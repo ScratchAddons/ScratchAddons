@@ -1,4 +1,6 @@
 /* Page background */
+html,
+body,
 #view,
 .crash-container,
 .semicolon {
@@ -504,6 +506,45 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button:checked {
 .studio-tab-nav a.active.nav_link:hover > li {
   background-color: var(--darkWww-button-variant);
   color: var(--darkWww-button-text);
+}
+.intro-banner .intro-container,
+.title-banner.mod-messages,
+.download .download-header,
+.title-banner.mod-conference,
+.conf2019-title-band,
+.sa-annual-report-2019 .message-section,
+.sa-annual-report-2019 .initiatives-section .initiatives-subsection-header.community,
+.sa-annual-report-2019 .initiatives-section .initiatives-community .community-quotes .community-quote .comment-text,
+.title-banner.mod-blue-bg /* camp 2017 */,
+.wedo .top-banner,
+.gdxfor .extension-header {
+  background-color: var(--darkWww-button-banner);
+}
+.sa-annual-report-2019 .initiatives-section .initiatives-community .community-quotes .community-quote .comment-text,
+.sa-annual-report-2019
+  .initiatives-section
+  .initiatives-community
+  .community-quotes
+  .community-quote
+  .comment-text::before,
+.sa-annual-report-2019
+  .initiatives-section
+  .initiatives-community
+  .community-quotes
+  .community-quote
+  .comment-text::after {
+  border-color: var(--darkWww-button-banner);
+}
+.gradient1 {
+  background-image: linear-gradient(var(--darkWww-button-banner), black);
+}
+.parents .title-banner.masthead,
+.information-page .title-banner.masthead,
+.download .title-banner.masthead /* Scratch 2.0 and 1.4 download */,
+.conf2017-title-band,
+.sa-annual-report-2019 .subnavigation,
+.sa-annual-report-2020 .initiatives-section .initiatives-subsection-header.community {
+  background-color: var(--darkWww-button-bannerVariant);
 }
 
 /* Link color */

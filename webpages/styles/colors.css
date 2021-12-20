@@ -37,6 +37,9 @@
   --warning-border: var(--red);
   --warning-text: #fff;
   --warning-icon-filter: brightness(0) invert(1);
+  --update-background: rgba(177, 23, 248, 0.25);
+  --update-border: #b20eb8;
+  --update-text: #fff;
 
   --modal-overlay: rgba(0, 0, 0, 0.65);
   --hover-highlight: rgba(255, 255, 255, 0.05);
