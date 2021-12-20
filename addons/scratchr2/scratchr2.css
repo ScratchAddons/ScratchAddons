@@ -12,9 +12,7 @@ input.link,
   font-weight: bold;
   text-decoration: none;
 }
-html {
-  background-color: #4280d7;
-}
+html,
 body,
 #pagewrapper {
   background: var(--darkWww-page, #fcfcfc);
