@@ -431,53 +431,63 @@ export default async ({ addon, msg, safeMsg }) => {
         } else return false;
       },
       checkCommentLocation(resourceType, resourceId, commentIds, elementObject) {
-        return new Promise((resolve) => {
-          chrome.runtime.sendMessage(
-            {
-              scratchMessaging: {
-                retrieveComments: {
-                  resourceType,
-                  resourceId,
-                  commentIds: commentIds,
-                },
-              },
-            },
-            (comments) => {
-              if (comments?.failed) {
-                // Sometimes incorrect (e.g. server is actually down)
-                // but this works
-                this.error = "loggedOut";
-                resolve();
-                return;
+        return Promise.all([
+          API.fetchComments(addon, {
+            resourceType,
+            resourceId,
+            commentIds,
+          }),
+          addon.self.getEnabledAddons(),
+        ])
+          .then(([comments, enabledAddons]) => {
+            if (Object.keys(comments).length === 0) elementObject.unreadComments = 0;
+            for (const commentId of Object.keys(comments)) {
+              const commentObject = comments[commentId];
+              let domContent = fixCommentContent(commentObject.content, enabledAddons);
+              if (this.resourceType !== "user") {
+                // Re-wrap elements from <body> to <div>
+                const newElement = document.createElement("div");
+                if (commentObject.replyingTo) {
+                  // We need to append the replyee ourselves
+                  newElement.append(
+                    Object.assign(document.createElement("a"), {
+                      href: `https://scratch.mit.edu/users/${commentObject.replyingTo}`,
+                      textContent: "@" + commentObject.replyingTo,
+                    })
+                  );
+                  newElement.append(" ");
+                }
+                newElement.append(...domContent.childNodes);
+                domContent = newElement;
               }
-              if (Object.keys(comments).length === 0) elementObject.unreadComments = 0;
-              for (const commentId of Object.keys(comments)) {
-                const commentObject = comments[commentId];
-                // @todo fix
-                const tmplDiv = document.createElement("div");
-                tmplDiv.innerHTML = commentObject.content;
-                commentObject.content = tmplDiv;
-                Vue.set(this.comments, commentId, commentObject);
-              }
-
-              // Preserve chronological sort when using JSON API
-              const parentComments = Object.entries(comments).filter((c) => c[1].childOf === null);
-              const sortedParentComments = parentComments.sort((a, b) => new Date(b[1].date) - new Date(a[1].date));
-              const sortedIds = sortedParentComments.map((arr) => arr[0]);
-              const resourceGetFunction =
-                resourceType === "project"
-                  ? "getProjectObject"
-                  : resourceType === "user"
-                  ? "getProfileObject"
-                  : "getStudioObject";
-              const resourceObject = this[resourceGetFunction](resourceId);
-              for (const sortedId of sortedIds) resourceObject.commentChains.push(sortedId);
-
-              elementObject.loadedComments = true;
-              resolve();
+              commentObject.content = domContent;
+              Vue.set(this.comments, commentId, commentObject);
             }
-          );
-        });
+
+            // Preserve chronological sort when using JSON API
+            const parentComments = Object.entries(comments).filter((c) => c[1].childOf === null);
+            const sortedParentComments = parentComments.sort((a, b) => new Date(b[1].date) - new Date(a[1].date));
+            const sortedIds = sortedParentComments.map((arr) => arr[0]);
+            const resourceGetFunction =
+              resourceType === "project"
+                ? "getProjectObject"
+                : resourceType === "user"
+                ? "getProfileObject"
+                : "getStudioObject";
+            const resourceObject = this[resourceGetFunction](resourceId);
+            for (const sortedId of sortedIds) resourceObject.commentChains.push(sortedId);
+
+            elementObject.loadedComments = true;
+          })
+          .catch((e) => {
+            if (e instanceof API.HTTPError || String(e).includes("NetworkError")) {
+              console.warn(e);
+              this.error = "loggedOut";
+              return;
+            }
+            console.error(e);
+            this.error = "loggedOut";
+          });
       },
 
       async analyzeMessages(showAll = false) {
