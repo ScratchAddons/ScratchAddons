@@ -70,6 +70,75 @@ export const setPaused = (_paused) => {
   eventTarget.dispatchEvent(new CustomEvent("change"));
 };
 
+export const singleStep = () => {
+  if (!paused) setPaused(true);
+
+  // Unpause threads only
+  const now = Date.now();
+  for (const thread of vm.runtime.threads) {
+    const pauseState = pausedThreadState.get(thread);
+    if (pauseState) {
+      const stackFrame = thread.peekStackFrame();
+      if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
+        const dt = now - pauseState.pauseTime;
+        stackFrame.executionContext.timer.startTime += dt;
+      }
+      Object.defineProperty(thread, "status", {
+        value: pauseState.status,
+        configurable: true,
+        enumerable: true,
+        writable: true,
+      });
+    }
+  }
+  pausedThreadState = new WeakMap();
+
+  // Run 1 step
+  vm.runtime._step();
+
+  // Emulate a frame of time passing
+  vm.runtime.ioDevices.clock._pausedTime += vm.runtime.currentStepTime;
+  // Skip all sounds forward by vm.runtime.currentStepTime miliseconds so it's as
+  //  if they where playing for one frame. 
+  const audioContext = vm.runtime.audioEngine.audioContext;
+  for (const target of vm.runtime.targets) {
+    for (const soundId in target.sprite.soundBank.soundPlayers) {
+      const soundPlayer = target.sprite.soundBank.soundPlayers[soundId];
+      if (soundPlayer.outputNode) {
+        soundPlayer.outputNode.stop(audioContext.currentTime);
+        soundPlayer._createSource();
+        soundPlayer.outputNode.start(audioContext.currentTime, audioContext.currentTime - soundPlayer.startingUntil + (vm.runtime.currentStepTime / 1000));
+        soundPlayer.startingUntil -= (vm.runtime.currentStepTime / 1000);
+      }
+    }
+  }
+
+  // Pause again
+  for (const thread of vm.runtime.threads) {
+    if (!thread.updateMonitor && !pausedThreadState.has(thread)) {
+      const pauseState = {
+        pauseTime: vm.runtime.currentMSecs + vm.runtime.currentStepTime, // Once again emulate a frame of time
+        // pauseTime: vm.runtime.currentMSecs,
+        status: thread.status,
+      };
+      pausedThreadState.set(thread, pauseState);
+      // Make sure that paused threads will always be paused.
+      // Setting thread.status is not enough for blocks like "ask and wait"
+      Object.defineProperty(thread, "status", {
+        get() {
+          return /* STATUS_PROMISE_WAIT */ 1;
+        },
+        set(status) {
+          // Status will be set when the thread is unpaused.
+          pauseState.status = status;
+        },
+        configurable: true,
+        enumerable: true,
+      });
+    }
+  }
+}
+
 const originalGreenFlag = vm.runtime.greenFlag;
 vm.runtime.greenFlag = function () {
   setPaused(false);

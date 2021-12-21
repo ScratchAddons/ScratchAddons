@@ -4,6 +4,8 @@
   "debugger/export": "Export",
   "debugger/clear": "Clear",
   "debugger/close": "Close",
+  "debugger/step": "Step",
+  "debugger/thread": "Thread {threadNum}",
   "debugger/enter-format": "Enter export format:",
   "debugger/unpause": "Unpause",
   "debugger/deleted-sprite": "(deleted sprite)",
@@ -15,5 +17,6 @@
   "debugger/block-log": "log %s",
   "debugger/block-warn": "warn %s",
   "debugger/block-error": "error %s",
-  "debugger/cannot-pause-player": "Breakpoint block can only be used while on the editor."
+  "debugger/cannot-pause-player": "Breakpoint block can only be used while on the editor.",
+  "debugger/step-desc": "Make all threads execute one step, then pause again."
 }

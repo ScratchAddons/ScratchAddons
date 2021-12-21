@@ -1,7 +1,9 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
-import { paused, setPaused, onPauseChanged } from "./../pause/module.js";
+import { paused, setPaused, onPauseChanged, singleStep } from "./../pause/module.js";
 
 export default async function ({ addon, global, console, msg }) {
+  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/Chart.min.js");
+
   let showingConsole, ScratchBlocks;
   const vm = addon.tab.traps.vm;
 
@@ -69,16 +71,17 @@ export default async function ({ addon, global, console, msg }) {
   const consoleWrapper = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_card", { others: "debug" }),
   });
-  const consoleTitle = Object.assign(document.createElement("div"), {
+  const consoleHeader = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_header-buttons"),
   });
-  const consoleText = Object.assign(document.createElement("h1"), {
-    innerText: msg("console"),
+  const consoleTabList = Object.assign(document.createElement("ul"), {
+    className: addon.tab.scratchClass("react-tabs_react-tabs__tab-list", "gui_tab-list") + " debugger-tabs",
   });
   const extraContainer = Object.assign(document.createElement("div"), {
     className: `extra-log-container`,
   });
 
+  // TODO Move this into an API?
   const goToBlock = (targetId, blockId) => {
     const workspace = Blockly.getMainWorkspace();
 
@@ -166,18 +169,13 @@ export default async function ({ addon, global, console, msg }) {
 
     _flash();
   };
+
   extraContainer.addEventListener("click", (e) => {
     const elem = e.target;
     if (elem.classList.contains("deletedTarget")) return;
     const targetId = elem.dataset.targetId;
     const blockId = elem.dataset.blockId;
     if (targetId && blockId) goToBlock(targetId, blockId);
-  });
-  const consoleList = Object.assign(document.createElement("div"), {
-    className: "logs",
-  });
-  const buttons = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_header-buttons-right"),
   });
 
   const unpauseButton = Object.assign(document.createElement("div"), {
@@ -189,6 +187,43 @@ export default async function ({ addon, global, console, msg }) {
   });
   const unpauseText = Object.assign(document.createElement("span"), {
     innerText: msg("unpause"),
+  });
+  unpauseButton.append(unpauseImg, unpauseText);
+  unpauseButton.addEventListener("click", () => setPaused(false));
+
+  const closeButton = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_remove-button"),
+    draggable: false,
+  });
+  const closeImg = Object.assign(document.createElement("img"), {
+    className: addon.tab.scratchClass("close-button_close-icon"),
+    src: addon.self.dir + "/add.svg",
+  });
+  const closeText = Object.assign(document.createElement("span"), {
+    innerText: msg("close"),
+  });
+  closeButton.append(closeImg, closeText);
+  closeButton.addEventListener("click", () => toggleConsole(false));
+
+  const tabClassName = addon.tab.scratchClass("react-tabs_react-tabs__tab", "gui_tab");
+  const tabSelectedClassName = addon.tab.scratchClass("react-tabs_react-tabs__tab", "gui_tab", "react-tabs_react-tabs__tab--selected", "gui_is-selected");
+
+  // ##### Logs Tab ##### //
+
+  const logsTabElement = Object.assign(document.createElement("li"), {
+    className: tabClassName,
+  });
+  const logsTabImg = Object.assign(document.createElement("img"), {
+    src: addon.self.dir + "/logs.svg",
+    draggable: false,
+  });
+  const logsTabText = Object.assign(document.createElement("span"), {
+    innerText: "Logs", // msg()
+  });
+  logsTabElement.append(logsTabImg, logsTabText);
+
+  const logsList = Object.assign(document.createElement("div"), {
+    className: "logs",
   });
 
   const exportButton = Object.assign(document.createElement("div"), {
@@ -202,6 +237,29 @@ export default async function ({ addon, global, console, msg }) {
   const exportText = Object.assign(document.createElement("span"), {
     innerText: msg("export"),
   });
+  exportButton.append(exportImg, exportText);
+  const download = (filename, text) => downloadBlob(filename, new Blob([text], { type: "text/plain" }));
+  exportButton.addEventListener("click", (e) => {
+    const defaultFormat = "{sprite}: {content} ({type})";
+    const exportFormat = e.shiftKey ? prompt(msg("enter-format"), defaultFormat) : defaultFormat;
+    if (!exportFormat) return;
+    closeDragElement();
+    const targetInfoCache = Object.create(null);
+    let file = logs
+      .map(({ targetId, type, content }) =>
+        exportFormat.replace(
+          /\{(sprite|type|content)\}/g,
+          (_, match) =>
+          ({
+            sprite: getTargetInfo(targetId, targetInfoCache).name,
+            type,
+            content,
+          }[match])
+        )
+      )
+      .join("\n");
+    download("logs.txt", file);
+  });
 
   const trashButton = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_shrink-expand-button"),
@@ -213,30 +271,263 @@ export default async function ({ addon, global, console, msg }) {
   const trashText = Object.assign(document.createElement("span"), {
     innerText: msg("clear"),
   });
+  trashButton.append(trashImg, trashText);
+  trashButton.addEventListener("click", () => {
+    document.querySelectorAll(".log").forEach((log, i) => log.remove());
+    closeDragElement();
+    logs = [];
+    isScrolledToEnd = true;
+  });
 
-  const closeButton = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_remove-button"),
+  // ##### Threads Tab ##### //
+
+  const threadsTabElement = Object.assign(document.createElement("li"), {
+    className: tabClassName,
+  });
+  const threadsTabImg = Object.assign(document.createElement("img"), {
+    src: addon.self.dir + "/threads.svg",
     draggable: false,
   });
-  const closeImg = Object.assign(document.createElement("img"), {
-    className: addon.tab.scratchClass("close-button_close-icon"),
-    src: addon.self.dir + "/add.svg",
+  const threadsTabText = Object.assign(document.createElement("span"), {
+    innerText: "Threads", // msg()
   });
-  const closeText = Object.assign(document.createElement("span"), {
-    innerText: msg("close"),
+  threadsTabElement.append(threadsTabImg, threadsTabText);
+
+  const threadsList = Object.assign(document.createElement("div"), {
+    className: "logs"
   });
 
-  consoleTitle.append(consoleText, buttons);
+  function threadsRefresh() {
+    if (paused) {
+      function blockToString(block) { // TODO Make this not shit
+        if (!block) return "?";
+        var scratchName = ScratchBlocks.Msg[block.opcode.toUpperCase()];
+        if (scratchName) return scratchName;
+        return block.opcode; // Some blocks don't have a message.
+      }
+
+      var addedThreads = [];
+
+      function createThreadElement(thread, idx, iconUrl) {
+        const element = document.createElement("div");
+        const subelements = Object.assign(document.createElement("div"), {
+          className: "subthread"
+        });
+
+        const threadInfo = Object.assign(document.createElement("div"), {
+          className: "log"
+        });
+        if (iconUrl) {
+          const icon = document.createElement("img");
+          icon.src = addon.self.dir + iconUrl;
+          icon.className = "logIcon";
+          threadInfo.append(icon);
+        }
+        const threadTitle = document.createElement("span");
+        threadTitle.append(Object.assign(document.createElement("b"), { innerText: thread.target.getName() }));
+        threadTitle.append(Object.assign(document.createElement("span"), { innerText: " " + msg("thread", { threadNum: idx }) }));
+        threadInfo.append(threadTitle);
+        element.append(threadInfo);
+
+        function createThreadBlockElement(blockId, stackFrame, iconUrl) {
+          const blockContainer = document.createElement("div");
+          const block = Object.assign(document.createElement("div"), {
+            className: "log"
+          });
+          const blockTitle = Object.assign(document.createElement("span"), {
+            innerText: blockToString(thread.target.blocks.getBlock(blockId)),
+          });
+          if (iconUrl) {
+            const icon = document.createElement("img");
+            icon.src = addon.self.dir + iconUrl;
+            icon.className = "logIcon";
+            blockContainer.append(icon);
+          }
+          const blockLink = document.createElement("a");
+          blockLink.textContent = thread.target.isOriginal
+            ? thread.target.getName()
+            : msg("clone-of", {
+              spriteName: thread.target.getName(),
+            });
+          blockLink.className = "logLink";
+          blockLink.dataset.blockId = blockId;
+          blockLink.dataset.targetId = thread.target.id;
+          if (!thread.target.isOriginal) {
+            blockLink.dataset.isClone = "true";
+          }
+          block.append(blockTitle, blockLink);
+          blockContainer.append(block);
+
+          if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.startedThreads) {
+            for (const thread of stackFrame.executionContext.startedThreads) {
+              addedThreads.push(thread);
+              blockContainer.append(createThreadElement(thread, idx + "." + (stackFrame.executionContext.startedThreads.indexOf(thread) + 1), "/subthread.svg"));
+            }
+          }
+          return blockContainer;
+        }
+
+        subelements.append(createThreadBlockElement(thread.topBlock));
+        for (var i = 0; i < thread.stack.length; i++) {
+          subelements.append(createThreadBlockElement(thread.stack[i], thread.stackFrames[i]));
+        }
+
+        element.append(subelements);
+        return element;
+      };
+
+      threadsList.innerHTML = "";
+      for (const thread of vm.runtime.threads) {
+        if (!addedThreads.includes(thread)) {
+          addedThreads.push(thread);
+          threadsList.append(createThreadElement(thread, vm.runtime.threads.indexOf(thread) + 1))
+        }
+      }
+
+    } else {
+      threadsList.innerHTML = "<span>Pause to view threads.</span>";
+    }
+  }
+
+  const stepButton = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_shrink-expand-button"),
+    title: msg("step-desc"),
+    draggable: false,
+  });
+  const stepImg = Object.assign(document.createElement("img"), {
+    src: addon.self.dir + "/step.svg",
+  });
+  const stepText = Object.assign(document.createElement("span"), {
+    innerText: msg("step"),
+  });
+  stepButton.append(stepImg, stepText);
+  stepButton.addEventListener("click", () => {
+    singleStep();
+    threadsRefresh();
+  });
+  threadsRefresh();
+
+  // ##### Performance Tab ##### //
+
+  const performanceTabElement = Object.assign(document.createElement("li"), {
+    className: tabClassName,
+  });
+  const performanceTabImg = Object.assign(document.createElement("img"), {
+    src: addon.self.dir + "/performance.svg",
+    draggable: false,
+  });
+  const performanceTabText = Object.assign(document.createElement("span"), {
+    innerText: "Performance", // msg()
+  });
+  performanceTabElement.append(performanceTabImg, performanceTabText);
+
+  const performancePanel = document.createElement("div");
+  const performanceFpsTitle = Object.assign(document.createElement("h1"), { innerText: "FPS" });
+  const performanceFpsChartCanvas = Object.assign(document.createElement("canvas"), {
+    id: "debug-fps-chart",
+    className: "logs"
+  });
+  const performanceCharNumPoints = 20;
+  var performanceFpsChart = new Chart(performanceFpsChartCanvas.getContext('2d'), {
+    type: 'line',
+    data: {
+      // An array like [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+      labels: Array.from(Array(performanceCharNumPoints).keys()).reverse(),
+      datasets: [{
+        data: Array(performanceCharNumPoints).fill(20),
+        borderWidth: 1,
+        backgroundColor: "hsla(163, 85%, 40%, 0.5)"
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+            max: 60
+          }
+        }]
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        callbacks: {
+          label: function (tooltipItem) {
+            return tooltipItem.yLabel;
+          }
+        }
+      }
+    }
+  });
+  const performanceClonesTitle = Object.assign(document.createElement("h1"), { innerText: "Clones" });
+  
+  vm.runtime.renderer.debugger_ogDraw = vm.runtime.renderer.draw;
+  // Holds the times of each frame drawn in the last second.
+  // The length of this list is effectively the FPS.
+  const renderTimes = [];
+
+  vm.runtime.renderer.draw = function () {
+    if (!paused) {
+      
+      const now = Date.now();
+      // Remove all frame times older than 1 second in renderTimes
+      while (renderTimes.length > 0 && renderTimes[0] <= now - 1000)
+        renderTimes.shift();
+      renderTimes.push(now);
+
+
+    }
+
+    vm.runtime.renderer.debugger_ogDraw();
+  }
+
+  performancePanel.append(performanceFpsTitle, performanceFpsChartCanvas, performanceClonesTitle);
+
+  //
+
+  const buttons = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_header-buttons-right"),
+  });
+
+  const tabElements = [logsTabElement, threadsTabElement, performanceTabElement];
+  const tabContent = [logsList, threadsList, performancePanel];
+  const tabButtons = [
+    [unpauseButton, exportButton, trashButton, closeButton],
+    [unpauseButton, stepButton, closeButton],
+    [unpauseButton, closeButton]
+  ]
+
+  let currentTab = 0;
+  const switchTab = (tabIdx) => {
+    if (currentTab != tabIdx) {
+      tabElements[currentTab].className = tabClassName;
+      tabElements[tabIdx].className = tabSelectedClassName;
+      currentTab = tabIdx;
+      extraContainer.innerHTML = "";
+      extraContainer.append(tabContent[tabIdx]);
+      buttons.innerHTML = "";
+      buttons.append(...tabButtons[tabIdx])
+    }
+  }
+  for (var i = 0; i < tabElements.length; i++) {
+    const tabIdx = i;
+    tabElements[i].addEventListener("click", (e) => switchTab(tabIdx));
+  }
+  consoleTabList.append(...tabElements);
+
+  extraContainer.append(tabContent[currentTab]);
+  buttons.append(...tabButtons[currentTab])
+  tabElements[currentTab].className = tabSelectedClassName;
+
+
+
+  consoleHeader.append(consoleTabList, buttons);
   buttons.append(unpauseButton, exportButton, trashButton, closeButton);
-  trashButton.append(trashImg, trashText);
-  closeButton.append(closeImg, closeText);
-  exportButton.append(exportImg, exportText);
-  unpauseButton.append(unpauseImg, unpauseText);
-  extraContainer.append(consoleList);
-  consoleWrapper.append(consoleTitle, extraContainer);
+  consoleWrapper.append(consoleHeader, extraContainer);
   document.body.append(consoleWrapper);
 
-  consoleTitle.addEventListener("mousedown", dragMouseDown);
+  consoleHeader.addEventListener("mousedown", dragMouseDown);
 
   let isScrolledToEnd = true;
   extraContainer.addEventListener(
@@ -311,44 +602,26 @@ export default async function ({ addon, global, console, msg }) {
     document.removeEventListener("mousemove", elementDrag);
   }
 
-  trashButton.addEventListener("click", () => {
-    document.querySelectorAll(".log").forEach((log, i) => log.remove());
-    closeDragElement();
-    logs = [];
-    isScrolledToEnd = true;
-  });
-  trashButton.addEventListener("mouseup", () => {
-    closeDragElement();
-  });
-  closeButton.addEventListener("click", () => toggleConsole(false));
-  closeButton.addEventListener("mouseup", () => closeDragElement());
-  let download = (filename, text) => downloadBlob(filename, new Blob([text], { type: "text/plain" }));
+  // trashButton.addEventListener("mouseup", () => {
+  //   closeDragElement();
+  // });
+  // closeButton.addEventListener("mouseup", () => closeDragElement());
 
-  unpauseButton.addEventListener("click", () => setPaused(false));
-  if (!paused) unpauseButton.style.display = "none";
-  onPauseChanged((newPauseValue) => (unpauseButton.style.display = newPauseValue ? "" : "none"));
-
-  exportButton.addEventListener("click", (e) => {
-    const defaultFormat = "{sprite}: {content} ({type})";
-    const exportFormat = e.shiftKey ? prompt(msg("enter-format"), defaultFormat) : defaultFormat;
-    if (!exportFormat) return;
-    closeDragElement();
-    const targetInfoCache = Object.create(null);
-    let file = logs
-      .map(({ targetId, type, content }) =>
-        exportFormat.replace(
-          /\{(sprite|type|content)\}/g,
-          (_, match) =>
-            ({
-              sprite: getTargetInfo(targetId, targetInfoCache).name,
-              type,
-              content,
-            }[match])
-        )
-      )
-      .join("\n");
-    download("logs.txt", file);
+  if (!paused) {
+    unpauseButton.style.display = "none";
+    stepButton.style.display = "none";
+  }
+  onPauseChanged((newPauseValue) => {
+    if (newPauseValue) {
+      unpauseButton.style.display = "";
+      stepButton.style.display = "";
+    } else {
+      unpauseButton.style.display = "none";
+      stepButton.style.display = "none";
+    }
+    threadsRefresh();
   });
+
   let logs = [];
   let scrollQueued = false;
   const createLogWrapper = (type) => {
@@ -369,7 +642,7 @@ export default async function ({ addon, global, console, msg }) {
     const target = thread.target;
     const parentTarget = target.isOriginal ? target : target.sprite.clones[0];
     const targetId = parentTarget.id;
-    consoleList.append(wrapper);
+    logsList.append(wrapper);
     if (type !== "log") {
       const imageURL = addon.self.dir + (type === "error" ? "/error.svg" : "/warning.svg");
       const icon = document.createElement("img");
@@ -450,8 +723,8 @@ export default async function ({ addon, global, console, msg }) {
     link.textContent = target.isOriginal
       ? target.getName()
       : msg("clone-of", {
-          spriteName: parentTarget.getName(),
-        });
+        spriteName: parentTarget.getName(),
+      });
     link.className = "logLink";
     link.dataset.blockId = blockId;
     link.dataset.targetId = targetId;

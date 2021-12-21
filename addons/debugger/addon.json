@@ -26,5 +26,6 @@
   ],
   "tags": ["editor", "featured"],
   "enabledByDefault": false,
-  "versionAdded": "1.16.0"
+  "versionAdded": "1.16.0",
+  "libraries": ["chartjs"]
 }
