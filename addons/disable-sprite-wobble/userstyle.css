@@ -1,0 +1,7 @@
+[class*="sprite-selector_raised"]:hover {
+    -webkit-animation-name: none;
+    animation-name: none;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
