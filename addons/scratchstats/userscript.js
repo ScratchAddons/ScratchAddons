@@ -79,7 +79,7 @@ export default async function ({ addon, msg, console }) {
         .then(async function (response) {
           const historyData = await response.json();
           historyData.pop();
-          await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/Chart.min.js");
+          await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
           const canvasContainer = document.createElement("div");
           stats.appendChild(canvasContainer);
           canvasContainer.style.position = "relative";
@@ -94,7 +94,6 @@ export default async function ({ addon, msg, console }) {
             data: {
               datasets: [
                 {
-                  label: msg("followers-label"),
                   data: historyData.map((item) => {
                     return { x: Date.parse(item.date), y: item.value };
                   }),
@@ -108,29 +107,28 @@ export default async function ({ addon, msg, console }) {
             options: {
               responsive: true,
               maintainAspectRatio: false,
-              title: {
-                display: true,
-                text: msg("followers-title"),
-              },
               scales: {
-                xAxes: [
-                  {
-                    ticks: {
-                      callback: (x) => new Date(x).toDateString(),
-                    },
+                x: {
+                  ticks: {
+                    callback: (x) => new Date(x).toDateString(),
                   },
-                ],
-                yAxes: [
-                  {
-                    ticks: {
-                      stepSize,
-                    },
-                  },
-                ],
+                },
+                y: {
+                  stepSize,
+                },
               },
-              tooltips: {
-                callbacks: {
-                  label: (item) => `${new Date(parseInt(item.label)).toDateString()}: ${item.value}`,
+              plugins: {
+                title: {
+                  display: true,
+                  text: msg("followers-title"),
+                },
+                tooltip: {
+                  callbacks: {
+                    label: (context) => `${new Date(parseInt(context.label)).toDateString()}: ${context.parsed.y}`,
+                  },
+                },
+                legend: {
+                  display: false,
                 },
               },
             },

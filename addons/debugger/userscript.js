@@ -2,7 +2,7 @@ import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import { paused, setPaused, onPauseChanged, singleStep } from "./../pause/module.js";
 
 export default async function ({ addon, global, console, msg }) {
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/Chart.min.js");
+  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
 
   let showingConsole, ScratchBlocks;
   const vm = addon.tab.traps.vm;
@@ -255,11 +255,11 @@ export default async function ({ addon, global, console, msg }) {
         exportFormat.replace(
           /\{(sprite|type|content)\}/g,
           (_, match) =>
-            ({
-              sprite: getTargetInfo(targetId, targetInfoCache).name,
-              type,
-              content,
-            }[match])
+          ({
+            sprite: getTargetInfo(targetId, targetInfoCache).name,
+            type,
+            content,
+          }[match])
         )
       )
       .join("\n");
@@ -355,8 +355,8 @@ export default async function ({ addon, global, console, msg }) {
           blockLink.textContent = thread.target.isOriginal
             ? thread.target.getName()
             : msg("clone-of", {
-                spriteName: thread.target.getName(),
-              });
+              spriteName: thread.target.getName(),
+            });
           blockLink.className = "logLink";
           blockLink.dataset.blockId = blockId;
           blockLink.dataset.targetId = thread.target.id;
@@ -450,31 +450,33 @@ export default async function ({ addon, global, console, msg }) {
         {
           data: Array(performanceCharNumPoints).fill(20),
           borderWidth: 1,
+          fill: true,
           backgroundColor: "hsla(163, 85%, 40%, 0.5)",
         },
       ],
     },
     options: {
       scales: {
-        yAxes: [
-          {
-            ticks: {
-              beginAtZero: true,
-              max: 60,
-            },
-          },
-        ],
-      },
-      legend: {
-        display: false,
-      },
-      tooltips: {
-        callbacks: {
-          label: function (tooltipItem) {
-            return tooltipItem.yLabel;
-          },
+        y: {
+          beginAtZero: true,
+          max: 60,
         },
       },
+
+      plugins: {
+        legend: {
+          display: false,
+        },
+
+        tooltips: {
+          callbacks: {
+            label: function (tooltipItem) {
+              return tooltipItem.yLabel;
+            },
+          },
+        },
+
+      }
     },
   });
   const performanceClonesTitle = Object.assign(document.createElement("h1"), { innerText: "Clones" });
@@ -734,8 +736,8 @@ export default async function ({ addon, global, console, msg }) {
     link.textContent = target.isOriginal
       ? target.getName()
       : msg("clone-of", {
-          spriteName: parentTarget.getName(),
-        });
+        spriteName: parentTarget.getName(),
+      });
     link.className = "logLink";
     link.dataset.blockId = blockId;
     link.dataset.targetId = targetId;
