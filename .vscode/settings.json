@@ -1,0 +1,45 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": ["/addons/*/addon.json"],
+      "url": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json"
+    },
+    {
+      "fileMatch": ["/manifest.json"],
+      "url": "https://json.schemastore.org/chrome-manifest.json"
+    },
+    {
+      "fileMatch": ["/libraries/license-info.json"],
+      "schema": {
+        "type": "object",
+        "additionalProperties": { "type": "string" }
+      }
+    },
+    {
+      "fileMatch": ["/addons-l10n/*/*.json"],
+      "schema": {
+        "type": "object",
+        "additionalProperties": { "type": "string" },
+        "propertyNames": {
+          "type": "string",
+          "pattern": "^([a-zA-Z0-9-]+/@?)?[a-zA-Z0-9_-]+$"
+        }
+      }
+    },
+    {
+      "fileMatch": ["/_locales/*/messages.json"],
+      "url":"https://raw.githubusercontent.com/RedGuy12/chrome-i18n-json-schema/master/schema.json"
+    },
+    {
+      "fileMatch": ["/addons/addons.json"],
+      "schema": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "type": "string",
+          "pattern": "^([a-zA-Z0-9-]+|//.+)$"
+        }
+      }
+    }
+  ]
+}
