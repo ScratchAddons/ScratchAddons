@@ -99,7 +99,7 @@ export const singleStep = () => {
   // Emulate a frame of time passing
   vm.runtime.ioDevices.clock._pausedTime += vm.runtime.currentStepTime;
   // Skip all sounds forward by vm.runtime.currentStepTime miliseconds so it's as
-  //  if they where playing for one frame. 
+  //  if they where playing for one frame.
   const audioContext = vm.runtime.audioEngine.audioContext;
   for (const target of vm.runtime.targets) {
     for (const soundId in target.sprite.soundBank.soundPlayers) {
@@ -107,8 +107,11 @@ export const singleStep = () => {
       if (soundPlayer.outputNode) {
         soundPlayer.outputNode.stop(audioContext.currentTime);
         soundPlayer._createSource();
-        soundPlayer.outputNode.start(audioContext.currentTime, audioContext.currentTime - soundPlayer.startingUntil + (vm.runtime.currentStepTime / 1000));
-        soundPlayer.startingUntil -= (vm.runtime.currentStepTime / 1000);
+        soundPlayer.outputNode.start(
+          audioContext.currentTime,
+          audioContext.currentTime - soundPlayer.startingUntil + vm.runtime.currentStepTime / 1000
+        );
+        soundPlayer.startingUntil -= vm.runtime.currentStepTime / 1000;
       }
     }
   }
@@ -137,7 +140,7 @@ export const singleStep = () => {
       });
     }
   }
-}
+};
 
 const originalGreenFlag = vm.runtime.greenFlag;
 vm.runtime.greenFlag = function () {

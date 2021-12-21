@@ -206,7 +206,12 @@ export default async function ({ addon, global, console, msg }) {
   closeButton.addEventListener("click", () => toggleConsole(false));
 
   const tabClassName = addon.tab.scratchClass("react-tabs_react-tabs__tab", "gui_tab");
-  const tabSelectedClassName = addon.tab.scratchClass("react-tabs_react-tabs__tab", "gui_tab", "react-tabs_react-tabs__tab--selected", "gui_is-selected");
+  const tabSelectedClassName = addon.tab.scratchClass(
+    "react-tabs_react-tabs__tab",
+    "gui_tab",
+    "react-tabs_react-tabs__tab--selected",
+    "gui_is-selected"
+  );
 
   // ##### Logs Tab ##### //
 
@@ -250,11 +255,11 @@ export default async function ({ addon, global, console, msg }) {
         exportFormat.replace(
           /\{(sprite|type|content)\}/g,
           (_, match) =>
-          ({
-            sprite: getTargetInfo(targetId, targetInfoCache).name,
-            type,
-            content,
-          }[match])
+            ({
+              sprite: getTargetInfo(targetId, targetInfoCache).name,
+              type,
+              content,
+            }[match])
         )
       )
       .join("\n");
@@ -294,12 +299,13 @@ export default async function ({ addon, global, console, msg }) {
   threadsTabElement.append(threadsTabImg, threadsTabText);
 
   const threadsList = Object.assign(document.createElement("div"), {
-    className: "logs"
+    className: "logs",
   });
 
   function threadsRefresh() {
     if (paused) {
-      function blockToString(block) { // TODO Make this not shit
+      function blockToString(block) {
+        // TODO Make this not shit
         if (!block) return "?";
         var scratchName = ScratchBlocks.Msg[block.opcode.toUpperCase()];
         if (scratchName) return scratchName;
@@ -311,11 +317,11 @@ export default async function ({ addon, global, console, msg }) {
       function createThreadElement(thread, idx, iconUrl) {
         const element = document.createElement("div");
         const subelements = Object.assign(document.createElement("div"), {
-          className: "subthread"
+          className: "subthread",
         });
 
         const threadInfo = Object.assign(document.createElement("div"), {
-          className: "log"
+          className: "log",
         });
         if (iconUrl) {
           const icon = document.createElement("img");
@@ -325,14 +331,16 @@ export default async function ({ addon, global, console, msg }) {
         }
         const threadTitle = document.createElement("span");
         threadTitle.append(Object.assign(document.createElement("b"), { innerText: thread.target.getName() }));
-        threadTitle.append(Object.assign(document.createElement("span"), { innerText: " " + msg("thread", { threadNum: idx }) }));
+        threadTitle.append(
+          Object.assign(document.createElement("span"), { innerText: " " + msg("thread", { threadNum: idx }) })
+        );
         threadInfo.append(threadTitle);
         element.append(threadInfo);
 
         function createThreadBlockElement(blockId, stackFrame, iconUrl) {
           const blockContainer = document.createElement("div");
           const block = Object.assign(document.createElement("div"), {
-            className: "log"
+            className: "log",
           });
           const blockTitle = Object.assign(document.createElement("span"), {
             innerText: blockToString(thread.target.blocks.getBlock(blockId)),
@@ -347,8 +355,8 @@ export default async function ({ addon, global, console, msg }) {
           blockLink.textContent = thread.target.isOriginal
             ? thread.target.getName()
             : msg("clone-of", {
-              spriteName: thread.target.getName(),
-            });
+                spriteName: thread.target.getName(),
+              });
           blockLink.className = "logLink";
           blockLink.dataset.blockId = blockId;
           blockLink.dataset.targetId = thread.target.id;
@@ -361,7 +369,13 @@ export default async function ({ addon, global, console, msg }) {
           if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.startedThreads) {
             for (const thread of stackFrame.executionContext.startedThreads) {
               addedThreads.push(thread);
-              blockContainer.append(createThreadElement(thread, idx + "." + (stackFrame.executionContext.startedThreads.indexOf(thread) + 1), "/subthread.svg"));
+              blockContainer.append(
+                createThreadElement(
+                  thread,
+                  idx + "." + (stackFrame.executionContext.startedThreads.indexOf(thread) + 1),
+                  "/subthread.svg"
+                )
+              );
             }
           }
           return blockContainer;
@@ -374,16 +388,15 @@ export default async function ({ addon, global, console, msg }) {
 
         element.append(subelements);
         return element;
-      };
+      }
 
       threadsList.innerHTML = "";
       for (const thread of vm.runtime.threads) {
         if (!addedThreads.includes(thread)) {
           addedThreads.push(thread);
-          threadsList.append(createThreadElement(thread, vm.runtime.threads.indexOf(thread) + 1))
+          threadsList.append(createThreadElement(thread, vm.runtime.threads.indexOf(thread) + 1));
         }
       }
-
     } else {
       threadsList.innerHTML = "<span>Pause to view threads.</span>";
     }
@@ -425,43 +438,47 @@ export default async function ({ addon, global, console, msg }) {
   const performanceFpsTitle = Object.assign(document.createElement("h1"), { innerText: "FPS" });
   const performanceFpsChartCanvas = Object.assign(document.createElement("canvas"), {
     id: "debug-fps-chart",
-    className: "logs"
+    className: "logs",
   });
   const performanceCharNumPoints = 20;
-  var performanceFpsChart = new Chart(performanceFpsChartCanvas.getContext('2d'), {
-    type: 'line',
+  var performanceFpsChart = new Chart(performanceFpsChartCanvas.getContext("2d"), {
+    type: "line",
     data: {
       // An array like [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
       labels: Array.from(Array(performanceCharNumPoints).keys()).reverse(),
-      datasets: [{
-        data: Array(performanceCharNumPoints).fill(20),
-        borderWidth: 1,
-        backgroundColor: "hsla(163, 85%, 40%, 0.5)"
-      }]
+      datasets: [
+        {
+          data: Array(performanceCharNumPoints).fill(20),
+          borderWidth: 1,
+          backgroundColor: "hsla(163, 85%, 40%, 0.5)",
+        },
+      ],
     },
     options: {
       scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true,
-            max: 60
-          }
-        }]
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+              max: 60,
+            },
+          },
+        ],
       },
       legend: {
-        display: false
+        display: false,
       },
       tooltips: {
         callbacks: {
           label: function (tooltipItem) {
             return tooltipItem.yLabel;
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    },
   });
   const performanceClonesTitle = Object.assign(document.createElement("h1"), { innerText: "Clones" });
-  
+
   vm.runtime.renderer.debugger_ogDraw = vm.runtime.renderer.draw;
   // Holds the times of each frame drawn in the last second.
   // The length of this list is effectively the FPS.
@@ -469,18 +486,14 @@ export default async function ({ addon, global, console, msg }) {
 
   vm.runtime.renderer.draw = function () {
     if (!paused) {
-      
       const now = Date.now();
       // Remove all frame times older than 1 second in renderTimes
-      while (renderTimes.length > 0 && renderTimes[0] <= now - 1000)
-        renderTimes.shift();
+      while (renderTimes.length > 0 && renderTimes[0] <= now - 1000) renderTimes.shift();
       renderTimes.push(now);
-
-
     }
 
     vm.runtime.renderer.debugger_ogDraw();
-  }
+  };
 
   performancePanel.append(performanceFpsTitle, performanceFpsChartCanvas, performanceClonesTitle);
 
@@ -495,8 +508,8 @@ export default async function ({ addon, global, console, msg }) {
   const tabButtons = [
     [unpauseButton, exportButton, trashButton, closeButton],
     [unpauseButton, stepButton, closeButton],
-    [unpauseButton, closeButton]
-  ]
+    [unpauseButton, closeButton],
+  ];
 
   let currentTab = 0;
   const switchTab = (tabIdx) => {
@@ -507,9 +520,9 @@ export default async function ({ addon, global, console, msg }) {
       extraContainer.innerHTML = "";
       extraContainer.append(tabContent[tabIdx]);
       buttons.innerHTML = "";
-      buttons.append(...tabButtons[tabIdx])
+      buttons.append(...tabButtons[tabIdx]);
     }
-  }
+  };
   for (var i = 0; i < tabElements.length; i++) {
     const tabIdx = i;
     tabElements[i].addEventListener("click", (e) => switchTab(tabIdx));
@@ -517,10 +530,8 @@ export default async function ({ addon, global, console, msg }) {
   consoleTabList.append(...tabElements);
 
   extraContainer.append(tabContent[currentTab]);
-  buttons.append(...tabButtons[currentTab])
+  buttons.append(...tabButtons[currentTab]);
   tabElements[currentTab].className = tabSelectedClassName;
-
-
 
   consoleHeader.append(consoleTabList, buttons);
   buttons.append(unpauseButton, exportButton, trashButton, closeButton);
@@ -723,8 +734,8 @@ export default async function ({ addon, global, console, msg }) {
     link.textContent = target.isOriginal
       ? target.getName()
       : msg("clone-of", {
-        spriteName: parentTarget.getName(),
-      });
+          spriteName: parentTarget.getName(),
+        });
     link.className = "logLink";
     link.dataset.blockId = blockId;
     link.dataset.targetId = targetId;

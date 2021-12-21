@@ -50,8 +50,7 @@
 
 @keyframes unpauseBackground
 
-/* Firefox */
-  {
+/* Firefox */ {
   0% {
     background-color: rgba(0, 0, 0, 0.15);
   }
@@ -61,7 +60,7 @@
   }
 }
 
-.sa-debugger-unpause>img {
+.sa-debugger-unpause > img {
   width: 20px;
   height: 20px;
 }
@@ -110,9 +109,9 @@
   background-color: hsl(0deg 100% 95%);
 }
 
-.log:not(.warn):not(.error)+.log:not(.warn):not(.error),
-.warn+.warn,
-.error+.error {
+.log:not(.warn):not(.error) + .log:not(.warn):not(.error),
+.warn + .warn,
+.error + .error {
   border-top-color: transparent;
 }
 
@@ -137,7 +136,7 @@
   margin-right: 5px;
 }
 
-.log>span:not(.console-variable) {
+.log > span:not(.console-variable) {
   flex-grow: 1;
 }
 
