@@ -22,7 +22,12 @@
     {
       "matches": ["https://scratch.mit.edu/*"],
       "run_at": "document_start",
-      "js": ["libraries/thirdparty/cs/comlink.js", "libraries/common/cs/text-color.js", "content-scripts/cs.js"],
+      "js": [
+        "libraries/thirdparty/cs/comlink.js",
+        "libraries/common/cs/text-color.js",
+        "content-scripts/cs-console.js",
+        "content-scripts/cs.js"
+      ],
       "all_frames": true
     },
     {
@@ -56,7 +61,8 @@
     "addons/*",
     "libraries/*/cs/*",
     "addons-l10n/*/*.json",
-    "images/cs/*"
+    "images/cs/*",
+    "content-scripts/*"
   ],
   "browser_specific_settings": {
     "gecko": {

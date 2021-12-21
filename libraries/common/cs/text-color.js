@@ -1,3 +1,5 @@
+// TODO: do not pollute content script globals
+
 function parseHex(hex) {
   return {
     r: parseInt(hex.substring(1, 3), 16),

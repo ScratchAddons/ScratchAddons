@@ -1,10 +1,12 @@
-function fixConsole() {
-  window._realConsole = {
-    ...console,
-  };
-}
+/* global shouldRun */
 
-if (!(document.documentElement instanceof SVGElement)) {
+if (shouldRun) {
+  function fixConsole() {
+    window._realConsole = {
+      ...console,
+    };
+  }
+
   const fixConsoleScript = document.createElement("script");
   fixConsoleScript.append(document.createTextNode("(" + fixConsole + ")()"));
   (document.head || document.documentElement).appendChild(fixConsoleScript);
