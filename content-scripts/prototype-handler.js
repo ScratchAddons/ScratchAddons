@@ -6,7 +6,7 @@ if (shouldRun && location.pathname.split("/")[1] === "projects") {
     // Use custom event target
     window.__scratchAddonsTraps = new EventTarget();
     const onceMap = (__scratchAddonsTraps._onceMap = Object.create(null));
-  
+
     Function.prototype.bind = function (...args) {
       if (Function.prototype.bind === oldBind) {
         // Just in case some code stores the bind function once on startup, then always uses it.

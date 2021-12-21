@@ -16,7 +16,6 @@ queueMicrotask(() => {
   import(chrome.runtime.getURL("/content-scripts/forum-warning.js"));
 });
 
-
 let pseudoUrl; // Fake URL to use if response code isn't 2xx
 
 let receivedResponse = false;

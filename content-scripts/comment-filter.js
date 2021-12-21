@@ -1,4 +1,3 @@
-
 // //
 import { escapeHTML } from "../libraries/common/cs/autoescaper.js";
 const DOLLARS = ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9"];
