@@ -10,6 +10,5 @@
   "color-picker-web-component": "MIT",
   "comlink": "Apache-2.0",
   "Sora": "OFL",
-  "fuse": "Apache-2.0",
-  "idb-keyval": "Apache-2.0"
+  "fuse": "Apache-2.0"
 }
