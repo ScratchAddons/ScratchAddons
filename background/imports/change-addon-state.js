@@ -31,7 +31,6 @@ export default (addonId, newState) => {
         addonObj.self.dispatchEvent(new CustomEvent("disabled"));
         addonObj._kill();
       });
-      scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
     }
   }
   if (addonId === "msg-count-badge") updateBadge(scratchAddons.cookieStoreId);
