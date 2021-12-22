@@ -8,6 +8,10 @@ export const onPauseChanged = (listener) => {
   eventTarget.addEventListener("change", () => listener(paused));
 };
 
+export const onStep = (listener) => {
+  eventTarget.addEventListener("step", () => listener(paused));
+};
+
 export const setPaused = (_paused) => {
   paused = _paused;
 
@@ -121,7 +125,6 @@ export const singleStep = () => {
     if (!thread.updateMonitor && !pausedThreadState.has(thread)) {
       const pauseState = {
         pauseTime: vm.runtime.currentMSecs + vm.runtime.currentStepTime, // Once again emulate a frame of time
-        // pauseTime: vm.runtime.currentMSecs,
         status: thread.status,
       };
       pausedThreadState.set(thread, pauseState);
@@ -140,6 +143,8 @@ export const singleStep = () => {
       });
     }
   }
+
+  eventTarget.dispatchEvent(new CustomEvent("step"));
 };
 
 const originalGreenFlag = vm.runtime.greenFlag;

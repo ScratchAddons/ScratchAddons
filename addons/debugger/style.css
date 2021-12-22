@@ -97,6 +97,10 @@
   contain-intrinsic-size: 1.2rem;
 }
 
+.block-log {
+  padding: 2px;
+}
+
 .warn {
   border-color: var(--warning-border-color);
   color: hsl(39deg 100% 18%);
@@ -130,13 +134,20 @@
 }
 
 .console-variable {
-  padding: 4px;
-  border-radius: 10px;
+  padding: 4px 8px;
+  border-radius: 100px;
   color: white;
   margin-right: 5px;
 }
 
-.log > span:not(.console-variable) {
+.console-block {
+  padding: 5px 8px;
+  border-radius: 3px;
+  color: white;
+  margin-right: 5px;
+}
+
+.log > span:not(.console-variable):not(.console-block) {
   flex-grow: 1;
 }
 

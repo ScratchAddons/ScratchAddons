@@ -27,5 +27,5 @@
   "tags": ["editor", "featured"],
   "enabledByDefault": false,
   "versionAdded": "1.16.0",
-  "libraries": ["chartjs"]
+  "libraries": ["chartjs", "chartjs-plugin-annotation"]
 }

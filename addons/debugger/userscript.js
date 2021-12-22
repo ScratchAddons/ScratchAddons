@@ -3,6 +3,7 @@ import { paused, setPaused, onPauseChanged, singleStep } from "./../pause/module
 
 export default async function ({ addon, global, console, msg }) {
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
+  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chartjs-plugin-annotation.min.js");
 
   let showingConsole, ScratchBlocks;
   const vm = addon.tab.traps.vm;
@@ -304,14 +305,6 @@ export default async function ({ addon, global, console, msg }) {
 
   function threadsRefresh() {
     if (paused) {
-      function blockToString(block) {
-        // TODO Make this not shit
-        if (!block) return "?";
-        var scratchName = ScratchBlocks.Msg[block.opcode.toUpperCase()];
-        if (scratchName) return scratchName;
-        return block.opcode; // Some blocks don't have a message.
-      }
-
       var addedThreads = [];
 
       function createThreadElement(thread, idx, iconUrl) {
@@ -338,13 +331,62 @@ export default async function ({ addon, global, console, msg }) {
         element.append(threadInfo);
 
         function createThreadBlockElement(blockId, stackFrame, iconUrl) {
+          const block = thread.target.blocks.getBlock(blockId);
+
+          var name, colour;
+          if (block.opcode == "procedures_call") {
+            colour = ScratchBlocks.Colours.more.primary;
+            if (block.mutation) {
+              name = block.mutation.proccode.replaceAll("%s", "()").replaceAll("%b", "()");
+              const customBlock = addon.tab.getCustomBlock(block.mutation.proccode);
+              if (customBlock) {
+                colour = customBlock.color;
+              }
+            }
+          } else {
+            // This quickly creates a Blockly block so we can get its name, than removes it again.
+            const workspace = Blockly.getMainWorkspace();
+
+            ScratchBlocks.Events.disabled_ = 1; // We disable events to the block isn't added to the DOM
+
+            // https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/core/block.js#L52
+            var blocklyBlock = new ScratchBlocks.Block(workspace, block.opcode, "debugger-temp");
+
+            name = blocklyBlock.toLocaleString().replaceAll("?", "()");
+            
+            var category = blocklyBlock.getCategory();
+            if (category == "data-lists") category = "data_lists";
+            if (category == "events") category = "event"; // ST why?
+            colour = ScratchBlocks.Colours[category];
+            if (colour)
+              colour = colour.primary;
+
+            // Calling `new Block` above adds it to two lists in the workspace.
+            // So we remove it from them again.
+            delete workspace.blockDB_["debugger-temp"];
+            workspace.topBlocks_.pop();
+
+            ScratchBlocks.Events.disabled_ = 0; // Re-enable events
+          }
+
+          if (!name) {
+            name = "?"
+          }
+
           const blockContainer = document.createElement("div");
-          const block = Object.assign(document.createElement("div"), {
+          const blockDiv = Object.assign(document.createElement("div"), {
             className: "log",
           });
           const blockTitle = Object.assign(document.createElement("span"), {
-            innerText: blockToString(thread.target.blocks.getBlock(blockId)),
+            innerText: name
           });
+
+          if (colour) {
+            blockTitle.style.backgroundColor = colour;
+            blockDiv.className += " block-log";
+            blockTitle.className = "console-block"
+          }
+
           if (iconUrl) {
             const icon = document.createElement("img");
             icon.src = addon.self.dir + iconUrl;
@@ -363,8 +405,8 @@ export default async function ({ addon, global, console, msg }) {
           if (!thread.target.isOriginal) {
             blockLink.dataset.isClone = "true";
           }
-          block.append(blockTitle, blockLink);
-          blockContainer.append(block);
+          blockDiv.append(blockTitle, blockLink);
+          blockContainer.append(blockDiv);
 
           if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.startedThreads) {
             for (const thread of stackFrame.executionContext.startedThreads) {
@@ -392,7 +434,9 @@ export default async function ({ addon, global, console, msg }) {
 
       threadsList.innerHTML = "";
       for (const thread of vm.runtime.threads) {
-        if (!addedThreads.includes(thread)) {
+        // thread.updateMonitor is for threads that update monitors. We don't want to show these.
+        // https://github.com/LLK/scratch-vm/blob/b3afd407f12630b1d27c4edadfa5ec4b5e1c820d/src/engine/runtime.js#L1717
+        if (!thread.updateMonitor && !addedThreads.includes(thread)) {
           addedThreads.push(thread);
           threadsList.append(createThreadElement(thread, vm.runtime.threads.indexOf(thread) + 1));
         }
@@ -441,6 +485,9 @@ export default async function ({ addon, global, console, msg }) {
     className: "logs",
   });
   const performanceCharNumPoints = 20;
+  function getMaxFps() {
+    return Math.round(1000 / vm.runtime.currentStepTime);
+  }
   var performanceFpsChart = new Chart(performanceFpsChartCanvas.getContext("2d"), {
     type: "line",
     data: {
@@ -448,7 +495,7 @@ export default async function ({ addon, global, console, msg }) {
       labels: Array.from(Array(performanceCharNumPoints).keys()).reverse(),
       datasets: [
         {
-          data: Array(performanceCharNumPoints).fill(20),
+          data: Array(performanceCharNumPoints).fill(-1),
           borderWidth: 1,
           fill: true,
           backgroundColor: "hsla(163, 85%, 40%, 0.5)",
@@ -459,7 +506,7 @@ export default async function ({ addon, global, console, msg }) {
       scales: {
         y: {
           beginAtZero: true,
-          max: 60,
+          max: getMaxFps(),
         },
       },
 
@@ -475,7 +522,6 @@ export default async function ({ addon, global, console, msg }) {
             },
           },
         },
-
       }
     },
   });
@@ -485,13 +531,27 @@ export default async function ({ addon, global, console, msg }) {
   // Holds the times of each frame drawn in the last second.
   // The length of this list is effectively the FPS.
   const renderTimes = [];
+  // The last time we pushed a new datapoint to the graph
+  var lastFpsTime = Date.now() + 3000;
+  var pauseTime = 0; // What time we paused at.
 
   vm.runtime.renderer.draw = function () {
     if (!paused) {
       const now = Date.now();
+      const maxFps = getMaxFps();
       // Remove all frame times older than 1 second in renderTimes
       while (renderTimes.length > 0 && renderTimes[0] <= now - 1000) renderTimes.shift();
       renderTimes.push(now);
+
+      if (now - lastFpsTime > 1000) {
+        lastFpsTime = now;
+        const fpsData = performanceFpsChart.data.datasets[0].data;
+        fpsData.shift();
+        fpsData.push(Math.min(renderTimes.length, maxFps));
+        // Incase we switch between 30FPS and 60FPS, update the max height of the chart.
+        performanceFpsChart.options.scales.y.max = maxFps;
+        performanceFpsChart.update();
+      }
     }
 
     vm.runtime.renderer.debugger_ogDraw();
@@ -628,9 +688,11 @@ export default async function ({ addon, global, console, msg }) {
     if (newPauseValue) {
       unpauseButton.style.display = "";
       stepButton.style.display = "";
+      pauseTime = Date.now();
     } else {
       unpauseButton.style.display = "none";
       stepButton.style.display = "none";
+      lastFpsTime += pauseTime;
     }
     threadsRefresh();
   });
