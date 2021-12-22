@@ -37,7 +37,7 @@ export default async function ({ addon, global, console }) {
   );
   input.value = scratchAddons.globalState.temporary[location.hash.slice(1)].publicCode;
   input[Object.keys(input).find((e) => e.startsWith("__reactEventHandlers"))].onChange({ target: input });
-  document.querySelector('[class*="question_question-submit-button"]')).click();
+  document.querySelector('[class*="question_question-submit-button"]').click();
   while (1) {
     await wait(100);
     try {
