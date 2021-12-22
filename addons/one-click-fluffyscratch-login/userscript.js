@@ -8,7 +8,7 @@ export default async function ({ addon, global, console }) {
     return document.body.classList.add("not-one-click");
   document.title = "Loading...";
   let loadingOverlay = Object.assign(document.createElement("div"), {
-    className: "one-click-overlay"
+    className: "one-click-overlay",
   });
   loadingOverlay.append(
     Object.assign(new Image(), {
@@ -32,9 +32,7 @@ export default async function ({ addon, global, console }) {
     };
   });
   gf.click();
-  let input = await addon.tab.waitForElement(
-    '[class*="question_question-input"] [class*="input_input-form"]'
-  );
+  let input = await addon.tab.waitForElement('[class*="question_question-input"] [class*="input_input-form"]');
   input.value = scratchAddons.globalState.temporary[location.hash.slice(1)].publicCode;
   input[Object.keys(input).find((e) => e.startsWith("__reactEventHandlers"))].onChange({ target: input });
   document.querySelector('[class*="question_question-submit-button"]').click();
