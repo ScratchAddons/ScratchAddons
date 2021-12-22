@@ -18,7 +18,6 @@ const BADGE_ALARM_NAME = "updateBadge";
  */
 export async function updateBadge(defaultStoreId) {
   if (duringBadgeUpdate) return;
-  if (!defaultStoreId) throw "defaultStoreId is falsey";
   duringBadgeUpdate = true;
   if (!scratchAddons.localState.allReady) {
     // This method may be called before ready, but we need to get addon settings
@@ -28,7 +27,11 @@ export async function updateBadge(defaultStoreId) {
   const isLoggedIn = scratchAddons.globalState.auth.isLoggedIn;
   let db;
   try {
-    if (scratchAddons.localState.addonsEnabled["msg-count-badge"] && (badgeSettings.showOffline || isLoggedIn)) {
+    if (
+      scratchAddons.localState.addonsEnabled["msg-count-badge"] &&
+      (badgeSettings.showOffline || isLoggedIn) &&
+      !scratchAddons.muted
+    ) {
       db = await MessageCache.openDatabase();
       const count = await db.get("count", defaultStoreId);
       // Do not show 0, unless that 0 means logged out
