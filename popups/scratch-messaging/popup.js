@@ -1,4 +1,5 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
+import * as MessageCache from "../../libraries/common/message-cache.js";
 import * as API from "./api.js";
 import fixCommentContent from "./fix-comment-content.js";
 
@@ -367,20 +368,39 @@ export default async ({ addon, msg, safeMsg }) => {
         });
       },
 
+      async updateMessageCount() {
+        const username = await addon.auth.fetchUsername();
+        const count = await MessageCache.fetchMessageCount(username);
+        const db = await MessageCache.openDatabase();
+        try {
+          await db.put("count", count, scratchAddons.cookieStoreId);
+        } finally {
+          await db.close();
+        }
+        this.markedAsRead = true;
+        chrome.runtime.sendMessage({
+          clearMessages: { store: scratchAddons.cookieStoreId },
+        });
+      },
+
       // For UI
       markAsRead() {
-        chrome.runtime.sendMessage({ scratchMessaging: "markAsRead" });
-        this.markedAsRead = true;
+        MessageCache.markAsRead(addon.auth.csrfToken)
+          .then(() => this.updateMessageCount())
+          .catch((e) => console.error("Marking messages as read failed:", e));
       },
       dismissAlert(id) {
         const confirmation = confirm(msg("stMessagesConfirm"));
         if (!confirmation) return;
-        API.dismissAlert(addon, id).then(() => {
-          this.stMessages.splice(
-            this.stMessages.findIndex((alert) => alert.id === id),
-            1
-          );
-        });
+        API.dismissAlert(addon, id)
+          .then(() => {
+            this.stMessages.splice(
+              this.stMessages.findIndex((alert) => alert.id === id),
+              1
+            );
+            this.updateMessageCount();
+          })
+          .catch((e) => console.error("Dismissing alert failed:", e));
       },
       reloadPage() {
         location.reload();

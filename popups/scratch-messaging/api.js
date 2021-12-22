@@ -333,3 +333,16 @@ export async function fetchLegacyComments(addon, { resourceType, resourceId, com
     return commentsObj;
   }
 }
+
+export async function fetchAlerts(addon) {
+  const username = await addon.auth.fetchUsername();
+  const xToken = await addon.auth.fetchXToken();
+  return fetch(`https://api.scratch.mit.edu/users/${username}/messages/admin`, {
+    headers: {
+      "x-token": xToken,
+    },
+  }).then((res) => {
+    if (!res.ok) throw HTTPError.fromResponse("Fetching alerts failed", res);
+    return res.json();
+  });
+}

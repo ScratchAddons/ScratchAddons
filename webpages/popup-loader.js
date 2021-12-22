@@ -25,7 +25,7 @@ const promisify =
   (...args) =>
     new Promise((resolve) => callbackFn(...args, resolve));
 
-function getCookieValue(name) {
+function getCookieValue(name, getCookie) {
   return new Promise((resolve) => {
     chrome.cookies.get(
       {
@@ -33,7 +33,7 @@ function getCookieValue(name) {
         name,
       },
       (cookie) => {
-        if (cookie && cookie.value) resolve(cookie.value);
+        if (cookie && cookie.value) resolve(getCookie ? cookie : cookie.value);
         else resolve(null);
       }
     );
@@ -42,9 +42,10 @@ function getCookieValue(name) {
 
 async function refetchCookies() {
   const scratchLang = (await getCookieValue("scratchlanguage")) || navigator.language;
-  const csrfToken = await getCookieValue("scratchcsrftoken");
+  const csrfTokenCookie = await getCookieValue("scratchcsrftoken", true);
+  scratchAddons.cookieStoreId = csrfTokenCookie.storeId;
   scratchAddons.cookies.set("scratchlanguage", scratchLang);
-  scratchAddons.cookies.set("scratchcsrftoken", csrfToken);
+  scratchAddons.cookies.set("scratchcsrftoken", csrfTokenCookie.value);
 }
 
 async function refetchSession(addon) {

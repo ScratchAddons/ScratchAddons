@@ -134,3 +134,17 @@ export async function updateMessages(cookieStoreId, forceClear, username, xToken
     await db.close();
   }
 }
+
+/**
+ * Marks messages as read.
+ * @param {string} csrfToken the CSRF token for requesting
+ * @throws {HTTPError} if operation fails
+ */
+export function markAsRead(csrfToken) {
+  return fetch("https://scratch.mit.edu/site-api/messages/messages-clear/?sareferer", {
+    method: "POST",
+    headers: { "x-csrftoken": csrfToken, "x-requested-with": "XMLHttpRequest" },
+  }).then((res) => {
+    if (!res.ok) throw HTTPError.fromResponse("Marking messages as read failed: ", res);
+  });
+}
