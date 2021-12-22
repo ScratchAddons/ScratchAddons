@@ -1,3 +1,9 @@
 body:not(.not-one-click) {
   display: none;
 }
+.one-click-overlay {
+  position: fixed;top: 0;left: 0;z-index: 300;background: inherit;width: 100%;height: 100%;color: #ffff;margin: 0;padding: 0;display: flex;align-items: center;justify-content: center;", /* prettier fix this pls */
+}
+.one-click-overlay .one-click-label {
+  margin-left: 0.5em;
+}

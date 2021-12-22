@@ -4,16 +4,15 @@ export default async function ({ addon, global, console }) {
     return document.body.classList.add("not-one-click");
   document.title = "Loading...";
   let loadingOverlay = Object.assign(document.createElement("div"), {
-    style:
-      "position: fixed;top: 0;left: 0;z-index: 300;background: inherit;width: 100%;height: 100%;color: #ffff;margin: 0;padding: 0;display: flex;align-items: center;justify-content: center;",
+    className: "one-click-overlay"
   });
   loadingOverlay.append(
     Object.assign(new Image(), {
       alt: "loading animation",
       className: "studio-status-icon-spinner spinner",
-      src: "https://scratch.mit.edu/svgs/modal/spinner-white.svg",
+      src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' fill-rule='evenodd' stroke='%23FFF' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M15 10a5 5 0 1 0-5 5'/%3E%3C/svg%3E",
     }),
-    Object.assign(document.createElement("div"), { textContent: "Loading...", style: "margin-left: 0.5em;" })
+    Object.assign(document.createElement("span"), { textContent: "Loading...", className: "one-click-label" })
   );
   document.documentElement.appendChild(loadingOverlay);
   const { projectId } = await (await fetch(addon.self.dir + "/consts.json")).json();
@@ -34,7 +33,6 @@ export default async function ({ addon, global, console }) {
   );
   input.value = scratchAddons.globalState.temporary[location.hash.slice(1)].publicCode;
   input[Object.keys(input).find((e) => e.startsWith("__reactEventHandlers"))].onChange({ target: input });
-  await wait(100);
   document.querySelector("." + addon.tab.scratchClass("question_question-submit-button")).click();
   while (1) {
     await wait(100);
