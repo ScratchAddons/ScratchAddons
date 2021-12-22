@@ -351,9 +351,10 @@ export default async ({ addon, msg, safeMsg }) => {
               API.fetchAlerts(addon),
             ]);
           })
-          .then(async ([_, alerts]) => {
+          .then(async ([newMessages, alerts]) => {
             chrome.runtime.sendMessage({
               forceBadgeUpdate: { store: scratchAddons.cookieStoreId },
+              notifyNewMessages: { store: scratchAddons.cookieStoreId, messages: newMessages },
             });
             const db = await MessageCache.openDatabase();
             try {

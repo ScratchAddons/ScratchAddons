@@ -1,4 +1,5 @@
 import * as MessageCache from "../libraries/common/message-cache.js";
+import { notifyNewMessages } from "../addons/scratch-notifier/notifier.js";
 
 let ready = false;
 let duringBadgeUpdate = false;
@@ -101,8 +102,9 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
           scratchAddons.globalState.auth.xToken
         );
         await updateBadge(scratchAddons.cookieStoreId);
-        // wip scratch notifier
-        console.log(newMessages);
+        if (scratchAddons.localState.addonsEnabled["scratch-notifier"]) {
+          notifyNewMessages(newMessages);
+        }
       } catch (e) {
         console.error("Could not fetch and update messages due to error: ", e);
       }
