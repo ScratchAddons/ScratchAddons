@@ -29,11 +29,11 @@ export default async function ({ addon, global, console }) {
   });
   gf.click();
   let input = await addon.tab.waitForElement(
-    "." + addon.tab.scratchClass("question_question-input") + " ." + addon.tab.scratchClass("input_input-form")
+    '[class*="question_question-input"] [class*="input_input-form"]'
   );
   input.value = scratchAddons.globalState.temporary[location.hash.slice(1)].publicCode;
   input[Object.keys(input).find((e) => e.startsWith("__reactEventHandlers"))].onChange({ target: input });
-  document.querySelector("." + addon.tab.scratchClass("question_question-submit-button")).click();
+  document.querySelector('[class*="question_question-submit-button"]')).click();
   while (1) {
     await wait(100);
     try {
