@@ -1,3 +1,7 @@
+/*
+If the project ID changes, update it in consts.json (projectId) and addon.json (userscripts[0].matches, userstyles[0].matches)
+*/
+
 export default async function ({ addon, global, console }) {
   const wait = (ms) => new Promise((cb) => setTimeout(cb, ms));
   if (!(location.hash.startsWith("#fluffyscratch-") && scratchAddons.globalState.temporary[location.hash.slice(1)]))
