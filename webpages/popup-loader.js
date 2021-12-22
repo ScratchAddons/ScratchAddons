@@ -13,9 +13,6 @@ scratchAddons.eventTargets = {
 scratchAddons.localEvents = new EventTarget();
 scratchAddons.globalState = {};
 scratchAddons.methods = {};
-scratchAddons._pending = {
-  getMsgCount: [],
-};
 scratchAddons.l10n = new WebsiteLocalizationProvider();
 scratchAddons.isLightMode = false;
 scratchAddons.cookies = new Map();
@@ -100,11 +97,9 @@ async function refetchSession(addon) {
     });
   });
 
-  scratchAddons.methods.getMsgCount = () =>
-    new Promise((resolve) => {
-      scratchAddons._pending.getMsgCount.push(resolve);
-      chrome.runtime.sendMessage("getMsgCount");
-    });
+  scratchAddons.methods.getMsgCount = () => {
+    throw new Error("Unimplemented; fetch from IndexedDB or call MessageCache.fetchMessageCount instead");
+  };
   scratchAddons.methods.getEnabledAddons = (tag) =>
     sendMessage({
       getEnabledAddons: {
@@ -119,12 +114,6 @@ async function refetchSession(addon) {
   });
 
   port.onMessage.addListener((request) => {
-    if (request.setMsgCount) {
-      const { count } = request.setMsgCount;
-      scratchAddons._pending.getMsgCount.forEach((resolve) => resolve(count));
-      scratchAddons._pending.getMsgCount = [];
-      return;
-    }
     if (request.newGlobalState) {
       scratchAddons.globalState = request.newGlobalState;
       return;
