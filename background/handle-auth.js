@@ -1,3 +1,6 @@
+import { startCache } from "./message-cache.js";
+import { openMessageCache } from "../libraries/common/message-cache.js";
+
 const promisify =
   (callbackFn) =>
   (...args) =>
@@ -24,6 +27,7 @@ function getDefaultStoreId() {
   const defaultStoreId = await getDefaultStoreId();
   console.log("Default cookie store ID: ", defaultStoreId);
   await checkSession();
+  startCache(defaultStoreId);
 })();
 
 chrome.cookies.onChanged.addListener(({ cookie, cause }) => {
@@ -33,7 +37,11 @@ chrome.cookies.onChanged.addListener(({ cookie, cause }) => {
     } else if (!scratchAddons.cookieStoreId) {
       getDefaultStoreId().then(() => checkSession());
     } else if (cookie.storeId === scratchAddons.cookieStoreId) {
-      checkSession();
+      checkSession().then(() => startCache(scratchAddons.cookieStoreId, true));
+    } else {
+      // Clear message cache for the store
+      // This is not the main one, so we don't refetch here
+      openMessageCache(cookie.storeId, true);
     }
     notify(cookie);
   }

@@ -1,15 +1,9 @@
+import { HTTPError } from "../../libraries/common/message-cache.js";
+
 const parser = new DOMParser();
 
-export class HTTPError extends Error {
-  constructor(message, code) {
-    super(message);
-    this.code = code;
-  }
+export { HTTPError };
 
-  static fromResponse(resp, message) {
-    return new HTTPError(`${message}: status ${resp.status}`, resp.status);
-  }
-}
 export class DetailedError extends Error {
   constructor(message, details) {
     super(message);

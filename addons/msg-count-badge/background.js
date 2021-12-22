@@ -14,10 +14,11 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     msgCount = await addon.account.getMsgCount();
     setBadge();
   };
-
+/*
   getMsgCountAndSetBadge();
 
   addon.settings.addEventListener("change", setBadge);
 
   setInterval(getMsgCountAndSetBadge, 2500);
+  */
 }

@@ -1,4 +1,5 @@
 import changeAddonState from "./imports/change-addon-state.js";
+import { updateBadge } from "./message-cache.js";
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // Message used to load popups as well
@@ -34,5 +35,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       scratchAddons.localEvents.dispatchEvent(
         new CustomEvent("updateUserstylesSettingsChange", { detail: { addonId, manifest } })
       );
+    if (addonId === "msg-count-badge") updateBadge(scratchAddons.cookieStoreId);
   }
 });

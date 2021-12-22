@@ -1,4 +1,5 @@
 import runPersistentScripts from "./run-persistent-scripts.js";
+import { updateBadge } from "../message-cache.js";
 
 /**
  * Changes addon state (enabled/disabled), and executes the addons if enabled,
@@ -33,4 +34,5 @@ export default (addonId, newState) => {
       scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
     }
   }
+  if (addonId === "msg-count-badge") updateBadge(scratchAddons.cookieStoreId);
 };
