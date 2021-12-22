@@ -1,10 +1,14 @@
 {
-  "name": "One Click FluffyScratch Login",
-  "description": "Makes logging in to sites that use FluffyScratch F A S T.",
+  "name": "One click FluffyScratch login",
+  "description": "Makes logging in to sites that use FluffyScratch (like Ocular) faster.",
   "credits": [
     {
       "name": "easrng",
       "link": "https://easrng.net/"
+    },
+    {
+      "name": "hampton",
+      "link": "https://hamptonmoore.com/"
     }
   ],
   "userscripts": [
@@ -15,7 +19,7 @@
   ],
   "userstyles": [
     {
-      "url": "hideuntilscript.css",
+      "url": "userstyle.css",
       "matches": ["https://scratch.mit.edu/projects/413751680", "https://scratch.mit.edu/projects/413751680/*"]
     }
   ],
