@@ -36,7 +36,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 <p dir="auto"><strong>${m("help-make-space")} ${m("help-new")}</strong> &ndash; ${m("help-make-space-desc")}</p>
 <p dir="auto"><strong>${m("copy-to-clipboard")}</strong> &ndash; ${m("copy-to-clipboard-desc")}</p>
 <p dir="auto"><strong>${m("paste-from-clipboard")}</strong> &ndash; ${m("paste-from-clipboard-desc")}</p>
-<p dir="auto"><strong>${m("swap-variable")}</strong> &ndash; ${m("swap-variable-desc")}</p>
 <p dir="auto"><strong>${m("middleclick")}</strong> &ndash; ${m("middleclick-desc")}</p>
 <p dir="auto"><strong>${m("ctrl-lr")}</strong> &ndash; ${m("ctrl-lr-desc")}</p>
 <p dir="auto"><strong>${m("ctrl-space")}</strong> &ndash; ${m("ctrl-space-desc")}</p>

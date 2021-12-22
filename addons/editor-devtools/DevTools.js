@@ -152,28 +152,6 @@ export default class DevTools {
       },
       { blocks: true }
     );
-    this.addon.tab.createBlockContextMenu(
-      (items, block) => {
-        if (block.getCategory() === "data" || block.getCategory() === "data-lists") {
-          this.selVarID = block.getVars()[0];
-          items.push({
-            enabled: true,
-            text: this.m("swap", { var: block.getCategory() === "data" ? this.m("variables") : this.m("lists") }),
-            callback: () => {
-              let wksp = this.utils.getWorkspace();
-              let v = wksp.getVariableById(this.selVarID);
-              let varName = window.prompt(this.msg("replace", { name: v.name }));
-              if (varName) {
-                this.doReplaceVariable(this.selVarID, varName, v.type);
-              }
-            },
-            separator: true,
-          });
-        }
-        return items;
-      },
-      { blocks: true, flyout: true }
-    );
   }
 
   isScriptEditor() {
@@ -1218,37 +1196,6 @@ export default class DevTools {
       return true;
     }
   */
-
-  /**
-   * Quick and dirty replace all instances of one variable / list with another variable / list
-   * @param varId original variable name
-   * @param newVarName new variable name
-   * @param type type of variable ("" = variable, anything else is a list?
-   */
-  doReplaceVariable(varId, newVarName, type) {
-    let wksp = this.utils.getWorkspace();
-    let v = wksp.getVariable(newVarName, type);
-    if (!v) {
-      alert(this.msg("var-not-exist"));
-      return;
-    }
-    let newVId = v.getId();
-
-    UndoGroup.startUndoGroup(wksp);
-    let blocks = this.getVariableUsesById(varId);
-    for (const block of blocks) {
-      try {
-        if (type === "") {
-          block.getField("VARIABLE").setValue(newVId);
-        } else {
-          block.getField("LIST").setValue(newVId);
-        }
-      } catch (e) {
-        // ignore
-      }
-    }
-    UndoGroup.endUndoGroup(wksp);
-  }
 
   /*
     function doInjectScripts(codeString) {
