@@ -17,7 +17,7 @@
       "matches": ["projects"]
     }
   ],
-  "tags": ["editor", "recommended"],
+  "tags": ["editor"],
   "enabledByDefault": false,
   "versionAdded": "1.24.0",
   "dynamicEnable": true,
