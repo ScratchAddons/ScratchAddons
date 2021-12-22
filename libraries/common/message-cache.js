@@ -125,8 +125,8 @@ export async function updateMessages(cookieStoreId, forceClear, username, xToken
     }
     // [1, 2, 3].unshift(4, 5) => [4, 5, 1, 2, 3]
     messages.unshift(...newlyAdded);
-    // Cap the cache size at 1000
-    messages.length = Math.min(messages.length, 1000);
+    // Cap the cache size at maxPages * 40
+    messages.length = Math.min(messages.length, maxPages * 40);
     const tx = await db.transaction(["cache", "lastUpdated", "count"], "readwrite");
     await tx.objectStore("cache").put(messages, cookieStoreId);
     await tx.objectStore("lastUpdated").put(Date.now(), cookieStoreId);

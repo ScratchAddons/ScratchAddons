@@ -338,34 +338,55 @@ export default async ({ addon, msg, safeMsg }) => {
       (async () => {
         let fetched = await this.getData();
         if (fetched) this.analyzeMessages();
-        else {
-          const interval = setInterval(async () => {
-            fetched = await this.getData();
-            if (fetched) {
-              clearInterval(interval);
-              this.analyzeMessages();
-            }
-          }, 500);
-        }
       })();
     },
     methods: {
       getData() {
-        return new Promise((resolve) => {
-          chrome.runtime.sendMessage({ scratchMessaging: "getData" }, (res) => {
-            if (res) {
-              this.stMessages = (Array.isArray(res.stMessages) ? res.stMessages : []).map((alert) => ({
-                ...alert,
-                datetime_created: new Date(alert.datetime_created).toDateString(),
-              }));
-              this.messages = res.messages;
-              this.msgCount = res.lastMsgCount;
-              this.username = res.username;
-              this.error = res.error;
-              resolve(res.error ? false : true);
+        return Promise.all([addon.auth.fetchUsername(), addon.auth.fetchXToken()])
+          .then(([username, xToken]) => {
+            if (!username) throw new MessageCache.HTTPError("Not logged in", 401);
+            this.username = username;
+            return Promise.all([
+              MessageCache.updateMessages(scratchAddons.cookieStoreId, false, username, xToken),
+              API.fetchAlerts(addon),
+            ]);
+          })
+          .then(async ([_, alerts]) => {
+            chrome.runtime.sendMessage({
+              forceBadgeUpdate: { store: scratchAddons.cookieStoreId },
+            });
+            const db = await MessageCache.openDatabase();
+            try {
+              this.messages = await db.get("cache", scratchAddons.cookieStoreId);
+              this.msgCount = await db.get("count", scratchAddons.cookieStoreId);
+            } finally {
+              await db.close();
             }
+            this.stMessages = (Array.isArray(alerts) ? alerts : []).map((alert) => ({
+              ...alert,
+              datetime_created: new Date(alert.datetime_created).toDateString(),
+            }));
+            this.error = undefined;
+            return true;
+          })
+          .catch((e) => {
+            if (e instanceof MessageCache.HTTPError) {
+              if (e.code === 401 || e.code === 403) {
+                this.error = "loggedOut";
+                return false;
+              } else if (e.code >= 500) {
+                this.error = "serverError";
+                return false;
+              }
+            } else if (e instanceof TypeError && String(e).includes("NetworkError")) {
+              this.error = "networkError";
+              return false;
+            }
+            console.error("Error while initial getData", e);
+            this.hasCustomError = true;
+            this.error = String(e);
+            return false;
           });
-        });
       },
 
       async updateMessageCount() {
@@ -377,9 +398,8 @@ export default async ({ addon, msg, safeMsg }) => {
         } finally {
           await db.close();
         }
-        this.markedAsRead = true;
         chrome.runtime.sendMessage({
-          clearMessages: { store: scratchAddons.cookieStoreId },
+          forceBadgeUpdate: { store: scratchAddons.cookieStoreId },
         });
       },
 
@@ -387,6 +407,9 @@ export default async ({ addon, msg, safeMsg }) => {
       markAsRead() {
         MessageCache.markAsRead(addon.auth.csrfToken)
           .then(() => this.updateMessageCount())
+          .then(() => {
+            this.markedAsRead = true;
+          })
           .catch((e) => console.error("Marking messages as read failed:", e));
       },
       dismissAlert(id) {
@@ -515,7 +538,6 @@ export default async ({ addon, msg, safeMsg }) => {
           })
           .catch((e) => {
             if (e instanceof API.HTTPError) {
-              console.warn(e, e.code);
               this.error = e.code < 500 ? "loggedOut" : "serverError";
               return;
             } else if (String(e).includes("NetworkError")) {

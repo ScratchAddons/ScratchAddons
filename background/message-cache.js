@@ -115,7 +115,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 });
 
 chrome.runtime.onMessage.addListener((message) => {
-  if (message?.clearMessages && message.clearMessages.store === scratchAddons.cookieStoreId) {
+  if (message?.forceBadgeUpdate && message.forceBadgeUpdate.store === scratchAddons.cookieStoreId) {
     updateBadge(scratchAddons.cookieStoreId);
   }
 });
