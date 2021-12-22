@@ -140,7 +140,7 @@ async function notifyMessage({
   }
 
   const soundSetting = settings.notification_sound;
-  if (soundSetting === "addons-ping") new Audio(chrome.runtime.getURL("./addons/scratch-notifier/ping.mp3")).play();
+  if (soundSetting === "addons-ping" && !scratchAddons.muted) new Audio(chrome.runtime.getURL("./addons/scratch-notifier/ping.mp3")).play();
 
   const notifId = await createNotification({
     base: "notifier",
