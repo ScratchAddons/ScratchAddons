@@ -17,6 +17,14 @@ export default class FetchableAuth extends AuthCommon {
   }
 
   /**
+   * @abstract
+   * @private
+   */
+  _getCookie() {
+    throw new Error("Subclasses must implement this.");
+  }
+
+  /**
    * @private
    */
   _waitUntilFetched() {
