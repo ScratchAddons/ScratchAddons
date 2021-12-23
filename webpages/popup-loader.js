@@ -23,12 +23,13 @@ const promisify =
   (...args) =>
     new Promise((resolve) => callbackFn(...args, resolve));
 
-function getCookieValue(name, getCookie) {
+function getCookieValue(name, getCookie, storeId) {
   return new Promise((resolve) => {
     chrome.cookies.get(
       {
         url: "https://scratch.mit.edu/",
         name,
+        storeId,
       },
       (cookie) => {
         if (cookie && cookie.value) resolve(getCookie ? cookie : cookie.value);
@@ -36,6 +37,17 @@ function getCookieValue(name, getCookie) {
       }
     );
   });
+}
+
+async function getActualCookieStore() {
+  // Due to https://bugzilla.mozilla.org/show_bug.cgi?id=1747283
+  // calling chrome.cookies.get without storeId on containers returns
+  // the cookie for the default context, not contaienr context.
+  // Since popups can't be containers, they must be tabs,
+  // which means tabs.getCurrent can be used to grab the store ID instead.
+  const current = await promisify(chrome.tabs.getCurrent.bind(chrome.tabs))();
+  // Return undefined in popup
+  return current?.cookieStoreId || undefined;
 }
 
 async function refetchCookies() {
@@ -46,9 +58,10 @@ async function refetchCookies() {
     scratchAddons.cookieFetchingFailed = true;
     return;
   }
-  const scratchLang = (await getCookieValue("scratchlanguage")) || navigator.language;
-  const csrfTokenCookie = await getCookieValue("scratchcsrftoken", true);
-  scratchAddons.cookieStoreId = csrfTokenCookie.storeId;
+  const tabCookieStoreId = await getActualCookieStore();
+  const scratchLang = (await getCookieValue("scratchlanguage", false, tabCookieStoreId)) || navigator.language;
+  const csrfTokenCookie = await getCookieValue("scratchcsrftoken", true, tabCookieStoreId);
+  scratchAddons.cookieStoreId = tabCookieStoreId || csrfTokenCookie.storeId;
   scratchAddons.cookies.set("scratchlanguage", scratchLang);
   scratchAddons.cookies.set("scratchcsrftoken", csrfTokenCookie.value);
 }
