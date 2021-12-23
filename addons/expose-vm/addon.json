@@ -1,0 +1,14 @@
+{
+  "name": "Expose VM",
+  "description": "Stores a reference to scratch-vm at window.vm",
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor"],
+  "enabledByDefault": false
+}
