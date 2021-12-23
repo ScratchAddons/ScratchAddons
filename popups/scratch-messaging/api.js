@@ -207,11 +207,16 @@ export async function fetchMigratedComments(
     const replies = [];
     let lastRepliesLength = 40;
     let offset = 0;
-    while (lastRepliesLength === 40) {
-      const newReplies = await getReplies(offset);
-      newReplies.forEach((c) => replies.push(c));
-      lastRepliesLength = newReplies.length;
-      offset += 40;
+    // reply_count is guaranteed to be above 0 if replies exist,
+    // although the exact value is unreliable
+    // This matches scratch-www behavior, and has significant performance gain
+    if (parentComment.reply_count > 0) {
+      while (lastRepliesLength === 40) {
+        const newReplies = await getReplies(offset);
+        newReplies.forEach((c) => replies.push(c));
+        lastRepliesLength = newReplies.length;
+        offset += 40;
+      }
     }
 
     if (json.parent_id && replies.length === 0) {
