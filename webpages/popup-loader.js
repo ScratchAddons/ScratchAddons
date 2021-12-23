@@ -15,6 +15,7 @@ scratchAddons.globalState = {};
 scratchAddons.methods = {};
 scratchAddons.l10n = new WebsiteLocalizationProvider();
 scratchAddons.isLightMode = false;
+scratchAddons.cookieFetchingFailed = false;
 scratchAddons.cookies = new Map();
 
 const promisify =
@@ -38,6 +39,13 @@ function getCookieValue(name, getCookie) {
 }
 
 async function refetchCookies() {
+  try {
+    await fetch("https://scratch.mit.edu/csrf_token/");
+  } catch (e) {
+    console.error(e);
+    scratchAddons.cookieFetchingFailed = true;
+    return;
+  }
   const scratchLang = (await getCookieValue("scratchlanguage")) || navigator.language;
   const csrfTokenCookie = await getCookieValue("scratchcsrftoken", true);
   scratchAddons.cookieStoreId = csrfTokenCookie.storeId;

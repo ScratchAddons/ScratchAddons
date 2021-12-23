@@ -344,6 +344,7 @@ export default async ({ addon, msg, safeMsg }) => {
       getData() {
         return Promise.all([addon.auth.fetchUsername(), addon.auth.fetchXToken()])
           .then(([username, xToken]) => {
+            if (scratchAddons.cookieFetchingFailed) throw new TypeError("NetworkError");
             if (!username) throw new MessageCache.HTTPError("Not logged in", 401);
             this.username = username;
             return Promise.all([

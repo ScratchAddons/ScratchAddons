@@ -9,6 +9,64 @@ export class HTTPError extends Error {
   }
 }
 
+class IncognitoTransaction {
+  constructor(db, stores) {
+    this.db = db;
+    this.stores = stores;
+  }
+
+  objectStore(name) {
+    return {
+      put: (value) => this.db.put(name, value),
+    };
+  }
+
+  get done() {
+    return null;
+  }
+}
+
+class IncognitoDatabase {
+  constructor() {
+    this.messages = [];
+    this.msgCount = 0;
+  }
+  get(name) {
+    switch (name) {
+      case "cache":
+        return this.messages.slice();
+      case "count":
+        return this.msgCount;
+    }
+  }
+
+  put(name, value) {
+    switch (name) {
+      case "cache": {
+        this.messages = value;
+        return;
+      }
+      case "count": {
+        this.msgCount = value;
+        return;
+      }
+    }
+  }
+
+  close() {}
+
+  transaction(stores) {
+    return new IncognitoTransaction(this, stores);
+  }
+
+  static isIncognito() {
+    // This API is not deprecated
+    return chrome.extension.inIncognitoContext;
+  }
+}
+
+const incognitoDatabase = new IncognitoDatabase();
+
 /**
  * Fetches the message count from the API.
  * Errors are silenced.
@@ -50,6 +108,7 @@ export async function fetchMessages(username, xToken, offset) {
  * Callers must close this in try-finally block.
  */
 export async function openDatabase() {
+  if (IncognitoDatabase.isIncognito()) return incognitoDatabase;
   return idb.openDB("messaging", 1, {
     upgrade(d) {
       d.createObjectStore("cache");
@@ -69,6 +128,7 @@ export async function openDatabase() {
  */
 export async function openMessageCache(cookieStoreId, forceClear) {
   const db = await openDatabase();
+  if (db instanceof IncognitoDatabase) return;
 
   try {
     const tx = await db.transaction(["cache", "lastUpdated", "count"], "readwrite");
