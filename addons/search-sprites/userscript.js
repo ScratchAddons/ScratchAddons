@@ -4,6 +4,7 @@ export default async function({ addon, global, console }) {
     search_box.setAttribute('type', 'search');
     search_box.setAttribute('placeholder', 'Search sprites...');
     search_box.setAttribute('id', 'sa-sprite-search-box');
+    search_box.setAttribute('autocomplete', 'off');
 
     await addon.tab.waitForElement("div.sprite-selector_items-wrapper_4bcOj");
 
