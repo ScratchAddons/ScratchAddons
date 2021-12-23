@@ -22,7 +22,8 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["projects"]
+      "matches": ["projects"],
+      "runAtComplete": false
     }
   ],
   "userstyles": [
@@ -49,6 +50,12 @@
       "default": "link"
     },
     {
+      "name": "Automatically open/replace",
+      "id": "auto",
+      "type": "boolean",
+      "default": false
+    },
+    {
       "name": "Enable addons",
       "id": "addons",
       "type": "boolean",
@@ -59,5 +66,9 @@
     }
   ],
   "versionAdded": "1.18.0",
+  "latestUpdate": {
+    "version": "1.24.0",
+    "newSettings": ["auto"]
+  },
   "tags": ["community", "projectPage", "featured"]
 }
