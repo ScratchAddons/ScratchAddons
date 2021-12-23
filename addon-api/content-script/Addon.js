@@ -18,7 +18,6 @@ export default class UserscriptAddon extends Addon {
     this.tab = new Tab(info);
     this.auth.dispose();
     this.auth = new Auth(this);
-    this.account.dispose();
     this.account = new Account(this);
     this.self.disabled = false;
     this.self.enabledLate = info.enabledLate;

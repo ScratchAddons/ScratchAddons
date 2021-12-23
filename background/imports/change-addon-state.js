@@ -1,4 +1,3 @@
-import runPersistentScripts from "./run-persistent-scripts.js";
 import { updateBadge } from "../message-cache.js";
 
 /**
@@ -18,19 +17,11 @@ export default (addonId, newState) => {
     if (dynamicEnable || dynamicDisable) {
       scratchAddons.localEvents.dispatchEvent(new CustomEvent("addonDynamicEnable", { detail: { addonId, manifest } }));
     }
-    runPersistentScripts(addonId);
   } else {
     if (dynamicDisable) {
       scratchAddons.localEvents.dispatchEvent(
         new CustomEvent("addonDynamicDisable", { detail: { addonId, manifest } })
       );
-    }
-    const addonObjs = scratchAddons.addonObjects.filter((addonObj) => addonObj.self.id === addonId);
-    if (addonObjs) {
-      addonObjs.forEach((addonObj) => {
-        addonObj.self.dispatchEvent(new CustomEvent("disabled"));
-        addonObj._kill();
-      });
     }
   }
   if (addonId === "msg-count-badge") updateBadge(scratchAddons.cookieStoreId);
