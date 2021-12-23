@@ -256,7 +256,8 @@ export function notifyNewMessages(messages) {
   const username = scratchAddons.globalState.auth.username;
   if (messages === null || messages.length === 0 || scratchAddons.muted) return;
   messages = messages.slice(20);
-  if (settings.notification_sound === "addons-ping") new Audio(chrome.runtime.getURL("./addons/scratch-notifier/ping.mp3")).play();
+  if (settings.notification_sound === "addons-ping")
+    new Audio(chrome.runtime.getURL("./addons/scratch-notifier/ping.mp3")).play();
   for (const message of messages) {
     let messageType = message.type;
     let commentUrl;
@@ -327,7 +328,11 @@ export function notifyNewMessages(messages) {
 // Popups might fetch new messages.
 // They will send the notifier the new messages, where we can send notifications.
 chrome.runtime.onMessage.addListener((message) => {
-  if (scratchAddons.localState.addonsEnabled["scratch-notifier"] && message?.notifyNewMessages && message.notifyNewMessages.store === scratchAddons.cookieStoreId) {
+  if (
+    scratchAddons.localState.addonsEnabled["scratch-notifier"] &&
+    message?.notifyNewMessages &&
+    message.notifyNewMessages.store === scratchAddons.cookieStoreId
+  ) {
     console.log(message.notifyNewMessages, scratchAddons.cookieStoreId);
     notifyNewMessages(message.notifyNewMessages.messages);
   }
