@@ -1,6 +1,6 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import { isPaused, setPaused, onPauseChanged, singleStep } from "./module.js";
-import { } from "./module.js";
+import {} from "./module.js";
 
 export default async function ({ addon, global, console, msg }) {
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
@@ -257,11 +257,11 @@ export default async function ({ addon, global, console, msg }) {
         exportFormat.replace(
           /\{(sprite|type|content)\}/g,
           (_, match) =>
-          ({
-            sprite: getTargetInfo(targetId, targetInfoCache).name,
-            type,
-            content,
-          }[match])
+            ({
+              sprite: getTargetInfo(targetId, targetInfoCache).name,
+              type,
+              content,
+            }[match])
         )
       )
       .join("\n");
@@ -398,8 +398,8 @@ export default async function ({ addon, global, console, msg }) {
           blockLink.textContent = thread.target.isOriginal
             ? thread.target.getName()
             : msg("clone-of", {
-              spriteName: thread.target.getName(),
-            });
+                spriteName: thread.target.getName(),
+              });
           blockLink.className = "logLink";
           blockLink.dataset.blockId = blockId;
           blockLink.dataset.targetId = thread.target.id;
@@ -800,8 +800,8 @@ export default async function ({ addon, global, console, msg }) {
     link.textContent = target.isOriginal
       ? target.getName()
       : msg("clone-of", {
-        spriteName: parentTarget.getName(),
-      });
+          spriteName: parentTarget.getName(),
+        });
     link.className = "logLink";
     link.dataset.blockId = blockId;
     link.dataset.targetId = targetId;
