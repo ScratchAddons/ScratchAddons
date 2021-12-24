@@ -133,7 +133,7 @@ export async function openMessageCache(cookieStoreId, forceClear) {
   try {
     const tx = await db.transaction(["cache", "lastUpdated", "count"], "readwrite");
     const lastUpdated = await tx.objectStore("lastUpdated").get(cookieStoreId);
-    if (lastUpdated === undefined || forceClear || lastUpdated + 60 * 60 * 1000 < Date.now()) {
+    if (lastUpdated === undefined || forceClear || lastUpdated + 12 * 60 * 60 * 1000 < Date.now()) {
       // Clear items last updated more than 1 hour ago
       await tx.objectStore("cache").put([], cookieStoreId);
       await tx.objectStore("count").put(0, cookieStoreId);
@@ -187,6 +187,8 @@ export async function updateMessages(cookieStoreId, forceClear, username, xToken
     messages.unshift(...newlyAdded);
     // Cap the cache size at maxPages * 40
     messages.length = Math.min(messages.length, maxPages * 40);
+    // Only notify actual new messages, since the cache invalidation may occur
+    newlyAdded.length = Math.min(newlyAdded.length, messageCount);
     const tx = await db.transaction(["cache", "lastUpdated", "count"], "readwrite");
     await tx.objectStore("cache").put(messages, cookieStoreId);
     await tx.objectStore("lastUpdated").put(Date.now(), cookieStoreId);
