@@ -1,15 +1,15 @@
 #sa-sprite-search-box {
-    color: black;
-    width: 100%;
-    box-sizing: border-box;
-    background-color: #eaf1fb;
-    border: 0px;
-    border-bottom: 1px solid hsla(0, 0%, 1%, 0.15);
-    outline: none;
-    padding: 5px 10px;
+  color: black;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #eaf1fb;
+  border: 0px;
+  border-bottom: 1px solid hsla(0, 0%, 1%, 0.15);
+  outline: none;
+  padding: 5px 10px;
 }
 
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-decoration {
-    -webkit-appearance: auto;
+  -webkit-appearance: auto;
 }
