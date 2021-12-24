@@ -37,8 +37,10 @@ chrome.cookies.onChanged.addListener(({ cookie, cause }) => {
     } else if (!scratchAddons.cookieStoreId) {
       getDefaultStoreId().then(() => checkSession());
     } else if (cookie.storeId === scratchAddons.cookieStoreId) {
-      checkSession().then(() => startCache(scratchAddons.cookieStoreId, true));
-    } else {
+      checkSession().then(() => {
+        if (cookie.name === "scratchsessionsid") startCache(scratchAddons.cookieStoreId, true);
+      });
+    } else if (cookie.name === "scratchsessionsid") {
       // Clear message cache for the store
       // This is not the main one, so we don't refetch here
       openMessageCache(cookie.storeId, true);

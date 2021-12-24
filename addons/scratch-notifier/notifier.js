@@ -333,7 +333,6 @@ chrome.runtime.onMessage.addListener((message) => {
     message?.notifyNewMessages &&
     message.notifyNewMessages.store === scratchAddons.cookieStoreId
   ) {
-    console.log(message.notifyNewMessages, scratchAddons.cookieStoreId);
     notifyNewMessages(message.notifyNewMessages.messages);
   }
 });
