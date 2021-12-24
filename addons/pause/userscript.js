@@ -1,4 +1,4 @@
-import { paused, setPaused, onPauseChanged } from "./module.js";
+import { isPaused, setPaused, onPauseChanged } from "./../debugger/module.js";
 
 export default async function ({ addon, global, console, msg }) {
   const img = document.createElement("img");
@@ -6,8 +6,8 @@ export default async function ({ addon, global, console, msg }) {
   img.draggable = false;
   img.title = msg("pause");
 
-  const setSrc = () => (img.src = addon.self.dir + (paused ? "/play.svg" : "/pause.svg"));
-  img.addEventListener("click", () => setPaused(!paused));
+  const setSrc = () => (img.src = addon.self.dir + (isPaused() ? "/play.svg" : "/pause.svg"));
+  img.addEventListener("click", () => setPaused(!isPaused()));
   addon.tab.displayNoneWhileDisabled(img);
   addon.self.addEventListener("disabled", () => setPaused(false));
   setSrc();

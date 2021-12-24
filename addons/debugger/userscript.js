@@ -1,5 +1,6 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
-import { paused, setPaused, onPauseChanged, singleStep } from "./../pause/module.js";
+import { isPaused, setPaused, onPauseChanged, singleStep } from "./module.js";
+import { } from "./module.js";
 
 export default async function ({ addon, global, console, msg }) {
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
@@ -33,7 +34,7 @@ export default async function ({ addon, global, console, msg }) {
       }
       return;
     }
-    setPaused(!paused);
+    setPaused(!isPaused());
     const pauseAddonButton = document.querySelector(".pause-btn");
     if (!pauseAddonButton || getComputedStyle(pauseAddonButton).display === "none") toggleConsole(true);
   };
@@ -256,11 +257,11 @@ export default async function ({ addon, global, console, msg }) {
         exportFormat.replace(
           /\{(sprite|type|content)\}/g,
           (_, match) =>
-            ({
-              sprite: getTargetInfo(targetId, targetInfoCache).name,
-              type,
-              content,
-            }[match])
+          ({
+            sprite: getTargetInfo(targetId, targetInfoCache).name,
+            type,
+            content,
+          }[match])
         )
       )
       .join("\n");
@@ -304,7 +305,7 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   function threadsRefresh() {
-    if (paused) {
+    if (isPaused()) {
       var addedThreads = [];
 
       function createThreadElement(thread, idx, iconUrl) {
@@ -334,40 +335,41 @@ export default async function ({ addon, global, console, msg }) {
           const block = thread.target.blocks.getBlock(blockId);
 
           var name, colour;
-          if (block.opcode == "procedures_call") {
-            colour = ScratchBlocks.Colours.more.primary;
-            if (block.mutation) {
-              name = block.mutation.proccode.replaceAll("%s", "()").replaceAll("%b", "()");
-              const customBlock = addon.tab.getCustomBlock(block.mutation.proccode);
-              if (customBlock) {
-                colour = customBlock.color;
+          if (block)
+            if (block.opcode == "procedures_call") {
+              colour = ScratchBlocks.Colours.more.primary;
+              if (block.mutation) {
+                name = block.mutation.proccode.replaceAll("%s", "()").replaceAll("%b", "()");
+                const customBlock = addon.tab.getCustomBlock(block.mutation.proccode);
+                if (customBlock) {
+                  colour = customBlock.color;
+                }
               }
+            } else {
+              // This quickly creates a Blockly block so we can get its name, than removes it again.
+              const workspace = Blockly.getMainWorkspace();
+
+              ScratchBlocks.Events.disabled_ = 1; // We disable events to the block isn't added to the DOM
+
+              // https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/core/block.js#L52
+              var blocklyBlock = new ScratchBlocks.Block(workspace, block.opcode, "debugger-temp");
+
+              name = blocklyBlock.toLocaleString().replaceAll("?", "()");
+
+              var category = blocklyBlock.getCategory();
+              if (category == "data-lists") category = "data_lists";
+              if (category == "events") category = "event"; // ST why?
+              colour = ScratchBlocks.Colours[category];
+              if (colour)
+                colour = colour.primary;
+
+              // Calling `new Block` above adds it to two lists in the workspace.
+              // So we remove it from them again.
+              delete workspace.blockDB_["debugger-temp"];
+              workspace.topBlocks_.pop();
+
+              ScratchBlocks.Events.disabled_ = 0; // Re-enable events
             }
-          } else {
-            // This quickly creates a Blockly block so we can get its name, than removes it again.
-            const workspace = Blockly.getMainWorkspace();
-
-            ScratchBlocks.Events.disabled_ = 1; // We disable events to the block isn't added to the DOM
-
-            // https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/core/block.js#L52
-            var blocklyBlock = new ScratchBlocks.Block(workspace, block.opcode, "debugger-temp");
-
-            name = blocklyBlock.toLocaleString().replaceAll("?", "()");
-            
-            var category = blocklyBlock.getCategory();
-            if (category == "data-lists") category = "data_lists";
-            if (category == "events") category = "event"; // ST why?
-            colour = ScratchBlocks.Colours[category];
-            if (colour)
-              colour = colour.primary;
-
-            // Calling `new Block` above adds it to two lists in the workspace.
-            // So we remove it from them again.
-            delete workspace.blockDB_["debugger-temp"];
-            workspace.topBlocks_.pop();
-
-            ScratchBlocks.Events.disabled_ = 0; // Re-enable events
-          }
 
           if (!name) {
             name = "?"
@@ -397,8 +399,8 @@ export default async function ({ addon, global, console, msg }) {
           blockLink.textContent = thread.target.isOriginal
             ? thread.target.getName()
             : msg("clone-of", {
-                spriteName: thread.target.getName(),
-              });
+              spriteName: thread.target.getName(),
+            });
           blockLink.className = "logLink";
           blockLink.dataset.blockId = blockId;
           blockLink.dataset.targetId = thread.target.id;
@@ -425,7 +427,8 @@ export default async function ({ addon, global, console, msg }) {
 
         subelements.append(createThreadBlockElement(thread.topBlock));
         for (var i = 0; i < thread.stack.length; i++) {
-          subelements.append(createThreadBlockElement(thread.stack[i], thread.stackFrames[i]));
+          if (!(thread.stack[i] == thread.topBlock && i == 0))
+            subelements.append(createThreadBlockElement(thread.stack[i], thread.stackFrames[i]));
         }
 
         element.append(subelements);
@@ -505,8 +508,8 @@ export default async function ({ addon, global, console, msg }) {
     options: {
       scales: {
         y: {
-          beginAtZero: true,
           max: getMaxFps(),
+          min: 0,
         },
       },
 
@@ -536,7 +539,7 @@ export default async function ({ addon, global, console, msg }) {
   var pauseTime = 0; // What time we paused at.
 
   vm.runtime.renderer.draw = function () {
-    if (!paused) {
+    if (!isPaused()) {
       const now = Date.now();
       const maxFps = getMaxFps();
       // Remove all frame times older than 1 second in renderTimes
@@ -680,7 +683,7 @@ export default async function ({ addon, global, console, msg }) {
   // });
   // closeButton.addEventListener("mouseup", () => closeDragElement());
 
-  if (!paused) {
+  if (!isPaused()) {
     unpauseButton.style.display = "none";
     stepButton.style.display = "none";
   }
@@ -798,8 +801,8 @@ export default async function ({ addon, global, console, msg }) {
     link.textContent = target.isOriginal
       ? target.getName()
       : msg("clone-of", {
-          spriteName: parentTarget.getName(),
-        });
+        spriteName: parentTarget.getName(),
+      });
     link.className = "logLink";
     link.dataset.blockId = blockId;
     link.dataset.targetId = targetId;
