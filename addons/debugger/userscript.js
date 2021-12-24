@@ -360,8 +360,7 @@ export default async function ({ addon, global, console, msg }) {
               if (category == "data-lists") category = "data_lists";
               if (category == "events") category = "event"; // ST why?
               colour = ScratchBlocks.Colours[category];
-              if (colour)
-                colour = colour.primary;
+              if (colour) colour = colour.primary;
 
               // Calling `new Block` above adds it to two lists in the workspace.
               // So we remove it from them again.
@@ -372,7 +371,7 @@ export default async function ({ addon, global, console, msg }) {
             }
 
           if (!name) {
-            name = "?"
+            name = "?";
           }
 
           const blockContainer = document.createElement("div");
@@ -380,13 +379,13 @@ export default async function ({ addon, global, console, msg }) {
             className: "log",
           });
           const blockTitle = Object.assign(document.createElement("span"), {
-            innerText: name
+            innerText: name,
           });
 
           if (colour) {
             blockTitle.style.backgroundColor = colour;
             blockDiv.className += " block-log";
-            blockTitle.className = "console-block"
+            blockTitle.className = "console-block";
           }
 
           if (iconUrl) {
