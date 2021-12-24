@@ -42,7 +42,7 @@ function getCookieValue(name, getCookie, storeId) {
 async function getActualCookieStore() {
   // Due to https://bugzilla.mozilla.org/show_bug.cgi?id=1747283
   // calling chrome.cookies.get without storeId on containers returns
-  // the cookie for the default context, not contaienr context.
+  // the cookie for the default context, not container context.
   // Since popups can't be containers, they must be tabs,
   // which means tabs.getCurrent can be used to grab the store ID instead.
   const current = await promisify(chrome.tabs.getCurrent.bind(chrome.tabs))();
