@@ -25,6 +25,15 @@ function openDatabase() {
   });
 }
 
+export async function purgeDatabase() {
+  const db = await openDatabase();
+  try {
+    await db.clear("urls");
+  } finally {
+    await db.close();
+  }
+}
+
 // Call in try-finally
 async function cleanupDatabase(db) {
   const tx = db.transaction("urls", "readwrite");

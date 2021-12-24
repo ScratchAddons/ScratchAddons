@@ -1,5 +1,6 @@
 import { startCache } from "./message-cache.js";
 import { openMessageCache } from "../libraries/common/message-cache.js";
+import { purgeDatabase } from "../addons/scratch-notifier/notifier.js";
 
 const promisify =
   (callbackFn) =>
@@ -38,7 +39,10 @@ chrome.cookies.onChanged.addListener(({ cookie, cause }) => {
       getDefaultStoreId().then(() => checkSession());
     } else if (cookie.storeId === scratchAddons.cookieStoreId) {
       checkSession().then(() => {
-        if (cookie.name === "scratchsessionsid") startCache(scratchAddons.cookieStoreId, true);
+        if (cookie.name === "scratchsessionsid") {
+          startCache(scratchAddons.cookieStoreId, true);
+          purgeDatabase();
+        }
       });
     } else if (cookie.name === "scratchsessionsid") {
       // Clear message cache for the store
