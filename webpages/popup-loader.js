@@ -81,7 +81,7 @@ async function refetchSession(addon) {
     d = await res.json();
   } catch (e) {
     d = {};
-    scratchAddons.console.warn("Session fetch failed: ", e);
+    console.warn("Session fetch failed: ", e);
     if ((res && !res.ok) || !res) setTimeout(() => this.refetchSession(addon), 60000);
   }
   scratchAddons.session = d;
