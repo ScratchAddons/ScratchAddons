@@ -173,6 +173,7 @@ const registerHandler = () => {
     if (scratchAddons.globalState.addonSettings["scratch-notifier"]?.mark_as_read_when_clicked === true) {
       try {
         await markAsRead(scratchAddons.globalState.auth.csrfToken);
+        updateBadge(scratchAddons.cookieStoreId);
       } catch (e) {
         console.error("Marking message as read failed:", e);
       }
@@ -195,6 +196,7 @@ const registerHandler = () => {
     else {
       try {
         await markAsRead(scratchAddons.globalState.auth.csrfToken);
+        updateBadge(scratchAddons.cookieStoreId);
       } catch (e) {
         console.error("Marking message as read failed:", e);
       }
@@ -255,7 +257,7 @@ export function notifyNewMessages(messages) {
   const settings = scratchAddons.globalState.addonSettings["scratch-notifier"] || {};
   const username = scratchAddons.globalState.auth.username;
   if (messages === null || messages.length === 0 || scratchAddons.muted) return;
-  messages = messages.slice(20);
+  messages = messages.slice(0, 20);
   if (settings.notification_sound === "addons-ping")
     new Audio(chrome.runtime.getURL("./addons/scratch-notifier/ping.mp3")).play();
   for (const message of messages) {
