@@ -9,12 +9,8 @@ const Thread = {
   STATUS_YIELD: 2,
   STATUS_YIELD_TICK: 3,
   STATUS_DONE: 4,
-
-  // Thread paused by ScratchAddons
-  SA_STATUS_PAUSED: 7729, // 'Random' big number
 };
-// https://github.com/LLK/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/sequencer.js#L62
-const WARP_TIME = 500;
+
 const EVENT_TARGET = new EventTarget();
 
 const Events = {
@@ -32,14 +28,14 @@ let paused = false;
 class ScratchAddonsSequencer {
   constructor(sequencer) {
     this.timer = runtime.sequencer.timer;
+    this.activeThread = null;
+    this.runtime = runtime;
 
     // This is normally a variable defined inside stepThreads, but
     //  we need it to be shared between steps while single stepping.
     this.stepRanFirstTick = false;
     this.stepExecutingThread = false;
-    this.activeThread = null;
-
-    this.runtime = runtime;
+    this.stepActiveThread = null;
 
     this.scratchSequencer = sequencer;
     // These methods need to be copied as they are overwriten in the
@@ -60,6 +56,10 @@ class ScratchAddonsSequencer {
     this.scratchSequencer.retireThread.call(this, ...args);
   }
 
+  stepThread(...args) {
+    this.scratchSequencer.stepThread.call(this, ...args);
+  }
+
   stepThreads() {
     if (singleSteppingBlocks) {
       // return this._singleStepThreads();
@@ -69,20 +69,20 @@ class ScratchAddonsSequencer {
   }
 
   /*
-        We need to call execute(this, thread) like the original sequencer. We don't
-        have access to that method, so we need to force the oringal stepThread to run
-        execute for us than exit before it tries to run more blocks.
+    We need to call execute(this, thread) like the original sequencer. We don't
+    have access to that method, so we need to force the oringal stepThread to run
+    execute for us than exit before it tries to run more blocks.
 
-        We can't override thread.status with STATUS_PROMISE_WAIT or STATUS_YIELD_TICK
-        becuase of this:
-        https://github.com/LLK/scratch-vm/blob/bbd242bbcab719fb0e3e25306ebf5e0b6fc48f4e/src/engine/execute.js#L108
+    We can't override thread.status with STATUS_PROMISE_WAIT or STATUS_YIELD_TICK
+    becuase of this:
+    https://github.com/LLK/scratch-vm/blob/bbd242bbcab719fb0e3e25306ebf5e0b6fc48f4e/src/engine/execute.js#L108
 
-        So, we make `thread.blockGlowInFrame = ...` throw an exception, so this line:
-        https://github.com/LLK/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/sequencer.js#L214
-        will end the function early. We then have to set it back to normal after.
+    So, we make `thread.blockGlowInFrame = ...` throw an exception, so this line:
+    https://github.com/LLK/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/sequencer.js#L214
+    will end the function early. We then have to set it back to normal after.
 
-        Why are we here just to suffer?
-    */
+    Why are we here just to suffer?
+   */
   _execute(thread) {
     const throwMsg = "Exit scratchSequencer.stepThread early.";
     thread.realBlockGlowInFrame = thread.blockGlowInFrame;
@@ -116,16 +116,9 @@ class ScratchAddonsSequencer {
       if (this.stepExecutingThread) {
         const thread = this.activeThread;
 
-        // Unpause the thread's status
-        thread.status = thread.pauseInfo.status;
-
         // Executes one block and moves the current block to the next one.
         // If we should swap thread, stop exexuting this thread.
         this.stepExecutingThread = !this._singleStepThread(thread);
-
-        // Repause the thread
-        thread.pauseInfo.status = thread.status;
-        thread.status = Thread.SA_STATUS_PAUSED;
 
         // We didn't finish any threads
         return [];
@@ -150,8 +143,6 @@ class ScratchAddonsSequencer {
       console.log("No active thread to step :(");
     }
   }
-
-  _singleStepSwapTo(thread) {}
 
   // Returns if we should swap threads.
   _singleStepThread(thread) {
@@ -212,20 +203,14 @@ class ScratchAddonsSequencer {
     // Whether `stepThreads` has run through a full single tick.
     var ranFirstTick = false;
     const doneThreads = [];
-    // It we pause in the middle of running this step, this varibale
-    // is what thread we paused on.
-    let pausedActiveThread = null;
-
+    
     var startIdx = 0;
-    // If active thread is set, we paused half way though executing a thread.
-    if (this.activeThread) {
-      // If that thread is no longer paused, start executing from it again.
-      if (this.activeThread.status !== Thread.SA_STATUS_PAUSED) {
-        startIdx = this.runtime.threads.indexOf(this.activeThread);
+    // If paused thread is set, we paused half way though executing a thread.
+    // If that thread is no longer paused, start executing from it again.
+    if (this.stepActiveThread && !this.stepActiveThread.pauseInfo) {
+        startIdx = this.runtime.threads.indexOf(this.stepActiveThread);
         if (startIdx == -1) startIdx = 0; // Just in case something weird happens
-      } else {
-        pausedActiveThread = this.activeThread;
-      }
+        this.stepActiveThread = null;
     }
 
     // Conditions for continuing to stepping threads:
@@ -259,6 +244,11 @@ class ScratchAddonsSequencer {
           activeThread.status = Thread.STATUS_RUNNING;
         }
 
+        // Don't run thread if paused
+        if (activeThread.pauseInfo) {
+            continue;
+        }
+
         if (activeThread.status === Thread.STATUS_RUNNING || activeThread.status === Thread.STATUS_YIELD) {
           this.stepThread(activeThread);
 
@@ -267,13 +257,25 @@ class ScratchAddonsSequencer {
             i--; // if the thread is removed from the list (killed), do not increase index
           }
 
-          if (activeThread.status === Thread.SA_STATUS_PAUSED) {
+          if (activeThread.pauseInfo) {
             // A breakpoint block was hit. While executing the thread.
             // We need to remember the active thread so we can return to it
             // when we unpause.
-            pausedActiveThread = activeThread;
+            this.stepActiveThread = activeThread;
             this.stepRanFirstTick = ranFirstTick;
             this.stepExecutingThread = false;
+
+            // Our status was forcibly set to STATUS_PROMISE_WAIT. Set
+            //  it back to normal.
+            Object.defineProperty(activeThread, "status", {
+                value: activeThread.pauseInfo.status,
+                configurable: true,
+                enumerable: true,
+                writable: true,
+            });
+            delete activeThread.pauseInfo.status;
+
+            continue;
           }
         }
 
@@ -310,90 +312,9 @@ class ScratchAddonsSequencer {
       startIdx = 0;
     }
 
-    // If we paused on a thread, set that to the activeThread.
-    // Otherwise, it's set to pausedThread's default value null.
-    this.activeThread = pausedActiveThread;
+    this.activeThread = null;
 
     return doneThreads;
-  }
-
-  stepThread(thread) {
-    if (thread.updateMonitor) {
-      this.scratchSequencer.stepThread(thread);
-      return;
-    }
-
-    // Don't step paused threads! (Should never be called on paused thread anyway...)
-    if (thread.status == Thread.SA_STATUS_PAUSED) {
-      return;
-    }
-
-    let currentBlockId = thread.peekStack();
-    if (!currentBlockId) {
-      thread.popStack();
-      if (thread.stack.length === 0) {
-        thread.status = Thread.STATUS_DONE;
-        return;
-      }
-    }
-    while ((currentBlockId = thread.peekStack())) {
-      let isWarpMode = thread.peekStackFrame().warpMode;
-      if (isWarpMode && !thread.warpTimer) {
-        // Use our timer object to create another one. Mitosis!
-        thread.warpTimer = new this.timer.constructor();
-        thread.warpTimer.start();
-      }
-      if (thread.target === null) {
-        this.retireThread(thread);
-      } else {
-        this._execute(thread);
-      }
-      thread.blockGlowInFrame = currentBlockId;
-      if (thread.status === Thread.STATUS_YIELD) {
-        thread.status = Thread.STATUS_RUNNING;
-        if (isWarpMode && thread.warpTimer.timeElapsed() <= WARP_TIME) {
-          continue;
-        }
-        return;
-      } else if (thread.status === Thread.STATUS_PROMISE_WAIT) {
-        return;
-      } else if (thread.status === Thread.STATUS_YIELD_TICK) {
-        return;
-      } else if (thread.status === Thread.SA_STATUS_PAUSED) {
-        return;
-      }
-      // If no control flow has happened, switch to next block.
-      if (thread.peekStack() === currentBlockId) {
-        thread.goToNextBlock();
-      }
-      // If no next block has been found at this point, look on the stack.
-      while (!thread.peekStack()) {
-        thread.popStack();
-
-        if (thread.stack.length === 0) {
-          // No more stack to run!
-          thread.status = Thread.STATUS_DONE;
-          return;
-        }
-
-        const stackFrame = thread.peekStackFrame();
-        isWarpMode = stackFrame.warpMode;
-
-        if (stackFrame.isLoop) {
-          if (!isWarpMode || thread.warpTimer.timeElapsed() > WARP_TIME) {
-            return;
-          }
-          continue;
-        } else if (stackFrame.waitingReporter) {
-          // This level of the stack was waiting for a value.
-          // This means a reporter has just returned - so don't go
-          // to the next block for this level of the stack.
-          return;
-        }
-        // Get next block of existing block on the stack.
-        thread.goToNextBlock();
-      }
-    }
   }
 }
 
@@ -430,15 +351,29 @@ export function setPaused(_paused) {
       }
 
       for (const thread of runtime.threads) {
-        if (!thread.updateMonitor && thread.status != Thread.SA_STATUS_PAUSED) {
+        if (!thread.updateMonitor && !thread.pauseInfo) {
           const pauseInfo = {
             time: runtime.currentMSecs,
-            status: thread.status,
           };
 
           thread.pauseInfo = pauseInfo;
-          thread.status = Thread.SA_STATUS_PAUSED;
         }
+      }
+
+      // If we where running a thread when we hit the breakpoint, we
+      //  need to get that thread to stop stepping instantly.
+      if (runtime.sequencer.activeThread) {
+          const thread = runtime.sequencer.activeThread;
+
+          thread.pauseInfo.status = thread.status;
+          Object.defineProperty(thread, "status", {
+              get: function () {
+                  return Thread.STATUS_PROMISE_WAIT;
+              },
+              set: function (status) {
+                  this.pauseInfo.status = status;
+              }
+          });
       }
     }
   } else {
@@ -450,7 +385,7 @@ export function setPaused(_paused) {
 
       const now = Date.now();
       for (const thread of runtime.threads) {
-        if (thread.status == Thread.SA_STATUS_PAUSED) {
+        if (thread.pauseInfo) {
           // If the thread is waiting on a timer (like for threads on a sleep block),
           //  make it so their timers havn't had any time pass sense they where paused.
           const stackFrame = thread.peekStackFrame();
@@ -458,7 +393,6 @@ export function setPaused(_paused) {
             stackFrame.executionContext.timer.startTime += now - thread.pauseInfo.time;
           }
 
-          thread.status = thread.pauseInfo.status;
           delete thread.pauseInfo;
         }
       }
@@ -498,7 +432,7 @@ vm.runtime._getMonitorThreadCount = function (threads) {
   let count = originalGetMonitorThreadCount.call(this, threads);
   if (paused) {
     for (const thread of threads) {
-      if (thread.status == Thread.SA_STATUS_PAUSED) {
+      if (thread.pauseInfo) {
         count++;
       }
     }
