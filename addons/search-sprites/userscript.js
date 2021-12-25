@@ -25,13 +25,20 @@ export default async function ({ addon, global, console }) {
   search_box.oninput = () => {
     if (search_box.value) {
       for (let i = 0; i < sprites_container.children.length; i++) {
-        if (sprites_container.children[i].children[0].children[1].innerText.toLowerCase().includes(search_box.value.toLowerCase())) {
+        if (
+          sprites_container.children[i].children[0].children[1].innerText
+            .toLowerCase()
+            .includes(search_box.value.toLowerCase())
+        ) {
           sprites_container.children[i].style.display = "block";
-        } 
-        else if (sprites_container.children[i].children[0].children[2].children[0].innerText.toLowerCase().includes(search_box.value.toLowerCase()) && sprites_container.children[i].children[0].classList.contains('sa-folders-folder')) {
+        } else if (
+          sprites_container.children[i].children[0].children[2].children[0].innerText
+            .toLowerCase()
+            .includes(search_box.value.toLowerCase()) &&
+          sprites_container.children[i].children[0].classList.contains("sa-folders-folder")
+        ) {
           sprites_container.children[i].style.display = "block";
-        } 
-        else {
+        } else {
           sprites_container.children[i].style.display = "none";
         }
       }
