@@ -1,5 +1,4 @@
 export default async function ({ addon, global, console }) {
-  console.log("hi");
   let sprites_container = document.querySelector('[class^="sprite-selector_items-wrapper"]');
   let search_box = document.createElement("input");
   search_box.setAttribute("type", "search");
