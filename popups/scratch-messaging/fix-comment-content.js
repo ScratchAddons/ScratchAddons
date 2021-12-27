@@ -20,7 +20,17 @@ export default (value, enabledAddons) => {
   node.normalize();
   for (let i = node.childNodes.length; i--; ) {
     const item = node.childNodes[i];
-    if (!shouldInsertLinebreak) item.textContent = item.textContent.replace(/\s+/g, " ");
+    let collapsed = item.textContent;
+    if (!shouldInsertLinebreak) {
+      collapsed = collapsed.replace(/\s+/g, " ");
+    }
+    if (i === 0) {
+      collapsed = collapsed.trimStart();
+    }
+    if (i === node.childNodes.length - 1) {
+      collapsed = collapsed.trimEnd();
+    }
+    item.textContent = collapsed;
     if (item instanceof Text && item.textContent === "") {
       item.remove();
     } else if (item instanceof HTMLAnchorElement && item.getAttribute("href").startsWith("/")) {
