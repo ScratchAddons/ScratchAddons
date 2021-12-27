@@ -1,4 +1,4 @@
-import Listenable from "./Listenable.js";
+import Listenable from "../common/Listenable.js";
 
 /**
  * Handles accounts.
