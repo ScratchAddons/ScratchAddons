@@ -76,23 +76,30 @@
         />
       </template>
       <template v-if="setting.type === 'datalist'">
-        <input
-          type="text"
-          class="setting-input string"
-          v-model="addonSettings[addon._addonId][setting.id]"
-          @change="checkValidity() || updateSettings()"
-          :disabled="!addon._enabled"
-          :placeholder="setting.default"
-          :maxlength="setting.max || 100"
-          :minlength="setting.min || 0"
-          :required="!!setting.min"
-          :data-addon-id="addon._addonId"
-          :data-setting-id="setting.id"
-          :list="'data-list-' + addon._addonId + '-' + setting.id"
-        />
-        <datalist :id="'data-list-' + addon._addonId + '-' + setting.id">
-          <option v-for="item of setting.items" :value="item"></option>
-        </datalist>
+        <span @click="wasClick = true">
+          <input
+            type="text"
+            class="setting-input string"
+            v-model="addonSettings[setting.id]"
+            @change="checkValidity() || updateSettings()"
+            :disabled="!addon._enabled"
+            :placeholder="setting.default"
+            :maxlength="setting.max || 100"
+            :minlength="setting.min || 0"
+            :required="!!setting.min"
+            :data-addon-id="addon._addonId"
+            :data-setting-id="setting.id"
+            @focus="showDatalist = true"
+            @blur="showDatalist = wasClick"
+          />
+          <div class="setting-dropdown" :class="{ open: showDatalist }">
+            <ul>
+              <li v-for="item of setting.items" @click="updateOption(item)">
+                <span>{{ item }}</span>
+              </li>
+            </ul>
+          </div>
+        </span>
       </template>
       <template v-if="setting.type === 'key'">
         <input

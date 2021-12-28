@@ -2,6 +2,12 @@ export default async function ({ template }) {
   const AddonSetting = Vue.extend({
     props: ["addon", "setting", "addon-settings"],
     template,
+    data() {
+      return {
+        showDatalist: false,
+        wasClick: false,
+      };
+    },
     computed: {
       show() {
         if (!this.setting.if) return true;
@@ -99,6 +105,8 @@ export default async function ({ template }) {
         this.$root.updateSettings(...params);
       },
       updateOption(newValue) {
+        this.wasClick = false;
+        this.showDatalist = false;
         this.addonSettings[this.setting.id] = newValue;
         this.updateSettings();
       },
