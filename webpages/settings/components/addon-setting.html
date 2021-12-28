@@ -76,7 +76,7 @@
         />
       </template>
       <template v-if="setting.type === 'datalist'">
-        <span @click="wasClick = true">
+        <span v-click-outside="clickOutside">
           <input
             type="text"
             class="setting-input string"
@@ -89,7 +89,7 @@
             :required="!!setting.min"
             :data-addon-id="addon._addonId"
             :data-setting-id="setting.id"
-            @focus="showDatalist = true"
+            @focus="showDatalist = wasClick = true"
             @blur="showDatalist = wasClick"
           />
           <div class="setting-dropdown" :class="{ open: showDatalist }">

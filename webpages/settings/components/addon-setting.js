@@ -105,7 +105,7 @@ export default async function ({ template }) {
         this.$root.updateSettings(...params);
       },
       updateOption(newValue) {
-        this.wasClick = false;
+        this.wasClick = true;
         this.showDatalist = false;
         this.addonSettings[this.setting.id] = newValue;
         this.updateSettings();
@@ -117,6 +117,9 @@ export default async function ({ template }) {
       },
       closeResetDropdowns(...params) {
         return this.$root.closeResetDropdowns(...params);
+      },
+      clickOutside() {
+        this.wasClick = false;
       },
     },
   });
