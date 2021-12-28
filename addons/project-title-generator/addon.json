@@ -30,6 +30,12 @@
       "type": "boolean",
       "id": "auto-on-create",
       "default": true
+    },
+    {
+      "name": "Hide button when project is named",
+      "type": "boolean",
+      "id": "only-untitled",
+      "default": false
     }
   ],
   "tags": ["editor", "easterEgg"],

@@ -53,15 +53,43 @@ export default async function ({ addon, global, console, msg }) {
   let button;
   createButton();
 
+  addon.tab.redux.addEventListener("statechanged", async (e) => {
+    if (e.detail.action.type === "projectTitle/SET_PROJECT_TITLE") {
+      let showButton = await shouldButtonShow();
+      if (showButton) createButton();
+      else removeButton();
+    }
+  });
   addon.tab.addEventListener("urlChange", () => {
     if (!addon.self.disabled && addon.tab.editorMode === "editor") createButton();
-    else if (addon.tab.editorMode !== "editor" && button) button.remove();
+    else if (addon.tab.editorMode !== "editor" && button) removeButton();
   });
-  addon.self.addEventListener("disabled", () => button.remove());
+  addon.self.addEventListener("disabled", () => removeButton());
   addon.self.addEventListener("reenabled", () => createButton());
+  addon.settings.addEventListener("change", async () => {
+    let showButton = await shouldButtonShow();
+    if (showButton) createButton();
+    else removeButton();
+  });
+
+  async function shouldButtonShow() {
+    let currentName = await addon.tab.redux.state.scratchGui.projectTitle;
+    if (!addon.settings.get("only-untitled") || currentName === "" || currentName.includes("Untitled")) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   async function createButton() {
+    let showButton = await shouldButtonShow();
+    if (!showButton || document.querySelector("#sa-project-title-generator-button") !== null) {
+      return;
+    }
+    let nameContainer = await addon.tab.waitForElement('[class*="menu-bar_menu-bar-item"][class*="menu-bar_growable"]');
+    nameContainer.classList.add("sa-project-title-generator");
     let nameField = await addon.tab.waitForElement('[class*="project-title-input_title-field"]');
+    if (button) button.remove();
     button = document.createElement("span");
     button.id = "sa-project-title-generator-button";
     button.className = addon.tab.scratchClass(
@@ -78,11 +106,15 @@ export default async function ({ addon, global, console, msg }) {
     button.addEventListener("click", () => setProjectName());
   }
 
+  async function removeButton() {
+    let nameContainer = await addon.tab.waitForElement('[class*="menu-bar_menu-bar-item"][class*="menu-bar_growable"]');
+    nameContainer.classList.remove("sa-project-title-generator");
+    button.remove();
+  }
+
   async function setProjectName() {
     let newName =
       msg("adj-" + randi(ADJ_COUNT)) + " " + msg("adj-" + randi(ADJ_COUNT)) + " " + msg("noun-" + randi(NOUN_COUNT));
-    let newInfo = await addon.tab.redux.state.preview.projectInfo;
-    newInfo.title = newName;
     addon.tab.redux.dispatch({ type: "projectTitle/SET_PROJECT_TITLE", title: newName });
   }
 

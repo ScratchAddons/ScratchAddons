@@ -1,8 +1,9 @@
-[class*="menu-bar_menu-bar-item"][class*="menu-bar_growable"] {
+.sa-project-title-generator[class*="menu-bar_menu-bar-item"][class*="menu-bar_growable"] {
   max-width: calc(12rem + 2rem);
 }
 
-[class*="project-title-input_title-field"] {
+.sa-project-title-generator[class*="menu-bar_menu-bar-item"][class*="menu-bar_growable"]
+  [class*="project-title-input_title-field"] {
   padding-right: 2rem;
 }
 
