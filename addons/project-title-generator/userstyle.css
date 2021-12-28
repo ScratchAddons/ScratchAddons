@@ -1,0 +1,18 @@
+[class*="menu-bar_menu-bar-item"][class*="menu-bar_growable"] {
+  max-width: calc(12rem + 2rem);
+}
+
+[class*="project-title-input_title-field"] {
+  padding-right: 2rem;
+}
+
+#sa-project-title-generator-button {
+  margin-left: -2rem;
+  padding-left: calc(0.75rem / 2);
+  padding-right: calc(0.75rem / 2);
+  box-shadow: none;
+}
+
+#sa-project-title-generator-button-img {
+  margin-right: 0;
+}
