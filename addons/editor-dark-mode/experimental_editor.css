@@ -57,7 +57,8 @@
 .account-nav_user-info_2We7v .account-nav_dropdown-caret-position_295CX img,
 .modal_back-button_2ej6v .button_icon_77d8G,
 .modal_header-item-close_2XDeL .close-button_close-icon_HBCuO,
-.loader_background_2DPrW img, #sa-project-title-generator-button-img {
+.loader_background_2DPrW img,
+#sa-project-title-generator-button-img {
   filter: var(--editorDarkMode-menuBar-filter);
 }
 .menu-bar_divider_2VFCm,
