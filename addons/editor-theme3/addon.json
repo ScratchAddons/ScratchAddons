@@ -12,6 +12,16 @@
   ],
   "customCssVariables": [
     {
+      "name": "inputColor-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input-color"
+        }
+      }
+    },
+    {
       "name": "inputColor-forumText",
       "value": {
         "type": "textColor",
