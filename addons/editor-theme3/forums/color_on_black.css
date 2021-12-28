@@ -1,0 +1,29 @@
+@import "%addon-self-dir%/forums/colored_text.css";
+
+.sb-motion,
+.sb-looks,
+.sb-sound,
+.sb-events,
+.sb-control,
+.sb-sensing,
+.sb-operators,
+.sb-variables,
+.sb-list,
+.sb-custom,
+.sb-custom-arg,
+.sb-extension,
+.sb-pen,
+.sb-grey,
+.sb-obsolete {
+  fill: #282828;
+}
+
+#bevelFilter feFlood[flood-color="#000"],
+#inputBevelFilter feFlood[flood-color="#000"] {
+  flood-color: white;
+  flood-opacity: 0.05;
+}
+
+.sb-input-dropdown ~ polygon {
+  fill: white;
+}

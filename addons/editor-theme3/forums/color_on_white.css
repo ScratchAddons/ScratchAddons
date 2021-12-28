@@ -1,0 +1,29 @@
+@import "%addon-self-dir%/forums/colored_text.css";
+
+.sb-motion,
+.sb-looks,
+.sb-sound,
+.sb-events,
+.sb-control,
+.sb-sensing,
+.sb-operators,
+.sb-variables,
+.sb-list,
+.sb-custom,
+.sb-custom-arg,
+.sb-extension,
+.sb-pen,
+.sb-grey,
+.sb-obsolete {
+  fill: white;
+}
+
+#bevelFilter feFlood[flood-color="#fff"],
+#inputBevelFilter feFlood[flood-color="#fff"] {
+  flood-color: black;
+  flood-opacity: 0.3;
+}
+
+.sb-label {
+  fill: black;
+}

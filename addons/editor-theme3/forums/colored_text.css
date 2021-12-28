@@ -1,0 +1,27 @@
+.sb-motion ~ .sb-label,
+.sb-looks ~ .sb-label,
+.sb-sound ~ .sb-label,
+.sb-events ~ .sb-label,
+.sb-control ~ .sb-label,
+.sb-sensing ~ .sb-label,
+.sb-operators ~ .sb-label,
+.sb-variables ~ .sb-label,
+.sb-list ~ .sb-label,
+.sb-custom ~ .sb-label,
+.sb-custom-arg ~ .sb-label,
+.sb-extension ~ .sb-label,
+.sb-pen ~ .sb-label {
+  fill: var(--sa-block-color);
+}
+.sb-grey ~ .sb-label {
+  fill: #949494;
+}
+.sb-obsolete ~ .sb-label {
+  fill: #d42828;
+}
+
+.sb-darker {
+  fill: var(--sa-block-color);
+  fill-opacity: 0.25;
+  filter: none;
+}

@@ -1,0 +1,76 @@
+.sb-motion,
+.sb-looks,
+.sb-sound,
+.sb-events,
+.sb-control,
+.sb-sensing,
+.sb-operators,
+.sb-variables,
+.sb-list,
+.sb-custom,
+.sb-custom-arg,
+.sb-extension,
+.sb-pen {
+  fill: var(--sa-block-color);
+}
+
+.sb-motion,
+.sb-motion ~ .sb-label {
+  --sa-block-color: var(--editorTheme3-motionColor);
+}
+.sb-looks,
+.sb-looks ~ .sb-label {
+  --sa-block-color: var(--editorTheme3-looksColor);
+}
+.sb-sound,
+.sb-sound ~ .sb-label {
+  --sa-block-color: var(--editorTheme3-soundsColor);
+}
+.sb-events,
+.sb-events ~ .sb-label {
+  --sa-block-color: var(--editorTheme3-eventsColor);
+}
+.sb-control,
+.sb-control ~ .sb-label {
+  --sa-block-color: var(--editorTheme3-controlColor);
+}
+.sb-sensing,
+.sb-sensing ~ .sb-label {
+  --sa-block-color: var(--editorTheme3-sensingColor);
+}
+.sb-operators,
+.sb-operators ~ .sb-label {
+  --sa-block-color: var(--editorTheme3-operatorsColor);
+}
+.sb-variables,
+.sb-variables ~ .sb-label {
+  --sa-block-color: var(--editorTheme3-dataColor);
+}
+.sb-list,
+.sb-list ~ .sb-label {
+  --sa-block-color: var(--editorTheme3-dataListsColor);
+}
+.sb-custom,
+.sb-custom ~ .sb-label,
+.sb-custom-arg,
+.sb-custom-arg ~ .sb-label {
+  --sa-block-color: var(--editorTheme3-customColor);
+}
+.sb-extension,
+.sb-extension ~ .sb-label,
+.sb-pen,
+.sb-pen ~ .sb-label {
+  --sa-block-color: var(--editorTheme3-PenColor);
+}
+
+.sb-input-number,
+.sb-input-number-dropdown,
+.sb-input-string {
+  fill: var(--editorTheme3-inputColor);
+}
+.sb-label.sb-literal-number,
+.sb-label.sb-literal-number-dropdown,
+.sb-literal-number-dropdown + polygon /* dropdown arrow */,
+.sb-label.sb-literal-string {
+  fill: var(--editorTheme3-inputColor-forumText);
+}
