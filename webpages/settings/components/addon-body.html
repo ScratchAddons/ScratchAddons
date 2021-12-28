@@ -27,6 +27,10 @@
     </div>
     <div class="addon-settings" v-if="everExpanded" v-show="expanded">
       <div class="addon-description-full">{{ addon.description }}</div>
+      <div class="addon-update" v-if="addon.latestUpdate && addon.latestUpdate.temporaryNotice">
+        <addon-tag tag="new"></addon-tag>
+        {{ addon.latestUpdate.temporaryNotice }}
+      </div>
       <div id="info" v-for="info of addon.info">
         <div class="addon-warn" v-if="info.type == 'warning'">
           <img src="../../images/icons/warning.svg" />{{ info.text }}
@@ -58,7 +62,7 @@
         <component
           :is="'preview-' + addon.addonPreview.type"
           :options="addon.addonPreview"
-          :settings="addonSettings[addon._addonId]"
+          :settings="addonSettings"
           :hovered-setting-id="hoveredSettingId"
           @areahover="highlightSetting"
         />
@@ -212,7 +216,8 @@
     flex-grow: 1;
   }
   .addon-notice,
-  .addon-warn {
+  .addon-warn,
+  .addon-update {
     padding: 8px;
     border: 2px solid;
     border-radius: 5px;
@@ -230,6 +235,11 @@
     border-color: var(--warning-border);
     background-color: var(--warning-background);
     color: var(--warning-text);
+  }
+  .addon-update {
+    border-color: var(--update-border);
+    background-color: var(--update-background);
+    color: var(--update-text);
   }
   .addon-notice img,
   .addon-warn img {

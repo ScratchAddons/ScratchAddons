@@ -1,18 +1,1720 @@
 {
-  "name": "Website dark mode",
-  "description": "Dark theme for the Scratch website.",
+  "name": "Website dark mode and customizable colors",
+  "description": "Customize colors used by the Scratch website. Multiple dark themes by different authors available. If you don't need dark mode but want to change the default colors you can select the \"Scratch's default colors\" preset and tweak it.",
   "tags": ["community", "theme", "featured"],
   "credits": [
     {
-      "name": "Maximouse",
+      "name": "Maximouse (addon, \"Experimental\" Dark)",
       "link": "https://scratch.mit.edu/users/Maximouse/"
+    },
+    {
+      "name": "Ucrash (Dark WWW)",
+      "link": "https://github.com/gducrash"
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "page-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-transparentText",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.3)",
+        "white": "rgba(255, 255, 255, 0.4)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-filter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-eyeFilter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-ideas",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        },
+        "r": 0.99,
+        "g": 0.99,
+        "b": 0.99
+      }
+    },
+    {
+      "name": "page-scratchr2Text",
+      "value": {
+        "type": "textColor",
+        "black": "#322f31",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-scratchr2HeaderText",
+      "value": {
+        "type": "textColor",
+        "black": "#554747",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-scratchr2LabelText",
+      "value": {
+        "type": "textColor",
+        "black": "#333333",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "navbar-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        }
+      }
+    },
+    {
+      "name": "navbar-transparentText",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(87, 94, 117, 0.75)",
+        "white": "rgba(255, 255, 255, 0.75)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        }
+      }
+    },
+    {
+      "name": "navbar-filter",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        }
+      }
+    },
+    {
+      "name": "navbar-border",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.1)",
+        "white": "rgba(255, 255, 255, 0.1)",
+        "threshold": 60,
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        }
+      }
+    },
+    {
+      "name": "navbar-inputFocus",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.2)",
+        "white": "rgba(255, 255, 255, 0.2)",
+        "threshold": 60,
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        }
+      }
+    },
+    {
+      "name": "navbar-variant",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        },
+        "r": 0.86,
+        "g": 0.85,
+        "b": 0.84
+      }
+    },
+    {
+      "name": "navbar-scratchr2",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        },
+        "r": 0.5,
+        "g": 0.92,
+        "b": 0.75
+      }
+    },
+    {
+      "name": "navbar-scratchr2Text",
+      "value": {
+        "type": "textColor",
+        "black": "#322f31",
+        "source": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "navbar"
+          },
+          "r": 0.5,
+          "g": 0.92,
+          "b": 0.75
+        }
+      }
+    },
+    {
+      "name": "navbar-scratchr2ShadowFilter",
+      "value": {
+        "type": "textColor",
+        "black": "drop-shadow(0 0 1px rgba(0, 0, 0, 0.2))",
+        "white": "none",
+        "source": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "navbar"
+          },
+          "r": 0.5,
+          "g": 0.92,
+          "b": 0.75
+        }
+      }
+    },
+    {
+      "name": "navbar-scratchr2Border",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        },
+        "r": 0.58,
+        "b": 0.8
+      }
+    },
+    {
+      "name": "navbar-scratchr2ItemHover",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        },
+        "r": 0.48,
+        "g": 0.64,
+        "b": 0.52
+      }
+    },
+    {
+      "name": "box-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-transparentText",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.3)",
+        "white": "rgba(255, 255, 255, 0.4)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-inputPlaceholder",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(87, 94, 117, 0.6)",
+        "white": "rgba(255, 255, 255, 0.4)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-borderText",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "alphaBlend",
+          "opaqueSource": {
+            "type": "settingValue",
+            "settingId": "box"
+          },
+          "transparentSource": {
+            "type": "brighten",
+            "source": {
+              "type": "settingValue",
+              "settingId": "border"
+            },
+            "a": 0.94
+          }
+        }
+      }
+    },
+    {
+      "name": "box-filter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-eyeFilter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-filterInverted",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-borderFilterInverted",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "alphaBlend",
+          "opaqueSource": {
+            "type": "settingValue",
+            "settingId": "box"
+          },
+          "transparentSource": {
+            "type": "brighten",
+            "source": {
+              "type": "settingValue",
+              "settingId": "border"
+            },
+            "a": 0.94
+          }
+        }
+      }
+    },
+    {
+      "name": "box-border",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "box"
+        },
+        "transparentSource": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "border"
+          },
+          "a": 0.94
+        }
+      }
+    },
+    {
+      "name": "box-tab",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.1)",
+        "white": "rgba(255, 255, 255, 0.1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-tabHover",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.2)",
+        "white": "rgba(255, 255, 255, 0.2)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-buttonDisabled",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.2)",
+        "white": "rgba(255, 255, 255, 0.2)",
+        "threshold": 32,
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-messageIconOpacity",
+      "value": {
+        "type": "textColor",
+        "black": 0.25,
+        "white": 0.5,
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-studioReportTile",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.05)",
+        "white": "rgba(255, 255, 255, 0.05)",
+        "threshold": 32,
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-caret",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-caretBlack)",
+        "white": "var(--darkWww-caretWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-scratchr2Text",
+      "value": {
+        "type": "textColor",
+        "black": "#322f31",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-scratchr2HeaderText",
+      "value": {
+        "type": "textColor",
+        "black": "#554747",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-scratchr2LabelText",
+      "value": {
+        "type": "textColor",
+        "black": "#333333",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-scratchr2ButtonText",
+      "value": {
+        "type": "textColor",
+        "black": "#666666",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-scratchr2Caret",
+      "value": {
+        "type": "textColor",
+        "black": "#000000",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-scratchr2InputText",
+      "value": {
+        "type": "textColor",
+        "black": "#555555",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-scratchr2InputPlaceholder",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.27)",
+        "white": "rgba(255, 255, 255, 0.4)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-scratchr2TransparentText",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.47)",
+        "white": "rgba(255, 255, 255, 0.75)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-scratchr2BlackText",
+      "value": {
+        "type": "textColor",
+        "black": "#000000",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-scratchr2Border",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "box"
+        },
+        "transparentSource": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "border"
+          },
+          "a": 0.98
+        }
+      }
+    },
+    {
+      "name": "box-scratchr2ButtonGradientTop",
+      "value": {
+        "type": "textColor",
+        "black": {
+          "type": "settingValue",
+          "settingId": "box"
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "box"
+          },
+          "r": 0.8,
+          "g": 0.8,
+          "b": 0.8
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-scratchr2ButtonGradientBottom",
+      "value": {
+        "type": "textColor",
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "box"
+          },
+          "r": 0.8,
+          "g": 0.8,
+          "b": 0.8
+        },
+        "white": {
+          "type": "settingValue",
+          "settingId": "box"
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-scratchr2ButtonHover",
+      "value": {
+        "type": "textColor",
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "box"
+          },
+          "r": 0.9,
+          "g": 0.9,
+          "b": 0.9
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "box"
+          },
+          "r": 0.9,
+          "g": 0.9,
+          "b": 0.9
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-scratchr2ButtonBorder",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "box"
+        },
+        "transparentSource": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "border"
+          },
+          "a": 0.67
+        }
+      }
+    },
+    {
+      "name": "box-scratchr2DropdownItemHover",
+      "value": {
+        "type": "textColor",
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "box"
+          },
+          "r": 0.93,
+          "g": 0.93,
+          "b": 0.93
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "box"
+          },
+          "r": 0.93,
+          "g": 0.93,
+          "b": 0.93
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "gray-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-boxHighlight",
+      "value": {
+        "type": "textColor",
+        "black": {
+          "type": "textColor",
+          "black": "#ffffff",
+          "white": {
+            "type": "brighten",
+            "source": {
+              "type": "settingValue",
+              "settingId": "gray"
+            },
+            "r": 0.87,
+            "g": 0.87,
+            "b": 0.87
+          },
+          "threshold": 224,
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          }
+        },
+        "white": "transparent",
+        "threshold": {
+          "type": "settingValue",
+          "settingId": "border"
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-tab",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.1)",
+        "white": "rgba(255, 255, 255, 0.1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-tabHover",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.2)",
+        "white": "rgba(255, 255, 255, 0.2)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-caret",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-caretBlack)",
+        "white": "var(--darkWww-caretWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-caretHover",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-caretBlackHover)",
+        "white": "var(--darkWww-caretWhiteHover)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-filter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-eyeFilter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-filterInverted",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-darker",
+      "value": {
+        "type": "textColor",
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "r": 0.74,
+          "g": 0.74,
+          "b": 0.74
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "r": 0.78,
+          "g": 0.78,
+          "b": 0.78
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-scratchr2",
+      "value": {
+        "type": "textColor",
+        "black": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "r": 0.62,
+          "g": 0.62,
+          "b": 0.62
+        },
+        "white": {
+          "type": "settingValue",
+          "settingId": "gray"
+        },
+        "threshold": 241,
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-scratchr2Text",
+      "value": {
+        "type": "textColor",
+        "black": "#322f31",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-scratchr2HeaderText",
+      "value": {
+        "type": "textColor",
+        "black": "#554747",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-scratchr2TransparentText",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.45)",
+        "white": "rgba(255, 255, 255, 0.75)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-scratchr2BlackText",
+      "value": {
+        "type": "textColor",
+        "black": "#000000",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-scratchr2LabelText",
+      "value": {
+        "type": "textColor",
+        "black": "#333333",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-scratchr2ButtonText",
+      "value": {
+        "type": "textColor",
+        "black": "#666666",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-mobilePaginationText",
+      "value": {
+        "type": "textColor",
+        "black": "#555555",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-scratchr2SelectedTab",
+      "value": {
+        "type": "textColor",
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "r": 0.63,
+          "g": 0.63,
+          "b": 0.63
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "r": 0.63,
+          "g": 0.63,
+          "b": 0.63
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-scratchr2TableHeader",
+      "value": {
+        "type": "textColor",
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "r": 0.98,
+          "g": 0.98,
+          "b": 0.98
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "r": 0.98,
+          "g": 0.98,
+          "b": 0.98
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-scratchr2TableCell",
+      "value": {
+        "type": "textColor",
+        "black": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "r": 0.77,
+          "g": 0.77,
+          "b": 0.77
+        },
+        "white": {
+          "type": "settingValue",
+          "settingId": "gray"
+        },
+        "threshold": 241,
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-forumTransparentQuote",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.03)",
+        "white": "rgba(255, 255, 255, 0.03)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "blue-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "blue"
+        }
+      }
+    },
+    {
+      "name": "blue-filter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "blue"
+        }
+      }
+    },
+    {
+      "name": "blue-tab",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.1)",
+        "white": "rgba(255, 255, 255, 0.1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "blue"
+        }
+      }
+    },
+    {
+      "name": "blue-studioTextareaBorder",
+      "value": {
+        "type": "makeHsv",
+        "h": {
+          "type": "settingValue",
+          "settingId": "border"
+        },
+        "s": {
+          "type": "settingValue",
+          "settingId": "border"
+        },
+        "v": {
+          "type": "alphaBlend",
+          "opaqueSource": {
+            "type": "settingValue",
+            "settingId": "blue"
+          },
+          "transparentSource": {
+            "type": "brighten",
+            "source": {
+              "type": "settingValue",
+              "settingId": "border"
+            },
+            "a": 0.79
+          }
+        }
+      }
+    },
+    {
+      "name": "blue-20",
+      "value": {
+        "type": "textColor",
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "blue"
+          },
+          "r": 0.93,
+          "g": 0.96
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "blue"
+          },
+          "r": 0.96,
+          "g": 0.96,
+          "b": 0.96
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "blue"
+        }
+      }
+    },
+    {
+      "name": "blue-opacity0",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "blue"
+        },
+        "a": 0
+      }
+    },
+    {
+      "name": "input-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        }
+      }
+    },
+    {
+      "name": "input-transparentText",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(87, 94, 117, 0.6)",
+        "white": "rgba(255, 255, 255, 0.4)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        }
+      }
+    },
+    {
+      "name": "input-caret",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-caretBlack)",
+        "white": "var(--darkWww-caretWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        }
+      }
+    },
+    {
+      "name": "input-caretHover",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-caretBlackHover)",
+        "white": "var(--darkWww-caretWhiteHover)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        }
+      }
+    },
+    {
+      "name": "input-scratchr2Text",
+      "value": {
+        "type": "textColor",
+        "black": "#322f31",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        }
+      }
+    },
+    {
+      "name": "button-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        }
+      }
+    },
+    {
+      "name": "button-filter",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        }
+      }
+    },
+    {
+      "name": "button-filterInverted",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        }
+      }
+    },
+    {
+      "name": "button-transparent10",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "a": 0.1
+      }
+    },
+    {
+      "name": "button-transparent15",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "a": 0.15
+      }
+    },
+    {
+      "name": "button-transparent25",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "a": 0.25
+      }
+    },
+    {
+      "name": "button-overlay",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "a": 0.7
+      }
+    },
+    {
+      "name": "button-variant",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "r": 0.86,
+        "g": 0.85,
+        "b": 0.84
+      }
+    },
+    {
+      "name": "button-banner",
+      "value": {
+        "type": "makeHsv",
+        "h": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "s": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "darkBanners"
+          },
+          "options": {
+            "off": 0.7,
+            "darker": 1,
+            "desaturated": 0.5
+          }
+        },
+        "v": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "darkBanners"
+          },
+          "options": {
+            "off": 1,
+            "darker": 0.6,
+            "desaturated": 0.4
+          }
+        }
+      }
+    },
+    {
+      "name": "button-bannerVariant",
+      "value": {
+        "type": "makeHsv",
+        "h": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "s": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "darkBanners"
+          },
+          "options": {
+            "off": 0.7,
+            "darker": 1,
+            "desaturated": 0.51
+          }
+        },
+        "v": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "darkBanners"
+          },
+          "options": {
+            "off": 0.84,
+            "darker": 0.54,
+            "desaturated": 0.3
+          }
+        }
+      }
+    },
+    {
+      "name": "button-scratchr2ButtonText",
+      "value": {
+        "type": "textColor",
+        "black": "#666666",
+        "source": {
+          "type": "brighten",
+          "source": {
+            "type": "multiply",
+            "source": {
+              "type": "settingValue",
+              "settingId": "button"
+            },
+            "r": 0.61,
+            "b": 0.86
+          },
+          "g": 0.92
+        }
+      }
+    },
+    {
+      "name": "button-scratchr2PostHeaderText",
+      "value": {
+        "type": "textColor",
+        "black": "#322f31",
+        "source": {
+          "type": "brighten",
+          "source": {
+            "type": "multiply",
+            "source": {
+              "type": "settingValue",
+              "settingId": "button"
+            },
+            "r": 0.52,
+            "b": 0.85
+          },
+          "g": 0.85
+        }
+      }
+    },
+    {
+      "name": "button-scratchr2ButtonGradientTop",
+      "value": {
+        "type": "brighten",
+        "source": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "button"
+          },
+          "r": 0.65,
+          "b": 0.98
+        },
+        "g": 0.7
+      }
+    },
+    {
+      "name": "button-scratchr2ButtonGradientBottom",
+      "value": {
+        "type": "brighten",
+        "source": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "button"
+          },
+          "r": 0.61,
+          "b": 0.86
+        },
+        "g": 0.92
+      }
+    },
+    {
+      "name": "button-scratchr2ButtonBorderTop",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "r": 0.62,
+        "b": 0.77
+      }
+    },
+    {
+      "name": "button-scratchr2ButtonBorderBottom",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "r": 0.58,
+        "g": 0.89,
+        "b": 0.68
+      }
+    },
+    {
+      "name": "button-scratchr2InputFocusBorder",
+      "value": {
+        "type": "brighten",
+        "source": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "button"
+          },
+          "b": 0.93,
+          "a": 0.8
+        },
+        "r": 0.97,
+        "g": 0.84
+      }
+    },
+    {
+      "name": "button-scratchr2InputFocusShadow",
+      "value": {
+        "type": "brighten",
+        "source": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "button"
+          },
+          "b": 0.93,
+          "a": 0.6
+        },
+        "r": 0.97,
+        "g": 0.84
+      }
+    },
+    {
+      "name": "button-scratchr2PostHeader",
+      "value": {
+        "type": "brighten",
+        "source": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "button"
+          },
+          "r": 0.52,
+          "b": 0.85
+        },
+        "g": 0.85
+      }
+    },
+    {
+      "name": "button-scratchr2PostBorder",
+      "value": {
+        "type": "brighten",
+        "source": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "button"
+          },
+          "b": 0.85
+        },
+        "r": 0.9,
+        "g": 0.71
+      }
+    },
+    {
+      "name": "link-hover",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "link"
+        },
+        "r": 0.86,
+        "g": 0.85,
+        "b": 0.84
+      }
+    },
+    {
+      "name": "link-iconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": {
+          "type": "settingValue",
+          "settingId": "link"
+        }
+      }
+    },
+    {
+      "name": "link-hoverIconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "link"
+          },
+          "r": 0.86,
+          "g": 0.85,
+          "b": 0.84
+        }
+      }
+    },
+    {
+      "name": "link-scratchr2",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "link"
+        },
+        "r": 0.66,
+        "b": 0.85
+      }
+    },
+    {
+      "name": "link-scratchr2IconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "link"
+          },
+          "r": 0.66,
+          "b": 0.85
+        }
+      }
+    },
+    {
+      "name": "footer-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "footer"
+        }
+      }
+    },
+    {
+      "name": "footer-filter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "footer"
+        }
+      }
+    },
+    {
+      "name": "footer-scratchr2",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "footer"
+        },
+        "r": 0.98,
+        "g": 0.98,
+        "b": 0.98
+      }
+    },
+    {
+      "name": "footer-scratchr2Text",
+      "value": {
+        "type": "textColor",
+        "black": "#666666",
+        "source": {
+          "type": "settingValue",
+          "settingId": "footer"
+        }
+      }
+    },
+    {
+      "name": "border-5",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "border"
+        },
+        "a": 0.5
+      }
+    },
+    {
+      "name": "border-15",
+      "value": {
+        "type": "brighten",
+        "source": {
+          "type": "settingValue",
+          "settingId": "border"
+        },
+        "a": 0.94
+      }
+    },
+    {
+      "name": "border-20",
+      "value": {
+        "type": "brighten",
+        "source": {
+          "type": "settingValue",
+          "settingId": "border"
+        },
+        "a": 0.89
+      }
+    },
+    {
+      "name": "border-33",
+      "value": {
+        "type": "brighten",
+        "source": {
+          "type": "settingValue",
+          "settingId": "border"
+        },
+        "a": 0.74
+      }
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "injectAsStyleElt": true,
   "versionAdded": "1.4.0",
+  "latestUpdate": {
+    "version": "1.23.0",
+    "isMajor": true,
+    "temporaryNotice": "You can now completely customize the appearance of the Scratch website."
+  },
+  "updateUserstylesOnSettingsChange": true,
   "userscripts": [
+    {
+      "url": "classes.js",
+      "matches": ["https://scratch.mit.edu/annual-report/*"],
+      "runAtComplete": false
+    },
     {
       "url": "experimental_forums_preview.js",
       "matches": ["editingScreens"]
@@ -21,7 +1723,10 @@
   "userstyles": [
     {
       "url": "scrollbar.css",
-      "matches": ["https://scratch.mit.edu/*"]
+      "matches": ["https://scratch.mit.edu/*"],
+      "if": {
+        "settings": { "darkScrollbars": true }
+      }
     },
     {
       "url": "experimental_scratchr2.css",
@@ -32,44 +1737,63 @@
       "matches": ["scratchWWWNoProject", "projects"]
     },
     {
-      "url": "experimental_forums.css",
-      "matches": ["https://scratch.mit.edu/discuss/*"]
+      "url": "experimental_scratchwww_white_bg.css",
+      "matches": ["https://scratch.mit.edu/ideas", "https://scratch.mit.edu/annual-report"]
     },
     {
-      "url": "experimental_profile.css",
-      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/classes/*"]
+      "url": "darker_banners.css",
+      "matches": ["scratchWWWNoProject"],
+      "if": {
+        "settings": { "darkBanners": "darker" }
+      }
     },
     {
-      "url": "experimental_scratchr2_comments.css",
-      "matches": ["https://scratch.mit.edu/users/*"]
+      "url": "desaturated_banners.css",
+      "matches": ["scratchWWWNoProject"],
+      "if": {
+        "settings": { "darkBanners": "desaturated" }
+      }
     },
     {
-      "url": "experimental_remixtree.css",
-      "matches": ["https://scratch.mit.edu/projects/*/remixtree/"]
+      "url": "blue_banners_scratchr2.css",
+      "matches": ["isNotScratchWWW"],
+      "if": {
+        "addonEnabled": ["scratchr2"]
+      }
     },
     {
-      "url": "experimental_mystuff.css",
-      "matches": ["https://scratch.mit.edu/mystuff/"]
+      "url": "darker_banners_scratchr2.css",
+      "matches": ["isNotScratchWWW"],
+      "if": {
+        "settings": { "darkBanners": "darker" },
+        "addonEnabled": ["scratchr2"]
+      }
     },
     {
-      "url": "experimental_settings.css",
-      "matches": [
-        "https://scratch.mit.edu/accounts/settings/",
-        "https://scratch.mit.edu/accounts/password_change/",
-        "https://scratch.mit.edu/accounts/email_change/"
-      ]
+      "url": "desaturated_banners_scratchr2.css",
+      "matches": ["isNotScratchWWW"],
+      "if": {
+        "settings": { "darkBanners": "desaturated" },
+        "addonEnabled": ["scratchr2"]
+      }
     },
     {
-      "url": "experimental_confirm_email_modal.css",
-      "matches": ["https://scratch.mit.edu/accounts/email_resend_standalone/"]
+      "url": "experimental_search.css",
+      "matches": ["https://scratch.mit.edu/explore/*", "https://scratch.mit.edu/search/*"]
     },
     {
-      "url": "experimental_statistics.css",
-      "matches": ["https://scratch.mit.edu/statistics/"]
+      "url": "explore_desaturated_banner.css",
+      "matches": ["https://scratch.mit.edu/explore/*"],
+      "if": {
+        "settings": { "darkBanners": "desaturated" }
+      }
     },
     {
-      "url": "experimental_quotes.css",
-      "matches": ["https://scratch.mit.edu/info/quotes/"]
+      "url": "search_desaturated_banner.css",
+      "matches": ["https://scratch.mit.edu/search/*"],
+      "if": {
+        "settings": { "darkBanners": "desaturated" }
+      }
     },
     {
       "url": "experimental_project_embed.css",
@@ -77,7 +1801,171 @@
     },
     {
       "url": "pygments.css",
-      "matches": ["forums"]
+      "matches": ["forums"],
+      "if": {
+        "settings": { "darkForumCode": true }
+      }
     }
-  ]
+  ],
+  "settings": [
+    {
+      "name": "Page background",
+      "id": "page",
+      "type": "color",
+      "default": "#202020"
+    },
+    {
+      "name": "Navigation bar background",
+      "id": "navbar",
+      "type": "color",
+      "default": "#4d97ff"
+    },
+    {
+      "name": "Content background",
+      "id": "box",
+      "type": "color",
+      "default": "#282828"
+    },
+    {
+      "name": "Gray background",
+      "id": "gray",
+      "type": "color",
+      "default": "#333333"
+    },
+    {
+      "name": "Blue background",
+      "id": "blue",
+      "type": "color",
+      "default": "#252c37"
+    },
+    {
+      "name": "Input background",
+      "id": "input",
+      "type": "color",
+      "default": "#202020"
+    },
+    {
+      "name": "Highlight color",
+      "id": "button",
+      "type": "color",
+      "default": "#4d97ff"
+    },
+    {
+      "name": "Link color",
+      "id": "link",
+      "type": "color",
+      "default": "#4d97ff"
+    },
+    {
+      "name": "Footer background",
+      "id": "footer",
+      "type": "color",
+      "default": "#333333"
+    },
+    {
+      "name": "Border color",
+      "id": "border",
+      "type": "color",
+      "allowTransparency": true,
+      "default": "#606060"
+    },
+    {
+      "name": "Colored areas",
+      "id": "darkBanners",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "off",
+          "name": "Default"
+        },
+        {
+          "id": "darker",
+          "name": "Darker"
+        },
+        {
+          "id": "desaturated",
+          "name": "Darker and desaturated"
+        }
+      ],
+      "default": "darker"
+    },
+    {
+      "name": "Dark scrollbars",
+      "id": "darkScrollbars",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Dark code blocks on the forums",
+      "id": "darkForumCode",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "\"Experimental\" Dark",
+      "id": "experimentalDark",
+      "description": "A dark theme by Maximouse based on a userstyle. Not experimental",
+      "values": {
+        "page": "#202020",
+        "navbar": "#4d97ff",
+        "box": "#282828",
+        "gray": "#333333",
+        "blue": "#252c37",
+        "input": "#202020",
+        "button": "#4d97ff",
+        "link": "#4d97ff",
+        "footer": "#333333",
+        "border": "#606060",
+        "darkBanners": "darker",
+        "darkScrollbars": true,
+        "darkForumCode": true
+      }
+    },
+    {
+      "name": "Dark WWW",
+      "id": "darkWww",
+      "description": "A dark theme by Ucrash",
+      "values": {
+        "page": "#242527",
+        "navbar": "#4d97ff",
+        "box": "#2f3137",
+        "gray": "#424346",
+        "blue": "#1b1d1f",
+        "input": "#3a3a3a",
+        "button": "#4d97ff",
+        "link": "#4d97ff",
+        "footer": "#17181a",
+        "border": "#000000",
+        "darkBanners": "desaturated",
+        "darkScrollbars": true,
+        "darkForumCode": true
+      }
+    },
+    {
+      "name": "Scratch's default colors",
+      "id": "scratch",
+      "description": "The colors normally used by Scratch",
+      "values": {
+        "page": "#fcfcfc",
+        "navbar": "#4d97ff",
+        "box": "#ffffff",
+        "gray": "#f2f2f2",
+        "blue": "#e9f1fc",
+        "input": "#fafafa",
+        "button": "#4d97ff",
+        "link": "#4d97ff",
+        "footer": "#f2f2f2",
+        "border": "#0000001a",
+        "darkBanners": "off",
+        "darkScrollbars": false,
+        "darkForumCode": false
+      }
+    }
+  ],
+  "presetPreview": {
+    "type": "palette",
+    "colors": ["button", "navbar", "page", "box", "gray", "blue"]
+  }
 }

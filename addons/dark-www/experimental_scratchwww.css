@@ -1,113 +1,128 @@
-html > body:not(.sa-body-editor),
-h1,
-h2,
-h3,
-h4,
-h5,
-p,
-.empty h4,
-.news li p,
-a.social-messages-profile-link,
-.outer .sort-mode .select select,
-.studio-tab-nav li,
-.user-projects-modal .user-projects-modal-nav button,
-.grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
-.thumbnail-column .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
-.thumbnail .thumbnail-loves,
-.thumbnail .thumbnail-favorites,
-.thumbnail .thumbnail-remixes,
-.thumbnail .thumbnail-views,
-.studio-project-tile .studio-project-username,
-.studio-member-tile .studio-member-role,
-#footer,
-#donor,
-.semicolon,
-.subactions .share-date,
-.developers #faq p,
-.social-form,
-body:not(.sa-body-editor) .join-flow-title,
-.initiatives-section .initiatives-tools .subsection-tag.collaborator {
-  color: #fff;
-}
-.sa-body-editor h1,
-.sa-body-editor h2,
-.sa-body-editor h3,
-.sa-body-editor h4,
-.sa-body-editor h5,
-.sa-body-editor p {
-  color: inherit;
-}
-.studio-page,
-.user-projects-modal .user-projects-modal-content {
-  background: #252c37;
-  --sa-oldstudio-background: #202020;
+/* Page background */
+html,
+body {
+  background-color: var(--darkWww-page);
 }
 #view,
 .crash-container,
-.outer #projectBox,
-.tips-getting-started,
-.tips-activity-guides,
-.studio-report-modal .studio-report-tile,
-.studio-report-modal .button:disabled,
 .semicolon {
-  background: #202020;
+  background-color: var(--darkWww-page);
+  color: var(--darkWww-page-text);
 }
-.box .box-header,
-.gray-area,
-#footer,
-#donor,
-.parents .title-banner.faq-banner,
-.developers .title-banner.faq-banner,
-.credits .supporters,
-.download .installation,
-body:not(.sa-body-editor) .gender-radio-row,
-.wedo .banner,
-.studio-report-modal .studio-report-tile-header {
-  background: #333;
+.subactions .share-date,
+.conf2019-description {
+  color: var(--darkWww-page-text);
 }
-.thumbnail .thumbnail-loves::before,
-.thumbnail .thumbnail-favorites::before,
-.thumbnail .thumbnail-remixes::before,
-.thumbnail .thumbnail-views::before,
+.tips-getting-started,
+.tips-activity-guides {
+  background-color: var(--darkWww-page-ideas);
+  color: var(--darkWww-page-text);
+}
 .project-loves::before,
 .project-favorites::before,
 .project-remixes::before,
-.project-views::before,
-.comment .comment-top-row .comment-delete::before,
-.comment .comment-top-row .comment-report::before,
-img.tips-icon,
-.tabs li:not(.active) .tab-icon,
-.overflow-menu-container .overflow-menu-trigger img,
-.studio-info .studio-info-footer-stats div img,
-body:not(.sa-body-editor) .stage-header_stage-button-icon_3zzFK {
-  filter: brightness(0) invert(1);
+.project-views::before {
+  filter: var(--darkWww-page-filter);
 }
 .project-loves.loved::before,
-.project-favorites.favorited::before,
-.studio-tab-nav li img {
+.project-favorites.favorited::before {
   filter: none;
 }
-.comment .comment-body .comment-bottom-row .comment-time {
-  color: rgba(255, 255, 255, 0.4);
+
+/* Navigation bar background */
+#navigation,
+.dropdown,
+.dropdown.with-arrow::before,
+.addToStudio-modal-header,
+.social-modal-header,
+.user-projects-modal .user-projects-modal-title,
+.promote-modal .promote-title,
+.transfer-host-modal .transfer-host-title {
+  background-color: var(--darkWww-navbar);
+  color: var(--darkWww-navbar-text);
 }
-.credits .logo-grid {
-  /* Some logos don't look well on dark background */
-  background: #f7f6f8;
-  color: #575e75;
+#navigation .link > a,
+#navigation .logo-a-title,
+#navigation .inner > ul > li.search .input[type="text"],
+#navigation .account-nav .user-info,
+.login,
+.dropdown a:link,
+.dropdown a:visited,
+.dropdown a:active,
+.modal-title,
+.overflow-menu-container .overflow-menu-dropdown li button {
+  color: var(--darkWww-navbar-text);
 }
+.report-modal-header .modal-title,
+.studio-report-modal .studio-report-title,
+.next-step-title {
+  color: white;
+}
+#navigation .inner > ul > li.search .input[type="text"]::placeholder {
+  color: var(--darkWww-navbar-transparentText);
+}
+#navigation .inner > ul > li.search .btn-search,
+#navigation .mystuff > a,
+.account-nav .user-info::after,
+.modal-content-close-img,
+.overflow-menu-container .overflow-menu-dropdown li button > img {
+  filter: var(--darkWww-navbar-filter);
+}
+.mod-report .modal-content-close-img,
+.studio-report-modal .modal-content-close-img {
+  filter: none;
+}
+#navigation .messages > a {
+  background-image: none;
+}
+#navigation .messages > a::before {
+  /* move background image into a pseudo-element
+     so that the filter doesn't affect the message count */
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: url(https://scratch.mit.edu/images/nav-notifications.png) no-repeat center / 45%;
+  filter: var(--darkWww-navbar-filter);
+}
+#navigation .messages > a:hover::before {
+  background-size: 50%;
+}
+#navigation .link > a:hover,
+#navigation .inner > ul > li.search .input,
+#navigation .inner > ul > li.right a:hover,
+.account-nav .user-info.open {
+  background-color: var(--darkWww-navbar-border);
+}
+.dropdown > li.divider,
+#navigation .logo-a-image {
+  border-color: var(--darkWww-navbar-border);
+}
+#navigation .inner > ul > li.search .input[type="text"]:focus {
+  background-color: var(--darkWww-navbar-inputFocus);
+}
+.addToStudio-modal-header,
+.social-modal-header,
+.user-projects-modal .user-projects-modal-title {
+  box-shadow: 0 -1px 0 inset var(--darkWww-navbar-variant);
+}
+
+/* Content background */
 .box,
 .box .box-content,
-body:not(.sa-body-editor) .button.white,
 .tab-background,
 .outer .tab-background,
 .tabs,
 .tabs li:hover,
-.intro-banner .intro-button,
 .os-chooser,
 .studio-tab-nav li,
 .user-projects-modal .user-projects-modal-nav button,
 body:not(.sa-body-editor) .modal-content,
 .studio-info .studio-image,
+.studio-report-modal .studio-report-tile-image,
 .grid .thumbnail,
 .studio-project-tile,
 .studio-member-tile,
@@ -120,121 +135,620 @@ body:not(.sa-body-editor) .modal-content,
 .comment .comment-body .comment-bubble::before,
 .milestones-section .milestone-box,
 .supporters-section .comment-text,
+.timeline-card,
 .card,
 .extension-landing .project-card,
 .promote-modal .cancel-button,
 body:not(.sa-body-editor) .stage-header_stage-button_hkl9B,
-.transfer-host-modal .cancel-button {
-  background: #282828;
-}
-.comment-text::after {
-  border-color: #282828;
-}
-.tabs li,
-.tabs li:hover,
-.tabs li.active:hover {
-  color: #fff;
-}
-.tabs li:hover {
-  border-bottom-color: rgba(255, 255, 255, 0.2);
-}
-.outer .categories li,
-.os-chooser .button,
-.studio-tab-nav a.nav_link:hover > li {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-.outer .categories li:hover,
-.supporters-section .supporters-level hr {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-.box,
-.box .box-header,
-#footer, /* for infinite scrolling fixed footer */
-.textarea,
-.studio-info textarea.studio-title:not(:focus), .studio-info textarea.studio-description:not(:focus),
-.crash-container,
 .studio-adder-section .studio-adder-row input,
 .studio-adder-section .studio-adder-row .studio-adder-vertical-divider,
-.studio-tab-nav,
-.studio-tab-nav a.nav_link:not(.active) > li,
-.studio-info .studio-image,
-.user-projects-modal .user-projects-modal-nav button,
-.studio-project-tile,
-.studio-member-tile,
-.studio-activity .studio-messages-list,
-.news li:nth-child(even),
-.thumbnail .thumbnail-image img,
-.outer .sort-controls,
-.video-player,
+.avatar-item img,
+.conf2019-panel-flag,
+.plan .faq .short,
+.conf2017-panel-flag,
+body:not(.sa-body-editor) .join-flow-input,
+body:not(.sa-body-editor) .select .join-flow-select,
+body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
+body:not(.sa-body-editor) input.formik-radio-input,
+.extension-landing .screenshot,
+.wedo .project-card,
+.transfer-host-modal .cancel-button,
+.transfer-host-modal .transfer-password-input,
+.comments-container .sa-emoji-picker,
+.studio-compose-container .sa-emoji-picker {
+  background-color: var(--darkWww-box);
+  color: var(--darkWww-box-text);
+}
+body:not(.sa-body-editor) .button.white,
+.intro-banner .intro-button,
+.donate-banner .donate-container .donate-button,
+.hoc-banner .hoc-more-activities,
+.hoc-banner .hoc-banner-image,
+.studio-selector-button,
+.button.mod-2019-conf-maillist-button,
+.index .title-banner p a button,
+.financials-section .financials-button,
+.donate-section .donate-button,
+.initiatives-section .initiatives-subsection-content .bubble.inverted {
+  background-color: var(--darkWww-box);
+}
+.expect .keynote .card {
+  background-color: transparent;
+}
+.studio-selector-button-selected {
+  background-color: #23be92;
+}
+.comment-text::after,
+.initiatives-section .initiatives-adaptation .community-quotes .community-quote .comment-text::after,
+.sa-annual-report-2020
+  .initiatives-section
+  .initiatives-community
+  .community-quotes
+  .community-quote
+  .comment-text::after,
+.wedo .project-card img {
+  border-color: var(--darkWww-box);
+}
+.empty h4,
+.news li p,
+.thumbnail .thumbnail-loves,
+.thumbnail .thumbnail-favorites,
+.thumbnail .thumbnail-remixes,
+.thumbnail .thumbnail-views,
+.tabs li,
+.tabs li:hover,
+.tabs li.active:hover,
+.grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
+a.social-messages-profile-link:link,
+.studio-selector-button-text-unselected,
+.studio-project-tile .studio-project-username,
+.studio-member-tile .studio-member-role,
+body:not(.sa-body-editor) .join-flow-title {
+  color: var(--darkWww-box-text);
+}
+.activity-li .social-message-date,
+.comment .comment-body .comment-bottom-row .comment-time,
+.registration-step .help-text {
+  color: var(--darkWww-box-transparentText);
+}
+body:not(.sa-body-editor) .formik-input::placeholder,
+body:not(.sa-body-editor) .join-flow-privacy-message,
+.char-count {
+  color: var(--darkWww-box-inputPlaceholder);
+}
+.comment .comment-body .comment-bubble.comment-bubble-reported,
+.comment .comment-body .comment-bubble.comment-bubble-reported::before,
+.react-tel-input {
+  color: #575e75;
+}
+.thumbnail .thumbnail-loves::before,
+.thumbnail .thumbnail-favorites::before,
+.thumbnail .thumbnail-remixes::before,
+.thumbnail .thumbnail-views::before,
+.tabs li:not(.active) .tab-icon,
+body:not(.sa-body-editor) .stage-header_stage-button-icon_3zzFK,
+.overflow-menu-container .overflow-menu-trigger img {
+  filter: var(--darkWww-box-filter);
+}
+.studio-tab-nav li img {
+  filter: var(--darkWww-box-filterInverted);
+}
+.box,
+.box .box-header {
+  border-color: var(--darkWww-box-border);
+}
+.os-chooser .button {
+  background-color: var(--darkWww-box-tab);
+}
+.tabs li:hover {
+  border-color: var(--darkWww-box-tabHover);
+}
+.social-message-icon {
+  opacity: var(--darkWww-box-messageIconOpacity);
+}
+.studio-report-modal .studio-report-tile,
+.studio-report-modal .studio-report-tile-header {
+  background-color: var(--darkWww-box-studioReportTile);
+}
+.action-button.disabled,
+.studio-report-modal .button:disabled,
+.transfer-host-modal .button:disabled {
+  background-color: var(--darkWww-box-buttonDisabled);
+  color: white;
+}
+body:not(.sa-body-editor) .select .join-flow-select {
+  background-image: var(--darkWww-box-caret);
+}
+
+/* Gray background */
+.box .box-header,
+.outer #projectBox,
+.download .installation,
+body:not(.sa-body-editor) .gender-radio-row,
+.wedo .banner {
+  background-color: var(--darkWww-gray);
+  color: var(--darkWww-gray-text);
+}
+body:not(.sa-body-editor) /* specificity */ .outer .sort-mode .select select {
+  background-color: transparent;
+  background-image: var(--darkWww-gray-caret);
+  color: var(--darkWww-gray-text);
+}
+body:not(.sa-body-editor) .outer .sort-mode .select select:hover,
+body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
+  background-image: var(--darkWww-gray-caretHover);
+}
+.box .box-header {
+  border-top-color: var(--darkWww-gray-boxHighlight);
+}
+.outer .categories li {
+  background-color: var(--darkWww-gray-tab);
+}
+.outer .categories li:hover {
+  background-color: var(--darkWww-gray-tabHover);
+}
+.toggle-switch .slider {
+  background-color: var(--darkWww-gray-darker);
+}
+.compose-comment .compose-bottom-row .compose-cancel {
+  background-color: var(--darkWww-gray-darker);
+  color: white;
+}
+
+/* Blue background */
+.social-message.mod-unread,
+.preview .project-description,
+.preview .project-lower-container,
+.studio-list-outer-scrollbox,
+.social-form,
+.studio-page,
+.user-projects-modal .user-projects-modal-content,
+.credits #acknowledgements,
+.download .blue,
+p.callout,
+.mission-section,
+.milestones-section,
+.initiatives-section .initiatives-tools .subsection-tag.collaborator,
+.sa-annual-report-2019 .supporters-section,
+.sa-annual-report-2019 .leadership-section,
+.extension-landing .blue,
+.extension-landing .tip-box,
+.transfer-host-modal .transfer-selection-heading,
+.transfer-host-modal .transfer-selection-scroll-pane,
+.transfer-host-modal .transfer-outcome,
+.filter-container,
+.tab-choice-selected-sa,
+.initiatives-section .year-in-review {
+  background-color: var(--darkWww-blue);
+  color: var(--darkWww-blue-text);
+}
+.thumbnail-column .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
+.studio-page #view,
+.milestones-section h2 {
+  color: var(--darkWww-blue-text);
+}
+.comment .comment-top-row .comment-delete::before,
+.comment .comment-top-row .comment-report::before,
+.studio-info .studio-info-footer-stats div img {
+  filter: var(--darkWww-blue-filter);
+}
+.studio-tab-nav a.nav_link:hover > li {
+  background-color: var(--darkWww-blue-tab);
+}
+.studio-info textarea.studio-title:not(:focus),
+.studio-info textarea.studio-description:not(:focus),
+.extension-landing .blue hr {
+  border-color: var(--darkWww-blue-studioTextareaBorder);
+}
+.install-scratch .downloads-container .horizontal-divider::before,
+.install-scratch .downloads-container .horizontal-divider::after,
+.extension-landing .install-scratch-link .horizontal-divider::before,
+.extension-landing .install-scratch-link .horizontal-divider::after {
+  background-color: var(--darkWww-blue-studioTextareaBorder);
+}
+.studio-info .studio-description.uneditable {
+  background-color: var(--darkWww-blue-20);
+}
+.replies.collapsed > .comment:last-of-type::after,
+.studio-list-bottom-gradient {
+  background-image: linear-gradient(var(--darkWww-blue-opacity0), var(--darkWww-blue));
+}
+
+/* Input background */
+body:not(.sa-body-editor) .select select,
+body:not(.sa-body-editor) .select select:hover,
+body:not(.sa-body-editor) .select select:focus,
+body:not(.sa-body-editor) .select select > option,
+.inplace-input,
+.inplace-textarea,
+.textarea,
+.input {
+  background-color: var(--darkWww-input);
+  color: var(--darkWww-input-text);
+}
+.inplace-input::placeholder,
+.inplace-textarea::placeholder {
+  color: var(--darkWww-input-transparentText);
+}
+body:not(.sa-body-editor) .select select {
+  background-image: var(--darkWww-input-caret);
+}
+body:not(.sa-body-editor) .select select:hover,
+body:not(.sa-body-editor) .select select:focus {
+  background-image: var(--darkWww-input-caretHover);
+}
+
+/* Highlight color */
+.button,
+.validation-info,
+.validation-info::before,
+.subactions .action-buttons .action-button,
+.studio-status-icon-unselected,
+.studio-info .studio-info-footer-report button,
+.studio-tab-nav .active > li,
+.user-projects-modal .user-projects-modal-nav button.active,
+.os-chooser .button.active,
+.step .step-number-row .step-number,
+.download .installation-column-number,
+#footer .inner .media li,
+.initiatives-section .initiatives-community .subsection-tag,
+body:not(.sa-body-editor) [type="checkbox"].formik-checkbox:checked,
+.info-button-message,
+.info-button-message::before,
+input[type="radio"].formik-radio-button:checked::after,
+.row .checkbox input[type="checkbox"]:checked,
+.row .col-sm-9 input[type="radio"]:checked,
+.tooltip .expand,
+.tooltip .expand::before {
+  background-color: var(--darkWww-button);
+  color: var(--darkWww-button-text);
+}
+.forms-close-button {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.banner-button {
+  background-color: #ffab1a;
+}
+.row .checkbox input[type="checkbox"]:checked::after {
+  color: var(--darkWww-button-text);
+}
+.row .col-sm-9 input[type="radio"]:checked::after {
+  background-color: var(--darkWww-button-text);
+}
+.preview .remix-button,
+.os-chooser .button:not(.active),
+.card .card-button,
+.initiatives-section .video-background.abhi .button,
+.initiatives-section .video-background.cps .button {
+  color: white;
+}
+.inplace-input:focus,
+.inplace-textarea:focus,
+.textarea:focus,
+body:not(.sa-body-editor) .formik-input:focus,
+body:not(.sa-body-editor) input[type="radio"].formik-radio-button:checked,
+.input:focus,
+.registration-step.demographics-step input[type="radio"]:focus {
+  border-color: var(--darkWww-button);
+}
+.studio-tile-added {
+  border-color: var(--darkWww-button) !important;
+}
+.promote-modal .cancel-button,
+.transfer-host-modal .cancel-button {
+  box-shadow: 0 0 0 1px var(--darkWww-button);
+}
+.button img,
+.preview .see-inside-button::before,
+.subactions .action-buttons .action-button::before,
+.studio-status-icon-plus-img,
+.studio-info .studio-info-footer-report button img,
+.studio-tab-nav .active > li img,
+.studio-tab-nav a.active.nav_link:hover > li img,
+#footer .inner .media li img {
+  filter: var(--darkWww-button-filter);
+}
+.forms-close-button img,
+.os-chooser .button:not(.active) img {
+  filter: none;
+}
+body:not(.sa-body-editor) [type="checkbox"].formik-checkbox:checked {
+  background-image: none;
+  position: relative;
+}
+body:not(.sa-body-editor) [type="checkbox"].formik-checkbox:checked::before {
+  /* move background image into a pseudo-element
+    so that the filter doesn't affect the background color */
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: url("/svgs/forms/checkmark.svg") center;
+  filter: var(--darkWww-button-filter);
+}
+.input_label:hover {
+  background-color: var(--darkWww-button-transparent10);
+}
+.user-projects-modal .user-projects-modal-nav button:hover,
+.user-projects-modal .user-projects-modal-nav button.active:hover {
+  border-color: var(--darkWww-button-transparent10);
+}
+.studio-report-modal .studio-report-selected {
+  background-color: var(--darkWww-button-transparent15);
+}
+.extension-chip,
+.studio-report-modal .studio-report-header-selected,
+.user-projects-modal .user-projects-modal-nav button:hover,
+.join-flow-footer-message {
+  background-color: var(--darkWww-button-transparent25);
+}
+.inplace-input,
+.inplace-textarea {
+  border-color: var(--darkWww-button-transparent25);
+}
+.comment .avatar {
+  box-shadow: 0 0 0 1px var(--darkWww-button-transparent25);
+}
+.inplace-input:focus,
+.inplace-textarea:focus,
+.studio-tile-added,
+body:not(.sa-body-editor) .formik-input:focus,
+body:not(.sa-body-editor) input[type="checkbox"].formik-checkbox:focus,
+body:not(.sa-body-editor) input[type="radio"].formik-radio-button:checked {
+  box-shadow: 0 0 0 4px var(--darkWww-button-transparent25);
+}
+.modal-overlay {
+  background-color: var(--darkWww-button-overlay);
+}
+.studio-info .studio-info-footer-report button:hover,
+.studio-tab-nav a.active.nav_link:hover > li {
+  background-color: var(--darkWww-button-variant);
+  color: var(--darkWww-button-text);
+}
+.intro-banner .intro-container,
+.title-banner.mod-messages,
+.download .download-header,
+.title-banner.mod-conference,
+.conf2019-title-band,
+.sa-annual-report-2019 .message-section,
+.sa-annual-report-2019 .initiatives-section .initiatives-subsection-header.community,
+.sa-annual-report-2019 .initiatives-section .initiatives-community .community-quotes .community-quote .comment-text,
+.title-banner.mod-blue-bg /* camp 2017 */,
+.wedo .top-banner,
+.gdxfor .extension-header {
+  background-color: var(--darkWww-button-banner);
+}
+.sa-annual-report-2019 .initiatives-section .initiatives-community .community-quotes .community-quote .comment-text,
+.sa-annual-report-2019
+  .initiatives-section
+  .initiatives-community
+  .community-quotes
+  .community-quote
+  .comment-text::before,
+.sa-annual-report-2019
+  .initiatives-section
+  .initiatives-community
+  .community-quotes
+  .community-quote
+  .comment-text::after {
+  border-color: var(--darkWww-button-banner);
+}
+.gradient1 {
+  background-image: linear-gradient(var(--darkWww-button-banner), black);
+}
+.parents .title-banner.masthead,
+.information-page .title-banner.masthead,
+.download .title-banner.masthead /* Scratch 2.0 and 1.4 download */,
+.conf2017-title-band,
+.sa-annual-report-2019 .subnavigation,
+.sa-annual-report-2020 .initiatives-section .initiatives-subsection-header.community {
+  background-color: var(--darkWww-button-bannerVariant);
+}
+
+/* Link color */
+a:link,
+a:visited,
+body:not(.sa-body-editor) .button.white,
+.news li h4,
+.intro-banner .intro-button,
+.hoc-banner .hoc-more-activities,
+.hoc-banner .hoc-banner-image .hoc-image-text,
+a.social-messages-profile-link:hover,
+a.social-messages-profile-link:active,
+.comment .comment-body .comment-bottom-row .comment-reply,
+.studio-adder-section h3,
+.studio-project-tile .studio-project-title,
+.studio-member-tile .studio-member-name,
+.studio-thumb-edit-button,
+.studio-manager-count,
+.promote-modal .cancel-button,
+.index .title-banner p a button,
+.financials-section .financials-button,
+.donate-section .donate-button,
+.transfer-host-modal .cancel-button {
+  color: var(--darkWww-link);
+}
+.studio-manager-count {
+  border-color: var(--darkWww-link);
+}
+a:hover,
+.button.mod-2019-conf-maillist-button {
+  color: var(--darkWww-link-hover);
+}
+.banner a,
+.subnavigation a {
+  color: white;
+}
+.hoc-banner .hoc-more-activities img,
+.comment .comment-body .comment-bottom-row .comment-reply::after,
+.studio-thumb-edit-img,
+.studio-activity .studio-activity-icon,
+.download .older-version .little-arrow,
+.conf2021-panel-row-icon-image,
+.conf2019-panel-row-icon-image,
+.conf2017-panel-row-icon-image,
+img[src^="/images/annual-report/milestones/timeline_"],
+.financials-section .financials-button img,
+.initiatives-section .year-in-review .connector,
+.transfer-host-modal .transfer-outcome-arrow {
+  filter: var(--darkWww-link-iconFilter);
+}
+
+/* Footer background */
+#footer,
+#donor,
+.gray-area,
+.parents .title-banner.faq-banner,
+.developers .title-banner.faq-banner {
+  background-color: var(--darkWww-footer);
+  color: var(--darkWww-footer-text);
+}
+.developers #faq p {
+  color: var(--darkWww-footer-text);
+}
+img.tips-icon {
+  filter: var(--darkWww-footer-filter);
+}
+
+/* Border color */
+.tips-divider,
+.about .masthead div li:nth-child(odd),
 .about .body,
 .about .body img,
 .about .body iframe,
+.preview .project-description,
+.avatar-item img,
+.filter-container,
+.tab-choice-sa,
+.tab-choice-selected-sa {
+  border-color: var(--darkWww-border-5);
+}
+body:not(.sa-body-editor) .select select,
+.textarea,
+.action-button.close-button,
+#footer /* for infinite scrolling fixed footer */,
+.outer .sort-controls,
+.comment .comment-body .comment-bubble,
+.comment .comment-body .comment-bubble::before,
+.studio-tab-nav a.nav_link:hover > li,
+.developers #faq,
+p.callout,
+#footer .inner .collaborators,
+.input,
+.row .col-sm-9 input[type="radio"]:not(:checked),
+.extension-landing .tip-box {
+  border-color: var(--darkWww-border);
+}
+.grid .thumbnail,
+.ttt-tile,
+.thumbnail-column .thumbnail .thumbnail-image {
+  box-shadow: 0 0 0 1px var(--darkWww-border);
+}
+.expand-thread::before,
+.expand-thread::after {
+  background-color: var(--darkWww-border);
+}
+.crash-container,
+.news li:nth-child(even),
+.thumbnail .thumbnail-image img,
+.video-player,
 .messages-social-list,
 .social-message,
 .comment-text,
 .comment-text::before,
-.compose-comment .textarea-row textarea:not(:focus),
-.comment .comment-body .comment-bubble,
-.comment .comment-body .comment-bubble::before,
-input[type="checkbox"].formik-checkbox,
+body:not(.sa-body-editor) .stage_stage_1fD7k,
+body:not(.sa-body-editor) .stage-header_stage-button_hkl9B,
+.social-form,
+.studio-info .studio-image,
+.studio-report-modal .studio-report-tile-image,
+.studio-tab-nav a.nav_link > li,
+.studio-project-tile,
+.studio-adder-section .studio-adder-row input,
+.studio-adder-section .studio-adder-row .studio-adder-vertical-divider,
+.user-projects-modal .user-projects-modal-nav button,
+.studio-member-tile,
+.studio-activity .studio-messages-list,
 .developers #projects h3,
 .developers #principles h3,
 .developers #donate,
-.developers #donate h3,
-.developers #faq,
 .information-page .info-outer nav,
-.conf2020-panel,
+.conf2021-panel,
+.conf2019-panel,
+.conf2019-panel-flag,
+.conf2017-panel,
+.conf2017-panel-flag,
+.expect .schedule table th,
+.expect .schedule table td,
+.plan section,
+.plan .faq .short,
+.supporters-section .supporters-level hr,
+body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
 .extension-landing hr,
+.extension-landing .screenshot,
 .extension-landing .project-card,
-body:not(.sa-body-editor) .stage_stage_1fD7k,
-body:not(.sa-body-editor) .stage-header_stage-button_hkl9B,
 .transfer-host-modal .transfer-password-input,
-.studio-info-box.studio-info-box-success {
-  border-color: #606060;
+.comments-container .sa-emoji-picker,
+.studio-compose-container .sa-emoji-picker,
+.sa-emoji-picker-divider {
+  border-color: var(--darkWww-border-15);
 }
-.box .box-header {
-  border-top-color: transparent;
+.compose-comment .textarea-row textarea:not(:focus),
+.studio-tab-nav,
+body:not(.sa-body-editor) .formik-input,
+body:not(.sa-body-editor) input[type="checkbox"].formik-checkbox:not(:checked),
+.row .checkbox input[type="checkbox"]:not(:checked) {
+  border-color: var(--darkWww-border-20);
 }
-.inplace-input,
-.inplace-textarea,
-.textarea,
-.studio-adder-section input,
-.modal,
-.transfer-host-modal .transfer-password-input {
-  background: #282828;
-  color: #fff;
+.studio-tab-nav a.nav_link.active > li,
+.user-projects-modal .user-projects-modal-nav button.active {
+  border-color: rgba(0, 0, 0, 0.15);
 }
-body:not(.sa-body-editor) .select select,
-body:not(.sa-body-editor) .select select:hover,
-body:not(.sa-body-editor) .select select:focus,
-body:not(.sa-body-editor) .select select option,
-.select .join-flow-join-flow-select {
-  color: #fff;
-  background-color: #282828;
+
+/* Miscellaneous styles */
+
+:root {
+  /* URLs defined here because addon.json can't use %addon-self-dir% */
+  --darkWww-caretBlack: url("%addon-self-dir%/assets/caret_transparent.svg");
+  --darkWww-caretWhite: url("%addon-self-dir%/assets/caret_white.svg");
+  --darkWww-caretBlackHover: url("%addon-self-dir%/assets/caret_transparent_hover.svg");
+  --darkWww-caretWhiteHover: url("%addon-self-dir%/assets/caret_white_hover.svg");
 }
-.social-message-icon {
-  opacity: 0.5;
+
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
+  color: inherit;
 }
+
+/* Some images are designed for a light background: */
+.studio-empty-img {
+  margin-top: 30px;
+  margin-bottom: 10px;
+  padding: 15px;
+  background-color: #e9f1fc;
+  border-radius: 8px;
+}
+#footer .inner .collaborators li {
+  padding: 0 4px;
+  background-color: #f2f2f2;
+  border-radius: 8px;
+}
+
+.project-info-alert,
+.alert-msg {
+  color: #575e75;
+}
+
 .intro-banner {
   background: transparent;
 }
-.developers .title-banner.masthead {
-  background: #075e46;
-}
-.comment .comment-body .comment-bubble.comment-bubble-reported,
-.comment .comment-body .comment-bubble.comment-bubble-reported::before {
-  background: #371528;
-  border-color: #601;
-}
-.replies.collapsed > .comment:last-of-type::after {
-  background: linear-gradient(rgba(37, 44, 55, 0), #252c37);
-}
-.studio-list-bottom-gradient {
-  background: linear-gradient(rgba(40, 40, 40, 0), #282828);
-}
-.join-flow-privacy-message {
-  color: rgba(255, 255, 255, 0.6);
-}
+
 .emoji[src$="meow.png"] {
   content: url(%addon-self-dir%/assets/meow.png);
 }
@@ -245,41 +759,7 @@ body:not(.sa-body-editor) .select select option,
   content: url(%addon-self-dir%/assets/waffle.png);
 }
 
-.project-info-alert,
-.alert-msg,
-.monitor_label_ci1ok, /* for some strange reason, variable names inherit their color from the body, unlike list title names */
-.monitor_list-empty_1UKsB {
-  color: #575e75;
-}
-
-.studio-info,
-.studio-tabs {
-  --sa-oldstudio-default-background: #333333;
-  --sa-oldstudio-default-border: #606060;
-  --sa-oldstudio-default-inner-border: transparent;
-}
-.studio-tab-nav {
-  --sa-oldstudio-scratchr2-background: #282828;
-}
-.sub-nav li {
-  --sa-oldstudio-scratchr2-hover-border: rgba(255, 255, 255, 0.2);
-}
-.studio-tab-nav .active > li,
-.studio-tab-nav a.active.nav_link:hover > li {
-  --sa-oldstudio-default-background: #282828;
-  --sa-oldstudio-text: white;
-  --sa-oldstudio-icon-filter: none;
-}
-.studio-tabs > div:not(.studio-tab-nav) {
-  --sa-oldstudio-default-background: #282828;
-}
-.studio-adder-section .studio-adder-row button ~ button, #sa-studio-followers-btn /* browse projects */ {
-  --sa-oldstudio-background: #282828;
-  --sa-oldstudio-border: #606060;
-  --sa-oldstudio-text: white;
-  --sa-oldstudio-icon-filter: none;
-}
-.replies.collapsed > .comment:last-of-type::after {
-  --sa-oldstudio-collapsed-gradient: linear-gradient(rgba(32, 32, 32, 0), #202020);
-  --sa-oldstudio-default-collapsed-gradient: linear-gradient(rgba(40, 40, 40, 0), #282828);
+.banner /* confirm email */ {
+  /* Fix ugly gray shadow */
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
 }

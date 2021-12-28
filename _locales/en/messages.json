@@ -239,14 +239,14 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_20": {
-    "message": "New addon: \"grab single block with Ctrl key\", which adds the ability to drag a single block out of the middle of a script (instead of the entire stack attached below it) while holding the Ctrl key. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_23": {
+    "message": "New addon: \"website dark mode and customizable colors\". Go to $1 to change specific colors, toggle dark scrollbars, and more!"
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_20": {
-    "message": "The \"editor dark mode and customizable colors\" addon has a new \"Scratch 2.0\" color preset. Other new addons added this update are \"hide new variables\" and \"move costume to top or bottom\"."
+  "extensionUpdateInfo2_v1_23": {
+    "message": "Other new addons added this update are \"snap scripts to grid\", \"block count\" and \"high resolution thumbnails\"."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
@@ -255,13 +255,17 @@
     "message": "New!",
     "description": "Tag for addons. Singular."
   },
+  "updated": {
+    "message": "New options",
+    "description": "Tag for addons with new features. Singular."
+  },
   "newGroup": {
-    "message": "Other new addons",
-    "description": "Used as a category name for new addons"
+    "message": "Other new addons and updates",
+    "description": "Used as a category name for new addons and updates"
   },
   "featuredNew": {
-    "message": "Featured new addons",
-    "description": "Used as a category name for featured new addons"
+    "message": "Featured new addons and updates",
+    "description": "Used as a category name for featured new addons and updates"
   },
   "enabled": {
     "message": "Enabled",

@@ -2,7 +2,7 @@
   "editor-devtools/help-title": "Scratch 3 Developer Tools",
   "editor-devtools/help-by": "by {url} and Scratch Addons contributors & translators",
   "editor-devtools/ctrl-space": "Ctrl + Space, Middle Click, or Shift + Click",
-  "editor-devtools/ctrl-space-desc": "Pops up a floating input box where you can type the name of a block (or parts of it) and drag the block into the code to make use of it right there.",
+  "editor-devtools/ctrl-space-desc": "Pops up a floating input box where you can type the name of a block (or parts of it) and drag the block into the code to make use of it right there. Hold Shift while dragging to avoid closing the box when adding multiple blocks at once.",
   "editor-devtools/code-tab-features": "Code Tab Features",
   "editor-devtools/interactive-find-bar": "Interactive Find Bar (Ctrl + F)",
   "editor-devtools/interactive-find-bar-desc": "Quickly find and jump to any Custom Block, Variable, Event, or Hat block defined in a sprite by clicking on the new find bar located to the right of the Code, Costumes and Sounds tabs. Begin typing to filter down the list. Use the up and down arrow keys to switch between the possible entries, and the left and right arrows to cycle between all found instances of that block.",

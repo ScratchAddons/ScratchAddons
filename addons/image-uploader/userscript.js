@@ -94,11 +94,11 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   };
 
   const onDragLeave = () => {
-    textBox.style.backgroundColor = "transparent";
+    textBox.style.backgroundColor = "";
   };
 
   const onDragEnd = () => {
-    textBox.style.backgroundColor = "transparent";
+    textBox.style.backgroundColor = "";
   };
 
   const onDragOver = (e) => {

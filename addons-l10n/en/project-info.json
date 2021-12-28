@@ -1,5 +1,4 @@
 {
   "project-info/sprite": "{num, plural, one {1 sprite} other {# sprites}}",
-  "project-info/script": "{num, plural, one {1 script} other {# scripts}}",
-  "project-info/blocks": "{num, plural, one {1 block} other {# blocks}}"
+  "project-info/script": "{num, plural, one {1 script} other {# scripts}}"
 }

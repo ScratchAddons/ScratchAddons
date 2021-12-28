@@ -4,6 +4,7 @@
 #content > .cols {
   position: static;
   padding-top: 40px;
+  padding-inline: 10px;
 }
 .box .box-head {
   position: absolute;
@@ -14,7 +15,7 @@
   padding-top: 20px;
   padding-bottom: 8px;
   border-radius: 0;
-  background: var(--scratchr2-primaryColor);
+  background: #4d97ff;
 }
 .box .box-head h2 {
   width: 942px;
@@ -37,7 +38,7 @@
   margin: 0 !important;
   border-radius: 0;
   border: none;
-  border-left: 1px solid #d9d9d9;
+  border-left: 1px solid var(--darkWww-border-15, #d9d9d9);
   background: transparent;
 }
 .v-tabs ul {
@@ -57,13 +58,13 @@
 }
 .v-tabs li a {
   padding: 0;
-  color: var(--scratchr2-primaryColor);
+  color: var(--darkWww-link, #4d97ff);
 }
-.v-tabs li:hover a {
-  color: var(--scratchr2-activeColor);
+.v-tabs li:hover:not(.active) a {
+  color: var(--darkWww-link-hover, #4280d7);
 }
 .v-tabs li.active a {
-  color: #575e75;
+  color: var(--darkWww-page-text, #575e75);
   text-shadow: none;
 }
 #content > .cols > .col-12 {
@@ -76,4 +77,9 @@
   padding: 0;
   border: none;
   background: transparent;
+}
+#main-content,
+#main-content h4,
+#main-content label {
+  color: var(--darkWww-page-text, #575e75);
 }

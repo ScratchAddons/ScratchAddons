@@ -24,7 +24,7 @@
   border-radius: 0;
   width: 100%;
   border: none;
-  background: #fff;
+  background-color: var(--darkWww-box, white);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
 }
 .v-tabs ul {
@@ -37,8 +37,10 @@
 .v-tabs li {
   border: none;
 }
-.v-tabs li a {
-  color: #575e75;
+.v-tabs li a,
+.v-tabs li:hover:not(.active) a,
+.v-tabs li.active a {
+  color: var(--darkWww-box-text, #575e75);
 }
 .v-tabs li.active,
 .v-tabs li.active:hover {
@@ -46,22 +48,22 @@
   background: transparent;
 }
 .v-tabs li.active a {
-  color: #575e75;
   text-shadow: none;
 }
 .v-tabs li:hover {
-  border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+  border-bottom: 3px solid var(--darkWww-box-tabHover, rgba(0, 0, 0, 0.2));
   background: transparent;
-}
-.v-tabs li:hover a {
-  color: #575e75;
 }
 #sidebar li.sub-list a {
   margin-left: 0;
 }
 .box-content#main-content {
   padding-top: 42px;
-  background: #fcfcfc;
+}
+#content,
+.box-content#main-content,
+.ajax-loader {
+  background-color: var(--darkWww-gray, #f2f2f2);
 }
 .box {
   position: relative;
@@ -70,7 +72,7 @@
 .box .box-head {
   border-radius: 0;
   border: none;
-  background: var(--scratchr2-primaryColor);
+  background: #4d97ff;
 }
 .box .box-head {
   width: 942px;
@@ -100,25 +102,29 @@
 }
 .box .box-content .action-bar .inner {
   padding: 0;
+  height: 52px;
   border: none;
   background: transparent;
 }
 .action-bar .inner .dropdown,
 .action-bar .inner .dropdown:hover {
   height: 46px;
-  border-color: rgba(0, 0, 0, 0.1);
+  border-color: var(--darkWww-border, rgba(0, 0, 0, 0.1));
   transition: border-color 0.5s ease;
-  background: #fafafa url("%addon-self-dir%/assets/caret.svg") no-repeat right center;
-  color: #575e75;
+  background-color: var(--darkWww-input, #fafafa);
+  background-image: var(--darkWww-input-caret, url("%addon-self-dir%/assets/caret.svg"));
+  background-repeat: no-repeat;
+  background-position: right center;
+  color: var(--darkWww-input-text, #575e75);
   font-weight: normal;
 }
 .action-bar .inner .dropdown:hover {
-  background-image: url("%addon-self-dir%/assets/caret_hover.svg");
+  background-image: var(--darkWww-input-caretHover, url("%addon-self-dir%/assets/caret_hover.svg"));
 }
 .action-bar .inner .dropdown:focus,
 .action-bar .inner .dropdown.open {
-  background-image: url("%addon-self-dir%/assets/caret_hover.svg");
-  border-color: var(--scratchr2-primaryColor);
+  background-image: var(--darkWww-input-caretHover, url("%addon-self-dir%/assets/caret_hover.svg"));
+  border-color: var(--darkWww-button, #4d97ff);
 }
 .action-bar .inner .dropdown .dropdown-toggle {
   display: block;
@@ -153,6 +159,20 @@
 .media-list .media-item-content {
   margin-bottom: 14px;
   border-radius: 4px;
-  background: #fff;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  background-color: var(--darkWww-box, white);
+  box-shadow: 0 0 0 1px var(--darkWww-border, rgba(0, 0, 0, 0.1));
+}
+#search-my-stuff-form {
+  margin: auto;
+  background: none;
+  border-top: none;
+}
+#search-my-stuff-input {
+  padding: 0 16px;
+  height: 48px;
+  font-size: 13px;
+}
+#search-my-stuff-input:focus {
+  box-shadow: 0 0 0 4px hsla(163, 85%, 40%, 0.25);
+  border-color: hsl(163, 85%, 40%);
 }

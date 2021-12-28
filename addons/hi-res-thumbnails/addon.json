@@ -1,0 +1,37 @@
+{
+  "name": "High resolution thumbnails",
+  "description": "Replaces thumbnails across the website with higher resolution images. Useful for Retina (high pixel density) displays and browsing at greater than 100% zoom.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "If your network's data plan is limited, keep in mind that higher resolution images require more data usage.",
+      "id": "imagefilesize"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Scale thumbnails (100-300%)",
+      "id": "multiplier",
+      "type": "integer",
+      "min": 100,
+      "max": 300,
+      "default": 200
+    }
+  ],
+  "tags": ["community"],
+  "credits": [
+    {
+      "name": "_nix",
+      "link": "https://scratch.mit.edu/users/_nix/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"],
+      "runAtComplete": false
+    }
+  ],
+  "versionAdded": "1.23.0",
+  "enabledByDefault": false
+}

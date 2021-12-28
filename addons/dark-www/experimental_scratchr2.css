@@ -1,170 +1,670 @@
+/* Page background */
 html,
-body,
-#pagewrapper,
-.semicolon {
-  background: #202020;
-  color: #fff;
-  text-shadow: none;
-}
-label {
-  color: #fff;
-}
-a.black,
-a.black:visited,
-input.link.black {
-  color: #fff;
-}
-span.small-text {
-  color: rgba(255, 255, 255, 0.4);
-}
-input,
-textarea,
-select,
-.editable-empty,
-.editable.read,
-.editable.write,
-.editable:hover {
-  background-color: #282828;
-  color: #fff;
-}
-input,
-textarea {
-  border: 2px solid #606060;
-}
-.editable-empty [data-content="prompt"] {
-  color: rgba(255, 255, 255, 0.4);
-}
-.button,
-button,
-.button:hover,
-button:hover,
-.button.grey,
-button.grey,
-.button[data-control="load-more"]:hover,
-.ui-widget button.ui-state-default {
-  text-shadow: none;
-}
-.button.grey:not([data-control="load-more"]),
-button.grey,
-.button.grey:not([data-control="load-more"]):hover,
-button.grey:hover,
-form.post-editor input[type="submit"] {
-  background-color: #282828;
-  background-image: none;
-  color: var(--scratchr2-linkColor, #fff);
-}
-.button.grey:not([data-control="load-more"]):hover,
-button.grey:hover {
-  color: var(--scratchr2-activeColor, #ccc);
-}
-.box {
-  background: #333;
-}
-.box .box-head {
-  border-color: transparent;
-}
-.box .box-content,
-.box .box-content .inner {
-  background: #282828;
-}
-.box .box-content .action-bar .inner {
-  background: transparent;
-}
-.box,
-.box .box-content,
-.thumb img {
-  border-color: #606060;
+body {
+  background-color: var(--darkWww-page);
+  color: var(--darkWww-page-scratchr2Text);
 }
 h1,
 h2,
 h3,
 h4 {
-  color: inherit;
+  color: var(--darkWww-page-scratchr2HeaderText);
 }
-.ui-widget-content {
-  color: #fff;
+label,
+#email-resend-box .email-resend-subsection {
+  color: var(--darkWww-page-scratchr2LabelText);
 }
-.dropdown .dropdown-menu {
-  background-color: #282828;
-  color: #fff;
+.list a /* mobile forums */ {
+  color: var(--darkWww-page-scratchr2Text);
 }
-.dropdown .dropdown-menu li:hover {
-  background-color: #606060;
+
+/* Navigation bar background */
+#topnav .innerwrap,
+#topnav ul.account-nav .logged-in-user .dropdown-menu,
+#topnav li.logout.divider input,
+#topnav ul.account-nav .sign-in .popover {
+  background-color: var(--darkWww-navbar-scratchr2);
 }
-.dropdown span.dropdown-toggle.black span.caret {
-  border-top-color: #fff;
+#topnav ul.account-nav .sign-in .popover .arrow:after {
+  border-bottom-color: var(--darkWww-navbar-scratchr2);
 }
-.icon-xs.black,
-.icon-sm.black {
-  filter: brightness(0) invert(1);
+#topnav ul.site-nav li a,
+#topnav ul.account-nav > li > span,
+#topnav ul.account-nav > li.join-scratch:not(:hover) > a,
+#topnav ul.account-nav ul.user-nav li a,
+#topnav li.logout.divider input,
+#topnav ul.account-nav .sign-in form label,
+#topnav ul.account-nav .sign-in form .forgot-password a {
+  color: var(--darkWww-navbar-scratchr2Text);
 }
-#footer {
-  background-color: #333;
-  border-color: #606060; /* for infinite scrolling fixed footer */
-  box-shadow: none;
+#topnav .dropdown span.dropdown-toggle span.caret {
+  border-top-color: var(--darkWww-navbar-scratchr2Text);
 }
-#footer ul.footer-col li h4 {
-  color: #fff !important; /* !important is needed, see #701 */
+#topnav ul.account-nav .my-stuff .mystuff-icon {
+  filter: var(--darkWww-navbar-scratchr2ShadowFilter);
 }
-#topnav {
-  box-shadow: none;
+#topnav ul.account-nav .messages .messages-icon {
+  background-image: none;
 }
-#topnav form.search .glass {
-  border-right: none;
-  background: url("https://scratch.mit.edu/images/nav-search-glass.png") no-repeat center center;
-  background-size: 14px 14px;
+#topnav ul.account-nav .messages .messages-icon::before {
+  /* Move icon into a pseudo-element so filters can be applied to it separately */
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: url("https://cdn.scratch.mit.edu/scratchr2/static/images/nav-notifications.png") no-repeat center center;
+  filter: var(--darkWww-navbar-scratchr2ShadowFilter);
 }
-#topnav form.search input[type="text"] {
-  background: rgba(0, 0, 0, 0.1);
+#topnav ul.site-nav li,
+#topnav ul.site-nav li.last,
+#topnav ul.account-nav > li,
+#topnav ul.account-nav > li.join-scratch,
+#topnav ul.account-nav.logged-in > li,
+#topnav ul.account-nav ul.user-nav li.logout.divider,
+#topnav ul.account-nav .sign-in .popover {
+  border-color: var(--darkWww-navbar-scratchr2Border);
 }
-#topnav form.search input[type="text"]::placeholder {
-  color: rgba(255, 255, 255, 0.75);
+#topnav ul.account-nav .sign-in .popover .arrow {
+  border-bottom-color: var(--darkWww-navbar-scratchr2Border);
 }
-#topnav ul.account-nav .logged-in-user .dropdown-menu {
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  background-clip: border-box;
+#topnav ul.site-nav li:hover,
+#topnav ul.account-nav > li.sign-in:hover,
+#topnav ul.account-nav > li.sign-in.open,
+#topnav ul.account-nav.logged-in li:hover,
+#topnav li.logout.divider input:hover {
+  background-color: var(--darkWww-navbar-scratchr2ItemHover);
 }
+#topnav ul.account-nav .logged-in-user.dropdown.open {
+  background-color: var(--darkWww-navbar-scratchr2ItemHover) !important;
+}
+
+/* Content background */
+.box .box-content,
+.box .box-content .inner,
+.editable:hover,
+.editable.write,
+.editable-empty,
 .modal,
 .jqui-modal,
-.jqui-modal.ui-corner-all {
-  background: #282828;
+.jqui-modal.ui-corner-all,
+.blockpost .box-content,
+.postright,
+.postfootright,
+#forum-search-form,
+.media-item-content .media-thumb,
+.ajax-loader,
+.box .box-head .portrait img,
+.gallery.thumb span.image,
+.gallery.thumb span.image img,
+#comments #comments-loading,
+#comments .more-replies,
+.nvtooltip /* statistics */,
+.help .faq .box,
+#email-resend-box .modal-footer,
+#new-scratcher-gallery-modal .modal-footer,
+.registration form,
+.registration a.why-we-ask:hover+div,
+#comments .sa-emoji-picker {
+  background-color: var(--darkWww-box);
+  color: var(--darkWww-box-scratchr2Text);
 }
-.modal .modal-header,
-.jqui-modal .ui-dialog-titlebar.ui-widget-header {
-  background: var(--scratchr2-primaryColor, #4d97ff);
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
+.info-tooltip /* statistics */ {
+  background-color: var(--darkWww-box);
+  color: var(--darkWww-box-scratchr2LabelText);
 }
-.ui-widget-content a {
-  color: #4d97ff;
+.dropdown .dropdown-menu {
+  background-color: var(--darkWww-box);
+  color: var(--darkWww-box-scratchr2ButtonText);
+}
+input,
+textarea,
+select {
+  background-color: var(--darkWww-box);
+  color: var(--darkWww-box-scratchr2InputText);
+}
+.arrow-left,
+.arrow-right {
+  background-color: var(--darkWww-box);
+}
+.markItUpHeader ul ul {
+  background-color: var(--darkWww-box) !important;
 }
 #featured-project-modal .project.thumb {
-  background: #282828;
+  border-color: var(--darkWww-box);
 }
-#email-resend-box {
-  border: none;
+.markItUpHeader ul ul li {
+  border-color: var(--darkWww-box) !important;
 }
-#email-resend-box .email-resend-subsection {
-  color: white;
+.box-content h1,
+.box-content h2,
+.box-content h3,
+.box-content h4,
+.modal h1,
+.modal h2,
+.modal h3,
+.modal h4 {
+  color: var(--darkWww-box-scratchr2HeaderText);
 }
-.modal .modal-footer,
-#email-resend-box .modal-footer,
-#new-scratcher-gallery-modal .modal-footer {
-  background: #282828;
-  border: none;
+.box-content label,
+.modal label,
+.jqui-modal .ui-dialog-titlebar,
+.ui-widget-content,
+.ui-widget-content a,
+#comments .comment .info .name a {
+  color: var(--darkWww-box-scratchr2LabelText);
+}
+.nvd3 [style*="fill: rgb(68, 68, 68)"] /* statistics radio buttons */ {
+  fill: var(--darkWww-box-scratchr2LabelText) !important;
+}
+.nvd3 [style*="stroke: rgb(68, 68, 68)"] /* statistics radio buttons */ {
+  stroke: var(--darkWww-box-scratchr2LabelText) !important;
+}
+span.small-text,
+.thumb span.owner,
+.media-item-content .media-stats .stat,
+.slider-carousel .thumb span.owner,
+.slider-carousel .thumb span.owner a,
+.box .box-content .template-feature-off,
+.help span.quotes {
+  color: var(--darkWww-box-scratchr2ButtonText);
+}
+.posteditmessage,
+.editable-empty [data-content="prompt"],
+.slider-carousel .slider-carousel-control.off {
+  color: var(--darkWww-box-transparentText);
+}
+.media-info-item.date,
+#bio-readonly,
+#status-readonly,
+#profile-box #bio textarea,
+#profile-box #status textarea,
+#comments .comment .info .time,
+#comments .comment .report,
+#comments .comment .delete,
+.box .box-content .pagination .disabled,
+.registration a.why-we-ask {
+  color: var(--darkWww-box-scratchr2TransparentText);
+}
+.dropdown span.dropdown-toggle.black span.caret {
+  border-top-color: var(--darkWww-box-scratchr2Caret);
+}
+input::placeholder {
+  color: var(--darkWww-box-scratchr2InputPlaceholder);
+}
+.close,
+.close:hover {
+  color: var(--darkWww-box-scratchr2BlackText);
+  text-shadow: none;
+}
+.markItUpHeader ul ul a {
+  color: var(--darkWww-box-scratchr2BlackText) !important;
+}
+.nvd3 text /* statistics */,
+#country_chart text /* statistics */ {
+  fill: var(--darkWww-box-scratchr2BlackText);
+}
+.nvd3 .nv-axis path /* statistics */ {
+  stroke: var(--darkWww-box-scratchr2BlackText);
+}
+.box-content .icon-xs.black,
+.box-content .icon-sm.black,
+.button.grey .icon-xs.black,
+.button.grey .icon-sm.black {
+  filter: var(--darkWww-box-eyeFilter);
+}
+.box,
+.box .box-content,
+.djangobb td,
+.djangobb th,
+#forum-search-form,
+.djangobb tbody th /* infinite scrolling */ {
+  border-color: var(--darkWww-box-scratchr2Border);
+}
+.tabs-index li {
+  border-bottom-color: var(--darkWww-box-scratchr2Border);
+}
+.postleft,
+.postfootleft {
+  box-shadow: 1px 0 var(--darkWww-box-scratchr2Border);
+}
+.postright,
+.postfootright {
+  box-shadow: 1px 0 inset var(--darkWww-box-scratchr2Border);
+}
+button,
+.button.grey {
+  background-image: linear-gradient(
+    var(--darkWww-box-scratchr2ButtonGradientTop),
+    var(--darkWww-box-scratchr2ButtonGradientBottom)
+  );
+  border-color: var(--darkWww-box-scratchr2ButtonBorder);
+  color: var(--darkWww-box-scratchr2ButtonText);
+  text-shadow: 0 1px var(--darkWww-box);
+}
+ul.pagination a:active:not(.current) span /* mobile forums */ {
+  background-color: var(--darkWww-box-scratchr2ButtonGradientBottom);
+  color: var(--darkWww-box-scratchr2InputText);
+}
+button:hover,
+.button.grey:hover {
+  background-image: linear-gradient(var(--darkWww-box-scratchr2ButtonHover), var(--darkWww-box-scratchr2ButtonHover));
+}
+.dropdown .dropdown-menu li:hover {
+  background-color: var(--darkWww-box-scratchr2DropdownItemHover);
+}
+
+/* Gray background */
+.my-ocular-reaction-button {
+  background-color: var(--darkWww-gray);
+  color: var(--darkWww-gray-scratchr2Text);
+}
+.box,
+.postleft,
+.postfootleft,
+.djangobb blockquote,
+#profile-box .doing,
+#comments .highlighted,
+.nvtooltip h3 /* statistics */,
+.table-striped tbody > tr:nth-child(odd) > td {
+  background-color: var(--darkWww-gray-scratchr2);
+  color: var(--darkWww-gray-scratchr2Text);
+}
+.markItUpHeader ul ul li:hover {
+  background-color: var(--darkWww-gray-scratchr2) !important;
+}
+.tabs-index li,
+.postright,
+.postfootright {
+  border-left-color: var(--darkWww-gray-scratchr2);
+}
+.markItUpHeader ul ul li:hover a {
+  color: var(--darkWww-gray-scratchr2BlackText) !important;
+}
+.box .box-head h1,
+.box .box-head h2,
+.box .box-head h3,
+.box .box-head h4,
+#profile-box .doing h1,
+#profile-box .doing h2,
+#profile-box .doing h3,
+#profile-box .doing h4 {
+  color: var(--darkWww-gray-scratchr2HeaderText);
+}
+.tabs-index li a,
+.header-text .profile-details,
+.activity-stream .time,
+#profile-data .footer #report-this {
+  color: var(--darkWww-gray-scratchr2TransparentText);
+}
+#comments .highlighted .info .name a {
+  color: var(--darkWww-gray-scratchr2LabelText);
+}
+.activity-stream .actor a {
+  color: var(--darkWww-gray-scratchr2LabelText) !important;
+}
+.tabs-index li:hover:not(.active) a {
+  color: var(--darkWww-gray-scratchr2ButtonText);
+}
+#profile-box .doing .icon-xs.black {
+  filter: var(--darkWww-gray-eyeFilter);
+}
+.box .box-head,
+.box .box-content .action-bar .inner,
+.v-tabs li,
+.v-tabs li:hover {
+  border-top-color: var(--darkWww-gray-boxHighlight);
+}
+.modal-footer,
+ul.pagination span /* mobile forums */,
+.post-content blockquote /* mobile forums */,
+.post-content div.code /* mobile forums */ {
+  box-shadow: 0 1px inset var(--darkWww-gray-boxHighlight);
+}
+.v-tabs li.active,
+.v-tabs li.active:hover {
+  background-color: var(--darkWww-gray-scratchr2SelectedTab);
+}
+.box .box-content .action-bar .inner,
+.djangobb th,
+.post-content blockquote /* mobile forums */,
+.post-content div.code /* mobile forums */ {
+  background-color: var(--darkWww-gray-scratchr2TableHeader);
+  color: var(--darkWww-gray-scratchr2Text);
+}
+ul.pagination span /* mobile forums */ {
+  background-color: var(--darkWww-gray-scratchr2TableHeader);
+  color: var(--darkWww-gray-mobilePaginationText);
+}
+.tc2,
+.tc3 {
+  background-color: var(--darkWww-gray-scratchr2TableCell);
+  color: var(--darkWww-gray-scratchr2Text);
+}
+.modal-footer {
+  background-color: var(--darkWww-gray-scratchr2TableCell);
+}
+.v-tabs li:hover {
+  background-color: var(--darkWww-gray-scratchr2TableCell);
+  border-left-color: var(--darkWww-gray-scratchr2TableCell);
+}
+
+/* Blue background */
+.empty-field {
+  background-color: var(--darkWww-blue);
+  border-color: var(--darkWww-blue-20);
+}
+.empty-field h4 {
+  color: var(--darkWww-blue-text);
+}
+
+/* Input background */
+.my-ocular-popup,
+#comments .more-replies .pulldown {
+  background-color: var(--darkWww-input);
+  color: var(--darkWww-input-scratchr2Text);
+}
+.my-ocular-popup::after {
+  border-top-color: var(--darkWww-input);
+}
+#comments .more-replies {
+  box-shadow: 0 -25px 20px -10px var(--darkWww-input);
+}
+
+/* Highlight color */
+.djangobb .new_topic {
+  color: var(--darkWww-button-scratchr2ButtonText);
+}
+.button {
+  background-image: linear-gradient(
+    var(--darkWww-button-scratchr2ButtonGradientTop),
+    var(--darkWww-button-scratchr2ButtonGradientBottom)
+  );
+  border-color: var(--darkWww-button-scratchr2ButtonBorderTop);
+  border-bottom-color: var(--darkWww-button-scratchr2ButtonBorderBottom);
+  color: var(--darkWww-button-scratchr2ButtonText);
+}
+.button a,
+.button a:hover,
+.button a:visited {
+  color: inherit;
+}
+.follow-topic .follow-button:hover {
+  color: var(--darkWww-button-scratchr2ButtonText);
+}
+.button:hover {
+  background-image: linear-gradient(
+    var(--darkWww-button-scratchr2ButtonGradientBottom),
+    var(--darkWww-button-scratchr2ButtonGradientBottom)
+  );
+}
+input:focus,
+textarea:focus,
+.control-group.tooltip textarea:focus,
+.registration .modal-body input:focus,
+.registration .modal-body textarea:focus,
+.registration .modal-body select:focus {
+  border-color: var(--darkWww-button-scratchr2InputFocusBorder);
+  box-shadow: 0 1px 1px inset rgba(0, 0, 0, 0.08), 0 0 8px var(--darkWww-button-scratchr2InputFocusShadow);
+}
+.editable textarea:focus,
+.editable-empty textarea:focus {
+  border-color: transparent;
   box-shadow: none;
 }
-.modal .modal-header {
-  border: none;
+.blockpost div.box {
+  background-color: var(--darkWww-button-scratchr2PostHeader);
+  border-top-color: var(--darkWww-button-scratchr2PostHeader);
 }
-#page-404 .box-header h1 {
-  color: #fff;
+.my-ocular-reaction-button {
+  box-shadow: 0 0 2px var(--darkWww-button-scratchr2PostHeader);
+}
+.my-ocular-reaction-button.selected {
+  background-color: var(--darkWww-button-scratchr2PostHeader);
+  color: var(--darkWww-button-scratchr2PostHeaderText);
+}
+.blockpost .box-head {
+  border-top-color: var(--darkWww-button-scratchr2PostBorder);
+}
+.blockpost .box-head span.conr,
+.blockpost .box-head a,
+.blockpost .box-head a:link,
+.blockpost .box-head a:active,
+.blockpost .box-head a:hover,
+.blockpost .box-head a:visited {
+  color: var(--darkWww-button-scratchr2PostHeaderText);
 }
 
-tbody#logs * {
-  background-color: inherit !important;
+/* Link color */
+a,
+a:hover,
+a:active,
+a.black:hover,
+a.black:active,
+input.link,
+input.link:hover,
+input.link:active,
+input.link.black:hover,
+input.link.black:active,
+#comments .more-replies .pulldown,
+#email-resend-box a {
+  color: var(--darkWww-link-scratchr2);
+}
+.inew,
+.isticky {
+  filter: var(--darkWww-link-scratchr2IconFilter);
 }
 
-#search-input {
-  background-color: #fff;
+/* Footer background */
+#footer {
+  background-color: var(--darkWww-footer-scratchr2);
+}
+#footer ul.footer-col li h4 {
+  color: var(--darkWww-footer-scratchr2Text) !important; /* !important is needed, see #701 */
+}
+
+/* Border color */
+.modal-header,
+#profile-box .player,
+.nvtooltip h3 /* statistics */ {
+  border-color: var(--darkWww-border-5);
+}
+.box .box-content .action-bar .inner {
+  border-bottom-color: var(--darkWww-border-5);
+}
+.modal-footer,
+#profile-box .doing,
+#profile-data .footer,
+#email-resend-box {
+  border-color: var(--darkWww-border);
+}
+.nvd3 .nv-axis line /* statistics */ {
+  stroke: var(--darkWww-border);
+}
+#footer /* for infinite scrolling fixed footer */,
+.thumb img,
+.djangobb blockquote,
+.my-ocular-popup,
+.media-list li,
+.media-item-content .media-thumb img,
+.header-text .profile-details .group,
+.slider-carousel .thumb img,
+#comments #comments-enabled-box,
+.table td,
+#comments .sa-emoji-picker,
+.sa-emoji-picker-divider {
+  border-color: var(--darkWww-border-15);
+}
+.markItUpHeader ul ul li:hover {
+  border-color: var(--darkWww-border-15) !important;
+}
+.my-ocular-popup::before {
+  border-top-color: var(--darkWww-border-15);
+}
+.v-tabs li:hover {
+  border-bottom-color: var(--darkWww-border-15);
+}
+input,
+textarea,
+select,
+.jqui-modal,
+.jqui-modal.ui-corner-all,
+#topnav form.search .glass,
+#page-404 .search input,
+.box .box-head .portrait img,
+.gallery.thumb span.image,
+.gallery.thumb span.image img,
+#comments #comment-form .template-feature-off,
+#comments .comments li,
+#comments ul.comments ul li,
+#comments .more-replies,
+#comments .more-replies .pulldown,
+.nvtooltip /* statistics */,
+.help .faq .box-content > div,
+.registration a.why-we-ask:hover+div {
+  border-color: var(--darkWww-border-20);
+}
+.editable:hover,
+.editable.write,
+.editable-empty {
+  border-color: var(--darkWww-border-20) !important;
+}
+.markItUpPreviewFrame {
+  border-color: var(--darkWww-border-20) !important;
+  background-color: transparent !important;
+}
+.dropdown .dropdown-menu {
+  background-clip: border-box;
+  border-color: var(--darkWww-border-20);
+  border-top-color: var(--darkWww-border-5);
+}
+.djangobb hr {
+  background-color: var(--darkWww-border-20);
+}
+.markItUpHeader ul .markItUpSeparator {
+  background-color: var(--darkWww-border-20) !important;
+  color: transparent;
+}
+.nvd3 line.nv-guideline /* statistics */ {
+  stroke: var(--darkWww-border-20);
+}
+.modal,
+.markItUpHeader ul ul,
+ul.pagination span /* mobile forums */,
+.post-content blockquote /* mobile forums */,
+.post-content div.code /* mobile forums */ {
+  border-color: var(--darkWww-border-33) !important;
+}
+
+/* Miscellaneous styles */
+
+:root {
+  /* URLs defined here because addon.json can't use %addon-self-dir% */
+  --darkWww-caretBlack: url("%addon-self-dir%/assets/caret_transparent.svg");
+  --darkWww-caretWhite: url("%addon-self-dir%/assets/caret_white.svg");
+  --darkWww-caretBlackHover: url("%addon-self-dir%/assets/caret_transparent_hover.svg");
+  --darkWww-caretWhiteHover: url("%addon-self-dir%/assets/caret_white_hover.svg");
+}
+
+html,
+body {
+  background-image: none;
+  text-shadow: none;
+}
+
+/* Fix gray shadows */
+#topnav {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+.box {
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.27);
+}
+#footer {
+  box-shadow: 0 0 10px inset rgba(0, 0, 0, 0.14);
+}
+div.content > article > header /* mobile forums */ {
+  box-shadow: 0 1px inset rgba(255, 255, 255, 0.29);
+}
+ul.pagination a:active:not(.current) span {
+  box-shadow: 0 1px inset rgba(255, 255, 255, 0.33);
+}
+.registration a.why-we-ask:hover + div {
+  box-shadow: 1px 1px 6px 2px rgba(0, 0, 0, 0.13);
+}
+
+a.black,
+a.black:visited,
+input.link.black {
+  color: inherit;
+}
+
+.jqui-modal,
+.jqui-modal.ui-corner-all {
+  background-image: none;
+}
+
+/* Some images are designed for a light background */
+.markItUpHeader > ul > li > a {
+  margin-right: 4px;
+  margin-bottom: 4px;
+  width: 12px;
+  height: 12px;
+  background-color: white;
+  background-position: 1px 1px;
+  background-size: 16px !important;
+  border-radius: 3px;
+}
+.markItUp .markItUpButton1 a {
+  height: 12px !important;
+}
+.markItUpHeader > ul > .markItUpDropMenu {
+  background-image: none !important;
+  margin-right: 4px !important;
+}
+.markItUpHeader > ul > .markItUpDropMenu::after {
+  /* Move icon into a pseudo-element so it appears in front of child element's white background */
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: url(https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/skins/simple/images/menu.png)
+    no-repeat 115% 60%;
+  pointer-events: none;
+}
+.markItUpHeader > ul > .sa-forum-toolbar-link::after {
+  content: none;
+}
+.markItUpHeader > ul > .markItUpDropMenu > a {
+  width: 16px;
+  margin-right: 1px;
+}
+.sa-forum-toolbar-link > a {
+  width: 12px !important;
+}
+.markItUp .browser-os-button a {
+  margin-left: 2px;
+  margin-right: 2px;
+  background-position: 1px 1px !important;
+}
+.markItUpHeader > ul > li.uploadStatus {
+  background: transparent !important;
+}
+
+#comments .easter-egg[src$="meow.png"] {
+  content: url(%addon-self-dir%/assets/meow.png);
+}
+#comments .easter-egg[src$="gobo.png"] {
+  content: url(%addon-self-dir%/assets/gobo.png);
+}
+#comments .easter-egg[src$="waffle.png"] {
+  content: url(%addon-self-dir%/assets/waffle.png);
+}
+.stats li.data {
+  background-image: url("%addon-self-dir%/assets/meow.png");
+  background-size: 20px 15px;
 }

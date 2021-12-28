@@ -373,6 +373,18 @@
       }
     },
     {
+      "name": "accent-invertedFilter",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        }
+      }
+    },
+    {
       "name": "accent-opacity0",
       "value": {
         "type": "multiply",
@@ -471,6 +483,17 @@
       }
     },
     {
+      "name": "input-transparent75",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        },
+        "a": 0.75
+      }
+    },
+    {
       "name": "input-transparent50",
       "value": {
         "type": "multiply",
@@ -551,6 +574,18 @@
       "name": "categoryMenu-text",
       "value": {
         "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "categoryMenu"
+        }
+      }
+    },
+    {
+      "name": "categoryMenu-invertedFilter",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
         "source": {
           "type": "settingValue",
           "settingId": "categoryMenu"
@@ -951,14 +986,14 @@
       "id": "experimentalDark",
       "description": "A dark theme by Maximouse based on a userstyle. Not experimental",
       "values": {
-        "page": "#001533",
+        "page": "#263241",
         "primary": "#4d97ff",
         "highlightText": "#4d97ff",
         "menuBar": "#4d97ff",
         "activeTab": "#282828",
-        "tab": "#192f4d",
-        "selector": "#030b16",
-        "selector2": "#192f4d",
+        "tab": "#202020",
+        "selector": "#252c37",
+        "selector2": "#202020",
         "selectorSelection": "#282828",
         "accent": "#282828",
         "input": "#282828",
@@ -995,7 +1030,7 @@
         "palette": "#111111",
         "fullscreen": "#111111",
         "stageHeader": "#111111",
-        "border": "#ffffff0d",
+        "border": "#ffffff26",
         "textShadow": false,
         "dots": true,
         "darkComments": true,

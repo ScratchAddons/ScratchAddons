@@ -1,7 +1,7 @@
 .sa-body-editor::-webkit-scrollbar,
 .sa-body-editor ::-webkit-scrollbar {
-  width: 16px;
-  height: 16px;
+  width: 17px;
+  height: 17px;
   background: transparent;
 }
 .sa-body-editor::-webkit-scrollbar {
@@ -15,9 +15,9 @@
   width: 8px;
   height: 8px;
   background-color: rgba(96, 96, 96, 0.8);
-  border: 4px solid transparent;
+  border: 4.5px solid transparent;
   background-clip: padding-box;
-  border-radius: 8px;
+  border-radius: 8.5px;
 }
 .sa-body-editor::-webkit-scrollbar-thumb:hover,
 .sa-body-editor ::-webkit-scrollbar-thumb:hover {

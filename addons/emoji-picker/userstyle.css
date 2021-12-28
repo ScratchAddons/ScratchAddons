@@ -1,0 +1,108 @@
+.sa-emoji-picker {
+  cursor: auto;
+  position: absolute;
+  width: 390px;
+  background-color: white;
+  color: black;
+  border-radius: 8px;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 0px 5px #00000022;
+  z-index: 1;
+  padding: 5px;
+  padding-bottom: 0;
+  overflow: hidden;
+  line-height: 0px;
+  font-size: 15px;
+  font-weight: normal;
+  right: -7px;
+}
+
+.sa-emoji-button-r2 .sa-emoji-picker:not(.sa-emoji-picker-offscreen) {
+  top: 33px;
+}
+.sa-emoji-button-www .sa-emoji-picker:not(.sa-emoji-picker-offscreen) {
+  top: calc(11rem + 5px);
+}
+.sa-emoji-button-r2 .sa-emoji-picker.sa-emoji-picker-offscreen {
+  bottom: 35px;
+}
+.sa-emoji-button-www .sa-emoji-picker.sa-emoji-picker-offscreen {
+  bottom: 52px;
+}
+
+.sa-emoji-picker-item {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  margin: 1px;
+  display: inline-block;
+  position: relative;
+}
+.sa-emoji-picker-item:hover {
+  background-color: rgba(0.5, 0.5, 0.5, 0.08);
+}
+.sa-emoji-picker-item-inner {
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+}
+.sa-emoji-button {
+  padding: 0.74rem 0.99rem;
+  vertical-align: middle;
+  font-weight: bold;
+}
+.button.small.sa-emoji-button-container {
+  user-select: none;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  margin-left: auto;
+}
+.comments-container .sa-emoji-button-container,
+.studio-compose-container .sa-emoji-button-container {
+  margin-left: 1em;
+}
+.sa-emoji-picker-divider {
+  height: 1px;
+  margin: 5px;
+  display: block;
+  border-top: 2px solid rgba(0, 0, 0, 0.15);
+}
+.sa-emoji-picker-break {
+  margin-bottom: 9px;
+  height: 2px;
+}
+.sa-emoji-picker-unicode {
+  font-size: 15px;
+  position: relative;
+  left: 6px;
+}
+.sa-emoji-picker-unicode .sa-emoji-picker-item {
+  width: 20px;
+  height: 20px;
+}
+.sa-emoji-picker-see-more {
+  width: 100%;
+  margin-top: 5px;
+}
+.sa-emoji-button-r2 .sa-emoji-picker-see-more {
+  width: calc(100% - 2px);
+  margin-bottom: 7px;
+  margin-top: 4px;
+}
+
+form > .control-group:not(.tooltip) {
+  display: flex;
+}
+form > .control-group:not(.tooltip) > [data-control="cancel"] {
+  /* Readd margin removed by rule above */
+  margin-left: 4px;
+}
+#comments .comment form > .control-group:last-child {
+  /* Only replies */
+  width: 412px;
+}
