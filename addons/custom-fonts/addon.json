@@ -1,6 +1,6 @@
 {
   "name": "Customizable fonts",
-  "description": "Customize the font family for different parts of Scratch. Choose a font from fonts.google.com and enter it into one or more of the boxes.",
+  "description": "Customize the font family for different parts of Scratch.",
   "tags": ["theme", "beta", "editor"],
   "credits": [
     {
@@ -23,7 +23,7 @@
     {
       "url": "userscript.js",
       "matches": ["https://scratch.mit.edu/*"],
-      "runAtComplete": false
+      "runAtComplete": true
     }
   ],
   "settings": [
@@ -32,42 +32,42 @@
       "id": "navfnt",
       "type": "datalist",
       "default": "Helvetica",
-      "items": ["Sora", "Helvetica", "Arial"]
+      "items": ["Sora", "Helvetica", "Arial", "Roboto"]
     },
     {
       "name": "Main font",
       "id": "mainfnt",
       "type": "datalist",
       "default": "Helvetica",
-      "items": ["Sora", "Helvetica", "Arial"]
+      "items": ["Sora", "Helvetica", "Arial", "Roboto"]
     },
     {
       "name": "Editor font",
       "id": "editfnt",
       "type": "datalist",
       "default": "Helvetica",
-      "items": ["Sora", "Helvetica", "Arial"]
+      "items": ["Sora", "Helvetica", "Arial", "Roboto"]
     },
     {
       "name": "Block Font",
       "id": "blockfnt",
       "type": "datalist",
       "default": "Helvetica",
-      "items": ["Sora", "Helvetica", "Arial"]
+      "items": ["Sora", "Helvetica", "Arial", "Roboto"]
     },
     {
       "name": "Header font",
       "id": "headfnt",
       "type": "datalist",
       "default": "Helvetica",
-      "items": ["Sora", "Helvetica", "Arial"]
+      "items": ["Sora", "Helvetica", "Arial", "Roboto"]
     },
     {
       "name": "Footer font",
       "id": "footerfnt",
       "type": "datalist",
       "default": "Helvetica",
-      "items": ["Sora", "Helvetica", "Arial"]
+      "items": ["Sora", "Helvetica", "Arial", "Roboto"]
     }
   ]
 }

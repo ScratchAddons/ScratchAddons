@@ -76,19 +76,26 @@ export default async function ({ addon, console }) {
     }
 
     for (let [id, nme] of options) {
-      let s = nme === "blocks" ? await calcSpacing(addon.settings.get(id).trim()) : 0;
+      let s = nme === "blocks" ? await calcSize(addon.settings.get(id).trim()) : 1;
+      if (s > 1) s = 1;
       if (init) {
         //This is the first time the addon has been run, we need to populate the list
         addStyle(
           createStyle(
-            styleFromTemplate(templates[nme], `font-family: ${addon.settings.get(id)}; letter-spacing: ${s}px;`),
+            styleFromTemplate(
+              templates[nme],
+              `font-family: ${addon.settings.get(id)}; ${s === 1 ? "" : `font-size: ${s.toFixed(2)}em;`}`
+            ),
             { id: `sa-custom-${nme}-font` }
           )
         );
       } else {
         updateStyle(
           `sa-custom-${nme}-font`,
-          styleFromTemplate(templates[nme], `font-family: ${addon.settings.get(id)}; letter-spacing: ${s}px;`)
+          styleFromTemplate(
+            templates[nme],
+            `font-family: ${addon.settings.get(id)}; ${s === 1 ? "" : `font-size: ${s.toFixed(2)}em;`}`
+          )
         );
       }
     }
@@ -136,7 +143,7 @@ export default async function ({ addon, console }) {
     return w / chars.length;
   }
 
-  async function calcSpacing(font) {
+  async function calcSize(font) {
     let styl = createStyle(styleFromTemplate(templates.blocks, `font-family: ${font} !important`), {
       id: "sa-custom-font-test",
     });
@@ -145,8 +152,9 @@ export default async function ({ addon, console }) {
       styl.addEventListener("load", resolve);
     });
     let spacing = getWidth();
-    let diff = spacing - defSpacing;
+    let percent = defSpacing / spacing;
     styl.remove();
-    return -diff;
+
+    return percent;
   }
 }
