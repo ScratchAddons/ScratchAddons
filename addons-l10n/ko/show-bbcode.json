@@ -1,1 +1,1 @@
-{"show-bbcode/source-button":"소스 보기","show-bbcode/source-button-active":"게시글 보기","show-bbcode/source-button-tooltip":"게시글에서 BBCode를 보입니다.","show-bbcode/loading":"불러오는 중...","show-bbcode/@description":"토론방에 게시물의 BBCode 소스를 보여주는 단추를 추가합니다."}
+{"show-bbcode/source-button":"소스 보기","show-bbcode/source-button-active":"게시글 보기","show-bbcode/source-button-tooltip":"게시글에서 BBCode를 보입니다.","show-bbcode/loading":"불러오는 중...","show-bbcode/@name":"BBCode 소스 버튼","show-bbcode/@description":"토론방에 게시물의 BBCode 소스를 보여주는 단추를 추가합니다."}

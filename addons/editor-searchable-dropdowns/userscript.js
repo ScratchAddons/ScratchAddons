@@ -13,6 +13,10 @@ export default async function ({ addon, global, console, msg }) {
   let blocklyDropDownContent = null;
   let blocklyDropdownMenu = null;
   let searchBar = null;
+  // Contains DOM and addon state
+  let items = [];
+  let searchedItems = [];
+  // Tracks internal Scratch state
   let currentDropdownOptions = [];
   let resultOfLastGetOptions = [];
 
@@ -33,6 +37,12 @@ export default async function ({ addon, global, console, msg }) {
     searchBar.classList.add("u-dropdown-searchbar");
     blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
 
+    items = Array.from(blocklyDropdownMenu.children)
+      .filter((child) => child.tagName !== "INPUT")
+      .map((element) => ({
+        element,
+        text: element.textContent,
+      }));
     currentDropdownOptions = resultOfLastGetOptions;
     updateSearch();
 
@@ -54,6 +64,8 @@ export default async function ({ addon, global, console, msg }) {
   const oldDropDownDivClearContent = Blockly.DropDownDiv.clearContent;
   Blockly.DropDownDiv.clearContent = function () {
     oldDropDownDivClearContent.call(this);
+    items = [];
+    searchedItems = [];
     Blockly.DropDownDiv.content_.style.height = "";
   };
 
@@ -146,20 +158,60 @@ export default async function ({ addon, global, console, msg }) {
     }
   }
 
-  function updateSearch() {
-    const items = getItems();
-    const search = searchBar.value.toLowerCase();
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
-      const option = currentDropdownOptions[i];
+  function performSearch() {
+    const query = searchBar.value.toLowerCase().trim();
+    const rank = (item, index) => {
+      // Negative number will hide
+      // Higher numbers will appear first
+      const option = currentDropdownOptions[index];
       if (SCRATCH_ITEMS_TO_HIDE.includes(option[1])) {
-        item.element.hidden = !!search;
+        return query ? -1 : 0;
       } else if (ADDON_ITEMS.includes(option[1])) {
         item.element.lastChild.lastChild.textContent = getMenuItemMessage(option[1])[0];
-        item.element.hidden = !search;
-      } else {
-        items[i].element.hidden = !items[i].text.toLowerCase().includes(search);
+        return query ? 0 : -1;
       }
+      const itemText = item.text.toLowerCase();
+      if (query === itemText) {
+        return 2;
+      }
+      if (itemText.startsWith(query)) {
+        return 1;
+      }
+      if (itemText.includes(query)) {
+        return 0;
+      }
+      return -1;
+    };
+    return items
+      .map((item, index) => ({
+        item,
+        score: rank(item, index),
+      }))
+      .sort(({ score: scoreA }, { score: scoreB }) => Math.max(0, scoreB) - Math.max(0, scoreA));
+  }
+
+  function updateSearch() {
+    const previousSearchedItems = searchedItems;
+    searchedItems = performSearch();
+    let needToUpdateDOM = previousSearchedItems.length !== searchedItems.length;
+    if (!needToUpdateDOM) {
+      for (let i = 0; i < searchedItems.length; i++) {
+        if (searchedItems[i].item !== previousSearchedItems[i].item) {
+          needToUpdateDOM = true;
+          break;
+        }
+      }
+    }
+    if (needToUpdateDOM && previousSearchedItems.length > 0) {
+      for (const { item } of previousSearchedItems) {
+        item.element.remove();
+      }
+      for (const { item } of searchedItems) {
+        blocklyDropdownMenu.appendChild(item.element);
+      }
+    }
+    for (const { item, score } of searchedItems) {
+      item.element.hidden = score < 0;
     }
   }
 
@@ -188,14 +240,13 @@ export default async function ({ addon, global, console, msg }) {
           return;
         }
       }
-      const items = getItems();
-      for (const item of items) {
+      for (const { item } of searchedItems) {
         if (!item.element.hidden) {
           selectItem(item.element, true);
           break;
         }
       }
-      // If there is no top value, just leave the dropdown open.
+      // If there is no top value, do nothing and leave the dropdown open
     } else if (event.key === "Escape") {
       Blockly.DropDownDiv.hide();
     } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
@@ -203,7 +254,7 @@ export default async function ({ addon, global, console, msg }) {
       event.preventDefault();
       event.stopPropagation();
 
-      const items = getItems().filter((item) => !item.element.hidden);
+      const items = searchedItems.filter((i) => i.score >= 0).map((i) => i.item);
       if (items.length === 0) {
         return;
       }
@@ -234,18 +285,6 @@ export default async function ({ addon, global, console, msg }) {
 
       selectItem(items[newIndex].element, false);
     }
-  }
-
-  function getItems() {
-    if (blocklyDropdownMenu) {
-      return Array.from(blocklyDropdownMenu.children)
-        .filter((child) => child.tagName !== "INPUT")
-        .map((element) => ({
-          element,
-          text: element.textContent,
-        }));
-    }
-    return [];
   }
 
   function getMenuItemMessage(message) {

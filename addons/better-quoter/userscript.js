@@ -112,11 +112,10 @@ export default async function ({ addon, global, console }) {
     let ols = html.querySelectorAll("ol");
     for (let ol of ols) ol.textContent = `[list=1]\n${ol.textContent}[/list]\n`;
 
-    // scratchblocks - just get rid of them for now
-    // todo: support scratchblocks
+    // scratchblocks
     let scratchBlocksPres = html.getElementsByClassName("blocks");
     for (let pre of scratchBlocksPres) {
-      pre.textContent = "~scratchblocks~\n";
+      pre.textContent = `[scratchblocks]\n${pre.getAttribute("data-original")}\n[/scratchblocks]`; // cs.js manages data-original because 3.0 scratchblocks
     }
 
     // code blocks

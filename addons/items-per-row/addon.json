@@ -1,7 +1,7 @@
 {
   "name": "More items per row",
   "description": "Lets you change the number of items displayed in a single row in a grid of projects, studios, or users.",
-  "tags": ["community"],
+  "tags": ["community", "featured"],
   "credits": [
     {
       "name": "Maximouse",

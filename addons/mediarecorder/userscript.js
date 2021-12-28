@@ -63,6 +63,24 @@ export default async ({ addon, console, msg }) => {
       recordOptionSeconds.appendChild(recordOptionSecondsInput);
       recordOptionInner.appendChild(recordOptionSeconds);
 
+      // Delay
+      const recordOptionDelay = document.createElement("p");
+      const recordOptionDelayInput = Object.assign(document.createElement("input"), {
+        type: "number",
+        min: 0,
+        max: 300,
+        defaultValue: 0,
+        id: "recordOptionDelayInput",
+        className: addon.tab.scratchClass("prompt_variable-name-text-input"),
+      });
+      const recordOptionDelayLabel = Object.assign(document.createElement("label"), {
+        htmlFor: "recordOptionDelayInput",
+        textContent: msg("start-delay"),
+      });
+      recordOptionDelay.appendChild(recordOptionDelayLabel);
+      recordOptionDelay.appendChild(recordOptionDelayInput);
+      recordOptionInner.appendChild(recordOptionDelay);
+
       // Audio
       const recordOptionAudio = document.createElement("p");
       const recordOptionAudioInput = Object.assign(document.createElement("input"), {
@@ -172,6 +190,7 @@ export default async ({ addon, console, msg }) => {
         () =>
           handleOptionClose({
             secs: Number(recordOptionSecondsInput.value),
+            delay: Number(recordOptionDelayInput.value),
             audioEnabled: recordOptionAudioInput.checked,
             micEnabled: recordOptionMicInput.checked,
             waitUntilFlag: recordOptionFlagInput.checked,
@@ -263,7 +282,6 @@ export default async ({ addon, console, msg }) => {
           throw e;
         }
       }
-      recordElem.textContent = msg("stop");
       isWaitingForFlag = false;
       waitingForFlagFunc = abortController = null;
       const stream = new MediaStream();
@@ -298,7 +316,19 @@ export default async ({ addon, console, msg }) => {
         stopSignFunc = () => stopRecording();
         vm.runtime.once("PROJECT_STOP_ALL", stopSignFunc);
       }
-      recorder.start(1000);
+
+      // Delay
+      const delay = opts.delay || 0;
+      const roundedDelay = Math.floor(delay);
+      for (let index = 0; index < roundedDelay; index++) {
+        recordElem.textContent = msg("starting-in", { secs: roundedDelay - index });
+        await new Promise((resolve) => setTimeout(resolve, 975));
+      }
+      setTimeout(() => {
+        recordElem.textContent = msg("stop");
+
+        recorder.start(1000);
+      }, (delay - roundedDelay) * 1000);
     };
     if (!recordElem) {
       recordElem = Object.assign(document.createElement("div"), {

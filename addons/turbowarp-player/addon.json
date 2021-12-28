@@ -4,7 +4,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "\"Replace player\" mode changes the Scratch player to a TurboWarp embed, which doesn't support Scratch editor addons nor seeing inside projects.",
+      "text": "\"Replace player\" mode changes the Scratch player to a TurboWarp embed, which doesn't support seeing inside projects.",
       "id": "addonsWontWork"
     },
     {
@@ -47,8 +47,17 @@
         }
       ],
       "default": "link"
+    },
+    {
+      "name": "Enable addons",
+      "id": "addons",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": { "action": "player" }
+      }
     }
   ],
   "versionAdded": "1.18.0",
-  "tags": ["community", "projectPage"]
+  "tags": ["community", "projectPage", "featured"]
 }

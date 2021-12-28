@@ -119,8 +119,13 @@ export default class Notifications extends Listenable {
     return scratchAddons.muted;
   }
   dispose() {
-    chrome.notifications.onClicked.removeListener(this._onClicked);
-    chrome.notifications.onClosed.removeListener(this._onClosed);
-    chrome.notifications.onButtonClicked.removeListener(this._onButtonClicked);
+    // While for the rest of the code the callee can assume that notifications permission
+    // is granted, this is not always the case e.g. when revoking optional permission on
+    // Firefox while the addon is enabled, this will be called during changeAddonState.
+    if (chrome.notifications) {
+      chrome.notifications.onClicked.removeListener(this._onClicked);
+      chrome.notifications.onClosed.removeListener(this._onClosed);
+      chrome.notifications.onButtonClicked.removeListener(this._onButtonClicked);
+    }
   }
 }

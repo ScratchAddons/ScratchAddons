@@ -1,7 +1,7 @@
 {
   "name": "Sprite and script count",
   "description": "Shows the number of sprites and scripts a project has next to the Remix button.",
-  "tags": ["community", "projectPage"],
+  "tags": ["community", "projectPage", "featured"],
   "credits": [
     {
       "name": "TheColaber",
@@ -12,28 +12,12 @@
     {
       "url": "projectstats.js",
       "matches": ["projects"]
-    },
-    {
-      "url": "blockcount.js",
-      "matches": ["projects"],
-      "settingMatch": {
-        "id": "editorCount",
-        "value": true
-      }
     }
   ],
   "userstyles": [
     {
       "url": "userscript.css",
       "matches": ["projects"]
-    }
-  ],
-  "settings": [
-    {
-      "id": "editorCount",
-      "name": "Live block count in editor",
-      "type": "boolean",
-      "default": false
     }
   ],
   "versionAdded": "1.4.0"
