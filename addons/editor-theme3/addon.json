@@ -28,10 +28,6 @@
     {
       "url": "theme3.css",
       "matches": ["projects"]
-    },
-    {
-      "url": "comments.css",
-      "matches": ["projects"]
     }
   ],
   "settings": [
