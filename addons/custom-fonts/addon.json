@@ -32,42 +32,42 @@
       "id": "navfnt",
       "type": "datalist",
       "default": "Helvetica",
-      "items": ["Sora", "Helvetica", "Arial", "Roboto"]
+      "items": ["Sora", "Helvetica", "Arial", "Roboto", "Lucida Grande", "Verdana", "DejaVu Sans"]
     },
     {
       "name": "Main font",
       "id": "mainfnt",
       "type": "datalist",
       "default": "Helvetica",
-      "items": ["Sora", "Helvetica", "Arial", "Roboto"]
+      "items": ["Sora", "Helvetica", "Arial", "Roboto", "Lucida Grande", "Verdana", "DejaVu Sans"]
     },
     {
       "name": "Editor font",
       "id": "editfnt",
       "type": "datalist",
       "default": "Helvetica",
-      "items": ["Sora", "Helvetica", "Arial", "Roboto"]
+      "items": ["Sora", "Helvetica", "Arial", "Roboto", "Lucida Grande", "Verdana", "DejaVu Sans"]
     },
     {
       "name": "Block Font",
       "id": "blockfnt",
       "type": "datalist",
       "default": "Helvetica",
-      "items": ["Sora", "Helvetica", "Arial", "Roboto"]
+      "items": ["Sora", "Helvetica", "Arial", "Roboto", "Lucida Grande", "Verdana", "DejaVu Sans"]
     },
     {
       "name": "Header font",
       "id": "headfnt",
       "type": "datalist",
       "default": "Helvetica",
-      "items": ["Sora", "Helvetica", "Arial", "Roboto"]
+      "items": ["Sora", "Helvetica", "Arial", "Roboto", "Lucida Grande", "Verdana", "DejaVu Sans"]
     },
     {
       "name": "Footer font",
       "id": "footerfnt",
       "type": "datalist",
       "default": "Helvetica",
-      "items": ["Sora", "Helvetica", "Arial", "Roboto"]
+      "items": ["Sora", "Helvetica", "Arial", "Roboto", "Lucida Grande", "Verdana", "DejaVu Sans"]
     }
   ]
 }

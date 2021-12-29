@@ -119,7 +119,7 @@ export default async function ({ template }) {
         return this.$root.closeResetDropdowns(...params);
       },
       clickOutside() {
-        this.wasClick = false;
+        this.showDatalist = this.wasClick = false;
       },
     },
   });

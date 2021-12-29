@@ -64,14 +64,18 @@ export default async function ({ addon, console }) {
 
     if (needsLoad.length > 0) {
       //Shouldn't load the fonts if the list is empty!
-      await new Promise(function (resolve) {
-        WebFont.load({
-          google: {
-            families: needsLoad,
-          },
-          active: resolve,
-          fontinactive: resolve, //Font failed, but we don't want to throw an error.
-        });
+      let fontFaces = needsLoad.map(function (family) {
+        return new FontFace(family, `url(${addon.self.dir + "/fonts/" + family.replace(/\s/g, "") + ".ttf"})`);
+      });
+
+      fontFaces = await Promise.all(
+        fontFaces.map(function (face) {
+          return face.load();
+        })
+      );
+
+      fontFaces.forEach(function (face) {
+        document.fonts.add(face);
       });
     }
 
@@ -111,6 +115,7 @@ export default async function ({ addon, console }) {
   }
 
   function createStyle(text, o) {
+    // /https://developer.mozilla.org/en-US/docs/Web/API/CSSStyleDeclaration
     let s = document.createElement("style");
     for (let option in o) {
       s[option] = o[option];
