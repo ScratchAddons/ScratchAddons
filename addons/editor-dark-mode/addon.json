@@ -18,6 +18,10 @@
       "name": "GarboMuffin (TurboWarp Dark)",
       "link": "https://github.com/GarboMuffin"
     }
+    {
+      "name": "Secret-chest (Oceanic Dark)",
+      "link": "https://github.com/Secret-chest"
+    }
   ],
   "customCssVariables": [
     {
@@ -1091,6 +1095,34 @@
         "dots": false,
         "darkComments": false,
         "darkScrollbars": false
+      }
+    },
+    {
+      "name": "Oceanic Dark",
+      "id": "oceanic",
+      "description": "A material theme based on the very popular blue gray (#263238) and teal (#009688) combination",
+      "values": {
+        "accent": "#37474fff",
+        "activeTab": "#37474fff",
+        "border": "#ffffff0d",
+        "categoryMenu": "#37474fff",
+        "darkComments": true,
+        "darkScrollbars": true,
+        "dots": false,
+        "fullscreen": "#263238ff",
+        "highlightText": "#009688ff",
+        "input": "#546e7aff",
+        "menuBar": "#37474fff",
+        "page": "#263238ff",
+        "palette": "#37474fff",
+        "primary": "#009688ff",
+        "selector": "#263238ff",
+        "selector2": "#37474fff",
+        "selectorSelection": "#009688ff",
+        "stageHeader": "#37474fff",
+        "tab": "#263238ff",
+        "textShadow": true,
+        "workspace": "#263238ff"
       }
     },
     {
