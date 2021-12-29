@@ -11,6 +11,10 @@
       "name": "Ucrash (Dark WWW)",
       "link": "https://github.com/gducrash"
     }
+    {
+      "name": "Secret-chest (Oceanic Dark)",
+      "link": "https://github.com/Secret-chest"
+    }
   ],
   "customCssVariables": [
     {
@@ -1941,6 +1945,26 @@
         "darkBanners": "desaturated",
         "darkScrollbars": true,
         "darkForumCode": true
+      }
+    },
+    {
+      "name": "Oceanic Dark",
+      "id": "oceanic",
+      "description": "A material theme based on the very popular blue gray (#263238) and teal (#009688) combination",
+      "values": {
+        "blue": "#37474fff",
+        "border": "#60606000",
+        "box": "#37474fff",
+        "button": "#009688ff",
+        "darkBanners": "off",
+        "darkForumCode": true,
+        "darkScrollbars": true,
+        "footer": "#37474fff",
+        "gray": "#37474fff",
+        "input": "#455a64ff",
+        "link": "#009688ff",
+        "navbar": "#009688ff",
+        "page": "#263238ff",
       }
     },
     {
