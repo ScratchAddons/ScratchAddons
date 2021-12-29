@@ -241,20 +241,20 @@
       "id": "material",
       "description": "A material color scheme with colors easy to tell apart",
       "values": {
-        "motion-color": "#4C97FF",
-        "looks-color": "#9966FF",
-        "sounds-color": "#CF63CF",
-        "events-color": "#FFBF00",
-        "control-color": "#FFAB19",
-        "sensing-color": "#5CB1D6",
-        "operators-color": "#59C059",
-        "data-color": "#FF8C1A",
-        "data-lists-color": "#FF661A",
-        "custom-color": "#FF6680",
-        "Pen-color": "#0FBD8C",
-        "sa-color": "#29BEB8",
-        "input-color": "#202020",
-        "text": "colorOnBlack"
+        "Pen-color": "#00897bff",
+        "control-color": "#ffab00ff",
+        "custom-color": "#311b92ff",
+        "data-color": "#ff6c00ff",
+        "data-lists-color": "#dd2c00ff",
+        "events-color": "#e65100ff",
+        "input-color": "#212121ff",
+        "looks-color": "#9c27b0ff",
+        "motion-color": "#1976d2ff",
+        "operators-color": "#64dd17ff",
+        "sa-color": "#cddc39ff",
+        "sensing-color": "#00acc1ff",
+        "sounds-color": "#e91e63ff",
+        "text": "white"
       }
     }
   ]
