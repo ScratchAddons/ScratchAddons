@@ -15,7 +15,7 @@
   "injectAsStyleElt": true,
   "versionAdded": "1.2.0",
   "latestUpdate": {
-    "version": "1.23.0",
+    "version": "1.24.0",
     "newSettings": ["comment-color"]
   },
   "userscripts": [
