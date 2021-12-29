@@ -90,7 +90,7 @@
             :data-addon-id="addon._addonId"
             :data-setting-id="setting.id"
             @focus="showDatalist = wasClick = true"
-            @blur="showDatalist = wasClick"
+            @blur="showDatalist = wasClick = false"
           />
           <div class="setting-dropdown" :class="{ open: showDatalist }">
             <ul>
