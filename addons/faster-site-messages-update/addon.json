@@ -1,12 +1,12 @@
 {
-    "name": "Faster site messages badge updating",
-    "description": "Makes website messages badge in navigation bar update every 2.5 seconds rather than the default 30 seconds.",
-    "tags": ["community"],
-    "enabledByDefault": false,
-    "userscripts": [
-        {
-          "url": "userscript.js",
-          "matches": ["https://scratch.mit.edu/*"]
-        }
-    ]
-  }
+  "name": "Faster site messages badge updating",
+  "description": "Makes website messages badge in navigation bar update every 2.5 seconds rather than the default 30 seconds.",
+  "tags": ["community"],
+  "enabledByDefault": false,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ]
+}
