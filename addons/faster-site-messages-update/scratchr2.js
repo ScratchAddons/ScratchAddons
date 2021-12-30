@@ -1,11 +1,11 @@
-export default async function ({ addon, global, document, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
+export default async function ({ addon, window, global, document, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
     let msgCount;
     console.log("Hi from the addon!")
     const setBadge = () => {
       if (msgCount === null && addon.settings.get("showOffline")) {
           // Do nothing
       } else {
-        global.document.querySelector("#navigation > div > ul > .messages > a > .message-count")=msgCount;
+        global.document.getElementsByClassName(".notificationsCount")[0].innerText=msgCount;
 
       }
     };

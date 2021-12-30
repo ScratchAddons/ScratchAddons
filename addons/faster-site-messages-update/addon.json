@@ -5,8 +5,12 @@
     "enabledByDefault": false,
     "userscripts": [
         {
-          "url": "userscript.js",
-          "matches": ["projects","topics","scratchWWWNoProject","studios","forums","users"]
+          "url": "www.js",
+          "matches": ["https://scratch.mit.edu/*"]
+        },
+        {
+            "url": "scratchr2.js",
+            "matches": ["https://scratch.mit.edu/*"]
         }
     ]
   }
