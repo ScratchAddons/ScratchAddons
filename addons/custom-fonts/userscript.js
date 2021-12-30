@@ -23,7 +23,18 @@ export default async function ({ addon, console }) {
 #footer * {}`;
 
   //Default letter width to use when calculating the spacing needed
-  let defWidth = getWidth();
+  let defWidth = await (async function () {
+    let styl = Object.assign(document.createElement("style"), {
+      innerHTML: `.saWidthTestString { font-family: Helvetica !important }`,
+    });
+    document.head.appendChild(styl);
+    await new Promise((resolve) => {
+      styl.addEventListener("load", resolve);
+    });
+    let w = getWidth();
+    styl.remove();
+    return w;
+  })();
 
   let styleSheet = Object.assign(document.createElement("style"), {
     innerHTML: BLANK_STYLE,
@@ -122,8 +133,6 @@ export default async function ({ addon, console }) {
     let width = getWidth();
     let percent = defWidth / width;
     styl.remove();
-
-    console.log(width, defWidth, percent);
 
     return percent;
   }
