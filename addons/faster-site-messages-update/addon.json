@@ -5,7 +5,7 @@
     "enabledByDefault": false,
     "userscripts": [
         {
-          "url": "www.js",
+          "url": "userscript.js",
           "matches": ["https://scratch.mit.edu/*"]
         }
     ]
