@@ -378,6 +378,7 @@ export default async function ({ addon, global, console, msg }) {
           const blockDiv = Object.assign(document.createElement("div"), {
             className: "log",
           });
+          
           const blockTitle = Object.assign(document.createElement("span"), {
             innerText: name,
           });
@@ -386,6 +387,10 @@ export default async function ({ addon, global, console, msg }) {
             blockTitle.style.backgroundColor = colour;
             blockDiv.className += " block-log";
             blockTitle.className = "console-block";
+          }
+
+          if (vm.runtime.sequencer.stepActiveThread && vm.runtime.sequencer.stepActiveThread.peekStack() === blockId) {
+            blockDiv.className += " block-log-running";
           }
 
           if (iconUrl) {
