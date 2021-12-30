@@ -18,10 +18,9 @@ export default async function ({ addon, console, setTimeout, setInterval, clearT
         );
       }
       // console.log(document)
-      if(typeof msgCount=="number") {
+      if (typeof msgCount == "number") {
         targetElement.innerText = msgCount;
-      }
-      else {
+      } else {
         // Assume that message count check failed
         console.error("Message count check failed. Result was invalid.\n\nResult was:\n".concat(msgCount));
       }
