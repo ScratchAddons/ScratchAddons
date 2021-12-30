@@ -1,5 +1,6 @@
 export default async function ({ addon, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
     if (addon.tab.clientVersion === null) return;
+    if (window.location.href.includes("/projects") && window.location.href.includes("/editor")) return;
     let msgCount;
     // console.log("Hi from the addon!")
     const setBadge = () => {
