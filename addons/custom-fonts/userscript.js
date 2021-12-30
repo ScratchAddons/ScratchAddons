@@ -9,8 +9,6 @@ export default async function ({ addon, console }) {
     ["footerfnt", "footer"],
   ];
 
-  let enabled = true;
-
   addon.self.addEventListener("disabled", disable);
 
   addon.self.addEventListener("reenabled", enable);
@@ -25,7 +23,7 @@ export default async function ({ addon, console }) {
   //Default letter width to use when calculating the spacing needed
   let defWidth = await (async function () {
     let styl = Object.assign(document.createElement("style"), {
-      innerHTML: `.saWidthTestString { font-family: Helvetica !important }`,
+      textContent: `.saWidthTestString { font-family: Helvetica !important }`,
     });
     document.head.appendChild(styl);
     await new Promise((resolve) => {
@@ -37,7 +35,7 @@ export default async function ({ addon, console }) {
   })();
 
   let styleSheet = Object.assign(document.createElement("style"), {
-    innerHTML: BLANK_STYLE,
+    textContent: BLANK_STYLE,
     id: "sa-custom-font-stylesheet",
   });
 
@@ -124,7 +122,7 @@ export default async function ({ addon, console }) {
 
   async function calcSize(font) {
     let styl = Object.assign(document.createElement("style"), {
-      innerHTML: `.saWidthTestString { font-family: ${font} !important }`,
+      textContent: `.saWidthTestString { font-family: ${font} !important }`,
     });
     document.head.appendChild(styl);
     await new Promise((resolve) => {
