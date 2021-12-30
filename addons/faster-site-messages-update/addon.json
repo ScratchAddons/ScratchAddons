@@ -7,10 +7,6 @@
         {
           "url": "www.js",
           "matches": ["https://scratch.mit.edu/*"]
-        },
-        {
-            "url": "scratchr2.js",
-            "matches": ["https://scratch.mit.edu/*"]
         }
     ]
   }

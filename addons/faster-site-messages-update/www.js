@@ -1,7 +1,7 @@
 export default async function ({ addon, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
     if (addon.tab.clientVersion === null) return;
     let msgCount;
-    console.log("Hi from the addon!")
+    // console.log("Hi from the addon!")
     const setBadge = () => {
       if (msgCount === null && addon.settings.get("showOffline")) {
           // Do nothing
@@ -13,7 +13,7 @@ export default async function ({ addon, console, setTimeout, setInterval, clearT
         else {
           targetElement=document.querySelector("#topnav > div > div > ul.account-nav.logged-in > li.messages > a > span");
         }
-        console.log(document)
+        // console.log(document)
         targetElement.innerText=msgCount;
 
       }
