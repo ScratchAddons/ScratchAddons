@@ -6,8 +6,15 @@ export default async function ({ addon, console, setTimeout, setInterval, clearT
       if (msgCount === null && addon.settings.get("showOffline")) {
           // Do nothing
       } else {
+        var targetElement;
+        if (addon.tab.clientVersion === "scratch-www") {
+          targetElement=document.querySelector("#navigation > div > ul > li.link.right.messages > a > span.message-count.show");
+        }
+        else {
+          targetElement=document.querySelector("#topnav > div > div > ul.account-nav.logged-in > li.messages > a > span");
+        }
         console.log(document)
-        document.querySelector("#navigation > div > ul > li.link.right.messages > a > span.message-count.show").innerText=msgCount;
+        targetElement.innerText=msgCount;
 
       }
     };
