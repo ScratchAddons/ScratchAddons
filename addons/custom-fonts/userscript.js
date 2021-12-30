@@ -13,51 +13,57 @@ export default async function ({ addon, console }) {
 
   let enabled = true;
 
-  let styles = [];
-
-  //Disable the addon
-  function disable() {
-    enabled = false;
-    styles = styles.map(function (style) {
-      let temp = style.cloneNode(true); //Duplicate the style before it is deleted
-      style.remove();
-      return temp;
-    });
-  }
-
-  //Enable the addon
-  function enable() {
-    enabled = true;
-    styles = styles.map(function (style) {
-      return document.head.appendChild(style); //Add the style
-    });
-  }
-
   addon.self.addEventListener("disabled", disable);
 
   addon.self.addEventListener("reenabled", enable);
 
-  let templates = {
-    //Css templates for the different options
-    nav: '#navigation, [class*="menu-bar_menu-bar"], #topnav { %1 }',
-    blocks: ".blocklyText, .blocklyHtmlInput, .scratchCommentBody, .scratchCommentText, .scratchblocks text  { %1 }",
-    header: ".box-header, .box-head, form *, .tabs-index * { %1 }",
-    main: ".box-content, .project-title, .comment, .button, .preview-row { %1 }",
-    editor:
-      '.scratchCategoryMenu, [role="tablist"], [class*="loader"], [class*="sprite-selector_sprite-selector"] *, [class*="target-pane_stage-selector-wrapper"] *, .pos-container > span, [class*="asset-panel_wrapper"] *:not(svg *) { %1 }',
-    footer: "#footer * { %1 }",
-  };
+  const BLANK_STYLE = `#navigation, [class*="menu-bar_menu-bar"], #topnav {}
+.blocklyText:not(.saWidthTestString), .blocklyHtmlInput, .scratchCommentBody, .scratchCommentText, .scratchblocks text  {}
+.box-header, .box-head, form *, .tabs-index * {}
+.box-content, .project-title, .comment, .button, .preview-row {}
+.scratchCategoryMenu, [role="tablist"], [class*="loader"], [class*="sprite-selector_sprite-selector"] *, [class*="target-pane_stage-selector-wrapper"] *, .pos-container > span, [class*="asset-panel_wrapper"] *:not(svg *) {}
+#footer * {}`;
 
   //Default letter width to use when calculating the spacing needed
-  let defSpacing = getWidth();
+  let defWidth = getWidth();
+
+  let styleSheet = Object.assign(document.createElement("style"), {
+    innerHTML: BLANK_STYLE,
+    id: "sa-custom-font-stylesheet",
+  });
+
+  document.head.appendChild(styleSheet);
+
+  let sheet = Array.from(document.styleSheets).find(function (sheet) {
+    return sheet.ownerNode.id === "sa-custom-font-stylesheet";
+  });
+
+  let styles = {
+    nav: sheet.cssRules[0],
+    blocks: sheet.cssRules[1],
+    header: sheet.cssRules[2],
+    main: sheet.cssRules[3],
+    editor: sheet.cssRules[4],
+    footer: sheet.cssRules[5],
+  };
+
+  //Disable the addon
+  function disable() {
+    styleSheet.disabled = true;
+  }
+
+  //Enable the addon
+  function enable() {
+    styleSheet.disabled = false;
+  }
 
   //Load the fonts
-  load(true);
+  load();
 
   //Reload the fonts after a change
   addon.settings.addEventListener("change", () => load());
 
-  async function load(init = false) {
+  async function load() {
     let fonts = options.map(([id, nme]) => addon.settings.get(id).trim()); //Get all of the fonts
 
     let needsLoad = fonts.filter((fnt) => !document.fonts.check(`12px ${fnt}`) && fnt.toLowerCase() !== "helvetica"); //The are the fonts that are not yet loaded on the website
@@ -82,62 +88,21 @@ export default async function ({ addon, console }) {
     for (let [id, nme] of options) {
       let s = nme === "blocks" ? await calcSize(addon.settings.get(id).trim()) : 1;
       if (s > 1) s = 1;
-      if (init) {
-        //This is the first time the addon has been run, we need to populate the list
-        addStyle(
-          createStyle(
-            styleFromTemplate(
-              templates[nme],
-              `font-family: ${addon.settings.get(id)}; ${s === 1 ? "" : `font-size: ${s.toFixed(2)}em;`}`
-            ),
-            { id: `sa-custom-${nme}-font` }
-          )
-        );
+
+      styles[nme].style.setProperty("font-family", addon.settings.get(id));
+
+      if (s !== 1) {
+        styles[nme].style.setProperty("font-size", `${s}em`);
       } else {
-        updateStyle(
-          `sa-custom-${nme}-font`,
-          styleFromTemplate(
-            templates[nme],
-            `font-family: ${addon.settings.get(id)}; ${s === 1 ? "" : `font-size: ${s.toFixed(2)}em;`}`
-          )
-        );
+        styles[nme].style.setProperty("font-size", ``);
       }
     }
-  }
-
-  function styleFromTemplate(template, ...args) {
-    //Easy method of replacement
-    let matches = template.match(/\%([0-9]+)/g);
-    matches.forEach((m) => {
-      template = template.replace(m, args[m.replace("%", "") - 1]);
-    });
-    return template;
-  }
-
-  function createStyle(text, o) {
-    // /https://developer.mozilla.org/en-US/docs/Web/API/CSSStyleDeclaration
-    let s = document.createElement("style");
-    for (let option in o) {
-      s[option] = o[option];
-    }
-    s.innerHTML = text;
-    return s;
-  }
-
-  function addStyle(s) {
-    document.head.appendChild(s);
-    styles.push(s);
-    return s;
-  }
-
-  function updateStyle(id, text) {
-    return (styles.filter((style) => style.id === id)[0].innerHTML = text);
   }
 
   function getWidth() {
     let chars = "mmmmmmmmmmlli";
     let p = document.createElement("p");
-    p.classList.add("blocklyText");
+    p.classList.add("blocklyText", "saWidthTestString");
     p.style.opacity = "0";
     p.innerHTML = chars;
     p.style.letterSpacing = 0;
@@ -149,16 +114,18 @@ export default async function ({ addon, console }) {
   }
 
   async function calcSize(font) {
-    let styl = createStyle(styleFromTemplate(templates.blocks, `font-family: ${font} !important`), {
-      id: "sa-custom-font-test",
+    let styl = Object.assign(document.createElement("style"), {
+      innerHTML: `.saWidthTestString { font-family: ${font} !important }`,
     });
     document.head.appendChild(styl);
     await new Promise((resolve) => {
       styl.addEventListener("load", resolve);
     });
-    let spacing = getWidth();
-    let percent = defSpacing / spacing;
+    let width = getWidth();
+    let percent = defWidth / width;
     styl.remove();
+
+    console.log(width, defWidth, percent);
 
     return percent;
   }
