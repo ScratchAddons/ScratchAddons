@@ -19,13 +19,13 @@ export default async function ({ addon, console, setTimeout, setInterval, clearT
       }
       // console.log(document)
       targetElement.innerText = msgCount;
-      targetElement=null; // Garbage collection
+      targetElement = null; // Garbage collection
     }
   };
   const getMsgCountAndSetBadge = async () => {
     let msgCount = await addon.account.getMsgCount();
     setBadge();
-    msgCount=null; // Garbage collection
+    msgCount = null; // Garbage collection
   };
 
   getMsgCountAndSetBadge();
