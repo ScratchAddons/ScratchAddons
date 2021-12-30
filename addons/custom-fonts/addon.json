@@ -6,9 +6,6 @@
     {
       "name": "ErrorGamer2000",
       "link": "https://scratch.mit.edu/users/ErrorGamer2000/"
-    },
-    {
-      "name": "TheColaber"
     }
   ],
   "info": [
@@ -36,17 +33,17 @@
       "type": "datalist",
       "default": "Helvetica",
       "items": [
-        "Sora",
         "Helvetica",
         "Arial",
         "Roboto",
         "Lucida Grande",
         "Verdana",
+        "Times New Roman",
+        "Sora",
         "DejaVu Sans",
         "Handlee",
         "Antonio",
-        "Lato",
-        "Times New Roman"
+        "Lato"
       ]
     },
     {
@@ -55,17 +52,17 @@
       "type": "datalist",
       "default": "Helvetica",
       "items": [
-        "Sora",
         "Helvetica",
         "Arial",
         "Roboto",
         "Lucida Grande",
         "Verdana",
+        "Times New Roman",
+        "Sora",
         "DejaVu Sans",
         "Handlee",
         "Antonio",
-        "Lato",
-        "Times New Roman"
+        "Lato"
       ]
     },
     {
@@ -74,17 +71,17 @@
       "type": "datalist",
       "default": "Helvetica",
       "items": [
-        "Sora",
         "Helvetica",
         "Arial",
         "Roboto",
         "Lucida Grande",
         "Verdana",
+        "Times New Roman",
+        "Sora",
         "DejaVu Sans",
         "Handlee",
         "Antonio",
-        "Lato",
-        "Times New Roman"
+        "Lato"
       ]
     },
     {
@@ -93,17 +90,17 @@
       "type": "datalist",
       "default": "Helvetica",
       "items": [
-        "Sora",
         "Helvetica",
         "Arial",
         "Roboto",
         "Lucida Grande",
         "Verdana",
+        "Times New Roman",
+        "Sora",
         "DejaVu Sans",
         "Handlee",
         "Antonio",
-        "Lato",
-        "Times New Roman"
+        "Lato"
       ]
     },
     {
@@ -112,17 +109,17 @@
       "type": "datalist",
       "default": "Helvetica",
       "items": [
-        "Sora",
         "Helvetica",
         "Arial",
         "Roboto",
         "Lucida Grande",
         "Verdana",
+        "Times New Roman",
+        "Sora",
         "DejaVu Sans",
         "Handlee",
         "Antonio",
-        "Lato",
-        "Times New Roman"
+        "Lato"
       ]
     },
     {
@@ -131,17 +128,17 @@
       "type": "datalist",
       "default": "Helvetica",
       "items": [
-        "Sora",
         "Helvetica",
         "Arial",
         "Roboto",
         "Lucida Grande",
         "Verdana",
+        "Times New Roman",
+        "Sora",
         "DejaVu Sans",
         "Handlee",
         "Antonio",
-        "Lato",
-        "Times New Roman"
+        "Lato"
       ]
     }
   ]
