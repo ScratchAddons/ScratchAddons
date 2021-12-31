@@ -30,6 +30,12 @@
   ],
   "settings": [
     {
+      "name": "Clear logs on green flag.",
+      "id": "log_clear_greenflag",
+      "type": "boolean",
+      "default": false
+    },
+    {
       "name": "Log flag clicks",
       "id": "log_greenflag",
       "type": "boolean",

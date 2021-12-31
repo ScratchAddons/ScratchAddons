@@ -278,12 +278,15 @@ export default async function ({ addon, global, console, msg }) {
   const trashText = Object.assign(document.createElement("span"), {
     innerText: msg("clear"),
   });
-  trashButton.append(trashImg, trashText);
-  trashButton.addEventListener("click", () => {
+  function clearLogs() {
     document.querySelectorAll(".log").forEach((log, i) => log.remove());
-    closeDragElement();
     logs = [];
     isScrolledToEnd = true;
+  }
+  trashButton.append(trashImg, trashText);
+  trashButton.addEventListener("click", () => {
+    clearLogs();
+    closeDragElement();
   });
 
   // ##### Threads Tab ##### //
@@ -961,6 +964,9 @@ export default async function ({ addon, global, console, msg }) {
 
   const ogGreenFlag = vm.runtime.greenFlag;
   vm.runtime.greenFlag = function (...args) {
+    if (addon.settings.get("log_clear_greenflag")) {
+      clearLogs();
+    }
     if (addon.settings.get("log_greenflag")) {
       addLog("Green flag clicked.", null, "log", true);
     }
