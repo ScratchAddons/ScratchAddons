@@ -18,9 +18,6 @@ const Events = {
   SINGLE_STEPPED: "single_stepped",
 };
 
-// Are we currently single-stepping through blocks?
-// `paused` must be true for this to be true
-let singleSteppingBlocks = false;
 let paused = false;
 
 /*
@@ -265,7 +262,6 @@ class ScratchAddonsSequencer {
 
         // If we should swap thread, stop exexuting this thread.
         this.stepExecutingThread = !this._singleStepThread(thread);
-        console.log("Single stepped thread!");
       }
       if (!this.stepExecutingThread) {
         // We are done executing the current thread :(
@@ -281,8 +277,6 @@ class ScratchAddonsSequencer {
         if (!this.stepExecutingThread) {
           this.stepActiveThread = null;
         }
-
-        console.log("Start new thread!");
       }
     }
     if (!thread) {
@@ -326,9 +320,7 @@ class ScratchAddonsSequencer {
         }
       }
 
-      console.log("Started VM step!");
     }
-    console.log(this.stepActiveThread);
     EVENT_TARGET.dispatchEvent(new CustomEvent(Events.SINGLE_STEPPED));
   }
 
@@ -508,7 +500,6 @@ vm.runtime.startHats = function (...args) {
     // If this hat was activated by a paused thread, pause the newly created
     //  threads as well.
     const newThreads = originalStartHats.apply(this, args);
-    console.log(newThreads);
     for (const idx in newThreads) {
       newThreads[idx].pauseInfo = {
         time: runtime.currentMSecs,
