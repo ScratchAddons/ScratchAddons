@@ -18,5 +18,18 @@
   "debugger/block-warn": "warn %s",
   "debugger/block-error": "error %s",
   "debugger/cannot-pause-player": "Breakpoint block can only be used while on the editor.",
-  "debugger/step-desc": "Make all threads execute one step, then pause again."
+  "debugger/step-desc": "Executes one block.",
+  "debugger/tab-logs": "Logs",
+  "debugger/tab-threads": "Threads",
+  "debugger/tab-performance": "Performance",
+  "debugger/threads-none-running": "No threads running.",
+  "debugger/threads-pause": "Pause to view threads.",
+  "debugger/performance-framerate-title": "FPS",
+  "debugger/performance-framerate-graph-tooltip": "FPS: {fps}",
+  "debugger/performance-clonecount-title": "Clones",
+  "debugger/performance-clonecount-graph-tooltip": "Clones: {clones}",
+  "debugger/log-msg-flag-clicked": "Green flag clicked.",
+  "debugger/log-msg-clone-cap": "Failed to create clone of {sprite}, cannot create over 300 clones.",
+  "debugger/log-msg-clone-created": "Created clone of {sprite}.",
+  "debugger/log-msg-broadcasted": "Broadcasted {broadcast}."
 }

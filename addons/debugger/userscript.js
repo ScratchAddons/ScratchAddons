@@ -225,7 +225,7 @@ export default async function ({ addon, global, console, msg }) {
     draggable: false,
   });
   const logsTabText = Object.assign(document.createElement("span"), {
-    innerText: "Logs", // msg()
+    innerText: msg("tab-logs"),
   });
   logsTabElement.append(logsTabImg, logsTabText);
 
@@ -299,7 +299,7 @@ export default async function ({ addon, global, console, msg }) {
     draggable: false,
   });
   const threadsTabText = Object.assign(document.createElement("span"), {
-    innerText: "Threads", // msg()
+    innerText: msg("tab-threads"),
   });
   threadsTabElement.append(threadsTabImg, threadsTabText);
 
@@ -473,13 +473,13 @@ export default async function ({ addon, global, console, msg }) {
       if (vm.runtime.threads.length === 0) {
         threadsList.append(Object.assign(document.createElement("span"), {
           className: "thread-info",
-          innerText: "No threads running.",
+          innerText: msg("threads-none-running"),
         }));
       }
     } else {
       threadsList.append(Object.assign(document.createElement("span"), {
         className: "thread-info",
-        innerText: "Pause to view threads.",
+        innerText: msg("threads-pause"),
       }));
     }
   }
@@ -512,12 +512,12 @@ export default async function ({ addon, global, console, msg }) {
     draggable: false,
   });
   const performanceTabText = Object.assign(document.createElement("span"), {
-    innerText: "Performance", // msg()
+    innerText: msg("tab-performance"),
   });
   performanceTabElement.append(performanceTabImg, performanceTabText);
 
   const performancePanel = document.createElement("div");
-  const performanceFpsTitle = Object.assign(document.createElement("h1"), { innerText: "FPS" });
+  const performanceFpsTitle = Object.assign(document.createElement("h1"), { innerText: msg("performance-framerate-title") });
   const performanceFpsChartCanvas = Object.assign(document.createElement("canvas"), {
     id: "debug-fps-chart",
     className: "logs",
@@ -553,13 +553,15 @@ export default async function ({ addon, global, console, msg }) {
           display: false,
         },
 
-        callbacks: {
-          label: (context) => `FPS: ${context.parsed.y}`,
+        tooltip: {
+          callbacks: {
+            label: (context) => msg("performance-framerate-graph-tooltip", { fps: context.parsed.y }),
+          },
         },
       },
     },
   });
-  const performanceClonesTitle = Object.assign(document.createElement("h1"), { innerText: "Clones" });
+  const performanceClonesTitle = Object.assign(document.createElement("h1"), { innerText: msg("performance-clonecount-title") });
   const performanceClonesChartCanvas = Object.assign(document.createElement("canvas"), {
     id: "debug-fps-chart",
     className: "logs",
@@ -590,9 +592,9 @@ export default async function ({ addon, global, console, msg }) {
           display: false,
         },
 
-        tooltips: {
+        tooltip: {
           callbacks: {
-            label: (context) => `Clones: ${context.parsed.y}`,
+            label: (context) => msg("performance-clonecount-graph-tooltip", { clones: context.parsed.y }),
           },
         },
       },
@@ -638,8 +640,6 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   performancePanel.append(performanceFpsTitle, performanceFpsChartCanvas, performanceClonesTitle, performanceClonesChartCanvas);
-
-  //
 
   const buttons = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_header-buttons-right"),
@@ -754,11 +754,6 @@ export default async function ({ addon, global, console, msg }) {
     document.removeEventListener("mouseup", closeDragElement);
     document.removeEventListener("mousemove", elementDrag);
   }
-
-  // trashButton.addEventListener("mouseup", () => {
-  //   closeDragElement();
-  // });
-  // closeButton.addEventListener("mouseup", () => closeDragElement());
 
   if (!isPaused()) {
     unpauseButton.style.display = "none";
@@ -968,7 +963,7 @@ export default async function ({ addon, global, console, msg }) {
       clearLogs();
     }
     if (addon.settings.get("log_greenflag")) {
-      addLog("Green flag clicked.", null, "log", true);
+      addLog(msg("log-msg-flag-clicked"), null, "log", true);
     }
     return ogGreenFlag.call(this, ...args);
   };
@@ -976,11 +971,11 @@ export default async function ({ addon, global, console, msg }) {
   const ogMakeClone = vm.runtime.targets[0].__proto__.makeClone;
   vm.runtime.targets[0].__proto__.makeClone = function (...args) {
     if (addon.settings.get("log_failed_clone_creation") && !vm.runtime.clonesAvailable()) {
-      addLog(`Failed to create clone of ${this.getName()}. Cannot create over 300 clones.`, vm.runtime.sequencer.activeThread, "warn", true);
+      addLog(msg("log-msg-clone-cap", { sprite: this.getName() }), vm.runtime.sequencer.activeThread, "warn", true);
     }
     var clone = ogMakeClone.call(this, ...args);
     if (addon.settings.get("log_clone_create") && clone) {
-      addLog(`Created clone of ${this.getName()}`, vm.runtime.sequencer.activeThread, "log", true);
+      addLog(msg("log-msg-clone-created", { sprite: this.getName() }), vm.runtime.sequencer.activeThread, "log", true);
     }
     return clone;
   }
@@ -988,7 +983,7 @@ export default async function ({ addon, global, console, msg }) {
   const ogStartHats = vm.runtime.startHats;
   vm.runtime.startHats = function (hat, optMatchFields, ...args) {
     if (addon.settings.get("log_broadcasts") && hat === "event_whenbroadcastreceived") {
-      addLog(`Broadcasted ${optMatchFields.BROADCAST_OPTION}`, vm.runtime.sequencer.activeThread, "log", true);
+      addLog(msg("log-msg-broadcasted", { broadcast: optMatchFields.BROADCAST_OPTION }), vm.runtime.sequencer.activeThread, "log", true);
     }
     return ogStartHats.call(this, hat, optMatchFields, ...args);
   }
