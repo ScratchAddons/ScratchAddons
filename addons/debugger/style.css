@@ -50,7 +50,8 @@
 
 @keyframes unpauseBackground
 
-/* Firefox */ {
+/* Firefox */
+  {
   0% {
     background-color: rgba(0, 0, 0, 0.15);
   }
@@ -60,7 +61,7 @@
   }
 }
 
-.sa-debugger-unpause > img {
+.sa-debugger-unpause>img {
   width: 20px;
   height: 20px;
 }
@@ -102,7 +103,7 @@
 }
 
 .block-log-running {
-  background-color: rgba(255, 187, 0, 0.233) !important;  
+  background-color: rgba(255, 187, 0, 0.233) !important;
   font-weight: bold;
 }
 
@@ -118,15 +119,20 @@
   background-color: hsl(0deg 100% 95%);
 }
 
-.log:not(.warn):not(.error) + .log:not(.warn):not(.error),
-.warn + .warn,
-.error + .error {
+.log:not(.warn):not(.error)+.log:not(.warn):not(.error),
+.warn+.warn,
+.error+.error {
   border-top-color: transparent;
 }
 
 .logs {
   border-radius: 0;
-  padding: 0;
+  padding: 3px 0;
+}
+
+.internal-log {
+  font-style: italic;
+  color: gray;
 }
 
 .extra-log-container {
@@ -152,7 +158,7 @@
   margin-right: 5px;
 }
 
-.log > span:not(.console-variable):not(.console-block) {
+.log>span:not(.console-variable):not(.console-block) {
   flex-grow: 1;
 }
 
@@ -185,6 +191,12 @@
 
 .subthread {
   margin-left: 3%;
+}
+
+.thread-info {
+  display: block;
+  margin: 5px;
+  font-style: italic;
 }
 
 .log:not(.warn):not(.error) {

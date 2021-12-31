@@ -15,6 +15,7 @@ const EVENT_TARGET = new EventTarget();
 
 const Events = {
   PAUSE_CHANGED: "pause_changed",
+  SINGLE_STEPPED: "single_stepped",
 };
 
 // Are we currently single-stepping through blocks?
@@ -134,8 +135,7 @@ class ScratchAddonsSequencer {
             // when we unpause.
             this.stepActiveThread = activeThread;
             this.stepRanFirstTick = ranFirstTick;
-            this.stepExecutingThread = false;
-
+            this.stepExecutingThread = true;
             // Our status was forcibly set to STATUS_PROMISE_WAIT. Set
             //  it back to normal.
             Object.defineProperty(activeThread, "status", {
@@ -145,6 +145,8 @@ class ScratchAddonsSequencer {
               writable: true,
             });
             delete activeThread.pauseInfo.status;
+
+            EVENT_TARGET.dispatchEvent(new CustomEvent(Events.SINGLE_STEPPED));
 
             continue;
           }
@@ -236,7 +238,6 @@ class ScratchAddonsSequencer {
     for (var i = startIdx; i < runtime.threads.length; i++) {
       const newThread = runtime.threads[i];
 
-      // TODO Find finished threads?
       if (newThread.status === Thread.STATUS_YIELD_TICK && !this.stepRanFirstTick) {
         newThread.status = Thread.STATUS_RUNNING;
       }
@@ -254,24 +255,23 @@ class ScratchAddonsSequencer {
     if (thread) {
       if (this.stepExecutingThread) {
         // Executes one block and moves the current block to the next one.
+
+        // Make it look like no time has passed.
+        const stackFrame = thread.peekStackFrame();
+        if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
+          stackFrame.executionContext.timer.startTime += runtime.currentMSecs - thread.pauseInfo.time;
+        }
+        thread.pauseInfo.time = runtime.currentMSecs;
+
         // If we should swap thread, stop exexuting this thread.
         this.stepExecutingThread = !this._singleStepThread(thread);
         console.log("Single stepped thread!");
-      } else {
+      }
+      if (!this.stepExecutingThread) {
         // We are done executing the current thread :(
 
         const oldThread = this.stepActiveThread;
         const threadIndex = runtime.threads.indexOf(oldThread);
-
-        // Make it look like no time has passed.
-        // const stackFrame = thread.peekStackFrame();
-        // if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
-        //   const timer = stackFrame.executionContext.timer;
-
-        //   timer.startTime += runtime.currentMSecs - thread.pauseInfo.time;
-        //   console.log(runtime.currentMSecs - stackFrame.executionContext.timer.startTime)
-        // }
-        // thread.pauseInfo.time = runtime.currentMSecs;
 
         // Search for a new thread to start executing.
         this._singleStepTryFindNewThread(threadIndex + 1);
@@ -284,10 +284,14 @@ class ScratchAddonsSequencer {
 
         console.log("Start new thread!");
       }
-    } 
+    }
     if (!thread) {
       this._singleStepTryFindNewThread();
 
+      // We have sucessfully run one tick!
+      this.stepRanFirstTick = true;
+
+      // Purge all completed threads.
       let nextActiveThread = 0;
       for (let i = 0; i < runtime.threads.length; i++) {
         const thread = runtime.threads[i];
@@ -316,15 +320,16 @@ class ScratchAddonsSequencer {
       }
 
       // Move all threads forward one frame in time. For blocks like `wait () seconds`
-      // for (const thread of vm.runtime.threads) {
-      //   if (thread.pauseInfo) {
-      //     thread.pauseInfo.time += runtime.currentMSecs + runtime.currentStepTime;
-      //   }
-      // }
+      for (const thread of vm.runtime.threads) {
+        if (thread.pauseInfo) {
+          thread.pauseInfo.time += runtime.currentStepTime;
+        }
+      }
 
       console.log("Started VM step!");
     }
     console.log(this.stepActiveThread);
+    EVENT_TARGET.dispatchEvent(new CustomEvent(Events.SINGLE_STEPPED));
   }
 
   // Returns if we should swap threads.
@@ -403,6 +408,16 @@ export function isPaused() {
 
 export function onPauseChanged(listener) {
   EVENT_TARGET.addEventListener(Events.PAUSE_CHANGED, () => listener(paused));
+}
+
+export function onSingleStepped(listener) {
+  EVENT_TARGET.addEventListener(Events.SINGLE_STEPPED, () => listener(runtime.sequencer));
+}
+
+export function getRunningBlock() {
+  if (runtime.sequencer.stepActiveThread) {
+    return runtime.sequencer.stepActiveThread.peekStack();
+  }
 }
 
 export function setPaused(_paused) {

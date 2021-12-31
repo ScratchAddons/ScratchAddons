@@ -3,6 +3,10 @@
   "description": "Adds a new \"debugger\" block category and a \"logs\" window to the editor. The \"log\", \"warn\" and \"error\" blocks will print the specified message into the logs window. The \"breakpoint\" block will pause the project when executed.",
   "credits": [
     {
+      "name": "Tacodude7729",
+      "link": "https://github.com/Tacodude7729"
+    },
+    {
       "name": "GrahamSH"
     },
     {
@@ -22,6 +26,32 @@
     {
       "url": "style.css",
       "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Log flag clicks",
+      "id": "log_greenflag",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Log clone creation",
+      "id": "log_clone_create",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Log failed clone creation",
+      "id": "log_failed_clone_creation",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Log broadcasts",
+      "id": "log_broadcasts",
+      "type": "boolean",
+      "default": false
     }
   ],
   "tags": ["editor", "featured"],

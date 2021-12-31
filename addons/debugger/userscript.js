@@ -1,6 +1,6 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
-import { isPaused, setPaused, onPauseChanged, singleStep } from "./module.js";
-import {} from "./module.js";
+import { isPaused, setPaused, onPauseChanged, onSingleStepped, getRunningBlock, singleStep } from "./module.js";
+import { } from "./module.js";
 
 export default async function ({ addon, global, console, msg }) {
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
@@ -18,7 +18,7 @@ export default async function ({ addon, global, console, msg }) {
   const buttonImage = document.createElement("img");
   buttonImage.className = addon.tab.scratchClass("stage-header_stage-button-icon");
   buttonImage.draggable = false;
-  buttonImage.src = addon.self.dir + "/debug.svg";
+  buttonImage.src = addon.self.dir + "/icons/debug.svg";
   buttonContent.appendChild(buttonImage);
   buttonContainer.appendChild(buttonContent);
   container.appendChild(buttonContainer);
@@ -185,7 +185,7 @@ export default async function ({ addon, global, console, msg }) {
     draggable: false,
   });
   const unpauseImg = Object.assign(document.createElement("img"), {
-    src: addon.self.dir + "/play.svg",
+    src: addon.self.dir + "/icons/play.svg",
   });
   const unpauseText = Object.assign(document.createElement("span"), {
     innerText: msg("unpause"),
@@ -199,7 +199,7 @@ export default async function ({ addon, global, console, msg }) {
   });
   const closeImg = Object.assign(document.createElement("img"), {
     className: addon.tab.scratchClass("close-button_close-icon"),
-    src: addon.self.dir + "/add.svg",
+    src: addon.self.dir + "/icons/add.svg",
   });
   const closeText = Object.assign(document.createElement("span"), {
     innerText: msg("close"),
@@ -221,7 +221,7 @@ export default async function ({ addon, global, console, msg }) {
     className: tabClassName,
   });
   const logsTabImg = Object.assign(document.createElement("img"), {
-    src: addon.self.dir + "/logs.svg",
+    src: addon.self.dir + "/icons/logs.svg",
     draggable: false,
   });
   const logsTabText = Object.assign(document.createElement("span"), {
@@ -239,7 +239,7 @@ export default async function ({ addon, global, console, msg }) {
     draggable: false,
   });
   const exportImg = Object.assign(document.createElement("img"), {
-    src: addon.self.dir + "/download-white.svg",
+    src: addon.self.dir + "/icons/download-white.svg",
   });
   const exportText = Object.assign(document.createElement("span"), {
     innerText: msg("export"),
@@ -257,11 +257,11 @@ export default async function ({ addon, global, console, msg }) {
         exportFormat.replace(
           /\{(sprite|type|content)\}/g,
           (_, match) =>
-            ({
-              sprite: getTargetInfo(targetId, targetInfoCache).name,
-              type,
-              content,
-            }[match])
+          ({
+            sprite: getTargetInfo(targetId, targetInfoCache).name,
+            type,
+            content,
+          }[match])
         )
       )
       .join("\n");
@@ -273,7 +273,7 @@ export default async function ({ addon, global, console, msg }) {
     draggable: false,
   });
   const trashImg = Object.assign(document.createElement("img"), {
-    src: addon.self.dir + "/delete.svg",
+    src: addon.self.dir + "/icons/delete.svg",
   });
   const trashText = Object.assign(document.createElement("span"), {
     innerText: msg("clear"),
@@ -292,7 +292,7 @@ export default async function ({ addon, global, console, msg }) {
     className: tabClassName,
   });
   const threadsTabImg = Object.assign(document.createElement("img"), {
-    src: addon.self.dir + "/threads.svg",
+    src: addon.self.dir + "/icons/threads.svg",
     draggable: false,
   });
   const threadsTabText = Object.assign(document.createElement("span"), {
@@ -304,9 +304,12 @@ export default async function ({ addon, global, console, msg }) {
     className: "logs",
   });
 
-  function threadsRefresh() {
+  function threadsRefresh(scrollToRunning = false) {
+    threadsList.innerHTML = "";
     if (isPaused()) {
       var addedThreads = [];
+      const runningBlockId = getRunningBlock();
+      var runningBlockElement;
 
       function createThreadElement(thread, idx, iconUrl) {
         const element = document.createElement("div");
@@ -359,7 +362,14 @@ export default async function ({ addon, global, console, msg }) {
               var category = blocklyBlock.getCategory();
               if (category == "data-lists") category = "data_lists";
               if (category == "events") category = "event"; // ST why?
-              colour = ScratchBlocks.Colours[category];
+              if (category) {
+                colour = ScratchBlocks.Colours[category];
+                if (!colour) {
+                  colour = ScratchBlocks.Colours.pen;
+                }
+              } else {
+                colour = { primary: "#979797" }
+              }
               if (colour) colour = colour.primary;
 
               // Calling `new Block` above adds it to two lists in the workspace.
@@ -378,7 +388,7 @@ export default async function ({ addon, global, console, msg }) {
           const blockDiv = Object.assign(document.createElement("div"), {
             className: "log",
           });
-          
+
           const blockTitle = Object.assign(document.createElement("span"), {
             innerText: name,
           });
@@ -389,8 +399,9 @@ export default async function ({ addon, global, console, msg }) {
             blockTitle.className = "console-block";
           }
 
-          if (vm.runtime.sequencer.stepActiveThread && vm.runtime.sequencer.stepActiveThread.peekStack() === blockId) {
+          if (runningBlockId && runningBlockId === blockId) {
             blockDiv.className += " block-log-running";
+            runningBlockElement = blockContainer;
           }
 
           if (iconUrl) {
@@ -403,8 +414,8 @@ export default async function ({ addon, global, console, msg }) {
           blockLink.textContent = thread.target.isOriginal
             ? thread.target.getName()
             : msg("clone-of", {
-                spriteName: thread.target.getName(),
-              });
+              spriteName: thread.target.getName(),
+            });
           blockLink.className = "logLink";
           blockLink.dataset.blockId = blockId;
           blockLink.dataset.targetId = thread.target.id;
@@ -421,7 +432,7 @@ export default async function ({ addon, global, console, msg }) {
                 createThreadElement(
                   thread,
                   idx + "." + (stackFrame.executionContext.startedThreads.indexOf(thread) + 1),
-                  "/subthread.svg"
+                  "/icons/subthread.svg"
                 )
               );
             }
@@ -436,10 +447,10 @@ export default async function ({ addon, global, console, msg }) {
         }
 
         element.append(subelements);
+
         return element;
       }
 
-      threadsList.innerHTML = "";
       for (const thread of vm.runtime.threads) {
         // thread.updateMonitor is for threads that update monitors. We don't want to show these.
         // https://github.com/LLK/scratch-vm/blob/b3afd407f12630b1d27c4edadfa5ec4b5e1c820d/src/engine/runtime.js#L1717
@@ -448,8 +459,25 @@ export default async function ({ addon, global, console, msg }) {
           threadsList.append(createThreadElement(thread, vm.runtime.threads.indexOf(thread) + 1));
         }
       }
+
+      if (runningBlockElement && scrollToRunning) {
+        runningBlockElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+
+      if (vm.runtime.threads.length === 0) {
+        threadsList.append(Object.assign(document.createElement("span"), {
+          className: "thread-info",
+          innerText: "No threads running.",
+        }));
+      }
     } else {
-      threadsList.innerHTML = "<span>Pause to view threads.</span>";
+      threadsList.append(Object.assign(document.createElement("span"), {
+        className: "thread-info",
+        innerText: "Pause to view threads.",
+      }));
     }
   }
 
@@ -459,7 +487,7 @@ export default async function ({ addon, global, console, msg }) {
     draggable: false,
   });
   const stepImg = Object.assign(document.createElement("img"), {
-    src: addon.self.dir + "/step.svg",
+    src: addon.self.dir + "/icons/step.svg",
   });
   const stepText = Object.assign(document.createElement("span"), {
     innerText: msg("step"),
@@ -477,7 +505,7 @@ export default async function ({ addon, global, console, msg }) {
     className: tabClassName,
   });
   const performanceTabImg = Object.assign(document.createElement("img"), {
-    src: addon.self.dir + "/performance.svg",
+    src: addon.self.dir + "/icons/performance.svg",
     draggable: false,
   });
   const performanceTabText = Object.assign(document.createElement("span"), {
@@ -495,7 +523,7 @@ export default async function ({ addon, global, console, msg }) {
   function getMaxFps() {
     return Math.round(1000 / vm.runtime.currentStepTime);
   }
-  var performanceFpsChart = new Chart(performanceFpsChartCanvas.getContext("2d"), {
+  const performanceFpsChart = new Chart(performanceFpsChartCanvas.getContext("2d"), {
     type: "line",
     data: {
       // An array like [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
@@ -522,19 +550,52 @@ export default async function ({ addon, global, console, msg }) {
           display: false,
         },
 
-        tooltips: {
-          callbacks: {
-            label: function (tooltipItem) {
-              return tooltipItem.yLabel;
-            },
-          },
+        callbacks: {
+          label: (context) => `FPS: ${context.parsed.y}`,
         },
       },
     },
   });
   const performanceClonesTitle = Object.assign(document.createElement("h1"), { innerText: "Clones" });
+  const performanceClonesChartCanvas = Object.assign(document.createElement("canvas"), {
+    id: "debug-fps-chart",
+    className: "logs",
+  });
+  const performanceClonesChart = new Chart(performanceClonesChartCanvas.getContext("2d"), {
+    type: "line",
+    data: {
+      labels: Array.from(Array(performanceCharNumPoints).keys()).reverse(),
+      datasets: [
+        {
+          data: Array(performanceCharNumPoints).fill(-1),
+          borderWidth: 1,
+          fill: true,
+          backgroundColor: "hsla(163, 85%, 40%, 0.5)",
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          max: 300,
+          min: 0,
+        },
+      },
 
-  vm.runtime.renderer.debugger_ogDraw = vm.runtime.renderer.draw;
+      plugins: {
+        legend: {
+          display: false,
+        },
+
+        tooltips: {
+          callbacks: {
+            label: (context) => `Clones: ${context.parsed.y}`,
+          },
+        },
+      },
+    },
+  });
+
   // Holds the times of each frame drawn in the last second.
   // The length of this list is effectively the FPS.
   const renderTimes = [];
@@ -542,7 +603,8 @@ export default async function ({ addon, global, console, msg }) {
   var lastFpsTime = Date.now() + 3000;
   var pauseTime = 0; // What time we paused at.
 
-  vm.runtime.renderer.draw = function () {
+  const ogDraw = vm.runtime.renderer.draw;
+  vm.runtime.renderer.draw = function (...args) {
     if (!isPaused()) {
       const now = Date.now();
       const maxFps = getMaxFps();
@@ -552,19 +614,27 @@ export default async function ({ addon, global, console, msg }) {
 
       if (now - lastFpsTime > 1000) {
         lastFpsTime = now;
+
+        // Update the graphs
+
         const fpsData = performanceFpsChart.data.datasets[0].data;
         fpsData.shift();
         fpsData.push(Math.min(renderTimes.length, maxFps));
         // Incase we switch between 30FPS and 60FPS, update the max height of the chart.
         performanceFpsChart.options.scales.y.max = maxFps;
         performanceFpsChart.update();
+
+        const clonesData = performanceClonesChart.data.datasets[0].data;
+        clonesData.shift();
+        clonesData.push(vm.runtime._cloneCounter);
+        performanceClonesChart.update();
       }
     }
 
-    vm.runtime.renderer.debugger_ogDraw();
+    ogDraw.call(this, ...args)
   };
 
-  performancePanel.append(performanceFpsTitle, performanceFpsChartCanvas, performanceClonesTitle);
+  performancePanel.append(performanceFpsTitle, performanceFpsChartCanvas, performanceClonesTitle, performanceClonesChartCanvas);
 
   //
 
@@ -699,9 +769,17 @@ export default async function ({ addon, global, console, msg }) {
     } else {
       unpauseButton.style.display = "none";
       stepButton.style.display = "none";
-      lastFpsTime += pauseTime;
+
+      const dt = Date.now() - pauseTime;
+      lastFpsTime += dt;
+      for (var i = 0; i < renderTimes.length; i++)
+        renderTimes[i] += dt;
     }
     threadsRefresh();
+  });
+
+  onSingleStepped((sequencer) => {
+    threadsRefresh(true);
   });
 
   let logs = [];
@@ -718,15 +796,16 @@ export default async function ({ addon, global, console, msg }) {
     return s;
   };
 
-  const addLog = (content, thread, type) => {
+  const addLog = (content, thread, type, internalLog = false) => {
     const wrapper = createLogWrapper(type);
 
-    const target = thread.target;
-    const parentTarget = target.isOriginal ? target : target.sprite.clones[0];
-    const targetId = parentTarget.id;
+    if (internalLog) {
+      wrapper.className += " internal-log";
+    }
+
     logsList.append(wrapper);
     if (type !== "log") {
-      const imageURL = addon.self.dir + (type === "error" ? "/error.svg" : "/warning.svg");
+      const imageURL = addon.self.dir + (type === "error" ? "/icons/error.svg" : "/icons/warning.svg");
       const icon = document.createElement("img");
       icon.src = imageURL;
       icon.alt = icon.title = msg("icon-" + type);
@@ -734,62 +813,69 @@ export default async function ({ addon, global, console, msg }) {
       wrapper.appendChild(icon);
     }
 
-    const blockId = thread.peekStack();
-    const block = target.blocks.getBlock(blockId);
-    if (block && ScratchBlocks) {
-      const inputId = Object.values(block.inputs)[0]?.block;
-      const inputBlock = target.blocks.getBlock(inputId);
-      if (inputBlock && inputBlock.opcode !== "text") {
-        let text, category;
-        if (
-          inputBlock.opcode === "data_variable" ||
-          inputBlock.opcode === "data_listcontents" ||
-          inputBlock.opcode === "argument_reporter_string_number" ||
-          inputBlock.opcode === "argument_reporter_boolean"
-        ) {
-          text = Object.values(inputBlock.fields)[0].value;
-          if (inputBlock.opcode === "data_variable") {
-            category = "data";
-          } else if (inputBlock.opcode === "data_listcontents") {
-            category = "list";
+    var targetId;
+
+    if (thread) {
+      const target = thread.target;
+      const blockId = thread.peekStack();
+      const parentTarget = target.isOriginal ? target : target.sprite.clones[0];
+      targetId = parentTarget.id;
+      const block = target.blocks.getBlock(blockId);
+      if (block && ScratchBlocks) {
+        const inputId = Object.values(block.inputs)[0]?.block;
+        const inputBlock = target.blocks.getBlock(inputId);
+        if (inputBlock && inputBlock.opcode !== "text") {
+          let text, category;
+          if (
+            inputBlock.opcode === "data_variable" ||
+            inputBlock.opcode === "data_listcontents" ||
+            inputBlock.opcode === "argument_reporter_string_number" ||
+            inputBlock.opcode === "argument_reporter_boolean"
+          ) {
+            text = Object.values(inputBlock.fields)[0].value;
+            if (inputBlock.opcode === "data_variable") {
+              category = "data";
+            } else if (inputBlock.opcode === "data_listcontents") {
+              category = "list";
+            } else {
+              category = "more";
+            }
           } else {
-            category = "more";
-          }
-        } else {
-          // Try to call things like https://github.com/LLK/scratch-blocks/blob/develop/blocks_vertical/operators.js
-          let jsonData;
-          const fakeBlock = {
-            jsonInit(data) {
-              jsonData = data;
-            },
-          };
-          const blockConstructor = ScratchBlocks.Blocks[inputBlock.opcode];
-          if (blockConstructor) {
-            try {
-              blockConstructor.init.call(fakeBlock);
-            } catch (e) {
-              // ignore
+            // Try to call things like https://github.com/LLK/scratch-blocks/blob/develop/blocks_vertical/operators.js
+            let jsonData;
+            const fakeBlock = {
+              jsonInit(data) {
+                jsonData = data;
+              },
+            };
+            const blockConstructor = ScratchBlocks.Blocks[inputBlock.opcode];
+            if (blockConstructor) {
+              try {
+                blockConstructor.init.call(fakeBlock);
+              } catch (e) {
+                // ignore
+              }
+            }
+            // If the block has a simple message with no arguments, display it
+            if (jsonData && jsonData.message0 && !jsonData.args0) {
+              text = jsonData.message0;
+              category = jsonData.category;
             }
           }
-          // If the block has a simple message with no arguments, display it
-          if (jsonData && jsonData.message0 && !jsonData.args0) {
-            text = jsonData.message0;
-            category = jsonData.category;
-          }
-        }
-        if (text && category) {
-          const blocklyColor = ScratchBlocks.Colours[category === "list" ? "data_lists" : category];
-          if (blocklyColor) {
-            const inputSpan = document.createElement("span");
-            inputSpan.textContent = text;
-            inputSpan.className = "console-variable";
-            const colorCategoryMap = {
-              list: "data-lists",
-              more: "custom",
-            };
-            inputSpan.dataset.category = colorCategoryMap[category] || category;
-            inputSpan.style.backgroundColor = blocklyColor.primary;
-            wrapper.append(inputSpan);
+          if (text && category) {
+            const blocklyColor = ScratchBlocks.Colours[category === "list" ? "data_lists" : category];
+            if (blocklyColor) {
+              const inputSpan = document.createElement("span");
+              inputSpan.textContent = text;
+              inputSpan.className = "console-variable";
+              const colorCategoryMap = {
+                list: "data-lists",
+                more: "custom",
+              };
+              inputSpan.dataset.category = colorCategoryMap[category] || category;
+              inputSpan.style.backgroundColor = blocklyColor.primary;
+              wrapper.append(inputSpan);
+            }
           }
         }
       }
@@ -801,27 +887,31 @@ export default async function ({ addon, global, console, msg }) {
     });
     wrapper.append(createLogText(content));
 
-    let link = document.createElement("a");
-    link.textContent = target.isOriginal
-      ? target.getName()
-      : msg("clone-of", {
+    if (thread) {
+      const target = thread.target;
+      const parentTarget = target.isOriginal ? target : target.sprite.clones[0];
+      const blockId = thread.peekStack();
+      let link = document.createElement("a");
+      link.textContent = target.isOriginal
+        ? target.getName()
+        : msg("clone-of", {
           spriteName: parentTarget.getName(),
         });
-    link.className = "logLink";
-    link.dataset.blockId = blockId;
-    link.dataset.targetId = targetId;
-    if (!target.isOriginal) {
-      link.dataset.isClone = "true";
+      link.className = "logLink";
+      link.dataset.blockId = blockId;
+      link.dataset.targetId = targetId;
+      if (!target.isOriginal) {
+        link.dataset.isClone = "true";
+      }
+      wrapper.appendChild(link);
     }
-
-    wrapper.appendChild(link);
 
     if (!scrollQueued && isScrolledToEnd) {
       scrollQueued = true;
       queueMicrotask(scrollToEnd);
     }
     if (!showingConsole) {
-      const unreadImage = addon.self.dir + "/debug-unread.svg";
+      const unreadImage = addon.self.dir + "/icons/debug-unread.svg";
       if (buttonImage.src !== unreadImage) buttonImage.src = unreadImage;
     }
   };
@@ -833,7 +923,7 @@ export default async function ({ addon, global, console, msg }) {
     showingConsole = show;
     consoleWrapper.style.display = show ? "flex" : "";
     if (show) {
-      buttonImage.src = addon.self.dir + "/debug.svg";
+      buttonImage.src = addon.self.dir + "/icons/debug.svg";
       const cacheObj = Object.create(null);
       for (const logLinkElem of document.getElementsByClassName("logLink")) {
         const targetId = logLinkElem.dataset.targetId;
@@ -866,6 +956,36 @@ export default async function ({ addon, global, console, msg }) {
     },
     { capture: true }
   );
+
+  // Events that we could need to log
+
+  const ogGreenFlag = vm.runtime.greenFlag;
+  vm.runtime.greenFlag = function (...args) {
+    if (addon.settings.get("log_greenflag")) {
+      addLog("Green flag clicked.", null, "log", true);
+    }
+    return ogGreenFlag.call(this, ...args);
+  };
+
+  const ogMakeClone = vm.runtime.targets[0].__proto__.makeClone;
+  vm.runtime.targets[0].__proto__.makeClone = function (...args) {
+    if (addon.settings.get("log_failed_clone_creation") && !vm.runtime.clonesAvailable()) {
+      addLog(`Failed to create clone of ${this.getName()}. Cannot create over 300 clones.`, vm.runtime.sequencer.activeThread, "warn", true);
+    }
+    var clone = ogMakeClone.call(this, ...args);
+    if (addon.settings.get("log_clone_create") && clone) {
+      addLog(`Created clone of ${this.getName()}`, vm.runtime.sequencer.activeThread, "log", true);
+    }
+    return clone;
+  }
+
+  const ogStartHats = vm.runtime.startHats;
+  vm.runtime.startHats = function (hat, optMatchFields, ...args) {
+    if (addon.settings.get("log_broadcasts") && hat === "event_whenbroadcastreceived") {
+      addLog(`Broadcasted ${optMatchFields.BROADCAST_OPTION}`, vm.runtime.sequencer.activeThread, "log", true);
+    }
+    return ogStartHats.call(this, hat, optMatchFields, ...args);
+  }
 
   while (true) {
     await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {
