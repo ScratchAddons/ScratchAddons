@@ -1,5 +1,6 @@
 export default async function ({ addon, global, console, msg }) {
   let posts = document.querySelectorAll(".blockpost");
+  let cache = {};
 
   posts.forEach(async (i) => {
     let username = i.querySelector(".username").innerText;
@@ -29,12 +30,15 @@ export default async function ({ addon, global, console, msg }) {
     }
   });
 
-  async function fetchStatus(username) {
-    const response = await fetch(`https://my-ocular.jeffalo.net/api/user/${username}`);
-    const data = await response.json();
-    return {
-      userStatus: data.status,
-      color: data.color,
-    };
+  function fetchStatus(username) {
+    if (cache[username]) return cache[username];
+    return (cache[username] = new Promise(async (resolve) => {
+      const response = await fetch(`https://my-ocular.jeffalo.net/api/user/${username}`);
+      const data = await response.json();
+      resolve({
+        userStatus: data.status,
+        color: data.color,
+      });
+    }));
   }
 }
