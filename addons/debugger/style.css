@@ -71,12 +71,8 @@
   --warning-border-color: hsl(50deg 100% 88%);
   --error-border-color: hsl(0deg 100% 92%);
   --error-text-color: red;
-  --monospace-font-size: 12px;
-  --monospace-font-family: consolas, lucida console, courier new, monospace;
-  --source-code-font-size: 12px;
-  --source-code-font-family: consolas, lucida console, courier new, monospace;
-  font-family: var(--monospace-font-family);
-  font-size: var(--monospace-font-size) !important;
+  font-family: monospace;
+  font-size: 12px;
   word-wrap: break-word;
   user-select: text;
   box-sizing: border-box;
