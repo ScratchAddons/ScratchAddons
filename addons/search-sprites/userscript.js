@@ -1,51 +1,42 @@
 export default async function ({ addon, global, console }) {
-  let spritesContainer = document.querySelector('[class^="sprite-selector_items-wrapper"]');
-  let searchBox = document.createElement("input");
+  let spritesContainer;
+  let spriteSelectorContainer;
+
+  const searchBox = document.createElement("input");
   searchBox.setAttribute("type", "search");
   searchBox.setAttribute("placeholder", "Search sprites...");
   searchBox.setAttribute("id", "sa-sprite-search-box");
   searchBox.setAttribute("autocomplete", "off");
 
-  await addon.tab.waitForElement('[class^="sprite-selector_items-wrapper"]');
+  const search = (query) => {
+    if (!spritesContainer) return;
 
-  let spriteSelectorContainer = document.querySelector('[class^="sprite-selector_scroll-wrapper"]');
-  spriteSelectorContainer.insertBefore(searchBox, spritesContainer);
+    query = query.toLowerCase();
+    const containsQuery = (str) => str.toLowerCase().includes(query);
 
-  addon.tab.displayNoneWhileDisabled(searchBox, { display: "block" });
-  addon.self.addEventListener("disabled", () => {
-    for (let i = 0; i < spritesContainer.children.length; i++) {
-      spritesContainer.children[i].style.display = "block";
+    for (const sprite of spritesContainer.children) {
+      const visible = (
+        !query ||
+        containsQuery(sprite.children[0].children[1].innerText) ||
+        (
+          containsQuery(sprite.children[0].children[2].children[0].innerText) &&
+          sprite.children[0].classList.contains("sa-folders-folder")
+        )
+      );
+      sprite.style.display = visible ? "" : "none";
     }
+  };
+
+  addon.tab.displayNoneWhileDisabled(searchBox, {
+    display: "block"
   });
-  addon.self.addEventListener("reenabled", () => {
+  addon.self.addEventListener("disabled", () => {
+    search("");
     searchBox.value = "";
   });
 
   searchBox.oninput = () => {
-    if (searchBox.value) {
-      for (let i = 0; i < spritesContainer.children.length; i++) {
-        if (
-          spritesContainer.children[i].children[0].children[1].innerText
-            .toLowerCase()
-            .includes(searchBox.value.toLowerCase())
-        ) {
-          spritesContainer.children[i].style.display = "block";
-        } else if (
-          spritesContainer.children[i].children[0].children[2].children[0].innerText
-            .toLowerCase()
-            .includes(searchBox.value.toLowerCase()) &&
-          spritesContainer.children[i].children[0].classList.contains("sa-folders-folder")
-        ) {
-          spritesContainer.children[i].style.display = "block";
-        } else {
-          spritesContainer.children[i].style.display = "none";
-        }
-      }
-    } else {
-      for (let i = 0; i < spritesContainer.children.length; i++) {
-        spritesContainer.children[i].style.display = "block";
-      }
-    }
+    search(searchBox.value);
   };
 
   while (true) {
