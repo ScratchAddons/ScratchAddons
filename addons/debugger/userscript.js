@@ -998,8 +998,8 @@ export default async function ({ addon, global, console, msg }) {
     return ogGreenFlag.call(this, ...args);
   };
 
-  const ogMakeClone = vm.runtime.targets[0].__proto__.makeClone;
-  vm.runtime.targets[0].__proto__.makeClone = function (...args) {
+  const ogMakeClone = vm.runtime.targets[0].constructor.prototype.makeClone;
+  vm.runtime.targets[0].constructor.prototype.makeClone = function (...args) {
     if (addon.settings.get("log_failed_clone_creation") && !vm.runtime.clonesAvailable()) {
       addLog(msg("log-msg-clone-cap", { sprite: this.getName() }), vm.runtime.sequencer.activeThread, "warn", true);
     }
