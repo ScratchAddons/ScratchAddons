@@ -2,16 +2,6 @@ import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import { isPaused, setPaused, onPauseChanged, onSingleStepped, getRunningBlock, singleStep } from "./module.js";
 
 export default async function ({ addon, global, console, msg }) {
-  const ScratchBlocks = await addon.tab.traps.getBlockly();
-  const vm = addon.tab.traps.vm;
-  await new Promise((resolve, reject) => {
-    if (vm.editingTarget) return resolve();
-    vm.runtime.once("PROJECT_LOADED", resolve);
-  });
-
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chartjs-plugin-annotation.min.js");
-
   let showingConsole;
 
   const container = document.createElement("div");
@@ -74,6 +64,16 @@ export default async function ({ addon, global, console, msg }) {
       addLog(content, thread, "error");
     },
   });
+
+  const ScratchBlocks = await addon.tab.traps.getBlockly();
+  const vm = addon.tab.traps.vm;
+  await new Promise((resolve, reject) => {
+    if (vm.editingTarget) return resolve();
+    vm.runtime.once("PROJECT_LOADED", resolve);
+  });
+
+  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
+  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chartjs-plugin-annotation.min.js");
 
   const consoleWrapper = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_card", { others: "debug" }),
