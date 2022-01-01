@@ -1,6 +1,5 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import { isPaused, setPaused, onPauseChanged, onSingleStepped, getRunningBlock, singleStep } from "./module.js";
-import { } from "./module.js";
 
 export default async function ({ addon, global, console, msg }) {
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
