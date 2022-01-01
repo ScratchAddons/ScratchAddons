@@ -1,19 +1,25 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import { isPaused, setPaused, onPauseChanged, onSingleStepped, getRunningBlock, singleStep } from "./module.js";
 
+const removeAllChildren = (element) => {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
+};
+
 export default async function ({ addon, global, console, msg }) {
   let hasLoggedPauseError = false;
   const pause = (_, thread) => {
     if (addon.tab.redux.state.scratchGui.mode.isPlayerOnly) {
       if (!hasLoggedPauseError) {
-        addLog(msg("cannot-pause-player"), thread, "error");
+        logsTab.addLog(msg("cannot-pause-player"), thread, "error");
         hasLoggedPauseError = true;
       }
       return;
     }
     setPaused(!isPaused());
     const pauseAddonButton = document.querySelector(".pause-btn");
-    if (!pauseAddonButton || getComputedStyle(pauseAddonButton).display === "none") toggleInterface(true);
+    if (!pauseAddonButton || getComputedStyle(pauseAddonButton).display === "none") setInterfaceVisible(true);
   };
 
   addon.tab.addBlock("sa-pause", {
@@ -30,21 +36,21 @@ export default async function ({ addon, global, console, msg }) {
     args: ["content"],
     displayName: msg("block-log"),
     callback: ({ content }, thread) => {
-      addLog(content, thread, "log");
+      logsTab.addLog(content, thread, "log");
     },
   });
   addon.tab.addBlock("\u200B\u200Bwarn\u200B\u200B %s", {
     args: ["content"],
     displayName: msg("block-warn"),
     callback: ({ content }, thread) => {
-      addLog(content, thread, "warn");
+      logsTab.addLog(content, thread, "warn");
     },
   });
   addon.tab.addBlock("\u200B\u200Berror\u200B\u200B %s", {
     args: ["content"],
     displayName: msg("block-error"),
     callback: ({ content }, thread) => {
-      addLog(content, thread, "error");
+      logsTab.addLog(content, thread, "error");
     },
   });
 
@@ -71,7 +77,7 @@ export default async function ({ addon, global, console, msg }) {
   debuggerButtonContent.appendChild(debuggerButtonImage);
   debuggerButton.appendChild(debuggerButtonContent);
   debuggerButtonOuter.appendChild(debuggerButton);
-  debuggerButton.addEventListener("click", () => toggleInterface(true));
+  debuggerButton.addEventListener("click", () => setInterfaceVisible(true));
 
   const interfaceContainer = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_card", { others: "debug" }),
@@ -89,9 +95,11 @@ export default async function ({ addon, global, console, msg }) {
     className: 'extra-log-container',
   });
 
-  const toggleInterface = (show) => {
-    interfaceContainer.style.display = show ? "flex" : "";
-    if (show) {
+  let isInterfaceVisible = false;
+  const setInterfaceVisible = (_isVisible) => {
+    isInterfaceVisible = _isVisible;
+    interfaceContainer.style.display = isInterfaceVisible ? "flex" : "";
+    if (isInterfaceVisible) {
       // TODO refactor
       debuggerButtonImage.src = addon.self.dir + "/icons/debug.svg";
       const cacheObj = Object.create(null);
@@ -106,9 +114,10 @@ export default async function ({ addon, global, console, msg }) {
           logLinkElem.textContent = msg("clone-of", { spriteName: tInfo.name });
         }
       }
-      if (isScrolledToEnd) {
-        scrollToEnd();
-      }
+      // TODO
+      // if (isScrolledToEnd) {
+      //   logsTab.scrollToEnd();
+      // }
     }
   };
 
@@ -249,7 +258,7 @@ export default async function ({ addon, global, console, msg }) {
     if (targetId && blockId) goToBlock(targetId, blockId);
   });
 
-  const makeHeaderButton = ({text, icon, description}) => {
+  const createHeaderButton = ({text, icon, description}) => {
     const button = Object.assign(document.createElement("div"), {
       className: addon.tab.scratchClass("card_shrink-expand-button"),
       draggable: false,
@@ -266,13 +275,13 @@ export default async function ({ addon, global, console, msg }) {
     button.appendChild(imageElement);
     button.appendChild(textElement);
     return {
-      button,
+      element: button,
       image: imageElement,
       text: textElement
     };
   };
 
-  const makeHeaderTab = ({text, icon}) => {
+  const createHeaderTab = ({text, icon}) => {
     const tab = Object.assign(document.createElement("li"), {
       className: addon.tab.scratchClass("react-tabs_react-tabs__tab", "gui_tab"),
     });
@@ -285,456 +294,657 @@ export default async function ({ addon, global, console, msg }) {
     tab.appendChild(imageElement);
     tab.appendChild(textElement);
     return {
-      tab,
+      element: tab,
       image: imageElement,
       text: textElement
     };
   };
 
-  const unpauseButton = makeHeaderButton({
+  const unpauseButton = createHeaderButton({
     text: msg('unpause'),
     icon: addon.self.dir + "/icons/play.svg"
   });
-  unpauseButton.button.classList.add('sa-debugger-unpause');
-  unpauseButton.button.addEventListener("click", () => setPaused(false));
+  unpauseButton.element.classList.add('sa-debugger-unpause');
+  unpauseButton.element.addEventListener("click", () => setPaused(false));
+  const updateUnpauseVisibility = (paused) => {
+    unpauseButton.element.style.display = paused ? '' : 'none';
+  };
+  updateUnpauseVisibility(isPaused());
+  onPauseChanged(updateUnpauseVisibility);
 
-  const closeButton = makeHeaderButton({
+  const closeButton = createHeaderButton({
     text: msg('close'),
     icon: addon.self.dir + "/icons/add.svg"
   });
   closeButton.image.classList.add(addon.tab.scratchClass("close-button_close-icon"));
-  closeButton.button.addEventListener("click", () => toggleInterface(false));
+  closeButton.element.addEventListener("click", () => setInterfaceVisible(false));
 
-  // ##### Logs Tab ##### //
+  const createLogsTab = () => {
+    const tab = createHeaderTab({
+      text: msg('tab-logs'),
+      icon: addon.self.dir + "/icons/logs.svg"
+    });
 
-  const logsTabElement = makeHeaderTab({
-    text: msg('tab-logs'),
-    icon: addon.self.dir + "/icons/logs.svg"
-  });
+    const content = Object.assign(document.createElement("div"), {
+      className: "logs",
+    });
 
-  const logsList = Object.assign(document.createElement("div"), {
-    className: "logs",
-  });
+    const exportButton = createHeaderButton({
+      text: msg('export'),
+      icon: addon.self.dir + "/icons/download-white.svg",
+      description: msg('export-desc')
+    });
+    const downloadTextAs = (filename, text) => downloadBlob(filename, new Blob([text], { type: "text/plain" }));
+    exportButton.element.addEventListener("click", (e) => {
+      const defaultFormat = "{sprite}: {content} ({type})";
+      const exportFormat = e.shiftKey ? prompt(msg("enter-format"), defaultFormat) : defaultFormat;
+      if (!exportFormat) return;
+      handleStopDrag();
+      const targetInfoCache = Object.create(null);
+      // TODO refactor
+      let file = logs
+        .map(({ targetId, type, content, count }) =>
+          (exportFormat.replace(
+            /\{(sprite|type|content)\}/g,
+            (_, match) =>
+            ({
+              sprite: getTargetInfo(targetId, targetInfoCache).name,
+              type,
+              content,
+            }[match])
+          ) + "\n").repeat(count)
+        ).join("");
+      downloadTextAs("logs.txt", file);
+    });
 
-  const exportButton = makeHeaderButton({
-    text: msg('export'),
-    icon: addon.self.dir + "/icons/download-white.svg",
-    description: msg('export-desc')
-  });
-  const downloadTextAs = (filename, text) => downloadBlob(filename, new Blob([text], { type: "text/plain" }));
-  exportButton.button.addEventListener("click", (e) => {
-    const defaultFormat = "{sprite}: {content} ({type})";
-    const exportFormat = e.shiftKey ? prompt(msg("enter-format"), defaultFormat) : defaultFormat;
-    if (!exportFormat) return;
-    handleStopDrag();
-    const targetInfoCache = Object.create(null);
-    // TODO refactor
-    let file = logs
-      .map(({ targetId, type, content, count }) =>
-        (exportFormat.replace(
-          /\{(sprite|type|content)\}/g,
-          (_, match) =>
-          ({
-            sprite: getTargetInfo(targetId, targetInfoCache).name,
-            type,
-            content,
-          }[match])
-        ) + "\n").repeat(count)
-      ).join("");
-    downloadTextAs("logs.txt", file);
-  });
+    const trashButton = createHeaderButton({
+      text: msg('clear'),
+      icon: addon.self.dir + "/icons/delete.svg"
+    });
+    trashButton.element.addEventListener("click", () => {
+      clearLogs();
+      handleStopDrag();
+    });
 
-  const trashButton = makeHeaderButton({
-    text: msg('clear'),
-    icon: addon.self.dir + "/icons/delete.svg"
-  });
-  trashButton.button.addEventListener("click", () => {
-    clearLogs();
-    handleStopDrag();
-  });
-
-  // ##### Threads Tab ##### //
-
-  const threadsTabElement = makeHeaderTab({
-    text: msg("tab-threads"),
-    icon: addon.self.dir + "/icons/threads.svg"
-  });
-
-  const threadsList = Object.assign(document.createElement("div"), {
-    className: "logs",
-  });
-
-  const threadsRefresh = (scrollToRunning = false) => {
-    threadsList.innerHTML = "";
-    if (isPaused()) {
-      var addedThreads = [];
-      const runningBlockId = getRunningBlock();
-      var runningBlockElement;
-
-      const createThreadElement = (thread, idx, iconUrl) => {
-        const element = document.createElement("div");
-        const subelements = Object.assign(document.createElement("div"), {
-          className: "subthread",
-        });
-
-        const threadInfo = Object.assign(document.createElement("div"), {
-          className: "log",
-        });
-        if (iconUrl) {
-          const icon = document.createElement("img");
-          icon.src = addon.self.dir + iconUrl;
-          icon.className = "logIcon";
-          threadInfo.append(icon);
-        }
-        const threadTitle = document.createElement("span");
-        threadTitle.append(Object.assign(document.createElement("b"), { innerText: thread.target.getName() }));
-        threadTitle.append(
-          Object.assign(document.createElement("span"), { innerText: " " + msg("thread", { threadNum: idx }) })
-        );
-        threadInfo.append(threadTitle);
-        element.append(threadInfo);
-
-        const createThreadBlockElement = (blockId, stackFrame, iconUrl) => {
-          const block = thread.target.blocks.getBlock(blockId);
-
-          var name, colour;
-          if (block)
-            if (block.opcode == "procedures_call") {
-              colour = ScratchBlocks.Colours.more.primary;
-              if (block.mutation) {
-                name = block.mutation.proccode.replaceAll("%s", "()").replaceAll("%b", "()");
-                const customBlock = addon.tab.getCustomBlock(block.mutation.proccode);
-                if (customBlock) {
-                  colour = customBlock.color;
-                }
+    let logs = [];
+    let scrollQueued = false;
+  
+    const createLogWrapper = (type) => {
+      const wrapper = document.createElement("div");
+      wrapper.className = "log";
+      wrapper.classList.add(type);
+      return wrapper;
+    };
+  
+    const createLogText = (text, count) => {
+      const s = document.createElement("span");
+      s.innerText = text;
+      if (count !== 1) {
+        const c = document.createElement("span");
+        c.innerText = count;
+        c.className = "log-count";
+        s.appendChild(c);
+      }
+      return s;
+    };
+  
+    // TODO this is way too low???
+    const MAX_LOGS = 10;
+    const addLog = (text, thread, type, internalLog = false) => {
+      const wrapper = createLogWrapper(type);
+  
+      if (internalLog) {
+        wrapper.className += " internal-log";
+      }
+  
+      if (logs.length >= MAX_LOGS) {
+        logs.shift(1);
+        content.children[0].remove();
+      }
+  
+      content.append(wrapper);
+      if (type !== "log") {
+        const imageURL = addon.self.dir + (type === "error" ? "/icons/error.svg" : "/icons/warning.svg");
+        const icon = document.createElement("img");
+        icon.src = imageURL;
+        icon.alt = icon.title = msg("icon-" + type);
+        icon.className = "logIcon";
+        wrapper.appendChild(icon);
+      }
+  
+      var targetId;
+  
+      if (thread) {
+        const target = thread.target;
+        const blockId = thread.peekStack();
+        const parentTarget = target.isOriginal ? target : target.sprite.clones[0];
+        targetId = parentTarget.id;
+        const block = target.blocks.getBlock(blockId);
+        if (block && ScratchBlocks) {
+          const inputId = Object.values(block.inputs)[0]?.block;
+          const inputBlock = target.blocks.getBlock(inputId);
+          if (inputBlock && inputBlock.opcode !== "text") {
+            let text, category;
+            if (
+              inputBlock.opcode === "data_variable" ||
+              inputBlock.opcode === "data_listcontents" ||
+              inputBlock.opcode === "argument_reporter_string_number" ||
+              inputBlock.opcode === "argument_reporter_boolean"
+            ) {
+              text = Object.values(inputBlock.fields)[0].value;
+              if (inputBlock.opcode === "data_variable") {
+                category = "data";
+              } else if (inputBlock.opcode === "data_listcontents") {
+                category = "list";
+              } else {
+                category = "more";
               }
             } else {
-              // This quickly creates a Blockly block so we can get its name, than removes it again.
-              const workspace = Blockly.getMainWorkspace();
-
-              ScratchBlocks.Events.disabled_ = 1; // We disable events to the block isn't added to the DOM
-
-              // https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/core/block.js#L52
-              var blocklyBlock = new ScratchBlocks.Block(workspace, block.opcode, "debugger-temp");
-
-              name = blocklyBlock.toLocaleString().replaceAll("?", "()");
-
-              var category = blocklyBlock.getCategory();
-              if (category == "data-lists") category = "data_lists";
-              if (category == "events") category = "event"; // ST why?
-              if (category) {
-                colour = ScratchBlocks.Colours[category];
-                if (!colour) {
-                  colour = ScratchBlocks.Colours.pen;
+              // Try to call things like https://github.com/LLK/scratch-blocks/blob/develop/blocks_vertical/operators.js
+              let jsonData;
+              const fakeBlock = {
+                jsonInit(data) {
+                  jsonData = data;
+                },
+              };
+              const blockConstructor = ScratchBlocks.Blocks[inputBlock.opcode];
+              if (blockConstructor) {
+                try {
+                  blockConstructor.init.call(fakeBlock);
+                } catch (e) {
+                  // ignore
                 }
-              } else {
-                colour = { primary: "#979797" }
               }
-              if (colour) colour = colour.primary;
-
-              // Calling `new Block` above adds it to two lists in the workspace.
-              // So we remove it from them again.
-              delete workspace.blockDB_["debugger-temp"];
-              workspace.topBlocks_.pop();
-
-              ScratchBlocks.Events.disabled_ = 0; // Re-enable events
+              // If the block has a simple message with no arguments, display it
+              if (jsonData && jsonData.message0 && !jsonData.args0) {
+                text = jsonData.message0;
+                category = jsonData.category;
+              }
             }
-
-          if (!name) {
-            name = "?";
+            if (text && category) {
+              const blocklyColor = ScratchBlocks.Colours[category === "list" ? "data_lists" : category];
+              if (blocklyColor) {
+                const inputSpan = document.createElement("span");
+                inputSpan.textContent = text;
+                inputSpan.className = "console-variable";
+                const colorCategoryMap = {
+                  list: "data-lists",
+                  more: "custom",
+                };
+                inputSpan.dataset.category = colorCategoryMap[category] || category;
+                inputSpan.style.backgroundColor = blocklyColor.primary;
+                wrapper.append(inputSpan);
+              }
+            }
           }
+        }
+      }
+  
+      var count = 1;
+  
+      const lastLog = logs[logs.length - 1];
+      if (lastLog) {
+        if (lastLog.targetId === targetId && lastLog.type === type && lastLog.text === text) {
+          logs.pop();
+          content.children[content.children.length - 2].remove();
+          count += lastLog.count;
+          console.log("Compressing messages! " + count);
+        }
+      }
+  
+      logs.push({
+        targetId,
+        type,
+        text,
+        count
+      });
+      wrapper.append(createLogText(text, count));
+  
+      if (thread) {
+        const target = thread.target;
+        const parentTarget = target.isOriginal ? target : target.sprite.clones[0];
+        const blockId = thread.peekStack();
+        let link = document.createElement("a");
+        link.textContent = target.isOriginal
+          ? target.getName()
+          : msg("clone-of", {
+            spriteName: parentTarget.getName(),
+          });
+        link.className = "logLink";
+        link.dataset.blockId = blockId;
+        link.dataset.targetId = targetId;
+        if (!target.isOriginal) {
+          link.dataset.isClone = "true";
+        }
+        wrapper.appendChild(link);
+      }
+  
+      if (!scrollQueued && isScrolledToEnd) {
+        scrollQueued = true;
+        queueMicrotask(scrollToEnd);
+      }
+      if (!isInterfaceVisible) {
+        const unreadImage = addon.self.dir + "/icons/debug-unread.svg";
+        if (debuggerButtonImage.src !== unreadImage) debuggerButtonImage.src = unreadImage;
+      }
+    };
+  
+    const clearLogs = () => {
+      document.querySelectorAll(".log").forEach((log, i) => log.remove());
+      logs = [];
+      isScrolledToEnd = true;
+    };
+  
+    const scrollToEnd = () => {
+      scrollQueued = false;
+      tabContentContainer.scrollTop = tabContentContainer.scrollHeight;
+    };  
 
-          const blockContainer = document.createElement("div");
-          const blockDiv = Object.assign(document.createElement("div"), {
+    return {
+      tab,
+      content,
+      buttons: [exportButton, trashButton],
+      addLog,
+      clearLogs
+    };
+  };
+
+  const createThreadTab = () => {
+    const tab = createHeaderTab({
+      text: msg("tab-threads"),
+      icon: addon.self.dir + "/icons/threads.svg"
+    });
+
+    const content = Object.assign(document.createElement("div"), {
+      className: "logs",
+    });
+
+    const updateContent = (scrollToRunning = false) => {
+      removeAllChildren(content);
+      if (isPaused()) {
+        var addedThreads = [];
+        const runningBlockId = getRunningBlock();
+        var runningBlockElement;
+
+        const createThreadElement = (thread, idx, iconUrl) => {
+          const element = document.createElement("div");
+          const subelements = Object.assign(document.createElement("div"), {
+            className: "subthread",
+          });
+
+          const threadInfo = Object.assign(document.createElement("div"), {
             className: "log",
           });
-
-          const blockTitle = Object.assign(document.createElement("span"), {
-            innerText: name,
-          });
-
-          if (colour) {
-            blockTitle.style.backgroundColor = colour;
-            blockDiv.className += " block-log";
-            blockTitle.className = "console-block";
-          }
-
-          if (runningBlockId && runningBlockId === blockId) {
-            blockDiv.className += " block-log-running";
-            runningBlockElement = blockContainer;
-          }
-
           if (iconUrl) {
             const icon = document.createElement("img");
             icon.src = addon.self.dir + iconUrl;
             icon.className = "logIcon";
-            blockContainer.append(icon);
+            threadInfo.append(icon);
           }
-          const blockLink = document.createElement("a");
-          blockLink.textContent = thread.target.isOriginal
-            ? thread.target.getName()
-            : msg("clone-of", {
-              spriteName: thread.target.getName(),
-            });
-          blockLink.className = "logLink";
-          blockLink.dataset.blockId = blockId;
-          blockLink.dataset.targetId = thread.target.id;
-          if (!thread.target.isOriginal) {
-            blockLink.dataset.isClone = "true";
-          }
-          blockDiv.append(blockTitle, blockLink);
-          blockContainer.append(blockDiv);
+          const threadTitle = document.createElement("span");
+          threadTitle.append(Object.assign(document.createElement("b"), { innerText: thread.target.getName() }));
+          threadTitle.append(
+            Object.assign(document.createElement("span"), { innerText: " " + msg("thread", { threadNum: idx }) })
+          );
+          threadInfo.append(threadTitle);
+          element.append(threadInfo);
 
-          if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.startedThreads) {
-            for (const thread of stackFrame.executionContext.startedThreads) {
-              addedThreads.push(thread);
-              blockContainer.append(
-                createThreadElement(
-                  thread,
-                  idx + "." + (stackFrame.executionContext.startedThreads.indexOf(thread) + 1),
-                  "/icons/subthread.svg"
-                )
-              );
+          const createThreadBlockElement = (blockId, stackFrame, iconUrl) => {
+            const block = thread.target.blocks.getBlock(blockId);
+
+            var name, colour;
+            if (block)
+              if (block.opcode == "procedures_call") {
+                colour = ScratchBlocks.Colours.more.primary;
+                if (block.mutation) {
+                  name = block.mutation.proccode.replaceAll("%s", "()").replaceAll("%b", "()");
+                  const customBlock = addon.tab.getCustomBlock(block.mutation.proccode);
+                  if (customBlock) {
+                    colour = customBlock.color;
+                  }
+                }
+              } else {
+                // This quickly creates a Blockly block so we can get its name, than removes it again.
+                const workspace = Blockly.getMainWorkspace();
+
+                ScratchBlocks.Events.disabled_ = 1; // We disable events to the block isn't added to the DOM
+
+                // https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/core/block.js#L52
+                var blocklyBlock = new ScratchBlocks.Block(workspace, block.opcode, "debugger-temp");
+
+                name = blocklyBlock.toLocaleString().replaceAll("?", "()");
+
+                var category = blocklyBlock.getCategory();
+                if (category == "data-lists") category = "data_lists";
+                if (category == "events") category = "event"; // ST why?
+                if (category) {
+                  colour = ScratchBlocks.Colours[category];
+                  if (!colour) {
+                    colour = ScratchBlocks.Colours.pen;
+                  }
+                } else {
+                  colour = { primary: "#979797" }
+                }
+                if (colour) colour = colour.primary;
+
+                // Calling `new Block` above adds it to two lists in the workspace.
+                // So we remove it from them again.
+                delete workspace.blockDB_["debugger-temp"];
+                workspace.topBlocks_.pop();
+
+                ScratchBlocks.Events.disabled_ = 0; // Re-enable events
+              }
+
+            if (!name) {
+              name = "?";
             }
+
+            const blockContainer = document.createElement("div");
+            const blockDiv = Object.assign(document.createElement("div"), {
+              className: "log",
+            });
+
+            const blockTitle = Object.assign(document.createElement("span"), {
+              innerText: name,
+            });
+
+            if (colour) {
+              blockTitle.style.backgroundColor = colour;
+              blockDiv.className += " block-log";
+              blockTitle.className = "console-block";
+            }
+
+            if (runningBlockId && runningBlockId === blockId) {
+              blockDiv.className += " block-log-running";
+              runningBlockElement = blockContainer;
+            }
+
+            if (iconUrl) {
+              const icon = document.createElement("img");
+              icon.src = addon.self.dir + iconUrl;
+              icon.className = "logIcon";
+              blockContainer.append(icon);
+            }
+            const blockLink = document.createElement("a");
+            blockLink.textContent = thread.target.isOriginal
+              ? thread.target.getName()
+              : msg("clone-of", {
+                spriteName: thread.target.getName(),
+              });
+            blockLink.className = "logLink";
+            blockLink.dataset.blockId = blockId;
+            blockLink.dataset.targetId = thread.target.id;
+            if (!thread.target.isOriginal) {
+              blockLink.dataset.isClone = "true";
+            }
+            blockDiv.append(blockTitle, blockLink);
+            blockContainer.append(blockDiv);
+
+            if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.startedThreads) {
+              for (const thread of stackFrame.executionContext.startedThreads) {
+                addedThreads.push(thread);
+                blockContainer.append(
+                  createThreadElement(
+                    thread,
+                    idx + "." + (stackFrame.executionContext.startedThreads.indexOf(thread) + 1),
+                    "/icons/subthread.svg"
+                  )
+                );
+              }
+            }
+            return blockContainer;
           }
-          return blockContainer;
+
+          subelements.append(createThreadBlockElement(thread.topBlock));
+          for (var i = 0; i < thread.stack.length; i++) {
+            if (!(thread.stack[i] == thread.topBlock && i == 0))
+              subelements.append(createThreadBlockElement(thread.stack[i], thread.stackFrames[i]));
+          }
+
+          element.append(subelements);
+
+          return element;
         }
 
-        subelements.append(createThreadBlockElement(thread.topBlock));
-        for (var i = 0; i < thread.stack.length; i++) {
-          if (!(thread.stack[i] == thread.topBlock && i == 0))
-            subelements.append(createThreadBlockElement(thread.stack[i], thread.stackFrames[i]));
+        for (const thread of vm.runtime.threads) {
+          // thread.updateMonitor is for threads that update monitors. We don't want to show these.
+          // https://github.com/LLK/scratch-vm/blob/b3afd407f12630b1d27c4edadfa5ec4b5e1c820d/src/engine/runtime.js#L1717
+          if (!thread.updateMonitor && !addedThreads.includes(thread)) {
+            addedThreads.push(thread);
+            content.append(createThreadElement(thread, vm.runtime.threads.indexOf(thread) + 1));
+          }
         }
 
-        element.append(subelements);
-
-        return element;
-      }
-
-      for (const thread of vm.runtime.threads) {
-        // thread.updateMonitor is for threads that update monitors. We don't want to show these.
-        // https://github.com/LLK/scratch-vm/blob/b3afd407f12630b1d27c4edadfa5ec4b5e1c820d/src/engine/runtime.js#L1717
-        if (!thread.updateMonitor && !addedThreads.includes(thread)) {
-          addedThreads.push(thread);
-          threadsList.append(createThreadElement(thread, vm.runtime.threads.indexOf(thread) + 1));
+        if (runningBlockElement && scrollToRunning) {
+          runningBlockElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
         }
-      }
 
-      if (runningBlockElement && scrollToRunning) {
-        runningBlockElement.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
-      }
-
-      if (vm.runtime.threads.length === 0) {
-        threadsList.append(Object.assign(document.createElement("span"), {
+        if (vm.runtime.threads.length === 0) {
+          content.append(Object.assign(document.createElement("span"), {
+            className: "thread-info",
+            innerText: msg("threads-none-running"),
+          }));
+        }
+      } else {
+        content.append(Object.assign(document.createElement("span"), {
           className: "thread-info",
-          innerText: msg("threads-none-running"),
+          innerText: msg("threads-pause"),
         }));
       }
-    } else {
-      threadsList.append(Object.assign(document.createElement("span"), {
-        className: "thread-info",
-        innerText: msg("threads-pause"),
-      }));
-    }
-  }
+    };
 
-  const stepButton = makeHeaderButton({
-    text: msg("step"),
-    icon: addon.self.dir + "/icons/step.svg",
-    description: msg("step-desc")
-  });
-  stepButton.button.addEventListener("click", () => {
-    singleStep();
-    threadsRefresh();
-  });
-  threadsRefresh();
+    const stepButton = createHeaderButton({
+      text: msg("step"),
+      icon: addon.self.dir + "/icons/step.svg",
+      description: msg("step-desc")
+    });
+    stepButton.element.addEventListener("click", () => {
+      singleStep();
+      updateContent();
+    });
 
-  // ##### Performance Tab ##### //
+    const pauseChanged = (paused) => {
+      stepButton.element.style.display = paused ? "" : 'none';
+      updateContent();
+    };
+    pauseChanged(isPaused());
+    onPauseChanged(pauseChanged);
 
-  const performanceTabElement = makeHeaderTab({
-    text: msg('tab-performance'),
-    icon: addon.self.dir + "/icons/performance.svg"
-  });
+    onSingleStepped(() => {
+      updateContent(true);
+    });
 
-  const performancePanel = document.createElement("div");
-  const performanceFpsTitle = Object.assign(document.createElement("h1"), { innerText: msg("performance-framerate-title") });
-  const performanceFpsChartCanvas = Object.assign(document.createElement("canvas"), {
-    id: "debug-fps-chart",
-    className: "logs",
-  });
-  const performanceCharNumPoints = 20;
-  const getMaxFps = () => {
-    return Math.round(1000 / vm.runtime.currentStepTime);
+    return {
+      tab,
+      content,
+      buttons: [stepButton]
+    };
   };
-  const performanceFpsChart = new Chart(performanceFpsChartCanvas.getContext("2d"), {
-    type: "line",
-    data: {
-      // An array like [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
-      labels: Array.from(Array(performanceCharNumPoints).keys()).reverse(),
-      datasets: [
-        {
-          data: Array(performanceCharNumPoints).fill(-1),
-          borderWidth: 1,
-          fill: true,
-          backgroundColor: "hsla(163, 85%, 40%, 0.5)",
-        },
-      ],
-    },
-    options: {
-      scales: {
-        y: {
-          max: getMaxFps(),
-          min: 0,
-        },
+
+  const createPerformanceTab = () => {
+    const tab = createHeaderTab({
+      text: msg('tab-performance'),
+      icon: addon.self.dir + "/icons/performance.svg"
+    });
+
+    const content = document.createElement("div");
+    const performanceFpsTitle = Object.assign(document.createElement("h1"), { innerText: msg("performance-framerate-title") });
+    const performanceFpsChartCanvas = Object.assign(document.createElement("canvas"), {
+      id: "debug-fps-chart",
+      className: "logs",
+    });
+    const performanceCharNumPoints = 20;
+    const getMaxFps = () => {
+      return Math.round(1000 / vm.runtime.currentStepTime);
+    };
+    const performanceFpsChart = new Chart(performanceFpsChartCanvas.getContext("2d"), {
+      type: "line",
+      data: {
+        // An array like [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+        labels: Array.from(Array(performanceCharNumPoints).keys()).reverse(),
+        datasets: [
+          {
+            data: Array(performanceCharNumPoints).fill(-1),
+            borderWidth: 1,
+            fill: true,
+            backgroundColor: "hsla(163, 85%, 40%, 0.5)",
+          },
+        ],
       },
-
-      plugins: {
-        legend: {
-          display: false,
+      options: {
+        scales: {
+          y: {
+            max: getMaxFps(),
+            min: 0,
+          },
         },
 
-        tooltip: {
-          callbacks: {
-            label: (context) => msg("performance-framerate-graph-tooltip", { fps: context.parsed.y }),
+        plugins: {
+          legend: {
+            display: false,
+          },
+
+          tooltip: {
+            callbacks: {
+              label: (context) => msg("performance-framerate-graph-tooltip", { fps: context.parsed.y }),
+            },
           },
         },
       },
-    },
-  });
-  const performanceClonesTitle = Object.assign(document.createElement("h1"), { innerText: msg("performance-clonecount-title") });
-  const performanceClonesChartCanvas = Object.assign(document.createElement("canvas"), {
-    id: "debug-fps-chart",
-    className: "logs",
-  });
-  const performanceClonesChart = new Chart(performanceClonesChartCanvas.getContext("2d"), {
-    type: "line",
-    data: {
-      labels: Array.from(Array(performanceCharNumPoints).keys()).reverse(),
-      datasets: [
-        {
-          data: Array(performanceCharNumPoints).fill(-1),
-          borderWidth: 1,
-          fill: true,
-          backgroundColor: "hsla(163, 85%, 40%, 0.5)",
-        },
-      ],
-    },
-    options: {
-      scales: {
-        y: {
-          max: 300,
-          min: 0,
-        },
+    });
+    const performanceClonesTitle = Object.assign(document.createElement("h1"), { innerText: msg("performance-clonecount-title") });
+    const performanceClonesChartCanvas = Object.assign(document.createElement("canvas"), {
+      id: "debug-fps-chart",
+      className: "logs",
+    });
+    const performanceClonesChart = new Chart(performanceClonesChartCanvas.getContext("2d"), {
+      type: "line",
+      data: {
+        labels: Array.from(Array(performanceCharNumPoints).keys()).reverse(),
+        datasets: [
+          {
+            data: Array(performanceCharNumPoints).fill(-1),
+            borderWidth: 1,
+            fill: true,
+            backgroundColor: "hsla(163, 85%, 40%, 0.5)",
+          },
+        ],
       },
-
-      plugins: {
-        legend: {
-          display: false,
+      options: {
+        scales: {
+          y: {
+            max: 300,
+            min: 0,
+          },
         },
 
-        tooltip: {
-          callbacks: {
-            label: (context) => msg("performance-clonecount-graph-tooltip", { clones: context.parsed.y }),
+        plugins: {
+          legend: {
+            display: false,
+          },
+
+          tooltip: {
+            callbacks: {
+              label: (context) => msg("performance-clonecount-graph-tooltip", { clones: context.parsed.y }),
+            },
           },
         },
       },
-    },
-  });
+    });
 
-  // Holds the times of each frame drawn in the last second.
-  // The length of this list is effectively the FPS.
-  const renderTimes = [];
-  // The last time we pushed a new datapoint to the graph
-  var lastFpsTime = Date.now() + 3000;
+    // Holds the times of each frame drawn in the last second.
+    // The length of this list is effectively the FPS.
+    const renderTimes = [];
+    // The last time we pushed a new datapoint to the graph
+    var lastFpsTime = Date.now() + 3000;
 
-  const ogDraw = vm.runtime.renderer.draw;
-  vm.runtime.renderer.draw = function (...args) {
-    if (!isPaused()) {
-      const now = Date.now();
-      const maxFps = getMaxFps();
-      // Remove all frame times older than 1 second in renderTimes
-      while (renderTimes.length > 0 && renderTimes[0] <= now - 1000) renderTimes.shift();
-      renderTimes.push(now);
+    const ogDraw = vm.runtime.renderer.draw;
+    vm.runtime.renderer.draw = function (...args) {
+      if (!isPaused()) {
+        const now = Date.now();
+        const maxFps = getMaxFps();
+        // Remove all frame times older than 1 second in renderTimes
+        while (renderTimes.length > 0 && renderTimes[0] <= now - 1000) renderTimes.shift();
+        renderTimes.push(now);
 
-      if (now - lastFpsTime > 1000) {
-        lastFpsTime = now;
+        if (now - lastFpsTime > 1000) {
+          lastFpsTime = now;
 
-        // Update the graphs
+          // Update the graphs
 
-        const fpsData = performanceFpsChart.data.datasets[0].data;
-        fpsData.shift();
-        fpsData.push(Math.min(renderTimes.length, maxFps));
-        // Incase we switch between 30FPS and 60FPS, update the max height of the chart.
-        performanceFpsChart.options.scales.y.max = maxFps;
-        performanceFpsChart.update();
+          const fpsData = performanceFpsChart.data.datasets[0].data;
+          fpsData.shift();
+          fpsData.push(Math.min(renderTimes.length, maxFps));
+          // Incase we switch between 30FPS and 60FPS, update the max height of the chart.
+          performanceFpsChart.options.scales.y.max = maxFps;
+          performanceFpsChart.update();
 
-        const clonesData = performanceClonesChart.data.datasets[0].data;
-        clonesData.shift();
-        clonesData.push(vm.runtime._cloneCounter);
-        performanceClonesChart.update();
+          const clonesData = performanceClonesChart.data.datasets[0].data;
+          clonesData.shift();
+          clonesData.push(vm.runtime._cloneCounter);
+          performanceClonesChart.update();
+        }
       }
-    }
 
-    ogDraw.call(this, ...args)
+      ogDraw.call(this, ...args)
+    };
+
+    content.append(performanceFpsTitle, performanceFpsChartCanvas, performanceClonesTitle, performanceClonesChartCanvas);
+
+    let pauseTime = 0;
+    onPauseChanged((paused) => {
+      if (paused) {
+        pauseTime = Date.now();
+      } else {
+        const dt = Date.now() - pauseTime;
+        lastFpsTime += dt;
+        for (var i = 0; i < renderTimes.length; i++) {
+          renderTimes[i] += dt;
+        }
+      }
+    });
+
+    return {
+      tab,
+      content,
+      buttons: []
+    };
   };
 
-  performancePanel.append(performanceFpsTitle, performanceFpsChartCanvas, performanceClonesTitle, performanceClonesChartCanvas);
-
-  const logsTab = {
-    tab: logsTabElement,
-    buttons: [unpauseButton, exportButton, trashButton, closeButton],
-    content: logsList
-  };
-  const threadsTab = {
-    tab: threadsTabElement,
-    buttons: [unpauseButton, stepButton, closeButton],
-    content: threadsList
-  };
-  const performanceTab = {
-    tab: performanceTabElement,
-    buttons: [unpauseButton, closeButton],
-    content: performancePanel
-  };
-  const allTabs = [
-    logsTab,
-    threadsTab,
-    performanceTab
-  ];
-
-  const removeAllChildren = (element) => {
-    while (element.firstChild) {
-      element.removeChild(element.firstChild);
-    }
-  };
+  const logsTab = createLogsTab();
+  const threadTab = createThreadTab();
+  const performanceTab = createPerformanceTab();
+  const allTabs = [logsTab, threadTab, performanceTab];
 
   let activeTab;
   const setActiveTab = (tab) => {
     if (tab === activeTab) return;
     if (activeTab) {
-      activeTab.tab.tab.classList.remove(addon.tab.scratchClass('gui_is-selected'));
+      activeTab.tab.element.classList.remove(addon.tab.scratchClass('gui_is-selected'));
     }
-    tab.tab.tab.classList.add(addon.tab.scratchClass('gui_is-selected'));
+    tab.tab.element.classList.add(addon.tab.scratchClass('gui_is-selected'));
     activeTab = tab;
 
     removeAllChildren(tabContentContainer);
     tabContentContainer.appendChild(tab.content);
 
     removeAllChildren(buttonContainerElement);
+    buttonContainerElement.appendChild(unpauseButton.element);
     for (const button of tab.buttons) {
-      buttonContainerElement.appendChild(button.button);
+      buttonContainerElement.appendChild(button.element);
     }
+    buttonContainerElement.appendChild(closeButton.element);
   };
-
   for (const tab of allTabs) {
-    tab.tab.tab.addEventListener('click', () => {
+    tab.tab.element.addEventListener('click', () => {
       setActiveTab(tab);
     });
-    tabListElement.appendChild(tab.tab.tab);
+    tabListElement.appendChild(tab.tab.element);
   }
-  setActiveTab(logsTab);
+  setActiveTab(allTabs[0]);
 
   let isScrolledToEnd = true;
   tabContentContainer.addEventListener(
@@ -768,208 +978,6 @@ export default async function ({ addon, global, console, msg }) {
     return item;
   };
 
-  // TODO refactor
-  let pauseTime = 0;
-  if (!isPaused()) {
-    unpauseButton.button.style.display = "none";
-    stepButton.button.style.display = "none";
-  }
-  onPauseChanged((newPauseValue) => {
-    if (newPauseValue) {
-      unpauseButton.button.style.display = "";
-      stepButton.button.style.display = "";
-      pauseTime = Date.now();
-    } else {
-      unpauseButton.button.style.display = "none";
-      stepButton.button.style.display = "none";
-
-      const dt = Date.now() - pauseTime;
-      lastFpsTime += dt;
-      for (var i = 0; i < renderTimes.length; i++)
-        renderTimes[i] += dt;
-    }
-    threadsRefresh();
-  });
-
-  onSingleStepped((sequencer) => {
-    threadsRefresh(true);
-  });
-
-  let showingConsole = false;
-  let logs = [];
-  let scrollQueued = false;
-
-  const createLogWrapper = (type) => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "log";
-    wrapper.classList.add(type);
-    return wrapper;
-  };
-
-  const createLogText = (text, count) => {
-    const s = document.createElement("span");
-    s.innerText = text;
-    if (count !== 1) {
-      const c = document.createElement("span");
-      c.innerText = count;
-      c.className = "log-count";
-      s.appendChild(c);
-    }
-    return s;
-  };
-
-  // TODO this is way too low???
-  const MAX_LOGS = 10;
-  const addLog = (content, thread, type, internalLog = false) => {
-    const wrapper = createLogWrapper(type);
-
-    if (internalLog) {
-      wrapper.className += " internal-log";
-    }
-
-    if (logs.length >= MAX_LOGS) {
-      logs.shift(1);
-      logsList.children[0].remove();
-    }
-
-    logsList.append(wrapper);
-    if (type !== "log") {
-      const imageURL = addon.self.dir + (type === "error" ? "/icons/error.svg" : "/icons/warning.svg");
-      const icon = document.createElement("img");
-      icon.src = imageURL;
-      icon.alt = icon.title = msg("icon-" + type);
-      icon.className = "logIcon";
-      wrapper.appendChild(icon);
-    }
-
-    var targetId;
-
-    if (thread) {
-      const target = thread.target;
-      const blockId = thread.peekStack();
-      const parentTarget = target.isOriginal ? target : target.sprite.clones[0];
-      targetId = parentTarget.id;
-      const block = target.blocks.getBlock(blockId);
-      if (block && ScratchBlocks) {
-        const inputId = Object.values(block.inputs)[0]?.block;
-        const inputBlock = target.blocks.getBlock(inputId);
-        if (inputBlock && inputBlock.opcode !== "text") {
-          let text, category;
-          if (
-            inputBlock.opcode === "data_variable" ||
-            inputBlock.opcode === "data_listcontents" ||
-            inputBlock.opcode === "argument_reporter_string_number" ||
-            inputBlock.opcode === "argument_reporter_boolean"
-          ) {
-            text = Object.values(inputBlock.fields)[0].value;
-            if (inputBlock.opcode === "data_variable") {
-              category = "data";
-            } else if (inputBlock.opcode === "data_listcontents") {
-              category = "list";
-            } else {
-              category = "more";
-            }
-          } else {
-            // Try to call things like https://github.com/LLK/scratch-blocks/blob/develop/blocks_vertical/operators.js
-            let jsonData;
-            const fakeBlock = {
-              jsonInit(data) {
-                jsonData = data;
-              },
-            };
-            const blockConstructor = ScratchBlocks.Blocks[inputBlock.opcode];
-            if (blockConstructor) {
-              try {
-                blockConstructor.init.call(fakeBlock);
-              } catch (e) {
-                // ignore
-              }
-            }
-            // If the block has a simple message with no arguments, display it
-            if (jsonData && jsonData.message0 && !jsonData.args0) {
-              text = jsonData.message0;
-              category = jsonData.category;
-            }
-          }
-          if (text && category) {
-            const blocklyColor = ScratchBlocks.Colours[category === "list" ? "data_lists" : category];
-            if (blocklyColor) {
-              const inputSpan = document.createElement("span");
-              inputSpan.textContent = text;
-              inputSpan.className = "console-variable";
-              const colorCategoryMap = {
-                list: "data-lists",
-                more: "custom",
-              };
-              inputSpan.dataset.category = colorCategoryMap[category] || category;
-              inputSpan.style.backgroundColor = blocklyColor.primary;
-              wrapper.append(inputSpan);
-            }
-          }
-        }
-      }
-    }
-
-    var count = 1;
-
-    const lastLog = logs[logs.length - 1];
-    if (lastLog) {
-      if (lastLog.targetId === targetId && lastLog.type === type && lastLog.content === content) {
-        logs.pop();
-        logsList.children[logsList.children.length - 2].remove();
-        count += lastLog.count;
-        console.log("Compressing messages! " + count);
-      }
-    }
-
-    logs.push({
-      targetId,
-      type,
-      content,
-      count
-    });
-    wrapper.append(createLogText(content, count));
-
-    if (thread) {
-      const target = thread.target;
-      const parentTarget = target.isOriginal ? target : target.sprite.clones[0];
-      const blockId = thread.peekStack();
-      let link = document.createElement("a");
-      link.textContent = target.isOriginal
-        ? target.getName()
-        : msg("clone-of", {
-          spriteName: parentTarget.getName(),
-        });
-      link.className = "logLink";
-      link.dataset.blockId = blockId;
-      link.dataset.targetId = targetId;
-      if (!target.isOriginal) {
-        link.dataset.isClone = "true";
-      }
-      wrapper.appendChild(link);
-    }
-
-    if (!scrollQueued && isScrolledToEnd) {
-      scrollQueued = true;
-      queueMicrotask(scrollToEnd);
-    }
-    if (!showingConsole) {
-      const unreadImage = addon.self.dir + "/icons/debug-unread.svg";
-      if (debuggerButton.src !== unreadImage) debuggerButton.src = unreadImage;
-    }
-  };
-
-  const clearLogs = () => {
-    document.querySelectorAll(".log").forEach((log, i) => log.remove());
-    logs = [];
-    isScrolledToEnd = true;
-  };
-
-  const scrollToEnd = () => {
-    scrollQueued = false;
-    tabContentContainer.scrollTop = tabContentContainer.scrollHeight;
-  };
-
   if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
     document.body.classList.add("sa-debugger-small");
   }
@@ -990,10 +998,10 @@ export default async function ({ addon, global, console, msg }) {
   const ogGreenFlag = vm.runtime.greenFlag;
   vm.runtime.greenFlag = function (...args) {
     if (addon.settings.get("log_clear_greenflag")) {
-      clearLogs();
+      logsTab.clearLogs();
     }
     if (addon.settings.get("log_greenflag")) {
-      addLog(msg("log-msg-flag-clicked"), null, "log", true);
+      logsTab.addLog(msg("log-msg-flag-clicked"), null, "log", true);
     }
     return ogGreenFlag.call(this, ...args);
   };
@@ -1001,11 +1009,11 @@ export default async function ({ addon, global, console, msg }) {
   const ogMakeClone = vm.runtime.targets[0].constructor.prototype.makeClone;
   vm.runtime.targets[0].constructor.prototype.makeClone = function (...args) {
     if (addon.settings.get("log_failed_clone_creation") && !vm.runtime.clonesAvailable()) {
-      addLog(msg("log-msg-clone-cap", { sprite: this.getName() }), vm.runtime.sequencer.activeThread, "warn", true);
+      logsTab.addLog(msg("log-msg-clone-cap", { sprite: this.getName() }), vm.runtime.sequencer.activeThread, "warn", true);
     }
     var clone = ogMakeClone.call(this, ...args);
     if (addon.settings.get("log_clone_create") && clone) {
-      addLog(msg("log-msg-clone-created", { sprite: this.getName() }), vm.runtime.sequencer.activeThread, "log", true);
+      logsTab.addLog(msg("log-msg-clone-created", { sprite: this.getName() }), vm.runtime.sequencer.activeThread, "log", true);
     }
     return clone;
   }
@@ -1013,7 +1021,7 @@ export default async function ({ addon, global, console, msg }) {
   const ogStartHats = vm.runtime.startHats;
   vm.runtime.startHats = function (hat, optMatchFields, ...args) {
     if (addon.settings.get("log_broadcasts") && hat === "event_whenbroadcastreceived") {
-      addLog(msg("log-msg-broadcasted", { broadcast: optMatchFields.BROADCAST_OPTION }), vm.runtime.sequencer.activeThread, "log", true);
+      logsTab.addLog(msg("log-msg-broadcasted", { broadcast: optMatchFields.BROADCAST_OPTION }), vm.runtime.sequencer.activeThread, "log", true);
     }
     return ogStartHats.call(this, hat, optMatchFields, ...args);
   }
@@ -1024,7 +1032,7 @@ export default async function ({ addon, global, console, msg }) {
       const list = util.target.lookupOrCreateList(
         args.LIST.id, args.LIST.name);
       if (list.value.length >= 200000) {
-        addLog(msg("log-msg-list-append-too-long", { list: list.name }), util.thread, "warn", true);
+        logsTab.addLog(msg("log-msg-list-append-too-long", { list: list.name }), util.thread, "warn", true);
       }
     }
     ogAddToList.call(this, args, util);
@@ -1036,7 +1044,7 @@ export default async function ({ addon, global, console, msg }) {
       const list = util.target.lookupOrCreateList(
         args.LIST.id, args.LIST.name);
       if (list.value.length >= 200000) {
-        addLog(msg("log-msg-list-insert-too-long", { list: list.name }), util.thread, "warn", true);
+        logsTab.addLog(msg("log-msg-list-insert-too-long", { list: list.name }), util.thread, "warn", true);
       }
     }
     ogInertAtList.call(this, args, util);
@@ -1050,9 +1058,9 @@ export default async function ({ addon, global, console, msg }) {
       if (variable.isCloud) {
         const value = args.VALUE.toString();
         if (isNaN(value)) {
-          addLog(msg("log-cloud-data-nan", { var: variable.name }), util.thread, "warn", true);
+          logsTab.addLog(msg("log-cloud-data-nan", { var: variable.name }), util.thread, "warn", true);
         } else if (value.length > 256) {
-          addLog(msg("log-cloud-data-too-long", { var: variable.name }), util.thread, "warn", true);
+          logsTab.addLog(msg("log-cloud-data-too-long", { var: variable.name }), util.thread, "warn", true);
         }
       }
     }
@@ -1074,7 +1082,7 @@ export default async function ({ addon, global, console, msg }) {
     if (addon.tab.editorMode === "editor") {
       addon.tab.appendToSharedSpace({ space: "stageHeader", element: debuggerButtonOuter, order: 0 });
     } else {
-      toggleInterface(false);
+      setInterfaceVisible(false);
     }
   }
 }
