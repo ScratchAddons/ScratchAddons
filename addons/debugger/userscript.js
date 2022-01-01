@@ -368,14 +368,15 @@ export default async function ({ addon, global, console, msg }) {
 
     let logs = [];
     let scrollQueued = false;
-  
+    let isScrolledToEnd = false;
+
     const createLogWrapper = (type) => {
       const wrapper = document.createElement("div");
       wrapper.className = "log";
       wrapper.classList.add(type);
       return wrapper;
     };
-  
+
     const createLogText = (text, count) => {
       const s = document.createElement("span");
       s.innerText = text;
@@ -387,21 +388,21 @@ export default async function ({ addon, global, console, msg }) {
       }
       return s;
     };
-  
+
     // TODO this is way too low???
-    const MAX_LOGS = 10;
+    const MAX_LOGS = 100;
     const addLog = (text, thread, type, internalLog = false) => {
       const wrapper = createLogWrapper(type);
-  
+
       if (internalLog) {
         wrapper.className += " internal-log";
       }
-  
+
       if (logs.length >= MAX_LOGS) {
         logs.shift(1);
         content.children[0].remove();
       }
-  
+
       content.append(wrapper);
       if (type !== "log") {
         const imageURL = addon.self.dir + (type === "error" ? "/icons/error.svg" : "/icons/warning.svg");
@@ -411,9 +412,9 @@ export default async function ({ addon, global, console, msg }) {
         icon.className = "logIcon";
         wrapper.appendChild(icon);
       }
-  
+
       var targetId;
-  
+
       if (thread) {
         const target = thread.target;
         const blockId = thread.peekStack();
@@ -479,19 +480,19 @@ export default async function ({ addon, global, console, msg }) {
           }
         }
       }
-  
+
       var count = 1;
-  
+
+      // TODO This is not the right way to collapse messages
       const lastLog = logs[logs.length - 1];
       if (lastLog) {
         if (lastLog.targetId === targetId && lastLog.type === type && lastLog.text === text) {
           logs.pop();
           content.children[content.children.length - 2].remove();
           count += lastLog.count;
-          console.log("Compressing messages! " + count);
         }
       }
-  
+
       logs.push({
         targetId,
         type,
@@ -499,7 +500,7 @@ export default async function ({ addon, global, console, msg }) {
         count
       });
       wrapper.append(createLogText(text, count));
-  
+
       if (thread) {
         const target = thread.target;
         const parentTarget = target.isOriginal ? target : target.sprite.clones[0];
@@ -518,7 +519,7 @@ export default async function ({ addon, global, console, msg }) {
         }
         wrapper.appendChild(link);
       }
-  
+
       if (!scrollQueued && isScrolledToEnd) {
         scrollQueued = true;
         queueMicrotask(scrollToEnd);
@@ -528,17 +529,35 @@ export default async function ({ addon, global, console, msg }) {
         if (debuggerButtonImage.src !== unreadImage) debuggerButtonImage.src = unreadImage;
       }
     };
-  
+
     const clearLogs = () => {
       document.querySelectorAll(".log").forEach((log, i) => log.remove());
       logs = [];
       isScrolledToEnd = true;
     };
-  
+
     const scrollToEnd = () => {
       scrollQueued = false;
       tabContentContainer.scrollTop = tabContentContainer.scrollHeight;
-    };  
+    };
+
+    tabContentContainer.addEventListener(
+      "wheel",
+      (e) => {
+        // When user scrolls up, stop automatically scrolling down
+        if (e.deltaY < 0) {
+          isScrolledToEnd = false;
+        }
+      },
+      { passive: true }
+    );
+    tabContentContainer.addEventListener(
+      "scroll",
+      () => {
+        isScrolledToEnd = tabContentContainer.scrollTop + 5 >= tabContentContainer.scrollHeight - tabContentContainer.clientHeight;
+      },
+      { passive: true }
+    );
 
     return {
       tab,
@@ -945,25 +964,6 @@ export default async function ({ addon, global, console, msg }) {
     tabListElement.appendChild(tab.tab.element);
   }
   setActiveTab(allTabs[0]);
-
-  let isScrolledToEnd = true;
-  tabContentContainer.addEventListener(
-    "wheel",
-    (e) => {
-      // When user scrolls up, stop automatically scrolling down
-      if (e.deltaY < 0) {
-        isScrolledToEnd = false;
-      }
-    },
-    { passive: true }
-  );
-  tabContentContainer.addEventListener(
-    "scroll",
-    () => {
-      isScrolledToEnd = tabContentContainer.scrollTop + 5 >= tabContentContainer.scrollHeight - tabContentContainer.clientHeight;
-    },
-    { passive: true }
-  );
 
   const getTargetInfo = (id, cache = null) => {
     if (cache && cache[id]) return cache[id];
