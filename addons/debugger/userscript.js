@@ -364,14 +364,14 @@ export default async function ({ addon, global, console, msg }) {
     className: "logs",
   });
 
-  function threadsRefresh(scrollToRunning = false) {
+  const threadsRefresh = (scrollToRunning = false) => {
     threadsList.innerHTML = "";
     if (isPaused()) {
       var addedThreads = [];
       const runningBlockId = getRunningBlock();
       var runningBlockElement;
 
-      function createThreadElement(thread, idx, iconUrl) {
+      const createThreadElement = (thread, idx, iconUrl) => {
         const element = document.createElement("div");
         const subelements = Object.assign(document.createElement("div"), {
           className: "subthread",
@@ -394,7 +394,7 @@ export default async function ({ addon, global, console, msg }) {
         threadInfo.append(threadTitle);
         element.append(threadInfo);
 
-        function createThreadBlockElement(blockId, stackFrame, iconUrl) {
+        const createThreadBlockElement = (blockId, stackFrame, iconUrl) => {
           const block = thread.target.blocks.getBlock(blockId);
 
           var name, colour;
@@ -566,9 +566,9 @@ export default async function ({ addon, global, console, msg }) {
     className: "logs",
   });
   const performanceCharNumPoints = 20;
-  function getMaxFps() {
+  const getMaxFps = () => {
     return Math.round(1000 / vm.runtime.currentStepTime);
-  }
+  };
   const performanceFpsChart = new Chart(performanceFpsChartCanvas.getContext("2d"), {
     type: "line",
     data: {
