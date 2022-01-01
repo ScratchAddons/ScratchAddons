@@ -1,8 +1,21 @@
-import { onPauseChanged, isPaused, onSingleStepped } from "./module.js";
+import { onPauseChanged, isPaused, onSingleStepped, getRunningBlock, singleStep } from "./module.js";
+import LogView from './log-view.js';
 
-const removeAllChildren = (element) => {
-  while (element.firstChild) {
-    element.removeChild(element.firstChild);
+const areArraysEqual = (a, b) => {
+  if (a.length !== b.length) {
+    return false;
+  }
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const concatInPlace = (copyInto, copyFrom) => {
+  for (const i of copyFrom) {
+    copyInto.push(i);
   }
 };
 
@@ -15,186 +28,221 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
     icon: addon.self.dir + "/icons/threads.svg"
   });
 
-  const content = Object.assign(document.createElement("div"), {
-    className: "logs",
-  });
+  const logView = new LogView({ addon, msg });
+  logView.canAutoScrollToEnd = false;
 
-  const updateContent = (scrollToRunning = false) => {
-    removeAllChildren(content);
-    if (isPaused()) {
-      var addedThreads = [];
-      const runningBlockId = getRunningBlock();
-      var runningBlockElement;
+  logView.buildDOM = (log) => {
+    const element = document.createElement('div');
+    element.dataset.type = log.type;
+    element.className = 'sa-debugger-log';
 
-      const createThreadElement = (thread, idx, iconUrl) => {
-        const element = document.createElement("div");
-        const subelements = Object.assign(document.createElement("div"), {
-          className: "subthread",
-        });
+    const INDENT = 10;
 
-        const threadInfo = Object.assign(document.createElement("div"), {
-          className: "log",
-        });
-        if (iconUrl) {
-          const icon = document.createElement("img");
-          icon.src = addon.self.dir + iconUrl;
-          icon.className = "logIcon";
-          threadInfo.append(icon);
-        }
-        const threadTitle = document.createElement("span");
-        threadTitle.append(Object.assign(document.createElement("b"), { innerText: thread.target.getName() }));
-        threadTitle.append(
-          Object.assign(document.createElement("span"), { innerText: " " + msg("thread", { threadNum: idx }) })
-        );
-        threadInfo.append(threadTitle);
-        element.append(threadInfo);
-
-        const createThreadBlockElement = (blockId, stackFrame, iconUrl) => {
-          const block = thread.target.blocks.getBlock(blockId);
-
-          var name, colour;
-          if (block)
-            if (block.opcode == "procedures_call") {
-              colour = ScratchBlocks.Colours.more.primary;
-              if (block.mutation) {
-                name = block.mutation.proccode.replaceAll("%s", "()").replaceAll("%b", "()");
-                const customBlock = addon.tab.getCustomBlock(block.mutation.proccode);
-                if (customBlock) {
-                  colour = customBlock.color;
-                }
-              }
-            } else {
-              // This quickly creates a Blockly block so we can get its name, than removes it again.
-              const workspace = Blockly.getMainWorkspace();
-
-              ScratchBlocks.Events.disabled_ = 1; // We disable events to the block isn't added to the DOM
-
-              // https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/core/block.js#L52
-              var blocklyBlock = new ScratchBlocks.Block(workspace, block.opcode, "debugger-temp");
-
-              name = blocklyBlock.toLocaleString().replaceAll("?", "()");
-
-              var category = blocklyBlock.getCategory();
-              if (category == "data-lists") category = "data_lists";
-              if (category == "events") category = "event"; // ST why?
-              if (category) {
-                colour = ScratchBlocks.Colours[category];
-                if (!colour) {
-                  colour = ScratchBlocks.Colours.pen;
-                }
-              } else {
-                colour = { primary: "#979797" }
-              }
-              if (colour) colour = colour.primary;
-
-              // Calling `new Block` above adds it to two lists in the workspace.
-              // So we remove it from them again.
-              delete workspace.blockDB_["debugger-temp"];
-              workspace.topBlocks_.pop();
-
-              ScratchBlocks.Events.disabled_ = 0; // Re-enable events
-            }
-
-          if (!name) {
-            name = "?";
-          }
-
-          const blockContainer = document.createElement("div");
-          const blockDiv = Object.assign(document.createElement("div"), {
-            className: "log",
-          });
-
-          const blockTitle = Object.assign(document.createElement("span"), {
-            innerText: name,
-          });
-
-          if (colour) {
-            blockTitle.style.backgroundColor = colour;
-            blockDiv.className += " block-log";
-            blockTitle.className = "console-block";
-          }
-
-          if (runningBlockId && runningBlockId === blockId) {
-            blockDiv.className += " block-log-running";
-            runningBlockElement = blockContainer;
-          }
-
-          if (iconUrl) {
-            const icon = document.createElement("img");
-            icon.src = addon.self.dir + iconUrl;
-            icon.className = "logIcon";
-            blockContainer.append(icon);
-          }
-          const blockLink = document.createElement("a");
-          blockLink.textContent = thread.target.isOriginal
-            ? thread.target.getName()
-            : msg("clone-of", {
-              spriteName: thread.target.getName(),
-            });
-          blockLink.className = "logLink";
-          blockLink.dataset.blockId = blockId;
-          blockLink.dataset.targetId = thread.target.id;
-          if (!thread.target.isOriginal) {
-            blockLink.dataset.isClone = "true";
-          }
-          blockDiv.append(blockTitle, blockLink);
-          blockContainer.append(blockDiv);
-
-          if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.startedThreads) {
-            for (const thread of stackFrame.executionContext.startedThreads) {
-              addedThreads.push(thread);
-              blockContainer.append(
-                createThreadElement(
-                  thread,
-                  idx + "." + (stackFrame.executionContext.startedThreads.indexOf(thread) + 1),
-                  "/icons/subthread.svg"
-                )
-              );
-            }
-          }
-          return blockContainer;
-        }
-
-        subelements.append(createThreadBlockElement(thread.topBlock));
-        for (var i = 0; i < thread.stack.length; i++) {
-          if (!(thread.stack[i] == thread.topBlock && i == 0))
-            subelements.append(createThreadBlockElement(thread.stack[i], thread.stackFrames[i]));
-        }
-
-        element.append(subelements);
-
-        return element;
+    if (log.type === 'thread-header') {
+      if (log.depth > 0) {
+        const icon = document.createElement('div');
+        icon.className = 'sa-debugger-log-icon';
+        icon.style.marginLeft = `${log.depth * INDENT}px`;
+        element.appendChild(icon);
       }
 
-      for (const thread of vm.runtime.threads) {
-        // thread.updateMonitor is for threads that update monitors. We don't want to show these.
-        // https://github.com/LLK/scratch-vm/blob/b3afd407f12630b1d27c4edadfa5ec4b5e1c820d/src/engine/runtime.js#L1717
-        if (!thread.updateMonitor && !addedThreads.includes(thread)) {
-          addedThreads.push(thread);
-          content.append(createThreadElement(thread, vm.runtime.threads.indexOf(thread) + 1));
-        }
-      }
+      const name = document.createElement('div');
+      name.textContent = log.targetName;
+      name.className = 'sa-debugger-thread-target-name';
+      element.appendChild(name);
 
-      if (runningBlockElement && scrollToRunning) {
-        runningBlockElement.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
-      }
-
-      if (vm.runtime.threads.length === 0) {
-        content.append(Object.assign(document.createElement("span"), {
-          className: "thread-info",
-          innerText: msg("threads-none-running"),
-        }));
-      }
-    } else {
-      content.append(Object.assign(document.createElement("span"), {
-        className: "thread-info",
-        innerText: msg("threads-pause"),
-      }));
+      const index = document.createElement('div');
+      index.className = 'sa-debugger-thread-index';
+      index.textContent = msg("thread", {
+        threadNum: log.index
+      });
+      element.appendChild(index);
     }
+
+    if (log.type === 'thread-stack') {
+      const block = document.createElement('div');
+      block.textContent = log.name;
+      block.className = 'sa-debugger-stacked-block';
+      block.style.backgroundColor = log.color;
+      block.style.marginLeft = `${(log.depth + 1) * INDENT}px`;
+      element.appendChild(block);
+    }
+
+    if (log.running) {
+      element.classList.add('sa-debugger-thread-running');
+    }
+
+    if (log.blockId && log.targetId) {
+      const link = document.createElement('a');
+      link.className = 'sa-debugger-log-link';
+      element.appendChild(link);
+
+      const {exists, name} = debug.getTargetInfoById(log.targetId);
+      link.textContent = name;
+      if (exists) {
+        link.addEventListener('click', logView.handleClickLink);
+        link.dataset.target = log.targetId;
+        link.dataset.block = log.blockId;
+      } else {
+        link.classList.add('sa-debugger-log-link-unknown');
+      }
+    }
+
+    return element;
+  }
+
+  let threadInfoCache = new WeakMap();
+  let previousContent = [];
+
+  const getBlockInfo = (block) => {
+    var name, color;
+    if (block)
+      if (block.opcode == "procedures_call") {
+        color = ScratchBlocks.Colours.more.primary;
+        if (block.mutation) {
+          name = block.mutation.proccode.replaceAll("%s", "()").replaceAll("%b", "()");
+          const customBlock = addon.tab.getCustomBlock(block.mutation.proccode);
+          if (customBlock) {
+            color = customBlock.color;
+          }
+        }
+      } else {
+        // This quickly creates a Blockly block so we can get its name, than removes it again.
+        const workspace = Blockly.getMainWorkspace();
+
+        ScratchBlocks.Events.disabled_ = 1; // We disable events to the block isn't added to the DOM
+
+        // https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/core/block.js#L52
+        var blocklyBlock = new ScratchBlocks.Block(workspace, block.opcode, "debugger-temp");
+
+        name = blocklyBlock.toLocaleString().replaceAll("?", "()");
+
+        var category = blocklyBlock.getCategory();
+        if (category == "data-lists") category = "data_lists";
+        if (category == "events") category = "event"; // ST why?
+        if (category) {
+          color = ScratchBlocks.Colours[category];
+          if (!color) {
+            color = ScratchBlocks.Colours.pen;
+          }
+        } else {
+          color = { primary: "#979797" }
+        }
+        if (color) color = color.primary;
+
+        // Calling `new Block` above adds it to two lists in the workspace.
+        // So we remove it from them again.
+        delete workspace.blockDB_["debugger-temp"];
+        workspace.topBlocks_.pop();
+
+        ScratchBlocks.Events.disabled_ = 0; // Re-enable events
+      }
+
+    if (!name) {
+      name = "?";
+    }
+
+    return {
+      name,
+      color
+    };
   };
+
+  const updateContent = (runningBlockId) => {
+    if (!logView.visible) {
+      return;
+    }
+
+    const newContent = [];
+    const threads = vm.runtime.threads;
+    const visitedThreads = new Set();
+
+    const createThreadInfo = (thread, depth) => {
+      const index = threads.indexOf(thread);
+      visitedThreads.add(thread);
+
+      const result = [];
+      const target = thread.target;
+
+      if (!threadInfoCache.has(thread)) {
+        threadInfoCache.set(thread, {
+          headerItem: {
+            type: 'thread-header',
+            depth,
+            targetName: target.getName(),
+            index: index + 1
+          },
+          blockCache: new WeakMap()
+        });
+      }
+      const cacheInfo = threadInfoCache.get(thread);
+      result.push(cacheInfo.headerItem);
+
+      const createBlockInfo = (blockId, stackFrame) => {
+        const block = thread.target.blocks.getBlock(blockId);
+        if (!cacheInfo.blockCache.get(block)) {
+          const {name, color} = getBlockInfo(block);
+          cacheInfo.blockCache.set(block, {
+            type: 'thread-stack',
+            depth,
+            name,
+            color,
+            targetId: target.id,
+            blockId
+          });
+        }
+
+        const blockInfo = cacheInfo.blockCache.get(block);
+        if (runningBlockId) {
+          if (blockId === runningBlockId) {
+            blockInfo.running = true;
+          } else {
+            blockInfo.running = false;
+          }
+        }
+        const result = [blockInfo];
+
+        if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.startedThreads) {
+          for (const thread of stackFrame.executionContext.startedThreads) {
+            concatInPlace(result, createThreadInfo(thread, depth + 1));
+          }
+        }
+
+        return result;
+      };
+
+      for (let i = 0; i < thread.stack.length; i++) {
+        const blockId = thread.stack[i];
+        const stackFrame = thread.stackFrames[i];
+        concatInPlace(result, createBlockInfo(blockId, stackFrame));
+      }
+
+      return result;
+    };
+
+    for (let i = 0; i < threads.length; i++) {
+      const thread = threads[i];
+      // Do not display threads used to update variable and list monitors.
+      if (thread.updateMonitor) {
+        continue;
+      }
+      if (visitedThreads.has(thread)) {
+        continue;
+      }
+
+      concatInPlace(newContent, createThreadInfo(thread, 0));
+    }
+
+    if (!areArraysEqual(newContent, previousContent)) {
+      logView.logs = newContent;
+      logView.queueUpdateContent();
+    }
+    previousContent = newContent;
+  };
+
+  debug.addAfterStepCallback(() => {
+    updateContent();
+  });
 
   const stepButton = debug.createHeaderButton({
     text: msg("step"),
@@ -203,26 +251,35 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
   });
   stepButton.element.addEventListener("click", () => {
     singleStep();
-    updateContent();
   });
 
-  const pauseChanged = (paused) => {
+  onSingleStepped(() => {
+    threadInfoCache = new WeakMap();
+    updateContent(getRunningBlock());
+    const runningBlockIndex = logView.logs.findIndex((i) => i.running);
+    if (runningBlockIndex !== -1) {
+      logView.scrollIntoView(runningBlockIndex);
+    }
+  });
+
+  const handlePauseChanged = (paused) => {
     stepButton.element.style.display = paused ? "" : 'none';
     updateContent();
   };
-  pauseChanged(isPaused());
-  onPauseChanged(pauseChanged);
+  handlePauseChanged(isPaused());
+  onPauseChanged(handlePauseChanged);
 
-  onSingleStepped(() => {
-    updateContent(true);
-  });
-
-  const show = () => {};
-  const hide = () => {};
+  const show = () => {
+    logView.show();
+    updateContent();
+  };
+  const hide = () => {
+    logView.hide();
+  };
 
   return {
     tab,
-    content,
+    content: logView.outerElement,
     buttons: [stepButton],
     show,
     hide

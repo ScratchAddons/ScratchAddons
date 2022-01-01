@@ -24,7 +24,6 @@
   "debugger/tab-threads": "Threads",
   "debugger/tab-performance": "Performance",
   "debugger/threads-none-running": "No threads running.",
-  "debugger/threads-pause": "Pause to view threads.",
   "debugger/performance-framerate-title": "FPS",
   "debugger/performance-framerate-graph-tooltip": "FPS: {fps}",
   "debugger/performance-clonecount-title": "Clones",
