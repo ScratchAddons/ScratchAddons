@@ -266,6 +266,7 @@ export default async function ({ addon, global, console, msg }) {
     }
     const imageElement = Object.assign(document.createElement("img"), {
       src: icon,
+      draggable: false
     });
     const textElement = Object.assign(document.createElement("span"), {
       textContent: text,
@@ -285,6 +286,7 @@ export default async function ({ addon, global, console, msg }) {
     });
     const imageElement = Object.assign(document.createElement("img"), {
       src: icon,
+      draggable: false
     });
     const textElement = Object.assign(document.createElement("span"), {
       textContent: text,
