@@ -31,7 +31,6 @@
   padding: 10px;
   cursor: move;
   z-index: 10;
-  /* color: #fff !important; */
   width: calc(100% - 20px);
   font-size: 20px;
 }
@@ -48,10 +47,7 @@
   margin-right: 0.2rem;
 }
 
-@keyframes unpauseBackground
-
-/* Firefox */
-  {
+@keyframes unpauseBackground {
   0% {
     background-color: rgba(0, 0, 0, 0.15);
   }
@@ -61,7 +57,7 @@
   }
 }
 
-.sa-debugger-unpause>img {
+.sa-debugger-unpause > img {
   width: 20px;
   height: 20px;
 }
@@ -71,12 +67,8 @@
   --warning-border-color: hsl(50deg 100% 88%);
   --error-border-color: hsl(0deg 100% 92%);
   --error-text-color: red;
-  --monospace-font-size: 12px;
-  --monospace-font-family: consolas, lucida console, courier new, monospace;
-  --source-code-font-size: 12px;
-  --source-code-font-family: consolas, lucida console, courier new, monospace;
-  font-family: var(--monospace-font-family);
-  font-size: var(--monospace-font-size) !important;
+  font-family: monospace;
+  font-size: 12px;
   word-wrap: break-word;
   user-select: text;
   box-sizing: border-box;
@@ -119,9 +111,9 @@
   background-color: hsl(0deg 100% 95%);
 }
 
-.log:not(.warn):not(.error)+.log:not(.warn):not(.error),
-.warn+.warn,
-.error+.error {
+.log:not(.warn):not(.error) + .log:not(.warn):not(.error),
+.warn + .warn,
+.error + .error {
   border-top-color: transparent;
 }
 
@@ -158,7 +150,7 @@
   margin-right: 5px;
 }
 
-.log>span:not(.console-variable):not(.console-block) {
+.log > span:not(.console-variable):not(.console-block) {
   flex-grow: 1;
 }
 
