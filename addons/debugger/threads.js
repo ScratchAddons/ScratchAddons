@@ -217,9 +217,14 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
     updateContent(true);
   });
 
+  const show = () => {};
+  const hide = () => {};
+
   return {
     tab,
     content,
-    buttons: [stepButton]
+    buttons: [stepButton],
+    show,
+    hide
   };
 }

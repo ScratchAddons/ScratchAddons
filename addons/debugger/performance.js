@@ -149,9 +149,14 @@ export default async function createPerformanceTab ({ debug, addon, console, msg
     }
   });
 
+  const show = () => {};
+  const hide = () => {};
+
   return {
     tab,
     content,
-    buttons: []
+    buttons: [],
+    show,
+    hide
   };
 }

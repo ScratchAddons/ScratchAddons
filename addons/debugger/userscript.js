@@ -77,20 +77,28 @@ export default async function ({ addon, global, console, msg }) {
   debuggerButtonOuter.appendChild(debuggerButton);
   debuggerButton.addEventListener("click", () => setInterfaceVisible(true));
 
+  const setHasUnreadMessage = (unreadMessage) => {
+    // setting image.src is slow, only do it when necessary
+    const newImage = addon.self.dir + (unreadMessage ? "/icons/debug-unread.svg": "/icons/debug.svg");
+    if (debuggerButtonImage.src !== newImage) {
+      debuggerButtonImage.src = newImage;
+    }
+  };
+
   const interfaceContainer = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_card", { others: "debug" }),
+    className: addon.tab.scratchClass("card_card", { others: "sa-debugger-interface" }),
   });
   const interfaceHeader = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_header-buttons"),
   });
   const tabListElement = Object.assign(document.createElement("ul"), {
-    className: addon.tab.scratchClass("react-tabs_react-tabs__tab-list", "gui_tab-list") + " debugger-tabs",
+    className: addon.tab.scratchClass("react-tabs_react-tabs__tab-list", "gui_tab-list", { others: "sa-debugger-tabs" }),
   });
   const buttonContainerElement = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_header-buttons-right"),
   });
   const tabContentContainer = Object.assign(document.createElement("div"), {
-    className: "extra-log-container",
+    className: 'sa-debugger-tab-content',
   });
 
   let isInterfaceVisible = false;
@@ -98,24 +106,10 @@ export default async function ({ addon, global, console, msg }) {
     isInterfaceVisible = _isVisible;
     interfaceContainer.style.display = isInterfaceVisible ? "flex" : "";
     if (isInterfaceVisible) {
-      // TODO refactor
-      debuggerButtonImage.src = addon.self.dir + "/icons/debug.svg";
-      // const cacheObj = Object.create(null);
-      // for (const logLinkElem of document.getElementsByClassName("logLink")) {
-      //   const targetId = logLinkElem.dataset.targetId;
-      //   if (!targetId) return;
-      //   const tInfo = getTargetInfo(targetId, cacheObj);
-      //   logLinkElem.textContent = tInfo.name;
-      //   if (tInfo.isDeleted) {
-      //     logLinkElem.classList.add("deletedTarget");
-      //   } else if (logLinkElem.dataset.isClone) {
-      //     logLinkElem.textContent = msg("clone-of", { spriteName: tInfo.name });
-      //   }
-      // }
-      // TODO
-      // if (isScrolledToEnd) {
-      //   logsTab.scrollToEnd();
-      // }
+      setHasUnreadMessage(false);
+      activeTab.show();
+    } else {
+      activeTab.hide();
     }
   };
 
@@ -159,104 +153,7 @@ export default async function ({ addon, global, console, msg }) {
   interfaceContainer.append(interfaceHeader, tabContentContainer);
   document.body.append(interfaceContainer);
 
-  // TODO Move this into an API?
-  const goToBlock = (targetId, blockId) => {
-    const workspace = Blockly.getMainWorkspace();
-
-    const offsetX = 32,
-      offsetY = 32;
-    if (targetId !== vm.editingTarget.id) {
-      // note: this is O(n) so don't call it if unnecessary!
-      if (vm.runtime.getTargetById(targetId)) {
-        vm.setEditingTarget(targetId);
-        // Should not cause recursion
-        setTimeout(() => goToBlock(targetId, blockId), 300);
-      }
-      return;
-    }
-    const block = workspace.getBlockById(blockId);
-    if (!block) return;
-
-    // Don't scroll to blocks in the flyout
-    if (block.workspace.isFlyout) return;
-
-    // Make sure the code tab is active
-    if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 0) {
-      addon.tab.redux.dispatch({
-        type: "scratch-gui/navigation/ACTIVATE_TAB",
-        activeTabIndex: 0,
-      });
-      setTimeout(() => goToBlock(targetId, blockId), 0);
-      return;
-    }
-
-    // Copied from devtools. If it's code gets improved for this function, bring those changes here too.
-    let root = block.getRootBlock();
-
-    let base = block;
-    while (base.getOutputShape() && base.getSurroundParent()) {
-      base = base.getSurroundParent();
-    }
-
-    let ePos = base.getRelativeToSurfaceXY(), // Align with the top of the block
-      rPos = root.getRelativeToSurfaceXY(), // Align with the left of the block 'stack'
-      scale = workspace.scale,
-      x = rPos.x * scale,
-      y = ePos.y * scale,
-      xx = block.width + x, // Turns out they have their x & y stored locally, and they are the actual size rather than scaled or including children...
-      yy = block.height + y,
-      s = workspace.getMetrics();
-    if (
-      x < s.viewLeft + offsetX - 4 ||
-      xx > s.viewLeft + s.viewWidth ||
-      y < s.viewTop + offsetY - 4 ||
-      yy > s.viewTop + s.viewHeight
-    ) {
-      let sx = x - s.contentLeft - offsetX,
-        sy = y - s.contentTop - offsetY;
-
-      workspace.scrollbar.set(sx, sy);
-    }
-    // Flashing
-    const myFlash = { block: null, timerID: null, colour: null };
-    if (myFlash.timerID > 0) {
-      clearTimeout(myFlash.timerID);
-      myFlash.block.setColour(myFlash.colour);
-    }
-
-    let count = 4;
-    let flashOn = true;
-    myFlash.colour = block.getColour();
-    myFlash.block = block;
-
-    function _flash() {
-      if (!myFlash.block.svgPath_) {
-        myFlash.timerID = count = 0;
-        flashOn = true;
-        return;
-      }
-      myFlash.block.svgPath_.style.fill = flashOn ? "#ffff80" : myFlash.colour;
-      flashOn = !flashOn;
-      count--;
-      if (count > 0) {
-        myFlash.timerID = setTimeout(_flash, 200);
-      } else {
-        myFlash.timerID = 0;
-      }
-    }
-
-    _flash();
-  };
-
-  tabContentContainer.addEventListener("click", (e) => {
-    const elem = e.target;
-    if (elem.classList.contains("deletedTarget")) return;
-    const targetId = elem.dataset.targetId;
-    const blockId = elem.dataset.blockId;
-    if (targetId && blockId) goToBlock(targetId, blockId);
-  });
-
-  const createHeaderButton = ({ text, icon, description }) => {
+  const createHeaderButton = ({text, icon, description}) => {
     const button = Object.assign(document.createElement("div"), {
       className: addon.tab.scratchClass("card_shrink-expand-button"),
       draggable: false,
@@ -323,6 +220,7 @@ export default async function ({ addon, global, console, msg }) {
     debug: {
       createHeaderButton,
       createHeaderTab,
+      setHasUnreadMessage,
     },
     addon,
     msg,
@@ -336,10 +234,12 @@ export default async function ({ addon, global, console, msg }) {
   let activeTab;
   const setActiveTab = (tab) => {
     if (tab === activeTab) return;
+    const selectedClass = addon.tab.scratchClass('gui_is-selected');
     if (activeTab) {
-      activeTab.tab.element.classList.remove(addon.tab.scratchClass("gui_is-selected"));
+      activeTab.hide();
+      activeTab.tab.element.classList.remove(selectedClass);
     }
-    tab.tab.element.classList.add(addon.tab.scratchClass("gui_is-selected"));
+    tab.tab.element.classList.add(selectedClass);
     activeTab = tab;
 
     removeAllChildren(tabContentContainer);
@@ -351,6 +251,10 @@ export default async function ({ addon, global, console, msg }) {
       buttonContainerElement.appendChild(button.element);
     }
     buttonContainerElement.appendChild(closeButton.element);
+
+    if (isInterfaceVisible) {
+      activeTab.show();
+    }
   };
   for (const tab of allTabs) {
     tab.tab.element.addEventListener("click", () => {
@@ -359,19 +263,6 @@ export default async function ({ addon, global, console, msg }) {
     tabListElement.appendChild(tab.tab.element);
   }
   setActiveTab(allTabs[0]);
-
-  const getTargetInfo = (id, cache = null) => {
-    if (cache && cache[id]) return cache[id];
-    const target = vm.runtime.getTargetById(id);
-    let item;
-    if (target) {
-      item = { name: target.getName(), isDeleted: false };
-    } else {
-      item = { name: msg("unknown-sprite"), isDeleted: true };
-    }
-    if (cache) cache[id] = item;
-    return item;
-  };
 
   if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
     document.body.classList.add("sa-debugger-small");
@@ -396,7 +287,7 @@ export default async function ({ addon, global, console, msg }) {
       logsTab.clearLogs();
     }
     if (addon.settings.get("log_greenflag")) {
-      logsTab.addLog(msg("log-msg-flag-clicked"), null, "log", true);
+      logsTab.addLog(msg("log-msg-flag-clicked"), null, "internal");
     }
     return ogGreenFlag.call(this, ...args);
   };
@@ -404,21 +295,11 @@ export default async function ({ addon, global, console, msg }) {
   const ogMakeClone = vm.runtime.targets[0].constructor.prototype.makeClone;
   vm.runtime.targets[0].constructor.prototype.makeClone = function (...args) {
     if (addon.settings.get("log_failed_clone_creation") && !vm.runtime.clonesAvailable()) {
-      logsTab.addLog(
-        msg("log-msg-clone-cap", { sprite: this.getName() }),
-        vm.runtime.sequencer.activeThread,
-        "warn",
-        true
-      );
+      logsTab.addLog(msg("log-msg-clone-cap", { sprite: this.getName() }), vm.runtime.sequencer.activeThread, "internal-warn");
     }
     var clone = ogMakeClone.call(this, ...args);
     if (addon.settings.get("log_clone_create") && clone) {
-      logsTab.addLog(
-        msg("log-msg-clone-created", { sprite: this.getName() }),
-        vm.runtime.sequencer.activeThread,
-        "log",
-        true
-      );
+      logsTab.addLog(msg("log-msg-clone-created", { sprite: this.getName() }), vm.runtime.sequencer.activeThread, "internal");
     }
     return clone;
   };
@@ -426,12 +307,7 @@ export default async function ({ addon, global, console, msg }) {
   const ogStartHats = vm.runtime.startHats;
   vm.runtime.startHats = function (hat, optMatchFields, ...args) {
     if (addon.settings.get("log_broadcasts") && hat === "event_whenbroadcastreceived") {
-      logsTab.addLog(
-        msg("log-msg-broadcasted", { broadcast: optMatchFields.BROADCAST_OPTION }),
-        vm.runtime.sequencer.activeThread,
-        "log",
-        true
-      );
+      logsTab.addLog(msg("log-msg-broadcasted", { broadcast: optMatchFields.BROADCAST_OPTION }), vm.runtime.sequencer.activeThread, "internal");
     }
     return ogStartHats.call(this, hat, optMatchFields, ...args);
   };
@@ -441,7 +317,7 @@ export default async function ({ addon, global, console, msg }) {
     if (addon.settings.get("log_max_list_length")) {
       const list = util.target.lookupOrCreateList(args.LIST.id, args.LIST.name);
       if (list.value.length >= 200000) {
-        logsTab.addLog(msg("log-msg-list-append-too-long", { list: list.name }), util.thread, "warn", true);
+        logsTab.addLog(msg("log-msg-list-append-too-long", { list: list.name }), util.thread, "internal-warn");
       }
     }
     ogAddToList.call(this, args, util);
@@ -452,7 +328,7 @@ export default async function ({ addon, global, console, msg }) {
     if (addon.settings.get("log_max_list_length")) {
       const list = util.target.lookupOrCreateList(args.LIST.id, args.LIST.name);
       if (list.value.length >= 200000) {
-        logsTab.addLog(msg("log-msg-list-insert-too-long", { list: list.name }), util.thread, "warn", true);
+        logsTab.addLog(msg("log-msg-list-insert-too-long", { list: list.name }), util.thread, "internal-warn");
       }
     }
     ogInertAtList.call(this, args, util);
@@ -465,9 +341,9 @@ export default async function ({ addon, global, console, msg }) {
       if (variable.isCloud) {
         const value = args.VALUE.toString();
         if (isNaN(value)) {
-          logsTab.addLog(msg("log-cloud-data-nan", { var: variable.name }), util.thread, "warn", true);
+          logsTab.addLog(msg("log-cloud-data-nan", { var: variable.name }), util.thread, "internal-warn");
         } else if (value.length > 256) {
-          logsTab.addLog(msg("log-cloud-data-too-long", { var: variable.name }), util.thread, "warn", true);
+          logsTab.addLog(msg("log-cloud-data-too-long", { var: variable.name }), util.thread, "internal-warn");
         }
       }
     }
