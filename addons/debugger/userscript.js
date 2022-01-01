@@ -2,25 +2,23 @@ import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import { isPaused, setPaused, onPauseChanged, onSingleStepped, getRunningBlock, singleStep } from "./module.js";
 
 export default async function ({ addon, global, console, msg }) {
-  let showingConsole;
-
-  const container = document.createElement("div");
-  container.className = "sa-debugger-container";
-  const buttonContainer = document.createElement("div");
-  buttonContainer.className = addon.tab.scratchClass("button_outlined-button", "stage-header_stage-button");
-  const buttonContent = document.createElement("div");
-  buttonContent.className = addon.tab.scratchClass("button_content");
-  const buttonImage = document.createElement("img");
-  buttonImage.className = addon.tab.scratchClass("stage-header_stage-button-icon");
-  buttonImage.draggable = false;
-  buttonImage.src = addon.self.dir + "/icons/debug.svg";
-  buttonContent.appendChild(buttonImage);
-  buttonContainer.appendChild(buttonContent);
-  container.appendChild(buttonContainer);
-  buttonContainer.addEventListener("click", () => toggleConsole(true));
+  // TODO: move much later
+  const debuggerButtonOuter = document.createElement("div");
+  debuggerButtonOuter.className = "sa-debugger-container";
+  const debuggerButton = document.createElement("div");
+  debuggerButton.className = addon.tab.scratchClass("button_outlined-button", "stage-header_stage-button");
+  const debuggerButtonContent = document.createElement("div");
+  debuggerButtonContent.className = addon.tab.scratchClass("button_content");
+  const debuggerButtonImage = document.createElement("img");
+  debuggerButtonImage.className = addon.tab.scratchClass("stage-header_stage-button-icon");
+  debuggerButtonImage.draggable = false;
+  debuggerButtonImage.src = addon.self.dir + "/icons/debug.svg";
+  debuggerButtonContent.appendChild(debuggerButtonImage);
+  debuggerButton.appendChild(debuggerButtonContent);
+  debuggerButtonOuter.appendChild(debuggerButton);
+  debuggerButton.addEventListener("click", () => toggleInterface(true));
 
   let hasLoggedPauseError = false;
-
   const pause = (_, thread) => {
     if (addon.tab.redux.state.scratchGui.mode.isPlayerOnly) {
       if (!hasLoggedPauseError) {
@@ -31,8 +29,9 @@ export default async function ({ addon, global, console, msg }) {
     }
     setPaused(!isPaused());
     const pauseAddonButton = document.querySelector(".pause-btn");
-    if (!pauseAddonButton || getComputedStyle(pauseAddonButton).display === "none") toggleConsole(true);
+    if (!pauseAddonButton || getComputedStyle(pauseAddonButton).display === "none") toggleInterface(true);
   };
+
   addon.tab.addBlock("sa-pause", {
     args: [],
     callback: pause,
@@ -75,15 +74,37 @@ export default async function ({ addon, global, console, msg }) {
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chartjs-plugin-annotation.min.js");
 
-  const consoleWrapper = Object.assign(document.createElement("div"), {
+  const toggleInterface = (show) => {
+    interfaceContainer.style.display = show ? "flex" : "";
+    if (show) {
+      debuggerButtonImage.src = addon.self.dir + "/icons/debug.svg";
+      const cacheObj = Object.create(null);
+      for (const logLinkElem of document.getElementsByClassName("logLink")) {
+        const targetId = logLinkElem.dataset.targetId;
+        if (!targetId) return;
+        const tInfo = getTargetInfo(targetId, cacheObj);
+        logLinkElem.textContent = tInfo.name;
+        if (tInfo.isDeleted) {
+          logLinkElem.classList.add("deletedTarget");
+        } else if (logLinkElem.dataset.isClone) {
+          logLinkElem.textContent = msg("clone-of", { spriteName: tInfo.name });
+        }
+      }
+      if (isScrolledToEnd) {
+        scrollToEnd();
+      }
+    }
+  };
+  const interfaceContainer = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_card", { others: "debug" }),
   });
-  const consoleHeader = Object.assign(document.createElement("div"), {
+  const interfaceHeader = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_header-buttons"),
   });
-  const consoleTabList = Object.assign(document.createElement("ul"), {
+  const tabListElement = Object.assign(document.createElement("ul"), {
     className: addon.tab.scratchClass("react-tabs_react-tabs__tab-list", "gui_tab-list") + " debugger-tabs",
   });
+  // TODO ???
   const extraContainer = Object.assign(document.createElement("div"), {
     className: `extra-log-container`,
   });
@@ -185,19 +206,31 @@ export default async function ({ addon, global, console, msg }) {
     if (targetId && blockId) goToBlock(targetId, blockId);
   });
 
-  const unpauseButton = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_shrink-expand-button", { others: "sa-debugger-unpause" }),
-    draggable: false,
-  });
-  const unpauseImg = Object.assign(document.createElement("img"), {
-    src: addon.self.dir + "/icons/play.svg",
-  });
-  const unpauseText = Object.assign(document.createElement("span"), {
-    innerText: msg("unpause"),
-  });
-  unpauseButton.append(unpauseImg, unpauseText);
-  unpauseButton.addEventListener("click", () => setPaused(false));
+  const makeButton = (text, icon) => {
+    const button = Object.assign(document.createElement("div"), {
+      className: addon.tab.scratchClass("card_shrink-expand-button"),
+      draggable: false,
+    });
+    const imageElement = Object.assign(document.createElement("img"), {
+      src: icon
+    });
+    const textElement = Object.assign(document.createElement("span"), {
+      textContent: text
+    });
+    button.appendChild(imageElement);
+    button.appendChild(textElement);
+    return {
+      button,
+      image: imageElement,
+      text: textElement
+    };
+  };
 
+  const unpauseButton = makeButton(msg('unpause'), addon.self.dir + "/icons/play.svg");
+  unpauseButton.button.classList.add('sa-debugger-unpause');
+  unpauseButton.button.addEventListener("click", () => setPaused(false));
+
+  // TODO: makeButton
   const closeButton = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_remove-button"),
     draggable: false,
@@ -210,7 +243,7 @@ export default async function ({ addon, global, console, msg }) {
     innerText: msg("close"),
   });
   closeButton.append(closeImg, closeText);
-  closeButton.addEventListener("click", () => toggleConsole(false));
+  closeButton.addEventListener("click", () => toggleInterface(false));
 
   const tabClassName = addon.tab.scratchClass("react-tabs_react-tabs__tab", "gui_tab");
   const tabSelectedClassName = addon.tab.scratchClass(
@@ -222,6 +255,7 @@ export default async function ({ addon, global, console, msg }) {
 
   // ##### Logs Tab ##### //
 
+  // TODO makeTab
   const logsTabElement = Object.assign(document.createElement("li"), {
     className: tabClassName,
   });
@@ -238,6 +272,7 @@ export default async function ({ addon, global, console, msg }) {
     className: "logs",
   });
 
+  // TODO makeButton
   const exportButton = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_shrink-expand-button"),
     title: msg("export-desc"),
@@ -272,6 +307,7 @@ export default async function ({ addon, global, console, msg }) {
     download("logs.txt", file);
   });
 
+  // TODO makeButton
   const trashButton = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_shrink-expand-button"),
     draggable: false,
@@ -282,11 +318,6 @@ export default async function ({ addon, global, console, msg }) {
   const trashText = Object.assign(document.createElement("span"), {
     innerText: msg("clear"),
   });
-  function clearLogs() {
-    document.querySelectorAll(".log").forEach((log, i) => log.remove());
-    logs = [];
-    isScrolledToEnd = true;
-  }
   trashButton.append(trashImg, trashText);
   trashButton.addEventListener("click", () => {
     clearLogs();
@@ -295,6 +326,7 @@ export default async function ({ addon, global, console, msg }) {
 
   // ##### Threads Tab ##### //
 
+  // TODO makeTab
   const threadsTabElement = Object.assign(document.createElement("li"), {
     className: tabClassName,
   });
@@ -488,6 +520,7 @@ export default async function ({ addon, global, console, msg }) {
     }
   }
 
+  // TODO makeButton
   const stepButton = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_shrink-expand-button"),
     title: msg("step-desc"),
@@ -508,6 +541,7 @@ export default async function ({ addon, global, console, msg }) {
 
   // ##### Performance Tab ##### //
 
+  // TODO makeTab
   const performanceTabElement = Object.assign(document.createElement("li"), {
     className: tabClassName,
   });
@@ -610,7 +644,6 @@ export default async function ({ addon, global, console, msg }) {
   const renderTimes = [];
   // The last time we pushed a new datapoint to the graph
   var lastFpsTime = Date.now() + 3000;
-  var pauseTime = 0; // What time we paused at.
 
   const ogDraw = vm.runtime.renderer.draw;
   vm.runtime.renderer.draw = function (...args) {
@@ -652,9 +685,9 @@ export default async function ({ addon, global, console, msg }) {
   const tabElements = [logsTabElement, threadsTabElement, performanceTabElement];
   const tabContent = [logsList, threadsList, performancePanel];
   const tabButtons = [
-    [unpauseButton, exportButton, trashButton, closeButton],
-    [unpauseButton, stepButton, closeButton],
-    [unpauseButton, closeButton],
+    [unpauseButton.button, exportButton, trashButton, closeButton],
+    [unpauseButton.button, stepButton, closeButton],
+    [unpauseButton.button, closeButton],
   ];
 
   let currentTab = 0;
@@ -673,18 +706,18 @@ export default async function ({ addon, global, console, msg }) {
     const tabIdx = i;
     tabElements[i].addEventListener("click", (e) => switchTab(tabIdx));
   }
-  consoleTabList.append(...tabElements);
+  tabListElement.append(...tabElements);
 
   extraContainer.append(tabContent[currentTab]);
   buttons.append(...tabButtons[currentTab]);
   tabElements[currentTab].className = tabSelectedClassName;
 
-  consoleHeader.append(consoleTabList, buttons);
-  buttons.append(unpauseButton, exportButton, trashButton, closeButton);
-  consoleWrapper.append(consoleHeader, extraContainer);
-  document.body.append(consoleWrapper);
+  interfaceHeader.append(tabListElement, buttons);
+  buttons.append(unpauseButton.button, exportButton, trashButton, closeButton);
+  interfaceContainer.append(interfaceHeader, extraContainer);
+  document.body.append(interfaceContainer);
 
-  consoleHeader.addEventListener("mousedown", dragMouseDown);
+  interfaceHeader.addEventListener("mousedown", dragMouseDown);
 
   let isScrolledToEnd = true;
   extraContainer.addEventListener(
@@ -725,8 +758,8 @@ export default async function ({ addon, global, console, msg }) {
 
   function dragMouseDown(e) {
     e.preventDefault();
-    mouseOffsetX = e.clientX - consoleWrapper.offsetLeft;
-    mouseOffsetY = e.clientY - consoleWrapper.offsetTop;
+    mouseOffsetX = e.clientX - interfaceContainer.offsetLeft;
+    mouseOffsetY = e.clientY - interfaceContainer.offsetTop;
     lastX = e.clientX;
     lastY = e.clientY;
     document.addEventListener("mouseup", closeDragElement);
@@ -738,10 +771,10 @@ export default async function ({ addon, global, console, msg }) {
     lastY = y;
     const width = (document.documentElement.clientWidth || document.body.clientWidth) - 1;
     const height = (document.documentElement.clientHeight || document.body.clientHeight) - 1;
-    const clampedX = Math.max(0, Math.min(x - mouseOffsetX, width - consoleWrapper.offsetWidth));
-    const clampedY = Math.max(0, Math.min(y - mouseOffsetY, height - consoleWrapper.offsetHeight));
-    consoleWrapper.style.left = clampedX + "px";
-    consoleWrapper.style.top = clampedY + "px";
+    const clampedX = Math.max(0, Math.min(x - mouseOffsetX, width - interfaceContainer.offsetWidth));
+    const clampedY = Math.max(0, Math.min(y - mouseOffsetY, height - interfaceContainer.offsetHeight));
+    interfaceContainer.style.left = clampedX + "px";
+    interfaceContainer.style.top = clampedY + "px";
   }
 
   function elementDrag(e) {
@@ -759,17 +792,18 @@ export default async function ({ addon, global, console, msg }) {
     document.removeEventListener("mousemove", elementDrag);
   }
 
+  // TODO
   if (!isPaused()) {
-    unpauseButton.style.display = "none";
+    unpauseButton.button.style.display = "none";
     stepButton.style.display = "none";
   }
   onPauseChanged((newPauseValue) => {
     if (newPauseValue) {
-      unpauseButton.style.display = "";
+      unpauseButton.button.style.display = "";
       stepButton.style.display = "";
       pauseTime = Date.now();
     } else {
-      unpauseButton.style.display = "none";
+      unpauseButton.button.style.display = "none";
       stepButton.style.display = "none";
 
       const dt = Date.now() - pauseTime;
@@ -784,14 +818,17 @@ export default async function ({ addon, global, console, msg }) {
     threadsRefresh(true);
   });
 
+  let showingConsole = false;
   let logs = [];
   let scrollQueued = false;
+
   const createLogWrapper = (type) => {
     const wrapper = document.createElement("div");
     wrapper.className = "log";
     wrapper.classList.add(type);
     return wrapper;
   };
+
   const createLogText = (text, count) => {
     const s = document.createElement("span");
     s.innerText = text;
@@ -804,6 +841,7 @@ export default async function ({ addon, global, console, msg }) {
     return s;
   };
 
+  // TODO this is way too low???
   const MAX_LOGS = 10;
   const addLog = (content, thread, type, internalLog = false) => {
     const wrapper = createLogWrapper(type);
@@ -940,34 +978,19 @@ export default async function ({ addon, global, console, msg }) {
     }
     if (!showingConsole) {
       const unreadImage = addon.self.dir + "/icons/debug-unread.svg";
-      if (buttonImage.src !== unreadImage) buttonImage.src = unreadImage;
+      if (debuggerButton.src !== unreadImage) debuggerButton.src = unreadImage;
     }
   };
+
+  const clearLogs = () => {
+    document.querySelectorAll(".log").forEach((log, i) => log.remove());
+    logs = [];
+    isScrolledToEnd = true;
+  };
+
   const scrollToEnd = () => {
     scrollQueued = false;
     extraContainer.scrollTop = extraContainer.scrollHeight;
-  };
-  const toggleConsole = (show = !showingConsole) => {
-    showingConsole = show;
-    consoleWrapper.style.display = show ? "flex" : "";
-    if (show) {
-      buttonImage.src = addon.self.dir + "/icons/debug.svg";
-      const cacheObj = Object.create(null);
-      for (const logLinkElem of document.getElementsByClassName("logLink")) {
-        const targetId = logLinkElem.dataset.targetId;
-        if (!targetId) return;
-        const tInfo = getTargetInfo(targetId, cacheObj);
-        logLinkElem.textContent = tInfo.name;
-        if (tInfo.isDeleted) {
-          logLinkElem.classList.add("deletedTarget");
-        } else if (logLinkElem.dataset.isClone) {
-          logLinkElem.textContent = msg("clone-of", { spriteName: tInfo.name });
-        }
-      }
-      if (isScrolledToEnd) {
-        scrollToEnd();
-      }
-    }
   };
 
   if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
@@ -1072,9 +1095,9 @@ export default async function ({ addon, global, console, msg }) {
       ],
     });
     if (addon.tab.editorMode === "editor") {
-      addon.tab.appendToSharedSpace({ space: "stageHeader", element: container, order: 0 });
+      addon.tab.appendToSharedSpace({ space: "stageHeader", element: debuggerButtonOuter, order: 0 });
     } else {
-      toggleConsole(false);
+      toggleInterface(false);
     }
   }
 }
