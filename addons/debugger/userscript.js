@@ -106,7 +106,6 @@ export default async function ({ addon, global, console, msg }) {
     isInterfaceVisible = _isVisible;
     interfaceContainer.style.display = isInterfaceVisible ? "flex" : "";
     if (isInterfaceVisible) {
-      setHasUnreadMessage(false);
       activeTab.show();
     } else {
       activeTab.hide();
@@ -216,11 +215,42 @@ export default async function ({ addon, global, console, msg }) {
   closeButton.image.classList.add(addon.tab.scratchClass("close-button_close-icon"));
   closeButton.element.addEventListener("click", () => setInterfaceVisible(false));
 
+  const originalStep = vm.runtime._step;
+  const afterStepCallbacks = [];
+  vm.runtime._step = function (...args) {
+    const ret = originalStep.call(this, ...args);
+    for (const cb of afterStepCallbacks) {
+      cb();
+    }
+    return ret;
+  };
+  const addAfterStepCallback = (cb) => {
+    afterStepCallbacks.push(cb);
+  };
+
+  const getTargetInfoById = (id) => {
+    const target = vm.runtime.getTargetById(id);
+    if (target) {
+      return {
+        exists: true,
+        name: target.isOriginal ? target.getName() : msg('clone-of', {
+          spriteName: target.getName()
+        })
+      }
+    }
+    return {
+      exists: false,
+      name: msg('unknown-sprite')
+    };
+  };
+
   const api = {
     debug: {
       createHeaderButton,
       createHeaderTab,
       setHasUnreadMessage,
+      addAfterStepCallback,
+      getTargetInfoById,
     },
     addon,
     msg,
@@ -278,8 +308,6 @@ export default async function ({ addon, global, console, msg }) {
     },
     { capture: true }
   );
-
-  // Events that we could need to log
 
   const ogGreenFlag = vm.runtime.greenFlag;
   vm.runtime.greenFlag = function (...args) {
@@ -349,8 +377,6 @@ export default async function ({ addon, global, console, msg }) {
     }
     ogSetVariableTo.call(this, args, util);
   };
-
-  ////////////
 
   while (true) {
     await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {

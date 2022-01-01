@@ -1,13 +1,146 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import LogView from "./log-view.js";
 
-export default function createLogsTab ({ debug, addon, console, msg }) {
+export default async function createLogsTab ({ debug, addon, console, msg }) {
+  const vm = addon.tab.traps.vm;
+  const ScratchBlocks = await addon.tab.traps.getBlockly();
+
   const tab = debug.createHeaderTab({
     text: msg('tab-logs'),
     icon: addon.self.dir + "/icons/logs.svg"
   });
 
   const logView = new LogView({msg, addon});
+
+  const createBlockPreview = (blockId, targetId) => {
+    const target = vm.runtime.getTargetById(targetId);
+    const block = target.blocks.getBlock(blockId);
+    if (!block || !ScratchBlocks) {
+      return null;
+    }
+
+    const inputId = Object.values(block.inputs)[0]?.block;
+    const inputBlock = target.blocks.getBlock(inputId);
+    if (inputBlock && inputBlock.opcode !== "text") {
+      let text, category;
+      if (
+        inputBlock.opcode === "data_variable" ||
+        inputBlock.opcode === "data_listcontents" ||
+        inputBlock.opcode === "argument_reporter_string_number" ||
+        inputBlock.opcode === "argument_reporter_boolean"
+      ) {
+        text = Object.values(inputBlock.fields)[0].value;
+        if (inputBlock.opcode === "data_variable") {
+          category = "data";
+        } else if (inputBlock.opcode === "data_listcontents") {
+          category = "list";
+        } else {
+          category = "more";
+        }
+      } else {
+        // Try to call things like https://github.com/LLK/scratch-blocks/blob/develop/blocks_vertical/operators.js
+        let jsonData;
+        const fakeBlock = {
+          jsonInit(data) {
+            jsonData = data;
+          },
+        };
+        const blockConstructor = ScratchBlocks.Blocks[inputBlock.opcode];
+        if (blockConstructor) {
+          try {
+            blockConstructor.init.call(fakeBlock);
+          } catch (e) {
+            // ignore
+          }
+        }
+        // If the block has a simple message with no arguments, display it
+        if (jsonData && jsonData.message0 && !jsonData.args0) {
+          text = jsonData.message0;
+          category = jsonData.category;
+        }
+      }
+      if (text && category) {
+        const blocklyColor = ScratchBlocks.Colours[category === "list" ? "data_lists" : category];
+        if (blocklyColor) {
+          const element = document.createElement("span");
+          element.textContent = text;
+          element.className = "sa-debugger-input-block";
+          const colorCategoryMap = {
+            list: "data-lists",
+            more: "custom",
+          };
+          element.dataset.category = colorCategoryMap[category] || category;
+          element.style.backgroundColor = blocklyColor.primary;
+          return element;
+        }
+      }
+    }
+    return null;
+  };
+
+  logView.compareLogs = (a, b) => {
+    a.text === b.text &&
+    a.type === b.type &&
+    // TODO: if the same message is logged from a different spot, should those messages be grouped?
+    a.blockId === b.blockId &&
+    a.targetId === b.targetId
+  };
+
+  logView.buildDOM = (log) => {
+    const element = document.createElement('div');
+    element.dataset.type = log.type;
+    element.className = 'sa-debugger-log';
+
+    if (log.count !== 1) {
+      const repeats = document.createElement('div');
+      repeats.className = 'sa-debugger-log-repeats';
+      repeats.textContent = log.count;
+      element.appendChild(repeats);
+    }
+
+    if (log.type !== 'log') {
+      const icon = document.createElement('div');
+      icon.className = 'sa-debugger-log-icon';
+      icon.title = msg('icon-' + log.type);
+      element.appendChild(icon);
+    }
+
+    if (log.blockId && log.targetId) {
+      const preview = createBlockPreview(log.blockId, log.targetId);
+      if (preview) {
+        element.appendChild(preview);
+      }
+    }
+
+    const body = document.createElement('div');
+    body.className = 'sa-debugger-log-body';
+    if (log.text.length === 0) {
+      body.textContent = msg('empty-string');
+      body.classList.add('sa-debugger-log-body-empty');
+    } else {
+      body.textContent = log.text;
+    }
+    body.title = log.text;
+    element.appendChild(body);
+
+    if (log.blockId && log.targetId) {
+      const link = document.createElement('a');
+      link.className = 'sa-debugger-log-link';
+      element.appendChild(link);
+
+      const {exists, name} = debug.getTargetInfoById(log.targetId);
+      link.textContent = name;
+      if (exists) {
+        link.addEventListener('click', logView.handleClickLink);
+        link.dataset.target = log.targetId;
+        link.dataset.block = log.blockId;
+      } else {
+        link.classList.add('sa-debugger-log-link-unknown');
+      }
+    }
+
+    return element;
+  };
 
   const exportButton = debug.createHeaderButton({
     text: msg('export'),
@@ -19,7 +152,7 @@ export default function createLogsTab ({ debug, addon, console, msg }) {
   };
   exportButton.element.addEventListener("click", (e) => {
     const defaultFormat = "{sprite}: {content} ({type})";
-    const exportFormat = e.shiftKey ? prompt(this.msg("enter-format"), defaultFormat) : defaultFormat;
+    const exportFormat = e.shiftKey ? prompt(msg("enter-format"), defaultFormat) : defaultFormat;
     if (!exportFormat) return;
     const file = logView.logs
       .map(({ text, targetId, type, count }) =>
@@ -70,6 +203,7 @@ export default function createLogsTab ({ debug, addon, console, msg }) {
 
   const show = () => {
     logView.show();
+    debug.setHasUnreadMessage(false);
   };
   const hide = () => {
     logView.hide();
@@ -77,7 +211,7 @@ export default function createLogsTab ({ debug, addon, console, msg }) {
 
   return {
     tab,
-    content: logView.scrollElement,
+    content: logView.outerElement,
     buttons: [exportButton, trashButton],
     show,
     hide,

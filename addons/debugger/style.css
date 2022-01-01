@@ -54,16 +54,26 @@
   height: 100%;
 }
 
-.sa-debugger-log-scroll {
-  overflow-y: auto;
+.sa-debugger-log-outer {
   height: 100%;
 }
 
-.sa-debugger-log-container {
+.sa-debugger-log-inner {
   position: relative;
+  overflow-y: auto;
   font-family: monospace;
   font-size: 12px;
   line-height: 1.2;
+  height: 100%;
+  contain: strict;
+}
+
+.sa-debugger-log-end {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
 }
 
 .sa-debugger-log {
@@ -108,6 +118,9 @@
 [data-type="error"] .sa-debugger-log-icon {
   background-image: url(./icons/error.svg);
 }
+[data-type="thread-header"] .sa-debugger-log-icon {
+  background-image: url(./icons/subthread.svg);
+}
 
 .sa-debugger-log-link {
   color: inherit;
@@ -139,47 +152,40 @@
   font-style: italic;
 }
 
-.sa-debugger-block-preview {
+.sa-debugger-thread-target-name {
+  font-weight: bold;
+  margin-right: 8px;
+}
+.sa-debugger-thread-target-index {
+
+}
+.sa-debugger-thread-running {
+  background-color: rgba(255, 187, 0, 0.233);
+  font-weight: bold;
+}
+
+.sa-debugger-input-block {
   color: white;
   border-radius: 100px;
   padding: 1px 6px;
   margin-right: 4px;
 }
 
-.block-log {
-  padding: 2px;
+.sa-debugger-stacked-block {
+  padding: 1px 6px;
+  border-radius: 3px;
+  color: white;
+  margin-right: 4px;
 }
 
-.block-log-running {
-  background-color: rgba(255, 187, 0, 0.233) !important;
-  font-weight: bold;
-}
-
-.internal-log {
+/* .internal-log {
   font-style: italic;
   color: gray;
-}
+} */
 
 .sa-debugger-tab-content {
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow: auto;
   cursor: default;
-}
-
-.console-block {
-  padding: 5px 8px;
-  border-radius: 3px;
-  color: white;
-  margin-right: 5px;
-}
-
-.subthread {
-  margin-left: 3%;
-}
-
-.thread-info {
-  display: block;
-  margin: 5px;
-  font-style: italic;
 }
