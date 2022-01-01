@@ -1,7 +1,7 @@
 #sa-sprite-search-box {
   width: 100%;
   box-sizing: border-box;
-  background-color: #eaf1fb;
+  background-color: transparent;
   border: 0px;
   border-bottom: 1px solid hsla(0, 0%, 1%, 0.15);
   outline: none;
