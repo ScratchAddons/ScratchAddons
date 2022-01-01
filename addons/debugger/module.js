@@ -272,7 +272,7 @@ class ScratchAddonsSequencer {
         // Search for a new thread to start executing.
         this._singleStepTryFindNewThread(threadIndex + 1);
 
-        // If we didn't find a thread then the current vm step is 
+        // If we didn't find a thread then the current vm step is
         //  finished!
         if (!this.stepExecutingThread) {
           this.stepActiveThread = null;
@@ -299,7 +299,7 @@ class ScratchAddonsSequencer {
       // Emulate one frame of time passing!
       vm.runtime.ioDevices.clock._pausedTime += runtime.currentStepTime;
       // Skip all sounds forward by vm.runtime.currentStepTime miliseconds so it's as
-      //  if they where playing for one frame. 
+      //  if they where playing for one frame.
       const audioContext = runtime.audioEngine.audioContext;
       for (const target of runtime.targets) {
         for (const soundId in target.sprite.soundBank.soundPlayers) {
@@ -307,8 +307,11 @@ class ScratchAddonsSequencer {
           if (soundPlayer.outputNode) {
             soundPlayer.outputNode.stop(audioContext.currentTime);
             soundPlayer._createSource();
-            soundPlayer.outputNode.start(audioContext.currentTime, audioContext.currentTime - soundPlayer.startingUntil + (vm.runtime.currentStepTime / 1000));
-            soundPlayer.startingUntil -= (runtime.currentStepTime / 1000);
+            soundPlayer.outputNode.start(
+              audioContext.currentTime,
+              audioContext.currentTime - soundPlayer.startingUntil + vm.runtime.currentStepTime / 1000
+            );
+            soundPlayer.startingUntil -= runtime.currentStepTime / 1000;
           }
         }
       }
@@ -319,7 +322,6 @@ class ScratchAddonsSequencer {
           thread.pauseInfo.time += runtime.currentStepTime;
         }
       }
-
     }
     EVENT_TARGET.dispatchEvent(new CustomEvent(Events.SINGLE_STEPPED));
   }
@@ -443,7 +445,7 @@ export function setPaused(_paused) {
           },
           set: function (status) {
             this.pauseInfo.status = status;
-          }
+          },
         });
       }
     }

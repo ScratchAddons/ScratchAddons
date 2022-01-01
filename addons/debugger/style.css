@@ -57,7 +57,7 @@
   }
 }
 
-.sa-debugger-unpause>img {
+.sa-debugger-unpause > img {
   width: 20px;
   height: 20px;
 }
@@ -111,9 +111,9 @@
   background-color: hsl(0deg 100% 95%);
 }
 
-.log:not(.warn):not(.error)+.log:not(.warn):not(.error),
-.warn+.warn,
-.error+.error {
+.log:not(.warn):not(.error) + .log:not(.warn):not(.error),
+.warn + .warn,
+.error + .error {
   border-top-color: transparent;
 }
 
@@ -150,7 +150,7 @@
   margin-right: 5px;
 }
 
-.log>span:not(.console-variable):not(.console-block) {
+.log > span:not(.console-variable):not(.console-block) {
   flex-grow: 1;
 }
 

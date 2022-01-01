@@ -92,7 +92,7 @@ export default async function ({ addon, global, console, msg }) {
     className: addon.tab.scratchClass("card_header-buttons-right"),
   });
   const tabContentContainer = Object.assign(document.createElement("div"), {
-    className: 'extra-log-container',
+    className: "extra-log-container",
   });
 
   let isInterfaceVisible = false;
@@ -258,7 +258,7 @@ export default async function ({ addon, global, console, msg }) {
     if (targetId && blockId) goToBlock(targetId, blockId);
   });
 
-  const createHeaderButton = ({text, icon, description}) => {
+  const createHeaderButton = ({ text, icon, description }) => {
     const button = Object.assign(document.createElement("div"), {
       className: addon.tab.scratchClass("card_shrink-expand-button"),
       draggable: false,
@@ -267,62 +267,62 @@ export default async function ({ addon, global, console, msg }) {
       button.title = description;
     }
     const imageElement = Object.assign(document.createElement("img"), {
-      src: icon
+      src: icon,
     });
     const textElement = Object.assign(document.createElement("span"), {
-      textContent: text
+      textContent: text,
     });
     button.appendChild(imageElement);
     button.appendChild(textElement);
     return {
       element: button,
       image: imageElement,
-      text: textElement
+      text: textElement,
     };
   };
 
-  const createHeaderTab = ({text, icon}) => {
+  const createHeaderTab = ({ text, icon }) => {
     const tab = Object.assign(document.createElement("li"), {
       className: addon.tab.scratchClass("react-tabs_react-tabs__tab", "gui_tab"),
     });
     const imageElement = Object.assign(document.createElement("img"), {
-      src: icon
+      src: icon,
     });
     const textElement = Object.assign(document.createElement("span"), {
-      textContent: text
+      textContent: text,
     });
     tab.appendChild(imageElement);
     tab.appendChild(textElement);
     return {
       element: tab,
       image: imageElement,
-      text: textElement
+      text: textElement,
     };
   };
 
   const unpauseButton = createHeaderButton({
-    text: msg('unpause'),
-    icon: addon.self.dir + "/icons/play.svg"
+    text: msg("unpause"),
+    icon: addon.self.dir + "/icons/play.svg",
   });
-  unpauseButton.element.classList.add('sa-debugger-unpause');
+  unpauseButton.element.classList.add("sa-debugger-unpause");
   unpauseButton.element.addEventListener("click", () => setPaused(false));
   const updateUnpauseVisibility = (paused) => {
-    unpauseButton.element.style.display = paused ? '' : 'none';
+    unpauseButton.element.style.display = paused ? "" : "none";
   };
   updateUnpauseVisibility(isPaused());
   onPauseChanged(updateUnpauseVisibility);
 
   const closeButton = createHeaderButton({
-    text: msg('close'),
-    icon: addon.self.dir + "/icons/add.svg"
+    text: msg("close"),
+    icon: addon.self.dir + "/icons/add.svg",
   });
   closeButton.image.classList.add(addon.tab.scratchClass("close-button_close-icon"));
   closeButton.element.addEventListener("click", () => setInterfaceVisible(false));
 
   const createLogsTab = () => {
     const tab = createHeaderTab({
-      text: msg('tab-logs'),
-      icon: addon.self.dir + "/icons/logs.svg"
+      text: msg("tab-logs"),
+      icon: addon.self.dir + "/icons/logs.svg",
     });
 
     const content = Object.assign(document.createElement("div"), {
@@ -330,9 +330,9 @@ export default async function ({ addon, global, console, msg }) {
     });
 
     const exportButton = createHeaderButton({
-      text: msg('export'),
+      text: msg("export"),
       icon: addon.self.dir + "/icons/download-white.svg",
-      description: msg('export-desc')
+      description: msg("export-desc"),
     });
     const downloadTextAs = (filename, text) => downloadBlob(filename, new Blob([text], { type: "text/plain" }));
     exportButton.element.addEventListener("click", (e) => {
@@ -344,22 +344,25 @@ export default async function ({ addon, global, console, msg }) {
       // TODO refactor
       let file = logs
         .map(({ targetId, type, content, count }) =>
-          (exportFormat.replace(
-            /\{(sprite|type|content)\}/g,
-            (_, match) =>
-            ({
-              sprite: getTargetInfo(targetId, targetInfoCache).name,
-              type,
-              content,
-            }[match])
-          ) + "\n").repeat(count)
-        ).join("");
+          (
+            exportFormat.replace(
+              /\{(sprite|type|content)\}/g,
+              (_, match) =>
+                ({
+                  sprite: getTargetInfo(targetId, targetInfoCache).name,
+                  type,
+                  content,
+                }[match])
+            ) + "\n"
+          ).repeat(count)
+        )
+        .join("");
       downloadTextAs("logs.txt", file);
     });
 
     const trashButton = createHeaderButton({
-      text: msg('clear'),
-      icon: addon.self.dir + "/icons/delete.svg"
+      text: msg("clear"),
+      icon: addon.self.dir + "/icons/delete.svg",
     });
     trashButton.element.addEventListener("click", () => {
       clearLogs();
@@ -497,7 +500,7 @@ export default async function ({ addon, global, console, msg }) {
         targetId,
         type,
         text,
-        count
+        count,
       });
       wrapper.append(createLogText(text, count));
 
@@ -509,8 +512,8 @@ export default async function ({ addon, global, console, msg }) {
         link.textContent = target.isOriginal
           ? target.getName()
           : msg("clone-of", {
-            spriteName: parentTarget.getName(),
-          });
+              spriteName: parentTarget.getName(),
+            });
         link.className = "logLink";
         link.dataset.blockId = blockId;
         link.dataset.targetId = targetId;
@@ -554,7 +557,8 @@ export default async function ({ addon, global, console, msg }) {
     tabContentContainer.addEventListener(
       "scroll",
       () => {
-        isScrolledToEnd = tabContentContainer.scrollTop + 5 >= tabContentContainer.scrollHeight - tabContentContainer.clientHeight;
+        isScrolledToEnd =
+          tabContentContainer.scrollTop + 5 >= tabContentContainer.scrollHeight - tabContentContainer.clientHeight;
       },
       { passive: true }
     );
@@ -564,14 +568,14 @@ export default async function ({ addon, global, console, msg }) {
       content,
       buttons: [exportButton, trashButton],
       addLog,
-      clearLogs
+      clearLogs,
     };
   };
 
   const createThreadTab = () => {
     const tab = createHeaderTab({
       text: msg("tab-threads"),
-      icon: addon.self.dir + "/icons/threads.svg"
+      icon: addon.self.dir + "/icons/threads.svg",
     });
 
     const content = Object.assign(document.createElement("div"), {
@@ -642,7 +646,7 @@ export default async function ({ addon, global, console, msg }) {
                     colour = ScratchBlocks.Colours.pen;
                   }
                 } else {
-                  colour = { primary: "#979797" }
+                  colour = { primary: "#979797" };
                 }
                 if (colour) colour = colour.primary;
 
@@ -688,8 +692,8 @@ export default async function ({ addon, global, console, msg }) {
             blockLink.textContent = thread.target.isOriginal
               ? thread.target.getName()
               : msg("clone-of", {
-                spriteName: thread.target.getName(),
-              });
+                  spriteName: thread.target.getName(),
+                });
             blockLink.className = "logLink";
             blockLink.dataset.blockId = blockId;
             blockLink.dataset.targetId = thread.target.id;
@@ -712,7 +716,7 @@ export default async function ({ addon, global, console, msg }) {
               }
             }
             return blockContainer;
-          }
+          };
 
           subelements.append(createThreadBlockElement(thread.topBlock));
           for (var i = 0; i < thread.stack.length; i++) {
@@ -723,7 +727,7 @@ export default async function ({ addon, global, console, msg }) {
           element.append(subelements);
 
           return element;
-        }
+        };
 
         for (const thread of vm.runtime.threads) {
           // thread.updateMonitor is for threads that update monitors. We don't want to show these.
@@ -736,29 +740,33 @@ export default async function ({ addon, global, console, msg }) {
 
         if (runningBlockElement && scrollToRunning) {
           runningBlockElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
+            behavior: "smooth",
+            block: "center",
           });
         }
 
         if (vm.runtime.threads.length === 0) {
-          content.append(Object.assign(document.createElement("span"), {
-            className: "thread-info",
-            innerText: msg("threads-none-running"),
-          }));
+          content.append(
+            Object.assign(document.createElement("span"), {
+              className: "thread-info",
+              innerText: msg("threads-none-running"),
+            })
+          );
         }
       } else {
-        content.append(Object.assign(document.createElement("span"), {
-          className: "thread-info",
-          innerText: msg("threads-pause"),
-        }));
+        content.append(
+          Object.assign(document.createElement("span"), {
+            className: "thread-info",
+            innerText: msg("threads-pause"),
+          })
+        );
       }
     };
 
     const stepButton = createHeaderButton({
       text: msg("step"),
       icon: addon.self.dir + "/icons/step.svg",
-      description: msg("step-desc")
+      description: msg("step-desc"),
     });
     stepButton.element.addEventListener("click", () => {
       singleStep();
@@ -766,7 +774,7 @@ export default async function ({ addon, global, console, msg }) {
     });
 
     const pauseChanged = (paused) => {
-      stepButton.element.style.display = paused ? "" : 'none';
+      stepButton.element.style.display = paused ? "" : "none";
       updateContent();
     };
     pauseChanged(isPaused());
@@ -779,18 +787,20 @@ export default async function ({ addon, global, console, msg }) {
     return {
       tab,
       content,
-      buttons: [stepButton]
+      buttons: [stepButton],
     };
   };
 
   const createPerformanceTab = () => {
     const tab = createHeaderTab({
-      text: msg('tab-performance'),
-      icon: addon.self.dir + "/icons/performance.svg"
+      text: msg("tab-performance"),
+      icon: addon.self.dir + "/icons/performance.svg",
     });
 
     const content = document.createElement("div");
-    const performanceFpsTitle = Object.assign(document.createElement("h1"), { innerText: msg("performance-framerate-title") });
+    const performanceFpsTitle = Object.assign(document.createElement("h1"), {
+      innerText: msg("performance-framerate-title"),
+    });
     const performanceFpsChartCanvas = Object.assign(document.createElement("canvas"), {
       id: "debug-fps-chart",
       className: "logs",
@@ -834,7 +844,9 @@ export default async function ({ addon, global, console, msg }) {
         },
       },
     });
-    const performanceClonesTitle = Object.assign(document.createElement("h1"), { innerText: msg("performance-clonecount-title") });
+    const performanceClonesTitle = Object.assign(document.createElement("h1"), {
+      innerText: msg("performance-clonecount-title"),
+    });
     const performanceClonesChartCanvas = Object.assign(document.createElement("canvas"), {
       id: "debug-fps-chart",
       className: "logs",
@@ -908,10 +920,15 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
 
-      ogDraw.call(this, ...args)
+      ogDraw.call(this, ...args);
     };
 
-    content.append(performanceFpsTitle, performanceFpsChartCanvas, performanceClonesTitle, performanceClonesChartCanvas);
+    content.append(
+      performanceFpsTitle,
+      performanceFpsChartCanvas,
+      performanceClonesTitle,
+      performanceClonesChartCanvas
+    );
 
     let pauseTime = 0;
     onPauseChanged((paused) => {
@@ -929,7 +946,7 @@ export default async function ({ addon, global, console, msg }) {
     return {
       tab,
       content,
-      buttons: []
+      buttons: [],
     };
   };
 
@@ -942,9 +959,9 @@ export default async function ({ addon, global, console, msg }) {
   const setActiveTab = (tab) => {
     if (tab === activeTab) return;
     if (activeTab) {
-      activeTab.tab.element.classList.remove(addon.tab.scratchClass('gui_is-selected'));
+      activeTab.tab.element.classList.remove(addon.tab.scratchClass("gui_is-selected"));
     }
-    tab.tab.element.classList.add(addon.tab.scratchClass('gui_is-selected'));
+    tab.tab.element.classList.add(addon.tab.scratchClass("gui_is-selected"));
     activeTab = tab;
 
     removeAllChildren(tabContentContainer);
@@ -958,7 +975,7 @@ export default async function ({ addon, global, console, msg }) {
     buttonContainerElement.appendChild(closeButton.element);
   };
   for (const tab of allTabs) {
-    tab.tab.element.addEventListener('click', () => {
+    tab.tab.element.addEventListener("click", () => {
       setActiveTab(tab);
     });
     tabListElement.appendChild(tab.tab.element);
@@ -1009,52 +1026,64 @@ export default async function ({ addon, global, console, msg }) {
   const ogMakeClone = vm.runtime.targets[0].constructor.prototype.makeClone;
   vm.runtime.targets[0].constructor.prototype.makeClone = function (...args) {
     if (addon.settings.get("log_failed_clone_creation") && !vm.runtime.clonesAvailable()) {
-      logsTab.addLog(msg("log-msg-clone-cap", { sprite: this.getName() }), vm.runtime.sequencer.activeThread, "warn", true);
+      logsTab.addLog(
+        msg("log-msg-clone-cap", { sprite: this.getName() }),
+        vm.runtime.sequencer.activeThread,
+        "warn",
+        true
+      );
     }
     var clone = ogMakeClone.call(this, ...args);
     if (addon.settings.get("log_clone_create") && clone) {
-      logsTab.addLog(msg("log-msg-clone-created", { sprite: this.getName() }), vm.runtime.sequencer.activeThread, "log", true);
+      logsTab.addLog(
+        msg("log-msg-clone-created", { sprite: this.getName() }),
+        vm.runtime.sequencer.activeThread,
+        "log",
+        true
+      );
     }
     return clone;
-  }
+  };
 
   const ogStartHats = vm.runtime.startHats;
   vm.runtime.startHats = function (hat, optMatchFields, ...args) {
     if (addon.settings.get("log_broadcasts") && hat === "event_whenbroadcastreceived") {
-      logsTab.addLog(msg("log-msg-broadcasted", { broadcast: optMatchFields.BROADCAST_OPTION }), vm.runtime.sequencer.activeThread, "log", true);
+      logsTab.addLog(
+        msg("log-msg-broadcasted", { broadcast: optMatchFields.BROADCAST_OPTION }),
+        vm.runtime.sequencer.activeThread,
+        "log",
+        true
+      );
     }
     return ogStartHats.call(this, hat, optMatchFields, ...args);
-  }
+  };
 
   const ogAddToList = vm.runtime._primitives.data_addtolist;
   vm.runtime._primitives.data_addtolist = function (args, util) {
     if (addon.settings.get("log_max_list_length")) {
-      const list = util.target.lookupOrCreateList(
-        args.LIST.id, args.LIST.name);
+      const list = util.target.lookupOrCreateList(args.LIST.id, args.LIST.name);
       if (list.value.length >= 200000) {
         logsTab.addLog(msg("log-msg-list-append-too-long", { list: list.name }), util.thread, "warn", true);
       }
     }
     ogAddToList.call(this, args, util);
-  }
+  };
 
   const ogInertAtList = vm.runtime._primitives.data_insertatlist;
   vm.runtime._primitives.data_insertatlist = function (args, util) {
     if (addon.settings.get("log_max_list_length")) {
-      const list = util.target.lookupOrCreateList(
-        args.LIST.id, args.LIST.name);
+      const list = util.target.lookupOrCreateList(args.LIST.id, args.LIST.name);
       if (list.value.length >= 200000) {
         logsTab.addLog(msg("log-msg-list-insert-too-long", { list: list.name }), util.thread, "warn", true);
       }
     }
     ogInertAtList.call(this, args, util);
-  }
+  };
 
   const ogSetVariableTo = vm.runtime._primitives.data_setvariableto;
   vm.runtime._primitives.data_setvariableto = function (args, util) {
     if (addon.settings.get("log_invalid_cloud_data")) {
-      const variable = util.target.lookupOrCreateVariable(
-        args.VARIABLE.id, args.VARIABLE.name);
+      const variable = util.target.lookupOrCreateVariable(args.VARIABLE.id, args.VARIABLE.name);
       if (variable.isCloud) {
         const value = args.VALUE.toString();
         if (isNaN(value)) {
@@ -1065,7 +1094,7 @@ export default async function ({ addon, global, console, msg }) {
       }
     }
     ogSetVariableTo.call(this, args, util);
-  }
+  };
 
   ////////////
 
