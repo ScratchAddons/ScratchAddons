@@ -206,11 +206,14 @@ export default async function ({ addon, global, console, msg }) {
     if (targetId && blockId) goToBlock(targetId, blockId);
   });
 
-  const makeButton = (text, icon) => {
+  const makeHeaderButton = ({text, icon, description}) => {
     const button = Object.assign(document.createElement("div"), {
       className: addon.tab.scratchClass("card_shrink-expand-button"),
       draggable: false,
     });
+    if (description) {
+      button.title = description;
+    }
     const imageElement = Object.assign(document.createElement("img"), {
       src: icon
     });
@@ -226,24 +229,19 @@ export default async function ({ addon, global, console, msg }) {
     };
   };
 
-  const unpauseButton = makeButton(msg('unpause'), addon.self.dir + "/icons/play.svg");
+  const unpauseButton = makeHeaderButton({
+    text: msg('unpause'),
+    icon: addon.self.dir + "/icons/play.svg"
+  });
   unpauseButton.button.classList.add('sa-debugger-unpause');
   unpauseButton.button.addEventListener("click", () => setPaused(false));
 
-  // TODO: makeButton
-  const closeButton = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_remove-button"),
-    draggable: false,
+  const closeButton = makeHeaderButton({
+    text: msg('close'),
+    icon: addon.self.dir + "/icons/add.svg"
   });
-  const closeImg = Object.assign(document.createElement("img"), {
-    className: addon.tab.scratchClass("close-button_close-icon"),
-    src: addon.self.dir + "/icons/add.svg",
-  });
-  const closeText = Object.assign(document.createElement("span"), {
-    innerText: msg("close"),
-  });
-  closeButton.append(closeImg, closeText);
-  closeButton.addEventListener("click", () => toggleInterface(false));
+  closeButton.image.classList.add(addon.tab.scratchClass("close-button_close-icon"));
+  closeButton.button.addEventListener("click", () => toggleInterface(false));
 
   const tabClassName = addon.tab.scratchClass("react-tabs_react-tabs__tab", "gui_tab");
   const tabSelectedClassName = addon.tab.scratchClass(
@@ -272,26 +270,19 @@ export default async function ({ addon, global, console, msg }) {
     className: "logs",
   });
 
-  // TODO makeButton
-  const exportButton = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_shrink-expand-button"),
-    title: msg("export-desc"),
-    draggable: false,
+  const exportButton = makeHeaderButton({
+    text: msg('export'),
+    icon: addon.self.dir + "/icons/download-white.svg",
+    description: msg('export-desc')
   });
-  const exportImg = Object.assign(document.createElement("img"), {
-    src: addon.self.dir + "/icons/download-white.svg",
-  });
-  const exportText = Object.assign(document.createElement("span"), {
-    innerText: msg("export"),
-  });
-  exportButton.append(exportImg, exportText);
-  const download = (filename, text) => downloadBlob(filename, new Blob([text], { type: "text/plain" }));
-  exportButton.addEventListener("click", (e) => {
+  const downloadTextAs = (filename, text) => downloadBlob(filename, new Blob([text], { type: "text/plain" }));
+  exportButton.button.addEventListener("click", (e) => {
     const defaultFormat = "{sprite}: {content} ({type})";
     const exportFormat = e.shiftKey ? prompt(msg("enter-format"), defaultFormat) : defaultFormat;
     if (!exportFormat) return;
     closeDragElement();
     const targetInfoCache = Object.create(null);
+    // TODO refactor
     let file = logs
       .map(({ targetId, type, content, count }) =>
         (exportFormat.replace(
@@ -304,22 +295,14 @@ export default async function ({ addon, global, console, msg }) {
           }[match])
         ) + "\n").repeat(count)
       ).join("");
-    download("logs.txt", file);
+    downloadTextAs("logs.txt", file);
   });
 
-  // TODO makeButton
-  const trashButton = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_shrink-expand-button"),
-    draggable: false,
+  const trashButton = makeHeaderButton({
+    text: msg('clear'),
+    icon: addon.self.dir + "/icons/delete.svg"
   });
-  const trashImg = Object.assign(document.createElement("img"), {
-    src: addon.self.dir + "/icons/delete.svg",
-  });
-  const trashText = Object.assign(document.createElement("span"), {
-    innerText: msg("clear"),
-  });
-  trashButton.append(trashImg, trashText);
-  trashButton.addEventListener("click", () => {
+  trashButton.button.addEventListener("click", () => {
     clearLogs();
     closeDragElement();
   });
@@ -520,20 +503,12 @@ export default async function ({ addon, global, console, msg }) {
     }
   }
 
-  // TODO makeButton
-  const stepButton = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_shrink-expand-button"),
-    title: msg("step-desc"),
-    draggable: false,
+  const stepButton = makeHeaderButton({
+    text: msg("step"),
+    icon: addon.self.dir + "/icons/step.svg",
+    description: msg("step-desc")
   });
-  const stepImg = Object.assign(document.createElement("img"), {
-    src: addon.self.dir + "/icons/step.svg",
-  });
-  const stepText = Object.assign(document.createElement("span"), {
-    innerText: msg("step"),
-  });
-  stepButton.append(stepImg, stepText);
-  stepButton.addEventListener("click", () => {
+  stepButton.button.addEventListener("click", () => {
     singleStep();
     threadsRefresh();
   });
@@ -685,9 +660,9 @@ export default async function ({ addon, global, console, msg }) {
   const tabElements = [logsTabElement, threadsTabElement, performanceTabElement];
   const tabContent = [logsList, threadsList, performancePanel];
   const tabButtons = [
-    [unpauseButton.button, exportButton, trashButton, closeButton],
-    [unpauseButton.button, stepButton, closeButton],
-    [unpauseButton.button, closeButton],
+    [unpauseButton.button, exportButton.button, trashButton.button, closeButton.button],
+    [unpauseButton.button, stepButton.button, closeButton.button],
+    [unpauseButton.button, closeButton.button],
   ];
 
   let currentTab = 0;
@@ -713,7 +688,7 @@ export default async function ({ addon, global, console, msg }) {
   tabElements[currentTab].className = tabSelectedClassName;
 
   interfaceHeader.append(tabListElement, buttons);
-  buttons.append(unpauseButton.button, exportButton, trashButton, closeButton);
+  buttons.append(unpauseButton.button, exportButton.button, trashButton.button, closeButton.button);
   interfaceContainer.append(interfaceHeader, extraContainer);
   document.body.append(interfaceContainer);
 
@@ -795,16 +770,16 @@ export default async function ({ addon, global, console, msg }) {
   // TODO
   if (!isPaused()) {
     unpauseButton.button.style.display = "none";
-    stepButton.style.display = "none";
+    stepButton.button.style.display = "none";
   }
   onPauseChanged((newPauseValue) => {
     if (newPauseValue) {
       unpauseButton.button.style.display = "";
-      stepButton.style.display = "";
+      stepButton.button.style.display = "";
       pauseTime = Date.now();
     } else {
       unpauseButton.button.style.display = "none";
-      stepButton.style.display = "none";
+      stepButton.button.style.display = "none";
 
       const dt = Date.now() - pauseTime;
       lastFpsTime += dt;
