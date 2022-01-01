@@ -253,8 +253,8 @@ export default async function ({ addon, global, console, msg }) {
     closeDragElement();
     const targetInfoCache = Object.create(null);
     let file = logs
-      .map(({ targetId, type, content }) =>
-        exportFormat.replace(
+      .map(({ targetId, type, content, count }) =>
+        (exportFormat.replace(
           /\{(sprite|type|content)\}/g,
           (_, match) =>
           ({
@@ -262,9 +262,8 @@ export default async function ({ addon, global, console, msg }) {
             type,
             content,
           }[match])
-        )
-      )
-      .join("\n");
+        ) + "\n").repeat(count)
+      ).join("");
     download("logs.txt", file);
   });
 
@@ -708,7 +707,7 @@ export default async function ({ addon, global, console, msg }) {
     if (target) {
       item = { name: target.getName(), isDeleted: false };
     } else {
-      item = { name: msg("deleted-sprite"), isDeleted: true };
+      item = { name: msg("unknown-sprite"), isDeleted: true };
     }
     if (cache) cache[id] = item;
     return item;
@@ -788,17 +787,29 @@ export default async function ({ addon, global, console, msg }) {
     wrapper.classList.add(type);
     return wrapper;
   };
-  const createLogText = (text) => {
+  const createLogText = (text, count) => {
     const s = document.createElement("span");
     s.innerText = text;
+    if (count !== 1) {
+      const c = document.createElement("span");
+      c.innerText = count;
+      c.className = "log-count";
+      s.appendChild(c);
+    }
     return s;
   };
 
+  const MAX_LOGS = 10;
   const addLog = (content, thread, type, internalLog = false) => {
     const wrapper = createLogWrapper(type);
 
     if (internalLog) {
       wrapper.className += " internal-log";
+    }
+
+    if (logs.length >= MAX_LOGS) {
+      logs.shift(1);
+      logsList.children[0].remove();
     }
 
     logsList.append(wrapper);
@@ -878,12 +889,26 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
     }
+
+    var count = 1;
+
+    const lastLog = logs[logs.length - 1];
+    if (lastLog) {
+      if (lastLog.targetId === targetId && lastLog.type === type && lastLog.content === content) {
+        logs.pop();
+        logsList.children[logsList.children.length - 2].remove();
+        count += lastLog.count;
+        console.log("Compressing messages! " + count);
+      }
+    }
+
     logs.push({
       targetId,
       type,
       content,
+      count
     });
-    wrapper.append(createLogText(content));
+    wrapper.append(createLogText(content, count));
 
     if (thread) {
       const target = thread.target;
@@ -987,6 +1012,49 @@ export default async function ({ addon, global, console, msg }) {
     }
     return ogStartHats.call(this, hat, optMatchFields, ...args);
   }
+
+  const ogAddToList = vm.runtime._primitives.data_addtolist;
+  vm.runtime._primitives.data_addtolist = function (args, util) {
+    if (addon.settings.get("log_max_list_length")) {
+      const list = util.target.lookupOrCreateList(
+        args.LIST.id, args.LIST.name);
+      if (list.value.length >= 200000) {
+        addLog(msg("log-msg-list-append-too-long", { list: list.name }), util.thread, "warn", true);
+      }
+    }
+    ogAddToList.call(this, args, util);
+  }
+
+  const ogInertAtList = vm.runtime._primitives.data_insertatlist;
+  vm.runtime._primitives.data_insertatlist = function (args, util) {
+    if (addon.settings.get("log_max_list_length")) {
+      const list = util.target.lookupOrCreateList(
+        args.LIST.id, args.LIST.name);
+      if (list.value.length >= 200000) {
+        addLog(msg("log-msg-list-insert-too-long", { list: list.name }), util.thread, "warn", true);
+      }
+    }
+    ogInertAtList.call(this, args, util);
+  }
+
+  const ogSetVariableTo = vm.runtime._primitives.data_setvariableto;
+  vm.runtime._primitives.data_setvariableto = function (args, util) {
+    if (addon.settings.get("log_invalid_cloud_data")) {
+      const variable = util.target.lookupOrCreateVariable(
+        args.VARIABLE.id, args.VARIABLE.name);
+      if (variable.isCloud) {
+        const value = args.VALUE.toString();
+        if (isNaN(value)) {
+          addLog(msg("log-cloud-data-nan", { var: variable.name }), util.thread, "warn", true);
+        } else if (value.length > 256) {
+          addLog(msg("log-cloud-data-too-long", { var: variable.name }), util.thread, "warn", true);
+        }
+      }
+    }
+    ogSetVariableTo.call(this, args, util);
+  }
+
+  ////////////
 
   while (true) {
     await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {

@@ -202,3 +202,11 @@
 .log:not(.warn):not(.error) {
   margin-left: 1.5rem;
 }
+
+.log-count {
+  background-color: hsla(163, 85%, 40%, 1);
+  color: white;
+  padding: 1px 6px;
+  border-radius: 100px;
+  margin-left: 10px;
+}
