@@ -104,10 +104,15 @@ export default async function ({ addon, global, console, msg }) {
   const tabListElement = Object.assign(document.createElement("ul"), {
     className: addon.tab.scratchClass("react-tabs_react-tabs__tab-list", "gui_tab-list") + " debugger-tabs",
   });
-  // TODO ???
-  const extraContainer = Object.assign(document.createElement("div"), {
-    className: `extra-log-container`,
+  const buttonContainerElement = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_header-buttons-right"),
   });
+  const tabContentContainer = Object.assign(document.createElement("div"), {
+    className: 'extra-log-container',
+  });
+  interfaceHeader.append(tabListElement, buttonContainerElement);
+  interfaceContainer.append(interfaceHeader, tabContentContainer);
+  document.body.append(interfaceContainer);
 
   // TODO Move this into an API?
   const goToBlock = (targetId, blockId) => {
@@ -198,7 +203,7 @@ export default async function ({ addon, global, console, msg }) {
     _flash();
   };
 
-  extraContainer.addEventListener("click", (e) => {
+  tabContentContainer.addEventListener("click", (e) => {
     const elem = e.target;
     if (elem.classList.contains("deletedTarget")) return;
     const targetId = elem.dataset.targetId;
@@ -231,7 +236,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const makeHeaderTab = ({text, icon}) => {
     const tab = Object.assign(document.createElement("li"), {
-      className: tabClassName,
+      className: addon.tab.scratchClass("react-tabs_react-tabs__tab", "gui_tab"),
     });
     const imageElement = Object.assign(document.createElement("img"), {
       src: icon
@@ -261,14 +266,6 @@ export default async function ({ addon, global, console, msg }) {
   });
   closeButton.image.classList.add(addon.tab.scratchClass("close-button_close-icon"));
   closeButton.button.addEventListener("click", () => toggleInterface(false));
-
-  const tabClassName = addon.tab.scratchClass("react-tabs_react-tabs__tab", "gui_tab");
-  const tabSelectedClassName = addon.tab.scratchClass(
-    "react-tabs_react-tabs__tab",
-    "gui_tab",
-    "react-tabs_react-tabs__tab--selected",
-    "gui_is-selected"
-  );
 
   // ##### Logs Tab ##### //
 
@@ -648,49 +645,63 @@ export default async function ({ addon, global, console, msg }) {
 
   performancePanel.append(performanceFpsTitle, performanceFpsChartCanvas, performanceClonesTitle, performanceClonesChartCanvas);
 
-  const buttons = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_header-buttons-right"),
-  });
-
-  const tabElements = [logsTabElement.tab, threadsTabElement.tab, performanceTabElement.tab];
-  const tabContent = [logsList, threadsList, performancePanel];
-  const tabButtons = [
-    [unpauseButton.button, exportButton.button, trashButton.button, closeButton.button],
-    [unpauseButton.button, stepButton.button, closeButton.button],
-    [unpauseButton.button, closeButton.button],
+  const logsTab = {
+    tab: logsTabElement,
+    buttons: [unpauseButton, exportButton, trashButton, closeButton],
+    content: logsList
+  };
+  const threadsTab = {
+    tab: threadsTabElement,
+    buttons: [unpauseButton, stepButton, closeButton],
+    content: threadsList
+  };
+  const performanceTab = {
+    tab: performanceTabElement,
+    buttons: [unpauseButton, closeButton],
+    content: performancePanel
+  };
+  const allTabs = [
+    logsTab,
+    threadsTab,
+    performanceTab
   ];
 
-  let currentTab = 0;
-  const switchTab = (tabIdx) => {
-    if (currentTab != tabIdx) {
-      tabElements[currentTab].className = tabClassName;
-      tabElements[tabIdx].className = tabSelectedClassName;
-      currentTab = tabIdx;
-      extraContainer.innerHTML = "";
-      extraContainer.append(tabContent[tabIdx]);
-      buttons.innerHTML = "";
-      buttons.append(...tabButtons[tabIdx]);
+  const removeAllChildren = (element) => {
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
     }
   };
-  for (var i = 0; i < tabElements.length; i++) {
-    const tabIdx = i;
-    tabElements[i].addEventListener("click", (e) => switchTab(tabIdx));
+
+  let activeTab;
+  const setActiveTab = (tab) => {
+    if (tab === activeTab) return;
+    if (activeTab) {
+      activeTab.tab.tab.classList.remove(addon.tab.scratchClass('gui_is-selected'));
+    }
+    tab.tab.tab.classList.add(addon.tab.scratchClass('gui_is-selected'));
+    activeTab = tab;
+
+    removeAllChildren(tabContentContainer);
+    tabContentContainer.appendChild(tab.content);
+
+    removeAllChildren(buttonContainerElement);
+    for (const button of tab.buttons) {
+      buttonContainerElement.appendChild(button.button);
+    }
+  };
+
+  for (const tab of allTabs) {
+    tab.tab.tab.addEventListener('click', () => {
+      setActiveTab(tab);
+    });
+    tabListElement.appendChild(tab.tab.tab);
   }
-  tabListElement.append(...tabElements);
-
-  extraContainer.append(tabContent[currentTab]);
-  buttons.append(...tabButtons[currentTab]);
-  tabElements[currentTab].className = tabSelectedClassName;
-
-  interfaceHeader.append(tabListElement, buttons);
-  buttons.append(unpauseButton.button, exportButton.button, trashButton.button, closeButton.button);
-  interfaceContainer.append(interfaceHeader, extraContainer);
-  document.body.append(interfaceContainer);
+  setActiveTab(logsTab);
 
   interfaceHeader.addEventListener("mousedown", dragMouseDown);
 
   let isScrolledToEnd = true;
-  extraContainer.addEventListener(
+  tabContentContainer.addEventListener(
     "wheel",
     (e) => {
       // When user scrolls up, stop automatically scrolling down
@@ -700,10 +711,10 @@ export default async function ({ addon, global, console, msg }) {
     },
     { passive: true }
   );
-  extraContainer.addEventListener(
+  tabContentContainer.addEventListener(
     "scroll",
     () => {
-      isScrolledToEnd = extraContainer.scrollTop + 5 >= extraContainer.scrollHeight - extraContainer.clientHeight;
+      isScrolledToEnd = tabContentContainer.scrollTop + 5 >= tabContentContainer.scrollHeight - tabContentContainer.clientHeight;
     },
     { passive: true }
   );
@@ -757,12 +768,11 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   function closeDragElement() {
-    // stop moving when mouse button is released:
+    // stop moving when mouse button is released
     document.removeEventListener("mouseup", closeDragElement);
     document.removeEventListener("mousemove", elementDrag);
   }
 
-  // TODO
   if (!isPaused()) {
     unpauseButton.button.style.display = "none";
     stepButton.button.style.display = "none";
@@ -960,7 +970,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const scrollToEnd = () => {
     scrollQueued = false;
-    extraContainer.scrollTop = extraContainer.scrollHeight;
+    tabContentContainer.scrollTop = tabContentContainer.scrollHeight;
   };
 
   if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
