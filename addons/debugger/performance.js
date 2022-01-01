@@ -127,7 +127,10 @@ export default async function createPerformanceTab ({ debug, addon, console, msg
         const clonesData = performanceClonesChart.data.datasets[0].data;
         clonesData.shift();
         clonesData.push(vm.runtime._cloneCounter);
-        performanceClonesChart.update();
+
+        if (isVisible) {
+          performanceClonesChart.update();
+        }
       }
     }
 
@@ -149,8 +152,13 @@ export default async function createPerformanceTab ({ debug, addon, console, msg
     }
   });
 
-  const show = () => {};
-  const hide = () => {};
+  let isVisible = false;
+  const show = () => {
+    isVisible = true;
+  };
+  const hide = () => {
+    isVisible = false;
+  };
 
   return {
     tab,
