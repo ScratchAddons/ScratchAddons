@@ -3,10 +3,13 @@ export default async function ({ addon, global, console, msg }) {
   let spriteSelectorContainer;
 
   const searchBox = document.createElement("input");
-  searchBox.setAttribute("type", "search");
-  searchBox.setAttribute("placeholder", msg('placeholder'));
-  searchBox.setAttribute("id", "sa-sprite-search-box");
-  searchBox.setAttribute("autocomplete", "off");
+  searchBox.className = 'sa-search-sprites-box';
+  searchBox.placeholder = msg('placeholder');
+  searchBox.autocomplete = 'off';
+  // search might make more sense, but browsers treat them special in ways that this addon does not handle,
+  // so just leave it as a text input. Also note that Scratch uses type=text for its own search inputs in
+  // the libraries, so this fits right in.
+  searchBox.type = 'text';
 
   const search = (query) => {
     if (!spritesContainer) return;
@@ -27,6 +30,10 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
 
+  searchBox.addEventListener("input", (e) => {
+    search(e.target.value);
+  });
+
   addon.tab.displayNoneWhileDisabled(searchBox, {
     display: "block"
   });
@@ -35,13 +42,10 @@ export default async function ({ addon, global, console, msg }) {
     searchBox.value = "";
   });
 
-  searchBox.oninput = () => {
-    search(searchBox.value);
-  };
-
   while (true) {
     await addon.tab.waitForElement("div[class^='sprite-selector_items-wrapper']", {
       markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
 

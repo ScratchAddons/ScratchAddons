@@ -1,4 +1,4 @@
-#sa-sprite-search-box {
+input.sa-search-sprites-box {
   width: 100%;
   box-sizing: border-box;
   background-color: transparent;
@@ -6,9 +6,4 @@
   border-bottom: 1px solid hsla(0, 0%, 1%, 0.15);
   outline: none;
   padding: 5px 10px;
-}
-
-input[type="search"]::-webkit-search-cancel-button,
-input[type="search"]::-webkit-search-decoration {
-  -webkit-appearance: auto;
 }
