@@ -2,6 +2,12 @@ export default async function ({ addon, global, console, msg }) {
   let spritesContainer;
   let spriteSelectorContainer;
 
+  const container = document.createElement("div");
+  container.className = 'sa-search-sprites-container';
+  addon.tab.displayNoneWhileDisabled(container, {
+    display: 'flex'
+  });
+
   const searchBox = document.createElement("input");
   searchBox.className = 'sa-search-sprites-box';
   searchBox.placeholder = msg('placeholder');
@@ -34,13 +40,19 @@ export default async function ({ addon, global, console, msg }) {
     search(e.target.value);
   });
 
-  addon.tab.displayNoneWhileDisabled(searchBox, {
-    display: "block"
-  });
-  addon.self.addEventListener("disabled", () => {
-    search("");
-    searchBox.value = "";
-  });
+  const reset = () => {
+    search('');
+    searchBox.value = '';
+  };
+
+  const resetButton = document.createElement("button");
+  resetButton.className = "sa-search-sprites-reset";
+  resetButton.addEventListener("click", reset);
+  resetButton.textContent = '×';
+  addon.self.addEventListener("disabled", reset);
+
+  container.appendChild(searchBox);
+  container.appendChild(resetButton);
 
   while (true) {
     await addon.tab.waitForElement("div[class^='sprite-selector_items-wrapper']", {
@@ -51,6 +63,6 @@ export default async function ({ addon, global, console, msg }) {
 
     spritesContainer = document.querySelector('[class^="sprite-selector_items-wrapper"]');
     spriteSelectorContainer = document.querySelector('[class^="sprite-selector_scroll-wrapper"]');
-    spriteSelectorContainer.insertBefore(searchBox, spritesContainer);
+    spriteSelectorContainer.insertBefore(container, spritesContainer);
   }
 }
