@@ -1,10 +1,10 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   let spritesContainer;
   let spriteSelectorContainer;
 
   const searchBox = document.createElement("input");
   searchBox.setAttribute("type", "search");
-  searchBox.setAttribute("placeholder", "Search sprites...");
+  searchBox.setAttribute("placeholder", msg('placeholder'));
   searchBox.setAttribute("id", "sa-sprite-search-box");
   searchBox.setAttribute("autocomplete", "off");
 
