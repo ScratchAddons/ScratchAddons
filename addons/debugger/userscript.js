@@ -2,22 +2,6 @@ import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import { isPaused, setPaused, onPauseChanged, onSingleStepped, getRunningBlock, singleStep } from "./module.js";
 
 export default async function ({ addon, global, console, msg }) {
-  // TODO: move much later
-  const debuggerButtonOuter = document.createElement("div");
-  debuggerButtonOuter.className = "sa-debugger-container";
-  const debuggerButton = document.createElement("div");
-  debuggerButton.className = addon.tab.scratchClass("button_outlined-button", "stage-header_stage-button");
-  const debuggerButtonContent = document.createElement("div");
-  debuggerButtonContent.className = addon.tab.scratchClass("button_content");
-  const debuggerButtonImage = document.createElement("img");
-  debuggerButtonImage.className = addon.tab.scratchClass("stage-header_stage-button-icon");
-  debuggerButtonImage.draggable = false;
-  debuggerButtonImage.src = addon.self.dir + "/icons/debug.svg";
-  debuggerButtonContent.appendChild(debuggerButtonImage);
-  debuggerButton.appendChild(debuggerButtonContent);
-  debuggerButtonOuter.appendChild(debuggerButton);
-  debuggerButton.addEventListener("click", () => toggleInterface(true));
-
   let hasLoggedPauseError = false;
   const pause = (_, thread) => {
     if (addon.tab.redux.state.scratchGui.mode.isPlayerOnly) {
@@ -74,9 +58,41 @@ export default async function ({ addon, global, console, msg }) {
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chartjs-plugin-annotation.min.js");
 
+  const debuggerButtonOuter = document.createElement("div");
+  debuggerButtonOuter.className = "sa-debugger-container";
+  const debuggerButton = document.createElement("div");
+  debuggerButton.className = addon.tab.scratchClass("button_outlined-button", "stage-header_stage-button");
+  const debuggerButtonContent = document.createElement("div");
+  debuggerButtonContent.className = addon.tab.scratchClass("button_content");
+  const debuggerButtonImage = document.createElement("img");
+  debuggerButtonImage.className = addon.tab.scratchClass("stage-header_stage-button-icon");
+  debuggerButtonImage.draggable = false;
+  debuggerButtonImage.src = addon.self.dir + "/icons/debug.svg";
+  debuggerButtonContent.appendChild(debuggerButtonImage);
+  debuggerButton.appendChild(debuggerButtonContent);
+  debuggerButtonOuter.appendChild(debuggerButton);
+  debuggerButton.addEventListener("click", () => toggleInterface(true));
+
+  const interfaceContainer = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_card", { others: "debug" }),
+  });
+  const interfaceHeader = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_header-buttons"),
+  });
+  const tabListElement = Object.assign(document.createElement("ul"), {
+    className: addon.tab.scratchClass("react-tabs_react-tabs__tab-list", "gui_tab-list") + " debugger-tabs",
+  });
+  const buttonContainerElement = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_header-buttons-right"),
+  });
+  const tabContentContainer = Object.assign(document.createElement("div"), {
+    className: 'extra-log-container',
+  });
+
   const toggleInterface = (show) => {
     interfaceContainer.style.display = show ? "flex" : "";
     if (show) {
+      // TODO refactor
       debuggerButtonImage.src = addon.self.dir + "/icons/debug.svg";
       const cacheObj = Object.create(null);
       for (const logLinkElem of document.getElementsByClassName("logLink")) {
@@ -95,21 +111,43 @@ export default async function ({ addon, global, console, msg }) {
       }
     }
   };
-  const interfaceContainer = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_card", { others: "debug" }),
+
+  let mouseOffsetX = 0;
+  let mouseOffsetY = 0;
+  let lastX = 0;
+  let lastY = 0;
+  const handleStartDrag = (e) => {
+    e.preventDefault();
+    mouseOffsetX = e.clientX - interfaceContainer.offsetLeft;
+    mouseOffsetY = e.clientY - interfaceContainer.offsetTop;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    document.addEventListener("mouseup", handleStopDrag);
+    document.addEventListener("mousemove", handleDragInterface);
+  };
+  const handleStopDrag = () => {
+    document.removeEventListener("mouseup", handleStopDrag);
+    document.removeEventListener("mousemove", handleDragInterface);
+  };
+  const moveInterface = (x, y) => {
+    lastX = x;
+    lastY = y;
+    const width = (document.documentElement.clientWidth || document.body.clientWidth) - 1;
+    const height = (document.documentElement.clientHeight || document.body.clientHeight) - 1;
+    const clampedX = Math.max(0, Math.min(x - mouseOffsetX, width - interfaceContainer.offsetWidth));
+    const clampedY = Math.max(0, Math.min(y - mouseOffsetY, height - interfaceContainer.offsetHeight));
+    interfaceContainer.style.left = clampedX + "px";
+    interfaceContainer.style.top = clampedY + "px";
+  };
+  const handleDragInterface = (e) => {
+    e.preventDefault();
+    moveInterface(e.clientX, e.clientY);
+  };
+  window.addEventListener("resize", () => {
+    moveInterface(lastX, lastY);
   });
-  const interfaceHeader = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_header-buttons"),
-  });
-  const tabListElement = Object.assign(document.createElement("ul"), {
-    className: addon.tab.scratchClass("react-tabs_react-tabs__tab-list", "gui_tab-list") + " debugger-tabs",
-  });
-  const buttonContainerElement = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_header-buttons-right"),
-  });
-  const tabContentContainer = Object.assign(document.createElement("div"), {
-    className: 'extra-log-container',
-  });
+  interfaceHeader.addEventListener("mousedown", handleStartDrag);
+
   interfaceHeader.append(tabListElement, buttonContainerElement);
   interfaceContainer.append(interfaceHeader, tabContentContainer);
   document.body.append(interfaceContainer);
@@ -288,7 +326,7 @@ export default async function ({ addon, global, console, msg }) {
     const defaultFormat = "{sprite}: {content} ({type})";
     const exportFormat = e.shiftKey ? prompt(msg("enter-format"), defaultFormat) : defaultFormat;
     if (!exportFormat) return;
-    closeDragElement();
+    handleStopDrag();
     const targetInfoCache = Object.create(null);
     // TODO refactor
     let file = logs
@@ -312,7 +350,7 @@ export default async function ({ addon, global, console, msg }) {
   });
   trashButton.button.addEventListener("click", () => {
     clearLogs();
-    closeDragElement();
+    handleStopDrag();
   });
 
   // ##### Threads Tab ##### //
@@ -698,8 +736,6 @@ export default async function ({ addon, global, console, msg }) {
   }
   setActiveTab(logsTab);
 
-  interfaceHeader.addEventListener("mousedown", dragMouseDown);
-
   let isScrolledToEnd = true;
   tabContentContainer.addEventListener(
     "wheel",
@@ -732,47 +768,8 @@ export default async function ({ addon, global, console, msg }) {
     return item;
   };
 
-  let mouseOffsetX = 0;
-  let mouseOffsetY = 0;
-  let lastX = 0;
-  let lastY = 0;
-
-  function dragMouseDown(e) {
-    e.preventDefault();
-    mouseOffsetX = e.clientX - interfaceContainer.offsetLeft;
-    mouseOffsetY = e.clientY - interfaceContainer.offsetTop;
-    lastX = e.clientX;
-    lastY = e.clientY;
-    document.addEventListener("mouseup", closeDragElement);
-    document.addEventListener("mousemove", elementDrag);
-  }
-
-  function dragConsole(x, y) {
-    lastX = x;
-    lastY = y;
-    const width = (document.documentElement.clientWidth || document.body.clientWidth) - 1;
-    const height = (document.documentElement.clientHeight || document.body.clientHeight) - 1;
-    const clampedX = Math.max(0, Math.min(x - mouseOffsetX, width - interfaceContainer.offsetWidth));
-    const clampedY = Math.max(0, Math.min(y - mouseOffsetY, height - interfaceContainer.offsetHeight));
-    interfaceContainer.style.left = clampedX + "px";
-    interfaceContainer.style.top = clampedY + "px";
-  }
-
-  function elementDrag(e) {
-    e.preventDefault();
-    dragConsole(e.clientX, e.clientY);
-  }
-
-  window.addEventListener("resize", () => {
-    dragConsole(lastX, lastY);
-  });
-
-  function closeDragElement() {
-    // stop moving when mouse button is released
-    document.removeEventListener("mouseup", closeDragElement);
-    document.removeEventListener("mousemove", elementDrag);
-  }
-
+  // TODO refactor
+  let pauseTime = 0;
   if (!isPaused()) {
     unpauseButton.button.style.display = "none";
     stepButton.button.style.display = "none";
