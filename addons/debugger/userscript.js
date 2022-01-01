@@ -229,6 +229,25 @@ export default async function ({ addon, global, console, msg }) {
     };
   };
 
+  const makeHeaderTab = ({text, icon}) => {
+    const tab = Object.assign(document.createElement("li"), {
+      className: tabClassName,
+    });
+    const imageElement = Object.assign(document.createElement("img"), {
+      src: icon
+    });
+    const textElement = Object.assign(document.createElement("span"), {
+      textContent: text
+    });
+    tab.appendChild(imageElement);
+    tab.appendChild(textElement);
+    return {
+      tab,
+      image: imageElement,
+      text: textElement
+    };
+  };
+
   const unpauseButton = makeHeaderButton({
     text: msg('unpause'),
     icon: addon.self.dir + "/icons/play.svg"
@@ -253,18 +272,10 @@ export default async function ({ addon, global, console, msg }) {
 
   // ##### Logs Tab ##### //
 
-  // TODO makeTab
-  const logsTabElement = Object.assign(document.createElement("li"), {
-    className: tabClassName,
+  const logsTabElement = makeHeaderTab({
+    text: msg('tab-logs'),
+    icon: addon.self.dir + "/icons/logs.svg"
   });
-  const logsTabImg = Object.assign(document.createElement("img"), {
-    src: addon.self.dir + "/icons/logs.svg",
-    draggable: false,
-  });
-  const logsTabText = Object.assign(document.createElement("span"), {
-    innerText: msg("tab-logs"),
-  });
-  logsTabElement.append(logsTabImg, logsTabText);
 
   const logsList = Object.assign(document.createElement("div"), {
     className: "logs",
@@ -309,18 +320,10 @@ export default async function ({ addon, global, console, msg }) {
 
   // ##### Threads Tab ##### //
 
-  // TODO makeTab
-  const threadsTabElement = Object.assign(document.createElement("li"), {
-    className: tabClassName,
+  const threadsTabElement = makeHeaderTab({
+    text: msg("tab-threads"),
+    icon: addon.self.dir + "/icons/threads.svg"
   });
-  const threadsTabImg = Object.assign(document.createElement("img"), {
-    src: addon.self.dir + "/icons/threads.svg",
-    draggable: false,
-  });
-  const threadsTabText = Object.assign(document.createElement("span"), {
-    innerText: msg("tab-threads"),
-  });
-  threadsTabElement.append(threadsTabImg, threadsTabText);
 
   const threadsList = Object.assign(document.createElement("div"), {
     className: "logs",
@@ -516,18 +519,10 @@ export default async function ({ addon, global, console, msg }) {
 
   // ##### Performance Tab ##### //
 
-  // TODO makeTab
-  const performanceTabElement = Object.assign(document.createElement("li"), {
-    className: tabClassName,
+  const performanceTabElement = makeHeaderTab({
+    text: msg('tab-performance'),
+    icon: addon.self.dir + "/icons/performance.svg"
   });
-  const performanceTabImg = Object.assign(document.createElement("img"), {
-    src: addon.self.dir + "/icons/performance.svg",
-    draggable: false,
-  });
-  const performanceTabText = Object.assign(document.createElement("span"), {
-    innerText: msg("tab-performance"),
-  });
-  performanceTabElement.append(performanceTabImg, performanceTabText);
 
   const performancePanel = document.createElement("div");
   const performanceFpsTitle = Object.assign(document.createElement("h1"), { innerText: msg("performance-framerate-title") });
@@ -657,7 +652,7 @@ export default async function ({ addon, global, console, msg }) {
     className: addon.tab.scratchClass("card_header-buttons-right"),
   });
 
-  const tabElements = [logsTabElement, threadsTabElement, performanceTabElement];
+  const tabElements = [logsTabElement.tab, threadsTabElement.tab, performanceTabElement.tab];
   const tabContent = [logsList, threadsList, performancePanel];
   const tabButtons = [
     [unpauseButton.button, exportButton.button, trashButton.button, closeButton.button],
