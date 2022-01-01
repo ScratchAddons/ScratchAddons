@@ -7,7 +7,7 @@
   "debugger/step": "Step",
   "debugger/thread": "Thread {threadNum}",
   "debugger/enter-format": "Enter export format:",
-  "debugger/unpause": "Unpause",
+  "debugger/unpause": "Resume",
   "debugger/unknown-sprite": "(unknown sprite)",
   "debugger/clone-of": "Clone of {spriteName}",
   "debugger/icon-warn": "Warning",
