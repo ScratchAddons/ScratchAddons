@@ -31,7 +31,6 @@
   padding: 10px;
   cursor: move;
   z-index: 10;
-  /* color: #fff !important; */
   width: calc(100% - 20px);
   font-size: 20px;
 }
@@ -48,10 +47,7 @@
   margin-right: 0.2rem;
 }
 
-@keyframes unpauseBackground
-
-/* Firefox */
-  {
+@keyframes unpauseBackground {
   0% {
     background-color: rgba(0, 0, 0, 0.15);
   }
