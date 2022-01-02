@@ -103,12 +103,12 @@ export default async function createLogsTab ({ debug, addon, console, msg }) {
       element.appendChild(repeats);
     }
 
+    const icon = document.createElement('div');
+    icon.className = 'sa-debugger-log-icon';
     if (log.type === 'warn' || log.type === 'error') {
-      const icon = document.createElement('div');
-      icon.className = 'sa-debugger-log-icon';
       icon.title = msg('icon-' + log.type);
-      element.appendChild(icon);
     }
+    element.appendChild(icon);
 
     if (log.blockId && log.targetId) {
       const preview = createBlockPreview(log.blockId, log.targetId);
