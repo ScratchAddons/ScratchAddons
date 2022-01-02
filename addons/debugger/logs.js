@@ -1,17 +1,17 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import LogView from "./log-view.js";
 
-export default async function createLogsTab ({ debug, addon, console, msg }) {
+export default async function createLogsTab({ debug, addon, console, msg }) {
   const vm = addon.tab.traps.vm;
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   const tab = debug.createHeaderTab({
-    text: msg('tab-logs'),
-    icon: addon.self.dir + "/icons/logs.svg"
+    text: msg("tab-logs"),
+    icon: addon.self.dir + "/icons/logs.svg",
   });
 
-  const logView = new LogView({msg, addon});
-  logView.placeholderElement.textContent = msg('no-logs');
+  const logView = new LogView({ msg, addon });
+  logView.placeholderElement.textContent = msg("no-logs");
 
   const createBlockPreview = (blockId, targetId) => {
     const target = vm.runtime.getTargetById(targetId);
@@ -79,35 +79,34 @@ export default async function createLogsTab ({ debug, addon, console, msg }) {
     return null;
   };
 
-  logView.compareLogs = (a, b) => (
+  logView.compareLogs = (a, b) =>
     a.text === b.text &&
     a.type === b.type &&
     a.internal === b.internal &&
     // TODO: if the same message is logged from a different spot, should those messages be grouped?
     a.blockId === b.blockId &&
-    a.targetId === b.targetId
-  );
+    a.targetId === b.targetId;
 
   logView.buildDOM = (log) => {
-    const element = document.createElement('div');
+    const element = document.createElement("div");
     element.dataset.type = log.type;
-    element.className = 'sa-debugger-log';
+    element.className = "sa-debugger-log";
 
     if (log.internal) {
-      element.classList.add('sa-debugger-log-internal');
+      element.classList.add("sa-debugger-log-internal");
     }
 
     if (log.count !== 1) {
-      const repeats = document.createElement('div');
-      repeats.className = 'sa-debugger-log-repeats';
+      const repeats = document.createElement("div");
+      repeats.className = "sa-debugger-log-repeats";
       repeats.textContent = log.count;
       element.appendChild(repeats);
     }
 
-    const icon = document.createElement('div');
-    icon.className = 'sa-debugger-log-icon';
-    if (log.type === 'warn' || log.type === 'error') {
-      icon.title = msg('icon-' + log.type);
+    const icon = document.createElement("div");
+    icon.className = "sa-debugger-log-icon";
+    if (log.type === "warn" || log.type === "error") {
+      icon.title = msg("icon-" + log.type);
     }
     element.appendChild(icon);
 
@@ -118,11 +117,11 @@ export default async function createLogsTab ({ debug, addon, console, msg }) {
       }
     }
 
-    const body = document.createElement('div');
-    body.className = 'sa-debugger-log-body';
+    const body = document.createElement("div");
+    body.className = "sa-debugger-log-body";
     if (log.text.length === 0) {
-      body.textContent = msg('empty-string');
-      body.classList.add('sa-debugger-log-body-empty');
+      body.textContent = msg("empty-string");
+      body.classList.add("sa-debugger-log-body-empty");
     } else {
       body.textContent = log.text;
     }
@@ -137,9 +136,9 @@ export default async function createLogsTab ({ debug, addon, console, msg }) {
   };
 
   const exportButton = debug.createHeaderButton({
-    text: msg('export'),
+    text: msg("export"),
     icon: addon.self.dir + "/icons/download-white.svg",
-    description: msg('export-desc')
+    description: msg("export-desc"),
   });
   const downloadText = (filename, text) => {
     downloadBlob(filename, new Blob([text], { type: "text/plain" }));
@@ -150,22 +149,25 @@ export default async function createLogsTab ({ debug, addon, console, msg }) {
     if (!exportFormat) return;
     const file = logView.logs
       .map(({ text, targetId, type, count }) =>
-        (exportFormat.replace(
-          /\{(sprite|type|content)\}/g,
-          (_, match) =>
-          ({
-            sprite: logView.getTargetInfoById(targetId).name,
-            type,
-            content: text,
-          }[match])
-        ) + "\n").repeat(count)
-      ).join("");
+        (
+          exportFormat.replace(
+            /\{(sprite|type|content)\}/g,
+            (_, match) =>
+              ({
+                sprite: logView.getTargetInfoById(targetId).name,
+                type,
+                content: text,
+              }[match])
+          ) + "\n"
+        ).repeat(count)
+      )
+      .join("");
     downloadText("logs.txt", file);
   });
 
   const trashButton = debug.createHeaderButton({
-    text: msg('clear'),
-    icon: addon.self.dir + "/icons/delete.svg"
+    text: msg("clear"),
+    icon: addon.self.dir + "/icons/delete.svg",
   });
   trashButton.element.addEventListener("click", () => {
     clearLogs();
@@ -174,19 +176,19 @@ export default async function createLogsTab ({ debug, addon, console, msg }) {
   const addLog = (text, thread, type) => {
     const log = {
       text,
-      type
+      type,
     };
     if (thread) {
       log.blockId = thread.peekStack();
       log.targetId = thread.target.id;
     }
-    if (type === 'internal') {
+    if (type === "internal") {
       log.internal = true;
-      log.type = 'log';
+      log.type = "log";
     }
-    if (type === 'internal-warn') {
+    if (type === "internal-warn") {
       log.internal = true;
-      log.type = 'warn';
+      log.type = "warn";
     }
 
     logView.append(log);
@@ -215,6 +217,6 @@ export default async function createLogsTab ({ debug, addon, console, msg }) {
     show,
     hide,
     addLog,
-    clearLogs
+    clearLogs,
   };
 }

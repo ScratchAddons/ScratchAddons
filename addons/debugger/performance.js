@@ -1,30 +1,28 @@
-import {onPauseChanged,isPaused} from "../pause/module.js";
+import { onPauseChanged, isPaused } from "../pause/module.js";
 
-export default async function createPerformanceTab ({ debug, addon, console, msg }) {
+export default async function createPerformanceTab({ debug, addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chartjs-plugin-annotation.min.js");
 
   const tab = debug.createHeaderTab({
-    text: msg('tab-performance'),
-    icon: addon.self.dir + "/icons/performance.svg"
+    text: msg("tab-performance"),
+    icon: addon.self.dir + "/icons/performance.svg",
   });
 
   const content = document.createElement("div");
 
-  const createChart = ({
-    title
-  }) => {
+  const createChart = ({ title }) => {
     const titleElement = Object.assign(document.createElement("h2"), {
-      textContent: title
+      textContent: title,
     });
     const canvas = Object.assign(document.createElement("canvas"), {
       className: "sa-debugger-chart",
     });
     return {
       title: titleElement,
-      canvas
+      canvas,
     };
   };
 
@@ -37,7 +35,7 @@ export default async function createPerformanceTab ({ debug, addon, console, msg
   const labels = Array.from(Array(NUMBER_OF_POINTS).keys()).reverse();
 
   const fpsElements = createChart({
-    title: msg('performance-framerate-title')
+    title: msg("performance-framerate-title"),
   });
   const fpsChart = new Chart(fpsElements.canvas.getContext("2d"), {
     type: "line",
@@ -73,7 +71,7 @@ export default async function createPerformanceTab ({ debug, addon, console, msg
   });
 
   const clonesElements = createChart({
-    title: msg('performance-clonecount-title')
+    title: msg("performance-clonecount-title"),
   });
   const performanceClonesChart = new Chart(clonesElements.canvas.getContext("2d"), {
     type: "line",
@@ -177,6 +175,6 @@ export default async function createPerformanceTab ({ debug, addon, console, msg
     content,
     buttons: [],
     show,
-    hide
+    hide,
   };
 }

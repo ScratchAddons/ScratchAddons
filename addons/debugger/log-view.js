@@ -13,7 +13,7 @@ const MAX_LOGS = 200000;
 const clamp = (i, min, max) => Math.max(min, Math.min(max, i));
 
 class LogView {
-  constructor ({msg, addon}) {
+  constructor({ msg, addon }) {
     this.addon = addon;
     this.msg = msg;
     this.vm = addon.tab.traps.vm;
@@ -21,40 +21,40 @@ class LogView {
     this.logs = [];
     this.canAutoScrollToEnd = true;
 
-    this.outerElement = document.createElement('div');
-    this.outerElement.className = 'sa-debugger-log-outer';
-    
-    this.innerElement = document.createElement('div');
-    this.innerElement.className = 'sa-debugger-log-inner';
-    this.outerElement.appendChild(this.innerElement);
-    this.innerElement.addEventListener('scroll', this._handleScroll.bind(this), {passive: true});
-    this.innerElement.addEventListener('wheel', this._handleWheel.bind(this), {passive: true});
+    this.outerElement = document.createElement("div");
+    this.outerElement.className = "sa-debugger-log-outer";
 
-    this.endElement = document.createElement('div');
-    this.endElement.className = 'sa-debugger-log-end';
+    this.innerElement = document.createElement("div");
+    this.innerElement.className = "sa-debugger-log-inner";
+    this.outerElement.appendChild(this.innerElement);
+    this.innerElement.addEventListener("scroll", this._handleScroll.bind(this), { passive: true });
+    this.innerElement.addEventListener("wheel", this._handleWheel.bind(this), { passive: true });
+
+    this.endElement = document.createElement("div");
+    this.endElement.className = "sa-debugger-log-end";
     this.innerElement.appendChild(this.endElement);
 
-    this.placeholderElement = document.createElement('div');
-    this.placeholderElement.className = 'sa-debugger-log-empty';
+    this.placeholderElement = document.createElement("div");
+    this.placeholderElement.className = "sa-debugger-log-empty";
 
     this.visible = false;
     this.isScrolledToEnd = true;
-    this.scrollTopWhenHidden = 'end';
+    this.scrollTopWhenHidden = "end";
     this.scrollTop = 0;
     this.updateContentQueued = false;
     this.scrollToEndQueued = false;
   }
 
-  compareLogs (a, b) {
+  compareLogs(a, b) {
     // to be overridden by users
     return false;
   }
 
-  append (log) {
+  append(log) {
     this.queueUpdateContent();
 
-    if (typeof log.text !== 'string') {
-      log.text = '' + log.text;
+    if (typeof log.text !== "string") {
+      log.text = "" + log.text;
     }
 
     const lastLog = this.logs[this.logs.length - 1];
@@ -74,64 +74,64 @@ class LogView {
     this._queueScrollToEnd();
   }
 
-  clear () {
+  clear() {
     this.logs.length = 0;
     this.scrollTop = 0;
     this.isScrolledToEnd = true;
     this.queueUpdateContent();
   }
 
-  show () {
+  show() {
     this.visible = true;
     this.height = this.innerElement.offsetHeight;
     this.queueUpdateContent();
-    if (this.scrollTopWhenHidden === 'end') {
+    if (this.scrollTopWhenHidden === "end") {
       this._queueScrollToEnd();
     } else {
       this.innerElement.scrollTop = this.scrollTopWhenHidden;
     }
   }
 
-  hide () {
+  hide() {
     this.visible = false;
-    this.scrollTopWhenHidden = this.isScrolledToEnd ? 'end' : this.scrollTop;
+    this.scrollTopWhenHidden = this.isScrolledToEnd ? "end" : this.scrollTop;
   }
 
-  _handleScroll (e) {
+  _handleScroll(e) {
     this.scrollTop = e.target.scrollTop;
     this.isScrolledToEnd = e.target.scrollTop + 5 >= e.target.scrollHeight - e.target.clientHeight;
     this.queueUpdateContent();
   }
 
-  _handleWheel (e) {
+  _handleWheel(e) {
     if (e.deltaY < 0) {
       this.isScrolledToEnd = false;
     }
   }
 
-  buildDOM (log) {
+  buildDOM(log) {
     // to be overridden by users
-    throw new Error('not implemented');
+    throw new Error("not implemented");
   }
 
-  _getLogDOM (log) {
+  _getLogDOM(log) {
     if (!log._dom) {
       log._dom = this.buildDOM(log);
     }
     return log._dom;
   }
 
-  invalidateAllLogDOM () {
+  invalidateAllLogDOM() {
     for (const i of this.logs) {
       this.invalidateLogDOM(i);
     }
   }
 
-  invalidateLogDOM (log) {
+  invalidateLogDOM(log) {
     log._dom = null;
   }
 
-  scrollIntoView (index) {
+  scrollIntoView(index) {
     const distanceFromTop = index * LOG_HEIGHT;
     const viewportStart = this.scrollTop;
     const viewportEnd = this.scrollTop + this.height;
@@ -142,7 +142,7 @@ class LogView {
     }
   }
 
-  _queueScrollToEnd () {
+  _queueScrollToEnd() {
     if (this.visible && this.canAutoScrollToEnd && this.isScrolledToEnd && !this.scrollToEndQueued) {
       this.scrollToEndQueued = true;
       queueMicrotask(() => {
@@ -156,7 +156,7 @@ class LogView {
     }
   }
 
-  queueUpdateContent () {
+  queueUpdateContent() {
     if (this.visible && !this.updateContentQueued) {
       this.updateContentQueued = true;
       queueMicrotask(() => {
@@ -166,7 +166,7 @@ class LogView {
     }
   }
 
-  updateContent () {
+  updateContent() {
     const totalHeight = this.logs.length * LOG_HEIGHT;
     this.endElement.style.transform = `translateY(${totalHeight}px)`;
 

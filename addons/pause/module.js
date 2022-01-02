@@ -20,7 +20,7 @@ const pauseThread = (thread, deferResume) => {
   const pauseState = {
     pauseTime: vm.runtime.currentMSecs,
     status: thread.status,
-    deferResume
+    deferResume,
   };
   pausedThreadState.set(thread, pauseState);
   // Make sure that paused threads will remain paused.
@@ -123,7 +123,7 @@ export const setupPause = (addon) => {
     setPaused(false);
     return originalGreenFlag.call(this);
   };
-  
+
   // Disable edge-activated hats and hats like "when key pressed" while paused.
   const originalStartHats = vm.runtime.startHats;
   vm.runtime.startHats = function (...args) {
@@ -143,7 +143,7 @@ export const setupPause = (addon) => {
     }
     return newThreads;
   };
-  
+
   // Paused threads should not be counted as running when updating GUI state.
   const originalGetMonitorThreadCount = vm.runtime._getMonitorThreadCount;
   vm.runtime._getMonitorThreadCount = function (threads) {
