@@ -9,5 +9,5 @@
   padding-right: 0;
 }
 .scratchCategorySecondMenu {
-	grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(10, 1fr);
 }

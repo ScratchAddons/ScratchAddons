@@ -6,12 +6,12 @@
       "url": "userstyle.css",
       "matches": ["projects"]
     },
-	{
+    {
       "url": "columns.css",
       "matches": ["projects"],
-	  "if": {
-		  "addonEnabled": "columns"
-	  }
+      "if": {
+        "addonEnabled": "columns"
+      }
     }
   ],
   "dynamicEnable": true,
