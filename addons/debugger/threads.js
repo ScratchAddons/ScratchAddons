@@ -1,4 +1,4 @@
-import { onPauseChanged, isPaused } from "../pause/module.js";
+import { onPauseChanged, isPaused, setPauseStartedHats, getRealStatus } from "../pause/module.js";
 import LogView from './log-view.js';
 
 const areArraysEqual = (a, b) => {
@@ -166,7 +166,6 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
       }
       const id = allThreadIds.get(thread);
 
-      const result = [];
       const target = thread.target;
 
       if (!threadInfoCache.has(thread)) {
@@ -181,11 +180,10 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
         });
       }
       const cacheInfo = threadInfoCache.get(thread);
-      result.push(cacheInfo.headerItem);
 
       const createBlockInfo = (blockId, stackFrame) => {
         const block = thread.target.blocks.getBlock(blockId);
-        if (!cacheInfo.blockCache.get(block)) {
+        if (!cacheInfo.blockCache.has(block)) {
           const {name, color} = getBlockInfo(block);
           cacheInfo.blockCache.set(block, {
             type: 'thread-stack',
@@ -205,8 +203,8 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
             blockInfo.running = false;
           }
         }
-        const result = [blockInfo];
 
+        const result = [blockInfo];
         if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.startedThreads) {
           for (const thread of stackFrame.executionContext.startedThreads) {
             concatInPlace(result, createThreadInfo(thread, depth + 1));
@@ -216,8 +214,14 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
         return result;
       };
 
+      const topBlock = thread.topBlock;
+      const result = [
+        cacheInfo.headerItem
+      ];
+      concatInPlace(result, createBlockInfo(topBlock, null));
       for (let i = 0; i < thread.stack.length; i++) {
         const blockId = thread.stack[i];
+        if (blockId === topBlock) continue;
         const stackFrame = thread.stackFrames[i];
         concatInPlace(result, createBlockInfo(blockId, stackFrame));
       }
@@ -256,9 +260,8 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
   });
 
   let singleSteppingThread = null;
-  const magicError = {
-    'used by Scratch Addons': 'used by Scratch Addons'
-  };
+  // Value of magicError doesn't matter as long as it's a unique object
+  const magicError = ['special error used by Scratch Addons for implementing single-stepping'];
   const fakeProfiler = {
     idByName: () => {
       throw magicError;
@@ -332,43 +335,60 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
       configurable: true
     });
 
+    setPauseStartedHats(true);
+
     try {
       sequencer.stepThread(thread);
     } catch (e) {
       if (e !== magicError) throw e;
     } finally {
+      setPauseStartedHats(false);
       Object.defineProperty(thread, 'blockGlowInFrame', {
         value: newBlockGlowInFrame,
         configurable: true,
         enumerable: true,
         writable: true
       });
+
+      // this little mess will let the pause module know what happened
+      const newStatus = thread.status;
       Object.defineProperty(thread, 'status', oldStatus);
+      thread.status = newStatus;
+
       vm.runtime.profiler = null;
     }
   };
 
-  const isThreadComplete = (thread) => thread.status === STATUS_DONE;
-
-  const findNewSingleSteppingThread = (oldThread) => {
+  const findNewSingleSteppingThread = (startIndex) => {
     const threads = vm.runtime.threads;
-    const index = threads.indexOf(oldThread);
-    for (let i = index + 1; i < threads.length; i++) {
+    for (let i = startIndex; i < threads.length; i++) {
       const thread = threads[i];
-      if (!isThreadComplete(thread)) {
+      const status = getRealStatus(thread);
+      if (status === STATUS_RUNNING || status === STATUS_YIELD || status === STATUS_YIELD_TICK) {
+        console.log('Switched to', thread);
         return thread;
       }
     }
+    return null;
   };
 
   const singleStep = () => {
+    if (!singleSteppingThread) {
+      singleSteppingThread = findNewSingleSteppingThread(0);
+    }
     if (!singleSteppingThread) {
       return;
     }
 
     singleStepThread(singleSteppingThread);
-    if (isThreadComplete(singleSteppingThread)) {
-      singleSteppingThread = findNewSingleSteppingThread();
+
+    const status = getRealStatus(singleSteppingThread);
+    if (status !== STATUS_RUNNING && status !== STATUS_YIELD) {
+      const index = vm.runtime.threads.indexOf(singleSteppingThread);
+      singleSteppingThread = findNewSingleSteppingThread(index + 1);
+    }
+    if (!singleSteppingThread) {
+      singleSteppingThread = findNewSingleSteppingThread(0);
     }
 
     threadInfoCache = new WeakMap();

@@ -16,6 +16,28 @@ export const onPauseChanged = (listener) => {
   eventTarget.addEventListener("change", () => listener(paused));
 };
 
+const pauseThread = (thread, deferResume) => {
+  const pauseState = {
+    pauseTime: vm.runtime.currentMSecs,
+    status: thread.status,
+    deferResume
+  };
+  pausedThreadState.set(thread, pauseState);
+  // Make sure that paused threads will remain paused.
+  // Setting thread.status once is not enough for promise blocks like "ask and wait"
+  Object.defineProperty(thread, "status", {
+    get() {
+      return STATUS_PROMISE_WAIT;
+    },
+    set(status) {
+      // New status will be applied when the thread is unpaused.
+      pauseState.status = status;
+    },
+    configurable: true,
+    enumerable: true,
+  });
+};
+
 export const setPaused = (_paused) => {
   paused = _paused;
 
@@ -34,25 +56,7 @@ export const setPaused = (_paused) => {
       if (thread.updateMonitor || pausedThreadState.has(thread)) {
         continue;
       }
-      const pauseState = {
-        pauseTime: vm.runtime.currentMSecs,
-        status: thread.status,
-        deferResume: i < activeThreadIndex
-      };
-      pausedThreadState.set(thread, pauseState);
-      // Make sure that paused threads will remain paused.
-      // Setting thread.status once is not enough for promise blocks like "ask and wait"
-      Object.defineProperty(thread, "status", {
-        get() {
-          return STATUS_PROMISE_WAIT;
-        },
-        set(status) {
-          // New status will be applied when the thread is unpaused.
-          pauseState.status = status;
-        },
-        configurable: true,
-        enumerable: true,
-      });
+      pauseThread(thread, i < activeThreadIndex);
     }
 
     // Immediately emit project stop
@@ -94,6 +98,19 @@ export const setPaused = (_paused) => {
   eventTarget.dispatchEvent(new CustomEvent("change"));
 };
 
+let pauseStartedHats = false;
+export const setPauseStartedHats = (_pauseStartedHats) => {
+  pauseStartedHats = _pauseStartedHats;
+};
+
+export const getRealStatus = (thread) => {
+  if (pausedThreadState.has(thread)) {
+    const pauseState = pausedThreadState.get(thread);
+    return pauseState.status;
+  }
+  return thread.status;
+};
+
 export const setupPause = (addon) => {
   if (vm) {
     return;
@@ -119,12 +136,10 @@ export const setupPause = (addon) => {
     }
     const newThreads = originalStartHats.apply(this, args);
     // Hats started by a paused thread should also be paused
-    // TODO i don't think this works, also don't like it
-    if (paused) {
-      debugger;
-    }
-    if (paused && pausedThreadState.has(this.sequencer.activeThread)) {
-      setPaused(true);
+    if (paused && pauseStartedHats) {
+      for (const thread of newThreads) {
+        pauseThread(thread, false);
+      }
     }
     return newThreads;
   };
