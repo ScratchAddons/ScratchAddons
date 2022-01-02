@@ -38,7 +38,7 @@ export default class DevTools {
   async init() {
     this.addContextMenus();
     while (true) {
-      const root = await this.addon.tab.waitForElement("ul[class*=gui_tab-list_]", {
+      const root = await this.addon.tab.waitForElement("div[class^=gui_tabs_] ul[class*=gui_tab-list_]", {
         markAsSeen: true,
         reduxEvents: [
           "scratch-gui/mode/SET_PLAYER",
