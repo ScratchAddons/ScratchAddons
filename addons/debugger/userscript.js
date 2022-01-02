@@ -1,4 +1,4 @@
-import {isPaused, setPaused, onPauseChanged, setupPause} from "./module.js";
+import {isPaused, setPaused, onPauseChanged, setupPause} from "../pause/module.js";
 import createLogsTab from './logs.js';
 import createThreadsTab from "./threads.js";
 import createPerformanceTab from "./performance.js";

@@ -1,4 +1,4 @@
-import { isPaused, setPaused, onPauseChanged, setupPause } from "./../debugger/module.js";
+import { isPaused, setPaused, onPauseChanged, setupPause } from "./module.js";
 
 export default async function ({ addon, global, console, msg }) {
   setupPause(addon);

@@ -1,4 +1,4 @@
-import { onPauseChanged, isPaused } from "./module.js";
+import { onPauseChanged, isPaused } from "../pause/module.js";
 import LogView from './log-view.js';
 
 const areArraysEqual = (a, b) => {

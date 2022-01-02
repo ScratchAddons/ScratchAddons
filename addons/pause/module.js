@@ -120,6 +120,9 @@ export const setupPause = (addon) => {
     const newThreads = originalStartHats.apply(this, args);
     // Hats started by a paused thread should also be paused
     // TODO i don't think this works, also don't like it
+    if (paused) {
+      debugger;
+    }
     if (paused && pausedThreadState.has(this.sequencer.activeThread)) {
       setPaused(true);
     }

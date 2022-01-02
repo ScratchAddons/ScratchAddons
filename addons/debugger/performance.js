@@ -1,9 +1,8 @@
-import {onPauseChanged,isPaused} from "./module.js";
+import {onPauseChanged,isPaused} from "../pause/module.js";
 
 export default async function createPerformanceTab ({ debug, addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
-  // TODO this sucks
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chartjs-plugin-annotation.min.js");
 
