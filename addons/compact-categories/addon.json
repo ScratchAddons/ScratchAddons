@@ -1,0 +1,29 @@
+{
+  "name": "Compact block category menu",
+  "description": "Hides the category labels on the block category menu, making it smaller.",
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    },
+	{
+      "url": "columns.css",
+      "matches": ["projects"],
+	  "if": {
+		  "addonEnabled": "columns"
+	  }
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "injectAsStyleElt": true,
+  "updateUserstylesOnSettingsChange": true,
+  "tags": ["editor", "theme", "codeEditor"],
+  "credits": [
+    {
+      "name": "CST1229",
+      "link": "https://github.com/CST1229/"
+    }
+  ],
+  "versionAdded": "1.24.0"
+}

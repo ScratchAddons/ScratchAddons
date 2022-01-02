@@ -1,0 +1,17 @@
+.scratchCategoryMenuItemLabel, .sa-add-extension-label { display: none;}
+
+.scratchCategoryMenuItem {padding: 5px; padding-left: 4px; padding-bottom: 4px;}
+.scratchCategoryMenu {width: 30px;}
+
+.blocklyFlyout {transform: translate(32px) !important;} /* Move the block palette left to compensate */
+
+.blocklyFlyoutScrollbar {position: relative; left: -30px;}
+
+div[class*="gui_extension-button-container"] {width: 30px;}
+img[class*="gui_extension-button-icon"] {position: relative; right: 3px;} /* Adjust extension button icon for it to look better */
+
+/* hide-flyout compatibility */
+.sa-lock-image {transform: translateX(-30px);}
+.blocklyFlyout.sa-flyoutClose {transform: translateX(-230px) !important;}
+.sa-lock-image.sa-flyoutClose {transform: translateX(-290px);}
+.sa-flyout-placeHolder {transform: translateX(-30px);}

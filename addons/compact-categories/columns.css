@@ -1,0 +1,13 @@
+.scratchCategoryMenu {
+  width: 100%;
+  columns: 10;
+  column-gap: 0;
+}
+.scratchCategoryMenuItem {
+  width: unset;
+  padding: 2px;
+  padding-right: 0;
+}
+.scratchCategorySecondMenu {
+	grid-template-columns: repeat(10, 1fr);
+}
