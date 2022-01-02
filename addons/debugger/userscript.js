@@ -19,9 +19,8 @@ export default async function ({ addon, global, console, msg }) {
       }
       return;
     }
-    setPaused(!isPaused());
-    const pauseAddonButton = document.querySelector(".pause-btn");
-    if (!pauseAddonButton || getComputedStyle(pauseAddonButton).display === "none") setInterfaceVisible(true);
+    setPaused(true);
+    setInterfaceVisible(true);
   };
 
   addon.tab.addBlock("sa-pause", {
