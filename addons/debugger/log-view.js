@@ -42,7 +42,7 @@ class LogView {
     this.scrollToEndQueued = false;
   }
 
-  compareLogs () {
+  compareLogs (a, b) {
     // to be overridden by users
     return false;
   }

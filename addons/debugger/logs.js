@@ -78,13 +78,14 @@ export default async function createLogsTab ({ debug, addon, console, msg }) {
     return null;
   };
 
-  logView.compareLogs = (a, b) => {
+  logView.compareLogs = (a, b) => (
     a.text === b.text &&
     a.type === b.type &&
+    a.internal === b.internal &&
     // TODO: if the same message is logged from a different spot, should those messages be grouped?
     a.blockId === b.blockId &&
     a.targetId === b.targetId
-  };
+  );
 
   logView.buildDOM = (log) => {
     const element = document.createElement('div');
