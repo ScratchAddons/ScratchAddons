@@ -34,6 +34,9 @@ class LogView {
     this.endElement.className = 'sa-debugger-log-end';
     this.innerElement.appendChild(this.endElement);
 
+    this.placeholderElement = document.createElement('div');
+    this.placeholderElement.className = 'sa-debugger-log-empty';
+
     this.visible = false;
     this.isScrolledToEnd = true;
     this.scrollTopWhenHidden = 'end';
@@ -177,6 +180,13 @@ class LogView {
         el.remove();
       }
     }
+
+    if (this.logs.length) {
+      this.placeholderElement.remove();
+    } else {
+      this.innerElement.appendChild(this.placeholderElement);
+    }
+
     for (let i = startIndex; i < endIndex; i++) {
       const log = this.logs[i];
       const element = this._getLogDOM(log);

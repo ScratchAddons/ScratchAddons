@@ -38,6 +38,7 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
   const logView = new LogView({ addon, msg });
   logView.canAutoScrollToEnd = false;
   logView.outerElement.classList.add('sa-debugger-threads');
+  logView.placeholderElement.textContent = msg('no-threads-running');
 
   const allThreadIds = new WeakMap();
   let nextThreadId = 1;

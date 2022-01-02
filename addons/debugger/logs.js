@@ -11,6 +11,7 @@ export default async function createLogsTab ({ debug, addon, console, msg }) {
   });
 
   const logView = new LogView({msg, addon});
+  logView.placeholderElement.textContent = msg('no-logs');
 
   const createBlockPreview = (blockId, targetId) => {
     const target = vm.runtime.getTargetById(targetId);
