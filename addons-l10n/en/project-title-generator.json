@@ -1,4 +1,5 @@
 {
+  "project-title-generator/format": "{adj} {adj2} {noun}",
   "project-title-generator/adj-1": "Funky",
   "project-title-generator/adj-2": "Wacky",
   "project-title-generator/adj-3": "Sleepy",

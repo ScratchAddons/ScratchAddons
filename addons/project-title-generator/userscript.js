@@ -113,8 +113,13 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   async function setProjectName() {
-    let newName =
-      msg("adj-" + randi(ADJ_COUNT)) + " " + msg("adj-" + randi(ADJ_COUNT)) + " " + msg("noun-" + randi(NOUN_COUNT));
+    // Constructing the name like this is necessary for cross-language compatibility
+    // (some languages put the adjectives after the noun, some don't use spaces here, etc.)
+    let newName = msg("format", {
+      adj: msg("adj-" + randi(ADJ_COUNT)),
+      adj2: msg("adj-" + randi(ADJ_COUNT)),
+      noun: msg("noun-" + randi(NOUN_COUNT)),
+    });
     addon.tab.redux.dispatch({ type: "projectTitle/SET_PROJECT_TITLE", title: newName });
   }
 
