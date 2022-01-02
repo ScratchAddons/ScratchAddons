@@ -235,7 +235,7 @@ export default async function ({ addon, global, console, msg }) {
       let original = target;
       if (!target.isOriginal) {
         name = msg('clone-of', {
-          spriteName: name
+          sprite: name
         });
         original = target.sprite.clones[0];
       }

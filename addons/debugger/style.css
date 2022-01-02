@@ -34,13 +34,13 @@
 }
 
 .sa-debugger-unpause {
-  animation: unpauseBackground 2s infinite alternate;
+  animation: saDebuggerUnpause 2s infinite alternate;
 }
 .sa-debugger-unpause > img {
   width: 20px;
   height: 20px;
 }
-@keyframes unpauseBackground {
+@keyframes saDebuggerUnpause {
   0% {
     background-color: rgba(0, 0, 0, 0.15);
   }
@@ -166,7 +166,7 @@
   font-weight: bold;
   margin-right: 8px;
 }
-.sa-debugger-thread-target-index {
+.sa-debugger-thread-target-id {
 
 }
 .sa-debugger-thread-running {

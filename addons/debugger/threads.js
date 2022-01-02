@@ -32,6 +32,9 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
   logView.canAutoScrollToEnd = false;
   logView.outerElement.classList.add('sa-debugger-threads');
 
+  const allThreadIds = new WeakMap();
+  let nextThreadId = 1;
+
   logView.buildDOM = (log) => {
     const INDENT = 16;
 
@@ -51,12 +54,12 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
       name.className = 'sa-debugger-thread-target-name';
       element.appendChild(name);
 
-      const index = document.createElement('div');
-      index.className = 'sa-debugger-thread-index';
-      index.textContent = msg("thread", {
-        threadNum: log.index
+      const id = document.createElement('div');
+      id.className = 'sa-debugger-thread-id';
+      id.textContent = msg("thread", {
+        id: log.id
       });
-      element.appendChild(index);
+      element.appendChild(id);
     }
 
     if (log.type === 'thread-stack') {
@@ -151,7 +154,10 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
       }
       visitedThreads.add(thread);
 
-      const index = threads.indexOf(thread);
+      if (!allThreadIds.has(thread)) {
+        allThreadIds.set(thread, nextThreadId++);
+      }
+      const id = allThreadIds.get(thread);
 
       const result = [];
       const target = thread.target;
@@ -162,7 +168,7 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
             type: 'thread-header',
             depth,
             targetName: target.getName(),
-            index: index + 1
+            id
           },
           blockCache: new WeakMap()
         });
