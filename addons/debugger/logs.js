@@ -91,6 +91,10 @@ export default async function createLogsTab ({ debug, addon, console, msg }) {
     element.dataset.type = log.type;
     element.className = 'sa-debugger-log';
 
+    if (log.internal) {
+      element.classList.add('sa-debugger-log-internal');
+    }
+
     if (log.count !== 1) {
       const repeats = document.createElement('div');
       repeats.className = 'sa-debugger-log-repeats';
@@ -98,7 +102,7 @@ export default async function createLogsTab ({ debug, addon, console, msg }) {
       element.appendChild(repeats);
     }
 
-    if (log.type !== 'log') {
+    if (log.type === 'warn' || log.type === 'error') {
       const icon = document.createElement('div');
       icon.className = 'sa-debugger-log-icon';
       icon.title = msg('icon-' + log.type);
@@ -123,20 +127,8 @@ export default async function createLogsTab ({ debug, addon, console, msg }) {
     body.title = log.text;
     element.appendChild(body);
 
-    if (log.blockId && log.targetId) {
-      const link = document.createElement('a');
-      link.className = 'sa-debugger-log-link';
-      element.appendChild(link);
-
-      const {exists, name} = debug.getTargetInfoById(log.targetId);
-      link.textContent = name;
-      if (exists) {
-        link.addEventListener('click', logView.handleClickLink);
-        link.dataset.target = log.targetId;
-        link.dataset.block = log.blockId;
-      } else {
-        link.classList.add('sa-debugger-log-link-unknown');
-      }
+    if (log.targetId && log.blockId) {
+      element.appendChild(debug.createBlockLink(log.targetId, log.blockId));
     }
 
     return element;
@@ -178,19 +170,24 @@ export default async function createLogsTab ({ debug, addon, console, msg }) {
   });
 
   const addLog = (text, thread, type) => {
-    let blockId;
-    let targetId;
+    const log = {
+      text,
+      type
+    };
     if (thread) {
-      blockId = thread.peekStack();
-      targetId = thread.target.id;
+      log.blockId = thread.peekStack();
+      log.targetId = thread.target.id;
+    }
+    if (type === 'internal') {
+      log.internal = true;
+      log.type = 'log';
+    }
+    if (type === 'internal-warn') {
+      log.internal = true;
+      log.type = 'warn';
     }
 
-    logView.append({
-      text,
-      type,
-      blockId,
-      targetId
-    });
+    logView.append(log);
 
     if (!logView.visible) {
       debug.setHasUnreadMessage(true);

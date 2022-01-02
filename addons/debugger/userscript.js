@@ -231,17 +231,128 @@ export default async function ({ addon, global, console, msg }) {
   const getTargetInfoById = (id) => {
     const target = vm.runtime.getTargetById(id);
     if (target) {
+      let name = target.getName();
+      let original = target;
+      if (!target.isOriginal) {
+        name = msg('clone-of', {
+          spriteName: name
+        });
+        original = target.sprite.clones[0];
+      }
       return {
         exists: true,
-        name: target.isOriginal ? target.getName() : msg('clone-of', {
-          spriteName: target.getName()
-        })
-      }
+        originalId: original.id,
+        name
+      };
     }
     return {
       exists: false,
+      original: null,
       name: msg('unknown-sprite')
     };
+  };
+
+  const createBlockLink = (targetId, blockId) => {
+    const link = document.createElement('a');
+    link.className = 'sa-debugger-log-link';
+
+    const {exists, name, originalId} = getTargetInfoById(targetId);
+    link.textContent = name;
+    if (exists) {
+      link.addEventListener('mousedown', () => goToBlock(originalId, blockId));
+    } else {
+      link.classList.add('sa-debugger-log-link-unknown');
+    }
+
+    return link;
+  };
+
+  const goToBlock = (targetId, blockId) => {
+    const workspace = Blockly.getMainWorkspace();
+    const redux = addon.tab.redux;
+
+    const offsetX = 32;
+    const offsetY = 32;
+    if (targetId !== vm.editingTarget.id) {
+      if (vm.runtime.getTargetById(targetId)) {
+        vm.setEditingTarget(targetId);
+        setTimeout(() => goToBlock(targetId, blockId), 300);
+      }
+      return;
+    }
+
+    const block = workspace.getBlockById(blockId);
+    if (!block) return;
+
+    // Don't scroll to blocks in the flyout
+    if (block.workspace.isFlyout) return;
+
+    // Make sure the code tab is active
+    if (redux.state.scratchGui.editorTab.activeTabIndex !== 0) {
+      redux.dispatch({
+        type: "scratch-gui/navigation/ACTIVATE_TAB",
+        activeTabIndex: 0,
+      });
+      setTimeout(() => goToBlock(targetId, blockId), 0);
+      return;
+    }
+
+    // Copied from devtools. If it's code gets improved for this function, bring those changes here too.
+    let root = block.getRootBlock();
+
+    let base = block;
+    while (base.getOutputShape() && base.getSurroundParent()) {
+      base = base.getSurroundParent();
+    }
+
+    let ePos = base.getRelativeToSurfaceXY(), // Align with the top of the block
+      rPos = root.getRelativeToSurfaceXY(), // Align with the left of the block 'stack'
+      scale = workspace.scale,
+      x = rPos.x * scale,
+      y = ePos.y * scale,
+      xx = block.width + x, // Turns out they have their x & y stored locally, and they are the actual size rather than scaled or including children...
+      yy = block.height + y,
+      s = workspace.getMetrics();
+    if (
+      x < s.viewLeft + offsetX - 4 ||
+      xx > s.viewLeft + s.viewWidth ||
+      y < s.viewTop + offsetY - 4 ||
+      yy > s.viewTop + s.viewHeight
+    ) {
+      let sx = x - s.contentLeft - offsetX,
+        sy = y - s.contentTop - offsetY;
+
+      workspace.scrollbar.set(sx, sy);
+    }
+    // Flashing
+    const myFlash = { block: null, timerID: null, colour: null };
+    if (myFlash.timerID > 0) {
+      clearTimeout(myFlash.timerID);
+      myFlash.block.setColour(myFlash.colour);
+    }
+
+    let count = 4;
+    let flashOn = true;
+    myFlash.colour = block.getColour();
+    myFlash.block = block;
+
+    function _flash() {
+      if (!myFlash.block.svgPath_) {
+        myFlash.timerID = count = 0;
+        flashOn = true;
+        return;
+      }
+      myFlash.block.svgPath_.style.fill = flashOn ? "#ffff80" : myFlash.colour;
+      flashOn = !flashOn;
+      count--;
+      if (count > 0) {
+        myFlash.timerID = setTimeout(_flash, 200);
+      } else {
+        myFlash.timerID = 0;
+      }
+    }
+
+    _flash();
   };
 
   const api = {
@@ -251,6 +362,7 @@ export default async function ({ addon, global, console, msg }) {
       setHasUnreadMessage,
       addAfterStepCallback,
       getTargetInfoById,
+      createBlockLink,
     },
     addon,
     msg,

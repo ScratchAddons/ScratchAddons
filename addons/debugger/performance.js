@@ -13,23 +13,40 @@ export default async function createPerformanceTab ({ debug, addon, console, msg
   });
 
   const content = document.createElement("div");
-  const performanceFpsTitle = Object.assign(document.createElement("h1"), { innerText: msg("performance-framerate-title") });
-  const performanceFpsChartCanvas = Object.assign(document.createElement("canvas"), {
-    id: "debug-fps-chart",
-    className: "logs",
-  });
-  const performanceCharNumPoints = 20;
-  const getMaxFps = () => {
-    return Math.round(1000 / vm.runtime.currentStepTime);
+
+  const createChart = ({
+    title
+  }) => {
+    const titleElement = Object.assign(document.createElement("h2"), {
+      textContent: title
+    });
+    const canvas = Object.assign(document.createElement("canvas"), {
+      className: "sa-debugger-chart",
+    });
+    return {
+      title: titleElement,
+      canvas
+    };
   };
-  const performanceFpsChart = new Chart(performanceFpsChartCanvas.getContext("2d"), {
+
+  const now = () => performance.now();
+
+  const getMaxFps = () => Math.round(1000 / vm.runtime.currentStepTime);
+
+  const NUMBER_OF_POINTS = 20;
+  // An array like [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+  const labels = Array.from(Array(NUMBER_OF_POINTS).keys()).reverse();
+
+  const fpsElements = createChart({
+    title: msg('performance-framerate-title')
+  });
+  const fpsChart = new Chart(fpsElements.canvas.getContext("2d"), {
     type: "line",
     data: {
-      // An array like [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
-      labels: Array.from(Array(performanceCharNumPoints).keys()).reverse(),
+      labels,
       datasets: [
         {
-          data: Array(performanceCharNumPoints).fill(-1),
+          data: Array(NUMBER_OF_POINTS).fill(-1),
           borderWidth: 1,
           fill: true,
           backgroundColor: "hsla(163, 85%, 40%, 0.5)",
@@ -43,12 +60,10 @@ export default async function createPerformanceTab ({ debug, addon, console, msg
           min: 0,
         },
       },
-
       plugins: {
         legend: {
           display: false,
         },
-
         tooltip: {
           callbacks: {
             label: (context) => msg("performance-framerate-graph-tooltip", { fps: context.parsed.y }),
@@ -57,18 +72,17 @@ export default async function createPerformanceTab ({ debug, addon, console, msg
       },
     },
   });
-  const performanceClonesTitle = Object.assign(document.createElement("h1"), { innerText: msg("performance-clonecount-title") });
-  const performanceClonesChartCanvas = Object.assign(document.createElement("canvas"), {
-    id: "debug-fps-chart",
-    className: "logs",
+
+  const clonesElements = createChart({
+    title: msg('performance-clonecount-title')
   });
-  const performanceClonesChart = new Chart(performanceClonesChartCanvas.getContext("2d"), {
+  const performanceClonesChart = new Chart(clonesElements.canvas.getContext("2d"), {
     type: "line",
     data: {
-      labels: Array.from(Array(performanceCharNumPoints).keys()).reverse(),
+      labels,
       datasets: [
         {
-          data: Array(performanceCharNumPoints).fill(-1),
+          data: Array(NUMBER_OF_POINTS).fill(-1),
           borderWidth: 1,
           fill: true,
           backgroundColor: "hsla(163, 85%, 40%, 0.5)",
@@ -82,12 +96,10 @@ export default async function createPerformanceTab ({ debug, addon, console, msg
           min: 0,
         },
       },
-
       plugins: {
         legend: {
           display: false,
         },
-
         tooltip: {
           callbacks: {
             label: (context) => msg("performance-clonecount-graph-tooltip", { clones: context.parsed.y }),
@@ -100,51 +112,52 @@ export default async function createPerformanceTab ({ debug, addon, console, msg
   // Holds the times of each frame drawn in the last second.
   // The length of this list is effectively the FPS.
   const renderTimes = [];
+
   // The last time we pushed a new datapoint to the graph
-  var lastFpsTime = Date.now() + 3000;
+  let lastFpsTime = now() + 3000;
 
-  const ogDraw = vm.runtime.renderer.draw;
-  vm.runtime.renderer.draw = function (...args) {
-    if (!isPaused()) {
-      const now = Date.now();
+  debug.addAfterStepCallback(() => {
+    if (isPaused()) {
+      return;
+    }
+    const time = now();
+
+    // Remove all frame times older than 1 second in renderTimes
+    while (renderTimes.length > 0 && renderTimes[0] <= time - 1000) renderTimes.shift();
+    renderTimes.push(time);
+
+    if (time - lastFpsTime > 1000) {
+      lastFpsTime = time;
+
       const maxFps = getMaxFps();
-      // Remove all frame times older than 1 second in renderTimes
-      while (renderTimes.length > 0 && renderTimes[0] <= now - 1000) renderTimes.shift();
-      renderTimes.push(now);
+      const fpsData = fpsChart.data.datasets[0].data;
+      fpsData.shift();
+      fpsData.push(Math.min(renderTimes.length, maxFps));
+      // Incase we switch between 30FPS and 60FPS, update the max height of the chart.
+      fpsChart.options.scales.y.max = maxFps;
 
-      if (now - lastFpsTime > 1000) {
-        lastFpsTime = now;
+      const clonesData = performanceClonesChart.data.datasets[0].data;
+      clonesData.shift();
+      clonesData.push(vm.runtime._cloneCounter);
 
-        // Update the graphs
-
-        const fpsData = performanceFpsChart.data.datasets[0].data;
-        fpsData.shift();
-        fpsData.push(Math.min(renderTimes.length, maxFps));
-        // Incase we switch between 30FPS and 60FPS, update the max height of the chart.
-        performanceFpsChart.options.scales.y.max = maxFps;
-        performanceFpsChart.update();
-
-        const clonesData = performanceClonesChart.data.datasets[0].data;
-        clonesData.shift();
-        clonesData.push(vm.runtime._cloneCounter);
-
-        if (isVisible) {
-          performanceClonesChart.update();
-        }
+      if (isVisible) {
+        fpsChart.update();
+        performanceClonesChart.update();
       }
     }
+  });
 
-    ogDraw.call(this, ...args)
-  };
-
-  content.append(performanceFpsTitle, performanceFpsChartCanvas, performanceClonesTitle, performanceClonesChartCanvas);
+  content.appendChild(fpsElements.title);
+  content.appendChild(fpsElements.canvas);
+  content.appendChild(clonesElements.title);
+  content.appendChild(clonesElements.canvas);
 
   let pauseTime = 0;
   onPauseChanged((paused) => {
     if (paused) {
-      pauseTime = Date.now();
+      pauseTime = now();
     } else {
-      const dt = Date.now() - pauseTime;
+      const dt = now() - pauseTime;
       lastFpsTime += dt;
       for (var i = 0; i < renderTimes.length; i++) {
         renderTimes[i] += dt;

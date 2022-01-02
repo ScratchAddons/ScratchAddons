@@ -30,13 +30,13 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
 
   const logView = new LogView({ addon, msg });
   logView.canAutoScrollToEnd = false;
+  logView.outerElement.classList.add('sa-debugger-threads');
 
   logView.buildDOM = (log) => {
-    const element = document.createElement('div');
-    element.dataset.type = log.type;
-    element.className = 'sa-debugger-log';
+    const INDENT = 16;
 
-    const INDENT = 10;
+    const element = document.createElement('div');
+    element.className = 'sa-debugger-log';
 
     if (log.type === 'thread-header') {
       if (log.depth > 0) {
@@ -72,20 +72,8 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
       element.classList.add('sa-debugger-thread-running');
     }
 
-    if (log.blockId && log.targetId) {
-      const link = document.createElement('a');
-      link.className = 'sa-debugger-log-link';
-      element.appendChild(link);
-
-      const {exists, name} = debug.getTargetInfoById(log.targetId);
-      link.textContent = name;
-      if (exists) {
-        link.addEventListener('click', logView.handleClickLink);
-        link.dataset.target = log.targetId;
-        link.dataset.block = log.blockId;
-      } else {
-        link.classList.add('sa-debugger-log-link-unknown');
-      }
+    if (log.targetId && log.blockId) {
+      element.appendChild(debug.createBlockLink(log.targetId, log.blockId));
     }
 
     return element;
@@ -158,8 +146,12 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
     const visitedThreads = new Set();
 
     const createThreadInfo = (thread, depth) => {
-      const index = threads.indexOf(thread);
+      if (visitedThreads.has(thread)) {
+        return [];
+      }
       visitedThreads.add(thread);
+
+      const index = threads.indexOf(thread);
 
       const result = [];
       const target = thread.target;
@@ -226,15 +218,12 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
       if (thread.updateMonitor) {
         continue;
       }
-      if (visitedThreads.has(thread)) {
-        continue;
-      }
-
       concatInPlace(newContent, createThreadInfo(thread, 0));
     }
 
     if (!areArraysEqual(newContent, previousContent)) {
       logView.logs = newContent;
+      logView.invalidateAllLogDOM();
       logView.queueUpdateContent();
     }
     previousContent = newContent;

@@ -49,7 +49,14 @@
   }
 }
 
-#debug-fps-chart {
+.sa-debugger-tab-content {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  cursor: default;
+}
+
+.sa-debugger-chart {
   width: 100%;
   height: 100%;
 }
@@ -118,7 +125,7 @@
 [data-type="error"] .sa-debugger-log-icon {
   background-image: url(./icons/error.svg);
 }
-[data-type="thread-header"] .sa-debugger-log-icon {
+.sa-debugger-threads .sa-debugger-log-icon {
   background-image: url(./icons/subthread.svg);
 }
 
@@ -151,6 +158,9 @@
 .sa-debugger-log-body-empty {
   font-style: italic;
 }
+.sa-debugger-log-internal .sa-debugger-log-body {
+  font-style: italic;
+}
 
 .sa-debugger-thread-target-name {
   font-weight: bold;
@@ -176,16 +186,4 @@
   border-radius: 3px;
   color: white;
   margin-right: 4px;
-}
-
-/* .internal-log {
-  font-style: italic;
-  color: gray;
-} */
-
-.sa-debugger-tab-content {
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  cursor: default;
 }
