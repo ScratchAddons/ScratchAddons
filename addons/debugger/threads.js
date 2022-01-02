@@ -182,8 +182,10 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
       }
       const cacheInfo = threadInfoCache.get(thread);
 
-      const createBlockInfo = (blockId, stackFrame) => {
-        const block = thread.target.blocks.getBlock(blockId);
+      const createBlockInfo = (block, stackFrame) => {
+        const blockId = block.id;
+        if (!block) return;
+
         if (!cacheInfo.blockCache.has(block)) {
           const { name, color } = getBlockInfo(block);
           cacheInfo.blockCache.set(block, {
@@ -215,14 +217,18 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
         return result;
       };
 
-      const topBlock = thread.topBlock;
+      const topBlock = thread.target.blocks.getBlock(thread.topBlock);
       const result = [cacheInfo.headerItem];
-      concatInPlace(result, createBlockInfo(topBlock, null));
-      for (let i = 0; i < thread.stack.length; i++) {
-        const blockId = thread.stack[i];
-        if (blockId === topBlock) continue;
-        const stackFrame = thread.stackFrames[i];
-        concatInPlace(result, createBlockInfo(blockId, stackFrame));
+      if (topBlock) {
+        concatInPlace(result, createBlockInfo(topBlock, null));
+        for (let i = 0; i < thread.stack.length; i++) {
+          const blockId = thread.stack[i];
+          if (blockId === topBlock) continue;
+          const stackFrame = thread.stackFrames[i];
+          const block = thread.target.blocks.getBlock(blockId);
+          if (block)
+            concatInPlace(result, createBlockInfo(block, stackFrame));
+        }
       }
 
       return result;
