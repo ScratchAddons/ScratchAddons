@@ -1,4 +1,4 @@
-import { isPaused, setPaused, onPauseChanged } from "./module.js";
+import {isPaused, setPaused, onPauseChanged, setupPause} from "./module.js";
 import createLogsTab from './logs.js';
 import createThreadsTab from "./threads.js";
 import createPerformanceTab from "./performance.js";
@@ -10,6 +10,8 @@ const removeAllChildren = (element) => {
 };
 
 export default async function ({ addon, global, console, msg }) {
+  setupPause(addon);
+
   let hasLoggedPauseError = false;
   const pause = (_, thread) => {
     if (addon.tab.redux.state.scratchGui.mode.isPlayerOnly) {

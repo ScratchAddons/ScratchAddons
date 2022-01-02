@@ -1,4 +1,4 @@
-import { onPauseChanged, isPaused, onSingleStepped, getRunningBlock, singleStep } from "./module.js";
+import { onPauseChanged, isPaused } from "./module.js";
 import LogView from './log-view.js';
 
 const areArraysEqual = (a, b) => {
@@ -18,6 +18,13 @@ const concatInPlace = (copyInto, copyFrom) => {
     copyInto.push(i);
   }
 };
+
+// https://github.com/LLK/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/thread.js#L198
+const STATUS_RUNNING = 0;
+const STATUS_PROMISE_WAIT = 1;
+const STATUS_YIELD = 2;
+const STATUS_YIELD_TICK = 3;
+const STATUS_DONE = 4;
 
 export default async function createThreadsTab ({ debug, addon, console, msg }) {
   const vm = addon.tab.traps.vm;
@@ -248,18 +255,137 @@ export default async function createThreadsTab ({ debug, addon, console, msg }) 
     singleStep();
   });
 
-  onSingleStepped(() => {
+  let singleSteppingThread = null;
+  const magicError = {
+    'used by Scratch Addons': 'used by Scratch Addons'
+  };
+  const fakeProfiler = {
+    idByName: () => {
+      throw magicError;
+    }
+  };
+
+  const singleStepThread = (thread) => {
+    const sequencer = vm.runtime.sequencer;
+
+    // This is the worst code you have ever seen.
+    // Basically, we want to run vm.runtime.sequencer.stepThread.
+    // (https://github.com/LLK/scratch-vm/blob/701dd5091341b51328fec26fb121c9959f856cc3/src/engine/sequencer.js#L179)
+    // However, we want stepThread's inner loop to terminate after at most 1 iteration so that the block only steps
+    // once, but there is no easy way to do that. So, instead, you get this absolute disaster.
+
+    // Here's an annotated version of the important parts of that function:
+    /*
+      let currentBlockId = thread.peekStack();
+      if (!currentBlockId) {} // ...
+
+      // This is the loop we only want to run once
+      while ((currentBlockId = thread.peekStack())) {
+        // ...
+
+        // We trap profiler to be !== null so that this code runs.
+        if (this.runtime.profiler !== null) {
+          if (executeProfilerId === -1) {
+            // We trap idByName to throw an error so that the loop aborts before executing another block.
+            executeProfilerId = this.runtime.profiler.idByName(executeProfilerFrame);
+          }
+          this.runtime.profiler.increment(executeProfilerId);
+        }
+
+        // This is the bit that actually runs the blocks.
+        if (thread.target === null) {
+          this.retireThread(thread);
+        } else {
+          execute(this, thread);
+        }
+
+        // We are able to trap this setter.
+        thread.blockGlowInFrame = currentBlockId;
+
+        if (thread.status === Thread.STATUS_YIELD) return; // ...
+        } else if (thread.status === Thread.STATUS_PROMISE_WAIT) return; // ...
+        } else if (thread.status === Thread.STATUS_YIELD_TICK) return; // ...
+
+        // This section must run as it will set the stack up so that the block has something to do
+        // on the next step.
+        if (thread.peekStack() === currentBlockId) {} // ...
+        while (!thread.peekStack()) {} // ...
+      }
+    */
+
+    let newBlockGlowInFrame = thread.blockGlowInFrame;
+    Object.defineProperty(thread, 'blockGlowInFrame', {
+      get: () => newBlockGlowInFrame,
+      set: (value) => {
+        newBlockGlowInFrame = value;
+        vm.runtime.profiler = fakeProfiler;
+      },
+      configurable: true,
+      enumerable: true
+    });
+
+    const oldStatus = Object.getOwnPropertyDescriptor(thread, 'status');
+    Object.defineProperty(thread, 'status', {
+      value: 0,
+      writable: true,
+      enumerable: true,
+      configurable: true
+    });
+
+    try {
+      sequencer.stepThread(thread);
+    } catch (e) {
+      if (e !== magicError) throw e;
+    } finally {
+      Object.defineProperty(thread, 'blockGlowInFrame', {
+        value: newBlockGlowInFrame,
+        configurable: true,
+        enumerable: true,
+        writable: true
+      });
+      Object.defineProperty(thread, 'status', oldStatus);
+      vm.runtime.profiler = null;
+    }
+  };
+
+  const isThreadComplete = (thread) => thread.status === STATUS_DONE;
+
+  const findNewSingleSteppingThread = (oldThread) => {
+    const threads = vm.runtime.threads;
+    const index = threads.indexOf(oldThread);
+    for (let i = index + 1; i < threads.length; i++) {
+      const thread = threads[i];
+      if (!isThreadComplete(thread)) {
+        return thread;
+      }
+    }
+  };
+
+  const singleStep = () => {
+    if (!singleSteppingThread) {
+      return;
+    }
+
+    singleStepThread(singleSteppingThread);
+    if (isThreadComplete(singleSteppingThread)) {
+      singleSteppingThread = findNewSingleSteppingThread();
+    }
+
     threadInfoCache = new WeakMap();
-    updateContent(getRunningBlock());
+    updateContent(singleSteppingThread ? singleSteppingThread.peekStack() : null);
     const runningBlockIndex = logView.logs.findIndex((i) => i.running);
     if (runningBlockIndex !== -1) {
       logView.scrollIntoView(runningBlockIndex);
     }
-  });
+  }
 
   const handlePauseChanged = (paused) => {
     stepButton.element.style.display = paused ? "" : 'none';
     updateContent();
+
+    if (paused) {
+      singleSteppingThread = vm.runtime.sequencer.activeThread;
+    }
   };
   handlePauseChanged(isPaused());
   onPauseChanged(handlePauseChanged);
