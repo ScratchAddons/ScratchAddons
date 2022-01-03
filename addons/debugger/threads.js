@@ -1,5 +1,6 @@
 import { onPauseChanged, isPaused, singleStep, onSingleStep, getRunningThread } from "./module.js";
 import LogView from "./log-view.js";
+import Highlighter from "../editor-stepping/highlighter.js";
 
 const areArraysEqual = (a, b) => {
   if (a.length !== b.length) {
@@ -32,6 +33,8 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
   logView.canAutoScrollToEnd = false;
   logView.outerElement.classList.add("sa-debugger-threads");
   logView.placeholderElement.textContent = msg("no-threads-running");
+
+  const highlighter = new Highlighter("#ff0000");
 
   const allThreadIds = new WeakMap();
   let nextThreadId = 1;
@@ -247,6 +250,12 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
 
   debug.addAfterStepCallback(() => {
     updateContent();
+    const runningThread = getRunningThread();
+    if (runningThread) {
+      highlighter.setGlowingThreads([runningThread])
+    } else {
+      highlighter.setGlowingThreads([]);
+    }
   });
 
   const stepButton = debug.createHeaderButton({
