@@ -1,5 +1,3 @@
-import { isPaused, getRunningThread } from "../debugger/module.js";
-
 export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.vm;
 
@@ -36,48 +34,35 @@ export default async function ({ addon, global, console }) {
   await addon.tab.traps.getBlockly();
   const elementsWithFilter = new Set();
   const oldStep = vm.runtime.constructor.prototype._step;
-
-  const hightlightThread = (thread) => {
-    if (thread.target.blocks.forceNoGlow) return;
-    thread.stack.forEach((blockId) => {
-      const block = Blockly.getMainWorkspace().getBlockById(blockId);
-      if (!block) {
-        return;
-      }
-      const childblock = thread.stack.find((i) => {
-        let b = block;
-        while (b.childBlocks_.length) {
-          b = b.childBlocks_[b.childBlocks_.length - 1];
-          if (i === b.id) return true;
-        }
-        return false;
-      });
-      if (!childblock && block.svgPath_) {
-        const svgPath = block.svgPath_;
-        svgPath.style.filter = "url(#colorStackGlow)";
-        elementsWithFilter.add(svgPath);
-      }
-    });
-  }
-
   vm.runtime.constructor.prototype._step = function (...args) {
-    
     oldStep.call(this, ...args);
     for (const el of elementsWithFilter) {
       el.style.filter = "";
     }
-
     elementsWithFilter.clear();
-
     if (!addon.self.disabled) {
-      if (isPaused()) {
-        const runningThread = getRunningThread();
-        if (runningThread) {
-          hightlightThread(runningThread);
-          return;
-        }
-      }
-      vm.runtime.threads.forEach(hightlightThread);
+      vm.runtime.threads.forEach((thread) => {
+        if (thread.target.blocks.forceNoGlow) return;
+        thread.stack.forEach((blockId) => {
+          const block = Blockly.getMainWorkspace().getBlockById(blockId);
+          if (!block) {
+            return;
+          }
+          const childblock = thread.stack.find((i) => {
+            let b = block;
+            while (b.childBlocks_.length) {
+              b = b.childBlocks_[b.childBlocks_.length - 1];
+              if (i === b.id) return true;
+            }
+            return false;
+          });
+          if (!childblock && block.svgPath_) {
+            const svgPath = block.svgPath_;
+            svgPath.style.filter = "url(#colorStackGlow)";
+            elementsWithFilter.add(svgPath);
+          }
+        });
+      });
     }
   };
 
