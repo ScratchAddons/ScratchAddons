@@ -7,10 +7,11 @@ const STATUS_YIELD_TICK = 3;
 const STATUS_DONE = 4;
 
 let vm;
-let sequencerStepThread;
+let sequencerStepThread; // The unmodified sequencer.stepThread function
 
 let paused = false;
 let pausedThreadState = new WeakMap();
+let pauseNewThreads = false;
 
 let steppingThread = null;
 
@@ -38,11 +39,12 @@ export const setPaused = (_paused) => {
 
         vm.runtime.threads.forEach(pauseThread);
 
-        // TODO Comment
+        // If there is an active thread, we hit paused in the middle of executing a block
         if (vm.runtime.sequencer.activeThread) {
             const thread = vm.runtime.sequencer.activeThread;
             pausedThreadState.get(thread).status = thread.status;
 
+            // Force the block to exit immediatly
             Object.defineProperty(thread, "status", {
                 get() {
                     return STATUS_PROMISE_WAIT;
@@ -86,6 +88,9 @@ export const getRunningThread = () => {
     return steppingThread;
 }
 
+// A modified version of this function
+// https://github.com/LLK/scratch-vm/blob/0e86a78a00db41af114df64255e2cd7dd881329f/src/engine/sequencer.js#L179
+// Returns if we should continue executing this thread.
 const singleStepThread = (thread) => {
     let currentBlockId = thread.peekStack();
 
@@ -99,11 +104,21 @@ const singleStepThread = (thread) => {
     }
 
     vm.runtime.sequencer.activeThread = thread;
+    pauseNewThreads = true;
 
     if (thread.target == null) {
         vm.runtime.sequencer.retireThread(thread);
     } else {
-        // Call execute()
+        /*
+          We need to call execute(this, thread) like the original sequencer. We don't
+          have access to that method, so we need to force the original stepThread to run
+          execute for us then exit before it tries to run more blocks.        
+          So, we make `thread.blockGlowInFrame = ...` throw an exception, so this line:
+          https://github.com/LLK/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/sequencer.js#L214
+          will end the function early. We then have to set it back to normal afterward.
+        
+          Why are we here just to suffer?
+         */
         const throwMsg = ["special error used by Scratch Addons for implementing single-stepping"];
 
         Object.defineProperty(thread, "blockGlowInFrame", {
@@ -127,6 +142,7 @@ const singleStepThread = (thread) => {
     }
 
     vm.runtime.sequencer.activeThread = null;
+    pauseNewThreads = false;
     thread.blockGlowInFrame = currentBlockId;
 
     if (thread.status === STATUS_YIELD) {
@@ -229,6 +245,14 @@ export const singleStep = () => {
                 pausedThreadState.get(thread).time += vm.runtime.currentStepTime;
             }
         }
+
+        // Try to run event_whentouchingobject and event_whengreaterthan hat blocks
+        pauseNewThreads = true;
+
+        vm.runtime.startHats("event_whentouchingobject");
+        vm.runtime.startHats("event_whengreaterthan");
+
+        pauseNewThreads = false;
     }
 
     eventTarget.dispatchEvent(new CustomEvent("step"));
@@ -272,6 +296,7 @@ export const setup = (addon) => {
     const ogStepThreads = vm.runtime.sequencer.stepThreads;
     vm.runtime.sequencer.stepThreads = function () {
 
+        // If we where half way through a vm step and have unpaused, pick up were we left off. 
         if (steppingThread && !paused) {
             const threads = vm.runtime.threads;
             for (var i = threads.indexOf(steppingThread); i < threads.length; i++) {
@@ -287,36 +312,57 @@ export const setup = (addon) => {
             }
 
             steppingThread = null;
-            return [];
         }
 
         return ogStepThreads.call(this);
     }
 
+    // Unpause when green flag
+    const originalGreenFlag = vm.runtime.greenFlag;
+    vm.runtime.greenFlag = function () {
+      setPaused(false);
+      return originalGreenFlag.call(this);
+    };
+  
+
     // Disable edge-activated hats and hats like "when key pressed" while paused.
     const originalStartHats = vm.runtime.startHats;
     vm.runtime.startHats = function (...args) {
         const hat = args[0];
-        if (paused) {
-            // We don't want to stop broadcasts or clone starts as they can be run by a user
-            //  while paused or run by paused threads while single stepping.
-            // TODO `event_whentouchingobject` and `event_whengreaterthan`
-            if (hat !== "event_whenbroadcastreceived" && hat !== "control_start_as_clone") {
+        if (pauseNewThreads) {
+            if (hat !== "event_whenbroadcastreceived" && hat !== "control_start_as_clone"
+             && hat !== "event_whentouchingobject" && hat !== "event_whengreaterthan") {
                 return [];
             }
-        }
-        if (pausedThreadState.get(vm.runtime.sequencer.activeThread)) {
-            // If this hat was activated by a paused thread, pause the newly created
-            //  threads as well.
             const newThreads = originalStartHats.apply(this, args);
             for (const idx in newThreads) {
                 pauseThread(newThreads[idx]);
             }
             return newThreads;
         } else {
+            if (paused) {
+                // We don't want to stop broadcasts or clone starts as they can be run by a user
+                //  while paused or run by paused threads while single stepping.
+                if (hat !== "event_whenbroadcastreceived" && hat !== "control_start_as_clone") {
+                    return [];
+                }
+            }
+
             return originalStartHats.apply(this, args);
         }
     };
 
-    // TODO Paused threads should not be counted as running when updating GUI state.
+    // Paused threads should not be counted as running when updating GUI state.
+    const originalGetMonitorThreadCount = vm.runtime._getMonitorThreadCount;
+    vm.runtime._getMonitorThreadCount = function (threads) {
+        let count = originalGetMonitorThreadCount.call(this, threads);
+        if (paused) {
+            for (const thread of threads) {
+                if (pausedThreadState.has(thread)) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    };
 }
