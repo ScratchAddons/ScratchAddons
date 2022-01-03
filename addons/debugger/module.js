@@ -58,8 +58,13 @@ export const setPaused = (_paused) => {
         vm.runtime.ioDevices.clock.resume();
 
         for (const thread of vm.runtime.threads) {
-            if (pausedThreadState.has(thread)) {
-                // TODO Ajust timing
+            const pauseState = pausedThreadState.get(thread);
+            if (pauseState) {
+                const stackFrame = thread.peekStackFrame();
+                if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
+                    const dt = now - pauseState.pauseTime;
+                    stackFrame.executionContext.timer.startTime += dt;
+                }
             }
         }
 
@@ -165,7 +170,7 @@ const findNewSteppingThread = (startIndex) => {
     for (var i = startIndex; i < vm.runtime.threads.length; i++) {
         const newThread = vm.runtime.threads[i];
 
-        if (newThread.status === STATUS_YIELD_TICK) { // TODO is `&& !this.stepRanFirstTick` needed for perfect emulation?
+        if (newThread.status === STATUS_YIELD_TICK) {
             newThread.status = STATUS_RUNNING;
         }
 
@@ -177,26 +182,53 @@ const findNewSteppingThread = (startIndex) => {
 }
 
 export const singleStep = () => {
+    const pauseState = pausedThreadState.get(steppingThread);
     if (steppingThread) {
-        // TODO Make it look like no time has passed
+        // Make it look like no time has passed
+        const stackFrame = steppingThread.peekStackFrame();
+        if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
+            stackFrame.executionContext.timer.startTime += vm.runtime.currentMSecs - pauseState.time;
+        }
+        pauseState.time = vm.runtime.currentMSecs;
 
-        console.log("Stepping thread");
-        console.log(steppingThread);
+        // Execute the block
         const continueExecuting = singleStepThread(steppingThread);
 
         if (!continueExecuting) {
+            // Try to move onto the next thread
             steppingThread = findNewSteppingThread(vm.runtime.threads.indexOf(steppingThread) + 1);
-            console.log("Thread finished. Trying to move to next one.");
-            console.log(steppingThread);
         }
     }
 
+    // If we don't have a thread, than we are between VM steps and should search for a new thread
     if (!steppingThread) {
         steppingThread = findNewSteppingThread(0);
-        console.log("Trying to start VM step");
-        console.log(steppingThread);
 
-        // TODO Everything else in here
+        // End of VM step, emulate one frame of time passing.
+        vm.runtime.ioDevices.clock._pausedTime += vm.runtime.currentStepTime;
+        // Skip all sounds forward by vm.runtime.currentStepTime miliseconds so it's as
+        //  if they where playing for one frame. 
+        const audioContext = vm.runtime.audioEngine.audioContext;
+        for (const target of vm.runtime.targets) {
+            for (const soundId in target.sprite.soundBank.soundPlayers) {
+                const soundPlayer = target.sprite.soundBank.soundPlayers[soundId];
+                if (soundPlayer.outputNode) {
+                    soundPlayer.outputNode.stop(audioContext.currentTime);
+                    soundPlayer._createSource();
+                    soundPlayer.outputNode.start(
+                        audioContext.currentTime,
+                        audioContext.currentTime - soundPlayer.startingUntil + vm.runtime.currentStepTime / 1000
+                    );
+                    soundPlayer.startingUntil -= vm.runtime.currentStepTime / 1000;
+                }
+            }
+        }
+        // Move all threads forward one frame in time. For blocks like `wait () seconds`
+        for (const thread of vm.runtime.threads) {
+            if (pausedThreadState.has(thread)) {
+                pausedThreadState.get(thread).time += vm.runtime.currentStepTime;
+            }
+        }
     }
 
     eventTarget.dispatchEvent(new CustomEvent("step"));
@@ -241,12 +273,11 @@ export const setup = (addon) => {
     vm.runtime.sequencer.stepThreads = function () {
 
         if (steppingThread && !paused) {
-
             const threads = vm.runtime.threads;
             for (var i = threads.indexOf(steppingThread); i < threads.length; i++) {
                 const thread = threads[i];
 
-                if (thread.status == STATUS_YIELD_TICK) { // TODO Like above
+                if (thread.status == STATUS_YIELD_TICK) {
                     thread.status = STATUS_RUNNING;
                 }
 
@@ -256,6 +287,7 @@ export const setup = (addon) => {
             }
 
             steppingThread = null;
+            return [];
         }
 
         return ogStepThreads.call(this);
@@ -268,14 +300,10 @@ export const setup = (addon) => {
         if (paused) {
             // We don't want to stop broadcasts or clone starts as they can be run by a user
             //  while paused or run by paused threads while single stepping.
+            // TODO `event_whentouchingobject` and `event_whengreaterthan`
             if (hat !== "event_whenbroadcastreceived" && hat !== "control_start_as_clone") {
                 return [];
             }
-        }
-        if (hat !== "event_whentouchingobject" && hat !== "event_whengreaterthan") {
-            console.log("Here!");
-            console.log(hat);
-            console.log(vm.runtime.sequencer.activeThread);
         }
         if (pausedThreadState.get(vm.runtime.sequencer.activeThread)) {
             // If this hat was activated by a paused thread, pause the newly created
