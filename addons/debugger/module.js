@@ -64,8 +64,7 @@ export const setPaused = (_paused) => {
             if (pauseState) {
                 const stackFrame = thread.peekStackFrame();
                 if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
-                    const dt = now - pauseState.pauseTime;
-                    stackFrame.executionContext.timer.startTime += dt;
+                    stackFrame.executionContext.timer.startTime += vm.runtime.currentMSecs - pauseState.time;
                 }
             }
         }
