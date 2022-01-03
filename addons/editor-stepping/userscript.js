@@ -1,3 +1,5 @@
+import { getRunningThread } from "../debugger/module.js";
+
 export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.vm;
 
@@ -33,15 +35,17 @@ export default async function ({ addon, global, console }) {
   // Wait for Blockly, as it tends to not be ready sometimes...
   await addon.tab.traps.getBlockly();
   const elementsWithFilter = new Set();
-  const oldStep = vm.runtime.constructor.prototype._step;
-  vm.runtime.constructor.prototype._step = function (...args) {
+  const oldStep = vm.runtime._step;
+  vm.runtime._step = function (...args) {
     oldStep.call(this, ...args);
     for (const el of elementsWithFilter) {
       el.style.filter = "";
     }
     elementsWithFilter.clear();
     if (!addon.self.disabled) {
+      const runningThread = getRunningThread();
       vm.runtime.threads.forEach((thread) => {
+        if (thread === runningThread) return;
         if (thread.target.blocks.forceNoGlow) return;
         thread.stack.forEach((blockId) => {
           const block = Blockly.getMainWorkspace().getBlockById(blockId);
