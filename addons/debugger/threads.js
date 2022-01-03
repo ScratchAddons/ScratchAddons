@@ -1,4 +1,4 @@
-import { onPauseChanged, isPaused, setPauseStartedHats, getRealStatus } from "../pause/module.js";
+import { onPauseChanged, isPaused, singleStep, onSingleStep, getRunningThread } from "./module.js";
 import LogView from "./log-view.js";
 
 const areArraysEqual = (a, b) => {
@@ -18,13 +18,6 @@ const concatInPlace = (copyInto, copyFrom) => {
     copyInto.push(i);
   }
 };
-
-// https://github.com/LLK/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/thread.js#L198
-const STATUS_RUNNING = 0;
-const STATUS_PROMISE_WAIT = 1;
-const STATUS_YIELD = 2;
-const STATUS_YIELD_TICK = 3;
-const STATUS_DONE = 4;
 
 export default async function createThreadsTab({ debug, addon, console, msg }) {
   const vm = addon.tab.traps.vm;
@@ -147,7 +140,7 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
     };
   };
 
-  const updateContent = (runningBlockId) => {
+  const updateContent = () => {
     if (!logView.visible) {
       return;
     }
@@ -155,6 +148,8 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
     const newContent = [];
     const threads = vm.runtime.threads;
     const visitedThreads = new Set();
+
+    var cacheUpdated = false;
 
     const createThreadInfo = (thread, depth) => {
       if (visitedThreads.has(thread)) {
@@ -182,6 +177,7 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
       }
       const cacheInfo = threadInfoCache.get(thread);
 
+      const runningThread = getRunningThread();
       const createBlockInfo = (block, stackFrame) => {
         const blockId = block.id;
         if (!block) return;
@@ -199,12 +195,10 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
         }
 
         const blockInfo = cacheInfo.blockCache.get(block);
-        if (runningBlockId) {
-          if (blockId === runningBlockId) {
-            blockInfo.running = true;
-          } else {
-            blockInfo.running = false;
-          }
+        if (runningThread) {
+          const isRunningBlock = blockId === runningThread.peekStack() && target.id === runningThread.target.id;
+          cacheUpdated = blockInfo.running != isRunningBlock;
+          blockInfo.running = isRunningBlock;
         }
 
         const result = [blockInfo];
@@ -243,7 +237,7 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
       concatInPlace(newContent, createThreadInfo(thread, 0));
     }
 
-    if (!areArraysEqual(newContent, previousContent)) {
+    if (cacheUpdated || !areArraysEqual(newContent, previousContent)) {
       logView.logs = newContent;
       logView.invalidateAllLogDOM();
       logView.queueUpdateContent();
@@ -264,156 +258,14 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
     singleStep();
   });
 
-  let singleSteppingThread = null;
-  // Value of magicError doesn't matter as long as it's a unique object
-  const magicError = ["special error used by Scratch Addons for implementing single-stepping"];
-  const fakeProfiler = {
-    idByName: () => {
-      throw magicError;
-    },
-  };
-
-  const singleStepThread = (thread) => {
-    const sequencer = vm.runtime.sequencer;
-
-    // This is the worst code you have ever seen.
-    // Basically, we want to run vm.runtime.sequencer.stepThread.
-    // (https://github.com/LLK/scratch-vm/blob/701dd5091341b51328fec26fb121c9959f856cc3/src/engine/sequencer.js#L179)
-    // However, we want stepThread's inner loop to terminate after at most 1 iteration so that the block only steps
-    // once, but there is no easy way to do that. So, instead, you get this absolute disaster.
-
-    // Here's an annotated version of the important parts of that function:
-    /*
-      let currentBlockId = thread.peekStack();
-      if (!currentBlockId) {} // ...
-
-      // This is the loop we only want to run once
-      while ((currentBlockId = thread.peekStack())) {
-        // ...
-
-        // We trap profiler to be !== null so that this code runs.
-        if (this.runtime.profiler !== null) {
-          if (executeProfilerId === -1) {
-            // We trap idByName to throw an error so that the loop aborts before executing another block.
-            executeProfilerId = this.runtime.profiler.idByName(executeProfilerFrame);
-          }
-          this.runtime.profiler.increment(executeProfilerId);
-        }
-
-        // This is the bit that actually runs the blocks.
-        if (thread.target === null) {
-          this.retireThread(thread);
-        } else {
-          execute(this, thread);
-        }
-
-        // We are able to trap this setter.
-        thread.blockGlowInFrame = currentBlockId;
-
-        if (thread.status === Thread.STATUS_YIELD) return; // ...
-        } else if (thread.status === Thread.STATUS_PROMISE_WAIT) return; // ...
-        } else if (thread.status === Thread.STATUS_YIELD_TICK) return; // ...
-
-        // This section must run as it will set the stack up so that the block has something to do
-        // on the next step.
-        if (thread.peekStack() === currentBlockId) {} // ...
-        while (!thread.peekStack()) {} // ...
-      }
-    */
-
-    let newBlockGlowInFrame = thread.blockGlowInFrame;
-    Object.defineProperty(thread, "blockGlowInFrame", {
-      get: () => newBlockGlowInFrame,
-      set: (value) => {
-        newBlockGlowInFrame = value;
-        vm.runtime.profiler = fakeProfiler;
-      },
-      configurable: true,
-      enumerable: true,
-    });
-
-    const oldStatus = Object.getOwnPropertyDescriptor(thread, "status");
-    Object.defineProperty(thread, "status", {
-      value: 0,
-      writable: true,
-      enumerable: true,
-      configurable: true,
-    });
-
-    setPauseStartedHats(true);
-
-    try {
-      sequencer.stepThread(thread);
-    } catch (e) {
-      if (e !== magicError) throw e;
-    } finally {
-      setPauseStartedHats(false);
-      Object.defineProperty(thread, "blockGlowInFrame", {
-        value: newBlockGlowInFrame,
-        configurable: true,
-        enumerable: true,
-        writable: true,
-      });
-
-      // this little mess will let the pause module know what happened
-      const newStatus = thread.status;
-      Object.defineProperty(thread, "status", oldStatus);
-      thread.status = newStatus;
-
-      vm.runtime.profiler = null;
-    }
-  };
-
-  const findNewSingleSteppingThread = (startIndex) => {
-    const threads = vm.runtime.threads;
-    for (let i = startIndex; i < threads.length; i++) {
-      const thread = threads[i];
-      const status = getRealStatus(thread);
-      if (status === STATUS_RUNNING || status === STATUS_YIELD || status === STATUS_YIELD_TICK) {
-        console.log("Switched to", thread);
-        return thread;
-      }
-    }
-    return null;
-  };
-
-  const singleStep = () => {
-    if (!singleSteppingThread) {
-      singleSteppingThread = findNewSingleSteppingThread(0);
-    }
-    if (!singleSteppingThread) {
-      return;
-    }
-
-    singleStepThread(singleSteppingThread);
-
-    const status = getRealStatus(singleSteppingThread);
-    if (status !== STATUS_RUNNING && status !== STATUS_YIELD) {
-      const index = vm.runtime.threads.indexOf(singleSteppingThread);
-      singleSteppingThread = findNewSingleSteppingThread(index + 1);
-    }
-    if (!singleSteppingThread) {
-      singleSteppingThread = findNewSingleSteppingThread(0);
-    }
-
-    threadInfoCache = new WeakMap();
-    updateContent(singleSteppingThread ? singleSteppingThread.peekStack() : null);
-    const runningBlockIndex = logView.logs.findIndex((i) => i.running);
-    if (runningBlockIndex !== -1) {
-      logView.scrollIntoView(runningBlockIndex);
-    }
-  };
-
   const handlePauseChanged = (paused) => {
     stepButton.element.style.display = paused ? "" : "none";
     updateContent();
-
-    if (paused) {
-      singleSteppingThread = vm.runtime.sequencer.activeThread;
-    }
   };
   handlePauseChanged(isPaused());
   onPauseChanged(handlePauseChanged);
+
+  onSingleStep(updateContent);
 
   const show = () => {
     logView.show();

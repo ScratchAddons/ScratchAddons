@@ -1,4 +1,4 @@
-import { isPaused, setPaused, onPauseChanged, setupPause } from "../pause/module.js";
+import { isPaused, setPaused, onPauseChanged, setup } from "./module.js";
 import createLogsTab from "./logs.js";
 import createThreadsTab from "./threads.js";
 import createPerformanceTab from "./performance.js";
@@ -10,7 +10,7 @@ const removeAllChildren = (element) => {
 };
 
 export default async function ({ addon, global, console, msg }) {
-  setupPause(addon);
+  setup(addon);
 
   let hasLoggedPauseError = false;
   const pause = (_, thread) => {

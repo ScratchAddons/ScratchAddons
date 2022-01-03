@@ -1,4 +1,4 @@
-import { onPauseChanged, isPaused } from "../pause/module.js";
+import { onPauseChanged, isPaused } from "./module.js";
 
 export default async function createPerformanceTab({ debug, addon, console, msg }) {
   const vm = addon.tab.traps.vm;

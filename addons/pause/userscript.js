@@ -1,7 +1,7 @@
-import { isPaused, setPaused, onPauseChanged, setupPause } from "./module.js";
+import { isPaused, setPaused, onPauseChanged, setup } from "../debugger/module.js";
 
 export default async function ({ addon, global, console, msg }) {
-  setupPause(addon);
+  setup(addon);
 
   const img = document.createElement("img");
   img.className = "pause-btn";
