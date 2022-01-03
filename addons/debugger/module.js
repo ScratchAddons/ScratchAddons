@@ -298,15 +298,18 @@ export const setup = (addon) => {
         // If we where half way through a vm step and have unpaused, pick up were we left off. 
         if (steppingThread && !paused) {
             const threads = vm.runtime.threads;
-            for (var i = threads.indexOf(steppingThread); i < threads.length; i++) {
-                const thread = threads[i];
+            const index = threads.indexOf(steppingThread);
+            if (index !== -1) {
+                for (let i = index; i < threads.length; i++) {
+                    const thread = threads[i];
 
-                if (thread.status == STATUS_YIELD_TICK) {
-                    thread.status = STATUS_RUNNING;
-                }
+                    if (thread.status == STATUS_YIELD_TICK) {
+                        thread.status = STATUS_RUNNING;
+                    }
 
-                if (thread.status == STATUS_RUNNING || thread.status == STATUS_YIELD) {
-                    vm.runtime.sequencer.stepThread(thread);
+                    if (thread.status == STATUS_RUNNING || thread.status == STATUS_YIELD) {
+                        vm.runtime.sequencer.stepThread(thread);
+                    }
                 }
             }
 
