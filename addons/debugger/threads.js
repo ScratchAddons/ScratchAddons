@@ -149,6 +149,8 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
     const threads = vm.runtime.threads;
     const visitedThreads = new Set();
 
+    var cacheUpdated = false;
+
     const createThreadInfo = (thread, depth) => {
       if (visitedThreads.has(thread)) {
         return [];
@@ -194,11 +196,9 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
 
         const blockInfo = cacheInfo.blockCache.get(block);
         if (runningBlockId) {
-          if (blockId === runningBlockId) {
-            blockInfo.running = true;
-          } else {
-            blockInfo.running = false;
-          }
+          const isRunningBlock = blockId === runningBlockId;
+          cacheUpdated = blockInfo.running != isRunningBlock;
+          blockInfo.running = isRunningBlock;
         }
 
         const result = [blockInfo];
@@ -237,7 +237,7 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
       concatInPlace(newContent, createThreadInfo(thread, 0));
     }
 
-    if (!areArraysEqual(newContent, previousContent)) {
+    if (cacheUpdated || !areArraysEqual(newContent, previousContent)) {
       logView.logs = newContent;
       logView.invalidateAllLogDOM();
       logView.queueUpdateContent();
