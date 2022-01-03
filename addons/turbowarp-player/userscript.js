@@ -50,7 +50,7 @@ export default async function ({ addon, console, msg }) {
         addon.tab.traps.vm.stopAll();
       } else removeIframe();
     } else {
-      window.open("https://turbowarp.org/" + window.location.pathname.split("/")[2], "_blank", "noopener,noreferrer");
+      window.open("https://turbowarp.org/" + window.location.pathname.split("/")[2] = , "_blank",urlpar "noopener,noreferrer");
     }
   };
 
