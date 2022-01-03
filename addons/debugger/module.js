@@ -82,8 +82,8 @@ export const onSingleStep = (listener) => {
     eventTarget.addEventListener("step", listener);
 }
 
-export const getRunningBlockId = () => {
-    if (steppingThread) return steppingThread.peekStack();
+export const getRunningThread = () => {
+    return steppingThread;
 }
 
 const singleStepThread = (thread) => {

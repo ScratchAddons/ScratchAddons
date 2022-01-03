@@ -1,4 +1,4 @@
-import { onPauseChanged, isPaused, singleStep, onSingleStep, getRunningBlockId } from "./module.js";
+import { onPauseChanged, isPaused, singleStep, onSingleStep, getRunningThread } from "./module.js";
 import LogView from "./log-view.js";
 
 const areArraysEqual = (a, b) => {
@@ -177,7 +177,7 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
       }
       const cacheInfo = threadInfoCache.get(thread);
 
-      const runningBlockId = getRunningBlockId();
+      const runningThread = getRunningThread();
       const createBlockInfo = (block, stackFrame) => {
         const blockId = block.id;
         if (!block) return;
@@ -195,8 +195,8 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
         }
 
         const blockInfo = cacheInfo.blockCache.get(block);
-        if (runningBlockId) {
-          const isRunningBlock = blockId === runningBlockId;
+        if (runningThread) {
+          const isRunningBlock = blockId === runningThread.peekStack() && target.id === runningThread.target.id;
           cacheUpdated = blockInfo.running != isRunningBlock;
           blockInfo.running = isRunningBlock;
         }
@@ -257,7 +257,7 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
   stepButton.element.addEventListener("click", () => {
     singleStep();
   });
-  
+
   const handlePauseChanged = (paused) => {
     stepButton.element.style.display = paused ? "" : "none";
     updateContent();
