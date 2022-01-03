@@ -12,11 +12,23 @@
       "text": "TurboWarp has separate cloud data servers. \"Replace player\" mode will send your Scratch username to TurboWarp.org for use in cloud data.",
       "id": "cloudData"
     }
+    {
+  "settings": [
+      "name": "URL Parameters",
+      "id": "urlpar"
+      "type": "string",
+      "default": ""
+    }
+    
   ],
-  "credits": [
+{ "credits": [
     {
       "name": "TheColaber",
       "link": "https://scratch.mit.edu/users/TheColaber"
+    } , 
+    {
+      "name": "mbrick2"
+    }
     }
   ],
   "userscripts": [
