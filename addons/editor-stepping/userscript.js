@@ -4,7 +4,7 @@ import Highlighter from "./highlighter.js";
 export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.vm;
 
-  const highlighter = new Highlighter(addon.settings.get("highlight-color"));
+  const highlighter = new Highlighter(0, addon.settings.get("highlight-color"));
   addon.settings.addEventListener("change", () => {
     highlighter.setColor(addon.settings.get("highlight-color"))
   });

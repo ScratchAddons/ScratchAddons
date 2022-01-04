@@ -10,8 +10,45 @@ document.body.appendChild(containerSvg);
 
 let nextGlowerId = 0;
 
+const highlightsPerElement = new WeakMap();
+
+const getHighlightersForElement = (element) => {
+  if (!highlightsPerElement.get(element)) {
+    highlightsPerElement.set(element, new Set());
+  }
+  return highlightsPerElement.get(element);
+};
+
+const updateHighlight = (element, highlighters) => {
+  let result;
+  for (const i of highlighters) {
+    if (!result || i.priority > result.priority) {
+      result = i;
+    }
+  }
+  if (result) {
+    element.style.filter = result.filter;
+  } else {
+    element.style.filter = '';
+  }
+};
+
+const addHighlight = (element, highlighter) => {
+  const highlighters = getHighlightersForElement(element);
+  highlighters.add(highlighter);
+  updateHighlight(element, highlighters);
+};
+
+const removeHighlight = (element, highlighter) => {
+  const highlighters = getHighlightersForElement(element);
+  highlighters.delete(highlighter);
+  updateHighlight(element, highlighters);
+};
+
 class Highlighter {
-  constructor (color) {
+  constructor (priority, color) {
+    this.priority = priority;
+
     const id = `sa_glower_filter${nextGlowerId++}`;
     this.filter = `url("#${id}")`;
 
@@ -92,14 +129,12 @@ class Highlighter {
 
     for (const element of this.previousElements) {
       if (!elementsToHighlight.has(element)) {
-        if (element.style.filter === this.filter) {
-          element.style.filter = '';
-        }
+        removeHighlight(element, this);
       }
     }
     for (const element of elementsToHighlight) {
       if (!this.previousElements.has(element)) {
-        element.style.filter = this.filter;
+        addHighlight(element, this);
       }
     }
     this.previousElements = elementsToHighlight;
