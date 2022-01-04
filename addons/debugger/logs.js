@@ -127,7 +127,7 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
 
   logView.renderRow = (elements, row) => {
     const {repeats} = elements;
-    if (row.count >= 1) {
+    if (row.count > 1) {
       repeats.style.display = '';
       repeats.textContent = row.count;
     }
