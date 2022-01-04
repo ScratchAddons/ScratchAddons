@@ -245,11 +245,17 @@ export const singleStep = () => {
             }
         }
 
-        // Try to run event_whentouchingobject and event_whengreaterthan hat blocks
+        // Try to run edge activated hats
         pauseNewThreads = true;
 
-        vm.runtime.startHats("event_whentouchingobject");
-        vm.runtime.startHats("event_whengreaterthan");
+        const hats = vm.runtime._hats;
+        for (const hatType in hats) {
+            if (!hats.hasOwnProperty(hatType)) continue;
+            const hat = hats[hatType];
+            if (hat.edgeActivated) {
+                vm.runtime.startHats(hatType);
+            }
+        }
 
         pauseNewThreads = false;
     }
@@ -333,12 +339,12 @@ export const setup = (addon) => {
         const hat = args[0];
         if (pauseNewThreads) {
             if (hat !== "event_whenbroadcastreceived" && hat !== "control_start_as_clone"
-             && hat !== "event_whentouchingobject" && hat !== "event_whengreaterthan") {
+             && !this.getIsEdgeActivatedHat(hat)) {
                 return [];
             }
             const newThreads = originalStartHats.apply(this, args);
-            for (const idx in newThreads) {
-                pauseThread(newThreads[idx]);
+            for (const thread of newThreads) {
+                pauseThread(thread);
             }
             return newThreads;
         } else {
