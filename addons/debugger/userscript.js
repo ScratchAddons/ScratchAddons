@@ -12,11 +12,21 @@ const removeAllChildren = (element) => {
 export default async function ({ addon, global, console, msg }) {
   setup(addon);
 
+  let logsTab;
+  const messagesLoggedBeforeLogsTabLoaded = [];
+  const logMessage = (...args) => {
+    if (logsTab) {
+      logsTab.addLog(...args);
+    } else {
+      messagesLoggedBeforeLogsTabLoaded.push(args);
+    }
+  };
+
   let hasLoggedPauseError = false;
   const pause = (_, thread) => {
     if (addon.tab.redux.state.scratchGui.mode.isPlayerOnly) {
       if (!hasLoggedPauseError) {
-        logsTab.addLog(msg("cannot-pause-player"), thread, "error");
+        logMessage(msg("cannot-pause-player"), thread, "error");
         hasLoggedPauseError = true;
       }
       return;
@@ -39,21 +49,21 @@ export default async function ({ addon, global, console, msg }) {
     args: ["content"],
     displayName: msg("block-log"),
     callback: ({ content }, thread) => {
-      logsTab.addLog(content, thread, "log");
+      logMessage(content, thread, "log");
     },
   });
   addon.tab.addBlock("\u200B\u200Bwarn\u200B\u200B %s", {
     args: ["content"],
     displayName: msg("block-warn"),
     callback: ({ content }, thread) => {
-      logsTab.addLog(content, thread, "warn");
+      logMessage(content, thread, "warn");
     },
   });
   addon.tab.addBlock("\u200B\u200Berror\u200B\u200B %s", {
     args: ["content"],
     displayName: msg("block-error"),
     callback: ({ content }, thread) => {
-      logsTab.addLog(content, thread, "error");
+      logMessage(content, thread, "error");
     },
   });
 
@@ -472,10 +482,15 @@ export default async function ({ addon, global, console, msg }) {
     msg,
     console,
   };
-  const logsTab = await createLogsTab(api);
+  logsTab = await createLogsTab(api);
   const threadsTab = await createThreadsTab(api);
   const performanceTab = await createPerformanceTab(api);
   const allTabs = [logsTab, threadsTab, performanceTab];
+
+  for (const message of messagesLoggedBeforeLogsTabLoaded) {
+    logsTab.addLog(...message);
+  }
+  messagesLoggedBeforeLogsTabLoaded.length = 0;
 
   let activeTab;
   const setActiveTab = (tab) => {
