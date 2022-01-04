@@ -10,7 +10,6 @@ const concatInPlace = (copyInto, copyFrom) => {
 
 export default async function createThreadsTab({ debug, addon, console, msg }) {
   const vm = addon.tab.traps.vm;
-  const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   const tab = debug.createHeaderTab({
     text: msg("tab-threads"),
@@ -25,16 +24,19 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
   const highlighter = new Highlighter("#ff0000");
 
   logView.generateRow = (row) => {
-    const INDENT = 16;
-
     const root = document.createElement("div");
     root.className = "sa-debugger-log";
 
-    if (row.type === "thread-header") {
+    const isHeader = row.type === 'thread-header';
+    const indenter = document.createElement('div');
+    const INDENT = 16;
+    indenter.style.marginLeft = `${INDENT * (isHeader ? row.depth : row.depth + 1)}px`;
+    root.appendChild(indenter);
+
+    if (isHeader) {
       if (row.depth > 0) {
         const icon = document.createElement("div");
         icon.className = "sa-debugger-log-icon";
-        icon.style.marginLeft = `${row.depth * INDENT}px`;
         root.appendChild(icon);
       }
 
@@ -52,12 +54,10 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
     }
 
     if (row.type === "thread-stack") {
-      const block = document.createElement("div");
-      block.textContent = row.name;
-      block.className = "sa-debugger-stacked-block";
-      block.style.backgroundColor = row.color;
-      block.style.marginLeft = `${(row.depth + 1) * INDENT}px`;
-      root.appendChild(block);
+      const preview = debug.createBlockPreview(row.targetId, row.blockId);
+      if (preview) {
+        root.appendChild(preview);
+      }
     }
 
     if (row.targetId && row.blockId) {
@@ -75,60 +75,6 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
   };
 
   let threadInfoCache = new WeakMap();
-
-  const getBlockInfo = (block) => {
-    var name, color;
-    if (block)
-      if (block.opcode == "procedures_call") {
-        color = ScratchBlocks.Colours.more.primary;
-        if (block.mutation) {
-          name = block.mutation.proccode.replaceAll("%s", "()").replaceAll("%b", "()");
-          const customBlock = addon.tab.getCustomBlock(block.mutation.proccode);
-          if (customBlock) {
-            color = customBlock.color;
-          }
-        }
-      } else {
-        // This quickly creates a Blockly block so we can get its name, than removes it again.
-        const workspace = Blockly.getMainWorkspace();
-
-        ScratchBlocks.Events.disabled_ = 1; // We disable events to the block isn't added to the DOM
-
-        // https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/core/block.js#L52
-        var blocklyBlock = new ScratchBlocks.Block(workspace, block.opcode, "debugger-temp");
-
-        name = blocklyBlock.toLocaleString().replaceAll("?", "()");
-
-        var category = blocklyBlock.getCategory();
-        if (category == "data-lists") category = "data_lists";
-        if (category == "events") category = "event"; // ST why?
-        if (category) {
-          color = ScratchBlocks.Colours[category];
-          if (!color) {
-            color = ScratchBlocks.Colours.pen;
-          }
-        } else {
-          color = { primary: "#979797" };
-        }
-        if (color) color = color.primary;
-
-        // Calling `new Block` above adds it to two lists in the workspace.
-        // So we remove it from them again.
-        delete workspace.blockDB_["debugger-temp"];
-        workspace.topBlocks_.pop();
-
-        ScratchBlocks.Events.disabled_ = 0; // Re-enable events
-      }
-
-    if (!name) {
-      name = "?";
-    }
-
-    return {
-      name,
-      color,
-    };
-  };
 
   const allThreadIds = new WeakMap();
   let nextThreadId = 1;
@@ -176,12 +122,9 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
         if (!block) return;
 
         if (!cacheInfo.blockCache.has(block)) {
-          const { name, color } = getBlockInfo(block);
           cacheInfo.blockCache.set(block, {
             type: "thread-stack",
             depth,
-            name,
-            color,
             targetId: target.id,
             blockId,
           });

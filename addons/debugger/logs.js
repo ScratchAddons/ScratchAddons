@@ -3,7 +3,6 @@ import LogView from "./log-view.js";
 
 export default async function createLogsTab({ debug, addon, console, msg }) {
   const vm = addon.tab.traps.vm;
-  const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   const tab = debug.createHeaderTab({
     text: msg("tab-logs"),
@@ -13,70 +12,13 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
   const logView = new LogView();
   logView.placeholderElement.textContent = msg("no-logs");
 
-  const createInputBlockPreview = (blockId, targetId) => {
+  const getInputOfBlock = (targetId, blockId) => {
     const target = vm.runtime.getTargetById(targetId);
     const block = target.blocks.getBlock(blockId);
-    if (!block || !ScratchBlocks) {
+    if (!block) {
       return null;
     }
-
-    const inputId = Object.values(block.inputs)[0]?.block;
-    const inputBlock = target.blocks.getBlock(inputId);
-    if (inputBlock && inputBlock.opcode !== "text") {
-      let text, category;
-      if (
-        inputBlock.opcode === "data_variable" ||
-        inputBlock.opcode === "data_listcontents" ||
-        inputBlock.opcode === "argument_reporter_string_number" ||
-        inputBlock.opcode === "argument_reporter_boolean"
-      ) {
-        text = Object.values(inputBlock.fields)[0].value;
-        if (inputBlock.opcode === "data_variable") {
-          category = "data";
-        } else if (inputBlock.opcode === "data_listcontents") {
-          category = "list";
-        } else {
-          category = "more";
-        }
-      } else {
-        // Try to call things like https://github.com/LLK/scratch-blocks/blob/develop/blocks_vertical/operators.js
-        let jsonData;
-        const fakeBlock = {
-          jsonInit(data) {
-            jsonData = data;
-          },
-        };
-        const blockConstructor = ScratchBlocks.Blocks[inputBlock.opcode];
-        if (blockConstructor) {
-          try {
-            blockConstructor.init.call(fakeBlock);
-          } catch (e) {
-            // ignore
-          }
-        }
-        // If the block has a simple message with no arguments, display it
-        if (jsonData && jsonData.message0 && !jsonData.args0) {
-          text = jsonData.message0;
-          category = jsonData.category;
-        }
-      }
-      if (text && category) {
-        const blocklyColor = ScratchBlocks.Colours[category === "list" ? "data_lists" : category];
-        if (blocklyColor) {
-          const element = document.createElement("span");
-          element.textContent = text;
-          element.className = "sa-debugger-input-block";
-          const colorCategoryMap = {
-            list: "data-lists",
-            more: "custom",
-          };
-          element.dataset.category = colorCategoryMap[category] || category;
-          element.style.backgroundColor = blocklyColor.primary;
-          return element;
-        }
-      }
-    }
-    return null;
+    return Object.values(block.inputs)[0]?.block;
   };
 
   logView.generateRow = (row) => {
@@ -99,9 +41,14 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
     }
     root.appendChild(icon);
 
-    const preview = row.blockId && row.targetId && createInputBlockPreview(row.blockId, row.targetId);
-    if (preview) {
-      root.appendChild(preview);
+    if (row.preview && row.blockId && row.targetId) {
+      const inputBlock = getInputOfBlock(row.targetId, row.blockId);
+      if (inputBlock) {
+        const preview = debug.createBlockPreview(row.targetId, inputBlock);
+        if (preview) {
+          root.appendChild(preview);
+        }
+      }
     }
 
     const text = document.createElement("div");
@@ -182,7 +129,8 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
     const log = {
       text,
       type,
-      count: 1
+      count: 1,
+      preview: true
     };
     if (thread) {
       log.blockId = thread.peekStack();
@@ -190,6 +138,7 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
     }
     if (type === "internal") {
       log.internal = true;
+      log.preview = false;
       log.type = "log";
     }
     if (type === "internal-warn") {

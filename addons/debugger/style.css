@@ -182,16 +182,14 @@
   font-weight: bold;
 }
 
-.sa-debugger-input-block {
+.sa-debugger-block-preview {
   color: white;
-  border-radius: 100px;
   padding: 1px 6px;
   margin-right: 4px;
 }
-
-.sa-debugger-stacked-block {
-  padding: 1px 6px;
+.sa-debugger-block-preview[data-shape="round"] {
+  border-radius: 100px;
+}
+.sa-debugger-block-preview[data-shape="stacked"] {
   border-radius: 3px;
-  color: white;
-  margin-right: 4px;
 }
