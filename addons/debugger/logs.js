@@ -25,13 +25,13 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
     const root = document.createElement("div");
     root.className = "sa-debugger-log";
     if (row.internal) {
-      root.classList.add('sa-debugger-log-internal');
+      root.classList.add("sa-debugger-log-internal");
     }
     root.dataset.type = row.type;
 
     const repeats = document.createElement("div");
     repeats.className = "sa-debugger-log-repeats";
-    repeats.style.display = 'none';
+    repeats.style.display = "none";
     root.appendChild(repeats);
 
     const icon = document.createElement("div");
@@ -55,7 +55,7 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
     text.className = "sa-debugger-log-text";
     if (row.text.length === 0) {
       text.classList.add("sa-debugger-log-text-empty");
-      text.textContent = msg('empty-string');
+      text.textContent = msg("empty-string");
     } else {
       text.textContent = row.text;
       text.title = row.text;
@@ -68,14 +68,14 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
 
     return {
       root,
-      repeats
+      repeats,
     };
   };
 
   logView.renderRow = (elements, row) => {
-    const {repeats} = elements;
+    const { repeats } = elements;
     if (row.count > 1) {
-      repeats.style.display = '';
+      repeats.style.display = "";
       repeats.textContent = row.count;
     }
   };
@@ -130,7 +130,7 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
       text,
       type,
       count: 1,
-      preview: true
+      preview: true,
     };
     if (thread) {
       log.blockId = thread.peekStack();

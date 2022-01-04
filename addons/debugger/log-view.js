@@ -19,7 +19,7 @@ const appendSortedElement = (parent, newChild) => {
 /**
  * LogView: A virtualized row viewer.
  * It efficiently manages row rendering and scrolling.
- * 
+ *
  * 1. .logs is the place where all the rows live. This is an array of any arbitrary object.
  * 2. Implement generateRow(row). This takes a row from .logs as an argument. This should return
  *    an object with a bunch of DOM elements on it. The "root" property must be set, nothing else
@@ -49,7 +49,7 @@ class LogView {
 
     this.endElement = document.createElement("div");
     this.endElement.className = "sa-debugger-log-end";
-    this.endElement.dataset.index = '-1';
+    this.endElement.dataset.index = "-1";
     this.innerElement.appendChild(this.endElement);
 
     this.placeholderElement = document.createElement("div");
@@ -147,11 +147,11 @@ class LogView {
     }
   }
 
-  generateRow (row) {
+  generateRow(row) {
     // to be implemented by users
   }
 
-  renderRow (elements, row) {
+  renderRow(elements, row) {
     // to be implemented by users
   }
 
@@ -199,9 +199,9 @@ class LogView {
         newElements.push(elements.root);
         metadata = {
           stringify: null,
-          elements
+          elements,
         };
-        this.rowToMetadata.set(row, metadata)
+        this.rowToMetadata.set(row, metadata);
       }
 
       const currentStringify = JSON.stringify(row);

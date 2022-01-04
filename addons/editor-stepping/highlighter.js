@@ -1,11 +1,11 @@
-const SVG_NS = 'http://www.w3.org/2000/svg';
+const SVG_NS = "http://www.w3.org/2000/svg";
 
-const containerSvg = document.createElementNS(SVG_NS, 'svg');
+const containerSvg = document.createElementNS(SVG_NS, "svg");
 // unfortunately we can't use display: none on this as that breaks filters
-containerSvg.style.position = 'fixed';
-containerSvg.style.top = '-999999px';
-containerSvg.style.width = '0';
-containerSvg.style.height = '0';
+containerSvg.style.position = "fixed";
+containerSvg.style.top = "-999999px";
+containerSvg.style.width = "0";
+containerSvg.style.height = "0";
 document.body.appendChild(containerSvg);
 
 let nextGlowerId = 0;
@@ -29,7 +29,7 @@ const updateHighlight = (element, highlighters) => {
   if (result) {
     element.style.filter = result.filter;
   } else {
-    element.style.filter = '';
+    element.style.filter = "";
   }
 };
 
@@ -46,7 +46,7 @@ const removeHighlight = (element, highlighter) => {
 };
 
 class Highlighter {
-  constructor (priority, color) {
+  constructor(priority, color) {
     this.priority = priority;
 
     const id = `sa_glower_filter${nextGlowerId++}`;
@@ -54,55 +54,55 @@ class Highlighter {
 
     this.previousElements = new Set();
 
-    const filterElement = document.createElementNS(SVG_NS, 'filter');
+    const filterElement = document.createElementNS(SVG_NS, "filter");
     filterElement.id = id;
-    filterElement.setAttribute('width', '180%')
-    filterElement.setAttribute('height', '160%');
-    filterElement.setAttribute('x', '-40%');
-    filterElement.setAttribute('y', '-30%');
+    filterElement.setAttribute("width", "180%");
+    filterElement.setAttribute("height", "160%");
+    filterElement.setAttribute("x", "-40%");
+    filterElement.setAttribute("y", "-30%");
 
-    const filterBlur = document.createElementNS(SVG_NS, 'feGaussianBlur');
-    filterBlur.setAttribute('in', 'SourceGraphic');
-    filterBlur.setAttribute('stdDeviation', '4');
+    const filterBlur = document.createElementNS(SVG_NS, "feGaussianBlur");
+    filterBlur.setAttribute("in", "SourceGraphic");
+    filterBlur.setAttribute("stdDeviation", "4");
     filterElement.appendChild(filterBlur);
 
-    const filterTransfer = document.createElementNS(SVG_NS, 'feComponentTransfer');
-    filterTransfer.setAttribute('result', 'outBlur');
+    const filterTransfer = document.createElementNS(SVG_NS, "feComponentTransfer");
+    filterTransfer.setAttribute("result", "outBlur");
     filterElement.appendChild(filterTransfer);
 
-    const filterTransferTable = document.createElementNS(SVG_NS, 'feFuncA');
-    filterTransferTable.setAttribute('type', 'table');
-    filterTransferTable.setAttribute('tableValues', '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1')
+    const filterTransferTable = document.createElementNS(SVG_NS, "feFuncA");
+    filterTransferTable.setAttribute("type", "table");
+    filterTransferTable.setAttribute("tableValues", "0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1");
     filterTransfer.appendChild(filterTransferTable);
 
-    const filterFlood = document.createElementNS(SVG_NS, 'feFlood');
-    filterFlood.setAttribute('flood-opacity', '1');
-    filterFlood.setAttribute('result', 'outColor');
+    const filterFlood = document.createElementNS(SVG_NS, "feFlood");
+    filterFlood.setAttribute("flood-opacity", "1");
+    filterFlood.setAttribute("result", "outColor");
     filterElement.appendChild(filterFlood);
     this.filterFlood = filterFlood;
 
-    const filterComposite = document.createElementNS(SVG_NS, 'feComposite');
-    filterComposite.setAttribute('in', 'outColor');
-    filterComposite.setAttribute('in2', 'outBlur');
-    filterComposite.setAttribute('operator', 'in');
-    filterComposite.setAttribute('result', 'outGlow');
+    const filterComposite = document.createElementNS(SVG_NS, "feComposite");
+    filterComposite.setAttribute("in", "outColor");
+    filterComposite.setAttribute("in2", "outBlur");
+    filterComposite.setAttribute("operator", "in");
+    filterComposite.setAttribute("result", "outGlow");
     filterElement.appendChild(filterComposite);
 
-    const filterFinalComposite = document.createElementNS(SVG_NS, 'feComposite');
-    filterFinalComposite.setAttribute('in', 'SourceGraphic');
-    filterFinalComposite.setAttribute('in2', 'outGlow');
-    filterFinalComposite.setAttribute('operator', 'over');
+    const filterFinalComposite = document.createElementNS(SVG_NS, "feComposite");
+    filterFinalComposite.setAttribute("in", "SourceGraphic");
+    filterFinalComposite.setAttribute("in2", "outGlow");
+    filterFinalComposite.setAttribute("operator", "over");
     filterElement.appendChild(filterFinalComposite);
 
     containerSvg.appendChild(filterElement);
     this.setColor(color);
   }
 
-  setColor (color) {
-    this.filterFlood.setAttribute('flood-color', color);
+  setColor(color) {
+    this.filterFlood.setAttribute("flood-color", color);
   }
 
-  setGlowingThreads (threads) {
+  setGlowingThreads(threads) {
     const elementsToHighlight = new Set();
     const workspace = Blockly.getMainWorkspace();
 

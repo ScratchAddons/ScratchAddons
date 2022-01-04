@@ -6,7 +6,7 @@ export default async function ({ addon, global, console }) {
 
   const highlighter = new Highlighter(0, addon.settings.get("highlight-color"));
   addon.settings.addEventListener("change", () => {
-    highlighter.setColor(addon.settings.get("highlight-color"))
+    highlighter.setColor(addon.settings.get("highlight-color"));
   });
 
   addon.self.addEventListener("disabled", () => {
@@ -18,10 +18,9 @@ export default async function ({ addon, global, console }) {
     oldStep.call(this, ...args);
     if (!addon.self.disabled) {
       const runningThread = getRunningThread();
-      const threads = vm.runtime.threads.filter((thread) => (
-        thread !== runningThread &&
-        !thread.target.blocks.forceNoGlow
-      ));
+      const threads = vm.runtime.threads.filter(
+        (thread) => thread !== runningThread && !thread.target.blocks.forceNoGlow
+      );
       highlighter.setGlowingThreads(threads);
     }
   };

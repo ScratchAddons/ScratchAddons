@@ -27,8 +27,8 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
     const root = document.createElement("div");
     root.className = "sa-debugger-log";
 
-    const isHeader = row.type === 'thread-header';
-    const indenter = document.createElement('div');
+    const isHeader = row.type === "thread-header";
+    const indenter = document.createElement("div");
     const INDENT = 16;
     indenter.style.marginLeft = `${INDENT * (isHeader ? row.depth : row.depth + 1)}px`;
     root.appendChild(indenter);
@@ -65,12 +65,12 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
     }
 
     return {
-      root
+      root,
     };
   };
 
   logView.renderRow = (elements, row) => {
-    const {root} = elements;
+    const { root } = elements;
     root.classList.toggle("sa-debugger-thread-running", !!row.running);
   };
 
@@ -179,7 +179,7 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
 
     const runningThread = getRunningThread();
     if (runningThread) {
-      highlighter.setGlowingThreads([runningThread])
+      highlighter.setGlowingThreads([runningThread]);
     } else {
       highlighter.setGlowingThreads([]);
     }

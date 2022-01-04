@@ -374,8 +374,8 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   // TODO: I think these are wrong in some edge cases
-  const formatProcedureCode = (proccode) => proccode.replace(/%[nbs]/g, '()');
-  const formatBlocklyTranslation = (msg) => msg.replace(/%\d+/g, '()');
+  const formatProcedureCode = (proccode) => proccode.replace(/%[nbs]/g, "()");
+  const formatBlocklyTranslation = (msg) => msg.replace(/%\d+/g, "()");
 
   const createBlockPreview = (targetId, blockId) => {
     const target = vm.runtime.getTargetById(targetId);
@@ -406,23 +406,26 @@ export default async function ({ addon, global, console, msg }) {
       } else {
         category = "more";
       }
-      shape = 'round';
-    } else if (block.opcode === 'procedures_call') {
+      shape = "round";
+    } else if (block.opcode === "procedures_call") {
       const proccode = block.mutation.proccode;
       text = formatProcedureCode(proccode);
       const customBlock = addon.tab.getCustomBlock(proccode);
       if (customBlock) {
-        category = 'addon-custom-block';
+        category = "addon-custom-block";
         color = customBlock.color;
       } else {
-        category = 'more';
+        category = "more";
       }
-    } else if (block.opcode === 'procedures_definition') {
+    } else if (block.opcode === "procedures_definition") {
       const prototypeBlockId = block.inputs.custom_block.block;
       const prototypeBlock = target.blocks.getBlock(prototypeBlockId);
       const proccode = prototypeBlock.mutation.proccode;
-      text = ScratchBlocks.ScratchMsgs.translate('PROCEDURES_DEFINITION', 'define %1').replace('%1', formatProcedureCode(proccode));
-      category = 'more';
+      text = ScratchBlocks.ScratchMsgs.translate("PROCEDURES_DEFINITION", "define %1").replace(
+        "%1",
+        formatProcedureCode(proccode)
+      );
+      category = "more";
     } else {
       // Try to call things like https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/operators.js#L36
       var jsonData;
@@ -448,12 +451,14 @@ export default async function ({ addon, global, console, msg }) {
       }
       text = formatBlocklyTranslation(text);
       category = jsonData.category;
-      const isStatement = (jsonData.extensions && (
-        jsonData.extensions.includes('shape_statement') ||
-        jsonData.extensions.includes('shape_hat') ||
-        jsonData.extensions.includes('shape_end')
-      )) || 'previousStatement' in jsonData || 'nextStatement' in jsonData;
-      shape = isStatement ? 'stacked' : 'round';
+      const isStatement =
+        (jsonData.extensions &&
+          (jsonData.extensions.includes("shape_statement") ||
+            jsonData.extensions.includes("shape_hat") ||
+            jsonData.extensions.includes("shape_end"))) ||
+        "previousStatement" in jsonData ||
+        "nextStatement" in jsonData;
+      shape = isStatement ? "stacked" : "round";
     }
     if (!text || !category) {
       return null;
@@ -461,8 +466,8 @@ export default async function ({ addon, global, console, msg }) {
 
     if (!color) {
       const blocklyCategoryMap = {
-        list: 'data_lists',
-        events: 'event'
+        list: "data_lists",
+        events: "event",
       };
       const blocklyColor = ScratchBlocks.Colours[blocklyCategoryMap[category] || category];
       if (!blocklyColor) {
@@ -480,7 +485,7 @@ export default async function ({ addon, global, console, msg }) {
     // data-category is used for editor-theme3 compatibility
     const colorCategoryMap = {
       list: "data-lists",
-      more: "custom"
+      more: "custom",
     };
     element.dataset.category = colorCategoryMap[category] || category;
 
