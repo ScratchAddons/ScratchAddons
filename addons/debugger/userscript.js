@@ -393,7 +393,8 @@ export default async function ({ addon, global, console, msg }) {
       }
       shape = 'round';
     } else if (block.opcode === 'procedures_call') {
-      text = block.mutation.proccode;
+      // TODO: I think this is wrong in some edge cases
+      text = block.mutation.proccode.replace(/%[nbs]/g, '()');
       category = 'more';
     } else {
       // Try to call things like https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/operators.js#L36
@@ -415,6 +416,11 @@ export default async function ({ addon, global, console, msg }) {
         return null;
       }
       text = jsonData.message0;
+      if (!text) {
+        return null;
+      }
+      // TODO: I think this is wrong in some edge cases
+      text = text.replace(/%\d+/g, '()');
       category = jsonData.category;
       const isStatement = (jsonData.extensions && (
         jsonData.extensions.includes('shape_statement') ||
@@ -433,7 +439,6 @@ export default async function ({ addon, global, console, msg }) {
     };
     const blocklyColor = ScratchBlocks.Colours[blocklyCategoryMap[category] || category];
     if (!blocklyColor) {
-      debugger;
       return null;
     }
 
