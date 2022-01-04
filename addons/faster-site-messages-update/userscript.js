@@ -4,7 +4,7 @@ export default async function ({ addon, console, setTimeout, setInterval, clearT
   let msgCount;
   // console.log("Hi from the addon!")
   const setBadge = () => {
-    if (msgCount === null && addon.settings.get("showOffline")) {
+    if (msgCount === null) {
       // Do nothing
     } else {
       var targetElement;
@@ -34,5 +34,5 @@ export default async function ({ addon, console, setTimeout, setInterval, clearT
   };
 
   getMsgCountAndSetBadge();
-  window.setInterval(getMsgCountAndSetBadge, 2500);
+  window.setInterval(getMsgCountAndSetBadge, 30000);
 }
