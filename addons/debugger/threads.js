@@ -2,18 +2,6 @@ import { onPauseChanged, isPaused, singleStep, onSingleStep, getRunningThread } 
 import LogView from "./log-view.js";
 import Highlighter from "../editor-stepping/highlighter.js";
 
-const areArraysEqual = (a, b) => {
-  if (a.length !== b.length) {
-    return false;
-  }
-  for (let i = 0; i < a.length; i++) {
-    if (a[i] !== b[i]) {
-      return false;
-    }
-  }
-  return true;
-};
-
 const concatInPlace = (copyInto, copyFrom) => {
   for (const i of copyFrom) {
     copyInto.push(i);
@@ -29,65 +17,64 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
     icon: addon.self.dir + "/icons/threads.svg",
   });
 
-  const logView = new LogView({ addon, msg });
+  const logView = new LogView();
   logView.canAutoScrollToEnd = false;
   logView.outerElement.classList.add("sa-debugger-threads");
   logView.placeholderElement.textContent = msg("no-threads-running");
 
   const highlighter = new Highlighter("#ff0000");
 
-  const allThreadIds = new WeakMap();
-  let nextThreadId = 1;
-
-  logView.buildDOM = (log) => {
+  logView.generateRow = (row) => {
     const INDENT = 16;
 
-    const element = document.createElement("div");
-    element.className = "sa-debugger-log";
+    const root = document.createElement("div");
+    root.className = "sa-debugger-log";
 
-    if (log.type === "thread-header") {
-      if (log.depth > 0) {
+    if (row.type === "thread-header") {
+      if (row.depth > 0) {
         const icon = document.createElement("div");
         icon.className = "sa-debugger-log-icon";
-        icon.style.marginLeft = `${log.depth * INDENT}px`;
-        element.appendChild(icon);
+        icon.style.marginLeft = `${row.depth * INDENT}px`;
+        root.appendChild(icon);
       }
 
       const name = document.createElement("div");
-      name.textContent = log.targetName;
+      name.textContent = row.targetName;
       name.className = "sa-debugger-thread-target-name";
-      element.appendChild(name);
+      root.appendChild(name);
 
       const id = document.createElement("div");
       id.className = "sa-debugger-thread-id";
       id.textContent = msg("thread", {
-        id: log.id,
+        id: row.id,
       });
-      element.appendChild(id);
+      root.appendChild(id);
     }
 
-    if (log.type === "thread-stack") {
+    if (row.type === "thread-stack") {
       const block = document.createElement("div");
-      block.textContent = log.name;
+      block.textContent = row.name;
       block.className = "sa-debugger-stacked-block";
-      block.style.backgroundColor = log.color;
-      block.style.marginLeft = `${(log.depth + 1) * INDENT}px`;
-      element.appendChild(block);
+      block.style.backgroundColor = row.color;
+      block.style.marginLeft = `${(row.depth + 1) * INDENT}px`;
+      root.appendChild(block);
     }
 
-    if (log.running) {
-      element.classList.add("sa-debugger-thread-running");
+    if (row.targetId && row.blockId) {
+      root.appendChild(debug.createBlockLink(row.targetId, row.blockId));
     }
 
-    if (log.targetId && log.blockId) {
-      element.appendChild(debug.createBlockLink(log.targetId, log.blockId));
-    }
+    return {
+      root
+    };
+  };
 
-    return element;
+  logView.renderRow = (elements, row) => {
+    const {root} = elements;
+    root.classList.toggle("sa-debugger-thread-running", !!row.running);
   };
 
   let threadInfoCache = new WeakMap();
-  let previousContent = [];
 
   const getBlockInfo = (block) => {
     var name, color;
@@ -143,16 +130,23 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
     };
   };
 
+  const allThreadIds = new WeakMap();
+  let nextThreadId = 1;
+  const getThreadId = (thread) => {
+    if (!allThreadIds.has(thread)) {
+      allThreadIds.set(thread, nextThreadId++);
+    }
+    return allThreadIds.get(thread);
+  };
+
   const updateContent = () => {
     if (!logView.visible) {
       return;
     }
 
-    const newContent = [];
+    const newRows = [];
     const threads = vm.runtime.threads;
     const visitedThreads = new Set();
-
-    var cacheUpdated = false;
 
     const createThreadInfo = (thread, depth) => {
       if (visitedThreads.has(thread)) {
@@ -160,11 +154,7 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
       }
       visitedThreads.add(thread);
 
-      if (!allThreadIds.has(thread)) {
-        allThreadIds.set(thread, nextThreadId++);
-      }
-      const id = allThreadIds.get(thread);
-
+      const id = getThreadId(thread);
       const target = thread.target;
 
       if (!threadInfoCache.has(thread)) {
@@ -198,11 +188,7 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
         }
 
         const blockInfo = cacheInfo.blockCache.get(block);
-        if (runningThread) {
-          const isRunningBlock = blockId === runningThread.peekStack() && target.id === runningThread.target.id;
-          cacheUpdated = blockInfo.running != isRunningBlock;
-          blockInfo.running = isRunningBlock;
-        }
+        blockInfo.running = thread === runningThread && blockId === runningThread.peekStack();
 
         const result = [blockInfo];
         if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.startedThreads) {
@@ -223,8 +209,9 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
           if (blockId === topBlock) continue;
           const stackFrame = thread.stackFrames[i];
           const block = thread.target.blocks.getBlock(blockId);
-          if (block)
+          if (block) {
             concatInPlace(result, createBlockInfo(block, stackFrame));
+          }
         }
       }
 
@@ -237,19 +224,16 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
       if (thread.updateMonitor) {
         continue;
       }
-      concatInPlace(newContent, createThreadInfo(thread, 0));
+      concatInPlace(newRows, createThreadInfo(thread, 0));
     }
 
-    if (cacheUpdated || !areArraysEqual(newContent, previousContent)) {
-      logView.logs = newContent;
-      logView.invalidateAllLogDOM();
-      logView.queueUpdateContent();
-    }
-    previousContent = newContent;
+    logView.rows = newRows;
+    logView.queueUpdateContent();
   };
 
   debug.addAfterStepCallback(() => {
     updateContent();
+
     const runningThread = getRunningThread();
     if (runningThread) {
       highlighter.setGlowingThreads([runningThread])

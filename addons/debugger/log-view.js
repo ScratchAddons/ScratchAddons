@@ -1,25 +1,42 @@
-/**
- * @fileoverview LogView: A virtualized row viewer.
- * LogView requires a couple things:
- *  - A list of things to include (it does not care what these things are)
- *  - A function to convert those things to DOM elements on demand
- */
-
-const LOG_HEIGHT = 20;
-const EXTRA_ROWS_ABOVE = 5;
-const EXTRA_ROWS_BELOW = 5;
-const MAX_LOGS = 200000;
-
 const clamp = (i, min, max) => Math.max(min, Math.min(max, i));
 
-class LogView {
-  constructor({ msg, addon }) {
-    this.addon = addon;
-    this.msg = msg;
-    this.vm = addon.tab.traps.vm;
+const appendSortedElement = (parent, newChild) => {
+  const newChildIndex = +newChild.dataset.index;
+  let foundSpot = false;
+  for (const existingChild of parent.children) {
+    const existingChildIndex = +existingChild.dataset.index;
+    if (existingChildIndex > newChildIndex) {
+      foundSpot = true;
+      parent.insertBefore(newChild, existingChild);
+      break;
+    }
+  }
+  if (!foundSpot) {
+    parent.appendChild(newChild);
+  }
+};
 
-    this.logs = [];
+/**
+ * LogView: A virtualized row viewer.
+ * It efficiently manages row rendering and scrolling.
+ * 
+ * 1. .logs is the place where all the rows live. This is an array of any arbitrary object.
+ * 2. Implement generateRow(row). This takes a row from .logs as an argument. This should return
+ *    an object with a bunch of DOM elements on it. The "root" property must be set, nothing else
+ *    is required. This is called when a row becomes visible. It can be called any number of times.
+ *    This is where you should setup elements that are immutable for a given row. LogView will
+ *    move the root element to the right spot for you.
+ * 3. Implement renderRow(elements, row). This will be called with the result returned by
+ *    generateRow() and the row in .logs any time a row is changed, including the first render.
+ *    It can be called any number of times. This is where you should update any dynamic elements.
+ * 4. Whenever you update .logs without using the helper methods such as append(), call
+ *    queueUpdateContent().
+ */
+class LogView {
+  constructor() {
+    this.rows = [];
     this.canAutoScrollToEnd = true;
+    this.rowHeight = 20;
 
     this.outerElement = document.createElement("div");
     this.outerElement.className = "sa-debugger-log-outer";
@@ -32,6 +49,7 @@ class LogView {
 
     this.endElement = document.createElement("div");
     this.endElement.className = "sa-debugger-log-end";
+    this.endElement.dataset.index = '-1';
     this.innerElement.appendChild(this.endElement);
 
     this.placeholderElement = document.createElement("div");
@@ -43,39 +61,24 @@ class LogView {
     this.scrollTop = 0;
     this.updateContentQueued = false;
     this.scrollToEndQueued = false;
-  }
-
-  compareLogs(a, b) {
-    // to be overridden by users
-    return false;
+    this.oldLength = -1;
+    this.rowToMetadata = new Map();
   }
 
   append(log) {
     this.queueUpdateContent();
-
-    if (typeof log.text !== "string") {
-      log.text = "" + log.text;
-    }
-
-    const lastLog = this.logs[this.logs.length - 1];
-    if (lastLog && this.compareLogs(lastLog, log)) {
-      lastLog.count++;
-      this.invalidateLogDOM(lastLog);
-      return;
-    }
-
-    log.count = 1;
-    this.logs.push(log);
-
-    while (this.logs.length > MAX_LOGS) {
-      this.logs.shift();
-    }
-
     this._queueScrollToEnd();
+
+    this.rows.push(log);
+
+    const MAX_LOGS = 200000;
+    while (this.rows.length > MAX_LOGS) {
+      this.rows.shift();
+    }
   }
 
   clear() {
-    this.logs.length = 0;
+    this.rows.length = 0;
     this.scrollTop = 0;
     this.isScrolledToEnd = true;
     this.queueUpdateContent();
@@ -109,30 +112,8 @@ class LogView {
     }
   }
 
-  buildDOM(log) {
-    // to be overridden by users
-    throw new Error("not implemented");
-  }
-
-  _getLogDOM(log) {
-    if (!log._dom) {
-      log._dom = this.buildDOM(log);
-    }
-    return log._dom;
-  }
-
-  invalidateAllLogDOM() {
-    for (const i of this.logs) {
-      this.invalidateLogDOM(i);
-    }
-  }
-
-  invalidateLogDOM(log) {
-    log._dom = null;
-  }
-
   scrollIntoView(index) {
-    const distanceFromTop = index * LOG_HEIGHT;
+    const distanceFromTop = index * this.rowHeight;
     const viewportStart = this.scrollTop;
     const viewportEnd = this.scrollTop + this.height;
     const isInView = distanceFromTop > viewportStart && distanceFromTop < viewportEnd;
@@ -166,32 +147,71 @@ class LogView {
     }
   }
 
+  generateRow (row) {
+    // to be implemented by users
+  }
+
+  renderRow (elements, row) {
+    // to be implemented by users
+  }
+
   updateContent() {
-    const totalHeight = this.logs.length * LOG_HEIGHT;
-    this.endElement.style.transform = `translateY(${totalHeight}px)`;
-
-    const scrollStartIndex = Math.floor(this.scrollTop / LOG_HEIGHT);
-    const rowsVisible = Math.ceil(this.height / LOG_HEIGHT);
-    const startIndex = clamp(scrollStartIndex - EXTRA_ROWS_BELOW, 0, this.logs.length);
-    const endIndex = clamp(scrollStartIndex + rowsVisible + EXTRA_ROWS_ABOVE, 0, this.logs.length);
-
-    for (const el of Array.from(this.innerElement.children)) {
-      if (el !== this.endElement) {
-        el.remove();
+    if (this.rows.length !== this.oldLength) {
+      const totalHeight = this.rows.length * this.rowHeight;
+      this.endElement.style.transform = `translateY(${totalHeight}px)`;
+      if (this.rows.length) {
+        this.placeholderElement.remove();
+      } else {
+        this.innerElement.appendChild(this.placeholderElement);
       }
+      this.oldLength = this.rows.length;
     }
 
-    if (this.logs.length) {
-      this.placeholderElement.remove();
-    } else {
-      this.innerElement.appendChild(this.placeholderElement);
+    if (this.rows.length === 0) {
+      return;
     }
 
+    // For better compatibility with asynchronous scrolling, we'll render a few extra rows in either direction.
+    const EXTRA_ROWS_ABOVE = 5;
+    const EXTRA_ROWS_BELOW = 5;
+
+    const scrollStartIndex = Math.floor(this.scrollTop / this.rowHeight);
+    const rowsVisible = Math.ceil(this.height / this.rowHeight);
+    const startIndex = clamp(scrollStartIndex - EXTRA_ROWS_BELOW, 0, this.rows.length);
+    const endIndex = clamp(scrollStartIndex + rowsVisible + EXTRA_ROWS_ABOVE, 0, this.rows.length);
+
+    const allVisibleRows = new Set();
     for (let i = startIndex; i < endIndex; i++) {
-      const log = this.logs[i];
-      const element = this._getLogDOM(log);
-      element.style.transform = `translateY(${i * LOG_HEIGHT}px)`;
-      this.innerElement.appendChild(element);
+      const row = this.rows[i];
+      allVisibleRows.add(row);
+
+      let metadata = this.rowToMetadata.get(row);
+      if (!metadata) {
+        const elements = this.generateRow(row);
+        appendSortedElement(this.innerElement, elements.root);
+        metadata = {
+          stringify: null,
+          elements
+        };
+        this.rowToMetadata.set(row, metadata)
+      }
+
+      const currentStringify = JSON.stringify(row);
+      if (currentStringify !== metadata.stringify) {
+        metadata.stringify = currentStringify;
+        this.renderRow(metadata.elements, row);
+      }
+
+      const root = metadata.elements.root;
+      root.style.transform = `translateY(${i * this.rowHeight}px)`;
+      root.dataset.index = i;
+    }
+
+    for (const [row, metadata] of this.rowToMetadata.entries()) {
+      if (!allVisibleRows.has(row)) {
+        metadata.elements.root.remove();
+        this.rowToMetadata.delete(row);
+      }
     }
   }
 }

@@ -10,10 +10,10 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
     icon: addon.self.dir + "/icons/logs.svg",
   });
 
-  const logView = new LogView({ msg, addon });
+  const logView = new LogView();
   logView.placeholderElement.textContent = msg("no-logs");
 
-  const createBlockPreview = (blockId, targetId) => {
+  const createInputBlockPreview = (blockId, targetId) => {
     const target = vm.runtime.getTargetById(targetId);
     const block = target.blocks.getBlock(blockId);
     if (!block || !ScratchBlocks) {
@@ -79,60 +79,58 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
     return null;
   };
 
-  logView.compareLogs = (a, b) =>
-    a.text === b.text &&
-    a.type === b.type &&
-    a.internal === b.internal &&
-    // TODO: if the same message is logged from a different spot, should those messages be grouped?
-    a.blockId === b.blockId &&
-    a.targetId === b.targetId;
-
-  logView.buildDOM = (log) => {
-    const element = document.createElement("div");
-    element.dataset.type = log.type;
-    element.className = "sa-debugger-log";
-
-    if (log.internal) {
-      element.classList.add("sa-debugger-log-internal");
+  logView.generateRow = (row) => {
+    const root = document.createElement("div");
+    root.className = "sa-debugger-log";
+    if (row.internal) {
+      root.classList.add('sa-debugger-log-internal');
     }
+    root.dataset.type = row.type;
 
-    if (log.count !== 1) {
-      const repeats = document.createElement("div");
-      repeats.className = "sa-debugger-log-repeats";
-      repeats.textContent = log.count;
-      element.appendChild(repeats);
-    }
+    const repeats = document.createElement("div");
+    repeats.className = "sa-debugger-log-repeats";
+    repeats.style.display = 'none';
+    root.appendChild(repeats);
 
     const icon = document.createElement("div");
     icon.className = "sa-debugger-log-icon";
-    if (log.type === "warn" || log.type === "error") {
-      icon.title = msg("icon-" + log.type);
+    if (row.type === "warn" || row.type === "error") {
+      icon.title = msg("icon-" + row.type);
     }
-    element.appendChild(icon);
+    root.appendChild(icon);
 
-    if (log.blockId && log.targetId) {
-      const preview = createBlockPreview(log.blockId, log.targetId);
-      if (preview) {
-        element.appendChild(preview);
-      }
+    const preview = row.blockId && row.targetId && createInputBlockPreview(row.blockId, row.targetId);
+    if (preview) {
+      root.appendChild(preview);
     }
 
-    const body = document.createElement("div");
-    body.className = "sa-debugger-log-body";
-    if (log.text.length === 0) {
-      body.textContent = msg("empty-string");
-      body.classList.add("sa-debugger-log-body-empty");
+    const text = document.createElement("div");
+    text.className = "sa-debugger-log-text";
+    if (row.text.length === 0) {
+      text.classList.add("sa-debugger-log-text-empty");
+      text.textContent = msg('empty-string');
     } else {
-      body.textContent = log.text;
+      text.textContent = row.text;
+      text.title = row.text;
     }
-    body.title = log.text;
-    element.appendChild(body);
+    root.appendChild(text);
 
-    if (log.targetId && log.blockId) {
-      element.appendChild(debug.createBlockLink(log.targetId, log.blockId));
+    if (row.targetId && row.blockId) {
+      root.appendChild(debug.createBlockLink(row.targetId, row.blockId));
     }
 
-    return element;
+    return {
+      root,
+      repeats
+    };
+  };
+
+  logView.renderRow = (elements, row) => {
+    const {repeats} = elements;
+    if (row.count >= 1) {
+      repeats.style.display = '';
+      repeats.textContent = row.count;
+    }
   };
 
   const exportButton = debug.createHeaderButton({
@@ -147,7 +145,7 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
     const defaultFormat = "{sprite}: {content} ({type})";
     const exportFormat = e.shiftKey ? prompt(msg("enter-format"), defaultFormat) : defaultFormat;
     if (!exportFormat) return;
-    const file = logView.logs
+    const file = logView.rows
       .map(({ text, targetId, type, count }) =>
         (
           exportFormat.replace(
@@ -173,10 +171,18 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
     clearLogs();
   });
 
+  const areLogsEqual = (a, b) =>
+    a.text === b.text &&
+    a.type === b.type &&
+    a.internal === b.internal &&
+    a.blockId === b.blockId &&
+    a.targetId === b.targetId;
+
   const addLog = (text, thread, type) => {
     const log = {
       text,
       type,
+      count: 1
     };
     if (thread) {
       log.blockId = thread.peekStack();
@@ -191,7 +197,13 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
       log.type = "warn";
     }
 
-    logView.append(log);
+    const previousLog = logView.rows[logView.rows.length - 1];
+    if (previousLog && areLogsEqual(log, previousLog)) {
+      previousLog.count++;
+      logView.queueUpdateContent();
+    } else {
+      logView.append(log);
+    }
 
     if (!logView.visible) {
       debug.setHasUnreadMessage(true);

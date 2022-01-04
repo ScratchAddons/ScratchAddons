@@ -159,15 +159,15 @@
   pointer-events: none;
 }
 
-.sa-debugger-log-body {
+.sa-debugger-log-text {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: pre;
 }
-.sa-debugger-log-body-empty {
+.sa-debugger-log-text-empty {
   font-style: italic;
 }
-.sa-debugger-log-internal .sa-debugger-log-body {
+.sa-debugger-log-internal .sa-debugger-log-text {
   font-style: italic;
 }
 
