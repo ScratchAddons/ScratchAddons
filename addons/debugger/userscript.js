@@ -466,6 +466,7 @@ export default async function ({ addon, global, console, msg }) {
 
     if (!color) {
       const blocklyCategoryMap = {
+        "data-lists": "data_lists",
         list: "data_lists",
         events: "event",
       };
