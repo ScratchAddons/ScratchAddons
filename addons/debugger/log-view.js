@@ -181,6 +181,7 @@ class LogView {
     const endIndex = clamp(scrollStartIndex + rowsVisible + EXTRA_ROWS_ABOVE, 0, this.rows.length);
 
     const allVisibleRows = new Set();
+    const newElements = [];
     for (let i = startIndex; i < endIndex; i++) {
       const row = this.rows[i];
       allVisibleRows.add(row);
@@ -188,7 +189,7 @@ class LogView {
       let metadata = this.rowToMetadata.get(row);
       if (!metadata) {
         const elements = this.generateRow(row);
-        appendSortedElement(this.innerElement, elements.root);
+        newElements.push(elements.root);
         metadata = {
           stringify: null,
           elements
@@ -212,6 +213,10 @@ class LogView {
         metadata.elements.root.remove();
         this.rowToMetadata.delete(row);
       }
+    }
+
+    for (const root of newElements) {
+      appendSortedElement(this.innerElement, root);
     }
   }
 }
