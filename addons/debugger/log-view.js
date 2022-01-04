@@ -157,14 +157,21 @@ class LogView {
 
   updateContent() {
     if (this.rows.length !== this.oldLength) {
+      this.oldLength = this.rows.length;
+
       const totalHeight = this.rows.length * this.rowHeight;
       this.endElement.style.transform = `translateY(${totalHeight}px)`;
+
       if (this.rows.length) {
         this.placeholderElement.remove();
       } else {
         this.innerElement.appendChild(this.placeholderElement);
+
+        for (const metadata of this.rowToMetadata.values()) {
+          metadata.elements.root.remove();
+        }
+        this.rowToMetadata.clear();
       }
-      this.oldLength = this.rows.length;
     }
 
     if (this.rows.length === 0) {
