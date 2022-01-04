@@ -21,7 +21,7 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
         warn: scratchAddons.console.warnForAddon(addonId),
         error: scratchAddons.console.errorForAddon(addonId),
       };
-     module.default({
+      module.default({
         addon: addonObj,
         global: globalObj,
         console: { ...console, ...localConsole },

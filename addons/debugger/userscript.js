@@ -12,11 +12,21 @@ const removeAllChildren = (element) => {
 export default async function ({ addon, global, console, msg }) {
   setup(addon);
 
+  let logsTab;
+  const messagesLoggedBeforeLogsTabLoaded = [];
+  const logMessage = (...args) => {
+    if (logsTab) {
+      logsTab.addLog(...args);
+    } else {
+      messagesLoggedBeforeLogsTabLoaded.push(args);
+    }
+  };
+
   let hasLoggedPauseError = false;
   const pause = (_, thread) => {
     if (addon.tab.redux.state.scratchGui.mode.isPlayerOnly) {
       if (!hasLoggedPauseError) {
-        logsTab.addLog(msg("cannot-pause-player"), thread, "error");
+        logMessage(msg("cannot-pause-player"), thread, "error");
         hasLoggedPauseError = true;
       }
       return;
@@ -39,21 +49,21 @@ export default async function ({ addon, global, console, msg }) {
     args: ["content"],
     displayName: msg("block-log"),
     callback: ({ content }, thread) => {
-      logsTab.addLog(content, thread, "log");
+      logMessage(content, thread, "log");
     },
   });
   addon.tab.addBlock("\u200B\u200Bwarn\u200B\u200B %s", {
     args: ["content"],
     displayName: msg("block-warn"),
     callback: ({ content }, thread) => {
-      logsTab.addLog(content, thread, "warn");
+      logMessage(content, thread, "warn");
     },
   });
   addon.tab.addBlock("\u200B\u200Berror\u200B\u200B %s", {
     args: ["content"],
     displayName: msg("block-error"),
     callback: ({ content }, thread) => {
-      logsTab.addLog(content, thread, "error");
+      logMessage(content, thread, "error");
     },
   });
 
@@ -62,6 +72,7 @@ export default async function ({ addon, global, console, msg }) {
     if (vm.editingTarget) return resolve();
     vm.runtime.once("PROJECT_LOADED", resolve);
   });
+  const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   const debuggerButtonOuter = document.createElement("div");
   debuggerButtonOuter.className = "sa-debugger-container";
@@ -262,7 +273,12 @@ export default async function ({ addon, global, console, msg }) {
     const { exists, name, originalId } = getTargetInfoById(targetId);
     link.textContent = name;
     if (exists) {
-      link.addEventListener("mousedown", () => goToBlock(originalId, blockId));
+      // We use mousedown instead of click so that you can still go to blocks when logs are rapidly scrolling
+      link.addEventListener("mousedown", () => {
+        switchToSprite(originalId);
+        activateCodeTab();
+        goToBlock(blockId);
+      });
     } else {
       link.classList.add("sa-debugger-log-link-unknown");
     }
@@ -270,35 +286,31 @@ export default async function ({ addon, global, console, msg }) {
     return link;
   };
 
-  const goToBlock = (targetId, blockId) => {
-    const workspace = Blockly.getMainWorkspace();
-    const redux = addon.tab.redux;
-
-    const offsetX = 32;
-    const offsetY = 32;
+  const switchToSprite = (targetId) => {
     if (targetId !== vm.editingTarget.id) {
       if (vm.runtime.getTargetById(targetId)) {
         vm.setEditingTarget(targetId);
-        setTimeout(() => goToBlock(targetId, blockId), 300);
       }
-      return;
     }
+  };
 
-    const block = workspace.getBlockById(blockId);
-    if (!block) return;
-
-    // Don't scroll to blocks in the flyout
-    if (block.workspace.isFlyout) return;
-
-    // Make sure the code tab is active
+  const activateCodeTab = () => {
+    const redux = addon.tab.redux;
     if (redux.state.scratchGui.editorTab.activeTabIndex !== 0) {
       redux.dispatch({
         type: "scratch-gui/navigation/ACTIVATE_TAB",
         activeTabIndex: 0,
       });
-      setTimeout(() => goToBlock(targetId, blockId), 0);
-      return;
     }
+  };
+
+  const goToBlock = (blockId) => {
+    const workspace = Blockly.getMainWorkspace();
+    const block = workspace.getBlockById(blockId);
+    if (!block) return;
+
+    // Don't scroll to blocks in the flyout
+    if (block.workspace.isFlyout) return;
 
     // Copied from devtools. If it's code gets improved for this function, bring those changes here too.
     let root = block.getRootBlock();
@@ -307,6 +319,9 @@ export default async function ({ addon, global, console, msg }) {
     while (base.getOutputShape() && base.getSurroundParent()) {
       base = base.getSurroundParent();
     }
+
+    const offsetX = 32;
+    const offsetY = 32;
 
     let ePos = base.getRelativeToSurfaceXY(), // Align with the top of the block
       rPos = root.getRelativeToSurfaceXY(), // Align with the left of the block 'stack'
@@ -358,6 +373,125 @@ export default async function ({ addon, global, console, msg }) {
     _flash();
   };
 
+  // TODO: I think these are wrong in some edge cases
+  const formatProcedureCode = (proccode) => proccode.replace(/%[nbs]/g, "()");
+  const formatBlocklyTranslation = (msg) => msg.replace(/%\d+/g, "()");
+
+  const createBlockPreview = (targetId, blockId) => {
+    const target = vm.runtime.getTargetById(targetId);
+    if (!target) {
+      return null;
+    }
+
+    const block = target.blocks.getBlock(blockId);
+    if (!block || block.opcode === "text") {
+      return null;
+    }
+
+    let text;
+    let category;
+    let shape;
+    let color;
+    if (
+      block.opcode === "data_variable" ||
+      block.opcode === "data_listcontents" ||
+      block.opcode === "argument_reporter_string_number" ||
+      block.opcode === "argument_reporter_boolean"
+    ) {
+      text = Object.values(block.fields)[0].value;
+      if (block.opcode === "data_variable") {
+        category = "data";
+      } else if (block.opcode === "data_listcontents") {
+        category = "list";
+      } else {
+        category = "more";
+      }
+      shape = "round";
+    } else if (block.opcode === "procedures_call") {
+      const proccode = block.mutation.proccode;
+      text = formatProcedureCode(proccode);
+      const customBlock = addon.tab.getCustomBlock(proccode);
+      if (customBlock) {
+        category = "addon-custom-block";
+        color = customBlock.color;
+      } else {
+        category = "more";
+      }
+    } else if (block.opcode === "procedures_definition") {
+      const prototypeBlockId = block.inputs.custom_block.block;
+      const prototypeBlock = target.blocks.getBlock(prototypeBlockId);
+      const proccode = prototypeBlock.mutation.proccode;
+      text = ScratchBlocks.ScratchMsgs.translate("PROCEDURES_DEFINITION", "define %1").replace(
+        "%1",
+        formatProcedureCode(proccode)
+      );
+      category = "more";
+    } else {
+      // Try to call things like https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/operators.js#L36
+      var jsonData;
+      const fakeBlock = {
+        jsonInit(data) {
+          jsonData = data;
+        },
+      };
+      const blockConstructor = ScratchBlocks.Blocks[block.opcode];
+      if (blockConstructor) {
+        try {
+          blockConstructor.init.call(fakeBlock);
+        } catch (e) {
+          // ignore
+        }
+      }
+      if (!jsonData) {
+        return null;
+      }
+      text = jsonData.message0;
+      if (!text) {
+        return null;
+      }
+      text = formatBlocklyTranslation(text);
+      category = jsonData.category;
+      const isStatement =
+        (jsonData.extensions &&
+          (jsonData.extensions.includes("shape_statement") ||
+            jsonData.extensions.includes("shape_hat") ||
+            jsonData.extensions.includes("shape_end"))) ||
+        "previousStatement" in jsonData ||
+        "nextStatement" in jsonData;
+      shape = isStatement ? "stacked" : "round";
+    }
+    if (!text || !category) {
+      return null;
+    }
+
+    if (!color) {
+      const blocklyCategoryMap = {
+        list: "data_lists",
+        events: "event",
+      };
+      const blocklyColor = ScratchBlocks.Colours[blocklyCategoryMap[category] || category];
+      if (!blocklyColor) {
+        return null;
+      }
+      color = blocklyColor.primary;
+    }
+
+    const element = document.createElement("span");
+    element.className = "sa-debugger-block-preview";
+    element.textContent = text;
+    element.style.backgroundColor = color;
+    element.dataset.shape = shape;
+
+    // data-category is used for editor-theme3 compatibility
+    const colorCategoryMap = {
+      list: "data-lists",
+      more: "custom",
+    };
+    element.dataset.category = colorCategoryMap[category] || category;
+
+    return element;
+  };
+
   const api = {
     debug: {
       createHeaderButton,
@@ -366,15 +500,21 @@ export default async function ({ addon, global, console, msg }) {
       addAfterStepCallback,
       getTargetInfoById,
       createBlockLink,
+      createBlockPreview,
     },
     addon,
     msg,
     console,
   };
-  const logsTab = await createLogsTab(api);
+  logsTab = await createLogsTab(api);
   const threadsTab = await createThreadsTab(api);
   const performanceTab = await createPerformanceTab(api);
   const allTabs = [logsTab, threadsTab, performanceTab];
+
+  for (const message of messagesLoggedBeforeLogsTabLoaded) {
+    logsTab.addLog(...message);
+  }
+  messagesLoggedBeforeLogsTabLoaded.length = 0;
 
   let activeTab;
   const setActiveTab = (tab) => {

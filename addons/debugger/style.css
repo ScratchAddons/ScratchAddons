@@ -159,15 +159,15 @@
   pointer-events: none;
 }
 
-.sa-debugger-log-body {
+.sa-debugger-log-text {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: pre;
 }
-.sa-debugger-log-body-empty {
+.sa-debugger-log-text-empty {
   font-style: italic;
 }
-.sa-debugger-log-internal .sa-debugger-log-body {
+.sa-debugger-log-internal .sa-debugger-log-text {
   font-style: italic;
 }
 
@@ -182,16 +182,14 @@
   font-weight: bold;
 }
 
-.sa-debugger-input-block {
+.sa-debugger-block-preview {
   color: white;
-  border-radius: 100px;
   padding: 1px 6px;
   margin-right: 4px;
 }
-
-.sa-debugger-stacked-block {
-  padding: 1px 6px;
+.sa-debugger-block-preview[data-shape="round"] {
+  border-radius: 100px;
+}
+.sa-debugger-block-preview[data-shape="stacked"] {
   border-radius: 3px;
-  color: white;
-  margin-right: 4px;
 }
