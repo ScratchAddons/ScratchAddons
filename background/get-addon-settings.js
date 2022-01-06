@@ -46,6 +46,15 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
         addonsEnabled["block-count"] = true;
       }
       if (addonId === "editor-dark-mode") {
+        if (settings.textShadow && addonsEnabled["custom-block-text"] === undefined) {
+          // Transition v1.23 to v1.24
+          // Moved text shadow option to the custom-block-text addon
+          madeChangesToAddon = madeAnyChanges = true;
+          delete settings.textShadow;
+          addonsEnabled["custom-block-text"] = true;
+          addonSettings["custom-block-text"].textShadow = true;
+        }
+
         // Transition v1.22 to v1.23
         // TurboWarp Dark preset changes:
         updatePresetIfMatching(
