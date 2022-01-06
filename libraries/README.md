@@ -9,7 +9,6 @@ Third-party libraries included are:
 - [tinycolor2 1.4.2](https://raw.githubusercontent.com/bgrins/TinyColor/1.4.2/dist/tinycolor-min.js) (MIT)
 - [text-field-edit 3.1.1](https://unpkg.com/text-field-edit@3.1.1/index.js)
 - [chart.js 3.6.2](https://unpkg.com/chart.js@3.6.2/dist/chart.min.js) (MIT)
-- [chartjs-plugin-annotation 1.2.1](https://unpkg.com/chartjs-plugin-annotation@1.2.1/dist/chartjs-plugin-annotation.min.js) (MIT)
 - [color-picker-web-component 1.3.7](https://unpkg.com/color-picker-web-component@1.3.7/dist/color-picker-esm.min.js) (MIT)
 - [comlink 4.3.1](https://unpkg.com/comlink@4.3.1/dist/umd/comlink.js) (Apache-2.0)
 - [Sora](https://fonts.google.com/specimen/Sora) (OFL)

@@ -4,7 +4,6 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
   const vm = addon.tab.traps.vm;
 
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chartjs-plugin-annotation.min.js");
 
   const tab = debug.createHeaderTab({
     text: msg("tab-performance"),
