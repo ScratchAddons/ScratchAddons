@@ -1,6 +1,8 @@
 /* Page background */
 html,
-body,
+body {
+  background-color: var(--darkWww-page);
+}
 #view,
 .crash-container,
 .semicolon {
