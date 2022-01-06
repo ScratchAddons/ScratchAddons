@@ -70,9 +70,11 @@ export const setPaused = (_paused) => {
         pausedThreadState = new WeakMap();
     }
   }
-  
-  paused = _paused;
-  eventTarget.dispatchEvent(new CustomEvent("change"));
+
+  if (paused !== _paused) {
+    paused = _paused;
+    eventTarget.dispatchEvent(new CustomEvent("change"));
+  }
 };
 
 export const onPauseChanged = (listener) => {
