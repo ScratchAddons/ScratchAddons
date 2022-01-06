@@ -19,7 +19,7 @@ const BADGE_ALARM_NAME = "updateBadge";
  */
 export async function updateBadge(defaultStoreId) {
   if (duringBadgeUpdate) return;
-  if (!defaultStoreId) throw new Error("defaultStoreId is not passed properly!");
+  if (!defaultStoreId) return;
   duringBadgeUpdate = true;
   if (!scratchAddons.localState.allReady) {
     // This method may be called before ready, but we need to get addon settings
@@ -111,6 +111,15 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
       break;
     }
     case BADGE_ALARM_NAME: {
+      if (scratchAddons.globalState.auth.isLoggedIn) {
+        const count = await MessageCache.fetchMessageCount(scratchAddons.globalState.auth.username);
+        const db = await MessageCache.openDatabase();
+        try {
+          await db.put("count", count, scratchAddons.cookieStoreId);
+        } finally {
+          await db.close();
+        }
+      }
       await updateBadge(scratchAddons.cookieStoreId);
     }
   }
