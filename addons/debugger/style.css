@@ -29,6 +29,9 @@
 .sa-debugger-tabs {
   margin-top: auto !important;
 }
+.sa-debugger-tabs li:first-child {
+  border-left: 0;
+}
 .sa-debugger-tabs img {
   margin-right: 0.2rem;
 }
@@ -54,6 +57,10 @@
   height: 100%;
   overflow: auto;
   cursor: default;
+}
+
+.sa-debugger-tab-content h2 {
+  margin-left: 10px;
 }
 
 .sa-debugger-chart {
@@ -174,8 +181,6 @@
 .sa-debugger-thread-target-name {
   font-weight: bold;
   margin-right: 8px;
-}
-.sa-debugger-thread-target-id {
 }
 .sa-debugger-thread-running {
   background-color: rgba(255, 187, 0, 0.233);
