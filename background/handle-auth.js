@@ -31,13 +31,19 @@ function getDefaultStoreId() {
   startCache(defaultStoreId);
 })();
 
-chrome.cookies.onChanged.addListener(({ cookie, cause }) => {
+chrome.cookies.onChanged.addListener(({ cookie, cause, removed }) => {
   if (cookie.name === "scratchsessionsid" || cookie.name === "scratchlanguage" || cookie.name === "scratchcsrftoken") {
     if (cookie.name === "scratchlanguage") {
       setLanguage();
     } else if (!scratchAddons.cookieStoreId) {
       getDefaultStoreId().then(() => checkSession());
-    } else if (cookie.storeId === scratchAddons.cookieStoreId) {
+    } else if (
+      cookie.storeId === scratchAddons.cookieStoreId &&
+      ((cookie.name === "scratchcsrftoken" && cookie.value !== scratchAddons.globalState.auth.csrfToken) ||
+        (cookie.name === "scratchsessionsid" &&
+          ((removed && scratchAddons.globalState.auth.isLoggedIn) ||
+            (!removed && cookie.value !== null && !scratchAddons.globalState.auth.isLoggedIn))))
+    ) {
       checkSession().then(() => {
         if (cookie.name === "scratchsessionsid") {
           startCache(scratchAddons.cookieStoreId, true);
