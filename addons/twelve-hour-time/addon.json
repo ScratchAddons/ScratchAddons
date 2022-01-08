@@ -1,0 +1,22 @@
+{
+  "name": "12 hour time",
+  "description": "Changes forum times into the 12 hour time equivalent",
+  "tags": ["community", "forums"],
+  "enabledByDefault": false,
+  "credits": [
+    {
+      "name": "god286/webdev03",
+      "link": "https://github.com/webdev03"
+    },
+    {
+      "name": "JaydenDev",
+      "link": "https://github.com/JaydenDev"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "changer.js",
+      "matches": ["https://scratch.mit.edu/discuss/*"]
+    }
+  ]
+}
