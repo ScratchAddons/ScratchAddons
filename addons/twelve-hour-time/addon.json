@@ -16,7 +16,7 @@
   "userscripts": [
     {
       "url": "changer.js",
-      "matches": ["https://scratch.mit.edu/discuss/*"]
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
     }
   ]
 }
