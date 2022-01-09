@@ -38,11 +38,9 @@ chrome.cookies.onChanged.addListener(({ cookie, cause, removed }) => {
     } else if (!scratchAddons.cookieStoreId) {
       getDefaultStoreId().then(() => checkSession());
     } else if (
+      // do not refetch for csrf token expiration date change
       cookie.storeId === scratchAddons.cookieStoreId &&
-      ((cookie.name === "scratchcsrftoken" && cookie.value !== scratchAddons.globalState.auth.csrfToken) ||
-        (cookie.name === "scratchsessionsid" &&
-          ((removed && scratchAddons.globalState.auth.isLoggedIn) ||
-            (!removed && cookie.value !== null && !scratchAddons.globalState.auth.isLoggedIn))))
+      !(cookie.name === "scratchcsrftoken" && cookie.value === scratchAddons.globalState.auth.csrfToken)
     ) {
       checkSession().then(() => {
         if (cookie.name === "scratchsessionsid") {

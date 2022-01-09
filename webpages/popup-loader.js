@@ -50,13 +50,15 @@ async function getActualCookieStore() {
   return current?.cookieStoreId || undefined;
 }
 
-async function refetchCookies() {
-  try {
-    await fetch("https://scratch.mit.edu/csrf_token/");
-  } catch (e) {
-    console.error(e);
-    scratchAddons.cookieFetchingFailed = true;
-    return;
+async function refetchCookies(needsRequest = true) {
+  if (needsRequest) {
+    try {
+      await fetch("https://scratch.mit.edu/csrf_token/");
+    } catch (e) {
+      console.error(e);
+      scratchAddons.cookieFetchingFailed = true;
+      return;
+    }
   }
   const tabCookieStoreId = await getActualCookieStore();
   const scratchLang = (await getCookieValue("scratchlanguage", false, tabCookieStoreId)) || navigator.language;
@@ -146,7 +148,7 @@ async function refetchSession(addon) {
       return;
     }
     if (request.refetchSession) {
-      refetchCookies().then(() => refetchSession(addon));
+      refetchCookies(false).then(() => refetchSession(addon));
       return;
     }
   });
