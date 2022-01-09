@@ -95,7 +95,7 @@
             <div class="comment" v-for="alert of stMessages">
               <span class="comment-time">{{ alert.datetime_created }}</span>
               <a class="delete-btn" @click="dismissAlert(alert.id)">{{ uiMessages.dismissMsg }}</a>
-              <div v-html="alert.message"></div>
+              <dom-element-renderer :element="alert.element"></dom-element-renderer>
             </div>
           </div>
         </div>

@@ -3,6 +3,8 @@ import * as MessageCache from "../../libraries/common/message-cache.js";
 import * as API from "./api.js";
 import fixCommentContent from "./fix-comment-content.js";
 
+const parser = new DOMParser();
+
 const errorCodes = {
   isEmpty: "comment-error-empty",
   // Two errors can be raised for rate limit;
@@ -364,10 +366,19 @@ export default async ({ addon, msg, safeMsg }) => {
             } finally {
               await db.close();
             }
-            this.stMessages = (Array.isArray(alerts) ? alerts : []).map((alert) => ({
-              ...alert,
-              datetime_created: new Date(alert.datetime_created).toDateString(),
-            }));
+            this.stMessages = (Array.isArray(alerts) ? alerts : []).map((alert) => {
+              const element = parser.parseFromString(alert.message, "text/html");
+              for (const link of element.getElementsByTagName("a")) {
+                link.href = new URL(link.getAttribute("href"), "https://scratch.mit.edu/").toString();
+              }
+              const wrapped = document.createElement("div");
+              wrapped.append(...element.body.childNodes);
+              return {
+                ...alert,
+                element: wrapped,
+                datetime_created: new Date(alert.datetime_created).toDateString(),
+              };
+            });
             this.error = undefined;
             return true;
           })
