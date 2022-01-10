@@ -27,13 +27,42 @@
 }
 
 .sa-debugger-tabs {
-  margin-top: auto !important;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
 }
-.sa-debugger-tabs li:first-child {
-  border-left: 0;
+.sa-debugger-tabs li {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  padding: 0.5em 1em;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 1.25rem;
+  color: white;
+  font-size: 0.8rem;
+  cursor: pointer;
 }
-.sa-debugger-tabs img {
-  margin-right: 0.2rem;
+.sa-debugger-tabs li + li {
+  margin-inline-start: 10px;
+}
+.sa-debugger-tabs li:hover {
+  background-color: rgba(0, 0, 0, 0.15);
+}
+.sa-debugger-tabs li.sa-debugger-tab-selected {
+  background-color: white;
+  background-clip: padding-box;
+  border-color: rgba(0, 0, 0, 0.25);
+  color: #4d97ff;
+}
+.sa-debugger-tabs li img {
+  margin-right: 0.25rem;
+  width: 1.25rem;
+  filter: brightness(0) invert(1);
+}
+.sa-debugger-tabs li.sa-debugger-tab-selected img {
+  filter: none;
 }
 
 .sa-debugger-unpause {

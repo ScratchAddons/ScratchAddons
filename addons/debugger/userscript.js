@@ -104,9 +104,7 @@ export default async function ({ addon, global, console, msg }) {
     className: addon.tab.scratchClass("card_header-buttons"),
   });
   const tabListElement = Object.assign(document.createElement("ul"), {
-    className: addon.tab.scratchClass("react-tabs_react-tabs__tab-list", "gui_tab-list", {
-      others: "sa-debugger-tabs",
-    }),
+    className: "sa-debugger-tabs",
   });
   const buttonContainerElement = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_header-buttons-right"),
@@ -191,9 +189,7 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const createHeaderTab = ({ text, icon }) => {
-    const tab = Object.assign(document.createElement("li"), {
-      className: addon.tab.scratchClass("react-tabs_react-tabs__tab", "gui_tab"),
-    });
+    const tab = document.createElement("li");
     const imageElement = Object.assign(document.createElement("img"), {
       src: icon,
       draggable: false,
@@ -520,7 +516,7 @@ export default async function ({ addon, global, console, msg }) {
   let activeTab;
   const setActiveTab = (tab) => {
     if (tab === activeTab) return;
-    const selectedClass = addon.tab.scratchClass("gui_is-selected");
+    const selectedClass = "sa-debugger-tab-selected";
     if (activeTab) {
       activeTab.hide();
       activeTab.tab.element.classList.remove(selectedClass);
