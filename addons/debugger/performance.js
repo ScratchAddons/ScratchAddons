@@ -11,7 +11,7 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
   });
 
   const content = Object.assign(document.createElement("div"), {
-    className: "sa-performance-tab-content"
+    className: "sa-performance-tab-content",
   });
 
   const createChart = ({ title }) => {
