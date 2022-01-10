@@ -10,7 +10,9 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
     icon: addon.self.dir + "/icons/performance.svg",
   });
 
-  const content = document.createElement("div");
+  const content = Object.assign(document.createElement("div"), {
+    className: "sa-performance-tab-content"
+  });
 
   const createChart = ({ title }) => {
     const titleElement = Object.assign(document.createElement("h2"), {

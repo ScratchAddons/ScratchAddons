@@ -59,13 +59,13 @@
   cursor: default;
 }
 
-.sa-debugger-tab-content h2 {
-  margin-left: 10px;
-}
-
 .sa-debugger-chart {
   width: 100%;
   height: 100%;
+}
+
+.sa-performance-tab-content {
+  padding: 8px;
 }
 
 .sa-debugger-log-outer {
