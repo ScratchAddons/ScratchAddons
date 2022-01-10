@@ -5,7 +5,6 @@
   "msg-count-badge",
   "scratch-notifier",
   "discuss-button",
-  "disable-sprite-wobble",
   "editor-stepping",
   "image-uploader",
   "scratch-messaging",
@@ -114,6 +113,7 @@
   "hi-res-thumbnails",
   "block-count",
   "script-snap",
+  "disable-sprite-wobble",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
