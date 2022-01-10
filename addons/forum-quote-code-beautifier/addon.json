@@ -3,10 +3,14 @@
   "description": "Shows nicer code and quote blocks on the forums.",
   "credits": [
     {
-      "name": "GrahamSH (Port)"
+      "name": "GrahamSH",
+      "note": "addon",
+      "id": "addon"
     },
     {
-      "name": "Boomer001 (Userstyle)"
+      "name": "Boomer001",
+      "note": "userstyle",
+      "id": "userstyle"
     }
   ],
   "settings": [

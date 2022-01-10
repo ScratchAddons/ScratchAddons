@@ -3,19 +3,27 @@
   "description": "Customize colors used by the project editor. Multiple dark themes by different authors available. If you don't need dark mode but want to change the default colors you can select the \"Scratch's default colors\" preset and tweak it.",
   "credits": [
     {
-      "name": "Maximouse (addon, \"Experimental\" Dark)",
+      "name": "Maximouse",
+      "note": "addon, \"Experimental\" Dark",
+      "id": "addon",
       "link": "https://scratch.mit.edu/users/Maximouse/"
     },
     {
-      "name": "infinitytec (3.Dark, 3.Darker)",
+      "name": "infinitytec",
+      "note": "3.Dark, 3.Darker",
+      "id": "darker",
       "link": "https://github.com/infinitytec"
     },
     {
-      "name": "_nix (Dark editor)",
+      "name": "_nix",
+      "note": "Dark editor",
+      "id": "dark",
       "link": "https://github.com/towerofnix"
     },
     {
-      "name": "GarboMuffin (TurboWarp Dark)",
+      "name": "GarboMuffin",
+      "note": "TurboWarp Dark",
+      "id": "twdark",
       "link": "https://github.com/GarboMuffin"
     }
   ],

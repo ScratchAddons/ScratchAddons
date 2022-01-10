@@ -3,7 +3,9 @@
   "description": "Adds buttons in the forum editing toolbar to insert BBCode tags, such as [center] or [color].",
   "credits": [
     {
-      "name": "Silk (icons)",
+      "name": "Silk",
+      "note": "icons",
+      "id": "icons",
       "link": "http://www.famfamfam.com/lab/icons/silk/"
     }
   ],
