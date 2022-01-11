@@ -1,44 +1,3 @@
-.intro-banner .intro-container,
-.title-banner.mod-messages,
-.download .download-header,
-.title-banner.mod-conference,
-.conf2019-title-band,
-.sa-annual-report-2019 .message-section,
-.sa-annual-report-2019 .initiatives-section .initiatives-subsection-header.community,
-.sa-annual-report-2019 .initiatives-section .initiatives-community .community-quotes .community-quote .comment-text,
-.title-banner.mod-blue-bg /* camp 2017 */,
-.wedo .top-banner,
-.gdxfor .extension-header {
-  background-color: #004099;
-}
-.sa-annual-report-2019 .initiatives-section .initiatives-community .community-quotes .community-quote .comment-text,
-.sa-annual-report-2019
-  .initiatives-section
-  .initiatives-community
-  .community-quotes
-  .community-quote
-  .comment-text::before,
-.sa-annual-report-2019
-  .initiatives-section
-  .initiatives-community
-  .community-quotes
-  .community-quote
-  .comment-text::after {
-  border-color: #004099;
-}
-.gradient1 {
-  background-image: linear-gradient(#004099, black);
-}
-html,
-body,
-.parents .title-banner.masthead,
-.information-page .title-banner.masthead,
-.download .title-banner.masthead /* Scratch 2.0 and 1.4 download */,
-.conf2017-title-band,
-.sa-annual-report-2019 .subnavigation,
-.sa-annual-report-2020 .initiatives-section .initiatives-subsection-header.community {
-  background-color: #003a8a;
-}
 .parents .title-banner.masthead .ted-talk {
   border-color: black;
 }
@@ -60,7 +19,7 @@ body,
 .wedo2 .extension-header {
   background-color: #99004d;
 }
-.donate-banner,
+.hoc-banner,
 .developers .title-banner.masthead,
 .sa-annual-report-2019 .reach-section,
 .initiatives-section .initiatives-subsection-header.tools,
@@ -71,11 +30,13 @@ body,
 .microbit .extension-header {
   background-color: #064734;
 }
+.hoc-banner .hoc-banner-image,
 .initiatives-section .initiatives-tools .abhi-quote .comment-text,
 .initiatives-section .initiatives-tools .abhi-quote .comment-text::before,
 .initiatives-section .initiatives-tools .abhi-quote .comment-text::after {
   border-color: #064734;
 }
+.donate-banner,
 .sa-annual-report-2019 .reach-scratch-jr {
   background-color: #05402f;
 }
