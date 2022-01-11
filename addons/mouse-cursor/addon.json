@@ -1,0 +1,19 @@
+{
+  "name": "Hide mouse cursor",
+  "description": "Hides the mouse cursor when hovering over the stage.",
+  "credits": [
+    {
+      "name": "Samq64",
+      "link": "https://scratch.mit.edu/users/samq64/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor", "projectPlayer"],
+  "versionAdded": "1.24.0",
+  "enabledByDefault": false
+}
