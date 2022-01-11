@@ -29,17 +29,17 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
     }
     root.dataset.type = row.type;
 
-    const repeats = document.createElement("div");
-    repeats.className = "sa-debugger-log-repeats";
-    repeats.style.display = "none";
-    root.appendChild(repeats);
-
     const icon = document.createElement("div");
     icon.className = "sa-debugger-log-icon";
     if (row.type === "warn" || row.type === "error") {
       icon.title = msg("icon-" + row.type);
     }
     root.appendChild(icon);
+
+    const repeats = document.createElement("div");
+    repeats.className = "sa-debugger-log-repeats";
+    repeats.style.display = "none";
+    root.appendChild(repeats);
 
     if (row.preview && row.blockId && row.targetId) {
       const inputBlock = getInputOfBlock(row.targetId, row.blockId);
