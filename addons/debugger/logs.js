@@ -99,7 +99,7 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
             /\{(sprite|type|content)\}/g,
             (_, match) =>
               ({
-                sprite: logView.getTargetInfoById(targetId).name,
+                sprite: debug.getTargetInfoById(targetId).name,
                 type,
                 content: text,
               }[match])
@@ -154,7 +154,7 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
       logView.append(log);
     }
 
-    if (!logView.visible) {
+    if (!logView.visible && !log.internal) {
       debug.setHasUnreadMessage(true);
     }
   };
