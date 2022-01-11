@@ -14,7 +14,7 @@ export default async function ({ addon, global, console, msg }) {
       container,
       content,
       closeButton: headerCloseButton,
-      remove
+      remove,
     } = addon.tab.createModal(msg("set-thumbnail"), {
       isOpen: true,
     });
