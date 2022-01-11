@@ -21,6 +21,7 @@
   "dynamicDisable": true,
   "injectAsStyleElt": true,
   "versionAdded": "1.1.0",
+  "updateUserstylesOnSettingsChange": true,
   "userstyles": [
     {
       "url": "scratchr2.css",
@@ -33,6 +34,13 @@
     {
       "url": "forums.css",
       "matches": ["https://scratch.mit.edu/discuss/*"]
+    },
+    {
+      "url": "forums_bubbles.css",
+      "matches": ["https://scratch.mit.edu/discuss/*"],
+      "if": {
+        "settings": { "postStyle": "bubble" }
+      }
     },
     {
       "url": "forums_topic.css",
@@ -96,6 +104,24 @@
         "https://scratch.mit.edu/users/*/following/",
         "https://scratch.mit.edu/users/*/followers/"
       ]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Forum post style",
+      "id": "postStyle",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "box",
+          "name": "Box"
+        },
+        {
+          "id": "bubble",
+          "name": "Bubble"
+        }
+      ],
+      "default": "box"
     }
   ]
 }

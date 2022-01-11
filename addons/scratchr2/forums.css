@@ -87,18 +87,6 @@ body > #pagewrapper {
 .forum-search-list .blockpost .box-head a:visited {
   color: rgba(255, 255, 255, 0.5);
 }
-.forum-search-list .postleft,
-.forum-search-list .postleft a,
-.forum-search-list .postleft .username {
-  color: white;
-}
-.forum-search-list .postmsg,
-.searchposts .postmsg {
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--darkWww-border, rgba(0, 0, 0, 0.1));
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-}
 #brdfooter {
   margin-top: 40px;
   margin-bottom: 0;
@@ -229,8 +217,7 @@ body > #pagewrapper {
   top: -55px;
 }
 .blockpost div.box,
-.blockpost .box-head,
-.blockpost .box-content {
+.blockpost .box-head {
   background-color: transparent !important;
   border: none !important;
   border-radius: 0;
@@ -254,28 +241,26 @@ body > #pagewrapper {
 .blockpost .box-head a:hover {
   text-decoration: underline;
 }
-.postright,
-.postfootright,
+.blockpost .box-content {
+  overflow: hidden;
+  border: 1px solid var(--darkWww-box-border, #d9d9d9);
+  border-radius: 8px;
+}
 .postleft,
 .postfootleft {
-  background-color: transparent;
-  border-color: transparent;
-  box-shadow: none;
-}
-.postleft,
-.postright {
-  position: relative;
-}
-.postleft {
-  z-index: 1;
-  color: var(--darkWww-page-text, #575e75);
+  background-color: var(--darkWww-gray, #f2f2f2);
+  color: var(--darkWww-gray-text, #575e75);
+  box-shadow: 1px 0 var(--darkWww-box-border, #d9d9d9);
 }
 .djangobb .blockpost dl {
-  padding: 0;
+  padding: 10px 12px;
 }
 .djangobb .username {
   color: var(--darkWww-link, #4d97ff);
   font-size: 16px;
+}
+.forum-search-list .postleft .username {
+  color: var(--darkWww-gray-text, #575e75);
 }
 .searchposts .postleft a {
   font-size: 16px;
@@ -287,47 +272,18 @@ body > #pagewrapper {
 }
 .postright,
 .postfootright {
-  padding: 0;
-  padding-left: 16px;
-}
-.postmsg,
-.postfootright > ul {
-  padding: 12px 13px;
-  background-color: var(--darkWww-box, white);
-  border: 1px solid var(--darkWww-border, rgba(0, 0, 0, 0.1));
-}
-.postright::before {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 6px;
-  width: 10px;
-  height: 9px;
-  background-color: var(--darkWww-box, white);
-  border: 1px solid var(--darkWww-border, rgba(0, 0, 0, 0.1));
-  border-right: none;
-  border-bottom-left-radius: 8px;
-}
-.postmsg {
-  width: auto;
-  padding-bottom: 8px;
-  border-bottom: none;
-  border-top-right-radius: 8px;
+  border-left-color: var(--darkWww-gray, #f2f2f2);
+  color: var(--darkWww-box-text, #575e75);
+  box-shadow: 1px 0 inset var(--darkWww-box-border, #d9d9d9);
 }
 .postmsg ::selection {
   /* Don't break [color=transparent] hidden text */
   background-color: var(--darkWww-button-variant, #4280d7);
   color: var(--darkWww-button-text, white);
 }
-.blockpost .clearer {
-  display: none;
-}
 .postfootright > ul {
-  padding-top: 8px;
-  border-top: none;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
+  padding: 12px 20px;
+  padding-top: 4px;
   font-size: 12px;
 }
 .djangobb blockquote {
@@ -366,6 +322,7 @@ body > #pagewrapper {
 }
 .my-ocular-reaction-button.selected {
   background-color: #0fbd8c;
+  color: white;
 }
 .my-ocular-popup {
   color: var(--darkWww-input-text, #575e75);
