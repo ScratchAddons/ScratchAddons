@@ -1,0 +1,175 @@
+.sb-motion,
+.sb-looks,
+.sb-sound,
+.sb-events,
+.sb-control,
+.sb-sensing,
+.sb-operators,
+.sb-variables,
+.sb-list,
+.sb-custom,
+.sb-custom-arg,
+.sb-extension,
+.sb-pen {
+  fill: var(--sa-block-color);
+}
+.sb3-motion,
+.sb3-looks,
+.sb3-sound,
+.sb3-events,
+.sb3-control,
+.sb3-sensing,
+.sb3-operators,
+.sb3-variables,
+.sb3-list,
+.sb3-custom,
+.sb3-custom-arg,
+.sb3-extension,
+.sb3-pen {
+  fill: var(--sa-block-color);
+  stroke: rgba(0, 0, 0, 0.2);
+}
+
+.sb3-motion-alt,
+.sb3-looks-alt,
+.sb3-sound-alt,
+.sb3-events-alt,
+.sb3-control-alt,
+.sb3-sensing-alt,
+.sb3-operators-alt,
+.sb3-variables-alt,
+.sb3-list-alt,
+.sb3-custom-alt,
+.sb3-custom-arg-alt,
+.sb3-extension-alt,
+.sb3-pen-alt {
+  fill: rgba(0, 0, 0, 0.1);
+  stroke: rgba(0, 0, 0, 0.1);
+}
+.sb3-motion-dark,
+.sb3-looks-dark,
+.sb3-sound-dark,
+.sb3-events-dark,
+.sb3-control-dark,
+.sb3-sensing-dark,
+.sb3-operators-dark,
+.sb3-variables-dark,
+.sb3-list-dark,
+.sb3-custom-dark,
+.sb3-custom-arg-dark,
+.sb3-extension-dark,
+.sb3-pen-dark {
+  fill: rgba(0, 0, 0, 0.2);
+}
+.sb3-extension-line {
+  stroke: rgba(0, 0, 0, 0.1);
+}
+
+.sb-motion,
+.sb-motion ~ .sb-label,
+.sb3-motion,
+.sb3-motion-dark,
+.sb3-motion ~ .sb3-label {
+  --sa-block-color: var(--editorTheme3-motionColor);
+}
+.sb-looks,
+.sb-looks ~ .sb-label,
+.sb3-looks,
+.sb3-looks-dark,
+.sb3-looks ~ .sb3-label {
+  --sa-block-color: var(--editorTheme3-looksColor);
+}
+.sb-sound,
+.sb-sound ~ .sb-label,
+.sb3-sound,
+.sb3-sound-dark,
+.sb3-sound ~ .sb3-label {
+  --sa-block-color: var(--editorTheme3-soundsColor);
+}
+.sb-events,
+.sb-events ~ .sb-label,
+.sb3-events,
+.sb3-events-dark,
+.sb3-events ~ .sb3-label {
+  --sa-block-color: var(--editorTheme3-eventsColor);
+}
+.sb-control,
+.sb-control ~ .sb-label,
+.sb3-control,
+.sb3-control-dark,
+.sb3-control ~ .sb3-label {
+  --sa-block-color: var(--editorTheme3-controlColor);
+}
+.sb-sensing,
+.sb-sensing ~ .sb-label,
+.sb3-sensing,
+.sb3-sensing-dark,
+.sb3-sensing ~ .sb3-label {
+  --sa-block-color: var(--editorTheme3-sensingColor);
+}
+.sb-operators,
+.sb-operators ~ .sb-label,
+.sb3-operators,
+.sb3-operators-dark,
+.sb3-operators ~ .sb3-label {
+  --sa-block-color: var(--editorTheme3-operatorsColor);
+}
+.sb-variables,
+.sb-variables ~ .sb-label,
+.sb3-variables,
+.sb3-variables-dark,
+.sb3-variables ~ .sb3-label {
+  --sa-block-color: var(--editorTheme3-dataColor);
+}
+.sb-list,
+.sb-list ~ .sb-label,
+.sb3-list,
+.sb3-list-dark,
+.sb3-list ~ .sb3-label {
+  --sa-block-color: var(--editorTheme3-dataListsColor);
+}
+.sb-custom,
+.sb-custom ~ .sb-label,
+.sb3-custom,
+.sb3-custom-dark,
+.sb3-custom ~ .sb3-label,
+.sb-custom-arg,
+.sb-custom-arg ~ .sb-label,
+.sb3-custom-arg,
+.sb3-custom-arg-dark,
+.sb3-custom-arg ~ .sb3-label {
+  --sa-block-color: var(--editorTheme3-customColor);
+}
+.sb-extension,
+.sb-extension ~ .sb-label,
+.sb3-extension,
+.sb3-extension-dark,
+.sb3-extension ~ .sb3-label,
+.sb-pen,
+.sb-pen ~ .sb-label,
+.sb3-pen,
+.sb3-pen-dark,
+.sb3-pen ~ .sb3-label,
+.sb3-extension-line {
+  --sa-block-color: var(--editorTheme3-PenColor);
+}
+
+.sb-input-number,
+.sb-input-number-dropdown,
+.sb-input-string {
+  fill: var(--editorTheme3-inputColor);
+}
+.sb3-input-number,
+.sb3-input-string {
+  fill: var(--editorTheme3-inputColor) !important;
+}
+.sb-label.sb-literal-number,
+.sb-label.sb-literal-number-dropdown,
+.sb-literal-number-dropdown + polygon /* dropdown arrow */,
+.sb-label.sb-literal-string {
+  fill: var(--editorTheme3-inputColor-forumText);
+}
+.sb3-label.sb3-literal-number,
+.sb3-label.sb3-literal-string {
+  fill: var(--editorTheme3-inputColor-text);
+}
