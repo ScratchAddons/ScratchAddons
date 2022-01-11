@@ -209,6 +209,9 @@
   font-style: italic;
 }
 
+.sa-debugger-thread-indent {
+  width: calc(16px * var(--level));
+}
 .sa-debugger-thread-target-name {
   font-weight: bold;
   margin-right: 8px;

@@ -29,8 +29,8 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
 
     const isHeader = row.type === "thread-header";
     const indenter = document.createElement("div");
-    const INDENT = 16;
-    indenter.style.marginLeft = `${INDENT * (isHeader ? row.depth : row.depth + 1)}px`;
+    indenter.className = "sa-debugger-thread-indent";
+    indenter.style.setProperty("--level", isHeader ? row.depth : row.depth + 1);
     root.appendChild(indenter);
 
     if (isHeader) {
