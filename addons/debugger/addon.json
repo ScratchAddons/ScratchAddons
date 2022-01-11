@@ -39,7 +39,7 @@
       "default": false
     },
     {
-      "name": "Log flag clicks",
+      "name": "Log green flag clicks",
       "id": "log_greenflag",
       "type": "boolean",
       "default": false
@@ -69,7 +69,7 @@
       "default": false
     },
     {
-      "name": "Log invalid cloud variable values.",
+      "name": "Log invalid cloud variable values",
       "id": "log_invalid_cloud_data",
       "type": "boolean",
       "default": false

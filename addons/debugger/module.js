@@ -265,12 +265,12 @@ export const singleStep = () => {
   eventTarget.dispatchEvent(new CustomEvent("step"));
 };
 
-export const setup = (addon) => {
+export const setup = (_vm) => {
   if (vm) {
     return;
   }
 
-  vm = addon.tab.traps.vm;
+  vm = _vm;
 
   sequencerStepThread = vm.runtime.sequencer.stepThread;
   vm.runtime.sequencer.stepThread = function (thread) {
