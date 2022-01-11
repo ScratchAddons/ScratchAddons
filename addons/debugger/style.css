@@ -211,6 +211,10 @@
 
 .sa-debugger-thread-indent {
   width: calc(16px * var(--level));
+  margin-right: 4px;
+}
+.sa-debugger-thread-title .sa-debugger-thread-indent {
+  margin: 0;
 }
 .sa-debugger-thread-target-name {
   font-weight: bold;

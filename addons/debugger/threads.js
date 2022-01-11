@@ -34,6 +34,8 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
     root.appendChild(indenter);
 
     if (isHeader) {
+      root.classList.add("sa-debugger-thread-title");
+
       if (row.depth > 0) {
         const icon = document.createElement("div");
         icon.className = "sa-debugger-log-icon";
