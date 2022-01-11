@@ -30,7 +30,8 @@
   margin: 0;
   display: flex;
   align-items: center;
-  padding: 0 10px;
+  padding: 0 15px;
+  font-size: 0.75rem;
 }
 .sa-debugger-tabs li {
   margin: 0;
@@ -39,9 +40,8 @@
   padding: 0.5em 1em;
   background-color: rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 1.25rem;
+  border-radius: 1rem;
   color: white;
-  font-size: 0.8rem;
   cursor: pointer;
 }
 .sa-debugger-tabs li + li {
@@ -57,8 +57,9 @@
   color: #4d97ff;
 }
 .sa-debugger-tabs li img {
+  margin: 0;
   margin-right: 0.25rem;
-  width: 1.25rem;
+  width: 1rem;
   filter: brightness(0) invert(1);
 }
 .sa-debugger-tabs li.sa-debugger-tab-selected img {
