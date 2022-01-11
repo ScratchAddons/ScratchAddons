@@ -9,28 +9,18 @@ export default async function ({ addon, global, console, msg }) {
   const createModal = () => {
     // User Interface
     let ignoreClickOutside = false;
-    const modalOverlay = Object.assign(document.createElement("div"), {
-      className: "modal-overlay",
+    const {
+      backdrop,
+      container,
+      content,
+      closeButton: headerCloseButton,
+      remove
+    } = addon.tab.createModal(msg("set-thumbnail"), {
+      isOpen: true,
     });
-    addon.tab.displayNoneWhileDisabled(modalOverlay);
-    const modal = Object.assign(document.createElement("div"), {
-      className: "modal-content modal-sizes sa-animated-thumb-popup",
-      dir: addon.tab.direction,
-    });
-    const modalHeader = Object.assign(document.createElement("div"), {
-      className: "modal-header sa-animated-thumb-popup-header",
-    });
-    modalHeader.appendChild(
-      Object.assign(document.createElement("div"), {
-        className: "modal-title",
-        textContent: msg("set-thumbnail"),
-      })
-    );
-    modal.appendChild(modalHeader);
-    const modalInner = Object.assign(document.createElement("div"), {
-      className: "modal-inner-content sa-animated-thumb-popup-content",
-    });
-    modalInner.appendChild(
+    container.classList.add("sa-animated-thumb-popup");
+    content.classList.add("sa-animated-thumb-popup-content");
+    content.appendChild(
       Object.assign(document.createElement("p"), {
         textContent: msg("description"),
         className: "sa-animated-thumb-text",
@@ -49,7 +39,7 @@ export default async function ({ addon, global, console, msg }) {
     });
     modalButtons.appendChild(uploadFromFileButton);
     modalButtons.appendChild(uploadFromStageButton);
-    modalInner.appendChild(modalButtons);
+    content.appendChild(modalButtons);
     const stopOverwritingRow = Object.assign(document.createElement("p"), {
       className: "sa-animated-thumb-text",
     });
@@ -64,8 +54,8 @@ export default async function ({ addon, global, console, msg }) {
     });
     stopOverwritingRow.appendChild(stopOverwritingCheckbox);
     stopOverwritingRow.appendChild(stopOverwritingLabel);
-    modalInner.appendChild(stopOverwritingRow);
-    modalInner.appendChild(
+    content.appendChild(stopOverwritingRow);
+    content.appendChild(
       Object.assign(document.createElement("p"), {
         textContent: msg("keep-thumb-desc"),
         className: "sa-animated-thumb-text",
@@ -75,9 +65,9 @@ export default async function ({ addon, global, console, msg }) {
       className: "sa-animated-thumb-popup-result",
       hidden: true,
     });
-    modalInner.appendChild(modalResultArea);
+    content.appendChild(modalResultArea);
 
-    modalInner.appendChild(
+    content.appendChild(
       Object.assign(document.createElement("p"), {
         textContent: msg("successful"),
         className: "sa-animated-thumb-text sa-animated-thumb-show-on-success",
@@ -92,8 +82,8 @@ export default async function ({ addon, global, console, msg }) {
       className: "sa-animated-thumb-show-on-success sa-animated-thumb-uploaded-thumb",
     });
     thumbImageWrapper.appendChild(thumbImage);
-    modalInner.appendChild(thumbImageWrapper);
-    modalInner.appendChild(
+    content.appendChild(thumbImageWrapper);
+    content.appendChild(
       Object.assign(document.createElement("p"), {
         textContent: msg("if-unsuccessful"),
         className: "sa-animated-thumb-text sa-animated-thumb-show-on-success",
@@ -111,20 +101,14 @@ export default async function ({ addon, global, console, msg }) {
     let handleClickOutside;
     const closePopup = () => {
       setter.removeFileInput();
-      modalOverlay.remove();
-      document.body.removeEventListener("click", handleClickOutside, {
-        capture: true,
-      });
-      document.body.classList.remove("overflow-hidden");
+      remove();
     };
     handleClickOutside = (e) => {
-      if (ignoreClickOutside || modal.contains(e.target)) return;
+      if (ignoreClickOutside) return;
       closePopup();
     };
-    document.body.addEventListener("click", handleClickOutside, {
-      capture: true,
-    });
-    document.body.classList.add("overflow-hidden");
+    backdrop.addEventListener("click", handleClickOutside);
+    headerCloseButton.addEventListener("click", handleClickOutside);
 
     const buttonRow = Object.assign(document.createElement("div"), {
       className: "flex-row action-buttons sa-animated-thumb-popup-buttons",
@@ -135,9 +119,7 @@ export default async function ({ addon, global, console, msg }) {
     });
     closeButton.addEventListener("click", closePopup, { once: true });
     buttonRow.appendChild(closeButton);
-    modalInner.appendChild(buttonRow);
-    modal.appendChild(modalInner);
-    modalOverlay.append(modal);
+    content.appendChild(buttonRow);
 
     setter.onFinished = (promise) =>
       promise
@@ -145,7 +127,7 @@ export default async function ({ addon, global, console, msg }) {
           (canceled) => {
             if (canceled) return;
             thumbImage.src = `https://cdn2.scratch.mit.edu/get_image/project/${projectId}_480x360.png?nocache=${Date.now()}`;
-            modalInner.classList.add("sa-animated-thumb-successful");
+            content.classList.add("sa-animated-thumb-successful");
             saveConfig(projectId, stopOverwritingCheckbox.checked);
           },
           (status) => {
@@ -190,8 +172,6 @@ export default async function ({ addon, global, console, msg }) {
       });
       addon.tab.traps.vm.renderer.draw();
     });
-
-    document.body.appendChild(modalOverlay);
   };
 
   addon.tab.addEventListener("urlChange", () => {

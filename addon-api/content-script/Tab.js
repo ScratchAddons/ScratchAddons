@@ -780,7 +780,10 @@ export default class Tab extends Listenable {
         container.style.display = "none";
         document.body.classList.remove("overflow-hidden");
       },
-      remove: container.remove.bind(container),
+      remove: () => {
+        container.remove();
+        document.body.classList.remove("overflow-hidden");
+      },
     };
   }
 
