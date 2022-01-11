@@ -160,7 +160,7 @@ div.s3devDDOut.vis,
 .mediaRecorderPopupContent p,
 .slider-prompt_body_2ZkXL,
 .record-modal_body_2VO4l,
-.debug {
+.sa-debugger-interface {
   background-color: var(--editorDarkMode-accent);
   color: var(--editorDarkMode-accent-text);
 }
@@ -556,7 +556,8 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 .slider-prompt_max-input_1Nwbv,
 .slider-prompt_button-row_32aCX button,
 .record-modal_waveform-container__ay3Q,
-.record-modal_button-row_1hdGe button {
+.record-modal_button-row_1hdGe button,
+.sa-debugger-log {
   border-color: var(--editorDarkMode-border);
 }
 .blocklyWidgetDiv .goog-menuitem,
@@ -569,9 +570,6 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 .Popover-tipShape,
 .sa-onion-settings-polygon {
   stroke: var(--editorDarkMode-border);
-}
-.log {
-  --message-border-color: var(--editorDarkMode-border);
 }
 .dropdown_mod-open_3zJSJ {
   background-color: var(--editorDarkMode-border);
