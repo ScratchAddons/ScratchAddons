@@ -369,9 +369,60 @@ export default async function ({ addon, global, console, msg }) {
     _flash();
   };
 
-  // TODO: I think these are wrong in some edge cases
+  // May be slightly incorrect in some edge cases.
   const formatProcedureCode = (proccode) => proccode.replace(/%[nbs]/g, "()");
-  const formatBlocklyTranslation = (msg) => msg.replace(/%\d+/g, "()");
+
+  // May be slightly incorrect in some edge cases.
+  const formatBlocklyBlockData = (jsonData) => {
+    // For sample jsonData, see:
+    // https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/motion.js
+    // https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/control.js
+
+    const processSegment = (index) => {
+      const message = jsonData[`message${index}`];
+      const args = jsonData[`args${index}`];
+      if (!message) {
+        return null;
+      }
+      const parts = message.split(/%\d+/g);
+      let formattedMessage = '';
+      for (let i = 0; i < parts.length; i++) {
+        formattedMessage += parts[i];
+        const argInfo = args && args[i];
+        if (argInfo) {
+          const type = argInfo.type;
+          if (type === 'field_vertical_separator') {
+            // no-op
+          } else if (type === 'field_image') {
+            const src = argInfo.src;
+            if (src.endsWith('rotate-left.svg')) {
+              formattedMessage += '↩';
+            } else if (src.endsWith('rotate-right.svg')) {
+              formattedMessage += '↪';
+            }
+          } else {
+            formattedMessage += '()';
+          }
+        }
+      }
+      return formattedMessage;  
+    };
+
+    const parts = [];
+    let i = 0;
+    // The jsonData doesn't directly tell us how many segments it has, so we have to
+    // just keep looping until one doesn't exist.
+    while (true) {
+      const nextSegment = processSegment(i);
+      if (nextSegment) {
+        parts.push(nextSegment);
+      } else {
+        break;
+      }
+      i++;
+    }
+    return parts.join(' ');
+  };
 
   const createBlockPreview = (targetId, blockId) => {
     const target = vm.runtime.getTargetById(targetId);
@@ -441,11 +492,10 @@ export default async function ({ addon, global, console, msg }) {
       if (!jsonData) {
         return null;
       }
-      text = jsonData.message0;
+      text = formatBlocklyBlockData(jsonData);
       if (!text) {
         return null;
       }
-      text = formatBlocklyTranslation(text);
       category = jsonData.category;
       const isStatement =
         (jsonData.extensions &&
@@ -467,10 +517,12 @@ export default async function ({ addon, global, console, msg }) {
         events: "event",
       };
       const blocklyColor = ScratchBlocks.Colours[blocklyCategoryMap[category] || category];
-      if (!blocklyColor) {
-        return null;
+      if (blocklyColor) {
+        // block probably belongs to an extension
+        color = blocklyColor.primary;
+      } else {
+        color = ScratchBlocks.Colours.pen.primary;
       }
-      color = blocklyColor.primary;
     }
 
     const element = document.createElement("span");
