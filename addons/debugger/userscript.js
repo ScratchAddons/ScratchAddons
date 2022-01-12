@@ -385,27 +385,27 @@ export default async function ({ addon, global, console, msg }) {
         return null;
       }
       const parts = message.split(/%\d+/g);
-      let formattedMessage = '';
+      let formattedMessage = "";
       for (let i = 0; i < parts.length; i++) {
         formattedMessage += parts[i];
         const argInfo = args && args[i];
         if (argInfo) {
           const type = argInfo.type;
-          if (type === 'field_vertical_separator') {
+          if (type === "field_vertical_separator") {
             // no-op
-          } else if (type === 'field_image') {
+          } else if (type === "field_image") {
             const src = argInfo.src;
-            if (src.endsWith('rotate-left.svg')) {
-              formattedMessage += '↩';
-            } else if (src.endsWith('rotate-right.svg')) {
-              formattedMessage += '↪';
+            if (src.endsWith("rotate-left.svg")) {
+              formattedMessage += "↩";
+            } else if (src.endsWith("rotate-right.svg")) {
+              formattedMessage += "↪";
             }
           } else {
-            formattedMessage += '()';
+            formattedMessage += "()";
           }
         }
       }
-      return formattedMessage;  
+      return formattedMessage;
     };
 
     const parts = [];
@@ -421,7 +421,7 @@ export default async function ({ addon, global, console, msg }) {
       }
       i++;
     }
-    return parts.join(' ');
+    return parts.join(" ");
   };
 
   const createBlockPreview = (targetId, blockId) => {
