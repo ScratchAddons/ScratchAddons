@@ -23,20 +23,8 @@ const pauseThread = (thread) => {
     pausedThreadState.set(thread, {
       time: vm.runtime.currentMSecs,
     });
-  }
-};
-
-export const setPaused = (_paused) => {
-  if (_paused) {
-    if (!paused) {
-      vm.runtime.audioEngine.audioContext.suspend();
-      if (!vm.runtime.ioDevices.clock._paused) {
-        vm.runtime.ioDevices.clock.pause();
-      }
-
-      vm.runtime.threads.forEach(pauseThread);
-
-      // If there is an active thread, we hit paused in the middle of executing a block
+    if (thread === vm.runtime.sequencer.activeThread) {
+      // If we are the active thread, we hit paused in the middle of executing a block
       if (vm.runtime.sequencer.activeThread) {
         const thread = vm.runtime.sequencer.activeThread;
         pausedThreadState.get(thread).status = thread.status;
@@ -52,25 +40,30 @@ export const setPaused = (_paused) => {
         });
       }
     }
-  } else {
-    if (paused) {
-      vm.runtime.audioEngine.audioContext.resume();
-      vm.runtime.ioDevices.clock.resume();
+  }
+};
 
-      for (const thread of vm.runtime.threads) {
-        const pauseState = pausedThreadState.get(thread);
-        if (pauseState) {
-          const stackFrame = thread.peekStackFrame();
-          if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
-            stackFrame.executionContext.timer.startTime += vm.runtime.currentMSecs - pauseState.time;
-          }
+export const setPaused = (_paused) => {
+  if (_paused) {
+    vm.runtime.audioEngine.audioContext.suspend();
+    if (!vm.runtime.ioDevices.clock._paused) {
+      vm.runtime.ioDevices.clock.pause();
+    }
+    vm.runtime.threads.forEach(pauseThread);
+  } else {
+    vm.runtime.audioEngine.audioContext.resume();
+    vm.runtime.ioDevices.clock.resume();
+    for (const thread of vm.runtime.threads) {
+      const pauseState = pausedThreadState.get(thread);
+      if (pauseState) {
+        const stackFrame = thread.peekStackFrame();
+        if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
+          stackFrame.executionContext.timer.startTime += vm.runtime.currentMSecs - pauseState.time;
         }
       }
-
-      pausedThreadState = new WeakMap();
     }
+    pausedThreadState = new WeakMap();
   }
-
   if (paused !== _paused) {
     paused = _paused;
     eventTarget.dispatchEvent(new CustomEvent("change"));
