@@ -151,7 +151,7 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
         concatInPlace(result, createBlockInfo(topBlock, null));
         for (let i = 0; i < thread.stack.length; i++) {
           const blockId = thread.stack[i];
-          if (blockId === topBlock) continue;
+          if (blockId === topBlock.id) continue;
           const stackFrame = thread.stackFrames[i];
           const block = thread.target.blocks.getBlock(blockId);
           if (block) {
