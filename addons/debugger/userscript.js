@@ -518,9 +518,9 @@ export default async function ({ addon, global, console, msg }) {
       };
       const blocklyColor = ScratchBlocks.Colours[blocklyCategoryMap[category] || category];
       if (blocklyColor) {
-        // block probably belongs to an extension
         color = blocklyColor.primary;
       } else {
+        // block probably belongs to an extension
         color = ScratchBlocks.Colours.pen.primary;
       }
     }
