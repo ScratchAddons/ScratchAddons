@@ -66,13 +66,15 @@
   filter: none;
 }
 
-.sa-debugger-unpause {
-  animation: saDebuggerUnpause 2s infinite alternate;
-}
-.sa-debugger-unpause > img {
+.sa-debugger-header-buttons img {
   width: 20px;
   height: 20px;
 }
+
+.sa-debugger-unpause {
+  animation: saDebuggerUnpause 2s infinite alternate;
+}
+
 @keyframes saDebuggerUnpause {
   0% {
     background-color: rgba(0, 0, 0, 0.15);

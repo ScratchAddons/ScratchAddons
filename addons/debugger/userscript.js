@@ -107,7 +107,7 @@ export default async function ({ addon, global, console, msg }) {
     className: "sa-debugger-tabs",
   });
   const buttonContainerElement = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_header-buttons-right"),
+    className: addon.tab.scratchClass("card_header-buttons-right", {others: "sa-debugger-header-buttons"}),
   });
   const tabContentContainer = Object.assign(document.createElement("div"), {
     className: "sa-debugger-tab-content",
@@ -220,9 +220,8 @@ export default async function ({ addon, global, console, msg }) {
 
   const closeButton = createHeaderButton({
     text: msg("close"),
-    icon: addon.self.dir + "/icons/add.svg",
+    icon: addon.self.dir + "/icons/close.svg",
   });
-  closeButton.image.classList.add(addon.tab.scratchClass("close-button_close-icon"));
   closeButton.element.addEventListener("click", () => setInterfaceVisible(false));
 
   const originalStep = vm.runtime._step;
