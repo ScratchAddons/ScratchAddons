@@ -13,5 +13,6 @@ Third-party libraries included are:
 - [comlink 4.3.1](https://unpkg.com/comlink@4.3.1/dist/umd/comlink.js) (Apache-2.0)
 - [Sora](https://fonts.google.com/specimen/Sora) (OFL)
 - [Fuse.js 6.4.6](https://unpkg.com/fuse.js@6.4.6/dist/fuse.esm.min.js) (Apache-2.0)
+- [idb 7.0.0](https://unpkg.com/idb@7.0.0/build/umd.js) (ISC)
 
 Note that these libraries are either from official release websites or from unpkg (which distributes the content uploaded to NPM as-is).
