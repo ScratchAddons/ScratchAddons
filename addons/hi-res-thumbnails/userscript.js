@@ -14,7 +14,7 @@ export default async function ({ addon, console }) {
 
     // If the image is from uploads.scratch.mit.edu, reformat src so it looks
     // like a cdn2 URL.
-    if (/^https?:\/\/uploads\.scratch.mit\.edu\//.test(src)) {
+    if (/^https?:\/\/uploads\.scratch\.mit\.edu\//.test(src)) {
       const id = src.match(/[0-9]+/);
       if (src.includes("projects")) {
         // Project thumbnails are always 480x360.
