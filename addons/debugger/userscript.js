@@ -107,7 +107,7 @@ export default async function ({ addon, global, console, msg }) {
     className: "sa-debugger-tabs",
   });
   const buttonContainerElement = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_header-buttons-right", {others: "sa-debugger-header-buttons"}),
+    className: addon.tab.scratchClass("card_header-buttons-right", { others: "sa-debugger-header-buttons" }),
   });
   const tabContentContainer = Object.assign(document.createElement("div"), {
     className: "sa-debugger-tab-content",
