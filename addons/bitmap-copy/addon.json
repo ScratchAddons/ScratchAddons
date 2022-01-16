@@ -13,13 +13,13 @@
       "url": "userscript.js",
       "matches": ["projects"]
     },
-	{
+    {
       "url": "paste.js",
       "matches": ["projects"]
     }
   ],
   "userstyles": [
-	{
+    {
       "url": "paste.css",
       "matches": ["projects"]
     }
