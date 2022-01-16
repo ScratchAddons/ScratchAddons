@@ -1,0 +1,29 @@
+[data-for*="Paste Image"]:hover + .__react_component_tooltip {
+  visibility: visible;
+}
+
+.sa-paste-image-btn:not([id*="_right"]) + .__react_component_tooltip {
+  left: auto;
+}
+
+.sa-paste-image-uploads-btn[id*="_right"] + .__react_component_tooltip,
+[data-for="sa-Choose_a_Backdrop-Paste Image"] + .__react_component_tooltip {
+  right: auto;
+}
+
+.sa-paste-overlay-inner {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+.sa-paste-overlay-text {
+	font-size: 2.5em;
+	color: white;
+	user-select: none;
+}
+.sa-paste-overlay-subtext {
+	font-size: 45%;
+	margin-top: 0.33em;
+}
