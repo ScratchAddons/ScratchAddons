@@ -239,7 +239,7 @@ export default class DevTools {
     let myBlocks = [];
     let myBlocksByProcCode = {};
 
-    // todo - get blockyly from an svg???
+    // todo - get blockly from an svg???
 
     let wksp = this.utils.getWorkspace();
     let topBlocks = wksp.getTopBlocks();
@@ -630,7 +630,7 @@ export default class DevTools {
   }
 
   /**
-   * Badly Ophaned - might want to delete these!
+   * Badly Orphaned - might want to delete these!
    * @param topBlock
    * @returns {boolean}
    */
@@ -820,7 +820,7 @@ export default class DevTools {
   }
 
   /**
-   * Find all the evern broadcasters.
+   * Find all the event broadcasters.
    * @return {[{eventName:string, block:Block}]} Array of event names and blocks.
    */
   getCallsToEvents() {

@@ -1,3 +1,5 @@
+import { updateBadge } from "./message-cache.js";
+
 const periods = [
   {
     name: chrome.i18n.getMessage("15min"),
@@ -84,13 +86,13 @@ function contextMenuMuted() {
 function muteForMins(mins) {
   if (mins !== Infinity) chrome.alarms.create("muted", { delayInMinutes: mins });
   scratchAddons.muted = true;
-  scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
+  updateBadge(scratchAddons.cookieStoreId);
   chrome.storage.local.set({ muted: true });
 }
 
 function unmute() {
   scratchAddons.muted = false;
-  scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
+  updateBadge(scratchAddons.cookieStoreId);
   chrome.storage.local.set({ muted: false });
 }
 

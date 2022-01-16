@@ -4,6 +4,9 @@
   <!-- Transition from Scratch Messaging Extension -->
   <script src="transition.js" type="module"></script>
 
+  <!-- Load idb -->
+  <script src="../libraries/thirdparty/idb.js" defer></script>
+
   <!-- Declare scratchAddons object, create global and local state -->
   <script src="declare-scratchaddons-object.js" type="module"></script>
 
@@ -18,15 +21,12 @@
   <script src="handle-cookie.js" type="module"></script>
   <script src="handle-auth.js" type="module"></script>
   <script src="handle-l10n.js" type="module"></script>
-  <script src="handle-messages.js" type="module"></script>
-  <script src="handle-browser-badge.js" type="module"></script>
   <script src="handle-clipboard.js" type="module"></script>
   <script src="handle-notifications.js" type="module"></script>
   <script src="handle-permissions.js" type="module"></script>
 
   <!-- When everything is ready, run scripts and communicate with content scripts -->
   <script src="get-userscripts.js" type="module"></script>
-  <script src="get-persistent-scripts.js" type="module"></script>
   <script src="get-popups.js" type="module"></script>
 
   <!-- Respond to requests by the settings page and others -->

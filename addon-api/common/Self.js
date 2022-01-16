@@ -43,11 +43,6 @@ export default class Self extends Listenable {
   }
 
   /**
-   * Restarts this addon. Only applicable to background scripts.
-   */
-  restart() {}
-
-  /**
    * Gets a list of addon IDs enabled, optionally filtered using tags.
    * @param {string=} tag - the tag for filtering.
    * @returns {Promise<string[]>} enabled addons' IDs
