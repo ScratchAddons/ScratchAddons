@@ -104,7 +104,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
           addonsEnabled["discuss-button"] === true &&
           (settings.buttonName || settings.removeIdeasBtn)
         ) {
-          // Transition v1.22.0 modes to v1.23.0 settings
+          // Transition v1.23.0 modes to v1.24.0 settings
           madeChangesToAddon = true;
           madeAnyChanges = true;
 
