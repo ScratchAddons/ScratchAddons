@@ -1,0 +1,1 @@
+{"block-count/blocks":"{num, plural, one {1 bloco} other {# blocos}}","block-count/@name":"Número de blocos","block-count/@description":"Mostra o número total de blocos em um projeto na barra de menu do editor. Anteriormente fazia parte do addon \"contador de atores e scripts\"."}

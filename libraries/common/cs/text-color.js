@@ -23,6 +23,8 @@ function convertToHex(obj) {
 
 function convertFromHsv({ h, s, v }) {
   if (s === 0) return { r: 255 * v, g: 255 * v, b: 255 * v };
+  h %= 360;
+  if (h < 0) h += 360;
   const h1 = h / 60;
   const hi = Math.floor(h1);
   const x = v * (1 - s * (1 - h1 + hi));
@@ -41,9 +43,6 @@ function convertFromHsv({ h, s, v }) {
       return { r: 255 * x, g: 255 * z, b: 255 * v };
     case 5:
       return { r: 255 * v, g: 255 * z, b: 255 * y };
-    default:
-      // ???
-      return { r: 0, g: 0, b: 0 };
   }
 }
 
@@ -132,7 +131,7 @@ function recolorFilter(hex) {
   return `url("data:image/svg+xml,
     <svg xmlns='http://www.w3.org/2000/svg'>
       <filter id='recolor'>
-        <feColorMatrix values='
+        <feColorMatrix color-interpolation-filters='sRGB' values='
           0 0 0 0 ${r / 255}
           0 0 0 0 ${g / 255}
           0 0 0 0 ${b / 255}

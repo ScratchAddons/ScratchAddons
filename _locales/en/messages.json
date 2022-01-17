@@ -239,14 +239,14 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_22": {
-    "message": "New addon: \"switch variables between 'For all sprites' and 'For this sprite only'\", which allows changing the scope of variables and lists and whether variables are stored in the cloud. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_23": {
+    "message": "New addon: \"website dark mode and customizable colors\". Go to $1 to change specific colors, toggle dark scrollbars, and more!"
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_22": {
-    "message": "Other new addons added this update are \"better editor comments\", \"two-column category menu\" and \"search bar on My Stuff\"."
+  "extensionUpdateInfo2_v1_23": {
+    "message": "Other new addons added this update are \"snap scripts to grid\", \"block count\" and \"high resolution thumbnails\"."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."

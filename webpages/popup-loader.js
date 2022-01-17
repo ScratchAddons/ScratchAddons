@@ -13,18 +13,86 @@ scratchAddons.eventTargets = {
 scratchAddons.localEvents = new EventTarget();
 scratchAddons.globalState = {};
 scratchAddons.methods = {};
-scratchAddons._pending = {
-  getMsgCount: [],
-};
 scratchAddons.l10n = new WebsiteLocalizationProvider();
 scratchAddons.isLightMode = false;
+scratchAddons.cookieFetchingFailed = false;
+scratchAddons.cookies = new Map();
+
+const promisify =
+  (callbackFn) =>
+  (...args) =>
+    new Promise((resolve) => callbackFn(...args, resolve));
+
+function getCookieValue(name, getCookie, storeId) {
+  return new Promise((resolve) => {
+    chrome.cookies.get(
+      {
+        url: "https://scratch.mit.edu/",
+        name,
+        storeId,
+      },
+      (cookie) => {
+        if (cookie && cookie.value) resolve(getCookie ? cookie : cookie.value);
+        else resolve(null);
+      }
+    );
+  });
+}
+
+async function getActualCookieStore() {
+  // Due to https://bugzilla.mozilla.org/show_bug.cgi?id=1747283
+  // calling chrome.cookies.get without storeId on containers returns
+  // the cookie for the default context, not container context.
+  // Since popups can't be containers, they must be tabs,
+  // which means tabs.getCurrent can be used to grab the store ID instead.
+  const current = await promisify(chrome.tabs.getCurrent.bind(chrome.tabs))();
+  // Return undefined in popup
+  return current?.cookieStoreId || undefined;
+}
+
+async function refetchCookies(needsRequest = true) {
+  if (needsRequest) {
+    try {
+      await fetch("https://scratch.mit.edu/csrf_token/");
+    } catch (e) {
+      console.error(e);
+      scratchAddons.cookieFetchingFailed = true;
+      return;
+    }
+  }
+  const tabCookieStoreId = await getActualCookieStore();
+  const scratchLang = (await getCookieValue("scratchlanguage", false, tabCookieStoreId)) || navigator.language;
+  const csrfTokenCookie = await getCookieValue("scratchcsrftoken", true, tabCookieStoreId);
+  scratchAddons.cookieStoreId = tabCookieStoreId || csrfTokenCookie.storeId;
+  scratchAddons.cookies.set("scratchlanguage", scratchLang);
+  scratchAddons.cookies.set("scratchcsrftoken", csrfTokenCookie.value);
+}
+
+async function refetchSession(addon) {
+  let res;
+  let d;
+  if (scratchAddons.isFetchingSession) return;
+  scratchAddons.isFetchingSession = true;
+  addon.auth._refresh();
+  try {
+    res = await fetch("https://scratch.mit.edu/session/?sareferer", {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+    d = await res.json();
+  } catch (e) {
+    d = {};
+    console.warn("Session fetch failed: ", e);
+    if ((res && !res.ok) || !res) setTimeout(() => this.refetchSession(addon), 60000);
+  }
+  scratchAddons.session = d;
+  addon.auth._update(d);
+  scratchAddons.isFetchingSession = false;
+}
 
 (async () => {
   const addonId = location.pathname.split("/")[2];
-  const promisify =
-    (callbackFn) =>
-    (...args) =>
-      new Promise((resolve) => callbackFn(...args, resolve));
 
   const sendMessage = promisify(chrome.runtime.sendMessage.bind(chrome.runtime));
   const popupData = await sendMessage({
@@ -33,7 +101,6 @@ scratchAddons.isLightMode = false;
     },
   });
   scratchAddons.globalState = {
-    auth: popupData.auth,
     addonSettings: popupData.settings,
   };
 
@@ -53,18 +120,23 @@ scratchAddons.isLightMode = false;
     });
   });
 
-  scratchAddons.methods.getMsgCount = () =>
-    new Promise((resolve) => {
-      scratchAddons._pending.getMsgCount.push(resolve);
-      chrome.runtime.sendMessage("getMsgCount");
+  scratchAddons.methods.getMsgCount = () => {
+    throw new Error("Unimplemented; fetch from IndexedDB or call MessageCache.fetchMessageCount instead");
+  };
+  scratchAddons.methods.getEnabledAddons = (tag) =>
+    sendMessage({
+      getEnabledAddons: {
+        tag,
+      },
     });
+
+  await refetchCookies();
+
+  const addon = new Addon({
+    id: addonId,
+  });
+
   port.onMessage.addListener((request) => {
-    if (request.setMsgCount) {
-      const { count } = request.setMsgCount;
-      scratchAddons._pending.getMsgCount.forEach((resolve) => resolve(count));
-      scratchAddons._pending.getMsgCount = [];
-      return;
-    }
     if (request.newGlobalState) {
       scratchAddons.globalState = request.newGlobalState;
       return;
@@ -75,13 +147,15 @@ scratchAddons.isLightMode = false;
       );
       return;
     }
+    if (request.refetchSession) {
+      refetchCookies(false).then(() => refetchSession(addon));
+      return;
+    }
   });
 
-  const addon = new Addon({
-    id: addonId,
-  });
   const globalObj = Object.create(null);
   await scratchAddons.l10n.loadByAddonId(addonId);
+  refetchSession(addon); // No await intended; session fetched asynchronously
   const msg = (key, placeholders) =>
     scratchAddons.l10n.get(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders);
   msg.locale = scratchAddons.l10n.locale;
