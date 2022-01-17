@@ -412,10 +412,11 @@
       <!-- Show errors, loading, etc. -->
       <div class="status-container">
         <p v-show="error === 'notReady'">{{ uiMessages.loadingMsg }}</p>
-        <p v-show="error === 'loggedOut'"
-          ><a v-cloak href="https://scratch.mit.edu/login" class="nolink open-messages"
-            >{{ uiMessages.loggedOutMsg }}<img src="../../images/icons/popout.svg" class="popout" /></a
-        ></p>
+        <p v-show="error === 'loggedOut'">
+          <a v-cloak href="https://scratch.mit.edu/login" class="nolink open-messages"
+            >{{ uiMessages.loggedOutMsg }}<img src="../../images/icons/popout.svg" class="popout"
+          /></a>
+        </p>
         <p v-show="error === 'serverError'">{{ uiMessages.serverErrorMsg }}</p>
         <p v-show="error === 'networkError'">{{ uiMessages.networkErrorMsg }}</p>
         <p v-show="messagesReady && !commentsReady">{{ uiMessages.loadingCommentsMsg }}</p>
