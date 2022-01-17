@@ -21,6 +21,7 @@
     "tinycolor": "readonly",
     "Chart": "readonly",
     "Comlink": "readonly",
+    "idb": "readonly",
 
     // Scratch-defined
     "Scratch": "readonly",

@@ -1,62 +1,28 @@
-.sa-forum-toolbar {
-  background-repeat: no-repeat;
-  height: 22px;
-  width: 22px;
-}
-
-.sa-forum-toolbar a {
-  background-size: 20px;
-}
-
-.sa-forum-toolbar-dropdown {
-  background-size: 16px !important;
-}
-
-.sa-forum-toolbar-dropdown > a {
-  width: 16px !important;
-}
-
-.sa-forum-toolbar-dropdown ul li {
-  height: 20px;
-  width: initial !important;
-  min-width: 120px;
-  background-position: 0% 0%;
-  background-size: 20px;
-}
-
-.sa-forum-toolbar-dropdown ul li a {
-  padding: 0 5px 0 25px;
-}
-
-.sa-forum-toolbar-link {
-  background-image: unset !important;
-}
-
 .sa-forum-toolbar-link > a {
-  background-image: url(./link.svg);
+  background-image: url(https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/link.png);
 }
 
 .sa-forum-toolbar-center a {
-  background-image: url(./center.svg);
+  background-image: url(./text_align_center.png);
 }
 
 .sa-forum-toolbar-wp a,
 .sa-forum-toolbar-wiki a {
-  background-image: url(./wp.svg);
+  background-image: url(./book_edit.png);
 }
 
 .sa-forum-toolbar-google a {
-  background-image: url(./google.svg);
+  background-image: url(./magnifier.png);
 }
 
 .sa-forum-toolbar-dictionary a {
-  background-image: url(./dictionary.svg);
+  background-image: url(./book_open.png);
 }
 
 .sa-forum-toolbar-code a {
-  background-image: url(./code.svg);
+  background-image: url(https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/code.png);
 }
 
 .sa-forum-toolbar-color a {
-  background-image: url(./color.svg);
+  background-image: url(./palette.png);
 }

@@ -1,1 +1,1 @@
-{"editor-unshare-button/@name":"Bouton Annuler le partage dans l'éditeur"}
+{"editor-unshare-button/unshare-button":"Annuler le partage","editor-unshare-button/unshare-msg":"Êtes-vous sûr de mettre ce projet en privé ?","editor-unshare-button/@name":"Bouton Annuler le partage dans l'éditeur","editor-unshare-button/@description":"Remplace le bouton \"Partagé\" à côté de la zone de titre du projet par un bouton pour annuler le partage du projet."}
