@@ -14,10 +14,10 @@
     <script src="./index.js" type="module"></script>
     <link rel="preload" href="../styles/colors-light.css" as="style" />
   </head>
-  <body class="loading">
+  <body class="loading" style="user-select:none">
     <div id="header">
       <div id="title">
-        <img src="../../images/icon.svg" id="logo" alt="Logo" />
+        <img src="../../images/icon.svg" id="logo" alt="Logo" draggable="false" />
         <span id="title-text" v-cloak>
           {{ msg("extensionName") }}
           <a id="version" :href="changelogLink" target="_blank" title="{{ msg('changelog') }}">v{{ version }}</a>
