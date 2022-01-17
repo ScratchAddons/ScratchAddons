@@ -61,7 +61,12 @@
       ]
     }
   ],
-  "versionAdded": "1.23.0",
-  "tags": ["community", "recommended"],
+  "versionAdded": "1.0.0",
+  "latestUpdate": {
+    "version": "1.24.0",
+    "newSettings": ["items"],
+    "isMajor": true
+  },
+  "tags": ["community", "featured"],
   "enabledByDefault": false
 }
