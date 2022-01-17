@@ -15,7 +15,7 @@
     <script src="../../webpages/popup-loader.js" type="module"></script>
   </head>
 
-  <body v-cloak>
+  <body v-cloak style="user-select:none">
     <div class="loading" v-show="!error && (projects.length === 0 || projects.length !== projectsChecked)">
       {{ loadingMsg }}
     </div>
@@ -27,7 +27,7 @@
       <div class="games" v-for="project of projectsSorted">
         <div class="title">
           <a class="project-name nolink" :href="'https://scratch.mit.edu/projects/' + project.id" target="_blank"
-            >{{ project.title }}</a
+            title="{{ project.title }}">{{ project.title }}</a
           >
           <span class="float-right"
             ><img class="small-icon" src="../../images/icons/users.svg" /> {{ project.amt }}</span
@@ -40,7 +40,7 @@
               :href="'https://scratch.mit.edu/users/' + user"
               target="_blank"
               class="nolink"
-              >{{ user }}</a
+              title="{{ user }}">{{ user }}</a
             >
           </div>
           <div class="username-list" v-show="project.amt === 0">{{ messages.noUsersMsg }}</div>
