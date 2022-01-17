@@ -14,439 +14,245 @@
       @import url("../../webpages/styles/components/popup.css");
     </style>
     <base target="_blank" />
-
     <!-- <dom-element-renderer> element template -->
     <template id="dom-element-renderer-component">
       <div class="dom-element-renderer"></div>
     </template>
-
     <!-- <comment> element template -->
     <template id="comment-component">
-      <div
-        class="comment"
-        :class="{'child-comment': !isParent, 'unread': unread, 'comment-me' : thisComment.author === username}"
-      >
-        <a
-          class="comment-author nolink"
-          rel="noopener noreferrer"
-          target="_blank"
-          href="https://scratch.mit.edu/users/{{ thisComment.author }}/"
-          >{{ thisComment.author }}</a
-        >{{ thisComment.scratchTeam ? "*" : "" }}
+      <div class="comment" :class="{'child-comment': !isParent, 'unread': unread, 'comment-me' : thisComment.author === username}">
+        <a class="comment-author nolink" rel="noopener noreferrer" target="_blank" href="https://scratch.mit.edu/users/{{thisComment.author}}/" title="{{thisComment.author}}">{{thisComment.author}}</a>
+        {{ thisComment.scratchTeam ? "*" : "" }}
         <span class="comment-time" v-show="deleteStep !== 1 && !deleted">
-          · {{ commentTimeAgo }}
+          · {{commentTimeAgo}}
           <a rel="noopener noreferrer" target="_blank" :href="commentURL">
-            <img src="../../images/icons/popout.svg" class="popout-comment" title="{{ messages.openNewTabMsg }}" />
+            <img src="../../images/icons/popout.svg" class="popout-comment" title="{{messages.openNewTabMsg}}" draggable="false" />
           </a>
         </span>
-        <a @click="deleteComment()" class="delete-btn" :class="{'bold': deleteStep === 1}" v-show="!deleted"
-          >{{ deleteStep === 0 ? messages.deleteMsg : messages.deleteConfirmMsg }}
+        <a @click="deleteComment()" class="delete-btn" :class="{'bold': deleteStep === 1}" v-show="!deleted">{{deleteStep === 0 ? messages.deleteMsg : messages.deleteConfirmMsg}}
         </a>
         <bdo dir="ltr">
           <!-- prevents LTR comments from being messed up in RTL layout - not ideal, but consistent with Scratch -->
           <div class="comment-content" :class="{'comment-self' : thisComment.author === username}">
             <div class="comment-content-text">
-              <span v-show="deleting">{{ messages.deletingMsg }}</span>
-              <span v-show="deleted && !deleting">{{ messages.deletedMsg }}</span>
+              <span v-show="deleting">{{messages.deletingMsg}}</span>
+              <span v-show="deleted && !deleting">{{messages.deletedMsg}}</span>
               <dom-element-renderer :element="thisComment.content" v-show="!deleted"></dom-element-renderer>
             </div>
-            <a
-              class="reply-button-comment"
-              @click="replying = true"
-              :class="{'replying': replying}"
-              :style="{'visibility': replying ? 'hidden' : 'visible'}"
-              v-show="!deleted"
-              >{{ messages.replyMsg }}</a
-            >
+            <a class="reply-button-comment" @click="replying = true" :class="{'replying': replying}" :style="{'visibility': replying ? 'hidden' : 'visible'}" v-show="!deleted" title="{{messages.replyMsg}}">{{messages.replyMsg}}</a>
           </div>
         </bdo>
         <div class="reply-box-comment" v-show="replying">
           <textarea class="reply-textarea" maxlength="500" v-model="replyBoxValue"></textarea>
           <div class="reply-box-buttons">
-            <button @click="!postingComment && postComment()" class="post-button">
-              {{ postingComment ? messages.postingMsg : messages.postMsg }}
+            <button @click="!postingComment && postComment()" class="post-button" title="{{postingComment ? messages.postingMsg : messages.postMsg}}">
+              {{postingComment ? messages.postingMsg : messages.postMsg}}
             </button>
-            <button @click="replying = false" v-show="!postingComment">{{ messages.cancelMsg }}</button>
-            <span class="comment-chars"> {{ replyBoxLeftMsg }}</span>
+            <button @click="replying = false" v-show="!postingComment" title="{{messages.cancelMsg}}">{{messages.cancelMsg}}</button>
+            <span class="comment-chars">{{replyBoxLeftMsg}}</span>
           </div>
         </div>
       </div>
     </template>
   </head>
-
-  <body>
+  <body style="user-select:none">
     <div v-cloak class="contents">
       <div v-show="!error">
         <!-- Scratch Team Messages -->
         <div class="message-type message-type-admin" v-show="stMessages.length">
-          <div
-            class="message-type-title hover-reverse"
-            @click="messageTypeExtended.stMessages = !messageTypeExtended.stMessages"
-          >
+          <div class="message-type-title hover-reverse" @click="messageTypeExtended.stMessages = !messageTypeExtended.stMessages">
             <div class="btn-dropdown">
-              <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.stMessages}" />
+              <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.stMessages}" draggable="false" />
             </div>
-            <span class="message-type-title-text">{{ uiMessages.stMessagesMsg }}</span>
-            <span class="float-right"
-              ><img class="small-icon" src="../../images/icons/notice.svg" /> {{ stMessages.length }}</span
-            >
+            <span class="message-type-title-text">{{uiMessages.stMessagesMsg}}</span>
+            <span class="float-right" title="{{stMessages.length}}"><img class="small-icon" src="../../images/icons/notice.svg" draggable="false" /> {{stMessages.length}}</span>
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.stMessages">
             <div class="comment" v-for="alert of stMessages">
-              <span class="comment-time">{{ alert.datetime_created }}</span>
-              <a class="delete-btn" @click="dismissAlert(alert.id)">{{ uiMessages.dismissMsg }}</a>
+              <span class="comment-time">{{alert.datetime_created}}</span>
+              <a class="delete-btn" @click="dismissAlert(alert.id)" title="{{uiMessages.dismissMsg}}">{{uiMessages.dismissMsg}}</a>
               <dom-element-renderer :element="alert.element"></dom-element-renderer>
             </div>
           </div>
         </div>
-
         <!-- Follows -->
         <div class="message-type" v-show="follows.length">
-          <div
-            class="message-type-title hover-reverse"
-            @click="messageTypeExtended.follows = !messageTypeExtended.follows"
-          >
+          <div class="message-type-title hover-reverse" @click="messageTypeExtended.follows = !messageTypeExtended.follows">
             <div class="btn-dropdown">
-              <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.follows}" />
+              <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.follows}" draggable="false" />
             </div>
-            <span class="message-type-title-text">{{ uiMessages.followsMsg }}</span>
-            <span class="float-right"
-              ><img class="small-icon" src="../../images/icons/follow.svg" /> {{ follows.length }}</span
-            >
+            <span class="message-type-title-text">{{uiMessages.followsMsg}}</span>
+            <span class="float-right" title="{{follows.length}}"><img class="small-icon" src="../../images/icons/follow.svg" draggable="false" /> {{follows.length}}</span>
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.follows">
             <div class="username-list">
-              <a v-for="follower of follows" href="https://scratch.mit.edu/users/{{ follower }}/">{{follower}}</a>
+              <a v-for="follower of follows" href="https://scratch.mit.edu/users/{{follower}}/" title="{{follower}}">{{follower}}</a>
             </div>
           </div>
         </div>
-
         <!-- Studio invites -->
         <div class="message-type" v-show="studioInvites.length">
-          <div
-            class="message-type-title hover-reverse"
-            @click="messageTypeExtended.studioInvites = !messageTypeExtended.studioInvites"
-          >
+          <div class="message-type-title hover-reverse" @click="messageTypeExtended.studioInvites = !messageTypeExtended.studioInvites">
             <div class="btn-dropdown">
-              <img
-                src="../../images/icons/expand.svg"
-                alt="v"
-                :class="{'reverted': messageTypeExtended.studioInvites}"
-              />
+              <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.studioInvites}" draggable="false" />
             </div>
-            <span class="message-type-title-text">{{ uiMessages.studioInvitesMsg }}</span>
-            <span class="float-right"
-              ><img class="small-icon" src="../../images/icons/studio-add.svg" /> {{ studioInvites.length }}</span
-            >
+            <span class="message-type-title-text">{{uiMessages.studioInvitesMsg}}</span>
+            <span class="float-right" title="{{studioInvites.length}}"><img class="small-icon" src="../../images/icons/studio-add.svg" draggable="false" /> {{studioInvites.length}}</span>
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.studioInvites">
-            <div class="thread-list" v-for="invite of studioInvites">{{{ studioInviteHTML(invite) }}}</div>
+            <div class="thread-list" v-for="invite of studioInvites">{{{studioInviteHTML(invite)}}}</div>
           </div>
         </div>
-
         <!-- Studio promotions -->
         <div class="message-type" v-show="studioPromotions.length">
-          <div
-            class="message-type-title hover-reverse"
-            @click="messageTypeExtended.studioPromotions = !messageTypeExtended.studioPromotions"
-          >
+          <div class="message-type-title hover-reverse" @click="messageTypeExtended.studioPromotions = !messageTypeExtended.studioPromotions">
             <div class="btn-dropdown">
-              <img
-                src="../../images/icons/expand.svg"
-                alt="v"
-                :class="{'reverted': messageTypeExtended.studioPromotions}"
-              />
+              <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.studioPromotions}" draggable="false" />
             </div>
-            <span class="message-type-title-text">{{ uiMessages.studioPromotionsMsg }}</span>
-            <span class="float-right"
-              ><img class="small-icon" src="../../images/icons/adminusers.svg" /> {{ studioPromotions.length }}</span
-            >
+            <span class="message-type-title-text">{{uiMessages.studioPromotionsMsg}}</span>
+            <span class="float-right" title="{{studioPromotions.length}}"><img class="small-icon" src="../../images/icons/adminusers.svg" draggable="false" /> {{studioPromotions.length}}</span>
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.studioPromotions">
-            <div class="thread-list" v-for="promotion of studioPromotions">{{{ studioPromotionHTML(promotion) }}}</div>
+            <div class="thread-list" v-for="promotion of studioPromotions">{{{studioPromotionHTML(promotion)}}}</div>
           </div>
         </div>
-
         <!-- Studio host transfer -->
         <div class="message-type" v-show="studioHostTransfers.length">
-          <div
-            class="message-type-title hover-reverse"
-            @click="messageTypeExtended.studioHostTransfers = !messageTypeExtended.studioHostTransfers"
-          >
+          <div class="message-type-title hover-reverse" @click="messageTypeExtended.studioHostTransfers = !messageTypeExtended.studioHostTransfers">
             <div class="btn-dropdown">
-              <img
-                src="../../images/icons/expand.svg"
-                alt="v"
-                :class="{'reverted': messageTypeExtended.studioHostTransfers}"
-              />
+              <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.studioHostTransfers}" draggable="false" />
             </div>
-            <span class="message-type-title-text">{{ uiMessages.studioHostTransfersMsg }}</span>
-            <span class="float-right"
-              ><img class="small-icon" src="../../images/icons/users.svg" /> {{ studioHostTransfers.length }}</span
-            >
+            <span class="message-type-title-text">{{uiMessages.studioHostTransfersMsg}}</span>
+            <span class="float-right" title="{{studioHostTransfers.length}}"><img class="small-icon" src="../../images/icons/users.svg" draggable="false" /> {{studioHostTransfers.length}}</span>
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.studioHostTransfers">
             <div class="thread-list" v-for="transfer of studioHostTransfers">
-              {{{ studioHostTransferHTML(transfer) }}}
+              {{{studioHostTransferHTML(transfer)}}}
             </div>
           </div>
         </div>
-
         <!-- Forum activity -->
         <div class="message-type" v-show="forumActivity.length">
-          <div
-            class="message-type-title hover-reverse"
-            @click="messageTypeExtended.forumActivity = !messageTypeExtended.forumActivity"
-          >
+          <div class="message-type-title hover-reverse" @click="messageTypeExtended.forumActivity = !messageTypeExtended.forumActivity">
             <div class="btn-dropdown">
-              <img
-                src="../../../images/icons/expand.svg"
-                alt="v"
-                :class="{'reverted': messageTypeExtended.forumActivity}"
-              />
+              <img src="../../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.forumActivity}" draggable="false" />
             </div>
-            <span class="message-type-title-text">{{ uiMessages.forumMsg }}</span>
-            <span class="float-right"
-              ><img class="small-icon" src="../../images/icons/forum.svg" /> {{ forumActivity.length }}</span
-            >
+            <span class="message-type-title-text">{{uiMessages.forumMsg}}</span>
+            <span class="float-right" title="{{forumActivity.length}}"><img class="small-icon" src="../../images/icons/forum.svg" draggable="false" /> {{forumActivity.length}}</span>
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.forumActivity">
-            <div class="thread-list" v-for="forumTopic of forumActivity">{{{ forumHTML(forumTopic) }}}</div>
+            <div class="thread-list" v-for="forumTopic of forumActivity">{{{forumHTML(forumTopic)}}}</div>
           </div>
         </div>
-
         <!-- Studio activity -->
         <div class="message-type" v-show="studioActivity.length">
-          <div
-            class="message-type-title hover-reverse"
-            @click="messageTypeExtended.studioActivity = !messageTypeExtended.studioActivity"
-          >
+          <div class="message-type-title hover-reverse" @click="messageTypeExtended.studioActivity = !messageTypeExtended.studioActivity">
             <div class="btn-dropdown">
-              <img
-                src="../../images/icons/expand.svg"
-                alt="v"
-                :class="{'reverted': messageTypeExtended.studioActivity}"
-              />
+              <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.studioActivity}" draggable="false" />
             </div>
-            <span class="message-type-title-text">{{ uiMessages.studioActivityMsg }}</span>
-            <span class="float-right"
-              ><img class="small-icon" src="../../images/icons/studio.svg" /> {{ studioActivity.length }}</span
-            >
+            <span class="message-type-title-text">{{uiMessages.studioActivityMsg}}</span>
+            <span class="float-right" title="{{studioActivity.length}}"><img class="small-icon" src="../../images/icons/studio.svg" draggable="false" /> {{studioActivity.length}}</span>
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.studioActivity">
-            <div class="thread-list" v-for="studio of studioActivity">{{{ studioActivityHTML(studio) }}}</div>
+            <div class="thread-list" v-for="studio of studioActivity">{{{studioActivityHTML(studio)}}}</div>
           </div>
         </div>
-
         <!-- Remixes -->
         <div class="message-type" v-show="remixes.length">
-          <div
-            class="message-type-title hover-reverse"
-            @click="messageTypeExtended.remixes = !messageTypeExtended.remixes"
-          >
+          <div class="message-type-title hover-reverse" @click="messageTypeExtended.remixes = !messageTypeExtended.remixes">
             <div class="btn-dropdown">
-              <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.remixes}" />
+              <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.remixes}" draggable="false" />
             </div>
-            <span class="message-type-title-text">{{ uiMessages.remixesMsg }}</span>
-            <span class="float-right"
-              ><img class="small-icon" src="../../images/icons/remix.svg" /> {{ remixes.length }}</span
-            >
+            <span class="message-type-title-text">{{uiMessages.remixesMsg}}</span>
+            <span class="float-right" title="{{remixes.length}}"><img class="small-icon" src="../../images/icons/remix.svg" draggable="false" /> {{remixes.length}}</span>
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.remixes">
-            <div v-for="remix of remixes" class="thread-list">{{{ remixHTML(remix) }}}</div>
+            <div v-for="remix of remixes" class="thread-list">{{{remixHTML(remix)}}}</div>
           </div>
         </div>
-
         <!-- Profiles -->
-        <div
-          class="message-type"
-          v-for="profile of profilesOrdered"
-          v-show="profile.unreadComments && profile.loadedComments"
-        >
+        <div class="message-type" v-for="profile of profilesOrdered" v-show="profile.unreadComments && profile.loadedComments">
           <div class="message-type-title">
-            <a
-              class="message-type-title-text nolink"
-              rel="noreferrer noopener"
-              target="_blank"
-              href="https://scratch.mit.edu/users/{{ profile.username }}/"
-            >
-              <span v-if="profile.username === username">{{ uiMessages.yourProfileMsg }}</span>
-              <span v-else>{{ othersProfile(profile.username) }}</span>
+            <a class="message-type-title-text nolink" rel="noreferrer noopener" target="_blank" href="https://scratch.mit.edu/users/{{profile.username}}/" title="{{profile.username}}">
+              <span v-if="profile.username === username">{{uiMessages.yourProfileMsg}}</span>
+              <span v-else>{{othersProfile(profile.username)}}</span>
             </a>
             <span class="float-right">
-              <span v-show="profile.unreadComments"
-                ><img class="small-icon" src="../../images/icons/comment.svg" /> {{profile.unreadComments}}</span
-              >
+              <span v-show="profile.unreadComments" title="{{profile.unreadComments}}"><img class="small-icon" src="../../images/icons/comment.svg" draggable="false" /> {{profile.unreadComments}}</span>
             </span>
           </div>
           <div class="message-type-details" v-show="profile.commentChains.length">
-            <div
-              class="comment-chain"
-              v-for="parentCommentId of profile.commentChains"
-              :class="{'unread': isCommentUnread(parentCommentId) }"
-            >
-              <comment
-                :comment-id="parentCommentId"
-                :comments-obj="comments"
-                :is-parent="true"
-                :unread="false"
-                resource-type="user"
-                :resource-id="profile.username"
-              ></comment>
-              <comment
-                v-for="childCommentId of comments[parentCommentId].children"
-                :comment-id="childCommentId"
-                :comments-obj="comments"
-                :is-parent="false"
-                :unread="isCommentUnread(childCommentId)"
-                resource-type="user"
-                :resource-id="profile.username"
-              ></comment>
+            <div class="comment-chain" v-for="parentCommentId of profile.commentChains" :class="{'unread': isCommentUnread(parentCommentId) }">
+              <comment :comment-id="parentCommentId" :comments-obj="comments" :is-parent="true" :unread="false" resource-type="user" :resource-id="profile.username"></comment>
+              <comment v-for="childCommentId of comments[parentCommentId].children" :comment-id="childCommentId" :comments-obj="comments" :is-parent="false" :unread="isCommentUnread(childCommentId)" resource-type="user" :resource-id="profile.username"></comment>
             </div>
           </div>
         </div>
         <!-- Studios -->
         <div class="message-type" v-for="studio of studios" v-show="studio.unreadComments && studio.loadedComments">
           <div class="message-type-title">
-            <a
-              class="message-type-title-text nolink"
-              rel="noopener noreferrer"
-              target="_blank"
-              href="https://scratch.mit.edu/studios/{{ studio.id }}/"
-              >{{ studioText(studio.title) }}</a
-            >
+            <a class="message-type-title-text nolink" rel="noopener noreferrer" target="_blank" href="https://scratch.mit.edu/studios/{{studio.id}}/" title="{{studioText(studio.title)}}">{{ studioText(studio.title) }}</a>
             <span class="float-right">
-              <span v-show="studio.unreadComments"
-                ><img class="small-icon" src="../../images/icons/comment.svg" /> {{studio.unreadComments}}</span
-              >
+              <span v-show="studio.unreadComments" title="{{studio.unreadComments}}"><img class="small-icon" src="../../images/icons/comment.svg" draggable="false" /> {{studio.unreadComments}}</span>
             </span>
           </div>
           <div class="message-type-details" v-show="studio.commentChains.length">
-            <div
-              class="comment-chain"
-              v-for="parentCommentId of studio.commentChains"
-              :class="{'unread': isCommentUnread(parentCommentId) }"
-            >
-              <comment
-                :comment-id="parentCommentId"
-                :comments-obj="comments"
-                :is-parent="true"
-                :unread="false"
-                resource-type="gallery"
-                :resource-id="studio.id"
-              ></comment>
-              <comment
-                v-for="childCommentId of comments[parentCommentId].children"
-                :comment-id="childCommentId"
-                :comments-obj="comments"
-                :is-parent="false"
-                :unread="isCommentUnread(childCommentId)"
-                resource-type="gallery"
-                :resource-id="studio.id"
-              ></comment>
+            <div class="comment-chain" v-for="parentCommentId of studio.commentChains" :class="{'unread': isCommentUnread(parentCommentId)}">
+              <comment :comment-id="parentCommentId" :comments-obj="comments" :is-parent="true" :unread="false" resource-type="gallery" :resource-id="studio.id"></comment>
+              <comment v-for="childCommentId of comments[parentCommentId].children" :comment-id="childCommentId" :comments-obj="comments" :is-parent="false" :unread="isCommentUnread(childCommentId)" resource-type="gallery" :resource-id="studio.id"></comment>
             </div>
           </div>
         </div>
-
         <!-- Projects -->
-        <div
-          class="message-type"
-          v-for="(i, project) in projectsOrdered"
-          v-show="project.unreadComments && project.loadedComments ||
-              !project.unreadComments && commentsReady"
-        >
+        <div class="message-type" v-for="(i, project) in projectsOrdered" v-show="project.unreadComments && project.loadedComments || !project.unreadComments && commentsReady">
           <div class="message-type-title" :style="{zIndex: 9999 - i}">
-            <a
-              class="message-type-title-text nolink"
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://scratch.mit.edu/projects/{{ project.id }}/"
-              >{{ project.title }}</a
-            >
+            <a class="message-type-title-text nolink" target="_blank" rel="noopener noreferrer" href="https://scratch.mit.edu/projects/{{project.id}}/" title="{{project.title}}">{{ project.title }}</a>
             <span class="float-right">
               <div class="tooltip" v-if="project.loveCount || project.favoriteCount">
                 <span class="tooltip-indicator">
-                  <span v-show="project.loveCount"
-                    ><img class="small-icon colored" src="../../images/icons/heart.svg" /> {{project.loveCount}}</span
-                  >
-                  <span v-show="project.favoriteCount"
-                    ><img class="small-icon colored" src="../../images/icons/star.svg" />
-                    {{project.favoriteCount}}</span
-                  >
+                  <span v-show="project.loveCount" title="{{project.loveCount}}"><img class="small-icon colored" src="../../images/icons/heart.svg" draggable="false" /> {{project.loveCount}}</span>
+                  <span v-show="project.favoriteCount" title="{{project.favoriteCount}}"><img class="small-icon colored" src="../../images/icons/star.svg" draggable="false" /> {{project.favoriteCount}}</span>
                 </span>
                 <span class="tooltiptext tooltiptextleft" v-html="projectLoversAndFavers(project)"></span>
               </div>
-              <span v-show="project.unreadComments"
-                ><img class="small-icon" src="../../images/icons/comment.svg" /> {{project.unreadComments}}</span
-              >
+              <span v-show="project.unreadComments" title="{{project.unreadComments}}"><img class="small-icon" src="../../images/icons/comment.svg" draggable="false" /> {{project.unreadComments}}</span>
             </span>
           </div>
           <div class="message-type-details" v-show="project.commentChains.length">
-            <div
-              class="comment-chain"
-              v-for="parentCommentId of project.commentChains"
-              :class="{'unread': isCommentUnread(parentCommentId) }"
-            >
-              <comment
-                :comment-id="parentCommentId"
-                :comments-obj="comments"
-                :is-parent="true"
-                :unread="false"
-                resource-type="project"
-                :resource-id="project.id"
-              ></comment>
-              <comment
-                v-for="childCommentId of comments[parentCommentId].children"
-                :comment-id="childCommentId"
-                :comments-obj="comments"
-                :is-parent="false"
-                :unread="isCommentUnread(childCommentId)"
-                resource-type="project"
-                :resource-id="project.id"
-              ></comment>
+            <div class="comment-chain" v-for="parentCommentId of project.commentChains" :class="{'unread': isCommentUnread(parentCommentId)}">
+              <comment :comment-id="parentCommentId" :comments-obj="comments" :is-parent="true" :unread="false" resource-type="project" :resource-id="project.id"></comment>
+              <comment v-for="childCommentId of comments[parentCommentId].children" :comment-id="childCommentId" :comments-obj="comments" :is-parent="false" :unread="isCommentUnread(childCommentId)" resource-type="project" :resource-id="project.id"></comment>
             </div>
           </div>
         </div>
       </div>
-
       <!-- Show errors, loading, etc. -->
       <div class="status-container">
-        <p v-show="error === 'notReady'">{{ uiMessages.loadingMsg }}</p>
-        <p v-show="error === 'loggedOut'">{{ uiMessages.loggedOutMsg }}</p>
-        <p v-show="error === 'serverError'">{{ uiMessages.serverErrorMsg }}</p>
-        <p v-show="error === 'networkError'">{{ uiMessages.networkErrorMsg }}</p>
-        <p v-show="messagesReady && !commentsReady">{{ uiMessages.loadingCommentsMsg }}</p>
+        <p v-show="error === 'notReady'">{{uiMessages.loadingMsg}}</p>
+        <p v-show="error === 'loggedOut'">{{uiMessages.loggedOutMsg}}</p>
+        <p v-show="error === 'serverError'">{{uiMessages.serverErrorMsg}}</p>
+        <p v-show="error === 'networkError'">{{uiMessages.networkErrorMsg}}</p>
+        <p v-show="messagesReady && !commentsReady">{{uiMessages.loadingCommentsMsg}}</p>
         <p v-show="hasCustomError">
-          {{ uiMessages.unknownFatalErrorMsg }}
-          <a target="_blank" :href="feedbackUrl" rel="noopener noreferrer"> {{ uiMessages.reportBugMsg }} </a>
+          {{uiMessages.unknownFatalErrorMsg}}
+          <a target="_blank" :href="feedbackUrl" rel="noopener noreferrer" title="{{uiMessages.reportBugMsg}}">{{uiMessages.reportBugMsg}}</a>
           <br />
-          <code class="error-message">{{ error }}</code>
-          (
-          <a @click="copyToClipboard(error)">{{ uiMessages.copyMsg }}</a>
-          )
+          <code class="error-message">{{error}}</code>
+          (<a @click="copyToClipboard(error)" title="{{uiMessages.copyMsg}}">{{uiMessages.copyMsg}}</a>)
         </p>
-        <button @click="reloadPage()" v-show="commentsReady && !canShowMoreMessages">
-          <img class="small-icon" src="../../images/icons/reload.svg" /><span>{{ uiMessages.reloadMsg }}</span>
+        <button @click="reloadPage()" v-show="commentsReady && !canShowMoreMessages" title="{{uiMessages.reloadMsg}}">
+          <img class="small-icon" src="../../images/icons/reload.svg" draggable="false" /><span>{{uiMessages.reloadMsg}}</span>
         </button>
-        <span v-show="messagesReady && showingMessagesAmt === 0 && stMessages.length === 0" class="status-empty"
-          >{{ uiMessages.noUnreadMsg }}</span
-        >
-        <button @click="showAllMessages = true" v-show="canShowMoreMessages">
-          <img class="small-icon" src="../../images/icons/plus.svg" /><span>{{ uiMessages.showMoreMsg }}</span>
-        </button>
+        <span v-show="messagesReady && showingMessagesAmt === 0 && stMessages.length === 0" class="status-empty">{{uiMessages.noUnreadMsg}}</span>
+        <button @click="showAllMessages = true" v-show="canShowMoreMessages" title="{{uiMessages.showMoreMsg}}"><img class="small-icon" src="../../images/icons/plus.svg" draggable="false" /><span>{{uiMessages.showMoreMsg}}</span></button>
       </div>
     </div>
-
-    <!-- Bottom bar-->
+    <!-- Bottom bar -->
     <div id="bottom-bar" v-show="messagesReady">
-      <a v-cloak @click="markAsRead()" v-show="!markedAsRead">{{ uiMessages.markAsReadMsg }}</a>
-      <span v-cloak v-show="markedAsRead" class="marked-as-read"
-        ><img class="small-icon" src="../../images/icons/read.svg" /> {{ uiMessages.markedAsReadMsg }}</span
-      >
+      <a v-cloak @click="markAsRead()" v-show="!markedAsRead">{{uiMessages.markAsReadMsg}}</a>
+      <span v-cloak v-show="markedAsRead" class="marked-as-read"><img class="small-icon" src="../../images/icons/read.svg" draggable="false" /> {{uiMessages.markedAsReadMsg}}</span>
       <span v-cloak class="separator">|</span>
-      <a v-cloak href="https://scratch.mit.edu/messages" id="open-messages"
-        >{{ uiMessages.openMessagesMsg }}<img src="../../images/icons/popout.svg" id="popout"
-      /></a>
+      <a v-cloak href="https://scratch.mit.edu/messages" id="open-messages">{{uiMessages.openMessagesMsg}}<img src="../../images/icons/popout.svg" id="popout" draggable="false" /></a>
     </div>
   </body>
 </html>
