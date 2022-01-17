@@ -1,1 +1,1 @@
-{"longer-wiwo/left":"{number, plural, one {1 karakter kaldı.} other {# karakter kaldı.}}"}
+{"longer-wiwo/left":"{number, plural, one {1 karakter kaldı.} other {# karakter kaldı.}}","longer-wiwo/@name":"\"Ne Üzerinde Çalışıyorum\" bölümündeki karakter sınırını yükseltir","longer-wiwo/@description":"Profilinizin \"Ne Üzerinde Çalışıyorum\" bölümüne 55 karakter daha yazmanıza izin verir. Scratch' teki herkes tarafından ekstra karakterler görünecek."}

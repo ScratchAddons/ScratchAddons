@@ -1,0 +1,61 @@
+.parents .title-banner.masthead .ted-talk {
+  border-color: black;
+}
+.educators .title-banner.masthead,
+.educators #teacher-accounts,
+.expect .keynote,
+.initiatives-section .initiatives-subsection-header.schools,
+.initiatives-section .initiatives-subsection-content .teacher-quote .comment-text,
+.initiatives-section .initiatives-subsection-header.connectivity,
+.teacher-registration,
+.teacher-waitingroom {
+  background-color: #473e59;
+}
+.initiatives-section .initiatives-subsection-content .teacher-quote .comment-text,
+.initiatives-section .initiatives-subsection-content .teacher-quote .comment-text::before,
+.initiatives-section .initiatives-subsection-content .teacher-quote .comment-text::after {
+  border-color: #473e59;
+}
+.banner.warning /* confirm email */,
+.banner-wrapper /* Ideas */,
+.modal-flush-bottom-button,
+.ev3 .extension-header,
+.boost .extension-header {
+  background-color: #99864d;
+}
+.wedo2 .extension-header {
+  background-color: #4d2e33;
+}
+.hoc-banner,
+.developers .title-banner.masthead,
+.sa-annual-report-2019 .reach-section,
+.initiatives-section .initiatives-subsection-header.tools,
+.initiatives-section .initiatives-tools .abhi-quote .comment-text,
+.initiatives-section .initiatives-subsection-header.adaptation,
+.donate-section,
+.card .card-button,
+.microbit .extension-header {
+  background-color: #27473e;
+}
+.hoc-banner .hoc-banner-image,
+.initiatives-section .initiatives-tools .abhi-quote .comment-text,
+.initiatives-section .initiatives-tools .abhi-quote .comment-text::before,
+.initiatives-section .initiatives-tools .abhi-quote .comment-text::after {
+  border-color: #27473e;
+}
+.donate-banner,
+.sa-annual-report-2019 .reach-scratch-jr {
+  background-color: #1c332c;
+}
+.sa-annual-report-2020 .subnavigation,
+.sa-annual-report-2020 .message-section,
+.sa-annual-report-2020 .reach-section {
+  background-color: #2a596f;
+}
+.sa-annual-report-2020 .reach-scratch-jr {
+  background-color: #265064;
+}
+.financials-section,
+.directors-message {
+  background-color: #16171d;
+}

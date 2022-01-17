@@ -58,7 +58,13 @@
       "id": "outline-color",
       "type": "color",
       "allowTransparency": true,
-      "default": "#4d97ff40"
+      "default": "#4d97ff40",
+      "if": {
+        "settings": {
+          "hide-outline": false,
+          "fill-transparent": true
+        }
+      }
     }
   ],
   "tags": ["community", "theme"],

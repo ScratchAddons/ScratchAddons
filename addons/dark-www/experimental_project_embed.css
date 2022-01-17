@@ -1,10 +1,14 @@
 .loader_background_2DPrW {
-  background-color: #282828;
+  background-color: var(--darkWww-navbar);
+  color: var(--darkWww-navbar-text);
+}
+.loader_background_2DPrW img {
+  filter: var(--darkWww-navbar-filter);
 }
 .stage-wrapper_stage-wrapper_2bejr.stage-wrapper_full-screen_2hjMb,
 .stage-header_stage-header-wrapper-overlay_5vfJa {
-  background-color: #202020;
+  background-color: var(--darkWww-box);
 }
 .stage_stage_1fD7k.stage_full-screen_ZO7xi {
-  border-color: #606060;
+  border-color: var(--darkWww-border);
 }

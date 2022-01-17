@@ -2,5 +2,8 @@
 .postmsg blockquote {
   border: none;
   border-left: 2px solid var(--forumQuoteCodeBeautifier-bordercolor);
-  background: rgba(0, 0, 0, 0.03);
+}
+.postmsg blockquote blockquote,
+.postmsg blockquote .code {
+  background-color: var(--darkWww-gray-forumTransparentQuote, rgba(0, 0, 0, 0.03));
 }

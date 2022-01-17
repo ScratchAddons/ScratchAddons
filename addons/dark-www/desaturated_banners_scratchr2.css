@@ -1,0 +1,8 @@
+#brdheader,
+.blockpost div.box {
+  background-color: #27473e !important;
+}
+.blockpost div.box,
+.blockpost .box-head {
+  border-top-color: #27473e !important;
+}

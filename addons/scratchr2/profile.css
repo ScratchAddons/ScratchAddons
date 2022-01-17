@@ -48,11 +48,16 @@
   padding: 0;
   border-radius: 0;
 }
+#profile-box .about h3,
+#profile-box .doing h3 {
+  color: var(--darkWww-page-text, #575e75);
+}
 #profile-box .about {
   padding-left: 0;
 }
 #profile-box .doing {
   padding-right: 0;
+  color: var(--darkWww-page-text, #575e75);
 }
 .box .box-head .portrait {
   height: 64px;
@@ -61,19 +66,23 @@
 .box .box-head .portrait img {
   width: 64px;
   height: 64px;
+  background-color: var(--darkWww-page, #fcfcfc);
   border-radius: 5px;
   border: none;
 }
 .box .box-head .header-text h2 {
+  color: var(--darkWww-page-text, #575e75);
   font-size: 28px;
   font-weight: normal;
   line-height: normal;
 }
-.header-text .profile-details {
-  color: #575e75;
+.header-text .profile-details,
+#bio-readonly,
+#status-readonly {
+  color: var(--darkWww-page-text, #575e75);
 }
 .header-text .profile-details .group {
-  border-color: #575e75;
+  border-color: var(--darkWww-border-15, #d9d9d9);
 }
 #profile-data .box-head .buttons {
   top: 0;
@@ -82,28 +91,39 @@
 #profile-box .inner {
   padding-top: 16px !important;
 }
-#bio-readonly,
-#status-readonly,
 #profile-box #bio textarea,
 #profile-box #status textarea {
-  color: #575e75;
+  color: var(--darkWww-input-text, #575e75);
 }
 #profile-box #bio textarea,
 #profile-box #status textarea {
   border-radius: 6px;
 }
 #profile-box .player {
+  background-color: var(--darkWww-box, white);
   border-radius: 4px;
-  border: none;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--darkWww-border-15, #d9d9d9);
+  box-shadow: none;
+}
+#profile-box .player h3 {
+  color: var(--darkWww-box-text, #575e75);
+}
+#profile-box .doing .icon-xs.black {
+  filter: var(--darkWww-page-eyeFilter, none);
 }
 .activity-stream .actor a {
-  color: #575e75 !important;
+  color: var(--darkWww-page-text, #575e75) !important;
+}
+.activity-stream .time {
+  color: var(--darkWww-page-transparentText, #b3b3b3) !important;
+}
+#profile-data .footer #report-this {
+  color: var(--darkWww-page-text, #575e75);
 }
 #content > .box:not(#profile-data):not(.slider-carousel-container):not(#page-404) {
   border-radius: 0;
   border: none;
-  background: rgba(77, 151, 255, 0.1);
+  background-color: var(--darkWww-blue, rgba(77, 151, 255, 0.1));
   padding-top: 16px;
   padding-bottom: 16px;
   margin-bottom: 0;
@@ -119,6 +139,7 @@
   padding: 16px 0;
 }
 #content > .box:not(#profile-data):not(.slider-carousel-container) .box-head h4 {
+  color: var(--darkWww-blue-text, #575e75);
   font-size: 20px;
   line-height: 1.7em;
 }
@@ -126,6 +147,9 @@
   padding: 0;
   padding-bottom: 16px;
   border-bottom: none;
+}
+#comments #comments-enabled-box label {
+  color: var(--darkWww-blue-text);
 }
 #comments #comment-form {
   padding: 0;
@@ -148,7 +172,7 @@
   width: 775px;
 }
 #comments .more-replies {
-  background-color: #eaf1fc;
+  background-color: var(--darkWww-blue, #eaf1fc);
 }
 
 .portrait [data-control="edit"] {

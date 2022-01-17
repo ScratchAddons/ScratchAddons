@@ -1,1 +1,1 @@
-{"project-info/blocks":"{num, plural, one {1 bloc} other {# blocs}}","project-info/@name":"Nombre de sprites et de scripts","project-info/@settings-name-editorCount":"Affichage du nombre de blocs dans l'éditeur"}
+{"project-info/@name":"Nombre de sprites et de scripts","project-info/@description":"Affiche le nombre de sprites et de scripts que contient un projet."}

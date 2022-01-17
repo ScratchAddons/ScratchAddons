@@ -4,12 +4,13 @@ export default async function ({ addon, global, console }) {
 
   let global_fps = 30;
   const vm = addon.tab.traps.vm;
+  let mode = false;
   while (true) {
     let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
-    let mode = false;
+
     const changeMode = (_mode = !mode) => {
       mode = _mode;
       if (mode) setFPS(addon.settings.get("framerate"));
@@ -51,5 +52,6 @@ export default async function ({ addon, global, console }) {
       }, interval);
       this.emit("RUNTIME_STARTED");
     };
+    changeMode(mode);
   }
 }

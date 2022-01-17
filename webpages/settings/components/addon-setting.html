@@ -7,12 +7,15 @@
     'number-setting': setting.type === 'integer' || setting.type === 'positive_integer',
   }"
   >
-    <div class="setting-label" v-html="settingsName(addon)"></div>
+    <div class="setting-label-container">
+      <div class="setting-label" v-html="settingsName(addon)"></div>
+      <addon-tag v-if="isNewOption" tag="new"></addon-tag>
+    </div>
     <template v-if="setting.type === 'boolean'">
       <input
         type="checkbox"
         class="setting-input check"
-        v-model="addonSettings[addon._addonId][setting.id]"
+        v-model="addonSettings[setting.id]"
         @change="updateSettings()"
         :disabled="!addon._enabled"
       />
@@ -22,7 +25,7 @@
         <div
           class="filter-option"
           v-for="option of setting.potentialValues"
-          :class="{'sel' : addonSettings[addon._addonId][setting.id] === option.id, 'disabled': !addon._enabled}"
+          :class="{'sel' : addonSettings[setting.id] === option.id, 'disabled': !addon._enabled}"
           @click="updateOption(option.id);"
         >
           {{ option.name }}
@@ -34,7 +37,7 @@
         <input
           type="number"
           class="setting-input number"
-          v-model="addonSettings[addon._addonId][setting.id]"
+          v-model="addonSettings[setting.id]"
           @change="checkValidity() || updateSettings()"
           :disabled="!addon._enabled"
           min="0"
@@ -47,7 +50,7 @@
         <input
           type="number"
           class="setting-input number"
-          v-model="addonSettings[addon._addonId][setting.id]"
+          v-model="addonSettings[setting.id]"
           @change="checkValidity() || updateSettings()"
           :disabled="!addon._enabled"
           :min="setting.min"
@@ -61,7 +64,7 @@
         <input
           type="text"
           class="setting-input string"
-          v-model="addonSettings[addon._addonId][setting.id]"
+          v-model="addonSettings[setting.id]"
           @change="checkValidity() || updateSettings()"
           :disabled="!addon._enabled"
           :placeholder="setting.default"
@@ -76,7 +79,7 @@
         <input
           type="text"
           class="setting-input"
-          v-model="addonSettings[addon._addonId][setting.id]"
+          v-model="addonSettings[setting.id]"
           @input="updateSettings()"
           @keydown="keySettingKeyDown"
           @keyup="keySettingKeyUp"
@@ -90,7 +93,7 @@
       </template>
       <template v-if="setting.type === 'color'">
         <picker
-          :value="addonSettings[addon._addonId][setting.id] || setting.default"
+          :value="addonSettings[setting.id] || setting.default"
           :setting="setting"
           :addon="addon"
           :no_alpha="!setting.allowTransparency"
@@ -126,6 +129,7 @@
     min-height: 32px;
     display: flex;
     align-items: center;
+    position: relative;
   }
   .setting-input {
     color: var(--content-text);
@@ -134,6 +138,7 @@
     height: 32px;
     box-sizing: border-box;
     padding: 0 12px;
+    margin-left: auto;
     border-radius: 4px 0 0 4px;
     transition: 0.2s ease;
     transition-property: box-shadow, border;
@@ -195,13 +200,18 @@
     align-items: center;
   }
 
-  .setting-label {
+  .setting-label-container {
+    display: flex;
+    align-items: center;
     width: 200px;
+    margin-inline-end: 10px;
+  }
+
+  .setting-label {
     text-transform: uppercase;
     color: var(--label-text);
     font-weight: 600;
     font-size: 12px;
-    margin-inline-end: 10px;
   }
 
   .setting-dropdown {

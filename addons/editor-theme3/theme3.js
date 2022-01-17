@@ -117,7 +117,7 @@ function updateSettings(addon, newStyle) {
       #s3devIDD > li.${prop}.sel {
         background-color: ${tertiary};
       }
-      .console-variable[data-category="${prop}"] {
+      .sa-debugger-block-preview[data-category="${prop}"] {
         background-color: var(--editorTheme3-${settingName}Color) !important;
       }
       `;

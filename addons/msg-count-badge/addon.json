@@ -1,8 +1,6 @@
 {
   "name": "Message count on extension icon",
   "description": "Adds the current message count in the Scratch Addons icon.",
-  "persistentScripts": ["background.js"],
-  "permissions": ["badge"],
   "tags": ["popup", "recommended"],
   "enabledByDefault": true,
   "versionAdded": "1.0.0",
@@ -42,6 +40,19 @@
       "values": {
         "color": "#000000"
       }
+    }
+  ],
+  "credits": [
+    {
+      "name": "World_Languages"
+    },
+    {
+      "name": "William Horning",
+      "link": "https://wgyt.tk/"
+    },
+    {
+      "name": "lisa_wolfgang",
+      "link": "https://scratch.mit.edu/users/lisa_wolfgang"
     }
   ]
 }
