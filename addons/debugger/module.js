@@ -100,17 +100,17 @@ const singleStepThread = (thread) => {
   vm.runtime.sequencer.activeThread = thread;
   pauseNewThreads = true;
 
-  if (thread.target == null) {
+  if (!thread.target) {
     vm.runtime.sequencer.retireThread(thread);
   } else {
     /*
           We need to call execute(this, thread) like the original sequencer. We don't
           have access to that method, so we need to force the original stepThread to run
-          execute for us then exit before it tries to run more blocks.        
+          execute for us then exit before it tries to run more blocks.
           So, we make `thread.blockGlowInFrame = ...` throw an exception, so this line:
           https://github.com/LLK/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/sequencer.js#L214
           will end the function early. We then have to set it back to normal afterward.
-        
+
           Why are we here just to suffer?
          */
     const throwMsg = ["special error used by Scratch Addons for implementing single-stepping"];
@@ -220,7 +220,7 @@ export const singleStep = () => {
     //  if they where playing for one frame.
     const audioContext = vm.runtime.audioEngine.audioContext;
     for (const target of vm.runtime.targets) {
-      for (const soundId in target.sprite.soundBank.soundPlayers) {
+      for (const soundId of Object.keys(target.sprite.soundBank.soundPlayers)) {
         const soundPlayer = target.sprite.soundBank.soundPlayers[soundId];
         if (soundPlayer.outputNode) {
           soundPlayer.outputNode.stop(audioContext.currentTime);
@@ -245,7 +245,7 @@ export const singleStep = () => {
 
     const hats = vm.runtime._hats;
     for (const hatType in hats) {
-      if (!hats.hasOwnProperty(hatType)) continue;
+      if (!Object.prototype.hasOwnProperty.call(hats, hatType)) continue;
       const hat = hats[hatType];
       if (hat.edgeActivated) {
         vm.runtime.startHats(hatType);
@@ -302,11 +302,11 @@ export const setup = (_vm) => {
         for (let i = index; i < threads.length; i++) {
           const thread = threads[i];
 
-          if (thread.status == STATUS_YIELD_TICK) {
+          if (thread.status === STATUS_YIELD_TICK) {
             thread.status = STATUS_RUNNING;
           }
 
-          if (thread.status == STATUS_RUNNING || thread.status == STATUS_YIELD) {
+          if (thread.status === STATUS_RUNNING || thread.status === STATUS_YIELD) {
             vm.runtime.sequencer.stepThread(thread);
           }
         }
