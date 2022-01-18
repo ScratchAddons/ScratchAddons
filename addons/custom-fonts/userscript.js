@@ -7,7 +7,7 @@ export default async function ({ addon, console }) {
     ["mainfnt", "main"],
     ["editfnt", "editor"],
     ["footerfnt", "footer"],
-    ["edmenfnt", "editorMenuBar"]
+    ["edmenfnt", "editorMenuBar"],
   ];
 
   addon.self.addEventListener("disabled", disable);
@@ -54,7 +54,7 @@ export default async function ({ addon, console }) {
     main: sheet.cssRules[3],
     editor: sheet.cssRules[4],
     footer: sheet.cssRules[5],
-    editorMenuBar: sheet.cssRules[6]
+    editorMenuBar: sheet.cssRules[6],
   };
 
   //Disable the addon
