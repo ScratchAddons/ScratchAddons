@@ -1,6 +1,6 @@
 {
   "name": "Customizable fonts",
-  "description": "Customize the font family for different parts of Scratch.",
+  "description": "Customize the fonts for different parts of Scratch.",
   "tags": ["theme", "beta", "editor"],
   "credits": [
     {
@@ -11,8 +11,8 @@
   "info": [
     {
       "type": "notice",
-      "id": "bunchwarn",
-      "text": "Letters in wider fonts will be bunched together. Try not to use excessively large fonts."
+      "id": "sizewarn",
+      "text": "Block letters in wider fonts could be very small."
     }
   ],
   "enabledByDefault": false,
@@ -34,7 +34,6 @@
       "default": "Helvetica",
       "items": [
         "Helvetica",
-        "Arial",
         "Roboto",
         "Lucida Grande",
         "Verdana",
@@ -47,13 +46,30 @@
       ]
     },
     {
-      "name": "Main font",
+      "name": "Editor menu bar font",
+      "id": "edmenfnt",
+      "type": "datalist",
+      "default": "Helvetica",
+      "items": [
+        "Helvetica",
+        "Roboto",
+        "Lucida Grande",
+        "Verdana",
+        "Times New Roman",
+        "Sora",
+        "DejaVu Sans",
+        "Handlee",
+        "Antonio",
+        "Lato"
+      ]
+    },
+    {
+      "name": "Website content font",
       "id": "mainfnt",
       "type": "datalist",
       "default": "Helvetica",
       "items": [
         "Helvetica",
-        "Arial",
         "Roboto",
         "Lucida Grande",
         "Verdana",
@@ -72,7 +88,6 @@
       "default": "Helvetica",
       "items": [
         "Helvetica",
-        "Arial",
         "Roboto",
         "Lucida Grande",
         "Verdana",
@@ -91,7 +106,6 @@
       "default": "Helvetica",
       "items": [
         "Helvetica",
-        "Arial",
         "Roboto",
         "Lucida Grande",
         "Verdana",
@@ -110,7 +124,6 @@
       "default": "Helvetica",
       "items": [
         "Helvetica",
-        "Arial",
         "Roboto",
         "Lucida Grande",
         "Verdana",
@@ -129,7 +142,6 @@
       "default": "Helvetica",
       "items": [
         "Helvetica",
-        "Arial",
         "Roboto",
         "Lucida Grande",
         "Verdana",

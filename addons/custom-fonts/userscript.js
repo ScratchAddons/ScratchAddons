@@ -7,18 +7,20 @@ export default async function ({ addon, console }) {
     ["mainfnt", "main"],
     ["editfnt", "editor"],
     ["footerfnt", "footer"],
+    ["edmenfnt", "editorMenuBar"]
   ];
 
   addon.self.addEventListener("disabled", disable);
 
   addon.self.addEventListener("reenabled", enable);
 
-  const BLANK_STYLE = `#navigation, [class*="menu-bar_menu-bar"], #topnav {}
+  const BLANK_STYLE = `#navigation, #topnav {}
 .blocklyText:not(.saWidthTestString), .blocklyHtmlInput, .scratchCommentBody, .scratchCommentText, .scratchblocks text  {}
-.box-header, .box-head, form *, .tabs-index * {}
+.box-header, .box-head, form *, .tabs-index *, h1, h2, h3, h4, h5, h6 {}
 .box-content, .project-title, .comment, .button, .preview-row {}
 .scratchCategoryMenu, [role="tablist"], [class*="loader"], [class*="sprite-selector_sprite-selector"] *, [class*="target-pane_stage-selector-wrapper"] *, .pos-container > span, [class*="asset-panel_wrapper"] *:not(svg *) {}
-#footer * {}`;
+#footer * {}
+[class*="menu-bar_menu-bar"] {}`;
 
   //Default letter width to use when calculating the spacing needed
   let defWidth = await (async function () {
@@ -52,6 +54,7 @@ export default async function ({ addon, console }) {
     main: sheet.cssRules[3],
     editor: sheet.cssRules[4],
     footer: sheet.cssRules[5],
+    editorMenuBar: sheet.cssRules[6]
   };
 
   //Disable the addon
@@ -107,7 +110,7 @@ export default async function ({ addon, console }) {
   }
 
   function getWidth() {
-    let chars = "mmmmmmmmmmlli";
+    let chars = "mmmmmmmmmmwwwwwwwwwwlli";
     let p = document.createElement("p");
     p.classList.add("blocklyText", "saWidthTestString");
     p.style.opacity = "0";
