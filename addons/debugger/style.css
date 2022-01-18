@@ -10,30 +10,72 @@
   display: none !important;
 }
 
-.debug {
+.sa-debugger-interface {
   display: none;
-}
-.debug {
   position: absolute;
   z-index: 492;
   background-color: white;
-  width: 400px;
+  width: 565px;
   height: 25rem;
 }
 
-.debug h1 {
+.sa-debugger-interface h1 {
   padding: 10px;
-  cursor: move;
   z-index: 10;
-  color: #fff !important;
   width: calc(100% - 20px);
   font-size: 20px;
 }
 
-.sa-debugger-unpause {
-  animation: unpauseBackground 2s infinite alternate;
+.sa-debugger-tabs {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  font-size: 0.75rem;
 }
-@keyframes unpauseBackground /* Firefox */ {
+.sa-debugger-tabs li {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  padding: 0.5em 1em;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 1rem;
+  color: white;
+  cursor: pointer;
+}
+.sa-debugger-tabs li + li {
+  margin-inline-start: 10px;
+}
+.sa-debugger-tabs li:hover {
+  background-color: rgba(0, 0, 0, 0.15);
+}
+.sa-debugger-tabs li.sa-debugger-tab-selected {
+  background-color: white;
+  background-clip: padding-box;
+  border-color: rgba(0, 0, 0, 0.25);
+  color: #4d97ff;
+}
+.sa-debugger-tabs li img {
+  margin: 0;
+  margin-right: 0.25rem;
+  width: 1rem;
+  filter: brightness(0) invert(1);
+}
+.sa-debugger-tabs li.sa-debugger-tab-selected img {
+  filter: none;
+}
+
+.sa-debugger-header-buttons img {
+  width: 20px;
+  height: 20px;
+}
+
+.sa-debugger-unpause {
+  animation: saDebuggerUnpause 2s infinite alternate;
+}
+
+@keyframes saDebuggerUnpause {
   0% {
     background-color: rgba(0, 0, 0, 0.15);
   }
@@ -41,80 +83,104 @@
     background-color: rgba(0, 0, 0, 0);
   }
 }
-.sa-debugger-unpause > img {
-  width: 20px;
-  height: 20px;
+
+.sa-debugger-tab-content {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  cursor: auto;
 }
 
-.log {
-  --message-border-color: rgba(0, 0, 0, 0.15);
-  --warning-border-color: hsl(50deg 100% 88%);
-  --error-border-color: hsl(0deg 100% 92%);
-  --error-text-color: red;
-  --monospace-font-size: 12px;
-  --monospace-font-family: consolas, lucida console, courier new, monospace;
-  --source-code-font-size: 12px;
-  --source-code-font-family: consolas, lucida console, courier new, monospace;
-  font-family: var(--monospace-font-family);
-  font-size: var(--monospace-font-size) !important;
-  word-wrap: break-word;
-  user-select: text;
-  box-sizing: border-box;
-  min-width: 0;
-  min-height: 0;
-  display: flex;
-  border-top: 1px solid var(--message-border-color);
-  border-bottom: 1px solid var(--message-border-color);
-  word-wrap: break-word;
-  white-space: pre-wrap;
-  flex: auto;
-  line-height: 1.2;
-  border-top-right-radius: revert;
-  border-top-left-radius: revert;
-  cursor: text;
-  align-items: center;
-  padding: 3px;
-  content-visibility: auto;
-  contain-intrinsic-size: 1.2rem;
+.sa-debugger-chart {
+  width: 100%;
+  height: 100%;
 }
-.warn {
-  border-color: var(--warning-border-color);
+
+.sa-performance-tab-content {
+  padding: 15px;
+}
+
+.sa-debugger-log-outer {
+  height: 100%;
+}
+
+.sa-debugger-log-inner {
+  position: relative;
+  overflow-y: auto;
+  font-size: 12px;
+  line-height: 1.2;
+  height: 100%;
+  contain: strict;
+}
+
+.sa-debugger-log-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 20px;
+  font-style: italic;
+}
+
+.sa-debugger-log-end {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.sa-debugger-log {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  padding-left: 4px;
+  font-family: monospace;
+}
+.sa-debugger-log[data-type="warn"] {
+  border-color: hsl(50deg, 100%, 75%);
   color: hsl(39deg 100% 18%);
   background-color: hsl(50deg 100% 95%);
 }
-.error {
-  border-color: var(--error-border-color);
-  color: var(--error-text-color);
+.sa-debugger-log[data-type="error"] {
+  border-color: hsl(0deg 100% 92%);
+  color: red;
   background-color: hsl(0deg 100% 95%);
 }
-.log:not(.warn):not(.error) + .log:not(.warn):not(.error),
-.warn + .warn,
-.error + .error {
-  border-top-color: transparent;
-}
-.logs {
-  border-radius: 0;
-  padding: 0;
-}
-.extra-log-container {
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
-  flex: 1;
-  cursor: default;
-  width: 100%;
-}
-.console-variable {
-  padding: 4px;
-  border-radius: 10px;
+
+.sa-debugger-log-repeats {
+  background-color: hsla(163, 85%, 40%, 1);
   color: white;
-  margin-right: 5px;
+  border-radius: 100px;
+  padding: 1px 6px;
+  margin-right: 4px;
 }
-.log > span:not(.console-variable) {
-  flex-grow: 1;
+
+.sa-debugger-log-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
 }
-.log a {
+[data-type="warn"] .sa-debugger-log-icon {
+  background-image: url(./icons/warning.svg);
+}
+[data-type="error"] .sa-debugger-log-icon {
+  background-image: url(./icons/error.svg);
+}
+.sa-debugger-threads .sa-debugger-log-icon {
+  background-image: url(./icons/subthread.svg);
+}
+
+.sa-debugger-log-link {
   color: inherit;
+  cursor: pointer;
   opacity: 0.5;
   text-decoration: underline;
   float: right;
@@ -124,21 +190,51 @@
   margin-right: 4px;
   margin-left: auto;
 }
-.log a:hover {
+.sa-debugger-log-link:hover {
+  text-decoration: underline;
   color: #4d97ff;
   opacity: 1;
 }
-
-.logLink.deletedTarget {
+.sa-debugger-log-link-unknown {
   pointer-events: none;
 }
 
-.logIcon {
-  width: 1rem;
-  height: 1rem;
-  margin: 0 0.25rem;
+.sa-debugger-log-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre;
+}
+.sa-debugger-log-text-empty {
+  font-style: italic;
+}
+.sa-debugger-log-internal .sa-debugger-log-text {
+  font-style: italic;
 }
 
-.log:not(.warn):not(.error) {
-  margin-left: 1.5rem;
+.sa-debugger-thread-indent {
+  width: calc(16px * var(--level));
+  margin-right: 4px;
+}
+.sa-debugger-thread-title .sa-debugger-thread-indent {
+  margin: 0;
+}
+.sa-debugger-thread-target-name {
+  font-weight: bold;
+  margin-right: 8px;
+}
+.sa-debugger-thread-running {
+  background-color: rgba(255, 187, 0, 0.233);
+  font-weight: bold;
+}
+
+.sa-debugger-block-preview {
+  color: white;
+  padding: 1px 6px;
+  margin-right: 4px;
+}
+.sa-debugger-block-preview[data-shape="round"] {
+  border-radius: 100px;
+}
+.sa-debugger-block-preview[data-shape="stacked"] {
+  border-radius: 3px;
 }

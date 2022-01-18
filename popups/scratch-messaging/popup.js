@@ -1,7 +1,48 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
+import * as MessageCache from "../../libraries/common/message-cache.js";
+import * as API from "./api.js";
+import fixCommentContent from "./fix-comment-content.js";
+
+const parser = new DOMParser();
+
+const errorCodes = {
+  isEmpty: "comment-error-empty",
+  // Two errors can be raised for rate limit;
+  // isFlood is the actual error, 429 is the status code
+  // ratelimit error will be unnecessary when #2505 is implemented
+  isFlood: "comment-error-ratelimit",
+  429: "comment-error-ratelimit",
+  isBad: "comment-error-filterbot-generic",
+  hasChatSite: "comment-error-filterbot-chat",
+  isSpam: "comment-error-filterbot-spam",
+  replyLimitReached: "comment-error-reply-limit",
+  // isDisallowed, isIPMuted, isTooLong, isNotPermitted use default error
+  500: "comment-error-down",
+  503: "comment-error-down",
+};
 
 export default async ({ addon, msg, safeMsg }) => {
   let dateNow = Date.now();
+
+  // <dom-element-renderer> component
+  // This component renders an element.
+  // Inspired by DOMElementRenderer in scratch-gui
+  const DOMElementRenderer = Vue.extend({
+    template: document.querySelector("template#dom-element-renderer-component").innerHTML,
+    props: ["element"],
+    compiled() {
+      this.$el.appendChild(this.element);
+    },
+    beforeDestroy() {
+      this.$el.removeChild(this.element);
+    },
+    watch: {
+      element(newElement, oldElement) {
+        oldElement.replaceWith(newElement);
+      },
+    },
+  });
+  Vue.component("dom-element-renderer", DOMElementRenderer);
 
   // <comment> component
   const Comment = Vue.extend({
@@ -12,6 +53,7 @@ export default async ({ addon, msg, safeMsg }) => {
         replying: false,
         replyBoxValue: "",
         deleted: false,
+        deleting: false,
         deleteStep: 0,
         postingComment: false,
         messages: {
@@ -22,6 +64,8 @@ export default async ({ addon, msg, safeMsg }) => {
           postingMsg: msg("posting"),
           postMsg: msg("post"),
           cancelMsg: msg("cancel"),
+          deletedMsg: msg("deleted"),
+          deletingMsg: msg("deleting"),
         },
       };
     },
@@ -36,73 +80,74 @@ export default async ({ addon, msg, safeMsg }) => {
           return regex.test(limitedValue);
         };
         if (shouldCaptureComment(this.replyBoxValue)) {
-          alert(
-            chrome.i18n
-              .getMessage("captureCommentError", ["$1"])
-              .replace("$1", chrome.i18n.getMessage("captureCommentPolicy"))
-          );
+          alert(chrome.i18n.getMessage("captureCommentError", [chrome.i18n.getMessage("captureCommentPolicy")]));
           return;
         }
         this.postingComment = true;
         const parent_pseudo_id = this.isParent ? this.commentId : this.thisComment.childOf;
         const parent_id = Number(parent_pseudo_id.substring(2));
-        chrome.runtime.sendMessage(
-          {
-            scratchMessaging: {
-              postComment: {
-                resourceType: this.resourceType,
-                resourceId: this.resourceId,
-                content: this.replyBoxValue,
-                parent_id,
-                commentee_id: this.thisComment.authorId,
-                commenteeUsername: this.thisComment.author,
-              },
-            },
-          },
-          (res) => {
-            this.postingComment = false;
-            dateNow = Date.now();
-            if (res.error) {
-              const errorCode =
-                {
-                  isEmpty: "comment-error-empty",
-                  // Two errors can be raised for rate limit;
-                  // isFlood is the actual error, 429 is the status code
-                  // ratelimit error will be unnecessary when #2505 is implemented
-                  isFlood: "comment-error-ratelimit",
-                  429: "comment-error-ratelimit",
-                  isBad: "comment-error-filterbot-generic",
-                  hasChatSite: "comment-error-filterbot-chat",
-                  isSpam: "comment-error-filterbot-spam",
-                  replyLimitReached: "comment-error-reply-limit",
-                  // isDisallowed, isIPMuted, isTooLong, isNotPermitted use default error
-                  500: "comment-error-down",
-                  503: "comment-error-down",
-                }[res.error] || "send-error";
-              let errorMsg = msg(errorCode);
-              if (res.muteStatus) {
+        Promise.all([
+          addon.auth.fetchUsername(),
+          addon.auth.fetchUserId(),
+          API.sendComment(addon, {
+            resourceType: this.resourceType,
+            resourceId: this.resourceId,
+            content: this.replyBoxValue,
+            parentId: parent_id,
+            commenteeId: this.thisComment.authorId,
+          }),
+          addon.self.getEnabledAddons(),
+        ])
+          .then(([username, userId, { id, content }, enabledAddons]) => {
+            this.replying = false;
+            let domContent = fixCommentContent(content, enabledAddons);
+            if (this.resourceType !== "user") {
+              // We need to append the replyee ourselves
+              const newElement = document.createElement("div");
+              newElement.append(
+                Object.assign(document.createElement("a"), {
+                  href: `https://scratch.mit.edu/users/${this.thisComment.author}`,
+                  textContent: "@" + this.thisComment.author,
+                })
+              );
+              newElement.append(" ");
+              newElement.append(...domContent.childNodes);
+              domContent = newElement;
+            }
+            const newCommentPseudoId = `${this.resourceType[0]}_${id}`;
+            Vue.set(this.commentsObj, newCommentPseudoId, {
+              author: username,
+              authorId: userId,
+              content: domContent,
+              date: new Date().toISOString(),
+              children: null,
+              childOf: parent_pseudo_id,
+            });
+            this.commentsObj[parent_pseudo_id].children.push(newCommentPseudoId);
+            this.replyBoxValue = "";
+          })
+          .catch((e) => {
+            // Error comes from sendComment
+            let errorMsg;
+            if (e instanceof API.DetailedError) {
+              if (e.details.muteStatus) {
                 errorMsg = msg("comment-mute") + " ";
                 errorMsg += msg("comment-cannot-post-for", {
-                  mins: Math.max(Math.ceil((res.muteStatus.muteExpiresAt - Date.now() / 1000) / 60), 1),
+                  mins: Math.max(Math.ceil((e.details.muteStatus.muteExpiresAt - Date.now() / 1000) / 60), 1),
                 });
+              } else {
+                errorMsg = msg(errorCodes[e.details.error] || "send-error");
               }
-              alert(errorMsg);
+            } else if (e instanceof API.HTTPError) {
+              errorMsg = msg(errorCodes[e.details.code] || "send-error");
             } else {
-              this.replying = false;
-              const newCommentPseudoId = `${this.resourceType[0]}_${res.commentId}`;
-              Vue.set(this.commentsObj, newCommentPseudoId, {
-                author: res.username,
-                authorId: res.userId,
-                content: res.content,
-                date: new Date().toISOString(),
-                children: null,
-                childOf: parent_pseudo_id,
-              });
-              this.commentsObj[parent_pseudo_id].children.push(newCommentPseudoId);
-              this.replyBoxValue = "";
+              errorMsg = e.toString();
             }
-          }
-        );
+            alert(errorMsg);
+          })
+          .finally(() => {
+            this.postingComment = false;
+          });
       },
       deleteComment() {
         if (this.deleteStep === 0) {
@@ -113,30 +158,24 @@ export default async ({ addon, msg, safeMsg }) => {
           return;
         }
         this.deleted = true;
-        const previousContent = this.thisComment.content;
-        this.thisComment.content = safeMsg("deleting");
-        chrome.runtime.sendMessage(
-          {
-            scratchMessaging: {
-              deleteComment: {
-                resourceType: this.resourceType,
-                resourceId: this.resourceId,
-                commentId: Number(this.commentId.substring(2)),
-              },
-            },
-          },
-          (res) => {
-            if (res.error) {
-              alert(msg("delete-error"));
-              this.thisComment.content = previousContent;
-              this.deleteStep = 0;
-              this.deleted = false;
-            } else {
-              if (this.isParent) this.thisComment.children = [];
-              this.thisComment.content = safeMsg("deleted");
-            }
-          }
-        );
+        this.deleting = true;
+        API.deleteComment(addon, {
+          resourceType: this.resourceType,
+          resourceId: this.resourceId,
+          commentId: Number(this.commentId.substring(2)),
+        })
+          .then(() => {
+            if (this.isParent) this.thisComment.children = [];
+          })
+          .catch((e) => {
+            console.error("Error while deleting a comment: ", e);
+            alert(msg("delete-error"));
+            this.deleteStep = 0;
+            this.deleted = false;
+          })
+          .finally(() => {
+            this.deleting = false;
+          });
       },
     },
     computed: {
@@ -188,6 +227,7 @@ export default async ({ addon, msg, safeMsg }) => {
       messages: [],
       comments: {},
       error: null,
+      hasCustomError: false,
 
       username: null,
       msgCount: null,
@@ -232,6 +272,11 @@ export default async ({ addon, msg, safeMsg }) => {
         yourProfileMsg: msg("your-profile"),
         loadingMsg: msg("loading"),
         loggedOutMsg: msg("logged-out"),
+        serverErrorMsg: msg("server-error"),
+        networkErrorMsg: msg("network-error"),
+        unknownFatalErrorMsg: msg("unknown-fatal-error"),
+        reportBugMsg: msg("report-bug"),
+        copyMsg: msg("copy"),
         loadingCommentsMsg: msg("loading-comments"),
         reloadMsg: msg("reload"),
         dismissMsg: msg("dismiss"),
@@ -262,6 +307,10 @@ export default async ({ addon, msg, safeMsg }) => {
       },
     },
     computed: {
+      feedbackUrl() {
+        const manifest = chrome.runtime.getManifest();
+        return `https://scratchaddons.com/feedback/?ext_version=${manifest.version_name}&utm_source=extension&utm_medium=messagingcrash&utm_campaign=v${manifest.versions}`;
+      },
       profilesOrdered() {
         // Own profile first, then others
         return [
@@ -280,6 +329,7 @@ export default async ({ addon, msg, safeMsg }) => {
         return (
           this.messagesReady &&
           this.commentsReady &&
+          !this.error &&
           this.showAllMessages === false &&
           this.messages.length > this.showingMessagesAmt
         );
@@ -290,55 +340,109 @@ export default async ({ addon, msg, safeMsg }) => {
       (async () => {
         let fetched = await this.getData();
         if (fetched) this.analyzeMessages();
-        else {
-          const interval = setInterval(async () => {
-            fetched = await this.getData();
-            if (fetched) {
-              clearInterval(interval);
-              this.analyzeMessages();
-            }
-          }, 500);
-        }
       })();
     },
     methods: {
       getData() {
-        return new Promise((resolve) => {
-          chrome.runtime.sendMessage({ scratchMessaging: "getData" }, (res) => {
-            if (res) {
-              this.stMessages = (Array.isArray(res.stMessages) ? res.stMessages : []).map((alert) => ({
-                ...alert,
-                datetime_created: new Date(alert.datetime_created).toDateString(),
-              }));
-              this.messages = res.messages;
-              this.msgCount = res.lastMsgCount;
-              this.username = res.username;
-              this.error = res.error;
-              resolve(res.error ? false : true);
+        return Promise.all([addon.auth.fetchUsername(), addon.auth.fetchXToken()])
+          .then(([username, xToken]) => {
+            if (scratchAddons.cookieFetchingFailed) throw new TypeError("NetworkError");
+            if (!username) throw new MessageCache.HTTPError("Not logged in", 401);
+            this.username = username;
+            return Promise.all([
+              MessageCache.updateMessages(scratchAddons.cookieStoreId, false, username, xToken),
+              API.fetchAlerts(addon),
+            ]);
+          })
+          .then(async ([newMessages, alerts]) => {
+            chrome.runtime.sendMessage({
+              forceBadgeUpdate: { store: scratchAddons.cookieStoreId },
+              notifyNewMessages: { store: scratchAddons.cookieStoreId, messages: newMessages },
+            });
+            const db = await MessageCache.openDatabase();
+            try {
+              this.messages = await db.get("cache", scratchAddons.cookieStoreId);
+              this.msgCount = await db.get("count", scratchAddons.cookieStoreId);
+            } finally {
+              await db.close();
             }
+            this.stMessages = (Array.isArray(alerts) ? alerts : []).map((alert) => {
+              const element = parser.parseFromString(alert.message, "text/html");
+              for (const link of element.getElementsByTagName("a")) {
+                link.href = new URL(link.getAttribute("href"), "https://scratch.mit.edu/").toString();
+              }
+              const wrapped = document.createElement("div");
+              wrapped.append(...element.body.childNodes);
+              return {
+                ...alert,
+                element: wrapped,
+                datetime_created: new Date(alert.datetime_created).toDateString(),
+              };
+            });
+            this.error = undefined;
+            return true;
+          })
+          .catch((e) => {
+            if (e instanceof MessageCache.HTTPError) {
+              if (e.code === 401 || e.code === 403) {
+                this.error = "loggedOut";
+                return false;
+              } else if (e.code >= 500) {
+                this.error = "serverError";
+                return false;
+              }
+            } else if (e instanceof TypeError && String(e).includes("NetworkError")) {
+              this.error = "networkError";
+              return false;
+            }
+            console.error("Error while initial getData", e);
+            this.hasCustomError = true;
+            this.error = String(e);
+            return false;
           });
+      },
+
+      async updateMessageCount() {
+        const username = await addon.auth.fetchUsername();
+        const count = await MessageCache.fetchMessageCount(username);
+        const db = await MessageCache.openDatabase();
+        try {
+          await db.put("count", count, scratchAddons.cookieStoreId);
+        } finally {
+          await db.close();
+        }
+        chrome.runtime.sendMessage({
+          forceBadgeUpdate: { store: scratchAddons.cookieStoreId },
         });
       },
 
       // For UI
       markAsRead() {
-        chrome.runtime.sendMessage({ scratchMessaging: "markAsRead" });
-        this.markedAsRead = true;
+        MessageCache.markAsRead(addon.auth.csrfToken)
+          .then(() => this.updateMessageCount())
+          .then(() => {
+            this.markedAsRead = true;
+          })
+          .catch((e) => console.error("Marking messages as read failed:", e));
       },
       dismissAlert(id) {
         const confirmation = confirm(msg("stMessagesConfirm"));
         if (!confirmation) return;
-        chrome.runtime.sendMessage({ scratchMessaging: { dismissAlert: id } }, (res) => {
-          if (res && !res.error) {
+        API.dismissAlert(addon, id)
+          .then(() => {
             this.stMessages.splice(
               this.stMessages.findIndex((alert) => alert.id === id),
               1
             );
-          }
-        });
+            this.updateMessageCount();
+          })
+          .catch((e) => console.error("Dismissing alert failed:", e));
       },
       reloadPage() {
         location.reload();
+      },
+      copyToClipboard(message) {
+        navigator.clipboard.writeText(message);
       },
 
       // Objects
@@ -397,49 +501,66 @@ export default async ({ addon, msg, safeMsg }) => {
         } else return false;
       },
       checkCommentLocation(resourceType, resourceId, commentIds, elementObject) {
-        return new Promise((resolve) => {
-          chrome.runtime.sendMessage(
-            {
-              scratchMessaging: {
-                retrieveComments: {
-                  resourceType,
-                  resourceId,
-                  commentIds: commentIds,
-                },
-              },
-            },
-            (comments) => {
-              if (comments?.failed) {
-                // Sometimes incorrect (e.g. server is actually down)
-                // but this works
-                this.error = "loggedOut";
-                resolve();
-                return;
+        return Promise.all([
+          API.fetchComments(addon, {
+            resourceType,
+            resourceId,
+            commentIds,
+          }),
+          addon.self.getEnabledAddons(),
+        ])
+          .then(([comments, enabledAddons]) => {
+            if (Object.keys(comments).length === 0) elementObject.unreadComments = 0;
+            for (const commentId of Object.keys(comments)) {
+              const commentObject = comments[commentId];
+              let domContent = fixCommentContent(commentObject.content, enabledAddons);
+              if (this.resourceType !== "user") {
+                // Re-wrap elements from <body> to <div>
+                const newElement = document.createElement("div");
+                if (commentObject.replyingTo) {
+                  // We need to append the replyee ourselves
+                  newElement.append(
+                    Object.assign(document.createElement("a"), {
+                      href: `https://scratch.mit.edu/users/${commentObject.replyingTo}`,
+                      textContent: "@" + commentObject.replyingTo,
+                    })
+                  );
+                  newElement.append(" ");
+                }
+                newElement.append(...domContent.childNodes);
+                domContent = newElement;
               }
-              if (Object.keys(comments).length === 0) elementObject.unreadComments = 0;
-              for (const commentId of Object.keys(comments)) {
-                const commentObject = comments[commentId];
-                Vue.set(this.comments, commentId, commentObject);
-              }
-
-              // Preserve chronological sort when using JSON API
-              const parentComments = Object.entries(comments).filter((c) => c[1].childOf === null);
-              const sortedParentComments = parentComments.sort((a, b) => new Date(b[1].date) - new Date(a[1].date));
-              const sortedIds = sortedParentComments.map((arr) => arr[0]);
-              const resourceGetFunction =
-                resourceType === "project"
-                  ? "getProjectObject"
-                  : resourceType === "user"
-                  ? "getProfileObject"
-                  : "getStudioObject";
-              const resourceObject = this[resourceGetFunction](resourceId);
-              for (const sortedId of sortedIds) resourceObject.commentChains.push(sortedId);
-
-              elementObject.loadedComments = true;
-              resolve();
+              commentObject.content = domContent;
+              Vue.set(this.comments, commentId, commentObject);
             }
-          );
-        });
+
+            // Preserve chronological sort when using JSON API
+            const parentComments = Object.entries(comments).filter((c) => c[1].childOf === null);
+            const sortedParentComments = parentComments.sort((a, b) => new Date(b[1].date) - new Date(a[1].date));
+            const sortedIds = sortedParentComments.map((arr) => arr[0]);
+            const resourceGetFunction =
+              resourceType === "project"
+                ? "getProjectObject"
+                : resourceType === "user"
+                ? "getProfileObject"
+                : "getStudioObject";
+            const resourceObject = this[resourceGetFunction](resourceId);
+            for (const sortedId of sortedIds) resourceObject.commentChains.push(sortedId);
+
+            elementObject.loadedComments = true;
+          })
+          .catch((e) => {
+            if (e instanceof API.HTTPError) {
+              this.error = e.code < 500 ? "loggedOut" : "serverError";
+              return;
+            } else if (String(e).includes("NetworkError")) {
+              this.error = "networkError";
+              return;
+            }
+            console.error(e);
+            this.error = String(e);
+            this.hasCustomError = true;
+          });
       },
 
       async analyzeMessages(showAll = false) {
