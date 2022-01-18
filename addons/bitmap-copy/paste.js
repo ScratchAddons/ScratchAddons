@@ -1,10 +1,147 @@
 export default async ({ addon, console, msg }) => {
 	
-	//The file input that the next pasted image will be pasted into.
+	//The action-menu_file-input classed input that the next pasted image will be pasted into.
 	let currentMenuInput;
 	
+	let lastClicked;
+	
+	//Paste overlay
+	const pasteOverlay = document.createElement("div");
+	pasteOverlay.className = "ReactModalPortal sa-paste-overlay-outer";
+	const displayNonePasteOverlay = () => {
+		pasteOverlay.classList.add("hidden");
+	}
+	const showPasteOverlay = () => {
+		pasteOverlay.classList.remove("hidden");
+	}
+	const hidePasteOverlay = () => {
+		displayNonePasteOverlay();
+		document.body.removeEventListener("paste", onPaste);
+	}
+	displayNonePasteOverlay();
+	pasteOverlay.addEventListener("click", hidePasteOverlay)
+	addon.self.addEventListener("disabled", hidePasteOverlay );
+	addon.self.addEventListener("disabled", () => pasteOverlay.style.display = "none" );
+	addon.self.addEventListener("reenabled", () => pasteOverlay.style.display = "" );
+	document.addEventListener("keydown", (e) => {
+		if (!(e.key === "Escape")) return;
+		hidePasteOverlay();
+	})
+	
+	const pasteOverlayInner = document.createElement("div");
+	pasteOverlayInner.className = "ReactModal__Overlay ReactModal__Overlay--after-open sa-paste-overlay-inner"
+	pasteOverlayInner.classList.add(addon.tab.scratchClass("modal_modal-overlay"));
+	
+	const pasteOverlayTextContainer = document.createElement("div");
+	pasteOverlayTextContainer.className = "sa-paste-overlay-text";
+	
+	const pasteOverlayText = document.createTextNode(msg("paste-overlay-message"));
+	
+	const pasteOverlaySubtext = document.createElement("div");
+	pasteOverlaySubtext.className = "sa-paste-overlay-subtext";
+	pasteOverlaySubtext.textContent = msg("paste-overlay-subtitle");
+	
+	pasteOverlay.appendChild(pasteOverlayInner);
+	pasteOverlayInner.appendChild(pasteOverlayTextContainer);
+	pasteOverlayTextContainer.appendChild(pasteOverlayText);
+	pasteOverlayTextContainer.appendChild(pasteOverlaySubtext);
+	
+	document.body.appendChild(pasteOverlay);
+	
+	//Handles what occurs when simply pressing Ctrl+V in the editor to paste an image as a costume when applicable.
+	const passivePaste = (e) => {
+		if (addon.self.disabled) return;
+		//If the paste overlay is active, let it do its thing
+		if (!pasteOverlay.classList.contains("hidden")) return;
+		
+		const COSTUMES_PANE = document.querySelector("#react-tabs-3 > div > [class*='selector_wrapper_']");
+		const COSTUME_EDITOR = document.querySelector("#react-tabs-3 > div > [class*='asset-panel_detail-area']");
+		const SPRITES_PANE = document.querySelector("[class*='sprite-selector_sprite-selector']");
+		const STAGE_PANE = document.querySelector("[class*='target-pane_stage-selector-wrapper']");
+		const el = lastClicked;
+		let pasteInto = null;
+		
+		if (COSTUMES_PANE) {
+			if (COSTUMES_PANE.contains(el) && !(COSTUME_EDITOR.contains(el))) pasteInto = COSTUMES_PANE;
+		}
+		if (SPRITES_PANE.contains(el)) pasteInto = SPRITES_PANE.parentElement;
+		if (STAGE_PANE.contains(el)) pasteInto = STAGE_PANE;
+		//Extra protection to make sure pasting into a text input never pastes an image
+		if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") pasteInto = null;
+				
+		if (pasteInto) {
+			currentMenuInput = pasteInto.querySelector("[class*='action-menu_more-buttons_'] input[class*='action-menu_file-input_']:not([class*='sa-'])");
+			onPaste(e, true);
+		}
+	}
+	document.body.addEventListener("paste", passivePaste);
+	document.body.addEventListener("click", (e) => {lastClicked = e.target;});
+	
+	//Handles clipboard validity checking and uploading the image
+	const onPaste = (e, silent = false) => {
+		
+		if (addon.self.disabled) return;
+		
+		hidePasteOverlay();
+		
+		const PNG = "image/png";
+		const JPEG = "image/jpeg";
+		const BMP = "image/bmp";
+		const GIF = "image/gif";
+	
+		let clipboardData = e.clipboardData || window.clipboardData || e.originalEvent.clipboardData;
+		if (!clipboardData) {
+			//I don't think this ever happens but just to be safe
+			console.error("Clipboard data not found");
+			if (!silent) {
+				alert(msg("paste-error-generic"));
+			}
+			return;
+		}
+		
+		const FILES = clipboardData.files;
+		const TYPES = clipboardData.types;
+
+		if (!FILES) {
+			console.error("No files");
+			if (!silent) {
+				alert(msg("paste-error-filetype"));
+			}
+			return;
+		}
+		
+		const filteredFiles = [];
+				
+		for (const i in FILES) {
+			const FILE = FILES[i];
+			if (FILE.type === PNG || FILE.type === JPEG || FILE.type === GIF || FILE.type === BMP) {
+				filteredFiles.push(FILE);
+			}
+		}
+		
+		if (filteredFiles.length < 1) {
+			console.error("No files of supported types");
+			if (!silent) {
+				alert(msg("paste-error-filetype"));
+			}
+			return;
+		}
+						
+		uploadFiles(currentMenuInput, new FileList(filteredFiles));
+		e.preventDefault();
+		
+	};
+	
+	//Add files to an input, and trigger their change events.
+	const uploadFiles = (input, files) => {
+		input.files = files;
+		input.dispatchEvent(new Event("change", {bubbles: true}));
+	}
+	
+	//A lot of the following code was pasted from the better-img-uploads addon.
+	//Credits to the people who made that addon
 	const createItem = (id, right) => {
-		const uploadMsg = "Paste Image";
+		const uploadMsg = msg("paste-image");
 		const wrapper = Object.assign(document.createElement("div"), { id });
 		const button = Object.assign(document.createElement("button"), {
 		  className: `${addon.tab.scratchClass("action-menu_button")} ${addon.tab.scratchClass(
@@ -34,101 +171,6 @@ export default async ({ addon, console, msg }) => {
 		wrapper.append(tooltip);
 		return [wrapper, button, tooltip];
 	  };
-	
-	let reader = new FileReader();
-	const PNG = "image/png";
-	const JPEG = "image/jpeg";
-	const BMP = "image/bmp";
-	const GIF = "image/gif";
-
-	reader.onload = function(evt) {
-		console.log(evt.target.result);
-	};
-	
-	//Handles clipboard validity checking and uploading the image
-	const onPaste = function(event) {
-
-		hidePasteOverlay();
-		
-		let clipboardData = event.clipboardData || window.clipboardData || event.originalEvent.clipboardData;
-		if (!clipboardData) {
-			//I don't think this ever happens but just to be safe
-			console.error("Clipboard data not found");
-			alert("Error uploading image");
-			return;
-		}
-		const FILES = clipboardData.files;
-		const TYPES = clipboardData.types;
-		console.log(FILES, TYPES, FILES[0], TYPES[0]);
-		if (!FILES) {
-			console.error("No files");
-			alert("Please paste a PNG, GIF or JPG image.");
-			return;
-		}
-		
-		const filteredFiles = [];
-				
-		for (const i in FILES) {
-			const FILE = FILES[i];
-			if (FILE.type === PNG || FILE.type === JPEG || FILE.type === GIF || FILE.type === BMP) {
-				filteredFiles.push(FILE);
-			}
-		}
-		
-		if (filteredFiles.length < 1) {
-			console.error("No files of supported types");
-			alert("Please paste a PNG, GIF or JPG image.");
-			return;
-		}
-		
-		uploadFiles(currentMenuInput, new FileList(filteredFiles));
-		event.preventDefault();
-		
-	};
-	
-	//Add files to an input, and trigger their change events.
-	const uploadFiles = function(input, files) {
-		input.files = files;
-		input.dispatchEvent(new Event("change", {bubbles: true}));
-	}
-	
-	//Paste overlay
-	const pasteOverlay = document.createElement("div");
-	const displayNonePasteOverlay = function() {
-		pasteOverlay.style.display = "none";
-	}
-	const hidePasteOverlay = function() {
-		displayNonePasteOverlay();
-		document.body.removeEventListener("paste", onPaste);
-	}
-	displayNonePasteOverlay();
-	pasteOverlay.className = "ReactModalPortal";
-	pasteOverlay.addEventListener("click", hidePasteOverlay)
-	document.addEventListener("keydown", function(e) {
-		if (!(e.key === "Escape")) return;
-		hidePasteOverlay();
-	})
-	
-	const pasteOverlayInner = document.createElement("div");
-	pasteOverlayInner.className = "ReactModal__Overlay ReactModal__Overlay--after-open sa-paste-overlay-inner"
-	pasteOverlayInner.classList.add(addon.tab.scratchClass("modal_modal-overlay"));
-	
-	const pasteOverlayTextContainer = document.createElement("div");
-	pasteOverlayTextContainer.className = "sa-paste-overlay-text";
-	
-	const pasteOverlayText = document.createTextNode("Paste an image to upload...");
-	
-	const pasteOverlaySubtext = document.createElement("div");
-	pasteOverlaySubtext.className = "sa-paste-overlay-subtext";
-	pasteOverlaySubtext.textContent = "(Click or press Escape to cancel)";
-	
-	pasteOverlay.appendChild(pasteOverlayInner);
-	pasteOverlayInner.appendChild(pasteOverlayTextContainer);
-	pasteOverlayTextContainer.appendChild(pasteOverlayText);
-	pasteOverlayTextContainer.appendChild(pasteOverlaySubtext)
-	
-	document.body.appendChild(pasteOverlay);
-	
 	while (true) {
 		//Catch all upload menus as they are created
 		let menu = await addon.tab.waitForElement(
@@ -148,11 +190,12 @@ export default async ({ addon, console, msg }) => {
 		}
 
 		const [menuItem, pasteButton, tooltip] = createItem(id, isRight);
+		addon.tab.displayNoneWhileDisabled(menuItem, {display: "block"});
 		addon.tab.appendToSharedSpace({space: "spriteCreationMenu", element: menuItem, order: 0, scope: menu});
 
 		pasteButton.addEventListener("click", (e) => {
 		  currentMenuInput = e.target.parentElement.parentElement.parentElement.querySelector("input[class*='action-menu_file-input_']:not([class*='sa-'])");
-		  pasteOverlay.style.display = "block";
+		  showPasteOverlay();
 		  document.body.addEventListener("paste", onPaste);
 		});
 

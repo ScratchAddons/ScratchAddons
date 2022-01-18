@@ -27,3 +27,6 @@
 	font-size: 45%;
 	margin-top: 0.33em;
 }
+.sa-paste-overlay-outer.hidden {
+	display: none;
+}

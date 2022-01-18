@@ -27,6 +27,11 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.0.0",
+  "latestUpdate": {
+    "version": "1.24.0",
+    "isMajor": false,
+    "temporaryNotice": "You can now paste images using the Paste Image button or by pressing Ctrl+V on the sprite pane, list of costumes or the stage pane."
+  },
   "tags": ["editor", "costumeEditor"],
   "permissions": ["clipboardWrite"],
   "enabledByDefault": false

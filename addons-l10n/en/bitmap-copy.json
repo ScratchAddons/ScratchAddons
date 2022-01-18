@@ -1,0 +1,7 @@
+{
+  "bitmap-copy/paste-overlay-message": "Paste an image to upload",
+  "bitmap-copy/paste-overlay-subtitle": "(Click or press Escape to cancel)",
+  "bitmap-copy/paste-error-generic": "Error uploading image.",
+  "bitmap-copy/paste-error-filetype": "Please paste a PNG, GIF, JPEG or BMP image.",
+  "bitmap-copy/paste-image": "Paste Image"
+}
