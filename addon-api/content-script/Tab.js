@@ -473,7 +473,7 @@ export default class Tab extends Listenable {
         },
         until: () => [],
       },
-	  spriteCreationMenu: {
+      spriteCreationMenu: {
         element: () => scope,
         from: () => [],
         until: () => [scope.querySelector("div:nth-last-child(4)")],

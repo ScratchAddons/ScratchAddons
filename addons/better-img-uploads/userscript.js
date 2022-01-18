@@ -64,7 +64,7 @@ export default async function ({ addon, console, msg }) {
     }
 
     const [menuItem, hdButton, input, tooltip] = createItem(id, isRight);
-    addon.tab.appendToSharedSpace({space: "spriteCreationMenu", element: menuItem, order: 1, scope: menu});
+    addon.tab.appendToSharedSpace({ space: "spriteCreationMenu", element: menuItem, order: 1, scope: menu });
 
     hdButton.addEventListener("click", (e) => {
       input.files = new FileList(); //Empty the input to make sure the change event fires even if the same file was uploaded.
