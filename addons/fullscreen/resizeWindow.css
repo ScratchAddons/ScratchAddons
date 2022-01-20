@@ -1,0 +1,25 @@
+[class*="stage-wrapper_full-screen"] [class*="stage-wrapper_stage-canvas-wrapper"],
+[class*="stage-wrapper_full-screen"] [class*="stage_stage"],
+[class*="stage-wrapper_full-screen"] [class*="stage-header_stage-menu-wrapper"],
+[class*="stage-wrapper_full-screen"] canvas {
+  width: min(calc((100vh - 44px) * 4 / 3), 100vw) !important;
+}
+
+[class*="stage-wrapper_full-screen"] [class*="stage-wrapper_stage-canvas-wrapper"],
+[class*="stage-wrapper_full-screen"] [class*="stage_stage"],
+[class*="stage-wrapper_full-screen"] [class*="stage_green-flag-overlay-wrapper"],
+[class*="stage-wrapper_full-screen"] canvas {
+  height: min(calc(100vh - 44px), calc(100vw * 3 / 4)) !important;
+}
+
+[class*="stage-wrapper_full-screen"] {
+  padding: 0rem !important;
+}
+
+[class*="stage-wrapper_full-screen"] [class*="monitor-list_monitor-list"] {
+  overflow: visible;
+}
+
+[class*="stage-wrapper_full-screen"] [class*="stage_question-wrapper"] {
+  width: auto !important;
+}

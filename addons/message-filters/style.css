@@ -1,20 +1,19 @@
 .filter-container {
   box-sizing: border-box;
-  padding: 2vw;
-  background: #05f2;
+  padding: 1rem 2.75rem;
+  background: rgba(77, 151, 255, 0.1);
   display: block;
   margin: 0 auto;
   border-radius: 5px;
-  border: 1px solid #05f3;
+  border: 1px solid rgba(77, 151, 255, 0.1);
   width: 100%;
   margin-top: 10px;
 }
 .filter-container h4 {
-  padding: 5px;
-  padding-left: 10px;
+  padding: 0.5rem;
 }
 .filter-container input {
-  margin-right: 0.5vmax;
+  margin-right: 0.5rem;
   outline: none;
 }
 
@@ -26,9 +25,9 @@
 .input_label {
   text-align: left;
   display: inline-block;
-  padding: 10px;
+  padding: 0.5rem;
   border-radius: 5px;
-  transition-duration: 0.3s;
+  transition-duration: 0.2s;
   transition-property: background-color;
   cursor: pointer;
   overflow: hidden;
@@ -36,5 +35,5 @@
 }
 /* Nice hover transition. */
 .input_label:hover {
-  background: #05f4;
+  background: rgba(77, 151, 255, 0.1);
 }

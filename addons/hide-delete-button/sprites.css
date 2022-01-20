@@ -1,0 +1,3 @@
+div[class*="sprite-selector_sprite-wrapper_"] div[class*="delete-button_delete-button_"] {
+  display: none;
+}

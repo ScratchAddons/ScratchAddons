@@ -1,0 +1,73 @@
+{
+  "name": "Customizable profile picture border",
+  "description": "Allows you to hide or change the outline around profile pictures in project and studio comments.",
+  "credits": [
+    {
+      "name": "CST1229",
+      "link": "https://github.com/CST1229"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "hide_outline.css",
+      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
+      "if": {
+        "settings": {
+          "hide-outline": true
+        }
+      }
+    },
+    {
+      "url": "outline_color.css",
+      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
+      "if": {
+        "settings": {
+          "hide-outline": false
+        }
+      }
+    },
+    {
+      "url": "fill_transparent.css",
+      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
+      "if": {
+        "settings": {
+          "fill-transparent": true
+        }
+      }
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "injectAsStyleElt": true,
+  "settings": [
+    {
+      "name": "Hide outline",
+      "id": "hide-outline",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Fill transparent profile pictures",
+      "id": "fill-transparent",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Outline colour",
+      "id": "outline-color",
+      "type": "color",
+      "allowTransparency": true,
+      "default": "#4d97ff40",
+      "if": {
+        "settings": {
+          "hide-outline": false,
+          "fill-transparent": true
+        }
+      }
+    }
+  ],
+  "tags": ["community", "theme"],
+  "versionAdded": "1.18.0",
+  "enabledByDefault": false
+}

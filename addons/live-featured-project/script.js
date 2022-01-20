@@ -3,6 +3,8 @@ export default async function ({ addon, msg }) {
   const forceAlternative = addon.settings.get("forceAlternative");
   const alternativePlayer = addon.settings.get("alternativePlayer");
   const autoPlay = addon.settings.get("autoPlay");
+  const enableTWAddons = addon.settings.get("enableTWAddons");
+  const enabledAddons = await addon.self.getEnabledAddons("editor");
 
   const stageElement = document.querySelector(".stage");
   const projectId = window.Scratch.INIT_DATA.PROFILE.featuredProject.id;
@@ -15,6 +17,10 @@ export default async function ({ addon, msg }) {
   iframeElement.setAttribute("height", "210");
   iframeElement.setAttribute("frameborder", "0");
   iframeElement.setAttribute("allowfullscreen", "");
+  iframeElement.setAttribute(
+    "allow",
+    "autoplay 'src'; camera 'src'; document-domain 'none'; fullscreen 'src'; gamepad 'src'; microphone 'src';"
+  );
   iframeElement.setAttribute("scrolling", "no");
 
   const wrapperElement = document.createElement("div");
@@ -66,7 +72,10 @@ export default async function ({ addon, msg }) {
   };
 
   const loadTurboWarp = () => {
-    iframeElement.setAttribute("src", `https://turbowarp.org/embed.html${autoPlay ? "?autoplay" : ""}#${projectId}`);
+    const usp = new URLSearchParams();
+    if (autoPlay) usp.set("autoplay", "");
+    if (enableTWAddons) usp.set("addons", enabledAddons.join(","));
+    iframeElement.setAttribute("src", `https://turbowarp.org/${projectId}/embed?${usp}`);
     wrapperElement.dataset.player = "turbowarp";
     if (!showMenu) iframeElement.setAttribute("height", "260");
   };

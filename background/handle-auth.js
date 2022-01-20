@@ -1,3 +1,7 @@
+import { startCache } from "./message-cache.js";
+import { openMessageCache } from "../libraries/common/message-cache.js";
+import { purgeDatabase } from "../addons/scratch-notifier/notifier.js";
+
 const promisify =
   (callbackFn) =>
   (...args) =>
@@ -24,16 +28,32 @@ function getDefaultStoreId() {
   const defaultStoreId = await getDefaultStoreId();
   console.log("Default cookie store ID: ", defaultStoreId);
   await checkSession();
+  startCache(defaultStoreId);
 })();
 
-chrome.cookies.onChanged.addListener(({ cookie, changeCause }) => {
+chrome.cookies.onChanged.addListener(({ cookie, cause, removed }) => {
   if (cookie.name === "scratchsessionsid" || cookie.name === "scratchlanguage" || cookie.name === "scratchcsrftoken") {
-    if (!scratchAddons.cookieStoreId) {
+    if (cookie.name === "scratchlanguage") {
+      setLanguage();
+    } else if (!scratchAddons.cookieStoreId) {
       getDefaultStoreId().then(() => checkSession());
-    } else if (cookie.storeId === scratchAddons.cookieStoreId) {
-      checkSession();
+    } else if (
+      // do not refetch for csrf token expiration date change
+      cookie.storeId === scratchAddons.cookieStoreId &&
+      !(cookie.name === "scratchcsrftoken" && cookie.value === scratchAddons.globalState.auth.csrfToken)
+    ) {
+      checkSession().then(() => {
+        if (cookie.name === "scratchsessionsid") {
+          startCache(scratchAddons.cookieStoreId, true);
+          purgeDatabase();
+        }
+      });
+    } else if (cookie.name === "scratchsessionsid") {
+      // Clear message cache for the store
+      // This is not the main one, so we don't refetch here
+      openMessageCache(cookie.storeId, true);
     }
-    notifyContentScripts(cookie);
+    notify(cookie);
   }
 });
 
@@ -52,9 +72,17 @@ function getCookieValue(name) {
   });
 }
 
+async function setLanguage() {
+  scratchAddons.globalState.auth.scratchLang = (await getCookieValue("scratchlanguage")) || navigator.language;
+}
+
+let isChecking = false;
+
 async function checkSession() {
   let res;
   let json;
+  if (isChecking) return;
+  isChecking = true;
   try {
     res = await fetch("https://scratch.mit.edu/session/", {
       headers: {
@@ -67,6 +95,7 @@ async function checkSession() {
     json = {};
     // If Scratch is down, or there was no internet connection, recheck soon:
     if ((res && !res.ok) || !res) {
+      isChecking = false;
       setTimeout(checkSession, 60000);
       scratchAddons.globalState.auth = {
         isLoggedIn: false,
@@ -89,16 +118,22 @@ async function checkSession() {
     csrfToken,
     scratchLang,
   };
+  isChecking = false;
 }
 
-function notifyContentScripts(cookie) {
+function notify(cookie) {
   if (cookie.name === "scratchlanguage") return;
   const storeId = cookie.storeId;
-  chrome.tabs.query(
-    {
-      cookieStoreId: storeId,
-    },
-    (tabs) =>
-      tabs.forEach((tab) => chrome.tabs.sendMessage(tab.id, "refetchSession", () => void chrome.runtime.lastError))
+  const cond = {};
+  if (typeof browser === "object") {
+    // Firefox-exclusive.
+    cond.cookieStoreId = storeId;
+  }
+  // On Chrome this can cause unnecessary session re-fetch, but there should be
+  // no harm (aside from extra requests) when doing so.
+  chrome.tabs.query(cond, (tabs) =>
+    tabs.forEach((tab) => chrome.tabs.sendMessage(tab.id, "refetchSession", () => void chrome.runtime.lastError))
   );
+  // Notify popups, since they also fetch sessions independently
+  scratchAddons.sendToPopups({ refetchSession: true });
 }

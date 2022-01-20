@@ -1,1 +1,1 @@
-{"disable-stage-drag-select/@name":"ドラッグできないスプライト","disable-stage-drag-select/@info-shift":"使用中でも、Shiftキーを押すとドラッグできます。"}
+{"disable-stage-drag-select/@name":"ドラッグできないスプライト","disable-stage-drag-select/@description":"ステージでスプライトをドラッグできないようにする。","disable-stage-drag-select/@info-shift":"使用中でも、Shiftキーを押すとドラッグできます。"}

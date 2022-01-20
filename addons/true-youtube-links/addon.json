@@ -13,6 +13,8 @@
       "runAtComplete": false
     }
   ],
+  "dynamicEnable": false,
+  "dynamicDisable": false,
   "versionAdded": "1.0.0",
   "tags": ["community", "forums"],
   "enabledByDefault": false

@@ -15,7 +15,9 @@
       "link": "https://github.com/easrng/material-scratch-forum-editor-buttons"
     },
     {
-      "name": "Secret-chest (Port)",
+      "name": "Secret-chest",
+      "note": "addon version",
+      "id": "addonVersion",
       "link": "https://github.com/Secret-chest"
     }
   ],

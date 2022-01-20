@@ -3,19 +3,27 @@
   "description": "Customize colors used by the project editor. Multiple dark themes by different authors available. If you don't need dark mode but want to change the default colors you can select the \"Scratch's default colors\" preset and tweak it.",
   "credits": [
     {
-      "name": "Maximouse (addon, \"Experimental\" Dark)",
+      "name": "Maximouse",
+      "note": "addon, \"Experimental\" Dark",
+      "id": "addon",
       "link": "https://scratch.mit.edu/users/Maximouse/"
     },
     {
-      "name": "infinitytec (3.Dark, 3.Darker)",
+      "name": "infinitytec",
+      "note": "3.Dark, 3.Darker",
+      "id": "darker",
       "link": "https://github.com/infinitytec"
     },
     {
-      "name": "_nix (Dark editor)",
+      "name": "_nix",
+      "note": "Dark editor",
+      "id": "dark",
       "link": "https://github.com/towerofnix"
     },
     {
-      "name": "GarboMuffin (TurboWarp Dark)",
+      "name": "GarboMuffin",
+      "note": "TurboWarp Dark",
+      "id": "twdark",
       "link": "https://github.com/GarboMuffin"
     }
   ],
@@ -373,6 +381,18 @@
       }
     },
     {
+      "name": "accent-invertedFilter",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        }
+      }
+    },
+    {
       "name": "accent-opacity0",
       "value": {
         "type": "multiply",
@@ -471,6 +491,17 @@
       }
     },
     {
+      "name": "input-transparent75",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        },
+        "a": 0.75
+      }
+    },
+    {
       "name": "input-transparent50",
       "value": {
         "type": "multiply",
@@ -551,6 +582,18 @@
       "name": "categoryMenu-text",
       "value": {
         "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "categoryMenu"
+        }
+      }
+    },
+    {
+      "name": "categoryMenu-invertedFilter",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
         "source": {
           "type": "settingValue",
           "settingId": "categoryMenu"
@@ -680,41 +723,43 @@
     {
       "url": "text-shadow.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "textShadow",
-        "value": true
+      "if": {
+        "settings": { "textShadow": true }
       }
     },
     {
       "url": "hide_dots.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "dots",
-        "value": false
+      "if": {
+        "settings": { "dots": false }
+      }
+    },
+    {
+      "url": "paper.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "affectPaper": true }
       }
     },
     {
       "url": "stage.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "affectStage",
-        "value": true
+      "if": {
+        "settings": { "affectStage": true }
       }
     },
     {
       "url": "dark_comments.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "darkComments",
-        "value": true
+      "if": {
+        "settings": { "darkComments": true }
       }
     },
     {
       "url": "scrollbar.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "darkScrollbars",
-        "value": true
+      "if": {
+        "settings": { "darkScrollbars": true }
       }
     }
   ],
@@ -835,6 +880,12 @@
       "default": false
     },
     {
+      "name": "Change the costume editor background and selection borders",
+      "id": "affectPaper",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "Change the colors of variables, lists, speech bubbles, and answer inputs on the stage",
       "id": "affectStage",
       "type": "boolean",
@@ -943,14 +994,14 @@
       "id": "experimentalDark",
       "description": "A dark theme by Maximouse based on a userstyle. Not experimental",
       "values": {
-        "page": "#001533",
+        "page": "#263241",
         "primary": "#4d97ff",
         "highlightText": "#4d97ff",
         "menuBar": "#4d97ff",
         "activeTab": "#282828",
-        "tab": "#192f4d",
-        "selector": "#030b16",
-        "selector2": "#192f4d",
+        "tab": "#202020",
+        "selector": "#252c37",
+        "selector2": "#202020",
         "selectorSelection": "#282828",
         "accent": "#282828",
         "input": "#282828",
@@ -987,11 +1038,67 @@
         "palette": "#111111",
         "fullscreen": "#111111",
         "stageHeader": "#111111",
-        "border": "#ffffff0d",
+        "border": "#ffffff26",
         "textShadow": false,
         "dots": true,
         "darkComments": true,
         "darkScrollbars": true
+      }
+    },
+    {
+      "name": "Scratch 2.0",
+      "id": "scratch2",
+      "description": "A theme based on Scratch 2.0's colors.",
+      "values": {
+        "page": "#ffffffff",
+        "primary": "#179fd7ff",
+        "highlightText": "#1e9ed6",
+        "menuBar": "#9c9ea2ff",
+        "activeTab": "#e6e8e8",
+        "tab": "#f1f2f2ff",
+        "selector": "#e6e8e8",
+        "selector2": "#e6e8e8",
+        "selectorSelection": "#d0d0d0ff",
+        "accent": "#f2f2f2",
+        "input": "#ffffffff",
+        "workspace": "#dddedeff",
+        "categoryMenu": "#e6e8e8ff",
+        "palette": "#e6e8e8ff",
+        "fullscreen": "#ffffffff",
+        "stageHeader": "#e6e8e8",
+        "border": "#d0d1d2",
+        "textShadow": false,
+        "dots": true,
+        "darkComments": false,
+        "darkScrollbars": false
+      }
+    },
+    {
+      "name": "Scratch 1.x",
+      "id": "scratch1",
+      "description": "A theme based on Scratch 1.x's colors.",
+      "values": {
+        "page": "#c0c3c6",
+        "primary": "#5498c7",
+        "highlightText": "#21211f",
+        "menuBar": "#c0c3c6",
+        "activeTab": "#b9d7e5",
+        "tab": "#adadb5",
+        "selector": "#6a6a6a",
+        "selector2": "#7c8083",
+        "selectorSelection": "#404143",
+        "accent": "#959a9f",
+        "input": "#5f6265",
+        "workspace": "#7c8083",
+        "categoryMenu": "#969a9f",
+        "palette": "#7c8083",
+        "fullscreen": "#000001",
+        "stageHeader": "#000001",
+        "border": "#0000006b",
+        "textShadow": false,
+        "dots": false,
+        "darkComments": false,
+        "darkScrollbars": false
       }
     },
     {
@@ -1023,6 +1130,13 @@
       }
     }
   ],
-  "tags": ["editor", "theme", "recommended"],
+  "addonPreview": {
+    "type": "editor-dark-mode"
+  },
+  "presetPreview": {
+    "type": "palette",
+    "colors": ["primary", "menuBar", "page", "accent", "workspace", "selector"]
+  },
+  "tags": ["editor", "theme", "featured"],
   "enabledByDefault": false
 }

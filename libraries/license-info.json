@@ -11,6 +11,7 @@
   "comlink": "Apache-2.0",
   "Sora": "OFL",
   "fuse": "Apache-2.0",
+  "idb": "ISC",
   "popper": "MIT",
   "tippy": "MIT"
 }

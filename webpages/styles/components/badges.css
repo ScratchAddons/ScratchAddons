@@ -4,9 +4,14 @@
   border-radius: 4px;
   padding: 2px 5px;
   font-size: 12px;
+  font-weight: 500;
   margin-inline-start: 10px;
   border-bottom: 2px solid #111;
   white-space: nowrap;
+}
+.addon-update .badge.purple {
+  margin-inline-start: 0;
+  margin-inline-end: 10px;
 }
 .badge .tooltiptext {
   white-space: normal;

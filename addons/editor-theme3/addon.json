@@ -10,10 +10,34 @@
       "link": "https://scratch.mit.edu/users/TheColaber"
     }
   ],
+  "customCssVariables": [
+    {
+      "name": "inputColor-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input-color"
+        }
+      }
+    },
+    {
+      "name": "inputColor-forumText",
+      "value": {
+        "type": "textColor",
+        "black": "#000000",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input-color"
+        }
+      }
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "injectAsStyleElt": true,
   "versionAdded": "1.2.0",
+  "updateUserstylesOnSettingsChange": true,
   "userscripts": [
     {
       "url": "theme3.js",
@@ -24,6 +48,43 @@
     {
       "url": "theme3.css",
       "matches": ["projects"]
+    },
+    {
+      "url": "forums/base.css",
+      "matches": ["editingScreens"],
+      "if": {
+        "settings": { "forums": true }
+      }
+    },
+    {
+      "url": "forums/black_text.css",
+      "matches": ["editingScreens"],
+      "if": {
+        "settings": {
+          "forums": true,
+          "text": "black"
+        }
+      }
+    },
+    {
+      "url": "forums/color_on_white.css",
+      "matches": ["editingScreens"],
+      "if": {
+        "settings": {
+          "forums": true,
+          "text": "colorOnWhite"
+        }
+      }
+    },
+    {
+      "url": "forums/color_on_black.css",
+      "matches": ["editingScreens"],
+      "if": {
+        "settings": {
+          "forums": true,
+          "text": "colorOnBlack"
+        }
+      }
     }
   ],
   "settings": [
@@ -105,6 +166,16 @@
       "allowTransparency": true
     },
     {
+      "name": "Scratch Addons blocks",
+      "id": "sa-color",
+      "type": "color",
+      "default": "#29BEB8",
+      "allowTransparency": true,
+      "if": {
+        "addonEnabled": ["debugger"]
+      }
+    },
+    {
       "name": "Block inputs",
       "id": "input-color",
       "type": "color",
@@ -133,9 +204,15 @@
           "name": "Colored on black background"
         }
       ]
+    },
+    {
+      "name": "Change the colors of blocks in the forums",
+      "id": "forums",
+      "type": "boolean",
+      "default": false
     }
   ],
-  "tags": ["editor", "theme", "codeEditor", "recommended"],
+  "tags": ["editor", "theme", "codeEditor", "featured"],
   "enabledByDefault": false,
   "presets": [
     {
@@ -154,6 +231,7 @@
         "data-lists-color": "#FF661A",
         "custom-color": "#5f49d8",
         "Pen-color": "#0FBD8C",
+        "sa-color": "#29BEB8",
         "input-color": "#FFFFFF",
         "text": "white"
       }
@@ -174,6 +252,7 @@
         "data-lists-color": "#cc5b22",
         "custom-color": "#632d99",
         "Pen-color": "#0e9a6c",
+        "sa-color": "#29beb8",
         "input-color": "#ffffff",
         "text": "white"
       }
@@ -194,6 +273,7 @@
         "data-lists-color": "#993300",
         "custom-color": "#99004d",
         "Pen-color": "#064734",
+        "sa-color": "#166966",
         "input-color": "#202020",
         "text": "white"
       }
@@ -214,6 +294,7 @@
         "data-lists-color": "#FF661A",
         "custom-color": "#FF6680",
         "Pen-color": "#0FBD8C",
+        "sa-color": "#29BEB8",
         "input-color": "#202020",
         "text": "colorOnBlack"
       }

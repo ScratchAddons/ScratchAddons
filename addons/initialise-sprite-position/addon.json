@@ -38,6 +38,6 @@
     }
   ],
   "versionAdded": "1.13.0",
-  "tags": ["editor"],
+  "tags": ["editor", "featured"],
   "enabledByDefault": false
 }

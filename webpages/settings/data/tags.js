@@ -19,6 +19,11 @@ export default [
     color: "purple",
   },
   {
+    name: "updated",
+    matchName: "updated",
+    color: "purple",
+  },
+  {
     name: "beta",
     tooltipText: "betaTooltip",
     matchName: "beta",

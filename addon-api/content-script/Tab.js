@@ -4,8 +4,13 @@ import Listenable from "../common/Listenable.js";
 import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
 import getWorkerScript from "./worker.js";
 import * as blocks from "./blocks.js";
+import { addContextMenu } from "./contextmenu.js";
 
 const DATA_PNG = "data:image/png;base64,";
+
+const contextMenuCallbacks = [];
+const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image", "swap-local-global"];
+let createdAnyBlockContextMenus = false;
 
 /**
  * APIs specific to userscripts.
@@ -33,6 +38,9 @@ export default class Tab extends Listenable {
   }
   removeBlock(...a) {
     return blocks.removeBlock(...a);
+  }
+  getCustomBlock(...a) {
+    return blocks.getCustomBlock(...a);
   }
   /**
    * Loads a script by URL.
@@ -157,6 +165,11 @@ export default class Tab extends Listenable {
    */
   scratchMessage(key) {
     if (this.clientVersion === "scratch-www") {
+      if (this.editorMode && this.redux.state) {
+        if (this.redux.state.locales.messages[key]) {
+          return this.redux.state.locales.messages[key];
+        }
+      }
       const locales = [window._locale ? window._locale.toLowerCase() : "en"];
       if (locales[0].includes("-")) locales.push(locales[0].split("-")[0]);
       if (locales.includes("pt") && !locales.includes("pt-br")) locales.push("pt-br");
@@ -231,12 +244,22 @@ export default class Tab extends Listenable {
     return res;
   }
 
+  /**
+   * Hides an element when the addon is disabled.
+   * @param {HTMLElement} el - the element.
+   * @param {object=} opts - the options.
+   * @param {string=} opts.display - the fallback value for CSS display.
+   */
   displayNoneWhileDisabled(el, { display = "" } = {}) {
     el.style.display = `var(--${this._addonId.replace(/-([a-z])/g, (g) =>
       g[1].toUpperCase()
     )}-_displayNoneWhileDisabledValue${display ? ", " : ""}${display})`;
   }
 
+  /**
+   * The direction of the text; i.e. rtl or ltr.
+   * @type {string}
+   */
   get direction() {
     // https://github.com/LLK/scratch-l10n/blob/master/src/supported-locales.js
     const rtlLocales = ["ar", "ckb", "fa", "he"];
@@ -244,6 +267,26 @@ export default class Tab extends Listenable {
     return rtlLocales.includes(lang) ? "rtl" : "ltr";
   }
 
+  /**
+   * Adds an item to a shared space.
+   * Defined shared spaces are:
+   * stageHeader - the stage header
+   * fullscreenStageHeader - the stage header for fullscreen
+   * afterGreenFlag - after the green flag
+   * afterStopButton - after the stop button
+   * afterCopyLinkButton - after the copy link button, shown below project descriptions
+   * afterSoundTab - after the sound tab in editor
+   * forumsBeforePostReport - before the report button in forum posts
+   * forumsAfterPostReport - after the report button in forum posts
+   * beforeRemixButton - before the remix button in project page
+   * studioCuratorsTab - inside the studio curators tab
+   * @param {object} opts - options.
+   * @param {string} opts.space - the shared space name.
+   * @param {HTMLElement} element - the element to add.
+   * @param {number} order - the order of the added element. Should not conflict with other addons.
+   * @param {HTMLElement=} scope - if multiple shared spaces exist, the one where the shared space gets added to.
+   * @returns {boolean} whether the operation was successful or not.
+   */
   appendToSharedSpace({ space, element, order, scope }) {
     const q = document.querySelector.bind(document);
     const sharedSpaces = {
@@ -283,6 +326,11 @@ export default class Tab extends Listenable {
         from: () => [q("[class^='stop-all_stop-all']")],
         until: () => [],
       },
+      beforeProjectActionButtons: {
+        element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
+        from: () => [],
+        until: () => [q(".report-button"), q(".action-buttons > div")],
+      },
       afterCopyLinkButton: {
         element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
         from: () => [q(".copy-link-button")],
@@ -291,7 +339,7 @@ export default class Tab extends Listenable {
       afterSoundTab: {
         element: () => q("[class^='react-tabs_react-tabs__tab-list']"),
         from: () => [q("[class^='react-tabs_react-tabs__tab-list']").children[2]],
-        until: () => [q(".s3devToolBar")],
+        until: () => [q("#s3devToolBar")],
       },
       forumsBeforePostReport: {
         element: () => scope.querySelector(".postfootright > ul"),
@@ -334,7 +382,10 @@ export default class Tab extends Listenable {
       beforeRemixButton: {
         element: () => q(".project-buttons"),
         from: () => [],
-        until: () => [q(".project-buttons > .remix-button"), q(".project-buttons > .see-inside-button")],
+        until: () => [
+          q(".project-buttons > .remix-button:not(.sa-remix-button)"),
+          q(".project-buttons > .see-inside-button"),
+        ],
       },
       studioCuratorsTab: {
         element: () => q(".studio-tabs div:nth-child(2)"),
@@ -344,6 +395,85 @@ export default class Tab extends Listenable {
           q(".studio-tabs div:nth-child(2) > .commenting-status"),
           q(".studio-tabs div:nth-child(2) > .studio-members"),
         ],
+      },
+      forumToolbarTextDecoration: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton4")],
+        until: () => [q(".markItUpButton4 ~ .markItUpSeparator")],
+      },
+      forumToolbarLinkDecoration: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton6")],
+        until: () => [q(".markItUpButton6 ~ .markItUpSeparator")],
+      },
+      forumToolbarFont: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton7")],
+        until: () => [q(".markItUpButton7 ~ .markItUpSeparator")],
+      },
+      forumToolbarList: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton10")],
+        until: () => [q(".markItUpButton10 ~ .markItUpSeparator")],
+      },
+      forumToolbarDecoration: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton12")],
+        until: () => [q(".markItUpButton12 ~ .markItUpSeparator")],
+      },
+      forumToolbarEnvironment: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton13")],
+        until: () => [q(".markItUpButton13 ~ .markItUpSeparator")],
+      },
+      forumToolbarScratchblocks: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton14")],
+        until: () => [q(".markItUpButton14 ~ .markItUpSeparator")],
+      },
+      forumToolbarTools: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton16")],
+        until: () => [],
+      },
+      assetContextMenuAfterExport: {
+        element: () => scope,
+        from: () => {
+          return Array.prototype.filter.call(
+            scope.children,
+            (c) => c.textContent === this.scratchMessage("gui.spriteSelectorItem.contextMenuExport")
+          );
+        },
+        until: () => {
+          return Array.prototype.filter.call(
+            scope.children,
+            (c) => c.textContent === this.scratchMessage("gui.spriteSelectorItem.contextMenuDelete")
+          );
+        },
+      },
+      assetContextMenuAfterDelete: {
+        element: () => scope,
+        from: () => {
+          return Array.prototype.filter.call(
+            scope.children,
+            (c) => c.textContent === this.scratchMessage("gui.spriteSelectorItem.contextMenuDelete")
+          );
+        },
+        until: () => [],
+      },
+      monitor: {
+        element: () => scope,
+        from: () => {
+          const endOfVanilla = [
+            this.scratchMessage("gui.monitor.contextMenu.large"),
+            this.scratchMessage("gui.monitor.contextMenu.slider"),
+            this.scratchMessage("gui.monitor.contextMenu.sliderRange"),
+            this.scratchMessage("gui.monitor.contextMenu.export"),
+          ];
+          const potential = Array.prototype.filter.call(scope.children, (c) => endOfVanilla.includes(c.textContent));
+          return [potential[potential.length - 1]];
+        },
+        until: () => [],
       },
     };
 
@@ -422,5 +552,117 @@ export default class Tab extends Listenable {
       spaceElement.insertBefore(element, insertAfter.nextSibling);
     }
     return true;
+  }
+
+  /**
+   * Type for context menu item.
+   * @typedef {object} Tab~ContextMenuItem
+   * @property {boolean} enabled - whether it is enabled.
+   * @property {string} text - the context menu item label.
+   * @property {function} callback - the function that is called when item is clicked.
+   * @property {boolean} separator - whether to add a separator above the item.
+   */
+
+  /**
+   * Callback to modify the context menu.
+   * @callback Tab~blockContextMenuCallback
+   * @param {Tab~ContextMenuItem[]} items - the items added by vanilla code or other addons.
+   * @param {?object} block - the targeted block, if any.
+   * @returns {Tab~ContextMenuItem[]} the array that contains values of items array as well as new items.
+   */
+
+  /**
+   * Creates an item in the editor Blockly context menu.
+   * @param {Tab~blockContextMenuCallback} callback Returns new menu items.
+   * @param {object} conditions - Show context menu when one of these conditions meet.
+   * @param {boolean=} conditions.workspace - Add to workspace context menu.
+   * @param {boolean=} conditions.blocks - Add to block context menu outside the flyout.
+   * @param {boolean=} conditions.flyout - Add to block context menu in flyout/palette.
+   * @param {boolean=} conditions.comments - Add to comments.
+   */
+  createBlockContextMenu(callback, { workspace = false, blocks = false, flyout = false, comments = false } = {}) {
+    contextMenuCallbacks.push({ addonId: this._addonId, callback, workspace, blocks, flyout, comments });
+
+    // Sort to ensure userscript run order doesn't change callback order
+    contextMenuCallbacks.sort((b, a) => CONTEXT_MENU_ORDER.indexOf(b.addonId) - CONTEXT_MENU_ORDER.indexOf(a.addonId));
+
+    if (createdAnyBlockContextMenus) return;
+    createdAnyBlockContextMenus = true;
+
+    this.traps.getBlockly().then((ScratchBlocks) => {
+      const oldShow = ScratchBlocks.ContextMenu.show;
+      ScratchBlocks.ContextMenu.show = function (event, items, rtl) {
+        const gesture = ScratchBlocks.mainWorkspace.currentGesture_;
+        const block = gesture.targetBlock_;
+
+        for (const { callback, workspace, blocks, flyout, comments } of contextMenuCallbacks) {
+          let injectMenu =
+            // Workspace
+            (workspace && !block && !gesture.flyout_ && !gesture.startBubble_) ||
+            // Block in workspace
+            (blocks && block && !gesture.flyout_) ||
+            // Block in flyout
+            (flyout && gesture.flyout_) ||
+            // Comments
+            (comments && gesture.startBubble_);
+          if (injectMenu) {
+            try {
+              items = callback(items, block);
+            } catch (e) {
+              console.error("Error while calling context menu callback: ", e);
+            }
+          }
+        }
+
+        oldShow.call(this, event, items, rtl);
+
+        const blocklyContextMenu = ScratchBlocks.WidgetDiv.DIV.firstChild;
+        items.forEach((item, i) => {
+          if (i !== 0 && item.separator) {
+            const itemElt = blocklyContextMenu.children[i];
+            itemElt.style.paddingTop = "2px";
+            itemElt.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
+          }
+        });
+      };
+    });
+  }
+
+  /**
+   * @typedef {object} Tab~EditorContextMenuContext
+   * @property {string} type - the type of the context menu.
+   * @property {HTMLElement} menuItem - the item element.
+   * @property {HTMLElement} target - the target item.
+   * @property {number=} index - the index, if applicable.
+   */
+
+  /**
+   * Callback executed when the item is clicked.
+   * @callback Tab~EditorContextMenuItemCallback
+   * @param {Tab~EditorContextMenuContext} context - the context for the action.
+   */
+
+  /**
+   * Callback to check if the item should be visible.
+   * @callback Tab~EditorContextMenuItemCallback
+   * @param {Tab~EditorContextMenuContext} context - the context for the action.
+   * @returns {boolean} true to make it visible, false to hide
+   */
+
+  /**
+   * Adds a context menu item for the editor.
+   * @param {Tab~EditorContextMenuItemCallback} callback - the callback executed when the item is clicked.
+   * @param {object} opts - the options.
+   * @param {string} opts.className - the class name to add to the item.
+   * @param {string[]} opts.types - which types of context menu it should add to.
+   * @param {string} opts.position - the position inside the context menu.
+   * @param {number} opts.order - the order within the position.
+   * @param {string} opts.label - the label for the item.
+   * @param {boolean=} opts.border - whether to add a border at the top or not.
+   * @param {boolean=} opts.dangerous - whether to indicate the item as dangerous or not.
+   * @param {Tab~EditorContextMenuItemCondition} opts.condition - a function to check if the item should be shown.
+   */
+  createEditorContextMenu(...args) {
+    addContextMenu(this, ...args);
   }
 }

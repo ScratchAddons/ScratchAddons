@@ -1,1 +1,1 @@
-{"fix-pasted-scripts/@name":"Non eseguire automaticamente blocchi duplicati"}
+{"fix-pasted-scripts/@name":"Non eseguire automaticamente blocchi duplicati","fix-pasted-scripts/@description":"Corregge un bug dell'editor di Scratch che causa l'esecuzione di uno script quando si duplica un blocco e lo si attacca allo script."}

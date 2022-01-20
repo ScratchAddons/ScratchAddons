@@ -1,0 +1,19 @@
+{
+  "name": "Name scripts before placing in backpack",
+  "description": "Asks you to name scripts after you drag them into the backpack, instead of using the default name \"code\".",
+  "credits": [
+    {
+      "name": "TheColaber"
+    }
+  ],
+  "tags": ["editor", "codeEditor", "featured"],
+  "versionAdded": "1.19.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}

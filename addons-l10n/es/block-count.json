@@ -1,0 +1,1 @@
+{"block-count/blocks":"{num, plural, one {1 bloques} other {# bloques}}","block-count/@name":"Contador de bloques","block-count/@description":"Muestra el número total de bloques de un proyecto en la barra de menú del editor. Previamente parte de \"contador de objectos y scripts\"."}

@@ -1,0 +1,98 @@
+.items-per-row-search-min5 .grid .flex-row {
+  /* Override a Scratch media query */
+  flex-direction: row;
+}
+
+.grid .thumbnail {
+  width: calc(58.75rem / var(--itemsPerRow-search) - 15px);
+  max-width: calc(100% - 15px);
+  padding-bottom: 8px;
+}
+.items-per-row-search-min5 .grid .thumbnail {
+  margin: 2px;
+  width: calc(58.75rem / var(--itemsPerRow-search) - 5px);
+  padding-bottom: 4px;
+}
+.items-per-row-search-max2 .grid .thumbnail {
+  margin: 16px;
+  width: calc(58.75rem / var(--itemsPerRow-search) - 33px);
+  padding-bottom: 13px;
+}
+
+.grid .thumbnail.project,
+.grid .thumbnail.gallery,
+.grid .thumbnail.project .thumbnail-image,
+.grid .thumbnail.gallery .thumbnail-image {
+  height: auto;
+}
+
+.grid .thumbnail .thumbnail-image,
+.grid .thumbnail .thumbnail-info {
+  width: calc(100% - 16px);
+}
+
+.items-per-row-search-min5 .grid .thumbnail .thumbnail-image {
+  margin: 4px;
+}
+
+.items-per-row-search-min5 .grid .thumbnail .thumbnail-image,
+.items-per-row-search-min5 .grid .thumbnail .thumbnail-info {
+  width: calc(100% - 8px);
+}
+
+.items-per-row-search-max2 .grid .thumbnail .thumbnail-image {
+  margin: 13px;
+  margin-bottom: 8px;
+}
+
+.items-per-row-search-max2 .grid .thumbnail .thumbnail-image,
+.items-per-row-search-max2 .grid .thumbnail .thumbnail-info {
+  width: calc(100% - 26px);
+}
+
+.thumbnail img {
+  vertical-align: middle;
+}
+
+.grid .thumbnail.project .thumbnail-image img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+}
+.grid .thumbnail.gallery .thumbnail-image img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 17 / 10;
+}
+
+.items-per-row-search-min5 .grid .thumbnail .thumbnail-info .creator-image img {
+  width: 24px;
+  height: 24px;
+  margin-right: 4px;
+}
+.items-per-row-search-max2 .grid .thumbnail .thumbnail-info .creator-image img {
+  width: 48px;
+  height: 48px;
+}
+
+.grid .thumbnail .thumbnail-info .thumbnail-title {
+  margin: 0;
+  max-width: calc(100% - 40px);
+}
+
+.items-per-row-search-min5 .grid .thumbnail .thumbnail-info .thumbnail-title {
+  max-width: calc(100% - 28px);
+  font-size: 0.75rem;
+}
+.items-per-row-search-max2 .grid .thumbnail .thumbnail-info .thumbnail-title {
+  max-width: calc(100% - 56px);
+  font-size: 1rem;
+  padding-top: 5px;
+}
+
+.items-per-row-search-min5 .thumbnail .thumbnail-creator {
+  font-size: 0.625rem;
+}
+.items-per-row-search-max2 .thumbnail .thumbnail-creator {
+  font-size: 0.875rem;
+}

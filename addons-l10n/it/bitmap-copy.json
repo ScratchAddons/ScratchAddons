@@ -1,1 +1,1 @@
-{"bitmap-copy/@name":"Copia immagini bitmap","bitmap-copy/@info-norightclick":"\"Clic destro → Copia\" non è supportato. Devi premere Ctrl+C quando l'immagine bitmap è selezionata."}
+{"bitmap-copy/@name":"Copia immagini bitmap","bitmap-copy/@description":"Ti permette di copiare negli appunti un'immagine bitmap dall'editor di immagini per poterla poi incollare in altri siti o in altre app.","bitmap-copy/@info-norightclick":"\"Clic destro → Copia\" non è supportato. Devi premere Ctrl+C quando l'immagine bitmap è selezionata."}

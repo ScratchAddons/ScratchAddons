@@ -1,0 +1,48 @@
+.sa-comment-preview-outer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100000000;
+  pointer-events: none;
+}
+
+.sa-comment-preview-inner {
+  width: calc(200px - 16px);
+  max-height: calc(132px - 8px);
+  padding: 8px;
+  overflow: hidden;
+
+  font-size: 12px;
+  white-space: pre-wrap;
+  pointer-events: none;
+
+  color: rgb(87, 94, 117);
+  background-color: rgb(255 255 255 / 90%);
+  border-style: none;
+  border-radius: 8px;
+  filter: drop-shadow(0px 5px 5px rgb(0 0 0 / 10%));
+
+  transform: perspective(200px);
+}
+
+@supports (backdrop-filter: blur(16px)) {
+  .sa-comment-preview-inner {
+    background-color: rgb(255 255 255 / 75%);
+    backdrop-filter: blur(16px);
+  }
+}
+
+.sa-comment-preview-fade {
+  transition: opacity 0.1s, filter 0.1s, transform 0.1s linear;
+}
+
+.sa-comment-preview-hidden {
+  opacity: 0;
+  filter: none;
+  transform: perspective(200px) translateZ(-20px);
+}
+
+.sa-comment-preview-reduce-transparency {
+  background-color: rgb(255 255 255);
+  backdrop-filter: none;
+}

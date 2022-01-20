@@ -12,7 +12,7 @@ export default async function ({ addon, global, console, msg }) {
   const members = [...redux.state.managers.items, ...redux.state.curators.items].map((member) => member.username);
 
   // TODO: consider logging into another account within the same session, like studio-tools does
-  const isOwner = redux.state.studio.owner === redux.state.session.session?.user?.id;
+  const isOwner = (redux.state.studio.host || redux.state.studio.owner) === redux.state.session.session?.user?.id;
   const isManager = redux.state.studio.manager || isOwner;
   if (!isManager) return;
   const itemPageLimit = 28;
@@ -100,7 +100,7 @@ export default async function ({ addon, global, console, msg }) {
     let btn = document.getElementById("sa-studio-followers-btn");
     if (btn) {
       // Show button again
-      btn.style.display = "";
+      btn.classList.remove("hidden");
       return;
     }
 
@@ -108,6 +108,7 @@ export default async function ({ addon, global, console, msg }) {
     btn.className = "button";
     btn.id = "sa-studio-followers-btn";
     btn.innerText = msg("button");
+    addon.tab.displayNoneWhileDisabled(btn);
     btn.addEventListener("click", () => {
       modal.style.display = modal.style.display === "none" ? null : "none";
       if (!data[currentType].activated) {
@@ -125,7 +126,7 @@ export default async function ({ addon, global, console, msg }) {
       init();
     } else {
       let button = document.getElementById("sa-studio-followers-btn");
-      if (button) button.style.display = "none";
+      if (button) button.classList.add("hidden");
     }
   });
 
@@ -154,4 +155,6 @@ export default async function ({ addon, global, console, msg }) {
     },
     { passive: true }
   );
+
+  addon.self.addEventListener("disabled", () => (modal.style.display = "none"));
 }

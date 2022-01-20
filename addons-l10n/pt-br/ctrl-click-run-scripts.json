@@ -1,1 +1,1 @@
-{"ctrl-click-run-scripts/@name":"Ctrl+Clique para rodar scripts","ctrl-click-run-scripts/@info-macContextDisabled":"No macOS, use a tecla Cmd ao invés de Ctrl."}
+{"ctrl-click-run-scripts/@name":"Ctrl+Clique para rodar scripts","ctrl-click-run-scripts/@description":"Só executa blocos clicados se você estiver segurando a tecla Ctrl.","ctrl-click-run-scripts/@info-macContextDisabled":"No macOS, use a tecla Cmd ao invés de Ctrl."}

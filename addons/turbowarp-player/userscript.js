@@ -2,20 +2,28 @@ export default async function ({ addon, console, msg }) {
   const action = addon.settings.get("action");
   let playerToggled = false;
   let scratchStage;
+  let twIframeContainer = document.createElement("div");
+  twIframeContainer.className = "sa-tw-iframe-container";
   let twIframe = document.createElement("iframe");
   twIframe.setAttribute("allowtransparency", "true");
   twIframe.setAttribute("allowfullscreen", "true");
+  twIframe.setAttribute(
+    "allow",
+    "autoplay *; camera https://turbowarp.org; document-domain 'none'; fullscreen *; gamepad https://turbowarp.org; microphone https://turbowarp.org;"
+  );
   twIframe.className = "sa-tw-iframe";
+  twIframeContainer.appendChild(twIframe);
 
   const button = document.createElement("button");
   button.className = "button sa-tw-button";
   button.title = "TurboWarp";
 
   function removeIframe() {
-    twIframe.remove();
+    twIframeContainer.remove();
     scratchStage.style.display = "";
     button.classList.remove("scratch");
     playerToggled = false;
+    button.title = "TurboWarp";
   }
 
   button.onclick = async () => {
@@ -23,24 +31,28 @@ export default async function ({ addon, console, msg }) {
       playerToggled = !playerToggled;
       if (playerToggled) {
         const username = await addon.auth.fetchUsername();
-        const usernameUrlParam = username ? `?username=${username}` : "";
+        const usp = new URLSearchParams();
+        if (username) usp.set("username", username);
         const projectId = window.location.pathname.split("/")[2];
-        const iframeUrl = `https://turbowarp.org/${projectId}/embed${usernameUrlParam}`;
+        if (addon.settings.get("addons")) {
+          const enabledAddons = await addon.self.getEnabledAddons("editor");
+          usp.set("addons", enabledAddons.join(","));
+        }
+        const iframeUrl = `https://turbowarp.org/${projectId}/embed?${usp}`;
         twIframe.src = "";
-        scratchStage.parentElement.prepend(twIframe);
+        scratchStage.parentElement.prepend(twIframeContainer);
         // Use location.replace to avoid creating a history entry
         twIframe.contentWindow.location.replace(iframeUrl);
 
         scratchStage.style.display = "none";
         button.classList.add("scratch");
+        button.title = "Scratch";
         addon.tab.traps.vm.stopAll();
       } else removeIframe();
     } else {
-      window.open("https://turbowarp.org/" + window.location.pathname.split("/")[2], "_blank");
+      window.open("https://turbowarp.org/" + window.location.pathname.split("/")[2], "_blank", "noopener,noreferrer");
     }
   };
-
-  addon.tab.addEventListener("urlChange", removeIframe);
 
   let showAlert = true;
   while (true) {

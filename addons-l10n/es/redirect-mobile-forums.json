@@ -1,1 +1,1 @@
-{"redirect-mobile-forums/@name":"Redirigir página móvil de los foros a página principal","redirect-mobile-forums/@description":"Le redirige de /discuss/m a /discuss/."}
+{"redirect-mobile-forums/@name":"Redirigir a foros comunes","redirect-mobile-forums/@description":"Le redirige de los foros comunes (\"principales\") cuando hace click en un enlace a los foros en versión móvil."}

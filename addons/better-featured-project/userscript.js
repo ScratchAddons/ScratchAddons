@@ -60,7 +60,7 @@ export default async function ({ addon, global, console, msg }) {
   }
   if (document.querySelector(".user-content .stage") !== null) {
     createBetterProfilePage(
-      document.querySelector(".user-content .stage img").src.replace("282x210", "480x360"),
+      document.querySelector(".user-content .stage img").src.replace(/[0-9]+x[0-9]+/, "480x360"),
       document.querySelector(".user-content .stage a").href,
       document.querySelector(".featured-project-heading").innerText,
       document.querySelector(".user-content .player .title a").innerText

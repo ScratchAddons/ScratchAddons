@@ -9,11 +9,12 @@
       "name": "NitroCipher/ZenithRogue"
     },
     {
-      "name": "notificationsounds.com (Scratch Addons ping)"
+      "name": "notificationsounds.com",
+      "note": "Scratch Addons ping",
+      "id": "Scratch Addons ping"
     }
   ],
   "permissions": ["notifications"],
-  "persistentScripts": ["background.js"],
   "settings": [
     {
       "name": "Mark all messages as read after clicking notification",
@@ -98,6 +99,12 @@
     {
       "name": "@adminusers.svg Notify studio promotions",
       "id": "becomeownerstudio_notifications",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "@users.svg Notify studio host transfers",
+      "id": "becomehoststudio_notifications",
       "type": "boolean",
       "default": true
     }

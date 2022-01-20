@@ -150,7 +150,7 @@ export function createUser(follower, addon, msg, members) {
     );
 
     if (res.status !== 200) {
-      return alert(msg("fetch-err"));
+      return alert(msg("fetch-error"));
     }
     btn.classList.remove("mod-mutating");
     add.classList.add("studio-tile-dynamic-remove");

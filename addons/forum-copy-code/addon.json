@@ -1,0 +1,26 @@
+{
+  "name": "Copy code button on forums",
+  "description": "Adds a \"copy code\" button above code boxes in forum posts that copies the contents into the clipboard.",
+  "credits": [
+    {
+      "name": "CST1229",
+      "link": "https://github.com/CST1229/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "tags": ["community", "forums"],
+  "versionAdded": "1.19.0"
+}

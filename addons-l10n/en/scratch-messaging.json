@@ -28,7 +28,12 @@
   "scratch-messaging/others-profile": "{username}'s profile",
   "scratch-messaging/studio": "Studio: {title}",
   "scratch-messaging/loading": "Loading messages...",
+  "scratch-messaging/server-error": "Can't access server, please try again later.",
+  "scratch-messaging/network-error": "Can't access server, please check your internet connection.",
   "scratch-messaging/logged-out": "Can't access messages, please log in on Scratch.",
+  "scratch-messaging/unknown-fatal-error": "An error occurred while loading.",
+  "scratch-messaging/report-bug": "Please report the following error code to us:",
+  "scratch-messaging/copy": "Copy",
   "scratch-messaging/settings": "Scratch Addons settings",
   "scratch-messaging/loading-comments": "Loading comments...",
   "scratch-messaging/reload": "Reload messages",
@@ -47,5 +52,8 @@
   "scratch-messaging/comment-error-down": "Scratch server is having a problem. Please try again later.",
   "scratch-messaging/comment-mute": "You are muted because Scratch's filterbot considered your last comment to violate the Community Guidelines.",
   "scratch-messaging/comment-cannot-post-for": "{mins, plural, one {You cannot post comments for 1 minute.} other {You cannot post comments for # minutes.}}",
-  "scratch-messaging/comment-error-reply-limit": "Studio comments can no longer have more than 25 replies."
+  "scratch-messaging/comment-error-reply-limit": "Studio comments can no longer have more than 25 replies.",
+  "scratch-messaging/studio-host-transfers": "Studio host transfers",
+  "scratch-messaging/studio-host-transfer": "{actor} made you the host of the studio \"{title}\"",
+  "scratch-messaging/st": "A Scratch Team member"
 }
