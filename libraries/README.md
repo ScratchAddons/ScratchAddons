@@ -15,6 +15,6 @@ Third-party libraries included are:
 - [Fuse.js 6.5.3](https://unpkg.com/fuse.js@6.5.3/dist/fuse.esm.min.js) (Apache-2.0)
 - [idb 7.0.0](https://unpkg.com/idb@7.0.0/build/umd.js) (ISC)
 - [Popper 2.9.2](https://unpkg.com/@popperjs/core@2.9.2/dist/umd/popper.min.js) (MIT)
-- [Tippy.js 6.3.1](https://unpkg.com/tippy.js@6.3.1/dist/tippy-bundle.umd.min.js) (MIT)
+- [Tippy.js 6.3.7](https://unpkg.com/tippy.js@6.3.7/dist/tippy-bundle.umd.min.js) (MIT)
 
 Note that these libraries are either from official release websites or from unpkg (which distributes the content uploaded to NPM as-is).
