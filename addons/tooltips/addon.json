@@ -1,6 +1,4 @@
 {
-  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
-  "//": "^ Don't forget to remove that before PR!",
   "name": "Tooltips",
   "description": "Adds tooltips for projects, users, studios, forum topics, and forum posts. Uses the Scratch API and ScratchDB.",
   "credits": [
@@ -109,6 +107,5 @@
     }
   ],
   "tags": ["community"],
-  "enabledByDefault": true,
-  "//": "^ Don't forget set enabledByDefault to false!"
+  "enabledByDefault": false
 }
