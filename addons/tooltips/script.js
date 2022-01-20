@@ -510,9 +510,7 @@ export default async function ({ addon, console, msg }) {
     if (addon.settings.get("color-scheme") !== "auto") {
         tippyGlobalOptions.theme = `sa-tooltips-${addon.settings.get("color-scheme")}`
     } else {
-        // I believe that there's a better way to check if dark-www is turned on.
-        // Please tell me if there is.
-        if (document.querySelector("[data-addon-id=dark-www]")) tippyGlobalOptions.theme += "sa-tooltips-dark"
+        if (await (await addon.self.getEnabledAddons()).indexOf('dark-www') + 1) tippyGlobalOptions.theme += "sa-tooltips-dark"
         else tippyGlobalOptions.theme = "sa-tooltips-light"
     }
 

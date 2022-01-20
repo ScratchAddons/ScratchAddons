@@ -22,33 +22,37 @@
     {
       "url": "scratch2.css",
       "matches": "*",
-      "settingMatch": {
-        "id": "theme",
-        "value": "scratch2"
+      "if": {
+        "settings": {
+          "theme": "scratch2"
+        }
       }
     },
     {
       "url": "scratch3.css",
       "matches": "*",
-      "settingMatch": {
-        "id": "theme",
-        "value": "scratch3"
+      "if": {
+        "settings": {
+          "theme": "scratch3"
+        }
       }
     },
     {
       "url": "extended.css",
       "matches": "*",
-      "settingMatch": {
-        "id": "theme",
-        "value": "extended"
+      "if": {
+        "settings": {
+          "theme": "extended"
+        }
       }
     },
     {
       "url": "extended-statistics.css",
       "matches": "*",
-      "settingMatch": {
-        "id": "theme",
-        "value": "extendedStatistics"
+      "if": {
+        "settings": {
+          "theme": "extendedStatistics"
+        }
       }
     }
   ],
