@@ -469,7 +469,6 @@ let tooltipContentFunctions = {
 }
 
 let tippyGlobalOptions = {
-    theme: 'sa-tooltips',
     allowHTML: true,
     popperOptions: {
         strategy: 'fixed',
@@ -501,30 +500,46 @@ let tippyGlobalOptions = {
     // }
 }
 
+let tippyGlobalOptionsChanging = {
+    theme: 'sa-tooltips'
+}
+
 export default async function ({ addon, console, msg }) {
 
     let theme = addon.settings.get("theme")
 
     tippyGlobalOptions.content = msg("loading")
 
-    if (addon.settings.get("color-scheme") !== "auto") {
-        tippyGlobalOptions.theme = `sa-tooltips-${addon.settings.get("color-scheme")}`
-    } else {
-        if (await (await addon.self.getEnabledAddons()).indexOf('dark-www') + 1) tippyGlobalOptions.theme += "sa-tooltips-dark"
-        else tippyGlobalOptions.theme = "sa-tooltips-light"
+    let changeColorScheme = async () => {
+        if (addon.settings.get("color-scheme") !== "auto") {
+            tippyGlobalOptionsChanging.theme = `sa-tooltips-${addon.settings.get("color-scheme")}`
+        } else {
+            if (await (await addon.self.getEnabledAddons()).indexOf('dark-www') + 1) tippyGlobalOptionsChanging.theme = "sa-tooltips-dark"
+            else tippyGlobalOptionsChanging.theme = "sa-tooltips-light"
+        }
     }
 
     /*global tippy*/
     await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/popper.js")
     await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/tippy.js")
 
+    tippy.setDefaultProps(tippyGlobalOptions)
+
+    addon.settings.addEventListener("change", () => {
+        changeColorScheme()
+        // Placeholder for live style changes
+
+    })
+
+    changeColorScheme()
+
     const triggerTooltipUnified = (type, element, regexResult) => {
 
         const id = regexResult[1]
 
         let tippyOptions = {
-            ...tippyGlobalOptions,
             async onShow(instance) {
+                instance.setProps(tippyGlobalOptionsChanging)
                 if (instance._isFetching || instance._error) return
                 instance._isFetching = true
 
