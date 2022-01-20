@@ -32,7 +32,7 @@ let selectorExclusionDict = {
         "parent! parent! .thumb",                         // Thumbnail text (2.0)
     ],
     studio: [
-        "parent! #studio-tab-nav",                        // Tabs (such as the tab on the studio page)
+        "parent! .studio-tab-nav",                        // Tabs (such as the tab on the studio page)
         "parent! parent! .thumb"                          // Thumbnail text (2.0)
     ],
     user: [
@@ -40,7 +40,7 @@ let selectorExclusionDict = {
         "[data-control='view-all']",                      // "View all" buttons
         "parent! .studio-member-tile",                    // Studio curator image
         ".studio-member-name",                            // Studio curator text 
-        "parent! parent! .thumb",                    // Thumbnail text (2.0)
+        "parent! parent! .thumb",                         // Thumbnail text (2.0)
         "parent! parent! parent! .postleft"               // Forum user avatar
     ],
     forumPost: [
