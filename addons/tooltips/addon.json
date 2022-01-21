@@ -109,5 +109,8 @@
   "tags": ["community", "projectPage", "profiles", "forums", "studios", "comments"],
   "enabledByDefault": false,
   "versionAdded": "1.24.0",
-  "libraries": ["popper", "tippy"]
+  "libraries": ["popper", "tippy"],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true
 }

@@ -1,4 +1,4 @@
-let regexDict = {
+const regexDict = {
 	project: [
 		/^(?:(?:https?:)?\/\/scratch\.mit\.edu)?\/projects\/(\d+)/,
 	],
@@ -17,7 +17,7 @@ let regexDict = {
 	]
 }
 
-let selectorExclusionDict = {
+const selectorExclusionDict = {
 	all: [
 		"parent! parent! parent! parent! #navigation",    // Navigation bar on the top of the page
 		".page",                                          // Links to topic page
@@ -57,10 +57,10 @@ let selectorExclusionDict = {
 //     }
 // }
 
-let tooltipContentFunctions = {
+const tooltipContentFunctions = {
 	_default: {
 		async project(msg, id) {
-			let data = await fetch(`https://api.scratch.mit.edu/projects/${id}`)
+			const data = await fetch(`https://api.scratch.mit.edu/projects/${id}`)
 				.then(response => response.json())
 				.catch(error => {
 					throw msg("error-request-failed", { error });
@@ -71,13 +71,13 @@ let tooltipContentFunctions = {
 				else throw msg("error-request-failed", { error: data.code })
 			}    
 			
-			let imgInfo = document.createElement("img")
-			let titleText = document.createElement("div")
-			let authorText = document.createElement("div")
-			let img = document.createElement("img")
-			let imgWrapper = document.createElement("div")
-			let infoWrapper = document.createElement("div")
-			let wrapper = document.createElement("div")
+			const imgInfo = document.createElement("img")
+			const titleText = document.createElement("div")
+			const authorText = document.createElement("div")
+			const img = document.createElement("img")
+			const imgWrapper = document.createElement("div")
+			const infoWrapper = document.createElement("div")
+			const wrapper = document.createElement("div")
 
 			imgInfo.className = "sa-tooltips-project-author-img"
 			titleText.className = "sa-tooltips-project-title"
@@ -102,7 +102,7 @@ let tooltipContentFunctions = {
 		},
 
 		async studio(msg, id) {
-			let data = await fetch(`https://api.scratch.mit.edu/studios/${id}`)
+			const data = await fetch(`https://api.scratch.mit.edu/studios/${id}`)
 			.then(response => response.json())
 			.catch(error => {
 				throw msg("error-request-failed", { error });
@@ -113,11 +113,11 @@ let tooltipContentFunctions = {
 				else throw msg("error-request-failed", { error: data.code })
 			}    
 				
-			let titleText = document.createElement("div")
-			let img = document.createElement("img")
-			let imgWrapper = document.createElement("div")
-			let infoWrapper = document.createElement("div")
-			let wrapper = document.createElement("div")
+			const titleText = document.createElement("div")
+			const img = document.createElement("img")
+			const imgWrapper = document.createElement("div")
+			const infoWrapper = document.createElement("div")
+			const wrapper = document.createElement("div")
 
 			titleText.className = "sa-tooltips-studio-title"
 			img.className = "sa-tooltips-studio-img"
@@ -136,7 +136,7 @@ let tooltipContentFunctions = {
 		},
 
 		async user(msg, id) {
-			let data = await fetch(`https://api.scratch.mit.edu/users/${id}`)
+			const data = await fetch(`https://api.scratch.mit.edu/users/${id}`)
 				.then(response => response.json())
 				.catch(error => {
 					throw msg("error-request-failed", { error });
@@ -147,11 +147,11 @@ let tooltipContentFunctions = {
 				else throw msg("error-request-failed", { error: data.code })
 			}
 
-			let usernameText = document.createElement("div")
-			let img = document.createElement("img")
-			let imgWrapper = document.createElement("div")
-			let infoWrapper = document.createElement("div")
-			let wrapper = document.createElement("div")
+			const usernameText = document.createElement("div")
+			const img = document.createElement("img")
+			const imgWrapper = document.createElement("div")
+			const infoWrapper = document.createElement("div")
+			const wrapper = document.createElement("div")
 
 			usernameText.className = "sa-tooltips-user-name"
 			img.className = "sa-tooltips-user-img"
@@ -170,7 +170,7 @@ let tooltipContentFunctions = {
 		},
 
 		async forumTopic(msg, id) {
-			let data = await fetch(`https://scratchdb.lefty.one/v3/forum/topic/info/${id}`)
+			const data = await fetch(`https://scratchdb.lefty.one/v3/forum/topic/info/${id}`)
 				.then(response => response.json())
 				.catch(error => {
 					throw msg("error-request-failed", { error });
@@ -186,11 +186,11 @@ let tooltipContentFunctions = {
 				throw msg("error-scratchdb-deleted")
 			}
 
-			let categoryText = document.createElement("div")
-			let titleText = document.createElement("div")
-			let postCountText = document.createElement("div")
-			let infoWrapper = document.createElement("div")
-			let wrapper = document.createElement("div")
+			const categoryText = document.createElement("div")
+			const titleText = document.createElement("div")
+			const postCountText = document.createElement("div")
+			const infoWrapper = document.createElement("div")
+			const wrapper = document.createElement("div")
 
 			categoryText.className = "sa-tooltips-topic-category"
 			titleText.className = "sa-tooltips-topic-title"
@@ -210,7 +210,7 @@ let tooltipContentFunctions = {
 		},
 
 		async forumPost(msg, id) {
-			let data = await fetch(`https://scratchdb.lefty.one/v3/forum/post/info/${id}`)
+			const data = await fetch(`https://scratchdb.lefty.one/v3/forum/post/info/${id}`)
 				.then(response => response.json())
 				.catch(error => {
 					throw msg("error-request-failed", { error });
@@ -227,13 +227,13 @@ let tooltipContentFunctions = {
 				// console.log(data)
 			}
 
-			let categoryText = document.createElement("div")
-			let titleText = document.createElement("div")
-			let authorText = document.createElement("div")
-			let postText = document.createElement("div")
-			let postCountText = document.createElement("div")
-			let infoWrapper = document.createElement("div")
-			let wrapper = document.createElement("div")
+			const categoryText = document.createElement("div")
+			const titleText = document.createElement("div")
+			const authorText = document.createElement("div")
+			const postText = document.createElement("div")
+			const postCountText = document.createElement("div")
+			const infoWrapper = document.createElement("div")
+			const wrapper = document.createElement("div")
 
 			categoryText.className = "sa-tooltips-topic-category"
 			titleText.className = "sa-tooltips-topic-title"
@@ -259,7 +259,7 @@ let tooltipContentFunctions = {
 
 	scratch2: {
 		async project(msg, id) {
-			let { wrapper, data } = await tooltipContentFunctions._default.project(msg, id)
+			const { wrapper, data } = await tooltipContentFunctions._default.project(msg, id)
 
 			wrapper.querySelector(".sa-tooltips-project-author").textContent = msg("info-by", {author: data.author.username})
 
@@ -269,9 +269,9 @@ let tooltipContentFunctions = {
 
 	extended: {
 		async project(msg, id) {
-			let { wrapper, data } = await tooltipContentFunctions._default.project(msg, id)
+			const { wrapper, data } = await tooltipContentFunctions._default.project(msg, id)
 
-			let infoExtendedWrapper = document.createElement("div")
+			const infoExtendedWrapper = document.createElement("div")
 			infoExtendedWrapper.className = "sa-tooltips-info-extended-wrapper"    
 			infoExtendedWrapper.textContent = data.description.replace(/^\n+|\n$/, "") || data.instructions.replace(/^\n+|\n$/, "")
 
@@ -281,9 +281,9 @@ let tooltipContentFunctions = {
 		},
 
 		async studio(msg, id) {
-			let { wrapper, data } = await tooltipContentFunctions._default.studio(msg, id)
+			const { wrapper, data } = await tooltipContentFunctions._default.studio(msg, id)
 
-			let infoExtendedWrapper = document.createElement("div")
+			const infoExtendedWrapper = document.createElement("div")
 			infoExtendedWrapper.className = "sa-tooltips-info-extended-wrapper"    
 			infoExtendedWrapper.textContent = data.description.replace(/^\n+|\n$/, "")
 
@@ -293,9 +293,9 @@ let tooltipContentFunctions = {
 		},
 
 		async user(msg, id) {
-			let { wrapper, data } = await tooltipContentFunctions._default.user(msg, id)
+			const { wrapper, data } = await tooltipContentFunctions._default.user(msg, id)
 
-			let infoExtendedWrapper = document.createElement("div")
+			const infoExtendedWrapper = document.createElement("div")
 			infoExtendedWrapper.className = "sa-tooltips-info-extended-wrapper"    
 			infoExtendedWrapper.textContent = data.profile.bio.replace(/^\n+|\n$/, "")
 
@@ -305,14 +305,14 @@ let tooltipContentFunctions = {
 		},
 
 		async forumTopic(msg, id) {
-			let wrapper = await tooltipContentFunctions._default.forumTopic(msg, id)
+			const wrapper = await tooltipContentFunctions._default.forumTopic(msg, id)
 
-			let postText = document.createElement("div")
+			const postText = document.createElement("div")
 			postText.className = "sa-tooltips-post"
 
-			let data = await fetch(`https://scratchdb.lefty.one/v3/forum/topic/posts/${id}?o=oldest`)
+			const data = await fetch(`https://scratchdb.lefty.one/v3/forum/topic/posts/${id}?o=oldest`)
 				.then(response => response.json())
-				.catch(error => false)
+				.catch(() => false)
 
 			if (!data) return wrapper
 			
@@ -325,12 +325,12 @@ let tooltipContentFunctions = {
 		async forumPost(msg, id) {
 			let { wrapper, data } = await tooltipContentFunctions._default.forumPost(msg, id)
 
-			let postCountText = document.createElement("div")
+			const postCountText = document.createElement("div")
 			postCountText.className = "sa-tooltips-post-count"
 
 			data = await fetch(`https://scratchdb.lefty.one/v3/forum/topic/info/${data.topic.id}`)
 				.then(response => response.json())
-				.catch(error => false)
+				.catch(() => false)
 
 			if (!data) return wrapper
 			
@@ -344,13 +344,13 @@ let tooltipContentFunctions = {
 
 	extendedStatistics: {
 		async project(msg, id) {
-			let { wrapper, data } = await tooltipContentFunctions._default.project(msg, id)
+			const { wrapper, data } = await tooltipContentFunctions._default.project(msg, id)
 
-			let viewsText = document.createElement("div")
-			let lovesText = document.createElement("div")
-			let favoritesText = document.createElement("div")
-			let remixesText = document.createElement("div")
-			let infoExtendedWrapper = document.createElement("div")
+			const viewsText = document.createElement("div")
+			const lovesText = document.createElement("div")
+			const favoritesText = document.createElement("div")
+			const remixesText = document.createElement("div")
+			const infoExtendedWrapper = document.createElement("div")
 
 			viewsText.className = "sa-tooltips-views"
 			lovesText.className = "sa-tooltips-loves"
@@ -373,13 +373,13 @@ let tooltipContentFunctions = {
 		},
 
 		async studio(msg, id) {
-			let { wrapper, data } = await tooltipContentFunctions._default.studio(msg, id)
+			const { wrapper, data } = await tooltipContentFunctions._default.studio(msg, id)
 
-			let projectsText = document.createElement("div")
-			let commentsText = document.createElement("div")
-			let followersText = document.createElement("div")
-			let managersText = document.createElement("div")
-			let infoExtendedWrapper = document.createElement("div")
+			const projectsText = document.createElement("div")
+			const commentsText = document.createElement("div")
+			const followersText = document.createElement("div")
+			const managersText = document.createElement("div")
+			const infoExtendedWrapper = document.createElement("div")
 
 			projectsText.className = "sa-tooltips-projects"
 			commentsText.className = "sa-tooltips-comments"
@@ -402,16 +402,16 @@ let tooltipContentFunctions = {
 		},
 
 		async user(msg, id) {
-			let { wrapper } = await tooltipContentFunctions._default.user(msg, id)
+			const { wrapper } = await tooltipContentFunctions._default.user(msg, id)
 
-			let data = await fetch(`https://scratchdb.lefty.one/v3/user/info/${id}`)
+			const data = await fetch(`https://scratchdb.lefty.one/v3/user/info/${id}`)
 				.then(response => response.json())
-				.catch(error => false)
+				.catch(() => false)
 
 			if (!data) return wrapper
 
-			let originText = document.createElement("div")
-			let infoExtendedWrapper = document.createElement("div")
+			const originText = document.createElement("div")
+			const infoExtendedWrapper = document.createElement("div")
 
 			originText.className = "sa-tooltips-origin"
 			infoExtendedWrapper.className = "sa-tooltips-info-extended-wrapper"
@@ -422,11 +422,11 @@ let tooltipContentFunctions = {
 
 			if (!data.statistics) return wrapper
 			
-			let viewsText = document.createElement("div")
-			let lovesText = document.createElement("div")
-			let favoritesText = document.createElement("div")
-			let followersText = document.createElement("div")
-			let followingText = document.createElement("div")    
+			const viewsText = document.createElement("div")
+			const lovesText = document.createElement("div")
+			const favoritesText = document.createElement("div")
+			const followersText = document.createElement("div")
+			const followingText = document.createElement("div")    
 
 			viewsText.className = "sa-tooltips-views"
 			lovesText.className = "sa-tooltips-loves"
@@ -460,7 +460,7 @@ let tooltipContentFunctions = {
 		},
 
 		async _template(msg, id) {
-			let { wrapper } = await tooltipContentFunctions._default.project(msg, id)
+			const { wrapper } = await tooltipContentFunctions._default.project(msg, id)
 
 			return wrapper
 		},
@@ -468,7 +468,7 @@ let tooltipContentFunctions = {
 	}
 }
 
-let tippyGlobalOptions = {
+const tippyGlobalOptions = {
 	allowHTML: true,
 	popperOptions: {
 		strategy: 'fixed',
@@ -500,22 +500,40 @@ let tippyGlobalOptions = {
 	// }
 }
 
-let tippyGlobalOptionsChanging = {
+const tippyGlobalOptionsChanging = {
 	theme: 'sa-tooltips'
 }
 
-export default async function ({ addon, console, msg }) {
+let tippyInstances = []
 
-	let theme = addon.settings.get("theme")
+export default async function ({ addon, msg }) {
+
+	let lastTheme = addon.settings.get("theme")
 
 	tippyGlobalOptions.content = msg("loading")
 
-	let changeColorScheme = async () => {
+	const changeColorScheme = async () => {
 		if (addon.settings.get("color-scheme") !== "auto") {
 			tippyGlobalOptionsChanging.theme = `sa-tooltips-${addon.settings.get("color-scheme")}`
 		} else {
 			if ((await addon.self.getEnabledAddons()).includes("dark-www")) tippyGlobalOptionsChanging.theme = "sa-tooltips-dark"
 			else tippyGlobalOptionsChanging.theme = "sa-tooltips-light"
+		}
+	}
+
+	const destroyAllInstances = () => {
+		document.querySelectorAll('a.sa-tooltips-read').forEach(e => {
+			e.classList.remove('sa-tooltips-read')
+		})
+		tippyInstances.forEach(instance => instance.destroy())
+		tippyInstances.length = 0
+	}
+
+	const changeTheme = async () => {
+		const currentTheme = addon.settings.get("theme")
+		if (currentTheme !== lastTheme) {
+			destroyAllInstances()
+			lastTheme = currentTheme
 		}
 	}
 
@@ -525,10 +543,9 @@ export default async function ({ addon, console, msg }) {
 
 	tippy.setDefaultProps(tippyGlobalOptions)
 
-	addon.settings.addEventListener("change", () => {
-		changeColorScheme()
-		// Placeholder for live style changes
-
+	addon.settings.addEventListener("change", async () => {
+		await changeTheme()
+		await changeColorScheme()
 	})
 
 	changeColorScheme()
@@ -537,14 +554,14 @@ export default async function ({ addon, console, msg }) {
 
 		const id = regexResult[1]
 
-		let tippyOptions = {
+		const tippyOptions = {
 			async onShow(instance) {
 				instance.setProps(tippyGlobalOptionsChanging)
 				if (instance._isFetching || instance._error) return
 				instance._isFetching = true
 
 				let themeKey
-				if (tooltipContentFunctions[theme] && tooltipContentFunctions[theme][type]) themeKey = theme
+				if (tooltipContentFunctions[lastTheme] && tooltipContentFunctions[lastTheme][type]) themeKey = lastTheme
 				else themeKey = "_default"
 
 				await tooltipContentFunctions[themeKey][type](msg, id)
@@ -560,13 +577,15 @@ export default async function ({ addon, console, msg }) {
 			}
 		}
 
-		tippy(element, tippyOptions).show()
+		const instance = tippy(element, tippyOptions)
+		instance.show()
+		tippyInstances = tippyInstances.concat(instance);
 
 	}
 
 	let currentTarget
 
-	document.addEventListener("mousemove", () => {
+	const mouseMoveFunction = () => {
 
 		// const target = document.querySelector("a:hover")
 		const target = document.querySelector("a:hover:not(.sa-tooltips-read)")
@@ -579,9 +598,9 @@ export default async function ({ addon, console, msg }) {
 
 		let type = ""
 		let regexResult = []
-		for (let regexType of Object.keys(regexDict)) {
+		for (const regexType of Object.keys(regexDict)) {
 			if (type) break
-			for (let regex of regexDict[regexType]) {
+			for (const regex of regexDict[regexType]) {
 				if (type) break
 				if (regex.test(target.href)) {
 					regexResult = regex.exec(target.href)
@@ -596,7 +615,7 @@ export default async function ({ addon, console, msg }) {
 
 		if (!addon.settings.get("forceAll")) {
 
-			let selectorExclusions = [...selectorExclusionDict.all]
+			const selectorExclusions = [...selectorExclusionDict.all]
 			if (selectorExclusionDict[type]) selectorExclusions.push(...selectorExclusionDict[type])
 	
 			for (let selector of selectorExclusions) {
@@ -618,8 +637,21 @@ export default async function ({ addon, console, msg }) {
 		//     ...themeOption,
 		//     ...themeOptions[theme]
 		// }
+
+
 		
 		triggerTooltipUnified(type, target, regexResult)
+	}
+
+	document.addEventListener("mousemove", mouseMoveFunction)
+
+	addon.self.addEventListener("disabled", () => {
+		destroyAllInstances()
+		document.removeEventListener("mousemove", mouseMoveFunction)
+	})
+
+	addon.self.addEventListener("reenabled", () => {
+		document.addEventListener("mousemove", mouseMoveFunction)
 	})
 
 }
