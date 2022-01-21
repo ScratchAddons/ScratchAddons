@@ -1,6 +1,6 @@
 {
   "name": "Tooltips",
-  "description": "Adds tooltips for projects, users, studios, forum topics, and forum posts. Uses the Scratch API and ScratchDB.",
+  "description": "Adds informational tooltips for links of projects, users, studios, forum topics, and forum posts. Uses the Scratch API and ScratchDB.",
   "credits": [
     {
       "name": "Hans5958"
