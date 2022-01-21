@@ -106,7 +106,8 @@
       "default": false
     }
   ],
-  "tags": ["community"],
+  "tags": ["community", "projectPage", "profiles", "forums", "studios", "comments"],
   "enabledByDefault": false,
-  "versionAdded": "v1.24.0"
+  "versionAdded": "1.24.0",
+  "libraries": ["popper", "tippy"]
 }
