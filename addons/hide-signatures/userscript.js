@@ -28,6 +28,7 @@ export default async function ({ addon, global, console, msg }) {
     addon.self.addEventListener("disabled", () => {
       show = true;
       signature.style.display = "block";
+      hideBtn.innerText = msg("hide");
     });
 
     hideBtnWrapper.appendChild(hideBtn);
