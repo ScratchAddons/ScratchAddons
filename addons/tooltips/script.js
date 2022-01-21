@@ -21,7 +21,7 @@ let selectorExclusionDict = {
     all: [
         "parent! parent! parent! parent! #navigation",    // Navigation bar on the top of the page
         ".page",                                          // Links to topic page
-        "parent! parent! parent .linksb",                 // Bottom links on forums
+        "parent! parent! .linksb",                        // Bottom links on forums
         "[href^='#']",                                    // Links that starts with and hash (don't link to another page)
         ".thumbnail-image",                               // Thumbnail image (3.0)
         "parent! .thumbnail-title",                       // Thumbnail text (3.0)
