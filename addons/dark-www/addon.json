@@ -4,11 +4,15 @@
   "tags": ["community", "theme", "featured"],
   "credits": [
     {
-      "name": "Maximouse (addon, \"Experimental\" Dark)",
+      "name": "Maximouse",
+      "note": "addon, \"Experimental\" Dark",
+      "id": "addon",
       "link": "https://scratch.mit.edu/users/Maximouse/"
     },
     {
-      "name": "Ucrash (Dark WWW)",
+      "name": "Ucrash",
+      "note": "Dark WWW",
+      "id": "darkwww",
       "link": "https://github.com/gducrash"
     }
   ],

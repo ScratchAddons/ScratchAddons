@@ -21,6 +21,11 @@
           info.text = scratchAddons.l10n.get(`${folderName}/@info-${info.id}`, {}, info.text);
         }
       }
+      if (manifest.credits) {
+        for (const credit of manifest.credits || []) {
+          credit.note = scratchAddons.l10n.get(`${folderName}/@credits-${credit.id}`, {}, credit.note);
+        }
+      }
       if (manifest.popup) {
         manifest.popup.name = scratchAddons.l10n.get(`${folderName}/@popup-name`, {}, manifest.popup.name);
       }
