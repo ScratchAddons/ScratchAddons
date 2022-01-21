@@ -112,5 +112,5 @@
   "libraries": ["popper", "tippy"],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "updateUserstylesOnSettingsChange": true,
+  "updateUserstylesOnSettingsChange": true
 }
