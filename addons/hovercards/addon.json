@@ -1,6 +1,6 @@
 {
-  "name": "Tooltips",
-  "description": "Adds informational tooltips for links of projects, users, studios, forum topics, and forum posts. Uses the Scratch API and ScratchDB.",
+  "name": "Hovercards",
+  "description": "Adds informational hovercards for links to projects, users, studios, forum topics, and forum posts. Uses the Scratch API and ScratchDB.",
   "credits": [
     {
       "name": "Hans5958"
@@ -101,7 +101,7 @@
     },
     {
       "id": "forceAll",
-      "name": "Force tooltips on all possible links",
+      "name": "Force hovercards on all possible links",
       "type": "boolean",
       "default": false
     }
