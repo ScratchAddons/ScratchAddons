@@ -1,19 +1,19 @@
 let regexDict = {
     project: [
-        /^(?:(?:https?:)?\/\/scratch.mit.edu)?\/projects\/(\d+)/,
+        /^(?:(?:https?:)?\/\/scratch\.mit\.edu)?\/projects\/(\d+)/,
     ],
     studio: [
-        /^(?:(?:https?:)?\/\/scratch.mit.edu)?\/studios\/(\d+)/,
+        /^(?:(?:https?:)?\/\/scratch\.mit\.edu)?\/studios\/(\d+)/,
     ],
     user: [
-        /^(?:(?:https?:)?\/\/scratch.mit.edu)?\/users\/([a-zA-Z0-9-_]+)/,
+        /^(?:(?:https?:)?\/\/scratch\.mit\.edu)?\/users\/([a-zA-Z0-9-_]+)/,
     ],
     forumTopic: [
-        /^(?:(?:https?:)?\/\/scratch.mit.edu)?\/discuss\/topic\/(\d+)(?!.+#post-\d)/,
+        /^(?:(?:https?:)?\/\/scratch\.mit\.edu)?\/discuss\/topic\/(\d+)(?!.+#post-\d)/,
     ],
     forumPost: [
-        /^(?:(?:https?:)?\/\/scratch.mit.edu)?\/discuss\/post\/(\d+)/,
-        /^(?:(?:https?:)?\/\/scratch.mit.edu)?\/discuss\/topic\/\d+(?:.+#post-(\d+))/
+        /^(?:(?:https?:)?\/\/scratch\.mit\.edu)?\/discuss\/post\/(\d+)/,
+        /^(?:(?:https?:)?\/\/scratch\.mit\.edu)?\/discuss\/topic\/\d+(?:.+#post-(\d+))/
     ]
 }
 
@@ -60,7 +60,7 @@ let selectorExclusionDict = {
 let tooltipContentFunctions = {
     _default: {
         async project(msg, id) {
-            let data = await fetch(`https://api.scratch.mit.edu/projects/${id}`)
+            let data = await fetch(`https://api.scratch\.mit\.edu/projects/${id}`)
                 .then(response => response.json())
                 .catch(error => {
                     throw msg("error-request-failed", { error });
@@ -102,7 +102,7 @@ let tooltipContentFunctions = {
         },
 
         async studio(msg, id) {
-            let data = await fetch(`https://api.scratch.mit.edu/studios/${id}`)
+            let data = await fetch(`https://api.scratch\.mit\.edu/studios/${id}`)
             .then(response => response.json())
             .catch(error => {
                 throw msg("error-request-failed", { error });
@@ -136,7 +136,7 @@ let tooltipContentFunctions = {
         },
 
         async user(msg, id) {
-            let data = await fetch(`https://api.scratch.mit.edu/users/${id}`)
+            let data = await fetch(`https://api.scratch\.mit\.edu/users/${id}`)
                 .then(response => response.json())
                 .catch(error => {
                     throw msg("error-request-failed", { error });
@@ -460,7 +460,7 @@ let tooltipContentFunctions = {
         },
 
         async _template(msg, id) {
-            let { wrapper, data } = await tooltipContentFunctions._default.project(msg, id)
+            let { wrapper } = await tooltipContentFunctions._default.project(msg, id)
 
             return wrapper
         },
