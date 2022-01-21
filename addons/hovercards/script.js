@@ -79,13 +79,13 @@ const tooltipContentFunctions = {
 			const infoWrapper = document.createElement("div")
 			const wrapper = document.createElement("div")
 
-			imgInfo.className = "sa-tooltips-project-author-img"
-			titleText.className = "sa-tooltips-project-title"
-			authorText.className = "sa-tooltips-project-author"
-			img.className = "sa-tooltips-project-img"
-			imgWrapper.className = "sa-tooltips-img-wrapper"
-			infoWrapper.className = "sa-tooltips-info-wrapper"
-			wrapper.className = "sa-tooltips-wrapper sa-tooltips-project"
+			imgInfo.className = "sa-hovercards-project-author-img"
+			titleText.className = "sa-hovercards-project-title"
+			authorText.className = "sa-hovercards-project-author"
+			img.className = "sa-hovercards-project-img"
+			imgWrapper.className = "sa-hovercards-img-wrapper"
+			infoWrapper.className = "sa-hovercards-info-wrapper"
+			wrapper.className = "sa-hovercards-wrapper sa-hovercards-project"
 
 			imgInfo.src = data.author.profile.images["32x32"]
 			titleText.textContent = data.title
@@ -119,11 +119,11 @@ const tooltipContentFunctions = {
 			const infoWrapper = document.createElement("div")
 			const wrapper = document.createElement("div")
 
-			titleText.className = "sa-tooltips-studio-title"
-			img.className = "sa-tooltips-studio-img"
-			imgWrapper.className = "sa-tooltips-img-wrapper"
-			infoWrapper.className = "sa-tooltips-info-wrapper"
-			wrapper.className = "sa-tooltips-wrapper sa-tooltips-studio"
+			titleText.className = "sa-hovercards-studio-title"
+			img.className = "sa-hovercards-studio-img"
+			imgWrapper.className = "sa-hovercards-img-wrapper"
+			infoWrapper.className = "sa-hovercards-info-wrapper"
+			wrapper.className = "sa-hovercards-wrapper sa-hovercards-studio"
 
 			titleText.textContent = data.title.trim()
 			img.src = data.image
@@ -153,11 +153,11 @@ const tooltipContentFunctions = {
 			const infoWrapper = document.createElement("div")
 			const wrapper = document.createElement("div")
 
-			usernameText.className = "sa-tooltips-user-name"
-			img.className = "sa-tooltips-user-img"
-			imgWrapper.className = "sa-tooltips-img-wrapper"
-			infoWrapper.className = "sa-tooltips-info-wrapper"
-			wrapper.className = "sa-tooltips-wrapper sa-tooltips-user"
+			usernameText.className = "sa-hovercards-user-name"
+			img.className = "sa-hovercards-user-img"
+			imgWrapper.className = "sa-hovercards-img-wrapper"
+			infoWrapper.className = "sa-hovercards-info-wrapper"
+			wrapper.className = "sa-hovercards-wrapper sa-hovercards-user"
 
 			usernameText.textContent = data.username.trim()
 			img.src = data.profile.images["90x90"].replace("90x90", "150x150")
@@ -192,11 +192,11 @@ const tooltipContentFunctions = {
 			const infoWrapper = document.createElement("div")
 			const wrapper = document.createElement("div")
 
-			categoryText.className = "sa-tooltips-topic-category"
-			titleText.className = "sa-tooltips-topic-title"
-			postCountText.className = "sa-tooltips-post-count"
-			infoWrapper.className = "sa-tooltips-info-wrapper"
-			wrapper.className = "sa-tooltips-wrapper sa-tooltips-forum-topic"
+			categoryText.className = "sa-hovercards-topic-category"
+			titleText.className = "sa-hovercards-topic-title"
+			postCountText.className = "sa-hovercards-post-count"
+			infoWrapper.className = "sa-hovercards-info-wrapper"
+			wrapper.className = "sa-hovercards-wrapper sa-hovercards-forum-topic"
 
 			categoryText.textContent = data.category
 			titleText.textContent = data.title
@@ -235,13 +235,13 @@ const tooltipContentFunctions = {
 			const infoWrapper = document.createElement("div")
 			const wrapper = document.createElement("div")
 
-			categoryText.className = "sa-tooltips-topic-category"
-			titleText.className = "sa-tooltips-topic-title"
-			authorText.className = "sa-tooltips-post-author"
-			postText.className = "sa-tooltips-post"
-			postCountText.className = "sa-tooltips-post-count"
-			infoWrapper.className = "sa-tooltips-info-wrapper"
-			wrapper.className = "sa-tooltips-wrapper sa-tooltips-forum-post"
+			categoryText.className = "sa-hovercards-topic-category"
+			titleText.className = "sa-hovercards-topic-title"
+			authorText.className = "sa-hovercards-post-author"
+			postText.className = "sa-hovercards-post"
+			postCountText.className = "sa-hovercards-post-count"
+			infoWrapper.className = "sa-hovercards-info-wrapper"
+			wrapper.className = "sa-hovercards-wrapper sa-hovercards-forum-post"
 
 			categoryText.textContent = data.topic.category
 			titleText.textContent = data.topic.title
@@ -261,7 +261,7 @@ const tooltipContentFunctions = {
 		async project(msg, id) {
 			const { wrapper, data } = await tooltipContentFunctions._default.project(msg, id)
 
-			wrapper.querySelector(".sa-tooltips-project-author").textContent = msg("info-by", {author: data.author.username})
+			wrapper.querySelector(".sa-hovercards-project-author").textContent = msg("info-by", {author: data.author.username})
 
 			return wrapper
 		}
@@ -272,7 +272,7 @@ const tooltipContentFunctions = {
 			const { wrapper, data } = await tooltipContentFunctions._default.project(msg, id)
 
 			const infoExtendedWrapper = document.createElement("div")
-			infoExtendedWrapper.className = "sa-tooltips-info-extended-wrapper"    
+			infoExtendedWrapper.className = "sa-hovercards-info-extended-wrapper"    
 			infoExtendedWrapper.textContent = data.description.replace(/^\n+|\n$/, "") || data.instructions.replace(/^\n+|\n$/, "")
 
 			wrapper.appendChild(infoExtendedWrapper)
@@ -284,7 +284,7 @@ const tooltipContentFunctions = {
 			const { wrapper, data } = await tooltipContentFunctions._default.studio(msg, id)
 
 			const infoExtendedWrapper = document.createElement("div")
-			infoExtendedWrapper.className = "sa-tooltips-info-extended-wrapper"    
+			infoExtendedWrapper.className = "sa-hovercards-info-extended-wrapper"    
 			infoExtendedWrapper.textContent = data.description.replace(/^\n+|\n$/, "")
 
 			wrapper.appendChild(infoExtendedWrapper)
@@ -296,7 +296,7 @@ const tooltipContentFunctions = {
 			const { wrapper, data } = await tooltipContentFunctions._default.user(msg, id)
 
 			const infoExtendedWrapper = document.createElement("div")
-			infoExtendedWrapper.className = "sa-tooltips-info-extended-wrapper"    
+			infoExtendedWrapper.className = "sa-hovercards-info-extended-wrapper"    
 			infoExtendedWrapper.textContent = data.profile.bio.replace(/^\n+|\n$/, "")
 
 			wrapper.appendChild(infoExtendedWrapper)
@@ -308,7 +308,7 @@ const tooltipContentFunctions = {
 			const wrapper = await tooltipContentFunctions._default.forumTopic(msg, id)
 
 			const postText = document.createElement("div")
-			postText.className = "sa-tooltips-post"
+			postText.className = "sa-hovercards-post"
 
 			const data = await fetch(`https://scratchdb.lefty.one/v3/forum/topic/posts/${id}?o=oldest`)
 				.then(response => response.json())
@@ -326,7 +326,7 @@ const tooltipContentFunctions = {
 			let { wrapper, data } = await tooltipContentFunctions._default.forumPost(msg, id)
 
 			const postCountText = document.createElement("div")
-			postCountText.className = "sa-tooltips-post-count"
+			postCountText.className = "sa-hovercards-post-count"
 
 			data = await fetch(`https://scratchdb.lefty.one/v3/forum/topic/info/${data.topic.id}`)
 				.then(response => response.json())
@@ -352,11 +352,11 @@ const tooltipContentFunctions = {
 			const remixesText = document.createElement("div")
 			const infoExtendedWrapper = document.createElement("div")
 
-			viewsText.className = "sa-tooltips-views"
-			lovesText.className = "sa-tooltips-loves"
-			favoritesText.className = "sa-tooltips-favorites"
-			remixesText.className = "sa-tooltips-remixes"
-			infoExtendedWrapper.className = "sa-tooltips-info-extended-wrapper"
+			viewsText.className = "sa-hovercards-views"
+			lovesText.className = "sa-hovercards-loves"
+			favoritesText.className = "sa-hovercards-favorites"
+			remixesText.className = "sa-hovercards-remixes"
+			infoExtendedWrapper.className = "sa-hovercards-info-extended-wrapper"
 
 			viewsText.textContent = msg("info-views", { count: data.stats.views })
 			lovesText.textContent = msg("info-loves", { count: data.stats.loves })
@@ -381,11 +381,11 @@ const tooltipContentFunctions = {
 			const managersText = document.createElement("div")
 			const infoExtendedWrapper = document.createElement("div")
 
-			projectsText.className = "sa-tooltips-projects"
-			commentsText.className = "sa-tooltips-comments"
-			followersText.className = "sa-tooltips-followers"
-			managersText.className = "sa-tooltips-managers"
-			infoExtendedWrapper.className = "sa-tooltips-info-extended-wrapper"
+			projectsText.className = "sa-hovercards-projects"
+			commentsText.className = "sa-hovercards-comments"
+			followersText.className = "sa-hovercards-followers"
+			managersText.className = "sa-hovercards-managers"
+			infoExtendedWrapper.className = "sa-hovercards-info-extended-wrapper"
 
 			projectsText.textContent = data.stats.projects === 100 ? msg("info-projects-100") : msg("info-projects", { count: data.stats.projects })
 			commentsText.textContent = data.stats.comments === 100 ? msg("info-comments-100") : msg("info-comments", { count: data.stats.comments })
@@ -413,8 +413,8 @@ const tooltipContentFunctions = {
 			const originText = document.createElement("div")
 			const infoExtendedWrapper = document.createElement("div")
 
-			originText.className = "sa-tooltips-origin"
-			infoExtendedWrapper.className = "sa-tooltips-info-extended-wrapper"
+			originText.className = "sa-hovercards-origin"
+			infoExtendedWrapper.className = "sa-hovercards-info-extended-wrapper"
 
 			originText.textContent = msg("info-origin", { status: data.status, country: data.country })
 
@@ -428,11 +428,11 @@ const tooltipContentFunctions = {
 			const followersText = document.createElement("div")
 			const followingText = document.createElement("div")    
 
-			viewsText.className = "sa-tooltips-views"
-			lovesText.className = "sa-tooltips-loves"
-			favoritesText.className = "sa-tooltips-favorites"
-			followersText.className = "sa-tooltips-followers"
-			followingText.className = "sa-tooltips-following"
+			viewsText.className = "sa-hovercards-views"
+			lovesText.className = "sa-hovercards-loves"
+			favoritesText.className = "sa-hovercards-favorites"
+			followersText.className = "sa-hovercards-followers"
+			followingText.className = "sa-hovercards-following"
 			
 			viewsText.textContent = msg("info-views", { count: data.statistics.views })
 			lovesText.textContent = msg("info-loves", { count: data.statistics.loves })
@@ -501,7 +501,7 @@ const tippyGlobalOptions = {
 }
 
 const tippyGlobalOptionsChanging = {
-	theme: 'sa-tooltips'
+	theme: 'sa-hovercards'
 }
 
 let tippyInstances = []
@@ -514,16 +514,16 @@ export default async function ({ addon, msg }) {
 
 	const changeColorScheme = async () => {
 		if (addon.settings.get("color-scheme") !== "auto") {
-			tippyGlobalOptionsChanging.theme = `sa-tooltips-${addon.settings.get("color-scheme")}`
+			tippyGlobalOptionsChanging.theme = `sa-hovercards-${addon.settings.get("color-scheme")}`
 		} else {
-			if ((await addon.self.getEnabledAddons()).includes("dark-www")) tippyGlobalOptionsChanging.theme = "sa-tooltips-dark"
-			else tippyGlobalOptionsChanging.theme = "sa-tooltips-light"
+			if ((await addon.self.getEnabledAddons()).includes("dark-www")) tippyGlobalOptionsChanging.theme = "sa-hovercards-dark"
+			else tippyGlobalOptionsChanging.theme = "sa-hovercards-light"
 		}
 	}
 
 	const destroyAllInstances = () => {
-		document.querySelectorAll('a.sa-tooltips-read').forEach(e => {
-			e.classList.remove('sa-tooltips-read')
+		document.querySelectorAll('a.sa-hovercards-read').forEach(e => {
+			e.classList.remove('sa-hovercards-read')
 		})
 		tippyInstances.forEach(instance => instance.destroy())
 		tippyInstances.length = 0
@@ -588,9 +588,9 @@ export default async function ({ addon, msg }) {
 	const mouseMoveFunction = () => {
 
 		// const target = document.querySelector("a:hover")
-		const target = document.querySelector("a:hover:not(.sa-tooltips-read)")
+		const target = document.querySelector("a:hover:not(.sa-hovercards-read)")
 		if (!target || currentTarget === target) return
-		target.classList.add("sa-tooltips-read")
+		target.classList.add("sa-hovercards-read")
 
 		currentTarget = target
 

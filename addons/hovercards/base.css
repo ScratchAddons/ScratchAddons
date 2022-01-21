@@ -95,7 +95,7 @@
                      TIPPY LIGHT THEME
 ========================================================= */
 
-.tippy-box[data-theme="sa-tooltips-light"] {
+.tippy-box[data-theme="sa-hovercards-light"] {
   color: #26323d;
   box-shadow: 0 0 20px 4px rgba(154, 161, 177, 0.15), 0 4px 80px -8px rgba(36, 40, 47, 0.25),
     0 4px 4px -2px rgba(91, 94, 105, 0.15);
@@ -103,31 +103,31 @@
   font-size: inherit
 }
 
-.tippy-box[data-theme="sa-tooltips-light"][data-placement^="top"]
+.tippy-box[data-theme="sa-hovercards-light"][data-placement^="top"]
   > .tippy-arrow:before {
   border-top-color: #fff;
 }
 
-.tippy-box[data-theme="sa-tooltips-light"][data-placement^="bottom"]
+.tippy-box[data-theme="sa-hovercards-light"][data-placement^="bottom"]
   > .tippy-arrow:before {
   border-bottom-color: #fff;
 }
 
-.tippy-box[data-theme="sa-tooltips-light"][data-placement^="left"]
+.tippy-box[data-theme="sa-hovercards-light"][data-placement^="left"]
   > .tippy-arrow:before {
   border-left-color: #fff;
 }
 
-.tippy-box[data-theme="sa-tooltips-light"][data-placement^="right"]
+.tippy-box[data-theme="sa-hovercards-light"][data-placement^="right"]
   > .tippy-arrow:before {
   border-right-color: #fff;
 }
 
-.tippy-box[data-theme="sa-tooltips-light"] > .tippy-backdrop {
+.tippy-box[data-theme="sa-hovercards-light"] > .tippy-backdrop {
   background-color: #fff;
 }
 
-.tippy-box[data-theme="sa-tooltips-light"] > .tippy-svg-arrow {
+.tippy-box[data-theme="sa-hovercards-light"] > .tippy-svg-arrow {
   fill: #fff;
 }
 
@@ -135,11 +135,11 @@
                         MINOR FIXES
 ========================================================= */
 
-#comments #comment-user.sa-tooltips-read {
+#comments #comment-user.sa-hovercards-read {
   float: left;
   margin-right: 10px;
 }
 
-#comments #comment-user.sa-tooltips-read img.avatar {
+#comments #comment-user.sa-hovercards-read img.avatar {
   margin-right: 0;
 }

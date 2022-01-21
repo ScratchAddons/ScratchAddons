@@ -1,101 +1,101 @@
-.sa-tooltips-wrapper {
+.sa-hovercards-wrapper {
   margin: .25em;
 }
 
-.sa-tooltips-studio-title {
+.sa-hovercards-studio-title {
   margin: 0;
   width: 200px;
 }
 
-.sa-tooltips-user-name {
+.sa-hovercards-user-name {
   margin: 0;
   width: 150px;
 }
 
-.sa-tooltips-project-author,
-.sa-tooltips-project-title {
+.sa-hovercards-project-author,
+.sa-hovercards-project-title {
   width: calc(200px - 3em);
 }
 
-.sa-tooltips-project-img {
+.sa-hovercards-project-img {
   width: 200px;
 }
 
-.sa-tooltips-studio-img {
+.sa-hovercards-studio-img {
   width: 200px;
 }
 
-.sa-tooltips-user-img {
+.sa-hovercards-user-img {
   width: 150px;
 }
 
-.tippy-box[data-theme^="sa-tooltips"] .tippy-content {
+.tippy-box[data-theme^="sa-hovercards"] .tippy-content {
   font-size: .923em;
   line-height: 1.2em;
   font-weight: bold;
 }
 
-.sa-tooltips-project-author,
-.sa-tooltips-topic-category,
-.sa-tooltips-post-count {
+.sa-hovercards-project-author,
+.sa-hovercards-topic-category,
+.sa-hovercards-post-count {
   color: #aaa;
   font-size: .8462em;
 }
 
-.tippy-box[data-theme="sa-tooltips-light"] .sa-tooltips-project-author,
-.tippy-box[data-theme="sa-tooltips-light"] .sa-tooltips-topic-category,
-.tippy-box[data-theme="sa-tooltips-light"] .sa-tooltips-post-count {
+.tippy-box[data-theme="sa-hovercards-light"] .sa-hovercards-project-author,
+.tippy-box[data-theme="sa-hovercards-light"] .sa-hovercards-topic-category,
+.tippy-box[data-theme="sa-hovercards-light"] .sa-hovercards-post-count {
   color: #575e75;
 }
 
-.sa-tooltips-topic-title,
-.sa-tooltips-post {
+.sa-hovercards-topic-title,
+.sa-hovercards-post {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-box-orient: vertical;
 }
 
-.sa-tooltips-forum-topic .sa-tooltips-post,
-.sa-tooltips-forum-post .sa-tooltips-topic-title {
+.sa-hovercards-forum-topic .sa-hovercards-post,
+.sa-hovercards-forum-post .sa-hovercards-topic-title {
   -webkit-line-clamp: 2;
 }
 
-.sa-tooltips-forum-topic .sa-tooltips-topic-title,
-.sa-tooltips-forum-post .sa-tooltips-post {
+.sa-hovercards-forum-topic .sa-hovercards-topic-title,
+.sa-hovercards-forum-post .sa-hovercards-post {
   -webkit-line-clamp: 6;
 }
 
-.sa-tooltips-post,
-.sa-tooltips-post-author {
+.sa-hovercards-post,
+.sa-hovercards-post-author {
   font-size: 1em;
   line-height: 1em;
   font-weight: normal;
 }
 
-.sa-tooltips-post-author {
+.sa-hovercards-post-author {
   padding-top: .5em;
   border-top: 1px solid #8888;
   font-weight: bold;
 }
 
-.sa-tooltips-forum-topic .sa-tooltips-info-wrapper > *,
-.sa-tooltips-forum-post .sa-tooltips-info-wrapper > * {
+.sa-hovercards-forum-topic .sa-hovercards-info-wrapper > *,
+.sa-hovercards-forum-post .sa-hovercards-info-wrapper > * {
   margin: .5em 0;
 }
 
-.sa-tooltips-img-wrapper {
+.sa-hovercards-img-wrapper {
   margin-bottom: .5em;
 }
 
-.sa-tooltips-project .sa-tooltips-info-wrapper {
+.sa-hovercards-project .sa-hovercards-info-wrapper {
   display: grid;
   grid-auto-flow: column;
   gap: 0px;
   /* grid-template-columns: repeat(2); */
 }
 
-.sa-tooltips-project-author-img {
+.sa-hovercards-project-author-img {
   grid-column: 1;
   grid-row: 1 / span 100;
   margin: auto .5em auto 0;
