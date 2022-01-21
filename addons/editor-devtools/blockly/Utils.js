@@ -108,7 +108,7 @@ export default class Utils {
       workspace.scrollbar.set(sx, sy);
       this.navigationHistory.storeView({ left: sx, top: sy }, 64);
     }
-    this.blockly.hideChaff();
+    this.blockly?.hideChaff();
     BlockFlasher.flash(block);
   }
 
