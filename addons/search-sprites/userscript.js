@@ -61,5 +61,6 @@ export default async function ({ addon, global, console, msg }) {
     spritesContainer = document.querySelector('[class^="sprite-selector_items-wrapper"]');
     spriteSelectorContainer = document.querySelector('[class^="sprite-selector_scroll-wrapper"]');
     spriteSelectorContainer.insertBefore(container, spritesContainer);
+    reset(); // Clear search box after going outside then inside
   }
 }
