@@ -60,7 +60,7 @@ let selectorExclusionDict = {
 let tooltipContentFunctions = {
     _default: {
         async project(msg, id) {
-            let data = await fetch(`https://api.scratch\.mit\.edu/projects/${id}`)
+            let data = await fetch(`https://api.scratch.mit.edu/projects/${id}`)
                 .then(response => response.json())
                 .catch(error => {
                     throw msg("error-request-failed", { error });
@@ -102,7 +102,7 @@ let tooltipContentFunctions = {
         },
 
         async studio(msg, id) {
-            let data = await fetch(`https://api.scratch\.mit\.edu/studios/${id}`)
+            let data = await fetch(`https://api.scratch.mit.edu/studios/${id}`)
             .then(response => response.json())
             .catch(error => {
                 throw msg("error-request-failed", { error });
@@ -136,7 +136,7 @@ let tooltipContentFunctions = {
         },
 
         async user(msg, id) {
-            let data = await fetch(`https://api.scratch\.mit\.edu/users/${id}`)
+            let data = await fetch(`https://api.scratch.mit.edu/users/${id}`)
                 .then(response => response.json())
                 .catch(error => {
                     throw msg("error-request-failed", { error });
