@@ -43,7 +43,8 @@
         "Handlee",
         "Antonio",
         "Lato"
-      ]
+      ],
+      "autofill": "font"
     },
     {
       "name": "Editor menu bar font",
@@ -61,7 +62,8 @@
         "Handlee",
         "Antonio",
         "Lato"
-      ]
+      ],
+      "autofill": "font"
     },
     {
       "name": "Website content font",
@@ -79,7 +81,8 @@
         "Handlee",
         "Antonio",
         "Lato"
-      ]
+      ],
+      "autofill": "font"
     },
     {
       "name": "Editor font",
@@ -97,7 +100,8 @@
         "Handlee",
         "Antonio",
         "Lato"
-      ]
+      ],
+      "autofill": "font"
     },
     {
       "name": "Block Font",
@@ -115,7 +119,8 @@
         "Handlee",
         "Antonio",
         "Lato"
-      ]
+      ],
+      "autofill": "font"
     },
     {
       "name": "Header font",
@@ -133,7 +138,8 @@
         "Handlee",
         "Antonio",
         "Lato"
-      ]
+      ],
+      "autofill": "font"
     },
     {
       "name": "Footer font",
@@ -151,7 +157,8 @@
         "Handlee",
         "Antonio",
         "Lato"
-      ]
+      ],
+      "autofill": "font"
     }
   ]
 }

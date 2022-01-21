@@ -6,6 +6,9 @@ export default async function ({ template }) {
       return {
         showDatalist: false,
         wasClick: false,
+        items: [],
+        filteredItems: [],
+        search: false,
       };
     },
     computed: {
@@ -110,6 +113,44 @@ export default async function ({ template }) {
         this.addonSettings[this.setting.id] = newValue;
         this.updateSettings();
       },
+      updateItems() {
+        let items = this.items;
+        switch (this.setting.autofill) {
+          case "font": {
+            chrome.fontSettings.getFontList((list) => {
+              items = items.concat(list.map((n) => n.displayName));
+              this.items = [...new Set(items)];
+            });
+            break;
+          }
+
+          default: {
+            break;
+          }
+        }
+      },
+
+      updateSearch() {
+        let input = document.querySelector(
+          `input[data-addon-id='${this.addon._addonId}'][data-setting-id='${this.setting.id}']`
+        );
+        let search = input.value.toLowerCase();
+        this.filteredItems = this.items.filter(function (item) {
+          return item.toLowerCase().includes(search);
+        });
+
+        this.search = !!search;
+        this.showDatalist = this.wasClick = true;
+      },
+
+      clearSearch() {
+        this.filteredItems = this.items;
+        this.search = false;
+      },
+
+      selectItem() {
+        this.updateOption(this.search ? this.filteredItems[0] : this.setting.default);
+      },
     },
     events: {
       closePickers(...params) {
@@ -121,6 +162,13 @@ export default async function ({ template }) {
       clickOutside() {
         this.showDatalist = this.wasClick = false;
       },
+    },
+
+    created() {
+      if (this.setting.type === "datalist") {
+        this.filteredItems = this.items = this.setting.items;
+        this.updateItems();
+      }
     },
   });
   Vue.component("addon-setting", AddonSetting);

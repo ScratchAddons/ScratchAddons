@@ -86,9 +86,14 @@ export default async function ({ addon, console }) {
 
       fontFaces = await Promise.all(
         fontFaces.map(function (face) {
-          return face.load();
+          return new Promise((res) => {
+            face
+              .load()
+              .then(res)
+              .catch(() => res(null)); //Stop trying to load a font that we do not have a file for.
+          });
         })
-      );
+      ).filter(Boolean);
 
       fontFaces.forEach(function (face) {
         document.fonts.add(face);
