@@ -514,7 +514,7 @@ export default async function ({ addon, console, msg }) {
         if (addon.settings.get("color-scheme") !== "auto") {
             tippyGlobalOptionsChanging.theme = `sa-tooltips-${addon.settings.get("color-scheme")}`
         } else {
-            if (await (await addon.self.getEnabledAddons()).indexOf('dark-www') + 1) tippyGlobalOptionsChanging.theme = "sa-tooltips-dark"
+            if ((await addon.self.getEnabledAddons()).includes("dark-www")) tippyGlobalOptionsChanging.theme = "sa-tooltips-dark"
             else tippyGlobalOptionsChanging.theme = "sa-tooltips-light"
         }
     }
