@@ -113,7 +113,4 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "updateUserstylesOnSettingsChange": true,
-  "latestUpdate": {
-    "version": "1.24.0"
-  }
 }
