@@ -70,7 +70,6 @@
   "blocks2image",
   "editor-sounds",
   "transparent-orphans",
-  "material-forum-editor-buttons",
   "gamepad",
   "remove-curved-stage-border",
   "fix-pasted-scripts",
@@ -114,6 +113,7 @@
   "block-count",
   "script-snap",
   "hide-signatures",
+  "disable-sprite-wobble",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
@@ -127,6 +127,7 @@
   "customize-avatar-border",
   "scratchblocks",
   "better-featured-project",
+  "material-forum-editor-buttons",
   "forum-quote-code-beautifier",
   "// For editor:",
   "editor-dark-mode",

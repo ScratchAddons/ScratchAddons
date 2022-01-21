@@ -3,11 +3,15 @@
   "description": "Shows an interactive featured project, directly from the user's profile. Based on the implementation in Mega Scratch Userscript.",
   "credits": [
     {
-      "name": "GRA0007 (original)",
+      "name": "GRA0007",
+      "note": "original",
+      "id": "original",
       "link": "https://github.com/MegaScratchUserscript/Mega-Scratch-Userscript/blob/master/originals/GRA0007/scratchultimate.user.js#L23-L46"
     },
     {
-      "name": "Hans5958 (remake)"
+      "name": "Hans5958",
+      "note": "remake",
+      "id": "remake"
     }
   ],
   "userscripts": [
