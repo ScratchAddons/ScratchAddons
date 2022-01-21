@@ -12,21 +12,21 @@
 }
 
 .sa-paste-overlay-inner {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .sa-paste-overlay-text {
-	font-size: 2.5em;
-	color: white;
-	user-select: none;
+  font-size: 2.5em;
+  color: white;
+  user-select: none;
 }
 .sa-paste-overlay-subtext {
-	font-size: 45%;
-	margin-top: 0.33em;
+  font-size: 45%;
+  margin-top: 0.33em;
 }
 .sa-paste-overlay-outer.hidden {
-	display: none;
+  display: none;
 }

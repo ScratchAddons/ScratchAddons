@@ -280,7 +280,7 @@ export default class Tab extends Listenable {
    * forumsAfterPostReport - after the report button in forum posts
    * beforeRemixButton - before the remix button in project page
    * studioCuratorsTab - inside the studio curators tab
-   * spriteCreationMenu - inside create sprite/backdrop/sound dropups
+   * spriteCreationMenu - inside create costume/sprite/backdrop/sound dropups
    * @param {object} opts - options.
    * @param {string} opts.space - the shared space name.
    * @param {HTMLElement} element - the element to add.
