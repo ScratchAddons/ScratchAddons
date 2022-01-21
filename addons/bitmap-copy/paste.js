@@ -57,16 +57,18 @@ export default async ({ addon, console, msg }) => {
     const COSTUME_EDITOR = document.querySelector("#react-tabs-3 > div > [class*='asset-panel_detail-area']");
     const SPRITES_PANE = document.querySelector("[class*='sprite-selector_sprite-selector']");
     const STAGE_PANE = document.querySelector("[class*='target-pane_stage-selector-wrapper']");
-	const COSTUMES_TAB_BTN = document.getElementById("react-tabs-2");
-	
+    const COSTUMES_TAB_BTN = document.getElementById("react-tabs-2");
+
     const el = lastClicked;
     let pasteInto = null;
 
     if (COSTUMES_PANE) {
       if (
-		(COSTUMES_PANE.contains(el) && !COSTUME_EDITOR.contains(el))
-		|| el === COSTUMES_TAB_BTN || COSTUMES_TAB_BTN.contains(el)
-	  ) pasteInto = COSTUMES_PANE;
+        (COSTUMES_PANE.contains(el) && !COSTUME_EDITOR.contains(el)) ||
+        el === COSTUMES_TAB_BTN ||
+        COSTUMES_TAB_BTN.contains(el)
+      )
+        pasteInto = COSTUMES_PANE;
     }
     if (SPRITES_PANE.contains(el)) pasteInto = SPRITES_PANE.parentElement;
     if (STAGE_PANE.contains(el)) pasteInto = STAGE_PANE;
