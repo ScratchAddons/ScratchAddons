@@ -529,7 +529,7 @@ export default async function ({ addon, msg }) {
 		tippyInstances.length = 0
 	}
 
-	const changeTheme = async () => {
+	const changeTheme = () => {
 		const currentTheme = addon.settings.get("theme")
 		if (currentTheme !== lastTheme) {
 			destroyAllInstances()
@@ -544,7 +544,7 @@ export default async function ({ addon, msg }) {
 	tippy.setDefaultProps(tippyGlobalOptions)
 
 	addon.settings.addEventListener("change", async () => {
-		await changeTheme()
+		changeTheme()
 		await changeColorScheme()
 	})
 
