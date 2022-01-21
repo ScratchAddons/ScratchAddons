@@ -25,6 +25,12 @@
       "default": true
     },
     {
+      "name": "Confirm project unsharing",
+      "id": "projectunsharing",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "Confirm following/unfollowing users",
       "id": "followinguser",
       "type": "boolean",

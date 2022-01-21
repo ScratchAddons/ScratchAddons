@@ -33,6 +33,7 @@ export default [
     expanded: true,
     iframeShow: false,
     fullscreenShow: true,
+    customOrder: ["new", "updated"],
   },
   {
     id: "new",
@@ -41,6 +42,7 @@ export default [
     expanded: new URLSearchParams(window.location.search).get("source") === "updatenotif",
     iframeShow: false,
     fullscreenShow: true,
+    customOrder: ["new", "updated"],
   },
   {
     id: "enabled",

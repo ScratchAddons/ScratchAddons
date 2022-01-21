@@ -1,0 +1,54 @@
+.parents .title-banner.masthead .ted-talk {
+  border-color: black;
+}
+.educators .title-banner.masthead,
+.educators #teacher-accounts,
+.expect .keynote,
+.initiatives-section .initiatives-subsection-header.schools,
+.initiatives-section .initiatives-subsection-content .teacher-quote .comment-text,
+.initiatives-section .initiatives-subsection-header.connectivity,
+.teacher-registration,
+.teacher-waitingroom {
+  background-color: #220066;
+}
+.initiatives-section .initiatives-subsection-content .teacher-quote .comment-text,
+.initiatives-section .initiatives-subsection-content .teacher-quote .comment-text::before,
+.initiatives-section .initiatives-subsection-content .teacher-quote .comment-text::after {
+  border-color: #220066;
+}
+.wedo2 .extension-header {
+  background-color: #99004d;
+}
+.hoc-banner,
+.developers .title-banner.masthead,
+.sa-annual-report-2019 .reach-section,
+.initiatives-section .initiatives-subsection-header.tools,
+.initiatives-section .initiatives-tools .abhi-quote .comment-text,
+.initiatives-section .initiatives-subsection-header.adaptation,
+.donate-section,
+.card .card-button,
+.microbit .extension-header {
+  background-color: #064734;
+}
+.hoc-banner .hoc-banner-image,
+.initiatives-section .initiatives-tools .abhi-quote .comment-text,
+.initiatives-section .initiatives-tools .abhi-quote .comment-text::before,
+.initiatives-section .initiatives-tools .abhi-quote .comment-text::after {
+  border-color: #064734;
+}
+.donate-banner,
+.sa-annual-report-2019 .reach-scratch-jr {
+  background-color: #05402f;
+}
+.sa-annual-report-2020 .subnavigation,
+.sa-annual-report-2020 .message-section,
+.sa-annual-report-2020 .reach-section {
+  background-color: #194e66;
+}
+.sa-annual-report-2020 .reach-scratch-jr {
+  background-color: #1c465a;
+}
+.financials-section,
+.directors-message {
+  background-color: #16171d;
+}

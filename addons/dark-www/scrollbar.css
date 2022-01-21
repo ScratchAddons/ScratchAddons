@@ -1,20 +1,17 @@
 body:not(.sa-body-editor)::-webkit-scrollbar,
 body:not(.sa-body-editor) ::-webkit-scrollbar {
-  width: 16px;
-  height: 16px;
+  width: 17px;
+  height: 17px;
   background: transparent;
-}
-body:not(.sa-body-editor)::-webkit-scrollbar {
-  background: #202020;
 }
 body:not(.sa-body-editor)::-webkit-scrollbar-thumb,
 body:not(.sa-body-editor) ::-webkit-scrollbar-thumb {
   width: 8px;
   height: 8px;
   background-color: rgba(96, 96, 96, 0.8);
-  border: 4px solid transparent;
+  border: 4.5px solid transparent;
   background-clip: padding-box;
-  border-radius: 8px;
+  border-radius: 8.5px;
 }
 body:not(.sa-body-editor)::-webkit-scrollbar-thumb:hover,
 body:not(.sa-body-editor) ::-webkit-scrollbar-thumb:hover {
@@ -25,8 +22,26 @@ body:not(.sa-body-editor) ::-webkit-scrollbar-corner {
   background: transparent;
 }
 
+/* Scratch sets the scrollbar width for the add to studio modal */
+body /* specificity */ .studio-list-inner-scrollbox::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+body /* specificity */ .studio-list-inner-scrollbox::-webkit-scrollbar-thumb {
+  border: none;
+  border-radius: 4px;
+}
+
 /* Override scratchr2 scrollbar style */
+.scrollbar .track,
+.slider-carousel .handle .end {
+  background: transparent;
+}
+.slider-carousel .handle {
+  background-color: rgba(96, 96, 96, 0.8);
+}
 .viewport::-webkit-scrollbar-track,
-textarea::-webkit-scrollbar-track {
+textarea::-webkit-scrollbar-track,
+.scrollbar .track {
   box-shadow: none;
 }

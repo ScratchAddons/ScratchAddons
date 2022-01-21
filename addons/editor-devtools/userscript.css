@@ -440,7 +440,7 @@ div.s3devDDOut.vis ul.s3devDD {
   border-radius: 4px;
   box-shadow: rgba(0, 0, 0, 0.3) 0 0 3px, rgba(0, 0, 0, 0.2) 0 3px 10px;
 
-  z-index: 1000001;
+  z-index: 999;
 }
 
 #s3devInsertLabel {

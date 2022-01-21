@@ -11,9 +11,8 @@ export default async function ({ addon, global, console, msg }) {
     // The check can technically fail when Redux isn't supported (rare cases)
     // Just ignore in this case
   }
-  const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
-  const reactInternalKey = Object.keys(paintEditorCanvasContainer).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
-  const paperCanvas = paintEditorCanvasContainer[reactInternalKey].child.child.child.stateNode;
+  const paperCanvas =
+    paintEditorCanvasContainer[addon.tab.traps.getInternalKey(paintEditorCanvasContainer)].child.child.child.stateNode;
 
   let paperCenter;
   const storedOnionLayers = [];
@@ -126,14 +125,6 @@ export default async function ({ addon, global, console, msg }) {
     paperCanvas.importImage = PaperCanvas.prototype.importImage.bind(paperCanvas);
   };
 
-  const createCanvas = (width, height) => {
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    canvas.getContext("2d").imageSmoothingEnabled = false;
-    return canvas;
-  };
-
   const createOnionLayer = () => {
     const layer = new paper.Layer();
     layer.locked = true;
@@ -142,7 +133,14 @@ export default async function ({ addon, global, console, msg }) {
     return layer;
   };
 
+  // Each onion layer update is given an ID
+  // Because updating layers is async, we need this to cancel all but the most recent update
+  let globalUpdateId = 0;
+  const cancelOngoingUpdatesAndGetNewId = () => ++globalUpdateId;
+
   const removeOnionLayers = () => {
+    cancelOngoingUpdatesAndGetNewId();
+
     const project = paper.project;
     if (!project) {
       return;
@@ -164,27 +162,18 @@ export default async function ({ addon, global, console, msg }) {
     if (!project) {
       return;
     }
-    const onions = [];
-    for (const layer of project.layers) {
-      if (layer.data.sa_isOnionLayer) {
-        onions.push(layer);
-      }
+    const onionLayer = project.layers.find((i) => i.data.sa_isOnionLayer);
+    if (!onionLayer) {
+      return;
     }
-    onions.sort((a, b) => a.data.sa_onionIndex - b.data.sa_onionIndex);
     if (settings.layering === "front") {
-      for (const layer of onions) {
-        project.addLayer(layer);
-      }
+      project.addLayer(onionLayer);
     } else {
       const rasterLayer = project.layers.find((i) => i.data.isRasterLayer);
       if (rasterLayer.index === 0) {
-        for (const layer of onions) {
-          project.insertLayer(0, layer);
-        }
+        project.insertLayer(0, onionLayer);
       } else {
-        for (const layer of onions) {
-          project.insertLayer(1, layer);
-        }
+        project.insertLayer(1, onionLayer);
       }
     }
   };
@@ -230,15 +219,85 @@ export default async function ({ addon, global, console, msg }) {
       if (alpha === 0) {
         continue;
       }
-      const [newRed, newGreen, newBlue] = getTint(red, green, blue, isBefore);
-      data[i + 0] = newRed;
-      data[i + 1] = newGreen;
-      data[i + 2] = newBlue;
+      const newTint = getTint(red, green, blue, isBefore);
+      data[i + 0] = newTint[0];
+      data[i + 1] = newTint[1];
+      data[i + 2] = newTint[2];
     }
     context.putImageData(imageData, 0, 0);
   };
 
-  const makeVectorLayer = (layer, costume, asset, isBefore) =>
+  const waitForAllRastersToLoad = (root) => {
+    const promises = [];
+    recursePaperItem(root, (item) => {
+      if (item instanceof paper.Raster) {
+        promises.push(
+          new Promise((resolve, reject) => {
+            item.on("load", () => resolve());
+            item.on("error", () => reject(new Error("Raster inside SVG failed to load")));
+          })
+        );
+      }
+    });
+    return Promise.all(promises);
+  };
+
+  const rasterizeVector = (root) => {
+    const bounds = root.strokeBounds;
+    const { width, height } = bounds;
+
+    // Some browsers experience extremely poor performance when this value exceeds 3840.
+    const MAX_SIZE = 3000;
+    const maxScale = Math.min(MAX_SIZE / width, MAX_SIZE / height);
+
+    const raster = new paper.Raster(new paper.Size(width, height));
+    raster.remove();
+    raster.smoothing = true;
+
+    raster.guide = true;
+    raster.locked = true;
+
+    let renderedAtScale = 0;
+    const originalDraw = raster.draw;
+    raster.draw = function (...args) {
+      const displayedSize = this.getView().getZoom() * window.devicePixelRatio;
+      const newScale = Math.max(1, Math.min(maxScale, 2 ** Math.ceil(Math.log2(displayedSize))));
+      if (newScale > renderedAtScale) {
+        renderedAtScale = newScale;
+        const canvas = this.canvas;
+        const ctx = this.context;
+
+        // Based on https://github.com/LLK/paper.js/blob/16d5ff0267e3a0ef647c25e58182a27300afad20/src/item/Item.js#L1761
+        const scaledWidth = width * newScale;
+        const scaledHeight = height * newScale;
+        canvas.width = scaledWidth;
+        canvas.height = scaledHeight;
+
+        this._size = new paper.Size(scaledWidth, scaledHeight);
+        const topLeft = bounds.getTopLeft().floor();
+        const bottomRight = bounds.getBottomRight().ceil();
+        const size = new paper.Size(bottomRight.subtract(topLeft));
+        const matrix = new paper.Matrix().scale(newScale).translate(topLeft.negate());
+        ctx.save();
+        matrix.applyToContext(ctx);
+        root.draw(
+          ctx,
+          new paper.Base({
+            matrices: [matrix],
+          })
+        );
+        ctx.restore();
+        this.matrix.reset();
+        this.transform(new paper.Matrix().translate(topLeft.add(size.divide(2))).scale(1 / newScale));
+      }
+
+      return originalDraw.call(this, ...args);
+    };
+
+    return raster;
+  };
+
+  const makeVectorOnion = (opacity, costume, asset, isBefore) =>
     new Promise((resolve, reject) => {
       const { rotationCenterX, rotationCenterY } = costume;
       // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L196-L218
@@ -259,80 +318,83 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
 
+      const handleLoad = (root) => {
+        root.opacity = opacity;
+
+        // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L274-L275
+        recursePaperItem(root, (i) => {
+          if (i.className === "PathItem") {
+            i.clockwise = true;
+          }
+          if (i.className !== "PointText" && !i.children) {
+            if (i.strokeWidth) {
+              i.strokeWidth = i.strokeWidth * 2;
+            }
+          }
+          i.locked = true;
+          i.guide = true;
+        });
+        root.scale(2, new paper.Point(0, 0));
+
+        if (settings.mode === "tint") {
+          const gradients = new Set();
+          recursePaperItem(root, (i) => {
+            if (i.strokeColor) {
+              i.strokeColor = getPaperColorTint(i.strokeColor, isBefore);
+            }
+            if (i.fillColor) {
+              const gradient = i.fillColor.gradient;
+              if (gradient) {
+                if (gradients.has(gradient)) return;
+                gradients.add(gradient);
+                for (const stop of gradient.stops) {
+                  stop.color = getPaperColorTint(stop.color, isBefore);
+                }
+              } else {
+                i.fillColor = getPaperColorTint(i.fillColor, isBefore);
+              }
+            }
+            if (i.canvas) {
+              tintRaster(i, isBefore);
+            }
+          });
+        }
+
+        // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L277-L287
+        if (typeof rotationCenterX !== "undefined" && typeof rotationCenterY !== "undefined") {
+          let rotationPoint = new paper.Point(rotationCenterX, rotationCenterY);
+          if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
+            rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
+          }
+          root.translate(paperCenter.subtract(rotationPoint.multiply(2)));
+        } else {
+          root.translate(paperCenter.subtract(root.bounds.width, root.bounds.height));
+        }
+
+        return rasterizeVector(root);
+      };
+
       paper.project.importSVG(asset, {
         expandShapes: true,
+        insert: false,
         onLoad: (root) => {
           if (!root) {
             reject(new Error("could not load onion skin"));
             return;
           }
-
-          root.remove();
-
-          // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L274-L275
-          recursePaperItem(root, (i) => {
-            if (i.className === "PathItem") {
-              i.clockwise = true;
-            }
-            if (i.className !== "PointText" && !i.children) {
-              if (i.strokeWidth) {
-                i.strokeWidth = i.strokeWidth * 2;
-              }
-            }
-            i.locked = true;
-            i.guide = true;
-          });
-          root.scale(2, new paper.Point(0, 0));
-
-          if (settings.mode === "tint") {
-            const gradients = new Set();
-            recursePaperItem(root, (i) => {
-              if (i.strokeColor) {
-                i.strokeColor = getPaperColorTint(i.strokeColor, isBefore);
-              }
-              if (i.fillColor) {
-                const gradient = i.fillColor.gradient;
-                if (gradient) {
-                  if (gradients.has(gradient)) return;
-                  gradients.add(gradient);
-                  for (const stop of gradient.stops) {
-                    stop.color = getPaperColorTint(stop.color, isBefore);
-                  }
-                } else {
-                  i.fillColor = getPaperColorTint(i.fillColor, isBefore);
-                }
-              }
-              if (i.canvas) {
-                tintRaster(i, isBefore);
-              }
-            });
-          }
-
-          // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L277-L287
-          if (typeof rotationCenterX !== "undefined" && typeof rotationCenterY !== "undefined") {
-            let rotationPoint = new paper.Point(rotationCenterX, rotationCenterY);
-            if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
-              rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
-            }
-            root.translate(paperCenter.subtract(rotationPoint.multiply(2)));
-          } else {
-            root.translate(paperCenter.subtract(root.bounds.width, root.bounds.height));
-          }
-
-          layer.addChild(root);
-          resolve();
+          resolve(waitForAllRastersToLoad(root).then(() => handleLoad(root)));
         },
       });
     });
 
-  const makeRasterLayer = (layer, costume, asset, isBefore) =>
+  const makeRasterOnion = (opacity, costume, asset, isBefore) =>
     new Promise((resolve, reject) => {
       let { rotationCenterX, rotationCenterY } = costume;
 
       const image = new Image();
       image.onload = () => {
-        const width = Math.min(960, image.width);
-        const height = Math.min(720, image.height);
+        const width = Math.min(paperCenter.x * 2, image.width);
+        const height = Math.min(paperCenter.y * 2, image.height);
 
         // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L151-L156
         if (typeof rotationCenterX === "undefined") {
@@ -342,21 +404,20 @@ export default async function ({ addon, global, console, msg }) {
           rotationCenterY = height / 2;
         }
 
-        const raster = new paper.Raster(createCanvas(width, height));
-        raster.parent = layer;
+        const raster = new paper.Raster(image);
+        raster.opacity = opacity;
         raster.guide = true;
         raster.locked = true;
         const x = width / 2 + (paperCenter.x - rotationCenterX);
         const y = height / 2 + (paperCenter.y - rotationCenterY);
         raster.position = new paper.Point(x, y);
-
-        raster.drawImage(image, 0, 0);
+        raster.remove();
 
         if (settings.mode === "tint") {
           tintRaster(raster, isBefore);
         }
 
-        resolve();
+        resolve(raster);
       };
       image.onerror = () => {
         reject(new Error("could not load image"));
@@ -385,55 +446,66 @@ export default async function ({ addon, global, console, msg }) {
 
     removeOnionLayers();
 
+    const localUpdateId = cancelOngoingUpdatesAndGetNewId();
+
     const vm = addon.tab.traps.vm;
     if (!vm) {
       return;
     }
-    const activeLayer = project.activeLayer;
+    const originalActiveLayer = project.activeLayer;
     const costumes = vm.editingTarget.sprite.costumes;
 
     const startIndex = Math.max(0, selectedCostumeIndex - settings.previous);
     const endIndex = Math.min(costumes.length - 1, selectedCostumeIndex + settings.next);
 
     try {
+      const layersToCreate = [];
       for (let i = startIndex; i <= endIndex; i++) {
         if (i === selectedCostumeIndex) {
           continue;
         }
-
         const isBefore = i < selectedCostumeIndex;
         const distance = Math.abs(i - selectedCostumeIndex) - 1;
-        const opacity = settings.opacity - settings.opacityStep * distance;
-
+        const opacity = (settings.opacity - settings.opacityStep * distance) / 100;
         if (opacity <= 0) {
           continue;
         }
+        layersToCreate.push({
+          index: i,
+          isBefore,
+          opacity,
+        });
+      }
 
+      const onions = await Promise.all(
+        layersToCreate.map(({ index, isBefore, opacity }) => {
+          const onionCostume = costumes[index];
+          const onionAsset = vm.getCostume(index);
+
+          if (onionCostume.dataFormat === "svg") {
+            return makeVectorOnion(opacity, onionCostume, onionAsset, isBefore);
+          } else if (onionCostume.dataFormat === "png" || onionCostume.dataFormat === "jpg") {
+            return makeRasterOnion(opacity, onionCostume, onionAsset, isBefore);
+          } else {
+            throw new Error(`Unknown data format: ${onionCostume.dataFormat}`);
+          }
+        })
+      );
+
+      // Make sure we haven't been cancelled
+      if (globalUpdateId === localUpdateId) {
         const layer = createOnionLayer();
-        layer.data.sa_onionIndex = i;
-        layer.opacity = opacity / 100;
-        relayerOnionLayers();
-
-        // Important: Make sure that we do not change the active layer of the editor as doing so can cause corruption.
-        activeLayer.activate();
-
-        const onionCostume = costumes[i];
-        const onionAsset = vm.getCostume(i);
-
-        if (onionCostume.dataFormat === "svg") {
-          await makeVectorLayer(layer, onionCostume, onionAsset, isBefore);
-        } else if (onionCostume.dataFormat === "png" || onionCostume.dataFormat === "jpg") {
-          await makeRasterLayer(layer, onionCostume, onionAsset, isBefore);
-        } else {
-          throw new Error(`Unknown data format: ${onionCostume.dataFormat}`);
+        for (const item of onions) {
+          layer.addChild(item);
         }
+        relayerOnionLayers();
       }
     } catch (e) {
       console.error(e);
     }
 
-    // Important: Regardless of any errors, we need to make sure the original active layer is still active.
-    activeLayer.activate();
+    // We must make sure to always reset the active layer to avoid corruption.
+    originalActiveLayer.activate();
   };
 
   const setEnabled = (_enabled) => {
@@ -483,8 +555,8 @@ export default async function ({ addon, global, console, msg }) {
     return el;
   };
 
-  const createButton = () => {
-    const el = document.createElement("span");
+  const createButton = ({ useButtonTag } = {}) => {
+    const el = document.createElement(useButtonTag ? "button" : "span");
     el.className = "sa-onion-button";
     el.setAttribute("role", "button");
     return el;
@@ -535,7 +607,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const layerInputs = {};
   for (const type of ["previous", "next", "opacity", "opacityStep"]) {
-    const container = document.createElement("div");
+    const container = document.createElement("label");
     container.className = "sa-onion-settings-line";
 
     const label = document.createElement("div");
@@ -615,7 +687,7 @@ export default async function ({ addon, global, console, msg }) {
   modeLabel.textContent = msg("mode");
   const modeGroup = createGroup();
   modeContainer.appendChild(modeLabel);
-  const modeMergeButton = createButton();
+  const modeMergeButton = createButton({ useButtonTag: true });
   modeMergeButton.appendChild(document.createTextNode(msg("merge")));
   modeGroup.appendChild(modeMergeButton);
   modeMergeButton.addEventListener("click", (e) => {
@@ -625,7 +697,7 @@ export default async function ({ addon, global, console, msg }) {
     settingsChanged();
   });
   modeMergeButton.dataset.enabled = settings.mode === "merge";
-  const modeTintButton = createButton();
+  const modeTintButton = createButton({ useButtonTag: true });
   modeTintButton.appendChild(document.createTextNode(msg("tint")));
   modeGroup.appendChild(modeTintButton);
   modeTintButton.addEventListener("click", (e) => {
@@ -645,7 +717,7 @@ export default async function ({ addon, global, console, msg }) {
   layeringLabel.textContent = msg("layering");
   const layeringGroup = createGroup();
   layeringContainer.appendChild(layeringLabel);
-  const layeringFrontButton = createButton();
+  const layeringFrontButton = createButton({ useButtonTag: true });
   layeringFrontButton.appendChild(document.createTextNode(msg("front")));
   layeringGroup.appendChild(layeringFrontButton);
   layeringFrontButton.addEventListener("click", (e) => {
@@ -655,7 +727,7 @@ export default async function ({ addon, global, console, msg }) {
     settingsChanged(true);
   });
   layeringFrontButton.dataset.enabled = settings.layering === "front";
-  const layeringBehindButton = createButton();
+  const layeringBehindButton = createButton({ useButtonTag: true });
   layeringBehindButton.appendChild(document.createTextNode(msg("behind")));
   layeringGroup.appendChild(layeringBehindButton);
   layeringBehindButton.addEventListener("click", (e) => {

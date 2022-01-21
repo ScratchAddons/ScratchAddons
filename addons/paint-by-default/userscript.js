@@ -80,7 +80,7 @@ export default async function ({ addon, console }) {
   const getButtonToClick = (mainButton) => {
     const assetPanelWrapper = mainButton.closest("[class*=asset-panel_wrapper_]");
     if (assetPanelWrapper) {
-      if (assetPanelWrapper.querySelector("[class*=sound-editor_editor-container_]")) {
+      if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex === 2) {
         return soundMeta[getSetting("sound")] || soundMeta.library;
       } else {
         return costumeMeta[getSetting("costume")] || costumeMeta.library;

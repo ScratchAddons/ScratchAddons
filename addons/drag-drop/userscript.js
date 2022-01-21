@@ -109,7 +109,9 @@ export default async function ({ addon, global, console }) {
 
     const handleDragOver = (e) => {
       e.preventDefault();
+      e.dataTransfer.dropEffect = "copy";
     };
+    e.dataTransfer.dropEffect = "copy";
 
     const handleDragLeave = (e) => {
       e.preventDefault();

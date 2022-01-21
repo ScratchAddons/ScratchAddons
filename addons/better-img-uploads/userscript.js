@@ -115,6 +115,7 @@ export default async function ({ addon, console, msg }) {
       });
 
       let dim = { width: i.width, height: i.height };
+      const originalDim = JSON.parse(JSON.stringify(dim));
 
       if (mode === "fit") {
         //Make sure the image fits completely in the stage
@@ -176,7 +177,9 @@ export default async function ({ addon, console, msg }) {
       processed.push(
         new File( //Create the svg file
           [
-            `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0,0,${dim.width},${dim.height}" width="${dim.width}" height="${dim.height}">
+            `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0,0,${
+              dim.width
+            },${dim.height}" width="${dim.width}" height="${dim.height}">
         <g>
           <g
               data-paper-data='{"isPaintingLayer":true}'
@@ -192,8 +195,9 @@ export default async function ({ addon, console, msg }) {
               style="mix-blend-mode: normal;"
           >
             <image
-                width="${dim.width}"
-                height="${dim.height}"
+                width="${originalDim.width}"
+                height="${originalDim.height}"
+				transform="scale(${dim.width / originalDim.width},${dim.height / originalDim.height})"
                 xlink:href="${blob}"
             />
           </g>

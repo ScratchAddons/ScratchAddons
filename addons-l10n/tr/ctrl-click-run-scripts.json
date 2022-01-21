@@ -1,1 +1,1 @@
-{"ctrl-click-run-scripts/@name":"Kodları çalıştırmak için Ctrl+Tıkla","ctrl-click-run-scripts/@info-macContextDisabled":"macOS'ta Ctrl tuşu yerine Cmd tuşunu kullanın."}
+{"ctrl-click-run-scripts/@name":"Kodları çalıştırmak için Ctrl+Tıkla","ctrl-click-run-scripts/@description":"Sadece eğer Ctrl tuşu da basılı tutuluyorsa blok dizilerini çalıştırın.","ctrl-click-run-scripts/@info-macContextDisabled":"macOS'ta Ctrl tuşu yerine Cmd tuşunu kullanın."}

@@ -17,7 +17,7 @@
   "userstyles": [
     {
       "url": "break-spaces.css",
-      "matches": ["studios", "projects", "profiles"]
+      "matches": ["studios", "projects"]
     }
   ],
   "dynamicEnable": true,

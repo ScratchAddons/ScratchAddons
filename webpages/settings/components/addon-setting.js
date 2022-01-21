@@ -18,12 +18,23 @@ export default async function ({ template }) {
             const arr = Array.isArray(this.setting.if.settings[settingName])
               ? this.setting.if.settings[settingName]
               : [this.setting.if.settings[settingName]];
-            return arr.some((possibleValue) => this.addonSettings[this.addon._addonId][settingName] === possibleValue);
+            return arr.some((possibleValue) => this.addonSettings[settingName] === possibleValue);
           });
           if (anyMatches === true) return true;
         }
 
         return false;
+      },
+      isNewOption() {
+        if (!this.addon.latestUpdate) return false;
+
+        const [extMajor, extMinor, _] = window.vue.version.split(".");
+        const [addonMajor, addonMinor, __] = this.addon.latestUpdate.version.split(".");
+        if (!(extMajor === addonMajor && extMinor === addonMinor)) return false;
+
+        if (this.addon.latestUpdate.newSettings && this.addon.latestUpdate.newSettings.includes(this.setting.id))
+          return true;
+        else return false;
       },
     },
     methods: {
@@ -58,9 +69,7 @@ export default async function ({ template }) {
         let input = document.querySelector(
           `input[data-addon-id='${this.addon._addonId}'][data-setting-id='${this.setting.id}']`
         );
-        this.addonSettings[this.addon._addonId][this.setting.id] = input.validity.valid
-          ? input.value
-          : this.setting.default;
+        this.addonSettings[this.setting.id] = input.validity.valid ? input.value : this.setting.default;
       },
       keySettingKeyDown(e) {
         e.preventDefault();
@@ -90,7 +99,7 @@ export default async function ({ template }) {
         this.$root.updateSettings(...params);
       },
       updateOption(newValue) {
-        this.addonSettings[this.addon._addonId][this.setting.id] = newValue;
+        this.addonSettings[this.setting.id] = newValue;
         this.updateSettings();
       },
     },

@@ -21,8 +21,20 @@
           info.text = scratchAddons.l10n.get(`${folderName}/@info-${info.id}`, {}, info.text);
         }
       }
+      if (manifest.credits) {
+        for (const credit of manifest.credits || []) {
+          credit.note = scratchAddons.l10n.get(`${folderName}/@credits-${credit.id}`, {}, credit.note);
+        }
+      }
       if (manifest.popup) {
         manifest.popup.name = scratchAddons.l10n.get(`${folderName}/@popup-name`, {}, manifest.popup.name);
+      }
+      if (manifest.latestUpdate?.temporaryNotice) {
+        manifest.latestUpdate.temporaryNotice = scratchAddons.l10n.get(
+          `${folderName}/@update`,
+          {},
+          manifest.latestUpdate.temporaryNotice
+        );
       }
     }
     for (const propName of ["userscripts", "userstyles"]) {
@@ -64,6 +76,7 @@
             studioIcon: "@studio.svg",
             remixIcon: "@remix.svg",
             adminusersIcon: "@adminusers.svg",
+            usersIcon: "@users.svg",
           },
           option.name
         );

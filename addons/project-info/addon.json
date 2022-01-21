@@ -12,27 +12,12 @@
     {
       "url": "projectstats.js",
       "matches": ["projects"]
-    },
-    {
-      "url": "blockcount.js",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "editorCount": true }
-      }
     }
   ],
   "userstyles": [
     {
       "url": "userscript.css",
       "matches": ["projects"]
-    }
-  ],
-  "settings": [
-    {
-      "id": "editorCount",
-      "name": "Live block count in editor",
-      "type": "boolean",
-      "default": false
     }
   ],
   "versionAdded": "1.4.0"

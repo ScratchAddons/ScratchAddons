@@ -3,6 +3,8 @@
   "mediarecorder/stop": "Stop Recording",
   "mediarecorder/option-title": "Record Options",
   "mediarecorder/record-duration": "Record Duration (in seconds)",
+  "mediarecorder/start-delay": "Start Delay (in seconds)",
+  "mediarecorder/starting-in": "Starting in {secs}...",
   "mediarecorder/record-audio": "Include project sounds",
   "mediarecorder/record-mic": "Include sounds from microphone",
   "mediarecorder/record-audio-description": "This does not include Text-to-Speech.",

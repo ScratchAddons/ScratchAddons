@@ -1,0 +1,19 @@
+{
+  "name": "Hide new variables",
+  "description": "Do not automatically create monitors for newly created variables or lists.",
+  "credits": [
+    {
+      "name": "GarboMuffin"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor", "codeEditor", "featured"],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "versionAdded": "1.20.0"
+}
