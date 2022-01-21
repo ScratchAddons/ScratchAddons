@@ -1,6 +1,6 @@
 {
   "name": "Hide signatures on forums",
-  "description": "Hides people's signatures in the forums.",
+  "description": "Hides signatures in forum posts and adds a \"Show signature\" button.",
   "credits": [
     {
       "name": "Verixion",
