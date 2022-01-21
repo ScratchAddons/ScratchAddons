@@ -5,6 +5,7 @@ export default async function ({ addon, global, console, msg }) {
   for (const post of posts) {
     const actionsWrapper = post.querySelector(".postfootright");
     const signature = post.querySelector(".postsignature");
+    if (!signature) continue;
 
     const hideBtnWrapper = document.createElement("li");
     const hideBtn = document.createElement("a");
