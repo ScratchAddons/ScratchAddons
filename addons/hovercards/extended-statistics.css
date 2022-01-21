@@ -156,8 +156,15 @@
   margin-bottom: auto;
 }
 
-.sa-hovercards-user .sa-hovercards-origin {
+.sa-hovercards-user .sa-hovercards-origin,
+.sa-hovercards-user .sa-hovercards-warn {
   grid-column: 1 / span 2;
+}
+
+.sa-hovercards-user .sa-hovercards-warn {
+  font-size: 80%;
+  line-height: 100%;
+  margin-top: 1.5%
 }
 
 .sa-hovercards-project .sa-hovercards-img-wrapper,

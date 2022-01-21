@@ -183,7 +183,7 @@ const tooltipContentFunctions = {
 			}
 
 			if (data.deleted) {
-				throw msg("error-scratchdb-deleted")
+				throw msg("error-deleted-forum-topic-scratchdb")
 			}
 
 			const categoryText = document.createElement("div")
@@ -223,7 +223,7 @@ const tooltipContentFunctions = {
 			}        
 
 			if (data.deleted) {
-				throw msg("error-scratchdb-deleted")
+				throw msg("error-deleted-forum-post-scratchdb")
 				// console.log(data)
 			}
 
@@ -408,10 +408,20 @@ const tooltipContentFunctions = {
 				.then(response => response.json())
 				.catch(() => false)
 
-			if (!data) return wrapper
+			console.log(data)
 
-			const originText = document.createElement("div")
 			const infoExtendedWrapper = document.createElement("div")
+			wrapper.appendChild(infoExtendedWrapper)
+
+			if (!data || (data.error && data.error === "UserNotFoundError")) {
+				const warnElement = document.createElement("div")
+				warnElement.className = "sa-hovercards-warning"
+				warnElement.textContent = msg("error-no-user-scratchdb")
+				infoExtendedWrapper.appendChild(warnElement)
+				return wrapper
+			}
+			
+			const originText = document.createElement("div")
 
 			originText.className = "sa-hovercards-origin"
 			infoExtendedWrapper.className = "sa-hovercards-info-extended-wrapper"
@@ -420,7 +430,13 @@ const tooltipContentFunctions = {
 
 			infoExtendedWrapper.appendChild(originText)
 
-			if (!data.statistics) return wrapper
+			if (!data.statistics) {
+				const warnElement = document.createElement("div")
+				warnElement.className = "sa-hovercards-warn"
+				warnElement.textContent = msg("error-no-user-statistics-scratchdb")
+				infoExtendedWrapper.appendChild(warnElement)
+				return wrapper
+			}
 			
 			const viewsText = document.createElement("div")
 			const lovesText = document.createElement("div")
@@ -445,8 +461,6 @@ const tooltipContentFunctions = {
 			infoExtendedWrapper.appendChild(favoritesText)
 			infoExtendedWrapper.appendChild(followersText)
 			infoExtendedWrapper.appendChild(followingText)    
-
-			wrapper.appendChild(infoExtendedWrapper)
 
 			return wrapper
 		},
@@ -492,7 +506,7 @@ const tippyGlobalOptions = {
 		instance._isFetching = false;
 		instance._src = null;
 		instance._error = null;
-	}
+	},
 	//,
 	// onHidden(instance) {
 	//     instance.destroy()
