@@ -74,7 +74,9 @@ export default async ({ addon, console, msg }) => {
     if (STAGE_PANE.contains(el)) pasteInto = STAGE_PANE;
     //Extra protection to make sure pasting into a text input never pastes an image
     if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") pasteInto = null;
-
+	//Also, disable passive paste when clicking on a card and if the costume editor is open
+	if (el.matches("[class*='sprite-selector-item_sprite-selector-item_'], [class*='sprite-selector-item_sprite-selector-item_'] *") && COSTUME_EDITOR) pasteInto = null;
+	
     if (pasteInto) {
       currentMenuInput = pasteInto.querySelector(
         "[class*='action-menu_more-buttons_'] input[class*='action-menu_file-input_']:not([class*='sa-'])"
