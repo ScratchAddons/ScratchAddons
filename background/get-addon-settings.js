@@ -34,6 +34,17 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       madeAnyChanges = true;
     }
 
+    if (addonSettings["editor-dark-mode"].textShadow === true && addonsEnabled["custom-block-text"] === undefined) {
+      // Transition v1.23 to v1.24
+      // Moved text shadow option to the custom-block-text addon
+      madeAnyChanges = true;
+      delete addonSettings["editor-dark-mode"].textShadow;
+      addonsEnabled["custom-block-text"] = addonsEnabled["editor-dark-mode"];
+      addonSettings["custom-block-text"] = { shadow: true };
+      // `shadow` isn't the only setting - the other setting, `bold`, is set
+      // to its default (false) inside the for loop below.
+    }
+
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
       const settings = addonSettings[addonId] || {};
