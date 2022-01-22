@@ -34,6 +34,15 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       madeAnyChanges = true;
     }
 
+    if (addonSettings["editor-dark-mode"].textShadow === true && addonsEnabled["custom-block-text"] === undefined) {
+      // Transition v1.23 to v1.24
+      // Moved text shadow option to the custom-block-text addon
+      madeAnyChanges = true;
+      delete addonSettings["editor-dark-mode"].textShadow;
+      addonsEnabled["custom-block-text"] = addonsEnabled["editor-dark-mode"];
+      addonSettings["custom-block-text"] = { textShadow: true };
+    }
+
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
       const settings = addonSettings[addonId] || {};
@@ -46,15 +55,6 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
         addonsEnabled["block-count"] = true;
       }
       if (addonId === "editor-dark-mode") {
-        if (settings.textShadow && addonsEnabled["custom-block-text"] === undefined) {
-          // Transition v1.23 to v1.24
-          // Moved text shadow option to the custom-block-text addon
-          madeChangesToAddon = madeAnyChanges = true;
-          delete settings.textShadow;
-          addonsEnabled["custom-block-text"] = addonsEnabled["editor-dark-mode"];
-          addonSettings["custom-block-text"].textShadow = true;
-        }
-
         // Transition v1.22 to v1.23
         // TurboWarp Dark preset changes:
         updatePresetIfMatching(
