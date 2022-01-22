@@ -13,7 +13,7 @@ export default async function ({ addon, global, console }) {
 
     const updateFlag = () => {
       button.style.filter = mode ? "hue-rotate(90deg)" : "";
-    }
+    };
 
     const changeMode = (_mode = !mode) => {
       mode = _mode;
