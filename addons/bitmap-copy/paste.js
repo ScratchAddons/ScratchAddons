@@ -116,10 +116,9 @@ export default async ({ addon, console, msg }) => {
       return;
     }
 
-    const FILES = clipboardData.files;
-    const TYPES = clipboardData.types;
+    const { files } = clipboardData;
 
-    if (!FILES) {
+    if (!files) {
       console.error("No files");
       if (!silent) {
         alert(msg("paste-error-filetype"));
@@ -129,10 +128,14 @@ export default async ({ addon, console, msg }) => {
 
     const filteredFiles = [];
 
-    for (const i in FILES) {
-      const FILE = FILES[i];
-      if (FILE.type === PNG || FILE.type === JPEG || FILE.type === GIF || FILE.type === BMP) {
-        filteredFiles.push(FILE);
+    for (const file of files) {
+      switch (file.type) {
+        case PNG:
+        case JPEG:
+        case GIF:
+        case BMP: {
+          filteredFiles.push(file);
+        }
       }
     }
 
@@ -179,7 +182,7 @@ export default async ({ addon, console, msg }) => {
     const tooltip = Object.assign(document.createElement("div"), {
       className: `__react_component_tooltip place-${right ? "left" : "right"} type-dark ${addon.tab.scratchClass(
         "action-menu_tooltip"
-      )} sa-better-img-uploads-tooltip`,
+      )} sa-paste-image-tooltip`,
       id: `sa-${id}-Paste Image`,
       textContent: uploadMsg,
     });
