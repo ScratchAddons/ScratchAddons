@@ -1,6 +1,6 @@
 {
   "name": "Customizable block text style",
-  "description": "Changes the thickness of the text on Scratch blocks and optionally adds a text shadow.",
+  "description": "Changes the thickness of the text on blocks and optionally adds a text shadow.",
   "tags": ["editor", "codeEditor", "featured"],
   "credits": [
     {
