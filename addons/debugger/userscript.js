@@ -2,6 +2,7 @@ import { isPaused, setPaused, onPauseChanged, setup } from "./module.js";
 import createLogsTab from "./logs.js";
 import createThreadsTab from "./threads.js";
 import createPerformanceTab from "./performance.js";
+import DevtoolsUtils from "../editor-devtools/blockly/Utils.js";
 
 const removeAllChildren = (element) => {
   while (element.firstChild) {
@@ -307,65 +308,8 @@ export default async function ({ addon, global, console, msg }) {
     // Don't scroll to blocks in the flyout
     if (block.workspace.isFlyout) return;
 
-    // Copied from devtools. If it's code gets improved for this function, bring those changes here too.
-    let root = block.getRootBlock();
-
-    let base = block;
-    while (base.getOutputShape() && base.getSurroundParent()) {
-      base = base.getSurroundParent();
-    }
-
-    const offsetX = 32;
-    const offsetY = 32;
-
-    let ePos = base.getRelativeToSurfaceXY(), // Align with the top of the block
-      rPos = root.getRelativeToSurfaceXY(), // Align with the left of the block 'stack'
-      scale = workspace.scale,
-      x = rPos.x * scale,
-      y = ePos.y * scale,
-      xx = block.width + x, // Turns out they have their x & y stored locally, and they are the actual size rather than scaled or including children...
-      yy = block.height + y,
-      s = workspace.getMetrics();
-    if (
-      x < s.viewLeft + offsetX - 4 ||
-      xx > s.viewLeft + s.viewWidth ||
-      y < s.viewTop + offsetY - 4 ||
-      yy > s.viewTop + s.viewHeight
-    ) {
-      let sx = x - s.contentLeft - offsetX,
-        sy = y - s.contentTop - offsetY;
-
-      workspace.scrollbar.set(sx, sy);
-    }
-    // Flashing
-    const myFlash = { block: null, timerID: null, colour: null };
-    if (myFlash.timerID > 0) {
-      clearTimeout(myFlash.timerID);
-      myFlash.block.setColour(myFlash.colour);
-    }
-
-    let count = 4;
-    let flashOn = true;
-    myFlash.colour = block.getColour();
-    myFlash.block = block;
-
-    function _flash() {
-      if (!myFlash.block.svgPath_) {
-        myFlash.timerID = count = 0;
-        flashOn = true;
-        return;
-      }
-      myFlash.block.svgPath_.style.fill = flashOn ? "#ffff80" : myFlash.colour;
-      flashOn = !flashOn;
-      count--;
-      if (count > 0) {
-        myFlash.timerID = setTimeout(_flash, 200);
-      } else {
-        myFlash.timerID = 0;
-      }
-    }
-
-    _flash();
+    const { scrollBlockIntoView } = new DevtoolsUtils(addon);
+    scrollBlockIntoView(blockId);
   };
 
   // May be slightly incorrect in some edge cases.

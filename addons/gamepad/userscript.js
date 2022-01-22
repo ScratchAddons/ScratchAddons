@@ -97,6 +97,9 @@ export default async function ({ addon, global, console, msg }) {
       usedKeys: getKeysUsedByProject(),
     };
   };
+  vm.runtime.on("PROJECT_LOADED", () => {
+    gamepad.resetControls();
+  });
 
   if (addon.settings.get("hide")) {
     await new Promise((resolve) => {
