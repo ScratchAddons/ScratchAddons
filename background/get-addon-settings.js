@@ -40,7 +40,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       madeAnyChanges = true;
       delete addonSettings["editor-dark-mode"].textShadow;
       addonsEnabled["custom-block-text"] = addonsEnabled["editor-dark-mode"];
-      addonSettings["custom-block-text"] = { textShadow: true };
+      addonSettings["custom-block-text"] = { shadow: true };
     }
 
     for (const { manifest, addonId } of scratchAddons.manifests) {
