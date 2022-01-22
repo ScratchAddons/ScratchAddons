@@ -1,6 +1,6 @@
 export default async function ({ template }) {
   const AddonSetting = Vue.extend({
-    props: ["addon", "setting", "addon-settings"],
+    props: ["addon", "tableChild", "setting", "addon-settings"],
     template,
     data() {
       return {
@@ -44,6 +44,7 @@ export default async function ({ template }) {
       },
       showResetDropdown() {
         return (
+          !this.tableChild &&
           this.addon.presets &&
           this.addon.presets.some((preset) =>
             Object.prototype.hasOwnProperty.call(preset.values, this.setting.id) && this.setting.type === "color"
