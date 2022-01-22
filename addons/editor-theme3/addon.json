@@ -10,6 +10,11 @@
       "link": "https://scratch.mit.edu/users/TheColaber"
     }
   ],
+  "latestUpdate": {
+    "version": "1.24.0",
+    "temporaryNotice": "New setting to enable changing the colors of blocks in the forums.",
+    "newSettings": ["forums"]
+  },
   "customCssVariables": [
     {
       "name": "inputColor-text",

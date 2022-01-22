@@ -18,7 +18,7 @@
       "matches": ["projects"]
     }
   ],
-  "tags": ["editor", "codeEditor", "featured", "beta"],
+  "tags": ["editor", "codeEditor", "featured"],
   "versionAdded": "1.22.0",
   "dynamicEnable": true,
   "dynamicDisable": true,

@@ -23,7 +23,7 @@
       }
       if (manifest.credits) {
         for (const credit of manifest.credits || []) {
-          credit.note = scratchAddons.l10n.get(`${folderName}/@credits-${credit.id}`, {}, credit.note);
+          if (credit.note) credit.note = scratchAddons.l10n.get(`${folderName}/@credits-${credit.id}`, {}, credit.note);
         }
       }
       if (manifest.popup) {

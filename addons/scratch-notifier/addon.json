@@ -11,7 +11,7 @@
     {
       "name": "notificationsounds.com",
       "note": "Scratch Addons ping",
-      "id": "Scratch Addons ping"
+      "id": "scratchAddonsPing"
     }
   ],
   "permissions": ["notifications"],
