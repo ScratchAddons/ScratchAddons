@@ -1,5 +1,5 @@
 .sa-hovercards-wrapper {
-  margin: .25em;
+  margin: 0.25em;
 }
 
 .sa-hovercards-studio-title {
@@ -31,7 +31,7 @@
 }
 
 .tippy-box[data-theme^="sa-hovercards"] .tippy-content {
-  font-size: .923em;
+  font-size: 0.923em;
   line-height: 1.2em;
   font-weight: bold;
 }
@@ -40,7 +40,7 @@
 .sa-hovercards-topic-category,
 .sa-hovercards-post-count {
   color: #aaa;
-  font-size: .8462em;
+  font-size: 0.8462em;
 }
 
 .tippy-box[data-theme="sa-hovercards-light"] .sa-hovercards-project-author,
@@ -75,18 +75,18 @@
 }
 
 .sa-hovercards-post-author {
-  padding-top: .5em;
+  padding-top: 0.5em;
   border-top: 1px solid #8888;
   font-weight: bold;
 }
 
 .sa-hovercards-forum-topic .sa-hovercards-info-wrapper > *,
 .sa-hovercards-forum-post .sa-hovercards-info-wrapper > * {
-  margin: .5em 0;
+  margin: 0.5em 0;
 }
 
 .sa-hovercards-studio .sa-hovercards-img-wrapper {
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 
 .sa-hovercards-user,
@@ -94,7 +94,7 @@
 .sa-hovercards-studio {
   display: grid;
   grid-auto-flow: column;
-  gap: .25em .5em;
+  gap: 0.25em 0.5em;
 }
 
 .sa-hovercards-user .sa-hovercards-img-wrapper,
@@ -115,7 +115,7 @@
 .sa-hovercards-project-author-img {
   grid-column: 1;
   grid-row: 1 / span 2;
-  margin: auto .5em auto 0;
+  margin: auto 0.5em auto 0;
   border-radius: calc((1em / 0.923) * 0.25);
   width: calc((1em / 0.923) * 2);
   height: calc((1em / 0.923) * 2);
@@ -131,7 +131,7 @@
 .sa-hovercards-studio .sa-hovercards-info-extended-wrapper,
 .sa-hovercards-user .sa-hovercards-info-extended-wrapper {
   width: 250px;
-  font-size: .8462em;
+  font-size: 0.8462em;
   font-weight: normal;
   margin-bottom: auto;
   white-space: pre-line;
@@ -155,5 +155,5 @@
 
 .sa-hovercards-forum-post,
 .sa-hovercards-forum-topic {
-  max-width: calc(350px - 18.5px - .5em);
+  max-width: calc(350px - 18.5px - 0.5em);
 }
