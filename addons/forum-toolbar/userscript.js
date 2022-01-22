@@ -39,8 +39,6 @@ export default async ({ addon, console, msg }) => {
     const liTag = document.createElement("li");
     liTag.classList.add("markItUpButton");
     liTag.classList.add("markItUpDropMenu");
-    liTag.classList.add("sa-forum-toolbar");
-    liTag.classList.add("sa-forum-toolbar-dropdown");
     liTag.classList.add("sa-forum-toolbar-" + name);
     liTag.dataset.name = name;
     const buttonName = msg(name);
@@ -79,7 +77,6 @@ export default async ({ addon, console, msg }) => {
   ) => {
     const liTag = document.createElement("li");
     liTag.classList.add("markItUpButton");
-    liTag.classList.add("sa-forum-toolbar");
     liTag.classList.add("sa-forum-toolbar-" + name);
     liTag.dataset.name = name;
     const buttonName = msg(name);

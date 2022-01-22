@@ -1,39 +1,41 @@
-import downloadBlob from "../../libraries/common/cs/download-blob.js";
-import { paused, setPaused, onPauseChanged } from "./../pause/module.js";
+import { isPaused, setPaused, onPauseChanged, setup } from "./module.js";
+import createLogsTab from "./logs.js";
+import createThreadsTab from "./threads.js";
+import createPerformanceTab from "./performance.js";
+import DevtoolsUtils from "../editor-devtools/blockly/Utils.js";
+
+const removeAllChildren = (element) => {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
+};
 
 export default async function ({ addon, global, console, msg }) {
-  let showingConsole, ScratchBlocks;
-  const vm = addon.tab.traps.vm;
+  setup(addon.tab.traps.vm);
 
-  const container = document.createElement("div");
-  container.className = "sa-debugger-container";
-  const buttonContainer = document.createElement("div");
-  buttonContainer.className = addon.tab.scratchClass("button_outlined-button", "stage-header_stage-button");
-  const buttonContent = document.createElement("div");
-  buttonContent.className = addon.tab.scratchClass("button_content");
-  const buttonImage = document.createElement("img");
-  buttonImage.className = addon.tab.scratchClass("stage-header_stage-button-icon");
-  buttonImage.draggable = false;
-  buttonImage.src = addon.self.dir + "/debug.svg";
-  buttonContent.appendChild(buttonImage);
-  buttonContainer.appendChild(buttonContent);
-  container.appendChild(buttonContainer);
-  buttonContainer.addEventListener("click", () => toggleConsole(true));
+  let logsTab;
+  const messagesLoggedBeforeLogsTabLoaded = [];
+  const logMessage = (...args) => {
+    if (logsTab) {
+      logsTab.addLog(...args);
+    } else {
+      messagesLoggedBeforeLogsTabLoaded.push(args);
+    }
+  };
 
   let hasLoggedPauseError = false;
-
   const pause = (_, thread) => {
     if (addon.tab.redux.state.scratchGui.mode.isPlayerOnly) {
       if (!hasLoggedPauseError) {
-        addLog(msg("cannot-pause-player"), thread, "error");
+        logMessage(msg("cannot-pause-player"), thread, "error");
         hasLoggedPauseError = true;
       }
       return;
     }
-    setPaused(!paused);
-    const pauseAddonButton = document.querySelector(".pause-btn");
-    if (!pauseAddonButton || getComputedStyle(pauseAddonButton).display === "none") toggleConsole(true);
+    setPaused(true);
+    setInterfaceVisible(true);
   };
+
   addon.tab.addBlock("sa-pause", {
     args: [],
     callback: pause,
@@ -48,454 +50,496 @@ export default async function ({ addon, global, console, msg }) {
     args: ["content"],
     displayName: msg("block-log"),
     callback: ({ content }, thread) => {
-      addLog(content, thread, "log");
+      logMessage(content, thread, "log");
     },
   });
   addon.tab.addBlock("\u200B\u200Bwarn\u200B\u200B %s", {
     args: ["content"],
     displayName: msg("block-warn"),
     callback: ({ content }, thread) => {
-      addLog(content, thread, "warn");
+      logMessage(content, thread, "warn");
     },
   });
   addon.tab.addBlock("\u200B\u200Berror\u200B\u200B %s", {
     args: ["content"],
     displayName: msg("block-error"),
     callback: ({ content }, thread) => {
-      addLog(content, thread, "error");
+      logMessage(content, thread, "error");
     },
   });
 
-  const consoleWrapper = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_card", { others: "debug" }),
+  const vm = addon.tab.traps.vm;
+  await new Promise((resolve, reject) => {
+    if (vm.editingTarget) return resolve();
+    vm.runtime.once("PROJECT_LOADED", resolve);
   });
-  const consoleTitle = Object.assign(document.createElement("div"), {
+  const ScratchBlocks = await addon.tab.traps.getBlockly();
+
+  const debuggerButtonOuter = document.createElement("div");
+  debuggerButtonOuter.className = "sa-debugger-container";
+  const debuggerButton = document.createElement("div");
+  debuggerButton.className = addon.tab.scratchClass("button_outlined-button", "stage-header_stage-button");
+  const debuggerButtonContent = document.createElement("div");
+  debuggerButtonContent.className = addon.tab.scratchClass("button_content");
+  const debuggerButtonImage = document.createElement("img");
+  debuggerButtonImage.className = addon.tab.scratchClass("stage-header_stage-button-icon");
+  debuggerButtonImage.draggable = false;
+  debuggerButtonImage.src = addon.self.dir + "/icons/debug.svg";
+  debuggerButtonContent.appendChild(debuggerButtonImage);
+  debuggerButton.appendChild(debuggerButtonContent);
+  debuggerButtonOuter.appendChild(debuggerButton);
+  debuggerButton.addEventListener("click", () => setInterfaceVisible(true));
+
+  const setHasUnreadMessage = (unreadMessage) => {
+    // setting image.src is slow, only do it when necessary
+    const newImage = addon.self.dir + (unreadMessage ? "/icons/debug-unread.svg" : "/icons/debug.svg");
+    if (debuggerButtonImage.src !== newImage) {
+      debuggerButtonImage.src = newImage;
+    }
+  };
+
+  const interfaceContainer = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_card", { others: "sa-debugger-interface" }),
+  });
+  const interfaceHeader = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_header-buttons"),
   });
-  const consoleText = Object.assign(document.createElement("h1"), {
-    innerText: msg("console"),
+  const tabListElement = Object.assign(document.createElement("ul"), {
+    className: "sa-debugger-tabs",
   });
-  const extraContainer = Object.assign(document.createElement("div"), {
-    className: `extra-log-container`,
+  const buttonContainerElement = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_header-buttons-right", { others: "sa-debugger-header-buttons" }),
   });
-
-  const goToBlock = (targetId, blockId) => {
-    const workspace = Blockly.getMainWorkspace();
-
-    const offsetX = 32,
-      offsetY = 32;
-    if (targetId !== vm.editingTarget.id) {
-      // note: this is O(n) so don't call it if unnecessary!
-      if (vm.runtime.getTargetById(targetId)) {
-        vm.setEditingTarget(targetId);
-        // Should not cause recursion
-        setTimeout(() => goToBlock(targetId, blockId), 300);
-      }
-      return;
-    }
-    const block = workspace.getBlockById(blockId);
-    if (!block) return;
-
-    // Don't scroll to blocks in the flyout
-    if (block.workspace.isFlyout) return;
-
-    // Make sure the code tab is active
-    if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 0) {
-      addon.tab.redux.dispatch({
-        type: "scratch-gui/navigation/ACTIVATE_TAB",
-        activeTabIndex: 0,
-      });
-      setTimeout(() => goToBlock(targetId, blockId), 0);
-      return;
-    }
-
-    // Copied from devtools. If it's code gets improved for this function, bring those changes here too.
-    let root = block.getRootBlock();
-
-    let base = block;
-    while (base.getOutputShape() && base.getSurroundParent()) {
-      base = base.getSurroundParent();
-    }
-
-    let ePos = base.getRelativeToSurfaceXY(), // Align with the top of the block
-      rPos = root.getRelativeToSurfaceXY(), // Align with the left of the block 'stack'
-      scale = workspace.scale,
-      x = rPos.x * scale,
-      y = ePos.y * scale,
-      xx = block.width + x, // Turns out they have their x & y stored locally, and they are the actual size rather than scaled or including children...
-      yy = block.height + y,
-      s = workspace.getMetrics();
-    if (
-      x < s.viewLeft + offsetX - 4 ||
-      xx > s.viewLeft + s.viewWidth ||
-      y < s.viewTop + offsetY - 4 ||
-      yy > s.viewTop + s.viewHeight
-    ) {
-      let sx = x - s.contentLeft - offsetX,
-        sy = y - s.contentTop - offsetY;
-
-      workspace.scrollbar.set(sx, sy);
-    }
-    // Flashing
-    const myFlash = { block: null, timerID: null, colour: null };
-    if (myFlash.timerID > 0) {
-      clearTimeout(myFlash.timerID);
-      myFlash.block.setColour(myFlash.colour);
-    }
-
-    let count = 4;
-    let flashOn = true;
-    myFlash.colour = block.getColour();
-    myFlash.block = block;
-
-    function _flash() {
-      if (!myFlash.block.svgPath_) {
-        myFlash.timerID = count = 0;
-        flashOn = true;
-        return;
-      }
-      myFlash.block.svgPath_.style.fill = flashOn ? "#ffff80" : myFlash.colour;
-      flashOn = !flashOn;
-      count--;
-      if (count > 0) {
-        myFlash.timerID = setTimeout(_flash, 200);
-      } else {
-        myFlash.timerID = 0;
-      }
-    }
-
-    _flash();
-  };
-  extraContainer.addEventListener("click", (e) => {
-    const elem = e.target;
-    if (elem.classList.contains("deletedTarget")) return;
-    const targetId = elem.dataset.targetId;
-    const blockId = elem.dataset.blockId;
-    if (targetId && blockId) goToBlock(targetId, blockId);
-  });
-  const consoleList = Object.assign(document.createElement("div"), {
-    className: "logs",
-  });
-  const buttons = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_header-buttons-right"),
+  const tabContentContainer = Object.assign(document.createElement("div"), {
+    className: "sa-debugger-tab-content",
   });
 
-  const unpauseButton = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_shrink-expand-button", { others: "sa-debugger-unpause" }),
-    draggable: false,
-  });
-  const unpauseImg = Object.assign(document.createElement("img"), {
-    src: addon.self.dir + "/play.svg",
-  });
-  const unpauseText = Object.assign(document.createElement("span"), {
-    innerText: msg("unpause"),
-  });
-
-  const exportButton = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_shrink-expand-button"),
-    title: msg("export-desc"),
-    draggable: false,
-  });
-  const exportImg = Object.assign(document.createElement("img"), {
-    src: addon.self.dir + "/download-white.svg",
-  });
-  const exportText = Object.assign(document.createElement("span"), {
-    innerText: msg("export"),
-  });
-
-  const trashButton = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_shrink-expand-button"),
-    draggable: false,
-  });
-  const trashImg = Object.assign(document.createElement("img"), {
-    src: addon.self.dir + "/delete.svg",
-  });
-  const trashText = Object.assign(document.createElement("span"), {
-    innerText: msg("clear"),
-  });
-
-  const closeButton = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_remove-button"),
-    draggable: false,
-  });
-  const closeImg = Object.assign(document.createElement("img"), {
-    className: addon.tab.scratchClass("close-button_close-icon"),
-    src: addon.self.dir + "/add.svg",
-  });
-  const closeText = Object.assign(document.createElement("span"), {
-    innerText: msg("close"),
-  });
-
-  consoleTitle.append(consoleText, buttons);
-  buttons.append(unpauseButton, exportButton, trashButton, closeButton);
-  trashButton.append(trashImg, trashText);
-  closeButton.append(closeImg, closeText);
-  exportButton.append(exportImg, exportText);
-  unpauseButton.append(unpauseImg, unpauseText);
-  extraContainer.append(consoleList);
-  consoleWrapper.append(consoleTitle, extraContainer);
-  document.body.append(consoleWrapper);
-
-  consoleTitle.addEventListener("mousedown", dragMouseDown);
-
-  let isScrolledToEnd = true;
-  extraContainer.addEventListener(
-    "wheel",
-    (e) => {
-      // When user scrolls up, stop automatically scrolling down
-      if (e.deltaY < 0) {
-        isScrolledToEnd = false;
-      }
-    },
-    { passive: true }
-  );
-  extraContainer.addEventListener(
-    "scroll",
-    () => {
-      isScrolledToEnd = extraContainer.scrollTop + 5 >= extraContainer.scrollHeight - extraContainer.clientHeight;
-    },
-    { passive: true }
-  );
-
-  const getTargetInfo = (id, cache = null) => {
-    if (cache && cache[id]) return cache[id];
-    const target = vm.runtime.getTargetById(id);
-    let item;
-    if (target) {
-      item = { name: target.getName(), isDeleted: false };
+  let isInterfaceVisible = false;
+  const setInterfaceVisible = (_isVisible) => {
+    isInterfaceVisible = _isVisible;
+    interfaceContainer.style.display = isInterfaceVisible ? "flex" : "";
+    if (isInterfaceVisible) {
+      activeTab.show();
     } else {
-      item = { name: msg("deleted-sprite"), isDeleted: true };
+      activeTab.hide();
     }
-    if (cache) cache[id] = item;
-    return item;
   };
 
   let mouseOffsetX = 0;
   let mouseOffsetY = 0;
   let lastX = 0;
   let lastY = 0;
-
-  function dragMouseDown(e) {
+  const handleStartDrag = (e) => {
     e.preventDefault();
-    mouseOffsetX = e.clientX - consoleWrapper.offsetLeft;
-    mouseOffsetY = e.clientY - consoleWrapper.offsetTop;
+    mouseOffsetX = e.clientX - interfaceContainer.offsetLeft;
+    mouseOffsetY = e.clientY - interfaceContainer.offsetTop;
     lastX = e.clientX;
     lastY = e.clientY;
-    document.addEventListener("mouseup", closeDragElement);
-    document.addEventListener("mousemove", elementDrag);
-  }
-
-  function dragConsole(x, y) {
+    document.addEventListener("mouseup", handleStopDrag);
+    document.addEventListener("mousemove", handleDragInterface);
+  };
+  const handleStopDrag = () => {
+    document.removeEventListener("mouseup", handleStopDrag);
+    document.removeEventListener("mousemove", handleDragInterface);
+  };
+  const moveInterface = (x, y) => {
     lastX = x;
     lastY = y;
     const width = (document.documentElement.clientWidth || document.body.clientWidth) - 1;
     const height = (document.documentElement.clientHeight || document.body.clientHeight) - 1;
-    const clampedX = Math.max(0, Math.min(x - mouseOffsetX, width - consoleWrapper.offsetWidth));
-    const clampedY = Math.max(0, Math.min(y - mouseOffsetY, height - consoleWrapper.offsetHeight));
-    consoleWrapper.style.left = clampedX + "px";
-    consoleWrapper.style.top = clampedY + "px";
-  }
-
-  function elementDrag(e) {
+    const clampedX = Math.max(0, Math.min(x - mouseOffsetX, width - interfaceContainer.offsetWidth));
+    const clampedY = Math.max(0, Math.min(y - mouseOffsetY, height - interfaceContainer.offsetHeight));
+    interfaceContainer.style.left = clampedX + "px";
+    interfaceContainer.style.top = clampedY + "px";
+  };
+  const handleDragInterface = (e) => {
     e.preventDefault();
-    dragConsole(e.clientX, e.clientY);
-  }
-
+    moveInterface(e.clientX, e.clientY);
+  };
   window.addEventListener("resize", () => {
-    dragConsole(lastX, lastY);
+    moveInterface(lastX, lastY);
   });
+  interfaceHeader.addEventListener("mousedown", handleStartDrag);
 
-  function closeDragElement() {
-    // stop moving when mouse button is released:
-    document.removeEventListener("mouseup", closeDragElement);
-    document.removeEventListener("mousemove", elementDrag);
-  }
+  interfaceHeader.append(tabListElement, buttonContainerElement);
+  interfaceContainer.append(interfaceHeader, tabContentContainer);
+  document.body.append(interfaceContainer);
 
-  trashButton.addEventListener("click", () => {
-    document.querySelectorAll(".log").forEach((log, i) => log.remove());
-    closeDragElement();
-    logs = [];
-    isScrolledToEnd = true;
-  });
-  trashButton.addEventListener("mouseup", () => {
-    closeDragElement();
-  });
-  closeButton.addEventListener("click", () => toggleConsole(false));
-  closeButton.addEventListener("mouseup", () => closeDragElement());
-  let download = (filename, text) => downloadBlob(filename, new Blob([text], { type: "text/plain" }));
-
-  unpauseButton.addEventListener("click", () => setPaused(false));
-  if (!paused) unpauseButton.style.display = "none";
-  onPauseChanged((newPauseValue) => (unpauseButton.style.display = newPauseValue ? "" : "none"));
-
-  exportButton.addEventListener("click", (e) => {
-    const defaultFormat = "{sprite}: {content} ({type})";
-    const exportFormat = e.shiftKey ? prompt(msg("enter-format"), defaultFormat) : defaultFormat;
-    if (!exportFormat) return;
-    closeDragElement();
-    const targetInfoCache = Object.create(null);
-    let file = logs
-      .map(({ targetId, type, content }) =>
-        exportFormat.replace(
-          /\{(sprite|type|content)\}/g,
-          (_, match) =>
-            ({
-              sprite: getTargetInfo(targetId, targetInfoCache).name,
-              type,
-              content,
-            }[match])
-        )
-      )
-      .join("\n");
-    download("logs.txt", file);
-  });
-  let logs = [];
-  let scrollQueued = false;
-  const createLogWrapper = (type) => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "log";
-    wrapper.classList.add(type);
-    return wrapper;
-  };
-  const createLogText = (text) => {
-    const s = document.createElement("span");
-    s.innerText = text;
-    return s;
-  };
-
-  const addLog = (content, thread, type) => {
-    const wrapper = createLogWrapper(type);
-
-    const target = thread.target;
-    const parentTarget = target.isOriginal ? target : target.sprite.clones[0];
-    const targetId = parentTarget.id;
-    consoleList.append(wrapper);
-    if (type !== "log") {
-      const imageURL = addon.self.dir + (type === "error" ? "/error.svg" : "/warning.svg");
-      const icon = document.createElement("img");
-      icon.src = imageURL;
-      icon.alt = icon.title = msg("icon-" + type);
-      icon.className = "logIcon";
-      wrapper.appendChild(icon);
-    }
-
-    const blockId = thread.peekStack();
-    const block = target.blocks.getBlock(blockId);
-    if (block && ScratchBlocks) {
-      const inputId = Object.values(block.inputs)[0]?.block;
-      const inputBlock = target.blocks.getBlock(inputId);
-      if (inputBlock && inputBlock.opcode !== "text") {
-        let text, category;
-        if (
-          inputBlock.opcode === "data_variable" ||
-          inputBlock.opcode === "data_listcontents" ||
-          inputBlock.opcode === "argument_reporter_string_number" ||
-          inputBlock.opcode === "argument_reporter_boolean"
-        ) {
-          text = Object.values(inputBlock.fields)[0].value;
-          if (inputBlock.opcode === "data_variable") {
-            category = "data";
-          } else if (inputBlock.opcode === "data_listcontents") {
-            category = "list";
-          } else {
-            category = "more";
-          }
-        } else {
-          // Try to call things like https://github.com/LLK/scratch-blocks/blob/develop/blocks_vertical/operators.js
-          let jsonData;
-          const fakeBlock = {
-            jsonInit(data) {
-              jsonData = data;
-            },
-          };
-          const blockConstructor = ScratchBlocks.Blocks[inputBlock.opcode];
-          if (blockConstructor) {
-            try {
-              blockConstructor.init.call(fakeBlock);
-            } catch (e) {
-              // ignore
-            }
-          }
-          // If the block has a simple message with no arguments, display it
-          if (jsonData && jsonData.message0 && !jsonData.args0) {
-            text = jsonData.message0;
-            category = jsonData.category;
-          }
-        }
-        if (text && category) {
-          const blocklyColor = ScratchBlocks.Colours[category === "list" ? "data_lists" : category];
-          if (blocklyColor) {
-            const inputSpan = document.createElement("span");
-            inputSpan.textContent = text;
-            inputSpan.className = "console-variable";
-            const colorCategoryMap = {
-              list: "data-lists",
-              more: "custom",
-            };
-            inputSpan.dataset.category = colorCategoryMap[category] || category;
-            inputSpan.style.backgroundColor = blocklyColor.primary;
-            wrapper.append(inputSpan);
-          }
-        }
-      }
-    }
-    logs.push({
-      targetId,
-      type,
-      content,
+  const createHeaderButton = ({ text, icon, description }) => {
+    const button = Object.assign(document.createElement("div"), {
+      className: addon.tab.scratchClass("card_shrink-expand-button"),
+      draggable: false,
     });
-    wrapper.append(createLogText(content));
+    if (description) {
+      button.title = description;
+    }
+    const imageElement = Object.assign(document.createElement("img"), {
+      src: icon,
+      draggable: false,
+    });
+    const textElement = Object.assign(document.createElement("span"), {
+      textContent: text,
+    });
+    button.appendChild(imageElement);
+    button.appendChild(textElement);
+    return {
+      element: button,
+      image: imageElement,
+      text: textElement,
+    };
+  };
 
-    let link = document.createElement("a");
-    link.textContent = target.isOriginal
-      ? target.getName()
-      : msg("clone-of", {
-          spriteName: parentTarget.getName(),
+  const createHeaderTab = ({ text, icon }) => {
+    const tab = document.createElement("li");
+    const imageElement = Object.assign(document.createElement("img"), {
+      src: icon,
+      draggable: false,
+    });
+    const textElement = Object.assign(document.createElement("span"), {
+      textContent: text,
+    });
+    tab.appendChild(imageElement);
+    tab.appendChild(textElement);
+    return {
+      element: tab,
+      image: imageElement,
+      text: textElement,
+    };
+  };
+
+  const unpauseButton = createHeaderButton({
+    text: msg("unpause"),
+    icon: addon.self.dir + "/icons/play.svg",
+  });
+  unpauseButton.element.classList.add("sa-debugger-unpause");
+  unpauseButton.element.addEventListener("click", () => setPaused(false));
+  const updateUnpauseVisibility = (paused) => {
+    unpauseButton.element.style.display = paused ? "" : "none";
+  };
+  updateUnpauseVisibility(isPaused());
+  onPauseChanged(updateUnpauseVisibility);
+
+  const closeButton = createHeaderButton({
+    text: msg("close"),
+    icon: addon.self.dir + "/icons/close.svg",
+  });
+  closeButton.element.addEventListener("click", () => setInterfaceVisible(false));
+
+  const originalStep = vm.runtime._step;
+  const afterStepCallbacks = [];
+  vm.runtime._step = function (...args) {
+    const ret = originalStep.call(this, ...args);
+    for (const cb of afterStepCallbacks) {
+      cb();
+    }
+    return ret;
+  };
+  const addAfterStepCallback = (cb) => {
+    afterStepCallbacks.push(cb);
+  };
+
+  const getTargetInfoById = (id) => {
+    const target = vm.runtime.getTargetById(id);
+    if (target) {
+      let name = target.getName();
+      let original = target;
+      if (!target.isOriginal) {
+        name = msg("clone-of", {
+          sprite: name,
         });
-    link.className = "logLink";
-    link.dataset.blockId = blockId;
-    link.dataset.targetId = targetId;
-    if (!target.isOriginal) {
-      link.dataset.isClone = "true";
+        original = target.sprite.clones[0];
+      }
+      return {
+        exists: true,
+        originalId: original.id,
+        name,
+      };
+    }
+    return {
+      exists: false,
+      original: null,
+      name: msg("unknown-sprite"),
+    };
+  };
+
+  const createBlockLink = (targetId, blockId) => {
+    const link = document.createElement("a");
+    link.className = "sa-debugger-log-link";
+
+    const { exists, name, originalId } = getTargetInfoById(targetId);
+    link.textContent = name;
+    if (exists) {
+      // We use mousedown instead of click so that you can still go to blocks when logs are rapidly scrolling
+      link.addEventListener("mousedown", () => {
+        switchToSprite(originalId);
+        activateCodeTab();
+        goToBlock(blockId);
+      });
+    } else {
+      link.classList.add("sa-debugger-log-link-unknown");
     }
 
-    wrapper.appendChild(link);
+    return link;
+  };
 
-    if (!scrollQueued && isScrolledToEnd) {
-      scrollQueued = true;
-      queueMicrotask(scrollToEnd);
-    }
-    if (!showingConsole) {
-      const unreadImage = addon.self.dir + "/debug-unread.svg";
-      if (buttonImage.src !== unreadImage) buttonImage.src = unreadImage;
+  const switchToSprite = (targetId) => {
+    if (targetId !== vm.editingTarget.id) {
+      if (vm.runtime.getTargetById(targetId)) {
+        vm.setEditingTarget(targetId);
+      }
     }
   };
-  const scrollToEnd = () => {
-    scrollQueued = false;
-    extraContainer.scrollTop = extraContainer.scrollHeight;
+
+  const activateCodeTab = () => {
+    const redux = addon.tab.redux;
+    if (redux.state.scratchGui.editorTab.activeTabIndex !== 0) {
+      redux.dispatch({
+        type: "scratch-gui/navigation/ACTIVATE_TAB",
+        activeTabIndex: 0,
+      });
+    }
   };
-  const toggleConsole = (show = !showingConsole) => {
-    showingConsole = show;
-    consoleWrapper.style.display = show ? "flex" : "";
-    if (show) {
-      buttonImage.src = addon.self.dir + "/debug.svg";
-      const cacheObj = Object.create(null);
-      for (const logLinkElem of document.getElementsByClassName("logLink")) {
-        const targetId = logLinkElem.dataset.targetId;
-        if (!targetId) return;
-        const tInfo = getTargetInfo(targetId, cacheObj);
-        logLinkElem.textContent = tInfo.name;
-        if (tInfo.isDeleted) {
-          logLinkElem.classList.add("deletedTarget");
-        } else if (logLinkElem.dataset.isClone) {
-          logLinkElem.textContent = msg("clone-of", { spriteName: tInfo.name });
+
+  const goToBlock = (blockId) => {
+    const workspace = Blockly.getMainWorkspace();
+    const block = workspace.getBlockById(blockId);
+    if (!block) return;
+
+    // Don't scroll to blocks in the flyout
+    if (block.workspace.isFlyout) return;
+
+    const { scrollBlockIntoView } = new DevtoolsUtils(addon);
+    scrollBlockIntoView(blockId);
+  };
+
+  // May be slightly incorrect in some edge cases.
+  const formatProcedureCode = (proccode) => proccode.replace(/%[nbs]/g, "()");
+
+  // May be slightly incorrect in some edge cases.
+  const formatBlocklyBlockData = (jsonData) => {
+    // For sample jsonData, see:
+    // https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/motion.js
+    // https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/control.js
+
+    const processSegment = (index) => {
+      const message = jsonData[`message${index}`];
+      const args = jsonData[`args${index}`];
+      if (!message) {
+        return null;
+      }
+      const parts = message.split(/%\d+/g);
+      let formattedMessage = "";
+      for (let i = 0; i < parts.length; i++) {
+        formattedMessage += parts[i];
+        const argInfo = args && args[i];
+        if (argInfo) {
+          const type = argInfo.type;
+          if (type === "field_vertical_separator") {
+            // no-op
+          } else if (type === "field_image") {
+            const src = argInfo.src;
+            if (src.endsWith("rotate-left.svg")) {
+              formattedMessage += "↩";
+            } else if (src.endsWith("rotate-right.svg")) {
+              formattedMessage += "↪";
+            }
+          } else {
+            formattedMessage += "()";
+          }
         }
       }
-      if (isScrolledToEnd) {
-        scrollToEnd();
+      return formattedMessage;
+    };
+
+    const parts = [];
+    let i = 0;
+    // The jsonData doesn't directly tell us how many segments it has, so we have to
+    // just keep looping until one doesn't exist.
+    while (true) {
+      const nextSegment = processSegment(i);
+      if (nextSegment) {
+        parts.push(nextSegment);
+      } else {
+        break;
+      }
+      i++;
+    }
+    return parts.join(" ");
+  };
+
+  const createBlockPreview = (targetId, blockId) => {
+    const target = vm.runtime.getTargetById(targetId);
+    if (!target) {
+      return null;
+    }
+
+    const block = target.blocks.getBlock(blockId);
+    if (!block || block.opcode === "text") {
+      return null;
+    }
+
+    let text;
+    let category;
+    let shape;
+    let color;
+    if (
+      block.opcode === "data_variable" ||
+      block.opcode === "data_listcontents" ||
+      block.opcode === "argument_reporter_string_number" ||
+      block.opcode === "argument_reporter_boolean"
+    ) {
+      text = Object.values(block.fields)[0].value;
+      if (block.opcode === "data_variable") {
+        category = "data";
+      } else if (block.opcode === "data_listcontents") {
+        category = "list";
+      } else {
+        category = "more";
+      }
+      shape = "round";
+    } else if (block.opcode === "procedures_call") {
+      const proccode = block.mutation.proccode;
+      text = formatProcedureCode(proccode);
+      const customBlock = addon.tab.getCustomBlock(proccode);
+      if (customBlock) {
+        category = "addon-custom-block";
+        color = customBlock.color;
+      } else {
+        category = "more";
+      }
+    } else if (block.opcode === "procedures_definition") {
+      const prototypeBlockId = block.inputs.custom_block.block;
+      const prototypeBlock = target.blocks.getBlock(prototypeBlockId);
+      const proccode = prototypeBlock.mutation.proccode;
+      text = ScratchBlocks.ScratchMsgs.translate("PROCEDURES_DEFINITION", "define %1").replace(
+        "%1",
+        formatProcedureCode(proccode)
+      );
+      category = "more";
+    } else {
+      // Try to call things like https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/operators.js#L36
+      var jsonData;
+      const fakeBlock = {
+        jsonInit(data) {
+          jsonData = data;
+        },
+      };
+      const blockConstructor = ScratchBlocks.Blocks[block.opcode];
+      if (blockConstructor) {
+        try {
+          blockConstructor.init.call(fakeBlock);
+        } catch (e) {
+          // ignore
+        }
+      }
+      if (!jsonData) {
+        return null;
+      }
+      text = formatBlocklyBlockData(jsonData);
+      if (!text) {
+        return null;
+      }
+      category = jsonData.category;
+      const isStatement =
+        (jsonData.extensions &&
+          (jsonData.extensions.includes("shape_statement") ||
+            jsonData.extensions.includes("shape_hat") ||
+            jsonData.extensions.includes("shape_end"))) ||
+        "previousStatement" in jsonData ||
+        "nextStatement" in jsonData;
+      shape = isStatement ? "stacked" : "round";
+    }
+    if (!text || !category) {
+      return null;
+    }
+
+    if (!color) {
+      const blocklyCategoryMap = {
+        "data-lists": "data_lists",
+        list: "data_lists",
+        events: "event",
+      };
+      const blocklyColor = ScratchBlocks.Colours[blocklyCategoryMap[category] || category];
+      if (blocklyColor) {
+        color = blocklyColor.primary;
+      } else {
+        // block probably belongs to an extension
+        color = ScratchBlocks.Colours.pen.primary;
       }
     }
+
+    const element = document.createElement("span");
+    element.className = "sa-debugger-block-preview";
+    element.textContent = text;
+    element.style.backgroundColor = color;
+    element.dataset.shape = shape;
+
+    // data-category is used for editor-theme3 compatibility
+    const colorCategoryMap = {
+      list: "data-lists",
+      more: "custom",
+    };
+    element.dataset.category = colorCategoryMap[category] || category;
+
+    return element;
   };
+
+  const api = {
+    debug: {
+      createHeaderButton,
+      createHeaderTab,
+      setHasUnreadMessage,
+      addAfterStepCallback,
+      getTargetInfoById,
+      createBlockLink,
+      createBlockPreview,
+    },
+    addon,
+    msg,
+    console,
+  };
+  logsTab = await createLogsTab(api);
+  const threadsTab = await createThreadsTab(api);
+  const performanceTab = await createPerformanceTab(api);
+  const allTabs = [logsTab, threadsTab, performanceTab];
+
+  for (const message of messagesLoggedBeforeLogsTabLoaded) {
+    logsTab.addLog(...message);
+  }
+  messagesLoggedBeforeLogsTabLoaded.length = 0;
+
+  let activeTab;
+  const setActiveTab = (tab) => {
+    if (tab === activeTab) return;
+    const selectedClass = "sa-debugger-tab-selected";
+    if (activeTab) {
+      activeTab.hide();
+      activeTab.tab.element.classList.remove(selectedClass);
+    }
+    tab.tab.element.classList.add(selectedClass);
+    activeTab = tab;
+
+    removeAllChildren(tabContentContainer);
+    tabContentContainer.appendChild(tab.content);
+
+    removeAllChildren(buttonContainerElement);
+    buttonContainerElement.appendChild(unpauseButton.element);
+    for (const button of tab.buttons) {
+      buttonContainerElement.appendChild(button.element);
+    }
+    buttonContainerElement.appendChild(closeButton.element);
+
+    if (isInterfaceVisible) {
+      activeTab.show();
+    }
+  };
+  for (const tab of allTabs) {
+    tab.tab.element.addEventListener("click", () => {
+      setActiveTab(tab);
+    });
+    tabListElement.appendChild(tab.tab.element);
+  }
+  setActiveTab(allTabs[0]);
 
   if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
     document.body.classList.add("sa-debugger-small");
@@ -512,6 +556,87 @@ export default async function ({ addon, global, console, msg }) {
     { capture: true }
   );
 
+  const ogGreenFlag = vm.runtime.greenFlag;
+  vm.runtime.greenFlag = function (...args) {
+    if (addon.settings.get("log_clear_greenflag")) {
+      logsTab.clearLogs();
+    }
+    if (addon.settings.get("log_greenflag")) {
+      logsTab.addLog(msg("log-msg-flag-clicked"), null, "internal");
+    }
+    return ogGreenFlag.call(this, ...args);
+  };
+
+  const ogMakeClone = vm.runtime.targets[0].constructor.prototype.makeClone;
+  vm.runtime.targets[0].constructor.prototype.makeClone = function (...args) {
+    if (addon.settings.get("log_failed_clone_creation") && !vm.runtime.clonesAvailable()) {
+      logsTab.addLog(
+        msg("log-msg-clone-cap", { sprite: this.getName() }),
+        vm.runtime.sequencer.activeThread,
+        "internal-warn"
+      );
+    }
+    var clone = ogMakeClone.call(this, ...args);
+    if (addon.settings.get("log_clone_create") && clone) {
+      logsTab.addLog(
+        msg("log-msg-clone-created", { sprite: this.getName() }),
+        vm.runtime.sequencer.activeThread,
+        "internal"
+      );
+    }
+    return clone;
+  };
+
+  const ogStartHats = vm.runtime.startHats;
+  vm.runtime.startHats = function (hat, optMatchFields, ...args) {
+    if (addon.settings.get("log_broadcasts") && hat === "event_whenbroadcastreceived") {
+      logsTab.addLog(
+        msg("log-msg-broadcasted", { broadcast: optMatchFields.BROADCAST_OPTION }),
+        vm.runtime.sequencer.activeThread,
+        "internal"
+      );
+    }
+    return ogStartHats.call(this, hat, optMatchFields, ...args);
+  };
+
+  const ogAddToList = vm.runtime._primitives.data_addtolist;
+  vm.runtime._primitives.data_addtolist = function (args, util) {
+    if (addon.settings.get("log_max_list_length")) {
+      const list = util.target.lookupOrCreateList(args.LIST.id, args.LIST.name);
+      if (list.value.length >= 200000) {
+        logsTab.addLog(msg("log-msg-list-append-too-long", { list: list.name }), util.thread, "internal-warn");
+      }
+    }
+    ogAddToList.call(this, args, util);
+  };
+
+  const ogInertAtList = vm.runtime._primitives.data_insertatlist;
+  vm.runtime._primitives.data_insertatlist = function (args, util) {
+    if (addon.settings.get("log_max_list_length")) {
+      const list = util.target.lookupOrCreateList(args.LIST.id, args.LIST.name);
+      if (list.value.length >= 200000) {
+        logsTab.addLog(msg("log-msg-list-insert-too-long", { list: list.name }), util.thread, "internal-warn");
+      }
+    }
+    ogInertAtList.call(this, args, util);
+  };
+
+  const ogSetVariableTo = vm.runtime._primitives.data_setvariableto;
+  vm.runtime._primitives.data_setvariableto = function (args, util) {
+    if (addon.settings.get("log_invalid_cloud_data")) {
+      const variable = util.target.lookupOrCreateVariable(args.VARIABLE.id, args.VARIABLE.name);
+      if (variable.isCloud) {
+        const value = args.VALUE.toString();
+        if (isNaN(value)) {
+          logsTab.addLog(msg("log-cloud-data-nan", { var: variable.name }), util.thread, "internal-warn");
+        } else if (value.length > 256) {
+          logsTab.addLog(msg("log-cloud-data-too-long", { var: variable.name }), util.thread, "internal-warn");
+        }
+      }
+    }
+    ogSetVariableTo.call(this, args, util);
+  };
+
   while (true) {
     await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {
       markAsSeen: true,
@@ -523,10 +648,9 @@ export default async function ({ addon, global, console, msg }) {
       ],
     });
     if (addon.tab.editorMode === "editor") {
-      ScratchBlocks = await addon.tab.traps.getBlockly();
-      addon.tab.appendToSharedSpace({ space: "stageHeader", element: container, order: 0 });
+      addon.tab.appendToSharedSpace({ space: "stageHeader", element: debuggerButtonOuter, order: 0 });
     } else {
-      toggleConsole(false);
+      setInterfaceVisible(false);
     }
   }
 }

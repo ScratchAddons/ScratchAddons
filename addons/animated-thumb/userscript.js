@@ -199,6 +199,8 @@ export default async function ({ addon, global, console, msg }) {
     blockOverwriting(isOverwritingEnabled(projectId));
   });
 
+  localStorage.removeItem("saAnimatedThumbShowTooltip");
+
   while (true) {
     await addon.tab.waitForElement(".flex-row.subactions > .flex-row.action-buttons", {
       markAsSeen: true,
@@ -212,31 +214,6 @@ export default async function ({ addon, global, console, msg }) {
     });
     addon.tab.displayNoneWhileDisabled(element);
     element.addEventListener("click", () => createModal());
-    if (!localStorage.getItem("saAnimatedThumbShowTooltip")) {
-      const tooltip = Object.assign(document.createElement("div"), {
-        className: "validation-message validation-info sa-animated-thumb-tooltip",
-        textContent: msg("tooltip"),
-        title: "",
-      });
-      element.addEventListener(
-        "click",
-        () => {
-          localStorage.setItem("saAnimatedThumbShowTooltip", "1");
-          tooltip.remove();
-        },
-        { once: true }
-      );
-      tooltip.addEventListener(
-        "click",
-        (e) => {
-          e.stopPropagation();
-          localStorage.setItem("saAnimatedThumbShowTooltip", "1");
-          tooltip.remove();
-        },
-        { once: true }
-      );
-      element.appendChild(tooltip);
-    }
     addon.tab.appendToSharedSpace({
       space: "beforeProjectActionButtons",
       order: 0,

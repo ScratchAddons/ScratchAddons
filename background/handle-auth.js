@@ -1,3 +1,7 @@
+import { startCache } from "./message-cache.js";
+import { openMessageCache } from "../libraries/common/message-cache.js";
+import { purgeDatabase } from "../addons/scratch-notifier/notifier.js";
+
 const promisify =
   (callbackFn) =>
   (...args) =>
@@ -24,18 +28,32 @@ function getDefaultStoreId() {
   const defaultStoreId = await getDefaultStoreId();
   console.log("Default cookie store ID: ", defaultStoreId);
   await checkSession();
+  startCache(defaultStoreId);
 })();
 
-chrome.cookies.onChanged.addListener(({ cookie, cause }) => {
+chrome.cookies.onChanged.addListener(({ cookie, cause, removed }) => {
   if (cookie.name === "scratchsessionsid" || cookie.name === "scratchlanguage" || cookie.name === "scratchcsrftoken") {
     if (cookie.name === "scratchlanguage") {
       setLanguage();
     } else if (!scratchAddons.cookieStoreId) {
       getDefaultStoreId().then(() => checkSession());
-    } else if (cookie.storeId === scratchAddons.cookieStoreId) {
-      checkSession();
+    } else if (
+      // do not refetch for csrf token expiration date change
+      cookie.storeId === scratchAddons.cookieStoreId &&
+      !(cookie.name === "scratchcsrftoken" && cookie.value === scratchAddons.globalState.auth.csrfToken)
+    ) {
+      checkSession().then(() => {
+        if (cookie.name === "scratchsessionsid") {
+          startCache(scratchAddons.cookieStoreId, true);
+          purgeDatabase();
+        }
+      });
+    } else if (cookie.name === "scratchsessionsid") {
+      // Clear message cache for the store
+      // This is not the main one, so we don't refetch here
+      openMessageCache(cookie.storeId, true);
     }
-    notifyContentScripts(cookie);
+    notify(cookie);
   }
 });
 
@@ -103,7 +121,7 @@ async function checkSession() {
   isChecking = false;
 }
 
-function notifyContentScripts(cookie) {
+function notify(cookie) {
   if (cookie.name === "scratchlanguage") return;
   const storeId = cookie.storeId;
   const cond = {};
@@ -116,4 +134,6 @@ function notifyContentScripts(cookie) {
   chrome.tabs.query(cond, (tabs) =>
     tabs.forEach((tab) => chrome.tabs.sendMessage(tab.id, "refetchSession", () => void chrome.runtime.lastError))
   );
+  // Notify popups, since they also fetch sessions independently
+  scratchAddons.sendToPopups({ refetchSession: true });
 }

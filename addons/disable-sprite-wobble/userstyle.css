@@ -1,0 +1,4 @@
+[class*="sprite-selector_raised"]:hover {
+  animation-name: none;
+  transform: none;
+}

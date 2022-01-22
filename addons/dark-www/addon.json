@@ -4,11 +4,15 @@
   "tags": ["community", "theme", "featured"],
   "credits": [
     {
-      "name": "Maximouse (addon, \"Experimental\" Dark)",
+      "name": "Maximouse",
+      "note": "addon, \"Experimental\" Dark",
+      "id": "addon",
       "link": "https://scratch.mit.edu/users/Maximouse/"
     },
     {
-      "name": "Ucrash (Dark WWW)",
+      "name": "Ucrash",
+      "note": "Dark WWW",
+      "id": "darkwww",
       "link": "https://github.com/gducrash"
     }
   ],
@@ -29,6 +33,18 @@
         "type": "textColor",
         "black": "rgba(0, 0, 0, 0.3)",
         "white": "rgba(255, 255, 255, 0.4)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-tab",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.1)",
+        "white": "rgba(255, 255, 255, 0.1)",
         "source": {
           "type": "settingValue",
           "settingId": "page"
@@ -1049,6 +1065,18 @@
       }
     },
     {
+      "name": "gray-forumTransparentQuote",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.03)",
+        "white": "rgba(255, 255, 255, 0.03)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
       "name": "blue-text",
       "value": {
         "type": "textColor",
@@ -1297,6 +1325,74 @@
         "r": 0.86,
         "g": 0.85,
         "b": 0.84
+      }
+    },
+    {
+      "name": "button-banner",
+      "value": {
+        "type": "makeHsv",
+        "h": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "s": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "darkBanners"
+          },
+          "options": {
+            "off": 0.7,
+            "darker": 1,
+            "desaturated": 0.5
+          }
+        },
+        "v": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "darkBanners"
+          },
+          "options": {
+            "off": 1,
+            "darker": 0.6,
+            "desaturated": 0.4
+          }
+        }
+      }
+    },
+    {
+      "name": "button-bannerVariant",
+      "value": {
+        "type": "makeHsv",
+        "h": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "s": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "darkBanners"
+          },
+          "options": {
+            "off": 0.7,
+            "darker": 1,
+            "desaturated": 0.51
+          }
+        },
+        "v": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "darkBanners"
+          },
+          "options": {
+            "off": 0.84,
+            "darker": 0.54,
+            "desaturated": 0.3
+          }
+        }
       }
     },
     {
@@ -1672,6 +1768,13 @@
       "matches": ["scratchWWWNoProject"],
       "if": {
         "settings": { "darkBanners": "desaturated" }
+      }
+    },
+    {
+      "url": "blue_banners_scratchr2.css",
+      "matches": ["isNotScratchWWW"],
+      "if": {
+        "addonEnabled": ["scratchr2"]
       }
     },
     {
