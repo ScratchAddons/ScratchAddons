@@ -103,7 +103,6 @@ let fuse;
       if (!addonManifest) continue;
       const permissionsRequired = addonManifest.permissions || [];
       const browserPermissionsRequired = permissionsRequired.filter((p) => browserLevelPermissions.includes(p));
-      console.log(addonId, permissionsRequired, browserPermissionsRequired);
       if (addonValue.enabled && browserPermissionsRequired.length) {
         pendingPermissions[addonId] = browserPermissionsRequired;
       } else {
@@ -122,7 +121,6 @@ let fuse;
         const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({
           permissions: Object.values(pendingPermissions).flat(),
         });
-        console.log(pendingPermissions, granted);
         Object.keys(pendingPermissions).forEach((addonId) => {
           addonsEnabled[addonId] = granted;
         });
@@ -307,7 +305,6 @@ let fuse;
         inputElem.addEventListener(
           "change",
           async (e) => {
-            console.log(e);
             const file = inputElem.files[0];
             if (!file) {
               inputElem.remove();
