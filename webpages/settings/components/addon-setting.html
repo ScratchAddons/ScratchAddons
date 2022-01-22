@@ -72,77 +72,82 @@
       </div>
     </template>
     <div v-else class="setting-input-container" :class="{ 'full-radius': tableChild }">
-      <input
-        v-if="setting.type === 'positive_integer'"
-        type="number"
-        class="setting-input number"
-        v-model="addonSettings[setting.id]"
-        @change="checkValidity() || updateSettings()"
-        :disabled="!addon._enabled"
-        min="0"
-        number
-      />
-      <input
-        v-if="setting.type === 'integer'"
-        type="number"
-        class="setting-input number"
-        v-model="addonSettings[setting.id]"
-        @change="checkValidity() || updateSettings()"
-        :disabled="!addon._enabled"
-        :min="setting.min"
-        :max="setting.max"
-        number
-      />
-      <input
-        v-if="setting.type === 'string' || setting.type === 'untranslated'"
-        type="text"
-        class="setting-input string"
-        v-model="addonSettings[setting.id]"
-        @change="checkValidity() || updateSettings()"
-        :disabled="!addon._enabled"
-        :placeholder="setting.default"
-        :maxlength="setting.max || 100"
-        :minlength="setting.min || 0"
-        :required="!!setting.min"
-      />
-      <input
-        v-if="setting.type === 'key'"
-        type="text"
-        class="setting-input"
-        v-model="addonSettings[setting.id]"
-        @input="updateSettings"
-        @keydown="keySettingKeyDown"
-        @keyup="keySettingKeyUp"
-        :disabled="!addon._enabled"
-        :placeholder="setting.default"
-        maxlength="100"
-        spellcheck="false"
-      />
-      <picker
-        v-if="setting.type === 'color'"
-        :value="addonSettings[setting.id] || setting.default"
-        :setting="setting"
-        :addon="addon"
-        :no_alpha="!setting.allowTransparency"
-        v-click-outside="closePickers"
-      ></picker>
-      <reset-dropdown
-        v-if="showResetDropdown"
-        :setting="setting"
-        :enabled="addon._enabled"
-        :presets="addon.presets"
-        v-click-outside="closeResetDropdowns"
-      ></reset-dropdown>
-      <button
-        v-if="!tableChild && !showResetDropdown"
-        type="button"
-        class="large-button clear-button"
-        :disabled="!addon._enabled"
-        :title="msg('reset')"
-        @click="updateOption(setting.default || '')"
-      >
-        <img src="../../images/icons/undo.svg" class="icon-type" />
-      </button>
+      <template v-if="setting.type === 'positive_integer'">
+        <input
+          type="number"
+          class="setting-input number"
+          v-model="addonSettings[setting.id]"
+          @change="checkValidity() || updateSettings()"
+          :disabled="!addon._enabled"
+          min="0"
+          number
+        />
+      </template>
+      <template v-if="setting.type === 'integer'">
+        <input
+          type="number"
+          class="setting-input number"
+          v-model="addonSettings[setting.id]"
+          @change="checkValidity() || updateSettings()"
+          :disabled="!addon._enabled"
+          :min="setting.min"
+          :max="setting.max"
+          number
+        />
+      </template>
+      <template v-if="setting.type === 'string' || setting.type === 'untranslated'"
+        ><input
+          type="text"
+          class="setting-input string"
+          v-model="addonSettings[setting.id]"
+          @change="checkValidity() || updateSettings()"
+          :disabled="!addon._enabled"
+          :placeholder="setting.default"
+          :maxlength="setting.max || 100"
+          :minlength="setting.min || 0"
+          :required="!!setting.min"
+        />
+      </template>
+      <template v-if="setting.type === 'key'"
+        ><input
+          type="text"
+          class="setting-input"
+          v-model="addonSettings[setting.id]"
+          @input="updateSettings"
+          @keydown="keySettingKeyDown"
+          @keyup="keySettingKeyUp"
+          :disabled="!addon._enabled"
+          :placeholder="setting.default"
+          maxlength="100"
+          spellcheck="false"
+      /></template>
+      <template v-if="setting.type === 'color'">
+        <picker
+          :value="addonSettings[setting.id] || setting.default"
+          :setting="setting"
+          :addon="addon"
+          :no_alpha="!setting.allowTransparency"
+          v-click-outside="closePickers"
+        ></picker
+      ></template>
+      <template v-if="showResetDropdown"
+        ><reset-dropdown
+          :setting="setting"
+          :enabled="addon._enabled"
+          :presets="addon.presets"
+          v-click-outside="closeResetDropdowns"
+        ></reset-dropdown
+      ></template>
+      <template v-if="!tableChild && !showResetDropdown"
+        ><button
+          type="button"
+          class="large-button clear-button"
+          :disabled="!addon._enabled"
+          :title="msg('reset')"
+          @click="updateOption(setting.default || '')"
+        >
+          <img src="../../images/icons/undo.svg" class="icon-type" /></button
+      ></template>
     </div>
   </div>
 </template>
