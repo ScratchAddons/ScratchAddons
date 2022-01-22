@@ -24,6 +24,14 @@
       "matches": ["projects"]
     }
   ],
+  "credits": [
+    {
+      "name": "CST1229",
+      "note": "Pasting images",
+      "id": "pasting",
+      "link": "https://github.com/CST1229"
+    }
+  ]
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.0.0",
