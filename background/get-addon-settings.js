@@ -34,6 +34,17 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       madeAnyChanges = true;
     }
 
+    if (addonSettings["editor-dark-mode"].textShadow === true && addonsEnabled["custom-block-text"] === undefined) {
+      // Transition v1.23 to v1.24
+      // Moved text shadow option to the custom-block-text addon
+      madeAnyChanges = true;
+      delete addonSettings["editor-dark-mode"].textShadow;
+      addonsEnabled["custom-block-text"] = addonsEnabled["editor-dark-mode"];
+      addonSettings["custom-block-text"] = { shadow: true };
+      // `shadow` isn't the only setting - the other setting, `bold`, is set
+      // to its default (false) inside the for loop below.
+    }
+
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
       const settings = addonSettings[addonId] || {};
@@ -99,17 +110,34 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
         );
       }
       if (manifest.settings) {
+        if (
+          addonId === "discuss-button" &&
+          addonsEnabled["discuss-button"] === true &&
+          (settings.buttonName || settings.removeIdeasBtn)
+        ) {
+          // Transition v1.23.0 modes to v1.24.0 settings
+          madeChangesToAddon = true;
+          madeAnyChanges = true;
+
+          let option = manifest.settings.find((option) => option.id === "items");
+          settings.items = [...option.default];
+          settings.items.splice(2, 0, {
+            name: settings.buttonName,
+            url: "/discuss",
+          });
+          if (settings.removeIdeasBtn) settings.items.splice(3, 1);
+
+          delete settings.removeIdeasBtn;
+          delete settings.buttonName;
+        }
+
         for (const option of manifest.settings) {
           if (settings[option.id] === undefined) {
             madeChangesToAddon = true;
             madeAnyChanges = true;
-            // Transition v1.16.5 to v1.17.0
-            // Users of scratchr2 addon will get "scratchr2" version of old-studio-layout
-            if (addonId === "old-studio-layout" && option.id === "version" && addonsEnabled.scratchr2) {
-              settings.version = "scratchr2";
-              continue;
-            }
-            settings[option.id] = option.default;
+
+            // cloning required for tables
+            settings[option.id] = JSON.parse(JSON.stringify(option.default));
           } else if (option.type === "positive_integer" || option.type === "integer") {
             // ^ else means typeof can't be "undefined", so it must be number
             if (typeof settings[option.id] !== "number") {
@@ -121,6 +149,24 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
               const newValue = Number.isNaN(number) ? option.default : number;
               settings[option.id] = newValue;
             }
+          } else if (option.type === "table") {
+            const tableSettingIds = option.row.map((setting) => setting.id);
+            settings[option.id].forEach((item, i) => {
+              option.row.forEach((setting) => {
+                if (item[setting.id] === undefined) {
+                  madeChangesToAddon = true;
+                  madeAnyChanges = true;
+                  item[setting.id] = option.default[i][setting.id];
+                }
+              });
+              for (const def in item) {
+                if (!tableSettingIds.includes(def)) {
+                  madeChangesToAddon = true;
+                  madeAnyChanges = true;
+                  delete item[def];
+                }
+              }
+            });
           }
         }
         if (addonId === "dark-www") {
@@ -144,18 +190,6 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       }
 
       if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;
-      else if (addonId === "dango-rain") {
-        if (typeof settings.force !== "undefined") {
-          if (settings.force === false) {
-            // Note: addon might be disabled already, but we don't care
-            addonsEnabled[addonId] = false;
-            console.log("Disabled dango-rain because force was disabled");
-          }
-          delete settings.force; // Remove setting so that this only happens once
-          madeChangesToAddon = true;
-          madeAnyChanges = true;
-        }
-      }
 
       if (madeChangesToAddon) {
         console.log(`Changed settings for addon ${addonId}`);

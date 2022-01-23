@@ -48,7 +48,7 @@ export default async function ({ addon, console, msg }) {
   while (true) {
     //Catch all upload menus as they are created
     let menu = await addon.tab.waitForElement(
-      '[class*="sprite-selector_sprite-selector_"] [class*="action-menu_more-buttons_"], [class*="stage-selector_stage-selector_"] [class*="action-menu_more-buttons_"],  #react-tabs-3 [class*="action-menu_more-buttons_"]',
+      '[class*="sprite-selector_sprite-selector_"] [class*="action-menu_more-buttons_"], [class*="stage-selector_stage-selector_"] [class*="action-menu_more-buttons_"], [data-tabs] > :nth-child(3) [class*="action-menu_more-buttons_"]',
       { markAsSeen: true }
     );
     let button = menu.parentElement.previousElementSibling.previousElementSibling; //The base button that the popup menu is from
