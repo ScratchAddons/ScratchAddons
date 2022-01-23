@@ -121,11 +121,11 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
 
           let option = manifest.settings.find((option) => option.id === "items");
           settings.items = [...option.default];
-          settings.items.splice(3, 0, {
+          settings.items.splice(2, 0, {
             name: settings.buttonName,
             url: "/discuss",
           });
-          if (settings.removeIdeasBtn) settings.items.splice(2, 1);
+          if (settings.removeIdeasBtn) settings.items.splice(3, 1);
 
           delete settings.removeIdeasBtn;
           delete settings.buttonName;
