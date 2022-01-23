@@ -256,7 +256,7 @@
     "description": "Tag for addons. Singular."
   },
   "updated": {
-    "message": "New features",
+    "message": "New settings",
     "description": "Tag for addons with new features. Singular."
   },
   "newGroup": {
