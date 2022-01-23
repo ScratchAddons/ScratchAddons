@@ -259,6 +259,10 @@
     "message": "New features",
     "description": "Tag for addons with new features. Singular."
   },
+  "updatedWithSettings": {
+    "message": "New settings",
+    "description": "Tag for addons with new settings. Singular."
+  },
   "newGroup": {
     "message": "Other new addons and updates",
     "description": "Used as a category name for new addons and updates"
