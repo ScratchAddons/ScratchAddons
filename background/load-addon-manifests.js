@@ -58,7 +58,7 @@ const localizeSettings = (addonId, setting, tableId) => {
       }
       if (manifest.credits) {
         for (const credit of manifest.credits || []) {
-          if (credit.note) credit.note = scratchAddons.l10n.get(`${folderName}/@credits-${credit.id}`, {}, credit.note);
+          if (credit.note) credit.note = scratchAddons.l10n.get(`${addonId}/@credits-${credit.id}`, {}, credit.note);
         }
       }
       if (manifest.popup) {
