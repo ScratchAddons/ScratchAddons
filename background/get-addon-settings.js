@@ -34,7 +34,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       madeAnyChanges = true;
     }
 
-    if (addonSettings["editor-dark-mode"].textShadow === true && addonsEnabled["custom-block-text"] === undefined) {
+    if (addonSettings["editor-dark-mode"]?.textShadow === true && addonsEnabled["custom-block-text"] === undefined) {
       // Transition v1.23 to v1.24
       // Moved text shadow option to the custom-block-text addon
       madeAnyChanges = true;
