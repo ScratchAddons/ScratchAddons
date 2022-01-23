@@ -515,7 +515,7 @@ let fuse;
         const [extMajor, extMinor, _] = vue.version.split(".");
         const [addonMajor, addonMinor, __] = manifest.latestUpdate.version.split(".");
         if (extMajor === addonMajor && extMinor === addonMinor) {
-          manifest.tags.push("updated");
+          manifest.tags.push(manifest.latestUpdate.newSettings?.length ? "updatedWithSettings" : "updated");
           manifest._groups.push(manifest.latestUpdate.isMajor ? "featuredNew" : "new");
         }
       }
