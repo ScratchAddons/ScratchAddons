@@ -602,9 +602,15 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
   color-scheme: dark;
 }
 /* For `editor-comment-previews` */
-.sa-comment-preview {
+.sa-comment-preview-inner {
   color: var(--editorDarkMode-input-text);
-  background-color: var(--editorDarkMode-input-transparent75);
+  background-color: var(--editorDarkMode-input-transparent90);
+}
+@supports (backdrop-filter: blur(16px)) {
+  .sa-comment-preview-inner {
+    background-color: var(--editorDarkMode-input-transparent75);
+    backdrop-filter: blur(16px);
+  }
 }
 .sa-comment-preview-reduce-transparency {
   background-color: var(--editorDarkMode-input);
