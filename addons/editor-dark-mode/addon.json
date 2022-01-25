@@ -491,6 +491,17 @@
       }
     },
     {
+      "name": "input-transparent90",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        },
+        "a": 0.90
+      }
+    },
+    {
       "name": "input-transparent75",
       "value": {
         "type": "multiply",
