@@ -243,7 +243,7 @@ body.iframe .addon-settings {
 body.iframe .settings-column {
   flex-direction: column;
 }
-body.iframe .addon-setting {
+body.iframe .settings-column > .addon-setting {
   margin: 10px 0;
   min-height: 0;
   flex-direction: column;
