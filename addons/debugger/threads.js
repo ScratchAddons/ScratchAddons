@@ -130,7 +130,7 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
         }
 
         const blockInfoMap = cacheInfo.blockCache.get(block);
-        var blockInfo = blockInfoMap[stackFrameIdx];
+        let blockInfo = blockInfoMap[stackFrameIdx];
 
         if (!blockInfo) {
           blockInfo = blockInfoMap[stackFrameIdx] = {
