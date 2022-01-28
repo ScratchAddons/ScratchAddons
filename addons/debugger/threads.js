@@ -138,10 +138,13 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
             depth,
             targetId: target.id,
             blockId,
-          }
+          };
         }
 
-        blockInfo.running = thread === runningThread && blockId === runningThread.peekStack() && stackFrameIdx === runningThread.stackFrames.length - 1;
+        blockInfo.running =
+          thread === runningThread &&
+          blockId === runningThread.peekStack() &&
+          stackFrameIdx === runningThread.stackFrames.length - 1;
 
         const result = [blockInfo];
         if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.startedThreads) {
