@@ -17,6 +17,10 @@ export default async function ({ addon, global, console }) {
       const a = document.createElement("a");
       a.href = ["http:", "https:"].includes(new URL(url, location.href).protocol) ? url : "";
       li.append(a);
+      if (scratchr2List) {
+        // scratch's code looks for this id in account-nav.js (scratchr2 only).
+        a.id = "project-create";
+      }
 
       const span = document.createElement("span");
       span.innerText = name;
