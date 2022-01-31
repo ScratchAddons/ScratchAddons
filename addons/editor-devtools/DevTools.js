@@ -2055,11 +2055,6 @@ export default class DevTools {
       } else {
         field.innerText = option.option[1]; // griffpatch - oops! option.option[1] not 0?
       }
-
-      // Handle "stop other scripts in sprite"
-      if (option.option[1] === "other scripts in sprite") {
-        option.dom.querySelector("mutation").setAttribute("hasnext", "true");
-      }
     }
 
     x.appendChild(option.dom);

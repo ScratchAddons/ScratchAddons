@@ -119,32 +119,21 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
       const cacheInfo = threadInfoCache.get(thread);
 
       const runningThread = getRunningThread();
-      const createBlockInfo = (block, stackFrameIdx) => {
+      const createBlockInfo = (block, stackFrame) => {
         const blockId = block.id;
         if (!block) return;
 
-        const stackFrame = thread.stackFrames[stackFrameIdx];
-
         if (!cacheInfo.blockCache.has(block)) {
-          cacheInfo.blockCache.set(block, {});
-        }
-
-        const blockInfoMap = cacheInfo.blockCache.get(block);
-        let blockInfo = blockInfoMap[stackFrameIdx];
-
-        if (!blockInfo) {
-          blockInfo = blockInfoMap[stackFrameIdx] = {
+          cacheInfo.blockCache.set(block, {
             type: "thread-stack",
             depth,
             targetId: target.id,
             blockId,
-          };
+          });
         }
 
-        blockInfo.running =
-          thread === runningThread &&
-          blockId === runningThread.peekStack() &&
-          stackFrameIdx === runningThread.stackFrames.length - 1;
+        const blockInfo = cacheInfo.blockCache.get(block);
+        blockInfo.running = thread === runningThread && blockId === runningThread.peekStack();
 
         const result = [blockInfo];
         if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.startedThreads) {
@@ -159,13 +148,14 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
       const topBlock = thread.target.blocks.getBlock(thread.topBlock);
       const result = [cacheInfo.headerItem];
       if (topBlock) {
-        concatInPlace(result, createBlockInfo(topBlock, 0));
+        concatInPlace(result, createBlockInfo(topBlock, null));
         for (let i = 0; i < thread.stack.length; i++) {
           const blockId = thread.stack[i];
           if (blockId === topBlock.id) continue;
+          const stackFrame = thread.stackFrames[i];
           const block = thread.target.blocks.getBlock(blockId);
           if (block) {
-            concatInPlace(result, createBlockInfo(block, i));
+            concatInPlace(result, createBlockInfo(block, stackFrame));
           }
         }
       }

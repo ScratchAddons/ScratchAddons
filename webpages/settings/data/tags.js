@@ -24,11 +24,6 @@ export default [
     color: "purple",
   },
   {
-    name: "updatedWithSettings",
-    matchName: "updatedWithSettings",
-    color: "purple",
-  },
-  {
     name: "beta",
     tooltipText: "betaTooltip",
     matchName: "beta",

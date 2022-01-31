@@ -6,9 +6,6 @@ import BlockFlasher from "./BlockFlasher.js";
 export default class Utils {
   constructor(addon) {
     this.addon = addon;
-    this.addon.tab.traps.getBlockly().then((blockly) => {
-      this.blockly = blockly;
-    });
     /**
      * Scratch Virtual Machine
      * @type {null|*}
@@ -59,8 +56,9 @@ export default class Utils {
   /**
    * Based on wksp.centerOnBlock(li.data.labelID);
    * @param blockOrId {Blockly.Block|{id}|BlockInstance} A Blockly Block, a block id, or a BlockInstance
+   * @param [force] {boolean} if true, the view always moves, otherwise only move if the selected element is not entirely visible
    */
-  scrollBlockIntoView(blockOrId) {
+  scrollBlockIntoView(blockOrId, force) {
     let workspace = this.getWorkspace();
     /** @type {Blockly.Block} */
     let block; // or is it really a Blockly.BlockSvg?
@@ -108,7 +106,6 @@ export default class Utils {
       workspace.scrollbar.set(sx, sy);
       this.navigationHistory.storeView({ left: sx, top: sy }, 64);
     }
-    this.blockly?.hideChaff();
     BlockFlasher.flash(block);
   }
 

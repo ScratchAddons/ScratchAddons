@@ -239,14 +239,14 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_24": {
-    "message": "New addon: \"customizable navigation bar\", which lets you choose a list of links to be displayed in the navigation bar. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_23": {
+    "message": "New addon: \"website dark mode and customizable colors\". Go to $1 to change specific colors, toggle dark scrollbars, and more!"
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_24": {
-    "message": "Other new addons added this update are \"customizable block text style\", \"disable sprite wobble in sprite pane\" and \"search sprites by name\". In addition, the \"Scratch 2.0 → 3.0\" addon has been updated to match Scratch 3.0 more closely."
+  "extensionUpdateInfo2_v1_23": {
+    "message": "Other new addons added this update are \"snap scripts to grid\", \"block count\" and \"high resolution thumbnails\"."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
@@ -256,12 +256,8 @@
     "description": "Tag for addons. Singular."
   },
   "updated": {
-    "message": "New features",
+    "message": "New options",
     "description": "Tag for addons with new features. Singular."
-  },
-  "updatedWithSettings": {
-    "message": "New settings",
-    "description": "Tag for addons with new settings. Singular."
   },
   "newGroup": {
     "message": "Other new addons and updates",

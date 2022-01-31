@@ -479,7 +479,6 @@ body:not(.sa-body-editor) [type="checkbox"].formik-checkbox:checked::before {
 .studio-report-modal .studio-report-selected {
   background-color: var(--darkWww-button-transparent15);
 }
-::selection,
 .extension-chip,
 .studio-report-modal .studio-report-header-selected,
 .user-projects-modal .user-projects-modal-nav button:hover,

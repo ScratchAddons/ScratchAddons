@@ -26,8 +26,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     const { addonId, newSettings } = request.changeAddonSettings;
     scratchAddons.globalState.addonSettings[addonId] = newSettings;
     chrome.storage.sync.set({
-      // Store target so arrays don't become objects
-      addonSettings: scratchAddons.globalState.addonSettings._target,
+      addonSettings: scratchAddons.globalState.addonSettings,
     });
 
     const manifest = scratchAddons.manifests.find((addon) => addon.addonId === addonId).manifest;

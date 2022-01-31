@@ -1,24 +1,11 @@
 #content {
   width: 100%;
-  padding-top: 66px;
 }
 #profile-data,
 #content > .slider-carousel-container {
   width: 942px;
-  box-sizing: border-box;
   margin-left: auto;
   margin-right: auto;
-}
-.slider-carousel-container .box-head {
-  padding: 8px 20px;
-}
-.slider-carousel-container .box-head h4 {
-  font-size: 17.6px;
-  line-height: 1em;
-}
-.slider-carousel-container:not(.sa-stats) .box-head a {
-  margin-top: calc(17.6px - 1em);
-  line-height: 1em;
 }
 .slider-carousel.horizontal .slider-carousel-control {
   width: 40px;
@@ -61,26 +48,15 @@
   padding: 0;
   border-radius: 0;
 }
-#profile-box .user-content {
-  width: 621px;
-  height: auto;
-}
 #profile-box .about h3,
-#profile-box .doing h3,
-#profile-box .player h3 {
-  margin-bottom: 8px;
+#profile-box .doing h3 {
   color: var(--darkWww-page-text, #575e75);
-  font-size: 16px;
-  line-height: normal;
 }
 #profile-box .about {
-  width: 303px;
-  padding: 0;
+  padding-left: 0;
 }
 #profile-box .doing {
-  top: 25px;
-  width: 305px;
-  padding: 0;
+  padding-right: 0;
   color: var(--darkWww-page-text, #575e75);
 }
 .box .box-head .portrait {
@@ -100,10 +76,9 @@
   font-weight: normal;
   line-height: normal;
 }
-.sa-user-id {
-  color: var(--darkWww-page-transparentText, rgba(0, 0, 0, 0.3));
-}
-.header-text .profile-details {
+.header-text .profile-details,
+#bio-readonly,
+#status-readonly {
   color: var(--darkWww-page-text, #575e75);
 }
 .header-text .profile-details .group {
@@ -113,123 +88,36 @@
   top: 0;
   right: 0;
 }
-#profile-data .follow-button {
-  margin: 0;
-  height: auto;
-  border-radius: 4px;
-  font-size: 14px;
-}
-#profile-data .follow-button.following {
-  background-color: var(--darkWww-gray-darker, #b3b3b3);
-  color: white;
-}
-#profile-data .follow-button.notfollowing span.icon-sm.follower {
-  filter: var(--darkWww-button-filter);
-}
-#profile-data .follow-button.following span.icon-sm.follower {
-  filter: brightness(0) invert(1);
-}
-.follow-button > span {
-  height: 18px;
-  padding: 11px 15px;
-}
 #profile-box .inner {
-  padding-top: 25px !important;
-}
-#bio-readonly,
-#bio {
-  margin-bottom: 12px;
-}
-#bio-readonly,
-#status-readonly {
-  height: 91px;
-  padding: 8px;
-  background-color: var(--darkWww-blue, rgba(77, 151, 255, 0.1)) !important;
-  border: 1px solid var(--darkWww-border-5, rgba(77, 151, 255, 0.1)) !important;
-  border-radius: 8px;
-  color: var(--darkWww-blue-text, #575e75);
-}
-#bio,
-#status {
-  margin-left: 0;
-  width: 299px;
-  height: 105px;
-  padding: 0;
+  padding-top: 16px !important;
 }
 #profile-box #bio textarea,
 #profile-box #status textarea {
-  height: 105px;
-  box-sizing: border-box;
-  border-width: 7px;
   color: var(--darkWww-input-text, #575e75);
-  line-height: inherit;
 }
 #profile-box #bio textarea,
 #profile-box #status textarea {
   border-radius: 6px;
 }
 #profile-box .player {
-  margin-top: 26.4px;
-  padding: 8px;
-  width: auto;
   background-color: var(--darkWww-box, white);
-  border-radius: 8px;
+  border-radius: 4px;
   border: 1px solid var(--darkWww-border-15, #d9d9d9);
   box-shadow: none;
 }
 #profile-box .player h3 {
-  position: absolute;
-  left: 0;
-  top: -26.4px;
-  margin: 0;
-}
-#profile-box .player .stage img {
-  margin-bottom: 8px;
-  vertical-align: middle;
-  border-radius: 4px;
-}
-#lfp-embed {
-  margin-bottom: 2px;
-}
-#profile-box .player [data-control="edit"],
-#lfp-change-featured {
-  left: 8px;
-  top: 8px;
-  border-top-left-radius: 4px;
-}
-.activity-stream {
-  height: 254px;
-  background-color: var(--darkWww-box, white);
-  border: 1px solid var(--darkWww-border-15, #d9d9d9);
-  border-radius: 8px;
   color: var(--darkWww-box-text, #575e75);
 }
-.activity-stream li {
-  margin: 0;
-  padding: 8px;
-}
-.activity-stream li + li {
-  border-top: 1px solid var(--darkWww-border-15, #d9d9d9);
-}
 #profile-box .doing .icon-xs.black {
-  filter: var(--darkWww-box-eyeFilter, none);
-}
-.activity-stream div {
-  width: calc(100% - 24px);
+  filter: var(--darkWww-page-eyeFilter, none);
 }
 .activity-stream .actor a {
-  color: var(--darkWww-box-text, #575e75) !important;
+  color: var(--darkWww-page-text, #575e75) !important;
 }
 .activity-stream .time {
-  color: var(--darkWww-box-transparentText, #b3b3b3) !important;
-  line-height: 20px;
-}
-#profile-data .footer {
-  height: 28px;
+  color: var(--darkWww-page-transparentText, #b3b3b3) !important;
 }
 #profile-data .footer #report-this {
-  right: 0;
-  top: 8px;
   color: var(--darkWww-page-text, #575e75);
 }
 #content > .box:not(#profile-data):not(.slider-carousel-container):not(#page-404) {
@@ -261,64 +149,27 @@
   border-bottom: none;
 }
 #comments #comments-enabled-box label {
-  margin-left: 4px;
   color: var(--darkWww-blue-text);
-  font-size: 16px;
 }
 #comments #comment-form {
   padding: 0;
-  margin-top: 30px;
-  margin-bottom: 56px;
+  margin-bottom: 24px;
 }
-#comments #comment-form .template-feature-off {
-  height: auto;
-  padding: 24px;
-  background-color: rgba(77, 151, 255, 0.1);
-  border-color: rgba(77, 151, 255, 0.25);
-  color: var(--darkWww-blue-text);
-  font-size: 16px;
-}
-#comments #comment-form form {
-  margin-left: 16px;
-  width: calc(100% - 62px);
+#comments #comment-form textarea {
+  width: 857px;
+  height: 80px;
+  padding: 1rem;
 }
 #comments .comment form {
-  margin-left: 8px;
-  padding-top: 54px;
-  padding-bottom: 28px;
+  margin-left: 1rem;
 }
-#comments #comment-form textarea,
 #comments .comment form textarea {
-  width: 100%;
-  box-sizing: border-box;
-  height: 112px;
-  padding: 12px 16px;
+  width: 845px;
+  height: 80px;
+  padding: 1rem;
 }
-#comments #comment-form .button,
-#comments .comment form .button {
-  margin-top: 6.4px;
-  margin-bottom: 6.4px;
-  height: auto;
-  border-radius: 4px;
-  font-size: 12.8px;
-}
-#comments #comment-form .button + .button,
-#comments .comment form .button + .button {
-  margin-left: 5px;
-}
-#comments #comment-form .button > a,
-#comments .comment form .button > a {
-  display: inline-block;
-  padding: 12.8px 16px;
-  line-height: normal;
-}
-#comments #comment-form .button.grey,
-#comments .comment form .button.grey {
-  background-color: var(--darkWww-gray-darker, #b3b3b3);
-  color: white;
-}
-.sa-emoji-button-r2 .sa-emoji-picker:not(.sa-emoji-picker-offscreen) {
-  top: 54px;
+#comments .reply .comment form textarea {
+  width: 775px;
 }
 #comments .more-replies {
   background-color: var(--darkWww-blue, #eaf1fc);

@@ -274,8 +274,8 @@ export default async function ({ addon, global, console, msg }) {
         canvas.height = scaledHeight;
 
         this._size = new paper.Size(scaledWidth, scaledHeight);
-        const topLeft = bounds.getTopLeft();
-        const bottomRight = bounds.getBottomRight();
+        const topLeft = bounds.getTopLeft().floor();
+        const bottomRight = bounds.getBottomRight().ceil();
         const size = new paper.Size(bottomRight.subtract(topLeft));
         const matrix = new paper.Matrix().scale(newScale).translate(topLeft.negate());
         ctx.save();

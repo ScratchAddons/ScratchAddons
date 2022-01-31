@@ -21,7 +21,6 @@
   "dynamicDisable": true,
   "injectAsStyleElt": true,
   "versionAdded": "1.1.0",
-  "updateUserstylesOnSettingsChange": true,
   "userstyles": [
     {
       "url": "scratchr2.css",
@@ -36,24 +35,8 @@
       "matches": ["https://scratch.mit.edu/discuss/*"]
     },
     {
-      "url": "forums_bubbles.css",
-      "matches": ["https://scratch.mit.edu/discuss/*"],
-      "if": {
-        "settings": { "postStyle": "bubble" }
-      }
-    },
-    {
       "url": "forums_topic.css",
       "matches": ["https://scratch.mit.edu/discuss/topic/*/"]
-    },
-    {
-      "url": "forums_subpage.css",
-      "matches": [
-        "https://scratch.mit.edu/discuss/*/topic/add/",
-        "https://scratch.mit.edu/discuss/post/*/edit/",
-        "https://scratch.mit.edu/discuss/misc/",
-        "https://scratch.mit.edu/discuss/settings/*/"
-      ]
     },
     {
       "url": "forums_yt.css",
@@ -72,15 +55,6 @@
       "matches": ["https://scratch.mit.edu/projects/*/remixtree/"]
     },
     {
-      "url": "v_tabs.css",
-      "matches": [
-        "https://scratch.mit.edu/mystuff/",
-        "https://scratch.mit.edu/accounts/settings/",
-        "https://scratch.mit.edu/accounts/password_change/",
-        "https://scratch.mit.edu/accounts/email_change/"
-      ]
-    },
-    {
       "url": "mystuff.css",
       "matches": ["https://scratch.mit.edu/mystuff/"]
     },
@@ -91,37 +65,6 @@
         "https://scratch.mit.edu/accounts/password_change/",
         "https://scratch.mit.edu/accounts/email_change/"
       ]
-    },
-    {
-      "url": "view_all.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/remixes/",
-        "https://scratch.mit.edu/projects/*/studios/",
-        "https://scratch.mit.edu/users/*/projects/",
-        "https://scratch.mit.edu/users/*/favorites/",
-        "https://scratch.mit.edu/users/*/studios_following/",
-        "https://scratch.mit.edu/users/*/studios/",
-        "https://scratch.mit.edu/users/*/following/",
-        "https://scratch.mit.edu/users/*/followers/"
-      ]
-    }
-  ],
-  "settings": [
-    {
-      "name": "Forum post style",
-      "id": "postStyle",
-      "type": "select",
-      "potentialValues": [
-        {
-          "id": "box",
-          "name": "Box"
-        },
-        {
-          "id": "bubble",
-          "name": "Bubble"
-        }
-      ],
-      "default": "box"
     }
   ]
 }

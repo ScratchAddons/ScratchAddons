@@ -1,6 +1,5 @@
 export default async function ({ addon, global, console, msg }) {
   const Blockly = await addon.tab.traps.getBlockly();
-  const vm = addon.tab.traps.vm;
 
   const SCRATCH_ITEMS_TO_HIDE = ["RENAME_VARIABLE_ID", "DELETE_VARIABLE_ID", "NEW_BROADCAST_MESSAGE_ID"];
   const ADDON_ITEMS = [
@@ -74,18 +73,13 @@ export default async function ({ addon, global, console, msg }) {
   Blockly.FieldDropdown.prototype.getOptions = function () {
     const options = oldFieldDropdownGetOptions.call(this);
     const block = this.sourceBlock_;
-    const isStage = vm.editingTarget && vm.editingTarget.isStage;
     if (block) {
       if (block.category_ === "data") {
         options.push(getMenuItemMessage("createGlobalVariable"));
-        if (!isStage) {
-          options.push(getMenuItemMessage("createLocalVariable"));
-        }
+        options.push(getMenuItemMessage("createLocalVariable"));
       } else if (block.category_ === "data-lists") {
         options.push(getMenuItemMessage("createGlobalList"));
-        if (!isStage) {
-          options.push(getMenuItemMessage("createLocalList"));
-        }
+        options.push(getMenuItemMessage("createLocalList"));
       } else if (block.type === "event_broadcast_menu" || block.type === "event_whenbroadcastreceived") {
         options.push(getMenuItemMessage("createBroadcast"));
       }
