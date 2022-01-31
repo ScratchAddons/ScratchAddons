@@ -1,1 +1,1 @@
-{"fix-pasted-scripts/@name":"Otomatik olarak kopyalanmış blokları çalıştırmayın.","fix-pasted-scripts/@description":"Scratch editöründe, bir bloğun kopyalanıp bir komut dosyasına eklenmesinin komut dosyasının çalışmasına neden olduğu bir hatayı düzeltir."}
+{"fix-pasted-scripts/@name":"Çoğaltılan blokları otomatik olarak çalıştırma","fix-pasted-scripts/@description":"Scratch editöründe, bir bloğun kopyalanıp bir bloğa eklenmesinin bloğun istemsizce çalışmasına neden olduğu bir hatayı düzeltir."}
