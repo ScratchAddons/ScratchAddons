@@ -171,13 +171,13 @@ export async function updateMessages(cookieStoreId, forceClear, username, xToken
   const db = await openDatabase();
   try {
     const messages = await db.get("cache", cookieStoreId);
-    const firstTimestamp = messages[0] ? new Date(messages[0].datetime_created).getTime() : 0;
+    const firstId = messages[0]?.id;
     const newlyAdded = [];
     const knownIds = new Set();
     fetching: for (let i = 0; i < maxPages; i++) {
       const pageMessages = await fetchMessages(username, xToken, i * 40);
       for (const pageMessage of pageMessages) {
-        if (new Date(pageMessage.datetime_created).getTime() <= firstTimestamp) break fetching;
+        if (pageMessage.id <= firstId) break fetching;
         if (knownIds.has(pageMessage.id)) continue;
         newlyAdded.push(pageMessage);
         knownIds.add(pageMessage.id);

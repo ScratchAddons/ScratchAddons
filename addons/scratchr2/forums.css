@@ -1,6 +1,3 @@
-body > #pagewrapper {
-  min-height: 0;
-}
 #content {
   width: 100%;
   min-width: 942px;
@@ -8,7 +5,6 @@ body > #pagewrapper {
 }
 .linkst,
 .linksb,
-.postlinksb,
 .blocktable,
 .blockpost,
 .block,
@@ -79,13 +75,19 @@ body > #pagewrapper {
 .forum-search-list .blockpost {
   width: 100%;
 }
+.forum-search-list .blockpost div.box {
+  background-color: var(--darkWww-button, #4d97ff);
+}
+.forum-search-list .blockpost .box-head {
+  border-top-color: var(--darkWww-button, #4d97ff);
+}
 .forum-search-list .blockpost .box-head span.conr,
 .forum-search-list .blockpost .box-head a,
 .forum-search-list .blockpost .box-head a:link,
 .forum-search-list .blockpost .box-head a:active,
 .forum-search-list .blockpost .box-head a:hover,
 .forum-search-list .blockpost .box-head a:visited {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--darkWww-button-text, white);
 }
 #brdfooter {
   margin-top: 40px;
@@ -98,116 +100,14 @@ body > #pagewrapper {
   box-sizing: border-box;
   width: 942px;
   margin: auto;
-  padding: 0;
-  padding-top: 22.8px;
+  padding-top: 20px;
+  padding-left: 4px;
+  padding-right: 4px;
   background: transparent;
   color: var(--darkWww-footer-text, #575e75);
 }
 #brdfooter .box-content button {
   margin: 0;
-}
-.djangobb .box-head a.toggle {
-  width: 20px;
-  height: 20px;
-  transform: scaleY(-1);
-  background: url("https://scratch.mit.edu/images/dropdown.png") no-repeat center center;
-  background-size: 50%;
-  filter: var(--darkWww-box-filterInverted, brightness(0.4));
-}
-.djangobb .collapsed a.toggle {
-  transform: none;
-}
-.linkst,
-.linksb {
-  padding: 0;
-  padding: 13px 0;
-}
-.linkst::after {
-  content: "";
-  display: block;
-  clear: both;
-}
-.pagination {
-  cursor: default;
-}
-.linkst li,
-.linksb li {
-  display: inline-block;
-  margin-right: 5px;
-  height: auto;
-  line-height: 18px;
-}
-.linkst li:first-child:nth-last-child(2),
-.linksb li {
-  margin: 0;
-}
-.linkst li:not(:last-child) a,
-.linksb li:not(:last-child) a,
-.pagination span,
-.pagination a {
-  display: inline-block;
-  min-width: 8px;
-  padding: 0 5px;
-  background-color: var(--darkWww-box, white);
-  border: 1px solid var(--darkWww-border-15, rgba(0, 0, 0, 0.15));
-  border-radius: 10px;
-  color: var(--darkWww-box-text, #575e75);
-  line-height: 18px;
-  font-weight: bold;
-  text-align: center;
-}
-.linkst li:not(:last-child) a:hover,
-.linksb li:not(:last-child) a:hover,
-.pagination a:hover {
-  background-color: var(--darkWww-page-tab, rgba(0, 0, 0, 0.1));
-  border-color: var(--darkWww-border, rgba(0, 0, 0, 0.1));
-  color: var(--darkWww-page-text, #575e75);
-}
-.pagination .current {
-  background-color: var(--darkWww-button, #4d97ff);
-  border-color: rgba(0, 0, 0, 0.15);
-  color: var(--darkWww-button-text, white);
-}
-.pagination .current:hover {
-  background-color: var(--darkWww-button-variant, #4280d7);
-}
-.pagination .disabled {
-  opacity: 0.5;
-}
-.linkst .follow-topic {
-  top: -31px;
-}
-.linksb .follow-topic {
-  bottom: -31px;
-}
-.follow-topic .loading {
-  width: 22.8px;
-  height: 22.8px;
-  object-position: -100px -100px;
-  background-image: url(/svgs/modal/spinner-blue.svg);
-  background-size: 100%;
-  opacity: 1;
-  filter: var(--darkWww-link-iconFilter, none);
-}
-.follow-topic .loading:not([style="display: none;"]) {
-  /* Spinner animation code */
-  /* From https://github.com/LLK/scratch-www/blob/develop/src/components/spinner/spinner.scss */
-  animation-name: spin-intro, spin;
-  animation-duration: 0.25s, 1s;
-  animation-timing-function: cubic-bezier(0.3, -3, 0.6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);
-  animation-delay: 0s, 0.25s;
-  animation-iteration-count: 1, infinite;
-}
-.follow-button,
-.unfollow-button {
-  margin: 0;
-}
-.follow-topic .follow-button:hover {
-  color: var(--darkWww-button-text, white);
-}
-.button.grey.unfollow-button {
-  background-color: var(--darkWww-gray-darker, #b3b3b3);
-  color: white;
 }
 .blockpost {
   position: relative;
@@ -216,35 +116,28 @@ body > #pagewrapper {
   position: absolute;
   top: -55px;
 }
-.blockpost div.box,
-.blockpost .box-head {
-  background-color: transparent !important;
-  border: none !important;
-  border-radius: 0;
-}
-.blockpost .box {
-  margin-bottom: 24px;
+.blockpost div.box {
+  background-color: #0fbd8c;
+  border-top-color: #0fbd8c;
 }
 .blockpost .box-head {
-  padding: 0;
-  padding-bottom: 8px;
+  border-top-color: #0fbd8c;
 }
-.blockpost .box-head,
 .blockpost .box-head span.conr,
 .blockpost .box-head a,
 .blockpost .box-head a:link,
 .blockpost .box-head a:active,
 .blockpost .box-head a:hover,
 .blockpost .box-head a:visited {
-  color: var(--darkWww-page-transparentText, #b3b3b3);
+  color: white;
 }
 .blockpost .box-head a:hover {
   text-decoration: underline;
 }
-.blockpost .box-content {
-  overflow: hidden;
-  border: 1px solid var(--darkWww-box-border, #d9d9d9);
-  border-radius: 8px;
+.blockpost .box-content,
+.postright,
+.postfootright {
+  color: var(--darkWww-box-text, #575e75);
 }
 .postleft,
 .postfootleft {
@@ -252,39 +145,10 @@ body > #pagewrapper {
   color: var(--darkWww-gray-text, #575e75);
   box-shadow: 1px 0 var(--darkWww-box-border, #d9d9d9);
 }
-.djangobb .blockpost dl {
-  padding: 10px 12px;
-}
-.djangobb .username {
-  color: var(--darkWww-link, #4d97ff);
-  font-size: 16px;
-}
-.forum-search-list .postleft .username {
-  color: var(--darkWww-gray-text, #575e75);
-}
-.searchposts .postleft a {
-  font-size: 16px;
-}
-.postavatar img {
-  margin: 1px;
-  box-shadow: 0 0 0 1px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
-  border-radius: 5px;
-}
 .postright,
 .postfootright {
   border-left-color: var(--darkWww-gray, #f2f2f2);
-  color: var(--darkWww-box-text, #575e75);
   box-shadow: 1px 0 inset var(--darkWww-box-border, #d9d9d9);
-}
-.postmsg ::selection {
-  /* Don't break [color=transparent] hidden text */
-  background-color: var(--darkWww-button-variant, #4280d7);
-  color: var(--darkWww-button-text, white);
-}
-.postfootright > ul {
-  padding: 12px 20px;
-  padding-top: 4px;
-  font-size: 12px;
 }
 .djangobb blockquote {
   background-color: var(--darkWww-gray, #f2f2f2);
@@ -315,52 +179,12 @@ body > #pagewrapper {
   box-sizing: border-box;
   padding: 8px;
 }
-.my-ocular-reaction-button,
-.my-ocular-reaction-button:hover {
-  color: var(--darkWww-gray-text, #575e75);
+.my-ocular-reaction-button {
   box-shadow: 0 0 2px #0fbd8c;
 }
 .my-ocular-reaction-button.selected {
   background-color: #0fbd8c;
-  color: white;
 }
 .my-ocular-popup {
   color: var(--darkWww-input-text, #575e75);
-}
-#reply,
-#reply .box-head,
-#reply .box-content {
-  padding: 0;
-  background-color: transparent;
-  border: none;
-  border-radius: 0;
-}
-#reply .box-head {
-  padding: 16px 0;
-}
-#reply .box-head h4 {
-  color: var(--darkWww-page-text, #575e75);
-  font-size: 20px;
-  line-height: 1.7em;
-}
-#reply label {
-  color: var(--darkWww-page-text, #575e75);
-}
-.djangobb label {
-  margin-bottom: 10px;
-}
-.form-submit {
-  margin-top: 10px;
-}
-.form-submit .button.grey {
-  border-radius: 4px;
-}
-.form-submit a {
-  display: inline-block;
-  vertical-align: middle;
-  padding: 0 10px;
-  background-color: var(--darkWww-gray-darker, #b3b3b3);
-  border-radius: 4px;
-  color: white;
-  line-height: 32px;
 }

@@ -46,8 +46,7 @@ export default async function ({ addon, global, console, msg }) {
   const varTab = document.createElement("li");
   addon.tab.displayNoneWhileDisabled(varTab, { display: "flex" });
   varTab.classList.add(addon.tab.scratchClass("react-tabs_react-tabs__tab"), addon.tab.scratchClass("gui_tab"));
-  // Cannot use number due to conflict after leaving and re-entering editor
-  varTab.id = "react-tabs-sa-variable-manager";
+  varTab.id = "react-tabs-7";
 
   const varTabIcon = document.createElement("img");
   varTabIcon.draggable = false;

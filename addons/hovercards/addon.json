@@ -1,0 +1,116 @@
+{
+  "name": "Hovercards",
+  "description": "Adds informational hovercards for links to projects, users, studios, forum topics, and forum posts. Uses the Scratch API and ScratchDB.",
+  "credits": [
+    {
+      "name": "Hans5958"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "script.js",
+      "matches": "*"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "base.css",
+      "matches": "*"
+    },
+    {
+      "url": "scratch2.css",
+      "matches": "*",
+      "if": {
+        "settings": {
+          "theme": "scratch2"
+        }
+      }
+    },
+    {
+      "url": "scratch3.css",
+      "matches": "*",
+      "if": {
+        "settings": {
+          "theme": "scratch3"
+        }
+      }
+    },
+    {
+      "url": "extended.css",
+      "matches": "*",
+      "if": {
+        "settings": {
+          "theme": "extended"
+        }
+      }
+    },
+    {
+      "url": "extended-statistics.css",
+      "matches": "*",
+      "if": {
+        "settings": {
+          "theme": "extendedStatistics"
+        }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "id": "theme",
+      "name": "Theme",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "scratch3",
+          "name": "Scratch 3"
+        },
+        {
+          "id": "scratch2",
+          "name": "Scratch 2"
+        },
+        {
+          "id": "extended",
+          "name": "Extended"
+        },
+        {
+          "id": "extendedStatistics",
+          "name": "Extended (statistics)"
+        }
+      ],
+      "default": "scratch3"
+    },
+    {
+      "id": "color-scheme",
+      "name": "Color scheme",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "auto",
+          "name": "Auto"
+        },
+        {
+          "id": "light",
+          "name": "Light"
+        },
+        {
+          "id": "dark",
+          "name": "Dark"
+        }
+      ],
+      "default": "auto"
+    },
+    {
+      "id": "forceAll",
+      "name": "Force hovercards on all possible links",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "tags": ["community", "featured"],
+  "enabledByDefault": false,
+  "versionAdded": "1.24.0",
+  "libraries": ["popper", "tippy"],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true
+}

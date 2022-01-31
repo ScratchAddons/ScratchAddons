@@ -1,0 +1,105 @@
+.sa-hovercards-wrapper {
+  margin: 0.25em;
+}
+
+.sa-hovercards-studio-title {
+  margin: 0;
+  width: 200px;
+}
+
+.sa-hovercards-user-name {
+  margin: 0;
+  width: 150px;
+}
+
+.sa-hovercards-project-author,
+.sa-hovercards-project-title {
+  width: calc(200px - 3em);
+}
+
+.sa-hovercards-project-img {
+  width: 200px;
+}
+
+.sa-hovercards-studio-img {
+  width: 200px;
+}
+
+.sa-hovercards-user-img {
+  width: 150px;
+}
+
+.tippy-box[data-theme^="sa-hovercards"] .tippy-content {
+  font-size: 0.923em;
+  line-height: 1.2em;
+  font-weight: bold;
+}
+
+.sa-hovercards-project-author,
+.sa-hovercards-topic-category,
+.sa-hovercards-post-count {
+  color: #aaa;
+  font-size: 0.8462em;
+}
+
+.tippy-box[data-theme="sa-hovercards-light"] .sa-hovercards-project-author,
+.tippy-box[data-theme="sa-hovercards-light"] .sa-hovercards-topic-category,
+.tippy-box[data-theme="sa-hovercards-light"] .sa-hovercards-post-count {
+  color: #575e75;
+}
+
+.sa-hovercards-topic-title,
+.sa-hovercards-post {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.sa-hovercards-forum-topic .sa-hovercards-post,
+.sa-hovercards-forum-post .sa-hovercards-topic-title {
+  -webkit-line-clamp: 2;
+}
+
+.sa-hovercards-forum-topic .sa-hovercards-topic-title,
+.sa-hovercards-forum-post .sa-hovercards-post {
+  -webkit-line-clamp: 6;
+}
+
+.sa-hovercards-post,
+.sa-hovercards-post-author {
+  font-size: 1em;
+  line-height: 1em;
+  font-weight: normal;
+}
+
+.sa-hovercards-post-author {
+  padding-top: 0.5em;
+  border-top: 1px solid #8888;
+  font-weight: bold;
+}
+
+.sa-hovercards-forum-topic .sa-hovercards-info-wrapper > *,
+.sa-hovercards-forum-post .sa-hovercards-info-wrapper > * {
+  margin: 0.5em 0;
+}
+
+.sa-hovercards-img-wrapper {
+  margin-bottom: 0.5em;
+}
+
+.sa-hovercards-project .sa-hovercards-info-wrapper {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 0px;
+  /* grid-template-columns: repeat(2); */
+}
+
+.sa-hovercards-project-author-img {
+  grid-column: 1;
+  grid-row: 1 / span 100;
+  margin: auto 0.5em auto 0;
+  border-radius: calc((1em / 0.923) * 0.25);
+  width: calc((1em / 0.923) * 2);
+  height: calc((1em / 0.923) * 2);
+}

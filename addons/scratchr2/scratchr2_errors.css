@@ -38,7 +38,7 @@
 }
 #page-404 .box-header h1 {
   margin-top: -4px;
-  color: var(--darkWww-page-text, #575e75);
+  color: #575e75;
   font-size: 40px;
   line-height: 1.7em;
 }

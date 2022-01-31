@@ -14,6 +14,7 @@ Third-party libraries included are:
 - [Sora](https://fonts.google.com/specimen/Sora) (OFL)
 - [Fuse.js 6.5.3](https://unpkg.com/fuse.js@6.5.3/dist/fuse.esm.min.js) (Apache-2.0)
 - [idb 7.0.0](https://unpkg.com/idb@7.0.0/build/umd.js) (ISC)
-- [Sortable.js 1.14.0](https://unpkg.com/sortablejs@1.14.0/Sortable.min.js) (MIT)
+- [Popper 2.11.2](https://unpkg.com/@popperjs/core@2.11.2/dist/umd/popper.min.js) (MIT)
+- [Tippy.js 6.3.7](https://unpkg.com/tippy.js@6.3.7/dist/tippy-bundle.umd.min.js) (MIT)
 
 Note that these libraries are either from official release websites or from unpkg (which distributes the content uploaded to NPM as-is).

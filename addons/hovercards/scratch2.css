@@ -1,0 +1,134 @@
+.sa-hovercards-wrapper {
+  margin: 0.25em;
+}
+
+.sa-hovercards-studio-title {
+  margin: 0;
+  width: 200px;
+  display: block;
+}
+
+.sa-hovercards-user-name {
+  margin: 0;
+  width: 150px;
+  display: block;
+}
+
+.sa-hovercards-project-author,
+.sa-hovercards-project-title {
+  width: calc(200px - 3em);
+  display: block;
+}
+
+.sa-hovercards-project-img {
+  width: 200px;
+  height: 150px;
+}
+
+.sa-hovercards-studio-img {
+  width: 200px;
+  height: 117.64px;
+}
+
+.sa-hovercards-user-img {
+  width: 150px;
+  height: 150px;
+}
+
+.sa-hovercards-wrapper {
+  margin: 0.25em;
+}
+
+.sa-hovercards-project-title,
+.sa-hovercards-studio-title {
+  margin: 0;
+  width: 200px;
+  display: block;
+}
+
+.sa-hovercards-user-name {
+  margin: 0;
+  width: 150px;
+  display: block;
+}
+
+.sa-hovercards-project-author {
+  width: 200px;
+  display: block;
+}
+
+.sa-hovercards-project-img {
+  width: 200px;
+}
+
+.sa-hovercards-studio-img {
+  width: 200px;
+}
+
+.sa-hovercards-user-img {
+  width: 150px;
+}
+
+.tippy-box[data-theme^="sa-hovercards"] .tippy-content {
+  font-size: 0.923em;
+  line-height: 1.2em;
+}
+
+.sa-hovercards-project-title,
+.sa-hovercards-studio-title,
+.sa-hovercards-user-name {
+  font-weight: 800;
+}
+
+.sa-hovercards-project-author,
+.sa-hovercards-topic-category,
+.sa-hovercards-post-count {
+  color: #aaa;
+  font-size: 0.8462em;
+}
+
+.tippy-box[data-theme="sa-hovercards-light"] .sa-hovercards-project-author,
+.tippy-box[data-theme="sa-hovercards-light"] .sa-hovercards-topic-category,
+.tippy-box[data-theme="sa-hovercards-light"] .sa-hovercards-post-count {
+  color: #666;
+}
+
+.sa-hovercards-topic-title,
+.sa-hovercards-post {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.sa-hovercards-forum-topic .sa-hovercards-post,
+.sa-hovercards-forum-post .sa-hovercards-topic-title {
+  -webkit-line-clamp: 2;
+}
+
+.sa-hovercards-forum-topic .sa-hovercards-topic-title,
+.sa-hovercards-forum-post .sa-hovercards-post {
+  -webkit-line-clamp: 6;
+}
+
+.sa-hovercards-post,
+.sa-hovercards-post-author {
+  font-size: 1em;
+  line-height: 1em;
+  font-weight: normal;
+}
+
+.sa-hovercards-post-author {
+  padding-top: 0.5em;
+  border-top: 1px solid #8888;
+  font-weight: bold;
+}
+
+.sa-hovercards-forum-topic .sa-hovercards-info-wrapper > *,
+.sa-hovercards-forum-post .sa-hovercards-info-wrapper > * {
+  margin: 0.5em 0;
+}
+
+.sa-hovercards-project-author-img {
+  display: none;
+}

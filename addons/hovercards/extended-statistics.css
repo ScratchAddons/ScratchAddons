@@ -1,0 +1,180 @@
+.sa-hovercards-wrapper {
+  margin: 0.25em;
+}
+
+.sa-hovercards-studio-title {
+  width: 200px;
+}
+
+.sa-hovercards-project .sa-hovercards-info-wrapper,
+.sa-hovercards-user .sa-hovercards-info-wrapper,
+.sa-hovercards-studio .sa-hovercards-info-wrapper {
+  width: 200px;
+}
+
+.sa-hovercards-project-author,
+.sa-hovercards-project-title {
+  width: calc(200px - 3em);
+}
+
+.sa-hovercards-project-img,
+.sa-hovercards-studio-img {
+  width: 150px;
+}
+
+.sa-hovercards-user-img {
+  width: 100px;
+}
+
+.tippy-box[data-theme^="sa-hovercards"] {
+  max-width: none !important;
+}
+
+.tippy-box[data-theme^="sa-hovercards"] .tippy-content {
+  font-size: 0.923em;
+  line-height: 1.2em;
+  font-weight: bold;
+}
+
+.sa-hovercards-project-author,
+.sa-hovercards-topic-category,
+.sa-hovercards-post-count {
+  color: #aaa;
+  font-size: 0.8462em;
+}
+
+.tippy-box[data-theme="sa-hovercards-light"] .sa-hovercards-project-author,
+.tippy-box[data-theme="sa-hovercards-light"] .sa-hovercards-topic-category,
+.tippy-box[data-theme="sa-hovercards-light"] .sa-hovercards-post-count {
+  color: #575e75;
+}
+
+.sa-hovercards-topic-title,
+.sa-hovercards-post {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.sa-hovercards-forum-topic .sa-hovercards-post,
+.sa-hovercards-forum-post .sa-hovercards-topic-title {
+  -webkit-line-clamp: 2;
+}
+
+.sa-hovercards-forum-topic .sa-hovercards-topic-title,
+.sa-hovercards-forum-post .sa-hovercards-post {
+  -webkit-line-clamp: 6;
+}
+
+.sa-hovercards-post,
+.sa-hovercards-post-author {
+  font-size: 1em;
+  line-height: 1em;
+  font-weight: normal;
+}
+
+.sa-hovercards-post-author {
+  padding-top: 0.5em;
+  border-top: 1px solid #8888;
+  font-weight: bold;
+}
+
+.sa-hovercards-forum-topic .sa-hovercards-info-wrapper > *,
+.sa-hovercards-forum-post .sa-hovercards-info-wrapper > * {
+  margin: 0.5em 0;
+}
+
+.sa-hovercards-studio .sa-hovercards-img-wrapper {
+  margin-bottom: 0.5em;
+}
+
+.sa-hovercards-user,
+.sa-hovercards-project,
+.sa-hovercards-studio {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 0.25em 0.5em;
+}
+
+.sa-hovercards-user .sa-hovercards-img-wrapper,
+.sa-hovercards-project .sa-hovercards-img-wrapper,
+.sa-hovercards-studio .sa-hovercards-img-wrapper {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+.sa-hovercards-project .sa-hovercards-info-wrapper {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 0px;
+  /* grid-template-columns: repeat(2); */
+  margin-top: auto;
+}
+
+.sa-hovercards-project-author-img {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  margin: auto 0.5em auto 0;
+  border-radius: calc((1em / 0.923) * 0.25);
+  width: calc((1em / 0.923) * 2);
+  height: calc((1em / 0.923) * 2);
+}
+
+.sa-hovercards-project .sa-hovercards-info-wrapper,
+.sa-hovercards-studio .sa-hovercards-info-wrapper,
+.sa-hovercards-user .sa-hovercards-info-wrapper {
+  margin-top: auto;
+}
+
+.sa-hovercards-project .sa-hovercards-info-extended-wrapper,
+.sa-hovercards-studio .sa-hovercards-info-extended-wrapper,
+.sa-hovercards-user .sa-hovercards-info-extended-wrapper {
+  width: 200px;
+  font-size: 0.8462em;
+  font-weight: normal;
+  display: grid;
+  margin-bottom: auto;
+}
+
+.sa-hovercards-project .sa-hovercards-info-extended-wrapper,
+.sa-hovercards-studio .sa-hovercards-info-extended-wrapper {
+  grid-template-rows: 1fr 1fr;
+  grid-auto-flow: column;
+}
+
+.sa-hovercards-user .sa-hovercards-info-extended-wrapper {
+  grid-template-columns: 1fr 1fr;
+}
+
+.sa-hovercards-user .sa-hovercards-info-extended-wrapper {
+  width: 200px;
+  font-size: 0.8462em;
+  font-weight: normal;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: auto;
+}
+
+.sa-hovercards-user .sa-hovercards-origin,
+.sa-hovercards-user .sa-hovercards-warn {
+  grid-column: 1 / span 2;
+}
+
+.sa-hovercards-user .sa-hovercards-warn {
+  font-size: 80%;
+  line-height: 100%;
+  margin-top: 1.5%;
+}
+
+.sa-hovercards-project .sa-hovercards-img-wrapper,
+.sa-hovercards-studio .sa-hovercards-img-wrapper,
+.sa-hovercards-user .sa-hovercards-img-wrapper {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.sa-hovercards-forum-post,
+.sa-hovercards-forum-topic {
+  max-width: calc(350px - 18.5px - 0.5em);
+}

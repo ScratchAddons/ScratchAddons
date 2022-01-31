@@ -112,10 +112,8 @@
   "hi-res-thumbnails",
   "block-count",
   "script-snap",
-  "custom-block-text",
-  "search-sprites",
-  "hide-signatures",
   "disable-sprite-wobble",
+  "hovercards",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",

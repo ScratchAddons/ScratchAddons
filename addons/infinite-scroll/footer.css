@@ -12,17 +12,16 @@ body, /* scratch-www */
   bottom: 0;
   width: 100%;
   border-top: 1px solid #d9d9d9;
-  height: 32px !important;
-  box-sizing: border-box;
-  padding-top: 4px !important;
+  height: 32px;
+  padding: 0;
   z-index: 20;
   transition-duration: 0.5s;
 }
-#footer .lists dl {
-  margin-top: 0;
+#footer .container {
+  padding-top: 20px;
 }
 #footer:hover {
-  height: var(--footer-hover-height) !important;
+  height: var(--footer-hover-height);
 }
 
 .page > #view {
@@ -30,5 +29,5 @@ body, /* scratch-www */
 }
 
 :root {
-  --footer-hover-height: 328px; /* How high the hovered footer is (for donor text fix) */
+  --footer-hover-height: 300px; /* How high the hovered footer is (for donor text fix) */
 }

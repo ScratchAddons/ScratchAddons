@@ -10,7 +10,8 @@
   "color-picker-web-component": "MIT",
   "comlink": "Apache-2.0",
   "Sora": "OFL",
-  "sortable": "MIT",
   "fuse": "Apache-2.0",
-  "idb": "ISC"
+  "idb": "ISC",
+  "popper": "MIT",
+  "tippy": "MIT"
 }

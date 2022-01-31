@@ -11,15 +11,11 @@ export default async function ({ addon, global, console }) {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
 
-    const updateFlag = () => {
-      button.style.filter = mode ? "hue-rotate(90deg)" : "";
-    };
-
     const changeMode = (_mode = !mode) => {
       mode = _mode;
       if (mode) setFPS(addon.settings.get("framerate"));
       else setFPS(30);
-      updateFlag();
+      button.style.filter = mode ? "hue-rotate(90deg)" : "";
     };
     const flagListener = (e) => {
       if (addon.self.disabled) return;
@@ -56,6 +52,6 @@ export default async function ({ addon, global, console }) {
       }, interval);
       this.emit("RUNTIME_STARTED");
     };
-    updateFlag();
+    changeMode(mode);
   }
 }

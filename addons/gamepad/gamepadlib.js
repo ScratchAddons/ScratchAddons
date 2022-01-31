@@ -147,10 +147,6 @@ class GamepadData {
   constructor(gamepad, gamepadLib) {
     this.gamepad = gamepad;
     this.gamepadLib = gamepadLib;
-    this.resetMappings();
-  }
-
-  resetMappings() {
     this.buttonMappings = this.getDefaultButtonMappings().map(transformAndCopyMapping);
     this.axesMappings = this.getDefaultAxisMappings().map(transformAndCopyMapping);
   }
@@ -450,13 +446,6 @@ class GamepadLib extends EventTarget {
       Object.assign(this.hints, this.getHintsLazily());
     }
     this.hints.generated = true;
-  }
-
-  resetControls() {
-    this.hints.generated = false;
-    for (const gamepad of this.gamepads.values()) {
-      gamepad.resetMappings();
-    }
   }
 
   handleConnect(e) {
