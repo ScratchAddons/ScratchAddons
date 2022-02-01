@@ -1,28 +1,25 @@
 {
-    "name": "Hide studio icons",
-    "description": "Hides the studio icons covering studio thumbnails.",
-    "credits": [
-      {
-        "name": "Xan",
-        "link": "https://scratch.mit.edu/users/-Xanimation-"
-      },
-      {
-        "name": "--Explosion--",
-        "link": "https://github.com/explosion-scratch"
-      }
-    ],
-    "userstyles": [
-      {
-        "url": "userstyle.css",
-        "matches": [
-          "https://scratch.mit.edu/users/*",
-          "https://scratch.mit.edu/projects/*/studios/"
-        ]
-      }
-    ],
-    "tags": ["profiles"],
-    "enabledByDefault": false,
-    "dynamicEnable": true,
-    "dynamicDisable": true,
-    "versionAdded": "1.25.0"
-  }
+  "name": "Hide studio icons",
+  "description": "Hides the studio icons covering studio thumbnails.",
+  "credits": [
+    {
+      "name": "Xan",
+      "link": "https://scratch.mit.edu/users/-Xanimation-"
+    },
+    {
+      "name": "--Explosion--",
+      "link": "https://github.com/explosion-scratch"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/projects/*/studios/"]
+    }
+  ],
+  "tags": ["profiles"],
+  "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.25.0"
+}
