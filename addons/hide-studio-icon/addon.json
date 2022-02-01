@@ -11,9 +11,6 @@
         "link": "https://github.com/explosion-scratch"
       }
     ],
-    "tags": ["profiles"],
-    "enabledByDefault": false,
-    "dynamicEnable": true,
     "userstyles": [
       {
         "url": "userstyle.css",
@@ -22,5 +19,10 @@
           "https://scratch.mit.edu/projects/*/studios/"
         ]
       }
-    ]
+    ],
+    "tags": ["profiles"],
+    "enabledByDefault": false,
+    "dynamicEnable": true,
+    "dynamicDisable": true,
+    "versionAdded": "1.25.0"
   }
