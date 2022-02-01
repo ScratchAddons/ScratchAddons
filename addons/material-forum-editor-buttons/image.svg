@@ -1,1 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="24"
+   width="24"
+   version="1.1"
+   id="svg4"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <path
+     id="path2"
+     style="color:#000000;fill:#000000;"
+     d="M 5 3 C 3.9 3 3 3.899999999999999 3 5 L 3 19 C 3 20.1 3.899999999999999 21 5 21 L 19 21 C 20.1 21 21 20.1 21 19 L 21 5 C 21 3.9 20.1 3 19 3 L 5 3 z M 5.5 5.5 L 18.5 5.5 L 18.5 18.5 L 5.5 18.5 L 5.5 5.5 z " />
+  <path
+     d="m 9.125,13.67857142857143 2.053571428571431,2.4725 2.875,-3.70464285714286 L 17.75,17.375 H 6.25 Z"
+     id="path2323"
+     style="stroke-width:0.999999" />
+</svg>
