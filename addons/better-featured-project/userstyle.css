@@ -131,6 +131,10 @@
 #lfp-change-featured {
   display: none !important;
 }
+#bio,
+#bio-readonly {
+  margin-bottom: 0;
+}
 #bio-readonly,
 #status-readonly {
   width: 285px;
