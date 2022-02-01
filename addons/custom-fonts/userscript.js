@@ -115,7 +115,7 @@ export default async function ({ addon, console }) {
   }
 
   function getWidth() {
-    let chars = "mmmmmmmmmmwwwwwwwwwwlli";
+    let chars = "mmmmmmmmmmlli";
     let p = document.createElement("p");
     p.classList.add("blocklyText", "saWidthTestString");
     p.style.opacity = "0";

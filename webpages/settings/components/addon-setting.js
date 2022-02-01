@@ -10,7 +10,9 @@ export default async function ({ template }) {
         filteredItems: [],
         search: false,
         rowDropdownOpen: false,
-        noResetDropdown: ["table", "boolean", "select"].includes(this.setting.type),
+        noResetDropdown: ["table", "boolean", "select"].includes(
+          this.setting.type
+        ),
       };
     },
     ready() {
@@ -28,20 +30,27 @@ export default async function ({ template }) {
           const arr = Array.isArray(this.setting.if.addonEnabled)
             ? this.setting.if.addonEnabled
             : [this.setting.if.addonEnabled];
-          if (arr.some((addon) => this.$root.manifestsById[addon]._enabled === true)) return true;
+          if (
+            arr.some(
+              (addon) => this.$root.manifestsById[addon]._enabled === true
+            )
+          )
+            return true;
         }
 
         if (this.setting.if.settings) {
-          const anyMatches = Object.keys(this.setting.if.settings).some((settingName) => {
-            const arr = Array.isArray(this.setting.if.settings[settingName])
-              ? this.setting.if.settings[settingName]
-              : [this.setting.if.settings[settingName]];
-            return arr.some(
-              (possibleValue) =>
-                this.addonSettings[settingName] === possibleValue ||
-                this.$parent?.addonSettings?.[settingName] === possibleValue
-            );
-          });
+          const anyMatches = Object.keys(this.setting.if.settings).some(
+            (settingName) => {
+              const arr = Array.isArray(this.setting.if.settings[settingName])
+                ? this.setting.if.settings[settingName]
+                : [this.setting.if.settings[settingName]];
+              return arr.some(
+                (possibleValue) =>
+                  this.addonSettings[settingName] === possibleValue ||
+                  this.$parent?.addonSettings?.[settingName] === possibleValue
+              );
+            }
+          );
           if (anyMatches === true) return true;
         }
 
@@ -52,8 +61,12 @@ export default async function ({ template }) {
           !this.tableChild &&
           this.addon.presets &&
           this.addon.presets.some((preset) =>
-            Object.prototype.hasOwnProperty.call(preset.values, this.setting.id) && this.setting.type === "color"
-              ? preset.values[this.setting.id].toLowerCase() !== this.setting.default.toLowerCase()
+            Object.prototype.hasOwnProperty.call(
+              preset.values,
+              this.setting.id
+            ) && this.setting.type === "color"
+              ? preset.values[this.setting.id].toLowerCase() !==
+                this.setting.default.toLowerCase()
               : preset.values[this.setting.id] !== this.setting.default
           )
         );
@@ -62,10 +75,14 @@ export default async function ({ template }) {
         if (!this.addon.latestUpdate) return false;
 
         const [extMajor, extMinor, _] = window.vue.version.split(".");
-        const [addonMajor, addonMinor, __] = this.addon.latestUpdate.version.split(".");
+        const [addonMajor, addonMinor, __] =
+          this.addon.latestUpdate.version.split(".");
         if (!(extMajor === addonMajor && extMinor === addonMinor)) return false;
 
-        if (this.addon.latestUpdate.newSettings && this.addon.latestUpdate.newSettings.includes(this.setting.id))
+        if (
+          this.addon.latestUpdate.newSettings &&
+          this.addon.latestUpdate.newSettings.includes(this.setting.id)
+        )
           return true;
         else return false;
       },
@@ -79,17 +96,23 @@ export default async function ({ template }) {
             return icon.slice(1);
           }
           if (icon[0] === "@") {
-            return `<img class="inline-icon" src="../../images/icons/${icon.split("@")[1]}"/>`;
+            return `<img class="inline-icon" src="../../images/icons/${
+              icon.split("@")[1]
+            }"/>`;
           }
           if (icon[0] === "#") {
-            return `<img class="inline-icon" src="../../addons/${addon._addonId}/${icon.split("#")[1]}"/>`;
+            return `<img class="inline-icon" src="../../addons/${
+              addon._addonId
+            }/${icon.split("#")[1]}"/>`;
           }
         });
       },
       checkValidity() {
         // Needed to get just changed input to enforce it's min, max, and integer rule if the user "manually" sets the input to a value.
         let input = this.$event.target;
-        this.addonSettings[this.setting.id] = input.validity.valid ? input.value : this.setting.default;
+        this.addonSettings[this.setting.id] = input.validity.valid
+          ? input.value
+          : this.setting.default;
       },
       keySettingKeyDown(e) {
         e.preventDefault();
@@ -155,10 +178,22 @@ export default async function ({ template }) {
         let items = this.items;
         switch (this.setting.autofill) {
           case "font": {
-            chrome.fontSettings.getFontList((list) => {
-              items = items.concat(list.map((n) => n.displayName));
-              this.items = [...new Set(items)];
-            });
+            try {
+              chrome.fontSettings.getFontList((list) => {
+                items = items.concat(list.map((n) => n.displayName));
+                this.items = [...new Set(items)];
+              });
+            } catch (e) {
+              if (
+                e.message.includes("chrome.fontSettings is undefined") &&
+                e.message.includes("moz-extension")
+              ) {
+                //Firefox error
+                this.items = [...new Set(items)];
+              } else {
+                throw e;
+              }
+            }
             break;
           }
 
@@ -187,7 +222,9 @@ export default async function ({ template }) {
       },
 
       selectItem() {
-        this.updateOption(this.search ? this.filteredItems[0] : this.setting.default);
+        this.updateOption(
+          this.search ? this.filteredItems[0] : this.setting.default
+        );
       },
     },
     events: {
