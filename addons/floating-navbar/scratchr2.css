@@ -1,0 +1,132 @@
+/* Main CSS file for scratchr2 pages */
+/* "matches": ["isNotScratchWWW"] */
+
+:root {
+  --search-bar-radius: 30px;
+  --header-color: #4a5577d0;
+  --header-hover-color: #3d4763bb;
+}
+
+.page {
+  background-color: var(--darkWww-page, #fcfcfc);
+}
+
+#topnav {
+  top: 0;
+  left: 0;
+  z-index: 10;
+  box-shadow: 0 0 3px rgb(0 0 0 / 25%);
+  width: 100%;
+  height: 50px;
+  border: none;
+}
+
+#topnav .innerwrap {
+  border-radius: 10px;
+  margin: 10px 45px 10px 25px;
+  right: 0px;
+  width: auto !important;
+
+  background-color: var(--header-color) !important;
+  backdrop-filter: blur(7px);
+
+  height: 50px !important;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#topnav li {
+  border: none !important;
+}
+
+#topnav .logo {
+  margin-top: 7px;
+}
+
+#topnav .logo:hover span {
+  transform: scale(1.05) !important;
+  transition: 0.15s ease-all;
+  background: url(https://scratch.mit.edu/images/logo_sm.png) no-repeat center
+    center;
+  background-size: 95%;
+  height: 35px;
+}
+
+#topnav .logo span {
+  background: url(https://scratch.mit.edu/images/logo_sm.png) no-repeat center
+    center;
+  background-size: 95%;
+  height: 35px;
+}
+
+#topnav .container {
+  height: 50px;
+  align-items: center !important;
+  padding: 0px 20px;
+}
+
+#topnav ul.account-nav {
+  margin-bottom: 0px !important;
+  align-self: center !important;
+}
+
+#topnav ul.account-nav .logged-in-user.dropdown.open {
+  background-color: var(--header-color) !important;
+}
+
+#topnav input[value="Sign out"] {
+  background-color: var(--header-color) !important;
+}
+
+#topnav ul.account-nav ul.user-nav li:hover {
+  background-color: var(--header-hover-color) !important;
+}
+
+#topnav ul.account-nav .logged-in-user .dropdown-menu {
+  border: none;
+}
+
+#topnav ul.account-nav .logged-in-user .user-icon {
+  border: none;
+  height: 27px;
+  width: 27px;
+  border-radius: 5px;
+}
+
+#topnav ul.account-nav .logged-in-user .dropdown-menu {
+  margin-top: 25px;
+  background-color: #4a5577 !important;
+  box-shadow: 0px 0px 20px #4a5577;
+  border-radius: 10px;
+}
+
+#topnav li:hover {
+  transition: 0.3s;
+  background-color: var(--header-hover-color) !important;
+  border-radius: 4px;
+}
+
+#topnav .site-nav {
+  font-weight: bold;
+  font-family: "Helvetica Neue", "Segoe UI", "Helvetica", "Arial", sans-serif;
+  font-size: 10px;
+}
+
+#topnav form.search input[type="text"] {
+  margin-top: 0px;
+  border-radius: var(--search-bar-radius);
+}
+
+#topnav form.search input[type="submit"] {
+  margin-top: 0px;
+}
+
+#topnav li.messages .notificationsCount {
+  background: linear-gradient(45deg, #ff7601, #ffab1a) !important;
+}
+
+#pagewrapper #content {
+  margin-top: 60px;
+}

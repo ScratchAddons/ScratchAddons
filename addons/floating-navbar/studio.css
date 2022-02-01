@@ -1,0 +1,11 @@
+/* Just here to make sure the background is consistent with the rest of the page */
+/* "matches": ["https://scratch.mit.edu/studios/*"] */
+
+html,
+body {
+  background-color: #e9f1fc !important;
+}
+
+.page {
+  background-color: #e9f1fc !important;
+}

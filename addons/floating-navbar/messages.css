@@ -1,0 +1,6 @@
+/* Just here to make sure the background is consistent with the rest of the page */
+/* "matches": ["https://scratch.mit.edu/messages", "https://scratch.mit.edu/download"] */
+
+.page {
+  background-color: var(--darkWww-button-banner, #4d97ff);
+}

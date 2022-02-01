@@ -1,0 +1,70 @@
+/* Main CSS file */
+/* Note: This userstyle was not created with the SA 2.0 --> 3.0 addon in mind */
+
+:root {
+  --header-color: #4a5577d0;
+  --dropdown-color: #4a5577;
+  --header-hover-color: #4a5577d0;
+  --search-bar-radius: 30px;
+}
+
+.page {
+  /* compatibility with dark-www (if I ever feel like going back to dark mode) */
+  background-color: var(--darkWww-page, #fcfcfc);
+}
+
+#navigation {
+  border-radius: 10px;
+  margin: 10px 45px 10px 25px;
+  right: 0px;
+  width: auto !important;
+
+  background-color: var(--header-color) !important;
+  backdrop-filter: blur(7px);
+}
+
+#view {
+  margin-top: 70px !important;
+}
+
+#app .dropdown {
+  background-color: var(--dropdown-color);
+  margin-top: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px #4a5577;
+}
+
+.dropdown ul {
+  background-color: var(--dropdown-color) !important;
+  backdrop-filter: blur(7px) !important;
+}
+
+.col-sm-9 .input {
+  border-radius: var(--search-bar-radius) !important;
+}
+
+#navigation .messages .message-count.show {
+  background: linear-gradient(45deg, #ff7601, #ffab1a) !important;
+}
+
+/* project page alert */
+/* doesn't belong here, but whatever */
+.banner-outer {
+  width: min-content;
+  margin: 0 auto;
+  padding-left: 35px;
+  padding-right: 35px;
+  border-radius: 50px;
+}
+
+/* COMPATIBILITY NOTICE */
+/* The :has() pseudoclass will make things a LOT EASIER and I'll no longer need 7 different stylesheets. However, most browsers do not support it YET */
+/* Chromium is actively working on implementing support for :has() : https://bugs.chromium.org/p/chromium/issues/detail?id=669058 */
+/* Mozilla is *probably* working on implementing support for :has(): https://bugzilla.mozilla.org/show_bug.cgi?id=418039 */
+/* Safari already implemented support for :has(): https://developer.apple.com/safari/technology-preview/release-notes/ */
+/* I honestly can't believe safari is first at something lol */
+/* Proof that this syntax works (on Safari Preview) : https://u.cubeupload.com/BarelySmooth/Screenshot20220130at.png */
+
+/* .page:has(.ideas-banner) {
+  background-color: #febf00 !important;
+} */

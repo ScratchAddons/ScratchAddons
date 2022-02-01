@@ -1,0 +1,9 @@
+/* Just here to make sure the background is consistent with the rest of the page */
+/* This is for the explore page and ideas page */
+/* "matches": ["https://scratch.mit.edu/explore/*", "https://scratch.mit.edu/ideas"] */
+
+.page {
+  background-color: #febf00;
+}
+
+/* There is a much better way of doing this that doesn't involve creating 7 different stylesheets. But most browsers don't support it yet, so I'll stick with this for now. */
