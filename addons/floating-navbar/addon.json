@@ -1,0 +1,42 @@
+{
+  "name": "Floating navbar",
+  "description": "some description",
+  "credits": [
+    {
+      "name": "BarelySmooth"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "scratch-www.css",
+      "matches": ["scratchWWWNoProject", "projects"]
+    },
+    {
+      "url": "scratchr2.css",
+      "matches": ["isNotScratchWWW"]
+    },
+    {
+      "url": "studio.css",
+      "matches": ["https://scratch.mit.edu/studios/*"]
+    },
+    {
+      "url": "explore-ideas.css",
+      "matches": ["https://scratch.mit.edu/explore/*", "https://scratch.mit.edu/ideas"]
+    },
+    {
+      "url": "forums.css",
+      "matches": ["https://scratch.mit.edu/discuss/*"]
+    },
+    {
+      "url": "messages.css",
+      "matches": ["https://scratch.mit.edu/messages", "https://scratch.mit.edu/download"]
+    },
+    {
+      "url": "info.css",
+      "matches": ["https://scratch.mit.edu/contact-us", "https://scratch.mit.edu/faq", "https://scratch.mit.edu/parents/", "https://scratch.mit.edu/search/*", "https://scratch.mit.edu/terms_of_use", "https://scratch.mit.edu/privacy_policy", "https://scratch.mit.edu/DMCA"]
+    }
+  ],
+  "versionAdded": "1.24.0",
+  "tags": ["community", "profiles", "forums", "studios"],
+  "enabledByDefault": false
+}
