@@ -37,6 +37,7 @@
   background: transparent;
 }
 .v-tabs li {
+  margin-right: 14px;
   display: block;
   width: fit-content;
   background-color: var(--darkWww-box, white);

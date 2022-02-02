@@ -1,6 +1,12 @@
 #content {
   padding-top: 204px;
 }
+#content > .cols > .col-4 {
+  width: 280px;
+}
+#content > .cols > .col-12 {
+  width: 662px;
+}
 body:not(.beta-opt-in, .password-change, .email-change) #content > .cols > .col-12 > .box {
   background-color: var(--darkWww-page, #fcfcfc);
 }
@@ -41,7 +47,7 @@ body:not(.beta-opt-in, .password-change, .email-change) #content > .cols > .col-
   position: relative;
 }
 #sidebar li.sub-list {
-  margin-left: 8px;
+  margin-left: 11px;
 }
 #sidebar li.sub-list a {
   margin: 0;
