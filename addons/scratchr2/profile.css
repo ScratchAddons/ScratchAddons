@@ -171,7 +171,7 @@
 #profile-box .player {
   margin-top: 26.4px;
   padding: 8px;
-  width: auto;
+  width: 282px;
   background-color: var(--darkWww-box, white);
   border-radius: 8px;
   border: 1px solid var(--darkWww-border-15, #d9d9d9);
