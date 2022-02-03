@@ -71,7 +71,7 @@
   margin-bottom: 8px;
   color: var(--darkWww-page-text, #575e75);
   font-size: 16px;
-  line-height: normal;
+  line-height: 18px;
 }
 #profile-box .about {
   width: 303px;
@@ -138,7 +138,7 @@
 }
 #bio-readonly,
 #bio {
-  margin-bottom: 12px;
+  margin-bottom: 13px;
 }
 #bio-readonly,
 #status-readonly {
