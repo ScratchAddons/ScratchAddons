@@ -1,0 +1,60 @@
+{
+  "name": "Customizable banner colors",
+  "description": "Lets you change the colors of the explore and forums banners",
+  "tags": ["community", "forums"],
+  "enabledByDefault": false,
+  "versionAdded": "1.25.0",
+  "injectAsStyleElt": true,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "settings": [
+    {
+      "name": "Forum banner color",
+      "id": "forumcolor",
+      "type": "color",
+      "default": "#0fbd8c"
+    },
+    {
+      "name": "Explore banner color",
+      "id": "explorecolor",
+      "type": "color",
+      "default": "#ffbf00"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "forums.css",
+      "matches": ["forums"],
+      "if": {
+        "addonEnabled": ["scratchr2"]
+      }
+    },
+    {
+      "url": "explore.css",
+      "matches": ["https://scratch.mit.edu/explore/*"]
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "forumcolor",
+      "value": {
+        "type": "settingValue",
+        "settingId": "forumcolor"
+      }
+    },
+    {
+      "name": "explorecolor",
+      "value": {
+        "type": "settingValue",
+        "settingId": "explorecolor"
+      }
+    }
+  ],
+  "credits": [
+    {
+      "name": "MystPi",
+      "link": "https://github.com/mystpi"
+    }
+  ]
+}
