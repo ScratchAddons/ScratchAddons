@@ -1,45 +1,45 @@
 {
-    "name": "Profile subpages navigation",
-    "description": "Navigate through user profiles with navigation links on sub-pages.",
-    "tags": ["community","profiles"],
-    "enabledByDefault": false,
-    "versionAdded": "1.25.0",
-    "dynamicDisable": true,
-    "dynamicEnable": true,
-    "userscripts": [
-        {
-            "url": "userscript.js",
-            "matches": ["https://scratch.mit.edu/users/*/projects/"]
-        },
-        {
-            "url": "userscript.js",
-            "matches": ["https://scratch.mit.edu/users/*/favorites/"]
-        },
-        {
-            "url": "userscript.js",
-            "matches": ["https://scratch.mit.edu/users/*/studios/"]
-        },
-        {
-            "url": "userscript.js",
-            "matches": ["https://scratch.mit.edu/users/*/studios_following/"]
-        },
-        {
-            "url": "userscript.js",
-            "matches": ["https://scratch.mit.edu/users/*/following/"]
-        },
-        {
-            "url": "userscript.js",
-            "matches": ["https://scratch.mit.edu/users/*/followers/"]
-        }
-    ],
-    "credits": [
-        {
-          "name": "Xan",
-          "link": "https://scratch.mit.edu/users/-Xanimation-/"
-        },
-        {
-            "name": "Zro617",
-            "link": "https://scratch.mit.edu/users/Zro716/"
-        }
-      ]
-  }
+  "name": "Profile subpages navigation",
+  "description": "Navigate through user profiles with navigation links on sub-pages.",
+  "tags": ["community", "profiles"],
+  "enabledByDefault": false,
+  "versionAdded": "1.25.0",
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/users/*/projects/"]
+    },
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/users/*/favorites/"]
+    },
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/users/*/studios/"]
+    },
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/users/*/studios_following/"]
+    },
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/users/*/following/"]
+    },
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/users/*/followers/"]
+    }
+  ],
+  "credits": [
+    {
+      "name": "Xan",
+      "link": "https://scratch.mit.edu/users/-Xanimation-/"
+    },
+    {
+      "name": "Zro617",
+      "link": "https://scratch.mit.edu/users/Zro716/"
+    }
+  ]
+}
