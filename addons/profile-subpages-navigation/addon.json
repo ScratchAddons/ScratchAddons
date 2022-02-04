@@ -9,29 +9,9 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/users/*/projects/"]
-    },
-    {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/users/*/favorites/"]
-    },
-    {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/users/*/studios/"]
-    },
-    {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/users/*/studios_following/"]
-    },
-    {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/users/*/following/"]
-    },
-    {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/users/*/followers/"]
+      "matches": ["https://scratch.mit.edu/users/*/projects/","https://scratch.mit.edu/users/*/favorites/","https://scratch.mit.edu/users/*/studios/","https://scratch.mit.edu/users/*/studios_following/","https://scratch.mit.edu/users/*/following/","https://scratch.mit.edu/users/*/followers/"]
     }
-  ],
+],
   "credits": [
     {
       "name": "Xan",
