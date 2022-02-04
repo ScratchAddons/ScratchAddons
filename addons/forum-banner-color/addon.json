@@ -10,7 +10,7 @@
   "updateUserstylesOnSettingsChange": true,
   "settings": [
     {
-      "name": "Color",
+      "name": "Background color",
       "id": "color",
       "type": "color",
       "default": "#0fbd8c"
