@@ -4,6 +4,8 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
   const vm = addon.tab.traps.vm;
 
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
+  
+      
 
   const tab = debug.createHeaderTab({
     text: msg("tab-performance"),
@@ -46,12 +48,13 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
         {
           data: Array(NUMBER_OF_POINTS).fill(-1),
           borderWidth: 1,
-          fill: true,
+          fill: !addon.settings.get("graphs_optimization"),
           backgroundColor: "hsla(163, 85%, 40%, 0.5)",
         },
       ],
     },
     options: {
+      animation: !addon.settings.get("graphs_optimization"),
       scales: {
         y: {
           max: getMaxFps(),
@@ -78,16 +81,15 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
     type: "line",
     data: {
       labels,
-      datasets: [
-        {
+      datasets: [{
           data: Array(NUMBER_OF_POINTS).fill(-1),
           borderWidth: 1,
-          fill: true,
+          fill: !addon.settings.get("graphs_optimization"), 
           backgroundColor: "hsla(163, 85%, 40%, 0.5)",
-        },
-      ],
+      }],
     },
     options: {
+      animation: !addon.settings.get("graphs_optimization"),
       scales: {
         y: {
           max: 300,
