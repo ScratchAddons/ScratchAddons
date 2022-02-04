@@ -9,9 +9,16 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/users/*/projects/","https://scratch.mit.edu/users/*/favorites/","https://scratch.mit.edu/users/*/studios/","https://scratch.mit.edu/users/*/studios_following/","https://scratch.mit.edu/users/*/following/","https://scratch.mit.edu/users/*/followers/"]
+      "matches": [
+        "https://scratch.mit.edu/users/*/projects/",
+        "https://scratch.mit.edu/users/*/favorites/",
+        "https://scratch.mit.edu/users/*/studios/",
+        "https://scratch.mit.edu/users/*/studios_following/",
+        "https://scratch.mit.edu/users/*/following/",
+        "https://scratch.mit.edu/users/*/followers/"
+      ]
     }
-],
+  ],
   "credits": [
     {
       "name": "Xan",
