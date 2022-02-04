@@ -71,7 +71,7 @@
   margin-bottom: 8px;
   color: var(--darkWww-page-text, #575e75);
   font-size: 16px;
-  line-height: normal;
+  line-height: 18px;
 }
 #profile-box .about {
   width: 303px;
@@ -138,7 +138,7 @@
 }
 #bio-readonly,
 #bio {
-  margin-bottom: 12px;
+  margin-bottom: 13px;
 }
 #bio-readonly,
 #status-readonly {
@@ -171,7 +171,7 @@
 #profile-box .player {
   margin-top: 26.4px;
   padding: 8px;
-  width: auto;
+  width: 282px;
   background-color: var(--darkWww-box, white);
   border-radius: 8px;
   border: 1px solid var(--darkWww-border-15, #d9d9d9);
