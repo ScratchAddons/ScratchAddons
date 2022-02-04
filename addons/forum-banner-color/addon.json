@@ -3,7 +3,7 @@
   "description": "Lets you change the color of the banner on the forums",
   "tags": ["community", "forums"],
   "enabledByDefault": false,
-  "versionAdded": "1.24.1",
+  "versionAdded": "1.25.0",
   "injectAsStyleElt": true,
   "dynamicEnable": true,
   "dynamicDisable": true,
