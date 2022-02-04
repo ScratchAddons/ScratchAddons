@@ -38,5 +38,4 @@ for (var x in links) {
   li.appendChild(a);
   ul.appendChild(li);
 }
-//div.appendChild(document.createElement("br"));
 div.appendChild(ul);
