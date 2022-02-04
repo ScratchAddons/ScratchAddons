@@ -73,23 +73,23 @@
       "id": "log_invalid_cloud_data",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Graphs optimization",
+      "id": "graphs_optimization",
+      "type": "boolean",
+      "default": false
     }
   ],
   "tags": ["editor", "featured"],
   "enabledByDefault": false,
   "versionAdded": "1.16.0",
   "latestUpdate": {
-    "version": "1.24.0",
-    "isMajor": true,
-    "temporaryNotice": "New \"Threads\" and \"Performance\" tabs in the debugger window.",
+    "version": "1.24.1",
+    "isMajor": false,
+    "temporaryNotice": "New option to make graphs not laggy!",
     "newSettings": [
-      "log_clear_greenflag",
-      "log_greenflag",
-      "log_clone_create",
-      "log_failed_clone_creation",
-      "log_broadcasts",
-      "log_max_list_length",
-      "log_invalid_cloud_data"
+      "graphs_optimization"
     ]
   },
   "libraries": ["chartjs"]
