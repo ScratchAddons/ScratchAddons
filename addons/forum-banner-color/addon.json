@@ -1,0 +1,43 @@
+{
+  "name": "Customizable forum banner color",
+  "description": "Lets you change the color of the banner on the forums",
+  "tags": ["community", "forums"],
+  "enabledByDefault": false,
+  "versionAdded": "1.24.1",
+  "injectAsStyleElt": true,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "settings": [
+    {
+      "name": "Color",
+      "id": "color",
+      "type": "color",
+      "default": "#0fbd8c"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["forums"],
+      "if": {
+        "addonEnabled": ["scratchr2"]
+      }
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "color",
+      "value": {
+        "type": "settingValue",
+        "settingId": "color"
+      }
+    }
+  ],
+  "credits": [
+    {
+      "name": "MystPi",
+      "link": "https://github.com/mystpi"
+    }
+  ]
+}
