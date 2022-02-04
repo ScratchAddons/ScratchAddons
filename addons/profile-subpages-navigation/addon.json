@@ -1,5 +1,5 @@
 {
-    "name": "Profile sub-pages navigation",
+    "name": "Profile subpages navigation",
     "description": "Navigate through user profiles with navigation links on sub-pages.",
     "tags": ["community","profiles"],
     "enabledByDefault": false,
