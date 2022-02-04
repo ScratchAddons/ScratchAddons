@@ -22,11 +22,13 @@
   "credits": [
     {
       "name": "Xan",
-      "link": "https://scratch.mit.edu/users/-Xanimation-/"
+      "link": "https://scratch.mit.edu/users/-Xanimation-/",
+      "note": "Addon version"
     },
     {
       "name": "Zro617",
-      "link": "https://scratch.mit.edu/users/Zro716/"
+      "link": "https://scratch.mit.edu/users/Zro716/",
+      "note": "Original userscript"
     }
   ]
 }
