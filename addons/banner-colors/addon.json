@@ -1,6 +1,6 @@
 {
   "name": "Customizable banner colors",
-  "description": "Lets you change the colors of the discuss, explore, and My Stuff banners",
+  "description": "Lets you change the colors of the discuss, explore, and My Stuff banners. The Scratch 2.0 \u2192 3.0 addon must be enabled to change the discuss and My Stuff colors.",
   "tags": ["community", "forums"],
   "enabledByDefault": false,
   "versionAdded": "1.25.0",
@@ -13,7 +13,10 @@
       "name": "Forum banner color",
       "id": "forumcolor",
       "type": "color",
-      "default": "#0fbd8c"
+      "default": "#0fbd8c",
+      "if": {
+        "addonEnabled": ["scratchr2"]
+      }
     },
     {
       "name": "Explore banner color",
@@ -25,7 +28,10 @@
       "name": "My Stuff banner color",
       "id": "mystuffcolor",
       "type": "color",
-      "default": "#4d97ff"
+      "default": "#4d97ff",
+      "if": {
+        "addonEnabled": ["scratchr2"]
+      }
     }
   ],
   "userstyles": [
