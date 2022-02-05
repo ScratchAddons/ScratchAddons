@@ -10,7 +10,7 @@
   "updateUserstylesOnSettingsChange": true,
   "settings": [
     {
-      "name": "Forum banner color",
+      "name": "Discuss banner color",
       "id": "forumcolor",
       "type": "color",
       "default": "#0fbd8c",
