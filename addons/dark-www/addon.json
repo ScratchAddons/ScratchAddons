@@ -1732,7 +1732,7 @@
       "runAtComplete": false
     },
     {
-      "url": "experimental_forums_preview.js",
+      "url": "forums_preview.js",
       "matches": ["editingScreens"]
     }
   ],
@@ -1745,40 +1745,43 @@
       }
     },
     {
-      "url": "experimental_scratchr2.css",
+      "url": "scratchr2.css", 
       "matches": ["isNotScratchWWW"]
     },
     {
-      "url": "experimental_scratchwww.css",
+      "url": "scratchwww.css",
       "matches": ["scratchWWWNoProject", "projects"]
     },
     {
-      "url": "experimental_scratchwww_white_bg.css",
-      "matches": ["https://scratch.mit.edu/ideas", "https://scratch.mit.edu/annual-report"]
+      "url": "scratchwww_white_bg.css",
+      "matches": [
+        "https://scratch.mit.edu/ideas",
+        "https://scratch.mit.edu/annual-report/*"
+      ]
     },
     {
-      "url": "darker_banners.css",
+      "url": "banners/darker.css",
       "matches": ["scratchWWWNoProject"],
       "if": {
         "settings": { "darkBanners": "darker" }
       }
     },
     {
-      "url": "desaturated_banners.css",
+      "url": "banners/desaturated.css",
       "matches": ["scratchWWWNoProject"],
       "if": {
         "settings": { "darkBanners": "desaturated" }
       }
     },
     {
-      "url": "blue_banners_scratchr2.css",
+      "url": "banners/blue_scratchr2.css",
       "matches": ["isNotScratchWWW"],
       "if": {
         "addonEnabled": ["scratchr2"]
       }
     },
     {
-      "url": "darker_banners_scratchr2.css",
+      "url": "banners/darker_scratchr2.css",
       "matches": ["isNotScratchWWW"],
       "if": {
         "settings": { "darkBanners": "darker" },
@@ -1786,7 +1789,7 @@
       }
     },
     {
-      "url": "desaturated_banners_scratchr2.css",
+      "url": "banners/desaturated_scratchr2.css",
       "matches": ["isNotScratchWWW"],
       "if": {
         "settings": { "darkBanners": "desaturated" },
@@ -1794,25 +1797,25 @@
       }
     },
     {
-      "url": "experimental_search.css",
+      "url": "search.css",
       "matches": ["https://scratch.mit.edu/explore/*", "https://scratch.mit.edu/search/*"]
     },
     {
-      "url": "explore_desaturated_banner.css",
+      "url": "banners/desaturated_explore.css",
       "matches": ["https://scratch.mit.edu/explore/*"],
       "if": {
         "settings": { "darkBanners": "desaturated" }
       }
     },
     {
-      "url": "search_desaturated_banner.css",
+      "url": "banners/desaturated_search.css",
       "matches": ["https://scratch.mit.edu/search/*"],
       "if": {
         "settings": { "darkBanners": "desaturated" }
       }
     },
     {
-      "url": "experimental_project_embed.css",
+      "url": "project_embed.css",
       "matches": ["projectEmbeds"]
     },
     {
