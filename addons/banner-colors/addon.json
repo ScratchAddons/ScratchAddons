@@ -11,7 +11,8 @@
   "info": [
     {
       "type": "notice",
-      "text": "The Scratch 2.0 \u2192 3.0 addon must be enabled to change the discuss and My Stuff colors."
+      "text": "The Scratch 2.0 \u2192 3.0 addon must be enabled to change the discuss and My Stuff colors.",
+      "id": "scratchr2AddonNotice"
     }
   ],
   "settings": [
