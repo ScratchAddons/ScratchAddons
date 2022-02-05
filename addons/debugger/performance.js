@@ -4,6 +4,16 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
   const vm = addon.tab.traps.vm;
 
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
+  
+  // In optimized graphs it still looks good
+  if (addon.settings.get("graphs_optimization") == true) {
+      var lineWidth = 2;
+      var lineColor = "hsla(163, 85%, 40%, 1)";
+  } else {
+      var lineWidth = 1;
+      var lineColor = "hsla(163, 85%, 40%, 0.5)";
+  }
+      
 
   const tab = debug.createHeaderTab({
     text: msg("tab-performance"),
@@ -45,13 +55,15 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
       datasets: [
         {
           data: Array(NUMBER_OF_POINTS).fill(-1),
-          borderWidth: 1,
-          fill: true,
+          borderWidth: lineWidth,
+          fill: !addon.settings.get("graphs_optimization"),
           backgroundColor: "hsla(163, 85%, 40%, 0.5)",
+          borderColor: lineColor,
         },
       ],
     },
     options: {
+      animation: !addon.settings.get("graphs_optimization"),
       scales: {
         y: {
           max: getMaxFps(),
@@ -78,16 +90,16 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
     type: "line",
     data: {
       labels,
-      datasets: [
-        {
+      datasets: [{
           data: Array(NUMBER_OF_POINTS).fill(-1),
-          borderWidth: 1,
-          fill: true,
+          borderWidth: lineWidth,
+          fill: !addon.settings.get("graphs_optimization"), 
           backgroundColor: "hsla(163, 85%, 40%, 0.5)",
-        },
-      ],
+          borderColor: lineColor,
+      }],
     },
     options: {
+      animation: !addon.settings.get("graphs_optimization"),
       scales: {
         y: {
           max: 300,
