@@ -73,13 +73,19 @@
       "id": "log_invalid_cloud_data",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Faster graph rendering",
+      "id": "graphs_optimization",
+      "type": "boolean",
+      "default": false
     }
   ],
   "tags": ["editor", "featured"],
   "enabledByDefault": false,
   "versionAdded": "1.16.0",
   "latestUpdate": {
-    "version": "1.24.0",
+    "version": "1.24.2",
     "isMajor": true,
     "temporaryNotice": "New \"Threads\" and \"Performance\" tabs in the debugger window.",
     "newSettings": [
@@ -89,7 +95,8 @@
       "log_failed_clone_creation",
       "log_broadcasts",
       "log_max_list_length",
-      "log_invalid_cloud_data"
+      "log_invalid_cloud_data",
+      "graphs_optimization"
     ]
   },
   "libraries": ["chartjs"]
