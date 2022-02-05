@@ -1,6 +1,6 @@
 {
   "name": "Customizable banner colors",
-  "description": "Lets you change the colors of the explore and forums banners",
+  "description": "Lets you change the colors of the discuss, explore, and My Stuff banners",
   "tags": ["community", "forums"],
   "enabledByDefault": false,
   "versionAdded": "1.25.0",
@@ -20,6 +20,12 @@
       "id": "explorecolor",
       "type": "color",
       "default": "#ffbf00"
+    },
+    {
+      "name": "My Stuff banner color",
+      "id": "mystuffcolor",
+      "type": "color",
+      "default": "#4d97ff"
     }
   ],
   "userstyles": [
@@ -33,6 +39,13 @@
     {
       "url": "explore.css",
       "matches": ["https://scratch.mit.edu/explore/*"]
+    },
+    {
+      "url": "mystuff.css",
+      "matches": ["https://scratch.mit.edu/mystuff/*"],
+      "if": {
+        "addonEnabled": ["scratchr2"]
+      }
     }
   ],
   "customCssVariables": [
@@ -48,6 +61,13 @@
       "value": {
         "type": "settingValue",
         "settingId": "explorecolor"
+      }
+    },
+    {
+      "name": "mystuffcolor",
+      "value": {
+        "type": "settingValue",
+        "settingId": "mystuffcolor"
       }
     }
   ],
