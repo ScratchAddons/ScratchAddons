@@ -4,7 +4,7 @@ export class HTTPError extends Error {
     this.code = code;
   }
 
-  static fromResponse(resp, message) {
+  static fromResponse(message, resp) {
     return new HTTPError(`${message}: status ${resp.status}`, resp.status);
   }
 }
