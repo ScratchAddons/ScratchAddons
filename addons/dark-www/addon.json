@@ -1754,10 +1754,7 @@
     },
     {
       "url": "scratchwww_white_bg.css",
-      "matches": [
-        "https://scratch.mit.edu/ideas",
-        "https://scratch.mit.edu/annual-report/*"
-      ]
+      "matches": ["https://scratch.mit.edu/ideas", "https://scratch.mit.edu/annual-report/*"]
     },
     {
       "url": "banners/darker.css",
