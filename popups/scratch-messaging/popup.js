@@ -550,7 +550,7 @@ export default async ({ addon, msg, safeMsg }) => {
             elementObject.loadedComments = true;
           })
           .catch((e) => {
-            if (e instanceof API.HTTPError) {
+            if (e instanceof API.HTTPError && e.code > 400) {
               this.error = e.code < 500 ? "loggedOut" : "serverError";
               return;
             } else if (String(e).includes("NetworkError")) {
@@ -765,14 +765,7 @@ export default async ({ addon, msg, safeMsg }) => {
           else if (priorityB > priorityA) return -1;
           else return 0;
         });
-        arr.forEach((obj, i) => {
-          if (obj.loved) str += `<img class="small-icon colored" src="../../images/icons/heart.svg">`;
-          if (obj.faved) str += `<img class="small-icon colored" src="../../images/icons/star.svg">`;
-          str += " ";
-          str += `<a href="https://scratch.mit.edu/users/${obj.username}/">${obj.username}</a>`;
-          if (i !== arr.length - 1) str += "<br>";
-        });
-        return str;
+        return arr;
       },
     },
   });
