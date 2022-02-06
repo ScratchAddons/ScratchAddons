@@ -258,7 +258,7 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
         return addonSettings[addonId][obj.settingId];
       case "ternary":
         // this is not even a color lol
-        return getColor(addonId, obj.source) ? obj.true : obj.false;
+        return getColor(addonId, obj.source) ? getColor(addonId, obj.true) : getColor(addonId, obj.false);
       case "map":
         return obj.options[getColor(addonId, obj.source)];
       case "textColor": {
