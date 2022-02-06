@@ -29,7 +29,7 @@ const pauseThread = (thread) => {
         const thread = vm.runtime.sequencer.activeThread;
         pausedThreadState.get(thread).status = thread.status;
 
-        // Force the block to exit immediatly
+        // Force the block to exit immediately
         Object.defineProperty(thread, "status", {
           get() {
             return STATUS_PROMISE_WAIT;
@@ -216,7 +216,7 @@ export const singleStep = () => {
 
     // End of VM step, emulate one frame of time passing.
     vm.runtime.ioDevices.clock._pausedTime += vm.runtime.currentStepTime;
-    // Skip all sounds forward by vm.runtime.currentStepTime miliseconds so it's as
+    // Skip all sounds forward by vm.runtime.currentStepTime milliseconds so it's as
     //  if they where playing for one frame.
     const audioContext = vm.runtime.audioEngine.audioContext;
     for (const target of vm.runtime.targets) {
