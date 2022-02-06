@@ -226,7 +226,7 @@ export default async ({ addon, msg, safeMsg }) => {
       stMessages: [],
       messages: [],
       comments: {},
-      error: null,
+      error: "loadingPage",
       hasCustomError: false,
 
       username: null,
