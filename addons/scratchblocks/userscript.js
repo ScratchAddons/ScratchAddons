@@ -113,6 +113,7 @@ export default async function ({ addon, msg }) {
     block.classList.add("blocks3");
     block.innerHTML = "";
     block.innerText = block.getAttribute("data-original");
+    block.style.overflow = "auto";
   });
 
   renderMatching(".blockpost pre.blocks3");
