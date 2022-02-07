@@ -179,6 +179,16 @@ export default async ({ addon, msg, safeMsg }) => {
       },
     },
     computed: {
+      canDeleteComment() {
+        switch (this.resourceType) {
+          case "user":
+            return this.resourceId === this.username;
+          case "project":
+            return this.thisComment.projectAuthor === this.username;
+          default:
+            return true; // Studio comment deletion is complex, just assume we can
+        }
+      },
       thisComment() {
         return this.commentsObj[this.commentId];
       },
