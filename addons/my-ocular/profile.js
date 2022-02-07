@@ -31,6 +31,11 @@ export default async function ({ addon, global, console, msg }) {
 
     container.innerText = ""; // clear the old location
 
+    //Change featured project override long text
+    container.style.width = "660px";
+    container.style.marginLeft = "15px"; 
+    container.style.wordWrap = "break-word";
+    
     container.appendChild(locationElem); // give it the location
     container.appendChild(statusSpan);
     container.appendChild(dot);
