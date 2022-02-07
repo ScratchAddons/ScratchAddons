@@ -171,7 +171,7 @@ h1 {
 }
 
 .hidden-button {
-  /* needs !important because it conlicts with display: block */
+  /* needs !important because it conflicts with display: block */
   display: none !important;
 }
 #confirmImport {
@@ -224,7 +224,7 @@ body.iframe .addon-topbar {
   height: 44px;
   padding-inline-end: 6px;
 }
-body.iframe .clickeable-area {
+body.iframe .clickable-area {
   padding-inline-start: 6px;
 }
 body.iframe .addon-name {

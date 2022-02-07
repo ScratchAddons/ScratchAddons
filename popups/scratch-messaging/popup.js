@@ -757,15 +757,13 @@ export default async ({ addon, msg, safeMsg }) => {
       projectLoversAndFavers(project) {
         // First lovers&favers, then favers-only, then lovers only. Lower is better
         const priorityOf = (obj) => (obj.loved && obj.faved ? 0 : obj.faved ? 1 : 2);
-        let str = "";
-        const arr = project.loversAndFavers.slice(0, 20).sort((a, b) => {
+        return project.loversAndFavers.slice(0, 20).sort((a, b) => {
           const priorityA = priorityOf(a);
           const priorityB = priorityOf(b);
           if (priorityA > priorityB) return 1;
           else if (priorityB > priorityA) return -1;
           else return 0;
         });
-        return arr;
       },
     },
   });
