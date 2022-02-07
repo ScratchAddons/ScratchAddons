@@ -1,0 +1,27 @@
+{
+  "name": "Horizontal tabs in My Stuff",
+  "description": "Moves the tab bar in My Stuff to the top of the page.",
+  "tags": ["community"],
+  "credits": [
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "injectAsStyleElt": true,
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/mystuff/"]
+    },
+    {
+      "url": "scratchr2.css",
+      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "if": {
+        "addonEnabled": ["scratchr2"]
+      }
+    }
+  ]
+}
