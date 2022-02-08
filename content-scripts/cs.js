@@ -251,7 +251,7 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
 
   // Set variables for customCssVariables
   const getColor = (addonId, obj) => {
-    if (typeof obj !== "object") return obj;
+    if (typeof obj !== "object" || obj === null) return obj;
     let hex;
     switch (obj.type) {
       case "settingValue":
