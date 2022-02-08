@@ -41,7 +41,8 @@ export default class Trap extends Listenable {
   async getBlockly() {
     if (this._cache.Blockly) return this._cache.Blockly;
     const editorMode = this._getEditorMode();
-    if (!editorMode || editorMode === "embed") throw new Error("Cannot access Blockly on this page");
+    if (!editorMode || editorMode === "embed")
+      throw new Error(`Cannot access Blockly on ${editorMode} page (${location.pathname})`);
     const BLOCKS_CLASS = '[class^="gui_blocks-wrapper"]';
     let elem = document.querySelector(BLOCKS_CLASS);
     if (!elem) {

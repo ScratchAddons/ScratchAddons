@@ -180,3 +180,10 @@ if (window.parent === window) {
   document.body.classList.add("fullscreen");
   document.documentElement.classList.add("fullscreen");
 }
+
+document.head.appendChild(
+  Object.assign(document.createElement("link"), {
+    rel: "icon",
+    href: "../../images/icon.png",
+  })
+);

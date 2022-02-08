@@ -1077,6 +1077,36 @@
       }
     },
     {
+      "name": "gray-forumTransparentCode",
+      "value": {
+        "type": "ternary",
+        "source": {
+          "type": "settingValue",
+          "settingId": "darkForumCode"
+        },
+        "true": {
+          "type": "textColor",
+          "black": "#333333",
+          "white": "rgba(255, 255, 255, 0.03)",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "threshold": 64
+        },
+        "false": {
+          "type": "textColor",
+          "black": "rgba(0, 0, 0, 0.03)",
+          "white": "#f7f7f7",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "threshold": 204
+        }
+      }
+    },
+    {
       "name": "blue-text",
       "value": {
         "type": "textColor",
