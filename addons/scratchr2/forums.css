@@ -248,6 +248,7 @@ body > #pagewrapper {
 }
 .postleft,
 .postfootleft {
+  overflow: visible;
   background-color: var(--darkWww-gray, #f2f2f2);
   color: var(--darkWww-gray-text, #575e75);
   box-shadow: 1px 0 var(--darkWww-box-border, #d9d9d9);
@@ -256,8 +257,18 @@ body > #pagewrapper {
   padding: 10px 12px;
 }
 .djangobb .username {
+  margin: -4px;
+  display: block;
+  padding: 4px;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: var(--darkWww-gray, #f2f2f2);
   color: var(--darkWww-link, #4d97ff);
   font-size: 16px;
+  text-overflow: ellipsis;
+}
+.djangobb .username:hover {
+  width: fit-content;
 }
 .forum-search-list .postleft .username {
   color: var(--darkWww-gray-text, #575e75);

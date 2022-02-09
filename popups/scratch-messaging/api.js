@@ -221,7 +221,9 @@ export async function fetchMigratedComments(
 
     if (json.parent_id && replies.length === 0) {
       // Something went wrong, we didn't get the replies
-      throw new Error("No replies found on comments with parents (see logs)");
+      throw new Error(
+        `No replies found on comment ${resourceType}/${resourceId}/${commentId} with parents ${json.parent_id}`
+      );
     }
 
     for (const reply of replies) {
