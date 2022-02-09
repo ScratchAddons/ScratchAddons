@@ -14,7 +14,8 @@ const _linkify = (child) => {
         content = `http://${content}`;
       }
       elem.href = content;
-      elem.rel = "noreferrer";
+      elem.rel = "noopener noreferrer";
+      elem.target = "_blank";
       child.parentNode.insertBefore(elem, child);
     } else {
       child.parentNode.insertBefore(document.createTextNode(content), child);
@@ -36,6 +37,7 @@ const _pingify = (child) => {
       } else {
         elem.href = `https://scratch.mit.edu/users/${word.slice(1)}/`;
       }
+      elem.href = `https://scratch.mit.edu/users/${word.slice(1)}/`;
       elem.rel = "noreferrer";
       child.parentNode.insertBefore(elem, child);
     } else if (word) {
