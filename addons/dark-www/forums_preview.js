@@ -55,7 +55,7 @@ export default async function ({ addon, console }) {
             previewRoot = node;
           }
           if (node.tagName === "LINK" && node.href.endsWith("djangobb_forum/css/pygments.css")) {
-            preview.contentDocument.head.appendChild(createStyle(addon.self.dir + "/experimental_scratchr2.css"));
+            preview.contentDocument.head.appendChild(createStyle(addon.self.dir + "/scratchr2.css"));
             preview.contentDocument.head.appendChild(createStyle(addon.self.dir + "/experimental_forums.css"));
             preview.contentDocument.head.appendChild(
               createStyle(addon.self.dir + "/pygments.css", !addon.settings.get("darkForumCode"))
