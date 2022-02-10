@@ -122,6 +122,7 @@ export default async ({ addon, msg, safeMsg }) => {
               date: new Date().toISOString(),
               children: null,
               childOf: parent_pseudo_id,
+              projectAuthor: this.thisComment.projectAuthor,
             });
             this.commentsObj[parent_pseudo_id].children.push(newCommentPseudoId);
             this.replyBoxValue = "";
