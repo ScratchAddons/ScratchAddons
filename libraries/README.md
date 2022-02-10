@@ -1,7 +1,7 @@
 # Used third-party libraries
 
 Third-party libraries included are:
-- [js-md5 0.7.3](https://raw.githubusercontent.com/emn178/js-md5/v0.7.3/build/md5.min.js) (MIT)
+- [spark-md5 3.0.2](https://unpkg.com/spark-md5@3.0.2/spark-md5.min.js) (MIT)
 - [scratchblocks 3.5.2](https://scratchblocks.github.io/js/scratchblocks-v3.5.2-min.js) (MIT)
 - [scratchblocks 3.5.2 translations](https://scratchblocks.github.io/js/translations-all-v3.5.2.js) (MIT)
 - [vue 1.0.28-csp](https://raw.githubusercontent.com/vuejs/vue/v1.0.28-csp/dist/vue.js) (BSD-3-Clause)
