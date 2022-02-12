@@ -1,1 +1,1 @@
-{"block-cherry-picking/@name":"Вытаскивать отдельный блок с клавишей Ctrl"}
+{"block-cherry-picking/@name":"Вытаскивать отдельный блок с клавишей Ctrl","block-cherry-picking/@description":"Позволяет перемещать один блок из середины скрипта (вместо всей стопки, прикреплённая снизу блока) с помощью зажатия клавиши Ctrl.","block-cherry-picking/@info-macContextDisabled":"В macOS используйте клавишу Cmd вместо Ctrl."}
