@@ -13,6 +13,7 @@ export default async function ({ addon, global, console, msg }) {
       let br = document.createElement("br");
       addon.tab.displayNoneWhileDisabled(br);
       let status = document.createElement("i");
+      status.setAttribute("class", "ocular-status")
       addon.tab.displayNoneWhileDisabled(status);
       status.title = msg("status-hover");
       status.innerText = userStatus;
