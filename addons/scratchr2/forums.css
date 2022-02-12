@@ -375,3 +375,7 @@ body > #pagewrapper {
   color: white;
   line-height: 32px;
 }
+
+.ocular-status {
+  word-wrap: break-word;
+}
