@@ -161,7 +161,7 @@ export default async function ({ template }) {
                 this.items = [...new Set(items)];
               });
             } else {
-              this.items = [...new Set(items)] // Firefox does not support fontSettings
+              this.items = [...new Set(items)]; // Firefox does not support fontSettings
             }
             break;
           }
