@@ -155,18 +155,13 @@ export default async function ({ template }) {
         let items = this.items;
         switch (this.setting.autofill) {
           case "font": {
-            try {
+            if (typeof chrome.fontSettings !== "undefined") {
               chrome.fontSettings.getFontList((list) => {
                 items = items.concat(list.map((n) => n.displayName));
                 this.items = [...new Set(items)];
               });
-            } catch (e) {
-              if (e.message.includes("chrome.fontSettings is undefined") && e.message.includes("moz-extension")) {
-                //Firefox error
-                this.items = [...new Set(items)];
-              } else {
-                throw e;
-              }
+            } else {
+              this.items = [...new Set(items)] // Firefox does not support fontSettings
             }
             break;
           }

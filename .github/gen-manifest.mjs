@@ -18,7 +18,9 @@ export default (env, manifest) => {
       break;
     }
     case "firefox": {
-      // Currently none
+      manifest.optional_permissions = manifest.optional_permissions.filter(
+        (permission) => permission !== "fontSettings"
+      )
       break;
     }
   }

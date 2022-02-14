@@ -47,10 +47,9 @@
     "webRequestBlocking",
     "storage",
     "contextMenus",
-    "alarms",
-    "fontSettings"
+    "alarms"
   ],
-  "optional_permissions": ["notifications", "clipboardWrite"],
+  "optional_permissions": ["notifications", "clipboardWrite", "fontSettings"],
   "web_accessible_resources": [
     "content-scripts/inject/*",
     "addon-api/*",
