@@ -142,3 +142,8 @@
 .sa-user-id {
   color: white;
 }
+.location {
+  word-break: break-all;
+  width: 660px;
+  margin-left: 15px;
+}
