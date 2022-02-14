@@ -251,14 +251,14 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
 
   // Set variables for customCssVariables
   const getColor = (addonId, obj) => {
-    if (typeof obj !== "object") return obj;
+    if (typeof obj !== "object" || obj === null) return obj;
     let hex;
     switch (obj.type) {
       case "settingValue":
         return addonSettings[addonId][obj.settingId];
       case "ternary":
         // this is not even a color lol
-        return getColor(addonId, obj.source) ? obj.true : obj.false;
+        return getColor(addonId, obj.source) ? getColor(addonId, obj.true) : getColor(addonId, obj.false);
       case "map":
         return obj.options[getColor(addonId, obj.source)];
       case "textColor": {
@@ -479,19 +479,16 @@ const showBanner = () => {
     box-shadow: 0 0 20px 0px #0000009e;
     line-height: 1em;`,
   });
-  /*
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=9y4IsQLz3rk",
+    href: "https://www.youtube.com/watch?v=cQboWcsjR40",
     target: "_blank",
     rel: "noopener",
     referrerPolicy: "strict-origin-when-cross-origin",
   });
-  // Thumbnails were 100px height
-  */
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/dark-www.gif"),
-    style: "height: 175px; border-radius: 5px; padding: 20px",
+    src: chrome.runtime.getURL("/images/cs/yt-thumbnail.jpg"),
+    style: "height: 100px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
@@ -589,9 +586,9 @@ const showBanner = () => {
   notifText.appendChild(makeBr());
   notifText.appendChild(notifFooter);
 
-  // notifImageLink.appendChild(notifImage);
+  notifImageLink.appendChild(notifImage);
 
-  notifInnerBody.appendChild(notifImage);
+  notifInnerBody.appendChild(notifImageLink);
   notifInnerBody.appendChild(notifText);
 
   notifOuterBody.appendChild(notifInnerBody);

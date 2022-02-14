@@ -3,6 +3,7 @@
   padding-top: 66px;
 }
 #profile-data,
+.profile-box-footer-module,
 #content > .slider-carousel-container {
   width: 942px;
   box-sizing: border-box;
@@ -71,7 +72,7 @@
   margin-bottom: 8px;
   color: var(--darkWww-page-text, #575e75);
   font-size: 16px;
-  line-height: normal;
+  line-height: 18px;
 }
 #profile-box .about {
   width: 303px;
@@ -138,7 +139,7 @@
 }
 #bio-readonly,
 #bio {
-  margin-bottom: 12px;
+  margin-bottom: 13px;
 }
 #bio-readonly,
 #status-readonly {
@@ -171,7 +172,7 @@
 #profile-box .player {
   margin-top: 26.4px;
   padding: 8px;
-  width: auto;
+  width: 282px;
   background-color: var(--darkWww-box, white);
   border-radius: 8px;
   border: 1px solid var(--darkWww-border-15, #d9d9d9);
@@ -231,6 +232,33 @@
   right: 0;
   top: 8px;
   color: var(--darkWww-page-text, #575e75);
+}
+.profile-box-footer-module {
+  margin-bottom: 20px;
+  padding: 0;
+  overflow: visible;
+  background-color: transparent;
+  color: var(--darkWww-page-text, #575e75);
+  box-shadow: none;
+}
+.profile-box-footer-module div.section {
+  padding: 0;
+}
+.profile-box-footer-module h4,
+.profile-box-footer-module .close {
+  color: var(--darkWww-page-text, #575e75);
+}
+.profile-box-footer-module textarea {
+  margin-top: 10px;
+  background-color: var(--darkWww-input, #fafafa);
+  color: var(--darkWww-input-text, #575e75);
+}
+.profile-box-footer-module textarea::placeholder {
+  color: var(--darkWww-input-transparentText, rgba(87, 94, 117, 0.6));
+}
+.profile-box-footer-module button {
+  margin-left: 0;
+  margin-right: 0;
 }
 #content > .box:not(#profile-data):not(.slider-carousel-container):not(#page-404) {
   border-radius: 0;

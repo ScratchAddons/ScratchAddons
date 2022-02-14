@@ -23,14 +23,18 @@ export default class Tab extends Listenable {
   constructor(info) {
     super();
     this._addonId = info.id;
-    this.clientVersion = document.querySelector("meta[name='format-detection']")
-      ? "scratch-www"
-      : document.querySelector("script[type='text/javascript']")
-      ? "scratchr2"
-      : null;
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
+  }
+  get clientVersion() {
+    if (!this._clientVersion)
+      this._clientVersion = document.querySelector("meta[name='format-detection']")
+        ? "scratch-www"
+        : document.querySelector("script[type='text/javascript']")
+        ? "scratchr2"
+        : null;
+    return this._clientVersion;
   }
   addBlock(...a) {
     blocks.init(this);
