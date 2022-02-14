@@ -56,6 +56,7 @@ let fuse;
 
   const browserLevelPermissions = ["notifications"];
   if (typeof browser !== "undefined") browserLevelPermissions.push("clipboardWrite");
+  else browserLevelPermissions.push("fontSettings");
   let grantedOptionalPermissions = [];
   const updateGrantedPermissions = () =>
     chrome.permissions.getAll(({ permissions }) => {

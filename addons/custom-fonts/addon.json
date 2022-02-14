@@ -160,5 +160,6 @@
       ],
       "autofill": "font"
     }
-  ]
+  ],
+  "permissions": ["fontSettings"]
 }
