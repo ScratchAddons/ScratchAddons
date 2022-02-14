@@ -40,14 +40,11 @@
         </div>
       </div>
       <div class="addon-credits" v-if="addon.credits">
-        <span>{{ msg("creditTo") }}</span>
-        <span v-for="credit of addon.credits">
-          <span v-if="credit.link">
-            <a href="{{ credit.link }}" rel="noreferrer noopener" target="_blank">{{ credit.name }}</a>
-          </span>
-          <span v-else="credit.link">{{ credit.name }}</span>
-          <span v-if="credit.note">({{ credit.note }})</span>
-        </span>
+        {{ msg("creditTo") }}
+        <span v-for="credit of addon.credits"
+          ><a v-if="credit.link" href="{{ credit.link }}" rel="noreferrer noopener" target="_blank">{{ credit.name }}</a
+          ><span v-else="credit.link">{{ credit.name }}</span><span v-if="credit.note"> ({{ credit.note }})</span></span
+        >
       </div>
       <div class="addon-license" v-if="addon.libraries && addon.libraries.length">
         <a target="_blank" href="./licenses.html?libraries={{ addon.libraries.join(',') }}"
@@ -135,12 +132,8 @@
     color: var(--blue-text);
   }
 
-  .addon-credits > span {
-    margin-inline-end: 0.5rem;
-  }
-
-  .addon-credits > span:not(:first-child):not(:last-child)::after {
-    content: ",";
+  .addon-credits > span:not(:last-child)::after {
+    content: ", ";
   }
   .addon-name {
     margin-inline-start: 10px;
