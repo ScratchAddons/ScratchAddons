@@ -248,6 +248,7 @@ body > #pagewrapper {
 }
 .postleft,
 .postfootleft {
+  overflow-wrap: break-word;
   overflow: visible;
   background-color: var(--darkWww-gray, #f2f2f2);
   color: var(--darkWww-gray-text, #575e75);
