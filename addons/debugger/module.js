@@ -47,7 +47,7 @@ const pauseThread = (thread) => {
 const setSteppingThred = (thread) => {
   steppingThread = thread;
   steppingThreadIndex = vm.runtime.threads.indexOf(steppingThread);
-}
+};
 
 export const setPaused = (_paused) => {
   if (_paused) {
