@@ -307,6 +307,7 @@ export const setup = (_vm) => {
           }
 
           if (thread.status === STATUS_RUNNING || thread.status === STATUS_YIELD) {
+            vm.runtime.sequencer.activeThread = thread;
             vm.runtime.sequencer.stepThread(thread);
           }
         }
