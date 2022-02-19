@@ -358,7 +358,7 @@ function getL10NURLs() {
 async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscripts, addonsWithUserstyles }) {
   // In order for the "everLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and parse
   const everLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
-  const disabledDynamicAddons = [];
+  const disabledDynamicAddons = new Set();
   globalState = globalStateMsg;
   setCssVariables(globalState.addonSettings, addonsWithUserstyles);
   // Just in case, make sure the <head> loaded before injecting styles
@@ -395,6 +395,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
         dynamicDisable,
         partial,
       } = request.dynamicAddonEnabled;
+      disabledDynamicAddons.delete(addonId);
       addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
       if (partial) {
         // Partial: part of userstyle was (re-)enabled.
@@ -428,7 +429,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
       // This may run twice if the style-only addon was first "partially"
       // (but in fact entirely) disabled, and it was then toggled off.
       // Early return in this situation.
-      if (disabledDynamicAddons.includes(addonId)) return;
+      if (disabledDynamicAddons.has(addonId)) return;
       const scriptIndex = addonsWithUserscripts.findIndex((a) => a.addonId === addonId);
       const styleIndex = addonsWithUserstyles.findIndex((a) => a.addonId === addonId);
       if (partialDynamicDisabledStyles) {
@@ -451,7 +452,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
       } else {
         removeAddonStyles(addonId);
       }
-      disabledDynamicAddons.push(addonId);
+      disabledDynamicAddons.add(addonId);
 
       if (scriptIndex !== -1) addonsWithUserscripts.splice(scriptIndex, 1);
       if (scriptIndex !== -1) addonsWithUserstyles.splice(scriptIndex, 1);
@@ -468,7 +469,11 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
     } else if (request === "getRunningAddons") {
       const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
       const userstyles = addonsWithUserstyles.map((obj) => obj.addonId);
-      sendResponse({ userscripts, userstyles, disabledDynamicAddons });
+      sendResponse({
+        userscripts,
+        userstyles,
+        disabledDynamicAddons: Array.from(disabledDynamicAddons),
+      });
     } else if (request === "refetchSession") {
       _page_.refetchSession();
     }
