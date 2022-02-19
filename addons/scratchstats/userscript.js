@@ -116,12 +116,12 @@ export default async function ({ addon, msg, console }) {
                 y: {
                   precision: 0,
                   ticks: {
-                    callback: function(stepSize) {
-                       if (!(stepSize%1)) {
-                         return new Intl.NumberFormat().format(Number(stepSize).toFixed(0));
-                       }
-                    }
-                  }
+                    callback: function (stepSize) {
+                      if (!(stepSize % 1)) {
+                        return new Intl.NumberFormat().format(Number(stepSize).toFixed(0));
+                      }
+                    },
+                  },
                 },
               },
               plugins: {
