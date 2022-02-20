@@ -356,8 +356,7 @@ function getL10NURLs() {
 }
 
 async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscripts, addonsWithUserstyles }) {
-  // In order for the "everLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and parse
-  const everLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
+  const everLoadedUserscriptAddons = new Set(addonsWithUserscripts.map((entry) => entry.addonId));
   const disabledDynamicAddons = new Set();
   globalState = globalStateMsg;
   setCssVariables(globalState.addonSettings, addonsWithUserstyles);
@@ -408,7 +407,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
         }
       } else {
         // Non-partial: the whole addon was (re-)enabled.
-        if (everLoadedAddons.find((addon) => addon.addonId === addonId)) {
+        if (everLoadedUserscriptAddons.has(addonId)) {
           if (!dynamicDisable) return;
           // Addon was reenabled
           _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
@@ -416,13 +415,13 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
           if (!dynamicEnable) return;
           // Addon was not injected in page yet
           _page_.runAddonUserscripts({ addonId, scripts, enabledLate: true });
+          everLoadedUserscriptAddons.add(addonId);
         }
 
         addonsWithUserscripts.push({ addonId, scripts });
         addonsWithUserstyles.push({ styles: userstyles, cssVariables, addonId, injectAsStyleElt, index });
       }
       setCssVariables(globalState.addonSettings, addonsWithUserstyles);
-      everLoadedAddons.push({ addonId, scripts });
     } else if (request.dynamicAddonDisable) {
       // Note: partialDynamicDisabledStyles includes ones that are disabled currently, too!
       const { addonId, partialDynamicDisabledStyles } = request.dynamicAddonDisable;
