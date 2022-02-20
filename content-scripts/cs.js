@@ -454,7 +454,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
       disabledDynamicAddons.add(addonId);
 
       if (scriptIndex !== -1) addonsWithUserscripts.splice(scriptIndex, 1);
-      if (scriptIndex !== -1) addonsWithUserstyles.splice(scriptIndex, 1);
+      if (styleIndex !== -1) addonsWithUserstyles.splice(styleIndex, 1);
 
       _page_.fireEvent({ name: "disabled", addonId, target: "self" });
       setCssVariables(globalState.addonSettings, addonsWithUserstyles);
