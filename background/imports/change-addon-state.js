@@ -27,7 +27,7 @@ export default (addonId, newState) => {
   if (addonId === "msg-count-badge") updateBadge(scratchAddons.cookieStoreId);
   // Partial dynamicEnable (PDE)/Partial dynamicDisable (PDD)
   // See #4188 - for now, userstyles only.
-  if (scratchAddons.dependents[addonId]?.length) {
+  if (scratchAddons.dependents[addonId]?.size) {
     for (const dependentAddonId of scratchAddons.dependents[addonId]) {
       // Ignore disabled addons
       if (!scratchAddons.localState.addonsEnabled[addonId]) continue;

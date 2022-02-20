@@ -100,8 +100,8 @@ const localizeSettings = (addonId, setting, tableId) => {
             injectable.if.addonEnabled = [injectable.if.addonEnabled];
           }
           for (const dependency of injectable.if.addonEnabled) {
-            if (!scratchAddons.dependents[dependency]) scratchAddons.dependents[dependency] = [];
-            scratchAddons.dependents[dependency].push(addonId);
+            if (!scratchAddons.dependents[dependency]) scratchAddons.dependents[dependency] = new Set();
+            scratchAddons.dependents[dependency].add(addonId);
           }
         }
       }

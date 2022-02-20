@@ -9,7 +9,7 @@ scratchAddons.localEvents = new EventTarget();
 
 // Load manifests into memory
 scratchAddons.manifests = [];
-// addonId to array of addon IDs that has the addon inside userstyle's settings.if.addonEnabled
+// addonId to set of addon IDs that has the addon inside userstyle's settings.if.addonEnabled
 scratchAddons.dependents = {};
 
 // Other files may add their own global methods here so that addon-api files can access them
