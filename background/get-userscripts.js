@@ -134,7 +134,8 @@ async function getAddonData({ addonId, manifest, url }) {
       });
   }
   const userstyles = [];
-  for (const style of manifest.userstyles || []) {
+  for (let i = 0; i < manifest.userstyles?.length; i++) {
+    const style = manifest.userstyles[i];
     if (userscriptMatches({ url }, style, addonId))
       if (manifest.injectAsStyleElt) {
         // Reserve index in array to avoid race conditions (#700)
@@ -152,11 +153,15 @@ async function getAddonData({ addonId, manifest, url }) {
               userstyles[indexToUse] = {
                 href: styleHref,
                 text,
+                index: i,
               };
             })
         );
       } else {
-        userstyles.push({ href: chrome.runtime.getURL(`/addons/${addonId}/${style.url}`) });
+        userstyles.push({
+          href: chrome.runtime.getURL(`/addons/${addonId}/${style.url}`),
+          index: i,
+        });
       }
   }
   await Promise.all(promises);

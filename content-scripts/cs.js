@@ -187,7 +187,7 @@ function addStyle(addon) {
   }
   for (let i = 0; i < addon.styles.length; i++) {
     const userstyle = addon.styles[i];
-    const styleIndex = addon.index * MAX_USERSTYLES_PER_ADDON + i;
+    const styleIndex = addon.index * MAX_USERSTYLES_PER_ADDON + userstyle.index;
     if (addon.injectAsStyleElt) {
       // If an existing style is already appended, just enable it instead
       const existingEl = addonStyles.find((style) => style.dataset.styleHref === userstyle.href);
@@ -199,7 +199,7 @@ function addStyle(addon) {
       const style = document.createElement("style");
       style.classList.add("scratch-addons-style");
       style.setAttribute("data-addon-id", addon.addonId);
-      style.setAttribute("data-addon-index", addon.index);
+      style.setAttribute("data-addon-index", styleIndex);
       style.setAttribute("data-style-href", userstyle.href);
       style.textContent = userstyle.text;
       appendByIndex(style, styleIndex);
@@ -213,7 +213,7 @@ function addStyle(addon) {
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.setAttribute("data-addon-id", addon.addonId);
-      link.setAttribute("data-addon-index", addon.index);
+      link.setAttribute("data-addon-index", styleIndex);
       link.classList.add("scratch-addons-style");
       link.href = userstyle.href;
       appendByIndex(link, styleIndex);
