@@ -30,7 +30,7 @@ export default (addonId, newState) => {
   if (scratchAddons.dependents[addonId]?.size) {
     for (const dependentAddonId of scratchAddons.dependents[addonId]) {
       // Ignore disabled addons
-      if (!scratchAddons.localState.addonsEnabled[addonId]) continue;
+      if (!scratchAddons.localState.addonsEnabled[dependentAddonId]) continue;
       const dependentManifest = scratchAddons.manifests.find(
         (manifest) => manifest.addonId === dependentAddonId
       ).manifest;
