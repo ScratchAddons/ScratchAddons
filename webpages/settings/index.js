@@ -21,9 +21,13 @@ let fuse;
 
 (async () => {
   const { theme: initialTheme, setGlobalTheme } = await globalTheme();
-  
-  const timeInputOne = await new Promise((resolve, reject) => chrome.storage.sync.get(['timeOne'], result => resolve(result.timeOne)));
-  const timeInputTwo = await new Promise((resolve, reject) => chrome.storage.sync.get(['timeTwo'], result => resolve(result.timeTwo)));
+
+  const timeInputOne = await new Promise((resolve, reject) =>
+    chrome.storage.sync.get(["timeOne"], (result) => resolve(result.timeOne))
+  );
+  const timeInputTwo = await new Promise((resolve, reject) =>
+    chrome.storage.sync.get(["timeTwo"], (result) => resolve(result.timeTwo))
+  );
 
   await loadVueComponent([
     "webpages/settings/components/picker-component",
@@ -270,15 +274,13 @@ let fuse;
       clearSearch() {
         this.searchInputReal = "";
       },
-      
+
       setTime(id, title) {
         var value = document.getElementById(id).value;
-        if (title == 'timeOne')
-          chrome.storage.sync.set({'timeOne': value});
-        else
-          chrome.storage.sync.set({'timeTwo': value});
+        if (title == "timeOne") chrome.storage.sync.set({ timeOne: value });
+        else chrome.storage.sync.set({ timeTwo: value });
       },
-      
+
       setTheme(mode) {
         setGlobalTheme(mode);
         this.theme = mode;
@@ -293,7 +295,7 @@ let fuse;
             chrome.runtime.sendMessage({
               changeAddonSettings: { addonId: addon._addonId, newSettings: this.addonSettings[addon._addonId] },
             });
-            console.log("Updated" , this.addonSettings[addon._addonId]);
+            console.log("Updated", this.addonSettings[addon._addonId]);
           }
         }, wait);
       },

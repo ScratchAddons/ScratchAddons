@@ -239,8 +239,30 @@
                 </div>
               </div>
               <div class="time-option" :class="{'hided': theme !== 'time'}">
-                <div class="time-input"><span>{{ msg("sunrise").toUpperCase() }}</span><input value="{{$root.timeInputOne}}" id="time-input-1" @input="setTime('time-input-1', 'timeOne')" type="time" min="00:00" max="24:00" required /></div>
-                <div class="time-input"><span>{{ msg("sunset").toUpperCase() }}</span><input value="{{$root.timeInputTwo}}" id="time-input-2" @input="setTime('time-input-2', 'timeTwo')" type="time" min="00:00" max="24:00" required /></div>
+                <div class="time-input">
+                  <span>{{ msg("sunrise").toUpperCase() }}</span
+                  ><input
+                    value="{{$root.timeInputOne}}"
+                    id="time-input-1"
+                    @input="setTime('time-input-1', 'timeOne')"
+                    type="time"
+                    min="00:00"
+                    max="24:00"
+                    required
+                  />
+                </div>
+                <div class="time-input">
+                  <span>{{ msg("sunset").toUpperCase() }}</span
+                  ><input
+                    value="{{$root.timeInputTwo}}"
+                    id="time-input-2"
+                    @input="setTime('time-input-2', 'timeTwo')"
+                    type="time"
+                    min="00:00"
+                    max="24:00"
+                    required
+                  />
+                </div>
               </div>
             </div>
           </div>
