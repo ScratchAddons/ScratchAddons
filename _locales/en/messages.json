@@ -167,17 +167,20 @@
   "dark": {
     "message": "Dark"
   },
+  "autoTheme": {
+    "message": "Sync with system"
+  },
+  "timeTheme": {
+    "message": "Toggle at sunset/sunrise"
+  },
   "sunset": {
     "message": "Sunset"
   },
   "sunrise": {
     "message": "Sunrise"
   },
-  "autoTheme": {
-    "message": "Sync with system"
-  },
-  "timeTheme": {
-    "message": "Toggle at sunset/sunrise"
+  "syncAddonsWithTheme": {
+    "message": "Make dark mode addon sync with these settings"
   },
   "licensesTitle": {
     "message": "Licenses - Scratch Addons"
