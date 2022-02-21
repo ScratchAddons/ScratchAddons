@@ -26,7 +26,7 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
           void chrome.runtime.lastError;
           if (res) {
             (async () => {
-              let { userscripts, userstyles, cssVariables } = await getAddonData({ addonId, url: res, manifest });
+              const { userscripts, userstyles, cssVariables } = await getAddonData({ addonId, url: res, manifest });
               // Handle partial dynamic enable (PDE)
               // Userscripts currently cannot be PDEd
               // Note: this can still result in userstyles being empty
