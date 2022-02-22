@@ -22,5 +22,6 @@
       "matches": ["editingScreens"]
     }
   ],
-  "tags": ["community", "forums"]
+  "tags": ["community", "forums"],
+  "versionAdded": "1.25.0"
 }
