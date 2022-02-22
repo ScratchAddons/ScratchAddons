@@ -28,4 +28,6 @@ export default async function ({ addon, console }) {
   addon.self.addEventListener("disabled", () => {
     showPreview();
   });
+
+  if (addon.self.enabledLate) updatePreview();
 }
