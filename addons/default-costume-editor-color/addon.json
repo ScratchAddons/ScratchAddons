@@ -32,6 +32,12 @@
       "min": 0,
       "max": 100,
       "default": 4
+    },
+    {
+      "name": "Use previous color instead of default color when resetting color after switching tools",
+      "id": "persistence",
+      "type": "boolean",
+      "default": true
     }
   ],
   "versionAdded": "1.25.0",
