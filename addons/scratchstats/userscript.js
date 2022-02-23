@@ -116,7 +116,7 @@ export default async function ({ addon, msg, console }) {
                 y: {
                   ticks: {
                     stepSize,
-                  }
+                  },
                 },
               },
               plugins: {
