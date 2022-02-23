@@ -13,5 +13,18 @@ const autoescaper = (strings, ...dangerous) => {
   }
   return r;
 };
+
+/**
+ * Auto-escapes inputs of template strings.
+ * @param {string[]} strings - the template string.
+ * @param {...string} dangerous - the inputs.
+ * @return {string} string with inputs escaped.
+ */
 export default autoescaper;
+
+/**
+ * Escapes HTML special characters.
+ * @param {string} str - the string.
+ * @returns {string} HTML-escaped string.
+ */
 export { escapeHTML };

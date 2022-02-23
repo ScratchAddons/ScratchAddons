@@ -30,10 +30,30 @@ export default class Tab extends Listenable {
     /** @type {WeakSet<Element>} */
     this._waitForElementSet = new WeakSet();
   }
+
+  /**
+   * Handler for the Scratch Addons blocks. This must never throw.
+   * @callback Tab~blocksCallback
+   * @param {object} args - the arguments passed to the block.
+   * @param {Thread} thread - the execution thread for ths block.
+   */
+
+  /**
+   * Adds a Scratch Addons block.
+   * @param {string} proccode - the code displayed to the user.
+   * @param {string[]} args - the block argument names.
+   * @param {Tab~blocksCallback} handler - the handler.
+   * @param {boolean=} hide - whether to hide the block from the block palette.
+   */
   addBlock(...a) {
     blocks.init(this);
     return blocks.addBlock(...a);
   }
+
+  /**
+   * Removes a Scratch Addons block.
+   * @param {string} proccode - the code displayed to the user.
+   */
   removeBlock(...a) {
     return blocks.removeBlock(...a);
   }
