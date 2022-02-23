@@ -267,8 +267,7 @@ export function notifyNewMessages(messages) {
   const username = scratchAddons.globalState.auth.username;
   if (messages === null || messages.length === 0 || scratchAddons.muted) return;
   messages = messages.slice(0, 20);
-  if (settings.notification_sound === "addons-ping")
-    new Audio(chrome.runtime.getURL("./addons/scratch-notifier/ping.mp3")).play();
+  let anyNotified = false;
   for (const message of messages) {
     let messageType = message.type;
     let commentUrl;
@@ -332,6 +331,11 @@ export function notifyNewMessages(messages) {
       element_id: message.comment_id || message.gallery_id || message.project_id || message.topic_id,
       parent_title: message.parent_title, // Remixes only
     };
+    if (!anyNotified && settings.notification_sound === "addons-ping") {
+      new Audio(chrome.runtime.getURL("./addons/scratch-notifier/ping.mp3")).play();
+    }
+    // Play the sound only once
+    anyNotified = true;
     notifyMessage(messageInfo);
   }
 }

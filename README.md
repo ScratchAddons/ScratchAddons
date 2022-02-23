@@ -71,8 +71,8 @@ After downloading the extension to your computer, just load it by following thes
   3. Click the `Load unpacked` button on the top and select the extension directory which has the `manifest.json` file in it. 
 
 - Mozilla Firefox
-  1. Open `about:debugging` to open the add-ons page by typing it into your address bar.
-  2. Click `This Firefox` on the right-hand menu.
+  1. Open `about:debugging` to open the debugging page by typing it into your address bar.
+  2. Click `This Firefox` on the left-hand menu.
   3. Click `Load Temporary Add-on...` and select the `manifest.json` file.
 
 ## Contribute

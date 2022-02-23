@@ -86,8 +86,8 @@ export default async function (/** @type {typeof UserscriptUtils} */ { addon, gl
   GamepadLib.setConsole(console);
   const gamepad = new GamepadLib();
 
-  const parsedOptions = parseOptionsComment();
   gamepad.getHintsLazily = () => {
+    const parsedOptions = parseOptionsComment();
     if (parsedOptions) {
       return {
         importedSettings: parsedOptions,

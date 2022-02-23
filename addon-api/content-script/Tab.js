@@ -2,7 +2,6 @@ import Trap from "./Trap.js";
 import ReduxHandler from "./ReduxHandler.js";
 import Listenable from "../common/Listenable.js";
 import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
-import getWorkerScript from "./worker.js";
 import * as blocks from "./blocks.js";
 import { addContextMenu } from "./contextmenu.js";
 
@@ -17,18 +16,26 @@ export default class Tab extends Listenable {
   constructor(info) {
     super();
     this._addonId = info.id;
-    /** Version of the renderer (scratch-www, scratchr2, etc) @type {string | null} */
-    this.clientVersion = document.querySelector("meta[name='format-detection']")
-      ? "scratch-www"
-      : document.querySelector("script[type='text/javascript']")
-      ? "scratchr2"
-      : null;
-    /** @type {Trap} */
     this.traps = new Trap(this);
     /** @type {ReduxHandler} */
     this.redux = new ReduxHandler();
     /** @type {WeakSet<Element>} */
     this._waitForElementSet = new WeakSet();
+  }
+
+  /**
+   * Version of the renderer (scratch-www, scratchr2, etc)
+   *
+   * @type {string | null}
+   */
+  get clientVersion() {
+    if (!this._clientVersion)
+      this._clientVersion = document.querySelector("meta[name='format-detection']")
+        ? "scratch-www"
+        : document.querySelector("script[type='text/javascript']")
+        ? "scratchr2"
+        : null;
+    return this._clientVersion;
   }
 
   /**
@@ -222,22 +229,6 @@ export default class Tab extends Listenable {
   /** @private */
   get _eventTargetKey() {
     return "tab";
-  }
-
-  /**
-   * Loads a Web Worker.
-   *
-   * @param {string} url - URL of the worker to load.
-   * @returns {Promise<Worker>} - Worker.
-   */
-  async loadWorker(url) {
-    const resp = await fetch(url);
-    const script = await resp.text();
-    const workerScript = getWorkerScript(this, script, url);
-    const blob = new Blob([workerScript], { type: "text/javascript" });
-    const workerURL = URL.createObjectURL(blob);
-    const worker = new Worker(workerURL);
-    return new Promise((resolve) => worker.addEventListener("message", () => resolve(worker), { once: true }));
   }
 
   /**

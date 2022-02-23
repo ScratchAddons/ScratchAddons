@@ -114,7 +114,9 @@ export default async function (/** @type {typeof UserscriptUtils} */ { addon, ms
                   },
                 },
                 y: {
-                  stepSize,
+                  ticks: {
+                    stepSize,
+                  },
                 },
               },
               plugins: {
@@ -124,7 +126,7 @@ export default async function (/** @type {typeof UserscriptUtils} */ { addon, ms
                 },
                 tooltip: {
                   callbacks: {
-                    label: (context) => `${new Date(parseInt(context.label)).toDateString()}: ${context.parsed.y}`,
+                    label: (context) => `${new Date(Number(context.raw.x)).toDateString()}: ${context.parsed.y}`,
                   },
                 },
                 legend: {
