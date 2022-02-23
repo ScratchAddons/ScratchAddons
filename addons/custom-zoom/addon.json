@@ -24,10 +24,10 @@
   ],
   "settings": [
     {
-      "name": "Maximum Zoom (50-500%)",
+      "name": "Maximum Zoom (100-500%)",
       "id": "maxZoom",
       "type": "integer",
-      "min": 50,
+      "min": 100,
       "default": 300,
       "max": 500
     },
