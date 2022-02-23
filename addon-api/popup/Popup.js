@@ -20,7 +20,7 @@ export default class Popup {
   /**
    * Gets the URL of the Scratch page that is selected, or null.
    *
-   * @returns {Promise<null|string>} - The URL.
+   * @returns {Promise<null | string>} - The URL.
    */
   getSelectedTabUrl() {
     return new Promise((resolve) => {
