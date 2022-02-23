@@ -5,8 +5,10 @@ declare global {
   /**
    * Userscripts must default-export an async function that takes this object as a sole argument. Example:
    *
-   *     export default async function (/** @type {typeof UserscriptUtils} *\/ utils)
-   *
+   * ```js
+   * export default async function (/** @type {typeof UserscriptUtils} *\/ utils)
+   * ```
+   * (remove the `/`)
    * Note that it is commonly done using destructing syntax.
    */
   const UserscriptUtils: Utils<UserscriptAddon>;

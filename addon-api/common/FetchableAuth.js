@@ -55,7 +55,7 @@ export default class FetchableAuth extends AuthCommon {
   /**
    * Fetch current username.
    *
-   * @returns {Promise<?string>} - The username.
+   * @returns {Promise<null |string>} - The username.
    */
   fetchUsername() {
     return this._fetchProperty("_lastUsername");
@@ -64,7 +64,7 @@ export default class FetchableAuth extends AuthCommon {
   /**
    * Fetch current user ID.
    *
-   * @returns {Promise<?number>} - The user ID.
+   * @returns {Promise<null|number>} - The user ID.
    */
   fetchUserId() {
     return this._fetchProperty("_lastUserId");
@@ -73,7 +73,7 @@ export default class FetchableAuth extends AuthCommon {
   /**
    * Fetch X-Token used in new APIs.
    *
-   * @returns {Promise<?string>} - The X-Token.
+   * @returns {Promise<null|string>} - The X-Token.
    */
   fetchXToken() {
     return this._fetchProperty("_lastXToken");

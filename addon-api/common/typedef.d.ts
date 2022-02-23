@@ -4,7 +4,8 @@ type Utils<Addon> = {
   addon: Addon;
   /** Object accessible by all userscripts of the same addon. */
   global: Record<any, any>;
-  /** Console API with formatting. */ console: Console;
+  /** Console API with formatting. */
+  console: Console;
   /** Gets localized message from addons-l10n folder. Supports placeholders and plurals. */
   msg: msg & {
     /** Current locale used by msg function. */

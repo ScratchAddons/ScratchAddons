@@ -13,7 +13,7 @@ export default class Auth extends Listenable {
   /**
    * Fetch current username.
    *
-   * @returns {Promise<?string>} - The username.
+   * @returns {Promise<null|string>} - The username.
    */
   fetchUsername() {
     return Promise.resolve(scratchAddons.globalState.auth.username);
@@ -21,7 +21,7 @@ export default class Auth extends Listenable {
   /**
    * Fetch current user ID.
    *
-   * @returns {Promise<?number>} - The user ID.
+   * @returns {Promise<null|number>} - The user ID.
    */
   fetchUserId() {
     return Promise.resolve(scratchAddons.globalState.auth.userId);
@@ -29,7 +29,7 @@ export default class Auth extends Listenable {
   /**
    * Fetch X-Token used in new APIs.
    *
-   * @returns {Promise<?string>} - The X-Token.
+   * @returns {Promise<null|string>} - The X-Token.
    */
   fetchXToken() {
     return Promise.resolve(scratchAddons.globalState.auth.xToken);

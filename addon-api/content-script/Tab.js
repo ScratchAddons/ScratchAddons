@@ -34,9 +34,9 @@ export default class Tab extends Listenable {
   /**
    * Handler for the Scratch Addons blocks. This must never throw.
    *
-   * @callback Tab~blocksCallback
+   * @callback blocksCallback
    * @param {object} args - The arguments passed to the block.
-   * @param {Thread} thread - The execution thread for ths block.
+   * @param {Thread} thread - The execution thread for this block.
    */
 
   /**
@@ -44,7 +44,7 @@ export default class Tab extends Listenable {
    *
    * @param {string} proccode - The code displayed to the user.
    * @param {string[]} args - The block argument names.
-   * @param {Tab~blocksCallback} handler - The handler.
+   * @param {blocksCallback} handler - The handler.
    * @param {boolean} [hide] - Whether to hide the block from the block palette.
    */
   addBlock(...a) {
@@ -60,6 +60,11 @@ export default class Tab extends Listenable {
   removeBlock(...a) {
     return blocks.removeBlock(...a);
   }
+  /**
+   * Get a Scratch Addons block by proccode.
+   *
+   * @param {string} proccode - The code displayed to the user.
+   */
   getCustomBlock(...a) {
     return blocks.getCustomBlock(...a);
   }

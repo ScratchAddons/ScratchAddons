@@ -10,7 +10,7 @@ export default class Account extends Listenable {
   /**
    * Fetches message count.
    *
-   * @returns {Promise<?number>} - Current message count.
+   * @returns {Promise<null|number>} - Current message count.
    */
   getMsgCount() {
     return this._addon.auth.fetchIsLoggedIn().then((isLoggedIn) => {
