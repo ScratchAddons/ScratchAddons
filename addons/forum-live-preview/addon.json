@@ -1,0 +1,27 @@
+{
+  "name": "Live forum post preview",
+  "description": "Automatically shows a preview when you stop typing while writing or editing a forum post.",
+  "credits": [
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["editingScreens"],
+      "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["editingScreens"]
+    }
+  ],
+  "tags": ["community", "forums"],
+  "versionAdded": "1.25.0"
+}
