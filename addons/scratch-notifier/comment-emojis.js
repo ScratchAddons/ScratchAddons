@@ -1,7 +1,7 @@
 export default Object.assign(Object.create(null), {
   "meow.png": "[meow emoji]",
   "gobo.png": "[gobo emoji]",
-  "waffle.png": "🧇",
+  "waffle.png": "[waffle emoji]",
   "taco.png": "🌮",
   "sushi.png": "🍣",
   "apple.png": "🍎",
