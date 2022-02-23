@@ -1,6 +1,6 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 
-export default async ({ addon, console, msg }) => {
+export default async (/** @type {typeof UserscriptUtils} */ { addon, console, msg }) => {
   let recordElem;
   let isRecording = false;
   let isWaitingForFlag = false;

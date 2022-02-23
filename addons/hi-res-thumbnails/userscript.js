@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, console }) {
   main: while (true) {
     const image = await addon.tab.waitForElement("img", {
       markAsSeen: true,

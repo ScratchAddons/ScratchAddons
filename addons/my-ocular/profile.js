@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, global, console, msg }) {
   var username = document.querySelector("#profile-data > div.box-head > div > h2").innerText;
 
   var container = document.querySelector(".location");

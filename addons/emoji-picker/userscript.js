@@ -1,5 +1,5 @@
 import { emojis, unicodeEmojis } from "./emojis.js";
-export default async function ({ addon, global, console, msg }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, global, console, msg }) {
   //Constants
 
   //Functions

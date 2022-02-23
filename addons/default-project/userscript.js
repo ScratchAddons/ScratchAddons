@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, global, console, msg }) {
   let pendingReplacement = false;
 
   let reduxAvailable = Boolean(addon.tab.redux.state);

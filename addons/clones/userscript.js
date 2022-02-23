@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
 
   if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {

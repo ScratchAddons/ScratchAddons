@@ -1,4 +1,4 @@
-export default function ({ addon }) {
+export default function (/** @type {typeof UserscriptUtils} */ { addon }) {
   const usernameHeader = document.querySelector(".header-text").firstElementChild;
   const userId = Object.assign(document.createElement("span"), {
     innerText: `#${Scratch.INIT_DATA.PROFILE.model.userId}`,

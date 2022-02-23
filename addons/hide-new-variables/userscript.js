@@ -1,4 +1,4 @@
-export default async function ({ addon, msg, global, console }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, msg, global, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const originalSetCheckboxState = ScratchBlocks.VerticalFlyout.prototype.setCheckboxState;
   ScratchBlocks.VerticalFlyout.prototype.setCheckboxState = function (...args) {

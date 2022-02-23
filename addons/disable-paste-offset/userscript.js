@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, console }) {
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
     if (addon.self.disabled) return;

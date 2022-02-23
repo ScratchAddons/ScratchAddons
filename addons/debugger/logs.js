@@ -1,7 +1,7 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import LogView from "./log-view.js";
 
-export default async function createLogsTab({ debug, addon, console, msg }) {
+export default async function createLogsTab(/** @type {import("./userscript.js").APIs}*/{ debug, addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
   const tab = debug.createHeaderTab({

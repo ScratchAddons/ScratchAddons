@@ -1,6 +1,4 @@
-/**
- * @private
- */
+/** @private */
 export default (tab, script, url) => {
   script = script.replace(/^export default (?:async )?/, "");
   script = script.replace(

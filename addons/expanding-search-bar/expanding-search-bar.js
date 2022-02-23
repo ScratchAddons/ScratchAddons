@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, global, console }) {
   if (addon.tab.clientVersion === null) return; //if neither www or r2, exit
 
   var exsearch_searchBar; //The search bar element

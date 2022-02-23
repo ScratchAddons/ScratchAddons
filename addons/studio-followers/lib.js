@@ -1,3 +1,9 @@
+/**
+ * @param {import("../../addon-api/content-script/Addon").default} addon
+ * @param {string} title
+ * @param {import("../../addon-api/common/typedef").msg} msg
+ * @param {(nextType: string) => void} switchType
+ */
 export function createModal(addon, title, msg, switchType) {
   const overlay = Object.assign(document.createElement("div"), {
     className: "modal-overlay",
@@ -99,7 +105,14 @@ export function createModal(addon, title, msg, switchType) {
 
   return overlay;
 }
-
+/**
+ * @param {any} follower
+ * @param {import("../../addon-api/content-script/Addon").default} addon
+ * @param {import("../../addon-api/common/typedef").msg} msg
+ * @param {string[]} members
+ *
+ * @returns {HTMLDivElement}
+ */
 export function createUser(follower, addon, msg, members) {
   let { redux } = addon.tab;
   const btn = Object.assign(document.createElement("div"), {

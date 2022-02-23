@@ -1,7 +1,7 @@
 import { normalizeHex, getHexRegex } from "../../libraries/common/cs/normalize-color.js";
 import RateLimiter from "../../libraries/common/cs/rate-limiter.js";
 
-export default async ({ addon, console, msg }) => {
+export default async (/** @type {typeof UserscriptUtils} */ { addon, console, msg }) => {
   // 250-ms rate limit
   const rateLimiter = new RateLimiter(250);
   const getColor = (element) => {

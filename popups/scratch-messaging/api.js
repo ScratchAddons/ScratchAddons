@@ -11,6 +11,16 @@ export class DetailedError extends Error {
   }
 }
 
+/**
+ * @typedef {object} deleteOptions
+ * @property {string} resourceType
+ * @property {string} resourceId
+ * @property {string} commenteeId
+ */
+/**
+ * @param {import("../../addon-api/popup/Addon").default} addon
+ * @param {deleteOptions} options
+ */
 export async function deleteComment(addon, { resourceType, resourceId, commentId }) {
   if (resourceType === "user") return deleteLegacyComment(addon, { resourceType, resourceId, commentId });
   const resourceTypeUrl = resourceType === "project" ? "project" : "studio";
@@ -31,6 +41,10 @@ export async function deleteComment(addon, { resourceType, resourceId, commentId
   });
 }
 
+/**
+ * @param {import("../../addon-api/popup/Addon").default} addon
+ * @param {deleteOptions} options
+ */
 const deleteLegacyComment = async (addon, { resourceType, resourceId, commentId }) => {
   return fetch(`https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/del/?sareferer`, {
     headers: {
@@ -46,6 +60,10 @@ const deleteLegacyComment = async (addon, { resourceType, resourceId, commentId 
   });
 };
 
+/**
+ * @param {import("../../addon-api/popup/Addon").default} addon
+ * @property {string} alertId
+ */
 export async function dismissAlert(addon, alertId) {
   return fetch("https://scratch.mit.edu/site-api/messages/messages-delete/?sareferer", {
     headers: {
@@ -60,12 +78,28 @@ export async function dismissAlert(addon, alertId) {
   });
 }
 
+/**
+ * @typedef {object} sendOptions
+ * @property {string} resourceType
+ * @property {string} resourceId
+ * @property {string} content
+ * @property {string} parentId
+ * @property {string} commenteeId
+ */
+/**
+ * @param {import("../../addon-api/popup/Addon").default} addon
+ * @param {sendOptions} options
+ */
 export async function sendComment(addon, { resourceType, resourceId, content, parentId, commenteeId }) {
   if (resourceType === "user")
     return sendLegacyComment(addon, { resourceType, resourceId, content, parentId, commenteeId });
   return sendMigratedComment(addon, { resourceType, resourceId, content, parentId, commenteeId });
 }
 
+/**
+ * @param {import("../../addon-api/popup/Addon").default} addon
+ * @param {sendOptions} options
+ */
 export async function sendMigratedComment(addon, { resourceType, resourceId, content, parentId, commenteeId }) {
   const resourceTypeUrl = resourceType === "project" ? "project" : "studio";
   const xToken = await addon.auth.fetchXToken();
@@ -96,6 +130,10 @@ export async function sendMigratedComment(addon, { resourceType, resourceId, con
     });
 }
 
+/**
+ * @param {import("../../addon-api/popup/Addon").default} addon
+ * @param {sendOptions} options
+ */
 export async function sendLegacyComment(addon, { resourceType, resourceId, content, parentId, commenteeId }) {
   return fetch(`https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/add/?sareferer`, {
     headers: {
@@ -131,12 +169,39 @@ export async function sendLegacyComment(addon, { resourceType, resourceId, conte
     });
 }
 
+/**
+ * @typedef {object} fetchOptions
+ * @property {string} resourceType
+ * @property {string} resourceId
+ * @property {string[]} commentIds
+ * @property {number} [page]
+ * @property {{
+ *   [key: string]: {
+ *     author: string;
+ *     authorId: number;
+ *     content: string;
+ *     date: string;
+ *     children: string[];
+ *     childOf: null | string;
+ *     scratchTeam: boolean;
+ *   };
+ * }} [commentsObj]
+ */
+
+/**
+ * @param {import("../../addon-api/popup/Addon").default} addon
+ * @param {fetchOptions} options
+ */
 export async function fetchComments(addon, { resourceType, resourceId, commentIds, page = 1, commentsObj = {} }) {
   if (resourceType === "user")
     return fetchLegacyComments(addon, { resourceType, resourceId, commentIds, page, commentsObj });
   return fetchMigratedComments(addon, { resourceType, resourceId, commentIds, page, commentsObj });
 }
 
+/**
+ * @param {import("../../addon-api/popup/Addon").default} addon
+ * @param {fetchOptions} options
+ */
 export async function fetchMigratedComments(
   addon,
   { resourceType, resourceId, commentIds, page = 1, commentsObj = {} }
@@ -256,6 +321,10 @@ export async function fetchMigratedComments(
   return commentsObj;
 }
 
+/**
+ * @param {import("../../addon-api/popup/Addon").default} addon
+ * @param {fetchOptions} options
+ */
 export async function fetchLegacyComments(addon, { resourceType, resourceId, commentIds, page = 1, commentsObj = {} }) {
   const res = await fetch(
     `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/?page=${page}&nocache=${Date.now()}`,
@@ -339,6 +408,7 @@ export async function fetchLegacyComments(addon, { resourceType, resourceId, com
   }
 }
 
+/** @param {import("../../addon-api/popup/Addon").default} addon */
 export async function fetchAlerts(addon) {
   const username = await addon.auth.fetchUsername();
   const xToken = await addon.auth.fetchXToken();

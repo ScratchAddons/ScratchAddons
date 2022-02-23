@@ -6,6 +6,7 @@ function scaleSVG(svg, factor) {
 
   svg.classList.add("scaled");
 }
+/** @param {import("../../addon-api/content-script/Addon").default} addon */
 async function getLocales(addon) {
   const forumIdToLang = {
     13: "de",
@@ -45,7 +46,7 @@ async function getLocales(addon) {
 
   return lang;
 }
-export default async function ({ addon, msg }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, msg }) {
   window.scratchAddons._scratchblocks3Enabled = true;
 
   let languages = ["en"];

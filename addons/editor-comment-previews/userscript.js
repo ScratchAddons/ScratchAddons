@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, global, console }) {
   const vm = addon.tab.traps.vm;
 
   const updateStyles = () => {

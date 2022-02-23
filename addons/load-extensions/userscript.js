@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, global, console }) {
   const vm = addon.tab.traps.vm;
   const loadExtensions = () => {
     // IDs are taken from https://github.com/LLK/scratch-vm/blob/ffa78b91b8645b6a8c80f698a3637bb73abf2931/src/extension-support/extension-manager.js#L11

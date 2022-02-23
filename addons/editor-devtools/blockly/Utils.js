@@ -4,7 +4,9 @@ import BlockFlasher from "./BlockFlasher.js";
 // A file to split Editor Devtools by features.
 
 export default class Utils {
+  /** @param {import("../../../addon-api/content-script/Addon").default} addon */
   constructor(addon) {
+    /** @type {typeof addon} */
     this.addon = addon;
     this.addon.tab.traps.getBlockly().then((blockly) => {
       this.blockly = blockly;

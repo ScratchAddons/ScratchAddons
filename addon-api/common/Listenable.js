@@ -1,6 +1,5 @@
 /**
  * Wrapper class for EventTarget.
- * @extends EventTarget
  */
 export default class Listenable extends EventTarget {
   constructor(...args) {
@@ -10,18 +9,16 @@ export default class Listenable extends EventTarget {
     }
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   dispatchEvent(...args) {
     return super.dispatchEvent(...args);
   }
 
   /**
-   * If the subclass removes stale references using dispose(),
-   * this key will be used.
-   * @type {?string}
+   * If the subclass removes stale references using dispose(), this key will be used.
+   *
    * @private
+   * @type {string | null}
    */
   get _eventTargetKey() {
     return null;
@@ -29,6 +26,7 @@ export default class Listenable extends EventTarget {
 
   /**
    * Destructor of this instance.
+   *
    * @private
    */
   dispose() {

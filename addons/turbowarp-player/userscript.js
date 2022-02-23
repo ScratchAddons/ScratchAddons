@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, console, msg }) {
   const action = addon.settings.get("action");
   let playerToggled = false;
   let scratchStage;

@@ -1,4 +1,12 @@
-async function commentLoader(addon, heightControl, selector, pathname, { yProvider = undefined } = {}) {
+/**
+ *
+ * @param {import("../../addon-api/content-script/Addon").default} addon
+ * @param {string} heightControl
+ * @param {string} selector
+ * @param {string} pathname
+ * @param {{yProvider?:string}} [param4]
+ */
+async function commentLoader(addon, heightControl, selector, pathname, {yProvider = undefined} = {}) {
   let func;
   let prevScrollDetector;
   const yProviderValue = yProvider;
@@ -28,7 +36,7 @@ async function commentLoader(addon, heightControl, selector, pathname, { yProvid
   }
 }
 
-export default async function ({ addon, global, console }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, global, console }) {
   if (window.location.pathname.split("/")[1] === "users" && addon.settings.get("profileCommentScroll"))
     commentLoader(addon, "#content", "[data-control=load-more]");
   const isStudio = window.location.pathname.split("/")[1] === "studios";

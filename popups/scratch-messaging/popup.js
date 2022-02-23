@@ -21,7 +21,7 @@ const errorCodes = {
   503: "comment-error-down",
 };
 
-export default async ({ addon, msg, safeMsg }) => {
+export default async (/** @type {typeof PopupUtils} */ { addon, msg, safeMsg }) => {
   let dateNow = Date.now();
 
   // <dom-element-renderer> component

@@ -10,7 +10,7 @@ function createItem(number, label) {
   return item;
 }
 
-export default async function ({ addon, msg, console }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, msg, console }) {
   const username = location.pathname.split("/")[2];
   if (!username) return;
   const content = document.querySelector("#content");

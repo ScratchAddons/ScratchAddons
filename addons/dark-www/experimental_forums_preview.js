@@ -8,6 +8,10 @@ function createStyle(url, disabled) {
   return style;
 }
 
+/**
+ * @param {HTMLElement} node
+ * @param {import("../../addon-api/content-script/Addon.js").default} addon
+ */
 function updateCssVariables(node, addon) {
   if (node === undefined) return;
   if (addon.self.disabled) {
@@ -43,7 +47,7 @@ function updateCssVariables(node, addon) {
   if (scrollbarStyle) scrollbarStyle.disabled = !addon.settings.get("darkScrollbars");
 }
 
-export default async function ({ addon, console }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, console }) {
   const preview = await addon.tab.waitForElement(".markItUpPreviewFrame");
   let previewRoot;
   const observer = new MutationObserver(function (records, observer) {

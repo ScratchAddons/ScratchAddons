@@ -1,4 +1,4 @@
-export default async ({ addon, console }) => {
+export default async (/** @type {typeof UserscriptUtils} */ { addon, console }) => {
   const vm = addon.tab.traps.vm;
 
   let shiftKeyPressed = false;

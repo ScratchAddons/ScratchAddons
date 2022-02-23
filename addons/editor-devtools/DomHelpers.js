@@ -1,5 +1,7 @@
 export default class DomHelpers {
+  /** @param {import("../../addon-api/content-script/Addon.js").default} addon */
   constructor(addon) {
+    /** @type {typeof addon} */
     this.addon = addon;
     this.vm = addon.tab.traps.vm;
     /**

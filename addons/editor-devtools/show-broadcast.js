@@ -1,7 +1,9 @@
 // A file to split Editor Devtools by features.
 // Unlike userscript.js, this file mainly interacts with VM.
 export default class ShowBroadcast {
+  /** @param {import("../../addon-api/content-script/Addon.js").default} addon */
   constructor(addon) {
+    /** @type {typeof addon} */
     this.addon = addon;
     this.vm = this.addon.tab.traps.vm;
     this.highlights = {

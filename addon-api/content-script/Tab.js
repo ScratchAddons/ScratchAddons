@@ -12,24 +12,22 @@ const contextMenuCallbacks = [];
 const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image", "swap-local-global"];
 let createdAnyBlockContextMenus = false;
 
-/**
- * APIs specific to userscripts.
- * @extends Listenable
- * @property {?string} clientVersion - version of the renderer (scratch-www, scratchr2, etc)
- * @property {Trap} traps
- * @property {ReduxHandler} redux
- */
+/** APIs specific to userscripts. */
 export default class Tab extends Listenable {
   constructor(info) {
     super();
     this._addonId = info.id;
+    /** Version of the renderer (scratch-www, scratchr2, etc) @type {string | null} */
     this.clientVersion = document.querySelector("meta[name='format-detection']")
       ? "scratch-www"
       : document.querySelector("script[type='text/javascript']")
       ? "scratchr2"
       : null;
+    /** @type {Trap} */
     this.traps = new Trap(this);
+    /** @type {ReduxHandler} */
     this.redux = new ReduxHandler();
+    /** @type {WeakSet<Element>} */
     this._waitForElementSet = new WeakSet();
   }
   addBlock(...a) {
@@ -44,8 +42,10 @@ export default class Tab extends Listenable {
   }
   /**
    * Loads a script by URL.
-   * @param {string} url - script URL.
-   * @returns {Promise}
+   *
+   * @param {string} url - Script URL.
+   *
+   * @returns {Promise<void>}
    */
   loadScript(url) {
     return new Promise((resolve) => {
@@ -57,16 +57,19 @@ export default class Tab extends Listenable {
   }
   /**
    * Waits until an element renders, then return the element.
-   * @param {string} selector - argument passed to querySelector.
-   * @param {object} opts - options.
-   * @param {boolean=} opts.markAsSeen - Whether it should mark resolved elements to be skipped next time or not.
-   * @param {function=} opts.condition - A function that returns whether to resolve the selector or not.
-   * @param {function=} opts.elementCondition - A function that returns whether to resolve the selector or not, given an element.
-   * @param {function=} opts.reduxCondition - A function that returns whether to resolve the selector or not.
-   * Use this as an optimization and do not rely on the behavior.
-   * @param {string[]=} opts.reduxEvents - An array of redux events that must be dispatched before resolving the selector.
-   * Use this as an optimization and do not rely on the behavior.
-   * @returns {Promise<Element>} - element found.
+   *
+   * @param {string} selector - Argument passed to querySelector.
+   * @param {object} opts - Options.
+   * @param {boolean} [opts.markAsSeen] - Whether it should mark resolved elements to be skipped next time or not.
+   * @param {() => boolean} [opts.condition] - A function that returns whether to resolve the selector or not.
+   * @param {(element: Element) => boolean} [opts.elementCondition] - A function that returns whether to resolve the
+   *   selector or not, given an element.
+   * @param {(state) => boolean} [opts.reduxCondition] - A function that returns whether to resolve the selector or not.
+   *   Use this as an optimization and do not rely on the behavior.
+   * @param {string[]} [opts.reduxEvents] - An array of redux events that must be dispatched before resolving the
+   *   selector. Use this as an optimization and do not rely on the behavior.
+   *
+   * @returns {Promise<Element>} - Element found.
    */
   waitForElement(selector, opts = {}) {
     const markAsSeen = !!opts.markAsSeen;
@@ -121,8 +124,9 @@ export default class Tab extends Listenable {
     return promise;
   }
   /**
-   * editor mode (or null for non-editors).
-   * @type {?string}
+   * Editor mode (or null for non-editors).
+   *
+   * @type {string | null}
    */
   get editorMode() {
     const pathname = location.pathname.toLowerCase();
@@ -136,8 +140,10 @@ export default class Tab extends Listenable {
 
   /**
    * Copies an PNG image.
-   * @param {string} dataURL - data url of the png image
-   * @returns {Promise}
+   *
+   * @param {string} dataURL - Data url of the png image.
+   *
+   * @returns {Promise<void>}
    */
   copyImage(dataURL) {
     if (!dataURL.startsWith(DATA_PNG)) return Promise.reject(new TypeError("Expected PNG data URL"));
@@ -160,7 +166,9 @@ export default class Tab extends Listenable {
 
   /**
    * Gets translation used by Scratch.
+   *
    * @param {string} key - Translation key.
+   *
    * @returns {string} Translation.
    */
   scratchMessage(key) {
@@ -187,18 +195,17 @@ export default class Tab extends Listenable {
     }
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   get _eventTargetKey() {
     return "tab";
   }
 
   /**
    * Loads a Web Worker.
-   * @async
+   *
    * @param {string} url - URL of the worker to load.
-   * @returns {Promise<Worker>} - worker.
+   *
+   * @returns {Promise<Worker>} - Worker.
    */
   async loadWorker(url) {
     const resp = await fetch(url);
@@ -212,9 +219,11 @@ export default class Tab extends Listenable {
 
   /**
    * Gets the hashed class name for a Scratch stylesheet class name.
-   * @param {...*} args Unhashed class names.
-   * @param {object} opts - options.
-   * @param {String[]|String} opts.others - Non-Scratch class or classes to merge.
+   *
+   * @param {...string} args Unhashed class names.
+   * @param {object} [opts] - Options.
+   * @param {string[] | string} [opts.others] - Non-Scratch class or classes to merge.
+   *
    * @returns {string} Hashed class names.
    */
   scratchClass(...args) {
@@ -246,9 +255,10 @@ export default class Tab extends Listenable {
 
   /**
    * Hides an element when the addon is disabled.
-   * @param {HTMLElement} el - the element.
-   * @param {object=} opts - the options.
-   * @param {string=} opts.display - the fallback value for CSS display.
+   *
+   * @param {HTMLElement} el - The element.
+   * @param {object} [opts] - The options.
+   * @param {string} [opts.display] - The fallback value for CSS display.
    */
   displayNoneWhileDisabled(el, { display = "" } = {}) {
     el.style.display = `var(--${this._addonId.replace(/-([a-z])/g, (g) =>
@@ -258,6 +268,7 @@ export default class Tab extends Listenable {
 
   /**
    * The direction of the text; i.e. rtl or ltr.
+   *
    * @type {string}
    */
   get direction() {
@@ -268,24 +279,20 @@ export default class Tab extends Listenable {
   }
 
   /**
-   * Adds an item to a shared space.
-   * Defined shared spaces are:
-   * stageHeader - the stage header
-   * fullscreenStageHeader - the stage header for fullscreen
-   * afterGreenFlag - after the green flag
-   * afterStopButton - after the stop button
-   * afterCopyLinkButton - after the copy link button, shown below project descriptions
-   * afterSoundTab - after the sound tab in editor
-   * forumsBeforePostReport - before the report button in forum posts
-   * forumsAfterPostReport - after the report button in forum posts
-   * beforeRemixButton - before the remix button in project page
-   * studioCuratorsTab - inside the studio curators tab
-   * @param {object} opts - options.
-   * @param {string} opts.space - the shared space name.
-   * @param {HTMLElement} element - the element to add.
-   * @param {number} order - the order of the added element. Should not conflict with other addons.
-   * @param {HTMLElement=} scope - if multiple shared spaces exist, the one where the shared space gets added to.
-   * @returns {boolean} whether the operation was successful or not.
+   * Adds an item to a shared space. Defined shared spaces are: stageHeader - the stage header fullscreenStageHeader -
+   * the stage header for fullscreen afterGreenFlag - after the green flag afterStopButton - after the stop button
+   * afterCopyLinkButton - after the copy link button, shown below project descriptions afterSoundTab - after the sound
+   * tab in editor forumsBeforePostReport - before the report button in forum posts forumsAfterPostReport - after the
+   * report button in forum posts beforeRemixButton - before the remix button in project page studioCuratorsTab - inside
+   * the studio curators tab.
+   *
+   * @param {object} opts - Options.
+   * @param {string} opts.space - The shared space name.
+   * @param {HTMLElement} element - The element to add.
+   * @param {number} order - The order of the added element. Should not conflict with other addons.
+   * @param {HTMLElement} [scope] - If multiple shared spaces exist, the one where the shared space gets added to.
+   *
+   * @returns {boolean} Whether the operation was successful or not.
    */
   appendToSharedSpace({ space, element, order, scope }) {
     const q = document.querySelector.bind(document);
@@ -556,29 +563,33 @@ export default class Tab extends Listenable {
 
   /**
    * Type for context menu item.
-   * @typedef {object} Tab~ContextMenuItem
-   * @property {boolean} enabled - whether it is enabled.
-   * @property {string} text - the context menu item label.
-   * @property {function} callback - the function that is called when item is clicked.
-   * @property {boolean} separator - whether to add a separator above the item.
+   *
+   * @typedef {object} ContextMenuItem
+   * @property {boolean} enabled - Whether it is enabled.
+   * @property {string} text - The context menu item label.
+   * @property {() => void} callback - The function that is called when item is clicked.
+   * @property {boolean} separator - Whether to add a separator above the item.
    */
 
   /**
    * Callback to modify the context menu.
-   * @callback Tab~blockContextMenuCallback
-   * @param {Tab~ContextMenuItem[]} items - the items added by vanilla code or other addons.
-   * @param {?object} block - the targeted block, if any.
-   * @returns {Tab~ContextMenuItem[]} the array that contains values of items array as well as new items.
+   *
+   * @callback blockContextMenuCallback
+   * @param {ContextMenuItem[]} items - The items added by vanilla code or other addons.
+   * @param {any} [block] - The targeted block, if any.
+   *
+   * @returns {ContextMenuItem[]} The array that contains values of items array as well as new items.
    */
 
   /**
    * Creates an item in the editor Blockly context menu.
-   * @param {Tab~blockContextMenuCallback} callback Returns new menu items.
+   *
+   * @param {blockContextMenuCallback} callback Returns new menu items.
    * @param {object} conditions - Show context menu when one of these conditions meet.
-   * @param {boolean=} conditions.workspace - Add to workspace context menu.
-   * @param {boolean=} conditions.blocks - Add to block context menu outside the flyout.
-   * @param {boolean=} conditions.flyout - Add to block context menu in flyout/palette.
-   * @param {boolean=} conditions.comments - Add to comments.
+   * @param {boolean} [conditions.workspace] - Add to workspace context menu.
+   * @param {boolean} [conditions.blocks] - Add to block context menu outside the flyout.
+   * @param {boolean} [conditions.flyout] - Add to block context menu in flyout/palette.
+   * @param {boolean} [conditions.comments] - Add to comments.
    */
   createBlockContextMenu(callback, { workspace = false, blocks = false, flyout = false, comments = false } = {}) {
     contextMenuCallbacks.push({ addonId: this._addonId, callback, workspace, blocks, flyout, comments });
@@ -629,40 +640,45 @@ export default class Tab extends Listenable {
   }
 
   /**
-   * @typedef {object} Tab~EditorContextMenuContext
-   * @property {string} type - the type of the context menu.
-   * @property {HTMLElement} menuItem - the item element.
-   * @property {HTMLElement} target - the target item.
-   * @property {number=} index - the index, if applicable.
+   * @typedef {object} EditorContextMenuContext
+   * @property {string} type - The type of the context menu.
+   * @property {HTMLElement} menuItem - The item element.
+   * @property {HTMLElement} target - The target item.
+   * @property {number} [index] - The index, if applicable.
    */
 
   /**
    * Callback executed when the item is clicked.
-   * @callback Tab~EditorContextMenuItemCallback
-   * @param {Tab~EditorContextMenuContext} context - the context for the action.
+   *
+   * @callback EditorContextMenuItemCallback
+   * @param {EditorContextMenuContext} context - The context for the action.
+   * @returns {void}
    */
 
   /**
    * Callback to check if the item should be visible.
-   * @callback Tab~EditorContextMenuItemCallback
-   * @param {Tab~EditorContextMenuContext} context - the context for the action.
-   * @returns {boolean} true to make it visible, false to hide
+   *
+   * @callback EditorContextMenuItemCondition
+   * @param {EditorContextMenuContext} context - The context for the action.
+   *
+   * @returns {boolean} True to make it visible, false to hide.
    */
 
   /**
    * Adds a context menu item for the editor.
-   * @param {Tab~EditorContextMenuItemCallback} callback - the callback executed when the item is clicked.
-   * @param {object} opts - the options.
-   * @param {string} opts.className - the class name to add to the item.
-   * @param {string[]} opts.types - which types of context menu it should add to.
-   * @param {string} opts.position - the position inside the context menu.
-   * @param {number} opts.order - the order within the position.
-   * @param {string} opts.label - the label for the item.
-   * @param {boolean=} opts.border - whether to add a border at the top or not.
-   * @param {boolean=} opts.dangerous - whether to indicate the item as dangerous or not.
-   * @param {Tab~EditorContextMenuItemCondition} opts.condition - a function to check if the item should be shown.
+   *
+   * @param {EditorContextMenuItemCallback} callback - The callback executed when the item is clicked.
+   * @param {object} opts - The options.
+   * @param {string} opts.className - The class name to add to the item.
+   * @param {string[]} opts.types - Which types of context menu it should add to.
+   * @param {string} opts.position - The position inside the context menu.
+   * @param {number} opts.order - The order within the position.
+   * @param {string} opts.label - The label for the item.
+   * @param {boolean} [opts.border] - Whether to add a border at the top or not.
+   * @param {boolean} [opts.dangerous] - Whether to indicate the item as dangerous or not.
+   * @param {EditorContextMenuItemCondition} opts.condition - A function to check if the item should be shown.
    */
-  createEditorContextMenu(...args) {
-    addContextMenu(this, ...args);
+  createEditorContextMenu(callback, opts) {
+    addContextMenu(this, callback, opts);
   }
 }

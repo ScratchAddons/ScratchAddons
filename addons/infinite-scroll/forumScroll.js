@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, global, console, msg }) {
   // This line below will always return the element since it will
   // only run on the category page based on the match.
   let vf = document.getElementById("vf");

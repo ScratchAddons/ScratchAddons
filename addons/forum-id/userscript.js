@@ -1,5 +1,5 @@
 /* global $, paste */
-export default async function ({ addon, console, msg }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, console, msg }) {
   const buttons = document.querySelectorAll(".postfootright");
   buttons.forEach(function (elm) {
     const addBtn = document.createElement("li");

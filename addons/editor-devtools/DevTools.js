@@ -7,14 +7,17 @@ import BlockItem from "./BlockItem.js";
 import UndoGroup from "./blockly/UndoGroup.js";
 
 export default class DevTools {
+  /**
+   * @param {import("../../addon-api/content-script/Addon.js").default} addon
+   * @param {import("../../addon-api/common/typedef").msg} msg
+   * @param {import("../../addon-api/common/typedef").msg} m
+   * @param {string} helpHTML
+   */
   constructor(addon, msg, m, helpHTML) {
-    this.addon = addon;
-    this.msg = msg;
-    this.m = m;
-    /**
-     * @type {VirtualMachine}
-     */
-    this.vm = addon.tab.traps.vm;
+    /** @type {typeof addon} */ this.addon = addon;
+    /** @type {typeof msg} */ this.msg = msg;
+    /** @type {typeof m} */ this.m = m;
+    /** @type {VirtualMachine} */ this.vm = addon.tab.traps.vm;
     this.utils = new Utils(addon);
     this.domHelpers = new DomHelpers(addon);
     this.multi = new Multi(this.utils);

@@ -1,4 +1,4 @@
-export default async ({ addon }) => {
+export default async (/** @type {typeof UserscriptUtils} */ { addon }) => {
   while (true) {
     const soundEditorRobot = await addon.tab.waitForElement('[class*="sound-editor_row-reverse_"] > :nth-child(10)', {
       markAsSeen: true,

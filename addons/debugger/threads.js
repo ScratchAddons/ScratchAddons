@@ -8,7 +8,7 @@ const concatInPlace = (copyInto, copyFrom) => {
   }
 };
 
-export default async function createThreadsTab({ debug, addon, console, msg }) {
+export default async function createThreadsTab(/** @type {import("./userscript.js").APIs}*/{ debug, addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
   const tab = debug.createHeaderTab({

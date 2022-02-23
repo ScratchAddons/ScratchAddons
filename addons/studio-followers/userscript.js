@@ -1,6 +1,6 @@
 import { createModal, createUser } from "./lib.js";
 
-export default async function ({ addon, global, console, msg }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, global, console, msg }) {
   const { redux } = addon.tab;
   // Same waitForState as studio-tools
   await redux.waitForState(

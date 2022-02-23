@@ -1,4 +1,6 @@
 {
+  "root": true,
+  "ignorePatterns": ["libraries/thirdparty/*", "*.ts"],
   "parserOptions": {
     "sourceType": "module"
   },

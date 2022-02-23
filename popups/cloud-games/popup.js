@@ -1,4 +1,4 @@
-export default async ({ addon, msg, safeMsg }) => {
+export default async (/** @type {typeof PopupUtils} */ { addon, msg, safeMsg }) => {
   // TODO: support setting this via settings page
   const url = "https://scratch.mit.edu/studios/539952/";
   const studioId = url.match(/\d+/)?.[0];

@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, console }) {
   addon.tab.waitForElement("#navigation .login-item").then(() => {
     addon.tab.waitForElement(".studio-page").then((page) => {
       page.classList.add("sa-oldstudio-logged-out");

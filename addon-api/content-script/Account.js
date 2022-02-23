@@ -2,7 +2,7 @@ import Listenable from "../common/Listenable.js";
 
 /**
  * Handles accounts.
- * @extends Listenable
+ *
  */
 export default class Account extends Listenable {
   constructor(addon) {
@@ -12,7 +12,8 @@ export default class Account extends Listenable {
 
   /**
    * Fetches message count.
-   * @returns {Promise<?number>} - current message count.
+   *
+   * @returns {Promise<?number>} - Current message count.
    */
   getMsgCount() {
     return this._addon.auth.fetchIsLoggedIn().then((isLoggedIn) => {

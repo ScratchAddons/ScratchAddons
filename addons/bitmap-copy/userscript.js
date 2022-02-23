@@ -1,4 +1,4 @@
-export default async ({ addon, console }) => {
+export default async (/** @type {typeof UserscriptUtils} */ { addon, console }) => {
   if (!addon.tab.redux.state) return console.warn("Redux is not available!");
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", ({ detail }) => {

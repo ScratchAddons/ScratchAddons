@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, global, console, msg }) {
   const messages = document.createElement("a");
   messages.href = "/messages/";
   messages.title = msg("messages");

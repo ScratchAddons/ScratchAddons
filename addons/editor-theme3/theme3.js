@@ -1,5 +1,9 @@
 import { textColor, multiply } from "../../libraries/common/cs/text-color.esm.js";
 
+/**
+ * @param {import("../../addon-api/content-script/Addon").default} addon
+ * @param {HTMLStyleElement} newStyle
+ */
 function updateSettings(addon, newStyle) {
   var stylesheet = "";
   const textMode = addon.settings.get("text");
@@ -380,7 +384,7 @@ function updateSettings(addon, newStyle) {
   newStyle.textContent = stylesheet;
 }
 
-export default async function ({ addon, global, console }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, global, console }) {
   const otherStyle = document.querySelector(`[data-addon-id='${addon.self.id}']`);
   const newStyle = document.createElement("style");
   updateSettings(addon, newStyle);

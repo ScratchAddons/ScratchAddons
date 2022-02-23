@@ -1,4 +1,4 @@
-export default async ({ addon, console, msg }) => {
+export default async (/** @type {typeof UserscriptUtils} */ { addon, console, msg }) => {
   const { redux } = addon.tab;
   await redux.waitForState(
     (state) => state.studio?.infoStatus === "FETCHED" && state.studio?.rolesStatus === "FETCHED",

@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, global, console }) {
   while (true) {
     const searchItem = await addon.tab.waitForElement(".search", {
       markAsSeen: true,

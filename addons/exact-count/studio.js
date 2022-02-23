@@ -1,4 +1,4 @@
-export default async function ({ addon }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon }) {
   function countProjects(url, page, delta, callback) {
     fetch(url + 40 * page)
       .then((resp) => resp.json())

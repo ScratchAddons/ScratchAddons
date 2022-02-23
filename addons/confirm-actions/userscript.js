@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, console, msg }) {
   document.addEventListener(
     "click",
     (e) => {

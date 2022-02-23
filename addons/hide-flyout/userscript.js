@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, global, console }) {
   let placeHolderDiv = null;
   let lockDisplay = null;
   let flyOut = null;

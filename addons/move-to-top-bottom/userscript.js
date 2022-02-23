@@ -1,4 +1,4 @@
-export default async ({ addon, console, msg }) => {
+export default async (/** @type {typeof UserscriptUtils} */ { addon, console, msg }) => {
   const types = ["sound"];
 
   // Costumes should not be affected if user is running DevtoolsExtension before version 1.20.0

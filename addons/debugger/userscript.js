@@ -4,13 +4,40 @@ import createThreadsTab from "./threads.js";
 import createPerformanceTab from "./performance.js";
 import DevtoolsUtils from "../editor-devtools/blockly/Utils.js";
 
+/**
+ * @typedef APIs
+ * @property {Addon} addon
+ * @property {Console} console
+ * @property {import("../../addon-api/common/typedef").msg} msg
+ * @property {object} debug
+ * @property {({ text: string, icon: string, description: string }) => {
+ *   element: HTMLDivElement;
+ *   image: HTMLImageElement;
+ *   text: HTMLSpanElement;
+ * }} debug.createHeaderButton
+ * @property {({ text: string, icon: string }) => {
+ *   element: HTMLLIElement;
+ *   image: HTMLImageElement;
+ *   text: HTMLSpanElement;
+ * }} debug.createHeaderTab
+ * @property {(unreadMessage: boolean) => void} debug.setHasUnreadMessage
+ * @property {(cb: () => void) => void} debug.addAfterStepCallback
+ * @property {(
+ *   id: string
+ * ) =>
+ *   | { exists: false; original: null; name: string; originalId: undefined }
+ *   | { exists: true; originalId: string; name: string; original: undefined }} debug.getTargetInfoById
+ * @property {(targetId: string, blockId: string) => HTMLAnchorElement} debug.createBlockLink
+ * @property {(targetId: string, blockId: string) => HTMLSpanElement | null} debug.createBlockPreview
+ */
+
 const removeAllChildren = (element) => {
   while (element.firstChild) {
     element.removeChild(element.firstChild);
   }
 };
 
-export default async function ({ addon, global, console, msg }) {
+export default async function (/** @type {typeof UserscriptUtils} */ { addon, global, console, msg }) {
   setup(addon.tab.traps.vm);
 
   let logsTab;
