@@ -35,10 +35,7 @@ export default async function (/** @type {typeof UserscriptUtils} */ { addon, gl
 
   const DIVIDER = "//";
 
-  /**
-   * getFolderFromName("B") === null
-   * getFolderFromName("A//b") === "A"
-   */
+  /** GetFolderFromName("B") === null getFolderFromName("A//b") === "A" */
   const getFolderFromName = (name) => {
     const idx = name.indexOf(DIVIDER);
     if (idx === -1 || idx === 0) {
@@ -47,10 +44,7 @@ export default async function (/** @type {typeof UserscriptUtils} */ { addon, gl
     return name.substr(0, idx);
   };
 
-  /**
-   * getNameWithoutFolder("B") === "B"
-   * getNameWithoutFolder("A//b") === "b"
-   */
+  /** GetNameWithoutFolder("B") === "B" getNameWithoutFolder("A//b") === "b" */
   const getNameWithoutFolder = (name) => {
     const idx = name.indexOf(DIVIDER);
     if (idx === -1 || idx === 0) {
@@ -60,9 +54,7 @@ export default async function (/** @type {typeof UserscriptUtils} */ { addon, gl
   };
 
   /**
-   * setFolderOfName("B", "y") === "y//B"
-   * setFolderOfName("c//B", "y") === "y//B"
-   * setFolderOfName("B", null) === "B"
+   * SetFolderOfName("B", "y") === "y//B" setFolderOfName("c//B", "y") === "y//B" setFolderOfName("B", null) === "B"
    * setFolderOfName("c//B", null) === "B"
    */
   const setFolderOfName = (name, folder) => {
@@ -128,9 +120,7 @@ export default async function (/** @type {typeof UserscriptUtils} */ { addon, gl
    * @property {boolean} folderOpen
    */
 
-  /**
-   * @returns {ItemData|null}
-   */
+  /** @returns {ItemData | null} */
   const getItemData = (item) => {
     if (item && item.name && typeof item.name === "object") {
       return item.name;

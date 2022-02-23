@@ -3,10 +3,7 @@ import Tab from "./Tab.js";
 import Auth from "./Auth.js";
 import Account from "./Account.js";
 
-/**
- * An addon that loads as a userscript.
- *
- */
+/** An addon that loads as a userscript. */
 export default class UserscriptAddon extends Addon {
   constructor(info) {
     super(info);

@@ -1,12 +1,11 @@
 /**
- *
  * @param {import("../../addon-api/content-script/Addon").default} addon
  * @param {string} heightControl
  * @param {string} selector
  * @param {string} pathname
- * @param {{yProvider?:string}} [param4]
+ * @param {{ yProvider?: string }} [param4]
  */
-async function commentLoader(addon, heightControl, selector, pathname, {yProvider = undefined} = {}) {
+async function commentLoader(addon, heightControl, selector, pathname, { yProvider = undefined } = {}) {
   let func;
   let prevScrollDetector;
   const yProviderValue = yProvider;

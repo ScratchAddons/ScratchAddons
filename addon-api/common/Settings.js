@@ -1,8 +1,6 @@
 import Listenable from "./Listenable.js";
 
-/**
- * Manages settings.
- */
+/** Manages settings. */
 export default class Settings extends Listenable {
   constructor(addonObject) {
     super();
@@ -12,7 +10,6 @@ export default class Settings extends Listenable {
    * Gets a setting.
    *
    * @param {string} optionName - ID of the settings.
-   *
    * @returns {any} Setting.
    * @throws Settings ID is invalid.
    */

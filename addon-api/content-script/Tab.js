@@ -33,17 +33,19 @@ export default class Tab extends Listenable {
 
   /**
    * Handler for the Scratch Addons blocks. This must never throw.
+   *
    * @callback Tab~blocksCallback
-   * @param {object} args - the arguments passed to the block.
-   * @param {Thread} thread - the execution thread for ths block.
+   * @param {object} args - The arguments passed to the block.
+   * @param {Thread} thread - The execution thread for ths block.
    */
 
   /**
    * Adds a Scratch Addons block.
-   * @param {string} proccode - the code displayed to the user.
-   * @param {string[]} args - the block argument names.
-   * @param {Tab~blocksCallback} handler - the handler.
-   * @param {boolean=} hide - whether to hide the block from the block palette.
+   *
+   * @param {string} proccode - The code displayed to the user.
+   * @param {string[]} args - The block argument names.
+   * @param {Tab~blocksCallback} handler - The handler.
+   * @param {boolean} [hide] - Whether to hide the block from the block palette.
    */
   addBlock(...a) {
     blocks.init(this);
@@ -52,7 +54,8 @@ export default class Tab extends Listenable {
 
   /**
    * Removes a Scratch Addons block.
-   * @param {string} proccode - the code displayed to the user.
+   *
+   * @param {string} proccode - The code displayed to the user.
    */
   removeBlock(...a) {
     return blocks.removeBlock(...a);
@@ -64,7 +67,6 @@ export default class Tab extends Listenable {
    * Loads a script by URL.
    *
    * @param {string} url - Script URL.
-   *
    * @returns {Promise<void>}
    */
   loadScript(url) {
@@ -88,7 +90,6 @@ export default class Tab extends Listenable {
    *   Use this as an optimization and do not rely on the behavior.
    * @param {string[]} [opts.reduxEvents] - An array of redux events that must be dispatched before resolving the
    *   selector. Use this as an optimization and do not rely on the behavior.
-   *
    * @returns {Promise<Element>} - Element found.
    */
   waitForElement(selector, opts = {}) {
@@ -162,7 +163,6 @@ export default class Tab extends Listenable {
    * Copies an PNG image.
    *
    * @param {string} dataURL - Data url of the png image.
-   *
    * @returns {Promise<void>}
    */
   copyImage(dataURL) {
@@ -188,7 +188,6 @@ export default class Tab extends Listenable {
    * Gets translation used by Scratch.
    *
    * @param {string} key - Translation key.
-   *
    * @returns {string} Translation.
    */
   scratchMessage(key) {
@@ -224,7 +223,6 @@ export default class Tab extends Listenable {
    * Loads a Web Worker.
    *
    * @param {string} url - URL of the worker to load.
-   *
    * @returns {Promise<Worker>} - Worker.
    */
   async loadWorker(url) {
@@ -243,7 +241,6 @@ export default class Tab extends Listenable {
    * @param {...string} args Unhashed class names.
    * @param {object} [opts] - Options.
    * @param {string[] | string} [opts.others] - Non-Scratch class or classes to merge.
-   *
    * @returns {string} Hashed class names.
    */
   scratchClass(...args) {
@@ -311,7 +308,6 @@ export default class Tab extends Listenable {
    * @param {HTMLElement} element - The element to add.
    * @param {number} order - The order of the added element. Should not conflict with other addons.
    * @param {HTMLElement} [scope] - If multiple shared spaces exist, the one where the shared space gets added to.
-   *
    * @returns {boolean} Whether the operation was successful or not.
    */
   appendToSharedSpace({ space, element, order, scope }) {
@@ -597,7 +593,6 @@ export default class Tab extends Listenable {
    * @callback blockContextMenuCallback
    * @param {ContextMenuItem[]} items - The items added by vanilla code or other addons.
    * @param {any} [block] - The targeted block, if any.
-   *
    * @returns {ContextMenuItem[]} The array that contains values of items array as well as new items.
    */
 
@@ -680,7 +675,6 @@ export default class Tab extends Listenable {
    *
    * @callback EditorContextMenuItemCondition
    * @param {EditorContextMenuContext} context - The context for the action.
-   *
    * @returns {boolean} True to make it visible, false to hide.
    */
 

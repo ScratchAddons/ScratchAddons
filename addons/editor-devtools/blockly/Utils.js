@@ -13,22 +13,22 @@ export default class Utils {
     });
     /**
      * Scratch Virtual Machine
-     * @type {null|*}
+     *
+     * @type {null | any}
      */
     this.vm = this.addon.tab.traps.vm;
     // this._myFlash = { block: null, timerID: null, colour: null };
     this.offsetX = 32;
     this.offsetY = 32;
     this.navigationHistory = new NavigationHistory(this);
-    /**
-     * The workspace
-     */
+    /** The workspace */
     this._workspace = null;
   }
 
   /**
    * Get the Scratch Editing Target
-   * @returns {?Target} the scratch editing target
+   *
+   * @returns {Target | null} The scratch editing target
    */
   getEditingTarget() {
     return this.vm.runtime.getEditingTarget();
@@ -36,6 +36,7 @@ export default class Utils {
 
   /**
    * Set the current workspace (switches sprites)
+   *
    * @param targetID {string}
    */
   setEditingTarget(targetID) {
@@ -46,6 +47,7 @@ export default class Utils {
 
   /**
    * Returns the main workspace
+   *
    * @returns !Blockly.Workspace
    */
   getWorkspace() {
@@ -60,6 +62,7 @@ export default class Utils {
 
   /**
    * Based on wksp.centerOnBlock(li.data.labelID);
+   *
    * @param blockOrId {Blockly.Block|{id}|BlockInstance} A Blockly Block, a block id, or a BlockInstance
    */
   scrollBlockIntoView(blockOrId) {
@@ -80,9 +83,7 @@ export default class Utils {
       return;
     }
 
-    /**
-     * !Blockly.Block
-     */
+    /** !Blockly.Block */
     let root = block.getRootBlock();
     let base = this.getTopOfStackFor(block);
     let ePos = base.getRelativeToSurfaceXY(), // Align with the top of the block
@@ -116,8 +117,9 @@ export default class Utils {
 
   /**
    * Find the top stack block of a stack
-   * @param block a block in a stack
-   * @returns {*} a block that is the top of the stack of blocks
+   *
+   * @param block A block in a stack
+   * @returns {any} A block that is the top of the stack of blocks
    */
   getTopOfStackFor(block) {
     let base = block;
@@ -135,9 +137,7 @@ class NavigationHistory {
     this.forward = [];
   }
 
-  /**
-   * Keep a record of the scroll and zoom position
-   */
+  /** Keep a record of the scroll and zoom position */
   storeView(next, dist) {
     this.forward = [];
     let workspace = this.utils.getWorkspace(),

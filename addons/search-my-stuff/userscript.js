@@ -99,9 +99,8 @@ export default async function (/** @type {typeof UserscriptUtils} */ { addon, gl
   /**
    * Adds our new search bar.
    *
-   * Since the My Stuff page reloads several elements when switching tabs or
-   * filters, some things need to be reinjected or have their references
-   * updated.
+   * Since the My Stuff page reloads several elements when switching tabs or filters, some things need to be reinjected
+   * or have their references updated.
    */
   async function inject() {
     // Determine which tab we're on and switch the placeholder text
@@ -131,10 +130,7 @@ export default async function (/** @type {typeof UserscriptUtils} */ { addon, gl
     searchBar.focus();
   }
 
-  /**
-   * Indexes the project tile elements and their project names,
-   * then updates the search algorithm.
-   */
+  /** Indexes the project tile elements and their project names, then updates the search algorithm. */
   async function indexPage() {
     while (true) {
       const project = await addon.tab.waitForElement(".media-list > li", {
@@ -152,9 +148,7 @@ export default async function (/** @type {typeof UserscriptUtils} */ { addon, gl
     }
   }
 
-  /**
-   * Reorders based on fuzzy search algorithm.
-   */
+  /** Reorders based on fuzzy search algorithm. */
   async function triggerNewSearch() {
     await resultsContainer;
     // Empty page, do nothing
@@ -186,10 +180,7 @@ export default async function (/** @type {typeof UserscriptUtils} */ { addon, gl
     }
   }
 
-  /**
-   * Determines if the page should automatically load more items.
-   * If so, `autoLoadMore()` is called.
-   */
+  /** Determines if the page should automatically load more items. If so, `autoLoadMore()` is called. */
   function determineLoadMore() {
     if (resultsContainer && searchBar.value !== "" && !loading) {
       if (resultsContainer.querySelectorAll("li").length === 0) {
@@ -209,9 +200,7 @@ export default async function (/** @type {typeof UserscriptUtils} */ { addon, gl
     }
   }
 
-  /**
-   * Attempts to load more until results are found or everything has loaded.
-   */
+  /** Attempts to load more until results are found or everything has loaded. */
   async function autoLoadMore() {
     if (searchBar.value !== "" && !loading) {
       loading = true;

@@ -1,18 +1,14 @@
 /**
- Since presets can change independently of others, we have to keep track of
- the versions separately. Current versions:
-
- - editor-dark-mode 2 (bumped in v1.23 twice)
+ * Since presets can change independently of others, we have to keep track of the versions separately. Current versions:
+ *
+ * - Editor-dark-mode 2 (bumped in v1.23 twice)
  */
 
 const updatePresetIfMatching = (preset, settings, oldPreset, version) => {
   if ((settings._version || 0) < version) {
     /**
-     Version must be set even if transition is unnecessary;
-     1) User uses custom settings
-     2) User updates, transition aborts
-     3) User changes settings to old preset values
-     4) Without version, this change will revert after reload!
+     * Version must be set even if transition is unnecessary; 1) User uses custom settings 2) User updates, transition
+     * aborts 3) User changes settings to old preset values 4) Without version, this change will revert after reload!
      */
     settings._version = version;
     const map = {};

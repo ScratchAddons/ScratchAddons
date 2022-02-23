@@ -13,9 +13,9 @@ const ALARM_NAME = "fetchMessages";
 const BADGE_ALARM_NAME = "updateBadge";
 
 /**
- * Updates the badge. Called when new messages are fetched,
- * once per minute, or when msg-count-badge settings get changed.
- * @param {string} defaultStoreId the default cookie store ID
+ * Updates the badge. Called when new messages are fetched, once per minute, or when msg-count-badge settings get changed.
+ *
+ * @param {string} defaultStoreId The default cookie store ID
  */
 export async function updateBadge(defaultStoreId) {
   if (duringBadgeUpdate) return;
@@ -61,8 +61,9 @@ export async function updateBadge(defaultStoreId) {
 
 /**
  * Caches messages for the first time.
- * @param {string} defaultStoreId the default cookie store ID
- * @param {boolean} forceClear whether to force-clear cache; set to true after auth change, but not on initial startup
+ *
+ * @param {string} defaultStoreId The default cookie store ID
+ * @param {boolean} forceClear Whether to force-clear cache; set to true after auth change, but not on initial startup
  */
 export async function startCache(defaultStoreId, forceClear) {
   ready = false;

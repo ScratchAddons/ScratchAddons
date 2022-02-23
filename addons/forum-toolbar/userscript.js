@@ -66,10 +66,11 @@ export default async (/** @type {typeof UserscriptUtils} */ { addon, console, ms
   };
   /**
    * There are four ways to use this:
-   * 1) use openWith (and closeWith optionally) - useful for static values e.g. emoji, [center]
-   * 2) use replaceWith - useful for replacing selection with static text
-   * 3) use promptTag/promptContent along with tag - useful for inserting a tag with parameter e.g. [url]
-   * 4) use callback - useful if you're not inserting
+   *
+   * 1. Use openWith (and closeWith optionally) - useful for static values e.g. emoji, [center]
+   * 2. Use replaceWith - useful for replacing selection with static text
+   * 3. Use promptTag/promptContent along with tag - useful for inserting a tag with parameter e.g. [url]
+   * 4. Use callback - useful if you're not inserting
    */
   const createButton = (
     name,
@@ -115,11 +116,12 @@ export default async (/** @type {typeof UserscriptUtils} */ { addon, console, ms
 
   /**
    * To add buttons,
-   * 1) edit addon.json; add a new setting for the button, and add customCssVariables
-   * 2) add code below
-   * 3) add background-image on userstyle.css
-   * 4) add icon
-   * 5) add addons-l10n
+   *
+   * 1. Edit addon.json; add a new setting for the button, and add customCssVariables
+   * 2. Add code below
+   * 3. Add background-image on userstyle.css
+   * 4. Add icon
+   * 5. Add addons-l10n
    */
 
   // Reminder: forumToolbarLinkDecoration order 1 is reserved by image-uploader

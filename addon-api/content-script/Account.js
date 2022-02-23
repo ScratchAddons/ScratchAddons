@@ -1,9 +1,6 @@
 import Listenable from "../common/Listenable.js";
 
-/**
- * Handles accounts.
- *
- */
+/** Handles accounts. */
 export default class Account extends Listenable {
   constructor(addon) {
     super();

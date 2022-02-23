@@ -1,6 +1,6 @@
-export type msg = (key: string, placeholders?: { [ key: string ]: string; }) => string;
+export type msg = (key: string, placeholders?: { [key: string]: string }) => string;
 type Utils<Addon> = {
-	/** APIs for addons. */
+  /** APIs for addons. */
   addon: Addon;
   /** Object accessible by all userscripts of the same addon. */
   global: Record<any, any>;
@@ -9,8 +9,8 @@ type Utils<Addon> = {
   msg: msg & {
     /** Current locale used by msg function. */
     locale: string;
-};
-/** Gets localized and HTML-escaped messages. Placeholders are NOT escaped. */
-safeMsg: msg;
+  };
+  /** Gets localized and HTML-escaped messages. Placeholders are NOT escaped. */
+  safeMsg: msg;
 };
 export default Utils;

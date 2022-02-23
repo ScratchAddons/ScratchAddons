@@ -1,10 +1,10 @@
 import { updateBadge } from "../message-cache.js";
 
 /**
- * Changes addon state (enabled/disabled), and executes the addons if enabled,
- * or stops the execution if disabled.
- * @param {string} addonId - addon ID.
- * @param {boolean} newState - new addon state.
+ * Changes addon state (enabled/disabled), and executes the addons if enabled, or stops the execution if disabled.
+ *
+ * @param {string} addonId - Addon ID.
+ * @param {boolean} newState - New addon state.
  */
 export default (addonId, newState) => {
   scratchAddons.localState.addonsEnabled[addonId] = newState;

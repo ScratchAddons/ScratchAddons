@@ -2,9 +2,7 @@ import Auth from "./Auth.js";
 import Self from "./Self.js";
 import Settings from "../common/Settings.js";
 
-/**
- * An addon.
- */
+/** An addon. */
 export default class Addon {
   constructor(info) {
     /** @type {Self} */

@@ -9,5 +9,5 @@ declare global {
    *
    * Note that it is commonly done using destructing syntax.
    */
-  const  UserscriptUtils: Utils<UserscriptAddon>;
+  const UserscriptUtils: Utils<UserscriptAddon>;
 }

@@ -1,9 +1,9 @@
-/**
- * Sets a project thumbnail.
- */export default class ThumbSetter {  /**
+/** Sets a project thumbnail. */ export default class ThumbSetter {
+  /**
    * Creates a thumbnail setter.
-   * @param {function} messagesFn - a function that returns a translation, typically msg.
-   * @param {string=} projectId - the project ID. If absent, obtained from the current URL.
+   *
+   * @param {function} messagesFn - A function that returns a translation, typically msg.
+   * @param {string} [projectId] - The project ID. If absent, obtained from the current URL.
    */
   constructor(projectId, beforeUpload) {
     this._input = null;
@@ -21,9 +21,7 @@
     });
   }
 
-  /**
-   * Adds an input for the thumbnail setter.
-   */
+  /** Adds an input for the thumbnail setter. */
   addFileInput() {
     const input = (this._input = document.createElement("input"));
     input.type = "file";
@@ -34,16 +32,12 @@
     document.body.appendChild(input);
   }
 
-  /**
-   * Asks the user to upload a thumbnail.
-   */
+  /** Asks the user to upload a thumbnail. */
   showInput() {
     if (this._input) this._input.click();
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   onInput() {
     let promise = Promise.resolve();
     const file = this._input?.files?.[0];
@@ -65,9 +59,7 @@
     this._callback(true);
   }
 
-  /**
-   * Removes the file input. This is automatically called after upload.
-   */
+  /** Removes the file input. This is automatically called after upload. */
   removeFileInput() {
     if (this._input) {
       this._input.remove();
@@ -75,9 +67,7 @@
     }
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   getCSRFToken() {
     const tokens = /scratchcsrftoken=([\w]+)/.exec(document.cookie);
     return tokens[1];
@@ -85,8 +75,9 @@
 
   /**
    * Uploads a thumbnail and displays error.
+   *
    * @async
-   * @param {Blob} file - the file to upload.
+   * @param {Blob} file - The file to upload.
    * @returns {Promise}
    */
   async upload(file) {

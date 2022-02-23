@@ -61,8 +61,8 @@ const deleteLegacyComment = async (addon, { resourceType, resourceId, commentId 
 };
 
 /**
- * @param {import("../../addon-api/popup/Addon").default} addon
  * @property {string} alertId
+ * @param {import("../../addon-api/popup/Addon").default} addon
  */
 export async function dismissAlert(addon, alertId) {
   return fetch("https://scratch.mit.edu/site-api/messages/messages-delete/?sareferer", {

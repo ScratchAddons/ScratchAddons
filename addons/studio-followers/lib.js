@@ -110,7 +110,6 @@ export function createModal(addon, title, msg, switchType) {
  * @param {import("../../addon-api/content-script/Addon").default} addon
  * @param {import("../../addon-api/common/typedef").msg} msg
  * @param {string[]} members
- *
  * @returns {HTMLDivElement}
  */
 export function createUser(follower, addon, msg, members) {

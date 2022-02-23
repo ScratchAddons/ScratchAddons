@@ -1,12 +1,11 @@
-/**
- * @return {RegExp} regular expression for the hexadecimal color representation.
- */
+/** @returns {RegExp} Regular expression for the hexadecimal color representation. */
 export const getHexRegex = () => /^#?([0-9a-fA-F]{3}){1,2}$/g;
 
 /**
  * Normalizes hexadecimal color to #RRGGBB format.
- * @param {string} input - a color.
- * @return {string} normalized color.
+ *
+ * @param {string} input - A color.
+ * @returns {string} Normalized color.
  */
 export const normalizeHex = (input) => {
   let hex = String(input);

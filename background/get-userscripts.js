@@ -323,16 +323,9 @@ function matchesIf(injectable, settings) {
   // addonEnabled and settings values are OR-ed
 
   /**
-   * Formula:
-   * NOT (
-   *  (addonEnabled exists AND all of the addons are disabled) OR
-   *  (settings exists AND there is a setting where none of potential values match)
-   * )
-   * Or,
-   * NOT (
-   *  (addonEnabled AND AND(addons**Dis**abled)) OR
-   *  (settings exists AND OR(AND(settings do **NOT** match)))
-   * )
+   * Formula: NOT ( (addonEnabled exists AND all of the addons are disabled) OR (settings exists AND there is a setting
+   * where none of potential values match) ) Or, NOT ( (addonEnabled AND AND(addons**Dis**abled)) OR (settings exists
+   * AND OR(AND(settings do **NOT** match))) )
    */
 
   return !(

@@ -17,20 +17,17 @@ const appendSortedElement = (parent, newChild) => {
 };
 
 /**
- * LogView: A virtualized row viewer.
- * It efficiently manages row rendering and scrolling.
+ * LogView: A virtualized row viewer. It efficiently manages row rendering and scrolling.
  *
  * 1. .logs is the place where all the rows live. This is an array of any arbitrary object.
- * 2. Implement generateRow(row). This takes a row from .logs as an argument. This should return
- *    an object with a bunch of DOM elements on it. The "root" property must be set, nothing else
- *    is required. This is called when a row becomes visible. It can be called any number of times.
- *    This is where you should setup elements that are immutable for a given row. LogView will
- *    move the root element to the right spot for you.
- * 3. Implement renderRow(elements, row). This will be called with the result returned by
- *    generateRow() and the row in .logs any time a row is changed, including the first render.
- *    It can be called any number of times. This is where you should update any dynamic elements.
- * 4. Whenever you update .logs without using the helper methods such as append(), call
- *    queueUpdateContent().
+ * 2. Implement generateRow(row). This takes a row from .logs as an argument. This should return an object with a bunch of
+ *    DOM elements on it. The "root" property must be set, nothing else is required. This is called when a row becomes
+ *    visible. It can be called any number of times. This is where you should setup elements that are immutable for a
+ *    given row. LogView will move the root element to the right spot for you.
+ * 3. Implement renderRow(elements, row). This will be called with the result returned by generateRow() and the row in
+ *    .logs any time a row is changed, including the first render. It can be called any number of times. This is where
+ *    you should update any dynamic elements.
+ * 4. Whenever you update .logs without using the helper methods such as append(), call queueUpdateContent().
  */
 class LogView {
   constructor() {

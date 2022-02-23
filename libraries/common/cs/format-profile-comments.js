@@ -1,7 +1,7 @@
 /**
- * Formats profile comments by removing unnecessary spaces.
- * This modifies the element in-place.
- * @param {HTMLElement} comment - the element that contains text, i.e. div.content
+ * Formats profile comments by removing unnecessary spaces. This modifies the element in-place.
+ *
+ * @param {HTMLElement} comment - The element that contains text, i.e. div.content
  */
 export default (comment) => {
   let nodes = comment.childNodes;

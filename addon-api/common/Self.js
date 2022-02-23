@@ -1,8 +1,6 @@
 import Listenable from "./Listenable.js";
 
-/**
- * Represents information about the addon.
- */
+/** Represents information about the addon. */
 export default class Self extends Listenable {
   constructor(addonObj, info) {
     super();
@@ -57,7 +55,6 @@ export default class Self extends Listenable {
    * Gets a list of addon IDs enabled, optionally filtered using tags.
    *
    * @param {string} [tag] - The tag for filtering.
-   *
    * @returns {Promise<string[]>} Enabled addons' IDs.
    */
   getEnabledAddons(tag) {

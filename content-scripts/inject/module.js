@@ -156,7 +156,6 @@ class SharedObserver {
    * @param {() => boolean} opts.condition - A function that returns whether to resolve the selector or not.
    * @param {(element: Element) => boolean} opts.elementCondition - A function that returns whether to resolve the
    *   selector or not, given an element.
-   *
    * @returns {Promise<Element>} Promise that is resolved with modified element.
    */
   watch(opts) {

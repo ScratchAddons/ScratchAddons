@@ -29,10 +29,7 @@ export default class ReduxHandler extends Listenable {
     });
   }
 
-  /**
-   * Redux state.
-   *
-   */
+  /** Redux state. */
   get state() {
     return __scratchAddonsRedux.state;
   }
@@ -51,10 +48,9 @@ export default class ReduxHandler extends Listenable {
   /**
    * Waits until a state meets the condition.
    *
-   * @param {(state)=>boolean} condition - A function that takes redux state and returns whether to keep waiting or not.
+   * @param {(state) => boolean} condition - A function that takes redux state and returns whether to keep waiting or not.
    * @param {object} [opts] - Options.
-   * @param {string|string[]} [opts.actions] - The action(s) to check for.
-   *
+   * @param {string | string[]} [opts.actions] - The action(s) to check for.
    * @returns {Promise<void>} A Promise resolved when the state meets the condition.
    */
   waitForState(condition, opts = {}) {

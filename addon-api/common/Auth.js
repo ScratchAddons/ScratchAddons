@@ -1,9 +1,6 @@
 import Listenable from "./Listenable.js";
 
-/**
- * Authentication related utilities.
- *
- */
+/** Authentication related utilities. */
 export default class Auth extends Listenable {
   /**
    * Fetch whether the user is logged in or not.

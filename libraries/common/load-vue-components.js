@@ -2,7 +2,8 @@ const styles = {};
 
 /**
  * Loads Vue components.
- * @param {string[]} filenames - filenames of the components, without extensions.
+ *
+ * @param {string[]} filenames - Filenames of the components, without extensions.
  * @returns {Promise}
  */
 export default (filenames) =>

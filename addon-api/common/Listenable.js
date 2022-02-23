@@ -1,6 +1,4 @@
-/**
- * Wrapper class for EventTarget.
- */
+/** Wrapper class for EventTarget. */
 export default class Listenable extends EventTarget {
   constructor(...args) {
     super(...args);

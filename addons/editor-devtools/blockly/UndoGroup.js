@@ -1,12 +1,12 @@
 /**
- * This class is dedicated to maintaining the Undo stack of Blockly
- * It allows us to initiate an undo group such that all subsequent operations are recorded as a single
- * undoable transaction.
+ * This class is dedicated to maintaining the Undo stack of Blockly It allows us to initiate an undo group such that all
+ * subsequent operations are recorded as a single undoable transaction.
  */
 export default class UndoGroup {
   /**
    * Start an Undo group - begin recording
-   * @param workspace the workspace
+   *
+   * @param workspace The workspace
    */
   static startUndoGroup(workspace) {
     const undoStack = workspace.undoStack_;
@@ -17,7 +17,8 @@ export default class UndoGroup {
 
   /**
    * End an Undo group - stops recording
-   * @param workspace the workspace
+   *
+   * @param workspace The workspace
    */
   static endUndoGroup(workspace) {
     const undoStack = workspace.undoStack_;
@@ -34,8 +35,9 @@ export default class UndoGroup {
 
 /**
  * https://github.com/LLK/scratch-blocks/blob/f159a1779e5391b502d374fb2fdd0cb5ca43d6a2/core/events.js#L182
- * @returns {string}
+ *
  * @private
+ * @returns {string}
  */
 function generateUID() {
   const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%()*+,-./:;=?@[]^_`{|}~";

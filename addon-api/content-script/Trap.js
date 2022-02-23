@@ -1,9 +1,6 @@
 import Listenable from "../common/Listenable.js";
 
-/**
- * Manages object trapping.
- *
- */
+/** Manages object trapping. */
 export default class Trap extends Listenable {
   constructor(tab) {
     super();
@@ -61,7 +58,6 @@ export default class Trap extends Listenable {
    * Gets react internal key.
    *
    * @param {HTMLElement} elem - The reference.
-   *
    * @returns {string} The key.
    */
   getInternalKey(elem) {

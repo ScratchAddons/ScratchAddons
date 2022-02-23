@@ -1,8 +1,6 @@
 import FetchableAuth from "../common/FetchableAuth.js";
 
-/**
- * Authentication related utilities.
- */
+/** Authentication related utilities. */
 export default class Auth extends FetchableAuth {
   /** @private */
   _getCookie(name) {

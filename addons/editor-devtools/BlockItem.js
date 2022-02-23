@@ -7,7 +7,8 @@ export default class BlockItem {
     this.lower = procCode.toLowerCase();
     /**
      * An Array of block ids
-     * @type {Array.<string>}
+     *
+     * @type {string[]}
      */
     this.clones = null;
     this.eventName = null;
@@ -15,6 +16,7 @@ export default class BlockItem {
 
   /**
    * True if the blockID matches a black represented by this BlockItem
+   *
    * @param id
    * @returns {boolean}
    */
