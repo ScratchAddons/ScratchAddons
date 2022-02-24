@@ -39,6 +39,7 @@
 .v-tabs li {
   margin-right: 14px;
   display: block;
+  width: -moz-fit-content;
   width: fit-content;
   background-color: var(--darkWww-box, white);
   border: 1px solid var(--darkWww-border-15, rgba(0, 0, 0, 0.15));
