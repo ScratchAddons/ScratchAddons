@@ -6,7 +6,7 @@ export default async function ({ addon, global, console }) {
   icon.loading = "lazy";
   icon.style.display = "none";
   const toggleMute = (e) => {
-    if (e.ctrlKey) {
+    if (e.ctrlKey || e.metaKey) {
       e.cancelBubble = true;
       e.preventDefault();
       muted = !muted;
