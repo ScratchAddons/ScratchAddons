@@ -1,6 +1,6 @@
 {
   "name": "Full areas",
-  "description": "Shows the full content of areas with limited height, such as user signatures on the forums and What I've been doing on profiles, by making them resizable or scrollable.",
+  "description": "Shows the full content of areas with limited height, such as user signatures on the forums and the \"What I've been doing\" on profiles by making them resizable and/or scrollable.",
   "credits": [
     {
       "name": "GrahamSH"
@@ -14,6 +14,8 @@
     },
     {
       "name": "RedGuy7",
+      "id": "scratchblocks",
+      "note": "\"Show scroll for forum Scratchblocks\" option",
       "link": "https://paul-s-reid.com/web-dev"
     }
   ],

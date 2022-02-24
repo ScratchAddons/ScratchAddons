@@ -18,7 +18,7 @@ export default async function ({ addon, global, console }) {
     for (let br of lineBreaks) br.insertAdjacentText("afterend", "\n");
 
     // images and smileys
-    let smilieReplaces = Object.assign(Object.create(null), {
+    let smileReplaces = Object.assign(Object.create(null), {
       smile: ":)",
       neutral: ":|",
       sad: ":(",
@@ -40,9 +40,9 @@ export default async function ({ addon, global, console }) {
           img.src
         )
       ) {
-        if (smilieReplaces[img.src.split("smilies/")[1].split(".")[0]]) {
+        if (smileReplaces[img.src.split("smilies/")[1].split(".")[0]]) {
           img.parentNode.insertBefore(
-            document.createTextNode(smilieReplaces[img.src.split("smilies/")[1].split(".")[0]]),
+            document.createTextNode(smileReplaces[img.src.split("smilies/")[1].split(".")[0]]),
             img
           );
         } else img.parentNode.insertBefore(document.createTextNode(`[img${img.src}[/img]`), img);
@@ -88,7 +88,7 @@ export default async function ({ addon, global, console }) {
     }
 
     // links
-    // todo: try and gues where dictionary/wiki/wp etc. tags are being used?
+    // todo: try and guess where dictionary/wiki/wp etc. tags are being used?
     let links = html.querySelectorAll("a");
     for (let link of links) {
       link.insertAdjacentText("afterbegin", `[url=${link.href}]`);

@@ -11,7 +11,7 @@ assignees: ''
 READ BEFORE CREATING!
 
 - Avoid creating duplicates! Read the FAQ page and search through Issues and Discussions before creating one.
-- Try to do a simple but descriptive title, and include detailed information in here. This could save a lot of time and help us fix issues swiftly.
+- Try to do a simple but descriptive title, and include detailed information here. This could save a lot of time and help us fix issues swiftly.
 - Make sure to use the latest version of Scratch Addons.
 - Asking for help should be done on Discussions or our Discord server. Return to the last page for the links.
 

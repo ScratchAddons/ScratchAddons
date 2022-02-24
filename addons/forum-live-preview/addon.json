@@ -1,6 +1,6 @@
 {
   "name": "Live forum post preview",
-  "description": "Automatically shows a preview when you stop typing while writing or editing a forum post.",
+  "description": "Shows a post preview automatically when you stop typing while writing or editing a forum post.",
   "credits": [
     {
       "name": "Maximouse",

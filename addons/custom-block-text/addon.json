@@ -1,6 +1,6 @@
 {
   "name": "Customizable block text style",
-  "description": "Changes the thickness of the text on blocks and optionally adds a text shadow.",
+  "description": "Changes the thickness of text on blocks and/or adds a shadow to the block text.",
   "tags": ["editor", "codeEditor", "featured"],
   "credits": [
     {

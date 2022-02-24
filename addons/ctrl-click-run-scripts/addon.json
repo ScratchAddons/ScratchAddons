@@ -1,10 +1,10 @@
 {
-  "name": "Ctrl+Click to run scripts",
-  "description": "Only run scripts on click if also holding the Ctrl key.",
+  "name": "\"Ctrl\" + click to run scripts",
+  "description": "Disabled running scripts on click unless you are also holding the \"Ctrl\" key.",
   "info": [
     {
       "type": "notice",
-      "text": "On macOS, use the Cmd key instead of the Ctrl key.",
+      "text": "On macOS, use the \"Cmd\" key instead of the \"Ctrl\" key.",
       "id": "macContextDisabled"
     }
   ],

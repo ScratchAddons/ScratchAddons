@@ -1,6 +1,6 @@
 {
-  "name": "Cloud games",
-  "description": "Available when clicking the Scratch Addons icon. Shows you how many Scratchers are currently on multiplayer projects, and their usernames.",
+  "name": "Cloud games players",
+  "description": "Shows you who are currently playing multiplayer projects when you click on the Scratch Addons icon.",
   "credits": [
     {
       "name": "World_Languages"

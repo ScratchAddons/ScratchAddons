@@ -1,6 +1,6 @@
 {
   "name": "Scratch Notifier",
-  "description": "Notifications on new Scratch messages. Click the notification to go straight to the message (comment, project, etc.)",
+  "description": "Receive notifications when you get new Scratch messages. Click the notification to go straight to the message (comment, project, etc.)",
   "credits": [
     {
       "name": "World_Languages"

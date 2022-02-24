@@ -1,6 +1,6 @@
 {
   "name": "Muted project player mode",
-  "description": "Ctrl+Click the green flag to mute/unmute the project.",
+  "description": "\"Ctrl\" + click the green flag to mute/unmute the project.",
   "credits": [
     {
       "name": "TheColaber",

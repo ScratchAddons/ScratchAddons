@@ -1,6 +1,6 @@
 {
   "name": "Customizable block colors",
-  "description": "Edit block colors for each category in the editor.",
+  "description": "Changes the colors of blocks in the editor by category.",
   "credits": [
     {
       "name": "NitroCipher/ZenithRogue"

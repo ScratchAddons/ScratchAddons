@@ -1,6 +1,6 @@
 {
   "name": "Project progress bar",
-  "description": "Adds a progress bar for loading and saving projects.",
+  "description": "Adds a progress bar when loading and saving projects.",
   "credits": [
     {
       "name": "GarboMuffin"

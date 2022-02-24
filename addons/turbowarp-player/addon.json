@@ -1,10 +1,10 @@
 {
   "name": "TurboWarp button",
-  "description": "Adds a button on project pages to play the project in TurboWarp.org, next to the Remix button.",
+  "description": "Adds a button next to the \"Remix\" button on project pages to play the project in TurboWarp.org",
   "info": [
     {
       "type": "notice",
-      "text": "\"Replace player\" mode changes the Scratch player to a TurboWarp embed, which doesn't support seeing inside projects.",
+      "text": "\"Replace player\" changes the Scratch player to a TurboWarp embed, which doesn't support seeing inside projects.",
       "id": "addonsWontWork"
     },
     {

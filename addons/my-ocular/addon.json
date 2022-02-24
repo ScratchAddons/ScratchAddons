@@ -1,9 +1,15 @@
 {
   "name": "ocular integration",
-  "description": "Shows ocular statuses and forum post reactions. Uses my-ocular.jeffalo.net to obtain data.",
+  "description": "Shows ocular statuses and forum post reactions.",
   "credits": [
     {
       "name": "Jeffalo"
+    },
+    {
+      "name": "my-ocular.jeffalo.net",
+      "url": "https://ocular.jeffalo.net",
+      "note": "to obtain data",
+      "id":"ocular"
     }
   ],
   "userscripts": [

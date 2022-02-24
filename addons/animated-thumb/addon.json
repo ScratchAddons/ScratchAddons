@@ -1,6 +1,6 @@
 {
-  "name": "Thumbnails setter",
-  "description": "Adds a button to the bottom-right of the project page to set the thumbnail of your project to any image (including gifs).",
+  "name": "Project thumbnail setter",
+  "description": "Adds a button to the bottom-right of project pages to set the thumbnail of your project to any image (including GIFs).",
   "userscripts": [
     {
       "matches": ["projects"],

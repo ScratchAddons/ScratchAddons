@@ -1,6 +1,6 @@
 {
   "name": "Show exact count",
-  "description": "Shows the exact count for user and studio info. Uses ScratchDB for forums information.",
+  "description": "Shows the exact count for user and studio info.",
   "credits": [
     {
       "name": "TheColaber",
@@ -12,6 +12,12 @@
     },
     {
       "name": "World_Languages"
+    },
+    {
+      "name": "ScratchDB",
+      "link": "https://scratchdb.lefty.one/v3/docs/",
+      "note": "forums information",
+      "id": "scratchdb"
     }
   ],
   "settings": [

@@ -1,6 +1,6 @@
 {
   "name": "Mouse position",
-  "description": "Displays your mouse x/y position above the stage in the editor.",
+  "description": "Displays your mouse X/Y position above the stage in the editor.",
   "credits": [
     {
       "name": "Jeffalo"

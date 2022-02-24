@@ -1,6 +1,6 @@
 {
   "name": "Gamepad support",
-  "description": "Interact with projects using a USB or Bluetooth controller/gamepad.",
+  "description": "Interacts with projects using a USB or Bluetooth controller/gamepad.",
   "credits": [
     {
       "name": "GarboMuffin"

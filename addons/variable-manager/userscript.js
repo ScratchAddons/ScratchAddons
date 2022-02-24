@@ -106,7 +106,7 @@ export default async function ({ addon, global, console, msg }) {
       if (this.scratchVariable.name.toLowerCase().includes(search.toLowerCase()) || !search) {
         // fuzzy searches are lame we are too cool for fuzzy searches (& i doubt they're even the right thing to use here, this should work fine enough)
         this.row.style.display = ""; // make the row normal
-        this.updateValue(true); // force it to update because its hidden and it wouldnt be able to otherwise
+        this.updateValue(true); // force it to update because its hidden and it wouldn't be able to otherwise
       } else {
         this.row.style.display = "none"; // set the entire row as hidden
       }

@@ -1,6 +1,6 @@
 {
-  "name": "Quote post number",
-  "description": "Click the \"quote post number\" button to include a link to the post in your reply.",
+  "name": "Quote forum post number",
+  "description": "Adds a \"quote post number\" button to forum posts to include a link to the post in your reply.",
   "userscripts": [
     {
       "url": "userscript.js",

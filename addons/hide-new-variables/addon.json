@@ -1,6 +1,6 @@
 {
-  "name": "Hide new variables",
-  "description": "Do not automatically create monitors for newly created variables or lists.",
+  "name": "Hidden new variables",
+  "description": "Hide variables and lists from the stage by default.",
   "credits": [
     {
       "name": "GarboMuffin"

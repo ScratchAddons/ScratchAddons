@@ -1,6 +1,6 @@
 {
-  "name": "Do not shift pasted items",
-  "description": "Paste copied items at their original position instead of shifted slightly in the costume editor.",
+  "name": "Unshifted pasted items",
+  "description": "Pastes copied items at their original position instead of shifted slightly in the costume editor.",
   "credits": [
     {
       "name": "GarboMuffin"

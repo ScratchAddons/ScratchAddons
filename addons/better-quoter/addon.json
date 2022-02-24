@@ -1,6 +1,6 @@
 {
-  "name": "Better forum quoter",
-  "description": "Select text in a forum post and click quote in the bottom right corner to only quote the select text.",
+  "name": "Partial forum post quoter",
+  "description": "Allows you to only quote text you have selected when you press \"quote\", if there is text selected.",
   "credits": [
     {
       "name": "TheColaber",
@@ -22,7 +22,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "The BBCode may not be 100% accurate. To get fully accurate quotes, quote as normal and delete any parts that you don't need.",
+      "text": "The BBCode may not be completely accurate. To guarantee fully accurate quotes, quote the post as normal and delete any parts that you don't need, as you would without this addon.",
       "id": "scratchblocks_notice"
     }
   ]

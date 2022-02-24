@@ -1,6 +1,6 @@
 {
   "name": "Customizable code area zoom",
-  "description": "Choose custom settings for the minimum, maximum, speed, and start size of the zoom of scripts in the code area, and autohide the controls.",
+  "description": "Adds customization of the minimum, maximum, and initial of the zoom of scripts in the code area, changes the zoom speed, and/or autohides the controls when they aren't in use.",
   "tags": ["editor", "codeEditor", "featured"],
   "credits": [
     {

@@ -1,6 +1,6 @@
 {
   "name": "Hide delete button",
-  "description": "Hides delete button (trash can icon) from sprites, costumes and sounds. They can still be deleted using the right click context menu.",
+  "description": "Hides the delete button (trash can icon) from sprites, costumes, and sounds. They can still be deleted using the right-click menu.",
   "tags": ["editor", "featured"],
   "versionAdded": "1.19.0",
   "dynamicEnable": true,

@@ -1,6 +1,6 @@
 {
   "name": "Block switching",
-  "description": "Right click on a block to switch it to a related block.",
+  "description": "Adds options to right-click menus on blocks to switch them to similar blocks.",
   "credits": [
     {
       "name": "GarboMuffin"

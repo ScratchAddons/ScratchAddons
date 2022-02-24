@@ -1,6 +1,6 @@
 {
   "name": "Website dark mode and customizable colors",
-  "description": "Customize colors used by the Scratch website. Multiple dark themes by different authors available. If you don't need dark mode but want to change the default colors you can select the \"Scratch's default colors\" preset and tweak it.",
+  "description": "Allows you to customize the colors used by the Scratch website. Multiple themes by different authors are available. If you don't want dark mode but want to change the default colors you can select the \"Scratch's default colors\" preset and tweak it to your liking.",
   "tags": ["community", "theme", "featured"],
   "credits": [
     {

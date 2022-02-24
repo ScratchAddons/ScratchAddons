@@ -1,6 +1,6 @@
 {
   "name": "Snap scripts to grid",
-  "description": "Drag a script to automatically align its position to the code area dots.",
+  "description": "Aligns scripts to the code area dots when dragged.",
   "tags": ["editor", "codeEditor", "featured"],
   "credits": [
     {

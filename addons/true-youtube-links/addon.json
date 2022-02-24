@@ -1,6 +1,6 @@
 {
   "name": "True forums YouTube links",
-  "description": "Replaces links to the embedded site with real YouTube links.",
+  "description": "Replaces links to Scratch's YouTube embed page with real YouTube links.",
   "credits": [
     {
       "name": "HTML-Fan/NT"

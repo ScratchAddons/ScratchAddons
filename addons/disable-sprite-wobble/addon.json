@@ -1,6 +1,6 @@
 {
-  "name": "Disable sprite wobble in sprite pane",
-  "description": "Allow scripts, costumes, and sounds to be moved to different sprites without the sprites moving around within the sprite pane.",
+  "name": "Stationary sprites in sprite pane",
+  "description": "Prevents sprites from moving around within the sprite pane when moving scripts, costumes, and sounds between sprites.",
   "credits": [
     {
       "name": "Xan",

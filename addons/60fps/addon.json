@@ -1,10 +1,10 @@
 {
   "name": "60FPS project player mode",
-  "description": "Alt+Click the green flag to toggle 60FPS.",
+  "description": "Adds a 60 frames per second mode, togglable by holding \"Alt\" while clicking the green flag.",
   "info": [
     {
       "type": "notice",
-      "text": "Projects will run twice as fast at 60FPS, because they typically run at 30FPS.",
+      "text": "Projects will run twice as fast at 60FPS since they typically run at 30FPS.",
       "id": "projectRunsFasterNotice"
     }
   ],

@@ -1,12 +1,13 @@
 {
   "name": "Profile statistics",
-  "description": "Shows statistics from ScratchDB on user profiles.",
+  "description": "Shows statistics on user profiles.",
   "tags": ["community", "profiles"],
   "credits": [
     {
       "name": "Maximouse",
       "link": "https://scratch.mit.edu/users/Maximouse/"
-    }
+    },
+    { "name": "ScratchDB", "url": "http://scratchdb.lefty.one/v3/docs/", "note": "for information", "id": "scratchdb" }
   ],
   "versionAdded": "1.11.0",
   "userscripts": [

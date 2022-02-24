@@ -1,6 +1,6 @@
 {
   "name": "Editor dark mode and customizable colors",
-  "description": "Customize colors used by the project editor. Multiple dark themes by different authors available. If you don't need dark mode but want to change the default colors you can select the \"Scratch's default colors\" preset and tweak it.",
+  "description": "Allows you to customize the colors used by the project editor. Multiple themes by different authors are available. If you don't want dark mode but want to change the default colors you can select the \"Scratch's default colors\" preset and tweak it to your liking.",
   "credits": [
     {
       "name": "Maximouse",
@@ -10,13 +10,13 @@
     },
     {
       "name": "infinitytec",
-      "note": "3.Dark, 3.Darker",
+      "note": "Darker, Dark Blue",
       "id": "darker",
       "link": "https://github.com/infinitytec"
     },
     {
       "name": "_nix",
-      "note": "Dark editor",
+      "note": "Dark Editor",
       "id": "dark",
       "link": "https://github.com/towerofnix"
     },
@@ -904,7 +904,7 @@
   ],
   "presets": [
     {
-      "name": "3.Darker",
+      "name": "Darker",
       "id": "3darker",
       "description": "A dark theme based on a userscript by infinitytec",
       "values": {
@@ -931,7 +931,7 @@
       }
     },
     {
-      "name": "3.Dark",
+      "name": "Dark Blue",
       "id": "3dark",
       "description": "A dark blue theme based on a userscript by infinitytec",
       "values": {

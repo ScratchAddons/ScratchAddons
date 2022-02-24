@@ -47,7 +47,7 @@ const _pingify = (child) => {
 
 /**
  * Linkify an element which uses either <br> or whitespace: pre-line to add linebreaks,
- * such as "About Me" or project descriptions.
+ * such as "About me" or project descriptions.
  * @param {Element} elem - element to linkify to.
  */
 export const linkifyTextNode = (elem) => {

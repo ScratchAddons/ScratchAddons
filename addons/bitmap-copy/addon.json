@@ -4,7 +4,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "\"Right click \u2192 copy\" is not supported. You must press Ctrl+C while a bitmap image is selected.",
+      "text": "\"Right-click \u2192 copy\" is not supported. You must press Ctrl+C while a bitmap image is selected.",
       "id": "norightclick"
     }
   ],

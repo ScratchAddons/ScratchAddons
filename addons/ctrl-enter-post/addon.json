@@ -1,6 +1,6 @@
 {
-  "name": "Ctrl+Enter to post",
-  "description": "Automatically posts the comment or forum post on Ctrl+Enter.",
+  "name": "\"Ctrl\" + \"Enter\" to post",
+  "description": "Posts website comments or forum posts on \"Ctrl\" + \"Enter\".",
   "credits": [
     {
       "name": "Verixion",

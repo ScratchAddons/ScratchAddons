@@ -1,6 +1,6 @@
 {
   "name": "Dango rain on profiles (April Fools Day)",
-  "description": "Users that include the word \"dango\" on their \"About Me\" will have dango emojis raining on the sides of their profile.",
+  "description": "Rains dango emojis on the sides of profiles with the word \"dango\" in the \"About me\" or \"What I'm working on\".",
   "info": [
     {
       "type": "notice",

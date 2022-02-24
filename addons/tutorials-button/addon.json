@@ -1,6 +1,6 @@
 {
-  "name": "Hide Tutorials button",
-  "description": "Hides the Tutorials button in the editor menu bar.",
+  "name": "Hidden \"Tutorials\" button",
+  "description": "Hides the \"Tutorials\" button from the editor menu bar.",
   "tags": ["editor"],
   "credits": [
     {

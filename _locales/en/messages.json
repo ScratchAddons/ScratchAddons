@@ -159,7 +159,7 @@
     "message": "Scratch Addons theme"
   },
   "scratchAddonsThemeDescription": {
-    "message": "This allows you to switch between light and dark themes for this settings page, and the extension's popup."
+    "message": "This allows you to switch between light and dark themes for this settings page and the extension's popup."
   },
   "light": {
     "message": "Light"
@@ -313,7 +313,7 @@
     "description": "Used as a category name for recently used addons"
   },
   "settingsPagePermission": {
-    "message": "To enable the \"$1\" addon, go to the full screen settings page."
+    "message": "To enable the \"$1\" addon, go to the full-screen settings page."
   },
   "openFullSettings": {
     "message": "Open full screen settings"
@@ -347,11 +347,11 @@
     "message": "Keep in mind, all features are togglable! To enable or disable them, go to the settings page by clicking this extension’s icon under “extensions” in the top-right corner of your browser, and then click the gear icon."
   },
   "extensionStoreDescription4": {
-    "message": "No usernames or passwords are stored, and you are required to be signed into your Scratch account in your browser for some features to work.",
+    "message": "No usernames or passwords are stored, and you are required to be signed in to your Scratch account in your browser for some features to work.",
     "description": "NOTE: please only mention \"Scratch\" once on this string, do not repeat this word."
   },
   "extensionStoreDescription5": {
-    "message": "This extension is open source software licensed under GPL v3.\nTo contribute or check the source code: https://github.com/ScratchAddons\nFor more information, go to: ScratchAddons.com"
+    "message": "This extension is open-source software licensed under GPL v3.\nTo contribute or check the source code: https://github.com/ScratchAddons\nFor more information, go to: ScratchAddons.com"
   },
   "extensionStoreDescription6": {
     "message": "This project is not affiliated, associated, or in any way officially connected with the Scratch website, Team, Foundation, or any of its affiliates.",

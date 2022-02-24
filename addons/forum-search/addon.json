@@ -1,13 +1,14 @@
 {
   "name": "Forum search",
-  "description": "Adds a post search bar to the forums. Uses ScratchDB for information.",
+  "description": "Adds a post search bar to the forums.",
   "credits": [
     {
       "name": "DatOneLefty"
     },
     {
       "name": "Hans5958"
-    }
+    },
+    { "name": "ScratchDB", "url": "http://scratchdb.lefty.one/v3/docs/", "note": "for information", "id": "scratchdb" }
   ],
   "userscripts": [
     {

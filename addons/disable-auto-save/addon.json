@@ -1,6 +1,6 @@
 {
   "name": "Disable auto-save",
-  "description": "Disables the automatic saving of projects while editing.",
+  "description": "Disables the automatic saving of projects.",
   "info": [
     {
       "type": "warning",

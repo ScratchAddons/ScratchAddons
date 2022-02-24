@@ -1,6 +1,6 @@
 {
   "name": "Unshare button in editor",
-  "description": "Replaces the \"Shared\" button next to the project title box with a button to unshare the project.",
+  "description": "Replaces the \"Shared\" text next to the project title box with a button to unshare the project.",
   "credits": [
     {
       "name": "Verixion",
