@@ -7,6 +7,13 @@
       "link": "https://scratch.mit.edu/users/TheColaber"
     }
   ],
+  "info": [
+    {
+      "type": "notice",
+      "text": "On macOS, you can also use the Cmd key.",
+      "id": "macOS"
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
