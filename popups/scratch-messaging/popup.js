@@ -73,9 +73,9 @@ export default async ({ addon, msg, safeMsg }) => {
       postComment() {
         const shouldCaptureComment = (value) => {
           // From content-scripts/cs.js
-          const regex = / scratch[ ]?add[ ]?ons/;
+          const regex = /scratch[ ]?add[ ]?ons/;
           // Trim like scratchr2
-          const trimmedValue = " " + value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+          const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
           const limitedValue = trimmedValue.toLowerCase().replace(/[^a-z /]+/g, "");
           return regex.test(limitedValue);
         };
