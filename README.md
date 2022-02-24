@@ -1,12 +1,12 @@
 <img src="https://raw.githubusercontent.com/ScratchAddons/ScratchAddons/master/images/icon.svg" alt="Scratch Addons logo" align="right" width="128px"></img>
 # Welcome to Scratch Addons' repository!
 
-[![](https://img.shields.io/github/stars/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/stargazers)
+[![](https://img.shields.io/github/stars/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/stargazers) 
 [![](https://img.shields.io/github/forks/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/network/members)
-[![](https://img.shields.io/github/watchers/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/watchers)
-[![](https://img.shields.io/github/issues/ScratchAddons/ScratchAddons?color=green&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/issues)
-[![](https://img.shields.io/github/issues-pr/ScratchAddons/ScratchAddons?color=green&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/pulls)
-[![](https://img.shields.io/github/license/ScratchAddons/ScratchAddons?style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/blob/master/LICENSE) <!-- 2 spaces -->
+[![](https://img.shields.io/github/watchers/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/watchers) 
+[![](https://img.shields.io/github/issues/ScratchAddons/ScratchAddons?color=green&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/issues) 
+[![](https://img.shields.io/github/issues-pr/ScratchAddons/ScratchAddons?color=green&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/pulls) 
+[![](https://img.shields.io/github/license/ScratchAddons/ScratchAddons?style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/blob/master/LICENSE) <!-- 2 spaces -->  
 [![](https://img.shields.io/chrome-web-store/v/fbeffbjdlemaoicjdapfpikkikjoneco?style=flat-square&logo=google-chrome&logoColor=white&label=version&color=4285F4)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
 [![](https://img.shields.io/chrome-web-store/users/fbeffbjdlemaoicjdapfpikkikjoneco?style=flat-square&logo=google-chrome&logoColor=white&label=users&color=4285F4)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
 [![](https://img.shields.io/amo/v/scratch-messaging-extension?style=flat-square&logo=firefox-browser&logoColor=white&label=version&color=FF7139)](https://addons.mozilla.org/firefox/addon/scratch-messaging-extension/)
@@ -19,7 +19,7 @@
 
 ## About
 
-Scratch Addons is a WebExtension (supports both Chrome and Firefox). Scratch Addons' mission is to combine all existing Scratch extensions, userscripts, and userstyles into a single easy-to-access place, while still letting users choose which ones to enable.
+Scratch Addons is a WebExtension supporting both Chrome and Firefox. Scratch Addons' mission is to combine all existing Scratch extensions, userscripts, and userstyles into a single easy-to-access place, while still letting users choose which ones to enable.
 
 ### What's actually an "addon"?
 

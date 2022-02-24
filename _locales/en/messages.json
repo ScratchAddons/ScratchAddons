@@ -313,7 +313,7 @@
     "description": "Used as a category name for recently used addons"
   },
   "settingsPagePermission": {
-    "message": "To enable the \"$1\" addon, go to the full-screen settings page."
+    "message": "To enable the \"$1\" addon, go to the fulscreen settings page."
   },
   "openFullSettings": {
     "message": "Open full screen settings"
