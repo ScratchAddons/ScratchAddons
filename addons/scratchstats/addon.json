@@ -8,7 +8,11 @@
       "link": "https://scratch.mit.edu/users/Maximouse/"
     },
     {
-       "name": "ScratchDB", "link": "http://scratchdb.lefty.one/v3/docs/", "note": "for information", "id": "scratchdb" }
+      "name": "ScratchDB",
+      "link": "http://scratchdb.lefty.one/v3/docs/",
+      "note": "for information",
+      "id": "scratchdb"
+    }
   ],
   "versionAdded": "1.11.0",
   "userscripts": [
