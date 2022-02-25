@@ -1,6 +1,6 @@
 {
-  "name": "Vectorized emojis",
-  "description": "Replaces the emojis in website comments with alternate vector designs.",
+  "name": "Vector emojis",
+  "description": "Replaces the emojis in website comments with alternative vector designs.",
   "tags": ["community", "comments"],
   "credits": [
     {

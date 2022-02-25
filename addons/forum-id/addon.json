@@ -1,5 +1,5 @@
 {
-  "name": "Quote forum post number",
+  "name": "Forums \"quote post number\" button",
   "description": "Adds a \"quote post number\" button to forum posts to include a link to the post in your reply.",
   "userscripts": [
     {

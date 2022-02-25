@@ -10,7 +10,7 @@
     },
     {
       "name": "infinitytec",
-      "note": "Darker, Dark Blue",
+      "note": "3.Darker, 3.Dark",
       "id": "darker",
       "link": "https://github.com/infinitytec"
     },
@@ -904,7 +904,7 @@
   ],
   "presets": [
     {
-      "name": "Darker",
+      "name": "3.Darker",
       "id": "3darker",
       "description": "A dark theme based on a userscript by infinitytec",
       "values": {
@@ -931,7 +931,7 @@
       }
     },
     {
-      "name": "Dark Blue",
+      "name": "3.Dark",
       "id": "3dark",
       "description": "A dark blue theme based on a userscript by infinitytec",
       "values": {

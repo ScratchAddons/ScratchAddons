@@ -1,6 +1,6 @@
 {
-  "name": "Old studio layout",
-  "description": "Reverts the layout of the studio page back to the one used before the studio update or the one previously available as part of the Scratch 2.0 \u2192 3.0 addon.",
+  "name": "2.0 studio layout",
+  "description": "Reverts the layout of the studio page to look like Scratch 2.0 or how it looked using the \"Scratch 2.0 \u2192 3.0\" addon.",
   "info": [
     {
       "type": "notice",

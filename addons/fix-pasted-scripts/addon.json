@@ -1,5 +1,5 @@
 {
-  "name": "Do not automatically run duplicated blocks",
+  "name": "Not-automatically-ran duplicated blocks",
   "description": "Fixes a bug in the Scratch editor where duplicating a block and attaching it to a script causes the script to run.",
   "credits": [
     {

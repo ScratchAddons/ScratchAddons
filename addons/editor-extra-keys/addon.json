@@ -1,6 +1,6 @@
 {
   "name": "Extra key support",
-  "description": "Adds more keys to the \"key () pressed?\" and \"when () key pressed\" block dropdowns, such as \"enter\", \".\", \",\", and more.",
+  "description": "Adds more keys to the \"key () pressed?\" and \"when () key pressed\" block dropdowns, such as \"Enter\", period (full stop), comma, and more.",
   "tags": ["editor", "codeEditor", "beta"],
   "credits": [
     {
@@ -11,12 +11,12 @@
   "info": [
     {
       "type": "warning",
-      "text": "The \"experimental keys\" include key such as \"=\", \"\\\", and \";\". They may not work on all operating systems or keyboard layouts.",
+      "text": "The \"experimental keys\" include keys such as equals, backslash, and semicolon. They may not work on all operating systems or keyboard layouts.",
       "id": "experimentalKeysWarn"
     },
     {
       "type": "warning",
-      "text": "The \"Shift keys\" include keys which typically require the Shift key and a number key, like \"#\", \"!\", and more. These keys only work with the \"when () key pressed\" block and do not work on all operating systems or keyboard layouts.",
+      "text": "The \"Shift keys\" include keys which typically require the Shift key and a number key, like hashtag (pound) and exclamation point. These keys only work with the \"when () key pressed\" block and do not work on all operating systems or keyboard layouts.",
       "id": "shiftKeysWarn"
     }
   ],

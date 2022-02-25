@@ -1,6 +1,6 @@
 {
   "name": "Hex color picker",
-  "description": "Adds RBG hex color code inputs to color pickers.",
+  "description": "Adds RGB hex color code inputs to color pickers.",
   "tags": ["editor", "costumeEditor", "recommended"],
   "credits": [
     {

@@ -1,6 +1,6 @@
 {
-  "name": "Paint costume by default",
-  "description": "Changes the default action of \"Choose a Sprite/Costume/Backdrop/Sound\" buttons, which open the library by default.",
+  "name": "\"Paint costume\" by default",
+  "description": "Changes the default action of \"Choose a Sprite\"/\"Costume\"/\"Backdrop\"/\"Sound\" buttons, which open the library by default.",
   "credits": [
     {
       "name": "GarboMuffin"

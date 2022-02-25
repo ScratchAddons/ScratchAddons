@@ -1,6 +1,6 @@
 {
   "name": "\"Ctrl\" + click to run scripts",
-  "description": "Disabled running scripts on click unless you are also holding the \"Ctrl\" key.",
+  "description": "Disables running scripts on click unless you are also holding the \"Ctrl\" key.",
   "info": [
     {
       "type": "notice",

@@ -1,5 +1,5 @@
 {
-  "name": "Browse-native full screen",
+  "name": "Browser-native full screen",
   "description": "Fixes some undesired effects in the project player's full screen mode, opens it in your browser's full screen mode, and/or hides the green flag toolbar.",
   "credits": [
     {
@@ -17,7 +17,7 @@
   "settings": [
     {
       "name": "Open full screen project player in full screen browser mode",
-      "id": "browserfullscreen",
+      "id": "browserFullscreen",
       "type": "boolean",
       "default": true
     },
