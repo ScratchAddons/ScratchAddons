@@ -15,7 +15,8 @@ export default async function ({ addon, global, console }) {
       if (last) li.classList.add("last");
 
       const a = document.createElement("a");
-      a.href = ["http:", "https:"].includes(new URL(url, location.href).protocol) ? url : "";
+      const absolute = new URL(url, location.origin);
+      a.href = ["http:", "https:"].includes(absolute.protocol) ? absolute.toString() : "";
       li.append(a);
       if (scratchr2List) {
         // scratch's code looks for this id in account-nav.js (scratchr2 only).
