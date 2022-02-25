@@ -13,16 +13,17 @@ export default async function ({ addon, msg, global, console }) {
     state.handleUpdatePlayhead = function (playhead) {
       _handleUpdatePlayhead.call(this, playhead);
       const timeSinceStart = (Date.now() - this.startTime) / 1000;
-      const trimStartTime = this.buffer.duration * this.trimStart;
-      const trimmedDuration = this.buffer.duration * this.trimEnd - trimStartTime;
+      const trimStartTime = state.audioBufferPlayer.buffer.duration * state.audioBufferPlayer.trimStart;
+      const trimmedDuration = state.audioBufferPlayer.buffer.duration * state.audioBufferPlayer.trimEnd - trimStartTime;
       el.textContent = norm(timeSinceStart) + "/" + norm(trimmedDuration);
     };
 
     const _handleStoppedPlaying = state.handleStoppedPlaying;
     state.handleStoppedPlaying = function () {
       _handleStoppedPlaying.call(this);
-      el.textContent =
-        norm(0) + "/" + norm(state.audioBufferPlayer.buffer.length / state.audioBufferPlayer.buffer.sampleRate);
+      const trimStartTime = state.audioBufferPlayer.buffer.duration * state.audioBufferPlayer.trimStart;
+      const trimmedDuration = state.audioBufferPlayer.buffer.duration * state.audioBufferPlayer.trimEnd - trimStartTime;
+      el.textContent = norm(0) + "/" + norm(trimmedDuration);
     };
 
     const _componentWillReceiveProps = state.componentWillReceiveProps;
