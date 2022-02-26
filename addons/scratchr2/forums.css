@@ -278,7 +278,8 @@ body > #pagewrapper {
 .djangobb .username:hover {
   width: fit-content;
 }
-.forum-search-list .postleft .username {
+.forum-search-list .postleft .username,
+.forum-search-list .postleft .username:visited:not(:hover) {
   color: var(--darkWww-gray-text, #575e75);
 }
 .searchposts .postleft a {
