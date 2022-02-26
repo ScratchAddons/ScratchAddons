@@ -1,7 +1,3 @@
-body:not(.beta-opt-in, .password-change, .email-change) #content > .cols > .col-12 > .box,
-#content > .cols > .col-12 > .box .box-head {
-  background-color: #004099;
-}
 #brdheader,
 .blockpost div.box {
   background-color: #064734 !important;
