@@ -336,7 +336,7 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     startTick() {
-      this.usedThisTick.clear()
+      this.usedThisTick.clear();
     }
 
     endTick() {
