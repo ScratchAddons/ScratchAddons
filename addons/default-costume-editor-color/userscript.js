@@ -19,7 +19,7 @@ export default async function ({ addon, global, console, msg }) {
   const SCRATCH_DEFAULT_STROKE = parseColor("#000000");
 
   // color could be a hex color string, MIXED, or null
-  const isValidColor = (color) => typeof color === 'string' && color.startsWith('#');
+  const isValidColor = (color) => typeof color === "string" && color.startsWith("#");
 
   // returns hex color string, MIXED, or null
   const getCurrentFillColor = () => addon.tab.redux.state.scratchPaint.color.fillColor.primary;
@@ -41,7 +41,7 @@ export default async function ({ addon, global, console, msg }) {
     if (defaultFillColor !== getCurrentFillColor()) {
       addon.tab.redux.dispatch({
         type: "scratch-paint/fill-style/CHANGE_FILL_COLOR",
-        color: defaultFillColor
+        color: defaultFillColor,
       });
     }
   };
@@ -49,7 +49,7 @@ export default async function ({ addon, global, console, msg }) {
     if (defaultStrokeColor !== getCurrentStrokeColor()) {
       addon.tab.redux.dispatch({
         type: "scratch-paint/stroke-style/CHANGE_STROKE_COLOR",
-        color: defaultStrokeColor
+        color: defaultStrokeColor,
       });
     }
   };
@@ -57,7 +57,7 @@ export default async function ({ addon, global, console, msg }) {
     if (getCurrentStrokeWidth() !== defaultStrokeWidth) {
       addon.tab.redux.dispatch({
         type: "scratch-paint/stroke-width/CHANGE_STROKE_WIDTH",
-        strokeWidth: defaultStrokeWidth
+        strokeWidth: defaultStrokeWidth,
       });
     }
   };
@@ -76,7 +76,7 @@ export default async function ({ addon, global, console, msg }) {
 
   let activatingTool = false;
   addon.tab.redux.initialize();
-  addon.tab.redux.addEventListener("statechanged", ({detail}) => {
+  addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
     if (addon.self.disabled) {
       return;
     }
@@ -118,7 +118,10 @@ export default async function ({ addon, global, console, msg }) {
           }
           if (shouldCheckIfStrokeChanges) {
             const finalStrokeColor = getCurrentStrokeColor();
-            if (finalStrokeColor === SCRATCH_DEFAULT_STROKE || (initialStrokeColor === MIXED && finalStrokeColor !== MIXED)) {
+            if (
+              finalStrokeColor === SCRATCH_DEFAULT_STROKE ||
+              (initialStrokeColor === MIXED && finalStrokeColor !== MIXED)
+            ) {
               if (defaultStrokeWidth !== 0) {
                 applyStrokeWidth();
                 applyStrokeColor();
