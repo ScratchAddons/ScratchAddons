@@ -44,7 +44,7 @@ function messageForAllTabs(message) {
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach(
       (tab) =>
-        (tab.url || (!tab.url && typeof browser !== "undefined")) &&
+        (tab.url) &&
         chrome.tabs.sendMessage(tab.id, message, () => void chrome.runtime.lastError)
     )
   );
