@@ -29,9 +29,11 @@ export default async function ({ addon, global, console, msg }) {
 
   let defaultFillColor;
   let defaultStrokeColor;
+  let defaultStrokeWidth;
   const setDefaultColorsToSettings = () => {
     defaultFillColor = parseColor(addon.settings.get("fill"));
     defaultStrokeColor = parseColor(addon.settings.get("stroke"));
+    defaultStrokeWidth = addon.settings.get("strokeSize");
   };
   setDefaultColorsToSettings();
 
@@ -52,11 +54,10 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
   const applyStrokeWidth = () => {
-    const customStrokeSize = addon.settings.get("strokeSize");
-    if (getCurrentStrokeWidth() !== customStrokeSize) {
+    if (getCurrentStrokeWidth() !== defaultStrokeWidth) {
       addon.tab.redux.dispatch({
         type: "scratch-paint/stroke-width/CHANGE_STROKE_WIDTH",
-        strokeWidth: customStrokeSize
+        strokeWidth: defaultStrokeWidth
       });
     }
   };
@@ -90,6 +91,8 @@ export default async function ({ addon, global, console, msg }) {
         if (isValidColor(action.color)) {
           defaultStrokeColor = action.color;
         }
+      } else if (action.type === "scratch-paint/stroke-width/CHANGE_STROKE_WIDTH") {
+        defaultStrokeWidth = action.strokeWidth;
       }
     }
 
@@ -115,8 +118,11 @@ export default async function ({ addon, global, console, msg }) {
           }
           if (shouldCheckIfStrokeChanges) {
             const finalStrokeColor = getCurrentStrokeColor();
-            if (finalStrokeColor === SCRATCH_DEFAULT_STROKE) {
-              applyStrokeColor();
+            if (finalStrokeColor === SCRATCH_DEFAULT_STROKE || (initialStrokeColor === MIXED && finalStrokeColor !== MIXED)) {
+              if (defaultStrokeWidth !== 0) {
+                applyStrokeWidth();
+                applyStrokeColor();
+              }
             }
           }
         });
