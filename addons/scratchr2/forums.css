@@ -257,21 +257,29 @@ body > #pagewrapper {
   padding: 10px 12px;
 }
 .djangobb .username {
+  position: relative;
+  z-index: 1;
   margin: -4px;
   display: block;
+  max-width: fit-content;
   padding: 4px;
   overflow: hidden;
   border-radius: 4px;
   background-color: var(--darkWww-gray, #f2f2f2);
   color: var(--darkWww-link, #4d97ff);
   font-size: 16px;
+  white-space: nowrap;
   text-overflow: ellipsis;
+}
+.djangobb .username:visited:not(:hover) {
+  color: var(--darkWww-link, #4d97ff);
 }
 .djangobb .username:hover {
   width: -moz-fit-content;
   width: fit-content;
 }
-.forum-search-list .postleft .username {
+.forum-search-list .postleft .username,
+.forum-search-list .postleft .username:visited:not(:hover) {
   color: var(--darkWww-gray-text, #575e75);
 }
 .searchposts .postleft a {
