@@ -4,11 +4,11 @@
   "credits": [
     {
       "name": "TheColaber",
-      "link": "https://scratch.mit.edu/users/thecolaber"
+      "link": "https://scratch.mit.edu/users/TheColaber/"
     }
   ],
-  "versionAdded": "1.24.0",
-  "tags": ["editor", "costumeEditor"],
+  "versionAdded": "1.25.0",
+  "tags": ["editor", "costumeEditor", "featured"],
   "userscripts": [
     {
       "url": "userscript.js",
