@@ -4,7 +4,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "On macOS, use the \"Cmd\" key instead of the \"Ctrl\" key.",
+      "text": "On macOS, use the Cmd key instead of the Ctrl key.",
       "id": "macOS"
     }
   ],
