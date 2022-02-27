@@ -30,7 +30,7 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
               // Handle partial dynamic enable (PDE)
               // Userscripts currently cannot be PDEd
               // Note: this can still result in userstyles being empty
-              // if a userstyle depends on multple addons
+              // if a userstyle depends on multiple addons
               // If no running userstyles depend on the provided dependency,
               // this means no new userstyles are loaded, thus early return.
               // We still need to send the whole array.
