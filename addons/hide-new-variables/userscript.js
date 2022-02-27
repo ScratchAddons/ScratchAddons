@@ -1,13 +1,23 @@
 export default async function ({ addon, msg, global, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
-  const originalSetCheckboxState = ScratchBlocks.VerticalFlyout.prototype.setCheckboxState;
-  ScratchBlocks.VerticalFlyout.prototype.setCheckboxState = function (...args) {
-    // This method is called here: https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/variables.js#L331
-    // When a prompt like the "New variable" prompt is open, just don't do anything
-    // Scratch does have other types of prompts, but you can't create variables while those are open, so this is safe.
-    if (!addon.self.disabled && document.querySelector('[class*="prompt_modal-content_"]')) {
-      return;
+  const originalCreateVariable = ScratchBlocks.Variables.createVariable;
+  // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/variables.js#L277
+  ScratchBlocks.Variables.createVariable = function (workspace, opt_callback, opt_type) {
+    if (!addon.self.disabled) {
+      const originalCallback = opt_callback;
+      opt_callback = (variableBlockId) => {
+        if (variableBlockId) {
+          const flyout = workspace.isFlyout ? workspace : workspace.getFlyout();
+          if (flyout.setCheckboxState) {
+            flyout.setCheckboxState(variableBlockId, false);
+          }
+        }
+
+        if (originalCallback) {
+          originalCallback(variableBlockId);
+        }
+      };
     }
-    return originalSetCheckboxState.call(this, ...args);
+    return originalCreateVariable.call(this, workspace, opt_callback, opt_type);
   };
 }

@@ -25,4 +25,40 @@ export default (addonId, newState) => {
     }
   }
   if (addonId === "msg-count-badge") updateBadge(scratchAddons.cookieStoreId);
+  // Partial dynamicEnable (PDE)/Partial dynamicDisable (PDD)
+  // See #4188 - for now, userstyles only.
+  if (scratchAddons.dependents[addonId]?.size) {
+    for (const dependentAddonId of scratchAddons.dependents[addonId]) {
+      // Ignore disabled addons
+      if (!scratchAddons.localState.addonsEnabled[dependentAddonId]) continue;
+      const dependentManifest = scratchAddons.manifests.find(
+        (manifest) => manifest.addonId === dependentAddonId
+      ).manifest;
+      // Require dynamicEnable/dynamicDisable since this is a type of dynamic enable/disable
+      // and it might cause problems if applied to addons without support
+      if (newState && dependentManifest.dynamicEnable) {
+        // Dependent might have a userstyle that needs to be activated
+        scratchAddons.localEvents.dispatchEvent(
+          new CustomEvent("addonDynamicEnable", {
+            detail: {
+              addonId: dependentAddonId,
+              manifest: dependentManifest,
+              partialDynamicEnableBy: addonId,
+            },
+          })
+        );
+      } else if (!newState && dependentManifest.dynamicDisable) {
+        // Dependent might have a userstyle that needs to be deactivated
+        scratchAddons.localEvents.dispatchEvent(
+          new CustomEvent("addonDynamicDisable", {
+            detail: {
+              addonId: dependentAddonId,
+              manifest: dependentManifest,
+              partialDynamicDisableBy: addonId,
+            },
+          })
+        );
+      }
+    }
+  }
 };

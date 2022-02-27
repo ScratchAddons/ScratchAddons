@@ -317,39 +317,39 @@ export default async function ({ addon, global, console, msg }) {
 
   class Cache {
     constructor() {
-      this.map = new Map();
-      this.used = [];
+      this.cache = new Map();
+      this.usedThisTick = new Set();
     }
 
     has(id) {
-      return this.map.has(id);
+      return this.cache.has(id);
     }
 
     get(id) {
-      this.used.push(id);
-      return this.map.get(id);
+      this.usedThisTick.add(id);
+      return this.cache.get(id);
     }
 
     set(id, value) {
-      this.used.push(id);
-      this.map.set(id, value);
+      this.usedThisTick.add(id);
+      this.cache.set(id, value);
     }
 
-    start() {
-      this.used = [];
+    startTick() {
+      this.usedThisTick.clear();
     }
 
-    end() {
-      for (const id of Array.from(this.map.keys())) {
-        if (!this.used.includes(id)) {
-          this.map.delete(id);
+    endTick() {
+      for (const id of Array.from(this.cache.keys())) {
+        if (!this.usedThisTick.has(id)) {
+          this.cache.delete(id);
         }
       }
     }
 
     clear() {
-      this.start();
-      this.map.clear();
+      this.usedThisTick.clear();
+      this.cache.clear();
     }
   }
 
@@ -441,9 +441,9 @@ export default async function ({ addon, global, console, msg }) {
         };
       };
 
-      itemCache.start();
-      folderItemCache.start();
-      folderAssetCache.start();
+      itemCache.startTick();
+      folderItemCache.startTick();
+      folderAssetCache.startTick();
 
       const folderOccurrences = new Map();
       const items = [];
@@ -564,9 +564,9 @@ export default async function ({ addon, global, console, msg }) {
         i++;
       }
 
-      itemCache.end();
-      folderItemCache.end();
-      folderAssetCache.end();
+      itemCache.endTick();
+      folderItemCache.endTick();
+      folderAssetCache.endTick();
 
       return result;
     };

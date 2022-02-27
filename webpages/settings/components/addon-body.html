@@ -1,7 +1,7 @@
 <template>
   <div class="addon-body" v-show="shouldShow" :id="'addon-' + addon._addonId">
     <div class="addon-topbar">
-      <div class="clickeable-area" @click="expanded = !expanded">
+      <div class="clickable-area" @click="expanded = !expanded">
         <div class="btn-dropdown">
           <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': expanded}" />
         </div>
@@ -162,7 +162,7 @@
     display: flex;
     align-items: center;
   }
-  .clickeable-area {
+  .clickable-area {
     padding-inline-start: 10px;
   }
   .addon-body {
@@ -229,7 +229,7 @@
     border-radius: 4px;
     transition: 0.2s ease;
   }
-  .clickeable-area:hover .btn-dropdown {
+  .clickable-area:hover .btn-dropdown {
     background: var(--hover-highlight);
   }
 
@@ -239,16 +239,16 @@
     filter: var(--content-icon-filter);
   }
 
-  .clickeable-area {
+  .clickable-area {
     cursor: pointer;
     display: flex;
     align-self: stretch;
     align-items: center;
   }
-  .clickeable-area .tooltip {
+  .clickable-area .tooltip {
     cursor: pointer;
   }
-  .iframe .clickeable-area {
+  .iframe .clickable-area {
     flex-grow: 1;
   }
   .addon-notice,

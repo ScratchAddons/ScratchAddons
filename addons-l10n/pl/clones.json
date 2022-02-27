@@ -1,1 +1,1 @@
-{"clones/clones":"clone:{cloneCount}","clones/@name":"Licznik klonów"}
+{"clones/clones":"klony:{cloneCount}","clones/@name":"Licznik klonów","clones/@description":"Dodaje licznik nad sceną pokazujący ilość klonów."}
