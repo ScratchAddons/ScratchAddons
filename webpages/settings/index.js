@@ -189,7 +189,6 @@ let fuse;
             if (obj.group.id === "_iframeSearch") obj.matchesSearch = false;
             else obj.matchesSearch = true;
           });
-          console.log(this.addonListObjs);
           return this.addonListObjs.sort((b, a) => b.naturalIndex - a.naturalIndex);
         }
 
