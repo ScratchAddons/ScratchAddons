@@ -127,6 +127,7 @@ h1 {
 }
 .large-button:hover:not([disabled]) {
   background: var(--button-hover-background);
+  cursor: pointer;
 }
 .large-button:focus-visible {
   outline: none;
