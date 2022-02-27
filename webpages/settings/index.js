@@ -189,6 +189,7 @@ let fuse;
             if (obj.group.id === "_iframeSearch") obj.matchesSearch = false;
             else obj.matchesSearch = true;
           });
+          console.log(this.addonListObjs);
           return this.addonListObjs.sort((b, a) => b.naturalIndex - a.naturalIndex);
         }
 
@@ -215,6 +216,9 @@ let fuse;
         );
         for (const obj of addonListObjs) obj.matchesSearch = results.includes(obj);
         return addonListObjs.sort((b, a) => results.indexOf(b) - results.indexOf(a));
+      },
+      hasNoResults() {
+        return !this.addonList.some((addon) => addon.matchesSearch && addon.matchesCategory);
       },
       version() {
         return chrome.runtime.getManifest().version;

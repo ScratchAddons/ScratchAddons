@@ -178,6 +178,14 @@ h1 {
   border-color: var(--brand-orange);
 }
 
+#search-not-found {
+  margin: 10px;
+}
+body.iframe #search-not-found {
+  margin: unset;
+  text-align: center;
+}
+
 /*scrollbar*/
 
 /* width */
