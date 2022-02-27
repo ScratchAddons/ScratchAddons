@@ -399,7 +399,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
       if (partial) {
         // Partial: part of userstyle was (re-)enabled.
         // No need to deal with userscripts here.
-        const addonsWithUserstylesEntry = addonsWithUserscripts.find((entry) => entry.addonId === addonId);
+        const addonsWithUserstylesEntry = addonsWithUserstyles.find((entry) => entry.addonId === addonId);
         if (addonsWithUserstylesEntry) {
           addonsWithUserstylesEntry.styles = userstyles;
         } else {
@@ -438,7 +438,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
         removeAddonStylesPartial(addonId, partialDynamicDisabledStyles);
         if (styleIndex > -1) {
           // This should exist... right? Safeguarding anyway
-          const userstylesEntry = addonsWithUserscripts[styleIndex];
+          const userstylesEntry = addonsWithUserstyles[styleIndex];
           userstylesEntry.styles = userstylesEntry.styles.filter(
             (style) => !partialDynamicDisabledStyles.includes(style.href)
           );
