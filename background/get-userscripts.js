@@ -36,8 +36,7 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
               // We still need to send the whole array.
               if (partialDynamicEnableBy) {
                 // NOR(a userstyle has a dependency on the newly enabled addon), RETURN
-                if (!userstyles.some((injectable) => injectable.if?.addonEnabled?.includes(partialDynamicEnableBy)))
-                  return;
+                if (!userstyles.some((style) => style.addonEnabled?.includes(partialDynamicEnableBy))) return;
               }
               if (userscripts.length || userstyles.length) {
                 chrome.tabs.sendMessage(
@@ -136,12 +135,12 @@ async function getAddonData({ addonId, manifest, url }) {
   const userstyles = [];
   for (let i = 0; i < manifest.userstyles?.length; i++) {
     const style = manifest.userstyles[i];
+    const styleHref = chrome.runtime.getURL(`/addons/${addonId}/${style.url}`);
     if (userscriptMatches({ url }, style, addonId))
       if (manifest.injectAsStyleElt) {
         // Reserve index in array to avoid race conditions (#700)
         const arrLength = userstyles.push(null);
         const indexToUse = arrLength - 1;
-        const styleHref = chrome.runtime.getURL(`/addons/${addonId}/${style.url}`);
         promises.push(
           fetch(styleHref)
             .then((res) => res.text())
@@ -154,13 +153,15 @@ async function getAddonData({ addonId, manifest, url }) {
                 href: styleHref,
                 text,
                 index: i,
+                addonEnabled: style.if?.addonEnabled,
               };
             })
         );
       } else {
         userstyles.push({
-          href: chrome.runtime.getURL(`/addons/${addonId}/${style.url}`),
+          href: styleHref,
           index: i,
+          addonEnabled: style.if?.addonEnabled,
         });
       }
   }
