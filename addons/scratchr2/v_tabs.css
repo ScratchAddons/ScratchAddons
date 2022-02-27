@@ -6,7 +6,7 @@
   padding-top: 40px;
   padding-inline: 10px;
 }
-.box .box-head {
+#content > .cols > .col-12 > .box > .box-head {
   position: absolute;
   top: 50px;
   left: 0;
@@ -18,7 +18,7 @@
   background: #4d97ff;
   border: none;
 }
-.box .box-head h2 {
+#content > .cols > .col-12 > .box > .box-head h2 {
   width: 942px;
   margin: auto;
   margin-bottom: 16px;
@@ -37,7 +37,9 @@
   background: transparent;
 }
 .v-tabs li {
+  margin-right: 14px;
   display: block;
+  width: -moz-fit-content;
   width: fit-content;
   background-color: var(--darkWww-box, white);
   border: 1px solid var(--darkWww-border-15, rgba(0, 0, 0, 0.15));
@@ -78,7 +80,7 @@
   margin: 0;
   width: 722px;
 }
-#content > .cols > .col-12 .box,
+#content > .cols > .col-12 > .box,
 #main-content {
   padding: 0;
   border: none;

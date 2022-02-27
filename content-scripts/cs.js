@@ -5,6 +5,8 @@ try {
 }
 if (document.documentElement instanceof SVGElement) throw "Top-level SVG document (this can be ignored)";
 
+const MAX_USERSTYLES_PER_ADDON = 100;
+
 const _realConsole = window.console;
 const consoleOutput = (logAuthor = "[cs]") => {
   const style = {
@@ -175,10 +177,20 @@ function addStyle(addon) {
     }
   };
 
-  for (let userstyle of addon.styles) {
+  if (addon.styles.length > MAX_USERSTYLES_PER_ADDON) {
+    console.warn(
+      "Please increase MAX_USERSTYLES_PER_ADDON in content-scripts/cs.js, otherwise style priority is not guaranteed! Has",
+      addon.styles.length,
+      "styles, current max is",
+      MAX_USERSTYLES_PER_ADDON
+    );
+  }
+  for (let i = 0; i < addon.styles.length; i++) {
+    const userstyle = addon.styles[i];
+    const styleIndex = addon.index * MAX_USERSTYLES_PER_ADDON + userstyle.index;
     if (addon.injectAsStyleElt) {
       // If an existing style is already appended, just enable it instead
-      const existingEl = addonStyles.find((style) => style.textContent === userstyle);
+      const existingEl = addonStyles.find((style) => style.dataset.styleHref === userstyle.href);
       if (existingEl) {
         existingEl.disabled = false;
         continue;
@@ -187,11 +199,12 @@ function addStyle(addon) {
       const style = document.createElement("style");
       style.classList.add("scratch-addons-style");
       style.setAttribute("data-addon-id", addon.addonId);
-      style.setAttribute("data-addon-index", addon.index);
-      style.textContent = userstyle;
-      appendByIndex(style, addon.index);
+      style.setAttribute("data-addon-index", styleIndex);
+      style.setAttribute("data-style-href", userstyle.href);
+      style.textContent = userstyle.text;
+      appendByIndex(style, styleIndex);
     } else {
-      const existingEl = addonStyles.find((style) => style.href === userstyle);
+      const existingEl = addonStyles.find((style) => style.href === userstyle.href);
       if (existingEl) {
         existingEl.disabled = false;
         continue;
@@ -200,10 +213,10 @@ function addStyle(addon) {
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.setAttribute("data-addon-id", addon.addonId);
-      link.setAttribute("data-addon-index", addon.index);
+      link.setAttribute("data-addon-index", styleIndex);
       link.classList.add("scratch-addons-style");
-      link.href = userstyle;
-      appendByIndex(link, addon.index);
+      link.href = userstyle.href;
+      appendByIndex(link, styleIndex);
     }
   }
 }
@@ -212,6 +225,11 @@ function removeAddonStyles(addonId) {
   // That way, if the addon needs to be reenabled, it can just enable that style/link element instead of readding it.
   // This helps with load times for link elements.
   document.querySelectorAll(`[data-addon-id='${addonId}']`).forEach((style) => (style.disabled = true));
+}
+function removeAddonStylesPartial(addonId, stylesToRemove) {
+  document.querySelectorAll(`[data-addon-id='${addonId}']`).forEach((style) => {
+    if (stylesToRemove.includes(style.href || style.dataset.styleHref)) style.disabled = true;
+  });
 }
 
 function injectUserstyles(addonsWithUserstyles) {
@@ -251,14 +269,14 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
 
   // Set variables for customCssVariables
   const getColor = (addonId, obj) => {
-    if (typeof obj !== "object") return obj;
+    if (typeof obj !== "object" || obj === null) return obj;
     let hex;
     switch (obj.type) {
       case "settingValue":
         return addonSettings[addonId][obj.settingId];
       case "ternary":
         // this is not even a color lol
-        return getColor(addonId, obj.source) ? obj.true : obj.false;
+        return getColor(addonId, obj.source) ? getColor(addonId, obj.true) : getColor(addonId, obj.false);
       case "map":
         return obj.options[getColor(addonId, obj.source)];
       case "textColor": {
@@ -338,9 +356,8 @@ function getL10NURLs() {
 }
 
 async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscripts, addonsWithUserstyles }) {
-  // In order for the "everLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and parse
-  const everLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
-  const disabledDynamicAddons = [];
+  const everLoadedUserscriptAddons = new Set(addonsWithUserscripts.map((entry) => entry.addonId));
+  const disabledDynamicAddons = new Set();
   globalState = globalStateMsg;
   setCssVariables(globalState.addonSettings, addonsWithUserstyles);
   // Just in case, make sure the <head> loaded before injecting styles
@@ -366,33 +383,79 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
     } else if (request.fireEvent) {
       _page_.fireEvent(request.fireEvent);
     } else if (request.dynamicAddonEnabled) {
-      const { scripts, userstyles, cssVariables, addonId, injectAsStyleElt, index, dynamicEnable, dynamicDisable } =
-        request.dynamicAddonEnabled;
+      const {
+        scripts,
+        userstyles,
+        cssVariables,
+        addonId,
+        injectAsStyleElt,
+        index,
+        dynamicEnable,
+        dynamicDisable,
+        partial,
+      } = request.dynamicAddonEnabled;
+      disabledDynamicAddons.delete(addonId);
       addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
-      if (everLoadedAddons.find((addon) => addon.addonId === addonId)) {
-        if (!dynamicDisable) return;
-        // Addon was reenabled
-        _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
+      if (partial) {
+        // Partial: part of userstyle was (re-)enabled.
+        // No need to deal with userscripts here.
+        const addonsWithUserstylesEntry = addonsWithUserstyles.find((entry) => entry.addonId === addonId);
+        if (addonsWithUserstylesEntry) {
+          addonsWithUserstylesEntry.styles = userstyles;
+        } else {
+          addonsWithUserstyles.push({ styles: userstyles, cssVariables, addonId, injectAsStyleElt, index });
+        }
       } else {
-        if (!dynamicEnable) return;
-        // Addon was not injected in page yet
-        _page_.runAddonUserscripts({ addonId, scripts, enabledLate: true });
+        // Non-partial: the whole addon was (re-)enabled.
+        if (everLoadedUserscriptAddons.has(addonId)) {
+          if (!dynamicDisable) return;
+          // Addon was reenabled
+          _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
+        } else {
+          if (!dynamicEnable) return;
+          // Addon was not injected in page yet
+          _page_.runAddonUserscripts({ addonId, scripts, enabledLate: true });
+          everLoadedUserscriptAddons.add(addonId);
+        }
+
+        addonsWithUserscripts.push({ addonId, scripts });
+        addonsWithUserstyles.push({ styles: userstyles, cssVariables, addonId, injectAsStyleElt, index });
       }
-
-      addonsWithUserscripts.push({ addonId, scripts });
-      addonsWithUserstyles.push({ styles: userstyles, cssVariables, addonId, injectAsStyleElt, index });
       setCssVariables(globalState.addonSettings, addonsWithUserstyles);
-      everLoadedAddons.push({ addonId, scripts });
     } else if (request.dynamicAddonDisable) {
-      const { addonId } = request.dynamicAddonDisable;
-      disabledDynamicAddons.push(addonId);
+      // Note: partialDynamicDisabledStyles includes ones that are disabled currently, too!
+      const { addonId, partialDynamicDisabledStyles } = request.dynamicAddonDisable;
+      // This may run twice if the style-only addon was first "partially"
+      // (but in fact entirely) disabled, and it was then toggled off.
+      // Early return in this situation.
+      if (disabledDynamicAddons.has(addonId)) return;
+      const scriptIndex = addonsWithUserscripts.findIndex((a) => a.addonId === addonId);
+      const styleIndex = addonsWithUserstyles.findIndex((a) => a.addonId === addonId);
+      if (partialDynamicDisabledStyles) {
+        // Userstyles are partially disabled.
+        // This should not result in other parts being disabled,
+        // unless that means no scripts/styles are running on this page.
+        removeAddonStylesPartial(addonId, partialDynamicDisabledStyles);
+        if (styleIndex > -1) {
+          // This should exist... right? Safeguarding anyway
+          const userstylesEntry = addonsWithUserstyles[styleIndex];
+          userstylesEntry.styles = userstylesEntry.styles.filter(
+            (style) => !partialDynamicDisabledStyles.includes(style.href)
+          );
+          if (userstylesEntry.styles.length || scriptIndex > -1) {
+            // The addon was not completely disabled, so early return.
+            // Note: we do not need to recalculate cssVariables here
+            return;
+          }
+        }
+      } else {
+        removeAddonStyles(addonId);
+      }
+      disabledDynamicAddons.add(addonId);
 
-      let addonIndex = addonsWithUserscripts.findIndex((a) => a.addonId === addonId);
-      if (addonIndex !== -1) addonsWithUserscripts.splice(addonIndex, 1);
-      addonIndex = addonsWithUserstyles.findIndex((a) => a.addonId === addonId);
-      if (addonIndex !== -1) addonsWithUserstyles.splice(addonIndex, 1);
+      if (scriptIndex !== -1) addonsWithUserscripts.splice(scriptIndex, 1);
+      if (styleIndex !== -1) addonsWithUserstyles.splice(styleIndex, 1);
 
-      removeAddonStyles(addonId);
       _page_.fireEvent({ name: "disabled", addonId, target: "self" });
       setCssVariables(globalState.addonSettings, addonsWithUserstyles);
     } else if (request.updateUserstylesSettingsChange) {
@@ -405,7 +468,11 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
     } else if (request === "getRunningAddons") {
       const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
       const userstyles = addonsWithUserstyles.map((obj) => obj.addonId);
-      sendResponse({ userscripts, userstyles, disabledDynamicAddons });
+      sendResponse({
+        userscripts,
+        userstyles,
+        disabledDynamicAddons: Array.from(disabledDynamicAddons),
+      });
     } else if (request === "refetchSession") {
       _page_.refetchSession();
     }
@@ -479,19 +546,16 @@ const showBanner = () => {
     box-shadow: 0 0 20px 0px #0000009e;
     line-height: 1em;`,
   });
-  /*
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=9y4IsQLz3rk",
+    href: "https://www.youtube.com/watch?v=cQboWcsjR40",
     target: "_blank",
     rel: "noopener",
     referrerPolicy: "strict-origin-when-cross-origin",
   });
-  // Thumbnails were 100px height
-  */
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/dark-www.gif"),
-    style: "height: 175px; border-radius: 5px; padding: 20px",
+    src: chrome.runtime.getURL("/images/cs/yt-thumbnail.jpg"),
+    style: "height: 100px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
@@ -589,9 +653,9 @@ const showBanner = () => {
   notifText.appendChild(makeBr());
   notifText.appendChild(notifFooter);
 
-  // notifImageLink.appendChild(notifImage);
+  notifImageLink.appendChild(notifImage);
 
-  notifInnerBody.appendChild(notifImage);
+  notifInnerBody.appendChild(notifImageLink);
   notifInnerBody.appendChild(notifText);
 
   notifOuterBody.appendChild(notifInnerBody);
@@ -629,9 +693,9 @@ const isProject = pathArr[0] === "projects";
 
 if (isProfile || isStudio || isProject) {
   const shouldCaptureComment = (value) => {
-    const regex = / scratch[ ]?add[ ]?ons/;
+    const regex = /scratch[ ]?add[ ]?ons/;
     // Trim like scratchr2
-    const trimmedValue = " " + value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+    const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
     const limitedValue = trimmedValue.toLowerCase().replace(/[^a-z /]+/g, "");
     return regex.test(limitedValue);
   };

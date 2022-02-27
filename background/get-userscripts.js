@@ -18,7 +18,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) => {
-  const { addonId, manifest } = detail;
+  const { addonId, manifest, partialDynamicEnableBy } = detail;
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
@@ -27,6 +27,17 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
           if (res) {
             (async () => {
               const { userscripts, userstyles, cssVariables } = await getAddonData({ addonId, url: res, manifest });
+              // Handle partial dynamic enable (PDE)
+              // Userscripts currently cannot be PDEd
+              // Note: this can still result in userstyles being empty
+              // if a userstyle depends on multiple addons
+              // If no running userstyles depend on the provided dependency,
+              // this means no new userstyles are loaded, thus early return.
+              // We still need to send the whole array.
+              if (partialDynamicEnableBy) {
+                // NOR(a userstyle has a dependency on the newly enabled addon), RETURN
+                if (!userstyles.some((style) => style.addonEnabled?.includes(partialDynamicEnableBy))) return;
+              }
               if (userscripts.length || userstyles.length) {
                 chrome.tabs.sendMessage(
                   tab.id,
@@ -40,6 +51,7 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
                       index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
                       dynamicEnable: Boolean(manifest.dynamicEnable),
                       dynamicDisable: Boolean(manifest.dynamicDisable),
+                      partial: !!partialDynamicEnableBy,
                     },
                   },
                   { frameId: 0 }
@@ -53,13 +65,24 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
   );
 });
 scratchAddons.localEvents.addEventListener("addonDynamicDisable", ({ detail }) => {
-  const { addonId } = detail;
+  const { addonId, manifest, partialDynamicDisableBy } = detail;
+  let partialDynamicDisabledStyles;
+  if (partialDynamicDisableBy) {
+    partialDynamicDisabledStyles = manifest.userstyles
+      ?.filter((injectable) => injectable.if?.addonEnabled?.includes(partialDynamicDisableBy))
+      .map((style) => chrome.runtime.getURL(`/addons/${addonId}/${style.url}`));
+  }
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
         chrome.tabs.sendMessage(
           tab.id,
-          { dynamicAddonDisable: { addonId } },
+          {
+            dynamicAddonDisable: {
+              addonId,
+              partialDynamicDisabledStyles,
+            },
+          },
           { frameId: 0 },
           () => void chrome.runtime.lastError
         );
@@ -110,25 +133,36 @@ async function getAddonData({ addonId, manifest, url }) {
       });
   }
   const userstyles = [];
-  for (const style of manifest.userstyles || []) {
+  for (let i = 0; i < manifest.userstyles?.length; i++) {
+    const style = manifest.userstyles[i];
+    const styleHref = chrome.runtime.getURL(`/addons/${addonId}/${style.url}`);
     if (userscriptMatches({ url }, style, addonId))
       if (manifest.injectAsStyleElt) {
         // Reserve index in array to avoid race conditions (#700)
         const arrLength = userstyles.push(null);
         const indexToUse = arrLength - 1;
         promises.push(
-          fetch(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`))
+          fetch(styleHref)
             .then((res) => res.text())
             .then((text) => {
               // Replace %addon-self-dir% for relative URLs
               text = text.replace(/\%addon-self-dir\%/g, chrome.runtime.getURL(`addons/${addonId}`));
               // Provide source url
               text += `\n/*# sourceURL=${style.url} */`;
-              userstyles[indexToUse] = text;
+              userstyles[indexToUse] = {
+                href: styleHref,
+                text,
+                index: i,
+                addonEnabled: style.if?.addonEnabled,
+              };
             })
         );
       } else {
-        userstyles.push(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`));
+        userstyles.push({
+          href: styleHref,
+          index: i,
+          addonEnabled: style.if?.addonEnabled,
+        });
       }
   }
   await Promise.all(promises);

@@ -308,8 +308,7 @@ export default async function ({ addon, global, console, msg }) {
     // Don't scroll to blocks in the flyout
     if (block.workspace.isFlyout) return;
 
-    const { scrollBlockIntoView } = new DevtoolsUtils(addon);
-    scrollBlockIntoView(blockId);
+    new DevtoolsUtils(addon).scrollBlockIntoView(blockId);
   };
 
   // May be slightly incorrect in some edge cases.

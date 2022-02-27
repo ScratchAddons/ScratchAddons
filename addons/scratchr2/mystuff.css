@@ -1,8 +1,11 @@
 #content {
   padding-top: 204px;
 }
-body:not(.beta-opt-in, .password-change, .email-change) #content > .cols > .col-12 > .box {
-  background-color: var(--darkWww-page, #fcfcfc);
+#content > .cols > .col-4 {
+  width: 280px;
+}
+#content > .cols > .col-12 {
+  width: 662px;
 }
 .ajax-loader {
   background-color: transparent;
@@ -28,10 +31,10 @@ body:not(.beta-opt-in, .password-change, .email-change) #content > .cols > .col-
   animation-delay: 0s, 0.25s;
   animation-iteration-count: 1, infinite;
 }
-.box .box-head {
+#content > .cols > .col-12 > .box > .box-head {
   padding-bottom: 20px;
 }
-.box .box-head .buttons {
+#content > .cols > .col-12 > .box > .box-head .buttons {
   position: static;
   width: 942px;
   margin: auto;
@@ -41,7 +44,7 @@ body:not(.beta-opt-in, .password-change, .email-change) #content > .cols > .col-
   position: relative;
 }
 #sidebar li.sub-list {
-  margin-left: 8px;
+  margin-left: 11px;
 }
 #sidebar li.sub-list a {
   margin: 0;
