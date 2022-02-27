@@ -1,3 +1,5 @@
 # Files created during packaging
 .manifest.js.bak
 .dist
+
+.browserslistrc
