@@ -179,10 +179,11 @@
         </div>
 
         <div class="addons-container" :class="{placeholder: !loaded}" v-cloak>
+          <p id="search-not-found" v-show="searchInput && hasNoResults">{{ msg("searchNotFound") }}</p>
           <template v-for="addon of addonList">
             <div
               id="iframe-fullscreen-suggestion"
-              v-if="isIframe && addon.headerAbove && addon.group.id === 'enabled'"
+              v-if="isIframe && addon.headerAbove && (hasNoResults || addon.group.id === 'enabled')"
               v-show="searchInput === ''"
             >
               <span>{{ msg("exploreAllAddons", [addonAmt]) }}</span>
