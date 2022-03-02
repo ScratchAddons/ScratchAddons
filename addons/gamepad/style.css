@@ -40,7 +40,6 @@
   will-change: transform;
   image-rendering: optimizeSpeed;
   image-rendering: crisp-edges;
-  image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
 }
 .sa-gamepad-cursor-down {
