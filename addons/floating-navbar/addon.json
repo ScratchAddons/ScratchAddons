@@ -9,7 +9,7 @@
   "userstyles": [
     {
       "url": "scratch-www.css",
-      "matches": ["scratchWWWNoProject", "projects"]
+      "matches": ["scratchWWWNoProject", "projects", "https://scratch.mit.edu"]
     },
     {
       "url": "scratchr2.css",
