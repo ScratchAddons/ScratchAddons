@@ -3,7 +3,9 @@ export default async function ({ template }) {
     props: ["category"],
     template,
     data() {
-      return {};
+      return {
+        lastClick: 0,
+      };
     },
     computed: {
       selectedCategory() {
@@ -19,11 +21,12 @@ export default async function ({ template }) {
     methods: {
       onClick(event) {
         event.stopPropagation();
-        if (this.selectedCategory === this.category.id && !this.category.parent) {
+        if (this.selectedCategory === this.category.id && !this.category.parent && Date.now() - this.lastClick > 500) {
           this.$root.selectedCategory = "all";
         } else {
           this.$root.selectedCategory = this.category.id;
         }
+        this.lastClick = Date.now();
       },
     },
   });
