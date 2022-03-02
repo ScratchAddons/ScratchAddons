@@ -1828,6 +1828,10 @@
       "matches": ["https://scratch.mit.edu/explore/*", "https://scratch.mit.edu/search/*"]
     },
     {
+      "url": "scratcher_promotion.css",
+      "matches": ["https://scratch.mit.edu/become-a-scratcher"]
+    },
+    {
       "url": "explore_desaturated_banner.css",
       "matches": ["https://scratch.mit.edu/explore/*"],
       "if": {
