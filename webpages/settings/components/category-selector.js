@@ -19,11 +19,11 @@ export default async function ({ template }) {
     methods: {
       onClick(event) {
         event.stopPropagation();
-        this.$root.selectedCategory = (
-          this.selectedCategory === this.category.id && !this.category.parent
-            ? this.$root.categories.find(category => category.id === "all")
-            : this.category
-        ).id;
+        if (this.selectedCategory === this.category.id && !this.category.parent) {
+          this.$root.selectedCategory = "all";
+        } else {
+          this.$root.selectedCategory = this.category.id;
+        }
       },
     },
   });
