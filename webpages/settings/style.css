@@ -396,6 +396,9 @@ button.setting-input.color.open {
   display: flex;
   position: relative;
 }
+.color-container .setting-input.color {
+  cursor: pointer;
+}
 
 .action-disabled {
   pointer-events: none;
