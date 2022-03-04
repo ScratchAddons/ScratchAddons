@@ -23,10 +23,7 @@ export default class Popup {
     return new Promise((resolve) => {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (tabs.length === 0) return resolve(null);
-        chrome.tabs.sendMessage(tabs[0].id, "getLocationHref", { frameId: 0 }, (url) => {
-          if (chrome.runtime.lastError) return resolve(null);
-          resolve(url);
-        });
+        return resolve(tabs[0]?.url || null);
       });
     });
   }
