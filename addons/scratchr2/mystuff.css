@@ -7,9 +7,6 @@
 #content > .cols > .col-12 {
   width: 662px;
 }
-body:not(.beta-opt-in, .password-change, .email-change) #content > .cols > .col-12 > .box {
-  background-color: var(--darkWww-page, #fcfcfc);
-}
 .ajax-loader {
   background-color: transparent;
   background-image: none;
@@ -34,10 +31,10 @@ body:not(.beta-opt-in, .password-change, .email-change) #content > .cols > .col-
   animation-delay: 0s, 0.25s;
   animation-iteration-count: 1, infinite;
 }
-.box .box-head {
+#content > .cols > .col-12 > .box > .box-head {
   padding-bottom: 20px;
 }
-.box .box-head .buttons {
+#content > .cols > .col-12 > .box > .box-head .buttons {
   position: static;
   width: 942px;
   margin: auto;
@@ -198,7 +195,7 @@ body:not(.beta-opt-in, .password-change, .email-change) #content > .cols > .col-
   right: 12px;
 }
 .button[data-control="load-more"] {
-  width: 722px;
+  width: 662px;
 }
 #search-my-stuff-form {
   margin: auto;

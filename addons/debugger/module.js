@@ -13,6 +13,7 @@ let pausedThreadState = new WeakMap();
 let pauseNewThreads = false;
 
 let steppingThread = null;
+let steppingThreadIndex = -1;
 
 let eventTarget = new EventTarget();
 
@@ -29,7 +30,7 @@ const pauseThread = (thread) => {
         const thread = vm.runtime.sequencer.activeThread;
         pausedThreadState.get(thread).status = thread.status;
 
-        // Force the block to exit immediatly
+        // Force the block to exit immediately
         Object.defineProperty(thread, "status", {
           get() {
             return STATUS_PROMISE_WAIT;
@@ -41,6 +42,11 @@ const pauseThread = (thread) => {
       }
     }
   }
+};
+
+const setSteppingThred = (thread) => {
+  steppingThread = thread;
+  steppingThreadIndex = vm.runtime.threads.indexOf(steppingThread);
 };
 
 export const setPaused = (_paused) => {
@@ -206,17 +212,17 @@ export const singleStep = () => {
 
     if (!continueExecuting) {
       // Try to move onto the next thread
-      steppingThread = findNewSteppingThread(vm.runtime.threads.indexOf(steppingThread) + 1);
+      steppingThread = findNewSteppingThread(steppingThreadIndex + 1);
     }
   }
 
   // If we don't have a thread, than we are between VM steps and should search for a new thread
   if (!steppingThread) {
-    steppingThread = findNewSteppingThread(0);
+    setSteppingThred(findNewSteppingThread(0));
 
     // End of VM step, emulate one frame of time passing.
     vm.runtime.ioDevices.clock._pausedTime += vm.runtime.currentStepTime;
-    // Skip all sounds forward by vm.runtime.currentStepTime miliseconds so it's as
+    // Skip all sounds forward by vm.runtime.currentStepTime milliseconds so it's as
     //  if they where playing for one frame.
     const audioContext = vm.runtime.audioEngine.audioContext;
     for (const target of vm.runtime.targets) {
@@ -277,7 +283,7 @@ export const setup = (_vm) => {
     if (pausedThreadState.has(thread)) {
       const threadPauseState = pausedThreadState.get(thread);
 
-      steppingThread = thread;
+      setSteppingThred(thread);
 
       Object.defineProperty(thread, "status", {
         value: threadPauseState.status,
@@ -297,9 +303,8 @@ export const setup = (_vm) => {
     // If we where half way through a vm step and have unpaused, pick up were we left off.
     if (steppingThread && !paused) {
       const threads = vm.runtime.threads;
-      const index = threads.indexOf(steppingThread);
-      if (index !== -1) {
-        for (let i = index; i < threads.length; i++) {
+      if (steppingThreadIndex !== -1) {
+        for (let i = steppingThreadIndex; i < threads.length; i++) {
           const thread = threads[i];
 
           if (thread.status === STATUS_YIELD_TICK) {
@@ -307,6 +312,7 @@ export const setup = (_vm) => {
           }
 
           if (thread.status === STATUS_RUNNING || thread.status === STATUS_YIELD) {
+            vm.runtime.sequencer.activeThread = thread;
             vm.runtime.sequencer.stepThread(thread);
           }
         }

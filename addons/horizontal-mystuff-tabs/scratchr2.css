@@ -1,0 +1,70 @@
+#content > .cols {
+  padding-top: 76px;
+}
+
+#content > .cols > .col-12 > .box > .box-head {
+  height: auto;
+}
+
+.v-tabs {
+  left: 0;
+  right: 0;
+  top: 214px;
+  background-color: var(--darkWww-box, white);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
+}
+
+.v-tabs ul {
+  width: 942px;
+  margin: auto;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.v-tabs li {
+  margin-right: 0;
+  border: none;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+}
+
+.v-tabs li.first {
+  border-radius: 0;
+}
+
+.v-tabs li + li {
+  margin-top: 0;
+}
+
+#sidebar li.sub-list {
+  margin-left: 0;
+}
+
+.v-tabs li a {
+  padding: 0.75em 1.5em;
+  border: none;
+  font-size: 12.8px;
+  line-height: normal;
+  color: var(--darkWww-box-text, #575e75);
+}
+
+.v-tabs li:hover {
+  background-color: transparent;
+  border-bottom: 3px solid var(--darkWww-box-tabHover, rgba(0, 0, 0, 0.2));
+}
+
+.v-tabs li.active,
+.v-tabs li.active:hover {
+  background-color: transparent;
+  border: none;
+  border-bottom: 3px solid #0fbd8c;
+}
+
+.button[data-control="load-more"] {
+  width: 942px;
+}
+
+.v-tabs li.active a {
+  border: none;
+  color: var(--darkWww-box-text, #575e75);
+}

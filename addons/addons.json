@@ -117,6 +117,8 @@
   "hide-signatures",
   "disable-sprite-wobble",
   "banner-colors",
+  "forum-live-preview",
+
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
   "// because the first in the list gets their CSS injected first,",
@@ -131,6 +133,7 @@
   "better-featured-project",
   "material-forum-editor-buttons",
   "forum-quote-code-beautifier",
+  "horizontal-mystuff-tabs",
   "// For editor:",
   "editor-dark-mode",
   "editor-colored-context-menus",

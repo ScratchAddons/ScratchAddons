@@ -325,6 +325,9 @@
     "message": "Explore all $1 addons:",
     "description": "Placeholder is a number. Example: explore all 80+ addons"
   },
+  "searchNotFound": {
+    "message": "No results found. Perhaps try different keywords?"
+  },
   "captureCommentError": {
     "message": "Message added by Scratch Addons: it appears that your comment doesn't follow $1, which asks Scratchers not to advertise or name browser extensions. This comment wasn't posted because it will probably result in your account getting muted from commenting for 5 minutes."
   },

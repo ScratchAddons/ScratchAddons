@@ -34,6 +34,9 @@
 .djangobb .blockpost dl {
   padding: 0;
 }
+.djangobb .username {
+  background-color: var(--darkWww-page, #fcfcfc);
+}
 .postright,
 .postfootright {
   padding: 0;

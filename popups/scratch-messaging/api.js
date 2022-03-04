@@ -220,8 +220,13 @@ export async function fetchMigratedComments(
     }
 
     if (json.parent_id && replies.length === 0) {
-      // Something went wrong, we didn't get the replies
-      throw new Error("No replies found on comments with parents (see logs)");
+      // Something went wrong, we didn't get the replies (likely API failure)
+      // Add the comment as a reply - better than crashing, because apparently it's
+      // more common than I thought!
+      console.error(
+        `No replies found on comment ${resourceType}/${resourceId}/${commentId} with parents ${json.parent_id}`
+      );
+      replies.push(json);
     }
 
     for (const reply of replies) {
@@ -236,6 +241,7 @@ export async function fetchMigratedComments(
         childOf: `${resourceType[0]}_${parentId}`,
         replyingTo,
         scratchTeam: reply.author.scratchteam,
+        projectAuthor,
       };
     }
     for (const childCommentId of Object.keys(childrenComments)) {
@@ -251,6 +257,7 @@ export async function fetchMigratedComments(
       childOf: null,
       replyingTo: "",
       scratchTeam: parentComment.author.scratchteam,
+      projectAuthor,
     };
   }
   return commentsObj;
