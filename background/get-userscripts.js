@@ -21,7 +21,7 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
   const { addonId, manifest, partialDynamicEnableBy } = detail;
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
-      if (tab.url || (!tab.url && typeof browser !== "undefined")) {
+      if (tab.url) {
         chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, (res) => {
           void chrome.runtime.lastError;
           if (res) {
@@ -74,7 +74,7 @@ scratchAddons.localEvents.addEventListener("addonDynamicDisable", ({ detail }) =
   }
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
-      if (tab.url || (!tab.url && typeof browser !== "undefined")) {
+      if (tab.url) {
         chrome.tabs.sendMessage(
           tab.id,
           {
@@ -94,7 +94,7 @@ scratchAddons.localEvents.addEventListener("updateUserstylesSettingsChange", ({ 
   const { addonId, manifest } = detail;
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
-      if (tab.url || (!tab.url && typeof browser !== "undefined")) {
+      if (tab.url) {
         chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, (res) => {
           if (res) {
             (async () => {
@@ -322,7 +322,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 // we notify them they can resend the contentScriptInfo message
 chrome.tabs.query({}, (tabs) =>
   tabs.forEach((tab) => {
-    if (tab.url || (!tab.url && typeof browser !== "undefined")) {
+    if (tab.url) {
       chrome.tabs.sendMessage(tab.id, "backgroundListenerReady", () => void chrome.runtime.lastError);
     }
   })
