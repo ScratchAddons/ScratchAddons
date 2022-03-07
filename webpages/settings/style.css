@@ -127,6 +127,7 @@ h1 {
 }
 .large-button:hover:not([disabled]) {
   background: var(--button-hover-background);
+  cursor: pointer;
 }
 .large-button:focus-visible {
   outline: none;
@@ -402,6 +403,9 @@ button.setting-input.color.open {
   background-color: white;
   display: flex;
   position: relative;
+}
+.color-container .setting-input.color {
+  cursor: pointer;
 }
 
 .action-disabled {
