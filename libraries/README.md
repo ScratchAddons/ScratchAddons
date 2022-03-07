@@ -2,8 +2,8 @@
 
 Third-party libraries included are:
 - [spark-md5 3.0.2](https://unpkg.com/spark-md5@3.0.2/spark-md5.min.js) (MIT)
-- [scratchblocks 3.5.2](https://scratchblocks.github.io/js/scratchblocks-v3.5.2-min.js) (MIT)
-- [scratchblocks 3.5.2 translations](https://scratchblocks.github.io/js/translations-all-v3.5.2.js) (MIT)
+- [scratchblocks 3.6.0](https://unpkg.com/scratchblocks@3.6.0/build/scratchblocks.min.es.js) (MIT)
+- [scratchblocks 3.6.0 translations](https://unpkg.com/scratchblocks@3.6.0/build/translations-all-es.js) (MIT)
 - [vue 1.0.28-csp](https://raw.githubusercontent.com/vuejs/vue/v1.0.28-csp/dist/vue.js) (BSD-3-Clause)
 - [icu-message-formatter 0.12.0](https://unpkg.com/@ultraq/icu-message-formatter@0.12.0/dist/icu-message-formatter.es.min.js) (Apache-2.0)
 - [tinycolor2 1.4.2](https://raw.githubusercontent.com/bgrins/TinyColor/1.4.2/dist/tinycolor-min.js) (MIT)
