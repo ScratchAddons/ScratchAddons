@@ -290,6 +290,9 @@
   "import": {
     "message": "Import Settings"
   },
+  "view":{
+    "message": "View settings file"
+  },
   "fileNotSelected": {
     "message": "Please select a settings file."
   },
