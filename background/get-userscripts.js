@@ -346,7 +346,15 @@ const WELL_KNOWN_PATTERNS = {
 const WELL_KNOWN_MATCHERS = {
   isNotScratchWWW: (match) => {
     const { projects, projectEmbeds, scratchWWWNoProject } = WELL_KNOWN_PATTERNS;
-    return !(projects.test(match) || projectEmbeds.test(match) || scratchWWWNoProject.test(match));
+    // Server errors are neither r2 nor www
+    return !(
+      (
+        projects.test(match) ||
+        projectEmbeds.test(match) ||
+        scratchWWWNoProject.test(match) ||
+        /^\/50[03]\/?$/.test(match)
+      )
+    );
   },
 };
 
