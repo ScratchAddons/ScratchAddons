@@ -12,6 +12,7 @@ export default async function ({ addon, msg, global, console }) {
     const color = ["hue", "saturation", "brightness"];
     color.forEach((c, i) => {
       const header = headers[i];
+      // TODO: move these styles into a userstyle and use header.classList.add
       header.style.display = "flex";
       header.style.alignItems = "center";
       header.style.justifyContent = "space-between";
