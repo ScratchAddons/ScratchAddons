@@ -1,20 +1,19 @@
 import Listenable from "../common/Listenable.js";
 
-/**
- * Handles Redux state.
- * @extends Listenable
- * @property {boolean} initialized Whether the handler is initialized or not.
- */
+/** Handles Redux state. */
 export default class ReduxHandler extends Listenable {
   constructor() {
     super();
+    /**
+     * Whether the handler is initialized or not.
+     *
+     * @type {boolean}
+     */
     this.initialized = false;
     this.initialize();
   }
 
-  /**
-   * Initialize the handler. Must be called before adding events.
-   */
+  /** Initialize the handler. Must be called before adding events. */
   initialize() {
     if (!__scratchAddonsRedux.target || this.initialized) return;
     this.initialized = true;
@@ -30,18 +29,16 @@ export default class ReduxHandler extends Listenable {
     });
   }
 
-  /**
-   * Redux state.
-   * @type {object}
-   */
+  /** Redux state. */
   get state() {
     return __scratchAddonsRedux.state;
   }
 
   /**
    * Dispatches redux state change.
-   * @param {object} payload - payload to pass to redux.
-   * @throws when Redux is unavailable.
+   *
+   * @param payload - Payload to pass to redux.
+   * @throws When Redux is unavailable.
    */
   dispatch(payload) {
     if (!__scratchAddonsRedux.dispatch) throw new Error("Redux is unavailable");
@@ -50,10 +47,11 @@ export default class ReduxHandler extends Listenable {
 
   /**
    * Waits until a state meets the condition.
-   * @param {function} condition - a function that takes redux state and returns whether to keep waiting or not.
-   * @param {object=} opts - options.
-   * @param {string=|string[]=} actions - the action(s) to check for.
-   * @returns {Promise} a Promise resolved when the state meets the condition.
+   *
+   * @param {(state) => boolean} condition - A function that takes redux state and returns whether to keep waiting or not.
+   * @param {object} [opts] - Options.
+   * @param {string | string[]} [opts.actions] - The action(s) to check for.
+   * @returns {Promise<void>} A Promise resolved when the state meets the condition.
    */
   waitForState(condition, opts = {}) {
     this.initialize();

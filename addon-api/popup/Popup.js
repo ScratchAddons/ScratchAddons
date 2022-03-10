@@ -1,6 +1,7 @@
 export default class Popup {
   /**
    * Whether the popup is displayed fullscreen.
+   *
    * @type {boolean}
    */
   get isFullscreen() {
@@ -9,6 +10,7 @@ export default class Popup {
 
   /**
    * Whether the user has enabled light mode on Scratch Addons settings.
+   *
    * @type {boolean}
    */
   get isLightMode() {
@@ -17,7 +19,8 @@ export default class Popup {
 
   /**
    * Gets the URL of the Scratch page that is selected, or null.
-   * @returns {Promise<?string>} - the URL
+   *
+   * @returns {Promise<null | string>} - The URL.
    */
   getSelectedTabUrl() {
     return new Promise((resolve) => {
