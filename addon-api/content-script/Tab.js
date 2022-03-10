@@ -17,9 +17,7 @@ export default class Tab extends Listenable {
     super();
     this._addonId = info.id;
     this.traps = new Trap(this);
-    /** @type {ReduxHandler} */
-    this.redux = new ReduxHandler();
-    /** @type {WeakSet<Element>} */
+    /** @type {ReduxHandler} */ this.redux = new ReduxHandler();/** @type {ReduxHandler} */ this.type {WeakSet<Element>} */
     this._waitForElementSet = new WeakSet();
   }
 
@@ -50,13 +48,15 @@ export default class Tab extends Listenable {
    * Adds a Scratch Addons block.
    *
    * @param {string} proccode - The code displayed to the user.
-   * @param {string[]} args - The block argument names.
-   * @param {blocksCallback} handler - The handler.
-   * @param {boolean} [hide] - Whether to hide the block from the block palette.
+   * @param {object} opts
+   * @param {string[]} opts.args - The block argument names.
+   * @param {blocksCallback} opts.callback - The handler.
+   * @param {boolean} [opts.hidden] - Whether to hide the block from the block palette.
+   * @param {string} [opts.displayName]
    */
-  addBlock(...a) {
+  addBlock(proccode, opts) {
     blocks.init(this);
-    return blocks.addBlock(...a);
+    return blocks.addBlock(proccode, opts);
   }
 
   /**
@@ -64,16 +64,17 @@ export default class Tab extends Listenable {
    *
    * @param {string} proccode - The code displayed to the user.
    */
-  removeBlock(...a) {
-    return blocks.removeBlock(...a);
+  removeBlock(proccode) {
+    return blocks.removeBlock(proccode);
   }
+
   /**
    * Get a Scratch Addons block by proccode.
    *
    * @param {string} proccode - The code displayed to the user.
    */
-  getCustomBlock(...a) {
-    return blocks.getCustomBlock(...a);
+  getCustomBlock(proccode) {
+    return blocks.getCustomBlock(proccode);
   }
   /**
    * Loads a script by URL.

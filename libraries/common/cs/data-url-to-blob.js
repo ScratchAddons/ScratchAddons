@@ -1,4 +1,11 @@
 // From https://github.com/LLK/scratch-gui/blob/develop/src/lib/data-uri-to-blob.js
+/**
+ * Converts data URL to blob.
+ *
+ * @param {string} dataURL - The data URL.
+ * @param {boolean} [returnArrayBuffer] - Whether to return ArrayBuffer or not.
+ * @returns {Blob | ArrayBuffer} The converted.
+ */
 export default function (dataURL, returnArrayBuffer) {
   const byteString = atob(dataURL.split(",")[1]);
   const mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];

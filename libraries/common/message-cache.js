@@ -68,10 +68,10 @@ class IncognitoDatabase {
 const incognitoDatabase = new IncognitoDatabase();
 
 /**
- * Fetches the message count from the API.
- * Errors are silenced.
- * @param {string} username the username
- * @returns {number} the message count, or 0 if it errors
+ * Fetches the message count from the API. Errors are silenced.
+ *
+ * @param {string} username The username
+ * @returns {number} The message count, or 0 if it errors
  */
 export async function fetchMessageCount(username) {
   const resp = await fetch(`https://api.scratch.mit.edu/users/${username}/messages/count?timestamp=${Date.now()}`);
@@ -81,11 +81,12 @@ export async function fetchMessageCount(username) {
 
 /**
  * Fetches the messages, maximum 40 at a time.
- * @param {string} username the username
- * @param {string} xToken the X-Token value
- * @param {number} offset the offset; 0 for latest
- * @returns {object[]} the messages
- * @throws {HTTPError} when fetching fails
+ *
+ * @param {string} username The username
+ * @param {string} xToken The X-Token value
+ * @param {number} offset The offset; 0 for latest
+ * @returns {object[]} The messages
+ * @throws {HTTPError} When fetching fails
  */
 export async function fetchMessages(username, xToken, offset) {
   const resp = await fetch(
@@ -103,10 +104,7 @@ export async function fetchMessages(username, xToken, offset) {
   return resp.json();
 }
 
-/**
- * Opens a messaging cache database.
- * Callers must close this in try-finally block.
- */
+/** Opens a messaging cache database. Callers must close this in try-finally block. */
 export async function openDatabase() {
   if (IncognitoDatabase.isIncognito()) return incognitoDatabase;
   return idb.openDB("messaging", 1, {
@@ -119,12 +117,11 @@ export async function openDatabase() {
 }
 
 /**
- * Opens a message cache database, and clears if necessary.
- * Cache is cleared for the first time the database was created,
- * and if the cache is more than 1 hour old.
- * To force clear cache (after an reauth, for example) set forceClear to true.
- * @param {string} cookieStoreId the cookie store ID for the cache
- * @param {boolean} forceClear whether to force clear the cache
+ * Opens a message cache database, and clears if necessary. Cache is cleared for the first time the database was
+ * created, and if the cache is more than 1 hour old. To force clear cache (after an reauth, for example) set forceClear to true.
+ *
+ * @param {string} cookieStoreId The cookie store ID for the cache
+ * @param {boolean} forceClear Whether to force clear the cache
  */
 export async function openMessageCache(cookieStoreId, forceClear) {
   const db = await openDatabase();
@@ -146,22 +143,20 @@ export async function openMessageCache(cookieStoreId, forceClear) {
 }
 
 /**
- * Fetches new messages, updates the message cache and returns new messages.
- * Callers may use the returned value for notification, etc.
- * This method fetches unread messages and a page of extra messages
- * up to 25 pages in total. For example, if the user has no unread messages, it'll fetch
- * 1 page, and if they have 1 unread messages, it'll fetch 2 pages. If the user has more than
- * 960 unread messages, it'll only fetch the latest 25 pages.
- * By default, this method only fetches new messages and keeps old data from cache,
- * up to 1000 messages. To force clear them and fetch new ones, set forceClear to true.
- * Fetched data is then stored to the cache, keyed by the cookie store ID.
- * If the cache size exceeds 1000, only new 1000 items will be kept.
- * @param {string} cookieStoreId the cookie store ID for the cache
- * @param {boolean} forceClear whether to force clear the cache before fetching
- * @param {string} username the username
- * @param {string} xToken the X-Token value
- * @returns {object[]} new messages
- * @throws {HTTPError} if fetching fails
+ * Fetches new messages, updates the message cache and returns new messages. Callers may use the returned value for
+ * notification, etc. This method fetches unread messages and a page of extra messages up to 25 pages in total. For
+ * example, if the user has no unread messages, it'll fetch 1 page, and if they have 1 unread messages, it'll fetch 2
+ * pages. If the user has more than 960 unread messages, it'll only fetch the latest 25 pages. By default, this method
+ * only fetches new messages and keeps old data from cache, up to 1000 messages. To force clear them and fetch new ones,
+ * set forceClear to true. Fetched data is then stored to the cache, keyed by the cookie store ID. If the cache size
+ * exceeds 1000, only new 1000 items will be kept.
+ *
+ * @param {string} cookieStoreId The cookie store ID for the cache
+ * @param {boolean} forceClear Whether to force clear the cache before fetching
+ * @param {string} username The username
+ * @param {string} xToken The X-Token value
+ * @returns {object[]} New messages
+ * @throws {HTTPError} If fetching fails
  */
 export async function updateMessages(cookieStoreId, forceClear, username, xToken) {
   await openMessageCache(cookieStoreId, forceClear);
@@ -202,8 +197,9 @@ export async function updateMessages(cookieStoreId, forceClear, username, xToken
 
 /**
  * Marks messages as read.
- * @param {string} csrfToken the CSRF token for requesting
- * @throws {HTTPError} if operation fails
+ *
+ * @param {string} csrfToken The CSRF token for requesting
+ * @throws {HTTPError} If operation fails
  */
 export function markAsRead(csrfToken) {
   return fetch("https://scratch.mit.edu/site-api/messages/messages-clear/?sareferer", {

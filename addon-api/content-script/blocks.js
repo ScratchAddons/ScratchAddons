@@ -210,6 +210,8 @@ const injectWorkspace = (ScratchBlocks) => {
 };
 
 let inited = false;
+
+/** @param {import("./Tab").default} tab */
 export async function init(tab) {
   if (inited) {
     return;

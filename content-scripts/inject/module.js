@@ -115,9 +115,18 @@ Comlink.expose(page, Comlink.windowEndpoint(comlinkIframe4.contentWindow, comlin
 
 class SharedObserver {
   constructor() {
-    this.inactive = true;
+    /** @type {boolean} */ this.inactive = true;
+    /**
+     * @type {Set<{
+     *   resolve: (value: Element | PromiseLike<Element>) => void;
+     *   query: string;
+     *   seen: WeakSet<Element> | null;
+     *   condition: () => boolean;
+     *   elementCondition: (element: Element) => boolean;
+     * }>}
+     */
     this.pending = new Set();
-    this.observer = new MutationObserver((mutation, observer) => {
+    /** @type {MutationObserver} */ this.observer = new MutationObserver((mutation, observer) => {
       for (const item of this.pending) {
         if (item.condition && !item.condition()) continue;
         for (const match of document.querySelectorAll(item.query)) {
@@ -138,12 +147,14 @@ class SharedObserver {
 
   /**
    * Watches an element.
-   * @param {object} opts - options
-   * @param {string} opts.query - query.
-   * @param {WeakSet=} opts.seen - a WeakSet that tracks whether an element has already been seen.
-   * @param {function=} opts.condition - a function that returns whether to resolve the selector or not.
-   * @param {function=} opts.elementCondition - A function that returns whether to resolve the selector or not, given an element.
-   * @returns {Promise<Node>} Promise that is resolved with modified element.
+   *
+   * @param {object} opts - Options.
+   * @param {string} opts.query - Query.
+   * @param {WeakSet<Element> | null} opts.seen - A WeakSet that tracks whether an element has already been seen.
+   * @param {() => boolean} opts.condition - A function that returns whether to resolve the selector or not.
+   * @param {(element: Element) => boolean} opts.elementCondition - A function that returns whether to resolve the
+   *   selector or not, given an element.
+   * @returns {Promise<Element>} Promise that is resolved with modified element.
    */
   watch(opts) {
     if (this.inactive) {

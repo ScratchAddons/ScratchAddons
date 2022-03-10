@@ -5,12 +5,9 @@ import Settings from "../common/Settings.js";
 /** An addon. */
 export default class Addon {
   constructor(info) {
-    /** @type {Self} */
-    this.self = new Self(this, info);
-    /** @type {Auth} */
-    this.auth = new Auth(this);
-    /** @type {Settings} */
-    this.settings = new Settings(this);
+    /** @type {Self} */ this.self = new Self(this, info);
+    /** @type {Auth} */ this.auth = new Auth(this);
+    /** @type {Settings} */ this.settings = new Settings(this);
   }
 
   /**

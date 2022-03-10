@@ -8,8 +8,7 @@ export default class PopupAddon extends Addon {
     super(info);
     this.auth.dispose();
     this.auth = new Auth(this);
-    /** @type {Popup} */
-    this.popup = new Popup();
+    /** @type {Popup} */ this.popup = new Popup();
   }
 
   /** @private */
