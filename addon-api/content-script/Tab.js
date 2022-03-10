@@ -17,8 +17,8 @@ export default class Tab extends Listenable {
     super();
     this._addonId = info.id;
     this.traps = new Trap(this);
-    /** @type {ReduxHandler} */ this.redux = new ReduxHandler();/** @type {ReduxHandler} */ this.type {WeakSet<Element>} */
-    this._waitForElementSet = new WeakSet();
+    /** @type {ReduxHandler} */ this.redux = new ReduxHandler();
+    /** @type {WeakSet<Element>} */ this._waitForElementSet = new WeakSet();
   }
 
   /**

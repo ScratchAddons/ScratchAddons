@@ -12,7 +12,7 @@ export default class Trap extends Listenable {
   }
 
   /**
-   * Scratch-vm instance.
+   * `scratch-vm` instance.
    *
    * @throws When on non-project page.
    */

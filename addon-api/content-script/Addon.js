@@ -11,8 +11,8 @@ export default class UserscriptAddon extends Addon {
     this.__path = `${new URL(import.meta.url).origin}/`;
     /** @type {Tab} */ this.tab = new Tab(info);
     this.auth.dispose();
-    /** @type {Auth} */ this.auth = new Auth(this);/** @type {Auth} */ this.type {Account} */
-    this.account = new Account(this);
+    /** @type {Auth} */ this.auth = new Auth(this);
+    /** @type {Account} */ this.account = new Account(this);
     this.self.disabled = false;
     this.self.enabledLate = info.enabledLate;
   }
