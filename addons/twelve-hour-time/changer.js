@@ -3,7 +3,7 @@ export default async function ({ addon, global, console }) {
   boxHeads.forEach((el) => {
     if (!el.getElementsByTagName("a")[0]) return;
     const text = el.getElementsByTagName("a")[0].innerText;
-    const dateCheck = handleFormatting(text)
+    const dateCheck = handleFormatting(text);
     el.getElementsByTagName("a")[0].innerText = dateCheck;
   });
 }
