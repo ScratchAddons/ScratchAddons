@@ -1,6 +1,6 @@
 {
-  "name": "Local timezone on forums",
-  "description": "Uses your local time zone for displaying post dates and times on the forums.",
+  "name": "Forum time changer",
+  "description": "Changes the times for posts in the forums.",
   "userscripts": [
     {
       "url": "timezones.js",
@@ -43,6 +43,13 @@
       "id": "relative-dates",
       "type": "boolean",
       "default": true
+    }
+  ],
+  "info": [
+    {
+      "type": "notice",
+      "text": "The forum timezone changer connects to ScratchDB.",
+      "id": "scratchDBNotice"
     }
   ],
   "enabledByDefault": false
