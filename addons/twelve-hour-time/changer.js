@@ -8,6 +8,9 @@ export default async function ({ addon, global, console }) {
   });
 }
 
+// this part was all written by @towerofnix on github
+// thank you so much!!!!!!!!!!!!
+
 function handleFormatting(text) {
   const formatter = new Intl.DateTimeFormat("default", {
     hour12: true,
