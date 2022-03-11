@@ -1,6 +1,6 @@
 export default async function ({ addon, global, console }) {
   // check if setting enabled
-  if(addon.settings.get("twelve-hour-time") === false) return;
+  if (addon.settings.get("twelve-hour-time") === false) return;
 
   const boxHeads = document.querySelectorAll(".box-head");
   boxHeads.forEach((el) => {

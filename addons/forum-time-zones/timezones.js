@@ -1,6 +1,6 @@
 export default async function ({ addon, _global, _console }) {
   // check if setting enabled
-  if(addon.settings.get("local-timezone") === false) return;
+  if (addon.settings.get("local-timezone") === false) return;
 
   const forum_topic_id = parseInt(location.pathname.split("/")[3]);
   const locale = addon.auth.scratchLang;
