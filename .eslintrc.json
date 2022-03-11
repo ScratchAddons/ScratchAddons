@@ -16,11 +16,12 @@
 
     // Third Party-defined
     "Vue": "readonly",
-    "md5": "readonly",
+    "SparkMD5": "readonly",
     "scratchblocks": "readonly",
     "tinycolor": "readonly",
     "Chart": "readonly",
     "Comlink": "readonly",
+    "idb": "readonly",
 
     // Scratch-defined
     "Scratch": "readonly",

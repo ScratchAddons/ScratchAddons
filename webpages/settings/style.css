@@ -127,6 +127,7 @@ h1 {
 }
 .large-button:hover:not([disabled]) {
   background: var(--button-hover-background);
+  cursor: pointer;
 }
 .large-button:focus-visible {
   outline: none;
@@ -171,11 +172,19 @@ h1 {
 }
 
 .hidden-button {
-  /* needs !important because it conlicts with display: block */
+  /* needs !important because it conflicts with display: block */
   display: none !important;
 }
 #confirmImport {
   border-color: var(--brand-orange);
+}
+
+#search-not-found {
+  margin: 10px;
+}
+body.iframe #search-not-found {
+  margin: unset;
+  text-align: center;
 }
 
 /*scrollbar*/
@@ -224,7 +233,7 @@ body.iframe .addon-topbar {
   height: 44px;
   padding-inline-end: 6px;
 }
-body.iframe .clickeable-area {
+body.iframe .clickable-area {
   padding-inline-start: 6px;
 }
 body.iframe .addon-name {
@@ -243,7 +252,7 @@ body.iframe .addon-settings {
 body.iframe .settings-column {
   flex-direction: column;
 }
-body.iframe .addon-setting {
+body.iframe .settings-column > .addon-setting {
   margin: 10px 0;
   min-height: 0;
   flex-direction: column;
@@ -394,6 +403,9 @@ button.setting-input.color.open {
   background-color: white;
   display: flex;
   position: relative;
+}
+.color-container .setting-input.color {
+  cursor: pointer;
 }
 
 .action-disabled {

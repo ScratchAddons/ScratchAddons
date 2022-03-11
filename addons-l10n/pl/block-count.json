@@ -1,1 +1,1 @@
-{"block-count/@name":"Liczba bloczków "}
+{"block-count/blocks":"{num, plural, one {1 blok} few {# bloków} many {# bloków} other {# bloków}}","block-count/@name":"Liczba bloków","block-count/@description":"Pokazuje ilość bloków użytych w edytorze. Wcześniej część dodatku \"Sprite and script count\"."}

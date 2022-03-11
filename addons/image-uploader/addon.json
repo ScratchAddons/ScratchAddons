@@ -17,5 +17,5 @@
   "versionAdded": "1.0.0",
   "tags": ["forums", "community"],
   "enabledByDefault": false,
-  "libraries": ["md5", "text-field-edit"]
+  "libraries": ["spark-md5", "text-field-edit"]
 }

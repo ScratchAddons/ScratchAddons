@@ -4,5 +4,5 @@ export default async function ({ addon, global, console }) {
   const donor = await addon.tab.waitForElement("#donor"); //The donor text
 
   footer.appendChild(donor); //Move the donor text to inside the footer
-  root.style.setProperty("--footer-hover-height", "400px"); //Also make the hovered footer higher so the text is actually visible
+  root.style.setProperty("--footer-hover-height", "426px"); //Also make the hovered footer higher so the text is actually visible
 }

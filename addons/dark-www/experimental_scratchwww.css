@@ -133,6 +133,7 @@ body:not(.sa-body-editor) .modal-content,
 .comment-text,
 .comment .comment-body .comment-bubble,
 .comment .comment-body .comment-bubble::before,
+.invitation-card,
 .milestones-section .milestone-box,
 .supporters-section .comment-text,
 .timeline-card,
@@ -165,6 +166,7 @@ body:not(.sa-body-editor) .button.white,
 .hoc-banner .hoc-more-activities,
 .hoc-banner .hoc-banner-image,
 .studio-selector-button,
+.onboarding button.go-back,
 .button.mod-2019-conf-maillist-button,
 .index .title-banner p a button,
 .financials-section .financials-button,
@@ -303,6 +305,7 @@ body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
 .social-form,
 .studio-page,
 .user-projects-modal .user-projects-modal-content,
+.congratulations-page .congratulations-image-layout,
 .credits #acknowledgements,
 .download .blue,
 p.callout,
@@ -387,6 +390,7 @@ body:not(.sa-body-editor) .select select:focus {
 .studio-info .studio-info-footer-report button,
 .studio-tab-nav .active > li,
 .user-projects-modal .user-projects-modal-nav button.active,
+.navigation .dot.active,
 .os-chooser .button.active,
 .step .step-number-row .step-number,
 .download .installation-column-number,
@@ -428,7 +432,9 @@ input[type="radio"].formik-radio-button:checked::after,
 body:not(.sa-body-editor) .formik-input:focus,
 body:not(.sa-body-editor) input[type="radio"].formik-radio-button:checked,
 .input:focus,
-.registration-step.demographics-step input[type="radio"]:focus {
+.registration-step.demographics-step input[type="radio"]:focus,
+.onboarding button.finish-later,
+.onboarding button.go-back {
   border-color: var(--darkWww-button);
 }
 .studio-tile-added {
@@ -479,6 +485,7 @@ body:not(.sa-body-editor) [type="checkbox"].formik-checkbox:checked::before {
 .studio-report-modal .studio-report-selected {
   background-color: var(--darkWww-button-transparent15);
 }
+::selection,
 .extension-chip,
 .studio-report-modal .studio-report-header-selected,
 .user-projects-modal .user-projects-modal-nav button:hover,
@@ -507,6 +514,9 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button:checked {
 .studio-tab-nav a.active.nav_link:hover > li {
   background-color: var(--darkWww-button-variant);
   color: var(--darkWww-button-text);
+}
+.navigation .dot.active {
+  border-color: var(--darkWww-button-variant);
 }
 .intro-banner .intro-container,
 .title-banner.mod-messages,
@@ -539,6 +549,7 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button:checked {
 .gradient1 {
   background-image: linear-gradient(var(--darkWww-button-banner), black);
 }
+.blue-background,
 .parents .title-banner.masthead,
 .information-page .title-banner.masthead,
 .download .title-banner.masthead /* Scratch 2.0 and 1.4 download */,
@@ -565,6 +576,8 @@ a.social-messages-profile-link:active,
 .studio-thumb-edit-button,
 .studio-manager-count,
 .promote-modal .cancel-button,
+.onboarding button.finish-later,
+.onboarding button.go-back,
 .index .title-banner p a button,
 .financials-section .financials-button,
 .donate-section .donate-button,
@@ -694,6 +707,9 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
 .studio-compose-container .sa-emoji-picker,
 .sa-emoji-picker-divider {
   border-color: var(--darkWww-border-15);
+}
+.navigation .dot {
+  background-color: var(--darkWww-border-15);
 }
 .compose-comment .textarea-row textarea:not(:focus),
 .studio-tab-nav,

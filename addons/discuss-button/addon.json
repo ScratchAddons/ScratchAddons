@@ -1,14 +1,6 @@
 {
-  "name": "Discuss button",
-  "description": "Adds the discuss button to the navigation bar.",
-  "credits": [
-    {
-      "name": "Maximouse"
-    },
-    {
-      "name": "World_Languages"
-    }
-  ],
+  "name": "Customizable navigation bar",
+  "description": "Choose a list of links to be displayed in the navigation bar.",
   "userscripts": [
     {
       "url": "userscript.js",
@@ -18,21 +10,63 @@
   ],
   "settings": [
     {
-      "name": "Remove \"ideas\" button",
-      "id": "removeIdeasBtn",
-      "type": "boolean",
-      "default": false
-    },
-    {
-      "name": "Discuss button name",
-      "id": "buttonName",
-      "type": "string",
-      "default": "Discuss",
-      "min": 1,
-      "max": 30
+      "name": "Items",
+      "id": "items",
+      "type": "table",
+      "default": [
+        { "name": "Create", "url": "/projects/editor/" },
+        { "name": "Explore", "url": "/explore/projects/all" },
+        { "name": "Ideas", "url": "/ideas" },
+        { "name": "About", "url": "/about" }
+      ],
+      "row": [
+        {
+          "name": "Name",
+          "id": "name",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "name": "URL",
+          "id": "url",
+          "type": "untranslated",
+          "default": ""
+        }
+      ],
+      "presets": [
+        {
+          "name": "Create",
+          "values": { "name": "Create", "url": "/projects/editor/" }
+        },
+        {
+          "name": "Explore",
+          "values": { "name": "Explore", "url": "/explore/projects/all" }
+        },
+        {
+          "name": "Ideas",
+          "values": { "name": "Ideas", "url": "/ideas" }
+        },
+        {
+          "name": "About",
+          "values": { "name": "About", "url": "/about" }
+        },
+        {
+          "name": "Discuss",
+          "values": { "name": "Discuss", "url": "/discuss" }
+        },
+        {
+          "name": "Wiki",
+          "values": { "name": "Wiki", "url": "https://scratch-wiki.info/" }
+        }
+      ]
     }
   ],
   "versionAdded": "1.0.0",
-  "tags": ["community", "forums"],
+  "latestUpdate": {
+    "version": "1.24.0",
+    "newSettings": ["items"],
+    "isMajor": true
+  },
+  "tags": ["community", "featured"],
   "enabledByDefault": false
 }

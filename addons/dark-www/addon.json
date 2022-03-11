@@ -4,11 +4,15 @@
   "tags": ["community", "theme", "featured"],
   "credits": [
     {
-      "name": "Maximouse (addon, \"Experimental\" Dark)",
+      "name": "Maximouse",
+      "note": "addon, \"Experimental\" Dark",
+      "id": "addon",
       "link": "https://scratch.mit.edu/users/Maximouse/"
     },
     {
-      "name": "Ucrash (Dark WWW)",
+      "name": "Ucrash",
+      "note": "Dark WWW",
+      "id": "darkwww",
       "link": "https://github.com/gducrash"
     }
   ],
@@ -29,6 +33,18 @@
         "type": "textColor",
         "black": "rgba(0, 0, 0, 0.3)",
         "white": "rgba(255, 255, 255, 0.4)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-tab",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.1)",
+        "white": "rgba(255, 255, 255, 0.1)",
         "source": {
           "type": "settingValue",
           "settingId": "page"
@@ -1061,6 +1077,36 @@
       }
     },
     {
+      "name": "gray-forumTransparentCode",
+      "value": {
+        "type": "ternary",
+        "source": {
+          "type": "settingValue",
+          "settingId": "darkForumCode"
+        },
+        "true": {
+          "type": "textColor",
+          "black": "#333333",
+          "white": "rgba(255, 255, 255, 0.03)",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "threshold": 64
+        },
+        "false": {
+          "type": "textColor",
+          "black": "rgba(0, 0, 0, 0.03)",
+          "white": "#f7f7f7",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "threshold": 204
+        }
+      }
+    },
+    {
       "name": "blue-text",
       "value": {
         "type": "textColor",
@@ -1780,6 +1826,10 @@
     {
       "url": "experimental_search.css",
       "matches": ["https://scratch.mit.edu/explore/*", "https://scratch.mit.edu/search/*"]
+    },
+    {
+      "url": "scratcher_promotion.css",
+      "matches": ["https://scratch.mit.edu/become-a-scratcher"]
     },
     {
       "url": "explore_desaturated_banner.css",
