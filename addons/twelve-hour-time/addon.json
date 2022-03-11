@@ -22,5 +22,14 @@
       "url": "changer.js",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"]
     }
+  ],
+  "settings": [
+    {
+      "name": "Use relative dates",
+      "id": "relative-dates",
+      "description": "Use dates like \"Today\" instead of \"1 March\"",
+      "type": "boolean",
+      "default": true
+    }
   ]
 }
