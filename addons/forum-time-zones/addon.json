@@ -3,12 +3,42 @@
   "description": "Uses your local time zone for displaying post dates and times on the forums.",
   "userscripts": [
     {
-      "url": "userscript.js",
+      "url": "timezones.js",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "runAtComplete": false
+    },
+    {
+      "url": "matcher.js",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
       "runAtComplete": false
     }
   ],
   "versionAdded": "1.0.0",
   "tags": ["forums", "community"],
+  "settings": [
+    {
+      "name": "Use local timezone",
+      "id": "local-timezone",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Use twelve hour time",
+      "id": "twelve-hour-time",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Use relative dates",
+      "id": "relative-dates",
+      "if": {
+        "settings": {
+          "twelve-hour-time": true
+        }
+      },
+      "type": "boolean",
+      "default": true
+    }
+  ],
   "enabledByDefault": false
 }
