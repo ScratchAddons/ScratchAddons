@@ -6,11 +6,6 @@ export default async function ({ addon, _global, _console }) {
   const locale = addon.auth.scratchLang;
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const localCurrentTimeRepr = new Date(new Date().toLocaleString("en-US", { timeZone }));
-  const relativeFormatter = new Intl.RelativeTimeFormat(locale, {
-    localeMatcher: "best fit",
-    numeric: "auto",
-    style: "long",
-  });
   const capitalize = (str) => str[0].toUpperCase() + str.slice(1);
   const formatter = (time) => {
     // This is the correct representation of the given time.
@@ -26,8 +21,15 @@ export default async function ({ addon, _global, _console }) {
     switch (localDateDiff) {
       case 0:
       case -1: {
-        const relativePart = relativeFormatter.format(localDateDiff, "day");
-        return `${capitalize(relativePart)} ${timePart}`;
+        if (addon.settings.get("relative-dates") === true) {
+          const relativeFormatter = new Intl.RelativeTimeFormat(locale, {
+            localeMatcher: "best fit",
+            numeric: "auto",
+            style: "long",
+          });
+          const relativePart = relativeFormatter.format(localDateDiff, "day");
+          return `${capitalize(relativePart)} ${timePart}`;
+        }
       }
       default: {
         const datePart = localTimeRepr.toLocaleDateString(locale, {

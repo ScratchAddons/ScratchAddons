@@ -41,11 +41,6 @@
     {
       "name": "Use relative dates",
       "id": "relative-dates",
-      "if": {
-        "settings": {
-          "twelve-hour-time": true
-        }
-      },
       "type": "boolean",
       "default": true
     }
