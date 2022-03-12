@@ -4,15 +4,17 @@
 // If you found any bugs, or you want change anything
 // create issue on Scratch Addon github (or create PR)!
 
-export default async function ({ addon, global, console, msg }) {  
+export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
 
   //This is code for creating button that can hide stage for user
   if (addon.settings.get("hideStage")) {
-    if (addon.tab.redux.state.scratchGui.mode.isPlayerOnly) { return }
+    if (addon.tab.redux.state.scratchGui.mode.isPlayerOnly) {
+      return;
+    }
     let stageHidden = false;
     let event = new CustomEvent("resize");
-    
+
     //Creating element and adding it to controls container
     const hideStageButton = document.createElement("div");
     hideStageButton.className = "sa-editorenhancements-movebutton";
@@ -21,10 +23,10 @@ export default async function ({ addon, global, console, msg }) {
     hideSceneImage.className = addon.tab.scratchClass("stage-header_stage-button");
     hideStageButton.appendChild(hideSceneImage);
     document.querySelector("[class*='controls_controls-container']").appendChild(hideStageButton);
-    
+
     //Hide stage and change things in style
-    hideStageButton.addEventListener("click", function() {
-      if ( stageHidden ) {
+    hideStageButton.addEventListener("click", function () {
+      if (stageHidden) {
         stageHidden = false;
         hideStageButton.classList.remove("sa-editorenhancements-movebutton-rotate");
         document.querySelector("[class*='controls_controls-container']").appendChild(hideStageButton);
@@ -41,12 +43,12 @@ export default async function ({ addon, global, console, msg }) {
       window.dispatchEvent(event);
     });
   }
-    
+
   //This is code for new button for taking screenshot of scene
   if (addon.settings.get("takePhoto")) {
     var resultImage;
     let canvas = document.getElementsByTagName("canvas")[0];
-    
+
     //Thanks to Debbuger Addon for nice code of creating element!
     const photoButtonOuter = document.createElement("div");
     photoButtonOuter.className = "sa-editorenhancements-photobutton";
@@ -62,81 +64,89 @@ export default async function ({ addon, global, console, msg }) {
     photoButton.appendChild(photoButtonContent);
     photoButtonOuter.appendChild(photoButton);
     addon.tab.appendToSharedSpace({ space: "stageHeader", element: photoButtonOuter, order: 1 });
-    
-    
+
     // This is function that saves current image from canvas.
-    photoButton.addEventListener("click", function() {
-      vm.renderer.requestSnapshot(dataURL => {
-         if (typeof dataURL == "undefined") { return };
-         resultImage = dataURL;
+    photoButton.addEventListener("click", function () {
+      vm.renderer.requestSnapshot((dataURL) => {
+        if (typeof dataURL == "undefined") {
+          return;
+        }
+        resultImage = dataURL;
       });
-      var tempLink = document.createElement('a');
+      var tempLink = document.createElement("a");
       tempLink.download = "scratch-screenshot.jpg";
       tempLink.href = resultImage;
       tempLink.click();
     });
   }
-  
+
   // This function detect on which sprite you clicked, then go to origin element of sprite, after that go back to sprite name.
   if (addon.settings.get("moveSpriteToFront")) {
     let spriteList = document.getElementsByClassName("sprite-selector_items-wrapper_4bcOj box_box_2jjDp");
-    spriteList[0].addEventListener("click",
-      function(e) {
+    spriteList[0].addEventListener(
+      "click",
+      function (e) {
         if (e.shiftKey) {
-          let parentDiv = event.target.closest(".sprite-selector_sprite-wrapper_1C5Mq")
-          let name = parentDiv.querySelector('.sprite-selector-item_sprite-name_1PXjh').innerText;
+          let parentDiv = event.target.closest(".sprite-selector_sprite-wrapper_1C5Mq");
+          let name = parentDiv.querySelector(".sprite-selector-item_sprite-name_1PXjh").innerText;
           vm.runtime.getSpriteTargetByName(name).goToFront();
           e.stopPropagation(); //Disable opening this sprite in editor.
         }
       },
-    false);
+      false
+    );
   }
-  
+
   if (addon.settings.get("sizeInput")) {
-    let inputNumber = document.getElementsByClassName("input_input-form_l9eYg input_input-small_2qj1C")[2]
+    let inputNumber = document.getElementsByClassName("input_input-form_l9eYg input_input-small_2qj1C")[2];
     inputNumber.style.position = "relative";
-    
+
     //This function make changing size in input working dynamically!
-    inputNumber.oninput = function() {
+    inputNumber.oninput = function () {
       document.getElementById("input-size").value = inputNumber.value;
-      vm.editingTarget.setSize(inputNumber.value)
+      vm.editingTarget.setSize(inputNumber.value);
     };
 
-    //When element is clicked, open menu  
-    inputNumber.addEventListener('focus', (e) => {
+    //When element is clicked, open menu
+    inputNumber.addEventListener("focus", (e) => {
       openMenu();
-    })
+    });
 
-    inputNumber.addEventListener('blur', (e) => {
-      setTimeout(function(){
-        if ((document.activeElement.id == "sa-input-size") || (document.activeElement.classList.contains("sa-popover-size"))) { return }
+    inputNumber.addEventListener("blur", (e) => {
+      setTimeout(function () {
+        if (
+          document.activeElement.id == "sa-input-size" ||
+          document.activeElement.classList.contains("sa-popover-size")
+        ) {
+          return;
+        }
         closeMenu();
       }, 1);
-    })
-  
+    });
+
     function openMenu() {
       document.getElementsByClassName("gui_flex-wrapper_uXHkj box_box_2jjDp")[0].style.overflow = "hidden";
-      
+
       //Create element
       let popoverElement = document.createElement("div");
       popoverElement.classList.add("sa-popover-size");
       let inputElement = document.createElement("input");
-    
+
       //Create input
       popoverElement.appendChild(inputElement);
       inputElement.type = "range";
       inputElement.id = "sa-input-size";
-      inputElement.value =  inputNumber.value;
-      
-      inputElement.oninput = function() {
+      inputElement.value = inputNumber.value;
+
+      inputElement.oninput = function () {
         inputNumber.value = inputElement.value;
-        vm.editingTarget.setSize(inputElement.value)
+        vm.editingTarget.setSize(inputElement.value);
       };
-      
-      inputElement.addEventListener('blur', (e) => {
+
+      inputElement.addEventListener("blur", (e) => {
         closeMenu();
-      })
-    
+      });
+
       //Creating polygons in JS is strange...
       let svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       let polygonElement = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
@@ -144,7 +154,7 @@ export default async function ({ addon, global, console, msg }) {
       polygonElement.setAttribute("points", "0,0 7,7, 14,0");
       svgElement.classList.add("svg");
       popoverElement.appendChild(svgElement);
-    
+
       document.getElementsByClassName("sprite-info_sprite-info_3EyZh box_box_2jjDp")[0].appendChild(popoverElement);
     }
 
@@ -152,7 +162,7 @@ export default async function ({ addon, global, console, msg }) {
       document.getElementsByClassName("sa-popover-size")[0].remove();
     }
   }
-  
+
   //Function that "locks" mouse
   if (addon.settings.get("lockMouse")) {
     //Create element for showing if mouse is locked
@@ -169,19 +179,22 @@ export default async function ({ addon, global, console, msg }) {
     let savedPositionY;
     let savedPositionX;
     let isMouseClicked = false;
-    
-    document.addEventListener("mousedown", e => {
-      if (!mouseLocked) { return };
-      setTimeout(function(){
+
+    document.addEventListener("mousedown", (e) => {
+      if (!mouseLocked) {
+        return;
+      }
+      setTimeout(function () {
         let event = new CustomEvent("mousemove");
         window.dispatchEvent(event);
         console.log("move2");
       }, 2000);
     });
-    
-    document.body.onkeyup = function(e) {
-    
-      if (e.key !== "Escape") { return }
+
+    document.body.onkeyup = function (e) {
+      if (e.key !== "Escape") {
+        return;
+      }
       //Turning off and on this function
       if (mouseLocked) {
         mouseLocked = false;
@@ -193,11 +206,11 @@ export default async function ({ addon, global, console, msg }) {
         saveMousePosition = true;
         mouseLockedSpan.innerText = msg("mouse-lock");
         mouseLockedDiv.classList.add("mouselock-locked");
-        isMouseClicked = vm.runtime.ioDevices.mouse._isDown; 
+        isMouseClicked = vm.runtime.ioDevices.mouse._isDown;
       }
-    }
-  
-    document.addEventListener('mousemove', e => {
+    };
+
+    document.addEventListener("mousemove", (e) => {
       if (saveMousePosition) {
         savedPositionX = vm.runtime.ioDevices.mouse.__scratchX;
         savedPositionY = vm.runtime.ioDevices.mouse.__scratchY;

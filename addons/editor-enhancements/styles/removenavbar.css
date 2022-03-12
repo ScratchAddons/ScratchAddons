@@ -1,9 +1,9 @@
-[class*='gui_alerts-container'],
-[class*='gui_menu-bar-position'] {
-    display: none;
+[class*="gui_alerts-container"],
+[class*="gui_menu-bar-position"] {
+  display: none;
 }
 
-[class*='gui_body-wrapper'] {
+[class*="gui_body-wrapper"] {
   height: 100%;
 }
 
