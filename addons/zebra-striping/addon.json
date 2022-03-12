@@ -1,0 +1,35 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
+  "name": "Zebra striping",
+  "description": "Makes blocks of the same category alternate between lighter and darker colors when nested inside eachother.",
+  "credits": [
+    {
+      "name": "CST1229",
+	  "link": "https://github.com/CST1229"
+    }
+  ],
+  "tags": [
+    "editor",
+    "codeEditor",
+	"theme"
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": [
+        "projects"
+      ],
+	  "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": [
+        "projects"
+      ]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}

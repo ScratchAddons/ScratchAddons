@@ -1,0 +1,7 @@
+.sa-zebra-stripe {
+	filter: brightness(1.15) saturate(0.85);
+}
+
+.sa-zebra-stripe[filter*="#blocklyReplacementGlowFilter"] {
+	filter: url(#blocklyReplacementGlowFilter80012101345171) brightness(1.15) saturate(0.85);
+}
