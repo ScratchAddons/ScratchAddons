@@ -1,0 +1,111 @@
+{
+  "name":"Editor Enhancements",
+  "description":"This addon have a lot of small features that aren't too big for normal addon!",
+  "info": [
+    {
+      "type": "notice",
+      "text": "Press \"Shift\" while clicking on sprite in sprite list to move it to top. To lock and unlock your mouse position you need to click \"Esc\" key.",
+      "id": "shortcuts"
+    }
+  ],
+  "credits": [
+    {
+      "name": "Norbiros",
+      "link": "https://scratch.mit.edu/users/Norbir/"
+    }
+  ],
+  "userscripts":[
+    {
+      "url":"userscript.js",
+      "matches":["projects"]
+    }
+  ],
+  "updateUserstylesOnSettingsChange": true,
+  "userstyles":[
+    {
+      "url":"/styles/userstyle.css",
+      "matches":["projects"]
+    },
+    {
+      "url":"/styles/hidebackpack.css",
+      "matches":["projects"],
+      "if": {
+        "settings": { "hideBackpack": true }
+      }
+    },
+    {
+      "url":"/styles/disablespritewooble.css",
+      "matches":["projects"],
+      "if": {
+        "settings": { "disableSpriteWooble": true }
+      }
+    },
+    {
+      "url":"/styles/removenavbar.css",
+      "matches":["projects"],
+      "if": {
+        "settings": { "removeNavbar": true }
+      }
+    }
+  ],
+
+  "settings":[
+    {
+      "name":"Hide Backapck",
+      "description":"When you don't use Scratch's backpack, enable this function to get free space in menu!",
+      "id":"hideBackpack",
+      "type":"boolean",
+      "default":false
+    },
+    {
+      "name":"Move sprite to front layer",
+      "description":"If you want eaisly move sprite to front, click with shift on it's thumbail in sprite list.",
+      "id":"moveSpriteToFront",
+      "type":"boolean",
+      "default":true
+    },
+    {
+      "name":"Disable sprite wobble",
+      "id":"disableSpriteWooble",
+      "type":"boolean",
+      "default":false
+    },
+    {
+      "name":" Lock mouse position",
+      "description":"Using this function you can lock your mose position -  blocks like 'go to mouse pointer' will go to this position. To save position click Esc key.",
+      "id":"lockMouse",
+      "type":"boolean",
+      "default":true
+    },
+    {
+      "name":"Take photo of scene",
+      "description":"Using this function you can lock your mose position -  blocks like 'go to mouse pointer' will go to this position. To save position click Esc key.",
+      "id":"takePhoto",
+      "type":"boolean",
+      "default":true
+    },
+    {
+      "name":"Remove navbar of scene",
+      "id":"removeNavbar",
+      "type":"boolean",
+      "default":false
+    },
+    {
+      "name":"Create button that allows to hide scene",
+      "id":"hideStage",
+      "type":"boolean",
+      "default":false
+    },
+    {
+      "name":"Show pretty input for changing size",
+      "id":"sizeInput",
+      "type":"boolean",
+      "default":true
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "tags": ["editor", "codeEditor", "beta"],
+  "enabled_by_default":true,
+  "versionAdded": "1.5.0"
+}

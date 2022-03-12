@@ -1,0 +1,94 @@
+.popoverSizeAbove {
+  position: absolute;
+}
+
+.sa-popover-size {
+  position: absolute;
+  display: flex;
+  height: 30px;
+  width: 150px;
+  background: white;
+  flex-flow: column nowrap;
+  transform: translateY(0px);
+  opacity: 1;
+  transition-property: top, left, opacity, transform;
+  transition-duration: 500ms;
+  transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, .3);
+  left: 125px;
+  top: 15px;
+}
+
+
+
+#sa-input-size {
+  width: 125px;
+  margin: 0px 12.5px;
+  height: 31px;
+}
+
+#sa-input-size::-webkit-slider-thumb,
+#sa-input-size::-moz-range-thumb,
+#sa-input-size::-ms-thumb {
+  height: 10px;
+  width: 10px;
+}
+
+.mouselock-info {
+  font-size: 0.8rem;
+  font-weight: bold;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: red;
+  white-space: nowrap;
+  align-items: center;
+  padding: 0.25rem;
+  user-select: none;
+  width: 130px;
+  justify-content: center;
+  display: flex;
+}
+
+
+.svg {
+  transition: transform 150ms ease-in 0s;
+  margin-top: 31px;
+  margin-left: 74px;
+  fill: white;
+  stroke: #ddd;
+  position: absolute;
+}
+
+.sa-editorenhancements-photobutton {
+  margin-right: 3px;
+}
+
+.sa-editorenhancements-movebutton {
+  position: absolute;
+  margin-left: -42px;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  top: 6px;
+}
+
+.sa-editorenhancements-movebutton-rotate {
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
+  position: absolute;
+  right: 10px;
+  top: 47px;
+}
+
+.sa-editorenhancements-movebutton img {
+  height: 32px;
+}
+
+.sa-editorenhancements-movebutton-rotate img {
+  height: 20px;
+  width: 20px;
+  top: 5px;
+  position: absolute;
+  right: 0px;
+}
+}

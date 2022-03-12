@@ -1,0 +1,14 @@
+[class*='gui_alerts-container'],
+[class*='gui_menu-bar-position'] {
+    display: none;
+}
+
+[class*='gui_body-wrapper'] {
+  height: 100%;
+}
+
+.blockyWorkspace,
+#react-tabs-1,
+.gui_blocks-wrapper_1ccgf {
+  height: 100%;
+}
