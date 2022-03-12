@@ -5,29 +5,21 @@
   "credits": [
     {
       "name": "CST1229",
-	  "link": "https://github.com/CST1229"
+      "link": "https://github.com/CST1229"
     }
   ],
-  "tags": [
-    "editor",
-    "codeEditor",
-	"theme"
-  ],
+  "tags": ["editor", "codeEditor", "theme"],
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "projects"
-      ],
-	  "runAtComplete": false
+      "matches": ["projects"],
+      "runAtComplete": false
     }
   ],
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": [
-        "projects"
-      ]
+      "matches": ["projects"]
     }
   ],
   "dynamicEnable": true,
