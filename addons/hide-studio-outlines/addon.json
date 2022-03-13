@@ -1,0 +1,18 @@
+
+{
+  "name": "Hide studio outlines",
+  "description": "Hides the ugly outlines that studidos have on Scratch 2.0 profiles.",
+  "credits": [
+    {
+      "name": "rgantzos",
+      "link": "https://scratch.mit.edu/users/rgantzos/"
+    }
+  ],
+  "tags": ["studios"],
+  "userscripts": [
+    {
+      "url": "script.js",
+      "matches": ["profiles"]
+    }
+  ]
+}
