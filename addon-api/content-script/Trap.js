@@ -12,6 +12,7 @@ export default class Trap extends Listenable {
     this._getEditorMode = () => this._isWWW() && tab.editorMode;
     this._waitForElement = tab.waitForElement.bind(tab);
     this._cache = Object.create(null);
+    this._isTimeTravel2020 = () => tab.redux.state.scratchGui?.timeTravel?.year === "2020";
   }
 
   /**
@@ -55,6 +56,7 @@ export default class Trap extends Listenable {
     }
     const internal = elem[this._react_internal_key];
     let childable = internal;
+    if (this._isTimeTravel2020()) childable = childable.alternate;
     /* eslint-disable no-empty */
     while (((childable = childable.child), !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks)) {}
     /* eslint-enable no-empty */
