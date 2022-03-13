@@ -61,18 +61,18 @@ export default async function ({ addon, global, console, msg }) {
       });
     }
   };
-  const applyEverything = () => {
-    if (!addon.self.disabled) {
-      applyFillColor();
-      applyStrokeColor();
-      applyStrokeWidth();
-    }
-  };
+
+  if (!addon.self.disabled) {
+    applyFillColor();
+    applyStrokeColor();
+    applyStrokeWidth();
+  }
+
   addon.settings.addEventListener("change", () => {
-    setDefaultColorsToSettings();
-    applyEverything();
+    if (!addon.settings.get("persistence")) {
+      setDefaultColorsToSettings();
+    }
   });
-  applyEverything();
 
   let activatingTool = false;
   addon.tab.redux.initialize();
