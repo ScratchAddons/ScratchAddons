@@ -23,7 +23,10 @@ function injectPrototype() {
   };
 }
 
-if (!(document.documentElement instanceof SVGElement) && (origin === "https://llk.github.io" ||  location.pathname.split("/")[1] === "projects")) {
+if (
+  !(document.documentElement instanceof SVGElement) &&
+  (origin === "https://llk.github.io" || location.pathname.split("/")[1] === "projects")
+) {
   const injectPrototypeScript = document.createElement("script");
   injectPrototypeScript.append(document.createTextNode("(" + injectPrototype + ")()"));
   (document.head || document.documentElement).appendChild(injectPrototypeScript);

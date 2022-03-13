@@ -236,7 +236,7 @@ Promise.all([
   loadScript(chrome.runtime.getURL("/content-scripts/inject/module.js"), true),
   new Promise((resolve) => {
     chrome.runtime.sendMessage("getEditorInfo", resolve);
-  })
+  }),
 ]).then(([_, info]) => {
   _page_ = Comlink.wrap(Comlink.windowEndpoint(comlinkIframe3.contentWindow, comlinkIframe4.contentWindow));
   setCssVariables(info.globalState.addonSettings, info.addonsWithUserstyles);
