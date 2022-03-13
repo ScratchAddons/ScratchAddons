@@ -207,6 +207,12 @@ async function getContentScriptInfo(url) {
   return data;
 }
 
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request !== "getEditorInfo") return;
+  getContentScriptInfo("https://scratch.mit.edu/projects/editor/").then((res) => sendResponse(res));
+  return true;
+});
+
 function createCsIdentity({ tabId, frameId, url }) {
   // String that should uniquely identify a tab/iframe in the csInfoCache map
   return `${tabId}/${frameId}@${url}`;
