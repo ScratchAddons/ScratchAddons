@@ -1,5 +1,5 @@
 {
-  "name": "Editor Enhancements",
+  "name": "Small Editor Enhancements",
   "description": "This addon have a lot of small features that aren't too big for normal addon!",
   "info": [
     {
@@ -106,6 +106,6 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "tags": ["editor", "codeEditor", "beta"],
-  "enabled_by_default": true,
-  "versionAdded": "1.5.0"
+  "enabledByDefault": false,
+  "versionAdded": "1.26.0"
 }
