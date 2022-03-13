@@ -391,7 +391,7 @@ export default async function ({ addon, global, console, msg }) {
           result += `<image width="${width}" height="${height}" x="${x}" y="${y}" href="${src}"/>`;
         }
       }
-      result += '</svg>';
+      result += "</svg>";
       return result;
     };
 
