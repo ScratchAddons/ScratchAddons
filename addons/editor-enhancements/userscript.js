@@ -47,7 +47,6 @@ export default async function ({ addon, global, console, msg }) {
   //This is code for new button for taking screenshot of scene
   if (addon.settings.get("takePhoto")) {
     var resultImage;
-    let canvas = document.getElementsByTagName("canvas")[0];
 
     //Thanks to Debbuger Addon for nice code of creating element!
     const photoButtonOuter = document.createElement("div");
