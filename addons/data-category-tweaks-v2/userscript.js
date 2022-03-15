@@ -1,5 +1,7 @@
 export default async function ({ addon, global, console, msg, safeMsg }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
+  // causes crash
+  if (typeof addon.tab.redux.state.scratchGui.timeTravel === "object") return;
 
   const SMALL_GAP = 8;
   const BIG_GAP = 24;
