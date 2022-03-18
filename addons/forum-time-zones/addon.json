@@ -4,12 +4,12 @@
   "userscripts": [
     {
       "url": "timezones.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "matches": ["topics"],
       "runAtComplete": false
     },
     {
       "url": "matcher.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "matches": ["topics"],
       "runAtComplete": false
     }
   ],
