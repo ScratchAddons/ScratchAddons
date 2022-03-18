@@ -239,12 +239,51 @@ Promise.all([
   }),
 ]).then(([_, info]) => {
   _page_ = Comlink.wrap(Comlink.windowEndpoint(comlinkIframe3.contentWindow, comlinkIframe4.contentWindow));
+  const addonsWithUserstyles = info.addonsWithUserstyles;
   setCssVariables(info.globalState.addonSettings, info.addonsWithUserstyles);
   // Just in case, make sure the <head> loaded before injecting styles
   waitForDocumentHead().then(() => injectUserstyles(info.addonsWithUserstyles));
 
+  const everLoadedUserscriptAddons = new Set();
+
   _page_.globalState = Object.assign({}, info.globalState, getGlobalState());
   _page_.l10njson = [chrome.runtime.getURL("addons-l10n/en")];
-  _page_.addonsWithUserscripts = info.addonsWithUserscripts;
+  const addonsWithUserscripts = (_page_.addonsWithUserscripts = info.addonsWithUserscripts);
+  for (const addon of addonsWithUserscripts) everLoadedUserscriptAddons.add(addon.addonId);
   _page_.dataReady = true;
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.dynamicAddonEnabled) {
+      const {
+        scripts,
+        userstyles,
+        cssVariables,
+        addonId,
+        injectAsStyleElt,
+        index,
+        dynamicEnable,
+        dynamicDisable,
+        partial,
+      } = request.dynamicAddonEnabled;
+      addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
+
+      // Non-partial: the whole addon was (re-)enabled.
+      if (everLoadedUserscriptAddons.has(addonId)) {
+        if (!dynamicDisable) return;
+        // Addon was reenabled
+        _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
+      } else {
+        if (!dynamicEnable) return;
+        // Addon was not injected in page yet
+        _page_.runAddonUserscripts({ addonId, scripts, enabledLate: true });
+        everLoadedUserscriptAddons.add(addonId);
+      }
+
+      addonsWithUserscripts.push({ addonId, scripts });
+      addonsWithUserstyles.push({ styles: userstyles, cssVariables, addonId, injectAsStyleElt, index });
+
+      setCssVariables(info.addonSettings, addonsWithUserstyles);
+    } else if (request === "getInitialUrl") {
+      sendResponse("https://scratch.mit.edu/projects/editor");
+    }
+  });
 });
