@@ -8,6 +8,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     window.dispatchEvent(new CustomEvent("scratchAddonsDevtoolsAddonStopped"));
     return;
   }
+  if (typeof addon.tab.redux.state.scratchGui.timeTravel === "object") return;
 
   const guiDirection = addon.tab.direction;
   const helpHTML = `
