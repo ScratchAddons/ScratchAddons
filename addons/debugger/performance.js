@@ -57,6 +57,7 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
       ],
     },
     options: {
+      animation: !addon.settings.get("graphs_optimization"),
       scales: {
         y: {
           max: getMaxFps(),
@@ -94,6 +95,7 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
       ],
     },
     options: {
+      animation: !addon.settings.get("graphs_optimization"),
       scales: {
         y: {
           max: 300,
