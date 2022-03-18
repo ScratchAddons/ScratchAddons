@@ -48,7 +48,7 @@ fix this warning."
 
     function middleware({ getState, dispatch }) {
       scratchAddonsRedux.dispatch = dispatch;
-      const state = scratchAddonsRedux.state = getState();
+      const state = (scratchAddonsRedux.state = getState());
       if (!hasAddedClass && typeof state?.scratchGui?.timeTravel === "object") {
         document.body.classList.add("totally-normal");
         hasAddedClass = true;
