@@ -80,6 +80,48 @@ export default async function ({ addon, msg, global, console }) {
 		return block.__zebra;
 	}
 	
+	// Calculate and apply striping for a block and all blocks
+	// below or in it.
+	function stripeScript(target, id) {
+		const el = document.querySelector(`.blocklyDraggable[data-id="${blockId}"]`);
+		const isStriped = blockIsStriped(target, id);
+		if (el) {
+			stripeStyling(el, isStriped);
+		}
+		
+		const block = target.blocks._blocks[id];
+		
+		if (block.next) {
+			stripeScript(target, block.next);
+		}
+		const inputs = Object.values(target.blocks._blocks[id].inputs);
+		for (const i in inputs) {
+			const input = inputs[i];
+			if (input.block) {
+				stripeScript(target, input.block);
+			}
+		}
+	}
+	
+	
+	// Add or remove the striping class from a block element.
+	function stripeStyling(el, isStriped) {
+		// We iterate through all children of the block element instead of
+		// simply adding the class to the path so that empty boolean inputs
+		// are lighter too
+		for (const child of el.children) {
+			if (child.matches(
+				".blocklyPath, .blocklyEditableText[data-argument-type='dropdown']"
+			)) {
+				if (isStriped) {
+					child.classList.add("sa-zebra-stripe");
+				} else {
+					child.classList.remove("sa-zebra-stripe");
+				}
+			}
+		}
+	}
+	
 	// Calculate and apply striping for all blocks in the code area.
 	// maybe todo: only calculate striping for the modified script.
 	// probably would have a big performance increase on large sprites
@@ -106,29 +148,21 @@ export default async function ({ addon, msg, global, console }) {
 			if (!el) continue;
 			
 			const isStriped = blockIsStriped(editingTarget, blockId);
-			// We iterate through all children of the block element instead of
-			// simply adding the class to the path so that empty boolean inputs
-			// are lighter too
-			for (const child of el.children) {
-				if (child.matches(
-					".blocklyPath, .blocklyEditableText[data-argument-type='dropdown']"
-				)) {
-					if (isStriped) {
-						child.classList.add("sa-zebra-stripe");
-					} else {
-						child.classList.remove("sa-zebra-stripe");
-					}
-				}
-			}
+			stripeStyling(el, isStriped);
 		}
 	}
 	
 	addon.tab.redux.addEventListener("statechanged", (e) => {
 		if (
 			e.detail.action.type === "scratch-gui/project-changed/SET_PROJECT_CHANGED" ||
-			e.detail.action.type === "scratch-gui/toolbox/UPDATE_TOOLBOX" ||
 			e.detail.action.type === "scratch-gui/block-drag/BLOCK_DRAG_UPDATE"
 		) {
+			queueMicrotask(stripeAll);
+		}
+		if (
+			e.detail.action.type === "scratch-gui/toolbox/UPDATE_TOOLBOX"
+		) {
+			// Switching sprites
 			queueMicrotask(stripeAll);
 		}
 	})
