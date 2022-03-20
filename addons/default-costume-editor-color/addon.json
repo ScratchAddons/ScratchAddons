@@ -34,7 +34,7 @@
       "default": 4
     },
     {
-      "name": "Use previous color instead of default color when resetting color after switching tools",
+      "name": "Use previous color instead of default colors when switching tools",
       "id": "persistence",
       "type": "boolean",
       "default": true
