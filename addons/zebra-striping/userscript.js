@@ -1,4 +1,7 @@
 export default async function ({ addon, msg, global, console }) {
+  if (addon.tab.editorMode === "embed") {
+    return;
+  }
 
 	if (addon.tab.editorMode === "embed") {
 		return;
