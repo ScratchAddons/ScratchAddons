@@ -78,11 +78,15 @@ export default async function ({ addon, global, console, msg }) {
       });
     }
   };
-  const applyStrokeWidth = () => {
-    if (getStrokeWidth() !== defaultStrokeWidth) {
+  const applyStrokeWidth = (mustBeAtLeastOne) => {
+    let width = defaultStrokeWidth;
+    if (width === 0 && mustBeAtLeastOne) {
+      width = 1;
+    }
+    if (getStrokeWidth() !== width) {
       addon.tab.redux.dispatch({
         type: "scratch-paint/stroke-width/CHANGE_STROKE_WIDTH",
-        strokeWidth: defaultStrokeWidth,
+        strokeWidth: width,
       });
     }
   };
@@ -90,7 +94,7 @@ export default async function ({ addon, global, console, msg }) {
   if (!addon.self.disabled) {
     applyFillColor();
     applyStrokeColor();
-    applyStrokeWidth();
+    applyStrokeWidth(false);
   }
 
   addon.settings.addEventListener("change", () => {
@@ -108,6 +112,9 @@ export default async function ({ addon, global, console, msg }) {
     const action = detail.action;
 
     if (!activatingTool && addon.settings.get("persistence")) {
+      // Fill and stroke color can change in response to their respective scratch-paint/fill-style/CHANGE_FILL_COLOR
+      // actions and also to scratch-paint/select/CHANGE_SELECTED_ITEMS, so it's best to check the prev and next
+      // color for a change.
       const oldFillColor = getFillColor(detail.prev);
       const newFillColor = getFillColor(detail.next);
       if (oldFillColor !== newFillColor) {
@@ -126,10 +133,10 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
 
-      const oldStrokeWidth = getStrokeWidth(detail.prev);
-      const newStrokeWidth = getStrokeWidth(detail.next);
-      if (oldStrokeWidth !== newStrokeWidth) {
-        defaultStrokeWidth = newStrokeWidth;
+      // We don't want the default stroke width to change in response to scratch-paint/select/CHANGE_SELECTED_ITEMS
+      // so we use specific action here
+      if (action.type === 'scratch-paint/stroke-width/CHANGE_STROKE_WIDTH') {
+        defaultStrokeWidth = action.strokeWidth;
       }
     }
 
@@ -160,10 +167,8 @@ export default async function ({ addon, global, console, msg }) {
               finalStrokeColor === SCRATCH_DEFAULT_STROKE ||
               (initialStrokeColor === MIXED && finalStrokeColor !== MIXED)
             ) {
-              if (defaultStrokeWidth !== 0) {
-                applyStrokeWidth();
-                applyStrokeColor();
-              }
+              applyStrokeWidth(true);
+              applyStrokeColor();
             }
           }
         });
