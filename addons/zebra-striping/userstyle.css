@@ -1,18 +1,19 @@
 :root {
-	--zebraStriping-percent: calc(var(--zebraStriping-intensity) / 100);
-	--zebraStriping-bright: calc(1 + var(--zebraStriping-percent));
-	--zebraStriping-saturate: calc(1 - var(--zebraStriping-percent));
+  --zebraStriping-percent: calc(var(--zebraStriping-intensity) / 100);
+  --zebraStriping-bright: calc(1 + var(--zebraStriping-percent));
+  --zebraStriping-saturate: calc(1 - var(--zebraStriping-percent));
 }
 
 .sa-zebra-stripe {
-	filter: brightness(var(--zebraStriping-bright)) saturate(var(--zebraStriping-saturate));
+  filter: brightness(var(--zebraStriping-bright)) saturate(var(--zebraStriping-saturate));
 }
 
 .sa-zebra-stripe[filter*="#blocklyReplacementGlowFilter"] {
-	filter: brightness(var(--zebraStriping-bright)) saturate(var(--zebraStriping-saturate)) url(#blocklyReplacementGlowFilter80012101345171);
+  filter: brightness(var(--zebraStriping-bright)) saturate(var(--zebraStriping-saturate))
+    url(#blocklyReplacementGlowFilter80012101345171);
 }
 
 /* editor-stepping compatibility */
 .sa-zebra-stripe[style*="#sa_glower_filter"] {
-	filter: brightness(var(--zebraStriping-bright)) saturate(var(--zebraStriping-saturate)) url("#sa_glower_filter0");
+  filter: brightness(var(--zebraStriping-bright)) saturate(var(--zebraStriping-saturate)) url("#sa_glower_filter0");
 }

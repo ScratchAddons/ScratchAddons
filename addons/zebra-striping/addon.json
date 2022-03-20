@@ -27,9 +27,9 @@
       "name": "Intensity (0-100%)",
       "id": "intensity",
       "type": "integer",
-	  "min": 0,
+      "min": 0,
       "default": 10,
-	  "max": 100
+      "max": 100
     }
   ],
   "dynamicEnable": true,
