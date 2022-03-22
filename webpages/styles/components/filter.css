@@ -1,3 +1,29 @@
+.hided {
+  display: none;
+}
+
+.time-option {
+  margin: 10px 0px;
+  font-weight: bold;
+  margin-left: 65px;
+  color: var(--label-text);
+}
+
+.time-input {
+  margin: 10px 0px;
+  position: relative;
+}
+
+.time-input input {
+  left: 240px;
+  position: absolute;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  border: 1px solid black;
+  padding-left: 15px;
+}
+
 .filter-selector {
   display: flex;
   margin-inline-start: 20px;
@@ -24,6 +50,7 @@
   line-height: 30px;
   border-inline-end: 1px solid var(--control-border);
   transition: background 0.2s ease;
+  cursor: pointer;
 }
 .filter-option:hover {
   background: var(--button-hover-background);
@@ -34,6 +61,7 @@
 .filter-option.sel {
   background: var(--brand-orange);
   color: var(--white-text);
+  cursor: default;
 }
 .filter-option.disabled {
   filter: grayscale(80%);

@@ -159,13 +159,28 @@
     "message": "Scratch Addons theme"
   },
   "scratchAddonsThemeDescription": {
-    "message": "This allows you to switch between light and dark themes for this settings page, and the extension's popup."
+    "message": "Choose the style of the Scratch Addons page for light or dark. You can set the mode to change at specific times, or to be the same as in your computer settings. Changeable settings can also turn on and off add-ons like 'Editor Dark Mode' and 'Dark WWW'."
   },
   "light": {
     "message": "Light"
   },
   "dark": {
     "message": "Dark"
+  },
+  "autoTheme": {
+    "message": "Sync with system"
+  },
+  "timeTheme": {
+    "message": "Toggle at sunset/sunrise"
+  },
+  "sunset": {
+    "message": "Sunset"
+  },
+  "sunrise": {
+    "message": "Sunrise"
+  },
+  "syncAddonsWithTheme": {
+    "message": "Make dark mode addon sync with these settings"
   },
   "licensesTitle": {
     "message": "Licenses - Scratch Addons"
