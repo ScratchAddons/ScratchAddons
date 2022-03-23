@@ -238,6 +238,7 @@ export async function fetchMigratedComments(
         childOf: `${resourceType[0]}_${parentId}`,
         replyingTo,
         scratchTeam: reply.author.scratchteam,
+        projectAuthor,
       };
     }
     for (const childCommentId of Object.keys(childrenComments)) {
@@ -253,6 +254,7 @@ export async function fetchMigratedComments(
       childOf: null,
       replyingTo: "",
       scratchTeam: parentComment.author.scratchteam,
+      projectAuthor,
     };
   }
   return commentsObj;

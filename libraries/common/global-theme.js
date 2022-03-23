@@ -37,6 +37,7 @@ export default function () {
         getTime();
       }
 
+
       let theme;
 
       resolve({

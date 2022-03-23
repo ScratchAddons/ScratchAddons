@@ -39,7 +39,12 @@
             <img src="../../images/icons/popout.svg" class="popout-comment" title="{{ messages.openNewTabMsg }}" />
           </a>
         </span>
-        <a @click="deleteComment()" class="delete-btn" :class="{'bold': deleteStep === 1}" v-show="!deleted"
+        <a
+          @click="deleteComment()"
+          class="delete-btn"
+          :class="{'bold': deleteStep === 1}"
+          v-show="!deleted"
+          v-if="canDeleteComment"
           >{{ deleteStep === 0 ? messages.deleteMsg : messages.deleteConfirmMsg }}
         </a>
         <bdo dir="ltr">
