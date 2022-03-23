@@ -31,16 +31,6 @@ let fuse;
     chrome.storage.sync.get(["themeSyncAddons"], (result) => resolve(result.themeSyncAddons))
   );
 
-  const timeInputOne = await new Promise((resolve, reject) =>
-    chrome.storage.sync.get(["timeOne"], (result) => resolve(result.timeOne))
-  );
-  const timeInputTwo = await new Promise((resolve, reject) =>
-    chrome.storage.sync.get(["timeTwo"], (result) => resolve(result.timeTwo))
-  );
-  const themeSyncAddons = await new Promise((resolve, reject) =>
-    chrome.storage.sync.get(["themeSyncAddons"], (result) => resolve(result.themeSyncAddons))
-  );
-
   await loadVueComponent([
     "webpages/settings/components/picker-component",
     "webpages/settings/components/reset-dropdown",
