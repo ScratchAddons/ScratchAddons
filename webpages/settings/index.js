@@ -31,6 +31,16 @@ let fuse;
     chrome.storage.sync.get(["themeSyncAddons"], (result) => resolve(result.themeSyncAddons))
   );
 
+  const timeInputOne = await new Promise((resolve, reject) =>
+    chrome.storage.sync.get(["timeOne"], (result) => resolve(result.timeOne))
+  );
+  const timeInputTwo = await new Promise((resolve, reject) =>
+    chrome.storage.sync.get(["timeTwo"], (result) => resolve(result.timeTwo))
+  );
+  const themeSyncAddons = await new Promise((resolve, reject) =>
+    chrome.storage.sync.get(["themeSyncAddons"], (result) => resolve(result.themeSyncAddons))
+  );
+
   await loadVueComponent([
     "webpages/settings/components/picker-component",
     "webpages/settings/components/reset-dropdown",
@@ -277,6 +287,7 @@ let fuse;
       clearSearch() {
         this.searchInputReal = "";
       },
+
       changeAddonStatusTheme() {
         chrome.storage.sync.get(["themeSyncAddons"], function (result) {
           let element = document.getElementById("change-theme-input");
@@ -286,7 +297,8 @@ let fuse;
           });
         });
       },
-      setTime(id, title) {
+
+      generate(id, title) {
         var value = document.getElementById(id).value;
         if (title == "timeOne") chrome.storage.sync.set({ timeOne: value });
         else chrome.storage.sync.set({ timeTwo: value });

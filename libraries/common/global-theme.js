@@ -17,8 +17,12 @@ export default function () {
           }
           updateTheme(!event.matches);
           const newState = event.matches;
-          chrome.runtime.sendMessage({ changeEnabledState: { addonId: "dark-www", newState } });
-          chrome.runtime.sendMessage({ changeEnabledState: { addonId: "editor-dark-mode", newState } });
+          chrome.storage.sync.get(["themeSyncAddons"], function (result) {
+            if (result.themeSyncAddons) {
+              chrome.runtime.sendMessage({ changeEnabledState: { addonId: "dark-www", newState } });
+              chrome.runtime.sendMessage({ changeEnabledState: { addonId: "editor-dark-mode", newState } });
+            }
+          });
           updateTheme(window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches);
         });
       }
@@ -32,6 +36,7 @@ export default function () {
         }, 60000);
         getTime();
       }
+
 
       let theme;
 
@@ -57,18 +62,6 @@ export default function () {
     });
   });
 
-  async function updateAddons(state) {
-    const themeSyncAddons = await new Promise((resolve, reject) =>
-      chrome.storage.sync.get(["themeSyncAddons"], (result) => resolve(result.themeSyncAddons))
-    );
-    if (themeSyncAddons) {
-      const addonWWW = await chrome.runtime.sendMessage({ changeEnabledState: { addonId: "dark-www", state } });
-      const addonEditor = await chrome.runtime.sendMessage({
-        changeEnabledState: { addonId: "editor-dark-mode", state },
-      });
-    }
-  }
-
   async function getTime() {
     // Add chrome messages and if about turning off and on addons...
     let timeInputOne = await new Promise((resolve, reject) =>
@@ -93,6 +86,5 @@ export default function () {
     } else {
       lightThemeLink.media = "not all";
     }
-    updateAddons(mode);
   }
 }

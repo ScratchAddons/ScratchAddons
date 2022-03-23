@@ -50,6 +50,7 @@
   line-height: 30px;
   border-inline-end: 1px solid var(--control-border);
   transition: background 0.2s ease;
+  cursor: pointer;
 }
 .filter-option:hover {
   background: var(--button-hover-background);
@@ -60,6 +61,7 @@
 .filter-option.sel {
   background: var(--brand-orange);
   color: var(--white-text);
+  cursor: default;
 }
 .filter-option.disabled {
   filter: grayscale(80%);
