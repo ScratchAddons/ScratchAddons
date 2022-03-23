@@ -1,6 +1,6 @@
 export default async function ({ addon, msg, global, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
-  
+
   // Style breaks after enabling cat blocks from "mode" menu
   if (addon.tab.isScratchAprilFools22()) return;
 
