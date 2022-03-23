@@ -239,16 +239,45 @@
                 </div>
               </div>
               <div class="time-option" :class="{'hided': theme !== 'time'}">
-                <div class="time-input"><span>{{ msg("sunrise").toUpperCase() }}</span><input value="{{$root.timeInputOne}}" id="time-input-1" @input="generate('time-input-1', 'timeOne')" type="time" min="00:00" max="24:00" required /></div>
-                <div class="time-input"><span>{{ msg("sunset").toUpperCase() }}</span><input value="{{$root.timeInputTwo}}" id="time-input-2" @input="generate('time-input-2', 'timeTwo')" type="time" min="00:00" max="24:00" required /></div>
+                <div class="time-input">
+                  <span>{{ msg("sunrise").toUpperCase() }}</span
+                  ><input
+                    value="{{$root.timeInputOne}}"
+                    id="time-input-1"
+                    @input="generate('time-input-1', 'timeOne')"
+                    type="time"
+                    min="00:00"
+                    max="24:00"
+                    required
+                  />
+                </div>
+                <div class="time-input">
+                  <span>{{ msg("sunset").toUpperCase() }}</span
+                  ><input
+                    value="{{$root.timeInputTwo}}"
+                    id="time-input-2"
+                    @input="generate('time-input-2', 'timeTwo')"
+                    type="time"
+                    min="00:00"
+                    max="24:00"
+                    required
+                  />
+                </div>
               </div>
-              
-              <div v-if="theme == 'time' || theme == 'auto'" class="setting-label-container" style="position: relative;">
-                <div style="padding-left: 65px; margin-bottom: 10px;"class="setting-label">{{ msg("syncAddonsWithTheme") }}</div>
-                <div id="change-theme-input" style="position: absolute; left: 325px; " class="switch" :state="themeSyncAddons ? 'on' : 'off'" @click="changeAddonStatusTheme()"></div>
+
+              <div v-if="theme == 'time' || theme == 'auto'" class="setting-label-container" style="position: relative">
+                <div style="padding-left: 65px; margin-bottom: 10px" class="setting-label">
+                  {{ msg("syncAddonsWithTheme") }}
+                </div>
+                <div
+                  id="change-theme-input"
+                  style="position: absolute; left: 325px"
+                  class="switch"
+                  :state="themeSyncAddons ? 'on' : 'off'"
+                  @click="changeAddonStatusTheme()"
+                ></div>
                 <!-- @change="changeAddonStatusTheme()" -->
               </div>
-              
             </div>
           </div>
           <div class="addon-body">

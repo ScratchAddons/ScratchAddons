@@ -37,7 +37,6 @@
       "js": ["content-scripts/global-theme.js"],
       "all_frames": true
     }
-    
   ],
   "options_ui": {
     "page": "webpages/settings/index.html",

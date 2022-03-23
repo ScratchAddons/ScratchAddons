@@ -21,10 +21,16 @@ let fuse;
 
 (async () => {
   const { theme: initialTheme, setGlobalTheme } = await globalTheme();
-  
-  const timeInputOne = await new Promise((resolve, reject) => chrome.storage.sync.get(['timeOne'], result => resolve(result.timeOne)));
-  const timeInputTwo = await new Promise((resolve, reject) => chrome.storage.sync.get(['timeTwo'], result => resolve(result.timeTwo)));
-  const themeSyncAddons = await new Promise((resolve, reject) => chrome.storage.sync.get(['themeSyncAddons'], result => resolve(result.themeSyncAddons)));
+
+  const timeInputOne = await new Promise((resolve, reject) =>
+    chrome.storage.sync.get(["timeOne"], (result) => resolve(result.timeOne))
+  );
+  const timeInputTwo = await new Promise((resolve, reject) =>
+    chrome.storage.sync.get(["timeTwo"], (result) => resolve(result.timeTwo))
+  );
+  const themeSyncAddons = await new Promise((resolve, reject) =>
+    chrome.storage.sync.get(["themeSyncAddons"], (result) => resolve(result.themeSyncAddons))
+  );
 
   await loadVueComponent([
     "webpages/settings/components/picker-component",
@@ -272,27 +278,24 @@ let fuse;
       clearSearch() {
         this.searchInputReal = "";
       },
-      
+
       changeAddonStatusTheme() {
-        chrome.storage.sync.get(['themeSyncAddons'], function(result) {
+        chrome.storage.sync.get(["themeSyncAddons"], function (result) {
           //let value = (typeof value === 'undefined') ? true : !(result.themeSyncAddons);
           let element = document.getElementById("change-theme-input");
-          let valueBol = element.getAttribute('state') == "on"  ? false : true ;
-          chrome.storage.sync.set({'themeSyncAddons': valueBol}, function() {
-            element.setAttribute('state', (valueBol ? 'on' : 'off'));
+          let valueBol = element.getAttribute("state") == "on" ? false : true;
+          chrome.storage.sync.set({ themeSyncAddons: valueBol }, function () {
+            element.setAttribute("state", valueBol ? "on" : "off");
           });
-          
         });
       },
-      
+
       generate(id, title) {
         var value = document.getElementById(id).value;
-        if (title == 'timeOne')
-          chrome.storage.sync.set({'timeOne': value});
-        else
-          chrome.storage.sync.set({'timeTwo': value});
+        if (title == "timeOne") chrome.storage.sync.set({ timeOne: value });
+        else chrome.storage.sync.set({ timeTwo: value });
       },
-      
+
       setTheme(mode) {
         setGlobalTheme(mode);
         this.theme = mode;
@@ -307,7 +310,7 @@ let fuse;
             chrome.runtime.sendMessage({
               changeAddonSettings: { addonId: addon._addonId, newSettings: this.addonSettings[addon._addonId] },
             });
-            console.log("Updated" , this.addonSettings[addon._addonId]);
+            console.log("Updated", this.addonSettings[addon._addonId]);
           }
         }, wait);
       },
