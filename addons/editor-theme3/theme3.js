@@ -384,9 +384,6 @@ export default async function ({ addon, global, console }) {
   // Stops working after enabling cat blocks from "mode" menu,
   // comes back after coming back to normal mode
   if (addon.tab.isScratchAprilFools22()) return;
-  // TODO: should we call getBlockly() before this to make sure
-  // isScratchAprilFools22() has returned the correct value?
-  // Or should we make that method async?
 
   const otherStyle = document.querySelector(`[data-addon-id='${addon.self.id}']`);
   const newStyle = document.createElement("style");
