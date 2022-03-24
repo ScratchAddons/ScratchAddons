@@ -653,7 +653,7 @@ export default class Tab extends Listenable {
     addContextMenu(this, ...args);
   }
   isScratchAprilFools22() {
-    if (!this.redux) return true; // better safe than sorry
+    if (!this.redux.state) return true; // better safe than sorry
     if (typeof this.redux.state?.scratchGui?.timeTravel === "object") return true;
     return false;
   }

@@ -12,7 +12,7 @@ export default class Trap extends Listenable {
     this._getEditorMode = () => this._isWWW() && tab.editorMode;
     this._waitForElement = tab.waitForElement.bind(tab);
     this._cache = Object.create(null);
-    this._isTimeTravel2020 = () => tab.redux.state.scratchGui?.timeTravel?.year === "2020";
+    this._isTimeTravel2020 = () => tab.redux.state?.scratchGui?.timeTravel?.year === "2020";
   }
 
   /**
