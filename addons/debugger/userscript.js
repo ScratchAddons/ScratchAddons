@@ -11,7 +11,6 @@ const removeAllChildren = (element) => {
 };
 
 export default async function ({ addon, global, console, msg }) {
-  if (typeof addon.tab.redux.state.scratchGui.timeTravel === "object") return;
   setup(addon.tab.traps.vm);
 
   let logsTab;

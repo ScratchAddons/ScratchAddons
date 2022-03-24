@@ -381,9 +381,6 @@ function updateSettings(addon, newStyle) {
 }
 
 export default async function ({ addon, global, console }) {
-  // Stops working after enabling cat blocks from "mode" menu,
-  // comes back after coming back to normal mode
-  if (addon.tab.isScratchAprilFools22()) return;
 
   const otherStyle = document.querySelector(`[data-addon-id='${addon.self.id}']`);
   const newStyle = document.createElement("style");
