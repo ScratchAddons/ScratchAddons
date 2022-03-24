@@ -89,7 +89,6 @@ const page = {
   },
   isFetching: false,
   async refetchSession() {
-    if (origin === "https://llk.github.io") return;
     let res;
     let d;
     if (this.isFetching) return;
@@ -221,10 +220,6 @@ function onDataReady() {
 }
 
 function bodyIsEditorClassCheck() {
-  if (origin === "https://llk.github.io") {
-    document.body.classList.add("sa-body-editor");
-    return;
-  }
   const pathname = location.pathname.toLowerCase();
   const split = pathname.split("/").filter(Boolean);
   if (!split[0] || split[0] !== "projects") return;

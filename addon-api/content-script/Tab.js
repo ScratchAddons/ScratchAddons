@@ -27,7 +27,6 @@ export default class Tab extends Listenable {
     this._waitForElementSet = new WeakSet();
   }
   get clientVersion() {
-    if (origin === "https://llk.github.io") return "scratch-www";
     if (!this._clientVersion)
       this._clientVersion = document.querySelector("meta[name='format-detection']")
         ? "scratch-www"
@@ -129,7 +128,6 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get editorMode() {
-    if (origin === "https://llk.github.io") return "editor";
     const pathname = location.pathname.toLowerCase();
     const split = pathname.split("/").filter(Boolean);
     if (!split[0] || split[0] !== "projects") return null;
