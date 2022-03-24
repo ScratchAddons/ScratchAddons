@@ -20,20 +20,16 @@ function injectPrototype() {
       const vm = args[0];
 
       const getStyleFixer = () => {
-        // TODO: more reliable, space after semicolon is not guaranteed
         const cssVariables = document.documentElement
           .getAttribute("style")
-          .slice(0, -1)
-          .split("; ")
-          .filter((s) => s.startsWith("--"))
-          .join("; ")
-          .concat(";");
+          .split(";")
+          .filter((s) => s.trimStart().startsWith("--"))
+          .join(";");
         return () => {
           document.documentElement.setAttribute("style", cssVariables);
         };
       };
 
-      // TODO: make all this code less likely to cause a crash itself
       const originalsetWorldStageMode = vm.setWorldStageMode;
       vm.setWorldStageMode = function () {
         const fixStyles = getStyleFixer();
