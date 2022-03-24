@@ -381,7 +381,6 @@ function updateSettings(addon, newStyle) {
 }
 
 export default async function ({ addon, global, console }) {
-
   const otherStyle = document.querySelector(`[data-addon-id='${addon.self.id}']`);
   const newStyle = document.createElement("style");
   updateSettings(addon, newStyle);
