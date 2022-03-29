@@ -40,6 +40,75 @@ export default async function ({ addon, global, console, msg }) {
     return parseColor(color);
   };
 
+  const TOOL_INFO = Object.assign(Object.create(null), {
+    // Tool names and gradient info defined in https://github.com/LLK/scratch-paint/blob/develop/src/lib/modes.js
+    // Search for activateTool() in matching file in https://github.com/LLK/scratch-paint/tree/develop/src/containers
+    BRUSH: {
+      resetsFill: true
+    },
+    ERASER: {},
+    LINE: {
+      resetsStroke: true,
+      requiresNonZeroStrokeWidth: true,
+      supportsGradient: true
+    },
+    FILL: {
+      resetsFill: true,
+      supportsGradient: true
+    },
+    SELECT: {
+      supportsGradient: true
+    },
+    RESHAPE: {
+      supportsGradient: true
+    },
+    OVAL: {
+      resetsFill: true,
+      resetsStroke: true,
+      supportsGradient: true
+    },
+    RECT: {
+      resetsFill: true,
+      resetsStroke: true,
+      supportsGradient: true
+    },
+    TEXT: {
+      resetsFill: true,
+      resetsStroke: true
+    },
+    BIT_BRUSH: {
+      resetsFill: true
+    },
+    BIT_LINE: {
+      resetsFill: true,
+      requiresNonZeroStrokeWidth: true
+    },
+    BIT_OVAL: {
+      resetsFill: true,
+      resetsStroke: true,
+      supportsGradient: true
+    },
+    BIT_RECT: {
+      resetsFill: true,
+      resetsStroke: true,
+      supportsGradient: true
+    },
+    BIT_TEXT: {
+      resetsFill: true,
+      resetsStroke: true
+    },
+    BIT_FILL: {
+      resetsFill: true,
+      supportsGradient: true
+    },
+    BIT_ERASER: {},
+    BIT_SELECT: {
+      supportsGradient: true
+    }
+  });
+
+  const getToolInfo = () => TOOL_INFO[addon.tab.redux.state.scratchPaint.mode];
+
   class ColorStyleReducerWrapper {
     constructor(reduxPropertyName, primaryAction, secondaryAction, gradientTypeAction) {
       this.reduxPropertyName = reduxPropertyName;
@@ -61,18 +130,22 @@ export default async function ({ addon, global, console, msg }) {
           color: newPrimary
         });
       }
-      const newSecondary = parseColorStyleColor(newColor.secondary);
-      if (state.secondary !== newSecondary) {
-        addon.tab.redux.dispatch({
-          type: this.secondaryAction,
-          color: newSecondary
-        });
-      }
-      if (state.gradientType !== newColor.gradientType) {
-        addon.tab.redux.dispatch({
-          type: this.gradientTypeAction,
-          gradientType: newColor.gradientType
-        });
+      const toolInfo = getToolInfo();
+      const toolSupportsGradient = toolInfo && toolInfo.supportsGradient;
+      if (toolSupportsGradient) {
+        const newSecondary = parseColorStyleColor(newColor.secondary);
+        if (state.secondary !== newSecondary) {
+          addon.tab.redux.dispatch({
+            type: this.secondaryAction,
+            color: newSecondary
+          });
+        }
+        if (state.gradientType !== newColor.gradientType) {
+          addon.tab.redux.dispatch({
+            type: this.gradientTypeAction,
+            gradientType: newColor.gradientType
+          });
+        }
       }
     }
   }
@@ -137,61 +210,6 @@ export default async function ({ addon, global, console, msg }) {
     }
   });
 
-  const TOOL_INFO = Object.assign(Object.create(null), {
-    // Tool names and gradient info defined in https://github.com/LLK/scratch-paint/blob/develop/src/lib/modes.js
-    // Search for activateTool() in matching file in https://github.com/LLK/scratch-paint/tree/develop/src/containers
-    BRUSH: {
-      resetsFill: true
-    },
-    ERASER: {},
-    LINE: {
-      resetsStroke: true,
-      requiresNonZeroStrokeWidth: true
-    },
-    FILL: {
-      resetsFill: true
-    },
-    SELECT: {},
-    RESHAPE: {},
-    OVAL: {
-      resetsFill: true,
-      resetsStroke: true
-    },
-    RECT: {
-      resetsFill: true,
-      resetsStroke: true
-    },
-    ROUNDED_RECT: {}, // unused tool
-    TEXT: {
-      resetsFill: true,
-      resetsStroke: true
-    },
-    BIT_BRUSH: {
-      resetsFill: true
-    },
-    BIT_LINE: {
-      resetsFill: true,
-      requiresNonZeroStrokeWidth: true
-    },
-    BIT_OVAL: {
-      resetsFill: true,
-      resetsStroke: true
-    },
-    BIT_RECT: {
-      resetsFill: true,
-      resetsStroke: true
-    },
-    BIT_TEXT: {
-      resetsFill: true,
-      resetsStroke: true
-    },
-    BIT_FILL: {
-      resetsFill: true
-    },
-    BIT_ERASER: {},
-    BIT_SELECT: {},
-  });
-
   const isValidColorToPersist = (color) => color.primary !== null && color.primary !== MIXED;
 
   let activatingTool = false;
@@ -224,17 +242,16 @@ export default async function ({ addon, global, console, msg }) {
       activatingTool = true;
       queueMicrotask(() => {
         activatingTool = false;
-        const newToolName = action.mode;
-        const newToolInfo = TOOL_INFO[newToolName];
-        if (!newToolInfo) {
+        const toolInfo = getToolInfo();
+        if (!toolInfo) {
           console.warn('unknown tool', newToolName);
           return;
         }
-        if (newToolInfo.resetsFill) {
+        if (toolInfo.resetsFill) {
           applyFillColor();
         }
-        if (newToolInfo.resetsStroke) {
-          applyStrokeWidth(!!newToolInfo.requiresNonZeroStrokeWidth);
+        if (toolInfo.resetsStroke) {
+          applyStrokeWidth(!!toolInfo.requiresNonZeroStrokeWidth);
           applyStrokeColor();
         }
       });
