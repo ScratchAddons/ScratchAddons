@@ -203,21 +203,26 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     if (action.type === "scratch-paint/modes/CHANGE_MODE") {
-      const newToolInfo = TOOL_INFO[action.mode];
-      const shouldResetFill = newToolInfo.resetsNoFill || newToolInfo.resetsMixedFill;
-      const shouldResetStroke = newToolInfo.resetsStroke;
-      if (shouldResetFill || shouldResetStroke) {
-        activatingTool = true;
-        queueMicrotask(() => {
-          activatingTool = false;
-          if (shouldResetFill) {
-            applyFillColor();
-          }
-          if (shouldResetStroke) {
-            applyStrokeWidth(!!newToolInfo.requiresNonZeroStrokeWidth);
-            applyStrokeColor();
-          }
-        });
+      const newToolName = action.mode;
+      const newToolInfo = TOOL_INFO[newToolName];
+      if (newToolInfo) {
+        const shouldResetFill = newToolInfo.resetsNoFill || newToolInfo.resetsMixedFill;
+        const shouldResetStroke = newToolInfo.resetsStroke;
+        if (shouldResetFill || shouldResetStroke) {
+          activatingTool = true;
+          queueMicrotask(() => {
+            activatingTool = false;
+            if (shouldResetFill) {
+              applyFillColor();
+            }
+            if (shouldResetStroke) {
+              applyStrokeWidth(!!newToolInfo.requiresNonZeroStrokeWidth);
+              applyStrokeColor();
+            }
+          });
+        }  
+      } else {
+        console.warn('unknown tool', newToolName);
       }
     }
   });
