@@ -103,6 +103,68 @@ export default async function ({ addon, global, console, msg }) {
     }
   });
 
+  const TOOL_INFO = Object.assign(Object.create(null), {
+    // Tool names and gradient info defined in https://github.com/LLK/scratch-paint/blob/develop/src/lib/modes.js
+    // Search for activateTool() in matching file in https://github.com/LLK/scratch-paint/tree/develop/src/containers
+    BRUSH: {
+      resetsMixedFill: true,
+      resetsNoFill: true
+    },
+    ERASER: {},
+    LINE: {
+      resetsStroke: true,
+      requiresNonZeroStrokeWidth: true
+    },
+    FILL: {
+      resetsMixedFill: true
+    },
+    SELECT: {},
+    RESHAPE: {},
+    OVAL: {
+      resetsMixedFill: true,
+      resetsNoFill: true,
+      resetsStroke: true
+    },
+    RECT: {
+      resetsMixedFill: true,
+      resetsNoFill: true,
+      resetsStroke: true
+    },
+    ROUNDED_RECT: {}, // unused tool
+    TEXT: {
+      resetsMixedFill: true,
+      resetsNoFill: true,
+      resetsStroke: true
+    },
+    BIT_BRUSH: {
+      resetsFill: true
+    },
+    BIT_LINE: {
+      resetsMixedFill: true,
+      requiresNonZeroStrokeWidth: true
+    },
+    BIT_OVAL: {
+      resetsMixedFill: true,
+      resetsNoFill: true,
+      resetsStroke: true
+    },
+    BIT_RECT: {
+      resetsMixedFill: true,
+      resetsNoFill: true,
+      resetsStroke: true
+    },
+    BIT_TEXT: {
+      resetsMixedFill: true,
+      resetsNoFill: true,
+      resetsStroke: true
+    },
+    BIT_FILL: {
+      resetsMixedFill: true
+    },
+    BIT_ERASER: {},
+    BIT_SELECT: {},
+  });
+
   let activatingTool = false;
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
@@ -141,35 +203,19 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     if (action.type === "scratch-paint/modes/CHANGE_MODE") {
-      // Activating certain tools can cause the selected colors to change from transparent or MIXED to the default colors.
-      // Example: https://github.com/LLK/scratch-paint/blob/6733e20b56f52d139f9885952a57c7da012a542f/src/containers/bit-brush-mode.jsx#L55-L59
-      // We have to do this weird redux trick because we can't modify these constants:
-      // https://github.com/LLK/scratch-paint/blob/6733e20b56f52d139f9885952a57c7da012a542f/src/reducers/fill-style.js#L7
-      // https://github.com/LLK/scratch-paint/blob/6733e20b56f52d139f9885952a57c7da012a542f/src/reducers/stroke-style.js#L7
-      const initialFillColor = getFillColor();
-      const initialStrokeColor = getStrokeColor();
-      const shouldCheckIfFillChanges = !initialFillColor || initialFillColor === MIXED;
-      const shouldCheckIfStrokeChanges = !initialStrokeColor || initialStrokeColor === MIXED;
-      if (shouldCheckIfFillChanges || shouldCheckIfStrokeChanges) {
+      const newToolInfo = TOOL_INFO[action.mode];
+      const shouldResetFill = newToolInfo.resetsNoFill || newToolInfo.resetsMixedFill;
+      const shouldResetStroke = newToolInfo.resetsStroke;
+      if (shouldResetFill || shouldResetStroke) {
         activatingTool = true;
         queueMicrotask(() => {
           activatingTool = false;
-          if (shouldCheckIfFillChanges) {
-            const finalFillColor = getFillColor();
-            if (finalFillColor === SCRATCH_DEFAULT_FILL) {
-              applyFillColor();
-            }
+          if (shouldResetFill) {
+            applyFillColor();
           }
-
-          if (shouldCheckIfStrokeChanges) {
-            const finalStrokeColor = getStrokeColor();
-            if (
-              finalStrokeColor === SCRATCH_DEFAULT_STROKE ||
-              (initialStrokeColor === MIXED && finalStrokeColor !== MIXED)
-            ) {
-              applyStrokeWidth(true);
-              applyStrokeColor();
-            }
+          if (shouldResetStroke) {
+            applyStrokeWidth(!!newToolInfo.requiresNonZeroStrokeWidth);
+            applyStrokeColor();
           }
         });
       }
