@@ -112,9 +112,9 @@ export default async function ({ addon, global, console, msg }) {
   const applyStrokeColor = () => {
     strokeStyle.set(defaultStrokeColor);
   };
-  const applyStrokeWidth = (mustBeAtLeastOne) => {
+  const applyStrokeWidth = (mustBeNonZero) => {
     let width = defaultStrokeWidth;
-    if (width < 1 && mustBeAtLeastOne) {
+    if (width === 0 && mustBeNonZero) {
       width = 1;
     }
     if (addon.tab.redux.state.scratchPaint.color.strokeWidth !== width) {
