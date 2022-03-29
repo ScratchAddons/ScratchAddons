@@ -1,5 +1,5 @@
 {
-  "name": "Customize default costume editor colors",
+  "name": "Customizable default costume editor colors",
   "description": "Changes the default colors and outline size used by the costume editor.",
   "credits": [
     {
@@ -41,7 +41,7 @@
     }
   ],
   "versionAdded": "1.25.0",
-  "tags": ["editor", "costumeEditor"],
+  "tags": ["editor", "costumeEditor", "featured"],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "enabledByDefault": false
