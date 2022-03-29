@@ -204,12 +204,12 @@ export default async function ({ addon, global, console, msg }) {
   let activatingTool = false;
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
-    if (addon.self.disabled) {
+    if (addon.self.disabled || !addon.settings.get("persistence")) {
       return;
     }
     const action = detail.action;
 
-    if (!activatingTool && addon.settings.get("persistence")) {
+    if (!activatingTool) {
       // We always want to check for changes instead of filtering to just certain actions because quite a few
       // actions can change these.
       const newFill = fillStyle.get();
@@ -221,35 +221,30 @@ export default async function ({ addon, global, console, msg }) {
         defaultStrokeColor = newStroke;
       }
 
-      // We don't want the default stroke width to change in response to scratch-paint/select/CHANGE_SELECTED_ITEMS
-      // so we use specific action here
-      if (action.type === 'scratch-paint/stroke-width/CHANGE_STROKE_WIDTH') {
-        defaultStrokeWidth = action.strokeWidth;
+      const newStrokeWidth = detail.next.scratchPaint.color.strokeWidth;
+      if (typeof newStrokeWidth === 'number') {
+        defaultStrokeWidth = newStrokeWidth;
       }
     }
 
     if (action.type === "scratch-paint/modes/CHANGE_MODE") {
-      const newToolName = action.mode;
-      const newToolInfo = TOOL_INFO[newToolName];
-      if (newToolInfo) {
-        const shouldResetFill = newToolInfo.resetsNoFill || newToolInfo.resetsMixedFill;
-        const shouldResetStroke = newToolInfo.resetsStroke;
-        if (shouldResetFill || shouldResetStroke) {
-          activatingTool = true;
-          queueMicrotask(() => {
-            activatingTool = false;
-            if (shouldResetFill) {
-              applyFillColor();
-            }
-            if (shouldResetStroke) {
-              applyStrokeWidth(!!newToolInfo.requiresNonZeroStrokeWidth);
-              applyStrokeColor();
-            }
-          });
-        }  
-      } else {
-        console.warn('unknown tool', newToolName);
-      }
+      activatingTool = true;
+      queueMicrotask(() => {
+        activatingTool = false;
+        const newToolName = action.mode;
+        const newToolInfo = TOOL_INFO[newToolName];
+        if (!newToolInfo) {
+          console.warn('unknown tool', newToolName);
+          return;
+        }
+        if (newToolInfo.resetsNoFill || newToolInfo.resetsMixedFill) {
+          applyFillColor();
+        }
+        if (newToolInfo.resetsStroke) {
+          applyStrokeWidth(!!newToolInfo.requiresNonZeroStrokeWidth);
+          applyStrokeColor();
+        }
+      });
     }
   });
 }
