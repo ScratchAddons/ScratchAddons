@@ -300,9 +300,10 @@ let fuse;
         });
       },
       viewSettings() {
+        const openedWindow = window.open("about:blank");
         serializeSettings().then((serialized) => {
           const blob = new Blob([serialized], { type: "text/plain" });
-          window.open(URL.createObjectURL(blob));
+          openedWindow.location.replace(URL.createObjectURL(blob));
         });
       },
       importSettings() {
