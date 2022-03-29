@@ -215,12 +215,12 @@ export default async function ({ addon, global, console, msg }) {
   let activatingTool = false;
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
-    if (addon.self.disabled || !addon.settings.get("persistence")) {
+    if (addon.self.disabled) {
       return;
     }
     const action = detail.action;
 
-    if (!activatingTool) {
+    if (!activatingTool && addon.settings.get("persistence")) {
       // We always want to check for changes instead of filtering to just certain actions because quite a few
       // actions can change these.
       const newFill = fillStyle.get();
