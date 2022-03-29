@@ -14,25 +14,31 @@ export default async function ({ addon, global, console, msg }) {
 
   const hexComponent = (str) => (+str).toString(16).toUpperCase().padStart(2, '0');
 
-  const parseHexColor = (color) => {
-    // Scratch colors must be in hex format and do not support transparency
-    if (typeof color !== 'string' || color === MIXED) {
+  const parseColor = (color) => {
+    if (color === null) {
       return null;
     }
-    if (color.startsWith('#')) {
-      return color.substring(0, 7).toUpperCase();
+    if (typeof color === 'string') {
+      // Scratch natively supports hex color codes without transparency
+      if (color.startsWith('#')) {
+        return color.substring(0, 7).toUpperCase();
+      }
+      // Sometimes paper gives us rgb() colors which have to be converted to hex
+      // It can also return rgba() sometimes but we won't parse that because Scratch doesn't support transparency anyways
+      const rgbMatch = color.match(/^rgb\((\d+)\s*,(\d+)\s*,(\d+)\)$/);
+      if (rgbMatch) {
+        const [_, r, g, b] = rgbMatch;
+        return `#${hexComponent(r)}${hexComponent(g)}${hexComponent(b)}`;
+      }
     }
-    // paper can return rgba() colors but we can't set transparent colors anyways
-    const rgbMatch = color.match(/^rgb\((\d+)\s*,(\d+)\s*,(\d+)\)$/);
-    if (rgbMatch) {
-      const [_, r, g, b] = rgbMatch;
-      return `#${hexComponent(r)}${hexComponent(g)}${hexComponent(b)}`;
-    }
-    console.warn('Could not normalize color', color);
+    console.log('Could not normalize color', color);
     return null;
   };
 
-  const normalizeHexColor = (color) => parseHexColor(color) || '#000000';
+  const parseColorStyleColor = (color) => {
+    if (color === MIXED) return MIXED;
+    return parseColor(color);
+  };
 
   class ColorStyleReducerWrapper {
     constructor(reduxPropertyName, primaryAction, secondaryAction, gradientTypeAction) {
@@ -48,16 +54,18 @@ export default async function ({ addon, global, console, msg }) {
 
     set(newColor) {
       const state = this.get();
-      if (state.primary !== newColor.primary) {
+      const newPrimary = parseColorStyleColor(newColor.primary);
+      if (state.primary !== newPrimary) {
         addon.tab.redux.dispatch({
           type: this.primaryAction,
-          color: newColor.primary
+          color: newPrimary
         });
       }
-      if (state.secondary !== newColor.secondary) {
+      const newSecondary = parseColorStyleColor(newColor.secondary);
+      if (state.secondary !== newSecondary) {
         addon.tab.redux.dispatch({
           type: this.secondaryAction,
-          color: newColor.secondary
+          color: newSecondary
         });
       }
       if (state.gradientType !== newColor.gradientType) {
@@ -92,14 +100,13 @@ export default async function ({ addon, global, console, msg }) {
   let defaultStrokeColor;
   let defaultStrokeWidth;
   const setDefaultColorsToSettings = () => {
-    defaultFillColor = simpleHexColor(normalizeHexColor(addon.settings.get("fill")));
-    defaultStrokeColor = simpleHexColor(normalizeHexColor(addon.settings.get("stroke")));
+    defaultFillColor = simpleHexColor(parseColor(addon.settings.get("fill")));
+    defaultStrokeColor = simpleHexColor(parseColor(addon.settings.get("stroke")));
     defaultStrokeWidth = addon.settings.get("strokeSize");
   };
   setDefaultColorsToSettings();
 
   const applyFillColor = () => {
-    console.log(defaultFillColor);
     fillStyle.set(defaultFillColor);
   };
   const applyStrokeColor = () => {
