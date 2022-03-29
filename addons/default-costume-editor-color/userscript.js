@@ -14,7 +14,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const hexComponent = (str) => (+str).toString(16).toUpperCase().padStart(2, '0');
 
-  const parseColor = (color) => {
+  const parseHexColor = (color) => {
     // Scratch colors must be in hex format and do not support transparency
     if (typeof color !== 'string' || color === MIXED) {
       return null;
@@ -32,58 +32,85 @@ export default async function ({ addon, global, console, msg }) {
     return null;
   };
 
-  const normalizeColor = (color) => parseColor(color) || '#000000';
+  const normalizeHexColor = (color) => parseHexColor(color) || '#000000';
 
-  const SCRATCH_DEFAULT_FILL = normalizeColor("#9966FF");
-  const SCRATCH_DEFAULT_STROKE = normalizeColor("#000000");
+  class ColorStyleReducerWrapper {
+    constructor(reduxPropertyName, primaryAction, secondaryAction, gradientTypeAction) {
+      this.reduxPropertyName = reduxPropertyName;
+      this.primaryAction = primaryAction;
+      this.secondaryAction = secondaryAction;
+      this.gradientTypeAction = gradientTypeAction;
+    }
 
-  /**
-   * @returns {string|MIXED|null}
-   */
-  const getFillColor = (state=addon.tab.redux.state) => state.scratchPaint.color.fillColor.primary;
+    get(state=addon.tab.redux.state) {
+      return state.scratchPaint.color[this.reduxPropertyName];
+    }
 
-  /**
-   * @returns {string|MIXED|null}
-   */
-  const getStrokeColor = (state=addon.tab.redux.state) => state.scratchPaint.color.strokeColor.primary;
+    set(newColor) {
+      const state = this.get();
+      if (state.primary !== newColor.primary) {
+        addon.tab.redux.dispatch({
+          type: this.primaryAction,
+          color: newColor.primary
+        });
+      }
+      if (state.secondary !== newColor.secondary) {
+        addon.tab.redux.dispatch({
+          type: this.secondaryAction,
+          color: newColor.secondary
+        });
+      }
+      if (state.gradientType !== newColor.gradientType) {
+        addon.tab.redux.dispatch({
+          type: this.gradientTypeAction,
+          gradientType: newColor.gradientType
+        });
+      }
+    }
+  }
 
-  /**
-   * @returns {number}
-   */
-  const getStrokeWidth = (state=addon.tab.redux.state) => state.scratchPaint.color.strokeWidth;
+  const fillStyle = new ColorStyleReducerWrapper(
+    'fillColor',
+    'scratch-paint/fill-style/CHANGE_FILL_COLOR',
+    'scratch-paint/fill-style/CHANGE_FILL_COLOR_2',
+    'scratch-paint/fill-style/CHANGE_FILL_GRADIENT_TYPE'
+  );
+  const strokeStyle = new ColorStyleReducerWrapper(
+    'strokeColor',
+    'scratch-paint/stroke-style/CHANGE_STROKE_COLOR',
+    'scratch-paint/stroke-style/CHANGE_STROKE_COLOR_2',
+    'scratch-paint/stroke-style/CHANGE_STROKE_GRADIENT_TYPE'
+  );
+
+  const simpleHexColor = (hex) => ({
+    primary: hex,
+    secondary: null,
+    gradientType: 'SOLID'
+  });
 
   let defaultFillColor;
   let defaultStrokeColor;
   let defaultStrokeWidth;
   const setDefaultColorsToSettings = () => {
-    defaultFillColor = normalizeColor(addon.settings.get("fill"));
-    defaultStrokeColor = normalizeColor(addon.settings.get("stroke"));
+    defaultFillColor = simpleHexColor(normalizeHexColor(addon.settings.get("fill")));
+    defaultStrokeColor = simpleHexColor(normalizeHexColor(addon.settings.get("stroke")));
     defaultStrokeWidth = addon.settings.get("strokeSize");
   };
   setDefaultColorsToSettings();
 
   const applyFillColor = () => {
-    if (defaultFillColor !== getFillColor()) {
-      addon.tab.redux.dispatch({
-        type: "scratch-paint/fill-style/CHANGE_FILL_COLOR",
-        color: defaultFillColor,
-      });
-    }
+    console.log(defaultFillColor);
+    fillStyle.set(defaultFillColor);
   };
   const applyStrokeColor = () => {
-    if (defaultStrokeColor !== getStrokeColor()) {
-      addon.tab.redux.dispatch({
-        type: "scratch-paint/stroke-style/CHANGE_STROKE_COLOR",
-        color: defaultStrokeColor,
-      });
-    }
+    strokeStyle.set(defaultStrokeColor);
   };
   const applyStrokeWidth = (mustBeAtLeastOne) => {
     let width = defaultStrokeWidth;
-    if (width === 0 && mustBeAtLeastOne) {
+    if (width < 1 && mustBeAtLeastOne) {
       width = 1;
     }
-    if (getStrokeWidth() !== width) {
+    if (addon.tab.redux.state.scratchPaint.color.strokeWidth !== width) {
       addon.tab.redux.dispatch({
         type: "scratch-paint/stroke-width/CHANGE_STROKE_WIDTH",
         strokeWidth: width,
@@ -165,6 +192,8 @@ export default async function ({ addon, global, console, msg }) {
     BIT_SELECT: {},
   });
 
+  const isValidColorToPersist = (color) => color.primary !== null && color.primary !== MIXED;
+
   let activatingTool = false;
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
@@ -174,25 +203,15 @@ export default async function ({ addon, global, console, msg }) {
     const action = detail.action;
 
     if (!activatingTool && addon.settings.get("persistence")) {
-      // Fill and stroke color can change in response to their respective scratch-paint/fill-style/CHANGE_FILL_COLOR
-      // actions and also to scratch-paint/select/CHANGE_SELECTED_ITEMS, so it's best to check the prev and next
-      // color for a change.
-      const oldFillColor = getFillColor(detail.prev);
-      const newFillColor = getFillColor(detail.next);
-      if (oldFillColor !== newFillColor) {
-        const parsed = parseColor(newFillColor);
-        if (parsed) {
-          defaultFillColor = parsed;
-        }
+      // We always want to check for changes instead of filtering to just certain actions because quite a few
+      // actions can change these.
+      const newFill = fillStyle.get();
+      if (fillStyle.get(detail.prev) !== newFill && isValidColorToPersist(newFill)) {
+        defaultFillColor = newFill;
       }
-
-      const oldStrokeColor = getStrokeColor(detail.prev);
-      const newStrokeColor = getStrokeColor(detail.next);
-      if (oldStrokeColor !== newStrokeColor) {
-        const parsed = parseColor(newStrokeColor);
-        if (parsed) {
-          defaultStrokeColor = parsed;
-        }
+      const newStroke = strokeStyle.get();
+      if (strokeStyle.get(detail.prev) !== newStroke && isValidColorToPersist(newStroke)) {
+        defaultStrokeColor = newStroke;
       }
 
       // We don't want the default stroke width to change in response to scratch-paint/select/CHANGE_SELECTED_ITEMS
