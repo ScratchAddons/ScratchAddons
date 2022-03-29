@@ -141,8 +141,7 @@ export default async function ({ addon, global, console, msg }) {
     // Tool names and gradient info defined in https://github.com/LLK/scratch-paint/blob/develop/src/lib/modes.js
     // Search for activateTool() in matching file in https://github.com/LLK/scratch-paint/tree/develop/src/containers
     BRUSH: {
-      resetsMixedFill: true,
-      resetsNoFill: true
+      resetsFill: true
     },
     ERASER: {},
     LINE: {
@@ -150,50 +149,44 @@ export default async function ({ addon, global, console, msg }) {
       requiresNonZeroStrokeWidth: true
     },
     FILL: {
-      resetsMixedFill: true
+      resetsFill: true
     },
     SELECT: {},
     RESHAPE: {},
     OVAL: {
-      resetsMixedFill: true,
-      resetsNoFill: true,
+      resetsFill: true,
       resetsStroke: true
     },
     RECT: {
-      resetsMixedFill: true,
-      resetsNoFill: true,
+      resetsFill: true,
       resetsStroke: true
     },
     ROUNDED_RECT: {}, // unused tool
     TEXT: {
-      resetsMixedFill: true,
-      resetsNoFill: true,
+      resetsFill: true,
       resetsStroke: true
     },
     BIT_BRUSH: {
       resetsFill: true
     },
     BIT_LINE: {
-      resetsMixedFill: true,
+      resetsFill: true,
       requiresNonZeroStrokeWidth: true
     },
     BIT_OVAL: {
-      resetsMixedFill: true,
-      resetsNoFill: true,
+      resetsFill: true,
       resetsStroke: true
     },
     BIT_RECT: {
-      resetsMixedFill: true,
-      resetsNoFill: true,
+      resetsFill: true,
       resetsStroke: true
     },
     BIT_TEXT: {
-      resetsMixedFill: true,
-      resetsNoFill: true,
+      resetsFill: true,
       resetsStroke: true
     },
     BIT_FILL: {
-      resetsMixedFill: true
+      resetsFill: true
     },
     BIT_ERASER: {},
     BIT_SELECT: {},
@@ -237,7 +230,7 @@ export default async function ({ addon, global, console, msg }) {
           console.warn('unknown tool', newToolName);
           return;
         }
-        if (newToolInfo.resetsNoFill || newToolInfo.resetsMixedFill) {
+        if (newToolInfo.resetsFill) {
           applyFillColor();
         }
         if (newToolInfo.resetsStroke) {
