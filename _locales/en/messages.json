@@ -290,7 +290,7 @@
   "import": {
     "message": "Import Settings"
   },
-  "view":{
+  "view": {
     "message": "View settings file"
   },
   "fileNotSelected": {
