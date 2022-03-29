@@ -16,11 +16,7 @@
 .initiatives-section .initiatives-subsection-content .teacher-quote .comment-text::after {
   border-color: #473e59;
 }
-.banner.warning /* confirm email */,
-.banner-wrapper /* Ideas */,
-.modal-flush-bottom-button,
-.ev3 .extension-header,
-.boost .extension-header {
+.banner-wrapper /* Ideas */ {
   background-color: #99864d;
 }
 .wedo2 .extension-header {
@@ -54,6 +50,18 @@
 }
 .sa-annual-report-2020 .reach-scratch-jr {
   background-color: #265064;
+}
+.banner.warning /* confirm email */,
+.modal-flush-bottom-button,
+.ev3 .extension-header,
+.boost .extension-header,
+.validation-error,
+.validation-error::before,
+.error-text,
+.report-modal-content .validation-message,
+.report-modal-content .validation-message::before,
+.compose-comment .compose-error-row .compose-error-tip {
+  background-color: #a37629;
 }
 .financials-section,
 .directors-message {
