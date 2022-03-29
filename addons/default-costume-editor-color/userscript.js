@@ -8,10 +8,6 @@ export default async function ({ addon, global, console, msg }) {
     return;
   }
 
-  // Special value Scratch uses as color when objects with different colors are selected
-  // https://github.com/LLK/scratch-paint/blob/6733e20b56f52d139f9885952a57c7da012a542f/src/helper/style-path.js#L10
-  const MIXED = "scratch-paint/style-path/mixed";
-
   const hexComponent = (str) => (+str).toString(16).toUpperCase().padStart(2, '0');
 
   const parseColor = (color) => {
@@ -39,6 +35,13 @@ export default async function ({ addon, global, console, msg }) {
     if (color === MIXED) return MIXED;
     return parseColor(color);
   };
+
+  // Special value Scratch uses as color when objects with different colors are selected
+  // https://github.com/LLK/scratch-paint/blob/6733e20b56f52d139f9885952a57c7da012a542f/src/helper/style-path.js#L10
+  const MIXED = "scratch-paint/style-path/mixed";
+
+  const SCRATCH_DEFAULT_FILL = parseColor('#9966FF');
+  const SCRATCH_DEFAULT_STROKE = parseColor('#000000');
 
   const TOOL_INFO = Object.assign(Object.create(null), {
     // Tool names and gradient info defined in https://github.com/LLK/scratch-paint/blob/develop/src/lib/modes.js
@@ -242,17 +245,40 @@ export default async function ({ addon, global, console, msg }) {
       activatingTool = true;
       queueMicrotask(() => {
         activatingTool = false;
-        const toolInfo = getToolInfo();
-        if (!toolInfo) {
-          console.warn('unknown tool', newToolName);
-          return;
-        }
-        if (toolInfo.resetsFill) {
-          applyFillColor();
-        }
-        if (toolInfo.resetsStroke) {
-          applyStrokeWidth(!!toolInfo.requiresNonZeroStrokeWidth);
-          applyStrokeColor();
+        if (addon.settings.get("persistence")) {
+          // In persistence, we always want to re-apply the previous stroke and fill.
+          const toolInfo = getToolInfo();
+          if (!toolInfo) {
+            console.warn('unknown tool', newToolName);
+            return;
+          }
+          if (toolInfo.resetsFill) {
+            applyFillColor();
+          }
+          if (toolInfo.resetsStroke) {
+            applyStrokeWidth(!!toolInfo.requiresNonZeroStrokeWidth);
+            applyStrokeColor();
+          }
+        } else {
+          // In non-persistence, we'll only apply the default colors when Scratch resets them to maintain the same behavior.
+          // We have to do this weird redux trick because we can't modify these constants:
+          // https://github.com/LLK/scratch-paint/blob/6733e20b56f52d139f9885952a57c7da012a542f/src/reducers/fill-style.js#L7
+          // https://github.com/LLK/scratch-paint/blob/6733e20b56f52d139f9885952a57c7da012a542f/src/reducers/stroke-style.js#L7
+          const oldFillColor = fillStyle.get(detail.prev);
+          if (oldFillColor.primary === null || oldFillColor.primary === MIXED) {
+            const newFillColor = fillStyle.get();
+            if (newFillColor.primary === SCRATCH_DEFAULT_FILL) {
+              applyFillColor();
+            }
+          }
+          const oldStrokeColor = strokeStyle.get(detail.prev);
+          if (oldStrokeColor.primary === null || oldStrokeColor.primary === MIXED) {
+            const newStrokeColor = strokeStyle.get();
+            if (newStrokeColor.primary === SCRATCH_DEFAULT_STROKE) {
+              applyStrokeWidth(true);
+              applyStrokeColor();
+            }
+          }
         }
       });
     }
