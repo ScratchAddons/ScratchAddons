@@ -37,7 +37,7 @@
       "name": "Use previous color instead of default colors when switching tools",
       "id": "persistence",
       "type": "boolean",
-      "default": false
+      "default": true
     }
   ],
   "versionAdded": "1.25.0",
