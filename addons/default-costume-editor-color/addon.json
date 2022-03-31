@@ -40,7 +40,7 @@
       "default": true
     }
   ],
-  "versionAdded": "1.25.0",
+  "versionAdded": "1.26.0",
   "tags": ["editor", "costumeEditor", "featured", "beta"],
   "dynamicEnable": true,
   "dynamicDisable": true,
