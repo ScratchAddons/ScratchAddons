@@ -1,6 +1,7 @@
 export default function () {
   const now = Date.now() / 1000;
-  if (now < 1648911600 && now > 1648738800) document.documentElement.style.setProperty("--brand-orange", "#568203");
+  if (now < 1648911600 && now > 1648738800 && ["settings", "popup"].includes(location.pathname.split("/")[2]))
+    document.documentElement.style.setProperty("--brand-orange", "#568203");
 
   const lightThemeLink = document.createElement("link");
   lightThemeLink.setAttribute("rel", "stylesheet");
