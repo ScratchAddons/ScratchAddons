@@ -2,6 +2,7 @@
   display: flex;
   white-space: nowrap;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  z-index: 1;
 }
 
 .s3devLabel {
