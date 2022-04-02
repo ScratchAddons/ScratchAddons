@@ -304,6 +304,13 @@ let fuse;
           downloadBlob("scratch-addons-settings.json", blob);
         });
       },
+      viewSettings() {
+        const openedWindow = window.open("about:blank");
+        serializeSettings().then((serialized) => {
+          const blob = new Blob([serialized], { type: "text/plain" });
+          openedWindow.location.replace(URL.createObjectURL(blob));
+        });
+      },
       importSettings() {
         const inputElem = Object.assign(document.createElement("input"), {
           hidden: true,
