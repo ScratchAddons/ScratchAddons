@@ -102,6 +102,27 @@ textarea:focus {
   color: var(--darkWww-input-transparentText, rgba(87, 94, 117, 0.6));
   font-style: italic;
 }
+.viewport::-webkit-scrollbar,
+textarea::-webkit-scrollbar,
+.slider-carousel .handle .end,
+.scrollbar .track,
+.scrollbar .thumb .end {
+  background-color: transparent;
+}
+.viewport::-webkit-scrollbar-track,
+textarea::-webkit-scrollbar-track,
+.scrollbar .track {
+  box-shadow: none;
+}
+.viewport::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb,
+.slider-carousel .handle,
+.scrollbar .thumb {
+  background-color: rgba(190, 190, 190, 0.8);
+}
+.scrollbar .thumb {
+  opacity: 1;
+}
 .button,
 button,
 .button.small,
