@@ -176,11 +176,6 @@ let fuse;
             changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
           };
         })(),
-        aprilFoolsAvocado: (() => {
-          const now = Date.now() / 1000;
-          if (now < 1648911600 && now > 1648738800) return " 🥑";
-          else return "";
-        })(),
       };
     },
     computed: {

@@ -26,8 +26,6 @@ const vue = new Vue({
   },
   methods: {
     msg(message, ...params) {
-      const now = Date.now() / 1000;
-      if (message === "extensionName" && now < 1648911600 && now > 1648738800) return "Scratch Avocados";
       return chrome.i18n.getMessage(message, ...params);
     },
     direction() {
