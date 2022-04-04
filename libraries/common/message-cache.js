@@ -89,7 +89,7 @@ export async function fetchMessageCount(username) {
  */
 export async function fetchMessages(username, xToken, offset) {
   const resp = await fetch(
-    `https://api.scratch.mit.edu/users/${username}/messages?limit=40&offset=${offset}&sareferer`,
+    `https://api.scratch.mit.edu/users/${username}/messages?limit=40&offset=${offset}`,
     {
       headers: {
         "x-token": xToken,
