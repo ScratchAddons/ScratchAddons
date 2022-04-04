@@ -63,7 +63,7 @@
   border-radius: 0;
 }
 #profile-box .user-content {
-  width: 629px;
+  width: 633px;
   height: auto;
 }
 #profile-box .about h3,
@@ -75,15 +75,15 @@
   line-height: 18px;
 }
 #profile-box .about {
-  width: 313px;
+  width: 315px;
   padding: 0;
 }
 #profile-box .about .scrollbar {
-  width: 10px;
+  width: 12px;
 }
 #profile-box .doing {
   top: 25px;
-  width: 297px;
+  width: 293px;
   padding: 0;
   color: var(--darkWww-page-text, #575e75);
 }

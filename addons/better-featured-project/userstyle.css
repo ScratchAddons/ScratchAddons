@@ -84,6 +84,7 @@
 }
 #profile-box .user-content {
   position: static;
+  width: 661px;
 }
 #profile-box .player {
   position: static;
@@ -97,7 +98,7 @@
   display: none !important;
 }
 #user-details {
-  width: 637px !important;
+  width: 661px !important;
   height: 148px;
   display: flex;
   flex-direction: column;
@@ -116,8 +117,9 @@
   height: 140px !important;
   padding-bottom: 6px !important;
 }
-.doing {
-  height: 136px !important;
+#profile-box .doing {
+  width: 281px;
+  height: 136px;
   overflow: hidden;
 }
 .profile-details span {
@@ -137,7 +139,10 @@
 }
 #bio-readonly,
 #status-readonly {
-  width: 285px;
+  width: 297px;
+}
+#profile-box .about .scrollbar {
+  width: 12px;
 }
 .sa-user-id {
   color: white;
