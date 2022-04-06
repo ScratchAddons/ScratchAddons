@@ -55,7 +55,7 @@ export const createEditorModal = (tab, title, { isOpen = false } = {}) => {
     },
     remove: container.remove.bind(container),
   };
-}
+};
 
 export const createScratchWwwModal = (title, { isOpen = false, useSizesClass = true } = {}) => {
   const container = Object.assign(document.createElement("div"), {
@@ -120,7 +120,7 @@ export const createScratchWwwModal = (title, { isOpen = false, useSizesClass = t
       document.body.classList.remove("overflow-hidden");
     },
   };
-}
+};
 
 export const createScratchr2Modal = (title, { isOpen = false } = {}) => {
   const backdrop = Object.assign(document.createElement("div"), {
@@ -185,7 +185,7 @@ export const createScratchr2Modal = (title, { isOpen = false } = {}) => {
       }, 900);
     },
   };
-}
+};
 
 const createButtonRow = (tab, mode) => {
   const buttonRow = Object.assign(document.createElement("div"), {
@@ -221,7 +221,7 @@ const createButtonRow = (tab, mode) => {
   });
   buttonRow.appendChild(okButton);
   return { buttonRow, cancelButton, okButton };
-}
+};
 
 export const confirm = (tab, title, message, { useEditorClasses = false } = {}) => {
   const { remove, container, content, backdrop, closeButton } = tab.createModal(title, {
@@ -263,7 +263,7 @@ export const confirm = (tab, title, message, { useEditorClasses = false } = {}) 
       if (e.key === "Escape") cancel();
     });
   });
-}
+};
 
 export const prompt = (tab, title, message, defaultValue = "", { useEditorClasses = false } = {}) => {
   const { remove, container, content, backdrop, closeButton } = tab.createModal(title, {
@@ -319,4 +319,4 @@ export const prompt = (tab, title, message, defaultValue = "", { useEditorClasse
       if (e.key === "Escape") cancel();
     });
   });
-}
+};
