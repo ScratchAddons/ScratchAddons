@@ -1,47 +1,47 @@
-body:not(.totally-normal) [class*="blocks_blocks_"] .blocklyToolboxDiv {
+[class*="blocks_blocks_"] .blocklyToolboxDiv {
   width: 310px;
   height: auto !important;
 }
 
-body:not(.totally-normal) .scratchCategoryMenu {
+.scratchCategoryMenu {
   width: 100%;
   columns: 2;
   column-gap: 0.5rem;
   padding: 0.25rem;
 }
 
-body:not(.totally-normal) .scratchCategorySecondMenu {
+.scratchCategorySecondMenu {
   columns: 1;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   padding-bottom: 2.25rem;
 }
 
-body:not(.totally-normal) .scratchCategorySecondMenu:empty {
+.scratchCategorySecondMenu:empty {
   padding-top: 0;
   padding-bottom: 2rem;
 }
 
-body:not(.totally-normal) .scratchCategoryMenuItem {
+.scratchCategoryMenuItem {
   display: inline-flex; /* inline so that it isn't split between both columns */
   width: 100%;
   padding: 0.25rem;
   border-radius: 0.875rem;
 }
 
-body:not(.totally-normal) .scratchCategoryItemBubble,
-body:not(.totally-normal) .scratchCategoryItemIcon {
+.scratchCategoryItemBubble,
+.scratchCategoryItemIcon {
   margin: 0;
   margin-inline-end: 0.5rem;
 }
 
-body:not(.totally-normal) .scratchCategoryMenuItemLabel {
+.scratchCategoryMenuItemLabel {
   flex: 1;
   display: flex;
   align-items: center;
 }
 
-body:not(.totally-normal) [class*="gui_extension-button-container_"] {
+[class*="gui_extension-button-container_"] {
   top: var(--sa-add-extension-button-y);
   bottom: auto;
   margin-inline-start: 0.5rem;
@@ -52,58 +52,58 @@ body:not(.totally-normal) [class*="gui_extension-button-container_"] {
   border-radius: 0.25rem;
 }
 
-body:not(.totally-normal) [class*="gui_extension-button-container_"]:hover {
+[class*="gui_extension-button-container_"]:hover {
   background-color: var(--editorDarkMode-accent, white);
 }
 
-body:not(.totally-normal) [class*="gui_extension-button-container_"]::before {
+[class*="gui_extension-button-container_"]::before {
   display: none;
 }
 
-body:not(.totally-normal) [class*="gui_extension-button_"] {
+[class*="gui_extension-button_"] {
   display: flex;
   align-items: center;
   padding-inline: 0;
 }
 
-body:not(.totally-normal) [class*="gui_extension-button-icon_"] {
+[class*="gui_extension-button-icon_"] {
   filter: var(--editorDarkMode-categoryMenu-invertedFilter, brightness(0.4));
 }
 
-body:not(.totally-normal) [class*="gui_extension-button-container_"]:hover [class*="gui_extension-button-icon_"] {
+[class*="gui_extension-button-container_"]:hover [class*="gui_extension-button-icon_"] {
   filter: var(--editorDarkMode-accent-invertedFilter, brightness(0.4));
 }
 
-body:not(.totally-normal) .sa-add-extension-label {
+.sa-add-extension-label {
   color: var(--editorDarkMode-categoryMenu-text, #575e75);
   font-size: 0.65rem;
 }
 
-body:not(.totally-normal) [class*="gui_extension-button-container_"]:hover .sa-add-extension-label {
+[class*="gui_extension-button-container_"]:hover .sa-add-extension-label {
   color: var(--editorDarkMode-accent-text, #575e75);
   font-size: 0.65rem;
 }
 
 /* hide-flyout compatibility */
 
-body:not(.totally-normal) .blocklyFlyout.sa-flyoutClose {
+.blocklyFlyout.sa-flyoutClose {
   transform: translate(-320px, var(--sa-flyout-y)) !important;
 }
 
-body:not(.totally-normal) .blocklyFlyoutScrollbar.sa-flyoutClose {
+.blocklyFlyoutScrollbar.sa-flyoutClose {
   transform: translate(-25px, calc(var(--sa-flyout-y) + 2.5px)) !important;
 }
 
-body:not(.totally-normal) .sa-lock-image.sa-flyoutClose {
+.sa-lock-image.sa-flyoutClose {
   transform: translateX(-320px);
 }
 
-body:not(.totally-normal) .sa-flyout-placeHolder {
+.sa-flyout-placeHolder {
   left: 0;
   top: calc(var(--sa-flyout-y) + 44px);
   width: 311px;
 }
 
-body:not(.totally-normal) .sa-lock-image {
+.sa-lock-image {
   top: calc(var(--sa-flyout-y) + 46px);
 }
