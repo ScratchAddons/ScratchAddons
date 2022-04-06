@@ -6,9 +6,6 @@
 export default async function ({ addon, global, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
-  // Use vanilla experience when possible
-  if (addon.tab.isScratchAprilFools22()) return;
-
   const shouldWatchMouseCursor = addon.settings.get("watch");
 
   Blockly.BlockSvg.START_HAT_HEIGHT = 31;
