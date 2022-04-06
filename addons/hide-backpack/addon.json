@@ -1,0 +1,21 @@
+{
+    "name": "Hide Backpack",
+    "description": "Hides backpack if you don't need it",
+    "tags": ["editor", "theme", "codeEditor"],
+    "credits": [
+      {
+        "name": "Norbiros",
+        "link": "https://scratch.mit.edu/users/norbir/"
+      }
+    ],
+    "userstyles": [
+        {
+          "url": "userscript.css",
+          "matches": ["projects"]
+        }
+    ],
+    "dynamicEnable": true,
+    "dynamicDisable": true,
+    "versionAdded": "1.26.0",
+    "enabledByDefault": false
+  }
