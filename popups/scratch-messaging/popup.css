@@ -174,13 +174,13 @@ a.message-type-title-text {
   clip-path: inset(0 0 0 0); /* keep zalgo in this box */
 }
 .comment-content-text {
+  display: inline-block;
+}
+.comment-content-text > span,
+.comment-content-text .dom-element-renderer > * {
   margin-right: 10px;
   /* For multi-line comments */
   white-space: break-spaces;
-}
-.comment-content-text:after {
-  /* So that empty comments take up a line */
-  content: "\200b";
 }
 .comment-author {
   font-weight: 600;
@@ -342,4 +342,8 @@ a.message-type-title-text {
 #open-messages:hover #popout {
   opacity: 1;
   filter: none;
+}
+
+.dom-element-renderer {
+  display: contents;
 }

@@ -5,6 +5,7 @@
     <title></title>
     <link rel="stylesheet" href="popup.css" />
     <script src="../../libraries/thirdparty/vue.js" defer></script>
+    <script src="../../libraries/thirdparty/idb.js" defer></script>
     <link rel="preload" href="../../webpages/styles/colors-light.css" as="style" />
     <script src="../../webpages/popup-loader.js" type="module"></script>
     <style>
@@ -13,6 +14,11 @@
       @import url("../../webpages/styles/components/popup.css");
     </style>
     <base target="_blank" />
+
+    <!-- <dom-element-renderer> element template -->
+    <template id="dom-element-renderer-component">
+      <div class="dom-element-renderer"></div>
+    </template>
 
     <!-- <comment> element template -->
     <template id="comment-component">
@@ -33,13 +39,22 @@
             <img src="../../images/icons/popout.svg" class="popout-comment" title="{{ messages.openNewTabMsg }}" />
           </a>
         </span>
-        <a @click="deleteComment()" class="delete-btn" :class="{'bold': deleteStep === 1}" v-show="!deleted"
+        <a
+          @click="deleteComment()"
+          class="delete-btn"
+          :class="{'bold': deleteStep === 1}"
+          v-show="!deleted"
+          v-if="canDeleteComment"
           >{{ deleteStep === 0 ? messages.deleteMsg : messages.deleteConfirmMsg }}
         </a>
         <bdo dir="ltr">
           <!-- prevents LTR comments from being messed up in RTL layout - not ideal, but consistent with Scratch -->
           <div class="comment-content" :class="{'comment-self' : thisComment.author === username}">
-            <span class="comment-content-text">{{{ thisComment.content }}}</span>
+            <div class="comment-content-text">
+              <span v-show="deleting">{{ messages.deletingMsg }}</span>
+              <span v-show="deleted && !deleting">{{ messages.deletedMsg }}</span>
+              <dom-element-renderer :element="thisComment.content" v-show="!deleted"></dom-element-renderer>
+            </div>
             <a
               class="reply-button-comment"
               @click="replying = true"
@@ -85,7 +100,7 @@
             <div class="comment" v-for="alert of stMessages">
               <span class="comment-time">{{ alert.datetime_created }}</span>
               <a class="delete-btn" @click="dismissAlert(alert.id)">{{ uiMessages.dismissMsg }}</a>
-              <div v-html="alert.message"></div>
+              <dom-element-renderer :element="alert.element"></dom-element-renderer>
             </div>
           </div>
         </div>
@@ -364,7 +379,13 @@
                     {{project.favoriteCount}}</span
                   >
                 </span>
-                <span class="tooltiptext tooltiptextleft" v-html="projectLoversAndFavers(project)"></span>
+                <div class="tooltiptext tooltiptextleft">
+                  <div v-for="person of projectLoversAndFavers(project)">
+                    <img class="small-icon colored" src="../../images/icons/heart.svg" v-if="person.loved" />
+                    <img class="small-icon colored" src="../../images/icons/star.svg" v-if="person.faved" />
+                    <a href="https://scratch.mit.edu/users/{{ person.username }}/"> {{ person.username }} </a>
+                  </div>
+                </div>
               </div>
               <span v-show="project.unreadComments"
                 ><img class="small-icon" src="../../images/icons/comment.svg" /> {{project.unreadComments}}</span
@@ -401,9 +422,20 @@
 
       <!-- Show errors, loading, etc. -->
       <div class="status-container">
-        <span v-show="error === 'notReady'">{{ uiMessages.loadingMsg }}</span>
-        <span v-show="error === 'loggedOut'">{{ uiMessages.loggedOutMsg }}</span>
-        <span v-show="messagesReady && !commentsReady">{{ uiMessages.loadingCommentsMsg }}</span>
+        <p v-show="error === 'notReady'">{{ uiMessages.loadingMsg }}</p>
+        <p v-show="error === 'loggedOut'">{{ uiMessages.loggedOutMsg }}</p>
+        <p v-show="error === 'serverError'">{{ uiMessages.serverErrorMsg }}</p>
+        <p v-show="error === 'networkError'">{{ uiMessages.networkErrorMsg }}</p>
+        <p v-show="messagesReady && !commentsReady">{{ uiMessages.loadingCommentsMsg }}</p>
+        <p v-show="hasCustomError">
+          {{ uiMessages.unknownFatalErrorMsg }}
+          <a target="_blank" :href="feedbackUrl" rel="noopener noreferrer"> {{ uiMessages.reportBugMsg }} </a>
+          <br />
+          <code class="error-message">{{ error }}</code>
+          (
+          <a @click="copyToClipboard(error)">{{ uiMessages.copyMsg }}</a>
+          )
+        </p>
         <button @click="reloadPage()" v-show="commentsReady && !canShowMoreMessages">
           <img class="small-icon" src="../../images/icons/reload.svg" /><span>{{ uiMessages.reloadMsg }}</span>
         </button>

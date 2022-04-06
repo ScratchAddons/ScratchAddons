@@ -4,11 +4,15 @@
   "tags": ["community", "theme", "featured"],
   "credits": [
     {
-      "name": "Maximouse (addon, \"Experimental\" Dark)",
+      "name": "Maximouse",
+      "note": "addon, \"Experimental\" Dark",
+      "id": "addon",
       "link": "https://scratch.mit.edu/users/Maximouse/"
     },
     {
-      "name": "Ucrash (Dark WWW)",
+      "name": "Ucrash",
+      "note": "Dark WWW",
+      "id": "darkwww",
       "link": "https://github.com/gducrash"
     }
   ],
@@ -29,6 +33,18 @@
         "type": "textColor",
         "black": "rgba(0, 0, 0, 0.3)",
         "white": "rgba(255, 255, 255, 0.4)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-tab",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.1)",
+        "white": "rgba(255, 255, 255, 0.1)",
         "source": {
           "type": "settingValue",
           "settingId": "page"
@@ -455,6 +471,28 @@
           "type": "settingValue",
           "settingId": "box"
         }
+      }
+    },
+    {
+      "name": "box-success",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "box"
+        },
+        "transparentSource": "#08bd8c33"
+      }
+    },
+    {
+      "name": "box-error",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "box"
+        },
+        "transparentSource": "#ff8c1a23"
       }
     },
     {
@@ -1061,6 +1099,36 @@
       }
     },
     {
+      "name": "gray-forumTransparentCode",
+      "value": {
+        "type": "ternary",
+        "source": {
+          "type": "settingValue",
+          "settingId": "darkForumCode"
+        },
+        "true": {
+          "type": "textColor",
+          "black": "#333333",
+          "white": "rgba(255, 255, 255, 0.03)",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "threshold": 64
+        },
+        "false": {
+          "type": "textColor",
+          "black": "rgba(0, 0, 0, 0.03)",
+          "white": "#f7f7f7",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "threshold": 204
+        }
+      }
+    },
+    {
       "name": "blue-text",
       "value": {
         "type": "textColor",
@@ -1543,6 +1611,17 @@
       }
     },
     {
+      "name": "link-transparent",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "link"
+        },
+        "a": 0.75
+      }
+    },
+    {
       "name": "link-hover",
       "value": {
         "type": "multiply",
@@ -1742,14 +1821,14 @@
     },
     {
       "url": "darker_banners.css",
-      "matches": ["scratchWWWNoProject"],
+      "matches": ["projects", "scratchWWWNoProject"],
       "if": {
         "settings": { "darkBanners": "darker" }
       }
     },
     {
       "url": "desaturated_banners.css",
-      "matches": ["scratchWWWNoProject"],
+      "matches": ["projects", "scratchWWWNoProject"],
       "if": {
         "settings": { "darkBanners": "desaturated" }
       }
@@ -1780,6 +1859,10 @@
     {
       "url": "experimental_search.css",
       "matches": ["https://scratch.mit.edu/explore/*", "https://scratch.mit.edu/search/*"]
+    },
+    {
+      "url": "scratcher_promotion.css",
+      "matches": ["https://scratch.mit.edu/become-a-scratcher"]
     },
     {
       "url": "explore_desaturated_banner.css",

@@ -44,10 +44,15 @@ fix this warning."
     const reduxTarget = (scratchAddonsRedux.target = new EventTarget());
     scratchAddonsRedux.state = {};
     scratchAddonsRedux.dispatch = () => {};
+    let hasAddedClass = false;
 
     function middleware({ getState, dispatch }) {
       scratchAddonsRedux.dispatch = dispatch;
-      scratchAddonsRedux.state = getState();
+      const state = (scratchAddonsRedux.state = getState());
+      if (!hasAddedClass && typeof state?.scratchGui?.timeTravel === "object") {
+        document.body.classList.add("totally-normal");
+        hasAddedClass = true;
+      }
       return (next) => (action) => {
         const nextReturn = next(action);
         const ev = new CustomEvent("statechanged", {

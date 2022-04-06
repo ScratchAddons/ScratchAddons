@@ -1,4 +1,8 @@
 export default async function ({ addon, global, console }) {
+  // Annoying bug when cat blocks mode is enabled if
+  // active Scratch tab is costumes or sounds
+  if (addon.tab.isScratchAprilFools22()) return;
+
   let placeHolderDiv = null;
   let lockDisplay = null;
   let flyOut = null;

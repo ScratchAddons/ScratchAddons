@@ -1,6 +1,9 @@
 export default async function ({ addon, msg, global, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
+  // Style breaks after enabling cat blocks from "mode" menu
+  if (addon.tab.isScratchAprilFools22()) return;
+
   // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L235
   const _ToolboxPosition = Blockly.Toolbox.prototype.position;
   Blockly.Toolbox.prototype.position = function () {
@@ -146,7 +149,7 @@ export default async function ({ addon, msg, global, console }) {
     categoryMenu.createDom();
     // Repopulate the category menu since we've just disposed it.
     toolbox.populate_(workspace.options.languageTree);
-    // Repostion the toolbox, since it's likely our addon moved it.
+    // Reposition the toolbox, since it's likely our addon moved it.
     toolbox.position();
   }
 

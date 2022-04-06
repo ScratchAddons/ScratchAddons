@@ -21,7 +21,7 @@ export default async function ({ addon, global, console, msg }) {
     dot.style.backgroundColor = "#bbb"; //default incase bad
     dot.style.borderRadius = "50%";
 
-    dot.style.setProperty("display", "inline-block", "important"); // i have to do it like this because .style doesn't let me set prio, and fetaured project banner messes with this without !importnat
+    dot.style.setProperty("display", "inline-block", "important"); // i have to do it like this because .style doesn't let me set prio, and featured project banner messes with this without !important
 
     dot.style.backgroundColor = color;
 

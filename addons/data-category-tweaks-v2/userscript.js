@@ -1,6 +1,9 @@
 export default async function ({ addon, global, console, msg, safeMsg }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
+  // Causes crash when enabling cat blocks from "mode" menu
+  if (addon.tab.isScratchAprilFools22()) return;
+
   const SMALL_GAP = 8;
   const BIG_GAP = 24;
 

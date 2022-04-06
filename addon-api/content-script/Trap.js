@@ -8,10 +8,11 @@ export default class Trap extends Listenable {
   constructor(tab) {
     super();
     this._react_internal_key = undefined;
-    this._isWWW = tab.clientVersion === "scratch-www";
-    this._getEditorMode = () => this._isWWW && tab.editorMode;
+    this._isWWW = () => tab.clientVersion === "scratch-www";
+    this._getEditorMode = () => this._isWWW() && tab.editorMode;
     this._waitForElement = tab.waitForElement.bind(tab);
     this._cache = Object.create(null);
+    this._isTimeTravel2020 = () => tab.redux.state?.scratchGui?.timeTravel?.year === "2020";
   }
 
   /**
@@ -41,7 +42,8 @@ export default class Trap extends Listenable {
   async getBlockly() {
     if (this._cache.Blockly) return this._cache.Blockly;
     const editorMode = this._getEditorMode();
-    if (!editorMode || editorMode === "embed") throw new Error("Cannot access Blockly on this page");
+    if (!editorMode || editorMode === "embed")
+      throw new Error(`Cannot access Blockly on ${editorMode} page (${location.pathname})`);
     const BLOCKS_CLASS = '[class^="gui_blocks-wrapper"]';
     let elem = document.querySelector(BLOCKS_CLASS);
     if (!elem) {
@@ -54,6 +56,7 @@ export default class Trap extends Listenable {
     }
     const internal = elem[this._react_internal_key];
     let childable = internal;
+    if (this._isTimeTravel2020()) childable = childable.alternate;
     /* eslint-disable no-empty */
     while (((childable = childable.child), !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks)) {}
     /* eslint-enable no-empty */
