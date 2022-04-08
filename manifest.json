@@ -45,6 +45,7 @@
     "cookies",
     "webRequest",
     "webRequestBlocking",
+    "declarativeNetRequestWithHostAccess",
     "storage",
     "contextMenus",
     "alarms"
