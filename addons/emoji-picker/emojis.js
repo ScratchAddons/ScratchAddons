@@ -176,7 +176,6 @@ export const emojis = [
 //This array contains all of those emojis.
 //"br" is automatically converted to a section break.
 export const unicodeEmojis = [
-  "☁",
   "⌚️",
   "⏰",
   "⏱️",
