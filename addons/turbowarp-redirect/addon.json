@@ -1,6 +1,6 @@
 {
   "name": "TurboWarp redirect",
-  "description": "Redirects unshared projects to Turbowarp.",
+  "description": "Redirects unshared projects to TurboWarp.",
   "tags": ["community"],
   "credits": [
     {
@@ -23,7 +23,7 @@
       "potentialValues": [
         {
           "id": "//turbowarp.org/",
-          "name": "Turbowarp"
+          "name": "TurboWarp"
         },
         {
           "id": "//forkphorus.github.io/#",
