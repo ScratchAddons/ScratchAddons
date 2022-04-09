@@ -1,6 +1,6 @@
 {
-  "name": "Turbowarp Redirect",
-  "description": "Redirects unshared projects to turbowarp.",
+  "name": "Turbowarp redirect",
+  "description": "Redirects unshared projects to Turbowarp.",
   "tags": ["community"],
   "credits": [
     {
@@ -14,7 +14,25 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "versionAdded": "1.25.1",
+  "settings": [
+  	{
+      "name": "Redirect to",
+      "id": "redirectUrl",
+      "type": "select",
+      "default": "//turbowarp.org/",
+      "potentialValues": [
+        {
+          "id": "//turbowarp.org/",
+          "name": "Turbowarp"
+        },
+        {
+          "id": "//forkphorus.github.io/#",
+          "name": "Forkphorus"
+        }
+      ]
+    }
+  ],
+  "versionAdded": "1.26.0",
   "dynamicEnable": true,
   "enabledByDefault": true
 }
