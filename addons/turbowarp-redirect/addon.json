@@ -1,0 +1,20 @@
+{
+  "name": "Turbowarp Redirect",
+  "description": "Redirects unshared projects to turbowarp.",
+  "tags": ["community"],
+  "credits": [
+    {
+      "name": "illogicalapple",
+      "link": "https://scratch.mit.edu/users/illogicalapple/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "versionAdded": "1.25.1",
+  "dynamicEnable": true,
+  "enabledByDefault": true
+}
