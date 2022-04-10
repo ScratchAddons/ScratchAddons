@@ -1427,7 +1427,7 @@ export default class DevTools {
       return true;
     }
 
-    if (e.keyCode === 37 && ctrlKey || e.shiftKey) {
+    if ((e.keyCode === 37 && ctrlKey) || e.shiftKey) {
       // Ctrl + Left Arrow Key
       if (document.activeElement.tagName === "INPUT") {
         return;
