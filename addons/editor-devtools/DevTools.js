@@ -1419,7 +1419,7 @@ export default class DevTools {
       return true;
     }
 
-    if (e.key === " " && ctrlKey || e.shiftKey) {
+    if ((e.key === " " && ctrlKey) || e.shiftKey) {
       // Ctrl + Space (Inject Code)
       this.middleClickWorkspace(e);
       e.cancelBubble = true;
