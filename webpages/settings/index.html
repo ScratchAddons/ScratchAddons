@@ -118,7 +118,7 @@
     <div class="navbar">
       <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-cloak v-show="smallMode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
-      <h1 v-cloak>{{ msg("settings") }}{{ aprilFoolsAvocado }}</h1>
+      <h1 v-cloak>{{ msg("settings") }}</h1>
       <img v-cloak @click="setTheme(!theme)" class="theme-switch" :src="themePath" />
     </div>
     <div class="main">
@@ -252,6 +252,9 @@
                 <div class="filter-selector">
                   <button class="large-button" @click="importSettings()">{{ msg("import") }}</button>
                   <button class="large-button hidden-button" id="confirmImport">{{ msg("confirmImport") }}</button>
+                </div>
+                <div class="filter-selector" style="margin-left: 16px">
+                  <button class="large-button" @click="viewSettings()">{{ msg("viewSettings") }}</button>
                 </div>
               </div>
             </div>

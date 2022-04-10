@@ -176,11 +176,6 @@ let fuse;
             changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
           };
         })(),
-        aprilFoolsAvocado: (() => {
-          const now = Date.now() / 1000;
-          if (now < 1648911600 && now > 1648738800) return " 🥑";
-          else return "";
-        })(),
       };
     },
     computed: {
@@ -302,6 +297,13 @@ let fuse;
         serializeSettings().then((serialized) => {
           const blob = new Blob([serialized], { type: "application/json" });
           downloadBlob("scratch-addons-settings.json", blob);
+        });
+      },
+      viewSettings() {
+        const openedWindow = window.open("about:blank");
+        serializeSettings().then((serialized) => {
+          const blob = new Blob([serialized], { type: "text/plain" });
+          openedWindow.location.replace(URL.createObjectURL(blob));
         });
       },
       importSettings() {
