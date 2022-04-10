@@ -4,7 +4,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "Press \"Ctrl+F\" to focus the find box, \"Ctrl+Space\" to bring up the \"add block by name\" popup, \"Ctrl+Left/Right\" to navigate find history.",
+      "text": "Press \"Ctrl+F\" to focus the find box, \"Ctrl+Space\" (Shift+Space on macOS) to bring up the \"add block by name\" popup, \"Ctrl+Left/Right\" to navigate find history.",
       "id": "shortcuts"
     }
   ],
