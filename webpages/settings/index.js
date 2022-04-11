@@ -226,7 +226,7 @@ let fuse;
         return chrome.runtime.getManifest().version_name;
       },
       addonAmt() {
-        return `${Math.floor(this.manifests.length / 5) * 5}+`;
+        return `${Math.floor( this.manifests.filter(addon => !addon.tags.includes("easterEgg")).length / 5 ) * 5}+`;
       },
     },
 
