@@ -428,9 +428,13 @@ let fuse;
         }
       }, 0);
 
-      window.addEventListener('hashchange', (event) => { 
-        vue.selectedCategory = "all";
-      }, false);
+      window.addEventListener(
+        "hashchange",
+        (event) => {
+          vue.selectedCategory = "all";
+        },
+        false
+      );
     },
   });
 

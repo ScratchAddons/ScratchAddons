@@ -20,9 +20,15 @@ export default async function ({ template }) {
       },
     },
     ready() {
-      window.addEventListener('hashchange', (event) => { 
-        if (this.group.addonIds.includes(location.hash.replace("addon-", "")) ) { this.group.expanded = true }
-      }, false);
+      window.addEventListener(
+        "hashchange",
+        (event) => {
+          if (this.group.addonIds.includes(location.hash.replace("addon-", ""))) {
+            this.group.expanded = true;
+          }
+        },
+        false
+      );
     },
   });
   Vue.component("addon-group-header", AddonGroup);

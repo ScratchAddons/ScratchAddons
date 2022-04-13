@@ -128,9 +128,15 @@ export default async function ({ template }) {
       },
     },
     ready() {
-      window.addEventListener('hashchange', (event) => { 
-        if (location.hash.includes(this.addon._addonId)) { this.expanded = true; }
-      }, false);
+      window.addEventListener(
+        "hashchange",
+        (event) => {
+          if (location.hash.includes(this.addon._addonId)) {
+            this.expanded = true;
+          }
+        },
+        false
+      );
     },
   });
   Vue.component("addon-body", AddonBody);
