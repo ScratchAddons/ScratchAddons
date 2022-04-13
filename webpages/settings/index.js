@@ -427,6 +427,10 @@ let fuse;
             .map(() => JSON.parse(JSON.stringify(exampleAddonListItem)));
         }
       }, 0);
+
+      window.addEventListener('hashchange', (event) => { 
+        vue.selectedCategory = "all";
+      }, false);
     },
   });
 

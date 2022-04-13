@@ -127,6 +127,11 @@ export default async function ({ template }) {
         if (newValue === true) this.everExpanded = true;
       },
     },
+    ready() {
+      window.addEventListener('hashchange', (event) => { 
+        if (location.hash.includes(this.addon._addonId)) { this.expanded = true; }
+      }, false);
+    },
   });
   Vue.component("addon-body", AddonBody);
 }
