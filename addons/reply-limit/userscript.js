@@ -33,7 +33,7 @@ export default async function ({ addon, msg }) {
     const remainingRepliesDisplay = document.createElement("span");
     remainingRepliesDisplay.classList.add("sa-remaining-replies");
     remainingRepliesDisplay.style.fontWeight = "bold";
-    remainingRepliesDisplay.innerText = `${remainingReplies} ${remainingReplies > 1 ? "replies" : "reply"}, `;
+    remainingRepliesDisplay.innerText = `${remainingReplies} ${remainingReplies > 1 ? msg("replies") : msg("reply")}, `;
     commentInput
       .querySelector(".compose-limit")
       .insertBefore(remainingRepliesDisplay, commentInput.querySelector(".compose-limit > span"));
