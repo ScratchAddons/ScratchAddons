@@ -99,7 +99,8 @@
 }
 #user-details {
   width: 661px !important;
-  height: 148px;
+  height: 158px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -119,7 +120,8 @@
 }
 #profile-box .doing {
   width: 281px;
-  height: 136px;
+  height: 156px;
+  box-sizing: border-box;
   overflow: hidden;
 }
 .profile-details span {
