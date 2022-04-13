@@ -1,41 +1,37 @@
 export default async function ({ addon, msg }) {
-  addon.self.addEventListener(
-    "disabled",
-    () => (document.querySelector(".sa-remaining-replies").style.display = "none")
-  );
-  addon.self.addEventListener(
-    "reenabled",
-    () => (document.querySelector(".sa-remaining-replies").style.display = "inline")
-  );
+  // function addRemainingReplyCount(comment) {
+
+  // }
 
   while (true) {
     // wait for input box
-    const commentInput = await addon.tab.waitForElement("div.compose-row", {
+    const comment = await addon.tab.waitForElement("div.comment", {
       markAsSeen: true,
     });
 
     // skip the main comment input at the top of the page
-    if (commentInput.parentElement.parentElement.classList.contains("studio-compose-container")) continue;
+    if (comment.classList.contains("compose-row")) continue;
+    // comments are off on the page
+    if (!comment.querySelector(".comment-reply span")) continue;
 
-    let parentComment = commentInput.parentElement.parentElement.parentElement;
-    if (parentComment.parentElement.classList.contains("replies")) {
-      // the current "parentComment" is a reply to another comment
-      parentComment = parentComment.parentElement.parentElement.children[0];
-    }
+    let parentComment = comment.parentElement.classList.contains("replies")
+      ? comment.parentElement.parentElement.children[0]
+      : comment;
+
+    // if (comment.parentElement.classList.contains("replies")) {
+    //   // the current comment is a reply to another comment
+    //   parentComment = comment.parentElement.parentElement.children[0];
+    // } else {
+    //   parentComment = comment;
+    // }
 
     const parentCommentID = parentComment.getAttribute("id");
     const parentCommentData = addon.tab.redux.state.comments.comments.filter(
       // substring in order to remove the "comments-" prefix
-      (comment) => comment.id == parentCommentID.substring(9)
+      (comment_in_list) => comment_in_list.id == parentCommentID.substring(9)
     )[0];
 
     const remainingReplies = 25 - parentCommentData?.reply_count;
-    const remainingRepliesDisplay = document.createElement("span");
-    remainingRepliesDisplay.classList.add("sa-remaining-replies");
-    remainingRepliesDisplay.style.fontWeight = "bold";
-    remainingRepliesDisplay.innerText = `${remainingReplies} ${remainingReplies > 1 ? msg("replies") : msg("reply")}, `;
-    commentInput
-      .querySelector(".compose-limit")
-      .insertBefore(remainingRepliesDisplay, commentInput.querySelector(".compose-limit > span"));
+    comment.querySelector(".comment-reply span").innerText += ` (${remainingReplies} left)`;
   }
 }

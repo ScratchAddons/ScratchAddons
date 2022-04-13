@@ -13,8 +13,6 @@
       "matches": ["studios"]
     }
   ],
-  "dynamicEnable": true,
-  "dynamicDisable": true,
   "versionAdded": "1.26.0",
   "tags": ["community", "comments"],
   "enabledByDefault": false
