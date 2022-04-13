@@ -5,16 +5,15 @@ export default async function ({ addon, global, console, msg }) {
       markAsSeen: true,
     });
 
-    if (commentInput.parentElement.parentElement.classList.contains("studio-compose-container")) {
-      continue;
-    }
+    // skip the main comment input at the top of the page
+    if (commentInput.parentElement.parentElement.classList.contains("studio-compose-container")) continue;
 
     let parentComment = commentInput.parentElement.parentElement.parentElement;
     if (parentComment.parentElement.classList.contains("replies")) {
-      alert("you clicked nested reply");
+      // alert("you clicked nested reply");
       parentComment = parentComment.parentElement.parentElement.children[0];
     }
-    console.log(parentComment);
+    // console.log(parentComment);
 
     const parentCommentID = parentComment.getAttribute("id");
 
@@ -23,7 +22,17 @@ export default async function ({ addon, global, console, msg }) {
     )[0];
 
     const remainingReplies = 25 - parentCommentData?.reply_count;
-    const textNode = document.createTextNode(`${remainingReplies} ${remainingReplies > 1 ? "replies" : "reply"} left`);
-    commentInput.appendChild(textNode);
+    // const textNode = document.createTextNode(`${remainingReplies} ${remainingReplies > 1 ? "replies" : "reply"} left`);
+    // commentInput.appendChild(textNode);
+
+    // console.log(commentInput);
+
+    const remainingRepliesDisplay = document.createElement("span");
+    remainingRepliesDisplay.classList.add("sa-remaining-replies");
+    remainingRepliesDisplay.style.fontWeight = "bold";
+    remainingRepliesDisplay.innerText = `${remainingReplies} ${remainingReplies > 1 ? "replies" : "reply"}, `;
+    commentInput
+      .querySelector(".compose-limit")
+      .insertBefore(remainingRepliesDisplay, commentInput.querySelector(".compose-limit > span"));
   }
 }
