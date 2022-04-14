@@ -16,7 +16,12 @@
         <div class="setting-table-list" v-sortable>
           <div class="setting-table-row" v-for="(i, row) of addonSettings[setting.id]">
             <div class="setting-table-options">
-              <button :disabled="!addon._enabled" class="addon-buttons" @click="deleteTableRow(i)" v-if="setting.enableEditing" >
+              <button
+                :disabled="!addon._enabled"
+                class="addon-buttons"
+                @click="deleteTableRow(i)"
+                v-if="setting.enableEditing"
+              >
                 <img class="icon-type" src="../../images/icons/close.svg" />
               </button>
               <button :disabled="!addon._enabled" class="addon-buttons handle">
@@ -36,8 +41,12 @@
             </div>
           </div>
         </div>
-        <div class="addon-split-button setting-table-dropdown" :class="{open: rowDropdownOpen}" v-if="setting.enableEditing">
-          <button :disabled="!addon._enabled"  class="addon-buttons addon-split-button-button" @click="addTableRow()">
+        <div
+          class="addon-split-button setting-table-dropdown"
+          :class="{open: rowDropdownOpen}"
+          v-if="setting.enableEditing"
+        >
+          <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-button" @click="addTableRow()">
             <img class="icon-type" src="../../images/icons/plus.svg" />
           </button>
           <div v-click-outside="closeResetDropdowns">
