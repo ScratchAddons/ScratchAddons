@@ -16,11 +16,12 @@ export default function () {
             return;
           }
           updateTheme(!event.matches);
-          const newState = event.matches;
+          console.log(event.matches);
           chrome.storage.sync.get(["themeSyncAddons"], function (result) {
+            console.log("themeSyncAddons " + result.themeSyncAddons)
             if (result.themeSyncAddons) {
-              chrome.runtime.sendMessage({ changeEnabledState: { addonId: "dark-www", newState } });
-              chrome.runtime.sendMessage({ changeEnabledState: { addonId: "editor-dark-mode", newState } });
+              chrome.runtime.sendMessage({ changeEnabledState: { addonId: "dark-www", newState: event.matches } });
+              chrome.runtime.sendMessage({ changeEnabledState: { addonId: "editor-dark-mode", newState: event.matches } });
             }
           });
           updateTheme(window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches);

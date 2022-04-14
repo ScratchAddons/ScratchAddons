@@ -378,6 +378,7 @@ let fuse;
         );
       },
       groupShownCount(group) {
+        console.log(this.manifests.filter(word => word.tags.includes("easterEgg")).length + 1);
         if (group.id === "_iframeSearch") return -1;
         return this.addonListObjs.filter(
           (addon) => addon.group === group && addon.matchesSearch && addon.matchesCategory
@@ -446,6 +447,10 @@ let fuse;
             .map(() => JSON.parse(JSON.stringify(exampleAddonListItem)));
         }
       }, 0);
+      
+      window.addEventListener('hashchange', (event) => { 
+        vue.selectedCategory = "all";
+      }, false);
     },
   });
 
