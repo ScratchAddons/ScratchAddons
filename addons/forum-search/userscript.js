@@ -98,6 +98,13 @@ function appendSearch(box, query, page, term, msg) {
           }
           return element;
         }
+        function createLabel(text) {
+          let container = document.createElement("div");
+          let textElement = document.createElement("strong");
+          container.appendChild(textElement);
+          textElement.innerText = text;
+          return container;
+        }
         // the post
         let postElem = document.createElement("div");
         postElem.classList = "blockpost roweven firstpost";
@@ -135,7 +142,7 @@ function appendSearch(box, query, page, term, msg) {
         let postLeftDl = document.createElement("dl");
         postLeft.appendChild(postLeftDl);
 
-        postLeftDl.appendChild(createTextBox(msg("username"), "black username", 1));
+        postLeftDl.appendChild(createLabel(msg("username")));
         let userLink = document.createElement("a"); // this one is an `a` and not a `span`, so it isnt in the createTextBox function
         userLink.setAttribute("href", `https://scratch.mit.edu/users/${post.username}`);
         userLink.appendChild(document.createTextNode(post.username));
@@ -177,10 +184,10 @@ function appendSearch(box, query, page, term, msg) {
         postLeftDl.appendChild(document.createElement("br"));
         postLeftDl.appendChild(document.createElement("br"));
 
-        postLeftDl.appendChild(createTextBox(msg("first-checked"), "black username", 1));
+        postLeftDl.appendChild(createLabel(msg("first-checked"), "black username", 1));
         postLeftDl.appendChild(createTextBox(scratchAddons.l10n.datetime(new Date(post.time.first_checked)), "", 2));
 
-        postLeftDl.appendChild(createTextBox(msg("last-checked"), "black username", 1));
+        postLeftDl.appendChild(createLabel(msg("last-checked"), "black username", 1));
         postLeftDl.appendChild(
           createTextBox(scratchAddons.l10n.datetime(new Date(post.time.html_last_checked)), "", 2)
         );
