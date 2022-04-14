@@ -1,6 +1,8 @@
 chrome.storage.sync.get(["globalTheme"], function (r) {
   var tickTimeCheck = setInterval(function () {
-    if (r.globalTheme !== "time") { return };
+    if (r.globalTheme !== "time") {
+      return;
+    }
     getTime();
   }, 1000);
   getTime();
