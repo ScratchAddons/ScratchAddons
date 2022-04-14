@@ -16,7 +16,7 @@
         <div class="setting-table-list" v-sortable>
           <div class="setting-table-row" v-for="(i, row) of addonSettings[setting.id]">
             <div class="setting-table-options">
-              <button :disabled="!addon._enabled" class="addon-buttons" @click="deleteTableRow(i)">
+              <button :disabled="!addon._enabled" class="addon-buttons" @click="deleteTableRow(i)" v-if="setting.enableEditing" >
                 <img class="icon-type" src="../../images/icons/close.svg" />
               </button>
               <button :disabled="!addon._enabled" class="addon-buttons handle">
@@ -26,16 +26,18 @@
             <div class="setting-table-row-settings">
               <addon-setting
                 v-for="(id, val) of row"
+                v-if="getTableSetting(id)"
                 :addon="addon"
                 :table-child="true"
                 :setting="getTableSetting(id)"
                 :addon-settings="row"
+                :class="{'el': !setting.enableEditing}"
               ></addon-setting>
             </div>
           </div>
         </div>
-        <div class="addon-split-button setting-table-dropdown" :class="{open: rowDropdownOpen}">
-          <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-button" @click="addTableRow()">
+        <div class="addon-split-button setting-table-dropdown" :class="{open: rowDropdownOpen}" v-if="setting.enableEditing">
+          <button :disabled="!addon._enabled"  class="addon-buttons addon-split-button-button" @click="addTableRow()">
             <img class="icon-type" src="../../images/icons/plus.svg" />
           </button>
           <div v-click-outside="closeResetDropdowns">
@@ -395,5 +397,12 @@
     right: 0;
     border-top-left-radius: 4px;
     border-top-right-radius: 0;
+  }
+  .editable {
+    background: red;
+  }
+  .el input {
+    pointer-events: none;
+    border: none;
   }
 </style>

@@ -1,0 +1,81 @@
+{
+  "name": "Featured project lists",
+  "description": "Choose a list of featured projects/studios to be displayed on the front page",
+  "credits": [
+    {
+      "name": "Norbiros",
+      "link": "https://scratch.mit.edu/users/norbir/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/"],
+      "runAtComplete": true
+    }
+  ],
+  "settings": [
+    {
+      "name": "Items",
+      "id": "lists",
+      "type": "table",
+      "enableEditing": false,
+      "default": [
+        { "name": "Featured Projects", "id": "FeaturedProjects" },
+        { "name": "Featured Studios", "id": "FeaturedStudios" },
+        { "name": "Projects Curated by", "id": "CuratedProjects" },
+        { "name": "Scratch Studio", "id": "ScratchStudio" },
+        { "name": "Projects Loved by", "id": "ProjectsLoved" },
+        { "name": "What community is remixing", "id": "CommunityRemixing" },
+        { "name": "What community is loving", "id": "CommunityLoving" }
+      ],
+      "row": [
+        {
+          "name": "Name",
+          "id": "name",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "name": "Id",
+          "id": "id",
+          "type": "untranslated",
+          "default": ""
+        }
+      ],
+      "presets": [
+        {
+          "name": "Featured Projects",
+          "values": { "name": "Featured Projects", "id": "FeaturedProjects" }
+        },
+        {
+          "name": "Featured Studios",
+          "values": { "name": "Featured Studios", "id": "FeaturedStudios" }
+        },
+        {
+          "name": "Projects Curated by",
+          "values": { "name": "Projects Curated by", "id": "CuratedProjects" }
+        },
+        {
+          "name": "Scratch Studio",
+          "values": { "name": "Scratch Studio", "id": "ScratchStudio" }
+        },
+        {
+          "name": "Projects Loved by",
+          "values": { "name": "Projects Loved by", "id": "ProjectsLoved" }
+        },
+        {
+          "name": "What community is remixing",
+          "values": { "name": "What community is remixing", "id": "CommunityRemixing" }
+        },
+        {
+          "name": "What community is loving",
+          "values": { "name": "What community is loving", "id": "CommunityLoving" }
+        }
+      ]
+    }
+  ],
+  "versionAdded": "1.26.0",
+  "tags": ["community", "featured"],
+  "enabledByDefault": false
+}

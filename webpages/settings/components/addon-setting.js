@@ -6,6 +6,7 @@ export default async function ({ template }) {
       return {
         rowDropdownOpen: false,
         noResetDropdown: ["table", "boolean", "select"].includes(this.setting.type),
+        display: true,
       };
     },
     ready() {
@@ -14,6 +15,7 @@ export default async function ({ template }) {
           this.rowDropdownOpen = false;
         }
       });
+     
     },
     computed: {
       show() {
@@ -63,7 +65,7 @@ export default async function ({ template }) {
         if (this.addon.latestUpdate.newSettings && this.addon.latestUpdate.newSettings.includes(this.setting.id))
           return true;
         else return false;
-      },
+      }
     },
     methods: {
       settingsName(addon) {
@@ -107,6 +109,7 @@ export default async function ({ template }) {
         this.updateOption(e.target.value);
       },
       getTableSetting(id) {
+        if (id == "id") {return false}
         return this.setting.row.find((setting) => setting.id === id);
       },
       deleteTableRow(i) {
