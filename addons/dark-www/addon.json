@@ -1820,28 +1820,28 @@
       "matches": ["https://scratch.mit.edu/ideas", "https://scratch.mit.edu/annual-report"]
     },
     {
-      "url": "darker_banners.css",
+      "url": "banners/darker.css",
       "matches": ["projects", "scratchWWWNoProject"],
       "if": {
         "settings": { "darkBanners": "darker" }
       }
     },
     {
-      "url": "desaturated_banners.css",
+      "url": "banners/desaturated.css",
       "matches": ["projects", "scratchWWWNoProject"],
       "if": {
         "settings": { "darkBanners": "desaturated" }
       }
     },
     {
-      "url": "blue_banners_scratchr2.css",
+      "url": "banners/scratchr2_blue.css",
       "matches": ["isNotScratchWWW"],
       "if": {
         "addonEnabled": ["scratchr2"]
       }
     },
     {
-      "url": "darker_banners_scratchr2.css",
+      "url": "banners/darker_scratchr2.css",
       "matches": ["isNotScratchWWW"],
       "if": {
         "settings": { "darkBanners": "darker" },
@@ -1849,7 +1849,7 @@
       }
     },
     {
-      "url": "desaturated_banners_scratchr2.css",
+      "url": "banners/desaturated_scratchr2.css",
       "matches": ["isNotScratchWWW"],
       "if": {
         "settings": { "darkBanners": "desaturated" },
@@ -1865,14 +1865,14 @@
       "matches": ["https://scratch.mit.edu/become-a-scratcher"]
     },
     {
-      "url": "explore_desaturated_banner.css",
+      "url": "banners/desaturated_explore.css",
       "matches": ["https://scratch.mit.edu/explore/*"],
       "if": {
         "settings": { "darkBanners": "desaturated" }
       }
     },
     {
-      "url": "search_desaturated_banner.css",
+      "url": "banners/desaturated_search.css",
       "matches": ["https://scratch.mit.edu/search/*"],
       "if": {
         "settings": { "darkBanners": "desaturated" }
