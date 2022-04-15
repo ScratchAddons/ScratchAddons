@@ -103,7 +103,6 @@ let fuse;
       if (!addonManifest) continue;
       const permissionsRequired = addonManifest.permissions || [];
       const browserPermissionsRequired = permissionsRequired.filter((p) => browserLevelPermissions.includes(p));
-      console.log(addonId, permissionsRequired, browserPermissionsRequired);
       if (addonValue.enabled && browserPermissionsRequired.length) {
         pendingPermissions[addonId] = browserPermissionsRequired;
       } else {
@@ -122,7 +121,6 @@ let fuse;
         const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({
           permissions: Object.values(pendingPermissions).flat(),
         });
-        console.log(pendingPermissions, granted);
         Object.keys(pendingPermissions).forEach((addonId) => {
           addonsEnabled[addonId] = granted;
         });
@@ -173,7 +171,7 @@ let fuse;
           const versionName = chrome.runtime.getManifest().version_name;
           const utm = `utm_source=extension&utm_medium=settingspage&utm_campaign=v${version}`;
           return {
-            contributors: `https://scratchaddons.com/${localeSlash}contributors?${utm}`,
+            contributors: `https://scratchaddons.com/${localeSlash}credits?${utm}`,
             feedback: `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${versionName}&${utm}`,
             changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
           };
@@ -217,6 +215,9 @@ let fuse;
         );
         for (const obj of addonListObjs) obj.matchesSearch = results.includes(obj);
         return addonListObjs.sort((b, a) => results.indexOf(b) - results.indexOf(a));
+      },
+      hasNoResults() {
+        return !this.addonList.some((addon) => addon.matchesSearch && addon.matchesCategory);
       },
       version() {
         return chrome.runtime.getManifest().version;
@@ -298,6 +299,13 @@ let fuse;
           downloadBlob("scratch-addons-settings.json", blob);
         });
       },
+      viewSettings() {
+        const openedWindow = window.open("about:blank");
+        serializeSettings().then((serialized) => {
+          const blob = new Blob([serialized], { type: "text/plain" });
+          openedWindow.location.replace(URL.createObjectURL(blob));
+        });
+      },
       importSettings() {
         const inputElem = Object.assign(document.createElement("input"), {
           hidden: true,
@@ -307,7 +315,6 @@ let fuse;
         inputElem.addEventListener(
           "change",
           async (e) => {
-            console.log(e);
             const file = inputElem.files[0];
             if (!file) {
               inputElem.remove();
@@ -520,7 +527,7 @@ let fuse;
         const [extMajor, extMinor, _] = vue.version.split(".");
         const [addonMajor, addonMinor, __] = manifest.latestUpdate.version.split(".");
         if (extMajor === addonMajor && extMinor === addonMinor) {
-          manifest.tags.push("updated");
+          manifest.tags.push(manifest.latestUpdate.newSettings?.length ? "updatedWithSettings" : "updated");
           manifest._groups.push(manifest.latestUpdate.isMajor ? "featuredNew" : "new");
         }
       }

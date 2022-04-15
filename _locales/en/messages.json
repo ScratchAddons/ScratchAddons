@@ -239,14 +239,14 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_23": {
-    "message": "New addon: \"website dark mode and customizable colors\". Go to $1 to change specific colors, toggle dark scrollbars, and more!"
+  "extensionUpdateInfo1_v1_25": {
+    "message": "New addon: \"color picker inputs\", which allows setting an exact value (0-100) for each slider in the costume editor color picker. Go to $1 to enable it."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_23": {
-    "message": "Other new addons added this update are \"snap scripts to grid\", \"block count\" and \"high resolution thumbnails\"."
+  "extensionUpdateInfo2_v1_25": {
+    "message": "Other new addons added this update are \"horizontal tabs on My Stuff\" and \"live forum post preview\"."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
@@ -256,8 +256,12 @@
     "description": "Tag for addons. Singular."
   },
   "updated": {
-    "message": "New options",
+    "message": "New features",
     "description": "Tag for addons with new features. Singular."
+  },
+  "updatedWithSettings": {
+    "message": "New settings",
+    "description": "Tag for addons with new settings. Singular."
   },
   "newGroup": {
     "message": "Other new addons and updates",
@@ -285,6 +289,9 @@
   },
   "import": {
     "message": "Import Settings"
+  },
+  "viewSettings": {
+    "message": "View settings file"
   },
   "fileNotSelected": {
     "message": "Please select a settings file."
@@ -320,6 +327,9 @@
   "exploreAllAddons": {
     "message": "Explore all $1 addons:",
     "description": "Placeholder is a number. Example: explore all 80+ addons"
+  },
+  "searchNotFound": {
+    "message": "No results found. Perhaps try different keywords?"
   },
   "captureCommentError": {
     "message": "Message added by Scratch Addons: it appears that your comment doesn't follow $1, which asks Scratchers not to advertise or name browser extensions. This comment wasn't posted because it will probably result in your account getting muted from commenting for 5 minutes."

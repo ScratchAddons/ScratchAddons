@@ -97,6 +97,7 @@ label,
 .media-item-content .media-thumb,
 .ajax-loader,
 .box .box-head .portrait img,
+.profile-box-footer-module,
 .gallery.thumb span.image,
 .gallery.thumb span.image img,
 #comments #comments-loading,
@@ -145,7 +146,8 @@ select {
 .modal h1,
 .modal h2,
 .modal h3,
-.modal h4 {
+.modal h4,
+.profile-box-footer-module h4 {
   color: var(--darkWww-box-scratchr2HeaderText);
 }
 .box-content label,
@@ -266,6 +268,7 @@ button:hover,
 .postfootleft,
 .djangobb blockquote,
 #profile-box .doing,
+.profile-box-footer-module textarea,
 #comments .highlighted,
 .nvtooltip h3 /* statistics */,
 .table-striped tbody > tr:nth-child(odd) > td {
@@ -296,7 +299,8 @@ button:hover,
 .tabs-index li a,
 .header-text .profile-details,
 .activity-stream .time,
-#profile-data .footer #report-this {
+#profile-data .footer #report-this,
+.profile-box-footer-module textarea::placeholder {
   color: var(--darkWww-gray-scratchr2TransparentText);
 }
 #comments .highlighted .info .name a {

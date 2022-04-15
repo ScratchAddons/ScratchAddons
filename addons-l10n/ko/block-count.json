@@ -1,1 +1,1 @@
-{"block-count/blocks":"{num, plural, other {블럭 #개}}","block-count/@description":"편집기 메뉴바에 프로젝트의 총 블록 수를 표시합니다. 과거에는 \"스프라이트 및 스크립트 수\"의 일부였습니다."}
+{"block-count/blocks":"{num, plural, other {블럭 #개}}","block-count/@name":"블록 수 세기","block-count/@description":"편집기 메뉴바에 프로젝트의 총 블록 수를 표시합니다. 과거에는 \"스프라이트 및 스크립트 수\"의 일부였습니다."}

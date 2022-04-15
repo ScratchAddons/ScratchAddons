@@ -146,7 +146,7 @@ export default async function ({ addon, msg, global, console }) {
     categoryMenu.createDom();
     // Repopulate the category menu since we've just disposed it.
     toolbox.populate_(workspace.options.languageTree);
-    // Repostion the toolbox, since it's likely our addon moved it.
+    // Reposition the toolbox, since it's likely our addon moved it.
     toolbox.position();
   }
 

@@ -1,1 +1,1 @@
-{"fix-pasted-scripts/@name":"Nie uruchamiaj automatycznie zduplikowanych bloków"}
+{"fix-pasted-scripts/@name":"Nie uruchamiaj automatycznie zduplikowanych bloków","fix-pasted-scripts/@description":"Naprawia błąd w Edytorze Scratch, kiedy kopiowanie bloku i przyczepianie go do kodu wywołuje ten skrypt."}

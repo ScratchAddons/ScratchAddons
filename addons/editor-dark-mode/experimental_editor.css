@@ -160,7 +160,8 @@ div.s3devDDOut.vis,
 .mediaRecorderPopupContent p,
 .slider-prompt_body_2ZkXL,
 .record-modal_body_2VO4l,
-.debug {
+.sa-debugger-interface,
+.sa-debugger-tabs li.sa-debugger-tab-selected {
   background-color: var(--editorDarkMode-accent);
   color: var(--editorDarkMode-accent-text);
 }
@@ -467,7 +468,8 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .gui_tab_27Unf.gui_is-selected_sHAiu,
 .dropdown_dropdown_yOinO,
 .record-modal_playing-text_1tknI,
-.record-modal_button-row_1hdGe button {
+.record-modal_button-row_1hdGe button,
+.sa-debugger-tabs li.sa-debugger-tab-selected {
   color: var(--editorDarkMode-highlightText);
 }
 .scratchCategoryMenuItem:hover {
@@ -489,7 +491,8 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .filter_filter-icon_3Pfaw,
 img[src="/static/assets/d889a872f3b0985b28fa872764172ef1.svg"] /* record modal play */,
 img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal stop */,
-.record-modal_rerecord-button_jgsi_ img {
+.record-modal_rerecord-button_jgsi_ img,
+.sa-debugger-tabs li.sa-debugger-tab-selected img {
   filter: var(--editorDarkMode-highlightText-iconFilter);
 }
 
@@ -556,7 +559,8 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 .slider-prompt_max-input_1Nwbv,
 .slider-prompt_button-row_32aCX button,
 .record-modal_waveform-container__ay3Q,
-.record-modal_button-row_1hdGe button {
+.record-modal_button-row_1hdGe button,
+.sa-debugger-log {
   border-color: var(--editorDarkMode-border);
 }
 .blocklyWidgetDiv .goog-menuitem,
@@ -569,9 +573,6 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 .Popover-tipShape,
 .sa-onion-settings-polygon {
   stroke: var(--editorDarkMode-border);
-}
-.log {
-  --message-border-color: var(--editorDarkMode-border);
 }
 .dropdown_mod-open_3zJSJ {
   background-color: var(--editorDarkMode-border);
@@ -601,9 +602,15 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
   color-scheme: dark;
 }
 /* For `editor-comment-previews` */
-.sa-comment-preview {
+.sa-comment-preview-inner {
   color: var(--editorDarkMode-input-text);
-  background-color: var(--editorDarkMode-input-transparent75);
+  background-color: var(--editorDarkMode-input-transparent90);
+}
+@supports (backdrop-filter: blur(16px)) {
+  .sa-comment-preview-inner {
+    background-color: var(--editorDarkMode-input-transparent75);
+    backdrop-filter: blur(16px);
+  }
 }
 .sa-comment-preview-reduce-transparency {
   background-color: var(--editorDarkMode-input);

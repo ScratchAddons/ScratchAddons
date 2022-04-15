@@ -1,4 +1,8 @@
 /* Page background */
+html,
+body {
+  background-color: var(--darkWww-page);
+}
 #view,
 .crash-container,
 .semicolon {
@@ -33,6 +37,7 @@
 .social-modal-header,
 .user-projects-modal .user-projects-modal-title,
 .promote-modal .promote-title,
+.manager-limit-modal .manager-limit-title,
 .transfer-host-modal .transfer-host-title {
   background-color: var(--darkWww-navbar);
   color: var(--darkWww-navbar-text);
@@ -117,6 +122,8 @@
 .studio-tab-nav li,
 .user-projects-modal .user-projects-modal-nav button,
 body:not(.sa-body-editor) .modal-content,
+.unsupported-browser .body,
+body:not(.sa-body-editor) .formik-input,
 .studio-info .studio-image,
 .studio-report-modal .studio-report-tile-image,
 .grid .thumbnail,
@@ -129,6 +136,7 @@ body:not(.sa-body-editor) .modal-content,
 .comment-text,
 .comment .comment-body .comment-bubble,
 .comment .comment-body .comment-bubble::before,
+.invitation-card,
 .milestones-section .milestone-box,
 .supporters-section .comment-text,
 .timeline-card,
@@ -161,6 +169,7 @@ body:not(.sa-body-editor) .button.white,
 .hoc-banner .hoc-more-activities,
 .hoc-banner .hoc-banner-image,
 .studio-selector-button,
+.onboarding button.go-back,
 .button.mod-2019-conf-maillist-button,
 .index .title-banner p a button,
 .financials-section .financials-button,
@@ -185,7 +194,6 @@ body:not(.sa-body-editor) .button.white,
 .wedo .project-card img {
   border-color: var(--darkWww-box);
 }
-.empty h4,
 .news li p,
 .thumbnail .thumbnail-loves,
 .thumbnail .thumbnail-favorites,
@@ -195,6 +203,7 @@ body:not(.sa-body-editor) .button.white,
 .tabs li:hover,
 .tabs li.active:hover,
 .grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
+.unsupported-browser .faq-link-text,
 a.social-messages-profile-link:link,
 .studio-selector-button-text-unselected,
 .studio-project-tile .studio-project-username,
@@ -255,6 +264,16 @@ body:not(.sa-body-editor) .stage-header_stage-button-icon_3zzFK,
 body:not(.sa-body-editor) .select .join-flow-select {
   background-image: var(--darkWww-box-caret);
 }
+.alert-wrapper .alert.alert-success,
+.studio-info-box.studio-info-box-success {
+  background-color: var(--darkWww-box-success);
+  color: var(--darkWww-box-text);
+}
+.alert-wrapper .alert.alert-error,
+.studio-info-box.studio-info-box-error {
+  background-color: var(--darkWww-box-error);
+  color: var(--darkWww-box-text);
+}
 
 /* Gray background */
 .box .box-header,
@@ -286,19 +305,23 @@ body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
 .toggle-switch .slider {
   background-color: var(--darkWww-gray-darker);
 }
-.compose-comment .compose-bottom-row .compose-cancel {
+.compose-comment .compose-bottom-row .compose-cancel,
+.modal-mute .feedback-nav .close-button {
   background-color: var(--darkWww-gray-darker);
   color: white;
 }
 
 /* Blue background */
+.empty,
 .social-message.mod-unread,
+.preview .remix-credit,
 .preview .project-description,
 .preview .project-lower-container,
 .studio-list-outer-scrollbox,
 .social-form,
 .studio-page,
 .user-projects-modal .user-projects-modal-content,
+.congratulations-page .congratulations-image-layout,
 .credits #acknowledgements,
 .download .blue,
 p.callout,
@@ -318,6 +341,7 @@ p.callout,
   background-color: var(--darkWww-blue);
   color: var(--darkWww-blue-text);
 }
+.empty h4,
 .thumbnail-column .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
 .studio-page #view,
 .milestones-section h2 {
@@ -328,7 +352,8 @@ p.callout,
 .studio-info .studio-info-footer-stats div img {
   filter: var(--darkWww-blue-filter);
 }
-.studio-tab-nav a.nav_link:hover > li {
+.studio-tab-nav a.nav_link:hover > li,
+.studio-info-box .studio-info-close-button {
   background-color: var(--darkWww-blue-tab);
 }
 .studio-info textarea.studio-title:not(:focus),
@@ -342,7 +367,10 @@ p.callout,
 .extension-landing .install-scratch-link .horizontal-divider::after {
   background-color: var(--darkWww-blue-studioTextareaBorder);
 }
-.studio-info .studio-description.uneditable {
+.commenting-status,
+.preview .comments-container .comments-turned-off,
+.studio-info .studio-description.uneditable,
+.studio-info-box {
   background-color: var(--darkWww-blue-20);
 }
 .replies.collapsed > .comment:last-of-type::after,
@@ -379,10 +407,12 @@ body:not(.sa-body-editor) .select select:focus {
 .validation-info,
 .validation-info::before,
 .subactions .action-buttons .action-button,
+.unsupported-browser .back-button,
 .studio-status-icon-unselected,
 .studio-info .studio-info-footer-report button,
 .studio-tab-nav .active > li,
 .user-projects-modal .user-projects-modal-nav button.active,
+.navigation .dot.active,
 .os-chooser .button.active,
 .step .step-number-row .step-number,
 .download .installation-column-number,
@@ -421,10 +451,13 @@ input[type="radio"].formik-radio-button:checked::after,
 .inplace-input:focus,
 .inplace-textarea:focus,
 .textarea:focus,
+.unsupported-browser .back-button,
 body:not(.sa-body-editor) .formik-input:focus,
 body:not(.sa-body-editor) input[type="radio"].formik-radio-button:checked,
 .input:focus,
-.registration-step.demographics-step input[type="radio"]:focus {
+.registration-step.demographics-step input[type="radio"]:focus,
+.onboarding button.finish-later,
+.onboarding button.go-back {
   border-color: var(--darkWww-button);
 }
 .studio-tile-added {
@@ -475,6 +508,7 @@ body:not(.sa-body-editor) [type="checkbox"].formik-checkbox:checked::before {
 .studio-report-modal .studio-report-selected {
   background-color: var(--darkWww-button-transparent15);
 }
+::selection,
 .extension-chip,
 .studio-report-modal .studio-report-header-selected,
 .user-projects-modal .user-projects-modal-nav button:hover,
@@ -482,7 +516,8 @@ body:not(.sa-body-editor) [type="checkbox"].formik-checkbox:checked::before {
   background-color: var(--darkWww-button-transparent25);
 }
 .inplace-input,
-.inplace-textarea {
+.inplace-textarea,
+.modal-mute .nav-divider {
   border-color: var(--darkWww-button-transparent25);
 }
 .comment .avatar {
@@ -504,8 +539,53 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button:checked {
   background-color: var(--darkWww-button-variant);
   color: var(--darkWww-button-text);
 }
+.navigation .dot.active {
+  border-color: var(--darkWww-button-variant);
+}
+.intro-banner .intro-container,
+.unsupported-browser,
+.title-banner.mod-messages,
+.download .download-header,
+.title-banner.mod-conference,
+.conf2019-title-band,
+.sa-annual-report-2019 .message-section,
+.sa-annual-report-2019 .initiatives-section .initiatives-subsection-header.community,
+.sa-annual-report-2019 .initiatives-section .initiatives-community .community-quotes .community-quote .comment-text,
+.title-banner.mod-blue-bg /* camp 2017 */,
+.wedo .top-banner,
+.gdxfor .extension-header {
+  background-color: var(--darkWww-button-banner);
+}
+.sa-annual-report-2019 .initiatives-section .initiatives-community .community-quotes .community-quote .comment-text,
+.sa-annual-report-2019
+  .initiatives-section
+  .initiatives-community
+  .community-quotes
+  .community-quote
+  .comment-text::before,
+.sa-annual-report-2019
+  .initiatives-section
+  .initiatives-community
+  .community-quotes
+  .community-quote
+  .comment-text::after {
+  border-color: var(--darkWww-button-banner);
+}
+.gradient1 {
+  background-image: linear-gradient(var(--darkWww-button-banner), black);
+}
+.blue-background,
+.parents .title-banner.masthead,
+.information-page .title-banner.masthead,
+.download .title-banner.masthead /* Scratch 2.0 and 1.4 download */,
+.conf2017-title-band,
+.sa-annual-report-2019 .subnavigation,
+.sa-annual-report-2020 .initiatives-section .initiatives-subsection-header.community {
+  background-color: var(--darkWww-button-bannerVariant);
+}
 
 /* Link color */
+a,
 a:link,
 a:visited,
 body:not(.sa-body-editor) .button.white,
@@ -513,6 +593,7 @@ body:not(.sa-body-editor) .button.white,
 .intro-banner .intro-button,
 .hoc-banner .hoc-more-activities,
 .hoc-banner .hoc-banner-image .hoc-image-text,
+.unsupported-browser .faq-link,
 a.social-messages-profile-link:hover,
 a.social-messages-profile-link:active,
 .comment .comment-body .comment-bottom-row .comment-reply,
@@ -522,6 +603,8 @@ a.social-messages-profile-link:active,
 .studio-thumb-edit-button,
 .studio-manager-count,
 .promote-modal .cancel-button,
+.onboarding button.finish-later,
+.onboarding button.go-back,
 .index .title-banner p a button,
 .financials-section .financials-button,
 .donate-section .donate-button,
@@ -530,6 +613,9 @@ a.social-messages-profile-link:active,
 }
 .studio-manager-count {
   border-color: var(--darkWww-link);
+}
+.user-projects-modal .studio-projects-empty-text {
+  color: var(--darkWww-link-transparent);
 }
 a:hover,
 .button.mod-2019-conf-maillist-button {
@@ -541,6 +627,7 @@ a:hover,
 }
 .hoc-banner .hoc-more-activities img,
 .comment .comment-body .comment-bottom-row .comment-reply::after,
+.comment-status-icon,
 .studio-thumb-edit-img,
 .studio-activity .studio-activity-icon,
 .download .older-version .little-arrow,
@@ -576,7 +663,9 @@ img.tips-icon {
 .about .body,
 .about .body img,
 .about .body iframe,
+.preview .remix-credit,
 .preview .project-description,
+.commenting-status,
 .avatar-item img,
 .filter-container,
 .tab-choice-sa,
@@ -587,10 +676,13 @@ body:not(.sa-body-editor) .select select,
 .textarea,
 .action-button.close-button,
 #footer /* for infinite scrolling fixed footer */,
+.empty,
 .outer .sort-controls,
+.preview .comments-container .comments-turned-off,
 .comment .comment-body .comment-bubble,
 .comment .comment-body .comment-bubble::before,
 .studio-tab-nav a.nav_link:hover > li,
+.studio-info-box,
 .developers #faq,
 p.callout,
 #footer .inner .collaborators,
@@ -652,6 +744,9 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
 .sa-emoji-picker-divider {
   border-color: var(--darkWww-border-15);
 }
+.navigation .dot {
+  background-color: var(--darkWww-border-15);
+}
 .compose-comment .textarea-row textarea:not(:focus),
 .studio-tab-nav,
 body:not(.sa-body-editor) .formik-input,
@@ -684,6 +779,13 @@ p {
 }
 
 /* Some images are designed for a light background: */
+.preview .comments-container .comment-placeholder-img,
+.studio-comment-placholder-img {
+  width: calc(100% - 30px);
+  padding: 15px;
+  background-color: #e9f1fc;
+  border-radius: 8px;
+}
 .studio-empty-img {
   margin-top: 30px;
   margin-bottom: 10px;
@@ -697,8 +799,7 @@ p {
   border-radius: 8px;
 }
 
-.project-info-alert,
-.alert-msg {
+.project-info-alert {
   color: #575e75;
 }
 
