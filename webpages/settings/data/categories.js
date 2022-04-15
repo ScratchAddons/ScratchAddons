@@ -73,12 +73,6 @@ export default [
     name: chrome.i18n.getMessage("editorThemes"),
   },
   {
-    id: "themesForPlayer",
-    parent: "theme",
-    icon: "player",
-    name: chrome.i18n.getMessage("playerThemes"),
-  },
-  {
     id: "themesForWebsite",
     parent: "theme",
     icon: "web",

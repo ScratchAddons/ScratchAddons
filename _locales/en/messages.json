@@ -62,9 +62,6 @@
   "forEditor": {
     "message": "For editor"
   },
-  "forPlayer": {
-    "message": "For project player"
-  },
   "forWebsite": {
     "message": "For website"
   },
@@ -115,9 +112,6 @@
   },
   "websiteThemes": {
     "message": "Website Themes"
-  },
-  "playerThemes": {
-    "message": "Project Player Themes"
   },
   "popupFeatures": {
     "message": "Extension Popup Features"
