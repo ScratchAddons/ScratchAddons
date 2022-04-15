@@ -1,6 +1,18 @@
 {
   "name": "Hide backpack",
   "description": "Removes the backpack from the bottom of the editor.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "Disable this addon to access the backpack.",
+      "id": "disable"
+    },
+    {
+      "type": "notice",
+      "text": "This addon does not delete the contents of your backpack, it only hides it.",
+      "id": "contents"
+    }
+  ],
   "tags": ["editor", "codeEditor", "danger"],
   "credits": [
     {
