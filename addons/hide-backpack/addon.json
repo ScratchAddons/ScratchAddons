@@ -1,7 +1,7 @@
 {
-  "name": "Hide Backpack",
-  "description": "Hides backpack if you don't need it",
-  "tags": ["editor", "theme", "codeEditor"],
+  "name": "Hide backpack",
+  "description": "Removes the backpack from the bottom of the editor.",
+  "tags": ["editor", "codeEditor", "danger"],
   "credits": [
     {
       "name": "Norbiros",
