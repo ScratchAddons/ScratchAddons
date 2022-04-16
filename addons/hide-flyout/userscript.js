@@ -134,7 +134,7 @@ export default async function ({ addon, global, console }) {
     };
 
     // Only append if we don't have "categoryclick" on
-    if (toggleSetting === "hover") tabs.appendChild(lockDisplay);
+    if (toggleSetting === "hover" || toggleSetting === "cathover") tabs.appendChild(lockDisplay);
 
     if (toggleSetting === "hover") {
       placeHolderDiv.onmouseenter = (e) => onmouseenter(e);
@@ -149,7 +149,7 @@ export default async function ({ addon, global, console }) {
       const toolbox = document.querySelector(".blocklyToolboxDiv");
       const addExtensionButton = document.querySelector("[class^=gui_extension-button-container_]");
 
-      for (let e of [toolbox, addExtensionButton, flyOut, scrollBar]) {
+      for (let e of [toolbox, addExtensionButton, flyOut, scrollBar, lockDisplay]) {
         e.onmouseenter = onmouseenter;
         e.onmouseleave = onmouseleave;
       }
