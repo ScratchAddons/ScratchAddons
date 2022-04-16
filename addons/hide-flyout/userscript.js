@@ -102,6 +102,26 @@ export default async function ({ addon, global, console }) {
         }
       })();
     }
+    if (toggleSetting !== "hover") {
+      // add flyout size to the workspace dimensions
+      addon.tab.traps.getBlockly().then(Blockly => {
+        const workspace = Blockly.getMainWorkspace();
+        const oldGetMetrics = workspace.getMetrics;
+        workspace.getMetrics = function() {
+          const metrics = oldGetMetrics.call(this);
+          if (workspace.getToolbox().flyout_.getWidth() === 310) {
+            // columns is enabled
+            return metrics;
+          }
+          return {
+            ...metrics,
+            absoluteLeft: metrics.absoluteLeft - 250,
+            viewWidth: metrics.viewWidth + 250,
+          };
+        };
+        Blockly.svgResize(workspace);
+      });
+    }
   }
 
   while (true) {
@@ -109,7 +129,6 @@ export default async function ({ addon, global, console }) {
       markAsSeen: true,
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
-    let blocklySvg = document.querySelector(".blocklySvg");
     scrollBar = document.querySelector(".blocklyFlyoutScrollbar");
     const tabs = document.querySelector('[class^="gui_tabs"]');
 
