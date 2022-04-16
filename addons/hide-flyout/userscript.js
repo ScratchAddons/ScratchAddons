@@ -3,7 +3,7 @@ export default async function ({ addon, global, console }) {
   let lockDisplay = null;
   let flyOut = null;
   let scrollBar = null;
-  let toggle = true;
+  let toggle = false;
   let selectedCategory = null;
   let toggleSetting = addon.settings.get("toggle");
   let flyoutLock = false;
@@ -71,8 +71,8 @@ export default async function ({ addon, global, console }) {
           lockDisplay.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
           placeHolderDiv.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
           if (e.detail.action.activeTabIndex === 0) {
-            onmouseenter(null, 0);
-            toggle = true;
+            onmouseleave(null, 0);
+            toggle = false;
           }
           break;
         // Event casted when you switch between tabs
