@@ -103,6 +103,12 @@ export default async function ({ addon, global, console }) {
         }
         oldSetSelectedItem.call(this, item, shouldScroll);
       };
+      const oldGetSelectedCategoryId = Blockly.Toolbox.prototype.getSelectedCategoryId;
+      Blockly.Toolbox.prototype.getSelectedCategoryId = function() {
+        // the selected category can now be null
+        if (!this.selectedItem_) return null;
+        return oldGetSelectedCategoryId.call(this);
+      };
       const oldStepScrollAnimation = Blockly.Flyout.prototype.stepScrollAnimation;
       Blockly.Flyout.prototype.stepScrollAnimation = function() {
         // scrolling should not be animated when opening the flyout
