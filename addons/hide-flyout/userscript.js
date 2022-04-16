@@ -4,10 +4,11 @@ export default async function ({ addon, global, console }) {
   let flyOut = null;
   let scrollBar = null;
   let toggle = false;
-  let selectedCategory = null;
   let toggleSetting = addon.settings.get("toggle");
   let flyoutLock = false;
   let closeOnMouseUp = false;
+
+  const Blockly = await addon.tab.traps.getBlockly();
 
   function getSpeedValue() {
     let data = {
@@ -79,48 +80,45 @@ export default async function ({ addon, global, console }) {
           break;
       }
     });
-    if (toggleSetting === "category" || toggleSetting === "cathover") {
-      (async () => {
-        while (true) {
-          let category = await addon.tab.waitForElement(".scratchCategoryMenuItem", {
-            markAsSeen: true,
-            condition: () => !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
-          });
-          category.onclick = () => {
-            if (toggle && selectedCategory === category && toggleSetting === "category") {
-              onmouseleave();
-              selectedCategory = category;
-            } else if (!toggle) {
-              onmouseenter();
-              selectedCategory = category;
-            } else {
-              selectedCategory = category;
-              return;
-            }
-            if (toggleSetting === "category") toggle = !toggle;
-          };
+    if (toggleSetting === "category") {
+      const oldSetSelectedItem = Blockly.Toolbox.prototype.setSelectedItem;
+      Blockly.Toolbox.prototype.setSelectedItem = function(item, shouldScroll) {
+        if (shouldScroll === undefined) shouldScroll = true;
+        if (!shouldScroll) {
+          // prevent initial selection
+          item = null;
+        } else if (this.selectedItem_ === item) {
+          toggle = !toggle;
+          if (toggle) onmouseenter();
+          else {
+            onmouseleave();
+            // unselect the category
+            item = null;
+          }
+        } else {
+          toggle = true;
+          onmouseenter();
         }
-      })();
+        oldSetSelectedItem.call(this, item, shouldScroll);
+      };
     }
     if (toggleSetting !== "hover") {
       // add flyout size to the workspace dimensions
-      addon.tab.traps.getBlockly().then(Blockly => {
-        const workspace = Blockly.getMainWorkspace();
-        const oldGetMetrics = workspace.getMetrics;
-        workspace.getMetrics = function() {
-          const metrics = oldGetMetrics.call(this);
-          if (workspace.getToolbox().flyout_.getWidth() === 310) {
-            // columns is enabled
-            return metrics;
-          }
-          return {
-            ...metrics,
-            absoluteLeft: metrics.absoluteLeft - 250,
-            viewWidth: metrics.viewWidth + 250,
-          };
+      const workspace = Blockly.getMainWorkspace();
+      const oldGetMetrics = workspace.getMetrics;
+      workspace.getMetrics = function() {
+        const metrics = oldGetMetrics.call(this);
+        if (workspace.getToolbox().flyout_.getWidth() === 310) {
+          // columns is enabled
+          return metrics;
+        }
+        return {
+          ...metrics,
+          absoluteLeft: metrics.absoluteLeft - 250,
+          viewWidth: metrics.viewWidth + 250,
         };
-        Blockly.svgResize(workspace);
-      });
+      };
+      Blockly.svgResize(workspace);
     }
   }
 
