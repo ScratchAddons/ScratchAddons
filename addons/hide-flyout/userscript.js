@@ -36,7 +36,16 @@ export default async function ({ addon, global, console }) {
   }
   function onmouseleave(e, speed = getSpeedValue()) {
     // If we go behind the flyout or the user has locked it, let's return
-    if ((toggleSetting !== "cathover" && e && e.clientX <= scrollBar.getBoundingClientRect().left) || flyoutLock)
+    if (
+      (
+        toggleSetting !== "cathover"
+        && e
+        && (
+          addon.tab.direction === "ltr" && e.clientX <= scrollBar.getBoundingClientRect().left
+          || addon.tab.direction === "rtl" && e.clientX >= scrollBar.getBoundingClientRect().right
+        )
+      ) || flyoutLock
+    )
       return;
     flyOut.classList.add("sa-flyoutClose");
     flyOut.style.transitionDuration = `${speed}s`;
