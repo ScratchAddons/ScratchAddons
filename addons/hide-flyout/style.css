@@ -5,7 +5,7 @@
 }
 
 .gui[dir="ltr"] .blocklyFlyout.sa-flyoutClose {
-  transform: translateX(-200px) !important;
+  transform: translateX(-260px) !important;
 }
 
 .gui[dir="ltr"] .blocklyFlyoutScrollbar.sa-flyoutClose {
@@ -52,6 +52,9 @@
   right: 280px;
 }
 
-.injectionDiv {
-  overflow: hidden !important;
+.gui_stage-and-target-wrapper_69KBf {
+  /* must cover the hidden palette when editor-stage-left is enabled */
+  position: relative;
+  z-index: 31;
+  background-color: var(--editorDarkMode-page, hsl(215, 100%, 95%));
 }
