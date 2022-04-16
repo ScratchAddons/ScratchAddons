@@ -7,6 +7,7 @@ export default async function ({ addon, global, console }) {
   let toggleSetting = addon.settings.get("toggle");
   let flyoutLock = false;
   let closeOnMouseUp = false;
+  let scrollAnimation = true;
 
   const Blockly = await addon.tab.traps.getBlockly();
 
@@ -95,11 +96,23 @@ export default async function ({ addon, global, console }) {
             // unselect the category
             item = null;
           }
-        } else {
+        } else if (!toggle) {
+          scrollAnimation = false;
           toggle = true;
           onmouseenter();
         }
         oldSetSelectedItem.call(this, item, shouldScroll);
+      };
+      const oldStepScrollAnimation = Blockly.Flyout.prototype.stepScrollAnimation;
+      Blockly.Flyout.prototype.stepScrollAnimation = function() {
+        // scrolling should not be animated when opening the flyout
+        if (!scrollAnimation) {
+          this.scrollbar_.set(this.scrollTarget);
+          this.scrollTarget = null;
+          scrollAnimation = true;
+          return;
+        }
+        oldStepScrollAnimation.call(this);
       };
     }
     if (toggleSetting !== "hover") {
