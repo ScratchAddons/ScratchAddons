@@ -7,6 +7,7 @@ export default async function ({ addon, global, console }) {
   let selectedCategory = null;
   let toggleSetting = addon.settings.get("toggle");
   let flyoutLock = false;
+  let closeOnMouseUp = false;
 
   function getSpeedValue() {
     let data = {
@@ -33,20 +34,15 @@ export default async function ({ addon, global, console }) {
       lockDisplay.style.transitionDuration = `${speed}s`;
       setTimeout(() => Blockly.getMainWorkspace().recordCachedAreas(), speed * 1000);
     }
+    closeOnMouseUp = false; // only close if the mouseup event happens outside the flyout
   }
   function onmouseleave(e, speed = getSpeedValue()) {
-    // If we go behind the flyout or the user has locked it, let's return
-    if (
-      (
-        toggleSetting !== "cathover"
-        && e
-        && (
-          addon.tab.direction === "ltr" && e.clientX <= scrollBar.getBoundingClientRect().left
-          || addon.tab.direction === "rtl" && e.clientX >= scrollBar.getBoundingClientRect().right
-        )
-      ) || flyoutLock
-    )
+    if (flyoutLock) return;
+    if (e && e.buttons) {
+      // dragging a block or scrollbar
+      closeOnMouseUp = true;
       return;
+    }
     flyOut.classList.add("sa-flyoutClose");
     flyOut.style.transitionDuration = `${speed}s`;
     scrollBar.classList.add("sa-flyoutClose");
@@ -133,18 +129,11 @@ export default async function ({ addon, global, console }) {
       lockDisplay.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
     };
 
-    // Only append if we don't have "categoryclick" on
-    if (toggleSetting === "hover" || toggleSetting === "cathover") tabs.appendChild(lockDisplay);
-
-    if (toggleSetting === "hover") {
-      placeHolderDiv.onmouseenter = (e) => onmouseenter(e);
-      placeHolderDiv.onmouseup = (e) => onmouseenter();
-      document.querySelector(".blocklyToolboxDiv").onmouseenter = (e) => onmouseenter(e); // for columns
-      blocklySvg.onmouseenter = (e) => onmouseleave(e);
-    }
-
-    if (toggleSetting === "cathover") {
+    if (toggleSetting === "hover" || toggleSetting === "cathover") {
       onmouseleave(null, 0);
+
+      // Only append if we don't have "categoryclick" on
+      tabs.appendChild(lockDisplay);
 
       const toolbox = document.querySelector(".blocklyToolboxDiv");
       const addExtensionButton = document.querySelector("[class^=gui_extension-button-container_]");
@@ -153,6 +142,18 @@ export default async function ({ addon, global, console }) {
         e.onmouseenter = onmouseenter;
         e.onmouseleave = onmouseleave;
       }
+
+      if (toggleSetting === "hover") {
+        placeHolderDiv.onmouseenter = onmouseenter;
+        placeHolderDiv.onmouseleave = onmouseleave;
+      }
+
+      document.body.addEventListener("mouseup", () => {
+        if (closeOnMouseUp) {
+          onmouseleave();
+          closeOnMouseUp = false;
+        }
+      });
     }
 
     doOneTimeSetup();
