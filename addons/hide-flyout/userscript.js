@@ -83,7 +83,7 @@ export default async function ({ addon, global, console }) {
     });
     if (toggleSetting === "category") {
       const oldSetSelectedItem = Blockly.Toolbox.prototype.setSelectedItem;
-      Blockly.Toolbox.prototype.setSelectedItem = function(item, shouldScroll) {
+      Blockly.Toolbox.prototype.setSelectedItem = function (item, shouldScroll) {
         if (shouldScroll === undefined) shouldScroll = true;
         if (!shouldScroll) {
           // prevent initial selection
@@ -104,13 +104,13 @@ export default async function ({ addon, global, console }) {
         oldSetSelectedItem.call(this, item, shouldScroll);
       };
       const oldGetSelectedCategoryId = Blockly.Toolbox.prototype.getSelectedCategoryId;
-      Blockly.Toolbox.prototype.getSelectedCategoryId = function() {
+      Blockly.Toolbox.prototype.getSelectedCategoryId = function () {
         // the selected category can now be null
         if (!this.selectedItem_) return null;
         return oldGetSelectedCategoryId.call(this);
       };
       const oldStepScrollAnimation = Blockly.Flyout.prototype.stepScrollAnimation;
-      Blockly.Flyout.prototype.stepScrollAnimation = function() {
+      Blockly.Flyout.prototype.stepScrollAnimation = function () {
         // scrolling should not be animated when opening the flyout
         if (!scrollAnimation) {
           this.scrollbar_.set(this.scrollTarget);
@@ -125,7 +125,7 @@ export default async function ({ addon, global, console }) {
       // add flyout size to the workspace dimensions
       const workspace = Blockly.getMainWorkspace();
       const oldGetMetrics = workspace.getMetrics;
-      workspace.getMetrics = function() {
+      workspace.getMetrics = function () {
         const metrics = oldGetMetrics.call(this);
         if (workspace.getToolbox().flyout_.getWidth() === 310) {
           // columns is enabled
