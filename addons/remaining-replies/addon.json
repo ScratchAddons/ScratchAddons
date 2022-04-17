@@ -13,6 +13,14 @@
       "matches": ["studios"]
     }
   ],
+  "settings": [
+    {
+      "name": "Show count only if fewer than 10 replies are remaining",
+      "id": "show_only_if_less_than_10",
+      "type": "boolean",
+      "default": true
+    }
+  ],
   "versionAdded": "1.26.0",
   "tags": ["community", "comments"],
   "enabledByDefault": false
