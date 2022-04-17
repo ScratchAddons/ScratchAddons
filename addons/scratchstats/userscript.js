@@ -59,7 +59,7 @@ export default async function ({ addon, msg, console }) {
       );
       ranksRow.appendChild(
         createItem(
-          `#${data.statistics.ranks.loves.toLocaleString()} (#${data.statistics.ranks.country.loves})`,
+          `#${data.statistics.ranks.loves.toLocaleString()} (#${data.statistics.ranks.country.loves.toLocaleString()})`,
           msg("most-loves")
         )
       );
