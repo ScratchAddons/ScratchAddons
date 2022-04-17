@@ -16,7 +16,9 @@ export default async function ({ addon, msg }) {
     )[0];
 
     const remainingReplies = 25 - parentCommentData?.reply_count;
-    comment.querySelector(".comment-reply span").innerText = `reply (${remainingReplies} left)`;
+    comment.querySelector(".comment-reply span").innerText = `${msg("reply")} (${remainingReplies} ${msg(
+      "remaining"
+    )})`;
   }
 
   async function waitForComment() {
