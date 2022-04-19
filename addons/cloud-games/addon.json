@@ -15,7 +15,79 @@
     "script": "popup.js",
     "html": "popup.html"
   },
+  "settings": [
+    {
+      "id": "gameSource",
+      "name": "Displayed projects",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "griffpatch",
+          "name": "Griffpatch's games"
+        },
+        {
+          "id": "custom",
+          "name": "Choose your own"
+        }
+      ],
+      "default": "griffpatch"
+    },
+    {
+      "id": "customGames",
+      "name": "Custom games",
+      "type": "table",
+      "if": {
+        "settings": {
+          "gameSource": "custom"
+        }
+      },
+      "default": [
+        {
+          "url": "https://scratch.mit.edu/projects/612229554/"
+        }
+      ],
+      "row": [
+        {
+          "name": "Project URL",
+          "id": "url",
+          "type": "untranslated",
+          "default": ""
+        }
+      ],
+      "presets": [
+        {
+          "name": "Massive Multiplayer Platformer",
+          "values": {
+            "url": "https://scratch.mit.edu/projects/612229554/"
+          }
+        },
+        {
+          "name": "Cloud Multiplayer Platformer Fun",
+          "values": {
+            "url": "https://scratch.mit.edu/projects/378507713/"
+          }
+        },
+        {
+          "name": "slither.io",
+          "values": {
+            "url": "https://scratch.mit.edu/projects/108566337/"
+          }
+        },
+        {
+          "name": "diep.io",
+          "values": {
+            "url": "https://scratch.mit.edu/projects/131270192/"
+          }
+        }
+      ]
+    }
+  ],
   "tags": ["popup", "recommended"],
+  "latestUpdate": {
+    "version": "1.26.0",
+    "newSettings": ["gameSource", "customGames"],
+    "isMajor": true
+  },
   "versionAdded": "1.1.0",
   "enabledByDefault": true
 }

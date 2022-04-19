@@ -1,8 +1,51 @@
+import { HTTPError } from "../../libraries/common/message-cache.js";
+
+const SETTINGS_TO_STUDIO_ID = {
+  griffpatch: 539952,
+};
+
+const studioStrategy = async (addon) => {
+  let res;
+  const studioId = SETTINGS_TO_STUDIO_ID[addon.settings.get("gameSource")];
+  try {
+    res = await fetch(`https://api.scratch.mit.edu/studios/${studioId}/projects/?limit=40`);
+  } catch (e) {
+    console.warn("Error when fetching studio: ", e);
+    throw new HTTPError(`Error when fetching studio: ${e}`, 500);
+  }
+  if (res.status >= 400) {
+    console.warn("Error when fetching studio: ", res.status);
+    throw HTTPError.fromResponse("Error when fetching studio", res);
+  }
+  return res.json();
+};
+
+const deduplicate = (items) => {
+  if (!items) return [];
+  return Array.from(new Set(items));
+};
+
+const customStrategy = async (addon) =>
+  Promise.all(
+    deduplicate(addon.settings.get("customGames").map(({ url }) => url)).map(async (url) => {
+      const projectId = url.match(/\d+/)?.[0];
+      if (!projectId || isNaN(projectId)) return null;
+      let res;
+      try {
+        res = await fetch(`https://api.scratch.mit.edu/projects/${projectId}`);
+      } catch (e) {
+        console.warn("Error when fetching project: ", e);
+        return null;
+      }
+      if (res.status >= 400) {
+        console.warn("Error when fetching project: ", res.status);
+        return null;
+      }
+      return res.json();
+    })
+  ).then((projects) => projects.filter((project) => project));
+
 export default async ({ addon, msg, safeMsg }) => {
-  // TODO: support setting this via settings page
-  const url = "https://scratch.mit.edu/studios/539952/";
-  const studioId = url.match(/\d+/)?.[0];
-  const shouldFailEarly = !studioId || isNaN(studioId);
   window.vue = new Vue({
     el: "body",
     data: {
@@ -10,7 +53,7 @@ export default async ({ addon, msg, safeMsg }) => {
       loaded: false,
       messages: { noUsersMsg: msg("no-users") },
       projectsChecked: 0,
-      error: shouldFailEarly ? "general-error" : null,
+      error: null,
     },
     computed: {
       projectsSorted() {
@@ -64,29 +107,26 @@ export default async ({ addon, msg, safeMsg }) => {
     },
     async created() {
       document.title = msg("popup-title");
-      if (shouldFailEarly) return;
-      let res;
+      let projects;
       try {
-        res = await fetch(`https://api.scratch.mit.edu/studios/${studioId}/projects/?limit=40`);
+        if (addon.settings.get("gameSource") === "custom") {
+          projects = await customStrategy(addon);
+        } else {
+          projects = await studioStrategy(addon);
+        }
       } catch (e) {
-        console.warn("Error when fetching studios: ", e);
-        this.error = "server-error";
-        return;
+        if (e instanceof HTTPError) {
+          const code = e.code;
+          if (code >= 500) this.error = "server-error";
+          else if (code >= 400) this.error = "general-error";
+          return;
+        }
+        throw e;
       }
-      if (res.status >= 500) {
-        this.error = "server-error";
-        return;
-      }
-      if (res.status >= 400) {
-        this.error = "general-error";
-        return;
-      }
-      const projects = await res.json();
       if (projects.length === 0) {
         this.error = "no-projects";
         return;
       }
-      // TODO: add currently opened game to projects array. Sort function should put it on top
       this.projects = projects
         .map((project) => ({ title: project.title, id: project.id, amt: 0, users: [], extended: true }))
         .reverse();
