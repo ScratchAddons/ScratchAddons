@@ -50,6 +50,9 @@
   "beta": {
     "message": "Beta"
   },
+  "bugfix": {
+    "message": "Bugfix"
+  },
   "danger": {
     "message": "Dangerous"
   },
@@ -187,6 +190,9 @@
   },
   "betaTooltip": {
     "message": "Keep in mind that this addon might have bugs."
+  },
+  "bugfixTooltip": {
+    "message": "This addon fix Scratch's bugs!"
   },
   "forumsTooltip": {
     "message": "This addon applies to Scratch's Discussion Forums."
