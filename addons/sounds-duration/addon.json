@@ -13,5 +13,11 @@
       "url": "userscript.js",
       "matches": ["projects"]
     }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
   ]
 }
