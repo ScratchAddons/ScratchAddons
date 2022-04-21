@@ -176,11 +176,6 @@ let fuse;
             changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
           };
         })(),
-        aprilFoolsAvocado: (() => {
-          const now = Date.now() / 1000;
-          if (now < 1648911600 && now > 1648738800) return " 🥑";
-          else return "";
-        })(),
       };
     },
     computed: {
@@ -231,7 +226,7 @@ let fuse;
         return chrome.runtime.getManifest().version_name;
       },
       addonAmt() {
-        return `${Math.floor(this.manifests.length / 5) * 5}+`;
+        return `${Math.floor(this.manifests.filter((addon) => !addon.tags.includes("easterEgg")).length / 5) * 5}+`;
       },
     },
 
