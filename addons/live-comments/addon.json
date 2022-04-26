@@ -17,5 +17,6 @@
       "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"]
     }
   ],
-  "tags": ["community", "studios", "projectPage"]
+  "tags": ["community", "studios", "projectPage"],
+  "versionAdded": "1.26.0"
 }
