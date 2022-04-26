@@ -1,105 +1,105 @@
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export default async function ({ addon, global, console, msg }) {
-    const { redux } = addon.tab;
-    const [, type, id] = location.pathname.split("/");
+  const { redux } = addon.tab;
+  const [, type, id] = location.pathname.split("/");
 
-    if (type === "studios") {
-        await redux.waitForState(({ studio }) => studio.infoStatus === "FETCHED", { 
-            actions: ["SET_INFO"]
-        });
-    } else {
-        await redux.waitForState(({ preview }) => preview.status.project === "FETCHED", {
-            actions: ["SET_PROJECT_INFO"]
-        });
+  if (type === "studios") {
+    await redux.waitForState(({ studio }) => studio.infoStatus === "FETCHED", {
+      actions: ["SET_INFO"],
+    });
+  } else {
+    await redux.waitForState(({ preview }) => preview.status.project === "FETCHED", {
+      actions: ["SET_PROJECT_INFO"],
+    });
+  }
+
+  const typePath = type === "projects" ? `users/${redux.state.preview.projectInfo.author.username}` : "studios";
+  const commentsURL = `https://api.scratch.mit.edu/${typePath}/${id}/comments`;
+
+  const getAllComments = () => [...redux.state.comments.comments];
+  const getAllReplies = () => {
+    const replies = [];
+
+    for (const reply of Object.values(redux.state.comments.replies)) {
+      replies.push(...reply);
     }
 
-    const typePath = type === "projects" ? `users/${redux.state.preview.projectInfo.author.username}` : "studios";
-    const commentsURL = `https://api.scratch.mit.edu/${typePath}/${id}/comments`;
+    return replies;
+  };
 
-    const getAllComments = () => [...redux.state.comments.comments];
-    const getAllReplies = () => {
-        const replies = [];
+  let newest = Date.now();
 
-        for (const reply of Object.values(redux.state.comments.replies)) {
-            replies.push(...reply);
-        }
-
-        return replies
-    };
-
-    let newest = Date.now();
-
+  while (true) {
+    const loopOffset = 40;
+    let offset = -loopOffset;
     while (true) {
-        const loopOffset = 40;
-        let offset = -loopOffset;
-        while (true) {
-            offset += loopOffset;
+      offset += loopOffset;
 
-            const res = await fetch(`${commentsURL}?offset=${offset}&limit=${loopOffset}`);
-            const data = await res.json();
+      const res = await fetch(`${commentsURL}?offset=${offset}&limit=${loopOffset}`);
+      const data = await res.json();
 
-            const comments = data.map(comment => {
-                const commentCreatedTime = new Date(comment.datetime_created).getTime();
+      const comments = data.map((comment) => {
+        const commentCreatedTime = new Date(comment.datetime_created).getTime();
 
-                if (commentCreatedTime > newest) {
-                    return comment;
-                } else {
-                    return undefined;
-                }
-            });
+        if (commentCreatedTime > newest) {
+          return comment;
+        } else {
+          return undefined;
+        }
+      });
 
-            if (comments.length === 0) break;
+      if (comments.length === 0) break;
 
-            const loadedComments = getAllComments().map(comment => comment.id);
+      const loadedComments = getAllComments().map((comment) => comment.id);
 
-            for (const comment of comments) {
-                if (!comment) continue;
+      for (const comment of comments) {
+        if (!comment) continue;
 
-                if (loadedComments.indexOf(comment.id) !== -1) {
-                    break;
-                }
-
-                redux.dispatch({ type: "ADD_NEW_COMMENT", comment });
-            }
-
-            if (comments.length < loopOffset) break;
+        if (loadedComments.indexOf(comment.id) !== -1) {
+          break;
         }
 
-        const comments = getAllComments();
+        redux.dispatch({ type: "ADD_NEW_COMMENT", comment });
+      }
 
-        for (const comment of comments) {
-            offset = -loopOffset;
+      if (comments.length < loopOffset) break;
+    }
 
-            while (true) {
-                offset += loopOffset;
-                const res = await fetch(`${commentsURL}/${comment.id}/replies?offset=${offset}&limit=${loopOffset}`);
-                const unprocReplies = await res.json();
+    const comments = getAllComments();
 
-                const replies = unprocReplies.map(reply => {
-                    const replyCreatedTime = new Date(reply.datetime_created).getTime();
+    for (const comment of comments) {
+      offset = -loopOffset;
 
-                    if (replyCreatedTime > newest) {
-                        return reply;
-                    } else {
-                        return undefined;
-                    }
-                });
+      while (true) {
+        offset += loopOffset;
+        const res = await fetch(`${commentsURL}/${comment.id}/replies?offset=${offset}&limit=${loopOffset}`);
+        const unprocReplies = await res.json();
 
-                if (replies.length === 0) break;
+        const replies = unprocReplies.map((reply) => {
+          const replyCreatedTime = new Date(reply.datetime_created).getTime();
 
-                const loadedReplies = getAllReplies().map(reply => reply.id);
+          if (replyCreatedTime > newest) {
+            return reply;
+          } else {
+            return undefined;
+          }
+        });
 
-                for (const reply of replies) {
-                    if (!reply) continue;
+        if (replies.length === 0) break;
 
-                    if (loadedReplies.indexOf(reply.id) !== -1) continue;
+        const loadedReplies = getAllReplies().map((reply) => reply.id);
 
-                    redux.dispatch({ type: "ADD_NEW_COMMENT", comment: reply, topLevelCommentId: comment.id });
-                }
-            }
+        for (const reply of replies) {
+          if (!reply) continue;
+
+          if (loadedReplies.indexOf(reply.id) !== -1) continue;
+
+          redux.dispatch({ type: "ADD_NEW_COMMENT", comment: reply, topLevelCommentId: comment.id });
         }
 
         await wait(10000);
+      }
     }
+  }
 }
