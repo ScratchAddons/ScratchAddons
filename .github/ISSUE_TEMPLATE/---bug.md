@@ -24,7 +24,7 @@ Return to the last page: https://github.com/ScratchAddons/ScratchAddons/issues/n
 
 <!-- Include a clear and concise description of what the bug is. -->
 
-### Repoduction steps
+### Reproduction steps
 
 <!-- Provide an unambiguous set of steps to reproduce this bug, and/or a link to a live example. -->
 
@@ -32,11 +32,11 @@ Return to the last page: https://github.com/ScratchAddons/ScratchAddons/issues/n
 2. 
 3. 
 
-### Expected behaviour
+### Expected behavior
 
 <!-- Include a description of what should happen. -->
 
-### Actual behaviour
+### Actual behavior
 
 <!-- Include a description of what actually happened. -->
 

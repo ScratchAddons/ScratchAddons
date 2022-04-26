@@ -111,6 +111,7 @@
     <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
     <script src="../../libraries/thirdparty/vue.js" defer></script>
     <script src="../../libraries/thirdparty/color-picker.js" type="module"></script>
+    <script src="../../libraries/thirdparty/sortable.min.js" type="module"></script>
     <script src="index.js" type="module"></script>
   </head>
   <body v-cloak :class="{light: theme}">
@@ -133,7 +134,7 @@
           v-cloak
           class="category category-small"
           style="margin-top: auto"
-          href="https://scratchaddons.com/contributors/"
+          href="https://scratchaddons.com/credits/"
           :href="sidebarUrls.contributors"
           target="_blank"
         >
@@ -178,10 +179,11 @@
         </div>
 
         <div class="addons-container" :class="{placeholder: !loaded}" v-cloak>
+          <p id="search-not-found" v-show="searchInput && hasNoResults">{{ msg("searchNotFound") }}</p>
           <template v-for="addon of addonList">
             <div
               id="iframe-fullscreen-suggestion"
-              v-if="isIframe && addon.headerAbove && addon.group.id === 'enabled'"
+              v-if="isIframe && addon.headerAbove && (hasNoResults || addon.group.id === 'enabled')"
               v-show="searchInput === ''"
             >
               <span>{{ msg("exploreAllAddons", [addonAmt]) }}</span>
@@ -251,6 +253,9 @@
                   <button class="large-button" @click="importSettings()">{{ msg("import") }}</button>
                   <button class="large-button hidden-button" id="confirmImport">{{ msg("confirmImport") }}</button>
                 </div>
+                <div class="filter-selector" style="margin-left: 16px">
+                  <button class="large-button" @click="viewSettings()">{{ msg("viewSettings") }}</button>
+                </div>
               </div>
             </div>
           </div>
@@ -269,7 +274,7 @@
           </p>
           <p>
             <a
-              href="./licenses.html?libraries=icu-message-formatter,vue,color-picker-web-component,comlink,Sora,fuse,idb"
+              href="./licenses.html?libraries=icu-message-formatter,vue,color-picker-web-component,comlink,Sora,fuse,idb,sortable"
               target="_blank"
               >{{ msg("libraryCredits") }}</a
             >
