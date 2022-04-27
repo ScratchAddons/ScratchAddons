@@ -16,9 +16,7 @@ export default function () {
             return;
           }
           updateTheme(!event.matches);
-          console.log(event.matches);
           chrome.storage.sync.get(["themeSyncAddons"], function (result) {
-            console.log("themeSyncAddons " + result.themeSyncAddons);
             if (result.themeSyncAddons) {
               chrome.runtime.sendMessage({ changeEnabledState: { addonId: "dark-www", newState: event.matches } });
               chrome.runtime.sendMessage({
@@ -45,7 +43,6 @@ export default function () {
       resolve({
         theme: globalTheme,
         setGlobalTheme(mode) {
-          if (mode == theme) return;
           chrome.storage.sync.set({ globalTheme: mode }, () => {
             let tempMode;
             if (mode == "auto")
@@ -65,7 +62,6 @@ export default function () {
   });
 
   async function getTime() {
-    // Add chrome messages and if about turning off and on addons...
     let timeInputOne = await new Promise((resolve, reject) =>
       chrome.storage.sync.get(["timeOne"], (result) => resolve(result.timeOne))
     );

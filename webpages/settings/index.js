@@ -288,7 +288,7 @@ let fuse;
         });
       },
 
-      generate(id, title) {
+      saveTimeInputValue(id, title) {
         var value = document.getElementById(id).value;
         if (title == "timeOne") chrome.storage.sync.set({ timeOne: value });
         else chrome.storage.sync.set({ timeTwo: value });
