@@ -228,6 +228,9 @@ let fuse;
       addonAmt() {
         return `${Math.floor(this.manifests.length / 5) * 5}+`;
       },
+      selectedCategoryName() {
+        return this.categories.find(category => category.id === this.selectedCategory)?.name;
+      },
     },
 
     methods: {
