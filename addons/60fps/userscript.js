@@ -5,6 +5,8 @@ export default async function ({ addon, global, console }) {
   let global_fps = 30;
   const vm = addon.tab.traps.vm;
   let mode = false;
+  let monitorUpdateFixed = false;
+
   while (true) {
     let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
       markAsSeen: true,
@@ -17,7 +19,21 @@ export default async function ({ addon, global, console }) {
 
     const changeMode = (_mode = !mode) => {
       mode = _mode;
-      if (mode) setFPS(addon.settings.get("framerate"));
+      if (mode) {
+        setFPS(addon.settings.get("framerate"));
+
+        // monitor updates are throttled by default
+        // https://github.com/LLK/scratch-gui/blob/ba76db7/src/reducers/monitors.js
+        if (!monitorUpdateFixed) {
+          const originalListener = vm.listeners("MONITORS_UPDATE").find((f) => f.name == "onMonitorsUpdate");
+          if (originalListener) vm.removeListener("MONITORS_UPDATE", originalListener);
+          vm.on("MONITORS_UPDATE", monitors => addon.tab.redux.dispatch({
+            type: "scratch-gui/monitors/UPDATE_MONITORS",
+            monitors,
+          }));
+          monitorUpdateFixed = true;
+        }
+      }
       else setFPS(30);
       updateFlag();
     };
