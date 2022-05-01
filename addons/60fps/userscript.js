@@ -27,14 +27,15 @@ export default async function ({ addon, global, console }) {
         if (!monitorUpdateFixed) {
           const originalListener = vm.listeners("MONITORS_UPDATE").find((f) => f.name == "onMonitorsUpdate");
           if (originalListener) vm.removeListener("MONITORS_UPDATE", originalListener);
-          vm.on("MONITORS_UPDATE", monitors => addon.tab.redux.dispatch({
-            type: "scratch-gui/monitors/UPDATE_MONITORS",
-            monitors,
-          }));
+          vm.on("MONITORS_UPDATE", (monitors) =>
+            addon.tab.redux.dispatch({
+              type: "scratch-gui/monitors/UPDATE_MONITORS",
+              monitors,
+            })
+          );
           monitorUpdateFixed = true;
         }
-      }
-      else setFPS(30);
+      } else setFPS(30);
       updateFlag();
     };
     const flagListener = (e) => {
