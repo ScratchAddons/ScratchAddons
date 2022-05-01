@@ -211,3 +211,9 @@
   box-shadow: 0 0 0 4px hsla(163, 85%, 40%, 0.25);
   border-color: hsl(163, 85%, 40%);
 }
+#new_project {
+  font-weight: bolder;
+}
+#new_studio, button, span {
+  font-weight: bolder;
+}
