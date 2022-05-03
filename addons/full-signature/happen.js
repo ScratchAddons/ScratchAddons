@@ -1,3 +1,6 @@
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon, global, console, msg }) {
   await addon.tab.waitForElement(".activity-ul li");
   let activityStream = document.querySelectorAll(".activity-ul li");

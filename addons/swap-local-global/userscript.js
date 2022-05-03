@@ -1,3 +1,6 @@
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon, msg, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;

@@ -1,3 +1,6 @@
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async ({ addon }) => {
   while (true) {
     const soundEditorRobot = await addon.tab.waitForElement('[class*="sound-editor_row-reverse_"] > :nth-child(10)', {

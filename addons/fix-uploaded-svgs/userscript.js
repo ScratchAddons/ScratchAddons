@@ -1,3 +1,6 @@
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon, global, console }) {
   const originalFileReader = window.FileReader;
   window.FileReader = function () {

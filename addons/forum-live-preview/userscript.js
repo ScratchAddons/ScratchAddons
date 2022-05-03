@@ -1,3 +1,6 @@
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon, console }) {
   const textarea = await addon.tab.waitForElement(".markItUpEditor");
   const previewButton = await addon.tab.waitForElement(".markItUpButton.preview");

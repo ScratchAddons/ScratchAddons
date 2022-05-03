@@ -1,3 +1,6 @@
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon, msg, global, console }) {
   while (true) {
     const swatchRow = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', {

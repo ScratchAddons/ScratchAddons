@@ -1,3 +1,6 @@
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon, global, console, msg }) {
   const nav = await addon.tab.waitForElement(".sub-nav.tabs");
   //Create elements for tab

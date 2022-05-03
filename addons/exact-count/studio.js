@@ -1,3 +1,6 @@
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon }) {
   function countProjects(url, page, delta, callback) {
     fetch(url + 40 * page)

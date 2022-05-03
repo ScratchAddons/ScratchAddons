@@ -1,3 +1,6 @@
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon, global, console }) {
   var posContainerContainer = document.createElement("div");
   addon.tab.displayNoneWhileDisabled(posContainerContainer, { display: "flex" });

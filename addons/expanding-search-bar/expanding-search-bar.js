@@ -1,3 +1,6 @@
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon, global, console }) {
   if (addon.tab.clientVersion === null) return; //if neither www or r2, exit
 

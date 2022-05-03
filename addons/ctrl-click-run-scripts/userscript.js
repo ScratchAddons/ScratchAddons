@@ -1,3 +1,6 @@
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.vm;
   await new Promise((resolve, reject) => {

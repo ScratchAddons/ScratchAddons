@@ -1,3 +1,6 @@
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const originalBumpNeighbors = ScratchBlocks.BlockSvg.prototype.bumpNeighbours_;

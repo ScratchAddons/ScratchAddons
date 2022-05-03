@@ -1,3 +1,6 @@
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon, global, console, msg }) {
   while (true) {
     const comment = await addon.tab.waitForElement("div.comment", {

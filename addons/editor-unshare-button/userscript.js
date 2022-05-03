@@ -1,3 +1,6 @@
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon, msg, global, console }) {
   const { redux } = addon.tab;
   while (true) {

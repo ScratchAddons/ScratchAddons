@@ -1,5 +1,8 @@
 import GamepadLib from "./gamepadlib.js";
 
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
 

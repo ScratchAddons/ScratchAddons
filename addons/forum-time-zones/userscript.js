@@ -1,3 +1,6 @@
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon, _global, _console }) {
   const forum_topic_id = parseInt(location.pathname.split("/")[3]);
   const locale = addon.auth.scratchLang;

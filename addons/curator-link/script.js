@@ -1,4 +1,8 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
+
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon }) {
   const oldh4 = document.querySelector(".inner:last-of-type h4");
 

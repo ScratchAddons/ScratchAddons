@@ -1,3 +1,6 @@
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon, console }) {
   const spriteMeta = Object.assign(Object.create(null), {
     upload: {

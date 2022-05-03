@@ -1,3 +1,6 @@
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon, global, console, msg }) {
   // Wait for the select element that is the default message filtering select then remove it.
   await addon.tab.waitForElement(".select", { markAsSeen: true });

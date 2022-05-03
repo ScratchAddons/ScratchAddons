@@ -1,3 +1,6 @@
+/**
+ * @param {import("../types").UserscriptUtilities} param0
+ */
 export default async function ({ addon, msg }) {
   const showMenu = addon.settings.get("showMenu");
   const forceAlternative = addon.settings.get("forceAlternative");
