@@ -52,7 +52,7 @@ export default class ReduxHandler extends Listenable {
    * Waits until a state meets the condition.
    * @param {function} condition - a function that takes redux state and returns whether to keep waiting or not.
    * @param {object=} opts - options.
-   * @param {string=|string[]=} actions - the action(s) to check for.
+   * @param {string=|string[]=} opts.actions - the action(s) to check for.
    * @returns {Promise} a Promise resolved when the state meets the condition.
    */
   waitForState(condition, opts = {}) {
