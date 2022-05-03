@@ -269,9 +269,9 @@ export default class Tab extends Listenable {
    * studioCuratorsTab - inside the studio curators tab
    * @param {object} opts - options.
    * @param {string} opts.space - the shared space name.
-   * @param {HTMLElement} element - the element to add.
-   * @param {number} order - the order of the added element. Should not conflict with other addons.
-   * @param {HTMLElement=} scope - if multiple shared spaces exist, the one where the shared space gets added to.
+   * @param {HTMLElement} opts.element - the element to add.
+   * @param {number} opts.order - the order of the added element. Should not conflict with other addons.
+   * @param {HTMLElement=} opts.scope - if multiple shared spaces exist, the one where the shared space gets added to.
    * @returns {boolean} whether the operation was successful or not.
    */
   appendToSharedSpace({ space, element, order, scope }) {
@@ -631,7 +631,7 @@ export default class Tab extends Listenable {
 
   /**
    * Callback to check if the item should be visible.
-   * @callback Tab~EditorContextMenuItemCallback
+   * @callback Tab~EditorContextMenuItemCondition
    * @param {Tab~EditorContextMenuContext} context - the context for the action.
    * @returns {boolean} true to make it visible, false to hide
    */
