@@ -138,7 +138,7 @@ export default class Tab extends Listenable {
   }
 
   /**
-   * Copies an PNG image.
+   * Copies a PNG image.
    * @param {string} dataURL - data url of the png image
    * @returns {Promise}
    */
