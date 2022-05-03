@@ -35,7 +35,7 @@ interface Utilities<T> {
  * export default async function (util)
  * Note that commonly it is done by using destructing syntax.
  */
-type UserscriptUtilities = Utilities<UserscriptAddon>;
+export type UserscriptUtilities = Utilities<UserscriptAddon>;
 
 /**
  * Popups must default-export an async function
@@ -43,4 +43,4 @@ type UserscriptUtilities = Utilities<UserscriptAddon>;
  * export default async function (util)
  * Note that commonly it is done by using destructing syntax.
  */
-type PopupUtilities = Utilities<PopupAddon>;
+export type PopupUtilities = Utilities<PopupAddon>;
