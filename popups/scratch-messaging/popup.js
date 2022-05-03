@@ -21,6 +21,9 @@ const errorCodes = {
   503: "comment-error-down",
 };
 
+/**
+ * @param {import("../../addons/types").PopupUtilities} param0
+ */
 export default async ({ addon, msg, safeMsg }) => {
   let dateNow = Date.now();
 

@@ -1,3 +1,6 @@
+/**
+ * @param {import("../../addons/types").PopupUtilities} param0
+ */
 export default async ({ addon, msg, safeMsg }) => {
   // TODO: support setting this via settings page
   const url = "https://scratch.mit.edu/studios/539952/";
