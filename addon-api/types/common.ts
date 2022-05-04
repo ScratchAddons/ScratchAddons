@@ -1,7 +1,7 @@
 /**
  * Wrapper class for EventTarget.
  */
-export interface Listenable<E> extends EventTarget {
+export interface Listenable<E extends string> extends EventTarget {
   addEventListener(
     eventName: E,
     callback: EventListenerOrEventListenerObject,
@@ -63,17 +63,17 @@ interface Auth extends Listenable<"change"> {
    * Fetch current username.
    * @returns the username.
    */
-  fetchUserName(): Promise<?string>;
+  fetchUserName(): Promise<string | void>;
   /**
    * Fetch current user ID.
    * @returns the user ID.
    */
-  fetchUserId(): Promise<?number>;
+  fetchUserId(): Promise<number | void>;
   /**
    * Fetch X-Token used in new APIs.
    * @returns the X-Token.
    */
-  fetchXToken(): Promise<?string>;
+  fetchXToken(): Promise<string | void>;
   /**
    * CSRF token used in APIs
    */

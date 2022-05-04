@@ -129,7 +129,7 @@ namespace Tab {
            * An object containing the values that are entered into the block
            * inputs.
            */
-          args: { [arg: A[number]]: any },
+          args: { (arg: A[number]): any },
           /**
            * A reference to the thread that this block is running in.
            */
@@ -187,7 +187,7 @@ namespace Tab {
     /**
      * editor mode (or null for non-editors)
      */
-    get editorMode(): ?string;
+    get editorMode(): string | void;
     /**
      * Copies a PNG image.
      * @param dataURL data url of the png image
@@ -207,7 +207,7 @@ namespace Tab {
      */
     scratchClass(
       ...classes: string[],
-      opts: {
+      opts?: {
         /**
          * Non-Scratch class or classes to merge.
          */
@@ -438,7 +438,7 @@ interface Account extends Listenable<never> {
    * Fetches message count.
    * @returns current message count.
    */
-  getMsgCount(): Promise<?number>;
+  getMsgCount(): Promise<number | void>;
 }
 
 /* ----------------------------- Main Interface ----------------------------- */

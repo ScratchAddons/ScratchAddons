@@ -13,7 +13,7 @@ interface Popup {
    * Gets the URL of the Scratch page that is selected, or null.
    * @returns the URL
    */
-  getSelectedTabURL(): Promise<?string>;
+  getSelectedTabURL(): Promise<string | void>;
 }
 
 export interface PopupAddon extends Addon {
