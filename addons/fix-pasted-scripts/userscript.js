@@ -1,6 +1,3 @@
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, global, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const originalGetGesture = ScratchBlocks.WorkspaceSvg.prototype.getGesture;

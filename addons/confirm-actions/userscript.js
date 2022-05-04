@@ -1,6 +1,3 @@
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, console, msg }) {
   document.addEventListener(
     "click",

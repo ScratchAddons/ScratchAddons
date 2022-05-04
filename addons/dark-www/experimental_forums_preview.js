@@ -43,9 +43,6 @@ function updateCssVariables(node, addon) {
   if (scrollbarStyle) scrollbarStyle.disabled = !addon.settings.get("darkScrollbars");
 }
 
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, console }) {
   const preview = await addon.tab.waitForElement(".markItUpPreviewFrame");
   let previewRoot;

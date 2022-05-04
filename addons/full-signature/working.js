@@ -1,6 +1,3 @@
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, global, console, msg }) {
   let activityStream = document.querySelectorAll(".activity-stream li");
   if (activityStream.length) {

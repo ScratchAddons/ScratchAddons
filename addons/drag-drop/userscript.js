@@ -1,6 +1,3 @@
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, global, console }) {
   const DRAG_OVER_CLASS = "sa-dragged-over";
 

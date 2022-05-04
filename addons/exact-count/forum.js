@@ -1,6 +1,3 @@
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, global, console }) {
   while (true) {
     let userbox = await addon.tab.waitForElement(".postleft dl", { markAsSeen: true });

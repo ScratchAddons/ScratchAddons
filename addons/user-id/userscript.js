@@ -1,6 +1,3 @@
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default function ({ addon }) {
   const usernameHeader = document.querySelector(".header-text").firstElementChild;
   const userId = Object.assign(document.createElement("span"), {

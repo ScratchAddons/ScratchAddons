@@ -380,9 +380,6 @@ function updateSettings(addon, newStyle) {
   newStyle.textContent = stylesheet;
 }
 
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, global, console }) {
   const otherStyle = document.querySelector(`[data-addon-id='${addon.self.id}']`);
   const newStyle = document.createElement("style");

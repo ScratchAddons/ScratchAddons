@@ -1,6 +1,3 @@
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, global, console, msg }) {
   // We don"t *need* to wait for the costume editor to be opened, but redux updates take a non-zero
   // amount of CPU time so let's delay that for as long as possible.

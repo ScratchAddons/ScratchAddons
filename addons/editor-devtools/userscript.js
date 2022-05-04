@@ -1,8 +1,5 @@
 import DevTools from "./DevTools.js";
 
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, global, console, msg, safeMsg: m }) {
   // noinspection JSUnresolvedVariable
   if (!addon.self._isDevtoolsExtension && window.initGUI) {

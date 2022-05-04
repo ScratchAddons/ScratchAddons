@@ -1,7 +1,4 @@
 /* global $, paste */
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, console, msg }) {
   const buttons = document.querySelectorAll(".postfootright");
   buttons.forEach(function (elm) {

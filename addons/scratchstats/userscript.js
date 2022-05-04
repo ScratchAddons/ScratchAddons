@@ -10,9 +10,6 @@ function createItem(number, label) {
   return item;
 }
 
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, msg, console }) {
   const username = location.pathname.split("/")[2];
   if (!username) return;

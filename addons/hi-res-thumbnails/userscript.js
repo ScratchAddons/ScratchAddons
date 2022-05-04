@@ -1,6 +1,3 @@
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, console }) {
   main: while (true) {
     const image = await addon.tab.waitForElement("img", {

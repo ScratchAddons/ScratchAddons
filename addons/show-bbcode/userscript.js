@@ -35,9 +35,6 @@ function viewSource(post, msg) {
   };
 }
 
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, console, msg }) {
   while (true) {
     const post = await addon.tab.waitForElement(".blockpost", { markAsSeen: true });

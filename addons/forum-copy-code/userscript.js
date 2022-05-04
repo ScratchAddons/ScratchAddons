@@ -1,6 +1,3 @@
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, global, console, msg }) {
   while (true) {
     const codeBlock = await addon.tab.waitForElement("div.code", {

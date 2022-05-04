@@ -1,6 +1,3 @@
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, global, console }) {
   let user1 = window.location.href.substring(30, 100);
   let username = user1.substring(0, user1.indexOf("/"));

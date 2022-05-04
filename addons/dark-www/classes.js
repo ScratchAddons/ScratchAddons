@@ -1,6 +1,3 @@
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, console }) {
   addon.tab.waitForElement(".annual-report-content .covid-response-section").then(() => {
     document.querySelector(".page").classList.add("sa-annual-report-2019");

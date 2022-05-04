@@ -1,7 +1,4 @@
 /* global copy_paste */
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, global, console }) {
   function getSelectionBBCode() {
     var selection = window.getSelection();

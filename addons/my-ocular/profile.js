@@ -1,6 +1,3 @@
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, global, console, msg }) {
   var username = document.querySelector("#profile-data > div.box-head > div > h2").innerText;
 

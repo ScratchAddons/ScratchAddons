@@ -1,6 +1,3 @@
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, global, console, msg }) {
   while (true) {
     let item = await addon.tab.waitForElement(".media-stats", { markAsSeen: true });

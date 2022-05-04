@@ -1,6 +1,3 @@
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon }) {
   let vm = addon.tab.traps.vm;
   let oldAddSprite = vm.constructor.prototype.addSprite;

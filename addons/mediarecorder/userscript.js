@@ -1,8 +1,5 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async ({ addon, console, msg }) => {
   let recordElem;
   let isRecording = false;

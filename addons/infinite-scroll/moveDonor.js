@@ -1,6 +1,3 @@
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, global, console }) {
   const root = document.documentElement; //The :root element
   const footer = await addon.tab.waitForElement("#footer"); //The footer

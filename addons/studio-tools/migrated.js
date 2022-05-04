@@ -1,6 +1,3 @@
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async ({ addon, console, msg }) => {
   const { redux } = addon.tab;
   await redux.waitForState(

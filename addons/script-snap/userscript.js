@@ -1,6 +1,3 @@
-/**
- * @param {import("../types").UserscriptUtilities} param0
- */
 export default async function ({ addon, global, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
   let workspace = Blockly.getMainWorkspace();
