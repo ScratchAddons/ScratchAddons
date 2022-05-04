@@ -206,13 +206,20 @@ namespace Tab {
      * @returns Hashed class names
      */
     scratchClass(
-      ...classes: string[],
-      opts?: {
-        /**
-         * Non-Scratch class or classes to merge.
-         */
-        others: string | string[];
-      }
+      ...classes: [
+        ...(
+          | string[]
+          | [
+              ...string[],
+              {
+                /**
+                 * Non-Scratch class or classes to merge.
+                 */
+                others: string | string[];
+              }
+            ]
+        )
+      ]
     ): string;
     /**
      * Hides an element when the addon is disabled.
