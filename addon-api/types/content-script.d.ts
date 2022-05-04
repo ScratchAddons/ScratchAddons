@@ -22,7 +22,7 @@ interface PayloadAction {
   /**
    * Action payload/data.
    */
-  payload: any;
+  [key: string]: any;
 }
 
 /* ---------------------------------- Core ---------------------------------- */
