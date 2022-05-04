@@ -1,0 +1,9 @@
+{
+  "include": ["./addon-api/types/*.ts"],
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ES6",
+    "moduleResolution": "Node"
+  },
+  "exclude": []
+}

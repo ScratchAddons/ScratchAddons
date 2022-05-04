@@ -93,7 +93,7 @@ interface ReduxHandler extends Listenable<"statechanged"> {
 /**
  * APIs specific to userscripts.
  */
-namespace Tab {
+declare namespace Tab {
   export interface Tab extends Listenable<"urlChange"> {
     traps: Trap;
     redux: ReduxHandler;
@@ -321,7 +321,7 @@ namespace Tab {
          */
         comments: boolean;
       }
-    );
+    ): void;
     /**
      * Adds a context menu item for the editor.
      * @param callback the callback executed when the item is clicked.
@@ -363,7 +363,7 @@ namespace Tab {
          */
         condition: EditorContextMenuItemCondition;
       }
-    );
+    ): void;
   }
   /**
    * Type for context menu item.
