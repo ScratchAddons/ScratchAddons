@@ -1,9 +1,0 @@
-{
-  "json.schemas": [
-    {
-      "fileMatch": ["addons/*/addon.json"],
-      "url": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json"
-    }
-  ],
-  "editor.rulers": [120]
-}
