@@ -25,7 +25,10 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
 
 document.title = chrome.i18n.getMessage("permissionsTitle");
 
-const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
+const promisify =
+  (callbackFn) =>
+  (...args) =>
+    new Promise((resolve) => callbackFn(...args, resolve));
 
 document.getElementById("permissionsBtn").addEventListener("click", async () => {
   const manifest = chrome.runtime.getManifest();
