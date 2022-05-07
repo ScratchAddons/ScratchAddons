@@ -228,6 +228,9 @@ let fuse;
       addonAmt() {
         return `${Math.floor(this.manifests.filter((addon) => !addon.tags.includes("easterEgg")).length / 5) * 5}+`;
       },
+      selectedCategoryName() {
+        return this.categories.find((category) => category.id === this.selectedCategory)?.name;
+      },
     },
 
     methods: {
