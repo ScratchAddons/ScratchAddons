@@ -25,7 +25,7 @@ export default async function ({ addon, global, console }) {
         // monitor updates are throttled by default
         // https://github.com/LLK/scratch-gui/blob/ba76db7/src/reducers/monitors.js
         if (!monitorUpdateFixed) {
-          const originalListener = vm.listeners("MONITORS_UPDATE").find((f) => f.name == "onMonitorsUpdate");
+          const originalListener = vm.listeners("MONITORS_UPDATE").find((f) => f.name === "onMonitorsUpdate");
           if (originalListener) vm.removeListener("MONITORS_UPDATE", originalListener);
           vm.on("MONITORS_UPDATE", (monitors) =>
             addon.tab.redux.dispatch({
