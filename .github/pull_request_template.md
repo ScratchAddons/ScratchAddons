@@ -4,12 +4,12 @@ Resolves #
 
 ### Changes
 
-<!-- Please describe the changes you've made. -->
+<!-- I've added a new option for the addon `clones` which make the monitor display just the icon and the clone nuumber, without the clones text. -->
 
 ### Reason for changes
 
-<!-- Why should these changes be made? -->
+<!-- Because RIMOPA (https://github.com/RIMOPA) requested it on discord (https://discord.com/channels/806602307750985799/826250884279173162/972687955011465227), and I support the idea, it's a small change, but very useful for small screens. -->
 
 ### Tests
 
-<!-- If applicable. Have you tested this pull request? If so, how? -->
+<!-- I tested it on Chrome and on Waterfox (Firefox based) on this project: https://scratch.mit.edu/projects/659873974/editor/, and it worked. -->
