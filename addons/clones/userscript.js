@@ -1,6 +1,8 @@
 export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
 
+  const showNoText = addon.settings.get("shownotext");
+
   if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
     document.body.classList.add("sa-clones-small");
   }
@@ -35,14 +37,21 @@ export default async function ({ addon, global, console, msg }) {
 
   const cache = Array(301)
     .fill()
-    .map((_, i) => msg("clones", { cloneCount: i }));
+    //loads the blank message in if shownotext setting is enabled
+    .map((_, i) => {if (showNoText) {msg("clones", { cloneCount: i })} else {msg("blank", { cloneCount: i })}});
 
   function doCloneChecks() {
     const v = vm.runtime._cloneCounter;
     // performance
     if (v === lastChecked) return;
     countContainerContainer.dataset.count = lastChecked = v;
-    count.dataset.str = cache[v] || msg("clones", { cloneCount: v });
+    if(showNoText){
+      //it caches the blank message if shownotext setting is enabled
+      count.dataset.str = cache[v] || msg("blank", { cloneCount: v });
+    }
+    else {
+      count.dataset.str = cache[v] || msg("clones", { cloneCount: v });
+    }
 
     if (v === 0) countContainerContainer.style.display = "none";
     else addon.tab.displayNoneWhileDisabled(countContainerContainer, { display: "flex" });
