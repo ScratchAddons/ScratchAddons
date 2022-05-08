@@ -21,6 +21,14 @@
       "matches": ["projects"]
     }
   ],
+  "settings": [
+    {
+      "id": "shownotext",
+      "name": "Show icon only",
+      "default": false,
+      "type": "boolean"
+    }
+  ],
   "tags": ["editor", "projectPlayer", "recommended"],
   "enabledByDefault": false
 }
