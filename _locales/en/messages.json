@@ -131,6 +131,9 @@
   "moreSettings": {
     "message": "More Settings"
   },
+  "close": {
+    "message": "Close"
+  },
   "filter": {
     "message": "Filter:"
   },
