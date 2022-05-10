@@ -1,0 +1,24 @@
+{
+  "name": "Compact Navbar",
+  "description": "Makes a more compact navbar.",
+  "userscripts": [
+    {
+      "url": "www.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    },
+    {
+      "url": "r2.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "credits": [
+    {
+      "name": "retronbv",
+      "note": "addon",
+      "id": "addon",
+      "link": "https://github.com/retronbv/"
+    }
+  ],
+  "versionAdded": "1.26.0",
+  "tags": ["featured"]
+}
