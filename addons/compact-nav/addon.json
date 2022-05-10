@@ -14,11 +14,11 @@
   "credits": [
     {
       "name": "retronbv",
-      "note": "addon",
-      "id": "addon",
       "link": "https://github.com/retronbv/"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.26.0",
   "tags": ["featured"]
 }
