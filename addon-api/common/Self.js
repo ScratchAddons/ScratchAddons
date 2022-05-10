@@ -13,7 +13,7 @@ export default class Self extends Listenable {
     this._addonId = info.id; // In order to receive fireEvent messages from background
     this.id = info.id;
     this._addonObj = addonObj;
-    this.browser = typeof InstallTrigger !== "undefined" ? "firefox" : "chrome";
+    this.browser = /Chrom/.test(navigator.userAgent) ? "chrome" : "firefox";
     this.disabled = false;
     this.addEventListener("disabled", () => (this.disabled = true));
     this.addEventListener("reenabled", () => (this.disabled = false));

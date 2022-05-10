@@ -131,6 +131,9 @@
   "moreSettings": {
     "message": "More Settings"
   },
+  "close": {
+    "message": "Close"
+  },
   "filter": {
     "message": "Filter:"
   },
@@ -254,14 +257,14 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_24": {
-    "message": "New addon: \"customizable navigation bar\", which lets you choose a list of links to be displayed in the navigation bar. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_25": {
+    "message": "New addon: \"color picker inputs\", which allows setting an exact value (0-100) for each slider in the costume editor color picker. Go to $1 to enable it."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_24": {
-    "message": "Other new addons added this update are \"customizable block text style\", \"disable sprite wobble in sprite pane\" and \"search sprites by name\". In addition, the \"Scratch 2.0 → 3.0\" addon has been updated to match Scratch 3.0 more closely."
+  "extensionUpdateInfo2_v1_25": {
+    "message": "Other new addons added this update are \"horizontal tabs on My Stuff\" and \"live forum post preview\"."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
@@ -305,6 +308,9 @@
   "import": {
     "message": "Import Settings"
   },
+  "viewSettings": {
+    "message": "View settings file"
+  },
   "fileNotSelected": {
     "message": "Please select a settings file."
   },
@@ -339,6 +345,12 @@
   "exploreAllAddons": {
     "message": "Explore all $1 addons:",
     "description": "Placeholder is a number. Example: explore all 80+ addons"
+  },
+  "searchNotFound": {
+    "message": "No results found. Perhaps try different keywords?"
+  },
+  "searchNotFoundInCategory": {
+    "message": "No results found in \"$1\". Perhaps try different keywords?"
   },
   "captureCommentError": {
     "message": "Message added by Scratch Addons: it appears that your comment doesn't follow $1, which asks Scratchers not to advertise or name browser extensions. This comment wasn't posted because it will probably result in your account getting muted from commenting for 5 minutes."

@@ -143,19 +143,19 @@ export async function fetchMigratedComments(
 ) {
   let projectAuthor;
   if (resourceType === "project") {
-    const projectRes = await fetch(`https://api.scratch.mit.edu/projects/${resourceId}?sareferer`);
+    const projectRes = await fetch(`https://api.scratch.mit.edu/projects/${resourceId}`);
     if (!projectRes.ok) return commentsObj; // empty
     const projectJson = await projectRes.json();
     projectAuthor = projectJson.author.username;
   }
   const getCommentUrl = (commId) =>
     resourceType === "project"
-      ? `https://api.scratch.mit.edu/users/${projectAuthor}/projects/${resourceId}/comments/${commId}?sareferer`
-      : `https://api.scratch.mit.edu/studios/${resourceId}/comments/${commId}?sareferer`;
+      ? `https://api.scratch.mit.edu/users/${projectAuthor}/projects/${resourceId}/comments/${commId}`
+      : `https://api.scratch.mit.edu/studios/${resourceId}/comments/${commId}`;
   const getRepliesUrl = (commId, offset) =>
     resourceType === "project"
-      ? `https://api.scratch.mit.edu/users/${projectAuthor}/projects/${resourceId}/comments/${commId}/replies?offset=${offset}&limit=40&nocache=${Date.now()}&sareferer`
-      : `https://api.scratch.mit.edu/studios/${resourceId}/comments/${commId}/replies?offset=${offset}&limit=40&nocache=${Date.now()}&sareferer`;
+      ? `https://api.scratch.mit.edu/users/${projectAuthor}/projects/${resourceId}/comments/${commId}/replies?offset=${offset}&limit=40&nocache=${Date.now()}`
+      : `https://api.scratch.mit.edu/studios/${resourceId}/comments/${commId}/replies?offset=${offset}&limit=40&nocache=${Date.now()}`;
   for (const commentId of commentIds) {
     if (commentsObj[`${resourceType[0]}_${commentId}`]) continue;
 
@@ -220,10 +220,13 @@ export async function fetchMigratedComments(
     }
 
     if (json.parent_id && replies.length === 0) {
-      // Something went wrong, we didn't get the replies
-      throw new Error(
+      // Something went wrong, we didn't get the replies (likely API failure)
+      // Add the comment as a reply - better than crashing, because apparently it's
+      // more common than I thought!
+      console.error(
         `No replies found on comment ${resourceType}/${resourceId}/${commentId} with parents ${json.parent_id}`
       );
+      replies.push(json);
     }
 
     for (const reply of replies) {

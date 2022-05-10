@@ -7,7 +7,7 @@ export default function create(opts) {
   if (scratchAddons.muted) return Promise.resolve(null);
   const notifId = `${opts.base}__${Date.now()}_${id++}`;
   let newOpts;
-  if (typeof InstallTrigger !== "undefined") {
+  if (!/Chrom/.test(navigator.userAgent)) {
     newOpts = JSON.parse(JSON.stringify(opts));
     // On Firefox, remove notification properties that throw.
     delete newOpts.buttons;
