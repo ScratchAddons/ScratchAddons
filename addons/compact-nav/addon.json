@@ -4,11 +4,17 @@
   "userscripts": [
     {
       "url": "www.js",
-      "matches": ["https://scratch.mit.edu/*"]
+      "matches": ["scratchWWWNoProject", "projects"]
     },
     {
       "url": "r2.js",
-      "matches": ["https://scratch.mit.edu/*"]
+      "matches": ["isNotScratchWWW"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["scratchWWWNoProject", "projects"]
     }
   ],
   "credits": [
@@ -20,5 +26,5 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.26.0",
-  "tags": ["featured"]
+  "tags": ["community"]
 }

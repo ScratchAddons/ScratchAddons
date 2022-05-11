@@ -1,0 +1,6 @@
+.user-info > .avatar {
+  margin-right: 0 !important;
+}
+.user-info > .profile-name {
+  display:none;
+}

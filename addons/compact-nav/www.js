@@ -16,8 +16,6 @@ export default async function ({ addon, console }) {
       profileName.appendChild(profileNameChild);
       dropdown.insertBefore(profileName, dropdown.firstChild);
       dropdown.childNodes[1].classList.add("divider");
-      accountnav.firstChild.childNodes[1].setAttribute("style","display:none;");
-      accountnav.firstChild.firstChild.setAttribute("style","margin-right: 0px !important;");
     }
     function disable(){
       profileNameChild.removeChild(profileNameChildChild);
