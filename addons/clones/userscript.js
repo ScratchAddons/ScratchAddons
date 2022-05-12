@@ -38,7 +38,13 @@ export default async function ({ addon, global, console, msg }) {
   const cache = Array(301)
     .fill()
     //loads the blank message in if shownotext setting is enabled
-    .map((_, i) => {if (showNoText) {msg("clones", { cloneCount: i })} else {msg("blank", { cloneCount: i })}});
+    .map((_, i) => {
+      if (showNoText) {
+        msg("clones", { cloneCount: i })
+      } else {
+        msg("blank", { cloneCount: i })
+      }
+    });
 
   function doCloneChecks() {
     const v = vm.runtime._cloneCounter;
