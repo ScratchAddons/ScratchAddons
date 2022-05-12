@@ -4,6 +4,10 @@
   "credits": [
     {
       "name": "Jeffalo"
+    },
+    {
+      "name": "OregSam",
+      "link": "https://github.com/OregSamSas"
     }
   ],
   "dynamicEnable": true,
