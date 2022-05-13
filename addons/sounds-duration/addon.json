@@ -1,13 +1,13 @@
 {
   "name": "Sound duration display",
-  "description": "Displays the duration of sounds in the sound editor as well as how long it has been playing.",
+  "description": "Adds a display to the sound editor that shows the total length and the elapsed time of the sound, or the selection within it.",
   "credits": [
     {
       "name": "TheColaber",
       "link": "https://scratch.mit.edu/users/TheColaber"
     }
   ],
-  "tags": ["editor"],
+  "tags": ["editor", "featured"],
   "userscripts": [
     {
       "url": "userscript.js",
@@ -19,5 +19,6 @@
       "url": "style.css",
       "matches": ["projects"]
     }
-  ]
+  ],
+  "versionAdded": "1.26.0"
 }
