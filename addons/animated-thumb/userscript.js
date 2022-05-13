@@ -85,7 +85,7 @@ export default async function ({ addon, global, console, msg }) {
     );
     const thumbImage = Object.assign(document.createElement("img"), {
       alt: "",
-      width: 360,
+      width: 320,
       height: 240,
     });
     const thumbImageWrapper = Object.assign(document.createElement("p"), {

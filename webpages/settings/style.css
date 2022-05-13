@@ -127,6 +127,7 @@ h1 {
 }
 .large-button:hover:not([disabled]) {
   background: var(--button-hover-background);
+  cursor: pointer;
 }
 .large-button:focus-visible {
   outline: none;
@@ -176,6 +177,14 @@ h1 {
 }
 #confirmImport {
   border-color: var(--brand-orange);
+}
+
+#search-not-found {
+  margin: 10px;
+}
+body.iframe #search-not-found {
+  margin: unset;
+  text-align: center;
 }
 
 /*scrollbar*/
@@ -394,6 +403,9 @@ button.setting-input.color.open {
   background-color: white;
   display: flex;
   position: relative;
+}
+.color-container .setting-input.color {
+  cursor: pointer;
 }
 
 .action-disabled {

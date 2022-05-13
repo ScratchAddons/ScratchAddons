@@ -119,7 +119,6 @@ body > #pagewrapper {
 }
 .linkst,
 .linksb {
-  padding: 0;
   padding: 13px 0;
 }
 .linkst::after {
@@ -258,21 +257,27 @@ body > #pagewrapper {
   padding: 10px 12px;
 }
 .djangobb .username {
+  position: relative;
+  z-index: 1;
   margin: -4px;
   display: block;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
   padding: 4px;
   overflow: hidden;
   border-radius: 4px;
   background-color: var(--darkWww-gray, #f2f2f2);
   color: var(--darkWww-link, #4d97ff);
   font-size: 16px;
+  white-space: nowrap;
   text-overflow: ellipsis;
 }
-.djangobb .username:hover {
-  width: fit-content;
+.djangobb .username:visited:not(:hover) {
+  color: var(--darkWww-link, #4d97ff);
 }
-.forum-search-list .postleft .username {
-  color: var(--darkWww-gray-text, #575e75);
+.djangobb .username:hover {
+  width: -moz-fit-content;
+  width: fit-content;
 }
 .searchposts .postleft a {
   font-size: 16px;

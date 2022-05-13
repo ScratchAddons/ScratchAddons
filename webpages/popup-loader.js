@@ -75,7 +75,7 @@ async function refetchSession(addon) {
   scratchAddons.isFetchingSession = true;
   addon.auth._refresh();
   try {
-    res = await fetch("https://scratch.mit.edu/session/?sareferer", {
+    res = await fetch("https://scratch.mit.edu/session/", {
       headers: {
         "X-Requested-With": "XMLHttpRequest",
       },
