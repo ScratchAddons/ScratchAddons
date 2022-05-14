@@ -17,6 +17,8 @@ export default async function ({ addon, msg, global, console }) {
     el.textContent =
       norm(0) + separator + norm(state.audioBufferPlayer.buffer.length / state.audioBufferPlayer.buffer.sampleRate);
 
+    // https://github.com/LLK/scratch-gui/blob/develop/src/containers/sound-editor.jsx
+
     const _handleUpdatePlayhead = state.handleUpdatePlayhead;
     state.handleUpdatePlayhead = function (playhead) {
       _handleUpdatePlayhead.call(this, playhead);
