@@ -78,7 +78,7 @@ export default async function ({ addon, msg, console }) {
       fetch(`https://scratchdb.lefty.one/v3/user/graph/${username}/followers?range=364&segment=6`)
         .then(async function (response) {
           const historyData = await response.json();
-          historyData.pop();
+          if (historyData.length === 0) return;
           await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
           const canvasContainer = document.createElement("div");
           stats.appendChild(canvasContainer);
