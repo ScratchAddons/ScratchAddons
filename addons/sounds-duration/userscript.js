@@ -13,18 +13,7 @@ export default async function ({ addon, msg, global, console }) {
 
     function setText(running, selected) {
       const norm = (num) => {
-        if (selected > 60) {
-          // display in minutes
-          return (
-            Math.floor(num / 60) +
-            ":" +
-            Math.floor(num % 60)
-              .toString()
-              .padStart(2, "0")
-          );
-        } else {
-          return (Math.round(num * 100) / 100).toFixed(2);
-        }
+        return Math.floor(num / 60) + ":" + ((Math.round(num * 100) / 100) % 60).toFixed(2).padStart(5, "0");
       };
 
       el.textContent = norm(running) + " / " + norm(selected);
@@ -50,7 +39,11 @@ export default async function ({ addon, msg, global, console }) {
       _handleStoppedPlaying.call(this);
       const trimStartTime = state.audioBufferPlayer.buffer.duration * state.audioBufferPlayer.trimStart;
       const trimmedDuration = state.audioBufferPlayer.buffer.duration * state.audioBufferPlayer.trimEnd - trimStartTime;
-      setText(0, trimmedDuration);
+      if (trimmedDuration === 0) {
+        setText(0, state.audioBufferPlayer.buffer.duration);
+      } else {
+        setText(0, trimmedDuration);
+      }
     };
 
     // When the user changes to a different sound
