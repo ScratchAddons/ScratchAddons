@@ -13,7 +13,7 @@ export default async function ({ addon, msg, global, console }) {
 
     function setText(running, selected) {
       const norm = (num) => {
-        if (selected > 5) {
+        if (selected > 60) {
           // display in minutes
           return (
             Math.floor(num / 60) +
