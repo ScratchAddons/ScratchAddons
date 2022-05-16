@@ -137,10 +137,10 @@ export default async ({ addon, msg, safeMsg }) => {
                   mins: Math.max(Math.ceil((e.details.muteStatus.muteExpiresAt - Date.now() / 1000) / 60), 1),
                 });
               } else {
-                errorMsg = msg(errorCodes[e.details.error] || "send-error");
+                errorMsg = msg(errorCodes[e.details?.error] || "send-error");
               }
             } else if (e instanceof API.HTTPError) {
-              errorMsg = msg(errorCodes[e.details.code] || "send-error");
+              errorMsg = msg(errorCodes[e.code] || "send-error");
             } else {
               errorMsg = e.toString();
             }
