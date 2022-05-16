@@ -128,6 +128,7 @@ export default async function ({ addon, global, console }) {
       const oldGetMetrics = workspace.getMetrics;
       workspace.getMetrics = function () {
         const metrics = oldGetMetrics.call(this);
+        if (workspace.RTL) return metrics;
         if (workspace.getToolbox().flyout_.getWidth() === 310) {
           // columns is enabled
           return metrics;
