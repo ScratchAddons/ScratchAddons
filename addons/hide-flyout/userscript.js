@@ -1,6 +1,7 @@
 export default async function ({ addon, global, console }) {
   let placeHolderDiv = null;
   let lockDisplay = null;
+  let lockIcon = null;
   let flyOut = null;
   let scrollBar = null;
   let toggle = false;
@@ -157,12 +158,16 @@ export default async function ({ addon, global, console }) {
 
     // Lock Img
     if (lockDisplay) lockDisplay.remove();
-    lockDisplay = document.createElement("img");
-    lockDisplay.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
+    lockDisplay = document.createElement("button");
     lockDisplay.className = "sa-lock-image";
+    lockIcon = document.createElement("img");
+    lockIcon.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
+    lockDisplay.appendChild(lockIcon);
     lockDisplay.onclick = () => {
       flyoutLock = !flyoutLock;
-      lockDisplay.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
+      lockIcon.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
+      if (flyoutLock) lockDisplay.classList.add("locked");
+      else lockDisplay.classList.remove("locked");
     };
 
     onmouseleave(null, 0);
