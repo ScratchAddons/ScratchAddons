@@ -68,7 +68,7 @@ export default async function ({ addon, global, console }) {
           // always 0, 1, 2
           lockDisplay.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
           placeHolderDiv.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
-          if (e.detail.action.activeTabIndex === 0) {
+          if (e.detail.action.activeTabIndex === 0 && (toggleSetting === "hover" || toggleSetting === "cathover")) {
             onmouseleave(null, 0);
             toggle = false;
           }
@@ -86,8 +86,8 @@ export default async function ({ addon, global, console }) {
       Blockly.Toolbox.prototype.setSelectedItem = function (item, shouldScroll) {
         if (shouldScroll === undefined) shouldScroll = true;
         if (!shouldScroll) {
-          // prevent initial selection
-          item = null;
+          // ignore initial selection when updating the toolbox
+          item = this.selectedItem_;
         } else if (this.selectedItem_ === item) {
           toggle = !toggle;
           if (toggle) onmouseenter();
@@ -165,9 +165,9 @@ export default async function ({ addon, global, console }) {
       lockDisplay.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
     };
 
-    if (toggleSetting === "hover" || toggleSetting === "cathover") {
-      onmouseleave(null, 0);
+    onmouseleave(null, 0);
 
+    if (toggleSetting === "hover" || toggleSetting === "cathover") {
       // Only append if we don't have "categoryclick" on
       tabs.appendChild(lockDisplay);
 
