@@ -160,6 +160,7 @@ export default async function ({ addon, global, console }) {
     if (lockDisplay) lockDisplay.remove();
     lockDisplay = document.createElement("button");
     lockDisplay.className = "sa-lock-image";
+    if (flyoutLock) lockDisplay.classList.add("locked");
     lockIcon = document.createElement("img");
     lockIcon.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
     lockDisplay.appendChild(lockIcon);
