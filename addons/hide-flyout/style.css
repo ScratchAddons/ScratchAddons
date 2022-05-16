@@ -8,7 +8,7 @@
 .blocklyFlyout,
 .blocklyFlyoutScrollbar,
 .sa-lock-image {
-  transition-property: transform, margin;
+  transition-property: margin;
 }
 
 .gui[dir="ltr"] .blocklyFlyout.sa-flyoutClose,
