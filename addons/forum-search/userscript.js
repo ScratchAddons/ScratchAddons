@@ -184,10 +184,10 @@ function appendSearch(box, query, page, term, msg) {
         postLeftDl.appendChild(document.createElement("br"));
         postLeftDl.appendChild(document.createElement("br"));
 
-        postLeftDl.appendChild(createLabel(msg("first-checked"), "black username"));
+        postLeftDl.appendChild(createLabel(msg("first-checked")));
         postLeftDl.appendChild(createTextBox(scratchAddons.l10n.datetime(new Date(post.time.first_checked)), "", 2));
 
-        postLeftDl.appendChild(createLabel(msg("last-checked"), "black username"));
+        postLeftDl.appendChild(createLabel(msg("last-checked")));
         postLeftDl.appendChild(
           createTextBox(scratchAddons.l10n.datetime(new Date(post.time.html_last_checked)), "", 2)
         );
