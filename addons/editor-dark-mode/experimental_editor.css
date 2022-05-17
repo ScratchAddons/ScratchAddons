@@ -580,8 +580,7 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 }
 
 /* Miscellaneous styles */
-.monitor_label_ci1ok,
-.monitor_list-empty_1UKsB {
+[class*="stage-wrapper_"] {
   color: #575e75;
 }
 .sprite-selector_sprite-selector_2KgCX {

@@ -9,13 +9,6 @@ body {
   background-color: var(--darkWww-page);
   color: var(--darkWww-page-text);
 }
-div[class*="stage-wrapper_"] {
-  /*
-    Revert the color specified above. Editor dark mode provides its own CSS.
-    See also: #4560 and LLK/scratch-gui#5797
-  */
-  color: #575e75;
-}
 .subactions .share-date,
 .conf2019-description {
   color: var(--darkWww-page-text);
@@ -806,7 +799,7 @@ p {
   border-radius: 8px;
 }
 
-.project-info-alert {
+.guiPlayer {
   color: #575e75;
 }
 
