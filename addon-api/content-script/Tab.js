@@ -52,11 +52,12 @@ export default class Tab extends Listenable {
    * @returns {Promise}
    */
   loadScript(url) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const script = document.createElement("script");
       script.src = url;
       document.head.appendChild(script);
       script.onload = resolve;
+      script.onerror = reject;
     });
   }
   /**
