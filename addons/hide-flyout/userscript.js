@@ -173,6 +173,7 @@ export default async function ({ addon, global, console }) {
     };
 
     onmouseleave(null, 0);
+    toggle = false;
 
     if (toggleSetting === "hover" || toggleSetting === "cathover") {
       // Only append if we don't have "categoryclick" on
