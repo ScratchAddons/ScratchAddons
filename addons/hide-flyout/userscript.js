@@ -124,12 +124,11 @@ export default async function ({ addon, global, console }) {
     }
     if (toggleSetting !== "hover") {
       // add flyout size to the workspace dimensions
-      const workspace = Blockly.getMainWorkspace();
-      const oldGetMetrics = workspace.getMetrics;
-      workspace.getMetrics = function () {
+      const oldGetMetrics = Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
+      Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function () {
         const metrics = oldGetMetrics.call(this);
-        if (workspace.RTL) return metrics;
-        if (workspace.getToolbox().flyout_.getWidth() === 310) {
+        if (this.RTL) return metrics;
+        if (this.getToolbox().flyout_?.getWidth() === 310) {
           // columns is enabled
           return metrics;
         }
@@ -139,7 +138,8 @@ export default async function ({ addon, global, console }) {
           viewWidth: metrics.viewWidth + 250,
         };
       };
-      Blockly.svgResize(workspace);
+      if (Blockly.getMainWorkspace())
+        Blockly.getMainWorkspace().getMetrics = Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
     }
   }
 
@@ -198,6 +198,11 @@ export default async function ({ addon, global, console }) {
           closeOnMouseUp = false;
         }
       });
+    }
+
+    if (toggleSetting !== "hover") {
+      // update workspace dimensions
+      Blockly.svgResize(Blockly.getMainWorkspace());
     }
 
     doOneTimeSetup();
