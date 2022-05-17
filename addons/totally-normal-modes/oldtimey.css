@@ -1,0 +1,16 @@
+.sa-body-editor {
+  filter: brightness(0.9) contrast(0.8) sepia(100%);
+}
+
+.sa-body-editor::after {
+  content: "";
+  display: block;
+  position: absolute;
+  z-index: 500;
+  width: 100%;
+  height: 100%;
+  background-image: url("assets/oldtimey.png");
+  background-size: 100%;
+  background-position: center center;
+  pointer-events: none;
+}

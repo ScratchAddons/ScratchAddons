@@ -27,6 +27,13 @@
       "if": {
         "settings": { "mode": "90s" }
       }
+    },
+    {
+      "url": "oldtimey.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "mode": "oldTimey" }
+      }
     }
   ],
   "settings": [

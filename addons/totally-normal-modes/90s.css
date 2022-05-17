@@ -1,8 +1,8 @@
-body {
+.sa-body-editor {
   filter: hue-rotate(40deg);
 }
 
-body::after {
+.sa-body-editor::after {
   content: "";
   display: block;
   position: absolute;
