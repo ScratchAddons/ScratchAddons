@@ -10,6 +10,8 @@ export default async function ({ addon, console }) {
   });
   while (true) {
     const tweet = await addon.tab.waitForElement(".twitter-tweet iframe[src*='theme=light']", { markAsSeen: true });
-    setInterval(() => {tweet.src = tweet.src.replace("theme=light", "theme=dark");}, 0);
+    setInterval(() => {
+      tweet.src = tweet.src.replace("theme=light", "theme=dark");
+    }, 0);
   }
 }
