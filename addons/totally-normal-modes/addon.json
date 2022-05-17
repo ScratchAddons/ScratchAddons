@@ -1,0 +1,60 @@
+{
+  "name": "Editor modes",
+  "description": "Adds the 90s, Old timey and Prehistoric mode from April Fools 2022 and the Mystery Mode from 2020.",
+  "credits": [
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "common.css",
+      "matches": ["projects"]
+    },
+    {
+      "url": "90s.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "mode": "90s" }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "id": "mode",
+      "type": "select",
+      "name": "Mode",
+      "potentialValues": [
+        {
+          "id": "90s",
+          "name": "90s"
+        },
+        {
+          "id": "oldTimey",
+          "name": "Old timey"
+        },
+        {
+          "id": "prehistoric",
+          "name": "Prehistoric"
+        },
+        {
+          "id": "mystery",
+          "name": "Mystery"
+        }
+      ],
+      "default": "90s"
+    }
+  ],
+  "tags": ["editor", "easterEgg"],
+  "libraries": ["scratch-gui"]
+}
