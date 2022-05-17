@@ -58,7 +58,7 @@
 
 .sa-lock-image.locked {
   background-color: var(--editorDarkMode-primary, #4d97ff);
-  border-color: var(--editorDarkMode-primary, #4d97ff);
+  border-color: var(--editorDarkMode-primary-variant, #3373cc);
 }
 
 .sa-lock-image img {
