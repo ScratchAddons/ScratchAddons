@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   let placeHolderDiv = null;
   let lockDisplay = null;
   let lockIcon = null;
@@ -162,11 +162,14 @@ export default async function ({ addon, global, console }) {
     lockDisplay = document.createElement("button");
     lockDisplay.className = "sa-lock-image";
     if (flyoutLock) lockDisplay.classList.add("locked");
+    lockDisplay.title = flyoutLock ? msg("unlock") : msg("lock");
     lockIcon = document.createElement("img");
     lockIcon.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
+    lockIcon.alt = "";
     lockDisplay.appendChild(lockIcon);
     lockDisplay.onclick = () => {
       flyoutLock = !flyoutLock;
+      lockDisplay.title = flyoutLock ? msg("unlock") : msg("lock");
       lockIcon.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
       if (flyoutLock) lockDisplay.classList.add("locked");
       else lockDisplay.classList.remove("locked");
