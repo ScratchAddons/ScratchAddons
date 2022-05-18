@@ -41,6 +41,13 @@
       "if": {
         "settings": { "mode": "prehistoric" }
       }
+    },
+    {
+      "url": "mystery.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "mode": "mystery" }
+      }
     }
   ],
   "settings": [

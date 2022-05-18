@@ -1,7 +1,3 @@
-.sa-body-editor {
-  filter: hue-rotate(40deg);
-}
-
 .sa-body-editor::after {
   content: "";
   display: block;
@@ -11,7 +7,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url("assets/shapes.svg");
-  opacity: 0.2;
+  background-image: url("assets/mystery.png");
+  background-position: calc(var(--sa-mouse-x, -10000px) - 2000px) calc(var(--sa-mouse-y, -10000px) - 2000px);
+  opacity: 0.9;
   pointer-events: none;
 }
