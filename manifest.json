@@ -1,14 +1,14 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
   "version": "1.26.0",
   "version_name": "1.26.0-prerelease",
   "default_locale": "en",
   "background": {
-    "page": "background/background.html"
+    "service_worker": "background/sw.js"
   },
-  "browser_action": {
+  "action": {
     "default_icon": "images/icon.png",
     "default_popup": "webpages/popup/index.html",
     "default_title": "Scratch Addons"
@@ -38,25 +38,25 @@
   },
   "homepage_url": "https://scratchaddons.com",
   "incognito": "spanning",
-  "permissions": [
+  "host_permissions": [
     "https://scratch.mit.edu/*",
     "https://api.scratch.mit.edu/*",
-    "https://clouddata.scratch.mit.edu/*",
-    "cookies",
-    "webRequest",
-    "webRequestBlocking",
-    "storage",
-    "contextMenus",
-    "alarms"
+    "https://clouddata.scratch.mit.edu/*"
   ],
+  "permissions": ["cookies", "webRequest", "storage", "contextMenus", "alarms"],
   "optional_permissions": ["notifications", "clipboardWrite"],
   "web_accessible_resources": [
-    "content-scripts/inject/*",
-    "addon-api/*",
-    "addons/*",
-    "libraries/*/cs/*",
-    "addons-l10n/*/*.json",
-    "images/cs/*"
+    {
+      "resources": [
+        "content-scripts/inject/*",
+        "addon-api/*",
+        "addons/*",
+        "libraries/*/cs/*",
+        "addons-l10n/*/*.json",
+        "images/cs/*"
+      ],
+      "matches": ["https://*.scratch.mit.edu/*", "https://scratchaddons.com/*"]
+    }
   ],
   "browser_specific_settings": {
     "gecko": {
