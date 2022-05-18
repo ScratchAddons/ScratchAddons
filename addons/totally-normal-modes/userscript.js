@@ -9,6 +9,7 @@ export default async function ({ addon, console }) {
     logo.src = {
       "90s": addon.self.dir + "/assets/nineties_logo.svg",
       "oldTimey": addon.self.dir + "/assets/oldtimey-logo.svg",
+      "prehistoric": addon.self.dir + "/assets/prehistoric-logo.svg",
     }[mode] || initialSrc;
   }
   function updateProjectorSound() {
@@ -31,6 +32,13 @@ export default async function ({ addon, console }) {
   };
   document.addEventListener("click", interactionListener);
   document.addEventListener("keydown", interactionListener);
+
+  document.documentElement.style.setProperty("--sa-mouse-x", `${window.innerWidth / 2}px`);
+  document.documentElement.style.setProperty("--sa-mouse-y", `${window.innerHeight / 2}px`);
+  document.addEventListener("pointermove", (e) => {
+    document.documentElement.style.setProperty("--sa-mouse-x", `${e.clientX}px`);
+    document.documentElement.style.setProperty("--sa-mouse-y", `${e.clientY}px`);
+  });
 
   addon.settings.addEventListener("change", () => {
     mode = addon.settings.get("mode");

@@ -2,3 +2,17 @@ html,
 body {
   height: 100%;
 }
+
+.sa-body-editor {
+  overflow: hidden;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.gui {
+  position: static;
+}

@@ -34,6 +34,13 @@
       "if": {
         "settings": { "mode": "oldTimey" }
       }
+    },
+    {
+      "url": "prehistoric.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "mode": "prehistoric" }
+      }
     }
   ],
   "settings": [
