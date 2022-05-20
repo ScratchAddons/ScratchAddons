@@ -1,0 +1,44 @@
+.sa-stage-button-middle > [class*="stage-header_stage-button_"],
+[dir="ltr"] [class*="asset-panel_wrapper_"],
+[dir="rtl"] [class*="asset-panel_wrapper_"] {
+  border-radius: 0;
+}
+
+[dir="ltr"] .sa-stage-button-middle > [class*="stage-header_stage-button_"] {
+  border-left: none;
+}
+
+[dir="rtl"] .sa-stage-button-middle > [class*="stage-header_stage-button_"] {
+  border-right: none;
+}
+
+.sa-stage-hidden [class*="blocks_blocks_"] .injectionDiv {
+  border-radius: 0;
+}
+
+.sa-stage-hidden [class*="gui_stage-and-target-wrapper_"] {
+  padding: 0;
+}
+
+.sa-stage-hidden
+  [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen_"])
+  [class*="controls_controls-container_"],
+.sa-stage-hidden
+  [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen_"])
+  [class*="stage-wrapper_stage-canvas-wrapper_"],
+.sa-stage-hidden [class*="gui_target-wrapper_"] {
+  display: none;
+}
+
+.sa-stage-hidden [class*="stage-header_stage-size-row"] {
+  position: absolute;
+  top: 0;
+  right: 0.5rem;
+  height: 2.75rem;
+  align-items: center;
+}
+
+[dir="rtl"] .sa-stage-hidden [class*="stage-header_stage-size-row"] {
+  right: auto;
+  left: 0.5rem;
+}
