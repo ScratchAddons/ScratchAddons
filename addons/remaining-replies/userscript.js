@@ -1,5 +1,4 @@
 export default async function ({ addon, msg }) {
-  console.log();
   function addRemainingReplyCount(comment) {
     // skip the main comment input at the top of the page
     if (comment.classList.contains("compose-row")) return;
