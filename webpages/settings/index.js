@@ -301,7 +301,7 @@ let fuse;
       viewSettings() {
         const openedWindow = window.open("about:blank");
         serializeSettings().then((serialized) => {
-          const blob = new Blob([serialized], { type: "text/plain" });
+          const blob = new Blob([JSON.stringify(JSON.parse(serialized), null, 2)], { type: "text/plain" });
           openedWindow.location.replace(URL.createObjectURL(blob));
         });
       },
