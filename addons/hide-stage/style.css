@@ -1,6 +1,4 @@
-.sa-stage-button-middle > [class*="stage-header_stage-button_"],
-[dir="ltr"] [class*="asset-panel_wrapper_"],
-[dir="rtl"] [class*="asset-panel_wrapper_"] {
+.sa-stage-button-middle > [class*="stage-header_stage-button_"] {
   border-radius: 0;
 }
 
@@ -12,7 +10,9 @@
   border-right: none;
 }
 
-.sa-stage-hidden [class*="blocks_blocks_"] .injectionDiv {
+.sa-stage-hidden [class*="blocks_blocks_"] .injectionDiv,
+.sa-stage-hidden [class*="asset-panel_wrapper_"],
+.sa-stage-hidden [class*="backpack_backpack-header_"] {
   border-radius: 0;
 }
 
