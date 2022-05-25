@@ -27,7 +27,7 @@
     </div>
     <div class="addon-settings" v-if="everExpanded" v-show="expanded">
       <div class="addon-description-full">{{ addon.description }}</div>
-      <div class="addon-update" v-if="addon.latestUpdate && addon.latestUpdate.temporaryNotice">
+      <div class="addon-update" v-if="showUpdateNotice">
         <addon-tag tag="new"></addon-tag>
         {{ addon.latestUpdate.temporaryNotice }}
       </div>
