@@ -20,12 +20,14 @@ export default async function ({ addon, console, msg }) {
       ),
     });
     stageControls.insertBefore(hideStageButton, smallStageButton);
-    hideStageButton.appendChild(Object.assign(document.createElement("img"), {
-      className: addon.tab.scratchClass("stage-header_stage-button-icon"),
-      src: addon.self.dir + "/icon.svg",
-      alt: msg("hide-stage"),
-      draggable: false,
-    }));
+    hideStageButton.appendChild(
+      Object.assign(document.createElement("img"), {
+        className: addon.tab.scratchClass("stage-header_stage-button-icon"),
+        src: addon.self.dir + "/icon.svg",
+        alt: msg("hide-stage"),
+        draggable: false,
+      })
+    );
     function hideStage() {
       stageHidden = true;
       bodyWrapper.classList.add("sa-stage-hidden");
