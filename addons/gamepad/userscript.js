@@ -267,8 +267,8 @@ export default async function ({ addon, global, console, msg }) {
       if (e.target.closest("[class*='stage-header_stage-button-first']:not(.sa-hide-stage-button)")) {
         document.body.classList.add("sa-gamepad-small");
       } else if (
-        e.target.closest("[class*='stage-header_stage-button-last']")
-        || e.target.closest(".sa-hide-stage-button")
+        e.target.closest("[class*='stage-header_stage-button-last']") ||
+        e.target.closest(".sa-hide-stage-button")
       ) {
         document.body.classList.remove("sa-gamepad-small");
       }
