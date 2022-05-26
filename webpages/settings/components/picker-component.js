@@ -37,7 +37,7 @@ export default async function ({ template }) {
           });
         }
       });
-      this.$els.pickr.addEventListener('paste', this.handlePaste);
+      this.$els.pickr.addEventListener("paste", this.handlePaste);
     },
     computed: {
       noAlphaString() {
@@ -68,7 +68,7 @@ export default async function ({ template }) {
       },
       handlePaste(e) {
         var clipboardData = e.clipboardData || window.clipboardData;
-        var pastedData = clipboardData.getData('Text').replaceAll("#", "");
+        var pastedData = clipboardData.getData("Text").replaceAll("#", "");
         if (pastedData.length <= 6) {
           event.target.value = pastedData;
         }
