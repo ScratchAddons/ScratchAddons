@@ -16,7 +16,12 @@ export default async function ({ addon, console, msg }) {
 
   const button = document.createElement("button");
   button.className = "button sa-tw-button";
-  button.title = "TurboWarp";
+  if (addon.settings.get("auto")) {
+    button.title = "Scratch";
+    button.classList.add("scratch");
+  } else {
+    button.title = "TurboWarp";
+  }
 
   function removeIframe() {
     twIframeContainer.remove();
@@ -26,7 +31,7 @@ export default async function ({ addon, console, msg }) {
     button.title = "TurboWarp";
   }
 
-  button.onclick = async () => {
+  const buttonAction = async () => {
     if (action === "player") {
       playerToggled = !playerToggled;
       if (playerToggled) {
@@ -40,6 +45,7 @@ export default async function ({ addon, console, msg }) {
         }
         const iframeUrl = `https://turbowarp.org/${projectId}/embed?${usp}`;
         twIframe.src = "";
+        scratchStage = await addon.tab.waitForElement(".guiPlayer");
         scratchStage.parentElement.prepend(twIframeContainer);
         // Use location.replace to avoid creating a history entry
         twIframe.contentWindow.location.replace(iframeUrl);
@@ -54,6 +60,10 @@ export default async function ({ addon, console, msg }) {
     }
   };
 
+  if (addon.settings.get("auto")) buttonAction();
+
+  button.onclick = buttonAction;
+
   let showAlert = true;
   while (true) {
     const seeInside = await addon.tab.waitForElement(".see-inside-button", {
@@ -62,9 +72,16 @@ export default async function ({ addon, console, msg }) {
     });
 
     seeInside.addEventListener("click", function seeInsideClick(event) {
-      if (!playerToggled || !showAlert) return;
+      if (!playerToggled) return;
+      if (!showAlert) {
+        button.title = "TurboWarp";
+        button.classList.remove("scratch");
+        return;
+      }
 
       if (confirm(msg("confirmation"))) {
+        button.title = "TurboWarp";
+        button.classList.remove("scratch");
         showAlert = false;
       } else {
         event.stopPropagation();
