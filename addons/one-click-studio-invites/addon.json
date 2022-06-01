@@ -1,0 +1,30 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
+  "name": "One-click studio invites",
+  "description": "TODO",
+  "credits": [
+    {
+      "name": "Weredime (9gr)",
+      "link": "https://scratch.mit.edu/users/9gr/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": [
+        "https://scratch.mit.edu/messages"
+      ]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": [
+        "https://scratch.mit.edu/messages"
+      ]
+    }
+  ],
+  "tags": ["community", "studios"],
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}

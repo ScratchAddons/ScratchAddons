@@ -1,0 +1,57 @@
+export default async function ( /** @type {import("../../addon-api/content-script/typedef").UserscriptUtilities} */ { addon, msg, global, console }) {
+    const STUDIO_REGEX = /https:\/\/scratch\.mit\.edu\/studios\/([0-9]+)/;
+    const xToken = await addon.auth.fetchXToken();
+    const username = await addon.auth.fetchUsername();
+    const { csrfToken } = addon.auth;
+
+    await addon.tab.redux.waitForState(state => state.messages.status.message === "FETCHED");
+    while (true) {
+        const invite = await addon.tab.waitForElement(".mod-curator-invite", { markAsSeen: true });
+        const inviteTextContainer = await addon.tab.waitForElement(".social-message-content > div > span", {
+            elementCondition: (el) => invite.contains(el),
+        });
+
+        const studioId = Array.from(inviteTextContainer.children).find((node) => node.tagName === "A" && STUDIO_REGEX.test(node.href)).href.match(STUDIO_REGEX)[1];
+        const userProfileRes = await fetch(`https://api.scratch.mit.edu/studios/${studioId}/users/${username}`, {
+            headers: {
+                "X-Token": xToken,
+            }
+        });
+        let userProfile = await userProfileRes.json();
+        
+        const button = document.createElement("button");
+        button.className = "sa-curator-invite-button button";
+
+        if (userProfile.invited) {
+            button.innerText = msg("accept");
+        } else {
+            button.innerText = msg("accepted");
+            button.disabled = true;
+        }
+
+        button.addEventListener("click", async () => {
+            if (userProfile.invited) {
+                button.classList.add("loading");
+                const addCurator = await fetch(`/site-api/users/curators-in/${studioId}/add/?usernames=${username}`, {
+                    method: "PUT",
+                    headers: {
+                        "x-csrftoken": csrfToken,
+                        "x-requested-with": "XMLHttpRequest",
+                    },
+                });
+                const { success } = await addCurator.json();
+
+                button.classList.remove("loading");
+                if (success) {
+                    button.innerText = msg("accepted");
+                    userProfile.invited = false;
+                    button.disabled = true;
+                } else {
+                    alert(msg("failed"));
+                }
+            }
+        })
+        
+        inviteTextContainer.parentElement.appendChild(button);
+    }
+}
