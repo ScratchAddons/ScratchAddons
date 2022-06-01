@@ -11,6 +11,8 @@
       "link": "https://scratch.mit.edu/users/Verixion"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",
