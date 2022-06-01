@@ -4,12 +4,16 @@
   flex-direction: row-reverse;
 }
 
-[dir="ltr"] [class*="stage-header_stage-size-toggle-group"] {
+[dir="ltr"] [class*="stage-header_stage-size-toggle-group"],
+[dir="ltr"] .sa-debugger-container,
+[dir="ltr"] .sa-gamepad-container {
   margin-right: 0;
   margin-left: 0.2rem;
 }
 
-[dir="rtl"] [class*="stage-header_stage-size-toggle-group"] {
+[dir="rtl"] [class*="stage-header_stage-size-toggle-group"],
+[dir="rtl"] .sa-debugger-container,
+[dir="rtl"] .sa-gamepad-container {
   margin-left: 0;
   margin-right: 0.2rem;
 }
@@ -54,9 +58,4 @@
 [class*="stop-all_stop-all_"],
 .pause-btn {
   order: 1;
-}
-
-.sa-debugger-container {
-  margin-left: 0.2rem;
-  margin-right: 0px !important;
 }
