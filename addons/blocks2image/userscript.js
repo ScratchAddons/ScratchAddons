@@ -44,71 +44,75 @@ export default async function ({ addon, global, console, msg }) {
   );
 
   addon.tab.createBlockContextMenu(
-    (items, block) => {
-      let svgchild = document.querySelector("svg.blocklySvg g.blocklyBlockCanvas");
+    (items) => {
+      if (!addon.self.disabled) {
+        let svgchild = document.querySelector("svg.blocklySvg g.blocklyBlockCanvas");
 
-      const pasteItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
-      const insertBeforeIndex =
-        pasteItemIndex !== -1
-          ? // If "paste" button exists, add own items before it
-            pasteItemIndex
-          : // If there's no such button, insert at end
-            items.length;
+        const pasteItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
+        const insertBeforeIndex =
+          pasteItemIndex !== -1
+            ? // If "paste" button exists, add own items before it
+              pasteItemIndex
+            : // If there's no such button, insert at end
+              items.length;
 
-      items.splice(
-        insertBeforeIndex,
-        0,
-        {
-          enabled: !!svgchild?.childNodes?.length,
-          text: msg("export_all_to_SVG"),
-          callback: () => {
-            exportBlock(false);
+        items.splice(
+          insertBeforeIndex,
+          0,
+          {
+            enabled: !!svgchild?.childNodes?.length,
+            text: msg("export_all_to_SVG"),
+            callback: () => {
+              exportBlock(false);
+            },
+            separator: true,
           },
-          separator: true,
-        },
-        {
-          enabled: !!svgchild?.childNodes?.length,
-          text: msg("export_all_to_PNG"),
-          callback: () => {
-            exportBlock(true);
-          },
-          separator: false,
-        }
-      );
+          {
+            enabled: !!svgchild?.childNodes?.length,
+            text: msg("export_all_to_PNG"),
+            callback: () => {
+              exportBlock(true);
+            },
+            separator: false,
+          }
+        );
+      }
       return items;
     },
     { workspace: true }
   );
   addon.tab.createBlockContextMenu(
     (items, block) => {
-      const makeSpaceItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
-      const insertBeforeIndex =
-        makeSpaceItemIndex !== -1
-          ? // If "make space" button exists, add own items before it
-            makeSpaceItemIndex
-          : // If there's no such button, insert at end
-            items.length;
+      if (!addon.self.disabled) {
+        const makeSpaceItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
+        const insertBeforeIndex =
+          makeSpaceItemIndex !== -1
+            ? // If "make space" button exists, add own items before it
+              makeSpaceItemIndex
+            : // If there's no such button, insert at end
+              items.length;
 
-      items.splice(
-        insertBeforeIndex,
-        0,
-        {
-          enabled: true,
-          text: msg("export_selected_to_SVG"),
-          callback: () => {
-            exportBlock(false, block);
+        items.splice(
+          insertBeforeIndex,
+          0,
+          {
+            enabled: true,
+            text: msg("export_selected_to_SVG"),
+            callback: () => {
+              exportBlock(false, block);
+            },
+            separator: true,
           },
-          separator: true,
-        },
-        {
-          enabled: true,
-          text: msg("export_selected_to_PNG"),
-          callback: () => {
-            exportBlock(true, block);
-          },
-          separator: false,
-        }
-      );
+          {
+            enabled: true,
+            text: msg("export_selected_to_PNG"),
+            callback: () => {
+              exportBlock(true, block);
+            },
+            separator: false,
+          }
+        );
+      }
       return items;
     },
     { blocks: true }
