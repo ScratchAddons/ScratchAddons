@@ -50,10 +50,13 @@
   border-bottom-left-radius: 0;
 }
 
-[class*="controls_controls-container"] img {
+[class*="green-flag_green-flag_"],
+[class*="stop-all_stop-all_"],
+.pause-btn {
   order: 1;
 }
 
-[class*="controls_controls-container"] div {
-  order: 0;
+.sa-debugger-container {
+  margin-left: 0.2rem;
+  margin-right: 0px !important;
 }
