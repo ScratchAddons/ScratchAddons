@@ -11,20 +11,15 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "https://scratch.mit.edu/messages"
-      ]
+      "matches": ["https://scratch.mit.edu/messages"]
     }
   ],
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": [
-        "https://scratch.mit.edu/messages"
-      ]
+      "matches": ["https://scratch.mit.edu/messages"]
     }
   ],
   "tags": ["community", "studios"],
-  "dynamicEnable": true,
-  "dynamicDisable": true
+  "versionAdded": "1.27.0"
 }
