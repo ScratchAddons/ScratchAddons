@@ -1,0 +1,20 @@
+{
+  "name": "Self referencing",
+  "description": "Adds the \"myself\" option to certain block dropdowns in the sensing category. Useful when working with clones.",
+  "credits": [
+    {
+      "name": "smalllevy"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.26.1",
+  "tags": ["editor"],
+  "enabledByDefault": false
+}
