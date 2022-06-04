@@ -20,6 +20,8 @@ export default async function ({ addon, console, msg }) {
         cancelMessage = msg("joinstudio");
       } else if (addon.settings.get("closingtopic") && e.target.closest("dd form button")) {
         cancelMessage = msg("closetopic");
+      } else if (addon.settings.get("cancelcomment") && e.target.closest("div[data-control='cancel'] > a, .compose-cancel")) {
+        cancelMessage = msg("cancelcomment");
       }
       if (cancelMessage !== null) {
         if (!confirm(cancelMessage)) {

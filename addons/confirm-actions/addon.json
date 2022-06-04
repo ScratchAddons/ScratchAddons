@@ -47,6 +47,12 @@
       "id": "closingtopic",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Confirm cancelling comments",
+      "id": "cancelcomment",
+      "type": "boolean",
+      "default": false
     }
   ],
   "tags": ["community", "recommended"],
