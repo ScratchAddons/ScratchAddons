@@ -14,7 +14,7 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.26.1",
+  "versionAdded": "1.27.0",
   "tags": ["editor"],
   "enabledByDefault": false
 }
