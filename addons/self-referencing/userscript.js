@@ -10,7 +10,7 @@ export default async function ({ addon, global, console, msg }) {
     const name = vm.editingTarget.sprite.name;
     if (block) {
       if (block.type === "sensing_touchingobjectmenu" || block.type === "sensing_of_object_menu" || block.type === "sensing_distancetomenu") {
-        options.push(["myself",name]); //Adds the "myself" option to the blocks listed above
+        options.push([name,name]); //Adds the "myself" option to the blocks listed above
       }
     }
     return options;
