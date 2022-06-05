@@ -8,6 +8,6 @@
   "confirm-actions/joinstudio": "Are you sure you would like to join this studio?",
   "confirm-actions/closetopic-title": "Close Topic",
   "confirm-actions/closetopic": "Are you sure you want to close this topic?",
-  "confirm-actions/cancelcomment-title": "Clear Comment",
-  "confirm-actions/cancelcomment": "Are you sure you want to clear the comment box?"
+  "confirm-actions/cancelcomment-title": "Discard Comment",
+  "confirm-actions/cancelcomment": "Are you sure you want to discard your comment?"
 }
