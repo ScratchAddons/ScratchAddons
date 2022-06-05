@@ -1,4 +1,6 @@
-export default async function ( /** @type {import("../../addon-api/content-script/typedef.js").UserscriptUtilities} */ { addon, msg }) {
+export default async function (
+  /** @type {import("../../addon-api/content-script/typedef.js").UserscriptUtilities} */ { addon, msg }
+) {
   let override = false;
   document.addEventListener(
     "click",
@@ -6,7 +8,7 @@ export default async function ( /** @type {import("../../addon-api/content-scrip
       if (override) {
         override = null;
         return;
-      };
+      }
       let cancelMessage = null;
       if (
         addon.settings.get("projectsharing") &&
@@ -25,18 +27,21 @@ export default async function ( /** @type {import("../../addon-api/content-scrip
         cancelMessage = msg("joinstudio");
       } else if (addon.settings.get("closingtopic") && e.target.closest("dd form button")) {
         cancelMessage = msg("closetopic");
-      } else if (addon.settings.get("cancelcomment") && e.target.closest("div[data-control='cancel'] > a, .compose-cancel")) {
+      } else if (
+        addon.settings.get("cancelcomment") &&
+        e.target.closest("div[data-control='cancel'] > a, .compose-cancel")
+      ) {
         cancelMessage = msg("cancelcomment");
       }
       if (cancelMessage !== null) {
         e.preventDefault();
         e.stopPropagation();
-        addon.tab.confirm(msg("title"), cancelMessage).then(confirmed => {
+        addon.tab.confirm(msg("title"), cancelMessage).then((confirmed) => {
           if (confirmed) {
             override = true;
             e.target.click();
           }
-        })
+        });
       }
     },
     true
