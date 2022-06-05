@@ -1,7 +1,12 @@
-export default async function ({ addon, console, msg }) {
+export default async function ( /** @type {import("../../addon-api/content-script/typedef.js").UserscriptUtilities} */ { addon, msg }) {
+  let override = false;
   document.addEventListener(
     "click",
     (e) => {
+      if (override) {
+        override = null;
+        return;
+      };
       let cancelMessage = null;
       if (
         addon.settings.get("projectsharing") &&
@@ -24,10 +29,14 @@ export default async function ({ addon, console, msg }) {
         cancelMessage = msg("cancelcomment");
       }
       if (cancelMessage !== null) {
-        if (!confirm(cancelMessage)) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
+        e.preventDefault();
+        e.stopPropagation();
+        addon.tab.confirm(msg("title"), cancelMessage).then(confirmed => {
+          if (confirmed) {
+            override = true;
+            e.target.click();
+          }
+        })
       }
     },
     true

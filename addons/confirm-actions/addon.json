@@ -1,4 +1,5 @@
 {
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
   "name": "Confirmations",
   "description": "Asks if you're sure when committing actions under your Scratch account, such as sharing projects.",
   "credits": [
@@ -55,6 +56,11 @@
       "default": false
     }
   ],
+  "latestUpdate": {
+    "version": "1.27.0",
+    "newSettings": ["cancelcomment"],
+    "temporaryNotice": "This addon was reworked to use the new confirmation system."
+  },
   "tags": ["community", "recommended"],
   "enabledByDefault": false
 }
