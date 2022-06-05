@@ -53,6 +53,7 @@ export default async function (
           .confirm(title, cancelMessage, {
             okButtonLabel: msg("yes"),
             cancelButtonLabel: msg("no"),
+            useEditorClasses: addon.tab.editorMode == "editor",
           })
           .then((confirmed) => {
             if (confirmed) {
