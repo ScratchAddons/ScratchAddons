@@ -36,7 +36,10 @@ export default async function (
       if (cancelMessage !== null) {
         e.preventDefault();
         e.stopPropagation();
-        addon.tab.confirm(msg("title"), cancelMessage).then((confirmed) => {
+        addon.tab.confirm(msg("title"), cancelMessage, {
+          okButtonLabel: msg("yes"),
+          cancelButtonLabel: msg("no"),
+        }).then((confirmed) => {
           if (confirmed) {
             override = true;
             e.target.click();

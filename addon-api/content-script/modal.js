@@ -187,7 +187,7 @@ export const createScratchr2Modal = (title, { isOpen = false } = {}) => {
   };
 };
 
-const createButtonRow = (tab, mode) => {
+const createButtonRow = (tab, mode, { okButtonLabel, cancelButtonLabel } = {}) => {
   const buttonRow = Object.assign(document.createElement("div"), {
     className: {
       editor: tab.scratchClass("prompt_button-row"),
@@ -197,7 +197,7 @@ const createButtonRow = (tab, mode) => {
   });
   const cancelButton = Object.assign(document.createElement("button"), {
     className: { "scratch-www": "button action-button close-button white" }[mode] || "",
-    innerText: tab.scratchMessage(
+    innerText: cancelButtonLabel || tab.scratchMessage(
       {
         editor: "gui.prompt.cancel",
         "scratch-www": "general.cancel",
@@ -211,7 +211,7 @@ const createButtonRow = (tab, mode) => {
       editor: tab.scratchClass("prompt_ok-button"),
       "scratch-www": "button action-button submit-button",
     }[mode],
-    innerText: tab.scratchMessage(
+    innerText: okButtonLabel || tab.scratchMessage(
       {
         editor: "gui.prompt.ok",
         "scratch-www": "general.okay",
@@ -223,7 +223,11 @@ const createButtonRow = (tab, mode) => {
   return { buttonRow, cancelButton, okButton };
 };
 
-export const confirm = (tab, title, message, { useEditorClasses = false } = {}) => {
+export const confirm = (tab, title, message, {
+  useEditorClasses = false,
+  okButtonLabel,
+  cancelButtonLabel,
+} = {}) => {
   const { remove, container, content, backdrop, closeButton } = tab.createModal(title, {
     isOpen: true,
     useEditorClasses: useEditorClasses,
@@ -241,7 +245,10 @@ export const confirm = (tab, title, message, { useEditorClasses = false } = {}) 
       innerText: message,
     })
   );
-  const { buttonRow, cancelButton, okButton } = createButtonRow(tab, mode);
+  const { buttonRow, cancelButton, okButton } = createButtonRow(tab, mode, {
+    okButtonLabel,
+    cancelButtonLabel,
+  });
   if (mode === "scratchr2") container.appendChild(buttonRow);
   else content.appendChild(buttonRow);
   okButton.focus();
