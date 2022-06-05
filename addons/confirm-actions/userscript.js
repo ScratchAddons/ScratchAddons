@@ -25,8 +25,7 @@ export default async function (
         if (button.classList.contains("notfollowing")) {
           title = button.querySelector("span.follow").textContent;
           cancelMessage = msg("follow");
-        }
-        else {
+        } else {
           title = button.querySelector("span.unfollow").textContent;
           cancelMessage = msg("unfollow");
         }
@@ -50,15 +49,17 @@ export default async function (
       if (cancelMessage !== null) {
         e.preventDefault();
         e.stopPropagation();
-        addon.tab.confirm(title, cancelMessage, {
-          okButtonLabel: msg("yes"),
-          cancelButtonLabel: msg("no"),
-        }).then((confirmed) => {
-          if (confirmed) {
-            override = true;
-            e.target.click();
-          }
-        });
+        addon.tab
+          .confirm(title, cancelMessage, {
+            okButtonLabel: msg("yes"),
+            cancelButtonLabel: msg("no"),
+          })
+          .then((confirmed) => {
+            if (confirmed) {
+              override = true;
+              e.target.click();
+            }
+          });
       }
     },
     true

@@ -197,13 +197,15 @@ const createButtonRow = (tab, mode, { okButtonLabel, cancelButtonLabel } = {}) =
   });
   const cancelButton = Object.assign(document.createElement("button"), {
     className: { "scratch-www": "button action-button close-button white" }[mode] || "",
-    innerText: cancelButtonLabel || tab.scratchMessage(
-      {
-        editor: "gui.prompt.cancel",
-        "scratch-www": "general.cancel",
-        scratchr2: "Cancel",
-      }[mode]
-    ),
+    innerText:
+      cancelButtonLabel ||
+      tab.scratchMessage(
+        {
+          editor: "gui.prompt.cancel",
+          "scratch-www": "general.cancel",
+          scratchr2: "Cancel",
+        }[mode]
+      ),
   });
   buttonRow.appendChild(cancelButton);
   const okButton = Object.assign(document.createElement("button"), {
@@ -211,23 +213,21 @@ const createButtonRow = (tab, mode, { okButtonLabel, cancelButtonLabel } = {}) =
       editor: tab.scratchClass("prompt_ok-button"),
       "scratch-www": "button action-button submit-button",
     }[mode],
-    innerText: okButtonLabel || tab.scratchMessage(
-      {
-        editor: "gui.prompt.ok",
-        "scratch-www": "general.okay",
-        scratchr2: "OK",
-      }[mode]
-    ),
+    innerText:
+      okButtonLabel ||
+      tab.scratchMessage(
+        {
+          editor: "gui.prompt.ok",
+          "scratch-www": "general.okay",
+          scratchr2: "OK",
+        }[mode]
+      ),
   });
   buttonRow.appendChild(okButton);
   return { buttonRow, cancelButton, okButton };
 };
 
-export const confirm = (tab, title, message, {
-  useEditorClasses = false,
-  okButtonLabel,
-  cancelButtonLabel,
-} = {}) => {
+export const confirm = (tab, title, message, { useEditorClasses = false, okButtonLabel, cancelButtonLabel } = {}) => {
   const { remove, container, content, backdrop, closeButton } = tab.createModal(title, {
     isOpen: true,
     useEditorClasses: useEditorClasses,
