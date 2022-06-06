@@ -1,15 +1,9 @@
 {
-  "name": "Fullscreen button on left",
+  "name": "Reverse order of project controls",
   "description": "Moves fullscreen button to the left, and green flag, pause and stop button to the right.",
-  "tags": ["editor", "theme"],
+  "tags": ["editor", "projectPlayer"],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "credits": [
-    {
-      "name": "djdolphin",
-      "link": "https://scratch.mit.edu/users/djdolphin/"
-    }
-  ],
   "userstyles": [
     {
       "url": "userstyle.css",
