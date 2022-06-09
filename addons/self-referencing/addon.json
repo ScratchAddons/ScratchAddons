@@ -12,8 +12,6 @@
       "matches": ["projects"]
     }
   ],
-  "dynamicEnable": true,
-  "dynamicDisable": true,
   "versionAdded": "1.27.0",
   "tags": ["editor"],
   "enabledByDefault": false
