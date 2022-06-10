@@ -8,7 +8,7 @@
   height: 32px;
   box-sizing: border-box;
   font-family: inherit;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .large-button:hover:not([disabled]) {

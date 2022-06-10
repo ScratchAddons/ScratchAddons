@@ -8,7 +8,7 @@ body {
   overflow: hidden;
   margin: 0;
   background-color: var(--brand-orange); /* Firefox popup arrow */
-  font-family: "Sora", sans-serif;
+  font-family: "Roboto", sans-serif;
   color: var(--white-text);
 }
 
@@ -30,6 +30,7 @@ body {
   display: flex;
   align-items: center;
   padding: 0 20px;
+  font-family: "Sora", sans-serif;
 }
 #logo {
   height: 30px;
@@ -71,7 +72,7 @@ body {
   height: 100%;
   box-sizing: border-box;
   align-items: center;
-  font-size: 12px;
+  font-size: 14px;
   padding-inline-start: 10.5px;
   padding-inline-end: 12px;
   background-color: var(--button-background);

@@ -1,17 +1,17 @@
-@import url("/libraries/thirdparty/Sora.css");
+@import url("/libraries/thirdparty/Roboto.css");
 html {
-  font-size: 12px;
+  font-size: 14px;
   height: 100%;
   scrollbar-width: thin;
   scrollbar-color: var(--gray-text) transparent;
 }
 html.fullscreen {
-  font-size: 15px;
+  font-size: 16px;
 }
 
 body {
   margin: 0 auto;
-  font-family: "Sora", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 1rem;
   width: auto;
   overflow-x: hidden;
