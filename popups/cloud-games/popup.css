@@ -54,6 +54,15 @@ body {
   color: var(--content-text);
 }
 
+.title-placeholder {
+  display: inline-block;
+  vertical-align: middle;
+  width: 150px;
+  height: 8px;
+  background-color: var(--gray-text);
+  border-radius: 3px;
+}
+
 .small-icon {
   height: 14px;
   vertical-align: text-bottom;
