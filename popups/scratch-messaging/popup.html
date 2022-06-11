@@ -432,7 +432,7 @@
         <span v-show="messagesReady && showingMessagesAmt === 0 && stMessages.length === 0" class="status-empty"
           >{{ uiMessages.noUnreadMsg }}</span
         >
-        <div v-show="commentsReady || canShowMoreMessages" id="buttons-container">
+        <div v-show="commentsReady || canShowMoreMessages" class="buttons-container">
           <button @click="reloadPage()" v-show="commentsReady">
             <img class="small-icon" src="../../images/icons/reload.svg" /><span>{{ uiMessages.reloadMsg }}</span>
           </button>

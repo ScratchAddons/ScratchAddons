@@ -292,6 +292,15 @@ a.message-type-title-text {
   margin-block: 10px;
 }
 
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.buttons-container > button + button {
+  margin-inline-start: 10px;
+}
+
 #bottom-bar {
   position: absolute;
   z-index: 10000;
@@ -342,19 +351,6 @@ a.message-type-title-text {
 .open-messages:hover .popout {
   opacity: 1;
   filter: none;
-}
-
-#buttons-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-#buttons-container > button {
-  height: auto;
-  width: 45%;
-  margin: 5px;
-  padding: 0.5rem;
 }
 
 .dom-element-renderer {
