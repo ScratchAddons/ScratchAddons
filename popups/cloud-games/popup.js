@@ -8,7 +8,10 @@ export default async ({ addon, msg, safeMsg }) => {
     data: {
       projects: [],
       projectsVisible: false,
-      messages: { noUsersMsg: msg("no-users") },
+      messages: {
+        loadingMsg: msg("loading"),
+        noUsersMsg: msg("no-users"),
+      },
       projectsChecked: 0,
       error: shouldFailEarly ? "general-error" : null,
     },
@@ -18,9 +21,6 @@ export default async ({ addon, msg, safeMsg }) => {
           if (a.amt !== b.amt) return a.amt - b.amt;
           return a.timestamp - b.timestamp;
         });
-      },
-      loadingMsg() {
-        return msg("loading", { done: this.projectsChecked, amount: this.projects.length || "?" });
       },
       errorMessage() {
         return this.error && msg(this.error);
