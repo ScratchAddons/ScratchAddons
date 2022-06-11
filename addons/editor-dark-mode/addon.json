@@ -3,19 +3,27 @@
   "description": "Customize colors used by the project editor. Multiple dark themes by different authors available. If you don't need dark mode but want to change the default colors you can select the \"Scratch's default colors\" preset and tweak it.",
   "credits": [
     {
-      "name": "Maximouse (addon, \"Experimental\" Dark)",
+      "name": "Maximouse",
+      "note": "addon, \"Experimental\" Dark",
+      "id": "addon",
       "link": "https://scratch.mit.edu/users/Maximouse/"
     },
     {
-      "name": "infinitytec (3.Dark, 3.Darker)",
+      "name": "infinitytec",
+      "note": "3.Dark, 3.Darker",
+      "id": "darker",
       "link": "https://github.com/infinitytec"
     },
     {
-      "name": "_nix (Dark editor)",
+      "name": "_nix",
+      "note": "Dark editor",
+      "id": "dark",
       "link": "https://github.com/towerofnix"
     },
     {
-      "name": "GarboMuffin (TurboWarp Dark)",
+      "name": "GarboMuffin",
+      "note": "TurboWarp Dark",
+      "id": "twdark",
       "link": "https://github.com/GarboMuffin"
     }
   ],
@@ -483,6 +491,17 @@
       }
     },
     {
+      "name": "input-transparent90",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        },
+        "a": 0.9
+      }
+    },
+    {
       "name": "input-transparent75",
       "value": {
         "type": "multiply",
@@ -713,13 +732,6 @@
       "matches": ["projects"]
     },
     {
-      "url": "text-shadow.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "textShadow": true }
-      }
-    },
-    {
       "url": "hide_dots.css",
       "matches": ["projects"],
       "if": {
@@ -866,12 +878,6 @@
       "default": false
     },
     {
-      "name": "Text shadow on blocks",
-      "id": "textShadow",
-      "type": "boolean",
-      "default": false
-    },
-    {
       "name": "Change the costume editor background and selection borders",
       "id": "affectPaper",
       "type": "boolean",
@@ -919,7 +925,6 @@
         "fullscreen": "#000000",
         "stageHeader": "#000000",
         "border": "#ffffff0d",
-        "textShadow": false,
         "dots": false,
         "darkComments": true,
         "darkScrollbars": true
@@ -947,7 +952,6 @@
         "fullscreen": "#051638",
         "stageHeader": "#051638",
         "border": "#00000026",
-        "textShadow": false,
         "dots": false,
         "darkComments": true,
         "darkScrollbars": true
@@ -975,7 +979,6 @@
         "fullscreen": "#222222",
         "stageHeader": "#222222",
         "border": "#111111",
-        "textShadow": true,
         "dots": false,
         "darkComments": true,
         "darkScrollbars": true
@@ -986,14 +989,14 @@
       "id": "experimentalDark",
       "description": "A dark theme by Maximouse based on a userstyle. Not experimental",
       "values": {
-        "page": "#001533",
+        "page": "#263241",
         "primary": "#4d97ff",
         "highlightText": "#4d97ff",
         "menuBar": "#4d97ff",
         "activeTab": "#282828",
-        "tab": "#192f4d",
-        "selector": "#030b16",
-        "selector2": "#192f4d",
+        "tab": "#202020",
+        "selector": "#252c37",
+        "selector2": "#202020",
         "selectorSelection": "#282828",
         "accent": "#282828",
         "input": "#282828",
@@ -1003,7 +1006,6 @@
         "fullscreen": "#282828",
         "stageHeader": "#333333",
         "border": "#444444",
-        "textShadow": false,
         "dots": true,
         "darkComments": true,
         "darkScrollbars": true
@@ -1030,8 +1032,7 @@
         "palette": "#111111",
         "fullscreen": "#111111",
         "stageHeader": "#111111",
-        "border": "#ffffff0d",
-        "textShadow": false,
+        "border": "#ffffff26",
         "dots": true,
         "darkComments": true,
         "darkScrollbars": true
@@ -1059,7 +1060,6 @@
         "fullscreen": "#ffffffff",
         "stageHeader": "#e6e8e8",
         "border": "#d0d1d2",
-        "textShadow": false,
         "dots": true,
         "darkComments": false,
         "darkScrollbars": false
@@ -1087,7 +1087,6 @@
         "fullscreen": "#000001",
         "stageHeader": "#000001",
         "border": "#0000006b",
-        "textShadow": false,
         "dots": false,
         "darkComments": false,
         "darkScrollbars": false
@@ -1115,7 +1114,6 @@
         "fullscreen": "#ffffff",
         "stageHeader": "#e8edf1",
         "border": "#00000026",
-        "textShadow": false,
         "dots": true,
         "darkComments": false,
         "darkScrollbars": false

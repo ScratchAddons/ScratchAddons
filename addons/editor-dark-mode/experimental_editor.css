@@ -157,11 +157,10 @@ div.s3devDDOut.vis,
 #s3devHelpContent,
 #s3devHelpContent h2,
 #s3devHelpContent p,
-.mediaRecorderPopupContent,
-.mediaRecorderPopupContent p,
 .slider-prompt_body_2ZkXL,
 .record-modal_body_2VO4l,
-.debug {
+.sa-debugger-interface,
+.sa-debugger-tabs li.sa-debugger-tab-selected {
   background-color: var(--editorDarkMode-accent);
   color: var(--editorDarkMode-accent-text);
 }
@@ -176,7 +175,8 @@ div.s3devDDOut.vis,
 .sound-editor_tool-button_2iNn9,
 .sound-editor_effect-button_2zuzT,
 .library-item_featured-extension-metadata_3D8E8,
-.record-modal_help-text_Jevsk {
+.record-modal_help-text_Jevsk,
+.sa-editor-modal-content p {
   color: var(--editorDarkMode-accent-text);
 }
 .blocklyFlyoutButton:hover {
@@ -467,7 +467,8 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .gui_tab_27Unf.gui_is-selected_sHAiu,
 .dropdown_dropdown_yOinO,
 .record-modal_playing-text_1tknI,
-.record-modal_button-row_1hdGe button {
+.record-modal_button-row_1hdGe button,
+.sa-debugger-tabs li.sa-debugger-tab-selected {
   color: var(--editorDarkMode-highlightText);
 }
 .scratchCategoryMenuItem:hover {
@@ -489,7 +490,8 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .filter_filter-icon_3Pfaw,
 img[src="/static/assets/d889a872f3b0985b28fa872764172ef1.svg"] /* record modal play */,
 img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal stop */,
-.record-modal_rerecord-button_jgsi_ img {
+.record-modal_rerecord-button_jgsi_ img,
+.sa-debugger-tabs li.sa-debugger-tab-selected img {
   filter: var(--editorDarkMode-highlightText-iconFilter);
 }
 
@@ -556,7 +558,8 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 .slider-prompt_max-input_1Nwbv,
 .slider-prompt_button-row_32aCX button,
 .record-modal_waveform-container__ay3Q,
-.record-modal_button-row_1hdGe button {
+.record-modal_button-row_1hdGe button,
+.sa-debugger-log {
   border-color: var(--editorDarkMode-border);
 }
 .blocklyWidgetDiv .goog-menuitem,
@@ -570,17 +573,13 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 .sa-onion-settings-polygon {
   stroke: var(--editorDarkMode-border);
 }
-.log {
-  --message-border-color: var(--editorDarkMode-border);
-}
 .dropdown_mod-open_3zJSJ {
   background-color: var(--editorDarkMode-border);
   border-color: transparent;
 }
 
 /* Miscellaneous styles */
-.monitor_label_ci1ok,
-.monitor_list-empty_1UKsB {
+[class*="stage-wrapper_"] {
   color: #575e75;
 }
 .sprite-selector_sprite-selector_2KgCX {
@@ -601,9 +600,15 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
   color-scheme: dark;
 }
 /* For `editor-comment-previews` */
-.sa-comment-preview {
+.sa-comment-preview-inner {
   color: var(--editorDarkMode-input-text);
-  background-color: var(--editorDarkMode-input-transparent75);
+  background-color: var(--editorDarkMode-input-transparent90);
+}
+@supports (backdrop-filter: blur(16px)) {
+  .sa-comment-preview-inner {
+    background-color: var(--editorDarkMode-input-transparent75);
+    backdrop-filter: blur(16px);
+  }
 }
 .sa-comment-preview-reduce-transparency {
   background-color: var(--editorDarkMode-input);

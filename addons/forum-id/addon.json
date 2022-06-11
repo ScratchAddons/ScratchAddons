@@ -9,8 +9,22 @@
     }
   ],
   "versionAdded": "1.22.0",
+  "latestUpdate": {
+    "version": "1.23.0",
+    "newSettings": ["auto_add"]
+  },
   "tags": ["community", "forums"],
   "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "settings": [
+    {
+      "name": "Automatically add post link to quotes",
+      "id": "auto_add",
+      "type": "boolean",
+      "default": false
+    }
+  ],
   "credits": [
     {
       "name": "itta611",

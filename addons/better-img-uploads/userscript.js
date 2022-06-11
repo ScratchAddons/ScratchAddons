@@ -48,7 +48,7 @@ export default async function ({ addon, console, msg }) {
   while (true) {
     //Catch all upload menus as they are created
     let menu = await addon.tab.waitForElement(
-      '[class*="sprite-selector_sprite-selector_"] [class*="action-menu_more-buttons_"], #react-tabs-3 [class*="action-menu_more-buttons_"]',
+      '[class*="sprite-selector_sprite-selector_"] [class*="action-menu_more-buttons_"], [data-tabs] > :nth-child(3) [class*="action-menu_more-buttons_"]',
       { markAsSeen: true }
     );
     let button = menu.parentElement.previousElementSibling.previousElementSibling; //The base button that the popup menu is from
@@ -115,6 +115,7 @@ export default async function ({ addon, console, msg }) {
       });
 
       let dim = { width: i.width, height: i.height };
+      const originalDim = JSON.parse(JSON.stringify(dim));
 
       if (mode === "fit") {
         //Make sure the image fits completely in the stage
@@ -176,7 +177,9 @@ export default async function ({ addon, console, msg }) {
       processed.push(
         new File( //Create the svg file
           [
-            `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0,0,${dim.width},${dim.height}" width="${dim.width}" height="${dim.height}">
+            `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0,0,${
+              dim.width
+            },${dim.height}" width="${dim.width}" height="${dim.height}">
         <g>
           <g
               data-paper-data='{"isPaintingLayer":true}'
@@ -192,8 +195,9 @@ export default async function ({ addon, console, msg }) {
               style="mix-blend-mode: normal;"
           >
             <image
-                width="${dim.width}"
-                height="${dim.height}"
+                width="${originalDim.width}"
+                height="${originalDim.height}"
+				transform="scale(${dim.width / originalDim.width},${dim.height / originalDim.height})"
                 xlink:href="${blob}"
             />
           </g>

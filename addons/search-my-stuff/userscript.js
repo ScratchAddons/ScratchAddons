@@ -22,12 +22,30 @@ export default async function ({ addon, global, console, msg }) {
 
   // Keyboard shortcut for focusing search bar
   document.addEventListener("keypress", (e) => {
+    // Ignore input
+    // 1) in <input> or <textarea>
+    // 2) with Ctrl/Alt/Meta keys pressed (probably browser shortcut keys)
+    // 3) that is not represented by one alphanumeric key code (probably special letters)
+    if (
+      e.target instanceof HTMLInputElement ||
+      e.target instanceof HTMLTextAreaElement ||
+      e.ctrlKey ||
+      e.altKey ||
+      e.metaKey ||
+      !/^\w$/.test(e.key)
+    )
+      return;
     searchBar.focus();
   });
 
   // Keyboard shortcut for visiting top hit
   search.addEventListener("keydown", (e) => {
-    if (e.ctrlKey && e.key === "Enter" && searchBar.value !== "" && resultsContainer.childNodes.length > 0)
+    if (
+      (e.ctrlKey || e.metaKey) &&
+      e.key === "Enter" &&
+      searchBar.value !== "" &&
+      resultsContainer.childNodes.length > 0
+    )
       window.location.href = resultsContainer.childNodes[0].querySelector("a").href;
   });
   search.addEventListener("submit", (e) => {
@@ -139,6 +157,8 @@ export default async function ({ addon, global, console, msg }) {
    */
   async function triggerNewSearch() {
     await resultsContainer;
+    // Empty page, do nothing
+    if (!fuse) return;
     // Blank query should restore the original order
     if (searchBar.value === "") {
       searchDropdown.querySelector("span span").innerText = originalDropdownText;
@@ -171,7 +191,7 @@ export default async function ({ addon, global, console, msg }) {
    * If so, `autoLoadMore()` is called.
    */
   function determineLoadMore() {
-    if (searchBar.value !== "" && !loading) {
+    if (resultsContainer && searchBar.value !== "" && !loading) {
       if (resultsContainer.querySelectorAll("li").length === 0) {
         autoLoadMore();
       } else if (allLoaded) {
@@ -254,7 +274,7 @@ export default async function ({ addon, global, console, msg }) {
           loading = false;
           autoLoadMore();
         }, 500);
-      } else {
+      } else if (resultsContainer) {
         // If "Load more" can be clicked again
         if (resultsContainer.querySelectorAll("li").length !== initResultsCount) {
           // Prompt to load more

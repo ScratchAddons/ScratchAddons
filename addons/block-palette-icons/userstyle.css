@@ -11,7 +11,7 @@
   right: 0;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 17px 17px;
+  background-size: cover;
 }
 
 .scratchCategoryId-motion .scratchCategoryItemBubble::after {

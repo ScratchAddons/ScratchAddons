@@ -1,1 +1,1 @@
-{"block-duplicate/@name":"Dupliquer le script avec la touche Alt"}
+{"block-duplicate/@name":"Dupliquer le script avec la touche Alt","block-duplicate/@description":"Dupliquez rapidement un script en le déplaçant tout en maintenant la touche Alt enfoncée. Maintenez la touche Ctrl enfoncée pour ne dupliquer qu'un seul bloc au lieu de toute la pile attachée en dessous.","block-duplicate/@info-mac":"Sur macOS, utilisez la touche Option au lieu de la touche Alt et la touche Commande au lieu de la touche Contrôle."}

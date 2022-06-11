@@ -7,18 +7,60 @@
     'number-setting': setting.type === 'integer' || setting.type === 'positive_integer',
   }"
   >
-    <div class="setting-label" v-html="settingsName(addon)"></div>
-    <template v-if="setting.type === 'boolean'">
+    <div class="setting-label-container">
+      <div class="setting-label" v-html="settingsName(addon)"></div>
+      <addon-tag v-if="isNewOption" tag="new"></addon-tag>
+    </div>
+    <template v-if="noResetDropdown">
+      <div v-if="setting.type === 'table'" class="setting-table">
+        <div class="setting-table-list" v-sortable>
+          <div class="setting-table-row" v-for="(i, row) of addonSettings[setting.id]">
+            <div class="setting-table-options">
+              <button :disabled="!addon._enabled" class="addon-buttons" @click="deleteTableRow(i)">
+                <img class="icon-type" src="../../images/icons/close.svg" />
+              </button>
+              <button :disabled="!addon._enabled" class="addon-buttons handle">
+                <img class="icon-type" src="../../images/icons/drag.svg" />
+              </button>
+            </div>
+            <div class="setting-table-row-settings">
+              <addon-setting
+                v-for="(id, val) of row"
+                :addon="addon"
+                :table-child="true"
+                :setting="getTableSetting(id)"
+                :addon-settings="row"
+              ></addon-setting>
+            </div>
+          </div>
+        </div>
+        <div class="addon-split-button setting-table-dropdown" :class="{open: rowDropdownOpen}">
+          <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-button" @click="addTableRow()">
+            <img class="icon-type" src="../../images/icons/plus.svg" />
+          </button>
+          <div v-click-outside="closeResetDropdowns">
+            <button
+              :disabled="!addon._enabled"
+              class="addon-buttons addon-split-button-dropdown"
+              @click="toggleRowDropdown"
+            >
+              <img class="icon-type" src="../../images/icons/expand.svg" />
+            </button>
+            <ul>
+              <li v-for="preset of setting.presets" @click="addTableRow(preset.values)">{{ preset.name }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
       <input
+        v-if="setting.type === 'boolean'"
         type="checkbox"
         class="setting-input check"
         v-model="addonSettings[setting.id]"
         @change="updateSettings()"
         :disabled="!addon._enabled"
       />
-    </template>
-    <template v-if="setting.type === 'select'">
-      <div class="filter-options">
+      <div v-if="setting.type === 'select'" class="filter-options">
         <div
           class="filter-option"
           v-for="option of setting.potentialValues"
@@ -29,7 +71,7 @@
         </div>
       </div>
     </template>
-    <div v-if="!['boolean', 'select'].includes(setting.type)" class="setting-input-container">
+    <div v-else class="setting-input-container" :class="{ 'full-radius': tableChild }">
       <template v-if="setting.type === 'positive_integer'">
         <input
           type="number"
@@ -38,8 +80,6 @@
           @change="checkValidity() || updateSettings()"
           :disabled="!addon._enabled"
           min="0"
-          :data-addon-id="addon._addonId"
-          :data-setting-id="setting.id"
           number
         />
       </template>
@@ -52,13 +92,11 @@
           :disabled="!addon._enabled"
           :min="setting.min"
           :max="setting.max"
-          :data-addon-id="addon._addonId"
-          :data-setting-id="setting.id"
           number
         />
       </template>
-      <template v-if="setting.type === 'string'">
-        <input
+      <template v-if="setting.type === 'string' || setting.type === 'untranslated'"
+        ><input
           type="text"
           class="setting-input string"
           v-model="addonSettings[setting.id]"
@@ -68,26 +106,21 @@
           :maxlength="setting.max || 100"
           :minlength="setting.min || 0"
           :required="!!setting.min"
-          :data-addon-id="addon._addonId"
-          :data-setting-id="setting.id"
         />
       </template>
-      <template v-if="setting.type === 'key'">
-        <input
+      <template v-if="setting.type === 'key'"
+        ><input
           type="text"
           class="setting-input"
           v-model="addonSettings[setting.id]"
-          @input="updateSettings()"
+          @input="updateSettings"
           @keydown="keySettingKeyDown"
           @keyup="keySettingKeyUp"
           :disabled="!addon._enabled"
           :placeholder="setting.default"
           maxlength="100"
-          :data-addon-id="addon._addonId"
-          :data-setting-id="setting.id"
           spellcheck="false"
-        />
-      </template>
+      /></template>
       <template v-if="setting.type === 'color'">
         <picker
           :value="addonSettings[setting.id] || setting.default"
@@ -95,26 +128,26 @@
           :addon="addon"
           :no_alpha="!setting.allowTransparency"
           v-click-outside="closePickers"
-        ></picker>
-      </template>
-      <reset-dropdown
-        v-if="showResetDropdown()"
-        :setting="setting"
-        :addon="addon"
-        :label="msg('reset')"
-        :default-label="msg('default')"
-        v-click-outside="closeResetDropdowns"
-      ></reset-dropdown>
-      <button
-        v-else
-        type="button"
-        class="large-button clear-button"
-        :disabled="!addon._enabled"
-        :title="msg('reset')"
-        @click="updateOption(setting.default)"
-      >
-        <img src="../../images/icons/undo.svg" class="icon-type" />
-      </button>
+        ></picker
+      ></template>
+      <template v-if="showResetDropdown"
+        ><reset-dropdown
+          :setting="setting"
+          :enabled="addon._enabled"
+          :presets="addon.presets"
+          v-click-outside="closeResetDropdowns"
+        ></reset-dropdown
+      ></template>
+      <template v-if="!tableChild && !showResetDropdown"
+        ><button
+          type="button"
+          class="large-button clear-button"
+          :disabled="!addon._enabled"
+          :title="msg('reset')"
+          @click="updateOption(setting.default || '')"
+        >
+          <img src="../../images/icons/undo.svg" class="icon-type" /></button
+      ></template>
     </div>
   </div>
 </template>
@@ -135,12 +168,16 @@
     height: 32px;
     box-sizing: border-box;
     padding: 0 12px;
+    margin-left: auto;
     border-radius: 4px 0 0 4px;
     transition: 0.2s ease;
     transition-property: box-shadow, border;
   }
   [dir="rtl"] .setting-input {
     border-radius: 0 4px 4px 0;
+  }
+  .full-radius .setting-input {
+    border-radius: 4px;
   }
   .setting-input:focus-visible {
     outline: none;
@@ -190,22 +227,31 @@
   [dir="rtl"] .setting-input.number {
     border-radius: 0 16px 16px 0;
   }
+  .full-radius .setting-input.number {
+    border-radius: 16px;
+  }
 
   .setting-input-container {
     display: flex;
     align-items: center;
   }
 
-  .setting-label {
+  .setting-label-container {
+    display: flex;
+    align-items: center;
     width: 200px;
+    margin-inline-end: 10px;
+  }
+
+  .setting-label {
     text-transform: uppercase;
     color: var(--label-text);
     font-weight: 600;
     font-size: 12px;
-    margin-inline-end: 10px;
   }
 
-  .setting-dropdown {
+  .setting-dropdown,
+  .setting-table-dropdown {
     position: relative;
   }
   .setting-dropdown.open .clear-button {
@@ -222,7 +268,8 @@
   [dir="rtl"] .setting-dropdown.open .clear-button {
     border-bottom-left-radius: 4px;
   }
-  .setting-dropdown ul {
+  .setting-dropdown ul,
+  .setting-table-dropdown ul {
     position: absolute;
     top: calc(100% - 1px);
     right: 0;
@@ -252,10 +299,12 @@
     right: -100px;
     border-top-left-radius: 4px;
   }
-  .setting-dropdown.open ul {
+  .setting-dropdown.open ul,
+  .setting-table-dropdown.open ul {
     display: block;
   }
-  .setting-dropdown li {
+  .setting-dropdown li,
+  .setting-table-dropdown li {
     padding: 6px 12px;
     list-style: none;
     white-space: nowrap;
@@ -263,7 +312,8 @@
     transition: 0.2s ease;
     user-select: none;
   }
-  .setting-dropdown li:hover {
+  .setting-dropdown li:hover,
+  .setting-table-dropdown li:hover {
     background: var(--button-hover-background);
   }
   .setting-dropdown li > * {
@@ -293,5 +343,45 @@
     margin-left: 12px;
     color: var(--label-text);
     font-weight: 600;
+  }
+
+  .setting-table {
+    display: flex;
+    flex-direction: column;
+  }
+  .setting-table-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .setting-table-row {
+    display: flex;
+    margin: 10px 0px;
+  }
+  .setting-table-row-settings {
+    background: var(--navigation-background);
+    border-radius: 10px;
+  }
+  .setting-table-row-settings .addon-setting {
+    margin-inline-end: 10px;
+    flex-wrap: wrap;
+  }
+  .setting-table-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .setting-table-dropdown {
+    align-self: flex-start;
+    display: flex;
+  }
+  .setting-table-dropdown ul {
+    right: auto;
+    left: 0;
+    border-radius: 4px;
+    border-top-left-radius: 0;
+  }
+  [dir="rtl"] .setting-table-dropdown ul {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 0;
   }
 </style>

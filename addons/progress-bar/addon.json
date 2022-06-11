@@ -29,7 +29,9 @@
     {
       "name": "Progress bar height (px)",
       "id": "height",
-      "type": "positive_integer",
+      "type": "integer",
+      "min": 3,
+      "max": 25,
       "default": 5
     }
   ],

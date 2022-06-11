@@ -21,8 +21,12 @@
   --notice-icon-filter: none;
   --warning-background: var(--red);
   --warning-border: var(--red-variant);
+  --update-background: rgba(177, 23, 248, 0.1);
+  --update-border: rgba(177, 23, 248, 0.2);
+  --update-text: #222;
 
   --hover-highlight: rgba(0, 0, 0, 0.05);
+  --hover-highlight-reduced: rgba(0, 0, 0, 0.02);
   --hover-darken: var(--hover-highlight);
 
   --content-border: #cfcfcf;
