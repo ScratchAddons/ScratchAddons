@@ -14,6 +14,9 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
 
   const getInputOfBlock = (targetId, blockId) => {
     const target = vm.runtime.getTargetById(targetId);
+    if (!target) {
+      return null;
+    }
     const block = target.blocks.getBlock(blockId);
     if (!block) {
       return null;
