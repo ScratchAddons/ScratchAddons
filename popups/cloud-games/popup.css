@@ -65,6 +65,7 @@ body {
 
 .project-details {
   padding: 8px;
+  color: var(--description-text);
   font-size: 12px;
 }
 .username-list > a {
