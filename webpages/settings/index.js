@@ -21,11 +21,8 @@ let fuse;
 
 (async () => {
   const { theme: initialTheme, setGlobalTheme } = await globalTheme();
-  const timeInputOne = await new Promise((resolve, reject) =>
-    chrome.storage.sync.get(["timeOne"], (result) => resolve(result.timeOne))
-  );
-  const timeInputTwo = await new Promise((resolve, reject) =>
-    chrome.storage.sync.get(["timeTwo"], (result) => resolve(result.timeTwo))
+  const timeInput = await new Promise((resolve, reject) =>
+    chrome.storage.sync.get(["themeTimeInputValue"], (result) => resolve(result.themeTimeInputValue))
   );
   const themeSyncAddons = await new Promise((resolve, reject) =>
     chrome.storage.sync.get(["themeSyncAddons"], (result) => resolve(result.themeSyncAddons))
@@ -151,11 +148,11 @@ let fuse;
     el: "body",
     data() {
       return {
-        timeInputOne: timeInputOne,
-        timeInputTwo: timeInputTwo,
+        timeInputSunrise: timeInput.split("-")[0],
+        timeInputSunset: timeInput.split("-")[1],
+        theme: initialTheme,
         themeSyncAddons: themeSyncAddons,
         smallMode: false,
-        theme: initialTheme,
         switchPath: "../../images/icons/switch.svg",
         moreSettingsOpen: false,
         categoryOpen: true,
@@ -281,21 +278,26 @@ let fuse;
       },
 
       changeAddonStatusTheme() {
-        chrome.storage.sync.get(["themeSyncAddons"], function (result) {
-          let element = document.getElementById("change-theme-input");
-          let valueBol = element.getAttribute("state") == "on" ? false : true;
-          chrome.storage.sync.set({ themeSyncAddons: valueBol }, function () {
-            element.setAttribute("state", valueBol ? "on" : "off");
+        chrome.storage.sync.get(["syncAddonsWithTheme"], function (result) {
+          let inputElement = document.getElementById("change-theme-input");
+          let inputState = inputElement.getAttribute("state") == "on" ? false : true;
+          chrome.storage.sync.set({ syncAddonsWithTheme: inputState }, function () {
+            inputElement.setAttribute("state",  inputState ? "on" : "off");
           });
         });
       },
 
-      saveTimeInputValue(id, title) {
-        var value = document.getElementById(id).value;
-        if (title == "timeOne") chrome.storage.sync.set({ timeOne: value });
-        else chrome.storage.sync.set({ timeTwo: value });
+      saveTimeInputValue() {
+        var timeInput = document.getElementById('time-input-1').value + "-" + document.getElementById('time-input-2').value;
+        chrome.storage.sync.set({ themeTimeInputValue: timeInput });
       },
-
+      changeTheme() {
+        chrome.storage.sync.get(["themeStatus"], ({ themeStatus = true }) => {
+          let el = themeStatus ? 'dark' : 'light';
+          setGlobalTheme(el);
+          this.theme = el;
+        });
+      },
       setTheme(mode) {
         setGlobalTheme(mode);
         this.theme = mode;

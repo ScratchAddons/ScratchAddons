@@ -22,19 +22,13 @@
     {
       "matches": ["https://scratch.mit.edu/*"],
       "run_at": "document_start",
-      "js": ["libraries/thirdparty/cs/comlink.js", "libraries/common/cs/text-color.js", "content-scripts/cs.js"],
+      "js": ["libraries/thirdparty/cs/comlink.js", "libraries/common/cs/text-color.js", "libraries/common/cs/global-theme.js", "content-scripts/cs.js"],
       "all_frames": true
     },
     {
       "matches": ["https://scratch.mit.edu/*"],
       "run_at": "document_start",
       "js": ["content-scripts/prototype-handler.js", "content-scripts/load-redux.js", "content-scripts/fix-console.js"],
-      "all_frames": true
-    },
-    {
-      "matches": ["https://scratch.mit.edu/*"],
-      "run_at": "document_start",
-      "js": ["content-scripts/global-theme.js"],
       "all_frames": true
     }
   ],

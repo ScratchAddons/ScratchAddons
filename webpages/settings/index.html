@@ -121,7 +121,8 @@
       <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-cloak v-show="smallMode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
       <h1 v-cloak>{{ msg("settings") }}</h1>
-      <img v-cloak @click="setTheme(!theme)" class="theme-switch" :src="themePath" />
+      <img v-cloak @click="changeTheme()" class="theme-switch" :src="themePath" />
+      {{ themeStatus }}
     </div>
     <div class="main">
       <div
@@ -222,20 +223,20 @@
           </div>
           <div class="addon-settings" style="position: relative">
             <span class="addon-description-full">{{ msg("scratchAddonsThemeDescription") }}</span>
-            <div class="addon-setting">
-              <div class="filter-selector">
+            <div class="addon-setting" style="display: block">
+              <div class="filter-selector" style="margin-bottom: 10px">
                 <div class="filter-text">{{ msg("theme") }}</div>
                 <div class="filter-options">
-                  <div class="filter-option" :class="{'sel': theme === true}" @click="setTheme(true)">
+                  <div class="filter-option" :class="{'sel': theme == 'light'}" @click="setTheme('light')">
                     {{ msg("light") }}
                   </div>
-                  <div class="filter-option" :class="{'sel': theme === false}" @click="setTheme(false)">
+                  <div class="filter-option" :class="{'sel': theme == 'dark'}" @click="setTheme('dark')">
                     {{ msg("dark") }}
                   </div>
-                  <div class="filter-option" :class="{'sel': theme === 'auto'}" @click="setTheme('auto')">
+                  <div class="filter-option" :class="{'sel': theme == 'auto'}" @click="setTheme('auto')">
                     {{ msg("autoTheme") }}
                   </div>
-                  <div class="filter-option" :class="{'sel': theme === 'time'}" @click="setTheme('time')">
+                  <div class="filter-option" :class="{'sel': theme == 'time'}" @click="setTheme('time')">
                     {{ msg("timeTheme") }}
                   </div>
                 </div>
@@ -244,9 +245,9 @@
                 <div class="time-input">
                   <span>{{ msg("sunrise").toUpperCase() }}</span
                   ><input
-                    value="{{$root.timeInputOne}}"
+                    value="{{$root.timeInputSunrise}}"
                     id="time-input-1"
-                    @input="saveTimeInputValue('time-input-1', 'timeOne')"
+                    @input="saveTimeInputValue()"
                     type="time"
                     min="00:00"
                     max="24:00"
@@ -256,9 +257,9 @@
                 <div class="time-input">
                   <span>{{ msg("sunset").toUpperCase() }}</span
                   ><input
-                    value="{{$root.timeInputTwo}}"
+                    value="{{$root.timeInputSunset}}"
                     id="time-input-2"
-                    @input="saveTimeInputValue('time-input-2', 'timeTwo')"
+                    @input="saveTimeInputValue()"
                     type="time"
                     min="00:00"
                     max="24:00"
@@ -275,7 +276,7 @@
                   id="change-theme-input"
                   style="position: absolute; left: 325px"
                   class="switch"
-                  :state="themeSyncAddons ? 'on' : 'off'"
+                  :state="syncAddonsWithTheme ? 'on' : 'off'"
                   @click="changeAddonStatusTheme()"
                 ></div>
               </div>
