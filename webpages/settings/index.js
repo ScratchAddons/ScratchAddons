@@ -282,18 +282,19 @@ let fuse;
           let inputElement = document.getElementById("change-theme-input");
           let inputState = inputElement.getAttribute("state") == "on" ? false : true;
           chrome.storage.sync.set({ syncAddonsWithTheme: inputState }, function () {
-            inputElement.setAttribute("state",  inputState ? "on" : "off");
+            inputElement.setAttribute("state", inputState ? "on" : "off");
           });
         });
       },
 
       saveTimeInputValue() {
-        var timeInput = document.getElementById('time-input-1').value + "-" + document.getElementById('time-input-2').value;
+        var timeInput =
+          document.getElementById("time-input-1").value + "-" + document.getElementById("time-input-2").value;
         chrome.storage.sync.set({ themeTimeInputValue: timeInput });
       },
       changeTheme() {
         chrome.storage.sync.get(["themeStatus"], ({ themeStatus = true }) => {
-          let el = themeStatus ? 'dark' : 'light';
+          let el = themeStatus ? "dark" : "light";
           setGlobalTheme(el);
           this.theme = el;
         });
