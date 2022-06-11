@@ -416,8 +416,6 @@ export default class DevTools {
           hoverBg: "#4cbf56",
           hoverText: "white",
         };
-      if (typeof window._devtoolsGetColorsForCls === "function") return window._devtoolsGetColorsForCls(cls);
-      const blockly = await addon.tab.traps.getBlockly();
       const colorIds = {
         receive: "event",
         event: "event",
@@ -428,10 +426,11 @@ export default class DevTools {
         LIST: "data_lists",
         costume: "looks",
       };
+      const colors = await addon.tab.getBlockCategoryColors(colorIds[cls]);
       return {
-        text: blockly.Colours[colorIds[cls]].primary,
-        hoverBg: blockly.Colours[colorIds[cls]].primary,
-        hoverText: "white",
+        text: colors.coloredText,
+        hoverBg: colors.brightBackground,
+        hoverText: colors.uncoloredText,
       };
     }
 
@@ -1858,20 +1857,18 @@ export default class DevTools {
       count++;
 
       async function getColorsForCategory(addon, category) {
-        if (typeof window._devtoolsGetColorsForCategory === "function")
-          return window._devtoolsGetColorsForCategory(cls);
-        const blockly = await addon.tab.traps.getBlockly();
         if (category === null) category = "more";
         const colorIds = {
           "data-lists": "data_lists",
           events: "event",
           extension: "pen",
         };
+        const colors = await addon.tab.getBlockCategoryColors(colorIds[category] || category);
         return {
-          bg: blockly.Colours[colorIds[category] || category].primary,
-          text: "white",
-          hoverBg: blockly.Colours[colorIds[category] || category].tertiary,
-          hoverText: "white",
+          bg: colors.coloredBackgroundPrimary,
+          text: colors.text,
+          hoverBg: colors.coloredBackgroundSecondary,
+          hoverText: colors.text,
         };
       }
 

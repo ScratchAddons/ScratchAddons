@@ -61,6 +61,7 @@ const categories = [
     colorId: "more",
   },
   extensionsCategory,
+  saCategory,
 ];
 
 export default async function ({ addon, console }) {
@@ -251,40 +252,21 @@ export default async function ({ addon, console }) {
     return oldFieldMatrixCreateButton.call(this, fill);
   };
 
-  window._devtoolsGetColorsForCls = (cls) => {
-    const colorIds = {
-      receive: "event",
-      event: "event",
-      define: "more",
-      var: "data",
-      VAR: "data",
-      list: "data_lists",
-      LIST: "data_lists",
-      costume: "looks",
-    };
-    const category = categories.find((item) => item.colorId === colorIds[cls]);
+  addon.tab.setBlockCategoryColorProvider((colorId) => {
+    const category = categories.find((item) => item.colorId === colorId);
+    if (!category) return null;
     return {
-      text: coloredTextColor(category),
-      hoverBg: isColoredTextMode() ? fieldBackground(category) : primaryColor(category),
-      hoverText: isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor(),
-    };
-  };
-
-  window._devtoolsGetColorsForCategory = (categoryId) => {
-    if (categoryId === null) categoryId = "more";
-    const colorIds = {
-      "data-lists": "data_lists",
-      events: "event",
-      extension: "pen",
-    };
-    const category = categories.find((item) => item.colorId === (colorIds[categoryId] || categoryId));
-    return {
-      bg: isColoredTextMode() ? secondaryColor(category) : primaryColor(category),
+      backgroundPrimary: primaryColor(category),
+      backgroundSecondary: secondaryColor(category),
+      backgroundTertiary: tertiaryColor(category),
+      coloredBackgroundPrimary: isColoredTextMode() ? secondaryColor(category) : primaryColor(category),
+      coloredBackgroundSecondary: isColoredTextMode() ? fieldBackground(category) : tertiaryColor(category),
+      brightBackground: isColoredTextMode() ? tertiaryColor(category) : primaryColor(category),
       text: isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor(),
-      hoverBg: isColoredTextMode() ? fieldBackground(category) : tertiaryColor(category),
-      hoverText: isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor(),
-    };
-  };
+      uncoloredText: uncoloredTextColor(),
+      coloredText: coloredTextColor(category),
+    }
+  });
 
   const updateColors = () => {
     const workspace = Blockly.getMainWorkspace();
@@ -294,6 +276,7 @@ export default async function ({ addon, console }) {
     textMode = addon.settings.get("text");
 
     for (let category of categories) {
+      if (!Blockly.Colours[category.colorId]) continue;
       Blockly.Colours[category.colorId].primary = primaryColor(category);
       Blockly.Colours[category.colorId].secondary = secondaryColor(category);
       Blockly.Colours[category.colorId].tertiary = tertiaryColor(category);
@@ -318,6 +301,9 @@ export default async function ({ addon, console }) {
     flyoutWorkspace.addChangeListener(vm.monitorBlockListener);
 
     if (vm.editingTarget) vm.emitWorkspaceUpdate();
+
+    // Notify other addons
+    addon.tab.updateBlockCategoryColors();
   };
 
   updateColors();

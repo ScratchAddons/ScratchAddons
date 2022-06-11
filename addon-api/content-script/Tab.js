@@ -5,6 +5,7 @@ import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
 import * as blocks from "./blocks.js";
 import { addContextMenu } from "./contextmenu.js";
 import * as modal from "./modal.js";
+import * as blockColor from "./block-color.js";
 
 const DATA_PNG = "data:image/png;base64,";
 
@@ -45,6 +46,9 @@ export default class Tab extends Listenable {
   }
   setCustomBlockColor(...a) {
     return blocks.setCustomBlockColor(...a);
+  }
+  getCustomBlockColor() {
+    return blocks.color;
   }
   getCustomBlock(...a) {
     return blocks.getCustomBlock(...a);
@@ -670,5 +674,19 @@ export default class Tab extends Listenable {
 
   prompt(...args) {
     return modal.prompt(this, ...args);
+  }
+
+  setBlockCategoryColorProvider(...args) {
+    return blockColor.setBlockCategoryColorProvider(...args);
+  }
+
+  updateBlockCategoryColors(...args) {
+    for (let eventTarget of window.scratchAddons.eventTargets.tab) {
+      eventTarget.dispatchEvent(new CustomEvent("blockCategoryColorChange"));
+    }
+  }
+
+  getBlockCategoryColors(...args) {
+    return blockColor.getBlockCategoryColors(this, ...args);
   }
 }

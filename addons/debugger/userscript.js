@@ -380,7 +380,6 @@ export default async function ({ addon, global, console, msg }) {
     let text;
     let category;
     let shape;
-    let color;
     if (
       block.opcode === "data_variable" ||
       block.opcode === "data_listcontents" ||
@@ -402,7 +401,6 @@ export default async function ({ addon, global, console, msg }) {
       const customBlock = addon.tab.getCustomBlock(proccode);
       if (customBlock) {
         category = "addon-custom-block";
-        color = customBlock.color;
       } else {
         category = "more";
       }
@@ -452,33 +450,26 @@ export default async function ({ addon, global, console, msg }) {
       return null;
     }
 
-    if (!color) {
-      const blocklyCategoryMap = {
-        "data-lists": "data_lists",
-        list: "data_lists",
-        events: "event",
-      };
-      const blocklyColor = ScratchBlocks.Colours[blocklyCategoryMap[category] || category];
-      if (blocklyColor) {
-        color = blocklyColor.primary;
-      } else {
-        // block probably belongs to an extension
-        color = ScratchBlocks.Colours.pen.primary;
-      }
-    }
-
     const element = document.createElement("span");
     element.className = "sa-debugger-block-preview";
     element.textContent = text;
-    element.style.backgroundColor = color;
     element.dataset.shape = shape;
 
-    // data-category is used for editor-theme3 compatibility
-    const colorCategoryMap = {
-      list: "data-lists",
-      more: "custom",
+    const colorIds = {
+      "addon-custom-block": "sa",
+      "data-lists": "data_lists",
+      list: "data_lists",
+      events: "event",
     };
-    element.dataset.category = colorCategoryMap[category] || category;
+    const updateColors = () => {
+      addon.tab.getBlockCategoryColors(colorIds[category] || category).then(async (colors) => {
+        if (!colors) colors = await addon.tab.getBlockCategoryColors("pen"); // block probably belongs to an extension
+        element.style.backgroundColor = colors.coloredBackgroundPrimary;
+        element.style.color = colors.text;
+      });
+    };
+    updateColors();
+    addon.tab.addEventListener("blockCategoryColorChange", updateColors);
 
     return element;
   };
