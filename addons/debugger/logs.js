@@ -17,7 +17,7 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
     if (!target) {
       return null;
     }
-    const block = target.blocks.getBlock(blockId);
+    const block = debug.getBlock(target, blockId);
     if (!block) {
       return null;
     }
