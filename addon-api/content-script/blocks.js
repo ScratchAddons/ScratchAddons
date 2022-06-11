@@ -6,7 +6,7 @@ let color = {
   tertiaryColor: "#3aa8a4",
 };
 
-export const setBlockColor = (newColor) => {
+export const setCustomBlockColor = (newColor) => {
   color = Object.assign(color, newColor);
 };
 

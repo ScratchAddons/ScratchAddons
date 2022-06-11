@@ -298,7 +298,7 @@ export default async function ({ addon, console }) {
       Blockly.Colours[category.colorId].secondary = secondaryColor(category);
       Blockly.Colours[category.colorId].tertiary = tertiaryColor(category);
     }
-    addon.tab.setBlockColor({
+    addon.tab.setCustomBlockColor({
       color: primaryColor(saCategory),
       secondaryColor: secondaryColor(saCategory),
       tertiaryColor: tertiaryColor(saCategory),

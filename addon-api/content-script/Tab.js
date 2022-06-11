@@ -43,8 +43,8 @@ export default class Tab extends Listenable {
   removeBlock(...a) {
     return blocks.removeBlock(...a);
   }
-  setBlockColor(...a) {
-    return blocks.setBlockColor(...a);
+  setCustomBlockColor(...a) {
+    return blocks.setCustomBlockColor(...a);
   }
   getCustomBlock(...a) {
     return blocks.getCustomBlock(...a);
