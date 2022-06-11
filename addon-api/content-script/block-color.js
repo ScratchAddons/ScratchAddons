@@ -2,11 +2,10 @@ let blockCategoryColorProvider = null;
 
 export const setBlockCategoryColorProvider = (provider) => {
   blockCategoryColorProvider = provider;
-}
+};
 
 export const getBlockCategoryColors = async (tab, colorId) => {
-  if ((typeof blockCategoryColorProvider) === "function")
-    return await blockCategoryColorProvider(colorId);
+  if (typeof blockCategoryColorProvider === "function") return await blockCategoryColorProvider(colorId);
   if (colorId === "sa") {
     const colors = tab.getCustomBlockColor();
     return {
@@ -34,4 +33,4 @@ export const getBlockCategoryColors = async (tab, colorId) => {
     uncoloredText: "#ffffff",
     coloredText: colors.primary,
   };
-}
+};

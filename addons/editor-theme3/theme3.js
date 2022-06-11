@@ -265,7 +265,7 @@ export default async function ({ addon, console }) {
       text: isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor(),
       uncoloredText: uncoloredTextColor(),
       coloredText: coloredTextColor(category),
-    }
+    };
   });
 
   const updateColors = () => {
