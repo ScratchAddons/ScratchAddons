@@ -105,7 +105,7 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
             /\{(sprite|type|content)\}/g,
             (_, match) =>
               ({
-                sprite: targetInfo ? targetInfo.name : msg('unknown-sprite'),
+                sprite: targetInfo ? targetInfo.name : msg("unknown-sprite"),
                 type,
                 content: text,
               }[match])
