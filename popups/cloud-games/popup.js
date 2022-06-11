@@ -7,7 +7,7 @@ export default async ({ addon, msg, safeMsg }) => {
     el: "body",
     data: {
       projects: [],
-      loaded: false,
+      projectsVisible: false,
       messages: { noUsersMsg: msg("no-users") },
       projectsChecked: 0,
       error: shouldFailEarly ? "general-error" : null,
@@ -46,7 +46,7 @@ export default async ({ addon, msg, safeMsg }) => {
             this.projectsChecked++;
             if (this.projectsChecked / this.projects.length > 0.5) {
               // Show UI even tho it's not ready, if a majority of projects loaded
-              this.loaded = true;
+              this.projectsVisible = true;
             }
             resolve();
           }, i * 125);

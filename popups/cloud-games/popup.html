@@ -23,7 +23,7 @@
       {{ errorMessage }}
       <span v-if="error !== 'server-error'">{{{ settingsHTML() }}}</span>
     </div>
-    <div v-show="loaded">
+    <div v-show="projectsVisible">
       <div class="games" v-for="project of projectsSorted">
         <div class="title">
           <a class="project-name nolink" :href="'https://scratch.mit.edu/projects/' + project.id" target="_blank"
