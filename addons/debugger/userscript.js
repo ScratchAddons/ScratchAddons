@@ -262,11 +262,11 @@ export default async function ({ addon, global, console, msg }) {
     };
   };
 
-  const createBlockLink = (targetId, blockId) => {
+  const createBlockLink = (targetInfo, blockId) => {
     const link = document.createElement("a");
     link.className = "sa-debugger-log-link";
 
-    const { exists, name, originalId } = getTargetInfoById(targetId);
+    const { exists, name, originalId } = targetInfo;
     link.textContent = name;
     if (exists) {
       // We use mousedown instead of click so that you can still go to blocks when logs are rapidly scrolling

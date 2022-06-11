@@ -63,7 +63,7 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
     }
 
     if (row.targetId && row.blockId) {
-      root.appendChild(debug.createBlockLink(row.targetId, row.blockId));
+      root.appendChild(debug.createBlockLink(debug.getTargetInfoById(row.targetId), row.blockId));
     }
 
     return {
