@@ -38,7 +38,7 @@
       "name": "Add scroll bars to tall comments",
       "id": "scrollbars",
       "type": "boolean",
-      "default": false
+      "default": true
     },
     {
       "name": "Maximum number of lines",
@@ -57,7 +57,7 @@
   "dynamicEnable": true,
   "versionAdded": "1.8.0",
   "latestUpdate": {
-    "version": "1.24.0",
+    "version": "1.27.0",
     "newSettings": ["scrollbars", "height"]
   },
   "tags": ["community", "comments"]
