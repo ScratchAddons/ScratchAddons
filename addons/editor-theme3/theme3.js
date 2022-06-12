@@ -1,4 +1,4 @@
-import { multiply, alphaBlend, removeAlpha, recolorFilter } from "../../libraries/common/cs/text-color.esm.js";
+import { multiply, alphaBlend, recolorFilter } from "../../libraries/common/cs/text-color.esm.js";
 
 const extensionsCategory = {
   id: null,
@@ -82,18 +82,18 @@ export default async function ({ addon, console }) {
     // Colored on white: can't use #ffffff because of editor-dark-mode dropdown div handling
     if (textMode === "colorOnWhite") return "#feffff";
     if (textMode === "colorOnBlack") return "#282828";
-    return removeAlpha(addon.settings.get(category.settingId));
+    return addon.settings.get(category.settingId);
   };
   const secondaryColor = (category) => {
     if (addon.self.disabled) return originalColors[category.colorId].secondary;
     if (isColoredTextMode())
       return alphaBlend(primaryColor(category), multiply(addon.settings.get(category.settingId), { a: 0.15 }));
-    return removeAlpha(multiply(addon.settings.get(category.settingId), { r: 0.9, g: 0.9, b: 0.9 }));
+    return multiply(addon.settings.get(category.settingId), { r: 0.9, g: 0.9, b: 0.9 });
   };
   const tertiaryColor = (category) => {
     if (addon.self.disabled) return originalColors[category.colorId].tertiary;
-    if (isColoredTextMode()) return removeAlpha(addon.settings.get(category.settingId));
-    return removeAlpha(multiply(addon.settings.get(category.settingId), { r: 0.8, g: 0.8, b: 0.8 }));
+    if (isColoredTextMode()) return addon.settings.get(category.settingId);
+    return multiply(addon.settings.get(category.settingId), { r: 0.8, g: 0.8, b: 0.8 });
   };
   const fieldBackground = (category) => {
     // Background color for open dropdowns and Boolean inputs
@@ -120,7 +120,7 @@ export default async function ({ addon, console }) {
   };
   const coloredTextColor = (category) => {
     if (!isColoredTextMode()) return originalColors[category.colorId].primary;
-    return removeAlpha(addon.settings.get(category.settingId));
+    return addon.settings.get(category.settingId);
   };
   const uncoloredTextColor = () => {
     if (addon.self.disabled) return "#ffffff";
@@ -133,7 +133,14 @@ export default async function ({ addon, console }) {
   };
   const otherColor = (settingId, colorId) => {
     if (addon.self.disabled) return originalColors[colorId];
-    return removeAlpha(addon.settings.get(settingId));
+    return addon.settings.get(settingId);
+  };
+
+  // Blockly doesn't handle colors with transparency
+  const oldBlockMakeColor = Blockly.Block.prototype.makeColour_;
+  Blockly.Block.prototype.makeColour_ = function (color) {
+    if ((typeof color) === "string" && /^#(?:[0-9A-Za-z]{2}){3,4}$/.test(color)) return color;
+    return oldBlockMakeColor(color);
   };
 
   const oldCategoryCreateDom = Blockly.Toolbox.Category.prototype.createDom;
