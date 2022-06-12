@@ -19,21 +19,61 @@
     {
       "name": "inputColor-text",
       "value": {
-        "type": "textColor",
+        "type": "alphaThreshold",
         "source": {
           "type": "settingValue",
           "settingId": "input-color"
+        },
+        "opaque": {
+          "type": "textColor",
+          "source": {
+            "type": "settingValue",
+            "settingId": "input-color"
+          }
+        },
+        "transparent": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "text"
+          },
+          "options": {
+            "white": "#ffffff",
+            "black": "#575e75",
+            "colorOnWhite": "#575e75",
+            "colorOnBlack": "#ffffff"
+          }
         }
       }
     },
     {
       "name": "inputColor-forumText",
       "value": {
-        "type": "textColor",
-        "black": "#000000",
+        "type": "alphaThreshold",
         "source": {
           "type": "settingValue",
           "settingId": "input-color"
+        },
+        "opaque": {
+          "type": "textColor",
+          "black": "#000000",
+          "source": {
+            "type": "settingValue",
+            "settingId": "input-color"
+          }
+        },
+        "transparent": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "text"
+          },
+          "options": {
+            "white": "#ffffff",
+            "black": "#000000",
+            "colorOnWhite": "#000000",
+            "colorOnBlack": "#ffffff"
+          }
         }
       }
     }
@@ -205,7 +245,8 @@
       "name": "Block inputs",
       "id": "input-color",
       "type": "color",
-      "default": "#FFFFFF"
+      "default": "#FFFFFF",
+      "allowTransparency": true
     },
     {
       "name": "Text color",
