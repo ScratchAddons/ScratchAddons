@@ -30,6 +30,12 @@ export default async function ({ template }) {
       addonSettings() {
         return this.$root.addonSettings[this.addon._addonId];
       },
+      showUpdateNotice() {
+        if (!this.addon.latestUpdate || !this.addon.latestUpdate.temporaryNotice) return false;
+        const [extMajor, extMinor, _] = this.$root.version.split(".");
+        const [addonMajor, addonMinor, __] = this.addon.latestUpdate.version.split(".");
+        return extMajor === addonMajor && extMinor === addonMinor;
+      },
     },
     methods: {
       getDefaultExpanded() {
@@ -52,7 +58,8 @@ export default async function ({ template }) {
       loadDefaults() {
         if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
           for (const property of this.addon.settings) {
-            this.addonSettings[property.id] = property.default;
+            // Clone necessary for tables
+            this.addonSettings[property.id] = JSON.parse(JSON.stringify(property.default));
           }
           this.$root.updateSettings(this.addon);
           console.log(`Loaded default values for ${this.addon._addonId}`);
@@ -74,6 +81,7 @@ export default async function ({ template }) {
               ? false
               : newState;
           chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
+          this.$emit("toggle-addon-request", newState);
         };
 
         const requiredPermissions = (this.addon.permissions || []).filter((value) =>

@@ -86,8 +86,8 @@ export default async function ({ addon, global, console, msg }) {
   GamepadLib.setConsole(console);
   const gamepad = new GamepadLib();
 
-  const parsedOptions = parseOptionsComment();
   gamepad.getHintsLazily = () => {
+    const parsedOptions = parseOptionsComment();
     if (parsedOptions) {
       return {
         importedSettings: parsedOptions,
@@ -210,62 +210,40 @@ export default async function ({ addon, global, console, msg }) {
     const editorEl = editor.generateEditor();
     handleEditorControllerChanged();
 
-    const close = () => {
-      modalOverlay.remove();
-      document.body.removeEventListener("click", handleClickOutside, true);
-      window.removeEventListener("keydown", handleKeyDown);
-      addon.self.removeEventListener("disabled", close);
-      editor.hide();
-    };
-    const handleClickOutside = (e) => {
-      if (!modalContentContainer.contains(e.target)) {
-        close();
-      }
-    };
+    const { backdrop, container, content, closeButton, remove } = addon.tab.createModal(msg("settings"), {
+      isOpen: true,
+      useEditorClasses: true,
+    });
+
     const handleKeyDown = (e) => {
       if (e.key === "Escape" && !e.target.closest("[data-accepting-input]")) {
-        close();
+        remove();
       }
     };
-    document.body.addEventListener("click", handleClickOutside, true);
+    backdrop.addEventListener("click", remove);
     window.addEventListener("keydown", handleKeyDown);
-    addon.self.addEventListener("disabled", close);
+    addon.self.addEventListener("disabled", remove);
 
-    const modalOverlay = document.createElement("div");
-    modalOverlay.className = addon.tab.scratchClass("modal_modal-overlay", { others: "sa-gamepad-popup-outer" });
-    const modalContentContainer = document.createElement("div");
-    modalContentContainer.className = addon.tab.scratchClass("modal_modal-content", { others: "sa-gamepad-popup" });
+    backdrop.classList.add("sa-gamepad-popup-outer");
+    container.classList.add("sa-gamepad-popup");
 
-    const modalHeaderContainer = document.createElement("div");
-    modalHeaderContainer.className = addon.tab.scratchClass("modal_header");
-    const modalHeaderText = document.createElement("div");
-    modalHeaderText.className = addon.tab.scratchClass("modal_header-item", "modal_header-item-title");
-    modalHeaderText.textContent = msg("settings");
-    modalHeaderContainer.appendChild(modalHeaderText);
-
-    const closeContainer = document.createElement("div");
-    closeContainer.className = addon.tab.scratchClass("modal_header-item", "modal_header-item-close");
-    const closeButton = document.createElement("div");
-    closeButton.className = addon.tab.scratchClass("close-button_close-button", "close-button_large");
     closeButton.tabIndex = "0";
     closeButton.setAttribute("role", "button");
-    const closeImage = document.createElement("img");
-    closeImage.className = addon.tab.scratchClass("close-button_close-icon");
-    closeImage.src = addon.self.dir + "/close.svg";
-    closeButton.appendChild(closeImage);
-    closeContainer.appendChild(closeButton);
-    modalHeaderContainer.appendChild(closeContainer);
-    closeButton.addEventListener("click", close);
+    closeButton.addEventListener("click", remove);
+    closeButton.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        remove();
+      }
+    });
 
-    const modalContent = document.createElement("div");
-    modalContent.className = "sa-gamepad-popup-content";
+    content.classList.add("sa-gamepad-popup-content");
     if (GamepadLib.browserHasBrokenGamepadAPI()) {
       const warning = document.createElement("div");
       warning.textContent = msg("browser-support");
       warning.className = "sa-gamepad-browser-support-warning";
-      modalContent.appendChild(warning);
+      content.appendChild(warning);
     }
-    modalContent.appendChild(editorEl);
+    content.appendChild(editorEl);
 
     const storeSettingsLabel = document.createElement("label");
     storeSettingsLabel.className = "sa-gamepad-store-settings";
@@ -275,12 +253,7 @@ export default async function ({ addon, global, console, msg }) {
     storeSettingsCheckbox.checked = shouldStoreSettingsInProject;
     storeSettingsCheckbox.addEventListener("change", handleStoreSettingsCheckboxChanged);
     storeSettingsLabel.prepend(storeSettingsCheckbox);
-    modalContent.appendChild(storeSettingsLabel);
-
-    modalContentContainer.appendChild(modalHeaderContainer);
-    modalContentContainer.appendChild(modalContent);
-    modalOverlay.appendChild(modalContentContainer);
-    document.body.appendChild(modalOverlay);
+    content.appendChild(storeSettingsLabel);
 
     editor.focus();
   });

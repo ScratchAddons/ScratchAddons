@@ -12,6 +12,7 @@
   --red: #fd2b2b;
   --red-opacity75: rgba(253, 43, 43, 0.75);
   --red-variant: #d81212;
+  --purple-opacity75: rgba(177, 23, 248, 0.75);
   --dark-red-variant: #d84a12;
   --dark-red-text: var(--dark-red-variant);
   --white-text: #fff;
@@ -37,12 +38,13 @@
   --warning-border: var(--red);
   --warning-text: #fff;
   --warning-icon-filter: brightness(0) invert(1);
-  --update-background: rgba(177, 23, 248, 0.25);
-  --update-border: #b20eb8;
+  --update-background: var(--navigation-background);
+  --update-border: var(--purple-opacity75);
   --update-text: #fff;
 
   --modal-overlay: rgba(0, 0, 0, 0.65);
   --hover-highlight: rgba(255, 255, 255, 0.05);
+  --hover-highlight-reduced: rgba(255, 255, 255, 0.02);
   --hover-darken: rgba(0, 0, 0, 0.1);
 
   --large-shadow: 0 0 10px rgba(0, 0, 0, 0.5);

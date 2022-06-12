@@ -1,7 +1,7 @@
 <template>
   <div class="addon-body" v-show="shouldShow" :id="'addon-' + addon._addonId">
     <div class="addon-topbar">
-      <div class="clickeable-area" @click="expanded = !expanded">
+      <div class="clickable-area" @click="expanded = !expanded">
         <div class="btn-dropdown">
           <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': expanded}" />
         </div>
@@ -16,18 +16,18 @@
         <div
           v-show="expanded && addon._enabled"
           v-if="addon.settings"
-          class="clear-settings"
+          class="addon-buttons"
           title="{{ msg('resetToDefault') }}"
           @click="loadDefaults"
         >
           <img src="../../images/icons/undo.svg" class="icon-type" />
         </div>
-        <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest($event)"></div>
+        <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest"></div>
       </div>
     </div>
     <div class="addon-settings" v-if="everExpanded" v-show="expanded">
       <div class="addon-description-full">{{ addon.description }}</div>
-      <div class="addon-update" v-if="addon.latestUpdate && addon.latestUpdate.temporaryNotice">
+      <div class="addon-update" v-if="showUpdateNotice">
         <addon-tag tag="new"></addon-tag>
         {{ addon.latestUpdate.temporaryNotice }}
       </div>
@@ -162,7 +162,7 @@
     display: flex;
     align-items: center;
   }
-  .clickeable-area {
+  .clickable-area {
     padding-inline-start: 10px;
   }
   .addon-body {
@@ -176,15 +176,50 @@
     animation: addonBlink 2s 1;
   }
 
-  .clear-settings {
+  .addon-buttons {
     display: flex;
     align-items: center;
+    padding-block: 8px;
     padding-inline-start: 8px;
+    padding-inline-end: 0;
     border-radius: 4px;
     margin-inline-end: 8px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: 0.2s ease;
   }
-  .clear-settings:hover {
+  .addon-buttons:hover:not([disabled]),
+  .addon-split-button.open .addon-split-button-dropdown,
+  .addon-split-button.open:hover .addon-split-button-dropdown:not(:hover) {
     background: var(--hover-highlight);
+  }
+  .addon-split-button:hover:not([disabled]) .addon-split-button-button:not(:hover),
+  .addon-split-button:hover:not([disabled]) .addon-split-button-dropdown:not(:hover),
+  .addon-split-button.open .addon-split-button-button {
+    background: var(--hover-highlight-reduced);
+  }
+  [disabled] {
+    cursor: initial !important;
+  }
+  .addon-split-button-button {
+    margin: 0;
+    border-radius: 4px 0 0 4px;
+  }
+  [dir="rtl"] .addon-split-button-button {
+    border-radius: 0 4px 4px 0;
+  }
+  .addon-split-button-dropdown {
+    margin: 0;
+    border-radius: 0 4px 4px 0;
+  }
+  [dir="rtl"] .addon-split-button-dropdown {
+    border-radius: 4px 0 0 4px;
+  }
+  .addon-split-button.open .addon-split-button-button,
+  .addon-split-button.open .addon-split-button-dropdown {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
   }
 
   .btn-dropdown {
@@ -194,7 +229,7 @@
     border-radius: 4px;
     transition: 0.2s ease;
   }
-  .clickeable-area:hover .btn-dropdown {
+  .clickable-area:hover .btn-dropdown {
     background: var(--hover-highlight);
   }
 
@@ -204,16 +239,16 @@
     filter: var(--content-icon-filter);
   }
 
-  .clickeable-area {
+  .clickable-area {
     cursor: pointer;
     display: flex;
     align-self: stretch;
     align-items: center;
   }
-  .clickeable-area .tooltip {
+  .clickable-area .tooltip {
     cursor: pointer;
   }
-  .iframe .clickeable-area {
+  .iframe .clickable-area {
     flex-grow: 1;
   }
   .addon-notice,
@@ -241,6 +276,10 @@
     border-color: var(--update-border);
     background-color: var(--update-background);
     color: var(--update-text);
+  }
+  .addon-update .badge {
+    margin: -3px;
+    margin-inline-end: 10px;
   }
   .addon-notice img,
   .addon-warn img {
@@ -302,6 +341,7 @@
     margin-inline-start: auto;
     padding: 5px;
     display: flex;
+    align-items: center;
   }
 
   .switch {

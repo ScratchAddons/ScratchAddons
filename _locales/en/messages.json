@@ -131,6 +131,9 @@
   "moreSettings": {
     "message": "More Settings"
   },
+  "close": {
+    "message": "Close"
+  },
   "filter": {
     "message": "Filter:"
   },
@@ -239,14 +242,14 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_23": {
-    "message": "New addon: \"website dark mode and customizable colors\". Go to $1 to change specific colors, toggle dark scrollbars, and more!"
+  "extensionUpdateInfo1_v1_26": {
+    "message": "New addon: \"customizable default costume editor colors\", which lets you change the default colors and outline size used by the costume editor. Go to $1 to enable it."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_23": {
-    "message": "Other new addons added this update are \"snap scripts to grid\", \"block count\" and \"high resolution thumbnails\"."
+  "extensionUpdateInfo2_v1_26": {
+    "message": "Another new addon added in this update is \"sound duration display\", which adds a display to the sound editor that shows the total length and the elapsed time of the sound, or the selection within it."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
@@ -258,6 +261,10 @@
   "updated": {
     "message": "New features",
     "description": "Tag for addons with new features. Singular."
+  },
+  "updatedWithSettings": {
+    "message": "New settings",
+    "description": "Tag for addons with new settings. Singular."
   },
   "newGroup": {
     "message": "Other new addons and updates",
@@ -285,6 +292,9 @@
   },
   "import": {
     "message": "Import Settings"
+  },
+  "viewSettings": {
+    "message": "View settings file"
   },
   "fileNotSelected": {
     "message": "Please select a settings file."
@@ -320,6 +330,12 @@
   "exploreAllAddons": {
     "message": "Explore all $1 addons:",
     "description": "Placeholder is a number. Example: explore all 80+ addons"
+  },
+  "searchNotFound": {
+    "message": "No results found. Perhaps try different keywords?"
+  },
+  "searchNotFoundInCategory": {
+    "message": "No results found in \"$1\". Perhaps try different keywords?"
   },
   "captureCommentError": {
     "message": "Message added by Scratch Addons: it appears that your comment doesn't follow $1, which asks Scratchers not to advertise or name browser extensions. This comment wasn't posted because it will probably result in your account getting muted from commenting for 5 minutes."

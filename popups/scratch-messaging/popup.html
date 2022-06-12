@@ -39,7 +39,12 @@
             <img src="../../images/icons/popout.svg" class="popout-comment" title="{{ messages.openNewTabMsg }}" />
           </a>
         </span>
-        <a @click="deleteComment()" class="delete-btn" :class="{'bold': deleteStep === 1}" v-show="!deleted"
+        <a
+          @click="deleteComment()"
+          class="delete-btn"
+          :class="{'bold': deleteStep === 1}"
+          v-show="!deleted"
+          v-if="canDeleteComment"
           >{{ deleteStep === 0 ? messages.deleteMsg : messages.deleteConfirmMsg }}
         </a>
         <bdo dir="ltr">
@@ -374,7 +379,13 @@
                     {{project.favoriteCount}}</span
                   >
                 </span>
-                <span class="tooltiptext tooltiptextleft" v-html="projectLoversAndFavers(project)"></span>
+                <div class="tooltiptext tooltiptextleft">
+                  <div v-for="person of projectLoversAndFavers(project)">
+                    <img class="small-icon colored" src="../../images/icons/heart.svg" v-if="person.loved" />
+                    <img class="small-icon colored" src="../../images/icons/star.svg" v-if="person.faved" />
+                    <a href="https://scratch.mit.edu/users/{{ person.username }}/"> {{ person.username }} </a>
+                  </div>
+                </div>
               </div>
               <span v-show="project.unreadComments"
                 ><img class="small-icon" src="../../images/icons/comment.svg" /> {{project.unreadComments}}</span
