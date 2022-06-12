@@ -139,7 +139,7 @@ export default async function ({ addon, console }) {
   // Blockly doesn't handle colors with transparency
   const oldBlockMakeColor = Blockly.Block.prototype.makeColour_;
   Blockly.Block.prototype.makeColour_ = function (color) {
-    if ((typeof color) === "string" && /^#(?:[0-9A-Za-z]{2}){3,4}$/.test(color)) return color;
+    if (typeof color === "string" && /^#(?:[0-9A-Za-z]{2}){3,4}$/.test(color)) return color;
     return oldBlockMakeColor(color);
   };
 
