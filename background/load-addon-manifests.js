@@ -88,6 +88,22 @@ const localizeSettings = (addonId, setting, tableId) => {
             }
           }
         }
+        // Cache dependents
+        // if A has addonEnabled: C
+        // A's dependency is C
+        // C's dependent is A
+        // Only handle userstyles because userscript support is complicated
+        if (propName === "userstyles" && injectable.if?.addonEnabled?.length) {
+          // Convert string shortcut to Array
+          // might as well remove this in the future
+          if (typeof injectable.if.addonEnabled === "string") {
+            injectable.if.addonEnabled = [injectable.if.addonEnabled];
+          }
+          for (const dependency of injectable.if.addonEnabled) {
+            if (!scratchAddons.dependents[dependency]) scratchAddons.dependents[dependency] = new Set();
+            scratchAddons.dependents[dependency].add(addonId);
+          }
+        }
       }
     }
     if (!useDefault) {

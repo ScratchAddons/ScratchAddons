@@ -84,9 +84,7 @@ export default async function ({ addon, global, console, msg }) {
   loadingCaption.innerText = msg("loading-project");
   loadingCaption.className = "u-progress-bar-caption";
 
-  const PROJECT_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\d+$/;
-  const REMIX_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\?is_remix=1&original_id=\d+/;
-  const COPY_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\?is_copy=1&original_id=\d+/;
+  const PROJECT_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\d+/;
   const ASSET_REGEX = /^https:\/\/assets\.scratch\.mit\.edu\//;
 
   // Scratch uses fetch() to download the project JSON and upload project assets.
@@ -144,15 +142,12 @@ export default async function ({ addon, global, console, msg }) {
     const method = args[0];
     const url = args[1];
     if (typeof method === "string" && typeof url === "string") {
-      if (
-        (method.toLowerCase() === "put" && PROJECT_REGEX.test(url)) ||
-        (method.toLowerCase() === "post" && COPY_REGEX.test(url)) ||
-        (method.toLowerCase() === "post" && REMIX_REGEX.test(url))
-      ) {
+      if ((method.toLowerCase() === "put" || method.toLowerCase() === "post") && PROJECT_REGEX.test(url)) {
+        const searchParams = new URLSearchParams(url);
         // This is a request to save, remix, or copy a project.
-        if (REMIX_REGEX.test(url)) {
+        if (searchParams.has("is_remix")) {
           setLoadingPhase(REMIX);
-        } else if (COPY_REGEX.test(url)) {
+        } else if (searchParams.has("is_copy")) {
           setLoadingPhase(COPY);
         } else {
           setLoadingPhase(SAVE_JSON);

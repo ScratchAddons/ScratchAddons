@@ -261,6 +261,7 @@ body > #pagewrapper {
   z-index: 1;
   margin: -4px;
   display: block;
+  max-width: -moz-fit-content;
   max-width: fit-content;
   padding: 4px;
   overflow: hidden;
@@ -277,10 +278,6 @@ body > #pagewrapper {
 .djangobb .username:hover {
   width: -moz-fit-content;
   width: fit-content;
-}
-.forum-search-list .postleft .username,
-.forum-search-list .postleft .username:visited:not(:hover) {
-  color: var(--darkWww-gray-text, #575e75);
 }
 .searchposts .postleft a {
   font-size: 16px;
