@@ -110,15 +110,15 @@ const singleStepThread = (thread) => {
     vm.runtime.sequencer.retireThread(thread);
   } else {
     /*
-          We need to call execute(this, thread) like the original sequencer. We don't
-          have access to that method, so we need to force the original stepThread to run
-          execute for us then exit before it tries to run more blocks.
-          So, we make `thread.blockGlowInFrame = ...` throw an exception, so this line:
-          https://github.com/LLK/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/sequencer.js#L214
-          will end the function early. We then have to set it back to normal afterward.
+      We need to call execute(this, thread) like the original sequencer. We don't
+      have access to that method, so we need to force the original stepThread to run
+      execute for us then exit before it tries to run more blocks.
+      So, we make `thread.blockGlowInFrame = ...` throw an exception, so this line:
+      https://github.com/LLK/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/sequencer.js#L214
+      will end the function early. We then have to set it back to normal afterward.
 
-          Why are we here just to suffer?
-         */
+      Why are we here just to suffer?
+    */
     const throwMsg = ["special error used by Scratch Addons for implementing single-stepping"];
 
     Object.defineProperty(thread, "blockGlowInFrame", {
