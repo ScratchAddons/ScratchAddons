@@ -44,7 +44,7 @@ const pauseThread = (thread) => {
   }
 };
 
-const setSteppingThred = (thread) => {
+const setSteppingThread = (thread) => {
   steppingThread = thread;
   steppingThreadIndex = vm.runtime.threads.indexOf(steppingThread);
 };
@@ -218,7 +218,7 @@ export const singleStep = () => {
 
   // If we don't have a thread, than we are between VM steps and should search for a new thread
   if (!steppingThread) {
-    setSteppingThred(findNewSteppingThread(0));
+    setSteppingThread(findNewSteppingThread(0));
 
     // End of VM step, emulate one frame of time passing.
     vm.runtime.ioDevices.clock._pausedTime += vm.runtime.currentStepTime;
@@ -283,7 +283,7 @@ export const setup = (_vm) => {
     if (pausedThreadState.has(thread)) {
       const threadPauseState = pausedThreadState.get(thread);
 
-      setSteppingThred(thread);
+      setSteppingThread(thread);
 
       Object.defineProperty(thread, "status", {
         value: threadPauseState.status,
