@@ -168,6 +168,12 @@ const singleStepThread = (thread) => {
   try {
     thread.status = STATUS_RUNNING;
 
+    // Restart the warp timer on each step.
+    // If we don't do this, Scratch will think a lot of time has passed and may yield this thread.
+    if (thread.warpTimer) {
+      thread.warpTimer.start();
+    }
+
     try {
       vm.runtime.sequencer.stepThread(thread);
     } catch (err) {
