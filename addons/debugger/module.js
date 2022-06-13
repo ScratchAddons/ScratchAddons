@@ -25,23 +25,26 @@ const pauseThread = (thread) => {
     return;
   }
 
-  const pausedState = {
+  const pauseState = {
     time: vm.runtime.currentMSecs,
     status: thread.status
   };
-  pausedThreadState.set(thread, pausedState);
+  pausedThreadState.set(thread, pauseState);
 
   // We must make thread.status return STATUS_PROMISE_WAIT on paused threads so that the sequencer doesn't
   // think this thread is active as otherwise Scratch will do 24ms of unnecessary main thread work every frame.
   Object.defineProperty(thread, "status", {
     get() {
       if (isInSingleStep && steppingThread === thread) {
-        return pausedState.status;
+        return pauseState.status;
+      }
+      if (pauseState.status === STATUS_DONE) {
+        return STATUS_DONE;
       }
       return STATUS_PROMISE_WAIT;
     },
     set(status) {
-      pausedState.status = status;
+      pauseState.status = status;
     },
   });
 };
@@ -110,6 +113,10 @@ export const getRunningThread = () => {
 // https://github.com/LLK/scratch-vm/blob/0e86a78a00db41af114df64255e2cd7dd881329f/src/engine/sequencer.js#L179
 // Returns if we should continue executing this thread.
 const singleStepThread = (thread) => {
+  if (thread.status === STATUS_DONE) {
+    return false;
+  }
+
   const currentBlockId = thread.peekStack();
   if (!currentBlockId) {
     thread.popStack();
@@ -142,16 +149,15 @@ const singleStepThread = (thread) => {
   });
 
   try {
+    thread.status = STATUS_RUNNING;
+
     try {
       vm.runtime.sequencer.stepThread(thread);
     } catch (err) {
       if (err !== specialError) throw err;
     }
 
-    if (thread.status === STATUS_YIELD) {
-      thread.status = STATUS_RUNNING;
-      return false;
-    } else if (thread.status === STATUS_PROMISE_WAIT || thread.status === STATUS_YIELD_TICK) {
+    if (thread.status !== STATUS_RUNNING) {
       return false;
     }
 
@@ -209,7 +215,6 @@ const findNewSteppingThread = (startIndex) => {
     const possibleNewThread = vm.runtime.threads[i];
     const status = getRealStatus(possibleNewThread);
     if (status === STATUS_YIELD_TICK || status === STATUS_RUNNING || status === STATUS_YIELD) {
-      // TODO: what happens if status === STATUS_YIELD_TICK
       return possibleNewThread;
     }
   }
