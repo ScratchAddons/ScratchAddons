@@ -445,6 +445,47 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
         if (styleIndex !== -1) addonsWithUserstyles.splice(styleIndex, 1);
 
         setCssVariables(globalState.addonSettings, addonsWithUserstyles);
+      } else if (request.updateUserstylesSettingsChange) {
+        const {
+          userstyles,
+          addonId,
+          injectAsStyleElt,
+          index,
+          dynamicEnable,
+          dynamicDisable,
+          addonSettings,
+          cssVariables,
+        } = request.updateUserstylesSettingsChange;
+        const addonIndex = addonsWithUserstyles.findIndex((addon) => addon.addonId === addonId);
+        removeAddonStyles(addonId);
+        if (addonIndex > -1 && userstyles.length === 0 && dynamicDisable) {
+          // This is actually dynamicDisable condition, but since this does not involve
+          // toggling addon state, this is not considered one by the code.
+          addonsWithUserstyles.splice(addonIndex, 1);
+          // This might race with newGlobalState, so we merge explicitly here
+          setCssVariables({ ...globalState.addonSettings, [addonId]: addonSettings }, addonsWithUserstyles);
+          console.log(`Dynamically disabling all userstyles of ${addonId} due to settings change`);
+          // Early return because we know addStyle will be no-op
+          return;
+          // Wait, but what about userscripts? Great question. No, we do not need to fire events
+          // or handle userscripts at all. This is because settings change does not cause
+          // userscripts to be enabled or disabled (only userstyles). Instead userscripts
+          // should always be executed but listen to settings change event. Thus this
+          // "dynamic disable" does not fire disable event, because userscripts aren't disabled.
+        }
+        if (addonIndex === -1 && userstyles.length > 0 && dynamicEnable) {
+          // This is actually dynamicEnable condition, but since this does not involve
+          // toggling addon state, this is not considered one by the code.
+          console.log(`Dynamically enabling userstyle addon ${addonId} due to settings change`);
+          addonsWithUserstyles.push({ styles: userstyles, cssVariables, addonId, injectAsStyleElt, index });
+          disabledDynamicAddons.delete(addonId);
+          setCssVariables({ ...globalState.addonSettings, [addonId]: addonSettings }, addonsWithUserstyles);
+          // Same goes here; enabling a setting does not run or re-enable an userscript by design.
+        }
+        // Removing the addon styles and readding them works since the background
+        // will send a different array for the new valid userstyles.
+        // Try looking for the "userscriptMatches" function.
+        addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
       }
     });
     await new Promise((resolve) => {
@@ -466,13 +507,6 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
       setCssVariables(request.newGlobalState.addonSettings, addonsWithUserstyles);
     } else if (request.fireEvent) {
       _page_.fireEvent(request.fireEvent);
-    } else if (request.updateUserstylesSettingsChange) {
-      const { userstyles, addonId, injectAsStyleElt, index } = request.updateUserstylesSettingsChange;
-      // Removing the addon styles and readding them works since the background
-      // will send a different array for the new valid userstyles.
-      // Try looking for the "userscriptMatches" function.
-      removeAddonStyles(addonId);
-      addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
     } else if (request === "getRunningAddons") {
       const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
       const userstyles = addonsWithUserstyles.map((obj) => obj.addonId);
