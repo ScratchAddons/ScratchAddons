@@ -295,7 +295,7 @@ export const setup = (_vm) => {
 
   const originalStepThreads = vm.runtime.sequencer.stepThreads;
   vm.runtime.sequencer.stepThreads = function () {
-    // If we where half way through a vm step and have unpaused, pick up were we left off.
+    // If we were half way through a vm step and have unpaused, pick up were we left off.
     if (steppingThread && !paused) {
       const threads = vm.runtime.threads;
       const startingIndex = threads.indexOf(steppingThread);
