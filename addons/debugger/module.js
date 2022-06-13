@@ -6,7 +6,6 @@ const STATUS_YIELD_TICK = 3;
 const STATUS_DONE = 4;
 
 let vm;
-let sequencerStepThread; // The unmodified sequencer.stepThread function
 
 let paused = false;
 let pausedThreadState = new WeakMap();
@@ -147,7 +146,7 @@ const singleStepThread = (thread) => {
       });
 
       try {
-        sequencerStepThread.call(vm.runtime.sequencer, thread);
+        vm.runtime.sequencer.stepThread(thread);
       } catch (err) {
         if (err !== throwMsg) throw err;
       }
@@ -298,11 +297,6 @@ export const setup = (_vm) => {
   }
 
   vm = _vm;
-
-  sequencerStepThread = vm.runtime.sequencer.stepThread;
-  vm.runtime.sequencer.stepThread = function (thread) {
-    sequencerStepThread.call(this, thread);
-  };
 
   const originalStepThreads = vm.runtime.sequencer.stepThreads;
   vm.runtime.sequencer.stepThreads = function () {
