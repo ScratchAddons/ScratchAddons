@@ -199,10 +199,10 @@ const singleStepThread = (thread) => {
       const stackFrame = thread.peekStackFrame();
 
       if (stackFrame.isLoop) {
-        if (!thread.isWarpMode) {
-          return false;
-        } else {
+        if (thread.peekStackFrame().warpMode) {
           continue;
+        } else {
+          return false;
         }
       } else if (stackFrame.waitingReporter) {
         return false;
