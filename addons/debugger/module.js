@@ -13,7 +13,6 @@ let pauseNewThreads = false;
 
 let steppingThread = null;
 let isInSingleStep = false;
-let steppingThreadIndex = -1;
 
 const eventTarget = new EventTarget();
 
@@ -51,7 +50,6 @@ const pauseThread = (thread) => {
 
 const setSteppingThread = (thread) => {
   steppingThread = thread;
-  steppingThreadIndex = vm.runtime.threads.indexOf(steppingThread);
 };
 
 const compensateForTimePassedWhilePaused = (thread, pauseState) => {
@@ -210,9 +208,12 @@ const getRealStatus = (thread) => {
   return thread.status;
 };
 
-const findNewSteppingThread = (startIndex) => {
-  for (var i = startIndex; i < vm.runtime.threads.length; i++) {
-    const possibleNewThread = vm.runtime.threads[i];
+const findNewSteppingThread = (startingThread) => {
+  const threads = vm.runtime.threads;
+  // if startingThread is somehow not in threads, indexOf() + 1 will conveniently be 0
+  const startIndex = startingThread ? threads.indexOf(startingThread) + 1 : 0;
+  for (let i = startIndex; i < threads.length; i++) {
+    const possibleNewThread = threads[i];
     const status = getRealStatus(possibleNewThread);
     if (status === STATUS_YIELD_TICK || status === STATUS_RUNNING || status === STATUS_YIELD) {
       return possibleNewThread;
@@ -233,13 +234,13 @@ export const singleStep = () => {
 
     if (!continueExecuting) {
       // Try to move onto the next thread
-      steppingThread = findNewSteppingThread(steppingThreadIndex + 1);
+      steppingThread = findNewSteppingThread(steppingThread);
     }
   }
 
   // If we don't have a thread, than we are between VM steps and should search for a new thread
   if (!steppingThread) {
-    setSteppingThread(findNewSteppingThread(0));
+    setSteppingThread(findNewSteppingThread(null));
 
     // End of VM step, emulate one frame of time passing.
     vm.runtime.ioDevices.clock._pausedTime += vm.runtime.currentStepTime;
@@ -297,15 +298,12 @@ export const setup = (_vm) => {
     // If we where half way through a vm step and have unpaused, pick up were we left off.
     if (steppingThread && !paused) {
       const threads = vm.runtime.threads;
-      if (steppingThreadIndex !== -1) {
-        for (let i = steppingThreadIndex; i < threads.length; i++) {
+      const startingIndex = threads.indexOf(steppingThread);
+      if (startingIndex !== -1) {
+        for (let i = startingIndex; i < threads.length; i++) {
           const thread = threads[i];
-
-          if (thread.status === STATUS_YIELD_TICK) {
-            thread.status = STATUS_RUNNING;
-          }
-
-          if (thread.status === STATUS_RUNNING || thread.status === STATUS_YIELD) {
+          const status = thread.status;
+          if (status === STATUS_RUNNING || status === STATUS_YIELD || status === STATUS_YIELD_TICK) {
             vm.runtime.sequencer.activeThread = thread;
             vm.runtime.sequencer.stepThread(thread);
           }
