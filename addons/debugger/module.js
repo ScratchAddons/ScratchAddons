@@ -59,11 +59,11 @@ const compensateForTimePassedWhilePaused = (thread, pauseState) => {
   }
 };
 
-const stepUnsteppedThreads = () => {
+const stepUnsteppedThreads = (lastSteppedThread) => {
   // If we paused in the middle of a tick, we need to make sure to step the scripts that didn't get
   // stepped in that tick to avoid affecting project behavior.
   const threads = vm.runtime.threads;
-  const startingIndex = threads.indexOf(steppingThread);
+  const startingIndex = threads.indexOf(lastSteppedThread);
   if (startingIndex !== -1) {
     for (let i = startingIndex; i < threads.length; i++) {
       const thread = threads[i];
@@ -105,7 +105,13 @@ export const setPaused = (_paused) => {
       }
     }
     pausedThreadState = new WeakMap();
-    stepUnsteppedThreads();
+
+    // https://github.com/ScratchAddons/ScratchAddons/issues/4281
+    const lastSteppedThread = steppingThread;
+    queueMicrotask(() => {
+      stepUnsteppedThreads(lastSteppedThread);
+    });
+
     steppingThread = null;
   }
   if (paused !== _paused) {
