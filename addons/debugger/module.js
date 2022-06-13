@@ -239,8 +239,14 @@ const findNewSteppingThread = (startingThread) => {
   const startIndex = startingThread ? threads.indexOf(startingThread) + 1 : 0;
   for (let i = startIndex; i < threads.length; i++) {
     const possibleNewThread = threads[i];
+    if (possibleNewThread.updateMonitor) {
+      // Never single-step monitor update threads.
+      continue;
+    }
     const status = getRealStatus(possibleNewThread);
-    if (status === STATUS_YIELD_TICK || status === STATUS_RUNNING || status === STATUS_YIELD) {
+    if (status === STATUS_RUNNING || status === STATUS_YIELD || status === STATUS_YIELD_TICK) {
+      // Thread must not be running for single stepping to work.
+      pauseThread(possibleNewThread);
       return possibleNewThread;
     }
   }
@@ -248,8 +254,10 @@ const findNewSteppingThread = (startingThread) => {
 };
 
 export const singleStep = () => {
-  const pauseState = pausedThreadState.get(steppingThread);
   if (steppingThread) {
+    const pauseState = pausedThreadState.get(steppingThread);
+    // We can assume pauseState is defined as any single stepping threads must already be paused.
+
     // Make it look like no time has passed
     compensateForTimePassedWhilePaused(steppingThread, pauseState);
     pauseState.time = vm.runtime.currentMSecs;
