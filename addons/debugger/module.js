@@ -63,7 +63,7 @@ const stepUnsteppedThreads = (lastSteppedThread) => {
   // If we paused in the middle of a tick, we need to make sure to step the scripts that didn't get
   // stepped in that tick to avoid affecting project behavior.
   const threads = vm.runtime.threads;
-  const startingIndex = threads.indexOf(lastSteppedThread);
+  const startingIndex = getThreadIndex(lastSteppedThread);
   if (startingIndex !== -1) {
     for (let i = startingIndex; i < threads.length; i++) {
       const thread = threads[i];
@@ -239,11 +239,19 @@ const getRealStatus = (thread) => {
   return thread.status;
 };
 
-const findNewSteppingThread = (startingThread) => {
+// You can't just use vm.runtime.threads.indexOf(thread) because threads can be restarted.
+// This can happens when, for example, a "when I receive message1" script broadcasts message1.
+// The Thread in runtime.threads is replaced when this happens.
+const getThreadIndex = (thread) => vm.runtime.threads.findIndex((otherThread) => (
+  otherThread.target === thread.target &&
+  otherThread.topBlock === thread.topBlock &&
+  otherThread.stackClick === thread.stackClick &&
+  otherThread.updateMonitor === thread.updateMonitor
+));
+
+const findNewSteppingThread = (startingIndex) => {
   const threads = vm.runtime.threads;
-  // if startingThread is somehow not in threads, indexOf() + 1 will conveniently be 0
-  const startIndex = startingThread ? threads.indexOf(startingThread) + 1 : 0;
-  for (let i = startIndex; i < threads.length; i++) {
+  for (let i = startingIndex; i < threads.length; i++) {
     const possibleNewThread = threads[i];
     if (possibleNewThread.updateMonitor) {
       // Never single-step monitor update threads.
@@ -273,13 +281,13 @@ export const singleStep = () => {
 
     if (!continueExecuting) {
       // Try to move onto the next thread
-      steppingThread = findNewSteppingThread(steppingThread);
+      steppingThread = findNewSteppingThread(getThreadIndex(steppingThread) + 1);
     }
   }
 
   // If we don't have a thread, than we are between VM steps and should search for a new thread
   if (!steppingThread) {
-    setSteppingThread(findNewSteppingThread(null));
+    setSteppingThread(findNewSteppingThread(0));
 
     // End of VM step, emulate one frame of time passing.
     vm.runtime.ioDevices.clock._pausedTime += vm.runtime.currentStepTime;
