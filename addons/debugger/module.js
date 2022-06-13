@@ -59,6 +59,23 @@ const compensateForTimePassedWhilePaused = (thread, pauseState) => {
   }
 };
 
+const stepUnsteppedThreads = () => {
+  // If we paused in the middle of a tick, we need to make sure to step the scripts that didn't get
+  // stepped in that tick to avoid affecting project behavior.
+  const threads = vm.runtime.threads;
+  const startingIndex = threads.indexOf(steppingThread);
+  if (startingIndex !== -1) {
+    for (let i = startingIndex; i < threads.length; i++) {
+      const thread = threads[i];
+      const status = thread.status;
+      if (status === STATUS_RUNNING || status === STATUS_YIELD || status === STATUS_YIELD_TICK) {
+        vm.runtime.sequencer.activeThread = thread;
+        vm.runtime.sequencer.stepThread(thread);
+      }
+    }
+  }
+};
+
 export const setPaused = (_paused) => {
   if (_paused) {
     vm.runtime.audioEngine.audioContext.suspend();
@@ -88,6 +105,8 @@ export const setPaused = (_paused) => {
       }
     }
     pausedThreadState = new WeakMap();
+    stepUnsteppedThreads();
+    steppingThread = null;
   }
   if (paused !== _paused) {
     paused = _paused;
@@ -292,29 +311,6 @@ export const setup = (_vm) => {
   }
 
   vm = _vm;
-
-  const originalStepThreads = vm.runtime.sequencer.stepThreads;
-  vm.runtime.sequencer.stepThreads = function () {
-    // If we were half way through a vm step and have unpaused, pick up were we left off.
-    if (steppingThread && !paused) {
-      const threads = vm.runtime.threads;
-      const startingIndex = threads.indexOf(steppingThread);
-      if (startingIndex !== -1) {
-        for (let i = startingIndex; i < threads.length; i++) {
-          const thread = threads[i];
-          const status = thread.status;
-          if (status === STATUS_RUNNING || status === STATUS_YIELD || status === STATUS_YIELD_TICK) {
-            vm.runtime.sequencer.activeThread = thread;
-            vm.runtime.sequencer.stepThread(thread);
-          }
-        }
-      }
-
-      steppingThread = null;
-    }
-
-    return originalStepThreads.call(this);
-  };
 
   // Unpause when green flag
   const originalGreenFlag = vm.runtime.greenFlag;
