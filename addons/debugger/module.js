@@ -51,6 +51,13 @@ const setSteppingThread = (thread) => {
   steppingThreadIndex = vm.runtime.threads.indexOf(steppingThread);
 };
 
+const compensateForTimePassedWhilePaused = (thread, pauseState) => {
+  const stackFrame = thread.peekStackFrame();
+  if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
+    stackFrame.executionContext.timer.startTime += vm.runtime.currentMSecs - pauseState.time;
+  }
+};
+
 export const setPaused = (_paused) => {
   if (_paused) {
     vm.runtime.audioEngine.audioContext.suspend();
@@ -70,10 +77,7 @@ export const setPaused = (_paused) => {
     for (const thread of vm.runtime.threads) {
       const pauseState = pausedThreadState.get(thread);
       if (pauseState) {
-        const stackFrame = thread.peekStackFrame();
-        if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
-          stackFrame.executionContext.timer.startTime += vm.runtime.currentMSecs - pauseState.time;
-        }
+        compensateForTimePassedWhilePaused(thread, pauseState);
         Object.defineProperty(thread, 'status', {
           value: pauseState.status,
           configurable: true,
@@ -221,10 +225,7 @@ export const singleStep = () => {
   const pauseState = pausedThreadState.get(steppingThread);
   if (steppingThread) {
     // Make it look like no time has passed
-    const stackFrame = steppingThread.peekStackFrame();
-    if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
-      stackFrame.executionContext.timer.startTime += vm.runtime.currentMSecs - pauseState.time;
-    }
+    compensateForTimePassedWhilePaused(steppingThread, pauseState);
     pauseState.time = vm.runtime.currentMSecs;
 
     // Execute the block
