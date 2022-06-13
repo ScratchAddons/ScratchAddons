@@ -110,56 +110,43 @@ export const getRunningThread = () => {
 // https://github.com/LLK/scratch-vm/blob/0e86a78a00db41af114df64255e2cd7dd881329f/src/engine/sequencer.js#L179
 // Returns if we should continue executing this thread.
 const singleStepThread = (thread) => {
+  const currentBlockId = thread.peekStack();
+  if (!currentBlockId) {
+    thread.popStack();
+
+    if (thread.stack.length === 0) {
+      thread.status = STATUS_DONE;
+      return false;
+    }
+  }
+
   isInSingleStep = true;
+  pauseNewThreads = true;
+  vm.runtime.sequencer.activeThread = thread;
+
+  /*
+    We need to call execute(this, thread) like the original sequencer. We don't
+    have access to that method, so we need to force the original stepThread to run
+    execute for us then exit before it tries to run more blocks.
+    So, we make `thread.blockGlowInFrame = ...` throw an exception, so this line:
+    https://github.com/LLK/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/sequencer.js#L214
+    will end the function early. We then have to set it back to normal afterward.
+
+    Why are we here just to suffer?
+  */
+  const specialError = ["special error used by Scratch Addons for implementing single-stepping"];
+  Object.defineProperty(thread, "blockGlowInFrame", {
+    set(_block) {
+      throw specialError;
+    },
+  });
 
   try {
-    const currentBlockId = thread.peekStack();
-
-    if (!currentBlockId) {
-      thread.popStack();
-
-      if (thread.stack.length === 0) {
-        thread.status = STATUS_DONE;
-        return false;
-      }
-    }
-
-    vm.runtime.sequencer.activeThread = thread;
-    pauseNewThreads = true;
-
-    /*
-      We need to call execute(this, thread) like the original sequencer. We don't
-      have access to that method, so we need to force the original stepThread to run
-      execute for us then exit before it tries to run more blocks.
-      So, we make `thread.blockGlowInFrame = ...` throw an exception, so this line:
-      https://github.com/LLK/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/sequencer.js#L214
-      will end the function early. We then have to set it back to normal afterward.
-
-      Why are we here just to suffer?
-    */
-    const throwMsg = ["special error used by Scratch Addons for implementing single-stepping"];
-
-    Object.defineProperty(thread, "blockGlowInFrame", {
-      set(block) {
-        throw throwMsg;
-      },
-    });
-
     try {
       vm.runtime.sequencer.stepThread(thread);
     } catch (err) {
-      if (err !== throwMsg) throw err;
+      if (err !== specialError) throw err;
     }
-
-    Object.defineProperty(thread, "blockGlowInFrame", {
-      value: currentBlockId,
-      configurable: true,
-      enumerable: true,
-      writable: true,
-    });
-
-    vm.runtime.sequencer.activeThread = null;
-    pauseNewThreads = false;
 
     if (thread.status === STATUS_YIELD) {
       thread.status = STATUS_RUNNING;
@@ -198,6 +185,14 @@ const singleStepThread = (thread) => {
     return true;
   } finally {
     isInSingleStep = false;
+    pauseNewThreads = false;
+    vm.runtime.sequencer.activeThread = null;
+    Object.defineProperty(thread, "blockGlowInFrame", {
+      value: currentBlockId,
+      configurable: true,
+      enumerable: true,
+      writable: true,
+    });
   }
 };
 
