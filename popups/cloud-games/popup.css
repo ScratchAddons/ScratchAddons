@@ -2,10 +2,41 @@ body {
   padding-bottom: 1px; /* show margin below last game */
 }
 
+.fade-transition {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter,
+.fade-leave {
+  opacity: 0;
+}
+
 .loading {
+  position: fixed;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px 20px;
+  overflow: hidden;
+  background-color: var(--tooltip-background);
+  border-radius: 10px;
+  box-shadow: var(--large-shadow);
+  font-weight: 600;
+}
+
+.loading-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 4px;
+  background-color: var(--brand-orange);
+}
+
+.error {
   text-align: center;
   font-size: 1rem;
-  padding-top: 10px;
+  padding-top: 20px;
   font-weight: 600;
   margin: 0 2rem;
 }
@@ -34,6 +65,7 @@ body {
 
 .project-details {
   padding: 8px;
+  color: var(--description-text);
   font-size: 12px;
 }
 .username-list > a {
@@ -52,6 +84,15 @@ body {
 
 .title a {
   color: var(--content-text);
+}
+
+.title-placeholder {
+  display: inline-block;
+  vertical-align: middle;
+  width: 150px;
+  height: 8px;
+  background-color: var(--gray-text);
+  border-radius: 3px;
 }
 
 .small-icon {

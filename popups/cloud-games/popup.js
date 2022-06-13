@@ -7,8 +7,11 @@ export default async ({ addon, msg, safeMsg }) => {
     el: "body",
     data: {
       projects: [],
-      loaded: false,
-      messages: { noUsersMsg: msg("no-users") },
+      projectsVisible: false,
+      messages: {
+        loadingMsg: msg("loading"),
+        noUsersMsg: msg("no-users"),
+      },
       projectsChecked: 0,
       error: shouldFailEarly ? "general-error" : null,
     },
@@ -18,9 +21,6 @@ export default async ({ addon, msg, safeMsg }) => {
           if (a.amt !== b.amt) return a.amt - b.amt;
           return a.timestamp - b.timestamp;
         });
-      },
-      loadingMsg() {
-        return msg("loading", { done: this.projectsChecked, amount: this.projects.length || "?" });
       },
       errorMessage() {
         return this.error && msg(this.error);
@@ -46,7 +46,7 @@ export default async ({ addon, msg, safeMsg }) => {
             this.projectsChecked++;
             if (this.projectsChecked / this.projects.length > 0.5) {
               // Show UI even tho it's not ready, if a majority of projects loaded
-              this.loaded = true;
+              this.projectsVisible = true;
             }
             resolve();
           }, i * 125);

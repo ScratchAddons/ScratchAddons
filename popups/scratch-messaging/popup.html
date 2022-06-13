@@ -449,7 +449,7 @@
     </div>
 
     <!-- Bottom bar-->
-    <div id="bottom-bar" v-show="messagesReady">
+    <div id="bottom-bar">
       <a v-cloak @click="markAsRead()" v-show="!markedAsRead">{{ uiMessages.markAsReadMsg }}</a>
       <span v-cloak v-show="markedAsRead" class="marked-as-read"
         ><img class="small-icon" src="../../images/icons/read.svg" /> {{ uiMessages.markedAsReadMsg }}</span
