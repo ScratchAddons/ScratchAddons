@@ -15,7 +15,7 @@ let steppingThread = null;
 let isInSingleStep = false;
 let steppingThreadIndex = -1;
 
-let eventTarget = new EventTarget();
+const eventTarget = new EventTarget();
 
 export const isPaused = () => paused;
 
@@ -109,7 +109,7 @@ const singleStepThread = (thread) => {
   isInSingleStep = true;
 
   try {
-    let currentBlockId = thread.peekStack();
+    const currentBlockId = thread.peekStack();
 
     if (!currentBlockId) {
       thread.popStack();
