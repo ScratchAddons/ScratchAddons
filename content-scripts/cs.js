@@ -361,6 +361,92 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
   // Just in case, make sure the <head> loaded before injecting styles
   waitForDocumentHead().then(() => injectUserstyles(addonsWithUserstyles));
   if (!_page_) {
+    chrome.runtime.onMessage.addListener((request) => {
+      if (request.dynamicAddonEnabled) {
+        const {
+          scripts,
+          userstyles,
+          cssVariables,
+          addonId,
+          injectAsStyleElt,
+          index,
+          dynamicEnable,
+          dynamicDisable,
+          partial,
+        } = request.dynamicAddonEnabled;
+        disabledDynamicAddons.delete(addonId);
+        addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
+        if (partial) {
+          // Partial: part of userstyle was (re-)enabled.
+          // No need to deal with userscripts here.
+          const addonsWithUserstylesEntry = addonsWithUserstyles.find((entry) => entry.addonId === addonId);
+          if (addonsWithUserstylesEntry) {
+            addonsWithUserstylesEntry.styles = userstyles;
+          } else {
+            addonsWithUserstyles.push({ styles: userstyles, cssVariables, addonId, injectAsStyleElt, index });
+          }
+        } else {
+          // Non-partial: the whole addon was (re-)enabled.
+          if (everLoadedUserscriptAddons.has(addonId)) {
+            if (!dynamicDisable) return;
+            // Addon was reenabled
+            _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
+          } else {
+            if (!dynamicEnable) return;
+            // Addon was not injected in page yet
+
+            // If the the module wasn't loaded yet, don't run these scripts as they will run later anyway.
+            if (_page_) {
+              _page_.runAddonUserscripts({ addonId, scripts, enabledLate: true });
+              everLoadedUserscriptAddons.add(addonId);
+            }
+          }
+
+          addonsWithUserscripts.push({ addonId, scripts });
+          addonsWithUserstyles.push({ styles: userstyles, cssVariables, addonId, injectAsStyleElt, index });
+        }
+        setCssVariables(globalState.addonSettings, addonsWithUserstyles);
+      } else if (request.dynamicAddonDisable) {
+        // Note: partialDynamicDisabledStyles includes ones that are disabled currently, too!
+        const { addonId, partialDynamicDisabledStyles } = request.dynamicAddonDisable;
+        // This may run twice if the style-only addon was first "partially"
+        // (but in fact entirely) disabled, and it was then toggled off.
+        // Early return in this situation.
+        if (disabledDynamicAddons.has(addonId)) return;
+        const scriptIndex = addonsWithUserscripts.findIndex((a) => a.addonId === addonId);
+        const styleIndex = addonsWithUserstyles.findIndex((a) => a.addonId === addonId);
+        if (_page_) {
+          if (partialDynamicDisabledStyles) {
+            // Userstyles are partially disabled.
+            // This should not result in other parts being disabled,
+            // unless that means no scripts/styles are running on this page.
+            removeAddonStylesPartial(addonId, partialDynamicDisabledStyles);
+            if (styleIndex > -1) {
+              // This should exist... right? Safeguarding anyway
+              const userstylesEntry = addonsWithUserstyles[styleIndex];
+              userstylesEntry.styles = userstylesEntry.styles.filter(
+                (style) => !partialDynamicDisabledStyles.includes(style.href)
+              );
+              if (userstylesEntry.styles.length || scriptIndex > -1) {
+                // The addon was not completely disabled, so early return.
+                // Note: we do not need to recalculate cssVariables here
+                return;
+              }
+            }
+          } else {
+            removeAddonStyles(addonId);
+          }
+          disabledDynamicAddons.add(addonId);
+          _page_.fireEvent({ name: "disabled", addonId, target: "self" });
+        } else {
+          everLoadedUserscriptAddons.delete(addonId);
+        }
+        if (scriptIndex !== -1) addonsWithUserscripts.splice(scriptIndex, 1);
+        if (styleIndex !== -1) addonsWithUserstyles.splice(styleIndex, 1);
+
+        setCssVariables(globalState.addonSettings, addonsWithUserstyles);
+      }
+    });
     await new Promise((resolve) => {
       // We're registering this load event after the load event that
       // sets _page_, so we can guarantee _page_ exists now
@@ -380,82 +466,6 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
       setCssVariables(request.newGlobalState.addonSettings, addonsWithUserstyles);
     } else if (request.fireEvent) {
       _page_.fireEvent(request.fireEvent);
-    } else if (request.dynamicAddonEnabled) {
-      const {
-        scripts,
-        userstyles,
-        cssVariables,
-        addonId,
-        injectAsStyleElt,
-        index,
-        dynamicEnable,
-        dynamicDisable,
-        partial,
-      } = request.dynamicAddonEnabled;
-      disabledDynamicAddons.delete(addonId);
-      addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
-      if (partial) {
-        // Partial: part of userstyle was (re-)enabled.
-        // No need to deal with userscripts here.
-        const addonsWithUserstylesEntry = addonsWithUserstyles.find((entry) => entry.addonId === addonId);
-        if (addonsWithUserstylesEntry) {
-          addonsWithUserstylesEntry.styles = userstyles;
-        } else {
-          addonsWithUserstyles.push({ styles: userstyles, cssVariables, addonId, injectAsStyleElt, index });
-        }
-      } else {
-        // Non-partial: the whole addon was (re-)enabled.
-        if (everLoadedUserscriptAddons.has(addonId)) {
-          if (!dynamicDisable) return;
-          // Addon was reenabled
-          _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
-        } else {
-          if (!dynamicEnable) return;
-          // Addon was not injected in page yet
-          _page_.runAddonUserscripts({ addonId, scripts, enabledLate: true });
-          everLoadedUserscriptAddons.add(addonId);
-        }
-
-        addonsWithUserscripts.push({ addonId, scripts });
-        addonsWithUserstyles.push({ styles: userstyles, cssVariables, addonId, injectAsStyleElt, index });
-      }
-      setCssVariables(globalState.addonSettings, addonsWithUserstyles);
-    } else if (request.dynamicAddonDisable) {
-      // Note: partialDynamicDisabledStyles includes ones that are disabled currently, too!
-      const { addonId, partialDynamicDisabledStyles } = request.dynamicAddonDisable;
-      // This may run twice if the style-only addon was first "partially"
-      // (but in fact entirely) disabled, and it was then toggled off.
-      // Early return in this situation.
-      if (disabledDynamicAddons.has(addonId)) return;
-      const scriptIndex = addonsWithUserscripts.findIndex((a) => a.addonId === addonId);
-      const styleIndex = addonsWithUserstyles.findIndex((a) => a.addonId === addonId);
-      if (partialDynamicDisabledStyles) {
-        // Userstyles are partially disabled.
-        // This should not result in other parts being disabled,
-        // unless that means no scripts/styles are running on this page.
-        removeAddonStylesPartial(addonId, partialDynamicDisabledStyles);
-        if (styleIndex > -1) {
-          // This should exist... right? Safeguarding anyway
-          const userstylesEntry = addonsWithUserstyles[styleIndex];
-          userstylesEntry.styles = userstylesEntry.styles.filter(
-            (style) => !partialDynamicDisabledStyles.includes(style.href)
-          );
-          if (userstylesEntry.styles.length || scriptIndex > -1) {
-            // The addon was not completely disabled, so early return.
-            // Note: we do not need to recalculate cssVariables here
-            return;
-          }
-        }
-      } else {
-        removeAddonStyles(addonId);
-      }
-      disabledDynamicAddons.add(addonId);
-
-      if (scriptIndex !== -1) addonsWithUserscripts.splice(scriptIndex, 1);
-      if (styleIndex !== -1) addonsWithUserstyles.splice(styleIndex, 1);
-
-      _page_.fireEvent({ name: "disabled", addonId, target: "self" });
-      setCssVariables(globalState.addonSettings, addonsWithUserstyles);
     } else if (request.updateUserstylesSettingsChange) {
       const { userstyles, addonId, injectAsStyleElt, index } = request.updateUserstylesSettingsChange;
       // Removing the addon styles and readding them works since the background
