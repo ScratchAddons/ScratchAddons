@@ -298,7 +298,7 @@ export const setup = (_vm) => {
     }
   };
 
-  const ogStepThreads = vm.runtime.sequencer.stepThreads;
+  const originalStepThreads = vm.runtime.sequencer.stepThreads;
   vm.runtime.sequencer.stepThreads = function () {
     // If we where half way through a vm step and have unpaused, pick up were we left off.
     if (steppingThread && !paused) {
@@ -321,7 +321,7 @@ export const setup = (_vm) => {
       steppingThread = null;
     }
 
-    return ogStepThreads.call(this);
+    return originalStepThreads.call(this);
   };
 
   // Unpause when green flag
