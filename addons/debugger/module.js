@@ -147,9 +147,8 @@ const singleStepThread = (thread) => {
       if (err !== throwMsg) throw err;
     }
 
-    // TODO: this and below = currentBlockId can be simplified
     Object.defineProperty(thread, "blockGlowInFrame", {
-      value: null,
+      value: currentBlockId,
       configurable: true,
       enumerable: true,
       writable: true,
@@ -157,7 +156,6 @@ const singleStepThread = (thread) => {
 
     vm.runtime.sequencer.activeThread = null;
     pauseNewThreads = false;
-    thread.blockGlowInFrame = currentBlockId;
 
     if (thread.status === STATUS_YIELD) {
       thread.status = STATUS_RUNNING;
