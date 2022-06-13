@@ -323,12 +323,10 @@ export const setup = (_vm) => {
   const originalStartHats = vm.runtime.startHats;
   vm.runtime.startHats = function (...args) {
     const hat = args[0];
+    // These hats can be manually started by the user when paused or while single stepping.
+    const isUserInitiated = hat === 'event_whenbroadcastreceived' || hat === 'control_start_as_clone';
     if (pauseNewThreads) {
-      if (
-        hat !== "event_whenbroadcastreceived" &&
-        hat !== "control_start_as_clone" &&
-        !this.getIsEdgeActivatedHat(hat)
-      ) {
+      if (!isUserInitiated && !this.getIsEdgeActivatedHat(hat)) {
         return [];
       }
       const newThreads = originalStartHats.apply(this, args);
@@ -336,17 +334,10 @@ export const setup = (_vm) => {
         pauseThread(thread);
       }
       return newThreads;
-    } else {
-      if (paused) {
-        // We don't want to stop broadcasts or clone starts as they can be run by a user
-        //  while paused or run by paused threads while single stepping.
-        if (hat !== "event_whenbroadcastreceived" && hat !== "control_start_as_clone") {
-          return [];
-        }
-      }
-
-      return originalStartHats.apply(this, args);
+    } else if (paused && !isUserInitiated) {
+      return [];
     }
+    return originalStartHats.apply(this, args);
   };
 
   // Paused threads should not be counted as running when updating GUI state.
