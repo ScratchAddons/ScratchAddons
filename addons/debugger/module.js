@@ -239,15 +239,18 @@ const getRealStatus = (thread) => {
   return thread.status;
 };
 
-// You can't just use vm.runtime.threads.indexOf(thread) because threads can be restarted.
-// This can happens when, for example, a "when I receive message1" script broadcasts message1.
-// The Thread in runtime.threads is replaced when this happens.
-const getThreadIndex = (thread) => vm.runtime.threads.findIndex((otherThread) => (
-  otherThread.target === thread.target &&
-  otherThread.topBlock === thread.topBlock &&
-  otherThread.stackClick === thread.stackClick &&
-  otherThread.updateMonitor === thread.updateMonitor
-));
+const getThreadIndex = (thread) => {
+  // We can't use vm.runtime.threads.indexOf(thread) because threads can be restarted.
+  // This can happens when, for example, a "when I receive message1" script broadcasts message1.
+  // The object in runtime.threads is replaced when this happens.
+  if (!thread) return -1;
+  return vm.runtime.threads.findIndex((otherThread) => (
+    otherThread.target === thread.target &&
+    otherThread.topBlock === thread.topBlock &&
+    otherThread.stackClick === thread.stackClick &&
+    otherThread.updateMonitor === thread.updateMonitor
+  ));
+};
 
 const findNewSteppingThread = (startingIndex) => {
   const threads = vm.runtime.threads;
