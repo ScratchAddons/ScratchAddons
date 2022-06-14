@@ -26,7 +26,7 @@ const pauseThread = (thread) => {
 
   const pauseState = {
     time: vm.runtime.currentMSecs,
-    status: thread.status
+    status: thread.status,
   };
   pausedThreadState.set(thread, pauseState);
 
@@ -89,7 +89,7 @@ export const setPaused = (_paused) => {
     const activeThread = vm.runtime.sequencer.activeThread;
     if (activeThread) {
       setSteppingThread(activeThread);
-      eventTarget.dispatchEvent(new CustomEvent('step'));
+      eventTarget.dispatchEvent(new CustomEvent("step"));
     }
   } else {
     vm.runtime.audioEngine.audioContext.resume();
@@ -98,11 +98,11 @@ export const setPaused = (_paused) => {
       const pauseState = pausedThreadState.get(thread);
       if (pauseState) {
         compensateForTimePassedWhilePaused(thread, pauseState);
-        Object.defineProperty(thread, 'status', {
+        Object.defineProperty(thread, "status", {
           value: pauseState.status,
           configurable: true,
           enumerable: true,
-          writable: true,  
+          writable: true,
         });
       }
     }
@@ -244,12 +244,13 @@ const getThreadIndex = (thread) => {
   // This can happens when, for example, a "when I receive message1" script broadcasts message1.
   // The object in runtime.threads is replaced when this happens.
   if (!thread) return -1;
-  return vm.runtime.threads.findIndex((otherThread) => (
-    otherThread.target === thread.target &&
-    otherThread.topBlock === thread.topBlock &&
-    otherThread.stackClick === thread.stackClick &&
-    otherThread.updateMonitor === thread.updateMonitor
-  ));
+  return vm.runtime.threads.findIndex(
+    (otherThread) =>
+      otherThread.target === thread.target &&
+      otherThread.topBlock === thread.topBlock &&
+      otherThread.stackClick === thread.stackClick &&
+      otherThread.updateMonitor === thread.updateMonitor
+  );
 };
 
 const findNewSteppingThread = (startingIndex) => {
@@ -355,7 +356,7 @@ export const setup = (_vm) => {
   vm.runtime.startHats = function (...args) {
     const hat = args[0];
     // These hats can be manually started by the user when paused or while single stepping.
-    const isUserInitiated = hat === 'event_whenbroadcastreceived' || hat === 'control_start_as_clone';
+    const isUserInitiated = hat === "event_whenbroadcastreceived" || hat === "control_start_as_clone";
     if (pauseNewThreads) {
       if (!isUserInitiated && !this.getIsEdgeActivatedHat(hat)) {
         return [];
