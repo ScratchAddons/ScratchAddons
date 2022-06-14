@@ -35,9 +35,11 @@ const pauseThread = (thread) => {
   Object.defineProperty(thread, "status", {
     get() {
       if (isInSingleStep && steppingThread === thread) {
+        // Must report true status when this thread is being single stepped so that Scratch can execute it.
         return pauseState.status;
       }
       if (pauseState.status === STATUS_DONE) {
+        // Done threads should report their true status so that they can be removed.
         return STATUS_DONE;
       }
       return STATUS_PROMISE_WAIT;
@@ -128,9 +130,7 @@ export const onSingleStep = (listener) => {
   eventTarget.addEventListener("step", listener);
 };
 
-export const getRunningThread = () => {
-  return steppingThread;
-};
+export const getRunningThread = () => steppingThread;
 
 // A modified version of this function
 // https://github.com/LLK/scratch-vm/blob/0e86a78a00db41af114df64255e2cd7dd881329f/src/engine/sequencer.js#L179
