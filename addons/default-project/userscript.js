@@ -1,4 +1,8 @@
 export default async function ({ addon, global, console, msg }) {
+  // Fetch as text without parsing as JSON, because guess what,
+  // the code will stringify anyway!
+  const emptyProjectPromise = fetch(`${addon.self.dir}/default.json`).then((res) => res.text());
+
   let pendingReplacement = false;
 
   let reduxAvailable = Boolean(addon.tab.redux.state);
@@ -36,32 +40,41 @@ export default async function ({ addon, global, console, msg }) {
         // By this point, vanilla new project was saved to cloud
       }
 
-      const projectId = addon.settings.get("projectId");
-      if (projectId !== 510186917 && !expired && !isFileUpload) {
-        if (typeof addon.tab.traps.vm.runtime?.storage?.setProjectToken === "function") {
-          addon.auth
-            .fetchXToken()
-            .then((xToken) =>
-              fetch(`https://api.scratch.mit.edu/projects/${projectId}`, {
-                headers: {
-                  "x-token": xToken,
-                },
-                credentials: "include",
-              })
-            )
-            .then((resp) => {
-              if (!resp.ok) throw new Error(`HTTP status code ${resp.status} returned`);
-              return resp.json();
-            })
-            .catch((exc) => console.error(`Fetching default project ${projectId} 's token failed`, exc))
-            .then((resp) => {
-              if (resp?.project_token) {
-                addon.tab.traps.vm.runtime.storage.setProjectToken(resp.project_token);
-              }
+      const projectId = Number(addon.settings.get("projectId"));
+      if (!expired && !isFileUpload) {
+        switch (projectId) {
+          case 510186917: // default project (do nothing)
+            break;
+          case 556445222: // empty project
+            emptyProjectPromise.then((projectJsonText) => addon.tab.traps.vm.loadProject(projectJsonText));
+            break;
+          default: {
+            if (typeof addon.tab.traps.vm.runtime?.storage?.setProjectToken === "function") {
+              addon.auth
+                .fetchXToken()
+                .then((xToken) =>
+                  fetch(`https://api.scratch.mit.edu/projects/${projectId}`, {
+                    headers: {
+                      "x-token": xToken,
+                    },
+                    credentials: "include",
+                  })
+                )
+                .then((resp) => {
+                  if (!resp.ok) throw new Error(`HTTP status code ${resp.status} returned`);
+                  return resp.json();
+                })
+                .catch((exc) => console.error(`Fetching default project ${projectId} 's token failed`, exc))
+                .then((resp) => {
+                  if (resp?.project_token) {
+                    addon.tab.traps.vm.runtime.storage.setProjectToken(resp.project_token);
+                  }
+                  addon.tab.traps.vm.downloadProjectId(projectId);
+                });
+            } else {
               addon.tab.traps.vm.downloadProjectId(projectId);
-            });
-        } else {
-          addon.tab.traps.vm.downloadProjectId(projectId);
+            }
+          }
         }
       }
       pendingReplacement = false;

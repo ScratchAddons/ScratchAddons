@@ -43,6 +43,8 @@
       "default": true
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "working.js",

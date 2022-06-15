@@ -15,7 +15,7 @@
 
 .mediaRecorderPopup p {
   font-size: 1rem;
-  margin: 1rem auto;
+  margin: 0.5rem auto;
 }
 
 .mediaRecorderPopup p :last-child {
@@ -25,6 +25,15 @@
 .mediaRecorderPopup[dir="rtl"] p :last-child {
   margin-left: 0;
   margin-right: 1rem;
+}
+
+p.mediaRecorderPopupOption {
+  display: flex;
+  align-items: center;
+}
+
+.mediaRecorderPopupOption input[type="checkbox"] {
+  height: 1.5rem;
 }
 
 #recordOptionSecondsInput,
