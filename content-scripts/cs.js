@@ -473,6 +473,13 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
           // should always be executed but listen to settings change event. Thus this
           // "dynamic disable" does not fire disable event, because userscripts aren't disabled.
         }
+        if (addonIndex > -1 && (dynamicDisable || dynamicEnable)) {
+          // Userstyles enabled when there are already enabled ones, or
+          // userstyles partially disabled. do not call
+          // removeAddonStylesPartial as we remove and re-add instead.
+          const userstylesEntry = addonsWithUserstyles[addonIndex];
+          userstylesEntry.styles = userstyles;
+        }
         if (addonIndex === -1 && userstyles.length > 0 && dynamicEnable) {
           // This is actually dynamicEnable condition, but since this does not involve
           // toggling addon state, this is not considered one by the code.
