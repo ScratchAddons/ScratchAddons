@@ -1,16 +1,11 @@
 {
   "name": "Old studio layout",
-  "description": "Reverts the layout of the studio page back to the one used before the studio update or the one previously available as part of the Scratch 2.0 \u2192 3.0 addon.",
+  "description": "Reverts the layout of the studio page back to the one used before the studio update or the one previously available as part of the Scratch 2.0 \u2192 3.0 addon. The size of most elements is not changed. If you want to see more projects and curators at once, use the \"more items per row\" addon.",
   "info": [
     {
       "type": "notice",
       "text": "This addon doesn't work well on mobile devices and in small windows.",
       "id": "mobile"
-    },
-    {
-      "type": "notice",
-      "text": "The size of most elements is not changed. If you want to see more projects and curators at once, use the \"more items per row\" addon.",
-      "id": "itemsPerRow"
     }
   ],
   "tags": ["community", "theme", "studios", "featured"],

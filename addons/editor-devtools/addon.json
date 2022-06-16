@@ -1,13 +1,6 @@
 {
   "name": "Developer tools",
-  "description": "Adds a find box and new menu options to the editor: copy/paste blocks, better clean up, go to custom block definition, and more!",
-  "info": [
-    {
-      "type": "notice",
-      "text": "Press \"Ctrl+F\" to focus the find box, \"Ctrl+Space\" to bring up the \"add block by name\" popup, \"Ctrl+Left/Right\" to navigate find history.",
-      "id": "shortcuts"
-    }
-  ],
+  "description": "Adds a find box and new menu options to the editor: copy/paste blocks, better clean up, go to custom block definition, and more! Press \"Ctrl+F\" to focus the find box, \"Ctrl+Space\" to bring up the \"add block by name\" popup, \"Ctrl+Left/Right\" to navigate find history.",
   "credits": [
     {
       "name": "griffpatch"
