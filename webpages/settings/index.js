@@ -557,22 +557,30 @@ let fuse;
     fuse = new Fuse(cleanManifests, fuseOptions);
 
     const checkTag = (tagOrTags, manifestA, manifestB) => {
-      const tags = Array.isArray(tagOrTags) ? tagOrTags : [tagOrTags];
-      const aHasTag = tags.some((tag) => manifestA.tags.includes(tag));
-      const bHasTag = tags.some((tag) => manifestB.tags.includes(tag));
+      let aHasTag = false;
+      let bHasTag = false;
+      if (tagOrTags === null) {
+        // null means "any tag"
+        aHasTag = true;
+        bHasTag = true;
+      } else {
+        const tags = Array.isArray(tagOrTags) ? tagOrTags : [tagOrTags];
+        aHasTag = tags.some((tag) => manifestA.tags.includes(tag));
+        bHasTag = tags.some((tag) => manifestB.tags.includes(tag));
+      }
       if (aHasTag ^ bHasTag) {
         // If only one has the tag
         return bHasTag - aHasTag;
       } else if (aHasTag && bHasTag) return manifestA.name.localeCompare(manifestB.name);
       else return null;
     };
-    const order = [["danger", "beta"], "editor", "community", "popup"];
+    const order = [["danger", "beta"]];
 
     vue.addonGroups.forEach((group) => {
       group.addonIds = group.addonIds
         .map((id) => vue.manifestsById[id])
         .sort((manifestA, manifestB) => {
-          for (const tag of group.customOrder || order) {
+          for (const tag of [...(group.customOrder || order), null]) { // null means "any tag"
             const val = checkTag(tag, manifestA, manifestB);
             if (val !== null) return val;
           }
