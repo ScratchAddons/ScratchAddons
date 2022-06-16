@@ -580,7 +580,8 @@ let fuse;
       group.addonIds = group.addonIds
         .map((id) => vue.manifestsById[id])
         .sort((manifestA, manifestB) => {
-          for (const tag of [...(group.customOrder || order), null]) { // null means "any tag"
+          for (const tag of [...(group.customOrder || order), null]) {
+            // null means "any tag"
             const val = checkTag(tag, manifestA, manifestB);
             if (val !== null) return val;
           }
