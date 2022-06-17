@@ -63,6 +63,7 @@
       "default" : false
     }
   ],
+  "versionAdded" : "1.26.1"
   "tags": ["community"],
   "enabledByDefault": false
 }
