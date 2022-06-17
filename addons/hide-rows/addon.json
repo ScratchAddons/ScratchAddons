@@ -1,0 +1,68 @@
+{
+  "name": "Hide rows of front page",
+  "description": "Lets you hide the rows of Scratch front page.",
+  "userscripts" : [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/"]
+    }
+  ],
+  "settings": [
+    {
+      "name" : "What's Happenning",
+      "id" : "whs_ha",
+      "type" : "boolean",
+      "default" : false
+    },
+    {
+      "name" : "Scratch News",
+      "id" : "news",
+      "type" : "boolean",
+      "default" : false
+    },
+    {
+      "name" : "Featured Projects",
+      "id" : "fea_pro",
+      "type" : "boolean",
+      "default" : false
+    },
+    {
+      "name" : "Featured Studios",
+      "id" : "fea_stu",
+      "type" : "boolean",
+      "default" : false
+    },
+    {
+      "name" : "Projects Curated By -",
+      "id" : "pro_cur",
+      "type" : "boolean",
+      "default" : false
+    },
+    {
+      "name" : "Scratch Design Studio -",
+      "id" : "sds",
+      "type" : "boolean",
+      "default" : false
+    },
+    {
+      "name" : "Projects Loved by Scratchers I'm Following",
+      "id" : "pro_lov",
+      "type" : "boolean",
+      "default" : false
+    },
+    {
+      "name" : "What the Community is Remixing",
+      "id" : "com_rem",
+      "type" : "boolean",
+      "default" : false
+    },
+    {
+      "name" : "What the Community is Loving",
+      "id" : "com_lov",
+      "type" : "boolean",
+      "default" : false
+    }
+  ],
+  "tags": ["community"],
+  "enabledByDefault": false
+}
