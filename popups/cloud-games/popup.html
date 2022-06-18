@@ -7,6 +7,7 @@
     <title></title>
     <style>
       @import url("../../webpages/styles/colors.css");
+      @import url("../../webpages/styles/components/buttons.css");
       @import url("../../webpages/styles/components/popup.css");
     </style>
     <link rel="stylesheet" href="popup.css" />
@@ -25,8 +26,13 @@
       {{ messages.loadingMsg }}
       <div class="loading-progress" :style="{ width: (100 * projectsChecked / projects.length || 0) + '%' }"></div>
     </div>
-    <div v-cloak v-show="addButtonType">
-      <button @click="addFromSelectedTab()" :disabled="addButtonUsed">
+    <div v-cloak v-show="addButtonType" class="add-button">
+      <button
+        @click="addFromSelectedTab()"
+        :disabled="addButtonUsed"
+        class="large-button"
+        :title="addButtonType === 'project' ? messages.addProjectDescription : messages.addStudioDescription"
+      >
         <span v-show="!addButtonUsed">
           <img class="small-icon" src="../../images/icons/plus.svg" /><span
             >{{ addButtonType === "project" ? messages.addProject : messages.addStudio }}</span
@@ -48,11 +54,11 @@
             >{{ project.title }}</a
           >
           <span class="float-right"
-            ><img class="small-icon" src="../../images/icons/users.svg" /> {{ project.amt }}</span
+            ><img class="small-icon" src="../../images/icons/users.svg" /> {{ project.error ? "?" : project.amt }}</span
           >
         </div>
-        <div class="project-details" v-show="true || project.amt > 0 && project.extended">
-          <div class="username-list">
+        <div class="project-details">
+          <div class="username-list" v-else>
             <a
               v-for="user of project.users"
               :href="'https://scratch.mit.edu/users/' + user"
@@ -61,7 +67,10 @@
               >{{ user }}</a
             >
           </div>
-          <div class="username-list" v-show="project.amt === 0">{{ messages.noUsersMsg }}</div>
+          <div class="username-list" v-show="project.error">
+            {{ project.error }}<code v-show="project.errorMessage"> {{ project.errorMessage }}</code>
+          </div>
+          <div class="username-list" v-show="project.amt === 0 && !project.error">{{ messages.noUsersMsg }}</div>
         </div>
       </div>
     </div>

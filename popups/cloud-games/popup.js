@@ -12,7 +12,10 @@ const studioStrategy = async (studioId) => {
     console.warn("Error when fetching studio: ", res.status);
     throw HTTPError.fromResponse("Error when fetching studio", res);
   }
-  return res.json();
+  return res.json().catch((exc) => {
+    console.warn("Error when fetching studio JSON: ", exc);
+    throw exc;
+  });
 };
 
 const getRegex = () => /^(?:(?:https?:\/\/scratch\.mit\.edu\/)?(project|studio)s\/)?(\d+)/;
@@ -43,7 +46,10 @@ const strategy = async (addon, displayedGames) =>
         console.warn("Error when fetching project: ", res.status);
         return null;
       }
-      return res.json();
+      return res.json().catch((exc) => {
+        console.warn("Error when fetching project JSON: ", exc);
+        return null;
+      });
     })
   ).then((projects) => {
     projects = projects.flat();
@@ -72,7 +78,9 @@ export default async ({ addon, msg, safeMsg }) => {
         loadingMsg: msg("loading"),
         noUsersMsg: msg("no-users"),
         addProject: msg("add-project"),
+        addProjectDescription: msg("add-project-desc"),
         addStudio: msg("add-studio"),
+        addStudioDescription: msg("add-studio-desc"),
         added: msg("added"),
       },
       projectsChecked: 0,
@@ -102,10 +110,33 @@ export default async ({ addon, msg, safeMsg }) => {
       setCloudDataForProject(projectObject, i) {
         return new Promise((resolve) => {
           setTimeout(async () => {
-            const res = await fetch(
-              `https://clouddata.scratch.mit.edu/logs?projectid=${projectObject.id}&limit=40&offset=0`
-            );
-            const json = await res.json();
+            const handle = () => {
+              this.projectsChecked++;
+              if (this.projectsChecked / this.projects.length > 0.5) {
+                // Show UI even tho it's not ready, if a majority of projects loaded
+                this.projectsVisible = true;
+              }
+              resolve();
+            };
+            let json;
+            try {
+              const res = await fetch(
+                `https://clouddata.scratch.mit.edu/logs?projectid=${projectObject.id}&limit=40&offset=0`
+              );
+              if (res.status >= 400) {
+                if (res.status >= 500) projectObject.errorMessage = msg("server-error");
+                throw HTTPError.fromResponse(`Error when fetching cloud data for ${projectObject.id}`, res);
+              }
+              json = await res.json();
+            } catch (exc) {
+              console.warn("Error when fetching cloud data", exc);
+              projectObject.error = msg("fetch-error");
+              if (!projectObject.errorMessage) {
+                projectObject.errorMessage = String(exc);
+              }
+              handle();
+              return;
+            }
             const dateNow = Date.now();
             const usersSet = new Set();
             for (const varChange of json) {
@@ -115,12 +146,7 @@ export default async ({ addon, msg, safeMsg }) => {
             projectObject.timestamp = json[0]?.timestamp || 0;
             projectObject.amt = usersSet.size;
             projectObject.users = Array.from(usersSet);
-            this.projectsChecked++;
-            if (this.projectsChecked / this.projects.length > 0.5) {
-              // Show UI even tho it's not ready, if a majority of projects loaded
-              this.projectsVisible = true;
-            }
-            resolve();
+            handle();
           }, i * 125);
         });
       },
@@ -159,7 +185,15 @@ export default async ({ addon, msg, safeMsg }) => {
         return;
       }
       this.projects = projects
-        .map((project) => ({ title: project.title, id: project.id, amt: 0, users: [], extended: true }))
+        .map((project) => ({
+          title: project.title,
+          id: project.id,
+          amt: 0,
+          users: [],
+          extended: true,
+          error: null,
+          errorMessage: "",
+        }))
         .reverse();
       await Promise.all(this.projects.map((project, i) => this.setCloudDataForProject(project, i)));
     },

@@ -11,5 +11,6 @@
   "cloud-games/add-project-desc": "Click to add the project from the current tab to the list.",
   "cloud-games/add-studio": "Add this studio",
   "cloud-games/add-studio-desc": "Click to add the studio from the current tab to the list.",
-  "cloud-games/added": "Added!"
+  "cloud-games/added": "Added!",
+  "cloud-games/fetch-error": "Could not load cloud data for this project:"
 }
