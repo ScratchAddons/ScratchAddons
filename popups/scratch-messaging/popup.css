@@ -287,6 +287,7 @@ a.message-type-title-text {
   font-weight: 600;
   text-align: center;
 }
+.status-container p,
 .status-empty {
   display: block;
   margin-block: 10px;

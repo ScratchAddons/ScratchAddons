@@ -88,9 +88,11 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
   const downloadText = (filename, text) => {
     downloadBlob(filename, new Blob([text], { type: "text/plain" }));
   };
-  exportButton.element.addEventListener("click", (e) => {
+  exportButton.element.addEventListener("click", async (e) => {
     const defaultFormat = "{sprite}: {content} ({type})";
-    const exportFormat = e.shiftKey ? prompt(msg("enter-format"), defaultFormat) : defaultFormat;
+    const exportFormat = e.shiftKey
+      ? await addon.tab.prompt(msg("export"), msg("enter-format"), defaultFormat, { useEditorClasses: true })
+      : defaultFormat;
     if (!exportFormat) return;
     const file = logView.rows
       .map(({ text, targetId, type, count }) =>

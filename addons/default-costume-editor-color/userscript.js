@@ -249,7 +249,7 @@ export default async function ({ addon, global, console, msg }) {
           // In persistence, we always want to re-apply the previous stroke and fill.
           const toolInfo = getToolInfo();
           if (!toolInfo) {
-            console.warn("unknown tool", newToolName);
+            console.warn("unknown tool", addon.tab.redux.state.scratchPaint.mode);
             return;
           }
           if (toolInfo.resetsFill) {

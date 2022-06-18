@@ -7,6 +7,7 @@
 .initiatives-section .initiatives-subsection-header.schools,
 .initiatives-section .initiatives-subsection-content .teacher-quote .comment-text,
 .initiatives-section .initiatives-subsection-header.connectivity,
+.initiatives-section .initiatives-subsection-header.community,
 .teacher-registration,
 .teacher-waitingroom {
   background-color: #473e59;
@@ -29,6 +30,10 @@
 .initiatives-section .initiatives-tools .abhi-quote .comment-text,
 .initiatives-section .initiatives-subsection-header.adaptation,
 .donate-section,
+.sa-annual-report-2021 .subnavigation,
+.sa-annual-report-2021 .message-section,
+.sa-annual-report-2021 .reach-section,
+.sa-annual-report-2021 .reach-scratch-jr,
 .card .card-button,
 .microbit .extension-header {
   background-color: #27473e;
@@ -42,6 +47,9 @@
 .donate-banner,
 .sa-annual-report-2019 .reach-scratch-jr {
   background-color: #1c332c;
+}
+.initiatives-section .initiatives-subsection-header.access {
+  background-color: #2d5330;
 }
 .sa-annual-report-2020 .subnavigation,
 .sa-annual-report-2020 .message-section,
@@ -64,6 +72,7 @@
   background-color: #a37629;
 }
 .financials-section,
-.directors-message {
+.sa-annual-report-2020 .directors-message,
+.sa-annual-report-2021 .founders-message {
   background-color: #16171d;
 }

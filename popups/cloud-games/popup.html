@@ -15,15 +15,21 @@
     <script src="../../webpages/popup-loader.js" type="module"></script>
   </head>
 
-  <body v-cloak>
-    <div class="loading" v-show="!error && (projects.length === 0 || projects.length !== projectsChecked)">
-      {{ loadingMsg }}
+  <body>
+    <div
+      v-cloak
+      class="loading"
+      transition="fade"
+      v-show="!error && (projects.length === 0 || projects.length !== projectsChecked)"
+    >
+      {{ messages.loadingMsg }}
+      <div class="loading-progress" :style="{ width: (100 * projectsChecked / projects.length) + '%' }"></div>
     </div>
-    <div class="loading" v-show="error">
+    <div v-cloak class="error" v-show="error">
       {{ errorMessage }}
       <span v-if="error !== 'server-error'">{{{ settingsHTML() }}}</span>
     </div>
-    <div v-show="loaded">
+    <div v-cloak v-show="projectsVisible">
       <div class="games" v-for="project of projectsSorted">
         <div class="title">
           <a class="project-name nolink" :href="'https://scratch.mit.edu/projects/' + project.id" target="_blank"
@@ -45,6 +51,12 @@
           </div>
           <div class="username-list" v-show="project.amt === 0">{{ messages.noUsersMsg }}</div>
         </div>
+      </div>
+    </div>
+    <div v-cloak v-else>
+      <div class="games" v-for="_ of (this.projects.length / 2)">
+        <div class="title"><span class="title-placeholder"></span><br /></div>
+        <div class="project-details"></div>
       </div>
     </div>
   </body>

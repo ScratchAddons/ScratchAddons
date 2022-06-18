@@ -1,7 +1,7 @@
 {
   "cloud-games/popup-title": "Scratch Addons - Cloud games",
   "cloud-games/no-users": "No users currently playing",
-  "cloud-games/loading": "Loading... ({done}/{amount})",
+  "cloud-games/loading": "Loading...",
   "cloud-games/general-error": "Could not load projects.",
   "cloud-games/server-error": "It seems like the Scratch server is having a problem.",
   "cloud-games/no-projects": "There are no projects to display.",
