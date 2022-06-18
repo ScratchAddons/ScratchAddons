@@ -26,6 +26,14 @@
       {{ messages.loadingMsg }}
       <div class="loading-progress" :style="{ width: (100 * projectsChecked / projects.length || 0) + '%' }"></div>
     </div>
+    <div v-cloak class="error" v-show="error">
+      {{ errorMessage }}
+      <span v-if="error !== 'server-error'"> {{{ settingsHTML() }}} </span>
+      <div v-if="error !== 'server-error'">
+        <p v-if="addButtonType">{{ clickButtonToAddDisplayMessage }}</p>
+        <p v-else>{{ messages.changeDisplay2 }}</p>
+      </div>
+    </div>
     <div v-cloak v-show="addButtonType" class="add-button">
       <button
         @click="addFromSelectedTab()"
@@ -42,10 +50,6 @@
           <img class="small-icon" src="../../images/icons/check.svg" /><span>{{ messages.added }}</span>
         </span>
       </button>
-    </div>
-    <div v-cloak class="error" v-show="error">
-      {{ errorMessage }}
-      <span v-if="error !== 'server-error'">{{{ settingsHTML() }}}</span>
     </div>
     <div v-cloak v-show="projectsVisible">
       <div class="games" v-for="project of projectsSorted">

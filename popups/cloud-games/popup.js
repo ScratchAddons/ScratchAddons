@@ -82,6 +82,7 @@ export default async ({ addon, msg, safeMsg }) => {
         addStudio: msg("add-studio"),
         addStudioDescription: msg("add-studio-desc"),
         added: msg("added"),
+        changeDisplay2: msg("change-display-2"),
       },
       projectsChecked: 0,
       error: null,
@@ -104,6 +105,11 @@ export default async ({ addon, msg, safeMsg }) => {
         const { id, type } = extractUrl(this.selectedTabUrl);
         if (!id || gameSet.has(`${type}/${id}`)) return null;
         return type;
+      },
+      clickButtonToAddDisplayMessage() {
+        return msg("change-display-open", {
+          buttonName: msg(`add-${this.addButtonType}`),
+        });
       },
     },
     methods: {
@@ -155,7 +161,7 @@ export default async ({ addon, msg, safeMsg }) => {
         link.target = "_blank";
         link.href = chrome.runtime.getURL("/webpages/settings/index.html#addon-cloud-games");
         link.textContent = msg("addon-settings");
-        return safeMsg("change-studio", {
+        return safeMsg("change-display", {
           settings: link.outerHTML,
         });
       },
