@@ -31,7 +31,7 @@
         @click="addFromSelectedTab()"
         :disabled="addButtonUsed"
         class="large-button"
-        :title="addButtonType === 'project' ? messages.addProjectDescription : messages.addStudioDescription"
+        :title="addButtonUsed ? '' : (addButtonType === 'project' ? messages.addProjectDescription : messages.addStudioDescription)"
       >
         <span v-show="!addButtonUsed">
           <img class="small-icon" src="../../images/icons/plus.svg" /><span
