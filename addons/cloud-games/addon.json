@@ -17,44 +17,29 @@
   },
   "settings": [
     {
-      "id": "gameSource",
-      "name": "Displayed projects",
-      "type": "select",
-      "potentialValues": [
-        {
-          "id": "griffpatch",
-          "name": "Griffpatch's games"
-        },
-        {
-          "id": "custom",
-          "name": "Choose your own"
-        }
-      ],
-      "default": "griffpatch"
-    },
-    {
-      "id": "customGames",
-      "name": "Custom games",
+      "id": "displayedGames",
+      "name": "Displayed games",
       "type": "table",
-      "if": {
-        "settings": {
-          "gameSource": "custom"
-        }
-      },
       "default": [
         {
-          "url": "https://scratch.mit.edu/projects/612229554/"
+          "url": "https://scratch.mit.edu/studios/539952/"
         }
       ],
       "row": [
         {
-          "name": "Project URL",
+          "name": "Project/Studio URL",
           "id": "url",
           "type": "untranslated",
           "default": ""
         }
       ],
       "presets": [
+        {
+          "name": "Griffpatch's Multiplayer Games",
+          "values": {
+            "url": "https://scratch.mit.edu/studios/539952/"
+          }
+        },
         {
           "name": "Massive Multiplayer Platformer",
           "values": {
@@ -84,7 +69,7 @@
   ],
   "tags": ["popup", "recommended"],
   "latestUpdate": {
-    "version": "1.26.0",
+    "version": "1.27.0",
     "newSettings": ["gameSource", "customGames"],
     "isMajor": true
   },

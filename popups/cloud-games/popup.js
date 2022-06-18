@@ -1,12 +1,7 @@
 import { HTTPError } from "../../libraries/common/message-cache.js";
 
-const SETTINGS_TO_STUDIO_ID = {
-  griffpatch: 539952,
-};
-
-const studioStrategy = async (addon) => {
+const studioStrategy = async (studioId) => {
   let res;
-  const studioId = SETTINGS_TO_STUDIO_ID[addon.settings.get("gameSource")];
   try {
     res = await fetch(`https://api.scratch.mit.edu/studios/${studioId}/projects/?limit=40`);
   } catch (e) {
@@ -20,30 +15,42 @@ const studioStrategy = async (addon) => {
   return res.json();
 };
 
-const deduplicate = (items) => {
-  if (!items) return [];
-  return Array.from(new Set(items));
-};
-
-const customStrategy = async (addon) =>
+const strategy = async (addon) =>
   Promise.all(
-    deduplicate(addon.settings.get("customGames").map(({ url }) => url)).map(async (url) => {
-      const projectId = url.match(/\d+/)?.[0];
-      if (!projectId || isNaN(projectId)) return null;
-      let res;
-      try {
-        res = await fetch(`https://api.scratch.mit.edu/projects/${projectId}`);
-      } catch (e) {
-        console.warn("Error when fetching project: ", e);
-        return null;
-      }
-      if (res.status >= 400) {
-        console.warn("Error when fetching project: ", res.status);
-        return null;
-      }
-      return res.json();
-    })
-  ).then((projects) => projects.filter((project) => project));
+    addon.settings
+      .get("displayedGames")
+      .map(({ url }) => url)
+      .map(async (url) => {
+        const match = url.match(/^(?:(?:https?:\/\/scratch\.mit\.edu\/)?(project|studio)s\/)?(\d+)/);
+        if (!match) return null;
+        const type = match[1] || "project";
+        const id = match[2];
+        if (isNaN(id)) return null;
+        if (type === "studio") return await studioStrategy(id);
+        let res;
+        try {
+          res = await fetch(`https://api.scratch.mit.edu/projects/${id}`);
+        } catch (e) {
+          console.warn("Error when fetching project: ", e);
+          return null;
+        }
+        if (res.status >= 400) {
+          console.warn("Error when fetching project: ", res.status);
+          return null;
+        }
+        return res.json();
+      })
+  ).then((projects) => {
+    projects = projects.flat();
+    const filtered = [];
+    const knownIds = new Set();
+    for (const project of projects) {
+      if (!project || knownIds.has(project.id)) continue;
+      knownIds.add(project.id);
+      filtered.push(project);
+    }
+    return filtered;
+  });
 
 export default async ({ addon, msg, safeMsg }) => {
   window.vue = new Vue({
@@ -109,11 +116,7 @@ export default async ({ addon, msg, safeMsg }) => {
       document.title = msg("popup-title");
       let projects;
       try {
-        if (addon.settings.get("gameSource") === "custom") {
-          projects = await customStrategy(addon);
-        } else {
-          projects = await studioStrategy(addon);
-        }
+        projects = await strategy(addon);
       } catch (e) {
         if (e instanceof HTTPError) {
           const code = e.code;

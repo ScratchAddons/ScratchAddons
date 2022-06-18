@@ -23,7 +23,7 @@
       v-show="!error && (projects.length === 0 || projects.length !== projectsChecked)"
     >
       {{ messages.loadingMsg }}
-      <div class="loading-progress" :style="{ width: (100 * projectsChecked / projects.length) + '%' }"></div>
+      <div class="loading-progress" :style="{ width: (100 * projectsChecked / projects.length || 0) + '%' }"></div>
     </div>
     <div v-cloak class="error" v-show="error">
       {{ errorMessage }}
