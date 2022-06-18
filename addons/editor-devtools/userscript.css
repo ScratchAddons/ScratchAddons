@@ -389,9 +389,6 @@ div.s3devDDOut.vis ul.s3devDD {
 
 .s3devAction {
   margin-left: 2em;
-  font-size: 12px;
-  font-weight: bold;
-  line-height: 2;
 }
 
 @media screen and (max-width: 1180px) {
