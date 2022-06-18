@@ -6,5 +6,10 @@
   "cloud-games/server-error": "It seems like the Scratch server is having a problem.",
   "cloud-games/no-projects": "There are no projects to display.",
   "cloud-games/change-studio": "You can select which projects to display here in the {settings}.",
-  "cloud-games/addon-settings": "addon settings"
+  "cloud-games/addon-settings": "addon settings",
+  "cloud-games/add-project": "Add this project",
+  "cloud-games/add-project-desc": "Click to add the project from the current tab to the list.",
+  "cloud-games/add-studio": "Add this studio",
+  "cloud-games/add-studio-desc": "Click to add the studio from the current tab to the list.",
+  "cloud-games/added": "Added!"
 }

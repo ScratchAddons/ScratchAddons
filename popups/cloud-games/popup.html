@@ -25,6 +25,18 @@
       {{ messages.loadingMsg }}
       <div class="loading-progress" :style="{ width: (100 * projectsChecked / projects.length || 0) + '%' }"></div>
     </div>
+    <div v-cloak v-show="addButtonType">
+      <button @click="addFromSelectedTab()" :disabled="addButtonUsed">
+        <span v-show="!addButtonUsed">
+          <img class="small-icon" src="../../images/icons/plus.svg" /><span
+            >{{ addButtonType === "project" ? messages.addProject : messages.addStudio }}</span
+          >
+        </span>
+        <span v-else>
+          <img class="small-icon" src="../../images/icons/check.svg" /><span>{{ messages.added }}</span>
+        </span>
+      </button>
+    </div>
     <div v-cloak class="error" v-show="error">
       {{ errorMessage }}
       <span v-if="error !== 'server-error'">{{{ settingsHTML() }}}</span>

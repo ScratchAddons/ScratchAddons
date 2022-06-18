@@ -15,31 +15,36 @@ const studioStrategy = async (studioId) => {
   return res.json();
 };
 
-const strategy = async (addon) =>
+const getRegex = () => /^(?:(?:https?:\/\/scratch\.mit\.edu\/)?(project|studio)s\/)?(\d+)/;
+
+const extractUrl = (url) => {
+  if (!url) return {};
+  const match = url.match(getRegex());
+  if (!match) return {};
+  const type = match[1] || "project";
+  const id = match[2];
+  if (isNaN(id)) return {};
+  return { id: +id, type };
+};
+
+const strategy = async (addon, displayedGames) =>
   Promise.all(
-    addon.settings
-      .get("displayedGames")
-      .map(({ url }) => url)
-      .map(async (url) => {
-        const match = url.match(/^(?:(?:https?:\/\/scratch\.mit\.edu\/)?(project|studio)s\/)?(\d+)/);
-        if (!match) return null;
-        const type = match[1] || "project";
-        const id = match[2];
-        if (isNaN(id)) return null;
-        if (type === "studio") return await studioStrategy(id);
-        let res;
-        try {
-          res = await fetch(`https://api.scratch.mit.edu/projects/${id}`);
-        } catch (e) {
-          console.warn("Error when fetching project: ", e);
-          return null;
-        }
-        if (res.status >= 400) {
-          console.warn("Error when fetching project: ", res.status);
-          return null;
-        }
-        return res.json();
-      })
+    displayedGames.map(async ({ id, type }) => {
+      if (!id) return;
+      if (type === "studio") return await studioStrategy(id);
+      let res;
+      try {
+        res = await fetch(`https://api.scratch.mit.edu/projects/${id}`);
+      } catch (e) {
+        console.warn("Error when fetching project: ", e);
+        return null;
+      }
+      if (res.status >= 400) {
+        console.warn("Error when fetching project: ", res.status);
+        return null;
+      }
+      return res.json();
+    })
   ).then((projects) => {
     projects = projects.flat();
     const filtered = [];
@@ -53,6 +58,11 @@ const strategy = async (addon) =>
   });
 
 export default async ({ addon, msg, safeMsg }) => {
+  const displayedGames = addon.settings
+    .get("displayedGames")
+    .map(({ url }) => url)
+    .map(extractUrl);
+  const gameSet = new Set(displayedGames.map(({ id, type }) => `${type}/${id}`));
   window.vue = new Vue({
     el: "body",
     data: {
@@ -61,9 +71,14 @@ export default async ({ addon, msg, safeMsg }) => {
       messages: {
         loadingMsg: msg("loading"),
         noUsersMsg: msg("no-users"),
+        addProject: msg("add-project"),
+        addStudio: msg("add-studio"),
+        added: msg("added"),
       },
       projectsChecked: 0,
       error: null,
+      selectedTabUrl: null,
+      addButtonUsed: false,
     },
     computed: {
       projectsSorted() {
@@ -74,6 +89,13 @@ export default async ({ addon, msg, safeMsg }) => {
       },
       errorMessage() {
         return this.error && msg(this.error);
+      },
+      addButtonType() {
+        if (this.projects.length === 0 && this.error !== "no-projects") return null;
+        if (this.projectsChecked !== this.projects.length) return null;
+        const { id, type } = extractUrl(this.selectedTabUrl);
+        if (!id || gameSet.has(`${type}/${id}`)) return null;
+        return type;
       },
     },
     methods: {
@@ -111,12 +133,18 @@ export default async ({ addon, msg, safeMsg }) => {
           settings: link.outerHTML,
         });
       },
+      addFromSelectedTab() {
+        this.addButtonUsed = true;
+      },
     },
     async created() {
       document.title = msg("popup-title");
+      addon.popup.getSelectedTabUrl().then((url) => {
+        this.selectedTabUrl = url;
+      });
       let projects;
       try {
-        projects = await strategy(addon);
+        projects = await strategy(addon, displayedGames);
       } catch (e) {
         if (e instanceof HTTPError) {
           const code = e.code;
