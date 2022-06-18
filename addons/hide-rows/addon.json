@@ -65,5 +65,7 @@
   ],
   "versionAdded" : "1.26.1"
   "tags": ["community"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "dynamicDisable": true,
+  "dynamicEnable": true
 }
