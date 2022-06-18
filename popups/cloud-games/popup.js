@@ -161,6 +161,12 @@ export default async ({ addon, msg, safeMsg }) => {
       },
       addFromSelectedTab() {
         this.addButtonUsed = true;
+        const { id, type } = extractUrl(this.selectedTabUrl);
+        const url = `https://scratch.mit.edu/${type}s/${id}`;
+        addon.popup.changeSettings({
+          displayedGames: [...addon.settings.get("displayedGames"), { url }],
+        });
+        setTimeout(() => location.reload(), 1500);
       },
     },
     async created() {
