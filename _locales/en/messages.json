@@ -279,7 +279,7 @@
     "description": "Used as a category name for enabled addons"
   },
   "exportAndImportSettings": {
-    "message": "Export and Import Settings"
+    "message": "Export and import settings"
   },
   "exportAndImportSettingsDescription": {
     "message": "Export settings as a JSON file for use on other computers."
@@ -288,10 +288,10 @@
     "message": "You can also enable your browser's built-in sync options to automatically synchronize the settings between devices."
   },
   "export": {
-    "message": "Export Settings"
+    "message": "Export settings"
   },
   "import": {
-    "message": "Import Settings"
+    "message": "Import settings"
   },
   "viewSettings": {
     "message": "View settings file"
