@@ -83,6 +83,11 @@ const stepUnsteppedThreads = (lastSteppedThread) => {
 };
 
 export const setPaused = (_paused) => {
+  if (paused !== _paused) {
+    paused = _paused;
+    eventTarget.dispatchEvent(new CustomEvent("change"));
+  }
+
   if (_paused) {
     vm.runtime.audioEngine.audioContext.suspend();
     if (!vm.runtime.ioDevices.clock._paused) {
@@ -107,17 +112,10 @@ export const setPaused = (_paused) => {
     }
     pausedThreadState = new WeakMap();
 
-    // https://github.com/ScratchAddons/ScratchAddons/issues/4281
     const lastSteppedThread = steppingThread;
-    queueMicrotask(() => {
-      stepUnsteppedThreads(lastSteppedThread);
-    });
-
+    // This must happen after the "change" event is fired to fix https://github.com/ScratchAddons/ScratchAddons/issues/4281
+    stepUnsteppedThreads(lastSteppedThread);
     steppingThread = null;
-  }
-  if (paused !== _paused) {
-    paused = _paused;
-    eventTarget.dispatchEvent(new CustomEvent("change"));
   }
 };
 
