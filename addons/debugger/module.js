@@ -224,6 +224,11 @@ const singleStepThread = (thread) => {
       enumerable: true,
       writable: true,
     });
+
+    // Strictly this doesn't seem to be necessary, but let's make sure the thread is still paused after we step it.
+    if (thread.status !== STATUS_DONE) {
+      thread.status = STATUS_PROMISE_WAIT;
+    }   
   }
 };
 
