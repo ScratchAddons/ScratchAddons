@@ -342,8 +342,10 @@ export const setup = (_vm) => {
 
   const originalStepThreads = vm.runtime.sequencer.stepThreads;
   vm.runtime.sequencer.stepThreads = function () {
-    for (const thread of this.runtime.threads) {
-      ensurePausedThreadIsStillPaused(thread);
+    if (isPaused()) {
+      for (const thread of this.runtime.threads) {
+        ensurePausedThreadIsStillPaused(thread);
+      }
     }
     return originalStepThreads.call(this);
   };
