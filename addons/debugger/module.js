@@ -12,7 +12,6 @@ let pausedThreadState = new WeakMap();
 let pauseNewThreads = false;
 
 let steppingThread = null;
-let isInSingleStep = false;
 
 const eventTarget = new EventTarget();
 
@@ -30,24 +29,29 @@ const pauseThread = (thread) => {
   };
   pausedThreadState.set(thread, pauseState);
 
-  // We must make thread.status return STATUS_PROMISE_WAIT on paused threads so that the sequencer doesn't
-  // think this thread is active as otherwise Scratch will do 24ms of unnecessary main thread work every frame.
-  Object.defineProperty(thread, "status", {
-    get() {
-      if (isInSingleStep && steppingThread === thread) {
-        // Must report true status when this thread is being single stepped so that Scratch can execute it.
-        return pauseState.status;
-      }
-      if (pauseState.status === STATUS_DONE) {
-        // Done threads should report their true status so that they can be removed.
-        return STATUS_DONE;
-      }
-      return STATUS_PROMISE_WAIT;
-    },
-    set(status) {
-      pauseState.status = status;
-    },
-  });
+  // Pausing a thread now works by just setting its status to STATUS_PROMISE_WAIT.
+  // At the start of each frame, we make sure each paused thread is still paused.
+  // This is really the best way to implement this.
+  // Converting thread.status into a getter/setter causes hot functions in Scratch's sequencer
+  //    to permanently deoptimize, significantly impacting performance in some projects.
+  // Trapping sequencer.stepThread to no-op for a paused thread causes Scratch's
+  //    sequencer to waste 24ms of CPU time every frame because it thinks a thread is running.
+  thread.status = STATUS_PROMISE_WAIT;
+};
+
+const ensurePausedThreadIsStillPaused = (thread) => {
+  if (thread.status === STATUS_DONE) {
+    // If a paused thread is finished by single stepping, let it keep being done.
+    return;
+  }
+  const pauseState = pausedThreadState.get(thread);
+  if (pauseState) {
+    if (thread.status !== STATUS_PROMISE_WAIT) {
+      // We'll record the change so we can properly resume the thread, but the thread must still be paused for now.
+      pauseState.status = thread.status;
+      thread.status = STATUS_PROMISE_WAIT;
+    }
+  }
 };
 
 const setSteppingThread = (thread) => {
@@ -98,12 +102,7 @@ export const setPaused = (_paused) => {
       const pauseState = pausedThreadState.get(thread);
       if (pauseState) {
         compensateForTimePassedWhilePaused(thread, pauseState);
-        Object.defineProperty(thread, "status", {
-          value: pauseState.status,
-          configurable: true,
-          enumerable: true,
-          writable: true,
-        });
+        thread.status = pauseState.status;
       }
     }
     pausedThreadState = new WeakMap();
@@ -150,7 +149,6 @@ const singleStepThread = (thread) => {
     }
   }
 
-  isInSingleStep = true;
   pauseNewThreads = true;
   vm.runtime.sequencer.activeThread = thread;
 
@@ -219,7 +217,6 @@ const singleStepThread = (thread) => {
 
     return true;
   } finally {
-    isInSingleStep = false;
     pauseNewThreads = false;
     vm.runtime.sequencer.activeThread = null;
     Object.defineProperty(thread, "blockGlowInFrame", {
@@ -343,6 +340,14 @@ export const setup = (_vm) => {
   }
 
   vm = _vm;
+
+  const originalStepThreads = vm.runtime.sequencer.stepThreads;
+  vm.runtime.sequencer.stepThreads = function () {
+    for (const thread of this.runtime.threads) {
+      ensurePausedThreadIsStillPaused(thread);
+    }
+    return originalStepThreads.call(this);
+  };
 
   // Unpause when green flag
   const originalGreenFlag = vm.runtime.greenFlag;
