@@ -1,6 +1,6 @@
 {
   "name": "Always show thumbnail",
-  "description": "Always shows thumbnails under the big green flag before projects are started.",
+  "description": "Always shows the thumbnail before a project is started even if it uses the pen extension or a custom thumbnail.",
   "credits": [
     {
       "name": "Samq64",
