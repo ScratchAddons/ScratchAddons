@@ -1,0 +1,28 @@
+{
+  "name": "Always show thumbnail",
+  "description": "Always shows thumbnails under the big green flag before projects are started.",
+  "credits": [
+    {
+      "name": "Samq64",
+      "link": "https://scratch.mit.edu/users/samq64/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.27.0",
+  "tags": ["community", "theme"],
+  "enabledByDefault": false
+}
