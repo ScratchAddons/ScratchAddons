@@ -28,6 +28,5 @@
     }
   ],
   "versionAdded": "1.27.0",
-  "runAtComplete": "false",
   "enabledByDefault": false
 }
