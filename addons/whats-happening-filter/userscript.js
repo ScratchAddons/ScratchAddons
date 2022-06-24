@@ -1,26 +1,25 @@
 import getWhatsHappeningData from "../full-signature/load-happen.js";
 
 export default async function ({ addon, console, msg }) {
-  
   // Load activity-li from Scratch API. Thanks to full-signature/happen.js
   let fetched = [];
   let displayedFetch = [];
   let dataLoaded = 5;
-  fetched = await getWhatsHappeningData({addon, console, dataLoaded });
-  
+  fetched = await getWhatsHappeningData({ addon, console, dataLoaded });
+
   let container = document.querySelector(".activity-ul").appendChild(document.createElement("div"));
   displayedFetch = fetched.slice(0, 40);
   await addon.tab.redux.dispatch({ type: "SET_ROWS", rowType: "activity", rows: displayedFetch });
   document.querySelector(".activity-ul").appendChild(container);
-      
+
   let types = [];
   for (let i = 0; i < fetched.length; i++) {
     // become-curator and become-ownerstudio is the same category
-    if (fetched[i].type == "becomecurator" ||  fetched[i].type == "becomeownerstudio")
-      fetched[i].type = "studiopromotion"
-    document.querySelectorAll(".activity-li")[i].classList.add(("sa-" + fetched[i].type))
+    if (fetched[i].type == "becomecurator" || fetched[i].type == "becomeownerstudio")
+      fetched[i].type = "studiopromotion";
+    document.querySelectorAll(".activity-li")[i].classList.add("sa-" + fetched[i].type);
   }
-  
+
   // Define list that contains all types and translations
   const filter = {
     [msg("share")]: "sa-shareproject",
@@ -31,7 +30,7 @@ export default async function ({ addon, console, msg }) {
     [msg("followuser")]: "sa-followuser",
     [msg("remix")]: "sa-remixproject",
   };
-  
+
   // Create menu where user can select options
   let settings = document.createElement("div");
   settings.classList.add("sa-filter-container");
@@ -40,7 +39,7 @@ export default async function ({ addon, console, msg }) {
   let heading = document.createElement("h4");
   heading.appendChild(document.createTextNode(msg("messages")));
   settings.appendChild(heading);
-  
+
   // Create triangle with svg
   var svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   var polygonElement = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
@@ -50,7 +49,7 @@ export default async function ({ addon, console, msg }) {
   document.querySelector("div.box.activity").querySelector("h5").appendChild(svgElement);
   var boxHeader = document.querySelector("div.box-header");
   svgElement.classList.add("rotate");
-  
+
   // Create no messages warnings
   var messagesList = document.querySelector(".activity-ul");
   var noMessages = document.createElement("div");
@@ -58,33 +57,33 @@ export default async function ({ addon, console, msg }) {
   noMessages.innerText = msg("no-messages");
   noMessages.style.display = "none";
   messagesList.appendChild(noMessages);
-  
+
   // On click: open setting page, and rotate svg
-  svgElement.addEventListener("click", function(e) { 
+  svgElement.addEventListener("click", function (e) {
     if (svgElement.classList.contains("rotate")) {
       svgElement.classList.remove("rotate");
       boxHeader.style.height = "auto";
-      messagesList.style.height = (336 - document.querySelector(".box-header").clientHeight) + "px";
+      messagesList.style.height = 336 - document.querySelector(".box-header").clientHeight + "px";
     } else {
       svgElement.classList.add("rotate");
       boxHeader.style.height = "20px";
       messagesList.style.height = "300px";
     }
   });
-  
+
   // Thanks to message-filter addon!
-  
+
   // Create checkboxes element
   let checkboxes = document.createElement("div");
   checkboxes.classList.add("checkboxes");
   settings.appendChild(checkboxes);
-  boxHeader.appendChild(settings) 
-  
+  boxHeader.appendChild(settings);
+
   let active = JSON.parse(localStorage.getItem("scratchAddonsWhatsHappeningFilterSettings")) || Object.values(filter);
   let keys = Object.keys(filter);
-  
+
   for (let i = 0; i < keys.length; i++) {
-  // And iterate over them adding a checkbox and label each time.
+    // And iterate over them adding a checkbox and label each time.
 
     // Create the label.
     let label = document.createElement("label");
@@ -100,7 +99,7 @@ export default async function ({ addon, console, msg }) {
     // Give it an attribute that indicates which message it filters.
     inp.setAttribute("data-for", filter[keys[i]]);
     label.appendChild(inp);
-    
+
     inp.onchange = () => {
       if (inp.checked) {
         // Add or remove the class that the input correlates to appropriately.
@@ -126,7 +125,7 @@ export default async function ({ addon, console, msg }) {
     // Add the label to the checkboxes div.
     checkboxes.appendChild(label);
   }
-  
+
   let count = 0;
   function update() {
     count = 0;
@@ -161,7 +160,7 @@ export default async function ({ addon, console, msg }) {
       noMessages.style.display = "none";
     }
   }
-  
+
   // Hide specific elements on load
-  update()
+  update();
 }
