@@ -1,0 +1,62 @@
+.sa-whats-happening-icon {
+  position: absolute;
+  top: -70px;
+  right: -255px;
+}
+
+.sa-whats-happening-icon polygon {
+  fill: #b8d3ef;
+  stroke: #101010;
+  stroke-width: 1;
+}
+
+div.box.activity:first-child {
+  position: relative;
+  height: 356px;
+}
+
+svg.rotate {
+  top: -40px;
+  transform: rotate(180deg);
+  right: 20px;
+}
+
+.sa-filter-container { 
+  clear: both;
+  padding-top: 10px;
+  background: rgba(77, 151, 255, 0.17);
+  margin-top: 30px;
+  border-radius: 5px;
+  width: 490px;
+  padding: 10px;
+}
+
+.sa-filter-container h4 {
+  text-align: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.checkboxes {
+  margin-top: 20px;
+  margin-top: 20px;
+  width: 500px;
+  margin-left: 10px;
+  display: grid;
+  grid-template-columns: 241px 241px;
+}
+
+.sa-filter-container input {
+  margin-right: 0.5rem;
+}
+
+.sa-no-messages {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 25px;
+}
+
+.activity-ul {
+  overflow: auto;
+  height: 300px;
+}

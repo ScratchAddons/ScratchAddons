@@ -1,0 +1,33 @@
+{
+  "name": "What's happening filter",
+  "description": "Lets you select which types of messages to hide or show in \"What's Happening?\" box.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "To open settings for this addon, click the triangle in \"What's Happening?\" box.",
+      "id": "openhappeningfilter"
+    }
+  ],
+  "tags": ["community"],
+  "credits": [
+    {
+      "name": "Norbiros",
+      "link": "https://scratch.mit.edu/users/norbir/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/"]
+    }
+  ],
+  "versionAdded": "1.27.0",
+  "runAtComplete": "false",
+  "enabledByDefault": false
+}
