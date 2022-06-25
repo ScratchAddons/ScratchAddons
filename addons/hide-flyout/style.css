@@ -100,7 +100,9 @@
   right: calc(var(--sa-toolbox-width) - 15px - 32px);
 }
 
-.gui_stage-and-target-wrapper_69KBf {
+/* Setting these styles on gui_stage-and-target-wrapper breaks full screen */
+[class*="stage-wrapper_stage-wrapper_"],
+[class*="gui_target-wrapper_"] {
   /* must cover the hidden palette when editor-stage-left is enabled */
   position: relative;
   z-index: 31;
