@@ -70,7 +70,7 @@
   "tags": ["popup", "recommended"],
   "latestUpdate": {
     "version": "1.27.0",
-    "newSettings": ["gameSource", "customGames"],
+    "newSettings": ["displayedGames"],
     "isMajor": true
   },
   "versionAdded": "1.1.0",
