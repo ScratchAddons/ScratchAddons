@@ -57,8 +57,7 @@
   ],
   "latestUpdate": {
     "version": "1.27.0",
-    "newSettings": ["cancelcomment"],
-    "temporaryNotice": "This addon was reworked to use the new confirmation system."
+    "newSettings": ["cancelcomment"]
   },
   "tags": ["community", "recommended"],
   "enabledByDefault": false
