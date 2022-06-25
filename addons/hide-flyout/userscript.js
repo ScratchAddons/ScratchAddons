@@ -67,18 +67,10 @@ export default async function ({ addon, global, console, msg }) {
         // Event casted when you switch between tabs
         case "scratch-gui/navigation/ACTIVATE_TAB":
           // always 0, 1, 2
-          lockDisplay.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
-          placeHolderDiv.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
           if (e.detail.action.activeTabIndex === 0 && (toggleSetting === "hover" || toggleSetting === "cathover")) {
             onmouseleave(null, 0);
             toggle = false;
           }
-          break;
-        // Event casted when you switch between tabs
-        case "scratch-gui/mode/SET_PLAYER":
-          // always true or false
-          lockDisplay.style.display = e.detail.action.isPlayerOnly ? "none" : "block";
-          placeHolderDiv.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
           break;
       }
     });
@@ -149,12 +141,12 @@ export default async function ({ addon, global, console, msg }) {
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
     scrollBar = document.querySelector(".blocklyFlyoutScrollbar");
-    const tabs = document.querySelector('[class^="gui_tabs"]');
+    const blocksWrapper = document.querySelector('[class*="gui_blocks-wrapper_"]');
 
     // Placeholder Div
     if (placeHolderDiv) placeHolderDiv.remove();
     placeHolderDiv = document.createElement("div");
-    if (toggleSetting === "hover") tabs.appendChild(placeHolderDiv);
+    if (toggleSetting === "hover") blocksWrapper.appendChild(placeHolderDiv);
     placeHolderDiv.className = "sa-flyout-placeHolder";
 
     // Lock Img
@@ -180,7 +172,7 @@ export default async function ({ addon, global, console, msg }) {
 
     if (toggleSetting === "hover" || toggleSetting === "cathover") {
       // Only append if we don't have "categoryclick" on
-      tabs.appendChild(lockDisplay);
+      blocksWrapper.appendChild(lockDisplay);
 
       const toolbox = document.querySelector(".blocklyToolboxDiv");
       const addExtensionButton = document.querySelector("[class^=gui_extension-button-container_]");

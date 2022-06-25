@@ -2,7 +2,6 @@
   --sa-category-width: 60px;
   --sa-flyout-width: 250px;
   --sa-toolbox-width: calc(var(--sa-category-width) + var(--sa-flyout-width));
-  --sa-tab-bar-height: 2.75rem;
 }
 
 .injectionDiv {
@@ -56,7 +55,6 @@
 .sa-flyout-placeHolder {
   position: absolute;
   left: calc(var(--sa-category-width + 1px));
-  top: var(--sa-tab-bar-height);
   height: 100%;
   width: calc(var(--sa-flyout-width) + 1px);
 }
@@ -70,7 +68,7 @@
   position: absolute;
   z-index: 20;
   cursor: pointer;
-  top: calc(var(--sa-tab-bar-height) + 4px);
+  top: 4px;
   left: calc(var(--sa-toolbox-width) - 15px - 32px);
   width: 32px;
   height: 32px;
