@@ -733,6 +733,7 @@ export default async function ({ addon, global, console, msg }) {
           !block.isShadow()
         ) {
           const customBlocks = getCustomBlocks();
+          const currentValue = block.getFieldValue("VALUE");
           if (customArgsMode === "all") {
             switch (type) {
               case "argument_reporter_string_number":
@@ -758,8 +759,8 @@ export default async function ({ addon, global, console, msg }) {
                 switches = customBlockObj.boolArgs;
                 break;
             }
+            if (!switches.includes(currentValue)) return items;
           }
-          const currentValue = block.getFieldValue("VALUE");
           switches = uniques(switches).map((i) => ({
             isNoop: i === currentValue,
             fieldValue: i,
