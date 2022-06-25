@@ -1,6 +1,4 @@
-export default async function (
-  /** @type {import("../../addon-api/content-script/typedef.js").UserscriptUtilities} */ { addon, msg }
-) {
+export default async function ({ addon, msg }) {
   let override = false;
   document.addEventListener(
     "click",
