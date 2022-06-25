@@ -33,11 +33,13 @@
       </div>
       <div id="info" v-for="info of addon.info">
         <div :class="['addon-message', 'addon-' + info.type]">
-          <img src="../../images/icons/{{ {
-            'warning': 'warning.svg',
-            'notice': 'notice.svg',
-            'info': 'help.svg',
-          }[info.type] }}" />{{ info.text }}
+          <img
+            src="../../images/icons/{{ {
+              'warning': 'warning.svg',
+              'notice': 'notice.svg',
+              'info': 'help.svg',
+            }[info.type] }}"
+          />{{ info.text }}
         </div>
       </div>
       <div class="addon-credits" v-if="addon.credits">
