@@ -1,7 +1,7 @@
 export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
 
-  const showNoText = addon.settings.get("shownotext");
+  const showIconOnly = addon.settings.get("showicononly");
 
   if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
     document.body.classList.add("sa-clones-small");
@@ -39,7 +39,7 @@ export default async function ({ addon, global, console, msg }) {
     .fill()
     //loads the blank message in if shownotext setting is enabled
     .map((_, i) => {
-      if (showNoText) {
+      if (showIconOnly) {
         msg("clones", { cloneCount: i })
       } else {
         msg("blank", { cloneCount: i })
@@ -51,7 +51,7 @@ export default async function ({ addon, global, console, msg }) {
     // performance
     if (v === lastChecked) return;
     countContainerContainer.dataset.count = lastChecked = v;
-    if(showNoText){
+    if(showIconOnly){
       //it caches the blank message if shownotext setting is enabled
       count.dataset.str = cache[v] || msg("blank", { cloneCount: v });
     }

@@ -27,7 +27,7 @@
   ],
   "settings": [
     {
-      "id": "shownotext",
+      "id": "showicononly",
       "name": "Show icon only",
       "default": false,
       "type": "boolean"
