@@ -1,5 +1,4 @@
 {
-  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
   "name": "Confirmations",
   "description": "Asks if you're sure when committing actions under your Scratch account, such as sharing projects.",
   "credits": [
