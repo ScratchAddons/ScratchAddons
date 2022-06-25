@@ -41,6 +41,8 @@ export default async function ({ addon, msg }) {
         addon.settings.get("cancelcomment") &&
         e.target.closest("div[data-control='cancel'] > a, .compose-cancel")
       ) {
+        // Do not ask to confirm cancelling empty comments
+        if (e.target.closest("form").querySelector("textarea").value === "") return;
         title = msg("cancelcomment-title");
         cancelMessage = msg("cancelcomment");
       }
