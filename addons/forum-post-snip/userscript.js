@@ -1,6 +1,4 @@
-export default async function (
-  /** @type {import("../../addon-api/content-script/typedef.js").UserscriptUtilities} */ { addon, global, console, msg }
-) {
+export default ({ addon, msg }) => {
   const posts = document.querySelectorAll(".blockpost");
 
   for (const post of posts) {
