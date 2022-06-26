@@ -22,6 +22,6 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.21.0",
-  "tags": ["editor", "codeEditor", "featured", "bugfix"],
+  "tags": ["editor", "codeEditor", "featured"],
   "enabledByDefault": false
 }
