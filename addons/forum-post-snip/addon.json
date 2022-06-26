@@ -1,7 +1,6 @@
 {
-  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
-  "name": "Collapse nested forum quotes",
-  "description": "Collapses forum quotes",
+  "name": "Nested forum post collapser",
+  "description": "Collapses forum quotes to a limit.",
   "credits": [
     {
       "name": "Weredime (9gr)",
@@ -16,7 +15,7 @@
   ],
   "settings": [
     {
-      "name": "Post collapse",
+      "name": "Maximum quote count",
       "id": "pc",
       "type": "positive_integer",
       "default": 3
