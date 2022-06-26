@@ -9,7 +9,7 @@
   ],
   "info": [
     {
-      "type": "notice",
+      "type": "info",
       "text": "On macOS, you can also use the Cmd key.",
       "id": "macOS"
     }

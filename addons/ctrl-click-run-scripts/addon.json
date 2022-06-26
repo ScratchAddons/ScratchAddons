@@ -3,7 +3,7 @@
   "description": "Only run scripts on click if also holding the Ctrl key.",
   "info": [
     {
-      "type": "notice",
+      "type": "info",
       "text": "On macOS, use the Cmd key instead of the Ctrl key.",
       "id": "macContextDisabled"
     }
