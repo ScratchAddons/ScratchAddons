@@ -1,0 +1,26 @@
+{
+  "name": "Save unsent posts",
+  "description": "Saves posts that you haven't published yet.",
+  "credits": [
+    {
+      "name": "Weredime (9gr)",
+      "link": "https://scratch.mit.edu/users/9gr/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["topics"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Post save timeout (seconds)",
+      "id": "timeout",
+      "type": "positive_integer",
+      "default": 5
+    }
+  ],
+  "tags": ["community", "forums"],
+  "versionAdded": "1.27.0"
+}
