@@ -1,4 +1,4 @@
-export default (/** @type {import("../../addon-api/content-script/typedef").UserscriptUtilities} */ { addon }) => {
+export default ({ addon }) => {
     const topicId = location.pathname.split("/")[3];
     const box = document.querySelector(".markItUpContainer .markItUpEditor");
 
