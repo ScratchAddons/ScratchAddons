@@ -1,6 +1,6 @@
 {
-  "name": "Save unsent posts",
-  "description": "Saves posts that you haven't published yet.",
+  "name": "Save draft posts",
+  "description": "Saves posts that you haven't sent yet at an interval.",
   "credits": [
     {
       "name": "Weredime (9gr)",
@@ -15,7 +15,7 @@
   ],
   "settings": [
     {
-      "name": "Post save timeout (seconds)",
+      "name": "Post save interval (seconds)",
       "id": "timeout",
       "type": "positive_integer",
       "default": 5
