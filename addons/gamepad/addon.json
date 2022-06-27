@@ -9,21 +9,30 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "userstyles": [
     {
       "url": "style.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     },
     {
       "url": "gamepadlib.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
-  "tags": ["editor", "beta"],
-  "versionAdded": "1.14.0",
+  "settings": [
+    {
+      "name": "Hide settings button when no controllers detected",
+      "type": "boolean",
+      "default": false,
+      "id": "hide"
+    }
+  ],
+  "tags": ["editor", "projectPlayer", "featured"],
   "enabledByDefault": false,
-  "l10n": true
+  "versionAdded": "1.14.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true
 }

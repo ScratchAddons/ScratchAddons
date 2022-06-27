@@ -1,0 +1,32 @@
+{
+  "name": "Message filters",
+  "description": "Lets you select filters for types of messages to hide or show on Scratch's messages page.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "This does not change your message count. This simply lets you hide certain types of messages on Scratch's messages page.",
+      "id": "nomessagecount"
+    }
+  ],
+  "credits": [
+    {
+      "name": "--Explosion--",
+      "link": "https://github.com/explosion-scratch"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/messages"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/messages"]
+    }
+  ],
+  "tags": ["community"],
+  "versionAdded": "1.15.0",
+  "enabledByDefault": false
+}

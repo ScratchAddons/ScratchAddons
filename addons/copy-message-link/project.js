@@ -2,10 +2,14 @@ export default async function ({ addon, global, console, msg }) {
   while (true) {
     const comment = await addon.tab.waitForElement("div.comment", {
       markAsSeen: true,
-      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+      reduxCondition: (state) => {
+        if (!state.scratchGui) return true;
+        return state.scratchGui.mode.isPlayerOnly;
+      },
     });
     if (comment.querySelector("form")) continue; // Comment input
     const newElem = document.createElement("span");
+    addon.tab.displayNoneWhileDisabled(newElem);
     newElem.className = "comment-delete sa-comment-link";
     newElem.textContent = msg("copyLink");
     newElem.onclick = () => {
@@ -19,6 +23,10 @@ export default async function ({ addon, global, console, msg }) {
         newElem.style.fontWeight = "";
       }, 5000);
     };
-    comment.querySelector("div.action-list").prepend(newElem);
+    const actionList = await addon.tab.waitForElement("div.action-list", {
+      markAsSeen: true,
+      elementCondition: (e) => comment.contains(e),
+    });
+    actionList.prepend(newElem);
   }
 }

@@ -1,8 +1,14 @@
 {
   "name": "Profile statistics",
-  "description": "Shows statistics from ScratchDB on profile pages.",
+  "description": "Shows statistics from ScratchDB on user profiles.",
   "tags": ["community", "profiles"],
-  "credits": [{ "name": "Maximouse" }],
+  "credits": [
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
+    }
+  ],
+  "versionAdded": "1.11.0",
   "userscripts": [
     {
       "url": "userscript.js",
@@ -15,6 +21,7 @@
       "matches": ["https://scratch.mit.edu/users/*/"]
     }
   ],
-  "libraries": ["chartjs"],
-  "l10n": true
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "libraries": ["chartjs"]
 }

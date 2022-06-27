@@ -1,5 +1,8 @@
-/* Based on https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/css/pygments.css */
+/* Based on https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/css/pygments.css
+   (pygments default style) */
 .code {
+  background-color: #333;
+  border-color: #606060;
   color: #fff;
 }
 .hll {

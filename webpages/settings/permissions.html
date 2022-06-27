@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
     <link rel="icon" href="../../images/icon.png" />
-    <script src="../set-lang.js" defer></script>
+    <script src="../set-lang.js" type="module"></script>
     <link rel="stylesheet" href="style.css" />
     <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
     <script src="../../libraries/thirdparty/vue.js" defer></script>
-    <script src="permissions.js" defer></script>
+    <script src="permissions.js" type="module"></script>
     <style>
       /*
        * Imports are here to attempt to speed up load. Also, it means licenses.html loads fewer unused styles, and this file doesn't get licenses.html's styles! In order of when it will be noticed/needed on the page
@@ -20,9 +20,9 @@
   <body class="permissions">
     <div class="navbar">
       <a href="./index.html"><img src="../../images/icon.svg" class="logo" alt="Logo" /></a>
-      <h1>{{ msg("permissions") }}</h1>
+      <h1 v-cloak>{{ msg("permissions") }}</h1>
     </div>
-    <div class="main">
+    <div v-cloak class="main">
       <div class="permissions-block">
         <h2>{{ msg("enablePermissionsTitle") }}</h2>
         <p>{{ msg("enablePermissionsDescription") }}</p>

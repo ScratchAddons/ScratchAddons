@@ -1,16 +1,7 @@
 .clone-container-container {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
+  display: none;
   align-items: center;
   padding: 0.25rem;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   color: #a065ff;
 }
@@ -44,4 +35,8 @@
 
 .clone-count::after {
   content: attr(data-str);
+}
+
+.sa-clones-small .clone-container-container {
+  display: none !important;
 }

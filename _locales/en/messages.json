@@ -44,6 +44,9 @@
   "recommended": {
     "message": "Recommended"
   },
+  "featured": {
+    "message": "Featured"
+  },
   "beta": {
     "message": "Beta"
   },
@@ -128,6 +131,9 @@
   "moreSettings": {
     "message": "More Settings"
   },
+  "close": {
+    "message": "Close"
+  },
   "filter": {
     "message": "Filter:"
   },
@@ -148,6 +154,9 @@
   },
   "presets": {
     "message": "Presets"
+  },
+  "preview": {
+    "message": "Preview"
   },
   "scratchAddonsTheme": {
     "message": "Scratch Addons theme"
@@ -192,7 +201,7 @@
     "message": "Message added by the Scratch Addons extension: make sure the bug you're about to report still happens when all browser extensions are disabled, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please $1."
   },
   "forumWarningGeneral": {
-    "message": "Message from Scratch Addons extension: Scratch policy forbids discussion about browser extensions, including Scratch Addons. Do not advertise Scratch Addons or any of its features. If you found bugs, please $1."
+    "message": "Message from Scratch Addons extension: Scratch policy forbids discussion about browser extensions, including Scratch Addons. Do not advertise Scratch Addons or any of its features. If you found a bug, please $1."
   },
   "search": {
     "message": "Search"
@@ -233,27 +242,44 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1": {
-    "message": "Some new addons of this update are \"gamepad support\", \"cat blocks\", \"editor sound effects\" and \"remove curved stage border\". Go to $1 to enable them."
+  "extensionUpdateInfo1_v1_26": {
+    "message": "New addon: \"customizable default costume editor colors\", which lets you change the default colors and outline size used by the costume editor. Go to $1 to enable it."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2": {
-    "message": "This update also ships a more organized Scratch Addons settings page, as well as performance improvements when using addons in the project editor."
+  "extensionUpdateInfo2_v1_26": {
+    "message": "Another new addon added in this update is \"sound duration display\", which adds a display to the sound editor that shows the total length and the elapsed time of the sound, or the selection within it."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
   },
   "new": {
-    "message": "New!"
+    "message": "New!",
+    "description": "Tag for addons. Singular."
+  },
+  "updated": {
+    "message": "New features",
+    "description": "Tag for addons with new features. Singular."
+  },
+  "updatedWithSettings": {
+    "message": "New settings",
+    "description": "Tag for addons with new settings. Singular."
+  },
+  "newGroup": {
+    "message": "Other new addons and updates",
+    "description": "Used as a category name for new addons and updates"
+  },
+  "featuredNew": {
+    "message": "Featured new addons and updates",
+    "description": "Used as a category name for featured new addons and updates"
   },
   "enabled": {
     "message": "Enabled",
     "description": "Used as a category name for enabled addons"
   },
   "exportAndImportSettings": {
-    "message": "Export and Import Settings"
+    "message": "Export and import settings"
   },
   "exportAndImportSettingsDescription": {
     "message": "Export settings as a JSON file for use on other computers."
@@ -262,10 +288,13 @@
     "message": "You can also enable your browser's built-in sync options to automatically synchronize the settings between devices."
   },
   "export": {
-    "message": "Export Settings"
+    "message": "Export settings"
   },
   "import": {
-    "message": "Import Settings"
+    "message": "Import settings"
+  },
+  "viewSettings": {
+    "message": "View settings file"
   },
   "fileNotSelected": {
     "message": "Please select a settings file."
@@ -301,6 +330,12 @@
   "exploreAllAddons": {
     "message": "Explore all $1 addons:",
     "description": "Placeholder is a number. Example: explore all 80+ addons"
+  },
+  "searchNotFound": {
+    "message": "No results found. Perhaps try different keywords?"
+  },
+  "searchNotFoundInCategory": {
+    "message": "No results found in \"$1\". Perhaps try different keywords?"
   },
   "captureCommentError": {
     "message": "Message added by Scratch Addons: it appears that your comment doesn't follow $1, which asks Scratchers not to advertise or name browser extensions. This comment wasn't posted because it will probably result in your account getting muted from commenting for 5 minutes."

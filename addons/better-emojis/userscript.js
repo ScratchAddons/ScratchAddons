@@ -1,42 +1,28 @@
 export default async function ({ addon, global, console }) {
-  const body = document.body;
-
-  // Check if there are any emojis on the page when this script loads.
-  // On Scratch 2.0-esque pages, emojis are given a different class and image directory than on Scratch 3.0-esque pages.
-
-  // For 2.0 pages
-  let emojis = document.getElementsByClassName("easter-egg");
-  for (let emoji of emojis) {
-    checkEmoji(emoji);
-  }
-
-  // For 3.0 pages
-  emojis = document.getElementsByClassName("emoji");
-  for (let emoji of emojis) {
-    checkEmojiNew(emoji);
-  }
-
-  // Defines a MutationObserver to detect when new elements are added to the page.
-  // A TreeWalker is used to navigate any new nodes and locate potential emojis.
-  let obs = new MutationObserver(function (mutations, observer) {
-    const treeWalker = document.createTreeWalker(body, NodeFilter.SHOW_ELEMENT);
-    let currentNode = treeWalker.currentNode;
-    while (currentNode) {
-      if (typeof currentNode.className === "string") {
-        if (currentNode.className.includes("easter-egg")) checkEmoji(currentNode);
-        else if (currentNode.className.includes("emoji")) checkEmojiNew(currentNode);
+  const updateEmojis = () => {
+    if (addon.tab.clientVersion === "scratch-www") {
+      if (addon.tab.redux?.state?.scratchGui && !addon.tab.redux.state.scratchGui.mode.isPlayerOnly) {
+        return;
       }
-      currentNode = treeWalker.nextNode();
+      const emojis = document.getElementsByClassName("emoji");
+      for (const emoji of emojis) {
+        checkEmojiNew(emoji);
+      }
+    } else if (addon.tab.clientVersion === "scratchr2") {
+      const emojis = document.getElementsByClassName("easter-egg");
+      for (const emoji of emojis) {
+        checkEmoji(emoji);
+      }
     }
-  });
+  };
 
-  // Begins to observe the page.
-  obs.observe(body, {
+  updateEmojis();
+  const obs = new MutationObserver(updateEmojis);
+  obs.observe(document.body, {
     childList: true,
     subtree: true,
   });
 
-  // Sets the src of the given Scratch 2.0 cat emoji to a custom image
   function checkEmoji(el) {
     if (el.src.includes("images/easter_eggs/cat.png")) el.src = addon.self.dir + "/images/cat.svg";
     if (el.src.includes("images/easter_eggs/aww-cat.png")) el.src = addon.self.dir + "/images/aww-cat.svg";
@@ -52,9 +38,11 @@ export default async function ({ addon, global, console }) {
     if (el.src.includes("images/easter_eggs/fav-it-cat.png")) el.src = addon.self.dir + "/images/fav-it-cat.svg";
     if (el.src.includes("images/easter_eggs/rainbow-cat.png")) el.src = addon.self.dir + "/images/rainbow-cat.svg";
     if (el.src.includes("images/easter_eggs/pizza-cat.png")) el.src = addon.self.dir + "/images/pizza-cat.svg";
+    if (el.src.includes("images/easter_eggs/meow.png")) el.src = addon.self.dir + "/images/meow.svg";
+    if (el.src.includes("images/easter_eggs/gobo.png")) el.src = addon.self.dir + "/images/gobo.svg";
+    if (el.src.includes("images/easter_eggs/waffle.png")) el.src = addon.self.dir + "/images/waffle.svg";
   }
 
-  // Sets the src of the given Scratch 3.0 cat emoji to a custom image
   function checkEmojiNew(el) {
     switch (el.src) {
       case "https://scratch.mit.edu/images/emoji/cat.png":
@@ -92,6 +80,16 @@ export default async function ({ addon, global, console }) {
         break;
       case "https://scratch.mit.edu/images/emoji/pizza-cat.png":
         el.src = addon.self.dir + "/images/pizza-cat.svg";
+        break;
+      case "https://scratch.mit.edu/images/emoji/meow.png":
+        el.src = addon.self.dir + "/images/meow.svg";
+        break;
+      case "https://scratch.mit.edu/images/emoji/gobo.png":
+        el.src = addon.self.dir + "/images/gobo.svg";
+        break;
+      case "https://scratch.mit.edu/images/emoji/waffle.png":
+        el.src = addon.self.dir + "/images/waffle.svg";
+        break;
     }
   }
 }

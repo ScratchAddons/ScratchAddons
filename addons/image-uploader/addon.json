@@ -1,6 +1,6 @@
 {
   "name": "Forums image uploader",
-  "description": "Integrates image uploading into the forums.",
+  "description": "Adds a button to directly upload and insert images into forum posts.",
   "credits": [
     {
       "name": "Jeffalo"
@@ -12,8 +12,10 @@
       "matches": ["https://scratch.mit.edu/discuss/*"]
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.0.0",
   "tags": ["forums", "community"],
   "enabledByDefault": false,
-  "libraries": ["md5", "text-field-edit"],
-  "l10n": true
+  "libraries": ["spark-md5", "text-field-edit"]
 }

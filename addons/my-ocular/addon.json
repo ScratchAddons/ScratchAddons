@@ -1,6 +1,6 @@
 {
-  "name": "Show ocular.jeffalo.net statuses and post reactions",
-  "description": "Shows ocular statuses and reactions. Uses jeffalo.net to obtain data.",
+  "name": "ocular integration",
+  "description": "Shows ocular statuses and forum post reactions. Uses my-ocular.jeffalo.net to obtain data.",
   "credits": [
     {
       "name": "Jeffalo"
@@ -10,25 +10,22 @@
     {
       "url": "discuss.js",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "settingMatch": {
-        "id": "discuss",
-        "value": true
+      "if": {
+        "settings": { "discuss": true }
       }
     },
     {
       "url": "profile.js",
       "matches": ["https://scratch.mit.edu/users/*/"],
-      "settingMatch": {
-        "id": "profile",
-        "value": true
+      "if": {
+        "settings": { "profile": true }
       }
     },
     {
       "url": "reactions.js",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "settingMatch": {
-        "id": "reactions",
-        "value": true
+      "if": {
+        "settings": { "reactions": true }
       }
     }
   ],
@@ -36,20 +33,20 @@
     {
       "url": "discuss.css",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "settingMatch": {
-        "id": "discuss",
-        "value": true
+      "if": {
+        "settings": { "discuss": true }
       }
     },
     {
       "url": "reactions.css",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "settingMatch": {
-        "id": "reactions",
-        "value": true
+      "if": {
+        "settings": { "reactions": true }
       }
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "settings": [
     {
       "name": "Show statuses on profiles",
@@ -70,7 +67,7 @@
       "default": true
     }
   ],
+  "versionAdded": "1.4.0",
   "tags": ["forums", "profiles", "community"],
-  "enabledByDefault": false,
-  "l10n": true
+  "enabledByDefault": false
 }

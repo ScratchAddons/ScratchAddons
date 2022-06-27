@@ -1,0 +1,27 @@
+{
+  "name": "Show user IDs",
+  "description": "Adds the user ID next to the username at the top of profile pages.",
+  "credits": [
+    {
+      "name": "yes-i-am-lanky",
+      "link": "https://scratch.mit.edu/users/yes-i-am-lanky/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["profiles"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["profiles"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "tags": ["community", "profiles"],
+  "versionAdded": "1.19.0",
+  "enabledByDefault": false
+}

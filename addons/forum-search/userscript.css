@@ -6,6 +6,10 @@
   display: none;
 }
 
+.forum-search-list.show {
+  display: block;
+}
+
 .forum-search-list .blockpost .box-head a {
   display: inline-block;
   max-width: 60%;

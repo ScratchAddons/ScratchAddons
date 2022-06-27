@@ -16,7 +16,7 @@
       ]
     }
   ],
-  "tags": ["community"],
-  "enabledByDefault": false,
-  "l10n": true
+  "versionAdded": "1.0.0",
+  "tags": ["community", "featured"],
+  "enabledByDefault": false
 }

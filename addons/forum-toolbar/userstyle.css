@@ -1,0 +1,28 @@
+.sa-forum-toolbar-link > a {
+  background-image: url(https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/link.png);
+}
+
+.sa-forum-toolbar-center a {
+  background-image: url(./text_align_center.png);
+}
+
+.sa-forum-toolbar-wp a,
+.sa-forum-toolbar-wiki a {
+  background-image: url(./book_edit.png);
+}
+
+.sa-forum-toolbar-google a {
+  background-image: url(./magnifier.png);
+}
+
+.sa-forum-toolbar-dictionary a {
+  background-image: url(./book_open.png);
+}
+
+.sa-forum-toolbar-code a {
+  background-image: url(https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/code.png);
+}
+
+.sa-forum-toolbar-color a {
+  background-image: url(./palette.png);
+}

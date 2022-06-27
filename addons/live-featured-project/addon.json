@@ -1,13 +1,17 @@
 {
   "name": "Live featured project",
-  "description": "Shows interactive embed of the featured project, directly from the user's profile page. Based on the implementation on Mega Scratch Userscript.",
+  "description": "Shows an interactive featured project, directly from the user's profile. Based on the implementation in Mega Scratch Userscript.",
   "credits": [
     {
-      "name": "GRA0007 (original)",
+      "name": "GRA0007",
+      "note": "original",
+      "id": "original",
       "link": "https://github.com/MegaScratchUserscript/Mega-Scratch-Userscript/blob/master/originals/GRA0007/scratchultimate.user.js#L23-L46"
     },
     {
-      "name": "Hans5958 (remake)"
+      "name": "Hans5958",
+      "note": "remake",
+      "id": "remake"
     }
   ],
   "userscripts": [
@@ -30,18 +34,6 @@
       "default": false
     },
     {
-      "id": "autoPlay",
-      "name": "Auto-play projects (for alternative players)",
-      "type": "boolean",
-      "default": false
-    },
-    {
-      "id": "forceAlternative",
-      "name": "Force using alternative player",
-      "type": "boolean",
-      "default": false
-    },
-    {
       "id": "alternativePlayer",
       "name": "Alternative player",
       "type": "select",
@@ -60,9 +52,36 @@
           "name": "forkphorus"
         }
       ]
+    },
+    {
+      "id": "autoPlay",
+      "name": "Auto-play projects (for alternative players)",
+      "type": "boolean",
+      "default": false,
+      "if": {
+        "settings": { "alternativePlayer": ["turbowarp", "forkphorus"] }
+      }
+    },
+    {
+      "id": "forceAlternative",
+      "name": "Force using alternative player",
+      "type": "boolean",
+      "default": false,
+      "if": {
+        "settings": { "alternativePlayer": ["turbowarp", "forkphorus"] }
+      }
+    },
+    {
+      "id": "enableTWAddons",
+      "name": "Enable TurboWarp addons",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": { "alternativePlayer": ["turbowarp"] }
+      }
     }
   ],
-  "tags": ["community", "profiles"],
-  "enabledByDefault": false,
-  "l10n": true
+  "tags": ["community", "profiles", "featured"],
+  "versionAdded": "1.3.0",
+  "enabledByDefault": false
 }

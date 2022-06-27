@@ -1,16 +1,18 @@
 {
-  "name": "Change new sprite default position",
-  "description": "Moves sprites to a specified x/y position when they are created.",
+  "name": "Customizable new sprite position",
+  "description": "Change the default x/y position of new sprites.",
   "credits": [
     {
       "name": "pufferfish101007",
       "link": "https://scratch.mit.edu/users/pufferfish101007"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "settings": [
@@ -37,7 +39,7 @@
       "default": false
     }
   ],
-  "tags": ["editor"],
-  "enabledByDefault": false,
-  "l10n": true
+  "versionAdded": "1.13.0",
+  "tags": ["editor", "featured"],
+  "enabledByDefault": false
 }

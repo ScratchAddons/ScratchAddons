@@ -1,31 +1,48 @@
-import WebsiteLocalizationProvider from "../../libraries/common/website-l10n.js";
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
+import * as MessageCache from "../../libraries/common/message-cache.js";
+import * as API from "./api.js";
+import fixCommentContent from "./fix-comment-content.js";
 
-(async () => {
-  if (window.parent === window) {
-    // We're not in popup mode!
-    document.body.classList.add("fullscreen");
-    document.documentElement.classList.add("fullscreen");
-  }
+const parser = new DOMParser();
 
-  const l10n = new WebsiteLocalizationProvider();
+const errorCodes = {
+  isEmpty: "comment-error-empty",
+  // Two errors can be raised for rate limit;
+  // isFlood is the actual error, 429 is the status code
+  // ratelimit error will be unnecessary when #2505 is implemented
+  isFlood: "comment-error-ratelimit",
+  429: "comment-error-ratelimit",
+  isBad: "comment-error-filterbot-generic",
+  hasChatSite: "comment-error-filterbot-chat",
+  isSpam: "comment-error-filterbot-spam",
+  replyLimitReached: "comment-error-reply-limit",
+  // isDisallowed, isIPMuted, isTooLong, isNotPermitted use default error
+  500: "comment-error-down",
+  503: "comment-error-down",
+};
 
-  //theme
-  const lightThemeLink = document.createElement("link");
-  lightThemeLink.setAttribute("rel", "stylesheet");
-  lightThemeLink.setAttribute("href", "light.css");
-
-  chrome.storage.sync.get(["globalTheme"], function (r) {
-    let rr = false; //true = light, false = dark
-    if (r.globalTheme) rr = r.globalTheme;
-    if (rr) {
-      document.head.appendChild(lightThemeLink);
-    }
-  });
-
-  await l10n.loadByAddonId("scratch-messaging");
-
+export default async ({ addon, msg, safeMsg }) => {
   let dateNow = Date.now();
+
+  // <dom-element-renderer> component
+  // This component renders an element.
+  // Inspired by DOMElementRenderer in scratch-gui
+  const DOMElementRenderer = Vue.extend({
+    template: document.querySelector("template#dom-element-renderer-component").innerHTML,
+    props: ["element"],
+    compiled() {
+      this.$el.appendChild(this.element);
+    },
+    beforeDestroy() {
+      this.$el.removeChild(this.element);
+    },
+    watch: {
+      element(newElement, oldElement) {
+        oldElement.replaceWith(newElement);
+      },
+    },
+  });
+  Vue.component("dom-element-renderer", DOMElementRenderer);
 
   // <comment> component
   const Comment = Vue.extend({
@@ -36,82 +53,102 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
         replying: false,
         replyBoxValue: "",
         deleted: false,
+        deleting: false,
         deleteStep: 0,
         postingComment: false,
         messages: {
-          openNewTabMsg: l10n.get("scratch-messaging/open-new-tab"),
-          deleteMsg: l10n.get("scratch-messaging/delete"),
-          deleteConfirmMsg: l10n.get("scratch-messaging/delete-confirm"),
-          replyMsg: l10n.get("scratch-messaging/reply"),
-          postingMsg: l10n.get("scratch-messaging/posting"),
-          postMsg: l10n.get("scratch-messaging/post"),
-          cancelMsg: l10n.get("scratch-messaging/cancel"),
+          openNewTabMsg: msg("open-new-tab"),
+          deleteMsg: msg("delete"),
+          deleteConfirmMsg: msg("delete-confirm"),
+          replyMsg: msg("reply"),
+          postingMsg: msg("posting"),
+          postMsg: msg("post"),
+          cancelMsg: msg("cancel"),
+          deletedMsg: msg("deleted"),
+          deletingMsg: msg("deleting"),
         },
       };
     },
     methods: {
-      openProfile: (username) => window.open(`https://scratch.mit.edu/users/${username}/`),
-      openComment() {
-        const urlPath =
-          this.resourceType === "user" ? "users" : this.resourceType === "gallery" ? "studios" : "projects";
-        const commentPath = this.resourceType === "gallery" ? "comments/" : "";
-        const url = `https://scratch.mit.edu/${urlPath}/${
-          this.resourceId
-        }/${commentPath}#comments-${this.commentId.substring(2)}`;
-        window.open(url);
-      },
       postComment() {
         const shouldCaptureComment = (value) => {
           // From content-scripts/cs.js
-          const regex = / scratch[ ]?add[ ]?ons/;
+          const regex = /scratch[ ]?add[ ]?ons/;
           // Trim like scratchr2
-          const trimmedValue = " " + value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+          const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
           const limitedValue = trimmedValue.toLowerCase().replace(/[^a-z /]+/g, "");
           return regex.test(limitedValue);
         };
         if (shouldCaptureComment(this.replyBoxValue)) {
-          alert(
-            chrome.i18n
-              .getMessage("captureCommentError", ["$1"])
-              .replace("$1", chrome.i18n.getMessage("captureCommentPolicy"))
-          );
+          alert(chrome.i18n.getMessage("captureCommentError", [chrome.i18n.getMessage("captureCommentPolicy")]));
           return;
         }
         this.postingComment = true;
         const parent_pseudo_id = this.isParent ? this.commentId : this.thisComment.childOf;
         const parent_id = Number(parent_pseudo_id.substring(2));
-        chrome.runtime.sendMessage(
-          {
-            scratchMessaging: {
-              postComment: {
-                resourceType: this.resourceType,
-                resourceId: this.resourceId,
-                content: this.replyBoxValue,
-                parent_id,
-                commentee_id: this.thisComment.authorId,
-              },
-            },
-          },
-          (res) => {
-            this.postingComment = false;
-            dateNow = Date.now();
-            if (res.error) alert(l10n.get("scratch-messaging/send-error"));
-            else {
-              this.replying = false;
-              const newCommentPseudoId = `${this.resourceType[0]}_${res.commentId}`;
-              Vue.set(this.commentsObj, newCommentPseudoId, {
-                author: res.username,
-                authorId: res.userId,
-                content: res.content,
-                date: new Date().toISOString(),
-                children: null,
-                childOf: parent_pseudo_id,
-              });
-              this.commentsObj[parent_pseudo_id].children.push(newCommentPseudoId);
-              this.replyBoxValue = "";
+        Promise.all([
+          addon.auth.fetchUsername(),
+          addon.auth.fetchUserId(),
+          API.sendComment(addon, {
+            resourceType: this.resourceType,
+            resourceId: this.resourceId,
+            content: this.replyBoxValue,
+            parentId: parent_id,
+            commenteeId: this.thisComment.authorId,
+          }),
+          addon.self.getEnabledAddons(),
+        ])
+          .then(([username, userId, { id, content }, enabledAddons]) => {
+            this.replying = false;
+            let domContent = fixCommentContent(content, enabledAddons);
+            if (this.resourceType !== "user") {
+              // We need to append the replyee ourselves
+              const newElement = document.createElement("div");
+              newElement.append(
+                Object.assign(document.createElement("a"), {
+                  href: `https://scratch.mit.edu/users/${this.thisComment.author}`,
+                  textContent: "@" + this.thisComment.author,
+                })
+              );
+              newElement.append(" ");
+              newElement.append(...domContent.childNodes);
+              domContent = newElement;
             }
-          }
-        );
+            const newCommentPseudoId = `${this.resourceType[0]}_${id}`;
+            Vue.set(this.commentsObj, newCommentPseudoId, {
+              author: username,
+              authorId: userId,
+              content: domContent,
+              date: new Date().toISOString(),
+              children: null,
+              childOf: parent_pseudo_id,
+              projectAuthor: this.thisComment.projectAuthor,
+            });
+            this.commentsObj[parent_pseudo_id].children.push(newCommentPseudoId);
+            this.replyBoxValue = "";
+          })
+          .catch((e) => {
+            // Error comes from sendComment
+            let errorMsg;
+            if (e instanceof API.DetailedError) {
+              if (e.details.muteStatus) {
+                errorMsg = msg("comment-mute") + " ";
+                errorMsg += msg("comment-cannot-post-for", {
+                  mins: Math.max(Math.ceil((e.details.muteStatus.muteExpiresAt - Date.now() / 1000) / 60), 1),
+                });
+              } else {
+                errorMsg = msg(errorCodes[e.details?.error] || "send-error");
+              }
+            } else if (e instanceof API.HTTPError) {
+              errorMsg = msg(errorCodes[e.code] || "send-error");
+            } else {
+              errorMsg = e.toString();
+            }
+            alert(errorMsg);
+          })
+          .finally(() => {
+            this.postingComment = false;
+          });
       },
       deleteComment() {
         if (this.deleteStep === 0) {
@@ -122,38 +159,42 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
           return;
         }
         this.deleted = true;
-        const previousContent = this.thisComment.content;
-        this.thisComment.content = l10n.escaped("scratch-messaging/deleting");
-        chrome.runtime.sendMessage(
-          {
-            scratchMessaging: {
-              deleteComment: {
-                resourceType: this.resourceType,
-                resourceId: this.resourceId,
-                commentId: Number(this.commentId.substring(2)),
-              },
-            },
-          },
-          (res) => {
-            if (res.error) {
-              alert(l10n.get("scratch-messaging/delete-error"));
-              this.thisComment.content = previousContent;
-              this.deleteStep = 0;
-              this.deleted = false;
-            } else {
-              if (this.isParent) this.thisComment.children = [];
-              this.thisComment.content = l10n.escaped("scratch-messaging/deleted");
-            }
-          }
-        );
+        this.deleting = true;
+        API.deleteComment(addon, {
+          resourceType: this.resourceType,
+          resourceId: this.resourceId,
+          commentId: Number(this.commentId.substring(2)),
+        })
+          .then(() => {
+            if (this.isParent) this.thisComment.children = [];
+          })
+          .catch((e) => {
+            console.error("Error while deleting a comment: ", e);
+            alert(msg("delete-error"));
+            this.deleteStep = 0;
+            this.deleted = false;
+          })
+          .finally(() => {
+            this.deleting = false;
+          });
       },
     },
     computed: {
+      canDeleteComment() {
+        switch (this.resourceType) {
+          case "user":
+            return this.resourceId === this.username;
+          case "project":
+            return this.thisComment.projectAuthor === this.username;
+          default:
+            return true; // Studio comment deletion is complex, just assume we can
+        }
+      },
       thisComment() {
         return this.commentsObj[this.commentId];
       },
       replyBoxLeftMsg() {
-        return l10n.get("scratch-messaging/chars-left", { num: 500 - this.replyBoxValue.length });
+        return msg("chars-left", { num: 500 - this.replyBoxValue.length });
       },
       username() {
         return vue.username;
@@ -173,6 +214,14 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
         else options = { unit: "day", divideBy: 60 * 60 * 24 };
         return timeFormatter.format(-Math.round(timeDiffSeconds / options.divideBy), options.unit);
       },
+      commentURL() {
+        const urlPath =
+          this.resourceType === "user" ? "users" : this.resourceType === "gallery" ? "studios" : "projects";
+        const commentPath = this.resourceType === "gallery" ? "comments/" : "";
+        return `https://scratch.mit.edu/${urlPath}/${
+          this.resourceId
+        }/${commentPath}#comments-${this.commentId.substring(2)}`;
+      },
     },
     watch: {
       replying(newVal) {
@@ -185,11 +234,11 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
   const vue = new Vue({
     el: "body",
     data: {
-      mounted: true, // Always true
-
+      stMessages: [],
       messages: [],
       comments: {},
-      error: null,
+      error: "notReady",
+      hasCustomError: false,
 
       username: null,
       msgCount: null,
@@ -204,6 +253,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
       follows: [],
       studioInvites: [],
       studioPromotions: [],
+      studioHostTransfers: [],
       forumActivity: [],
       studioActivity: [],
       remixes: [],
@@ -213,31 +263,41 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 
       // For UI
       messageTypeExtended: {
+        stMessages: false,
         follows: false,
         studioInvites: false,
         studioPromotions: false,
+        studioHostTransfers: false,
         forumActivity: false,
         studioActivity: false,
         remixes: false,
       },
 
       uiMessages: {
-        followsMsg: l10n.get("scratch-messaging/follows"),
-        studioInvitesMsg: l10n.get("scratch-messaging/studio-invites"),
-        forumMsg: l10n.get("scratch-messaging/forum"),
-        studioActivityMsg: l10n.get("scratch-messaging/studio-activity"),
-        remixesMsg: l10n.get("scratch-messaging/remixes"),
-        yourProfileMsg: l10n.get("scratch-messaging/your-profile"),
-        loadingMsg: l10n.get("scratch-messaging/loading"),
-        loggedOutMsg: l10n.get("scratch-messaging/logged-out"),
-        loadingCommentsMsg: l10n.get("scratch-messaging/loading-comments"),
-        reloadMsg: l10n.get("scratch-messaging/reload"),
-        noUnreadMsg: l10n.get("scratch-messaging/no-unread"),
-        showMoreMsg: l10n.get("scratch-messaging/show-more"),
-        markAsReadMsg: l10n.get("scratch-messaging/mark-as-read"),
-        markedAsReadMsg: l10n.get("scratch-messaging/marked-as-read"),
-        openMessagesMsg: l10n.get("scratch-messaging/open-messages"),
-        studioPromotionsMsg: l10n.get("scratch-messaging/studio-promotions"),
+        stMessagesMsg: msg("stMessages"),
+        followsMsg: msg("follows"),
+        studioInvitesMsg: msg("studio-invites"),
+        forumMsg: msg("forum"),
+        studioActivityMsg: msg("studio-activity"),
+        remixesMsg: msg("remixes"),
+        yourProfileMsg: msg("your-profile"),
+        loadingMsg: msg("loading"),
+        loggedOutMsg: msg("logged-out"),
+        serverErrorMsg: msg("server-error"),
+        networkErrorMsg: msg("network-error"),
+        unknownFatalErrorMsg: msg("unknown-fatal-error"),
+        reportBugMsg: msg("report-bug"),
+        copyMsg: msg("copy"),
+        loadingCommentsMsg: msg("loading-comments"),
+        reloadMsg: msg("reload"),
+        dismissMsg: msg("dismiss"),
+        noUnreadMsg: msg("no-unread"),
+        showMoreMsg: msg("show-more"),
+        markAsReadMsg: msg("mark-as-read"),
+        markedAsReadMsg: msg("marked-as-read"),
+        openMessagesMsg: msg("open-messages"),
+        studioPromotionsMsg: msg("studio-promotions"),
+        studioHostTransfersMsg: msg("studio-host-transfers"),
       },
     },
     watch: {
@@ -247,6 +307,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
         this.follows = [];
         this.studioInvites = [];
         this.studioPromotions = [];
+        this.studioHostTransfers = [];
         this.forumActivity = [];
         this.studioActivity = [];
         this.remixes = [];
@@ -257,6 +318,10 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
       },
     },
     computed: {
+      feedbackUrl() {
+        const manifest = chrome.runtime.getManifest();
+        return `https://scratchaddons.com/feedback/?ext_version=${manifest.version_name}&utm_source=extension&utm_medium=messagingcrash&utm_campaign=v${manifest.versions}`;
+      },
       profilesOrdered() {
         // Own profile first, then others
         return [
@@ -275,59 +340,121 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
         return (
           this.messagesReady &&
           this.commentsReady &&
+          !this.error &&
           this.showAllMessages === false &&
           this.messages.length > this.showingMessagesAmt
         );
       },
     },
     created() {
-      document.title = l10n.get("scratch-messaging/popup-title");
+      document.title = msg("popup-title");
       (async () => {
         let fetched = await this.getData();
         if (fetched) this.analyzeMessages();
-        else {
-          const interval = setInterval(async () => {
-            fetched = await this.getData();
-            if (fetched) {
-              clearInterval(interval);
-              this.analyzeMessages();
-            }
-          }, 500);
-        }
       })();
     },
     methods: {
       getData() {
-        return new Promise((resolve) => {
-          const timeout = setTimeout(() => {
-            this.error = "addonDisabled";
-            resolve(undefined);
-          }, 500);
-          chrome.runtime.sendMessage({ scratchMessaging: "getData" }, (res) => {
-            if (res) {
-              clearTimeout(timeout);
-              this.messages = res.messages;
-              this.msgCount = res.lastMsgCount;
-              this.username = res.username;
-              this.error = res.error;
-              resolve(res.error ? false : true);
+        return Promise.all([addon.auth.fetchUsername(), addon.auth.fetchXToken()])
+          .then(([username, xToken]) => {
+            if (scratchAddons.cookieFetchingFailed) throw new TypeError("NetworkError");
+            if (!username) throw new MessageCache.HTTPError("Not logged in", 401);
+            this.username = username;
+            return Promise.all([
+              MessageCache.updateMessages(scratchAddons.cookieStoreId, false, username, xToken),
+              API.fetchAlerts(addon),
+            ]);
+          })
+          .then(async ([newMessages, alerts]) => {
+            chrome.runtime.sendMessage({
+              forceBadgeUpdate: { store: scratchAddons.cookieStoreId },
+              notifyNewMessages: { store: scratchAddons.cookieStoreId, messages: newMessages },
+            });
+            const db = await MessageCache.openDatabase();
+            try {
+              this.messages = await db.get("cache", scratchAddons.cookieStoreId);
+              this.msgCount = await db.get("count", scratchAddons.cookieStoreId);
+            } finally {
+              await db.close();
             }
+            this.stMessages = (Array.isArray(alerts) ? alerts : []).map((alert) => {
+              const element = parser.parseFromString(alert.message, "text/html");
+              for (const link of element.getElementsByTagName("a")) {
+                link.href = new URL(link.getAttribute("href"), "https://scratch.mit.edu/").toString();
+              }
+              const wrapped = document.createElement("div");
+              wrapped.append(...element.body.childNodes);
+              return {
+                ...alert,
+                element: wrapped,
+                datetime_created: new Date(alert.datetime_created).toDateString(),
+              };
+            });
+            this.error = undefined;
+            return true;
+          })
+          .catch((e) => {
+            if (e instanceof MessageCache.HTTPError) {
+              if (e.code === 401 || e.code === 403) {
+                this.error = "loggedOut";
+                return false;
+              } else if (e.code >= 500) {
+                this.error = "serverError";
+                return false;
+              }
+            } else if (e instanceof TypeError && String(e).includes("NetworkError")) {
+              this.error = "networkError";
+              return false;
+            }
+            console.error("Error while initial getData", e);
+            this.hasCustomError = true;
+            this.error = String(e);
+            return false;
           });
+      },
+
+      async updateMessageCount() {
+        const username = await addon.auth.fetchUsername();
+        const count = await MessageCache.fetchMessageCount(username);
+        const db = await MessageCache.openDatabase();
+        try {
+          await db.put("count", count, scratchAddons.cookieStoreId);
+        } finally {
+          await db.close();
+        }
+        chrome.runtime.sendMessage({
+          forceBadgeUpdate: { store: scratchAddons.cookieStoreId },
         });
       },
 
       // For UI
       markAsRead() {
-        chrome.runtime.sendMessage({ scratchMessaging: "markAsRead" });
-        this.markedAsRead = true;
+        MessageCache.markAsRead(addon.auth.csrfToken)
+          .then(() => this.updateMessageCount())
+          .then(() => {
+            this.markedAsRead = true;
+          })
+          .catch((e) => console.error("Marking messages as read failed:", e));
+      },
+      dismissAlert(id) {
+        const confirmation = confirm(msg("stMessagesConfirm"));
+        if (!confirmation) return;
+        API.dismissAlert(addon, id)
+          .then(() => {
+            this.stMessages.splice(
+              this.stMessages.findIndex((alert) => alert.id === id),
+              1
+            );
+            this.updateMessageCount();
+          })
+          .catch((e) => console.error("Dismissing alert failed:", e));
       },
       reloadPage() {
         location.reload();
       },
-      openProfile: (username) => window.open(`https://scratch.mit.edu/users/${username}/`),
-      openProject: (projectId) => window.open(`https://scratch.mit.edu/projects/${projectId}/`),
-      openStudio: (studioId, tab = "") => window.open(`https://scratch.mit.edu/studios/${studioId}/${tab}`),
-      openUnreadPostsForums: (topicId) => window.open(`https://scratch.mit.edu/discuss/topic/${topicId}/unread/`),
+      copyToClipboard(message) {
+        navigator.clipboard.writeText(message);
+      },
 
       // Objects
       getProjectObject(projectId, title) {
@@ -385,37 +512,66 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
         } else return false;
       },
       checkCommentLocation(resourceType, resourceId, commentIds, elementObject) {
-        return new Promise((resolve) => {
-          chrome.runtime.sendMessage(
-            {
-              scratchMessaging: {
-                retrieveComments: {
-                  resourceType,
-                  resourceId,
-                  commentIds: commentIds,
-                },
-              },
-            },
-            (comments) => {
-              if (Object.keys(comments).length === 0) elementObject.unreadComments = 0;
-              for (const commentId of Object.keys(comments)) {
-                const commentObject = comments[commentId];
-                Vue.set(this.comments, commentId, commentObject);
-                const chainId = commentObject.childOf || commentId;
-                const resourceGetFunction =
-                  resourceType === "project"
-                    ? "getProjectObject"
-                    : resourceType === "user"
-                    ? "getProfileObject"
-                    : "getStudioObject";
-                const resourceObject = this[resourceGetFunction](resourceId);
-                if (!resourceObject.commentChains.includes(chainId)) resourceObject.commentChains.push(chainId);
+        return Promise.all([
+          API.fetchComments(addon, {
+            resourceType,
+            resourceId,
+            commentIds,
+          }),
+          addon.self.getEnabledAddons(),
+        ])
+          .then(([comments, enabledAddons]) => {
+            if (Object.keys(comments).length === 0) elementObject.unreadComments = 0;
+            for (const commentId of Object.keys(comments)) {
+              const commentObject = comments[commentId];
+              let domContent = fixCommentContent(commentObject.content, enabledAddons);
+              if (this.resourceType !== "user") {
+                // Re-wrap elements from <body> to <div>
+                const newElement = document.createElement("div");
+                if (commentObject.replyingTo) {
+                  // We need to append the replyee ourselves
+                  newElement.append(
+                    Object.assign(document.createElement("a"), {
+                      href: `https://scratch.mit.edu/users/${commentObject.replyingTo}`,
+                      textContent: "@" + commentObject.replyingTo,
+                    })
+                  );
+                  newElement.append(" ");
+                }
+                newElement.append(...domContent.childNodes);
+                domContent = newElement;
               }
-              elementObject.loadedComments = true;
-              resolve();
+              commentObject.content = domContent;
+              Vue.set(this.comments, commentId, commentObject);
             }
-          );
-        });
+
+            // Preserve chronological sort when using JSON API
+            const parentComments = Object.entries(comments).filter((c) => c[1].childOf === null);
+            const sortedParentComments = parentComments.sort((a, b) => new Date(b[1].date) - new Date(a[1].date));
+            const sortedIds = sortedParentComments.map((arr) => arr[0]);
+            const resourceGetFunction =
+              resourceType === "project"
+                ? "getProjectObject"
+                : resourceType === "user"
+                ? "getProfileObject"
+                : "getStudioObject";
+            const resourceObject = this[resourceGetFunction](resourceId);
+            for (const sortedId of sortedIds) resourceObject.commentChains.push(sortedId);
+
+            elementObject.loadedComments = true;
+          })
+          .catch((e) => {
+            if (e instanceof API.HTTPError && e.code > 400) {
+              this.error = e.code < 500 ? "loggedOut" : "serverError";
+              return;
+            } else if (String(e).includes("NetworkError")) {
+              this.error = "networkError";
+              return;
+            }
+            console.error(e);
+            this.error = String(e);
+            this.hasCustomError = true;
+          });
       },
 
       async analyzeMessages(showAll = false) {
@@ -424,8 +580,8 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
           1: [], // Profiles
           2: [], // Studios
         };
-        const messagesToCheck =
-          this.msgCount > 40 ? this.messages.length : showAll ? this.messages.length : this.msgCount;
+        let realMsgCount = this.msgCount - this.stMessages.length;
+        const messagesToCheck = showAll ? this.messages.length : realMsgCount;
         this.showingMessagesAmt = messagesToCheck;
         for (const message of this.messages.slice(0, messagesToCheck)) {
           if (message.type === "followuser") {
@@ -438,6 +594,13 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
             });
           } else if (message.type === "becomeownerstudio") {
             this.studioPromotions.push({
+              actor: message.actor_username,
+              studioId: message.gallery_id,
+              studioTitle: message.gallery_title,
+            });
+          } else if (message.type === "becomehoststudio") {
+            this.studioHostTransfers.push({
+              actorAdmin: message.admin_actor,
               actor: message.actor_username,
               studioId: message.gallery_id,
               studioTitle: message.gallery_title,
@@ -535,7 +698,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
             href="https://scratch.mit.edu/studios/${invite.studioId}/curators/"
             style="text-decoration: underline"
         >${escapeHTML(invite.studioTitle)}</a>`;
-        return l10n.escaped("scratch-messaging/curate-invite", { actor, title });
+        return safeMsg("curate-invite", { actor, title });
       },
       studioPromotionHTML(promotion) {
         const actor = `<a target="_blank"
@@ -547,7 +710,21 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
             href="https://scratch.mit.edu/studios/${promotion.studioId}/curators/"
             style="text-decoration: underline"
         >${escapeHTML(promotion.studioTitle)}</a>`;
-        return l10n.escaped("scratch-messaging/studio-promotion", { actor, title });
+        return safeMsg("studio-promotion", { actor, title });
+      },
+      studioHostTransferHTML(promotion) {
+        const actor = promotion.actorAdmin
+          ? safeMsg("st")
+          : `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/users/${escapeHTML(promotion.actor)}/"
+        >${escapeHTML(promotion.actor)}</a>`;
+        const title = `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/studios/${promotion.studioId}/"
+            style="text-decoration: underline"
+        >${escapeHTML(promotion.studioTitle)}</a>`;
+        return safeMsg("studio-host-transfer", { actor, title });
       },
       forumHTML(forumTopic) {
         const title = `<a target="_blank"
@@ -555,7 +732,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
             href="https://scratch.mit.edu/discuss/topic/${forumTopic.topicId}/unread/"
             style="text-decoration: underline"
         >${escapeHTML(forumTopic.topicTitle)}</a>`;
-        return l10n.escaped("scratch-messaging/forum-new-post", { title });
+        return safeMsg("forum-new-post", { title });
       },
       studioActivityHTML(studio) {
         const title = `<a target="_blank"
@@ -563,7 +740,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
             href="https://scratch.mit.edu/studios/${studio.studioId}/activity/"
             style="text-decoration: underline"
         >${escapeHTML(studio.studioTitle)}</a>`;
-        return l10n.escaped("scratch-messaging/new-activity", { title });
+        return safeMsg("new-activity", { title });
       },
       remixHTML(remix) {
         const actor = `<a target="_blank"
@@ -575,38 +752,29 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
             href="https://scratch.mit.edu/projects/${remix.projectId}/"
             style="text-decoration: underline"
         >${escapeHTML(remix.remixTitle)}</a>`;
-        return l10n.escaped("scratch-messaging/remix-as", {
+        return safeMsg("remix-as", {
           actor,
           title,
           parentTitle: escapeHTML(remix.parentTitle),
         });
       },
       othersProfile(username) {
-        return l10n.get("scratch-messaging/others-profile", { username });
+        return msg("others-profile", { username });
       },
       studioText(title) {
-        return l10n.get("scratch-messaging/studio", { title });
+        return msg("studio", { title });
       },
       projectLoversAndFavers(project) {
         // First lovers&favers, then favers-only, then lovers only. Lower is better
         const priorityOf = (obj) => (obj.loved && obj.faved ? 0 : obj.faved ? 1 : 2);
-        let str = "";
-        const arr = project.loversAndFavers.slice(0, 20).sort((a, b) => {
+        return project.loversAndFavers.slice(0, 20).sort((a, b) => {
           const priorityA = priorityOf(a);
           const priorityB = priorityOf(b);
           if (priorityA > priorityB) return 1;
           else if (priorityB > priorityA) return -1;
           else return 0;
         });
-        arr.forEach((obj, i) => {
-          if (obj.loved) str += `<img class="small-icon colored" src="../../images/icons/heart.svg">`;
-          if (obj.faved) str += `<img class="small-icon colored" src="../../images/icons/star.svg">`;
-          str += " ";
-          str += `<a href="https://scratch.mit.edu/users/${obj.username}/">${obj.username}</a>`;
-          if (i !== arr.length - 1) str += "<br>";
-        });
-        return str;
       },
     },
   });
-})();
+};

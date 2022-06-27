@@ -1,11 +1,16 @@
 .badge {
   background: gray;
-  color: #fff;
+  color: var(--white-text);
   border-radius: 4px;
   padding: 2px 5px;
   font-size: 12px;
-  margin-left: 10px;
+  font-weight: 500;
+  margin-inline-start: 10px;
   border-bottom: 2px solid #111;
+  white-space: nowrap;
+}
+.badge .tooltiptext {
+  white-space: normal;
 }
 
 .badge.blue {

@@ -1,26 +1,31 @@
 html {
-  background: var(--accent-1);
+  background: var(--content-background);
 }
 
 body {
-  background: var(--accent-2);
+  background: var(--page-background);
   font-family: "Sora", sans-serif;
   margin: 0;
   height: 100vh;
   overflow: hidden;
-  color: white;
+  color: var(--content-text);
   font-size: 12px;
+}
+
+:not(body)[v-cloak] {
+  display: none !important;
 }
 
 .navbar {
   height: 60px;
   background: var(--brand-orange);
-  color: #fff;
+  color: var(--white-text);
   display: flex;
   align-items: center;
-  padding: 0 20px;
-  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+  padding: 0 14px;
+  box-shadow: var(--large-shadow);
   user-select: none;
+  position: relative;
   z-index: 10;
 }
 
@@ -36,7 +41,8 @@ h1 {
 
 .logo {
   height: 30px;
-  margin-right: 20px;
+  width: 30px;
+  margin-inline-end: 9px;
 }
 
 .main {
@@ -44,37 +50,6 @@ h1 {
   height: calc(100% - 60px);
   width: 100%;
   align-items: stretch;
-}
-
-.addon-group {
-  margin-bottom: 20px;
-}
-
-.addon-group > span {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  margin: 0px 20px;
-}
-
-.addon-group > span > img {
-  height: 23px;
-  margin-right: 5px;
-  padding: 5px;
-  border-radius: 4px;
-}
-
-.addon-group > span > img:hover {
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-.addon-group > span:after {
-  content: "";
-  border-top: 1px solid white;
-  width: 100px;
-  margin-left: 10px;
-  flex: 1;
-  opacity: 0.5;
 }
 
 .addons-block {
@@ -86,35 +61,47 @@ h1 {
 
 .addons-container {
   overflow-y: auto;
-  padding: 10px 20px;
+  padding: 20px;
+  padding-top: 10px;
   scrollbar-width: thin;
-  scrollbar-color: grey none;
+  scrollbar-color: var(--gray-text) transparent;
   height: 100vh;
+}
+
+.addons-container.placeholder {
+  pointer-events: none;
+}
+.addons-container.placeholder .addon-body:first-child {
+  /* Doing this instead of padding in .addons-container itself to avoid
+  problems with other CSS that would also set padding on the same element,
+  like the "body.iframe .addons-container" selector below */
+  margin-top: 42px;
 }
 
 @keyframes addonBlink {
   10% {
-    border: 1px solid var(--accent-3);
+    border: 1px solid var(--content-border);
   }
   25% {
-    border: 1px solid #7e7e7e;
+    border: 1px solid var(--brand-orange);
   }
   50% {
-    border: 1px solid var(--accent-3);
+    border: 1px solid var(--content-border);
   }
   75% {
-    border: 1px solid #7e7e7e;
+    border: 1px solid var(--brand-orange);
   }
   100% {
-    border: 1px solid var(--accent-3);
+    border: 1px solid var(--content-border);
   }
 }
 
 .icon-type {
   height: 16px;
+  width: 16px;
   vertical-align: middle;
-  filter: invert(0) brightness(10);
-  margin-right: 8px;
+  filter: var(--content-icon-filter);
+  margin-inline-end: 8px;
 }
 
 .disabled {
@@ -127,90 +114,77 @@ h1 {
 }
 
 .large-button {
-  color: var(--accent-5);
-  background: var(--accent-2);
-  border: 1px solid #000;
-  padding: 6px 12px;
+  color: var(--content-text);
+  background: var(--button-background);
+  border: 1px solid var(--control-border);
+  padding: 0 12px;
   border-radius: 4px;
-  transition: 0.25s ease;
-  outline: none;
+  transition: 0.2s ease;
   height: 32px;
+  box-sizing: border-box;
   font-family: inherit;
   font-size: 12px;
 }
 .large-button:hover:not([disabled]) {
+  background: var(--button-hover-background);
+  cursor: pointer;
+}
+.large-button:focus-visible {
   outline: none;
-  background: #151515;
+  border-color: var(--brand-orange);
+  box-shadow: var(--input-focus-shadow);
+}
+.large-button > * {
+  vertical-align: middle;
 }
 
 .clear-button {
-  border-radius: 0 4px 4px 0px;
-  border-left: none !important;
+  padding-inline: 7px;
+  border-radius: 0 4px 4px 0;
+  border-inline-start: none !important;
 }
-.clear-button span {
-  vertical-align: middle;
+[dir="rtl"] .clear-button {
+  border-radius: 4px 0 0 4px;
+}
+.number-setting .clear-button {
+  border-radius: 0 16px 16px 0;
+}
+[dir="rtl"] .number-setting .clear-button {
+  border-radius: 16px 0 0 16px;
 }
 .clear-button .icon-type {
-  margin-left: 8px;
-  margin-right: 0;
-}
-
-.clear-settings {
-  display: flex;
-  align-items: center;
-  padding: 0 0px 0px 8px;
-  border-radius: 4px;
-  margin-right: 8px;
-}
-.clear-settings:hover {
-  background: rgba(255, 255, 255, 0.05);
+  margin: 0;
 }
 
 .reverted {
-  transform: rotate(180deg);
-}
-
-.small-button {
-  margin-left: 10px;
-  background: var(--accent-2);
-  border: 1px solid #000;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: white;
-  font-size: 12px;
-  cursor: pointer;
-}
-.small-button:hover {
-  background: #151515;
+  transform: scaleY(-1);
 }
 
 .theme-switch {
   height: 25px;
-  float: right;
   right: 25px;
   position: fixed;
   cursor: pointer;
 }
-.large-dropdown {
-  color: var(--accent-5);
-  background: var(--accent-2);
-  border: 1px solid #000;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: 0.25s ease;
-  outline: none;
-  height: 32px;
+[dir="rtl"] .theme-switch {
+  right: auto;
+  left: 25px;
 }
-.large-dropdown:hover {
-  outline: none;
-  background: #151515;
-}
+
 .hidden-button {
-  /* needs !important because it conlicts with display: block */
+  /* needs !important because it conflicts with display: block */
   display: none !important;
 }
 #confirmImport {
   border-color: var(--brand-orange);
+}
+
+#search-not-found {
+  margin: 10px;
+}
+body.iframe #search-not-found {
+  margin: unset;
+  text-align: center;
 }
 
 /*scrollbar*/
@@ -218,16 +192,18 @@ h1 {
 /* width */
 ::-webkit-scrollbar {
   width: 7px;
+  height: 7px;
 }
 
 /* hide track */
-::-webkit-scrollbar-track {
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
   background: none;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: grey;
+  background: var(--gray-text);
   border-radius: 4px;
 }
 
@@ -237,11 +213,8 @@ body.iframe .tooltiptext {
 body.iframe .addon-description {
   display: none;
 }
-body.iframe .filter-selector {
-  display: none;
-}
 body.iframe .search-box {
-  padding: 0 16px 0 16px;
+  padding: 10px;
 }
 body.iframe .navbar {
   display: none;
@@ -250,18 +223,67 @@ body.iframe .main {
   /* No calc -60px because there's no navbar */
   height: 100%;
 }
+body.iframe .addon-group {
+  padding-inline: 6px;
+}
+body.iframe .addon-group > img {
+  margin-inline-end: 5px;
+}
+body.iframe .addon-topbar {
+  height: 44px;
+  padding-inline-end: 6px;
+}
+body.iframe .clickable-area {
+  padding-inline-start: 6px;
+}
+body.iframe .addon-name {
+  margin-inline-start: 6px;
+}
+body.iframe .addon-name .icon-type {
+  margin-inline-end: 6px;
+}
+body.iframe .badge {
+  margin-inline-start: 8px;
+}
+
+body.iframe .addon-settings {
+  padding-inline: 16px;
+}
+body.iframe .settings-column {
+  flex-direction: column;
+}
+body.iframe .settings-column > .addon-setting {
+  margin: 10px 0;
+  min-height: 0;
+  flex-direction: column;
+  align-items: flex-start;
+}
 body.iframe .setting-label {
-  flex: 2;
-  margin-top: 5px;
+  width: auto;
   margin-bottom: 5px;
 }
-body.iframe .addons-container {
-  padding: 10px 0px;
-  overflow-y: visible;
+body.iframe .setting-input {
+  flex-shrink: 0;
 }
-body.iframe .addons-block {
-  /* Always show scroll bar to avoid viewport width changing */
-  overflow-y: scroll;
+body.iframe .addon-setting.boolean-setting {
+  margin: 5px 0;
+  flex-direction: row;
+  align-items: center;
+}
+body.iframe .addon-setting.boolean-setting .setting-label {
+  margin-bottom: 0;
+}
+body.iframe .presets-column > .setting-label {
+  margin-inline-start: 0;
+  margin-bottom: 0;
+}
+body.iframe .presets-column > .addon-setting {
+  margin: 5px 0;
+  margin-inline-end: 10px;
+}
+
+body.iframe .addons-container {
+  padding: 10px 0;
 }
 body.iframe .filter-options {
   flex-wrap: wrap;
@@ -271,20 +293,43 @@ body.iframe .filter-option {
   text-align: center;
 }
 body.iframe .search-box input {
-  width: auto;
-  min-width: 10px;
+  flex-grow: 1;
+  flex-basis: 0;
 }
+
 .categories-shrink {
   text-align: right;
   bottom: 0;
   position: fixed;
   margin: 5px;
-  margin-top: 7px;
   cursor: pointer;
   user-select: none;
 }
+.categories-shrink img {
+  vertical-align: middle;
+  filter: var(--content-icon-filter);
+}
 .flipped {
   transform: scaleX(-1);
+}
+
+/* Hide categories and prevent logo from jumping while loading in the popup and small mode */
+@media (max-width: 1099px) {
+  body[v-cloak] .logo {
+    margin-inline-start: 42px;
+  }
+
+  body[v-cloak] .categories-block,
+  body[v-cloak] .categories-shrink {
+    display: none;
+  }
+}
+
+/* Hide top bar while loading in the popup */
+@media (max-width: 400px) {
+  body[v-cloak] .navbar {
+    display: none;
+  }
 }
 
 .permissions div.main {
@@ -329,40 +374,24 @@ body.iframe .search-box input {
   height: 10rem;
 }
 
-#running-page {
-  font-weight: bold;
-  padding: 10px;
-  position: sticky;
-  top: 0;
-  background-color: var(--accent-2);
-  z-index: 999;
-}
-
-#popup-more-settings {
-  margin-left: 12px;
-}
-
-#popup-more-settings > button {
-  background: url(../../images/icons/settings.svg);
-  background-position: 8px 8px;
-  background-repeat: no-repeat;
-  width: max-content;
-}
 color-picker {
   z-index: 2;
-  filter: drop-shadow(black 2px 4px 6px);
   position: absolute;
-  top: 30px;
+  top: calc(100% - 1px);
   left: 0;
-  --color-picker-background-color: #222 !important;
-  --color-picker-color: #fff !important;
+  border: 1px solid var(--control-border);
+  --color-picker-background-color: var(--button-background);
+  --color-picker-color: var(--content-text);
+  --color-picker-font-family: Sora, sans-serif;
 }
 
 button.setting-input.color {
-  position: relative;
-  height: 32px;
   width: 100px;
-  border-radius: 4px 0px 0px 4px;
+  transition: border-radius 0.2s ease;
+}
+
+button.setting-input.color.open {
+  border-bottom-left-radius: 0;
 }
 
 .color-container {
@@ -372,6 +401,11 @@ button.setting-input.color {
   background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
   border-radius: 5px;
   background-color: white;
+  display: flex;
+  position: relative;
+}
+.color-container .setting-input.color {
+  cursor: pointer;
 }
 
 .action-disabled {
@@ -383,14 +417,16 @@ button.setting-input.color {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgb(0 0 0 / 50%);
-  padding: 20px 0 20px 0;
-  margin: 20px 20px 20px 20px;
+  border-radius: 4px;
+  background-color: var(--content-background);
+  border: 1px solid var(--content-border);
+  box-shadow: var(--content-shadow);
+  padding: 20px 0;
+  margin: 10px;
 }
 #iframe-fullscreen-suggestion > span {
   width: 100%;
-  font-weight: bold;
+  font-weight: 600;
   font-size: 13px;
   margin-bottom: 8px;
   display: flex;

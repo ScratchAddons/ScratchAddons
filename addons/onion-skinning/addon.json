@@ -1,6 +1,6 @@
 {
   "name": "Onion skinning",
-  "description": "Shows transparent overlays of previous or next costumes when editing a costume. Controlled by buttons under the editor by the zoom buttons.",
+  "description": "Shows transparent overlays of previous or next costumes when editing a costume. Controlled by buttons under the costume editor by the zoom buttons.",
   "credits": [
     {
       "name": "GarboMuffin"
@@ -9,14 +9,13 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"],
-      "runAtComplete": false
+      "matches": ["projects"]
     }
   ],
   "userstyles": [
     {
       "url": "style.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "settings": [
@@ -103,7 +102,9 @@
       "default": "#0000FF"
     }
   ],
+  "versionAdded": "1.5.0",
   "tags": ["editor", "costumeEditor", "recommended"],
-  "enabledByDefault": false,
-  "l10n": true
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "enabledByDefault": false
 }

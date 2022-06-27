@@ -5,23 +5,59 @@ let currentQuery;
 let currentSort = "relevance";
 let locationQuery = "";
 
+const ALLOWED_TAGS = {
+  A: ["href"],
+  BR: [],
+  BLOCKQUOTE: [],
+  DIV: ["class", "style"],
+  IMG: ["src"],
+  LI: [],
+  OL: ["style"],
+  P: ["class"],
+  PRE: ["class"],
+  SPAN: ["class", "style"],
+  UL: [],
+};
+
+class SanitizerFailed extends Error {}
+
 function cleanPost(post) {
   // Thanks Jeffalo
   const dom = new DOMParser();
   const readableDom = dom.parseFromString(post, "text/html");
 
-  const codeSegments = readableDom.querySelectorAll("pre");
-
-  for (const segment of codeSegments) {
-    segment.innerHTML = segment.innerHTML.replace(/<br>/g, "\n");
-    segment.innerHTML = segment.innerHTML.replace(/</g, "&lt;");
+  const recursiveCheck = (elem) => {
+    if (!(elem instanceof Element)) return;
+    const allowed = ALLOWED_TAGS[elem.tagName];
+    if (!allowed) {
+      throw new SanitizerFailed(`forum-search: Warning: Potential XSS attempt found: ${elem.tagName} is not allowed`);
+    }
+    Array.prototype.forEach.call(elem.attributes, (attr) => {
+      if (!allowed.includes(attr.name)) {
+        throw new SanitizerFailed(
+          `forum-search: Warning: Potential XSS attempt found: ${attr.name} is not allowed for ${elem.tagName}`
+        );
+      }
+      if (attr.name === "href" && !(elem.protocol === "https:" || elem.protocol === "http:")) {
+        throw new SanitizerFailed(
+          `forum-search: Warning: Potential XSS attempt found: protocol ${elem.protocol} is not allowed`
+        );
+      }
+    });
+    Array.prototype.forEach.call(elem.children, recursiveCheck);
+  };
+  try {
+    Array.prototype.forEach.call(readableDom.body.children, recursiveCheck);
+  } catch (e) {
+    if (!(e instanceof SanitizerFailed)) throw e;
+    console.warn(e.message);
+    return [document.createTextNode(readableDom.body.innerHTML)];
   }
-
-  return readableDom.documentElement.innerHTML;
+  return readableDom.body.cloneNode(true).childNodes;
 }
 
 function triggerNewSearch(searchContent, query, sort, msg) {
-  searchContent.style.display = "block";
+  searchContent.classList.add("show");
   while (searchContent.firstChild) {
     searchContent.removeChild(searchContent.firstChild);
   }
@@ -62,6 +98,13 @@ function appendSearch(box, query, page, term, msg) {
           }
           return element;
         }
+        function createLabel(text) {
+          let container = document.createElement("div");
+          let textElement = document.createElement("strong");
+          container.appendChild(textElement);
+          textElement.innerText = text;
+          return container;
+        }
         // the post
         let postElem = document.createElement("div");
         postElem.classList = "blockpost roweven firstpost";
@@ -99,7 +142,7 @@ function appendSearch(box, query, page, term, msg) {
         let postLeftDl = document.createElement("dl");
         postLeft.appendChild(postLeftDl);
 
-        postLeftDl.appendChild(createTextBox(msg("username"), "black username", 1));
+        postLeftDl.appendChild(createLabel(msg("username")));
         let userLink = document.createElement("a"); // this one is an `a` and not a `span`, so it isnt in the createTextBox function
         userLink.setAttribute("href", `https://scratch.mit.edu/users/${post.username}`);
         userLink.appendChild(document.createTextNode(post.username));
@@ -141,10 +184,10 @@ function appendSearch(box, query, page, term, msg) {
         postLeftDl.appendChild(document.createElement("br"));
         postLeftDl.appendChild(document.createElement("br"));
 
-        postLeftDl.appendChild(createTextBox(msg("first-checked"), "black username", 1));
+        postLeftDl.appendChild(createLabel(msg("first-checked")));
         postLeftDl.appendChild(createTextBox(scratchAddons.l10n.datetime(new Date(post.time.first_checked)), "", 2));
 
-        postLeftDl.appendChild(createTextBox(msg("last-checked"), "black username", 1));
+        postLeftDl.appendChild(createLabel(msg("last-checked")));
         postLeftDl.appendChild(
           createTextBox(scratchAddons.l10n.datetime(new Date(post.time.html_last_checked)), "", 2)
         );
@@ -159,7 +202,7 @@ function appendSearch(box, query, page, term, msg) {
 
         let postHTML = document.createElement("div");
         postHTML.classList = "post_body_html";
-        postHTML.insertAdjacentHTML("beforeend", cleanPost(post.content.html));
+        postHTML.append(...cleanPost(post.content.html));
         postMsg.appendChild(postHTML);
 
         if (post.editor) {
@@ -185,39 +228,46 @@ function appendSearch(box, query, page, term, msg) {
 
         box.appendChild(postElem);
       }
-      scratchblocks.renderMatching("pre.blocks");
+      scratchblocks.renderMatching(".forum-search-list pre.blocks");
       isCurrentlyProcessing = false;
     });
 }
 
 export default async function ({ addon, global, console, msg }) {
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5-min.js");
+  if (!window.scratchAddons._scratchblocks3Enabled) {
+    window.scratchblocks = (await import(addon.self.lib + "/thirdparty/cs/scratchblocks.min.es.js")).default;
+  }
+
   // create the search bar
   let search = document.createElement("form");
+  addon.tab.displayNoneWhileDisabled(search);
   search.id = "forum-search-form";
   let searchBar = document.createElement("input");
   searchBar.id = "forum-search-input";
   searchBar.setAttribute("type", "text");
   let pathSplit = window.location.pathname.split("/");
   let searchPlaceholder = msg("placeholder");
-  switch (pathSplit.length) {
-    case 5: {
-      let topicTitle = document
-        .getElementsByClassName("linkst")[0]
-        .getElementsByTagName("li")[2]
-        .innerText.substring(2)
-        .trim();
-      locationQuery = ` +topic:${pathSplit[3]}`;
-      searchPlaceholder = msg("search-topic", { topic: topicTitle });
-      break;
-    }
-    case 4: {
-      let category = document.getElementsByClassName("box-head")[1].getElementsByTagName("span")[0].innerHTML;
-      locationQuery = ` +category:"${category}"`;
-      searchPlaceholder = msg("search-cat", { cat: category });
-      break;
+  if (pathSplit[2] !== "settings") {
+    switch (pathSplit.length) {
+      case 5: {
+        let topicTitle = document
+          .getElementsByClassName("linkst")[0]
+          .getElementsByTagName("li")[2]
+          .innerText.substring(2)
+          .trim();
+        locationQuery = ` +topic:${pathSplit[3]}`;
+        searchPlaceholder = msg("search-topic", { topic: topicTitle });
+        break;
+      }
+      case 4: {
+        let category = document.getElementsByClassName("box-head")[1].getElementsByTagName("span")[0].innerHTML;
+        locationQuery = ` +category:"${category}"`;
+        searchPlaceholder = msg("search-cat", { cat: category });
+        break;
+      }
     }
   }
+
   searchBar.setAttribute("placeholder", searchPlaceholder);
   search.appendChild(searchBar);
 
@@ -233,6 +283,7 @@ export default async function ({ addon, global, console, msg }) {
   search.appendChild(searchDropdown);
 
   let searchContent = document.createElement("div");
+  addon.tab.displayNoneWhileDisabled(searchContent);
   searchContent.addEventListener("scroll", (e) => {
     let et = e.target;
     if (et.scrollHeight - et.scrollTop === et.clientHeight) {

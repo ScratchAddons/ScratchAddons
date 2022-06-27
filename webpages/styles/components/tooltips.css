@@ -1,62 +1,75 @@
 .tooltip {
   position: relative;
   /* making the .tooltip span a container for the tooltip text */
-  border-bottom: 1px dashed #000;
-  /* little indicater to indicate it's hoverable */
   cursor: default;
 }
 
+.tooltip-indicator {
+  border-bottom: 1px dashed var(--control-border);
+  /* little indicator to indicate it's hoverable */
+}
+
 .tooltiptext {
-  /* here's the magic */
   position: absolute;
-  /* vertically center */
   top: 50%;
   transform: translateY(-50%);
   /* Bring it on top of other tags */
   z-index: 10;
-  /* move to right */
-  left: 95%;
-  margin-left: 15px;
-  /* and add a small left margin */
-  /* basic styles */
+  left: 100%;
+  margin-inline-start: 10px; /* distance from parent */
   width: 200px;
   padding: 10px;
   border-radius: 10px;
-  background: #000;
-  color: #fff;
+  background: var(--tooltip-background);
+  color: var(--content-text);
   text-align: center;
   visibility: hidden;
 
-  box-shadow: 0px 0px 16px 10px #3b3b3b52;
+  filter: var(--large-shadow-filter);
+}
+[dir="rtl"] .tooltiptext {
+  left: auto;
+  right: 100%;
 }
 .tooltiptext.tooltiptextleft {
   left: auto;
+  right: 100%;
   top: -3px;
-  right: 95%;
-  margin-left: 0;
-  margin-right: 4px;
   transform: none;
+  margin-inline-start: 0;
+}
+[dir="rtl"] .tooltiptext.tooltiptextleft {
+  right: auto;
+  left: 100%;
 }
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
 }
 .tooltip .tooltiptext::after {
-  content: " ";
+  content: "";
   position: absolute;
   top: 50%;
   right: 100%; /* To the left of the tooltip */
   margin-top: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent black transparent transparent;
+  border: 5px solid transparent;
+  border-inline-end-color: var(--tooltip-background);
   white-space: normal;
+}
+[dir="rtl"] .tooltip .tooltiptext::after {
+  right: auto;
+  left: 100%; /* To the right of the tooltip */
 }
 .tooltip .tooltiptext.tooltiptextleft::after {
   right: auto;
-  top: 15px;
   left: 100%;
-  border-color: transparent transparent transparent black;
+  top: 15px;
+  border-inline-end-color: transparent;
+  border-inline-start-color: var(--tooltip-background);
+}
+[dir="rtl"] .tooltip .tooltiptext.tooltiptextleft::after {
+  left: auto;
+  right: 100%;
 }
 
 .tooltiptext:hover .tooltiptext:after {

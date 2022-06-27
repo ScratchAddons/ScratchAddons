@@ -1,0 +1,3 @@
+[data-tabs] > :nth-child(3) div[class*="delete-button_delete-button_"] {
+  display: none;
+}

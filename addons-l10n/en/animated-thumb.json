@@ -1,4 +1,16 @@
 {
   "animated-thumb/set-thumbnail": "Set Thumbnail",
-  "animated-thumb/added-by": "Button added by Scratch Addons browser extension"
+  "animated-thumb/added-by": "Button added by Scratch Addons browser extension",
+  "animated-thumb/description": "Upload a thumbnail from a file, or click \"Use Stage\" to use the current stage as the thumbnail.",
+  "animated-thumb/keep-thumb": "Stop thumbnail auto-saving (Recommended)",
+  "animated-thumb/keep-thumb-desc": "This stops the editor from overwriting the uploaded thumbnail with the stage's contents when saving the project.",
+  "animated-thumb/use-stage": "Use Stage",
+  "animated-thumb/select-file": "Select File",
+  "animated-thumb/close": "Close",
+  "animated-thumb/successful": "Thumbnail was uploaded.",
+  "animated-thumb/server-error": "Thumbnail could not be uploaded due to Scratch server error. Please try again later.",
+  "animated-thumb/error": "Thumbnail could not be uploaded.",
+  "animated-thumb/too-big": "The file is too big.",
+  "animated-thumb/gif": "Projects with an animated thumbnail might not appear on the Scratch front page and search results. Upload anyway?",
+  "animated-thumb/if-unsuccessful": "If this is not the thumbnail you uploaded just now, the Scratch server might be having a problem. Please wait a few hours and try again."
 }

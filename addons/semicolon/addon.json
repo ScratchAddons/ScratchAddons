@@ -19,7 +19,9 @@
       "matches": ["https://scratch.mit.edu/*"]
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.7.0",
   "tags": ["community", "easterEgg"],
-  "enabledByDefault": false,
-  "l10n": true
+  "enabledByDefault": false
 }

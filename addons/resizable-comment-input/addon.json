@@ -4,22 +4,23 @@
   "tags": ["community", "comments", "recommended", "theme"],
   "credits": [
     {
-      "name": "Maximouse"
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
     }
   ],
   "injectAsStyleElt": true,
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "versionAdded": "1.3.0",
   "userstyles": [
     {
       "url": "userstyle.css",
       "matches": [
         "https://scratch.mit.edu/projects/*",
         "https://scratch.mit.edu/users/*/",
-        "https://scratch.mit.edu/studios/*/comments"
+        "https://scratch.mit.edu/studios/*"
       ]
     }
   ],
-  "enabledByDefault": true,
-  "l10n": true
+  "enabledByDefault": true
 }

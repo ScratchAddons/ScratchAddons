@@ -6,14 +6,15 @@
       "name": "GarboMuffin"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "tags": ["editor", "codeEditor"],
-  "versionAdded": "1.14.0",
   "enabledByDefault": false,
-  "l10n": true
+  "versionAdded": "1.14.0"
 }

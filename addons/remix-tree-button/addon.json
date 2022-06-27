@@ -1,6 +1,6 @@
 {
-  "name": "Remix tree button on project pages",
-  "description": "Brings back the remix tree button to project pages.",
+  "name": "Remix tree button",
+  "description": "Brings back the remix tree button to project pages, next to the Copy Link button.",
   "tags": ["community", "recommended", "projectPage"],
   "credits": [
     {
@@ -11,23 +11,17 @@
   "userscripts": [
     {
       "url": "main.js",
-      "matches": ["https://scratch.mit.edu/projects/*"],
+      "matches": ["projects"],
       "runAtComplete": false
     }
   ],
   "userstyles": [
     {
       "url": "button.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
-  "settings": [
-    {
-      "name": "Button Color",
-      "id": "buttonColor",
-      "type": "color",
-      "default": "#4d97ff"
-    }
-  ],
-  "l10n": true
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.2.0"
 }

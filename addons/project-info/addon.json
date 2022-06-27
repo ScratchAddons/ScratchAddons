@@ -1,40 +1,26 @@
 {
   "name": "Sprite and script count",
-  "description": "Shows the number of sprites and scripts a project has.",
-  "tags": ["community", "projectPage"],
+  "description": "Shows the number of sprites and scripts a project has next to the Remix button.",
+  "tags": ["community", "projectPage", "featured"],
   "credits": [
     {
       "name": "TheColaber",
       "link": "https://scratch.mit.edu/users/TheColaber"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "projectstats.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
-    },
-    {
-      "url": "blockcount.js",
-      "matches": ["https://scratch.mit.edu/projects/*"],
-      "settingMatch": {
-        "id": "editorCount",
-        "value": true
-      }
+      "matches": ["projects"]
     }
   ],
   "userstyles": [
     {
       "url": "userscript.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
-  "settings": [
-    {
-      "id": "editorCount",
-      "name": "Live block count in editor",
-      "type": "boolean",
-      "default": false
-    }
-  ],
-  "l10n": true
+  "versionAdded": "1.4.0"
 }

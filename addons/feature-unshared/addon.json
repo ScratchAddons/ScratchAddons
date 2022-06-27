@@ -7,13 +7,15 @@
       "link": "https://scratch.mit.edu/users/TheColaber"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",
       "matches": ["https://scratch.mit.edu/users/*/"]
     }
   ],
-  "tags": ["community", "profiles", "beta"],
-  "enabledByDefault": false,
-  "l10n": true
+  "versionAdded": "1.4.0",
+  "tags": ["community", "profiles", "featured"],
+  "enabledByDefault": false
 }

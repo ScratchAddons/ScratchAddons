@@ -6,9 +6,6 @@ export default async function ({ addon, global, console }) {
     var vm = addon.tab.traps.vm;
 
     const { GRID_UNIT } = BlockSvg;
-    var multiplier;
-    var cornerSize;
-    var notchSize;
 
     function updateAllBlocks() {
       const workspace = Blockly.getMainWorkspace();
@@ -26,10 +23,14 @@ export default async function ({ addon, global, console }) {
       }
     }
 
-    function applyChanges() {
-      multiplier = addon.settings.get("paddingSize") / 100;
-      cornerSize = addon.settings.get("cornerSize") / 100;
-      notchSize = addon.settings.get("notchSize") / 100;
+    function applyChanges(
+      paddingSize = addon.settings.get("paddingSize"),
+      cornerSize = addon.settings.get("cornerSize"),
+      notchSize = addon.settings.get("notchSize")
+    ) {
+      let multiplier = paddingSize / 100;
+      cornerSize = cornerSize / 100;
+      notchSize = notchSize / 100;
       BlockSvg.SEP_SPACE_Y = 2 * GRID_UNIT * multiplier;
       BlockSvg.MIN_BLOCK_X = 16 * GRID_UNIT * multiplier;
       BlockSvg.MIN_BLOCK_X_OUTPUT = 12 * GRID_UNIT * multiplier;
@@ -158,7 +159,7 @@ export default async function ({ addon, global, console }) {
       BlockSvg.INPUT_SHAPE_ROUND_WIDTH = 12 * GRID_UNIT * multiplier;
       BlockSvg.INPUT_SHAPE_HEIGHT = 8 * GRID_UNIT * multiplier;
       BlockSvg.FIELD_HEIGHT = 8 * GRID_UNIT * multiplier; // NOTE: Determines string input heights
-      BlockSvg.FIELD_WIDTH = 0 * GRID_UNIT * multiplier;
+      BlockSvg.FIELD_WIDTH = 6 * GRID_UNIT * Math.min(multiplier, 1) + 10 * GRID_UNIT * Math.max(multiplier - 1, 0);
       BlockSvg.FIELD_DEFAULT_CORNER_RADIUS = 4 * GRID_UNIT * multiplier;
       BlockSvg.EDITABLE_FIELD_PADDING = 1.5 * GRID_UNIT * multiplier;
       BlockSvg.BOX_FIELD_PADDING = 2 * GRID_UNIT * multiplier;
@@ -176,8 +177,8 @@ export default async function ({ addon, global, console }) {
         return originalDropdownObject.call(this, x);
       };
 
-      //Corner setting
-      BlockSvg.CORNER_RADIUS = (1 * GRID_UNIT * addon.settings.get("cornerSize")) / 100;
+      // Corner setting
+      BlockSvg.CORNER_RADIUS = (1 * GRID_UNIT * cornerSize * 100) / 100;
 
       BlockSvg.TOP_LEFT_CORNER_START = "m 0," + BlockSvg.CORNER_RADIUS;
 
@@ -249,14 +250,19 @@ export default async function ({ addon, global, console }) {
       BlockSvg.STATEMENT_INPUT_INNER_SPACE = 2.8 * GRID_UNIT - 0.9 * GRID_UNIT * cornerSize;
     }
 
-    function applyAndUpdate() {
-      applyChanges();
+    function applyAndUpdate(...args) {
+      applyChanges(...args);
       updateAllBlocks();
     }
 
-    addon.settings.addEventListener("change", function () {
-      applyAndUpdate();
+    addon.settings.addEventListener("change", () => applyAndUpdate());
+
+    addon.self.addEventListener("disabled", () => {
+      // Scratch 3.0 blocks
+      applyAndUpdate(100, 100, 100);
     });
+
+    addon.self.addEventListener("reenabled", () => applyAndUpdate());
 
     applyAndUpdate();
   })(window.Blockly);

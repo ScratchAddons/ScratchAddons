@@ -9,11 +9,13 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/*"],
+      "matches": ["projects", "studios", "profiles", "forums"],
       "runAtComplete": false
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": false,
+  "versionAdded": "1.0.0",
   "tags": ["community", "forums"],
-  "enabledByDefault": false,
-  "l10n": true
+  "enabledByDefault": false
 }

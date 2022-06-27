@@ -1,0 +1,36 @@
+{
+  "name": "Hide signatures on forums",
+  "description": "Hides signatures in forum posts and adds a \"Show signature\" button.",
+  "credits": [
+    {
+      "name": "Verixion",
+      "link": "https://scratch.mit.edu/users/Verixion/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["topics"],
+      "runAtComplete": true
+    }
+  ],
+  "settings": [
+    {
+      "name": "Hide signatures by default",
+      "type": "boolean",
+      "default": true,
+      "id": "hide"
+    },
+    {
+      "name": "Show toggle button",
+      "type": "boolean",
+      "default": true,
+      "id": "toggle"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.24.0",
+  "enabledByDefault": false,
+  "tags": ["community", "forums"]
+}

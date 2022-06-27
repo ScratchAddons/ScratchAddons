@@ -1,6 +1,6 @@
 {
-  "name": "Linebreaks in comments",
-  "description": "Shows the linebreaks (pressing enter) in comments.",
+  "name": "Line breaks in comments",
+  "description": "Makes line breaks (pressing Enter) in comments on the website visible instead of converting them to spaces.",
   "credits": [
     {
       "name": "TheColaber",
@@ -10,14 +10,17 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "https://scratch.mit.edu/users/*/",
-        "https://scratch.mit.edu/projects/*",
-        "https://scratch.mit.edu/studios/*/comments"
-      ],
+      "matches": ["profiles"],
       "runAtComplete": false
     }
   ],
-  "tags": ["community", "comments"],
-  "l10n": true
+  "userstyles": [
+    {
+      "url": "break-spaces.css",
+      "matches": ["studios", "projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "versionAdded": "1.8.0",
+  "tags": ["community", "comments"]
 }

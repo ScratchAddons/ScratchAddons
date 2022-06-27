@@ -1,14 +1,14 @@
 blank_issues_enabled: false
 contact_links:
-  - name: 💬 Discussion
-    url: https://github.com/ScratchAddons/ScratchAddons/discussions/new?category_id=16783727
-    about: Needs discussion (moved to Discussions)
-  - name: ❓ Help/questions
-    url: https://github.com/ScratchAddons/ScratchAddons/discussions/new?category_id=16783729
-    about: Ask a question (moved to Discussions)
+  - name: 💬 GitHub Discussions
+    url: https://github.com/ScratchAddons/ScratchAddons/discussions
+    about: Ask a question, or just discuss about Scratch Addons on our GitHub Discussions (our own forums)
   - name: 📝 Send feedback
     url: https://scratchaddons.com/feedback
     about: Send a general feedback on our website
-  - name: 💬 GitHub Discussions
-    url: https://github.com/ScratchAddons/ScratchAddons/discussions
-    about: Discuss about Scratch Addons on our GitHub Discussions (our own forums)
+  - name: 🏠 Community Discord
+    url: https://discord.gg/R5NBqwMjNc
+    about: Discuss about Scratch Addons on our community Discord server (recommended)
+  - name: 🔧 Development Discord
+    url: https://discord.gg/Ak8sCDQ
+    about: Discuss about Scratch Addons on our development Discord server

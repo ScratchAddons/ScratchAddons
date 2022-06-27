@@ -12,10 +12,11 @@
   "popup": {
     "icon": "../../images/icons/envelope.svg",
     "name": "Messaging",
-    "fullscreen": true
+    "fullscreen": true,
+    "script": "popup.js",
+    "html": "popup.html"
   },
-  "persistentScripts": ["background.js"],
+  "versionAdded": "1.0.0",
   "tags": ["popup", "recommended"],
-  "enabledByDefault": true,
-  "l10n": true
+  "enabledByDefault": true
 }

@@ -1,38 +1,44 @@
 .search-box {
-  min-height: 60px;
-  background: var(--accent-1);
+  background: var(--search-toolbar-background);
+  border-bottom: 1px solid var(--control-border);
   display: flex;
   align-items: center;
-  padding: 10px 30px;
+  padding: 20px 30px;
   user-select: none;
 }
 
 .search-box input {
-  background: #111;
-  padding: 10px 15px;
+  background: var(--search-input-background);
+  padding: 8px 12px;
   border: none;
   border-radius: 4px 0 0 4px;
-  color: var(--accent-5);
+  color: var(--content-text);
   width: 150px;
   height: 16px;
+}
+[dir="rtl"] .search-box input {
+  border-radius: 0 4px 4px 0;
 }
 .search-box input:focus {
   outline: none;
 }
 .search-box input::placeholder {
-  color: #777;
+  color: var(--placeholder-text);
 }
 
 .search-box > button {
-  background-color: #111;
+  background-color: var(--search-input-background);
   background-repeat: no-repeat;
   background-position: center;
-  height: 36px;
-  width: 45px;
+  height: 32px;
+  width: 44px;
   border: none;
   border-radius: 0 4px 4px 0;
   outline: none;
   cursor: pointer;
+}
+[dir="rtl"] .search-box > button {
+  border-radius: 4px 0 0 4px;
 }
 
 .search-button {
@@ -41,44 +47,4 @@
 
 .search-clear-button {
   background-image: url(/images/icons/x.svg);
-}
-
-.search-box .badge {
-  cursor: default;
-  border-bottom: none;
-}
-.search-box .badge .selected-badge {
-  cursor: default;
-  border-bottom: none;
-}
-
-.switch {
-  display: block;
-  background: #111;
-  width: 40px;
-  height: 20px;
-  border-radius: 10px;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-.switch::before {
-  content: "";
-  position: absolute;
-  display: block;
-  width: 10px;
-  height: 10px;
-  background: var(--accent-4);
-  border-radius: 5px;
-  top: 5px;
-  left: 5px;
-  transition: all 0.25s ease;
-}
-
-.switch[state="on"] {
-  background: var(--brand-orange);
-}
-.switch[state="on"]::before {
-  background: #fff;
-  left: 25px;
 }

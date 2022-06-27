@@ -3,8 +3,7 @@ This folder is for addons. For messages used by non-addons (such as options), ch
 ## Obtaining translations
 `LocalizationProvider`'s subclasses are used to obtain translations.
 - `UserscriptLocalizationProvider` fetches translations using URL provided from background in `loadByAddonId`. This can be accessed via `scratchAddons.l10n` or `msg`/`safeMsg` passed to userscript functions. This is for userscripts, which get executed inside Scratch website origin.
-- `BackgroundLocalizationProvider` fetches translations using the UI locale in `load`. This can be accessed via `scratchAddons.l10n` or `msg` passed to background script functions. This is for background scripts, such as notifications.
-- `WebsiteLocalizationProvider` fetches translations using IPC (between BackgroundLocalizationProvider). Instances may be created on all pages, and `loadMessages` is used to load messages. This can be used from content scripts, option screens and popups.
+- `WebsiteLocalizationProvider` fetches translations using IPC. Instances may be created on all pages, and `loadMessages` is used to load messages. Popups will automatically load messages for its addon and receive `msg`/`safeMsg` function similar to userscripts. This can be used from content scripts, option screens and popups.
 
 ## File name
 Files are placed under `addons-l10n/LOCALECODE` folder, where the locale code is lowercased IETF language tag used by Scratch (e.g. en, zh-tw). Note that 2-letter code will be used if ones with regions are unavailable; e.g. if ja-JP is unavailable, it uses ja. English (en) is used as a fallback, so if ja is unavailable, en is loaded.
@@ -30,15 +29,7 @@ See the [ICU messaging format](https://unicode-org.github.io/icu/userguide/forma
 The second argument of the functions accepts an object which will have the placeholder name (case-sensitive) as the key and the value. For example, you can call `msg("press-key", {keyCode: "space"})` or `msg("apple", {count: 100})`.
 
 ## Manifest (addon.json)
-### l10n key
-`l10n` key on `addon.json` determines whether:
-- the translation is ready to be translated on translation services (currently Transifex)
-- `addon.json` keys are localized
-
-If `l10n` is not set (or is false), the addon's messages cannot be translated on translation services, and `addon.json` keys will not be localized. However, this **does not** mean `addons-l10n` is not loaded at all; Userscripts can still load translations if `l10n` is not specified, although that usually only loads English messages because other languages would be unavailable at that point.
-
-### Localized keys
-If `l10n: true` is set, these keys are overridden by the translated ones, if it exists. Here are the keys on addon.json and the message file:
+These keys are overridden by the translated ones, if it exists. Here are the keys on addon.json and the message file:
 - `name` - `addon-id/@name`
 - `description` - `addon-id/@description`
 
@@ -55,7 +46,13 @@ Setting default values can be translated if the `type` is `string`:
 Setting potential values can be translated:
 - `potentialValue.name` - `addon-id/@setting-select-SETTINGID-POTENTIALVALUEID`
 
-Note that in most cases you **only have to set `l10n: true`**, as English messages are fetched from the addon.json, not `addons-l10n/en`.
+Popup names can be translated:
+- `popup.name` - `addon-id/@popup-name`
+
+Latest update temporary notices can be translated:
+- `latestUpdate.temporaryNotice` - `addon-id/@update`
+
+Note that in most cases you **do not have to do anything**, as English messages are fetched from the addon.json, not `addons-l10n/en`.
 
 ## Example
 

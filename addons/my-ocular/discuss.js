@@ -1,20 +1,24 @@
 export default async function ({ addon, global, console, msg }) {
   let posts = document.querySelectorAll(".blockpost");
+  let cache = Object.create(null);
 
   posts.forEach(async (i) => {
     let username = i.querySelector(".username").innerText;
 
     let left = i.querySelector(".postleft").children[0];
 
-    const { userStatus, color } = await fetchStatus(username);
+    const { userStatus, color } = await (cache[username] || (cache[username] = fetchStatus(username)));
 
     if (userStatus) {
       let br = document.createElement("br");
+      addon.tab.displayNoneWhileDisabled(br);
       let status = document.createElement("i");
+      addon.tab.displayNoneWhileDisabled(status);
       status.title = msg("status-hover");
       status.innerText = userStatus;
 
       let dot = document.createElement("span");
+      addon.tab.displayNoneWhileDisabled(dot, { display: "inline-block" });
       dot.title = msg("status-hover");
       dot.className = "my-ocular-dot";
 

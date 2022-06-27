@@ -1,1 +1,1 @@
-{"clones/clones":"ikizler: {cloneCount}","clones/@name":"İkiz sayacı","clones/@description":"Düzenleyiciye toplam klon miktarını gösteren bir sayaç ekler."}
+{"clones/clones":"ikiz sayısı: {cloneCount}","clones/@name":"İkiz sayacı","clones/@description":"Düzenleyicide sahnedeki toplam ikiz sayısını gösteren bir sayaç ekler."}

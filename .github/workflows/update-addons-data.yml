@@ -24,7 +24,7 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: Addons Data Update
-          repo: ScratchAddons/website
+          repo: ScratchAddons/website-v2
           token: ${{ steps.generate-token.outputs.token }}
           ref: refs/heads/master
-          inputs: '{ "ref": "${{ github.event.tag_name }}" }'
+          inputs: '{ "ref": "${{ github.event.release.tag_name }}" }'

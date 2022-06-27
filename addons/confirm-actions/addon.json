@@ -1,6 +1,6 @@
 {
-  "name": "Confirm actions",
-  "description": "Asks if you're sure when committing actions under your Scratch account, such as sharing projects. ",
+  "name": "Confirmations",
+  "description": "Asks if you're sure when committing actions under your Scratch account, such as sharing projects.",
   "credits": [
     {
       "name": "TheColaber",
@@ -9,6 +9,7 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "versionAdded": "1.4.0",
   "userscripts": [
     {
       "url": "userscript.js",
@@ -24,6 +25,12 @@
       "default": true
     },
     {
+      "name": "Confirm project unsharing",
+      "id": "projectunsharing",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "Confirm following/unfollowing users",
       "id": "followinguser",
       "type": "boolean",
@@ -34,9 +41,14 @@
       "id": "joiningstudio",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Confirm closing forum topics",
+      "id": "closingtopic",
+      "type": "boolean",
+      "default": false
     }
   ],
-  "tags": ["community", "recommended", "studios"],
-  "enabledByDefault": false,
-  "l10n": true
+  "tags": ["community", "recommended"],
+  "enabledByDefault": false
 }

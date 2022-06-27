@@ -67,6 +67,10 @@ export default async ({ addon, console, msg }) => {
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
     });
     rateLimiter.abort(false);
+    if (!("colorIndex" in addon.tab.redux.state.scratchPaint.fillMode)) {
+      console.error("Detected new paint editor; this will be supported in future versions.");
+      return;
+    }
 
     // update the bg color of the picker
     function updateColor() {
@@ -237,14 +241,13 @@ export default async ({ addon, console, msg }) => {
     addon.tab.redux.addEventListener("statechanged", prevEventHandler);
     saColorPicker.appendChild(saColorPickerImage);
     saColorPicker.appendChild(saColorPickerHandle);
-    let e = element;
-    if (element.parentElement.querySelector(".sa-color-picker"))
-      e = element.parentElement.querySelector(".sa-color-picker");
-    element.parentElement.insertBefore(saColorLabel, e);
-    element.parentElement.insertBefore(saColorPicker, e);
 
-    //hide sat and bright sliders
-    saColorPicker.parentElement.children[2].style.display = "none";
-    saColorPicker.parentElement.children[3].style.display = "none";
+    const [colorSlider, saturationSlider, brightnessSlider] = [
+      ...element.parentElement.querySelectorAll('[class^="color-picker_row-header"]'),
+    ].map((i) => i.parentElement);
+    saturationSlider.style.display = "none";
+    brightnessSlider.style.display = "none";
+    colorSlider.insertAdjacentElement("afterend", saColorPicker);
+    colorSlider.insertAdjacentElement("afterend", saColorLabel);
   }
 };

@@ -1,26 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="preload" href="light.css" as="style" />
+    <link rel="preload" href="../../webpages/styles/colors-light.css" as="style" />
     <link rel="preload" href="popup.css" as="style" />
     <meta charset="UTF-8" />
     <title></title>
     <style>
+      @import url("../../webpages/styles/colors.css");
       @import url("../../webpages/styles/components/popup.css");
     </style>
-    <script src="../../webpages/set-lang.js" defer></script>
     <link rel="stylesheet" href="popup.css" />
     <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
     <script src="../../libraries/thirdparty/vue.js" defer></script>
-    <script src="./popup.js" type="module"></script>
+    <script src="../../webpages/popup-loader.js" type="module"></script>
   </head>
 
-  <body style="display: none" v-show="true">
-    <div class="loading" v-show="projects.length === 0 || projects.length !== projectsChecked">{{ loadingMsg }}</div>
-    <div v-show="loaded">
+  <body>
+    <div
+      v-cloak
+      class="loading"
+      transition="fade"
+      v-show="!error && (projects.length === 0 || projects.length !== projectsChecked)"
+    >
+      {{ messages.loadingMsg }}
+      <div class="loading-progress" :style="{ width: (100 * projectsChecked / projects.length) + '%' }"></div>
+    </div>
+    <div v-cloak class="error" v-show="error">
+      {{ errorMessage }}
+      <span v-if="error !== 'server-error'">{{{ settingsHTML() }}}</span>
+    </div>
+    <div v-cloak v-show="projectsVisible">
       <div class="games" v-for="project of projectsSorted">
         <div class="title">
-          <a class="project-name" :href="'https://scratch.mit.edu/projects/' + project.id" target="_blank"
+          <a class="project-name nolink" :href="'https://scratch.mit.edu/projects/' + project.id" target="_blank"
             >{{ project.title }}</a
           >
           <span class="float-right"
@@ -29,12 +41,22 @@
         </div>
         <div class="project-details" v-show="true || project.amt > 0 && project.extended">
           <div class="username-list">
-            <a v-for="user of project.users" :href="'https://scratch.mit.edu/users/' + user" target="_blank"
+            <a
+              v-for="user of project.users"
+              :href="'https://scratch.mit.edu/users/' + user"
+              target="_blank"
+              class="nolink"
               >{{ user }}</a
             >
           </div>
           <div class="username-list" v-show="project.amt === 0">{{ messages.noUsersMsg }}</div>
         </div>
+      </div>
+    </div>
+    <div v-cloak v-else>
+      <div class="games" v-for="_ of (this.projects.length / 2)">
+        <div class="title"><span class="title-placeholder"></span><br /></div>
+        <div class="project-details"></div>
       </div>
     </div>
   </body>

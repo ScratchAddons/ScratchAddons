@@ -5,150 +5,55 @@
   "credits": [
     {
       "name": "Maximouse",
-      "link": "https://github.com/mxmou/customize-scratch#scratch-30-look-for-old-parts-of-the-website"
+      "link": "https://scratch.mit.edu/users/Maximouse/"
     }
   ],
   "customCssVariables": [
     {
-      "name": "primaryColor-text",
+      "name": "defaultLinkIconFilter",
       "value": {
-        "type": "textColor",
-        "black": "#575e75",
-        "white": "#ffffff",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primaryColor"
-        }
-      }
-    },
-    {
-      "name": "primaryColor-transparentText",
-      "value": {
-        "type": "textColor",
-        "black": "#575e75b0",
-        "white": "#ffffffb0",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primaryColor"
-        }
-      }
-    },
-    {
-      "name": "primaryColor-filter",
-      "value": {
-        "type": "textColor",
-        "black": "brightness(0.4)",
-        "white": "none",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primaryColor"
-        }
+        "type": "recolorFilter",
+        "source": "#4d97ff"
       }
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "injectAsStyleElt": true,
+  "versionAdded": "1.1.0",
+  "updateUserstylesOnSettingsChange": true,
   "userstyles": [
     {
       "url": "scratchr2.css",
-      "matches": [
-        "https://scratch.mit.edu/discuss/*",
-        "https://scratch.mit.edu/mystuff/",
-        "https://scratch.mit.edu/users/*",
-        "https://scratch.mit.edu/classes/*",
-        "https://scratch.mit.edu/studios/*",
-        "https://scratch.mit.edu/projects/*/remixes/",
-        "https://scratch.mit.edu/projects/*/studios/",
-        "https://scratch.mit.edu/projects/*/remixtree/",
-        "https://scratch.mit.edu/accounts/*",
-        "https://scratch.mit.edu/statistics/",
-        "https://scratch.mit.edu/info/quotes/",
-        "https://scratch.mit.edu/info/ext_download/",
-        "https://scratch.mit.edu/cloudmonitor/*",
-        "https://scratch.mit.edu/403/",
-        "https://scratch.mit.edu/404/",
-        "https://scratch.mit.edu/500/",
-        "https://scratch.mit.edu/503/",
-        "https://scratch.mit.edu/login",
-        "https://scratch.mit.edu/login_retry",
-        "https://scratch.mit.edu/news"
-      ]
+      "matches": ["isNotScratchWWW"]
     },
     {
       "url": "scratchr2_errors.css",
-      "matches": [
-        "https://scratch.mit.edu/discuss/*",
-        "https://scratch.mit.edu/mystuff/",
-        "https://scratch.mit.edu/users/*",
-        "https://scratch.mit.edu/classes/*",
-        "https://scratch.mit.edu/studios/*",
-        "https://scratch.mit.edu/projects/*/remixes/",
-        "https://scratch.mit.edu/projects/*/studios/",
-        "https://scratch.mit.edu/projects/*/remixtree/",
-        "https://scratch.mit.edu/accounts/*",
-        "https://scratch.mit.edu/statistics/",
-        "https://scratch.mit.edu/info/quotes/",
-        "https://scratch.mit.edu/info/ext_download/",
-        "https://scratch.mit.edu/cloudmonitor/*",
-        "https://scratch.mit.edu/403/",
-        "https://scratch.mit.edu/404/",
-        "https://scratch.mit.edu/500/",
-        "https://scratch.mit.edu/503/",
-        "https://scratch.mit.edu/news"
-      ]
-    },
-    {
-      "url": "scratchwww.css",
-      "matches": [
-        "https://scratch.mit.edu/",
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor/",
-        "https://scratch.mit.edu/projects/*/fullscreen/",
-        "https://scratch.mit.edu/explore/*",
-        "https://scratch.mit.edu/search/*",
-        "https://scratch.mit.edu/ideas/",
-        "https://scratch.mit.edu/about/",
-        "https://scratch.mit.edu/messages/",
-        "https://scratch.mit.edu/parents/",
-        "https://scratch.mit.edu/educators/",
-        "https://scratch.mit.edu/developers/",
-        "https://scratch.mit.edu/credits/",
-        "https://scratch.mit.edu/community_guidelines/",
-        "https://scratch.mit.edu/info/faq/",
-        "https://scratch.mit.edu/download/",
-        "https://scratch.mit.edu/contact-us/",
-        "https://scratch.mit.edu/terms_of_use/",
-        "https://scratch.mit.edu/privacy_policy/",
-        "https://scratch.mit.edu/DMCA/",
-        "https://scratch.mit.edu/conference/",
-        "https://scratch.mit.edu/scratch_1.4",
-        "https://scratch.mit.edu/sec",
-        "https://scratch.mit.edu/research",
-        "https://scratch.mit.edu/conference/*",
-        "https://scratch.mit.edu/annual-report",
-        "https://scratch.mit.edu/camp",
-        "https://scratch.mit.edu/join",
-        "https://scratch.mit.edu/starter-projects",
-        "https://scratch.mit.edu/classes/complete_registration",
-        "https://scratch.mit.edu/educators/faq",
-        "https://scratch.mit.edu/educators/register",
-        "https://scratch.mit.edu/educators/waiting",
-        "https://scratch.mit.edu/wedo",
-        "https://scratch.mit.edu/wedo-legacy",
-        "https://scratch.mit.edu/ev3",
-        "https://scratch.mit.edu/microbit",
-        "https://scratch.mit.edu/vernier",
-        "https://scratch.mit.edu/boost"
-      ]
+      "matches": ["isNotScratchWWW"]
     },
     {
       "url": "forums.css",
       "matches": ["https://scratch.mit.edu/discuss/*"]
     },
     {
+      "url": "forums_bubbles.css",
+      "matches": ["https://scratch.mit.edu/discuss/*"],
+      "if": {
+        "settings": { "postStyle": "bubble" }
+      }
+    },
+    {
       "url": "forums_topic.css",
       "matches": ["https://scratch.mit.edu/discuss/topic/*/"]
+    },
+    {
+      "url": "forums_subpage.css",
+      "matches": [
+        "https://scratch.mit.edu/discuss/*/topic/add/",
+        "https://scratch.mit.edu/discuss/post/*/edit/",
+        "https://scratch.mit.edu/discuss/misc/",
+        "https://scratch.mit.edu/discuss/settings/*/"
+      ]
     },
     {
       "url": "forums_yt.css",
@@ -159,16 +64,21 @@
       "matches": ["https://scratch.mit.edu/users/*/", "https://scratch.mit.edu/classes/*/"]
     },
     {
-      "url": "studio.css",
-      "matches": ["https://scratch.mit.edu/studios/*"]
-    },
-    {
       "url": "scratchr2_comments.css",
-      "matches": ["https://scratch.mit.edu/users/*/", "https://scratch.mit.edu/studios/*"]
+      "matches": ["https://scratch.mit.edu/users/*/"]
     },
     {
       "url": "remixtree.css",
       "matches": ["https://scratch.mit.edu/projects/*/remixtree/"]
+    },
+    {
+      "url": "v_tabs.css",
+      "matches": [
+        "https://scratch.mit.edu/mystuff/",
+        "https://scratch.mit.edu/accounts/settings/*",
+        "https://scratch.mit.edu/accounts/password_change/",
+        "https://scratch.mit.edu/accounts/email_change/"
+      ]
     },
     {
       "url": "mystuff.css",
@@ -177,117 +87,41 @@
     {
       "url": "settings.css",
       "matches": [
-        "https://scratch.mit.edu/accounts/settings/",
+        "https://scratch.mit.edu/accounts/settings/*",
         "https://scratch.mit.edu/accounts/password_change/",
         "https://scratch.mit.edu/accounts/email_change/"
       ]
     },
     {
-      "url": "quotes.css",
-      "matches": ["https://scratch.mit.edu/info/quotes/"]
-    },
-    {
-      "url": "experimental_dark_compatibility.css",
-      "matches": ["https://scratch.mit.edu/*"]
-    },
-    {
-      "url": "lightprimary_compatibility.css",
+      "url": "view_all.css",
       "matches": [
-        "https://scratch.mit.edu/discuss/*",
-        "https://scratch.mit.edu/mystuff/",
-        "https://scratch.mit.edu/users/*",
-        "https://scratch.mit.edu/classes/*",
-        "https://scratch.mit.edu/studios/*",
         "https://scratch.mit.edu/projects/*/remixes/",
         "https://scratch.mit.edu/projects/*/studios/",
-        "https://scratch.mit.edu/projects/*/remixtree/",
-        "https://scratch.mit.edu/accounts/*",
-        "https://scratch.mit.edu/statistics/",
-        "https://scratch.mit.edu/info/quotes/",
-        "https://scratch.mit.edu/info/ext_download/",
-        "https://scratch.mit.edu/cloudmonitor/*",
-        "https://scratch.mit.edu/403/",
-        "https://scratch.mit.edu/404/",
-        "https://scratch.mit.edu/500/",
-        "https://scratch.mit.edu/503/",
-        "https://scratch.mit.edu/login",
-        "https://scratch.mit.edu/login_retry",
-        "https://scratch.mit.edu/news"
-      ]
-    },
-    {
-      "url": "lightprimary_scratchwww_compatibility.css",
-      "matches": [
-        "https://scratch.mit.edu/",
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor/",
-        "https://scratch.mit.edu/projects/*/fullscreen/",
-        "https://scratch.mit.edu/explore/*",
-        "https://scratch.mit.edu/search/*",
-        "https://scratch.mit.edu/ideas/",
-        "https://scratch.mit.edu/about/",
-        "https://scratch.mit.edu/messages/",
-        "https://scratch.mit.edu/parents/",
-        "https://scratch.mit.edu/educators/",
-        "https://scratch.mit.edu/developers/",
-        "https://scratch.mit.edu/credits/",
-        "https://scratch.mit.edu/community_guidelines/",
-        "https://scratch.mit.edu/info/faq/",
-        "https://scratch.mit.edu/download/",
-        "https://scratch.mit.edu/contact-us/",
-        "https://scratch.mit.edu/terms_of_use/",
-        "https://scratch.mit.edu/privacy_policy/",
-        "https://scratch.mit.edu/DMCA/",
-        "https://scratch.mit.edu/conference/",
-        "https://scratch.mit.edu/scratch_1.4",
-        "https://scratch.mit.edu/sec",
-        "https://scratch.mit.edu/research",
-        "https://scratch.mit.edu/conference/*",
-        "https://scratch.mit.edu/annual-report",
-        "https://scratch.mit.edu/camp",
-        "https://scratch.mit.edu/join",
-        "https://scratch.mit.edu/starter-projects",
-        "https://scratch.mit.edu/classes/complete_registration",
-        "https://scratch.mit.edu/educators/faq",
-        "https://scratch.mit.edu/educators/register",
-        "https://scratch.mit.edu/educators/waiting",
-        "https://scratch.mit.edu/wedo",
-        "https://scratch.mit.edu/wedo-legacy",
-        "https://scratch.mit.edu/ev3",
-        "https://scratch.mit.edu/microbit",
-        "https://scratch.mit.edu/vernier",
-        "https://scratch.mit.edu/boost"
-      ]
-    },
-    {
-      "url": "lightprimary_mystuff_compatibility.css",
-      "matches": [
-        "https://scratch.mit.edu/mystuff/",
-        "https://scratch.mit.edu/accounts/settings/",
-        "https://scratch.mit.edu/accounts/password_change/",
-        "https://scratch.mit.edu/accounts/email_change/"
+        "https://scratch.mit.edu/users/*/projects/",
+        "https://scratch.mit.edu/users/*/favorites/",
+        "https://scratch.mit.edu/users/*/studios_following/",
+        "https://scratch.mit.edu/users/*/studios/",
+        "https://scratch.mit.edu/users/*/following/",
+        "https://scratch.mit.edu/users/*/followers/"
       ]
     }
   ],
   "settings": [
     {
-      "id": "primaryColor",
-      "name": "Primary color",
-      "type": "color",
-      "default": "#4d97ff"
-    },
-    {
-      "id": "linkColor",
-      "name": "Link color",
-      "type": "color",
-      "default": "#4d97ff"
-    },
-    {
-      "id": "activeColor",
-      "name": "Link hover color",
-      "type": "color",
-      "default": "#4280d7"
+      "name": "Forum post style",
+      "id": "postStyle",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "box",
+          "name": "Box"
+        },
+        {
+          "id": "bubble",
+          "name": "Bubble"
+        }
+      ],
+      "default": "box"
     }
-  ],
-  "l10n": true
+  ]
 }

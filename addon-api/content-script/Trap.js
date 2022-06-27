@@ -8,10 +8,9 @@ export default class Trap extends Listenable {
   constructor(tab) {
     super();
     this._react_internal_key = undefined;
-    this._isWWW = tab.clientVersion === "scratch-www";
-    this._getEditorMode = () => this._isWWW && tab.editorMode;
-    this._waitForElement = (q) => tab.waitForElement(q, { markAsSeen: true });
-
+    this._isWWW = () => tab.clientVersion === "scratch-www";
+    this._getEditorMode = () => this._isWWW() && tab.editorMode;
+    this._waitForElement = tab.waitForElement.bind(tab);
     this._cache = Object.create(null);
   }
 
@@ -42,11 +41,14 @@ export default class Trap extends Listenable {
   async getBlockly() {
     if (this._cache.Blockly) return this._cache.Blockly;
     const editorMode = this._getEditorMode();
-    if (!editorMode || editorMode === "embed") throw new Error("Cannot access Blockly on this page");
+    if (!editorMode || editorMode === "embed")
+      throw new Error(`Cannot access Blockly on ${editorMode} page (${location.pathname})`);
     const BLOCKS_CLASS = '[class^="gui_blocks-wrapper"]';
     let elem = document.querySelector(BLOCKS_CLASS);
     if (!elem) {
-      elem = await this._waitForElement(BLOCKS_CLASS);
+      elem = await this._waitForElement(BLOCKS_CLASS, {
+        reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+      });
     }
     if (!this._react_internal_key) {
       this._react_internal_key = Object.keys(elem).find((key) => key.startsWith(this.REACT_INTERNAL_PREFIX));
@@ -57,5 +59,57 @@ export default class Trap extends Listenable {
     while (((childable = childable.child), !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks)) {}
     /* eslint-enable no-empty */
     return (this._cache.Blockly = childable.stateNode.ScratchBlocks);
+  }
+
+  /**
+   * Gets react internal key.
+   * @param {HTMLElement} elem - the reference
+   * @returns {string} the key
+   */
+  getInternalKey(elem) {
+    if (!this._react_internal_key) {
+      this._react_internal_key = Object.keys(elem).find((key) => key.startsWith(this.REACT_INTERNAL_PREFIX));
+    }
+    return this._react_internal_key;
+  }
+
+  /**
+   * Gets @scratch/paper instance.
+   * @async
+   * @throws when on non-project page or if paper couldn't be found.
+   * @returns {Promise<object>}
+   */
+  async getPaper() {
+    if (this._cache.paper) return this._cache.paper;
+    const editorMode = this._getEditorMode();
+    if (!editorMode || editorMode === "embed") throw new Error("Cannot access paper on this page");
+    // We can access paper through .tool on tools, for example:
+    // https://github.com/LLK/scratch-paint/blob/develop/src/containers/bit-brush-mode.jsx#L60-L62
+    // It happens that paper's Tool objects contain a reference to the entirety of paper's scope.
+    const modeSelector = await this._waitForElement("[class*='paint-editor_mode-selector']", {
+      reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
+    });
+    const internalState = modeSelector[this.getInternalKey(modeSelector)].child;
+    // .tool or .blob.tool only exists on the selected tool
+    let toolState = internalState;
+    let tool;
+    while (toolState) {
+      const toolInstance = toolState.child.stateNode;
+      if (toolInstance.tool) {
+        tool = toolInstance.tool;
+        break;
+      }
+      if (toolInstance.blob && toolInstance.blob.tool) {
+        tool = toolInstance.blob.tool;
+        break;
+      }
+      toolState = toolState.sibling;
+    }
+    if (tool) {
+      const paperScope = tool._scope;
+      this._cache.paper = paperScope;
+      return paperScope;
+    }
+    throw new Error("cannot find paper :(");
   }
 }

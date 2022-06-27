@@ -1,0 +1,384 @@
+<template>
+  <div class="addon-body" v-show="shouldShow" :id="'addon-' + addon._addonId">
+    <div class="addon-topbar">
+      <div class="clickable-area" @click="expanded = !expanded">
+        <div class="btn-dropdown">
+          <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': expanded}" />
+        </div>
+        <div class="addon-name">
+          <img :src="addonIconSrc" class="icon-type" />
+          <span @click="devShowAddonIds">{{ addon._displayedAddonId || addon.name }}</span>
+        </div>
+        <addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
+      </div>
+      <div class="addon-description" v-show="!expanded" dir="auto">{{ addon.description }}</div>
+      <div class="addon-check">
+        <div
+          v-show="expanded && addon._enabled"
+          v-if="addon.settings"
+          class="addon-buttons"
+          title="{{ msg('resetToDefault') }}"
+          @click="loadDefaults"
+        >
+          <img src="../../images/icons/undo.svg" class="icon-type" />
+        </div>
+        <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest"></div>
+      </div>
+    </div>
+    <div class="addon-settings" v-if="everExpanded" v-show="expanded">
+      <div class="addon-description-full">{{ addon.description }}</div>
+      <div class="addon-update" v-if="showUpdateNotice">
+        <addon-tag tag="new"></addon-tag>
+        {{ addon.latestUpdate.temporaryNotice }}
+      </div>
+      <div id="info" v-for="info of addon.info">
+        <div class="addon-warn" v-if="info.type == 'warning'">
+          <img src="../../images/icons/warning.svg" />{{ info.text }}
+        </div>
+        <div class="addon-notice" v-if="info.type == 'notice'">
+          <img src="../../images/icons/notice.svg" />{{ info.text }}
+        </div>
+      </div>
+      <div class="addon-credits" v-if="addon.credits">
+        <span>{{ msg("creditTo") }}</span>
+        <span v-for="credit of addon.credits">
+          <span v-if="credit.link">
+            <a href="{{ credit.link }}" rel="noreferrer noopener" target="_blank">{{ credit.name }}</a>
+          </span>
+          <span v-else="credit.link">{{ credit.name }}</span>
+          <span v-if="credit.note">({{ credit.note }})</span>
+        </span>
+      </div>
+      <div class="addon-license" v-if="addon.libraries && addon.libraries.length">
+        <a target="_blank" href="./licenses.html?libraries={{ addon.libraries.join(',') }}"
+          >{{ msg("viewLicenses") }}</a
+        >
+      </div>
+      <div
+        class="preview-column"
+        v-if="addon.addonPreview && !isIframe"
+        v-bind:class="[!addon._enabled ? 'disabled' : '']"
+      >
+        <div class="setting-label">{{ msg("preview") }}</div>
+        <component
+          :is="'preview-' + addon.addonPreview.type"
+          :options="addon.addonPreview"
+          :settings="addonSettings"
+          :hovered-setting-id="hoveredSettingId"
+          @areahover="highlightSetting"
+        />
+      </div>
+      <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
+        <addon-setting
+          v-for="setting of addon.settings"
+          :class="{'setting-highlighted': highlightedSettingId === setting.id}"
+          :addon="addon"
+          :setting="setting"
+          :addon-settings="addonSettings"
+          @mouseenter="hoveredSettingId = setting.id"
+          @mouseleave="hoveredSettingId = null"
+        ></addon-setting>
+      </div>
+      <div class="presets-column" v-if="addon.presets" v-bind:class="[!addon._enabled ? 'disabled' : '']">
+        <div class="setting-label">{{ msg("presets") }}</div>
+        <div class="addon-setting" v-for="preset of addon.presets">
+          <button
+            type="preset-button"
+            class="large-button"
+            :disabled="!addon._enabled"
+            @click="loadPreset(preset)"
+            :title="preset.description"
+          >
+            <span class="preset-preview">
+              <component
+                v-if="addon.presetPreview"
+                :is="'preview-' + addon.presetPreview.type"
+                :options="addon.presetPreview"
+                :setting-data="addon.settings"
+                :settings="preset.values"
+              />
+            </span>
+            <span>{{preset.name}}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style>
+  .addon-description {
+    margin-inline: 15px;
+    color: var(--gray-text);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 0; /* don't include the description
+                 when calculating addon-body size */
+    flex-grow: 1;
+  }
+
+  .addon-description-full,
+  .addon-credits {
+    width: 100%;
+    white-space: normal;
+    color: var(--description-text);
+  }
+
+  .addon-credits,
+  .addon-license {
+    margin-top: 4px;
+    font-size: 0.9em;
+  }
+  .addon-credits a,
+  .addon-license a {
+    color: var(--blue-text);
+  }
+
+  .addon-credits > span {
+    margin-inline-end: 0.5rem;
+  }
+
+  .addon-credits > span:not(:first-child):not(:last-child)::after {
+    content: ",";
+  }
+  .addon-name {
+    margin-inline-start: 10px;
+    font-weight: 400;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  .addon-name > span:empty {
+    display: inline-block;
+    width: 150px;
+    height: 8px;
+    background-color: var(--gray-text);
+    border-radius: 3px;
+  }
+  .addon-topbar {
+    height: 52px;
+    padding-inline-end: 10px;
+    display: flex;
+    align-items: center;
+  }
+  .clickable-area {
+    padding-inline-start: 10px;
+  }
+  .addon-body {
+    margin: 10px;
+    background: var(--content-background);
+    border: 1px solid var(--content-border);
+    border-radius: 4px;
+    box-shadow: var(--content-shadow);
+  }
+  .addon-body:target {
+    animation: addonBlink 2s 1;
+  }
+
+  .addon-buttons {
+    display: flex;
+    align-items: center;
+    padding-block: 8px;
+    padding-inline-start: 8px;
+    padding-inline-end: 0;
+    border-radius: 4px;
+    margin-inline-end: 8px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: 0.2s ease;
+  }
+  .addon-buttons:hover:not([disabled]),
+  .addon-split-button.open .addon-split-button-dropdown,
+  .addon-split-button.open:hover .addon-split-button-dropdown:not(:hover) {
+    background: var(--hover-highlight);
+  }
+  .addon-split-button:hover:not([disabled]) .addon-split-button-button:not(:hover),
+  .addon-split-button:hover:not([disabled]) .addon-split-button-dropdown:not(:hover),
+  .addon-split-button.open .addon-split-button-button {
+    background: var(--hover-highlight-reduced);
+  }
+  [disabled] {
+    cursor: initial !important;
+  }
+  .addon-split-button-button {
+    margin: 0;
+    border-radius: 4px 0 0 4px;
+  }
+  [dir="rtl"] .addon-split-button-button {
+    border-radius: 0 4px 4px 0;
+  }
+  .addon-split-button-dropdown {
+    margin: 0;
+    border-radius: 0 4px 4px 0;
+  }
+  [dir="rtl"] .addon-split-button-dropdown {
+    border-radius: 4px 0 0 4px;
+  }
+  .addon-split-button.open .addon-split-button-button,
+  .addon-split-button.open .addon-split-button-dropdown {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .btn-dropdown {
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    border-radius: 4px;
+    transition: 0.2s ease;
+  }
+  .clickable-area:hover .btn-dropdown {
+    background: var(--hover-highlight);
+  }
+
+  .btn-dropdown img {
+    height: 24px;
+    width: 24px;
+    filter: var(--content-icon-filter);
+  }
+
+  .clickable-area {
+    cursor: pointer;
+    display: flex;
+    align-self: stretch;
+    align-items: center;
+  }
+  .clickable-area .tooltip {
+    cursor: pointer;
+  }
+  .iframe .clickable-area {
+    flex-grow: 1;
+  }
+  .addon-notice,
+  .addon-warn,
+  .addon-update {
+    padding: 8px;
+    border: 2px solid;
+    border-radius: 5px;
+    font-weight: 600;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+  }
+  .addon-notice {
+    border-color: var(--notice-border);
+    background-color: var(--notice-background);
+    color: var(--notice-text);
+  }
+  .addon-warn {
+    border-color: var(--warning-border);
+    background-color: var(--warning-background);
+    color: var(--warning-text);
+  }
+  .addon-update {
+    border-color: var(--update-border);
+    background-color: var(--update-background);
+    color: var(--update-text);
+  }
+  .addon-update .badge {
+    margin: -3px;
+    margin-inline-end: 10px;
+  }
+  .addon-notice img,
+  .addon-warn img {
+    height: 15px;
+    width: 15px;
+    margin-inline-end: 10px;
+  }
+  .addon-notice img {
+    filter: var(--notice-icon-filter);
+  }
+  .addon-warn img {
+    filter: var(--warning-icon-filter);
+  }
+  .addon-settings {
+    padding-top: 5px;
+    padding-inline: 20px;
+  }
+  .addon-setting::after {
+    content: "";
+    position: absolute;
+    top: -7px;
+    bottom: -7px;
+    left: -7px;
+    right: -7px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    pointer-events: none;
+    transition: 0.2s ease;
+  }
+  .setting-highlighted::after {
+    border-color: var(--brand-orange);
+  }
+
+  .presets-column,
+  .settings-column {
+    width: 100%;
+    margin: 10px 0;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .preview-column {
+    margin: 10px 0;
+    padding-left: 10px;
+  }
+  .presets-column {
+    align-items: center;
+  }
+  .presets-column > .setting-label {
+    margin-inline-start: 10px;
+  }
+  .addon-preset {
+    margin-inline-end: 30px;
+  }
+  .preset-preview {
+    display: inline-flex;
+  }
+
+  .addon-check {
+    margin-inline-start: auto;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+  }
+
+  .switch {
+    display: block;
+    background: var(--switch-background);
+    width: 40px;
+    height: 20px;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .switch::before {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 10px;
+    height: 10px;
+    background: var(--switch-inner-background);
+    border-radius: 5px;
+    top: 5px;
+    left: 5px;
+    transition: all 0.25s ease;
+  }
+
+  .switch[state="on"] {
+    background: var(--brand-orange);
+  }
+  .switch[state="on"]::before {
+    background: var(--white-text);
+    left: 25px;
+  }
+
+  [dir="rtl"] .switch::before {
+    left: 25px;
+  }
+  [dir="rtl"] .switch[state="on"]::before {
+    left: 5px;
+  }
+</style>

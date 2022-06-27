@@ -1,3 +1,27 @@
 import * as _textColor from "./text-color.js";
-const { textColor, multiply, brighten } = globalThis.__scratchAddonsTextColor;
-export { textColor, multiply, brighten };
+const {
+  parseHex,
+  convertToHex,
+  convertFromHsv,
+  convertToHsv,
+  brightness,
+  textColor,
+  multiply,
+  brighten,
+  alphaBlend,
+  makeHsv,
+  recolorFilter,
+} = globalThis.__scratchAddonsTextColor;
+export {
+  parseHex,
+  convertToHex,
+  convertFromHsv,
+  convertToHsv,
+  brightness,
+  textColor,
+  multiply,
+  brighten,
+  alphaBlend,
+  makeHsv,
+  recolorFilter,
+};

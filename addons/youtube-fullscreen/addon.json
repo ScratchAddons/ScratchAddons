@@ -4,7 +4,7 @@
   "credits": [
     {
       "name": "Maximouse",
-      "link": "https://github.com/mxmou/customize-scratch#watch-youtube-videos-on-scratch-in-full-screen"
+      "link": "https://scratch.mit.edu/users/Maximouse/"
     }
   ],
   "userscripts": [
@@ -14,8 +14,9 @@
       "runAtComplete": false
     }
   ],
-  "dynamicEnable": true,
+  "versionAdded": "1.0.0",
+  "dynamicDisable": false,
+  "dynamicEnable": false,
   "tags": ["community", "forums"],
-  "enabledByDefault": false,
-  "l10n": true
+  "enabledByDefault": false
 }

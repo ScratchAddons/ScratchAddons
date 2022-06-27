@@ -13,14 +13,16 @@ export default async function ({ addon, global, console, msg }) {
     loadMore.addEventListener("click", async function () {
       dataLoaded += 5;
       if (dataLoaded > fetched.length) {
+        const username = await addon.auth.fetchUsername();
+        const xToken = await addon.auth.fetchXToken();
         await fetch(
           `
-          https://api.scratch.mit.edu/users/${addon.auth.username}/following/users/activity?limit=40&offset=${
+          https://api.scratch.mit.edu/users/${username}/following/users/activity?limit=40&offset=${
             Math.floor(dataLoaded / 40) * 40
           }`,
           {
             headers: {
-              "X-Token": addon.auth.xToken,
+              "X-Token": xToken,
             },
           }
         )
@@ -31,10 +33,18 @@ export default async function ({ addon, global, console, msg }) {
               .forEach((item) => fetched.push(item));
           });
       }
+      updateRedux();
+    });
+    async function updateRedux() {
       displayedFetch = fetched.slice(0, dataLoaded);
       await addon.tab.redux.dispatch({ type: "SET_ROWS", rowType: "activity", rows: displayedFetch });
       document.querySelector(".activity-ul").appendChild(container);
       if (dataLoaded > fetched.length) container.remove();
+    }
+    addon.tab.displayNoneWhileDisabled(loadMore);
+    addon.self.addEventListener("disabled", () => {
+      dataLoaded = 5;
+      updateRedux();
     });
   }
 }

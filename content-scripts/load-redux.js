@@ -24,17 +24,18 @@ fix this warning."
     }
 
     static applyMiddleware(...middlewares) {
-      return (createStore) => (...createStoreArgs) => {
-        const store = createStore(...createStoreArgs);
-        let { dispatch } = store;
-        const api = {
-          getState: store.getState,
-          dispatch: (action) => dispatch(action),
+      return (createStore) =>
+        (...createStoreArgs) => {
+          const store = createStore(...createStoreArgs);
+          let { dispatch } = store;
+          const api = {
+            getState: store.getState,
+            dispatch: (action) => dispatch(action),
+          };
+          const initialized = middlewares.map((middleware) => middleware(api));
+          dispatch = ReDucks.compose(...initialized)(store.dispatch);
+          return Object.assign({}, store, { dispatch });
         };
-        const initialized = middlewares.map((middleware) => middleware(api));
-        dispatch = ReDucks.compose(...initialized)(store.dispatch);
-        return Object.assign({}, store, { dispatch });
-      };
     }
   }
 
@@ -65,6 +66,8 @@ fix this warning."
   };
 }
 
-const injectReduxScript = document.createElement("script");
-injectReduxScript.append(document.createTextNode("(" + injectRedux + ")()"));
-(document.head || document.documentElement).appendChild(injectReduxScript);
+if (!(document.documentElement instanceof SVGElement)) {
+  const injectReduxScript = document.createElement("script");
+  injectReduxScript.append(document.createTextNode("(" + injectRedux + ")()"));
+  (document.head || document.documentElement).appendChild(injectReduxScript);
+}

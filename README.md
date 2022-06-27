@@ -14,7 +14,7 @@
 [![](https://img.shields.io/github/v/release/ScratchAddons/ScratchAddons?style=flat-square&logo=github&logoColor=white&label=version&color=181717)](https://github.com/ScratchAddons/ScratchAddons/releases)
 [![](https://img.shields.io/github/downloads/ScratchAddons/ScratchAddons/total?style=flat-square&logo=github&logoColor=white&label=downloads&color=181717)](https://github.com/ScratchAddons/ScratchAddons/releases)
 [![](https://img.shields.io/badge/discuss-on_github-181717.svg?style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/discussions)
-[![](https://img.shields.io/badge/chat-on_discord-7289da.svg?style=flat-square)](https://discord.gg/Ak8sCDQ)
+[![](https://img.shields.io/badge/chat-on_discord-7289da.svg?style=flat-square)](https://discord.gg/R5NBqwMjNc)
 [![](https://img.shields.io/badge/website-scratchaddons.com-ff7b26.svg?style=flat-square)](https://scratchaddons.com)
 
 ## About
@@ -27,7 +27,7 @@ An addon is similar to an extension or a userscript, but they use special APIs p
 
 Userscripts and persistent scripts can use the `addon.*` JavaScript APIs, which allow them to obtain Scratch-related information (for example, get the current logged in user) and also use extension APIs (like sending notifications).
 
-Converting an already existing extension/userscript into an addon, or writing your own, is very easy. [Check out the guide](https://github.com/ScratchAddons/ScratchAddons/wiki/Creating-an-addon).
+Converting an already existing extension/userscript into an addon, or writing your own, is very easy. [Check out the guide](https://scratchaddons.com/docs/develop/getting-started/creating-an-addon/).
 
 ### If everything is an addon, then what does Scratch Addons do?
 
@@ -71,8 +71,8 @@ After downloading the extension to your computer, just load it by following thes
   3. Click the `Load unpacked` button on the top and select the extension directory which has the `manifest.json` file in it. 
 
 - Mozilla Firefox
-  1. Open `about:debugging` to open the add-ons page by typing it into your address bar.
-  2. Click `This Firefox` on the right-hand menu.
+  1. Open `about:debugging` to open the debugging page by typing it into your address bar.
+  2. Click `This Firefox` on the left-hand menu.
   3. Click `Load Temporary Add-on...` and select the `manifest.json` file.
 
 ## Contribute

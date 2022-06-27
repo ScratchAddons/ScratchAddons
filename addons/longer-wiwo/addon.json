@@ -7,13 +7,15 @@
       "link": "https://paul-s-reid.com/web-dev/other.php"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",
       "matches": ["https://scratch.mit.edu/users/*"]
     }
   ],
-  "tags": ["community", "profiles"],
-  "enabledByDefault": false,
-  "l10n": true
+  "versionAdded": "1.11.0",
+  "tags": ["community", "profiles", "featured"],
+  "enabledByDefault": false
 }

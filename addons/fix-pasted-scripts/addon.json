@@ -1,0 +1,29 @@
+{
+  "name": "Do not automatically run duplicated blocks",
+  "description": "Fixes a bug in the Scratch editor, where duplicating a block and attaching it to a script causes the script to run.",
+  "credits": [
+    {
+      "name": "lisa_wolfgang",
+      "link": "https://github.com/lisa-wolfgang"
+    },
+    {
+      "name": "GarboMuffin",
+      "link": "https://github.com/GarboMuffin"
+    },
+    {
+      "name": "apple502j",
+      "link": "https://github.com/apple502j"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor", "recommended", "codeEditor"],
+  "versionAdded": "1.15.0",
+  "enabledByDefault": false
+}

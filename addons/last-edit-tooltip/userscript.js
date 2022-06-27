@@ -1,7 +1,11 @@
 export default async function ({ addon, global, console, msg }) {
-  const data = await (
-    await fetch("https://api.scratch.mit.edu" + location.pathname.match(/\/projects\/[0-9]+/g)[0])
-  ).json();
+  let { redux } = addon.tab;
+
+  await redux.waitForState((state) => state.preview.status.project === "FETCHED", {
+    actions: ["SET_INFO"],
+  });
+
+  let data = redux.state.preview.projectInfo;
 
   if (!data.history) return;
 
@@ -24,5 +28,12 @@ export default async function ({ addon, global, console, msg }) {
     let dataTitle = `${msg("shared", { date: dateShared })}
 ${msg("modified", { date: dateMod })}`;
     element.setAttribute("title", dataTitle);
+
+    addon.self.addEventListener("disabled", () => {
+      element.removeAttribute("title");
+    });
+    addon.self.addEventListener("reenabled", () => {
+      element.setAttribute("title", dataTitle);
+    });
   }
 }

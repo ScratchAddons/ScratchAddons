@@ -4,19 +4,89 @@
 }
 
 .my-ocular-reaction-button {
-  cursor: pointer;
   user-select: none;
   background-color: #f2f2f2;
   margin: 0 5px;
   padding: 4px;
+  vertical-align: middle;
   display: inline-block; /* don't wrap in the middle of a reaction */
-  line-height: normal;
+  line-height: 16px;
   border-radius: 6px;
   box-shadow: 0 0 2px #28a5da;
+  text-shadow: none;
   opacity: 1;
   /* transition: opacity .5s; */ /* due to the way the list is rerendered, css transitions wont do anything */
+  position: relative;
+  font-weight: inherit;
+}
+.my-ocular-reaction-button,
+.my-ocular-reaction-button:hover {
+  color: inherit;
 }
 .my-ocular-reaction-button.selected {
   color: #fff;
   background-color: #28a5da;
+}
+
+.my-ocular-reaction-button > .my-ocular-popup {
+  display: none;
+}
+.my-ocular-reaction-button:hover > .my-ocular-popup {
+  display: block;
+  z-index: 1;
+}
+
+.my-ocular-popup {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  padding: 6px;
+  background-color: #fafafa;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  color: #322f31;
+}
+.my-ocular-popup::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: calc(100% + 1px);
+  left: calc(50% - 6px);
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-top-color: #d9d9d9;
+}
+.my-ocular-popup::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 100%;
+  left: calc(50% - 5px);
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-top-color: #fafafa;
+}
+
+.my-ocular-reaction-menu-button {
+  font-weight: normal;
+  cursor: pointer;
+  filter: grayscale(100%);
+  transition: filter 0.2s ease;
+}
+.my-ocular-reaction-menu.open .my-ocular-reaction-menu-button {
+  filter: none;
+}
+
+.my-ocular-reaction-menu {
+  position: relative;
+}
+.my-ocular-reaction-menu > .my-ocular-popup {
+  display: none;
+}
+.my-ocular-reaction-menu.open > .my-ocular-popup {
+  display: block;
 }

@@ -9,7 +9,7 @@
   "userscripts": [
     {
       "url": "fix-share-the-love.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "dynamicEnable": true,
@@ -18,10 +18,10 @@
   "userstyles": [
     {
       "url": "stageleft.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
-  "tags": ["editor", "theme", "recommended"],
-  "enabledByDefault": false,
-  "l10n": true
+  "tags": ["editor", "theme", "featured"],
+  "versionAdded": "1.1.0",
+  "enabledByDefault": false
 }

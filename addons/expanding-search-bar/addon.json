@@ -1,0 +1,23 @@
+{
+  "name": "Expandable search bar",
+  "description": "Makes the search bar in the navigation bar wider when it's focused.",
+  "credits": [
+    {
+      "name": "CST1229",
+      "link": "https://github.com/cst1229"
+    }
+  ],
+
+  "userscripts": [
+    {
+      "url": "expanding-search-bar.js",
+      "matches": ["https://scratch.mit.edu/*"],
+      "runAtComplete": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.16.0",
+  "tags": ["community", "featured"],
+  "enabledByDefault": false
+}

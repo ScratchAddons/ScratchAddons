@@ -1,9 +1,20 @@
 {
-  "studio-tools/ipr": "Invite/promote/remove curators",
-  "studio-tools/promote": "Promote curator",
-  "studio-tools/remove": "Remove curator",
-  "studio-tools/leave": "Leave studio",
+  "studio-tools/promote-new": "Promote Curators",
+  "studio-tools/remove-new": "Remove Curators",
+  "studio-tools/leave": "Leave",
+  "studio-tools/leave-new": "Leave Studio",
+  "studio-tools/promote-btn": "Promote",
+  "studio-tools/remove-btn": "Remove",
   "studio-tools/owner-error": "You are the owner of the studio.",
   "studio-tools/leave-confirm": "Are you sure you want to leave this studio?",
-  "studio-tools/added-by": "Button added by Scratch Addons browser extension"
+  "studio-tools/added-by": "Button added by Scratch Addons browser extension",
+  "studio-tools/invalid-username": "The username is not valid.",
+  "studio-tools/not-curator": "The user is not a curator.",
+  "studio-tools/401": "Hmm, it seems like you are not allowed to do that. Make sure you're logged in.",
+  "studio-tools/server-down": "It seems like the Scratch server is down.",
+  "studio-tools/unknown-error": "Something went wrong, try again.",
+  "studio-tools/promoted": "Promoted {username} to the manager.",
+  "studio-tools/removed": "Removed {username} from the studio.",
+  "studio-tools/max-managers-reached": "This studio has reached the limit of {max} managers.",
+  "studio-tools/too-many-managers": "You have to remove some managers before promoting."
 }

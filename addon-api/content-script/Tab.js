@@ -2,9 +2,15 @@ import Trap from "./Trap.js";
 import ReduxHandler from "./ReduxHandler.js";
 import Listenable from "../common/Listenable.js";
 import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
-import getWorkerScript from "./worker.js";
+import * as blocks from "./blocks.js";
+import { addContextMenu } from "./contextmenu.js";
+import * as modal from "./modal.js";
 
 const DATA_PNG = "data:image/png;base64,";
+
+const contextMenuCallbacks = [];
+const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image", "swap-local-global"];
+let createdAnyBlockContextMenus = false;
 
 /**
  * APIs specific to userscripts.
@@ -17,14 +23,28 @@ export default class Tab extends Listenable {
   constructor(info) {
     super();
     this._addonId = info.id;
-    this.clientVersion = document.querySelector("meta[name='format-detection']")
-      ? "scratch-www"
-      : document.querySelector("script[type='text/javascript']")
-      ? "scratchr2"
-      : null;
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
+  }
+  get clientVersion() {
+    if (!this._clientVersion)
+      this._clientVersion = document.querySelector("meta[name='format-detection']")
+        ? "scratch-www"
+        : document.querySelector("script[type='text/javascript']")
+        ? "scratchr2"
+        : null;
+    return this._clientVersion;
+  }
+  addBlock(...a) {
+    blocks.init(this);
+    return blocks.addBlock(...a);
+  }
+  removeBlock(...a) {
+    return blocks.removeBlock(...a);
+  }
+  getCustomBlock(...a) {
+    return blocks.getCustomBlock(...a);
   }
   /**
    * Loads a script by URL.
@@ -32,11 +52,12 @@ export default class Tab extends Listenable {
    * @returns {Promise}
    */
   loadScript(url) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const script = document.createElement("script");
       script.src = url;
       document.head.appendChild(script);
       script.onload = resolve;
+      script.onerror = reject;
     });
   }
   /**
@@ -45,6 +66,7 @@ export default class Tab extends Listenable {
    * @param {object} opts - options.
    * @param {boolean=} opts.markAsSeen - Whether it should mark resolved elements to be skipped next time or not.
    * @param {function=} opts.condition - A function that returns whether to resolve the selector or not.
+   * @param {function=} opts.elementCondition - A function that returns whether to resolve the selector or not, given an element.
    * @param {function=} opts.reduxCondition - A function that returns whether to resolve the selector or not.
    * Use this as an optimization and do not rely on the behavior.
    * @param {string[]=} opts.reduxEvents - An array of redux events that must be dispatched before resolving the selector.
@@ -57,6 +79,7 @@ export default class Tab extends Listenable {
       const firstQuery = document.querySelectorAll(selector);
       for (const element of firstQuery) {
         if (this._waitForElementSet.has(element)) continue;
+        if (opts.elementCondition && !opts.elementCondition(element)) continue;
         if (markAsSeen) this._waitForElementSet.add(element);
         return Promise.resolve(element);
       }
@@ -92,6 +115,7 @@ export default class Tab extends Listenable {
       query: selector,
       seen: markAsSeen ? this._waitForElementSet : null,
       condition: combinedCondition,
+      elementCondition: opts.elementCondition || null,
     });
     if (listener) {
       promise.then((match) => {
@@ -146,6 +170,11 @@ export default class Tab extends Listenable {
    */
   scratchMessage(key) {
     if (this.clientVersion === "scratch-www") {
+      if (this.editorMode && this.redux.state) {
+        if (this.redux.state.locales.messages[key]) {
+          return this.redux.state.locales.messages[key];
+        }
+      }
       const locales = [window._locale ? window._locale.toLowerCase() : "en"];
       if (locales[0].includes("-")) locales.push(locales[0].split("-")[0]);
       if (locales.includes("pt") && !locales.includes("pt-br")) locales.push("pt-br");
@@ -168,22 +197,6 @@ export default class Tab extends Listenable {
    */
   get _eventTargetKey() {
     return "tab";
-  }
-
-  /**
-   * Loads a Web Worker.
-   * @async
-   * @param {string} url - URL of the worker to load.
-   * @returns {Promise<Worker>} - worker.
-   */
-  async loadWorker(url) {
-    const resp = await fetch(url);
-    const script = await resp.text();
-    const workerScript = getWorkerScript(this, script, url);
-    const blob = new Blob([workerScript], { type: "text/javascript" });
-    const workerURL = URL.createObjectURL(blob);
-    const worker = new Worker(workerURL);
-    return new Promise((resolve) => worker.addEventListener("message", () => resolve(worker), { once: true }));
   }
 
   /**
@@ -220,9 +233,439 @@ export default class Tab extends Listenable {
     return res;
   }
 
+  /**
+   * Hides an element when the addon is disabled.
+   * @param {HTMLElement} el - the element.
+   * @param {object=} opts - the options.
+   * @param {string=} opts.display - the fallback value for CSS display.
+   */
   displayNoneWhileDisabled(el, { display = "" } = {}) {
     el.style.display = `var(--${this._addonId.replace(/-([a-z])/g, (g) =>
       g[1].toUpperCase()
     )}-_displayNoneWhileDisabledValue${display ? ", " : ""}${display})`;
+  }
+
+  /**
+   * The direction of the text; i.e. rtl or ltr.
+   * @type {string}
+   */
+  get direction() {
+    // https://github.com/LLK/scratch-l10n/blob/master/src/supported-locales.js
+    const rtlLocales = ["ar", "ckb", "fa", "he"];
+    const lang = scratchAddons.globalState.auth.scratchLang.split("-")[0];
+    return rtlLocales.includes(lang) ? "rtl" : "ltr";
+  }
+
+  /**
+   * Adds an item to a shared space.
+   * Defined shared spaces are:
+   * stageHeader - the stage header
+   * fullscreenStageHeader - the stage header for fullscreen
+   * afterGreenFlag - after the green flag
+   * afterStopButton - after the stop button
+   * afterCopyLinkButton - after the copy link button, shown below project descriptions
+   * afterSoundTab - after the sound tab in editor
+   * forumsBeforePostReport - before the report button in forum posts
+   * forumsAfterPostReport - after the report button in forum posts
+   * beforeRemixButton - before the remix button in project page
+   * studioCuratorsTab - inside the studio curators tab
+   * @param {object} opts - options.
+   * @param {string} opts.space - the shared space name.
+   * @param {HTMLElement} element - the element to add.
+   * @param {number} order - the order of the added element. Should not conflict with other addons.
+   * @param {HTMLElement=} scope - if multiple shared spaces exist, the one where the shared space gets added to.
+   * @returns {boolean} whether the operation was successful or not.
+   */
+  appendToSharedSpace({ space, element, order, scope }) {
+    const q = document.querySelector.bind(document);
+    const sharedSpaces = {
+      stageHeader: {
+        // Non-fullscreen stage header only
+        element: () => q("[class^='stage-header_stage-size-row']"),
+        from: () => [],
+        until: () => [
+          // Small/big stage buttons (for editor mode)
+          q("[class^='stage-header_stage-size-toggle-group']"),
+          // Full screen icon (for player mode)
+          q("[class^='stage-header_stage-size-row']").lastChild,
+        ],
+      },
+      fullscreenStageHeader: {
+        // Fullscreen stage header only
+        element: () => q("[class^='stage-header_stage-menu-wrapper']"),
+        from: function () {
+          let emptyDiv = this.element().querySelector(".sa-spacer");
+          if (!emptyDiv) {
+            emptyDiv = document.createElement("div");
+            emptyDiv.style.marginLeft = "auto";
+            emptyDiv.className = "sa-spacer";
+            this.element().insertBefore(emptyDiv, this.element().lastChild);
+          }
+          return [emptyDiv];
+        },
+        until: () => [q("[class^='stage-header_stage-menu-wrapper']").lastChild],
+      },
+      afterGreenFlag: {
+        element: () => q("[class^='controls_controls-container']"),
+        from: () => [],
+        until: () => [q("[class^='stop-all_stop-all']")],
+      },
+      afterStopButton: {
+        element: () => q("[class^='controls_controls-container']"),
+        from: () => [q("[class^='stop-all_stop-all']")],
+        until: () => [],
+      },
+      beforeProjectActionButtons: {
+        element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
+        from: () => [],
+        until: () => [q(".report-button"), q(".action-buttons > div")],
+      },
+      afterCopyLinkButton: {
+        element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
+        from: () => [q(".copy-link-button")],
+        until: () => [],
+      },
+      afterSoundTab: {
+        element: () => q("[class^='react-tabs_react-tabs__tab-list']"),
+        from: () => [q("[class^='react-tabs_react-tabs__tab-list']").children[2]],
+        until: () => [q("#s3devToolBar")],
+      },
+      forumsBeforePostReport: {
+        element: () => scope.querySelector(".postfootright > ul"),
+        from: () => [],
+        until: function () {
+          let reportButton = scope.querySelector(
+            ".postfootright > ul > li.postreport, .postfootright > ul > li.pseudopostreport"
+          );
+          if (!reportButton) {
+            // User is logged out, so there's no report button on the post footer
+            // Create a pseudo post report button as a separator between this space
+            // and the forumsAfterPostReport space.
+            reportButton = Object.assign(document.createElement("li"), {
+              className: "pseudopostreport",
+              textContent: " 🞄 ",
+            });
+            this.element().appendChild(reportButton);
+          }
+          return [reportButton];
+        },
+      },
+      forumsAfterPostReport: {
+        element: () => scope.querySelector(".postfootright > ul"),
+        from: function () {
+          let reportButton = scope.querySelector(
+            ".postfootright > ul > li.postreport, .postfootright > ul > li.pseudopostreport"
+          );
+          if (!reportButton) {
+            // User is logged out. See comment on forumsBeforePostReport space
+            reportButton = Object.assign(document.createElement("li"), {
+              className: "pseudopostreport",
+              textContent: " 🞄 ",
+            });
+            this.element().appendChild(reportButton);
+          }
+          return [reportButton];
+        },
+        until: () => [scope.querySelector(".postfootright > ul > li.postquote")],
+      },
+      beforeRemixButton: {
+        element: () => q(".project-buttons"),
+        from: () => [],
+        until: () => [
+          q(".project-buttons > .remix-button:not(.sa-remix-button)"),
+          q(".project-buttons > .see-inside-button"),
+        ],
+      },
+      studioCuratorsTab: {
+        element: () => q(".studio-tabs div:nth-child(2)"),
+        from: () => [],
+        // .commenting-status only exists if account is muted
+        until: () => [
+          q(".studio-tabs div:nth-child(2) > .commenting-status"),
+          q(".studio-tabs div:nth-child(2) > .studio-members"),
+        ],
+      },
+      forumToolbarTextDecoration: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton4")],
+        until: () => [q(".markItUpButton4 ~ .markItUpSeparator")],
+      },
+      forumToolbarLinkDecoration: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton6")],
+        until: () => [q(".markItUpButton6 ~ .markItUpSeparator")],
+      },
+      forumToolbarFont: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton7")],
+        until: () => [q(".markItUpButton7 ~ .markItUpSeparator")],
+      },
+      forumToolbarList: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton10")],
+        until: () => [q(".markItUpButton10 ~ .markItUpSeparator")],
+      },
+      forumToolbarDecoration: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton12")],
+        until: () => [q(".markItUpButton12 ~ .markItUpSeparator")],
+      },
+      forumToolbarEnvironment: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton13")],
+        until: () => [q(".markItUpButton13 ~ .markItUpSeparator")],
+      },
+      forumToolbarScratchblocks: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton14")],
+        until: () => [q(".markItUpButton14 ~ .markItUpSeparator")],
+      },
+      forumToolbarTools: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton16")],
+        until: () => [],
+      },
+      assetContextMenuAfterExport: {
+        element: () => scope,
+        from: () => {
+          return Array.prototype.filter.call(
+            scope.children,
+            (c) => c.textContent === this.scratchMessage("gui.spriteSelectorItem.contextMenuExport")
+          );
+        },
+        until: () => {
+          return Array.prototype.filter.call(
+            scope.children,
+            (c) => c.textContent === this.scratchMessage("gui.spriteSelectorItem.contextMenuDelete")
+          );
+        },
+      },
+      assetContextMenuAfterDelete: {
+        element: () => scope,
+        from: () => {
+          return Array.prototype.filter.call(
+            scope.children,
+            (c) => c.textContent === this.scratchMessage("gui.spriteSelectorItem.contextMenuDelete")
+          );
+        },
+        until: () => [],
+      },
+      monitor: {
+        element: () => scope,
+        from: () => {
+          const endOfVanilla = [
+            this.scratchMessage("gui.monitor.contextMenu.large"),
+            this.scratchMessage("gui.monitor.contextMenu.slider"),
+            this.scratchMessage("gui.monitor.contextMenu.sliderRange"),
+            this.scratchMessage("gui.monitor.contextMenu.export"),
+          ];
+          const potential = Array.prototype.filter.call(scope.children, (c) => endOfVanilla.includes(c.textContent));
+          return [potential[potential.length - 1]];
+        },
+        until: () => [],
+      },
+    };
+
+    const spaceInfo = sharedSpaces[space];
+    const spaceElement = spaceInfo.element();
+    if (!spaceElement) return false;
+    const from = spaceInfo.from();
+    const until = spaceInfo.until();
+
+    element.dataset.saSharedSpaceOrder = order;
+
+    let foundFrom = false;
+    if (from.length === 0) foundFrom = true;
+
+    // insertAfter = element whose nextSibling will be the new element
+    // -1 means append at beginning of space (prepend)
+    // This will stay null if we need to append at the end of space
+    let insertAfter = null;
+
+    const children = Array.from(spaceElement.children);
+    for (let indexString of children.keys()) {
+      const child = children[indexString];
+      const i = Number(indexString);
+
+      // Find either element from "from" before doing anything
+      if (!foundFrom) {
+        if (from.includes(child)) {
+          foundFrom = true;
+          // If this is the last child, insertAfter will stay null
+          // and the element will be appended at the end of space
+        }
+        continue;
+      }
+
+      if (until.includes(child)) {
+        // This is the first SA element appended to this space
+        // If from = [] then prepend, otherwise append after
+        // previous child (likely a "from" element)
+        if (i === 0) insertAfter = -1;
+        else insertAfter = children[i - 1];
+        break;
+      }
+
+      if (child.dataset.saSharedSpaceOrder) {
+        if (Number(child.dataset.saSharedSpaceOrder) > order) {
+          // We found another SA element with higher order number
+          // If from = [] and this is the first child, prepend.
+          // Otherwise, append before this child.
+          if (i === 0) insertAfter = -1;
+          else insertAfter = children[i - 1];
+          break;
+        }
+      }
+    }
+
+    if (!foundFrom) return false;
+    // It doesn't matter if we didn't find an "until"
+
+    // Separators in forum post spaces
+    if (space === "forumsBeforePostReport") {
+      element.appendChild(document.createTextNode(" | "));
+    } else if (space === "forumsAfterPostReport") {
+      element.prepend(document.createTextNode("| "));
+    }
+
+    if (insertAfter === null) {
+      // This might happen with until = []
+      spaceElement.appendChild(element);
+    } else if (insertAfter === -1) {
+      // This might happen with from = []
+      spaceElement.prepend(element);
+    } else {
+      // Works like insertAfter but using insertBefore API.
+      // nextSibling cannot be null because insertAfter
+      // is always set to children[i-1], so it must exist
+      spaceElement.insertBefore(element, insertAfter.nextSibling);
+    }
+    return true;
+  }
+
+  /**
+   * Type for context menu item.
+   * @typedef {object} Tab~ContextMenuItem
+   * @property {boolean} enabled - whether it is enabled.
+   * @property {string} text - the context menu item label.
+   * @property {function} callback - the function that is called when item is clicked.
+   * @property {boolean} separator - whether to add a separator above the item.
+   */
+
+  /**
+   * Callback to modify the context menu.
+   * @callback Tab~blockContextMenuCallback
+   * @param {Tab~ContextMenuItem[]} items - the items added by vanilla code or other addons.
+   * @param {?object} block - the targeted block, if any.
+   * @returns {Tab~ContextMenuItem[]} the array that contains values of items array as well as new items.
+   */
+
+  /**
+   * Creates an item in the editor Blockly context menu.
+   * @param {Tab~blockContextMenuCallback} callback Returns new menu items.
+   * @param {object} conditions - Show context menu when one of these conditions meet.
+   * @param {boolean=} conditions.workspace - Add to workspace context menu.
+   * @param {boolean=} conditions.blocks - Add to block context menu outside the flyout.
+   * @param {boolean=} conditions.flyout - Add to block context menu in flyout/palette.
+   * @param {boolean=} conditions.comments - Add to comments.
+   */
+  createBlockContextMenu(callback, { workspace = false, blocks = false, flyout = false, comments = false } = {}) {
+    contextMenuCallbacks.push({ addonId: this._addonId, callback, workspace, blocks, flyout, comments });
+
+    // Sort to ensure userscript run order doesn't change callback order
+    contextMenuCallbacks.sort((b, a) => CONTEXT_MENU_ORDER.indexOf(b.addonId) - CONTEXT_MENU_ORDER.indexOf(a.addonId));
+
+    if (createdAnyBlockContextMenus) return;
+    createdAnyBlockContextMenus = true;
+
+    this.traps.getBlockly().then((ScratchBlocks) => {
+      const oldShow = ScratchBlocks.ContextMenu.show;
+      ScratchBlocks.ContextMenu.show = function (event, items, rtl) {
+        const gesture = ScratchBlocks.mainWorkspace.currentGesture_;
+        const block = gesture.targetBlock_;
+
+        for (const { callback, workspace, blocks, flyout, comments } of contextMenuCallbacks) {
+          let injectMenu =
+            // Workspace
+            (workspace && !block && !gesture.flyout_ && !gesture.startBubble_) ||
+            // Block in workspace
+            (blocks && block && !gesture.flyout_) ||
+            // Block in flyout
+            (flyout && gesture.flyout_) ||
+            // Comments
+            (comments && gesture.startBubble_);
+          if (injectMenu) {
+            try {
+              items = callback(items, block);
+            } catch (e) {
+              console.error("Error while calling context menu callback: ", e);
+            }
+          }
+        }
+
+        oldShow.call(this, event, items, rtl);
+
+        const blocklyContextMenu = ScratchBlocks.WidgetDiv.DIV.firstChild;
+        items.forEach((item, i) => {
+          if (i !== 0 && item.separator) {
+            const itemElt = blocklyContextMenu.children[i];
+            itemElt.style.paddingTop = "2px";
+            itemElt.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
+          }
+        });
+      };
+    });
+  }
+
+  /**
+   * @typedef {object} Tab~EditorContextMenuContext
+   * @property {string} type - the type of the context menu.
+   * @property {HTMLElement} menuItem - the item element.
+   * @property {HTMLElement} target - the target item.
+   * @property {number=} index - the index, if applicable.
+   */
+
+  /**
+   * Callback executed when the item is clicked.
+   * @callback Tab~EditorContextMenuItemCallback
+   * @param {Tab~EditorContextMenuContext} context - the context for the action.
+   */
+
+  /**
+   * Callback to check if the item should be visible.
+   * @callback Tab~EditorContextMenuItemCallback
+   * @param {Tab~EditorContextMenuContext} context - the context for the action.
+   * @returns {boolean} true to make it visible, false to hide
+   */
+
+  /**
+   * Adds a context menu item for the editor.
+   * @param {Tab~EditorContextMenuItemCallback} callback - the callback executed when the item is clicked.
+   * @param {object} opts - the options.
+   * @param {string} opts.className - the class name to add to the item.
+   * @param {string[]} opts.types - which types of context menu it should add to.
+   * @param {string} opts.position - the position inside the context menu.
+   * @param {number} opts.order - the order within the position.
+   * @param {string} opts.label - the label for the item.
+   * @param {boolean=} opts.border - whether to add a border at the top or not.
+   * @param {boolean=} opts.dangerous - whether to indicate the item as dangerous or not.
+   * @param {Tab~EditorContextMenuItemCondition} opts.condition - a function to check if the item should be shown.
+   */
+  createEditorContextMenu(...args) {
+    addContextMenu(this, ...args);
+  }
+
+  createModal(title, { isOpen = false, useEditorClasses = false, useSizesClass = false } = {}) {
+    if (this.editorMode !== null && useEditorClasses) return modal.createEditorModal(this, title, { isOpen });
+    if (this.clientVersion === "scratch-www") return modal.createScratchWwwModal(title, { isOpen, useSizesClass });
+    return modal.createScratchr2Modal(title, { isOpen });
+  }
+
+  confirm(...args) {
+    return modal.confirm(this, ...args);
+  }
+
+  prompt(...args) {
+    return modal.prompt(this, ...args);
   }
 }

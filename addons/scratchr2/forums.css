@@ -1,3 +1,6 @@
+body > #pagewrapper {
+  min-height: 0;
+}
 #content {
   width: 100%;
   min-width: 942px;
@@ -5,6 +8,7 @@
 }
 .linkst,
 .linksb,
+.postlinksb,
 .blocktable,
 .blockpost,
 .block,
@@ -64,6 +68,7 @@
   width: calc(85% - 8px);
   margin-right: 8px;
   height: 48px;
+  padding: 4px 20px;
 }
 .forum-search-list {
   width: 942px;
@@ -73,14 +78,19 @@
 }
 .forum-search-list .blockpost {
   width: 100%;
-  color: #575e75;
 }
-.forum-search-list .blockpost div.box {
-  background: var(--scratchr2-primaryColor);
+.forum-search-list .blockpost .box-head span.conr,
+.forum-search-list .blockpost .box-head a,
+.forum-search-list .blockpost .box-head a:link,
+.forum-search-list .blockpost .box-head a:active,
+.forum-search-list .blockpost .box-head a:hover,
+.forum-search-list .blockpost .box-head a:visited {
+  color: rgba(255, 255, 255, 0.5);
 }
 #brdfooter {
   margin-top: 40px;
   margin-bottom: 0;
+  background-color: var(--darkWww-footer, #f2f2f2);
   border-radius: 0;
   border: none;
 }
@@ -88,53 +98,286 @@
   box-sizing: border-box;
   width: 942px;
   margin: auto;
-  padding-top: 20px;
-  padding-left: 4px;
-  padding-right: 4px;
+  padding: 0;
+  padding-top: 22.8px;
   background: transparent;
+  color: var(--darkWww-footer-text, #575e75);
 }
 #brdfooter .box-content button {
   margin: 0;
 }
-.blockpost div.box {
-  background-color: #0fbd8c;
-  border-top-color: #0fbd8c;
+.djangobb .box-head a.toggle {
+  width: 20px;
+  height: 20px;
+  transform: scaleY(-1);
+  background: url("https://scratch.mit.edu/images/dropdown.png") no-repeat center center;
+  background-size: 50%;
+  filter: var(--darkWww-box-filterInverted, brightness(0.4));
+}
+.djangobb .collapsed a.toggle {
+  transform: none;
+}
+.linkst,
+.linksb {
+  padding: 13px 0;
+}
+.linkst::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.pagination {
+  cursor: default;
+}
+.linkst li,
+.linksb li {
+  display: inline-block;
+  margin-right: 5px;
+  height: auto;
+  line-height: 18px;
+}
+.linkst li:first-child:nth-last-child(2),
+.linksb li {
+  margin: 0;
+}
+.linkst li:not(:last-child) a,
+.linksb li:not(:last-child) a,
+.pagination span,
+.pagination a {
+  display: inline-block;
+  min-width: 8px;
+  padding: 0 5px;
+  background-color: var(--darkWww-box, white);
+  border: 1px solid var(--darkWww-border-15, rgba(0, 0, 0, 0.15));
+  border-radius: 10px;
+  color: var(--darkWww-box-text, #575e75);
+  line-height: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+.linkst li:not(:last-child) a:hover,
+.linksb li:not(:last-child) a:hover,
+.pagination a:hover {
+  background-color: var(--darkWww-page-tab, rgba(0, 0, 0, 0.1));
+  border-color: var(--darkWww-border, rgba(0, 0, 0, 0.1));
+  color: var(--darkWww-page-text, #575e75);
+}
+.pagination .current {
+  background-color: var(--darkWww-button, #4d97ff);
+  border-color: rgba(0, 0, 0, 0.15);
+  color: var(--darkWww-button-text, white);
+}
+.pagination .current:hover {
+  background-color: var(--darkWww-button-variant, #4280d7);
+}
+.pagination .disabled {
+  opacity: 0.5;
+}
+.linkst .follow-topic {
+  top: -31px;
+}
+.linksb .follow-topic {
+  bottom: -31px;
+}
+.follow-topic .loading {
+  width: 22.8px;
+  height: 22.8px;
+  object-position: -100px -100px;
+  background-image: url(/svgs/modal/spinner-blue.svg);
+  background-size: 100%;
+  opacity: 1;
+  filter: var(--darkWww-link-iconFilter, none);
+}
+.follow-topic .loading:not([style="display: none;"]) {
+  /* Spinner animation code */
+  /* From https://github.com/LLK/scratch-www/blob/develop/src/components/spinner/spinner.scss */
+  animation-name: spin-intro, spin;
+  animation-duration: 0.25s, 1s;
+  animation-timing-function: cubic-bezier(0.3, -3, 0.6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);
+  animation-delay: 0s, 0.25s;
+  animation-iteration-count: 1, infinite;
+}
+.follow-button,
+.unfollow-button {
+  margin: 0;
+}
+.follow-topic .follow-button:hover {
+  color: var(--darkWww-button-text, white);
+}
+.button.grey.unfollow-button {
+  background-color: var(--darkWww-gray-darker, #b3b3b3);
+  color: white;
+}
+.blockpost {
+  position: relative;
+}
+.blockpost > a[name] {
+  position: absolute;
+  top: -55px;
+}
+.blockpost div.box,
+.blockpost .box-head {
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0;
+}
+.blockpost .box {
+  margin-bottom: 24px;
 }
 .blockpost .box-head {
-  border-top-color: #0fbd8c;
+  padding: 0;
+  padding-bottom: 8px;
+}
+.blockpost .box-head,
+.blockpost .box-head span.conr,
+.blockpost .box-head a,
+.blockpost .box-head a:link,
+.blockpost .box-head a:active,
+.blockpost .box-head a:hover,
+.blockpost .box-head a:visited {
+  color: var(--darkWww-page-transparentText, #b3b3b3);
 }
 .blockpost .box-head a:hover {
   text-decoration: underline;
 }
-.blockpost .box-content,
-.postright,
-.postfootright {
-  background-color: #fff;
+.blockpost .box-content {
+  overflow: hidden;
+  border: 1px solid var(--darkWww-box-border, #d9d9d9);
+  border-radius: 8px;
 }
 .postleft,
 .postfootleft {
-  background-color: #f2f2f2;
+  overflow-wrap: break-word;
+  overflow: visible;
+  background-color: var(--darkWww-gray, #f2f2f2);
+  color: var(--darkWww-gray-text, #575e75);
+  box-shadow: 1px 0 var(--darkWww-box-border, #d9d9d9);
+}
+.djangobb .blockpost dl {
+  padding: 10px 12px;
+}
+.djangobb .username {
+  position: relative;
+  z-index: 1;
+  margin: -4px;
+  display: block;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+  padding: 4px;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: var(--darkWww-gray, #f2f2f2);
+  color: var(--darkWww-link, #4d97ff);
+  font-size: 16px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.djangobb .username:visited:not(:hover) {
+  color: var(--darkWww-link, #4d97ff);
+}
+.djangobb .username:hover {
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.searchposts .postleft a {
+  font-size: 16px;
+}
+.postavatar img {
+  margin: 1px;
+  box-shadow: 0 0 0 1px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
+  border-radius: 5px;
 }
 .postright,
 .postfootright {
-  border-left-color: #f2f2f2;
+  border-left-color: var(--darkWww-gray, #f2f2f2);
+  color: var(--darkWww-box-text, #575e75);
+  box-shadow: 1px 0 inset var(--darkWww-box-border, #d9d9d9);
 }
-.djangobb th,
+.postmsg ::selection {
+  /* Don't break [color=transparent] hidden text */
+  background-color: var(--darkWww-button-variant, #4280d7);
+  color: var(--darkWww-button-text, white);
+}
+.postfootright > ul {
+  padding: 12px 20px;
+  padding-top: 4px;
+  font-size: 12px;
+}
+.djangobb blockquote {
+  background-color: var(--darkWww-gray, #f2f2f2);
+  border-color: var(--darkWww-border, #d9d9d9);
+  color: var(--darkWww-gray-text, #575e75);
+}
+.djangobb th {
+  background-color: var(--darkWww-box-border, #d9d9d9);
+  color: var(--darkWww-box-borderText, #575e75);
+}
 .tc2,
 .tc3 {
-  background: #f2f2f2;
+  background-color: var(--darkWww-gray, #f2f2f2);
+  color: var(--darkWww-gray-text, #575e75);
+}
+.djangobb td,
+.djangobb th {
+  border-color: var(--darkWww-box-border, #d9d9d9);
 }
 .topic_isread a {
   font-weight: normal;
+}
+.inew,
+.isticky {
+  filter: var(--darkWww-link-iconFilter, var(--scratchr2-defaultLinkIconFilter));
 }
 .djangobb > .postmsg {
   box-sizing: border-box;
   padding: 8px;
 }
-.my-ocular-reaction-button {
-  background-color: #f2f2f2;
+.my-ocular-reaction-button,
+.my-ocular-reaction-button:hover {
+  color: var(--darkWww-gray-text, #575e75);
   box-shadow: 0 0 2px #0fbd8c;
 }
 .my-ocular-reaction-button.selected {
   background-color: #0fbd8c;
+  color: white;
+}
+.my-ocular-popup {
+  color: var(--darkWww-input-text, #575e75);
+}
+#reply,
+#reply .box-head,
+#reply .box-content {
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+#reply .box-head {
+  padding: 16px 0;
+}
+#reply .box-head h4 {
+  color: var(--darkWww-page-text, #575e75);
+  font-size: 20px;
+  line-height: 1.7em;
+}
+#reply label {
+  color: var(--darkWww-page-text, #575e75);
+}
+.djangobb label {
+  margin-bottom: 10px;
+}
+.form-submit {
+  margin-top: 10px;
+}
+.form-submit .button.grey {
+  border-radius: 4px;
+}
+.form-submit a {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0 10px;
+  background-color: var(--darkWww-gray-darker, #b3b3b3);
+  border-radius: 4px;
+  color: white;
+  line-height: 32px;
 }

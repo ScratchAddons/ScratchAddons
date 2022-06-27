@@ -4,14 +4,19 @@
   "credits": [
     {
       "name": "GarboMuffin"
+    },
+    {
+      "name": "pufferfish101007",
+      "link": "https://scratch.mit.edu/users/pufferfish101007"
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "versionAdded": "1.4.0",
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "tags": ["editor", "codeEditor", "recommended"],
@@ -81,9 +86,42 @@
       "id": "extension",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "Scratch Addons blocks",
+      "id": "sa",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "addonEnabled": ["debugger"]
+      }
+    },
+    {
+      "name": "Custom block arguments",
+      "id": "customargs",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Shown custom block arguments options",
+      "id": "customargsmode",
+      "type": "select",
+      "default": "defOnly",
+      "potentialValues": [
+        {
+          "id": "defOnly",
+          "name": "Arguments in own custom block"
+        },
+        {
+          "id": "all",
+          "name": "Arguments in all custom blocks in sprite"
+        }
+      ],
+      "if": {
+        "settings": { "customargs": true }
+      }
     }
   ],
   "libraries": ["scratch-blocks"],
-  "l10n": true,
   "enabledByDefault": false
 }

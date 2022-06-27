@@ -10,17 +10,17 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"],
+      "matches": ["projects"],
       "runAtComplete": false
     }
   ],
   "userstyles": [
     {
       "url": "style.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
+  "versionAdded": "1.4.0",
   "tags": ["community", "projectPage"],
-  "enabledByDefault": false,
-  "l10n": true
+  "enabledByDefault": false
 }

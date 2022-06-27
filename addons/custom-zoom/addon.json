@@ -1,29 +1,30 @@
 {
-  "name": "Custom scripts area zoom settings",
-  "description": "Adjust the minimum, maximum, speed, and start size of the zoom in the project code editor, and autohide the controls.",
-  "tags": ["editor", "codeEditor"],
+  "name": "Customizable code area zoom",
+  "description": "Choose custom settings for the minimum, maximum, speed, and start size of the zoom of scripts in the code area, and autohide the controls.",
+  "tags": ["editor", "codeEditor", "featured"],
   "credits": [
     {
       "name": "ErrorGamer2000",
       "link": "https://scratch.mit.edu/users/ErrorGamer2000/"
     }
   ],
+  "versionAdded": "1.13.0",
   "enabledByDefault": false,
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "userstyles": [
     {
       "url": "style.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "settings": [
     {
-      "name": "Maximum Zoom (50-500%)",
+      "name": "Maximum Zoom (100-500%)",
       "id": "maxZoom",
       "type": "integer",
       "min": 100,
@@ -82,8 +83,10 @@
           "name": "Long"
         }
       ],
-      "default": "default"
+      "default": "default",
+      "if": {
+        "settings": { "autohide": true }
+      }
     }
-  ],
-  "l10n": true
+  ]
 }

@@ -1,6 +1,6 @@
 import { insert } from "../../libraries/thirdparty/cs/text-field-edit.js";
 export default async function ({ addon, global, console, msg, safeMsg }) {
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/md5.min.js");
+  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/spark-md5.min.js");
 
   var toolbar =
     document.querySelector("#markItUpId_body > div > div.markItUpHeader > ul") ||
@@ -18,6 +18,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
 
   //button (the one the user interacts with)
   var inputButtonContainer = document.createElement("li");
+  addon.tab.displayNoneWhileDisabled(inputButtonContainer);
   inputButtonContainer.className = "markItUpButton markItUpButton17";
 
   var inputButton = document.createElement("a");
@@ -33,18 +34,21 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
 
   //add it
   if (toolbar) {
-    //make sure that i can type here and that there's a textbox
-    document.querySelector(".markItUpButton5").insertAdjacentElement("afterend", inputButtonContainer);
+    addon.tab.appendToSharedSpace({
+      space: "forumToolbarLinkDecoration",
+      element: inputButtonContainer,
+      order: 1,
+    });
     document.body.appendChild(uploadInput);
   }
 
   //events
-  inputButton.addEventListener("click", (e) => {
+  const onButtonClick = (e) => {
     //click on the button
     uploadInput.click(); //simulate clicking on the real input
-  });
+  };
 
-  uploadInput.addEventListener("change", (e) => {
+  const onFileUpload = (e) => {
     //when the input has a new file
     var file = uploadInput.files[0];
     var extension = uploadInput.files[0].name.split(".").pop().toLowerCase();
@@ -61,9 +65,9 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       progresselement.remove();
       throw err;
     };
-  });
+  };
 
-  textBox.addEventListener("paste", (e) => {
+  const onPaste = (e) => {
     retrieveImageFromClipboardAsBlob(e, (imageBlob) => {
       if (imageBlob) {
         var reader = new FileReader();
@@ -83,21 +87,26 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
         };
       }
     });
-  });
+  };
 
-  textBox.addEventListener("dragenter", () => {
+  const onDragEnter = () => {
     textBox.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
-  });
+  };
 
-  textBox.addEventListener("dragleave", () => {
-    textBox.style.backgroundColor = "transparent";
-  });
+  const onDragLeave = () => {
+    textBox.style.backgroundColor = "";
+  };
 
-  textBox.addEventListener("dragend", () => {
-    textBox.style.backgroundColor = "transparent";
-  });
+  const onDragEnd = () => {
+    textBox.style.backgroundColor = "";
+  };
 
-  textBox.addEventListener("drop", (e) => {
+  const onDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "copy";
+  };
+
+  const onDrop = (e) => {
     textBox.style.backgroundColor = "";
     console.log(e.dataTransfer);
     var file = e.dataTransfer.files[0];
@@ -120,7 +129,31 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
         throw err;
       };
     }
-  });
+  };
+
+  function addListeners() {
+    inputButton.addEventListener("click", onButtonClick);
+    uploadInput.addEventListener("change", onFileUpload);
+    textBox.addEventListener("paste", onPaste);
+    textBox.addEventListener("dragenter", onDragEnter);
+    textBox.addEventListener("dragover", onDragOver);
+    textBox.addEventListener("dragleave", onDragLeave);
+    textBox.addEventListener("dragend", onDragEnd);
+    textBox.addEventListener("drop", onDrop);
+  }
+  function removeListeners() {
+    inputButton.removeEventListener("click", onButtonClick);
+    uploadInput.removeEventListener("change", onFileUpload);
+    textBox.removeEventListener("paste", onPaste);
+    textBox.removeEventListener("dragenter", onDragEnter);
+    textBox.removeEventListener("dragover", onDragOver);
+    textBox.removeEventListener("dragleave", onDragLeave);
+    textBox.removeEventListener("dragend", onDragEnd);
+    textBox.removeEventListener("drop", onDrop);
+  }
+  addListeners();
+  addon.self.addEventListener("disabled", () => removeListeners());
+  addon.self.addEventListener("reenabled", () => addListeners());
 
   //cool functions below
   function retrieveImageFromClipboardAsBlob(pasteEvent, callback) {
@@ -149,7 +182,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     progresselement.className = "uploadStatus";
     console.log(image);
 
-    var hash = md5(image);
+    var hash = SparkMD5.ArrayBuffer.hash(image);
     var type = fileType;
     console.log("type: " + fileType);
 

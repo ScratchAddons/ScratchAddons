@@ -1,1 +1,1 @@
-{"editor-stepping/@name":"Aktuell ausgeführte Blöcke markieren","editor-stepping/@description":"Fügt den Blöcken, die gerade im Projekt ausgeführt werden, einen blauen Rahmen hinzu."}
+{"editor-stepping/@name":"Markierung für ausgeführte Blöcke","editor-stepping/@description":"Fügt eine farbige Markierung zu den Blöcken, die gerade in einem Projekt ausgeführt werden, hinzu.","editor-stepping/@settings-name-highlight-color":"Markierungsfarbe"}

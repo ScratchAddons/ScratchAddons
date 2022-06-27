@@ -13,7 +13,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "info": [
@@ -31,9 +31,8 @@
       "type": "boolean"
     }
   ],
-  "tags": ["editor", "codeEditor"],
   "versionAdded": "1.14.0",
+  "tags": ["editor", "codeEditor", "featured"],
   "enabledByDefault": false,
-  "libraries": ["scratch-blocks"],
-  "l10n": true
+  "libraries": ["scratch-blocks"]
 }

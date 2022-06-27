@@ -1,0 +1,12 @@
+{
+  "message-filters/messages": "Show messages from:",
+  "message-filters/studio": "Studio activity",
+  "message-filters/comment": "Comments",
+  "message-filters/favorite": "Favorites",
+  "message-filters/love": "Loves",
+  "message-filters/remix": "Remixes",
+  "message-filters/follow": "Follows",
+  "message-filters/invite": "Studio invites",
+  "message-filters/forum": "Forum activity",
+  "message-filters/promotion": "Studio promotions"
+}
