@@ -325,9 +325,6 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .blocklyFlyoutScrollbar .blocklyScrollbarHandle {
   fill: var(--editorDarkMode-palette-scrollbar);
 }
-.sa-lock-image {
-  filter: var(--editorDarkMode-palette-filter);
-}
 
 /* Full screen background */
 .stage-wrapper_stage-wrapper_2bejr.stage-wrapper_full-screen_2hjMb {
