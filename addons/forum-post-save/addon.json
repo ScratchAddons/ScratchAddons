@@ -21,6 +21,8 @@
       "default": 5
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "tags": ["community", "forums"],
   "versionAdded": "1.27.0"
 }
