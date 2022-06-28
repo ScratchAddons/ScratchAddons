@@ -67,6 +67,7 @@ export default async function ({ addon, global, console, msg }) {
 
         var spriteName = document.createElement('p');
         spriteName.className = "sprite-name";
+        spriteName.id = "sprite-name-" + i;
         if (!sortedTargets[i].isOriginal) {
           spriteName.innerHTML = msg("clone", {clone: sortedTargets[i].getName()});
         } else {
@@ -103,6 +104,11 @@ export default async function ({ addon, global, console, msg }) {
           sortedTargets[parseInt(evt.currentTarget.className)].goBackwardLayers(1);
           setVisible(true);
         }
+
+        var input = document.getElementsByClassName('sprite-info_sprite-input_17wjb');
+        input[0].addEventListener("change", function() {
+          setVisible(true);
+        });
       }
     } else {
       layerTab.classList.remove(
