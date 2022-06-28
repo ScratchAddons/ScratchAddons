@@ -32,14 +32,14 @@ export default async function ({ addon, console, msg }) {
       addon.tab.displayNoneWhileDisabled(container, { display: "inline-block" });
       addon.tab.appendToSharedSpace({ space: "beforeRemixButton", element: container, order: 0 });
       let projectInfo = getBlockCount();
-      let spriteImg = document.createElement("img")
-      spriteImg.setAttribute("src", "https://scratch.mit.edu/svgs/project/sprite-count.svg")
-      container.appendChild(spriteImg)
+      let spriteImg = document.createElement("img");
+      spriteImg.setAttribute("src", "https://scratch.mit.edu/svgs/project/sprite-count.svg");
+      container.appendChild(spriteImg);
       container.appendChild(document.createTextNode(msg("sprite", { num: projectInfo.spriteCount })));
       container.appendChild(document.createElement("br"));
-      let scriptImg = document.createElement("img")
-      scriptImg.setAttribute("src", "https://scratch.mit.edu/svgs/project/block-count.svg")
-      container.appendChild(scriptImg)
+      let scriptImg = document.createElement("img");
+      scriptImg.setAttribute("src", "https://scratch.mit.edu/svgs/project/block-count.svg");
+      container.appendChild(scriptImg);
       container.appendChild(document.createTextNode(msg("script", { num: projectInfo.scriptCount })));
     }
   };
