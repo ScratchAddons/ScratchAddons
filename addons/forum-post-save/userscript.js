@@ -9,14 +9,15 @@ export default ({ addon }) => {
     box.value = save;
   }
 
-  let lastTimeoutId;
+  let lastTimeoutId = null;
   box.addEventListener("input", (e) => {
     if (addon.self.disabled) return;
     if (typeof lastTimeoutId === "number") {
       clearTimeout(lastTimeoutId);
+      lastTimeoutId = null:
     }
     lastTimeoutId = setTimeout(() => {
-      lastTimeoutId = undefined;
+      lastTimeoutId = null;
       localStorage.setItem(`sa-forum-post-save-${topicId}`, box.value);
     }, addon.settings.get("timeout") * 1000);
   });
