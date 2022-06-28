@@ -2,8 +2,13 @@
   margin-left: 1rem;
   margin-bottom: 0.5rem;
   font-size: 0.875rem;
-  text-align: right;
 }
+
+.sa-project-info img {
+  height: 0.875rem;
+  margin-right: 0.5rem;
+}
+
 .preview .project-buttons > * {
   vertical-align: middle;
 }
