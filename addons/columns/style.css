@@ -86,24 +86,16 @@
 
 /* hide-flyout compatibility */
 
-.blocklyFlyout.sa-flyoutClose {
-  transform: translate(-320px, var(--sa-flyout-y)) !important;
-}
-
-.blocklyFlyoutScrollbar.sa-flyoutClose {
-  transform: translate(-25px, calc(var(--sa-flyout-y) + 2.5px)) !important;
-}
-
-.sa-lock-image.sa-flyoutClose {
-  transform: translateX(-320px);
+[class*="gui_tabs_"] {
+  --sa-flyout-width: 310px;
+  --sa-toolbox-width: var(--sa-flyout-width);
 }
 
 .sa-flyout-placeHolder {
   left: 0;
-  top: calc(var(--sa-flyout-y) + 44px);
-  width: 311px;
+  top: calc(var(--sa-flyout-y) + var(--sa-tab-bar-height));
 }
 
 .sa-lock-image {
-  top: calc(var(--sa-flyout-y) + 46px);
+  top: calc(var(--sa-flyout-y) + var(--sa-tab-bar-height) + 4px);
 }
