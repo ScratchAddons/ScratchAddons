@@ -34,5 +34,7 @@
       "default": false
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "tags": ["editor"]
 }

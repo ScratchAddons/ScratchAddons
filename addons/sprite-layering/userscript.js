@@ -1,9 +1,10 @@
 export default async function ({ addon, global, console, msg }) {
-  const { vm } = addon.tab.traps.vm;
+  const vm = addon.tab.traps.vm;
 
   const manager = document.createElement("div");
   manager.id = "sa-layer-manager";
   manager.classList.add(addon.tab.scratchClass("asset-panel_wrapper"), "sa-layer-manager");
+  addon.tab.displayNoneWhileDisabled(manager, { display: "block" });
 
   const layerTab = document.createElement("li");
   addon.tab.displayNoneWhileDisabled(layerTab, { display: "flex" });
@@ -41,44 +42,83 @@ export default async function ({ addon, global, console, msg }) {
         layerBody.removeChild(layerBody.firstChild);
       }
 
-      var targets = vm.runtime.targets;
+      let targets = vm.runtime.targets;
 
-      var sortedTargets = [];
-      var layers = [];
-      for (var i=0;i<targets.length;i++) {
+      let sortedTargets = [];
+      let layers = [];
+      for (let i=0;i<targets.length;i++) {
         layers.push(targets[i].getLayerOrder());
       }
 
-      var x = 0;
-      for (var i=0;i<layers.length;i++) {
+      let x = 0;
+      for (let i=0;i<layers.length;i++) {
         x = layers.indexOf(i);
-        sortedTargets.push(targets[x])
+        sortedTargets.push(targets[x]);
       }
       
-      for (var z=sortedTargets.length;z>0;z--) {
-        var i = z-1;
+      for (let z=sortedTargets.length;z>0;z--) {
+        let i = z-1;
         if (!sortedTargets[i].isOriginal) {
           if (addon.settings.get("clone_vis") === true) {
-            var layer = document.createElement('div');
+            let layer = document.createElement('div');
             layer.className = "layer";
             layer.id = "layer-manager-" + sortedTargets[i].getLayerOrder();
 
-            var layerNum = document.createElement('p');
+            let layerNum = document.createElement('p');
             layerNum.className = "layer-id";
-            layerNum.innerHTML = sortedTargets[i].getLayerOrder();
+            layerNum.innerText = sortedTargets[i].getLayerOrder();
 
-            var spriteName = document.createElement('p');
+            let spriteName = document.createElement('p');
             spriteName.className = "sprite-name";
             spriteName.id = "sprite-name-" + i;
             if (!sortedTargets[i].isOriginal) {
-              spriteName.innerHTML = msg("clone", {clone: sortedTargets[i].getName()});
+              spriteName.innerText = msg("clone", {clone: sortedTargets[i].getName()});
             } else {
-              spriteName.innerHTML = sortedTargets[i].getName();
+              spriteName.innerText = sortedTargets[i].getName();
             }
 
-            var buttons = document.createElement('div');
+            let buttons = document.createElement('div');
             buttons.className = "function-buttons";
-            buttons.innerHTML = "<button id='up-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/cc0065f74161f7e7859b31796aaa3345.svg'></button><button id='down-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/c4379c5eb21b7cf9b9c94055dde0b582.svg'></button>";
+
+            let button = document.createElement('button');
+            button.className = i;
+            button.id = 'up-'+i;
+            
+            let img = document.createElement('img');
+            img.src = 'https://scratch.mit.edu/static/assets/cc0065f74161f7e7859b31796aaa3345.svg';
+            
+            button.appendChild(img);
+            buttons.appendChild(button);
+
+            button = document.createElement('button');
+            button.className = i;
+            button.id = 'allup-'+i;
+            
+            img = document.createElement('img');
+            img.src = 'https://scratch.mit.edu/static/assets/abdb9221f6fe3367ae1d899e2352d2e3.svg';
+            
+            button.appendChild(img);
+            buttons.appendChild(button);
+            
+            button = document.createElement('button');
+            button.className = i;
+            button.id = 'down-'+i;
+            
+            img = document.createElement('img');
+            img.src = 'https://scratch.mit.edu/static/assets/c4379c5eb21b7cf9b9c94055dde0b582.svg';
+            
+            button.appendChild(img);
+            buttons.appendChild(button);
+
+            button = document.createElement('button');
+            button.className = i;
+            button.id = 'alldown-'+i;
+            
+            img = document.createElement('img');
+            img.src = 'https://scratch.mit.edu/static/assets/f3cd3bde88a384bf6757c9f30508cdd6.svg';
+            
+            button.appendChild(img);
+            buttons.appendChild(button);
             
             layerBody.appendChild(layer);
             layer = document.getElementById("layer-manager-" + sortedTargets[i].getLayerOrder());
@@ -89,15 +129,15 @@ export default async function ({ addon, global, console, msg }) {
             }
           }
         } else {
-          var layer = document.createElement('div');
+          let layer = document.createElement('div');
           layer.className = "layer";
           layer.id = "layer-manager-" + sortedTargets[i].getLayerOrder();
 
-          var layerNum = document.createElement('p');
+          let layerNum = document.createElement('p');
           layerNum.className = "layer-id";
           layerNum.innerHTML = sortedTargets[i].getLayerOrder();
 
-          var spriteName = document.createElement('p');
+          let spriteName = document.createElement('p');
           spriteName.className = "sprite-name";
           spriteName.id = "sprite-name-" + i;
           if (!sortedTargets[i].isOriginal) {
@@ -106,7 +146,7 @@ export default async function ({ addon, global, console, msg }) {
             spriteName.innerHTML = sortedTargets[i].getName();
           }
 
-          var buttons = document.createElement('div');
+          let buttons = document.createElement('div');
           buttons.className = "function-buttons";
           buttons.innerHTML = "<button id='up-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/cc0065f74161f7e7859b31796aaa3345.svg'></button><button id='allup-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/abdb9221f6fe3367ae1d899e2352d2e3.svg'></button><button id='down-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/c4379c5eb21b7cf9b9c94055dde0b582.svg'></button><button id='alldown-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/f3cd3bde88a384bf6757c9f30508cdd6.svg'></button>";
             
@@ -119,21 +159,21 @@ export default async function ({ addon, global, console, msg }) {
           }
         }
 
-        var input = document.getElementsByClassName('sprite-info_sprite-input_17wjb');
+        let input = document.getElementsByClassName('sprite-info_sprite-input_17wjb');
         input[0].addEventListener("change", function() {
           setVisible(true);
         });
       }
 
       document.getElementById('down-1').disabled = true;
-      var length = sortedTargets.length - 1;
+      let length = sortedTargets.length - 1;
       document.getElementById('up-'+length).disabled = true;
       document.getElementById('alldown-1').disabled = true;
       document.getElementById('allup-'+length).disabled = true;
 
-      for (var x=sortedTargets.length-1;x>0;x--) {
-        var temp_id = "up-" + x;
-        var button = document.getElementById(temp_id);
+      for (let x=sortedTargets.length-1;x>0;x--) {
+        let temp_id = "up-" + x;
+        let button = document.getElementById(temp_id);
         if (!sortedTargets[x].isOriginal) {
           if (addon.settings.get("clone_vis") === true) {
             button.addEventListener("click", forward);
@@ -147,8 +187,8 @@ export default async function ({ addon, global, console, msg }) {
           setVisible(true);
         }
 
-        var temp_id = "down-" + x;
-        var button = document.getElementById(temp_id);
+        temp_id = "down-" + x;
+        button = document.getElementById(temp_id);
         if (!sortedTargets[x].isOriginal) {
           if (addon.settings.get("clone_vis") === true) {
             button.addEventListener("click", backward);
@@ -162,8 +202,8 @@ export default async function ({ addon, global, console, msg }) {
           setVisible(true);
         }
 
-        var temp_id = "allup-" + x;
-        var button = document.getElementById(temp_id);
+        temp_id = "allup-" + x;
+        button = document.getElementById(temp_id);
         if (!sortedTargets[x].isOriginal) {
           if (addon.settings.get("clone_vis") === true) {
             button.addEventListener("click", front);
@@ -177,8 +217,8 @@ export default async function ({ addon, global, console, msg }) {
           setVisible(true);
         }
 
-        var temp_id = "alldown-" + x;
-        var button = document.getElementById(temp_id);
+        temp_id = "alldown-" + x;
+        button = document.getElementById(temp_id);
         if (!sortedTargets[x].isOriginal) {
           if (addon.settings.get("clone_vis") === true) {
             button.addEventListener("click", back);
@@ -214,7 +254,7 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   addon.self.addEventListener("disabled", () => {
-    if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex === 3) {
+    if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex === 4) {
       addon.tab.redux.dispatch({ type: "scratch-gui/navigation/ACTIVATE_TAB", activeTabIndex: 2 });
     }
   });
