@@ -1,0 +1,25 @@
+{
+  "name": "Layer manager",
+  "description": "Adds a tab next to \"sounds\" in the editor for easily updating sprite layering.",
+  "credits": [
+    {
+      "name": "Jeffalo"
+    },
+    {
+      "name": "GarboMuffin"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor"]
+}
