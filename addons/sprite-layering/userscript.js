@@ -23,7 +23,7 @@ export default async function ({ addon, global, console, msg }) {
 
   layerTab.appendChild(layerTabIcon);
   layerTab.appendChild(layerTabText);
-  
+
   layerTab.addEventListener("click", (e) => {
     addon.tab.redux.dispatch({ type: "scratch-gui/navigation/ACTIVATE_TAB", activeTabIndex: 4 });
   });
@@ -36,7 +36,7 @@ export default async function ({ addon, global, console, msg }) {
       );
       const contentArea = document.querySelector("[class^=gui_tabs]");
       contentArea.insertAdjacentElement("beforeend", manager);
-      const layerBody = document.getElementById('sa-layer-manager');
+      const layerBody = document.getElementById("sa-layer-manager");
 
       while (layerBody.firstChild) {
         layerBody.removeChild(layerBody.firstChild);
@@ -141,15 +141,32 @@ export default async function ({ addon, global, console, msg }) {
           spriteName.className = "sprite-name";
           spriteName.id = "sprite-name-" + i;
           if (!sortedTargets[i].isOriginal) {
-            spriteName.innerHTML = msg("clone", {clone: sortedTargets[i].getName()});
+            spriteName.innerHTML = msg("clone", { clone: sortedTargets[i].getName() });
           } else {
             spriteName.innerHTML = sortedTargets[i].getName();
           }
 
           let buttons = document.createElement('div');
           buttons.className = "function-buttons";
-          buttons.innerHTML = "<button id='up-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/cc0065f74161f7e7859b31796aaa3345.svg'></button><button id='allup-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/abdb9221f6fe3367ae1d899e2352d2e3.svg'></button><button id='down-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/c4379c5eb21b7cf9b9c94055dde0b582.svg'></button><button id='alldown-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/f3cd3bde88a384bf6757c9f30508cdd6.svg'></button>";
-            
+          buttons.innerHTML =
+            "<button id='up-" +
+            i +
+            "' class='" +
+            i +
+            "'><img src='https://scratch.mit.edu/static/assets/cc0065f74161f7e7859b31796aaa3345.svg'></button><button id='allup-" +
+            i +
+            "' class='" +
+            i +
+            "'><img src='https://scratch.mit.edu/static/assets/abdb9221f6fe3367ae1d899e2352d2e3.svg'></button><button id='down-" +
+            i +
+            "' class='" +
+            i +
+            "'><img src='https://scratch.mit.edu/static/assets/c4379c5eb21b7cf9b9c94055dde0b582.svg'></button><button id='alldown-" +
+            i +
+            "' class='" +
+            i +
+            "'><img src='https://scratch.mit.edu/static/assets/f3cd3bde88a384bf6757c9f30508cdd6.svg'></button>";
+
           layerBody.appendChild(layer);
           layer = document.getElementById("layer-manager-" + sortedTargets[i].getLayerOrder());
           layer.appendChild(layerNum);
