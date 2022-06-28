@@ -8,7 +8,6 @@
       "id": "mobile"
     },
     {
-      "type": "info",
       "text": "The size of most elements is not changed. If you want to see more projects and curators at once, use the \"more items per row\" addon.",
       "id": "itemsPerRow"
     }
