@@ -1,5 +1,5 @@
 {
-  "versionAdded":"27.0",
+  "versionAdded":"1.27.0",
   "name": "Layer manager",
   "description": "Adds a tab next to \"sounds\" in the editor for easily updating sprite layering.",
   "credits": [
