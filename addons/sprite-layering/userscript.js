@@ -46,80 +46,80 @@ export default async function ({ addon, global, console, msg }) {
 
       let sortedTargets = [];
       let layers = [];
-      for (let i=0;i<targets.length;i++) {
+      for (let i = 0; i < targets.length; i++) {
         layers.push(targets[i].getLayerOrder());
       }
 
       let x = 0;
-      for (let i=0;i<layers.length;i++) {
+      for (let i = 0; i < layers.length; i++) {
         x = layers.indexOf(i);
         sortedTargets.push(targets[x]);
       }
-      
-      for (let z=sortedTargets.length;z>0;z--) {
-        let i = z-1;
+
+      for (let z = sortedTargets.length; z > 0; z--) {
+        let i = z - 1;
         if (!sortedTargets[i].isOriginal) {
           if (addon.settings.get("clone_vis") === true) {
-            let layer = document.createElement('div');
+            let layer = document.createElement("div");
             layer.className = "layer";
             layer.id = "layer-manager-" + sortedTargets[i].getLayerOrder();
 
-            let layerNum = document.createElement('p');
+            let layerNum = document.createElement("p");
             layerNum.className = "layer-id";
             layerNum.innerText = sortedTargets[i].getLayerOrder();
 
-            let spriteName = document.createElement('p');
+            let spriteName = document.createElement("p");
             spriteName.className = "sprite-name";
             spriteName.id = "sprite-name-" + i;
             if (!sortedTargets[i].isOriginal) {
-              spriteName.innerText = msg("clone", {clone: sortedTargets[i].getName()});
+              spriteName.innerText = msg("clone", { clone: sortedTargets[i].getName() });
             } else {
               spriteName.innerText = sortedTargets[i].getName();
             }
 
-            let buttons = document.createElement('div');
+            let buttons = document.createElement("div");
             buttons.className = "function-buttons";
 
-            let button = document.createElement('button');
+            let button = document.createElement("button");
             button.className = i;
-            button.id = 'up-'+i;
-            
-            let img = document.createElement('img');
-            img.src = 'https://scratch.mit.edu/static/assets/cc0065f74161f7e7859b31796aaa3345.svg';
-            
+            button.id = "up-" + i;
+
+            let img = document.createElement("img");
+            img.src = "https://scratch.mit.edu/static/assets/cc0065f74161f7e7859b31796aaa3345.svg";
+
             button.appendChild(img);
             buttons.appendChild(button);
 
-            button = document.createElement('button');
+            button = document.createElement("button");
             button.className = i;
-            button.id = 'allup-'+i;
-            
-            img = document.createElement('img');
-            img.src = 'https://scratch.mit.edu/static/assets/abdb9221f6fe3367ae1d899e2352d2e3.svg';
-            
-            button.appendChild(img);
-            buttons.appendChild(button);
-            
-            button = document.createElement('button');
-            button.className = i;
-            button.id = 'down-'+i;
-            
-            img = document.createElement('img');
-            img.src = 'https://scratch.mit.edu/static/assets/c4379c5eb21b7cf9b9c94055dde0b582.svg';
-            
+            button.id = "allup-" + i;
+
+            img = document.createElement("img");
+            img.src = "https://scratch.mit.edu/static/assets/abdb9221f6fe3367ae1d899e2352d2e3.svg";
+
             button.appendChild(img);
             buttons.appendChild(button);
 
-            button = document.createElement('button');
+            button = document.createElement("button");
             button.className = i;
-            button.id = 'alldown-'+i;
-            
-            img = document.createElement('img');
-            img.src = 'https://scratch.mit.edu/static/assets/f3cd3bde88a384bf6757c9f30508cdd6.svg';
-            
+            button.id = "down-" + i;
+
+            img = document.createElement("img");
+            img.src = "https://scratch.mit.edu/static/assets/c4379c5eb21b7cf9b9c94055dde0b582.svg";
+
             button.appendChild(img);
             buttons.appendChild(button);
-            
+
+            button = document.createElement("button");
+            button.className = i;
+            button.id = "alldown-" + i;
+
+            img = document.createElement("img");
+            img.src = "https://scratch.mit.edu/static/assets/f3cd3bde88a384bf6757c9f30508cdd6.svg";
+
+            button.appendChild(img);
+            buttons.appendChild(button);
+
             layerBody.appendChild(layer);
             layer = document.getElementById("layer-manager-" + sortedTargets[i].getLayerOrder());
             layer.appendChild(layerNum);
@@ -129,15 +129,15 @@ export default async function ({ addon, global, console, msg }) {
             }
           }
         } else {
-          let layer = document.createElement('div');
+          let layer = document.createElement("div");
           layer.className = "layer";
           layer.id = "layer-manager-" + sortedTargets[i].getLayerOrder();
 
-          let layerNum = document.createElement('p');
+          let layerNum = document.createElement("p");
           layerNum.className = "layer-id";
           layerNum.innerHTML = sortedTargets[i].getLayerOrder();
 
-          let spriteName = document.createElement('p');
+          let spriteName = document.createElement("p");
           spriteName.className = "sprite-name";
           spriteName.id = "sprite-name-" + i;
           if (!sortedTargets[i].isOriginal) {
@@ -146,7 +146,7 @@ export default async function ({ addon, global, console, msg }) {
             spriteName.innerHTML = sortedTargets[i].getName();
           }
 
-          let buttons = document.createElement('div');
+          let buttons = document.createElement("div");
           buttons.className = "function-buttons";
           buttons.innerHTML =
             "<button id='up-" +
@@ -176,19 +176,19 @@ export default async function ({ addon, global, console, msg }) {
           }
         }
 
-        let input = document.getElementsByClassName('sprite-info_sprite-input_17wjb');
-        input[0].addEventListener("change", function() {
+        let input = document.getElementsByClassName("sprite-info_sprite-input_17wjb");
+        input[0].addEventListener("change", function () {
           setVisible(true);
         });
       }
 
-      document.getElementById('down-1').disabled = true;
+      document.getElementById("down-1").disabled = true;
       let length = sortedTargets.length - 1;
-      document.getElementById('up-'+length).disabled = true;
-      document.getElementById('alldown-1').disabled = true;
-      document.getElementById('allup-'+length).disabled = true;
+      document.getElementById("up-" + length).disabled = true;
+      document.getElementById("alldown-1").disabled = true;
+      document.getElementById("allup-" + length).disabled = true;
 
-      for (let x=sortedTargets.length-1;x>0;x--) {
+      for (let x = sortedTargets.length - 1; x > 0; x--) {
         let temp_id = "up-" + x;
         let button = document.getElementById(temp_id);
         if (!sortedTargets[x].isOriginal) {
