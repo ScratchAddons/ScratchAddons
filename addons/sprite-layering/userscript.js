@@ -68,7 +68,7 @@ export default async function ({ addon, global, console, msg }) {
         var spriteName = document.createElement('p');
         spriteName.className = "sprite-name";
         if (!sortedTargets[i].isOriginal) {
-          spriteName.innerHTML = sortedTargets[i].getName() + " (clone)";
+          spriteName.innerHTML = msg("clone", {clone: sortedTargets[i].getName()});
         } else {
           spriteName.innerHTML = sortedTargets[i].getName();
         }
