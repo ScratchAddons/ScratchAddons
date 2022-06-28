@@ -22,7 +22,7 @@ export default async function ({ addon, global, console, msg }) {
 
   layerTab.appendChild(layerTabIcon);
   layerTab.appendChild(layerTabText);
-  
+
   layerTab.addEventListener("click", (e) => {
     addon.tab.redux.dispatch({ type: "scratch-gui/navigation/ACTIVATE_TAB", activeTabIndex: 4 });
   });
@@ -35,7 +35,7 @@ export default async function ({ addon, global, console, msg }) {
       );
       const contentArea = document.querySelector("[class^=gui_tabs]");
       contentArea.insertAdjacentElement("beforeend", manager);
-      const layerBody = document.getElementById('sa-layer-manager');
+      const layerBody = document.getElementById("sa-layer-manager");
 
       while (layerBody.firstChild) {
         layerBody.removeChild(layerBody.firstChild);
@@ -45,41 +45,50 @@ export default async function ({ addon, global, console, msg }) {
 
       var sortedTargets = [];
       var layers = [];
-      for (var i=0;i<targets.length;i++) {
+      for (var i = 0; i < targets.length; i++) {
         layers.push(targets[i].getLayerOrder());
       }
 
       var x = 0;
-      for (var i=0;i<layers.length;i++) {
+      for (var i = 0; i < layers.length; i++) {
         x = layers.indexOf(i);
-        sortedTargets.push(targets[x])
+        sortedTargets.push(targets[x]);
       }
-      
-      for (var z=sortedTargets.length;z>0;z--) {
-        var i = z-1;
+
+      for (var z = sortedTargets.length; z > 0; z--) {
+        var i = z - 1;
         if (!sortedTargets[i].isOriginal) {
           if (addon.settings.get("clone_vis") === true) {
-            var layer = document.createElement('div');
+            var layer = document.createElement("div");
             layer.className = "layer";
             layer.id = "layer-manager-" + sortedTargets[i].getLayerOrder();
 
-            var layerNum = document.createElement('p');
+            var layerNum = document.createElement("p");
             layerNum.className = "layer-id";
             layerNum.innerHTML = sortedTargets[i].getLayerOrder();
 
-            var spriteName = document.createElement('p');
+            var spriteName = document.createElement("p");
             spriteName.className = "sprite-name";
             spriteName.id = "sprite-name-" + i;
             if (!sortedTargets[i].isOriginal) {
-              spriteName.innerHTML = msg("clone", {clone: sortedTargets[i].getName()});
+              spriteName.innerHTML = msg("clone", { clone: sortedTargets[i].getName() });
             } else {
               spriteName.innerHTML = sortedTargets[i].getName();
             }
 
-            var buttons = document.createElement('div');
+            var buttons = document.createElement("div");
             buttons.className = "function-buttons";
-            buttons.innerHTML = "<button id='up-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/cc0065f74161f7e7859b31796aaa3345.svg'></button><button id='down-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/c4379c5eb21b7cf9b9c94055dde0b582.svg'></button>";
-            
+            buttons.innerHTML =
+              "<button id='up-" +
+              i +
+              "' class='" +
+              i +
+              "'><img src='https://scratch.mit.edu/static/assets/cc0065f74161f7e7859b31796aaa3345.svg'></button><button id='down-" +
+              i +
+              "' class='" +
+              i +
+              "'><img src='https://scratch.mit.edu/static/assets/c4379c5eb21b7cf9b9c94055dde0b582.svg'></button>";
+
             layerBody.appendChild(layer);
             layer = document.getElementById("layer-manager-" + sortedTargets[i].getLayerOrder());
             layer.appendChild(layerNum);
@@ -89,27 +98,36 @@ export default async function ({ addon, global, console, msg }) {
             }
           }
         } else {
-          var layer = document.createElement('div');
+          var layer = document.createElement("div");
           layer.className = "layer";
           layer.id = "layer-manager-" + sortedTargets[i].getLayerOrder();
 
-          var layerNum = document.createElement('p');
+          var layerNum = document.createElement("p");
           layerNum.className = "layer-id";
           layerNum.innerHTML = sortedTargets[i].getLayerOrder();
 
-          var spriteName = document.createElement('p');
+          var spriteName = document.createElement("p");
           spriteName.className = "sprite-name";
           spriteName.id = "sprite-name-" + i;
           if (!sortedTargets[i].isOriginal) {
-            spriteName.innerHTML = msg("clone", {clone: sortedTargets[i].getName()});
+            spriteName.innerHTML = msg("clone", { clone: sortedTargets[i].getName() });
           } else {
             spriteName.innerHTML = sortedTargets[i].getName();
           }
 
-          var buttons = document.createElement('div');
+          var buttons = document.createElement("div");
           buttons.className = "function-buttons";
-          buttons.innerHTML = "<button id='up-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/cc0065f74161f7e7859b31796aaa3345.svg'></button><button id='down-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/c4379c5eb21b7cf9b9c94055dde0b582.svg'></button>";
-            
+          buttons.innerHTML =
+            "<button id='up-" +
+            i +
+            "' class='" +
+            i +
+            "'><img src='https://scratch.mit.edu/static/assets/cc0065f74161f7e7859b31796aaa3345.svg'></button><button id='down-" +
+            i +
+            "' class='" +
+            i +
+            "'><img src='https://scratch.mit.edu/static/assets/c4379c5eb21b7cf9b9c94055dde0b582.svg'></button>";
+
           layerBody.appendChild(layer);
           layer = document.getElementById("layer-manager-" + sortedTargets[i].getLayerOrder());
           layer.appendChild(layerNum);
@@ -119,12 +137,12 @@ export default async function ({ addon, global, console, msg }) {
           }
         }
 
-        var input = document.getElementsByClassName('sprite-info_sprite-input_17wjb');
-        input[0].addEventListener("change", function() {
+        var input = document.getElementsByClassName("sprite-info_sprite-input_17wjb");
+        input[0].addEventListener("change", function () {
           setVisible(true);
         });
       }
-      for (var x=sortedTargets.length-1;x>0;x--) {
+      for (var x = sortedTargets.length - 1; x > 0; x--) {
         var temp_id = "up-" + x;
         var button = document.getElementById(temp_id);
         if (!sortedTargets[x].isOriginal) {
