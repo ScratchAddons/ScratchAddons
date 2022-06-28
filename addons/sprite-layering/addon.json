@@ -7,6 +7,10 @@
     },
     {
       "name": "GarboMuffin"
+    },
+    {
+      "name": "Raspberry693",
+      "link": "https://scratch.mit.edu/users/Raspberry693"
     }
   ],
   "userscripts": [
@@ -21,5 +25,6 @@
       "matches": ["projects"]
     }
   ],
+  "version_added":27.0,
   "tags": ["editor"]
 }
