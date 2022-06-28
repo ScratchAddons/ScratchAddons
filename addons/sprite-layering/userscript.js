@@ -57,39 +57,83 @@ export default async function ({ addon, global, console, msg }) {
       
       for (var z=sortedTargets.length;z>0;z--) {
         var i = z-1;
-        var layer = document.createElement('div');
-        layer.className = "layer";
-        layer.id = "layer-manager-" + sortedTargets[i].getLayerOrder();
-
-        var layerNum = document.createElement('p');
-        layerNum.className = "layer-id";
-        layerNum.innerHTML = sortedTargets[i].getLayerOrder();
-
-        var spriteName = document.createElement('p');
-        spriteName.className = "sprite-name";
-        spriteName.id = "sprite-name-" + i;
         if (!sortedTargets[i].isOriginal) {
-          spriteName.innerHTML = msg("clone", {clone: sortedTargets[i].getName()});
+          if (addon.settings.get("clone_vis") === true) {
+            var layer = document.createElement('div');
+            layer.className = "layer";
+            layer.id = "layer-manager-" + sortedTargets[i].getLayerOrder();
+
+            var layerNum = document.createElement('p');
+            layerNum.className = "layer-id";
+            layerNum.innerHTML = sortedTargets[i].getLayerOrder();
+
+            var spriteName = document.createElement('p');
+            spriteName.className = "sprite-name";
+            spriteName.id = "sprite-name-" + i;
+            if (!sortedTargets[i].isOriginal) {
+              spriteName.innerHTML = msg("clone", {clone: sortedTargets[i].getName()});
+            } else {
+              spriteName.innerHTML = sortedTargets[i].getName();
+            }
+
+            var buttons = document.createElement('div');
+            buttons.className = "function-buttons";
+            buttons.innerHTML = "<button id='up-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/cc0065f74161f7e7859b31796aaa3345.svg'></button><button id='down-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/c4379c5eb21b7cf9b9c94055dde0b582.svg'></button>";
+            
+            layerBody.appendChild(layer);
+            layer = document.getElementById("layer-manager-" + sortedTargets[i].getLayerOrder());
+            layer.appendChild(layerNum);
+            layer.appendChild(spriteName);
+            if (sortedTargets[i].getLayerOrder() != 0) {
+              layer.appendChild(buttons);
+            }
+          }
         } else {
-          spriteName.innerHTML = sortedTargets[i].getName();
+          var layer = document.createElement('div');
+          layer.className = "layer";
+          layer.id = "layer-manager-" + sortedTargets[i].getLayerOrder();
+
+          var layerNum = document.createElement('p');
+          layerNum.className = "layer-id";
+          layerNum.innerHTML = sortedTargets[i].getLayerOrder();
+
+          var spriteName = document.createElement('p');
+          spriteName.className = "sprite-name";
+          spriteName.id = "sprite-name-" + i;
+          if (!sortedTargets[i].isOriginal) {
+            spriteName.innerHTML = msg("clone", {clone: sortedTargets[i].getName()});
+          } else {
+            spriteName.innerHTML = sortedTargets[i].getName();
+          }
+
+          var buttons = document.createElement('div');
+          buttons.className = "function-buttons";
+          buttons.innerHTML = "<button id='up-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/cc0065f74161f7e7859b31796aaa3345.svg'></button><button id='down-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/c4379c5eb21b7cf9b9c94055dde0b582.svg'></button>";
+            
+          layerBody.appendChild(layer);
+          layer = document.getElementById("layer-manager-" + sortedTargets[i].getLayerOrder());
+          layer.appendChild(layerNum);
+          layer.appendChild(spriteName);
+          if (sortedTargets[i].getLayerOrder() != 0) {
+            layer.appendChild(buttons);
+          }
         }
 
-        var buttons = document.createElement('div');
-        buttons.className = "function-buttons";
-        buttons.innerHTML = "<button id='up-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/cc0065f74161f7e7859b31796aaa3345.svg'></button><button id='down-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/c4379c5eb21b7cf9b9c94055dde0b582.svg'></button>";
-        
-        layerBody.appendChild(layer);
-        layer = document.getElementById("layer-manager-" + sortedTargets[i].getLayerOrder());
-        layer.appendChild(layerNum);
-        layer.appendChild(spriteName);
-        if (sortedTargets[i].getLayerOrder() != 0) {
-          layer.appendChild(buttons);
-        }
+        var input = document.getElementsByClassName('sprite-info_sprite-input_17wjb');
+        input[0].addEventListener("change", function() {
+          setVisible(true);
+        });
       }
       for (var x=sortedTargets.length-1;x>0;x--) {
         var temp_id = "up-" + x;
         var button = document.getElementById(temp_id);
-        button.addEventListener("click", forward);
+        if (!sortedTargets[x].isOriginal) {
+          if (addon.settings.get("clone_vis") === true) {
+            button.addEventListener("click", forward);
+          }
+        } else {
+          button.addEventListener("click", forward);
+        }
 
         function forward(evt) {
           sortedTargets[parseInt(evt.currentTarget.className)].goForwardLayers(1);
@@ -98,17 +142,18 @@ export default async function ({ addon, global, console, msg }) {
 
         var temp_id = "down-" + x;
         var button = document.getElementById(temp_id);
-        button.addEventListener("click", backward);
+        if (!sortedTargets[x].isOriginal) {
+          if (addon.settings.get("clone_vis") === true) {
+            button.addEventListener("click", backward);
+          }
+        } else {
+          button.addEventListener("click", backward);
+        }
 
         function backward(evt) {
           sortedTargets[parseInt(evt.currentTarget.className)].goBackwardLayers(1);
           setVisible(true);
         }
-
-        var input = document.getElementsByClassName('sprite-info_sprite-input_17wjb');
-        input[0].addEventListener("change", function() {
-          setVisible(true);
-        });
       }
     } else {
       layerTab.classList.remove(

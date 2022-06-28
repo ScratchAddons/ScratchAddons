@@ -26,5 +26,13 @@
       "matches": ["projects"]
     }
   ],
+  "settings": [
+    {
+      "name": "Show Clones",
+      "id": "clone_vis",
+      "type": "boolean",
+      "default": false
+    }
+  ],
   "tags": ["editor"]
 }
