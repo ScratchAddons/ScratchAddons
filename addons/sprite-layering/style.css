@@ -49,7 +49,7 @@
   background-color: rgb(218, 218, 218) !important;
 }
 .function-buttons > button[disabled] > img {
-  filter:grayscale(100%);
+  filter: grayscale(100%);
 }
 
 .gui_tab_27Unf.gui_is-selected_sHAiu {
