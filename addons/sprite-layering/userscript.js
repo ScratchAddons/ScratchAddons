@@ -108,7 +108,7 @@ export default async function ({ addon, global, console, msg }) {
 
           var buttons = document.createElement('div');
           buttons.className = "function-buttons";
-          buttons.innerHTML = "<button id='up-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/cc0065f74161f7e7859b31796aaa3345.svg'></button><button id='down-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/c4379c5eb21b7cf9b9c94055dde0b582.svg'></button>";
+          buttons.innerHTML = "<button id='up-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/cc0065f74161f7e7859b31796aaa3345.svg'></button><button id='allup-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/abdb9221f6fe3367ae1d899e2352d2e3.svg'></button><button id='down-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/c4379c5eb21b7cf9b9c94055dde0b582.svg'></button><button id='alldown-"+i+"' class='"+i+"'><img src='https://scratch.mit.edu/static/assets/f3cd3bde88a384bf6757c9f30508cdd6.svg'></button>";
             
           layerBody.appendChild(layer);
           layer = document.getElementById("layer-manager-" + sortedTargets[i].getLayerOrder());
@@ -124,6 +124,13 @@ export default async function ({ addon, global, console, msg }) {
           setVisible(true);
         });
       }
+
+      document.getElementById('down-1').disabled = true;
+      var length = sortedTargets.length - 1;
+      document.getElementById('up-'+length).disabled = true;
+      document.getElementById('alldown-1').disabled = true;
+      document.getElementById('allup-'+length).disabled = true;
+
       for (var x=sortedTargets.length-1;x>0;x--) {
         var temp_id = "up-" + x;
         var button = document.getElementById(temp_id);
@@ -152,6 +159,36 @@ export default async function ({ addon, global, console, msg }) {
 
         function backward(evt) {
           sortedTargets[parseInt(evt.currentTarget.className)].goBackwardLayers(1);
+          setVisible(true);
+        }
+
+        var temp_id = "allup-" + x;
+        var button = document.getElementById(temp_id);
+        if (!sortedTargets[x].isOriginal) {
+          if (addon.settings.get("clone_vis") === true) {
+            button.addEventListener("click", front);
+          }
+        } else {
+          button.addEventListener("click", front);
+        }
+
+        function front(evt) {
+          sortedTargets[parseInt(evt.currentTarget.className)].goToFront();
+          setVisible(true);
+        }
+
+        var temp_id = "alldown-" + x;
+        var button = document.getElementById(temp_id);
+        if (!sortedTargets[x].isOriginal) {
+          if (addon.settings.get("clone_vis") === true) {
+            button.addEventListener("click", back);
+          }
+        } else {
+          button.addEventListener("click", back);
+        }
+
+        function back(evt) {
+          sortedTargets[parseInt(evt.currentTarget.className)].goToBack();
           setVisible(true);
         }
       }

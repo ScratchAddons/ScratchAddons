@@ -30,9 +30,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: 0.1s;
+  margin-right: 5px;
 }
 .function-buttons > button:hover {
-  background-color: rgb(218, 218, 218);
+  background-color: rgb(241, 241, 241);
 }
 
 .sa-layer-manager {
@@ -41,6 +43,13 @@
   padding: 18px;
   height: 50px;
   overflow-y: auto;
+}
+
+.function-buttons > button[disabled] {
+  background-color: rgb(218, 218, 218) !important;
+}
+.function-buttons > button[disabled] > img {
+  filter:grayscale(100%);
 }
 
 .gui_tab_27Unf.gui_is-selected_sHAiu {
