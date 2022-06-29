@@ -1,9 +1,8 @@
-export default async function ({ addon, msg, global, console }) {
-  const isLoggedIn = await addon.auth.fetchIsLoggedIn();
-  if (!isLoggedIn) return;
-  const username = await addon.auth.fetchUsername();
+export default async function ({ addon }) {
   const { redux } = addon.tab;
+  await redux.waitForState((state) => typeof state.session.session.user === "object");
 
+  const username = await addon.auth.fetchUsername();
   await redux.waitForState(
     (state) => state.preview.status.project === "FETCHED" && state.preview.projectInfo.author?.username === username
   );
