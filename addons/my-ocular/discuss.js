@@ -34,7 +34,7 @@ export default async function ({ addon, global, console, msg }) {
     const response = await fetch(`https://my-ocular.jeffalo.net/api/user/${username}`);
     const data = await response.json();
     return {
-      userStatus: data.status?.replace(/\n/g, ' '),
+      userStatus: data.status?.replace(/\n/g, " "),
       color: data.color,
     };
   }

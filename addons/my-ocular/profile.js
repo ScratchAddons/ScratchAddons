@@ -8,7 +8,7 @@ export default async function ({ addon, global, console, msg }) {
 
   if (typeof data.status !== "string") return;
 
-  var statusText = data.status.replace(/\n/g, ' '); // clear out newlines
+  var statusText = data.status.replace(/\n/g, " "); // clear out newlines
   var color = data.color;
   if (statusText) {
     var statusSpan = document.createElement("i"); // for whatever reason, chrome turns variable named status into text. why the heck. aaaaaaaaaaaaaaaaaa
