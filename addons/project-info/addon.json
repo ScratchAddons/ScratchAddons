@@ -50,7 +50,7 @@
           "name": "Text only"
         }
       ],
-    "default": "both"
+      "default": "both"
     }
   ],
   "versionAdded": "1.4.0"

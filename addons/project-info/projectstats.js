@@ -44,15 +44,17 @@ export default async function ({ addon, console, msg }) {
       let scriptLbl = document.createElement("span");
       scriptLbl.id = "scriptLabel";
       container.appendChild(scriptLbl);
-      updateLabels()
+      updateLabels();
     }
   };
-  
+
   function updateLabels() {
     let setting = addon.settings.get("show");
     let projectInfo = getBlockCount();
-    document.querySelector("#spriteLabel").innerText = (setting === "icon") ? projectInfo.spriteCount : msg("sprite", { num: projectInfo.spriteCount });
-    document.querySelector("#scriptLabel").innerText = (setting === "icon") ? projectInfo.scriptCount : msg("script", { num: projectInfo.scriptCount });
+    document.querySelector("#spriteLabel").innerText =
+      setting === "icon" ? projectInfo.spriteCount : msg("sprite", { num: projectInfo.spriteCount });
+    document.querySelector("#scriptLabel").innerText =
+      setting === "icon" ? projectInfo.scriptCount : msg("script", { num: projectInfo.scriptCount });
   }
 
   // addProjectPageStats either when the project is loaded through the project page or when the user goes from the editor to the project page
