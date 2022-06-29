@@ -9,24 +9,8 @@ export default async function ({ addon, console }) {
 
     // Don't process data: URLs, since these are never thumbnails to be upsized,
     // and can be lengthy strings - which really does cause issues when it comes
-    // to the cdn2 regex!
+    // to the uploads regex!
     if (src.startsWith("data:")) continue;
-
-    // If the image is from uploads.scratch.mit.edu, reformat src so it looks
-    // like a cdn2 URL.
-    if (/^https?:\/\/uploads\.scratch\.mit\.edu\//.test(src)) {
-      const id = src.match(/[0-9]+/);
-      if (src.includes("projects")) {
-        // Project thumbnails are always 480x360.
-        src = `//cdn2.scratch.mit.edu/get_image/project/${id}_480x360.png`;
-      } else if (src.includes("users")) {
-        // Max user avatar size is 500x500.
-        src = `//cdn2.scratch.mit.edu/get_image/user/${id}_500x500.png`;
-      } else if (src.includes("galleries")) {
-        // Max studio thumbnail size is 500x500.
-        src = `//cdn2.scratch.mit.edu/get_image/gallery/${id}_500x500.png`;
-      }
-    }
 
     let width, height, newSrc;
 
