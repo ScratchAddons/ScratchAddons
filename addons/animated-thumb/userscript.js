@@ -126,7 +126,7 @@ export default async function ({ addon, global, console, msg }) {
         .then(
           (canceled) => {
             if (canceled) return;
-            thumbImage.src = `https://cdn2.scratch.mit.edu/get_image/project/${projectId}_480x360.png?nocache=${Date.now()}`;
+            thumbImage.src = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png?nocache=${Date.now()}`;
             content.classList.add("sa-animated-thumb-successful");
             saveConfig(projectId, stopOverwritingCheckbox.checked);
           },
