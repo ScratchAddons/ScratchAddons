@@ -13,6 +13,7 @@
   padding: 0.1rem;
 }
 
-.sa-project-info, .preview .project-buttons > * {
+.sa-project-info,
+.preview .project-buttons > * {
   vertical-align: middle;
 }
