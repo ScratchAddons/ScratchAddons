@@ -1,6 +1,6 @@
 {
-  "name": "Muted project player mode",
-  "description": "Ctrl+Click the green flag to mute/unmute the project.",
+  "name": "Project player volume control",
+  "description": "Ctrl+Click the green flag to mute/unmute the project, or use the slider",
   "info": [
     {
       "type": "notice",
@@ -12,12 +12,30 @@
     {
       "name": "TheColaber",
       "link": "https://scratch.mit.edu/users/TheColaber"
+    },
+    {
+      "name": "samq64",
+      "link": "https://scratch.mit.edu/users/samq64/"
     }
   ],
   "userscripts": [
     {
       "url": "userscript.js",
       "matches": ["projects", "projectEmbeds"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects", "projectEmbeds"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Show slider",
+      "id": "show-slider",
+      "type": "boolean",
+      "default": false
     }
   ],
   "dynamicEnable": true,
