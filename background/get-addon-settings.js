@@ -187,6 +187,10 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
             delete scratchr2.linkColor;
           }
         }
+        if (addonId == "project-info") {
+          madeChangesToAddon = madeAnyChanges = true;
+          settings.show = "text";
+        }
       }
 
       if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;
