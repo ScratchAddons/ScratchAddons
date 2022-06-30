@@ -1,0 +1,9 @@
+.sa-volume > * {
+  vertical-align: middle;
+  margin-top: 6px;
+}
+
+.sa-volume input {
+  width: 50px;
+  height: 5px;
+}
