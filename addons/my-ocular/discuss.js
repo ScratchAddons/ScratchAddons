@@ -1,23 +1,22 @@
 export default async function ({ addon, global, console, msg }) {
   let posts = document.querySelectorAll(".blockpost");
   let cache = Object.create(null);
-  
-  addon.settings.addEventListener("change", async function() {
+
+  addon.settings.addEventListener("change", async function () {
     posts.forEach(async (i) => {
       let username = i.querySelector(".username").innerText;
       const { userStatus, color } = await fetchStatus(username);
-      i.querySelector(".my-ocular-dot").style.backgroundColor = addon.settings.get("show-status") == "ocular" ? (color ? color :  "#bbb") : "";
+      i.querySelector(".my-ocular-dot").style.backgroundColor =
+        addon.settings.get("show-status") == "ocular" ? (color ? color : "#bbb") : "";
       if (userStatus) {
-          i.querySelector(".my-ocular-status").innerText = userStatus;
+        i.querySelector(".my-ocular-status").innerText = userStatus;
       } else {
-          i.querySelector(".my-ocular-status").innerText = "";
+        i.querySelector(".my-ocular-status").innerText = "";
       }
-      if (addon.settings.get("show-status") == "ocular")
-        status.title = msg("status-hover")
-      else
-        status.title = msg("aviate-status-hover")
+      if (addon.settings.get("show-status") == "ocular") status.title = msg("status-hover");
+      else status.title = msg("aviate-status-hover");
     });
-  }); 
+  });
 
   posts.forEach(async (i) => {
     let username = i.querySelector(".username").innerText;
@@ -31,10 +30,8 @@ export default async function ({ addon, global, console, msg }) {
     let status = document.createElement("i");
     status.classList.add("my-ocular-status");
     addon.tab.displayNoneWhileDisabled(status);
-    if (addon.settings.get("show-status") == "ocular")
-      status.title = msg("status-hover")
-    else
-      status.title = msg("aviate-status-hover")
+    if (addon.settings.get("show-status") == "ocular") status.title = msg("status-hover");
+    else status.title = msg("aviate-status-hover");
     let dot = document.createElement("span");
     addon.tab.displayNoneWhileDisabled(dot, { display: "inline-block" });
     dot.title = msg("status-hover");
@@ -43,10 +40,10 @@ export default async function ({ addon, global, console, msg }) {
     left.appendChild(br);
     left.appendChild(status);
     left.appendChild(dot);
-    
+
     if (userStatus) {
       status.innerText = userStatus;
-      dot.style.backgroundColor = addon.settings.get("show-status") == "ocular" ? (color ? color :  "#bbb") : "none";
+      dot.style.backgroundColor = addon.settings.get("show-status") == "ocular" ? (color ? color : "#bbb") : "none";
     }
   });
 
@@ -57,7 +54,7 @@ export default async function ({ addon, global, console, msg }) {
     } else if (addon.settings.get("show-status") == "aviate") {
       response = (await fetch(`https://aviateapp.eu.org/api/${username}`)).json();
     }
-    const data = (await response) ? await response : "\"status\": \"\",\"color\": \"\"";
+    const data = (await response) ? await response : '"status": "","color": ""';
     return {
       userStatus: data.status,
       color: data.color,

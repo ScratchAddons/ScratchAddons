@@ -1,6 +1,5 @@
 export default async function ({ addon, global, console, msg }) {
-
-  addon.settings.addEventListener("change", async function() {
+  addon.settings.addEventListener("change", async function () {
     statusSetting = addon.settings.get("show-status");
     let status = (await getStatus()).status;
     if (document.querySelector("#my-ocular-status") && status) {
@@ -10,23 +9,18 @@ export default async function ({ addon, global, console, msg }) {
       document.querySelector("#my-ocular-status").innerText = "";
       locationElem.classList.remove("group");
     }
-    if (statusSetting == "ocular")
-      statusSpan.title = msg("status-hover")
-    else
-      statusSpan.title = msg("aviate-status-hover")
-  }); 
-  
+    if (statusSetting == "ocular") statusSpan.title = msg("status-hover");
+    else statusSpan.title = msg("aviate-status-hover");
+  });
+
   let statusSetting = addon.settings.get("show-status");
   let username = document.querySelector("#profile-data > div.box-head > div > h2").innerText;
   let container = document.querySelector(".location");
   let data = await getStatus();
-  
-  
+
   let statusSpan = document.createElement("i"); // For whatever reason, chrome turns variable named status into text.
-  if (statusSetting == "ocular")
-    statusSpan.title = msg("status-hover")
-  else
-    statusSpan.title = msg("aviate-status-hover")
+  if (statusSetting == "ocular") statusSpan.title = msg("status-hover");
+  else statusSpan.title = msg("aviate-status-hover");
   statusSpan.id = "my-ocular-status";
 
   let dot = document.createElement("span");
@@ -42,14 +36,14 @@ export default async function ({ addon, global, console, msg }) {
   container.appendChild(locationElem); // give it the location
   container.appendChild(statusSpan);
   container.appendChild(dot);
-  
+
   if (data != false) {
     locationElem.classList.add("group");
     statusSpan.innerText = data.status;
     dot.style.backgroundColor = data.color;
   }
-  
-  async function getStatus() { 
+
+  async function getStatus() {
     let response;
     if (statusSetting == "ocular") {
       return (await fetch(`https://my-ocular.jeffalo.net/api/user/${username}`)).json();

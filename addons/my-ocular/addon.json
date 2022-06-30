@@ -1,73 +1,61 @@
 {
-  "name":"Ocular and Aviate Integration",
-  "description":"Shows ocular/aviate statuses and forum post reactions. Uses my-ocular.jeffalo.net to obtain data.",
-  "credits":[
+  "name": "Ocular and Aviate Integration",
+  "description": "Shows ocular/aviate statuses and forum post reactions. Uses my-ocular.jeffalo.net to obtain data.",
+  "credits": [
     {
-      "name":"Jeffalo"
+      "name": "Jeffalo"
     },
     {
-      "name":"MystPi"
+      "name": "MystPi"
     }
   ],
-  "userscripts":[
+  "userscripts": [
     {
-      "url":"discuss.js",
-      "matches":[
-        "https://scratch.mit.edu/discuss/topic/*",
-        "https://scratch.mit.edu/users/*"
-      ],
-      "if":{
-        "settings":{
-          "discuss":true
+      "url": "discuss.js",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*", "https://scratch.mit.edu/users/*"],
+      "if": {
+        "settings": {
+          "discuss": true
         }
       }
     },
     {
-      "url":"profile.js",
-      "matches":[
-        "https://scratch.mit.edu/users/*/"
-      ],
-      "if":{
-        "settings":{
-          "profile":true
+      "url": "profile.js",
+      "matches": ["https://scratch.mit.edu/users/*/"],
+      "if": {
+        "settings": {
+          "profile": true
         }
       }
     },
     {
-      "url":"reactions.js",
-      "matches":[
-        "https://scratch.mit.edu/discuss/topic/*"
-      ],
-      "if":{
-        "settings":{
-          "reactions":true
+      "url": "reactions.js",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "if": {
+        "settings": {
+          "reactions": true
         }
       }
     }
   ],
-  "userstyles":[
+  "userstyles": [
     {
-      "url":"button-style.css",
-      "matches":[
-        "https://scratch.mit.edu/discuss/topic/*",
-        "https://scratch.mit.edu/users/*"
-      ]
+      "url": "button-style.css",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*", "https://scratch.mit.edu/users/*"]
     },
     {
-      "url":"reactions.css",
-      "matches":[
-        "https://scratch.mit.edu/discuss/topic/*"
-      ],
-      "if":{
-        "settings":{
-          "reactions":true
+      "url": "reactions.css",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "if": {
+        "settings": {
+          "reactions": true
         }
       }
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "settings":[
+  "settings": [
     {
       "name": "Show Custom Statuses",
       "id": "show-status",
@@ -86,52 +74,42 @@
           "name": "None"
         }
       ],
-      "default":"ocular"
+      "default": "ocular"
     },
     {
-      "name":"Show statuses on profiles",
-      "id":"profile",
-      "type":"boolean",
-      "default":true,
-      "if":{
-        "settings":{
-          "show-status":[
-            "ocular",
-            "aviate"
-          ]
+      "name": "Show statuses on profiles",
+      "id": "profile",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": {
+          "show-status": ["ocular", "aviate"]
         }
       }
     },
     {
-      "name":"Show statuses on forums",
-      "id":"discuss",
-      "type":"boolean",
-      "default":true,
-      "if":{
-        "settings":{
-          "show-status":[
-            "ocular",
-            "aviate"
-          ],
-          "signature":true,
-          "mode":"forums"
+      "name": "Show statuses on forums",
+      "id": "discuss",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": {
+          "show-status": ["ocular", "aviate"],
+          "signature": true,
+          "mode": "forums"
         }
       }
     },
     {
-      "name":"Show ocular reaction buttons and \"View on ocular\" link",
-      "id":"reactions",
-      "type":"boolean",
-      "default":true
+      "name": "Show ocular reaction buttons and \"View on ocular\" link",
+      "id": "reactions",
+      "type": "boolean",
+      "default": true
     }
   ],
-  "versionAdded":"1.4.0",
-  "tags":[
-    "forums",
-    "profiles",
-    "community"
-  ],
-  "enabledByDefault":false,
+  "versionAdded": "1.4.0",
+  "tags": ["forums", "profiles", "community"],
+  "enabledByDefault": false,
   "latestUpdate": {
     "version": "1.27.0",
     "isMajor": true,
