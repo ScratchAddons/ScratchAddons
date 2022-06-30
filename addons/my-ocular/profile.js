@@ -1,38 +1,62 @@
 export default async function ({ addon, global, console, msg }) {
-  var username = document.querySelector("#profile-data > div.box-head > div > h2").innerText;
 
-  var container = document.querySelector(".location");
+  addon.settings.addEventListener("change", async function() {
+    statusSetting = addon.settings.get("show-status");
+    let status = (await getStatus()).status;
+    if (document.querySelector("#my-ocular-status") && status) {
+      document.querySelector("#my-ocular-status").innerText = status;
+      locationElem.classList.add("group");
+    } else {
+      document.querySelector("#my-ocular-status").innerText = "";
+      locationElem.classList.remove("group");
+    }
+    if (statusSetting == "ocular")
+      statusSpan.title = msg("status-hover")
+    else
+      statusSpan.title = msg("aviate-status-hover")
+  }); 
+  
+  let statusSetting = addon.settings.get("show-status");
+  let username = document.querySelector("#profile-data > div.box-head > div > h2").innerText;
+  let container = document.querySelector(".location");
+  let data = await getStatus();
+  
+  
+  let statusSpan = document.createElement("i"); // For whatever reason, chrome turns variable named status into text.
+  if (statusSetting == "ocular")
+    statusSpan.title = msg("status-hover")
+  else
+    statusSpan.title = msg("aviate-status-hover")
+  statusSpan.id = "my-ocular-status";
 
-  var response = await fetch(`https://my-ocular.jeffalo.net/api/user/${username}`);
-  var data = await response.json();
+  let dot = document.createElement("span");
+  addon.tab.displayNoneWhileDisabled(dot, { display: "inline-block" });
+  dot.title = msg("status-hover");
+  dot.className = "my-ocular-dot";
 
-  var statusText = data.status;
-  var color = data.color;
-  if (statusText) {
-    var statusSpan = document.createElement("i"); // for whatever reason, chrome turns variable named status into text. why the heck. aaaaaaaaaaaaaaaaaa
-    statusSpan.title = msg("status-hover");
-    statusSpan.innerText = statusText;
+  let locationElem = document.createElement("span"); // Create a new location element
+  locationElem.innerText = container.innerText; // Set it to the old innertext
 
-    var dot = document.createElement("span");
-    dot.title = msg("status-hover");
-    dot.style.height = "10px";
-    dot.style.width = "10px";
-    dot.style.marginLeft = "5px";
-    dot.style.backgroundColor = "#bbb"; //default incase bad
-    dot.style.borderRadius = "50%";
+  container.innerText = ""; // Clear the old location
 
-    dot.style.setProperty("display", "inline-block", "important"); // i have to do it like this because .style doesn't let me set prio, and featured project banner messes with this without !important
-
-    dot.style.backgroundColor = color;
-
-    var locationElem = document.createElement("span"); // create a new location element
-    locationElem.classList.add("group"); // give it the group class so it fits in
-    locationElem.innerText = container.innerText; // set it to the old innertext
-
-    container.innerText = ""; // clear the old location
-
-    container.appendChild(locationElem); // give it the location
-    container.appendChild(statusSpan);
-    container.appendChild(dot);
+  container.appendChild(locationElem); // give it the location
+  container.appendChild(statusSpan);
+  container.appendChild(dot);
+  
+  if (data != false) {
+    locationElem.classList.add("group");
+    statusSpan.innerText = data.status;
+    dot.style.backgroundColor = data.color;
+  }
+  
+  async function getStatus() { 
+    let response;
+    if (statusSetting == "ocular") {
+      return (await fetch(`https://my-ocular.jeffalo.net/api/user/${username}`)).json();
+    } else if (statusSetting == "aviate") {
+      return (await fetch(`https://aviateapp.eu.org/api/${username}`)).json();
+    } else {
+      return false;
+    }
   }
 }

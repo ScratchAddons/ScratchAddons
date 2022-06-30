@@ -1,5 +1,6 @@
 {
   "my-ocular/status-hover": "This is a customized status from ocular, displayed by Scratch Addons. You can set your own at https://ocular.jeffalo.net/dashboard.",
+  "my-ocular/aviate-status-hover": "This is a dynamic, component driven status from Aviate, displayed by Scratch Addons. You can set your own at https://aviateapp.eu.org.",
   "my-ocular/view-on-ocular": "View this post on ocular",
   "my-ocular/add-reaction": "React to this post using ocular"
 }
