@@ -4,16 +4,19 @@
   "credits": [
     {
       "name": "Jeffalo",
+      "id": "ocularAddon",
       "note": "Ocular addon",
       "link": "https://github.com/jefalo"
     },
     {
       "name": "MystPi",
+      "id": "aviateAddon",
       "note": "Aviate addon",
       "link": "https://github.com/MystPi"
     },
     {
       "name": "Norbiros",
+      "id": "addonVersion",
       "link": "https://github.com/Norbiros"
     }
   ],
