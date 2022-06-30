@@ -195,11 +195,10 @@ export default async function ({ addon, global, console, msg }) {
       });
     }
 
+    doOneTimeSetup();
     if (toggleSetting !== "hover") {
       // update workspace dimensions
       Blockly.svgResize(Blockly.getMainWorkspace());
     }
-
-    doOneTimeSetup();
   }
 }
