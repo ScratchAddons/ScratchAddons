@@ -1,6 +1,6 @@
 {
   "name": "Project player volume control",
-  "description": "Ctrl+Click the green flag to mute/unmute the project, or use the slider",
+  "description": "Adds a volume slider next to the green flag controls. You can also Ctrl+Click the green flag to mute/unmute the project.",
   "info": [
     {
       "type": "notice",
@@ -35,7 +35,7 @@
       "name": "Show slider",
       "id": "show-slider",
       "type": "boolean",
-      "default": false
+      "default": true
     }
   ],
   "dynamicEnable": true,
