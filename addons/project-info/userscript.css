@@ -1,14 +1,18 @@
 .preview .sa-project-info {
-  margin-left: 1rem;
   margin-bottom: 0.5rem;
   font-size: 0.875rem;
+  text-align: left;
 }
 
 .sa-project-info img {
   height: 0.875rem;
-  margin-right: 0.5rem;
+  vertical-align: bottom;
 }
 
-.preview .project-buttons > * {
+.sa-project-info > * {
+  padding: 0.1rem;
+}
+
+.sa-project-info, .preview .project-buttons > * {
   vertical-align: middle;
 }
