@@ -107,5 +107,10 @@
   /* must cover the hidden palette when editor-stage-left is enabled */
   position: relative;
   z-index: 31;
+  padding-inline: 0.5rem;
   background-color: var(--editorDarkMode-page, hsl(215, 100%, 95%));
+}
+
+[class*="gui_stage-and-target-wrapper_"] {
+  padding: 0;
 }
