@@ -37,7 +37,7 @@ export default async function ({ addon, global, console, msg }) {
   container.appendChild(statusSpan);
   container.appendChild(dot);
 
-  if (data != false) {
+  if (data !== false) {
     locationElem.classList.add("group");
     statusSpan.innerText = data.status;
     dot.style.backgroundColor = data.color;
