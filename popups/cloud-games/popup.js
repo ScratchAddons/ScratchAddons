@@ -92,8 +92,16 @@ export default async ({ addon, msg, safeMsg }) => {
     computed: {
       projectsSorted() {
         return this.projects.sort((b, a) => {
-          if (a.amt !== b.amt) return a.amt - b.amt;
-          return a.timestamp - b.timestamp;
+          if (b.online == true) return -99;
+          
+          if (a.amt !== b.amt) {
+            let amtDiff = a.timestamp - b.timestamp;
+            console.log(isNaN(amtDiff) || amtDiff < 0 ? 0 : amtDiff);
+            return isNaN(amtDiff) || amtDiff < 0 ? 0 : amtDiff;
+          }
+          let timestampDiff = a.timestamp - b.timestamp;
+          console.log(isNaN(timestampDiff) || timestampDiff < 0 ? 0 : timestampDiff);
+          return isNaN(timestampDiff) || timestampDiff < 0 ? 0 : timestampDiff;
         });
       },
       errorMessage() {
@@ -124,6 +132,7 @@ export default async ({ addon, msg, safeMsg }) => {
               }
               resolve();
             };
+            let username = await addon.auth.fetchUsername();
             let json;
             try {
               const res = await fetch(
@@ -145,8 +154,10 @@ export default async ({ addon, msg, safeMsg }) => {
             }
             const dateNow = Date.now();
             const usersSet = new Set();
+            projectObject.online = false;
             for (const varChange of json) {
-              if (dateNow - varChange.timestamp > 60000) break;
+              if (dateNow - varChange.timestamp > 280000) break;
+              if (varChange.user == username) projectObject.online = true;
               usersSet.add(varChange.user);
             }
             projectObject.timestamp = json[0]?.timestamp || 0;
@@ -202,6 +213,7 @@ export default async ({ addon, msg, safeMsg }) => {
           id: project.id,
           amt: 0,
           users: [],
+          online: project.online,
           extended: true,
           error: null,
           errorMessage: "",
