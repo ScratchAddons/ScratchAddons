@@ -156,7 +156,7 @@ export default async ({ addon, msg, safeMsg }) => {
             const usersSet = new Set();
             projectObject.online = false;
             for (const varChange of json) {
-              if (dateNow - varChange.timestamp > 280000) break;
+              if (dateNow - varChange.timestamp > 60000) break;
               if (varChange.user == username) projectObject.online = true;
               usersSet.add(varChange.user);
             }
