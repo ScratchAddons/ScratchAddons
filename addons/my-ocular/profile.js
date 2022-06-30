@@ -20,7 +20,7 @@ export default async function ({ addon, global, console, msg }) {
   let data = await getStatus();
 
   let statusSpan = document.createElement("i"); // For whatever reason, chrome turns variable named status into text.
-  updateTitle(statusSpan)
+  updateTitle(statusSpan);
   statusSpan.id = "my-ocular-status";
 
   let dot = document.createElement("span");
