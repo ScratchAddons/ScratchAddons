@@ -93,7 +93,7 @@ export default async ({ addon, msg, safeMsg }) => {
       projectsSorted() {
         return this.projects.sort((b, a) => {
           if (b.online == true) return -99;
-          
+
           if (a.amt !== b.amt) {
             let amtDiff = a.timestamp - b.timestamp;
             console.log(isNaN(amtDiff) || amtDiff < 0 ? 0 : amtDiff);
