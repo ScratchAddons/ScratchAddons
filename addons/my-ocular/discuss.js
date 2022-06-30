@@ -5,16 +5,16 @@ export default async function ({ addon, global, console, msg }) {
   addon.settings.addEventListener("change", async function () {
     posts.forEach(async (i) => {
       let username = i.querySelector(".username").innerText;
+      let statusElement = i.querySelector(".my-ocular-status");
       const { userStatus, color } = await fetchStatus(username);
       i.querySelector(".my-ocular-dot").style.backgroundColor =
         addon.settings.get("show-status") == "ocular" ? (color ? color : "#bbb") : "";
       if (userStatus) {
-        i.querySelector(".my-ocular-status").innerText = userStatus;
+        statusElement.innerText = userStatus;
       } else {
-        i.querySelector(".my-ocular-status").innerText = "";
+        statusElement.innerText = "";
       }
-      if (addon.settings.get("show-status") == "ocular") status.title = msg("status-hover");
-      else status.title = msg("aviate-status-hover");
+      updateTitle(statusElement);
     });
   });
 
@@ -30,11 +30,10 @@ export default async function ({ addon, global, console, msg }) {
     let status = document.createElement("i");
     status.classList.add("my-ocular-status");
     addon.tab.displayNoneWhileDisabled(status);
-    if (addon.settings.get("show-status") == "ocular") status.title = msg("status-hover");
-    else status.title = msg("aviate-status-hover");
+    updateTitle(status);
     let dot = document.createElement("span");
     addon.tab.displayNoneWhileDisabled(dot, { display: "inline-block" });
-    dot.title = msg("status-hover");
+    updateTitle(dot);
     dot.className = "my-ocular-dot";
 
     left.appendChild(br);
@@ -43,7 +42,7 @@ export default async function ({ addon, global, console, msg }) {
 
     if (userStatus) {
       status.innerText = userStatus;
-      dot.style.backgroundColor = addon.settings.get("show-status") == "ocular" ? (color ? color : "#bbb") : "none";
+      dot.style.backgroundColor = addon.settings.get("show-status") == "ocular" ? (color ? color : "#bbb") : "";
     }
   });
 
@@ -59,5 +58,10 @@ export default async function ({ addon, global, console, msg }) {
       userStatus: data.status,
       color: data.color,
     };
+  }
+
+  function updateTitle(el) {
+    if (statusSetting == "ocular") el.title = msg("status-hover");
+    else el.title = msg("aviate-status-hover");
   }
 }

@@ -1,16 +1,17 @@
 export default async function ({ addon, global, console, msg }) {
   addon.settings.addEventListener("change", async function () {
     statusSetting = addon.settings.get("show-status");
+    let statusElement = document.querySelector("#my-ocular-status");
     let status = (await getStatus()).status;
-    if (document.querySelector("#my-ocular-status") && status) {
-      document.querySelector("#my-ocular-status").innerText = status;
+    if (statusElement && status) {
+      statusElement.innerText = status;
       locationElem.classList.add("group");
     } else {
-      document.querySelector("#my-ocular-status").innerText = "";
+      statusElement.innerText = "";
       locationElem.classList.remove("group");
     }
-    if (statusSetting == "ocular") statusSpan.title = msg("status-hover");
-    else statusSpan.title = msg("aviate-status-hover");
+    dot.style.backgroundColor = addon.settings.get("show-status") == "ocular" ? (color ? color : "#bbb") : "";
+    updateTitle(statusElement);
   });
 
   let statusSetting = addon.settings.get("show-status");
@@ -19,8 +20,7 @@ export default async function ({ addon, global, console, msg }) {
   let data = await getStatus();
 
   let statusSpan = document.createElement("i"); // For whatever reason, chrome turns variable named status into text.
-  if (statusSetting == "ocular") statusSpan.title = msg("status-hover");
-  else statusSpan.title = msg("aviate-status-hover");
+  updateTitle(statusSpan)
   statusSpan.id = "my-ocular-status";
 
   let dot = document.createElement("span");
@@ -52,5 +52,10 @@ export default async function ({ addon, global, console, msg }) {
     } else {
       return false;
     }
+  }
+
+  function updateTitle(el) {
+    if (statusSetting == "ocular") el.title = msg("status-hover");
+    else el.title = msg("aviate-status-hover");
   }
 }
