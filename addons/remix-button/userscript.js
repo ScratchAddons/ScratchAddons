@@ -1,4 +1,4 @@
-export default async function ({ addon }) {
+export default async function ({ addon, msg, global, console }) {
   const { redux } = addon.tab;
   await redux.waitForState((state) => typeof state.session.session.user === "object");
 
