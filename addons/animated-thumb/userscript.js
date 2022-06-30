@@ -4,8 +4,8 @@ import { init, saveConfig, isOverwritingEnabled, blockOverwriting } from "./pers
 
 export default async function ({ addon, global, console, msg }) {
   init(console);
-  let projectId = location.href.match(/\d+/)[0];
-  blockOverwriting(isOverwritingEnabled(projectId));
+  let projectId = location.href.match(/\d+/)?.[0];
+  if (projectId) blockOverwriting(isOverwritingEnabled(projectId));
   const createModal = () => {
     // User Interface
     let ignoreClickOutside = false;
@@ -175,8 +175,8 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   addon.tab.addEventListener("urlChange", () => {
-    projectId = location.href.match(/\d+/)[0];
-    blockOverwriting(isOverwritingEnabled(projectId));
+    projectId = location.href.match(/\d+/)?.[0] || projectId;
+    if (projectId) blockOverwriting(isOverwritingEnabled(projectId));
   });
 
   localStorage.removeItem("saAnimatedThumbShowTooltip");

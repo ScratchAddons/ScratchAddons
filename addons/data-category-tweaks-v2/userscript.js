@@ -113,15 +113,15 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   const variableCategoryCallback = (workspace) => {
     let result = DataCategory(workspace);
 
-    if (addon.settings.get("moveReportersDown")) {
+    if (!addon.self.disabled && addon.settings.get("moveReportersDown")) {
       result = moveReportersDown(result);
     }
 
-    if (addon.settings.get("separateLocalVariables")) {
+    if (!addon.self.disabled && addon.settings.get("separateLocalVariables")) {
       result = separateLocalVariables(workspace, result);
     }
 
-    if (!hasSeparateListCategory) {
+    if (addon.self.disabled || !hasSeparateListCategory) {
       return result;
     }
 
@@ -152,7 +152,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   vm.runtime.getBlocksXML = function (target) {
     const result = originalGetBlocksXML.call(this, target);
     hasSeparateListCategory = addon.settings.get("separateListCategory");
-    if (hasSeparateListCategory) {
+    if (!addon.self.disabled && hasSeparateListCategory) {
       result.push({
         id: "data",
         xml: `
@@ -194,5 +194,12 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
         workspace.refreshToolboxSelection_();
       }
     }
+  });
+
+  addon.self.addEventListener("disabled", () => {
+    vm.emitWorkspaceUpdate();
+  });
+  addon.self.addEventListener("reenabled", () => {
+    vm.emitWorkspaceUpdate();
   });
 }

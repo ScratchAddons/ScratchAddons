@@ -3,16 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <title></title>
-    <link rel="stylesheet" href="popup.css" />
     <script src="../../libraries/thirdparty/vue.js" defer></script>
     <script src="../../libraries/thirdparty/idb.js" defer></script>
+    <link rel="preload" href="popup.css" as="style" />
     <link rel="preload" href="../../webpages/styles/colors-light.css" as="style" />
     <script src="../../webpages/popup-loader.js" type="module"></script>
     <style>
       @import url("../../webpages/styles/colors.css");
+      @import url("../../webpages/styles/components/buttons.css");
       @import url("../../webpages/styles/components/tooltips.css");
       @import url("../../webpages/styles/components/popup.css");
     </style>
+    <link rel="stylesheet" href="popup.css" />
     <base target="_blank" />
 
     <!-- <dom-element-renderer> element template -->
@@ -68,10 +70,12 @@
         <div class="reply-box-comment" v-show="replying">
           <textarea class="reply-textarea" maxlength="500" v-model="replyBoxValue"></textarea>
           <div class="reply-box-buttons">
-            <button @click="!postingComment && postComment()" class="post-button">
+            <button @click="postComment()" class="large-button post-button" :disabled="postingComment">
               {{ postingComment ? messages.postingMsg : messages.postMsg }}
             </button>
-            <button @click="replying = false" v-show="!postingComment">{{ messages.cancelMsg }}</button>
+            <button @click="replying = false" v-show="!postingComment" class="large-button">
+              {{ messages.cancelMsg }}
+            </button>
             <span class="comment-chars"> {{ replyBoxLeftMsg }}</span>
           </div>
         </div>
@@ -436,20 +440,20 @@
           <a @click="copyToClipboard(error)">{{ uiMessages.copyMsg }}</a>
           )
         </p>
-        <button @click="reloadPage()" v-show="commentsReady && !canShowMoreMessages">
+        <button @click="reloadPage()" v-show="commentsReady && !canShowMoreMessages" class="large-button">
           <img class="small-icon" src="../../images/icons/reload.svg" /><span>{{ uiMessages.reloadMsg }}</span>
         </button>
         <span v-show="messagesReady && showingMessagesAmt === 0 && stMessages.length === 0" class="status-empty"
           >{{ uiMessages.noUnreadMsg }}</span
         >
-        <button @click="showAllMessages = true" v-show="canShowMoreMessages">
+        <button @click="showAllMessages = true" v-show="canShowMoreMessages" class="large-button">
           <img class="small-icon" src="../../images/icons/plus.svg" /><span>{{ uiMessages.showMoreMsg }}</span>
         </button>
       </div>
     </div>
 
     <!-- Bottom bar-->
-    <div id="bottom-bar" v-show="messagesReady">
+    <div id="bottom-bar">
       <a v-cloak @click="markAsRead()" v-show="!markedAsRead">{{ uiMessages.markAsReadMsg }}</a>
       <span v-cloak v-show="markedAsRead" class="marked-as-read"
         ><img class="small-icon" src="../../images/icons/read.svg" /> {{ uiMessages.markedAsReadMsg }}</span
