@@ -26,7 +26,7 @@ export default async function ({ addon, global, console }) {
       icon.style.display = "inline-block";
       return;
     }
-    icon.src = v < 0.5 ? quietIcon : loudIcon
+    icon.src = v < 0.5 ? quietIcon : loudIcon;
     icon.style.display = addon.settings.get("show-slider") ? "inline-block" : "none";
   }
 
@@ -50,7 +50,7 @@ export default async function ({ addon, global, console }) {
     container.appendChild(icon);
     container.appendChild(slider);
     button.addEventListener("click", toggleMute);
-    button.addEventListener("contextmenu", toggleMute)
+    button.addEventListener("contextmenu", toggleMute);
     setVol(1);
     slider.addEventListener("change", function (e) {
       setVol(this.value);
