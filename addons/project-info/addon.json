@@ -53,5 +53,9 @@
       "default": "both"
     }
   ],
-  "versionAdded": "1.4.0"
+  "versionAdded": "1.4.0",
+    "latestUpdate": {
+    "version": "1.27.0",
+    "newSettings": ["show"]
+  }
 }
