@@ -54,7 +54,7 @@
     }
   ],
   "versionAdded": "1.4.0",
-    "latestUpdate": {
+  "latestUpdate": {
     "version": "1.27.0",
     "newSettings": ["show"]
   }
