@@ -44,7 +44,6 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   async function getStatus() {
-    let response;
     if (statusSetting == "ocular") {
       return (await fetch(`https://my-ocular.jeffalo.net/api/user/${username}`)).json();
     } else if (statusSetting == "aviate") {
