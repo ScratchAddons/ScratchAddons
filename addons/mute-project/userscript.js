@@ -12,23 +12,23 @@ export default async function ({ addon, global, console }) {
   slider.min = 0;
   slider.max = 1;
   slider.step = 0.01;
-  slider.style.width = "100px"
+  slider.style.width = "100px";
   const toggleMute = (e) => {
     if (!addon.self.disabled && (e.ctrlKey || e.metaKey)) {
       e.cancelBubble = true;
       e.preventDefault();
-      setVol((vol == 0) ? 1 : 0)
+      setVol(vol == 0 ? 1 : 0);
     }
   };
-  
+
   function setVol(v) {
-    vol = v
+    vol = v;
     vm.runtime.audioEngine.inputNode.gain.value = vol;
     slider.value = vol;
     if (vol == 0) {
       icon.src = mute;
       icon.style.display = "block";
-      return
+      return;
     }
     if (vol < 0.5) {
       icon.src = quiet;
@@ -37,18 +37,18 @@ export default async function ({ addon, global, console }) {
     }
     icon.style.display = addon.settings.get("show-slider") ? "block" : "none";
   }
-  
+
   addon.self.addEventListener("disabled", () => {
     vm.runtime.audioEngine.inputNode.gain.value = 1;
     icon.style.display = "none";
     slider.style.display = "none";
   });
-  
+
   addon.self.addEventListener("reenabled", () => {
     if (addon.settings.get("show-slider")) {
       slider.style.display = "block";
     }
-    setVol(1)
+    setVol(1);
   });
 
   while (true) {
@@ -60,18 +60,18 @@ export default async function ({ addon, global, console }) {
     button.addEventListener("click", toggleMute);
     button.addEventListener("contextmenu", toggleMute);
     addon.tab.appendToSharedSpace({ space: "afterStopButton", element: slider, order: 0 });
-    setVol(1)
-    slider.addEventListener("change", function(e) {
+    setVol(1);
+    slider.addEventListener("change", function (e) {
       setVol(this.value);
     });
-    addon.settings.addEventListener("change", function(){
+    addon.settings.addEventListener("change", function () {
       if (addon.settings.get("show-slider")) {
         slider.style.display = "block";
       } else {
         slider.style.display = "none";
         vol = 1;
       }
-      setVol(vol)
-     });
+      setVol(vol);
+    });
   }
 }
