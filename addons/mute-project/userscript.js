@@ -51,7 +51,7 @@ export default async function ({ addon, global, console }) {
     container.appendChild(slider);
     button.addEventListener("click", toggleMute);
     button.addEventListener("contextmenu", toggleMute);
-    setVol(1);
+    setVol(0.5);
     slider.addEventListener("change", function (e) {
       setVol(this.value);
     });

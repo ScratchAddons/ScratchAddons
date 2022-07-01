@@ -4,6 +4,28 @@
 }
 
 .sa-volume input {
+  -webkit-appearance: none;
+  -webkit-transition: 0.2s;
   width: 50px;
-  height: 5px;
+  height: 6px;
+  border-radius: 3px;
+  background-color: #de91de;
+  margin-left: 3px;
 }
+
+.sa-volume input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #cf63cf;
+}
+
+.sa-volume input[type=range]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #cf63cf;
+}
+
