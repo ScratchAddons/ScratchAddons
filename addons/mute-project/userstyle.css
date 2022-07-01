@@ -13,7 +13,7 @@
   margin-left: 3px;
 }
 
-.sa-volume input[type=range]::-webkit-slider-thumb {
+.sa-volume input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 12px;
@@ -22,10 +22,9 @@
   background: #cf63cf;
 }
 
-.sa-volume input[type=range]::-moz-range-thumb {
+.sa-volume input[type="range"]::-moz-range-thumb {
   width: 12px;
   height: 12px;
   border-radius: 50%;
   background: #cf63cf;
 }
-
