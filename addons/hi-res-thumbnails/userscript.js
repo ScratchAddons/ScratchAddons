@@ -9,7 +9,7 @@ export default async function ({ addon, console }) {
 
     // Don't process data: URLs, since these are never thumbnails to be upsized,
     // and can be lengthy strings - which really does cause issues when it comes
-    // to the uploads regex!
+    // to the cdn2 regex!
     if (src.startsWith("data:")) continue;
 
     let width, height, newSrc;
@@ -27,7 +27,7 @@ export default async function ({ addon, console }) {
     [width, height] = scaleDimensions(width, height);
 
     if (cdn2) {
-      newSrc = cdn2[1] + width + "x" + height + cdn2[4];
+      newSrc = cdn2[1].replace("cdn2", "uploads") + width + "x" + height + cdn2[4];
     }
 
     if (lazy) {
