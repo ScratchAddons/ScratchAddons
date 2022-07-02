@@ -3,7 +3,7 @@ export default async ({ addon, msg, safeMsg }) => {
     el: "body",
     data: {
       projects: [],
-      loaded: false
+      loaded: false,
     },
     async created() {
       const username = await addon.auth.fetchUsername();
@@ -11,6 +11,6 @@ export default async ({ addon, msg, safeMsg }) => {
       let projects = await res.json();
       this.projects = projects.map((project) => ({ title: project.title, id: project.id }));
       this.loaded = true;
-    }
+    },
   });
-}
+};
