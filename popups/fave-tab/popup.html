@@ -17,9 +17,7 @@
   <body>
     <div v-cloak v-show="projectsVisable">
       <div class="favorites" v-for="project of projects">
-        <a href="'https://scratch.mit.edu/projects/' + project.id" target="_blank"
-          >{{ project.title }}</a
-        >
+        <a href="'https://scratch.mit.edu/projects/' + project.id" target="_blank">{{ project.title }}</a>
       </div>
     </div>
   </body>
