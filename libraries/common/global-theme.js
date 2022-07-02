@@ -31,20 +31,15 @@ chrome.storage.sync.get(["themeSetting"], ({ themeSetting = null }) => {
 });
 
 function updateTheme() {
-  // Backwards compabilyty v1 - WE NEED TO TEST IT
-  chrome.storage.sync.get("globalTheme", function (r) {
-    if (typeof r.globalTheme == "undefined") {
-      return;
-    }
-    console.log("Updating themeSystem to newest version!");
-    let _themeSetting = globalTheme ? "on" : "off";
-    chrome.storage.sync.set({ themeSetting: _themeSetting });
-    chrome.storage.sync.remove("globalTheme");
-  });
 
   chrome.storage.sync.get(
-    ["themeSetting", "themeStatus", "themeTimeInputValue", "syncAddonsWithTheme"],
-    ({ themeSetting = null, themeStatus = null, themeTimeInputValue = null, syncAddonsWithTheme = null }) => {
+    ["themeSetting", "themeStatus", "themeTimeInputValue", "syncAddonsWithTheme", "globalTheme"],
+    ({ themeSetting = null, themeStatus = null, themeTimeInputValue = null, syncAddonsWithTheme = null, globalTheme = true }) => {
+      if (themeSetting == null) {
+        themeSetting = globalTheme ? "light" : "dark";
+        chrome.storage.sync.set({ themeSetting: themeSetting });
+        chrome.storage.sync.remove(["globalTheme"]);
+      }
       let _themeStatus;
       switch (themeSetting) {
         case "light":

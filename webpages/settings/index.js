@@ -21,9 +21,10 @@ let fuse;
 
 (async () => {
   const { theme: initialTheme, setGlobalTheme } = await globalTheme();
-  const timeInput = await new Promise((resolve, reject) =>
+  let timeInput = await new Promise((resolve, reject) =>
     chrome.storage.sync.get(["themeTimeInputValue"], (result) => resolve(result.themeTimeInputValue))
   );
+  timeInput = timeInput ? timeInput : "00:00-24:00";
   const themeSyncAddons = await new Promise((resolve, reject) =>
     chrome.storage.sync.get(["themeSyncAddons"], (result) => resolve(result.themeSyncAddons))
   );
