@@ -22,10 +22,12 @@ export default async function ({ addon, global, console, msg }) {
   updateTitle(statusSpan);
   statusSpan.id = "my-ocular-status";
 
+
   let dot = document.createElement("span");
   addon.tab.displayNoneWhileDisabled(dot, { display: "inline-block" });
   dot.title = msg("status-hover");
   dot.className = "my-ocular-dot";
+
 
   let locationElem = document.createElement("span"); // Create a new location element
   locationElem.innerText = container.innerText; // Set it to the old innertext
@@ -36,7 +38,9 @@ export default async function ({ addon, global, console, msg }) {
   container.appendChild(statusSpan);
   container.appendChild(dot);
 
-  if (data !== false) {
+  if (typeof data.status !== "string") return;
+  var statusText = data.status.replace(/\n/g, " "); // clear out newlines
+  if (data !== false && statusText) {
     locationElem.classList.add("group");
     statusSpan.innerText = data.status;
     dot.style.backgroundColor = data.color;

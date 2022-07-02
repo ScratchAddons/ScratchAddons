@@ -57,7 +57,7 @@ export default async function ({ addon, global, console, msg }) {
     }
     const data = (await response) ? await response : '"status": "","color": ""';
     return {
-      userStatus: data.status,
+      userStatus: data.status?.replace(/\n/g, " "),
       color: data.color,
     };
   }
