@@ -31,10 +31,15 @@ chrome.storage.sync.get(["themeSetting"], ({ themeSetting = null }) => {
 });
 
 function updateTheme() {
-
   chrome.storage.sync.get(
     ["themeSetting", "themeStatus", "themeTimeInputValue", "syncAddonsWithTheme", "globalTheme"],
-    ({ themeSetting = null, themeStatus = null, themeTimeInputValue = null, syncAddonsWithTheme = null, globalTheme = true }) => {
+    ({
+      themeSetting = null,
+      themeStatus = null,
+      themeTimeInputValue = null,
+      syncAddonsWithTheme = null,
+      globalTheme = true,
+    }) => {
       if (themeSetting == null) {
         themeSetting = globalTheme ? "light" : "dark";
         chrome.storage.sync.set({ themeSetting: themeSetting });
