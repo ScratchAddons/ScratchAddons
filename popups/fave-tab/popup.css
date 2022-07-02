@@ -1,4 +1,4 @@
-.title {
+.favorites {
   font-size: 12px;
   color: var(--content-text);
   padding: 6px 8px;
@@ -9,6 +9,6 @@
   user-select: none;
 }
 
-.title a {
+.favorites a {
   color: var(--content-text);
 }
