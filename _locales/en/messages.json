@@ -257,14 +257,14 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_25": {
-    "message": "New addon: \"color picker inputs\", which allows setting an exact value (0-100) for each slider in the costume editor color picker. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_26": {
+    "message": "New addon: \"customizable default costume editor colors\", which lets you change the default colors and outline size used by the costume editor. Go to $1 to enable it."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_25": {
-    "message": "Other new addons added this update are \"horizontal tabs on My Stuff\" and \"live forum post preview\"."
+  "extensionUpdateInfo2_v1_26": {
+    "message": "Another new addon added in this update is \"sound duration display\", which adds a display to the sound editor that shows the total length and the elapsed time of the sound, or the selection within it."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
@@ -294,7 +294,7 @@
     "description": "Used as a category name for enabled addons"
   },
   "exportAndImportSettings": {
-    "message": "Export and Import Settings"
+    "message": "Export and import settings"
   },
   "exportAndImportSettingsDescription": {
     "message": "Export settings as a JSON file for use on other computers."
@@ -303,10 +303,10 @@
     "message": "You can also enable your browser's built-in sync options to automatically synchronize the settings between devices."
   },
   "export": {
-    "message": "Export Settings"
+    "message": "Export settings"
   },
   "import": {
-    "message": "Import Settings"
+    "message": "Import settings"
   },
   "viewSettings": {
     "message": "View settings file"
