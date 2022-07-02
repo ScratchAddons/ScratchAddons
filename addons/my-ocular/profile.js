@@ -1,8 +1,8 @@
 export default async function ({ addon, global, console, msg }) {
+  let statusSetting = addon.settings.get("show-status");
   addon.settings.addEventListener("change", async function () {
-    statusSetting = addon.settings.get("show-status");
     let statusElement = document.querySelector("#my-ocular-status");
-    let status = (await getStatus()).status;
+    let status = (await fetchStatus(username)).status;
     if (statusElement && status) {
       statusElement.innerText = status;
       locationElem.classList.add("group");
@@ -14,10 +14,9 @@ export default async function ({ addon, global, console, msg }) {
     updateTitle(statusElement);
   });
 
-  let statusSetting = addon.settings.get("show-status");
   let username = document.querySelector("#profile-data > div.box-head > div > h2").innerText;
   let container = document.querySelector(".location");
-  let data = await getStatus();
+  let data = await fetchStatus(username);
 
   let statusSpan = document.createElement("i"); // For whatever reason, chrome turns variable named status into text.
   updateTitle(statusSpan);
@@ -43,18 +42,30 @@ export default async function ({ addon, global, console, msg }) {
     dot.style.backgroundColor = data.color;
   }
 
-  async function getStatus() {
-    if (statusSetting == "ocular") {
-      return (await fetch(`https://my-ocular.jeffalo.net/api/user/${username}`)).json();
-    } else if (statusSetting == "aviate") {
-      return (await fetch(`https://aviateapp.eu.org/api/${username}`)).json();
-    } else {
-      return false;
+
+  async function fetchStatus(username) {
+    let showstatus = addon.settings.get("show-status");
+    let response = await fetchSpecificStatus(username, showstatus);
+    if (await response.status == null) {
+      let statusType = showstatus == "aviate" ? "ocular" : (showstatus == "ocular" ? "aviate" : "");
+      response = await fetchSpecificStatus(username, statusType);
+      if (response) statusSetting = statusType
     }
+    const data = (await response) ? await response : '"status": "","color": ""';
+    return data ? data : false;
+  }
+
+  async function fetchSpecificStatus(username, type) {
+    if (type == "ocular") {
+      return (await fetch(`https://my-ocular.jeffalo.net/api/user/${username}`)).json();
+    } else if (type == "aviate") {
+      return (await fetch(`https://aviateapp.eu.org/api/${username}`)).json();
+    }
+    return;
   }
 
   function updateTitle(el) {
     if (statusSetting == "ocular") el.title = msg("status-hover");
-    else el.title = msg("aviate-status-hover");
+    else if (statusSetting == "aviate") el.title = msg("aviate-status-hover");
   }
 }

@@ -1,6 +1,7 @@
 export default async function ({ addon, global, console, msg }) {
   let posts = document.querySelectorAll(".blockpost");
   let cache = Object.create(null);
+  let statusSetting = addon.settings.get("show-status");
 
   addon.settings.addEventListener("change", async function () {
     posts.forEach(async (i) => {
@@ -8,7 +9,7 @@ export default async function ({ addon, global, console, msg }) {
       let statusElement = i.querySelector(".my-ocular-status");
       const { userStatus, color } = await fetchStatus(username);
       i.querySelector(".my-ocular-dot").style.backgroundColor =
-        addon.settings.get("show-status") == "ocular" ? (color ? color : "#bbb") : "";
+        statusSetting == "ocular" ? (color ? color : "#bbb") : "";
       if (userStatus) {
         statusElement.innerText = userStatus;
       } else {
@@ -42,16 +43,17 @@ export default async function ({ addon, global, console, msg }) {
 
     if (userStatus) {
       status.innerText = userStatus;
-      dot.style.backgroundColor = addon.settings.get("show-status") == "ocular" ? (color ? color : "#bbb") : "";
+      dot.style.backgroundColor = statusSetting == "ocular" ? (color ? color : "#bbb") : "";
     }
   });
 
   async function fetchStatus(username) {
-    let response;
-    if (addon.settings.get("show-status") == "ocular") {
-      response = (await fetch(`https://my-ocular.jeffalo.net/api/user/${username}`)).json();
-    } else if (addon.settings.get("show-status") == "aviate") {
-      response = (await fetch(`https://aviateapp.eu.org/api/${username}`)).json();
+    let showstatus = addon.settings.get("show-status");
+    let response = await fetchSpecificStatus(username, showstatus);
+    if (await response.status == null) {
+      let statusType = showstatus == "aviate" ? "ocular" : (showstatus == "ocular" ? "aviate" : "");
+      response = await fetchSpecificStatus(username, statusType);
+      if (response) statusSetting = statusType
     }
     const data = (await response) ? await response : '"status": "","color": ""';
     return {
@@ -60,8 +62,17 @@ export default async function ({ addon, global, console, msg }) {
     };
   }
 
+  async function fetchSpecificStatus(username, type) {
+    if (type == "ocular") {
+      return (await fetch(`https://my-ocular.jeffalo.net/api/user/${username}`)).json();
+    } else if (type == "aviate") {
+      return (await fetch(`https://aviateapp.eu.org/api/${username}`)).json();
+    }
+    return;
+  }
+
   function updateTitle(el) {
     if (statusSetting == "ocular") el.title = msg("status-hover");
-    else el.title = msg("aviate-status-hover");
+    else if (statusSetting == "aviate") el.title = msg("aviate-status-hover");
   }
 }

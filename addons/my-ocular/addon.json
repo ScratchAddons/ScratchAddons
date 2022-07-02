@@ -20,6 +20,13 @@
       "link": "https://github.com/Norbiros"
     }
   ],
+  "info": [
+    {
+      "type": "notice",
+      "text": "In \"Show status\" you can prioritize which type of status should be displayed.",
+      "id": "showstatusNotice"
+    }
+  ],
   "userscripts": [
     {
       "url": "discuss.js",
@@ -68,7 +75,7 @@
   "dynamicDisable": true,
   "settings": [
     {
-      "name": "Show Custom Statuses",
+      "name": "Show status",
       "id": "show-status",
       "type": "select",
       "potentialValues": [
@@ -82,7 +89,7 @@
         },
         {
           "id": "none",
-          "name": "None"
+          "name": "Don't show"
         }
       ],
       "default": "ocular"
