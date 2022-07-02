@@ -1,0 +1,14 @@
+.title {
+  font-size: 12px;
+  color: var(--content-text);
+  padding: 6px 8px;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--content-border);
+  user-select: none;
+}
+
+.title a {
+  color: var(--content-text);
+}

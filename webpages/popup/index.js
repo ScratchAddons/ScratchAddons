@@ -60,7 +60,7 @@ const vue = new Vue({
 });
 
 let manifests = null;
-const TAB_ORDER = ["scratch-messaging", "cloud-games", "__settings__"];
+const TAB_ORDER = ["scratch-messaging", "fave-tab", "cloud-games", "__settings__"];
 
 chrome.runtime.sendMessage("getSettingsInfo", (res) => {
   // If order unspecified, addon goes first. All new popups should be added here.

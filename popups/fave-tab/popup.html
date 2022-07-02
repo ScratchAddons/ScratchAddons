@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="preload" href="../../webpages/styles/colors-light.css" as="style" />
+    <link rel="preload" href="popup.css" as="style" />
+    <meta charset="UTF-8" />
+    <style>
+      @import url("../../webpages/styles/colors.css");
+      @import url("../../webpages/styles/components/popup.css");
+    </style>
+    <link rel="stylesheet" href="popup.css" />
+    <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
+    <script src="../../libraries/thirdparty/vue.js" defer></script>
+    <script src="../../webpages/popup-loader.js" type="module"></script>
+  </head>
+
+  <body style="display: none" v-show="loaded">
+    <div class="favorites" v-for="project of projects">
+      <div class="title">
+        <a class="project-name nolink" :href="'https://scratch.mit.edu/projects/' + project.id" target="_blank"
+          >{{ project.title }}</a
+        >
+      </div>
+    </div>
+  </body>
+</html>

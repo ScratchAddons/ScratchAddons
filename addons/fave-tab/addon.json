@@ -1,0 +1,18 @@
+{
+  "name": "Favorites tab",
+  "description": "Available when clicking the Scratch Addons icon. Shows the currenly logged in user's favorite projects for easy acsess.",
+  "credits": [
+    {
+      "name": "samq64"
+    }
+  ],
+  "popup": {
+    "icon": "../../images/icons/star.svg",
+    "name": "Favorites",
+    "script": "popup.js",
+    "html": "popup.html"
+  },
+  "tags": ["popup"],
+  "versionAdded": "1.27.0",
+  "enabledByDefault": false
+}
