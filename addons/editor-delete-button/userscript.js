@@ -1,7 +1,7 @@
-export default async (
-  /** @type {import("../../addon-api/content-script/typedef").UserscriptUtilities} */ { addon, console, msg }
-) => {
+export default async ({ addon, msg }) => {
   const { redux } = addon.tab;
+  // Wait until user has logged in, and is the author of the project
+  await redux.waitForState((state) => state.preview?.projectInfo?.author?.id === state.session?.session?.user?.id);
   while (true) {
     const loadItem = await addon.tab.waitForElement(
       "div[class^='menu-bar_file-group'] > :nth-child(3) ul > :nth-child(4):not(.sa-editor-delete-button)",
@@ -9,7 +9,6 @@ export default async (
         markAsSeen: true,
         reduxCondition: (state) =>
           !state.scratchGui.mode.isPlayerOnly &&
-          typeof state.session?.session?.user === "object" &&
           !state.preview.visibilityInfo.deleted,
       }
     );
@@ -22,14 +21,12 @@ export default async (
     addon.tab.displayNoneWhileDisabled(dropdownItem, { display: "block" });
 
     dropdownItem.addEventListener("click", async (e) => {
-      if (
-        !(await addon.tab.confirm(msg("modal-title"), msg("modal-msg"), {
-          okButtonLabel: msg("yes"),
-          cancelButtonLabel: msg("no"),
-          useEditorClasses: true,
-        }))
-      )
-        return;
+      const confirmed = await addon.tab.confirm(msg("modal-title"), msg("modal-msg"), {
+        okButtonLabel: msg("yes"),
+        cancelButtonLabel: msg("no"),
+        useEditorClasses: true,
+      });
+      if (!confirmed) return;
       const res = await fetch(`/site-api/projects/all/${redux.state.preview.projectInfo.id}/`, {
         headers: {
           "X-CSRFToken": addon.auth.csrfToken,
