@@ -42,7 +42,7 @@ export default async function ({ addon, global, console, msg }) {
       if (showIconOnly) {
         msg("clones", { cloneCount: i })
       } else {
-        msg("blank", { cloneCount: i })
+        i
       }
     });
 
@@ -56,7 +56,7 @@ export default async function ({ addon, global, console, msg }) {
       count.dataset.str = cache[v] || msg("blank", { cloneCount: v });
     }
     else {
-      count.dataset.str = cache[v] || msg("clones", { cloneCount: v });
+      count.dataset.str = cache[v] || v;
     }
 
     if (v === 0) countContainerContainer.style.display = "none";
