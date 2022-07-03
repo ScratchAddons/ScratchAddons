@@ -1,4 +1,6 @@
 export default async function ({ addon, console }) {
+  const CDN2_REGEX = /(.*\/get_image\/.*?\/[0-9]+?_)([0-9]+?)x([0-9]+?)(\.[a-z]+)/;
+  const UPLOADS_REGEX = /^https?:\/\/uploads\.scratch\.mit\.edu\//;
   main: while (true) {
     const image = await addon.tab.waitForElement("img", {
       markAsSeen: true,
@@ -12,9 +14,25 @@ export default async function ({ addon, console }) {
     // to the cdn2 regex!
     if (src.startsWith("data:")) continue;
 
+    // If the image is from uploads.scratch.mit.edu, but doesn't match the
+    // dimensions-including cdn2 style, reformat src so it does.
+    if (!CDN2_REGEX.test(src) && UPLOADS_REGEX.test(src)) {
+      const id = src.match(/[0-9]+/);
+      if (src.includes("projects")) {
+        // Project thumbnails are always 480x360.
+        src = `//uploads.scratch.mit.edu/get_image/project/${id}_480x360.png`;
+      } else if (src.includes("users")) {
+        // Max user avatar size is 500x500.
+        src = `//uploads.scratch.mit.edu/get_image/user/${id}_500x500.png`;
+      } else if (src.includes("galleries")) {
+        // Max studio thumbnail size is 500x500.
+        src = `//uploads.scratch.mit.edu/get_image/gallery/${id}_500x500.png`;
+      }
+    }
+
     let width, height, newSrc;
 
-    const cdn2 = src.match(/(.*\/get_image\/.*?\/[0-9]+?_)([0-9]+?)x([0-9]+?)(\.[a-z]+)/);
+    const cdn2 = src.match(CDN2_REGEX);
 
     if (cdn2) {
       width = cdn2[2];
