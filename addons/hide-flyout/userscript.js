@@ -177,9 +177,9 @@ export default async function ({ addon, global, console, msg }) {
       const toolbox = document.querySelector(".blocklyToolboxDiv");
       const addExtensionButton = document.querySelector("[class^=gui_extension-button-container_]");
 
-      for (let e of [toolbox, addExtensionButton, flyOut, scrollBar, lockDisplay]) {
-        e.onmouseenter = onmouseenter;
-        e.onmouseleave = onmouseleave;
+      for (let element of [toolbox, addExtensionButton, flyOut, scrollBar, lockDisplay]) {
+        element.onmouseenter = onmouseenter;
+        element.onmouseleave = onmouseleave;
       }
 
       if (toggleSetting === "hover") {
