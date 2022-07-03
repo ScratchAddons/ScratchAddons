@@ -7,9 +7,7 @@ export default async ({ addon, msg }) => {
       "div[class^='menu-bar_file-group'] > :nth-child(3) ul > :nth-child(4):not(.sa-editor-delete-button)",
       {
         markAsSeen: true,
-        reduxCondition: (state) =>
-          !state.scratchGui.mode.isPlayerOnly &&
-          !state.preview.visibilityInfo.deleted,
+        reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly && !state.preview.visibilityInfo.deleted,
       }
     );
 
