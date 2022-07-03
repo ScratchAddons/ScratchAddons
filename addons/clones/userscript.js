@@ -56,7 +56,7 @@ export default async function ({ addon, global, console, msg }) {
       count.dataset.str = cache[v] || v;
     }
     else {
-      count.dataset.str = cache[v] || msg("blank", { cloneCount: v });
+      count.dataset.str = cache[v] || msg("clones", { cloneCount: v });
     }
 
     if (v === 0) countContainerContainer.style.display = "none";
