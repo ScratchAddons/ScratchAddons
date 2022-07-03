@@ -1,7 +1,7 @@
 {
-    "editor-delete-button/button-text": "Delete",
-    "editor-delete-button/modal-msg": "Are you sure you want to delete this project?",
-    "editor-delete-button/yes": "Yes",
-    "editor-delete-button/no": "No",
-    "editor-delete-button/modal-title": "Deleting project"
+  "editor-delete-button/button-text": "Delete",
+  "editor-delete-button/modal-msg": "Are you sure you want to delete this project?",
+  "editor-delete-button/yes": "Yes",
+  "editor-delete-button/no": "No",
+  "editor-delete-button/modal-title": "Deleting project"
 }
