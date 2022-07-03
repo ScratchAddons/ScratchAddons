@@ -53,10 +53,10 @@ export default async function ({ addon, global, console, msg }) {
     countContainerContainer.dataset.count = lastChecked = v;
     if(showIconOnly){
       //it caches the blank message if shownotext setting is enabled
-      count.dataset.str = cache[v] || msg("blank", { cloneCount: v });
+      count.dataset.str = cache[v] || v;
     }
     else {
-      count.dataset.str = cache[v] || v;
+      count.dataset.str = cache[v] || msg("blank", { cloneCount: v });
     }
 
     if (v === 0) countContainerContainer.style.display = "none";
