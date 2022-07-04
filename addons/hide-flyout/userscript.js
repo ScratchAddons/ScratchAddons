@@ -25,6 +25,33 @@ export default async function ({ addon, global, console, msg }) {
     return addon.settings.get("toggle");
   }
 
+  function setTransition(speed) {
+    for (let element of [flyOut, scrollBar, lockDisplay]) {
+      element.style.transitionDuration = `${speed}s`;
+    }
+  }
+
+  function removeTransition() {
+    for (let element of [flyOut, scrollBar, lockDisplay]) {
+      element.style.removeProperty("transition-duration");
+    }
+  }
+
+  function selectLastOpenedCategory() {
+    /* Called when switching from category click to a different mode
+       or disabling the addon */
+    const toolbox = Blockly.getMainWorkspace().getToolbox();
+    const flyout = toolbox.flyout_;
+    if (toolbox.getSelectedCategoryId() === null) {
+      flyout.selectCategoryByScrollPosition(-flyout.getWorkspace().scrollY);
+      if (!toolbox.selectedItem_) {
+        // the scroll position is above the first category
+        toolbox.selectedItem_ = toolbox.categoryMenu_.categories_[0];
+        toolbox.selectedItem_.setSelected(true);
+      }
+    }
+  }
+
   function onmouseenter(e, speed = {}) {
     // If a mouse event was passed, only open flyout if the workspace isn't being dragged
     if (
@@ -33,13 +60,14 @@ export default async function ({ addon, global, console, msg }) {
       document.querySelector(".blocklyToolboxDiv").className.includes("blocklyToolboxDelete")
     ) {
       speed = typeof speed === "object" ? getSpeedValue() : speed;
+      setTransition(speed);
       flyOut.classList.remove("sa-flyoutClose");
-      flyOut.style.transitionDuration = `${speed}s`;
       scrollBar.classList.remove("sa-flyoutClose");
-      scrollBar.style.transitionDuration = `${speed}s`;
       lockDisplay.classList.remove("sa-flyoutClose");
-      lockDisplay.style.transitionDuration = `${speed}s`;
-      setTimeout(() => Blockly.getMainWorkspace().recordCachedAreas(), speed * 1000);
+      setTimeout(() => {
+        Blockly.getMainWorkspace().recordCachedAreas();
+        removeTransition();
+      }, speed * 1000);
     }
     closeOnMouseUp = false; // only close if the mouseup event happens outside the flyout
   }
@@ -51,13 +79,14 @@ export default async function ({ addon, global, console, msg }) {
       closeOnMouseUp = true;
       return;
     }
+    setTransition(speed);
     flyOut.classList.add("sa-flyoutClose");
-    flyOut.style.transitionDuration = `${speed}s`;
     scrollBar.classList.add("sa-flyoutClose");
-    scrollBar.style.transitionDuration = `${speed}s`;
     lockDisplay.classList.add("sa-flyoutClose");
-    lockDisplay.style.transitionDuration = `${speed}s`;
-    setTimeout(() => Blockly.getMainWorkspace().recordCachedAreas(), speed * 1000);
+    setTimeout(() => {
+      Blockly.getMainWorkspace().recordCachedAreas();
+      removeTransition();
+    }, speed * 1000);
   }
 
   let didOneTimeSetup = false;
@@ -74,7 +103,11 @@ export default async function ({ addon, global, console, msg }) {
         case "scratch-gui/navigation/ACTIVATE_TAB":
           // always 0, 1, 2
           const toggleSetting = getToggleSetting();
-          if (e.detail.action.activeTabIndex === 0 && (toggleSetting === "hover" || toggleSetting === "cathover")) {
+          if (
+            e.detail.action.activeTabIndex === 0
+            && !addon.self.disabled
+            && (toggleSetting === "hover" || toggleSetting === "cathover")
+          ) {
             onmouseleave(null, 0);
             toggle = false;
           }
@@ -89,7 +122,22 @@ export default async function ({ addon, global, console, msg }) {
       }
     });
 
+    if (addon.self.enabledLate && getToggleSetting() === "category") {
+      Blockly.getMainWorkspace().getToolbox().setSelectedItem(null);
+    }
+    addon.self.addEventListener("disabled", () => {
+      selectLastOpenedCategory();
+    });
+    addon.self.addEventListener("reenabled", () => {
+      if (getToggleSetting() === "category") {
+        Blockly.getMainWorkspace().getToolbox().setSelectedItem(null);
+        onmouseleave(null, 0);
+        toggle = false;
+      }
+    });
+
     addon.settings.addEventListener("change", () => {
+      if (addon.self.disabled) return;
       if (getToggleSetting() === "category") {
         // switching to category click mode
         // close the flyout unless it's locked
@@ -103,20 +151,14 @@ export default async function ({ addon, global, console, msg }) {
         }
       } else {
         onmouseleave();
-        const toolbox = Blockly.getMainWorkspace().getToolbox();
-        const flyout = toolbox.flyout_;
-        if (toolbox.getSelectedCategoryId() === null) {
-          // switching from category click to a different mode
-          // select the last opened category
-          flyout.selectCategoryByScrollPosition(-flyout.getWorkspace().scrollY);
-        }
+        selectLastOpenedCategory();
       }
     });
 
     // category click mode
     const oldSetSelectedItem = Blockly.Toolbox.prototype.setSelectedItem;
     Blockly.Toolbox.prototype.setSelectedItem = function (item, shouldScroll) {
-      if (getToggleSetting() !== "category")
+      if (addon.self.disabled || getToggleSetting() !== "category")
         return oldSetSelectedItem.call(this, item, shouldScroll);
       if (shouldScroll === undefined) shouldScroll = true;
       if (!shouldScroll) {
@@ -148,7 +190,7 @@ export default async function ({ addon, global, console, msg }) {
     Blockly.Toolbox.prototype.selectCategoryById = function (...args) {
       // called after populating the toolbox
       // ignore if the palette is closed
-      if (getToggleSetting() === "category" && !toggle) return;
+      if (!addon.self.disabled && getToggleSetting() === "category" && !toggle) return;
       // this function doesn't expect selectedItem_ to be null
       if (!this.selectedItem_) this.selectedItem_ = this.categoryMenu_.categories_[0];
       return oldSelectCategoryById.call(this, ...args);
@@ -170,7 +212,7 @@ export default async function ({ addon, global, console, msg }) {
     const oldGetMetrics = Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
     Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function () {
       const metrics = oldGetMetrics.call(this);
-      if (getToggleSetting() === "hover" || this.RTL) return metrics;
+      if (addon.self.disabled || getToggleSetting() === "hover" || this.RTL) return metrics;
       if (this.getToolbox().flyout_?.getWidth() === 310) {
         // columns is enabled
         return metrics;
@@ -198,6 +240,7 @@ export default async function ({ addon, global, console, msg }) {
     placeHolderDiv = document.createElement("div");
     blocksWrapper.appendChild(placeHolderDiv);
     placeHolderDiv.className = "sa-flyout-placeHolder";
+    placeHolderDiv.style.display = "none"; // overridden by userstyle if the addon is enabled
 
     // Lock Img
     if (lockDisplay) lockDisplay.remove();
@@ -206,6 +249,7 @@ export default async function ({ addon, global, console, msg }) {
     lockDisplay.className = "sa-lock-image";
     if (flyoutLock) lockDisplay.classList.add("locked");
     lockDisplay.title = flyoutLock ? msg("unlock") : msg("lock");
+    lockDisplay.style.display = "none"; // overridden by userstyle if the addon is enabled
     lockIcon = document.createElement("img");
     lockIcon.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
     lockIcon.alt = "";
@@ -227,18 +271,24 @@ export default async function ({ addon, global, console, msg }) {
     for (let element of [toolbox, addExtensionButton, flyOut, scrollBar, lockDisplay]) {
       element.onmouseenter = (e) => {
         const toggleSetting = getToggleSetting();
-        if (toggleSetting === "hover" || toggleSetting === "cathover") onmouseenter(e);
+        if (
+          !addon.self.disabled
+          && (toggleSetting === "hover" || toggleSetting === "cathover")
+        ) onmouseenter(e);
       };
       element.onmouseleave = (e) => {
         const toggleSetting = getToggleSetting();
-        if (toggleSetting === "hover" || toggleSetting === "cathover") onmouseleave(e);
+        if (
+          !addon.self.disabled
+          && (toggleSetting === "hover" || toggleSetting === "cathover")
+        ) onmouseleave(e);
       };
     }
     placeHolderDiv.onmouseenter = (e) => {
-      if (getToggleSetting() === "hover") onmouseenter(e);
+      if (!addon.self.disabled && getToggleSetting() === "hover") onmouseenter(e);
     };
     placeHolderDiv.onmouseleave = (e) => {
-      if (getToggleSetting() === "hover") onmouseleave(e);
+      if (!addon.self.disabled && getToggleSetting() === "hover") onmouseleave(e);
     };
 
     doOneTimeSetup();
