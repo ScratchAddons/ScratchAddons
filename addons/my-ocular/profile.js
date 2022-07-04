@@ -1,11 +1,11 @@
 export default async function ({ addon, global, console, msg }) {
   let statusSetting = addon.settings.get("show-status");
-  
+
   // Update title, dot and status on settings change
   addon.settings.addEventListener("change", async function () {
     let statusElement = document.querySelector("#my-ocular-status");
     statusSetting = addon.settings.get("show-status"); // Update statusSetting variable
-    
+
     let status = await fetchStatus(username);
     if (status?.status) {
       statusElement.innerText = status.status;
@@ -39,7 +39,7 @@ export default async function ({ addon, global, console, msg }) {
   container.appendChild(locationElem); // give it the location
   container.appendChild(statusSpan);
   container.appendChild(dot);
-  
+
   if (typeof data.status !== "string") return;
   var statusText = data.status.replace(/\n/g, " "); // clear out newlines
   if (statusText) {
@@ -48,14 +48,18 @@ export default async function ({ addon, global, console, msg }) {
     dot.style.backgroundColor = data.color;
   }
 
-
   async function fetchStatus(username) {
     let response = await fetchSpecificStatus(username, addon.settings.get("show-status"));
     // If status is not set, try to get another status
     if (!response.status) {
-      let statusType = addon.settings.get("show-status") == "aviate" ? "ocular" : (addon.settings.get("show-status") == "ocular" ? "aviate" : "");
+      let statusType =
+        addon.settings.get("show-status") == "aviate"
+          ? "ocular"
+          : addon.settings.get("show-status") == "ocular"
+          ? "aviate"
+          : "";
       response = await fetchSpecificStatus(username, statusType);
-      if (response.status) statusSetting = statusType
+      if (response.status) statusSetting = statusType;
     }
     response = response.status ? response : "'status': '', 'color': 'red'";
     return response;

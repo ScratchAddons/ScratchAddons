@@ -9,7 +9,7 @@ export default async function ({ addon, global, console, msg }) {
       let username = i.querySelector(".username").innerText;
       let statusElement = i.querySelector(".my-ocular-status");
       statusSetting = addon.settings.get("show-status");
-      
+
       const { userStatus, color, statusType } = await fetchStatus(username);
       i.querySelector(".my-ocular-dot").style.backgroundColor = statusType == "ocular" ? (color ? color : "#bbb") : "";
       statusElement.innerText = userStatus ? userStatus : ""; // If status is not set, show "" instead of undefined
@@ -53,7 +53,12 @@ export default async function ({ addon, global, console, msg }) {
     let response = await fetchSpecificStatus(username, addon.settings.get("show-status"));
     // If status is not set, try to get another status
     if (!response.status) {
-      let otherStatus = addon.settings.get("show-status") == "aviate" ? "ocular" : (addon.settings.get("show-status") == "ocular" ? "aviate" : "");
+      let otherStatus =
+        addon.settings.get("show-status") == "aviate"
+          ? "ocular"
+          : addon.settings.get("show-status") == "ocular"
+          ? "aviate"
+          : "";
       response = await fetchSpecificStatus(username, otherStatus);
       if (response.status) {
         statusSetting = statusType;
