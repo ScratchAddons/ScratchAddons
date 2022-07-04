@@ -3,6 +3,7 @@ export default async function ({ addon, global, console }) {
   const muteIcon = "/static/assets/e21225ab4b675bc61eed30cfb510c288.svg";
   const quietIcon = "/static/assets/3547fa1f2678a483a19f46852f36b426.svg";
   const loudIcon = "/static/assets/b2c44c738c9cbc1a99cd6edfd0c2b85b.svg";
+  let showSlider = addon.settings.get("show-slider")
   let icon = document.createElement("img");
   icon.loading = "lazy";
   let slider = document.createElement("input");
@@ -21,13 +22,14 @@ export default async function ({ addon, global, console }) {
   function setVol(v) {
     vm.runtime.audioEngine.inputNode.gain.value = v;
     slider.value = v;
+    slider.style.display = showSlider ? "inline-block" : "none";
     if (v == 0) {
       icon.src = muteIcon;
       icon.style.display = "inline-block";
       return;
     }
     icon.src = v < 0.5 ? quietIcon : loudIcon;
-    icon.style.display = addon.settings.get("show-slider") ? "inline-block" : "none";
+    icon.style.display = showSlider ? "inline-block" : "none";
   }
 
   addon.self.addEventListener("disabled", () => {
@@ -56,11 +58,7 @@ export default async function ({ addon, global, console }) {
       setVol(this.value);
     });
     addon.settings.addEventListener("change", function () {
-      if (addon.settings.get("show-slider")) {
-        slider.style.display = "inline-block";
-      } else {
-        slider.style.display = "none";
-      }
+      showSlider = addon.settings.get("show-slider")
       setVol(1);
     });
   }
