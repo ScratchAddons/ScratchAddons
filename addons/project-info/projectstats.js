@@ -29,6 +29,7 @@ export default async function ({ addon, console, msg }) {
       });
       const container = document.createElement("div");
       container.className = "sa-project-info";
+      addon.tab.displayNoneWhileDisabled(container, { display: "inline-block" });
       addon.tab.appendToSharedSpace({ space: "beforeRemixButton", element: container, order: 0 });
       let projectInfo = getBlockCount();
       container.appendChild(document.createTextNode(msg("sprite", { num: projectInfo.spriteCount })));
@@ -40,4 +41,6 @@ export default async function ({ addon, console, msg }) {
   // addProjectPageStats either when the project is loaded through the project page or when the user goes from the editor to the project page
   vm.runtime.on("PROJECT_LOADED", async () => addProjectPageStats());
   addon.tab.addEventListener("urlChange", (e) => addProjectPageStats());
+  // The addon ran late, so PROJECT_LOADED already happened.
+  if (addon.self.enabledLate) addProjectPageStats();
 }

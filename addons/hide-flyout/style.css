@@ -1,38 +1,116 @@
+[class*="gui_tabs_"] {
+  --sa-category-width: 60px;
+  --sa-flyout-width: 250px;
+  --sa-toolbox-width: calc(var(--sa-category-width) + var(--sa-flyout-width));
+}
+
+.injectionDiv {
+  border-left-color: transparent;
+}
+
+.gui[dir="rtl"] .injectionDiv {
+  border-left-color: var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+  border-right-color: transparent;
+}
+
+.injectionDiv::after {
+  /* left border of the code area:
+     must be above the flyout and below the extension button */
+  content: "";
+  display: block;
+  position: absolute;
+  z-index: 40;
+  top: 0;
+  bottom: 8px;
+  left: -1px;
+  border-left: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+}
+
+.gui[dir="rtl"] .injectionDiv::after {
+  left: auto;
+  right: -1px;
+}
+
 .blocklyFlyout,
 .blocklyFlyoutScrollbar,
 .sa-lock-image {
-  transition-property: transform;
+  transition-property: margin;
 }
 
-.blocklyFlyout.sa-flyoutClose {
-  transform: translateX(-200px) !important;
+.gui[dir="ltr"] .blocklyFlyout.sa-flyoutClose,
+.gui[dir="ltr"] .blocklyFlyoutScrollbar.sa-flyoutClose,
+.gui[dir="ltr"] .sa-lock-image.sa-flyoutClose {
+  margin-left: calc(0px - var(--sa-flyout-width) - 10px);
 }
 
-.blocklyFlyoutScrollbar.sa-flyoutClose {
-  transform: translateX(35px) !important;
+.gui[dir="rtl"] .blocklyFlyout.sa-flyoutClose,
+.gui[dir="rtl"] .blocklyFlyoutScrollbar.sa-flyoutClose {
+  margin-left: calc(var(--sa-flyout-width) + 10px);
 }
 
-.sa-lock-image.sa-flyoutClose {
-  transform: translateX(-260px);
+.gui[dir="rtl"] .sa-lock-image.sa-flyoutClose {
+  margin-right: calc(0px - var(--sa-flyout-width) - 10px);
 }
 
 .sa-flyout-placeHolder {
   position: absolute;
-  left: 61px;
-  top: 44px;
+  top: 0;
+  left: calc(var(--sa-category-width) + 1px);
   height: 100%;
-  width: 251px;
+  width: calc(var(--sa-flyout-width) + 1px);
+}
+
+[dir="rtl"] .sa-flyout-placeHolder {
+  left: auto;
+  right: calc(var(--sa-category-width) + 1px);
 }
 
 .sa-lock-image {
   position: absolute;
   z-index: 20;
-  width: 20px;
   cursor: pointer;
-  top: 46px;
-  left: 280px;
+  top: 4px;
+  left: calc(var(--sa-toolbox-width) - 15px - 32px);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--editorDarkMode-accent, white);
+  border: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+  border-radius: 4px;
 }
 
-.injectionDiv {
-  overflow: hidden !important;
+.sa-lock-image.locked {
+  background-color: var(--editorDarkMode-primary, #4d97ff);
+  border-color: var(--editorDarkMode-primary-variant, #3373cc);
+}
+
+.sa-lock-image img {
+  width: 20px;
+  filter: var(--editorDarkMode-accent-filter, none);
+}
+
+.sa-lock-image.locked img {
+  filter: var(--editorDarkMode-primary-filter, none);
+}
+
+[dir="rtl"] .sa-lock-image {
+  left: auto;
+  right: calc(var(--sa-toolbox-width) - 15px - 32px);
+}
+
+/* Setting these styles on gui_stage-and-target-wrapper breaks full screen */
+.sa-body-editor [class*="stage-wrapper_stage-wrapper_"],
+[class*="gui_target-wrapper_"] {
+  /* must cover the hidden palette when editor-stage-left is enabled */
+  position: relative;
+  z-index: 31;
+  padding-inline: 0.5rem;
+  background-color: var(--editorDarkMode-page, hsl(215, 100%, 95%));
+}
+
+[class*="gui_stage-and-target-wrapper_"] {
+  padding: 0;
 }
