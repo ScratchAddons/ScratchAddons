@@ -3,7 +3,7 @@ export default async function ({ addon, global, console }) {
   const muteIcon = "/static/assets/e21225ab4b675bc61eed30cfb510c288.svg";
   const quietIcon = "/static/assets/3547fa1f2678a483a19f46852f36b426.svg";
   const loudIcon = "/static/assets/b2c44c738c9cbc1a99cd6edfd0c2b85b.svg";
-  let showSlider = addon.settings.get("show-slider")
+  let showSlider = addon.settings.get("show-slider");
   let icon = document.createElement("img");
   icon.loading = "lazy";
   let slider = document.createElement("input");
@@ -58,7 +58,7 @@ export default async function ({ addon, global, console }) {
       setVol(this.value);
     });
     addon.settings.addEventListener("change", function () {
-      showSlider = addon.settings.get("show-slider")
+      showSlider = addon.settings.get("show-slider");
       setVol(1);
     });
   }
