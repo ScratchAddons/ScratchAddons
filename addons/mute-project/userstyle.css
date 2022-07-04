@@ -3,9 +3,8 @@
   margin-top: 6px;
 }
 
-.sa-volume input {
+.sa-volume input[type="range"] {
   -webkit-appearance: none;
-  -webkit-transition: 0.2s;
   width: 50px;
   height: 6px;
   border-radius: 3px;
@@ -15,16 +14,17 @@
 
 .sa-volume input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  appearance: none;
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #cf63cf;
+  background-color: #cf63cf;
 }
 
 .sa-volume input[type="range"]::-moz-range-thumb {
   width: 12px;
   height: 12px;
+  border: none;
   border-radius: 50%;
-  background: #cf63cf;
+  background-color: #cf63cf;
 }
+
