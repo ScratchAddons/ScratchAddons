@@ -1,14 +1,19 @@
+body {
+  padding-bottom: 1px; /* show margin below last project */
+}
+
 .favorites {
   font-size: 12px;
-  color: var(--content-text);
   padding: 6px 8px;
-  cursor: default;
   display: flex;
-  align-items: center;
   border-bottom: 1px solid var(--content-border);
-  user-select: none;
+  border-radius: 4px;
+  margin: 10px;
+  border: 1px solid var(--content-border);
+  background: var(--content-background);
+  box-shadow: var(--content-shadow);
 }
 
 .favorites a {
-  color: var(--content-text);
+  color: var(--content-text) !important; /* I'm probbably doiing somthing wrong and don't need !important */
 }
