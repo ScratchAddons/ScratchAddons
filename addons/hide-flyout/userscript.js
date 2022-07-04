@@ -37,21 +37,6 @@ export default async function ({ addon, global, console, msg }) {
     }
   }
 
-  function selectLastOpenedCategory() {
-    /* Called when switching from category click to a different mode
-       or disabling the addon */
-    const toolbox = Blockly.getMainWorkspace().getToolbox();
-    const flyout = toolbox.flyout_;
-    if (toolbox.getSelectedCategoryId() === null) {
-      flyout.selectCategoryByScrollPosition(-flyout.getWorkspace().scrollY);
-      if (!toolbox.selectedItem_) {
-        // the scroll position is above the first category
-        toolbox.selectedItem_ = toolbox.categoryMenu_.categories_[0];
-        toolbox.selectedItem_.setSelected(true);
-      }
-    }
-  }
-
   function onmouseenter(e, speed = {}) {
     // If a mouse event was passed, only open flyout if the workspace isn't being dragged
     if (
@@ -123,14 +108,14 @@ export default async function ({ addon, global, console, msg }) {
     });
 
     if (addon.self.enabledLate && getToggleSetting() === "category") {
-      Blockly.getMainWorkspace().getToolbox().setSelectedItem(null);
+      Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
     }
     addon.self.addEventListener("disabled", () => {
-      selectLastOpenedCategory();
-    });
+      Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
+    })
     addon.self.addEventListener("reenabled", () => {
       if (getToggleSetting() === "category") {
-        Blockly.getMainWorkspace().getToolbox().setSelectedItem(null);
+        Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
         onmouseleave(null, 0);
         toggle = false;
       }
@@ -145,54 +130,44 @@ export default async function ({ addon, global, console, msg }) {
           toggle = true;
           flyoutLock = false;
         } else {
-          Blockly.getMainWorkspace().getToolbox().setSelectedItem(null);
+          Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
           onmouseleave(null, 0);
           toggle = false;
         }
       } else {
         onmouseleave();
-        selectLastOpenedCategory();
+        Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
       }
     });
 
     // category click mode
     const oldSetSelectedItem = Blockly.Toolbox.prototype.setSelectedItem;
-    Blockly.Toolbox.prototype.setSelectedItem = function (item, shouldScroll) {
-      if (addon.self.disabled || getToggleSetting() !== "category")
-        return oldSetSelectedItem.call(this, item, shouldScroll);
-      if (shouldScroll === undefined) shouldScroll = true;
+    Blockly.Toolbox.prototype.setSelectedItem = function (item, shouldScroll = true) {
+      const previousSelection = this.selectedItem_;
+      oldSetSelectedItem.call(this, item, shouldScroll);
+      if (addon.self.disabled || getToggleSetting() !== "category") return;
       if (!shouldScroll) {
         // ignore initial selection when updating the toolbox
-        item = this.selectedItem_;
-      } else if (this.selectedItem_ === item) {
+        item.setSelected(false);
+      } else if (item === previousSelection) {
         toggle = !toggle;
         if (toggle) onmouseenter();
         else {
           onmouseleave();
-          // unselect the category
-          item = null;
+          item.setSelected(false);
         }
       } else if (!toggle) {
         scrollAnimation = false;
         toggle = true;
         onmouseenter();
       }
-      oldSetSelectedItem.call(this, item, shouldScroll);
     };
 
-    // the selected category can now be null
-    const oldGetSelectedCategoryId = Blockly.Toolbox.prototype.getSelectedCategoryId;
-    Blockly.Toolbox.prototype.getSelectedCategoryId = function () {
-      if (!this.selectedItem_) return null;
-      return oldGetSelectedCategoryId.call(this);
-    };
     const oldSelectCategoryById = Blockly.Toolbox.prototype.selectCategoryById;
     Blockly.Toolbox.prototype.selectCategoryById = function (...args) {
       // called after populating the toolbox
       // ignore if the palette is closed
       if (!addon.self.disabled && getToggleSetting() === "category" && !toggle) return;
-      // this function doesn't expect selectedItem_ to be null
-      if (!this.selectedItem_) this.selectedItem_ = this.categoryMenu_.categories_[0];
       return oldSelectCategoryById.call(this, ...args);
     }
 
