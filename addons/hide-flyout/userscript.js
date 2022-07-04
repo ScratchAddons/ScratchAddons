@@ -37,6 +37,13 @@ export default async function ({ addon, global, console, msg }) {
     }
   }
 
+  function updateLockDisplay() {
+    lockDisplay.title = flyoutLock ? msg("unlock") : msg("lock");
+    lockIcon.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
+    if (flyoutLock) lockDisplay.classList.add("locked");
+    else lockDisplay.classList.remove("locked");
+  }
+
   function onmouseenter(e, speed = {}) {
     // If a mouse event was passed, only open flyout if the workspace isn't being dragged
     if (
@@ -129,6 +136,7 @@ export default async function ({ addon, global, console, msg }) {
         if (flyoutLock) {
           toggle = true;
           flyoutLock = false;
+          updateLockDisplay();
         } else {
           Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
           onmouseleave(null, 0);
@@ -222,19 +230,14 @@ export default async function ({ addon, global, console, msg }) {
     lockDisplay = document.createElement("button");
     blocksWrapper.appendChild(lockDisplay);
     lockDisplay.className = "sa-lock-image";
-    if (flyoutLock) lockDisplay.classList.add("locked");
-    lockDisplay.title = flyoutLock ? msg("unlock") : msg("lock");
     lockDisplay.style.display = "none"; // overridden by userstyle if the addon is enabled
     lockIcon = document.createElement("img");
-    lockIcon.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
     lockIcon.alt = "";
     lockDisplay.appendChild(lockIcon);
+    updateLockDisplay();
     lockDisplay.onclick = () => {
       flyoutLock = !flyoutLock;
-      lockDisplay.title = flyoutLock ? msg("unlock") : msg("lock");
-      lockIcon.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
-      if (flyoutLock) lockDisplay.classList.add("locked");
-      else lockDisplay.classList.remove("locked");
+      updateLockDisplay();
     };
 
     onmouseleave(null, 0);
