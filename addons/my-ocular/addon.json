@@ -1,6 +1,6 @@
 {
   "name": "Ocular and Aviate Integration",
-  "description": "Shows ocular/aviate statuses and forum post reactions. Uses my-ocular.jeffalo.net to obtain data.",
+  "description": "Shows ocular or aviate statuses on profiles and forum posts. It also adds forum post reactions. Uses my-ocular.jeffalo.net and aviateapp.eu.org to obtain data.",
   "credits": [
     {
       "name": "Jeffalo",
@@ -30,7 +30,7 @@
   "userscripts": [
     {
       "url": "discuss.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*", "https://scratch.mit.edu/users/*"],
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
       "if": {
         "settings": {
           "discuss": true
@@ -112,9 +112,7 @@
       "default": true,
       "if": {
         "settings": {
-          "show-status": ["ocular", "aviate"],
-          "signature": true,
-          "mode": "forums"
+          "show-status": ["ocular", "aviate"]
         }
       }
     },
@@ -131,7 +129,7 @@
   "latestUpdate": {
     "version": "1.27.0",
     "isMajor": true,
-    "temporaryNotice": "Added support for Aviate.",
+    "temporaryNotice": "Added support for Aviate and many changes in code.",
     "newSettings": ["show-status"]
   }
 }
