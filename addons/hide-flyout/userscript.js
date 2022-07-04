@@ -96,9 +96,9 @@ export default async function ({ addon, global, console, msg }) {
           // always 0, 1, 2
           const toggleSetting = getToggleSetting();
           if (
-            e.detail.action.activeTabIndex === 0
-            && !addon.self.disabled
-            && (toggleSetting === "hover" || toggleSetting === "cathover")
+            e.detail.action.activeTabIndex === 0 &&
+            !addon.self.disabled &&
+            (toggleSetting === "hover" || toggleSetting === "cathover")
           ) {
             onmouseleave(null, 0);
             toggle = false;
@@ -119,7 +119,7 @@ export default async function ({ addon, global, console, msg }) {
     }
     addon.self.addEventListener("disabled", () => {
       Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
-    })
+    });
     addon.self.addEventListener("reenabled", () => {
       if (getToggleSetting() === "category") {
         Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
@@ -177,7 +177,7 @@ export default async function ({ addon, global, console, msg }) {
       // ignore if the palette is closed
       if (!addon.self.disabled && getToggleSetting() === "category" && !toggle) return;
       return oldSelectCategoryById.call(this, ...args);
-    }
+    };
 
     const oldStepScrollAnimation = Blockly.Flyout.prototype.stepScrollAnimation;
     Blockly.Flyout.prototype.stepScrollAnimation = function () {
@@ -249,17 +249,11 @@ export default async function ({ addon, global, console, msg }) {
     for (let element of [toolbox, addExtensionButton, flyOut, scrollBar, lockDisplay]) {
       element.onmouseenter = (e) => {
         const toggleSetting = getToggleSetting();
-        if (
-          !addon.self.disabled
-          && (toggleSetting === "hover" || toggleSetting === "cathover")
-        ) onmouseenter(e);
+        if (!addon.self.disabled && (toggleSetting === "hover" || toggleSetting === "cathover")) onmouseenter(e);
       };
       element.onmouseleave = (e) => {
         const toggleSetting = getToggleSetting();
-        if (
-          !addon.self.disabled
-          && (toggleSetting === "hover" || toggleSetting === "cathover")
-        ) onmouseleave(e);
+        if (!addon.self.disabled && (toggleSetting === "hover" || toggleSetting === "cathover")) onmouseleave(e);
       };
     }
     placeHolderDiv.onmouseenter = (e) => {
