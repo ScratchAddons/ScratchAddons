@@ -1,0 +1,7 @@
+{
+  "fave-tab/loading": "Loading...",
+  "fave-tab/no-projects": "There are no projects to display.",
+  "fave-tab/login": "Can't access favorites, please log in on Scratch.",
+  "fave-tab/general-error": "Could not load projects.",
+  "fave-tab/server-error": "It seems like the Scratch server is having a problem."
+}

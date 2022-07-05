@@ -15,6 +15,12 @@
   </head>
 
   <body>
+    <div v-cloak class="loading" transition="fade" v-show="!error && !projectsVisable">
+      {{ messages.loadingMsg }}
+    </div>
+    <div v-cloak class="error" transition="fade" v-show="error">
+      {{ error }}
+    </div>
     <div v-cloak v-show="projectsVisable">
       <div class="favorites" v-for="project of projects">
         <a :href="'https://scratch.mit.edu/projects/' + project.id" target="_blank">{{ project.title }}</a>
