@@ -16,9 +16,8 @@ export default async function ({ addon, global, console, msg }) {
     loadMore.addEventListener("click", async function () {
       dataLoaded += 5;
       if (dataLoaded > fetched.length) {
-        let fetchList = await getWhatsHappeningData({addon, console, dataLoaded });
-        if (fetched != fetchList)
-           fetched.push.apply(fetched, fetchList);
+        let fetchList = await getWhatsHappeningData({ addon, console, dataLoaded });
+        if (fetched != fetchList) fetched.push.apply(fetched, fetchList);
       }
       updateRedux();
     });

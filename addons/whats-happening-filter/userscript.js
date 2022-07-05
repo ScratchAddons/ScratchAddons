@@ -8,10 +8,9 @@ export default async function ({ addon, console, msg }) {
   let fetchList = [];
   do {
     fetchList = await getWhatsHappeningData({ addon, console, dataLoaded });
-    if (fetched != fetchList)
-       fetched.push.apply(fetched, fetchList);
+    if (fetched != fetchList) fetched.push.apply(fetched, fetchList);
     dataLoaded += 40;
-  } while (fetchList.length != 0)
+  } while (fetchList.length != 0);
 
   let container = document.querySelector(".activity-ul").appendChild(document.createElement("div"));
   displayedFetch = fetched;
