@@ -27,7 +27,7 @@
     </div>
     <div class="addon-settings" v-if="everExpanded" v-show="expanded">
       <div class="addon-description-full">{{ addon.description }}</div>
-      <div class="addon-update" v-if="addon.latestUpdate && addon.latestUpdate.temporaryNotice">
+      <div class="addon-update" v-if="showUpdateNotice">
         <addon-tag tag="new"></addon-tag>
         {{ addon.latestUpdate.temporaryNotice }}
       </div>
@@ -276,6 +276,10 @@
     border-color: var(--update-border);
     background-color: var(--update-background);
     color: var(--update-text);
+  }
+  .addon-update .badge {
+    margin: -3px;
+    margin-inline-end: 10px;
   }
   .addon-notice img,
   .addon-warn img {

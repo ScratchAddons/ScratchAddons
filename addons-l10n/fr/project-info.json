@@ -1,1 +1,1 @@
-{"project-info/@name":"Nombre de sprites et de scripts","project-info/@description":"Affiche le nombre de sprites et de scripts que contient un projet."}
+{"project-info/sprite":"{num, plural, one {1 sprite} many {# sprites} other {# sprites}}","project-info/script":"{num, plural, one {1 script} many {# scripts} other {# scripts}}","project-info/@name":"Nombre de sprites et de scripts","project-info/@description":"Affiche le nombre de sprites et de scripts que contient un projet."}

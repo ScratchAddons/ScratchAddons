@@ -28,6 +28,8 @@
       "default": false
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "forums.js",

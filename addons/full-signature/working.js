@@ -36,5 +36,6 @@ export default async function ({ addon, global, console, msg }) {
       },
       { once: true }
     );
+    addon.tab.displayNoneWhileDisabled(loadMore);
   }
 }

@@ -1635,6 +1635,19 @@
       }
     },
     {
+      "name": "link-variant",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "link"
+        },
+        "r": 0.66,
+        "g": 0.76,
+        "b": 0.8
+      }
+    },
+    {
       "name": "link-iconFilter",
       "value": {
         "type": "recolorFilter",
@@ -1817,7 +1830,7 @@
     },
     {
       "url": "experimental_scratchwww_white_bg.css",
-      "matches": ["https://scratch.mit.edu/ideas", "https://scratch.mit.edu/annual-report"]
+      "matches": ["https://scratch.mit.edu/ideas", "https://scratch.mit.edu/annual-report/*"]
     },
     {
       "url": "banners/darker.css",

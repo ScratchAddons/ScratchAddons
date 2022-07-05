@@ -43,6 +43,8 @@ const localizeSettings = (addonId, setting, tableId) => {
   for (const addonId of addonIds) {
     if (addonId.startsWith("//")) continue;
     const manifest = await (await fetch(`/addons/${addonId}/addon.json`)).json();
+    let potentiallyNeedsMissingDynamicWarning =
+      manifest.updateUserstylesOnSettingsChange && !(manifest.dynamicEnable && manifest.dynamicDisable);
     if (!useDefault) {
       manifest._english = {};
       for (const prop of ["name", "description"]) {
@@ -93,15 +95,28 @@ const localizeSettings = (addonId, setting, tableId) => {
         // A's dependency is C
         // C's dependent is A
         // Only handle userstyles because userscript support is complicated
-        if (propName === "userstyles" && injectable.if?.addonEnabled?.length) {
-          // Convert string shortcut to Array
-          // might as well remove this in the future
-          if (typeof injectable.if.addonEnabled === "string") {
-            injectable.if.addonEnabled = [injectable.if.addonEnabled];
+        if (propName === "userstyles") {
+          if (injectable.if?.addonEnabled?.length) {
+            // Convert string shortcut to Array
+            // might as well remove this in the future
+            if (typeof injectable.if.addonEnabled === "string") {
+              injectable.if.addonEnabled = [injectable.if.addonEnabled];
+            }
+            for (const dependency of injectable.if.addonEnabled) {
+              if (!scratchAddons.dependents[dependency]) scratchAddons.dependents[dependency] = new Set();
+              scratchAddons.dependents[dependency].add(addonId);
+            }
           }
-          for (const dependency of injectable.if.addonEnabled) {
-            if (!scratchAddons.dependents[dependency]) scratchAddons.dependents[dependency] = new Set();
-            scratchAddons.dependents[dependency].add(addonId);
+          if (potentiallyNeedsMissingDynamicWarning && Object.keys(injectable.if?.settings || {}).length > 0) {
+            potentiallyNeedsMissingDynamicWarning = false; // already warned
+            console.warn(
+              "Addon",
+              addonId,
+              "has updateUserstylesOnSettingsChange set to true without dynamic enable or disable.",
+              "This will cause an issue as userstyle",
+              injectable.url,
+              "has a setting as a condition!"
+            );
           }
         }
       }
