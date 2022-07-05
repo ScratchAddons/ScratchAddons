@@ -11,8 +11,8 @@ const fetchFaves = async (user) => {
   if (res.status >= 400) {
     throw HTTPError.fromResponse("Error when fetching favorites", res);
   }
-  return res.json()
-}
+  return res.json();
+};
 
 export default async ({ addon, msg, safeMsg }) => {
   window.vue = new Vue({
@@ -26,9 +26,9 @@ export default async ({ addon, msg, safeMsg }) => {
       },
     },
     async created() {
-      if (!await addon.auth.fetchIsLoggedIn()) {
+      if (!(await addon.auth.fetchIsLoggedIn())) {
         this.error = msg("login");
-        return
+        return;
       }
       const username = await addon.auth.fetchUsername();
       let projects;
@@ -36,7 +36,7 @@ export default async ({ addon, msg, safeMsg }) => {
         projects = await fetchFaves(username);
       } catch (e) {
         if (e instanceof HTTPError) {
-          this.error = msg((e.status >= 500) ? "server-error" : "general-error");
+          this.error = msg(e.status >= 500 ? "server-error" : "general-error");
         }
       }
       this.projects = projects.map((project) => ({ title: project.title, id: project.id }));
