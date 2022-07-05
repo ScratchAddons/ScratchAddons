@@ -4,11 +4,17 @@ export default async function ({ addon, console, msg }) {
   // Load activity-li from Scratch API. Thanks to full-signature/happen.js
   let fetched = [];
   let displayedFetch = [];
-  let dataLoaded = 5;
-  fetched = await getWhatsHappeningData({ addon, console, dataLoaded });
+  let dataLoaded = 0;
+  let fetchList = [];
+  do {
+    fetchList = await getWhatsHappeningData({ addon, console, dataLoaded });
+    if (fetched != fetchList)
+       fetched.push.apply(fetched, fetchList);
+    dataLoaded += 40;
+  } while (fetchList.length != 0)
 
   let container = document.querySelector(".activity-ul").appendChild(document.createElement("div"));
-  displayedFetch = fetched.slice(0, 40);
+  displayedFetch = fetched;
   await addon.tab.redux.dispatch({ type: "SET_ROWS", rowType: "activity", rows: displayedFetch });
   document.querySelector(".activity-ul").appendChild(container);
 

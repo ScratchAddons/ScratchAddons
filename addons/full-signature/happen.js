@@ -1,7 +1,7 @@
 import getWhatsHappeningData from "./load-happen.js";
 
 export default async function ({ addon, global, console, msg }) {
-  if (addon.self.getEnabledAddons("community")includes("whats-happening-filter") return;
+  //if (addon.self.getEnabledAddons("community").includes("whats-happening-filter")) return;
   await addon.tab.waitForElement(".activity-ul li");
   let activityStream = document.querySelectorAll(".activity-ul li");
   if (activityStream.length) {
@@ -16,7 +16,9 @@ export default async function ({ addon, global, console, msg }) {
     loadMore.addEventListener("click", async function () {
       dataLoaded += 5;
       if (dataLoaded > fetched.length) {
-        fetched = await getWhatsHappeningData({addon, console, dataLoaded });
+        let fetchList = await getWhatsHappeningData({addon, console, dataLoaded });
+        if (fetched != fetchList)
+           fetched.push.apply(fetched, fetchList);
       }
       updateRedux();
     });
