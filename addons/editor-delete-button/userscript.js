@@ -3,8 +3,8 @@ export default async ({ addon, msg }) => {
   // Wait until user has logged in, and is the author of the project
   await redux.waitForState((state) => state.preview?.projectInfo?.author?.id === state.session?.session?.user?.id);
   while (true) {
-    const loadItem = await addon.tab.waitForElement(
-      "div[class^='menu-bar_file-group'] > :nth-child(3) ul > :nth-child(4):not(.sa-editor-delete-button)",
+    const fileMenu = await addon.tab.waitForElement(
+      "div[class^='menu-bar_file-group'] > :nth-child(3) ul",
       {
         markAsSeen: true,
         reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly && !state.preview.visibilityInfo.deleted,
@@ -12,7 +12,7 @@ export default async ({ addon, msg }) => {
     );
 
     const dropdownItem = document.createElement("li");
-    dropdownItem.className = addon.tab.scratchClass("menu_menu-item", "menu_hoverable", {
+    dropdownItem.className = addon.tab.scratchClass("menu_menu-item", "menu_hoverable", "menu_menu-section", {
       others: ["sa-editor-delete-button"],
     });
     dropdownItem.innerText = msg("button-text");
@@ -51,6 +51,6 @@ export default async ({ addon, msg }) => {
       }
     });
 
-    loadItem.insertAdjacentElement("beforebegin", dropdownItem);
+    fileMenu.appendChild(dropdownItem);
   }
 };
