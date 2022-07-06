@@ -37,12 +37,12 @@ export default async function ({ addon, global, console, msg }) {
 
   const cache = Array(301)
     .fill()
-    //loads the blank message in if shownotext setting is enabled
+    //Shows just the clone count if the setting is enabled
     .map((_, i) => {
       if (showIconOnly) {
-        msg("clones", { cloneCount: i })
-      } else {
         i
+      } else {
+        msg("clones", { cloneCount: i })
       }
     });
 
@@ -52,7 +52,7 @@ export default async function ({ addon, global, console, msg }) {
     if (v === lastChecked) return;
     countContainerContainer.dataset.count = lastChecked = v;
     if(showIconOnly){
-      //it caches the blank message if shownotext setting is enabled
+      //it caches without the message if show icon only setting is enabled
       count.dataset.str = cache[v] || v;
     }
     else {
