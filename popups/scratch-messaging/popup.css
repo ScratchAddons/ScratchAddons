@@ -265,6 +265,7 @@ a.message-type-title-text {
 .comment-chars {
   margin-inline-start: auto;
   font-weight: normal;
+  font-variant: tabular-nums;
 }
 
 .status-container {

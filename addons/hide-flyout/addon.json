@@ -9,7 +9,6 @@
   ],
   "info": [
     {
-      "type": "notice",
       "text": "\"Palette area hover\" mode only extends the viewing area. If you want to be able to drag blocks into that area without them getting trashed, use one of the other modes.",
       "id": "hoverExplanation"
     }
