@@ -15,5 +15,7 @@
     }
   ],
   "tags": ["editor", "editorMenuBar"],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.28.0"
 }
