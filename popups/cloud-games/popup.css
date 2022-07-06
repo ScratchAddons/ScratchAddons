@@ -107,5 +107,9 @@ body {
 }
 
 .online {
-  border: 1px solid var(--brand-orange);
+  border: 1px solid var(--blue-variant);
+}
+
+.online .title {
+  background: var(--blue);
 }
