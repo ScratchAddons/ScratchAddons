@@ -19,6 +19,11 @@
   height: 25rem;
 }
 
+.sa-debugger-interface [class*="card_header-buttons_"] {
+  background-color: #29beb8;
+  border-color: #3aa8a4;
+}
+
 .sa-debugger-interface h1 {
   padding: 10px;
   z-index: 10;
