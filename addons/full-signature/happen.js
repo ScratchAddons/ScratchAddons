@@ -1,4 +1,7 @@
+import getWhatsHappeningData from "./load-happen.js";
+
 export default async function ({ addon, global, console, msg }) {
+  //if (addon.self.getEnabledAddons("community").includes("whats-happening-filter")) return;
   await addon.tab.waitForElement(".activity-ul li");
   let activityStream = document.querySelectorAll(".activity-ul li");
   if (activityStream.length) {
@@ -13,25 +16,8 @@ export default async function ({ addon, global, console, msg }) {
     loadMore.addEventListener("click", async function () {
       dataLoaded += 5;
       if (dataLoaded > fetched.length) {
-        const username = await addon.auth.fetchUsername();
-        const xToken = await addon.auth.fetchXToken();
-        await fetch(
-          `
-          https://api.scratch.mit.edu/users/${username}/following/users/activity?limit=40&offset=${
-            Math.floor(dataLoaded / 40) * 40
-          }`,
-          {
-            headers: {
-              "X-Token": xToken,
-            },
-          }
-        )
-          .then((response) => response.json())
-          .then((rows) => {
-            rows
-              .filter((item) => fetched.find((item2) => item2.id === item.id) === undefined)
-              .forEach((item) => fetched.push(item));
-          });
+        let fetchList = await getWhatsHappeningData({ addon, console, dataLoaded });
+        if (fetched != fetchList) fetched.push.apply(fetched, fetchList);
       }
       updateRedux();
     });
