@@ -1,0 +1,12 @@
+{
+  "editor-calculator/@name": "Calculatrice dans l'éditeur",
+  "editor-calculator/@description": "Ajoute un bouton dans éditeur au-dessus la scène qui ouvre une calculatrice. Vous pouvez utiliser les boutons affichés ou les touches du clavier pour effectuer des opérations.",
+  "editor-calculator/@settings-name-theme": "Thème",
+  "editor-calculator/@settings-select-theme-light": "Claire",
+  "editor-calculator/@settings-select-theme-dark": "Sombre",
+  "editor-calculator/@settings-name-popup": "Ouvrir dans une fenêtre popup",
+  "editor-calculator/standard": "Standard",
+  "editor-calculator/scientific": "Scientifique",
+  "editor-calculator/historical": "Historique",
+  "editor-calculator/no-historical": "Aucun calcul précédent"
+}
