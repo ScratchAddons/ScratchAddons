@@ -1,0 +1,48 @@
+{
+  "name": "Calculator in editor",
+  "description": "Add a button in éditeur above the stage that opens a calculator. You can use the displayed buttons or keyboard keys to perform operations.",
+  "tags": ["editor"],
+  "versionAdded": "1.26.0",
+  "credits": [
+    {
+      "name": "valmontechno",
+      "link": "https://scratch.mit.edu/users/valmontechno/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name" : "Theme",
+      "id": "theme",
+      "type": "select",
+      "potentialValues": [
+        {
+          "name": "Light",
+          "id": "light"
+        },
+        {
+          "name": "Dark",
+          "id": "dark"
+        }
+      ],
+      "default": "light"
+    },
+    {
+      "name": "Open in a popup window",
+      "id": "popup",
+      "type": "boolean",
+      "default": false
+    }
+  ]
+}

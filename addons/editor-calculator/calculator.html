@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Calculator</title>
+    <link rel="icon" href="icon/operation.svg">
+    <link rel="stylesheet" href="style.css" type="text/CSS">
+  </head>
+  <body>
+    <div id="toolbar">
+      <div  class="tab sel"><img class="popup-icon" src="icon/operation.svg"><span></span></div>
+      <div class="tab"><img class="popup-icon" src="icon/square-root.svg"><span></span></div>
+      <div class="tab"><img class="popup-icon" src="icon/history.svg"><span></span></div>
+    </div>
+    <div id="app">
+      <div class="calculator show" id="standard">
+        <div class="screen" id="screen-standard"><span></span></div>
+        <div class="button-standard">CE</div>
+        <div class="button-standard">C</div>
+        <div class="button-standard"><img src="icon/backspace.svg"></div>
+        <div class="button-standard">÷</div>
+        <div class="button-standard number">7</div>
+        <div class="button-standard number">8</div>
+        <div class="button-standard number">9</div>
+        <div class="button-standard">×</div>
+        <div class="button-standard number">4</div>
+        <div class="button-standard number">5</div>
+        <div class="button-standard number">6</div>
+        <div class="button-standard">-</div>
+        <div class="button-standard number">1</div>
+        <div class="button-standard number">2</div>
+        <div class="button-standard number">3</div>
+        <div class="button-standard">+</div>
+        <div class="button-standard">±</div>
+        <div class="button-standard number">0</div>
+        <div class="button-standard">.</div>
+        <div class="button-standard equal">=</div>
+      </div>
+      <div class="calculator" id="scientific">
+        <div class="screen" id="screen-scientific"><span></span></div>
+        <div class="button-scientific">π</div>
+        <div class="button-scientific m">M+</div>
+        <div class="button-scientific m">M-</div>
+        <div class="button-scientific m">MR</div>
+        <div class="button-scientific m">MC</div>
+        <div class="button-scientific">x<sup>2</sub></div>
+        <div class="button-scientific">CE</div>
+        <div class="button-scientific">C</div>
+        <div class="button-scientific"><img src="icon/backspace.svg"></div>
+        <div class="button-scientific">÷</div>
+        <div class="button-scientific">x<sup>y</sup></div>
+        <div class="button-scientific number">7</div>
+        <div class="button-scientific number">8</div>
+        <div class="button-scientific number">9</div>
+        <div class="button-scientific">×</div>
+        <div class="button-scientific">√</div>
+        <div class="button-scientific number">4</div>
+        <div class="button-scientific number">5</div>
+        <div class="button-scientific number">6</div>
+        <div class="button-scientific">-</div>
+        <div class="button-scientific"><sup>3</sup>√</div>
+        <div class="button-scientific number">1</div>
+        <div class="button-scientific number">2</div>
+        <div class="button-scientific number">3</div>
+        <div class="button-scientific">+</div>
+        <div class="button-scientific m">mod</div>
+        <div class="button-scientific">±</div>
+        <div class="button-scientific number">0</div>
+        <div class="button-scientific">.</div>
+        <div class="button-scientific equal">=</div>
+      </div>
+      <div class="calculator" id="historical"></div>
+    </div>
+    <script src="calculator.js"></script>
+  </body>
+</html>
