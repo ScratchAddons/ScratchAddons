@@ -9,20 +9,34 @@
     },
     {
       "type": "notice",
+      "text": "\"Always Choose\" mode gives the option on every page to decide wheater you want to replace the player (Click on the button simply), or open it in a new TurboWarp page (use Ctr+Click)",
+      "id": "bothModeDetails"
+    },
+    {
+      "type": "notice",
       "text": "TurboWarp has separate cloud data servers. \"Replace player\" mode will send your Scratch username to TurboWarp.org for use in cloud data.",
       "id": "cloudData"
+    },
+    {
+      "type": "notice",
+      "text": "\"Custom URL Parameters\" includes partly the TurboWarp advanced setting, if you don't know what are they, probably you shouldn't care about them."
     }
   ],
   "credits": [
     {
       "name": "TheColaber",
       "link": "https://scratch.mit.edu/users/TheColaber"
+    },
+    {
+      "name": "Oreg Sam",
+      "link": "https://github.com/OregSamSas"
     }
   ],
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["projects"]
+      "matches": ["projects"],
+      "runAtComplete": false
     }
   ],
   "userstyles": [
@@ -44,9 +58,22 @@
         {
           "id": "player",
           "name": "Replace player"
+        },
+        {
+          "id": "both",
+          "name": "Always Choose"
         }
       ],
       "default": "link"
+    },
+    {
+      "name": "Automatically replace",
+      "id": "auto",
+      "type": "boolean",
+      "default": false,
+      "if": {
+        "settings": {"action": ["player", "both"]}
+      }
     },
     {
       "name": "Enable addons",
@@ -54,8 +81,65 @@
       "type": "boolean",
       "default": true,
       "if": {
-        "settings": { "action": "player" }
+        "settings": {"action": ["player", "both"]}
       }
+    },
+    {
+      "name": "Custom URL parameters",
+      "id": "url-params",
+      "type": "table",
+      "default": [],
+
+      "row": [
+        {
+          "name": "Parameter",
+          "id": "param",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "presets": [
+        {
+          "name": "Username",
+          "values": {"param": "username=ObviNotGriffpatch"}
+        },
+        {
+          "name": "Custom FPS count",
+          "values": {"param": "fps=60"}
+        },
+        {
+          "name": "Interpolation",
+          "values": {"param": "interpolate"}
+        },
+        {
+          "name": "High Quality Pen",
+          "values": {"param": "hqpen"}
+        },
+        {
+          "name": "Warp Timer",
+          "values": {"param": "stuck"}
+        },
+        {
+          "name": "Infinity Clones",
+          "values": {"param": "clones=Infinity"}
+        },
+        {
+          "name": "Remove Fencing",
+          "values": {"param": "offscreen"}
+        },
+        {
+          "name": "Remove Miscellaneous Limits",
+          "values": {"param": "limitless"}
+        },
+        {
+          "name": "Disable Compiler",
+          "values": {"param": "nocompile"}
+        },
+        {
+          "name": "Autoplay (Only with \"Replace\" mode)",
+          "values": {"param": "autoplay"}
+        }
+      ]
     }
   ],
   "versionAdded": "1.18.0",
