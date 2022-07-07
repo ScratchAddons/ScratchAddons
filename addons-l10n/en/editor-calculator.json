@@ -1,0 +1,6 @@
+{
+  "editor-calculator/standard": "Standard",
+  "editor-calculator/scientific": "Scientific",
+  "editor-calculator/historical": "Historical",
+  "editor-calculator/no-historical": "No previous calculations"
+}
