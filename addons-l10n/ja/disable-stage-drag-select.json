@@ -1,1 +1,1 @@
-{"disable-stage-drag-select/@name":"ドラッグできないスプライト"}
+{"disable-stage-drag-select/@name":"ドラッグできないスプライト","disable-stage-drag-select/@description":"ステージではShiftキーを押さないとスプライトをドラッグできないようにする。"}
