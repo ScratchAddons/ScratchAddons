@@ -33,7 +33,7 @@
   ],
   "settings": [
     {
-      "name": "Show",
+      "name": "Show...",
       "id": "show",
       "type": "select",
       "potentialValues": [
