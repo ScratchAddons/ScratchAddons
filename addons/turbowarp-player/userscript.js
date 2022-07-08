@@ -18,8 +18,6 @@ export default async function ({ addon, console, msg }) {
   const button = document.createElement("button");
   button.className = "button sa-tw-button";
 
-  console.log(action);
-  console.log(autoreplace);
   //Shows a more detailed message as a title, if "Always Choose" option is enabled
   if (action === "both") {
     //If it's automatically replaces, we have to replace the title automatically as well
@@ -31,16 +29,14 @@ export default async function ({ addon, console, msg }) {
     }
   } else {
     
-    if (action === "replace") {
+    if (action === "player") {
       if (autoreplace) {
         button.title = "Scratch";
         button.classList.add("scratch");
-        console.log("Added Scratch button")
       } else {
         button.title = "TurboWarp";
       };
     } else {
-      console.log("Halihó!")
       button.title = "TurboWarp";
     }
   }
@@ -68,16 +64,12 @@ export default async function ({ addon, console, msg }) {
     let letterNum = 0;
     for (var i=0; (i < string.length && !(string[i-1] === ":")); i++) {
       letterNum +=1;
-      console.log(letterNum);
-      console.log(string.length);
-      console.log(string[i]);
     }
     letterNum += 1;
     for (var i=0; (letterNum < string.length && !(string[letterNum] === "\"")); i++) {
       newstring += string[letterNum];
       letterNum +=1;
     }
-    console.log(newstring);
     return newstring;
   }
 
@@ -96,13 +88,13 @@ export default async function ({ addon, console, msg }) {
     if ((e.ctrlKey || e.metaKey) && action === "both") {
       openedInNewTab = true;
     }
-
+    
     //Loads in the special URL parameters
     if(parameters.length > 0) {
       urlParams = "";
-      parameters.forEach((thisPar, l) => {
+      parameters.forEach((thisPar) => {
         urlParams += getParameter(thisPar);
-        if (l + 1 !== parameters.length || playerToggled) {
+        if (true) {
           urlParams += "&";
         }
         return;
@@ -111,7 +103,6 @@ export default async function ({ addon, console, msg }) {
 
     if ((action === "player") || (action === "both" && !openedInNewTab)) {
       playerToggled = !playerToggled;
-      console.log(playerToggled);
       
       if (playerToggled) {
         const username = await addon.auth.fetchUsername();
@@ -125,7 +116,6 @@ export default async function ({ addon, console, msg }) {
         }
         
         const iframeUrl = `https://turbowarp.org/${projectId}/embed?${urlParams}${usp}${search}`;
-        console.log(iframeUrl);
         twIframe.src = "";
         scratchStage = await addon.tab.waitForElement(".guiPlayer");
         scratchStage.parentElement.prepend(twIframeContainer);
@@ -152,14 +142,14 @@ export default async function ({ addon, console, msg }) {
     openedInNewTab = false;
   };
 
-   
+  //If auto is enabled, instantly executes the replacing function
+  if (addon.settings.get("auto") && (action === "player" || action === "both")) {
+    //creates a random object to fill in properly buttonAction's parameter
+    buttonAction({type:"scratcher", name:"simiagain", loves:"scratchaddons.com"});
+  }
 
   //When its clicked it also executes it
   button.onclick = buttonAction;
-  //If auto is enabled, instantly executes the replacing function
-  if (addon.settings.get("auto") && (action === "player" || action === "both")) {
-    buttonAction();
-  }
 
   let showAlert = true;
   while (true) {
@@ -169,9 +159,16 @@ export default async function ({ addon, console, msg }) {
     });
 
     seeInside.addEventListener("click", function seeInsideClick(event) {
-      if (!playerToggled || !showAlert) return;
+      if (!playerToggled) return;
+      if (!showAlert) {
+        button.title = "TurboWarp";
+        button.classList.remove("scratch");
+        return;
+      }
 
       if (confirm(msg("confirmation"))) {
+        button.title = "TurboWarp";
+        button.classList.remove("scratch");
         showAlert = false;
       } else {
         event.stopPropagation();
