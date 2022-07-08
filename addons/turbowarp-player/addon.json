@@ -19,7 +19,8 @@
     },
     {
       "type": "notice",
-      "text": "\"Custom URL Parameters\" includes partly the TurboWarp advanced setting, if you don't know what are they, probably you shouldn't care about them."
+      "text": "\"Custom URL Parameters\" includes partly the TurboWarp advanced setting, if you don't know what are they, probably you shouldn't care about them.",
+      "id": "customUrlParams"
     }
   ],
   "credits": [
