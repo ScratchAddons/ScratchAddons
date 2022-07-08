@@ -100,3 +100,8 @@ body {
   vertical-align: text-bottom;
   filter: var(--content-icon-filter);
 }
+
+.add-button {
+  text-align: center;
+  padding-top: 0.5rem;
+}

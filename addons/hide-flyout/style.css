@@ -54,14 +54,15 @@
 
 .sa-flyout-placeHolder {
   position: absolute;
-  left: calc(var(--sa-category-width + 1px));
+  top: 0;
+  left: calc(var(--sa-category-width) + 1px);
   height: 100%;
   width: calc(var(--sa-flyout-width) + 1px);
 }
 
 [dir="rtl"] .sa-flyout-placeHolder {
   left: auto;
-  right: calc(var(--sa-category-width + 1px));
+  right: calc(var(--sa-category-width) + 1px);
 }
 
 .sa-lock-image {
@@ -106,5 +107,10 @@
   /* must cover the hidden palette when editor-stage-left is enabled */
   position: relative;
   z-index: 31;
+  padding-inline: 0.5rem;
   background-color: var(--editorDarkMode-page, hsl(215, 100%, 95%));
+}
+
+[class*="gui_stage-and-target-wrapper_"] {
+  padding: 0;
 }
