@@ -10,14 +10,43 @@
       "link": "https://scratch.mit.edu/users/TheColaber"
     }
   ],
+  "latestUpdate": {
+    "version": "1.24.0",
+    "temporaryNotice": "New setting to enable changing the colors of blocks in the forums.",
+    "newSettings": ["forums"]
+  },
+  "customCssVariables": [
+    {
+      "name": "inputColor-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input-color"
+        }
+      }
+    },
+    {
+      "name": "inputColor-forumText",
+      "value": {
+        "type": "textColor",
+        "black": "#000000",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input-color"
+        }
+      }
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "injectAsStyleElt": true,
   "versionAdded": "1.2.0",
   "latestUpdate": {
-    "version": "1.24.0",
+    "version": "1.27.0",
     "newSettings": ["comment-color"]
   },
+  "updateUserstylesOnSettingsChange": true,
   "userscripts": [
     {
       "url": "theme3.js",
@@ -28,6 +57,43 @@
     {
       "url": "theme3.css",
       "matches": ["projects"]
+    },
+    {
+      "url": "forums/base.css",
+      "matches": ["editingScreens"],
+      "if": {
+        "settings": { "forums": true }
+      }
+    },
+    {
+      "url": "forums/black_text.css",
+      "matches": ["editingScreens"],
+      "if": {
+        "settings": {
+          "forums": true,
+          "text": "black"
+        }
+      }
+    },
+    {
+      "url": "forums/color_on_white.css",
+      "matches": ["editingScreens"],
+      "if": {
+        "settings": {
+          "forums": true,
+          "text": "colorOnWhite"
+        }
+      }
+    },
+    {
+      "url": "forums/color_on_black.css",
+      "matches": ["editingScreens"],
+      "if": {
+        "settings": {
+          "forums": true,
+          "text": "colorOnBlack"
+        }
+      }
     }
   ],
   "settings": [
@@ -153,6 +219,12 @@
           "name": "Colored on black background"
         }
       ]
+    },
+    {
+      "name": "Change the colors of blocks in the forums",
+      "id": "forums",
+      "type": "boolean",
+      "default": false
     }
   ],
   "customCssVariables": [

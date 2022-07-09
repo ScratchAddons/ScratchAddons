@@ -1,0 +1,33 @@
+.sa-search-sprites-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+input.sa-search-sprites-box {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: transparent;
+  border: 0px;
+  border-bottom: 1px solid hsla(0, 0%, 1%, 0.15);
+  outline: none;
+  padding: 5px 20px 5px 10px;
+}
+
+.sa-search-sprites-reset {
+  display: none;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  padding-right: 5px;
+  font-size: 25px;
+}
+
+.sa-search-sprites-box:not(:placeholder-shown) ~ .sa-search-sprites-reset {
+  display: block;
+}

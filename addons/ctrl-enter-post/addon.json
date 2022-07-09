@@ -9,7 +9,6 @@
   ],
   "info": [
     {
-      "type": "notice",
       "text": "On macOS, you can also use the Cmd key.",
       "id": "macOS"
     }
@@ -28,6 +27,8 @@
       "default": false
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "forums.js",

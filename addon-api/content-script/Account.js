@@ -1,6 +1,10 @@
-import AccountCommon from "../common/Account.js";
+import Listenable from "../common/Listenable.js";
 
-export default class Account extends AccountCommon {
+/**
+ * Handles accounts.
+ * @extends Listenable
+ */
+export default class Account extends Listenable {
   constructor(addon) {
     super();
     this._addon = addon;
@@ -15,19 +19,5 @@ export default class Account extends AccountCommon {
       if (!isLoggedIn) return null;
       return scratchAddons.methods.getMsgCount();
     });
-  }
-
-  /**
-   * @returns {Promise} - a promise that always rejects.
-   */
-  getMessages() {
-    return Promise.reject(new Error("This method is unavailable."));
-  }
-
-  /**
-   * @returns {Promise} - a promise that always rejects.
-   */
-  clearMessages() {
-    return Promise.reject(new Error("This method is unavailable."));
   }
 }
