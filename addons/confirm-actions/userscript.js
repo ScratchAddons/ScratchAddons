@@ -36,7 +36,9 @@ export default async function ({ addon, console, msg }) {
           (location.pathname.startsWith("/messages") && e.target.closest(".sa-curator-invite-button"))) &&
         addon.settings.get("joiningstudio")
       ) {
-        title = addon.tab.scratchMessage("studio.curatorAcceptInvite");
+        title = location.pathname.startsWith("/messages")
+          ? msg("accept-invite")
+          : addon.tab.scratchMessage("studio.curatorAcceptInvite");
         cancelMessage = msg("joinstudio");
       } else if (addon.settings.get("closingtopic") && e.target.closest("dd form button")) {
         title = msg("closetopic-title");
