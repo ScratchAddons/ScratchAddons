@@ -5,17 +5,17 @@
   "credits": [
     {
       "name": "Tacodude7729",
-      "link": "https://github.com/Tacodude7729"
+      "link": "https://scratch.mit.edu/users/Tacodude7729/"
     }
   ],
   "info": [
     {
-      "type": "warning",
+      "type": "notice",
       "text": "The \"experimental keys\" include equals, slash, semicolon and more. They may not work on all operating systems or keyboard layouts.",
       "id": "experimentalKeysWarn"
     },
     {
-      "type": "warning",
+      "type": "notice",
       "text": "The \"Shift keys\" include keys which typically require the Shift key and a number key, like hashtag, exclamation mark and more. These keys only work with the \"when () key pressed\" block and do not work on all operating systems or keyboard layouts.",
       "id": "shiftKeysWarn"
     }
@@ -40,5 +40,7 @@
       "matches": ["projects"]
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.20.0"
 }

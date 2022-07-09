@@ -2,18 +2,16 @@ import { emojis, unicodeEmojis } from "./emojis.js";
 export default async function ({ addon, global, console, msg }) {
   //Constants
 
-  const emojiPickerOffset = addon.tab.clientVersion === "scratchr2" ? 30 : 52;
-
   //Functions
 
   const setEmojiPickerPos = function () {
-    emojiPicker.style.top = emojiPickerOffset + "px";
+    emojiPicker.classList.remove("sa-emoji-picker-offscreen");
     //scratchr2 makes the body and root <html>'s height value the size of the screen somehow so this has to be done
     const realDocumentBody =
       addon.tab.clientVersion === "scratchr2" ? document.querySelector("#pagewrapper") : document.body;
     if (emojiPicker.getBoundingClientRect().bottom > realDocumentBody.getBoundingClientRect().bottom - 48) {
       //Emoji picker may be partially hidden, move up
-      emojiPicker.style.top = -emojiPicker.getBoundingClientRect().height + "px";
+      emojiPicker.classList.add("sa-emoji-picker-offscreen");
     }
   };
 
@@ -178,7 +176,7 @@ export default async function ({ addon, global, console, msg }) {
     } else {
       emojiButtonText = document.createElement("a");
     }
-    emojiButtonText.textContent = "🙂";
+    emojiButtonText.textContent = "🙂︎";
     emojiButtonText.classList.add("sa-emoji-button");
     emojiButton.appendChild(emojiButtonText);
     addon.tab.displayNoneWhileDisabled(emojiButton, { display: "inline-block" });

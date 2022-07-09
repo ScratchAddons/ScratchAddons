@@ -1,6 +1,6 @@
 export default async function ({ template }) {
   const ResetDropdown = Vue.extend({
-    props: ["addon", "setting", "label", "defaultLabel"],
+    props: ["enabled", "setting", "presets"],
     template,
     data() {
       return {
@@ -24,14 +24,17 @@ export default async function ({ template }) {
         this.$root.closeResetDropdowns({ isTrusted: true }, this); // close other dropdowns
       },
       resetToDefault() {
-        this.$parent.addonSettings[this.addon._addonId][this.setting.id] = this.setting.default;
+        this.$parent.addonSettings[this.setting.id] = this.setting.default;
         this.$parent.updateSettings(this.addon, { settingId: this.setting.id });
         this.toggle();
       },
       resetToPreset(preset) {
-        this.$parent.addonSettings[this.addon._addonId][this.setting.id] = preset.values[this.setting.id];
+        this.$parent.addonSettings[this.setting.id] = preset.values[this.setting.id];
         this.$parent.updateSettings(this.addon, { settingId: this.setting.id });
         this.toggle();
+      },
+      msg(...params) {
+        return this.$root.msg(...params);
       },
     },
   });

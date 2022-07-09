@@ -1,21 +1,5 @@
 button {
-  color: var(--content-text);
-  font-family: inherit;
-  font-size: 12px;
-  border-radius: 4px;
-  border: 1px solid var(--control-border);
-  background: var(--button-background);
-  height: 32px;
-  box-sizing: border-box;
-  padding: 0 12px;
   overflow: hidden;
-  transition: 0.2s ease;
-}
-button:hover {
-  background: var(--button-hover-background);
-}
-button > span {
-  vertical-align: middle;
 }
 
 .contents {
@@ -174,13 +158,13 @@ a.message-type-title-text {
   clip-path: inset(0 0 0 0); /* keep zalgo in this box */
 }
 .comment-content-text {
+  display: inline-block;
+}
+.comment-content-text > span,
+.comment-content-text .dom-element-renderer > * {
   margin-right: 10px;
   /* For multi-line comments */
   white-space: break-spaces;
-}
-.comment-content-text:after {
-  /* So that empty comments take up a line */
-  content: "\200b";
 }
 .comment-author {
   font-weight: 600;
@@ -271,13 +255,17 @@ a.message-type-title-text {
   background-color: var(--blue);
   color: var(--white-text);
 }
-.post-button:hover {
+.post-button:hover:not([disabled]) {
   background-color: var(--blue);
+  border-color: var(--blue-variant);
+}
+.post-button:focus-visible {
   border-color: var(--blue-variant);
 }
 .comment-chars {
   margin-inline-start: auto;
   font-weight: normal;
+  font-variant: tabular-nums;
 }
 
 .status-container {
@@ -287,6 +275,7 @@ a.message-type-title-text {
   font-weight: 600;
   text-align: center;
 }
+.status-container p,
 .status-empty {
   display: block;
   margin-block: 10px;
@@ -342,4 +331,8 @@ a.message-type-title-text {
 #open-messages:hover #popout {
   opacity: 1;
   filter: none;
+}
+
+.dom-element-renderer {
+  display: contents;
 }

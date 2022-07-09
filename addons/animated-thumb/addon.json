@@ -1,39 +1,10 @@
 {
   "name": "Thumbnails setter",
-  "description": "Adds a button to the editor menu bar to set the thumbnail of your project to any image (including gifs).",
-  "info": [
-    {
-      "type": "notice",
-      "text": "\"Don't set thumbnails automatically\" makes sure thumbnails will not be saved unless you use Set Thumbnail button. New projects will have Scratch Cat thumbnails until they are set manually.",
-      "id": "nooverwite"
-    },
-    {
-      "type": "warning",
-      "text": "Your project may be marked as NFE (not for everyone) by the Scratch Team if the thumbnail is animated. NFE projects aren't able to get into the front page, the explore page, or search results.",
-      "id": "animatednfe"
-    }
-  ],
-  "credits": [
-    {
-      "name": "World_Languages",
-      "link": "https://github.com/WorldLanguages/animatedThumbnailsBookmarklet/blob/master/code.js"
-    },
-    {
-      "name": "TheColaber",
-      "link": "https://scratch.mit.edu/users/TheColaber"
-    }
-  ],
+  "description": "Adds a button to the bottom-right of the project page to set the thumbnail of your project to any image (including gifs).",
   "userscripts": [
     {
       "matches": ["projects"],
       "url": "userscript.js"
-    },
-    {
-      "matches": ["projects"],
-      "url": "persistent-thumb.js",
-      "if": {
-        "settings": { "persistentThumb": true }
-      }
     }
   ],
   "userstyles": [
@@ -44,15 +15,7 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "settings": [
-    {
-      "name": "Don't set thumbnails automatically",
-      "type": "boolean",
-      "default": false,
-      "id": "persistentThumb"
-    }
-  ],
-  "tags": ["editor", "editorMenuBar", "recommended"],
+  "tags": ["community", "projectPage", "recommended"],
   "versionAdded": "1.3.0",
   "enabledByDefault": true
 }

@@ -13,7 +13,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return {
       popup: manifest.manifest.popup,
       settings: JSON.parse(JSON.stringify(scratchAddons.globalState.addonSettings)),
-      auth: JSON.parse(JSON.stringify(scratchAddons.globalState.auth)),
     };
   };
   if (!scratchAddons.localState.allReady) {

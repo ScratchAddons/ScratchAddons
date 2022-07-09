@@ -13,13 +13,23 @@
   overflow: hidden;
   line-height: 0px;
   font-size: 15px;
-}
-.sa-emoji-button-www .sa-emoji-picker {
+  font-weight: normal;
   right: -7px;
 }
-.sa-emoji-button-r2 .sa-emoji-picker {
-  left: -10px;
+
+.sa-emoji-button-r2 .sa-emoji-picker:not(.sa-emoji-picker-offscreen) {
+  top: 33px;
 }
+.sa-emoji-button-www .sa-emoji-picker:not(.sa-emoji-picker-offscreen) {
+  top: calc(11rem + 5px);
+}
+.sa-emoji-button-r2 .sa-emoji-picker.sa-emoji-picker-offscreen {
+  bottom: 35px;
+}
+.sa-emoji-button-www .sa-emoji-picker.sa-emoji-picker-offscreen {
+  bottom: 52px;
+}
+
 .sa-emoji-picker-item {
   cursor: pointer;
   width: 24px;
@@ -43,6 +53,7 @@
 .sa-emoji-button {
   padding: 0.74rem 0.99rem;
   vertical-align: middle;
+  font-weight: bold;
 }
 .button.small.sa-emoji-button-container {
   user-select: none;

@@ -3,13 +3,12 @@
   "description": "Automatically posts the comment or forum post on Ctrl+Enter.",
   "credits": [
     {
-      "name": "9gr",
-      "link": "https://scratch.mit.edu/users/9gr"
+      "name": "Verixion",
+      "link": "https://scratch.mit.edu/users/Verixion"
     }
   ],
   "info": [
     {
-      "type": "notice",
       "text": "On macOS, you can also use the Cmd key.",
       "id": "macOS"
     }
@@ -28,6 +27,8 @@
       "default": false
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "forums.js",

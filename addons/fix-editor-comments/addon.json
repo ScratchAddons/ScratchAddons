@@ -1,0 +1,79 @@
+{
+  "name": "Better editor comments",
+  "description": "Makes numerous changes to comments in the Scratch editor: fixes a bug where comments attached to blocks don't save their positions correctly after dragging, prevents block comments from spawning off-screen in large scripts, keeps block comment connections straight, and more.",
+  "tags": ["editor", "codeEditor", "recommended"],
+  "credits": [
+    {
+      "name": "GarboMuffin",
+      "link": "https://github.com/GarboMuffin"
+    },
+    {
+      "name": "lisa_wolfgang",
+      "link": "https://scratch.mit.edu/users/lisa_wolfgang/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "standalone-edit.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "standalone-edit": true }
+      }
+    },
+    {
+      "url": "scroll.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "scroll": true }
+      }
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Fix dragging blocks with comments",
+      "id": "fix-drag",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Add scroll bars to clipped comments",
+      "id": "scroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Directly edit standalone comments",
+      "id": "standalone-edit",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Always spawn block comments next to block",
+      "id": "leash",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Keep block comment connections straight",
+      "id": "straighten",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "versionAdded": "1.22.0",
+  "latestUpdate": {
+    "version": "1.23.0",
+    "isMajor": true,
+    "newSettings": ["leash", "straighten"]
+  },
+  "enabledByDefault": false
+}

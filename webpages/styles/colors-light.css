@@ -21,8 +21,13 @@
   --notice-icon-filter: none;
   --warning-background: var(--red);
   --warning-border: var(--red-variant);
+  --info-border: var(--content-border);
+  --update-background: rgba(177, 23, 248, 0.1);
+  --update-border: rgba(177, 23, 248, 0.2);
+  --update-text: #222;
 
   --hover-highlight: rgba(0, 0, 0, 0.05);
+  --hover-highlight-reduced: rgba(0, 0, 0, 0.02);
   --hover-darken: var(--hover-highlight);
 
   --content-border: #cfcfcf;
@@ -33,6 +38,7 @@
   --content-text: #222;
   --content-icon-filter: brightness(0);
   --description-text: #444;
+  --description-icon-filter: brightness(0) invert(0.27);
   --label-text: #555;
   --gray-text: #a1a1a1;
 }

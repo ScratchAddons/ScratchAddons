@@ -1,9 +1,7 @@
 .scratchCategoryItemBubble {
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 17px 17px;
-  height: 22px;
-  width: 22px;
+  background-size: cover;
 }
 
 .scratchCategoryId-motion .scratchCategoryItemBubble {

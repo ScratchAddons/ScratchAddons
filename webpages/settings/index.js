@@ -1,12 +1,13 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import getDirection from "../rtl-list.js";
 import loadVueComponent from "../../libraries/common/load-vue-components.js";
-import Fuse from "../../libraries/thirdparty/fuse.esm.min.js";
+import Fuse from "../../libraries/thirdparty/cs/fuse.esm.min.js";
 import tags from "./data/tags.js";
 import addonGroups from "./data/addon-groups.js";
 import categories from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
+import globalTheme from "../../libraries/common/global-theme.js";
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -18,28 +19,9 @@ if (window.parent !== window) {
 let vue;
 let fuse;
 
-let initialTheme;
-let initialThemePath;
-const lightThemeLink = document.createElement("link");
-lightThemeLink.setAttribute("rel", "stylesheet");
-lightThemeLink.setAttribute("href", "../styles/colors-light.css");
-lightThemeLink.setAttribute("data-below-vue-components", "");
-chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
-  if (globalTheme === true) {
-    document.head.appendChild(lightThemeLink);
-  }
-  const themePath = globalTheme ? "../../images/icons/moon.svg" : (initialThemePath = "../../images/icons/theme.svg");
-  if (vue) {
-    vue.theme = globalTheme;
-    vue.themePath = themePath;
-  } else {
-    initialTheme = globalTheme;
-    initialThemePath = themePath;
-  }
-  if (!isIframe) document.body.style.display = "";
-});
-
 (async () => {
+  const { theme: initialTheme, setGlobalTheme } = await globalTheme();
+
   await loadVueComponent([
     "webpages/settings/components/picker-component",
     "webpages/settings/components/reset-dropdown",
@@ -48,6 +30,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     "webpages/settings/components/addon-group-header",
     "webpages/settings/components/addon-body",
     "webpages/settings/components/category-selector",
+    "webpages/settings/components/modal",
     "webpages/settings/components/previews/editor-dark-mode",
     "webpages/settings/components/previews/palette",
   ]);
@@ -121,7 +104,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       if (!addonManifest) continue;
       const permissionsRequired = addonManifest.permissions || [];
       const browserPermissionsRequired = permissionsRequired.filter((p) => browserLevelPermissions.includes(p));
-      console.log(addonId, permissionsRequired, browserPermissionsRequired);
       if (addonValue.enabled && browserPermissionsRequired.length) {
         pendingPermissions[addonId] = browserPermissionsRequired;
       } else {
@@ -140,7 +122,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({
           permissions: Object.values(pendingPermissions).flat(),
         });
-        console.log(pendingPermissions, granted);
         Object.keys(pendingPermissions).forEach((addonId) => {
           addonsEnabled[addonId] = granted;
         });
@@ -162,11 +143,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     data() {
       return {
         smallMode: false,
-        theme: initialTheme ?? false,
-        themePath: initialThemePath ?? "",
+        theme: initialTheme,
         switchPath: "../../images/icons/switch.svg",
-        isOpen: false,
-        canCloseOutside: false,
+        moreSettingsOpen: false,
         categoryOpen: true,
         loaded: false,
         searchLoaded: false,
@@ -192,7 +171,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           const versionName = chrome.runtime.getManifest().version_name;
           const utm = `utm_source=extension&utm_medium=settingspage&utm_campaign=v${version}`;
           return {
-            contributors: `https://scratchaddons.com/${localeSlash}contributors?${utm}`,
+            contributors: `https://scratchaddons.com/${localeSlash}credits?${utm}`,
             feedback: `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${versionName}&${utm}`,
             changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
           };
@@ -200,6 +179,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       };
     },
     computed: {
+      themePath() {
+        return this.theme ? "../../images/icons/moon.svg" : "../../images/icons/theme.svg";
+      },
       addonList() {
         if (!this.searchInput) {
           this.addonListObjs.forEach((obj) => {
@@ -211,6 +193,17 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         }
 
         if (!fuse) return [];
+        const addonListObjs = Object.values(
+          this.addonListObjs.reduce((acc, cur) => {
+            if (
+              !acc[cur.manifest._addonId] ||
+              (acc[cur.manifest._addonId] && cur.group.id !== "featuredNew" && cur.group.id !== "new")
+            ) {
+              acc[cur.manifest._addonId] = cur;
+            }
+            return acc;
+          }, Object.create(null))
+        );
         const fuseSearch = fuse.search(this.searchInput).sort((a, b) => {
           // Sort very good matches at the top no matter what
           if ((a.score < 0.1) ^ (b.score < 0.1)) return a.score < 0.1 ? -1 : 1;
@@ -218,10 +211,13 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           else return b.item._enabled - a.item._enabled;
         });
         const results = fuseSearch.map((result) =>
-          this.addonListObjs.find((obj) => obj.manifest._addonId === result.item._addonId)
+          addonListObjs.find((obj) => obj.manifest._addonId === result.item._addonId)
         );
-        for (const obj of this.addonListObjs) obj.matchesSearch = results.includes(obj);
-        return this.addonListObjs.sort((b, a) => results.indexOf(b) - results.indexOf(a));
+        for (const obj of addonListObjs) obj.matchesSearch = results.includes(obj);
+        return addonListObjs.sort((b, a) => results.indexOf(b) - results.indexOf(a));
+      },
+      hasNoResults() {
+        return !this.addonList.some((addon) => addon.matchesSearch && addon.matchesCategory);
       },
       version() {
         return chrome.runtime.getManifest().version;
@@ -230,21 +226,20 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         return chrome.runtime.getManifest().version_name;
       },
       addonAmt() {
-        return `${Math.floor(this.manifests.length / 5) * 5}+`;
+        return `${Math.floor(this.manifests.filter((addon) => !addon.tags.includes("easterEgg")).length / 5) * 5}+`;
+      },
+      selectedCategoryName() {
+        return this.categories.find((category) => category.id === this.selectedCategory)?.name;
       },
     },
 
     methods: {
-      modalToggle: function () {
+      openMoreSettings: function () {
         this.closePickers();
-        this.isOpen = !this.isOpen;
+        this.moreSettingsOpen = true;
         if (vue.smallMode) {
           vue.sidebarToggle();
         }
-        this.canCloseOutside = false;
-        setTimeout(() => {
-          this.canCloseOutside = true;
-        }, 100);
       },
       sidebarToggle: function () {
         this.categoryOpen = !this.categoryOpen;
@@ -273,20 +268,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         this.searchInputReal = "";
       },
       setTheme(mode) {
-        chrome.storage.sync.get(["globalTheme"], function (r) {
-          let rr = mode ?? true;
-          chrome.storage.sync.set({ globalTheme: rr }, function () {
-            if (rr && r.globalTheme !== rr) {
-              document.head.appendChild(lightThemeLink);
-              vue.theme = true;
-              vue.themePath = "../../images/icons/moon.svg";
-            } else if (r.globalTheme !== rr) {
-              document.head.removeChild(lightThemeLink);
-              vue.theme = false;
-              vue.themePath = "../../images/icons/theme.svg";
-            }
-          });
-        });
+        setGlobalTheme(mode);
+        this.theme = mode;
       },
       stopPropagation(e) {
         e.stopPropagation();
@@ -315,6 +298,13 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           downloadBlob("scratch-addons-settings.json", blob);
         });
       },
+      viewSettings() {
+        const openedWindow = window.open("about:blank");
+        serializeSettings().then((serialized) => {
+          const blob = new Blob([serialized], { type: "text/plain" });
+          openedWindow.location.replace(URL.createObjectURL(blob));
+        });
+      },
       importSettings() {
         const inputElem = Object.assign(document.createElement("input"), {
           hidden: true,
@@ -324,7 +314,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         inputElem.addEventListener(
           "change",
           async (e) => {
-            console.log(e);
             const file = inputElem.files[0];
             if (!file) {
               inputElem.remove();
@@ -384,11 +373,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         if (event?.target.classList[0] === "toggle") return;
         if (this.categoryOpen && this.smallMode) {
           this.sidebarToggle();
-        }
-      },
-      modalClickOutside: function (e) {
-        if (this.isOpen && this.canCloseOutside && e.isTrusted) {
-          this.isOpen = false;
         }
       },
     },
@@ -531,6 +515,15 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         }
       }
 
+      if (manifest.latestUpdate) {
+        const [extMajor, extMinor, _] = vue.version.split(".");
+        const [addonMajor, addonMinor, __] = manifest.latestUpdate.version.split(".");
+        if (extMajor === addonMajor && extMinor === addonMinor) {
+          manifest.tags.push(manifest.latestUpdate.newSettings?.length ? "updatedWithSettings" : "updated");
+          manifest._groups.push(manifest.latestUpdate.isMajor ? "featuredNew" : "new");
+        }
+      }
+
       // Sort tags to preserve consistent order
       const order = tags.map((obj) => obj.matchName);
       manifest.tags.sort((b, a) => order.indexOf(b) - order.indexOf(a));
@@ -579,7 +572,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       group.addonIds = group.addonIds
         .map((id) => vue.manifestsById[id])
         .sort((manifestA, manifestB) => {
-          for (const tag of order) {
+          for (const tag of group.customOrder || order) {
             const val = checkTag(tag, manifestA, manifestB);
             if (val !== null) return val;
           }

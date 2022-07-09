@@ -168,7 +168,7 @@ export default async ({ addon, console, msg }) => {
       leaveBtn.appendChild(leaveSpan);
 
       leaveBtn.addEventListener("click", async () => {
-        if (!confirm(msg("leave-confirm"))) return;
+        if (!(await addon.tab.confirm(msg("leave-new"), msg("leave-confirm")))) return;
         const u = await addon.auth.fetchUsername();
         const r = await fetch(`/site-api/users/curators-in/${studioId}/remove/?usernames=${u}`, {
           method: "PUT",
@@ -190,6 +190,7 @@ export default async ({ addon, console, msg }) => {
   };
   render();
   addon.tab.addEventListener("urlChange", render);
+  redux.initialize();
   redux.addEventListener("statechanged", (e) => {
     if (
       e.detail.action.type === "SET_ROLES" ||

@@ -5,6 +5,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   if (!addon.self._isDevtoolsExtension && window.initGUI) {
     console.log("Extension running, stopping addon");
     window._devtoolsAddonEnabled = true;
+    window.dispatchEvent(new CustomEvent("scratchAddonsDevtoolsAddonStopped"));
     return;
   }
 

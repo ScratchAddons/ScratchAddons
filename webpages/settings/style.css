@@ -113,30 +113,6 @@ h1 {
   vertical-align: bottom;
 }
 
-.large-button {
-  color: var(--content-text);
-  background: var(--button-background);
-  border: 1px solid var(--control-border);
-  padding: 0 12px;
-  border-radius: 4px;
-  transition: 0.2s ease;
-  height: 32px;
-  box-sizing: border-box;
-  font-family: inherit;
-  font-size: 12px;
-}
-.large-button:hover:not([disabled]) {
-  background: var(--button-hover-background);
-}
-.large-button:focus-visible {
-  outline: none;
-  border-color: var(--brand-orange);
-  box-shadow: var(--input-focus-shadow);
-}
-.large-button > * {
-  vertical-align: middle;
-}
-
 .clear-button {
   padding-inline: 7px;
   border-radius: 0 4px 4px 0;
@@ -171,11 +147,19 @@ h1 {
 }
 
 .hidden-button {
-  /* needs !important because it conlicts with display: block */
+  /* needs !important because it conflicts with display: block */
   display: none !important;
 }
 #confirmImport {
   border-color: var(--brand-orange);
+}
+
+#search-not-found {
+  margin: 10px;
+}
+body.iframe #search-not-found {
+  margin: unset;
+  text-align: center;
 }
 
 /*scrollbar*/
@@ -224,7 +208,7 @@ body.iframe .addon-topbar {
   height: 44px;
   padding-inline-end: 6px;
 }
-body.iframe .clickeable-area {
+body.iframe .clickable-area {
   padding-inline-start: 6px;
 }
 body.iframe .addon-name {
@@ -243,7 +227,7 @@ body.iframe .addon-settings {
 body.iframe .settings-column {
   flex-direction: column;
 }
-body.iframe .addon-setting {
+body.iframe .settings-column > .addon-setting {
   margin: 10px 0;
   min-height: 0;
   flex-direction: column;
@@ -394,6 +378,9 @@ button.setting-input.color.open {
   background-color: white;
   display: flex;
   position: relative;
+}
+.color-container .setting-input.color {
+  cursor: pointer;
 }
 
 .action-disabled {

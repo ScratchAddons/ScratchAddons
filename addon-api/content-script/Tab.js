@@ -2,14 +2,14 @@ import Trap from "./Trap.js";
 import ReduxHandler from "./ReduxHandler.js";
 import Listenable from "../common/Listenable.js";
 import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
-import getWorkerScript from "./worker.js";
 import * as blocks from "./blocks.js";
 import { addContextMenu } from "./contextmenu.js";
+import * as modal from "./modal.js";
 
 const DATA_PNG = "data:image/png;base64,";
 
 const contextMenuCallbacks = [];
-const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image"];
+const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image", "swap-local-global"];
 let createdAnyBlockContextMenus = false;
 
 /**
@@ -25,14 +25,18 @@ export default class Tab extends Listenable {
 
     this._console = console;
     this._addonId = info.id;
-    this.clientVersion = document.querySelector("meta[name='format-detection']")
-      ? "scratch-www"
-      : document.querySelector("script[type='text/javascript']")
-      ? "scratchr2"
-      : null;
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
+  }
+  get clientVersion() {
+    if (!this._clientVersion)
+      this._clientVersion = document.querySelector("meta[name='format-detection']")
+        ? "scratch-www"
+        : document.querySelector("script[type='text/javascript']")
+        ? "scratchr2"
+        : null;
+    return this._clientVersion;
   }
   addBlock(...a) {
     blocks.init(this);
@@ -41,17 +45,21 @@ export default class Tab extends Listenable {
   removeBlock(...a) {
     return blocks.removeBlock(...a);
   }
+  getCustomBlock(...a) {
+    return blocks.getCustomBlock(...a);
+  }
   /**
    * Loads a script by URL.
    * @param {string} url - script URL.
    * @returns {Promise}
    */
   loadScript(url) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const script = document.createElement("script");
       script.src = url;
       document.head.appendChild(script);
       script.onload = resolve;
+      script.onerror = reject;
     });
   }
   /**
@@ -194,22 +202,6 @@ export default class Tab extends Listenable {
   }
 
   /**
-   * Loads a Web Worker.
-   * @async
-   * @param {string} url - URL of the worker to load.
-   * @returns {Promise<Worker>} - worker.
-   */
-  async loadWorker(url) {
-    const resp = await fetch(url);
-    const script = await resp.text();
-    const workerScript = getWorkerScript(this, script, url);
-    const blob = new Blob([workerScript], { type: "text/javascript" });
-    const workerURL = URL.createObjectURL(blob);
-    const worker = new Worker(workerURL);
-    return new Promise((resolve) => worker.addEventListener("message", () => resolve(worker), { once: true }));
-  }
-
-  /**
    * Gets the hashed class name for a Scratch stylesheet class name.
    * @param {...*} args Unhashed class names.
    * @param {object} opts - options.
@@ -324,6 +316,11 @@ export default class Tab extends Listenable {
         element: () => q("[class^='controls_controls-container']"),
         from: () => [q("[class^='stop-all_stop-all']")],
         until: () => [],
+      },
+      beforeProjectActionButtons: {
+        element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
+        from: () => [],
+        until: () => [q(".report-button"), q(".action-buttons > div")],
       },
       afterCopyLinkButton: {
         element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
@@ -583,10 +580,10 @@ export default class Tab extends Listenable {
     if (createdAnyBlockContextMenus) return;
     createdAnyBlockContextMenus = true;
 
-    this.traps.getBlockly().then((blockly) => {
-      const oldShow = blockly.ContextMenu.show;
-      blockly.ContextMenu.show = function (event, items, rtl) {
-        const gesture = blockly.mainWorkspace.currentGesture_;
+    this.traps.getBlockly().then((ScratchBlocks) => {
+      const oldShow = ScratchBlocks.ContextMenu.show;
+      ScratchBlocks.ContextMenu.show = function (event, items, rtl) {
+        const gesture = ScratchBlocks.mainWorkspace.currentGesture_;
         const block = gesture.targetBlock_;
 
         for (const { callback, workspace, blocks, flyout, comments } of contextMenuCallbacks) {
@@ -613,9 +610,10 @@ export default class Tab extends Listenable {
 
         oldShow.call(this, event, items, rtl);
 
+        const blocklyContextMenu = ScratchBlocks.WidgetDiv.DIV.firstChild;
         items.forEach((item, i) => {
-          if (item.separator) {
-            const itemElt = document.querySelector(".blocklyContextMenu").children[i];
+          if (i !== 0 && item.separator) {
+            const itemElt = blocklyContextMenu.children[i];
             itemElt.style.paddingTop = "2px";
             itemElt.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
           }
@@ -660,5 +658,19 @@ export default class Tab extends Listenable {
    */
   createEditorContextMenu(...args) {
     addContextMenu(this, ...args);
+  }
+
+  createModal(title, { isOpen = false, useEditorClasses = false, useSizesClass = false } = {}) {
+    if (this.editorMode !== null && useEditorClasses) return modal.createEditorModal(this, title, { isOpen });
+    if (this.clientVersion === "scratch-www") return modal.createScratchWwwModal(title, { isOpen, useSizesClass });
+    return modal.createScratchr2Modal(title, { isOpen });
+  }
+
+  confirm(...args) {
+    return modal.confirm(this, ...args);
+  }
+
+  prompt(...args) {
+    return modal.prompt(this, ...args);
   }
 }

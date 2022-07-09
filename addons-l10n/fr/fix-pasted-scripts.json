@@ -1,1 +1,1 @@
-{"fix-pasted-scripts/@name":"Ne pas exécuter automatiquement les blocs dupliqués"}
+{"fix-pasted-scripts/@name":"Ne pas exécuter automatiquement les blocs dupliqués","fix-pasted-scripts/@description":"Corrige un bug dans l'éditeur Scratch, où dupliquer un bloc et l'attacher à un script entraîne l'exécution du script."}

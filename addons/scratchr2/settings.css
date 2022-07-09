@@ -1,79 +1,8 @@
-#pagewrapper {
-  position: relative;
-}
-#content > .cols {
-  position: static;
-  padding-top: 40px;
-}
-.box .box-head {
-  position: absolute;
-  top: 50px;
-  left: 0;
-  width: 100%;
-  padding: 0;
-  padding-top: 20px;
-  padding-bottom: 8px;
-  border-radius: 0;
-  background: var(--scratchr2-primaryColor);
-}
-.box .box-head h2 {
-  width: 942px;
-  margin: auto;
-  margin-bottom: 16px;
-  padding: 5px 0;
-  color: #fff;
-  font-size: 40px;
-  line-height: 1.7em;
-}
 #content {
   padding-top: 173px;
 }
-#content > .cols > .col-4 {
-  margin: 0;
-  width: 30%;
-  float: right;
-}
-.v-tabs {
-  margin: 0 !important;
-  border-radius: 0;
-  border: none;
-  border-left: 1px solid #d9d9d9;
-  background: transparent;
-}
-.v-tabs ul {
-  padding-top: 16px;
-  padding-bottom: 16px;
-  padding-left: 20px;
-}
-.v-tabs li,
-.v-tabs li.active,
-.v-tabs li:hover,
-.v-tabs li.active:hover {
-  margin: 12px 0;
-  border: none;
-  background: transparent;
-  font-size: 16px;
-  line-height: 24px;
-}
-.v-tabs li a {
-  padding: 0;
-  color: var(--scratchr2-primaryColor);
-}
-.v-tabs li:hover a {
-  color: var(--scratchr2-activeColor);
-}
-.v-tabs li.active a {
-  color: #575e75;
-  text-shadow: none;
-}
-#content > .cols > .col-12 {
-  margin: 0;
-  width: 60%;
-  float: left;
-}
-#content > .cols > .col-12 .box,
-#main-content {
-  padding: 0;
-  border: none;
-  background: transparent;
+#main-content,
+#main-content h4,
+#main-content label {
+  color: var(--darkWww-page-text, #575e75);
 }

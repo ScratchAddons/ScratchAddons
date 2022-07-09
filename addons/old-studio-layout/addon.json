@@ -8,7 +8,6 @@
       "id": "mobile"
     },
     {
-      "type": "notice",
       "text": "The size of most elements is not changed. If you want to see more projects and curators at once, use the \"more items per row\" addon.",
       "id": "itemsPerRow"
     }
@@ -18,6 +17,22 @@
     {
       "name": "Maximouse",
       "link": "https://scratch.mit.edu/users/Maximouse/"
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "defaultLinkIconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": "#4d97ff"
+      }
+    },
+    {
+      "name": "defaultLinkHoverIconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": "#4280d7"
+      }
     }
   ],
   "dynamicEnable": true,

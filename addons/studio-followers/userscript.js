@@ -49,8 +49,6 @@ export default async function ({ addon, global, console, msg }) {
     currentType = nextType;
   });
 
-  document.body.appendChild(modal);
-
   data.followers.grid = modal.querySelector(".followers");
   data.following.grid = modal.querySelector(".following");
 

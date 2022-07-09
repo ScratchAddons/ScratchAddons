@@ -2,21 +2,18 @@
   display: flex;
   white-space: nowrap;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  width: 100%;
 }
 
 .s3devLabel {
   display: flex;
-  padding-right: 2em;
+  width: 100%;
 }
 
-[dir="rtl"] .s3devLabel {
-  padding-right: 0;
-  padding-left: 2em;
-}
-
-.s3devLabel > span:first-child {
-  margin-left: 1.5em;
-  margin-right: 1em;
+.s3devLabel > label {
+  /* padding instead of margin so clicking on the empty area will select the input */
+  padding-left: 1.5em;
+  padding-right: 1em;
   font-weight: bold;
   font-size: 0.625rem;
   user-select: none;
@@ -25,9 +22,9 @@
   padding-top: 2px;
 }
 
-[dir="rtl"] .s3devLabel > span:first-child {
-  margin-right: 1.5em;
-  margin-left: 1em;
+[dir="rtl"] .s3devLabel > label {
+  padding-right: 1.5em;
+  padding-left: 1em;
 }
 
 .s3devAction {
@@ -49,11 +46,21 @@
 
 #s3devFind {
   height: 2rem;
+  width: 100%;
+}
+
+/* We need to modify Scratch styles so that the place where the find bar is injected */
+/* has actually correct size information, which is used to make the find bar not cover up controls */
+[class*="gui_tab-list_"] {
+  width: 100%;
+}
+[class*="gui_tab_"] {
+  flex-grow: 0;
 }
 
 /* Find Input Box */
 input.s3devInp {
-  min-width: 100%;
+  width: 100%;
   box-sizing: border-box !important;
   /* !important required for extension, because CSS injection method (and hence order) differs from addon */
   height: 1.5rem;
@@ -70,15 +77,12 @@ input.s3devInp:focus {
 }
 
 /* Drop down from find button */
-#s3devDDOut {
+.s3devDDOut {
+  display: block;
   top: -6px;
-}
-
-/* Drop down from find button */
-div.s3devDDOut {
   z-index: 100;
-  left: 0;
-  width: 16em;
+  width: 100%;
+  max-width: 16em;
   position: relative;
   /*padding: 2.2em 0 0;*/
   /*background-color: white;*/
@@ -99,7 +103,9 @@ ul.s3devDD {
   max-width: 100%;
 }
 
-div.s3devDDOut.vis {
+.s3devDDOut.vis {
+  position: absolute;
+  width: 16em;
   /*box-shadow: 0 2px 3px rgba(0,0,0,0.3), 0 5px 8px rgba(0,0,0,0.2);*/
   box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
   background-color: white;
@@ -107,7 +113,7 @@ div.s3devDDOut.vis {
   border-radius: 4px;
 }
 
-div.s3devDDOut.vis ul.s3devDD {
+.s3devDDOut.vis ul.s3devDD {
   display: block;
   border: none;
 }
@@ -385,9 +391,6 @@ div.s3devDDOut.vis ul.s3devDD {
 
 .s3devAction {
   margin-left: 2em;
-  font-size: 12px;
-  font-weight: bold;
-  line-height: 2;
 }
 
 @media screen and (max-width: 1180px) {
@@ -440,7 +443,7 @@ div.s3devDDOut.vis ul.s3devDD {
   border-radius: 4px;
   box-shadow: rgba(0, 0, 0, 0.3) 0 0 3px, rgba(0, 0, 0, 0.2) 0 3px 10px;
 
-  z-index: 1000001;
+  z-index: 999;
 }
 
 #s3devInsertLabel {

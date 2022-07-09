@@ -16,7 +16,7 @@ let vm;
 const customBlocks = {};
 const customBlockParamNamesIdsDefaults = Object.create(null);
 
-const getCustomBlock = (proccode) => {
+export const getCustomBlock = (proccode) => {
   if (!Object.prototype.hasOwnProperty.call(customBlocks, proccode)) {
     return;
   }

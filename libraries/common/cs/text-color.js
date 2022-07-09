@@ -23,6 +23,8 @@ function convertToHex(obj) {
 
 function convertFromHsv({ h, s, v }) {
   if (s === 0) return { r: 255 * v, g: 255 * v, b: 255 * v };
+  h %= 360;
+  if (h < 0) h += 360;
   const h1 = h / 60;
   const hi = Math.floor(h1);
   const x = v * (1 - s * (1 - h1 + hi));
@@ -41,9 +43,6 @@ function convertFromHsv({ h, s, v }) {
       return { r: 255 * x, g: 255 * z, b: 255 * v };
     case 5:
       return { r: 255 * v, g: 255 * z, b: 255 * y };
-    default:
-      // ???
-      return { r: 0, g: 0, b: 0 };
   }
 }
 
@@ -66,10 +65,15 @@ function convertToHsv({ r, g, b }) {
   return { h, s, v };
 }
 
-function textColor(hex, black, white, threshold) {
+function brightness(hex) {
   const { r, g, b } = parseHex(hex);
+  return r * 0.299 + g * 0.587 + b * 0.114;
+}
+
+function textColor(hex, black, white, threshold) {
   threshold = threshold !== undefined ? threshold : 170;
-  if (r * 0.299 + g * 0.587 + b * 0.114 > threshold) {
+  if (typeof threshold !== "number") threshold = brightness(threshold);
+  if (brightness(hex) > threshold) {
     // https://stackoverflow.com/a/3943023
     return black !== undefined ? black : "#575e75";
   } else {
@@ -96,7 +100,7 @@ function brighten(hex, c) {
     r: (1 - c.r) * 255 + c.r * r,
     g: (1 - c.g) * 255 + c.g * g,
     b: (1 - c.b) * 255 + c.b * b,
-    a: (1 - c.a) * 255 + c.a * a,
+    a: 1 - c.a + c.a * a,
   });
 }
 
@@ -127,7 +131,7 @@ function recolorFilter(hex) {
   return `url("data:image/svg+xml,
     <svg xmlns='http://www.w3.org/2000/svg'>
       <filter id='recolor'>
-        <feColorMatrix values='
+        <feColorMatrix color-interpolation-filters='sRGB' values='
           0 0 0 0 ${r / 255}
           0 0 0 0 ${g / 255}
           0 0 0 0 ${b / 255}
@@ -145,6 +149,7 @@ globalThis.__scratchAddonsTextColor = {
   convertToHex,
   convertFromHsv,
   convertToHsv,
+  brightness,
   textColor,
   multiply,
   brighten,

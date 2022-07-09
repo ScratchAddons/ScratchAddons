@@ -82,9 +82,15 @@
 #profile-data .box-head .avatar img {
   background-color: transparent;
 }
-.user-content .player {
-  box-shadow: none !important;
-  border: none !important;
+#profile-box .user-content {
+  position: static;
+  width: 661px;
+}
+#profile-box .player {
+  position: static;
+  background: transparent;
+  box-shadow: none;
+  border: none;
 }
 .user-content .player .stage #featured-project,
 .user-content .player .title,
@@ -92,33 +98,30 @@
   display: none !important;
 }
 #user-details {
-  width: 800px !important;
-}
-#user-details h3:nth-child(4) {
-  position: absolute;
-  top: 0;
-  left: 340px;
-}
-#status,
-#status-readonly {
-  position: absolute;
-  top: 32px;
-  left: 340px;
+  width: 661px !important;
+  height: 158px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 #status span[data-content="prompt"] {
   position: relative;
   left: 0;
 }
 #activity-feed .activity-stream {
-  height: 100px !important;
+  height: 107px !important;
   overflow-x: hidden;
   overflow-y: scroll;
 }
 #profile-box .inner {
   height: 140px !important;
+  padding-bottom: 6px !important;
 }
-.doing {
-  height: 130px !important;
+#profile-box .doing {
+  width: 281px;
+  height: 156px;
+  box-sizing: border-box;
   overflow: hidden;
 }
 .profile-details span {
@@ -126,14 +129,22 @@
 }
 #lfp-embed {
   position: absolute;
-  bottom: 110px;
-  left: 290px;
+  bottom: 250px;
+  right: 20px;
 }
 #lfp-change-featured {
   display: none !important;
 }
+#bio,
 #bio-readonly {
-  width: 285px;
+  margin-bottom: 0;
+}
+#bio-readonly,
+#status-readonly {
+  width: 297px;
+}
+#profile-box .about .scrollbar {
+  width: 12px;
 }
 .sa-user-id {
   color: white;
