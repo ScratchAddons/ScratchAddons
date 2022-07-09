@@ -6,8 +6,10 @@ export default async function (
   const username = await addon.auth.fetchUsername();
   const { csrfToken } = addon.auth;
 
+  const cache = Object.create(null);
+
   await addon.tab.redux.waitForState((state) => state.messages.status.message === "FETCHED");
-  while (true) {
+  main: while (true) {
     const invite = await addon.tab.waitForElement(".mod-curator-invite", { markAsSeen: true });
     const inviteTextContainer = await addon.tab.waitForElement(".social-message-content > div > span", {
       elementCondition: (el) => invite.contains(el),
@@ -16,6 +18,11 @@ export default async function (
     const studioId = Array.from(inviteTextContainer.children)
       .find((node) => node.tagName === "A" && STUDIO_REGEX.test(node.href))
       .href.match(STUDIO_REGEX)[1];
+    if (cache[studioId]) {
+      continue main;
+    } else {
+      cache[studioId] = true;
+    }
     const userProfileRes = await fetch(`https://api.scratch.mit.edu/studios/${studioId}/users/${username}`, {
       headers: {
         "X-Token": xToken,
@@ -30,6 +37,7 @@ export default async function (
       button.innerText = msg("accept");
     } else {
       button.innerText = msg("accepted");
+      button.classList.add("disabled");
       button.disabled = true;
     }
 
@@ -50,6 +58,7 @@ export default async function (
           button.innerText = msg("accepted");
           userProfile.invited = false;
           button.disabled = true;
+          location.href = `/studios/${studioId}/`
         } else {
           alert(msg("failed"));
         }

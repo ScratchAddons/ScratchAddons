@@ -31,9 +31,8 @@ export default async function ({ addon, console, msg }) {
           cancelMessage = msg("unfollow");
         }
       } else if (
-        /^\/studios\/\d+\/curators/g.test(location.pathname) &&
-        addon.settings.get("joiningstudio") &&
-        e.target.closest("button.studio-invitation-button")
+        ((/^\/studios\/\d+\/curators/g.test(location.pathname) && e.target.closest("button.studio-invitation-button")) || (location.pathname.startsWith("/messages") && e.target.closest(".sa-curator-invite-button")))
+        && addon.settings.get("joiningstudio")
       ) {
         title = addon.tab.scratchMessage("studio.curatorAcceptInvite");
         cancelMessage = msg("joinstudio");
