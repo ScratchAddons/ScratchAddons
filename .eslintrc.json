@@ -1,6 +1,6 @@
 {
   "root": true,
-  "ignorePatterns": ["!**", ".git/", "node_modules/", "libraries/thirdparty/*", "*.ts"],
+  "ignorePatterns": ["node_modules/*", "_locales/*", ".github/*", "addons-l10n/*", "libraries/thirdparty/*"],
   "parserOptions": {
     "sourceType": "module"
   },
