@@ -1,0 +1,41 @@
+.sa-del-button {
+	background-color: #f2f2f2;
+	border: none;
+	margin-left: 10px;
+	border-radius: 50%;
+}
+
+.sa-add-button {
+	float: left;
+	margin-top: 10px;
+	margin-left: 10px;
+	border-radius: 50%;
+}
+
+.sa-add-exit-button {
+	float: right;
+	background-color: rgba(0,0,0,.2);
+	margin-right: 10px;
+	border-radius: 1rem;
+	height: 2rem;
+	width: 2rem;
+	top: .5rem;
+	right: .5rem;
+	text-align: center;
+	line-height: 2rem;
+	position: absolute;
+	padding: 0;
+    padding-top: 3px;
+}
+
+.sa-add-exit-button>img {
+	border: 0px;
+}
+
+.sa-add-option-button {
+	font-size: 10px;
+	float: left;
+	margin-top: 10px;
+	margin-left: 10px;
+	border-radius: 50%;
+}

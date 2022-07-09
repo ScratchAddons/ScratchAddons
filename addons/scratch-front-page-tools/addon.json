@@ -1,0 +1,21 @@
+{
+  "name": "Scratch Front Page Tools",
+  "description": "Lets you hide and add new rows of Scratch front page.",
+  "userscripts" : [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/"]
+    }
+  ],
+  "userstyles" : [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/"]
+    }
+  ],
+  "versionAdded" : "1.26.1",
+  "tags": ["community"],
+  "enabledByDefault": false,
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}
