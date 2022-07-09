@@ -14,6 +14,14 @@
       "matches": ["projects"]
     }
   ],
+  "settings": [
+    {
+      "name": "Reset project before trashing",
+      "type": "boolean",
+      "default": true,
+      "id": "resetProject"
+    }
+  ],
   "tags": ["editor", "editorMenuBar"],
   "dynamicEnable": true,
   "dynamicDisable": true,

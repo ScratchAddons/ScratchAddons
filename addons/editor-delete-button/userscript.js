@@ -1,5 +1,12 @@
 export default async ({ addon, msg }) => {
-  const { redux } = addon.tab;
+  // Fetch as text without parsing as JSON, because guess what,
+  // the code will stringify anyway!
+  const defaultProjectPromise = fetch(`${addon.self.dir}/default.json`).then((res) => res.text());
+
+  const {
+    redux,
+    traps: { vm },
+  } = addon.tab;
   // Wait until user has logged in, and is the author of the project
   await redux.waitForState((state) => state.preview?.projectInfo?.author?.id === state.session?.session?.user?.id);
   while (true) {
@@ -21,6 +28,12 @@ export default async ({ addon, msg }) => {
         cancelButtonLabel: msg("no"),
         useEditorClasses: true,
       });
+
+      if (addon.settings.get("resetProject")) {
+        const defaultProject = await defaultProjectPromise;
+        vm.loadProject(defaultProject);
+      }
+
       if (!confirmed) return;
       const res = await fetch(`/site-api/projects/all/${redux.state.preview.projectInfo.id}/`, {
         headers: {
