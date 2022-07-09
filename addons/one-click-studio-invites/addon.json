@@ -1,7 +1,6 @@
 {
-  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
   "name": "One-click studio invites",
-  "description": "TODO",
+  "description": "Accept studio invites directly from Scratch's messages page. An accept button will appear below studio invite messages.",
   "credits": [
     {
       "name": "Weredime (9gr)",
