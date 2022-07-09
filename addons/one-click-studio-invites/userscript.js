@@ -58,7 +58,6 @@ export default async function (
           button.innerText = msg("accepted");
           userProfile.invited = false;
           button.disabled = true;
-          location.href = `/studios/${studioId}/`;
         } else {
           alert(msg("failed"));
         }
