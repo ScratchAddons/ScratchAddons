@@ -6,7 +6,6 @@ const STATUS_YIELD_TICK = 3;
 const STATUS_DONE = 4;
 
 let vm;
-let sequencerStepThread; // The unmodified sequencer.stepThread function
 
 let paused = false;
 let pausedThreadState = new WeakMap();
@@ -14,59 +13,110 @@ let pauseNewThreads = false;
 
 let steppingThread = null;
 
-let eventTarget = new EventTarget();
+const eventTarget = new EventTarget();
 
 export const isPaused = () => paused;
 
 const pauseThread = (thread) => {
-  if (!thread.updateMonitor && !pausedThreadState.has(thread)) {
-    pausedThreadState.set(thread, {
-      time: vm.runtime.currentMSecs,
-    });
-    if (thread === vm.runtime.sequencer.activeThread) {
-      // If we are the active thread, we hit paused in the middle of executing a block
-      if (vm.runtime.sequencer.activeThread) {
-        const thread = vm.runtime.sequencer.activeThread;
-        pausedThreadState.get(thread).status = thread.status;
+  if (thread.updateMonitor || pausedThreadState.has(thread)) {
+    // Thread is already paused or shouldn't be paused.
+    return;
+  }
 
-        // Force the block to exit immediately
-        Object.defineProperty(thread, "status", {
-          get() {
-            return STATUS_PROMISE_WAIT;
-          },
-          set(status) {
-            pausedThreadState.get(this).status = status;
-          },
-        });
+  const pauseState = {
+    time: vm.runtime.currentMSecs,
+    status: thread.status,
+  };
+  pausedThreadState.set(thread, pauseState);
+
+  // Pausing a thread now works by just setting its status to STATUS_PROMISE_WAIT.
+  // At the start of each frame, we make sure each paused thread is still paused.
+  // This is really the best way to implement this.
+  // Converting thread.status into a getter/setter causes Scratch's sequencer to permanently
+  //    perform significantly slower in some projects. I think this is because it causes some
+  //    very hot functions to be deoptimized.
+  // Trapping sequencer.stepThread to no-op for a paused thread causes Scratch's sequencer
+  //    to waste 24ms of CPU time every frame because it thinks a thread is running.
+  thread.status = STATUS_PROMISE_WAIT;
+};
+
+const ensurePausedThreadIsStillPaused = (thread) => {
+  if (thread.status === STATUS_DONE) {
+    // If a paused thread is finished by single stepping, let it keep being done.
+    return;
+  }
+  const pauseState = pausedThreadState.get(thread);
+  if (pauseState) {
+    if (thread.status !== STATUS_PROMISE_WAIT) {
+      // We'll record the change so we can properly resume the thread, but the thread must still be paused for now.
+      pauseState.status = thread.status;
+      thread.status = STATUS_PROMISE_WAIT;
+    }
+  }
+};
+
+const setSteppingThread = (thread) => {
+  steppingThread = thread;
+};
+
+const compensateForTimePassedWhilePaused = (thread, pauseState) => {
+  const stackFrame = thread.peekStackFrame();
+  if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
+    stackFrame.executionContext.timer.startTime += vm.runtime.currentMSecs - pauseState.time;
+  }
+};
+
+const stepUnsteppedThreads = (lastSteppedThread) => {
+  // If we paused in the middle of a tick, we need to make sure to step the scripts that didn't get
+  // stepped in that tick to avoid affecting project behavior.
+  const threads = vm.runtime.threads;
+  const startingIndex = getThreadIndex(lastSteppedThread);
+  if (startingIndex !== -1) {
+    for (let i = startingIndex; i < threads.length; i++) {
+      const thread = threads[i];
+      const status = thread.status;
+      if (status === STATUS_RUNNING || status === STATUS_YIELD || status === STATUS_YIELD_TICK) {
+        vm.runtime.sequencer.activeThread = thread;
+        vm.runtime.sequencer.stepThread(thread);
       }
     }
   }
 };
 
 export const setPaused = (_paused) => {
+  if (paused !== _paused) {
+    paused = _paused;
+    eventTarget.dispatchEvent(new CustomEvent("change"));
+  }
+
   if (_paused) {
     vm.runtime.audioEngine.audioContext.suspend();
     if (!vm.runtime.ioDevices.clock._paused) {
       vm.runtime.ioDevices.clock.pause();
     }
     vm.runtime.threads.forEach(pauseThread);
+
+    const activeThread = vm.runtime.sequencer.activeThread;
+    if (activeThread) {
+      setSteppingThread(activeThread);
+      eventTarget.dispatchEvent(new CustomEvent("step"));
+    }
   } else {
     vm.runtime.audioEngine.audioContext.resume();
     vm.runtime.ioDevices.clock.resume();
     for (const thread of vm.runtime.threads) {
       const pauseState = pausedThreadState.get(thread);
       if (pauseState) {
-        const stackFrame = thread.peekStackFrame();
-        if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
-          stackFrame.executionContext.timer.startTime += vm.runtime.currentMSecs - pauseState.time;
-        }
+        compensateForTimePassedWhilePaused(thread, pauseState);
+        thread.status = pauseState.status;
       }
     }
     pausedThreadState = new WeakMap();
-  }
-  if (paused !== _paused) {
-    paused = _paused;
-    eventTarget.dispatchEvent(new CustomEvent("change"));
+
+    const lastSteppedThread = steppingThread;
+    // This must happen after the "change" event is fired to fix https://github.com/ScratchAddons/ScratchAddons/issues/4281
+    stepUnsteppedThreads(lastSteppedThread);
+    steppingThread = null;
   }
 };
 
@@ -78,16 +128,17 @@ export const onSingleStep = (listener) => {
   eventTarget.addEventListener("step", listener);
 };
 
-export const getRunningThread = () => {
-  return steppingThread;
-};
+export const getRunningThread = () => steppingThread;
 
 // A modified version of this function
 // https://github.com/LLK/scratch-vm/blob/0e86a78a00db41af114df64255e2cd7dd881329f/src/engine/sequencer.js#L179
 // Returns if we should continue executing this thread.
 const singleStepThread = (thread) => {
-  let currentBlockId = thread.peekStack();
+  if (thread.status === STATUS_DONE) {
+    return false;
+  }
 
+  const currentBlockId = thread.peekStack();
   if (!currentBlockId) {
     thread.popStack();
 
@@ -97,108 +148,137 @@ const singleStepThread = (thread) => {
     }
   }
 
-  vm.runtime.sequencer.activeThread = thread;
   pauseNewThreads = true;
+  vm.runtime.sequencer.activeThread = thread;
 
-  if (!thread.target) {
-    vm.runtime.sequencer.retireThread(thread);
-  } else {
-    /*
-          We need to call execute(this, thread) like the original sequencer. We don't
-          have access to that method, so we need to force the original stepThread to run
-          execute for us then exit before it tries to run more blocks.
-          So, we make `thread.blockGlowInFrame = ...` throw an exception, so this line:
-          https://github.com/LLK/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/sequencer.js#L214
-          will end the function early. We then have to set it back to normal afterward.
+  /*
+    We need to call execute(this, thread) like the original sequencer. We don't
+    have access to that method, so we need to force the original stepThread to run
+    execute for us then exit before it tries to run more blocks.
+    So, we make `thread.blockGlowInFrame = ...` throw an exception, so this line:
+    https://github.com/LLK/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/sequencer.js#L214
+    will end the function early. We then have to set it back to normal afterward.
 
-          Why are we here just to suffer?
-         */
-    const throwMsg = ["special error used by Scratch Addons for implementing single-stepping"];
+    Why are we here just to suffer?
+  */
+  const specialError = ["special error used by Scratch Addons for implementing single-stepping"];
+  Object.defineProperty(thread, "blockGlowInFrame", {
+    set(_block) {
+      throw specialError;
+    },
+  });
 
-    Object.defineProperty(thread, "blockGlowInFrame", {
-      set(block) {
-        throw throwMsg;
-      },
-    });
+  try {
+    thread.status = STATUS_RUNNING;
 
-    try {
-      sequencerStepThread.call(vm.runtime.sequencer, thread);
-    } catch (err) {
-      if (err !== throwMsg) throw err;
+    // Restart the warp timer on each step.
+    // If we don't do this, Scratch will think a lot of time has passed and may yield this thread.
+    if (thread.warpTimer) {
+      thread.warpTimer.start();
     }
 
+    try {
+      vm.runtime.sequencer.stepThread(thread);
+    } catch (err) {
+      if (err !== specialError) throw err;
+    }
+
+    if (thread.status !== STATUS_RUNNING) {
+      return false;
+    }
+
+    if (thread.peekStack() === currentBlockId) {
+      thread.goToNextBlock();
+    }
+
+    while (!thread.peekStack()) {
+      thread.popStack();
+
+      if (thread.stack.length === 0) {
+        thread.status = STATUS_DONE;
+        return false;
+      }
+
+      const stackFrame = thread.peekStackFrame();
+
+      if (stackFrame.isLoop) {
+        if (thread.peekStackFrame().warpMode) {
+          continue;
+        } else {
+          return false;
+        }
+      } else if (stackFrame.waitingReporter) {
+        return false;
+      }
+
+      thread.goToNextBlock();
+    }
+
+    return true;
+  } finally {
+    pauseNewThreads = false;
+    vm.runtime.sequencer.activeThread = null;
     Object.defineProperty(thread, "blockGlowInFrame", {
-      value: null,
+      value: currentBlockId,
       configurable: true,
       enumerable: true,
       writable: true,
     });
-  }
 
-  vm.runtime.sequencer.activeThread = null;
-  pauseNewThreads = false;
-  thread.blockGlowInFrame = currentBlockId;
-
-  if (thread.status === STATUS_YIELD) {
-    thread.status = STATUS_RUNNING;
-    return false;
-  } else if (thread.status === STATUS_PROMISE_WAIT || thread.status === STATUS_YIELD_TICK) {
-    return false;
-  }
-
-  if (thread.peekStack() === currentBlockId) {
-    thread.goToNextBlock();
-  }
-
-  while (!thread.peekStack()) {
-    thread.popStack();
-
-    if (thread.stack.length === 0) {
-      thread.status = STATUS_DONE;
-      return false;
+    // Strictly this doesn't seem to be necessary, but let's make sure the thread is still paused after we step it.
+    if (thread.status !== STATUS_DONE) {
+      thread.status = STATUS_PROMISE_WAIT;
     }
-
-    const stackFrame = thread.peekStackFrame();
-
-    if (stackFrame.isLoop) {
-      if (!thread.isWarpMode) {
-        return false;
-      } else {
-        continue;
-      }
-    } else if (stackFrame.waitingReporter) {
-      return false;
-    }
-
-    thread.goToNextBlock();
   }
-
-  return true;
 };
 
-const findNewSteppingThread = (startIndex) => {
-  for (var i = startIndex; i < vm.runtime.threads.length; i++) {
-    const newThread = vm.runtime.threads[i];
+const getRealStatus = (thread) => {
+  const pauseState = pausedThreadState.get(thread);
+  if (pauseState) {
+    return pauseState.status;
+  }
+  return thread.status;
+};
 
-    if (newThread.status === STATUS_YIELD_TICK) {
-      newThread.status = STATUS_RUNNING;
+const getThreadIndex = (thread) => {
+  // We can't use vm.runtime.threads.indexOf(thread) because threads can be restarted.
+  // This can happens when, for example, a "when I receive message1" script broadcasts message1.
+  // The object in runtime.threads is replaced when this happens.
+  if (!thread) return -1;
+  return vm.runtime.threads.findIndex(
+    (otherThread) =>
+      otherThread.target === thread.target &&
+      otherThread.topBlock === thread.topBlock &&
+      otherThread.stackClick === thread.stackClick &&
+      otherThread.updateMonitor === thread.updateMonitor
+  );
+};
+
+const findNewSteppingThread = (startingIndex) => {
+  const threads = vm.runtime.threads;
+  for (let i = startingIndex; i < threads.length; i++) {
+    const possibleNewThread = threads[i];
+    if (possibleNewThread.updateMonitor) {
+      // Never single-step monitor update threads.
+      continue;
     }
-
-    if (newThread.status === STATUS_RUNNING || newThread.status === STATUS_YIELD) {
-      return newThread;
+    const status = getRealStatus(possibleNewThread);
+    if (status === STATUS_RUNNING || status === STATUS_YIELD || status === STATUS_YIELD_TICK) {
+      // Thread must not be running for single stepping to work.
+      pauseThread(possibleNewThread);
+      return possibleNewThread;
     }
   }
   return null;
 };
 
 export const singleStep = () => {
-  const pauseState = pausedThreadState.get(steppingThread);
   if (steppingThread) {
+    const pauseState = pausedThreadState.get(steppingThread);
+    // We can assume pauseState is defined as any single stepping threads must already be paused.
+
     // Make it look like no time has passed
-    const stackFrame = steppingThread.peekStackFrame();
-    if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
-      stackFrame.executionContext.timer.startTime += vm.runtime.currentMSecs - pauseState.time;
-    }
+    compensateForTimePassedWhilePaused(steppingThread, pauseState);
     pauseState.time = vm.runtime.currentMSecs;
 
     // Execute the block
@@ -206,13 +286,13 @@ export const singleStep = () => {
 
     if (!continueExecuting) {
       // Try to move onto the next thread
-      steppingThread = findNewSteppingThread(vm.runtime.threads.indexOf(steppingThread) + 1);
+      steppingThread = findNewSteppingThread(getThreadIndex(steppingThread) + 1);
     }
   }
 
   // If we don't have a thread, than we are between VM steps and should search for a new thread
   if (!steppingThread) {
-    steppingThread = findNewSteppingThread(0);
+    setSteppingThread(findNewSteppingThread(0));
 
     // End of VM step, emulate one frame of time passing.
     vm.runtime.ioDevices.clock._pausedTime += vm.runtime.currentStepTime;
@@ -265,57 +345,14 @@ export const setup = (_vm) => {
 
   vm = _vm;
 
-  sequencerStepThread = vm.runtime.sequencer.stepThread;
-  vm.runtime.sequencer.stepThread = function (thread) {
-    if (pausedThreadState.has(thread)) {
-      return;
-    }
-
-    sequencerStepThread.call(this, thread);
-
-    // Thread was paused in the middle of execution
-    if (pausedThreadState.has(thread)) {
-      const threadPauseState = pausedThreadState.get(thread);
-
-      steppingThread = thread;
-
-      Object.defineProperty(thread, "status", {
-        value: threadPauseState.status,
-        configurable: true,
-        enumerable: true,
-        writable: true,
-      });
-
-      delete threadPauseState.status;
-
-      eventTarget.dispatchEvent(new CustomEvent("step"));
-    }
-  };
-
-  const ogStepThreads = vm.runtime.sequencer.stepThreads;
+  const originalStepThreads = vm.runtime.sequencer.stepThreads;
   vm.runtime.sequencer.stepThreads = function () {
-    // If we where half way through a vm step and have unpaused, pick up were we left off.
-    if (steppingThread && !paused) {
-      const threads = vm.runtime.threads;
-      const index = threads.indexOf(steppingThread);
-      if (index !== -1) {
-        for (let i = index; i < threads.length; i++) {
-          const thread = threads[i];
-
-          if (thread.status === STATUS_YIELD_TICK) {
-            thread.status = STATUS_RUNNING;
-          }
-
-          if (thread.status === STATUS_RUNNING || thread.status === STATUS_YIELD) {
-            vm.runtime.sequencer.stepThread(thread);
-          }
-        }
+    if (isPaused()) {
+      for (const thread of this.runtime.threads) {
+        ensurePausedThreadIsStillPaused(thread);
       }
-
-      steppingThread = null;
     }
-
-    return ogStepThreads.call(this);
+    return originalStepThreads.call(this);
   };
 
   // Unpause when green flag
@@ -329,12 +366,10 @@ export const setup = (_vm) => {
   const originalStartHats = vm.runtime.startHats;
   vm.runtime.startHats = function (...args) {
     const hat = args[0];
+    // These hats can be manually started by the user when paused or while single stepping.
+    const isUserInitiated = hat === "event_whenbroadcastreceived" || hat === "control_start_as_clone";
     if (pauseNewThreads) {
-      if (
-        hat !== "event_whenbroadcastreceived" &&
-        hat !== "control_start_as_clone" &&
-        !this.getIsEdgeActivatedHat(hat)
-      ) {
+      if (!isUserInitiated && !this.getIsEdgeActivatedHat(hat)) {
         return [];
       }
       const newThreads = originalStartHats.apply(this, args);
@@ -342,17 +377,10 @@ export const setup = (_vm) => {
         pauseThread(thread);
       }
       return newThreads;
-    } else {
-      if (paused) {
-        // We don't want to stop broadcasts or clone starts as they can be run by a user
-        //  while paused or run by paused threads while single stepping.
-        if (hat !== "event_whenbroadcastreceived" && hat !== "control_start_as_clone") {
-          return [];
-        }
-      }
-
-      return originalStartHats.apply(this, args);
+    } else if (paused && !isUserInitiated) {
+      return [];
     }
+    return originalStartHats.apply(this, args);
   };
 
   // Paused threads should not be counted as running when updating GUI state.

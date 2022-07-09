@@ -8,6 +8,10 @@
       "link": "https://scratch.mit.edu/users/TheColaber"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "injectAsStyleElt": true,
+  "updateUserstylesOnSettingsChange": true,
   "userscripts": [
     {
       "url": "projectstats.js",
@@ -18,7 +22,40 @@
     {
       "url": "userscript.css",
       "matches": ["projects"]
+    },
+    {
+      "url": "text-only.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "show": "text" }
+      }
     }
   ],
-  "versionAdded": "1.4.0"
+  "settings": [
+    {
+      "name": "Show...",
+      "id": "show",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "both",
+          "name": "Icon and text"
+        },
+        {
+          "id": "icon",
+          "name": "Icon only"
+        },
+        {
+          "id": "text",
+          "name": "Text only"
+        }
+      ],
+      "default": "both"
+    }
+  ],
+  "versionAdded": "1.4.0",
+  "latestUpdate": {
+    "version": "1.27.0",
+    "newSettings": ["show"]
+  }
 }

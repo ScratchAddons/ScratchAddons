@@ -1,4 +1,8 @@
 export default class Popup {
+  constructor(addon) {
+    this._addonId = addon.self.id;
+  }
+
   /**
    * Whether the popup is displayed fullscreen.
    * @type {boolean}
@@ -23,11 +27,26 @@ export default class Popup {
     return new Promise((resolve) => {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (tabs.length === 0) return resolve(null);
-        chrome.tabs.sendMessage(tabs[0].id, "getLocationHref", { frameId: 0 }, (url) => {
-          if (chrome.runtime.lastError) return resolve(null);
-          resolve(url);
-        });
+        return resolve(tabs[0]?.url || null);
       });
+    });
+  }
+
+  /**
+   * Changes the settings of this addon.
+   * @param {object} settings the settings to merge to current
+   */
+  changeSettings(settings = {}) {
+    const settingsObj = scratchAddons.globalState.addonSettings[this._addonId] || {};
+    const unknownKeys = Object.keys(settings).filter((key) => !Object.prototype.hasOwnProperty.call(settingsObj, key));
+    if (unknownKeys.length) {
+      throw new Error(`Unknown setting keys passed: ${unknownKeys}`);
+    }
+    chrome.runtime.sendMessage({
+      changeAddonSettings: {
+        addonId: this._addonId,
+        newSettings: { ...settingsObj, ...settings },
+      },
     });
   }
 }

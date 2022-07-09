@@ -1,7 +1,7 @@
 import { insert, wrapSelection, getSelection } from "../../libraries/thirdparty/cs/text-field-edit.js";
 export default async ({ addon, console, msg }) => {
   await addon.tab.waitForElement(".markItUpButton16");
-  const textBox = document.getElementById("id_body");
+  const textBox = document.querySelector(".markItUpEditor");
   /*
    * Available spaces are: (from left to right)
    * forumToolbarTextDecoration
