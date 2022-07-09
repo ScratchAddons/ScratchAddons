@@ -57,7 +57,7 @@ function cleanPost(post) {
 }
 
 function triggerNewSearch(searchContent, query, sort, msg) {
-  searchContent.style.display = "block";
+  searchContent.classList.add("show");
   while (searchContent.firstChild) {
     searchContent.removeChild(searchContent.firstChild);
   }
@@ -240,6 +240,7 @@ export default async function ({ addon, global, console, msg }) {
 
   // create the search bar
   let search = document.createElement("form");
+  addon.tab.displayNoneWhileDisabled(search, { display: "flex" });
   search.id = "forum-search-form";
   let searchBar = document.createElement("input");
   searchBar.id = "forum-search-input";
@@ -293,6 +294,7 @@ export default async function ({ addon, global, console, msg }) {
 
   searchContent.classList = "forum-search-list";
   searchContent.id = "forum-search-list";
+  searchContent.style.display = "none"; // overridden by userstyle if the addon is enabled
 
   // now add the search bar
   let navIndex = document.querySelector("#brdmenu");

@@ -15,7 +15,58 @@
     "script": "popup.js",
     "html": "popup.html"
   },
+  "settings": [
+    {
+      "id": "displayedGames",
+      "name": "Displayed games",
+      "type": "table",
+      "default": [
+        {
+          "url": "https://scratch.mit.edu/studios/539952/"
+        }
+      ],
+      "row": [
+        {
+          "name": "Project/Studio URL",
+          "id": "url",
+          "type": "untranslated",
+          "default": ""
+        }
+      ],
+      "presets": [
+        {
+          "name": "Griffpatch's Multiplayer Games",
+          "values": {
+            "url": "https://scratch.mit.edu/studios/539952/"
+          }
+        },
+        {
+          "name": "Cloud Multiplayer Platformer Fun",
+          "values": {
+            "url": "https://scratch.mit.edu/projects/378507713/"
+          }
+        },
+        {
+          "name": "slither.io",
+          "values": {
+            "url": "https://scratch.mit.edu/projects/108566337/"
+          }
+        },
+        {
+          "name": "diep.io",
+          "values": {
+            "url": "https://scratch.mit.edu/projects/131270192/"
+          }
+        }
+      ]
+    }
+  ],
   "tags": ["popup", "recommended"],
+  "latestUpdate": {
+    "version": "1.27.0",
+    "newSettings": ["displayedGames"],
+    "isMajor": true
+  },
   "versionAdded": "1.1.0",
   "enabledByDefault": true
 }

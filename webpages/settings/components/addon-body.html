@@ -27,16 +27,19 @@
     </div>
     <div class="addon-settings" v-if="everExpanded" v-show="expanded">
       <div class="addon-description-full">{{ addon.description }}</div>
-      <div class="addon-update" v-if="showUpdateNotice">
+      <div class="addon-message addon-update" v-if="showUpdateNotice">
         <addon-tag tag="new"></addon-tag>
         {{ addon.latestUpdate.temporaryNotice }}
       </div>
       <div id="info" v-for="info of addon.info">
-        <div class="addon-warn" v-if="info.type == 'warning'">
-          <img src="../../images/icons/warning.svg" />{{ info.text }}
-        </div>
-        <div class="addon-notice" v-if="info.type == 'notice'">
-          <img src="../../images/icons/notice.svg" />{{ info.text }}
+        <div :class="['addon-message', 'addon-' + (info.type || 'info')]">
+          <img
+            :src="'../../images/icons/' + {
+              'warning': 'warning.svg',
+              'notice': 'notice.svg',
+              'info': 'help.svg',
+            }[info.type || 'info']"
+          />{{ info.text }}
         </div>
       </div>
       <div class="addon-credits" v-if="addon.credits">
@@ -251,9 +254,7 @@
   .iframe .clickable-area {
     flex-grow: 1;
   }
-  .addon-notice,
-  .addon-warn,
-  .addon-update {
+  .addon-message {
     padding: 8px;
     border: 2px solid;
     border-radius: 5px;
@@ -267,10 +268,16 @@
     background-color: var(--notice-background);
     color: var(--notice-text);
   }
-  .addon-warn {
+  .addon-warning {
     border-color: var(--warning-border);
     background-color: var(--warning-background);
     color: var(--warning-text);
+  }
+  .addon-info {
+    border-color: var(--info-border);
+    background-color: var(--navigation-background);
+    color: var(--description-text);
+    font-weight: normal;
   }
   .addon-update {
     border-color: var(--update-border);
@@ -281,8 +288,7 @@
     margin: -3px;
     margin-inline-end: 10px;
   }
-  .addon-notice img,
-  .addon-warn img {
+  .addon-message img {
     height: 15px;
     width: 15px;
     margin-inline-end: 10px;
@@ -290,8 +296,11 @@
   .addon-notice img {
     filter: var(--notice-icon-filter);
   }
-  .addon-warn img {
+  .addon-warning img {
     filter: var(--warning-icon-filter);
+  }
+  .addon-info img {
+    filter: var(--description-icon-filter);
   }
   .addon-settings {
     padding-top: 5px;
