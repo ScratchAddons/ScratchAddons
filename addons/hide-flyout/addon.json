@@ -5,6 +5,10 @@
     {
       "name": "TheColaber",
       "link": "https://scratch.mit.edu/users/TheColaber"
+    },
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
     }
   ],
   "info": [
@@ -79,7 +83,7 @@
           "name": "Category click"
         }
       ],
-      "default": "hover"
+      "default": "cathover"
     },
     {
       "name": "Animation duration",
@@ -106,5 +110,10 @@
       "default": "default"
     }
   ],
-  "tags": ["editor", "codeEditor", "recommended"]
+  "tags": ["editor", "codeEditor", "recommended"],
+  "latestUpdate": {
+    "version": "1.27.0",
+    "temporaryNotice": "This addon was revised and many bugs were fixed.",
+    "isMajor": true
+  }
 }
