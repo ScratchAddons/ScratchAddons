@@ -242,14 +242,14 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_26": {
-    "message": "New addon: \"customizable default costume editor colors\", which lets you change the default colors and outline size used by the costume editor. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_27": {
+    "message": "New addon: \"hide stage and sprite pane\", which adds a button that hides the stage and the sprite pane, making the code area much larger. Go to $1 to enable it."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_26": {
-    "message": "Another new addon added in this update is \"sound duration display\", which adds a display to the sound editor that shows the total length and the elapsed time of the sound, or the selection within it."
+  "extensionUpdateInfo2_v1_27": {
+    "message": "Another new addon is \"reverse order of project controls\", which moves the green flag and stop buttons to the right and the full screen button to the left, like in Scratch 2.0. Also, you can now customize the projects shown on the cloud games tab."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
