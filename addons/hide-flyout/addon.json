@@ -106,5 +106,10 @@
       "default": "default"
     }
   ],
-  "tags": ["editor", "codeEditor", "recommended"]
+  "tags": ["editor", "codeEditor", "recommended"],
+  "latestUpdate": {
+    "version": "1.27.0",
+    "temporaryNotice": "This addon was revisited and many bugs were fixed.",
+    "isMajor": true
+  }
 }
