@@ -53,6 +53,7 @@
 }
 
 .sa-flyout-placeHolder {
+  display: var(--hideFlyout-placeholderDisplay) !important;
   position: absolute;
   top: 0;
   left: calc(var(--sa-category-width) + 1px);
@@ -66,6 +67,7 @@
 }
 
 .sa-lock-image {
+  display: var(--hideFlyout-lockDisplay) !important;
   position: absolute;
   z-index: 20;
   cursor: pointer;
@@ -73,7 +75,6 @@
   left: calc(var(--sa-toolbox-width) - 15px - 32px);
   width: 32px;
   height: 32px;
-  display: flex;
   padding: 0;
   justify-content: center;
   align-items: center;
