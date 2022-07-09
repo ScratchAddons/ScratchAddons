@@ -83,7 +83,7 @@
           "name": "Category click"
         }
       ],
-      "default": "hover"
+      "default": "cathover"
     },
     {
       "name": "Animation duration",
