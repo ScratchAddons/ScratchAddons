@@ -90,9 +90,9 @@ function messageHTML(message, safeMsg) {
         message.unread ? "mod-unread" : ""
       } mod-social-message"><div class="social-message-content"><img alt="love notification image" class="social-message-icon" src="/svgs/messages/love.svg"><div><span><a class="social-messages-profile-link" href="/users/${
         message.actor_username
-      }">${message.actor_username}</a> loved your project <a href="/projects/${message.project_id}">${message.title
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")}</a></span>`;
+      }">${message.actor_username}</a> loved your project <a href="/projects/${
+        message.project_id
+      }">${message.title.replaceAll("<", "&lt;").replaceAll(">", "&gt;")}</a></span>`;
     case "favoriteproject":
       return `love-favorite"><div class="flex-row ${
         message.unread ? "mod-unread" : ""
@@ -118,9 +118,9 @@ function messageHTML(message, safeMsg) {
         message.actor_username
       }/">${message.actor_username}</a> invited <a class="social-messages-profile-link" href="/users/${
         message.recipient_name
-      }/">${message.recipient_name}</a> to curate the studio <a href="/studios/${message.gallery_id}/">${message.title
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")}</a>. Visit the <a href="/studios/${
+      }/">${message.recipient_name}</a> to curate the studio <a href="/studios/${
+        message.gallery_id
+      }/">${message.title.replaceAll("<", "&lt;").replaceAll(">", "&gt;")}</a>. Visit the <a href="/studios/${
         message.gallery_id
       }/curators/">curator tab</a> on the studio to accept the invitation</span>`;
     case "becomeownerstudio":
