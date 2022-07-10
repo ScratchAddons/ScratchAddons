@@ -17,7 +17,11 @@ export default (settings, manifests) => {
       delete newSettings[addonId];
     } else {
       for (const settingsKey of Object.keys(setting)) {
-        if (manifestObj && !manifestObj[addonId].settings?.some((s) => settingsKey === s.id)) {
+        if (
+          manifestObj &&
+          !settingsKey.startsWith("_") &&
+          !manifestObj[addonId].settings?.some((s) => settingsKey === s.id)
+        ) {
           delete setting[settingsKey];
         }
       }
