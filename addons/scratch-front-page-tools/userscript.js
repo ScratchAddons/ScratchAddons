@@ -38,7 +38,6 @@ export default async function ({ addon, global, console }) {
 
     for (let i = 0; i < allBoxHeaders; i++) {
       let available = document.querySelectorAll(".box-header>p>.sa-del-button")[Number(i)];
-      console.log(available);
       if (available === undefined) {
         let delButton = document.createElement("button");
         delButton.className = "sa-del-button";
