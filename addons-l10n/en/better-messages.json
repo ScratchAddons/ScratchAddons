@@ -1,8 +1,0 @@
-{
-  "better-messages/years": "{number, plural, one {1 year ago} other {# years ago}}",
-  "better-messages/months": "{number, plural, one {1 month ago} other {# months ago}}",
-  "better-messages/days": "{number, plural, one {1 day ago} other {# days ago}}",
-  "better-messages/hours": "{number, plural, one {1 hour ago} other {# hours ago}}",
-  "better-messages/minutes": "{number, plural, one {1 minute ago} other {# minutes ago}}",
-  "better-messages/seconds": "{number, plural, one {1 second ago} other {# seconds ago}}"
-}
