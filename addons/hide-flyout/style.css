@@ -103,7 +103,7 @@
 }
 
 /* Setting these styles on gui_stage-and-target-wrapper breaks full screen */
-.sa-body-editor [class*="stage-wrapper_stage-wrapper_"],
+.sa-body-editor [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen"]),
 [class*="gui_target-wrapper_"] {
   /* must cover the hidden palette when editor-stage-left is enabled */
   position: relative;
