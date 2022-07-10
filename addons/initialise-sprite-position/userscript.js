@@ -1,6 +1,6 @@
 export default async function ({ addon }) {
   const vm = addon.tab.traps.vm;
-    
+
   const oldAddSprite = vm.constructor.prototype.addSprite;
   vm.constructor.prototype.addSprite = function (input) {
     let spriteObj,
@@ -20,26 +20,26 @@ export default async function ({ addon }) {
     }
     return oldAddSprite.call(this, stringify ? JSON.stringify(spriteObj) : spriteObj);
   };
-  
+
   const registerDupPrototype = () => {
     const targetPrototype = vm.runtime.getTargetForStage().constructor.prototype;
     const oldDuplicate = targetPrototype.duplicate;
     targetPrototype.duplicate = function () {
-        return oldDuplicate.call(this).then(newSprite => {
-            if (!addon.self.disabled) {
-                switch (addon.settings.get('duplicate')) {
-                  case 'custom':
-                    newSprite.setXY(addon.settings.get('x'), addon.settings.get('y'));
-                    break;
-                  case 'keep':
-                    newSprite.setXY(this.x, this.y);
-                }
-            }
-            return newSprite;
-        });
+      return oldDuplicate.call(this).then((newSprite) => {
+        if (!addon.self.disabled) {
+          switch (addon.settings.get("duplicate")) {
+            case "custom":
+              newSprite.setXY(addon.settings.get("x"), addon.settings.get("y"));
+              break;
+            case "keep":
+              newSprite.setXY(this.x, this.y);
+          }
+        }
+        return newSprite;
+      });
     };
   };
-  
+
   if (vm.runtime.getTargetForStage()) {
     registerDupPrototype();
   } else {
