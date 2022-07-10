@@ -1,5 +1,4 @@
 export default async function ({ addon, console, msg }) {
-  const Blockly = await addon.tab.traps.getBlockly();
   let stageHidden = false;
   while (true) {
     const stageControls = await addon.tab.waitForElement("[class*='stage-header_stage-size-toggle-group_']", {
@@ -34,7 +33,7 @@ export default async function ({ addon, console, msg }) {
       hideStageButton.classList.remove(addon.tab.scratchClass("stage-header_stage-button-toggled-off"));
       smallStageButton.firstChild.classList.add(addon.tab.scratchClass("stage-header_stage-button-toggled-off"));
       largeStageButton.firstChild.classList.add(addon.tab.scratchClass("stage-header_stage-button-toggled-off"));
-      Blockly.svgResize(Blockly.getMainWorkspace());
+      window.dispatchEvent(new Event("resize")); // resizes the code area and paint editor canvas
     }
     function unhideStage(e) {
       stageHidden = false;
@@ -44,7 +43,7 @@ export default async function ({ addon, console, msg }) {
         const target = e.target.closest("[class*='stage-header_stage-button_']");
         target.classList.remove(addon.tab.scratchClass("stage-header_stage-button-toggled-off"));
       }
-      Blockly.svgResize(Blockly.getMainWorkspace());
+      window.dispatchEvent(new Event("resize")); // resizes the code area and paint editor canvas
     }
     if (stageHidden) hideStage();
     else unhideStage();
