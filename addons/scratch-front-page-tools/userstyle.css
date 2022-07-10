@@ -1,24 +1,24 @@
 .sa-del-button {
-	background-color: var(--darkWww-gray);
-	border: none;
-	margin-left: 10px;
-	border-radius: 50%;
+  background-color: var(--darkWww-gray);
+  border: none;
+  margin-left: 10px;
+  border-radius: 50%;
 }
 
 .sa-add-button {
-	float: left;
-	margin-top: 10px;
-	margin-left: 10px;
-	border-radius: 50%;
+  float: left;
+  margin-top: 10px;
+  margin-left: 10px;
+  border-radius: 50%;
 }
 
 .sa-option-div {
-	float: left;
-	margin-top: 10px;
-	margin-left: 10px;
-	padding: 10px;
-	background-color: rgba(77, 151, 255, 0.1);
-	border-radius: 5px;
-	border: 1px solid rgba(77, 151, 255, 0.1);
-	margin-bottom: 20px;
+  float: left;
+  margin-top: 10px;
+  margin-left: 10px;
+  padding: 10px;
+  background-color: rgba(77, 151, 255, 0.1);
+  border-radius: 5px;
+  border: 1px solid rgba(77, 151, 255, 0.1);
+  margin-bottom: 20px;
 }
