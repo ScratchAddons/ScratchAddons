@@ -5,6 +5,7 @@
   "confirm-actions/unshare": "Are you sure you want to unshare?",
   "confirm-actions/follow": "Are you sure you want to follow this user?",
   "confirm-actions/unfollow": "Are you sure you want to unfollow this user?",
+  "confirm-actions/accept-invite": "Accept Invite",
   "confirm-actions/joinstudio": "Are you sure you want to join this studio?",
   "confirm-actions/closetopic-title": "Close Topic",
   "confirm-actions/closetopic": "Are you sure you want to close this topic?",

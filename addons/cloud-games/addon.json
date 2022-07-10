@@ -9,6 +9,12 @@
       "name": "griffpatch"
     }
   ],
+  "info": [
+    {
+      "id": "howtoadd",
+      "text": "You can add the currently open project or studio by clicking the \"Add this project/studio\" button on the cloud games tab."
+    }
+  ],
   "popup": {
     "icon": "../../images/icons/cloud.svg",
     "name": "Games",

@@ -21,7 +21,8 @@ body {
 .project-loves::before,
 .project-favorites::before,
 .project-remixes::before,
-.project-views::before {
+.project-views::before,
+.sa-project-info img {
   filter: var(--darkWww-page-filter);
 }
 .project-loves.loved::before,

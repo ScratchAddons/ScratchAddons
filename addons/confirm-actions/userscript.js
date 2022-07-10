@@ -31,11 +31,14 @@ export default async function ({ addon, console, msg }) {
           cancelMessage = msg("unfollow");
         }
       } else if (
-        /^\/studios\/\d+\/curators/g.test(location.pathname) &&
-        addon.settings.get("joiningstudio") &&
-        e.target.closest("button.studio-invitation-button")
+        ((/^\/studios\/\d+\/curators/g.test(location.pathname) &&
+          e.target.closest("button.studio-invitation-button")) ||
+          (location.pathname.startsWith("/messages") && e.target.closest(".sa-curator-invite-button"))) &&
+        addon.settings.get("joiningstudio")
       ) {
-        title = addon.tab.scratchMessage("studio.curatorAcceptInvite");
+        title = location.pathname.startsWith("/messages")
+          ? msg("accept-invite")
+          : addon.tab.scratchMessage("studio.curatorAcceptInvite");
         cancelMessage = msg("joinstudio");
       } else if (addon.settings.get("closingtopic") && e.target.closest("dd form button")) {
         title = msg("closetopic-title");

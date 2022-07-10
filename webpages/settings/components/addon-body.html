@@ -34,11 +34,11 @@
       <div id="info" v-for="info of addon.info">
         <div :class="['addon-message', 'addon-' + (info.type || 'info')]">
           <img
-            src="../../images/icons/{{ {
+            :src="'../../images/icons/' + {
               'warning': 'warning.svg',
               'notice': 'notice.svg',
               'info': 'help.svg',
-            }[info.type || 'info'] }}"
+            }[info.type || 'info']"
           />{{ info.text }}
         </div>
       </div>

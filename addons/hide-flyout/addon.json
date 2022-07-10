@@ -5,12 +5,50 @@
     {
       "name": "TheColaber",
       "link": "https://scratch.mit.edu/users/TheColaber"
+    },
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
     }
   ],
   "info": [
     {
       "text": "\"Palette area hover\" mode only extends the viewing area. If you want to be able to drag blocks into that area without them getting trashed, use one of the other modes.",
       "id": "hoverExplanation"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "customCssVariables": [
+    {
+      "name": "lockDisplay",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "toggle"
+        },
+        "options": {
+          "hover": "flex",
+          "cathover": "flex",
+          "category": "none"
+        }
+      }
+    },
+    {
+      "name": "placeholderDisplay",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "toggle"
+        },
+        "options": {
+          "hover": "block",
+          "cathover": "none",
+          "category": "none"
+        }
+      }
     }
   ],
   "userscripts": [
@@ -45,7 +83,7 @@
           "name": "Category click"
         }
       ],
-      "default": "hover"
+      "default": "cathover"
     },
     {
       "name": "Animation duration",
@@ -72,5 +110,10 @@
       "default": "default"
     }
   ],
-  "tags": ["editor", "codeEditor", "recommended"]
+  "tags": ["editor", "codeEditor", "recommended"],
+  "latestUpdate": {
+    "version": "1.27.0",
+    "temporaryNotice": "This addon was revised and many bugs were fixed.",
+    "isMajor": true
+  }
 }
