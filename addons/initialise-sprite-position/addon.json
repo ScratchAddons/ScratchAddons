@@ -37,6 +37,26 @@
       "name": "Randomize the position of library sprites",
       "type": "boolean",
       "default": false
+    },
+    {
+      "id": "duplicate",
+      "name": "Behaviour when duplicating sprites",
+      "type": "select",
+      "default": "keep",
+      "potentialValues": [
+        {
+          "id": "custom",
+          "name": "Send to custom x/y values"
+        },
+        {
+          "id": "keep",
+          "name": "Keep the same as the original sprite"
+        },
+        {
+          "id": "randomize",
+          "name": "Randomize"
+        }
+      ]
     }
   ],
   "versionAdded": "1.13.0",
