@@ -31,16 +31,36 @@ export default async function ({ addon, console, msg }) {
       container.className = "sa-project-info";
       addon.tab.displayNoneWhileDisabled(container, { display: "inline-block" });
       addon.tab.appendToSharedSpace({ space: "beforeRemixButton", element: container, order: 0 });
-      let projectInfo = getBlockCount();
-      container.appendChild(document.createTextNode(msg("sprite", { num: projectInfo.spriteCount })));
+      let spriteImg = document.createElement("img");
+      spriteImg.setAttribute("src", "https://scratch.mit.edu/svgs/project/sprite-count.svg");
+      container.appendChild(spriteImg);
+      let spriteLbl = document.createElement("span");
+      spriteLbl.id = "spriteLabel";
+      container.appendChild(spriteLbl);
       container.appendChild(document.createElement("br"));
-      container.appendChild(document.createTextNode(msg("script", { num: projectInfo.scriptCount })));
+      let scriptImg = document.createElement("img");
+      scriptImg.setAttribute("src", "https://scratch.mit.edu/svgs/project/block-count.svg");
+      container.appendChild(scriptImg);
+      let scriptLbl = document.createElement("span");
+      scriptLbl.id = "scriptLabel";
+      container.appendChild(scriptLbl);
+      updateLabels();
     }
   };
+
+  function updateLabels() {
+    let setting = addon.settings.get("show");
+    let projectInfo = getBlockCount();
+    document.querySelector("#spriteLabel").innerText =
+      setting === "icon" ? projectInfo.spriteCount : msg("sprite", { num: projectInfo.spriteCount });
+    document.querySelector("#scriptLabel").innerText =
+      setting === "icon" ? projectInfo.scriptCount : msg("script", { num: projectInfo.scriptCount });
+  }
 
   // addProjectPageStats either when the project is loaded through the project page or when the user goes from the editor to the project page
   vm.runtime.on("PROJECT_LOADED", async () => addProjectPageStats());
   addon.tab.addEventListener("urlChange", (e) => addProjectPageStats());
   // The addon ran late, so PROJECT_LOADED already happened.
   if (addon.self.enabledLate) addProjectPageStats();
+  addon.settings.addEventListener("change", (e) => updateLabels());
 }

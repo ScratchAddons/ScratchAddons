@@ -5,7 +5,6 @@ export default async function ({ addon, global, console, msg }) {
   let flyOut = null;
   let scrollBar = null;
   let toggle = false;
-  let toggleSetting = addon.settings.get("toggle");
   let flyoutLock = false;
   let closeOnMouseUp = false;
   let scrollAnimation = true;
@@ -21,6 +20,30 @@ export default async function ({ addon, global, console, msg }) {
     };
     return data[addon.settings.get("speed")];
   }
+
+  function getToggleSetting() {
+    return addon.settings.get("toggle");
+  }
+
+  function setTransition(speed) {
+    for (let element of [flyOut, scrollBar, lockDisplay]) {
+      element.style.transitionDuration = `${speed}s`;
+    }
+  }
+
+  function removeTransition() {
+    for (let element of [flyOut, scrollBar, lockDisplay]) {
+      element.style.removeProperty("transition-duration");
+    }
+  }
+
+  function updateLockDisplay() {
+    lockDisplay.title = flyoutLock ? msg("unlock") : msg("lock");
+    lockIcon.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
+    if (flyoutLock) lockDisplay.classList.add("locked");
+    else lockDisplay.classList.remove("locked");
+  }
+
   function onmouseenter(e, speed = {}) {
     // If a mouse event was passed, only open flyout if the workspace isn't being dragged
     if (
@@ -29,16 +52,18 @@ export default async function ({ addon, global, console, msg }) {
       document.querySelector(".blocklyToolboxDiv").className.includes("blocklyToolboxDelete")
     ) {
       speed = typeof speed === "object" ? getSpeedValue() : speed;
+      setTransition(speed);
       flyOut.classList.remove("sa-flyoutClose");
-      flyOut.style.transitionDuration = `${speed}s`;
       scrollBar.classList.remove("sa-flyoutClose");
-      scrollBar.style.transitionDuration = `${speed}s`;
       lockDisplay.classList.remove("sa-flyoutClose");
-      lockDisplay.style.transitionDuration = `${speed}s`;
-      setTimeout(() => Blockly.getMainWorkspace().recordCachedAreas(), speed * 1000);
+      setTimeout(() => {
+        Blockly.getMainWorkspace().recordCachedAreas();
+        removeTransition();
+      }, speed * 1000);
     }
     closeOnMouseUp = false; // only close if the mouseup event happens outside the flyout
   }
+
   function onmouseleave(e, speed = getSpeedValue()) {
     if (flyoutLock) return;
     if (e && e.buttons) {
@@ -46,13 +71,14 @@ export default async function ({ addon, global, console, msg }) {
       closeOnMouseUp = true;
       return;
     }
+    setTransition(speed);
     flyOut.classList.add("sa-flyoutClose");
-    flyOut.style.transitionDuration = `${speed}s`;
     scrollBar.classList.add("sa-flyoutClose");
-    scrollBar.style.transitionDuration = `${speed}s`;
     lockDisplay.classList.add("sa-flyoutClose");
-    lockDisplay.style.transitionDuration = `${speed}s`;
-    setTimeout(() => Blockly.getMainWorkspace().recordCachedAreas(), speed * 1000);
+    setTimeout(() => {
+      Blockly.getMainWorkspace().recordCachedAreas();
+      removeTransition();
+    }, speed * 1000);
   }
 
   let didOneTimeSetup = false;
@@ -61,78 +87,127 @@ export default async function ({ addon, global, console, msg }) {
       return;
     }
     didOneTimeSetup = true;
+
     addon.tab.redux.initialize();
     addon.tab.redux.addEventListener("statechanged", (e) => {
       switch (e.detail.action.type) {
         // Event casted when you switch between tabs
         case "scratch-gui/navigation/ACTIVATE_TAB":
           // always 0, 1, 2
-          if (e.detail.action.activeTabIndex === 0 && (toggleSetting === "hover" || toggleSetting === "cathover")) {
+          const toggleSetting = getToggleSetting();
+          if (
+            e.detail.action.activeTabIndex === 0 &&
+            !addon.self.disabled &&
+            (toggleSetting === "hover" || toggleSetting === "cathover")
+          ) {
             onmouseleave(null, 0);
             toggle = false;
           }
           break;
       }
     });
-    if (toggleSetting === "category") {
-      const oldSetSelectedItem = Blockly.Toolbox.prototype.setSelectedItem;
-      Blockly.Toolbox.prototype.setSelectedItem = function (item, shouldScroll) {
-        if (shouldScroll === undefined) shouldScroll = true;
-        if (!shouldScroll) {
-          // ignore initial selection when updating the toolbox
-          item = this.selectedItem_;
-        } else if (this.selectedItem_ === item) {
-          toggle = !toggle;
-          if (toggle) onmouseenter();
-          else {
-            onmouseleave();
-            // unselect the category
-            item = null;
-          }
-        } else if (!toggle) {
-          scrollAnimation = false;
+
+    document.body.addEventListener("mouseup", () => {
+      if (closeOnMouseUp) {
+        onmouseleave();
+        closeOnMouseUp = false;
+      }
+    });
+
+    if (addon.self.enabledLate && getToggleSetting() === "category") {
+      Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
+    }
+    addon.self.addEventListener("disabled", () => {
+      Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
+    });
+    addon.self.addEventListener("reenabled", () => {
+      if (getToggleSetting() === "category") {
+        Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
+        onmouseleave(null, 0);
+        toggle = false;
+      }
+    });
+
+    addon.settings.addEventListener("change", () => {
+      if (addon.self.disabled) return;
+      if (getToggleSetting() === "category") {
+        // switching to category click mode
+        // close the flyout unless it's locked
+        if (flyoutLock) {
           toggle = true;
-          onmouseenter();
+          flyoutLock = false;
+          updateLockDisplay();
+        } else {
+          Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
+          onmouseleave(null, 0);
+          toggle = false;
         }
-        oldSetSelectedItem.call(this, item, shouldScroll);
-      };
-      const oldGetSelectedCategoryId = Blockly.Toolbox.prototype.getSelectedCategoryId;
-      Blockly.Toolbox.prototype.getSelectedCategoryId = function () {
-        // the selected category can now be null
-        if (!this.selectedItem_) return null;
-        return oldGetSelectedCategoryId.call(this);
-      };
-      const oldStepScrollAnimation = Blockly.Flyout.prototype.stepScrollAnimation;
-      Blockly.Flyout.prototype.stepScrollAnimation = function () {
-        // scrolling should not be animated when opening the flyout
-        if (!scrollAnimation) {
-          this.scrollbar_.set(this.scrollTarget);
-          this.scrollTarget = null;
-          scrollAnimation = true;
-          return;
+      } else {
+        onmouseleave();
+        Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
+      }
+    });
+
+    // category click mode
+    const oldSetSelectedItem = Blockly.Toolbox.prototype.setSelectedItem;
+    Blockly.Toolbox.prototype.setSelectedItem = function (item, shouldScroll = true) {
+      const previousSelection = this.selectedItem_;
+      oldSetSelectedItem.call(this, item, shouldScroll);
+      if (addon.self.disabled || getToggleSetting() !== "category") return;
+      if (!shouldScroll) {
+        // ignore initial selection when updating the toolbox
+        item.setSelected(false);
+      } else if (item === previousSelection) {
+        toggle = !toggle;
+        if (toggle) onmouseenter();
+        else {
+          onmouseleave();
+          item.setSelected(false);
         }
-        oldStepScrollAnimation.call(this);
+      } else if (!toggle) {
+        scrollAnimation = false;
+        toggle = true;
+        onmouseenter();
+      }
+    };
+
+    const oldSelectCategoryById = Blockly.Toolbox.prototype.selectCategoryById;
+    Blockly.Toolbox.prototype.selectCategoryById = function (...args) {
+      // called after populating the toolbox
+      // ignore if the palette is closed
+      if (!addon.self.disabled && getToggleSetting() === "category" && !toggle) return;
+      return oldSelectCategoryById.call(this, ...args);
+    };
+
+    const oldStepScrollAnimation = Blockly.Flyout.prototype.stepScrollAnimation;
+    Blockly.Flyout.prototype.stepScrollAnimation = function () {
+      // scrolling should not be animated when opening the flyout in category click mode
+      if (!scrollAnimation) {
+        this.scrollbar_.set(this.scrollTarget);
+        this.scrollTarget = null;
+        scrollAnimation = true;
+        return;
+      }
+      oldStepScrollAnimation.call(this);
+    };
+
+    // add flyout size to the workspace dimensions
+    const oldGetMetrics = Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
+    Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function () {
+      const metrics = oldGetMetrics.call(this);
+      if (addon.self.disabled || getToggleSetting() === "hover" || this.RTL) return metrics;
+      if (this.getToolbox().flyout_?.getWidth() === 310) {
+        // columns is enabled
+        return metrics;
+      }
+      return {
+        ...metrics,
+        absoluteLeft: metrics.absoluteLeft - 250,
+        viewWidth: metrics.viewWidth + 250,
       };
-    }
-    if (toggleSetting !== "hover") {
-      // add flyout size to the workspace dimensions
-      const oldGetMetrics = Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
-      Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function () {
-        const metrics = oldGetMetrics.call(this);
-        if (this.RTL) return metrics;
-        if (this.getToolbox().flyout_?.getWidth() === 310) {
-          // columns is enabled
-          return metrics;
-        }
-        return {
-          ...metrics,
-          absoluteLeft: metrics.absoluteLeft - 250,
-          viewWidth: metrics.viewWidth + 250,
-        };
-      };
-      if (Blockly.getMainWorkspace())
-        Blockly.getMainWorkspace().getMetrics = Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
-    }
+    };
+    if (Blockly.getMainWorkspace())
+      Blockly.getMainWorkspace().getMetrics = Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
   }
 
   while (true) {
@@ -146,57 +221,50 @@ export default async function ({ addon, global, console, msg }) {
     // Placeholder Div
     if (placeHolderDiv) placeHolderDiv.remove();
     placeHolderDiv = document.createElement("div");
-    if (toggleSetting === "hover") blocksWrapper.appendChild(placeHolderDiv);
+    blocksWrapper.appendChild(placeHolderDiv);
     placeHolderDiv.className = "sa-flyout-placeHolder";
+    placeHolderDiv.style.display = "none"; // overridden by userstyle if the addon is enabled
 
     // Lock Img
     if (lockDisplay) lockDisplay.remove();
     lockDisplay = document.createElement("button");
+    blocksWrapper.appendChild(lockDisplay);
     lockDisplay.className = "sa-lock-image";
-    if (flyoutLock) lockDisplay.classList.add("locked");
-    lockDisplay.title = flyoutLock ? msg("unlock") : msg("lock");
+    lockDisplay.style.display = "none"; // overridden by userstyle if the addon is enabled
     lockIcon = document.createElement("img");
-    lockIcon.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
     lockIcon.alt = "";
     lockDisplay.appendChild(lockIcon);
+    updateLockDisplay();
     lockDisplay.onclick = () => {
       flyoutLock = !flyoutLock;
-      lockDisplay.title = flyoutLock ? msg("unlock") : msg("lock");
-      lockIcon.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
-      if (flyoutLock) lockDisplay.classList.add("locked");
-      else lockDisplay.classList.remove("locked");
+      updateLockDisplay();
     };
 
     onmouseleave(null, 0);
     toggle = false;
 
-    if (toggleSetting === "hover" || toggleSetting === "cathover") {
-      // Only append if we don't have "categoryclick" on
-      blocksWrapper.appendChild(lockDisplay);
+    const toolbox = document.querySelector(".blocklyToolboxDiv");
+    const addExtensionButton = document.querySelector("[class^=gui_extension-button-container_]");
 
-      const toolbox = document.querySelector(".blocklyToolboxDiv");
-      const addExtensionButton = document.querySelector("[class^=gui_extension-button-container_]");
-
-      for (let e of [toolbox, addExtensionButton, flyOut, scrollBar, lockDisplay]) {
-        e.onmouseenter = onmouseenter;
-        e.onmouseleave = onmouseleave;
-      }
-
-      if (toggleSetting === "hover") {
-        placeHolderDiv.onmouseenter = onmouseenter;
-        placeHolderDiv.onmouseleave = onmouseleave;
-      }
-
-      document.body.addEventListener("mouseup", () => {
-        if (closeOnMouseUp) {
-          onmouseleave();
-          closeOnMouseUp = false;
-        }
-      });
+    for (let element of [toolbox, addExtensionButton, flyOut, scrollBar, lockDisplay]) {
+      element.onmouseenter = (e) => {
+        const toggleSetting = getToggleSetting();
+        if (!addon.self.disabled && (toggleSetting === "hover" || toggleSetting === "cathover")) onmouseenter(e);
+      };
+      element.onmouseleave = (e) => {
+        const toggleSetting = getToggleSetting();
+        if (!addon.self.disabled && (toggleSetting === "hover" || toggleSetting === "cathover")) onmouseleave(e);
+      };
     }
+    placeHolderDiv.onmouseenter = (e) => {
+      if (!addon.self.disabled && getToggleSetting() === "hover") onmouseenter(e);
+    };
+    placeHolderDiv.onmouseleave = (e) => {
+      if (!addon.self.disabled && getToggleSetting() === "hover") onmouseleave(e);
+    };
 
     doOneTimeSetup();
-    if (toggleSetting !== "hover") {
+    if (getToggleSetting() !== "hover") {
       // update workspace dimensions
       Blockly.svgResize(Blockly.getMainWorkspace());
     }
