@@ -1,1 +1,1 @@
-{"disable-stage-drag-select/@name":"Blokada przesuwania duszków w edytorze"}
+{"disable-stage-drag-select/@name":"Blokada przesuwania duszków w edytorze","disable-stage-drag-select/@description":"Blokuje możliwość przesuwania duszków na scenie w edytorze, z wyjątkiem tych, które są ustawione na \"przesuwanie\". Przytrzymać Shift, aby normalnie przesuwać duszki."}
