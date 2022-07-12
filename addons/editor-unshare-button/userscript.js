@@ -9,6 +9,10 @@ export default async function ({ addon, msg, global, console }) {
     button.classList.add("sa-unshare-button");
     button.querySelector("span").innerText = msg("unshare-button");
     button.addEventListener("click", async (e) => {
+      // Don't do anything if the button is now a "Share" button
+      // This can happen if the "Unshare" button was clicked previously
+      if (!button.className.includes("is-shared")) return;
+
       if (!(await addon.tab.confirm(msg("unshare-button"), msg("unshare-msg"), { useEditorClasses: true }))) return;
       redux.dispatch({
         type: "SET_COMMENT_FETCH_STATUS",
