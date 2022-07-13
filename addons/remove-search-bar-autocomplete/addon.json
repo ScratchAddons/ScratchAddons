@@ -13,7 +13,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/*"]
+      "matches": ["https://scratch.mit.edu/*"],
       "runAtComplete": false
     }
   ],
