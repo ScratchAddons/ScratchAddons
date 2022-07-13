@@ -1,6 +1,7 @@
 export default async function ({ addon, console }) {
   const textarea = await addon.tab.waitForElement(".markItUpEditor");
   const previewButton = await addon.tab.waitForElement(".markItUpButton.preview");
+  const delay = addon.settings.get("refresh");
   let previewIframe;
   addon.tab.waitForElement(".markItUpPreviewFrame").then((iframe) => (previewIframe = iframe));
 
@@ -23,7 +24,7 @@ export default async function ({ addon, console }) {
   let timeout;
   textarea.addEventListener("input", () => {
     if (timeout !== undefined) clearTimeout(timeout);
-    timeout = setTimeout(updatePreview, addon.settings.get("refresh"));
+    timeout = setTimeout(updatePreview, delay);
   });
   addon.self.addEventListener("disabled", () => {
     showPreview();
