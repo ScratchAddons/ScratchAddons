@@ -23,7 +23,7 @@ export default async function ({ addon, console }) {
   let timeout;
   textarea.addEventListener("input", () => {
     if (timeout !== undefined) clearTimeout(timeout);
-    timeout = setTimeout(updatePreview, 1000);
+    timeout = setTimeout(updatePreview, addon.settings.get("refresh"));
   });
   addon.self.addEventListener("disabled", () => {
     showPreview();
