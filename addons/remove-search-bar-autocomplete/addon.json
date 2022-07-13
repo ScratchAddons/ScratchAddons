@@ -13,6 +13,7 @@
     {
       "url": "userscript.js",
       "matches": ["https://scratch.mit.edu/*"]
+      "runAtComplete": false
     }
   ],
   "versionAdded": "1.28.0"
