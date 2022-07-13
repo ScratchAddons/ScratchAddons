@@ -9,6 +9,7 @@
     }
   ],
   "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",
