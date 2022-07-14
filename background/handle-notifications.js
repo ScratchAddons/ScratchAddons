@@ -59,12 +59,21 @@ function contextMenuUnmuted() {
       contexts: ["browser_action"],
     });
   }
-  chrome.browserAction.setIcon({
-    path: {
-      16: "../images/icon-16.png",
-      32: "../images/icon-32.png",
-    },
-  });
+  if (chrome.runtime.getManifest().version_name.includes("-prerelease")) {
+    chrome.browserAction.setIcon({
+      path: {
+        16: "../images/icon-blue-16.png",
+        32: "../images/icon-blue-32.png",
+      },
+    });
+  } else {
+    chrome.browserAction.setIcon({
+      path: {
+        16: "../images/icon-16.png",
+        32: "../images/icon-32.png",
+      },
+    });
+  }
 }
 
 function contextMenuMuted() {

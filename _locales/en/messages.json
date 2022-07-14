@@ -2,6 +2,9 @@
   "extensionName": {
     "message": "Scratch Addons"
   },
+  "extensionBetaName": {
+    "message": "Scratch Addons Beta"
+  },
   "extensionDescription": {
     "message": "Scratch Addons provides customizable features and themes for the scratch.mit.edu website and project editor."
   },

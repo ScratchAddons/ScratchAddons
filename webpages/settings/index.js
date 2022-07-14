@@ -166,6 +166,7 @@ let fuse;
         browserLevelPermissions,
         grantedOptionalPermissions,
         addonListObjs: [],
+        prerelease: chrome.runtime.getManifest().version_name.includes("-prerelease"),
         sidebarUrls: (() => {
           const uiLanguage = chrome.i18n.getUILanguage();
           const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
@@ -425,6 +426,10 @@ let fuse;
       }, 0);
     },
   });
+
+  if (chrome.runtime.getManifest().version_name.includes("-prerelease")) {
+    document.querySelector(".navbar").style.backgroundColor = "#0e44b8";
+  }
 
   const getRunningAddons = (manifests, addonsEnabled) => {
     return new Promise((resolve) => {

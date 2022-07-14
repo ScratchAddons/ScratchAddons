@@ -23,6 +23,7 @@ const vue = new Vue({
     currentPopup: null,
     popupsWithIframes: [],
     version: chrome.runtime.getManifest().version,
+    prerelease: chrome.runtime.getManifest().version_name.includes("-prerelease")
   },
   methods: {
     msg(message, ...params) {
@@ -61,6 +62,9 @@ const vue = new Vue({
 
 let manifests = null;
 const TAB_ORDER = ["scratch-messaging", "cloud-games", "__settings__"];
+if (chrome.runtime.getManifest().version_name.includes("-prerelease")) {
+  document.getElementById("header").style.backgroundColor = "#0e44b8";
+}
 
 chrome.runtime.sendMessage("getSettingsInfo", (res) => {
   // If order unspecified, addon goes first. All new popups should be added here.
