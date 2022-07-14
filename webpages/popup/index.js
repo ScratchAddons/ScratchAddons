@@ -23,7 +23,7 @@ const vue = new Vue({
     currentPopup: null,
     popupsWithIframes: [],
     version: chrome.runtime.getManifest().version,
-    prerelease: chrome.runtime.getManifest().version_name.includes("-prerelease")
+    prerelease: chrome.runtime.getManifest().version_name.includes("-prerelease"),
   },
   methods: {
     msg(message, ...params) {
