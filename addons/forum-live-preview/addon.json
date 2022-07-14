@@ -27,9 +27,9 @@
       "name": "Refresh rate (ms)",
       "id": "refresh",
       "type": "integer",
-      "min": "250",
-      "max": "10000",
-      "default": "1000"
+      "min": 250,
+      "max": 10000,
+      "default": 1000
     }
   ],
   "tags": ["community", "forums"],
