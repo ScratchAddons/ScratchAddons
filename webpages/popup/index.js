@@ -62,8 +62,9 @@ const vue = new Vue({
 
 let manifests = null;
 const TAB_ORDER = ["scratch-messaging", "cloud-games", "__settings__"];
+
 if (chrome.runtime.getManifest().version_name.includes("-prerelease")) {
-  document.getElementById("header").style.backgroundColor = "#0e44b8";
+  document.getElementById("header").style.backgroundColor = "#175ef8";
 }
 
 chrome.runtime.sendMessage("getSettingsInfo", (res) => {

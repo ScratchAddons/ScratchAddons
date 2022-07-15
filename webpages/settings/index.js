@@ -428,7 +428,7 @@ let fuse;
   });
 
   if (chrome.runtime.getManifest().version_name.includes("-prerelease")) {
-    document.querySelector(".navbar").style.backgroundColor = "#0e44b8";
+    document.querySelector(".navbar").style.backgroundColor = "#175ef8";
   }
 
   const getRunningAddons = (manifests, addonsEnabled) => {
