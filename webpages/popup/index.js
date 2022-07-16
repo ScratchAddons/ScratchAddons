@@ -24,7 +24,6 @@ const vue = new Vue({
     popups: [],
     currentPopup: null,
     popupsWithIframes: [],
-    version: chrome.runtime.getManifest().version,
   },
   methods: {
     msg(message, ...params) {
@@ -60,6 +59,10 @@ const vue = new Vue({
     },
     logoSrc() {
       return prerelease ? "../../images/icon-blue.svg" : "../../images/icon.svg";
+    },
+    version() {
+      const ver = chrome.runtime.getManifest().version;
+      return prerelease ? ver+"-pre" : ver;
     },
   },
 });
