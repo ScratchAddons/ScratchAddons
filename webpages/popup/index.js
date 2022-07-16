@@ -62,7 +62,7 @@ const vue = new Vue({
     },
     version() {
       const ver = chrome.runtime.getManifest().version;
-      return prerelease ? ver+"-pre" : ver;
+      return prerelease ? ver + "-pre" : ver;
     },
   },
 });
