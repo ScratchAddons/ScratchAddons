@@ -68,6 +68,7 @@ const vue = new Vue({
 });
 
 let manifests = null;
+// If order unspecified, addon goes first. All new popups should be added here.
 const TAB_ORDER = ["scratch-messaging", "cloud-games", "__settings__"];
 
 if (prerelease) {
@@ -76,7 +77,6 @@ if (prerelease) {
 }
 
 chrome.runtime.sendMessage("getSettingsInfo", (res) => {
-  // If order unspecified, addon goes first. All new popups should be added here.
   manifests = res.manifests;
   const popupObjects = Object.keys(res.addonsEnabled)
     .filter((addonId) => res.addonsEnabled[addonId] === true)

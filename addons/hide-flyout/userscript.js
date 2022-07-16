@@ -196,7 +196,7 @@ export default async function ({ addon, global, console, msg }) {
     Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function () {
       const metrics = oldGetMetrics.call(this);
       if (addon.self.disabled || getToggleSetting() === "hover" || this.RTL) return metrics;
-      if (this.getToolbox().flyout_?.getWidth() === 310) {
+      if (this.getToolbox()?.flyout_?.getWidth() === 310) {
         // columns is enabled
         return metrics;
       }
