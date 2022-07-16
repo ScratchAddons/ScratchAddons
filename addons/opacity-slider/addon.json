@@ -1,0 +1,18 @@
+{
+  "name": "Opacity Slider",
+  "description": "Adds opacity slider to color pickers.",
+  "tags": ["editor", "costumeEditor"],
+  "credits": [
+    {
+      "name": "itta611",
+      "link": "https://github.com/itta611/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "enabledByDefault": false
+}
