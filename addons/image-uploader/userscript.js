@@ -38,16 +38,7 @@ export default async function ({ addon, msg }) {
   const onButtonClick = (e) => uploadInput.click();
   const onFileUpload = (e) => {
     const file = uploadInput.files[0];
-    const extension = uploadInput.files[0].name.split(".").pop().toLowerCase();
-
-    const reader = new FileReader();
-    reader.readAsArrayBuffer(file);
-    reader.addEventListener("loadend", (e) => uploadImage(reader.result, extension));
-    reader.addEventListener("error", (e) => {
-      console.error("Error when reading file:", e);
-      addon.tab.confirm(msg("load-error"));
-      progressElement?.remove();
-    });
+    uploadBlob(file);
   };
   const onPaste = async (ev) => {
     const files = await retrieveImagesFromClipboardAsBlob(ev);
@@ -126,7 +117,7 @@ export default async function ({ addon, msg }) {
     reader.addEventListener("loadend", (e) => uploadImage(reader.result, fileExt));
     reader.addEventListener("error", (e) => {
       console.error("Error when reading file:", e);
-      addon.tab.confirm(msg("load-error"));
+      alert(msg("load-error"));
       progressElement?.remove();
     });
   }
@@ -148,12 +139,14 @@ export default async function ({ addon, msg }) {
       if (data.status === "ok") {
         insert(textBox, `[img]https://assets.scratch.mit.edu/get_image/.%2E/${data["content-name"]}[/img]`);
       } else {
-        addon.tab.confirm(msg("upload-error"));
+        progressElement?.remove();
+        alert(msg("upload-error"));
       }
       progressElement.remove();
     } catch (ex) {
       console.log("Error encountered while uploading image:", ex);
-      addon.tab.confirm(msg("upload-error"));
+      progressElement?.remove();
+      alert(msg("upload-error"));
     }
   }
 }
