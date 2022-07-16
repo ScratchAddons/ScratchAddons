@@ -61,6 +61,8 @@
       ]
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.0.0",
   "latestUpdate": {
     "version": "1.24.0",

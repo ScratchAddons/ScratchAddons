@@ -9,10 +9,11 @@ export default async function ({ addon, global, console }) {
     });
     const scratchr2List = document.querySelector(".site-nav");
 
-    function createItem({ name, url }, last) {
+    function createItem({ name, url, extraClass }, last) {
       const li = document.createElement("li");
       li.className = "link";
       if (last) li.classList.add("last");
+      if (addon.tab.clientVersion !== "scratchr2" && typeof extraClass === "string") li.classList.add(extraClass);
 
       const a = document.createElement("a");
       const absolute = new URL(url, location.origin);
@@ -42,7 +43,12 @@ export default async function ({ addon, global, console }) {
     }
     function init() {
       removeAllItems();
-      let items = addon.settings.get("items");
+      let items = addon.self.disabled ? [
+        { name: "Create", url: "/projects/editor/", extraClass: "create" },
+        { name: "Explore", url: "/explore/projects/all", extraClass: "explore" },
+        { name: "Ideas", url: "/ideas", extraClass: "ideas" },
+        { name: "About", url: "/about", extraClass: "about" },
+      ] : addon.settings.get("items");
       items.forEach((item, i) => {
         if (scratchr2List) {
           scratchr2List.append(createItem(item, i + 1 === items.length));
@@ -53,5 +59,7 @@ export default async function ({ addon, global, console }) {
     }
     init();
     addon.settings.addEventListener("change", init);
+    addon.self.addEventListener("disabled", init);
+    addon.self.addEventListener("reenabled", init);
   }
 }
