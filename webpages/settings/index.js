@@ -430,7 +430,7 @@ let fuse;
   });
 
   if (prerelease) {
-    const blue = getComputedStyle(document.documentElement).getPropertyValue('--blue');
+    const blue = getComputedStyle(document.documentElement).getPropertyValue("--blue");
     document.querySelector(".navbar").style.backgroundColor = blue;
   }
 

@@ -68,7 +68,7 @@ let manifests = null;
 const TAB_ORDER = ["scratch-messaging", "cloud-games", "__settings__"];
 
 if (prerelease) {
-  const blue = getComputedStyle(document.documentElement).getPropertyValue('--blue');
+  const blue = getComputedStyle(document.documentElement).getPropertyValue("--blue");
   document.getElementById("header").style.backgroundColor = blue;
 }
 
