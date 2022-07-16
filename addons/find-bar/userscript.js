@@ -57,7 +57,6 @@ export default async function ({ addon, msg, global, console }) {
       this.rhdd = 0;
 
       this.findLabel = null;
-      this.findHelp = null;
       this.findWrapper = null;
       this.findInput = null;
       this.dropdownOut = null;
@@ -80,11 +79,6 @@ export default async function ({ addon, msg, global, console }) {
       this.findLabel = findBar.appendChild(document.createElement("label"));
       this.findLabel.htmlFor = "find-input";
       this.findLabel.textContent = msg("find");
-
-      this.findHelp = this.findLabel.appendChild(document.createElement("a"));
-      this.findHelp.href = "#";
-      this.findHelp.className = "find-help";
-      this.findHelp.textContent = "(?)";
 
       this.findWrapper = findBar.appendChild(document.createElement("span"));
       this.findWrapper.className = "find-wrapper";
@@ -110,8 +104,6 @@ export default async function ({ addon, msg, global, console }) {
       this.findInput.addEventListener("keyup", (e) => this.inputChange());
       this.findInput.addEventListener("focus", (e) => this.inputChange());
       this.findInput.addEventListener("keydown", (e) => this.inputKeyDown(e));
-
-      this.findHelp.addEventListener("click", (e) => this.eventClickHelp(e));
 
       document.addEventListener("mousedown", (e) => this.eventMouseDown(e), true);
       document.addEventListener("keydown", (e) => this.eventKeyDown(e), true);
@@ -381,68 +373,6 @@ export default async function ({ addon, msg, global, console }) {
 
     get scriptEditor() {
       return this.codeTab.className.indexOf("gui_is-selected") >= 0;
-    }
-
-    eventClickHelp(e) {
-      if (!document.getElementById("s3devHelpPop")) {
-        const helpHTML = `
-        <div id="s3devHelpPop" class="${addon.tab.scratchClass("modal_modal-overlay")}" dir="${guiDirection}">
-        <div class="${addon.tab.scratchClass("modal_modal-content")}">
-        <div class="${addon.tab.scratchClass("modal_header")}">
-          <div class="${addon.tab.scratchClass("modal_header-item", "modal_header-item-title")}">${msg(
-          "help-title"
-        )}</div>
-          <div class="${addon.tab.scratchClass("modal_header-item", "modal_header-item-close")}">
-            <div class="${addon.tab.scratchClass("close-button_close-button", "close-button_large", {
-              others: "close-button",
-            })}">
-            <img class="${addon.tab.scratchClass(
-              "close-button_close-icon"
-            )}" src="/static/assets/cb666b99d3528f91b52f985dfb102afa.svg">
-          </div>
-          </div>
-        </div>
-        <div id="s3devHelpContent">
-        <p>${msg("help-title")} ${m("help-by", {
-          ndash: "&ndash;",
-          url: '<a target="_blank" rel="noreferrer noopener" href="https://www.youtube.com/griffpatch">Griffpatch</a>',
-        })}</p>
-        <hr />
-        <h2><strong>${msg("code-tab-features")}</strong></h2>
-        <p dir="auto"><strong>${msg("interactive-find-bar")}</strong> &ndash; ${m("interactive-find-bar-desc")}</p>
-        <p dir="auto"><strong>${msg("improved-tidy-up")}</strong> &ndash; ${m("improved-tidy-up-desc")}</p>
-        <p dir="auto"><strong>${msg("help-make-space")} ${m("help-new")}</strong> &ndash; ${m(
-          "help-make-space-desc"
-        )}</p>
-        <p dir="auto"><strong>${msg("copy-to-clipboard")}</strong> &ndash; ${m("copy-to-clipboard-desc")}</p>
-        <p dir="auto"><strong>${msg("paste-from-clipboard")}</strong> &ndash; ${m("paste-from-clipboard-desc")}</p>
-        <p dir="auto"><strong>${msg("swap-variable")}</strong> &ndash; ${m("swap-variable-desc")}</p>
-        <p dir="auto"><strong>${msg("middleclick")}</strong> &ndash; ${m("middleclick-desc")}</p>
-        <p dir="auto"><strong>${msg("ctrl-lr")}</strong> &ndash; ${m("ctrl-lr-desc")}</p>
-        <p dir="auto"><strong>${msg("ctrl-space")}</strong> &ndash; ${m("ctrl-space-desc")}</p>
-        <hr />
-        <h2><strong>${msg("costume-tab-features")}</strong></h2>
-        <p dir="auto"><strong>${msg("find-bar")}</strong> &ndash; ${m("find-bar-costume-desc")}</p>
-        <p dir="auto"><strong>${msg("ctrl-lr")}</strong> &ndash; ${m("ctrl-lr-costume-desc")}</p>
-        <hr />
-        <p>${m(
-          "youtube"
-        )} -&nbsp;<a target="_blank" href="https://www.youtube.com/griffpatch" rel="noopener noreferrer">https://www.youtube.com/user/griffpatch</a></p>
-        </div>
-        </div>
-        </div>
-        `;
-        document.body.insertAdjacentHTML("beforeend", helpHTML);
-        document.getElementById("s3devHelpPop").addEventListener("mousedown", function (e) {
-          if (e.target.id === "s3devHelpPop") {
-            e.target.remove();
-          }
-        });
-        document.querySelector("#s3devHelpPop .close-button").addEventListener("click", function (e) {
-          document.getElementById("s3devHelpPop").remove();
-        });
-      }
-      e.preventDefault();
     }
 
     isBlockAnOrphan(topBlock) {

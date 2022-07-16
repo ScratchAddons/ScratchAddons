@@ -9,8 +9,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     return;
   }
 
-  const guiDirection = addon.tab.direction;
-
   const devTools = new DevTools(addon, msg, m);
   devTools.init();
 }
