@@ -1,8 +1,9 @@
 import BlockInstance from "./BlockInstance.js";
 import BlockFlasher from "./BlockFlasher.js";
 
-// A file to split Editor Devtools by features.
-
+// Make these global so that every addon uses the same arrays.
+let views = [];
+let forward = [];
 export default class Utils {
   constructor(addon) {
     this.addon = addon;
@@ -113,7 +114,7 @@ export default class Utils {
   }
 
   /**
-   * Find the top stack block of a stack
+   * Find the top stack block of a  stack
    * @param block a block in a stack
    * @returns {*} a block that is the top of the stack of blocks
    */
@@ -127,27 +128,22 @@ export default class Utils {
 }
 
 class NavigationHistory {
-  constructor() {
-    this.views = [];
-    this.forward = [];
-  }
-
   /**
    * Keep a record of the scroll and zoom position
    */
   storeView(next, dist) {
-    this.forward = [];
+    forward = [];
     let workspace = Blockly.getMainWorkspace(),
       s = workspace.getMetrics();
 
     let pos = { left: s.viewLeft, top: s.viewTop };
     if (!next || distance(pos, next) > dist) {
-      this.views.push(pos);
+      views.push(pos);
     }
   }
 
   peek() {
-    return this.views.length > 0 ? this.views[this.views.length - 1] : null;
+    return views.length > 0 ? views[views.length - 1] : null;
   }
 
   goBack() {
@@ -161,9 +157,9 @@ class NavigationHistory {
     }
     if (distance(pos, view) < 64) {
       // Go back to current if we are already far away from it
-      if (this.views.length > 1) {
-        this.views.pop();
-        this.forward.push(view);
+      if (views.length > 1) {
+        views.pop();
+        forward.push(view);
       }
     }
 
@@ -197,11 +193,11 @@ class NavigationHistory {
   }
 
   goForward() {
-    let view = this.forward.pop();
+    let view = forward.pop();
     if (!view) {
       return;
     }
-    this.views.push(view);
+    views.push(view);
 
     let workspace = Blockly.getMainWorkspace(),
       s = workspace.getMetrics();
