@@ -235,7 +235,7 @@ let fuse;
       },
       logoSrc() {
         return prerelease ? "../../images/icon-blue.svg" : "../../images/icon.svg";
-      }
+      },
     },
 
     methods: {
