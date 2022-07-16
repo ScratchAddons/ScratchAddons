@@ -7,23 +7,17 @@
       "name": "griffpatch"
     }
   ],
-  "tags": [
-    "editor"
-  ],
+  "tags": ["editor"],
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "projects"
-      ]
+      "matches": ["projects"]
     }
   ],
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": [
-        "projects"
-      ]
+      "matches": ["projects"]
     }
   ]
 }
