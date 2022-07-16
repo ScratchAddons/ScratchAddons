@@ -4,6 +4,7 @@ export default async function ({ addon, global, console, msg }) {
   if (activityStream.length) {
     let container = document.querySelector(".activity-ul").appendChild(document.createElement("div"));
     container.classList.add("load-more-wh-container");
+    container.style.display = "none"; // overridden by userstyle if the setting is enabled
     let loadMore = container.appendChild(document.createElement("button"));
     loadMore.className = "load-more-wh button";
     loadMore.innerText = msg("load-more");
@@ -36,13 +37,13 @@ export default async function ({ addon, global, console, msg }) {
       updateRedux();
     });
     async function updateRedux() {
-      displayedFetch = fetched.slice(0, addon.self.disabled ? 5 : dataLoaded);
+      displayedFetch = fetched.slice(0, !addon.self.disabled && addon.settings.get("whathappen") ? dataLoaded : 5);
       await addon.tab.redux.dispatch({ type: "SET_ROWS", rowType: "activity", rows: displayedFetch });
       document.querySelector(".activity-ul").appendChild(container);
       if (dataLoaded > fetched.length) container.remove();
     }
-    addon.tab.displayNoneWhileDisabled(loadMore);
     addon.self.addEventListener("disabled", updateRedux);
-    addon.self.addEventListener("reenabled", updateRedux)
+    addon.self.addEventListener("reenabled", updateRedux);
+    addon.settings.addEventListener("change", updateRedux);
   }
 }
