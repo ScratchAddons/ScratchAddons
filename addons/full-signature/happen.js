@@ -36,15 +36,13 @@ export default async function ({ addon, global, console, msg }) {
       updateRedux();
     });
     async function updateRedux() {
-      displayedFetch = fetched.slice(0, dataLoaded);
+      displayedFetch = fetched.slice(0, addon.self.disabled ? 5 : dataLoaded);
       await addon.tab.redux.dispatch({ type: "SET_ROWS", rowType: "activity", rows: displayedFetch });
       document.querySelector(".activity-ul").appendChild(container);
       if (dataLoaded > fetched.length) container.remove();
     }
     addon.tab.displayNoneWhileDisabled(loadMore);
-    addon.self.addEventListener("disabled", () => {
-      dataLoaded = 5;
-      updateRedux();
-    });
+    addon.self.addEventListener("disabled", updateRedux);
+    addon.self.addEventListener("reenabled", updateRedux)
   }
 }
