@@ -33,6 +33,7 @@ export default async function ({ addon, msg, global, console }) {
     createDom(root) {
       const findBar = root.appendChild(document.createElement("div"));
       findBar.className = "find-bar";
+      addon.tab.displayNoneWhileDisabled(findBar, { display: "flex" });
 
       this.findLabel = findBar.appendChild(document.createElement("label"));
       this.findLabel.htmlFor = "find-input";
@@ -733,6 +734,8 @@ export default async function ({ addon, msg, global, console }) {
     }
 
     eventMouseDown(e) {
+      if (addon.self.disabled) return;
+
       if (this.dropdownOut && this.dropdownOut.classList.contains("visible") && !e.target.closest(".visible")) {
         // If we click outside the dropdown, then instigate the hide code...
         this.hideDropDown();
@@ -748,6 +751,8 @@ export default async function ({ addon, msg, global, console }) {
       }
     }
     eventKeyDown(e) {
+      if (addon.self.disabled) return;
+
       let ctrlKey = e.ctrlKey || e.metaKey;
 
       if (e.key === "f" && ctrlKey && !e.shiftKey) {
