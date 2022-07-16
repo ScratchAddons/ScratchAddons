@@ -21,6 +21,13 @@ export default async function ({ addon, console, msg }) {
     return tinycolor(color).toHexString();
   };
 
+  const setSliderBg = (element, hex) => {
+    element.style.background =
+      "linear-gradient(45deg, #eaf0f8 25%, transparent 25%, transparent 75%, #eaf0f8 75%), linear-gradient(45deg, #eaf0f8 25%, transparent 25%, transparent 75%, #eaf0f8 75%)";
+    element.style.backgroundSize = "20px 20px";
+    element.style.backgroundPosition = "0 0, 10px 10px";
+  };
+
   while (true) {
     const element = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', {
       markAsSeen: true,
@@ -32,6 +39,7 @@ export default async function ({ addon, console, msg }) {
       prevEventHandler = null;
     }
 
+    const defaultColor = getColor(element);
     const ContainerWrapper = document.createElement("div");
     const RowHeaderClass = document.querySelector('[class*="color-picker_row-header"]').className.split(" ")[0];
     const RowHeader = Object.assign(document.createElement("div"), {
@@ -53,6 +61,7 @@ export default async function ({ addon, console, msg }) {
     const saOpcitySlider = Object.assign(document.createElement("div"), {
       className: `sa-opacity-slider ${sliderContainerClass} ${sliderLastClass}`,
     });
+    setSliderBg(saOpcitySlider, defaultColor);
     const sliderHandleClass = document.querySelector('[class*="slider_handle"]').className.split(" ")[0];
     const saOpcityHandle = Object.assign(document.createElement("div"), {
       className: `sa-opacity-handle ${sliderHandleClass}`,
@@ -60,7 +69,6 @@ export default async function ({ addon, console, msg }) {
     lastSlider.className = sliderContainerClass;
 
     prevEventHandler = ({ detail }) => {
-      console.log(detail.action.type);
       if (
         detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR" ||
         detail.action.type === "scratch-paint/stroke-style/CHANGE_STROKE_COLOR"
