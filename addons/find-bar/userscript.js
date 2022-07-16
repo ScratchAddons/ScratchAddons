@@ -24,8 +24,6 @@ export default async function ({ addon, msg, global, console }) {
       this.codeTab = guiTabs[0];
       this.costumeTab = guiTabs[1];
 
-      this.costumeTabBody = document.querySelector("div[aria-labelledby=" + this.costumeTab.id + "]");
-
       this.createDom(root);
       this.bindEvents();
     }
@@ -172,7 +170,11 @@ export default async function ({ addon, msg, global, console }) {
       this.prevValue = focusID ? "" : null; // Clear the previous value of the input search
 
       this.dropdownOut.classList.add("visible");
-      let scratchBlocks = this.costumeEditor ? this.getScratchCostumes() : this.getScratchBlocks();
+      let scratchBlocks = this.costumeEditor
+        ? this.getScratchCostumes()
+        : this.scriptEditor
+        ? this.getScratchBlocks()
+        : this.getScratchSounds();
 
       this.dom_removeChildren(this.dropdown);
 
@@ -252,8 +254,8 @@ export default async function ({ addon, msg, global, console }) {
 
     clickDropDownRow(li, instanceBlock) {
       let cls = li.data.cls;
-      if (cls === "costume") {
-        // Viewing costumes - jump to selected costume
+      if (cls === "costume" || cls === "sound") {
+        // Viewing costumes/sounds - jump to selected costume/sound
         const assetPanel = document.querySelector("[class^=asset-panel_wrapper]");
         if (assetPanel) {
           const reactInstance = assetPanel[addon.tab.traps.getInternalKey(assetPanel)];
@@ -672,33 +674,33 @@ export default async function ({ addon, msg, global, console }) {
     }
 
     getScratchCostumes() {
-      let costumes = this.costumeTabBody.querySelectorAll("div[class^='sprite-selector-item_sprite-name']");
-      // this.costTab[0].click();
+      let costumes = this.utils.getEditingTarget().getCostumes();
 
-      let myBlocks = [];
-      let myBlocksByProcCode = {};
-
-      /**
-       * @param cls
-       * @param txt
-       * @param root
-       * @returns BlockItem
-       */
-      function addBlock(cls, txt, root) {
-        let id = root.className;
-        let items = new BlockItem(cls, txt, id, 0);
-        myBlocks.push(items);
-        myBlocksByProcCode[txt] = items;
-        return items;
-      }
+      let procs = [];
 
       let i = 0;
       for (const costume of costumes) {
-        addBlock("costume", costume.innerText, costume).y = i;
+        let items = new BlockItem("costume", costume.name, costume.assetId, i);
+        procs.push(items);
         i++;
       }
 
-      return { procs: myBlocks };
+      return { procs };
+    }
+
+    getScratchSounds() {
+      let sounds = this.utils.getEditingTarget().getSounds();
+
+      let procs = [];
+
+      let i = 0;
+      for (const sound of sounds) {
+        let items = new BlockItem("sound", sound.name, sound.assetId, i);
+        procs.push(items);
+        i++;
+      }
+
+      return { procs };
     }
 
     dom_removeChildren(myNode) {

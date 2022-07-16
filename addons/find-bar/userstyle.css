@@ -177,11 +177,14 @@
   background-color: rgb(255, 102, 26);
 }
 
-.costume {
+.costume,
+.sound {
   color: rgb(26, 66, 255);
 }
 .costume:hover,
-.costume.sel {
+.costume.sel,
+.sound:hover,
+.sound.sel {
   background-color: rgb(26, 66, 255);
 }
 
