@@ -52,7 +52,11 @@
       </button>
     </div>
     <div v-cloak v-show="projectsVisible" class="games">
-      <div class="game" v-for="project of projectsSorted" :class="{ 'opened': project.id == selectedTabId, 'online': project.online }">
+      <div
+        class="game"
+        v-for="project of projectsSorted"
+        :class="{ 'opened': project.id == selectedTabId, 'online': project.online }"
+      >
         <div class="title">
           <a class="project-name nolink" :href="'https://scratch.mit.edu/projects/' + project.id" target="_blank"
             >{{ project.title }}</a

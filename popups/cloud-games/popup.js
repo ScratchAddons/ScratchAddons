@@ -103,7 +103,7 @@ export default async ({ addon, msg, safeMsg }) => {
         if (this.projects.length === 0 && this.error !== "no-projects") return null;
         if (this.projectsChecked !== this.projects.length) return null;
         const { id, type } = extractUrl(this.selectedTabUrl);
-        if (!id || this.projects.some(el => el.id == id)) return null;
+        if (!id || this.projects.some((el) => el.id == id)) return null;
         return type;
       },
       clickButtonToAddDisplayMessage() {
