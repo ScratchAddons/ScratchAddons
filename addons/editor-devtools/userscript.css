@@ -1,10 +1,3 @@
-#s3devToolBar {
-  display: flex;
-  white-space: nowrap;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  width: 100%;
-}
-
 .s3devLabel {
   display: flex;
   width: 100%;
@@ -27,35 +20,11 @@
   padding-left: 1em;
 }
 
-.s3devAction {
-  transition: opacity 200ms ease-in;
-  /*font-weight: bold;*/
-  opacity: 0;
-}
-
-.s3devLabel:hover .s3devAction {
-  opacity: 0.7;
-}
-
 /* Wrapper around find button and drop down */
 .s3devWrap {
   overflow: visible;
   /*margin-left:3em;*/
   position: relative;
-}
-
-#s3devFind {
-  height: 2rem;
-  width: 100%;
-}
-
-/* We need to modify Scratch styles so that the place where the find bar is injected */
-/* has actually correct size information, which is used to make the find bar not cover up controls */
-[class*="gui_tab-list_"] {
-  width: 100%;
-}
-[class*="gui_tab_"] {
-  flex-grow: 0;
 }
 
 /* Find Input Box */
@@ -356,80 +325,6 @@ ul.s3devDD {
   border-left: 9px solid transparent;
   border-top: 9px solid white;
   border-bottom: 10px solid white;
-}
-
-#s3devOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(80, 80, 80, 0.5);
-  z-index: 9999;
-  padding: 10em;
-  color: white;
-  font-weight: bold;
-}
-
-.s3devMulti {
-  font-weight: normal;
-  position: absolute;
-  right: 0;
-  white-space: nowrap;
-  background-color: inherit;
-  z-index: 1;
-  padding: 0;
-}
-
-.s3devNav {
-  padding: 0 6px;
-}
-
-.s3devNav:hover {
-  color: #ffff80;
-}
-
-.s3devAction {
-  margin-left: 2em;
-}
-
-@media screen and (max-width: 1180px) {
-  .s3devAction {
-    display: none;
-  }
-}
-
-.s3devHide {
-  display: none;
-}
-
-.s3dev-mi:hover {
-  background-color: #d6e9f8;
-}
-
-#s3devHelpPop > div {
-  box-sizing: border-box;
-  width: 800px;
-  height: 60vh;
-  max-height: 800px;
-  max-width: 85%;
-  margin: auto;
-  margin-top: 20vh;
-}
-
-#s3devHelpPop [class*="modal_header-item-title"] {
-  margin: 0 -20rem 0 0;
-}
-#s3devHelpPop[dir="rtl"] [class*="modal_header-item-title"] {
-  margin: 0 0 0 -20rem;
-}
-
-#s3devHelpContent {
-  height: calc(100% - 3.125rem);
-  overflow-y: auto;
-  padding: 1em 2em 4em;
-  background-color: white;
-  user-select: text;
 }
 
 #s3devFloatingBar {

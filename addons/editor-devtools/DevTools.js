@@ -556,58 +556,6 @@ export default class DevTools {
     }
   }
 
-  /*
-    function deepSearch(e) {
-      document.body.insertAdjacentHTML(
-        "beforeend",
-        `
-              <div id="s3devOverlay">
-              </div>
-          `
-      );
-
-      let overlay = document.getElementById("s3devOverlay");
-      overlay.addEventListener("click", function (e) {
-        overlay.remove();
-      });
-
-      // todo: use scratch runtime instead!
-
-      const runtime = vm.runtime;
-      const targets = runtime.targets; // The sprites / stage
-
-      let dict = {};
-
-      for (const target of targets) {
-        if (!target.isOriginal) {
-          continue; // Skip clones
-        }
-
-        const name = target.getName();
-        const isStage = target.isStage;
-        const blocks = target.blocks;
-        const scripts = blocks.getScripts();
-
-        let divElement = document.createElement("div");
-        divElement.appendChild(document.createTextNode("Searching in " + name));
-        divElement.appendChild(document.createTextNode(", Top Scripts x" + scripts.length));
-        overlay.appendChild(divElement);
-
-        const sprite = (dict[name] = {});
-        sprite.scripts = [];
-
-        for (const script of scripts) {
-          const block = blocks.getBlock(script);
-          const top = { id: script, opcode: block.opcode, block: block };
-          sprite.scripts.push(top);
-        }
-      }
-
-      e.preventDefault();
-      return true;
-    }
-  */
-
   /**
    * Quick and dirty replace all instances of one variable / list with another variable / list
    * @param varId original variable name
