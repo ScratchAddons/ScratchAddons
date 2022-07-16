@@ -889,7 +889,7 @@ export default async function ({ addon, msg, global, console }) {
     }
 
     eventMouseDown(e) {
-      if (this.dropdownOut && this.dropdownOut.classList.contains("vis") && !e.target.closest("#s3devDDOut")) {
+      if (this.dropdownOut && this.dropdownOut.classList.contains("visible") && !e.target.closest(".visible")) {
         // If we click outside the dropdown, then instigate the hide code...
         this.hideDropDown();
       }
