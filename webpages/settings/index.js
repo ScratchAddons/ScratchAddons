@@ -430,7 +430,8 @@ let fuse;
   });
 
   if (prerelease) {
-    document.querySelector(".navbar").style.backgroundColor = "#175ef8";
+    const blue = getComputedStyle(document.documentElement).getPropertyValue('--blue');
+    document.querySelector(".navbar").style.backgroundColor = blue;
   }
 
   const getRunningAddons = (manifests, addonsEnabled) => {

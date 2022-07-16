@@ -68,7 +68,8 @@ let manifests = null;
 const TAB_ORDER = ["scratch-messaging", "cloud-games", "__settings__"];
 
 if (prerelease) {
-  document.getElementById("header").style.backgroundColor = "#175ef8";
+  const blue = getComputedStyle(document.documentElement).getPropertyValue('--blue');
+  document.getElementById("header").style.backgroundColor = blue;
 }
 
 chrome.runtime.sendMessage("getSettingsInfo", (res) => {
