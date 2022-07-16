@@ -43,12 +43,14 @@ export default async function ({ addon, global, console }) {
     }
     function init() {
       removeAllItems();
-      let items = addon.self.disabled ? [
-        { name: "Create", url: "/projects/editor/", extraClass: "create" },
-        { name: "Explore", url: "/explore/projects/all", extraClass: "explore" },
-        { name: "Ideas", url: "/ideas", extraClass: "ideas" },
-        { name: "About", url: "/about", extraClass: "about" },
-      ] : addon.settings.get("items");
+      let items = addon.self.disabled
+        ? [
+            { name: "Create", url: "/projects/editor/", extraClass: "create" },
+            { name: "Explore", url: "/explore/projects/all", extraClass: "explore" },
+            { name: "Ideas", url: "/ideas", extraClass: "ideas" },
+            { name: "About", url: "/about", extraClass: "about" },
+          ]
+        : addon.settings.get("items");
       items.forEach((item, i) => {
         if (scratchr2List) {
           scratchr2List.append(createItem(item, i + 1 === items.length));
