@@ -1,4 +1,4 @@
-import BlockInstance from "../BlockInstance.js";
+import BlockInstance from "./BlockInstance.js";
 import BlockFlasher from "./BlockFlasher.js";
 
 // A file to split Editor Devtools by features.
@@ -127,8 +127,7 @@ export default class Utils {
 }
 
 class NavigationHistory {
-  constructor(utils) {
-    this.utils = utils;
+  constructor() {
     this.views = [];
     this.forward = [];
   }
@@ -138,7 +137,7 @@ class NavigationHistory {
    */
   storeView(next, dist) {
     this.forward = [];
-    let workspace = this.utils.getWorkspace(),
+    let workspace = Blockly.getMainWorkspace(),
       s = workspace.getMetrics();
 
     let pos = { left: s.viewLeft, top: s.viewTop };
@@ -152,7 +151,7 @@ class NavigationHistory {
   }
 
   goBack() {
-    const workspace = this.utils.getWorkspace(),
+    const workspace = Blockly.getMainWorkspace(),
       s = workspace.getMetrics();
 
     let pos = { left: s.viewLeft, top: s.viewTop };
@@ -204,7 +203,7 @@ class NavigationHistory {
     }
     this.views.push(view);
 
-    let workspace = this.utils.getWorkspace(),
+    let workspace = Blockly.getMainWorkspace(),
       s = workspace.getMetrics();
 
     let sx = view.left - s.contentLeft,

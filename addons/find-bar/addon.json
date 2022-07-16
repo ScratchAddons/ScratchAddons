@@ -1,0 +1,29 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
+  "name": "Editor find bar",
+  "description": "Quicky find scripts around your project.",
+  "credits": [
+    {
+      "name": "griffpatch"
+    }
+  ],
+  "tags": [
+    "editor"
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": [
+        "projects"
+      ]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": [
+        "projects"
+      ]
+    }
+  ]
+}

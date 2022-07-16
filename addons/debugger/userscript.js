@@ -2,7 +2,7 @@ import { isPaused, setPaused, onPauseChanged, setup } from "./module.js";
 import createLogsTab from "./logs.js";
 import createThreadsTab from "./threads.js";
 import createPerformanceTab from "./performance.js";
-import DevtoolsUtils from "../editor-devtools/blockly/Utils.js";
+import Utils from "../find-bar/blockly/Utils.js";
 
 const removeAllChildren = (element) => {
   while (element.firstChild) {
@@ -310,7 +310,7 @@ export default async function ({ addon, global, console, msg }) {
     // Don't scroll to blocks in the flyout
     if (block.workspace.isFlyout) return;
 
-    new DevtoolsUtils(addon).scrollBlockIntoView(blockId);
+    new Utils(addon).scrollBlockIntoView(blockId);
   };
 
   // May be slightly incorrect in some edge cases.
