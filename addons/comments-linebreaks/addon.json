@@ -21,6 +21,7 @@
     }
   ],
   "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.8.0",
   "tags": ["community", "comments"]
 }
