@@ -15,9 +15,11 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/*"]
+      "matches": ["projects", "studios", "https://scratch.mit.edu/users/*/"]
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "enabledByDefault": false,
   "versionAdded": "1.1.0"
 }
