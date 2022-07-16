@@ -1,13 +1,15 @@
 {
-  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
   "name": "Editor find bar",
-  "description": "Quicky find scripts around your project.",
+  "description": "Quicky find scripts, costumes and sounds around your project using the find bar.",
   "credits": [
     {
       "name": "griffpatch"
+    },
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/thecolaber/"
     }
   ],
-  "tags": ["editor"],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "userscripts": [
@@ -21,5 +23,13 @@
       "url": "userstyle.css",
       "matches": ["projects"]
     }
-  ]
+  ],
+  "versionAdded": "1.0.0",
+  "latestUpdate": {
+    "version": "1.27.0",
+    "temporaryNotice": "This addon was once part of the Developer Tools addon but has been moved here.",
+    "isMajor": true
+  },
+  "tags": ["editor", "codeEditor", "costumeEditor", "recommended"],
+  "enabledByDefault": true
 }
