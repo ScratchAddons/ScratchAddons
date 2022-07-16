@@ -18,7 +18,7 @@ export default class Utils {
     // this._myFlash = { block: null, timerID: null, colour: null };
     this.offsetX = 32;
     this.offsetY = 32;
-    this.navigationHistory = new NavigationHistory(this);
+    this.navigationHistory = new NavigationHistory();
     /**
      * The workspace
      */

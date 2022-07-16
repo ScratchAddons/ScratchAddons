@@ -1436,7 +1436,3 @@ const DROPDOWN_BLOCK_LIST_MAX_ROWS = 25;
 
 let rhdd2 = 0;
 let prevVal = "";
-
-function enc(str) {
-  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
