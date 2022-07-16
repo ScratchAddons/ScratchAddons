@@ -1,4 +1,5 @@
 export default async function ({ addon, global, console }) {
+  let originalNavbar;
   while (true) {
     const searchItem = await addon.tab.waitForElement(".search", {
       markAsSeen: true,
@@ -44,12 +45,13 @@ export default async function ({ addon, global, console }) {
     function init() {
       removeAllItems();
       let items = addon.self.disabled
-        ? [
-            { name: "Create", url: "/projects/editor/", extraClass: "create" },
-            { name: "Explore", url: "/explore/projects/all", extraClass: "explore" },
-            { name: "Ideas", url: "/ideas", extraClass: "ideas" },
-            { name: "About", url: "/about", extraClass: "about" },
-          ]
+        ? originalNavbar ??
+          (originalNavbar = [
+            { name: addon.tab.scratchMessage("general.create"), url: "/projects/editor/", extraClass: "create" },
+            { name: addon.tab.scratchMessage("general.explore"), url: "/explore/projects/all", extraClass: "explore" },
+            { name: addon.tab.scratchMessage("general.ideas"), url: "/ideas", extraClass: "ideas" },
+            { name: addon.tab.scratchMessage("general.about"), url: "/about", extraClass: "about" },
+          ])
         : addon.settings.get("items");
       items.forEach((item, i) => {
         if (scratchr2List) {
