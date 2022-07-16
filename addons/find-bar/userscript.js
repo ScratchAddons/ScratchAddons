@@ -67,9 +67,7 @@ export default async function ({ addon, msg, global, console }) {
     }
 
     inputChange() {
-      if (!this.dropdownOut.classList.contains("visible")) {
-        this.showDropDown();
-      }
+      this.showDropDown();
 
       // Filter the list...
       let val = (this.findInput.value || "").toLowerCase();
@@ -81,9 +79,8 @@ export default async function ({ addon, msg, global, console }) {
 
       this.multi.blocks = null;
 
-      // Hide items in list that do not contain filter text, and highlight the parts of words that match the filter text
-
-      let listLI = this.dropdown.getElementsByTagName("li");
+      // Hide items in list that do not contain filter text, and
+      let listLI = this.dropdown.children;
       for (const li of listLI) {
         let procCode = li.data.procCode;
         let i = li.data.lower.indexOf(val);
@@ -103,6 +100,136 @@ export default async function ({ addon, msg, global, console }) {
         } else {
           li.style.display = "none";
         }
+      }
+    }
+
+    inputKeyDown(e) {
+      // Up Arrow
+      if (e.keyCode === 38) {
+        this.navigateFilter(-1);
+        e.preventDefault();
+        return;
+      }
+
+      // Down Arrow
+      if (e.keyCode === 40) {
+        this.navigateFilter(1);
+        e.preventDefault();
+        return;
+      }
+
+      // Left Arrow
+      if (e.keyCode === 37) {
+        let sel = this.dropdown.querySelector(".sel");
+        if (sel && this.multi.blocks) {
+          this.multi.navLeft(e);
+        }
+      }
+
+      // Right Arrow
+      if (e.keyCode === 39) {
+        let sel = this.dropdown.querySelector(".sel");
+        if (sel && this.multi.blocks) {
+          this.multi.navRight(e);
+        }
+      }
+
+      // Enter
+      if (e.keyCode === 13) {
+        // Any selected on enter? if not select now
+        let sel = this.dropdown.querySelector(".sel");
+        if (sel) {
+          this.navigateFilter(1);
+        }
+        // noinspection JSUnresolvedFunction
+        this.findInput.blur();
+        e.preventDefault();
+        return;
+      }
+
+      // Escape
+      if (e.keyCode === 27) {
+        if (this.findInput.value.length > 0) {
+          this.findInput.value = ""; // Clear search first, then close on second press
+          this.inputChange();
+        } else {
+          // noinspection JSUnresolvedFunction
+          this.findInput.blur();
+        }
+        e.preventDefault();
+        return;
+      }
+
+      this.inputChange();
+    }
+
+    showDropDown(focusID, instanceBlock) {
+      if (!focusID && this.dropdownOut.classList.contains("visible")) {
+        return;
+      }
+
+      // special '' vs null... - null forces a reevaluation
+      this.prevValue = focusID ? "" : null; // Clear the previous value of the input search
+
+      this.dropdownOut.classList.add("visible");
+      let scratchBlocks = this.costumeEditor ? this.getScratchCostumes() : this.getScratchBlocks();
+
+      this.dom_removeChildren(this.dropdown);
+
+      let foundLi = null;
+      /**
+       * @type {[BlockItem]}
+       */
+      const procs = scratchBlocks.procs;
+      for (const proc of procs) {
+        let li = document.createElement("li");
+        li.innerText = proc.procCode;
+        li.data = proc;
+        li.className = proc.cls;
+        li.addEventListener("mousedown", (e) => {
+          this.dropDownClick(li);
+          e.preventDefault();
+          e.cancelBubble = true;
+          return false;
+        });
+        if (focusID) {
+          if (proc.matchesID(focusID)) {
+            foundLi = li;
+            li.classList.add("sel");
+          } else {
+            li.style.display = "none";
+          }
+        }
+        this.dropdown.appendChild(li);
+      }
+
+      this.utils.offsetX =
+        this.dropdownOut.getBoundingClientRect().right - this.findLabel.getBoundingClientRect().left + 26;
+      this.utils.offsetY = 32;
+
+      if (foundLi) {
+        this.clickDropDownRow(foundLi, instanceBlock);
+      }
+    }
+
+    hideDropDown() {
+      this.dropdownOut.classList.remove("visible");
+    }
+
+    navigateFilter(dir) {
+      let sel = this.dropdown.querySelector(".sel");
+      let nxt;
+      if (sel && sel.style.display !== "none") {
+        nxt = dir === -1 ? sel.previousSibling : sel.nextSibling;
+      } else {
+        nxt = this.dropdown.children[0];
+        dir = 1;
+      }
+      while (nxt && nxt.style.display === "none") {
+        nxt = dir === -1 ? nxt.previousSibling : nxt.nextSibling;
+      }
+      if (nxt) {
+        this.dropDownClick(nxt);
       }
     }
 
@@ -577,136 +704,6 @@ export default async function ({ addon, msg, global, console }) {
     dom_removeChildren(myNode) {
       while (myNode.firstChild) {
         myNode.removeChild(myNode.firstChild);
-      }
-    }
-
-    showDropDown(focusID, instanceBlock) {
-      if (!focusID && this.dropdownOut.classList.contains("visible")) {
-        return;
-      }
-
-      // special '' vs null... - null forces a reevaluation
-      this.prevValue = focusID ? "" : null; // Clear the previous value of the input search
-
-      this.dropdownOut.classList.add("visible");
-      let scratchBlocks = this.costumeEditor ? this.getScratchCostumes() : this.getScratchBlocks();
-
-      this.dom_removeChildren(this.dropdown);
-
-      let foundLi = null;
-      /**
-       * @type {[BlockItem]}
-       */
-      const procs = scratchBlocks.procs;
-      for (const proc of procs) {
-        let li = document.createElement("li");
-        li.innerText = proc.procCode;
-        li.data = proc;
-        li.className = proc.cls;
-        li.addEventListener("mousedown", (e) => {
-          this.dropDownClick(li);
-          e.preventDefault();
-          e.cancelBubble = true;
-          return false;
-        });
-        if (focusID) {
-          if (proc.matchesID(focusID)) {
-            foundLi = li;
-            li.classList.add("sel");
-          } else {
-            li.style.display = "none";
-          }
-        }
-        this.dropdown.appendChild(li);
-      }
-
-      this.utils.offsetX =
-        this.dropdownOut.getBoundingClientRect().right - this.findLabel.getBoundingClientRect().left + 26;
-      this.utils.offsetY = 32;
-
-      if (foundLi) {
-        this.clickDropDownRow(foundLi, instanceBlock);
-      }
-    }
-
-    hideDropDown() {
-      this.dropdownOut.classList.remove("visible");
-    }
-
-    inputKeyDown(e) {
-      // Up Arrow
-      if (e.keyCode === 38) {
-        this.navigateFilter(-1);
-        e.preventDefault();
-        return;
-      }
-
-      // Down Arrow
-      if (e.keyCode === 40) {
-        this.navigateFilter(1);
-        e.preventDefault();
-        return;
-      }
-
-      // Left Arrow
-      if (e.keyCode === 37) {
-        let sel = this.dropdown.getElementsByClassName("sel");
-        if (sel && this.multi.blocks) {
-          this.multi.navLeft(e);
-        }
-      }
-
-      // Right Arrow
-      if (e.keyCode === 39) {
-        let sel = this.dropdown.getElementsByClassName("sel");
-        if (sel && this.multi.blocks) {
-          this.multi.navRight(e);
-        }
-      }
-
-      // Enter
-      if (e.keyCode === 13) {
-        // Any selected on enter? if not select now
-        let sel = this.dropdown.getElementsByClassName("sel");
-        if (sel.length === 0) {
-          this.navigateFilter(1);
-        }
-        // noinspection JSUnresolvedFunction
-        document.activeElement.blur();
-        e.preventDefault();
-        return;
-      }
-
-      // Escape
-      if (e.keyCode === 27) {
-        if (this.findInput.value.length > 0) {
-          this.findInput.value = ""; // Clear search first, then close on second press
-          this.inputChange();
-        } else {
-          // noinspection JSUnresolvedFunction
-          document.activeElement.blur();
-        }
-        e.preventDefault();
-        return;
-      }
-
-      this.inputChange();
-    }
-
-    navigateFilter(dir) {
-      let sel = this.dropdown.querySelector(".sel");
-      let nxt;
-      if (sel && sel.style.display !== "none") {
-        nxt = dir === -1 ? sel.previousSibling : sel.nextSibling;
-      } else {
-        nxt = this.dropdown.children[0];
-        dir = 1;
-      }
-      while (nxt && nxt.style.display === "none") {
-        nxt = dir === -1 ? nxt.previousSibling : nxt.nextSibling;
-      }
-      if (nxt) {
-        this.dropDownClick(nxt);
       }
     }
 
