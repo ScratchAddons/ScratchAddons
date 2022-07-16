@@ -37,6 +37,7 @@ export default async function ({ addon, global, console, msg }) {
       updateRedux();
     });
     async function updateRedux() {
+      if (!fetched.length) return; // load more hasn't been clicked yet: just use the data loaded by Scratch
       displayedFetch = fetched.slice(0, !addon.self.disabled && addon.settings.get("whathappen") ? dataLoaded : 5);
       await addon.tab.redux.dispatch({ type: "SET_ROWS", rowType: "activity", rows: displayedFetch });
       document.querySelector(".activity-ul").appendChild(container);
