@@ -72,6 +72,7 @@ let fuse;
     (...args) =>
       new Promise((resolve) => callbackFn(...args, resolve));
 
+  const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
   let handleConfirmClicked = null;
 
   const serializeSettings = async () => {
@@ -127,7 +128,6 @@ let fuse;
           addonsEnabled[addonId] = granted;
         });
       }
-      const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
       await syncSet({
         globalTheme: !!obj.core.lightTheme,
         addonsEnabled,
@@ -166,7 +166,6 @@ let fuse;
         browserLevelPermissions,
         grantedOptionalPermissions,
         addonListObjs: [],
-        prerelease: chrome.runtime.getManifest().version_name.includes("-prerelease"),
         sidebarUrls: (() => {
           const uiLanguage = chrome.i18n.getUILanguage();
           const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
@@ -234,6 +233,9 @@ let fuse;
       selectedCategoryName() {
         return this.categories.find((category) => category.id === this.selectedCategory)?.name;
       },
+      logoSrc() {
+        return prerelease ? "../../images/icon-blue.svg" : "../../images/icon.svg";
+      }
     },
 
     methods: {
@@ -427,7 +429,7 @@ let fuse;
     },
   });
 
-  if (chrome.runtime.getManifest().version_name.includes("-prerelease")) {
+  if (prerelease) {
     document.querySelector(".navbar").style.backgroundColor = "#175ef8";
   }
 

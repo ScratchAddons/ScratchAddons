@@ -2,6 +2,8 @@ import globalTheme from "../../libraries/common/global-theme.js";
 
 globalTheme();
 
+const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
+
 function calculatePopupSize() {
   if (!window.innerWidth || !window.innerHeight) {
     setTimeout(calculatePopupSize, 0);
@@ -23,7 +25,6 @@ const vue = new Vue({
     currentPopup: null,
     popupsWithIframes: [],
     version: chrome.runtime.getManifest().version,
-    prerelease: chrome.runtime.getManifest().version_name.includes("-prerelease"),
   },
   methods: {
     msg(message, ...params) {
@@ -57,13 +58,16 @@ const vue = new Vue({
       const utm = `utm_source=extension&utm_medium=popup&utm_campaign=v${chrome.runtime.getManifest().version}`;
       return `https://scratchaddons.com/${localeSlash}changelog/?${utm}`;
     },
+    logoSrc() {
+      return prerelease ? "../../images/icon-blue.svg" : "../../images/icon.svg";
+    },
   },
 });
 
 let manifests = null;
 const TAB_ORDER = ["scratch-messaging", "cloud-games", "__settings__"];
 
-if (chrome.runtime.getManifest().version_name.includes("-prerelease")) {
+if (prerelease) {
   document.getElementById("header").style.backgroundColor = "#175ef8";
 }
 
