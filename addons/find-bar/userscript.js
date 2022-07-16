@@ -2,49 +2,6 @@ import BlockItem from "./blockly/BlockItem.js";
 import BlockInstance from "./blockly/BlockInstance.js";
 import Utils from "./blockly/Utils.js";
 
-function enc(str) {
-  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
-
-class Multi {
-  constructor(utils) {
-    this.idx = 0;
-    this.count = null;
-    this.blocks = null;
-    this.selID = null;
-    /**
-     * @type {Utils}
-     */
-    this.utils = utils;
-  }
-
-  update() {
-    this.count.innerText = this.blocks && this.blocks.length > 0 ? enc(this.idx + 1 + " / " + this.blocks.length) : "0";
-    this.selID = this.idx < this.blocks.length ? this.blocks[this.idx].id : null;
-  }
-
-  navLeft(e) {
-    return this.navSideways(e, -1);
-  }
-
-  navRight(e) {
-    return this.navSideways(e, 1);
-  }
-
-  navSideways(e, dir) {
-    if (this.blocks && this.blocks.length > 0) {
-      this.idx = (this.idx + dir + this.blocks.length) % this.blocks.length; // + length to fix negative modulo js issue.
-      this.update();
-      this.utils.scrollBlockIntoView(this.blocks[this.idx]);
-    }
-    if (e) {
-      e.cancelBubble = true;
-      e.preventDefault();
-    }
-    return false;
-  }
-}
-
 export default async function ({ addon, msg, global, console }) {
   class FindBar {
     constructor(root, workspace) {
@@ -54,13 +11,14 @@ export default async function ({ addon, msg, global, console }) {
       this.multi = new Multi(this.utils);
 
       this.prevValue = "";
-      this.rhdd = 0;
 
       this.findLabel = null;
       this.findWrapper = null;
       this.findInput = null;
       this.dropdownOut = null;
       this.dropdown = null;
+
+      this.carousel = null;
 
       let guiTabs = root.childNodes;
       this.codeTab = guiTabs[0];
@@ -72,7 +30,7 @@ export default async function ({ addon, msg, global, console }) {
       this.bindEvents();
     }
 
-    async createDom(root) {
+    createDom(root) {
       const findBar = root.appendChild(document.createElement("div"));
       findBar.className = "find-bar";
 
@@ -99,51 +57,105 @@ export default async function ({ addon, msg, global, console }) {
     }
 
     bindEvents() {
-      this.dropdownOut.addEventListener("mousedown", (e) => this.dropDownClick(e));
-
-      this.findInput.addEventListener("keyup", (e) => this.inputChange());
-      this.findInput.addEventListener("focus", (e) => this.inputChange());
+      this.findInput.addEventListener("focus", () => this.inputChange());
       this.findInput.addEventListener("keydown", (e) => this.inputKeyDown(e));
+      this.findInput.addEventListener("focusout", () => this.hideDropDown());
 
       document.addEventListener("mousedown", (e) => this.eventMouseDown(e), true);
       document.addEventListener("keydown", (e) => this.eventKeyDown(e), true);
     }
 
-    clickDropDownRow(li, workspace, instanceBlock) {
-      let nav = document.querySelector(".find-carousel");
+    inputChange() {
+      if (!this.dropdownOut.classList.contains("visible")) {
+        this.showDropDown();
+      }
 
+      // Filter the list...
+      let val = (this.findInput.value || "").toLowerCase();
+      if (val === this.prevValue) {
+        // No change so don't re-filter
+        return;
+      }
+      this.prevValue = val;
+
+      this.multi.blocks = null;
+
+      // Hide items in list that do not contain filter text, and highlight the parts of words that match the filter text
+
+      let listLI = this.dropdown.getElementsByTagName("li");
+      for (const li of listLI) {
+        let procCode = li.data.procCode;
+        let i = li.data.lower.indexOf(val);
+        if (i >= 0) {
+          li.style.display = "block";
+          this.dom_removeChildren(li);
+          if (i > 0) {
+            li.appendChild(document.createTextNode(procCode.substring(0, i)));
+          }
+          let bText = document.createElement("b");
+          bText.appendChild(document.createTextNode(procCode.substr(i, val.length)));
+          li.appendChild(bText);
+          if (i + val.length < procCode.length) {
+            li.appendChild(document.createTextNode(procCode.substr(i + val.length)));
+          }
+          // li.innerHTML = enc(procCode.substring(0, i)) + '<b>' + enc(procCode.substr(i, val.length)) + "</b>" + enc(procCode.substr(i + val.length));
+        } else {
+          li.style.display = "none";
+        }
+      }
+    }
+
+    dropDownClick(li) {
+      if (this.prevValue === null) {
+        // Hack to stop filter change if not entered data into edt box, but clicked on row
+        this.prevValue = this.findInput.value;
+      }
+
+      let sel = this.dropdown.querySelector(".sel");
+      if (sel && sel !== li) {
+        sel.classList.remove("sel");
+      }
+      if (sel !== li) {
+        li.classList.add("sel");
+      }
+
+      this.clickDropDownRow(li);
+    }
+
+    clickDropDownRow(li, instanceBlock) {
       let cls = li.data.cls;
       if (cls === "costume") {
         // Viewing costumes - jump to selected costume
-        let costumes = this.costumeTabBody.querySelectorAll("div[class^='sprite-selector-item_sprite-name']");
-        let costume = costumes[li.data.y];
-        if (costume) {
-          costume.click();
-          setTimeout(() => {
-            let wrapper = costume.closest("div[class*=gui_flex-wrapper]");
-            costume.parentElement.parentElement.scrollIntoView({
-              behavior: "auto",
-              block: "center",
-              inline: "start",
-            });
-            wrapper.scrollTop = 0;
-          }, 10);
+        const assetPanel = document.querySelector("[class^=asset-panel_wrapper]");
+        if (assetPanel) {
+          const reactInstance = assetPanel[addon.tab.traps.getInternalKey(assetPanel)];
+          const reactProps = reactInstance.pendingProps.children[0].props;
+          reactProps.onItemClick(li.data.y);
+          const selectorList = assetPanel.firstChild.firstChild;
+          selectorList.children[li.data.y].scrollIntoView({
+            behavior: "auto",
+            block: "center",
+            inline: "start",
+          });
+          // The wrappers seems to scroll when we use the function above.
+          let wrapper = assetPanel.closest("div[class*=gui_flex-wrapper]");
+          wrapper.scrollTop = 0;
         }
       } else if (cls === "var" || cls === "VAR" || cls === "list" || cls === "LIST") {
         // Search now for all instances
         // let wksp = getWorkspace();
         // let blocks = wksp.getVariableUsesById(li.data.labelID);
         let blocks = this.getVariableUsesById(li.data.labelID);
-        this.buildNavigationCarousel(nav, li, blocks, instanceBlock);
+        this.buildNavigationCarousel(li, blocks, instanceBlock);
       } else if (cls === "define") {
         let blocks = this.getCallsToProcedureById(li.data.labelID);
-        this.buildNavigationCarousel(nav, li, blocks, instanceBlock);
+        this.buildNavigationCarousel(li, blocks, instanceBlock);
       } else if (cls === "receive") {
         /*
-                            let blocks = [workspace.getBlockById(li.data.labelID)];
+                            let blocks = [this.workspace.getBlockById(li.data.labelID)];
                             if (li.data.clones) {
                                 for (const cloneID of li.data.clones) {
-                                    blocks.push(workspace.getBlockById(cloneID))
+                                    blocks.push(this.workspace.getBlockById(cloneID))
                                 }
                             }
                             blocks = blocks.concat(getCallsToEventsByName(li.data.eventName));
@@ -160,18 +172,18 @@ export default async function ({ addon, msg, global, console }) {
             }
           }
         }
-        this.buildNavigationCarousel(nav, li, blocks, instanceBlock);
+        this.buildNavigationCarousel(li, blocks, instanceBlock);
       } else if (li.data.clones) {
-        let blocks = [workspace.getBlockById(li.data.labelID)];
+        let blocks = [this.workspace.getBlockById(li.data.labelID)];
         for (const cloneID of li.data.clones) {
-          blocks.push(workspace.getBlockById(cloneID));
+          blocks.push(this.workspace.getBlockById(cloneID));
         }
-        this.buildNavigationCarousel(nav, li, blocks, instanceBlock);
+        this.buildNavigationCarousel(li, blocks, instanceBlock);
       } else {
         this.multi.blocks = null;
         this.centerTop(li.data.labelID);
-        if (nav) {
-          nav.remove();
+        if (this.carousel) {
+          this.carousel.remove();
         }
       }
     }
@@ -231,26 +243,26 @@ export default async function ({ addon, msg, global, console }) {
       return uses;
     }
 
-    buildNavigationCarousel(nav, li, blocks, instanceBlock) {
-      if (nav && nav.parentNode === li) {
+    buildNavigationCarousel(li, blocks, instanceBlock) {
+      if (this.carousel && this.carousel.parentNode === li) {
         // Same control... click again to go to next
         this.multi.navRight();
       } else {
-        if (nav) {
-          nav.remove();
+        if (this.carousel) {
+          this.carousel.remove();
         }
-        const carousel = li.appendChild(document.createElement("span"));
-        carousel.className = "find-carousel";
+        this.carousel = li.appendChild(document.createElement("span"));
+        this.carousel.className = "find-carousel";
 
-        const leftControl = carousel.appendChild(document.createElement("span"));
+        const leftControl = this.carousel.appendChild(document.createElement("span"));
         leftControl.className = "find-carousel-control";
         leftControl.textContent = "◀";
         leftControl.addEventListener("mousedown", (e) => this.multi.navLeft(e));
 
-        const count = carousel.appendChild(document.createElement("span"));
+        const count = this.carousel.appendChild(document.createElement("span"));
         this.multi.count = count;
 
-        const rightControl = carousel.appendChild(document.createElement("span"));
+        const rightControl = this.carousel.appendChild(document.createElement("span"));
         rightControl.className = "find-carousel-control";
         rightControl.textContent = "▶";
         rightControl.addEventListener("mousedown", (e) => this.multi.navRight(e));
@@ -279,92 +291,6 @@ export default async function ({ addon, msg, global, console }) {
 
     centerTop(e, force) {
       this.utils.scrollBlockIntoView(e, force);
-    }
-
-    dropDownClick(e) {
-      let workspace = this.workspace;
-
-      if (this.prevValue === null) {
-        this.prevValue = this.findInput.value; // Hack to stop filter change if not entered data into edt box, but clicked on row
-      }
-
-      let li = e.target;
-      while (true) {
-        if (!li || li === this.dropdown) {
-          return;
-        }
-        if (li.data) {
-          break;
-        }
-        li = li.parentNode;
-      }
-
-      // If this was a mouse click, unselect the keyboard selection
-      // e.navKey is set when this is called from the keyboard handler...
-      if (!e.navKey) {
-        let sel = this.dropdown.getElementsByClassName("sel");
-        sel = sel.length > 0 ? sel[0] : null;
-        if (sel && sel !== li) {
-          try {
-            sel.classList.remove("sel");
-          } catch (e) {
-            console.log(sel);
-            console.error(e);
-          }
-        }
-        if (li !== sel) {
-          li.classList.add("sel");
-        }
-      }
-
-      this.clickDropDownRow(li, workspace);
-      if (e && e.preventDefault) {
-        e.preventDefault();
-        e.cancelBubble = true;
-      }
-      return false;
-    }
-
-    inputChange() {
-      if (!this.dropdownOut.classList.contains("visible")) {
-        this.showDropDown();
-        this.hideDropDown(); // Start timer to hide if not got focus
-      }
-
-      // Filter the list...
-      let val = (this.findInput.value || "").toLowerCase();
-      if (val === this.prevVal) {
-        // No change so don't re-filter
-        return;
-      }
-
-      this.prevVal = val;
-      this.multi.blocks = null;
-
-      //
-      // Hide items in list that do not contain filter text, and highlight the parts of words that match the filter text
-
-      let listLI = this.dropdown.getElementsByTagName("li");
-      for (const li of listLI) {
-        let procCode = li.data.procCode;
-        let i = li.data.lower.indexOf(val);
-        if (i >= 0) {
-          li.style.display = "block";
-          this.dom_removeChildren(li);
-          if (i > 0) {
-            li.appendChild(document.createTextNode(procCode.substring(0, i)));
-          }
-          let bText = document.createElement("b");
-          bText.appendChild(document.createTextNode(procCode.substr(i, val.length)));
-          li.appendChild(bText);
-          if (i + val.length < procCode.length) {
-            li.appendChild(document.createTextNode(procCode.substr(i + val.length)));
-          }
-          // li.innerHTML = enc(procCode.substring(0, i)) + '<b>' + enc(procCode.substr(i, val.length)) + "</b>" + enc(procCode.substr(i + val.length));
-        } else {
-          li.style.display = "none";
-        }
-      }
     }
 
     get costumeEditor() {
@@ -654,15 +580,12 @@ export default async function ({ addon, msg, global, console }) {
     }
 
     showDropDown(focusID, instanceBlock) {
-      clearTimeout(this.rhdd);
-      this.rhdd = 0;
-
       if (!focusID && this.dropdownOut.classList.contains("visible")) {
         return;
       }
 
       // special '' vs null... - null forces a reevaluation
-      this.prevVal = focusID ? "" : null; // Clear the previous value of the input search
+      this.prevValue = focusID ? "" : null; // Clear the previous value of the input search
 
       this.dropdownOut.classList.add("visible");
       let scratchBlocks = this.costumeEditor ? this.getScratchCostumes() : this.getScratchBlocks();
@@ -679,6 +602,12 @@ export default async function ({ addon, msg, global, console }) {
         li.innerText = proc.procCode;
         li.data = proc;
         li.className = proc.cls;
+        li.addEventListener("mousedown", (e) => {
+          this.dropDownClick(li);
+          e.preventDefault();
+          e.cancelBubble = true;
+          return false;
+        });
         if (focusID) {
           if (proc.matchesID(focusID)) {
             foundLi = li;
@@ -695,24 +624,12 @@ export default async function ({ addon, msg, global, console }) {
       this.utils.offsetY = 32;
 
       if (foundLi) {
-        this.clickDropDownRow(foundLi, this.workspace, instanceBlock);
+        this.clickDropDownRow(foundLi, instanceBlock);
       }
     }
 
     hideDropDown() {
-      clearTimeout(this.rhdd);
-      this.rhdd = setTimeout(() => this.reallyHideDropDown(), 250);
-    }
-
-    reallyHideDropDown() {
-      // Check focus of find box
-      if (this.findInput === document.activeElement) {
-        this.hideDropDown();
-        return;
-      }
-
       this.dropdownOut.classList.remove("visible");
-      this.rhdd = 0;
     }
 
     inputKeyDown(e) {
@@ -763,7 +680,7 @@ export default async function ({ addon, msg, global, console }) {
       if (e.keyCode === 27) {
         if (this.findInput.value.length > 0) {
           this.findInput.value = ""; // Clear search first, then close on second press
-          this.inputChange(e);
+          this.inputChange();
         } else {
           // noinspection JSUnresolvedFunction
           document.activeElement.blur();
@@ -771,13 +688,15 @@ export default async function ({ addon, msg, global, console }) {
         e.preventDefault();
         return;
       }
+
+      this.inputChange();
     }
 
     navigateFilter(dir) {
-      let sel = this.dropdown.getElementsByClassName("sel");
+      let sel = this.dropdown.querySelector(".sel");
       let nxt;
-      if (sel.length > 0 && sel[0].style.display !== "none") {
-        nxt = dir === -1 ? sel[0].previousSibling : sel[sel.length - 1].nextSibling;
+      if (sel && sel.style.display !== "none") {
+        nxt = dir === -1 ? sel.previousSibling : sel.nextSibling;
       } else {
         nxt = this.dropdown.children[0];
         dir = 1;
@@ -786,12 +705,7 @@ export default async function ({ addon, msg, global, console }) {
         nxt = dir === -1 ? nxt.previousSibling : nxt.nextSibling;
       }
       if (nxt) {
-        for (const i of sel) {
-          i.classList.remove("sel");
-        }
-        nxt.classList.add("sel");
-        this.dropDownClick({ target: nxt, navKey: true });
-        // centerTop(nxt.data.labelID);
+        this.dropDownClick(nxt);
       }
     }
 
@@ -916,7 +830,7 @@ export default async function ({ addon, msg, global, console }) {
           let id = block.id ? block.id : block.getId ? block.getId() : null;
 
           this.findInput.focus();
-          this.showDropDown(null, id);
+          this.showDropDown(id);
 
           e.cancelBubble = true;
           e.preventDefault();
@@ -931,7 +845,7 @@ export default async function ({ addon, msg, global, console }) {
           let id = block.getVars()[0];
 
           this.findInput.focus();
-          this.showDropDown(null, id, block);
+          this.showDropDown(id, block);
 
           // let button = document.getElementById('s3devReplace');
 
@@ -952,7 +866,7 @@ export default async function ({ addon, msg, global, console }) {
           let id = block.id;
 
           this.findInput.focus();
-          this.showDropDown(null, id, block);
+          this.showDropDown(id, block);
 
           this.selVarID = id;
 
@@ -975,5 +889,48 @@ export default async function ({ addon, msg, global, console }) {
     });
     const ScratchBlocks = await addon.tab.traps.getBlockly();
     new FindBar(root, ScratchBlocks.getMainWorkspace());
+  }
+}
+
+function enc(str) {
+  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+class Multi {
+  constructor(utils) {
+    this.idx = 0;
+    this.count = null;
+    this.blocks = null;
+    this.selID = null;
+    /**
+     * @type {Utils}
+     */
+    this.utils = utils;
+  }
+
+  update() {
+    this.count.innerText = this.blocks && this.blocks.length > 0 ? enc(this.idx + 1 + " / " + this.blocks.length) : "0";
+    this.selID = this.idx < this.blocks.length ? this.blocks[this.idx].id : null;
+  }
+
+  navLeft(e) {
+    return this.navSideways(e, -1);
+  }
+
+  navRight(e) {
+    return this.navSideways(e, 1);
+  }
+
+  navSideways(e, dir) {
+    if (this.blocks && this.blocks.length > 0) {
+      this.idx = (this.idx + dir + this.blocks.length) % this.blocks.length; // + length to fix negative modulo js issue.
+      this.update();
+      this.utils.scrollBlockIntoView(this.blocks[this.idx]);
+    }
+    if (e) {
+      e.cancelBubble = true;
+      e.preventDefault();
+    }
+    return false;
   }
 }
