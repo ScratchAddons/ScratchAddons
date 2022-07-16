@@ -68,7 +68,6 @@ export default async ({ addon, msg, safeMsg }) => {
     .get("displayedGames")
     .map(({ url }) => url)
     .map(extractUrl);
-  const gameSet = new Set(displayedGames.map(({ id, type }) => `${type}/${id}`));
   window.vue = new Vue({
     el: "body",
     data: {
@@ -87,18 +86,14 @@ export default async ({ addon, msg, safeMsg }) => {
       projectsChecked: 0,
       error: null,
       selectedTabUrl: null,
+      selectedTabId: null,
       addButtonUsed: false,
     },
     computed: {
       projectsSorted() {
         return this.projects.sort((b, a) => {
-          if (b.online == true) return -99;
-          if (a.amt !== b.amt) {
-            let amtDiff = a.timestamp - b.timestamp;
-            return isNaN(amtDiff) || amtDiff < 0 ? 0 : amtDiff;
-          }
-          let timestampDiff = a.timestamp - b.timestamp;
-          return isNaN(timestampDiff) || timestampDiff < 0 ? 0 : timestampDiff;
+          if (a.amt !== b.amt) return a.amt - b.amt;
+          return a.timestamp - b.timestamp;
         });
       },
       errorMessage() {
@@ -108,7 +103,7 @@ export default async ({ addon, msg, safeMsg }) => {
         if (this.projects.length === 0 && this.error !== "no-projects") return null;
         if (this.projectsChecked !== this.projects.length) return null;
         const { id, type } = extractUrl(this.selectedTabUrl);
-        if (!id || gameSet.has(`${type}/${id}`)) return null;
+        if (!id || this.projects.some(el => el.id == id)) return null;
         return type;
       },
       clickButtonToAddDisplayMessage() {
@@ -154,7 +149,7 @@ export default async ({ addon, msg, safeMsg }) => {
             projectObject.online = false;
             for (const varChange of json) {
               if (dateNow - varChange.timestamp > 60000) break;
-              if (varChange.user == username) projectObject.online = true;
+              if (varChange.user === username) projectObject.online = true;
               usersSet.add(varChange.user);
             }
             projectObject.timestamp = json[0]?.timestamp || 0;
@@ -187,6 +182,8 @@ export default async ({ addon, msg, safeMsg }) => {
       document.title = msg("popup-title");
       addon.popup.getSelectedTabUrl().then((url) => {
         this.selectedTabUrl = url;
+        const { id, __ } = extractUrl(url);
+        this.selectedTabId = id;
       });
       let projects;
       try {
