@@ -22,7 +22,21 @@ export default async function ({ addon }) {
     "https://api.scratch.mit.edu/studios/" + /[0-9]+/.exec(location.pathname)[0] + "/projects/?limit=40&offset=";
   const initialDelta = 100;
   const countElement = await addon.tab.waitForElement(".studio-tab-nav > a:first-child .tab-count");
+  const originalText = countElement.innerText;
+  let counted = false;
   countProjects(apiUrlPrefix, 0, initialDelta, function (count) {
-    countElement.innerText = `(${count})`;
+    counted = count;
+    if (!addon.self.disabled) countElement.innerText = `(${count})`;
+  });
+
+  addon.self.addEventListener("disabled", () => {
+    if (typeof counted === "number") {
+      countElement.innerText = originalText;
+    }
+  });
+  addon.self.addEventListener("reenabled", () => {
+    if (typeof counted === "number") {
+      countElement.innerText = `(${counted})`;
+    }
   });
 }
