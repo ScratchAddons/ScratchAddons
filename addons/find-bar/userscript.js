@@ -15,7 +15,6 @@ export default async function ({ addon, msg, console }) {
       this.findInput = null;
       this.dropdownOut = null;
       this.dropdown = new Dropdown(this.utils);
-      this.carousel = null;
 
       this.createDom(root);
       this.bindEvents();
@@ -68,7 +67,7 @@ export default async function ({ addon, msg, console }) {
       }
       this.prevValue = val;
 
-      this.dropdown.multi.blocks = null;
+      this.dropdown.blocks = null;
 
       // Hide items in list that do not contain filter text
       let listLI = this.dropdown.items;
@@ -567,11 +566,15 @@ export default async function ({ addon, msg, console }) {
     constructor(utils) {
       this.utils = utils;
       this.workspace = this.utils.getWorkspace();
-      this.multi = new Multi(this.utils);
 
       this.el = null;
       this.items = [];
       this.selected = null;
+      this.carousel = null;
+
+      this.idx = 0;
+      this.count = null;
+      this.blocks = null;
     }
 
     createDom() {
@@ -597,15 +600,15 @@ export default async function ({ addon, msg, console }) {
 
       // Left Arrow
       if (e.keyCode === 37) {
-        if (this.selected && this.multi.blocks) {
-          this.multi.navLeft(e);
+        if (this.selected && this.blocks) {
+          this.navLeft(e);
         }
       }
 
       // Right Arrow
       if (e.keyCode === 39) {
-        if (this.selected && this.multi.blocks) {
-          this.multi.navRight(e);
+        if (this.selected && this.blocks) {
+          this.navRight(e);
         }
       }
 
@@ -721,7 +724,7 @@ export default async function ({ addon, msg, console }) {
         }
         this.buildNavigationCarousel(item, blocks, instanceBlock);
       } else {
-        this.multi.blocks = null;
+        this.blocks = null;
         this.utils.scrollBlockIntoView(item.data.labelID);
         if (this.carousel) {
           this.carousel.remove();
@@ -809,7 +812,7 @@ export default async function ({ addon, msg, console }) {
     buildNavigationCarousel(li, blocks, instanceBlock) {
       if (this.carousel && this.carousel.parentNode === li) {
         // Same control... click again to go to next
-        this.multi.navRight();
+        this.navRight();
       } else {
         if (this.carousel) {
           this.carousel.remove();
@@ -820,34 +823,33 @@ export default async function ({ addon, msg, console }) {
         const leftControl = this.carousel.appendChild(document.createElement("span"));
         leftControl.className = "find-carousel-control";
         leftControl.textContent = "◀";
-        leftControl.addEventListener("mousedown", (e) => this.multi.navLeft(e));
+        leftControl.addEventListener("mousedown", (e) => this.navLeft(e));
 
-        const count = this.carousel.appendChild(document.createElement("span"));
-        this.multi.count = count;
+        this.count = this.carousel.appendChild(document.createElement("span"));
 
         const rightControl = this.carousel.appendChild(document.createElement("span"));
         rightControl.className = "find-carousel-control";
         rightControl.textContent = "▶";
-        rightControl.addEventListener("mousedown", (e) => this.multi.navRight(e));
+        rightControl.addEventListener("mousedown", (e) => this.navRight(e));
 
-        this.multi.idx = 0;
+        this.idx = 0;
 
         if (instanceBlock) {
           for (let i = 0; i < blocks.length; i++) {
             const block = blocks[i];
             if (block.id === instanceBlock.id) {
-              this.multi.idx = i;
+              this.idx = i;
               break;
             }
           }
           // multi.idx = blocks.indexOf(instanceBlock);
         }
 
-        this.multi.blocks = blocks;
-        this.multi.update();
+        this.blocks = blocks;
+        this.update();
 
-        if (this.multi.idx < blocks.length) {
-          this.utils.scrollBlockIntoView(blocks[this.multi.idx]);
+        if (this.idx < blocks.length) {
+          this.utils.scrollBlockIntoView(blocks[this.idx]);
         }
       }
     }
@@ -859,6 +861,31 @@ export default async function ({ addon, msg, console }) {
       this.items = [];
       this.selected = null;
     }
+
+    update() {
+      this.count.innerText = this.blocks && this.blocks.length > 0 ? this.idx + 1 + " / " + this.blocks.length : "0";
+    }
+
+    navLeft(e) {
+      return this.navSideways(e, -1);
+    }
+
+    navRight(e) {
+      return this.navSideways(e, 1);
+    }
+
+    navSideways(e, dir) {
+      if (this.blocks && this.blocks.length > 0) {
+        this.idx = (this.idx + dir + this.blocks.length) % this.blocks.length; // + length to fix negative modulo js issue.
+        this.update();
+        this.utils.scrollBlockIntoView(this.blocks[this.idx]);
+      }
+      if (e) {
+        e.cancelBubble = true;
+        e.preventDefault();
+      }
+      return false;
+    }
   }
 
   while (true) {
@@ -868,44 +895,5 @@ export default async function ({ addon, msg, console }) {
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
     new FindBar(root);
-  }
-}
-
-class Multi {
-  constructor(utils) {
-    this.idx = 0;
-    this.count = null;
-    this.blocks = null;
-    this.selID = null;
-    /**
-     * @type {Utils}
-     */
-    this.utils = utils;
-  }
-
-  update() {
-    this.count.innerText = this.blocks && this.blocks.length > 0 ? this.idx + 1 + " / " + this.blocks.length : "0";
-    this.selID = this.idx < this.blocks.length ? this.blocks[this.idx].id : null;
-  }
-
-  navLeft(e) {
-    return this.navSideways(e, -1);
-  }
-
-  navRight(e) {
-    return this.navSideways(e, 1);
-  }
-
-  navSideways(e, dir) {
-    if (this.blocks && this.blocks.length > 0) {
-      this.idx = (this.idx + dir + this.blocks.length) % this.blocks.length; // + length to fix negative modulo js issue.
-      this.update();
-      this.utils.scrollBlockIntoView(this.blocks[this.idx]);
-    }
-    if (e) {
-      e.cancelBubble = true;
-      e.preventDefault();
-    }
-    return false;
   }
 }
