@@ -676,11 +676,6 @@ export default async function ({ addon, msg, console }) {
     }
 
     onItemClick(item) {
-      // if (this.prevValue === null) {
-      //   // Hack to stop filter change if not entered data into edit box, but clicked on row
-      //   this.prevValue = this.findInput.value;
-      // }
-
       if (this.selected && this.selected !== item) {
         this.selected.classList.remove("sel");
         this.selected = null;
