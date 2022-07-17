@@ -58,6 +58,7 @@ export default async function ({ addon, msg, global, console }) {
     bindEvents() {
       this.findInput.addEventListener("focus", () => this.inputChange());
       this.findInput.addEventListener("keydown", (e) => this.inputKeyDown(e));
+      this.findInput.addEventListener("keyup", () => this.inputChange());
       this.findInput.addEventListener("focusout", () => this.hideDropDown());
 
       document.addEventListener("mousedown", (e) => this.eventMouseDown(e), true);
@@ -157,8 +158,6 @@ export default async function ({ addon, msg, global, console }) {
         e.preventDefault();
         return;
       }
-
-      this.inputChange();
     }
 
     showDropDown(focusID, instanceBlock) {
