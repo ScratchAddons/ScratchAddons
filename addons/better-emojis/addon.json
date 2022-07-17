@@ -15,7 +15,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["projects", "studios", "profiles"]
+      "matches": ["projects", "studios", "profiles", "https://scratch.mit.edu/messages/"]
     }
   ],
   "dynamicEnable": true,
