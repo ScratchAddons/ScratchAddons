@@ -1,6 +1,5 @@
 export default async function ({ addon, global, console }) {
-  const cache = (window.cache = Object.create(null));
-  window.scratchAddons.CACHE = cache;
+  const cache = Object.create(null);
   addon.self.addEventListener("disabled", () => {
     for (const cached of Object.keys(cache)) {
       const post = document.getElementById(cached);
