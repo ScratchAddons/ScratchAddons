@@ -1,7 +1,14 @@
 export default async function ({ addon, console, msg }) {
+  const CONTAINER_WIDTH = 150;
+  const HANDLE_WIDTH = 26;
   let prevEventHandler;
+  let handleClickOffset;
+  let element;
+  let LabelReadout;
+  let saOpacityHandle;
+  let saOpacitySlider;
 
-  const getColor = (element) => {
+  const getColor = () => {
     let fillOrStroke;
     const state = addon.tab.redux.state;
     if (state.scratchPaint.modals.fillColor) {
@@ -21,15 +28,98 @@ export default async function ({ addon, console, msg }) {
     return tinycolor(color).toHexString();
   };
 
+  const setColor = (color) => {
+    // tell scratch that the color has changed
+    const onEyeDropperOpened = ({ detail }) => {
+      if (detail.action.type !== "scratch-paint/eye-dropper/ACTIVATE_COLOR_PICKER") return;
+      addon.tab.redux.removeEventListener("statechanged", onEyeDropperOpened);
+      setTimeout(() => {
+        const previousTool = addon.tab.redux.state.scratchPaint.color.eyeDropper.previousTool;
+        if (previousTool) previousTool.activate();
+        addon.tab.redux.state.scratchPaint.color.eyeDropper.callback(color);
+        addon.tab.redux.dispatch({
+          type: "scratch-paint/eye-dropper/DEACTIVATE_COLOR_PICKER",
+        });
+      }, 50);
+    };
+    addon.tab.redux.addEventListener("statechanged", onEyeDropperOpened);
+    element.children[1].children[0].click();
+
+    // setTimeout(() => {
+    // // can't use scratch-paint/fill-style/CHANGE_FILL_COLOR because it checks the hex
+    // // https://github.com/LLK/scratch-paint/blob/0d169c7706d6ddda491b58b9180bb96c6ba946d8/src/lib/make-color-style-reducer.js#L9
+    // const state = addon.tab.redux.state;
+    // state.scratchPaint.color.fillColor.primary = color;
+    // // need to apply color to selection
+    // // https://github.com/LLK/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/containers/color-indicator.jsx#L70
+    // for (let i = 0; i < state.scratchPaint.selectedItems.length; i++) {
+    //   console.log(state.scratchPaint.selectedItems[i].fillColor);
+    //   state.scratchPaint.selectedItems[i].fillColor.set(color);
+    // }
+    // }, 500);
+  };
+
   const setSliderBg = (element, hex) => {
-    element.style.background =
-      "linear-gradient(45deg, #eaf0f8 25%, transparent 25%, transparent 75%, #eaf0f8 75%), linear-gradient(45deg, #eaf0f8 25%, transparent 25%, transparent 75%, #eaf0f8 75%)";
-    element.style.backgroundSize = "20px 20px";
+    let bg = `linear-gradient(to left, ${hex} 0%, rgba(0, 0, 0, 0) 100%),`;
+    bg += "linear-gradient(45deg, #eaf0f8 25%, transparent 25%, transparent 75%, #eaf0f8 75%),";
+    bg += "linear-gradient(45deg, #eaf0f8 25%, transparent 25%, transparent 75%, #eaf0f8 75%)";
+    element.style.background = bg;
+    element.style.backgroundSize = "100% 100%, 20px 20px, 20px 20px";
     element.style.backgroundPosition = "0 0, 10px 10px";
   };
 
+  const getEventXY = (e) => {
+    if (e.touches && e.touches[0]) {
+      return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    } else if (e.changedTouches && e.changedTouches[0]) {
+      return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+    }
+    return { x: e.clientX, y: e.clientY };
+  };
+
+  const handleMouseDown = (event) => {
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+
+    handleClickOffset = getEventXY(event).x - saOpacityHandle.getBoundingClientRect().left;
+  };
+
+  const handleMouseUp = () => {
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", handleMouseUp);
+  };
+
+  const handleMouseMove = (event) => {
+    event.preventDefault();
+    changeOpacity(scaleMouseToSliderPosition(event));
+  };
+
+  const handleClickBackground = (event) => {
+    if (event.target !== saOpacitySlider) return;
+    handleClickOffset = HANDLE_WIDTH / 2;
+    changeOpacity(scaleMouseToSliderPosition(event));
+  };
+
+  const scaleMouseToSliderPosition = (event) => {
+    const { x } = getEventXY(event);
+    const backgroundBBox = saOpacitySlider.getBoundingClientRect();
+    const scaledX = x - backgroundBBox.left - handleClickOffset;
+    return Math.max(0, Math.min(100, (100 * scaledX) / (backgroundBBox.width - HANDLE_WIDTH)));
+  };
+
+  const changeOpacity = (opacityValue) => {
+    const halfHandleWidth = HANDLE_WIDTH / 2;
+    const pixelMin = halfHandleWidth;
+    const pixelMax = CONTAINER_WIDTH - halfHandleWidth;
+    LabelReadout.textContent = Math.round(opacityValue);
+    saOpacityHandle.style.left = pixelMin + (pixelMax - pixelMin) * (opacityValue / 100) - halfHandleWidth + "px";
+
+    const color = tinycolor(getColor()).toRgb();
+    setColor(`rgba(${color.r}, ${color.g}, ${color.b}, ${opacityValue / 100})`);
+  };
+
   while (true) {
-    const element = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', {
+    element = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', {
       markAsSeen: true,
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
     });
@@ -39,53 +129,62 @@ export default async function ({ addon, console, msg }) {
       prevEventHandler = null;
     }
 
-    const defaultColor = getColor(element);
     const ContainerWrapper = document.createElement("div");
     const RowHeaderClass = document.querySelector('[class*="color-picker_row-header"]').className.split(" ")[0];
     const RowHeader = Object.assign(document.createElement("div"), {
       className: RowHeaderClass,
     });
+
     const LabelNameClass = document.querySelector('[class*="color-picker_label-name"]').className.split(" ")[0];
     const saLabelName = Object.assign(document.createElement("span"), {
       className: LabelNameClass,
       textContent: msg("opacity"),
     });
+
     const LabelReadoutClass = document.querySelector('[class*="color-picker_label-readout"]').className.split(" ")[0];
-    const LabelReadout = Object.assign(document.createElement("span"), {
+    LabelReadout = Object.assign(document.createElement("span"), {
       className: LabelReadoutClass,
-      textContent: "100",
+      textContent: 100,
     });
+
+    const defaultColor = getColor();
     const sliderContainerClass = document.querySelector('[class*="slider_container"]').className.split(" ")[0];
     const lastSlider = document.querySelector('[class*="slider_last"]');
     const sliderLastClass = lastSlider.className.split(" ")[0];
-    const saOpcitySlider = Object.assign(document.createElement("div"), {
+    saOpacitySlider = Object.assign(document.createElement("div"), {
       className: `sa-opacity-slider ${sliderContainerClass} ${sliderLastClass}`,
     });
-    setSliderBg(saOpcitySlider, defaultColor);
+    setSliderBg(saOpacitySlider, defaultColor);
+    saOpacitySlider.addEventListener("click", handleClickBackground);
+
     const sliderHandleClass = document.querySelector('[class*="slider_handle"]').className.split(" ")[0];
-    const saOpcityHandle = Object.assign(document.createElement("div"), {
+    saOpacityHandle = Object.assign(document.createElement("div"), {
       className: `sa-opacity-handle ${sliderHandleClass}`,
     });
+    saOpacityHandle.style.left = CONTAINER_WIDTH - HANDLE_WIDTH + "px";
+    saOpacityHandle.addEventListener("mousedown", handleMouseDown);
     lastSlider.className = sliderContainerClass;
 
     prevEventHandler = ({ detail }) => {
+      console.log(detail.action.type);
+      console.log(detail.action);
       if (
         detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR" ||
         detail.action.type === "scratch-paint/stroke-style/CHANGE_STROKE_COLOR"
       ) {
         setTimeout(() => {
-          const color = getColor(element);
-          saOpcitySlider.style.background = color || "#000000";
+          const color = getColor();
+          saOpacitySlider, color || "#000000";
         }, 100);
       }
     };
     addon.tab.redux.addEventListener("statechanged", prevEventHandler);
 
     ContainerWrapper.appendChild(RowHeader);
-    ContainerWrapper.appendChild(saOpcitySlider);
+    ContainerWrapper.appendChild(saOpacitySlider);
     RowHeader.appendChild(saLabelName);
     RowHeader.appendChild(LabelReadout);
-    saOpcitySlider.appendChild(saOpcityHandle);
+    saOpacitySlider.appendChild(saOpacityHandle);
     element.parentElement.insertBefore(ContainerWrapper, element);
   }
 }
