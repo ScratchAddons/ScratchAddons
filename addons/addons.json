@@ -140,7 +140,9 @@
   "// For editor:",
   "editor-dark-mode",
   "editor-colored-context-menus",
+  "hide-stage",
   "editor-stage-left",
+  "editor-buttons-reverse-order",
   "columns",
   "editor-theme3"
 ]

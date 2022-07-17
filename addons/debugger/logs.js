@@ -14,7 +14,10 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
 
   const getInputOfBlock = (targetId, blockId) => {
     const target = vm.runtime.getTargetById(targetId);
-    const block = target.blocks.getBlock(blockId);
+    if (!target) {
+      return null;
+    }
+    const block = debug.getBlock(target, blockId);
     if (!block) {
       return null;
     }
@@ -41,10 +44,11 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
     repeats.style.display = "none";
     root.appendChild(repeats);
 
-    if (row.preview && row.blockId && row.targetId) {
-      const inputBlock = getInputOfBlock(row.targetId, row.blockId);
+    if (row.preview && row.blockId && row.targetInfo) {
+      const originalId = row.targetInfo.originalId;
+      const inputBlock = getInputOfBlock(originalId, row.blockId);
       if (inputBlock) {
-        const preview = debug.createBlockPreview(row.targetId, inputBlock);
+        const preview = debug.createBlockPreview(originalId, inputBlock);
         if (preview) {
           root.appendChild(preview);
         }
@@ -62,8 +66,8 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
     }
     root.appendChild(text);
 
-    if (row.targetId && row.blockId) {
-      root.appendChild(debug.createBlockLink(row.targetId, row.blockId));
+    if (row.targetInfo && row.blockId) {
+      root.appendChild(debug.createBlockLink(row.targetInfo, row.blockId));
     }
 
     return {
@@ -95,13 +99,13 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
       : defaultFormat;
     if (!exportFormat) return;
     const file = logView.rows
-      .map(({ text, targetId, type, count }) =>
+      .map(({ text, targetInfo, type, count }) =>
         (
           exportFormat.replace(
             /\{(sprite|type|content)\}/g,
             (_, match) =>
               ({
-                sprite: debug.getTargetInfoById(targetId).name,
+                sprite: targetInfo ? targetInfo.name : msg("unknown-sprite"),
                 type,
                 content: text,
               }[match])
@@ -136,7 +140,9 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
     };
     if (thread) {
       log.blockId = thread.peekStack();
-      log.targetId = thread.target.id;
+      const targetId = thread.target.id;
+      log.targetId = targetId;
+      log.targetInfo = debug.getTargetInfoById(targetId);
     }
     if (type === "internal") {
       log.internal = true;

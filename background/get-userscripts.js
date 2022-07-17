@@ -91,7 +91,7 @@ scratchAddons.localEvents.addEventListener("addonDynamicDisable", ({ detail }) =
   );
 });
 scratchAddons.localEvents.addEventListener("updateUserstylesSettingsChange", ({ detail }) => {
-  const { addonId, manifest } = detail;
+  const { addonId, manifest, newSettings } = detail;
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url) {
@@ -107,8 +107,11 @@ scratchAddons.localEvents.addEventListener("updateUserstylesSettingsChange", ({ 
                     userstyles,
                     cssVariables,
                     addonId,
+                    addonSettings: newSettings,
                     injectAsStyleElt: !!manifest.injectAsStyleElt,
                     index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
+                    dynamicEnable: manifest.dynamicEnable,
+                    dynamicDisable: manifest.dynamicDisable,
                   },
                 },
                 { frameId: 0 }

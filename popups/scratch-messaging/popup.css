@@ -1,21 +1,5 @@
 button {
-  color: var(--content-text);
-  font-family: inherit;
-  font-size: 12px;
-  border-radius: 4px;
-  border: 1px solid var(--control-border);
-  background: var(--button-background);
-  height: 32px;
-  box-sizing: border-box;
-  padding: 0 12px;
   overflow: hidden;
-  transition: 0.2s ease;
-}
-button:hover {
-  background: var(--button-hover-background);
-}
-button > span {
-  vertical-align: middle;
 }
 
 .contents {
@@ -271,13 +255,17 @@ a.message-type-title-text {
   background-color: var(--blue);
   color: var(--white-text);
 }
-.post-button:hover {
+.post-button:hover:not([disabled]) {
   background-color: var(--blue);
+  border-color: var(--blue-variant);
+}
+.post-button:focus-visible {
   border-color: var(--blue-variant);
 }
 .comment-chars {
   margin-inline-start: auto;
   font-weight: normal;
+  font-variant: tabular-nums;
 }
 
 .status-container {
