@@ -4,10 +4,9 @@ import Utils from "./blockly/Utils.js";
 
 export default async function ({ addon, msg, console }) {
   class FindBar {
-    constructor(root, workspace) {
-      this.workspace = workspace;
-
+    constructor(root) {
       this.utils = new Utils(addon);
+      this.workspace = this.utils.getWorkspace();
 
       this.prevValue = "";
 
@@ -15,7 +14,7 @@ export default async function ({ addon, msg, console }) {
       this.findWrapper = null;
       this.findInput = null;
       this.dropdownOut = null;
-      this.dropdown = new Dropdown(workspace, this.utils);
+      this.dropdown = new Dropdown(this.utils);
       this.carousel = null;
 
       this.createDom(root);
@@ -451,6 +450,7 @@ export default async function ({ addon, msg, console }) {
         }
       }
     }
+
     eventKeyDown(e) {
       if (addon.self.disabled) return;
 
@@ -507,30 +507,7 @@ export default async function ({ addon, msg, console }) {
         return;
       }
 
-      // Move outwards until we reach a block we can take action on
-
       for (; block; block = block.getSurroundParent()) {
-        if (block.type === "procedures_call") {
-          e.cancelBubble = true;
-          e.preventDefault();
-
-          // todo: navigate to definition
-          let findProcCode = block.getProcCode();
-
-          let topBlocks = this.workspace.getTopBlocks();
-          for (const root of topBlocks) {
-            if (root.type === "procedures_definition") {
-              let label = root.getChildren()[0];
-              let procCode = label.getProcCode();
-              if (procCode && procCode === findProcCode) {
-                // Found... navigate to it!
-                this.utils.scrollBlockIntoView(root);
-                return;
-              }
-            }
-          }
-        }
-
         if (block.type === "procedures_definition") {
           let id = block.id ? block.id : block.getId ? block.getId() : null;
 
@@ -587,9 +564,9 @@ export default async function ({ addon, msg, console }) {
   }
 
   class Dropdown {
-    constructor(workspace, utils) {
-      this.workspace = workspace;
+    constructor(utils) {
       this.utils = utils;
+      this.workspace = this.utils.getWorkspace();
       this.multi = new Multi(this.utils);
 
       this.el = null;
@@ -890,8 +867,7 @@ export default async function ({ addon, msg, console }) {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
-    const ScratchBlocks = await addon.tab.traps.getBlockly();
-    new FindBar(root, ScratchBlocks.getMainWorkspace());
+    new FindBar(root);
   }
 }
 
