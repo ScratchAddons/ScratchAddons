@@ -6,13 +6,20 @@
       "name": "griffpatch"
     }
   ],
-  "tags": ["editor", "codeEditor"],
   "userscripts": [
     {
       "url": "userscript.js",
       "matches": ["projects"]
     }
   ],
+  "versionAdded": "1.0.0",
+  "latestUpdate": {
+    "version": "1.28.0",
+    "temporaryNotice": "This addon was once part of the Developer Tools addon but has been moved here.",
+    "isMajor": true
+  },
+  "tags": ["editor", "codeEditor", "recommended"],
+  "enabledByDefault": true,
   "dynamicEnable": true,
   "dynamicDisable": true
 }
