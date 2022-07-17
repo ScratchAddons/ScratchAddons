@@ -168,16 +168,12 @@ export default async function ({ addon, console, msg }) {
     lastSlider.className = sliderContainerClass;
 
     prevEventHandler = ({ detail }) => {
-      console.log(detail.action.type);
-      console.log(detail.action);
       if (
         detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR" ||
         detail.action.type === "scratch-paint/stroke-style/CHANGE_STROKE_COLOR"
       ) {
-        setTimeout(() => {
-          const color = getColor();
-          saOpacitySlider, color || "#000000";
-        }, 100);
+        const color = getColor();
+        setSliderBg(saOpacitySlider, color || "#000000");
       }
     };
     addon.tab.redux.addEventListener("statechanged", prevEventHandler);
