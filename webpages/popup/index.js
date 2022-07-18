@@ -2,8 +2,6 @@ import globalTheme from "../../libraries/common/global-theme.js";
 
 globalTheme();
 
-const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
-
 function calculatePopupSize() {
   if (!window.innerWidth || !window.innerHeight) {
     setTimeout(calculatePopupSize, 0);
@@ -58,6 +56,7 @@ const vue = new Vue({
       return `https://scratchaddons.com/${localeSlash}changelog/?${utm}`;
     },
     version() {
+      const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
       const ver = chrome.runtime.getManifest().version;
       return prerelease ? ver + "-pre" : ver;
     },

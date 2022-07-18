@@ -72,7 +72,6 @@ let fuse;
     (...args) =>
       new Promise((resolve) => callbackFn(...args, resolve));
 
-  const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
   let handleConfirmClicked = null;
 
   const serializeSettings = async () => {
@@ -128,6 +127,7 @@ let fuse;
           addonsEnabled[addonId] = granted;
         });
       }
+      const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
       await syncSet({
         globalTheme: !!obj.core.lightTheme,
         addonsEnabled,
