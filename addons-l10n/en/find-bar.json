@@ -1,6 +1,4 @@
 {
   "find-bar/find": "Find",
-  "find-bar/find-placeholder": "Find (Ctrl+F)",
-  "find-bar/help": "Help",
-  "find-bar/tutorials": "Tutorials"
+  "find-bar/find-placeholder": "Find (Ctrl+F)"
 }

@@ -4,8 +4,6 @@
   "editor-devtools/unused-list": "{count, plural, one {Developer tools: Delete 1 unused local list? Here it is:\n} other {Developer tools: Delete # unused local lists? Here they are:\n} }",
   "editor-devtools/var-not-exist": "That variable does not exist...",
   "editor-devtools/replace": "Developer tools: Switch all {name} in this sprite for the variable named:",
-  "editor-devtools/top": "send to top",
-  "editor-devtools/bottom": "send to bottom",
   "editor-devtools/clean-plus": "Clean up Blocks +",
   "editor-devtools/paste": "Paste",
   "editor-devtools/copy-all": "Copy All",
