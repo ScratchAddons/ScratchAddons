@@ -9,7 +9,6 @@ export default async function ({ addon, console, msg }) {
   let LabelReadout;
   let saOpacityHandle;
   let saOpacitySlider;
-  let currentOpacity;
 
   const getColor = () => {
     let fillOrStroke;
@@ -114,7 +113,6 @@ export default async function ({ addon, console, msg }) {
     const pixelMax = CONTAINER_WIDTH - halfHandleWidth;
     LabelReadout.textContent = Math.round(opacityValue);
     saOpacityHandle.style.left = pixelMin + (pixelMax - pixelMin) * (opacityValue / 100) - halfHandleWidth + "px";
-    currentOpacity = opacityValue / 100;
 
     const color = tinycolor(getColor()).toRgb();
     setColor(`rgba(${color.r}, ${color.g}, ${color.b}, ${opacityValue / 100})`);
@@ -148,12 +146,11 @@ export default async function ({ addon, console, msg }) {
     });
 
     const defaultAlpha = tinycolor(getColor()).toRgb().a;
-    currentOpacity = defaultAlpha;
     const LabelReadoutClass = document.querySelector('[class*="color-picker_label-readout"]').className.split(" ")[0];
     LabelReadout = Object.assign(document.createElement("span"), {
       className: LabelReadoutClass,
     });
-    LabelReadout.textContent = defaultAlpha * 100;
+    LabelReadout.textContent = Math.round(defaultAlpha * 100);
 
     const defaultColor = getColor();
     const sliderContainerClass = document.querySelector('[class*="slider_container"]').className.split(" ")[0];
@@ -174,14 +171,21 @@ export default async function ({ addon, console, msg }) {
     setHandlePos(defaultAlpha);
 
     prevEventHandler = ({ detail }) => {
+      console.log(detail.action.type);
       if (
         detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR" ||
+        detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR_2" ||
         detail.action.type === "scratch-paint/stroke-style/CHANGE_STROKE_COLOR" ||
+        detail.action.type === "scratch-paint/stroke-style/CHANGE_STROKE_COLOR_2" ||
         detail.action.type === "scratch-paint/color-index/CHANGE_COLOR_INDEX"
       ) {
         const color = getColor();
-        setSliderBg(color || "#000000");
-        setHandlePos(currentOpacity);
+        setSliderBg(color);
+        console.log(color);
+        if (detail.action.type === "scratch-paint/color-index/CHANGE_COLOR_INDEX") {
+          console.log(tinycolor(color));
+          setHandlePos(tinycolor(color).toRgb().a);
+        }
       }
     };
     addon.tab.redux.addEventListener("statechanged", prevEventHandler);
