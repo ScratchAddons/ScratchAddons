@@ -15,6 +15,10 @@
   z-index: 6;
 }
 
+.sa-var-manager-tab {
+  display: flex !important;
+}
+
 .sa-var-manager {
   display: block;
   padding: 18px;

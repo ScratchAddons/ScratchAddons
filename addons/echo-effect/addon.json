@@ -10,5 +10,11 @@
       "matches": ["projects"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
   "versionAdded": "1.21.0"
 }

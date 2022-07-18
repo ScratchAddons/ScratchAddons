@@ -39,7 +39,8 @@ export default async function ({ addon, console, msg }) {
   while (true) {
     const post = await addon.tab.waitForElement(".blockpost", { markAsSeen: true });
     const sourceItem = document.createElement("li");
-    addon.tab.displayNoneWhileDisabled(sourceItem);
+    sourceItem.className = "sa-view-source";
+    sourceItem.style.display = "none"; // overridden by userstyle if the addon is enabled
     addon.tab.appendToSharedSpace({ space: "forumsAfterPostReport", scope: post, element: sourceItem, order: 0 });
     const sourceButton = document.createElement("a");
     sourceItem.appendChild(sourceButton);

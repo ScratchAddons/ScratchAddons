@@ -10,6 +10,8 @@ export default async function ({ addon, global, console, msg }) {
     const hideBtnWrapper = document.createElement("li");
     const hideBtn = document.createElement("a");
 
+    hideBtnWrapper.className = "sa-hide-signature";
+    hideBtnWrapper.style.display = "none"; // overridden by userstyle if the addon is enabled
     hideBtn.href = "#hide";
     hideBtn.innerText = msg("hide");
 
@@ -39,6 +41,5 @@ export default async function ({ addon, global, console, msg }) {
       scope: actionsWrapper,
       order: 9,
     });
-    addon.tab.displayNoneWhileDisabled(hideBtnWrapper);
   }
 }

@@ -1,11 +1,11 @@
 export default async function ({ addon, global, console }) {
   var posContainerContainer = document.createElement("div");
-  addon.tab.displayNoneWhileDisabled(posContainerContainer, { display: "flex" });
 
   var posContainer = document.createElement("div");
   var pos = document.createElement("span");
 
   posContainerContainer.className = "pos-container-container";
+  posContainerContainer.style.display = "none"; // overridden by userstyle if the addon is enabled
   posContainer.className = "pos-container";
 
   posContainerContainer.appendChild(posContainer);

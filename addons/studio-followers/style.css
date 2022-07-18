@@ -1,3 +1,7 @@
+#sa-studio-followers-btn {
+  display: inline-block !important;
+}
+
 .sa-followers-modal-grid {
   grid-template-columns: repeat(7, minmax(0, 1fr));
   overflow-anchor: none;

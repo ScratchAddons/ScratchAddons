@@ -68,6 +68,7 @@ p.sa-animated-thumb-uploaded-thumb {
 }
 
 .sa-set-thumbnail-button {
+  display: block !important;
   position: relative;
 }
 .sa-set-thumbnail-button::before {

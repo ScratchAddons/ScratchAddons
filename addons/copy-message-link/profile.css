@@ -1,7 +1,3 @@
-#comments .comment .report {
-  display: block;
-  opacity: 0;
-}
-#comments .comment:hover .report {
-  opacity: 1;
+#comments .comment:hover .sa-copy-link-btn {
+  display: block !important;
 }

@@ -3,3 +3,7 @@
   background: white;
   color: black;
 }
+
+.semicolon.visible {
+  display: block !important;
+}

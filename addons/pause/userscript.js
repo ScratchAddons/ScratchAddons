@@ -5,12 +5,12 @@ export default async function ({ addon, global, console, msg }) {
 
   const img = document.createElement("img");
   img.className = "pause-btn";
+  img.style.display = "none"; // overridden by userstyle if the addon is enabled
   img.draggable = false;
   img.title = msg("pause");
 
   const setSrc = () => (img.src = addon.self.dir + (isPaused() ? "/play.svg" : "/pause.svg"));
   img.addEventListener("click", () => setPaused(!isPaused()));
-  addon.tab.displayNoneWhileDisabled(img);
   addon.self.addEventListener("disabled", () => setPaused(false));
   setSrc();
   onPauseChanged(setSrc);

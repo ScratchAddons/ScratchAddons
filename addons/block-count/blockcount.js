@@ -30,9 +30,8 @@ export default async function ({ addon, console, msg }) {
           reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
         });
         let display = topBar.appendChild(document.createElement("span"));
-        addon.tab.displayNoneWhileDisabled(display);
-        display.style.order = 1;
-        display.style.padding = "9px";
+        display.className = "sa-block-count";
+        display.style.display = "none"; // overridden by userstyle if the addon is enabled
         display.innerText = msg("blocks", { num: getBlockCount().blockCount });
         let debounce; // debouncing values because of the way 'PROJECT_CHANGED' works
         if (handler) {

@@ -9,8 +9,8 @@ export default async function ({ addon, global, console, msg }) {
     });
     if (comment.querySelector("form")) continue; // Comment input
     const newElem = document.createElement("span");
-    addon.tab.displayNoneWhileDisabled(newElem);
     newElem.className = "comment-delete sa-comment-link";
+    newElem.style.display = "none"; // overridden by userstyle if the addon is enabled
     newElem.textContent = msg("copyLink");
     newElem.onclick = () => {
       let url = `${location.origin}${location.pathname}`;

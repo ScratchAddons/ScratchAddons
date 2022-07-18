@@ -5,6 +5,7 @@ export default async function ({ addon, global, console, msg }) {
   messages.className = addon.tab.scratchClass("menu-bar_menu-bar-item", "menu-bar_hoverable", {
     others: "sa-editormessages",
   });
+  messages.style.display = "none"; // overridden by userstyle if the addon is enabled
   let messageCount = document.createElement("span");
   messageCount.classList.add("sa-editormessages-count");
   messages.appendChild(messageCount);
@@ -40,7 +41,6 @@ export default async function ({ addon, global, console, msg }) {
   });
   addon.self.addEventListener("reenabled", createInterval);
 
-  addon.tab.displayNoneWhileDisabled(messages);
   while (true) {
     let nav = await addon.tab.waitForElement("[class^='menu-bar_account-info-group'] > [href^='/my']", {
       markAsSeen: true,

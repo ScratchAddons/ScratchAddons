@@ -4,6 +4,10 @@
   height: calc(1.95rem + 2px);
 }
 
+.sa-onion-group {
+  display: flex !important;
+}
+
 .sa-onion-button {
   position: relative;
 }
@@ -15,6 +19,7 @@
 }
 
 .sa-onion-settings {
+  display: block !important;
   position: absolute;
   bottom: 0;
   right: 16px;

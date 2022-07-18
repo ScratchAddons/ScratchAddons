@@ -4,9 +4,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const container = document.createElement("div");
   container.className = "sa-search-sprites-container";
-  addon.tab.displayNoneWhileDisabled(container, {
-    display: "flex",
-  });
+  container.style.display = "none"; // overridden by userstyle if the addon is enabled
 
   const searchBox = document.createElement("input");
   searchBox.className = "sa-search-sprites-box";

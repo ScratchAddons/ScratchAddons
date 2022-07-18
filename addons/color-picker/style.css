@@ -1,5 +1,5 @@
 .sa-color-picker {
-  display: flex;
+  display: flex !important;
 }
 
 .sa-color-picker-code {

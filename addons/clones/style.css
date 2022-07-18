@@ -1,9 +1,12 @@
 .clone-container-container {
-  display: none;
   align-items: center;
   padding: 0.25rem;
   user-select: none;
   color: #a065ff;
+}
+
+.clone-container-container.visible {
+  display: flex !important;
 }
 
 .clone-container {

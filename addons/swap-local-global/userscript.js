@@ -255,7 +255,8 @@ export default async function ({ addon, msg, console }) {
     }
 
     const root = document.createElement("div");
-    addon.tab.displayNoneWhileDisabled(root);
+    root.className = "sa-swap-local-global-container";
+    root.style.display = "none"; // overridden by userstyle if the addon is enabled
 
     const createLabeledInput = (text, value) => {
       const outer = document.createElement("label");

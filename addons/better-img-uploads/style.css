@@ -1,3 +1,7 @@
+.sa-better-img-uploads-container {
+  display: block !important;
+}
+
 [data-for*="HD Upload"]:hover + .__react_component_tooltip {
   visibility: visible;
 }

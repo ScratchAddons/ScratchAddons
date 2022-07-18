@@ -75,6 +75,7 @@
 }
 
 .sa-add-extension-label {
+  display: block !important;
   color: var(--editorDarkMode-categoryMenu-text, #575e75);
   font-size: 0.65rem;
 }

@@ -3,13 +3,14 @@ export default async function ({ addon, console, msg }) {
   const buttons = document.querySelectorAll(".postfootright");
   buttons.forEach(function (elm) {
     const addBtn = document.createElement("li");
+    addBtn.className = "sa-quote-post-number";
+    addBtn.style.display = "none"; // overridden by userstyle if the addon is enabled
     const addBtnAElement = document.createElement("a");
     addBtnAElement.href = "#reply";
     addBtnAElement.textContent = msg("add-btn");
     addBtn.appendChild(addBtnAElement);
     addBtn.addEventListener("click", (e) => setTimeout(() => addIDLink(e), 0));
     addon.tab.appendToSharedSpace({ space: "forumsBeforePostReport", element: addBtn, scope: elm, order: 10 });
-    addon.tab.displayNoneWhileDisabled(addBtn, { display: "inline" });
   });
   function addIDLink(e) {
     let idName = e.target.closest(".blockpost").querySelector(".box-head > .conr").textContent;

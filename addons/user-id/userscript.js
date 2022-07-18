@@ -4,6 +4,6 @@ export default function ({ addon }) {
     innerText: `#${Scratch.INIT_DATA.PROFILE.model.userId}`,
     className: "sa-user-id",
   });
-  addon.tab.displayNoneWhileDisabled(userId);
+  userId.style.display = "none"; // overridden by userstyle if the addon is enabled
   usernameHeader.appendChild(userId);
 }

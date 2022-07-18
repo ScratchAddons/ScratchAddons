@@ -105,8 +105,8 @@ export default async function ({ addon, global, console, msg }) {
     btn = document.createElement("button");
     btn.className = "button";
     btn.id = "sa-studio-followers-btn";
+    btn.style.display = "none"; // overridden by userstyle if the addon is enabled
     btn.innerText = msg("button");
-    addon.tab.displayNoneWhileDisabled(btn);
     btn.addEventListener("click", () => {
       modal.style.display = modal.style.display === "none" ? null : "none";
       if (!data[currentType].activated) {

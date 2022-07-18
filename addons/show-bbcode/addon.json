@@ -11,7 +11,13 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+      "matches": ["topics"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["topics"]
     }
   ],
   "dynamicEnable": true,

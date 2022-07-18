@@ -1,3 +1,8 @@
+.sa-leave-section,
+.sa-adder-section {
+  display: block !important;
+}
+
 .button.sa-leave-button {
   background-color: #ff8c1a;
   color: white;

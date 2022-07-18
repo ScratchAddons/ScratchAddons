@@ -4,10 +4,12 @@ export default async ({ addon }) => {
       markAsSeen: true,
     });
     const echoButton = document.createElement("div");
-    echoButton.className = addon.tab.scratchClass("icon-button_container", "sound-editor_effect-button");
-    addon.tab.displayNoneWhileDisabled(echoButton, {
-      display: "flex",
-    });
+    echoButton.className = addon.tab.scratchClass(
+      "icon-button_container",
+      "sound-editor_effect-button",
+      { others: "sa-echo-button" }
+    );
+    echoButton.style.display = "none"; // overridden by userstyle if the addon is enabled
     echoButton.setAttribute("role", "button");
     echoButton.addEventListener("click", () => {
       const soundEditorContainer = soundEditorRobot.closest('[class*="sound-editor_editor-container_"]');

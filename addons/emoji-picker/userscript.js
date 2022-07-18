@@ -79,7 +79,7 @@ export default async function ({ addon, global, console, msg }) {
   //Create the emoji picker
   const emojiPicker = document.createElement("div");
   emojiPicker.className = "sa-emoji-picker";
-  addon.tab.displayNoneWhileDisabled(emojiPicker, { display: "inline-block" });
+  emojiPicker.style.display = "none"; // overridden by userstyle if the addon is enabled
 
   //Scratch emojis
   emojis.forEach((emoji) => {
@@ -161,6 +161,7 @@ export default async function ({ addon, global, console, msg }) {
 
     const emojiButton = document.createElement("div");
     emojiButton.classList.add("sa-emoji-button-container");
+    emojiButton.style.display = "none"; // overridden by userstyle if the addon is enabled
     if (addon.tab.clientVersion === "scratchr2") {
       //Special classes for scratchr2 pages
       emojiButton.classList.add("button", "small", "sa-emoji-button-r2");
@@ -179,7 +180,6 @@ export default async function ({ addon, global, console, msg }) {
     emojiButtonText.textContent = "🙂︎";
     emojiButtonText.classList.add("sa-emoji-button");
     emojiButton.appendChild(emojiButtonText);
-    addon.tab.displayNoneWhileDisabled(emojiButton, { display: "inline-block" });
     if (addon.tab.clientVersion === "scratch-www") {
       buttonAppend.appendChild(emojiButton);
     } else {

@@ -16,5 +16,11 @@
       "matches": ["projects"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "blockcount.css",
+      "matches": ["projects"]
+    }
+  ],
   "versionAdded": "1.23.0"
 }

@@ -6,7 +6,7 @@ export default async function ({ addon, global, console, msg }) {
 
     const copyCode = document.createElement("div"); //Div used to store the text
     copyCode.className = "sa-copyCodeDiv"; //Class
-    addon.tab.displayNoneWhileDisabled(copyCode, { display: "block" }); //Dynamic disable
+    copyCode.style.display = "none"; //Overridden by userstyle if the addon is enabled
 
     const copyCodeButton = document.createElement("span"); //The actual button
     copyCodeButton.className = "sa-copyCodeButton"; //Class

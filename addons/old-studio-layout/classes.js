@@ -8,6 +8,13 @@ export default async function ({ addon, console }) {
           page.classList.remove("sa-oldstudio-logged-out");
         });
       });
+      addon.tab.addEventListener("urlChange", () => {
+        if (location.pathname.split("/")[3] === "curators") {
+          page.classList.add("sa-oldstudio-curators-tab");
+        } else {
+          page.classList.remove("sa-oldstudio-curators-tab");
+        }
+      });
     });
   });
   addon.tab.waitForElement(".studio-follow-button").then((followButton) => {
@@ -17,20 +24,13 @@ export default async function ({ addon, console }) {
   // Keep "invite followers" button
   addon.tab.waitForElement("#sa-studio-followers-btn").then((realButton) => {
     const button = document.createElement("button");
-    button.classList = "button";
+    button.classList = "button sa-pseudobutton";
     const span = document.createElement("span");
     span.textContent = realButton.textContent;
     button.appendChild(span);
     button.onclick = () => setTimeout(() => realButton.click(), 0);
-    addon.tab.displayNoneWhileDisabled(button);
+    button.style.display = "none"; // overridden by userstyle if the addon is enabled
     addon.tab.appendToSharedSpace({ space: "studioCuratorsTab", element: button, order: 0.5 });
-    addon.tab.addEventListener("urlChange", (e) => {
-      if (location.pathname.split("/")[3] === "curators") {
-        addon.tab.displayNoneWhileDisabled(button);
-      } else {
-        button.style.display = "none";
-      }
-    });
   });
 
   // Keep "browse projects" button
@@ -47,7 +47,7 @@ export default async function ({ addon, console }) {
     span.textContent = realButton.textContent;
     button.appendChild(span);
     button.onclick = () => realButton.click();
-    addon.tab.displayNoneWhileDisabled(button);
+    button.style.display = "none"; // overridden by userstyle if the addon is enabled
     document.querySelector(".studio-adder-section .studio-adder-row .studio-adder-vertical-divider").after(button);
   }
 }

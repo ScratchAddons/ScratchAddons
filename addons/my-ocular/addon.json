@@ -9,37 +9,35 @@
   "userscripts": [
     {
       "url": "discuss.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "if": {
-        "settings": { "discuss": true }
-      }
+      "matches": ["topics"]
     },
     {
       "url": "profile.js",
-      "matches": ["https://scratch.mit.edu/users/*/"],
-      "if": {
-        "settings": { "profile": true }
-      }
+      "matches": ["profiles"]
     },
     {
       "url": "reactions.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "if": {
-        "settings": { "reactions": true }
-      }
+      "matches": ["topics"]
     }
   ],
   "userstyles": [
     {
       "url": "discuss.css",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "matches": ["topics"],
       "if": {
         "settings": { "discuss": true }
       }
     },
     {
+      "url": "profile.css",
+      "matches": ["profiles"],
+      "if": {
+        "settings": { "profile": true }
+      }
+    },
+    {
       "url": "reactions.css",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "matches": ["topics"],
       "if": {
         "settings": { "reactions": true }
       }
@@ -47,6 +45,7 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
   "settings": [
     {
       "name": "Show statuses on profiles",

@@ -1,5 +1,5 @@
 .sa-editormessages {
-  display: block;
+  display: block !important;
   position: relative;
   width: 1.7rem;
 }

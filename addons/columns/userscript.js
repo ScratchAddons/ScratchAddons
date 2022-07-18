@@ -164,7 +164,7 @@ export default async function ({ addon, msg, global, console }) {
       className: "sa-add-extension-label",
       innerText: addon.tab.scratchMessage("gui.gui.addExtension"),
     });
-    addon.tab.displayNoneWhileDisabled(addExtensionLabel);
+    addExtensionLabel.style.display = "none"; // overridden by userstyle if the addon is enabled
     addExtensionButton.appendChild(addExtensionLabel);
     addExtensionButton.removeAttribute("title");
   }

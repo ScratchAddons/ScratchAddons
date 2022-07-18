@@ -1,3 +1,7 @@
+.sa-hide-stage-button {
+  display: block !important;
+}
+
 .sa-stage-button-middle > [class*="stage-header_stage-button_"] {
   border-radius: 0;
 }

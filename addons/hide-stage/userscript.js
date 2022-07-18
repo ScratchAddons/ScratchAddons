@@ -41,7 +41,7 @@ export default async function ({ addon, console, msg }) {
         { others: "sa-hide-stage-button" }
       ),
     });
-    addon.tab.displayNoneWhileDisabled(hideStageButton);
+    hideStageButton.style.display = "none"; // overridden by userstyle if the addon is enabled
     stageControls.insertBefore(hideStageButton, smallStageButton);
     hideStageButton.appendChild(
       Object.assign(document.createElement("img"), {

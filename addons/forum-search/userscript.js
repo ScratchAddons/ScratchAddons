@@ -240,8 +240,8 @@ export default async function ({ addon, global, console, msg }) {
 
   // create the search bar
   let search = document.createElement("form");
-  addon.tab.displayNoneWhileDisabled(search, { display: "flex" });
   search.id = "forum-search-form";
+  search.style.display = "none"; // overridden by userstyle if the addon is enabled
   let searchBar = document.createElement("input");
   searchBar.id = "forum-search-input";
   searchBar.setAttribute("type", "text");

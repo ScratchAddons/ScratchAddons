@@ -1,4 +1,5 @@
 .sa-copyCodeDiv {
+  display: block !important;
   text-align: right;
   height: 0px;
 }

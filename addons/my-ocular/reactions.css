@@ -3,6 +3,10 @@
   padding-top: 5px;
 }
 
+.my-ocular-reaction-list {
+  display: inline !important;
+}
+
 .my-ocular-reaction-button {
   user-select: none;
   background-color: #f2f2f2;
@@ -82,6 +86,7 @@
 }
 
 .my-ocular-reaction-menu {
+  display: inline !important;
   position: relative;
 }
 .my-ocular-reaction-menu > .my-ocular-popup {
@@ -89,4 +94,8 @@
 }
 .my-ocular-reaction-menu.open > .my-ocular-popup {
   display: block;
+}
+
+.my-ocular-view-on-ocular {
+  display: inline !important;
 }

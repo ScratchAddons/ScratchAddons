@@ -8,15 +8,15 @@ export default async function ({ addon, global, console, msg }) {
     user = document.querySelector('[name="q"]').value.trim(),
     valid = /^[\w-]{3,20}$/g.test(user);
   //Set up elements
+  tab.className = "sa-search-profile";
+  tab.style.display = "none"; // overridden by userstyle if the addon is enabled
   img.src = addon.self.dir + "/user.svg";
   img.className = "tab-icon";
   span.innerText = msg("profile");
-  addon.tab.displayNoneWhileDisabled(tab);
   if (valid) tab.href = "/users/" + user + "/";
   //Check if whats entered is a valid username
   if (!valid) {
-    img.style.filter = "grayscale(100%) brightness(100%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(1)";
-    span.style.color = "red";
+    tab.classList.add("sa-search-profile-invalid");
     li.title = msg("invalid-username", { username: user });
   }
 }

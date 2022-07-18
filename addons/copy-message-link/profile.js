@@ -16,8 +16,8 @@ export default async function ({ addon, global, console, msg }) {
       continue;
     }
     const newElem = document.createElement("span");
-    addon.tab.displayNoneWhileDisabled(newElem);
     newElem.className = "actions report sa-copy-link-btn";
+    newElem.style.display = "none"; // overridden by userstyle if the addon is enabled
     newElem.textContent = msg("copyLink");
     newElem.onclick = () => {
       // For profiles, respect correct username casing in URL

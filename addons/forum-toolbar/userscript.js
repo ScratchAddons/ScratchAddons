@@ -19,9 +19,7 @@ export default async ({ addon, console, msg }) => {
       order,
       element,
     });
-    addon.tab.displayNoneWhileDisabled(element, {
-      display: `var(--forumToolbar-${element.dataset.name}, none)`,
-    });
+    element.style.display = `var(--forumToolbar-${element.dataset.name}, none)`;
   };
   const appendDropdown = (space, element, order) => {
     addon.tab.appendToSharedSpace({
@@ -31,9 +29,7 @@ export default async ({ addon, console, msg }) => {
     });
     const buttons = element.children[1].children;
     const display = Array.from(buttons, (button) => `var(--forumToolbar-${button.dataset.name},`);
-    addon.tab.displayNoneWhileDisabled(element, {
-      display: `${display.join("")}none${")".repeat(buttons.length)}`,
-    });
+    element.style.display = `${display.join("")}none${")".repeat(buttons.length)}`;
   };
   const createDropdown = (name, ...buttons) => {
     const liTag = document.createElement("li");

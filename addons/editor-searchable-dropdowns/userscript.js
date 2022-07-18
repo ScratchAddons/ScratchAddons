@@ -31,11 +31,11 @@ export default async function ({ addon, global, console, msg }) {
     blocklyDropdownMenu.focus = () => {}; // no-op focus() so it can't steal it from the search bar
 
     searchBar = document.createElement("input");
-    addon.tab.displayNoneWhileDisabled(searchBar, { display: "flex" });
     searchBar.type = "text";
     searchBar.addEventListener("input", updateSearch);
     searchBar.addEventListener("keydown", handleKeyDownEvent);
     searchBar.classList.add("u-dropdown-searchbar");
+    searchBar.style.display = "none"; // overridden by userstyle if the addon is enabled
     blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
 
     items = Array.from(blocklyDropdownMenu.children)

@@ -7,7 +7,11 @@ export default async function ({ addon, console, msg }) {
 
   const createItem = (id, right) => {
     const uploadMsg = msg("upload");
-    const wrapper = Object.assign(document.createElement("div"), { id });
+    const wrapper = Object.assign(document.createElement("div"), {
+      className: "sa-better-img-uploads-container",
+      id,
+    });
+    wrapper.style.display = "none"; // overridden by userstyle if the addon is enabled
     const button = Object.assign(document.createElement("button"), {
       className: `${addon.tab.scratchClass("action-menu_button")} ${addon.tab.scratchClass(
         "action-menu_more-button"
@@ -43,7 +47,6 @@ export default async function ({ addon, console, msg }) {
     });
     tooltip.dataset.id = "tooltip";
     wrapper.append(tooltip);
-    addon.tab.displayNoneWhileDisabled(wrapper);
     return [wrapper, button, input, tooltip];
   };
 

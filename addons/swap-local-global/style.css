@@ -1,3 +1,6 @@
+.sa-swap-local-global-container {
+  display: block !important;
+}
 .sa-swap-local-global-hint {
   padding-bottom: 1rem;
 }

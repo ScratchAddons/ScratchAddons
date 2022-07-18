@@ -18,8 +18,8 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
 
   //button (the one the user interacts with)
   var inputButtonContainer = document.createElement("li");
-  addon.tab.displayNoneWhileDisabled(inputButtonContainer);
-  inputButtonContainer.className = "markItUpButton markItUpButton17";
+  inputButtonContainer.className = "markItUpButton sa-image-uploader";
+  inputButtonContainer.style.display = "none"; // overridden by userstyle if the addon is enabled
 
   var inputButton = document.createElement("a");
   inputButton.id = "uploadButton";

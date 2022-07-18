@@ -1,3 +1,7 @@
+.sa-gamepad-container {
+  display: flex !important;
+}
+
 [dir="ltr"] .sa-gamepad-container {
   margin-right: 0.2rem;
 }

@@ -1,4 +1,12 @@
 export default async function ({ addon, global, console, msg }) {
+  if (!addon.settings.get("reactions")) {
+    await new Promise((resolve) => {
+      addon.settings.addEventListener("change", () => {
+        if (addon.settings.get("reactions")) resolve();
+      });
+    });
+  }
+
   let posts = document.querySelectorAll(".blockpost");
   const isLoggedIn = await addon.auth.fetchIsLoggedIn();
   const username = await addon.auth.fetchUsername();
@@ -7,7 +15,8 @@ export default async function ({ addon, global, console, msg }) {
     let postID = i.id.split("p")[1];
 
     let viewOnOcularContainer = document.createElement("li");
-    addon.tab.displayNoneWhileDisabled(viewOnOcularContainer);
+    viewOnOcularContainer.className = "my-ocular-view-on-ocular";
+    viewOnOcularContainer.style.display = "none"; // overridden by userstyle if the setting is enabled
     let viewOnOcular = document.createElement("a");
     viewOnOcular.innerText = `🔍 ocular`;
     viewOnOcular.title = msg("view-on-ocular");
@@ -22,8 +31,8 @@ export default async function ({ addon, global, console, msg }) {
 
     if (isLoggedIn) {
       let reactionMenuContainer = document.createElement("li");
-      addon.tab.displayNoneWhileDisabled(reactionMenuContainer);
       reactionMenuContainer.className = "my-ocular-reaction-menu";
+      reactionMenuContainer.style.display = "none"; // overridden by userstyle if the setting is enabled
       let reactionMenuButton = document.createElement("a");
       reactionMenuButton.href = "";
       reactionMenuButton.className = "my-ocular-reaction-menu-button";
@@ -47,7 +56,8 @@ export default async function ({ addon, global, console, msg }) {
       reactionMenu.addEventListener("click", (e) => e.stopPropagation()); /* don't close the menu when it's clicked */
 
       let reactionList = document.createElement("li"); // it's a list item, because its inside the postfootright list. so it's basically a nested list
-      addon.tab.displayNoneWhileDisabled(reactionList);
+      reactionList.className = "my-ocular-reaction-list";
+      reactionList.style.display = "none"; // overridden by userstyle if the setting is enabled
       async function makeReactionList(focusedEmoji, isMenuFocused) {
         const reactions = await fetchReactions(postID);
 

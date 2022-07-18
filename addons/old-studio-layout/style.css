@@ -93,6 +93,9 @@
 .studio-tab-nav li img {
   height: 1.5em;
 }
+.sa-pseudobutton {
+  display: inline-block !important;
+}
 .studio-adder-section .studio-adder-row button ~ button:not(.sa-pseudobutton), #sa-studio-followers-btn /* browse projects */ {
   position: fixed;
   bottom: 0;

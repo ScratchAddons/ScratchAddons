@@ -29,8 +29,8 @@ export default async ({ addon, console, msg }) => {
     const disabledMessage = optDisable && optDisable();
 
     const adderSec = document.createElement("div");
-    adderSec.className = "studio-adder-section";
-    addon.tab.displayNoneWhileDisabled(adderSec);
+    adderSec.className = "studio-adder-section sa-adder-section";
+    adderSec.style.display = "none"; // overridden by userstyle if the addon is enabled
 
     const adderHeader = document.createElement("h3");
     const adderHeaderSpan = document.createElement("span");
@@ -157,6 +157,7 @@ export default async ({ addon, console, msg }) => {
       /*<button class="button x-button studio-follow-button"><span>Follow Studio</span></button>*/
       leaveSection = document.createElement("div");
       leaveSection.className = "studio-info-section sa-leave-section";
+      leaveSection.style.display = "none"; // overridden by userstyle if the addon is enabled
 
       let leaveBtn = document.createElement("button");
       leaveBtn.className = "button sa-leave-button";
@@ -185,7 +186,6 @@ export default async ({ addon, console, msg }) => {
       const studioInfo = document.querySelector(".studio-info");
       const followButton = document.querySelector(".studio-follow-button");
       studioInfo.insertBefore(leaveSection, followButton.parentNode.nextSibling);
-      addon.tab.displayNoneWhileDisabled(leaveSection);
     }
   };
   render();

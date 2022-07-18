@@ -575,7 +575,7 @@ export default async function ({ addon, global, console, msg }) {
   paintEditorControlsContainer.dir = "";
 
   const toggleControlsGroup = createGroup();
-  addon.tab.displayNoneWhileDisabled(toggleControlsGroup, { display: "flex" });
+  toggleControlsGroup.style.display = "none"; // overridden by userstyle if the addon is enabled
 
   const toggleButton = createButton();
   toggleButton.dataset.enabled = settings.enabled;
@@ -598,6 +598,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const settingsPage = document.createElement("div");
   settingsPage.className = "sa-onion-settings";
+  settingsPage.style.display = "none"; // overridden by userstyle if the addon is enabled
 
   const setSettingsOpen = (open) => {
     settingButton.dataset.enabled = open;

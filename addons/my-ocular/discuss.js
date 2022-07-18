@@ -1,4 +1,12 @@
 export default async function ({ addon, global, console, msg }) {
+  if (!addon.settings.get("discuss")) {
+    await new Promise((resolve) => {
+      addon.settings.addEventListener("change", () => {
+        if (addon.settings.get("discuss")) resolve();
+      });
+    });
+  }
+
   let posts = document.querySelectorAll(".blockpost");
   let cache = Object.create(null);
 
@@ -10,23 +18,19 @@ export default async function ({ addon, global, console, msg }) {
     const { userStatus, color } = await (cache[username] || (cache[username] = fetchStatus(username)));
 
     if (userStatus) {
-      let br = document.createElement("br");
-      addon.tab.displayNoneWhileDisabled(br);
-      let status = document.createElement("i");
-      addon.tab.displayNoneWhileDisabled(status);
+      let status = document.createElement("div");
       status.title = msg("status-hover");
       status.innerText = userStatus;
+      status.className = "my-ocular-status";
+      status.style.display = "none"; // overridden by userstyle if the setting is enabled
 
       let dot = document.createElement("span");
-      addon.tab.displayNoneWhileDisabled(dot, { display: "inline-block" });
-      dot.title = msg("status-hover");
       dot.className = "my-ocular-dot";
 
       dot.style.backgroundColor = color;
 
-      left.appendChild(br);
       left.appendChild(status);
-      if (color) left.appendChild(dot);
+      if (color) status.appendChild(dot);
     }
   });
 

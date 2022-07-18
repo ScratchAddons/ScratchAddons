@@ -14,6 +14,7 @@ export default async function ({ addon, msg, global, console }) {
 
     const button = document.createElement("button");
     button.className = "button remix-button sa-remix-button";
+    button.style.display = "none"; // overridden by userstyle if the addon is enabled
 
     const remixButtonAlt = addon.tab.scratchMessage("project.remixButton.altText");
     button.setAttribute("title", remixButtonAlt);
@@ -35,6 +36,5 @@ export default async function ({ addon, msg, global, console }) {
     button.append(inner);
 
     addon.tab.appendToSharedSpace({ space: "beforeRemixButton", element: button, order: 9 });
-    addon.tab.displayNoneWhileDisabled(button);
   }
 }

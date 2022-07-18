@@ -1,5 +1,5 @@
 .my-ocular-status {
-  display: block !important;
+  display: inline !important;
   font-style: italic;
 }
 
@@ -9,5 +9,5 @@
   margin-left: 5px;
   background-color: #bbb;
   border-radius: 50%;
-  display: inline-block;
+  display: inline-block !important;
 }

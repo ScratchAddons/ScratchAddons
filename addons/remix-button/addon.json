@@ -13,6 +13,12 @@
       "matches": ["projects"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
   "tags": ["community", "projectPage"],
   "dynamicDisable": true,
   "dynamicEnable": true,

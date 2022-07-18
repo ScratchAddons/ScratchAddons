@@ -1,5 +1,6 @@
 .sa-emoji-picker {
   cursor: auto;
+  display: block !important;
   position: absolute;
   width: 390px;
   background-color: white;
@@ -49,6 +50,9 @@
   top: 50%;
   left: 50%;
   transform: translateY(-50%) translateX(-50%);
+}
+.sa-emoji-button-container {
+  display: inline-block !important;
 }
 .sa-emoji-button {
   padding: 0.74rem 0.99rem;

@@ -8,6 +8,12 @@
       "runAtComplete": true
     }
   ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["topics"]
+    }
+  ],
   "versionAdded": "1.22.0",
   "latestUpdate": {
     "version": "1.23.0",

@@ -192,7 +192,7 @@ export default async function ({ addon, global, console, msg }) {
       className: "button action-button sa-set-thumbnail-button",
       title: msg("added-by"),
     });
-    addon.tab.displayNoneWhileDisabled(element);
+    element.style.display = "none"; // overridden by userstyle if the addon is enabled
     element.addEventListener("click", () => createModal());
     addon.tab.appendToSharedSpace({
       space: "beforeProjectActionButtons",

@@ -1,3 +1,6 @@
+.sa-stats {
+  display: block !important;
+}
 .sa-stats > .box-head a {
   float: right;
 }
