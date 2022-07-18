@@ -22,7 +22,7 @@
         }
       ],
       "default": "confirm"
-    }, 
+    },
     {
       "name": "Sprites",
       "id": "sprites",
