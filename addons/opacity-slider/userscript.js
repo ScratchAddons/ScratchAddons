@@ -9,6 +9,7 @@ export default async function ({ addon, console, msg }) {
   let LabelReadout;
   let saOpacityHandle;
   let saOpacitySlider;
+  let currentOpacity;
 
   const getColor = () => {
     let fillOrStroke;
@@ -116,6 +117,7 @@ export default async function ({ addon, console, msg }) {
     const pixelMax = CONTAINER_WIDTH - halfHandleWidth;
     LabelReadout.textContent = Math.round(opacityValue);
     saOpacityHandle.style.left = pixelMin + (pixelMax - pixelMin) * (opacityValue / 100) - halfHandleWidth + "px";
+    currentOpacity = opacityValue / 100;
 
     const color = tinycolor(getColor()).toRgb();
     setColor(`rgba(${color.r}, ${color.g}, ${color.b}, ${opacityValue / 100})`);
@@ -149,6 +151,7 @@ export default async function ({ addon, console, msg }) {
     });
 
     const defaultAlpha = tinycolor(getColor()).toRgb().a;
+    currentOpacity = defaultAlpha;
     const LabelReadoutClass = document.querySelector('[class*="color-picker_label-readout"]').className.split(" ")[0];
     LabelReadout = Object.assign(document.createElement("span"), {
       className: LabelReadoutClass,
@@ -180,9 +183,8 @@ export default async function ({ addon, console, msg }) {
         detail.action.type === "scratch-paint/color-index/CHANGE_COLOR_INDEX"
       ) {
         const color = getColor();
-        console.log(color);
         setSliderBg(color || "#000000");
-        setHandlePos(tinycolor(color).toRgb().a);
+        setHandlePos(currentOpacity);
       }
     };
     addon.tab.redux.addEventListener("statechanged", prevEventHandler);
