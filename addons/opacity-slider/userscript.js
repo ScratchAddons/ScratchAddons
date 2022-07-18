@@ -183,7 +183,7 @@ export default async function ({ addon, console, msg }) {
         setSliderBg(color);
         console.log(color);
         if (detail.action.type === "scratch-paint/color-index/CHANGE_COLOR_INDEX") {
-          console.log(tinycolor(color));
+          LabelReadout.textContent = Math.round(tinycolor(color).toRgb().a * 100);
           setHandlePos(tinycolor(color).toRgb().a);
         }
       }
