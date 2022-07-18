@@ -120,7 +120,7 @@ export default async function ({ addon, console }) {
         "scratch-gui/navigation/ACTIVATE_TAB",
         "scratch-gui/mode/SET_PLAYER",
         "fontsLoaded/SET_FONTS_LOADED",
-        "scratch-gui/locales/SELECT_LOCALE"
+        "scratch-gui/locales/SELECT_LOCALE",
       ],
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
     });
