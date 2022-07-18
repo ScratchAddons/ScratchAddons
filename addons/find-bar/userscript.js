@@ -466,11 +466,7 @@ export default async function ({ addon, msg, console }) {
       this.el = null;
       this.items = [];
       this.selected = null;
-      this.carousel = null;
-
-      this.idx = 0;
-      this.count = null;
-      this.blocks = null;
+      this.carousel = new Carousel(this.utils);
     }
 
     createDom() {
@@ -494,20 +490,6 @@ export default async function ({ addon, msg, console }) {
         return;
       }
 
-      // Left Arrow
-      if (e.keyCode === 37) {
-        if (this.selected && this.blocks) {
-          this.navLeft(e);
-        }
-      }
-
-      // Right Arrow
-      if (e.keyCode === 39) {
-        if (this.selected && this.blocks) {
-          this.navRight(e);
-        }
-      }
-
       // Enter
       if (e.keyCode === 13) {
         // Any selected on enter? if not select now
@@ -517,6 +499,8 @@ export default async function ({ addon, msg, console }) {
         e.preventDefault();
         return;
       }
+
+      this.carousel.inputKeyDown(e);
     }
 
     navigateFilter(dir) {
@@ -582,10 +566,10 @@ export default async function ({ addon, msg, console }) {
       } else if (cls === "var" || cls === "VAR" || cls === "list" || cls === "LIST") {
         // Search now for all instances
         let blocks = this.getVariableUsesById(item.data.labelID);
-        this.buildNavigationCarousel(item, blocks, instanceBlock);
+        this.carousel.build(item, blocks, instanceBlock);
       } else if (cls === "define") {
         let blocks = this.getCallsToProcedureById(item.data.labelID);
-        this.buildNavigationCarousel(item, blocks, instanceBlock);
+        this.carousel.build(item, blocks, instanceBlock);
       } else if (cls === "receive") {
         /*
           let blocks = [this.workspace.getBlockById(li.data.labelID)];
@@ -608,19 +592,16 @@ export default async function ({ addon, msg, console }) {
             }
           }
         }
-        this.buildNavigationCarousel(item, blocks, instanceBlock);
+        this.carousel.build(item, blocks, instanceBlock);
       } else if (item.data.clones) {
         let blocks = [this.workspace.getBlockById(item.data.labelID)];
         for (const cloneID of item.data.clones) {
           blocks.push(this.workspace.getBlockById(cloneID));
         }
-        this.buildNavigationCarousel(item, blocks, instanceBlock);
+        this.carousel.build(item, blocks, instanceBlock);
       } else {
-        this.blocks = null;
         this.utils.scrollBlockIntoView(item.data.labelID);
-        if (this.carousel) {
-          this.carousel.remove();
-        }
+        this.carousel.remove();
       }
     }
 
@@ -701,51 +682,6 @@ export default async function ({ addon, msg, console }) {
       return uses;
     }
 
-    buildNavigationCarousel(li, blocks, instanceBlock) {
-      if (this.carousel && this.carousel.parentNode === li) {
-        // Same control... click again to go to next
-        this.navRight();
-      } else {
-        if (this.carousel) {
-          this.carousel.remove();
-        }
-        this.carousel = li.appendChild(document.createElement("span"));
-        this.carousel.className = "find-carousel";
-
-        const leftControl = this.carousel.appendChild(document.createElement("span"));
-        leftControl.className = "find-carousel-control";
-        leftControl.textContent = "◀";
-        leftControl.addEventListener("mousedown", (e) => this.navLeft(e));
-
-        this.count = this.carousel.appendChild(document.createElement("span"));
-
-        const rightControl = this.carousel.appendChild(document.createElement("span"));
-        rightControl.className = "find-carousel-control";
-        rightControl.textContent = "▶";
-        rightControl.addEventListener("mousedown", (e) => this.navRight(e));
-
-        this.idx = 0;
-
-        if (instanceBlock) {
-          for (let i = 0; i < blocks.length; i++) {
-            const block = blocks[i];
-            if (block.id === instanceBlock.id) {
-              this.idx = i;
-              break;
-            }
-          }
-          // multi.idx = blocks.indexOf(instanceBlock);
-        }
-
-        this.blocks = blocks;
-        this.update();
-
-        if (this.idx < blocks.length) {
-          this.utils.scrollBlockIntoView(blocks[this.idx]);
-        }
-      }
-    }
-
     empty() {
       for (const item of this.items) {
         this.el.removeChild(item);
@@ -753,9 +689,78 @@ export default async function ({ addon, msg, console }) {
       this.items = [];
       this.selected = null;
     }
+  }
 
-    update() {
-      this.count.innerText = this.blocks && this.blocks.length > 0 ? this.idx + 1 + " / " + this.blocks.length : "0";
+  class Carousel {
+    constructor(utils) {
+      this.utils = utils;
+
+      this.el = null;
+      this.count = null;
+      this.blocks = [];
+      this.idx = 0;
+    }
+
+    build(item, blocks, instanceBlock) {
+      if (this.el && this.el.parentNode === item) {
+        // Same control... click again to go to next
+        this.navRight();
+      } else {
+        this.remove();
+        this.blocks = blocks;
+        item.appendChild(this.createDom());
+
+        this.idx = 0;
+        if (instanceBlock) {
+          for (const idx in this.blocks) {
+            const block = this.blocks[idx];
+            if (block.id === instanceBlock.id) {
+              this.idx = Number(idx);
+              break;
+            }
+          }
+        }
+
+        if (this.idx < this.blocks.length) {
+          this.utils.scrollBlockIntoView(this.blocks[this.idx]);
+        }
+      }
+    }
+
+    createDom() {
+      this.el = document.createElement("span");
+      this.el.className = "find-carousel";
+
+      const leftControl = this.el.appendChild(document.createElement("span"));
+      leftControl.className = "find-carousel-control";
+      leftControl.textContent = "◀";
+      leftControl.addEventListener("mousedown", (e) => this.navLeft(e));
+
+      this.count = this.el.appendChild(document.createElement("span"));
+      this.count.innerText = this.blocks.length > 0 ? this.idx + 1 + " / " + this.blocks.length : "0";
+
+      const rightControl = this.el.appendChild(document.createElement("span"));
+      rightControl.className = "find-carousel-control";
+      rightControl.textContent = "▶";
+      rightControl.addEventListener("mousedown", (e) => this.navRight(e));
+
+      return this.el;
+    }
+
+    inputKeyDown(e) {
+      // Left Arrow
+      if (e.keyCode === 37) {
+        if (this.el && this.blocks) {
+          this.navLeft(e);
+        }
+      }
+
+      // Right Arrow
+      if (e.keyCode === 39) {
+        if (this.el && this.blocks) {
+          this.navRight(e);
+        }
+      }
     }
 
     navLeft(e) {
@@ -767,16 +772,22 @@ export default async function ({ addon, msg, console }) {
     }
 
     navSideways(e, dir) {
-      if (this.blocks && this.blocks.length > 0) {
+      if (this.blocks.length > 0) {
         this.idx = (this.idx + dir + this.blocks.length) % this.blocks.length; // + length to fix negative modulo js issue.
-        this.update();
+        this.count.innerText = this.idx + 1 + " / " + this.blocks.length;
         this.utils.scrollBlockIntoView(this.blocks[this.idx]);
       }
-      if (e) {
-        e.cancelBubble = true;
-        e.preventDefault();
+
+      e.cancelBubble = true;
+      e.preventDefault();
+    }
+
+    remove() {
+      if (this.el) {
+        this.el.remove();
+        this.blocks = [];
+        this.idx = 0;
       }
-      return false;
     }
   }
 

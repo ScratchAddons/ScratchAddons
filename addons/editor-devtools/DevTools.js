@@ -849,66 +849,12 @@ export default class DevTools {
       } catch (x) {
         console.error(x);
       }
-    } else if (e.button === 2) {
-      // Right click...
-      /*
-      let spriteSelector = e.target.closest("#react-tabs-3 div[class*='sprite-selector-item_sprite-selector-item']");
-      if (spriteSelector) {
-        let contextMenu = spriteSelector.getElementsByTagName("nav")[0];
-        if (!contextMenu.querySelector("div.s3devSTT")) {
-          contextMenu.insertAdjacentHTML(
-            "beforeend",
-            `
-                            <div class="${this.addon.tab.scratchClass(
-                              "context-menu_menu-item",
-                              "context-menu_menu-item-bordered",
-                              {
-                                others: ["react-contextmenu-item", "s3devSTT"],
-                              }
-                            )}" role="menuitem"
-                                tabindex="-1" aria-disabled="false"><span>${this.m("top")}</span></div>
-                            <div class="${this.addon.tab.scratchClass("context-menu_menu-item", {
-                              others: ["react-contextmenu-item", "s3devSTT"],
-                            })}" role="menuitem"
-                                tabindex="-1" aria-disabled="false"><span>${this.m("bottom")}</span></div>
-                        `
-          );
-        }
-      }
-      */
     } else {
       let chk = e.target;
       if (chk && chk.tagName !== "BUTTON" && chk.getAttribute && !chk.getAttribute("role")) {
         chk = chk.parentNode;
         if (chk && chk.tagName !== "BUTTON" && chk.getAttribute && !chk.getAttribute("role")) {
           chk = chk.parentNode;
-        }
-      }
-
-      if (chk && chk.className && chk.className.indexOf) {
-        if (!this.canShare && chk.className.indexOf("share-button") >= 0) {
-          // Commented for ScratchAddons
-          /*e.cancelBubble = true;
-                      e.preventDefault();
-
-                      if (confirm("Griffpatch: Are you sure you want to share?")) {
-                          // action the share!
-                          canShare = true;
-                          chk.click();
-                      }*/
-
-          return;
-        }
-      }
-
-      chk = e.target.tagName === "SPAN" ? e.target.parentNode : e.target;
-
-      if (chk.classList.contains("s3devSTT")) {
-        if (chk.textContent === this.m("top") || chk.textContent === this.m("bottom")) {
-          let spriteSelector = e.target.closest("div[class*='sprite-selector-item_sprite-selector-item']");
-          this.moveCostumeTo(chk.textContent === this.m("top"), spriteSelector);
-          e.cancelBubble = true;
-          e.preventDefault();
         }
       }
     }
