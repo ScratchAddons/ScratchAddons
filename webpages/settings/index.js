@@ -233,9 +233,6 @@ let fuse;
       selectedCategoryName() {
         return this.categories.find((category) => category.id === this.selectedCategory)?.name;
       },
-      logoSrc() {
-        return prerelease ? "../../images/icon-blue.svg" : "../../images/icon.svg";
-      },
     },
 
     methods: {

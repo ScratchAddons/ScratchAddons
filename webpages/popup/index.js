@@ -57,9 +57,6 @@ const vue = new Vue({
       const utm = `utm_source=extension&utm_medium=popup&utm_campaign=v${chrome.runtime.getManifest().version}`;
       return `https://scratchaddons.com/${localeSlash}changelog/?${utm}`;
     },
-    logoSrc() {
-      return prerelease ? "../../images/icon-blue.svg" : "../../images/icon.svg";
-    },
     version() {
       const ver = chrome.runtime.getManifest().version;
       return prerelease ? ver + "-pre" : ver;
