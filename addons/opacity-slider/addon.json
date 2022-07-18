@@ -1,7 +1,7 @@
 {
   "name": "Opacity slider",
-  "description": "Adds opacity slider to color pickers.",
-  "tags": ["editor", "costumeEditor"],
+  "description": "Adds opacity slider to the costume editor color picker.",
+  "tags": ["editor", "costumeEditor", "recommended"],
   "credits": [
     {
       "name": "itta611",

@@ -128,7 +128,7 @@ export default async function ({ addon, console, msg }) {
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
     });
     addon.tab.redux.initialize();
-    if (addon.tab.redux && typeof prevEventHandler === "function") {
+    if (typeof prevEventHandler === "function") {
       addon.tab.redux.removeEventListener("statechanged", prevEventHandler);
       prevEventHandler = null;
     }
