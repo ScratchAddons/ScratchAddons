@@ -76,7 +76,9 @@ export default async function ({ addon, msg, console }) {
         let i = li.data.lower.indexOf(val);
         if (i >= 0) {
           li.style.display = "block";
-          this.dom_removeChildren(li);
+          while (li.firstChild) {
+            li.removeChild(li.firstChild);
+          }
           if (i > 0) {
             li.appendChild(document.createTextNode(procCode.substring(0, i)));
           }
@@ -107,11 +109,132 @@ export default async function ({ addon, msg, console }) {
           this.findInput.value = ""; // Clear search first, then close on second press
           this.inputChange();
         } else {
-          // noinspection JSUnresolvedFunction
           this.findInput.blur();
         }
         e.preventDefault();
         return;
+      }
+    }
+
+    eventMouseDown(e) {
+      if (addon.self.disabled) return;
+
+      if (this.dropdownOut && this.dropdownOut.classList.contains("visible") && !e.target.closest(".visible")) {
+        // If we click outside the dropdown, then instigate the hide code...
+        this.hideDropDown();
+      }
+
+      if (e.button === 1 || e.shiftKey) {
+        // Wheel button...
+        // Intercept clicks to allow jump to...?
+        let blockSvg = e.target.closest("[data-id]");
+        if (!blockSvg) {
+          return;
+        }
+
+        let w = this.workspace;
+        let dataId = blockSvg.getAttribute("data-id");
+        let block = w.getBlockById(dataId);
+        if (!block) {
+          return;
+        }
+
+        for (; block; block = block.getSurroundParent()) {
+          if (block.type === "procedures_definition") {
+            let id = block.id ? block.id : block.getId ? block.getId() : null;
+
+            this.findInput.focus();
+            this.showDropDown(id);
+
+            e.cancelBubble = true;
+            e.preventDefault();
+            return;
+          }
+
+          if (
+            block.type === "data_variable" ||
+            block.type === "data_changevariableby" ||
+            block.type === "data_setvariableto"
+          ) {
+            let id = block.getVars()[0];
+
+            this.findInput.focus();
+            this.showDropDown(id, block);
+
+            // let button = document.getElementById('s3devReplace');
+
+            this.selVarID = id;
+            // button.classList.remove('s3devHide');
+
+            e.cancelBubble = true;
+            e.preventDefault();
+            return;
+          }
+
+          if (
+            block.type === "event_whenbroadcastreceived" ||
+            block.type === "event_broadcastandwait" ||
+            block.type === "event_broadcast"
+          ) {
+            // todo: actually index the broadcasts...!
+            let id = block.id;
+
+            this.findInput.focus();
+            this.showDropDown(id, block);
+
+            this.selVarID = id;
+
+            e.cancelBubble = true;
+            e.preventDefault();
+            return;
+          }
+        }
+
+        e.cancelBubble = true;
+        e.preventDefault();
+      }
+    }
+
+    eventKeyDown(e) {
+      if (addon.self.disabled) return;
+
+      let ctrlKey = e.ctrlKey || e.metaKey;
+
+      if (e.key === "f" && ctrlKey && !e.shiftKey) {
+        // Ctrl + F (Override default Ctrl+F find)
+        this.findInput.focus();
+        this.findInput.select();
+        e.cancelBubble = true;
+        e.preventDefault();
+        return true;
+      }
+
+      if (e.keyCode === 37 && ctrlKey) {
+        // Ctrl + Left Arrow Key
+        if (document.activeElement.tagName === "INPUT") {
+          return;
+        }
+
+        if (this.selectedTab === 0) {
+          this.utils.navigationHistory.goBack();
+          e.cancelBubble = true;
+          e.preventDefault();
+          return true;
+        }
+      }
+
+      if (e.keyCode === 39 && ctrlKey) {
+        // Ctrl + Right Arrow Key
+        if (document.activeElement.tagName === "INPUT") {
+          return;
+        }
+
+        if (this.selectedTab === 0) {
+          this.utils.navigationHistory.goForward();
+          e.cancelBubble = true;
+          e.preventDefault();
+          return true;
+        }
       }
     }
 
@@ -132,8 +255,6 @@ export default async function ({ addon, msg, console }) {
           : this.getScratchSounds();
 
       this.dropdown.empty();
-
-      let foundLi = null;
       /**
        * @type {[BlockItem]}
        */
@@ -143,9 +264,7 @@ export default async function ({ addon, msg, console }) {
 
         if (focusID) {
           if (proc.matchesID(focusID)) {
-            foundLi = item;
-            item.classList.add("sel");
-            this.dropdown.selected = item;
+            this.dropdown.onItemClick(item, instanceBlock);
           } else {
             item.style.display = "none";
           }
@@ -155,10 +274,6 @@ export default async function ({ addon, msg, console }) {
       this.utils.offsetX =
         this.dropdownOut.getBoundingClientRect().right - this.findLabel.getBoundingClientRect().left + 26;
       this.utils.offsetY = 32;
-
-      if (foundLi) {
-        this.dropdown.clickDropDownRow(foundLi, instanceBlock);
-      }
     }
 
     hideDropDown() {
@@ -167,112 +282,6 @@ export default async function ({ addon, msg, console }) {
 
     get selectedTab() {
       return addon.tab.redux.state.scratchGui.editorTab.activeTabIndex;
-    }
-
-    isBlockAnOrphan(topBlock) {
-      return !!topBlock.outputConnection;
-    }
-
-    getOrderedTopBlockColumns(separateOrphans) {
-      let topBlocks = this.workspace.getTopBlocks();
-      let maxWidths = {};
-
-      if (separateOrphans) {
-        let topComments = this.workspace.getTopComments();
-
-        // todo: tie comments to blocks... find widths and width of block stack row...
-        for (const comment of topComments) {
-          // comment.autoPosition_();
-          // Hiding and showing repositions the comment right next to it's block - nice!
-          if (comment.setVisible) {
-            comment.setVisible(false);
-            comment.needsAutoPositioning_ = true;
-            comment.setVisible(true);
-
-            // let bb = comment.block_.svgPath_.getBBox();
-            let right = comment.getBoundingRectangle().bottomRight.x;
-
-            // Get top block for stack...
-            let root = comment.block_.getRootBlock();
-            let left = root.getBoundingRectangle().topLeft.x;
-            maxWidths[root.id] = Math.max(right - left, maxWidths[root.id] || 0);
-          }
-        }
-      }
-
-      /**
-       * @type {Col[]}
-       */
-      let cols = [];
-      const TOLERANCE = 256;
-      let orphans = { x: -999999, count: 0, blocks: [] };
-
-      for (const topBlock of topBlocks) {
-        // let r = b.getBoundingRectangle();
-        let position = topBlock.getRelativeToSurfaceXY();
-        /**
-         * @type {Col}
-         */
-        let bestCol = null;
-        let bestError = TOLERANCE;
-
-        if (separateOrphans && this.isBlockAnOrphan(topBlock)) {
-          orphans.blocks.push(topBlock);
-          continue;
-        }
-
-        // Find best columns
-        for (const col of cols) {
-          let err = Math.abs(position.x - col.x);
-          if (err < bestError) {
-            bestError = err;
-            bestCol = col;
-          }
-        }
-
-        if (bestCol) {
-          // We found a column that we fitted into
-          bestCol.x = (bestCol.x * bestCol.count + position.x) / ++bestCol.count; // re-average the columns as more items get added...
-          bestCol.blocks.push(topBlock);
-        } else {
-          // Create a new column
-          cols.push({ x: position.x, count: 1, blocks: [topBlock] });
-        }
-      }
-
-      // if (orphans.blocks.length > 0) {
-      //     cols.push(orphans);
-      // }
-
-      // Sort columns, then blocks inside the columns
-      cols.sort((a, b) => a.x - b.x);
-      for (const col of cols) {
-        col.blocks.sort((a, b) => a.getRelativeToSurfaceXY().y - b.getRelativeToSurfaceXY().y);
-      }
-
-      return { cols: cols, orphans: orphans, maxWidths: maxWidths };
-    }
-
-    getCallsToEvents() {
-      const uses = []; // Definition First, then calls to it
-      const found = {};
-
-      let topBlocks = this.workspace.getTopBlocks();
-      for (const topBlock of topBlocks) {
-        /** @type {!Array<!Blockly.Block>} */
-        let kids = topBlock.getDescendants();
-        for (const block of kids) {
-          if (block.type === "event_broadcast" || block.type === "event_broadcastandwait") {
-            const eventName = block.getChildren()[0].inputList[0].fieldRow[0].getText();
-            if (!found[eventName]) {
-              found[eventName] = block;
-              uses.push({ eventName: eventName, block: block });
-            }
-          }
-        }
-      }
-
-      return uses;
     }
 
     getScratchBlocks() {
@@ -426,139 +435,26 @@ export default async function ({ addon, msg, console }) {
       return { procs };
     }
 
-    dom_removeChildren(myNode) {
-      while (myNode.firstChild) {
-        myNode.removeChild(myNode.firstChild);
-      }
-    }
+    getCallsToEvents() {
+      const uses = []; // Definition First, then calls to it
+      const found = {};
 
-    eventMouseDown(e) {
-      if (addon.self.disabled) return;
-
-      if (this.dropdownOut && this.dropdownOut.classList.contains("visible") && !e.target.closest(".visible")) {
-        // If we click outside the dropdown, then instigate the hide code...
-        this.hideDropDown();
-      }
-
-      if (e.button === 1 || e.shiftKey) {
-        // Wheel button...
-        try {
-          this.middleClick(e);
-        } catch (x) {
-          console.error(x);
-        }
-      }
-    }
-
-    eventKeyDown(e) {
-      if (addon.self.disabled) return;
-
-      let ctrlKey = e.ctrlKey || e.metaKey;
-
-      if (e.key === "f" && ctrlKey && !e.shiftKey) {
-        // Ctrl + F (Override default Ctrl+F find)
-        this.findInput.focus();
-        this.findInput.select();
-        e.cancelBubble = true;
-        e.preventDefault();
-        return true;
-      }
-
-      if (e.keyCode === 37 && ctrlKey) {
-        // Ctrl + Left Arrow Key
-        if (document.activeElement.tagName === "INPUT") {
-          return;
-        }
-
-        if (this.selectedTab === 0) {
-          this.utils.navigationHistory.goBack();
-          e.cancelBubble = true;
-          e.preventDefault();
-          return true;
+      let topBlocks = this.workspace.getTopBlocks();
+      for (const topBlock of topBlocks) {
+        /** @type {!Array<!Blockly.Block>} */
+        let kids = topBlock.getDescendants();
+        for (const block of kids) {
+          if (block.type === "event_broadcast" || block.type === "event_broadcastandwait") {
+            const eventName = block.getChildren()[0].inputList[0].fieldRow[0].getText();
+            if (!found[eventName]) {
+              found[eventName] = block;
+              uses.push({ eventName: eventName, block: block });
+            }
+          }
         }
       }
 
-      if (e.keyCode === 39 && ctrlKey) {
-        // Ctrl + Right Arrow Key
-        if (document.activeElement.tagName === "INPUT") {
-          return;
-        }
-
-        if (this.selectedTab === 0) {
-          this.utils.navigationHistory.goForward();
-          e.cancelBubble = true;
-          e.preventDefault();
-          return true;
-        }
-      }
-    }
-    middleClick(e) {
-      // Intercept clicks to allow jump to...?
-      let blockSvg = e.target.closest("[data-id]");
-      if (!blockSvg) {
-        return;
-      }
-
-      let w = this.workspace;
-      let dataId = blockSvg.getAttribute("data-id");
-      let block = w.getBlockById(dataId);
-      if (!block) {
-        return;
-      }
-
-      for (; block; block = block.getSurroundParent()) {
-        if (block.type === "procedures_definition") {
-          let id = block.id ? block.id : block.getId ? block.getId() : null;
-
-          this.findInput.focus();
-          this.showDropDown(id);
-
-          e.cancelBubble = true;
-          e.preventDefault();
-          return;
-        }
-
-        if (
-          block.type === "data_variable" ||
-          block.type === "data_changevariableby" ||
-          block.type === "data_setvariableto"
-        ) {
-          let id = block.getVars()[0];
-
-          this.findInput.focus();
-          this.showDropDown(id, block);
-
-          // let button = document.getElementById('s3devReplace');
-
-          this.selVarID = id;
-          // button.classList.remove('s3devHide');
-
-          e.cancelBubble = true;
-          e.preventDefault();
-          return;
-        }
-
-        if (
-          block.type === "event_whenbroadcastreceived" ||
-          block.type === "event_broadcastandwait" ||
-          block.type === "event_broadcast"
-        ) {
-          // todo: actually index the broadcasts...!
-          let id = block.id;
-
-          this.findInput.focus();
-          this.showDropDown(id, block);
-
-          this.selVarID = id;
-
-          e.cancelBubble = true;
-          e.preventDefault();
-          return;
-        }
-      }
-
-      e.cancelBubble = true;
-      e.preventDefault();
+      return uses;
     }
   }
 
@@ -655,7 +551,7 @@ export default async function ({ addon, msg, console }) {
       return item;
     }
 
-    onItemClick(item) {
+    onItemClick(item, instanceBlock) {
       if (this.selected && this.selected !== item) {
         this.selected.classList.remove("sel");
         this.selected = null;
@@ -665,10 +561,6 @@ export default async function ({ addon, msg, console }) {
         this.selected = item;
       }
 
-      this.clickDropDownRow(item);
-    }
-
-    clickDropDownRow(item, instanceBlock) {
       let cls = item.data.cls;
       if (cls === "costume" || cls === "sound") {
         // Viewing costumes/sounds - jump to selected costume/sound
