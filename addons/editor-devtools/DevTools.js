@@ -849,14 +849,6 @@ export default class DevTools {
       } catch (x) {
         console.error(x);
       }
-    } else {
-      let chk = e.target;
-      if (chk && chk.tagName !== "BUTTON" && chk.getAttribute && !chk.getAttribute("role")) {
-        chk = chk.parentNode;
-        if (chk && chk.tagName !== "BUTTON" && chk.getAttribute && !chk.getAttribute("role")) {
-          chk = chk.parentNode;
-        }
-      }
     }
   }
 
