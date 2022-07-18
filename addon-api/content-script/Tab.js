@@ -234,18 +234,6 @@ export default class Tab extends Listenable {
   }
 
   /**
-   * Hides an element when the addon is disabled.
-   * @param {HTMLElement} el - the element.
-   * @param {object=} opts - the options.
-   * @param {string=} opts.display - the fallback value for CSS display.
-   */
-  displayNoneWhileDisabled(el, { display = "" } = {}) {
-    el.style.display = `var(--${this._addonId.replace(/-([a-z])/g, (g) =>
-      g[1].toUpperCase()
-    )}-_displayNoneWhileDisabledValue${display ? ", " : ""}${display})`;
-  }
-
-  /**
    * The direction of the text; i.e. rtl or ltr.
    * @type {string}
    */
