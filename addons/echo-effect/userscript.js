@@ -4,11 +4,9 @@ export default async ({ addon }) => {
       markAsSeen: true,
     });
     const echoButton = document.createElement("div");
-    echoButton.className = addon.tab.scratchClass(
-      "icon-button_container",
-      "sound-editor_effect-button",
-      { others: "sa-echo-button" }
-    );
+    echoButton.className = addon.tab.scratchClass("icon-button_container", "sound-editor_effect-button", {
+      others: "sa-echo-button",
+    });
     echoButton.style.display = "none"; // overridden by userstyle if the addon is enabled
     echoButton.setAttribute("role", "button");
     echoButton.addEventListener("click", () => {
