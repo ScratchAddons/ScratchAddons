@@ -171,7 +171,6 @@ export default async function ({ addon, console, msg }) {
     setHandlePos(defaultAlpha);
 
     prevEventHandler = ({ detail }) => {
-      console.log(detail.action.type);
       if (
         detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR" ||
         detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR_2" ||
@@ -181,7 +180,6 @@ export default async function ({ addon, console, msg }) {
       ) {
         const color = getColor();
         setSliderBg(color);
-        console.log(color);
         if (detail.action.type === "scratch-paint/color-index/CHANGE_COLOR_INDEX") {
           LabelReadout.textContent = Math.round(tinycolor(color).toRgb().a * 100);
           setHandlePos(tinycolor(color).toRgb().a);
