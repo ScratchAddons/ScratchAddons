@@ -176,13 +176,13 @@ export default async function ({ addon, console, msg }) {
     prevEventHandler = ({ detail }) => {
       if (
         detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR" ||
-        detail.action.type === "scratch-paint/stroke-style/CHANGE_STROKE_COLOR"
-        // detail.action.type === "scratch-paint/color-index/CHANGE_COLOR_INDEX"
+        detail.action.type === "scratch-paint/stroke-style/CHANGE_STROKE_COLOR" ||
+        detail.action.type === "scratch-paint/color-index/CHANGE_COLOR_INDEX"
       ) {
         const color = getColor();
         console.log(color);
         setSliderBg(color || "#000000");
-        // setHandlePos(tinycolor(color).toRgb().a);
+        setHandlePos(tinycolor(color).toRgb().a);
       }
     };
     addon.tab.redux.addEventListener("statechanged", prevEventHandler);
