@@ -71,11 +71,6 @@ let manifests = null;
 // If order unspecified, addon goes first. All new popups should be added here.
 const TAB_ORDER = ["scratch-messaging", "cloud-games", "__settings__"];
 
-if (prerelease) {
-  const blue = getComputedStyle(document.documentElement).getPropertyValue("--blue");
-  document.getElementById("header").style.backgroundColor = blue;
-}
-
 chrome.runtime.sendMessage("getSettingsInfo", (res) => {
   manifests = res.manifests;
   const popupObjects = Object.keys(res.addonsEnabled)
