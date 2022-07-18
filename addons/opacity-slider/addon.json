@@ -15,5 +15,6 @@
     }
   ],
   "libraries": ["tinycolor2"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "versionAdded": "1.28.0"
 }
