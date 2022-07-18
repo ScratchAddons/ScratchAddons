@@ -14,5 +14,6 @@
       "matches": ["projects"]
     }
   ],
+  "libraries": ["tinycolor2"],
   "enabledByDefault": false
 }
