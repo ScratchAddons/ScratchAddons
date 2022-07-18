@@ -1,12 +1,28 @@
 {
-  "name": "Hide delete button",
-  "description": "Hides delete button (trash can icon) from sprites, costumes and sounds. They can still be deleted using the right click context menu.",
+  "name": "Delete button action",
+  "description": "Hides delete button (trash can icon) from sprites, costumes and sounds or ask for confirmation on delete.",
   "tags": ["editor", "featured"],
   "versionAdded": "1.19.0",
   "dynamicEnable": true,
   "dynamicDisable": true,
   "updateUserstylesOnSettingsChange": true,
   "settings": [
+    {
+      "name": "Action... ",
+      "id": "action",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "confirm",
+          "name": "Ask for confirmation"
+        },
+        {
+          "id": "hide",
+          "name": "Hide delete button"
+        }
+      ],
+      "default": "confirm"
+    }, 
     {
       "name": "Sprites",
       "id": "sprites",
@@ -26,13 +42,25 @@
       "default": true
     }
   ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "if": {
+        "settings": {
+          "action": "confirm"
+        }
+      }
+    }
+  ],
   "userstyles": [
     {
       "url": "sprites.css",
       "matches": ["projects"],
       "if": {
         "settings": {
-          "sprites": true
+          "sprites": true,
+          "action": "hide"
         }
       }
     },
@@ -41,7 +69,8 @@
       "matches": ["projects"],
       "if": {
         "settings": {
-          "costumes": true
+          "costumes": true,
+          "action": "hide"
         }
       }
     },
@@ -50,7 +79,8 @@
       "matches": ["projects"],
       "if": {
         "settings": {
-          "sounds": true
+          "sounds": true,
+          "action": "hide"
         }
       }
     }
