@@ -151,7 +151,7 @@ h1 {
   display: none !important;
 }
 #confirmImport {
-  border-color: var(--brand-orange);
+  border-color: var(--danger-orange);
 }
 
 #search-not-found {

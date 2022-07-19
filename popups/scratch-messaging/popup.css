@@ -36,7 +36,7 @@ button {
   box-shadow: var(--content-shadow);
 }
 .message-type-admin {
-  border-color: var(--brand-orange);
+  border-color: var(--danger-orange);
 }
 
 .message-type-title {
