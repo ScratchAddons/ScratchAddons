@@ -155,7 +155,7 @@ export default async function ({ addon, global, console }) {
           blockpost.querySelector(".black.username").innerText
         }]${getSelectionBBCode()}[/quote]`;
       else copy_paste(blockpost.id);
-      textarea.scrollIntoView(false);
+      window.location.hash = "#reply";
       textarea.focus();
     });
   }

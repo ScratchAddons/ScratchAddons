@@ -82,6 +82,8 @@
     <link rel="modulepreload" href="components/addon-body.js" />
     <link rel="preload" href="components/category-selector.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/category-selector.js" />
+    <link rel="preload" href="components/modal.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/modal.js" />
     <link rel="preload" href="components/previews/editor-dark-mode.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/previews/editor-dark-mode.js" />
     <link rel="preload" href="components/previews/palette.html" as="fetch" crossorigin />
@@ -96,6 +98,7 @@
       */
       @import url("../styles/colors.css");
       @import url("../styles/components/badges.css");
+      @import url("../styles/components/buttons.css");
       @import url("../styles/components/filter.css");
       @import url("../styles/components/categories.css");
       @import url("../styles/components/search.css");
@@ -161,7 +164,7 @@
           <img src="../../images/icons/comment.svg" />
           <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" /></span>
         </a>
-        <div v-cloak class="category" style="margin-top: 12px; margin-bottom: 14px" @click="modalToggle()">
+        <div v-cloak class="category" style="margin-top: 12px; margin-bottom: 14px" @click="openMoreSettings()">
           <img src="../../images/icons/wrench.svg" />
           <span>{{ msg("moreSettings") }}</span>
         </div>
@@ -179,7 +182,12 @@
         </div>
 
         <div class="addons-container" :class="{placeholder: !loaded}" v-cloak>
-          <p id="search-not-found" v-show="searchInput && hasNoResults">{{ msg("searchNotFound") }}</p>
+          <template v-if="searchInput && hasNoResults">
+            <p id="search-not-found" v-if="selectedCategory === 'all' || !selectedCategoryName">
+              {{ msg("searchNotFound") }}
+            </p>
+            <p id="search-not-found" v-else>{{ msg("searchNotFoundInCategory", selectedCategoryName) }}</p>
+          </template>
           <template v-for="addon of addonList">
             <div
               id="iframe-fullscreen-suggestion"
@@ -205,83 +213,77 @@
         </div>
       </div>
     </div>
-    <div v-cloak v-show="isOpen" class="modal">
-      <div class="modal-content" v-click-outside="modalClickOutside">
-        <div>
-          <img @click="modalToggle()" class="close" alt="Logo" src="../../images/icons/close.svg" />
-          <h1 class="setting-heading">{{ msg("moreSettings") }}</h1>
-        </div>
-        <div class="addon-block settings-block">
-          <div class="addon-body">
-            <div class="addon-topbar">
-              <span class="addon-name"
-                ><img src="../../images/icons/theme.svg" class="icon-type" /> {{ msg("scratchAddonsTheme") }}
-              </span>
-            </div>
-            <div class="addon-settings">
-              <span class="addon-description-full">{{ msg("scratchAddonsThemeDescription") }}</span>
-              <div class="addon-setting">
-                <div class="filter-selector">
-                  <div class="filter-text">{{ msg("theme") }}</div>
-                  <div class="filter-options">
-                    <div class="filter-option" :class="{'sel': theme === true}" @click="setTheme(true)">
-                      {{ msg("light") }}
-                    </div>
-                    <div class="filter-option" :class="{'sel': theme === false}" @click="setTheme(false)">
-                      {{ msg("dark") }}
-                    </div>
+    <modal class="more-settings" :is-open.sync="moreSettingsOpen" :title="msg('moreSettings')" v-cloak>
+      <div class="addon-block settings-block">
+        <div class="addon-body">
+          <div class="addon-topbar">
+            <span class="addon-name"
+              ><img src="../../images/icons/theme.svg" class="icon-type" /> {{ msg("scratchAddonsTheme") }}
+            </span>
+          </div>
+          <div class="addon-settings">
+            <span class="addon-description-full">{{ msg("scratchAddonsThemeDescription") }}</span>
+            <div class="addon-setting">
+              <div class="filter-selector">
+                <div class="filter-text">{{ msg("theme") }}</div>
+                <div class="filter-options">
+                  <div class="filter-option" :class="{'sel': theme === true}" @click="setTheme(true)">
+                    {{ msg("light") }}
+                  </div>
+                  <div class="filter-option" :class="{'sel': theme === false}" @click="setTheme(false)">
+                    {{ msg("dark") }}
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="addon-body">
-            <div class="addon-topbar">
-              <span class="addon-name"
-                ><img src="../../images/icons/import-export.svg" class="icon-type" :class="{'dark': theme === false}" />
-                {{ msg("exportAndImportSettings") }}
-              </span>
-            </div>
-            <div class="addon-settings">
-              <span class="addon-description-full">{{ msg("exportAndImportSettingsDescription") }}</span>
-              <span class="addon-description-full">{{ msg("useBrowserSync") }}</span>
-              <div class="addon-setting">
-                <div class="filter-selector">
-                  <button class="large-button" @click="exportSettings()">{{ msg("export") }}</button>
-                </div>
-                <div class="filter-selector">
-                  <button class="large-button" @click="importSettings()">{{ msg("import") }}</button>
-                  <button class="large-button hidden-button" id="confirmImport">{{ msg("confirmImport") }}</button>
-                </div>
-                <div class="filter-selector" style="margin-left: 16px">
-                  <button class="large-button" @click="viewSettings()">{{ msg("viewSettings") }}</button>
-                </div>
+        </div>
+        <div class="addon-body">
+          <div class="addon-topbar">
+            <span class="addon-name"
+              ><img src="../../images/icons/import-export.svg" class="icon-type" :class="{'dark': theme === false}" />
+              {{ msg("exportAndImportSettings") }}
+            </span>
+          </div>
+          <div class="addon-settings">
+            <span class="addon-description-full">{{ msg("exportAndImportSettingsDescription") }}</span>
+            <span class="addon-description-full">{{ msg("useBrowserSync") }}</span>
+            <div class="addon-setting">
+              <div class="filter-selector">
+                <button class="large-button" @click="exportSettings()">{{ msg("export") }}</button>
+              </div>
+              <div class="filter-selector">
+                <button class="large-button" @click="importSettings()">{{ msg("import") }}</button>
+                <button class="large-button hidden-button" id="confirmImport">{{ msg("confirmImport") }}</button>
+              </div>
+              <div class="filter-selector" style="margin-left: 16px">
+                <button class="large-button" @click="viewSettings()">{{ msg("viewSettings") }}</button>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer">
-          <p>
-            {{ msg("extensionName") }}
-            <a
-              href="https://scratchaddons.com/changelog"
-              :href="sidebarUrls.changelog"
-              title="{{ msg('changelog') }}"
-              target="_blank"
-            >
-              v{{ version }}</a
-            >
-          </p>
-          <p>
-            <a
-              href="./licenses.html?libraries=icu-message-formatter,vue,color-picker-web-component,comlink,Sora,fuse,idb,sortable"
-              target="_blank"
-              >{{ msg("libraryCredits") }}</a
-            >
-          </p>
-        </div>
       </div>
-    </div>
+      <div class="footer">
+        <p>
+          {{ msg("extensionName") }}
+          <a
+            href="https://scratchaddons.com/changelog"
+            :href="sidebarUrls.changelog"
+            title="{{ msg('changelog') }}"
+            target="_blank"
+          >
+            v{{ version }}</a
+          >
+        </p>
+        <p>
+          <a
+            href="./licenses.html?libraries=icu-message-formatter,vue,color-picker-web-component,comlink,Sora,fuse,idb,sortable"
+            target="_blank"
+            >{{ msg("libraryCredits") }}</a
+          >
+        </p>
+      </div>
+    </modal>
     <div class="popup" v-cloak v-show="showPopupModal">
       <div class="label">{{ msg("settingsPagePermission", addonToEnable ? addonToEnable.name : "") }}</div>
       <div>
