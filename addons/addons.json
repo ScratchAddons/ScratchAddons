@@ -121,7 +121,6 @@
   "sounds-duration",
   "default-costume-editor-color",
   "one-click-studio-invites",
-  "floating-navbar",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
@@ -145,5 +144,6 @@
   "editor-stage-left",
   "editor-buttons-reverse-order",
   "columns",
-  "editor-theme3"
+  "editor-theme3",
+  "floating-navbar"
 ]
