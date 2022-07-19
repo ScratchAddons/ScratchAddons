@@ -40,7 +40,7 @@
   align-items: center;
 }
 
-[dir="rtl"] .sa-stage-hidden [class*="stage-header_stage-size-row"] {
+.sa-stage-hidden [dir="rtl"] [class*="stage-header_stage-size-row"] {
   right: auto;
   left: 0.5rem;
 }
@@ -51,4 +51,8 @@
   [class*="stage-header_stage-button-icon_"] {
   /* makes small and large stage buttons appear unselected */
   filter: var(--editorDarkMode-accent-desaturateFilter, saturate(0));
+}
+
+.sa-stage-hidden .scratchEyedropper {
+  display: none;
 }
