@@ -10,7 +10,7 @@ Also, feel free to ask questions, suggest new features, and more.
 
 ## Creating [pull requests](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests)
 
-Contributions are welcome! Be sure to file an issue first (see above). If you know a fix for that issue, or you know a fix for a different one, you can create a pull request. Fork this repository, create a new branch from the 'master' branch, and make your changes on the new branch. Now, create a pull request on the origin repository (ScratchAddons/ScratchAddons). We will review your pull request. When it receives two approvals, it is eligible to be merged.
+Contributions are welcome! Be sure to file an issue first (see above). If you know a fix for that issue, or you know a fix for a different one, you can create a pull request. Fork this repository, create a new branch from the 'master' branch, and make your changes on the new branch. Now, create a pull request on the origin repository (ScratchAddons/ScratchAddons). We will review your pull request.
 
 ### Quality guidelines
 View our quality guidelines here: https://scratchaddons.com/docs/develop/getting-started/quality-guidelines/
