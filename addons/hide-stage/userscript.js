@@ -1,4 +1,11 @@
 export default async function ({ addon, console, msg }) {
+  // Can't access renderer until project has loaded
+  const vm = addon.tab.traps.vm;
+  await new Promise((resolve) => {
+    if (vm.editingTarget) return resolve();
+    vm.runtime.once("PROJECT_LOADED", resolve);
+  });
+
   let stageHidden = false;
   let bodyWrapper;
   let smallStageButton;
@@ -22,6 +29,43 @@ export default async function ({ addon, console, msg }) {
   }
 
   addon.self.addEventListener("disabled", () => unhideStage());
+
+  // Some places in Scratch's renderer use canvas.clientWidth and canvas.clientHeight.
+  // When the stage is hidden these will return 0 which can cause infinite loops or crashes.
+  const renderer = vm.renderer;
+
+  // Used by "touching mouse pointer" block and hovered sprite detection.
+  const originalClientSpaceToScratchBounds = renderer.clientSpaceToScratchBounds;
+  renderer.clientSpaceToScratchBounds = function patchedClientSpaceToScratchBounds(...args) {
+    const result = originalClientSpaceToScratchBounds.apply(this, args);
+    if (stageHidden) {
+      // We'll just say that the stage is very far offscreen so that we shouldn't be touching anything
+      const BIG_NUMBER = 1000000;
+      // left, right, bottom, top
+      result.initFromBounds(BIG_NUMBER, BIG_NUMBER, BIG_NUMBER, BIG_NUMBER);
+    }
+    return result;
+  };
+
+  // Used by stage color pickers.
+  const originalExtractColor = renderer.extractColor;
+  renderer.extractColor = function patchedExtractColor(...args) {
+    if (stageHidden) {
+      // Pretend the stage is transparent. The user has no way to hover over the stage anyways.
+      return {
+        data: new Uint8ClampedArray(4),
+        width: 1,
+        height: 1,
+        color: {
+          r: 0,
+          g: 0,
+          b: 0,
+          a: 0
+        }
+      };
+    }
+    return originalExtractColor.apply(this, args);
+  };
 
   while (true) {
     const stageControls = await addon.tab.waitForElement("[class*='stage-header_stage-size-toggle-group_']", {
