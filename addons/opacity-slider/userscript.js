@@ -6,7 +6,7 @@ export default async function ({ addon, console, msg }) {
   let prevEventHandler;
   let handleClickOffset;
   let element;
-  let LabelReadout;
+  let labelReadout;
   let saOpacityHandle;
   let saOpacitySlider;
 
@@ -111,7 +111,7 @@ export default async function ({ addon, console, msg }) {
     const halfHandleWidth = HANDLE_WIDTH / 2;
     const pixelMin = halfHandleWidth;
     const pixelMax = CONTAINER_WIDTH - halfHandleWidth;
-    LabelReadout.textContent = Math.round(opacityValue);
+    labelReadout.textContent = Math.round(opacityValue);
     saOpacityHandle.style.left = pixelMin + (pixelMax - pixelMin) * (opacityValue / 100) - halfHandleWidth + "px";
 
     const color = tinycolor(getColor()).toRgb();
@@ -133,24 +133,24 @@ export default async function ({ addon, console, msg }) {
       prevEventHandler = null;
     }
 
-    const ContainerWrapper = document.createElement("div");
-    const RowHeaderClass = document.querySelector('[class*="color-picker_row-header"]').className.split(" ")[0];
-    const RowHeader = Object.assign(document.createElement("div"), {
-      className: RowHeaderClass,
+    const containerWrapper = document.createElement("div");
+    const rowHeaderClass = document.querySelector('[class*="color-picker_row-header"]').className.split(" ")[0];
+    const rowHeader = Object.assign(document.createElement("div"), {
+      className: rowHeaderClass,
     });
 
-    const LabelNameClass = document.querySelector('[class*="color-picker_label-name"]').className.split(" ")[0];
+    const labelNameClass = document.querySelector('[class*="color-picker_label-name"]').className.split(" ")[0];
     const saLabelName = Object.assign(document.createElement("span"), {
-      className: LabelNameClass,
+      className: labelNameClass,
       textContent: msg("opacity"),
     });
 
     const defaultAlpha = tinycolor(getColor()).toRgb().a;
-    const LabelReadoutClass = document.querySelector('[class*="color-picker_label-readout"]').className.split(" ")[0];
-    LabelReadout = Object.assign(document.createElement("span"), {
-      className: LabelReadoutClass,
+    const labelReadoutClass = document.querySelector('[class*="color-picker_label-readout"]').className.split(" ")[0];
+    labelReadout = Object.assign(document.createElement("span"), {
+      className: labelReadoutClass,
     });
-    LabelReadout.textContent = Math.round(defaultAlpha * 100);
+    labelReadout.textContent = Math.round(defaultAlpha * 100);
 
     const defaultColor = getColor();
     const sliderContainerClass = document.querySelector('[class*="slider_container"]').className.split(" ")[0];
@@ -181,18 +181,18 @@ export default async function ({ addon, console, msg }) {
         const color = getColor();
         setSliderBg(color);
         if (detail.action.type === "scratch-paint/color-index/CHANGE_COLOR_INDEX") {
-          LabelReadout.textContent = Math.round(tinycolor(color).toRgb().a * 100);
+          labelReadout.textContent = Math.round(tinycolor(color).toRgb().a * 100);
           setHandlePos(tinycolor(color).toRgb().a);
         }
       }
     };
     addon.tab.redux.addEventListener("statechanged", prevEventHandler);
 
-    ContainerWrapper.appendChild(RowHeader);
-    ContainerWrapper.appendChild(saOpacitySlider);
-    RowHeader.appendChild(saLabelName);
-    RowHeader.appendChild(LabelReadout);
+    containerWrapper.appendChild(rowHeader);
+    containerWrapper.appendChild(saOpacitySlider);
+    rowHeader.appendChild(saLabelName);
+    rowHeader.appendChild(labelReadout);
     saOpacitySlider.appendChild(saOpacityHandle);
-    element.parentElement.insertBefore(ContainerWrapper, element);
+    element.parentElement.insertBefore(containerWrapper, element);
   }
 }
