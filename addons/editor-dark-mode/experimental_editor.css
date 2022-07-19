@@ -317,6 +317,7 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 /* Block palette background */
 .blocklyFlyoutBackground {
   fill: var(--editorDarkMode-palette);
+  fill-opacity: 1;
 }
 .blocklyFlyoutLabelText,
 .blocklyFlyoutButton .blocklyText {
