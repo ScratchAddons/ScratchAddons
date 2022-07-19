@@ -44,7 +44,9 @@ export default async function ({ addon, console, msg }) {
     return result;
   };
 
-  // Used by stage color pickers.
+  // Used by code editor eye droppers.
+  // We already hide the button with CSS but just in case it somehow gets called anyways, we'll still fix
+  // this method.
   const originalExtractColor = renderer.extractColor;
   renderer.extractColor = function patchedExtractColor(...args) {
     if (stageHidden) {
