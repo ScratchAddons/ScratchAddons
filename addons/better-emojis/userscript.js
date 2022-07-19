@@ -23,7 +23,8 @@ export default async function ({ addon, global, console, msg }) {
   addon.self.addEventListener("disabled", () => {
     const emojis = document.querySelectorAll("img.easter-egg, img.emoji");
     for (const emoji of emojis) {
-      if (EMOJIS.includes(emoji.dataset.emoji)) { // check if emoji is supported by this addon
+      if (EMOJIS.includes(emoji.dataset.emoji)) {
+        // check if emoji is supported by this addon
         emoji.src =
           addon.tab.clientVersion === "scratch-www"
             ? `https://scratch.mit.edu/images/emoji/${emoji.dataset.emoji}.png`
@@ -34,7 +35,8 @@ export default async function ({ addon, global, console, msg }) {
   addon.self.addEventListener("reenabled", () => {
     const emojis = document.querySelectorAll("img.easter-egg[data-emoji], img.emoji[data-emoji]");
     for (const emoji of emojis) {
-      if (EMOJIS.includes(emoji.dataset.emoji)) { // check if emoji is supported by this addon
+      if (EMOJIS.includes(emoji.dataset.emoji)) {
+        // check if emoji is supported by this addon
         emoji.src = addon.self.dir + "/images/" + emoji.dataset.emoji + ".svg";
       }
     }
@@ -48,7 +50,8 @@ export default async function ({ addon, global, console, msg }) {
     const match = emoji.src.match(COMMENTS_REGEX);
     if (match !== null) {
       const emojiId = match[addon.tab.clientVersion === "scratch-www" ? 1 : 2];
-      if (EMOJIS.includes(emojiId)) { // check if emoji is supported by this addon
+      if (EMOJIS.includes(emojiId)) {
+        // check if emoji is supported by this addon
         if (!addon.self.disabled) emoji.src = addon.self.dir + "/images/" + emojiId + ".svg";
         emoji.dataset.emoji = emojiId;
       }
