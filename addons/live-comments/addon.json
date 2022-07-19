@@ -1,13 +1,13 @@
 {
   "name": "Live comment refreshing",
-  "description": "Refreshes comments to get a near-live view.",
+  "description": "Refreshes comments to get a near-live view (on studios and projects).",
   "credits": [
     {
       "name": "CubeyTheCube",
       "link": "https://github.com/CubeyTheCube"
     },
     {
-      "name": "Weredime/9gr",
+      "name": "Weredime (9gr)",
       "link": "https://scratch.mit.edu/users/9gr/"
     }
   ],
@@ -18,5 +18,5 @@
     }
   ],
   "tags": ["community", "studios", "projectPage"],
-  "versionAdded": "1.26.0"
+  "versionAdded": "1.29.0"
 }
