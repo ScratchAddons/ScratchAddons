@@ -52,7 +52,3 @@
   /* makes small and large stage buttons appear unselected */
   filter: var(--editorDarkMode-accent-desaturateFilter, saturate(0));
 }
-
-.sa-stage-hidden .scratchEyedropper {
-  display: none;
-}
