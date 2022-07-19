@@ -1,4 +1,5 @@
 export default async function ({ addon, global, console }) {
+  let originalNavbar;
   while (true) {
     const searchItem = await addon.tab.waitForElement(".search", {
       markAsSeen: true,
@@ -9,10 +10,11 @@ export default async function ({ addon, global, console }) {
     });
     const scratchr2List = document.querySelector(".site-nav");
 
-    function createItem({ name, url }, last) {
+    function createItem({ name, url, extraClass }, last) {
       const li = document.createElement("li");
       li.className = "link";
       if (last) li.classList.add("last");
+      if (addon.tab.clientVersion !== "scratchr2" && typeof extraClass === "string") li.classList.add(extraClass);
 
       const a = document.createElement("a");
       const absolute = new URL(url, location.origin);
@@ -42,7 +44,15 @@ export default async function ({ addon, global, console }) {
     }
     function init() {
       removeAllItems();
-      let items = addon.settings.get("items");
+      let items = addon.self.disabled
+        ? originalNavbar ??
+          (originalNavbar = [
+            { name: addon.tab.scratchMessage("general.create"), url: "/projects/editor/", extraClass: "create" },
+            { name: addon.tab.scratchMessage("general.explore"), url: "/explore/projects/all", extraClass: "explore" },
+            { name: addon.tab.scratchMessage("general.ideas"), url: "/ideas", extraClass: "ideas" },
+            { name: addon.tab.scratchMessage("general.about"), url: "/about", extraClass: "about" },
+          ])
+        : addon.settings.get("items");
       items.forEach((item, i) => {
         if (scratchr2List) {
           scratchr2List.append(createItem(item, i + 1 === items.length));
@@ -53,5 +63,7 @@ export default async function ({ addon, global, console }) {
     }
     init();
     addon.settings.addEventListener("change", init);
+    addon.self.addEventListener("disabled", init);
+    addon.self.addEventListener("reenabled", init);
   }
 }
