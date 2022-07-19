@@ -59,8 +59,8 @@ export default async function ({ addon, console, msg }) {
           r: 0,
           g: 0,
           b: 0,
-          a: 0
-        }
+          a: 0,
+        },
       };
     }
     return originalExtractColor.apply(this, args);
