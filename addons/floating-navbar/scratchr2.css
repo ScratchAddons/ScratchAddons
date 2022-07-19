@@ -48,15 +48,13 @@
 #topnav .logo:hover span {
   transform: scale(1.05) !important;
   transition: 0.15s ease-all;
-  background: url(https://scratch.mit.edu/images/logo_sm.png) no-repeat center
-    center;
+  background: url(https://scratch.mit.edu/images/logo_sm.png) no-repeat center center;
   background-size: 95%;
   height: 35px;
 }
 
 #topnav .logo span {
-  background: url(https://scratch.mit.edu/images/logo_sm.png) no-repeat center
-    center;
+  background: url(https://scratch.mit.edu/images/logo_sm.png) no-repeat center center;
   background-size: 95%;
   height: 35px;
 }

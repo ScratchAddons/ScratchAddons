@@ -34,7 +34,15 @@
     },
     {
       "url": "info.css",
-      "matches": ["https://scratch.mit.edu/contact-us", "https://scratch.mit.edu/faq", "https://scratch.mit.edu/parents/", "https://scratch.mit.edu/search/*", "https://scratch.mit.edu/terms_of_use", "https://scratch.mit.edu/privacy_policy", "https://scratch.mit.edu/DMCA"]
+      "matches": [
+        "https://scratch.mit.edu/contact-us",
+        "https://scratch.mit.edu/faq",
+        "https://scratch.mit.edu/parents/",
+        "https://scratch.mit.edu/search/*",
+        "https://scratch.mit.edu/terms_of_use",
+        "https://scratch.mit.edu/privacy_policy",
+        "https://scratch.mit.edu/DMCA"
+      ]
     }
   ],
   "versionAdded": "1.28.0",
