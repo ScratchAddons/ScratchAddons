@@ -36,7 +36,7 @@ export default async function ({ addon, console, msg }) {
   renderer.clientSpaceToScratchBounds = function patchedClientSpaceToScratchBounds(...args) {
     const result = originalClientSpaceToScratchBounds.apply(this, args);
     if (stageHidden) {
-      // We'll just say that the stage is very far offscreen so that we shouldn't be touching anything
+      // We'll just say that the mouse is very far offscreen so that it shouldn't be touching anything
       const BIG_NUMBER = 1000000;
       // left, right, bottom, top
       result.initFromBounds(BIG_NUMBER, BIG_NUMBER, BIG_NUMBER, BIG_NUMBER);
