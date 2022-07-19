@@ -59,7 +59,7 @@ function contextMenuUnmuted() {
       contexts: ["browser_action"],
     });
   }
-  // This runs when the extension is loaded, so just set the right color icon here
+  // This seems to be run when the extension is loaded, so we'll just set the right icon here.
   const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
   chrome.browserAction.setIcon({
     path: {
