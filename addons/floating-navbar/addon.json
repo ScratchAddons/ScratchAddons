@@ -3,13 +3,14 @@
   "description": "Turns your navbar into a rounded, floating navbar.",
   "credits": [
     {
-      "name": "BarelySmooth"
+      "name": "BarelySmooth",
+      "link": "https://scratch.mit.edu/users/BarelySmooth/"
     }
   ],
   "userstyles": [
     {
-      "url": "scratch-www.css",
-      "matches": ["scratchWWWNoProject", "projects", "https://scratch.mit.edu"]
+      "url": "userstyle.css",
+      "matches": ["scratchWWWNoProject", "projects"]
     },
     {
       "url": "scratchr2.css",
@@ -36,7 +37,7 @@
       "matches": ["https://scratch.mit.edu/contact-us", "https://scratch.mit.edu/faq", "https://scratch.mit.edu/parents/", "https://scratch.mit.edu/search/*", "https://scratch.mit.edu/terms_of_use", "https://scratch.mit.edu/privacy_policy", "https://scratch.mit.edu/DMCA"]
     }
   ],
-  "versionAdded": "1.24.0",
-  "tags": ["community", "profiles", "forums", "studios"],
+  "versionAdded": "1.28.0",
+  "tags": ["community", "profiles", "forums", "studios", "theme"],
   "enabledByDefault": false
 }
