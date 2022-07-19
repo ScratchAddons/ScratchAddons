@@ -17,19 +17,30 @@ export default async function ({ addon, global, console, msg }) {
       messageCount.setAttribute("style", "");
     }
   };
-  if (addon.tab.editorMode === "editor") {
-    setMessages();
-    setInterval(setMessages, 5000);
-  } else {
-    addon.tab.addEventListener("urlChange", function thisFunction() {
-      if (addon.tab.editorMode === "editor") {
-        setMessages();
-        setInterval(setMessages, 5000);
-        addon.tab.removeEventListener("urlChange", thisFunction);
-      }
-    });
-  }
 
+  let interval;
+  function createInterval() {
+    if (addon.tab.editorMode === "editor") {
+      setMessages();
+      interval = setInterval(setMessages, 5000);
+    } else {
+      addon.tab.addEventListener("urlChange", function thisFunction() {
+        if (addon.tab.editorMode === "editor") {
+          setMessages();
+          interval = setInterval(setMessages, 5000);
+          addon.tab.removeEventListener("urlChange", thisFunction);
+        }
+      });
+    }
+  }
+  createInterval();
+
+  addon.self.addEventListener("disabled", () => {
+    clearInterval(interval);
+  });
+  addon.self.addEventListener("reenabled", createInterval);
+
+  addon.tab.displayNoneWhileDisabled(messages);
   while (true) {
     let nav = await addon.tab.waitForElement("[class^='menu-bar_account-info-group'] > [href^='/my']", {
       markAsSeen: true,

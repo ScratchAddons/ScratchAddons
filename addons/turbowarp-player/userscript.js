@@ -27,6 +27,13 @@ export default async function ({ addon, console, msg }) {
   }
 
   button.onclick = async () => {
+    let search = "";
+    if (
+      addon.tab.redux.state?.preview?.projectInfo?.public === false &&
+      addon.tab.redux.state.preview.projectInfo.project_token
+    ) {
+      search = `#?token=${addon.tab.redux.state.preview.projectInfo.project_token}`;
+    }
     if (action === "player") {
       playerToggled = !playerToggled;
       if (playerToggled) {
@@ -38,7 +45,7 @@ export default async function ({ addon, console, msg }) {
           const enabledAddons = await addon.self.getEnabledAddons("editor");
           usp.set("addons", enabledAddons.join(","));
         }
-        const iframeUrl = `https://turbowarp.org/${projectId}/embed?${usp}`;
+        const iframeUrl = `https://turbowarp.org/${projectId}/embed?${usp}${search}`;
         twIframe.src = "";
         scratchStage.parentElement.prepend(twIframeContainer);
         // Use location.replace to avoid creating a history entry
@@ -50,7 +57,11 @@ export default async function ({ addon, console, msg }) {
         addon.tab.traps.vm.stopAll();
       } else removeIframe();
     } else {
-      window.open("https://turbowarp.org/" + window.location.pathname.split("/")[2], "_blank", "noopener,noreferrer");
+      window.open(
+        `https://turbowarp.org/${window.location.pathname.split("/")[2]}${search}`,
+        "_blank",
+        "noopener,noreferrer"
+      );
     }
   };
 

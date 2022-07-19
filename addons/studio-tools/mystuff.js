@@ -7,7 +7,7 @@ export default async function ({ addon, global, console, msg }) {
       leaveButton.innerText = msg("leave");
       leaveButton.setAttribute("data-id", item.parentElement.querySelector(".title a").href.match(/[0-9]+/g));
       leaveButton.addEventListener("click", async function (e) {
-        if (confirm(msg("leave-confirm"))) {
+        if (await addon.tab.confirm(msg("leave-new"), msg("leave-confirm"))) {
           await fetch(
             `https://scratch.mit.edu/site-api/users/curators-in/${leaveButton.getAttribute(
               "data-id"

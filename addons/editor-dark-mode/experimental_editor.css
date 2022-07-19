@@ -150,14 +150,12 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .slider_handle_3f0xk,
 .sound-editor_button_1_6Li,
 .library-item_library-item_1DcMO,
-div.s3devDDOut.vis,
+.s3devDDOut.vis,
 .prompt_body_18Z-I,
 .custom-procedures_body_SQBv6,
 #s3devHelpContent,
 #s3devHelpContent h2,
 #s3devHelpContent p,
-.mediaRecorderPopupContent,
-.mediaRecorderPopupContent p,
 .slider-prompt_body_2ZkXL,
 .record-modal_body_2VO4l,
 .sa-debugger-interface,
@@ -176,7 +174,8 @@ div.s3devDDOut.vis,
 .sound-editor_tool-button_2iNn9,
 .sound-editor_effect-button_2zuzT,
 .library-item_featured-extension-metadata_3D8E8,
-.record-modal_help-text_Jevsk {
+.record-modal_help-text_Jevsk,
+.sa-editor-modal-content p {
   color: var(--editorDarkMode-accent-text);
 }
 .blocklyFlyoutButton:hover {
@@ -325,9 +324,6 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 }
 .blocklyFlyoutScrollbar .blocklyScrollbarHandle {
   fill: var(--editorDarkMode-palette-scrollbar);
-}
-.sa-lock-image {
-  filter: var(--editorDarkMode-palette-filter);
 }
 
 /* Full screen background */
@@ -580,8 +576,7 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 }
 
 /* Miscellaneous styles */
-.monitor_label_ci1ok,
-.monitor_list-empty_1UKsB {
+[class*="stage-wrapper_"] {
   color: #575e75;
 }
 .sprite-selector_sprite-selector_2KgCX {
