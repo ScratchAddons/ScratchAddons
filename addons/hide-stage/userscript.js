@@ -7,20 +7,23 @@ export default async function ({ addon, console, msg }) {
   });
 
   let stageHidden = false;
+  let bodyWrapper;
   let smallStageButton;
   let largeStageButton;
   let hideStageButton;
 
   function hideStage() {
     stageHidden = true;
-    document.documentElement.classList.add("sa-stage-hidden");
+    if (!bodyWrapper) return;
+    bodyWrapper.classList.add("sa-stage-hidden");
     hideStageButton.classList.remove(addon.tab.scratchClass("stage-header_stage-button-toggled-off"));
     window.dispatchEvent(new Event("resize")); // resizes the code area and paint editor canvas
   }
 
   function unhideStage(e) {
     stageHidden = false;
-    document.documentElement.classList.remove("sa-stage-hidden");
+    if (!bodyWrapper) return;
+    bodyWrapper.classList.remove("sa-stage-hidden");
     hideStageButton.classList.add(addon.tab.scratchClass("stage-header_stage-button-toggled-off"));
     window.dispatchEvent(new Event("resize")); // resizes the code area and paint editor canvas
   }
@@ -69,6 +72,7 @@ export default async function ({ addon, console, msg }) {
       markAsSeen: true,
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
+    bodyWrapper = document.querySelector("[class*='gui_body-wrapper_']");
     smallStageButton = stageControls.firstChild;
     smallStageButton.classList.add("sa-stage-button-middle");
     largeStageButton = stageControls.lastChild;

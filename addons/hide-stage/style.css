@@ -40,7 +40,7 @@
   align-items: center;
 }
 
-.sa-stage-hidden [dir="rtl"] [class*="stage-header_stage-size-row"] {
+[dir="rtl"] .sa-stage-hidden [class*="stage-header_stage-size-row"] {
   right: auto;
   left: 0.5rem;
 }

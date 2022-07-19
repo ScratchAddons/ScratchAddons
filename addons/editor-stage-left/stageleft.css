@@ -66,7 +66,7 @@
   justify-content: flex-end;
 }
 
-.sa-stage-hidden [dir="rtl"] [class*="stage-header_stage-size-row"] {
+[dir="rtl"] .sa-stage-hidden [class*="stage-header_stage-size-row"] {
   left: auto;
   right: 0.5rem;
 }
