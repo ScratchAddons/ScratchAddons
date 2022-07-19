@@ -1,5 +1,5 @@
 export default async function ({ addon, console, msg }) {
-  // Can't access renderer until project has loaded
+  // Wait until the project is loaded so that the renderer will definitely exist.
   const vm = addon.tab.traps.vm;
   await new Promise((resolve) => {
     if (vm.editingTarget) return resolve();
