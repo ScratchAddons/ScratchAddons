@@ -112,14 +112,11 @@ export default async function ({ addon, msg, console }) {
   async function uploadBlob(file) {
     const fileExt = file.name.split(".").pop().toLowerCase();
 
-    const reader = new FileReader();
-    reader.readAsArrayBuffer(file);
-    reader.addEventListener("loadend", (e) => uploadImage(reader.result, fileExt));
-    reader.addEventListener("error", (e) => {
+    file.arrayBuffer().then((buf) => uploadImage(buf, fileExt), (e) => {
       console.error("Error when reading file:", e);
       alert(msg("load-error"));
       progressElement?.remove();
-    });
+    }));
   }
   async function uploadImage(img, fileType) {
     progressElement = toolbar.appendChild(document.createElement("li"));
