@@ -1,8 +1,10 @@
 export default function () {
   const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
   if (prerelease) {
+    const orange = getComputedStyle(document.documentElement).getPropertyValue("--danger-orange");
     const blue = getComputedStyle(document.documentElement).getPropertyValue("--blue");
     document.documentElement.style.setProperty("--brand-orange", blue);
+    document.documentElement.style.setProperty("--blue", orange);
   }
   const lightThemeLink = document.createElement("link");
   lightThemeLink.setAttribute("rel", "stylesheet");
