@@ -18,6 +18,8 @@
     }
   ],
   "versionAdded": "1.7.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "tags": ["forums", "community"],
   "info": [
     {

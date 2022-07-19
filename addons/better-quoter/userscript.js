@@ -142,6 +142,7 @@ export default async function ({ addon, global, console }) {
     quoteButton.setAttribute("onclick", "return false");
     quoteButton.addEventListener("mouseup", (e) => {
       let blockpost = quoteButton.closest(".blockpost");
+      if (addon.self.disabled) return copy_paste(blockpost.id);
       let selection = window.getSelection();
       let selectionStr = selection.toString();
       if (
