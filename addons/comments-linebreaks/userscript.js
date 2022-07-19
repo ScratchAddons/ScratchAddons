@@ -9,7 +9,7 @@ export default async function ({ addon, global, console }) {
       cached.comment.style.whiteSpace = "nowrap";
 
       for (const elm of cached.content.childNodes) {
-        const cloned = elm.cloneNode();
+        const cloned = elm.cloneNode(true);
         cached.comment.appendChild(cloned);
       }
     }
