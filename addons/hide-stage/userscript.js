@@ -15,6 +15,7 @@ export default async function ({ addon, console, msg }) {
   function hideStage() {
     stageHidden = true;
     if (!bodyWrapper) return;
+    document.body.classList.add("sa-stage-hidden-outer");
     bodyWrapper.classList.add("sa-stage-hidden");
     hideStageButton.classList.remove(addon.tab.scratchClass("stage-header_stage-button-toggled-off"));
     window.dispatchEvent(new Event("resize")); // resizes the code area and paint editor canvas
@@ -23,6 +24,7 @@ export default async function ({ addon, console, msg }) {
   function unhideStage(e) {
     stageHidden = false;
     if (!bodyWrapper) return;
+    document.body.classList.remove("sa-stage-hidden-outer");
     bodyWrapper.classList.remove("sa-stage-hidden");
     hideStageButton.classList.add(addon.tab.scratchClass("stage-header_stage-button-toggled-off"));
     window.dispatchEvent(new Event("resize")); // resizes the code area and paint editor canvas
