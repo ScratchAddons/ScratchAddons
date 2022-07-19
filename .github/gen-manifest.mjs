@@ -8,7 +8,7 @@
 export default (env, manifest) => {
   // Deep-clone
   manifest = JSON.parse(JSON.stringify(manifest));
-  browser_action["default_icon"] = "images/icon.png";
+  manifest.browser_action["default_icon"] = "images/icon.png";
   manifest.icons["1024"] = "images/icon.png";
   manifest.icons["32"] = "images/icon-32.png";
   manifest.icons["16"] = "images/icon-16.png";
