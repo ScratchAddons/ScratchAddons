@@ -134,40 +134,34 @@ export default async function ({ addon, console, msg }) {
     }
 
     const containerWrapper = document.createElement("div");
-    const rowHeaderClass = document.querySelector('[class*="color-picker_row-header"]').className.split(" ")[0];
     const rowHeader = Object.assign(document.createElement("div"), {
-      className: rowHeaderClass,
+      className: addon.tab.scratchClass("color-picker_row-header"),
     });
 
-    const labelNameClass = document.querySelector('[class*="color-picker_label-name"]').className.split(" ")[0];
     const saLabelName = Object.assign(document.createElement("span"), {
-      className: labelNameClass,
+      className: addon.tab.scratchClass("color-picker_label-name"),
       textContent: msg("opacity"),
     });
 
     const defaultAlpha = tinycolor(getColor()).toRgb().a;
-    const labelReadoutClass = document.querySelector('[class*="color-picker_label-readout"]').className.split(" ")[0];
     labelReadout = Object.assign(document.createElement("span"), {
-      className: labelReadoutClass,
+      className: addon.tab.scratchClass("color-picker_label-readout"),
     });
     labelReadout.textContent = Math.round(defaultAlpha * 100);
 
     const defaultColor = getColor();
-    const sliderContainerClass = document.querySelector('[class*="slider_container"]').className.split(" ")[0];
-    const lastSlider = document.querySelector('[class*="slider_last"]');
-    const sliderLastClass = lastSlider.className.split(" ")[0];
     saOpacitySlider = Object.assign(document.createElement("div"), {
-      className: `sa-opacity-slider ${sliderContainerClass} ${sliderLastClass}`,
+      className: `sa-opacity-slider ${addon.tab.scratchClass("slider_container", "slider_last")}`,
     });
     setSliderBg(defaultColor);
     saOpacitySlider.addEventListener("click", handleClickBackground);
 
-    const sliderHandleClass = document.querySelector('[class*="slider_handle"]').className.split(" ")[0];
     saOpacityHandle = Object.assign(document.createElement("div"), {
-      className: `sa-opacity-handle ${sliderHandleClass}`,
+      className: `sa-opacity-handle ${addon.tab.scratchClass("slider_handle")}`,
     });
     saOpacityHandle.addEventListener("mousedown", handleMouseDown);
-    lastSlider.className = sliderContainerClass;
+    const lastSlider = document.querySelector('[class*="slider_last"]');
+    lastSlider.className = addon.tab.scratchClass("slider_container");
     setHandlePos(defaultAlpha);
 
     prevEventHandler = ({ detail }) => {
