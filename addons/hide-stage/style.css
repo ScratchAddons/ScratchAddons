@@ -1,0 +1,54 @@
+.sa-stage-button-middle > [class*="stage-header_stage-button_"] {
+  border-radius: 0;
+}
+
+[dir="ltr"] .sa-stage-button-middle > [class*="stage-header_stage-button_"] {
+  border-left: none;
+}
+
+[dir="rtl"] .sa-stage-button-middle > [class*="stage-header_stage-button_"] {
+  border-right: none;
+}
+
+.sa-stage-hidden [class*="blocks_blocks_"] .injectionDiv,
+.sa-stage-hidden [class*="asset-panel_wrapper_"],
+.sa-stage-hidden [class*="backpack_backpack-header_"] {
+  border-radius: 0;
+}
+
+.sa-stage-hidden [class*="gui_stage-and-target-wrapper_"],
+.sa-stage-hidden [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen_"]),
+.sa-stage-hidden [class*="gui_target-wrapper_"] {
+  padding: 0;
+}
+
+.sa-stage-hidden
+  [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen_"])
+  [class*="controls_controls-container_"],
+.sa-stage-hidden
+  [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen_"])
+  [class*="stage-wrapper_stage-canvas-wrapper_"],
+.sa-stage-hidden [class*="gui_target-wrapper_"] {
+  display: none;
+}
+
+.sa-stage-hidden [class*="stage-header_stage-size-row"] {
+  position: absolute;
+  top: 0;
+  right: 0.5rem;
+  height: 2.75rem;
+  align-items: center;
+}
+
+[dir="rtl"] .sa-stage-hidden [class*="stage-header_stage-size-row"] {
+  right: auto;
+  left: 0.5rem;
+}
+
+.sa-stage-hidden
+  /* specificity --> */ [class*="stage-header_stage-size-row_"] /* <-- specificity */
+  [class*="stage-header_stage-button_"]:not(.sa-hide-stage-button)
+  [class*="stage-header_stage-button-icon_"] {
+  /* makes small and large stage buttons appear unselected */
+  filter: var(--editorDarkMode-accent-desaturateFilter, saturate(0));
+}

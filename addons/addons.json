@@ -112,12 +112,17 @@
   "hi-res-thumbnails",
   "block-count",
   "script-snap",
+  "color-inputs",
   "custom-block-text",
   "search-sprites",
   "hide-signatures",
-  "disable-sprite-wobble",
+  "disable-sprite-wobble",  
+  "forum-live-preview",
+  "sounds-duration",
+  "default-costume-editor-color",
+  "one-click-studio-invites",
   "floating-navbar",
-  
+
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
   "// because the first in the list gets their CSS injected first,",
@@ -132,10 +137,13 @@
   "better-featured-project",
   "material-forum-editor-buttons",
   "forum-quote-code-beautifier",
+  "horizontal-mystuff-tabs",
   "// For editor:",
   "editor-dark-mode",
   "editor-colored-context-menus",
+  "hide-stage",
   "editor-stage-left",
+  "editor-buttons-reverse-order",
   "columns",
   "editor-theme3"
 ]

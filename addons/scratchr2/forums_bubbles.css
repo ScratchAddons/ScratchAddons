@@ -1,6 +1,5 @@
 .forum-search-list .postleft,
-.forum-search-list .postleft a,
-.forum-search-list .postleft .username {
+.forum-search-list .postleft a {
   color: white;
 }
 .forum-search-list .postmsg,
@@ -33,6 +32,9 @@
 }
 .djangobb .blockpost dl {
   padding: 0;
+}
+.djangobb .username {
+  background-color: var(--darkWww-page, #fcfcfc);
 }
 .postright,
 .postfootright {

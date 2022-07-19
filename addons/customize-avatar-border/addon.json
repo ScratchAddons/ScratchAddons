@@ -34,6 +34,36 @@
           "fill-transparent": true
         }
       }
+    },
+    {
+      "url": "scratchr2/hide_outline.css",
+      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/discuss/*"],
+      "if": {
+        "settings": {
+          "hide-outline": true
+        },
+        "addonEnabled": ["scratchr2"]
+      }
+    },
+    {
+      "url": "scratchr2/outline_color.css",
+      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/discuss/*"],
+      "if": {
+        "settings": {
+          "hide-outline": false
+        },
+        "addonEnabled": ["scratchr2"]
+      }
+    },
+    {
+      "url": "scratchr2/fill_transparent.css",
+      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/discuss/*"],
+      "if": {
+        "settings": {
+          "fill-transparent": true
+        },
+        "addonEnabled": ["scratchr2"]
+      }
     }
   ],
   "dynamicEnable": true,
