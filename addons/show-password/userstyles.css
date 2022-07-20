@@ -1,0 +1,17 @@
+label.sa-show-password-button{
+  position: absolute;
+  cursor: pointer;
+  background-image: url(https://scratch.mit.edu/static/assets/acc6c29b5eee67bc6b2aa85854d9bb3a.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 25px;
+  width: 25px;
+  padding: 0;
+  margin: 0;
+  filter: saturate(0);
+  z-index: 1000;
+}
+
+.sa-show-password-button.barred{
+  background-image: url(https://scratch.mit.edu/static/assets/68d9ddbb2aa63310b88c7697e5b0c6c9.svg);
+}
