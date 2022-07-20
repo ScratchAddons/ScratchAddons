@@ -185,16 +185,16 @@
       }
     },
     {
-      "name": "Comments",
-      "id": "comment-color",
-      "type": "color",
-      "default": "#FEF49C"
-    },
-    {
       "name": "Block inputs",
       "id": "input-color",
       "type": "color",
       "default": "#FFFFFF"
+    },
+    {
+      "name": "Comments",
+      "id": "comment-color",
+      "type": "color",
+      "default": "#FEF49C"
     },
     {
       "name": "Block text color",
@@ -303,7 +303,7 @@
         "custom-color": "#99004d",
         "Pen-color": "#064734",
         "sa-color": "#166966",
-        "comment-color": "#4C4401",
+        "comment-color": "#423f24",
         "input-color": "#202020",
         "text": "white"
       }
