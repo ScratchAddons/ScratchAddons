@@ -11,21 +11,26 @@ export default async function ({ addon, console, msg }) {
       }
 
       let type = null;
-      
-      if ( addon.settings.get("sprites") && 
-        (e.target.closest("[class*='sprite-selector_sprite_'] > nav[class*='context-menu_context-menu_'] > :nth-child(3)") || 
-        e.target.closest("div[class*='sprite-selector_sprite-wrapper_'] div[class*='delete-button_delete-button_']")))
-      {
+
+      if (
+        addon.settings.get("sprites") &&
+        (e.target.closest(
+          "[class*='sprite-selector_sprite_'] > nav[class*='context-menu_context-menu_'] > :nth-child(3)"
+        ) ||
+          e.target.closest("div[class*='sprite-selector_sprite-wrapper_'] div[class*='delete-button_delete-button_']"))
+      ) {
         type = msg("sprite");
-      } else if (addon.settings.get("sounds") &&
-        (e.target.closest("[data-tabs] > :nth-child(4) nav[class*='context-menu_context-menu_'] > :nth-child(3)")) ||
-        e.target.closest("[data-tabs] > :nth-child(4) div[class*='delete-button_delete-button_']"))
-      {
+      } else if (
+        (addon.settings.get("sounds") &&
+          e.target.closest("[data-tabs] > :nth-child(4) nav[class*='context-menu_context-menu_'] > :nth-child(3)")) ||
+        e.target.closest("[data-tabs] > :nth-child(4) div[class*='delete-button_delete-button_']")
+      ) {
         type = msg("sound");
-      } else if (addon.settings.get("costumes") &&
-        (e.target.closest("[data-tabs] > :nth-child(3) nav[class*='context-menu_context-menu_'] > :nth-child(3)")) ||
-        e.target.closest("[data-tabs] > :nth-child(3) div[class*='delete-button_delete-button_']"))
-      {
+      } else if (
+        (addon.settings.get("costumes") &&
+          e.target.closest("[data-tabs] > :nth-child(3) nav[class*='context-menu_context-menu_'] > :nth-child(3)")) ||
+        e.target.closest("[data-tabs] > :nth-child(3) div[class*='delete-button_delete-button_']")
+      ) {
         type = msg("costume");
       }
 
@@ -33,11 +38,15 @@ export default async function ({ addon, console, msg }) {
         e.preventDefault();
         e.stopPropagation();
         addon.tab
-          .confirm(msg("confirm-title", {object: type.charAt(0).toUpperCase() + type.slice(1)}), msg("confirm-message", {object: msg(type)}), {
-            okButtonLabel: msg("yes"),
-            cancelButtonLabel: msg("no"),
-            useEditorClasses: true,
-          })
+          .confirm(
+            msg("confirm-title", { object: type.charAt(0).toUpperCase() + type.slice(1) }),
+            msg("confirm-message", { object: msg(type) }),
+            {
+              okButtonLabel: msg("yes"),
+              cancelButtonLabel: msg("no"),
+              useEditorClasses: true,
+            }
+          )
           .then((confirmed) => {
             if (confirmed) {
               override = true;
