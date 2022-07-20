@@ -1,6 +1,6 @@
 {
   "name": "Live comment refreshing",
-  "description": "Refreshes comments to get a near-live view (on studios and projects).",
+  "description": "Refreshes comments on studios and projects to create a near-live view.",
   "credits": [
     {
       "name": "CubeyTheCube",
