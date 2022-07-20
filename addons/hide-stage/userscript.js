@@ -16,6 +16,7 @@ export default async function ({ addon, console, msg }) {
     stageHidden = true;
     if (!bodyWrapper) return;
     document.body.classList.add("sa-stage-hidden-outer");
+    // Inner class is applied to body wrapper so that it won't affect the project page.
     bodyWrapper.classList.add("sa-stage-hidden");
     hideStageButton.classList.remove(addon.tab.scratchClass("stage-header_stage-button-toggled-off"));
     window.dispatchEvent(new Event("resize")); // resizes the code area and paint editor canvas
