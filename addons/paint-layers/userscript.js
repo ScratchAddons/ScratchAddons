@@ -65,6 +65,13 @@ export default async function ({ addon, msg, global, console }) {
     });
   }
 
+  function forceCanvasSizeRefresh() {
+    addon.tab.redux.dispatch({
+      type: "scratch-paint/view/UPDATE_VIEW_BOUNDS",
+      viewBounds: paper.view.matrix,
+    });
+  }
+
   while (true) {
     const zoomControls = await addon.tab.waitForElement("[class^='paint-editor_zoom-controls']", {
       markAsSeen: true,
@@ -94,6 +101,7 @@ export default async function ({ addon, msg, global, console }) {
         button.classList.remove("selected");
         removeLayers(layersEl);
       }
+      forceCanvasSizeRefresh();
     });
 
     const image = button.appendChild(document.createElement("img"));
