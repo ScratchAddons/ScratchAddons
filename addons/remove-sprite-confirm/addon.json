@@ -1,9 +1,35 @@
 {
-  "name": "Sprite deletion confirmation",
-  "description": "Asks if you're sure when deleting a sprite inside a project.",
+  "name": "Editor confirmations",
+  "description": "Asks if you're sure when deleting a sprite/costume/sound inside a project.",
   "userscripts": [
     {
       "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Sprites",
+      "id": "sprites",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Costumes and backdrops",
+      "id": "costumes",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Sounds",
+      "id": "sounds",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "fix-z-index.css",
       "matches": ["projects"]
     }
   ],
@@ -11,5 +37,12 @@
   "dynamicDisable": true,
   "versionAdded": "1.0.0",
   "tags": ["editor", "recommended"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "latestUpdate": {
+    "version": "1.28.0",
+    "isMajor": true,
+    "temporaryNotice": "You can now select, to ask for confirmations when deleting costumes and sounds.",
+    "newSettings": ["sprites", "costumes", "sounds"]
+  }
+
 }

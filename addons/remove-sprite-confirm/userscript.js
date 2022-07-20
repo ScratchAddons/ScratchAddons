@@ -1,22 +1,51 @@
-export default async ({ addon, console, msg }) => {
-  if (!addon.tab.redux.state) return console.warn("Redux is not available!");
-  const vm = addon.tab.traps.vm;
-  if (!vm) return;
-  const oldDeleteSprite = vm.deleteSprite;
-  const newDeleteSprite = function (...args) {
-    if (addon.self.disabled) return oldDeleteSprite.apply(this, args);
-    const canDelete = confirm(msg("confirm"));
-    if (canDelete) return oldDeleteSprite.apply(this, args);
-    const restoreDeletionState = Object.assign({}, addon.tab.redux.state.scratchGui.restoreDeletion);
-    setTimeout(
-      () =>
-        addon.tab.redux.dispatch({
-          type: "scratch-gui/restore-deletion/RESTORE_UPDATE",
-          state: restoreDeletionState,
-        }),
-      100
-    );
-    return Promise.resolve();
-  };
-  vm.deleteSprite = newDeleteSprite;
-};
+export default async function ({ addon, console, msg }) {
+  // Thanks to confirm-actions addon!
+  let override = false;
+
+  document.addEventListener(
+    "click",
+    (e) => {
+      if (override) {
+        override = false;
+        return;
+      }
+
+      let type = null;
+      
+      if ( addon.settings.get("sprites") && 
+        (e.target.closest("[class*='sprite-selector_sprite_'] > nav[class*='context-menu_context-menu_'] > :nth-child(3)") || 
+        e.target.closest("div[class*='sprite-selector_sprite-wrapper_'] div[class*='delete-button_delete-button_']")))
+      {
+        type = msg("sprite");
+      } else if (addon.settings.get("sounds") &&
+        (e.target.closest("[data-tabs] > :nth-child(4) nav[class*='context-menu_context-menu_'] > :nth-child(3)")) ||
+        e.target.closest("[data-tabs] > :nth-child(4) div[class*='delete-button_delete-button_']"))
+      {
+        type = msg("sound");
+      } else if (addon.settings.get("costumes") &&
+        (e.target.closest("[data-tabs] > :nth-child(3) nav[class*='context-menu_context-menu_'] > :nth-child(3)")) ||
+        e.target.closest("[data-tabs] > :nth-child(3) div[class*='delete-button_delete-button_']"))
+      {
+        type = msg("costume");
+      }
+
+      if (type !== null) {
+        e.preventDefault();
+        e.stopPropagation();
+        addon.tab
+          .confirm(msg("confirm-title", {object: type.charAt(0).toUpperCase() + type.slice(1)}), msg("confirm-message", {object: msg(type)}), {
+            okButtonLabel: msg("yes"),
+            cancelButtonLabel: msg("no"),
+            useEditorClasses: true,
+          })
+          .then((confirmed) => {
+            if (confirmed) {
+              override = true;
+              e.target.click();
+            }
+          });
+      }
+    },
+    { capture: true }
+  );
+}
