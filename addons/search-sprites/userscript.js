@@ -17,7 +17,7 @@ export default async function ({ addon, global, console, msg }) {
   // the libraries, so this fits right in.
   searchBox.type = "text";
 
-  // This function was taken from the search sprites addon
+  // This function was taken from the folders addon
   const getFolderFromName = (name) => {
     const idx = name.indexOf("//");
     if (idx === -1 || idx === 0) {
