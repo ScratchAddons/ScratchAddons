@@ -78,7 +78,7 @@ export default async function ({ addon, console, msg }) {
 
   // Scratch might try to resize the canvas to 0x0 when you leave fullscreen with the stage hidden.
   const originalResize = renderer.resize;
-  renderer.resize = function patchedResize (width, height) {
+  renderer.resize = function patchedResize(width, height) {
     if (stageHidden && (width === 0 || height === 0)) {
       return originalResize.call(this, this._nativeSize[0], this._nativeSize[1]);
     }
