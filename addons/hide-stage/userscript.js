@@ -41,8 +41,9 @@ export default async function ({ addon, console, msg }) {
   const originalClientSpaceToScratchBounds = renderer.clientSpaceToScratchBounds;
   renderer.clientSpaceToScratchBounds = function patchedClientSpaceToScratchBounds(...args) {
     const result = originalClientSpaceToScratchBounds.apply(this, args);
-    if (stageHidden) {
-      // We'll just say that the mouse is very far offscreen so that it shouldn't be touching anything
+    // Hidden stage causes left, right, bottom, top to be all Infinity.
+    if (stageHidden && result.left === Infinity) {
+      // Pretend the mouse is very far offscreen so that it shouldn't be touching anything
       const BIG_NUMBER = 1000000;
       // left, right, bottom, top
       result.initFromBounds(BIG_NUMBER, BIG_NUMBER, BIG_NUMBER, BIG_NUMBER);
@@ -55,9 +56,12 @@ export default async function ({ addon, console, msg }) {
   // this method.
   const originalExtractColor = renderer.extractColor;
   renderer.extractColor = function patchedExtractColor(...args) {
-    if (stageHidden) {
-      // Pretend the stage is transparent. The user has no way to hover over the stage anyways.
+    const result = originalExtractColor.apply(this, args);
+    // Hidden stage causes NaN width/height, empty data array, color object with all undefined
+    if (stageHidden && isNaN(result.width)) {
+      // Pretend the canvas is transparent. The user has no way to hover over the stage anyways.
       return {
+        // 4 bytes for 1 RGBA pixel
         data: new Uint8ClampedArray(4),
         width: 1,
         height: 1,
@@ -69,7 +73,7 @@ export default async function ({ addon, console, msg }) {
         },
       };
     }
-    return originalExtractColor.apply(this, args);
+    return result;
   };
 
   while (true) {
