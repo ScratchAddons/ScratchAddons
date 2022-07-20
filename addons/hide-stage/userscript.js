@@ -76,6 +76,20 @@ export default async function ({ addon, console, msg }) {
     return result;
   };
 
+  // Scratch might try to resize the canvas to 0x0 when you leave fullscreen with the stage hidden.
+  // This can cause crashes in things like text bubble rendering, so we'll force it to be at least 1x1.
+  const originalResize = renderer.resize;
+  renderer.resize = function patchedResize (width, height) {
+    if (stageHidden) {
+      return originalResize.call(
+        this,
+        Math.max(1, width),
+        Math.max(1, height)
+      );
+    }
+    return originalResize.call(this, width, height);
+  };
+
   while (true) {
     const stageControls = await addon.tab.waitForElement("[class*='stage-header_stage-size-toggle-group_']", {
       markAsSeen: true,
