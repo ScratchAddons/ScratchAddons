@@ -426,7 +426,7 @@ let fuse;
 
       window.addEventListener("hashchange", (event) => {
         vue.selectedCategory = "all";
-        document.querySelector(location.hash).scrollIntoView();
+        document.querySelector(location.hash)?.scrollIntoView();
       });
     },
   });
@@ -630,6 +630,7 @@ let fuse;
         if (hash.startsWith("#addon-")) {
           const addonId = hash.substring(7);
           const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
+          if (!groupWithAddon) return;
           groupWithAddon.expanded = true;
           setTimeout(() => {
             // Only required in Firefox
