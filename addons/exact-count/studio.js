@@ -1,22 +1,20 @@
 export default async function ({ addon }) {
-  function countProjects(url, page, delta, callback) {
-    fetch(url + 40 * page)
-      .then((resp) => resp.json())
-      .then((resp) => {
-        let pageLen = resp.length;
-        if (pageLen === 40) {
-          countProjects(url, page + delta, delta, callback);
-        } else if (pageLen > 0) {
-          let count = 40 * page + pageLen;
-          callback(count);
-        } else if (pageLen === 0 && page === 0) {
-          callback(0);
-        } else {
-          page -= delta;
-          delta /= 10;
-          countProjects(url, page + delta, delta, callback);
-        }
-      });
+  async function countProjects(url, page, delta) {
+    const res = await fetch(url + 40 * page);
+    const data = await res.json();
+    let pageLen = data.length;
+    if (pageLen === 40) {
+      return countProjects(url, page + delta, delta);
+    } else if (pageLen > 0) {
+      let count = 40 * page + pageLen;
+      return count;
+    } else if (pageLen === 0 && page === 0) {
+      return 0;
+    } else {
+      page -= delta;
+      delta /= 10;
+      return countProjects(url, page + delta, delta);
+    }
   }
   const apiUrlPrefix =
     "https://api.scratch.mit.edu/studios/" + /[0-9]+/.exec(location.pathname)[0] + "/projects/?limit=40&offset=";
@@ -24,11 +22,6 @@ export default async function ({ addon }) {
   const countElement = await addon.tab.waitForElement(".studio-tab-nav > a:first-child .tab-count");
   const originalText = countElement.innerText;
   let counted = false;
-  countProjects(apiUrlPrefix, 0, initialDelta, function (count) {
-    counted = count;
-    if (!addon.self.disabled) countElement.innerText = `(${count})`;
-  });
-
   addon.self.addEventListener("disabled", () => {
     if (typeof counted === "number") {
       countElement.innerText = originalText;
@@ -39,4 +32,8 @@ export default async function ({ addon }) {
       countElement.innerText = `(${counted})`;
     }
   });
+
+  const count = await countProjects(apiUrlPrefix, 0, initialDelta);
+  counted = count;
+  if (!addon.self.disabled) countElement.innerText = `(${count})`;
 }
