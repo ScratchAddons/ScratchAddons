@@ -8,7 +8,7 @@ export default ({ addon }) => {
 
   let madeAnyChanges = false;
   for (const topicId of Object.keys(cache)) {
-    if ((now - cache[topicId].stamp) > 1209600000) {
+    if (now - cache[topicId].stamp > 1209600000) {
       // two weeks (1000 * 60 * 60 * 24 * 14): (ms/s) * (s/m) * (m/h) * (h/d) * (d/w)
       delete cache[topicId];
       madeAnyChanges = true;
