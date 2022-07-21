@@ -37,6 +37,8 @@
   z-index: -9999;
   /* move the stage to avoid a horizontal scroll bar */
   right: 0;
+  /* and move it up so that the mouse can't hover over the stage while its hidden */
+  bottom: 100%;
 }
 [dir="rtl"]
   .sa-stage-hidden
