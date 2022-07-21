@@ -1,0 +1,26 @@
+{
+  "name": "Project volume slider",
+  "description": "Adds a volume slider next to the green flag controls.",
+  "credits": [
+    {
+      "name": "samq64",
+      "link": "https://scratch.mit.edu/users/samq64/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects", "projectEmbeds"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects", "projectEmbeds"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.28.0",
+  "tags": ["editor", "projectPlayer"]
+}

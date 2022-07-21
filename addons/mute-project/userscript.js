@@ -1,43 +1,28 @@
 export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.vm;
-  const muteIcon = "/static/assets/e21225ab4b675bc61eed30cfb510c288.svg";
-  const quietIcon = "/static/assets/3547fa1f2678a483a19f46852f36b426.svg";
-  const loudIcon = "/static/assets/b2c44c738c9cbc1a99cd6edfd0c2b85b.svg";
-  let showSlider = addon.settings.get("show-slider");
+  let muted = false;
   let icon = document.createElement("img");
+  icon.src = "/static/assets/e21225ab4b675bc61eed30cfb510c288.svg";
   icon.loading = "lazy";
-  let slider = document.createElement("input");
-  slider.type = "range";
-  slider.min = 0;
-  slider.max = 1;
-  slider.step = 0.02;
+  icon.style.display = "none";
   const toggleMute = (e) => {
     if (!addon.self.disabled && (e.ctrlKey || e.metaKey)) {
       e.cancelBubble = true;
       e.preventDefault();
-      setVol(slider.value == 0 ? 1 : 0);
+      muted = !muted;
+      if (muted) {
+        vm.runtime.audioEngine.inputNode.gain.value = 0;
+        icon.style.display = "block";
+      } else {
+        vm.runtime.audioEngine.inputNode.gain.value = 1;
+        icon.style.display = "none";
+      }
     }
   };
-
-  function setVol(v) {
-    vm.runtime.audioEngine.inputNode.gain.value = v;
-    slider.value = v;
-    slider.style.display = showSlider ? "inline-block" : "none";
-    if (v == 0) {
-      icon.src = muteIcon;
-      icon.style.display = "inline-block";
-      return;
-    }
-    icon.src = v < 0.5 ? quietIcon : loudIcon;
-    icon.style.display = showSlider ? "inline-block" : "none";
-  }
-
   addon.self.addEventListener("disabled", () => {
+    muted = false;
     vm.runtime.audioEngine.inputNode.gain.value = 1;
-  });
-
-  addon.self.addEventListener("reenabled", () => {
-    setVol(1);
+    icon.style.display = "none";
   });
 
   while (true) {
@@ -45,21 +30,8 @@ export default async function ({ addon, global, console }) {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
-    const container = document.createElement("div");
-    container.className = "sa-volume";
-    addon.tab.displayNoneWhileDisabled(container, { display: "inline-block" });
-    addon.tab.appendToSharedSpace({ space: "afterStopButton", element: container, order: 0 });
-    container.appendChild(icon);
-    container.appendChild(slider);
+    addon.tab.appendToSharedSpace({ space: "afterStopButton", element: icon, order: 0 });
     button.addEventListener("click", toggleMute);
     button.addEventListener("contextmenu", toggleMute);
-    setVol(1);
-    slider.addEventListener("change", function (e) {
-      setVol(this.value);
-    });
-    addon.settings.addEventListener("change", function () {
-      showSlider = addon.settings.get("show-slider");
-      setVol(1);
-    });
   }
 }

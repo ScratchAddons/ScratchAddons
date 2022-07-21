@@ -1,9 +1,8 @@
 {
-  "name": "Project player volume control",
-  "description": "Adds a volume slider next to the green flag controls. You can also Ctrl+Click the green flag to mute/unmute the project.",
+  "name": "Muted project player mode",
+  "description": "Ctrl+Click the green flag to mute/unmute the project.",
   "info": [
     {
-      "type": "notice",
       "text": "On macOS, use the Cmd key instead of the Ctrl key.",
       "id": "macOS"
     }
@@ -11,31 +10,13 @@
   "credits": [
     {
       "name": "TheColaber",
-      "link": "https://scratch.mit.edu/users/TheColaber"
-    },
-    {
-      "name": "samq64",
-      "link": "https://scratch.mit.edu/users/samq64/"
+      "link": "https://scratch.mit.edu/users/TheColaber/"
     }
   ],
   "userscripts": [
     {
       "url": "userscript.js",
       "matches": ["projects", "projectEmbeds"]
-    }
-  ],
-  "userstyles": [
-    {
-      "url": "userstyle.css",
-      "matches": ["projects", "projectEmbeds"]
-    }
-  ],
-  "settings": [
-    {
-      "name": "Show slider",
-      "id": "show-slider",
-      "type": "boolean",
-      "default": true
     }
   ],
   "dynamicEnable": true,
