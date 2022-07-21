@@ -28,20 +28,20 @@
       "id": "refresh",
       "type": "select",
       "potentialValues": [
-       {
-           "name": "fast",
-           "id": "250"
-         },
-         {
-           "name": "normal",
-           "id": "1000"
-         },
-         {
-           "name": "slow",
-           "id": "3000"
-         }
-       ],
-       "default": "normal"
+        {
+          "name": "fast",
+          "id": "250"
+        },
+        {
+          "name": "normal",
+          "id": "1000"
+        },
+        {
+          "name": "slow",
+          "id": "3000"
+        }
+      ],
+      "default": "normal"
     }
   ],
   "tags": ["community", "forums"],
