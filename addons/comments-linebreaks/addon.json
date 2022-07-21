@@ -5,10 +5,6 @@
     {
       "name": "TheColaber",
       "link": "https://scratch.mit.edu/users/TheColaber"
-    },
-    {
-      "name": "Samq64",
-      "link": "https://scratch.mit.edu/users/samq64/"
     }
   ],
   "userscripts": [
@@ -57,7 +53,7 @@
   "dynamicEnable": true,
   "versionAdded": "1.8.0",
   "latestUpdate": {
-    "version": "1.27.0",
+    "version": "1.28.0",
     "newSettings": ["scrollbars", "height"]
   },
   "tags": ["community", "comments"]
