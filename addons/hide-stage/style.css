@@ -31,12 +31,19 @@
 .sa-stage-hidden
   [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen_"])
   [class*="stage-wrapper_stage-canvas-wrapper_"] {
-  /* can't use display: none here because that causes the canvas's size to become 0x0 and causes crashes */
+  /* can't use display: none because that causes the canvas's clientWidth/Height to become 0 which causes crashes */
   visibility: hidden;
   position: absolute;
-  /* this puts the stage fully offscreen it can't be hovered over */
-  right: 100vw;
   z-index: -9999;
+  /* move the stage to avoid a horizontal scroll bar */
+  right: 0;
+}
+[dir="rtl"]
+  .sa-stage-hidden
+  [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen_"])
+  [class*="stage-wrapper_stage-canvas-wrapper_"] {
+  right: initial;
+  left: 0;
 }
 
 .sa-stage-hidden [class*="stage-header_stage-size-row"] {
