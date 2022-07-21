@@ -133,7 +133,10 @@ export default async function ({ template }) {
         (event) => {
           if (location.hash.includes(this.addon._addonId)) {
             this.expanded = true;
+            if (this.addon.tags.includes("easterEgg" )) //dango-rain
+              vue.selectedCategory = "easterEgg"; 
           }
+            
         },
         false
       );

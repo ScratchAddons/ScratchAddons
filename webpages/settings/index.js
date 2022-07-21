@@ -432,8 +432,8 @@ let fuse;
         "hashchange",
         (event) => {
           vue.selectedCategory = "all";
-        },
-        false
+          document.querySelector(location.hash).scrollIntoView();
+        }
       );
     },
   });
