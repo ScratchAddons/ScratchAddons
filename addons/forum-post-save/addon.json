@@ -13,14 +13,6 @@
       "matches": ["topics"]
     }
   ],
-  "settings": [
-    {
-      "name": "Post save interval (seconds)",
-      "id": "timeout",
-      "type": "positive_integer",
-      "default": 5
-    }
-  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "tags": ["community", "forums"],
