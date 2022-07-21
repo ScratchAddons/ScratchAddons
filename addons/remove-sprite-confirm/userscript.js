@@ -38,15 +38,11 @@ export default async function ({ addon, console, msg }) {
         e.preventDefault();
         e.stopPropagation();
         addon.tab
-          .confirm(
-            msg("delete-" + type + "-title"),
-            msg("delete-" + type + "-message"),
-            {
-              okButtonLabel: msg("yes"),
-              cancelButtonLabel: msg("no"),
-              useEditorClasses: true,
-            }
-          )
+          .confirm(msg("delete-" + type + "-title"), msg("delete-" + type + "-message"), {
+            okButtonLabel: msg("yes"),
+            cancelButtonLabel: msg("no"),
+            useEditorClasses: true,
+          })
           .then((confirmed) => {
             if (confirmed) {
               override = true;
