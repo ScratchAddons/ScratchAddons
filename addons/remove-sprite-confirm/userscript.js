@@ -19,19 +19,19 @@ export default async function ({ addon, console, msg }) {
         ) ||
           e.target.closest("div[class*='sprite-selector_sprite-wrapper_'] div[class*='delete-button_delete-button_']"))
       ) {
-        type = msg("sprite");
+        type = "sprite";
       } else if (
         (addon.settings.get("sounds") &&
           e.target.closest("[data-tabs] > :nth-child(4) nav[class*='context-menu_context-menu_'] > :nth-child(3)")) ||
         e.target.closest("[data-tabs] > :nth-child(4) div[class*='delete-button_delete-button_']")
       ) {
-        type = msg("sound");
+        type = "sound";
       } else if (
         (addon.settings.get("costumes") &&
           e.target.closest("[data-tabs] > :nth-child(3) nav[class*='context-menu_context-menu_'] > :nth-child(3)")) ||
         e.target.closest("[data-tabs] > :nth-child(3) div[class*='delete-button_delete-button_']")
       ) {
-        type = msg("costume");
+        type = "costume";
       }
 
       if (type !== null) {
@@ -39,8 +39,8 @@ export default async function ({ addon, console, msg }) {
         e.stopPropagation();
         addon.tab
           .confirm(
-            msg("confirm-title", { object: type.charAt(0).toUpperCase() + type.slice(1) }),
-            msg("confirm-message", { object: msg(type) }),
+            msg("delete-" + type + "-title"),
+            msg("delete-" + type + "-message"),
             {
               okButtonLabel: msg("yes"),
               cancelButtonLabel: msg("no"),

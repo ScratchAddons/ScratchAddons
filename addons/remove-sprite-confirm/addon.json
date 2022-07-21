@@ -1,6 +1,6 @@
 {
   "name": "Editor confirmations",
-  "description": "Asks if you're sure when deleting a sprite/costume/sound inside a project.",
+  "description": "Asks if you're sure when deleting a sprite, costume, or sound inside a project.",
   "userscripts": [
     {
       "url": "userscript.js",
