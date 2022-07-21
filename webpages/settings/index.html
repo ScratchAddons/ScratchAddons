@@ -98,6 +98,7 @@
       */
       @import url("../styles/colors.css");
       @import url("../styles/components/badges.css");
+      @import url("../styles/components/buttons.css");
       @import url("../styles/components/filter.css");
       @import url("../styles/components/categories.css");
       @import url("../styles/components/search.css");
@@ -212,7 +213,7 @@
         </div>
       </div>
     </div>
-    <modal class="more-settings" :is-open.sync="moreSettingsOpen" :title="msg('moreSettings')">
+    <modal class="more-settings" :is-open.sync="moreSettingsOpen" :title="msg('moreSettings')" v-cloak>
       <div class="addon-block settings-block">
         <div class="addon-body">
           <div class="addon-topbar">
