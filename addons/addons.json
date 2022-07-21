@@ -118,7 +118,9 @@
   "hide-signatures",
   "disable-sprite-wobble",
   "forum-live-preview",
+  "sounds-duration",
   "default-costume-editor-color",
+  "one-click-studio-invites",
   "hide-backpack",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
@@ -139,7 +141,9 @@
   "// For editor:",
   "editor-dark-mode",
   "editor-colored-context-menus",
+  "hide-stage",
   "editor-stage-left",
+  "editor-buttons-reverse-order",
   "columns",
   "editor-theme3"
 ]

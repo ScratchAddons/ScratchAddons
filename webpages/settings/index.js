@@ -8,6 +8,7 @@ import categories from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
 import globalTheme from "../../libraries/common/global-theme.js";
+import minifySettings from "../../libraries/common/minify-settings.js";
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -30,6 +31,7 @@ let fuse;
     "webpages/settings/components/addon-group-header",
     "webpages/settings/components/addon-body",
     "webpages/settings/components/category-selector",
+    "webpages/settings/components/modal",
     "webpages/settings/components/previews/editor-dark-mode",
     "webpages/settings/components/previews/palette",
   ]);
@@ -125,10 +127,11 @@ let fuse;
           addonsEnabled[addonId] = granted;
         });
       }
+      const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
       await syncSet({
         globalTheme: !!obj.core.lightTheme,
         addonsEnabled,
-        addonSettings,
+        addonSettings: minifySettings(addonSettings, prerelease ? null : manifests),
       });
       resolvePromise();
     };
@@ -144,8 +147,7 @@ let fuse;
         smallMode: false,
         theme: initialTheme,
         switchPath: "../../images/icons/switch.svg",
-        isOpen: false,
-        canCloseOutside: false,
+        moreSettingsOpen: false,
         categoryOpen: true,
         loaded: false,
         searchLoaded: false,
@@ -228,19 +230,18 @@ let fuse;
       addonAmt() {
         return `${Math.floor(this.manifests.filter((addon) => !addon.tags.includes("easterEgg")).length / 5) * 5}+`;
       },
+      selectedCategoryName() {
+        return this.categories.find((category) => category.id === this.selectedCategory)?.name;
+      },
     },
 
     methods: {
-      modalToggle: function () {
+      openMoreSettings: function () {
         this.closePickers();
-        this.isOpen = !this.isOpen;
+        this.moreSettingsOpen = true;
         if (vue.smallMode) {
           vue.sidebarToggle();
         }
-        this.canCloseOutside = false;
-        setTimeout(() => {
-          this.canCloseOutside = true;
-        }, 100);
       },
       sidebarToggle: function () {
         this.categoryOpen = !this.categoryOpen;
@@ -374,11 +375,6 @@ let fuse;
         if (event?.target.classList[0] === "toggle") return;
         if (this.categoryOpen && this.smallMode) {
           this.sidebarToggle();
-        }
-      },
-      modalClickOutside: function (e) {
-        if (this.isOpen && this.canCloseOutside && e.isTrusted) {
-          this.isOpen = false;
         }
       },
     },
