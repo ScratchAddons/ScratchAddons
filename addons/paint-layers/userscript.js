@@ -1,6 +1,8 @@
 export default async function ({ addon, msg, global, console }) {
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/sortable.min.js");
   window.paper = await addon.tab.traps.getPaper();
+  let currentBounds;
+  let layersPanelEl;
   let layersEl;
   let toggled = false;
 
@@ -9,7 +11,15 @@ export default async function ({ addon, msg, global, console }) {
     console.log(detail.action.type, detail);
     if (!toggled) return;
     if ("scratch-paint/view/UPDATE_VIEW_BOUNDS" === detail.action.type) {
-      updateLayers();
+      // Check if the bounds were actually updated
+      let newBounds = detail.action.viewBounds.values;
+      if (newBounds.every((e, i) => e === currentBounds[i])) {
+        updateLayers();
+        updateLayerPanelHeight();
+      } else {
+        currentBounds = addon.tab.redux.state.scratchPaint.viewBounds.values;
+        forceCanvasSizeRefresh();
+      }
     }
     if ("scratch-paint/select/CHANGE_SELECTED_ITEMS" === detail.action.type) {
       console.log(paper.project);
@@ -65,11 +75,21 @@ export default async function ({ addon, msg, global, console }) {
     });
   }
 
+  // Makes Paper trigger a canvas size update by faking a browser window resize
+  // If a more direct way to refresh the canvas size is available, feel free to replace this
   function forceCanvasSizeRefresh() {
+    window.dispatchEvent(new Event("resize"));
     addon.tab.redux.dispatch({
       type: "scratch-paint/view/UPDATE_VIEW_BOUNDS",
       viewBounds: paper.view.matrix,
     });
+  }
+
+  // Makes the layer panel match the height of the "controls container" (tool ribbon, canvas, and zoom controls)
+  // Scratch's flexbox implementation is so cursed that this is the only reasonable solution I could come to
+  function updateLayerPanelHeight() {
+    let controlsContainer = document.querySelector("[class^='paint-editor_controls-container_'");
+    layersPanelEl.style.height = getComputedStyle(controlsContainer).height;
   }
 
   while (true) {
@@ -80,8 +100,13 @@ export default async function ({ addon, msg, global, console }) {
     });
     toggled = false;
 
-    const wrapper = document.querySelector("[class^=asset-panel_wrapper]");
-    layersEl = wrapper.appendChild(document.createElement("div"));
+    const wrapper = document.querySelector("[class^=paint-editor_top-align-row_]");
+    layersPanelEl = wrapper.appendChild(document.createElement("div"));
+    layersPanelEl.className = "paint-layers-panel hidden";
+    currentBounds = addon.tab.redux.state.scratchPaint.viewBounds.values;
+    updateLayerPanelHeight();
+
+    layersEl = layersPanelEl.appendChild(document.createElement("div"));
     layersEl.className = "layers";
 
     const group = zoomControls.appendChild(document.createElement("div"));
@@ -96,9 +121,11 @@ export default async function ({ addon, msg, global, console }) {
       toggled = !toggled;
       if (toggled) {
         button.classList.add("selected");
+        layersPanelEl.classList.remove("hidden");
         updateLayers(layersEl);
       } else {
         button.classList.remove("selected");
+        layersPanelEl.classList.add("hidden");
         removeLayers(layersEl);
       }
       forceCanvasSizeRefresh();
