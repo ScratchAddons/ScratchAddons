@@ -1,6 +1,12 @@
 {
-  "name": "Jump to block definition",
-  "description": "Middle click or hold shift while clicking a custom block to jump to its definition.",
+  "name": "Jump to custom block definition",
+  "description": "Using the middle mouse button or Shift + Click on a custom block allows you to jump to its definition.",
+  "info": [
+    {
+      "text": "This addon was previously part of the \"developer tools\" addon but has moved here.",
+      "id": "developer-tools"
+    }
+  ],
   "credits": [
     {
       "name": "griffpatch"
@@ -12,12 +18,7 @@
       "matches": ["projects"]
     }
   ],
-  "versionAdded": "1.0.0",
-  "latestUpdate": {
-    "version": "1.28.0",
-    "temporaryNotice": "This addon was once part of the Developer Tools addon but has been moved here.",
-    "isMajor": true
-  },
+  "versionAdded": "1.28.0",
   "tags": ["editor", "codeEditor", "recommended"],
   "enabledByDefault": true,
   "dynamicEnable": true,

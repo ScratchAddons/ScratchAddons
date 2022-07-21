@@ -1,6 +1,12 @@
 {
   "name": "Editor find bar",
-  "description": "Quicky find scripts, costumes and sounds around your project using the find bar.",
+  "description": "Quickly find and jump to scripts, costumes and sounds in a sprite by clicking on the new find bar located to the right of sounds tab. Use the input to filter and your mouse or arrow keys to select items. Use Ctrl + Left and Ctrl + Right in the scripting area to navigate to previous / next visited position in the code area after using the navigate to block or find bar.",
+  "info": [
+    {
+      "text": "This addon was previously part of the \"developer tools\" addon but has moved here.",
+      "id": "developer-tools"
+    }
+  ],
   "credits": [
     {
       "name": "griffpatch"
@@ -24,12 +30,7 @@
       "matches": ["projects"]
     }
   ],
-  "versionAdded": "1.0.0",
-  "latestUpdate": {
-    "version": "1.28.0",
-    "temporaryNotice": "This addon was once part of the Developer Tools addon but has been moved here.",
-    "isMajor": true
-  },
+  "versionAdded": "1.28.0",
   "tags": ["editor", "codeEditor", "costumeEditor", "recommended"],
   "enabledByDefault": true
 }
