@@ -424,13 +424,10 @@ let fuse;
         }
       }, 0);
 
-      window.addEventListener(
-        "hashchange",
-        (event) => {
-          vue.selectedCategory = "all";
-          document.querySelector(location.hash).scrollIntoView();
-        }
-      );
+      window.addEventListener("hashchange", (event) => {
+        vue.selectedCategory = "all";
+        document.querySelector(location.hash).scrollIntoView();
+      });
     },
   });
 
