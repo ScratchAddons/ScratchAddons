@@ -1,38 +1,3 @@
-.modal {
-  position: fixed;
-  z-index: 100;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: var(--modal-overlay);
-  backdrop-filter: blur(2px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-content {
-  background-color: var(--page-background);
-  margin: auto;
-  padding: 20px;
-  width: 50rem;
-  max-width: 75%;
-  border-radius: 10px;
-  height: 75%;
-  display: flex;
-  flex-direction: column;
-}
-
-.close {
-  float: right;
-  cursor: pointer;
-  filter: var(--content-icon-filter);
-}
-[dir="rtl"] .close {
-  float: left;
-}
-
 .footer {
   text-align: center;
   color: var(--gray-text);
@@ -45,31 +10,31 @@
   margin-top: 20px;
   overflow-y: auto;
 }
-.modal .large-button {
+.more-settings .large-button {
   display: block;
   margin-inline-end: 10px;
 }
-.modal .filter-selector {
+.more-settings .filter-selector {
   margin: 0;
 }
-.modal .addon-body,
-.modal .addon-setting {
+.more-settings .addon-body,
+.more-settings .addon-setting {
   margin-inline: 0;
 }
-.modal .addon-body:first-child {
+.more-settings .addon-body:first-child {
   margin-top: 0;
 }
-.modal .addon-body:last-child {
+.more-settings .addon-body:last-child {
   margin-bottom: 0;
 }
-.modal .addon-topbar {
+.more-settings .addon-topbar {
   height: 36px;
   border-bottom: 1px solid var(--content-border);
 }
-.modal .addon-name {
+.more-settings .addon-name {
   margin-inline-start: 10px;
 }
-.modal .addon-settings {
+.more-settings .addon-settings {
   padding: 10px;
   padding-bottom: 0;
 }

@@ -1,3 +1,5 @@
+import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
+
 export default async function ({ addon, global, console, msg }) {
   // The basic premise of how this addon works is relative simple.
   // scratch-gui renders the sprite selectors and asset selectors in a hierarchy like this:
@@ -16,8 +18,6 @@ export default async function ({ addon, global, console, msg }) {
   // We touch some things on the VM to make dragging items work properly.
 
   const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
-
-  const SVG_NS = "http://www.w3.org/2000/svg";
 
   const TYPE_SPRITES = 1;
   const TYPE_ASSETS = 2;
@@ -370,26 +370,29 @@ export default async function ({ addon, global, console, msg }) {
     ];
 
     const createFolderPreview = (items) => {
-      const svg = document.createElementNS(SVG_NS, "svg");
-      svg.setAttribute("width", PREVIEW_SIZE);
-      svg.setAttribute("height", PREVIEW_SIZE);
+      // Directly generate a string instead of using DOM API for performance as we deal with very large inlined images
+      // Because the result is only used as an img src, XSS shouldn't be a concern
+      let result = `data:image/svg+xml;,<svg xmlns="http://www.w3.org/2000/svg" width="${PREVIEW_SIZE}" height="${PREVIEW_SIZE}">`;
       for (let i = 0; i < Math.min(PREVIEW_POSITIONS.length, items.length); i++) {
         const item = items[i];
-        const image = document.createElementNS(SVG_NS, "image");
-        image.setAttribute("width", PREVIEW_SIZE / 2);
-        image.setAttribute("height", PREVIEW_SIZE / 2);
-        image.setAttribute("x", PREVIEW_POSITIONS[i][0]);
-        image.setAttribute("y", PREVIEW_POSITIONS[i][1]);
+        const width = PREVIEW_SIZE / 2;
+        const height = PREVIEW_SIZE / 2;
+        const [x, y] = PREVIEW_POSITIONS[i];
+        let src;
         if (item.asset) {
-          image.setAttribute("href", item.asset.encodeDataURI());
+          // escaping shouldn't be necessary here but we'll do it anyways for safety
+          src = escapeHTML(item.asset.encodeDataURI());
         } else if (item.costume && item.costume.asset) {
-          image.setAttribute("href", item.costume.asset.encodeDataURI());
+          src = escapeHTML(item.costume.asset.encodeDataURI());
         } else if (item.url) {
-          image.setAttribute("href", soundIconHref);
+          src = soundIconHref;
         }
-        svg.appendChild(image);
+        if (src) {
+          result += `<image width="${width}" height="${height}" x="${x}" y="${y}" href="${src}"/>`;
+        }
       }
-      return "data:image/svg+xml;," + new XMLSerializer().serializeToString(svg);
+      result += "</svg>";
+      return result;
     };
 
     const getUniqueIdOfFolderItems = (items) => {
@@ -747,8 +750,13 @@ export default async function ({ addon, global, console, msg }) {
           fixSoundOrder();
         }
       };
-      const renameFolder = () => {
-        let newName = prompt(msg("rename-folder-prompt"), data.folder);
+      const renameFolder = async () => {
+        let newName = await addon.tab.prompt(
+          msg("rename-folder-prompt-title"),
+          msg("rename-folder-prompt"),
+          data.folder,
+          { useEditorClasses: true }
+        );
         // Prompt cancelled, do not rename
         if (newName === null) {
           return;
@@ -806,8 +814,13 @@ export default async function ({ addon, global, console, msg }) {
         }
       };
 
-      const createFolder = () => {
-        const name = prompt(msg("name-prompt"), getNameWithoutFolder(data.realName));
+      const createFolder = async () => {
+        const name = await addon.tab.prompt(
+          msg("name-prompt-title"),
+          msg("name-prompt"),
+          getNameWithoutFolder(data.realName),
+          { useEditorClasses: true }
+        );
         if (name === null) {
           return;
         }
@@ -1247,10 +1260,11 @@ export default async function ({ addon, global, console, msg }) {
       const dragInfo = args[0];
       const folderItems = dragInfo && dragInfo.payload && dragInfo.payload.sa_folder_items;
       if (Array.isArray(folderItems)) {
-        if (confirm(msg("confirm-backpack-folder"))) {
+        addon.tab.confirm("", msg("confirm-backpack-folder"), { useEditorClasses: true }).then((result) => {
+          if (!result) return;
           this.sa_queuedItems = folderItems;
           this.sa_loadNextItem();
-        }
+        });
         return;
       }
       return originalHandleDrop.call(this, ...args);
