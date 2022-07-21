@@ -24,12 +24,24 @@
   ],
   "settings": [
     {
-      "name": "Refresh rate (ms)",
+      "name": "Refresh rate",
       "id": "refresh",
-      "type": "integer",
-      "min": 250,
-      "max": 10000,
-      "default": 1000
+      "type": "select",
+      "potentialValues": [
+       {
+           "name": "fast",
+           "id": "250"
+         },
+         {
+           "name": "normal",
+           "id": "1000"
+         },
+         {
+           "name": "slow",
+           "id": "3000"
+         }
+       ],
+       "default": "normal"
     }
   ],
   "tags": ["community", "forums"],

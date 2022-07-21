@@ -1,7 +1,7 @@
 export default async function ({ addon, console }) {
   const textarea = await addon.tab.waitForElement(".markItUpEditor");
   const previewButton = await addon.tab.waitForElement(".markItUpButton.preview");
-  const delay = addon.settings.get("refresh");
+  const delay = Number(addon.settings.get("refresh"));
   let previewIframe;
   addon.tab.waitForElement(".markItUpPreviewFrame").then((iframe) => (previewIframe = iframe));
 
