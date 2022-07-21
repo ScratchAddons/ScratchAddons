@@ -25,23 +25,23 @@
   "settings": [
     {
       "name": "Refresh rate",
-      "id": "refresh",
+      "id": "rate",
       "type": "select",
       "potentialValues": [
         {
-          "name": "fast",
-          "id": "250"
+          "id": "fast",
+          "name": "Fast"
         },
         {
-          "name": "normal",
-          "id": "1000"
+          "id": "default",
+          "name": "Default"
         },
         {
-          "name": "slow",
-          "id": "3000"
+          "id": "slow",
+          "name": "Slow"
         }
       ],
-      "default": "normal"
+      "default": "default"
     }
   ],
   "tags": ["community", "forums"],
