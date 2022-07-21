@@ -25,11 +25,18 @@
 .sa-stage-hidden
   [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen_"])
   [class*="controls_controls-container_"],
-.sa-stage-hidden
-  [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen_"])
-  [class*="stage-wrapper_stage-canvas-wrapper_"],
 .sa-stage-hidden [class*="gui_target-wrapper_"] {
   display: none;
+}
+.sa-stage-hidden
+  [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen_"])
+  [class*="stage-wrapper_stage-canvas-wrapper_"] {
+  /* can't use display: none here because that causes the canvas's size to become 0x0 and causes crashes */
+  visibility: hidden;
+  position: absolute;
+  /* this puts the stage fully offscreen it can't be hovered over */
+  right: 100vw;
+  z-index: -9999;
 }
 
 .sa-stage-hidden [class*="stage-header_stage-size-row"] {
