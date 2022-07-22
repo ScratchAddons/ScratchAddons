@@ -4,21 +4,13 @@ import BackgroundLocalizationProvider from "./l10n.js";
 
 window.scratchAddons = {};
 
-// Store addon objects for persistent scripts
-scratchAddons.addonObjects = [];
-
-// Store event targets for addon.* API events
-scratchAddons.eventTargets = {
-  auth: [],
-  settings: [],
-  self: [],
-};
-
 // Event target for local background page events
 scratchAddons.localEvents = new EventTarget();
 
 // Load manifests into memory
 scratchAddons.manifests = [];
+// addonId to set of addon IDs that has the addon inside userstyle's settings.if.addonEnabled
+scratchAddons.dependents = {};
 
 // Other files may add their own global methods here so that addon-api files can access them
 scratchAddons.methods = {};

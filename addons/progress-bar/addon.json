@@ -35,6 +35,8 @@
       "default": 5
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.0.0",
   "tags": ["editor", "recommended"],
   "enabledByDefault": false

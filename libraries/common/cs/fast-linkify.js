@@ -31,7 +31,11 @@ const _pingify = (child) => {
     if (getPingRegex().test(word)) {
       const elem = document.createElement("a");
       elem.textContent = word;
-      elem.href = `https://scratch.mit.edu/users/${word.slice(1)}/`;
+      if (word.toLowerCase() === "@welcomingcommittee") {
+        elem.href = "https://scratch.mit.edu/studios/146521/";
+      } else {
+        elem.href = `https://scratch.mit.edu/users/${word.slice(1)}/`;
+      }
       elem.rel = "noreferrer";
       child.parentNode.insertBefore(elem, child);
     } else if (word) {
@@ -58,7 +62,7 @@ export const linkifyTextNode = (elem) => {
  */
 export const linkifyTag = (elem, tagClass) => {
   for (const tag of elem.children) {
-    if (tagClass && !(elem instanceof tagClass)) continue;
+    if (tagClass && !(tag instanceof tagClass)) continue;
     for (const child of tag.childNodes) {
       _linkify(child);
     }

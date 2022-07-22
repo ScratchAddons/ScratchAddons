@@ -1,35 +1,12 @@
 export function createModal(addon, title, msg, switchType) {
-  const overlay = Object.assign(document.createElement("div"), {
-    className: "modal-overlay",
-  });
+  const { backdrop, container, content, closeButton, close } = addon.tab.createModal(title, { useSizesClass: false });
 
-  const div = Object.assign(document.createElement("div"), {
-    className: "sa-followers-main modal-content user-projects-modal",
-    tabindex: "-1",
-    role: "dialog",
-  });
+  container.classList.add("user-projects-modal");
+  container.classList.add("sa-followers-main");
+  container.querySelector(".modal-header").classList.add("user-projects-modal-title");
 
-  const closeBtnContainer = document.createElement("div");
-  closeBtnContainer.className = "modal-content-close";
-  const closeBtn = Object.assign(document.createElement("img"), {
-    src: addon.self.dir + "/close.svg",
-    alt: "close-icon",
-    className: "modal-content-close-img",
-    draggable: "false",
-  });
-
-  function close() {
-    overlay.style.display = "none";
-  }
-
-  closeBtnContainer.addEventListener("click", close);
-  closeBtnContainer.appendChild(closeBtn);
-  div.appendChild(closeBtnContainer);
-
-  const titleEl = document.createElement("div");
-  titleEl.className = "modal-title user-projects-modal-title modal-header";
-  titleEl.innerText = title;
-  div.appendChild(titleEl);
+  backdrop.addEventListener("click", close);
+  closeButton.addEventListener("click", close);
 
   const switcher = document.createElement("div");
   switcher.className = "sub-nav user-projects-modal-nav sub-nav-align-left";
@@ -55,10 +32,9 @@ export function createModal(addon, title, msg, switchType) {
     switchType("following");
   });
 
-  div.appendChild(switcher);
+  content.parentElement.insertBefore(switcher, content);
 
-  const main = document.createElement("div");
-  main.className = "modal-inner-content user-projects-modal-content";
+  content.classList.add("user-projects-modal-content");
 
   const followersGrid = document.createElement("div");
   followersGrid.className = "user-projects-modal-grid sa-followers-modal-grid followers";
@@ -67,10 +43,8 @@ export function createModal(addon, title, msg, switchType) {
   followingGrid.className = "user-projects-modal-grid sa-followers-modal-grid following";
   followingGrid.style.display = "none";
 
-  main.appendChild(followersGrid);
-  main.appendChild(followingGrid);
-
-  div.appendChild(main);
+  content.appendChild(followersGrid);
+  content.appendChild(followingGrid);
 
   const doneBtnContainer = document.createElement("div");
   doneBtnContainer.className = "studio-projects-done-row";
@@ -83,21 +57,9 @@ export function createModal(addon, title, msg, switchType) {
 
   doneBtnContainer.appendChild(doneBtn);
 
-  div.appendChild(doneBtnContainer);
+  content.parentElement.appendChild(doneBtnContainer);
 
-  overlay.appendChild(div);
-
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest(".sa-followers-main") && !e.target.closest("#sa-studio-followers-btn")) {
-      close();
-    }
-  });
-
-  // By default, hide the screen
-
-  close();
-
-  return overlay;
+  return backdrop;
 }
 
 export function createUser(follower, addon, msg, members) {
@@ -109,7 +71,7 @@ export function createUser(follower, addon, msg, members) {
   });
   const userImage = Object.assign(document.createElement("img"), {
     className: "studio-project-image",
-    src: `https://cdn2.scratch.mit.edu/get_image/user/${follower.id}_90x90.png`,
+    src: `https://uploads.scratch.mit.edu/get_image/user/${follower.id}_90x90.png`,
   });
 
   btn.appendChild(userImage);
