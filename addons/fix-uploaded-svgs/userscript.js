@@ -40,8 +40,8 @@ export default async function ({ addon, global, console }) {
   window.FileReader = pollutedFileReader;
   addon.self.addEventListener("disabled", () => {
     window.FileReader = originalFileReader;
-  })
+  });
   addon.self.addEventListener("reenabled", () => {
     window.FileReader = pollutedFileReader;
-  })
+  });
 }
