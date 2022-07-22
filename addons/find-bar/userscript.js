@@ -345,16 +345,10 @@ export default async function ({ addon, msg, console }) {
         }
 
         if (root.type === "event_whenbroadcastreceived") {
-          try {
-            // let wksp2 = Blockly.getMainWorkspace().getTopBlocks()[2].inputList[0].fieldRow[1];
-            let fields = root.inputList[0];
-            // let typeDesc = fields.fieldRow[0].getText();
-            let eventName = fields.fieldRow[1].getText();
-            // addBlock('receive', typeDesc + ' ' + eventName, root).eventName = eventName;
-            addBlock("receive", "event " + eventName, root).eventName = eventName;
-          } catch (e) {
-            // eat
-          }
+          const fieldRow = root.inputList[0].fieldRow;
+          let eventName = fieldRow.find((input) => input.name === "BROADCAST_OPTION").getText();
+          addBlock("receive", "event " + eventName, root).eventName = eventName;
+
           continue;
         }
 
@@ -666,7 +660,7 @@ export default async function ({ addon, msg, console }) {
           continue;
         }
 
-        for (const id of Object.keys(blocks._blocks)) {
+        for (const id in blocks._blocks) {
           const block = blocks._blocks[id];
           // To find event broadcaster blocks, we look for the nested "event_broadcast_menu" blocks first that match the event name
           if (block.opcode === "event_broadcast_menu" && block.fields.BROADCAST_OPTION.value === name) {
@@ -778,8 +772,10 @@ export default async function ({ addon, msg, console }) {
         this.utils.scrollBlockIntoView(this.blocks[this.idx]);
       }
 
-      e.cancelBubble = true;
-      e.preventDefault();
+      if (e) {
+        e.cancelBubble = true;
+        e.preventDefault();
+      }
     }
 
     remove() {
