@@ -66,7 +66,9 @@ export default async function ({ template }) {
         }
       },
       copyAddonLink() {
-        navigator.clipboard.writeText(`https://scratch.mit.edu/scratch-addons-extension/settings#addon-${this.addon._addonId}`);
+        navigator.clipboard.writeText(
+          `https://scratch.mit.edu/scratch-addons-extension/settings#addon-${this.addon._addonId}`
+        );
       },
       toggleAddonRequest(event) {
         const toggle = () => {
