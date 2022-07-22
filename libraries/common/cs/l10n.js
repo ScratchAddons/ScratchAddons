@@ -26,10 +26,12 @@ export default class LocalizationProvider extends EventTarget {
   _get(key, placeholders, messageHandler, fallback) {
     messageHandler = messageHandler || ((m) => m);
     if (Object.prototype.hasOwnProperty.call(this.messages, key)) {
-      const message = messageHandler(this.messages[key]);
+      const rawMessage = this.messages[key];
+      // English source file may use Structured JSON, non-English files use keyvalue JSON
+      const message = messageHandler(rawMessage.string || rawMessage);
       return this.formatter.format(message, placeholders);
     }
-    console.warn("Key missing:", key);
+    if (!fallback) (globalThis.scratchAddons?.console || console).warn("Key missing:", key);
     return fallback || key;
   }
 

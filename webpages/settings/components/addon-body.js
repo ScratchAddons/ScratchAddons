@@ -30,6 +30,12 @@ export default async function ({ template }) {
       addonSettings() {
         return this.$root.addonSettings[this.addon._addonId];
       },
+      showUpdateNotice() {
+        if (!this.addon.latestUpdate || !this.addon.latestUpdate.temporaryNotice) return false;
+        const [extMajor, extMinor, _] = this.$root.version.split(".");
+        const [addonMajor, addonMinor, __] = this.addon.latestUpdate.version.split(".");
+        return extMajor === addonMajor && extMinor === addonMinor;
+      },
     },
     methods: {
       getDefaultExpanded() {
@@ -136,10 +142,10 @@ export default async function ({ template }) {
         (event) => {
           if (location.hash.includes(this.addon._addonId)) {
             this.expanded = true;
-            if (this.addon.tags.includes("easterEgg" )) //dango-rain
-              vue.selectedCategory = "easterEgg"; 
+            if (this.addon.tags.includes("easterEgg"))
+              //dango-rain
+              vue.selectedCategory = "easterEgg";
           }
-            
         },
         false
       );
