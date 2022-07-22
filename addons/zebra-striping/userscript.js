@@ -76,18 +76,17 @@ export default async function ({ addon, msg, global, console }) {
   // Calculate and apply striping for a block and all blocks
   // below and in it.
   function stripeScript(target, id) {
-	const ws = Blockly.getMainWorkspace();
-	
+    const ws = Blockly.getMainWorkspace();
+
     const block = target.blocks._blocks[id];
-	if (!block) return;
-	block.__zebra = null;
-	
+    if (!block) return;
+    block.__zebra = null;
+
     const el = ws.getBlockById(id).getSvgRoot();
     const isStriped = blockIsStriped(target, id);
     if (el) {
       stripeStyling(el, isStriped);
     }
-
 
     if (block.next) {
       stripeScript(target, block.next);
@@ -129,13 +128,13 @@ export default async function ({ addon, msg, global, console }) {
     /* document.querySelectorAll(".sa-zebra-stripe").forEach(el => {
 			el.classList.remove("sa-zebra-stripe");
 		}); */
-	
-	const ws = Blockly.getMainWorkspace();
-	
+
+    const ws = Blockly.getMainWorkspace();
+
     for (const blockId in allBlocks) {
       // Clear stored striping
       allBlocks[blockId].__zebra = null;
-	  
+
       const el = ws.getBlockById(blockId).getSvgRoot();
       if (!el) continue;
 
@@ -143,20 +142,20 @@ export default async function ({ addon, msg, global, console }) {
       stripeStyling(el, isStriped);
     }
   }
-  
+
   function stripeSelected() {
-	  const selected = document.querySelector(".blocklySelected");
-	  if (!selected) {
-		  stripeAll();
-		  return;
-	  }
-	  if (!selected.dataset.id) return;
-	  stripeScript(vm.editingTarget, selected.dataset.id);
+    const selected = document.querySelector(".blocklySelected");
+    if (!selected) {
+      stripeAll();
+      return;
+    }
+    if (!selected.dataset.id) return;
+    stripeScript(vm.editingTarget, selected.dataset.id);
   }
 
   addon.tab.redux.addEventListener("statechanged", (e) => {
     if (addon.self.disabled) return;
-	
+
     if (
       e.detail.action.type === "scratch-gui/project-changed/SET_PROJECT_CHANGED" ||
       e.detail.action.type === "scratch-gui/block-drag/BLOCK_DRAG_UPDATE"
