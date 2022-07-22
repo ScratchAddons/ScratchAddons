@@ -59,6 +59,9 @@ export default async function ({ template }) {
           console.log(`Loaded default values for ${this.addon._addonId}`);
         }
       },
+      copyAddonLink() {
+        navigator.clipboard.writeText(`https://scratch.mit.edu/scratch-addons-extension/settings#addon-${this.addon._addonId}`);
+      },
       toggleAddonRequest(event) {
         const toggle = () => {
           // Prevents selecting text when the shift key is being held down

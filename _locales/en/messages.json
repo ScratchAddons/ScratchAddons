@@ -137,6 +137,9 @@
   "resetToDefault": {
     "message": "Reset to default settings"
   },
+  "copyAddonLink": {
+    "message": "Copy link of this addon"
+  },
   "creditTo": {
     "message": "Credit to:"
   },
