@@ -48,9 +48,6 @@ function updateCache(assign) {
   if (cache === stored) return; // if no diff, return
   localStorage.setItem("sa-forum-post-save", JSON.stringify(cache));
 }
-function getCache(topicId) {
-  return _getAllCache()[topicId];
-}
 function _getAllCache() {
   let data;
   try {
