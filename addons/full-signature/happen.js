@@ -4,6 +4,7 @@ export default async function ({ addon, global, console, msg }) {
   if (activityStream.length) {
     let container = document.querySelector(".activity-ul").appendChild(document.createElement("div"));
     container.classList.add("load-more-wh-container");
+    container.style.display = "none"; // overridden by userstyle if the setting is enabled
     let loadMore = container.appendChild(document.createElement("button"));
     loadMore.className = "load-more-wh button";
     loadMore.innerText = msg("load-more");
@@ -33,10 +34,17 @@ export default async function ({ addon, global, console, msg }) {
               .forEach((item) => fetched.push(item));
           });
       }
-      displayedFetch = fetched.slice(0, dataLoaded);
+      updateRedux();
+    });
+    async function updateRedux() {
+      if (!fetched.length) return; // load more hasn't been clicked yet: just use the data loaded by Scratch
+      displayedFetch = fetched.slice(0, !addon.self.disabled && addon.settings.get("whathappen") ? dataLoaded : 5);
       await addon.tab.redux.dispatch({ type: "SET_ROWS", rowType: "activity", rows: displayedFetch });
       document.querySelector(".activity-ul").appendChild(container);
       if (dataLoaded > fetched.length) container.remove();
-    });
+    }
+    addon.self.addEventListener("disabled", updateRedux);
+    addon.self.addEventListener("reenabled", updateRedux);
+    addon.settings.addEventListener("change", updateRedux);
   }
 }

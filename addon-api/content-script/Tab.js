@@ -4,6 +4,7 @@ import Listenable from "../common/Listenable.js";
 import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
 import * as blocks from "./blocks.js";
 import { addContextMenu } from "./contextmenu.js";
+import * as modal from "./modal.js";
 
 const DATA_PNG = "data:image/png;base64,";
 
@@ -51,11 +52,12 @@ export default class Tab extends Listenable {
    * @returns {Promise}
    */
   loadScript(url) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const script = document.createElement("script");
       script.src = url;
       document.head.appendChild(script);
       script.onload = resolve;
+      script.onerror = reject;
     });
   }
   /**
@@ -651,5 +653,19 @@ export default class Tab extends Listenable {
    */
   createEditorContextMenu(...args) {
     addContextMenu(this, ...args);
+  }
+
+  createModal(title, { isOpen = false, useEditorClasses = false, useSizesClass = false } = {}) {
+    if (this.editorMode !== null && useEditorClasses) return modal.createEditorModal(this, title, { isOpen });
+    if (this.clientVersion === "scratch-www") return modal.createScratchWwwModal(title, { isOpen, useSizesClass });
+    return modal.createScratchr2Modal(title, { isOpen });
+  }
+
+  confirm(...args) {
+    return modal.confirm(this, ...args);
+  }
+
+  prompt(...args) {
+    return modal.prompt(this, ...args);
   }
 }
