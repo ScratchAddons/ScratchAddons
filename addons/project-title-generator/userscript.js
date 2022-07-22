@@ -1,8 +1,7 @@
-export default async function ({ addon, global, console, msg }) {
-  // Number of adjectives/nouns defined in addons-l10n\<LOCALE>\project-title-generator.json
-  const ADJ_COUNT = 30;
-  const NOUN_COUNT = 30;
+import ADJECTIVES from "./data/adjectives.js";
+import NOUNS from "./data/nouns.js";
 
+export default async function ({ addon, global, console, msg }) {
   let pendingReplacement = false;
 
   let reduxAvailable = Boolean(addon.tab.redux.state);
@@ -113,17 +112,14 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   async function setProjectName() {
-    // Constructing the name like this is necessary for cross-language compatibility
-    // (some languages put the adjectives after the noun, some don't use spaces here, etc.)
-    let newName = msg("format", {
-      adj: msg("adj-" + randi(ADJ_COUNT)),
-      adj2: msg("adj-" + randi(ADJ_COUNT)),
-      noun: msg("noun-" + randi(NOUN_COUNT)),
-    });
+    let adj1 = ADJECTIVES[randi(ADJECTIVES.length)];
+    let adj2 = ADJECTIVES[randi(ADJECTIVES.length)];
+    let noun1 = NOUNS[randi(NOUNS.length)];
+    let newName = `${adj1} ${adj2} ${noun1}`;
     addon.tab.redux.dispatch({ type: "projectTitle/SET_PROJECT_TITLE", title: newName });
   }
 
   function randi(max) {
-    return Math.floor(Math.random() * max) + 1;
+    return Math.floor(Math.random() * max);
   }
 }
