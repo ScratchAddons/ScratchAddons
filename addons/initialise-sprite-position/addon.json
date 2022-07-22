@@ -42,11 +42,11 @@
       "id": "duplicate",
       "name": "Behaviour when duplicating sprites",
       "type": "select",
-      "default": "keep",
+      "default": "randomize",
       "potentialValues": [
         {
           "id": "custom",
-          "name": "Send to custom x/y values"
+          "name": "Send to specified x/y values"
         },
         {
           "id": "keep",
