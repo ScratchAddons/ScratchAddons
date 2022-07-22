@@ -1,6 +1,6 @@
 export default async function ({ addon, global, console }) {
   const originalFileReader = window.FileReader;
-  window.FileReader = function () {
+  const pollutedFileReader = function () {
     const realFileReader = new originalFileReader();
     const readAsArrayBuffer = Symbol();
     realFileReader[readAsArrayBuffer] = realFileReader.readAsArrayBuffer;
@@ -37,4 +37,11 @@ export default async function ({ addon, global, console }) {
     };
     return realFileReader;
   };
+  window.FileReader = pollutedFileReader;
+  addon.self.addEventListener("disabled", () => {
+    window.FileReader = originalFileReader;
+  })
+  addon.self.addEventListener("reenabled", () => {
+    window.FileReader = pollutedFileReader;
+  })
 }
