@@ -1,4 +1,4 @@
-export default NOUNS = [
+export default [
   "Cows",
   "Dogs",
   "Noodles",

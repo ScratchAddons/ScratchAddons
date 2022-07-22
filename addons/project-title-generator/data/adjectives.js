@@ -1,4 +1,4 @@
-export default ADJECTIVES = [
+export default [
   "Funky",
   "Wacky",
   "Sleepy",
