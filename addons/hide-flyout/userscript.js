@@ -119,6 +119,8 @@ export default async function ({ addon, global, console, msg }) {
     }
     addon.self.addEventListener("disabled", () => {
       Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
+      // update workspace dimensions
+      Blockly.svgResize(Blockly.getMainWorkspace());
     });
     addon.self.addEventListener("reenabled", () => {
       if (getToggleSetting() === "category") {
@@ -126,6 +128,8 @@ export default async function ({ addon, global, console, msg }) {
         onmouseleave(null, 0);
         toggle = false;
       }
+      // update workspace dimensions
+      Blockly.svgResize(Blockly.getMainWorkspace());
     });
 
     addon.settings.addEventListener("change", () => {
@@ -146,6 +150,8 @@ export default async function ({ addon, global, console, msg }) {
         onmouseleave();
         Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
       }
+      // update workspace dimensions
+      Blockly.svgResize(Blockly.getMainWorkspace());
     });
 
     // category click mode
@@ -196,7 +202,7 @@ export default async function ({ addon, global, console, msg }) {
     Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function () {
       const metrics = oldGetMetrics.call(this);
       if (addon.self.disabled || getToggleSetting() === "hover" || this.RTL) return metrics;
-      if (this.getToolbox().flyout_?.getWidth() === 310) {
+      if (this.getToolbox()?.flyout_?.getWidth() === 310) {
         // columns is enabled
         return metrics;
       }
