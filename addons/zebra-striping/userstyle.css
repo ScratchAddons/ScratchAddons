@@ -15,5 +15,6 @@
 
 /* editor-stepping compatibility */
 .sa-zebra-stripe[style*="#sa_glower_filter"] {
-  filter: brightness(var(--zebraStriping-bright)) saturate(var(--zebraStriping-saturate)) url("#sa_glower_filter0");
+  /* !important because editor-stepping uses inline styles */
+  filter: brightness(var(--zebraStriping-bright)) saturate(var(--zebraStriping-saturate)) url("#sa_glower_filter0") !important;
 }

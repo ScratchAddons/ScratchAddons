@@ -3,16 +3,12 @@ export default async function ({ addon, msg, global, console }) {
     return;
   }
 
-  if (addon.tab.editorMode === "embed") {
-    return;
-  }
-
   addon.tab.redux.initialize();
   const vm = addon.tab.traps.vm;
 
   // Get the *real* parent of a block (the block it's in), as Scratch also
   // considers the previous block to be its parent.
-  function realParentOfBlock(target, id, compareId) {
+  function realParentOfBlock(target, id) {
     if (!target) return null;
     if (!id) return;
     const block = target.blocks._blocks[id];
@@ -38,8 +34,8 @@ export default async function ({ addon, msg, global, console }) {
     return parentBlock;
   }
 
-  // Check if a block is to be striped, and store the result
-  // for performance.
+  // Check if a block is to be striped, and cache the result
+  // for better performance.
   function blockIsStriped(target, id) {
     const block = target.blocks._blocks[id];
     if (!block) return null;
@@ -78,15 +74,20 @@ export default async function ({ addon, msg, global, console }) {
   }
 
   // Calculate and apply striping for a block and all blocks
-  // below or in it.
+  // below and in it.
   function stripeScript(target, id) {
-    const el = document.querySelector(`.blocklyDraggable[data-id="${blockId}"]`);
+	const ws = Blockly.getMainWorkspace();
+	
+    const block = target.blocks._blocks[id];
+	if (!block) return;
+	block.__zebra = null;
+	
+    const el = ws.getBlockById(id).getSvgRoot();
     const isStriped = blockIsStriped(target, id);
     if (el) {
       stripeStyling(el, isStriped);
     }
 
-    const block = target.blocks._blocks[id];
 
     if (block.next) {
       stripeScript(target, block.next);
@@ -117,41 +118,50 @@ export default async function ({ addon, msg, global, console }) {
   }
 
   // Calculate and apply striping for all blocks in the code area.
-  // maybe todo: only calculate striping for the modified script.
-  // probably would have a big performance increase on large sprites
   function stripeAll() {
-    if (addon.self.disabled) return;
-
     const editingTarget = vm.editingTarget;
     if (!editingTarget) return;
 
     const allBlocks = editingTarget.blocks._blocks;
-    // Clear all stored striping
-    for (const blockId in allBlocks) {
-      allBlocks[blockId].__zebra = null;
-    }
     // Calling and looping through a querySelectorAll probably has
     // perf impact. I'll uncomment this if stuff doesn't unstripe properly
     // sometimes
     /* document.querySelectorAll(".sa-zebra-stripe").forEach(el => {
 			el.classList.remove("sa-zebra-stripe");
 		}); */
-
+	
+	const ws = Blockly.getMainWorkspace();
+	
     for (const blockId in allBlocks) {
-      const el = document.querySelector(`.blocklyDraggable[data-id="${blockId}"]`);
+      // Clear stored striping
+      allBlocks[blockId].__zebra = null;
+	  
+      const el = ws.getBlockById(blockId).getSvgRoot();
       if (!el) continue;
 
       const isStriped = blockIsStriped(editingTarget, blockId);
       stripeStyling(el, isStriped);
     }
   }
+  
+  function stripeSelected() {
+	  const selected = document.querySelector(".blocklySelected");
+	  if (!selected) {
+		  stripeAll();
+		  return;
+	  }
+	  if (!selected.dataset.id) return;
+	  stripeScript(vm.editingTarget, selected.dataset.id);
+  }
 
   addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (addon.self.disabled) return;
+	
     if (
       e.detail.action.type === "scratch-gui/project-changed/SET_PROJECT_CHANGED" ||
       e.detail.action.type === "scratch-gui/block-drag/BLOCK_DRAG_UPDATE"
     ) {
-      queueMicrotask(stripeAll);
+      queueMicrotask(stripeSelected);
     }
     if (e.detail.action.type === "scratch-gui/toolbox/UPDATE_TOOLBOX") {
       // Switching sprites
@@ -161,6 +171,6 @@ export default async function ({ addon, msg, global, console }) {
   addon.self.addEventListener("reenabled", stripeAll);
 
   if (addon.tab.editorMode === "editor") {
-    queueMicrotask(stripeAll());
+    queueMicrotask(stripeAll);
   }
 }
