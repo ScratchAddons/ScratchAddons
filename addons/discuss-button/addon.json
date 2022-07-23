@@ -8,6 +8,15 @@
       "runAtComplete": false
     }
   ],
+  "userstyles": [
+    {
+      "url": "position-bottom.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "if": {
+        "settings": { "position-bottom": true }
+      }
+    }
+  ],
   "settings": [
     {
       "name": "Items",
@@ -59,13 +68,19 @@
           "values": { "name": "Wiki", "url": "https://scratch-wiki.info/" }
         }
       ]
+    },
+    {
+      "name": "Position the navigation bar down",
+      "id": "position-bottom",
+      "type": "boolean",
+      "default": false
     }
   ],
+  "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.0.0",
   "latestUpdate": {
-    "version": "1.24.0",
-    "newSettings": ["items"],
-    "isMajor": true
+    "version": "1.27.3",
+    "newSettings": ["position-bottom"]
   },
   "tags": ["community", "featured"],
   "enabledByDefault": false
