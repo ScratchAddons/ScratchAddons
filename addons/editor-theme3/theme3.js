@@ -276,8 +276,6 @@ export default async function ({ addon, console }) {
   });
 
   const updateColors = () => {
-    const workspace = Blockly.getMainWorkspace();
-    const toolbox = workspace.getToolbox();
     const vm = addon.tab.traps.vm;
 
     textMode = addon.settings.get("text");
@@ -297,17 +295,18 @@ export default async function ({ addon, console }) {
     if (uncoloredTextColor() === "#575e75") Blockly.Colours.fieldShadow = "rgba(0, 0, 0, 0.15)";
     else Blockly.Colours.fieldShadow = originalColors.fieldShadow;
 
-    // Reload toolbox
-    toolbox.dispose();
-    toolbox.workspace_ = workspace;
-    toolbox.init();
-    // Connects events to VM
-    // https://github.com/LLK/scratch-gui/blob/ba76db7350bd43b79119cac2701bc10f6c511f0c/src/containers/blocks.jsx#L250-L254
-    const flyoutWorkspace = workspace.getFlyout().getWorkspace();
-    flyoutWorkspace.addChangeListener(vm.flyoutBlockListener);
-    flyoutWorkspace.addChangeListener(vm.monitorBlockListener);
+    const workspace = Blockly.getMainWorkspace();
+    const flyout = workspace.getFlyout();
+    const toolbox = workspace.getToolbox();
 
-    if (vm.editingTarget) vm.emitWorkspaceUpdate();
+    // Reload toolbox
+    if (vm.editingTarget) {
+      vm.emitWorkspaceUpdate();
+    }
+    const flyoutWorkspace = flyout.getWorkspace();
+    Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
+    toolbox.refreshSelection();
+    workspace.toolboxRefreshEnabled_ = true;
 
     // Notify other addons
     addon.tab.updateBlockCategoryColors();
