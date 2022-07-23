@@ -66,9 +66,11 @@ export default async function ({ template }) {
         }
       },
       copyAddonLink() {
+        Vue.set(this.addon, "_copied", true);
         navigator.clipboard.writeText(
           `https://scratch.mit.edu/scratch-addons-extension/settings#addon-${this.addon._addonId}`
         );
+        setTimeout(() => { Vue.set(this.addon, "_copied", false) }, 750);
       },
       toggleAddonRequest(event) {
         const toggle = () => {

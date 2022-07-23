@@ -14,7 +14,7 @@
       <div class="addon-description" v-show="!expanded" dir="auto">{{ addon.description }}</div>
       <div class="addon-check">
         <div v-show="expanded" class="addon-buttons" title="{{ msg('copyAddonLink') }}" @click="copyAddonLink">
-          <img src="../../images/icons/paper-clip.svg" class="icon-type" />
+          <img :src="addon._copied ? '../../images/icons/tick.svg' : '../../images/icons/paper-clip.svg'" class="icon-type" />
         </div>
         <div
           v-show="expanded && addon._enabled"
