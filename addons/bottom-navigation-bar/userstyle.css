@@ -1,0 +1,60 @@
+#navigation, #topnav{
+  top: auto;
+  bottom: 0;
+  z-index: 1000;
+}
+
+#view{
+  margin-top: 0;
+}
+
+.page:last-child{
+  margin-bottom: 50px;
+}
+
+div#footer{
+  padding-bottom: 60px;
+}
+
+.account-nav .dropdown,
+#pagewrapper #topnav ul.account-nav .logged-in-user .dropdown-menu,
+.dropdown.with-arrow,
+#topnav ul.account-nav .sign-in .popover{
+  top: auto;
+  bottom: 50px;
+  border-radius: 5px 5px 0 0;
+}
+
+.dropdown.with-arrow:before{
+  content: none;
+}
+
+#topnav ul.account-nav .sign-in .popover .arrow{
+  display: none;
+}
+
+.account-nav .dropdown.open{
+  border-radius: 5px 5px 0 0;
+}
+
+#topnav ul.account-nav .logged-in-user.dropdown,
+#topnav ul.account-nav > li{
+  border-radius: 0;
+}
+
+#topnav ul.account-nav.logged-in > li,
+#topnav ul.account-nav li.sign-in{
+  position: static;
+}
+
+#content > .cols > .col-12 > .box > .box-head{
+  top: 0 !important;
+}
+
+.box.v-tabs{
+  top: 164px;
+}
+
+#content.container > .cols{
+  padding-top: 26px;
+}

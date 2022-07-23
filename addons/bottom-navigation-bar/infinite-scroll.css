@@ -1,0 +1,37 @@
+div#footer{
+  padding: 0 0 50px 0 !important;
+}
+
+div#footer:hover{
+  padding-top: 20px !important;
+  margin-bottom: 50px;
+}
+
+div.inner{
+  .margin-top: 20px;
+}
+
+div#footer:before, div#footer:after{
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: -25px;
+  right: 10px;
+  height: 25px;
+  width: 45px;
+}
+
+div#footer:before{
+  background-color: var(--darkWww-footer, #f2f2f2);
+  border: 1px solid var(--darkWww-border, #d9d9d9);
+  border-bottom: none;
+  border-radius: 5px 5px 0 0;
+}
+
+div#footer:after{
+  background-image: url(footer.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  filter: var(--darkWww-box-filter);
+}

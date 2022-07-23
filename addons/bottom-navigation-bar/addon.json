@@ -1,0 +1,27 @@
+{
+  "name": "Bottom navigation bar",
+  "description": "Positions the navigation bar at the bottom of the page.",
+  "tags": ["community", "theme"],
+  "versionAdded": "1.27.2",
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/*"]
+    },
+    {
+      "url": "infinite-scroll.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "if": {
+        "addonEnabled": ["infinite-scroll"]
+      }
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "credits": [
+    {
+      "name": "valmontechno",
+      "link": "https://scratch.mit.edu/users/valmontechno/"
+    }
+  ]
+}
