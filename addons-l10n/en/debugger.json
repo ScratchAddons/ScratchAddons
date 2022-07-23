@@ -12,7 +12,7 @@
   "debugger/clone-of": "Clone of {sprite}",
   "debugger/icon-warn": "Warning",
   "debugger/icon-error": "Error",
-  "debugger/empty-string": "<empty string>",
+  "debugger/empty-string": "(empty string)",
   "debugger/export-desc": "Click while holding Shift to customize export format.",
   "debugger/block-breakpoint": "breakpoint",
   "debugger/block-log": "log %s",

@@ -52,9 +52,12 @@ export default async function ({ addon, msg }) {
   const oldScript = await addon.tab.waitForElement("script[src$='scratchblocks.js']");
   oldScript.remove();
 
-  // Translations can't load first
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js");
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/translations-all-v3.5.2.js");
+  const [sb, loadTranslations] = await Promise.all([
+    import(addon.self.lib + "/thirdparty/cs/scratchblocks.min.es.js").then((mod) => mod.default),
+    import(addon.self.lib + "/thirdparty/cs/translations-all-es.js").then((mod) => mod.default),
+  ]);
+  window.scratchblocks = sb;
+  loadTranslations(sb);
 
   function renderMatching(selector, options = {}) {
     const opts = {

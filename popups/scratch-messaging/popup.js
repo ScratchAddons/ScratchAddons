@@ -73,9 +73,9 @@ export default async ({ addon, msg, safeMsg }) => {
       postComment() {
         const shouldCaptureComment = (value) => {
           // From content-scripts/cs.js
-          const regex = / scratch[ ]?add[ ]?ons/;
+          const regex = /scratch[ ]?add[ ]?ons/;
           // Trim like scratchr2
-          const trimmedValue = " " + value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+          const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
           const limitedValue = trimmedValue.toLowerCase().replace(/[^a-z /]+/g, "");
           return regex.test(limitedValue);
         };
@@ -122,6 +122,7 @@ export default async ({ addon, msg, safeMsg }) => {
               date: new Date().toISOString(),
               children: null,
               childOf: parent_pseudo_id,
+              projectAuthor: this.thisComment.projectAuthor,
             });
             this.commentsObj[parent_pseudo_id].children.push(newCommentPseudoId);
             this.replyBoxValue = "";
@@ -136,10 +137,10 @@ export default async ({ addon, msg, safeMsg }) => {
                   mins: Math.max(Math.ceil((e.details.muteStatus.muteExpiresAt - Date.now() / 1000) / 60), 1),
                 });
               } else {
-                errorMsg = msg(errorCodes[e.details.error] || "send-error");
+                errorMsg = msg(errorCodes[e.details?.error] || "send-error");
               }
             } else if (e instanceof API.HTTPError) {
-              errorMsg = msg(errorCodes[e.details.code] || "send-error");
+              errorMsg = msg(errorCodes[e.code] || "send-error");
             } else {
               errorMsg = e.toString();
             }
@@ -179,6 +180,16 @@ export default async ({ addon, msg, safeMsg }) => {
       },
     },
     computed: {
+      canDeleteComment() {
+        switch (this.resourceType) {
+          case "user":
+            return this.resourceId === this.username;
+          case "project":
+            return this.thisComment.projectAuthor === this.username;
+          default:
+            return true; // Studio comment deletion is complex, just assume we can
+        }
+      },
       thisComment() {
         return this.commentsObj[this.commentId];
       },
@@ -226,7 +237,7 @@ export default async ({ addon, msg, safeMsg }) => {
       stMessages: [],
       messages: [],
       comments: {},
-      error: null,
+      error: "notReady",
       hasCustomError: false,
 
       username: null,
@@ -551,7 +562,7 @@ export default async ({ addon, msg, safeMsg }) => {
             elementObject.loadedComments = true;
           })
           .catch((e) => {
-            if (e instanceof API.HTTPError) {
+            if (e instanceof API.HTTPError && e.code > 400) {
               this.error = e.code < 500 ? "loggedOut" : "serverError";
               return;
             } else if (String(e).includes("NetworkError")) {
@@ -571,8 +582,7 @@ export default async ({ addon, msg, safeMsg }) => {
           2: [], // Studios
         };
         let realMsgCount = this.msgCount - this.stMessages.length;
-        const messagesToCheck =
-          realMsgCount > 40 ? this.messages.length : showAll ? this.messages.length : realMsgCount;
+        const messagesToCheck = showAll ? this.messages.length : realMsgCount;
         this.showingMessagesAmt = messagesToCheck;
         for (const message of this.messages.slice(0, messagesToCheck)) {
           if (message.type === "followuser") {
@@ -758,22 +768,13 @@ export default async ({ addon, msg, safeMsg }) => {
       projectLoversAndFavers(project) {
         // First lovers&favers, then favers-only, then lovers only. Lower is better
         const priorityOf = (obj) => (obj.loved && obj.faved ? 0 : obj.faved ? 1 : 2);
-        let str = "";
-        const arr = project.loversAndFavers.slice(0, 20).sort((a, b) => {
+        return project.loversAndFavers.slice(0, 20).sort((a, b) => {
           const priorityA = priorityOf(a);
           const priorityB = priorityOf(b);
           if (priorityA > priorityB) return 1;
           else if (priorityB > priorityA) return -1;
           else return 0;
         });
-        arr.forEach((obj, i) => {
-          if (obj.loved) str += `<img class="small-icon colored" src="../../images/icons/heart.svg">`;
-          if (obj.faved) str += `<img class="small-icon colored" src="../../images/icons/star.svg">`;
-          str += " ";
-          str += `<a href="https://scratch.mit.edu/users/${obj.username}/">${obj.username}</a>`;
-          if (i !== arr.length - 1) str += "<br>";
-        });
-        return str;
       },
     },
   });

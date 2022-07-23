@@ -2,6 +2,7 @@ import { isPaused, setPaused, onPauseChanged, setup } from "./module.js";
 import createLogsTab from "./logs.js";
 import createThreadsTab from "./threads.js";
 import createPerformanceTab from "./performance.js";
+import DevtoolsUtils from "../editor-devtools/blockly/Utils.js";
 
 const removeAllChildren = (element) => {
   while (element.firstChild) {
@@ -237,6 +238,8 @@ export default async function ({ addon, global, console, msg }) {
     afterStepCallbacks.push(cb);
   };
 
+  const getBlock = (target, id) => target.blocks.getBlock(id) || vm.runtime.flyoutBlocks.getBlock(id);
+
   const getTargetInfoById = (id) => {
     const target = vm.runtime.getTargetById(id);
     if (target) {
@@ -261,11 +264,11 @@ export default async function ({ addon, global, console, msg }) {
     };
   };
 
-  const createBlockLink = (targetId, blockId) => {
+  const createBlockLink = (targetInfo, blockId) => {
     const link = document.createElement("a");
     link.className = "sa-debugger-log-link";
 
-    const { exists, name, originalId } = getTargetInfoById(targetId);
+    const { exists, name, originalId } = targetInfo;
     link.textContent = name;
     if (exists) {
       // We use mousedown instead of click so that you can still go to blocks when logs are rapidly scrolling
@@ -307,65 +310,7 @@ export default async function ({ addon, global, console, msg }) {
     // Don't scroll to blocks in the flyout
     if (block.workspace.isFlyout) return;
 
-    // Copied from devtools. If it's code gets improved for this function, bring those changes here too.
-    let root = block.getRootBlock();
-
-    let base = block;
-    while (base.getOutputShape() && base.getSurroundParent()) {
-      base = base.getSurroundParent();
-    }
-
-    const offsetX = 32;
-    const offsetY = 32;
-
-    let ePos = base.getRelativeToSurfaceXY(), // Align with the top of the block
-      rPos = root.getRelativeToSurfaceXY(), // Align with the left of the block 'stack'
-      scale = workspace.scale,
-      x = rPos.x * scale,
-      y = ePos.y * scale,
-      xx = block.width + x, // Turns out they have their x & y stored locally, and they are the actual size rather than scaled or including children...
-      yy = block.height + y,
-      s = workspace.getMetrics();
-    if (
-      x < s.viewLeft + offsetX - 4 ||
-      xx > s.viewLeft + s.viewWidth ||
-      y < s.viewTop + offsetY - 4 ||
-      yy > s.viewTop + s.viewHeight
-    ) {
-      let sx = x - s.contentLeft - offsetX,
-        sy = y - s.contentTop - offsetY;
-
-      workspace.scrollbar.set(sx, sy);
-    }
-    // Flashing
-    const myFlash = { block: null, timerID: null, colour: null };
-    if (myFlash.timerID > 0) {
-      clearTimeout(myFlash.timerID);
-      myFlash.block.setColour(myFlash.colour);
-    }
-
-    let count = 4;
-    let flashOn = true;
-    myFlash.colour = block.getColour();
-    myFlash.block = block;
-
-    function _flash() {
-      if (!myFlash.block.svgPath_) {
-        myFlash.timerID = count = 0;
-        flashOn = true;
-        return;
-      }
-      myFlash.block.svgPath_.style.fill = flashOn ? "#ffff80" : myFlash.colour;
-      flashOn = !flashOn;
-      count--;
-      if (count > 0) {
-        myFlash.timerID = setTimeout(_flash, 200);
-      } else {
-        myFlash.timerID = 0;
-      }
-    }
-
-    _flash();
+    new DevtoolsUtils(addon).scrollBlockIntoView(blockId);
   };
 
   // May be slightly incorrect in some edge cases.
@@ -429,7 +374,7 @@ export default async function ({ addon, global, console, msg }) {
       return null;
     }
 
-    const block = target.blocks.getBlock(blockId);
+    const block = getBlock(target, blockId);
     if (!block || block.opcode === "text") {
       return null;
     }
@@ -465,7 +410,7 @@ export default async function ({ addon, global, console, msg }) {
       }
     } else if (block.opcode === "procedures_definition") {
       const prototypeBlockId = block.inputs.custom_block.block;
-      const prototypeBlock = target.blocks.getBlock(prototypeBlockId);
+      const prototypeBlock = getBlock(target, prototypeBlockId);
       const proccode = prototypeBlock.mutation.proccode;
       text = ScratchBlocks.ScratchMsgs.translate("PROCEDURES_DEFINITION", "define %1").replace(
         "%1",
@@ -546,6 +491,7 @@ export default async function ({ addon, global, console, msg }) {
       createHeaderTab,
       setHasUnreadMessage,
       addAfterStepCallback,
+      getBlock,
       getTargetInfoById,
       createBlockLink,
       createBlockPreview,
@@ -603,9 +549,12 @@ export default async function ({ addon, global, console, msg }) {
   document.addEventListener(
     "click",
     (e) => {
-      if (e.target.closest("[class*='stage-header_stage-button-first']")) {
+      if (e.target.closest("[class*='stage-header_stage-button-first']:not(.sa-hide-stage-button)")) {
         document.body.classList.add("sa-debugger-small");
-      } else if (e.target.closest("[class*='stage-header_stage-button-last']")) {
+      } else if (
+        e.target.closest("[class*='stage-header_stage-button-last']") ||
+        e.target.closest(".sa-hide-stage-button")
+      ) {
         document.body.classList.remove("sa-debugger-small");
       }
     },

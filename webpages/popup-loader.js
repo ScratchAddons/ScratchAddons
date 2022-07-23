@@ -75,7 +75,7 @@ async function refetchSession(addon) {
   scratchAddons.isFetchingSession = true;
   addon.auth._refresh();
   try {
-    res = await fetch("https://scratch.mit.edu/session/?sareferer", {
+    res = await fetch("https://scratch.mit.edu/session/", {
       headers: {
         "X-Requested-With": "XMLHttpRequest",
       },
@@ -180,3 +180,10 @@ if (window.parent === window) {
   document.body.classList.add("fullscreen");
   document.documentElement.classList.add("fullscreen");
 }
+
+document.head.appendChild(
+  Object.assign(document.createElement("link"), {
+    rel: "icon",
+    href: "../../images/icon.png",
+  })
+);

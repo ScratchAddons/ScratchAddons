@@ -150,14 +150,12 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .slider_handle_3f0xk,
 .sound-editor_button_1_6Li,
 .library-item_library-item_1DcMO,
-div.s3devDDOut.vis,
+.s3devDDOut.vis,
 .prompt_body_18Z-I,
 .custom-procedures_body_SQBv6,
 #s3devHelpContent,
 #s3devHelpContent h2,
 #s3devHelpContent p,
-.mediaRecorderPopupContent,
-.mediaRecorderPopupContent p,
 .slider-prompt_body_2ZkXL,
 .record-modal_body_2VO4l,
 .sa-debugger-interface,
@@ -176,7 +174,8 @@ div.s3devDDOut.vis,
 .sound-editor_tool-button_2iNn9,
 .sound-editor_effect-button_2zuzT,
 .library-item_featured-extension-metadata_3D8E8,
-.record-modal_help-text_Jevsk {
+.record-modal_help-text_Jevsk,
+.sa-editor-modal-content p {
   color: var(--editorDarkMode-accent-text);
 }
 .blocklyFlyoutButton:hover {
@@ -325,9 +324,6 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 }
 .blocklyFlyoutScrollbar .blocklyScrollbarHandle {
   fill: var(--editorDarkMode-palette-scrollbar);
-}
-.sa-lock-image {
-  filter: var(--editorDarkMode-palette-filter);
 }
 
 /* Full screen background */
@@ -501,7 +497,9 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 .gui_tab_27Unf.gui_is-selected_sHAiu:focus,
 .blocks_blocks_C530M .injectionDiv,
 .blocks_blocks_C530M .blocklyToolboxDiv,
+[dir="rtl"] .blocks_blocks_C530M .blocklyToolboxDiv,
 .blocks_blocks_C530M .blocklyFlyout,
+[dir="rtl"] .blocks_blocks_C530M .blocklyFlyout,
 .backpack_backpack-header_6ltCS,
 .backpack_backpack-list_MOp5X,
 .sa-body-editor .stage_stage_1fD7k,
@@ -543,7 +541,10 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 [dir="rtl"] .paint-editor_button-group-button_1I1tm:first-of-type,
 .sound-editor_button_1_6Li,
 [dir="ltr"] .sound-editor_button-group_SFPoV .sound-editor_button_1_6Li:first-of-type,
+[dir="rtl"] .sound-editor_button-group_SFPoV .sound-editor_button_1_6Li:first-of-type,
 [dir="ltr"] .sound-editor_input-group_2hWiH,
+[dir="rtl"] .sound-editor_input-group_2hWiH,
+[dir="rtl"] .sound-editor_row-reverse_1qAAx > .sound-editor_input-group_2hWiH,
 .sa-var-manager td,
 .context-menu_context-menu_2SJM-,
 .context-menu_menu-item-bordered_29CJG,
@@ -580,8 +581,7 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 }
 
 /* Miscellaneous styles */
-.monitor_label_ci1ok,
-.monitor_list-empty_1UKsB {
+[class*="stage-wrapper_"] {
   color: #575e75;
 }
 .sprite-selector_sprite-selector_2KgCX {
@@ -602,9 +602,15 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
   color-scheme: dark;
 }
 /* For `editor-comment-previews` */
-.sa-comment-preview {
+.sa-comment-preview-inner {
   color: var(--editorDarkMode-input-text);
-  background-color: var(--editorDarkMode-input-transparent75);
+  background-color: var(--editorDarkMode-input-transparent90);
+}
+@supports (backdrop-filter: blur(16px)) {
+  .sa-comment-preview-inner {
+    background-color: var(--editorDarkMode-input-transparent75);
+    backdrop-filter: blur(16px);
+  }
 }
 .sa-comment-preview-reduce-transparency {
   background-color: var(--editorDarkMode-input);

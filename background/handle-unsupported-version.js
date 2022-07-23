@@ -6,7 +6,7 @@ const checkIfUnsupported = () => {
   };
 
   let { browser, version } = getVersion();
-  return (browser === "Chrome" && version < 80) || (browser === "Firefox" && version < 74);
+  return (browser === "Chrome" && version < 80) || (browser === "Firefox" && version < 86);
 };
 
 if (checkIfUnsupported()) {

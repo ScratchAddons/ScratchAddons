@@ -6,7 +6,7 @@ export default async function ({ addon, global, console }) {
   icon.loading = "lazy";
   icon.style.display = "none";
   const toggleMute = (e) => {
-    if (e.ctrlKey) {
+    if (!addon.self.disabled && (e.ctrlKey || e.metaKey)) {
       e.cancelBubble = true;
       e.preventDefault();
       muted = !muted;
@@ -19,6 +19,12 @@ export default async function ({ addon, global, console }) {
       }
     }
   };
+  addon.self.addEventListener("disabled", () => {
+    muted = false;
+    vm.runtime.audioEngine.inputNode.gain.value = 1;
+    icon.style.display = "none";
+  });
+
   while (true) {
     let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
       markAsSeen: true,

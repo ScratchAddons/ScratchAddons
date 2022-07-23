@@ -147,6 +147,10 @@ class GamepadData {
   constructor(gamepad, gamepadLib) {
     this.gamepad = gamepad;
     this.gamepadLib = gamepadLib;
+    this.resetMappings();
+  }
+
+  resetMappings() {
     this.buttonMappings = this.getDefaultButtonMappings().map(transformAndCopyMapping);
     this.axesMappings = this.getDefaultAxisMappings().map(transformAndCopyMapping);
   }
@@ -375,6 +379,12 @@ class GamepadData {
   }
 }
 
+const defaultHints = () => ({
+  usedKeys: new Set(),
+  importedSettings: null,
+  generated: false,
+});
+
 class GamepadLib extends EventTarget {
   constructor() {
     super();
@@ -404,11 +414,7 @@ class GamepadLib extends EventTarget {
 
     this.connectCallbacks = [];
 
-    this.hints = {
-      usedKeys: new Set(),
-      importedSettings: null,
-      generated: false,
-    };
+    this.hints = defaultHints();
 
     this.keysPressedThisFrame = new Set();
     this.oldKeysPressed = new Set();
@@ -446,6 +452,14 @@ class GamepadLib extends EventTarget {
       Object.assign(this.hints, this.getHintsLazily());
     }
     this.hints.generated = true;
+  }
+
+  resetControls() {
+    this.hints = defaultHints();
+    this.ensureHintsGenerated();
+    for (const gamepad of this.gamepads.values()) {
+      gamepad.resetMappings();
+    }
   }
 
   handleConnect(e) {
