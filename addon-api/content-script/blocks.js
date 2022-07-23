@@ -7,7 +7,7 @@ let color = {
 };
 
 export const setCustomBlockColor = (newColor) => {
-  color = Object.assign(color, newColor);
+  Object.assign(color, newColor);
 };
 
 const ICON =
