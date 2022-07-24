@@ -245,6 +245,10 @@ export default async function ({ addon, global, console, msg }) {
     }
     content.appendChild(editorEl);
 
+    const extraOptionsContainer = document.createElement('div');
+    extraOptionsContainer.className = 'sa-gamepad-extra-options';
+    content.appendChild(extraOptionsContainer);
+
     const storeSettingsLabel = document.createElement("label");
     storeSettingsLabel.className = "sa-gamepad-store-settings";
     storeSettingsLabel.textContent = msg("store-in-project");
@@ -253,7 +257,7 @@ export default async function ({ addon, global, console, msg }) {
     storeSettingsCheckbox.checked = shouldStoreSettingsInProject;
     storeSettingsCheckbox.addEventListener("change", handleStoreSettingsCheckboxChanged);
     storeSettingsLabel.prepend(storeSettingsCheckbox);
-    content.appendChild(storeSettingsLabel);
+    extraOptionsContainer.appendChild(storeSettingsLabel);
 
     editor.focus();
   });
