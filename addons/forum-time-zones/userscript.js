@@ -1,5 +1,4 @@
 export default async function ({ addon, _global, _console }) {
-  const forum_topic_id = parseInt(location.pathname.split("/")[3]);
   const locale = addon.auth.scratchLang;
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const localCurrentTimeRepr = new Date(new Date().toLocaleString("en-US", { timeZone }));
@@ -34,21 +33,24 @@ export default async function ({ addon, _global, _console }) {
       }
     }
   };
-  window
-    .fetch(`https://scratchdb.lefty.one/v2/forum/topic/${forum_topic_id}`)
+  const pageNumber = /page=(\d+)/.exec(location.search)?.[1];
+  fetch(`https://scratch.mit.edu/discuss/m/topic/${location.pathname.split("/")[3]}?page=${pageNumber || 1}`, {
+    credentials: "omit", // disable reply box
+  })
     .catch(() => {
       throw "fetch error";
     })
-    .then((res) => res.json())
-    .then(async (data) => {
+    .then((res) => res.text())
+    .then(async (text) => {
       await addon.tab.waitForElement(".blockpost");
-      Array.prototype.map
-        .call(document.getElementsByClassName("blockpost"), (e) => parseInt(e.id.replace("p", "")))
-        .forEach((e) => {
-          var p = data.posts.find((x) => x.id === e);
-          if (p) {
-            document.querySelector(`#p${e} > .box > .box-head > a`).innerText = formatter(p.time.posted);
-          }
-        });
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, "text/html");
+      const posts = [...doc.querySelectorAll("article")];
+      posts.forEach((e) => {
+        const time = e.querySelector("time").getAttribute("datetime");
+        const timeOnPost = document.querySelector(`#p${e.id.substring(5)} > .box > .box-head > a`);
+        timeOnPost.innerText = formatter(time);
+        timeOnPost.setAttribute("datetime", time);
+      });
     });
 }
