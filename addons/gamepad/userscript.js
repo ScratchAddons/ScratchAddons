@@ -249,12 +249,19 @@ export default async function ({ addon, global, console, msg }) {
     extraOptionsContainer.className = 'sa-gamepad-extra-options';
     content.appendChild(extraOptionsContainer);
 
+    const mappingsWereResetOrCleared = () => {
+      editor.updateAllContent();
+      removeStoredMappings();
+      storeSettingsCheckbox.checked = false;
+      shouldStoreSettingsInProject = false;
+    };
+
     const resetButton = document.createElement('button');
     resetButton.className = 'sa-gamepad-reset-button';
     resetButton.textContent = msg('reset');
     resetButton.addEventListener('click', () => {
       gamepad.resetControls();
-      editor.updateAllContent();
+      mappingsWereResetOrCleared();
     });
     extraOptionsContainer.appendChild(resetButton);
 
@@ -263,7 +270,7 @@ export default async function ({ addon, global, console, msg }) {
     clearButton.textContent = msg('clear');
     clearButton.addEventListener('click', () => {
       gamepad.clearControls();
-      editor.updateAllContent();
+      mappingsWereResetOrCleared();
     });
     extraOptionsContainer.appendChild(clearButton);
 
