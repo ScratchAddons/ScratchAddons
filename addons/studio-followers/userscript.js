@@ -10,7 +10,8 @@ export default async function ({ addon, global, console, msg }) {
       actions: ["SET_INFO", "SET_ROLES"],
     }
   );
-  const getMembers = () => [...redux.state.managers.items, ...redux.state.curators.items].map((member) => member.username);
+  const getMembers = () =>
+    [...redux.state.managers.items, ...redux.state.curators.items].map((member) => member.username);
 
   const isOwner = (redux.state.studio.host || redux.state.studio.owner) === redux.state.session.session?.user?.id;
   const isManager = redux.state.studio.manager || isOwner;
