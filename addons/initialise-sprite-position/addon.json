@@ -40,7 +40,7 @@
     },
     {
       "id": "duplicate",
-      "name": "Behaviour when duplicating sprites",
+      "name": "Behavior when duplicating sprites",
       "type": "select",
       "default": "randomize",
       "potentialValues": [
