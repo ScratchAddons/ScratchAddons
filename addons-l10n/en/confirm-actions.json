@@ -13,6 +13,8 @@
   "confirm-actions/cancelcomment": "Are you sure you want to discard your comment?",
   "confirm-actions/leavestudio-title": "Leave Studio",
   "confirm-actions/leavestudio": "Are you sure you want to leave this studio?",
+  "confirm-actions/deletestudio-title": "Delete Studio",
+  "confirm-actions/deletestudio": "Are you sure you want to delete this studio?",
   "confirm-actions/removeproject-title": "Remove Project",
   "confirm-actions/removeproject": "Are you sure you want to remove this project?"
 }

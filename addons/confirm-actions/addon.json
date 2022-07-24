@@ -49,7 +49,7 @@
       "default": false
     },
     {
-      "name": "Confirm leaving studios",
+      "name": "Confirm leaving or deleting studios",
       "id": "leavingstudio",
       "type": "boolean",
       "default": false
@@ -68,8 +68,8 @@
     }
   ],
   "latestUpdate": {
-    "version": "1.27.0",
-    "newSettings": ["cancelcomment"]
+    "version": "1.28.0",
+    "newSettings": ["closingtopic", "removingprojects"]
   },
   "tags": ["community", "recommended"],
   "enabledByDefault": false
