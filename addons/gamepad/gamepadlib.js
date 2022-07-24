@@ -131,6 +131,8 @@ const padWithEmptyMappings = (array, length) => {
   return array;
 };
 
+const createEmptyMappingList = (length) => padWithEmptyMappings([], length);
+
 const getMovementConfiguration = (usedKeys) => ({
   usesArrows:
     usedKeys.has("ArrowUp") || usedKeys.has("ArrowDown") || usedKeys.has("ArrowRight") || usedKeys.has("ArrowLeft"),
@@ -153,6 +155,11 @@ class GamepadData {
   resetMappings() {
     this.buttonMappings = this.getDefaultButtonMappings().map(transformAndCopyMapping);
     this.axesMappings = this.getDefaultAxisMappings().map(transformAndCopyMapping);
+  }
+
+  clearMappings() {
+    this.buttonMappings = createEmptyMappingList(this.gamepad.buttons.length);
+    this.axesMappings = createEmptyMappingList(this.gamepad.axes.length);
   }
 
   getDefaultButtonMappings() {
@@ -459,6 +466,12 @@ class GamepadLib extends EventTarget {
     this.ensureHintsGenerated();
     for (const gamepad of this.gamepads.values()) {
       gamepad.resetMappings();
+    }
+  }
+
+  clearControls() {
+    for (const gamepad of this.gamepads.values()) {
+      gamepad.clearMappings();
     }
   }
 

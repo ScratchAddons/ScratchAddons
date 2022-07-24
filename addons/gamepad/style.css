@@ -67,6 +67,13 @@
   display: block;
 }
 
+.sa-gamepad-store-settings {
+  display: block;
+}
 .sa-gamepad-store-settings > input {
   margin-right: 4px;
+}
+
+.sa-gamepad-reset-button {
+  margin: 8px 8px 8px 0;
 }
