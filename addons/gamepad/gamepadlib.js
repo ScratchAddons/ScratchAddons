@@ -688,7 +688,7 @@ class GamepadEditor extends EventTarget {
     this.onSelectorChange = this.onSelectorChange.bind(this);
     this.onGamepadsChange = this.onGamepadsChange.bind(this);
 
-    this.selector.onchange = this.onSelectorChange;
+    this.selector.addEventListener("change", this.onSelectorChange);
     this.gamepadLib.addEventListener("gamepadconnected", this.onGamepadsChange);
     this.gamepadLib.addEventListener("gamepaddisconnected", this.onGamepadsChange);
 
