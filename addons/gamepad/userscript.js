@@ -175,7 +175,7 @@ export default async function ({ addon, global, console, msg }) {
     }
     didChangeProject();
   };
-  const removeMappings = () => {
+  const removeStoredMappings = () => {
     const comment = findOptionsComment();
     if (comment) {
       const target = vm.runtime.getTargetForStage();
@@ -183,7 +183,7 @@ export default async function ({ addon, global, console, msg }) {
       didChangeProject();
     }
   };
-  const handleEditorChanged = () => {
+  const handleGamepadMappingChanged = () => {
     if (shouldStoreSettingsInProject) {
       storeMappings();
     }
@@ -193,18 +193,18 @@ export default async function ({ addon, global, console, msg }) {
     if (shouldStoreSettingsInProject) {
       storeMappings();
     } else {
-      removeMappings();
+      removeStoredMappings();
     }
   };
   const handleEditorControllerChanged = () => {
     document.body.classList.toggle("sa-gamepad-has-controller", editor.hasControllerSelected());
-    handleEditorChanged();
+    handleGamepadMappingChanged();
   };
   buttonContainer.addEventListener("click", () => {
     if (!editor) {
       editor = gamepad.editor();
       editor.msg = msg;
-      editor.addEventListener("mapping-changed", handleEditorChanged);
+      editor.addEventListener("mapping-changed", handleGamepadMappingChanged);
       editor.addEventListener("gamepad-changed", handleEditorControllerChanged);
     }
     const editorEl = editor.generateEditor();
