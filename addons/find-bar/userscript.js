@@ -18,6 +18,7 @@ export default async function ({ addon, msg, console }) {
 
       this.createDom(root);
       this.bindEvents();
+      this.polluteBlockly();
     }
 
     createDom(root) {
@@ -52,8 +53,79 @@ export default async function ({ addon, msg, console }) {
       this.findInput.addEventListener("keyup", () => this.inputChange());
       this.findInput.addEventListener("focusout", () => this.hideDropDown());
 
-      document.addEventListener("mousedown", (e) => this.eventMouseDown(e), true);
       document.addEventListener("keydown", (e) => this.eventKeyDown(e), true);
+    }
+
+    async polluteBlockly() {
+      const findBar = this;
+
+      const Blockly = await addon.tab.traps.getBlockly();
+
+      const _handleUp = Blockly.Gesture.prototype.handleUp;
+      Blockly.Gesture.prototype.handleUp = function (e) {
+        if (
+          !addon.self.disabled &&
+          findBar.dropdownOut &&
+          findBar.dropdownOut.classList.contains("visible") &&
+          !e.target.closest(".visible")
+        ) {
+          // If we click outside the dropdown, then instigate the hide code...
+          this.hideDropDown();
+        }
+        _handleUp.call(this, e);
+      };
+
+      const _doBlockClick_ = Blockly.Gesture.prototype.doBlockClick_;
+      Blockly.Gesture.prototype.doBlockClick_ = function () {
+        if (!addon.self.disabled && (this.mostRecentEvent_.button === 1 || this.mostRecentEvent_.shiftKey)) {
+          // Wheel button...
+          // Intercept clicks to allow jump to...?
+          let block = this.startBlock_;
+          for (; block; block = block.getSurroundParent()) {
+            if (block.type === "procedures_definition" || (!this.jumpToDef && block.type === "procedures_call")) {
+              let id = block.id ? block.id : block.getId ? block.getId() : null;
+
+              findBar.findInput.focus();
+              findBar.showDropDown(id);
+
+              return;
+            }
+
+            if (
+              block.type === "data_variable" ||
+              block.type === "data_changevariableby" ||
+              block.type === "data_setvariableto"
+            ) {
+              let id = block.getVars()[0];
+
+              findBar.findInput.focus();
+              findBar.showDropDown(id, block);
+
+              findBar.selVarID = id;
+
+              return;
+            }
+
+            if (
+              block.type === "event_whenbroadcastreceived" ||
+              block.type === "event_broadcastandwait" ||
+              block.type === "event_broadcast"
+            ) {
+              // todo: actually index the broadcasts...!
+              let id = block.id;
+
+              findBar.findInput.focus();
+              findBar.showDropDown(id, block);
+
+              findBar.selVarID = id;
+
+              return;
+            }
+          }
+        }
+
+        _doBlockClick_.call(this);
+      };
     }
 
     inputChange() {
@@ -113,85 +185,6 @@ export default async function ({ addon, msg, console }) {
         }
         e.preventDefault();
         return;
-      }
-    }
-
-    eventMouseDown(e) {
-      if (addon.self.disabled) return;
-
-      if (this.dropdownOut && this.dropdownOut.classList.contains("visible") && !e.target.closest(".visible")) {
-        // If we click outside the dropdown, then instigate the hide code...
-        this.hideDropDown();
-      }
-
-      if (e.button === 1 || e.shiftKey) {
-        // Wheel button...
-        // Intercept clicks to allow jump to...?
-        let blockSvg = e.target.closest("[data-id]");
-        if (!blockSvg) {
-          return;
-        }
-
-        let w = this.workspace;
-        let dataId = blockSvg.getAttribute("data-id");
-        let block = w.getBlockById(dataId);
-        if (!block) {
-          return;
-        }
-
-        for (; block; block = block.getSurroundParent()) {
-          if (block.type === "procedures_definition") {
-            let id = block.id ? block.id : block.getId ? block.getId() : null;
-
-            this.findInput.focus();
-            this.showDropDown(id);
-
-            e.cancelBubble = true;
-            e.preventDefault();
-            return;
-          }
-
-          if (
-            block.type === "data_variable" ||
-            block.type === "data_changevariableby" ||
-            block.type === "data_setvariableto"
-          ) {
-            let id = block.getVars()[0];
-
-            this.findInput.focus();
-            this.showDropDown(id, block);
-
-            // let button = document.getElementById('s3devReplace');
-
-            this.selVarID = id;
-            // button.classList.remove('s3devHide');
-
-            e.cancelBubble = true;
-            e.preventDefault();
-            return;
-          }
-
-          if (
-            block.type === "event_whenbroadcastreceived" ||
-            block.type === "event_broadcastandwait" ||
-            block.type === "event_broadcast"
-          ) {
-            // todo: actually index the broadcasts...!
-            let id = block.id;
-
-            this.findInput.focus();
-            this.showDropDown(id, block);
-
-            this.selVarID = id;
-
-            e.cancelBubble = true;
-            e.preventDefault();
-            return;
-          }
-        }
-
-        e.cancelBubble = true;
-        e.preventDefault();
       }
     }
 
