@@ -251,7 +251,6 @@ export default async function ({ addon, global, console, msg }) {
 
     const mappingsWereResetOrCleared = () => {
       editor.updateAllContent();
-      removeStoredMappings();
       storeSettingsCheckbox.checked = false;
       shouldStoreSettingsInProject = false;
     };
