@@ -49,8 +49,20 @@
       "default": false
     },
     {
+      "name": "Confirm leaving studios",
+      "id": "leavingstudio",
+      "type": "boolean",
+      "default": false
+    },
+    {
       "name": "Confirm closing forum topics",
       "id": "closingtopic",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Confirm removing projects",
+      "id": "removingprojects",
       "type": "boolean",
       "default": false
     }

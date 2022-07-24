@@ -10,5 +10,9 @@
   "confirm-actions/closetopic-title": "Close Topic",
   "confirm-actions/closetopic": "Are you sure you want to close this topic?",
   "confirm-actions/cancelcomment-title": "Discard Comment",
-  "confirm-actions/cancelcomment": "Are you sure you want to discard your comment?"
+  "confirm-actions/cancelcomment": "Are you sure you want to discard your comment?",
+  "confirm-actions/leavestudio-title": "Leave Studio",
+  "confirm-actions/leavestudio": "Are you sure you want to leave this studio?",
+  "confirm-actions/removeproject-title": "Remove Project",
+  "confirm-actions/removeproject": "Are you sure you want to remove this project?"
 }
