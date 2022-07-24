@@ -66,6 +66,7 @@ export default async function ({ template }) {
         }
       },
       copyAddonLink() {
+        if (this.addon._copied) return;
         Vue.set(this.addon, "_copied", true);
         navigator.clipboard.writeText(
           `https://scratch.mit.edu/scratch-addons-extension/settings#addon-${this.addon._addonId}`
