@@ -240,7 +240,7 @@ export default async function ({ addon, global, console, msg }) {
 
   // create the search bar
   let search = document.createElement("form");
-  addon.tab.displayNoneWhileDisabled(search);
+  addon.tab.displayNoneWhileDisabled(search, { display: "flex" });
   search.id = "forum-search-form";
   let searchBar = document.createElement("input");
   searchBar.id = "forum-search-input";
@@ -283,7 +283,6 @@ export default async function ({ addon, global, console, msg }) {
   search.appendChild(searchDropdown);
 
   let searchContent = document.createElement("div");
-  addon.tab.displayNoneWhileDisabled(searchContent);
   searchContent.addEventListener("scroll", (e) => {
     let et = e.target;
     if (et.scrollHeight - et.scrollTop === et.clientHeight) {
@@ -295,6 +294,7 @@ export default async function ({ addon, global, console, msg }) {
 
   searchContent.classList = "forum-search-list";
   searchContent.id = "forum-search-list";
+  searchContent.style.display = "none"; // overridden by userstyle if the addon is enabled
 
   // now add the search bar
   let navIndex = document.querySelector("#brdmenu");

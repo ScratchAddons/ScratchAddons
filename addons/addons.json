@@ -120,6 +120,7 @@
   "forum-live-preview",
   "sounds-duration",
   "default-costume-editor-color",
+  "one-click-studio-invites",
   "vol-slider",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
@@ -140,6 +141,7 @@
   "// For editor:",
   "editor-dark-mode",
   "editor-colored-context-menus",
+  "hide-stage",
   "editor-stage-left",
   "editor-buttons-reverse-order",
   "columns",

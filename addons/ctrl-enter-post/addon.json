@@ -3,13 +3,12 @@
   "description": "Automatically posts the comment or forum post on Ctrl+Enter.",
   "credits": [
     {
-      "name": "Verixion",
-      "link": "https://scratch.mit.edu/users/Verixion"
+      "name": "Weredime (9gr)",
+      "link": "https://scratch.mit.edu/users/9gr/"
     }
   ],
   "info": [
     {
-      "type": "notice",
       "text": "On macOS, you can also use the Cmd key.",
       "id": "macOS"
     }
