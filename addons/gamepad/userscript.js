@@ -245,8 +245,8 @@ export default async function ({ addon, global, console, msg }) {
     }
     content.appendChild(editorEl);
 
-    const extraOptionsContainer = document.createElement('div');
-    extraOptionsContainer.className = 'sa-gamepad-extra-options';
+    const extraOptionsContainer = document.createElement("div");
+    extraOptionsContainer.className = "sa-gamepad-extra-options";
     content.appendChild(extraOptionsContainer);
 
     const mappingsWereResetOrCleared = () => {
@@ -255,19 +255,19 @@ export default async function ({ addon, global, console, msg }) {
       shouldStoreSettingsInProject = false;
     };
 
-    const resetButton = document.createElement('button');
-    resetButton.className = 'sa-gamepad-reset-button';
-    resetButton.textContent = msg('reset');
-    resetButton.addEventListener('click', () => {
+    const resetButton = document.createElement("button");
+    resetButton.className = "sa-gamepad-reset-button";
+    resetButton.textContent = msg("reset");
+    resetButton.addEventListener("click", () => {
       gamepad.resetControls();
       mappingsWereResetOrCleared();
     });
     extraOptionsContainer.appendChild(resetButton);
 
-    const clearButton = document.createElement('button');
-    clearButton.className = 'sa-gamepad-reset-button';
-    clearButton.textContent = msg('clear');
-    clearButton.addEventListener('click', () => {
+    const clearButton = document.createElement("button");
+    clearButton.className = "sa-gamepad-reset-button";
+    clearButton.textContent = msg("clear");
+    clearButton.addEventListener("click", () => {
       gamepad.clearControls();
       mappingsWereResetOrCleared();
     });
