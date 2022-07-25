@@ -66,15 +66,20 @@
   right: calc(var(--sa-category-width) + 1px);
 }
 
-.sa-lock-image {
+.sa-lock-object {
   display: var(--hideFlyout-lockDisplay) !important;
-  position: absolute;
-  z-index: 20;
-  cursor: pointer;
-  top: 4px;
-  left: calc(var(--sa-toolbox-width) - 15px - 32px);
+  transform: translate(calc(var(--sa-flyout-width) - 15px - 32px), 4px);
   width: 32px;
   height: 32px;
+}
+[dir="rtl"] .sa-lock-object {
+  transform: translate(15px, 4px);
+}
+
+.sa-lock-button {
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
   padding: 0;
   justify-content: center;
   align-items: center;
@@ -83,29 +88,24 @@
   border-radius: 4px;
 }
 
-.sa-lock-image.locked {
+.sa-lock-object.locked .sa-lock-button {
   background-color: var(--editorDarkMode-primary, #4d97ff);
   border-color: var(--editorDarkMode-primary-variant, #3373cc);
 }
 
-.sa-lock-image img {
+.sa-lock-button img {
   width: 20px;
   filter: var(--editorDarkMode-accent-filter, none);
 }
 
-.sa-lock-image.locked img {
+.sa-lock-object.locked img {
   filter: var(--editorDarkMode-primary-filter, none);
-}
-
-[dir="rtl"] .sa-lock-image {
-  left: auto;
-  right: calc(var(--sa-toolbox-width) - 15px - 32px);
 }
 
 /* Setting these styles on gui_stage-and-target-wrapper breaks full screen */
 .sa-body-editor [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen"]),
 [class*="gui_target-wrapper_"] {
-  /* must cover the hidden palette when editor-stage-left is enabled */
+  /* must cover the hidden palette when editor-stage-left is enabled and lock icon when columns is also enabled */
   position: relative;
   z-index: 31;
   padding-inline: 0.5rem;

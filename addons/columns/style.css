@@ -95,7 +95,3 @@
   left: 0;
   top: calc(var(--sa-flyout-y));
 }
-
-.sa-lock-image {
-  top: calc(var(--sa-flyout-y) + 4px);
-}
