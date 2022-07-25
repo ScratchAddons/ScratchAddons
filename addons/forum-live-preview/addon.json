@@ -29,16 +29,16 @@
       "type": "select",
       "potentialValues": [
         {
-          "id": "fast",
-          "name": "Fast"
+          "id": "slow",
+          "name": "Slow"
         },
         {
           "id": "default",
           "name": "Default"
         },
         {
-          "id": "slow",
-          "name": "Slow"
+          "id": "fast",
+          "name": "Fast"
         }
       ],
       "default": "default"
