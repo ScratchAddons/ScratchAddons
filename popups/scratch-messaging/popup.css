@@ -1,21 +1,5 @@
 button {
-  color: var(--content-text);
-  font-family: inherit;
-  font-size: 12px;
-  border-radius: 4px;
-  border: 1px solid var(--control-border);
-  background: var(--button-background);
-  height: 32px;
-  box-sizing: border-box;
-  padding: 0 12px;
   overflow: hidden;
-  transition: 0.2s ease;
-}
-button:hover {
-  background: var(--button-hover-background);
-}
-button > span {
-  vertical-align: middle;
 }
 
 .contents {
@@ -271,13 +255,17 @@ a.message-type-title-text {
   background-color: var(--blue);
   color: var(--white-text);
 }
-.post-button:hover {
+.post-button:hover:not([disabled]) {
   background-color: var(--blue);
+  border-color: var(--blue-variant);
+}
+.post-button:focus-visible {
   border-color: var(--blue-variant);
 }
 .comment-chars {
   margin-inline-start: auto;
   font-weight: normal;
+  font-variant: tabular-nums;
 }
 
 .status-container {
@@ -287,9 +275,19 @@ a.message-type-title-text {
   font-weight: 600;
   text-align: center;
 }
+.status-container p,
 .status-empty {
   display: block;
   margin-block: 10px;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.buttons-container > button + button {
+  margin-inline-start: 10px;
 }
 
 #bottom-bar {
@@ -326,20 +324,20 @@ a.message-type-title-text {
 .marked-as-read {
   font-weight: 600;
 }
-#popout {
+.popout {
   height: 10px;
   vertical-align: baseline;
   margin-left: 5px;
   opacity: 0.6;
   filter: var(--content-icon-filter);
 }
-[dir="rtl"] #popout {
+[dir="rtl"] .popout {
   transform: scaleX(-1);
 }
-#open-messages {
+.open-messages {
   color: inherit;
 }
-#open-messages:hover #popout {
+.open-messages:hover .popout {
   opacity: 1;
   filter: none;
 }

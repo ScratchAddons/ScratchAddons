@@ -91,7 +91,7 @@ scratchAddons.localEvents.addEventListener("addonDynamicDisable", ({ detail }) =
   );
 });
 scratchAddons.localEvents.addEventListener("updateUserstylesSettingsChange", ({ detail }) => {
-  const { addonId, manifest } = detail;
+  const { addonId, manifest, newSettings } = detail;
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url) {
@@ -107,8 +107,11 @@ scratchAddons.localEvents.addEventListener("updateUserstylesSettingsChange", ({ 
                     userstyles,
                     cssVariables,
                     addonId,
+                    addonSettings: newSettings,
                     injectAsStyleElt: !!manifest.injectAsStyleElt,
                     index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
+                    dynamicEnable: manifest.dynamicEnable,
+                    dynamicDisable: manifest.dynamicDisable,
                   },
                 },
                 { frameId: 0 }
@@ -340,7 +343,7 @@ const WELL_KNOWN_PATTERNS = {
   editingScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add|post\/\d+\/edit|settings\/[\w-]+)\/?$/,
   forums: /^\/discuss(?!\/m(?:$|\/))(?:\/.*)?$/,
   scratchWWWNoProject:
-    /^\/(?:(?:about|annual-report(?:\/\d+)?|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|code-of-ethics|credits|developers|DMCA|download(?:\/scratch2)?|educators(?:\/(?:faq|register|waiting))?|explore\/(?:project|studio)s\/\w+(?:\/\w+)?|community_guidelines|faq|ideas|join|messages|parents|privacy_policy(?:\/apps)?|research|scratch_1\.4|search\/(?:project|studio)s|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?|become-a-scratcher)\/?)?$/,
+    /^\/(?:(?:about|annual-report(?:\/\d+)?|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|code-of-ethics|credits|developers|DMCA|download(?:\/scratch2)?|educators(?:\/(?:faq|register|waiting))?|explore\/(?:project|studio)s\/\w+(?:\/\w+)?|community_guidelines|faq|ideas|join|messages|parents|privacy_policy(?:\/apps)?|research|scratch_1\.4|search\/(?:project|studio)s|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?|components|become-a-scratcher)\/?)?$/,
 };
 
 const WELL_KNOWN_MATCHERS = {
