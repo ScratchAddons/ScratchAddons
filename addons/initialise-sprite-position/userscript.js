@@ -43,6 +43,6 @@ export default async function ({ addon }) {
   if (vm.runtime.getTargetForStage()) {
     registerDupPrototype();
   } else {
-    vm.runtime.on(vm.runtime.constructor.PROJECT_LOADED, registerDupPrototype);
+    vm.runtime.once("PROJECT_LOADED", registerDupPrototype);
   }
 }
