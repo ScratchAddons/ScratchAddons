@@ -13,11 +13,18 @@
       "id": "contents"
     }
   ],
-  "tags": ["editor", "codeEditor", "danger"],
   "credits": [
     {
       "name": "Norbiros",
       "link": "https://scratch.mit.edu/users/norbir/"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Show small backpack icon",
+      "id": "showButton",
+      "type": "boolean",
+      "default": false
     }
   ],
   "userstyles": [
@@ -32,8 +39,9 @@
       "matches": ["projects"]
     }
   ],
+  "tags": ["editor", "codeEditor", "danger"],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.26.0",
+  "versionAdded": "1.28.0",
   "enabledByDefault": false
 }

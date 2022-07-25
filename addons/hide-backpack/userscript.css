@@ -1,3 +1,16 @@
 [class^="backpack_backpack-container"] {
   display: none;
 }
+
+[class^="button-group_button-group_"] {
+  margin-right: 50px;
+}
+
+.sa-backpack-button {
+  position: absolute;
+  right: 20px;
+  bottom: 15px;
+  width: 35px;
+  height: 35px;
+  background-size: contain;
+}
