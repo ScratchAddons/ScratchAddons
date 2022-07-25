@@ -3,7 +3,7 @@
     "message": "Scratch Addons"
   },
   "extensionDescription": {
-    "message": "Scratch Addons provides new features and themes for the scratch.mit.edu website and project editor."
+    "message": "Scratch Addons provides customizable features and themes for the scratch.mit.edu website and project editor."
   },
   "messaging": {
     "message": "Messaging"
@@ -131,6 +131,9 @@
   "moreSettings": {
     "message": "More Settings"
   },
+  "close": {
+    "message": "Close"
+  },
   "filter": {
     "message": "Filter:"
   },
@@ -239,14 +242,14 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_24": {
-    "message": "New addon: \"customizable navigation bar\", which lets you choose a list of links to be displayed in the navigation bar. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_27": {
+    "message": "New addon: \"hide stage and sprite pane\", which adds a button that hides the stage and the sprite pane, making the code area much larger. Go to $1 to enable it."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_24": {
-    "message": "Other new addons added this update are \"customizable block text style\", \"disable sprite wobble in sprite pane\" and \"search sprites by name\". In addition, the \"Scratch 2.0 → 3.0\" addon has been updated to match Scratch 3.0 more closely."
+  "extensionUpdateInfo2_v1_27": {
+    "message": "Another new addon is \"reverse order of project controls\", which moves the green flag and stop buttons to the right and the full screen button to the left, like in Scratch 2.0. Also, you can now customize the projects shown on the cloud games tab."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
@@ -276,7 +279,7 @@
     "description": "Used as a category name for enabled addons"
   },
   "exportAndImportSettings": {
-    "message": "Export and Import Settings"
+    "message": "Export and import settings"
   },
   "exportAndImportSettingsDescription": {
     "message": "Export settings as a JSON file for use on other computers."
@@ -285,10 +288,13 @@
     "message": "You can also enable your browser's built-in sync options to automatically synchronize the settings between devices."
   },
   "export": {
-    "message": "Export Settings"
+    "message": "Export settings"
   },
   "import": {
-    "message": "Import Settings"
+    "message": "Import settings"
+  },
+  "viewSettings": {
+    "message": "View settings file"
   },
   "fileNotSelected": {
     "message": "Please select a settings file."
@@ -325,6 +331,12 @@
     "message": "Explore all $1 addons:",
     "description": "Placeholder is a number. Example: explore all 80+ addons"
   },
+  "searchNotFound": {
+    "message": "No results found. Perhaps try different keywords?"
+  },
+  "searchNotFoundInCategory": {
+    "message": "No results found in \"$1\". Perhaps try different keywords?"
+  },
   "captureCommentError": {
     "message": "Message added by Scratch Addons: it appears that your comment doesn't follow $1, which asks Scratchers not to advertise or name browser extensions. This comment wasn't posted because it will probably result in your account getting muted from commenting for 5 minutes."
   },
@@ -338,23 +350,19 @@
     "message": "Are you sure you want to post this comment? Scratch will probably mute your account from commenting anywhere on Scratch for at least 5 minutes."
   },
   "extensionStoreDescription1": {
-    "message": "➖ scratch.mit.edu features ➖\n- Messaging: click the extension icon to get a summary of your messages.\n- Cloud games: see who's playing multiplayer games.\n- Notifier: get browser notifications when you get new messages.\n- Navigation bar customization: re-add the “discuss” button.\n- Make 2.0-styled pages look like 3.0.\n- Website and editor dark modes.\n- And more!"
+    "message": "Choose from 100+ options:",
+    "description:": "Used in the description for the extension stores"
   },
   "extensionStoreDescription2": {
-    "message": "➖ Project editor features ➖\n- Developer tools: adds a find box and new menu options to the editor.\n- 60FPS player mode.\n- Pause button.\n- Onion skinning.\n- Auto-hide block palette.\n- Display stage on left side.\n- And more!"
+    "message": "• Quickly read and respond to messages by clicking the extension icon.\n• Jump into active multiplayer games with the cloud games tab.\n• Beautify every page on the Scratch website with the 3.0 style and options for dark mode and custom color themes.\n• Easily leave studios, promote or remove curators, and browse followers to invite.\n• Improve project management with the My Stuff search bar and the unshare button.\n• Enhance the project player with a pause button, 60FPS, and gamepad support.\n• Animate more easily with onion skinning, exact color picking, and costume search.\n• Supercharge your coding efficiency with block search, searchable dropdowns, block switching, single-grab, and copy/paste.\n• Stay tidy with the auto-hiding block palette and sprite folders.\n• Directly set and freeze project thumbnails to any image or GIF.\n• Bring back the cat blocks from April Fools.\n• Debug projects with logging, performance monitoring, and step-by-step execution.\n• And more with each update!",
+    "description": "Used in the description for the extension stores"
   },
   "extensionStoreDescription3": {
-    "message": "Keep in mind, all features are togglable! To enable or disable them, go to the settings page by clicking this extension’s icon under “extensions” in the top-right corner of your browser, and then click the gear icon."
+    "message": "This extension is open source software licensed under GPL v3.\nTo contribute or check the source code: https://github.com/ScratchAddons\nFor more information, go to: ScratchAddons.com",
+    "description": "Used in the description for the extension stores. Do not translate \"GPL v3\" or the links."
   },
   "extensionStoreDescription4": {
-    "message": "No usernames or passwords are stored, and you are required to be signed into your Scratch account in your browser for some features to work.",
-    "description": "NOTE: please only mention \"Scratch\" once on this string, do not repeat this word."
-  },
-  "extensionStoreDescription5": {
-    "message": "This extension is open source software licensed under GPL v3.\nTo contribute or check the source code: https://github.com/ScratchAddons\nFor more information, go to: ScratchAddons.com"
-  },
-  "extensionStoreDescription6": {
-    "message": "This project is not affiliated, associated, or in any way officially connected with the Scratch website, Team, Foundation, or any of its affiliates.",
-    "description": "NOTE: please only mention \"Scratch\" once on this string, do not repeat this word."
+    "message": "This project is not affiliated, associated, or in any way officially connected with the Scratch website or the organizations that maintain it.",
+    "description": "Used in the description for the extension stores"
   }
 }

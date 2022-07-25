@@ -1,4 +1,6 @@
 {
+  "root": true,
+  "ignorePatterns": ["node_modules/*", "_locales/*", ".github/*", "addons-l10n/*", "libraries/thirdparty/*"],
   "parserOptions": {
     "sourceType": "module"
   },
@@ -16,7 +18,7 @@
 
     // Third Party-defined
     "Vue": "readonly",
-    "md5": "readonly",
+    "SparkMD5": "readonly",
     "scratchblocks": "readonly",
     "tinycolor": "readonly",
     "Chart": "readonly",

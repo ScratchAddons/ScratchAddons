@@ -113,15 +113,15 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   const variableCategoryCallback = (workspace) => {
     let result = DataCategory(workspace);
 
-    if (addon.settings.get("moveReportersDown")) {
+    if (!addon.self.disabled && addon.settings.get("moveReportersDown")) {
       result = moveReportersDown(result);
     }
 
-    if (addon.settings.get("separateLocalVariables")) {
+    if (!addon.self.disabled && addon.settings.get("separateLocalVariables")) {
       result = separateLocalVariables(workspace, result);
     }
 
-    if (!hasSeparateListCategory) {
+    if (addon.self.disabled || !hasSeparateListCategory) {
       return result;
     }
 
@@ -152,7 +152,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   vm.runtime.getBlocksXML = function (target) {
     const result = originalGetBlocksXML.call(this, target);
     hasSeparateListCategory = addon.settings.get("separateListCategory");
-    if (hasSeparateListCategory) {
+    if (!addon.self.disabled && hasSeparateListCategory) {
       result.push({
         id: "data",
         xml: `
@@ -194,5 +194,29 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
         workspace.refreshToolboxSelection_();
       }
     }
+  });
+
+  const dynamicEnableOrDisable = () => {
+    // Enabling/disabling is similar to changing settings.
+    // If separate list category is enabled, a workspace update is needed.
+    // If any other setting is enabled, refresh the toolbox.
+    if (addon.settings.get("separateListCategory")) {
+      if (vm.editingTarget) {
+        vm.emitWorkspaceUpdate();
+      }
+    }
+    if (addon.settings.get("separateLocalVariables") || addon.settings.get("moveReportersDown")) {
+      const workspace = Blockly.getMainWorkspace();
+      if (workspace) {
+        workspace.refreshToolboxSelection_();
+      }
+    }
+  };
+
+  addon.self.addEventListener("disabled", () => {
+    dynamicEnableOrDisable();
+  });
+  addon.self.addEventListener("reenabled", () => {
+    dynamicEnableOrDisable();
   });
 }
