@@ -85,19 +85,8 @@
   "enabledByDefault": false,
   "versionAdded": "1.16.0",
   "latestUpdate": {
-    "version": "1.26.0",
-    "isMajor": true,
-    "temporaryNotice": "New \"Threads\" and \"Performance\" tabs in the debugger window.",
-    "newSettings": [
-      "log_clear_greenflag",
-      "log_greenflag",
-      "log_clone_create",
-      "log_failed_clone_creation",
-      "log_broadcasts",
-      "log_max_list_length",
-      "log_invalid_cloud_data",
-      "graphs_optimization"
-    ]
+    "version": "1.28.0",
+    "newSettings": [ "graphs_optimization" ]
   },
   "libraries": ["chartjs"]
 }
