@@ -1,10 +1,9 @@
 export default async function ({ addon, global }) {
-
   // Fix automatic enable bug
   window.dispatchEvent(new Event("resize"));
-  
-  addon.settings.addEventListener("change", function() { 
-    let backpackEl = document.querySelector(".sa-backpack-button")
+
+  addon.settings.addEventListener("change", function () {
+    let backpackEl = document.querySelector(".sa-backpack-button");
     if (addon.settings.get("showButton")) {
       if (backpackEl) {
         backpackEl.style.display = "inline-block";
@@ -23,16 +22,16 @@ let open = true;
 
 function createBackpackButton(addon) {
   if (!addon.settings.get("showButton")) return;
-  
-  let backpackButton = document.createElement("div");  
-  backpackButton.style.backgroundImage = `url('${addon.self.dir}/backpack.svg')`; 
+
+  let backpackButton = document.createElement("div");
+  backpackButton.style.backgroundImage = `url('${addon.self.dir}/backpack.svg')`;
   backpackButton.classList.add("sa-backpack-button");
   backpackButton.addEventListener("click", toggleBackpack);
-  
+
   moveResizeButtons();
-  
+
   document.querySelector(".injectionDiv").appendChild(backpackButton);
-  
+
   addSoundEditorButton(addon, backpackButton);
   addCostumeEditorButton(addon, backpackButton);
 }
@@ -69,12 +68,12 @@ function toggleBackpack() {
     document.querySelector("[class^='backpack_backpack-container']").style.display = "block";
   }
   window.dispatchEvent(new Event("resize"));
-} 
+}
 
 function moveResizeButtons() {
   // Move resize buttons to top
   var resizeElements = document.querySelectorAll(".blocklyZoom > image");
-  resizeElements[0].setAttribute("y", "5")
-  resizeElements[1].setAttribute("y", "-39")
-  resizeElements[2].setAttribute("y", "49")
+  resizeElements[0].setAttribute("y", "5");
+  resizeElements[1].setAttribute("y", "-39");
+  resizeElements[2].setAttribute("y", "49");
 }
