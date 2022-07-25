@@ -60,6 +60,10 @@
     }
   ],
   "versionAdded": "1.13.0",
+  "latestUpdate": {
+    "version": "1.28.0",
+    "newSettings": ["duplicate"]
+  },
   "tags": ["editor", "featured"],
   "enabledByDefault": false
 }
