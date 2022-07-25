@@ -8,7 +8,7 @@
   border-left-color: transparent;
 }
 
-.gui[dir="rtl"] .injectionDiv {
+[dir="rtl"] .injectionDiv {
   border-left-color: var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
   border-right-color: transparent;
 }
@@ -26,7 +26,7 @@
   border-left: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
 }
 
-.gui[dir="rtl"] .injectionDiv::after {
+[dir="rtl"] .injectionDiv::after {
   left: auto;
   right: -1px;
 }
@@ -37,18 +37,18 @@
   transition-property: margin;
 }
 
-.gui[dir="ltr"] .blocklyFlyout.sa-flyoutClose,
-.gui[dir="ltr"] .blocklyFlyoutScrollbar.sa-flyoutClose,
-.gui[dir="ltr"] .sa-lock-image.sa-flyoutClose {
+[dir="ltr"] .blocklyFlyout.sa-flyoutClose,
+[dir="ltr"] .blocklyFlyoutScrollbar.sa-flyoutClose,
+[dir="ltr"] .sa-lock-image.sa-flyoutClose {
   margin-left: calc(0px - var(--sa-flyout-width) - 10px);
 }
 
-.gui[dir="rtl"] .blocklyFlyout.sa-flyoutClose,
-.gui[dir="rtl"] .blocklyFlyoutScrollbar.sa-flyoutClose {
+[dir="rtl"] .blocklyFlyout.sa-flyoutClose,
+[dir="rtl"] .blocklyFlyoutScrollbar.sa-flyoutClose {
   margin-left: calc(var(--sa-flyout-width) + 10px);
 }
 
-.gui[dir="rtl"] .sa-lock-image.sa-flyoutClose {
+[dir="rtl"] .sa-lock-image.sa-flyoutClose {
   margin-right: calc(0px - var(--sa-flyout-width) - 10px);
 }
 
