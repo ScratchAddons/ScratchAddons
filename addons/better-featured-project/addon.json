@@ -19,7 +19,7 @@
       "matches": ["https://scratch.mit.edu/users/*/"]
     },
     {
-      "url": "statuslenght.css",
+      "url": "statuslength.css",
       "matches": ["https://scratch.mit.edu/users/*/"],
       "if": {
         "addonEnabled": ["scratchr2"]
