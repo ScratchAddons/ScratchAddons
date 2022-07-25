@@ -41,7 +41,9 @@ const vue = new Vue({
     setPopup(popup) {
       if (this.currentPopup !== popup) {
         this.currentPopup = popup;
-        localStorage.setItem("currentPopup", popup._addonId);
+        chrome.storage.local.set({
+          lastSelectedPopup: popup._addonId,
+        });
         if (!this.popupsWithIframes.includes(popup)) this.popupsWithIframes.push(popup);
         setTimeout(() => document.querySelector("iframe:not([style='display: none;'])").focus(), 0);
       }
@@ -87,13 +89,14 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
     _addonId: "__settings__",
   });
   vue.popups = popupObjects;
-  const lastUsedPopup = localStorage.getItem("currentPopup");
-  let id = 0;
-  if (lastUsedPopup !== null) {
-    id = vue.popups.findIndex((pop) => pop._addonId === lastUsedPopup);
-    if (id === -1) id = 0; // default to first popup if last used popup is no longer available
-  }
-  vue.setPopup(popupObjects[id]);
+  chrome.storage.local.get("lastSelectedPopup", ({ lastSelectedPopup }) => {
+    let id = 0;
+    if (lastSelectedPopup !== null) {
+      id = vue.popups.findIndex((popup) => popup._addonId === lastSelectedPopup);
+      if (id === -1) id = 0;
+    }
+    vue.setPopup(vue.popups[id]);
+  });
 });
 
 // Dynamic Popups
