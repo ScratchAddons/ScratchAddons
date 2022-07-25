@@ -86,7 +86,7 @@
   "versionAdded": "1.16.0",
   "latestUpdate": {
     "version": "1.28.0",
-    "newSettings": [ "graphs_optimization" ]
+    "newSettings": ["graphs_optimization"]
   },
   "libraries": ["chartjs"]
 }
