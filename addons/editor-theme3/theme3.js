@@ -294,11 +294,15 @@ export default async function ({ addon, console }) {
     const workspace = Blockly.getMainWorkspace();
     const flyout = workspace.getFlyout();
     const toolbox = workspace.getToolbox();
+    const categoryMenu = toolbox.categoryMenu_;
 
     // Reload toolbox
     if (vm.editingTarget) {
       vm.emitWorkspaceUpdate();
     }
+    categoryMenu.dispose();
+    categoryMenu.createDom();
+    toolbox.populate_(workspace.options.languageTree);
     const flyoutWorkspace = flyout.getWorkspace();
     Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
     toolbox.refreshSelection();
