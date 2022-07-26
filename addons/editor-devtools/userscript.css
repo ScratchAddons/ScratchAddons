@@ -1,3 +1,5 @@
+@import url("../editor-theme3/compatibility.css");
+
 #s3devToolBar {
   display: flex;
   white-space: nowrap;
@@ -118,8 +120,7 @@ div.s3devDDOut.vis ul.s3devDD {
   padding: 0.5em 0.3em;
   white-space: nowrap;
   margin: 0;
-  background-color: var(--bg);
-  color: var(--text);
+  color: var(--sa-block-colored-text);
   font-weight: bold;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -133,8 +134,8 @@ div.s3devDDOut.vis ul.s3devDD {
 /* Drop down items */
 .s3devDD > li:hover,
 .s3devDD > li.sel {
-  background-color: var(--hover-bg);
-  color: var(--hover-text);
+  background-color: var(--sa-block-bright-background);
+  color: var(--sa-block-text-on-bright-background);
   cursor: pointer;
 }
 
@@ -148,6 +149,16 @@ div.s3devDDOut.vis ul.s3devDD {
 /*.s3devDD>li.reporter::before {                      content: '● ';}*/
 /*.s3devDD>li.boolean::before {                       content: '◆ ';}*/
 
+#s3devDD > li.flag {
+  color: #4cbf56;
+}
+
+#s3devDD > li.flag:hover,
+#s3devDD > li.flag.sel {
+  background-color: #4cbf56;
+  color: white;
+}
+
 #s3devIDD > li {
   height: 19px;
   padding: 3px 8px;
@@ -156,6 +167,13 @@ div.s3devDDOut.vis ul.s3devDD {
   position: relative;
   font-weight: bold;
   width: min-content;
+  background-color: var(--sa-block-colored-background);
+  color: var(--sa-block-text);
+}
+
+#s3devIDD > li:hover,
+#s3devIDD > li.sel {
+  background-color: var(--sa-block-colored-background-secondary);
 }
 
 .s3devDD > li.hat {

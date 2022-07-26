@@ -11,3 +11,11 @@
 .blocklyDropDownDiv .blocklyText {
   fill: #575e75;
 }
+
+/* Compatibility */
+
+.sa-block-color {
+  --sa-block-text: #575e75;
+  --sa-block-gray-text: #575e75;
+  --sa-block-text-on-bright-background: #575e75;
+}

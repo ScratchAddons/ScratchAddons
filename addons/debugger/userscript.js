@@ -436,7 +436,7 @@ export default async function ({ addon, global, console, msg }) {
       if (!text) {
         return null;
       }
-      category = jsonData.category;
+      category = jsonData.extensions.includes("scratch_extension") ? "pen" : jsonData.category;
       const isStatement =
         (jsonData.extensions &&
           (jsonData.extensions.includes("shape_statement") ||
@@ -451,7 +451,7 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     const element = document.createElement("span");
-    element.className = "sa-debugger-block-preview";
+    element.className = "sa-debugger-block-preview sa-block-color";
     element.textContent = text;
     element.dataset.shape = shape;
 
@@ -461,15 +461,7 @@ export default async function ({ addon, global, console, msg }) {
       list: "data_lists",
       events: "event",
     };
-    const updateColors = () => {
-      addon.tab.getBlockCategoryColors(colorIds[category] || category).then(async (colors) => {
-        if (!colors) colors = await addon.tab.getBlockCategoryColors("pen"); // block probably belongs to an extension
-        element.style.backgroundColor = colors.coloredBackgroundPrimary;
-        element.style.color = colors.text;
-      });
-    };
-    updateColors();
-    addon.tab.addEventListener("blockCategoryColorChange", updateColors);
+    element.classList.add(`sa-block-color-${colorIds[category] || category}`);
 
     return element;
   };

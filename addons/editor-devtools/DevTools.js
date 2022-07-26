@@ -409,13 +409,15 @@ export default class DevTools {
 
     this.dom_removeChildren(this.dd);
 
-    async function getColorsForCls(addon, cls) {
-      if (cls === "flag")
-        return {
-          text: "#4cbf56",
-          hoverBg: "#4cbf56",
-          hoverText: "white",
-        };
+    let foundLi = null;
+    /**
+     * @type {[BlockItem]}
+     */
+    const procs = scratchBlocks.procs;
+    for (const proc of procs) {
+      let li = document.createElement("li");
+      li.innerText = proc.procCode;
+      li.data = proc;
       const colorIds = {
         receive: "event",
         event: "event",
@@ -426,29 +428,12 @@ export default class DevTools {
         LIST: "data_lists",
         costume: "looks",
       };
-      const colors = await addon.tab.getBlockCategoryColors(colorIds[cls]);
-      return {
-        text: colors.coloredText,
-        hoverBg: colors.brightBackground,
-        hoverText: colors.uncoloredText,
-      };
-    }
-
-    let foundLi = null;
-    /**
-     * @type {[BlockItem]}
-     */
-    const procs = scratchBlocks.procs;
-    for (const proc of procs) {
-      let li = document.createElement("li");
-      li.innerText = proc.procCode;
-      li.data = proc;
-      li.className = proc.cls;
-      getColorsForCls(this.addon, proc.cls).then(function (colors) {
-        li.style.setProperty("--text", colors.text);
-        li.style.setProperty("--hover-bg", colors.hoverBg);
-        li.style.setProperty("--hover-text", colors.hoverText);
-      });
+      if (proc.cls === "flag") {
+        li.className = "flag";
+      } else {
+        const colorId = colorIds[proc.cls];
+        li.className = `sa-block-color sa-block-color-${colorId}`;
+      }
       if (focusID) {
         if (proc.matchesID(focusID)) {
           foundLi = li;
@@ -1856,32 +1841,16 @@ export default class DevTools {
 
       count++;
 
-      async function getColorsForCategory(addon, category) {
-        if (category === null) category = "more";
-        const colorIds = {
-          "data-lists": "data_lists",
-          events: "event",
-          extension: "pen",
-        };
-        const colors = await addon.tab.getBlockCategoryColors(colorIds[category] || category);
-        return {
-          bg: colors.coloredBackgroundPrimary,
-          text: colors.text,
-          hoverBg: colors.coloredBackgroundSecondary,
-          hoverText: colors.text,
-        };
-      }
-
       li.innerText = desc;
       li.data = { text: desc, lower: " " + desc.toLowerCase(), option: option };
-      const cls = option.block.isScratchExtension ? "extension" : option.block.getCategory();
-      li.className = "var " + cls + " " + bType; // proc.cls;
-      getColorsForCategory(this.addon, cls).then(function (colors) {
-        li.style.setProperty("--bg", colors.bg);
-        li.style.setProperty("--text", colors.text);
-        li.style.setProperty("--hover-bg", colors.hoverBg);
-        li.style.setProperty("--hover-text", colors.hoverText);
-      });
+      let cls = option.block.isScratchExtension ? "pen" : option.block.getCategory();
+      if (cls === null) cls = "more";
+      const colorIds = {
+        "data-lists": "data_lists",
+        events: "event",
+      };
+      const colorId = colorIds[cls] || cls;
+      li.className = "var sa-block-color sa-block-color-" + colorId + " " + bType; // proc.cls;
       if (count > DROPDOWN_BLOCK_LIST_MAX_ROWS) {
         // Limit maximum number of rows to prevent lag when no filter is applied
         li.style.display = "none";

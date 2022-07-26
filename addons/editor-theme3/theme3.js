@@ -259,28 +259,24 @@ export default async function ({ addon, console }) {
     return oldFieldMatrixCreateButton.call(this, fill);
   };
 
-  addon.tab.setBlockCategoryColorProvider((colorId) => {
-    const category = categories.find((item) => item.colorId === colorId);
-    if (!category) return null;
-    return {
-      backgroundPrimary: primaryColor(category),
-      backgroundSecondary: secondaryColor(category),
-      backgroundTertiary: tertiaryColor(category),
-      coloredBackgroundPrimary: isColoredTextMode() ? secondaryColor(category) : primaryColor(category),
-      coloredBackgroundSecondary: isColoredTextMode() ? fieldBackground(category) : tertiaryColor(category),
-      brightBackground: isColoredTextMode() ? tertiaryColor(category) : primaryColor(category),
-      text: isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor(),
-      uncoloredText: uncoloredTextColor(),
-      coloredText: coloredTextColor(category),
-    };
-  });
-
   const updateColors = () => {
     const vm = addon.tab.traps.vm;
 
     textMode = addon.settings.get("text");
 
     for (let category of categories) {
+      // CSS variables are used for compatibility with other addons
+      const prefix = `--editorTheme3-${category.colorId}`;
+      for (let [name, value] of Object.entries({
+        primary: primaryColor(category),
+        secondary: secondaryColor(category),
+        tertiary: tertiaryColor(category),
+        field: fieldBackground(category),
+      })) {
+        document.documentElement.style.setProperty(`${prefix}-${name}`, value);
+      }
+
+      // Update Blockly.Colours
       if (!Blockly.Colours[category.colorId]) continue;
       Blockly.Colours[category.colorId].primary = primaryColor(category);
       Blockly.Colours[category.colorId].secondary = secondaryColor(category);
@@ -307,9 +303,6 @@ export default async function ({ addon, console }) {
     Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
     toolbox.refreshSelection();
     workspace.toolboxRefreshEnabled_ = true;
-
-    // Notify other addons
-    addon.tab.updateBlockCategoryColors();
   };
 
   updateColors();
