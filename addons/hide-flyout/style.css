@@ -115,3 +115,7 @@
 [class*="gui_stage-and-target-wrapper_"] {
   padding: 0;
 }
+
+.Popover {
+  z-index: 40;
+}
