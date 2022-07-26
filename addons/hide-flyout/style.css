@@ -46,7 +46,6 @@
   margin-left: calc(var(--sa-flyout-width) + 10px);
 }
 
-
 .sa-flyout-placeHolder {
   display: var(--hideFlyout-placeholderDisplay) !important;
   position: absolute;
