@@ -41,10 +41,9 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   function updateLockDisplay() {
+    lockObject.classList.toggle("locked", flyoutLock);
     lockButton.title = flyoutLock ? msg("unlock") : msg("lock");
     lockIcon.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
-    if (flyoutLock) lockObject.classList.add("locked");
-    else lockObject.classList.remove("locked");
   }
 
   function onmouseenter(e, speed = {}) {
@@ -58,7 +57,6 @@ export default async function ({ addon, global, console, msg }) {
       setTransition(speed);
       flyOut.classList.remove("sa-flyoutClose");
       scrollBar.classList.remove("sa-flyoutClose");
-      lockObject.classList.remove("sa-flyoutClose");
       setTimeout(() => {
         Blockly.getMainWorkspace().recordCachedAreas();
         removeTransition();
@@ -77,7 +75,6 @@ export default async function ({ addon, global, console, msg }) {
     setTransition(speed);
     flyOut.classList.add("sa-flyoutClose");
     scrollBar.classList.add("sa-flyoutClose");
-    lockObject.classList.add("sa-flyoutClose");
     setTimeout(() => {
       Blockly.getMainWorkspace().recordCachedAreas();
       removeTransition();

@@ -32,14 +32,12 @@
 }
 
 .blocklyFlyout,
-.blocklyFlyoutScrollbar,
-.sa-lock-image {
+.blocklyFlyoutScrollbar {
   transition-property: margin;
 }
 
 [dir="ltr"] .blocklyFlyout.sa-flyoutClose,
-[dir="ltr"] .blocklyFlyoutScrollbar.sa-flyoutClose,
-[dir="ltr"] .sa-lock-image.sa-flyoutClose {
+[dir="ltr"] .blocklyFlyoutScrollbar.sa-flyoutClose {
   margin-left: calc(0px - var(--sa-flyout-width) - 10px);
 }
 
@@ -48,9 +46,6 @@
   margin-left: calc(var(--sa-flyout-width) + 10px);
 }
 
-[dir="rtl"] .sa-lock-image.sa-flyoutClose {
-  margin-right: calc(0px - var(--sa-flyout-width) - 10px);
-}
 
 .sa-flyout-placeHolder {
   display: var(--hideFlyout-placeholderDisplay) !important;
@@ -116,6 +111,7 @@
   padding: 0;
 }
 
+/* https://github.com/ScratchAddons/ScratchAddons/issues/4896 */
 .Popover {
   z-index: 40;
 }
