@@ -426,7 +426,8 @@ let fuse;
 
       window.addEventListener("hashchange", (event) => {
         vue.selectedCategory = "all";
-        document.querySelector(location.hash)?.scrollIntoView();
+        this.clearSearch();
+        setTimeout(() => { document.querySelector(location.hash)?.scrollIntoView(); }, 100);
       });
     },
   });
