@@ -11,8 +11,8 @@
 /* Two elements are necessary because the border color has transparency. */
 .sa-flyout-border-1,
 .sa-flyout-border-2 {
-  display: block;
   position: absolute;
+  /* above flyout but below add extension button */
   z-index: 40;
   top: 0;
   bottom: 8px;
