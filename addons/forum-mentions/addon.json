@@ -1,0 +1,19 @@
+{
+  "name": "Clickable forum mentions",
+  "description": "Makes unstyled @mentions on the forums clickable. This addon doesn't support mentions styled with BBCode.",
+  "credits": [
+    {
+      "name": "Samq64",
+      "link": "https://scratch.mit.edu/users/samq64/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["topics"]
+    }
+  ],
+  "versionAdded": "1.18.0",
+  "tags": ["community", "forums"],
+  "enabledByDefault": false
+}

@@ -1,6 +1,6 @@
 {
   "name": "More links",
-  "description": "Adds links for URLs pointing outside scratch.mit.edu and makes most mentions on the forums clickable.",
+  "description": "Adds links for URLs pointing outside scratch.mit.edu.",
   "credits": [
     {
       "name": "Hans5958"
@@ -12,8 +12,7 @@
       "matches": [
         "https://scratch.mit.edu/projects/*",
         "https://scratch.mit.edu/studios/*",
-        "https://scratch.mit.edu/users/*",
-        "https://scratch.mit.edu/discuss/*"
+        "https://scratch.mit.edu/users/*"
       ]
     }
   ],

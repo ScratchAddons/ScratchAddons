@@ -1,4 +1,4 @@
-import { linkifyTextNode, pingifyTextNode, linkifyTag } from "../../libraries/common/cs/fast-linkify.js";
+import { linkifyTextNode, linkifyTag } from "../../libraries/common/cs/fast-linkify.js";
 
 export default async function ({ addon, console }) {
   const pageType = document.location.pathname.substr(1).split("/")[0];
@@ -41,17 +41,10 @@ export default async function ({ addon, console }) {
 
   (async () => {
     if (addon.tab.clientVersion === "scratchr2") {
-      if (pageType === "discuss") {
-        while (true) {
-          let post = await addon.tab.waitForElement(".post_body_html", { markAsSeen: true });
-          pingifyTextNode(post);
-        }
-      } else {
-        while (true) {
-          let comment = await addon.tab.waitForElement(".comment .content", { markAsSeen: true });
-          // scratchr2 comment is a simple linkifyTextNode.
-          linkifyTextNode(comment);
-        }
+      while (true) {
+        let comment = await addon.tab.waitForElement(".comment .content", { markAsSeen: true });
+        // scratchr2 comment is a simple linkifyTextNode.
+        linkifyTextNode(comment);
       }
     } else {
       while (true) {
