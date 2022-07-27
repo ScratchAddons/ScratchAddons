@@ -120,7 +120,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (removeIndex !== -1) vue.popupsWithIframes.splice(removeIndex, 1);
       removeIndex = vue.popups.findIndex((popup) => popup._addonId === addonId);
       vue.popups.splice(removeIndex, 1);
-      if (vue.popups.indexOf(vue.currentPopup) === -1) {
+      if (!vue.popups.includes(vue.currentPopup)) {
         vue.setPopup(vue.popups[0]); // set to default popup if current popup is no longer available
       }
     }
