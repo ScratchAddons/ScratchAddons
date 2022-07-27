@@ -300,13 +300,9 @@ export default async function ({ addon, console }) {
     if (vm.editingTarget) {
       vm.emitWorkspaceUpdate();
     }
-    categoryMenu.dispose();
-    categoryMenu.createDom();
-    toolbox.populate_(workspace.options.languageTree);
     const flyoutWorkspace = flyout.getWorkspace();
     Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
-    toolbox.refreshSelection();
-    workspace.toolboxRefreshEnabled_ = true;
+    toolbox.populate_(workspace.options.languageTree);
   };
 
   updateColors();
