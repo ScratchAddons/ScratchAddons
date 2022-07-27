@@ -18,7 +18,7 @@
     {
       "name": "Reset project before trashing",
       "type": "boolean",
-      "default": true,
+      "default": false,
       "id": "resetProject"
     }
   ],
