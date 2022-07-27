@@ -121,5 +121,6 @@
 
 /* https://github.com/ScratchAddons/ScratchAddons/issues/4896 */
 .Popover {
-  z-index: 40;
+  /* above stage wrapper and target pane */
+  z-index: 51;
 }
