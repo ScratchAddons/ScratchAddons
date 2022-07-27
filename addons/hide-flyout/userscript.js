@@ -229,9 +229,11 @@ export default async function ({ addon, global, console, msg }) {
     // Code editor left border
     const borderElement1 = document.createElement("div");
     borderElement1.className = "sa-flyout-border-1";
+    addon.tab.displayNoneWhileDisabled(borderElement1);
     injectionDiv.appendChild(borderElement1);
     const borderElement2 = document.createElement("div");
     borderElement2.className = "sa-flyout-border-2";
+    addon.tab.displayNoneWhileDisabled(borderElement2);
     injectionDiv.appendChild(borderElement2);
 
     // Placeholder Div
