@@ -91,7 +91,7 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
   vue.popups = popupObjects;
   chrome.storage.local.get("lastSelectedPopup", ({ lastSelectedPopup }) => {
     let id = 0;
-    if (lastSelectedPopup !== null) {
+    if (typeof lastSelectedPopup === "string") {
       id = vue.popups.findIndex((popup) => popup._addonId === lastSelectedPopup);
       if (id === -1) id = 0;
     }
