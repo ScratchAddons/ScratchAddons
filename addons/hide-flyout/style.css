@@ -4,31 +4,30 @@
   --sa-flyout-width: 250px;
 }
 
-.injectionDiv {
-  border-left-color: transparent;
-}
-
-[dir="rtl"] .injectionDiv {
-  border-left-color: var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
-  border-right-color: transparent;
-}
-
-.injectionDiv::after {
-  /* left border of the code area:
-     must be above the flyout and below the extension button */
-  content: "";
+/* The default left-side border does not work properly when a block is being dragged, */
+/* which lets a 1 pixel column of the flyout be visible. */
+/* To fix this we use two elements that are only visible when a block is being dragged. */
+/* The first element is white/black to cover up the contents, the other has the correct border color. */
+/* Two elements are necessary because the border color has transparency. */
+.sa-flyout-border-1,
+.sa-flyout-border-2 {
   display: block;
   position: absolute;
   z-index: 40;
   top: 0;
   bottom: 8px;
   left: -1px;
-  border-left: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
 }
-
-[dir="rtl"] .injectionDiv::after {
+[dir="rtl"] .sa-flyout-border-1,
+[dir="rtl"] .sa-flyout-border-2 {
   left: auto;
   right: -1px;
+}
+.sa-flyout-border-1 {
+  border-left: 1px solid var(--editorDarkMode-page, hsla(215, 100%, 95%, 1));
+}
+.sa-flyout-border-2 {
+  border-left: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
 }
 
 .blocklyFlyout,
