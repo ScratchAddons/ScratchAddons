@@ -13,7 +13,7 @@
       "matches": ["topics"]
     }
   ],
-  "versionAdded": "1.18.0",
+  "versionAdded": "1.28.0",
   "tags": ["community", "forums"],
   "enabledByDefault": false
 }
