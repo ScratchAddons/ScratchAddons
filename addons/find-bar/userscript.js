@@ -241,18 +241,17 @@ export default async function ({ addon, msg, console }) {
 
       this.dropdownOut.classList.add("visible");
       let scratchBlocks =
-        this.selectedTab === 1
-          ? this.getScratchCostumes()
-          : this.selectedTab === 0
+        this.selectedTab === 0
           ? this.getScratchBlocks()
-          : this.getScratchSounds();
+          : this.selectedTab === 1
+          ? this.getScratchCostumes()
+          : this.selectedTab === 2
+          ? this.getScratchSounds()
+          : [];
 
       this.dropdown.empty();
-      /**
-       * @type {[BlockItem]}
-       */
-      const procs = scratchBlocks.procs;
-      for (const proc of procs) {
+
+      for (const proc of scratchBlocks) {
         let item = this.dropdown.addItem(proc);
 
         if (focusID) {
@@ -389,37 +388,37 @@ export default async function ({ addon, msg, console }) {
         return a.y - b.y;
       });
 
-      return { procs: myBlocks };
+      return myBlocks;
     }
 
     getScratchCostumes() {
       let costumes = this.utils.getEditingTarget().getCostumes();
 
-      let procs = [];
+      let items = [];
 
       let i = 0;
       for (const costume of costumes) {
-        let items = new BlockItem("costume", costume.name, costume.assetId, i);
-        procs.push(items);
+        let item = new BlockItem("costume", costume.name, costume.assetId, i);
+        items.push(item);
         i++;
       }
 
-      return { procs };
+      return items;
     }
 
     getScratchSounds() {
       let sounds = this.utils.getEditingTarget().getSounds();
 
-      let procs = [];
+      let items = [];
 
       let i = 0;
       for (const sound of sounds) {
-        let items = new BlockItem("sound", sound.name, sound.assetId, i);
-        procs.push(items);
+        let item = new BlockItem("sound", sound.name, sound.assetId, i);
+        items.push(item);
         i++;
       }
 
-      return { procs };
+      return items;
     }
 
     getCallsToEvents() {
