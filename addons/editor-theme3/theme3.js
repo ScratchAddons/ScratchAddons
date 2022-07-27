@@ -1,4 +1,4 @@
-import { multiply, alphaBlend, recolorFilter } from "../../libraries/common/cs/text-color.esm.js";
+import { removeAlpha, multiply, alphaBlend, recolorFilter } from "../../libraries/common/cs/text-color.esm.js";
 
 const extensionsCategory = {
   id: null,
@@ -220,6 +220,11 @@ export default async function ({ addon, console }) {
     }
 
     // Dropdown menus
+    let primaryColor;
+    if (this.sourceBlock_.isShadow() && this.sourceBlock_.getParent())
+      primaryColor = this.sourceBlock_.getParent().getColour();
+    else primaryColor = this.sourceBlock_.getColour();
+    Blockly.DropDownDiv.DIV_.style.backgroundColor = removeAlpha(primaryColor);
     if (isColoredTextMode()) {
       Blockly.DropDownDiv.getContentDiv().style.setProperty("--editorTheme3-hoveredItem", fieldBackground(this));
     } else {
