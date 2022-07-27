@@ -8,6 +8,7 @@ import categories from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
 import globalTheme from "../../libraries/common/global-theme.js";
+import minifySettings from "../../libraries/common/minify-settings.js";
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -133,10 +134,11 @@ let fuse;
           addonsEnabled[addonId] = granted;
         });
       }
+      const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
       await syncSet({
         globalTheme: !!obj.core.lightTheme,
         addonsEnabled,
-        addonSettings,
+        addonSettings: minifySettings(addonSettings, prerelease ? null : manifests),
       });
       resolvePromise();
     };
