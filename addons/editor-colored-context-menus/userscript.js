@@ -1,3 +1,5 @@
+import { removeAlpha } from "../../libraries/common/cs/text-color.esm.js";
+
 export default async function ({ addon, global, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
@@ -10,9 +12,8 @@ export default async function ({ addon, global, console }) {
     if (!background) {
       return;
     }
-    const style = window.getComputedStyle(background);
-    const fill = style.getPropertyValue("fill");
-    const border = style.getPropertyValue("stroke") || "#0003";
+    const fill = removeAlpha(background.getAttribute("fill"));
+    const border = background.getAttribute("stroke") || "#0003";
     widgetDiv.classList.add("sa-contextmenu-colored");
     widgetDiv.style.setProperty("--sa-contextmenu-bg", fill);
     widgetDiv.style.setProperty("--sa-contextmenu-border", border);
