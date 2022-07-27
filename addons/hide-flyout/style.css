@@ -100,11 +100,18 @@
 /* Setting these styles on gui_stage-and-target-wrapper breaks full screen */
 .sa-body-editor [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen"]),
 [class*="gui_target-wrapper_"] {
-  /* must cover the hidden palette when editor-stage-left is enabled and lock icon when columns is also enabled */
   position: relative;
-  z-index: 31;
   padding-inline: 0.5rem;
   background-color: var(--editorDarkMode-page, hsl(215, 100%, 95%));
+}
+/* Both must be above hidden flyout when dragging block with editor-stage-left enabled */
+/* Both must be above category list when columns is enabled so dragged sprites appear aren't obscured */
+/* Stage wrapper must be above target pane so dragged sprites aren't obscured */
+.sa-body-editor [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen"]) {
+  z-index: 50;
+}
+[class*="gui_target-wrapper_"] {
+  z-index: 49;
 }
 
 [class*="gui_stage-and-target-wrapper_"] {
