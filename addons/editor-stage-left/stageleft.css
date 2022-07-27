@@ -54,7 +54,8 @@
 }
 
 .Popover {
-  z-index: 40;
+  /* see hide-flyout */
+  z-index: 51;
 }
 
 /* hide-stage compatibility */
