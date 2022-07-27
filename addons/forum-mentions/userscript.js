@@ -6,4 +6,3 @@ export default async function ({ addon, console }) {
     pingifyTextNode(post);
   }
 }
-
