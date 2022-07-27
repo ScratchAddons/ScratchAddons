@@ -1,7 +1,7 @@
 [class*="gui_tabs_"] {
+  /* overridden by other addons */
   --sa-category-width: 60px;
   --sa-flyout-width: 250px;
-  --sa-toolbox-width: calc(var(--sa-category-width) + var(--sa-flyout-width));
 }
 
 .injectionDiv {
@@ -49,14 +49,16 @@
 .sa-flyout-placeHolder {
   display: var(--hideFlyout-placeholderDisplay) !important;
   position: absolute;
-  top: 0;
-  left: calc(var(--sa-category-width) + 1px);
   height: 100%;
   width: calc(var(--sa-flyout-width) + 1px);
+  top: 0;
+}
+
+[dir="ltr"] .sa-flyout-placeHolder {
+  left: calc(var(--sa-category-width) + 1px);
 }
 
 [dir="rtl"] .sa-flyout-placeHolder {
-  left: auto;
   right: calc(var(--sa-category-width) + 1px);
 }
 
