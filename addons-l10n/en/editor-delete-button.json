@@ -3,5 +3,6 @@
   "editor-delete-button/modal-msg": "Are you sure you want to delete this project?",
   "editor-delete-button/yes": "Delete",
   "editor-delete-button/no": "Cancel",
-  "editor-delete-button/modal-title": "Delete Project"
+  "editor-delete-button/modal-title": "Delete Project",
+  "editor-delete-button/fetch-err": "An error occurred while saving the default project. Scratch's servers may be down - Please try again later."
 }

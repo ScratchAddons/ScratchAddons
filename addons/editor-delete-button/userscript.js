@@ -1,4 +1,4 @@
-export default async ({ addon, msg }) => {
+export default async ({ addon, msg, console }) => {
   // Fetch as text without parsing as JSON, because guess what,
   // the code will stringify anyway!
   const defaultProjectPromise = fetch(`${addon.self.dir}/default.json`).then((res) => res.text());
@@ -28,13 +28,32 @@ export default async ({ addon, msg }) => {
         cancelButtonLabel: msg("no"),
         useEditorClasses: true,
       });
-
+      if (!confirmed) return;
       if (addon.settings.get("resetProject")) {
         const defaultProject = await defaultProjectPromise;
         vm.loadProject(defaultProject);
+        const safe = await new Promise((resolve, reject) => {
+          const xhrOpen = XMLHttpRequest.prototype.open;
+          XMLHttpRequest.prototype.open = function (method, url, ...args) {
+            if (method === "put" && String(url).startsWith("https://projects.scratch.mit.edu")) {
+              this.addEventListener("loadend", (ev) => {
+                if (ev.target.status === 200) {
+                  XMLHttpRequest.prototype.open = xhrOpen;
+                  resolve(true);
+                } else {
+                  // Shouldn't happen
+                  reject();
+                }
+              });
+            }
+            return xhrOpen.call(this, method, url, ...args);
+          };
+          redux.dispatch({
+            type: "scratch-gui/project-state/START_MANUAL_UPDATING",
+          });
+        }).catch(() => alert(msg("fetch-err")));
+        if (!safe) return;
       }
-
-      if (!confirmed) return;
       const res = await fetch(`/site-api/projects/all/${redux.state.preview.projectInfo.id}/`, {
         headers: {
           "X-CSRFToken": addon.auth.csrfToken,
