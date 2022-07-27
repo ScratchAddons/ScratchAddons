@@ -7,12 +7,12 @@
 /* The default left-side border does not work properly when a block is being dragged, */
 /* which lets a 1 pixel column of the flyout be visible. */
 /* To fix this we use two elements that are only visible when a block is being dragged. */
-/* The first element is white/black to cover up the contents, the other has the correct border color. */
-/* Two elements are necessary because the border color has transparency. */
+/* The first element is opaque to cover up the contents with the background color. */
+/* The other element is the transparent border color. */
 .sa-flyout-border-1,
 .sa-flyout-border-2 {
   position: absolute;
-  /* above flyout but below add extension button */
+  /* Above flyout but below add extension button */
   z-index: 40;
   top: 0;
   bottom: 8px;
@@ -121,7 +121,7 @@
 
 /* https://github.com/ScratchAddons/ScratchAddons/issues/4896 */
 .Popover {
-  /* above stage wrapper and target pane */
-  /* see editor-stage-left */
+  /* Above stage wrapper and target pane */
+  /* See editor-stage-left */
   z-index: 51;
 }
