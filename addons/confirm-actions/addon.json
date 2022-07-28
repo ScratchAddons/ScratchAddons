@@ -31,6 +31,12 @@
       "default": true
     },
     {
+      "name": "Confirm deleting projects",
+      "id": "removingprojects",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "Confirm cancelling comments",
       "id": "cancelcomment",
       "type": "boolean",
@@ -51,12 +57,6 @@
     {
       "name": "Confirm closing forum topics",
       "id": "closingtopic",
-      "type": "boolean",
-      "default": false
-    },
-    {
-      "name": "Confirm removing projects",
-      "id": "removingprojects",
       "type": "boolean",
       "default": false
     }

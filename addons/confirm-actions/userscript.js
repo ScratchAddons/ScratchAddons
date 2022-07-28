@@ -11,15 +11,13 @@ export default async function ({ addon, console, msg }) {
 
       let title = null;
       let cancelMessage = null;
-      let isInStudios = document.querySelector("#tabs > :nth-child(4).active");
-
       if (
         addon.settings.get("projectsharing") &&
         e.target.closest("[class*='share-button_share-button']:not([class*='is-shared']), .banner-button")
       ) {
         title = addon.tab.scratchMessage("project.share.shareButton"); // "Share"
         cancelMessage = msg("share");
-      } else if (addon.settings.get("projectunsharing") && e.target.closest(".media-stats a.unshare") && !isInStudios) {
+      } else if (addon.settings.get("projectunsharing") && e.target.closest(".media-stats a.unshare") && location.hash !== "#galleries") {
         title = e.target.closest(".media-stats a.unshare").textContent; // "Unshare"
         cancelMessage = msg("unshare");
       } else if (addon.settings.get("followinguser") && e.target.closest("#profile-data .follow-button")) {
