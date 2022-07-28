@@ -39,8 +39,8 @@ export default async function ({ addon, console, msg }) {
         e.stopPropagation();
         addon.tab
           .confirm(msg("delete-" + type + "-title"), msg("delete-" + type + "-message"), {
-            okButtonLabel: msg("yes"),
-            cancelButtonLabel: msg("no"),
+            okButtonLabel: msg("delete"),
+            cancelButtonLabel: msg("cancel"),
             useEditorClasses: true,
           })
           .then((confirmed) => {

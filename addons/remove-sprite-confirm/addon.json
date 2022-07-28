@@ -18,13 +18,13 @@
       "name": "Costumes and backdrops",
       "id": "costumes",
       "type": "boolean",
-      "default": true
+      "default": false
     },
     {
       "name": "Sounds",
       "id": "sounds",
       "type": "boolean",
-      "default": true
+      "default": false
     }
   ],
   "userstyles": [
