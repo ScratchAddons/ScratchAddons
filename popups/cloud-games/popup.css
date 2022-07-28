@@ -118,7 +118,7 @@ body {
 
 .opened .title {
   background: var(--blue);
-  border: 1px solid var(--blue-variant);
+  border-color: var(--blue-variant);
 }
 
 .games {
