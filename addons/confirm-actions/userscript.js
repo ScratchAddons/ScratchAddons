@@ -17,7 +17,11 @@ export default async function ({ addon, console, msg }) {
       ) {
         title = addon.tab.scratchMessage("project.share.shareButton"); // "Share"
         cancelMessage = msg("share");
-      } else if (addon.settings.get("projectunsharing") && e.target.closest(".media-stats a.unshare") && location.hash !== "#galleries") {
+      } else if (
+        addon.settings.get("projectunsharing") &&
+        e.target.closest(".media-stats a.unshare") &&
+        location.hash !== "#galleries"
+      ) {
         title = e.target.closest(".media-stats a.unshare").textContent; // "Unshare"
         cancelMessage = msg("unshare");
       } else if (addon.settings.get("followinguser") && e.target.closest("#profile-data .follow-button")) {
