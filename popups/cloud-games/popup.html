@@ -55,7 +55,7 @@
       <div
         class="game"
         v-for="project of projectsSorted"
-        :class="{ 'opened': project.id == selectedTabId, 'online': project.online }"
+        :class="{ 'opened': project.id == selectedTabId }"
       >
         <div class="title">
           <a class="project-name nolink" :href="'https://scratch.mit.edu/projects/' + project.id" target="_blank"

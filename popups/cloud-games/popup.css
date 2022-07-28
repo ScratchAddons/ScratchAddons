@@ -80,7 +80,6 @@ body {
   background: var(--content-background);
   margin: 5px 10px;
   box-shadow: var(--content-shadow);
-  order: 1;
 }
 
 .title a {
@@ -107,13 +106,8 @@ body {
   padding-top: 0.5rem;
 }
 
-.online {
-  order: 0;
-}
-
 .opened {
   border: 1px solid var(--blue-variant);
-  order: -1;
 }
 
 .opened .title {

@@ -91,9 +91,17 @@ export default async ({ addon, msg, safeMsg }) => {
     },
     computed: {
       projectsSorted() {
-        return this.projects.sort((b, a) => {
-          if (a.amt !== b.amt) return a.amt - b.amt;
-          return a.timestamp - b.timestamp;
+        return this.projects.sort((a, b) => {
+          if (a.id === b.id) return 0; // this should not happen
+          // Put currently opened project first
+          if (a.id === this.selectedTabId) return -1;
+          if (b.id === this.selectedTabId) return 1;
+          // Projects where the user is online
+          if (a.online && !b.online) return -1;
+          if (b.online && !a.online) return 1;
+          // Sort by number of users
+          if (a.amt !== b.amt) return b.amt - a.amt;
+          return b.timestamp - a.timestamp;
         });
       },
       errorMessage() {
