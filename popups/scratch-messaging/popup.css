@@ -265,6 +265,7 @@ a.message-type-title-text {
 .comment-chars {
   margin-inline-start: auto;
   font-weight: normal;
+  font-variant: tabular-nums;
 }
 
 .status-container {
@@ -278,6 +279,15 @@ a.message-type-title-text {
 .status-empty {
   display: block;
   margin-block: 10px;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.buttons-container > button + button {
+  margin-inline-start: 10px;
 }
 
 #bottom-bar {
@@ -314,20 +324,20 @@ a.message-type-title-text {
 .marked-as-read {
   font-weight: 600;
 }
-#popout {
+.popout {
   height: 10px;
   vertical-align: baseline;
   margin-left: 5px;
   opacity: 0.6;
   filter: var(--content-icon-filter);
 }
-[dir="rtl"] #popout {
+[dir="rtl"] .popout {
   transform: scaleX(-1);
 }
-#open-messages {
+.open-messages {
   color: inherit;
 }
-#open-messages:hover #popout {
+.open-messages:hover .popout {
   opacity: 1;
   filter: none;
 }
