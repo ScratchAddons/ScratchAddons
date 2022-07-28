@@ -52,14 +52,6 @@ export default async function ({ addon, console, msg }) {
         if (e.target.closest("form").querySelector("textarea").value === "") return;
         title = msg("cancelcomment-title");
         cancelMessage = msg("cancelcomment");
-      } else if (addon.settings.get("leavingstudio") && e.target.closest("a.unshare") && isInStudios) {
-        if (e.target.closest("[data-control='trash']")) {
-          title = msg("deletestudio-title");
-          cancelMessage = msg("deletestudio");
-        } else {
-          title = msg("leavestudio-title");
-          cancelMessage = msg("leavestudio");
-        }
       } else if (addon.settings.get("removingprojects") && e.target.closest(".media-trash")) {
         title = msg("removeproject-title");
         cancelMessage = msg("removeproject");
