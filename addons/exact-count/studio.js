@@ -33,7 +33,6 @@ export default async function ({ addon }) {
     }
   });
 
-  const count = await countProjects(apiUrlPrefix, 0, initialDelta);
-  counted = count;
-  if (!addon.self.disabled) countElement.innerText = `(${count})`;
+  counted = await countProjects(apiUrlPrefix, 0, initialDelta);
+  if (!addon.self.disabled) countElement.innerText = `(${counted})`;
 }
