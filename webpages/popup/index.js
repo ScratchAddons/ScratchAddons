@@ -41,6 +41,9 @@ const vue = new Vue({
     setPopup(popup) {
       if (this.currentPopup !== popup) {
         this.currentPopup = popup;
+        chrome.storage.local.set({
+          lastSelectedPopup: popup._addonId,
+        });
         if (!this.popupsWithIframes.includes(popup)) this.popupsWithIframes.push(popup);
         setTimeout(() => document.querySelector("iframe:not([style='display: none;'])").focus(), 0);
       }
@@ -86,7 +89,14 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
     _addonId: "__settings__",
   });
   vue.popups = popupObjects;
-  vue.setPopup(vue.popups[0]);
+  chrome.storage.local.get("lastSelectedPopup", ({ lastSelectedPopup }) => {
+    let id = 0;
+    if (typeof lastSelectedPopup === "string") {
+      id = vue.popups.findIndex((popup) => popup._addonId === lastSelectedPopup);
+      if (id === -1) id = 0;
+    }
+    vue.setPopup(vue.popups[id]);
+  });
 });
 
 // Dynamic Popups
@@ -110,6 +120,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (removeIndex !== -1) vue.popupsWithIframes.splice(removeIndex, 1);
       removeIndex = vue.popups.findIndex((popup) => popup._addonId === addonId);
       vue.popups.splice(removeIndex, 1);
+      if (!vue.popups.includes(vue.currentPopup)) {
+        vue.setPopup(vue.popups[0]); // set to default popup if current popup is no longer available
+      }
     }
   }
 });
