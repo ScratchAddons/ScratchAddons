@@ -59,6 +59,11 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
         addonsEnabled["block-count"] = true;
       }
       if (addonId === "editor-dark-mode") {
+        // Transition v1.27 to v1.28
+        if (settings.palette !== undefined && settings.palette.length === 7) {
+          settings.palette += "cc";
+          madeAnyChanges = madeChangesToAddon = true;
+        }
       }
       if (manifest.settings) {
         if (
