@@ -18,7 +18,7 @@ export default async function ({ addon, global, console, msg }) {
       status.innerText = userStatus;
 
       let dot = document.createElement("span");
-      addon.tab.displayNoneWhileDisabled(dot, { display: "inline-block" });
+      addon.tab.displayNoneWhileDisabled(dot);
       dot.title = msg("status-hover");
       dot.className = "my-ocular-dot";
 

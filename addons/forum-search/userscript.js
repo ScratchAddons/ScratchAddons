@@ -240,7 +240,7 @@ export default async function ({ addon, global, console, msg }) {
 
   // create the search bar
   let search = document.createElement("form");
-  addon.tab.displayNoneWhileDisabled(search, { display: "flex" });
+  addon.tab.displayNoneWhileDisabled(search);
   search.id = "forum-search-form";
   let searchBar = document.createElement("input");
   searchBar.id = "forum-search-input";

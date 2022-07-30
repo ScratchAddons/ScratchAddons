@@ -575,7 +575,8 @@ export default async function ({ addon, global, console, msg }) {
   paintEditorControlsContainer.dir = "";
 
   const toggleControlsGroup = createGroup();
-  addon.tab.displayNoneWhileDisabled(toggleControlsGroup, { display: "flex" });
+  addon.tab.displayNoneWhileDisabled(toggleControlsGroup);
+  toggleControlsGroup.style.display = "flex";
 
   const toggleButton = createButton();
   toggleButton.dataset.enabled = settings.enabled;

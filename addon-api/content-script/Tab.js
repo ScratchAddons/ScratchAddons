@@ -239,10 +239,8 @@ export default class Tab extends Listenable {
    * @param {object=} opts - the options.
    * @param {string=} opts.display - the fallback value for CSS display.
    */
-  displayNoneWhileDisabled(el, { display = "" } = {}) {
-    el.style.display = `var(--${this._addonId.replace(/-([a-z])/g, (g) =>
-      g[1].toUpperCase()
-    )}-_displayNoneWhileDisabledValue${display ? ", " : ""}${display})`;
+  displayNoneWhileDisabled(el) {
+    el.setAttribute("data-addon-disabled-" + this._addonId, "");
   }
 
   /**

@@ -27,6 +27,8 @@ export default async function ({ addon, global, console, msg }) {
   count.className = "clone-count";
   icon.className = "clone-icon";
 
+  addon.tab.displayNoneWhileDisabled(countContainerContainer);
+
   countContainerContainer.appendChild(icon);
   countContainerContainer.appendChild(countContainer);
   countContainer.appendChild(count);
@@ -44,8 +46,7 @@ export default async function ({ addon, global, console, msg }) {
     countContainerContainer.dataset.count = lastChecked = v;
     count.dataset.str = cache[v] || msg("clones", { cloneCount: v });
 
-    if (v === 0) countContainerContainer.style.display = "none";
-    else addon.tab.displayNoneWhileDisabled(countContainerContainer, { display: "flex" });
+    countContainerContainer.style.display = v === 0 ? "none" : "flex";
   }
 
   vm.runtime.on("targetWasRemoved", (t) => {

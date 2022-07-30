@@ -14,7 +14,7 @@ export default async function ({ addon, global, console, msg }) {
   } else {
     barOuter.classList.add("u-progress-bar-integrated");
   }
-  addon.tab.displayNoneWhileDisabled(barOuter, { display: "flex" });
+  addon.tab.displayNoneWhileDisabled(barOuter);
 
   // We track the loading phase so that we can detect when the phase changed to reset and move the progress bar accordingly.
   const NONE = "none";
