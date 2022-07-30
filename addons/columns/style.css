@@ -92,14 +92,9 @@
 
 [class*="gui_tabs_"] {
   --sa-flyout-width: 310px;
-  --sa-toolbox-width: var(--sa-flyout-width);
+  --sa-category-width: 0;
 }
 
 .sa-flyout-placeHolder {
-  left: 0;
   top: calc(var(--sa-flyout-y));
-}
-
-.sa-lock-image {
-  top: calc(var(--sa-flyout-y) + 4px);
 }
