@@ -49,6 +49,10 @@
   height: calc(1.75rem - 2px);
   background-color: transparent;
   border-color: var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+}
+
+/* [dir] is for specificity to override editor-stage-left */
+[dir] [class*="gui_extension-button-container_"] {
   border-radius: 0.25rem;
 }
 
