@@ -22,7 +22,6 @@ const vue = new Vue({
     popups: [],
     currentPopup: null,
     popupsWithIframes: [],
-    version: chrome.runtime.getManifest().version,
   },
   methods: {
     msg(message, ...params) {
@@ -58,6 +57,11 @@ const vue = new Vue({
       const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
       const utm = `utm_source=extension&utm_medium=popup&utm_campaign=v${chrome.runtime.getManifest().version}`;
       return `https://scratchaddons.com/${localeSlash}changelog/?${utm}`;
+    },
+    version() {
+      const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
+      const ver = chrome.runtime.getManifest().version;
+      return prerelease ? ver + "-pre" : ver;
     },
   },
 });

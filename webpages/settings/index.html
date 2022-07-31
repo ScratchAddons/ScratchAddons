@@ -39,7 +39,6 @@
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
-    <link rel="icon" href="../../images/icon.png" />
 
     <!-- Preload index.js imports -->
     <link rel="modulepreload" href="../../libraries/common/cs/download-blob.js" />
@@ -120,7 +119,7 @@
   <body v-cloak :class="{light: theme}">
     <div class="navbar">
       <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-cloak v-show="smallMode" alt="Logo" />
-      <img src="../../images/icon.svg" class="logo" alt="Logo" />
+      <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" />
       <h1 v-cloak>{{ msg("settings") }}</h1>
       <img v-cloak @click="setTheme(!theme)" class="theme-switch" :src="themePath" />
     </div>
