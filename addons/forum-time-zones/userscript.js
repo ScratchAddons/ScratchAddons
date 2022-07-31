@@ -1,4 +1,5 @@
-export default async function ({ addon, _global, _console }) {
+export default async function ({ addon, global, console }) {
+  const cache = [];
   const locale = addon.auth.scratchLang;
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const localCurrentTimeRepr = new Date(new Date().toLocaleString("en-US", { timeZone }));
@@ -34,6 +35,19 @@ export default async function ({ addon, _global, _console }) {
     }
   };
   const pageNumber = /page=(\d+)/.exec(location.search)?.[1];
+
+  addon.self.addEventListener("disabled", () => {
+    for (const c of cache) {
+      const { el, og } = c;
+      el.innerText = og;
+    }
+  });
+  addon.self.addEventListener("reenabled", () => {
+    for (const c of cache) {
+      const { el, fetched } = c;
+      el.innerText = formatter(fetched);
+    }
+  });
   fetch(`https://scratch.mit.edu/discuss/m/topic/${location.pathname.split("/")[3]}?page=${pageNumber || 1}`, {
     credentials: "omit", // disable reply box
   })
@@ -47,10 +61,16 @@ export default async function ({ addon, _global, _console }) {
       const doc = parser.parseFromString(text, "text/html");
       const posts = [...doc.querySelectorAll("article")];
       posts.forEach((e) => {
-        const time = e.querySelector("time").getAttribute("datetime");
+        const time = e.querySelector("time").getAttribute("datetime") + ".000Z"; // default timezone is UTC
         const timeOnPost = document.querySelector(`#p${e.id.substring(5)} > .box > .box-head > a`);
-        timeOnPost.innerText = formatter(time);
-        timeOnPost.setAttribute("datetime", time);
+        cache.push({
+          el: timeOnPost,
+          fetched: time,
+          og: timeOnPost.innerText,
+        });
+        if (!addon.self.disabled) {
+          timeOnPost.innerText = formatter(time);
+        }
       });
     });
 }
