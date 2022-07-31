@@ -22,10 +22,9 @@ export default async function ({ addon, global, console }) {
         .then((response) => response.json())
         .then((data) => {
           if (data.counts && data.counts.total && data.counts.total.count > postCountReal) {
-            cache[userbox.parentElement.parentElement.parentElement.parentElement.id] = {
+            cache[userbox.closest(".blockpost").id] = {
               original: userbox.childNodes[6].textContent,
               new: data.counts.total.count,
-              author: userbox.querySelector("a").innerText,
             };
             userbox.childNodes[6].nodeValue = `${data.counts.total.count} posts`;
           }
