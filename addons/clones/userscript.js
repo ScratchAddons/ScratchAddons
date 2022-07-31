@@ -37,7 +37,6 @@ export default async function ({ addon, global, console, msg }) {
 
   const cache = Array(301)
     .fill()
-    //Shows just the clone count if the setting is enabled
     .map((_, i) => msg("clones", { cloneCount: i }));
 
   function doCloneChecks() {
