@@ -9,13 +9,76 @@
       "name": "griffpatch"
     }
   ],
+  "info": [
+    {
+      "id": "howtoadd",
+      "text": "You can add the currently open project or studio by clicking the \"Add this project/studio\" button on the cloud games tab."
+    }
+  ],
   "popup": {
     "icon": "../../images/icons/cloud.svg",
     "name": "Games",
     "script": "popup.js",
     "html": "popup.html"
   },
+  "settings": [
+    {
+      "id": "displayedGames",
+      "name": "Displayed games",
+      "type": "table",
+      "default": [
+        {
+          "url": "https://scratch.mit.edu/studios/539952/"
+        }
+      ],
+      "row": [
+        {
+          "name": "Project/Studio URL",
+          "id": "url",
+          "type": "untranslated",
+          "default": ""
+        }
+      ],
+      "presets": [
+        {
+          "name": "Griffpatch's Multiplayer Games",
+          "values": {
+            "url": "https://scratch.mit.edu/studios/539952/"
+          }
+        },
+        {
+          "name": "Massive Multiplayer Platformer",
+          "values": {
+            "url": "https://scratch.mit.edu/projects/612229554/"
+          }
+        },
+        {
+          "name": "Cloud Platformer Multiplayer Fun",
+          "values": {
+            "url": "https://scratch.mit.edu/projects/378507713/"
+          }
+        },
+        {
+          "name": "slither.io",
+          "values": {
+            "url": "https://scratch.mit.edu/projects/108566337/"
+          }
+        },
+        {
+          "name": "diep.io",
+          "values": {
+            "url": "https://scratch.mit.edu/projects/131270192/"
+          }
+        }
+      ]
+    }
+  ],
   "tags": ["popup", "recommended"],
+  "latestUpdate": {
+    "version": "1.27.0",
+    "newSettings": ["displayedGames"],
+    "isMajor": true
+  },
   "versionAdded": "1.1.0",
   "enabledByDefault": true
 }

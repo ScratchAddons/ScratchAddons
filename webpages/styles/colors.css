@@ -2,6 +2,7 @@
   --brand-orange: #ff7b26;
   --brand-orange-opacity35: rgba(255, 123, 38, 0.35);
   --brand-orange-min-font-weight: normal;
+  --danger-orange: #ff7b26;
   --yellow-opacity50: rgba(253, 221, 43, 0.5);
   --green: #008000;
   --light-green-variant: #53b31c;
@@ -38,6 +39,7 @@
   --warning-border: var(--red);
   --warning-text: #fff;
   --warning-icon-filter: brightness(0) invert(1);
+  --info-border: var(--content-separator);
   --update-background: var(--navigation-background);
   --update-border: var(--purple-opacity75);
   --update-text: #fff;
@@ -59,6 +61,7 @@
   --content-text: #fff;
   --content-icon-filter: brightness(0) invert(1);
   --description-text: #ddd;
+  --description-icon-filter: brightness(0) invert(0.87);
   --label-text: #aaa;
   --gray-text: #808080;
   --placeholder-text: #777;

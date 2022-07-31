@@ -121,6 +121,7 @@
   "sounds-duration",
   "default-costume-editor-color",
   "player-thumb",
+  "one-click-studio-invites",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
@@ -140,7 +141,9 @@
   "// For editor:",
   "editor-dark-mode",
   "editor-colored-context-menus",
+  "hide-stage",
   "editor-stage-left",
+  "editor-buttons-reverse-order",
   "columns",
   "editor-theme3"
 ]
