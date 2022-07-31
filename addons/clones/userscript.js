@@ -38,24 +38,16 @@ export default async function ({ addon, global, console, msg }) {
   const cache = Array(301)
     .fill()
     //Shows just the clone count if the setting is enabled
-    .map((_, i) => {
-      if (showIconOnly) {
-        i
-      } else {
-        msg("clones", { cloneCount: i })
-      }
-    });
+    .map((_, i) => msg("clones", { cloneCount: i }));
 
   function doCloneChecks() {
     const v = vm.runtime._cloneCounter;
     // performance
     if (v === lastChecked) return;
     countContainerContainer.dataset.count = lastChecked = v;
-    if(showIconOnly){
-      //it caches without the message if show icon only setting is enabled
-      count.dataset.str = cache[v] || v;
-    }
-    else {
+    if (showIconOnly) {
+      count.dataset.str = v;
+    } else {
       count.dataset.str = cache[v] || msg("clones", { cloneCount: v });
     }
 
