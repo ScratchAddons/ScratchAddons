@@ -150,7 +150,7 @@ export default async function ({ addon, global, console, msg }) {
         addButton.classList.add("studio-tile-dynamic-add");
         addButton.classList.add("studio-tile-dynamic-remove");
         img.src = addon.self.dir + "/tick.svg";
-        addButton.removeEventListener("click", clickListener);
+        userButton.removeEventListener("click", clickListener);
       };
       if (getMembers().includes(user.username)) {
         addButton.classList.remove("mod-mutating", "studio-tile-dynamic-remove");
