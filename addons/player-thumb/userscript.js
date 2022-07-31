@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console }) {
-  const el = await addon.tab.waitForElement("div.stage_green-flag-overlay-wrapper_2hUi_.box_box_2jjDp", {
+  const el = await addon.tab.waitForElement('div[class*="stage_green-flag-overlay-wrapper_"]', {
     markAsSeen: true,
   });
 
