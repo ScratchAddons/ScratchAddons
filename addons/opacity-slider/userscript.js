@@ -9,7 +9,7 @@ export default async function ({ addon, console, msg }) {
   let labelReadout;
   let saOpacityHandle;
   let saOpacitySlider;
-
+  console.log(addon);
   const getColor = () => {
     let fillOrStroke;
     const state = addon.tab.redux.state;
@@ -60,9 +60,13 @@ export default async function ({ addon, console, msg }) {
 
   const setSliderBg = (color) => {
     const hex = tinycolor(color).toHexString(); // remove alpha value
+    const darkmodeBackground = getComputedStyle(document.documentElement).getPropertyValue(
+      "--editorDarkMode-accent-paintEditorBackground"
+    );
+    const bgColor = darkmodeBackground === "" ? "#eaf0f8" : darkmodeBackground;
     let bg = `linear-gradient(to left, ${hex} 0%, rgba(0, 0, 0, 0) 100%),`;
-    bg += "linear-gradient(45deg, #eaf0f8 25%, transparent 25%, transparent 75%, #eaf0f8 75%),";
-    bg += "linear-gradient(45deg, #eaf0f8 25%, transparent 25%, transparent 75%, #eaf0f8 75%)";
+    bg += `linear-gradient(45deg, ${bgColor} 25%, transparent 25%, transparent 75%, ${bgColor} 75%),`;
+    bg += `linear-gradient(45deg, ${bgColor} 25%, transparent 25%, transparent 75%, ${bgColor} 75%)`;
     saOpacitySlider.style.background = bg;
     saOpacitySlider.style.backgroundSize = "100% 100%, 20px 20px, 20px 20px";
     saOpacitySlider.style.backgroundPosition = "0 0, 10px 10px";
