@@ -11,7 +11,6 @@ export default async function ({ addon, console, msg }) {
   let saOpacitySlider;
   let ignoreKeepingOpacity = false;
   let currentAlpha;
-  let modalOpening;
 
   const getColor = () => {
     let fillOrStroke;
@@ -87,7 +86,7 @@ export default async function ({ addon, console, msg }) {
   const handleMouseDown = (event) => {
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
-
+    ignoreKeepingOpacity = true;
     handleClickOffset = getEventXY(event).x - saOpacityHandle.getBoundingClientRect().left;
   };
 
@@ -175,6 +174,7 @@ export default async function ({ addon, console, msg }) {
     lastSlider.className = addon.tab.scratchClass("slider_container");
     setHandlePos(defaultAlpha);
     currentAlpha = defaultAlpha;
+    let modalOpening = true;
 
     prevEventHandler = ({ detail }) => {
       if (detail.action.type === "scratch-paint/modals/OPEN_MODAL") {
