@@ -445,6 +445,54 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
         if (styleIndex !== -1) addonsWithUserstyles.splice(styleIndex, 1);
 
         setCssVariables(globalState.addonSettings, addonsWithUserstyles);
+      } else if (request.updateUserstylesSettingsChange) {
+        const {
+          userstyles,
+          addonId,
+          injectAsStyleElt,
+          index,
+          dynamicEnable,
+          dynamicDisable,
+          addonSettings,
+          cssVariables,
+        } = request.updateUserstylesSettingsChange;
+        const addonIndex = addonsWithUserstyles.findIndex((addon) => addon.addonId === addonId);
+        removeAddonStyles(addonId);
+        if (addonIndex > -1 && userstyles.length === 0 && dynamicDisable) {
+          // This is actually dynamicDisable condition, but since this does not involve
+          // toggling addon state, this is not considered one by the code.
+          addonsWithUserstyles.splice(addonIndex, 1);
+          // This might race with newGlobalState, so we merge explicitly here
+          setCssVariables({ ...globalState.addonSettings, [addonId]: addonSettings }, addonsWithUserstyles);
+          console.log(`Dynamically disabling all userstyles of ${addonId} due to settings change`);
+          // Early return because we know addStyle will be no-op
+          return;
+          // Wait, but what about userscripts? Great question. No, we do not need to fire events
+          // or handle userscripts at all. This is because settings change does not cause
+          // userscripts to be enabled or disabled (only userstyles). Instead userscripts
+          // should always be executed but listen to settings change event. Thus this
+          // "dynamic disable" does not fire disable event, because userscripts aren't disabled.
+        }
+        if (addonIndex > -1 && (dynamicDisable || dynamicEnable)) {
+          // Userstyles enabled when there are already enabled ones, or
+          // userstyles partially disabled. do not call
+          // removeAddonStylesPartial as we remove and re-add instead.
+          const userstylesEntry = addonsWithUserstyles[addonIndex];
+          userstylesEntry.styles = userstyles;
+        }
+        if (addonIndex === -1 && userstyles.length > 0 && dynamicEnable) {
+          // This is actually dynamicEnable condition, but since this does not involve
+          // toggling addon state, this is not considered one by the code.
+          console.log(`Dynamically enabling userstyle addon ${addonId} due to settings change`);
+          addonsWithUserstyles.push({ styles: userstyles, cssVariables, addonId, injectAsStyleElt, index });
+          disabledDynamicAddons.delete(addonId);
+          setCssVariables({ ...globalState.addonSettings, [addonId]: addonSettings }, addonsWithUserstyles);
+          // Same goes here; enabling a setting does not run or re-enable an userscript by design.
+        }
+        // Removing the addon styles and readding them works since the background
+        // will send a different array for the new valid userstyles.
+        // Try looking for the "userscriptMatches" function.
+        addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
       }
     });
     await new Promise((resolve) => {
@@ -466,13 +514,6 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
       setCssVariables(request.newGlobalState.addonSettings, addonsWithUserstyles);
     } else if (request.fireEvent) {
       _page_.fireEvent(request.fireEvent);
-    } else if (request.updateUserstylesSettingsChange) {
-      const { userstyles, addonId, injectAsStyleElt, index } = request.updateUserstylesSettingsChange;
-      // Removing the addon styles and readding them works since the background
-      // will send a different array for the new valid userstyles.
-      // Try looking for the "userscriptMatches" function.
-      removeAddonStyles(addonId);
-      addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
     } else if (request === "getRunningAddons") {
       const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
       const userstyles = addonsWithUserstyles.map((obj) => obj.addonId);
@@ -555,7 +596,7 @@ const showBanner = () => {
     line-height: 1em;`,
   });
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=mTX1V9e6KK0",
+    href: "https://www.youtube.com/watch?v=ostWH0KN4bM",
     target: "_blank",
     rel: "noopener",
     referrerPolicy: "strict-origin-when-cross-origin",
@@ -593,7 +634,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_26", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_27", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -612,7 +653,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_26"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_27"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,

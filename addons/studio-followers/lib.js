@@ -71,7 +71,7 @@ export function createUser(follower, addon, msg, members) {
   });
   const userImage = Object.assign(document.createElement("img"), {
     className: "studio-project-image",
-    src: `https://cdn2.scratch.mit.edu/get_image/user/${follower.id}_90x90.png`,
+    src: `https://uploads.scratch.mit.edu/get_image/user/${follower.id}_90x90.png`,
   });
 
   btn.appendChild(userImage);

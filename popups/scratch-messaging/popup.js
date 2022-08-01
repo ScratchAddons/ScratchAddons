@@ -283,6 +283,7 @@ export default async ({ addon, msg, safeMsg }) => {
         yourProfileMsg: msg("your-profile"),
         loadingMsg: msg("loading"),
         loggedOutMsg: msg("logged-out"),
+        loggedOutLinkMsg: msg("logged-out-link"),
         serverErrorMsg: msg("server-error"),
         networkErrorMsg: msg("network-error"),
         unknownFatalErrorMsg: msg("unknown-fatal-error"),

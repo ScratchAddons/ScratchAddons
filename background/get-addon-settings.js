@@ -1,3 +1,5 @@
+import minifySettings from "../libraries/common/minify-settings.js";
+
 /**
  Since presets can change independently of others, we have to keep track of
  the versions separately. Current versions:
@@ -197,7 +199,12 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       }
     }
 
-    if (madeAnyChanges) chrome.storage.sync.set({ addonSettings, addonsEnabled });
+    const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
+    if (madeAnyChanges)
+      chrome.storage.sync.set({
+        addonSettings: minifySettings(addonSettings, prerelease ? null : scratchAddons.manifests),
+        addonsEnabled,
+      });
     scratchAddons.globalState.addonSettings = addonSettings;
     scratchAddons.localState.addonsEnabled = addonsEnabled;
     scratchAddons.localState.ready.addonSettings = true;
