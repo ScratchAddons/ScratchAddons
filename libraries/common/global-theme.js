@@ -3,8 +3,12 @@ export default function () {
   if (prerelease) {
     const blue = getComputedStyle(document.documentElement).getPropertyValue("--blue");
     document.documentElement.style.setProperty("--brand-orange", blue);
+    document.documentElement.style.setProperty("--brand-orange-option", "rgba(23, 94, 248, 0.7)");
     const favicon = document.getElementById("favicon");
     if (favicon) favicon.href = chrome.runtime.getURL("/images/icon-blue.png");
+  } else {
+    document.documentElement.style.setProperty("--content-icon-filter-hover", "none");
+    document.documentElement.style.setProperty("--content-icon-filter-bg", "#fff");
   }
   const lightThemeLink = document.createElement("link");
   lightThemeLink.setAttribute("rel", "stylesheet");

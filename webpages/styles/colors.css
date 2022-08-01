@@ -1,6 +1,7 @@
 :root {
   --brand-orange: #ff7b26;
   --brand-orange-opacity35: rgba(255, 123, 38, 0.35);
+  --brand-orange-option: rgba(255, 123, 38, 0.7);
   --brand-orange-min-font-weight: normal;
   --orange: #ff7b26;
   --yellow-opacity50: rgba(253, 221, 43, 0.5);
@@ -60,6 +61,8 @@
 
   --content-text: #fff;
   --content-icon-filter: brightness(0) invert(1);
+  --content-icon-filter-hover: brightness(1.2) invert(1);
+  --content-icon-filter-bg: #111;
   --description-text: #ddd;
   --description-icon-filter: brightness(0) invert(0.87);
   --label-text: #aaa;

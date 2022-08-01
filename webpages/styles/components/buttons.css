@@ -18,7 +18,7 @@
 
 .large-button:focus-visible {
   outline: none;
-  border-color: var(--orange);
+  border-color: var(--brand-orange);
   box-shadow: var(--input-focus-shadow);
 }
 

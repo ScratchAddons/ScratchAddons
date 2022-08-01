@@ -99,7 +99,7 @@ body {
   height: 18px;
 }
 .popup-name.sel img {
-  filter: brightness(0) invert(1);
+  filter: var(--content-icon-filter);
 }
 .popup-title {
   padding-inline-start: 5px;
@@ -114,8 +114,8 @@ body {
   border-radius: 2px;
 }
 .popout:hover > .popout-img {
-  background-color: var(--white-text);
-  filter: none;
+  filter: var(--content-icon-filter-hover);
+  background-color: var(--content-icon-filter-bg);
 }
 [dir="rtl"] .popout > .popout-img {
   transform: scaleX(-1);

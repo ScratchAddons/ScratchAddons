@@ -339,7 +339,7 @@ a.message-type-title-text {
 }
 .open-messages:hover .popout {
   opacity: 1;
-  filter: none;
+  filter: var(--content-icon-filter-hover);
 }
 
 .dom-element-renderer {

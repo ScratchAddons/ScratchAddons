@@ -14,6 +14,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  filter: var(--content-icon-filter-hover)
 }
 
 @keyframes dropDown {

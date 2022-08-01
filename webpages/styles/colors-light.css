@@ -37,6 +37,7 @@
 
   --content-text: #222;
   --content-icon-filter: brightness(0);
+  --content-icon-filter-hover: brightness(1.2) invert(1);
   --description-text: #444;
   --description-icon-filter: brightness(0) invert(0.27);
   --label-text: #555;
