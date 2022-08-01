@@ -11,6 +11,7 @@ export default async function ({ addon, console, msg }) {
   let saOpacitySlider;
   let ignoreKeepingOpacity = false;
   let currentAlpha;
+  let modalOpening;
 
   const getColor = () => {
     let fillOrStroke;
@@ -176,6 +177,12 @@ export default async function ({ addon, console, msg }) {
     currentAlpha = defaultAlpha;
 
     prevEventHandler = ({ detail }) => {
+      if (detail.action.type === "scratch-paint/modals/OPEN_MODAL") {
+        modalOpening = true;
+      }
+      if (detail.action.type === "scratch-paint/modals/CLOSE_MODAL") {
+        modalOpening = false;
+      }
       if (
         detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR" ||
         detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR_2" ||
@@ -189,9 +196,9 @@ export default async function ({ addon, console, msg }) {
           labelReadout.textContent = Math.round(tinycolor(color).toRgb().a * 100);
           setHandlePos(tinycolor(color).toRgb().a);
         }
-        // ignore when opacity slider is changeing
-        console.log(ignoreKeepingOpacity, currentAlpha);
-        if (!ignoreKeepingOpacity) changeOpacity(currentAlpha * 100);
+        // ignore when opacity slider is changeing or when popover closed
+        if (!ignoreKeepingOpacity && modalOpening) changeOpacity(currentAlpha * 100);
+        ignoreKeepingOpacity = false;
       }
     };
     addon.tab.redux.addEventListener("statechanged", prevEventHandler);
