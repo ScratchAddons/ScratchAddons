@@ -1,8 +1,8 @@
 :root {
   --brand-orange: #ff7b26;
-  --brand-orange-opacity35: rgba(255, 123, 38, 0.35);
   --brand-orange-min-font-weight: normal;
   --orange: #ff7b26;
+  --orange-opacity35: rgba(255, 123, 38, 0.35);
   --yellow-opacity50: rgba(253, 221, 43, 0.5);
   --green: #008000;
   --light-green-variant: #53b31c;

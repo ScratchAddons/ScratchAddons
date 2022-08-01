@@ -3,7 +3,6 @@ export default function () {
   if (prerelease) {
     const blue = getComputedStyle(document.documentElement).getPropertyValue("--blue");
     document.documentElement.style.setProperty("--brand-orange", blue);
-    document.documentElement.style.setProperty("--brand-orange-opacity35", blue + "59"); // Appends the alph hex digits to the blue color.
     const favicon = document.getElementById("favicon");
     if (favicon) favicon.href = chrome.runtime.getURL("/images/icon-blue.png");
   }
