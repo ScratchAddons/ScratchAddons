@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
   "name": "Delete button in editor",
-  "description": "Adds a delete button to the file menu that allows you to delete your project.",
+  "description": "Adds a delete button to the file menu that allows you to move your project to the trash folder.",
   "credits": [
     {
       "name": "Weredime (9gr)",
@@ -14,12 +14,25 @@
       "matches": ["projects"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
   "settings": [
     {
       "name": "Reset project before trashing",
       "type": "boolean",
       "default": false,
       "id": "resetProject"
+    }
+  ],
+  "info": [
+    {
+      "id": "reset",
+      "text": "If the setting \"Reset project before trashing\" is checked, the project will be reset before trashing it. You will not be able to undo this action.",
+      "type": "warning"
     }
   ],
   "tags": ["editor", "editorMenuBar"],

@@ -1,4 +1,4 @@
-export default async ({ addon, msg, console }) => {
+export default async (/** @type {import("../../addon-api/content-script/typedef.js").UserscriptUtilities} **/ { addon, msg, console }) => {
   // Fetch as text without parsing as JSON, because guess what,
   // the code will stringify anyway!
   const defaultProjectPromise = fetch(`${addon.self.dir}/default.json`).then((res) => res.text());
@@ -7,15 +7,29 @@ export default async ({ addon, msg, console }) => {
     redux,
     traps: { vm },
   } = addon.tab;
-  // Wait until user has logged in, and is the author of the project
-  await redux.waitForState((state) => state.preview?.projectInfo?.author?.id === state.session?.session?.user?.id);
+  let dropdownItem;
+
+  redux.initialize();
+  redux.addEventListener("statechanged", (e) => {
+    if (e.detail.action.type === "SET_INFO") {
+      // shared => unshared (editor-unshare-button)
+      if (e.detail.state.prev.preview.projectInfo.is_published && !e.detail.state.next.preview.projectInfo.is_published) {
+        dropdownItem?.classList.remove("is-shared");
+      } else if (!e.detail.state.prev.preview.projectInfo.is_published && e.detail.state.next.preview.projectInfo.is_published) {
+        // unshared => shared
+        dropdownItem?.classList.add("is-shared");
+      }
+    }
+  })
+
   while (true) {
+    await redux.waitForState((state) => state.preview?.projectInfo?.author?.id === state.session?.session?.user?.id && !state.preview?.projectInfo?.is_published);
     const fileMenu = await addon.tab.waitForElement("div[class^='menu-bar_file-group'] > :nth-child(3) ul", {
       markAsSeen: true,
-      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly && !state.preview.visibilityInfo.deleted,
+      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly && !state.preview.visibilityInfo.deleted && !state.preview.projectInfo.is_published,
     });
 
-    const dropdownItem = document.createElement("li");
+    dropdownItem = document.createElement("li");
     dropdownItem.className = addon.tab.scratchClass("menu_menu-item", "menu_hoverable", "menu_menu-section", {
       others: ["sa-editor-delete-button"],
     });
