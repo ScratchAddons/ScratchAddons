@@ -3,6 +3,7 @@ export default function () {
   if (prerelease) {
     const blue = getComputedStyle(document.documentElement).getPropertyValue("--blue");
     document.documentElement.style.setProperty("--brand-orange", blue);
+    document.documentElement.style.setProperty("--brand-orange-opacity35", "rgba(23, 94, 248, 0.35)");
     document.documentElement.style.setProperty("--brand-orange-option", "rgba(23, 94, 248, 0.7)");
     const favicon = document.getElementById("favicon");
     if (favicon) favicon.href = chrome.runtime.getURL("/images/icon-blue.png");
