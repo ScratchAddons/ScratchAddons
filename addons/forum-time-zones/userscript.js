@@ -34,7 +34,7 @@ export default async function ({ addon, global, console }) {
       }
     }
   };
-  const pageNumber = /page=(\d+)/.exec(location.search)?.[1];
+  const pageNumber = new URLSearchParams(location.search).get("page");
 
   addon.self.addEventListener("disabled", () => {
     for (const c of cache) {
