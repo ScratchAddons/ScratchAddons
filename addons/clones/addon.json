@@ -33,6 +33,11 @@
       "type": "boolean"
     }
   ],
+  "latestUpdate": {
+    "version": "1.28.0",
+    "newSettings": ["showicononly"],
+    "isMajor": false
+  },
   "tags": ["editor", "projectPlayer", "recommended"],
   "enabledByDefault": false
 }
