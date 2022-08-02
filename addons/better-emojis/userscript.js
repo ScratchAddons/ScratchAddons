@@ -23,28 +23,33 @@ export default async function ({ addon, global, console, msg }) {
   addon.self.addEventListener("disabled", () => {
     const emojis = document.querySelectorAll("img.easter-egg, img.emoji");
     for (const emoji of emojis) {
-      if (EMOJIS.includes(emoji.dataset.emoji)) {
+      if (EMOJIS.includes(emoji.dataset.saEmoji)) {
         // check if emoji is supported by this addon
         emoji.src =
           addon.tab.clientVersion === "scratch-www"
-            ? `https://scratch.mit.edu/images/emoji/${emoji.dataset.emoji}.png`
-            : `https://cdn.scratch.mit.edu/scratchr2/static/images/easter_eggs/${emoji.dataset.emoji}.png`;
+            ? `https://scratch.mit.edu/images/emoji/${emoji.dataset.saEmoji}.png`
+            : `https://cdn.scratch.mit.edu/scratchr2/static/images/easter_eggs/${emoji.dataset.saEmoji}.png`;
       }
     }
   });
   addon.self.addEventListener("reenabled", () => {
-    const emojis = document.querySelectorAll("img.easter-egg[data-emoji], img.emoji[data-emoji]");
+    const emojis = document.querySelectorAll("img.easter-egg[data-sa-emoji], img.emoji[data-sa-emoji]");
     for (const emoji of emojis) {
-      if (EMOJIS.includes(emoji.dataset.emoji)) {
+      if (EMOJIS.includes(emoji.dataset.saEmoji)) {
         // check if emoji is supported by this addon
-        emoji.src = addon.self.dir + "/images/" + emoji.dataset.emoji + ".svg";
+        emoji.src = addon.self.dir + "/images/" + emoji.dataset.saEmoji + ".svg";
       }
     }
   });
   while (true) {
     const emoji = await addon.tab.waitForElement(".emoji, .easter-egg", {
       markAsSeen: true,
-      reduxCondition: (state) => state?.comments.status.comments === "FETCHED",
+      reduxCondition: (state) => {
+        if (location.pathname.startsWith("/messages")) {
+          return state.messages?.status?.message === "FETCHED";
+        }
+        return state.comments?.status?.comments === "FETCHED";
+      },
     });
 
     const match = emoji.src.match(COMMENTS_REGEX);
@@ -53,7 +58,7 @@ export default async function ({ addon, global, console, msg }) {
       if (EMOJIS.includes(emojiId)) {
         // check if emoji is supported by this addon
         if (!addon.self.disabled) emoji.src = addon.self.dir + "/images/" + emojiId + ".svg";
-        emoji.dataset.emoji = emojiId;
+        emoji.dataset.saEmoji = emojiId;
       }
     }
   }
