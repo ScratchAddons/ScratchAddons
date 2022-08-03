@@ -47,7 +47,13 @@
           }
         },
         {
-          "name": "Cloud Multiplayer Platformer Fun",
+          "name": "Massive Multiplayer Platformer",
+          "values": {
+            "url": "https://scratch.mit.edu/projects/612229554/"
+          }
+        },
+        {
+          "name": "Cloud Platformer Multiplayer Fun",
           "values": {
             "url": "https://scratch.mit.edu/projects/378507713/"
           }
