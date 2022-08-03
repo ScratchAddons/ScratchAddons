@@ -13,7 +13,7 @@
     {
       "url": "userscript.js",
       "matches": ["projects"],
-      "runAtComplete": false
+      "runAtComplete": true
     }
   ],
   "userstyles": [

@@ -5,6 +5,7 @@ export default async function ({ addon, msg, global, console }) {
 
   addon.tab.redux.initialize();
   const vm = addon.tab.traps.vm;
+  const scratchBlocks = await addon.tab.traps.getBlockly();
 
   // Get the *real* parent of a block (the block it's in), as Scratch also
   // considers the previous block to be its parent.
@@ -75,27 +76,29 @@ export default async function ({ addon, msg, global, console }) {
 
   // Calculate and apply striping for a block and all blocks
   // below and in it.
-  function stripeScript(target, id) {
-    const ws = Blockly.getMainWorkspace();
+  function stripeScript(target, ws, id) {
 
     const block = target.blocks._blocks[id];
     if (!block) return;
     block.__zebra = null;
 
-    const el = ws.getBlockById(id).getSvgRoot();
+	const blockSvg = ws.getBlockById(id);
+	if (!blockSvg) return;
+	
+    const el = blockSvg.getSvgRoot();
     const isStriped = blockIsStriped(target, id);
     if (el) {
       stripeStyling(el, isStriped);
     }
 
     if (block.next) {
-      stripeScript(target, block.next);
+      stripeScript(target, ws, block.next);
     }
     const inputs = Object.values(target.blocks._blocks[id].inputs);
     for (const i in inputs) {
       const input = inputs[i];
       if (input.block) {
-        stripeScript(target, input.block);
+        stripeScript(target, ws, input.block);
       }
     }
   }
@@ -129,12 +132,12 @@ export default async function ({ addon, msg, global, console }) {
 			el.classList.remove("sa-zebra-stripe");
 		}); */
 
-    const ws = Blockly.getMainWorkspace();
+    const ws = scratchBlocks.getMainWorkspace();
 
     for (const blockId in allBlocks) {
       // Clear stored striping
       allBlocks[blockId].__zebra = null;
-
+	
       const el = ws.getBlockById(blockId).getSvgRoot();
       if (!el) continue;
 
@@ -150,18 +153,11 @@ export default async function ({ addon, msg, global, console }) {
       return;
     }
     if (!selected.dataset.id) return;
-    stripeScript(vm.editingTarget, selected.dataset.id);
+    stripeScript(vm.editingTarget, scratchBlocks.getMainWorkspace(), selected.dataset.id);
   }
 
   addon.tab.redux.addEventListener("statechanged", (e) => {
     if (addon.self.disabled) return;
-
-    if (
-      e.detail.action.type === "scratch-gui/project-changed/SET_PROJECT_CHANGED" ||
-      e.detail.action.type === "scratch-gui/block-drag/BLOCK_DRAG_UPDATE"
-    ) {
-      queueMicrotask(stripeSelected);
-    }
     if (e.detail.action.type === "scratch-gui/toolbox/UPDATE_TOOLBOX") {
       // Switching sprites
       queueMicrotask(stripeAll);
@@ -170,6 +166,16 @@ export default async function ({ addon, msg, global, console }) {
   addon.self.addEventListener("reenabled", stripeAll);
 
   if (addon.tab.editorMode === "editor") {
-    queueMicrotask(stripeAll);
+	  // The editor has already loaded, stripe immediately
+	  if (vm && vm.editingTarget) {
+		queueMicrotask(stripeAll);
+	  }
   }
+  
+  scratchBlocks.getMainWorkspace().addChangeListener((e) => {
+    if (addon.self.disabled) return;
+	  if (e.type === "move") {
+		stripeScript(vm.editingTarget, scratchBlocks.getMainWorkspace(), e.blockId);
+	  }
+  })
 }
