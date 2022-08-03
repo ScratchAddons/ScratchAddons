@@ -120,8 +120,8 @@
   "forum-live-preview",
   "sounds-duration",
   "default-costume-editor-color",
-  "hide-stage",
   "one-click-studio-invites",
+  "remove-search-bar-autocomplete",
   "find-bar",
   "jump-to-def",
 
@@ -143,6 +143,7 @@
   "// For editor:",
   "editor-dark-mode",
   "editor-colored-context-menus",
+  "hide-stage",
   "editor-stage-left",
   "editor-buttons-reverse-order",
   "columns",
