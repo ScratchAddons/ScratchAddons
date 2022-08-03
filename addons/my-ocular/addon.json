@@ -30,7 +30,7 @@
   "userscripts": [
     {
       "url": "discuss.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "matches": ["topics"],
       "if": {
         "settings": {
           "discuss": true
