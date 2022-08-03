@@ -1,5 +1,6 @@
 export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
+  const Blockly = await addon.tab.traps.getBlockly();
 
   let localVariables = [];
   let globalVariables = [];
@@ -148,6 +149,19 @@ export default async function ({ addon, global, console, msg }) {
         if (existingVariableWithNewName) {
           label.value = this.scratchVariable.name;
         } else {
+          if (
+            !Blockly.Variables.nameValidator_.call(
+              null,
+              this.scratchVariable.type ?? "string",
+              label.value,
+              workspace,
+              [],
+              this.scratchVariable.isCloud
+            )
+          ) {
+            label.value = this.scratchVariable.name;
+            return;
+          }
           workspace.renameVariableById(this.scratchVariable.id, label.value);
         }
         label.blur();
