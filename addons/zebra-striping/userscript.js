@@ -77,14 +77,13 @@ export default async function ({ addon, msg, global, console }) {
   // Calculate and apply striping for a block and all blocks
   // below and in it.
   function stripeScript(target, ws, id) {
-
     const block = target.blocks._blocks[id];
     if (!block) return;
     block.__zebra = null;
 
-	const blockSvg = ws.getBlockById(id);
-	if (!blockSvg) return;
-	
+    const blockSvg = ws.getBlockById(id);
+    if (!blockSvg) return;
+
     const el = blockSvg.getSvgRoot();
     const isStriped = blockIsStriped(target, id);
     if (el) {
@@ -137,7 +136,7 @@ export default async function ({ addon, msg, global, console }) {
     for (const blockId in allBlocks) {
       // Clear stored striping
       allBlocks[blockId].__zebra = null;
-	
+
       const el = ws.getBlockById(blockId).getSvgRoot();
       if (!el) continue;
 
@@ -166,16 +165,16 @@ export default async function ({ addon, msg, global, console }) {
   addon.self.addEventListener("reenabled", stripeAll);
 
   if (addon.tab.editorMode === "editor") {
-	  // The editor has already loaded, stripe immediately
-	  if (vm && vm.editingTarget) {
-		queueMicrotask(stripeAll);
-	  }
+    // The editor has already loaded, stripe immediately
+    if (vm && vm.editingTarget) {
+      queueMicrotask(stripeAll);
+    }
   }
-  
+
   scratchBlocks.getMainWorkspace().addChangeListener((e) => {
     if (addon.self.disabled) return;
-	  if (e.type === "move") {
-		stripeScript(vm.editingTarget, scratchBlocks.getMainWorkspace(), e.blockId);
-	  }
-  })
+    if (e.type === "move") {
+      stripeScript(vm.editingTarget, scratchBlocks.getMainWorkspace(), e.blockId);
+    }
+  });
 }
