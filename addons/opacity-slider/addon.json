@@ -1,6 +1,6 @@
 {
   "name": "Opacity slider",
-  "description": "Adds opacity slider to the costume editor color picker.",
+  "description": "Adds an opacity slider to the costume editor color picker.",
   "tags": ["editor", "costumeEditor", "beta", "featured"],
   "credits": [
     {
