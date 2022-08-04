@@ -40,8 +40,7 @@ export default async ({ addon, console, msg }) => {
       addon.tab.redux.removeEventListener("statechanged", onEyeDropperOpened);
       const previousTool = addon.tab.redux.state.scratchPaint.color.eyeDropper.previousTool;
       if (previousTool) previousTool.activate();
-      const colorWithAlpha = tinycolor(hex).setAlpha(window.opacitySliderAlpha).toRgbString();
-      addon.tab.redux.state.scratchPaint.color.eyeDropper.callback(colorWithAlpha);
+      addon.tab.redux.state.scratchPaint.color.eyeDropper.callback(hex);
       addon.tab.redux.dispatch({
         type: "scratch-paint/eye-dropper/DEACTIVATE_COLOR_PICKER",
       });
@@ -162,7 +161,9 @@ export default async ({ addon, console, msg }) => {
           addon.tab.redux.state.scratchPaint.fillMode.gradientType === "SOLID") &&
         el
       ) {
-        setColor(tinycolor({ h: origHue, s: cx / 150, v: 1 - cy / 150 }).toHex(), element);
+        let c = tinycolor({ h: origHue, s: cx / 150, v: 1 - cy / 150 }).toHex();
+        if (c.startsWith("#")) el.style.background = c;
+        else el.style.background = "#" + c;
       }
     }
 
