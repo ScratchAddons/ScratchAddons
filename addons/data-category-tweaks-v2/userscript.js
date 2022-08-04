@@ -196,10 +196,27 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     }
   });
 
+  const dynamicEnableOrDisable = () => {
+    // Enabling/disabling is similar to changing settings.
+    // If separate list category is enabled, a workspace update is needed.
+    // If any other setting is enabled, refresh the toolbox.
+    if (addon.settings.get("separateListCategory")) {
+      if (vm.editingTarget) {
+        vm.emitWorkspaceUpdate();
+      }
+    }
+    if (addon.settings.get("separateLocalVariables") || addon.settings.get("moveReportersDown")) {
+      const workspace = Blockly.getMainWorkspace();
+      if (workspace) {
+        workspace.refreshToolboxSelection_();
+      }
+    }
+  };
+
   addon.self.addEventListener("disabled", () => {
-    vm.emitWorkspaceUpdate();
+    dynamicEnableOrDisable();
   });
   addon.self.addEventListener("reenabled", () => {
-    vm.emitWorkspaceUpdate();
+    dynamicEnableOrDisable();
   });
 }
