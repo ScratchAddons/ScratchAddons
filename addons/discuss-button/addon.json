@@ -21,7 +21,12 @@
   "userstyles": [
     {
       "url": "compact-nav.css",
-      "matches": ["https://scratch.mit.edu/*"]
+      "matches": ["https://scratch.mit.edu/*"],
+      "if": {
+        "settings": {
+          "compact-nav": true
+        }
+      }
     }
   ],
   "settings": [
@@ -90,5 +95,6 @@
     "isMajor": false
   },
   "tags": ["community", "featured"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "updateUserstylesOnSettingsChange": true
 }
