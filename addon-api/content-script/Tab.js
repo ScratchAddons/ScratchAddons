@@ -53,11 +53,40 @@ export default class Tab extends Listenable {
    */
   loadScript(url) {
     return new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      script.src = url;
-      document.head.appendChild(script);
-      script.onload = resolve;
-      script.onerror = reject;
+      if (scratchAddons.loadedScripts[url]) {
+        const obj = scratchAddons.loadedScripts[url];
+        if (obj.loaded) {
+          // Script has been already loaded
+          resolve();
+        } else if (obj.error === null) {
+          // Script has been appended to document.head, but not loaded yet.
+          obj.script.addEventListener("load", (e) => {
+            obj.loaded = true;
+            resolve(e);
+          });
+        } else {
+          // Script has been appended to document.head, and failed to load.
+          reject(`Failed to load script from ${url} - ${obj.error}`);
+        }
+      } else {
+        // No other addon has loaded this script yet.
+        const script = document.createElement("script");
+        script.src = url;
+        const obj = (scratchAddons.loadedScripts[url] = {
+          script,
+          loaded: false,
+          error: null,
+        });
+        document.head.appendChild(script);
+        script.addEventListener("load", () => {
+          obj.loaded = true;
+          resolve();
+        });
+        script.addEventListener("error", ({ error }) => {
+          obj.error = error;
+          reject(`Failed to load script from ${url} - ${error}`);
+        });
+      }
     });
   }
   /**
