@@ -3,10 +3,11 @@ import BlockInstance from "./blockly/BlockInstance.js";
 import Utils from "./blockly/Utils.js";
 
 export default async function ({ addon, msg, console }) {
+  const Blockly = await addon.tab.traps.getBlockly();
+
   class FindBar {
-    constructor(root) {
+    constructor() {
       this.utils = new Utils(addon);
-      this.workspace = this.utils.getWorkspace();
 
       this.prevValue = "";
 
@@ -15,10 +16,10 @@ export default async function ({ addon, msg, console }) {
       this.findInput = null;
       this.dropdownOut = null;
       this.dropdown = new Dropdown(this.utils);
+    }
 
-      this.createDom(root);
-      this.bindEvents();
-      this.polluteBlockly();
+    get workspace() {
+      return Blockly.getMainWorkspace();
     }
 
     createDom(root) {
@@ -45,6 +46,8 @@ export default async function ({ addon, msg, console }) {
       this.findInput.autocomplete = "off";
 
       this.dropdownOut.appendChild(this.dropdown.createDom());
+
+      this.bindEvents();
     }
 
     bindEvents() {
@@ -54,78 +57,6 @@ export default async function ({ addon, msg, console }) {
       this.findInput.addEventListener("focusout", () => this.hideDropDown());
 
       document.addEventListener("keydown", (e) => this.eventKeyDown(e), true);
-    }
-
-    async polluteBlockly() {
-      const findBar = this;
-
-      const Blockly = await addon.tab.traps.getBlockly();
-
-      const _handleUp = Blockly.Gesture.prototype.handleUp;
-      Blockly.Gesture.prototype.handleUp = function (e) {
-        if (
-          !addon.self.disabled &&
-          findBar.dropdownOut &&
-          findBar.dropdownOut.classList.contains("visible") &&
-          !e.target.closest(".visible")
-        ) {
-          // If we click outside the dropdown, then instigate the hide code...
-          this.hideDropDown();
-        }
-        _handleUp.call(this, e);
-      };
-
-      const _doBlockClick_ = Blockly.Gesture.prototype.doBlockClick_;
-      Blockly.Gesture.prototype.doBlockClick_ = function () {
-        if (!addon.self.disabled && (this.mostRecentEvent_.button === 1 || this.mostRecentEvent_.shiftKey)) {
-          // Wheel button...
-          // Intercept clicks to allow jump to...?
-          let block = this.startBlock_;
-          for (; block; block = block.getSurroundParent()) {
-            if (block.type === "procedures_definition" || (!this.jumpToDef && block.type === "procedures_call")) {
-              let id = block.id ? block.id : block.getId ? block.getId() : null;
-
-              findBar.findInput.focus();
-              findBar.showDropDown(id);
-
-              return;
-            }
-
-            if (
-              block.type === "data_variable" ||
-              block.type === "data_changevariableby" ||
-              block.type === "data_setvariableto"
-            ) {
-              let id = block.getVars()[0];
-
-              findBar.findInput.focus();
-              findBar.showDropDown(id, block);
-
-              findBar.selVarID = id;
-
-              return;
-            }
-
-            if (
-              block.type === "event_whenbroadcastreceived" ||
-              block.type === "event_broadcastandwait" ||
-              block.type === "event_broadcast"
-            ) {
-              // todo: actually index the broadcasts...!
-              let id = block.id;
-
-              findBar.findInput.focus();
-              findBar.showDropDown(id, block);
-
-              findBar.selVarID = id;
-
-              return;
-            }
-          }
-        }
-
-        _doBlockClick_.call(this);
-      };
     }
 
     inputChange() {
@@ -447,12 +378,15 @@ export default async function ({ addon, msg, console }) {
   class Dropdown {
     constructor(utils) {
       this.utils = utils;
-      this.workspace = this.utils.getWorkspace();
 
       this.el = null;
       this.items = [];
       this.selected = null;
       this.carousel = new Carousel(this.utils);
+    }
+
+    get workspace() {
+      return Blockly.getMainWorkspace();
     }
 
     createDom() {
@@ -670,7 +604,9 @@ export default async function ({ addon, msg, console }) {
 
     empty() {
       for (const item of this.items) {
-        this.el.removeChild(item);
+        if (this.el.contains(item)) {
+          this.el.removeChild(item);
+        }
       }
       this.items = [];
       this.selected = null;
@@ -779,12 +715,80 @@ export default async function ({ addon, msg, console }) {
     }
   }
 
+  const findBar = new FindBar();
+
+  const _handleUp = Blockly.Gesture.prototype.handleUp;
+  Blockly.Gesture.prototype.handleUp = function (e) {
+    if (
+      !addon.self.disabled &&
+      findBar.dropdownOut &&
+      findBar.dropdownOut.classList.contains("visible") &&
+      !e.target.closest(".visible")
+    ) {
+      // If we click outside the dropdown, then instigate the hide code...
+      findBar.hideDropDown();
+    }
+    _handleUp.call(this, e);
+  };
+
+  const _doBlockClick_ = Blockly.Gesture.prototype.doBlockClick_;
+  Blockly.Gesture.prototype.doBlockClick_ = function () {
+    if (!addon.self.disabled && (this.mostRecentEvent_.button === 1 || this.mostRecentEvent_.shiftKey)) {
+      // Wheel button...
+      // Intercept clicks to allow jump to...?
+      let block = this.startBlock_;
+      for (; block; block = block.getSurroundParent()) {
+        if (block.type === "procedures_definition" || (!this.jumpToDef && block.type === "procedures_call")) {
+          let id = block.id ? block.id : block.getId ? block.getId() : null;
+
+          findBar.findInput.focus();
+          findBar.showDropDown(id);
+
+          return;
+        }
+
+        if (
+          block.type === "data_variable" ||
+          block.type === "data_changevariableby" ||
+          block.type === "data_setvariableto"
+        ) {
+          let id = block.getVars()[0];
+
+          findBar.findInput.focus();
+          findBar.showDropDown(id, block);
+
+          findBar.selVarID = id;
+
+          return;
+        }
+
+        if (
+          block.type === "event_whenbroadcastreceived" ||
+          block.type === "event_broadcastandwait" ||
+          block.type === "event_broadcast"
+        ) {
+          // todo: actually index the broadcasts...!
+          let id = block.id;
+
+          findBar.findInput.focus();
+          findBar.showDropDown(id, block);
+
+          findBar.selVarID = id;
+
+          return;
+        }
+      }
+    }
+
+    _doBlockClick_.call(this);
+  };
+
   while (true) {
     const root = await addon.tab.waitForElement("ul[class*=gui_tab-list_]", {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
-    new FindBar(root);
+    findBar.createDom(root);
   }
 }
