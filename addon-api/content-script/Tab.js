@@ -61,8 +61,12 @@ export default class Tab extends Listenable {
         } else if (obj.error === null) {
           // Script has been appended to document.head, but not loaded yet.
           obj.script.addEventListener("load", (e) => {
-            obj.loaded = true;
-            resolve(e);
+            // Script loaded successfully - resolve the promise, but don't edit the global object (since it's already been edited by the original listener).
+            resolve();
+          });
+          obj.script.addEventListener("error", ({ error }) => {
+            // Script failed to load - reject the promise, but don't edit the global object (since it's already been edited by the original listener).
+            reject(`Failed to load script from ${url} - ${error}`);
           });
         } else {
           // Script has been appended to document.head, and failed to load.
