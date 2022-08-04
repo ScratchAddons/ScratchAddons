@@ -1,6 +1,5 @@
 export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
-  const Blockly = await addon.tab.traps.getBlockly();
 
   let localVariables = [];
   let globalVariables = [];
