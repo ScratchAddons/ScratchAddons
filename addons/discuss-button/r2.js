@@ -1,19 +1,16 @@
 export default async function ({ addon, console }) {
   if (!addon.settings.get("compact-nav")) return;
   if (addon.tab.clientVersion == "scratch-www") return;
-  const user = addon.auth;
-  if (await user.fetchIsLoggedIn()) {
-    const username = await user.fetchUsername();
-    const accountnav = document.querySelector(".logged-in-user");
-    const dropdown = accountnav.childNodes[1].firstChild;
-    const profileName = document.createElement("li");
-    const profileNameChild = document.createElement("a");
-    profileNameChild.setAttribute("href", "#");
-    profileNameChild.innerText = username;
-    dropdown.firstChild.classList.add("divider");
-    dropdown.firstChild.classList.add("logout"); // just for color or divider used for signout button
-    profileName.appendChild(profileNameChild);
-    dropdown.insertBefore(profileName, dropdown.firstChild);
-    accountnav.firstChild.removeChild(accountnav.firstChild.childNodes[1]);
+  if (await addon.auth.fetchIsLoggedIn()) {
+    const username = await addon.auth.fetchUsername();
+    const container = document.querySelector(".dropdown");
+    const dropdown = container.querySelector(".dropdown-menu .user-nav");
+    const profileSpans = dropdown.childNodes[0].childNodes[0];
+    const span = profileSpans.appendChild(document.createElement("span"));
+    span.className = "sa-profile-name";
+    span.textContent = username;
+
+    // Remove username next to icon.
+    container.firstChild.removeChild(container.firstChild.childNodes[1]);
   }
 }

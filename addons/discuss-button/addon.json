@@ -21,7 +21,7 @@
   "userstyles": [
     {
       "url": "compact-nav.css",
-      "matches": ["scratchWWWNoProject", "projects"]
+      "matches": ["https://scratch.mit.edu/*"]
     }
   ],
   "settings": [
