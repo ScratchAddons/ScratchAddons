@@ -123,7 +123,7 @@ export default async function ({ addon, console, msg }) {
     saOpacityHandle.style.left = pixelMin + (pixelMax - pixelMin) * (opacityValue / 100) - halfHandleWidth + "px";
 
     const color = tinycolor(getColor()).toRgb();
-    window.opacitySliderAlpha = opacityValue / 100;
+    scratchAddons.opacitySliderAlpha = opacityValue / 100;
     setColor(`rgba(${color.r}, ${color.g}, ${color.b}, ${opacityValue / 100})`);
   };
 
@@ -172,7 +172,7 @@ export default async function ({ addon, console, msg }) {
     const lastSlider = document.querySelector('[class*="slider_last"]');
     lastSlider.className = addon.tab.scratchClass("slider_container");
     setHandlePos(defaultAlpha);
-    window.opacitySliderAlpha = defaultAlpha;
+    scratchAddons.opacitySliderAlpha = defaultAlpha;
     let modalOpening = true;
 
     prevEventHandler = ({ detail }) => {
@@ -196,7 +196,7 @@ export default async function ({ addon, console, msg }) {
           setHandlePos(tinycolor(color).toRgb().a);
         }
         // ignore when opacity slider is changeing or when popover closed
-        if (!ignoreKeepingOpacity && modalOpening) changeOpacity(window.opacitySliderAlpha * 100);
+        if (!ignoreKeepingOpacity && modalOpening) changeOpacity(scratchAddons.opacitySliderAlpha * 100);
         ignoreKeepingOpacity = false;
       }
     };
