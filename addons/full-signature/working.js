@@ -3,6 +3,7 @@ export default async function ({ addon, global, console, msg }) {
   if (activityStream.length) {
     let container = document.querySelector(".activity-stream").appendChild(document.createElement("div"));
     container.classList.add("load-more-wibd-container");
+    container.style.display = "none"; // overridden by userstyle if the setting is enabled
     let loadMore = container.appendChild(document.createElement("button"));
     loadMore.classList.add("load-more-wibd");
     loadMore.innerText = msg("load-more");
@@ -36,6 +37,5 @@ export default async function ({ addon, global, console, msg }) {
       },
       { once: true }
     );
-    addon.tab.displayNoneWhileDisabled(loadMore);
   }
 }
