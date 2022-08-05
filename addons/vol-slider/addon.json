@@ -19,6 +19,16 @@
       "matches": ["projects", "projectEmbeds"]
     }
   ],
+  "settings": [
+    {
+      "name": "Default volume",
+      "id": "defVol",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 100
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.28.0",
