@@ -717,20 +717,6 @@ export default async function ({ addon, msg, console }) {
 
   const findBar = new FindBar();
 
-  const _handleUp = Blockly.Gesture.prototype.handleUp;
-  Blockly.Gesture.prototype.handleUp = function (e) {
-    if (
-      !addon.self.disabled &&
-      findBar.dropdownOut &&
-      findBar.dropdownOut.classList.contains("visible") &&
-      !e.target.closest(".visible")
-    ) {
-      // If we click outside the dropdown, then instigate the hide code...
-      findBar.hideDropDown();
-    }
-    _handleUp.call(this, e);
-  };
-
   const _doBlockClick_ = Blockly.Gesture.prototype.doBlockClick_;
   Blockly.Gesture.prototype.doBlockClick_ = function () {
     if (!addon.self.disabled && (this.mostRecentEvent_.button === 1 || this.mostRecentEvent_.shiftKey)) {
