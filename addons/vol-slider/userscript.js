@@ -44,7 +44,7 @@ export default async function ({ addon, global, console }) {
     container.appendChild(icon);
     container.appendChild(slider);
     setVol(defVol);
-    slider.addEventListener("change", function (e) {
+    slider.addEventListener("input", function (e) {
       setVol(this.value);
     });
   }
