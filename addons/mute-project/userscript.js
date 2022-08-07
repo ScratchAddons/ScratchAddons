@@ -30,7 +30,9 @@ export default async function ({ addon, global, console }) {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
-    addon.tab.appendToSharedSpace({ space: "afterStopButton", element: icon, order: 0 });
+    if (!addon.self.getEnabledAddons("vol-sldier")) {
+      addon.tab.appendToSharedSpace({ space: "afterStopButton", element: icon, order: 0 });
+    }
     button.addEventListener("click", toggleMute);
     button.addEventListener("contextmenu", toggleMute);
   }
