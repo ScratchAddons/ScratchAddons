@@ -1,6 +1,25 @@
 export default async function ({ addon, console }) {
   const CDN2_REGEX = /(.*\/get_image\/.*?\/[0-9]+?_)([0-9]+?)x([0-9]+?)(\.[a-z]+)/;
   const UPLOADS_REGEX = /^https?:\/\/uploads\.scratch\.mit\.edu\//;
+  const thumbnails = [];
+  addon.self.addEventListener("disabled", () => {
+    for (const { image, src, lazySrc } of thumbnails) {
+      if (lazySrc) {
+        image.dataset.original = lazySrc;
+      }
+      image.src = src;
+    }
+  });
+  addon.self.addEventListener("reenabled", () => {
+    for (const { image, src, lazySrc, newSrc } of thumbnails) {
+      if (lazySrc) {
+        image.dataset.original = newSrc;
+      }
+      if (src) {
+        image.src = newSrc;
+      }
+    }
+  });
   main: while (true) {
     const image = await addon.tab.waitForElement("img", {
       markAsSeen: true,
@@ -48,13 +67,7 @@ export default async function ({ addon, console }) {
       newSrc = cdn2[1].replace("cdn2", "uploads") + width + "x" + height + cdn2[4];
     }
 
-    if (lazy) {
-      image.dataset.original = newSrc;
-    }
-
-    if (image.src) {
-      image.src = newSrc;
-    }
+    reloadImageSafe(image, newSrc);
   }
 
   function resizeToScreenRes(width, height, image) {
@@ -121,5 +134,19 @@ export default async function ({ addon, console }) {
     height = Math.round(height);
 
     return [width, height];
+  }
+  function reloadImageSafe(image, newSrc) {
+    thumbnails.push({
+      image,
+      src: image.src,
+      lazySrc: image.dataset.original,
+      newSrc,
+    });
+    if (image.classList.contains("lazy")) {
+      image.dataset.original = newSrc;
+    }
+    if (image.src) {
+      image.src = newSrc;
+    }
   }
 }
