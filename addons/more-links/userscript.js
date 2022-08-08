@@ -1,7 +1,22 @@
-import { linkifyTextNode, linkifyTag } from "../../libraries/common/cs/fast-linkify.js";
+import { linkifyTextNode as linkifyNode, linkifyTag as _linkifyTag } from "../../libraries/common/cs/fast-linkify.js";
 
 export default async function ({ addon, console }) {
   const pageType = document.location.pathname.substring(1).split("/")[0];
+  const linkified = [];
+  addon.self.addEventListener("disabled", () => {
+    for (const { element, original } of linkified) {
+      element.innerHTML = original;
+    }
+  });
+  addon.self.addEventListener("reenabled", () => {
+    for (const { element, constructor, type } of linkified) {
+      if (type === "tag") {
+        _linkifyTag(element, constructor);
+      } else {
+        linkifyNode(element);
+      }
+    }
+  });
 
   switch (pageType) {
     case "users":
@@ -60,4 +75,22 @@ export default async function ({ addon, console }) {
       }
     }
   })();
+
+  function linkifyTextNode(element) {
+    linkified.push({
+      element,
+      original: element.innerHTML,
+      type: "node",
+    });
+    return linkifyNode(element);
+  }
+  function linkifyTag(element, constructor) {
+    linkified.push({
+      element,
+      original: element.innerHTML,
+      type: "tag",
+      constructor,
+    });
+    return _linkifyTag(element, constructor);
+  }
 }
