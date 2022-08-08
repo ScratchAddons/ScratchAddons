@@ -1,7 +1,7 @@
 import { linkifyTextNode, linkifyTag } from "../../libraries/common/cs/fast-linkify.js";
 
 export default async function ({ addon, console }) {
-  const pageType = document.location.pathname.substr(1).split("/")[0];
+  const pageType = document.location.pathname.substring(1).split("/")[0];
 
   switch (pageType) {
     case "users":
