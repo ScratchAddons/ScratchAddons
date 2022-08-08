@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console }) {
-  let originalNavbar;
+  let originalNavbar = [];
   while (true) {
     const searchItem = await addon.tab.waitForElement(".search", {
       markAsSeen: true,
@@ -31,8 +31,17 @@ export default async function ({ addon, global, console }) {
 
       return li;
     }
-    function removeAllItems() {
+    async function removeAllItems() {
       if (scratchr2List) {
+        // We are on scratchr2!
+        if (originalNavbar.length < 4) {
+          originalNavbar.push(
+            ...Array.prototype.map.call(scratchr2List.children, (item) => ({
+              name: item.innerText,
+              url: item.firstChild.href,
+            }))
+          );
+        }
         while (scratchr2List.firstChild) {
           scratchr2List.removeChild(scratchr2List.lastChild);
         }
@@ -42,16 +51,21 @@ export default async function ({ addon, global, console }) {
         searchItem.previousSibling.remove();
       }
     }
-    function init() {
-      removeAllItems();
-      let items = addon.self.disabled
-        ? originalNavbar ??
-          (originalNavbar = [
-            { name: addon.tab.scratchMessage("general.create"), url: "/projects/editor/", extraClass: "create" },
-            { name: addon.tab.scratchMessage("general.explore"), url: "/explore/projects/all", extraClass: "explore" },
-            { name: addon.tab.scratchMessage("general.ideas"), url: "/ideas", extraClass: "ideas" },
-            { name: addon.tab.scratchMessage("general.about"), url: "/about", extraClass: "about" },
-          ])
+    async function init() {
+      await removeAllItems();
+      const items = addon.self.disabled
+        ? originalNavbar.length === 0
+          ? (originalNavbar = [
+              { name: addon.tab.scratchMessage("general.create"), url: "/projects/editor/", extraClass: "create" },
+              {
+                name: addon.tab.scratchMessage("general.explore"),
+                url: "/explore/projects/all",
+                extraClass: "explore",
+              },
+              { name: addon.tab.scratchMessage("general.ideas"), url: "/ideas", extraClass: "ideas" },
+              { name: addon.tab.scratchMessage("general.about"), url: "/about", extraClass: "about" },
+            ])
+          : originalNavbar
         : addon.settings.get("items");
       items.forEach((item, i) => {
         if (scratchr2List) {
