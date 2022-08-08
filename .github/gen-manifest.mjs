@@ -1,3 +1,6 @@
+const PERMISSIONS_IGNORED_IN_CHROME = ["clipboardWrite"];
+const PERMISSIONS_IGNORED_IN_FIREFOX = ["declarativeNetRequestWithHostAccess"];
+
 /**
  * Generates a manifest for specific browsers.
  * Called by packer-script.
@@ -17,12 +20,14 @@ export default (env, manifest) => {
       delete manifest.browser_specific_settings;
       // manifest.incognito = "split";
       manifest.optional_permissions = manifest.optional_permissions.filter(
-        (permission) => permission !== "clipboardWrite"
+        (permission) => !PERMISSIONS_IGNORED_IN_CHROME.includes(permission)
       );
       break;
     }
     case "firefox": {
-      // Currently none
+      manifest.optional_permissions = manifest.optional_permissions.filter(
+        (permission) => !PERMISSIONS_IGNORED_IN_FIREFOX.includes(permission)
+      );
       break;
     }
   }
