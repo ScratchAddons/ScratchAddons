@@ -6,22 +6,6 @@ export default async function ({ addon, msg, global, console }) {
   addon.tab.redux.initialize();
   const scratchBlocks = await addon.tab.traps.getBlockly();
 
-  // Get the *real* parent of a block (the block it's in), as Scratch also
-  // considers the previous block to be its parent.
-  function realParentOfBlock(block) {
-    if (!block) return null;
-	
-	const parentBlock = block.getParent();
-    if (!parentBlock) return null;
-
-    if (parentBlock.nextConnection?.targetConnection?.sourceBlock_ === block) {
-      // This may be a stack block under a stack block in a C
-      // block - look further!
-      return realParentOfBlock(parentBlock);
-    }
-    return parentBlock;
-  }
-
   // Check if a block is to be striped, and cache the result
   // for better performance.
   function blockIsStriped(block) {
@@ -32,7 +16,7 @@ export default async function ({ addon, msg, global, console }) {
       return block.__zebra;
     }
 
-    const parentBlock = realParentOfBlock(block);
+    const parentBlock = block.getSurroundParent();
     if (!parentBlock) {
       // Blocks not in another block will always be normal
       block.__zebra = false;
@@ -50,7 +34,7 @@ export default async function ({ addon, msg, global, console }) {
     if (parentBlock.__zebra !== null && parentBlock.__zebra !== undefined) {
       // The parent's striping was already calculated;
       // just inherit that and invert if neccessary
-      if (block.isShadow_) {
+      if (block.isShadow()) {
 		block.__zebra = parentBlock.__zebra;
 	  } else {
 		block.__zebra = !parentBlock.__zebra;
@@ -60,7 +44,7 @@ export default async function ({ addon, msg, global, console }) {
 
     // The parent's striping hasn't been calculated yet;
     // calculate that then invert the result if necessary
-    if (block.isShadow_) {
+    if (block.isShadow()) {
 		block.__zebra = blockIsStriped(parentBlock);
 	} else {
 		block.__zebra = !blockIsStriped(parentBlock);
@@ -80,7 +64,7 @@ export default async function ({ addon, msg, global, console }) {
       stripeStyling(el, isStriped);
     }
 	
-    for (const child of block.childBlocks_) {
+    for (const child of block.getChildren()) {
       stripeScript(child);
     }
   }
