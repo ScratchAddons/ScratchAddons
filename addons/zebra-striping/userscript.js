@@ -142,7 +142,7 @@ export default async function ({ addon, msg, global, console }) {
 	  // The editor has already loaded, stripe immediately
 	  queueMicrotask(stripeAll);
   }
-  
+
   scratchBlocks.getMainWorkspace().addChangeListener((e) => {
     if (addon.self.disabled) return;
 	  if (e.type === "move") {
