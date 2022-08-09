@@ -220,7 +220,6 @@ export default async ({ addon, console, msg }) => {
           },
         });
         if (!isOkay(r)) return;
-        alert(msg("removed", { username: u }));
 
         let index = redux.state.curators.items.findIndex((v) => v.username.toLowerCase() === u.toLowerCase());
         if (index === -1) {
@@ -235,6 +234,7 @@ export default async ({ addon, console, msg }) => {
             type: "curators_REMOVE",
             index,
           });
+        alert(msg("removed", { username: u }));
       });
 
       const studioInfo = document.querySelector(".studio-info");
