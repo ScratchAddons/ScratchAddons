@@ -5,7 +5,7 @@ export default async function ({ addon, msg, global, console }) {
 
   addon.tab.redux.initialize();
   const scratchBlocks = await addon.tab.traps.getBlockly();
-	
+
   // Check if a block is to be striped, and cache the result
   // for better performance.
   function blockIsStriped(block) {
@@ -35,20 +35,20 @@ export default async function ({ addon, msg, global, console }) {
       // The parent's striping was already calculated;
       // just inherit that and invert if neccessary
       if (block.isShadow()) {
-		block.__zebra = parentBlock.__zebra;
-	  } else {
-		block.__zebra = !parentBlock.__zebra;
-	  }
+        block.__zebra = parentBlock.__zebra;
+      } else {
+        block.__zebra = !parentBlock.__zebra;
+      }
       return block.__zebra;
     }
 
     // The parent's striping hasn't been calculated yet;
     // calculate that then invert the result if necessary
     if (block.isShadow()) {
-		block.__zebra = blockIsStriped(parentBlock);
-	} else {
-		block.__zebra = !blockIsStriped(parentBlock);
-	}
+      block.__zebra = blockIsStriped(parentBlock);
+    } else {
+      block.__zebra = !blockIsStriped(parentBlock);
+    }
     return block.__zebra;
   }
 
@@ -63,7 +63,7 @@ export default async function ({ addon, msg, global, console }) {
     if (el) {
       stripeStyling(el, isStriped);
     }
-	
+
     for (const child of block.getChildren()) {
       stripeScript(child);
     }
