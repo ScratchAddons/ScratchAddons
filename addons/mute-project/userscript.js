@@ -1,6 +1,7 @@
+import {setup, isMuted, setVol} from "../vol-slider/module.js";
+
 export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.vm;
-  let muted = false;
   let icon = document.createElement("img");
   icon.src = "/static/assets/e21225ab4b675bc61eed30cfb510c288.svg";
   icon.loading = "lazy";
@@ -10,19 +11,17 @@ export default async function ({ addon, global, console }) {
     if (!addon.self.disabled && (e.ctrlKey || e.metaKey)) {
       e.cancelBubble = true;
       e.preventDefault();
-      muted = !muted;
-      if (muted) {
-        vm.runtime.audioEngine.inputNode.gain.value = 0;
-        icon.style.display = "block";
-      } else {
-        vm.runtime.audioEngine.inputNode.gain.value = 1;
+      if (isMuted()) {
+        setVol(1);
         icon.style.display = "none";
+      } else {
+        setVol(0);
+        icon.style.display = "block";
       }
     }
   };
   addon.self.addEventListener("disabled", () => {
-    muted = false;
-    vm.runtime.audioEngine.inputNode.gain.value = 1;
+    setVol(1);
     icon.style.display = "none";
   });
 
@@ -32,6 +31,7 @@ export default async function ({ addon, global, console }) {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
     addon.tab.appendToSharedSpace({ space: "afterStopButton", element: icon, order: 0 });
+    setup(vm);
     button.addEventListener("click", toggleMute);
     button.addEventListener("contextmenu", toggleMute);
   }
