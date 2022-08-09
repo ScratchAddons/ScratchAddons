@@ -124,9 +124,39 @@ export default async ({ addon, console, msg }) => {
             result = JSON.parse(result);
           } catch (e) {}
           if (!isOkay(r, result)) return;
+
+          const curatorList = redux.state.curators.items;
+          const index = curatorList.findIndex((v) => v.username.toLowerCase() === u.toLowerCase());
+          let curatorItem = curatorList[index];
+          if (curatorItem) {
+            redux.dispatch({
+              type: "curators_REMOVE",
+              index,
+            });
+          } else {
+            // We don't have the user in the list, so add them
+            // Also: scratchr2 even returns success if the user is not a curator, so check that
+            const res = await fetch(
+              `https://api.scratch.mit.edu/studios/${studioId}/managers?limit=${MAX_MANAGERS}&cache=${Date.now()}`
+            );
+            const data = await res.json();
+            const user = data.find((v) => v.username.toLowerCase() === u.toLowerCase());
+            if (!user) return alert(msg("not-curator"));
+            curatorItem = user;
+          }
+          redux.dispatch({
+            type: "managers_CREATE",
+            item: curatorItem,
+            atEnd: true,
+          });
+
+          redux.dispatch({
+            type: "SET_INFO",
+            info: {
+              managers: redux.state.studio.managers + 1,
+            },
+          });
           alert(msg("promoted", { username: u }));
-          // we don't bother updating redux ourselves
-          location.reload();
         },
         () => {
           if (redux.state.studio.managers < MAX_MANAGERS) return null;
@@ -145,8 +175,20 @@ export default async ({ addon, console, msg }) => {
         });
         if (!isOkay(r)) return;
         alert(msg("removed", { username: u }));
-        // we don't bother updating redux ourselves
-        location.reload();
+
+        let index = redux.state.curators.items.findIndex((v) => v.username.toLowerCase() === u.toLowerCase());
+        if (index === -1) {
+          index = redux.state.managers.items.findIndex((v) => v.username.toLowerCase() === u.toLowerCase());
+          index !== -1 &&
+            redux.dispatch({
+              type: "managers_REMOVE",
+              index,
+            });
+        } else
+          redux.dispatch({
+            type: "curators_REMOVE",
+            index,
+          });
       });
 
       addon.tab.appendToSharedSpace({ space: "studioCuratorsTab", element: pSec, order: 1 });
@@ -178,8 +220,21 @@ export default async ({ addon, console, msg }) => {
           },
         });
         if (!isOkay(r)) return;
-        // we don't bother updating redux ourselves
-        location.reload();
+        alert(msg("removed", { username: u }));
+
+        let index = redux.state.curators.items.findIndex((v) => v.username.toLowerCase() === u.toLowerCase());
+        if (index === -1) {
+          index = redux.state.managers.items.findIndex((v) => v.username.toLowerCase() === u.toLowerCase());
+          index !== -1 &&
+            redux.dispatch({
+              type: "managers_REMOVE",
+              index,
+            });
+        } else
+          redux.dispatch({
+            type: "curators_REMOVE",
+            index,
+          });
       });
 
       const studioInfo = document.querySelector(".studio-info");
