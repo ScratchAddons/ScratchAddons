@@ -1,137 +1,36 @@
 export default async function ({ addon, msg, global, console }) {
-  if (addon.tab.editorMode === "embed") {
-    return;
-  }
-
-  addon.tab.redux.initialize();
+  const vm = addon.tab.traps.vm;
   const scratchBlocks = await addon.tab.traps.getBlockly();
-
-  // Check if a block is to be striped, and cache the result
-  // for better performance.
-  function blockIsStriped(block) {
-    if (!block) return null;
-
-    if (block.__zebra !== null && block.__zebra !== undefined) {
-      // Striping was already calculated; just return it
-      return block.__zebra;
-    }
-
-    const parentBlock = block.getSurroundParent();
-    if (!parentBlock) {
-      // Blocks not in another block will always be normal
-      block.__zebra = false;
-      return block.__zebra;
-    }
-
-    if (block.getColour() !== parentBlock.getColour()) {
-      // Blocks with different colors will always be normal
-      // (Not categories. If, for example, a music reporter
-      // is put into a pen block, it will be striped)
-      block.__zebra = false;
-      return block.__zebra;
-    }
-
-    if (parentBlock.__zebra !== null && parentBlock.__zebra !== undefined) {
-      // The parent's striping was already calculated;
-      // just inherit that and invert if neccessary
-      if (block.isShadow()) {
-        block.__zebra = parentBlock.__zebra;
-      } else {
-        block.__zebra = !parentBlock.__zebra;
+  const _render = scratchBlocks.BlockSvg.prototype.render;
+  scratchBlocks.BlockSvg.prototype.render = function (opt_bubble) {
+    console.log(this.isShadow_);
+    if (!this.isInFlyout && !this.isShadow_) {
+      let block = this;
+      while (block.getSurroundParent() && block.getSurroundParent().type === block.type) {
+        block = block.getSurroundParent();
       }
-      return block.__zebra;
-    }
 
-    // The parent's striping hasn't been calculated yet;
-    // calculate that then invert the result if necessary
-    if (block.isShadow()) {
-      block.__zebra = blockIsStriped(parentBlock);
-    } else {
-      block.__zebra = !blockIsStriped(parentBlock);
-    }
-    return block.__zebra;
-  }
-
-  // Calculate and apply striping for a block and all blocks
-  // below and in it.
-  function stripeScript(block) {
-    if (!block) return;
-    block.__zebra = null;
-
-    const el = block.getSvgRoot();
-    const isStriped = blockIsStriped(block);
-    if (el) {
-      stripeStyling(el, isStriped);
-    }
-
-    for (const child of block.getChildren()) {
-      stripeScript(child);
-    }
-  }
-
-  // Add or remove the striping class from a block element.
-  function stripeStyling(el, isStriped) {
-    // We iterate through all children of the block element instead of
-    // simply adding the class to the path so that empty boolean inputs
-    // are lighter too
-    for (const child of el.children) {
-      if (child.matches(".blocklyPath, .blocklyEditableText[data-argument-type='dropdown']")) {
-        if (isStriped) {
-          child.classList.add("sa-zebra-stripe");
-        } else {
-          child.classList.remove("sa-zebra-stripe");
+      function zebra(block, z) {
+        if (block.zebra && !z) {
+          block.svgPath_.classList.remove("sa-zebra-stripe");
+        }
+        block.zebra = z;
+        if (z) {
+          block.svgPath_.classList.add("sa-zebra-stripe");
+        }
+        for (const b of block.childBlocks_) {
+          const parent = b.getSurroundParent();
+          if (parent && !b.isShadow_ && parent.type === b.type) {
+            zebra(b, !parent.zebra);
+          }
         }
       }
+      zebra(block, false);
     }
+    _render.call(this, opt_bubble);
+  };
+
+  if (vm.editingTarget) {
+    vm.emitWorkspaceUpdate();
   }
-
-  // Calculate and apply striping for all blocks in the code area.
-  function stripeAll() {
-    const ws = scratchBlocks.getMainWorkspace();
-    if (!ws) return;
-
-    for (const block of ws.getAllBlocks()) {
-      // Clear stored striping
-      block.__zebra = null;
-
-      const el = block.getSvgRoot();
-      if (!el) continue;
-
-      const isStriped = blockIsStriped(block);
-      stripeStyling(el, isStriped);
-    }
-  }
-
-  function stripeSelected() {
-    const selected = document.querySelector(".blocklySelected");
-    const ws = scratchBlocks.getMainWorkspace();
-    if (!(ws && selected)) {
-      stripeAll();
-      return;
-    }
-    if (!selected.dataset.id) return;
-    stripeScript(ws.getBlockById(selected.dataset.id));
-  }
-
-  addon.tab.redux.addEventListener("statechanged", (e) => {
-    if (addon.self.disabled) return;
-    if (e.detail.action.type === "scratch-gui/toolbox/UPDATE_TOOLBOX") {
-      // Switching sprites
-      queueMicrotask(stripeAll);
-    }
-  });
-  addon.self.addEventListener("reenabled", stripeAll);
-
-  if (addon.tab.editorMode === "editor") {
-    // The editor has already loaded, stripe immediately
-    queueMicrotask(stripeAll);
-  }
-
-  scratchBlocks.getMainWorkspace().addChangeListener((e) => {
-    if (addon.self.disabled) return;
-    if (e.type === "move") {
-      const ws = scratchBlocks.getMainWorkspace();
-      stripeScript(ws.getBlockById(e.blockId));
-    }
-  });
 }
