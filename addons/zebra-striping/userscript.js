@@ -39,9 +39,7 @@ export default async function ({ addon, msg, global, console }) {
       return block.__zebra;
     }
 
-    const extension = block.type.split("_")[0];
-    const parentExtension = parentBlock.type.split("_")[0];
-    if (extension !== parentExtension) {
+    if (block.getColour() !== parentBlock.getColour()) {
       // Blocks from different categories will always be normal
       block.__zebra = false;
       return block.__zebra;
