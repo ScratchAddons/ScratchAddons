@@ -10,8 +10,8 @@ export default async function ({ addon, msg, global, console }) {
   // considers the previous block to be its parent.
   function realParentOfBlock(block) {
     if (!block) return null;
-	
-	const parentBlock = block.getParent();
+
+    const parentBlock = block.getParent();
     if (!parentBlock) return null;
 
     if (parentBlock.nextConnection?.targetConnection?.sourceBlock_ === block) {
@@ -41,45 +41,45 @@ export default async function ({ addon, msg, global, console }) {
 
     if (block.getColour() !== parentBlock.getColour()) {
       // Blocks with different colors will always be normal
-	  // (Not categories. If, for example, a music reporter
-	  // is put into a pen block, it will be striped)
+      // (Not categories. If, for example, a music reporter
+      // is put into a pen block, it will be striped)
       block.__zebra = false;
       return block.__zebra;
     }
-	
+
     if (parentBlock.__zebra !== null && parentBlock.__zebra !== undefined) {
       // The parent's striping was already calculated;
       // just inherit that and invert if neccessary
       if (block.isShadow_) {
-		block.__zebra = parentBlock.__zebra;
-	  } else {
-		block.__zebra = !parentBlock.__zebra;
-	  }
+        block.__zebra = parentBlock.__zebra;
+      } else {
+        block.__zebra = !parentBlock.__zebra;
+      }
       return block.__zebra;
     }
 
     // The parent's striping hasn't been calculated yet;
     // calculate that then invert the result if necessary
     if (block.isShadow_) {
-		block.__zebra = blockIsStriped(parentBlock);
-	} else {
-		block.__zebra = !blockIsStriped(parentBlock);
-	}
+      block.__zebra = blockIsStriped(parentBlock);
+    } else {
+      block.__zebra = !blockIsStriped(parentBlock);
+    }
     return block.__zebra;
   }
 
   // Calculate and apply striping for a block and all blocks
   // below and in it.
   function stripeScript(block) {
-	  if (!block) return;
+    if (!block) return;
     block.__zebra = null;
-	
+
     const el = block.getSvgRoot();
     const isStriped = blockIsStriped(block);
     if (el) {
       stripeStyling(el, isStriped);
     }
-	
+
     for (const child of block.childBlocks_) {
       stripeScript(child);
     }
@@ -104,12 +104,12 @@ export default async function ({ addon, msg, global, console }) {
   // Calculate and apply striping for all blocks in the code area.
   function stripeAll() {
     const ws = scratchBlocks.getMainWorkspace();
-	if (!ws) return;
-	
+    if (!ws) return;
+
     for (const block of ws.getAllBlocks()) {
       // Clear stored striping
       block.__zebra = null;
-	
+
       const el = block.getSvgRoot();
       if (!el) continue;
 
@@ -120,7 +120,7 @@ export default async function ({ addon, msg, global, console }) {
 
   function stripeSelected() {
     const selected = document.querySelector(".blocklySelected");
-	  const ws = scratchBlocks.getMainWorkspace();
+    const ws = scratchBlocks.getMainWorkspace();
     if (!(ws && selected)) {
       stripeAll();
       return;
@@ -139,15 +139,15 @@ export default async function ({ addon, msg, global, console }) {
   addon.self.addEventListener("reenabled", stripeAll);
 
   if (addon.tab.editorMode === "editor") {
-	  // The editor has already loaded, stripe immediately
-	  queueMicrotask(stripeAll);
+    // The editor has already loaded, stripe immediately
+    queueMicrotask(stripeAll);
   }
 
   scratchBlocks.getMainWorkspace().addChangeListener((e) => {
     if (addon.self.disabled) return;
-	  if (e.type === "move") {
-		  const ws = scratchBlocks.getMainWorkspace();
-		stripeScript(ws.getBlockById(e.blockId));
-	  }
-  })
+    if (e.type === "move") {
+      const ws = scratchBlocks.getMainWorkspace();
+      stripeScript(ws.getBlockById(e.blockId));
+    }
+  });
 }
