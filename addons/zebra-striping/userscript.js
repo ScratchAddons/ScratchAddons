@@ -40,7 +40,9 @@ export default async function ({ addon, msg, global, console }) {
     }
 
     if (block.getColour() !== parentBlock.getColour()) {
-      // Blocks from different categories will always be normal
+      // Blocks with different colors will always be normal
+	  // (But if, for example, a music reporter is put into
+	  // a pen block, it will be striped)
       block.__zebra = false;
       return block.__zebra;
     }
