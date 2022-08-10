@@ -19,7 +19,7 @@ export default async function ({ addon, global, console }) {
   addon.self.addEventListener("reenabled", () => {
     setVol(getDefVol());
   });
-  
+
   addon.settings.addEventListener("change", () => {
     setDefVol(addon.settings.get("defVol") / 100);
   });

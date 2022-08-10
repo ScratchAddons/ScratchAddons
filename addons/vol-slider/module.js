@@ -19,22 +19,22 @@ export const setVol = (v) => {
   } else {
     icon.src = loudIcon;
   }
-}
+};
 
 export const setDefVol = (v) => {
   defVol = v;
-}
+};
 
 export const getDefVol = () => {
   return defVol;
-}
+};
 
 export const isMuted = () => {
   return vmVol.value === 0;
-}
+};
 
 export const setup = (_vm) => {
   if (vm) return;
   vm = _vm;
   vmVol = vm.runtime.audioEngine.inputNode.gain;
-}
+};
