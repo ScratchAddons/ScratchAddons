@@ -11,13 +11,27 @@ export default async function ({ addon, msg, global, console }) {
 
       for (const b of block.getDescendants()) {
         const parent = b.getSurroundParent();
-        if ((!b.isShadow_ && !parent) || (parent && parent.category_ === b.category_)) {
-          const zebra = parent ? !parent.zebra : false;
-          if (!zebra && b.zebra) {
-            b.svgPath_.classList.remove("sa-zebra-stripe");
+
+        const zebra = parent ? (b.isShadow_ ? parent.zebra : !parent.zebra) : false;
+        if (b.isShadow_ || !parent || (parent && parent.category_ === b.category_)) {
+          const els = [b.svgPath_];
+          for (const input of b.inputList) {
+            if (input.outlinePath) {
+              els.push(input.outlinePath);
+            }
+            for (const field of input.fieldRow) {
+              if (field.fieldGroup_) {
+                els.push(field.fieldGroup_);
+              }
+            }
           }
-          if (zebra && !b.zebra) {
-            b.svgPath_.classList.add("sa-zebra-stripe");
+          for (const el of els) {
+            if (!zebra && b.zebra) {
+              el.classList.remove("sa-zebra-stripe");
+            }
+            if (zebra && !b.zebra) {
+              el.classList.add("sa-zebra-stripe");
+            }
           }
           b.zebra = zebra;
         }
