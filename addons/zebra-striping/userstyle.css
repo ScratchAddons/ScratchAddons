@@ -2,6 +2,8 @@
   --zebraStriping-percent: calc(var(--zebraStriping-intensity) / 100);
   --zebraStriping-bright: calc(1 + var(--zebraStriping-percent));
   --zebraStriping-saturate: calc(1 - var(--zebraStriping-percent));
+  /* "Temporary" value, gets replaced by userscript */
+  --zebraStriping-replacementGlow: url(#blocklyReplacementGlowFilter);
 }
 
 .sa-zebra-stripe {
@@ -10,7 +12,7 @@
 
 .sa-zebra-stripe[filter*="#blocklyReplacementGlowFilter"] {
   filter: brightness(var(--zebraStriping-bright)) saturate(var(--zebraStriping-saturate))
-    url(#blocklyReplacementGlowFilter80012101345171);
+    var(--zebraStriping-replacementGlow);
 }
 
 /* editor-stepping compatibility */
