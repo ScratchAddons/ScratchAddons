@@ -2,7 +2,7 @@ export default async function ({ addon, msg, global, console }) {
   const vm = addon.tab.traps.vm;
   const scratchBlocks = await addon.tab.traps.getBlockly();
   const _render = scratchBlocks.BlockSvg.prototype.render;
-  
+
   scratchBlocks.BlockSvg.prototype.render = function (opt_bubble) {
     if (!this.isInFlyout && !this.isShadow()) {
       let block = this;
@@ -44,7 +44,7 @@ export default async function ({ addon, msg, global, console }) {
   if (vm.editingTarget) {
     vm.emitWorkspaceUpdate();
   }
-  
+
   // The replacement glow filter's ID is randomly generated and changes
   // when the workspace is reloaded (which includes loading the page and
   // seeing the project page then seeing inside).
@@ -52,14 +52,9 @@ export default async function ({ addon, msg, global, console }) {
   // userstyle, we need to use the usersciript to get the filter's ID
   // and set a CSS variable on the document's root.
   while (true) {
-  const replacementGlowEl = await addon.tab.waitForElement(
-	'filter[id*="blocklyReplacementGlowFilter"]', {
-		markAsSeen: true
-	}
-  );
-	document.documentElement.style.setProperty(
-	"--zebraStriping-replacementGlow",
-	`url(#${replacementGlowEl.id})`
-	);
+    const replacementGlowEl = await addon.tab.waitForElement('filter[id*="blocklyReplacementGlowFilter"]', {
+      markAsSeen: true,
+    });
+    document.documentElement.style.setProperty("--zebraStriping-replacementGlow", `url(#${replacementGlowEl.id})`);
   }
 }
