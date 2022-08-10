@@ -4,11 +4,13 @@ const loudIcon = "/static/assets/b2c44c738c9cbc1a99cd6edfd0c2b85b.svg";
 
 let vm;
 let vmVol;
-let icon;
-let slider;
+let defVol = 1;
 
 export const setVol = (v) => {
   vmVol.value = v;
+  let slider = document.getElementById("sa-vol-slider");
+  let icon = document.getElementById("sa-vol-icon");
+  if (!slider) return;
   slider.value = v;
   if (v == 0) {
     icon.src = muteIcon;
@@ -19,6 +21,14 @@ export const setVol = (v) => {
   }
 }
 
+export const setDefVol = (v) => {
+  defVol = v;
+}
+
+export const getDefVol = () => {
+  return defVol;
+}
+
 export const isMuted = () => {
   return vmVol.value === 0;
 }
@@ -27,6 +37,4 @@ export const setup = (_vm) => {
   if (vm) return;
   vm = _vm;
   vmVol = vm.runtime.audioEngine.inputNode.gain;
-  slider = document.getElementById("sa-vol-slider");
-  icon = document.getElementById("sa-vol-icon");
 }

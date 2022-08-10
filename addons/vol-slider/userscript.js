@@ -1,8 +1,7 @@
-import { setup, setVol } from "./module.js";
+import { setup, setVol, isMuted, getDefVol, setDefVol } from "./module.js";
 
 export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.vm;
-  const defVol = addon.settings.get("defVol") / 100;
   let icon = document.createElement("img");
   icon.loading = "lazy";
   icon.id = "sa-vol-icon";
@@ -14,15 +13,19 @@ export default async function ({ addon, global, console }) {
   slider.step = 0.02;
 
   addon.self.addEventListener("disabled", () => {
-    stVol(1);
+    setVol(1);
   });
 
   addon.self.addEventListener("reenabled", () => {
-    setVol(defVol);
+    setVol(getDefVol());
+  });
+  
+  addon.settings.addEventListener("change", () => {
+    setDefVol(addon.settings.get("defVol") / 100);
   });
 
   while (true) {
-    let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
+    await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
@@ -33,7 +36,8 @@ export default async function ({ addon, global, console }) {
     container.appendChild(icon);
     container.appendChild(slider);
     setup(vm);
-    setVol(defVol);
+    setDefVol(addon.settings.get("defVol") / 100);
+    setVol(getDefVol());
     slider.addEventListener("input", function (e) {
       setVol(this.value);
     });

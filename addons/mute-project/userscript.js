@@ -1,4 +1,4 @@
-import {setup, isMuted, setVol} from "../vol-slider/module.js";
+import {setup, isMuted, setVol, getDefVol} from "../vol-slider/module.js";
 
 export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.vm;
@@ -12,7 +12,7 @@ export default async function ({ addon, global, console }) {
       e.cancelBubble = true;
       e.preventDefault();
       if (isMuted()) {
-        setVol(1);
+        setVol(getDefVol());
         icon.style.display = "none";
       } else {
         setVol(0);
