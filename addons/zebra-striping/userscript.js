@@ -3,17 +3,17 @@ export default async function ({ addon, msg, global, console }) {
   const scratchBlocks = await addon.tab.traps.getBlockly();
   const _render = scratchBlocks.BlockSvg.prototype.render;
   scratchBlocks.BlockSvg.prototype.render = function (opt_bubble) {
-    if (!this.isInFlyout && !this.isShadow_) {
+    if (!this.isInFlyout && !this.isShadow()) {
       let block = this;
-      while (block.getSurroundParent() && block.getSurroundParent().category_ === block.category_) {
+      while (block.getSurroundParent() && block.getSurroundParent().getCategory() === block.getCategory()) {
         block = block.getSurroundParent();
       }
 
       for (const b of block.getDescendants()) {
         const parent = b.getSurroundParent();
 
-        const zebra = parent ? (b.isShadow_ ? parent.zebra : !parent.zebra) : false;
-        if (b.isShadow_ || !parent || (parent && parent.category_ === b.category_)) {
+        const zebra = parent ? (b.isShadow() ? parent.zebra : !parent.zebra) : false;
+        if (b.isShadow() || !parent || (parent && parent.getCategory() === b.getCategory())) {
           const els = [b.svgPath_];
           for (const input of b.inputList) {
             if (input.outlinePath) {
