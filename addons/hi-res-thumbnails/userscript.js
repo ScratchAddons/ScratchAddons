@@ -3,11 +3,11 @@ export default async function ({ addon, console }) {
   const UPLOADS_REGEX = /^https?:\/\/uploads\.scratch\.mit\.edu\//;
   const thumbnails = [];
   addon.self.addEventListener("disabled", () => {
-    for (const { image, src, lazySrc } of thumbnails) {
+    for (const { image, lazySrc } of thumbnails) {
       if (lazySrc) {
         image.dataset.original = lazySrc;
       }
-      image.src = src;
+      image.src = lazySrc;
     }
   });
   addon.self.addEventListener("reenabled", () => {
