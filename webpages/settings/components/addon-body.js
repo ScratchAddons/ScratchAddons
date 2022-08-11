@@ -139,8 +139,7 @@ export default async function ({ template }) {
         (event) => {
           if (location.hash.includes(this.addon._addonId)) {
             this.expanded = true;
-            if (this.addon.tags.includes("easterEgg"))
-              vue.selectedCategory = "easterEgg";
+            if (this.addon.tags.includes("easterEgg")) vue.selectedCategory = "easterEgg";
           }
         },
         false
