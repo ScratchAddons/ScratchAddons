@@ -184,6 +184,9 @@ if (window.parent === window) {
 document.head.appendChild(
   Object.assign(document.createElement("link"), {
     rel: "icon",
-    href: "../../images/icon.png",
+    href: chrome.runtime.getManifest().version_name.endsWith("-prerelease")
+      ? "../../images/icon-blue.png"
+      : "../../images/icon.png",
+    id: "favicon",
   })
 );
