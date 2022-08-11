@@ -425,11 +425,16 @@ let fuse;
       }, 0);
 
       window.addEventListener("hashchange", (event) => {
+        const addonId = location.hash?.substring(7);
+        const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
+        if (!groupWithAddon) return; //Don't run if hash is invalid
+
+        groupWithAddon.expanded = true;
         vue.selectedCategory = "all";
         this.clearSearch();
         setTimeout(() => {
           document.querySelector(location.hash)?.scrollIntoView();
-        }, 100);
+        }, 0);
       });
     },
   });

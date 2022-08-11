@@ -23,7 +23,7 @@ export default async function ({ template }) {
       window.addEventListener(
         "hashchange",
         (event) => {
-          if (this.group.addonIds.includes(location.hash.replace("addon-", ""))) {
+          if (this.group.addonIds.includes(location.hash?.substring(7))) {
             this.group.expanded = true;
           }
         },

@@ -65,16 +65,6 @@ export default async function ({ template }) {
           console.log(`Loaded default values for ${this.addon._addonId}`);
         }
       },
-      copyAddonLink() {
-        if (this.addon._copied) return;
-        Vue.set(this.addon, "_copied", true);
-        navigator.clipboard.writeText(
-          `https://scratch.mit.edu/scratch-addons-extension/settings#addon-${this.addon._addonId}`
-        );
-        setTimeout(() => {
-          Vue.set(this.addon, "_copied", false);
-        }, 750);
-      },
       toggleAddonRequest(event) {
         const toggle = () => {
           // Prevents selecting text when the shift key is being held down
@@ -150,7 +140,6 @@ export default async function ({ template }) {
           if (location.hash.includes(this.addon._addonId)) {
             this.expanded = true;
             if (this.addon.tags.includes("easterEgg"))
-              //dango-rain
               vue.selectedCategory = "easterEgg";
           }
         },
