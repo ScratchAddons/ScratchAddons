@@ -1,6 +1,6 @@
 export default async function ({ addon, msg, global, console }) {
   const vm = addon.tab.traps.vm;
-  const scratchBlocks = await addon.tab.traps.getBlockly();
+  const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   /**
    * Returns the direct children of a block and the siblings of those children.
@@ -31,8 +31,8 @@ export default async function ({ addon, msg, global, console }) {
     return blocks;
   };
 
-  const originalRender = scratchBlocks.BlockSvg.prototype.render;
-  scratchBlocks.BlockSvg.prototype.render = function (opt_bubble) {
+  const originalRender = ScratchBlocks.BlockSvg.prototype.render;
+  ScratchBlocks.BlockSvg.prototype.render = function (opt_bubble) {
     if (!this.isInFlyout && !this.isShadow()) {
       const surroundingParent = this.getSurroundParent();
       const category = this.getCategory();
