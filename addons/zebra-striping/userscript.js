@@ -36,7 +36,7 @@ export default async function ({ addon, msg, global, console }) {
     if (!this.isInFlyout && !this.isShadow()) {
       const surroundingParent = this.getSurroundParent();
       const category = this.getCategory();
-      const isTop = !surroundingParent || (surroundingParent.getCategory() !== category);
+      const isTop = !surroundingParent || surroundingParent.getCategory() !== category;
 
       // The "top block" is responsible for determining which of its children should be striped.
       // All modifications that can change whether a block should be striped should bubble up to the
