@@ -20,7 +20,7 @@ export default async function ({ addon, msg, global, console }) {
           if (block.isShadow()) {
             isStriped = !!stripeState.get(parent);
           } else if (parent.getCategory() === block.getCategory()) {
-            isStriped = !stripeState.get(parent)
+            isStriped = !stripeState.get(parent);
           }
         }
         stripeState.set(block, isStriped);
