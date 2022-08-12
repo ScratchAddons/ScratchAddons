@@ -47,9 +47,14 @@ export default async function ({ addon, msg, global, console }) {
         let nextBlocks = [];
 
         while (blocks.length) {
-          for (const block of blocks) {
+          // Use old-style loop because we add items as we iterate
+          for (let i = 0; i < blocks.length; i++) {
+            const block = blocks[i];
+
             for (const child of getImmediateDescendants(block)) {
-              if (!child.isShadow() && child.getCategory() === category) {
+              if (child.isShadow()) {
+                blocks.push(child);
+              } else if (child.getCategory() === category) {
                 nextBlocks.push(child);
               }
             }
