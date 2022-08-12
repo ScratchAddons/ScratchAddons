@@ -2,21 +2,21 @@
   --zebraStriping-percent: calc(var(--zebraStriping-intensity) / 100);
   --zebraStriping-bright: calc(1 + var(--zebraStriping-percent));
   --zebraStriping-saturate: calc(1 - var(--zebraStriping-percent));
+  --zebraStriping-filter: brightness(var(--zebraStriping-bright)) saturate(var(--zebraStriping-saturate));
   /* "Temporary" value, gets replaced by userscript */
   --zebraStriping-replacementGlow: url(#blocklyReplacementGlowFilter);
 }
 
 .sa-zebra-stripe {
-  filter: brightness(var(--zebraStriping-bright)) saturate(var(--zebraStriping-saturate));
+  filter: var(--zebraStriping-filter);
 }
 
 .sa-zebra-stripe[filter*="#blocklyReplacementGlowFilter"] {
-  filter: brightness(var(--zebraStriping-bright)) saturate(var(--zebraStriping-saturate))
-    var(--zebraStriping-replacementGlow);
+  filter: var(--zebraStriping-filter) var(--zebraStriping-replacementGlow);
 }
 
 /* editor-stepping compatibility */
 .sa-zebra-stripe[style*="#sa_glower_filter"] {
   /* !important because editor-stepping uses inline styles */
-  filter: brightness(var(--zebraStriping-bright)) saturate(var(--zebraStriping-saturate)) url("#sa_glower_filter0") !important;
+  filter: var(--zebraStriping-filter) url("#sa_glower_filter0") !important;
 }
