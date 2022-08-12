@@ -46,11 +46,11 @@ const localizeSettings = (addonId, setting, tableId) => {
     try {
       manifest = await (await fetch(`/addons/${addonId}/addon.json`)).json();
     } catch (ex) {
-      console.error(`Failed to load addon manifest for ${addonId}, skipping to next addon:`, ex);
+      console.error(`Failed to load addon manifest for ${addonId}, crashing:`, ex);
       chrome.tabs.create({
         url: `data:text/plain,Scratch Addons crashed: invalid addon.json for addon with id ${addonId}. Click the "Errors" button on the extension tile for more details.`,
       });
-      continue;
+      throw ex;
     }
     let potentiallyNeedsMissingDynamicWarning =
       manifest.updateUserstylesOnSettingsChange && !(manifest.dynamicEnable && manifest.dynamicDisable);
