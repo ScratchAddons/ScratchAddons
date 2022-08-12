@@ -177,7 +177,7 @@ export default async function ({ addon, global, console, msg }) {
         }
       };
       label.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.shiftKey) e.target.blur();
+        if (e.key === "Enter") e.target.blur();
       });
       label.addEventListener("focusout", onLabelOut);
 
@@ -223,7 +223,7 @@ export default async function ({ addon, global, console, msg }) {
       };
 
       input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.shiftKey) e.target.blur();
+        if (e.target.nodeName === "INPUT" && e.key === "Enter") e.target.blur();
       });
       input.addEventListener("focusout", onInputOut);
 
