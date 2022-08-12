@@ -15,7 +15,7 @@
       "link": "https://scratch.mit.edu/users/thecolaber"
     }
   ],
-  "tags": ["editor", "codeEditor"],
+  "tags": ["editor", "codeEditor", "featured"],
   "userscripts": [
     {
       "url": "userscript.js",
