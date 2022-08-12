@@ -1,6 +1,7 @@
 {
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
   "name": "Alternating nested block colors",
-  "description": "Makes blocks of the same category alternate between lighter and darker shades when nested inside each other.",
+  "description": "Makes blocks of the same category alternate between lighter and darker shades when nested inside eachother.",
   "credits": [
     {
       "name": "CST1229",
@@ -12,7 +13,7 @@
     {
       "url": "userscript.js",
       "matches": ["projects"],
-      "runAtComplete": false
+      "runAtComplete": true
     }
   ],
   "userstyles": [
