@@ -1,22 +1,22 @@
 export default async function ({ addon, msg, global, console }) {
   const vm = addon.tab.traps.vm;
   const scratchBlocks = await addon.tab.traps.getBlockly();
-  const _render = scratchBlocks.BlockSvg.prototype.render;
 
+  const originalRender = scratchBlocks.BlockSvg.prototype.render;
   scratchBlocks.BlockSvg.prototype.render = function (opt_bubble) {
     if (!this.isInFlyout && !this.isShadow()) {
-      let block = this;
-      while (block.getSurroundParent() && block.getSurroundParent().getCategory() === block.getCategory()) {
-        block = block.getSurroundParent();
+      let top = this;
+      while (top.getSurroundParent() && top.getSurroundParent().getCategory() === top.getCategory()) {
+        top = top.getSurroundParent();
       }
 
-      for (const b of block.getDescendants()) {
-        const parent = b.getSurroundParent();
+      for (const block of top.getDescendants()) {
+        const parent = block.getSurroundParent();
 
-        const zebra = parent ? (b.isShadow() ? parent.zebra : !parent.zebra) : false;
-        if (b.isShadow() || !parent || (parent && parent.getCategory() === b.getCategory())) {
-          const els = [b.svgPath_];
-          for (const input of b.inputList) {
+        const zebra = parent ? (block.isShadow() ? parent.zebra : !parent.zebra) : false;
+        if (block.isShadow() || !parent || (parent && parent.getCategory() === block.getCategory())) {
+          const els = [block.svgPath_];
+          for (const input of block.inputList) {
             if (input.outlinePath) {
               els.push(input.outlinePath);
             }
@@ -27,18 +27,18 @@ export default async function ({ addon, msg, global, console }) {
             }
           }
           for (const el of els) {
-            if (!zebra && b.zebra) {
+            if (!zebra && block.zebra) {
               el.classList.remove("sa-zebra-stripe");
             }
-            if (zebra && !b.zebra) {
+            if (zebra && !block.zebra) {
               el.classList.add("sa-zebra-stripe");
             }
           }
-          b.zebra = zebra;
+          block.zebra = zebra;
         }
       }
     }
-    _render.call(this, opt_bubble);
+    return originalRender.call(this, opt_bubble);
   };
 
   if (vm.editingTarget) {
