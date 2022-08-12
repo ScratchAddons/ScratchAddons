@@ -2,39 +2,77 @@ export default async function ({ addon, msg, global, console }) {
   const vm = addon.tab.traps.vm;
   const scratchBlocks = await addon.tab.traps.getBlockly();
 
+  /**
+   * Returns the direct children of a block and the siblings of those children.
+   * For the script:
+   * repeat ((1) + (2)) {
+   *   move (10) steps
+   *   repeat (5) {
+   *     ...
+   *   }
+   * }
+   * say (Hello)
+   * Calling this function on the top repeat block would return:
+   *  - the addition block (but not its inputs)
+   *  - the move steps block (but not its inputs)
+   *  - the second repeat block (but not its inputs or children)
+   * @returns {unknown[]}
+   */
+  const getImmediateDescendants = (block) => {
+    const blocks = [];
+    // getChildren() will also return the next block which we don't want to include
+    const blockNext = block.getNextBlock();
+    for (let childBlock of block.getChildren()) {
+      while (childBlock && childBlock !== blockNext) {
+        blocks.push(childBlock);
+        childBlock = childBlock.getNextBlock();
+      }
+    }
+    return blocks;
+  };
+
   const originalRender = scratchBlocks.BlockSvg.prototype.render;
   scratchBlocks.BlockSvg.prototype.render = function (opt_bubble) {
     if (!this.isInFlyout && !this.isShadow()) {
-      let top = this;
-      while (top.getSurroundParent() && top.getSurroundParent().getCategory() === top.getCategory()) {
-        top = top.getSurroundParent();
-      }
+      const surroundingParent = this.getSurroundParent();
+      const category = this.getCategory();
+      const isTop = !surroundingParent || (surroundingParent.getCategory() !== category);
 
-      for (const block of top.getDescendants()) {
-        const parent = block.getSurroundParent();
+      // The "top block" is responsible for determining which of its children should be striped.
+      // All modifications that can change whether a block should be striped should bubble up to the
+      // top block.
+      if (isTop) {
+        let zebra = false;
+        let blocks = [this];
+        let nextBlocks = [];
 
-        const zebra = parent ? (block.isShadow() ? parent.zebra : !parent.zebra) : false;
-        if (block.isShadow() || !parent || (parent && parent.getCategory() === block.getCategory())) {
-          const els = [block.svgPath_];
-          for (const input of block.inputList) {
-            if (input.outlinePath) {
-              els.push(input.outlinePath);
-            }
-            for (const field of input.fieldRow) {
-              if (field.fieldGroup_) {
-                els.push(field.fieldGroup_);
+        while (blocks.length) {
+          for (const block of blocks) {
+            for (const child of getImmediateDescendants(block)) {
+              if (!child.isShadow() && child.getCategory() === category) {
+                nextBlocks.push(child);
               }
             }
-          }
-          for (const el of els) {
-            if (!zebra && block.zebra) {
-              el.classList.remove("sa-zebra-stripe");
+
+            const stripedElements = [block.svgPath_];
+            for (const input of block.inputList) {
+              if (input.outlinePath) {
+                stripedElements.push(input.outlinePath);
+              }
+              for (const field of input.fieldRow) {
+                if (field.fieldGroup_) {
+                  stripedElements.push(field.fieldGroup_);
+                }
+              }
             }
-            if (zebra && !block.zebra) {
-              el.classList.add("sa-zebra-stripe");
+            for (const el of stripedElements) {
+              el.classList.toggle("sa-zebra-stripe", zebra);
             }
           }
-          block.zebra = zebra;
+
+          zebra = !zebra;
+          blocks = nextBlocks;
+          nextBlocks = [];
         }
       }
     }
