@@ -2,82 +2,42 @@ export default async function ({ addon, msg, global, console }) {
   const vm = addon.tab.traps.vm;
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
-  /**
-   * Returns the direct children of a block and the siblings of those children.
-   * For the script:
-   * repeat ((1) + (2)) {
-   *   move (10) steps
-   *   repeat (5) {
-   *     ...
-   *   }
-   * }
-   * say (Hello)
-   * Calling this function on the top repeat block would return:
-   *  - the addition block (but not its inputs)
-   *  - the move steps block (but not its inputs)
-   *  - the second repeat block (but not its inputs or children)
-   * @returns {unknown[]}
-   */
-  const getImmediateDescendants = (block) => {
-    const blocks = [];
-    // getChildren() will also return the next block which we don't want to include
-    const blockNext = block.getNextBlock();
-    for (let childBlock of block.getChildren()) {
-      while (childBlock && childBlock !== blockNext) {
-        blocks.push(childBlock);
-        childBlock = childBlock.getNextBlock();
-      }
-    }
-    return blocks;
-  };
-
   const originalRender = ScratchBlocks.BlockSvg.prototype.render;
   ScratchBlocks.BlockSvg.prototype.render = function (opt_bubble) {
-    if (!this.isInFlyout && !this.isShadow()) {
-      const surroundingParent = this.getSurroundParent();
-      const category = this.getCategory();
-      const isTop = !surroundingParent || surroundingParent.getCategory() !== category;
+    // Any changes that affect block striping should bubble to the top block of the script.
+    // The top block of the script is responsible for striping all of its children.
+    // This way stripes are computed exactly once.
+    if (!this.isInFlyout && !this.isShadow() && this.getParent() === null) {
+      const stripeState = new Map();
+      // Conveniently getDescendants() returns blocks in an order such that each block's
+      // parent will always come before that block (except the first block which has no
+      // parent).
+      for (const block of this.getDescendants()) {
+        const parent = block.getSurroundParent();
 
-      // The "top block" is responsible for determining which of its children should be striped.
-      // All modifications that can change whether a block should be striped should bubble up to the
-      // top block.
-      if (isTop) {
-        let zebra = false;
-        let blocks = [this];
-        let nextBlocks = [];
+        let isStriped = false;
+        if (parent) {
+          if (block.isShadow()) {
+            isStriped = !!stripeState.get(parent);
+          } else if (parent.getCategory() === block.getCategory()) {
+            isStriped = !stripeState.get(parent)
+          }
+        }
+        stripeState.set(block, isStriped);
 
-        while (blocks.length) {
-          // Use old-style loop because we add items as we iterate
-          for (let i = 0; i < blocks.length; i++) {
-            const block = blocks[i];
-
-            for (const child of getImmediateDescendants(block)) {
-              if (child.isShadow()) {
-                blocks.push(child);
-              } else if (child.getCategory() === category) {
-                nextBlocks.push(child);
-              }
-            }
-
-            const stripedElements = [block.svgPath_];
-            for (const input of block.inputList) {
-              if (input.outlinePath) {
-                stripedElements.push(input.outlinePath);
-              }
-              for (const field of input.fieldRow) {
-                if (field.fieldGroup_) {
-                  stripedElements.push(field.fieldGroup_);
-                }
-              }
-            }
-            for (const el of stripedElements) {
-              el.classList.toggle("sa-zebra-stripe", zebra);
+        const elements = [block.svgPath_];
+        for (const input of block.inputList) {
+          if (input.outlinePath) {
+            elements.push(input.outlinePath);
+          }
+          for (const field of input.fieldRow) {
+            if (field.fieldGroup_) {
+              elements.push(field.fieldGroup_);
             }
           }
-
-          zebra = !zebra;
-          blocks = nextBlocks;
-          nextBlocks = [];
+        }
+        for (const el of elements) {
+          el.classList.toggle("sa-zebra-stripe", isStriped);
         }
       }
     }
