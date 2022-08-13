@@ -4,6 +4,7 @@ import Listenable from "../common/Listenable.js";
 import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
 import * as blocks from "./blocks.js";
 import { addContextMenu } from "./contextmenu.js";
+import * as modal from "./modal.js";
 
 const DATA_PNG = "data:image/png;base64,";
 
@@ -42,6 +43,12 @@ export default class Tab extends Listenable {
   removeBlock(...a) {
     return blocks.removeBlock(...a);
   }
+  setCustomBlockColor(...a) {
+    return blocks.setCustomBlockColor(...a);
+  }
+  getCustomBlockColor() {
+    return blocks.color;
+  }
   getCustomBlock(...a) {
     return blocks.getCustomBlock(...a);
   }
@@ -51,11 +58,45 @@ export default class Tab extends Listenable {
    * @returns {Promise}
    */
   loadScript(url) {
-    return new Promise((resolve) => {
-      const script = document.createElement("script");
-      script.src = url;
-      document.head.appendChild(script);
-      script.onload = resolve;
+    return new Promise((resolve, reject) => {
+      if (scratchAddons.loadedScripts[url]) {
+        const obj = scratchAddons.loadedScripts[url];
+        if (obj.loaded) {
+          // Script has been already loaded
+          resolve();
+        } else if (obj.error === null) {
+          // Script has been appended to document.head, but not loaded yet.
+          obj.script.addEventListener("load", (e) => {
+            // Script loaded successfully - resolve the promise, but don't edit the global object (since it's already been edited by the original listener).
+            resolve();
+          });
+          obj.script.addEventListener("error", ({ error }) => {
+            // Script failed to load - reject the promise, but don't edit the global object (since it's already been edited by the original listener).
+            reject(`Failed to load script from ${url} - ${error}`);
+          });
+        } else {
+          // Script has been appended to document.head, and failed to load.
+          reject(`Failed to load script from ${url} - ${obj.error}`);
+        }
+      } else {
+        // No other addon has loaded this script yet.
+        const script = document.createElement("script");
+        script.src = url;
+        const obj = (scratchAddons.loadedScripts[url] = {
+          script,
+          loaded: false,
+          error: null,
+        });
+        document.head.appendChild(script);
+        script.addEventListener("load", () => {
+          obj.loaded = true;
+          resolve();
+        });
+        script.addEventListener("error", ({ error }) => {
+          obj.error = error;
+          reject(`Failed to load script from ${url} - ${error}`);
+        });
+      }
     });
   }
   /**
@@ -651,5 +692,19 @@ export default class Tab extends Listenable {
    */
   createEditorContextMenu(...args) {
     addContextMenu(this, ...args);
+  }
+
+  createModal(title, { isOpen = false, useEditorClasses = false, useSizesClass = false } = {}) {
+    if (this.editorMode !== null && useEditorClasses) return modal.createEditorModal(this, title, { isOpen });
+    if (this.clientVersion === "scratch-www") return modal.createScratchWwwModal(title, { isOpen, useSizesClass });
+    return modal.createScratchr2Modal(title, { isOpen });
+  }
+
+  confirm(...args) {
+    return modal.confirm(this, ...args);
+  }
+
+  prompt(...args) {
+    return modal.prompt(this, ...args);
   }
 }

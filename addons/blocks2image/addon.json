@@ -8,6 +8,8 @@
       "link": "https://github.com/summerscar"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",

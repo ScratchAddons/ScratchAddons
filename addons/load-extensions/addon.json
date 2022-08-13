@@ -33,6 +33,8 @@
       "default": false
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.10.0",
   "tags": ["editor", "codeEditor", "featured"]
 }
