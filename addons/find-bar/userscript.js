@@ -601,7 +601,7 @@ export default async function ({ addon, msg, console }) {
           continue;
         }
 
-        for (const id in blocks._blocks) {
+        for (const id of Object.keys(blocks._blocks)) {
           const block = blocks._blocks[id];
           // To find event broadcaster blocks, we look for the nested "event_broadcast_menu" blocks first that match the event name
           if (block.opcode === "event_broadcast_menu" && block.fields.BROADCAST_OPTION.value === name) {
@@ -649,7 +649,7 @@ export default async function ({ addon, msg, console }) {
 
         this.idx = 0;
         if (instanceBlock) {
-          for (const idx in this.blocks) {
+          for (const idx of Object.keys(this.blocks)) {
             const block = this.blocks[idx];
             if (block.id === instanceBlock.id) {
               this.idx = Number(idx);
