@@ -38,7 +38,7 @@
       '--selectorSelection': settings.selectorSelection,
       '--fullscreen': settings.fullscreen,
       '--stageHeader': settings.stageHeader,
-      '--border': hoveredSettingId === 'border' ? 'var(--brand-orange)' : settings.border,
+      '--border': hoveredSettingId === 'border' ? 'var(--orange)' : settings.border,
     })"
   >
     <div class="edm-menu-bar" @mouseenter="$emit('areahover', 'menuBar')" @mouseleave="$emit('areahover', 'page')">
@@ -643,7 +643,7 @@
   .edm-preview[data-setting-hovered="fullscreen"] .edm-fullscreen-view,
   .edm-preview[data-setting-hovered="stageHeader"] .edm-fullscreen-controls,
   .edm-preview[data-setting-hovered="affectPaper"] .edm-paint-canvas {
-    box-shadow: 0 0 8px inset var(--brand-orange);
+    box-shadow: 0 0 8px inset var(--orange);
   }
 
   .edm-preview[data-setting-hovered="page"] .edm-menu-bar,
@@ -668,7 +668,7 @@
   .edm-preview[data-setting-hovered="activeTab"] .edm-tab-selected,
   .edm-preview[data-setting-hovered="selectorSelection"] .edm-asset-selected,
   .edm-preview[data-setting-hovered="fullscreen"] .edm-fullscreen-controls {
-    filter: drop-shadow(0 0 4px var(--brand-orange));
+    filter: drop-shadow(0 0 4px var(--orange));
   }
 
   .edm-icon-placeholder {

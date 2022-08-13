@@ -284,6 +284,13 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
         let threshold = getColor(addonId, obj.threshold);
         return textColorLib.textColor(hex, black, white, threshold);
       }
+      case "alphaThreshold": {
+        hex = getColor(addonId, obj.source);
+        let { a } = textColorLib.parseHex(hex);
+        let threshold = getColor(addonId, obj.threshold) || 0.5;
+        if (a >= threshold) return getColor(addonId, obj.opaque);
+        else return getColor(addonId, obj.transparent);
+      }
       case "multiply": {
         hex = getColor(addonId, obj.source);
         return textColorLib.multiply(hex, obj);
@@ -596,7 +603,7 @@ const showBanner = () => {
     line-height: 1em;`,
   });
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=mTX1V9e6KK0",
+    href: "https://www.youtube.com/watch?v=ostWH0KN4bM",
     target: "_blank",
     rel: "noopener",
     referrerPolicy: "strict-origin-when-cross-origin",

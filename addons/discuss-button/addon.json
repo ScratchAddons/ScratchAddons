@@ -6,6 +6,27 @@
       "url": "userscript.js",
       "matches": ["https://scratch.mit.edu/*"],
       "runAtComplete": false
+    },
+    {
+      "url": "www.js",
+      "matches": ["scratchWWWNoProject", "projects"],
+      "runAtComplete": false
+    },
+    {
+      "url": "r2.js",
+      "matches": ["isNotScratchWWW"],
+      "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "compact-nav.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "if": {
+        "settings": {
+          "compact-nav": true
+        }
+      }
     }
   ],
   "settings": [
@@ -59,14 +80,21 @@
           "values": { "name": "Wiki", "url": "https://scratch-wiki.info/" }
         }
       ]
+    },
+    {
+      "name": "Compact user dropdown",
+      "id": "compact-nav",
+      "type": "boolean",
+      "default": false
     }
   ],
   "versionAdded": "1.0.0",
   "latestUpdate": {
-    "version": "1.24.0",
-    "newSettings": ["items"],
-    "isMajor": true
+    "version": "1.28.0",
+    "newSettings": ["compact-nav"],
+    "isMajor": false
   },
   "tags": ["community", "featured"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "updateUserstylesOnSettingsChange": true
 }
