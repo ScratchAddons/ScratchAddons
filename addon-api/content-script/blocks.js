@@ -1,6 +1,6 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 
-let color = {
+const color = {
   color: "#29beb8",
   secondaryColor: "#3aa8a4",
   tertiaryColor: "#3aa8a4",

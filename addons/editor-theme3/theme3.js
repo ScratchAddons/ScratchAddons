@@ -67,7 +67,7 @@ const categories = [
 export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
-  let originalColors = JSON.parse(JSON.stringify(Blockly.Colours));
+  const originalColors = JSON.parse(JSON.stringify(Blockly.Colours));
   originalColors.sa = {
     primary: "#29beb8",
     secondary: "#3aa8a4",
@@ -165,7 +165,7 @@ export default async function ({ addon, console }) {
   Blockly.BlockSvg.prototype.updateColour = function () {
     oldBlockUpdateColour.call(this);
     // Boolean inputs
-    for (let input of this.inputList) {
+    for (const input of this.inputList) {
       if (input.outlinePath) {
         input.outlinePath.setAttribute("fill", fieldBackground(this));
       }
@@ -265,10 +265,10 @@ export default async function ({ addon, console }) {
 
     textMode = addon.settings.get("text");
 
-    for (let category of categories) {
+    for (const category of categories) {
       // CSS variables are used for compatibility with other addons
       const prefix = `--editorTheme3-${category.colorId}`;
-      for (let [name, value] of Object.entries({
+      for (const [name, value] of Object.entries({
         primary: primaryColor(category),
         secondary: secondaryColor(category),
         tertiary: tertiaryColor(category),
