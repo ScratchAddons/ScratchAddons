@@ -1,29 +1,18 @@
 // import ShowBroadcast from "./show-broadcast.js";
-import Utils from "./blockly/Utils.js";
 import DomHelpers from "./DomHelpers.js";
-import BlockInstance from "./BlockInstance.js";
 import XML from "./XML.js";
-import BlockItem from "./BlockItem.js";
-import UndoGroup from "./blockly/UndoGroup.js";
+import UndoGroup from "./UndoGroup.js";
 
 export default class DevTools {
-  constructor(addon, msg, m, helpHTML) {
+  constructor(addon, msg, m) {
     this.addon = addon;
     this.msg = msg;
     this.m = m;
     /**
      * @type {VirtualMachine}
      */
-    this.vm = addon.tab.traps.vm;
-    this.utils = new Utils(addon);
     this.domHelpers = new DomHelpers(addon);
-    this.multi = new Multi(this.utils);
 
-    this._helpHTML = helpHTML;
-    this.find = null;
-    this.findInp = null;
-    this.ddOut = null;
-    this.dd = null;
     this.codeTab = null;
     this.costTab = null;
     this.costTabBody = null;
@@ -160,7 +149,7 @@ export default class DevTools {
             enabled: true,
             text: this.m("swap", { var: block.getCategory() === "data" ? this.m("variables") : this.m("lists") }),
             callback: () => {
-              let wksp = this.utils.getWorkspace();
+              let wksp = this.getWorkspace();
               let v = wksp.getVariableById(this.selVarID);
               let varName = window.prompt(this.msg("replace", { name: v.name }));
               if (varName) {
@@ -176,300 +165,16 @@ export default class DevTools {
     );
   }
 
+  getWorkspace() {
+    return Blockly.getMainWorkspace();
+  }
+
   isScriptEditor() {
     return this.codeTab.className.indexOf("gui_is-selected") >= 0;
   }
 
   isCostumeEditor() {
     return this.costTab.className.indexOf("gui_is-selected") >= 0;
-  }
-
-  eventClickHelp(e) {
-    if (!document.getElementById("s3devHelpPop")) {
-      document.body.insertAdjacentHTML("beforeend", this._helpHTML);
-      document.getElementById("s3devHelpPop").addEventListener("mousedown", function (e) {
-        if (e.target.id === "s3devHelpPop") {
-          e.target.remove();
-        }
-      });
-      document.querySelector("#s3devHelpPop .close-button").addEventListener("click", function (e) {
-        document.getElementById("s3devHelpPop").remove();
-      });
-    }
-    e.preventDefault();
-  }
-
-  getScratchCostumes() {
-    let costumes = this.costTabBody.querySelectorAll("div[class^='sprite-selector-item_sprite-name']");
-    // this.costTab[0].click();
-
-    let myBlocks = [];
-    let myBlocksByProcCode = {};
-
-    /**
-     * @param cls
-     * @param txt
-     * @param root
-     * @returns BlockItem
-     */
-    function addBlock(cls, txt, root) {
-      let id = root.className;
-      let items = new BlockItem(cls, txt, id, 0);
-      myBlocks.push(items);
-      myBlocksByProcCode[txt] = items;
-      return items;
-    }
-
-    let i = 0;
-    for (const costume of costumes) {
-      addBlock("costume", costume.innerText, costume).y = i;
-      i++;
-    }
-
-    return { procs: myBlocks };
-  }
-
-  /**
-   * Fetch the scratch 3 block list
-   * @returns jsonFetch object
-   */
-  getScratchBlocks() {
-    // Access Blockly!
-
-    let myBlocks = [];
-    let myBlocksByProcCode = {};
-
-    // todo - get blockly from an svg???
-
-    let wksp = this.utils.getWorkspace();
-    let topBlocks = wksp.getTopBlocks();
-
-    // console.log(topBlocks);
-
-    /**
-     * @param cls
-     * @param txt
-     * @param root
-     * @returns BlockItem
-     */
-    function addBlock(cls, txt, root) {
-      let id = root.id ? root.id : root.getId ? root.getId() : null;
-      let clone = myBlocksByProcCode[txt];
-      if (clone) {
-        if (!clone.clones) {
-          clone.clones = [];
-        }
-        clone.clones.push(id);
-        return clone;
-      }
-      let items = new BlockItem(cls, txt, id, 0);
-      items.y = root.getRelativeToSurfaceXY ? root.getRelativeToSurfaceXY().y : null;
-      myBlocks.push(items);
-      myBlocksByProcCode[txt] = items;
-      return items;
-    }
-
-    function getDescFromField(root) {
-      let fields = root.inputList[0];
-      let desc;
-      for (const fieldRow of fields.fieldRow) {
-        desc = (desc ? desc + " " : "") + fieldRow.getText();
-      }
-      return desc;
-    }
-
-    for (const root of topBlocks) {
-      if (root.type === "procedures_definition") {
-        const label = root.getChildren()[0];
-        const procCode = label.getProcCode();
-        if (!procCode) {
-          continue;
-        }
-        const indexOfLabel = root.inputList.findIndex((i) => i.fieldRow.length > 0);
-        if (indexOfLabel === -1) {
-          continue;
-        }
-        const translatedDefine = root.inputList[indexOfLabel].fieldRow[0].getText();
-        const message = indexOfLabel === 0 ? `${translatedDefine} ${procCode}` : `${procCode} ${translatedDefine}`;
-        addBlock("define", message, root);
-        continue;
-      }
-
-      if (root.type === "event_whenflagclicked") {
-        addBlock("flag", getDescFromField(root), root); // "When Flag Clicked"
-        continue;
-      }
-
-      if (root.type === "event_whenbroadcastreceived") {
-        try {
-          // let wksp2 = Blockly.getMainWorkspace().getTopBlocks()[2].inputList[0].fieldRow[1];
-          let fields = root.inputList[0];
-          // let typeDesc = fields.fieldRow[0].getText();
-          let eventName = fields.fieldRow[1].getText();
-          // addBlock('receive', typeDesc + ' ' + eventName, root).eventName = eventName;
-          addBlock("receive", "event " + eventName, root).eventName = eventName;
-        } catch (e) {
-          // eat
-        }
-        continue;
-      }
-
-      if (root.type.substr(0, 10) === "event_when") {
-        addBlock("event", getDescFromField(root), root); // "When Flag Clicked"
-        continue;
-      }
-
-      if (root.type === "control_start_as_clone") {
-        addBlock("event", getDescFromField(root), root); // "when I start as a clone"
-        continue;
-      }
-    }
-
-    let map = wksp.getVariableMap();
-
-    let vars = map.getVariablesOfType("");
-    for (const row of vars) {
-      addBlock(row.isLocal ? "var" : "VAR", (row.isLocal ? "var " : "VAR ") + row.name, row);
-    }
-
-    let lists = map.getVariablesOfType("list");
-    for (const row of lists) {
-      addBlock(row.isLocal ? "list" : "LIST", (row.isLocal ? "list " : "LIST ") + row.name, row);
-    }
-
-    const events = this.getCallsToEvents();
-    for (const event of events) {
-      addBlock("receive", "event " + event.eventName, event.block).eventName = event.eventName;
-    }
-
-    /*
-                  const runtime = vm.runtime;
-                  // Now let's also add event broadcasts (not just hat blocks)
-                  const target = runtime.getEditingTarget();
-                  const blocks = target.blocks;
-                  if (blocks._blocks) {
-                      for (const id in blocks._blocks) {
-                          if (!blocks._blocks.hasOwnProperty(id)) {
-                              continue;
-                          }
-                          const block = blocks._blocks[id];
-                          if (block.opcode === 'event_broadcast_menu') {
-
-                              debugger;
-
-                              // Now get the parent block that is the actual broadcast or broadcast and wait
-                              const broadcastBlock = blocks.getBlock(block.parent);
-                              let b = new BlockInstance(target, broadcastBlock);
-
-                              const fieldName = block.fields.BROADCAST_OPTION.value;
-                              addBlock('receive', 'event ' + fieldName, b).eventName = broadcastBlock.eventName;
-
-                              //
-                              // let fields = root.inputList[0];
-                              // let typeDesc = fields.fieldRow[0].getText();
-                              // let eventName = fields.fieldRow[1].getText();
-                              // addBlock('receive', 'event ' + eventName, root).eventName = eventName;
-                          }
-                      }
-                  }
-          */
-
-    const clsOrder = { flag: 0, receive: 1, event: 2, define: 3, var: 4, VAR: 5, list: 6, LIST: 7 };
-
-    myBlocks.sort((a, b) => {
-      let t = clsOrder[a.cls] - clsOrder[b.cls];
-      if (t !== 0) {
-        return t;
-      }
-      if (a.lower < b.lower) {
-        return -1;
-      }
-      if (a.lower > b.lower) {
-        return 1;
-      }
-      return a.y - b.y;
-    });
-
-    return { procs: myBlocks };
-  }
-
-  showDropDown(e, focusID, instanceBlock) {
-    clearTimeout(rhdd);
-    rhdd = 0;
-
-    if (!focusID && this.ddOut.classList.contains("vis")) {
-      return;
-    }
-
-    // special '' vs null... - null forces a reevaluation
-    prevVal = focusID ? "" : null; // Clear the previous value of the input search
-
-    this.ddOut.classList.add("vis");
-    let scratchBlocks = this.isCostumeEditor() ? this.getScratchCostumes() : this.getScratchBlocks();
-
-    this.dom_removeChildren(this.dd);
-
-    let foundLi = null;
-    /**
-     * @type {[BlockItem]}
-     */
-    const procs = scratchBlocks.procs;
-    for (const proc of procs) {
-      let li = document.createElement("li");
-      li.innerText = proc.procCode;
-      li.data = proc;
-      const colorIds = {
-        receive: "event",
-        event: "event",
-        define: "more",
-        var: "data",
-        VAR: "data",
-        list: "data_lists",
-        LIST: "data_lists",
-        costume: "looks",
-      };
-      if (proc.cls === "flag") {
-        li.className = "flag";
-      } else {
-        const colorId = colorIds[proc.cls];
-        li.className = `sa-block-color sa-block-color-${colorId}`;
-      }
-      if (focusID) {
-        if (proc.matchesID(focusID)) {
-          foundLi = li;
-          li.classList.add("sel");
-        } else {
-          li.style.display = "none";
-        }
-      }
-      this.dd.appendChild(li);
-    }
-
-    let label = document.getElementById("s3devFindLabel");
-    this.utils.offsetX = this.ddOut.getBoundingClientRect().right - label.getBoundingClientRect().left + 26;
-    this.utils.offsetY = 32;
-
-    if (foundLi) {
-      this.clickDropDownRow(foundLi, this.utils.getWorkspace(), instanceBlock);
-    }
-  }
-
-  hideDropDown() {
-    clearTimeout(rhdd);
-    rhdd = setTimeout(() => this.reallyHideDropDown(), 250);
-  }
-
-  reallyHideDropDown() {
-    // Check focus of find box
-    if (this.findInp === document.activeElement) {
-      this.hideDropDown();
-      return;
-    }
-
-    // document.getElementById('s3devReplace').classList.add('s3devHide');
-
-    this.ddOut.classList.remove("vis");
-    rhdd = 0;
   }
 
   hideFloatDropDown() {
@@ -519,7 +224,7 @@ export default class DevTools {
    * A much nicer way of laying out the blocks into columns
    */
   doCleanUp(block) {
-    let workspace = this.utils.getWorkspace();
+    let workspace = this.getWorkspace();
     let makeSpaceForBlock = block && block.getRootBlock();
 
     UndoGroup.startUndoGroup(workspace);
@@ -576,7 +281,7 @@ export default class DevTools {
 
     setTimeout(() => {
       // Locate unused local variables...
-      let workspace = this.utils.getWorkspace();
+      let workspace = this.getWorkspace();
       let map = workspace.getVariableMap();
       let vars = map.getVariablesOfType("");
       let unusedLocals = [];
@@ -659,7 +364,7 @@ export default class DevTools {
    * @returns {{orphans: {blocks: [Block], x: number, count: number}, cols: [Col]}}
    */
   getOrderedTopBlockColumns(separateOrphans) {
-    let w = this.utils.getWorkspace();
+    let w = this.getWorkspace();
     let topBlocks = w.getTopBlocks();
     let maxWidths = {};
 
@@ -770,478 +475,13 @@ export default class DevTools {
   }
 
   /**
-   * Find all the uses of a named procedure.
-   * @param {string} id ID of the variable to find.
-   * @return {!Array.<!Blockly.Block>} Array of block usages.
-   */
-  getCallsToProcedureById(id) {
-    let w = this.utils.getWorkspace();
-    let procBlock = w.getBlockById(id);
-    let label = procBlock.getChildren()[0];
-    let procCode = label.getProcCode();
-
-    let uses = [procBlock]; // Definition First, then calls to it
-    let topBlocks = this.getTopBlocks(true);
-    for (const topBlock of topBlocks) {
-      /** @type {!Array<!Blockly.Block>} */
-      let kids = topBlock.getDescendants();
-      for (const block of kids) {
-        if (block.type === "procedures_call") {
-          if (block.getProcCode() === procCode) {
-            uses.push(block);
-          }
-        }
-      }
-    }
-
-    return uses;
-  }
-
-  /**
-   * Find all the uses of a named procedure.
-   * @param {string} name name of the variable to find.
-   * @return {!Array.<!Blockly.Block>} Array of block usages.
-   */
-  getCallsToEventsByName(name) {
-    let uses = []; // Definition First, then calls to it
-
-    const runtime = this.vm.runtime;
-    const targets = runtime.targets; // The sprites / stage
-
-    for (const target of targets) {
-      if (!target.isOriginal) {
-        continue; // Skip clones
-      }
-
-      const blocks = target.blocks;
-      if (!blocks._blocks) {
-        continue;
-      }
-
-      for (const id of Object.keys(blocks._blocks)) {
-        const block = blocks._blocks[id];
-        // To find event broadcaster blocks, we look for the nested "event_broadcast_menu" blocks first that match the event name
-        if (block.opcode === "event_broadcast_menu" && block.fields.BROADCAST_OPTION.value === name) {
-          // Now get the parent block that is the actual broadcast or broadcast and wait
-          const broadcastBlock = blocks.getBlock(block.parent);
-          uses.push(new BlockInstance(target, broadcastBlock));
-        } else if (block.opcode === "event_whenbroadcastreceived" && block.fields.BROADCAST_OPTION.value === name) {
-          uses.push(new BlockInstance(target, block));
-        }
-      }
-    }
-
-    return uses;
-  }
-
-  /**
-   * Find all the event broadcasters.
-   * @return {[{eventName:string, block:Block}]} Array of event names and blocks.
-   */
-  getCallsToEvents() {
-    const uses = []; // Definition First, then calls to it
-    const found = {};
-
-    let topBlocks = this.getTopBlocks(true);
-    for (const topBlock of topBlocks) {
-      /** @type {!Array<!Blockly.Block>} */
-      let kids = topBlock.getDescendants();
-      for (const block of kids) {
-        if (block.type === "event_broadcast" || block.type === "event_broadcastandwait") {
-          const eventName = block.getChildren()[0].inputList[0].fieldRow[0].getText();
-          if (!found[eventName]) {
-            found[eventName] = block;
-            uses.push({ eventName: eventName, block: block });
-          }
-        }
-      }
-    }
-
-    return uses;
-  }
-
-  buildNavigationCarousel(nav, li, blocks, instanceBlock) {
-    if (nav && nav.parentNode === li) {
-      // Same control... click again to go to next
-      this.multi.navRight();
-    } else {
-      if (nav) {
-        nav.remove();
-      }
-      li.insertAdjacentHTML(
-        "beforeend",
-        `
-                    <span id="s3devMulti" class="s3devMulti">
-                        <span id="s3devMultiLeft" class="s3devNav">◀</span><span id="s3devMultiCount"></span><span id="s3devMultiRight" class="s3devNav">▶</span>
-                    </span>
-                `
-      );
-      document.getElementById("s3devMultiLeft").addEventListener("mousedown", (...e) => this.multi.navLeft(...e));
-      document.getElementById("s3devMultiRight").addEventListener("mousedown", (...e) => this.multi.navRight(...e));
-
-      this.multi.idx = 0;
-
-      if (instanceBlock) {
-        for (let i = 0; i < blocks.length; i++) {
-          const block = blocks[i];
-          if (block.id === instanceBlock.id) {
-            this.multi.idx = i;
-            break;
-          }
-        }
-        // multi.idx = blocks.indexOf(instanceBlock);
-      }
-
-      this.multi.blocks = blocks;
-      this.multi.update();
-
-      if (this.multi.idx < blocks.length) {
-        this.centerTop(blocks[this.multi.idx]);
-      }
-    }
-  }
-
-  /**
-   * Move a costume to the top or bottom of the list
-   * @param top true for the top, false for the bottom
-   * @param selected optional parameter to pass in the costume div to be moved
-   */
-  moveCostumeTo(top, selected) {
-    let isSelected = !selected || selected.className.indexOf("sprite-selector-item_is-selected") >= 0;
-    if (!selected) {
-      selected = this.costTabBody.querySelectorAll("div[class*='sprite-selector-item_is-selected']");
-      if (selected.length === 0) {
-        return;
-      }
-      selected = selected[0].querySelectorAll("div[class^='sprite-selector-item_sprite-name']")[0];
-    }
-    let costumes = this.costTabBody.querySelectorAll("div[class^='sprite-selector-item_sprite-name']");
-
-    // First scroll sprite view to reveal top or bottom otherwise this won't work.
-    let scroller = selected.closest("div[class*=selector_list-area]");
-    let lastScroll = scroller.scrollTop;
-    scroller.scrollTop = top ? 0 : scroller.scrollHeight;
-
-    this.domHelpers.triggerDragAndDrop(selected, costumes[top ? 0 : costumes.length - 1], undefined);
-    if (!isSelected) {
-      // Restore Scroll position
-      scroller.scrollTop = lastScroll;
-    }
-  }
-
-  /**
-   *
-   * @param li
-   * @param workspace
-   * @param instanceBlock the instance to be highlighted (or null)
-   */
-  clickDropDownRow(li, workspace, instanceBlock) {
-    let nav = document.getElementById("s3devMulti");
-
-    let cls = li.data.cls;
-    if (cls === "costume") {
-      // Viewing costumes - jump to selected costume
-      let costumes = this.costTabBody.querySelectorAll("div[class^='sprite-selector-item_sprite-name']");
-      let costume = costumes[li.data.y];
-      if (costume) {
-        costume.click();
-        setTimeout(() => {
-          let wrapper = costume.closest("div[class*=gui_flex-wrapper]");
-          costume.parentElement.parentElement.scrollIntoView({
-            behavior: "auto",
-            block: "center",
-            inline: "start",
-          });
-          wrapper.scrollTop = 0;
-        }, 10);
-      }
-    } else if (cls === "var" || cls === "VAR" || cls === "list" || cls === "LIST") {
-      // Search now for all instances
-      // let wksp = getWorkspace();
-      // let blocks = wksp.getVariableUsesById(li.data.labelID);
-      let blocks = this.getVariableUsesById(li.data.labelID);
-      this.buildNavigationCarousel(nav, li, blocks, instanceBlock);
-    } else if (cls === "define") {
-      let blocks = this.getCallsToProcedureById(li.data.labelID);
-      this.buildNavigationCarousel(nav, li, blocks, instanceBlock);
-    } else if (cls === "receive") {
-      /*
-                          let blocks = [workspace.getBlockById(li.data.labelID)];
-                          if (li.data.clones) {
-                              for (const cloneID of li.data.clones) {
-                                  blocks.push(workspace.getBlockById(cloneID))
-                              }
-                          }
-                          blocks = blocks.concat(getCallsToEventsByName(li.data.eventName));
-              */
-      // Now, fetch the events from the scratch runtime instead of blockly
-      let blocks = this.getCallsToEventsByName(li.data.eventName);
-      if (!instanceBlock) {
-        // Can we start by selecting the first block on 'this' sprite
-        const currentTargetID = this.utils.getEditingTarget().id;
-        for (const block of blocks) {
-          if (block.targetId === currentTargetID) {
-            instanceBlock = block;
-            break;
-          }
-        }
-      }
-      this.buildNavigationCarousel(nav, li, blocks, instanceBlock);
-    } else if (li.data.clones) {
-      let blocks = [workspace.getBlockById(li.data.labelID)];
-      for (const cloneID of li.data.clones) {
-        blocks.push(workspace.getBlockById(cloneID));
-      }
-      this.buildNavigationCarousel(nav, li, blocks, instanceBlock);
-    } else {
-      this.multi.blocks = null;
-      this.centerTop(li.data.labelID);
-      if (nav) {
-        nav.remove();
-      }
-    }
-  }
-
-  dropDownClick(e) {
-    // console.log(e);
-    let workspace = this.utils.getWorkspace();
-
-    if (prevVal === null) {
-      prevVal = this.findInp.value; // Hack to stop filter change if not entered data into edt box, but clicked on row
-    }
-
-    let li = e.target;
-    for (;;) {
-      if (!li || li === this.dd) {
-        return;
-      }
-      if (li.data) {
-        break;
-      }
-      li = li.parentNode;
-    }
-
-    // If this was a mouse click, unselect the keyboard selection
-    // e.navKey is set when this is called from the keyboard handler...
-    if (!e.navKey) {
-      let sel = this.dd.getElementsByClassName("sel");
-      sel = sel.length > 0 ? sel[0] : null;
-      if (sel && sel !== li) {
-        try {
-          sel.classList.remove("sel");
-        } catch (e) {
-          console.log(sel);
-          console.error(e);
-        }
-      }
-      if (li !== sel) {
-        li.classList.add("sel");
-      }
-    }
-
-    this.clickDropDownRow(li, workspace);
-    if (e && e.preventDefault) {
-      e.preventDefault();
-      e.cancelBubble = true;
-    }
-    return false;
-  }
-
-  /**
-   * Based on wksp.centerOnBlock(li.data.labelID);
-   * @param e
-   * @param force if true, the view always moves, otherwise only move if the selected element is not entirely visible
-   */
-  centerTop(e, force) {
-    this.utils.scrollBlockIntoView(e, force);
-  }
-
-  inputChange(e) {
-    if (!this.ddOut.classList.contains("vis")) {
-      this.showDropDown();
-      this.hideDropDown(); // Start timer to hide if not got focus
-    }
-
-    // Filter the list...
-    let val = (this.findInp.value || "").toLowerCase();
-    if (val === prevVal) {
-      // No change so don't re-filter
-      return;
-    }
-
-    prevVal = val;
-    this.multi.blocks = null;
-
-    //
-    // Hide items in list that do not contain filter text, and highlight the parts of words that match the filter text
-
-    let listLI = this.dd.getElementsByTagName("li");
-    for (const li of listLI) {
-      let procCode = li.data.procCode;
-      let i = li.data.lower.indexOf(val);
-      if (i >= 0) {
-        li.style.display = "block";
-        this.dom_removeChildren(li);
-        if (i > 0) {
-          li.appendChild(document.createTextNode(procCode.substring(0, i)));
-        }
-        let bText = document.createElement("b");
-        bText.appendChild(document.createTextNode(procCode.substr(i, val.length)));
-        li.appendChild(bText);
-        if (i + val.length < procCode.length) {
-          li.appendChild(document.createTextNode(procCode.substr(i + val.length)));
-        }
-        // li.innerHTML = enc(procCode.substring(0, i)) + '<b>' + enc(procCode.substr(i, val.length)) + "</b>" + enc(procCode.substr(i + val.length));
-      } else {
-        li.style.display = "none";
-      }
-    }
-  }
-
-  /**
-   * Select previous or next item in the drop down filter list
-   * @param dir direction of navigation: -1=up, 1=down
-   */
-  navigateFilter(dir) {
-    let sel = this.dd.getElementsByClassName("sel");
-    let nxt;
-    if (sel.length > 0 && sel[0].style.display !== "none") {
-      nxt = dir === -1 ? sel[0].previousSibling : sel[sel.length - 1].nextSibling;
-    } else {
-      nxt = this.dd.children[0];
-      dir = 1;
-    }
-    while (nxt && nxt.style.display === "none") {
-      nxt = dir === -1 ? nxt.previousSibling : nxt.nextSibling;
-    }
-    if (nxt) {
-      for (const i of sel) {
-        i.classList.remove("sel");
-      }
-      nxt.classList.add("sel");
-      this.dropDownClick({ target: nxt, navKey: true });
-      // centerTop(nxt.data.labelID);
-    }
-  }
-
-  inputKeyDown(e) {
-    // Up Arrow
-    if (e.keyCode === 38) {
-      this.navigateFilter(-1);
-      e.preventDefault();
-      return;
-    }
-
-    // Down Arrow
-    if (e.keyCode === 40) {
-      this.navigateFilter(1);
-      e.preventDefault();
-      return;
-    }
-
-    // Left Arrow
-    if (e.keyCode === 37) {
-      let sel = this.dd.getElementsByClassName("sel");
-      if (sel && this.multi.blocks) {
-        this.multi.navLeft(e);
-      }
-    }
-
-    // Right Arrow
-    if (e.keyCode === 39) {
-      let sel = this.dd.getElementsByClassName("sel");
-      if (sel && this.multi.blocks) {
-        this.multi.navRight(e);
-      }
-    }
-
-    // Enter
-    if (e.keyCode === 13) {
-      // Any selected on enter? if not select now
-      let sel = this.dd.getElementsByClassName("sel");
-      if (sel.length === 0) {
-        this.navigateFilter(1);
-      }
-      // noinspection JSUnresolvedFunction
-      document.activeElement.blur();
-      e.preventDefault();
-      return;
-    }
-
-    // Escape
-    if (e.keyCode === 27) {
-      if (this.findInp.value.length > 0) {
-        this.findInp.value = ""; // Clear search first, then close on second press
-        this.inputChange(e);
-      } else {
-        // noinspection JSUnresolvedFunction
-        document.activeElement.blur();
-      }
-      e.preventDefault();
-      return;
-    }
-  }
-
-  /*
-    function deepSearch(e) {
-      document.body.insertAdjacentHTML(
-        "beforeend",
-        `
-              <div id="s3devOverlay">
-              </div>
-          `
-      );
-
-      let overlay = document.getElementById("s3devOverlay");
-      overlay.addEventListener("click", function (e) {
-        overlay.remove();
-      });
-
-      // todo: use scratch runtime instead!
-
-      const runtime = vm.runtime;
-      const targets = runtime.targets; // The sprites / stage
-
-      let dict = {};
-
-      for (const target of targets) {
-        if (!target.isOriginal) {
-          continue; // Skip clones
-        }
-
-        const name = target.getName();
-        const isStage = target.isStage;
-        const blocks = target.blocks;
-        const scripts = blocks.getScripts();
-
-        let divElement = document.createElement("div");
-        divElement.appendChild(document.createTextNode("Searching in " + name));
-        divElement.appendChild(document.createTextNode(", Top Scripts x" + scripts.length));
-        overlay.appendChild(divElement);
-
-        const sprite = (dict[name] = {});
-        sprite.scripts = [];
-
-        for (const script of scripts) {
-          const block = blocks.getBlock(script);
-          const top = { id: script, opcode: block.opcode, block: block };
-          sprite.scripts.push(top);
-        }
-      }
-
-      e.preventDefault();
-      return true;
-    }
-  */
-
-  /**
    * Quick and dirty replace all instances of one variable / list with another variable / list
    * @param varId original variable name
    * @param newVarName new variable name
    * @param type type of variable ("" = variable, anything else is a list?
    */
   doReplaceVariable(varId, newVarName, type) {
-    let wksp = this.utils.getWorkspace();
+    let wksp = this.getWorkspace();
     let v = wksp.getVariable(newVarName, type);
     if (!v) {
       alert(this.msg("var-not-exist"));
@@ -1362,7 +602,7 @@ export default class DevTools {
    * @returns {Set<any>} Set of top blocks
    */
   getTopBlockIDs() {
-    let wksp = this.utils.getWorkspace();
+    let wksp = this.getWorkspace();
     let topBlocks = wksp.getTopBlocks();
     let ids = new Set();
     for (const block of topBlocks) {
@@ -1381,7 +621,7 @@ export default class DevTools {
     if (!this.addon.settings.get("enablePasteBlocksAtMouse")) {
       return;
     }
-    let wksp = this.utils.getWorkspace();
+    let wksp = this.getWorkspace();
     let topBlocks = wksp.getTopBlocks();
     for (const block of topBlocks) {
       if (!ids.has(block.id)) {
@@ -1403,7 +643,7 @@ export default class DevTools {
   }
 
   eventKeyDown(e) {
-    function switchCostume(up) {
+    const switchCostume = (up) => {
       // todo: select previous costume
       let selected = this.costTabBody.querySelector("div[class*='sprite-selector-item_is-selected']");
       let node = up ? selected.parentNode.previousSibling : selected.parentNode.nextSibling;
@@ -1417,22 +657,13 @@ export default class DevTools {
         });
         wrapper.scrollTop = 0;
       }
-    }
+    };
 
     if (document.URL.indexOf("editor") <= 0) {
       return;
     }
 
     let ctrlKey = e.ctrlKey || e.metaKey;
-
-    if (e.key === "f" && ctrlKey && !e.shiftKey) {
-      // Ctrl + F (Override default Ctrl+F find)
-      this.findInp.focus();
-      this.findInp.select();
-      e.cancelBubble = true;
-      e.preventDefault();
-      return true;
-    }
 
     if (e.key === " " && ctrlKey) {
       // Ctrl + Space (Inject Code)
@@ -1447,17 +678,13 @@ export default class DevTools {
       if (document.activeElement.tagName === "INPUT") {
         return;
       }
-      // todo: if (!this.addon.settings.get("enableCtrlLeftRightNav")) {
-      //         return;
-      //       }
-      if (this.isScriptEditor()) {
-        this.utils.navigationHistory.goBack();
-      } else if (this.isCostumeEditor()) {
+
+      if (this.isCostumeEditor()) {
         switchCostume(true);
+        e.cancelBubble = true;
+        e.preventDefault();
+        return true;
       }
-      e.cancelBubble = true;
-      e.preventDefault();
-      return true;
     }
 
     if (e.keyCode === 39 && ctrlKey) {
@@ -1465,17 +692,13 @@ export default class DevTools {
       if (document.activeElement.tagName === "INPUT") {
         return;
       }
-      // todo: if (!this.addon.settings.get("enableCtrlLeftRightNav")) {
-      //         return;
-      //       }
-      if (this.isScriptEditor()) {
-        this.utils.navigationHistory.goForward();
-      } else if (this.isCostumeEditor()) {
+
+      if (this.isCostumeEditor()) {
         switchCostume(false);
+        e.cancelBubble = true;
+        e.preventDefault();
+        return true;
       }
-      e.cancelBubble = true;
-      e.preventDefault();
-      return true;
     }
 
     if (e.keyCode === 86 && ctrlKey && !e.griff) {
@@ -1493,7 +716,7 @@ export default class DevTools {
   }
 
   eventCopyClick(block, blockOnly) {
-    let wksp = this.utils.getWorkspace();
+    let wksp = this.getWorkspace();
 
     if (block) {
       block.select();
@@ -1522,11 +745,6 @@ export default class DevTools {
   eventMouseDown(e) {
     this.updateMousePosition(e);
 
-    if (this.ddOut && this.ddOut.classList.contains("vis") && !e.target.closest("#s3devDDOut")) {
-      // If we click outside the dropdown, then instigate the hide code...
-      this.hideDropDown();
-    }
-
     if (this.floatInp && !e.target.closest("#s3devIDDOut")) {
       if (
         !e.shiftKey ||
@@ -1548,68 +766,6 @@ export default class DevTools {
         this.middleClick(e);
       } catch (x) {
         console.error(x);
-      }
-    } else if (e.button === 2) {
-      // Right click...
-      /*
-      let spriteSelector = e.target.closest("#react-tabs-3 div[class*='sprite-selector-item_sprite-selector-item']");
-      if (spriteSelector) {
-        let contextMenu = spriteSelector.getElementsByTagName("nav")[0];
-        if (!contextMenu.querySelector("div.s3devSTT")) {
-          contextMenu.insertAdjacentHTML(
-            "beforeend",
-            `
-                            <div class="${this.addon.tab.scratchClass(
-                              "context-menu_menu-item",
-                              "context-menu_menu-item-bordered",
-                              {
-                                others: ["react-contextmenu-item", "s3devSTT"],
-                              }
-                            )}" role="menuitem"
-                                tabindex="-1" aria-disabled="false"><span>${this.m("top")}</span></div>
-                            <div class="${this.addon.tab.scratchClass("context-menu_menu-item", {
-                              others: ["react-contextmenu-item", "s3devSTT"],
-                            })}" role="menuitem"
-                                tabindex="-1" aria-disabled="false"><span>${this.m("bottom")}</span></div>
-                        `
-          );
-        }
-      }
-      */
-    } else {
-      let chk = e.target;
-      if (chk && chk.tagName !== "BUTTON" && chk.getAttribute && !chk.getAttribute("role")) {
-        chk = chk.parentNode;
-        if (chk && chk.tagName !== "BUTTON" && chk.getAttribute && !chk.getAttribute("role")) {
-          chk = chk.parentNode;
-        }
-      }
-
-      if (chk && chk.className && chk.className.indexOf) {
-        if (!this.canShare && chk.className.indexOf("share-button") >= 0) {
-          // Commented for ScratchAddons
-          /*e.cancelBubble = true;
-                      e.preventDefault();
-
-                      if (confirm("Griffpatch: Are you sure you want to share?")) {
-                          // action the share!
-                          canShare = true;
-                          chk.click();
-                      }*/
-
-          return;
-        }
-      }
-
-      chk = e.target.tagName === "SPAN" ? e.target.parentNode : e.target;
-
-      if (chk.classList.contains("s3devSTT")) {
-        if (chk.textContent === this.m("top") || chk.textContent === this.m("bottom")) {
-          let spriteSelector = e.target.closest("div[class*='sprite-selector-item_sprite-selector-item']");
-          this.moveCostumeTo(chk.textContent === this.m("top"), spriteSelector);
-          e.cancelBubble = true;
-          e.preventDefault();
-        }
       }
     }
   }
@@ -1689,98 +845,7 @@ export default class DevTools {
         this.blockCursor = null; // Clear the cursor if using the mouse
         this.middleClickWorkspace(e);
       }
-      return;
     }
-
-    if (!this.addon.settings.get("enableMiddleClickFinder")) {
-      return;
-    }
-
-    let w = this.utils.getWorkspace();
-    let dataId = blockSvg.getAttribute("data-id");
-    let block = w.getBlockById(dataId);
-    if (!block) {
-      return;
-    }
-
-    // Move outwards until we reach a block we can take action on
-
-    for (; block; block = block.getSurroundParent()) {
-      if (block.type === "procedures_call") {
-        e.cancelBubble = true;
-        e.preventDefault();
-
-        // todo: navigate to definition
-        let findProcCode = block.getProcCode();
-
-        let wksp = this.utils.getWorkspace();
-        let topBlocks = wksp.getTopBlocks();
-        for (const root of topBlocks) {
-          if (root.type === "procedures_definition") {
-            let label = root.getChildren()[0];
-            let procCode = label.getProcCode();
-            if (procCode && procCode === findProcCode) {
-              // Found... navigate to it!
-              this.centerTop(root);
-              return;
-            }
-          }
-        }
-      }
-
-      if (block.type === "procedures_definition") {
-        let id = block.id ? block.id : block.getId ? block.getId() : null;
-
-        this.findInp.focus();
-        this.showDropDown(null, id);
-        // findInp.select();
-
-        e.cancelBubble = true;
-        e.preventDefault();
-        return;
-      }
-
-      if (
-        block.type === "data_variable" ||
-        block.type === "data_changevariableby" ||
-        block.type === "data_setvariableto"
-      ) {
-        let id = block.getVars()[0];
-
-        this.findInp.focus();
-        this.showDropDown(null, id, block);
-
-        // let button = document.getElementById('s3devReplace');
-
-        this.selVarID = id;
-        // button.classList.remove('s3devHide');
-
-        e.cancelBubble = true;
-        e.preventDefault();
-        return;
-      }
-
-      if (
-        block.type === "event_whenbroadcastreceived" ||
-        block.type === "event_broadcastandwait" ||
-        block.type === "event_broadcast"
-      ) {
-        // todo: actually index the broadcasts...!
-        let id = block.id;
-
-        this.findInp.focus();
-        this.showDropDown(null, id, block);
-
-        this.selVarID = id;
-
-        e.cancelBubble = true;
-        e.preventDefault();
-        return;
-      }
-    }
-
-    e.cancelBubble = true;
-    e.preventDefault();
   }
 
   getEdgeTypeClass(block) {
@@ -1799,7 +864,7 @@ export default class DevTools {
 
     let options = [];
 
-    let t = this.utils.getWorkspace().getToolbox();
+    let t = this.getWorkspace().getToolbox();
 
     let blocks = t.flyout_.getWorkspace().getTopBlocks();
     // 107 blocks, not in order... but we can sort by y value or description right :)
@@ -2042,7 +1107,7 @@ export default class DevTools {
       e.preventDefault();
     }
 
-    let wksp = this.utils.getWorkspace();
+    let wksp = this.getWorkspace();
 
     let sel = e && e.target;
     if (sel.tagName === "B") {
@@ -2113,13 +1178,6 @@ export default class DevTools {
   }
 
   floatInputChange(e) {
-    let ddOut = document.getElementById("s3devIDDOut");
-
-    if (!ddOut.classList.contains("vis")) {
-      // showDropDown();
-      // hideDropDown(); // Start timer to hide if not got focus
-    }
-
     let findInp = document.getElementById("s3devIInp");
 
     // Filter the list...
@@ -2129,7 +1187,6 @@ export default class DevTools {
     }
 
     prevVal = val;
-    this.multi.blocks = null;
 
     let dd = document.getElementById("s3devIDD");
     let p = dd.parentNode;
@@ -2207,102 +1264,10 @@ export default class DevTools {
     this.costTab = guiTabs[1];
     this.costTabBody = document.querySelector("div[aria-labelledby=" + this.costTab.id + "]");
 
-    if (!document.getElementById("s3devFind")) {
-      // noinspection JSUnresolvedVariable
-      root.insertAdjacentHTML(
-        "beforeend",
-        `
-                <div id="s3devToolBar">
-                    <div class='title s3devLabel' id=s3devFindLabel>
-                        <label for="s3devInp">${this.m("find")} ${
-          this.addon.self._isDevtoolsExtension
-            ? ""
-            : '<a href="#" class="s3devAction" id="s3devHelp" style="/*s-a*/ margin-left: 0; font-size: 10px; /*s-a*/">(?)</a>'
-        } </label>
-                        <span id=s3devFind class="s3devWrap">
-                            <label id='s3devDDOut' class="s3devDDOut">
-                                <input id='s3devInp' class="${this.addon.tab.scratchClass("input_input-form", {
-                                  others: "s3devInp",
-                                })}" type='search' placeholder='${this.m("find-placeholder")}' autocomplete='off'>
-                                <ul id='s3devDD' class="s3devDD"></ul>
-                            </label>
-                        </span>
-                        <a id="s3devDeep" class="s3devAction s3devHide" href="#">${this.m("deep")}</a>
-                        <div ${
-                          this.addon.self._isDevtoolsExtension ? "" : 'style="display: none;"'
-                        }><a href="#" class="s3devAction" id="s3devHelp"><b>${this.m("help")}</b></a>
-                        <a href="https://www.youtube.com/griffpatch" class="s3devAction" target="_blank" id="s3devHelp" rel="noreferrer noopener">${this.m(
-                          "tutorials"
-                        )}</a></div>
-                    </div>
-                </div>
-            `
-      );
-
-      this.find = document.getElementById("s3devFind");
-      this.findInp = document.getElementById("s3devInp");
-      this.ddOut = document.getElementById("s3devDDOut");
-      this.domHelpers.bindOnce(this.ddOut, "mousedown", (...e) => this.dropDownClick(...e), undefined);
-      this.dd = document.getElementById("s3devDD");
-
-      // bindOnce(find, 'mouseenter', showDropDown);
-      // bindOnce(find, 'mouseleave', hideDropDown);
-      this.domHelpers.bindOnce(this.findInp, "keyup", (...e) => this.inputChange(...e), undefined);
-      this.domHelpers.bindOnce(this.findInp, "keydown", (...e) => this.inputKeyDown(...e), undefined);
-      this.domHelpers.bindOnce(this.findInp, "focus", (...e) => this.inputChange(...e), undefined);
-
-      this.domHelpers.bindOnce(
-        document.getElementById("s3devHelp"),
-        "click",
-        (...e) => this.eventClickHelp(...e),
-        undefined
-      );
-
-      this.domHelpers.bindOnce(document, "keydown", (...e) => this.eventKeyDown(...e), true);
-    }
-
+    this.domHelpers.bindOnce(document, "keydown", (...e) => this.eventKeyDown(...e), true);
     this.domHelpers.bindOnce(document, "mousemove", (...e) => this.eventMouseMove(...e), true);
     this.domHelpers.bindOnce(document, "mousedown", (...e) => this.eventMouseDown(...e), true); // true to capture all mouse downs 'before' the dom events handle them
     this.domHelpers.bindOnce(document, "mouseup", (...e) => this.eventMouseUp(...e), true);
-  }
-}
-
-class Multi {
-  constructor(utils) {
-    this.idx = 0;
-    this.blocks = null;
-    this.selID = null;
-    /**
-     * @type {Utils}
-     */
-    this.utils = utils;
-  }
-
-  update() {
-    const count = document.getElementById("s3devMultiCount");
-    count.innerText = this.blocks && this.blocks.length > 0 ? enc(this.idx + 1 + " / " + this.blocks.length) : "0";
-    this.selID = this.idx < this.blocks.length ? this.blocks[this.idx].id : null;
-  }
-
-  navLeft(e) {
-    return this.navSideways(e, -1);
-  }
-
-  navRight(e) {
-    return this.navSideways(e, 1);
-  }
-
-  navSideways(e, dir) {
-    if (this.blocks && this.blocks.length > 0) {
-      this.idx = (this.idx + dir + this.blocks.length) % this.blocks.length; // + length to fix negative modulo js issue.
-      this.update();
-      this.utils.scrollBlockIntoView(this.blocks[this.idx]);
-    }
-    if (e) {
-      e.cancelBubble = true;
-      e.preventDefault();
-    }
-    return false;
   }
 }
 
@@ -2331,10 +1296,5 @@ class Col {
 
 const DROPDOWN_BLOCK_LIST_MAX_ROWS = 25;
 
-let rhdd = 0;
 let rhdd2 = 0;
 let prevVal = "";
-
-function enc(str) {
-  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
