@@ -1,4 +1,4 @@
-import { setup, setVol, isMuted, getDefVol, setDefVol } from "./module.js";
+import { setup, setVol, getDefVol, setDefVol } from "./module.js";
 
 export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.vm;
