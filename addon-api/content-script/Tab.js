@@ -15,7 +15,6 @@ let createdAnyBlockContextMenus = false;
 /**
  * APIs specific to userscripts.
  * @extends Listenable
- * @property {?string} clientVersion - version of the renderer (scratch-www, scratchr2, etc)
  * @property {Trap} traps
  * @property {ReduxHandler} redux
  */
@@ -27,6 +26,10 @@ export default class Tab extends Listenable {
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
   }
+  /**
+   * Version of the renderer (scratch-www, scratchr2, or null if it cannot be determined).
+   * @type {?string}
+   */
   get clientVersion() {
     if (!this._clientVersion)
       this._clientVersion = document.querySelector("meta[name='format-detection']")
@@ -36,21 +39,55 @@ export default class Tab extends Listenable {
         : null;
     return this._clientVersion;
   }
-  addBlock(...a) {
+  /**
+   * @callback Tab~blockCallback
+   * @param {object} params - the passed params.
+   * @param {object} thread - the current thread.
+   */
+  /**
+   * Adds a custom stack block definition. Internally this is a special-cased custom block.
+   * @param {string} proccode the procedure definition code
+   * @param {object} opts - options.
+   * @param {string[]} opts.args - a list of argument names the block takes.
+   * @param {Tab~blockCallback} opts.callback - the callback.
+   * @param {boolean=} opts.hidden - whether the block is hidden from the palette.
+   * @param {string=} opts.displayName - the display name of the block, if different from the proccode.
+   */
+  addBlock(proccode, opts) {
     blocks.init(this);
-    return blocks.addBlock(...a);
+    return blocks.addBlock(proccode, opts);
   }
-  removeBlock(...a) {
-    return blocks.removeBlock(...a);
+  /**
+   * Removes a stack block definition. Should not be called in most cases.
+   * @param {string} proccode the procedure definition code of the block
+   */
+  removeBlock(proccode) {
+    return blocks.removeBlock(proccode);
   }
-  setCustomBlockColor(...a) {
-    return blocks.setCustomBlockColor(...a);
+  /**
+   * Sets the color for the custom blocks.
+   * @param {object} colors - the colors.
+   * @param {string=} colors.color - the primary color.
+   * @param {string=} colors.secondaryColor - the secondary color.
+   * @param {string=} colors.tertiaryColor - the tertiary color.
+   */
+  setCustomBlockColor(colors) {
+    return blocks.setCustomBlockColor(colors);
   }
+  /**
+   * Gets the custom block colors.
+   * @returns {object} - the colors.
+   */
   getCustomBlockColor() {
     return blocks.color;
   }
-  getCustomBlock(...a) {
-    return blocks.getCustomBlock(...a);
+  /**
+   * Gets a custom block from the procedure definition code.
+   * @param {string} proccode the procedure definition code.
+   * @returns {object=} the custom block definition.
+   */
+  getCustomBlock(proccode) {
+    return blocks.getCustomBlock(proccode);
   }
   /**
    * Loads a script by URL.
@@ -308,6 +345,18 @@ export default class Tab extends Listenable {
    * forumsAfterPostReport - after the report button in forum posts
    * beforeRemixButton - before the remix button in project page
    * studioCuratorsTab - inside the studio curators tab
+   * forumToolbarTextDecoration - after the forum toolbar's text decoration (bold, etc) buttons
+   * forumToolbarLinkDecoration - after the forum toolbar's link buttons
+   * forumToolbarFont - after the forum toolbar's big or small font dropdown
+   * forumToolbarList - after the forum toolbar's list buttons
+   * forumToolbarDecoration - after the forum toolbar's emoji and quote buttons
+   * forumToolbarEnvironment - after the forum toolbar's environment button
+   * forumToolbarScratchblocks - after the forum toolbar's scratchblocks dropdown
+   * forumToolbarTools - after the forum toolbar's remove formatting and preview buttons
+   * assetContextMenuAfterExport - after the export button of asset (sprite, costume, etc)'s context menu
+   * assetContextMenuAfterDelete - after the delete button of asset (sprite, costume, etc)'s context menu
+   * monitor - after the end of the stage monitor context menu
+   *
    * @param {object} opts - options.
    * @param {string} opts.space - the shared space name.
    * @param {HTMLElement} element - the element to add.
@@ -694,17 +743,56 @@ export default class Tab extends Listenable {
     addContextMenu(this, ...args);
   }
 
+  /**
+   * @typedef {object} Tab~Modal
+   * @property {HTMLElement} container - the container element.
+   * @property {HTMLElement} content - where the content should be appended.
+   * @property {HTMLElement} backdrop - the modal overlay.
+   * @property {HTMLElement} closeButton - the close (X) button on the header.
+   * @property {function} open - opens the modal.
+   * @property {function} close - closes the modal.
+   * @property {function} remove - removes the modal, making it no longer usable.
+   */
+
+  /**
+   * Creates a modal using the vanilla style.
+   * @param {string} title - the title.
+   * @param {object=} opts - the options.
+   * @param {boolean=} opts.isOpen - whether to open the modal by default.
+   * @param {boolean=} opts.useEditorClasses - if on editor, whether to apply editor styles and not www styles.
+   * @param {boolean=} opts.useSizesClass - if on scratch-www, whether to add modal-sizes class.
+   * @return {Tab~Modal} - the modal.
+   */
   createModal(title, { isOpen = false, useEditorClasses = false, useSizesClass = false } = {}) {
     if (this.editorMode !== null && useEditorClasses) return modal.createEditorModal(this, title, { isOpen });
     if (this.clientVersion === "scratch-www") return modal.createScratchWwwModal(title, { isOpen, useSizesClass });
     return modal.createScratchr2Modal(title, { isOpen });
   }
 
-  confirm(...args) {
-    return modal.confirm(this, ...args);
+  /**
+   * Opens a confirmation dialog. Can be used to replace confirm(), but is async.
+   * @param {string} title - the title.
+   * @param {string} message - the message displayed in the contents.
+   * @param {object=} opts - the options.
+   * @param {boolean=} opts.useEditorClasses - if on editor, whether to apply editor styles and not www styles.
+   * @param {string=} opts.okButtonLabel - the label of the button for approving the confirmation
+   * @param {string=} opts.cancelButtonLabel - the label of the button for rejecting the confirmation
+   * @returns {Promise<boolean>} - whether the confirmation was approved
+   */
+  confirm(title, message, opts) {
+    return modal.confirm(this, title, message, opts);
   }
 
-  prompt(...args) {
-    return modal.prompt(this, ...args);
+  /**
+   * Opens a prompt that a user can enter a value into.
+   * @param {string} title - the title.
+   * @param {string} message - the message displayed in the contents.
+   * @param {string=} defaultValue - the default value.
+   * @param {object=} opts - the options.
+   * @param {boolean=} opts.useEditorClasses - if on editor, whether to apply editor styles and not www styles.
+   * @returns Promise<?string> - the entered value, or null if canceled.
+   */
+  prompt(title, message, defaultValue, opts) {
+    return modal.prompt(this, title, message, defaultValue, opts);
   }
 }
