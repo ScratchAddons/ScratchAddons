@@ -118,10 +118,6 @@ export default async function ({ addon, console }) {
     if (field) return field.sourceBlock_.getColourTertiary();
     return "#000000";
   };
-  const coloredTextColor = (category) => {
-    if (!isColoredTextMode()) return originalColors[category.colorId].primary;
-    return addon.settings.get(category.settingId);
-  };
   const uncoloredTextColor = () => {
     if (addon.self.disabled) return "#ffffff";
     return {
@@ -299,7 +295,6 @@ export default async function ({ addon, console }) {
     const workspace = Blockly.getMainWorkspace();
     const flyout = workspace.getFlyout();
     const toolbox = workspace.getToolbox();
-    const categoryMenu = toolbox.categoryMenu_;
 
     // Reload toolbox
     if (vm.editingTarget) {
