@@ -6,7 +6,6 @@
   background-color: var(--editorDarkMode-page);
   color: var(--editorDarkMode-page-text);
 }
-.s3devLabel > span:first-child,
 .backpack_status-message_3kt5s {
   color: var(--editorDarkMode-page-text);
 }
@@ -151,12 +150,9 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .slider_handle_3f0xk,
 .sound-editor_button_1_6Li,
 .library-item_library-item_1DcMO,
-.s3devDDOut.vis,
+.find-dropdown-out.visible,
 .prompt_body_18Z-I,
 .custom-procedures_body_SQBv6,
-#s3devHelpContent,
-#s3devHelpContent h2,
-#s3devHelpContent p,
 .slider-prompt_body_2ZkXL,
 .record-modal_body_2VO4l,
 .sa-debugger-interface,
@@ -188,11 +184,11 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .selector_new-buttons_2qHDd::before {
   background: linear-gradient(var(--editorDarkMode-accent-opacity0), var(--editorDarkMode-accent));
 }
-.s3devDD > li.boolean::before {
+.find-dropdown > li.boolean::before {
   border-top: 9px solid var(--editorDarkMode-accent);
   border-bottom: 10px solid var(--editorDarkMode-accent);
 }
-.s3devDD > li.boolean::after {
+.find-dropdown > li.boolean::after {
   border-top: 9px solid var(--editorDarkMode-accent);
   border-bottom: 10px solid var(--editorDarkMode-accent);
 }
@@ -352,10 +348,6 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .context-menu_menu-item_3cioN:not(.context-menu_menu-item-danger_1tJg0):hover,
 .blocklyWidgetDiv .goog-menuitem-highlight,
 .blocklyWidgetDiv .goog-menuitem-hover,
-.s3dev-mi:hover {
-  background-color: var(--editorDarkMode-primary);
-  color: var(--editorDarkMode-primary-text);
-}
 .gui_extension-button-container_b4rCs,
 .prompt_button-row_3Wc5Z button.prompt_ok-button_3QFdD,
 .custom-procedures_button-row_2jBu3 button.custom-procedures_ok-button_2X0Vj,
@@ -407,7 +399,7 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .action-menu_main-button_3ccfy {
   box-shadow: 0 0 0 4px var(--editorDarkMode-primary-transparent35);
 }
-.input_input-form_l9eYg:not(.project-title-input_title-field_en5Gd):not(.s3devInp):focus,
+.input_input-form_l9eYg:not(.project-title-input_title-field_en5Gd):not(.find-input):focus,
 .input_input-form_1Y0wX:focus,
 .sprite-selector-item_sprite-selector-item_kQm-i.sprite-selector-item_is-selected_24tQj,
 .stage-selector_stage-selector_3oWOr.stage-selector_is-selected_2x2r_,
