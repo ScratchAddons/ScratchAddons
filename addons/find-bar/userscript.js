@@ -443,7 +443,22 @@ export default async function ({ addon, msg, console }) {
       const item = document.createElement("li");
       item.innerText = proc.procCode;
       item.data = proc;
-      item.className = proc.cls;
+      const colorIds = {
+        receive: "event",
+        event: "event",
+        define: "more",
+        var: "data",
+        VAR: "data",
+        list: "data_lists",
+        LIST: "data_lists",
+        costume: "looks",
+      };
+      if (proc.cls === "flag") {
+        item.className = "flag";
+      } else {
+        const colorId = colorIds[proc.cls];
+        item.className = `sa-block-color sa-block-color-${colorId}`;
+      }
       item.addEventListener("mousedown", (e) => {
         this.onItemClick(item);
         e.preventDefault();
