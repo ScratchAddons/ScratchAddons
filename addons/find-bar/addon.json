@@ -1,0 +1,36 @@
+{
+  "name": "Editor find bar",
+  "description": "Adds a find bar to find and jump to scripts, costumes and sounds next to the sounds tab. Use Ctrl+Left and Ctrl+Right in the code area to navigate to previous or next visited position after using the find bar.",
+  "info": [
+    {
+      "text": "This addon was previously part of the \"developer tools\" addon but has moved here.",
+      "id": "developer-tools"
+    }
+  ],
+  "credits": [
+    {
+      "name": "griffpatch"
+    },
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/thecolaber/"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.28.0",
+  "tags": ["editor", "codeEditor", "costumeEditor", "recommended"],
+  "enabledByDefault": true
+}
