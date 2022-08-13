@@ -122,6 +122,9 @@
   "default-costume-editor-color",
   "one-click-studio-invites",
   "forum-post-snip",
+  "remove-search-bar-autocomplete",
+  "find-bar",
+  "jump-to-def",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",

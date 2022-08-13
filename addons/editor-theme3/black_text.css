@@ -1,0 +1,21 @@
+.scratchCategoryItemBubble::after {
+  /* block-palette-icons */
+  filter: brightness(0);
+  opacity: 0.6;
+}
+
+.blocklyDropDownDiv .goog-menuitem,
+.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem .goog-menuitem-content {
+  color: #575e75;
+}
+.blocklyDropDownDiv .blocklyText {
+  fill: #575e75;
+}
+
+/* Compatibility */
+
+.sa-block-color {
+  --sa-block-text: #575e75;
+  --sa-block-gray-text: #575e75;
+  --sa-block-text-on-bright-background: #575e75;
+}
