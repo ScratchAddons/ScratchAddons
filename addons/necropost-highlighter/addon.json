@@ -1,198 +1,195 @@
 {
-	"name": "Necropost highlighter",
-	"description": "Spot old forum topics brought back to life, before opening the message. Topics started much earlier than others listed on the same page are highlighted (in selected forums). If you've wasted time reading zombie messages or a help/question/request that was actually asked years ago, this is for you!",
-	"info": [
-		{
-			"type": "notice",
-			"id": "whatGetsHighlighted",
-			"text": "Sometimes an older topic is kept alive for good reasons, like an ongoing conversation, or the original poster following up their own topic months later. All older topics in selected forums are highlighted, including occasional lingering topics that are not necroposts. (That's why they get highlighted, but not removed.)"
-		}
-	],
-	"credits": [
-		{
-			"name": "RT_Borg",
-			"link": "https://github.com/RT-Borg"
-		}
-	],
-	"dynamicDisable": true,
-	"dynamicEnable": true,
-	"enabledByDefault": false,
-	"tags": [
-		"community",
-		"forums"
-	],
-	"versionAdded": "1.28.0",
-	"userscripts": [
-		{
-			"url": "userscript.js",
-			"matches": [
-				"https://scratch.mit.edu/discuss/search/*",
-				"https://scratch.mit.edu/discuss/6/*",
-				"https://scratch.mit.edu/discuss/m/6/*",
-				"https://scratch.mit.edu/discuss/7/*",
-				"https://scratch.mit.edu/discuss/m/7/*",
-				"https://scratch.mit.edu/discuss/9/*",
-				"https://scratch.mit.edu/discuss/m/9/*",
-				"https://scratch.mit.edu/discuss/11/*",
-				"https://scratch.mit.edu/discuss/m/11/*",
-				"https://scratch.mit.edu/discuss/4/*",
-				"https://scratch.mit.edu/discuss/m/4/*",
-				"https://scratch.mit.edu/discuss/1/*",
-				"https://scratch.mit.edu/discuss/m/1/*",
-				"https://scratch.mit.edu/discuss/3/*",
-				"https://scratch.mit.edu/discuss/m/3/*",
-				"https://scratch.mit.edu/discuss/49/*",
-				"https://scratch.mit.edu/discuss/m/49/*"
-			]
-		}
-	],
-	"settings": [
-		{
-			"name": "Highlight color",
-			"id": "highlightColor",
-			"type": "color",
-			"default": "#D1E9F2"
-		},
-		{
-			"name": "Choose custom forums?",
-			"id": "chooseCustomForums",
-			"type": "boolean",
-			"default": false
-		},
-		{
-			"name": "New Scratchers (advised)",
-			"id": "applyToNewScratchers",
-			"type": "boolean",
-			"default": true,
-			"if": {
-				"settings": {
-					"chooseCustomForums": true
-				}
-			}
-		},
-		{
-			"name": "Help with Scripts (advised)",
-			"id": "applyToHelpWithScripts",
-			"type": "boolean",
-			"default": true,
-			"if": {
-				"settings": {
-					"chooseCustomForums": true
-				}
-			}
-		},
-		{
-			"name": "Questions about Scratch (advised)",
-			"id": "applyToQuestionsAboutScratch",
-			"type": "boolean",
-			"default": true,
-			"if": {
-				"settings": {
-					"chooseCustomForums": true
-				}
-			}
-		},
-		{
-			"name": "Bugs and Glitches (advised)",
-			"id": "applyToBugsAndGlitches",
-			"type": "boolean",
-			"default": true,
-			"if": {
-				"settings": {
-					"chooseCustomForums": true
-				}
-			}
-		},
-		{
-			"name": "Project Ideas (marginal)",
-			"id": "applyToProjectIdeas",
-			"type": "boolean",
-			"default": true,
-			"if": {
-				"settings": {
-					"chooseCustomForums": true
-				}
-			}
-		},
-		{
-			"name": "Requests (suspect)",
-			"id": "applyToRequests",
-			"type": "boolean",
-			"default": false,
-			"if": {
-				"settings": {
-					"chooseCustomForums": true
-				}
-			}
-		},
-		{
-			"name": "Suggestions (suspect)",
-			"id": "applyToSuggestions",
-			"type": "boolean",
-			"default": false,
-			"if": {
-				"settings": {
-					"chooseCustomForums": true
-				}
-			}
-		},
-		{
-			"name": "Open Source Projects (suspect)",
-			"id": "applyToOpenSourceProjects",
-			"type": "boolean",
-			"default": false,
-			"if": {
-				"settings": {
-					"chooseCustomForums": true
-				}
-			}
-		},
-		{
-			"name": "Choose custom age?",
-			"id": "chooseCustomTopicInterval",
-			"type": "boolean",
-			"default": false
-		},
-		{
-			"name": "How many topics is 'old'? (7,500 is about a month)",
-			"id": "customTopicInterval",
-			"type": "positive_integer",
-			"default": 7500,
-			"if": {
-				"settings": {
-					"chooseCustomTopicInterval": true
-				}
-			}
-		}
-	],
-	"presets": [
-		{
-			"name": "Light theme blue",
-			"id": "lightThemeBlue",
-			"values": {
-				"highlightColor": "#D1E9F2"
-			}
-		},
-		{
-			"name": "Light theme pink",
-			"id": "lightThemePink",
-			"values": {
-				"highlightColor": "#FFE4E1"
-			}
-		},
-		{
-			"name": "Dark theme blue",
-			"id": "darkThemeBlue",
-			"values": {
-				"highlightColor": "#0A2F4B"
-			}
-		},
-		{
-			"name": "Dark theme red",
-			"id": "darkThemeRed",
-			"values": {
-				"highlightColor": "#390500"
-			}
-		}
-	]
+  "name": "Necropost highlighter",
+  "description": "Spot old forum topics brought back to life, before opening the message. Topics started much earlier than others listed on the same page are highlighted (in selected forums). If you've wasted time reading zombie messages or a help/question/request that was actually asked years ago, this is for you!",
+  "info": [
+    {
+      "type": "notice",
+      "id": "whatGetsHighlighted",
+      "text": "Sometimes an older topic is kept alive for good reasons, like an ongoing conversation, or the original poster following up their own topic months later. All older topics in selected forums are highlighted, including occasional lingering topics that are not necroposts. (That's why they get highlighted, but not removed.)"
+    }
+  ],
+  "credits": [
+    {
+      "name": "RT_Borg",
+      "link": "https://github.com/RT-Borg"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "enabledByDefault": false,
+  "tags": ["community", "forums"],
+  "versionAdded": "1.28.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": [
+        "https://scratch.mit.edu/discuss/search/*",
+        "https://scratch.mit.edu/discuss/6/*",
+        "https://scratch.mit.edu/discuss/m/6/*",
+        "https://scratch.mit.edu/discuss/7/*",
+        "https://scratch.mit.edu/discuss/m/7/*",
+        "https://scratch.mit.edu/discuss/9/*",
+        "https://scratch.mit.edu/discuss/m/9/*",
+        "https://scratch.mit.edu/discuss/11/*",
+        "https://scratch.mit.edu/discuss/m/11/*",
+        "https://scratch.mit.edu/discuss/4/*",
+        "https://scratch.mit.edu/discuss/m/4/*",
+        "https://scratch.mit.edu/discuss/1/*",
+        "https://scratch.mit.edu/discuss/m/1/*",
+        "https://scratch.mit.edu/discuss/3/*",
+        "https://scratch.mit.edu/discuss/m/3/*",
+        "https://scratch.mit.edu/discuss/49/*",
+        "https://scratch.mit.edu/discuss/m/49/*"
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Highlight color",
+      "id": "highlightColor",
+      "type": "color",
+      "default": "#D1E9F2"
+    },
+    {
+      "name": "Choose custom forums?",
+      "id": "chooseCustomForums",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "New Scratchers (advised)",
+      "id": "applyToNewScratchers",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": {
+          "chooseCustomForums": true
+        }
+      }
+    },
+    {
+      "name": "Help with Scripts (advised)",
+      "id": "applyToHelpWithScripts",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": {
+          "chooseCustomForums": true
+        }
+      }
+    },
+    {
+      "name": "Questions about Scratch (advised)",
+      "id": "applyToQuestionsAboutScratch",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": {
+          "chooseCustomForums": true
+        }
+      }
+    },
+    {
+      "name": "Bugs and Glitches (advised)",
+      "id": "applyToBugsAndGlitches",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": {
+          "chooseCustomForums": true
+        }
+      }
+    },
+    {
+      "name": "Project Ideas (marginal)",
+      "id": "applyToProjectIdeas",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": {
+          "chooseCustomForums": true
+        }
+      }
+    },
+    {
+      "name": "Requests (suspect)",
+      "id": "applyToRequests",
+      "type": "boolean",
+      "default": false,
+      "if": {
+        "settings": {
+          "chooseCustomForums": true
+        }
+      }
+    },
+    {
+      "name": "Suggestions (suspect)",
+      "id": "applyToSuggestions",
+      "type": "boolean",
+      "default": false,
+      "if": {
+        "settings": {
+          "chooseCustomForums": true
+        }
+      }
+    },
+    {
+      "name": "Open Source Projects (suspect)",
+      "id": "applyToOpenSourceProjects",
+      "type": "boolean",
+      "default": false,
+      "if": {
+        "settings": {
+          "chooseCustomForums": true
+        }
+      }
+    },
+    {
+      "name": "Choose custom age?",
+      "id": "chooseCustomTopicInterval",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "How many topics is 'old'? (7,500 is about a month)",
+      "id": "customTopicInterval",
+      "type": "positive_integer",
+      "default": 7500,
+      "if": {
+        "settings": {
+          "chooseCustomTopicInterval": true
+        }
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "Light theme blue",
+      "id": "lightThemeBlue",
+      "values": {
+        "highlightColor": "#D1E9F2"
+      }
+    },
+    {
+      "name": "Light theme pink",
+      "id": "lightThemePink",
+      "values": {
+        "highlightColor": "#FFE4E1"
+      }
+    },
+    {
+      "name": "Dark theme blue",
+      "id": "darkThemeBlue",
+      "values": {
+        "highlightColor": "#0A2F4B"
+      }
+    },
+    {
+      "name": "Dark theme red",
+      "id": "darkThemeRed",
+      "values": {
+        "highlightColor": "#390500"
+      }
+    }
+  ]
 }
