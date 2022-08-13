@@ -134,16 +134,13 @@ export default async function ({ template }) {
       },
     },
     ready() {
-      window.addEventListener(
-        "hashchange",
-        (event) => {
-          if (location.hash.includes(this.addon._addonId)) {
-            this.expanded = true;
-            if (this.addon.tags.includes("easterEgg")) vue.selectedCategory = "easterEgg";
-          }
-        },
-        false
-      );
+      const onHashChange = () => {
+        if (location.hash.replace(/^#addon-/, "") === this.addon._addonId) {
+          this.expanded = true;
+        }
+      };
+      window.addEventListener("hashchange", onHashChange, { capture: false });
+      setTimeout(onHashChange, 0);
     },
   });
   Vue.component("addon-body", AddonBody);
