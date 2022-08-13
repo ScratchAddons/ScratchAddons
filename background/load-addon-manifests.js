@@ -42,7 +42,16 @@ const localizeSettings = (addonId, setting, tableId) => {
   const useDefault = scratchAddons.l10n.locale.startsWith("en");
   for (const addonId of addonIds) {
     if (addonId.startsWith("//")) continue;
-    const manifest = await (await fetch(`/addons/${addonId}/addon.json`)).json();
+    let manifest;
+    try {
+      manifest = await (await fetch(`/addons/${addonId}/addon.json`)).json();
+    } catch (ex) {
+      console.error(`Failed to load addon manifest for ${addonId}, crashing:`, ex);
+      chrome.tabs.create({
+        url: `data:text/plain,Scratch Addons crashed: invalid addon.json for addon with id ${addonId}. Click the "Errors" button on the extension tile for more details.`,
+      });
+      throw ex;
+    }
     let potentiallyNeedsMissingDynamicWarning =
       manifest.updateUserstylesOnSettingsChange && !(manifest.dynamicEnable && manifest.dynamicDisable);
     if (!useDefault) {

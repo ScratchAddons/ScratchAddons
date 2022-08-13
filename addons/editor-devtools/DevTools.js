@@ -908,8 +908,14 @@ export default class DevTools {
 
       li.innerText = desc;
       li.data = { text: desc, lower: " " + desc.toLowerCase(), option: option };
-      li.className =
-        "var " + (option.block.isScratchExtension ? "extension" : option.block.getCategory()) + " " + bType; // proc.cls;
+      let cls = option.block.isScratchExtension ? "pen" : option.block.getCategory();
+      if (cls === null) cls = "more";
+      const colorIds = {
+        "data-lists": "data_lists",
+        events: "event",
+      };
+      const colorId = colorIds[cls] || cls;
+      li.className = "var sa-block-color sa-block-color-" + colorId + " " + bType; // proc.cls;
       if (count > DROPDOWN_BLOCK_LIST_MAX_ROWS) {
         // Limit maximum number of rows to prevent lag when no filter is applied
         li.style.display = "none";

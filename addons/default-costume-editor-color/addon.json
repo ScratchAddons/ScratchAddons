@@ -41,7 +41,7 @@
     }
   ],
   "versionAdded": "1.26.0",
-  "tags": ["editor", "costumeEditor", "featured", "beta"],
+  "tags": ["editor", "costumeEditor", "featured"],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "enabledByDefault": false
