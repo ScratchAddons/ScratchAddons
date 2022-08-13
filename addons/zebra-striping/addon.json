@@ -29,10 +29,26 @@
   ],
   "settings": [
     {
-      "name": "Intensity (-100-100%)",
+      "name": "Shade",
+      "id": "shade",
+      "type": "select",
+      "potentialValues": [
+        {
+          "name": "Lighter",
+          "id": 1
+        },
+        {
+          "name": "Darker",
+          "id": -1
+        }
+      ],
+      "default": 1
+    },
+    {
+      "name": "Intensity (0-100%)",
       "id": "intensity",
       "type": "integer",
-      "min": -100,
+      "min": 0,
       "default": 20,
       "max": 100
     }
