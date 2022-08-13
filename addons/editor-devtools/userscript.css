@@ -1,3 +1,5 @@
+@import url("../editor-theme3/compatibility.css");
+
 #s3devToolBar {
   display: flex;
   white-space: nowrap;
@@ -124,6 +126,7 @@ ul.s3devDD {
   padding: 0.5em 0.3em;
   white-space: nowrap;
   margin: 0;
+  color: var(--sa-block-colored-text);
   font-weight: bold;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -137,172 +140,13 @@ ul.s3devDD {
 /* Drop down items */
 .s3devDD > li:hover,
 .s3devDD > li.sel {
-  color: white;
+  background-color: var(--sa-block-bright-background);
+  color: var(--sa-block-text-on-bright-background);
   cursor: pointer;
 }
 
 #s3devDD > li::before {
   content: "\25CF "; /* ● */
-}
-
-.define {
-  color: rgb(255, 102, 128);
-}
-.define:hover,
-.define.sel {
-  background-color: rgb(255, 102, 128);
-}
-
-.flag {
-  color: #4cbf56;
-}
-.flag:hover,
-.flag.sel {
-  background-color: #4cbf56;
-}
-
-.receive {
-  color: rgb(255, 191, 0);
-}
-.receive:hover,
-.receive.sel {
-  background-color: rgb(255, 191, 0);
-}
-
-.event {
-  color: rgb(255, 191, 0);
-}
-.event:hover,
-.event.sel {
-  background-color: rgb(255, 191, 0);
-}
-
-.var,
-.VAR {
-  color: rgb(255, 120, 26);
-}
-.var:hover,
-.var.sel,
-.VAR:hover,
-.VAR.sel {
-  background-color: rgb(255, 120, 26);
-}
-
-.list,
-.LIST {
-  color: rgb(255, 102, 26);
-}
-.list:hover,
-.list.sel,
-.LIST:hover,
-.LIST.sel {
-  background-color: rgb(255, 102, 26);
-}
-
-.costume {
-  color: rgb(26, 66, 255);
-}
-.costume:hover,
-.costume.sel {
-  background-color: rgb(26, 66, 255);
-}
-
-.operators {
-  background-color: rgb(64, 191, 74);
-  color: rgb(56, 148, 56);
-}
-.operators:hover,
-.operators.sel {
-  background-color: rgb(56, 148, 56);
-}
-
-.data {
-  background-color: rgb(255, 140, 26);
-  color: rgb(219, 110, 0);
-}
-.data:hover,
-.data.sel {
-  background-color: rgb(219, 110, 0);
-}
-
-.data-lists {
-  background-color: rgb(255, 102, 26);
-  color: rgb(255, 102, 26);
-}
-.data-lists:hover,
-.data-lists.sel {
-  background-color: rgb(207, 81, 20);
-}
-
-.sensing {
-  background-color: rgb(76, 191, 230);
-  color: rgb(46, 142, 184);
-}
-.sensing:hover,
-.sensing.sel {
-  background-color: rgb(46, 142, 184);
-}
-
-.looks {
-  background-color: rgb(153, 102, 255);
-  color: rgb(119, 77, 203);
-}
-.looks:hover,
-.looks.sel {
-  background-color: rgb(119, 77, 203);
-}
-
-.sounds {
-  background-color: rgb(214, 92, 214);
-  color: rgb(189, 66, 189);
-}
-.sounds:hover,
-.sounds.sel {
-  background-color: rgb(189, 66, 189);
-}
-
-.motion {
-  background-color: rgb(76, 151, 255);
-  color: rgb(51, 115, 204);
-}
-.motion:hover,
-.motion.sel {
-  background-color: rgb(51, 115, 204);
-}
-
-.events {
-  background-color: rgb(255, 213, 0);
-  color: rgb(204, 153, 0);
-}
-.events:hover,
-.events.sel {
-  background-color: rgb(204, 153, 0);
-}
-
-.control {
-  background-color: rgb(255, 171, 25);
-  color: rgb(207, 139, 23);
-}
-.control:hover,
-.control.sel {
-  background-color: rgb(207, 139, 23);
-}
-
-.null {
-  background-color: rgb(255, 102, 128);
-  color: rgb(255, 77, 106);
-}
-.null:hover,
-.null.sel {
-  background-color: rgb(255, 77, 106);
-}
-
-.extension {
-  background-color: rgb(15 189 140);
-}
-.extension:hover,
-.extension.sel {
-  background-color: rgb(11 158 117);
 }
 
 /*.s3devDD>li.hat::before {                           content: '◠ ';}*/
@@ -311,15 +155,31 @@ ul.s3devDD {
 /*.s3devDD>li.reporter::before {                      content: '● ';}*/
 /*.s3devDD>li.boolean::before {                       content: '◆ ';}*/
 
+#s3devDD > li.flag {
+  color: #4cbf56;
+}
+
+#s3devDD > li.flag:hover,
+#s3devDD > li.flag.sel {
+  background-color: #4cbf56;
+  color: white;
+}
+
 #s3devIDD > li {
   height: 19px;
   padding: 3px 8px;
   margin: 2px 0.3em;
   box-sizing: border-box;
   position: relative;
-  color: white;
   font-weight: bold;
   width: min-content;
+  background-color: var(--sa-block-colored-background);
+  color: var(--sa-block-text);
+}
+
+#s3devIDD > li:hover,
+#s3devIDD > li.sel {
+  background-color: var(--sa-block-colored-background-secondary);
 }
 
 .s3devDD > li.hat {

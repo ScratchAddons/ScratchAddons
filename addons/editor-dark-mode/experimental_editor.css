@@ -26,6 +26,7 @@
   color: var(--editorDarkMode-menuBar-text);
 }
 .menu-bar_menu-bar-item_oLDa-,
+.input_input-form_l9eYg.project-title-input_title-field_en5Gd,
 .inline-message_info_E7dNO,
 .modal_header-item_2zQTd {
   color: var(--editorDarkMode-menuBar-text);
@@ -245,7 +246,6 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .u-dropdown-searchbar,
 .project-title-input_title-field_en5Gd {
   background-color: var(--editorDarkMode-input-transparent25);
-  color: var(--editorDarkMode-menuBar-text);
 }
 .color-picker_row-header_173LQ,
 .filter_filter-input_1iiEt,
