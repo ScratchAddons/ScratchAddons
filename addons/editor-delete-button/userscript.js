@@ -64,7 +64,7 @@ export default async (
         const safe = await new Promise((resolve, reject) => {
           const xhrOpen = XMLHttpRequest.prototype.open;
           XMLHttpRequest.prototype.open = function (method, url, ...args) {
-            if (method === "put" && String(url).startsWith("https://projects.scratch.mit.edu")) {
+            if (method === "put" && String(url).startsWith("https://projects.scratch.mit.edu/")) {
               this.addEventListener("loadend", (ev) => {
                 if (ev.target.status === 200) {
                   XMLHttpRequest.prototype.open = xhrOpen;
