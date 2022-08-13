@@ -7,7 +7,7 @@ import minifySettings from "../libraries/common/minify-settings.js";
  - editor-dark-mode 2 (bumped in v1.23 twice)
  */
 
-const updatePresetIfMatching = (preset, settings, oldPreset, version) => {
+const updatePresetIfMatching = (settings, version, oldPreset = null, preset = null) => {
   if ((settings._version || 0) < version) {
     /**
      Version must be set even if transition is unnecessary;
@@ -15,8 +15,12 @@ const updatePresetIfMatching = (preset, settings, oldPreset, version) => {
      2) User updates, transition aborts
      3) User changes settings to old preset values
      4) Without version, this change will revert after reload!
+
+     Therefore, DO NOT REMOVE CALLS TO THIS METHOD. Instead omit oldPreset and preset
+     when transition is no longer necessary.
      */
     settings._version = version;
+    if (preset === null) return;
     const map = {};
     for (const key of Object.keys(oldPreset)) {
       if (settings[key] !== oldPreset[key]) return;
@@ -47,19 +51,24 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       // to its default (false) inside the for loop below.
     }
 
+    if (addonsEnabled["editor-devtools"] === false) {
+      // Transition 1.27.0 to 1.28.0
+      // Disable addons previously part of devtools, if devtools is disabled
+      if (addonsEnabled["find-bar"] === undefined) {
+        madeAnyChanges = true;
+        addonsEnabled["find-bar"] = false;
+      }
+      if (addonsEnabled["jump-to-def"] === undefined) {
+        madeAnyChanges = true;
+        addonsEnabled["jump-to-def"] = false;
+      }
+    }
+
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
       const settings = addonSettings[addonId] || {};
       let madeChangesToAddon = false;
 
-      // Transition v1.27.0 to v1.28.0
-      if (addonId === "find-bar" && addonsEnabled["find-bar"] === true) {
-        // Because find-bar was previously with devtools, if the user had devtools disabled, then we should also disable find-bar.
-        if (addonsEnabled["editor-devtools"] === false) {
-          madeChangesToAddon = madeAnyChanges = true;
-          addonsEnabled["find-bar"] = false;
-        }
-      }
       if (manifest.settings) {
         for (const option of manifest.settings) {
           if (settings[option.id] === undefined) {
@@ -117,6 +126,8 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
             delete scratchr2.linkColor;
           }
         }
+
+        if (addonId === "editor-dark-mode") updatePresetIfMatching(settings, 2);
       }
 
       if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;
