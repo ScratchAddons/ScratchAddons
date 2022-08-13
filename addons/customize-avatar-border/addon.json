@@ -84,7 +84,7 @@
       "default": false
     },
     {
-      "name": "Outline colour",
+      "name": "Outline color",
       "id": "outline-color",
       "type": "color",
       "allowTransparency": true,
