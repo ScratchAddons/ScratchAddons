@@ -2213,19 +2213,19 @@ export default class DevTools {
         "beforeend",
         `
                 <div id="s3devToolBar">
-                    <label class='title s3devLabel' id=s3devFindLabel>
-                        <span>${this.m("find")} ${
+                    <div class='title s3devLabel' id=s3devFindLabel>
+                        <label for="s3devInp">${this.m("find")} ${
           this.addon.self._isDevtoolsExtension
             ? ""
             : '<a href="#" class="s3devAction" id="s3devHelp" style="/*s-a*/ margin-left: 0; font-size: 10px; /*s-a*/">(?)</a>'
-        } </span>
+        } </label>
                         <span id=s3devFind class="s3devWrap">
-                            <div id='s3devDDOut' class="s3devDDOut">
+                            <label id='s3devDDOut' class="s3devDDOut">
                                 <input id='s3devInp' class="${this.addon.tab.scratchClass("input_input-form", {
                                   others: "s3devInp",
                                 })}" type='search' placeholder='${this.m("find-placeholder")}' autocomplete='off'>
                                 <ul id='s3devDD' class="s3devDD"></ul>
-                            </div>
+                            </label>
                         </span>
                         <a id="s3devDeep" class="s3devAction s3devHide" href="#">${this.m("deep")}</a>
                         <div ${
@@ -2234,7 +2234,7 @@ export default class DevTools {
                         <a href="https://www.youtube.com/griffpatch" class="s3devAction" target="_blank" id="s3devHelp" rel="noreferrer noopener">${this.m(
                           "tutorials"
                         )}</a></div>
-                    </label>
+                    </div>
                 </div>
             `
       );

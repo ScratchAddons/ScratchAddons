@@ -10,7 +10,7 @@
     },
     {
       "name": "TheColaber",
-      "link": "https://scratch.mit.edu/users/TheColaber"
+      "link": "https://scratch.mit.edu/users/TheColaber/"
     },
     {
       "name": "RedGuy7",
@@ -43,21 +43,18 @@
       "default": true
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
   "userscripts": [
     {
       "url": "working.js",
-      "matches": ["https://scratch.mit.edu/users/*"],
-      "if": {
-        "settings": { "whatworkingon": true }
-      }
+      "matches": ["https://scratch.mit.edu/users/*"]
     },
     {
       "url": "happen.js",
       "matches": ["https://scratch.mit.edu/"],
-      "runAtComplete": false,
-      "if": {
-        "settings": { "whathappen": true }
-      }
+      "runAtComplete": false
     }
   ],
   "userstyles": [

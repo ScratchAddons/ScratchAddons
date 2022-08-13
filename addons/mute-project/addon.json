@@ -3,7 +3,6 @@
   "description": "Ctrl+Click the green flag to mute/unmute the project.",
   "info": [
     {
-      "type": "notice",
       "text": "On macOS, use the Cmd key instead of the Ctrl key.",
       "id": "macOS"
     }
@@ -11,7 +10,7 @@
   "credits": [
     {
       "name": "TheColaber",
-      "link": "https://scratch.mit.edu/users/TheColaber"
+      "link": "https://scratch.mit.edu/users/TheColaber/"
     }
   ],
   "userscripts": [
@@ -20,6 +19,8 @@
       "matches": ["projects", "projectEmbeds"]
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.7.0",
   "tags": ["editor", "projectPlayer", "recommended"]
 }

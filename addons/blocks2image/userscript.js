@@ -58,7 +58,8 @@ export default async function ({ addon, global, console, msg }) {
   );
 
   addon.tab.createBlockContextMenu(
-    (items, block) => {
+    (items) => {
+      if (addon.self.disabled) return items;
       let svgchild = document.querySelector("svg.blocklySvg g.blocklyBlockCanvas");
 
       const pasteItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
@@ -89,12 +90,14 @@ export default async function ({ addon, global, console, msg }) {
           separator: false,
         }
       );
+
       return items;
     },
     { workspace: true }
   );
   addon.tab.createBlockContextMenu(
     (items, block) => {
+      if (addon.self.disabled) return items;
       const makeSpaceItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
       const insertBeforeIndex =
         makeSpaceItemIndex !== -1
@@ -123,6 +126,7 @@ export default async function ({ addon, global, console, msg }) {
           separator: false,
         }
       );
+
       return items;
     },
     { blocks: true }
