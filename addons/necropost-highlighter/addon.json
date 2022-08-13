@@ -23,23 +23,7 @@
     {
       "url": "userscript.js",
       "matches": [
-        "https://scratch.mit.edu/discuss/search/*",
-        "https://scratch.mit.edu/discuss/6/*",
-        "https://scratch.mit.edu/discuss/m/6/*",
-        "https://scratch.mit.edu/discuss/7/*",
-        "https://scratch.mit.edu/discuss/m/7/*",
-        "https://scratch.mit.edu/discuss/9/*",
-        "https://scratch.mit.edu/discuss/m/9/*",
-        "https://scratch.mit.edu/discuss/11/*",
-        "https://scratch.mit.edu/discuss/m/11/*",
-        "https://scratch.mit.edu/discuss/4/*",
-        "https://scratch.mit.edu/discuss/m/4/*",
-        "https://scratch.mit.edu/discuss/1/*",
-        "https://scratch.mit.edu/discuss/m/1/*",
-        "https://scratch.mit.edu/discuss/3/*",
-        "https://scratch.mit.edu/discuss/m/3/*",
-        "https://scratch.mit.edu/discuss/49/*",
-        "https://scratch.mit.edu/discuss/m/49/*"
+		"^https://scratch.mit.edu/discuss/(?:m/)?(?:search|1|3|4|6|7|9|11|49)/.*"
       ]
     }
   ],
