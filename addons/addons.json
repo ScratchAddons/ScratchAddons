@@ -1,5 +1,4 @@
 [
-  "necropost-highlighter",
   "editor-searchable-dropdowns",
   "editor-devtools",
   "forum-search",
@@ -123,6 +122,7 @@
   "default-costume-editor-color",
   "one-click-studio-invites",
   "remove-search-bar-autocomplete",
+  "necropost-highlighter",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",

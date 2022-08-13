@@ -1,22 +1,8 @@
 /**
  * @author RT_Borg
  * 
- * Necropost Highlighter
- * 
  * Uses topic id as a proxy for age, which doesn't require loading other pages
  * to read actual dates.
- *
- * The number of new topics per month on Scratch forums is fairly stable over time.
- * Since the topic interval doesn't need to be precise to determine a likely necropost,
- * this ends up working very well.
- *
- * Inspects topic ids of all posts on the page and highlights any topics significantly
- * older than surrounding posts.
- * 
- * Works with:
- *   - Addon: Website dark mode and customizable colors
- *   - Addon: Infinite scrolling
- *   - Standard and Mobile websites
  */
 
 export default async function ({ addon, global, console }) {
