@@ -260,7 +260,7 @@ export default async function ({ addon, global, console, msg }) {
         break;
       }
       case 4: {
-        let category = document.getElementsByClassName("box-head")[1].getElementsByTagName("span")[0].innerHTML;
+        let category = document.getElementsByClassName("box-head")[1].getElementsByTagName("span")[0].textContent;
         locationQuery = ` +category:"${category}"`;
         searchPlaceholder = msg("search-cat", { cat: category });
         break;

@@ -68,7 +68,6 @@ export default async ({ addon, msg, safeMsg }) => {
     .get("displayedGames")
     .map(({ url }) => url)
     .map(extractUrl);
-  const gameSet = new Set(displayedGames.map(({ id, type }) => `${type}/${id}`));
   window.vue = new Vue({
     el: "body",
     data: {
@@ -87,13 +86,22 @@ export default async ({ addon, msg, safeMsg }) => {
       projectsChecked: 0,
       error: null,
       selectedTabUrl: null,
+      selectedTabId: null,
       addButtonUsed: false,
     },
     computed: {
       projectsSorted() {
-        return this.projects.sort((b, a) => {
-          if (a.amt !== b.amt) return a.amt - b.amt;
-          return a.timestamp - b.timestamp;
+        return this.projects.sort((a, b) => {
+          if (a.id === b.id) return 0; // this should not happen
+          // Put currently opened project first
+          if (a.id === this.selectedTabId) return -1;
+          if (b.id === this.selectedTabId) return 1;
+          // Projects where the user is online
+          if (a.online && !b.online) return -1;
+          if (b.online && !a.online) return 1;
+          // Sort by number of users
+          if (a.amt !== b.amt) return b.amt - a.amt;
+          return b.timestamp - a.timestamp;
         });
       },
       errorMessage() {
@@ -103,7 +111,7 @@ export default async ({ addon, msg, safeMsg }) => {
         if (this.projects.length === 0 && this.error !== "no-projects") return null;
         if (this.projectsChecked !== this.projects.length) return null;
         const { id, type } = extractUrl(this.selectedTabUrl);
-        if (!id || gameSet.has(`${type}/${id}`)) return null;
+        if (!id || this.projects.some((el) => el.id === id)) return null;
         return type;
       },
       clickButtonToAddDisplayMessage() {
@@ -124,6 +132,7 @@ export default async ({ addon, msg, safeMsg }) => {
               }
               resolve();
             };
+            let username = await addon.auth.fetchUsername();
             let json;
             try {
               const res = await fetch(
@@ -145,8 +154,10 @@ export default async ({ addon, msg, safeMsg }) => {
             }
             const dateNow = Date.now();
             const usersSet = new Set();
+            projectObject.online = false;
             for (const varChange of json) {
               if (dateNow - varChange.timestamp > 60000) break;
+              if (varChange.user === username) projectObject.online = true;
               usersSet.add(varChange.user);
             }
             projectObject.timestamp = json[0]?.timestamp || 0;
@@ -179,6 +190,8 @@ export default async ({ addon, msg, safeMsg }) => {
       document.title = msg("popup-title");
       addon.popup.getSelectedTabUrl().then((url) => {
         this.selectedTabUrl = url;
+        const { id, __ } = extractUrl(url);
+        this.selectedTabId = id;
       });
       let projects;
       try {
@@ -202,6 +215,7 @@ export default async ({ addon, msg, safeMsg }) => {
           id: project.id,
           amt: 0,
           users: [],
+          online: project.online,
           extended: true,
           error: null,
           errorMessage: "",

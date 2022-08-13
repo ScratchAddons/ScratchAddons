@@ -11,14 +11,17 @@ export default async function ({ addon, console, msg }) {
 
       let title = null;
       let cancelMessage = null;
-
       if (
         addon.settings.get("projectsharing") &&
         e.target.closest("[class*='share-button_share-button']:not([class*='is-shared']), .banner-button")
       ) {
         title = addon.tab.scratchMessage("project.share.shareButton"); // "Share"
         cancelMessage = msg("share");
-      } else if (addon.settings.get("projectunsharing") && e.target.closest(".media-stats a.unshare")) {
+      } else if (
+        addon.settings.get("projectunsharing") &&
+        e.target.closest(".media-stats a.unshare") &&
+        location.hash !== "#galleries"
+      ) {
         title = e.target.closest(".media-stats a.unshare").textContent; // "Unshare"
         cancelMessage = msg("unshare");
       } else if (addon.settings.get("followinguser") && e.target.closest("#profile-data .follow-button")) {
@@ -51,6 +54,9 @@ export default async function ({ addon, console, msg }) {
         if (e.target.closest("form").querySelector("textarea").value === "") return;
         title = msg("cancelcomment-title");
         cancelMessage = msg("cancelcomment");
+      } else if (addon.settings.get("removingprojects") && e.target.closest(".media-trash")) {
+        title = msg("removeproject-title");
+        cancelMessage = msg("removeproject");
       }
 
       if (cancelMessage !== null) {
