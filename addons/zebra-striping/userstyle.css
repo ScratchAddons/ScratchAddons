@@ -1,5 +1,5 @@
 :root {
-  --zebraStriping-percent: calc(var(--zebraStriping-shade) * var(--zebraStriping-intensity) / 100);
+  --zebraStriping-percent: calc(var(--zebraStriping-shadeNumber) * var(--zebraStriping-intensity) / 100);
   --zebraStriping-bright: calc(1 + var(--zebraStriping-percent));
   --zebraStriping-saturate: calc(1 - var(--zebraStriping-percent));
   --zebraStriping-filter: brightness(var(--zebraStriping-bright)) saturate(var(--zebraStriping-saturate));
