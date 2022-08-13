@@ -35,14 +35,14 @@
       "potentialValues": [
         {
           "name": "Lighter",
-          "id": 1
+          "id": "1"
         },
         {
           "name": "Darker",
-          "id": -1
+          "id": "-1"
         }
       ],
-      "default": 1
+      "default": "1"
     },
     {
       "name": "Intensity (0-100%)",
