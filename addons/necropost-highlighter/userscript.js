@@ -32,6 +32,16 @@ export default async function ({ addon, global, console }) {
   let isMobileSite = await determineIsMobileSite();
   let forumOrSearchPageName = await determineForumOrSearchPageName();
 
+  /**
+   * An array of topic
+   * Each topic is:
+   *    - topicId      int, used to compare topic "age" relative to other posts on the page
+   *    - topicCell    Node that will be highlighted if too old
+   *    - forum        String, usually the forum being listed. Comes from the row on a search page
+   *    - initialCell  A clone of the initial state of the cell Node, to revert for disable addon
+   */
+  let topics = [];
+
   highlightNecropostsIfOnSelectedForumPage();
 
   addon.settings.addEventListener("change", onAddonSettingsChange);
@@ -86,6 +96,7 @@ export default async function ({ addon, global, console }) {
    * is probably not a concern here, browsing a forum page.
    */
   async function onRowsChanged(mutationList, mutationObserver) {
+    await removeAnyPriorHighlights();
     await highlightNecropostsIfOnSelectedForumPage();
   }
 
@@ -93,12 +104,12 @@ export default async function ({ addon, global, console }) {
    * This is where the magic happens
    ***********************************************************************/
   async function highlightNecropostsIfOnSelectedForumPage() {
-    let shouldRunOnThisPage = await isOnSelectedForumPage();
+	let shouldRunOnThisPage = await isOnSelectedForumPage();
     if (!shouldRunOnThisPage) {
       return;
     }
 
-    let topics = await gatherTopics();
+    await gatherTopics();
     // console.log("Topic Count: " + topics.length);
     let highestTopicOnThisPage = highestTopicIdFrom(topics);
     // console.log("Highest TopicId: " + highestTopicOnThisPage);
@@ -107,13 +118,17 @@ export default async function ({ addon, global, console }) {
   }
 
   /**
-   * Returns an array of topic.
+   * Populates the topics array with an entry for each cell associated with a forum being handled.
+   * In most cases that means all topic cells, but Search pages are special.
+   * Any topics gathered previously will be forgotten. (And should have already been when disabling.)
    * Each topic is:
-   *    - topicId     int, used to compare topic "age" relative to other posts on the page
-   *    - topicCell   Node that will be highlighted if too old
-   *    - forum       String, usually the forum being listed. Comes from the row on a search page
+   *    - topicId      int, used to compare topic "age" relative to other posts on the page
+   *    - topicCell    Node that will be highlighted if too old
+   *    - forum        String, usually the forum being listed. Comes from the row on a search page
+   *    - initialCell  A clone of the initial state of the cell Node, to revert for disable addon
    */
   async function gatherTopics() {
+    topics = [];
     let possibleTopicCells; // verified before forming a topic
     if (isMobileSite) {
       possibleTopicCells = document.querySelectorAll(".topic.list>li");
@@ -121,7 +136,6 @@ export default async function ({ addon, global, console }) {
       possibleTopicCells = document.querySelectorAll(".tcl");
     }
     // console.log("possibleTopicCells length: " + possibleTopicCells.length);
-    let topics = [];
     let theForum = forumOrSearchPageName; // usually, but overridden per cell if on a search page
     // console.log("theForum: " + theForum);
     for (let i = 0; i < possibleTopicCells.length; i++) {
@@ -133,13 +147,13 @@ export default async function ({ addon, global, console }) {
         topicId: await extractTopicIdFrom(possibleTopicCells[i]),
         topicCell: possibleTopicCells[i],
         forum: theForum,
+		initialCell: possibleTopicCells[i].cloneNode(true)
       };
       if (topic.topicId != 0) {
         topics.push(topic);
         // console.log("gatherTopics: " + topic.topicId + " in " + topic.forum);
       }
     }
-    return topics;
   }
 
   /**
@@ -153,13 +167,15 @@ export default async function ({ addon, global, console }) {
   }
 
   /**
-   * Does not conflict with Addon: Website dark mode and customizable colors
+   * Restores topic cells to the initial state they had before any highlighting on this page.
+   * Clears any previously gathered topics.
+   * Does not conflict with Addon: Website dark mode and customizable colors.
    */
   async function removeAnyPriorHighlights() {
-    let topics = await gatherTopics();
     topics.forEach((topic) => {
-      topic.topicCell.style.backgroundColor = "";
+	  topic.topicCell.replaceWith(topic.initialCell);
     });
+	topics = [];
   }
 
   function determineActivatedForums() {
@@ -220,7 +236,6 @@ export default async function ({ addon, global, console }) {
   function highlightTopicCellsWithTopicIdBelow(topics, lowestNewTopicId) {
     const standardSiteStickyClass = ".isticky";
     const mobileSiteStickyClassName = "sticky";
-    let highlightColor = addon.settings.get("highlightColor");
 
     let activatedForums = determineActivatedForums();
     topics
@@ -228,7 +243,27 @@ export default async function ({ addon, global, console }) {
       .filter((topic) => !topic.topicCell.classList.contains(mobileSiteStickyClassName)) // on this item
       .filter((topic) => topic.topicId < lowestNewTopicId)
       .filter((topic) => activatedForums.includes(topic.forum))
-      .forEach((topic) => (topic.topicCell.style.backgroundColor = highlightColor));
+      .forEach(highlightSingle);
+
+	  function highlightSingle(topic) {
+		const necropostMessage = "(Necropost?)";
+		const highlightColor = addon.settings.get("highlightColor");
+
+		topic.topicCell.style.backgroundColor = highlightColor;
+		if (isMobileSite) {
+			let replies = topic.topicCell.querySelector("span");
+			replies.textContent += (" " + necropostMessage);
+			return;
+		}
+		let possibleNewPostsLink = topic.topicCell.querySelector(".tclcon>a");
+		if (!possibleNewPostsLink) {
+			// No New Posts link. Insert a plain text '(Necropost?)'
+			let byUser = topic.topicCell.querySelector("span.byuser");
+			byUser.textContent += (" " + necropostMessage);
+		} else {
+			possibleNewPostsLink.textContent = necropostMessage;
+		}
+	  }
   }
 
   function highestTopicIdFrom(topics) {
