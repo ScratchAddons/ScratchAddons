@@ -104,7 +104,7 @@ export default async function ({ addon, global, console }) {
    * This is where the magic happens
    ***********************************************************************/
   async function highlightNecropostsIfOnSelectedForumPage() {
-	let shouldRunOnThisPage = await isOnSelectedForumPage();
+    let shouldRunOnThisPage = await isOnSelectedForumPage();
     if (!shouldRunOnThisPage) {
       return;
     }
@@ -147,7 +147,7 @@ export default async function ({ addon, global, console }) {
         topicId: await extractTopicIdFrom(possibleTopicCells[i]),
         topicCell: possibleTopicCells[i],
         forum: theForum,
-		initialCell: possibleTopicCells[i].cloneNode(true)
+        initialCell: possibleTopicCells[i].cloneNode(true),
       };
       if (topic.topicId != 0) {
         topics.push(topic);
@@ -173,9 +173,9 @@ export default async function ({ addon, global, console }) {
    */
   async function removeAnyPriorHighlights() {
     topics.forEach((topic) => {
-	  topic.topicCell.replaceWith(topic.initialCell);
+      topic.topicCell.replaceWith(topic.initialCell);
     });
-	topics = [];
+    topics = [];
   }
 
   function determineActivatedForums() {
@@ -245,25 +245,25 @@ export default async function ({ addon, global, console }) {
       .filter((topic) => activatedForums.includes(topic.forum))
       .forEach(highlightSingle);
 
-	  function highlightSingle(topic) {
-		const necropostMessage = "(Necropost?)";
-		const highlightColor = addon.settings.get("highlightColor");
+    function highlightSingle(topic) {
+      const necropostMessage = "(Necropost?)";
+      const highlightColor = addon.settings.get("highlightColor");
 
-		topic.topicCell.style.backgroundColor = highlightColor;
-		if (isMobileSite) {
-			let replies = topic.topicCell.querySelector("span");
-			replies.textContent += (" " + necropostMessage);
-			return;
-		}
-		let possibleNewPostsLink = topic.topicCell.querySelector(".tclcon>a");
-		if (!possibleNewPostsLink) {
-			// No New Posts link. Insert a plain text '(Necropost?)'
-			let byUser = topic.topicCell.querySelector("span.byuser");
-			byUser.textContent += (" " + necropostMessage);
-		} else {
-			possibleNewPostsLink.textContent = necropostMessage;
-		}
-	  }
+      topic.topicCell.style.backgroundColor = highlightColor;
+      if (isMobileSite) {
+        let replies = topic.topicCell.querySelector("span");
+        replies.textContent += " " + necropostMessage;
+        return;
+      }
+      let possibleNewPostsLink = topic.topicCell.querySelector(".tclcon>a");
+      if (!possibleNewPostsLink) {
+        // No New Posts link. Insert a plain text '(Necropost?)'
+        let byUser = topic.topicCell.querySelector("span.byuser");
+        byUser.textContent += " " + necropostMessage;
+      } else {
+        possibleNewPostsLink.textContent = necropostMessage;
+      }
+    }
   }
 
   function highestTopicIdFrom(topics) {

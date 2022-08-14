@@ -30,7 +30,7 @@
       "name": "Highlight color",
       "id": "highlightColor",
       "type": "color",
-	  "allowTransparency": true,
+      "allowTransparency": true,
       "default": "#D1E9F2"
     },
     {
@@ -168,18 +168,18 @@
       }
     },
     {
-		"name": "Dark theme red",
-		"id": "darkThemeRed",
-		"values": {
-		  "highlightColor": "#390500"
-		}
-	  },
-	  {
-		"name": "No cell color",
-		"id": "noCellColor",
-		"values": {
-		  "highlightColor": "#00000000"
-		}
-	  }		
+      "name": "Dark theme red",
+      "id": "darkThemeRed",
+      "values": {
+        "highlightColor": "#390500"
+      }
+    },
+    {
+      "name": "No cell color",
+      "id": "noCellColor",
+      "values": {
+        "highlightColor": "#00000000"
+      }
+    }
   ]
 }
