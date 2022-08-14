@@ -3,6 +3,13 @@ import BlockInstance from "./blockly/BlockInstance.js";
 import Utils from "./blockly/Utils.js";
 
 export default async function ({ addon, msg, console }) {
+  if (!addon.self._isDevtoolsExtension && window.initGUI) {
+    console.log("Extension running, stopping addon");
+    window._devtoolsAddonEnabled = true;
+    window.dispatchEvent(new CustomEvent("scratchAddonsDevtoolsAddonStopped"));
+    return;
+  }
+
   const Blockly = await addon.tab.traps.getBlockly();
 
   class FindBar {
