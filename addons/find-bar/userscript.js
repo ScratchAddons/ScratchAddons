@@ -459,6 +459,7 @@ export default async function ({ addon, msg, console }) {
         list: "data_lists",
         LIST: "data_lists",
         costume: "looks",
+        sound: "sounds",
       };
       if (proc.cls === "flag") {
         item.className = "flag";
