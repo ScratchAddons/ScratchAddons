@@ -11,9 +11,9 @@
     }
   ],
   "latestUpdate": {
-    "version": "1.24.0",
-    "temporaryNotice": "New setting to enable changing the colors of blocks in the forums.",
-    "newSettings": ["forums"]
+    "version": "1.29.0",
+    "temporaryNotice": "The \"Dark comments\" setting from \"Editor dark mode and customizable colors\" has been moved here and is now customizable.",
+    "newSettings": ["comment-color"]
   },
   "customCssVariables": [
     {
@@ -74,6 +74,28 @@
             "colorOnWhite": "#000000",
             "colorOnBlack": "#ffffff"
           }
+        }
+      }
+    },
+    {
+      "name": "commentText",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "comment-color"
+        }
+      }
+    },
+    {
+      "name": "commentTextTransparent",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.50)",
+        "white": "rgba(255, 255, 255, 0.50)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "comment-color"
         }
       }
     }
@@ -287,18 +309,6 @@
       "id": "forums",
       "type": "boolean",
       "default": false
-    }
-  ],
-  "customCssVariables": [
-    {
-      "name": "commentText",
-      "value": {
-        "type": "textColor",
-        "source": {
-          "type": "settingValue",
-          "settingId": "comment-color"
-        }
-      }
     }
   ],
   "tags": ["editor", "theme", "codeEditor", "featured"],
