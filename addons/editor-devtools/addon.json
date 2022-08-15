@@ -33,12 +33,6 @@
       "matches": ["projects"]
     }
   ],
-  "userstyles": [
-    {
-      "url": "userscript.css",
-      "matches": ["projects"]
-    }
-  ],
   "versionAdded": "1.0.0",
   "tags": ["editor", "codeEditor", "costumeEditor", "recommended"],
   "enabledByDefault": true

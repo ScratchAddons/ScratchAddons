@@ -1,0 +1,27 @@
+{
+  "name": "Middle click block dropdown",
+  "description": "Pops up a floating input box where you can type the name of a block (or parts of it) and drag the block into the code to make use of it right there. Hold Shift while dragging to avoid closing the box when adding multiple blocks at once.",
+  "credits": [
+    {
+      "name": "griffpatch"
+    },
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/thecolaber"
+    }
+  ],
+  "tags": ["editor"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.29.0"
+}
