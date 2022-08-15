@@ -1,12 +1,30 @@
 {
+  "json.validate.enable": true,
+  "json.schemaDownload.enable": true,
   "json.schemas": [
+    {
+      "fileMatch": ["/_locales/*/messages.json"],
+      "url": "https://raw.githubusercontent.com/RedGuy12/chrome-i18n-json-schema/master/schema.json"
+    },
     {
       "fileMatch": ["/addons/*/addon.json"],
       "url": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json"
     },
     {
-      "fileMatch": ["/manifest.json"],
-      "url": "https://json.schemastore.org/chrome-manifest.json"
+      "fileMatch": ["/addons/addons.json"],
+      "schema": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": { "type": "string", "pattern": "^([a-zA-Z0-9-]+|//.+)$" }
+      }
+    },
+    {
+      "fileMatch": ["/addons-l10n/*/*.json"],
+      "schema": {
+        "type": "object",
+        "additionalProperties": { "type": "string" },
+        "propertyNames": { "type": "string", "pattern": "^([a-zA-Z0-9-]+/@?)?[a-zA-Z0-9_-]+$" }
+      }
     },
     {
       "fileMatch": ["/libraries/license-info.json"],
@@ -15,31 +33,21 @@
         "additionalProperties": { "type": "string" }
       }
     },
-    {
-      "fileMatch": ["/addons-l10n/*/*.json"],
-      "schema": {
-        "type": "object",
-        "additionalProperties": { "type": "string" },
-        "propertyNames": {
-          "type": "string",
-          "pattern": "^([a-zA-Z0-9-]+/@?)?[a-zA-Z0-9_-]+$"
-        }
-      }
-    },
-    {
-      "fileMatch": ["/_locales/*/messages.json"],
-      "url":"https://raw.githubusercontent.com/RedGuy12/chrome-i18n-json-schema/master/schema.json"
-    },
-    {
-      "fileMatch": ["/addons/addons.json"],
-      "schema": {
-        "type": "array",
-        "uniqueItems": true,
-        "items": {
-          "type": "string",
-          "pattern": "^([a-zA-Z0-9-]+|//.+)$"
-        }
-      }
-    }
-  ]
+    { "fileMatch": ["/manifest.json"], "url": "https://json.schemastore.org/chrome-manifest.json" }
+  ],
+
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    ".eslintrc.json": ".*",
+    "/webpages/settings/*.html": "/webpages/settings/${capture}.html"
+  },
+  "files.exclude": { "**/{_locales,addons-l10n}/{es,[a-d]*,[f-z]*}/**": true },
+  "search.exclude": { "**/libraries/thirdparty/**": true },
+
+  "files.associations": { "*.html": "vue" },
+  "vetur.validation.template": false,
+
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[markdown]": { "editor.defaultFormatter": null },
+  "editor.formatOnSave": true
 }
