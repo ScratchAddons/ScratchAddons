@@ -38,7 +38,8 @@ export default async function ({ addon, global, console }) {
    *    - topicId      int, used to compare topic "age" relative to other posts on the page
    *    - topicCell    Node that will be highlighted if too old
    *    - forum        String, usually the forum being listed. Comes from the row on a search page
-   *    - initialCell  A clone of the initial state of the cell Node, to revert for disable addon
+   *    - restoreCell  Only defined if the cell is modified. A clone of the initial state
+   *                   of the cell Node, to revert for disable addon reload and settings changes
    */
   let topics = [];
 
@@ -96,8 +97,12 @@ export default async function ({ addon, global, console }) {
    * is probably not a concern here, browsing a forum page.
    */
   async function onRowsChanged(mutationList, mutationObserver) {
-    await removeAnyPriorHighlights();
-    await highlightNecropostsIfOnSelectedForumPage();
+	requestAnimationFrame(rebuild);
+  }
+
+  async function rebuild() {
+	await removeAnyPriorHighlights();
+	highlightNecropostsIfOnSelectedForumPage();
   }
 
   /***********************************************************************
@@ -125,7 +130,8 @@ export default async function ({ addon, global, console }) {
    *    - topicId      int, used to compare topic "age" relative to other posts on the page
    *    - topicCell    Node that will be highlighted if too old
    *    - forum        String, usually the forum being listed. Comes from the row on a search page
-   *    - initialCell  A clone of the initial state of the cell Node, to revert for disable addon
+   *    - restoreCell  Only defined if the cell is modified.
+   *                   A clone of the initial state of the cell Node, to revert for disable addon
    */
   async function gatherTopics() {
     topics = [];
@@ -143,14 +149,15 @@ export default async function ({ addon, global, console }) {
         // the cell to the right of the topic cell lists the forum, in search results
         theForum = possibleTopicCells[i].nextElementSibling.innerText;
       }
-      let topic = {
-        topicId: await extractTopicIdFrom(possibleTopicCells[i]),
-        topicCell: possibleTopicCells[i],
-        forum: theForum,
-        initialCell: possibleTopicCells[i].cloneNode(true),
-      };
-      if (topic.topicId != 0) {
-        topics.push(topic);
+	  const theTopicId = await extractTopicIdFrom(possibleTopicCells[i]);
+      if (theTopicId != 0) {
+		// No restoreCell property at this point. Only added if the cell is modified
+		const topic = {
+			topicId: theTopicId,
+			topicCell: possibleTopicCells[i],
+			forum: theForum,
+		  };
+			topics.push(topic);
         // console.log("gatherTopics: " + topic.topicId + " in " + topic.forum);
       }
     }
@@ -173,7 +180,9 @@ export default async function ({ addon, global, console }) {
    */
   async function removeAnyPriorHighlights() {
     topics.forEach((topic) => {
-      topic.topicCell.replaceWith(topic.initialCell);
+	  if (topic.restoreCell) {
+		topic.topicCell.replaceWith(topic.restoreCell);
+	  }
     });
     topics = [];
   }
@@ -246,6 +255,9 @@ export default async function ({ addon, global, console }) {
       .forEach(highlightSingle);
 
     function highlightSingle(topic) {
+	  if (!topic.restoreCell) {
+		topic.restoreCell = topic.topicCell.cloneNode(true);
+	  }
       const necropostMessage = "(Necropost?)";
       const highlightColor = addon.settings.get("highlightColor");
 
