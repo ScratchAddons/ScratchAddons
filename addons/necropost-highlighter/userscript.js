@@ -97,12 +97,12 @@ export default async function ({ addon, global, console }) {
    * is probably not a concern here, browsing a forum page.
    */
   async function onRowsChanged(mutationList, mutationObserver) {
-	requestAnimationFrame(rebuild);
+    requestAnimationFrame(rebuild);
   }
 
   async function rebuild() {
-	await removeAnyPriorHighlights();
-	highlightNecropostsIfOnSelectedForumPage();
+    await removeAnyPriorHighlights();
+    highlightNecropostsIfOnSelectedForumPage();
   }
 
   /***********************************************************************
@@ -149,15 +149,15 @@ export default async function ({ addon, global, console }) {
         // the cell to the right of the topic cell lists the forum, in search results
         theForum = possibleTopicCells[i].nextElementSibling.innerText;
       }
-	  const theTopicId = await extractTopicIdFrom(possibleTopicCells[i]);
+      const theTopicId = await extractTopicIdFrom(possibleTopicCells[i]);
       if (theTopicId != 0) {
-		// No restoreCell property at this point. Only added if the cell is modified
-		const topic = {
-			topicId: theTopicId,
-			topicCell: possibleTopicCells[i],
-			forum: theForum,
-		  };
-			topics.push(topic);
+        // No restoreCell property at this point. Only added if the cell is modified
+        const topic = {
+          topicId: theTopicId,
+          topicCell: possibleTopicCells[i],
+          forum: theForum,
+        };
+        topics.push(topic);
         // console.log("gatherTopics: " + topic.topicId + " in " + topic.forum);
       }
     }
@@ -180,9 +180,9 @@ export default async function ({ addon, global, console }) {
    */
   async function removeAnyPriorHighlights() {
     topics.forEach((topic) => {
-	  if (topic.restoreCell) {
-		topic.topicCell.replaceWith(topic.restoreCell);
-	  }
+      if (topic.restoreCell) {
+        topic.topicCell.replaceWith(topic.restoreCell);
+      }
     });
     topics = [];
   }
@@ -255,9 +255,9 @@ export default async function ({ addon, global, console }) {
       .forEach(highlightSingle);
 
     function highlightSingle(topic) {
-	  if (!topic.restoreCell) {
-		topic.restoreCell = topic.topicCell.cloneNode(true);
-	  }
+      if (!topic.restoreCell) {
+        topic.restoreCell = topic.topicCell.cloneNode(true);
+      }
       const necropostMessage = "(Necropost?)";
       const highlightColor = addon.settings.get("highlightColor");
 
