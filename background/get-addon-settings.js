@@ -69,6 +69,16 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       const settings = addonSettings[addonId] || {};
       let madeChangesToAddon = false;
 
+      if (addonId === "editor-dark-mode") {
+        // Transition v1.27 to v1.28
+        // editor-dark-mode enabled opacity to the block pallete.
+        // We append "cc" to the color so that it's the same as before this update.
+        if (settings.palette !== undefined && settings.palette.length === 7) {
+          settings.palette += "cc";
+          madeAnyChanges = madeChangesToAddon = true;
+        }
+      }
+
       if (manifest.settings) {
         for (const option of manifest.settings) {
           if (settings[option.id] === undefined) {
