@@ -19,6 +19,9 @@
 .scratchCommentTextarea {
   background-color: var(--editorTheme3-commentColor);
 }
+.scratchWorkspaceCommentBorder {
+  stroke: var(--editorTheme3-commentFilter);
+}
 .scratchCommentTextarea::placeholder {
   color: var(--editorTheme3-commentTextTransparent);
 }

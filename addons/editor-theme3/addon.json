@@ -98,6 +98,19 @@
           "settingId": "comment-color"
         }
       }
+    },
+    {
+      "name": "commentFilter",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "comment-color"
+        },
+        "r": 0.70,
+        "g": 0.70,
+        "b": 0.70
+      }
     }
   ],
   "dynamicEnable": true,
