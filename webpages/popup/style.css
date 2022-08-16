@@ -7,7 +7,7 @@ body {
   height: var(--height, 599px);
   overflow: hidden;
   margin: 0;
-  background-color: var(--brand-orange); /* Firefox popup arrow */
+  background-color: var(--brand); /* Firefox popup arrow */
   font-family: "Sora", sans-serif;
   color: var(--white-text);
 }
@@ -90,34 +90,39 @@ body {
   border-inline-end: none;
 }
 .popup-name.sel {
-  background-color: var(--brand-orange);
+  background-color: var(--orange);
   color: var(--white-text);
 }
-.popup-name img {
+.popup-icon {
   vertical-align: middle;
-  filter: var(--content-icon-filter);
+  width: 18px;
   height: 18px;
-}
-.popup-name.sel img {
-  filter: brightness(0) invert(1);
 }
 .popup-title {
   padding-inline-start: 5px;
 }
-.popout > .popout-img {
+.popout {
+  color: inherit;
+}
+.popout > .popout-icon {
   display: inline-block;
   vertical-align: -3px;
+  width: 10px;
   height: 10px;
   padding: 2px;
   margin-inline-start: 3px;
   margin-inline-end: -2px;
   border-radius: 2px;
 }
-.popout:hover > .popout-img {
-  background-color: var(--white-text);
-  filter: none;
+.popout:hover > .popout-icon {
+  background-color: var(--blue);
+  color: var(--white-text);
 }
-[dir="rtl"] .popout > .popout-img {
+.popup-name.sel .popout:hover > .popout-icon {
+  background-color: var(--white-text);
+  color: var(--orange);
+}
+[dir="rtl"] .popout > .popout-icon {
   transform: scaleX(-1);
 }
 

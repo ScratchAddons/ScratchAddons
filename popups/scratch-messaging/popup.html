@@ -3,10 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <title></title>
-    <script src="../../libraries/thirdparty/vue.js" defer></script>
-    <script src="../../libraries/thirdparty/idb.js" defer></script>
+
+    <!-- Preload styles -->
     <link rel="preload" href="popup.css" as="style" />
     <link rel="preload" href="../../webpages/styles/colors-light.css" as="style" />
+
+    <!-- Preload components -->
+    <link rel="preload" href="../../webpages/common/components/inline-icon.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="../../webpages/common/components/inline-icon.js" />
+
+    <script src="../../libraries/thirdparty/vue.js" defer></script>
+    <script src="../../libraries/thirdparty/idb.js" defer></script>
     <script src="../../webpages/popup-loader.js" type="module"></script>
     <style>
       @import url("../../webpages/styles/colors.css");
@@ -37,8 +44,8 @@
         >{{ thisComment.scratchTeam ? "*" : "" }}
         <span class="comment-time" v-show="deleteStep !== 1 && !deleted">
           · {{ commentTimeAgo }}
-          <a rel="noopener noreferrer" target="_blank" :href="commentURL">
-            <img src="../../images/icons/popout.svg" class="popout-comment" title="{{ messages.openNewTabMsg }}" />
+          <a class="nolink" rel="noopener noreferrer" target="_blank" :href="commentURL">
+            <inline-icon icon="popout" class="popout-comment" title="{{ messages.openNewTabMsg }}" />
           </a>
         </span>
         <a
@@ -465,7 +472,7 @@
       >
       <span v-cloak class="separator">|</span>
       <a v-cloak href="https://scratch.mit.edu/messages" class="nolink open-messages"
-        >{{ uiMessages.openMessagesMsg }}<img src="../../images/icons/popout.svg" class="popout"
+        >{{ uiMessages.openMessagesMsg }}<inline-icon icon="popout" class="popout"
       /></a>
     </div>
   </body>

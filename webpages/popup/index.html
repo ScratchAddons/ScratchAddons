@@ -2,6 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
+    <!-- Preload styles -->
+    <link rel="preload" href="../styles/colors-light.css" as="style" />
+
+    <!-- Preload components -->
+    <link rel="preload" href="../common/components/inline-icon.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="../common/components/inline-icon.js" />
+
     <script src="../set-lang.js" type="module"></script>
     <script src="../check-unsupported.js" defer></script>
     <style>
@@ -13,7 +21,6 @@
     <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
     <script src="../../libraries/thirdparty/vue.js" defer></script>
     <script src="./index.js" type="module"></script>
-    <link rel="preload" href="../styles/colors-light.css" as="style" />
   </head>
   <body class="loading">
     <div id="header">
@@ -37,7 +44,7 @@
             :class="{ sel: currentPopup === popup }"
             @click="setPopup(popup)"
           >
-            <img v-if="popup.icon" :src="popup.icon" class="popup-icon" />
+            <inline-icon v-if="popup.icon" :icon="popup.icon" class="popup-icon"></inline-icon>
             <a class="popup-title">{{ popup.name }}</a>
             <a
               v-if="popup.fullscreen"
@@ -46,7 +53,7 @@
               target="_blank"
               @click="closePopup()"
             >
-              <img src="../../images/icons/popout.svg" class="popout-img" title="{{ msg('openInNewTab') }}" />
+              <inline-icon icon="popout" class="popout-icon" :title="msg('openInNewTab')"></inline-icon>
             </a>
           </div>
         </div>

@@ -1,12 +1,12 @@
 .badge {
-  background: gray;
-  color: var(--white-text);
+  background-color: var(--badge-background);
+  color: var(--badge-text);
   border-radius: 4px;
   padding: 2px 5px;
   font-size: 12px;
   font-weight: 500;
   margin-inline-start: 10px;
-  border-bottom: 2px solid #111;
+  border-bottom: 2px solid var(--badge-border);
   white-space: nowrap;
 }
 .badge .tooltiptext {
@@ -14,49 +14,22 @@
 }
 
 .badge.blue {
-  background: #175ef8;
-  border-color: #0e44b8;
-}
-.badge.green {
-  background: #78fd2b;
-  color: #333;
-  border-color: #53b31c;
+  background-color: var(--blue);
+  border-color: var(--blue-variant);
+  color: var(--white-text);
 }
 .badge.yellow {
-  background: #fddd2b;
-  color: #333;
-  border-color: #fdab12;
+  background-color: var(--yellow);
+  border-color: var(--yellow-variant);
+  color: var(--black-text);
+}
+.badge.orange {
+  background-color: var(--orange);
+  border-color: var(--orange-variant);
+  color: var(--white-text);
 }
 .badge.red {
-  background: #fd662b;
-  border-color: #d84a12;
-}
-.badge.darkred {
-  background: #fd2b2b;
-  border-color: #d81212;
-}
-.badge.darkgreen {
-  background: #00b1a8;
-  border-color: #047773;
-}
-.badge.purple {
-  background: rgb(177, 23, 248);
-  border-color: #b20eb8;
-}
-.filter-option.sel.blue {
-  background: #175ef8;
-}
-.filter-option.sel.green {
-  background: #78fd2b;
-  color: #333;
-}
-.filter-option.sel.yellow {
-  background: #fddd2b;
-  color: #333;
-}
-.filter-option.sel.red {
-  background: #fd662b;
-}
-.filter-option.sel.darkgreen {
-  background: #00b1a8;
+  background-color: var(--red);
+  border-color: var(--red-variant);
+  color: var(--white-text);
 }

@@ -30,7 +30,7 @@ body {
   left: 0;
   width: 0;
   height: 4px;
-  background-color: var(--brand-orange);
+  background-color: var(--blue);
 }
 
 .error {

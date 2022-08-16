@@ -36,7 +36,7 @@ button {
   box-shadow: var(--content-shadow);
 }
 .message-type-admin {
-  border-color: var(--danger-orange);
+  border-color: var(--yellow);
 }
 
 .message-type-title {
@@ -154,6 +154,7 @@ a.message-type-title-text {
   background-color: var(--unread-comment-background);
 }
 .comment-content {
+  color: var(--description-text);
   word-break: break-word;
   clip-path: inset(0 0 0 0); /* keep zalgo in this box */
 }
@@ -168,25 +169,24 @@ a.message-type-title-text {
 }
 .comment-author {
   font-weight: 600;
-  color: var(--dark-red-text);
+  color: var(--content-text);
 }
 .comment-me .comment-author {
-  font-weight: 700;
-  color: var(--green-text);
-}
-.unread .comment-author {
-  font-weight: 700;
+  color: var(--orange);
 }
 .comment-time {
   /*font-weight: 200;*/
-  opacity: 0.5;
+  color: var(--gray-text);
+}
+.comment-time a {
+  color: inherit;
 }
 .popout-comment {
   cursor: pointer;
+  width: 10px;
   height: 10px;
   vertical-align: baseline;
   padding-left: 2px;
-  filter: var(--content-icon-filter);
 }
 [dir="rtl"] .popout-comment {
   transform: scaleX(-1);
@@ -239,7 +239,7 @@ a.message-type-title-text {
 }
 .reply-textarea:focus {
   outline: none;
-  border-color: var(--brand-orange);
+  border-color: var(--orange);
   box-shadow: var(--input-focus-shadow);
 }
 .reply-box-buttons {
@@ -311,11 +311,8 @@ a.message-type-title-text {
 #bottom-bar > * {
   padding: 8px 0;
 }
-#bottom-bar > a {
-  font-weight: var(--brand-orange-min-font-weight);
-}
 #bottom-bar > a:hover {
-  color: var(--brand-orange);
+  color: var(--blue-text);
   text-decoration: none;
 }
 #bottom-bar .separator {
@@ -325,11 +322,11 @@ a.message-type-title-text {
   font-weight: 600;
 }
 .popout {
+  width: 10px;
   height: 10px;
   vertical-align: baseline;
   margin-left: 5px;
-  opacity: 0.6;
-  filter: var(--content-icon-filter);
+  color: var(--gray-text);
 }
 [dir="rtl"] .popout {
   transform: scaleX(-1);
@@ -338,8 +335,7 @@ a.message-type-title-text {
   color: inherit;
 }
 .open-messages:hover .popout {
-  opacity: 1;
-  filter: none;
+  color: var(--blue-text);
 }
 
 .dom-element-renderer {

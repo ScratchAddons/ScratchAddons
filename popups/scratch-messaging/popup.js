@@ -1,5 +1,6 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 import * as MessageCache from "../../libraries/common/message-cache.js";
+import loadVueComponent from "../../libraries/common/load-vue-components.js";
 import * as API from "./api.js";
 import fixCommentContent from "./fix-comment-content.js";
 
@@ -23,6 +24,8 @@ const errorCodes = {
 
 export default async ({ addon, msg, safeMsg }) => {
   let dateNow = Date.now();
+
+  await loadVueComponent(["webpages/common/components/inline-icon"]);
 
   // <dom-element-renderer> component
   // This component renders an element.

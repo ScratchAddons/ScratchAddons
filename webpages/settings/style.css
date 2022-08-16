@@ -18,7 +18,7 @@ body {
 
 .navbar {
   height: 60px;
-  background: var(--brand-orange);
+  background: var(--brand);
   color: var(--white-text);
   display: flex;
   align-items: center;
@@ -151,7 +151,7 @@ h1 {
   display: none !important;
 }
 #confirmImport {
-  border-color: var(--orange);
+  border-color: var(--yellow);
 }
 
 #search-not-found {

@@ -4,7 +4,7 @@ export default [
     name: "danger",
     tooltipText: "dangerTooltip",
     matchName: "danger",
-    color: "darkred",
+    color: "red",
     iframeAlwaysShow: true,
   },
   {
@@ -16,35 +16,33 @@ export default [
   {
     name: "new",
     matchName: "new",
-    color: "purple",
+    color: "orange",
   },
   {
     name: "updated",
     matchName: "updated",
-    color: "purple",
+    color: "orange",
   },
   {
     name: "updatedWithSettings",
     matchName: "updatedWithSettings",
-    color: "purple",
+    color: "orange",
   },
   {
     name: "beta",
     tooltipText: "betaTooltip",
     matchName: "beta",
-    color: "red",
+    color: "yellow",
     iframeAlwaysShow: true,
   },
   {
     name: "forums",
     tooltipText: "forumsTooltip",
     matchName: "forums",
-    color: "green",
   },
   {
     name: "forEditor",
     matchName: "editor",
-    color: "darkgreen",
     addonTabShow: {
       theme: true,
     },
@@ -52,7 +50,6 @@ export default [
   {
     name: "forWebsite",
     matchName: "community",
-    color: "yellow",
     addonTabShow: {
       theme: true,
     },

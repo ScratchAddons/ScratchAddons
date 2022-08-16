@@ -35,7 +35,7 @@
   border-inline-end: none;
 }
 .filter-option.sel {
-  background: var(--brand-orange);
+  background: var(--orange);
   color: var(--white-text);
 }
 .filter-option.disabled {

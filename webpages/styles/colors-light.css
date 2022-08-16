@@ -1,6 +1,5 @@
 :root {
-  --brand-orange-min-font-weight: 600;
-  --green-text: var(--green);
+  --orange-min-font-weight: 600;
   --blue-text: var(--blue);
 
   --page-background: #fcfcfc;
@@ -16,15 +15,16 @@
   --tooltip-background: #ecebeb;
   --comment-background: #f0f0f0;
   --unread-comment-background: #fff;
-  --notice-background: rgba(253, 221, 43, 0.25);
+  --notice-background: var(--yellow-opacity25);
   --notice-text: #222;
   --notice-icon-filter: none;
   --warning-background: var(--red);
   --warning-border: var(--red-variant);
   --info-border: var(--content-border);
-  --update-background: rgba(177, 23, 248, 0.1);
-  --update-border: rgba(177, 23, 248, 0.2);
+  --update-background: var(--orange-opacity15);
+  --update-border: var(--orange-opacity20);
   --update-text: #222;
+  --badge-background: #cfcfcf;
 
   --hover-highlight: rgba(0, 0, 0, 0.05);
   --hover-highlight-reduced: rgba(0, 0, 0, 0.02);
@@ -36,7 +36,7 @@
   --control-border: #aaa;
 
   --content-text: #222;
-  --content-icon-filter: brightness(0);
+  --content-icon-filter: brightness(0) invert(0.13);
   --description-text: #444;
   --description-icon-filter: brightness(0) invert(0.27);
   --label-text: #555;

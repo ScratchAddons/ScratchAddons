@@ -16,7 +16,7 @@
     }
   ],
   "popup": {
-    "icon": "../../images/icons/cloud.svg",
+    "icon": "cloud",
     "name": "Games",
     "fullscreen": true,
     "script": "popup.js",
