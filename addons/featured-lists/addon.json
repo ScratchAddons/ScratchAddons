@@ -1,6 +1,6 @@
 {
   "name": "Featured project lists",
-  "description": "Choose a list of featured projects/studios to be displayed on the front page",
+  "description": "Change order of lists that are displayed on the front page.",
   "credits": [
     {
       "name": "Norbiros",
@@ -16,18 +16,19 @@
   ],
   "settings": [
     {
-      "name": "Items",
-      "id": "lists",
+      "name": "Rows",
+      "id": "rows",
       "type": "table",
-      "enableEditing": false,
       "default": [
-        { "name": "Featured Projects", "id": "FeaturedProjects" },
-        { "name": "Featured Studios", "id": "FeaturedStudios" },
-        { "name": "Projects Curated by", "id": "CuratedProjects" },
-        { "name": "Scratch Studio", "id": "ScratchStudio" },
-        { "name": "Projects Loved by", "id": "ProjectsLoved" },
-        { "name": "What community is remixing", "id": "CommunityRemixing" },
-        { "name": "What community is loving", "id": "CommunityLoving" }
+        { "name": "Featured Projects", "id": "community_featured_projects" },
+        { "name": "Featured Studios", "id": "community_featured_studios" },
+        { "name": "Projects Curated by", "id": "curator_top_projects" },
+        { "name": "Scratch Design Studio", "id": "scratch_design_studio" },
+        { "name": "Projects by Scratchers I'm Following", "id": "custom_projects_by_following" },
+        { "name": "Projects Loved by Scratchers I'm Following", "id": "custom_projects_loved_by_following" },
+        { "name": "Projects in Studios I'm Following", "id": "custom_projects_in_studios_following" },
+        { "name": "What the Community is Remixing", "id": "community_most_remixed_project" },
+        { "name": "What the Community is Loving", "id": "community_most_loved_projects" }
       ],
       "row": [
         {
@@ -46,36 +47,46 @@
       "presets": [
         {
           "name": "Featured Projects",
-          "values": { "name": "Featured Projects", "id": "FeaturedProjects" }
+          "values": { "name": "Featured Projects", "id": "community_featured_projects" }
         },
         {
           "name": "Featured Studios",
-          "values": { "name": "Featured Studios", "id": "FeaturedStudios" }
+          "values": { "name": "Featured Studios", "id": "community_featured_studios" }
         },
         {
           "name": "Projects Curated by",
-          "values": { "name": "Projects Curated by", "id": "CuratedProjects" }
+          "values": { "name": "Projects Curated by", "id": "curator_top_projects" }
         },
         {
-          "name": "Scratch Studio",
-          "values": { "name": "Scratch Studio", "id": "ScratchStudio" }
+          "name": "Scratch Design Studio",
+          "values": { "name": "Scratch Design Studio", "id": "scratch_design_studio" }
         },
         {
-          "name": "Projects Loved by",
-          "values": { "name": "Projects Loved by", "id": "ProjectsLoved" }
+          "name": "Projects by Scratchers I'm Following",
+          "values": { "name": "Projects by Scratchers I'm Following", "id": "custom_projects_by_following" }
         },
         {
-          "name": "What community is remixing",
-          "values": { "name": "What community is remixing", "id": "CommunityRemixing" }
+          "name": "Projects Loved by Scratchers I'm Following",
+          "values": { "name": "Projects Loved by Scratchers I'm Following", "id": "custom_projects_loved_by_following" }
         },
         {
-          "name": "What community is loving",
-          "values": { "name": "What community is loving", "id": "CommunityLoving" }
+          "name": "Projects in Studios I'm Following",
+          "values": { "name": "Projects in Studios I'm Following", "id": "custom_projects_in_studios_following" }
+        },
+        {
+          "name": "What the Community is Remixing",
+          "values": { "name": "What the Community is Remixing", "id": "community_most_remixed_project" }
+        },
+        {
+          "name": "What the Community is Loving",
+          "values": { "name": "What the Community is Loving", "id": "community_most_loved_projects" }
         }
       ]
     }
   ],
-  "versionAdded": "1.26.0",
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "versionAdded": "1.28.0",
   "tags": ["community", "featured"],
   "enabledByDefault": false
 }

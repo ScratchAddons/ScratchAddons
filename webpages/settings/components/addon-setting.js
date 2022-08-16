@@ -108,10 +108,12 @@ export default async function ({ template }) {
         this.updateOption(e.target.value);
       },
       getTableSetting(id) {
-        if (id == "id") {
-          return false;
-        }
         return this.setting.row.find((setting) => setting.id === id);
+      },
+      getTableSettings(row) {
+        let rowTemp = row;
+        if (rowTemp.id) delete rowTemp["id"];
+        return rowTemp;
       },
       deleteTableRow(i) {
         this.addonSettings[this.setting.id].splice(i, 1);

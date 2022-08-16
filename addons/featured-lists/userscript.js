@@ -1,38 +1,51 @@
-export default async function ({ addon, global, console, msg }) {
-  // When user is logging into page it shows:
-  // DOMException: Node.insertBefore: Child to insert before is not a child of this node
-  var init = async function () {
-    const isLoggedIn = await addon.auth.fetchIsLoggedIn();
+export default async function ({ addon, console }) {
+  let modSplashes;
+  changeRowsOrder();
 
-    addon.tab.waitForElement(".mod-splash").then(() => {
-      let list = {
-        FeaturedProjects: document.querySelectorAll("[class='box']")[0],
-        FeaturedStudios: document.querySelectorAll("[class='box']")[1],
-        CuratedProjects: document.querySelectorAll("[class='box']")[2],
-        ScratchStudio: document.querySelectorAll("[class='box']")[3],
-        ProjectsLoved: document.querySelectorAll("[class='box']")[4],
-        CommunityRemixing: document.querySelectorAll("[class='box']")[5],
-        CommunityLoving: document.querySelectorAll("[class='box']")[6],
-      };
+  addon.self.addEventListener("disabled", function () {
+    modSplashes = document.querySelectorAll(".mod-splash");
+    modSplashes[0].style.display = "block"; // If user is not logged in
+    modSplashes[1].style.display = "block";
+  });
+  addon.self.addEventListener("reenabled", changeRowsOrder);
 
-      if (!isLoggedIn) {
-        list["CommunityRemixing"] = document.querySelectorAll("[class='box']")[4];
-        list["CommunityLoving"] = document.querySelectorAll("[class='box']")[5];
-      }
+  async function changeRowsOrder() {
+    addon.tab.waitForElement(".mod-splash").then((modSplash) => {
+      // Rows are splited to 2 different elements, so order doesn't work. This code moves
+      document.querySelectorAll(".mod-splash")[1]?.prepend(document.querySelectorAll(".mod-splash .box")[3]);
+      document.querySelectorAll(".mod-splash")[1]?.prepend(document.querySelectorAll(".mod-splash .box")[2]);
 
-      document.querySelectorAll(".mod-splash")[1].prepend(document.querySelectorAll(".mod-splash .box")[3]);
-      document.querySelectorAll(".mod-splash")[1].prepend(document.querySelectorAll(".mod-splash .box")[2]);
+      // Create list of rowsObjects and keys
+      let rowsWithIds = [];
+      let rowsObjects = document.querySelectorAll("div.inner.mod-splash > .box");
+      rowsObjects.forEach(function (el) {
+        let rowObj = {};
+        rowObj["key"] = getRowKey(el);
+        rowObj["obj"] = el;
+        el.style.order = "10";
+        rowsWithIds.push(rowObj);
+      });
 
-      let modsplash = document.querySelectorAll(".mod-splash")[1];
-      modsplash.style.display = "grid";
-      let lists = addon.settings.get("lists");
-      lists.forEach((item, i) => {
-        if (!(!isLoggedIn && item.id == "ProjectsLoved")) {
-          list[item.id].style.order = i;
-        }
+      // Change style to grid
+      modSplashes = document.querySelectorAll(".mod-splash");
+      modSplashes[0].style.display = "grid"; // If user is not logged in
+      modSplashes[1].style.display = "grid";
+
+      // Change order of rows
+      let rowsSetting = addon.settings.get("rows");
+      rowsSetting.forEach((item, i) => {
+        let specificRow = rowsWithIds.find((e) => e.key == item.id);
+        console.log(item.id);
+        console.log(specificRow);
+        if (specificRow) specificRow.obj.style.order = i;
       });
     });
-  };
+  }
 
-  init();
+  function getRowKey(row) {
+    for (let key in row) {
+      if (key.startsWith("__reactInternalInstance")) return row[key].return.key;
+    }
+    return null;
+  }
 }
