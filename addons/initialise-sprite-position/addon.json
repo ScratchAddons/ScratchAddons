@@ -4,9 +4,11 @@
   "credits": [
     {
       "name": "pufferfish101007",
-      "link": "https://scratch.mit.edu/users/pufferfish101007"
+      "link": "https://scratch.mit.edu/users/pufferfish101007/"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",
@@ -35,9 +37,33 @@
       "name": "Randomize the position of library sprites",
       "type": "boolean",
       "default": false
+    },
+    {
+      "id": "duplicate",
+      "name": "Behavior when duplicating sprites",
+      "type": "select",
+      "default": "randomize",
+      "potentialValues": [
+        {
+          "id": "custom",
+          "name": "Send to specified x/y values"
+        },
+        {
+          "id": "keep",
+          "name": "Keep the same as the original sprite"
+        },
+        {
+          "id": "randomize",
+          "name": "Randomize"
+        }
+      ]
     }
   ],
   "versionAdded": "1.13.0",
+  "latestUpdate": {
+    "version": "1.28.0",
+    "newSettings": ["duplicate"]
+  },
   "tags": ["editor", "featured"],
   "enabledByDefault": false
 }

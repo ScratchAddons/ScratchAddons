@@ -8,6 +8,7 @@ import categories from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
 import globalTheme from "../../libraries/common/global-theme.js";
+import minifySettings from "../../libraries/common/minify-settings.js";
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -30,6 +31,7 @@ let fuse;
     "webpages/settings/components/addon-group-header",
     "webpages/settings/components/addon-body",
     "webpages/settings/components/category-selector",
+    "webpages/settings/components/modal",
     "webpages/settings/components/previews/editor-dark-mode",
     "webpages/settings/components/previews/palette",
   ]);
@@ -125,10 +127,11 @@ let fuse;
           addonsEnabled[addonId] = granted;
         });
       }
+      const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
       await syncSet({
         globalTheme: !!obj.core.lightTheme,
         addonsEnabled,
-        addonSettings,
+        addonSettings: minifySettings(addonSettings, prerelease ? null : manifests),
       });
       resolvePromise();
     };
@@ -144,8 +147,7 @@ let fuse;
         smallMode: false,
         theme: initialTheme,
         switchPath: "../../images/icons/switch.svg",
-        isOpen: false,
-        canCloseOutside: false,
+        moreSettingsOpen: false,
         categoryOpen: true,
         loaded: false,
         searchLoaded: false,
@@ -226,21 +228,20 @@ let fuse;
         return chrome.runtime.getManifest().version_name;
       },
       addonAmt() {
-        return `${Math.floor(this.manifests.length / 5) * 5}+`;
+        return `${Math.floor(this.manifests.filter((addon) => !addon.tags.includes("easterEgg")).length / 5) * 5}+`;
+      },
+      selectedCategoryName() {
+        return this.categories.find((category) => category.id === this.selectedCategory)?.name;
       },
     },
 
     methods: {
-      modalToggle: function () {
+      openMoreSettings: function () {
         this.closePickers();
-        this.isOpen = !this.isOpen;
+        this.moreSettingsOpen = true;
         if (vue.smallMode) {
           vue.sidebarToggle();
         }
-        this.canCloseOutside = false;
-        setTimeout(() => {
-          this.canCloseOutside = true;
-        }, 100);
       },
       sidebarToggle: function () {
         this.categoryOpen = !this.categoryOpen;
@@ -376,11 +377,6 @@ let fuse;
           this.sidebarToggle();
         }
       },
-      modalClickOutside: function (e) {
-        if (this.isOpen && this.canCloseOutside && e.isTrusted) {
-          this.isOpen = false;
-        }
-      },
     },
     watch: {
       searchInputReal(newValue) {
@@ -427,6 +423,22 @@ let fuse;
             .map(() => JSON.parse(JSON.stringify(exampleAddonListItem)));
         }
       }, 0);
+
+      window.addEventListener(
+        "hashchange",
+        (e) => {
+          const addonId = location.hash.replace(/^#addon-/, "");
+          const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
+          if (!groupWithAddon) return; //Don't run if hash is invalid
+          const addon = this.manifestsById[addonId];
+
+          groupWithAddon.expanded = true;
+          this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
+          this.clearSearch();
+          setTimeout(() => document.getElementById("addon-" + addonId)?.scrollIntoView(), 0);
+        },
+        { capture: false }
+      );
     },
   });
 
@@ -623,21 +635,25 @@ let fuse;
 
     vue.loaded = true;
     setTimeout(() => {
-      // Set hash again after loading addons, to force scroll to addon
-      let hash = window.location.hash;
-      if (hash) {
-        window.location.hash = "";
-        window.location.hash = hash;
-        if (hash.startsWith("#addon-")) {
-          const addonId = hash.substring(7);
-          const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
-          groupWithAddon.expanded = true;
-          setTimeout(() => {
-            // Only required in Firefox
-            window.location.hash = "";
-            window.location.hash = hash;
-          }, 0);
-        }
+      const hash = window.location.hash;
+      if (hash.startsWith("#addon-")) {
+        const addonId = hash.substring(7);
+        const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
+        if (!groupWithAddon) return;
+        groupWithAddon.expanded = true;
+
+        const addon = vue.manifestsById[addonId];
+        vue.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
+        setTimeout(() => {
+          const addonElem = document.getElementById("addon-" + addonId);
+          if (!addonElem) return;
+          addonElem.scrollIntoView();
+          // Browsers sometimes ignore :target for the elements dynamically appended.
+          // Use CSS class to initiate the blink animation.
+          addonElem.classList.add("addon-blink");
+          // 2s (animation length) + 1ms
+          setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
+        }, 0);
       }
     }, 0);
 

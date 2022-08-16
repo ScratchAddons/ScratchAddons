@@ -31,6 +31,12 @@ export default async function ({ template }) {
       addonSettings() {
         return this.$root.addonSettings[this.addon._addonId];
       },
+      showUpdateNotice() {
+        if (!this.addon.latestUpdate || !this.addon.latestUpdate.temporaryNotice) return false;
+        const [extMajor, extMinor, _] = this.$root.version.split(".");
+        const [addonMajor, addonMinor, __] = this.addon.latestUpdate.version.split(".");
+        return extMajor === addonMajor && extMinor === addonMinor;
+      },
     },
     methods: {
       getDefaultExpanded() {
@@ -127,6 +133,15 @@ export default async function ({ template }) {
       expanded(newValue) {
         if (newValue === true) this.everExpanded = true;
       },
+    },
+    ready() {
+      const onHashChange = () => {
+        if (location.hash.replace(/^#addon-/, "") === this.addon._addonId) {
+          this.expanded = true;
+        }
+      };
+      window.addEventListener("hashchange", onHashChange, { capture: false });
+      setTimeout(onHashChange, 0);
     },
   });
   Vue.component("addon-body", AddonBody);

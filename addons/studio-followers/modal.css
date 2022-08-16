@@ -24,6 +24,10 @@
   margin: 3px;
 }
 
-#sa-studio-followers-btn.hidden {
+#sa-studio-followers-button.hidden {
   display: none !important;
+}
+
+.studio-follower-added {
+  cursor: default;
 }

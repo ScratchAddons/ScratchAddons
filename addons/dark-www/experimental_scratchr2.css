@@ -332,6 +332,7 @@ ul.pagination span /* mobile forums */,
   background-color: var(--darkWww-gray-scratchr2SelectedTab);
 }
 .box .box-content .action-bar .inner,
+.contact #block-message,
 .djangobb th,
 .post-content blockquote /* mobile forums */,
 .post-content div.code /* mobile forums */ {

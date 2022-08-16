@@ -561,6 +561,46 @@ select:focus {
 .banner {
   top: 50px;
 }
+#alert-view {
+  top: 70px;
+  box-shadow: none;
+}
+.alert {
+  padding: 16px 20px;
+  border-radius: 8px;
+  color: var(--darkWww-box-text, #575e75);
+  text-shadow: none;
+  font-size: 14px;
+  line-height: 32px;
+  font-weight: bold;
+}
+.alert-info {
+  background-color: var(--darkWww-blue, #e9f1fc);
+  border-color: var(--darkWww-button, #4d97ff);
+}
+.alert-success {
+  background-color: var(--darkWww-box-success, #cef2e8);
+  border-color: #0ebd9c;
+}
+.alert-error {
+  background-color: var(--darkWww-box-error, #fff0df);
+  border-color: #ff8c1a;
+  box-shadow: 0px 0px 0px 2px rgba(255, 140, 26, 0.25);
+}
+.alert .close {
+  position: static;
+  margin-left: 16px;
+  width: 32px;
+  height: 32px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  color: white;
+  text-shadow: none;
+  text-align: center;
+  line-height: 32px;
+  opacity: 1;
+  cursor: pointer;
+}
 .modal-backdrop,
 .modal-backdrop.fade.in,
 .ui-widget-overlay {

@@ -3,7 +3,7 @@
   "description": "Replaces thumbnails across the website with higher resolution images. Useful for Retina (high pixel density) displays and browsing at greater than 100% zoom.",
   "info": [
     {
-      "type": "notice",
+      "type": "warning",
       "text": "If your network's data plan is limited, keep in mind that higher resolution images require more data usage.",
       "id": "imagefilesize"
     }

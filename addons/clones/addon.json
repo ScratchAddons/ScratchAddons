@@ -4,6 +4,10 @@
   "credits": [
     {
       "name": "Jeffalo"
+    },
+    {
+      "name": "OregSam",
+      "link": "https://github.com/OregSamSas"
     }
   ],
   "dynamicEnable": true,
@@ -21,6 +25,19 @@
       "matches": ["projects"]
     }
   ],
+  "settings": [
+    {
+      "id": "showicononly",
+      "name": "Show icon only",
+      "default": false,
+      "type": "boolean"
+    }
+  ],
+  "latestUpdate": {
+    "version": "1.28.0",
+    "newSettings": ["showicononly"],
+    "isMajor": false
+  },
   "tags": ["editor", "recommended"],
   "enabledByDefault": false
 }

@@ -8,6 +8,12 @@
       "runAtComplete": false
     }
   ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/search/*"]
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "credits": [{ "name": "Geotale" }, { "name": "pufferfish101007" }],
