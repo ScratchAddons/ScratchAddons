@@ -77,11 +77,8 @@
   "settings": {
     "message": "Settings"
   },
-  "all": {
-    "message": "All"
-  },
   "editorFeatures": {
-    "message": "Scratch Editor Features"
+    "message": "Editor"
   },
   "costumeEditorFeatures": {
     "message": "Costume Editor"
@@ -96,7 +93,7 @@
     "message": "Profiles"
   },
   "projectPlayerFeatures": {
-    "message": "Project Player"
+    "message": "Player"
   },
   "projectPageFeatures": {
     "message": "Project Pages"
@@ -107,14 +104,14 @@
   "themes": {
     "message": "Themes"
   },
-  "editorThemes": {
-    "message": "Editor Themes"
+  "hotkeys": {
+    "message": "Hotkeys"
   },
-  "websiteThemes": {
-    "message": "Website Themes"
+  "website": {
+    "message": "Website"
   },
-  "popupFeatures": {
-    "message": "Extension Popup Features"
+  "popup": {
+    "message": "Popup"
   },
   "theme": {
     "message": "Theme:"
@@ -204,7 +201,7 @@
     "message": "Message from Scratch Addons extension: Scratch policy forbids discussion about browser extensions, including Scratch Addons. Do not advertise Scratch Addons or any of its features. If you found a bug, please $1."
   },
   "search": {
-    "message": "Search"
+    "message": "Search for themes, addons, creators..."
   },
   "permissionsTitle": {
     "message": "Permissions - Scratch Addons"

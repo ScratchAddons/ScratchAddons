@@ -17,8 +17,8 @@ body {
 }
 
 .navbar {
-  height: 60px;
-  background: var(--brand-orange);
+  height: 70px;
+  background: var(--content-background);
   color: var(--white-text);
   display: flex;
   align-items: center;
@@ -27,12 +27,20 @@ body {
   user-select: none;
   position: relative;
   z-index: 10;
+  justify-content: space-between;
 }
-
+.navbarText {
+  display: flex;
+  align-items: center;
+}
+.navbarText > span {
+  display: flex;
+  align-items: center;
+}
 h1 {
   font-size: 18px;
   margin: 0;
-  font-weight: 400;
+  font-weight:300;
 }
 
 .navbar a {

@@ -489,6 +489,7 @@ let fuse;
         }
         return count;
       };
+      addCategoryIfTag(["recommended"])
       if (manifest._categories[0] === "theme") {
         // All themes should have either "editor" or "community" tag
         addCategoryIfTag([

@@ -1,88 +1,33 @@
 export default [
   {
-    id: "all",
+    id: "recommended",
     icon: "list",
-    name: chrome.i18n.getMessage("all"),
+    name: chrome.i18n.getMessage("recommended"),
+  },
+  {
+    id: "popup",
+    icon: "popup",
+    name: chrome.i18n.getMessage("popup"),
+  },
+  {
+    id: "website",
+    icon: "brush2",
+    name: chrome.i18n.getMessage("website"),
+  },
+  {
+    id: "projectPlayer",
+    icon: "player",
+    name: chrome.i18n.getMessage("projectPlayerFeatures"),
   },
   {
     id: "editor",
     icon: "puzzle",
     name: chrome.i18n.getMessage("editorFeatures"),
   },
+
   {
-    id: "codeEditor",
-    parent: "editor",
-    icon: "code",
-    name: chrome.i18n.getMessage("codeEditorFeatures"),
-  },
-  {
-    id: "costumeEditor",
-    parent: "editor",
-    icon: "brush2",
-    name: chrome.i18n.getMessage("costumeEditorFeatures"),
-  },
-  {
-    id: "projectPlayer",
-    parent: "editor",
-    icon: "player",
-    name: chrome.i18n.getMessage("projectPlayerFeatures"),
-  },
-  {
-    id: "editorOthers",
-    parent: "editor",
+    id: "hotkeys",
     icon: "dots",
-    name: chrome.i18n.getMessage("others"),
-  },
-  {
-    id: "community",
-    icon: "web",
-    name: chrome.i18n.getMessage("websiteFeatures"),
-  },
-  {
-    id: "projectPage",
-    parent: "community",
-    icon: "projectpage",
-    name: chrome.i18n.getMessage("projectPageFeatures"),
-  },
-  {
-    id: "profiles",
-    parent: "community",
-    icon: "users",
-    name: chrome.i18n.getMessage("profilesFeatures"),
-  },
-  {
-    id: "forums",
-    parent: "community",
-    icon: "forum",
-    name: chrome.i18n.getMessage("forums"),
-  },
-  {
-    id: "communityOthers",
-    parent: "community",
-    icon: "dots",
-    name: chrome.i18n.getMessage("others"),
-  },
-  {
-    id: "theme",
-    icon: "brush",
-    name: chrome.i18n.getMessage("themes"),
-  },
-  {
-    id: "themesForEditor",
-    parent: "theme",
-    icon: "puzzle",
-    name: chrome.i18n.getMessage("editorThemes"),
-  },
-  {
-    id: "themesForWebsite",
-    parent: "theme",
-    icon: "web",
-    name: chrome.i18n.getMessage("websiteThemes"),
-  },
-  {
-    id: "popup",
-    icon: "popup",
-    name: chrome.i18n.getMessage("popupFeatures"),
-    marginBottom: true,
+    name: chrome.i18n.getMessage("hotkeys"),
   },
 ];

@@ -18,12 +18,17 @@
 <style>
   .category {
     transition: background-color 0.2s ease, padding 0.2s ease, height 0.2s ease, opacity 0.2s ease;
-    padding: 20px 20px;
+    padding: 10px 10px;
     position: relative;
     user-select: none;
     cursor: pointer;
     display: flex;
     align-items: center;
+
+    margin-left: 1px;
+    margin-right: 1px;
+    border-radius: 10px;
+    font-weight: 200;
   }
   .category.category-small {
     padding: 15px 20px 15px 20px;
@@ -59,24 +64,9 @@
   .category:hover {
     background: var(--hover-darken);
   }
-  .category::before {
-    content: "";
-    transition: all 0.2s ease;
-    display: block;
-    width: 4px;
-    border-radius: 0 4px 4px 0;
-    height: 40px;
-    background: var(--orange);
-    position: absolute;
-    left: 0;
-    opacity: 0;
-  }
   [dir="rtl"] .category::before {
     right: 0;
     border-radius: 4px 0 0 4px;
-  }
-  .category.sel::before {
-    opacity: 1;
   }
   .category.hasParent::before {
     height: 25px;
@@ -91,6 +81,6 @@
     filter: none;
   }
   .category span {
-    margin-inline-start: 15px;
+    margin-inline-start: 10px;
   }
 </style>

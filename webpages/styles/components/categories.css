@@ -10,3 +10,8 @@
   scrollbar-color: var(--gray-text) transparent;
   padding: 20px 0;
 }
+
+.categories-row {
+  display: flex;
+  
+}

@@ -1,7 +1,7 @@
 :root {
-  --brand-orange: #ff7b26;
+  --brand-orange: #1A2933;
   --brand-orange-min-font-weight: normal;
-  --orange: #ff7b26;
+  --orange: #E48627;
   --orange-opacity35: rgba(255, 123, 38, 0.35);
   --yellow-opacity50: rgba(253, 221, 43, 0.5);
   --green: #008000;
@@ -18,14 +18,13 @@
   --dark-red-text: var(--dark-red-variant);
   --white-text: #fff;
 
-  --page-background: #222;
-  --content-background: #2a2a2a;
+  --page-background: #1A2933;
+  --content-background: #141F26;
   --navigation-background: #333;
-  --search-toolbar-background: #2a2a2a;
   --button-background: #222;
   --button-hover-background: #1a1a1a;
   --input-background: #222;
-  --search-input-background: #111;
+  --search-input-background: #141F26;
   --switch-background: #111;
   --switch-inner-background: #aaa;
   --tooltip-background: #000;
@@ -47,7 +46,7 @@
   --modal-overlay: rgba(0, 0, 0, 0.65);
   --hover-highlight: rgba(255, 255, 255, 0.05);
   --hover-highlight-reduced: rgba(255, 255, 255, 0.02);
-  --hover-darken: rgba(0, 0, 0, 0.1);
+  --hover-darken: #1A2933;
 
   --large-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   --large-shadow-filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
@@ -58,7 +57,7 @@
   --input-focus-shadow: 0 0 0 3px var(--orange-opacity35);
   --fullscreen-popup-shadow: 0 -1px 7px rgba(0, 0, 0, 0.2);
 
-  --content-text: #fff;
+  --content-text: #647886;
   --content-icon-filter: brightness(0) invert(1);
   --description-text: #ddd;
   --description-icon-filter: brightness(0) invert(0.87);

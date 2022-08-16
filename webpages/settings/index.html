@@ -119,10 +119,15 @@
   </head>
   <body v-cloak :class="{light: theme}">
     <div class="navbar">
-      <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-cloak v-show="smallMode" alt="Logo" />
-      <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" />
-      <h1 v-cloak>{{ msg("settings") }}</h1>
-      <img v-cloak @click="setTheme(!theme)" class="theme-switch" :src="themePath" />
+      <div class="navbarText">
+        <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-cloak v-show="smallMode" alt="Logo" />
+        <span
+          ><img src="../../images/icon-32.svg" class="logo" alt="Logo" />
+          <h1 v-cloak>{{ msg("settings") }}</h1></span
+        >
+      </div>
+      <div class="categories-row navbarText"><category-selector v-for="category of categories" :category="category"></category-selector></div>
+      <div class="navbarText"><img v-cloak @click="setTheme(!theme)" class="theme-switch" :src="themePath" /></div>
     </div>
     <div class="main">
       <div
@@ -131,8 +136,6 @@
         v-show="categoryOpen && !isIframe"
         :class="{smallMode: smallMode === true}"
       >
-        <category-selector v-for="category of categories" :category="category"></category-selector>
-
         <a
           v-cloak
           class="category category-small"
@@ -176,19 +179,20 @@
       <!-- This is the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
         <div v-cloak class="search-box" :class="{smallMode: smallMode === true}">
-          <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
           <button v-show="searchInput === ''" class="search-button"></button>
           <button v-else class="search-clear-button" @click="clearSearch()"></button>
+
+          <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
         </div>
 
-        <div class="addons-container" :class="{placeholder: !loaded}" v-cloak>
+        <div class="addons-container" :class="{placeholder: !loaded}" v-cloak class="display: flex; flex-direction:column;">
           <template v-if="searchInput && hasNoResults">
             <p id="search-not-found" v-if="selectedCategory === 'all' || !selectedCategoryName">
               {{ msg("searchNotFound") }}
             </p>
             <p id="search-not-found" v-else>{{ msg("searchNotFoundInCategory", selectedCategoryName) }}</p>
           </template>
-          <template v-for="addon of addonList">
+          <template v-for="addon of addonList" >
             <div
               id="iframe-fullscreen-suggestion"
               v-if="isIframe && addon.headerAbove && (hasNoResults || addon.group.id === 'enabled')"
