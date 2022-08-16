@@ -50,6 +50,14 @@ export default [
     },
   },
   {
+    name: "forPlayer",
+    matchName: "player",
+    color: "darkgreen", // TODO: use a new tag color
+    addonTabShow: {
+      theme: true,
+    },
+  },
+  {
     name: "forWebsite",
     matchName: "community",
     color: "yellow",

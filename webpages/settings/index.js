@@ -492,7 +492,7 @@ let fuse;
         return count;
       };
       if (manifest._categories[0] === "theme") {
-        // All themes should have either "editor" or "community" tag
+        // All themes should have either the "editor", "community" or "player" tag
         addCategoryIfTag([
           {
             tag: "editor",
@@ -503,6 +503,12 @@ let fuse;
             {
               tag: "community",
               category: "themesForWebsite",
+            },
+          ]) ||
+          addCategoryIfTag([
+            {
+              tag: "player",
+              category: "themesForPlayer",
             },
           ]);
       } else if (manifest._categories[0] === "editor") {
