@@ -1,5 +1,9 @@
 <template>
   <div class="addon-body" v-show="shouldShow" :id="'addon-' + addon._addonId">
+            <div style="position: relative; height: 225px; width:300px;     border-radius: 4px;" :style="{'background-image': 'url(https://scratchaddons.com/assets/img/addons/' +addon._addonId+'.png)'}">
+        <img class="addon-image" :src=""/>
+        </div>
+
     <div class="addon-topbar">
       <div class="clickable-area" @click="expanded = !expanded">
         <div class="btn-dropdown">
@@ -9,7 +13,7 @@
           <img :src="addonIconSrc" class="icon-type" />
           <span @click="devShowAddonIds">{{ addon._displayedAddonId || addon.name }}</span>
         </div>
-        <addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
+        <!--<addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>-->
       </div>
       <div class="addon-description" v-show="!expanded" dir="auto">{{ addon.description }}</div>
       <div class="addon-check">
@@ -25,7 +29,7 @@
         <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest"></div>
       </div>
     </div>
-    <div class="addon-settings" v-if="everExpanded" v-show="expanded">
+    <div class="addon-settings" v-if="everExpanded" v-show="expanded && false">
       <div class="addon-description-full">{{ addon.description }}</div>
       <div class="addon-message addon-update" v-if="showUpdateNotice">
         <addon-tag tag="new"></addon-tag>
@@ -174,6 +178,7 @@
     border: 1px solid var(--content-border);
     border-radius: 4px;
     box-shadow: var(--content-shadow);
+    width: 300px;
   }
   .addon-body:target,
   .addon-blink {

@@ -416,3 +416,15 @@ button.setting-input.color.open {
   align-items: center;
   justify-content: center;
 }
+
+.group-container {
+  display: flex;
+}
+.addon-container{
+  display:flex;
+  overflow-x: scroll;
+}
+.group-title {
+  width:10rem;
+  font-size: 1rem;
+}

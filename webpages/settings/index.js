@@ -236,6 +236,12 @@ let fuse;
     },
 
     methods: {
+      filterByGroup: function (addons, group) {
+        return addons.filter((addon) =>{
+          
+          return group.id == addon.group.id
+        })
+      },
       openMoreSettings: function () {
         this.closePickers();
         this.moreSettingsOpen = true;
@@ -394,7 +400,7 @@ let fuse;
           obj.matchesCategory =
             !shouldHideAsEasterEgg && (newValue === "all" || obj.manifest._categories.includes(newValue));
         });
-        if (newValue === "forums") this.addonGroups.find((group) => group.id === "forums").expanded = true;
+        //if (newValue === "forums") this.addonGroups.find((group) => group.id === "forums").expanded = true;
       },
     },
     ready() {
@@ -432,7 +438,7 @@ let fuse;
           if (!groupWithAddon) return; //Don't run if hash is invalid
           const addon = this.manifestsById[addonId];
 
-          groupWithAddon.expanded = true;
+          //groupWithAddon.expanded = true;
           this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
           this.clearSearch();
           setTimeout(() => document.getElementById("addon-" + addonId)?.scrollIntoView(), 0);
@@ -639,7 +645,7 @@ let fuse;
         const addonId = hash.substring(7);
         const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
         if (!groupWithAddon) return;
-        groupWithAddon.expanded = true;
+        //groupWithAddon.expanded = true;
 
         const addon = vue.manifestsById[addonId];
         vue.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
