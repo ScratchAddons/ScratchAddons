@@ -107,9 +107,9 @@
           "type": "settingValue",
           "settingId": "comment-color"
         },
-        "r": 0.70,
-        "g": 0.70,
-        "b": 0.70
+        "r": 0.7,
+        "g": 0.7,
+        "b": 0.7
       }
     }
   ],
