@@ -20,6 +20,24 @@
   paint-order: stroke fill;
 }
 
+.scratchCommentRect {
+  fill: #feffff;
+}
+.scratchCommentBody,
+.scratchCommentTextarea {
+  background-color: #feffff;
+}
+.scratchWorkspaceCommentBorder {
+  stroke: var(--editorTheme3-commentColor);
+}
+.scratchCommentTextarea::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+.scratchCommentText {
+  fill: #575e75;
+  color: #575e75;
+}
+
 /* Compatibility */
 
 .sa-block-color {

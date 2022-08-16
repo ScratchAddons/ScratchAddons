@@ -117,10 +117,6 @@
   "dynamicDisable": true,
   "injectAsStyleElt": true,
   "versionAdded": "1.2.0",
-  "latestUpdate": {
-    "version": "1.27.0",
-    "newSettings": ["comment-color"]
-  },
   "updateUserstylesOnSettingsChange": true,
   "userscripts": [
     {
@@ -294,7 +290,7 @@
       "default": "#FEF49C"
     },
     {
-      "name": "Block text color",
+      "name": "Text color",
       "id": "text",
       "type": "select",
       "default": "white",
@@ -410,7 +406,7 @@
         "custom-color": "#FF6680",
         "Pen-color": "#0FBD8C",
         "sa-color": "#29BEB8",
-        "comment-color": "#202020",
+        "comment-color": "#FEF49C",
         "input-color": "#202020",
         "text": "colorOnBlack"
       }
