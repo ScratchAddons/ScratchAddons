@@ -199,16 +199,16 @@
             </p>
             <p id="search-not-found" v-else>{{ msg("searchNotFoundInCategory", selectedCategoryName) }}</p>
           </template>
-          <div v-for="group of addonGroups" class="group-container" >
+          <div v-for="group of addonGroups" class="group-container">
             <div class="group-title" v-show="groupShownCount(group) != 0">{{group.name}}</div>
             <div class="addon-container">
-                <addon-body
-                  :visible="addon.matchesSearch && addon.matchesCategory"
-                  :addon="addon.manifest"
-                  :group-id="addon.group.id"
-                  :group-expanded="addon.group.expanded"
-                  v-for="addon of filterByGroup(addonList,group)"
-                ></addon-body>
+              <addon-body
+                :visible="addon.matchesSearch && addon.matchesCategory"
+                :addon="addon.manifest"
+                :group-id="addon.group.id"
+                :group-expanded="addon.group.expanded"
+                v-for="addon of filterByGroup(addonList,group)"
+              ></addon-body>
             </div>
           </div>
 

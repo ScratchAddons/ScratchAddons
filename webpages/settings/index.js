@@ -237,10 +237,9 @@ let fuse;
 
     methods: {
       filterByGroup: function (addons, group) {
-        return addons.filter((addon) =>{
-          
-          return group.id == addon.group.id
-        })
+        return addons.filter((addon) => {
+          return group.id == addon.group.id;
+        });
       },
       openMoreSettings: function () {
         this.closePickers();
@@ -495,7 +494,7 @@ let fuse;
         }
         return count;
       };
-      addCategoryIfTag(["recommended"])
+      addCategoryIfTag(["recommended"]);
       if (manifest._categories[0] === "theme") {
         // All themes should have either "editor" or "community" tag
         addCategoryIfTag([

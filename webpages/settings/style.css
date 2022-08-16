@@ -40,7 +40,7 @@ body {
 h1 {
   font-size: 18px;
   margin: 0;
-  font-weight:300;
+  font-weight: 300;
 }
 
 .navbar a {
@@ -420,11 +420,11 @@ button.setting-input.color.open {
 .group-container {
   display: flex;
 }
-.addon-container{
-  display:flex;
+.addon-container {
+  display: flex;
   overflow-x: scroll;
 }
 .group-title {
-  width:10rem;
+  width: 10rem;
   font-size: 1rem;
 }

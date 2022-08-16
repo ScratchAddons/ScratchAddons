@@ -1,8 +1,11 @@
 <template>
   <div class="addon-body" v-show="shouldShow" :id="'addon-' + addon._addonId">
-            <div style="position: relative; height: 225px; width:300px;     border-radius: 4px;" :style="{'background-image': 'url(https://scratchaddons.com/assets/img/addons/' +addon._addonId+'.png)'}">
-        <img class="addon-image" :src=""/>
-        </div>
+    <div
+      style="position: relative; height: 225px; width: 300px; border-radius: 4px"
+      :style="{'background-image': 'url(https://scratchaddons.com/assets/img/addons/' +addon._addonId+'.png)'}"
+    >
+      <img class="addon-image" :src="" />
+    </div>
 
     <div class="addon-topbar">
       <div class="clickable-area" @click="expanded = !expanded">
