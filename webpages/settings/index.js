@@ -726,8 +726,6 @@ setTimeout(() => {
   }
 
   function hide(e) {
-
-    
     if (popperInstance.state.elements.popper != e.target && popperInstance.state.elements.reference != e.target) {
       console.log("ola2");
       tooltip.removeAttribute("data-show");
