@@ -11,7 +11,19 @@ export default async function ({ addon, global, console }) {
   slider.min = 0;
   slider.max = 1;
   slider.step = 0.02;
+  const container = document.createElement("div");
+  container.className = "sa-volume";
 
+  document.addEventListener("click", (e) => {
+      if (e.target.closest("[class*='stage-header_stage-button-first']")) {
+        container.style.display = "none";
+      } else if (e.target.closest("[class*='stage-header_stage-button-last']")) {
+        container.style.display = "inline-block";
+      }
+    },
+    { capture: true }
+  );
+  
   addon.self.addEventListener("disabled", () => {
     setVol(1);
   });
@@ -23,14 +35,16 @@ export default async function ({ addon, global, console }) {
   addon.settings.addEventListener("change", () => {
     setDefVol(addon.settings.get("defVol") / 100);
   });
+  
+  slider.addEventListener("input", function (e) {
+    setVol(this.value);
+  });
 
   while (true) {
     await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
-    const container = document.createElement("div");
-    container.className = "sa-volume";
     addon.tab.displayNoneWhileDisabled(container, { display: "inline-block" });
     addon.tab.appendToSharedSpace({ space: "afterStopButton", element: container, order: 0 });
     container.appendChild(icon);
@@ -38,8 +52,5 @@ export default async function ({ addon, global, console }) {
     setup(vm);
     setDefVol(addon.settings.get("defVol") / 100);
     setVol(getDefVol());
-    slider.addEventListener("input", function (e) {
-      setVol(this.value);
-    });
   }
 }
