@@ -90,53 +90,6 @@ export default class Tab extends Listenable {
     return blocks.getCustomBlock(proccode);
   }
   /**
-   * Loads a script by URL.
-   * @param {string} url - script URL.
-   * @returns {Promise}
-   */
-  loadScript(url) {
-    return new Promise((resolve, reject) => {
-      if (scratchAddons.loadedScripts[url]) {
-        const obj = scratchAddons.loadedScripts[url];
-        if (obj.loaded) {
-          // Script has been already loaded
-          resolve();
-        } else if (obj.error === null) {
-          // Script has been appended to document.head, but not loaded yet.
-          obj.script.addEventListener("load", (e) => {
-            // Script loaded successfully - resolve the promise, but don't edit the global object (since it's already been edited by the original listener).
-            resolve();
-          });
-          obj.script.addEventListener("error", ({ error }) => {
-            // Script failed to load - reject the promise, but don't edit the global object (since it's already been edited by the original listener).
-            reject(`Failed to load script from ${url} - ${error}`);
-          });
-        } else {
-          // Script has been appended to document.head, and failed to load.
-          reject(`Failed to load script from ${url} - ${obj.error}`);
-        }
-      } else {
-        // No other addon has loaded this script yet.
-        const script = document.createElement("script");
-        script.src = url;
-        const obj = (scratchAddons.loadedScripts[url] = {
-          script,
-          loaded: false,
-          error: null,
-        });
-        document.head.appendChild(script);
-        script.addEventListener("load", () => {
-          obj.loaded = true;
-          resolve();
-        });
-        script.addEventListener("error", ({ error }) => {
-          obj.error = error;
-          reject(`Failed to load script from ${url} - ${error}`);
-        });
-      }
-    });
-  }
-  /**
    * Waits until an element renders, then return the element.
    * @param {string} selector - argument passed to querySelector.
    * @param {object} opts - options.
