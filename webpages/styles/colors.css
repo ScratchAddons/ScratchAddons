@@ -21,11 +21,11 @@
   --page-background: #1a2933;
   --content-background: #141f26;
   --navigation-background: #333;
-  --button-background: #263D4D;
+  --button-background: #263d4d;
   --button-hover-background: #1a1a1a;
   --input-background: #222;
   --search-input-background: #141f26;
-  --switch-background: linear-gradient(135deg, #F8CDA0 0%, #FF8D18 100%);;
+  --switch-background: linear-gradient(135deg, #f8cda0 0%, #ff8d18 100%);
   --switch-inner-background: #aaa;
   --tooltip-background: #000;
   --comment-background: #222;

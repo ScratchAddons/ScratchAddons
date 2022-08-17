@@ -421,14 +421,12 @@ button.setting-input.color.open {
 
 .group-container {
   display: flex;
-    margin-bottom: 5px;
-
+  margin-bottom: 5px;
 }
 .addon-container {
   display: flex;
   overflow-x: scroll;
   scroll-snap-type: x mandatory;
-
 }
 .group-title {
   width: 10rem;
