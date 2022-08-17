@@ -137,8 +137,8 @@
   "resetToDefault": {
     "message": "Reset to default settings"
   },
-  "creditTo": {
-    "message": "Credit to:"
+  "by": {
+    "message": "By:"
   },
   "viewLicenses": {
     "message": "View library licenses"

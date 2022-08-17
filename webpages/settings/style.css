@@ -65,6 +65,8 @@ h1 {
   flex-shrink: 1;
   display: flex;
   flex-direction: column;
+  max-width: 100vw;
+  
 }
 
 .addons-container {
@@ -74,6 +76,7 @@ h1 {
   scrollbar-width: thin;
   scrollbar-color: var(--gray-text) transparent;
   height: 100vh;
+  
 }
 
 .addons-container.placeholder {
@@ -427,4 +430,7 @@ button.setting-input.color.open {
 .group-title {
   width: 10rem;
   font-size: 1rem;
+  flex-shrink: 0;
+  color: var(--white-text)
+
 }

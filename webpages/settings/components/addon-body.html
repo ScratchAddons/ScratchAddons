@@ -1,24 +1,30 @@
 <template>
   <div class="addon-body" v-show="shouldShow" :id="'addon-' + addon._addonId">
     <div
-      style="position: relative; height: 225px; width: 300px; border-radius: 4px"
+      style="position: relative; height: 180px; width: 300px; border-radius: 8px; background-clip: border-box"
       :style="{'background-image': 'url(https://scratchaddons.com/assets/img/addons/' +addon._addonId+'.png)'}"
     >
       <img class="addon-image" :src="" />
     </div>
 
     <div class="addon-topbar">
-      <div class="clickable-area" @click="expanded = !expanded">
-        <div class="btn-dropdown">
-          <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': expanded}" />
-        </div>
-        <div class="addon-name">
-          <img :src="addonIconSrc" class="icon-type" />
-          <span @click="devShowAddonIds">{{ addon._displayedAddonId || addon.name }}</span>
+      <div>
+        <div class="addon-data">
+          <span class="addon-name" @click="devShowAddonIds">{{ addon._displayedAddonId || addon.name }}</span>
+          <div class="addon-credits" v-if="addon.credits">
+            <span>{{ msg("by") }}</span>
+            <span v-for="credit of addon.credits">
+              <span v-if="credit.link">
+                <a href="{{ credit.link }}" rel="noreferrer noopener" target="_blank">{{ credit.name }}</a>
+              </span>
+              <span v-else="credit.link">{{ credit.name }}</span>
+              <span v-if="credit.note">({{ credit.note }})</span>
+            </span>
+          </div>
+          <div class="addon-description" dir="auto">{{ addon.description }}</div>
         </div>
         <!--<addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>-->
       </div>
-      <div class="addon-description" v-show="!expanded" dir="auto">{{ addon.description }}</div>
       <div class="addon-check">
         <div
           v-show="expanded && addon._enabled"
@@ -48,16 +54,6 @@
             }[info.type || 'info']"
           />{{ info.text }}
         </div>
-      </div>
-      <div class="addon-credits" v-if="addon.credits">
-        <span>{{ msg("creditTo") }}</span>
-        <span v-for="credit of addon.credits">
-          <span v-if="credit.link">
-            <a href="{{ credit.link }}" rel="noreferrer noopener" target="_blank">{{ credit.name }}</a>
-          </span>
-          <span v-else="credit.link">{{ credit.name }}</span>
-          <span v-if="credit.note">({{ credit.note }})</span>
-        </span>
       </div>
       <div class="addon-license" v-if="addon.libraries && addon.libraries.length">
         <a target="_blank" href="./licenses.html?libraries={{ addon.libraries.join(',') }}"
@@ -118,13 +114,11 @@
 
 <style>
   .addon-description {
-    margin-inline: 15px;
-    color: var(--gray-text);
+    margin-top: 4px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    width: 0; /* don't include the description
-                 when calculating addon-body size */
+
     flex-grow: 1;
   }
 
@@ -146,18 +140,22 @@
   }
 
   .addon-credits > span {
-    margin-inline-end: 0.5rem;
+    margin-inline-end: 0.05rem;
   }
 
   .addon-credits > span:not(:first-child):not(:last-child)::after {
     content: ",";
   }
   .addon-name {
-    margin-inline-start: 10px;
     font-weight: 400;
     height: 100%;
     display: flex;
     align-items: center;
+    font-size: 0.9rem;
+    color: var(--white-text);
+  }
+  .addon-data {
+    margin-inline-start: 10px;
   }
   .addon-name > span:empty {
     display: inline-block;
@@ -167,10 +165,10 @@
     border-radius: 3px;
   }
   .addon-topbar {
-    height: 52px;
     padding-inline-end: 10px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    margin-top: 10px;
   }
   .clickable-area {
     padding-inline-start: 10px;
@@ -178,10 +176,10 @@
   .addon-body {
     margin: 10px;
     background: var(--content-background);
-    border: 1px solid var(--content-border);
     border-radius: 4px;
     box-shadow: var(--content-shadow);
     width: 300px;
+    border-radius: 8px;
   }
   .addon-body:target,
   .addon-blink {
