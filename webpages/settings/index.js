@@ -444,6 +444,18 @@ let fuse;
         },
         { capture: false }
       );
+      this.$nextTick(() =>{
+      tippy(".settings-toggle", {
+        trigger: "click",
+
+        content(reference) {
+          const id = reference.getAttribute("data-addon");
+          const template = document.getElementById(id);
+          return template;
+        },
+      });
+    })
+
     },
   });
 
@@ -494,28 +506,9 @@ let fuse;
         }
         return count;
       };
+
       addCategoryIfTag(["recommended"]);
-      if (manifest._categories[0] === "theme") {
-        // All themes should have either "editor" or "community" tag
-        addCategoryIfTag([
-          {
-            tag: "editor",
-            category: "themesForEditor",
-          },
-        ]) ||
-          addCategoryIfTag([
-            {
-              tag: "community",
-              category: "themesForWebsite",
-            },
-          ]);
-      } else if (manifest._categories[0] === "editor") {
-        const addedCategories = addCategoryIfTag(["codeEditor", "costumeEditor", "projectPlayer"]);
-        if (addedCategories === 0) manifest._categories.push("editorOthers");
-      } else if (manifest._categories[0] === "community") {
-        const addedCategories = addCategoryIfTag(["profiles", "projectPage", "forums"]);
-        if (addedCategories === 0) manifest._categories.push("communityOthers");
-      }
+      addCategoryIfTag(["projectPlayer"]);
 
       // Exception: show cat-blocks after konami code, even tho
       // it's categorized as an editor addon, not as easterEgg
@@ -716,3 +709,14 @@ let fuse;
 
   chrome.runtime.sendMessage("checkPermissions");
 })();
+setTimeout(()=> {      tippy(".settings-toggle", {
+  trigger: "click",
+  placement: "auto-start",
+
+  content(reference) {
+    const id = reference.getAttribute("data-addon");
+    const template = document.getElementById(id);
+    return template;
+  },
+});
+},500)

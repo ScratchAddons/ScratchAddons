@@ -26,6 +26,7 @@
         <!--<addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>-->
       </div>
       <div class="addon-check">
+        <div  class="settings-toggle" :data-addon="addon._addonId">Expand</div>
         <div
           v-show="expanded && addon._enabled"
           v-if="addon.settings"
@@ -38,7 +39,7 @@
         <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest"></div>
       </div>
     </div>
-    <div class="addon-settings" v-if="everExpanded" v-show="expanded && false">
+    <div class="addon-settings" style="position: relative;"  :id="addon._addonId">
       <div class="addon-description-full">{{ addon.description }}</div>
       <div class="addon-message addon-update" v-if="showUpdateNotice">
         <addon-tag tag="new"></addon-tag>
@@ -363,6 +364,7 @@
     padding: 5px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
   }
 
   .switch {
