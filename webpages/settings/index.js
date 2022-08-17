@@ -658,7 +658,7 @@ let fuse;
     const addonsEnabledBase36 = BigInt(`0b${binaryNum}`).toString(36);
     vue.sidebarUrls.feedback += `#_${addonsEnabledBase36}`;
   });
-  
+
   window.addEventListener("keydown", function (e) {
     if (e.ctrlKey && e.key === "f") {
       e.preventDefault();
@@ -715,9 +715,7 @@ const hideEvents = ["click"];
 setTimeout(() => {
   const button = document.querySelector(".settings-toggle");
   const tooltip = document.querySelector("#zebra-striping");
-  const popperInstance = Popper.createPopper(button, tooltip, {
-  });
-  
+  const popperInstance = Popper.createPopper(button, tooltip, {});
 
   function show() {
     tooltip.setAttribute("data-show", "");
