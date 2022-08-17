@@ -14,7 +14,9 @@ export default async function ({ addon, global, console }) {
   const container = document.createElement("div");
   container.className = "sa-volume";
 
-  document.addEventListener("click", (e) => {
+  document.addEventListener(
+    "click",
+    (e) => {
       if (e.target.closest("[class*='stage-header_stage-button-first']")) {
         container.style.display = "none";
       } else if (e.target.closest("[class*='stage-header_stage-button-last']")) {
@@ -23,7 +25,7 @@ export default async function ({ addon, global, console }) {
     },
     { capture: true }
   );
-  
+
   addon.self.addEventListener("disabled", () => {
     setVol(1);
   });
@@ -35,7 +37,7 @@ export default async function ({ addon, global, console }) {
   addon.settings.addEventListener("change", () => {
     setDefVol(addon.settings.get("defVol") / 100);
   });
-  
+
   slider.addEventListener("input", function (e) {
     setVol(this.value);
   });
