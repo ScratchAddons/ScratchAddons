@@ -726,8 +726,10 @@ setTimeout(() => {
   }
 
   function hide(e) {
-    console.log("ola");
-    if (!popperInstance.state.elements.popper == e.target && !popperInstance.state.elements.reference == e.target) {
+
+    
+    if (popperInstance.state.elements.popper != e.target && popperInstance.state.elements.reference != e.target) {
+      console.log("ola2");
       tooltip.removeAttribute("data-show");
     }
   }
@@ -737,6 +739,6 @@ setTimeout(() => {
   });
 
   hideEvents.forEach((event) => {
-    button.addEventListener(event, hide);
+    document.addEventListener(event, hide);
   });
 }, 500);
