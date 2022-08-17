@@ -444,18 +444,17 @@ let fuse;
         },
         { capture: false }
       );
-      this.$nextTick(() =>{
-      tippy(".settings-toggle", {
-        trigger: "click",
+      this.$nextTick(() => {
+        tippy(".settings-toggle", {
+          trigger: "click",
 
-        content(reference) {
-          const id = reference.getAttribute("data-addon");
-          const template = document.getElementById(id);
-          return template;
-        },
+          content(reference) {
+            const id = reference.getAttribute("data-addon");
+            const template = document.getElementById(id);
+            return template;
+          },
+        });
       });
-    })
-
     },
   });
 
@@ -659,7 +658,7 @@ let fuse;
     const addonsEnabledBase36 = BigInt(`0b${binaryNum}`).toString(36);
     vue.sidebarUrls.feedback += `#_${addonsEnabledBase36}`;
   });
-
+  
   window.addEventListener("keydown", function (e) {
     if (e.ctrlKey && e.key === "f") {
       e.preventDefault();
@@ -709,14 +708,37 @@ let fuse;
 
   chrome.runtime.sendMessage("checkPermissions");
 })();
-setTimeout(()=> {      tippy(".settings-toggle", {
-  trigger: "click",
-  placement: "auto-start",
 
-  content(reference) {
-    const id = reference.getAttribute("data-addon");
-    const template = document.getElementById(id);
-    return template;
-  },
-});
-},500)
+const showEvents = ["mousedown", "focus"];
+const hideEvents = ["click"];
+
+setTimeout(() => {
+  const button = document.querySelector(".settings-toggle");
+  const tooltip = document.querySelector("#zebra-striping");
+  const popperInstance = Popper.createPopper(button, tooltip, {
+  });
+  
+
+  function show() {
+    tooltip.setAttribute("data-show", "");
+
+    // We need to tell Popper to update the tooltip position
+    // after we show the tooltip, otherwise it will be incorrect
+    popperInstance.update();
+  }
+
+  function hide(e) {
+    console.log("ola");
+    if (!popperInstance.state.elements.popper == e.target && !popperInstance.state.elements.reference == e.target) {
+      tooltip.removeAttribute("data-show");
+    }
+  }
+
+  showEvents.forEach((event) => {
+    button.addEventListener(event, show);
+  });
+
+  hideEvents.forEach((event) => {
+    button.addEventListener(event, hide);
+  });
+}, 500);

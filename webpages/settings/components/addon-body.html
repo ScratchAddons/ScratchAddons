@@ -28,7 +28,7 @@
       <div class="addon-check">
         <div  class="settings-toggle" :data-addon="addon._addonId">Expand</div>
         <div
-          v-show="expanded && addon._enabled"
+          v-show="addon._enabled"
           v-if="addon.settings"
           class="addon-buttons"
           title="{{ msg('resetToDefault') }}"
@@ -404,4 +404,13 @@
   [dir="rtl"] .switch[state="on"]::before {
     left: 5px;
   }
+  .addon-settings {
+    /* ... */
+    display: none;
+  }
+
+  .addon-settings[data-show] {
+    display: block;
+  }
+
 </style>
