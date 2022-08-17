@@ -131,52 +131,6 @@
       </div>
       <div class="navbarText"><img v-cloak @click="setTheme(!theme)" class="theme-switch" :src="themePath" /></div>
     </div>
-    <div class="main">
-      <div
-        class="categories-block"
-        v-click-outside="closesidebar"
-        v-show="categoryOpen && !isIframe"
-        :class="{smallMode: smallMode === true}"
-      >
-        <a
-          v-cloak
-          class="category category-small"
-          style="margin-top: auto"
-          href="https://scratchaddons.com/credits/"
-          :href="sidebarUrls.contributors"
-          target="_blank"
-        >
-          <img src="../../images/icons/users.svg" />
-          <span>{{ msg("credits") }} <img src="../../images/icons/popout.svg" /></span>
-        </a>
-        <!--
-        <div class="category category-small" @click="openReview()">
-          <img src="../../images/icons/star.svg" />
-          <span v-cloak>{{ msg("review") }}</span>
-        </div>
-        -->
-        <a v-cloak class="category category-small" href="https://scratchaddons.com/translate" target="_blank">
-          <img src="../../images/icons/translate.svg" />
-          <span>{{ msg("translate") }} <img src="../../images/icons/popout.svg" /></span>
-        </a>
-        <a
-          v-cloak
-          class="category category-small"
-          href="https://scratchaddons.com/feedback/"
-          :href="sidebarUrls.feedback"
-          target="_blank"
-        >
-          <img src="../../images/icons/comment.svg" />
-          <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" /></span>
-        </a>
-        <div v-cloak class="category" style="margin-top: 12px; margin-bottom: 14px" @click="openMoreSettings()">
-          <img src="../../images/icons/wrench.svg" />
-          <span>{{ msg("moreSettings") }}</span>
-        </div>
-      </div>
-      <div v-show="!isIframe && smallMode === false" class="categories-shrink" @click="sidebarToggle()">
-        <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryOpen === (direction() === 'rtl')}" />
-      </div>
 
       <!-- This is the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
