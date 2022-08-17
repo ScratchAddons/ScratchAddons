@@ -1,7 +1,6 @@
+import "../../libraries/thirdparty/cs/spark-md5.min.js";
 import { insert } from "../../libraries/thirdparty/cs/text-field-edit.js";
 export default async function ({ addon, global, console, msg, safeMsg }) {
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/spark-md5.min.js");
-
   var toolbar =
     document.querySelector("#markItUpId_body > div > div.markItUpHeader > ul") ||
     document.querySelector("#markItUpId_signature > div > div.markItUpHeader > ul");
