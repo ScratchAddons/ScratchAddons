@@ -33,6 +33,7 @@
   --notice-background: var(--navigation-background);
   --notice-border: var(--yellow-opacity50);
   --notice-text: #fff;
+  --accent-text: #fff;
   --notice-icon-filter: brightness(0) invert(1);
   --warning-background: var(--red-opacity75);
   --warning-border: var(--red);
