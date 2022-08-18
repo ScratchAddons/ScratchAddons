@@ -26,22 +26,29 @@
         <!--<addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>-->
       </div>
       <div class="addon-check">
-        <div class="settings-toggle"  @click="toggleSettings(true)" v-el:expand>Expand</div>
+        <div class="settings-toggle" @click="toggleSettings(true)" v-el:expand>Expand</div>
         <div class="addon-toggle-container">
-        <div
-          v-show="addon._enabled"
-          v-if="addon.settings"
-          class="addon-buttons"
-          title="{{ msg('resetToDefault') }}"
-          @click="loadDefaults"
-        >
-          <img src="../../images/icons/undo.svg" class="icon-type" />
-        </div>
-        <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest"></div>
+          <div
+            v-show="addon._enabled"
+            v-if="addon.settings"
+            class="addon-buttons"
+            title="{{ msg('resetToDefault') }}"
+            @click="loadDefaults"
+          >
+            <img src="../../images/icons/undo.svg" class="icon-type" />
+          </div>
+          <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest"></div>
         </div>
       </div>
     </div>
-    <div class="addon-settings" style="position: relative" :id="addon._addonId" :data-show="expanded" v-el:tooltip v-click-outside="closeSettings">
+    <div
+      class="addon-settings"
+      style="position: relative"
+      :id="addon._addonId"
+      :data-show="expanded"
+      v-el:tooltip
+      v-click-outside="closeSettings"
+    >
       <div class="addon-description-full">{{ addon.description }}</div>
       <div class="addon-message addon-update" v-if="showUpdateNotice">
         <addon-tag tag="new"></addon-tag>
@@ -326,7 +333,6 @@
     overflow-y: scroll;
     background: var(--content-background);
     width: 600px;
-
   }
   .addon-setting::after {
     content: "";

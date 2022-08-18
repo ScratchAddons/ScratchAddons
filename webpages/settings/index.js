@@ -697,5 +697,3 @@ let fuse;
 
   chrome.runtime.sendMessage("checkPermissions");
 })();
-
-
