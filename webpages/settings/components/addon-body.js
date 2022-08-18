@@ -7,10 +7,11 @@ export default async function ({ template }) {
     data() {
       return {
         isIframe: isIframe,
-        expanded: this.getDefaultExpanded(),
-        everExpanded: this.getDefaultExpanded(),
+        expanded: false,
+        everExpanded: false,
         hoveredSettingId: null,
         highlightedSettingId: null,
+        popperInstance: {},
       };
     },
     computed: {
@@ -74,12 +75,7 @@ export default async function ({ template }) {
           this.addon._wasEverEnabled = this.addon._enabled || newState;
           this.addon._enabled = newState;
           // Do not extend when enabling in popup mode, unless addon has warnings
-          this.expanded =
-            isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
-              ? false
-              : event.shiftKey
-              ? false
-              : newState;
+          this.expanded = false;
           chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
           this.$emit("toggle-addon-request", newState);
         };
@@ -119,11 +115,37 @@ export default async function ({ template }) {
       msg(...params) {
         return this.$root.msg(...params);
       },
+      toggleSettings(value) {
+        function enableListeners(modifiers, value) {
+          const modifier = modifiers.find((x) => x.name === "eventListeners");
+          if (!modifier) return [...modifiers, { name: "eventListeners", enabled: value }];
+          modifier.enabled = value;
+          return modifiers;
+        }
+
+        this.expanded = value;
+        if (this.expanded) {
+          this.popperInstance.setOptions((options) => ({
+            modifiers: enableListeners(options.modifiers, true),
+          }));
+        } else {
+          this.popperInstance.setOptions((options) => ({
+            modifiers: enableListeners(options.modifiers, false),
+          }));
+        }
+        this.popperInstance.update();
+      },
+    },
+    events: {
+      closeSettings() {
+        if (!this.expanded) return;
+        this.toggleSettings(false);
+      },
     },
     watch: {
       groupId(newValue) {
         // Happens when going from "example" addon to real addon
-        this.expanded = this.getDefaultExpanded();
+        //this.expanded = this.getDefaultExpanded();
       },
       searchInput(newValue) {
         if (newValue === "") this.expanded = this.getDefaultExpanded();
@@ -141,6 +163,19 @@ export default async function ({ template }) {
       };
       window.addEventListener("hashchange", onHashChange, { capture: false });
       setTimeout(onHashChange, 0);
+      const expand = this.$els.expand;
+      const tooltip = this.$els.tooltip;
+      this.popperInstance = Popper.createPopper(expand, tooltip, {
+        placement: "right",
+        modifiers: [
+          {
+            name: "offset",
+            options: {
+              offset: [-50, 250],
+            },
+          },
+        ],
+      });
     },
   });
   Vue.component("addon-body", AddonBody);

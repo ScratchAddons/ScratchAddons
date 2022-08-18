@@ -444,17 +444,6 @@ let fuse;
         },
         { capture: false }
       );
-      this.$nextTick(() => {
-        tippy(".settings-toggle", {
-          trigger: "click",
-
-          content(reference) {
-            const id = reference.getAttribute("data-addon");
-            const template = document.getElementById(id);
-            return template;
-          },
-        });
-      });
     },
   });
 
@@ -492,7 +481,7 @@ let fuse;
         : manifest.tags.includes("community")
         ? "community"
         : "editor";
-
+      console.log(manifest._categories);
       const addCategoryIfTag = (arr) => {
         let count = 0;
         for (const objOrString of arr) {
@@ -709,36 +698,4 @@ let fuse;
   chrome.runtime.sendMessage("checkPermissions");
 })();
 
-const showEvents = ["mousedown", "focus"];
-const hideEvents = ["click"];
 
-setTimeout(() => {
-  const button = document.querySelector(".settings-toggle");
-  const tooltip = document.querySelector("#zebra-striping");
-  const popperInstance = Popper.createPopper(button, tooltip, {});
-
-  function show() {
-    tooltip.setAttribute("data-show", "");
-
-    // We need to tell Popper to update the tooltip position
-    // after we show the tooltip, otherwise it will be incorrect
-    popperInstance.update();
-  }
-
-  function hide(e) {
-
-    
-    if (popperInstance.state.elements.popper != e.target && popperInstance.state.elements.reference != e.target) {
-      console.log("ola2");
-      tooltip.removeAttribute("data-show");
-    }
-  }
-
-  showEvents.forEach((event) => {
-    button.addEventListener(event, show);
-  });
-
-  hideEvents.forEach((event) => {
-    document.addEventListener(event, hide);
-  });
-}, 500);
