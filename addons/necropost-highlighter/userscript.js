@@ -29,8 +29,17 @@ export default async function ({ addon, global, console }) {
     applyToOpenSourceProjects: "Open Source Projects",
   };
   const searchResultsPageName = "Search Results"; // recent posts and unanswered posts
-  let isMobileSite = await determineIsMobileSite();
-  let forumOrSearchPageName = await determineForumOrSearchPageName();
+  const isMobileSite = await determineIsMobileSite();
+  // tableBodyNode will be null on mobile and non-table search page:
+  // https://scratch.mit.edu/discuss/search/?action=show_user&show_as=posts
+  const tableBodyNode = document.querySelector("tbody"); // null on mobile
+
+  if (!tableBodyNode && !isMobileSite) {
+	// Standard site page without a table. Don't run on this page.
+	return;
+  }
+
+  const forumOrSearchPageName = await determineForumOrSearchPageName();
 
   /**
    * An array of topic
@@ -50,7 +59,6 @@ export default async function ({ addon, global, console }) {
   addon.self.addEventListener("reenabled", onReenabled);
 
   // Support for infinite scrolling (only available on Standard not Mobile)
-  const tableBodyNode = document.querySelector("tbody"); // null on mobile
   const config = { childList: true };
   const tableBodyMutationObserver = new MutationObserver(onRowsChanged);
   attachMutationObserverOnStandardSite();
@@ -147,6 +155,11 @@ export default async function ({ addon, global, console }) {
     for (let i = 0; i < possibleTopicCells.length; i++) {
       if (forumOrSearchPageName.includes(searchResultsPageName)) {
         // the cell to the right of the topic cell lists the forum, in search results
+		if (!possibleTopicCells[i].nextElementSibling) {
+			// synthetic "Page n" rows attached by Infinite Scrolling on search pages
+			// have no sibling, because they span all 4 columns
+			continue;
+		}
         theForum = possibleTopicCells[i].nextElementSibling.innerText;
       }
       const theTopicId = await extractTopicIdFrom(possibleTopicCells[i]);
