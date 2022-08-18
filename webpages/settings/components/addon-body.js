@@ -174,6 +174,12 @@ export default async function ({ template }) {
               offset: [-50, 250],
             },
           },
+          {
+            name: "flip",
+            options: {
+              fallbackPlacements: ["left"],
+            },
+          },
         ],
       });
     },
