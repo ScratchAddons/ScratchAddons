@@ -26,7 +26,7 @@ export default async function ({ addon, msg, global, console }) {
             // To work around this, we will re-enable the color picker before running the callback.
             addon.tab.redux.dispatch({
               ...action,
-              [brand]: true
+              [brand]: true,
             });
             action.callback(color);
             if (action.previousMode) {
@@ -34,10 +34,10 @@ export default async function ({ addon, msg, global, console }) {
             }
             addon.tab.redux.dispatch({
               type: "scratch-paint/eye-dropper/DEACTIVATE_COLOR_PICKER",
-              [brand]: true
+              [brand]: true,
             });
           });
-        }
+        },
       });
     }
 
@@ -48,7 +48,7 @@ export default async function ({ addon, msg, global, console }) {
       if (addon.tab.redux.state.scratchGui.colorPicker.active) {
         addon.tab.redux.dispatch({
           type: "scratch-gui/color-picker/DEACTIVATE_COLOR_PICKER",
-          [brand]: true
+          [brand]: true,
         });
       }
     }
