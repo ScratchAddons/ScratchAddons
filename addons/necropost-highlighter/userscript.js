@@ -35,8 +35,8 @@ export default async function ({ addon, global, console }) {
   const tableBodyNode = document.querySelector("tbody"); // null on mobile
 
   if (!tableBodyNode && !isMobileSite) {
-	// Standard site page without a table. Don't run on this page.
-	return;
+    // Standard site page without a table. Don't run on this page.
+    return;
   }
 
   const forumOrSearchPageName = await determineForumOrSearchPageName();
@@ -155,11 +155,11 @@ export default async function ({ addon, global, console }) {
     for (let i = 0; i < possibleTopicCells.length; i++) {
       if (forumOrSearchPageName.includes(searchResultsPageName)) {
         // the cell to the right of the topic cell lists the forum, in search results
-		if (!possibleTopicCells[i].nextElementSibling) {
-			// synthetic "Page n" rows attached by Infinite Scrolling on search pages
-			// have no sibling, because they span all 4 columns
-			continue;
-		}
+        if (!possibleTopicCells[i].nextElementSibling) {
+          // synthetic "Page n" rows attached by Infinite Scrolling on search pages
+          // have no sibling, because they span all 4 columns
+          continue;
+        }
         theForum = possibleTopicCells[i].nextElementSibling.innerText;
       }
       const theTopicId = await extractTopicIdFrom(possibleTopicCells[i]);
