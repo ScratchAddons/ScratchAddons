@@ -1,6 +1,6 @@
 {
   "name": "Middle click block dropdown",
-  "description": "Pops up a floating input box where you can type the name of a block (or parts of it) and drag the block into the code to make use of it right there. Hold Shift while dragging to avoid closing the box when adding multiple blocks at once.",
+  "description": "Use Ctrl+Space (Shift+Space on macOS) to bring up a floating input box where you can type the name of a block (or parts of it) and drag the block into the code area. Hold Shift while dragging to avoid closing the box when adding multiple blocks at once.",
   "credits": [
     {
       "name": "griffpatch"
