@@ -67,16 +67,12 @@
   text-overflow: ellipsis;
   overflow: hidden;
   cursor: pointer;
-
 }
 
 .floatBarDropdown > li > b {
   background-color: #aaffaa;
   color: black;
 }
-/* .floatBarDropdown > li::before {
-  content: "\25CF "; /* ● */
-} */
 
 .define {
   color: rgb(255, 102, 128);

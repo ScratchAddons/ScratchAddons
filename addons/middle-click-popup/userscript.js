@@ -1,5 +1,6 @@
 export default async function ({ addon, msg, global, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
+  let mouse = { x: 0, y: 0 };
 
   class FloatingInput {
     constructor() {
@@ -72,8 +73,8 @@ export default async function ({ addon, msg, global, console }) {
       e.cancelBubble = true;
       e.preventDefault();
 
-      this.floatBar.style.left = e.clientX + 16 + "px";
-      this.floatBar.style.top = e.clientY - 8 + "px";
+      this.floatBar.style.left = (e.clientX ?? mouse.x) + 16 + "px";
+      this.floatBar.style.top = (e.clientY ?? mouse.y) - 8 + "px";
       this.floatBar.style.display = "";
       this.floatInput.focus();
     }
@@ -120,7 +121,7 @@ export default async function ({ addon, msg, global, console }) {
         }
       }
 
-      this.createDragingBlock(option.dom, e, sel.getBoundingClientRect());
+      this.createDragingBlock(option.dom, e);
 
       if (e.shiftKey) {
         this.floatBar.style.display = "";
@@ -128,7 +129,7 @@ export default async function ({ addon, msg, global, console }) {
       }
     }
 
-    createDragingBlock(xml, e, rect) {
+    createDragingBlock(xml, e) {
       // This is mostly copied from https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/scratch_blocks_utils.js#L171
       // Some bits were removed or changed to fit our needs.
       this.workspace.setResizesEnabled(false);
@@ -144,14 +145,7 @@ export default async function ({ addon, msg, global, console }) {
           throw new Error("newBlock is not rendered.");
         }
 
-        // console.log(rect);
-        // console.log(this.workspace.scrollX, this.workspace.scrollY);
-        // console.log(this.workspace.scrollbar);
-        // const { hScroll, vScroll } = this.workspace.scrollbar;
-        // // console.log(hScroll.handleLength_ * hScroll.ratio_, vScroll.handleLength_ / vScroll.ratio_);
-        // console.log(newBlock.getRelativeToSurfaceXY());
-        // console.log(newBlock);
-        // TODO: Make this work ;()
+        // TODO: Make this work ;(
         newBlock.moveBy(0, 0);
       } finally {
         Blockly.Events.enable();
@@ -469,4 +463,8 @@ export default async function ({ addon, msg, global, console }) {
 
     _doWorkspaceClick_.call(this);
   };
+
+  document.addEventListener("mousemove", (e) => {
+    mouse = { x: e.clientX, y: e.clientY };
+  });
 }
