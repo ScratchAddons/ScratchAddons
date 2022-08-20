@@ -29,6 +29,7 @@ export default async function ({ addon, global, console }) {
     applyToOpenSourceProjects: "Open Source Projects",
   };
   const searchResultsPageName = "Search Results"; // recent posts and unanswered posts
+  // mobile urls look like: https://scratch.mit.edu/discuss/m/6/*
   const isMobileSite = /^\/discuss\/m\//.test(location.pathname);
   // tableBodyNode will be null on mobile and non-table search page:
   // https://scratch.mit.edu/discuss/search/?action=show_user&show_as=posts
@@ -299,13 +300,6 @@ export default async function ({ addon, global, console }) {
       }
     }
     return highestSoFar;
-  }
-
-  async function determineIsMobileSite() {
-    // urls look like: https://scratch.mit.edu/discuss/m/6/*
-    let url = document.location.href;
-    // console.log(url);
-    return url.includes("/m/");
   }
 
   /**
