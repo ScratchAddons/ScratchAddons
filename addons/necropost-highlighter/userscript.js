@@ -5,7 +5,7 @@
  * to read actual dates.
  */
 
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   // Default is a little over a month's worth of topics. Reasonably stable through 2022.
   // There's a lot of tolerance. Half or twice as many topics filter pretty much the same.
   const defaultTopicInterval = 7500;
@@ -272,7 +272,7 @@ export default async function ({ addon, global, console }) {
       if (!topic.restoreCell) {
         topic.restoreCell = topic.topicCell.cloneNode(true);
       }
-      const necropostMessage = "(Necropost?)";
+      const necropostMessage = msg("(Necropost?)");
       const highlightColor = addon.settings.get("highlightColor");
 
       topic.topicCell.style.backgroundColor = highlightColor;
