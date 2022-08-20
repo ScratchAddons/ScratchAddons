@@ -29,7 +29,7 @@ export default async function ({ addon, global, console }) {
     applyToOpenSourceProjects: "Open Source Projects",
   };
   const searchResultsPageName = "Search Results"; // recent posts and unanswered posts
-  const isMobileSite = /^\/discuss\/m\//.test(location.pathname)
+  const isMobileSite = /^\/discuss\/m\//.test(location.pathname);
   // tableBodyNode will be null on mobile and non-table search page:
   // https://scratch.mit.edu/discuss/search/?action=show_user&show_as=posts
   const tableBodyNode = document.querySelector("tbody"); // null on mobile
