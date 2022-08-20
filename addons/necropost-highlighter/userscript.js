@@ -315,7 +315,7 @@ export default async function ({ addon, global, console }) {
     const typicalSuffix = "/"; // all Standard and read mobile messages
     const unreadSuffix = "unread/"; // only on mobile
 
-    let a = await topicCell.querySelector("a");
+    let a = topicCell.querySelector("a");
     if (a == null) {
       return 0;
     }
