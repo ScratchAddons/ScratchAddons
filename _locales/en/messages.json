@@ -242,14 +242,14 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_27": {
-    "message": "New addon: \"hide stage and sprite pane\", which adds a button that hides the stage and the sprite pane, making the code area much larger. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_28": {
+    "message": "New addon: \"alternating nested block colors\", which makes blocks of the same category alternate between lighter and darker shades when nested inside each other (zebra striping). Go to $1 to enable it."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_27": {
-    "message": "Another new addon is \"reverse order of project controls\", which moves the green flag and stop buttons to the right and the full screen button to the left, like in Scratch 2.0. Also, you can now customize the projects shown on the cloud games tab."
+  "extensionUpdateInfo2_v1_28": {
+    "message": "The \"editor find bar\" and \"jump to custom block definition\" addons, previously part of the \"developer tools\" addon, can now be toggled separately."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
