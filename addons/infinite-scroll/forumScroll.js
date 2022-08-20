@@ -1,6 +1,6 @@
 export default async function ({ addon, global, console, msg }) {
-  // This line below will always return the element since it will
-  // only run on the category page based on the match.
+  // Present on forum pages with tbody. Used as a switch to
+  // query for table and posts, and determine append/insert location.
   let vf = document.getElementById("vf");
 
   let pageSeparator, pageSeparatorTd;
@@ -58,7 +58,11 @@ export default async function ({ addon, global, console, msg }) {
               if (vf) {
                 table.appendChild(postArray[i]);
               } else {
-                table.insertBefore(postArray[i], table.querySelector(".linksb"));
+                let insertionPoint = table.querySelector(".linksb");
+                if (!insertionPoint) {
+                  insertionPoint = table.querySelector(".postlinksb");
+                }
+                table.insertBefore(postArray[i], insertionPoint);
               }
             }
             lock = false;
