@@ -50,11 +50,15 @@ export default async function ({ addon, global, console, msg }) {
               table = document.getElementById("djangobbindex");
               posts = doc.getElementById("djangobbindex").getElementsByClassName("blockpost");
             }
-            for (let i = 1; i < posts.length; i++) {
+            // Use an array to iterate, since elements are removed from the live HTMLCollection
+            // 'posts' each time an element is detached during appendChild/insertBefore 
+            const postArray = Array.from(posts);
+            // Element 0 is the table header. Skip it with i = 1
+            for (let i = 1; i < postArray.length; i++) {
               if (vf) {
-                table.appendChild(posts[i]);
+                table.appendChild(postArray[i]);
               } else {
-                table.insertBefore(posts[i], table.querySelector(".linksb"));
+                table.insertBefore(postArray[i], table.querySelector(".linksb"));
               }
             }
             lock = false;
