@@ -51,7 +51,7 @@ export default async function ({ addon, global, console, msg }) {
               posts = doc.getElementById("djangobbindex").getElementsByClassName("blockpost");
             }
             // Use an array to iterate, since elements are removed from the live HTMLCollection
-            // 'posts' each time an element is detached during appendChild/insertBefore 
+            // 'posts' each time an element is detached during appendChild/insertBefore
             const postArray = Array.from(posts);
             // Element 0 is the table header. Skip it with i = 1
             for (let i = 1; i < postArray.length; i++) {
