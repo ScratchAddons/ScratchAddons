@@ -121,7 +121,7 @@ export default async function ({ addon, msg, global, console }) {
         }
       }
 
-      this.createDragingBlock(option.dom, e);
+      this.createDragingBlock(option.dom, e, sel);
 
       if (e.shiftKey) {
         this.floatBar.style.display = "";
@@ -129,7 +129,7 @@ export default async function ({ addon, msg, global, console }) {
       }
     }
 
-    createDragingBlock(xml, e) {
+    createDragingBlock(xml, e, sel) {
       // This is mostly copied from https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/scratch_blocks_utils.js#L171
       // Some bits were removed or changed to fit our needs.
       this.workspace.setResizesEnabled(false);
@@ -154,21 +154,19 @@ export default async function ({ addon, msg, global, console }) {
         Blockly.Events.fire(new Blockly.Events.BlockCreate(newBlock));
       }
 
-      if (e.type === "mousedown") {
-        var fakeEvent = {
-          clientX: e.clientX,
-          clientY: e.clientY,
-          type: "mousedown",
-          preventDefault: function () {
-            e.preventDefault();
-          },
-          stopPropagation: function () {
-            e.stopPropagation();
-          },
-          target: e.target,
-        };
-        this.workspace.startDragWithFakeEvent(fakeEvent, newBlock);
-      }
+      var fakeEvent = {
+        clientX: mouse.x,
+        clientY: mouse.y,
+        type: "mousedown",
+        preventDefault: function () {
+          e.preventDefault();
+        },
+        stopPropagation: function () {
+          e.stopPropagation();
+        },
+        target: sel,
+      };
+      this.workspace.startDragWithFakeEvent(fakeEvent, newBlock);
     }
 
     inputChange() {
@@ -326,11 +324,6 @@ export default async function ({ addon, msg, global, console }) {
           // Limit maximum number of rows to prevent lag when no filter is applied
           li.style.display = "none";
         }
-        // li.addEventListener("mousedown", (e) => {
-        //   e.preventDefault();
-        //   e.cancelBubble = true;
-        //   return false;
-        // });
         this.dropdown.appendChild(li);
       }
 
