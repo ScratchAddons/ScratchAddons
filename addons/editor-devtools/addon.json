@@ -1,6 +1,6 @@
 {
   "name": "Developer tools",
-  "description": "Adds new menu options to the editor: copy/paste blocks, better clean up, go to custom block definition, and more!",
+  "description": "Adds new menu options to the editor: copy/paste blocks, better clean up, and more!",
   "credits": [
     {
       "name": "griffpatch"
@@ -18,12 +18,6 @@
       "id": "enablePasteBlocksAtMouse",
       "type": "boolean",
       "default": true
-    },
-    {
-      "name": "Middle mouse click variables, custom blocks or events to navigate",
-      "id": "enableMiddleClickFinder",
-      "type": "boolean",
-      "default": true
     }
   ],
   "dynamicEnable": true,
@@ -34,6 +28,6 @@
     }
   ],
   "versionAdded": "1.0.0",
-  "tags": ["editor", "codeEditor", "costumeEditor", "recommended"],
+  "tags": ["editor", "codeEditor", "recommended"],
   "enabledByDefault": true
 }
