@@ -25,7 +25,7 @@
 }
 .scratchCommentBody,
 .scratchCommentTextarea {
-  background-color: #feffff;
+  background-color: #ffffff;
 }
 .scratchWorkspaceCommentBorder {
   stroke: var(--editorTheme3-commentColor);

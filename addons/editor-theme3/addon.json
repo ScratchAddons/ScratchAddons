@@ -100,7 +100,7 @@
       }
     },
     {
-      "name": "commentFilter",
+      "name": "commentBorder",
       "value": {
         "type": "multiply",
         "source": {
