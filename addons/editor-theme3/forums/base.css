@@ -154,11 +154,13 @@
   --sa-block-color: var(--editorTheme3-PenColor);
 }
 
-.sb-comment, .sb3-comment {
+.sb-comment,
+.sb3-comment {
   fill: var(--editorTheme3-commentColor);
   stroke: var(--editorTheme3-commentBorder);
 }
-.sb-comment-label, .sb3-comment-label {
+.sb-comment-label,
+.sb3-comment-label {
   fill: var(--editorTheme3-commentText);
 }
 
