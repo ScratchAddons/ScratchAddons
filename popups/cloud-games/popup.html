@@ -49,9 +49,8 @@
         :title="addButtonUsed ? '' : (addButtonType === 'project' ? messages.addProjectDescription : messages.addStudioDescription)"
       >
         <span v-show="!addButtonUsed">
-          <inline-icon class="small-icon" icon="add"></inline-icon><span
-            >{{ addButtonType === "project" ? messages.addProject : messages.addStudio }}</span
-          >
+          <inline-icon class="small-icon" icon="add"></inline-icon
+          ><span>{{ addButtonType === "project" ? messages.addProject : messages.addStudio }}</span>
         </span>
         <span v-else>
           <inline-icon class="small-icon" icon="check"></inline-icon><span>{{ messages.added }}</span>
