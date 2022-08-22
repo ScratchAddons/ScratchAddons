@@ -17,7 +17,6 @@
   --unread-comment-background: #fff;
   --notice-background: var(--yellow-opacity25);
   --notice-text: #222;
-  --notice-icon-filter: none;
   --warning-background: var(--red);
   --warning-border: var(--red-variant);
   --info-border: var(--content-border);
@@ -36,9 +35,7 @@
   --control-border: #aaa;
 
   --content-text: #222;
-  --content-icon-filter: brightness(0) invert(0.13);
   --description-text: #444;
-  --description-icon-filter: brightness(0) invert(0.27);
   --label-text: #555;
   --gray-text: #a1a1a1;
 }

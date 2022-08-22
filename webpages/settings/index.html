@@ -52,21 +52,12 @@
     <link rel="modulepreload" href="data/fuse-options.js" />
 
     <!-- Preload images -->
-    <link rel="preload" href="../../images/icons/switch.svg" as="image" />
     <link rel="preload" href="../../images/icon-transparent.svg" as="image" />
-    <link rel="preload" href="../../images/icons/list.svg" as="image" />
-    <link rel="preload" href="../../images/icons/puzzle.svg" as="image" />
-    <link rel="preload" href="../../images/icons/web.svg" as="image" />
-    <link rel="preload" href="../../images/icons/brush.svg" as="image" />
-    <link rel="preload" href="../../images/icons/popup.svg" as="image" />
-    <link rel="preload" href="../../images/icons/users.svg" as="image" />
-    <link rel="preload" href="../../images/icons/translate.svg" as="image" />
-    <link rel="preload" href="../../images/icons/comment.svg" as="image" />
-    <link rel="preload" href="../../images/icons/wrench.svg" as="image" />
     <link rel="preload" href="../../images/icons/search.svg" as="image" />
-    <link rel="preload" href="../../images/icons/expand.svg" as="image" />
 
     <!-- Preload components -->
+    <link rel="preload" href="../common/components/inline-icon.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="../common/components/inline-icon.js" />
     <link rel="preload" href="components/picker-component.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/picker-component.js" />
     <link rel="preload" href="components/reset-dropdown.html" as="fetch" crossorigin />
@@ -119,10 +110,16 @@
   </head>
   <body v-cloak :class="{light: theme}">
     <div class="navbar">
-      <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-cloak v-show="smallMode" alt="Logo" />
+      <inline-icon
+        :icon="sidebarToggleIcon"
+        class="toggle"
+        @click="sidebarToggle()"
+        v-cloak
+        v-show="smallMode"
+      ></inline-icon>
       <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" />
       <h1 v-cloak>{{ msg("settings") }}</h1>
-      <img v-cloak @click="setTheme(!theme)" class="theme-switch" :src="themePath" />
+      <inline-icon v-cloak @click="setTheme(!theme)" class="theme-switch" :icon="themeSwitchIcon"></inline-icon>
     </div>
     <div class="main">
       <div
@@ -141,8 +138,8 @@
           :href="sidebarUrls.contributors"
           target="_blank"
         >
-          <img src="../../images/icons/users.svg" />
-          <span>{{ msg("credits") }} <img src="../../images/icons/popout.svg" /></span>
+          <inline-icon icon="people"></inline-icon>
+          <span>{{ msg("credits") }} <inline-icon icon="popout"></inline-icon></span>
         </a>
         <!--
         <div class="category category-small" @click="openReview()">
@@ -151,8 +148,8 @@
         </div>
         -->
         <a v-cloak class="category category-small" href="https://scratchaddons.com/translate" target="_blank">
-          <img src="../../images/icons/translate.svg" />
-          <span>{{ msg("translate") }} <img src="../../images/icons/popout.svg" /></span>
+          <inline-icon icon="translate"></inline-icon>
+          <span>{{ msg("translate") }} <inline-icon icon="popout"></inline-icon></span>
         </a>
         <a
           v-cloak
@@ -161,16 +158,21 @@
           :href="sidebarUrls.feedback"
           target="_blank"
         >
-          <img src="../../images/icons/comment.svg" />
-          <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" /></span>
+          <inline-icon icon="comment"></inline-icon>
+          <span>{{ msg("feedback") }} <inline-icon icon="popout"></inline-icon></span>
         </a>
         <div v-cloak class="category" style="margin-top: 12px; margin-bottom: 14px" @click="openMoreSettings()">
-          <img src="../../images/icons/wrench.svg" />
+          <inline-icon icon="wrench"></inline-icon>
           <span>{{ msg("moreSettings") }}</span>
         </div>
       </div>
-      <div v-show="!isIframe && smallMode === false" class="categories-shrink" @click="sidebarToggle()">
-        <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryOpen === (direction() === 'rtl')}" />
+      <div
+        v-show="!isIframe && smallMode === false"
+        class="categories-shrink"
+        :class="{flipped: categoryOpen === (direction() === 'rtl')}"
+        @click="sidebarToggle()"
+      >
+        <inline-icon icon="expandLeft"></inline-icon>
       </div>
 
       <!-- This is the main menu, where the searchbar and the addon items are located -->
@@ -218,7 +220,7 @@
         <div class="addon-body">
           <div class="addon-topbar">
             <span class="addon-name"
-              ><img src="../../images/icons/theme.svg" class="icon-type" /> {{ msg("scratchAddonsTheme") }}
+              ><inline-icon icon="theme" class="icon-type"></inline-icon> {{ msg("scratchAddonsTheme") }}
             </span>
           </div>
           <div class="addon-settings">
@@ -241,7 +243,7 @@
         <div class="addon-body">
           <div class="addon-topbar">
             <span class="addon-name"
-              ><img src="../../images/icons/import-export.svg" class="icon-type" :class="{'dark': theme === false}" />
+              ><inline-icon icon="import" class="icon-type"></inline-icon>
               {{ msg("exportAndImportSettings") }}
             </span>
           </div>

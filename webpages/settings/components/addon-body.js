@@ -17,15 +17,15 @@ export default async function ({ template }) {
       shouldShow() {
         return this.visible && (this.$root.searchInput === "" ? this.groupExpanded : true);
       },
-      addonIconSrc() {
+      addonIcon() {
         const map = {
           editor: "puzzle",
           community: "web",
           theme: "brush",
-          easterEgg: "egg-easter",
+          easterEgg: "easterEgg",
           popup: "popup",
         };
-        return `../../images/icons/${map[this.addon._icon]}.svg`;
+        return map[this.addon._icon];
       },
       addonSettings() {
         return this.$root.addonSettings[this.addon._addonId];

@@ -36,11 +36,9 @@
   --notice-background: var(--navigation-background);
   --notice-border: var(--yellow-opacity50);
   --notice-text: #fff;
-  --notice-icon-filter: brightness(0) invert(1);
   --warning-background: var(--red-opacity75);
   --warning-border: var(--red);
   --warning-text: #fff;
-  --warning-icon-filter: brightness(0) invert(1);
   --info-border: var(--content-separator);
   --update-background: var(--navigation-background);
   --update-border: var(--orange-opacity60);
@@ -64,9 +62,7 @@
   --fullscreen-popup-shadow: 0 -1px 7px rgba(0, 0, 0, 0.2);
 
   --content-text: #fff;
-  --content-icon-filter: brightness(0) invert(1);
   --description-text: #ddd;
-  --description-icon-filter: brightness(0) invert(0.87);
   --label-text: #aaa;
   --gray-text: #808080;
   --placeholder-text: #777;

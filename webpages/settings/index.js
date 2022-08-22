@@ -24,6 +24,7 @@ let fuse;
   const { theme: initialTheme, setGlobalTheme } = await globalTheme();
 
   await loadVueComponent([
+    "webpages/common/components/inline-icon",
     "webpages/settings/components/picker-component",
     "webpages/settings/components/reset-dropdown",
     "webpages/settings/components/addon-setting",
@@ -146,7 +147,6 @@ let fuse;
       return {
         smallMode: false,
         theme: initialTheme,
-        switchPath: "../../images/icons/switch.svg",
         moreSettingsOpen: false,
         categoryOpen: true,
         loaded: false,
@@ -181,8 +181,11 @@ let fuse;
       };
     },
     computed: {
-      themePath() {
-        return this.theme ? "../../images/icons/moon.svg" : "../../images/icons/theme.svg";
+      themeSwitchIcon() {
+        return this.theme ? "darkTheme" : "theme";
+      },
+      sidebarToggleIcon() {
+        return this.categoryOpen ? "close" : "menu";
       },
       addonList() {
         if (!this.searchInput) {
@@ -245,11 +248,6 @@ let fuse;
       },
       sidebarToggle: function () {
         this.categoryOpen = !this.categoryOpen;
-        if (this.categoryOpen) {
-          vue.switchPath = "../../images/icons/close.svg";
-        } else {
-          vue.switchPath = "../../images/icons/switch.svg";
-        }
       },
       msg(message, ...params) {
         return chrome.i18n.getMessage(message, ...params);
@@ -676,11 +674,9 @@ let fuse;
     if (window.innerWidth < 1100) {
       vue.smallMode = true;
       vue.categoryOpen = false;
-      vue.switchPath = "../../images/icons/switch.svg";
     } else if (vue.smallMode !== false) {
       vue.smallMode = false;
       vue.categoryOpen = true;
-      vue.switchPath = "../../images/icons/close.svg";
     }
   }
   window.onresize = resize;

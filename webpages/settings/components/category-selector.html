@@ -10,7 +10,7 @@
     :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"
     @click="onClick($event)"
   >
-    <img :src="'../../images/icons/' + category.icon + '.svg'" />
+    <inline-icon :icon="category.icon"></inline-icon>
     <span>{{ category.name }}</span>
   </div>
 </template>
@@ -34,7 +34,8 @@
     color: inherit;
     text-decoration: inherit;
   }
-  a.category > span > img {
+  a.category > span > svg {
+    width: 18px;
     height: 10px;
     vertical-align: middle;
   }
@@ -82,13 +83,9 @@
     height: 25px;
   }
 
-  .category img {
-    height: 18px;
+  .category svg {
     width: 18px;
-    filter: var(--content-icon-filter);
-  }
-  .category.sel img {
-    filter: none;
+    height: 18px;
   }
   .category span {
     margin-inline-start: 15px;

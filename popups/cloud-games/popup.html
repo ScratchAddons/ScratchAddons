@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="preload" href="../../webpages/styles/colors-light.css" as="style" />
-    <link rel="preload" href="popup.css" as="style" />
     <meta charset="UTF-8" />
     <title></title>
+
+    <!-- Preload styles -->
+    <link rel="preload" href="../../webpages/styles/colors-light.css" as="style" />
+    <link rel="preload" href="popup.css" as="style" />
+
+    <!-- Preload components -->
+    <link rel="preload" href="../../webpages/common/components/inline-icon.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="../../webpages/common/components/inline-icon.js" />
+
     <style>
       @import url("../../webpages/styles/colors.css");
       @import url("../../webpages/styles/components/buttons.css");
@@ -42,12 +49,12 @@
         :title="addButtonUsed ? '' : (addButtonType === 'project' ? messages.addProjectDescription : messages.addStudioDescription)"
       >
         <span v-show="!addButtonUsed">
-          <img class="small-icon" src="../../images/icons/plus.svg" /><span
+          <inline-icon class="small-icon" icon="add"></inline-icon><span
             >{{ addButtonType === "project" ? messages.addProject : messages.addStudio }}</span
           >
         </span>
         <span v-else>
-          <img class="small-icon" src="../../images/icons/check.svg" /><span>{{ messages.added }}</span>
+          <inline-icon class="small-icon" icon="check"></inline-icon><span>{{ messages.added }}</span>
         </span>
       </button>
     </div>
@@ -58,7 +65,7 @@
             >{{ project.title }}</a
           >
           <span class="float-right"
-            ><img class="small-icon" src="../../images/icons/users.svg" /> {{ project.error ? "?" : project.amt }}</span
+            ><inline-icon class="small-icon" icon="people"></inline-icon> {{ project.error ? "?" : project.amt }}</span
           >
         </div>
         <div class="project-details">

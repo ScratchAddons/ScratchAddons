@@ -1,6 +1,8 @@
 <template>
   <div class="addon-group" v-show="shouldShow" @click="toggle" :class="{  'margin-above': marginAbove }">
-    <img src="../../images/icons/expand.svg" alt="v" :class="{ 'reverted': group.expanded }" />
+    <div class="addon-group-expand" :class="{'reverted': group.expanded}">
+      <inline-icon icon="expandDown"></inline-icon>
+    </div>
     {{ group.name }} ({{ shownCount }})
   </div>
 </template>
@@ -18,17 +20,20 @@
     padding: 0px 10px;
   }
 
-  .addon-group > img {
-    height: 24px;
-    width: 24px;
+  .addon-group-expand {
     margin-inline-end: 9px;
     padding: 4px;
     border-radius: 4px;
-    filter: var(--content-icon-filter);
     transition: background-color 0.2s ease;
   }
 
-  .addon-group:hover > img {
+  .addon-group-expand svg {
+    vertical-align: middle;
+    width: 24px;
+    height: 24px;
+  }
+
+  .addon-group:hover .addon-group-expand {
     background-color: var(--hover-highlight);
   }
 

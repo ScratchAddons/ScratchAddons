@@ -1,7 +1,7 @@
 <template>
   <div :class="{'setting-dropdown': true, open: isOpen}">
     <button type="button" class="large-button clear-button" :disabled="!enabled" @click="toggle" :title="msg('reset')">
-      <img src="../../images/icons/expand.svg" class="icon-type" />
+      <inline-icon icon="expandDown" class="icon-type"></inline-icon>
     </button>
     <ul>
       <li @click="resetToDefault">

@@ -17,10 +17,10 @@
           <div class="setting-table-row" v-for="(i, row) of addonSettings[setting.id]">
             <div class="setting-table-options">
               <button :disabled="!addon._enabled" class="addon-buttons" @click="deleteTableRow(i)">
-                <img class="icon-type" src="../../images/icons/close.svg" />
+                <inline-icon class="icon-type" icon="close"></inline-icon>
               </button>
               <button :disabled="!addon._enabled" class="addon-buttons handle">
-                <img class="icon-type" src="../../images/icons/drag.svg" />
+                <inline-icon class="icon-type" icon="drag"></inline-icon>
               </button>
             </div>
             <div class="setting-table-row-settings">
@@ -36,7 +36,7 @@
         </div>
         <div class="addon-split-button setting-table-dropdown" :class="{open: rowDropdownOpen}">
           <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-button" @click="addTableRow()">
-            <img class="icon-type" src="../../images/icons/plus.svg" />
+            <inline-icon class="icon-type" icon="add"></inline-icon>
           </button>
           <div v-click-outside="closeResetDropdowns">
             <button
@@ -44,7 +44,7 @@
               class="addon-buttons addon-split-button-dropdown"
               @click="toggleRowDropdown"
             >
-              <img class="icon-type" src="../../images/icons/expand.svg" />
+              <inline-icon class="icon-type" icon="expandDown"></inline-icon>
             </button>
             <ul>
               <li v-for="preset of setting.presets" @click="addTableRow(preset.values)">{{ preset.name }}</li>
@@ -146,7 +146,7 @@
           :title="msg('reset')"
           @click="updateOption(setting.default || '')"
         >
-          <img src="../../images/icons/undo.svg" class="icon-type" /></button
+          <inline-icon icon="undo" class="icon-type"></inline-icon></button
       ></template>
     </div>
   </div>

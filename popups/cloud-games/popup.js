@@ -1,4 +1,5 @@
 import { HTTPError } from "../../libraries/common/message-cache.js";
+import loadVueComponent from "../../libraries/common/load-vue-components.js";
 
 const studioStrategy = async (studioId) => {
   let res;
@@ -68,6 +69,7 @@ export default async ({ addon, msg, safeMsg }) => {
     .get("displayedGames")
     .map(({ url }) => url)
     .map(extractUrl);
+  await loadVueComponent(["webpages/common/components/inline-icon"]);
   window.vue = new Vue({
     el: "body",
     data: {

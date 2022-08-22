@@ -2,7 +2,7 @@
   <div v-cloak v-show="isOpen" class="modal">
     <div class="modal-content" v-click-outside="clickOutside">
       <div>
-        <img @click="isOpen = false" class="close" :title="msg('close')" src="../../../images/icons/close.svg" />
+        <inline-icon @click="isOpen = false" class="close" :title="msg('close')" icon="close"></inline-icon>
         <h1>{{ title }}</h1>
       </div>
       <slot></slot>
@@ -40,7 +40,6 @@
   .close {
     float: right;
     cursor: pointer;
-    filter: var(--content-icon-filter);
   }
   [dir="rtl"] .close {
     float: left;

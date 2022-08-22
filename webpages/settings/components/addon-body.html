@@ -2,11 +2,11 @@
   <div class="addon-body" v-show="shouldShow" :id="'addon-' + addon._addonId">
     <div class="addon-topbar">
       <div class="clickable-area" @click="expanded = !expanded">
-        <div class="btn-dropdown">
-          <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': expanded}" />
+        <div class="btn-dropdown" :class="{'reverted': expanded}">
+          <inline-icon icon="expandDown"></inline-icon>
         </div>
         <div class="addon-name">
-          <img :src="addonIconSrc" class="icon-type" />
+          <inline-icon :icon="addonIcon" class="icon-type"></inline-icon>
           <span @click="devShowAddonIds">{{ addon._displayedAddonId || addon.name }}</span>
         </div>
         <addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
@@ -20,7 +20,7 @@
           title="{{ msg('resetToDefault') }}"
           @click="loadDefaults"
         >
-          <img src="../../images/icons/undo.svg" class="icon-type" />
+          <inline-icon icon="undo" class="icon-type"></inline-icon>
         </div>
         <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest"></div>
       </div>
@@ -33,13 +33,13 @@
       </div>
       <div id="info" v-for="info of addon.info">
         <div :class="['addon-message', 'addon-' + (info.type || 'info')]">
-          <img
-            :src="'../../images/icons/' + {
-              'warning': 'warning.svg',
-              'notice': 'notice.svg',
-              'info': 'help.svg',
+          <inline-icon
+            :icon="{
+              'warning': 'warning',
+              'notice': 'notice',
+              'info': 'help',
             }[info.type || 'info']"
-          />{{ info.text }}
+          ></inline-icon>{{ info.text }}
         </div>
       </div>
       <div class="addon-credits" v-if="addon.credits">
@@ -196,6 +196,7 @@
     cursor: pointer;
     background: none;
     border: none;
+    color: var(--content-text);
     transition: 0.2s ease;
   }
   .addon-buttons:hover:not([disabled]),
@@ -236,16 +237,15 @@
     align-items: center;
     padding: 4px;
     border-radius: 4px;
-    transition: 0.2s ease;
+    transition: background-color 0.2s ease;
   }
   .clickable-area:hover .btn-dropdown {
     background: var(--hover-highlight);
   }
 
-  .btn-dropdown img {
+  .btn-dropdown svg {
     height: 24px;
     width: 24px;
-    filter: var(--content-icon-filter);
   }
 
   .clickable-area {
@@ -294,19 +294,11 @@
     margin: -3px;
     margin-inline-end: 10px;
   }
-  .addon-message img {
+  .addon-message svg {
+    flex-shrink: 0;
     height: 15px;
     width: 15px;
     margin-inline-end: 10px;
-  }
-  .addon-notice img {
-    filter: var(--notice-icon-filter);
-  }
-  .addon-warning img {
-    filter: var(--warning-icon-filter);
-  }
-  .addon-info img {
-    filter: var(--description-icon-filter);
   }
   .addon-settings {
     padding-top: 5px;

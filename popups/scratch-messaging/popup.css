@@ -23,9 +23,9 @@ button {
   transform: rotate(180deg);
 }
 
-.btn-dropdown img {
+.btn-dropdown svg {
+  width: 24px;
   height: 24px;
-  filter: var(--content-icon-filter);
 }
 
 .message-type {
@@ -95,11 +95,9 @@ button {
   cursor: pointer;
 }
 .small-icon {
+  width: 14px;
   height: 14px;
   vertical-align: text-bottom;
-}
-.small-icon:not(.colored) {
-  filter: var(--content-icon-filter);
 }
 button > .small-icon {
   margin-inline-start: -2px;

@@ -100,7 +100,6 @@ h1 {
   height: 16px;
   width: 16px;
   vertical-align: middle;
-  filter: var(--content-icon-filter);
   margin-inline-end: 8px;
 }
 
@@ -136,6 +135,7 @@ h1 {
 }
 
 .theme-switch {
+  width: 25px;
   height: 25px;
   right: 25px;
   position: fixed;
@@ -201,7 +201,7 @@ body.iframe .main {
 body.iframe .addon-group {
   padding-inline: 6px;
 }
-body.iframe .addon-group > img {
+body.iframe .addon-group-expand {
   margin-inline-end: 5px;
 }
 body.iframe .addon-topbar {
@@ -280,9 +280,8 @@ body.iframe .search-box input {
   cursor: pointer;
   user-select: none;
 }
-.categories-shrink img {
+.categories-shrink svg {
   vertical-align: middle;
-  filter: var(--content-icon-filter);
 }
 .flipped {
   transform: scaleX(-1);

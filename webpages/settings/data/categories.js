@@ -24,13 +24,13 @@ export default [
   {
     id: "projectPlayer",
     parent: "editor",
-    icon: "player",
+    icon: "tv",
     name: chrome.i18n.getMessage("projectPlayerFeatures"),
   },
   {
     id: "editorOthers",
     parent: "editor",
-    icon: "dots",
+    icon: "more",
     name: chrome.i18n.getMessage("others"),
   },
   {
@@ -41,13 +41,13 @@ export default [
   {
     id: "projectPage",
     parent: "community",
-    icon: "projectpage",
+    icon: "projectPage",
     name: chrome.i18n.getMessage("projectPageFeatures"),
   },
   {
     id: "profiles",
     parent: "community",
-    icon: "users",
+    icon: "people",
     name: chrome.i18n.getMessage("profilesFeatures"),
   },
   {
@@ -59,7 +59,7 @@ export default [
   {
     id: "communityOthers",
     parent: "community",
-    icon: "dots",
+    icon: "more",
     name: chrome.i18n.getMessage("others"),
   },
   {

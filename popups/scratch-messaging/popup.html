@@ -45,7 +45,7 @@
         <span class="comment-time" v-show="deleteStep !== 1 && !deleted">
           · {{ commentTimeAgo }}
           <a class="nolink" rel="noopener noreferrer" target="_blank" :href="commentURL">
-            <inline-icon icon="popout" class="popout-comment" title="{{ messages.openNewTabMsg }}" />
+            <inline-icon icon="popout" class="popout-comment" title="{{ messages.openNewTabMsg }}"></inline-icon>
           </a>
         </span>
         <a
@@ -99,12 +99,12 @@
             class="message-type-title hover-reverse"
             @click="messageTypeExtended.stMessages = !messageTypeExtended.stMessages"
           >
-            <div class="btn-dropdown">
-              <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.stMessages}" />
+            <div class="btn-dropdown" :class="{'reverted': messageTypeExtended.stMessages}">
+              <inline-icon icon="expandDown"></inline-icon>
             </div>
             <span class="message-type-title-text">{{ uiMessages.stMessagesMsg }}</span>
             <span class="float-right"
-              ><img class="small-icon" src="../../images/icons/notice.svg" /> {{ stMessages.length }}</span
+              ><inline-icon class="small-icon" icon="notice"></inline-icon> {{ stMessages.length }}</span
             >
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.stMessages">
@@ -122,12 +122,12 @@
             class="message-type-title hover-reverse"
             @click="messageTypeExtended.follows = !messageTypeExtended.follows"
           >
-            <div class="btn-dropdown">
-              <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.follows}" />
+            <div class="btn-dropdown" :class="{'reverted': messageTypeExtended.follows}">
+              <inline-icon icon="expandDown"></inline-icon>
             </div>
             <span class="message-type-title-text">{{ uiMessages.followsMsg }}</span>
             <span class="float-right"
-              ><img class="small-icon" src="../../images/icons/follow.svg" /> {{ follows.length }}</span
+              ><inline-icon class="small-icon" icon="follow"></inline-icon> {{ follows.length }}</span
             >
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.follows">
@@ -143,16 +143,12 @@
             class="message-type-title hover-reverse"
             @click="messageTypeExtended.studioInvites = !messageTypeExtended.studioInvites"
           >
-            <div class="btn-dropdown">
-              <img
-                src="../../images/icons/expand.svg"
-                alt="v"
-                :class="{'reverted': messageTypeExtended.studioInvites}"
-              />
+            <div class="btn-dropdown" :class="{'reverted': messageTypeExtended.studioInvites}">
+              <inline-icon icon="expandDown"></inline-icon>
             </div>
             <span class="message-type-title-text">{{ uiMessages.studioInvitesMsg }}</span>
             <span class="float-right"
-              ><img class="small-icon" src="../../images/icons/studio-add.svg" /> {{ studioInvites.length }}</span
+              ><inline-icon class="small-icon" icon="envelopeAdd"></inline-icon> {{ studioInvites.length }}</span
             >
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.studioInvites">
@@ -166,16 +162,12 @@
             class="message-type-title hover-reverse"
             @click="messageTypeExtended.studioPromotions = !messageTypeExtended.studioPromotions"
           >
-            <div class="btn-dropdown">
-              <img
-                src="../../images/icons/expand.svg"
-                alt="v"
-                :class="{'reverted': messageTypeExtended.studioPromotions}"
-              />
+            <div class="btn-dropdown" :class="{'reverted': messageTypeExtended.studioPromotions}">
+              <inline-icon icon="expandDown"></inline-icon>
             </div>
             <span class="message-type-title-text">{{ uiMessages.studioPromotionsMsg }}</span>
             <span class="float-right"
-              ><img class="small-icon" src="../../images/icons/adminusers.svg" /> {{ studioPromotions.length }}</span
+              ><inline-icon class="small-icon" icon="adminUser"></inline-icon> {{ studioPromotions.length }}</span
             >
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.studioPromotions">
@@ -189,16 +181,12 @@
             class="message-type-title hover-reverse"
             @click="messageTypeExtended.studioHostTransfers = !messageTypeExtended.studioHostTransfers"
           >
-            <div class="btn-dropdown">
-              <img
-                src="../../images/icons/expand.svg"
-                alt="v"
-                :class="{'reverted': messageTypeExtended.studioHostTransfers}"
-              />
+            <div class="btn-dropdown" :class="{'reverted': messageTypeExtended.studioHostTransfers}">
+              <inline-icon icon="expandDown"></inline-icon>
             </div>
             <span class="message-type-title-text">{{ uiMessages.studioHostTransfersMsg }}</span>
             <span class="float-right"
-              ><img class="small-icon" src="../../images/icons/users.svg" /> {{ studioHostTransfers.length }}</span
+              ><inline-icon class="small-icon" icon="people"></inline-icon> {{ studioHostTransfers.length }}</span
             >
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.studioHostTransfers">
@@ -214,16 +202,12 @@
             class="message-type-title hover-reverse"
             @click="messageTypeExtended.forumActivity = !messageTypeExtended.forumActivity"
           >
-            <div class="btn-dropdown">
-              <img
-                src="../../../images/icons/expand.svg"
-                alt="v"
-                :class="{'reverted': messageTypeExtended.forumActivity}"
-              />
+            <div class="btn-dropdown" :class="{'reverted': messageTypeExtended.forumActivity}">
+              <inline-icon icon="expandDown"></inline-icon>
             </div>
             <span class="message-type-title-text">{{ uiMessages.forumMsg }}</span>
             <span class="float-right"
-              ><img class="small-icon" src="../../images/icons/forum.svg" /> {{ forumActivity.length }}</span
+              ><inline-icon class="small-icon" icon="forum"></inline-icon> {{ forumActivity.length }}</span
             >
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.forumActivity">
@@ -237,16 +221,12 @@
             class="message-type-title hover-reverse"
             @click="messageTypeExtended.studioActivity = !messageTypeExtended.studioActivity"
           >
-            <div class="btn-dropdown">
-              <img
-                src="../../images/icons/expand.svg"
-                alt="v"
-                :class="{'reverted': messageTypeExtended.studioActivity}"
-              />
+            <div class="btn-dropdown" :class="{'reverted': messageTypeExtended.studioActivity}">
+              <inline-icon icon="expandDown"></inline-icon>
             </div>
             <span class="message-type-title-text">{{ uiMessages.studioActivityMsg }}</span>
             <span class="float-right"
-              ><img class="small-icon" src="../../images/icons/studio.svg" /> {{ studioActivity.length }}</span
+              ><inline-icon class="small-icon" icon="folderNotice"></inline-icon> {{ studioActivity.length }}</span
             >
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.studioActivity">
@@ -260,12 +240,12 @@
             class="message-type-title hover-reverse"
             @click="messageTypeExtended.remixes = !messageTypeExtended.remixes"
           >
-            <div class="btn-dropdown">
-              <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.remixes}" />
+            <div class="btn-dropdown" :class="{'reverted': messageTypeExtended.remixes}">
+              <inline-icon icon="expandDown"></inline-icon>
             </div>
             <span class="message-type-title-text">{{ uiMessages.remixesMsg }}</span>
             <span class="float-right"
-              ><img class="small-icon" src="../../images/icons/remix.svg" /> {{ remixes.length }}</span
+              ><inline-icon class="small-icon" icon="remix"></inline-icon> {{ remixes.length }}</span
             >
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.remixes">
@@ -291,7 +271,7 @@
             </a>
             <span class="float-right">
               <span v-show="profile.unreadComments"
-                ><img class="small-icon" src="../../images/icons/comment.svg" /> {{profile.unreadComments}}</span
+                ><inline-icon class="small-icon" icon="comment"></inline-icon> {{profile.unreadComments}}</span
               >
             </span>
           </div>
@@ -333,7 +313,7 @@
             >
             <span class="float-right">
               <span v-show="studio.unreadComments"
-                ><img class="small-icon" src="../../images/icons/comment.svg" /> {{studio.unreadComments}}</span
+                ><inline-icon class="small-icon" icon="comment"></inline-icon> {{studio.unreadComments}}</span
               >
             </span>
           </div>
@@ -383,23 +363,23 @@
               <div class="tooltip" v-if="project.loveCount || project.favoriteCount">
                 <span class="tooltip-indicator">
                   <span v-show="project.loveCount"
-                    ><img class="small-icon colored" src="../../images/icons/heart.svg" /> {{project.loveCount}}</span
+                    ><img class="small-icon" src="../../images/icons/heart.svg" /> {{project.loveCount}}</span
                   >
                   <span v-show="project.favoriteCount"
-                    ><img class="small-icon colored" src="../../images/icons/star.svg" />
+                    ><img class="small-icon" src="../../images/icons/star.svg" />
                     {{project.favoriteCount}}</span
                   >
                 </span>
                 <div class="tooltiptext tooltiptextleft">
                   <div v-for="person of projectLoversAndFavers(project)">
-                    <img class="small-icon colored" src="../../images/icons/heart.svg" v-if="person.loved" />
-                    <img class="small-icon colored" src="../../images/icons/star.svg" v-if="person.faved" />
+                    <img class="small-icon" src="../../images/icons/heart.svg" v-if="person.loved" />
+                    <img class="small-icon" src="../../images/icons/star.svg" v-if="person.faved" />
                     <a href="https://scratch.mit.edu/users/{{ person.username }}/"> {{ person.username }} </a>
                   </div>
                 </div>
               </div>
               <span v-show="project.unreadComments"
-                ><img class="small-icon" src="../../images/icons/comment.svg" /> {{project.unreadComments}}</span
+                ><inline-icon class="small-icon" icon="comment"></inline-icon> {{project.unreadComments}}</span
               >
             </span>
           </div>
@@ -455,10 +435,10 @@
         >
         <div v-show="commentsReady || canShowMoreMessages" class="buttons-container">
           <button @click="reloadPage()" v-show="commentsReady" class="large-button">
-            <img class="small-icon" src="../../images/icons/reload.svg" /><span>{{ uiMessages.reloadMsg }}</span>
+            <inline-icon class="small-icon" icon="reload"></inline-icon><span>{{ uiMessages.reloadMsg }}</span>
           </button>
           <button @click="showAllMessages = true" v-show="canShowMoreMessages" class="large-button">
-            <img class="small-icon" src="../../images/icons/plus.svg" /><span>{{ uiMessages.showMoreMsg }}</span>
+            <inline-icon class="small-icon" icon="add"></inline-icon><span>{{ uiMessages.showMoreMsg }}</span>
           </button>
         </div>
       </div>
@@ -468,12 +448,12 @@
     <div id="bottom-bar">
       <a v-cloak @click="markAsRead()" v-show="!markedAsRead">{{ uiMessages.markAsReadMsg }}</a>
       <span v-cloak v-show="markedAsRead" class="marked-as-read"
-        ><img class="small-icon" src="../../images/icons/read.svg" /> {{ uiMessages.markedAsReadMsg }}</span
+        ><inline-icon class="small-icon" icon="read"></inline-icon> {{ uiMessages.markedAsReadMsg }}</span
       >
       <span v-cloak class="separator">|</span>
       <a v-cloak href="https://scratch.mit.edu/messages" class="nolink open-messages"
         >{{ uiMessages.openMessagesMsg }}<inline-icon icon="popout" class="popout"
-      /></a>
+      ></inline-icon></a>
     </div>
   </body>
 </html>
