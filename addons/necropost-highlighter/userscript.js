@@ -306,7 +306,7 @@ export default async function ({ addon, global, console, msg }) {
    * Returns int topicId, or 0 if no topic was found.
    */
   function extractTopicIdFrom(topicCell) {
-    const link = topic.querySelector("a");
+    const link = topicCell.querySelector("a");
     if (link instanceof HTMLAnchorElement) {
       return /\/topic\/(\d+)\//.exec(link.href)?.[1] || 0;
     }
