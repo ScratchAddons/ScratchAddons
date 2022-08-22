@@ -40,7 +40,7 @@ export default async function ({ addon, global, console, msg }) {
     return;
   }
 
-  const forumOrSearchPageName = await determineForumOrSearchPageName();
+  const forumOrSearchPageName = determineForumOrSearchPageName();
 
   /**
    * An array of topic
@@ -217,12 +217,12 @@ export default async function ({ addon, global, console, msg }) {
   /**
    * Name of a forum this addon might process, or "Search Results" or "".
    */
-  async function determineForumOrSearchPageName() {
-    let title = document.querySelector("title");
+  function determineForumOrSearchPageName() {
+    const title = document.querySelector("title");
     if (!title) {
       return "";
     }
-    let titleText = title.innerText;
+    const titleText = title.innerText;
     if (titleText.includes(searchResultsPageName)) {
       return searchResultsPageName;
     }
@@ -272,7 +272,7 @@ export default async function ({ addon, global, console, msg }) {
       if (!topic.restoreCell) {
         topic.restoreCell = topic.topicCell.cloneNode(true);
       }
-      const necropostMessage = msg("(Necropost?)");
+      const necropostMessage = msg("necropost");
       const highlightColor = addon.settings.get("highlightColor");
 
       topic.topicCell.style.backgroundColor = highlightColor;
@@ -282,12 +282,12 @@ export default async function ({ addon, global, console, msg }) {
         return;
       }
       let possibleNewPostsLink = topic.topicCell.querySelector(".tclcon>a");
-      if (!possibleNewPostsLink) {
+      if (possibleNewPostsLink) {
+        possibleNewPostsLink.textContent = necropostMessage;
+      } else {
         // No New Posts link. Insert a plain text '(Necropost?)'
         let byUser = topic.topicCell.querySelector("span.byuser");
         byUser.textContent += " " + necropostMessage;
-      } else {
-        possibleNewPostsLink.textContent = necropostMessage;
       }
     }
   }
@@ -305,29 +305,11 @@ export default async function ({ addon, global, console, msg }) {
   /**
    * Returns int topicId, or 0 if no topic was found.
    */
-  async function extractTopicIdFrom(topicCell) {
-    // Standard format: "/discuss/topic/622368/"
-    // Mobile format (read): "/discuss/m/topic/622368/"
-    // Mobile format (unread): "/discuss/m/topic/622368/unread/"
-    // In each case, we want to return the int value 622368
-    const standardTopicPrefix = "https://scratch.mit.edu/discuss/topic/";
-    const mobileTopicPrefix = "https://scratch.mit.edu/discuss/m/topic/";
-    const typicalSuffix = "/"; // all Standard and read mobile messages
-    const unreadSuffix = "unread/"; // only on mobile
-
-    let a = topicCell.querySelector("a");
-    if (a == null) {
-      return 0;
+  function extractTopicIdFrom(topicCell) {
+    const link = topic.querySelector("a");
+    if (link instanceof HTMLAnchorElement) {
+      return /\/topic\/(\d+)\//.exec(link.href)?.[1] || 0
     }
-    let topicUrl = a.toString();
-    // console.log("topicUrl " + topicUrl);
-    let topicPrefix = isMobileSite ? mobileTopicPrefix : standardTopicPrefix;
-    if (!topicUrl.startsWith(topicPrefix)) {
-      return 0;
-    }
-    let suffixLength = topicUrl.endsWith(unreadSuffix) ? unreadSuffix.length : typicalSuffix.length;
-    let topicId = parseInt(topicUrl.substring(topicPrefix.length, topicUrl.length - suffixLength));
-    // console.log("topicId " + topicId);
-    return topicId;
+    return 0;
   }
 }
