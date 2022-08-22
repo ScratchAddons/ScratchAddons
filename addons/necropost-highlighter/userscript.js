@@ -308,7 +308,7 @@ export default async function ({ addon, global, console, msg }) {
   function extractTopicIdFrom(topicCell) {
     const link = topic.querySelector("a");
     if (link instanceof HTMLAnchorElement) {
-      return /\/topic\/(\d+)\//.exec(link.href)?.[1] || 0
+      return /\/topic\/(\d+)\//.exec(link.href)?.[1] || 0;
     }
     return 0;
   }
