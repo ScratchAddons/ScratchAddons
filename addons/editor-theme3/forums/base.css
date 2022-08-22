@@ -155,7 +155,9 @@
 }
 
 .sb-comment,
-.sb3-comment {
+.sb3-comment,
+.sb-comment-line,
+.sb3-comment-line {
   fill: var(--editorTheme3-commentColor);
   stroke: var(--editorTheme3-commentBorder);
 }
