@@ -126,9 +126,7 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     gatherTopics();
-    // console.log("Topic Count: " + topics.length);
     let highestTopicOnThisPage = highestTopicIdFrom(topics);
-    // console.log("Highest TopicId: " + highestTopicOnThisPage);
     let lowestNewTopicId = highestTopicOnThisPage - addon.settings.get("staleTopicInterval");
     highlightTopicCellsWithTopicIdBelow(topics, lowestNewTopicId);
   }
@@ -152,9 +150,7 @@ export default async function ({ addon, global, console, msg }) {
     } else {
       possibleTopicCells = document.querySelectorAll(".tcl");
     }
-    // console.log("possibleTopicCells length: " + possibleTopicCells.length);
     let theForum = forumOrSearchPageName; // usually, but overridden per cell if on a search page
-    // console.log("theForum: " + theForum);
     for (let i = 0; i < possibleTopicCells.length; i++) {
       if (forumOrSearchPageName.includes(searchResultsPageName)) {
         // the cell to the right of the topic cell lists the forum, in search results
@@ -174,7 +170,6 @@ export default async function ({ addon, global, console, msg }) {
           forum: theForum,
         };
         topics.push(topic);
-        // console.log("gatherTopics: " + topic.topicId + " in " + topic.forum);
       }
     }
   }
