@@ -129,7 +129,7 @@ export default async function ({ addon, global, console, msg }) {
     // console.log("Topic Count: " + topics.length);
     let highestTopicOnThisPage = highestTopicIdFrom(topics);
     // console.log("Highest TopicId: " + highestTopicOnThisPage);
-    let lowestNewTopicId = highestTopicOnThisPage - determineTopicInterval();
+    let lowestNewTopicId = highestTopicOnThisPage - addon.settings.get("staleTopicInterval");
     highlightTopicCellsWithTopicIdBelow(topics, lowestNewTopicId);
   }
 
@@ -177,16 +177,6 @@ export default async function ({ addon, global, console, msg }) {
         // console.log("gatherTopics: " + topic.topicId + " in " + topic.forum);
       }
     }
-  }
-
-  /**
-   * How many topics since the earliest on the same page to be considered a "necropost"
-   */
-  function determineTopicInterval() {
-    if (!addon.settings.get("chooseCustomTopicInterval")) {
-      return defaultTopicInterval;
-    }
-    return addon.settings.get("customTopicInterval");
   }
 
   /**

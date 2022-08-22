@@ -34,6 +34,12 @@
       "default": "#D1E9F2"
     },
     {
+      "name": "How many topics is 'old'? (7,500 is about a month)",
+      "id": "staleTopicInterval",
+      "type": "positive_integer",
+      "default": 7500
+    },
+    {
       "name": "Choose custom forums?",
       "id": "chooseCustomForums",
       "type": "boolean",
@@ -124,23 +130,6 @@
       "if": {
         "settings": {
           "chooseCustomForums": true
-        }
-      }
-    },
-    {
-      "name": "Choose custom age?",
-      "id": "chooseCustomTopicInterval",
-      "type": "boolean",
-      "default": false
-    },
-    {
-      "name": "How many topics is 'old'? (7,500 is about a month)",
-      "id": "customTopicInterval",
-      "type": "positive_integer",
-      "default": 7500,
-      "if": {
-        "settings": {
-          "chooseCustomTopicInterval": true
         }
       }
     }
