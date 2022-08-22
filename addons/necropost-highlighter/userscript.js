@@ -67,19 +67,19 @@ export default async function ({ addon, global, console, msg }) {
   /***********************************************************************
    * Callbacks
    ***********************************************************************/
-  async function onAddonSettingsChange() {
-    await removeAnyPriorHighlights();
-    await highlightNecropostsIfOnSelectedForumPage();
+  function onAddonSettingsChange() {
+    removeAnyPriorHighlights();
+    highlightNecropostsIfOnSelectedForumPage();
   }
 
-  async function onDisabled() {
+  function onDisabled() {
     detatchMutationObserverOnStandardSite();
-    await removeAnyPriorHighlights();
+    removeAnyPriorHighlights();
   }
 
-  async function onReenabled() {
+  function onReenabled() {
     attachMutationObserverOnStandardSite();
-    await highlightNecropostsIfOnSelectedForumPage();
+    highlightNecropostsIfOnSelectedForumPage();
   }
 
   function attachMutationObserverOnStandardSite() {
@@ -107,25 +107,25 @@ export default async function ({ addon, global, console, msg }) {
    * Inefficiency of a full highlightNecropostsIfOnSelectedForumPage
    * is probably not a concern here, browsing a forum page.
    */
-  async function onRowsChanged(mutationList, mutationObserver) {
+  function onRowsChanged(mutationList, mutationObserver) {
     requestAnimationFrame(rebuild);
   }
 
-  async function rebuild() {
-    await removeAnyPriorHighlights();
+  function rebuild() {
+    removeAnyPriorHighlights();
     highlightNecropostsIfOnSelectedForumPage();
   }
 
   /***********************************************************************
    * This is where the magic happens
    ***********************************************************************/
-  async function highlightNecropostsIfOnSelectedForumPage() {
-    let shouldRunOnThisPage = await isOnSelectedForumPage();
+  function highlightNecropostsIfOnSelectedForumPage() {
+    let shouldRunOnThisPage = isOnSelectedForumPage();
     if (!shouldRunOnThisPage) {
       return;
     }
 
-    await gatherTopics();
+    gatherTopics();
     // console.log("Topic Count: " + topics.length);
     let highestTopicOnThisPage = highestTopicIdFrom(topics);
     // console.log("Highest TopicId: " + highestTopicOnThisPage);
@@ -144,7 +144,7 @@ export default async function ({ addon, global, console, msg }) {
    *    - restoreCell  Only defined if the cell is modified.
    *                   A clone of the initial state of the cell Node, to revert for disable addon
    */
-  async function gatherTopics() {
+  function gatherTopics() {
     topics = [];
     let possibleTopicCells; // verified before forming a topic
     if (isMobileSite) {
@@ -165,7 +165,7 @@ export default async function ({ addon, global, console, msg }) {
         }
         theForum = possibleTopicCells[i].nextElementSibling.innerText;
       }
-      const theTopicId = await extractTopicIdFrom(possibleTopicCells[i]);
+      const theTopicId = extractTopicIdFrom(possibleTopicCells[i]);
       if (theTopicId != 0) {
         // No restoreCell property at this point. Only added if the cell is modified
         const topic = {
@@ -184,7 +184,7 @@ export default async function ({ addon, global, console, msg }) {
    * Clears any previously gathered topics.
    * Does not conflict with Addon: Website dark mode and customizable colors.
    */
-  async function removeAnyPriorHighlights() {
+  function removeAnyPriorHighlights() {
     topics.forEach((topic) => {
       if (topic.restoreCell) {
         topic.topicCell.replaceWith(topic.restoreCell);
@@ -232,7 +232,7 @@ export default async function ({ addon, global, console, msg }) {
   /**
    * Search Results or user selected forums, or default forums if custom forums is off
    */
-  async function isOnSelectedForumPage() {
+  function isOnSelectedForumPage() {
     if (forumOrSearchPageName.includes(searchResultsPageName)) {
       return true;
     }
