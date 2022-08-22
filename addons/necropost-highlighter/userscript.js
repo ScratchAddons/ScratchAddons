@@ -60,8 +60,8 @@ export default async function ({ addon, global, console, msg }) {
   addon.self.addEventListener("reenabled", onReenabled);
 
   // Support for infinite scrolling (only available on Standard not Mobile)
+  let tableBodyMutationObserver;
   const config = { childList: true };
-  const tableBodyMutationObserver = new MutationObserver(onRowsChanged);
   attachMutationObserverOnStandardSite();
 
   /***********************************************************************
@@ -84,6 +84,7 @@ export default async function ({ addon, global, console, msg }) {
 
   function attachMutationObserverOnStandardSite() {
     if (!isMobileSite) {
+      tableBodyMutationObserver = new MutationObserver(onRowsChanged);
       tableBodyMutationObserver.observe(tableBodyNode, config);
     }
   }
@@ -92,6 +93,7 @@ export default async function ({ addon, global, console, msg }) {
     if (!isMobileSite) {
       tableBodyMutationObserver.takeRecords(); // and discard
       tableBodyMutationObserver.disconnect();
+      tableBodyMutationObserver = null;
     }
   }
 
