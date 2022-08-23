@@ -75,68 +75,68 @@ export default async function ({ addon, msg, console }) {
           msg("most-views")
         )
       );
-      fetch(`https://scratchdb.lefty.one/v3/user/graph/${username}/followers?range=364&segment=6`)
-        .then(async function (response) {
-          const historyData = await response.json();
-          if (historyData.length === 0) return;
-          await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
-          const canvasContainer = document.createElement("div");
-          stats.appendChild(canvasContainer);
-          canvasContainer.style.position = "relative";
-          canvasContainer.style.height = "400px";
-          const canvas = document.createElement("canvas");
-          canvasContainer.appendChild(canvas);
-          const stepAvg = historyData.reduce((acc, cur) => acc + cur.value / historyData.length, 0);
-          const stepLog = Math.log10(stepAvg);
-          const stepSize = Math.pow(10, Math.max(Math.round(stepLog) - 1, 1));
-          new Chart(canvas, {
-            type: "scatter",
-            data: {
-              datasets: [
-                {
-                  data: historyData.map((item) => {
-                    return { x: Date.parse(item.date), y: item.value };
-                  }),
-                  fill: false,
-                  showLine: true,
-                  borderColor: "#4d97ff",
-                  lineTension: 0,
-                },
-              ],
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              scales: {
-                x: {
-                  ticks: {
-                    callback: (x) => new Date(x).toDateString(),
-                  },
-                },
-                y: {
-                  ticks: {
-                    stepSize,
-                  },
-                },
-              },
-              plugins: {
-                title: {
-                  display: true,
-                  text: msg("followers-title"),
-                },
-                tooltip: {
-                  callbacks: {
-                    label: (context) => `${new Date(Number(context.raw.x)).toDateString()}: ${context.parsed.y}`,
-                  },
-                },
-                legend: {
-                  display: false,
-                },
-              },
-            },
-          });
-        })
-        .catch(() => stats.appendChild(document.createTextNode(msg("err")))); // appended so basic stats are still there, it's just the chart that's gone
     })
     .catch(() => (stats.innerText = msg("err"))); // innerText to remove loading message
+    fetch(`https://scratchdb.lefty.one/v3/user/graph/${username}/followers?range=364&segment=6`)
+      .then(async function (response) {
+        const historyData = await response.json();
+        if (historyData.length === 0) return;
+        await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
+        const canvasContainer = document.createElement("div");
+        stats.appendChild(canvasContainer);
+        canvasContainer.style.position = "relative";
+        canvasContainer.style.height = "400px";
+        const canvas = document.createElement("canvas");
+        canvasContainer.appendChild(canvas);
+        const stepAvg = historyData.reduce((acc, cur) => acc + cur.value / historyData.length, 0);
+        const stepLog = Math.log10(stepAvg);
+        const stepSize = Math.pow(10, Math.max(Math.round(stepLog) - 1, 1));
+        new Chart(canvas, {
+          type: "scatter",
+          data: {
+            datasets: [
+              {
+                data: historyData.map((item) => {
+                  return { x: Date.parse(item.date), y: item.value };
+                }),
+                fill: false,
+                showLine: true,
+                borderColor: "#4d97ff",
+                lineTension: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                ticks: {
+                  callback: (x) => new Date(x).toDateString(),
+                },
+              },
+              y: {
+                ticks: {
+                  stepSize,
+                },
+              },
+            },
+            plugins: {
+              title: {
+                display: true,
+                text: msg("followers-title"),
+              },
+              tooltip: {
+                callbacks: {
+                  label: (context) => `${new Date(Number(context.raw.x)).toDateString()}: ${context.parsed.y}`,
+                },
+              },
+              legend: {
+                display: false,
+              },
+            },
+          },
+        });
+      })
+      .catch(() => stats.appendChild(document.createTextNode(msg("err")))); // appended so basic stats are still there, it's just the chart that's gone
 }
