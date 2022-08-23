@@ -150,7 +150,8 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .slider_handle_3f0xk,
 .sound-editor_button_1_6Li,
 .library-item_library-item_1DcMO,
-.find-dropdown-out.visible,
+.s3devDDOut.vis, /* devtools style */
+.find-dropdown-out.visible, /* find-bar style */
 .prompt_body_18Z-I,
 .custom-procedures_body_SQBv6,
 .slider-prompt_body_2ZkXL,
@@ -184,11 +185,11 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .selector_new-buttons_2qHDd::before {
   background: linear-gradient(var(--editorDarkMode-accent-opacity0), var(--editorDarkMode-accent));
 }
-.find-dropdown > li.boolean::before {
+.s3devDD > li.boolean::before /* devtools style */ {
   border-top: 9px solid var(--editorDarkMode-accent);
   border-bottom: 10px solid var(--editorDarkMode-accent);
 }
-.find-dropdown > li.boolean::after {
+.s3devDD > li.boolean::after  /* devtools style */ {
   border-top: 9px solid var(--editorDarkMode-accent);
   border-bottom: 10px solid var(--editorDarkMode-accent);
 }
