@@ -92,7 +92,7 @@ export default async function ({ addon, global, console, msg }) {
     { passive: true }
   );
 
-  addon.self.addEventListener("disabled", () => (backdrop.style.display = "none"));
+  addon.self.addEventListener("disabled", () => close());
   onPageChange();
 
   async function loadData(type) {
