@@ -92,7 +92,7 @@ export default async function ({ addon, global, console, msg }) {
     { passive: true }
   );
 
-  addon.self.addEventListener("disabled", () => (modal.style.display = "none"));
+  addon.self.addEventListener("disabled", () => (backdrop.style.display = "none"));
   onPageChange();
 
   async function loadData(type) {
@@ -119,6 +119,7 @@ export default async function ({ addon, global, console, msg }) {
       const userAvatar = Object.assign(document.createElement("img"), {
         className: "studio-project-image",
         src: `https://uploads.scratch.mit.edu/get_image/user/${user.id}_90x90.png`,
+        draggable: false,
       });
       userButton.appendChild(userAvatar);
 
@@ -138,6 +139,7 @@ export default async function ({ addon, global, console, msg }) {
       const img = Object.assign(document.createElement("img"), {
         className: "studio-project-add-remove-image",
         src: addon.self.dir + "/add.svg",
+        draggable: false,
       });
       addButton.appendChild(img);
 
