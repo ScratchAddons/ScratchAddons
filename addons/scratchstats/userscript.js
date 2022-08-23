@@ -88,6 +88,10 @@ export default async function ({ addon, msg, console }) {
         canvasContainer.style.height = "400px";
         const canvas = document.createElement("canvas");
         canvasContainer.appendChild(canvas);
+        canvas.id = "sa-scratchstats-chart";
+
+        const textColor = "#575e75";
+        const lineColor = "rgba(0, 0, 0, 0.1)";
         const stepAvg = historyData.reduce((acc, cur) => acc + cur.value / historyData.length, 0);
         const stepLog = Math.log10(stepAvg);
         const stepSize = Math.pow(10, Math.max(Math.round(stepLog) - 1, 1));
@@ -113,11 +117,23 @@ export default async function ({ addon, msg, console }) {
               x: {
                 ticks: {
                   callback: (x) => new Date(x).toDateString(),
+                  color: textColor,
+                },
+                grid: {
+                  borderColor: textColor,
+                  tickColor: textColor,
+                  color: lineColor,
                 },
               },
               y: {
                 ticks: {
                   stepSize,
+                  color: textColor,
+                },
+                grid: {
+                  borderColor: textColor,
+                  tickColor: textColor,
+                  color: lineColor,
                 },
               },
             },
@@ -125,6 +141,7 @@ export default async function ({ addon, msg, console }) {
               title: {
                 display: true,
                 text: msg("followers-title"),
+                color: textColor,
               },
               tooltip: {
                 callbacks: {
