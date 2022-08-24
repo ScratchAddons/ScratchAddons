@@ -8,7 +8,7 @@
 export default async function ({ addon, global, console, msg }) {
   // Default is a little over a month's worth of topics. Reasonably stable through 2022.
   // There's a lot of tolerance. Half or twice as many topics filter pretty much the same.
-  const defaultTopicInterval = 7500;
+  const TOPICS_PER_MONTH = 7500;
   const defaultForums = [
     "New Scratchers",
     "Help with Scripts",
@@ -127,7 +127,8 @@ export default async function ({ addon, global, console, msg }) {
 
     gatherTopics();
     let highestTopicOnThisPage = highestTopicIdFrom(topics);
-    let lowestNewTopicId = highestTopicOnThisPage - addon.settings.get("staleTopicInterval");
+    let staleTopicInterval = TOPICS_PER_MONTH * addon.settings.get("monthCountConsideredOld");
+    let lowestNewTopicId = highestTopicOnThisPage - staleTopicInterval;
     highlightTopicCellsWithTopicIdBelow(topics, lowestNewTopicId);
   }
 

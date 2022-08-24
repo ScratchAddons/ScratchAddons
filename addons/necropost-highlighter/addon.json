@@ -34,10 +34,10 @@
       "default": "#D1E9F2"
     },
     {
-      "name": "How many topics is 'old'? (7,500 is about a month)",
-      "id": "staleTopicInterval",
+      "name": "Roughly how many months is 'old'?",
+      "id": "monthCountConsideredOld",
       "type": "positive_integer",
-      "default": 7500
+      "default": 1
     },
     {
       "name": "Choose custom forums?",
