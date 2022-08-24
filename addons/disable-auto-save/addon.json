@@ -11,9 +11,11 @@
   "credits": [
     {
       "name": "RustingRobot",
-      "link": "https://scratch.mit.edu/users/RustingRobot"
+      "link": "https://scratch.mit.edu/users/RustingRobot/"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",

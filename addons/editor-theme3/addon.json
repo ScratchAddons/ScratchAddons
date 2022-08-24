@@ -7,13 +7,82 @@
     },
     {
       "name": "TheColaber",
-      "link": "https://scratch.mit.edu/users/TheColaber"
+      "link": "https://scratch.mit.edu/users/TheColaber/"
+    }
+  ],
+  "latestUpdate": {
+    "version": "1.24.0",
+    "temporaryNotice": "New setting to enable changing the colors of blocks in the forums.",
+    "newSettings": ["forums"]
+  },
+  "customCssVariables": [
+    {
+      "name": "inputColor-text",
+      "value": {
+        "type": "alphaThreshold",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input-color"
+        },
+        "opaque": {
+          "type": "textColor",
+          "source": {
+            "type": "settingValue",
+            "settingId": "input-color"
+          }
+        },
+        "transparent": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "text"
+          },
+          "options": {
+            "white": "#ffffff",
+            "black": "#575e75",
+            "colorOnWhite": "#575e75",
+            "colorOnBlack": "#ffffff"
+          }
+        }
+      }
+    },
+    {
+      "name": "inputColor-forumText",
+      "value": {
+        "type": "alphaThreshold",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input-color"
+        },
+        "opaque": {
+          "type": "textColor",
+          "black": "#000000",
+          "source": {
+            "type": "settingValue",
+            "settingId": "input-color"
+          }
+        },
+        "transparent": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "text"
+          },
+          "options": {
+            "white": "#ffffff",
+            "black": "#000000",
+            "colorOnWhite": "#000000",
+            "colorOnBlack": "#ffffff"
+          }
+        }
+      }
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "injectAsStyleElt": true,
   "versionAdded": "1.2.0",
+  "updateUserstylesOnSettingsChange": true,
   "userscripts": [
     {
       "url": "theme3.js",
@@ -24,6 +93,64 @@
     {
       "url": "theme3.css",
       "matches": ["projects"]
+    },
+    {
+      "url": "black_text.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "text": "black" }
+      }
+    },
+    {
+      "url": "color_on_white.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "text": "colorOnWhite" }
+      }
+    },
+    {
+      "url": "color_on_black.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "text": "colorOnBlack" }
+      }
+    },
+    {
+      "url": "forums/base.css",
+      "matches": ["editingScreens"],
+      "if": {
+        "settings": { "forums": true }
+      }
+    },
+    {
+      "url": "forums/black_text.css",
+      "matches": ["editingScreens"],
+      "if": {
+        "settings": {
+          "forums": true,
+          "text": "black"
+        }
+      }
+    },
+    {
+      "url": "forums/color_on_white.css",
+      "matches": ["editingScreens"],
+      "if": {
+        "settings": {
+          "forums": true,
+          "text": "colorOnWhite"
+        }
+      }
+    },
+    {
+      "url": "forums/color_on_black.css",
+      "matches": ["editingScreens"],
+      "if": {
+        "settings": {
+          "forums": true,
+          "text": "colorOnBlack"
+        }
+      }
     }
   ],
   "settings": [
@@ -118,7 +245,8 @@
       "name": "Block inputs",
       "id": "input-color",
       "type": "color",
-      "default": "#FFFFFF"
+      "default": "#FFFFFF",
+      "allowTransparency": true
     },
     {
       "name": "Text color",
@@ -143,6 +271,12 @@
           "name": "Colored on black background"
         }
       ]
+    },
+    {
+      "name": "Change the colors of blocks in the forums",
+      "id": "forums",
+      "type": "boolean",
+      "default": false
     }
   ],
   "tags": ["editor", "theme", "codeEditor", "featured"],

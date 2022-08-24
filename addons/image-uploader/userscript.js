@@ -1,6 +1,6 @@
 import { insert } from "../../libraries/thirdparty/cs/text-field-edit.js";
 export default async function ({ addon, global, console, msg, safeMsg }) {
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/md5.min.js");
+  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/spark-md5.min.js");
 
   var toolbar =
     document.querySelector("#markItUpId_body > div > div.markItUpHeader > ul") ||
@@ -182,7 +182,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     progresselement.className = "uploadStatus";
     console.log(image);
 
-    var hash = md5(image);
+    var hash = SparkMD5.ArrayBuffer.hash(image);
     var type = fileType;
     console.log("type: " + fileType);
 

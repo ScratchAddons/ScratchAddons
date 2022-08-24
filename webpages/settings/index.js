@@ -8,6 +8,7 @@ import categories from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
 import globalTheme from "../../libraries/common/global-theme.js";
+import minifySettings from "../../libraries/common/minify-settings.js";
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -30,6 +31,7 @@ let fuse;
     "webpages/settings/components/addon-group-header",
     "webpages/settings/components/addon-body",
     "webpages/settings/components/category-selector",
+    "webpages/settings/components/modal",
     "webpages/settings/components/previews/editor-dark-mode",
     "webpages/settings/components/previews/palette",
   ]);
@@ -103,7 +105,6 @@ let fuse;
       if (!addonManifest) continue;
       const permissionsRequired = addonManifest.permissions || [];
       const browserPermissionsRequired = permissionsRequired.filter((p) => browserLevelPermissions.includes(p));
-      console.log(addonId, permissionsRequired, browserPermissionsRequired);
       if (addonValue.enabled && browserPermissionsRequired.length) {
         pendingPermissions[addonId] = browserPermissionsRequired;
       } else {
@@ -122,15 +123,15 @@ let fuse;
         const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({
           permissions: Object.values(pendingPermissions).flat(),
         });
-        console.log(pendingPermissions, granted);
         Object.keys(pendingPermissions).forEach((addonId) => {
           addonsEnabled[addonId] = granted;
         });
       }
+      const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
       await syncSet({
         globalTheme: !!obj.core.lightTheme,
         addonsEnabled,
-        addonSettings,
+        addonSettings: minifySettings(addonSettings, prerelease ? null : manifests),
       });
       resolvePromise();
     };
@@ -146,8 +147,7 @@ let fuse;
         smallMode: false,
         theme: initialTheme,
         switchPath: "../../images/icons/switch.svg",
-        isOpen: false,
-        canCloseOutside: false,
+        moreSettingsOpen: false,
         categoryOpen: true,
         loaded: false,
         searchLoaded: false,
@@ -173,7 +173,7 @@ let fuse;
           const versionName = chrome.runtime.getManifest().version_name;
           const utm = `utm_source=extension&utm_medium=settingspage&utm_campaign=v${version}`;
           return {
-            contributors: `https://scratchaddons.com/${localeSlash}contributors?${utm}`,
+            contributors: `https://scratchaddons.com/${localeSlash}credits?${utm}`,
             feedback: `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${versionName}&${utm}`,
             changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
           };
@@ -218,6 +218,9 @@ let fuse;
         for (const obj of addonListObjs) obj.matchesSearch = results.includes(obj);
         return addonListObjs.sort((b, a) => results.indexOf(b) - results.indexOf(a));
       },
+      hasNoResults() {
+        return !this.addonList.some((addon) => addon.matchesSearch && addon.matchesCategory);
+      },
       version() {
         return chrome.runtime.getManifest().version;
       },
@@ -225,21 +228,20 @@ let fuse;
         return chrome.runtime.getManifest().version_name;
       },
       addonAmt() {
-        return `${Math.floor(this.manifests.length / 5) * 5}+`;
+        return `${Math.floor(this.manifests.filter((addon) => !addon.tags.includes("easterEgg")).length / 5) * 5}+`;
+      },
+      selectedCategoryName() {
+        return this.categories.find((category) => category.id === this.selectedCategory)?.name;
       },
     },
 
     methods: {
-      modalToggle: function () {
+      openMoreSettings: function () {
         this.closePickers();
-        this.isOpen = !this.isOpen;
+        this.moreSettingsOpen = true;
         if (vue.smallMode) {
           vue.sidebarToggle();
         }
-        this.canCloseOutside = false;
-        setTimeout(() => {
-          this.canCloseOutside = true;
-        }, 100);
       },
       sidebarToggle: function () {
         this.categoryOpen = !this.categoryOpen;
@@ -298,6 +300,13 @@ let fuse;
           downloadBlob("scratch-addons-settings.json", blob);
         });
       },
+      viewSettings() {
+        const openedWindow = window.open("about:blank");
+        serializeSettings().then((serialized) => {
+          const blob = new Blob([serialized], { type: "text/plain" });
+          openedWindow.location.replace(URL.createObjectURL(blob));
+        });
+      },
       importSettings() {
         const inputElem = Object.assign(document.createElement("input"), {
           hidden: true,
@@ -307,7 +316,6 @@ let fuse;
         inputElem.addEventListener(
           "change",
           async (e) => {
-            console.log(e);
             const file = inputElem.files[0];
             if (!file) {
               inputElem.remove();
@@ -369,11 +377,6 @@ let fuse;
           this.sidebarToggle();
         }
       },
-      modalClickOutside: function (e) {
-        if (this.isOpen && this.canCloseOutside && e.isTrusted) {
-          this.isOpen = false;
-        }
-      },
     },
     watch: {
       searchInputReal(newValue) {
@@ -420,6 +423,22 @@ let fuse;
             .map(() => JSON.parse(JSON.stringify(exampleAddonListItem)));
         }
       }, 0);
+
+      window.addEventListener(
+        "hashchange",
+        (e) => {
+          const addonId = location.hash.replace(/^#addon-/, "");
+          const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
+          if (!groupWithAddon) return; //Don't run if hash is invalid
+          const addon = this.manifestsById[addonId];
+
+          groupWithAddon.expanded = true;
+          this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
+          this.clearSearch();
+          setTimeout(() => document.getElementById("addon-" + addonId)?.scrollIntoView(), 0);
+        },
+        { capture: false }
+      );
     },
   });
 
@@ -518,7 +537,7 @@ let fuse;
         const [extMajor, extMinor, _] = vue.version.split(".");
         const [addonMajor, addonMinor, __] = manifest.latestUpdate.version.split(".");
         if (extMajor === addonMajor && extMinor === addonMinor) {
-          manifest.tags.push("updated");
+          manifest.tags.push(manifest.latestUpdate.newSettings?.length ? "updatedWithSettings" : "updated");
           manifest._groups.push(manifest.latestUpdate.isMajor ? "featuredNew" : "new");
         }
       }
@@ -614,21 +633,25 @@ let fuse;
 
     vue.loaded = true;
     setTimeout(() => {
-      // Set hash again after loading addons, to force scroll to addon
-      let hash = window.location.hash;
-      if (hash) {
-        window.location.hash = "";
-        window.location.hash = hash;
-        if (hash.startsWith("#addon-")) {
-          const addonId = hash.substring(7);
-          const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
-          groupWithAddon.expanded = true;
-          setTimeout(() => {
-            // Only required in Firefox
-            window.location.hash = "";
-            window.location.hash = hash;
-          }, 0);
-        }
+      const hash = window.location.hash;
+      if (hash.startsWith("#addon-")) {
+        const addonId = hash.substring(7);
+        const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
+        if (!groupWithAddon) return;
+        groupWithAddon.expanded = true;
+
+        const addon = vue.manifestsById[addonId];
+        vue.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
+        setTimeout(() => {
+          const addonElem = document.getElementById("addon-" + addonId);
+          if (!addonElem) return;
+          addonElem.scrollIntoView();
+          // Browsers sometimes ignore :target for the elements dynamically appended.
+          // Use CSS class to initiate the blink animation.
+          addonElem.classList.add("addon-blink");
+          // 2s (animation length) + 1ms
+          setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
+        }, 0);
       }
     }, 0);
 

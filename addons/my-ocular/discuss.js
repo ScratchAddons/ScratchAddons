@@ -1,12 +1,13 @@
 export default async function ({ addon, global, console, msg }) {
   let posts = document.querySelectorAll(".blockpost");
+  let cache = Object.create(null);
 
   posts.forEach(async (i) => {
     let username = i.querySelector(".username").innerText;
 
     let left = i.querySelector(".postleft").children[0];
 
-    const { userStatus, color } = await fetchStatus(username);
+    const { userStatus, color } = await (cache[username] || (cache[username] = fetchStatus(username)));
 
     if (userStatus) {
       let br = document.createElement("br");
@@ -33,7 +34,7 @@ export default async function ({ addon, global, console, msg }) {
     const response = await fetch(`https://my-ocular.jeffalo.net/api/user/${username}`);
     const data = await response.json();
     return {
-      userStatus: data.status,
+      userStatus: data.status?.replace(/\n/g, " "),
       color: data.color,
     };
   }

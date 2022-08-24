@@ -28,5 +28,12 @@ export default async function ({ addon, global, console, msg }) {
     let dataTitle = `${msg("shared", { date: dateShared })}
 ${msg("modified", { date: dateMod })}`;
     element.setAttribute("title", dataTitle);
+
+    addon.self.addEventListener("disabled", () => {
+      element.removeAttribute("title");
+    });
+    addon.self.addEventListener("reenabled", () => {
+      element.setAttribute("title", dataTitle);
+    });
   }
 }

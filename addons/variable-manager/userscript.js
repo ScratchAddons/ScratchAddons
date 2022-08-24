@@ -46,7 +46,8 @@ export default async function ({ addon, global, console, msg }) {
   const varTab = document.createElement("li");
   addon.tab.displayNoneWhileDisabled(varTab, { display: "flex" });
   varTab.classList.add(addon.tab.scratchClass("react-tabs_react-tabs__tab"), addon.tab.scratchClass("gui_tab"));
-  varTab.id = "react-tabs-7";
+  // Cannot use number due to conflict after leaving and re-entering editor
+  varTab.id = "react-tabs-sa-variable-manager";
 
   const varTabIcon = document.createElement("img");
   varTabIcon.draggable = false;
@@ -105,7 +106,7 @@ export default async function ({ addon, global, console, msg }) {
       if (this.scratchVariable.name.toLowerCase().includes(search.toLowerCase()) || !search) {
         // fuzzy searches are lame we are too cool for fuzzy searches (& i doubt they're even the right thing to use here, this should work fine enough)
         this.row.style.display = ""; // make the row normal
-        this.updateValue(true); // force it to update because its hidden and it wouldnt be able to otherwise
+        this.updateValue(true); // force it to update because its hidden and it wouldn't be able to otherwise
       } else {
         this.row.style.display = "none"; // set the entire row as hidden
       }
@@ -143,16 +144,40 @@ export default async function ({ addon, global, console, msg }) {
       const onLabelOut = (e) => {
         e.preventDefault();
         const workspace = Blockly.getMainWorkspace();
-        const existingVariableWithNewName = workspace.getVariable(label.value, this.scratchVariable.type);
-        if (existingVariableWithNewName) {
+
+        let newName = label.value;
+        if (newName === this.scratchVariable.name) {
+          // If the name is unchanged before we make sure the cloud prefix exists, there's nothing to do.
+          return;
+        }
+
+        const CLOUD_SYMBOL = "☁";
+        const CLOUD_PREFIX = CLOUD_SYMBOL + " ";
+        if (this.scratchVariable.isCloud) {
+          if (newName.startsWith(CLOUD_SYMBOL)) {
+            if (!newName.startsWith(CLOUD_PREFIX)) {
+              // There isn't a space between the cloud symbol and the name, so add one.
+              newName = newName.substring(0, 1) + " " + newName.substring(1);
+            }
+          } else {
+            newName = CLOUD_PREFIX + newName;
+          }
+        }
+
+        const isEmpty = !newName.trim();
+        const nameAlreadyUsed = !!workspace.getVariable(newName, this.scratchVariable.type);
+        if (isEmpty || nameAlreadyUsed) {
           label.value = this.scratchVariable.name;
         } else {
-          workspace.renameVariableById(this.scratchVariable.id, label.value);
+          workspace.renameVariableById(this.scratchVariable.id, newName);
+          // Only update the input's value when we need to to avoid resetting undo history.
+          if (label.value !== newName) {
+            label.value = newName;
+          }
         }
-        label.blur();
       };
       label.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.shiftKey) e.target.blur();
+        if (e.key === "Enter") e.target.blur();
       });
       label.addEventListener("focusout", onLabelOut);
 
@@ -198,7 +223,7 @@ export default async function ({ addon, global, console, msg }) {
       };
 
       input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.shiftKey) e.target.blur();
+        if (e.target.nodeName === "INPUT" && e.key === "Enter") e.target.blur();
       });
       input.addEventListener("focusout", onInputOut);
 
@@ -319,8 +344,8 @@ export default async function ({ addon, global, console, msg }) {
     }
   });
 
-  const oldStep = vm.runtime.constructor.prototype._step;
-  vm.runtime.constructor.prototype._step = function (...args) {
+  const oldStep = vm.runtime._step;
+  vm.runtime._step = function (...args) {
     const ret = oldStep.call(this, ...args);
     try {
       quickReload();
