@@ -1,0 +1,66 @@
+name: ➕ New addon
+description: Suggest a new addon!
+labels: ["new addon", "scope: addon", "type: enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **READ BEFORE CREATING!**
+
+  - type: markdown
+    attributes:
+      value: |
+        - Avoid creating duplicates! Read the FAQ page and search through Issues and Discussions before creating one.
+        - Try to make a simple but descriptive title, and include the detailed information below.
+        - Make sure to use the latest version of Scratch Addons.
+        - Asking for help should be done on Discussions or our Discord server. Return to the last page for the links.
+
+  - type: markdown
+    attributes:
+      value: |
+        FAQ: https://scratchaddons.com/faq
+        Return to the last page: https://github.com/ScratchAddons/ScratchAddons/issues/new/choose
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Why this would be helpful/solve a problem
+      description: A clear and concise description of how this addon could help with a problem or how it could improve something.
+      placeholder: Sometimes I want to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: howitworks
+    attributes:
+      label: What this addon does
+      description: A clear and concise description of how the features this addon provides work and what they do.
+      placeholder: This addon adds a button to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Possible alternatives
+      description: A clear and concise description of any alternative solutions or features you've thought about or heard of.
+      placeholder: We could also ... instead.
+    validations:
+      required: false
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Demonstration(s) and additional context
+      description: Add any other information like screenshots, videos, or context about the feature request here.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: check
+    attributes:
+      label: Check for duplicates
+      description: Remember to search to make sure the idea hasn't been suggested already. If you found a duplicate, add your feedback there instead.
+      options:
+        - label: I've checked for duplicates.
+          required: true
