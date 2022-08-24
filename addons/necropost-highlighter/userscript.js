@@ -163,7 +163,7 @@ export default async function ({ addon, global, console, msg }) {
         theForum = possibleTopicCells[i].nextElementSibling.innerText;
       }
       const theTopicId = extractTopicIdFrom(possibleTopicCells[i]);
-      if (theTopicId != 0) {
+      if (theTopicId !== 0) {
         // No restoreCell property at this point. Only added if the cell is modified
         const topic = {
           topicId: theTopicId,
@@ -296,7 +296,10 @@ export default async function ({ addon, global, console, msg }) {
   function extractTopicIdFrom(topicCell) {
     const link = topicCell.querySelector("a");
     if (link instanceof HTMLAnchorElement) {
-      return /\/topic\/(\d+)\//.exec(link.href)?.[1] || 0;
+      const topicIdText = /\/topic\/(\d+)\//.exec(link.href)?.[1];
+      if (topicIdText) {
+        return parseInt(topicIdText);
+      }
     }
     return 0;
   }
