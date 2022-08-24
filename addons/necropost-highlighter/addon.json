@@ -46,7 +46,7 @@
       "default": false
     },
     {
-      "name": "New Scratchers (advised)",
+      "name": "New Scratchers (usually&nbsp;accurate)",
       "id": "applyToNewScratchers",
       "type": "boolean",
       "default": true,
@@ -57,7 +57,7 @@
       }
     },
     {
-      "name": "Help with Scripts (advised)",
+      "name": "Help with Scripts (usually&nbsp;accurate)",
       "id": "applyToHelpWithScripts",
       "type": "boolean",
       "default": true,
@@ -68,7 +68,7 @@
       }
     },
     {
-      "name": "Questions about Scratch (advised)",
+      "name": "Questions about Scratch (usually&nbsp;accurate)",
       "id": "applyToQuestionsAboutScratch",
       "type": "boolean",
       "default": true,
@@ -79,7 +79,7 @@
       }
     },
     {
-      "name": "Bugs and Glitches (advised)",
+      "name": "Bugs and Glitches (usually&nbsp;accurate)",
       "id": "applyToBugsAndGlitches",
       "type": "boolean",
       "default": true,
@@ -90,7 +90,7 @@
       }
     },
     {
-      "name": "Project Ideas (marginal)",
+      "name": "Project Ideas (mostly&nbsp;accurate)",
       "id": "applyToProjectIdeas",
       "type": "boolean",
       "default": true,
@@ -101,7 +101,7 @@
       }
     },
     {
-      "name": "Requests (suspect)",
+      "name": "Requests (less&nbsp;accurate)",
       "id": "applyToRequests",
       "type": "boolean",
       "default": false,
@@ -112,7 +112,7 @@
       }
     },
     {
-      "name": "Suggestions (suspect)",
+      "name": "Suggestions (less&nbsp;accurate)",
       "id": "applyToSuggestions",
       "type": "boolean",
       "default": false,
@@ -123,7 +123,7 @@
       }
     },
     {
-      "name": "Open Source Projects (suspect)",
+      "name": "Open Source Projects (less&nbsp;accurate)",
       "id": "applyToOpenSourceProjects",
       "type": "boolean",
       "default": false,
