@@ -45,7 +45,7 @@ export default async function ({ addon, msg, console }) {
 
     const followRow = document.createElement("div");
     element.appendChild(followRow);
-    followRow.className = "sa-stats-row"
+    followRow.className = "sa-stats-row";
     followRow.appendChild(createSimpleItem(data, (data) => data?.statistics?.followers, msg("followers")));
     followRow.appendChild(
       createSimpleRankItem(data, (data) => data?.statistics?.ranks?.followers, msg("most-followed-global"))
@@ -82,14 +82,20 @@ export default async function ({ addon, msg, console }) {
       )
     );
 
-    if (loading) element.appendChild(Object.assign(document.createElement("div"), {
-      className: "sa-spinner",
-    }));
+    if (loading)
+      element.appendChild(
+        Object.assign(document.createElement("div"), {
+          className: "sa-spinner",
+        })
+      );
 
-    if (error) element.appendChild(Object.assign(document.createElement("div"), {
-      className: "sa-stats-error",
-      innerText: msg("err"),
-    }));
+    if (error)
+      element.appendChild(
+        Object.assign(document.createElement("div"), {
+          className: "sa-stats-error",
+          innerText: msg("err"),
+        })
+      );
   };
 
   const username = location.pathname.split("/")[2];
@@ -134,7 +140,7 @@ export default async function ({ addon, msg, console }) {
   stats.appendChild(chartSection);
   const chartLoadingSpinner = Object.assign(document.createElement("div"), {
     className: "sa-spinner",
-  })
+  });
   chartSection.appendChild(chartLoadingSpinner);
 
   fetch(`https://scratchdb.lefty.one/v3/user/info/${username}`)
@@ -159,75 +165,74 @@ export default async function ({ addon, msg, console }) {
       const stepAvg = historyData.reduce((acc, cur) => acc + cur.value / historyData.length, 0);
       const stepLog = Math.log10(stepAvg);
       const stepSize = Math.pow(10, Math.max(Math.round(stepLog) - 1, 1));
-      new Chart(
-        canvas,
-        {
-          type: "scatter",
-          data: {
-            datasets: [
-              {
-                data: historyData.map((item) => {
-                  return { x: Date.parse(item.date), y: item.value };
-                }),
-                fill: false,
-                showLine: true,
-                borderColor: "#4d97ff",
-                lineTension: 0,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              x: {
-                ticks: {
-                  callback: (x) => new Date(x).toDateString(),
-                  color: textColor,
-                },
-                grid: {
-                  borderColor: textColor,
-                  tickColor: textColor,
-                  color: lineColor,
-                },
-              },
-              y: {
-                ticks: {
-                  stepSize,
-                  color: textColor,
-                },
-                grid: {
-                  borderColor: textColor,
-                  tickColor: textColor,
-                  color: lineColor,
-                },
-              },
+      new Chart(canvas, {
+        type: "scatter",
+        data: {
+          datasets: [
+            {
+              data: historyData.map((item) => {
+                return { x: Date.parse(item.date), y: item.value };
+              }),
+              fill: false,
+              showLine: true,
+              borderColor: "#4d97ff",
+              lineTension: 0,
             },
-            plugins: {
-              title: {
-                display: true,
-                text: msg("followers-title"),
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              ticks: {
+                callback: (x) => new Date(x).toDateString(),
                 color: textColor,
               },
-              tooltip: {
-                callbacks: {
-                  label: (context) => `${new Date(Number(context.raw.x)).toDateString()}: ${context.parsed.y}`,
-                },
+              grid: {
+                borderColor: textColor,
+                tickColor: textColor,
+                color: lineColor,
               },
-              legend: {
-                display: false,
+            },
+            y: {
+              ticks: {
+                stepSize,
+                color: textColor,
+              },
+              grid: {
+                borderColor: textColor,
+                tickColor: textColor,
+                color: lineColor,
               },
             },
           },
-        }
-      );
+          plugins: {
+            title: {
+              display: true,
+              text: msg("followers-title"),
+              color: textColor,
+            },
+            tooltip: {
+              callbacks: {
+                label: (context) => `${new Date(Number(context.raw.x)).toDateString()}: ${context.parsed.y}`,
+              },
+            },
+            legend: {
+              display: false,
+            },
+          },
+        },
+      });
     })
     .catch(() => {
       chartLoadingSpinner.remove();
       chartSection.classList.add("sa-stats-placeholder");
-      chartSection.appendChild(Object.assign(document.createElement("div"), {
-        className: "sa-stats-error",
-        innerText: msg("err-chart"),
-      }));
+      chartSection.appendChild(
+        Object.assign(document.createElement("div"), {
+          className: "sa-stats-error",
+          innerText: msg("err-chart"),
+        })
+      );
     });
 }
