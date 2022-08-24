@@ -1,0 +1,103 @@
+name: 🐛 Bug
+description: Report a bug.
+labels: ["status: needs triage", "type: bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **READ BEFORE CREATING!**
+
+  - type: markdown
+    attributes:
+      value: |
+        - Avoid creating duplicates! Read the FAQ page and search through Issues and Discussions before creating one.
+        - Try to make a simple but descriptive title, and include the detailed information below. This could save a lot of time and help us fix issues swiftly.
+        - Make sure to use the latest version of Scratch Addons. Otherwise, the bug might already be fixed.
+        - Asking for help should be done on Discussions or our Discord server. Return to the last page for the links.
+
+  - type: markdown
+    attributes:
+      value: |
+        FAQ: https://scratchaddons.com/faq
+        Return to the last page: https://github.com/ScratchAddons/ScratchAddons/issues/new/choose
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Include a clear and concise description of what's happening.
+      placeholder: I can't see the button...
+    validations:
+      required: true
+
+  - type: textarea
+    id: e-behavior
+    attributes:
+      label: Expected behavior
+      description: What should happen?
+      placeholder: The button should always be visible.
+    validations:
+      required: true
+
+  - type: textarea
+    id: a-behavior
+    attributes:
+      label: Actual behavior
+      description: What actually happens?
+      placeholder: The button is not visible if I...
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Provide an unambiguous set of steps to reproduce this bug.
+      placeholder: |
+        1. Open a Scratch project.
+        2. Click See inside.
+        3. Open the costume editor.
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Demonstration/Screenshots
+      description: If applicable, insert screenshots or a live example to help explain your problem.
+    validations:
+      required: false
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include information related to your environment/device.
+      placeholder: Include what version of Scratch Addons you're using (can be found in the extension popup), your browser and its version, and your operating system.
+      value: |
+        Browser: <!-- e.g. Chrome 89 -->
+        Scratch Addons version: <!-- e.g. 1.10.0, for pre-releases, include hash if possible -->
+        Operating system: <!-- e.g. Windows -->
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional context
+      description: Add any other information/context about your problem here.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: check
+    attributes:
+      label: Check for duplicates
+      description: Remember to search to make sure the bug hasn't been reported already. If you found a duplicate, add any additional context there instead.
+      options:
+        - label: I've checked for duplicates.
+          required: true
