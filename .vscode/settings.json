@@ -39,7 +39,7 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
     ".eslintrc.json": ".*",
-    "/webpages/settings/*.html": "/webpages/settings/${capture}.html"
+    "*.html": "${capture}.*"
   },
   "files.exclude": { "**/{_locales,addons-l10n}/{es,[a-d]*,[f-z]*}/**": true },
   "search.exclude": { "**/libraries/thirdparty/**": true },
