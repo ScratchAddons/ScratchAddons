@@ -21,7 +21,8 @@ export default async function ({ addon, global, console }) {
       const isDuplicate = !(this.mostRecentEvent_ instanceof MouseEvent);
       const block = this.targetBlock_;
       const invert = addon.settings.get("invertDrag") && !isDuplicate && block.getParent();
-      if (ctrlKeyPressed === !invert) {
+      const isShadow = block.isShadow();
+      if (ctrlKeyPressed === !invert && !isShadow) {
         if (!ScratchBlocks.Events.getGroup()) {
           ScratchBlocks.Events.setGroup(true);
         }
