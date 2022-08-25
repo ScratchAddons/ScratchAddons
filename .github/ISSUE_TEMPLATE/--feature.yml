@@ -12,7 +12,7 @@ body:
         - Make sure to use the latest version of Scratch Addons.
         - For help, check our [FAQ page](https://scratchaddons.com/faq) or ask on [Discussions](https://github.com/ScratchAddons/ScratchAddons/discussions) or our [Discord server](https://discord.gg/R5NBqwMjNc).
       options:
-        - label: OK
+        - label: I understand
           required: true
 
   - type: textarea
