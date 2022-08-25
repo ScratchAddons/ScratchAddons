@@ -2,24 +2,18 @@ name: ➕ New addon
 description: Suggest a new addon!
 labels: ["new addon", "scope: addon", "type: enhancement"]
 body:
-  - type: markdown
+  - type: checkboxes
+    id: readfirst
     attributes:
-      value: |
-        **READ BEFORE CREATING!**
-
-  - type: markdown
-    attributes:
-      value: |
+      label: READ BEFORE CREATING!
+      description: |
         - Avoid creating duplicates! Read the FAQ page and search through Issues and Discussions before creating one.
         - Try to make a simple but descriptive title, and include the detailed information below.
         - Make sure to use the latest version of Scratch Addons.
-        - Asking for help should be done on Discussions or our Discord server. Return to the last page for the links.
-
-  - type: markdown
-    attributes:
-      value: |
-        FAQ: https://scratchaddons.com/faq
-        Return to the last page: https://github.com/ScratchAddons/ScratchAddons/issues/new/choose
+        - For help, check our [FAQ page](https://scratchaddons.com/faq) or ask on [Discussions](https://github.com/ScratchAddons/ScratchAddons/discussions) or our [Discord server](https://discord.gg/R5NBqwMjNc).
+      options:
+        - label: OK
+          required: true
 
   - type: textarea
     id: problem
@@ -55,12 +49,3 @@ body:
       description: Add any other information like screenshots, videos, or context about the feature request here.
     validations:
       required: false
-
-  - type: checkboxes
-    id: check
-    attributes:
-      label: Check for duplicates
-      description: Remember to search to make sure the idea hasn't been suggested already. If you found a duplicate, add your feedback there instead.
-      options:
-        - label: I've checked for duplicates.
-          required: true
