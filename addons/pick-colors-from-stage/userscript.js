@@ -1,6 +1,8 @@
 export default async function ({ addon, msg, global, console }) {
   const brand = Symbol();
 
+  const setIsPicking = (picking) => document.body.classList.toggle("sa-stage-color-picker-picking", picking);
+
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
     const action = e.detail.action;
@@ -11,7 +13,7 @@ export default async function ({ addon, msg, global, console }) {
     }
 
     if (!addon.self.disabled && action.type === "scratch-paint/eye-dropper/ACTIVATE_COLOR_PICKER") {
-      document.body.classList.add("sa-stage-color-picker-picking");
+      setIsPicking(true);
 
       // When scratch-paint's color picker is activated, also activate scratch-gui's color picker.
       addon.tab.redux.dispatch({
@@ -36,13 +38,14 @@ export default async function ({ addon, msg, global, console }) {
               type: "scratch-paint/eye-dropper/DEACTIVATE_COLOR_PICKER",
               [brand]: true,
             });
+            setIsPicking(false);
           });
         },
       });
     }
 
     if (action.type === "scratch-paint/eye-dropper/DEACTIVATE_COLOR_PICKER") {
-      document.body.classList.remove("sa-stage-color-picker-picking");
+      setIsPicking(false);
 
       // When someone selects a color in the scratch-paint picker, cancel the scratch-gui picker
       if (addon.tab.redux.state.scratchGui.colorPicker.active) {
