@@ -603,7 +603,7 @@ const showBanner = () => {
     line-height: 1em;`,
   });
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=ostWH0KN4bM",
+    href: "https://www.youtube.com/watch?v=e_70jvFOmfI",
     target: "_blank",
     rel: "noopener",
     referrerPolicy: "strict-origin-when-cross-origin",
