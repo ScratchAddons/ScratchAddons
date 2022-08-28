@@ -48,8 +48,9 @@ body:
     validations:
       required: false
 
-  - type: input
+  - type: textarea
     id: environment
+    attributes:
       label: Environment
       description: Include information related to your environment/device.
       placeholder: Include what version of Scratch Addons you're using (can be found in the extension popup), your browser and its version, and your operating system.
