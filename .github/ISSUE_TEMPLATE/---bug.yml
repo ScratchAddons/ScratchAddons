@@ -49,26 +49,13 @@ body:
       required: false
 
   - type: input
-    id: browser
-    attributes:
-      label: Browser
-      placeholder: Chrome 89
-    validations:
-      required: true
-
-  - type: input
-    id: sa
-    attributes:
-      label: Scratch Addons version
-      description: Can be found on the extension popup. For pre-releases, include hash if possible
-      placeholder: "1.10.0"
-    validations:
-      required: true
-      
-  - type: input
-    id: os
-    attributes:
-      label: Operating System
-      placeholder: Windows
+    id: environment
+      label: Environment
+      description: Include information related to your environment/device.
+      placeholder: Include what version of Scratch Addons you're using (can be found in the extension popup), your browser and its version, and your operating system.
+      value: |
+        Browser: <!-- e.g. Chrome 89 -->
+        Scratch Addons version: <!-- e.g. 1.10.0. For pre-releases, include hash if possible -->
+        Operating system: <!-- e.g. Windows -->
     validations:
       required: true
