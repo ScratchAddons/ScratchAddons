@@ -457,12 +457,6 @@ export default async function ({ addon, global, console, msg }) {
     element.textContent = text;
     element.dataset.shape = shape;
 
-    const colorIds = {
-      "addon-custom-block": "sa",
-      "data-lists": "data_lists",
-      list: "data_lists",
-      events: "event",
-    };
     element.classList.add(`sa-block-color-${colorIds[category] || category}`);
 
     return element;

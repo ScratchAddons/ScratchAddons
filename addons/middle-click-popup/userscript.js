@@ -27,21 +27,21 @@ export default async function ({ addon, msg, global, console }) {
     createDom() {
       // Popup new input box for block injection
       this.floatBar = document.body.appendChild(document.createElement("div"));
-      this.floatBar.className = "floatBar";
+      this.floatBar.className = "sa-floatBar";
       this.floatBar.dir = addon.tab.direction;
       this.floatBar.style.display = "none";
 
       this.dropdownOut = this.floatBar.appendChild(document.createElement("div"));
-      this.dropdownOut.className = "floatBarDropdownOut";
+      this.dropdownOut.className = "sa-floatBarDropdownOut";
 
       this.floatInput = this.dropdownOut.appendChild(document.createElement("input"));
-      this.floatInput.className = "floatBarInput";
+      this.floatInput.className = "sa-floatBarInput";
       this.floatInput.className = addon.tab.scratchClass("input_input-form", {
-        others: "floatBarInput",
+        others: "sa-floatBarInput",
       });
 
       this.dropdown = this.dropdownOut.appendChild(document.createElement("ul"));
-      this.dropdown.className = "floatBarDropdown";
+      this.dropdown.className = "sa-floatBarDropdown";
 
       this.floatInput.addEventListener("keyup", () => this.inputChange());
       this.floatInput.addEventListener("focus", () => this.inputChange());
@@ -318,8 +318,9 @@ export default async function ({ addon, msg, global, console }) {
 
         li.innerText = desc;
         li.data = { text: desc, lower: " " + desc.toLowerCase(), option: option };
+
         li.className =
-          "var " + (option.block.isScratchExtension ? "extension" : option.block.getCategory()) + " " + bType; // proc.cls;
+          "sa-block-color-" + (option.block.isScratchExtension ? "pen" : option.block.getCategory()) + " sa-" + bType;
         if (count > this.DROPDOWN_BLOCK_LIST_MAX_ROWS) {
           // Limit maximum number of rows to prevent lag when no filter is applied
           li.style.display = "none";

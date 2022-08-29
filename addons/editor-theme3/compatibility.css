@@ -31,7 +31,7 @@
   --sa-block-field-background: var(--editorTheme3-sounds-field, #bd42bd);
 }
 
-.sa-block-color-event {
+.sa-block-color-events {
   --sa-block-background-primary: var(--editorTheme3-event-primary, #ffbf00);
   --sa-block-background-secondary: var(--editorTheme3-event-secondary, #e6ac00);
   --sa-block-background-tertiary: var(--editorTheme3-event-tertiary, #cc9900);
@@ -66,7 +66,8 @@
   --sa-block-field-background: var(--editorTheme3-data-field, #db6e00);
 }
 
-.sa-block-color-data_lists {
+.sa-block-color-data-lists,
+.sa-block-color-list {
   --sa-block-background-primary: var(--editorTheme3-data_lists-primary, #ff661a);
   --sa-block-background-secondary: var(--editorTheme3-data_lists-secondary, #ff5500);
   --sa-block-background-tertiary: var(--editorTheme3-data_lists-tertiary, #e64d00);
@@ -87,7 +88,7 @@
   --sa-block-field-background: var(--editorTheme3-pen-field, #0b8e69);
 }
 
-.sa-block-color-sa {
+.sa-block-color-addon-custom-block {
   --sa-block-background-primary: var(--editorTheme3-sa-primary, #29beb8);
   --sa-block-background-secondary: var(--editorTheme3-sa-secondary, #3aa8a4);
   --sa-block-background-tertiary: var(--editorTheme3-sa-tertiary, #3aa8a4);
