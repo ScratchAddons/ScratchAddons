@@ -23,12 +23,14 @@
   display: block;
   top: -6px;
   z-index: 100;
-  width: 100%;
   max-width: 16em;
-  position: relative;
-  /*padding: 2.2em 0 0;*/
-  /*background-color: white;*/
   padding: 4px;
+  position: absolute;
+  width: 16em;
+  box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
+  background-color: white;
+  border: none;
+  border-radius: 4px;
 }
 
 /* Drop down from find button */
@@ -43,15 +45,6 @@
   max-height: 65vh;
   user-select: none;
   max-width: 100%;
-}
-
-.sa-floatBarDropdownOut.vis {
-  position: absolute;
-  width: 16em;
-  box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
-  background-color: white;
-  border: none;
-  border-radius: 4px;
 }
 
 .sa-floatBarDropdownOut.vis .sa-floatBarDropdown {
