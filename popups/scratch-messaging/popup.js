@@ -137,10 +137,10 @@ export default async ({ addon, msg, safeMsg }) => {
                   mins: Math.max(Math.ceil((e.details.muteStatus.muteExpiresAt - Date.now() / 1000) / 60), 1),
                 });
               } else {
-                errorMsg = msg(errorCodes[e.details.error] || "send-error");
+                errorMsg = msg(errorCodes[e.details?.error] || "send-error");
               }
             } else if (e instanceof API.HTTPError) {
-              errorMsg = msg(errorCodes[e.details.code] || "send-error");
+              errorMsg = msg(errorCodes[e.code] || "send-error");
             } else {
               errorMsg = e.toString();
             }
@@ -283,6 +283,7 @@ export default async ({ addon, msg, safeMsg }) => {
         yourProfileMsg: msg("your-profile"),
         loadingMsg: msg("loading"),
         loggedOutMsg: msg("logged-out"),
+        loggedOutLinkMsg: msg("logged-out-link"),
         serverErrorMsg: msg("server-error"),
         networkErrorMsg: msg("network-error"),
         unknownFatalErrorMsg: msg("unknown-fatal-error"),
@@ -581,8 +582,7 @@ export default async ({ addon, msg, safeMsg }) => {
           2: [], // Studios
         };
         let realMsgCount = this.msgCount - this.stMessages.length;
-        const messagesToCheck =
-          realMsgCount > 40 ? this.messages.length : showAll ? this.messages.length : realMsgCount;
+        const messagesToCheck = showAll ? this.messages.length : realMsgCount;
         this.showingMessagesAmt = messagesToCheck;
         for (const message of this.messages.slice(0, messagesToCheck)) {
           if (message.type === "followuser") {

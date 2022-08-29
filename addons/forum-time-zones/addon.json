@@ -23,6 +23,8 @@
       "link": "https://github.com/towerofnix"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.0.0",
   "tags": ["forums", "community"],
   "settings": [

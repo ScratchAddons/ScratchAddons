@@ -2,7 +2,7 @@ import { isPaused, setPaused, onPauseChanged, setup } from "./module.js";
 import createLogsTab from "./logs.js";
 import createThreadsTab from "./threads.js";
 import createPerformanceTab from "./performance.js";
-import DevtoolsUtils from "../editor-devtools/blockly/Utils.js";
+import Utils from "../find-bar/blockly/Utils.js";
 
 const removeAllChildren = (element) => {
   while (element.firstChild) {
@@ -238,6 +238,8 @@ export default async function ({ addon, global, console, msg }) {
     afterStepCallbacks.push(cb);
   };
 
+  const getBlock = (target, id) => target.blocks.getBlock(id) || vm.runtime.flyoutBlocks.getBlock(id);
+
   const getTargetInfoById = (id) => {
     const target = vm.runtime.getTargetById(id);
     if (target) {
@@ -262,11 +264,11 @@ export default async function ({ addon, global, console, msg }) {
     };
   };
 
-  const createBlockLink = (targetId, blockId) => {
+  const createBlockLink = (targetInfo, blockId) => {
     const link = document.createElement("a");
     link.className = "sa-debugger-log-link";
 
-    const { exists, name, originalId } = getTargetInfoById(targetId);
+    const { exists, name, originalId } = targetInfo;
     link.textContent = name;
     if (exists) {
       // We use mousedown instead of click so that you can still go to blocks when logs are rapidly scrolling
@@ -308,7 +310,7 @@ export default async function ({ addon, global, console, msg }) {
     // Don't scroll to blocks in the flyout
     if (block.workspace.isFlyout) return;
 
-    new DevtoolsUtils(addon).scrollBlockIntoView(blockId);
+    new Utils(addon).scrollBlockIntoView(blockId);
   };
 
   // May be slightly incorrect in some edge cases.
@@ -372,7 +374,7 @@ export default async function ({ addon, global, console, msg }) {
       return null;
     }
 
-    const block = target.blocks.getBlock(blockId);
+    const block = getBlock(target, blockId);
     if (!block || block.opcode === "text") {
       return null;
     }
@@ -380,7 +382,6 @@ export default async function ({ addon, global, console, msg }) {
     let text;
     let category;
     let shape;
-    let color;
     if (
       block.opcode === "data_variable" ||
       block.opcode === "data_listcontents" ||
@@ -402,13 +403,12 @@ export default async function ({ addon, global, console, msg }) {
       const customBlock = addon.tab.getCustomBlock(proccode);
       if (customBlock) {
         category = "addon-custom-block";
-        color = customBlock.color;
       } else {
         category = "more";
       }
     } else if (block.opcode === "procedures_definition") {
       const prototypeBlockId = block.inputs.custom_block.block;
-      const prototypeBlock = target.blocks.getBlock(prototypeBlockId);
+      const prototypeBlock = getBlock(target, prototypeBlockId);
       const proccode = prototypeBlock.mutation.proccode;
       text = ScratchBlocks.ScratchMsgs.translate("PROCEDURES_DEFINITION", "define %1").replace(
         "%1",
@@ -438,7 +438,7 @@ export default async function ({ addon, global, console, msg }) {
       if (!text) {
         return null;
       }
-      category = jsonData.category;
+      category = jsonData.extensions.includes("scratch_extension") ? "pen" : jsonData.category;
       const isStatement =
         (jsonData.extensions &&
           (jsonData.extensions.includes("shape_statement") ||
@@ -452,33 +452,18 @@ export default async function ({ addon, global, console, msg }) {
       return null;
     }
 
-    if (!color) {
-      const blocklyCategoryMap = {
-        "data-lists": "data_lists",
-        list: "data_lists",
-        events: "event",
-      };
-      const blocklyColor = ScratchBlocks.Colours[blocklyCategoryMap[category] || category];
-      if (blocklyColor) {
-        color = blocklyColor.primary;
-      } else {
-        // block probably belongs to an extension
-        color = ScratchBlocks.Colours.pen.primary;
-      }
-    }
-
     const element = document.createElement("span");
-    element.className = "sa-debugger-block-preview";
+    element.className = "sa-debugger-block-preview sa-block-color";
     element.textContent = text;
-    element.style.backgroundColor = color;
     element.dataset.shape = shape;
 
-    // data-category is used for editor-theme3 compatibility
-    const colorCategoryMap = {
-      list: "data-lists",
-      more: "custom",
+    const colorIds = {
+      "addon-custom-block": "sa",
+      "data-lists": "data_lists",
+      list: "data_lists",
+      events: "event",
     };
-    element.dataset.category = colorCategoryMap[category] || category;
+    element.classList.add(`sa-block-color-${colorIds[category] || category}`);
 
     return element;
   };
@@ -489,6 +474,7 @@ export default async function ({ addon, global, console, msg }) {
       createHeaderTab,
       setHasUnreadMessage,
       addAfterStepCallback,
+      getBlock,
       getTargetInfoById,
       createBlockLink,
       createBlockPreview,
@@ -546,9 +532,12 @@ export default async function ({ addon, global, console, msg }) {
   document.addEventListener(
     "click",
     (e) => {
-      if (e.target.closest("[class*='stage-header_stage-button-first']")) {
+      if (e.target.closest("[class*='stage-header_stage-button-first']:not(.sa-hide-stage-button)")) {
         document.body.classList.add("sa-debugger-small");
-      } else if (e.target.closest("[class*='stage-header_stage-button-last']")) {
+      } else if (
+        e.target.closest("[class*='stage-header_stage-button-last']") ||
+        e.target.closest(".sa-hide-stage-button")
+      ) {
         document.body.classList.remove("sa-debugger-small");
       }
     },
