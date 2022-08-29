@@ -31,22 +31,22 @@ export default async function ({ addon, msg, console }) {
 
     createDom(root) {
       const findBar = root.appendChild(document.createElement("div"));
-      findBar.className = "find-bar";
+      findBar.className = "sa-find-bar";
       addon.tab.displayNoneWhileDisabled(findBar, { display: "flex" });
 
       this.findLabel = findBar.appendChild(document.createElement("label"));
-      this.findLabel.htmlFor = "find-input";
+      this.findLabel.htmlFor = "sa-find-input";
       this.findLabel.textContent = msg("find");
 
       this.findWrapper = findBar.appendChild(document.createElement("span"));
-      this.findWrapper.className = "find-wrapper";
+      this.findWrapper.className = "sa-find-wrapper";
 
       this.dropdownOut = this.findWrapper.appendChild(document.createElement("label"));
-      this.dropdownOut.className = "find-dropdown-out";
+      this.dropdownOut.className = "sa-find-dropdown-out";
 
       this.findInput = this.dropdownOut.appendChild(document.createElement("input"));
       this.findInput.className = addon.tab.scratchClass("input_input-form", {
-        others: "find-input",
+        others: "sa-find-input",
       });
       this.findInput.type = "search";
       this.findInput.placeholder = msg("find-placeholder");
@@ -398,7 +398,7 @@ export default async function ({ addon, msg, console }) {
 
     createDom() {
       this.el = document.createElement("ul");
-      this.el.className = "find-dropdown";
+      this.el.className = "sa-find-dropdown";
       return this.el;
     }
 
@@ -462,7 +462,7 @@ export default async function ({ addon, msg, console }) {
         sound: "sounds",
       };
       if (proc.cls === "flag") {
-        item.className = "flag";
+        item.className = "sa-find-flag";
       } else {
         const colorId = colorIds[proc.cls];
         item.className = `sa-block-color sa-block-color-${colorId}`;
@@ -674,10 +674,10 @@ export default async function ({ addon, msg, console }) {
 
     createDom() {
       this.el = document.createElement("span");
-      this.el.className = "find-carousel";
+      this.el.className = "sa-find-carousel";
 
       const leftControl = this.el.appendChild(document.createElement("span"));
-      leftControl.className = "find-carousel-control";
+      leftControl.className = "sa-find-carousel-control";
       leftControl.textContent = "◀";
       leftControl.addEventListener("mousedown", (e) => this.navLeft(e));
 
@@ -685,7 +685,7 @@ export default async function ({ addon, msg, console }) {
       this.count.innerText = this.blocks.length > 0 ? this.idx + 1 + " / " + this.blocks.length : "0";
 
       const rightControl = this.el.appendChild(document.createElement("span"));
-      rightControl.className = "find-carousel-control";
+      rightControl.className = "sa-find-carousel-control";
       rightControl.textContent = "▶";
       rightControl.addEventListener("mousedown", (e) => this.navRight(e));
 
