@@ -74,7 +74,8 @@
   --sa-block-field-background: var(--editorTheme3-data_lists-field, #e64d00);
 }
 
-.sa-block-color-more {
+.sa-block-color-more,
+.sa-block-color-null {
   --sa-block-background-primary: var(--editorTheme3-more-primary, #ff6680);
   --sa-block-background-secondary: var(--editorTheme3-more-secondary, #ff4d6a);
   --sa-block-background-tertiary: var(--editorTheme3-more-tertiary, #ff3355);

@@ -50,8 +50,6 @@ export default async function ({ addon, msg, global, console }) {
 
       this.dropdownOut.addEventListener("mousedown", (...e) => this.onClick(...e));
 
-      this.buildFilterList();
-
       document.addEventListener("keydown", (e) => {
         let ctrlKey = e.ctrlKey || e.metaKey;
 
@@ -72,6 +70,8 @@ export default async function ({ addon, msg, global, console }) {
 
       e.cancelBubble = true;
       e.preventDefault();
+
+      this.buildFilterList();
 
       this.floatBar.style.left = (e.clientX ?? mouse.x) + 16 + "px";
       this.floatBar.style.top = (e.clientY ?? mouse.y) - 8 + "px";
@@ -290,7 +290,6 @@ export default async function ({ addon, msg, global, console }) {
       const doms = {};
       for (const x of fullDom.children) {
         if (x.tagName === "BLOCK") {
-          // let type = x.getAttribute('type');
           let id = x.getAttribute("id");
           doms[id] = x;
         }
@@ -306,6 +305,9 @@ export default async function ({ addon, msg, global, console }) {
 
       let count = 0;
 
+      while (this.dropdown.firstChild) {
+        this.dropdown.removeChild(this.dropdown.firstChild);
+      }
       for (const option of options) {
         const li = document.createElement("li");
         const desc = option.desc;
