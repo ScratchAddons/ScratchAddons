@@ -1,0 +1,40 @@
+{
+  "versionAdded": "1.27.0",
+  "name": "Layer manager",
+  "description": "Adds a tab next to \"sounds\" in the editor for easily updating sprite layering.",
+  "credits": [
+    {
+      "name": "Jeffalo"
+    },
+    {
+      "name": "GarboMuffin"
+    },
+    {
+      "name": "Raspberry693",
+      "link": "https://scratch.mit.edu/users/Raspberry693"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Show Clones",
+      "id": "clone_vis",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "tags": ["editor"]
+}

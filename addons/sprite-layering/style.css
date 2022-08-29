@@ -1,0 +1,69 @@
+/* Change z-indexes to allow more than 3 tabs */
+.layer {
+  margin: 10px 10px 0px 10px;
+  border: #dddddd 1px solid;
+  border-radius: 0.5rem;
+  height: 70px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow: hidden;
+}
+.layer > .layer-id {
+  width: 50px;
+  text-align: center;
+}
+.layer > .sprite-name {
+  width: 200px;
+}
+
+.function-buttons {
+  display: flex;
+  flex-direction: row;
+}
+.function-buttons > button {
+  border-radius: 0.5rem;
+  border: none;
+  background-color: white;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.1s;
+  margin-right: 5px;
+}
+.function-buttons > button:hover {
+  background-color: rgb(241, 241, 241);
+}
+
+.sa-layer-manager {
+  height: 100%;
+  display: block;
+  padding: 18px;
+  height: 50px;
+  overflow-y: auto;
+}
+
+.function-buttons > button[disabled] {
+  background-color: rgb(218, 218, 218) !important;
+}
+.function-buttons > button[disabled] > img {
+  filter: grayscale(100%);
+}
+
+.gui_tab_27Unf.gui_is-selected_sHAiu {
+  z-index: 10 !important;
+}
+.gui_tab_27Unf:nth-of-type(1) {
+  z-index: 9;
+}
+.gui_tab_27Unf:nth-of-type(2) {
+  z-index: 8;
+}
+.gui_tab_27Unf:nth-of-type(3) {
+  z-index: 7;
+}
+.gui_tab_27Unf:nth-of-type(4) {
+  z-index: 6;
+}
