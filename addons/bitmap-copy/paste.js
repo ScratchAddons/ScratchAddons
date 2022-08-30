@@ -1,10 +1,8 @@
 export default async ({ addon, console, msg }) => {
-  //The action-menu_file-input classed input that the next pasted image will be pasted into.
+  // The action-menu_file-input classed input that the next pasted image will be pasted into.
   let currentMenuInput;
 
-  let lastClicked;
-
-  //Paste overlay
+  // Paste overlay
   const pasteOverlay = document.createElement("div");
   pasteOverlay.className = "ReactModalPortal sa-paste-overlay-outer";
   const displayNonePasteOverlay = () => {
@@ -20,8 +18,6 @@ export default async ({ addon, console, msg }) => {
   displayNonePasteOverlay();
   pasteOverlay.addEventListener("click", hidePasteOverlay);
   addon.self.addEventListener("disabled", hidePasteOverlay);
-  addon.self.addEventListener("disabled", () => (pasteOverlay.style.display = "none"));
-  addon.self.addEventListener("reenabled", () => (pasteOverlay.style.display = ""));
   document.addEventListener("keydown", (e) => {
     if (!(e.key === "Escape")) return;
     hidePasteOverlay();
@@ -47,56 +43,8 @@ export default async ({ addon, console, msg }) => {
 
   document.body.appendChild(pasteOverlay);
 
-  //Handles what occurs when simply pressing Ctrl+V in the editor to paste an image as a costume when applicable.
-  const passivePaste = (e) => {
-    if (addon.self.disabled) return;
-    //If the paste overlay is active, let it do its thing
-    if (!pasteOverlay.classList.contains("hidden")) return;
-
-    const COSTUMES_PANE = document.querySelector("#react-tabs-3 > div > [class*='selector_wrapper_']");
-    const COSTUME_EDITOR = document.querySelector("#react-tabs-3 > div > [class*='asset-panel_detail-area']");
-    const SPRITES_PANE = document.querySelector("[class*='sprite-selector_sprite-selector']");
-    const STAGE_PANE = document.querySelector("[class*='target-pane_stage-selector-wrapper']");
-    const COSTUMES_TAB_BTN = document.getElementById("react-tabs-2");
-
-    const el = lastClicked;
-    let pasteInto = null;
-
-    if (COSTUMES_PANE) {
-      if (
-        (COSTUMES_PANE.contains(el) && !COSTUME_EDITOR.contains(el)) ||
-        el === COSTUMES_TAB_BTN ||
-        COSTUMES_TAB_BTN.contains(el)
-      )
-        pasteInto = COSTUMES_PANE;
-    }
-    if (SPRITES_PANE.contains(el)) pasteInto = SPRITES_PANE.parentElement;
-    if (STAGE_PANE.contains(el)) pasteInto = STAGE_PANE;
-    //Extra protection to make sure pasting into a text input never pastes an image
-    if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") pasteInto = null;
-    //Also, disable passive paste when clicking on a card and if the costume editor is open
-    if (
-      el.matches(
-        "[class*='sprite-selector-item_sprite-selector-item_'], [class*='sprite-selector-item_sprite-selector-item_'] *"
-      ) &&
-      COSTUME_EDITOR
-    )
-      pasteInto = null;
-
-    if (pasteInto) {
-      currentMenuInput = pasteInto.querySelector(
-        "[class*='action-menu_more-buttons_'] input[class*='action-menu_file-input_']:not([class*='sa-'])"
-      );
-      onPaste(e, true);
-    }
-  };
-  document.body.addEventListener("paste", passivePaste);
-  document.body.addEventListener("click", (e) => {
-    lastClicked = e.target;
-  });
-
-  //Handles clipboard validity checking and uploading the image
-  const onPaste = (e, silent = false) => {
+  // Handles clipboard validity checking and uploading the image
+  const onPaste = (e, checkOnly = false) => {
     if (addon.self.disabled) return;
 
     hidePasteOverlay();
@@ -108,19 +56,19 @@ export default async ({ addon, console, msg }) => {
 
     let clipboardData = e.clipboardData || window.clipboardData || e.originalEvent.clipboardData;
     if (!clipboardData) {
-      //I don't think this ever happens but just to be safe
+      // I don't think this ever happens but just to be safe
       console.error("Clipboard data not found");
-      if (!silent) {
+      if (!checkOnly) {
         alert(msg("paste-error-generic"));
       }
       return;
     }
 
-    const { files } = clipboardData;
+    const {files} = clipboardData;
 
     if (!files) {
       console.error("No files");
-      if (!silent) {
+      if (!checkOnly) {
         alert(msg("paste-error-filetype"));
       }
       return;
@@ -141,24 +89,58 @@ export default async ({ addon, console, msg }) => {
 
     if (filteredFiles.length < 1) {
       console.error("No files of supported types");
-      if (!silent) {
+      if (!checkOnly) {
         alert(msg("paste-error-filetype"));
       }
       return;
     }
-
-    uploadFiles(currentMenuInput, new FileList(filteredFiles));
-    e.preventDefault();
+	
+	if (checkOnly) {
+		return new FileList(filteredFiles);
+	} else {
+		e.preventDefault();
+		uploadFiles(currentMenuInput, new FileList(filteredFiles));
+	}
   };
 
-  //Add files to an input, and trigger their change events.
+  // Handles what occurs when simply pressing Ctrl+V in the editor to
+  // paste an image as a costume when applicable.
+  const passivePaste = async (e) => {
+    if (addon.self.disabled) return;
+    //If the paste overlay is active, let it do its thing
+	console.log("overlay")
+    if (!pasteOverlay.classList.contains("hidden")) return;
+
+    const COSTUMES_PANE = document.querySelector("[data-tabs] > :nth-child(3) > div > [class*='selector_wrapper_']");
+	console.log("costumes")
+    if (!COSTUMES_PANE) return;
+	
+	const files = onPaste(e, true);
+	console.log("files", files)
+	if (!files) return;
+	
+    e.preventDefault();
+	
+	// As Paper isn't required for all of the addon's functionality,
+	// get it here
+	const paper = await addon.tab.traps.getPaper();
+	
+	for (const file of files) {
+		const raster = new paper.Raster(URL.createObjectURL(file));
+		raster.selected = "true";
+		raster.smoothing = "off";
+	}
+  };
+  document.body.addEventListener("paste", passivePaste);
+
+  // Add files to an input, and trigger their change events.
   const uploadFiles = (input, files) => {
     input.files = files;
-    input.dispatchEvent(new Event("change", { bubbles: true }));
+    input.dispatchEvent(new Event("change", {bubbles: true}));
   };
 
-  //A lot of the following code was pasted from the better-img-uploads addon.
-  //Credits to the people who made that addon
+  // A lot of the following code was pasted from the better-img-uploads addon.
+  // Credits to the people who made that addon
   const createItem = (id, right) => {
     const uploadMsg = msg("paste-image");
     const wrapper = Object.assign(document.createElement("div"), { id });
@@ -191,16 +173,16 @@ export default async ({ addon, console, msg }) => {
     return [wrapper, button, tooltip];
   };
   while (true) {
-    //Catch all upload menus as they are created
+    // Catch all upload menus as they are created
     let menu = await addon.tab.waitForElement(
       '[class*="sprite-selector_sprite-selector_"] [class*="action-menu_more-buttons_"], [class*="stage-selector_stage-selector_"] [class*="action-menu_more-buttons_"], [data-tabs] > :nth-child(3) [class*="action-menu_more-buttons_"]',
       { markAsSeen: true }
     );
-    let button = menu.parentElement.previousElementSibling.previousElementSibling; //The base button that the popup menu is from
+    let button = menu.parentElement.previousElementSibling.previousElementSibling; // The base button that the popup menu is from
 
     let id = button.getAttribute("aria-label").replace(/\s+/g, "_");
 
-    let isRight = //Is it on the right side of the screen?
+    let isRight = // Is it on the right side of the screen?
       button.parentElement.classList.contains(addon.tab.scratchClass("sprite-selector_add-button")) ||
       button.parentElement.classList.contains(addon.tab.scratchClass("stage-selector_add-button"));
 
@@ -234,11 +216,11 @@ export default async ({ addon, console, msg }) => {
   }
 
   function FileList(arr = []) {
-    //File list constructor. Does not need the `new` keyword, but it is easier to read
-    let filelist = new DataTransfer(); //This "creates" a FileList that we can add files to
+    // File list constructor. Does not need the `new` keyword, but it is easier to read
+    let filelist = new DataTransfer(); // This "creates" a FileList that we can add files to
     for (let file of arr) {
       filelist.items.add(file);
     }
-    return filelist.files; //Completed FileList
+    return filelist.files; // Completed FileList
   }
 };
