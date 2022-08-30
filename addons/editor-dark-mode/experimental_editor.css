@@ -349,7 +349,10 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .action-menu_button_1qbot,
 .context-menu_menu-item_3cioN:not(.context-menu_menu-item-danger_1tJg0):hover,
 .blocklyWidgetDiv .goog-menuitem-highlight,
-.blocklyWidgetDiv .goog-menuitem-hover,
+.blocklyWidgetDiv .goog-menuitem-hover {
+  background-color: var(--editorDarkMode-primary);
+  color: var(--editorDarkMode-primary-text);
+}
 .gui_extension-button-container_b4rCs,
 .prompt_button-row_3Wc5Z button.prompt_ok-button_3QFdD,
 .custom-procedures_button-row_2jBu3 button.custom-procedures_ok-button_2X0Vj,
