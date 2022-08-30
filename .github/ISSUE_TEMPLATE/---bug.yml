@@ -11,6 +11,7 @@ body:
         - Try to make a simple but descriptive title, and include the detailed information below. This could save a lot of time and help us fix issues swiftly.
         - Make sure to use the latest version of Scratch Addons.
         - For help, check our [FAQ page](https://scratchaddons.com/faq) or ask on [Discussions](https://github.com/ScratchAddons/ScratchAddons/discussions) or our [Discord server](https://discord.gg/R5NBqwMjNc).
+        - If you found a security vulnerability, please read our [security policy](https://github.com/ScratchAddons/ScratchAddons/security/policy).
       options:
         - label: I understand
           required: true
