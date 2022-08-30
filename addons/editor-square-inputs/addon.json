@@ -8,15 +8,11 @@
       "link": "https://github.com/CST1229"
     }
   ],
-  "tags": [
-    "editor"
-  ],
+  "tags": ["editor"],
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "projects"
-      ]
+      "matches": ["projects"]
     }
   ],
   "settings": [
