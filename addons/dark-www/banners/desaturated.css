@@ -1,0 +1,78 @@
+.parents .title-banner.masthead .ted-talk {
+  border-color: black;
+}
+.educators .title-banner.masthead,
+.educators #teacher-accounts,
+.expect .keynote,
+.initiatives-section .initiatives-subsection-header.schools,
+.initiatives-section .initiatives-subsection-content .teacher-quote .comment-text,
+.initiatives-section .initiatives-subsection-header.connectivity,
+.initiatives-section .initiatives-subsection-header.community,
+.teacher-registration,
+.teacher-waitingroom {
+  background-color: #473e59;
+}
+.initiatives-section .initiatives-subsection-content .teacher-quote .comment-text,
+.initiatives-section .initiatives-subsection-content .teacher-quote .comment-text::before,
+.initiatives-section .initiatives-subsection-content .teacher-quote .comment-text::after {
+  border-color: #473e59;
+}
+.banner-wrapper /* Ideas */ {
+  background-color: #99864d;
+}
+.wedo2 .extension-header {
+  background-color: #4d2e33;
+}
+.hoc-banner,
+.developers .title-banner.masthead,
+.sa-annual-report-2019 .reach-section,
+.initiatives-section .initiatives-subsection-header.tools,
+.initiatives-section .initiatives-tools .abhi-quote .comment-text,
+.initiatives-section .initiatives-subsection-header.adaptation,
+.donate-section,
+.sa-annual-report-2021 .subnavigation,
+.sa-annual-report-2021 .message-section,
+.sa-annual-report-2021 .reach-section,
+.sa-annual-report-2021 .reach-scratch-jr,
+.card .card-button,
+.microbit .extension-header {
+  background-color: #27473e;
+}
+.hoc-banner .hoc-banner-image,
+.initiatives-section .initiatives-tools .abhi-quote .comment-text,
+.initiatives-section .initiatives-tools .abhi-quote .comment-text::before,
+.initiatives-section .initiatives-tools .abhi-quote .comment-text::after {
+  border-color: #27473e;
+}
+.donate-banner,
+.sa-annual-report-2019 .reach-scratch-jr {
+  background-color: #1c332c;
+}
+.initiatives-section .initiatives-subsection-header.access {
+  background-color: #2d5330;
+}
+.sa-annual-report-2020 .subnavigation,
+.sa-annual-report-2020 .message-section,
+.sa-annual-report-2020 .reach-section {
+  background-color: #2a596f;
+}
+.sa-annual-report-2020 .reach-scratch-jr {
+  background-color: #265064;
+}
+.banner.warning /* confirm email */,
+.modal-flush-bottom-button,
+.ev3 .extension-header,
+.boost .extension-header,
+.validation-error,
+.validation-error::before,
+.error-text,
+.report-modal-content .validation-message,
+.report-modal-content .validation-message::before,
+.compose-comment .compose-error-row .compose-error-tip {
+  background-color: #a37629;
+}
+.financials-section,
+.sa-annual-report-2020 .directors-message,
+.sa-annual-report-2021 .founders-message {
+  background-color: #16171d;
+}

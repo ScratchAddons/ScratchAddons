@@ -40,6 +40,14 @@
       "values": {
         "color": "#000000"
       }
+    },
+    {
+      "name": "Orange",
+      "id": "orange",
+      "description": "The same color as the Scratch Addons logo.",
+      "values": {
+        "color": "#FF7B26"
+      }
     }
   ],
   "credits": [
@@ -52,7 +60,9 @@
     },
     {
       "name": "lisa_wolfgang",
-      "link": "https://scratch.mit.edu/users/lisa_wolfgang"
+      "link": "https://scratch.mit.edu/users/lisa_wolfgang/"
     }
-  ]
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true
 }

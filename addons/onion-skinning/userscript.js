@@ -274,8 +274,8 @@ export default async function ({ addon, global, console, msg }) {
         canvas.height = scaledHeight;
 
         this._size = new paper.Size(scaledWidth, scaledHeight);
-        const topLeft = bounds.getTopLeft().floor();
-        const bottomRight = bounds.getBottomRight().ceil();
+        const topLeft = bounds.getTopLeft();
+        const bottomRight = bounds.getBottomRight();
         const size = new paper.Size(bottomRight.subtract(topLeft));
         const matrix = new paper.Matrix().scale(newScale).translate(topLeft.negate());
         ctx.save();
@@ -766,7 +766,13 @@ export default async function ({ addon, global, console, msg }) {
     while (true) {
       const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {
         markAsSeen: true,
-        reduxEvents: ["scratch-gui/navigation/ACTIVATE_TAB", "scratch-gui/mode/SET_PLAYER"],
+        reduxEvents: [
+          "scratch-gui/navigation/ACTIVATE_TAB",
+          "scratch-gui/mode/SET_PLAYER",
+          "fontsLoaded/SET_FONTS_LOADED",
+          "scratch-gui/locales/SELECT_LOCALE",
+          "scratch-gui/targets/UPDATE_TARGET_LIST",
+        ],
         reduxCondition: (state) =>
           state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
       });

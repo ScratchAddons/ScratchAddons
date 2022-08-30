@@ -1,3 +1,5 @@
+@import url("../editor-theme3/compatibility.css");
+
 [dir="ltr"] .sa-debugger-container {
   margin-right: 0.2rem;
 }
@@ -17,6 +19,11 @@
   background-color: white;
   width: 565px;
   height: 25rem;
+}
+
+.sa-debugger-interface [class*="card_header-buttons_"] {
+  background-color: #29beb8;
+  border-color: #3aa8a4;
 }
 
 .sa-debugger-interface h1 {
@@ -228,9 +235,10 @@
 }
 
 .sa-debugger-block-preview {
-  color: white;
   padding: 1px 6px;
   margin-right: 4px;
+  background-color: var(--sa-block-colored-background);
+  color: var(--sa-block-text);
 }
 .sa-debugger-block-preview[data-shape="round"] {
   border-radius: 100px;

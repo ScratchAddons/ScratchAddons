@@ -70,6 +70,8 @@
 }
 #comments .comment .actions-wrap {
   line-height: normal;
+  /* Needed to make the action buttons actually work; #4161 */
+  z-index: 1;
 }
 #comments .comment .info::before {
   content: "";

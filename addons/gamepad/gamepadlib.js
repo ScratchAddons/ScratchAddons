@@ -131,6 +131,8 @@ const padWithEmptyMappings = (array, length) => {
   return array;
 };
 
+const createEmptyMappingList = (length) => padWithEmptyMappings([], length);
+
 const getMovementConfiguration = (usedKeys) => ({
   usesArrows:
     usedKeys.has("ArrowUp") || usedKeys.has("ArrowDown") || usedKeys.has("ArrowRight") || usedKeys.has("ArrowLeft"),
@@ -153,6 +155,11 @@ class GamepadData {
   resetMappings() {
     this.buttonMappings = this.getDefaultButtonMappings().map(transformAndCopyMapping);
     this.axesMappings = this.getDefaultAxisMappings().map(transformAndCopyMapping);
+  }
+
+  clearMappings() {
+    this.buttonMappings = createEmptyMappingList(this.gamepad.buttons.length);
+    this.axesMappings = createEmptyMappingList(this.gamepad.axes.length);
   }
 
   getDefaultButtonMappings() {
@@ -379,6 +386,12 @@ class GamepadData {
   }
 }
 
+const defaultHints = () => ({
+  usedKeys: new Set(),
+  importedSettings: null,
+  generated: false,
+});
+
 class GamepadLib extends EventTarget {
   constructor() {
     super();
@@ -408,11 +421,7 @@ class GamepadLib extends EventTarget {
 
     this.connectCallbacks = [];
 
-    this.hints = {
-      usedKeys: new Set(),
-      importedSettings: null,
-      generated: false,
-    };
+    this.hints = defaultHints();
 
     this.keysPressedThisFrame = new Set();
     this.oldKeysPressed = new Set();
@@ -453,9 +462,16 @@ class GamepadLib extends EventTarget {
   }
 
   resetControls() {
-    this.hints.generated = false;
+    this.hints = defaultHints();
+    this.ensureHintsGenerated();
     for (const gamepad of this.gamepads.values()) {
       gamepad.resetMappings();
+    }
+  }
+
+  clearControls() {
+    for (const gamepad of this.gamepads.values()) {
+      gamepad.clearMappings();
     }
   }
 
@@ -685,7 +701,7 @@ class GamepadEditor extends EventTarget {
     this.onSelectorChange = this.onSelectorChange.bind(this);
     this.onGamepadsChange = this.onGamepadsChange.bind(this);
 
-    this.selector.onchange = this.onSelectorChange;
+    this.selector.addEventListener("change", this.onSelectorChange);
     this.gamepadLib.addEventListener("gamepadconnected", this.onGamepadsChange);
     this.gamepadLib.addEventListener("gamepaddisconnected", this.onGamepadsChange);
 

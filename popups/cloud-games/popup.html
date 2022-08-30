@@ -7,6 +7,7 @@
     <title></title>
     <style>
       @import url("../../webpages/styles/colors.css");
+      @import url("../../webpages/styles/components/buttons.css");
       @import url("../../webpages/styles/components/popup.css");
     </style>
     <link rel="stylesheet" href="popup.css" />
@@ -15,26 +16,53 @@
     <script src="../../webpages/popup-loader.js" type="module"></script>
   </head>
 
-  <body v-cloak>
-    <div class="loading" v-show="!error && (projects.length === 0 || projects.length !== projectsChecked)">
-      {{ loadingMsg }}
+  <body>
+    <div
+      v-cloak
+      class="loading"
+      transition="fade"
+      v-show="!error && (projects.length === 0 || projects.length !== projectsChecked)"
+    >
+      {{ messages.loadingMsg }}
+      <div class="loading-progress" :style="{ width: (100 * projectsChecked / projects.length || 0) + '%' }"></div>
     </div>
-    <div class="loading" v-show="error">
+    <div v-cloak class="error" v-show="error">
       {{ errorMessage }}
-      <span v-if="error !== 'server-error'">{{{ settingsHTML() }}}</span>
+      <span v-if="error !== 'server-error'"> {{{ settingsHTML() }}} </span>
+      <div v-if="error !== 'server-error'">
+        <p v-if="addButtonType">{{ clickButtonToAddDisplayMessage }}</p>
+        <p v-else>{{ messages.changeDisplay2 }}</p>
+      </div>
     </div>
-    <div v-show="loaded">
-      <div class="games" v-for="project of projectsSorted">
+    <div v-cloak v-show="addButtonType" class="add-button">
+      <button
+        @click="addFromSelectedTab()"
+        :disabled="addButtonUsed"
+        class="large-button"
+        :title="addButtonUsed ? '' : (addButtonType === 'project' ? messages.addProjectDescription : messages.addStudioDescription)"
+      >
+        <span v-show="!addButtonUsed">
+          <img class="small-icon" src="../../images/icons/plus.svg" /><span
+            >{{ addButtonType === "project" ? messages.addProject : messages.addStudio }}</span
+          >
+        </span>
+        <span v-else>
+          <img class="small-icon" src="../../images/icons/check.svg" /><span>{{ messages.added }}</span>
+        </span>
+      </button>
+    </div>
+    <div v-cloak v-show="projectsVisible">
+      <div class="game" v-for="project of projectsSorted" :class="{ 'opened': project.id == selectedTabId }">
         <div class="title">
           <a class="project-name nolink" :href="'https://scratch.mit.edu/projects/' + project.id" target="_blank"
             >{{ project.title }}</a
           >
           <span class="float-right"
-            ><img class="small-icon" src="../../images/icons/users.svg" /> {{ project.amt }}</span
+            ><img class="small-icon" src="../../images/icons/users.svg" /> {{ project.error ? "?" : project.amt }}</span
           >
         </div>
-        <div class="project-details" v-show="true || project.amt > 0 && project.extended">
-          <div class="username-list">
+        <div class="project-details">
+          <div class="username-list" v-else>
             <a
               v-for="user of project.users"
               :href="'https://scratch.mit.edu/users/' + user"
@@ -43,8 +71,17 @@
               >{{ user }}</a
             >
           </div>
-          <div class="username-list" v-show="project.amt === 0">{{ messages.noUsersMsg }}</div>
+          <div class="username-list" v-show="project.error">
+            {{ project.error }}<code v-show="project.errorMessage"> {{ project.errorMessage }}</code>
+          </div>
+          <div class="username-list" v-show="project.amt === 0 && !project.error">{{ messages.noUsersMsg }}</div>
         </div>
+      </div>
+    </div>
+    <div v-cloak v-else>
+      <div class="game" v-for="_ of (this.projects.length / 2)">
+        <div class="title"><span class="title-placeholder"></span><br /></div>
+        <div class="project-details"></div>
       </div>
     </div>
   </body>

@@ -106,25 +106,27 @@ class Highlighter {
     const elementsToHighlight = new Set();
     const workspace = Blockly.getMainWorkspace();
 
-    for (const thread of threads) {
-      thread.stack.forEach((blockId) => {
-        const block = workspace.getBlockById(blockId);
-        if (!block) {
-          return;
-        }
-        const childblock = thread.stack.find((i) => {
-          let b = block;
-          while (b.childBlocks_.length) {
-            b = b.childBlocks_[b.childBlocks_.length - 1];
-            if (i === b.id) return true;
+    if (workspace) {
+      for (const thread of threads) {
+        thread.stack.forEach((blockId) => {
+          const block = workspace.getBlockById(blockId);
+          if (!block) {
+            return;
           }
-          return false;
+          const childblock = thread.stack.find((i) => {
+            let b = block;
+            while (b.childBlocks_.length) {
+              b = b.childBlocks_[b.childBlocks_.length - 1];
+              if (i === b.id) return true;
+            }
+            return false;
+          });
+          if (!childblock && block.svgPath_) {
+            const svgPath = block.svgPath_;
+            elementsToHighlight.add(svgPath);
+          }
         });
-        if (!childblock && block.svgPath_) {
-          const svgPath = block.svgPath_;
-          elementsToHighlight.add(svgPath);
-        }
-      });
+      }
     }
 
     for (const element of this.previousElements) {

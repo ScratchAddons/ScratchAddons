@@ -1,3 +1,10 @@
+// https://github.com/fregante/text-field-edit/issues/16
+function safeTextInsert(text) {
+    if (text === '') {
+        return document.execCommand('delete');
+    }
+    return document.execCommand('insertText', false, text);
+}
 function insertTextFirefox(field, text) {
     // Found on https://www.everythingfrontend.com/posts/insert-text-into-textarea-at-cursor-position.html 🎈
     field.setRangeText(text, field.selectionStart || 0, field.selectionEnd || 0, 'end');
@@ -13,7 +20,7 @@ export function insert(field, text) {
     if (initialFocus !== field) {
         field.focus();
     }
-    if (!document.execCommand('insertText', false, text)) {
+    if (!safeTextInsert(text)) {
         insertTextFirefox(field, text);
     }
     if (initialFocus === document.body) {

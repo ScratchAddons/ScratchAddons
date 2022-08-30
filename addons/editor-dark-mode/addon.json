@@ -491,6 +491,17 @@
       }
     },
     {
+      "name": "input-transparent90",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        },
+        "a": 0.9
+      }
+    },
+    {
       "name": "input-transparent75",
       "value": {
         "type": "multiply",
@@ -617,8 +628,15 @@
       "value": {
         "type": "textColor",
         "source": {
-          "type": "settingValue",
-          "settingId": "palette"
+          "type": "alphaBlend",
+          "opaqueSource": {
+            "type": "settingValue",
+            "settingId": "workspace"
+          },
+          "transparentSource": {
+            "type": "settingValue",
+            "settingId": "palette"
+          }
         }
       }
     },
@@ -629,8 +647,15 @@
         "black": "none",
         "white": "brightness(0) invert(1)",
         "source": {
-          "type": "settingValue",
-          "settingId": "palette"
+          "type": "alphaBlend",
+          "opaqueSource": {
+            "type": "settingValue",
+            "settingId": "workspace"
+          },
+          "transparentSource": {
+            "type": "settingValue",
+            "settingId": "palette"
+          }
         }
       }
     },
@@ -645,12 +670,8 @@
             "settingId": "workspace"
           },
           "transparentSource": {
-            "type": "multiply",
-            "source": {
-              "type": "settingValue",
-              "settingId": "palette"
-            },
-            "a": 0.8
+            "type": "settingValue",
+            "settingId": "palette"
           }
         },
         "black": {
@@ -662,12 +683,8 @@
               "settingId": "workspace"
             },
             "transparentSource": {
-              "type": "multiply",
-              "source": {
-                "type": "settingValue",
-                "settingId": "palette"
-              },
-              "a": 0.8
+              "type": "settingValue",
+              "settingId": "palette"
             }
           },
           "r": 0.83,
@@ -683,12 +700,8 @@
               "settingId": "workspace"
             },
             "transparentSource": {
-              "type": "multiply",
-              "source": {
-                "type": "settingValue",
-                "settingId": "palette"
-              },
-              "a": 0.8
+              "type": "settingValue",
+              "settingId": "palette"
             }
           },
           "r": 0.91,
@@ -839,7 +852,8 @@
       "name": "Block palette background",
       "id": "palette",
       "type": "color",
-      "default": "#202020"
+      "default": "#202020cc",
+      "allowTransparency": true
     },
     {
       "name": "Full screen background",
@@ -910,7 +924,7 @@
         "input": "#202020",
         "workspace": "#151515",
         "categoryMenu": "#202020",
-        "palette": "#202020",
+        "palette": "#202020cc",
         "fullscreen": "#000000",
         "stageHeader": "#000000",
         "border": "#ffffff0d",
@@ -937,7 +951,7 @@
         "input": "#2f4066",
         "workspace": "#273552",
         "categoryMenu": "#2f4066",
-        "palette": "#2f4066",
+        "palette": "#2f4066cc",
         "fullscreen": "#051638",
         "stageHeader": "#051638",
         "border": "#00000026",
@@ -964,7 +978,7 @@
         "input": "#444444",
         "workspace": "#444444",
         "categoryMenu": "#333333",
-        "palette": "#222222",
+        "palette": "#222222cc",
         "fullscreen": "#222222",
         "stageHeader": "#222222",
         "border": "#111111",
@@ -991,7 +1005,7 @@
         "input": "#282828",
         "workspace": "#282828",
         "categoryMenu": "#282828",
-        "palette": "#333333",
+        "palette": "#333333cc",
         "fullscreen": "#282828",
         "stageHeader": "#333333",
         "border": "#444444",
@@ -1018,7 +1032,7 @@
         "input": "#1e1e1e",
         "workspace": "#1e1e1e",
         "categoryMenu": "#111111",
-        "palette": "#111111",
+        "palette": "#111111cc",
         "fullscreen": "#111111",
         "stageHeader": "#111111",
         "border": "#ffffff26",
@@ -1045,7 +1059,7 @@
         "input": "#ffffffff",
         "workspace": "#dddedeff",
         "categoryMenu": "#e6e8e8ff",
-        "palette": "#e6e8e8ff",
+        "palette": "#e6e8e8cc",
         "fullscreen": "#ffffffff",
         "stageHeader": "#e6e8e8",
         "border": "#d0d1d2",
@@ -1072,7 +1086,7 @@
         "input": "#5f6265",
         "workspace": "#7c8083",
         "categoryMenu": "#969a9f",
-        "palette": "#7c8083",
+        "palette": "#7c8083cc",
         "fullscreen": "#000001",
         "stageHeader": "#000001",
         "border": "#0000006b",
@@ -1099,7 +1113,7 @@
         "input": "#ffffff",
         "workspace": "#f9f9f9",
         "categoryMenu": "#ffffff",
-        "palette": "#f9f9f9",
+        "palette": "#f9f9f9cc",
         "fullscreen": "#ffffff",
         "stageHeader": "#e8edf1",
         "border": "#00000026",

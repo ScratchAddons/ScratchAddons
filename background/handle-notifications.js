@@ -59,10 +59,12 @@ function contextMenuUnmuted() {
       contexts: ["browser_action"],
     });
   }
+  // This seems to be run when the extension is loaded, so we'll just set the right icon here.
+  const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
   chrome.browserAction.setIcon({
     path: {
-      16: "../images/icon-16.png",
-      32: "../images/icon-32.png",
+      16: prerelease ? "../images/icon-blue-16.png" : "../images/icon-16.png",
+      32: prerelease ? "../images/icon-blue-32.png" : "../images/icon-32.png",
     },
   });
 }

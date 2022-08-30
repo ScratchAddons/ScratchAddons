@@ -4,7 +4,7 @@ export class HTTPError extends Error {
     this.code = code;
   }
 
-  static fromResponse(resp, message) {
+  static fromResponse(message, resp) {
     return new HTTPError(`${message}: status ${resp.status}`, resp.status);
   }
 }
@@ -88,14 +88,11 @@ export async function fetchMessageCount(username) {
  * @throws {HTTPError} when fetching fails
  */
 export async function fetchMessages(username, xToken, offset) {
-  const resp = await fetch(
-    `https://api.scratch.mit.edu/users/${username}/messages?limit=40&offset=${offset}&sareferer`,
-    {
-      headers: {
-        "x-token": xToken,
-      },
-    }
-  );
+  const resp = await fetch(`https://api.scratch.mit.edu/users/${username}/messages?limit=40&offset=${offset}`, {
+    headers: {
+      "x-token": xToken,
+    },
+  });
   if (!resp.ok) {
     if (resp.status === 404) return [];
     throw HTTPError.fromResponse(`Fetching message offset ${offset} for ${username} failed`, resp);
@@ -171,13 +168,13 @@ export async function updateMessages(cookieStoreId, forceClear, username, xToken
   const db = await openDatabase();
   try {
     const messages = await db.get("cache", cookieStoreId);
-    const firstId = messages[0]?.id;
+    const firstTimestamp = messages[0] ? new Date(messages[0].datetime_created).getTime() : 0;
     const newlyAdded = [];
     const knownIds = new Set();
     fetching: for (let i = 0; i < maxPages; i++) {
       const pageMessages = await fetchMessages(username, xToken, i * 40);
       for (const pageMessage of pageMessages) {
-        if (pageMessage.id <= firstId) break fetching;
+        if (new Date(pageMessage.datetime_created).getTime() <= firstTimestamp) break fetching;
         if (knownIds.has(pageMessage.id)) continue;
         newlyAdded.push(pageMessage);
         knownIds.add(pageMessage.id);

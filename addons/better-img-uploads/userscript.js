@@ -43,8 +43,10 @@ export default async function ({ addon, console, msg }) {
     });
     tooltip.dataset.id = "tooltip";
     wrapper.append(tooltip);
+    addon.tab.displayNoneWhileDisabled(wrapper);
     return [wrapper, button, input, tooltip];
   };
+
   while (true) {
     //Catch all upload menus as they are created
     let menu = await addon.tab.waitForElement(
