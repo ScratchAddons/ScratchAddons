@@ -1,7 +1,7 @@
 .sa-onion-button {
   position: relative;
 }
-.sa-onion-button:focus-within {
+.sa-onion-button:active {
   background-color: hsla(215, 100%, 65%, 0.2);
 }
 .sa-onion-button[data-enabled="true"] {
