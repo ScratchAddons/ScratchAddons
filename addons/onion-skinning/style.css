@@ -24,6 +24,9 @@
   pointer-events: none;
   background: white;
   color: black;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
 }
 .sa-onion-settings[data-visible="true"] {
   bottom: 16px;
