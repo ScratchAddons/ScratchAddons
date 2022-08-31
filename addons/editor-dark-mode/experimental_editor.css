@@ -376,8 +376,8 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .button_button_u6SE2:active,
 .fixed-tools_mod-menu-item_1syXh:not(.fixed-tools_mod-disabled_3dvDX):hover,
 .button_highlighted_2cM8r.button_button_u6SE2,
-.sa-paint-snap-button:focus-within,
-.sa-onion-button:focus-within {
+.sa-paint-snap-button:active,
+.sa-onion-button:active {
   background-color: var(--editorDarkMode-primary-transparent20);
 }
 .button_mod-disabled_1rf31:active {
