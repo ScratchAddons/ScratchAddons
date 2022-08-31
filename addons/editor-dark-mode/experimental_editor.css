@@ -235,6 +235,7 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .record-modal_button-row_1hdGe button,
 .Popover-body,
 .sa-onion-settings,
+.sa-paint-snap-settings,
 .u-dropdown-searchbar:focus {
   background-color: var(--editorDarkMode-input);
   color: var(--editorDarkMode-input-text);
@@ -252,6 +253,7 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 }
 .Popover-tipShape,
 .sa-onion-settings-polygon,
+.sa-paint-snap-settings-polygon,
 .blocklyFlyoutCheckbox {
   fill: var(--editorDarkMode-input);
 }
@@ -264,6 +266,7 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
   color: var(--editorDarkMode-input-text);
 }
 .scratchEyedropper img,
+.sa-paint-snap-settings .sa-paint-snap-image,
 .sa-onion-settings .sa-onion-image {
   filter: var(--editorDarkMode-input-filter);
 }
@@ -342,6 +345,7 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .tool-select-base_mod-tool-select_1iD-h.tool-select-base_is-selected_3x4kL:active,
 .paint-editor_bitmap-button_keW7B,
 .sa-onion-button[data-enabled="true"],
+.sa-paint-snap-button[data-enabled="true"],
 .sound-editor_round-button_3NLcW,
 .audio-trimmer_selection-background_3LBuB,
 .tag-button_tag-button_nBLRM:not(.tag-button_active_2stEz),
@@ -372,6 +376,7 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .button_button_u6SE2:active,
 .fixed-tools_mod-menu-item_1syXh:not(.fixed-tools_mod-disabled_3dvDX):hover,
 .button_highlighted_2cM8r.button_button_u6SE2,
+.sa-paint-snap-button:focus-within,
 .sa-onion-button:focus-within {
   background-color: var(--editorDarkMode-primary-transparent20);
 }
@@ -430,6 +435,7 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
   filter: var(--editorDarkMode-primary-filter);
 }
 .tool-select-base_mod-tool-select_1iD-h.tool-select-base_is-selected_3x4kL .tool-select-base_tool-select-icon_tJ-rr,
+.sa-paint-snap-button[data-enabled="true"] .sa-paint-snap-image,
 .sa-onion-button[data-enabled="true"] .sa-onion-image {
   filter: var(--editorDarkMode-primary-filter2);
 }
@@ -545,6 +551,7 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 .scratchEyedropper,
 .Popover-body,
 .sa-onion-settings,
+.sa-paint-snap-settings,
 .prompt_variable-name-text-input_1iu8-,
 .prompt_cloud-option_1jjSa,
 .prompt_button-row_3Wc5Z button,
@@ -565,6 +572,7 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 .custom-procedures_workspace_1d2uW .blocklyMainBackground,
 .blocklyFlyoutCheckbox,
 .Popover-tipShape,
+.sa-paint-snap-settings-polygon,
 .sa-onion-settings-polygon {
   stroke: var(--editorDarkMode-border);
 }
