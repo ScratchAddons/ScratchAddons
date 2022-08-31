@@ -1,3 +1,5 @@
 # Files created during packaging
 .manifest.js.bak
 .dist
+# Automatically generated file by macOS
+.DS_Store
