@@ -9,7 +9,7 @@ const getMoveTool = (tool) => {
   return tool.boundingBoxTool._modeMap.MOVE;
 };
 
-/** @type {(paper: any, tool: any, settings: import("../../addon-api/content-script/typedef").UserscriptUtilities["addon"]["settings"]) => Promise<void>} */
+/** @type {(paper: any, tool: any, settings: import("../../addon-api/content-script/typedef").UserscriptAddon["settings"]) => Promise<void>} */
 export const updateSelectTool = (paper, tool, settings) => {
   const { checkPointsClose, snapDeltaToAngle } = loadMathModule(paper);
   const { getActionBounds, CENTER, ART_BOARD_BOUNDS, MAX_WORKSPACE_BOUNDS } = loadViewModule(paper);
