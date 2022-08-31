@@ -30,10 +30,6 @@
   pointer-events: auto;
   opacity: 1;
 }
-[dir="rtl"] .sa-onion-settings {
-  right: initial;
-  left: 24px;
-}
 
 .sa-onion-settings-line {
   display: flex;
@@ -67,9 +63,6 @@
   bottom: 0;
   transform: translateY(100%);
   right: 101px;
-}
-[dir="rtl"] .sa-onion-settings-tip {
-  right: 118px;
 }
 .sa-onion-settings-polygon {
   fill: white;
