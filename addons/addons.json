@@ -125,6 +125,7 @@
   "zebra-striping",
   "find-bar",
   "jump-to-def",
+  "disable-warning-not-save",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
