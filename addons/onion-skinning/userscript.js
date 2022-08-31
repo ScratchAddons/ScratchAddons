@@ -570,10 +570,6 @@ export default async function ({ addon, global, console, msg }) {
     return el;
   };
 
-  const paintEditorControlsContainer = document.createElement("div");
-  paintEditorControlsContainer.className = "sa-onion-controls-container";
-  paintEditorControlsContainer.dir = "";
-
   const toggleControlsGroup = createGroup();
   addon.tab.displayNoneWhileDisabled(toggleControlsGroup, { display: "flex" });
 
@@ -589,8 +585,6 @@ export default async function ({ addon, global, console, msg }) {
   settingButton.title = msg("settings");
   settingButton.appendChild(createButtonImage("settings"));
   toggleControlsGroup.appendChild(settingButton);
-
-  paintEditorControlsContainer.appendChild(toggleControlsGroup);
 
   //
   // Settings page
@@ -779,17 +773,11 @@ export default async function ({ addon, global, console, msg }) {
       const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
       const canvasContainer = document.querySelector("[class^='paint-editor_canvas-container']");
 
-      // TODO: when leaving the paint editor, references to the old zoom controls are kept around by our DOM
-      // Need to investigate whether this leaks memory or other issues.
-      const oldZoomControlsContainer = paintEditorControlsContainer.querySelector(
-        "[class^='paint-editor_zoom-controls']"
-      );
-      if (oldZoomControlsContainer) {
-        oldZoomControlsContainer.parentNode.removeChild(oldZoomControlsContainer);
-      }
-
-      paintEditorControlsContainer.appendChild(zoomControlsContainer);
-      canvasControls.appendChild(paintEditorControlsContainer);
+      addon.tab.appendToSharedSpace({
+        space: "paintEditorZoomControls",
+        element: toggleControlsGroup,
+        order: 1,
+      });
       canvasContainer.appendChild(settingsPage);
 
       if (!hasRunOnce) {
