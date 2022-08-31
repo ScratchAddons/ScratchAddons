@@ -38,6 +38,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: baseline;
+  gap: 0.25em;
 }
 
 .sa-onion-settings-input {
