@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
+  "name": "Paint snapping",
+  "description": "Snap objects in the paint editor to bounding boxes and svg nodes.",
+  "tags": ["editor", "costumeEditor", "featured"],
+  "versionAdded": "1.28.0",
+  "userscripts": [
+    {
+      "matches": ["projects"],
+      "url": "userscript.js",
+      "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "matches": ["projects"],
+      "url": "userstyle.css"
+    }
+  ],
+  "settings": [
+    {
+      "type": "positive_integer",
+      "min": 4,
+      "id": "snap-dist",
+      "name": "Snapping Distance",
+      "default": 10
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}
