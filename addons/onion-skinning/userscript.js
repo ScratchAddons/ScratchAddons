@@ -578,17 +578,19 @@ export default async function ({ addon, global, console, msg }) {
   toggleButton.addEventListener("click", () => setEnabled(!settings.enabled));
   toggleButton.title = msg("toggle");
   toggleButton.appendChild(createButtonImage("toggle"));
-  toggleControlsGroup.appendChild(toggleButton);
 
   const settingButton = createButton();
   settingButton.addEventListener("click", () => setSettingsOpen(!areSettingsOpen()));
   settingButton.title = msg("settings");
   settingButton.appendChild(createButtonImage("settings"));
-  toggleControlsGroup.appendChild(settingButton);
 
   //
   // Settings page
   //
+
+  const settingPageWrapper = document.createElement("div");
+  settingPageWrapper.className = "sa-onion-settings-wrapper";
+  toggleControlsGroup.append(settingPageWrapper, toggleButton, settingButton);
 
   const settingsPage = document.createElement("div");
   settingsPage.className = "sa-onion-settings";
@@ -778,7 +780,7 @@ export default async function ({ addon, global, console, msg }) {
         element: toggleControlsGroup,
         order: 1,
       });
-      canvasContainer.appendChild(settingsPage);
+      settingPageWrapper.appendChild(settingsPage);
 
       if (!hasRunOnce) {
         hasRunOnce = true;
