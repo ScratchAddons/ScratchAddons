@@ -1,7 +1,4 @@
-import Modes, { BitmapModes } from "./lib/modes.js";
-import { loadModule as loadMathModule } from "./helper/math.js";
-import { loadModule as loadViewModule } from "./helper/view.js";
-import { loadModule as loadLayerModule } from "./helper/layer.js";
+import { loadModules, Modes, BitmapModes } from "./helpers.js";
 
 import { snapFrom, snapTo, snapOn, threshold, setThreshold, setSnapTo, setSnapFrom, toggle } from "./state.js";
 
@@ -11,9 +8,11 @@ const getMoveTool = (tool) => {
 
 /** @type {(paper: any, tool: any, settings: import("../../addon-api/content-script/typedef").UserscriptAddon["settings"]) => Promise<void>} */
 export const updateSelectTool = (paper, tool, settings) => {
-  const { checkPointsClose, snapDeltaToAngle } = loadMathModule(paper);
-  const { getActionBounds, CENTER, ART_BOARD_BOUNDS, MAX_WORKSPACE_BOUNDS } = loadViewModule(paper);
-  const { getDragCrosshairLayer, CROSSHAIR_FULL_OPACITY, getLayer } = loadLayerModule(paper);
+  const {
+    math: { checkPointsClose, snapDeltaToAngle },
+    view: { getActionBounds, CENTER, ART_BOARD_BOUNDS, MAX_WORKSPACE_BOUNDS },
+    layer: { getDragCrosshairLayer, CROSSHAIR_FULL_OPACITY, getLayer },
+  } = loadModules(paper);
 
   const moveTool = getMoveTool(tool);
 
