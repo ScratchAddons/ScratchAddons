@@ -538,13 +538,6 @@ export const updateSelectTool = (paper, tool, settings) => {
     } // else the rotation center is within selection bounds, always show drag crosshair at full opacity
     getDragCrosshairLayer().opacity = CROSSHAIR_FULL_OPACITY * opacityMultiplier;
   };
-
-  const oldonMouseUp = moveTool.constructor.prototype.onMouseUp;
-
-  moveTool.constructor.prototype.onMouseUp = function (...args) {
-    hideGuides();
-    oldonMouseUp.apply(this, args);
-  };
 };
 
 export const isSelectTool = (tool) => {
