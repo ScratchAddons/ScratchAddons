@@ -1,5 +1,5 @@
 name: ✨ Feature
-description: Suggest a new feature, addon or other improvement!
+description: Suggest a feature or improvement!
 labels: ["status: needs triage", "type: enhancement"]
 body:
   - type: markdown

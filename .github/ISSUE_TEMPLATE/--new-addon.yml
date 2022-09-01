@@ -26,7 +26,7 @@ body:
     attributes:
       label: What this addon does
       description: A clear and concise description of how the features this addon provides work and what they do.
-      placeholder: There will be a new option...
+      placeholder: This addon adds a button to...
     validations:
       required: true
 
@@ -40,5 +40,5 @@ body:
   - type: textarea
     id: notes
     attributes:
-      label: Demonstrations and additional context
+      label: Demonstration(s) and additional context
       description: Add any other information like screenshots, videos, or context about the new addon here.
