@@ -31,7 +31,7 @@ export default async function ({ addon, global, console }) {
 
       return li;
     }
-    async function removeAllItems() {
+    function removeAllItems() {
       if (scratchr2List) {
         // We are on scratchr2!
         if (originalNavbar.length < 4) {
@@ -51,8 +51,8 @@ export default async function ({ addon, global, console }) {
         searchItem.previousSibling.remove();
       }
     }
-    async function init() {
-      await removeAllItems();
+    function init() {
+      removeAllItems();
       const items = addon.self.disabled
         ? originalNavbar.length === 0
           ? (originalNavbar = [
