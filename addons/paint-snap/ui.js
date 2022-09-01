@@ -105,7 +105,7 @@ export function initUI({ addon, msg }) {
       if (!suppress) onChange(values[button]);
     };
 
-    setSelectedButton(values[defaultValue], null, true);
+    setSelectedButton(1 - values.indexOf(defaultValue), null, true);
 
     button1.addEventListener("click", setSelectedButton.bind(button1, 1));
     button2.addEventListener("click", setSelectedButton.bind(button2, 0));

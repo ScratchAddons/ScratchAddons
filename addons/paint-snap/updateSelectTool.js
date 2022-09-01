@@ -3,7 +3,7 @@ import { loadModule as loadMathModule } from "./helper/math.js";
 import { loadModule as loadViewModule } from "./helper/view.js";
 import { loadModule as loadLayerModule } from "./helper/layer.js";
 
-import { snapFrom, snapTo, snapOn, threshold, setThreshold } from "./state.js";
+import { snapFrom, snapTo, snapOn, threshold, setThreshold, setSnapTo, setSnapFrom, toggle } from "./state.js";
 
 const getMoveTool = (tool) => {
   return tool.boundingBoxTool._modeMap.MOVE;
@@ -17,7 +17,15 @@ export const updateSelectTool = (paper, tool, settings) => {
 
   const moveTool = getMoveTool(tool);
 
+  toggle(settings.get("enable-default"));
   setThreshold(settings.get("snap-dist") || 4);
+
+  for (const point of Object.keys(snapTo)) {
+    setSnapTo(point, settings.get(point));
+  }
+  for (const point of Object.keys(snapFrom)) {
+    setSnapFrom(point, settings.get(point));
+  }
 
   /*
   ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
