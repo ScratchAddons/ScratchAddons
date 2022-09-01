@@ -773,7 +773,6 @@ export default async function ({ addon, global, console, msg }) {
           state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
       });
       const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
-      const canvasContainer = document.querySelector("[class^='paint-editor_canvas-container']");
 
       addon.tab.appendToSharedSpace({
         space: "paintEditorZoomControls",

@@ -1,9 +1,6 @@
 export function loadModules(paper) {
   // https://github.com/LLK/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/helper/math.js
 
-  /** The ratio of the curve length to use for the handle length to convert squares into approximately circles. */
-  const HANDLE_RATIO = 0.3902628565;
-
   const checkPointsClose = function (startPos, eventPoint, threshold) {
     const xOff = Math.abs(startPos.x - eventPoint.x);
     const yOff = Math.abs(startPos.y - eventPoint.y);
