@@ -5,15 +5,15 @@ const ls = localStorage;
 export const snapTo = {
   pageEdges: true,
   pageCenter: true,
-  pageCorners: true,
+  pageCorners: false,
   objectEdges: true,
   objectCenters: true,
-  objectCorners: true,
+  objectCorners: false,
 };
 export const snapFrom = {
   boxCenter: true,
-  boxCorners: true,
-  boxEdgeCenters: true,
+  boxCorners: false,
+  boxEdgeCenters: false,
 };
 
 export let threshold = 4;
