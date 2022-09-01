@@ -113,7 +113,7 @@ export function initUI({ addon, msg }) {
     valueInput.min = min;
     valueInput.max = max;
     valueInput.value = defaultValue;
-    valueInput.addEventListener("input", () => {
+    valueInput.addEventListener("change", () => {
       if (valueInput.value > max) valueInput.value = max;
       if (valueInput.value < min) valueInput.value = min;
       onChange(valueInput.value);
