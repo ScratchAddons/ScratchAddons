@@ -45,12 +45,16 @@ export function setSnapTo(point, to) {
 
 export function enable() {
   snapOn = true;
-  eventTarget.dispatchEvent(new CustomEvent("enable"));
+  eventTarget.dispatchEvent(new CustomEvent("toggle"));
 }
 
 export function disable() {
   snapOn = false;
-  eventTarget.dispatchEvent(new CustomEvent("disable"));
+  eventTarget.dispatchEvent(new CustomEvent("toggle"));
+}
+
+export function toggle(enabled) {
+  enabled ? enable() : disable();
 }
 
 export let enabledAddons = [];
@@ -61,4 +65,10 @@ export function setEnabled(addons) {
 
 export function addonIsEnabled(addonName) {
   return enabledAddons.includes(addonName);
+}
+
+export let threshold = 4;
+
+export function setThreshold(thresh) {
+  threshold = thresh;
 }

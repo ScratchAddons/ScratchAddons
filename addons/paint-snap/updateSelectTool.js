@@ -3,7 +3,7 @@ import { loadModule as loadMathModule } from "./helper/math.js";
 import { loadModule as loadViewModule } from "./helper/view.js";
 import { loadModule as loadLayerModule } from "./helper/layer.js";
 
-import { snapFrom, snapTo } from "./state.js";
+import { snapFrom, snapTo, snapOn, threshold, setThreshold } from "./state.js";
 
 const getMoveTool = (tool) => {
   return tool.boundingBoxTool._modeMap.MOVE;
@@ -17,12 +17,7 @@ export const updateSelectTool = (paper, tool, settings) => {
 
   const moveTool = getMoveTool(tool);
 
-  let threshold = settings.get("snap-dist") || 4;
-  settings.addEventListener("change", () => {
-    threshold = settings.get("snap-dist");
-  });
-
-  let cache = new WeakMap();
+  setThreshold(settings.get("snap-dist") || 4);
 
   /*
   ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -33,7 +28,6 @@ export const updateSelectTool = (paper, tool, settings) => {
 
   const FADE_DISTANCE = 10;
 
-  const guideLayer = getLayer("isGuideLayer");
   const guideLine = new paper.Path.Line({
     from: [0, 0],
     to: [0, 0],
@@ -75,8 +69,6 @@ export const updateSelectTool = (paper, tool, settings) => {
   };
   const guidePoint = new paper.Group({ children: [guidePointParts.shadow, guidePointParts.circle], visible: false });
 
-  guideLayer.addChildren([guideLine, guidePoint]);
-
   const fixGuideSizes = () => {
     guidePointParts.shadow = new paper.Path.Circle({
       center: new paper.Point(0, 0),
@@ -110,6 +102,9 @@ export const updateSelectTool = (paper, tool, settings) => {
   let hideGuides;
 
   moveTool.constructor.prototype.onMouseDrag = function (event) {
+    guideLine.remove();
+    guidePoint.remove();
+    getLayer("isGuideLayer").addChildren([guideLine, guidePoint]);
     const point = event.point;
     const actionBounds = getActionBounds(this.mode in BitmapModes);
 
@@ -132,6 +127,7 @@ export const updateSelectTool = (paper, tool, settings) => {
 
     const resetAnchorColor = () => {
       selectionAnchor.strokeColor = new paper.Color(0.30196078431372547, 0.592156862745098, 1);
+      selectionAnchor.fillColor = null;
     };
 
     hideGuides = () => {
@@ -139,251 +135,245 @@ export const updateSelectTool = (paper, tool, settings) => {
       resetAnchorColor();
     };
 
-    const selectionAnchor = guideLayer.children.find((c) => c.data.isSelectionBound).selectionAnchor;
+    const selectionAnchor = getLayer("isGuideLayer").children.find((c) => c.data.isSelectionBound).selectionAnchor;
 
     if (snapOn && !event.modifiers.shift && this.mode !== Modes.RESHAPE) {
-      const hasBeenCached = cache.has(this.selectionCenter);
-      const cacheItem = cache.get(this.selectionCenter);
-      const snappingPoints = hasBeenCached
-        ? cacheItem.snappingPoints
-        : {
-            ...(snapFrom.boxCenter
-              ? {
-                  center: selectionBounds.center,
-                }
-              : {}),
-            ...(snapFrom.boxCorners
-              ? {
-                  topLeft: selectionBounds.topLeft,
-                  topRight: selectionBounds.topRight,
-                  bottomLeft: selectionBounds.bottomLeft,
-                  bottomRight: selectionBounds.bottomRight,
-                }
-              : {}),
-            ...(snapFrom.boxEdgeCenters
-              ? {
-                  left: new paper.Point(selectionBounds.left, selectionBounds.center.y),
-                  right: new paper.Point(selectionBounds.right, selectionBounds.center.y),
-                  top: new paper.Point(selectionBounds.center.x, selectionBounds.top),
-                  bottom: new paper.Point(selectionBounds.center.x, selectionBounds.bottom),
-                }
-              : {}),
-          };
+      const snappingPoints = {
+        ...(snapFrom.boxCenter
+          ? {
+              center: selectionBounds.center,
+            }
+          : {}),
+        ...(snapFrom.boxCorners
+          ? {
+              topLeft: selectionBounds.topLeft,
+              topRight: selectionBounds.topRight,
+              bottomLeft: selectionBounds.bottomLeft,
+              bottomRight: selectionBounds.bottomRight,
+            }
+          : {}),
+        ...(snapFrom.boxEdgeCenters
+          ? {
+              left: new paper.Point(selectionBounds.left, selectionBounds.center.y),
+              right: new paper.Point(selectionBounds.right, selectionBounds.center.y),
+              top: new paper.Point(selectionBounds.center.x, selectionBounds.top),
+              bottom: new paper.Point(selectionBounds.center.x, selectionBounds.bottom),
+            }
+          : {}),
+      };
 
       const paintLayer = getLayer("isPaintingLayer");
 
-      const snapPointDefs = hasBeenCached
-        ? cacheItem.snapPointDefs
-        : {
-            ...(snapTo.pageCenter
-              ? {
-                  bounds_c: {
-                    type: "point",
-                    value: CENTER,
-                  },
-                  bounds_cx: {
-                    type: "xcoord",
-                    value: CENTER.x,
-                  },
-                  bounds_cy: {
-                    type: "ycoord",
-                    value: CENTER.y,
-                  },
-                }
-              : {}),
-            ...(snapTo.pageEdges
-              ? {
-                  bounds_l: {
-                    type: "xcoord",
-                    value: ART_BOARD_BOUNDS.left,
-                    clamp: {
-                      min: ART_BOARD_BOUNDS.top,
-                      max: ART_BOARD_BOUNDS.bottom,
+      const snapPointDefs = {
+        ...(snapTo.pageCenter
+          ? {
+              bounds_c: {
+                type: "point",
+                value: CENTER,
+              },
+              bounds_cx: {
+                type: "xcoord",
+                value: CENTER.x,
+              },
+              bounds_cy: {
+                type: "ycoord",
+                value: CENTER.y,
+              },
+            }
+          : {}),
+        ...(snapTo.pageEdges
+          ? {
+              bounds_l: {
+                type: "xcoord",
+                value: ART_BOARD_BOUNDS.left,
+                clamp: {
+                  min: ART_BOARD_BOUNDS.top,
+                  max: ART_BOARD_BOUNDS.bottom,
+                },
+              },
+              bounds_r: {
+                type: "xcoord",
+                value: ART_BOARD_BOUNDS.right,
+                clamp: {
+                  min: ART_BOARD_BOUNDS.top,
+                  max: ART_BOARD_BOUNDS.bottom,
+                },
+              },
+              bounds_t: {
+                type: "ycoord",
+                value: ART_BOARD_BOUNDS.top,
+                clamp: {
+                  min: ART_BOARD_BOUNDS.left,
+                  max: ART_BOARD_BOUNDS.right,
+                },
+              },
+              bounds_b: {
+                type: "ycoord",
+                value: ART_BOARD_BOUNDS.bottom,
+                clamp: {
+                  min: ART_BOARD_BOUNDS.left,
+                  max: ART_BOARD_BOUNDS.right,
+                },
+              },
+              bounds_lc: {
+                type: "point",
+                value: new paper.Point(ART_BOARD_BOUNDS.left, CENTER.y),
+              },
+              bounds_rc: {
+                type: "point",
+                value: new paper.Point(ART_BOARD_BOUNDS.right, CENTER.y),
+              },
+              bounds_tc: {
+                type: "point",
+                value: new paper.Point(CENTER.x, ART_BOARD_BOUNDS.top),
+              },
+              bounds_bc: {
+                type: "point",
+                value: new paper.Point(CENTER.x, ART_BOARD_BOUNDS.bottom),
+              },
+            }
+          : {}),
+        ...(snapTo.pageCorners
+          ? {
+              bounds_tl: {
+                type: "point",
+                value: ART_BOARD_BOUNDS.topLeft,
+              },
+              bounds_tr: {
+                type: "point",
+                value: ART_BOARD_BOUNDS.topRight,
+              },
+              bounds_bl: {
+                type: "point",
+                value: ART_BOARD_BOUNDS.bottomLeft,
+              },
+              bounds_br: {
+                type: "point",
+                value: ART_BOARD_BOUNDS.bottomRight,
+              },
+            }
+          : {}),
+        ...(snapTo.objectEdges
+          ? Object.fromEntries(
+              paintLayer.children
+                .filter((item) => !(item.selected || item.data.isHelperItem))
+                .map((item) => [
+                  [
+                    `item_${item.id}_r`,
+                    {
+                      type: "itemSideVert",
+                      value: item.bounds.right,
+                      clamp: {
+                        min: item.bounds.top,
+                        max: item.bounds.bottom,
+                      },
                     },
-                  },
-                  bounds_r: {
-                    type: "xcoord",
-                    value: ART_BOARD_BOUNDS.right,
-                    clamp: {
-                      min: ART_BOARD_BOUNDS.top,
-                      max: ART_BOARD_BOUNDS.bottom,
+                  ],
+                  [
+                    `item_${item.id}_l`,
+                    {
+                      type: "itemSideVert",
+                      value: item.bounds.left,
+                      clamp: {
+                        min: item.bounds.top,
+                        max: item.bounds.bottom,
+                      },
                     },
-                  },
-                  bounds_t: {
-                    type: "ycoord",
-                    value: ART_BOARD_BOUNDS.top,
-                    clamp: {
-                      min: ART_BOARD_BOUNDS.left,
-                      max: ART_BOARD_BOUNDS.right,
+                  ],
+                  [
+                    `item_${item.id}_t`,
+                    {
+                      type: "itemSideHoriz",
+                      value: item.bounds.top,
+                      clamp: {
+                        min: item.bounds.left,
+                        max: item.bounds.right,
+                      },
                     },
-                  },
-                  bounds_b: {
-                    type: "ycoord",
-                    value: ART_BOARD_BOUNDS.bottom,
-                    clamp: {
-                      min: ART_BOARD_BOUNDS.left,
-                      max: ART_BOARD_BOUNDS.right,
+                  ],
+                  [
+                    `item_${item.id}_b`,
+                    {
+                      type: "itemSideHoriz",
+                      value: item.bounds.bottom,
+                      clamp: {
+                        min: item.bounds.left,
+                        max: item.bounds.right,
+                      },
                     },
-                  },
-                  bounds_lc: {
-                    type: "point",
-                    value: new paper.Point(ART_BOARD_BOUNDS.left, CENTER.y),
-                  },
-                  bounds_rc: {
-                    type: "point",
-                    value: new paper.Point(ART_BOARD_BOUNDS.right, CENTER.y),
-                  },
-                  bounds_tc: {
-                    type: "point",
-                    value: new paper.Point(CENTER.x, ART_BOARD_BOUNDS.top),
-                  },
-                  bounds_bc: {
-                    type: "point",
-                    value: new paper.Point(CENTER.x, ART_BOARD_BOUNDS.bottom),
-                  },
-                }
-              : {}),
-            ...(snapTo.pageCorners
-              ? {
-                  bounds_tl: {
-                    type: "point",
-                    value: ART_BOARD_BOUNDS.topLeft,
-                  },
-                  bounds_tr: {
-                    type: "point",
-                    value: ART_BOARD_BOUNDS.topRight,
-                  },
-                  bounds_bl: {
-                    type: "point",
-                    value: ART_BOARD_BOUNDS.bottomLeft,
-                  },
-                  bounds_br: {
-                    type: "point",
-                    value: ART_BOARD_BOUNDS.bottomRight,
-                  },
-                }
-              : {}),
-            ...(snapTo.objectEdges
-              ? Object.fromEntries(
-                  paintLayer.children
-                    .filter((item) => !(item.selected || item.data.isHelperItem))
-                    .map((item) => [
-                      [
-                        `item_${item.id}_r`,
-                        {
-                          type: "itemSideVert",
-                          value: item.bounds.right,
-                          clamp: {
-                            min: item.bounds.top,
-                            max: item.bounds.bottom,
-                          },
-                        },
-                      ],
-                      [
-                        `item_${item.id}_l`,
-                        {
-                          type: "itemSideVert",
-                          value: item.bounds.left,
-                          clamp: {
-                            min: item.bounds.top,
-                            max: item.bounds.bottom,
-                          },
-                        },
-                      ],
-                      [
-                        `item_${item.id}_t`,
-                        {
-                          type: "itemSideHoriz",
-                          value: item.bounds.top,
-                          clamp: {
-                            min: item.bounds.left,
-                            max: item.bounds.right,
-                          },
-                        },
-                      ],
-                      [
-                        `item_${item.id}_b`,
-                        {
-                          type: "itemSideHoriz",
-                          value: item.bounds.bottom,
-                          clamp: {
-                            min: item.bounds.left,
-                            max: item.bounds.right,
-                          },
-                        },
-                      ],
-                    ])
-                    .flat(1)
-                )
-              : {}),
-            ...(snapTo.objectCenters
-              ? Object.fromEntries(
-                  paintLayer.children
-                    .filter((item) => !item.selected)
-                    .map((item) => [
-                      [
-                        `item_${item.id}_c`,
-                        {
-                          type: "point",
-                          value: item.bounds.center,
-                        },
-                      ],
-                      [
-                        `item_${item.id}_cx`,
-                        {
-                          type: "xcoord",
-                          value: item.bounds.center.x,
-                        },
-                      ],
-                      [
-                        `item_${item.id}_cy`,
-                        {
-                          type: "ycoord",
-                          value: item.bounds.center.y,
-                        },
-                      ],
-                    ])
-                    .flat(1)
-                )
-              : {}),
-            ...(snapTo.objectCorners
-              ? Object.fromEntries(
-                  paintLayer.children
-                    .filter((item) => !item.selected)
-                    .map((item) => [
-                      [
-                        `item_${item.id}_tl`,
-                        {
-                          type: "point",
-                          value: item.bounds.topLeft,
-                        },
-                      ],
-                      [
-                        `item_${item.id}_tr`,
-                        {
-                          type: "point",
-                          value: item.bounds.topRight,
-                        },
-                      ],
-                      [
-                        `item_${item.id}_bl`,
-                        {
-                          type: "point",
-                          value: item.bounds.bottomLeft,
-                        },
-                      ],
-                      [
-                        `item_${item.id}_br`,
-                        {
-                          type: "point",
-                          value: item.bounds.bottomRight,
-                        },
-                      ],
-                    ])
-                    .flat(1)
-                )
-              : {}),
-          };
+                  ],
+                ])
+                .flat(1)
+            )
+          : {}),
+        ...(snapTo.objectCenters
+          ? Object.fromEntries(
+              paintLayer.children
+                .filter((item) => !item.selected)
+                .map((item) => [
+                  [
+                    `item_${item.id}_c`,
+                    {
+                      type: "point",
+                      value: item.bounds.center,
+                    },
+                  ],
+                  [
+                    `item_${item.id}_cx`,
+                    {
+                      type: "xcoord",
+                      value: item.bounds.center.x,
+                    },
+                  ],
+                  [
+                    `item_${item.id}_cy`,
+                    {
+                      type: "ycoord",
+                      value: item.bounds.center.y,
+                    },
+                  ],
+                ])
+                .flat(1)
+            )
+          : {}),
+        ...(snapTo.objectCorners
+          ? Object.fromEntries(
+              paintLayer.children
+                .filter((item) => !item.selected)
+                .map((item) => [
+                  [
+                    `item_${item.id}_tl`,
+                    {
+                      type: "point",
+                      value: item.bounds.topLeft,
+                    },
+                  ],
+                  [
+                    `item_${item.id}_tr`,
+                    {
+                      type: "point",
+                      value: item.bounds.topRight,
+                    },
+                  ],
+                  [
+                    `item_${item.id}_bl`,
+                    {
+                      type: "point",
+                      value: item.bounds.bottomLeft,
+                    },
+                  ],
+                  [
+                    `item_${item.id}_br`,
+                    {
+                      type: "point",
+                      value: item.bounds.bottomRight,
+                    },
+                  ],
+                ])
+                .flat(1)
+            )
+          : {}),
+      };
 
       if (!window.snapPointDefs) window.snapPointDefs = snapPointDefs;
 
@@ -413,13 +403,6 @@ export const updateSelectTool = (paper, tool, settings) => {
         point: point.add(dragVector),
         snapPoints: generateSnapPointsFor(point.add(dragVector)),
       }));
-
-      if (!hasBeenCached) {
-        cache.set(this.selectionCenter, {
-          snappingPoints,
-          snapPointDefs,
-        });
-      }
 
       const priority = ["point", "itemSideVert", "itemSideHoriz", "xcoord", "ycoord", "generated", undefined];
 
@@ -455,11 +438,11 @@ export const updateSelectTool = (paper, tool, settings) => {
 
       const closestSnapPoint = closestSnapForEachPoint.sort(sortByPrioOrDist)[0];
       hideGuides();
-      if (closestSnapPoint.snapPoint) {
+      if (closestSnapPoint?.snapPoint) {
         fixGuideSizes();
         snapVector = closestSnapPoint.snapPoint.subtract(closestSnapPoint.point);
         if (closestSnapPoint.point.equals(this.selectionCenter) && closestSnapPoint.snapPointType === "point") {
-          selectionAnchor.strokeColor = new paper.Color(1, 0, 0);
+          selectionAnchor.fillColor = selectionAnchor.strokeColor = new paper.Color(1, 0, 0);
         } else {
           resetAnchorColor();
           switch (closestSnapPoint.snapPointType) {
