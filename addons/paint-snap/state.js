@@ -15,42 +15,17 @@ export const snapFrom = {
   boxEdgeCenters: true,
 };
 
-export const eventTarget = new EventTarget();
-
-/** @type {(point: keyof snapFrom, to: boolean) => void} */
-export function setSnapFrom(point, to) {
-  snapFrom[point] = !!to;
-  eventTarget.dispatchEvent(
-    new CustomEvent("changeSnapFrom", {
-      detail: {
-        point,
-        value: to,
-      },
-    })
-  );
-}
-
 /** @type {(point: keyof snapTo, to: boolean) => void} */
 export function setSnapTo(point, to) {
   snapTo[point] = !!to;
-  eventTarget.dispatchEvent(
-    new CustomEvent("changeSnapTo", {
-      detail: {
-        point,
-        value: to,
-      },
-    })
-  );
 }
 
 export function enable() {
   snapOn = true;
-  eventTarget.dispatchEvent(new CustomEvent("toggle"));
 }
 
 export function disable() {
   snapOn = false;
-  eventTarget.dispatchEvent(new CustomEvent("toggle"));
 }
 
 export function toggle(enabled) {

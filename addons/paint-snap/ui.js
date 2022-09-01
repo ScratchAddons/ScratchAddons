@@ -1,14 +1,4 @@
-import {
-  eventTarget,
-  setSnapFrom,
-  setSnapTo,
-  snapOn,
-  snapFrom,
-  snapTo,
-  toggle,
-  threshold,
-  setThreshold,
-} from "./state.js";
+import { setSnapFrom, setSnapTo, snapOn, snapFrom, snapTo, toggle, threshold, setThreshold } from "./state.js";
 
 /** @type {import("../../addon-api/content-script/typedef").UserscriptUtilities} */
 export function initUI({ addon, msg }) {
@@ -64,15 +54,14 @@ export function initUI({ addon, msg }) {
   settingsPage.appendChild(settingsTip);
 
   const toggleButton = createButton();
-  toggleButton.addEventListener("click", () => toggle(!snapOn));
+  toggleButton.addEventListener("click", () => {
+    toggle(!snapOn);
+    toggleButton.dataset.enabled = snapOn;
+  });
   toggleButton.title = msg("toggle");
   toggleButton.appendChild(createButtonImage("snap"));
   toggleButton.dataset.enabled = snapOn;
   controlsGroup.appendChild(toggleButton);
-
-  eventTarget.addEventListener("toggle", () => {
-    toggleButton.dataset.enabled = snapOn;
-  });
 
   const settingButton = createButton();
   settingButton.addEventListener("click", () => setSettingsOpen(!areSettingsOpen()));
