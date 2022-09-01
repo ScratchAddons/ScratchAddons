@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
-  "name": "Paint snapping",
+  "name": "Costume editor snapping",
   "description": "Snap objects in the costume editor to bounding boxes and vector nodes.",
   "tags": ["editor", "costumeEditor", "featured"],
   "versionAdded": "1.29.0",
