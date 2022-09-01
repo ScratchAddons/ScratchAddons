@@ -17,14 +17,6 @@ export const updateSelectTool = (paper, tool, settings) => {
   const moveTool = getMoveTool(tool);
 
   toggle(settings.get("enable-default"));
-  setThreshold(settings.get("snap-dist") || 4);
-
-  for (const point of Object.keys(snapTo)) {
-    setSnapTo(point, settings.get(point));
-  }
-  for (const point of Object.keys(snapFrom)) {
-    setSnapFrom(point, settings.get(point));
-  }
 
   /*
   ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐

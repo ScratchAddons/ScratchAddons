@@ -113,7 +113,11 @@ export function initUI({ addon, msg }) {
     valueInput.min = min;
     valueInput.max = max;
     valueInput.value = defaultValue;
-    valueInput.addEventListener("input", () => onChange(valueInput.value));
+    valueInput.addEventListener("input", () => {
+      if (valueInput.value > max) valueInput.value = max;
+      if (valueInput.value < min) valueInput.value = min;
+      onChange(valueInput.value);
+    });
     valueInput.addEventListener("blur", () => {
       if (!valueInput.value) valueInput.value = "0";
     });

@@ -23,68 +23,6 @@
       "id": "enable-default",
       "name": "Enable by default",
       "default": true
-    },
-    {
-      "type": "positive_integer",
-      "min": 4,
-      "max": 50,
-      "id": "snap-dist",
-      "name": "Snapping distance",
-      "default": 10
-    },
-    {
-      "id": "pageEdges",
-      "name": "Snap to page edges",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "id": "pageCenter",
-      "name": "Snap to page center",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "id": "pageCorners",
-      "name": "Snap to page corners",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "id": "objectEdges",
-      "name": "Snap to object edges",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "id": "objectCenters",
-      "name": "Snap to object centers",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "id": "objectCorners",
-      "name": "Snap to object corners",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "id": "boxEdgeCenters",
-      "name": "Snap from selection edges",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "id": "boxCenter",
-      "name": "Snap from selection center",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "id": "boxCorners",
-      "name": "Snap from selection corners",
-      "type": "boolean",
-      "default": true
     }
   ],
   "dynamicDisable": true,
