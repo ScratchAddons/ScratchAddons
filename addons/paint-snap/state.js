@@ -54,7 +54,8 @@ export function disable() {
 }
 
 export function toggle(enabled) {
-  enabled ? enable() : disable();
+  if (enabled) enable();
+  else disable();
 }
 
 export let enabledAddons = [];

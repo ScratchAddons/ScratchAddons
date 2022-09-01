@@ -1,7 +1,5 @@
 import {
   eventTarget,
-  enable,
-  disable,
   addonIsEnabled,
   setSnapFrom,
   setSnapTo,
