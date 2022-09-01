@@ -15,9 +15,11 @@ export const snapFrom = {
   boxEdgeCenters: true,
 };
 
-/** @type {(point: keyof snapTo, to: boolean) => void} */
 export function setSnapTo(point, to) {
   snapTo[point] = !!to;
+}
+export function setSnapFrom(point, to) {
+  snapFrom[point] = !!to;
 }
 
 export function enable() {
