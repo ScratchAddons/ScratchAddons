@@ -41,7 +41,7 @@ body:
   - type: textarea
     id: additonalcontext
     attributes:
-      label: Demonstrations and additional context
+      label: Demonstration(s) and additional context
       description: If applicable, insert screenshots or a live example to help demonstrate your problem, as well as any other useful infomation here.
 
   - type: textarea
