@@ -356,6 +356,7 @@ export default class Tab extends Listenable {
    * assetContextMenuAfterExport - after the export button of asset (sprite, costume, etc)'s context menu
    * assetContextMenuAfterDelete - after the delete button of asset (sprite, costume, etc)'s context menu
    * monitor - after the end of the stage monitor context menu
+   * paintEditorZoomControls - Before the zoom controls in the paint editor
    *
    *
    * @param {object} opts - options.
