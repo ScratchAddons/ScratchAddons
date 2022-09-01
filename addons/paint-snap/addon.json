@@ -3,7 +3,7 @@
   "name": "Paint snapping",
   "description": "Snap objects in the paint editor to bounding boxes and svg nodes.",
   "tags": ["editor", "costumeEditor", "featured"],
-  "versionAdded": "1.28.0",
+  "versionAdded": "1.29.0",
   "userscripts": [
     {
       "matches": ["projects"],
