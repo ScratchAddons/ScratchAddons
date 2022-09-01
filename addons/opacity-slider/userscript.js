@@ -196,7 +196,8 @@ export default async function ({ addon, console, msg }) {
           setHandlePos(tinycolor(color).toRgb().a);
         }
         // ignore when opacity slider is changeing or when popover closed
-        if (!ignoreKeepingOpacity && modalOpening) changeOpacity(scratchAddons.opacitySliderAlpha * 100);
+        console.log(ignoreKeepingOpacity);
+        // if (!ignoreKeepingOpacity && modalOpening) changeOpacity(scratchAddons.opacitySliderAlpha * 100);
         ignoreKeepingOpacity = false;
       }
     };
