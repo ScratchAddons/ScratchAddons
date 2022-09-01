@@ -16,7 +16,7 @@ export const snapFrom = {
   boxEdgeCenters: false,
 };
 
-export let threshold = 4;
+export let threshold = 10;
 
 if (ls.getItem("sa-paint-snap-snapTo")) {
   const stored = JSON.parse(ls.getItem("sa-paint-snap-snapTo"));
