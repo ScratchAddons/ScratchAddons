@@ -1,6 +1,5 @@
 import {
   eventTarget,
-  addonIsEnabled,
   setSnapFrom,
   setSnapTo,
   snapOn,
@@ -50,7 +49,6 @@ export function initUI({ addon, msg }) {
 
   const settingsPage = document.createElement("div");
   settingsPage.className = "sa-paint-snap-settings";
-  settingsPage.dataset.compat = addonIsEnabled("onion-skinning");
   settingPageWrapper.appendChild(settingsPage);
 
   //todo msg

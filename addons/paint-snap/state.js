@@ -58,16 +58,6 @@ export function toggle(enabled) {
   else disable();
 }
 
-export let enabledAddons = [];
-
-export function setEnabled(addons) {
-  enabledAddons = addons;
-}
-
-export function addonIsEnabled(addonName) {
-  return enabledAddons.includes(addonName);
-}
-
 export let threshold = 4;
 
 export function setThreshold(thresh) {
