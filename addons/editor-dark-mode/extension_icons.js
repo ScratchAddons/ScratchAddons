@@ -1,6 +1,6 @@
 import { textColor } from "../../libraries/common/cs/text-color.esm.js";
 
-const dataUriRegex = new RegExp('^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$');
+const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$");
 
 export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
@@ -16,12 +16,12 @@ export default async function ({ addon, console }) {
       const oldSvg = atob(match[1]);
       const newColor = textColor(addon.settings.get("categoryMenu"), null, "#ffffff");
       if (newColor) {
-        const newSvg = oldSvg.replace(/#575e75|#4d4d4d/ig, newColor);
+        const newSvg = oldSvg.replace(/#575e75|#4d4d4d/gi, newColor);
         this.iconURI_ = `data:image/svg+xml;base64,${btoa(newSvg)}`;
       }
     }
     oldCategoryCreateDom.call(this);
-  }
+  };
 
   const reloadToolbox = () => {
     const workspace = Blockly.getMainWorkspace();

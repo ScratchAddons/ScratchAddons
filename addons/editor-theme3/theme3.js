@@ -1,6 +1,6 @@
 import { removeAlpha, multiply, alphaBlend, recolorFilter } from "../../libraries/common/cs/text-color.esm.js";
 
-const dataUriRegex = new RegExp('^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$');
+const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$");
 const extensionsCategory = {
   id: null,
   settingId: "Pen-color",
@@ -145,8 +145,7 @@ export default async function ({ addon, console }) {
     // Category bubbles
     if (this.iconURI_) {
       if (addon.self.disabled) return oldCategoryCreateDom.call(this);
-      if (!["sa-blocks", "videoSensing", "text2speech"].includes(this.id_))
-        return oldCategoryCreateDom.call(this);
+      if (!["sa-blocks", "videoSensing", "text2speech"].includes(this.id_)) return oldCategoryCreateDom.call(this);
 
       const match = dataUriRegex.exec(this.iconURI_);
       if (match) {
@@ -154,7 +153,7 @@ export default async function ({ addon, console }) {
         const category = this.id_ === "sa-blocks" ? saCategory : extensionsCategory;
         const newColor = isColoredTextMode ? tertiaryColor(category) : primaryColor(category);
         if (newColor) {
-          const newSvg = oldSvg.replace(/#29beb8|#0ebd8c/ig, newColor);
+          const newSvg = oldSvg.replace(/#29beb8|#0ebd8c/gi, newColor);
           this.iconURI_ = `data:image/svg+xml;base64,${btoa(newSvg)}`;
         }
       }
