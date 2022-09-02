@@ -111,3 +111,8 @@
 .sa-paint-snap-settings-label {
   white-space: nowrap;
 }
+
+.sa-paint-snap-image[data-shrink="true"] {
+  height: 1em;
+  width: 1em;
+}

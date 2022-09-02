@@ -81,8 +81,16 @@ export function initUI({ addon, msg }) {
     const button1 = createButton({ useButtonTag: true });
     const button2 = createButton({ useButtonTag: true });
 
-    button1.appendChild(document.createTextNode(msg(button1Text)));
-    button2.appendChild(document.createTextNode(msg(button2Text)));
+    const icon1 = createButtonImage(button1Text);
+    const icon2 = createButtonImage(button2Text);
+
+    icon1.dataset.shrink = icon2.dataset.shrink = true;
+
+    button1.appendChild(icon1);
+    button2.appendChild(icon2);
+
+    button1.setAttribute("aria-label", (button1.title = msg(button1Text)));
+    button2.setAttribute("aria-label", (button2.title = msg(button2Text)));
 
     const setSelectedButton = (button, e, suppress = false) => {
       button1.dataset.enabled = !!button;
