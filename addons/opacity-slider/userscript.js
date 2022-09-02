@@ -9,7 +9,6 @@ export default async function ({ addon, console, msg }) {
   let labelReadout;
   let saOpacityHandle;
   let saOpacitySlider;
-  let ignoreKeepingOpacity = false;
 
   const getColor = () => {
     let fillOrStroke;
@@ -85,26 +84,22 @@ export default async function ({ addon, console, msg }) {
   const handleMouseDown = (event) => {
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
-    ignoreKeepingOpacity = true;
     handleClickOffset = getEventXY(event).x - saOpacityHandle.getBoundingClientRect().left;
   };
 
   const handleMouseUp = () => {
     document.removeEventListener("mousemove", handleMouseMove);
     document.removeEventListener("mouseup", handleMouseUp);
-    ignoreKeepingOpacity = false;
   };
 
   const handleMouseMove = (event) => {
     event.preventDefault();
-    ignoreKeepingOpacity = true;
     changeOpacity(scaleMouseToSliderPosition(event));
   };
 
   const handleClickBackground = (event) => {
     if (event.target !== saOpacitySlider) return;
     handleClickOffset = HANDLE_WIDTH / 2;
-    ignoreKeepingOpacity = true;
     changeOpacity(scaleMouseToSliderPosition(event));
   };
 
@@ -173,15 +168,8 @@ export default async function ({ addon, console, msg }) {
     lastSlider.className = addon.tab.scratchClass("slider_container");
     setHandlePos(defaultAlpha);
     scratchAddons.opacitySliderAlpha = defaultAlpha;
-    let modalOpening = true;
 
     prevEventHandler = ({ detail }) => {
-      if (detail.action.type === "scratch-paint/modals/OPEN_MODAL") {
-        modalOpening = true;
-      }
-      if (detail.action.type === "scratch-paint/modals/CLOSE_MODAL") {
-        modalOpening = false;
-      }
       if (
         detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR" ||
         detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR_2" ||
@@ -195,10 +183,6 @@ export default async function ({ addon, console, msg }) {
           labelReadout.textContent = Math.round(tinycolor(color).toRgb().a * 100);
           setHandlePos(tinycolor(color).toRgb().a);
         }
-        // ignore when opacity slider is changeing or when popover closed
-        console.log(ignoreKeepingOpacity);
-        // if (!ignoreKeepingOpacity && modalOpening) changeOpacity(scratchAddons.opacitySliderAlpha * 100);
-        ignoreKeepingOpacity = false;
       }
     };
     addon.tab.redux.addEventListener("statechanged", prevEventHandler);
