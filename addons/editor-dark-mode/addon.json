@@ -760,13 +760,6 @@
       "if": {
         "settings": { "darkComments": true }
       }
-    },
-    {
-      "url": "scrollbar.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "darkScrollbars": true }
-      }
     }
   ],
   "settings": [
@@ -897,12 +890,6 @@
       "id": "darkComments",
       "type": "boolean",
       "default": true
-    },
-    {
-      "name": "Dark scrollbars",
-      "id": "darkScrollbars",
-      "type": "boolean",
-      "default": true
     }
   ],
   "presets": [
@@ -929,8 +916,7 @@
         "stageHeader": "#000000",
         "border": "#ffffff0d",
         "dots": false,
-        "darkComments": true,
-        "darkScrollbars": true
+        "darkComments": true
       }
     },
     {
@@ -956,8 +942,7 @@
         "stageHeader": "#051638",
         "border": "#00000026",
         "dots": false,
-        "darkComments": true,
-        "darkScrollbars": true
+        "darkComments": true
       }
     },
     {
@@ -983,8 +968,7 @@
         "stageHeader": "#222222",
         "border": "#111111",
         "dots": false,
-        "darkComments": true,
-        "darkScrollbars": true
+        "darkComments": true
       }
     },
     {
@@ -1010,8 +994,7 @@
         "stageHeader": "#333333",
         "border": "#444444",
         "dots": true,
-        "darkComments": true,
-        "darkScrollbars": true
+        "darkComments": true
       }
     },
     {
@@ -1037,8 +1020,7 @@
         "stageHeader": "#111111",
         "border": "#ffffff26",
         "dots": true,
-        "darkComments": true,
-        "darkScrollbars": true
+        "darkComments": true
       }
     },
     {
@@ -1064,8 +1046,7 @@
         "stageHeader": "#e6e8e8",
         "border": "#d0d1d2",
         "dots": true,
-        "darkComments": false,
-        "darkScrollbars": false
+        "darkComments": false
       }
     },
     {
@@ -1091,8 +1072,7 @@
         "stageHeader": "#000001",
         "border": "#0000006b",
         "dots": false,
-        "darkComments": false,
-        "darkScrollbars": false
+        "darkComments": false
       }
     },
     {
@@ -1118,8 +1098,7 @@
         "stageHeader": "#e8edf1",
         "border": "#00000026",
         "dots": true,
-        "darkComments": false,
-        "darkScrollbars": false
+        "darkComments": false
       }
     }
   ],

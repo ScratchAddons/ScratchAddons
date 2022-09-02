@@ -1814,13 +1814,6 @@
   ],
   "userstyles": [
     {
-      "url": "scrollbar.css",
-      "matches": ["https://scratch.mit.edu/*"],
-      "if": {
-        "settings": { "darkScrollbars": true }
-      }
-    },
-    {
       "url": "experimental_scratchr2.css",
       "matches": ["isNotScratchWWW"]
     },
@@ -1986,12 +1979,6 @@
       "default": "darker"
     },
     {
-      "name": "Dark scrollbars",
-      "id": "darkScrollbars",
-      "type": "boolean",
-      "default": true
-    },
-    {
       "name": "Dark code blocks on the forums",
       "id": "darkForumCode",
       "type": "boolean",
@@ -2015,7 +2002,6 @@
         "footer": "#333333",
         "border": "#606060",
         "darkBanners": "darker",
-        "darkScrollbars": true,
         "darkForumCode": true
       }
     },
@@ -2035,7 +2021,6 @@
         "footer": "#17181a",
         "border": "#000000",
         "darkBanners": "desaturated",
-        "darkScrollbars": true,
         "darkForumCode": true
       }
     },
@@ -2055,7 +2040,6 @@
         "footer": "#f2f2f2",
         "border": "#0000001a",
         "darkBanners": "off",
-        "darkScrollbars": false,
         "darkForumCode": false
       }
     }
