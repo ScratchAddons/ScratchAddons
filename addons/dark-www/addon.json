@@ -76,6 +76,19 @@
       }
     },
     {
+      "name": "page-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        },
+        "threshold": 128
+      }
+    },
+    {
       "name": "page-ideas",
       "value": {
         "type": "multiply",
@@ -471,6 +484,19 @@
           "type": "settingValue",
           "settingId": "box"
         }
+      }
+    },
+    {
+      "name": "box-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        },
+        "threshold": 128
       }
     },
     {
@@ -1163,6 +1189,18 @@
       }
     },
     {
+      "name": "blue-tabHover",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.2)",
+        "white": "rgba(255, 255, 255, 0.2)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "blue"
+        }
+      }
+    },
+    {
       "name": "blue-studioTextareaBorder",
       "value": {
         "type": "makeHsv",
@@ -1189,6 +1227,19 @@
             "a": 0.79
           }
         }
+      }
+    },
+    {
+      "name": "blue-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "blue"
+        },
+        "threshold": 128
       }
     },
     {
