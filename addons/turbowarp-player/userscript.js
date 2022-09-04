@@ -169,6 +169,7 @@ export default async function ({ addon, console, msg }) {
       if (confirm(msg("confirmation"))) {
         button.title = "TurboWarp";
         button.classList.remove("scratch");
+        playerToggled = !playerToggled;
         showAlert = false;
       } else {
         event.stopPropagation();
