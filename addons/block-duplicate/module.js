@@ -58,6 +58,13 @@ export async function load(addon) {
       !block.isShadow()
     ) || (isDuplicating && ctrlOrMetaPressed);
 
+    if (isDuplicating || isCherryPicking) {
+      if (!ScratchBlocks.Events.getGroup()) {
+        // Scratch will disable grouping on its own later.
+        ScratchBlocks.Events.setGroup(true);
+      }
+    }
+
     if (isDuplicating) {
       this.startWorkspace_.setResizesEnabled(false);
 
@@ -86,10 +93,6 @@ export async function load(addon) {
     }
 
     if (isCherryPicking) {
-      if (!ScratchBlocks.Events.getGroup()) {
-        // Scratch will disable grouping on its own later.
-        ScratchBlocks.Events.setGroup(true);
-      }
       if (isRightClickDuplicate || isDuplicating) {
         const nextBlock = block.getNextBlock();
         if (nextBlock) {
