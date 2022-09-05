@@ -31,7 +31,10 @@
             "name" : "Pause: ctrl + ",
             "id" : "pause",
             "type" : "string",
-            "default" : "k"
+            "default" : "k",
+            "if": {
+              "addonEnabled": "pause"
+            }
         },
         {
             "name" : "Stop: ctrl + ",
