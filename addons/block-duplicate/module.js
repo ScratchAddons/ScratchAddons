@@ -66,10 +66,9 @@ export async function load(addon) {
     }
 
     if (isDuplicating) {
-      this.startWorkspace_.setResizesEnabled(false);
-
       // Based on https://github.com/LLK/scratch-blocks/blob/feda366947432b9d82a4f212f43ff6d4ab6f252f/core/scratch_blocks_utils.js#L171
       // Setting this.shouldDuplicateOnDrag_ = true does NOT work because it doesn't call changeObscuredShadowIds
+      this.startWorkspace_.setResizesEnabled(false);
       ScratchBlocks.Events.disable();
       let newBlock;
       try {
