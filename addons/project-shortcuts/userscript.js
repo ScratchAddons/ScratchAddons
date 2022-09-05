@@ -3,35 +3,27 @@ export default async function ({ addon, global, console }) {
     var pause_key = addon.settings.get("pause").toLowerCase();
     var stop = addon.settings.get("stop").toLowerCase();
     console.log("Player controls", green_flag, pause_key, stop);
-    addon.settings.update();
+
+    addon.settings.addEventListener("change", function() {
+        green_flag = addon.settings.get("greenflag").toLowerCase();
+        pause_key = addon.settings.get("pause").toLowerCase();
+        stop = addon.settings.get("stop").toLowerCase();
+        console.log("Player controls", green_flag, pause_key, stop);
+      });
   
     document.addEventListener("keydown", function (e) {
       let pause = getComputedStyle(document.documentElement).getPropertyValue(
         "--pause-_displayNoneWhileDisabledValue"
       );
       let ctrlKey = e.ctrlKey || e.metaKey;
-      if (
-        ctrlKey &&
-        [green_flag, pause_key, stop] !=
-          [
-            addon.settings.get("greenflag").toLowerCase(),
-            addon.settings.get("pause").toLowerCase(),
-            addon.settings.get("stop").toLowerCase(),
-          ]
-      ) {
-        green_flag = addon.settings.get("greenflag").toLowerCase();
-        pause_key = addon.settings.get("pause").toLowerCase();
-        stop = addon.settings.get("stop").toLowerCase();
-        console.log("Player controls", green_flag, pause_key, stop);
-      }
-      if (ctrlKey && [green_flag, pause_key, stop].includes(e.key)) {
+      let key = e.key.toLowerCase();
+      
+      if (ctrlKey && [green_flag, pause_key, stop].includes(key)) {
         // console.log(e.key);
         e.preventDefault();
       } else {
         return;
       }
-  
-      let key = e.key.toLowerCase();
   
       if (ctrlKey && key == pause_key) {
         e.preventDefault();
