@@ -1,0 +1,47 @@
+{
+    "name": "Project Controls Shortucuts",
+    "description": "Adds shortcuts to project player controls",
+    "info": [
+        {
+          "text": "On macOS, use the Cmd key instead of the Ctrl key.",
+          "id": "macContextDisabled"
+        }
+      ],
+    "credits": [
+      {
+        "name": "ego-lay_atman-bay",
+        "link": "https://scratch.mit.edu/users/ego-lay_atman-bay/"
+      }
+    ],
+    "userscripts": [
+      {
+        "url": "userscript.js",
+        "matches": ["projects"],
+        "runAtComplete": true
+      }
+    ],
+    "settings" : [
+        {
+            "name" : "Green Flag: ctrl + ",
+            "id" : "greenflag",
+            "type" : "string",
+            "default" : "Enter"
+        },
+        {
+            "name" : "Pause: ctrl + ",
+            "id" : "pause",
+            "type" : "string",
+            "default" : "k"
+        },
+        {
+            "name" : "Stop: ctrl + ",
+            "id" : "stop",
+            "type" : "string",
+            "default" : "Delete"
+        }
+    ],
+    "versionAdded": "1.29.0",
+    "tags": ["project", "keyboard", "shortcut"],
+    "enabledByDefault": true
+  }
+  
