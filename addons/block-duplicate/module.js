@@ -52,11 +52,11 @@ export async function load(addon) {
     );
 
     const isCherryPickingInverted = invertCherryPicking && !isRightClickDuplicate && block.getParent();
-    const isCherryPicking = (
+    const isCherryPicking = isDuplicating ? ctrlOrMetaPressed : (
       enableCherryPicking &&
       ctrlOrMetaPressed === !isCherryPickingInverted &&
       !block.isShadow()
-    ) || (isDuplicating && ctrlOrMetaPressed);
+    );
 
     if (isDuplicating || isCherryPicking) {
       if (!ScratchBlocks.Events.getGroup()) {
