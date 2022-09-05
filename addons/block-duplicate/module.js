@@ -56,7 +56,7 @@ export async function load(addon) {
       enableCherryPicking &&
       ctrlOrMetaPressed === !isCherryPickingInverted &&
       !block.isShadow()
-    );
+    ) || (isDuplicating && ctrlOrMetaPressed);
 
     if (isDuplicating) {
       this.startWorkspace_.setResizesEnabled(false);
