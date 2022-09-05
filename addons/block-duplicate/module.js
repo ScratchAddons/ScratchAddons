@@ -42,21 +42,18 @@ export async function load(addon) {
     // Scratch uses fake mouse events to implement right click > duplicate
     const isRightClickDuplicate = !(this.mostRecentEvent_ instanceof MouseEvent);
 
-    const isDuplicating = (
+    const isDuplicating =
       enableDuplication &&
       altPressed &&
       !isRightClickDuplicate &&
       !this.flyout_ &&
       !this.shouldDuplicateOnDrag_ &&
-      this.targetBlock_.type !== "procedures_definition"
-    );
+      this.targetBlock_.type !== "procedures_definition";
 
     const isCherryPickingInverted = invertCherryPicking && !isRightClickDuplicate && block.getParent();
-    const isCherryPicking = isDuplicating ? ctrlOrMetaPressed : (
-      enableCherryPicking &&
-      ctrlOrMetaPressed === !isCherryPickingInverted &&
-      !block.isShadow()
-    );
+    const isCherryPicking = isDuplicating
+      ? ctrlOrMetaPressed
+      : enableCherryPicking && ctrlOrMetaPressed === !isCherryPickingInverted && !block.isShadow();
 
     if (isDuplicating || isCherryPicking) {
       if (!ScratchBlocks.Events.getGroup()) {
