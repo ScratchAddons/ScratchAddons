@@ -1,6 +1,17 @@
 import { loadModules, Modes, BitmapModes } from "./helpers.js";
 
-import { snapFrom, snapTo, snapOn, threshold, setThreshold, setSnapTo, setSnapFrom, toggle } from "./state.js";
+import {
+  snapFrom,
+  snapTo,
+  snapOn,
+  threshold,
+  setThreshold,
+  setSnapTo,
+  setSnapFrom,
+  toggle,
+  setGuideColor,
+  guideColor,
+} from "./state.js";
 
 const getMoveTool = (tool) => {
   return tool.boundingBoxTool._modeMap.MOVE;
@@ -17,6 +28,8 @@ export const updateSelectTool = (paper, tool, settings) => {
   const moveTool = getMoveTool(tool);
 
   toggle(settings.get("enable-default"));
+  setGuideColor(settings.get("guide-color"));
+  settings.addEventListener("change", () => setGuideColor(settings.get("guide-color")));
 
   // https://github.com/LLK/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/helper/selection-tools/move-tool.js
 
@@ -25,7 +38,7 @@ export const updateSelectTool = (paper, tool, settings) => {
   const guideLine = new paper.Path.Line({
     from: [0, 0],
     to: [0, 0],
-    strokeColor: "red",
+    strokeColor: new paper.Color(guideColor),
     strokeWidth: 1 / paper.view.zoom,
     visible: false,
     data: {
@@ -51,7 +64,7 @@ export const updateSelectTool = (paper, tool, settings) => {
     circle: new paper.Path.Circle({
       center: new paper.Point(0, 0),
       radius: 4 / paper.view.zoom,
-      fillColor: new paper.Color(1, 0, 0),
+      fillColor: new paper.Color(guideColor),
       data: {
         isScaleHandle: false,
         isHelperItem: true,
@@ -79,7 +92,7 @@ export const updateSelectTool = (paper, tool, settings) => {
     guidePointParts.circle = new paper.Path.Circle({
       center: new paper.Point(0, 0),
       radius: 4 / paper.view.zoom,
-      fillColor: new paper.Color(1, 0, 0),
+      fillColor: new paper.Color(guideColor),
       data: {
         isScaleHandle: false,
         isHelperItem: true,
@@ -91,6 +104,9 @@ export const updateSelectTool = (paper, tool, settings) => {
     guidePoint.removeChildren();
     guidePoint.addChildren([guidePointParts.shadow, guidePointParts.circle]);
     guideLine.strokeWidth = 1 / paper.view.zoom;
+    guideLine.strokeColor = new paper.Color(guideColor);
+    guideLine.bringToFront();
+    guidePoint.bringToFront();
   };
 
   let hideGuides;
@@ -436,7 +452,7 @@ export const updateSelectTool = (paper, tool, settings) => {
         fixGuideSizes();
         snapVector = closestSnapPoint.snapPoint.subtract(closestSnapPoint.point);
         if (closestSnapPoint.point.equals(this.selectionCenter) && closestSnapPoint.snapPointType === "point") {
-          selectionAnchor.fillColor = selectionAnchor.strokeColor = new paper.Color(1, 0, 0);
+          selectionAnchor.fillColor = selectionAnchor.strokeColor = new paper.Color(guideColor);
         } else {
           resetAnchorColor();
           switch (closestSnapPoint.snapPointType) {

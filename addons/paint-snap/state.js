@@ -18,6 +18,8 @@ export const snapFrom = {
 
 export let threshold = 10;
 
+export let guideColor;
+
 if (ls.getItem("sa-paint-snap-snapTo")) {
   const stored = JSON.parse(ls.getItem("sa-paint-snap-snapTo"));
   Object.assign(snapTo, stored);
@@ -58,4 +60,8 @@ export function disable() {
 export function toggle(enabled) {
   if (enabled) enable();
   else disable();
+}
+
+export function setGuideColor(hex) {
+  guideColor = hex;
 }

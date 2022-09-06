@@ -23,6 +23,12 @@
       "id": "enable-default",
       "name": "Enable by default",
       "default": true
+    },
+    {
+      "type": "color",
+      "id": "guide-color",
+      "name": "Snapping guide color",
+      "default": "#ff0000"
     }
   ],
   "dynamicDisable": true,
