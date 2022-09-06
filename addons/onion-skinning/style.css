@@ -4,6 +4,9 @@
 .sa-onion-button:active {
   background-color: hsla(215, 100%, 65%, 0.2);
 }
+.sa-onion-button[data-enabled="true"] .sa-onion-image {
+  filter: brightness(0) invert(1);
+}
 .sa-onion-button[data-enabled="true"] {
   background-color: #4c97ff;
 }
