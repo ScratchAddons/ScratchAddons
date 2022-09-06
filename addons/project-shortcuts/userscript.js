@@ -1,7 +1,7 @@
 export default async function ({ addon, global, console }) {
-  var green_flag = addon.settings.get("greenflag").toLowerCase();
-  var pause_key = addon.settings.get("pause").toLowerCase();
-  var stop = addon.settings.get("stop").toLowerCase();
+  let green_flag = addon.settings.get("greenflag").toLowerCase();
+  let pause_key = addon.settings.get("pause").toLowerCase();
+  let stop = addon.settings.get("stop").toLowerCase();
   console.log("Player controls", green_flag, pause_key, stop);
 
   addon.settings.addEventListener("change", function () {
