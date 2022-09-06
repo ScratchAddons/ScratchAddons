@@ -4,6 +4,9 @@
 .sa-paint-snap-button:active {
   background-color: hsla(215, 100%, 65%, 0.2);
 }
+.sa-paint-snap-button[data-enabled="true"] .sa-paint-snap-image {
+  filter: brightness(0) invert(1);
+}
 .sa-paint-snap-button[data-enabled="true"] {
   background-color: #4c97ff;
 }
