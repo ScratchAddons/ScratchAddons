@@ -6,3 +6,9 @@
   border-radius: 50%;
   display: inline-block;
 }
+
+#my-ocular-span {
+  border-left: 1px solid rgb(204, 204, 204);
+  margin-left: 5px;
+  padding-left: 5px;
+}
