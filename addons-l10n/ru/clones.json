@@ -1,1 +1,1 @@
-{"clones/clones":"клонов: {cloneCount}","clones/@name":"Счётчик клонов"}
+{"clones/clones":"клонов: {cloneCount}","clones/@name":"Счётчик клонов","clones/@description":"Добавляет счётчик над сценой,который показывает список клонов","clones/@settings-name-showicononly":"Показывать только иконку"}

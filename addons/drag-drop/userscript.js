@@ -80,7 +80,7 @@ export default async function ({ addon, global, console }) {
       callback = async (files) => {
         const text = (await Promise.all(Array.from(files, (file) => file.text())))
           .join("")
-          // Match pasting behaviour: remove all newline characters at the end
+          // Match pasting behavior: remove all newline characters at the end
           .replace(/[\r\n]+$/, "")
           .replace(/\r?\n|\r/g, " ");
         const selectionStart = el.selectionStart;
