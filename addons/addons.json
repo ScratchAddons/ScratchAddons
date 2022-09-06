@@ -1,5 +1,4 @@
 [
-  "project-shortcuts",
   "editor-searchable-dropdowns",
   "editor-devtools",
   "forum-search",
@@ -126,6 +125,7 @@
   "zebra-striping",
   "find-bar",
   "jump-to-def",
+  "project-shortcuts",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
