@@ -18,12 +18,7 @@ export const updateSelectTool = (paper, tool, settings) => {
 
   toggle(settings.get("enable-default"));
 
-  /*
-  ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-  │   See                                                                                                                      │
-  │ https://github.com/LLK/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/helper/selection-tools/move-tool.js |
-  └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- */
+  // https://github.com/LLK/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/helper/selection-tools/move-tool.js
 
   const FADE_DISTANCE = 10;
 
