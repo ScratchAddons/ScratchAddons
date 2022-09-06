@@ -1,4 +1,5 @@
 export default async function ({ addon, console, msg }) {
+  const vm = addon.tab.traps.vm;
   // Thanks to confirm-actions addon!
   let override = false;
 
@@ -31,7 +32,8 @@ export default async function ({ addon, console, msg }) {
           e.target.closest("[data-tabs] > :nth-child(3) nav[class*='context-menu_context-menu_'] > :nth-child(3)")) ||
         e.target.closest("[data-tabs] > :nth-child(3) div[class*='delete-button_delete-button_']")
       ) {
-        type = "costume";
+        if (vm.runtime.getEditingTarget().isStage === true) type = "backdrop";
+        else type = "costume";
       }
 
       if (type !== null) {

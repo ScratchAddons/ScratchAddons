@@ -3,6 +3,8 @@
   "remove-sprite-confirm/delete-sprite-message": "Do you want to delete this sprite?",
   "remove-sprite-confirm/delete-costume-title": "Delete Costume",
   "remove-sprite-confirm/delete-costume-message": "Do you want to delete this costume?",
+  "remove-sprite-confirm/delete-backdrop-title": "Delete Backdrop",
+  "remove-sprite-confirm/delete-backdrop-message": "Do you want to delete this backdrop?",
   "remove-sprite-confirm/delete-sound-title": "Delete Sound",
   "remove-sprite-confirm/delete-sound-message": "Do you want to delete this sound?",
   "remove-sprite-confirm/delete": "Delete"
