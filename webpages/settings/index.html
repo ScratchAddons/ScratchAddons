@@ -243,10 +243,11 @@
                 </div>
               </div>
               <div class="time-option" :class="{'hided': theme !== 'time'}">
-                <div class="time-input">
+                <div class="time-input"  style="padding: 5px">
                   <span>{{ msg("sunrise").toUpperCase() }}</span
                   ><input
                     value="{{$root.timeInputSunrise}}"
+                    class="setting-input"
                     id="time-input-1"
                     @input="saveTimeInputValue()"
                     type="time"
@@ -259,6 +260,7 @@
                   <span>{{ msg("sunset").toUpperCase() }}</span
                   ><input
                     value="{{$root.timeInputSunset}}"
+                    class="setting-input"
                     id="time-input-2"
                     @input="saveTimeInputValue()"
                     type="time"

@@ -408,3 +408,10 @@ button.setting-input.color.open {
   align-items: center;
   justify-content: center;
 }
+.time-input > span {
+  margin-top: 10px;
+  position: absolute;
+}
+.time-input {
+  height: 35px;
+}
