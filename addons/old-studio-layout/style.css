@@ -93,7 +93,7 @@
 .studio-tab-nav li img {
   height: 1.5em;
 }
-.studio-adder-section .studio-adder-row button ~ button:not(.sa-pseudobutton), #sa-studio-followers-btn /* browse projects */ {
+.studio-adder-section .studio-adder-row button ~ button:not(.sa-pseudobutton), #sa-studio-followers-button /* browse projects */ {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -105,14 +105,14 @@
   color: var(--darkWww-box-text, #575e75);
   text-align: left;
 }
-#sa-studio-followers-btn {
+#sa-studio-followers-button {
   margin: 0;
 }
 .overflow-menu-container .overflow-menu-dropdown {
   z-index: 20; /* above adder row */
 }
 .studio-adder-section .studio-adder-row button ~ button:not(.sa-pseudobutton)::before,
-#sa-studio-followers-btn::before {
+#sa-studio-followers-button::before {
   content: "";
   display: inline-block;
   vertical-align: middle;
