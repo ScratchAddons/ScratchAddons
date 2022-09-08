@@ -3,13 +3,13 @@
 }
 
 [class^="button-group_button-group_"] {
-  margin-right: 50px;
+  margin-right: 45px;
 }
 
 .sa-backpack-button {
   position: absolute;
-  right: 20px;
-  bottom: 15px;
+  right: 21px;
+  bottom: 12px;
   width: 35px;
   height: 35px;
   background-size: contain;

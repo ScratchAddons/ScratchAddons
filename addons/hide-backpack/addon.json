@@ -42,6 +42,6 @@
   "tags": ["editor", "codeEditor", "danger"],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.28.0",
+  "versionAdded": "1.29.0",
   "enabledByDefault": false
 }
