@@ -62,7 +62,7 @@
       "default": true
     },
     {
-      "name": "Show statuses ",
+      "name": "Show statuses",
       "id": "show-status",
       "type": "select",
       "potentialValues": [
@@ -89,7 +89,6 @@
   "enabledByDefault": false,
   "latestUpdate": {
     "version": "1.29.0",
-    "temporaryNotice": "Code re-write and new setting!",
     "newSettings": ["show-status"]
   }
 }
