@@ -72,7 +72,7 @@
         },
         {
           "id": "others",
-          "name": "only on other's profiles"
+          "name": "only on others' profiles"
         }
       ],
       "default": "everywhere"
