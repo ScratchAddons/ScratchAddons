@@ -129,7 +129,10 @@ export default async function ({ addon, console, msg }) {
   while (true) {
     element = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', {
       markAsSeen: true,
-      reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
+      reduxCondition: (state) =>
+        state.scratchGui.editorTab.activeTabIndex === 1 &&
+        !state.scratchGui.mode.isPlayerOnly &&
+        state.scratchPaint.selectedItems.length > 0,
     });
     addon.tab.redux.initialize();
     if (typeof prevEventHandler === "function") {
