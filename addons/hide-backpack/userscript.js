@@ -10,7 +10,8 @@ export default async function ({ addon, global }) {
 
   addon.self.addEventListener("reenabled", (e) => changeBackpackVisibility(addon));
   addon.self.addEventListener("disabled", (e) => {
-    moveResizeButtons(40);
+    moveResizeButtons(0);
+    window.dispatchEvent(new Event("resize"));
     document.querySelector("[class^=backpack_backpack-header_]").style.display = "block";
     document.querySelector(".sa-backpack-button").style.display = "none";
   });
