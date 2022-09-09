@@ -195,6 +195,6 @@ export default async function ({ addon, console, msg }) {
     rowHeader.appendChild(saLabelName);
     rowHeader.appendChild(labelReadout);
     saOpacitySlider.appendChild(saOpacityHandle);
-    element.parentElement.insertBefore(containerWrapper, element);
+    element.parentElement.querySelector("div:nth-child(4)").after(containerWrapper);
   }
 }
