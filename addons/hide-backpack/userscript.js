@@ -2,7 +2,7 @@ export default async function ({ addon, global }) {
   document.querySelector("[class^=backpack_backpack-header_]").style.display = "none";
   if (addon.settings.get("showButton")) createBackpackButton(addon);
 
-  // Fix automatic enable bug
+  // Fix dynamic enable bug
   window.dispatchEvent(new Event("resize"));
 
   // Event listeners that add dynamic enable/disable + setting change
