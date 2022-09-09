@@ -1,15 +1,15 @@
-export default async function ({ addon, global }) {
-  document.querySelector("[class^=backpack_backpack-header_]").style.display = "none";
+export default async function ({ addon }) {
+  let originalBackpack = await addon.tab.waitForElement("[class^=backpack_backpack-header_]", {
+    markAsSeen: true,
+  });
+  originalBackpack.style.display = "none";
+
   if (addon.settings.get("showButton")) createBackpackButton(addon);
 
-  // Fix dynamic enable bug
-  window.dispatchEvent(new Event("resize"));
-
   // Event listeners that add dynamic enable/disable + setting change
-  addon.settings.addEventListener("change", (e) => changeBackpackVisibility(addon));
-
-  addon.self.addEventListener("reenabled", (e) => changeBackpackVisibility(addon));
-  addon.self.addEventListener("disabled", (e) => {
+  addon.settings.addEventListener("change", () => changeBackpackVisibility(addon));
+  addon.self.addEventListener("reenabled", () => changeBackpackVisibility(addon));
+  addon.self.addEventListener("disabled", () => {
     moveResizeButtons(0);
     window.dispatchEvent(new Event("resize"));
     document.querySelector("[class^=backpack_backpack-header_]").style.display = "block";
@@ -17,6 +17,7 @@ export default async function ({ addon, global }) {
   });
 
   function changeBackpackVisibility(addon) {
+    window.dispatchEvent(new Event("resize"));
     document.querySelector("[class^=backpack_backpack-header_]").style.display = "none";
     let backpackEl = document.querySelector(".sa-backpack-button");
     if (addon.settings.get("showButton") === true) {
@@ -41,37 +42,10 @@ function createBackpackButton(addon) {
   backpackButton.style.backgroundImage = `url('${addon.self.dir}/backpack.png')`;
   backpackButton.classList.add("sa-backpack-button");
   backpackButton.addEventListener("click", toggleBackpack);
-  document.querySelector(".injectionDiv").appendChild(backpackButton);
-
   moveResizeButtons(35);
 
-  // Add backpack button to costume and sound editor
-  addSoundEditorButton(addon, backpackButton);
-  addCostumeEditorButton(addon, backpackButton);
-}
-
-async function addSoundEditorButton(addon, backpackButton) {
-  while (true) {
-    const container = await addon.tab.waitForElement("[class^=sound-editor_editor-container]", {
-      markAsSeen: true,
-      reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 2 && !state.scratchGui.mode.isPlayerOnly,
-    });
-    let soundBackpackButton = backpackButton.cloneNode();
-    container.querySelector("[class^='sound-editor_row_']").appendChild(soundBackpackButton);
-    soundBackpackButton.addEventListener("click", toggleBackpack);
-  }
-}
-
-async function addCostumeEditorButton(addon, backpackButton) {
-  while (true) {
-    const container = await addon.tab.waitForElement("[class^=paint-editor_editor-container]", {
-      markAsSeen: true,
-      reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
-    });
-    let costumeBackpackButton = backpackButton.cloneNode();
-    container.querySelector("[class^='paint-editor_row_']").appendChild(costumeBackpackButton);
-    costumeBackpackButton.addEventListener("click", toggleBackpack);
-  }
+  document.querySelector(".injectionDiv").appendChild(backpackButton);
+  document.querySelector("[class*='gui_tabs_']").appendChild(backpackButton);
 }
 
 // Open backpack (we need to close it to refresh)

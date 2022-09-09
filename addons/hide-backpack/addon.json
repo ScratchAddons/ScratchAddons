@@ -1,16 +1,11 @@
 {
   "name": "Hide backpack",
-  "description": "Removes the backpack from the bottom of the editor.",
+  "description": "Removes the backpack from the bottom of the editor or adds a small button to open it.",
   "info": [
     {
-      "type": "notice",
-      "text": "Disable this addon to access the backpack.",
+      "type": "warning",
+      "text": "If you disable \"show button\" setting, you have no access to backpack!",
       "id": "disable"
-    },
-    {
-      "type": "notice",
-      "text": "This addon does not delete the contents of your backpack, it only hides it.",
-      "id": "contents"
     }
   ],
   "credits": [
@@ -24,7 +19,7 @@
       "name": "Show small backpack icon",
       "id": "showButton",
       "type": "boolean",
-      "default": false
+      "default": true
     }
   ],
   "userstyles": [
@@ -39,7 +34,7 @@
       "matches": ["projects"]
     }
   ],
-  "tags": ["editor", "codeEditor", "danger"],
+  "tags": ["editor", "codeEditor"],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.29.0",
