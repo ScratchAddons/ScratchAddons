@@ -2,25 +2,23 @@ export default async function ({ addon }) {
   let originalBackpack = await addon.tab.waitForElement("[class^=backpack_backpack-header_]", {
     markAsSeen: true,
   });
-  originalBackpack.style.display = "none";
 
-  if (addon.settings.get("showButton")) createBackpackButton(addon);
+  changeBackpackVisibility(addon);
 
   // Event listeners that add dynamic enable/disable + setting change
   addon.settings.addEventListener("change", () => changeBackpackVisibility(addon));
   addon.self.addEventListener("reenabled", () => changeBackpackVisibility(addon));
   addon.self.addEventListener("disabled", () => {
     moveResizeButtons(0);
+    originalBackpack.style.display = "block";
     window.dispatchEvent(new Event("resize"));
-    document.querySelector("[class^=backpack_backpack-header_]").style.display = "block";
     document.querySelector(".sa-backpack-button").style.display = "none";
   });
 
   function changeBackpackVisibility(addon) {
-    window.dispatchEvent(new Event("resize"));
-    document.querySelector("[class^=backpack_backpack-header_]").style.display = "none";
+    originalBackpack.style.display = "none";
     let backpackEl = document.querySelector(".sa-backpack-button");
-    if (addon.settings.get("showButton") === true) {
+    if (addon.settings.get("showButton")) {
       if (backpackEl) {
         moveResizeButtons(36);
       } else {
@@ -28,9 +26,10 @@ export default async function ({ addon }) {
       }
     } else {
       if (document.querySelector("[class^=backpack_backpack-list-inner_]"))
-        document.querySelector("[class^=backpack_backpack-header_]").click();
+        originalBackpack.click();
       moveResizeButtons(0);
     }
+    window.dispatchEvent(new Event("resize"));
   }
 }
 
@@ -57,11 +56,9 @@ function toggleBackpack() {
   if (document.querySelector("[class^=backpack_backpack-list-inner_]")) {
     // Backpack is open and will be closed
     document.body.classList.remove("sa-backpack-open");
-    document.querySelector("[class^='backpack_backpack-container']").style.display = "none";
   } else {
     // Bacpack is closed and will be opened
     document.body.classList.add("sa-backpack-open");
-    document.querySelector("[class^='backpack_backpack-container']").style.display = "block";
   }
   document.querySelector("[class^=backpack_backpack-header_]").click();
   window.dispatchEvent(new Event("resize"));
