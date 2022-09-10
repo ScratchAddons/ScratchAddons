@@ -286,6 +286,19 @@
       }
     },
     {
+      "name": "selector-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "selector"
+        },
+        "threshold": 128
+      }
+    },
+    {
       "name": "selector2-text",
       "value": {
         "type": "textColor",
@@ -305,6 +318,19 @@
           "type": "settingValue",
           "settingId": "selector2"
         }
+      }
+    },
+    {
+      "name": "selector2-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "selector2"
+        },
+        "threshold": 128
       }
     },
     {
@@ -393,6 +419,19 @@
       }
     },
     {
+      "name": "accent-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "threshold": 128
+      }
+    },
+    {
       "name": "accent-opacity0",
       "value": {
         "type": "multiply",
@@ -441,6 +480,39 @@
           },
           "a": 0.15
         }
+      }
+    },
+    {
+      "name": "accent-paintEditorScrollbar",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "accent"
+          },
+          "r": 0.75,
+          "g": 0.75,
+          "b": 0.75,
+          "a": 0.8
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "accent"
+          },
+          "r": 0.8,
+          "g": 0.8,
+          "b": 0.8,
+          "a": 0.8
+        },
+        "threshold": 110
       }
     },
     {
@@ -760,13 +832,6 @@
       "if": {
         "settings": { "darkComments": true }
       }
-    },
-    {
-      "url": "scrollbar.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "darkScrollbars": true }
-      }
     }
   ],
   "settings": [
@@ -897,12 +962,6 @@
       "id": "darkComments",
       "type": "boolean",
       "default": true
-    },
-    {
-      "name": "Dark scrollbars",
-      "id": "darkScrollbars",
-      "type": "boolean",
-      "default": true
     }
   ],
   "presets": [
@@ -929,8 +988,7 @@
         "stageHeader": "#000000",
         "border": "#ffffff0d",
         "dots": false,
-        "darkComments": true,
-        "darkScrollbars": true
+        "darkComments": true
       }
     },
     {
@@ -956,8 +1014,7 @@
         "stageHeader": "#051638",
         "border": "#00000026",
         "dots": false,
-        "darkComments": true,
-        "darkScrollbars": true
+        "darkComments": true
       }
     },
     {
@@ -983,8 +1040,7 @@
         "stageHeader": "#222222",
         "border": "#111111",
         "dots": false,
-        "darkComments": true,
-        "darkScrollbars": true
+        "darkComments": true
       }
     },
     {
@@ -1010,8 +1066,7 @@
         "stageHeader": "#333333",
         "border": "#444444",
         "dots": true,
-        "darkComments": true,
-        "darkScrollbars": true
+        "darkComments": true
       }
     },
     {
@@ -1037,8 +1092,7 @@
         "stageHeader": "#111111",
         "border": "#ffffff26",
         "dots": true,
-        "darkComments": true,
-        "darkScrollbars": true
+        "darkComments": true
       }
     },
     {
@@ -1064,8 +1118,7 @@
         "stageHeader": "#e6e8e8",
         "border": "#d0d1d2",
         "dots": true,
-        "darkComments": false,
-        "darkScrollbars": false
+        "darkComments": false
       }
     },
     {
@@ -1091,8 +1144,7 @@
         "stageHeader": "#000001",
         "border": "#0000006b",
         "dots": false,
-        "darkComments": false,
-        "darkScrollbars": false
+        "darkComments": false
       }
     },
     {
@@ -1118,8 +1170,7 @@
         "stageHeader": "#e8edf1",
         "border": "#00000026",
         "dots": true,
-        "darkComments": false,
-        "darkScrollbars": false
+        "darkComments": false
       }
     }
   ],
