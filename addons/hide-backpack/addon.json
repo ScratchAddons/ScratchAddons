@@ -25,7 +25,10 @@
   "userstyles": [
     {
       "url": "userscript.css",
-      "matches": ["projects"]
+      "matches": ["projects"],
+      "if": {
+        "settings": { "showButton": true }
+      }
     }
   ],
   "userscripts": [
@@ -37,6 +40,7 @@
   "tags": ["editor", "codeEditor"],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.29.0",
   "enabledByDefault": false
 }

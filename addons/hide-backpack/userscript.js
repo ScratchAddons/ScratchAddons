@@ -22,8 +22,7 @@ export default async function ({ addon }) {
     let backpackEl = document.querySelector(".sa-backpack-button");
     if (addon.settings.get("showButton") === true) {
       if (backpackEl) {
-        backpackEl.style.display = "inline-block";
-        moveResizeButtons(35);
+        moveResizeButtons(36);
       } else {
         createBackpackButton(addon);
       }
@@ -31,7 +30,6 @@ export default async function ({ addon }) {
       if (document.querySelector("[class^=backpack_backpack-list-inner_]"))
         document.querySelector("[class^=backpack_backpack-header_]").click();
       moveResizeButtons(0);
-      if (backpackEl) backpackEl.style.display = "none";
     }
   }
 }
@@ -39,23 +37,34 @@ export default async function ({ addon }) {
 // Create default backpack button
 function createBackpackButton(addon) {
   let backpackButton = document.createElement("div");
-  backpackButton.style.backgroundImage = `url('${addon.self.dir}/backpack.png')`;
   backpackButton.classList.add("sa-backpack-button");
+  backpackButton.style.display = "none"; // overridden by userstyle if the setting is enabled
+  backpackButton.title = addon.tab.scratchMessage("gui.backpack.header");
   backpackButton.addEventListener("click", toggleBackpack);
-  moveResizeButtons(35);
+  backpackButton.appendChild(
+    Object.assign(document.createElement("img"), {
+      src: `${addon.self.dir}/backpack.svg`,
+      alt: "",
+    })
+  );
+  moveResizeButtons(36);
 
-  document.querySelector(".injectionDiv").appendChild(backpackButton);
   document.querySelector("[class*='gui_tabs_']").appendChild(backpackButton);
 }
 
 // Open backpack (we need to close it to refresh)
 function toggleBackpack() {
-  document.querySelector("[class^=backpack_backpack-header_]").click();
+  let backpackEl = document.querySelector(".sa-backpack-button");
   if (document.querySelector("[class^=backpack_backpack-list-inner_]")) {
+    // Backpack is open and will be closed
+    if (backpackEl) backpackEl.classList.remove("sa-backpack-open");
     document.querySelector("[class^='backpack_backpack-container']").style.display = "none";
   } else {
+    // Bacpack is closed and will be opened
+    if (backpackEl) backpackEl.classList.add("sa-backpack-open");
     document.querySelector("[class^='backpack_backpack-container']").style.display = "block";
   }
+  document.querySelector("[class^=backpack_backpack-header_]").click();
   window.dispatchEvent(new Event("resize"));
 }
 

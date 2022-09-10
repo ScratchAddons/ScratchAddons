@@ -1,12 +1,39 @@
+[class*="paint-editor_canvas-controls_"] {
+  /* vertically align zoom buttons with backpack button */
+  align-items: center;
+}
+
+[class*="paint-editor_bitmap-button_"] {
+  align-self: stretch;
+}
+
 [class^="paint-editor_zoom-controls_"] {
   margin-right: 45px;
 }
 
 .sa-backpack-button {
   position: absolute;
-  right: 21px;
-  bottom: 12px;
-  width: 35px;
-  height: 35px;
-  background-size: contain;
+  right: 22px;
+  bottom: 13px;
+  width: 36px;
+  height: 36px;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 2px; /* vertical position of the icon */
+  background-color: #575e75;
+  background-clip: padding-box;
+  border: 2px solid rgba(87, 94, 117, 0.5);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.sa-backpack-open {
+  background-color: #0fbd8c;
+  border-color: rgba(15, 189, 140, 0.35);
+}
+
+.sa-backpack-button img {
+  width: 24px;
+  height: 24px;
 }
