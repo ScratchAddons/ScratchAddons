@@ -28,7 +28,7 @@
   cursor: pointer;
 }
 
-.sa-backpack-open {
+.sa-backpack-open .sa-backpack-button {
   background-color: #0fbd8c;
   border-color: rgba(15, 189, 140, 0.35);
 }

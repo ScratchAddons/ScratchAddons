@@ -24,7 +24,11 @@
   ],
   "userstyles": [
     {
-      "url": "userscript.css",
+      "url": "border.css",
+      "matches": ["projects"]
+    },
+    {
+      "url": "button.css",
       "matches": ["projects"],
       "if": {
         "settings": { "showButton": true }
