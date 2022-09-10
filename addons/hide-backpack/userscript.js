@@ -15,6 +15,14 @@ export default async function ({ addon }) {
     document.querySelector(".sa-backpack-button").style.display = "none";
   });
 
+  while (true) {
+    originalBackpack = await addon.tab.waitForElement("[class^=backpack_backpack-header_]", {
+      markAsSeen: true,
+    });
+
+    changeBackpackVisibility(addon);
+  }
+
   function changeBackpackVisibility(addon) {
     originalBackpack.style.display = "none";
     let backpackEl = document.querySelector(".sa-backpack-button");
