@@ -1,0 +1,25 @@
+{
+	"name": "Project Folders",
+	"description": "Put your projects in a folder to access them easily.",
+	"credits": [
+		{
+			"name": "Platformer444",
+			"link": "https://scratch.mit.edu/users/Platformer444"
+		}
+	],
+	"userscripts": [
+		{
+			"url": "userscript.js",
+			"matches": ["https://scratch.mit.edu/mystuff"]
+		}
+	],
+	"userstyles": [
+		{
+			"url": "userstyle.css",
+			"matches": ["https://scratch.mit.edu/mystuff"]
+		}
+	],
+	"tags": ["community"],
+	"enabledByDefault": false,
+	"versionAdded": "1.29.0"
+}

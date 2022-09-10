@@ -1,0 +1,32 @@
+.folders {
+	padding: 10px;
+	padding-top: 0px;
+	padding-left: 0px;
+}
+
+.folder {
+	width: 100px !important;
+	border: 1px black solid !important;
+	text-align: center !important;
+	border-radius: 5px !important;
+	height: 90px !important;
+	padding: 5px !important;
+	display: inline-block !important;
+	margin: 10px !important;
+	background-color: #fcfcfc !important;
+	color: black !important;
+}
+
+.folder-image {
+	height: 50px;
+	width: 50px;
+}
+
+button.project-right-float-btn {
+	float: right;
+	background-color: white !important;
+}
+
+.folder {
+	overflow: hidden;
+}
