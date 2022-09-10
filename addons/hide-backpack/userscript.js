@@ -33,8 +33,7 @@ export default async function ({ addon }) {
         createBackpackButton(addon);
       }
     } else {
-      if (document.querySelector("[class^=backpack_backpack-list-inner_]"))
-        originalBackpack.click();
+      if (document.querySelector("[class^=backpack_backpack-list-inner_]")) originalBackpack.click();
       moveResizeButtons(0);
     }
     window.dispatchEvent(new Event("resize"));
