@@ -14,6 +14,7 @@ export default async function ({ addon, global, console, msg }) {
   } else {
     barOuter.classList.add("u-progress-bar-integrated");
   }
+  addon.tab.displayNoneWhileDisabled(barOuter, { display: "flex" });
 
   // We track the loading phase so that we can detect when the phase changed to reset and move the progress bar accordingly.
   const NONE = "none";
@@ -90,7 +91,7 @@ export default async function ({ addon, global, console, msg }) {
   // Scratch uses fetch() to download the project JSON and upload project assets.
   const originalFetch = window.fetch;
   window.fetch = (url, opts) => {
-    if (typeof url === "string" && opts && typeof opts.method === "string") {
+    if (!addon.self.disabled && typeof url === "string" && opts && typeof opts.method === "string") {
       if (opts.method.toLowerCase() === "get" && PROJECT_REGEX.test(url)) {
         // This is a request to get the project JSON.
         // Fetch does not support progress monitoring, so we use XMLHttpRequest instead.
@@ -141,7 +142,7 @@ export default async function ({ addon, global, console, msg }) {
   XMLHttpRequest.prototype.open = function (...args) {
     const method = args[0];
     const url = args[1];
-    if (typeof method === "string" && typeof url === "string") {
+    if (!addon.self.disabled && typeof method === "string" && typeof url === "string") {
       if ((method.toLowerCase() === "put" || method.toLowerCase() === "post") && PROJECT_REGEX.test(url)) {
         const searchParams = new URLSearchParams(url);
         // This is a request to save, remix, or copy a project.
@@ -171,7 +172,7 @@ export default async function ({ addon, global, console, msg }) {
   let foundWorker = false;
   const originalPostMessage = Worker.prototype.postMessage;
   Worker.prototype.postMessage = function (message, options) {
-    if (message && typeof message.id === "string" && typeof message.url === "string") {
+    if (!addon.self.disabled && message && typeof message.id === "string" && typeof message.url === "string") {
       // This is a message passed to the worker to start an asset download.
       setLoadingPhase(LOAD_ASSETS);
       totalTasks++;

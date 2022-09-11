@@ -76,6 +76,19 @@
       }
     },
     {
+      "name": "page-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        },
+        "threshold": 128
+      }
+    },
+    {
       "name": "page-ideas",
       "value": {
         "type": "multiply",
@@ -471,6 +484,19 @@
           "type": "settingValue",
           "settingId": "box"
         }
+      }
+    },
+    {
+      "name": "box-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        },
+        "threshold": 128
       }
     },
     {
@@ -1163,6 +1189,18 @@
       }
     },
     {
+      "name": "blue-tabHover",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.2)",
+        "white": "rgba(255, 255, 255, 0.2)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "blue"
+        }
+      }
+    },
+    {
       "name": "blue-studioTextareaBorder",
       "value": {
         "type": "makeHsv",
@@ -1189,6 +1227,19 @@
             "a": 0.79
           }
         }
+      }
+    },
+    {
+      "name": "blue-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "blue"
+        },
+        "threshold": 128
       }
     },
     {
@@ -1635,6 +1686,19 @@
       }
     },
     {
+      "name": "link-variant",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "link"
+        },
+        "r": 0.66,
+        "g": 0.76,
+        "b": 0.8
+      }
+    },
+    {
       "name": "link-iconFilter",
       "value": {
         "type": "recolorFilter",
@@ -1801,13 +1865,6 @@
   ],
   "userstyles": [
     {
-      "url": "scrollbar.css",
-      "matches": ["https://scratch.mit.edu/*"],
-      "if": {
-        "settings": { "darkScrollbars": true }
-      }
-    },
-    {
       "url": "experimental_scratchr2.css",
       "matches": ["isNotScratchWWW"]
     },
@@ -1817,7 +1874,7 @@
     },
     {
       "url": "experimental_scratchwww_white_bg.css",
-      "matches": ["https://scratch.mit.edu/ideas", "https://scratch.mit.edu/annual-report"]
+      "matches": ["https://scratch.mit.edu/ideas", "https://scratch.mit.edu/annual-report/*"]
     },
     {
       "url": "banners/darker.css",
@@ -1973,12 +2030,6 @@
       "default": "darker"
     },
     {
-      "name": "Dark scrollbars",
-      "id": "darkScrollbars",
-      "type": "boolean",
-      "default": true
-    },
-    {
       "name": "Dark code blocks on the forums",
       "id": "darkForumCode",
       "type": "boolean",
@@ -2002,7 +2053,6 @@
         "footer": "#333333",
         "border": "#606060",
         "darkBanners": "darker",
-        "darkScrollbars": true,
         "darkForumCode": true
       }
     },
@@ -2022,7 +2072,6 @@
         "footer": "#17181a",
         "border": "#000000",
         "darkBanners": "desaturated",
-        "darkScrollbars": true,
         "darkForumCode": true
       }
     },
@@ -2042,7 +2091,6 @@
         "footer": "#f2f2f2",
         "border": "#0000001a",
         "darkBanners": "off",
-        "darkScrollbars": false,
         "darkForumCode": false
       }
     }

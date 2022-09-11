@@ -2,6 +2,13 @@
 html,
 body {
   background-color: var(--darkWww-page);
+  color-scheme: var(--darkWww-page-colorScheme);
+}
+.sa-body-editor {
+  /* If website dark mode is enabled and editor dark mode
+  is disabled, inputs and scrollbars in the editor should
+  have a light background. */
+  color-scheme: light;
 }
 #view,
 .crash-container,
@@ -21,7 +28,8 @@ body {
 .project-loves::before,
 .project-favorites::before,
 .project-remixes::before,
-.project-views::before {
+.project-views::before,
+.sa-project-info img {
   filter: var(--darkWww-page-filter);
 }
 .project-loves.loved::before,
@@ -140,6 +148,7 @@ body:not(.sa-body-editor) .formik-input,
 .milestones-section .milestone-box,
 .supporters-section .comment-text,
 .timeline-card,
+.green.pull-quote,
 .card,
 .extension-landing .project-card,
 .promote-modal .cancel-button,
@@ -162,6 +171,7 @@ body:not(.sa-body-editor) input.formik-radio-input,
 .studio-compose-container .sa-emoji-picker {
   background-color: var(--darkWww-box);
   color: var(--darkWww-box-text);
+  color-scheme: var(--darkWww-box-colorScheme);
 }
 body:not(.sa-body-editor) .button.white,
 .intro-banner .intro-button,
@@ -230,6 +240,7 @@ body:not(.sa-body-editor) .join-flow-privacy-message,
 .thumbnail .thumbnail-favorites::before,
 .thumbnail .thumbnail-remixes::before,
 .thumbnail .thumbnail-views::before,
+.ttt-item img,
 .tabs li:not(.active) .tab-icon,
 body:not(.sa-body-editor) .stage-header_stage-button-icon_3zzFK,
 .overflow-menu-container .overflow-menu-trigger img {
@@ -337,9 +348,12 @@ p.callout,
 .transfer-host-modal .transfer-outcome,
 .filter-container,
 .tab-choice-selected-sa,
-.initiatives-section .year-in-review {
+.sa-annual-report-2020 .initiatives-section .year-in-review,
+.initiatives-section .initiatives-subsection-content .map,
+.sa-annual-report-2021 .leadership-section .leadership-scratch-team .avatar-item img {
   background-color: var(--darkWww-blue);
   color: var(--darkWww-blue-text);
+  color-scheme: var(--darkWww-blue-colorScheme);
 }
 .empty h4,
 .thumbnail-column .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
@@ -355,6 +369,9 @@ p.callout,
 .studio-tab-nav a.nav_link:hover > li,
 .studio-info-box .studio-info-close-button {
   background-color: var(--darkWww-blue-tab);
+}
+.studio-list-inner-scrollbox::-webkit-scrollbar-thumb {
+  background-color: var(--darkWww-blue-tabHover);
 }
 .studio-info textarea.studio-title:not(:focus),
 .studio-info textarea.studio-description:not(:focus),
@@ -372,6 +389,7 @@ p.callout,
 .studio-info .studio-description.uneditable,
 .studio-info-box {
   background-color: var(--darkWww-blue-20);
+  color-scheme: var(--darKWww-blue-colorScheme);
 }
 .replies.collapsed > .comment:last-of-type::after,
 .studio-list-bottom-gradient {
@@ -435,6 +453,7 @@ input[type="radio"].formik-radio-button:checked::after,
 .banner-button {
   background-color: #ffab1a;
 }
+a.ttt-try-tutorial-button > span,
 .row .checkbox input[type="checkbox"]:checked::after {
   color: var(--darkWww-button-text);
 }
@@ -580,7 +599,8 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button:checked {
 .download .title-banner.masthead /* Scratch 2.0 and 1.4 download */,
 .conf2017-title-band,
 .sa-annual-report-2019 .subnavigation,
-.sa-annual-report-2020 .initiatives-section .initiatives-subsection-header.community {
+.sa-annual-report-2020 .initiatives-section .initiatives-subsection-header.community,
+.initiatives-section .initiatives-subsection-header.SEC {
   background-color: var(--darkWww-button-bannerVariant);
 }
 
@@ -621,8 +641,19 @@ a:hover,
 .button.mod-2019-conf-maillist-button {
   color: var(--darkWww-link-hover);
 }
+.sa-annual-report-2020 a,
+.sa-annual-report-2020 a:link,
+.sa-annual-report-2020 a:visited,
+.sa-annual-report-2020 a:active,
+.sa-annual-report-2021 a,
+.sa-annual-report-2021 a:link,
+.sa-annual-report-2021 a:visited,
+.sa-annual-report-2021 a:active {
+  color: var(--darkWww-link-variant);
+}
 .banner a,
-.subnavigation a {
+.subnavigation a,
+.subnavigation a:active {
   color: white;
 }
 .hoc-banner .hoc-more-activities img,
@@ -636,7 +667,7 @@ a:hover,
 .conf2017-panel-row-icon-image,
 img[src^="/images/annual-report/milestones/timeline_"],
 .financials-section .financials-button img,
-.initiatives-section .year-in-review .connector,
+.sa-annual-report-2020 .initiatives-section .year-in-review .connector,
 .transfer-host-modal .transfer-outcome-arrow {
   filter: var(--darkWww-link-iconFilter);
 }
@@ -704,6 +735,7 @@ p.callout,
 .news li:nth-child(even),
 .thumbnail .thumbnail-image img,
 .video-player,
+.ttt-content-chunk + .ttt-content-chunk,
 .messages-social-list,
 .social-message,
 .comment-text,
@@ -799,7 +831,8 @@ p {
   border-radius: 8px;
 }
 
-.guiPlayer {
+.guiPlayer,
+.sa-annual-report-2021 .initiatives-section .year-in-review {
   color: #575e75;
 }
 
@@ -820,4 +853,9 @@ p {
 .banner /* confirm email */ {
   /* Fix ugly gray shadow */
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.initiatives-access > .green {
+  /* Change the solid color background to a transparent one */
+  background-color: rgba(0, 165, 0, 0.07);
 }

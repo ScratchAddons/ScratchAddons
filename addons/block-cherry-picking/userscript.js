@@ -12,24 +12,29 @@ export default async function ({ addon, global, console }) {
     }
   );
 
-  // https://github.com/LLK/scratch-blocks/blob/102b33d14b25400c064e9bf6924a7ae1b0dcb2ab/core/block_dragger.js#L160
-  const originalStartBlockDrag = ScratchBlocks.BlockDragger.prototype.startBlockDrag;
-  ScratchBlocks.BlockDragger.prototype.startBlockDrag = function (...args) {
+  // https://github.com/LLK/scratch-blocks/blob/912b8cc728bea8fd91af85078c64fcdbfe21c87a/core/gesture.js#L454
+  const originalStartDraggingBlock = ScratchBlocks.Gesture.prototype.startDraggingBlock_;
+  ScratchBlocks.Gesture.prototype.startDraggingBlock_ = function (...args) {
     if (!addon.self.disabled) {
-      const invert = addon.settings.get("invertDrag") && this.draggingBlock_.getParent();
-      if (ctrlKeyPressed === !invert) {
+      // Scratch uses fake mouse events to implement right click > duplicate
+      // This has no connection to the block-duplicate addon.
+      const isDuplicate = !(this.mostRecentEvent_ instanceof MouseEvent);
+      const block = this.targetBlock_;
+      const invert = addon.settings.get("invertDrag") && !isDuplicate && block.getParent();
+      const isShadow = block.isShadow();
+      if (ctrlKeyPressed === !invert && !isShadow) {
         if (!ScratchBlocks.Events.getGroup()) {
           ScratchBlocks.Events.setGroup(true);
         }
-        this.draggingBlock_.unplug(true);
-        // A separate field has to be updated to avoid dragging comments attached to blocks underneath this block.
-        this.dragIconData_ = this.dragIconData_.filter((i) => i.icon.block_ === this.draggingBlock_);
-        // And we also have to make sure Scratch will never try to drag a block on top of itself, which crashes the editor.
-        // That can happen when you cherry-pick the top block of a script and drop it where it started.
-        this.draggedConnectionManager_.availableConnections_ =
-          this.draggedConnectionManager_.initAvailableConnections_();
+        if (isDuplicate) {
+          const nextBlock = block.getNextBlock();
+          if (nextBlock) {
+            nextBlock.dispose();
+          }
+        }
+        block.unplug(true);
       }
     }
-    return originalStartBlockDrag.call(this, ...args);
+    return originalStartDraggingBlock.call(this, ...args);
   };
 }

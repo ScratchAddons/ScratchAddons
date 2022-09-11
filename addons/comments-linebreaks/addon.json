@@ -4,7 +4,7 @@
   "credits": [
     {
       "name": "TheColaber",
-      "link": "https://scratch.mit.edu/users/TheColaber"
+      "link": "https://scratch.mit.edu/users/TheColaber/"
     }
   ],
   "userscripts": [
@@ -51,6 +51,7 @@
     }
   ],
   "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.8.0",
   "latestUpdate": {
     "version": "1.28.0",

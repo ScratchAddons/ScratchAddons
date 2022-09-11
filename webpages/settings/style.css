@@ -83,13 +83,13 @@ h1 {
     border: 1px solid var(--content-border);
   }
   25% {
-    border: 1px solid var(--brand-orange);
+    border: 1px solid var(--orange);
   }
   50% {
     border: 1px solid var(--content-border);
   }
   75% {
-    border: 1px solid var(--brand-orange);
+    border: 1px solid var(--orange);
   }
   100% {
     border: 1px solid var(--content-border);
@@ -111,31 +111,6 @@ h1 {
 .inline-icon {
   height: 16px;
   vertical-align: bottom;
-}
-
-.large-button {
-  color: var(--content-text);
-  background: var(--button-background);
-  border: 1px solid var(--control-border);
-  padding: 0 12px;
-  border-radius: 4px;
-  transition: 0.2s ease;
-  height: 32px;
-  box-sizing: border-box;
-  font-family: inherit;
-  font-size: 12px;
-}
-.large-button:hover:not([disabled]) {
-  background: var(--button-hover-background);
-  cursor: pointer;
-}
-.large-button:focus-visible {
-  outline: none;
-  border-color: var(--brand-orange);
-  box-shadow: var(--input-focus-shadow);
-}
-.large-button > * {
-  vertical-align: middle;
 }
 
 .clear-button {
@@ -176,7 +151,7 @@ h1 {
   display: none !important;
 }
 #confirmImport {
-  border-color: var(--brand-orange);
+  border-color: var(--orange);
 }
 
 #search-not-found {

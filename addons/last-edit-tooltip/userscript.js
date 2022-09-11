@@ -2,7 +2,7 @@ export default async function ({ addon, global, console, msg }) {
   let { redux } = addon.tab;
 
   await redux.waitForState((state) => state.preview.status.project === "FETCHED", {
-    actions: ["SET_INFO"],
+    actions: ["SET_PROJECT_INFO"],
   });
 
   let data = redux.state.preview.projectInfo;
@@ -28,5 +28,12 @@ export default async function ({ addon, global, console, msg }) {
     let dataTitle = `${msg("shared", { date: dateShared })}
 ${msg("modified", { date: dateMod })}`;
     element.setAttribute("title", dataTitle);
+
+    addon.self.addEventListener("disabled", () => {
+      element.removeAttribute("title");
+    });
+    addon.self.addEventListener("reenabled", () => {
+      element.setAttribute("title", dataTitle);
+    });
   }
 }

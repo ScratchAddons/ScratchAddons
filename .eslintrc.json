@@ -1,4 +1,6 @@
 {
+  "root": true,
+  "ignorePatterns": ["node_modules/*", "_locales/*", ".github/*", "addons-l10n/*", "libraries/thirdparty/*"],
   "parserOptions": {
     "sourceType": "module"
   },
@@ -58,7 +60,8 @@
         "selector": "MemberExpression[property.type=Identifier][property.name=path]:matches([object.name=e],[object.name=ev],[object.name=event])",
         "message": "Event.path is incompatible with Firefox, use Event.composedPath()"
       }
-    ]
+    ],
+    "no-constant-binary-expression": 2
   },
   "overrides": [
     {

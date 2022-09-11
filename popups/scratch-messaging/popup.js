@@ -283,6 +283,7 @@ export default async ({ addon, msg, safeMsg }) => {
         yourProfileMsg: msg("your-profile"),
         loadingMsg: msg("loading"),
         loggedOutMsg: msg("logged-out"),
+        loggedOutLinkMsg: msg("logged-out-link"),
         serverErrorMsg: msg("server-error"),
         networkErrorMsg: msg("network-error"),
         unknownFatalErrorMsg: msg("unknown-fatal-error"),
@@ -581,8 +582,7 @@ export default async ({ addon, msg, safeMsg }) => {
           2: [], // Studios
         };
         let realMsgCount = this.msgCount - this.stMessages.length;
-        const messagesToCheck =
-          realMsgCount > 40 ? this.messages.length : showAll ? this.messages.length : realMsgCount;
+        const messagesToCheck = showAll ? this.messages.length : realMsgCount;
         this.showingMessagesAmt = messagesToCheck;
         for (const message of this.messages.slice(0, messagesToCheck)) {
           if (message.type === "followuser") {

@@ -3,6 +3,7 @@ html,
 body {
   background-color: var(--darkWww-page);
   color: var(--darkWww-page-scratchr2Text);
+  color-scheme: var(--darkWww-page-colorScheme);
 }
 h1,
 h2,
@@ -332,6 +333,7 @@ ul.pagination span /* mobile forums */,
   background-color: var(--darkWww-gray-scratchr2SelectedTab);
 }
 .box .box-content .action-bar .inner,
+.contact #block-message,
 .djangobb th,
 .post-content blockquote /* mobile forums */,
 .post-content div.code /* mobile forums */ {
