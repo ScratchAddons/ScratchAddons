@@ -1,17 +1,6 @@
 import { loadModules, Modes, BitmapModes } from "./helpers.js";
 
-import {
-  snapFrom,
-  snapTo,
-  snapOn,
-  threshold,
-  setThreshold,
-  setSnapTo,
-  setSnapFrom,
-  toggle,
-  setGuideColor,
-  guideColor,
-} from "./state.js";
+import { snapFrom, snapTo, snapOn, threshold, toggle, setGuideColor, guideColor } from "./state.js";
 
 const getMoveTool = (tool) => {
   return tool.boundingBoxTool._modeMap.MOVE;
