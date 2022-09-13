@@ -35,7 +35,7 @@ export const updateSelectTool = (paper, tool, settings) => {
 
   const FADE_DISTANCE = 10;
 
-  const guideLine = new paper.Path.Line({
+  let guideLine = new paper.Path.Line({
     from: [0, 0],
     to: [0, 0],
     strokeColor: new paper.Color(guideColor),
@@ -45,36 +45,21 @@ export const updateSelectTool = (paper, tool, settings) => {
       isHelperItem: true,
       noSelect: true,
       noHover: true,
+      saPaintSnapGuide: true,
+      saPaintSnapGuideLine: true,
     },
-    selected: true,
+    selected: false,
   });
+
   const guidePointParts = {
-    shadow: new paper.Path.Circle({
-      center: new paper.Point(0, 0),
-      radius: 5.5 / paper.view.zoom,
-      fillColor: "black",
-      opacity: 0.12,
-      data: {
-        isHelperItem: true,
-        noSelect: true,
-        noHover: true,
-      },
-      visible: true,
-    }),
-    circle: new paper.Path.Circle({
-      center: new paper.Point(0, 0),
-      radius: 4 / paper.view.zoom,
-      fillColor: new paper.Color(guideColor),
-      data: {
-        isScaleHandle: false,
-        isHelperItem: true,
-        noSelect: true,
-        noHover: true,
-      },
-      visible: true,
-    }),
+    shadow: null,
+    circle: null,
   };
-  const guidePoint = new paper.Group({ children: [guidePointParts.shadow, guidePointParts.circle], visible: false });
+  const guidePoint = new paper.Group({ children: [], visible: false });
+
+  // Paper adds them by default, and we don't want them in the canvas yet.
+  guideLine.remove();
+  guidePoint.remove();
 
   const fixGuideSizes = () => {
     guidePointParts.shadow = new paper.Path.Circle({
@@ -86,8 +71,10 @@ export const updateSelectTool = (paper, tool, settings) => {
         isHelperItem: true,
         noSelect: true,
         noHover: true,
+        saPaintSnapGuide: true,
       },
       visible: true,
+      guide: true,
     });
     guidePointParts.circle = new paper.Path.Circle({
       center: new paper.Point(0, 0),
@@ -98,8 +85,10 @@ export const updateSelectTool = (paper, tool, settings) => {
         isHelperItem: true,
         noSelect: true,
         noHover: true,
+        saPaintSnapGuide: true,
       },
       visible: true,
+      guide: true,
     });
     guidePoint.removeChildren();
     guidePoint.addChildren([guidePointParts.shadow, guidePointParts.circle]);
@@ -107,14 +96,12 @@ export const updateSelectTool = (paper, tool, settings) => {
     guideLine.strokeColor = new paper.Color(guideColor);
     guideLine.bringToFront();
     guidePoint.bringToFront();
+    getLayer("isGuideLayer").addChildren([guideLine, guidePoint]);
   };
 
-  let hideGuides;
+  let removeGuides;
 
   moveTool.constructor.prototype.onMouseDrag = function (event) {
-    guideLine.remove();
-    guidePoint.remove();
-    getLayer("isGuideLayer").addChildren([guideLine, guidePoint]);
     const point = event.point;
     const actionBounds = getActionBounds(this.mode in BitmapModes);
 
@@ -135,17 +122,22 @@ export const updateSelectTool = (paper, tool, settings) => {
       return p1.getDistance(p2);
     };
 
+    const selectionAnchor = getLayer("isGuideLayer").children.find((c) => c.data.isSelectionBound).selectionAnchor;
+
     const resetAnchorColor = () => {
       selectionAnchor.strokeColor = new paper.Color(0.30196078431372547, 0.592156862745098, 1);
       selectionAnchor.fillColor = null;
     };
 
-    hideGuides = () => {
-      guideLine.visible = guidePoint.visible = false;
+    removeGuides = () => {
+      guideLine.remove();
+      guidePoint.remove();
+      guidePoint.visible = false;
+      guideLine.visible = false;
       resetAnchorColor();
     };
 
-    const selectionAnchor = getLayer("isGuideLayer").children.find((c) => c.data.isSelectionBound).selectionAnchor;
+    removeGuides();
 
     if (snapOn && !event.modifiers.shift && this.mode !== Modes.RESHAPE) {
       const snappingPoints = {
@@ -447,7 +439,7 @@ export const updateSelectTool = (paper, tool, settings) => {
         .sort(sortByPrioOrDist);
 
       const closestSnapPoint = closestSnapForEachPoint.sort(sortByPrioOrDist)[0];
-      hideGuides();
+      removeGuides();
       if (closestSnapPoint?.snapPoint) {
         fixGuideSizes();
         snapVector = closestSnapPoint.snapPoint.subtract(closestSnapPoint.point);
@@ -544,7 +536,7 @@ export const updateSelectTool = (paper, tool, settings) => {
 
   const oldMouseUp = moveTool.constructor.prototype.onMouseUp;
   moveTool.constructor.prototype.onMouseUp = function (...a) {
-    hideGuides?.();
+    removeGuides?.();
     oldMouseUp.apply(this, a);
   };
 };
