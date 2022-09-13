@@ -19,6 +19,7 @@ body {
 #header {
   display: flex;
   height: 60px;
+  padding: 0 1rem;
 }
 #title-text,
 #settings {
@@ -29,15 +30,14 @@ body {
   flex-grow: 1;
   display: flex;
   align-items: center;
-  padding: 0 20px;
 }
 #logo {
   height: 30px;
-  margin-inline-end: 20px;
+  margin-inline-end: 0.75rem;
+  transform: scale(1.75);
   vertical-align: middle;
 }
 #settings {
-  padding: 0 20px;
   cursor: pointer;
   display: flex;
   align-items: center;

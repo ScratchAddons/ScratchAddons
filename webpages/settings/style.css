@@ -22,7 +22,7 @@ body {
   color: var(--white-text);
   display: flex;
   align-items: center;
-  padding: 0 14px;
+  padding: 0 1rem;
   box-shadow: var(--large-shadow);
   user-select: none;
   position: relative;
@@ -42,7 +42,13 @@ h1 {
 .logo {
   height: 30px;
   width: 30px;
-  margin-inline-end: 9px;
+  transform: scale(1.75);
+  margin-inline-end: .75rem;
+}
+#title {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
 }
 
 .main {
@@ -137,13 +143,7 @@ h1 {
 
 .theme-switch {
   height: 25px;
-  right: 25px;
-  position: fixed;
   cursor: pointer;
-}
-[dir="rtl"] .theme-switch {
-  right: auto;
-  left: 25px;
 }
 
 .hidden-button {
@@ -197,12 +197,6 @@ body.iframe .navbar {
 body.iframe .main {
   /* No calc -60px because there's no navbar */
   height: 100%;
-}
-body.iframe .addon-group {
-  padding-inline: 6px;
-}
-body.iframe .addon-group > img {
-  margin-inline-end: 5px;
 }
 body.iframe .addon-topbar {
   height: 44px;
