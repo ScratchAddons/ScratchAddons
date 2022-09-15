@@ -1356,6 +1356,17 @@
       }
     },
     {
+      "name": "highlight-transparent20",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "a": 0.20
+      }
+    },
+    {
       "name": "button-overlay",
       "value": {
         "type": "multiply",

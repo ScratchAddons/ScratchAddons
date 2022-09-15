@@ -40,6 +40,9 @@ export default async function ({ addon, global, console, msg }) {
     return;
   }
 
+  const defaultHighlightColor = "#4d97ff33"; // 20% opacity
+  let highlightColor = defaultHighlightColor;
+
   const forumOrSearchPageName = determineForumOrSearchPageName();
 
   /**
@@ -125,6 +128,12 @@ export default async function ({ addon, global, console, msg }) {
       return;
     }
 
+    const html = document.getElementsByTagName("html")[0];
+    highlightColor = getComputedStyle(html).getPropertyValue("--darkWww-highlight-transparent20");
+    if (!highlightColor) {
+      highlightColor = defaultHighlightColor;
+    }
+  
     gatherTopics();
     let highestTopicOnThisPage = highestTopicIdFrom(topics);
     let staleTopicInterval = TOPICS_PER_MONTH * addon.settings.get("monthCountConsideredOld");
@@ -260,10 +269,12 @@ export default async function ({ addon, global, console, msg }) {
       if (!topic.restoreCell) {
         topic.restoreCell = topic.topicCell.cloneNode(true);
       }
-      const necropostMessage = msg("necropost");
-      const highlightColor = addon.settings.get("highlightColor");
 
-      topic.topicCell.style.backgroundColor = highlightColor;
+      if (addon.settings.get("colorTopicCells")) {
+        topic.topicCell.style.backgroundColor = highlightColor;
+      }
+
+      const necropostMessage = msg("necropost");
       if (isMobileSite) {
         let replies = topic.topicCell.querySelector("span");
         replies.textContent += " " + necropostMessage;

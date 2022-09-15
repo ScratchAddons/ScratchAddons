@@ -27,17 +27,16 @@
   ],
   "settings": [
     {
-      "name": "Highlight color",
-      "id": "highlightColor",
-      "type": "color",
-      "allowTransparency": true,
-      "default": "#D1E9F2"
-    },
-    {
       "name": "Roughly how many months is 'old'?",
       "id": "monthCountConsideredOld",
       "type": "positive_integer",
       "default": 1
+    },
+    {
+      "name": "Color topic cells?",
+      "id": "colorTopicCells",
+      "type": "boolean",
+      "default": true
     },
     {
       "name": "Choose custom forums?",
@@ -131,43 +130,6 @@
         "settings": {
           "chooseCustomForums": true
         }
-      }
-    }
-  ],
-  "presets": [
-    {
-      "name": "Light theme blue",
-      "id": "lightThemeBlue",
-      "values": {
-        "highlightColor": "#D1E9F2"
-      }
-    },
-    {
-      "name": "Light theme pink",
-      "id": "lightThemePink",
-      "values": {
-        "highlightColor": "#FFE4E1"
-      }
-    },
-    {
-      "name": "Dark theme blue",
-      "id": "darkThemeBlue",
-      "values": {
-        "highlightColor": "#0A2F4B"
-      }
-    },
-    {
-      "name": "Dark theme red",
-      "id": "darkThemeRed",
-      "values": {
-        "highlightColor": "#390500"
-      }
-    },
-    {
-      "name": "No cell color",
-      "id": "noCellColor",
-      "values": {
-        "highlightColor": "#00000000"
       }
     }
   ]
