@@ -133,7 +133,7 @@ export default async function ({ addon, global, console, msg }) {
     if (!highlightColor) {
       highlightColor = defaultHighlightColor;
     }
-  
+
     gatherTopics();
     let highestTopicOnThisPage = highestTopicIdFrom(topics);
     let staleTopicInterval = TOPICS_PER_MONTH * addon.settings.get("monthCountConsideredOld");
