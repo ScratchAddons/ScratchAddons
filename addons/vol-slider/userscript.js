@@ -1,4 +1,4 @@
-import { setup, setVol, getDefVol, setDefVol } from "./module.js";
+import { setup, setVol, getDefVol, setDefVol, isMuted } from "./module.js";
 
 export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.vm;
@@ -38,6 +38,14 @@ export default async function ({ addon, global, console }) {
     setDefVol(addon.settings.get("defVol") / 100);
   });
 
+  icon.addEventListener("click", function (e) {
+    // Same logic as mute-project
+    if (isMuted()) {
+      setVol(getDefVol());
+    } else {
+      setVol(0);
+    }
+  });
   slider.addEventListener("input", function (e) {
     setVol(this.value);
   });
