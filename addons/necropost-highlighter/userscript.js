@@ -261,7 +261,7 @@ export default async function ({ addon, global, console, msg }) {
       }
 
       if (addon.settings.get("colorTopicCells")) {
-        topic.topicCell.classList.add("highlighted-necropost");        
+        topic.topicCell.classList.add("highlighted-necropost");
       }
 
       const necropostMessage = msg("necropost");
