@@ -40,9 +40,6 @@ export default async function ({ addon, global, console, msg }) {
     return;
   }
 
-  const defaultHighlightColor = "#4d97ff33"; // 20% opacity
-  let highlightColor = defaultHighlightColor;
-
   const forumOrSearchPageName = determineForumOrSearchPageName();
 
   /**
@@ -128,12 +125,6 @@ export default async function ({ addon, global, console, msg }) {
       return;
     }
 
-    const html = document.getElementsByTagName("html")[0];
-    highlightColor = getComputedStyle(html).getPropertyValue("--darkWww-highlight-transparent20");
-    if (!highlightColor) {
-      highlightColor = defaultHighlightColor;
-    }
-
     gatherTopics();
     let highestTopicOnThisPage = highestTopicIdFrom(topics);
     let staleTopicInterval = TOPICS_PER_MONTH * addon.settings.get("monthCountConsideredOld");
@@ -187,7 +178,6 @@ export default async function ({ addon, global, console, msg }) {
   /**
    * Restores topic cells to the initial state they had before any highlighting on this page.
    * Clears any previously gathered topics.
-   * Does not conflict with Addon: Website dark mode and customizable colors.
    */
   function removeAnyPriorHighlights() {
     topics.forEach((topic) => {
@@ -251,7 +241,7 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   /**
-   * Does not conflict with Addon: Website dark mode and customizable colors
+   * Uses a style derived from "Website dark mode and customizable colors" addon
    */
   function highlightTopicCellsWithTopicIdBelow(topics, lowestNewTopicId) {
     const standardSiteStickyClass = ".isticky";
@@ -271,7 +261,7 @@ export default async function ({ addon, global, console, msg }) {
       }
 
       if (addon.settings.get("colorTopicCells")) {
-        topic.topicCell.style.backgroundColor = highlightColor;
+        topic.topicCell.classList.add("highlighted-necropost");        
       }
 
       const necropostMessage = msg("necropost");
