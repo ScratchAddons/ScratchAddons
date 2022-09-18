@@ -174,7 +174,7 @@ export default async function ({ addon, console }) {
 
   const oldBlockShowContextMenu = Blockly.BlockSvg.prototype.showContextMenu_;
   Blockly.BlockSvg.prototype.showContextMenu_ = function (e) {
-    Blockly.WidgetDiv.DIV.style.setProperty("--editorTheme3-hoveredItem", fieldBackground(this));
+    Blockly.WidgetDiv.DIV.style.setProperty("--customBlockColor-hoveredItem", fieldBackground(this));
     return oldBlockShowContextMenu.call(this, e);
   };
 
@@ -222,9 +222,9 @@ export default async function ({ addon, console }) {
     else primaryColor = this.sourceBlock_.getColour();
     Blockly.DropDownDiv.DIV_.style.backgroundColor = removeAlpha(primaryColor);
     if (isColoredTextMode()) {
-      Blockly.DropDownDiv.getContentDiv().style.setProperty("--editorTheme3-hoveredItem", fieldBackground(this));
+      Blockly.DropDownDiv.getContentDiv().style.setProperty("--customBlockColor-hoveredItem", fieldBackground(this));
     } else {
-      Blockly.DropDownDiv.getContentDiv().style.removeProperty("--editorTheme3-hoveredItem");
+      Blockly.DropDownDiv.getContentDiv().style.removeProperty("--customBlockColor-hoveredItem");
     }
   };
 
@@ -267,7 +267,7 @@ export default async function ({ addon, console }) {
 
     for (const category of categories) {
       // CSS variables are used for compatibility with other addons
-      const prefix = `--editorTheme3-${category.colorId}`;
+      const prefix = `--customBlockColor-${category.colorId}`;
       for (const [name, value] of Object.entries({
         primary: primaryColor(category),
         secondary: secondaryColor(category),

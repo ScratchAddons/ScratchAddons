@@ -2,7 +2,7 @@
   border-color: rgba(255, 255, 255, 0.15);
 }
 .u-dropdown-searchbar:focus {
-  background-color: var(--editorTheme3-hoveredItem);
+  background-color: var(--customBlockColor-hoveredItem);
 }
 .blocklyDropDownDiv .goog-menuitem-checkbox {
   filter: brightness(0) invert(1);

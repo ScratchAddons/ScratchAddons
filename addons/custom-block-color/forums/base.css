@@ -70,63 +70,63 @@
 .sb3-motion,
 .sb3-motion-dark,
 .sb3-motion ~ .sb3-label {
-  --sa-block-color: var(--editorTheme3-motionColor);
+  --sa-block-color: var(--customBlockColor-motionColor);
 }
 .sb-looks,
 .sb-looks ~ .sb-label,
 .sb3-looks,
 .sb3-looks-dark,
 .sb3-looks ~ .sb3-label {
-  --sa-block-color: var(--editorTheme3-looksColor);
+  --sa-block-color: var(--customBlockColor-looksColor);
 }
 .sb-sound,
 .sb-sound ~ .sb-label,
 .sb3-sound,
 .sb3-sound-dark,
 .sb3-sound ~ .sb3-label {
-  --sa-block-color: var(--editorTheme3-soundsColor);
+  --sa-block-color: var(--customBlockColor-soundsColor);
 }
 .sb-events,
 .sb-events ~ .sb-label,
 .sb3-events,
 .sb3-events-dark,
 .sb3-events ~ .sb3-label {
-  --sa-block-color: var(--editorTheme3-eventsColor);
+  --sa-block-color: var(--customBlockColor-eventsColor);
 }
 .sb-control,
 .sb-control ~ .sb-label,
 .sb3-control,
 .sb3-control-dark,
 .sb3-control ~ .sb3-label {
-  --sa-block-color: var(--editorTheme3-controlColor);
+  --sa-block-color: var(--customBlockColor-controlColor);
 }
 .sb-sensing,
 .sb-sensing ~ .sb-label,
 .sb3-sensing,
 .sb3-sensing-dark,
 .sb3-sensing ~ .sb3-label {
-  --sa-block-color: var(--editorTheme3-sensingColor);
+  --sa-block-color: var(--customBlockColor-sensingColor);
 }
 .sb-operators,
 .sb-operators ~ .sb-label,
 .sb3-operators,
 .sb3-operators-dark,
 .sb3-operators ~ .sb3-label {
-  --sa-block-color: var(--editorTheme3-operatorsColor);
+  --sa-block-color: var(--customBlockColor-operatorsColor);
 }
 .sb-variables,
 .sb-variables ~ .sb-label,
 .sb3-variables,
 .sb3-variables-dark,
 .sb3-variables ~ .sb3-label {
-  --sa-block-color: var(--editorTheme3-dataColor);
+  --sa-block-color: var(--customBlockColor-dataColor);
 }
 .sb-list,
 .sb-list ~ .sb-label,
 .sb3-list,
 .sb3-list-dark,
 .sb3-list ~ .sb3-label {
-  --sa-block-color: var(--editorTheme3-dataListsColor);
+  --sa-block-color: var(--customBlockColor-dataListsColor);
 }
 .sb-custom,
 .sb-custom ~ .sb-label,
@@ -138,7 +138,7 @@
 .sb3-custom-arg,
 .sb3-custom-arg-dark,
 .sb3-custom-arg ~ .sb3-label {
-  --sa-block-color: var(--editorTheme3-customColor);
+  --sa-block-color: var(--customBlockColor-customColor);
 }
 .sb-extension,
 .sb-extension ~ .sb-label,
@@ -151,25 +151,25 @@
 .sb3-pen-dark,
 .sb3-pen ~ .sb3-label,
 .sb3-extension-line {
-  --sa-block-color: var(--editorTheme3-PenColor);
+  --sa-block-color: var(--customBlockColor-PenColor);
 }
 
 .sb-input-number,
 .sb-input-number-dropdown,
 .sb-input-string {
-  fill: var(--editorTheme3-inputColor);
+  fill: var(--customBlockColor-inputColor);
 }
 .sb3-input-number,
 .sb3-input-string {
-  fill: var(--editorTheme3-inputColor) !important;
+  fill: var(--customBlockColor-inputColor) !important;
 }
 .sb-label.sb-literal-number,
 .sb-label.sb-literal-number-dropdown,
 .sb-literal-number-dropdown + polygon /* dropdown arrow */,
 .sb-label.sb-literal-string {
-  fill: var(--editorTheme3-inputColor-forumText);
+  fill: var(--customBlockColor-inputColor-forumText);
 }
 .sb3-label.sb3-literal-number,
 .sb3-label.sb3-literal-string {
-  fill: var(--editorTheme3-inputColor-text);
+  fill: var(--customBlockColor-inputColor-text);
 }

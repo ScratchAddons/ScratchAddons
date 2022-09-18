@@ -11,7 +11,7 @@
   color: #575e75;
 }
 .u-dropdown-searchbar:focus {
-  background-color: var(--editorTheme3-hoveredItem);
+  background-color: var(--customBlockColor-hoveredItem);
 }
 
 .blocklyAngleDragHandle {

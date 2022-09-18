@@ -1,13 +1,13 @@
 .blocklyEditableText > text {
-  fill: var(--editorTheme3-inputColor-text);
+  fill: var(--customBlockColor-inputColor-text);
 }
 .blocklyHtmlInput {
-  background-color: var(--editorTheme3-inputColor);
-  color: var(--editorTheme3-inputColor-text);
+  background-color: var(--customBlockColor-inputColor);
+  color: var(--customBlockColor-inputColor-text);
 }
 
 .blocklyDropDownDiv .goog-menuitem-highlight,
 .blocklyDropDownDiv .goog-menuitem-hover,
 .sa-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight {
-  background-color: var(--editorTheme3-hoveredItem, rgba(0, 0, 0, 0.2));
+  background-color: var(--customBlockColor-hoveredItem, rgba(0, 0, 0, 0.2));
 }

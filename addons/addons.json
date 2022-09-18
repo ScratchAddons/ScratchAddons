@@ -4,7 +4,7 @@
   "forum-search",
   "msg-count-badge",
   "scratch-notifier",
-  "discuss-button",
+  "nav-bar",
   "editor-stepping",
   "image-uploader",
   "scratch-messaging",
@@ -50,7 +50,7 @@
   "mute-project",
   "disable-auto-save",
   "hide-flyout",
-  "comments-linebreaks",
+  "comment-linebreaks",
   "account-settings-capitalize",
   "longer-wiwo",
   "show-bbcode",
@@ -148,5 +148,5 @@
   "editor-stage-left",
   "editor-buttons-reverse-order",
   "columns",
-  "editor-theme3"
+  "custom-block-color"
 ]
