@@ -19,6 +19,13 @@
       "matches": ["https://scratch.mit.edu/mystuff"]
     }
   ],
+  "info": [
+    {
+      "type": "notice",
+      "text": "To create a folder, you need to go to a project and in the end of the instructions, add the foldertag in this format: #_[folderName]",
+      "id": "help"
+    }
+  ],
   "tags": ["community"],
   "enabledByDefault": false,
   "versionAdded": "1.29.0"

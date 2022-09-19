@@ -3,44 +3,97 @@ export default async function ({ addon, global, console, msg }) {
     markAsSeen: true,
   });
 
-  createData();
   createFolderAreaAndButton();
   load();
 
-  function createData() {
-    let folders = { Folders: [] };
+  async function load() {
 
-    if (!localStorage.getItem("Folders")) {
-      localStorage.setItem("Folders", JSON.stringify(folders));
+    let folders = [];
+
+    let folderDiv = document.querySelectorAll(".folders")[0];
+
+    let noFolderSpan = document.createElement('span');
+    noFolderSpan.textContent = msg('loading');
+    folderDiv.appendChild(noFolderSpan);
+
+    let tempBR = document.createElement('br');
+    folderDiv.appendChild(tempBR);
+
+    let loader = document.createElement('progress');
+    loader.setAttribute('value', '0');
+    loader.setAttribute('max', '100');
+    folderDiv.appendChild(loader)
+
+    for (let i = 0; i < projectColumns.childNodes.length; i++) {
+      loader.setAttribute("value", i / projectColumns.childNodes.length * 100);
+
+      let link = projectColumns.childNodes[i].childNodes[1].childNodes[3].childNodes[1].childNodes[0].href;
+      let projectID = link.replace('https://scratch.mit.edu/projects/', '');
+      projectID = projectID.replace('/', '');
+      let token = await addon.auth.fetchXToken();
+      let projectDetails = await fetch(`https://api.scratch.mit.edu/projects/${projectID}/`, {
+        headers : {
+          "content-type": "application/json",
+          "x-csrftoken": addon.auth.crsfToken,
+          "x-token": token
+        }
+      });
+      projectDetails = await projectDetails.json();
+      let instructions = projectDetails.instructions;
+
+      if (instructions.includes('#_')) {
+        let folderTag = false;
+        let folderName = '';
+        for (let j = 0; j < instructions.length; j++) {          
+          if (instructions[j] === '#' && instructions[j + 1] === '_' || folderTag) {
+            folderTag = true;
+          } else {
+            folderTag = false;
+          }
+
+          if (folderTag) {
+            if (instructions[j + 2] != undefined) {
+              folderName = `${folderName}${instructions[j + 2]}`;
+            }
+          }
+        }
+
+        if (folderName != '') {
+          folders.push(folderName);
+        }
+      }
     }
-  }
 
-  function load() {
-    let folders = JSON.parse(localStorage.getItem("Folders"));
+    loader.setAttribute("value", "100");
 
-    for (let i = 0; i < folders.Folders.length; i++) {
-      createFolder(folders.Folders[i].name);
+    if (folders.length === 0) {
+      noFolderSpan.textContent = msg('noFolder');
+    } else {
+      noFolderSpan.remove();
     }
 
-    if (folders.Folders.length === 0) {
-      let folderDiv = document.querySelectorAll("div.folders")[0];
-      let noFolderSpan = document.createElement("span");
-      noFolderSpan.className = "no-folder";
-      noFolderSpan.textContent = msg("noFolder");
-      folderDiv.appendChild(noFolderSpan);
+    loader.remove();
+    tempBR.remove();
+
+    for (let k = 0; k < folders.length; k++) {
+      createFolder(folders[k]);
     }
   }
 
   function createFolderAreaAndButton() {
     let columns = document.querySelectorAll(".col-12")[0];
     let folderDiv = document.createElement("div");
-    folderDiv.className = "folders";
+    folderDiv.className = "folders-container";
     columns.insertBefore(folderDiv, columns.childNodes[0]);
 
     let folderHeader = document.createElement("h4");
     folderHeader.textContent = msg("header");
     folderHeader.className = "folder-header";
     folderDiv.appendChild(folderHeader);
+
+    let realFolderDiv = document.createElement('div');
+    realFolderDiv.className = 'folders';
+    folderDiv.appendChild(realFolderDiv);
 
     let projectHeader = document.createElement("h4");
     projectHeader.textContent = msg("projectHeader");
@@ -57,9 +110,7 @@ export default async function ({ addon, global, console, msg }) {
 
     newFolderButton.addEventListener("click", () => {
       let folderName = prompt(msg("folderNamePrompt"));
-      if (saveNewFolder(folderName)) {
-        createFolder(folderName);
-      }
+      createFolder(folderName);
     });
   }
 
@@ -86,183 +137,12 @@ export default async function ({ addon, global, console, msg }) {
     folderName.textContent = name;
     folder.appendChild(folderName);
 
-    folder.addEventListener("click", () => {
-      const { backdrop, container, content, closeButton, remove } = addon.tab.createModal(folderName.textContent, {
-        isOpen: true,
-        useEditorClasses: true,
+    folder.addEventListener('click', () => {
+      let { backdrop, container, content, closeButton, remove } = addon.tab.createModal(folderName.textContent, {
+        isOpen: true
       });
 
-      backdrop.addEventListener("click", remove);
-
-      closeButton.setAttribute("role", "button");
-      closeButton.addEventListener("click", remove);
-
-      let projectDiv = document.createElement("div");
-      projectDiv.className = "projects";
-      content.appendChild(projectDiv);
-
-      let folders = JSON.parse(localStorage.getItem("Folders"));
-
-      for (let i = 0; i < folders.Folders.length; i++) {
-        if (folders.Folders[i].name === folderName.textContent) {
-          for (let j = 0; j < folders.Folders[i].projects.length; j++) {
-            let projectLink = folders.Folders[i].projects[j];
-            createProjectElement(projectLink, folderName.textContent);
-          }
-        }
-      }
-
-      let addProjectBtn = document.createElement("button");
-      addProjectBtn.className = "button";
-      content.appendChild(addProjectBtn);
-
-      let addProjectSpan = document.createElement("span");
-      addProjectSpan.textContent = msg("addProject");
-      addProjectBtn.appendChild(addProjectSpan);
-
-      let folderRenameBtn = document.createElement("button");
-      folderRenameBtn.className = "folder-rename-btn";
-      content.appendChild(folderRenameBtn);
-
-      let folderRenameSpan = document.createElement("span");
-      folderRenameSpan.textContent = msg("folderRename");
-      folderRenameBtn.appendChild(folderRenameSpan);
-
-      let folderDeleteBtn = document.createElement("button");
-      folderDeleteBtn.className = "folder-delete-btn";
-      content.appendChild(folderDeleteBtn);
-
-      let folderDeleteSpan = document.createElement("span");
-      folderDeleteSpan.textContent = msg("folderDelete");
-      folderDeleteBtn.appendChild(folderDeleteSpan);
-
-      addProjectBtn.addEventListener("click", () => {
-        let projectLink = prompt(msg("addProjectPrompt"), "https://scratch.mit.edu/projects/");
-        addProjectToFolder(projectLink, folderName.textContent);
-        createProjectElement(projectLink, folderName.textContent);
-      });
-
-      folderDeleteBtn.addEventListener("click", () => {
-        remove();
-        deleteFolder(folderName.textContent);
-        folder.remove();
-      });
-
-      folderRenameBtn.addEventListener("click", () => {
-        let newName = prompt(msg("renamePrompt"));
-        renameFolder(folderName.textContent, newName);
-        remove();
-      });
+      closeButton.addEventListener('click', remove);
     });
-  }
-
-  function saveNewFolder(folderName) {
-    let folders = JSON.parse(localStorage.getItem("Folders"));
-
-    if (folderName === "" || folderName === null) {
-      alert(msg("emptyNameAlert"));
-      return false;
-    }
-
-    for (let i = 0; i < folders.Folders.length; i++) {
-      if (folders.Folders[i].name === folderName) {
-        alert(msg("alreadyExistenceAlert"));
-        return false;
-        break;
-      }
-    }
-    folders.Folders.push({ name: folderName, projects: [] });
-    localStorage.setItem("Folders", JSON.stringify(folders));
-    return true;
-  }
-
-  function addProjectToFolder(link, folder) {
-    let folders = JSON.parse(localStorage.getItem("Folders"));
-
-    for (let i = 0; i < folders.Folders.length; i++) {
-      if (folders.Folders[i].name === folder) {
-        if (link.includes("https://scratch.mit.edu/projects/")) {
-          folders.Folders[i].projects.push(link);
-          break;
-        }
-      }
-    }
-
-    localStorage.setItem("Folders", JSON.stringify(folders));
-  }
-
-  function deleteFolder(folder) {
-    let folders = JSON.parse(localStorage.getItem("Folders"));
-
-    for (let i = 0; i < folders.Folders.length; i++) {
-      if (folders.Folders[i].name === folder) {
-        folders.Folders.splice(i, 1);
-      }
-    }
-
-    localStorage.setItem("Folders", JSON.stringify(folders));
-
-    if (folders.Folders.length === 0) {
-      let folderDiv = document.querySelectorAll("div.folders")[0];
-      let noFolderSpan = document.createElement("span");
-      noFolderSpan.className = "no-folder";
-      noFolderSpan.textContent = msg("noFolder");
-      folderDiv.appendChild(noFolderSpan);
-    }
-  }
-
-  function createProjectElement(proLink, folderName) {
-    let projectLink = proLink;
-    let projectDiv = document.querySelectorAll(".projects")[0];
-
-    let project = document.createElement("div");
-    project.className = "project";
-    projectDiv.appendChild(project);
-    let projectLinkElement = document.createElement("a");
-    projectLinkElement.href = projectLink;
-    projectLinkElement.textContent = projectLink;
-    project.appendChild(projectLinkElement);
-
-    let projectDelButton = document.createElement("button");
-    projectDelButton.className = "project-right-float-btn button small grey";
-    project.appendChild(projectDelButton);
-
-    let delImg = document.createElement("img");
-    delImg.src = "https://scratch.mit.edu/static/assets/6e61fa7e48326bd2026d28e7a62884b1.svg";
-    projectDelButton.appendChild(delImg);
-
-    projectDelButton.addEventListener("click", (event) => {
-      deleteProject(folderName, projectLink);
-      event.target.parentNode.parentNode.remove();
-    });
-  }
-
-  function deleteProject(folder, project) {
-    let folders = JSON.parse(localStorage.getItem("Folders"));
-
-    for (let i = 0; i < folders.Folders.length; i++) {
-      if (folders.Folders[i].name === folder) {
-        for (let j = 0; j < folders.Folders[i].projects.length; j++) {
-          if (folders.Folders[i].projects[j] === project) {
-            folders.Folders[i].projects.splice(j, 1);
-          }
-        }
-      }
-    }
-
-    localStorage.setItem("Folders", JSON.stringify(folders));
-  }
-
-  function renameFolder(original, target) {
-    let folders = JSON.parse(localStorage.getItem("Folders"));
-
-    for (let i = 0; i < folders.Folders.length; i++) {
-      if (folders.Folders[i].name === original) {
-        folders.Folders[i].name = target;
-        break;
-      }
-    }
-
-    localStorage.setItem("Folders", JSON.stringify(folders));
   }
 }

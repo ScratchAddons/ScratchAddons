@@ -1,0 +1,15 @@
+{
+	"project-folders/header": "Folders",
+	"project-folders/projectHeader": "All Projects",
+	"project-folders/noFolder": "You currently have no folders...",
+	"project-folders/createFolder": "+ New Folder",
+	"project-folders/addProject": "Add Project to Folder",
+	"project-folders/folderDelete": "Delete Folder",
+	"project-folders/addProjectPrompt": "Link of the project: ",
+	"project-folders/folderNamePrompt": "Name of the folder: ",
+	"project-folders/alreadyExistenceAlert": "Folder with this name already exists!",
+	"project-folders/emptyNameAlert": "Folder name cannot be empty!",
+	"project-folders/folderRename": "Rename Folder",
+	"project-folders/renamePrompt": "Rename folder to: ",
+	"project-folders/loading": "Folders Loading..."
+}
