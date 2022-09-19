@@ -38,12 +38,14 @@ export default async ({ addon, console, msg }) => {
     const onEyeDropperOpened = ({ detail }) => {
       if (detail.action.type !== "scratch-paint/eye-dropper/ACTIVATE_COLOR_PICKER") return;
       addon.tab.redux.removeEventListener("statechanged", onEyeDropperOpened);
-      const previousTool = addon.tab.redux.state.scratchPaint.color.eyeDropper.previousTool;
-      if (previousTool) previousTool.activate();
-      addon.tab.redux.state.scratchPaint.color.eyeDropper.callback(hex);
-      addon.tab.redux.dispatch({
-        type: "scratch-paint/eye-dropper/DEACTIVATE_COLOR_PICKER",
-      });
+      setTimeout(() => {
+        const previousTool = addon.tab.redux.state.scratchPaint.color.eyeDropper.previousTool;
+        if (previousTool) previousTool.activate();
+        addon.tab.redux.state.scratchPaint.color.eyeDropper.callback(hex);
+        addon.tab.redux.dispatch({
+          type: "scratch-paint/eye-dropper/DEACTIVATE_COLOR_PICKER",
+        });
+      }, 50);
     };
     addon.tab.redux.addEventListener("statechanged", onEyeDropperOpened);
     element.children[1].children[0].click();
