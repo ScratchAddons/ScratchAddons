@@ -7,45 +7,44 @@ export default async function ({ addon, global, console, msg }) {
   load();
 
   async function load() {
-
     let folders = [];
 
     let folderDiv = document.querySelectorAll(".folders")[0];
 
-    let noFolderSpan = document.createElement('span');
-    noFolderSpan.textContent = msg('loading');
+    let noFolderSpan = document.createElement("span");
+    noFolderSpan.textContent = msg("loading");
     folderDiv.appendChild(noFolderSpan);
 
-    let tempBR = document.createElement('br');
+    let tempBR = document.createElement("br");
     folderDiv.appendChild(tempBR);
 
-    let loader = document.createElement('progress');
-    loader.setAttribute('value', '0');
-    loader.setAttribute('max', '100');
-    folderDiv.appendChild(loader)
+    let loader = document.createElement("progress");
+    loader.setAttribute("value", "0");
+    loader.setAttribute("max", "100");
+    folderDiv.appendChild(loader);
 
     for (let i = 0; i < projectColumns.childNodes.length; i++) {
-      loader.setAttribute("value", i / projectColumns.childNodes.length * 100);
+      loader.setAttribute("value", (i / projectColumns.childNodes.length) * 100);
 
       let link = projectColumns.childNodes[i].childNodes[1].childNodes[3].childNodes[1].childNodes[0].href;
-      let projectID = link.replace('https://scratch.mit.edu/projects/', '');
-      projectID = projectID.replace('/', '');
+      let projectID = link.replace("https://scratch.mit.edu/projects/", "");
+      projectID = projectID.replace("/", "");
       let token = await addon.auth.fetchXToken();
       let projectDetails = await fetch(`https://api.scratch.mit.edu/projects/${projectID}/`, {
-        headers : {
+        headers: {
           "content-type": "application/json",
           "x-csrftoken": addon.auth.crsfToken,
-          "x-token": token
-        }
+          "x-token": token,
+        },
       });
       projectDetails = await projectDetails.json();
       let instructions = projectDetails.instructions;
 
-      if (instructions.includes('#_')) {
+      if (instructions.includes("#_")) {
         let folderTag = false;
-        let folderName = '';
-        for (let j = 0; j < instructions.length; j++) {          
-          if (instructions[j] === '#' && instructions[j + 1] === '_' || folderTag) {
+        let folderName = "";
+        for (let j = 0; j < instructions.length; j++) {
+          if ((instructions[j] === "#" && instructions[j + 1] === "_") || folderTag) {
             folderTag = true;
           } else {
             folderTag = false;
@@ -58,7 +57,7 @@ export default async function ({ addon, global, console, msg }) {
           }
         }
 
-        if (folderName != '') {
+        if (folderName != "") {
           folders.push(folderName);
         }
       }
@@ -67,7 +66,7 @@ export default async function ({ addon, global, console, msg }) {
     loader.setAttribute("value", "100");
 
     if (folders.length === 0) {
-      noFolderSpan.textContent = msg('noFolder');
+      noFolderSpan.textContent = msg("noFolder");
     } else {
       noFolderSpan.remove();
     }
@@ -91,8 +90,8 @@ export default async function ({ addon, global, console, msg }) {
     folderHeader.className = "folder-header";
     folderDiv.appendChild(folderHeader);
 
-    let realFolderDiv = document.createElement('div');
-    realFolderDiv.className = 'folders';
+    let realFolderDiv = document.createElement("div");
+    realFolderDiv.className = "folders";
     folderDiv.appendChild(realFolderDiv);
 
     let projectHeader = document.createElement("h4");
@@ -137,12 +136,12 @@ export default async function ({ addon, global, console, msg }) {
     folderName.textContent = name;
     folder.appendChild(folderName);
 
-    folder.addEventListener('click', () => {
+    folder.addEventListener("click", () => {
       let { backdrop, container, content, closeButton, remove } = addon.tab.createModal(folderName.textContent, {
-        isOpen: true
+        isOpen: true,
       });
 
-      closeButton.addEventListener('click', remove);
+      closeButton.addEventListener("click", remove);
     });
   }
 }
