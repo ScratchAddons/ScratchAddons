@@ -1,0 +1,73 @@
+{
+  "name": "Expanded backpack",
+  "description": "Adds multiple rows, better previews and vertical scrolling to the editor backpack to make it easier to find things.",
+  "credits": [
+    {
+      "name": "pumpkinhasapatch",
+      "link": "https://github.com/pumpkinhasapatch"
+    }
+  ],
+  "versionAdded": "1.27.3",
+  "tags": ["editor"],
+  "enabledByDefault": false,
+  "settings": [
+    {
+      "name": "Number of rows to display in backpack",
+      "id": "rows",
+      "type": "integer",
+      "min": 1,
+      "max": 3,
+      "default": 2
+    },
+    {
+      "name": "Larger costume and script preview images",
+      "id": "upscale",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Fill background to fix white squares behind previews",
+      "id": "bgfix",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "addonEnabled": ["editor-dark-mode"]
+      }
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "imgsize",
+      "value": {
+        "type": "ternary",
+        "source": {
+          "type": "settingValue",
+          "settingId": "upscale"
+        },
+        "true": "95%",
+        "false": "32px"
+      }
+    },
+    {
+      "name": "bgcolor",
+      "value": {
+        "type": "ternary",
+        "source": {
+          "type": "settingValue",
+          "settingId": "bgfix"
+        },
+        "true": "white",
+        "false": "none"
+      }
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "backpack.css",
+      "matches": ["projects"]
+    }
+  ],
+  "updateUserstylesOnSettingsChange": true,
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}

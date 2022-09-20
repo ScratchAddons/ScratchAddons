@@ -1,0 +1,31 @@
+.backpack_backpack-list_MOp5X {
+    /* set height of the backpack picker, 5.5rem is the height of 1 row so multiply it by the rows setting */
+    min-height: calc(var(--expandedBackpack-rows) * 5.5rem) !important;
+}
+
+.backpack_backpack-list-inner_10a2A {
+    /* move backpack items to the top left instead of vertically centering them */
+    -webkit-align-items: start !important;
+        -ms-align-items: start !important;
+    /* force horizontal wrapping and enable vertical scrolling */
+    flex-wrap: flex;
+    overflow-x: hidden !important;
+    overflow-y: auto;
+}
+
+.backpack_backpack-item_hwqzQ {
+    /* add vertical margin to make stacked buttons look nicer */
+    margin: 0.25rem 0.25rem !important;
+}
+
+/* non-backpacked sprite, costume and sound thumbnails use the same .sprite-selector and .react classes so check parents to see if it's part of the backpack */
+.backpack_backpack-list-inner_10a2A > .react-contextmenu-wrapper > .sprite-selector-item_sprite-image-outer_Xs0wN > .sprite-selector-item_sprite-image-inner_3oSwi {
+    /* fill area around thumbnail to make the image background blend in when using dark mode/custom theme */
+    background-color: var(--expandedBackpack-bgcolor);
+}
+
+.backpack_backpack-list-inner_10a2A > .react-contextmenu-wrapper > .sprite-selector-item_sprite-image-outer_Xs0wN > .sprite-selector-item_sprite-image-inner_3oSwi > .sprite-selector-item_sprite-image_2QWuK {
+    /* make thumbnails use all avaliable space inside the button instead of being downscaled to 32x32 pixels */
+    max-width: var(--expandedBackpack-imgsize) !important;
+    max-height: var(--expandedBackpack-imgsize) !important;
+}
