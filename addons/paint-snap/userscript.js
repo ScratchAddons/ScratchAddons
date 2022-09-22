@@ -8,7 +8,6 @@ export default async function (api) {
   addon.self.addEventListener("disabled", disable);
   addon.self.addEventListener("reenabled", enable);
   const paper = await addon.tab.traps.getPaper();
-  window.paper = paper;
   const [tool] = paper.tools;
   if (isSelectTool(tool)) {
     updateSelectTool(paper, tool, addon.settings);
