@@ -11,7 +11,7 @@
   "paint-snap/snapFrom": "Snap from:",
   "paint-snap/boxCenter": "Center of selection",
   "paint-snap/boxCorners": "Corners of selection",
-  "paint-snap/boxEdgeCenters": "Centers of selection edges",
+  "paint-snap/boxEdgeCenters": "Selection edge midpoints",
   "paint-snap/threshold": "Snapping distance",
   "paint-snap/on": "On",
   "paint-snap/off": "Off"
