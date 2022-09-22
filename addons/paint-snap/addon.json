@@ -28,6 +28,68 @@
       "id": "guide-color",
       "name": "Snapping guide color",
       "default": "#ff0000"
+    },
+    {
+      "type": "boolean",
+      "id": "pageEdges",
+      "name": "Snap to page edges",
+      "default": true
+    },
+    {
+      "type": "boolean",
+      "id": "pageCenter",
+      "name": "Snap to page center",
+      "default": true
+    },
+    {
+      "type": "boolean",
+      "id": "pageCorners",
+      "name": "Snap to page corners",
+      "default": false
+    },
+    {
+      "type": "boolean",
+      "id": "objectEdges",
+      "name": "Snap to object edges",
+      "default": true
+    },
+    {
+      "type": "boolean",
+      "id": "objectCenters",
+      "name": "Snap to object centers",
+      "default": true
+    },
+    {
+      "type": "boolean",
+      "id": "objectCorners",
+      "name": "Snap to object corners",
+      "default": false
+    },
+    {
+      "type": "boolean",
+      "id": "boxCenter",
+      "name": "Snap from selection box center",
+      "default": true
+    },
+    {
+      "type": "boolean",
+      "id": "boxCorners",
+      "name": "Snap from selection box corners",
+      "default": false
+    },
+    {
+      "type": "boolean",
+      "id": "boxEdgeMids",
+      "name": "Snap from selection box edge midpoints",
+      "default": false
+    },
+    {
+      "type": "positive_integer",
+      "id": "threshold",
+      "name": "Snapping distance",
+      "default": 10,
+      "min": 4,
+      "max": 100
     }
   ],
   "dynamicDisable": true,

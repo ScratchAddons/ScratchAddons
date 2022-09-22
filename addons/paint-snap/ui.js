@@ -234,7 +234,7 @@ export function initUI({ addon, msg }) {
     msg("snapFrom"),
     createSnapFromSetting("boxCenter"),
     createSnapFromSetting("boxCorners"),
-    createSnapFromSetting("boxEdgeCenters")
+    createSnapFromSetting("boxEdgeMids")
   );
 
   settingsPage.append(threshSetting, createSeperator(), snapToSection, createSeperator(), snapFromSection);

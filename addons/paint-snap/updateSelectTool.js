@@ -143,7 +143,7 @@ export const updateSelectTool = (paper, tool, settings) => {
               bottomRight: selectionBounds.bottomRight,
             }
           : {}),
-        ...(snapFrom.boxEdgeCenters
+        ...(snapFrom.boxEdgeMids
           ? {
               left: new paper.Point(selectionBounds.left, selectionBounds.center.y),
               right: new paper.Point(selectionBounds.right, selectionBounds.center.y),
