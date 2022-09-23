@@ -25,5 +25,13 @@
     }
   ],
   "tags": ["editor", "projectPlayer", "recommended"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+    "settings": [
+      {
+        "name": "Alt+X keybind",
+        "id": "keybindEnabled",
+        "type": "boolean",
+        "default": false
+      }
+    ]
 }
