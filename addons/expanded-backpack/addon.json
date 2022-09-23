@@ -20,19 +20,10 @@
       "default": 2
     },
     {
-      "name": "Larger costume and script preview images",
+      "name": "Larger costume and script previews",
       "id": "upscale",
       "type": "boolean",
       "default": true
-    },
-    {
-      "name": "Fill background to fix white squares behind previews",
-      "id": "bgfix",
-      "type": "boolean",
-      "default": true,
-      "if": {
-        "addonEnabled": ["editor-dark-mode"]
-      }
     }
   ],
   "customCssVariables": [
@@ -54,7 +45,7 @@
         "type": "ternary",
         "source": {
           "type": "settingValue",
-          "settingId": "bgfix"
+          "settingId": "upscale"
         },
         "true": "white",
         "false": "none"
