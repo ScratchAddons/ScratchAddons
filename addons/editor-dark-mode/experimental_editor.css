@@ -597,6 +597,22 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 .blocklyWidgetDiv .goog-menuitem-highlight {
   border-color: transparent !important;
 }
+.sa-opacity-slider {
+  background-image: linear-gradient(
+      45deg,
+      var(--editorDarkMode-accent-paintEditorBackground) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--editorDarkMode-accent-paintEditorBackground) 75%
+    ),
+    linear-gradient(
+      45deg,
+      var(--editorDarkMode-accent-paintEditorBackground) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--editorDarkMode-accent-paintEditorBackground) 75%
+    );
+}
 .sa-color-picker > .sa-color-picker-color {
   /* Use the dark version of the browser's default button appearance. */
   color-scheme: dark;

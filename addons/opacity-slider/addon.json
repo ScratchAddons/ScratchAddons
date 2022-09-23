@@ -21,6 +21,12 @@
       "matches": ["projects"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
   "libraries": ["tinycolor2"],
   "enabledByDefault": false,
   "versionAdded": "1.28.0"

@@ -9,6 +9,7 @@ export default async function ({ addon, console, msg }) {
   let labelReadout;
   let saOpacityHandle;
   let saOpacitySlider;
+  let saOpacitySliderBg;
 
   const getColor = () => {
     let fillOrStroke;
@@ -60,16 +61,7 @@ export default async function ({ addon, console, msg }) {
 
   const setSliderBg = (color) => {
     const hex = tinycolor(color).toHexString(); // remove alpha value
-    const darkmodeBackground = getComputedStyle(document.documentElement).getPropertyValue(
-      "--editorDarkMode-accent-paintEditorBackground"
-    );
-    const bgColor = darkmodeBackground === "" ? "#eaf0f8" : darkmodeBackground;
-    let bg = `linear-gradient(to left, ${hex} 0%, rgba(0, 0, 0, 0) 100%),`;
-    bg += `linear-gradient(45deg, ${bgColor} 25%, transparent 25%, transparent 75%, ${bgColor} 75%),`;
-    bg += `linear-gradient(45deg, ${bgColor} 25%, transparent 25%, transparent 75%, ${bgColor} 75%)`;
-    saOpacitySlider.style.background = bg;
-    saOpacitySlider.style.backgroundSize = "100% 100%, 20px 20px, 20px 20px";
-    saOpacitySlider.style.backgroundPosition = "0 0, 10px 10px";
+    saOpacitySliderBg.style.background = `linear-gradient(to left, ${hex} 0%, rgba(0, 0, 0, 0) 100%)`;
   };
 
   const getEventXY = (e) => {
@@ -160,8 +152,12 @@ export default async function ({ addon, console, msg }) {
     saOpacitySlider = Object.assign(document.createElement("div"), {
       className: `sa-opacity-slider ${addon.tab.scratchClass("slider_container", "slider_last")}`,
     });
-    setSliderBg(defaultColor);
     saOpacitySlider.addEventListener("click", handleClickBackground);
+
+    saOpacitySliderBg = Object.assign(document.createElement("div"), {
+      className: "sa-opacity-slider-bg",
+    });
+    setSliderBg(defaultColor);
 
     saOpacityHandle = Object.assign(document.createElement("div"), {
       className: `sa-opacity-handle ${addon.tab.scratchClass("slider_handle")}`,
@@ -194,6 +190,7 @@ export default async function ({ addon, console, msg }) {
     containerWrapper.appendChild(saOpacitySlider);
     rowHeader.appendChild(saLabelName);
     rowHeader.appendChild(labelReadout);
+    saOpacitySlider.appendChild(saOpacitySliderBg);
     saOpacitySlider.appendChild(saOpacityHandle);
     element.parentElement.querySelector("div:nth-child(4)").after(containerWrapper);
   }
