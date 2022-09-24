@@ -91,6 +91,9 @@
   border-bottom: none;
   border-top-right-radius: 5px;
   padding: 12px;
+  /* comments-linebreaks needs the bottom padding to be 0
+     to display the correct number of lines. */
+  padding-bottom: 0;
   margin-left: 8px;
   margin-bottom: 0;
   background-color: var(--darkWww-box, white);
@@ -98,7 +101,7 @@
 #comments .comment .info > div:not(.name):not(.content):not([data-content="reply-form"]) {
   margin-left: 8px;
   padding: 12px;
-  padding-top: 4px;
+  padding-top: 16px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   border: 1px solid var(--darkWww-border-15, #d9d9d9);
