@@ -1,3 +1,5 @@
+import {update} from "./paint-editor-utils.js";
+
 export default async ({ addon, console, msg }) => {
   // The action-menu_file-input classed input that the next pasted image will be pasted into.
   let currentMenuInput;
@@ -108,15 +110,12 @@ export default async ({ addon, console, msg }) => {
   const passivePaste = async (e) => {
     if (addon.self.disabled) return;
     //If the paste overlay is active, let it do its thing
-	console.log("overlay")
     if (!pasteOverlay.classList.contains("hidden")) return;
 
     const COSTUMES_PANE = document.querySelector("[data-tabs] > :nth-child(3) > div > [class*='selector_wrapper_']");
-	console.log("costumes")
     if (!COSTUMES_PANE) return;
 	
 	const files = onPaste(e, true);
-	console.log("files", files)
 	if (!files) return;
 	
     e.preventDefault();
@@ -126,10 +125,16 @@ export default async ({ addon, console, msg }) => {
 	const paper = await addon.tab.traps.getPaper();
 	
 	for (const file of files) {
-		const raster = new paper.Raster(URL.createObjectURL(file));
-		raster.selected = "true";
+		const raster = new paper.Raster({
+			source: URL.createObjectURL(file),
+			position: paper.view.center,
+		});
+		raster.selected = true;
 		raster.smoothing = "off";
+		raster.scale(2);
 	}
+	
+	update(addon.tab.redux, paper, true);
   };
   document.body.addEventListener("paste", passivePaste);
 
