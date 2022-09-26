@@ -19,7 +19,7 @@ export default async function ({ addon, global, console, msg }) {
     if (!document.querySelector(".pause-btn")) {
       document.addEventListener("keydown", function (e) {
         if (addon.settings.get("keybindEnabled")) {
-          if (e.altKey && e.key === "≈") {
+          if (e.altKey && e.code === "KeyX") {
             e.preventDefault();
             img.click();
           }
