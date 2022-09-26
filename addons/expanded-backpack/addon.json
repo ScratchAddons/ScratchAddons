@@ -1,6 +1,6 @@
 {
   "name": "Expanded backpack",
-  "description": "Adds multiple rows, better previews and vertical scrolling to the editor backpack to make it easier to find things.",
+  "description": "Adds multiple rows, better previews and vertical scrolling to the editor backpack.",
   "credits": [
     {
       "name": "pumpkinhasapatch",
@@ -12,7 +12,7 @@
   "enabledByDefault": false,
   "settings": [
     {
-      "name": "Number of rows to display in backpack",
+      "name": "Number of displayed rows",
       "id": "rows",
       "type": "integer",
       "min": 1,
