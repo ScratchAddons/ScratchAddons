@@ -21,7 +21,7 @@ export default async function ({ addon, global, console, msg }) {
         if (addon.settings.get("keybindEnabled")) {
           if (e.altKey && e.code === "KeyX") {
             e.preventDefault();
-            img.click();
+            setPaused(!isPaused());
           }
         }
       });
