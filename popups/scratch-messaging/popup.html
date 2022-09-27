@@ -68,7 +68,12 @@
           </div>
         </bdo>
         <div class="reply-box-comment" v-show="replying">
-          <textarea class="reply-textarea" maxlength="500" v-model="replyBoxValue"></textarea>
+          <textarea
+            class="reply-textarea"
+            maxlength="500"
+            v-model="replyBoxValue"
+            @keyup.enter="postComment($event.shiftKey)"
+          ></textarea>
           <div class="reply-box-buttons">
             <button @click="postComment()" class="large-button post-button" :disabled="postingComment">
               {{ postingComment ? messages.postingMsg : messages.postMsg }}
