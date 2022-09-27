@@ -5,6 +5,7 @@
   background-color: var(--editorTheme3-inputColor);
   color: var(--editorTheme3-inputColor-text);
 }
+
 .blocklyDropDownDiv .goog-menuitem-highlight,
 .blocklyDropDownDiv .goog-menuitem-hover,
 .sa-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight {
@@ -18,9 +19,11 @@
 .scratchCommentTextarea {
   background-color: var(--editorTheme3-commentColor);
 }
+.scratchWorkspaceCommentBorder {
+  stroke: var(--editorTheme3-commentBorder);
+}
 .scratchCommentTextarea::placeholder {
-  color: var(--editorTheme3-commentText);
-  opacity: 0.5;
+  color: var(--editorTheme3-commentTextTransparent);
 }
 .scratchCommentText {
   fill: var(--editorTheme3-commentText);
