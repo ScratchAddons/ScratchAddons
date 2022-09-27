@@ -91,11 +91,7 @@ export default async function ({ addon, global, console, msg }) {
   debuggerButton.addEventListener("click", () => setInterfaceVisible(true));
 
   const setHasUnreadMessage = (unreadMessage) => {
-    // setting image.src is slow, only do it when necessary
-    const newImage = addon.self.dir + (unreadMessage ? "/icons/debug-unread.svg" : "/icons/debug.svg");
-    if (debuggerButtonImage.src !== newImage) {
-      debuggerButtonImage.src = newImage;
-    }
+    debuggerButtonContent.classList.toggle("sa-debugger-unread", unreadMessage);
   };
 
   const interfaceContainer = Object.assign(document.createElement("div"), {
