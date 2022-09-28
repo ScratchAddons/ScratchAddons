@@ -70,7 +70,7 @@ export default async ({ addon, msg, safeMsg }) => {
       };
     },
     methods: {
-      postComment(shouldPost) {
+      postComment(shouldPost = true) {
         if (!shouldPost) return;
         const shouldCaptureComment = (value) => {
           // From content-scripts/cs.js
