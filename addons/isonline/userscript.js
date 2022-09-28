@@ -1,5 +1,6 @@
 import ThumbSetter from "../../libraries/common/cs/thumb-setter.js";
 import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
+import { getProjectId } from "./common.js";
 async function updateThumb(projectId) {
   const canvas = document.createElement("canvas");
   let uploader = new ThumbSetter(projectId);
@@ -17,7 +18,10 @@ async function isOnline(projectId) {
 }
 
 export default async function ({ addon, global, console, msg }) {
-  let projectId = "738141961";
+  let isLoggedIn = await addon.auth.fetchIsLoggedIn()
+  if (!isLoggedIn) return
+  let username = await addon.auth.fetchUsername();
+  let projectId = getProjectId(username);
 
   await updateThumb(projectId);
   setInterval(updateThumb, 1000 * 60 * 5);
