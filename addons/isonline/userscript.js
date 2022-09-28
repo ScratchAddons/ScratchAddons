@@ -13,7 +13,7 @@ async function isOnline(projectId) {
   );
   let data = await res.text();
   let lastCheckIn = new Date(parseInt(data));
-  return (Date.now() - lastCheckIn <= 5 * 60 * 1000);
+  return Date.now() - lastCheckIn <= 5 * 60 * 1000;
 }
 
 export default async function ({ addon, global, console, msg }) {
