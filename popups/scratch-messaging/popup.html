@@ -72,7 +72,7 @@
             class="reply-textarea"
             maxlength="500"
             v-model="replyBoxValue"
-            @keyup.enter="postComment($event.ctrlKey || $event.metaKey)"
+            @keyup.enter="($event.ctrlKey || $event.metaKey) && postComment()"
           ></textarea>
           <div class="reply-box-buttons">
             <button @click="postComment()" class="large-button post-button" :disabled="postingComment">

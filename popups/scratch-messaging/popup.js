@@ -70,8 +70,7 @@ export default async ({ addon, msg, safeMsg }) => {
       };
     },
     methods: {
-      postComment(shouldPost = true) {
-        if (!shouldPost) return;
+      postComment() {
         const shouldCaptureComment = (value) => {
           // From content-scripts/cs.js
           const regex = /scratch[ ]?add[ ]?ons/;
