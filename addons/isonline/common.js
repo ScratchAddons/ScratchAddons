@@ -8,3 +8,10 @@ export const isOnline = async (projectId) => {
   let lastCheckIn = new Date(parseInt(data));
   return Date.now() - lastCheckIn <= 5 * 60 * 1000;
 };
+export const getProjectId = async (username) => {
+    let res = await fetch(`https://api.scratch.mit.edu/users/${username}`);
+  let data = await res.json();
+  let {status} = data.profile
+  let projectId = status.split("IO:")[1]?.split(":")[0];
+  return projectId;
+}

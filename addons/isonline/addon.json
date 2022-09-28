@@ -6,7 +6,11 @@
       "matches": ["https://scratch.mit.edu/*"],
       "url": "userscript.js"
     },
-    { "matches": ["profiles"], "url": "profile.js" }
+    { "matches": ["profiles"], "url": "profile.js" },
+    {
+      "matches": ["https://scratch.mit.edu/404/"],
+      "url": "getstarted.js"
+    }
   ],
   "userstyles": [
     {
