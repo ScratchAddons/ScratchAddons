@@ -20,8 +20,10 @@ async function isOnline(projectId) {
 export default async function ({ addon, global, console, msg }) {
   let isLoggedIn = await addon.auth.fetchIsLoggedIn()
   if (!isLoggedIn) return
+
   let username = await addon.auth.fetchUsername();
-  let projectId = getProjectId(username);
+  let projectId = await getProjectId(username);
+  if (!projectId) alert('go to /accounts/settings/isonline to setup isonline');
 
   await updateThumb(projectId);
   setInterval(updateThumb, 1000 * 60 * 5);
