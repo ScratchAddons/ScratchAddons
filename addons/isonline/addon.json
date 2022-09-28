@@ -1,0 +1,22 @@
+{
+  "name": "IsOnline",
+  "description": "Adds a button to the bottom-right of the project page to set the thumbnail of your project to any image (including gifs).",
+  "userscripts": [
+    {
+      "matches": ["https://scratch.mit.edu/*"],
+      "url": "userscript.js"
+    },
+    { "matches": ["profiles"], "url": "profile.js" }
+  ],
+  "userstyles": [
+    {
+      "url": "userscript.css",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "tags": ["community", "projectPage", "recommended"],
+  "versionAdded": "1.3.0",
+  "enabledByDefault": true
+}
