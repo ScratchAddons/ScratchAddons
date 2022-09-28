@@ -12,7 +12,7 @@ export default async function ({ addon, global, console, msg }) {
     },
   });
   let data = await res.json();
-  
+
   content.innerHTML = isLoggedIn
     ? `<div>
   <h1>Get Started With IsOnline</h1>
