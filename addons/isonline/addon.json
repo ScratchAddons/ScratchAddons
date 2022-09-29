@@ -15,7 +15,7 @@
   "userstyles": [
     {
       "url": "userscript.css",
-      "matches": ["projects"]
+      "matches": ["profiles"]
     }
   ],
   "dynamicEnable": true,
