@@ -1,27 +1,28 @@
-.avatar.online::before, .avatar.offline::before{
-    content: ' ';
-    background: red;
-    border-radius: 100px;
-    position:absolute;
-    bottom: 0px;
-    right: -5px;
-    height: 15px;
-    width: 15px;
-    padding: 1px;
-      transition: width 0.2s;
-
+.avatar.online::before,
+.avatar.offline::before {
+  content: " ";
+  background: red;
+  border-radius: 100px;
+  position: absolute;
+  bottom: 0px;
+  right: -5px;
+  height: 15px;
+  width: 15px;
+  padding: 1px;
+  transition: width 0.2s;
 }
 .avatar.online::before {
   background: green;
 }
-.box-head:hover .avatar.offline::before, .box-head:hover .avatar.online::before {
-    content: 'Offline';
-    right: -30px;
-    height: 20px;
-    padding: 2px;
-    width: 40px;
-    color: white;
+.box-head:hover .avatar.offline::before,
+.box-head:hover .avatar.online::before {
+  content: "Offline";
+  right: -30px;
+  height: 20px;
+  padding: 2px;
+  width: 40px;
+  color: white;
 }
 .avatar.online:hover::before {
-    content: 'Online'!important;
+  content: "Online" !important;
 }
