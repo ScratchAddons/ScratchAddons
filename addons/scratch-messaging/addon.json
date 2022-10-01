@@ -17,7 +17,8 @@
     "html": "popup.html"
   },
   "versionAdded": "1.0.0",
-  "persistentScripts": ["background.js"],
   "tags": ["popup", "recommended"],
-  "enabledByDefault": true
+  "enabledByDefault": true,
+  "dynamicEnable": true,
+  "dynamicDisable": true
 }

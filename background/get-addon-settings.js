@@ -1,3 +1,35 @@
+import minifySettings from "../libraries/common/minify-settings.js";
+
+/**
+ Since presets can change independently of others, we have to keep track of
+ the versions separately. Current versions:
+
+ - editor-dark-mode 2 (bumped in v1.23 twice)
+ */
+
+const updatePresetIfMatching = (settings, version, oldPreset = null, preset = null) => {
+  if ((settings._version || 0) < version) {
+    /**
+     Version must be set even if transition is unnecessary;
+     1) User uses custom settings
+     2) User updates, transition aborts
+     3) User changes settings to old preset values
+     4) Without version, this change will revert after reload!
+
+     Therefore, DO NOT REMOVE CALLS TO THIS METHOD. Instead omit oldPreset and preset
+     when transition is no longer necessary.
+     */
+    settings._version = version;
+    if (preset === null) return;
+    const map = {};
+    for (const key of Object.keys(oldPreset)) {
+      if (settings[key] !== oldPreset[key]) return;
+      map[key] = preset.values[key];
+    }
+    Object.assign(settings, map);
+  }
+};
+
 chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {}, addonsEnabled = {} }) => {
   const func = () => {
     let madeAnyChanges = false;
@@ -8,67 +40,53 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       madeAnyChanges = true;
     }
 
+    if (addonSettings["editor-dark-mode"]?.textShadow === true && addonsEnabled["custom-block-text"] === undefined) {
+      // Transition v1.23 to v1.24
+      // Moved text shadow option to the custom-block-text addon
+      madeAnyChanges = true;
+      delete addonSettings["editor-dark-mode"].textShadow;
+      addonsEnabled["custom-block-text"] = addonsEnabled["editor-dark-mode"];
+      addonSettings["custom-block-text"] = { shadow: true };
+      // `shadow` isn't the only setting - the other setting, `bold`, is set
+      // to its default (false) inside the for loop below.
+    }
+
+    if (addonsEnabled["editor-devtools"] === false) {
+      // Transition 1.27.0 to 1.28.0
+      // Disable addons previously part of devtools, if devtools is disabled
+      if (addonsEnabled["find-bar"] === undefined) {
+        madeAnyChanges = true;
+        addonsEnabled["find-bar"] = false;
+      }
+      if (addonsEnabled["jump-to-def"] === undefined) {
+        madeAnyChanges = true;
+        addonsEnabled["jump-to-def"] = false;
+      }
+    }
+
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
       const settings = addonSettings[addonId] || {};
       let madeChangesToAddon = false;
-      if (addonId === "project-info" && settings.editorCount) {
-        // Transition v1.22 to v1.23
-        // project-info was split into 2 addons
-        madeChangesToAddon = madeAnyChanges = true;
-        delete settings.editorCount;
-        addonsEnabled["block-count"] = true;
-      }
-      if (manifest.settings) {
-        if (addonId === "editor-dark-mode") {
-          // Transition v1.12.0 modes to v1.13.0 presets
 
-          // If user had a selected mode (AKA was a v1.12.0 user)
-          // but has no "page" color set, do the transition
-          // This will happen on first v1.13.0 run only
-          if (settings.selectedMode && !settings.page) {
-            const usePreset = (presetId) => {
-              for (const option of manifest.settings) {
-                if (option.id === "textShadow" && settings.textShadow !== undefined) {
-                  // Exception: v1.12.0 already had this setting
-                  // and we want to preserve what the user had
-                  continue;
-                }
-                const presetValue = manifest.presets.find((preset) => preset.id === presetId).values[option.id];
-                if (presetValue !== undefined) settings[option.id] = presetValue;
-                else settings[option.id] = option.default;
-              }
-            };
-
-            const previousMode = settings.selectedMode;
-            usePreset(
-              {
-                "3-darker": "3darker",
-                "3-dark": "3dark",
-                "dark-editor": "darkEditor",
-                "experimental-dark": "experimentalDark",
-              }[previousMode] || /* Something went wrong, use 3.Darker */ "3darker"
-            );
-
-            addonSettings[addonId] = settings; // Note: IIRC this line doesn't actually do anything
-            madeAnyChanges = true;
-            console.log("Migrated editor-dark-mode to presets");
-            // Skip following code, continue with next addon
-            continue;
-          }
+      if (addonId === "editor-dark-mode") {
+        // Transition v1.27 to v1.28
+        // editor-dark-mode enabled opacity to the block pallete.
+        // We append "cc" to the color so that it's the same as before this update.
+        if (settings.palette !== undefined && settings.palette.length === 7) {
+          settings.palette += "cc";
+          madeAnyChanges = madeChangesToAddon = true;
         }
+      }
 
+      if (manifest.settings) {
         for (const option of manifest.settings) {
           if (settings[option.id] === undefined) {
             madeChangesToAddon = true;
             madeAnyChanges = true;
-            // Transition v1.16.5 to v1.17.0
-            // Users of scratchr2 addon will get "scratchr2" version of old-studio-layout
-            if (addonId === "old-studio-layout" && option.id === "version" && addonsEnabled.scratchr2) {
-              settings.version = "scratchr2";
-              continue;
-            }
-            settings[option.id] = option.default;
+
+            // cloning required for tables
+            settings[option.id] = JSON.parse(JSON.stringify(option.default));
           } else if (option.type === "positive_integer" || option.type === "integer") {
             // ^ else means typeof can't be "undefined", so it must be number
             if (typeof settings[option.id] !== "number") {
@@ -80,6 +98,24 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
               const newValue = Number.isNaN(number) ? option.default : number;
               settings[option.id] = newValue;
             }
+          } else if (option.type === "table") {
+            const tableSettingIds = option.row.map((setting) => setting.id);
+            settings[option.id].forEach((item, i) => {
+              option.row.forEach((setting) => {
+                if (item[setting.id] === undefined) {
+                  madeChangesToAddon = true;
+                  madeAnyChanges = true;
+                  item[setting.id] = option.default[i][setting.id];
+                }
+              });
+              for (const def in item) {
+                if (!tableSettingIds.includes(def)) {
+                  madeChangesToAddon = true;
+                  madeAnyChanges = true;
+                  delete item[def];
+                }
+              }
+            });
           }
         }
         if (addonId === "dark-www") {
@@ -100,21 +136,11 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
             delete scratchr2.linkColor;
           }
         }
+
+        if (addonId === "editor-dark-mode") updatePresetIfMatching(settings, 2);
       }
 
       if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;
-      else if (addonId === "dango-rain") {
-        if (typeof settings.force !== "undefined") {
-          if (settings.force === false) {
-            // Note: addon might be disabled already, but we don't care
-            addonsEnabled[addonId] = false;
-            console.log("Disabled dango-rain because force was disabled");
-          }
-          delete settings.force; // Remove setting so that this only happens once
-          madeChangesToAddon = true;
-          madeAnyChanges = true;
-        }
-      }
 
       if (madeChangesToAddon) {
         console.log(`Changed settings for addon ${addonId}`);
@@ -122,7 +148,12 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       }
     }
 
-    if (madeAnyChanges) chrome.storage.sync.set({ addonSettings, addonsEnabled });
+    const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
+    if (madeAnyChanges)
+      chrome.storage.sync.set({
+        addonSettings: minifySettings(addonSettings, prerelease ? null : scratchAddons.manifests),
+        addonsEnabled,
+      });
     scratchAddons.globalState.addonSettings = addonSettings;
     scratchAddons.localState.addonsEnabled = addonsEnabled;
     scratchAddons.localState.ready.addonSettings = true;

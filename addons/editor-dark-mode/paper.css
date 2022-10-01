@@ -1,3 +1,8 @@
 .paper-canvas_paper-canvas_1y588 {
   background-color: var(--editorDarkMode-accent-paintEditorBackground);
 }
+
+.scrollable-canvas_vertical-scrollbar_lbD_c,
+.scrollable-canvas_horizontal-scrollbar_2w6OD {
+  background-color: var(--editorDarkMode-accent-paintEditorScrollbar);
+}

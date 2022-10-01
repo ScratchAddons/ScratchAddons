@@ -4,11 +4,15 @@
   "tags": ["community", "theme", "featured"],
   "credits": [
     {
-      "name": "Maximouse (addon, \"Experimental\" Dark)",
+      "name": "Maximouse",
+      "note": "addon, \"Experimental\" Dark",
+      "id": "addon",
       "link": "https://scratch.mit.edu/users/Maximouse/"
     },
     {
-      "name": "Ucrash (Dark WWW)",
+      "name": "Ucrash",
+      "note": "Dark WWW",
+      "id": "darkwww",
       "link": "https://github.com/gducrash"
     }
   ],
@@ -29,6 +33,18 @@
         "type": "textColor",
         "black": "rgba(0, 0, 0, 0.3)",
         "white": "rgba(255, 255, 255, 0.4)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-tab",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.1)",
+        "white": "rgba(255, 255, 255, 0.1)",
         "source": {
           "type": "settingValue",
           "settingId": "page"
@@ -57,6 +73,19 @@
           "type": "settingValue",
           "settingId": "page"
         }
+      }
+    },
+    {
+      "name": "page-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        },
+        "threshold": 128
       }
     },
     {
@@ -455,6 +484,41 @@
           "type": "settingValue",
           "settingId": "box"
         }
+      }
+    },
+    {
+      "name": "box-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        },
+        "threshold": 128
+      }
+    },
+    {
+      "name": "box-success",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "box"
+        },
+        "transparentSource": "#08bd8c33"
+      }
+    },
+    {
+      "name": "box-error",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "box"
+        },
+        "transparentSource": "#ff8c1a23"
       }
     },
     {
@@ -1049,6 +1113,48 @@
       }
     },
     {
+      "name": "gray-forumTransparentQuote",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.03)",
+        "white": "rgba(255, 255, 255, 0.03)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-forumTransparentCode",
+      "value": {
+        "type": "ternary",
+        "source": {
+          "type": "settingValue",
+          "settingId": "darkForumCode"
+        },
+        "true": {
+          "type": "textColor",
+          "black": "#333333",
+          "white": "rgba(255, 255, 255, 0.03)",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "threshold": 64
+        },
+        "false": {
+          "type": "textColor",
+          "black": "rgba(0, 0, 0, 0.03)",
+          "white": "#f7f7f7",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "threshold": 204
+        }
+      }
+    },
+    {
       "name": "blue-text",
       "value": {
         "type": "textColor",
@@ -1083,6 +1189,18 @@
       }
     },
     {
+      "name": "blue-tabHover",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.2)",
+        "white": "rgba(255, 255, 255, 0.2)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "blue"
+        }
+      }
+    },
+    {
       "name": "blue-studioTextareaBorder",
       "value": {
         "type": "makeHsv",
@@ -1109,6 +1227,19 @@
             "a": 0.79
           }
         }
+      }
+    },
+    {
+      "name": "blue-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "blue"
+        },
+        "threshold": 128
       }
     },
     {
@@ -1300,6 +1431,74 @@
       }
     },
     {
+      "name": "button-banner",
+      "value": {
+        "type": "makeHsv",
+        "h": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "s": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "darkBanners"
+          },
+          "options": {
+            "off": 0.7,
+            "darker": 1,
+            "desaturated": 0.5
+          }
+        },
+        "v": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "darkBanners"
+          },
+          "options": {
+            "off": 1,
+            "darker": 0.6,
+            "desaturated": 0.4
+          }
+        }
+      }
+    },
+    {
+      "name": "button-bannerVariant",
+      "value": {
+        "type": "makeHsv",
+        "h": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "s": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "darkBanners"
+          },
+          "options": {
+            "off": 0.7,
+            "darker": 1,
+            "desaturated": 0.51
+          }
+        },
+        "v": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "darkBanners"
+          },
+          "options": {
+            "off": 0.84,
+            "darker": 0.54,
+            "desaturated": 0.3
+          }
+        }
+      }
+    },
+    {
       "name": "button-scratchr2ButtonText",
       "value": {
         "type": "textColor",
@@ -1463,6 +1662,17 @@
       }
     },
     {
+      "name": "link-transparent",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "link"
+        },
+        "a": 0.75
+      }
+    },
+    {
       "name": "link-hover",
       "value": {
         "type": "multiply",
@@ -1473,6 +1683,19 @@
         "r": 0.86,
         "g": 0.85,
         "b": 0.84
+      }
+    },
+    {
+      "name": "link-variant",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "link"
+        },
+        "r": 0.66,
+        "g": 0.76,
+        "b": 0.8
       }
     },
     {
@@ -1642,13 +1865,6 @@
   ],
   "userstyles": [
     {
-      "url": "scrollbar.css",
-      "matches": ["https://scratch.mit.edu/*"],
-      "if": {
-        "settings": { "darkScrollbars": true }
-      }
-    },
-    {
       "url": "experimental_scratchr2.css",
       "matches": ["isNotScratchWWW"]
     },
@@ -1658,24 +1874,31 @@
     },
     {
       "url": "experimental_scratchwww_white_bg.css",
-      "matches": ["https://scratch.mit.edu/ideas", "https://scratch.mit.edu/annual-report"]
+      "matches": ["https://scratch.mit.edu/ideas", "https://scratch.mit.edu/annual-report/*"]
     },
     {
-      "url": "darker_banners.css",
-      "matches": ["scratchWWWNoProject"],
+      "url": "banners/darker.css",
+      "matches": ["projects", "scratchWWWNoProject"],
       "if": {
         "settings": { "darkBanners": "darker" }
       }
     },
     {
-      "url": "desaturated_banners.css",
-      "matches": ["scratchWWWNoProject"],
+      "url": "banners/desaturated.css",
+      "matches": ["projects", "scratchWWWNoProject"],
       "if": {
         "settings": { "darkBanners": "desaturated" }
       }
     },
     {
-      "url": "darker_banners_scratchr2.css",
+      "url": "banners/scratchr2_blue.css",
+      "matches": ["isNotScratchWWW"],
+      "if": {
+        "addonEnabled": ["scratchr2"]
+      }
+    },
+    {
+      "url": "banners/darker_scratchr2.css",
       "matches": ["isNotScratchWWW"],
       "if": {
         "settings": { "darkBanners": "darker" },
@@ -1683,7 +1906,7 @@
       }
     },
     {
-      "url": "desaturated_banners_scratchr2.css",
+      "url": "banners/desaturated_scratchr2.css",
       "matches": ["isNotScratchWWW"],
       "if": {
         "settings": { "darkBanners": "desaturated" },
@@ -1695,14 +1918,18 @@
       "matches": ["https://scratch.mit.edu/explore/*", "https://scratch.mit.edu/search/*"]
     },
     {
-      "url": "explore_desaturated_banner.css",
+      "url": "scratcher_promotion.css",
+      "matches": ["https://scratch.mit.edu/become-a-scratcher"]
+    },
+    {
+      "url": "banners/desaturated_explore.css",
       "matches": ["https://scratch.mit.edu/explore/*"],
       "if": {
         "settings": { "darkBanners": "desaturated" }
       }
     },
     {
-      "url": "search_desaturated_banner.css",
+      "url": "banners/desaturated_search.css",
       "matches": ["https://scratch.mit.edu/search/*"],
       "if": {
         "settings": { "darkBanners": "desaturated" }
@@ -1803,12 +2030,6 @@
       "default": "darker"
     },
     {
-      "name": "Dark scrollbars",
-      "id": "darkScrollbars",
-      "type": "boolean",
-      "default": true
-    },
-    {
       "name": "Dark code blocks on the forums",
       "id": "darkForumCode",
       "type": "boolean",
@@ -1832,7 +2053,6 @@
         "footer": "#333333",
         "border": "#606060",
         "darkBanners": "darker",
-        "darkScrollbars": true,
         "darkForumCode": true
       }
     },
@@ -1852,7 +2072,6 @@
         "footer": "#17181a",
         "border": "#000000",
         "darkBanners": "desaturated",
-        "darkScrollbars": true,
         "darkForumCode": true
       }
     },
@@ -1872,7 +2091,6 @@
         "footer": "#f2f2f2",
         "border": "#0000001a",
         "darkBanners": "off",
-        "darkScrollbars": false,
         "darkForumCode": false
       }
     }

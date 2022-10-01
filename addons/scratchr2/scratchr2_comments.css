@@ -1,64 +1,113 @@
+#comments #comments-loading,
+#comments .posting {
+  background-image: none;
+  position: relative;
+}
 #comments #comments-loading {
   background-color: transparent;
+}
+#comments #comments-loading::after,
+#comments .posting::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: calc(50% - 10px);
+  left: calc(50% - 10px);
+  width: 22.8px;
+  height: 22.8px;
+  background-image: url(/svgs/modal/spinner-blue.svg);
+  background-size: 100%;
+  filter: var(--darkWww-link-iconFilter, none);
+  /* Spinner animation code */
+  /* From https://github.com/LLK/scratch-www/blob/develop/src/components/spinner/spinner.scss */
+  animation-name: spin-intro, spin;
+  animation-duration: 0.25s, 1s;
+  animation-timing-function: cubic-bezier(0.3, -3, 0.6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);
+  animation-delay: 0s, 0.25s;
+  animation-iteration-count: 1, infinite;
+}
+#comments #comments-loading::after {
+  top: 70px;
 }
 #comments form .small-text {
   color: var(--darkWww-blue-text, #575e75);
 }
+#comments .posting {
+  background-color: var(--darkWww-box, white);
+  color: transparent;
+}
 #comments .comment {
-  margin-left: 0;
-  margin-right: 0;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 24px;
 }
 #comments .comments li,
 #comments ul.comments ul li {
   /* Remove separators */
   border: none;
 }
+#comments #comment-form .avatar,
+#comments .comment img.avatar {
+  margin-left: 1px;
+  margin-top: 1px;
+  border-radius: 5px;
+  box-shadow: 0 0 0 1px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
+}
+#comments .comment img.avatar {
+  margin-right: 8px;
+}
 #comments .comments .info,
 #comments .comments li ul li .comment .info {
-  width: calc(100% - 55px);
+  width: calc(100% - 54px);
+}
+#comments .comments .info {
+  position: relative;
+}
+#comments .comment .info .name {
+  margin-bottom: 8px;
+  font-size: 16px;
+  line-height: 18px;
+}
+#comments .comment .actions-wrap {
+  line-height: normal;
+  /* Needed to make the action buttons actually work; #4161 */
+  z-index: 1;
+}
+#comments .comment .info::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 26px;
+  left: -2px;
+  width: 10px;
+  height: 9px;
+  background-color: var(--darkWww-box, white);
+  border: 1px solid var(--darkWww-border, rgba(0, 0, 0, 0.1));
+  border-right: none;
+  border-bottom-left-radius: 8px;
 }
 #comments .comment .info .content {
-  position: relative;
   border: 1px solid var(--darkWww-border-15, #d9d9d9);
   border-bottom: none;
   border-top-right-radius: 5px;
-  padding: 1rem;
-  margin-left: 1rem;
+  padding: 12px;
+  /* comments-linebreaks needs the bottom padding to be 0
+     to display the correct number of lines. */
+  padding-bottom: 0;
+  margin-left: 8px;
   margin-bottom: 0;
   background-color: var(--darkWww-box, white);
-  overflow: visible !important;
 }
 #comments .comment .info > div:not(.name):not(.content):not([data-content="reply-form"]) {
-  margin-left: 1rem;
-  padding: 1rem;
-  padding-top: 0;
+  margin-left: 8px;
+  padding: 12px;
+  padding-top: 16px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   border: 1px solid var(--darkWww-border-15, #d9d9d9);
   border-top: none;
   background-color: var(--darkWww-box, white);
-}
-#comments .content::after {
-  display: block;
-  position: absolute;
-  top: 0;
-  left: -12px;
-  border-bottom: 10px solid var(--darkWww-box, white);
-  border-left: 12px solid var(--darkWww-box, white);
-  border-radius: 0 0 0 12px;
-  width: 0;
-  content: "";
-}
-#comments .content::before {
-  display: block;
-  position: absolute;
-  top: -1px;
-  left: -13px;
-  border-bottom: 12px solid var(--darkWww-border-15, #d9d9d9);
-  border-left: 13px solid var(--darkWww-border-15, #d9d9d9);
-  border-radius: 0 0 0 13px;
-  width: 0;
-  content: "";
+  font-size: 12px;
 }
 #comments .highlighted {
   background: var(--darkWww-blue-20, rgba(77, 151, 255, 0.1));
@@ -75,13 +124,54 @@
 #comments .comment .info .time {
   color: var(--darkWww-box-transparentText, #b3b3b3);
 }
+#comments .comment .info .reply {
+  float: right;
+}
+#comments .comment .info .reply::after {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  width: 16px;
+  height: 16px;
+  background-image: url("/svgs/project/comment-reply.svg");
+  background-size: cover;
+  filter: var(--darkWww-link-iconFilter);
+}
 #comments .comment .report,
 #comments .comment .delete {
   color: var(--darkWww-blue-text);
   filter: opacity(0.5);
 }
+#comments ul.comments ul {
+  margin-top: 0;
+}
+#comments ul li ul li .comment {
+  margin: 0;
+}
+#comments .more-replies {
+  height: 68px;
+  border: none;
+  box-shadow: 0 -25px 20px -10px var(--darkWww-blue, #eaf1fc);
+}
+#comments .more-replies::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: calc(50% - 1px);
+  left: 0;
+  width: 100%;
+  border-top: 2px solid var(--darkWww-border, rgba(0, 0, 0, 0.1));
+}
 #comments .more-replies .pulldown {
+  top: 24px;
+  padding: 0 8px;
+  background-color: var(--darkWww-blue, #eaf1fc);
+  border: none;
   color: var(--darkWww-link, #4d97ff);
+  font-weight: bold;
+}
+#comments .more-replies:hover .pulldown {
+  color: var(--darkWww-link-hover, #4280d7);
 }
 #comments .comment form > .control-group:last-child {
   /* emoji-picker compatibility */
