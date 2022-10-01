@@ -4,7 +4,7 @@
   "userscripts": [
     {
       "url": "code.js",
-      "matches": ["https://scratch.mit.edu/*"]
+      "matches": ["projects"]
     }
   ],
   "versionAdded": "1.29.0",
