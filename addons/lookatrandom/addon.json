@@ -1,6 +1,6 @@
 {
     "name": "Look at random",
-    "description": "Provides easy looking at a random position",
+    "description": "Provides easy looking at a random position/direction",
     "userscripts": [
       {
         "url": "code.js",
