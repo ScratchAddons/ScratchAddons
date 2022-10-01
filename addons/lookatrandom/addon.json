@@ -1,13 +1,13 @@
 {
-    "name": "Look at random",
-    "description": "Provides easy looking at a random position/direction",
-    "userscripts": [
-      {
-        "url": "code.js",
-        "matches": ["https://scratch.mit.edu/*"]
-      }
-    ],
-    "versionAdded": "1.29.0",
-    "tags": ["community"],
-    "enabledByDefault": false
-  }
+  "name": "Look at random",
+  "description": "Provides easy looking at a random position/direction",
+  "userscripts": [
+    {
+      "url": "code.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "versionAdded": "1.29.0",
+  "tags": ["community"],
+  "enabledByDefault": false
+}
