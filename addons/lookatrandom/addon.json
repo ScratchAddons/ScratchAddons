@@ -1,13 +1,13 @@
 {
-    "name": "Point towards random direction",
-    "description": "Adds a \"random position\" option to the \"point towards ()\" block that makes the sprite point in a random direction. This will work for everyone using the project.",
-    "userscripts": [
-      { 
-        "url": "code.js",
-        "matches": ["https://scratch.mit.edu/*"]
-      }
-    ],
-    "versionAdded": "1.29.0",
-    "tags": ["community"],
-    "enabledByDefault": false
-  }
+  "name": "Point towards random direction",
+  "description": "Adds a \"random position\" option to the \"point towards ()\" block that makes the sprite point in a random direction. This will work for everyone using the project.",
+  "userscripts": [
+    {
+      "url": "code.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "versionAdded": "1.29.0",
+  "tags": ["community"],
+  "enabledByDefault": false
+}
