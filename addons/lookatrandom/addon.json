@@ -1,0 +1,12 @@
+{
+    "name": "Look at random",
+    "description": "Provides easy looking at a random position",
+    "userscripts": [
+      {
+        "url": "code.js",
+        "matches": ["https://scratch.mit.edu/*"]
+      }
+    ],
+    "tags": ["community"],
+    "enabledByDefault": false
+  }
