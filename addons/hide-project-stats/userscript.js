@@ -2,8 +2,9 @@ export default async function ({ addon, global, console }) {
   let loves = { name: "love" };
   let favorites = { name: "favorite" };
   let username = await addon.auth.fetchUsername();
-  await addon.tab.waitForElement(".project-favorites");
-  let visitingOwnProject = username !== null && document.querySelector(".button.action-button.report-button") === null;
+
+  await addon.tab.waitForElement(".title");
+  let visitingOwnProject = username !== null && document.querySelector(".title a").textContent === username;
 
   /**
    * Calculates whether or not various project stats should show.
