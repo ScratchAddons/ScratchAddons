@@ -9,5 +9,8 @@
   ],
   "versionAdded": "1.29.0",
   "tags": ["editor"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "credits": [ // maybe add some credits - you and also me seeing as I wrote the code :) ]
 }
