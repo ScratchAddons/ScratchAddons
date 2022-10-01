@@ -12,5 +12,5 @@
   "enabledByDefault": false,
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "credits": [ // maybe add some credits - you and also me seeing as I wrote the code :) ]
+    "credits": ["pufferfish101007#2024: wrote the code","me (winwinlmfao#8430): made the addon"]
 }

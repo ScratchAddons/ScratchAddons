@@ -26,4 +26,3 @@ export default async function ({ addon, global, console }) {
       extensions: ["output_string"],
     });
   };
-}
