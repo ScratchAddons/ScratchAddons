@@ -1,6 +1,6 @@
 {
   "name": "Hide project stats",
-  "description": "Lets you hide love, favorite, remix and view counts in the front page and project pages.",
+  "description": "Lets you hide love, favorite, remix and view counts on the front page, project pages, and My Stuff.",
   "credits": [
     {
       "name": "Weredime (9gr)",
@@ -53,6 +53,41 @@
       "if": {
         "settings": { "remixesFront": true }
       }
+    },
+    {
+      "url": "hide_remix_count.css",
+      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "if": {
+        "settings": { "remixes": true, "showOwnStats": false }
+      }
+    },
+    {
+      "url": "hide_view_count.css",
+      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "if": {
+        "settings": { "views": true, "showOwnStats": false }
+      }
+    },
+    {
+      "url": "hide_love_count.css",
+      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "if": {
+        "settings": { "loves": true, "showOwnStats": false }
+      }
+    },
+    {
+      "url": "hide_favorite_count.css",
+      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "if": {
+        "settings": { "favorites": true, "showOwnStats": false }
+      }
+    },
+    {
+      "url": "hide_comment_count.css",
+      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "if": {
+        "settings": { "comments": true, "showOwnStats": false }
+      }
     }
   ],
   "userscripts": [
@@ -85,6 +120,12 @@
       "name": "Hide view count",
       "default": true,
       "id": "views",
+      "type": "boolean"
+    },
+    {
+      "name": "Hide comment count",
+      "default": true,
+      "id": "comments",
       "type": "boolean"
     },
     {

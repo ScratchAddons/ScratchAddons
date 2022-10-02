@@ -5,3 +5,8 @@
 .sa-stat-display .project-views {
   display: flex;
 }
+
+/* My Stuff */
+.media-stats span.stat:nth-child(1) {
+  display: none;
+}

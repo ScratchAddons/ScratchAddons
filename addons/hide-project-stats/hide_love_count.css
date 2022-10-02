@@ -12,6 +12,12 @@
   display: none;
 }
 
+/* Front page */
 .thumbnail .thumbnail-loves {
+  display: none;
+}
+
+/* My Stuff */
+.media-stats span.stat:nth-child(3) {
   display: none;
 }
