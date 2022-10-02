@@ -39,6 +39,14 @@
   flood-opacity: 0.05;
 }
 
+.sb-comment,
+.sb3-comment {
+  fill: #282828;
+  stroke: var(--editorTheme3-commentColor);
+}
+
+.sb-label,
+.sb3-label,
 .sb-input-dropdown ~ polygon {
   fill: white;
 }
