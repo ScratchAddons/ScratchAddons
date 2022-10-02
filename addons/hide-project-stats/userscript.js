@@ -67,7 +67,8 @@ export default async function ({ addon, global, console }) {
    * or favorite buttons are clicked)
    */
   function observeStatsRow() {
-    observer.observe(document.querySelector(".flex-row.stats.noselect"), {
+    // Watch the parent because the stats row itself gets removed and replaced by Scratch
+    observer.observe(document.querySelector(".flex-row.stats.noselect").parentElement, {
       subtree: true,
       childList: true,
       characterData: true,
