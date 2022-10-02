@@ -12,5 +12,13 @@
   "enabledByDefault": false,
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "credits": ["pufferfish101007#2024: wrote the code", "me (winwinlmfao#8430): made the addon"]
+  "credits": [
+    {
+      "name": "pufferfish101007",
+      "link": "https://scratch.mit.edu/users/pufferfish101007/"
+    },
+    {
+      "name": "winwinlmfao"
+    }
+  ]
 }
