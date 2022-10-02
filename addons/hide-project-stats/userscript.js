@@ -21,14 +21,12 @@ export default async function ({ addon, global, console }) {
     refreshButton(loves);
     refreshButton(favorites);
     // If the user has the "show stats on my own projects" setting enabled,
-    // show the remix and view count if the user owns the project
-    document.querySelectorAll(".project-remixes, .project-views").forEach(async (element) => {
-      if (!addon.self.disabled && addon.settings.get("showOwnStats") && (await isVisitingOwnProject())) {
-        element.classList.add("stat-display");
-      } else {
-        element.classList.remove("stat-display");
-      }
-    });
+    // show counts if the user owns the project
+    if (!addon.self.disabled && addon.settings.get("showOwnStats") && (await isVisitingOwnProject())) {
+      getStatsRowParent().classList.add("sa-stat-display");
+    } else {
+      getStatsRowParent().classList.remove("sa-stat-display");
+    }
   }
 
   /**
@@ -46,8 +44,6 @@ export default async function ({ addon, global, console }) {
       !(addon.settings.get("showOwnStats") && (await isVisitingOwnProject()))
     ) {
       // Do not show the love/favorite count
-      button.buttonElement.classList.remove("stat-display");
-
       // Checks if the user is signed in or not, and hides the love/favorite buttons accordingly
       if ((await addon.auth.fetchUsername()) === null) {
         button.buttonElement.classList.add("hidden");
@@ -56,9 +52,12 @@ export default async function ({ addon, global, console }) {
       }
     } else {
       // Show the love/favorite count
-      button.buttonElement.classList.add("stat-display");
       button.buttonElement.classList.remove("hidden");
     }
+  }
+
+  function getStatsRowParent() {
+    return document.querySelector(".flex-row.stats.noselect").parentElement;
   }
 
   /**
@@ -68,7 +67,7 @@ export default async function ({ addon, global, console }) {
    */
   function observeStatsRow() {
     // Watch the parent because the stats row itself gets removed and replaced by Scratch
-    observer.observe(document.querySelector(".flex-row.stats.noselect").parentElement, {
+    observer.observe(getStatsRowParent(), {
       subtree: true,
       childList: true,
       characterData: true,

@@ -2,7 +2,7 @@
   display: none;
 }
 
-.project-remixes.stat-display {
+.sa-stat-display .project-remixes {
   display: flex;
 }
 

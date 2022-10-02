@@ -2,6 +2,6 @@
   display: none;
 }
 
-.project-views.stat-display {
+.sa-stat-display .project-views {
   display: flex;
 }
