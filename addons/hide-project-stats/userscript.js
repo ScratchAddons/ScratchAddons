@@ -76,22 +76,13 @@ export default async function ({ addon, global, console }) {
     refreshLabels();
   });
 
-  // Re-calculate visibility of elements when stats row is modified
-  // (such as when the user loves or favorites, since this will
-  // change the label to the count)
-  const observer = new MutationObserver(() => refreshLabels());
-  observer.observe(document.querySelector(".flex-row.stats.noselect"), {
-    subtree: true,
-    childList: true,
-    characterData: true,
-  });
-
   // Since the user can sign in during the same session,
   // the login status needs to be updated when this occurs
   while (true) {
     await addon.tab.waitForElement(".project-loves");
     await addon.tab.waitForElement(".project-favorites");
     refreshLabels();
+    // An element with .compose-row appears when signing in
     await addon.tab.waitForElement(".compose-row", { markAsSeen: true });
   }
 }
