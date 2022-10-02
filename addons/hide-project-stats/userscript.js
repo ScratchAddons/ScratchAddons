@@ -9,7 +9,7 @@ export default async function ({ addon, global, console }) {
   async function isVisitingOwnProject() {
     let username = await addon.auth.fetchUsername();
     await addon.tab.waitForElement(".title");
-    return username !== null && document.querySelector(".title a").textContent === username;
+    return username !== null && document.querySelector(".title form");
   }
 
   /**
