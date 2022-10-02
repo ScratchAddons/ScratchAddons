@@ -60,22 +60,6 @@ export default async function ({ addon, global, console }) {
     return document.querySelector(".flex-row.stats.noselect").parentElement;
   }
 
-  /**
-   * Watch the stats row for changes (specifically for loves and favorites
-   * because Scratch completely clears out and readds classes when the love
-   * or favorite buttons are clicked)
-   */
-  function observeStatsRow() {
-    // Watch the parent because the stats row itself gets removed and replaced by Scratch
-    observer.observe(getStatsRowParent(), {
-      subtree: true,
-      childList: true,
-      characterData: true,
-    });
-  }
-
-  const observer = new MutationObserver(() => refreshLabels());
-
   // Re-calculate visibility of various elements when settings change
   addon.settings.addEventListener("change", () => {
     refreshLabels();
@@ -89,14 +73,17 @@ export default async function ({ addon, global, console }) {
   // For the case of exiting and returning to the project page
   addon.tab.addEventListener("urlChange", async () => {
     refreshLabels();
-    // The element we were observing got cleared, so we need to reattach
-    // to the observer
-    observeStatsRow();
   });
-
-  // Re-calculate visibility of elements when stats row is modified
-  // (such as when the user loves or favorites, since this will
-  // change the label to the count)
+  addon.tab.redux.addEventListener("statechanged", (data) => {
+    // When the project is loved or unloved
+    if (data.detail.action.type === "SET_LOVED") {
+      refreshButton(loves);
+    }
+    // When the project is favorited or unfavorited
+    if (data.detail.action.type === "SET_FAVED") {
+      refreshButton(favorites);
+    }
+  });
 
   // Since the user can sign in during the same session,
   // the login status needs to be updated when this occurs
@@ -104,7 +91,6 @@ export default async function ({ addon, global, console }) {
     await addon.tab.waitForElement(".project-loves");
     await addon.tab.waitForElement(".project-favorites");
     refreshLabels();
-    observeStatsRow();
     // An element with .compose-row appears when signing in
     await addon.tab.waitForElement(".compose-row", { markAsSeen: true });
   }
