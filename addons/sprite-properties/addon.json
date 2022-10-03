@@ -22,7 +22,7 @@
   ],
   "settings": [
     {
-      "name": "Show panel on page load",
+      "name": "Don't collapse panel on load",
       "id": "showByDefault",
       "type": "boolean",
       "default": false
