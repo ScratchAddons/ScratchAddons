@@ -1,0 +1,21 @@
+{
+  "name": "Collapsing sprite properties",
+  "description": "Hides the sprite properties panel by default, like in Scratch 2.0. Double-click a sprite, or right-click and select \"properties\", to show it again.",
+  "tags": ["editor"],
+  "credits": [
+    {
+      "name": "lisa_wolfgang",
+      "link": "https://github.com/lisa-wolfgang/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.29.0",
+  "enabledByDefault": false
+}

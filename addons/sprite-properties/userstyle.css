@@ -1,0 +1,15 @@
+[class^="sprite-info_sprite-info_"] {
+  display: none;
+}
+
+[class^="sprite-selector_scroll-wrapper_"] {
+  height: 100%;
+}
+
+.sa-show-sprite-properties [class^="sprite-info_sprite-info_"] {
+  display: unset;
+}
+
+.sa-show-sprite-properties [class^="sprite-selector_scroll-wrapper_"] {
+  height: calc(100% - 6rem);
+}

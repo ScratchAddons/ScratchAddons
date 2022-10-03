@@ -126,6 +126,7 @@
   "find-bar",
   "jump-to-def",
   "pick-colors-from-stage",
+  "sprite-properties",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
