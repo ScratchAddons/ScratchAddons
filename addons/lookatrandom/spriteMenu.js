@@ -12,8 +12,3 @@ export default async function ({ addon, global, console }) {
                     sprites.push([vm.runtime.targets[targetId].sprite.name, vm.runtime.targets[targetId].sprite.name]);
                 }
             }
-        }
-        return sprites;
-    };
-    console.log("Sprite menu defined.")
-  }
