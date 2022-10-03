@@ -20,6 +20,14 @@
       "matches": ["projects"]
     }
   ],
+  "settings": [
+    {
+      "name": "Show panel on page load",
+      "id": "showByDefault",
+      "type": "boolean",
+      "default": false
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.29.0",
