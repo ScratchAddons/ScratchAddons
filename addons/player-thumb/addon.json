@@ -23,6 +23,6 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.28.0",
-  "tags": ["community", "theme"],
+  "tags": ["community", "projectPage"],
   "enabledByDefault": false
 }
