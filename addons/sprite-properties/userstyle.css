@@ -7,7 +7,7 @@
 }
 
 .sa-show-sprite-properties [class^="sprite-info_sprite-info_"] {
-  display: unset;
+  display: inherit;
 }
 
 .sa-show-sprite-properties [class^="sprite-selector_scroll-wrapper_"] {
