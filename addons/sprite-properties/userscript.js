@@ -1,6 +1,6 @@
 export default async function ({ addon, global, console }) {
   let propertiesPanel = await addon.tab.waitForElement('[class^="sprite-info_sprite-info_"]');
-  let spriteContainer = propertiesPanel.parentElement;
+  let spriteContainer = propertiesPanel.parentElement; // also contains sprite grid
   let spriteGrid = await addon.tab.waitForElement('[class^="sprite-selector_items-wrapper_"]');
 
   toggleOnLoad();
