@@ -35,6 +35,7 @@ export default async function ({ addon, global, console }) {
         options: [
           [ScratchBlocks.Msg.MOTION_POINTTOWARDS_POINTER, "_mouse_"],
           [ScratchBlocks.Msg.MOTION_POINTTOWARDS_RANDOM, "_random_"],
+          SpriteMenu()
         ],
       },
     ],
