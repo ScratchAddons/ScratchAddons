@@ -1,4 +1,5 @@
 export default async function ({ addon, global, console }) {
+    const vm = addon.tab.traps.vm;
     const spriteMenu = function () {
         const sprites = [];
         for (const targetId in vm.runtime.targets) {
