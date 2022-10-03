@@ -26,6 +26,12 @@
       "id": "showByDefault",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Automatically collapse when mouse leaves sprite panel",
+      "id": "autoCollapse",
+      "type": "boolean",
+      "default": false
     }
   ],
   "dynamicEnable": true,
