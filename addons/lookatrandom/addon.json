@@ -3,6 +3,10 @@
   "description": "Adds a \"random position\" option to the \"point towards ()\" block that makes the sprite point in a random direction. This will work for everyone using the project.",
   "userscripts": [
     {
+      "url": "spriteMenu.js",
+      "matches": ["projects"]
+    },
+    {
       "url": "code.js",
       "matches": ["projects"]
     }

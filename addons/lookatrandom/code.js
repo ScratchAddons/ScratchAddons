@@ -1,4 +1,5 @@
 export default async function ({ addon, global, console }) {
+  const vm = addon.tab.traps.vm;
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const oldInit = ScratchBlocks.Blocks.motion_pointtowards_menu.init;
   ScratchBlocks.Blocks.motion_pointtowards_menu.init = function () {
