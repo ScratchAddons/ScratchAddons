@@ -29,7 +29,7 @@ export default async function ({ addon, global, console, msg }) {
     dot.style.backgroundColor = color;
 
     // Hide things
-    if (addon.settings.get("show-status") === "others" && username == (await addon.auth.fetchUsername())) {
+    if (addon.settings.get("show-status") === "others" && username === (await addon.auth.fetchUsername())) {
       status.style.display = "none";
       dot.style.display = "none";
     }
@@ -57,7 +57,7 @@ export default async function ({ addon, global, console, msg }) {
       let status = left.querySelector("span");
       let dot = i.querySelector(".my-ocular-dot");
       let isMyProfile =
-        addon.settings.get("show-status") === "others" && username == (await addon.auth.fetchUsername());
+        addon.settings.get("show-status") === "others" && username === (await addon.auth.fetchUsername());
       if (!username || !dot) continue;
       if (isMyProfile || addon.settings.get("discuss") === false) {
         status.style.display = "none";
