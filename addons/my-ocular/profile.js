@@ -32,7 +32,7 @@ export default async function ({ addon, global, console, msg }) {
   container.innerText = ""; // Clear the old location
 
   // We can add elements on start and then just show/hide them
-  if (addon.settings.get("show-status") === "others" && username == (await addon.auth.fetchUsername())) {
+  if (addon.settings.get("show-status") === "others" && username === (await addon.auth.fetchUsername())) {
     dot.style.display = "none";
     statusSpan.style.display = "none";
   }
@@ -54,7 +54,7 @@ export default async function ({ addon, global, console, msg }) {
   async function updateOcular(disabled) {
     let span = document.querySelector(".my-ocular-span");
     let dot = document.querySelector(".my-ocular-dot");
-    let isMyProfile = addon.settings.get("show-status") === "others" && username == (await addon.auth.fetchUsername());
+    let isMyProfile = addon.settings.get("show-status") === "others" && username === (await addon.auth.fetchUsername());
     if (isMyProfile || addon.settings.get("profile") === false || disabled === true) {
       span.style.display = "none";
       dot.style.display = "none";
