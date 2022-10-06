@@ -1,0 +1,26 @@
+{
+    "name": "Show More button on Scratch News",
+    "description": "Turns the \"View All\" button on the homepage into a \"Show More\" button! (With a satisfying sliding animation)",
+    "tags":["community"],
+    "versionAdded":"1.29.0",
+    "userscripts": [
+        {
+            "url": "index.js",
+            "matches":["https://scratch.mit.edu/*"]
+        }
+    ],
+    "settings": [
+        {
+            "name": "Sliding Animation",
+            "id":"animation",
+            "type":"boolean",
+            "default":true
+        }
+    ],
+    "credits": [
+        {
+            "name":"themirrazz",
+            "link":"https://github.com/themirrazz"
+        }
+    ]
+}
