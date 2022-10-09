@@ -91,66 +91,66 @@ export default async function ({ addon, global, console, msg }) {
     let form = document.createElement("form");
     optionDiv.appendChild(form);
 
-    let optionsSelect = document.createElement('select');
-    optionsSelect.className = 'sa-options-select';
+    let optionsSelect = document.createElement("select");
+    optionsSelect.className = "sa-options-select";
     form.appendChild(optionsSelect);
 
     let rows = document.querySelectorAll(".box-header>h4");
     for (let i = 0; i < rows.length; i++) {
-      let option = document.createElement('option');
+      let option = document.createElement("option");
       option.textContent = rows[i].textContent;
       optionsSelect.appendChild(option);
     }
 
-    let addRowBTN = document.createElement('button');
-    addRowBTN.className = 'sa-add-row-button button';
+    let addRowBTN = document.createElement("button");
+    addRowBTN.className = "sa-add-row-button button";
     optionDiv.appendChild(addRowBTN);
 
-    let addRowSpan = document.createElement('span');
-    addRowSpan.textContent = msg('addRow');
+    let addRowSpan = document.createElement("span");
+    addRowSpan.textContent = msg("addRow");
     addRowBTN.appendChild(addRowSpan);
 
-    addBTN.addEventListener('click', () => {
+    addBTN.addEventListener("click", () => {
       let value = optionsSelect.value;
       for (let i = 0; i < rows.length; i++) {
         if (rows[i].textContent === value) {
-          if (rows[i].parentNode.parentNode.style.display !== 'none') {
-            addRowBTN.disabled = 'true';
+          if (rows[i].parentNode.parentNode.style.display !== "none") {
+            addRowBTN.disabled = "true";
           } else {
-            addRowBTN.removeAttribute('disabled');
+            addRowBTN.removeAttribute("disabled");
           }
         }
       }
-      if (optionDiv.style.display === 'none') {
-        optionDiv.style.display = 'inline-block';
+      if (optionDiv.style.display === "none") {
+        optionDiv.style.display = "inline-block";
       } else {
-        optionDiv.style.display = 'none';
+        optionDiv.style.display = "none";
       }
     });
 
-    optionsSelect.addEventListener('change', (event) => {
+    optionsSelect.addEventListener("change", (event) => {
       let value = event.target.value;
       for (let i = 0; i < rows.length; i++) {
         if (rows[i].textContent === value) {
-          if (rows[i].parentNode.parentNode.style.display !== 'none') {
-            addRowBTN.disabled = 'true';
+          if (rows[i].parentNode.parentNode.style.display !== "none") {
+            addRowBTN.disabled = "true";
           } else {
-            addRowBTN.removeAttribute('disabled');
+            addRowBTN.removeAttribute("disabled");
           }
         }
       }
     });
 
-    addRowBTN.addEventListener('click', () => {
+    addRowBTN.addEventListener("click", () => {
       let row = optionsSelect.value;
 
       for (let i = 0; i < rows.length; i++) {
         if (rows[i].textContent === row) {
           let rowData = JSON.parse(localStorage.getItem("rowData"));
-          rowData[i] = '1';
-          rows[i].parentNode.parentNode.style.display = 'inline-block';
+          rowData[i] = "1";
+          rows[i].parentNode.parentNode.style.display = "inline-block";
           localStorage.setItem("rowData", JSON.stringify(rowData));
-          addRowBTN.disabled = 'true';
+          addRowBTN.disabled = "true";
           break;
         }
       }

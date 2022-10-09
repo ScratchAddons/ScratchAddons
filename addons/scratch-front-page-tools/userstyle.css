@@ -26,9 +26,9 @@
 }
 
 .sa-options-select {
-  transition: border .5s ease;
+  transition: border 0.5s ease;
   margin-bottom: 0.75rem;
-  border: 1px solid rgba(0,0,0,.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   background: #fafafa url(https://scratch.mit.edu/svgs/forms/caret.svg) no-repeat right center;
   padding-right: 4rem;
@@ -36,7 +36,7 @@
   width: 100%;
   height: 3rem;
   color: #575e75;
-  font-size: .875rem;
+  font-size: 0.875rem;
   -webkit-appearance: none;
   appearance: none;
 }
