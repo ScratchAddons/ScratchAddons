@@ -1,6 +1,6 @@
 {
   "name": "Nested forum post collapser",
-  "description": "Collapses forum quotes to a limit.",
+  "description": "When there are multiple forum quotes nested inside of each other, only shows a certain amount of them.",
   "credits": [
     {
       "name": "Weredime (9gr)",
