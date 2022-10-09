@@ -1,0 +1,17 @@
+{
+  "name": "Rename broadcasts",
+  "description": "Adds an option to rename broadcasts in the broadcast blocks' dropdown.",
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+  ],
+  "tags": ["editor"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ]
+}
