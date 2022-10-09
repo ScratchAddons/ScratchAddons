@@ -6,7 +6,7 @@
       "name": "GarboMuffin"
     }
   ],
-  "tags": ["editor", "costumeEditor"],
+  "tags": ["editor", "costumeEditor", "featured"],
   "userscripts": [
     {
       "url": "userscript.js",
