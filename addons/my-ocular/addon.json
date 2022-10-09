@@ -68,11 +68,11 @@
       "potentialValues": [
         {
           "id": "everywhere",
-          "name": "everywhere"
+          "name": "Everywhere"
         },
         {
           "id": "others",
-          "name": "only on others' profiles"
+          "name": "Only on others' profiles"
         }
       ],
       "default": "everywhere"
