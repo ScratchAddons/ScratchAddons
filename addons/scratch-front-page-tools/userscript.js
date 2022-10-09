@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   DeleteRows();
   AddRows();
   Load();
@@ -91,41 +91,68 @@ export default async function ({ addon, global, console }) {
     let form = document.createElement("form");
     optionDiv.appendChild(form);
 
+    let optionsSelect = document.createElement('select');
+    optionsSelect.className = 'sa-options-select';
+    form.appendChild(optionsSelect);
+
     let rows = document.querySelectorAll(".box-header>h4");
     for (let i = 0; i < rows.length; i++) {
-      let option = document.createElement("input");
-      option.type = "checkbox";
-      option.name = "option" + String(i);
-      form.appendChild(option);
-
-      let label = document.createElement("label");
-      label.textContent = rows[i].textContent;
-      label.for = "option" + String(i);
-      form.appendChild(label);
-
-      form.appendChild(document.createElement("br"));
+      let option = document.createElement('option');
+      option.textContent = rows[i].textContent;
+      optionsSelect.appendChild(option);
     }
 
-    addBTN.addEventListener("click", () => {
-      let breakLine = document.querySelectorAll(".splash>br");
-      if (optionDiv.style.display === "none") {
-        optionDiv.style.display = "block";
-      } else if (optionDiv.style.display === "block") {
-        optionDiv.style.display = "none";
+    let addRowBTN = document.createElement('button');
+    addRowBTN.className = 'sa-add-row-button button';
+    optionDiv.appendChild(addRowBTN);
 
-        let rowData = JSON.parse(localStorage.getItem("rowData"));
-        let options = document.querySelectorAll(".sa-option-div>form>input");
-        for (let i = 0; i < options.length; i++) {
-          let show = options[i].checked;
-          if (show) {
-            rowData[i] = "1";
+    let addRowSpan = document.createElement('span');
+    addRowSpan.textContent = msg('addRow');
+    addRowBTN.appendChild(addRowSpan);
+
+    addBTN.addEventListener('click', () => {
+      let value = optionsSelect.value;
+      for (let i = 0; i < rows.length; i++) {
+        if (rows[i].textContent === value) {
+          if (rows[i].parentNode.parentNode.style.display !== 'none') {
+            addRowBTN.disabled = 'true';
+          } else {
+            addRowBTN.removeAttribute('disabled');
           }
-          options[i].checked = "true";
         }
-        let rowDataRaw = JSON.stringify(rowData);
-        localStorage.setItem("rowData", rowDataRaw);
-        Load();
-        DeleteRows();
+      }
+      if (optionDiv.style.display === 'none') {
+        optionDiv.style.display = 'inline-block';
+      } else {
+        optionDiv.style.display = 'none';
+      }
+    });
+
+    optionsSelect.addEventListener('change', (event) => {
+      let value = event.target.value;
+      for (let i = 0; i < rows.length; i++) {
+        if (rows[i].textContent === value) {
+          if (rows[i].parentNode.parentNode.style.display !== 'none') {
+            addRowBTN.disabled = 'true';
+          } else {
+            addRowBTN.removeAttribute('disabled');
+          }
+        }
+      }
+    });
+
+    addRowBTN.addEventListener('click', () => {
+      let row = optionsSelect.value;
+
+      for (let i = 0; i < rows.length; i++) {
+        if (rows[i].textContent === row) {
+          let rowData = JSON.parse(localStorage.getItem("rowData"));
+          rowData[i] = '1';
+          rows[i].parentNode.parentNode.style.display = 'inline-block';
+          localStorage.setItem("rowData", JSON.stringify(rowData));
+          addRowBTN.disabled = 'true';
+          break;
+        }
       }
     });
   }

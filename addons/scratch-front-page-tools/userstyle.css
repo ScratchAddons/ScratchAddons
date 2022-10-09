@@ -21,4 +21,34 @@
   border-radius: 5px;
   border: 1px solid rgba(77, 151, 255, 0.1);
   margin-bottom: 20px;
+  z-index: 10;
+  position: absolute;
+}
+
+.sa-options-select {
+  transition: border .5s ease;
+  margin-bottom: 0.75rem;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 5px;
+  background: #fafafa url(https://scratch.mit.edu/svgs/forms/caret.svg) no-repeat right center;
+  padding-right: 4rem;
+  padding-left: 1rem;
+  width: 100%;
+  height: 3rem;
+  color: #575e75;
+  font-size: .875rem;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.sa-options-select:focus {
+  outline: none;
+}
+
+.sa-add-row-button {
+  float: right;
+}
+
+.sa-add-row-button:disabled {
+  background-color: #939393;
 }
