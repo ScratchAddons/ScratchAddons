@@ -1,3 +1,5 @@
+@import url("%addon-self-dir%/../../libraries/common/css/spinner.css");
+
 body > #pagewrapper {
   min-height: 0;
 }

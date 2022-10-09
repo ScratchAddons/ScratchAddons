@@ -68,7 +68,12 @@
           </div>
         </bdo>
         <div class="reply-box-comment" v-show="replying">
-          <textarea class="reply-textarea" maxlength="500" v-model="replyBoxValue"></textarea>
+          <textarea
+            class="reply-textarea"
+            maxlength="500"
+            v-model="replyBoxValue"
+            @keyup.enter="($event.ctrlKey || $event.metaKey) && postComment()"
+          ></textarea>
           <div class="reply-box-buttons">
             <button @click="postComment()" class="large-button post-button" :disabled="postingComment">
               {{ postingComment ? messages.postingMsg : messages.postMsg }}
@@ -427,7 +432,10 @@
       <!-- Show errors, loading, etc. -->
       <div class="status-container">
         <p v-show="error === 'notReady'">{{ uiMessages.loadingMsg }}</p>
-        <p v-show="error === 'loggedOut'">{{ uiMessages.loggedOutMsg }}</p>
+        <p v-show="error === 'loggedOut'">
+          {{ uiMessages.loggedOutMsg }}
+          <a href="https://scratch.mit.edu/login">{{ uiMessages.loggedOutLinkMsg }}</a>
+        </p>
         <p v-show="error === 'serverError'">{{ uiMessages.serverErrorMsg }}</p>
         <p v-show="error === 'networkError'">{{ uiMessages.networkErrorMsg }}</p>
         <p v-show="messagesReady && !commentsReady">{{ uiMessages.loadingCommentsMsg }}</p>
@@ -440,15 +448,17 @@
           <a @click="copyToClipboard(error)">{{ uiMessages.copyMsg }}</a>
           )
         </p>
-        <button @click="reloadPage()" v-show="commentsReady && !canShowMoreMessages" class="large-button">
-          <img class="small-icon" src="../../images/icons/reload.svg" /><span>{{ uiMessages.reloadMsg }}</span>
-        </button>
         <span v-show="messagesReady && showingMessagesAmt === 0 && stMessages.length === 0" class="status-empty"
           >{{ uiMessages.noUnreadMsg }}</span
         >
-        <button @click="showAllMessages = true" v-show="canShowMoreMessages" class="large-button">
-          <img class="small-icon" src="../../images/icons/plus.svg" /><span>{{ uiMessages.showMoreMsg }}</span>
-        </button>
+        <div v-show="commentsReady || canShowMoreMessages" class="buttons-container">
+          <button @click="reloadPage()" v-show="commentsReady" class="large-button">
+            <img class="small-icon" src="../../images/icons/reload.svg" /><span>{{ uiMessages.reloadMsg }}</span>
+          </button>
+          <button @click="showAllMessages = true" v-show="canShowMoreMessages" class="large-button">
+            <img class="small-icon" src="../../images/icons/plus.svg" /><span>{{ uiMessages.showMoreMsg }}</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -459,8 +469,8 @@
         ><img class="small-icon" src="../../images/icons/read.svg" /> {{ uiMessages.markedAsReadMsg }}</span
       >
       <span v-cloak class="separator">|</span>
-      <a v-cloak href="https://scratch.mit.edu/messages" id="open-messages"
-        >{{ uiMessages.openMessagesMsg }}<img src="../../images/icons/popout.svg" id="popout"
+      <a v-cloak href="https://scratch.mit.edu/messages" class="nolink open-messages"
+        >{{ uiMessages.openMessagesMsg }}<img src="../../images/icons/popout.svg" class="popout"
       /></a>
     </div>
   </body>

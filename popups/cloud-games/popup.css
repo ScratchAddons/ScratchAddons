@@ -74,7 +74,7 @@ body {
   color: var(--blue-text);
 }
 
-.games {
+.game {
   border-radius: 4px;
   border: 1px solid var(--content-border);
   background: var(--content-background);
@@ -104,4 +104,13 @@ body {
 .add-button {
   text-align: center;
   padding-top: 0.5rem;
+}
+
+.opened {
+  border: 1px solid var(--blue-variant);
+}
+
+.opened .title {
+  background: var(--blue);
+  border-color: var(--blue-variant);
 }

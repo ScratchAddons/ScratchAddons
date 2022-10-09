@@ -18,6 +18,7 @@
   "popup": {
     "icon": "../../images/icons/cloud.svg",
     "name": "Games",
+    "fullscreen": true,
     "script": "popup.js",
     "html": "popup.html"
   },
@@ -47,7 +48,13 @@
           }
         },
         {
-          "name": "Cloud Multiplayer Platformer Fun",
+          "name": "Massive Multiplayer Platformer",
+          "values": {
+            "url": "https://scratch.mit.edu/projects/612229554/"
+          }
+        },
+        {
+          "name": "Cloud Platformer Multiplayer Fun",
           "values": {
             "url": "https://scratch.mit.edu/projects/378507713/"
           }
@@ -74,5 +81,7 @@
     "isMajor": true
   },
   "versionAdded": "1.1.0",
-  "enabledByDefault": true
+  "enabledByDefault": true,
+  "dynamicEnable": true,
+  "dynamicDisable": true
 }
