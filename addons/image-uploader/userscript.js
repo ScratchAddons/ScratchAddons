@@ -85,7 +85,7 @@ export default async function ({ addon, msg, console }) {
     textBox.removeEventListener("dragenter", onDragEnter);
     textBox.removeEventListener("dragover", onDragOver);
     textBox.removeEventListener("dragleave", onDragLeave);
-    textBox.removeEventListener("dragend", onDragEnd);
+    textBox.removeEventListener("dragend", onDragLeave);
     textBox.removeEventListener("drop", onDrop);
   });
   addon.self.addEventListener("reenabled", addListeners);
