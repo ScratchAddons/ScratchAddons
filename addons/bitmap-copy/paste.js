@@ -1,4 +1,4 @@
-import {update} from "./paint-editor-utils.js";
+import { update } from "./paint-editor-utils.js";
 
 export default async ({ addon, console, msg }) => {
   // The action-menu_file-input classed input that the next pasted image will be pasted into.
@@ -66,7 +66,7 @@ export default async ({ addon, console, msg }) => {
       return;
     }
 
-    const {files} = clipboardData;
+    const { files } = clipboardData;
 
     if (!files) {
       console.error("No files");
@@ -96,13 +96,13 @@ export default async ({ addon, console, msg }) => {
       }
       return;
     }
-	
-	if (checkOnly) {
-		return new FileList(filteredFiles);
-	} else {
-		e.preventDefault();
-		uploadFiles(currentMenuInput, new FileList(filteredFiles));
-	}
+
+    if (checkOnly) {
+      return new FileList(filteredFiles);
+    } else {
+      e.preventDefault();
+      uploadFiles(currentMenuInput, new FileList(filteredFiles));
+    }
   };
 
   // Handles what occurs when simply pressing Ctrl+V in the editor to
@@ -114,34 +114,34 @@ export default async ({ addon, console, msg }) => {
 
     const COSTUMES_PANE = document.querySelector("[data-tabs] > :nth-child(3) > div > [class*='selector_wrapper_']");
     if (!COSTUMES_PANE) return;
-	
-	const files = onPaste(e, true);
-	if (!files) return;
-	
+
+    const files = onPaste(e, true);
+    if (!files) return;
+
     e.preventDefault();
-	
-	// As Paper isn't required for all of the addon's functionality,
-	// get it here
-	const paper = await addon.tab.traps.getPaper();
-	
-	for (const file of files) {
-		const raster = new paper.Raster({
-			source: URL.createObjectURL(file),
-			position: paper.view.center,
-		});
-		raster.selected = true;
-		raster.smoothing = "off";
-		raster.scale(2);
-	}
-	
-	update(addon.tab.redux, paper, true);
+
+    // As Paper isn't required for all of the addon's functionality,
+    // get it here
+    const paper = await addon.tab.traps.getPaper();
+
+    for (const file of files) {
+      const raster = new paper.Raster({
+        source: URL.createObjectURL(file),
+        position: paper.view.center,
+      });
+      raster.selected = true;
+      raster.smoothing = "off";
+      raster.scale(2);
+    }
+
+    update(addon.tab.redux, paper, true);
   };
   document.body.addEventListener("paste", passivePaste);
 
   // Add files to an input, and trigger their change events.
   const uploadFiles = (input, files) => {
     input.files = files;
-    input.dispatchEvent(new Event("change", {bubbles: true}));
+    input.dispatchEvent(new Event("change", { bubbles: true }));
   };
 
   // A lot of the following code was pasted from the better-img-uploads addon.
