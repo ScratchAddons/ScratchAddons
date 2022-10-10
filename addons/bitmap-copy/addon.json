@@ -1,6 +1,6 @@
 {
   "name": "Bitmap images copying/pasting",
-  "description": "Allows you to copy a bitmap image from the costume editor into the system clipboard, so that you can paste it in other websites or software, as well as pasting images from your clipboard as a costume.",
+  "description": "Allows you to copy a bitmap image from the costume editor into the system clipboard, so that you can paste it in other websites or software, as well as pasting images from your clipboard as or into a costume.",
   "info": [
     {
       "type": "notice",
