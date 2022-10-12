@@ -13,5 +13,6 @@
       "url": "userscript.js",
       "matches": ["projects"]
     }
-  ]
+  ],
+  "versionAdded": "1.29.0"
 }
