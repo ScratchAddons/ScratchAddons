@@ -23,7 +23,7 @@
   "settings": [
     {
       "name": "Collapse panel on load",
-      "id": "showByDefault",
+      "id": "hideByDefault",
       "type": "boolean",
       "default": true
     },
