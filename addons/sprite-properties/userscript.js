@@ -20,7 +20,7 @@ export default async function ({ addon, global, console }) {
   addon.self.addEventListener("reenabled", () => toggleOnLoad());
 
   function toggleOnLoad() {
-    if (addon.settings.get("hideByDefault")) togglePropertiesPanel();
+    if (!addon.settings.get("hideByDefault")) togglePropertiesPanel();
   }
 
   function togglePropertiesPanel() {
