@@ -20,6 +20,24 @@
       "matches": ["projects"]
     }
   ],
+  "customCssVariables": [
+    {
+      "name": "transitionDuration",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "transitionDuration"
+        },
+        "options": {
+          "none": "0s",
+          "short": "0.15s",
+          "default": "0.25s",
+          "long": "0.5s"
+        }
+      }
+    }
+  ],
   "settings": [
     {
       "name": "Collapse panel on load",
@@ -32,6 +50,30 @@
       "id": "autoCollapse",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Animation duration",
+      "id": "transitionDuration",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "None"
+        },
+        {
+          "id": "short",
+          "name": "Short"
+        },
+        {
+          "id": "default",
+          "name": "Default"
+        },
+        {
+          "id": "long",
+          "name": "Long"
+        }
+      ],
+      "default": "default"
     }
   ],
   "dynamicEnable": true,

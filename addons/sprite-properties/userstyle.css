@@ -1,15 +1,22 @@
 [class^="sprite-info_sprite-info_"] {
-  display: none;
+  height: 0;
+  padding: 0 0.75rem;
+  overflow: hidden;
+  transition-property: height, padding, transform;
+  transition-duration: var(--spriteProperties-transitionDuration);
 }
 
 [class^="sprite-selector_scroll-wrapper_"] {
   height: 100%;
+  transition-property: height;
+  transition-duration: var(--spriteProperties-transitionDuration);
 }
 
 .sa-show-sprite-properties [class^="sprite-info_sprite-info_"] {
-  display: inherit;
+  height: 6.3125rem;
+  padding: 0.75rem;
 }
 
 .sa-show-sprite-properties [class^="sprite-selector_scroll-wrapper_"] {
-  height: calc(100% - 6rem);
+  height: calc(100% - 6.3125rem);
 }
