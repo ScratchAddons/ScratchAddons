@@ -22,10 +22,10 @@
   ],
   "settings": [
     {
-      "name": "Don't collapse panel on load",
+      "name": "Collapse panel on load",
       "id": "showByDefault",
       "type": "boolean",
-      "default": false
+      "default": true
     },
     {
       "name": "Automatically collapse when mouse leaves sprite panel",
