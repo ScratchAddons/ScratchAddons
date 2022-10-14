@@ -11,3 +11,21 @@
 .sa-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight {
   background-color: var(--editorTheme3-hoveredItem, rgba(0, 0, 0, 0.2));
 }
+
+.scratchCommentRect {
+  fill: var(--editorTheme3-commentColor);
+}
+.scratchCommentBody,
+.scratchCommentTextarea {
+  background-color: var(--editorTheme3-commentColor);
+}
+.scratchWorkspaceCommentBorder {
+  stroke: var(--editorTheme3-commentBorder);
+}
+.scratchCommentTextarea::placeholder {
+  color: var(--editorTheme3-commentTextTransparent);
+}
+.scratchCommentText {
+  fill: var(--editorTheme3-commentText);
+  color: var(--editorTheme3-commentText);
+}

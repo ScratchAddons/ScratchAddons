@@ -1861,6 +1861,11 @@
     {
       "url": "experimental_forums_preview.js",
       "matches": ["editingScreens"]
+    },
+    {
+      "url": "scratchstats.js",
+      "matches": ["profiles"],
+      "runAtComplete": false
     }
   ],
   "userstyles": [

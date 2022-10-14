@@ -126,6 +126,7 @@
   "find-bar",
   "jump-to-def",
   "paint-snap",
+  "pick-colors-from-stage",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
