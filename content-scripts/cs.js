@@ -90,7 +90,7 @@ const cs = {
   copyImage(dataURL) {
     // Firefox only
     return new Promise((resolve, reject) => {
-      browser.runtime.sendMessage({ clipboardDataURL: dataURL }).then(
+      chrome.runtime.sendMessage({ clipboardDataURL: dataURL }).then(
         (res) => {
           resolve();
         },
@@ -533,6 +533,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
     } else if (request === "refetchSession") {
       _page_.refetchSession();
     }
+    //!
   });
 }
 
