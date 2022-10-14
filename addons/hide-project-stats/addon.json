@@ -150,7 +150,10 @@
       "name": "Hide comment count",
       "default": true,
       "id": "comments",
-      "type": "boolean"
+      "type": "boolean",
+      "if": {
+        "settings": { "myStuff": true }
+      }
     }
   ],
   "dynamicDisable": true,
