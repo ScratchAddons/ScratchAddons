@@ -1,5 +1,6 @@
 import Addon from "../common/Addon.js";
 import Popup from "./Popup.js";
+import Auth from "./Auth.js";
 
 /**
  * An addon that loads as a popup.
@@ -9,7 +10,9 @@ import Popup from "./Popup.js";
 export default class PopupAddon extends Addon {
   constructor(info) {
     super(info);
-    this.popup = new Popup();
+    this.auth.dispose();
+    this.auth = new Auth(this);
+    this.popup = new Popup(this);
   }
 
   /**

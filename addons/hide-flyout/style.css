@@ -1,38 +1,127 @@
+[class*="gui_tabs_"] {
+  /* overridden by other addons */
+  --sa-category-width: 60px;
+  --sa-flyout-width: 250px;
+}
+
+/* The default left-side border does not work properly when a block is being dragged, */
+/* which lets a 1 pixel column of the flyout be visible. */
+/* To fix this we use two elements that are only visible when a block is being dragged. */
+/* The first element is opaque to cover up the contents with the background color. */
+/* The other element is the transparent border color. */
+.sa-flyout-border-1,
+.sa-flyout-border-2 {
+  position: absolute;
+  /* Above flyout but below add extension button */
+  z-index: 40;
+  top: 0;
+  bottom: 8px;
+  left: -1px;
+}
+[dir="rtl"] .sa-flyout-border-1,
+[dir="rtl"] .sa-flyout-border-2 {
+  left: auto;
+  right: -1px;
+}
+.sa-flyout-border-1 {
+  border-left: 1px solid var(--editorDarkMode-page, hsla(215, 100%, 95%, 1));
+}
+.sa-flyout-border-2 {
+  border-left: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+}
+
 .blocklyFlyout,
-.blocklyFlyoutScrollbar,
-.sa-lock-image {
-  transition-property: transform;
+.blocklyFlyoutScrollbar {
+  transition-property: margin;
 }
 
-.blocklyFlyout.sa-flyoutClose {
-  transform: translateX(-200px) !important;
+[dir="ltr"] .blocklyFlyout.sa-flyoutClose,
+[dir="ltr"] .blocklyFlyoutScrollbar.sa-flyoutClose {
+  margin-left: calc(0px - var(--sa-flyout-width) - 10px);
 }
 
-.blocklyFlyoutScrollbar.sa-flyoutClose {
-  transform: translateX(35px) !important;
-}
-
-.sa-lock-image.sa-flyoutClose {
-  transform: translateX(-260px);
+[dir="rtl"] .blocklyFlyout.sa-flyoutClose,
+[dir="rtl"] .blocklyFlyoutScrollbar.sa-flyoutClose {
+  margin-left: calc(var(--sa-flyout-width) + 10px);
 }
 
 .sa-flyout-placeHolder {
+  display: var(--hideFlyout-placeholderDisplay) !important;
   position: absolute;
-  left: 61px;
-  top: 44px;
   height: 100%;
-  width: 251px;
+  width: calc(var(--sa-flyout-width) + 1px);
+  top: 0;
 }
 
-.sa-lock-image {
-  position: absolute;
-  z-index: 20;
-  width: 20px;
+[dir="ltr"] .sa-flyout-placeHolder {
+  left: calc(var(--sa-category-width) + 1px);
+}
+
+[dir="rtl"] .sa-flyout-placeHolder {
+  right: calc(var(--sa-category-width) + 1px);
+}
+
+.sa-lock-object {
+  display: var(--hideFlyout-lockDisplay) !important;
+  transform: translate(calc(var(--sa-flyout-width) - 15px - 32px), 3px);
+  width: 32px;
+  height: 32px;
+}
+[dir="rtl"] .sa-lock-object {
+  transform: translate(15px, 3px);
+}
+
+.sa-lock-button {
+  display: flex;
   cursor: pointer;
-  top: 46px;
-  left: 280px;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--editorDarkMode-accent, white);
+  border: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+  border-radius: 4px;
 }
 
-.injectionDiv {
-  overflow: hidden !important;
+.sa-lock-object.locked .sa-lock-button {
+  background-color: var(--editorDarkMode-primary, #4d97ff);
+  border-color: var(--editorDarkMode-primary-variant, #3373cc);
+}
+
+.sa-lock-button img {
+  width: 20px;
+  filter: var(--editorDarkMode-accent-filter, none);
+}
+
+.sa-lock-object.locked img {
+  filter: var(--editorDarkMode-primary-filter, none);
+}
+
+/* Setting these styles on gui_stage-and-target-wrapper breaks full screen */
+.sa-body-editor [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen"]),
+[class*="gui_target-wrapper_"] {
+  position: relative;
+  padding-inline: 0.5rem;
+  background-color: var(--editorDarkMode-page, hsl(215, 100%, 95%));
+}
+/* Both must be above hidden flyout when dragging block with editor-stage-left enabled */
+/* Both must be above category list when columns is enabled so dragged sprites appear aren't obscured */
+/* Stage wrapper must be above target pane so dragged sprites aren't obscured */
+.sa-body-editor [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen"]) {
+  z-index: 50;
+}
+[class*="gui_target-wrapper_"] {
+  z-index: 49;
+}
+
+[class*="gui_stage-and-target-wrapper_"] {
+  padding: 0;
+}
+
+/* https://github.com/ScratchAddons/ScratchAddons/issues/4896 */
+.Popover {
+  /* Above stage wrapper and target pane */
+  /* See editor-stage-left */
+  z-index: 51;
 }

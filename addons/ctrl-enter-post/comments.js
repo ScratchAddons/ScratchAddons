@@ -18,8 +18,8 @@ export default async function ({ addon, global, console, msg }) {
       button = textbox.parentNode.parentNode.parentNode.querySelector(".compose-bottom-row .compose-post");
     }
 
-    textbox.addEventListener("keyup", (e) => {
-      if ((e.ctrlKey || e.metaKey) && (e.code === "Enter" || e.code === "NumpadEnter")) {
+    textbox.addEventListener("keydown", (e) => {
+      if (!addon.self.disabled && (e.ctrlKey || e.metaKey) && (e.code === "Enter" || e.code === "NumpadEnter")) {
         button.click();
       }
     });

@@ -1,104 +1,64 @@
+@import url("%addon-self-dir%/../../libraries/common/cs/spinner.css");
+
 #content {
-  padding-top: 50px;
-  width: 100%;
-  min-width: 942px;
-}
-#content > .cols {
-  width: 100%;
-  margin: 0;
-  position: relative;
-}
-#content > .cols > * {
-  width: 100%;
-  margin: 0;
+  padding-top: 204px;
 }
 #content > .cols > .col-4 {
-  position: absolute;
-  left: 0;
-  top: 164px;
-  z-index: 1;
+  width: 280px;
 }
-.v-tabs {
-  margin: 0;
-  margin-right: 0 !important;
-  border-radius: 0;
-  width: 100%;
-  border: none;
-  background-color: var(--darkWww-box, white);
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
+#content > .cols > .col-12 {
+  width: 662px;
 }
-.v-tabs ul {
-  display: flex;
-  justify-content: center;
-}
-.v-tabs li.first {
-  border-radius: 0;
-}
-.v-tabs li {
-  border: none;
-}
-.v-tabs li a,
-.v-tabs li:hover:not(.active) a,
-.v-tabs li.active a {
-  color: var(--darkWww-box-text, #575e75);
-}
-.v-tabs li.active,
-.v-tabs li.active:hover {
-  border-bottom: 3px solid #0fbd8c;
-  background: transparent;
-}
-.v-tabs li.active a {
-  text-shadow: none;
-}
-.v-tabs li:hover {
-  border-bottom: 3px solid var(--darkWww-box-tabHover, rgba(0, 0, 0, 0.2));
-  background: transparent;
-}
-#sidebar li.sub-list a {
-  margin-left: 0;
-}
-.box-content#main-content {
-  padding-top: 42px;
-}
-#content,
-.box-content#main-content,
 .ajax-loader {
-  background-color: var(--darkWww-gray, #f2f2f2);
-}
-.box {
+  background-color: transparent;
+  background-image: none;
   position: relative;
 }
-#content > .cols > .col-12 > .box,
-.box .box-head {
-  border-radius: 0;
-  border: none;
-  background: #4d97ff;
+.ajax-loader::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: calc(50% - 10px);
+  left: calc(50% - 10px);
+  width: 22.8px;
+  height: 22.8px;
+  background-image: url(/svgs/modal/spinner-blue.svg);
+  background-size: 100%;
+  filter: var(--darkWww-link-iconFilter, none);
+  /* Spinner animation code */
+  /* From https://github.com/LLK/scratch-www/blob/develop/src/components/spinner/spinner.scss */
+  animation-name: spin-intro, spin;
+  animation-duration: 0.25s, 1s;
+  animation-timing-function: cubic-bezier(0.3, -3, 0.6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);
+  animation-delay: 0s, 0.25s;
+  animation-iteration-count: 1, infinite;
 }
-.box .box-head {
+#content > .cols > .col-12 > .box > .box-head {
+  padding-bottom: 20px;
+}
+#content > .cols > .col-12 > .box > .box-head .buttons {
+  position: static;
   width: 942px;
   margin: auto;
-  padding: 20px 0;
-}
-.box .box-head h2 {
-  padding: 5px 0;
-  color: #fff;
-  font-size: 40px;
-  line-height: 1.7em;
-}
-.box .box-head .buttons {
-  position: static;
   margin-top: 20px;
 }
 #new_studio button[type="submit"] {
   position: relative;
 }
-.box .box-content {
+#sidebar li.sub-list {
+  margin-left: 11px;
+}
+#sidebar li.sub-list a {
+  margin: 0;
+}
+.box-content#main-content {
+  padding-bottom: 12px;
   position: static;
 }
 .action-bar {
   position: absolute;
-  top: 20px;
-  right: calc((100vw - 942px) / 2);
+  top: 70px;
+  right: calc((100vw - 959px) / 2);
 }
 .box .box-content .action-bar .inner {
   padding: 0;
@@ -106,10 +66,10 @@
   border: none;
   background: transparent;
 }
-.action-bar .inner .dropdown,
-.action-bar .inner .dropdown:hover {
-  height: 46px;
-  border-color: var(--darkWww-border, rgba(0, 0, 0, 0.1));
+.action-bar .inner .dropdown {
+  height: 48px;
+  border: 1px solid var(--darkWww-border, rgba(0, 0, 0, 0.1));
+  border-radius: 4px;
   transition: border-color 0.5s ease;
   background-color: var(--darkWww-input, #fafafa);
   background-image: var(--darkWww-input-caret, url("%addon-self-dir%/assets/caret.svg"));
@@ -143,24 +103,101 @@
   border-color: inherit;
   background-clip: border-box;
 }
-.action-bar .inner .button {
-  height: 46px;
+.action-bar .inner .button:not(.dropdown) {
+  margin-left: 16px;
+  height: 48px;
+  background-color: var(--darkWww-box, white);
+  border-radius: 4px;
+  color: var(--darkWww-link, #4d97ff);
+  font-size: 14px;
 }
-.action-bar .inner .button > span {
-  line-height: 44px;
+.action-bar .inner .button:not(.dropdown) > span {
+  display: inline-block;
+  padding: 16px;
+  line-height: normal;
 }
-.box .box-content .media-list {
-  width: 942px;
-  margin: auto;
+.box .box-head .buttons .button {
+  background-color: var(--darkWww-box, white);
+  border-radius: 4px;
+  color: var(--darkWww-link, #4d97ff);
+}
+.media-list {
+  padding: 0;
+  padding-bottom: 5px;
+}
+.media-list.loading {
+  opacity: 1;
 }
 .media-list li {
   border: none;
 }
 .media-list .media-item-content {
   margin-bottom: 14px;
-  border-radius: 4px;
+  height: 75px;
+  padding: 12px;
   background-color: var(--darkWww-box, white);
-  box-shadow: 0 0 0 1px var(--darkWww-border, rgba(0, 0, 0, 0.1));
+  border: 1px solid var(--darkWww-border-15, rgba(0, 0, 0, 0.15));
+  border-radius: 8px;
+}
+.media-item-content .media-thumb img {
+  height: 75px;
+  border: none;
+  border-radius: 4px;
+}
+.media-item-content .media-info {
+  margin: 0 12px;
+}
+.media-list .media-item-content .button {
+  border-radius: 4px;
+}
+.media-item-content .media-control-edit {
+  margin-top: 9px;
+}
+.media-item-content .media-control {
+  top: 24px;
+}
+.media-item-content .media-info .media-control {
+  top: 9px;
+}
+.media-control .dropdown-menu {
+  background-color: var(--darkWww-navbar, #4d97ff);
+  left: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  min-width: 218px;
+  color: var(--darkWww-navbar-text, white);
+  font-weight: bold;
+  line-height: normal;
+}
+.media-control .dropdown-menu li {
+  padding: 4px 10px;
+}
+.media-control .dropdown-menu li:hover {
+  background-color: var(--darkWww-navbar-border, rgba(0, 0, 0, 0.1));
+}
+.media-item-content .media-stats {
+  margin: 0;
+  height: 75px;
+  line-height: 18px;
+}
+.media-item-content .media-stats .unshare {
+  padding-right: 12px;
+  text-align: right;
+}
+.media-item-content .media-action {
+  top: 28px;
+  right: 12px;
+  width: auto;
+}
+.media-item-content .media-trash {
+  top: 0;
+  left: 0;
+}
+.media-item-content .media-untrash {
+  top: 24px;
+  right: 12px;
+}
+.button[data-control="load-more"] {
+  width: 662px;
 }
 #search-my-stuff-form {
   margin: auto;
@@ -169,7 +206,7 @@
 }
 #search-my-stuff-input {
   padding: 0 16px;
-  height: 48px;
+  height: 46px;
   font-size: 13px;
 }
 #search-my-stuff-input:focus {

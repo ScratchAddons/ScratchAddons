@@ -3,6 +3,7 @@ html,
 body {
   background-color: var(--darkWww-page);
   color: var(--darkWww-page-scratchr2Text);
+  color-scheme: var(--darkWww-page-colorScheme);
 }
 h1,
 h2,
@@ -97,6 +98,7 @@ label,
 .media-item-content .media-thumb,
 .ajax-loader,
 .box .box-head .portrait img,
+.profile-box-footer-module,
 .gallery.thumb span.image,
 .gallery.thumb span.image img,
 #comments #comments-loading,
@@ -145,7 +147,8 @@ select {
 .modal h1,
 .modal h2,
 .modal h3,
-.modal h4 {
+.modal h4,
+.profile-box-footer-module h4 {
   color: var(--darkWww-box-scratchr2HeaderText);
 }
 .box-content label,
@@ -266,6 +269,7 @@ button:hover,
 .postfootleft,
 .djangobb blockquote,
 #profile-box .doing,
+.profile-box-footer-module textarea,
 #comments .highlighted,
 .nvtooltip h3 /* statistics */,
 .table-striped tbody > tr:nth-child(odd) > td {
@@ -296,7 +300,8 @@ button:hover,
 .tabs-index li a,
 .header-text .profile-details,
 .activity-stream .time,
-#profile-data .footer #report-this {
+#profile-data .footer #report-this,
+.profile-box-footer-module textarea::placeholder {
   color: var(--darkWww-gray-scratchr2TransparentText);
 }
 #comments .highlighted .info .name a {
@@ -328,6 +333,7 @@ ul.pagination span /* mobile forums */,
   background-color: var(--darkWww-gray-scratchr2SelectedTab);
 }
 .box .box-content .action-bar .inner,
+.contact #block-message,
 .djangobb th,
 .post-content blockquote /* mobile forums */,
 .post-content div.code /* mobile forums */ {
@@ -613,11 +619,7 @@ input.link.black {
   height: 12px;
   background-color: white;
   background-position: 1px 1px;
-  background-size: 16px !important;
   border-radius: 3px;
-}
-.markItUp .markItUpButton1 a {
-  height: 12px !important;
 }
 .markItUpHeader > ul > .markItUpDropMenu {
   background-image: none !important;
@@ -636,15 +638,9 @@ input.link.black {
     no-repeat 115% 60%;
   pointer-events: none;
 }
-.markItUpHeader > ul > .sa-forum-toolbar-link::after {
-  content: none;
-}
 .markItUpHeader > ul > .markItUpDropMenu > a {
   width: 16px;
   margin-right: 1px;
-}
-.sa-forum-toolbar-link > a {
-  width: 12px !important;
 }
 .markItUp .browser-os-button a {
   margin-left: 2px;

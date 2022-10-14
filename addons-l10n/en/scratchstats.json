@@ -1,14 +1,13 @@
 {
   "scratchstats/title": "Statistics",
   "scratchstats/view-more": "View on ScratchStats.com",
-  "scratchstats/loading": "Loading...",
   "scratchstats/followers": "followers",
   "scratchstats/most-followed-global": "most followed on Scratch",
   "scratchstats/most-followed-location": "most followed by location",
   "scratchstats/most-loves": "most loves",
   "scratchstats/most-favorites": "most favorites",
   "scratchstats/most-views": "most views",
-  "scratchstats/followers-label": "Followers",
   "scratchstats/err": "Statistics could not be loaded.",
+  "scratchstats/err-chart": "Chart could not be loaded.",
   "scratchstats/followers-title": "Followers over time"
 }

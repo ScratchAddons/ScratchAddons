@@ -1,7 +1,16 @@
 {
-  "confirm-actions/share": "Scratch Addons:\nAre you sure you want to share?",
-  "confirm-actions/unshare": "Scratch Addons:\nAre you sure you want to unshare?",
-  "confirm-actions/follow": "Scratch Addons:\nAre you sure you want to follow/unfollow this user?",
-  "confirm-actions/joinstudio": "Scratch Addons:\nAre you sure you would like to join this studio?",
-  "confirm-actions/closetopic": "Scratch Addons:\nAre you sure you want to close this topic?"
+  "confirm-actions/yes": "Yes",
+  "confirm-actions/no": "No",
+  "confirm-actions/share": "Are you sure you want to share?",
+  "confirm-actions/unshare": "Are you sure you want to unshare?",
+  "confirm-actions/follow": "Are you sure you want to follow this user?",
+  "confirm-actions/unfollow": "Are you sure you want to unfollow this user?",
+  "confirm-actions/accept-invite": "Accept Invite",
+  "confirm-actions/joinstudio": "Are you sure you want to join this studio?",
+  "confirm-actions/closetopic-title": "Close Topic",
+  "confirm-actions/closetopic": "Are you sure you want to close this topic?",
+  "confirm-actions/cancelcomment-title": "Discard Comment",
+  "confirm-actions/cancelcomment": "Are you sure you want to discard your comment?",
+  "confirm-actions/removeproject-title": "Delete Project",
+  "confirm-actions/removeproject": "Are you sure you want to delete this project?"
 }

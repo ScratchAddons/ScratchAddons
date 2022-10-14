@@ -1,4 +1,25 @@
 export default async function ({ addon, console }) {
+  const CDN2_REGEX = /(.*\/get_image\/.*?\/[0-9]+?_)([0-9]+?)x([0-9]+?)(\.[a-z]+)/;
+  const UPLOADS_REGEX = /^https?:\/\/uploads\.scratch\.mit\.edu\//;
+  const thumbnails = [];
+  addon.self.addEventListener("disabled", () => {
+    for (const { image, lazySrc } of thumbnails) {
+      if (lazySrc) {
+        image.dataset.original = lazySrc;
+      }
+      image.src = lazySrc;
+    }
+  });
+  addon.self.addEventListener("reenabled", () => {
+    for (const { image, src, lazySrc, newSrc } of thumbnails) {
+      if (lazySrc) {
+        image.dataset.original = newSrc;
+      }
+      if (src) {
+        image.src = newSrc;
+      }
+    }
+  });
   main: while (true) {
     const image = await addon.tab.waitForElement("img", {
       markAsSeen: true,
@@ -12,25 +33,25 @@ export default async function ({ addon, console }) {
     // to the cdn2 regex!
     if (src.startsWith("data:")) continue;
 
-    // If the image is from uploads.scratch.mit.edu, reformat src so it looks
-    // like a cdn2 URL.
-    if (src.includes("uploads.scratch.mit.edu")) {
+    // If the image is from uploads.scratch.mit.edu, but doesn't match the
+    // dimensions-including cdn2 style, reformat src so it does.
+    if (!CDN2_REGEX.test(src) && UPLOADS_REGEX.test(src)) {
       const id = src.match(/[0-9]+/);
       if (src.includes("projects")) {
         // Project thumbnails are always 480x360.
-        src = `//cdn2.scratch.mit.edu/get_image/project/${id}_480x360.png`;
+        src = `//uploads.scratch.mit.edu/get_image/project/${id}_480x360.png`;
       } else if (src.includes("users")) {
         // Max user avatar size is 500x500.
-        src = `//cdn2.scratch.mit.edu/get_image/user/${id}_500x500.png`;
+        src = `//uploads.scratch.mit.edu/get_image/user/${id}_500x500.png`;
       } else if (src.includes("galleries")) {
         // Max studio thumbnail size is 500x500.
-        src = `//cdn2.scratch.mit.edu/get_image/gallery/${id}_500x500.png`;
+        src = `//uploads.scratch.mit.edu/get_image/gallery/${id}_500x500.png`;
       }
     }
 
     let width, height, newSrc;
 
-    const cdn2 = src.match(/(.*\/get_image\/.*?\/[0-9]+?_)([0-9]+?)x([0-9]+?)(\.[a-z]+)/);
+    const cdn2 = src.match(CDN2_REGEX);
 
     if (cdn2) {
       width = cdn2[2];
@@ -43,16 +64,10 @@ export default async function ({ addon, console }) {
     [width, height] = scaleDimensions(width, height);
 
     if (cdn2) {
-      newSrc = cdn2[1] + width + "x" + height + cdn2[4];
+      newSrc = cdn2[1].replace("cdn2", "uploads") + width + "x" + height + cdn2[4];
     }
 
-    if (lazy) {
-      image.dataset.original = newSrc;
-    }
-
-    if (image.src) {
-      image.src = newSrc;
-    }
+    reloadImageSafe(image, newSrc);
   }
 
   function resizeToScreenRes(width, height, image) {
@@ -119,5 +134,19 @@ export default async function ({ addon, console }) {
     height = Math.round(height);
 
     return [width, height];
+  }
+  function reloadImageSafe(image, newSrc) {
+    thumbnails.push({
+      image,
+      src: image.src,
+      lazySrc: image.dataset.original,
+      newSrc,
+    });
+    if (image.classList.contains("lazy")) {
+      image.dataset.original = newSrc;
+    }
+    if (image.src) {
+      image.src = newSrc;
+    }
   }
 }

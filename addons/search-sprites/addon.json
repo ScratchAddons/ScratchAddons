@@ -1,0 +1,30 @@
+{
+  "name": "Search sprites by name",
+  "description": "Adds a search box to the sprite pane to search for sprites by name.",
+  "credits": [
+    {
+      "name": "BarelySmooth",
+      "link": "https://scratch.mit.edu/users/BarelySmooth/"
+    },
+    {
+      "name": "GarboMuffin"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "search-bar.css",
+      "matches": ["projects"]
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.24.0",
+  "tags": ["editor"],
+  "enabledByDefault": false
+}

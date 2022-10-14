@@ -1,0 +1,48 @@
+{
+  "name": "Customizable default costume editor colors",
+  "description": "Changes the default colors and outline size used by the costume editor.",
+  "credits": [
+    {
+      "name": "GarboMuffin"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Default fill color",
+      "id": "fill",
+      "type": "color",
+      "default": "#9966FF"
+    },
+    {
+      "name": "Default outline color",
+      "id": "stroke",
+      "type": "color",
+      "default": "#000000"
+    },
+    {
+      "name": "Default outline size",
+      "id": "strokeSize",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 4
+    },
+    {
+      "name": "Use previous color instead of resetting after switching tools",
+      "id": "persistence",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "versionAdded": "1.26.0",
+  "tags": ["editor", "costumeEditor", "featured"],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "enabledByDefault": false
+}

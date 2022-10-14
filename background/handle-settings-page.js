@@ -1,4 +1,6 @@
 import changeAddonState from "./imports/change-addon-state.js";
+import minifySettings from "../libraries/common/minify-settings.js";
+import { updateBadge } from "./message-cache.js";
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // Message used to load popups as well
@@ -24,15 +26,21 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   } else if (request.changeAddonSettings) {
     const { addonId, newSettings } = request.changeAddonSettings;
     scratchAddons.globalState.addonSettings[addonId] = newSettings;
+    const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
     chrome.storage.sync.set({
-      addonSettings: scratchAddons.globalState.addonSettings,
+      // Store target so arrays don't become objects
+      addonSettings: minifySettings(
+        scratchAddons.globalState.addonSettings._target,
+        prerelease ? null : scratchAddons.manifests
+      ),
     });
 
     const manifest = scratchAddons.manifests.find((addon) => addon.addonId === addonId).manifest;
     const { updateUserstylesOnSettingsChange } = manifest;
     if (updateUserstylesOnSettingsChange)
       scratchAddons.localEvents.dispatchEvent(
-        new CustomEvent("updateUserstylesSettingsChange", { detail: { addonId, manifest } })
+        new CustomEvent("updateUserstylesSettingsChange", { detail: { addonId, manifest, newSettings } })
       );
+    if (addonId === "msg-count-badge") updateBadge(scratchAddons.cookieStoreId);
   }
 });
