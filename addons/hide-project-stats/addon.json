@@ -162,7 +162,7 @@
   "latestUpdate": {
     "version": "1.29.0",
     "temporaryNotice": "The padding between statistics has been fixed, the My Stuff page is now supported, and there is now an option to show statistics on your own projects.",
-    "newSettings": ["comments", "showOwnStats"]
+    "newSettings": ["comments", "showOwnStats", "myStuff"]
   },
   "enabledByDefault": false
 }
