@@ -88,6 +88,13 @@
       "if": {
         "settings": { "comments": true, "myStuff": true }
       }
+    },
+    {
+      "url": "hide_studio_count.css",
+      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "if": {
+        "settings": { "studios": true, "myStuff": true }
+      }
     }
   ],
   "userscripts": [
@@ -150,6 +157,15 @@
       "name": "Hide comment count",
       "default": true,
       "id": "comments",
+      "type": "boolean",
+      "if": {
+        "settings": { "myStuff": true }
+      }
+    },
+    {
+      "name": "Hide broken (always 0) studio count",
+      "default": true,
+      "id": "studios",
       "type": "boolean",
       "if": {
         "settings": { "myStuff": true }
