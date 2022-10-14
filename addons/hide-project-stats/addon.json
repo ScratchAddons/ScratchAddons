@@ -123,12 +123,6 @@
       "type": "boolean"
     },
     {
-      "name": "Hide comment count",
-      "default": true,
-      "id": "comments",
-      "type": "boolean"
-    },
-    {
       "name": "Hide love count in \"What the Community is Loving\"",
       "default": true,
       "id": "lovesFront",
@@ -141,15 +135,21 @@
       "type": "boolean"
     },
     {
+      "name": "Show stats on my own project pages",
+      "default": false,
+      "id": "showOwnStats",
+      "type": "boolean"
+    },
+    {
       "name": "Hide stats on My Stuff",
       "default": false,
       "id": "myStuff",
       "type": "boolean"
     },
     {
-      "name": "Show stats on my own project pages",
-      "default": false,
-      "id": "showOwnStats",
+      "name": "Hide comment count",
+      "default": true,
+      "id": "comments",
       "type": "boolean"
     }
   ],
