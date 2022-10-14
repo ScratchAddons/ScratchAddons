@@ -88,10 +88,15 @@ export default async function ({ addon, global, console }) {
   // Since the user can sign in during the same session,
   // the login status needs to be updated when this occurs
   while (true) {
-    await addon.tab.waitForElement(".project-loves", { reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly, });
-    await addon.tab.waitForElement(".project-favorites", { reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly, });
+    await addon.tab.waitForElement(".project-loves", { reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly });
+    await addon.tab.waitForElement(".project-favorites", {
+      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+    });
     refreshLabels();
     // An element with .compose-row appears when signing in
-    await addon.tab.waitForElement(".compose-row", { markAsSeen: true, reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly, });
+    await addon.tab.waitForElement(".compose-row", {
+      markAsSeen: true,
+      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+    });
   }
 }
