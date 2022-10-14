@@ -286,6 +286,19 @@
       }
     },
     {
+      "name": "selector-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "selector"
+        },
+        "threshold": 128
+      }
+    },
+    {
       "name": "selector2-text",
       "value": {
         "type": "textColor",
@@ -305,6 +318,19 @@
           "type": "settingValue",
           "settingId": "selector2"
         }
+      }
+    },
+    {
+      "name": "selector2-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "selector2"
+        },
+        "threshold": 128
       }
     },
     {
@@ -393,6 +419,19 @@
       }
     },
     {
+      "name": "accent-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "threshold": 128
+      }
+    },
+    {
       "name": "accent-opacity0",
       "value": {
         "type": "multiply",
@@ -441,6 +480,39 @@
           },
           "a": 0.15
         }
+      }
+    },
+    {
+      "name": "accent-paintEditorScrollbar",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "accent"
+          },
+          "r": 0.75,
+          "g": 0.75,
+          "b": 0.75,
+          "a": 0.8
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "accent"
+          },
+          "r": 0.8,
+          "g": 0.8,
+          "b": 0.8,
+          "a": 0.8
+        },
+        "threshold": 110
       }
     },
     {
@@ -753,20 +825,6 @@
       "if": {
         "settings": { "affectStage": true }
       }
-    },
-    {
-      "url": "dark_comments.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "darkComments": true }
-      }
-    },
-    {
-      "url": "scrollbar.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "darkScrollbars": true }
-      }
     }
   ],
   "settings": [
@@ -891,18 +949,6 @@
       "id": "affectStage",
       "type": "boolean",
       "default": false
-    },
-    {
-      "name": "Dark comments",
-      "id": "darkComments",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Dark scrollbars",
-      "id": "darkScrollbars",
-      "type": "boolean",
-      "default": true
     }
   ],
   "presets": [
@@ -928,9 +974,7 @@
         "fullscreen": "#000000",
         "stageHeader": "#000000",
         "border": "#ffffff0d",
-        "dots": false,
-        "darkComments": true,
-        "darkScrollbars": true
+        "dots": false
       }
     },
     {
@@ -955,9 +999,7 @@
         "fullscreen": "#051638",
         "stageHeader": "#051638",
         "border": "#00000026",
-        "dots": false,
-        "darkComments": true,
-        "darkScrollbars": true
+        "dots": false
       }
     },
     {
@@ -982,9 +1024,7 @@
         "fullscreen": "#222222",
         "stageHeader": "#222222",
         "border": "#111111",
-        "dots": false,
-        "darkComments": true,
-        "darkScrollbars": true
+        "dots": false
       }
     },
     {
@@ -1009,9 +1049,7 @@
         "fullscreen": "#282828",
         "stageHeader": "#333333",
         "border": "#444444",
-        "dots": true,
-        "darkComments": true,
-        "darkScrollbars": true
+        "dots": true
       }
     },
     {
@@ -1036,9 +1074,7 @@
         "fullscreen": "#111111",
         "stageHeader": "#111111",
         "border": "#ffffff26",
-        "dots": true,
-        "darkComments": true,
-        "darkScrollbars": true
+        "dots": true
       }
     },
     {
@@ -1063,9 +1099,7 @@
         "fullscreen": "#ffffffff",
         "stageHeader": "#e6e8e8",
         "border": "#d0d1d2",
-        "dots": true,
-        "darkComments": false,
-        "darkScrollbars": false
+        "dots": true
       }
     },
     {
@@ -1090,9 +1124,7 @@
         "fullscreen": "#000001",
         "stageHeader": "#000001",
         "border": "#0000006b",
-        "dots": false,
-        "darkComments": false,
-        "darkScrollbars": false
+        "dots": false
       }
     },
     {
@@ -1117,9 +1149,7 @@
         "fullscreen": "#ffffff",
         "stageHeader": "#e8edf1",
         "border": "#00000026",
-        "dots": true,
-        "darkComments": false,
-        "darkScrollbars": false
+        "dots": true
       }
     }
   ],
