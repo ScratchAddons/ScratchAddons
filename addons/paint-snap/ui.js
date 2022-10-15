@@ -7,9 +7,9 @@ export function initUI({ addon, msg }) {
     el.className = "sa-paint-snap-group";
     return el;
   };
-  const createSeperator = () => {
+  const createSeparator = () => {
     const el = document.createElement("div");
-    el.className = "sa-paint-snap-settings-seperator";
+    el.className = "sa-paint-snap-settings-separator";
     return el;
   };
 
@@ -237,7 +237,7 @@ export function initUI({ addon, msg }) {
     createSnapFromSetting("boxEdgeMids")
   );
 
-  settingsPage.append(threshSetting, createSeperator(), snapToSection, createSeperator(), snapFromSection);
+  settingsPage.append(threshSetting, createSeparator(), snapToSection, createSeparator(), snapFromSection);
 
   const controlsLoop = async () => {
     let hasRunOnce = false;
