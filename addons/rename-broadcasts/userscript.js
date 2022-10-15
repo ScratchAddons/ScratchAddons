@@ -6,8 +6,7 @@ export default async function ({ addon, msg, global, console }) {
   const _dropdownCreate = Blockly.FieldVariable.dropdownCreate;
   Blockly.FieldVariable.dropdownCreate = function () {
     const options = _dropdownCreate.call(this);
-    console.log(options);
-    if (this.defaultType_ == Blockly.BROADCAST_MESSAGE_VARIABLE_TYPE) {
+    if (!addon.self.disabled && this.defaultType_ == Blockly.BROADCAST_MESSAGE_VARIABLE_TYPE) {
       options.push([msg("RENAME_BROADCAST"), Blockly.RENAME_BROADCAST_MESSAGE_ID]);
     }
     return options;
@@ -27,7 +26,6 @@ export default async function ({ addon, msg, global, console }) {
 
   const _renameVariable = Blockly.Variables.renameVariable;
   Blockly.Variables.renameVariable = function (workspace, variable, opt_callback) {
-    console.log(variable);
     const varType = variable.type;
     if (varType === Blockly.BROADCAST_MESSAGE_VARIABLE_TYPE) {
       const modalTitle = msg("RENAME_BROADCAST_MODAL_TITLE");
@@ -59,4 +57,18 @@ export default async function ({ addon, msg, global, console }) {
     }
     _renameVariable.call(this, workspace, variable, opt_callback);
   };
+
+  if (addon.self.enabledLate) {
+    const workspace = Blockly.getMainWorkspace();
+    const blocks = workspace.getAllBlocks();
+    for (const block of blocks) {
+      for (const input of block.inputList) {
+        for (const field of input.fieldRow) {
+          if (field instanceof Blockly.FieldVariable) {
+            field.menuGenerator_ = Blockly.FieldVariable.dropdownCreate;
+          }
+        }
+      }
+    }
+  }
 }
