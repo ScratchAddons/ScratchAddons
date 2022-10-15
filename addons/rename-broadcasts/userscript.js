@@ -1,4 +1,4 @@
-export default async function ({ addon, msg, global, console }) {
+export default async function ({ addon, msg }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
   Blockly.RENAME_BROADCAST_MESSAGE_ID = "RENAME_BROADCAST_MESSAGE_ID";
@@ -6,7 +6,7 @@ export default async function ({ addon, msg, global, console }) {
   const _dropdownCreate = Blockly.FieldVariable.dropdownCreate;
   Blockly.FieldVariable.dropdownCreate = function () {
     const options = _dropdownCreate.call(this);
-    if (!addon.self.disabled && this.defaultType_ == Blockly.BROADCAST_MESSAGE_VARIABLE_TYPE) {
+    if (!addon.self.disabled && this.defaultType_ === Blockly.BROADCAST_MESSAGE_VARIABLE_TYPE) {
       options.push([msg("RENAME_BROADCAST"), Blockly.RENAME_BROADCAST_MESSAGE_ID]);
     }
     return options;
