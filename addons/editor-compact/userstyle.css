@@ -295,7 +295,8 @@ button[class*="action-menu_more-button"] {
   border-radius: 0.25rem;
 }
 [class*="asset-panel_detail-area"] [class*="labeled-icon-button_edit-field-icon"],
-[class*="sound-editor_button_"] img, [class*="sound-editor_tool-button"] img {
+[class*="sound-editor_button_"] img,
+[class*="sound-editor_tool-button"] img {
   width: 20px;
   height: 20px;
 }
@@ -317,7 +318,7 @@ button[class*="action-menu_more-button"] {
 }
 [class*="paint-editor_row_"] > [class*="tools_row_"],
 [class*="paint-editor_mod-mode-tools_"] > [class*="mode-tools_mode-tools_"] {
-  gap: calc(.25rem);
+  gap: calc(0.25rem);
 }
 [class*="tools_row_"] [class*="tools_mod-dashed-border_"],
 [class*="mode-tools_mode-tools_"] > [class*="mode-tools_mod-dashed-border_"],
