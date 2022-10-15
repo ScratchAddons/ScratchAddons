@@ -393,6 +393,32 @@ button[class*="action-menu_more-button"] {
 }
 
 /* Modals and prompts */
+[class*="card_header-buttons_"] > div,
+[class*="card_header-buttons-right_"] > div {
+  padding: 0.5rem;
+  margin: 0;
+}
+[class*="card_header-buttons_"] span:not(.sa-debugger-tabs *) {
+  display: none;
+}
+[class*="card_header-buttons_"] > [class*="card_header-buttons-right_"] {
+  padding: 0;
+}
+[class*="card_remove-button_"] > [class*="card_close-icon_"],
+[class*="card_all-button_"] > [class*="card_help-icon_"] {
+  margin: 0;
+}
+.sa-debugger-tabs {
+  padding: 0 0.25rem;
+  margin-left: 0.25rem;
+}
+.sa-debugger-tabs li {
+  padding: 0.25em 1em;
+}
+.sa-debugger-tabs li + li {
+  margin-inline-start: 0.25rem;
+}
+
 [class*="modal_header"],
 [class*="library_filter-bar"] {
   height: 2rem;
