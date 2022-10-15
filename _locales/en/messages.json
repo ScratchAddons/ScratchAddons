@@ -308,6 +308,12 @@
   "confirmImport": {
     "message": "Confirm"
   },
+  "language": {
+    "message": "Language"
+  },
+  "applySettings": {
+    "message": "Apply settings"
+  },
   "quickSettings": {
     "message": "Addons"
   },
