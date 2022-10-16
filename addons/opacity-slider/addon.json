@@ -5,7 +5,7 @@
   "info": [
     {
       "type": "info",
-      "text": "Opacity Slider is disabled when no object is selected or in bitmap mode.",
+      "text": "The opacity slider is disabled when no object is selected, and in bitmap mode.",
       "id": "bitmapModeincompleteInfo"
     }
   ],
