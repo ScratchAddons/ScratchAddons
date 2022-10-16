@@ -60,7 +60,7 @@ export default async function ({ addon, msg, console }) {
 
     // Update all references to the broadcast. Broadcasts won't work if these
     // don't match.
-    const blockContainers = new Set(vm.runtime.targets.map(i => i.blocks));
+    const blockContainers = new Set(vm.runtime.targets.map((i) => i.blocks));
     for (const blockContainer of blockContainers) {
       for (const block of Object.values(blockContainer._blocks)) {
         const broadcastOption = block.fields && block.fields.BROADCAST_OPTION;
@@ -99,7 +99,7 @@ export default async function ({ addon, msg, console }) {
     for (const block of workspace.getAllBlocks()) {
       for (const input of block.inputList) {
         for (const field of input.fieldRow) {
-          if (field.name === 'BROADCAST_OPTION') {
+          if (field.name === "BROADCAST_OPTION") {
             field.setValue(newId);
           }
         }
@@ -110,7 +110,7 @@ export default async function ({ addon, msg, console }) {
     // Merge in VM to update sprites that aren't open. Need to implement manual undo/redo.
     // To figure out how to undo this operation, we track which blocks we must touch.
     const vmBlocksToUpdate = [];
-    const blockContainers = new Set(vm.runtime.targets.map(i => i.blocks));
+    const blockContainers = new Set(vm.runtime.targets.map((i) => i.blocks));
     for (const blockContainer of blockContainers) {
       for (const block of Object.values(blockContainer._blocks)) {
         const broadcastOption = block.fields && block.fields.BROADCAST_OPTION;

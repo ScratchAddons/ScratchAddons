@@ -7,7 +7,7 @@ export default async function ({ addon, global, console, msg }) {
     "DELETE_VARIABLE_ID",
     "NEW_BROADCAST_MESSAGE_ID",
     // From rename-broadcasts addon
-    "RENAME_BROADCAST_MESSAGE_ID"
+    "RENAME_BROADCAST_MESSAGE_ID",
   ];
 
   const ADDON_ITEMS = [
