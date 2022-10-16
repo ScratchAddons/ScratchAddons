@@ -19,14 +19,14 @@ export default async function ({ addon, msg }) {
 
   const _onItemSelected = Blockly.FieldVariable.prototype.onItemSelected;
   Blockly.FieldVariable.prototype.onItemSelected = function (menu, menuItem) {
-    var workspace = this.sourceBlock_.workspace;
+    const workspace = this.sourceBlock_.workspace;
     if (this.sourceBlock_ && workspace) {
       if (menuItem.getValue() === Blockly.RENAME_BROADCAST_MESSAGE_ID) {
         Blockly.Variables.renameVariable(workspace, this.variable_);
         return;
       }
     }
-    _onItemSelected.call(this, menu, menuItem);
+    return _onItemSelected.call(this, menu, menuItem);
   };
 
   const _renameVariable = Blockly.Variables.renameVariable;
@@ -60,7 +60,7 @@ export default async function ({ addon, msg }) {
       );
       return;
     }
-    _renameVariable.call(this, workspace, variable, opt_callback);
+    return _renameVariable.call(this, workspace, variable, opt_callback);
   };
 
   if (addon.self.enabledLate) {
