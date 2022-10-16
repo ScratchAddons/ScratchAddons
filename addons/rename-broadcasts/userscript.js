@@ -10,9 +10,9 @@ export default async function ({ addon, msg }) {
     if (
       !addon.self.disabled &&
       this.defaultType_ === Blockly.BROADCAST_MESSAGE_VARIABLE_TYPE &&
+      // Disable when workspace has no actual broadcast to rename
       this.sourceBlock_.workspace.getVariableTypes().includes("broadcast_msg")
     ) {
-      // Disabled when workspace has no actual broadcast to rename
       options.push([msg("RENAME_BROADCAST"), RENAME_BROADCAST_MESSAGE_ID]);
     }
     return options;
@@ -43,7 +43,7 @@ export default async function ({ addon, msg }) {
         promptText,
         promptDefaultText,
         function (newName) {
-          var validatedText = validate(newName, workspace);
+          const validatedText = validate(newName, workspace);
           if (validatedText) {
             workspace.renameVariableById(variable.getId(), validatedText);
             if (opt_callback) {
