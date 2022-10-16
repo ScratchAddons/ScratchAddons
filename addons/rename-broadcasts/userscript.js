@@ -5,14 +5,14 @@ export default async function ({ addon, msg }) {
   // editor-searchable-dropdowns relies on this value
   const RENAME_BROADCAST_MESSAGE_ID = "RENAME_BROADCAST_MESSAGE_ID";
 
-  const BROADCAST_VARIABLE_TYPE = Blockly.BROADCAST_MESSAGE_VARIABLE_TYPE;
+  const BROADCAST_MESSAGE_TYPE = Blockly.BROADCAST_MESSAGE_VARIABLE_TYPE;
 
   const _dropdownCreate = Blockly.FieldVariable.dropdownCreate;
   Blockly.FieldVariable.dropdownCreate = function () {
     const options = _dropdownCreate.call(this);
     if (
       !addon.self.disabled &&
-      this.defaultType_ === BROADCAST_VARIABLE_TYPE &&
+      this.defaultType_ === BROADCAST_MESSAGE_TYPE &&
       // Disable when workspace has no actual broadcast to rename
       this.sourceBlock_.workspace.getVariableTypes().includes("broadcast_msg")
     ) {
@@ -64,8 +64,8 @@ export default async function ({ addon, msg }) {
 
   const promptRenameBroadcast = (workspace, variable) => {
     const modalTitle = msg("RENAME_BROADCAST_MODAL_TITLE");
-    const nameValidator = Blockly.Variables.nameValidator_.bind(null, BROADCAST_VARIABLE_TYPE);
     const oldName = variable.name;
+    const id = variable.getId();
     const promptText = msg("RENAME_BROADCAST_TITLE", { name: oldName });
     const promptDefaultText = oldName;
 
@@ -73,13 +73,21 @@ export default async function ({ addon, msg }) {
       promptText,
       promptDefaultText,
       function (newName) {
-        const validatedText = nameValidator(newName, workspace);
-        if (validatedText) {
-          renameBroadcast(workspace, variable.getId(), validatedText);
+        newName = Blockly.Variables.trimName_(newName);
+        const nameIsEmpty = !newName;
+        if (nameIsEmpty) {
+          return;
         }
+
+        const variableAlreadyExists = !!workspace.getVariable(newName, BROADCAST_MESSAGE_TYPE);
+        if (variableAlreadyExists) {
+          return;
+        }
+
+        renameBroadcast(workspace, id, newName);
       },
       modalTitle,
-      BROADCAST_VARIABLE_TYPE
+      BROADCAST_MESSAGE_TYPE
     );
   };
 
