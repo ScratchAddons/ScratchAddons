@@ -1,4 +1,4 @@
-export default async function ({ addon, msg }) {
+export default async function ({ addon, msg, console }) {
   const vm = addon.tab.traps.vm;
   const Blockly = await addon.tab.traps.getBlockly();
 
@@ -33,14 +33,18 @@ export default async function ({ addon, msg }) {
     return _onItemSelected.call(this, menu, menuItem);
   };
 
-  const renameBroadcast = (workspace, id, newName) => {
-    // Rename it in the editor
-    workspace.renameVariableById(id, newName);
+  const addUndoRedoHook = (callback) => {
+    const eventQueue = Blockly.Events.FIRE_QUEUE_;
+    const undoItem = eventQueue[eventQueue.length - 1];
+    const originalRun = undoItem.run;
+    undoItem.run = function (isRedo) {
+      originalRun.call(this, isRedo);
+      callback(isRedo);
+    };
+  };
 
-    // Scratch does not natively support broadcast renaming so we have to do
-    // some extra things.
-
-    // Finish renaming it in the VM
+  const renameBroadcastInVM = (id, newName) => {
+    // Editor's rename won't completely rename the variable.
     const vmVariable = vm.runtime.getTargetForStage().variables[id];
     vmVariable.name = newName;
     vmVariable.value = newName;
@@ -60,6 +64,23 @@ export default async function ({ addon, msg }) {
       // our changes go into effect.
       blockContainer.resetCache();
     }
+  }
+
+  const renameBroadcast = (workspace, id, oldName, newName) => {
+    // Rename it in the editor
+    workspace.renameVariableById(id, newName);
+
+    // Rename it in the VM
+    renameBroadcastInVM(id, newName);
+
+    // Undo/redo will automatically update the editor, but VM still needs to be updated
+    addUndoRedoHook((isRedo) => {
+      if (isRedo) {
+        renameBroadcastInVM(id, newName);
+      } else {
+        renameBroadcastInVM(id, oldName);
+      }
+    });
   };
 
   const promptRenameBroadcast = (workspace, variable) => {
@@ -84,7 +105,7 @@ export default async function ({ addon, msg }) {
           return;
         }
 
-        renameBroadcast(workspace, id, newName);
+        renameBroadcast(workspace, id, oldName, newName);
       },
       modalTitle,
       BROADCAST_MESSAGE_TYPE
