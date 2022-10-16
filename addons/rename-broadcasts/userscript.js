@@ -112,17 +112,22 @@ export default async function ({ addon, msg, console }) {
     );
   };
 
-  if (addon.self.enabledLate) {
+  const updateExistingMenuGenerators = () => {
     const workspace = Blockly.getMainWorkspace();
-    const blocks = workspace.getAllBlocks();
-    for (const block of blocks) {
-      for (const input of block.inputList) {
-        for (const field of input.fieldRow) {
-          if (field instanceof Blockly.FieldVariable) {
-            field.menuGenerator_ = Blockly.FieldVariable.dropdownCreate;
+    const flyout = workspace && workspace.getFlyout();
+    if (workspace && flyout) {
+      const allBlocks = [...workspace.getAllBlocks(), ...flyout.getWorkspace().getAllBlocks()];
+      for (const block of allBlocks) {
+        for (const input of block.inputList) {
+          for (const field of input.fieldRow) {
+            if (field instanceof Blockly.FieldVariable) {
+              field.menuGenerator_ = Blockly.FieldVariable.dropdownCreate;
+            }
           }
         }
       }
     }
-  }
+  };
+
+  updateExistingMenuGenerators();
 }
