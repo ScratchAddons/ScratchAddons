@@ -39,6 +39,7 @@ export default async function ({ addon, console, msg }) {
       if (playerToggled) {
         const username = await addon.auth.fetchUsername();
         const usp = new URLSearchParams();
+        usp.set("settings-button", "1");
         if (username) usp.set("username", username);
         const projectId = window.location.pathname.split("/")[2];
         if (addon.settings.get("addons")) {
