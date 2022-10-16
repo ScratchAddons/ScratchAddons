@@ -5,12 +5,14 @@ export default async function ({ addon, msg }) {
   // editor-searchable-dropdowns relies on this value
   const RENAME_BROADCAST_MESSAGE_ID = "RENAME_BROADCAST_MESSAGE_ID";
 
+  const BROADCAST_VARIABLE_TYPE = Blockly.BROADCAST_MESSAGE_VARIABLE_TYPE;
+
   const _dropdownCreate = Blockly.FieldVariable.dropdownCreate;
   Blockly.FieldVariable.dropdownCreate = function () {
     const options = _dropdownCreate.call(this);
     if (
       !addon.self.disabled &&
-      this.defaultType_ === Blockly.BROADCAST_MESSAGE_VARIABLE_TYPE &&
+      this.defaultType_ === BROADCAST_VARIABLE_TYPE &&
       // Disable when workspace has no actual broadcast to rename
       this.sourceBlock_.workspace.getVariableTypes().includes("broadcast_msg")
     ) {
@@ -24,7 +26,7 @@ export default async function ({ addon, msg }) {
     const workspace = this.sourceBlock_.workspace;
     if (this.sourceBlock_ && workspace) {
       if (menuItem.getValue() === RENAME_BROADCAST_MESSAGE_ID) {
-        Blockly.Variables.renameVariable(workspace, this.variable_);
+        promptRenameBroadcast(workspace, this.variable_);
         return;
       }
     }
@@ -60,39 +62,25 @@ export default async function ({ addon, msg }) {
     }
   };
 
-  const _renameVariable = Blockly.Variables.renameVariable;
-  Blockly.Variables.renameVariable = function (workspace, variable, opt_callback) {
-    const varType = variable.type;
-    if (varType === Blockly.BROADCAST_MESSAGE_VARIABLE_TYPE) {
-      const modalTitle = msg("RENAME_BROADCAST_MODAL_TITLE");
-      const validate = Blockly.Variables.nameValidator_.bind(null, varType);
-      const oldName = variable.name;
-      const promptText = msg("RENAME_BROADCAST_TITLE", { name: oldName });
-      const promptDefaultText = oldName;
+  const promptRenameBroadcast = (workspace, variable) => {
+    const modalTitle = msg("RENAME_BROADCAST_MODAL_TITLE");
+    const nameValidator = Blockly.Variables.nameValidator_.bind(null, BROADCAST_VARIABLE_TYPE);
+    const oldName = variable.name;
+    const promptText = msg("RENAME_BROADCAST_TITLE", { name: oldName });
+    const promptDefaultText = oldName;
 
-      Blockly.prompt(
-        promptText,
-        promptDefaultText,
-        function (newName) {
-          const validatedText = validate(newName, workspace);
-          if (validatedText) {
-            renameBroadcast(workspace, variable.getId(), validatedText);
-            if (opt_callback) {
-              opt_callback(newName);
-            }
-          } else {
-            // User canceled prompt without a value.
-            if (opt_callback) {
-              opt_callback(null);
-            }
-          }
-        },
-        modalTitle,
-        varType
-      );
-      return;
-    }
-    return _renameVariable.call(this, workspace, variable, opt_callback);
+    Blockly.prompt(
+      promptText,
+      promptDefaultText,
+      function (newName) {
+        const validatedText = nameValidator(newName, workspace);
+        if (validatedText) {
+          renameBroadcast(workspace, variable.getId(), validatedText);
+        }
+      },
+      modalTitle,
+      BROADCAST_VARIABLE_TYPE
+    );
   };
 
   if (addon.self.enabledLate) {
