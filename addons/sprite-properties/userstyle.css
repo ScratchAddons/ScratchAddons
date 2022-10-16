@@ -20,3 +20,11 @@
 .sa-show-sprite-properties [class^="sprite-selector_scroll-wrapper_"] {
   height: calc(100% - 6.3125rem);
 }
+
+.sa-sprite-properties-close-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background-color: transparent;
+}
