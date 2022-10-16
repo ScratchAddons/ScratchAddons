@@ -35,7 +35,9 @@ export default async function ({ addon, msg, console }) {
 
   const addUndoRedoHook = (callback) => {
     const eventQueue = Blockly.Events.FIRE_QUEUE_;
-    const undoItem = eventQueue[eventQueue.length - 1];
+    // After a rename is emitted, some unrelated garbage events also get emitted
+    // So we should trap the first event
+    const undoItem = eventQueue[0];
     const originalRun = undoItem.run;
     undoItem.run = function (isRedo) {
       originalRun.call(this, isRedo);
