@@ -1,7 +1,8 @@
 export default async function ({ addon, msg }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
-  Blockly.RENAME_BROADCAST_MESSAGE_ID = "RENAME_BROADCAST_MESSAGE_ID";
+  // editor-searchable-dropdowns relies on this value
+  const RENAME_BROADCAST_MESSAGE_ID = "RENAME_BROADCAST_MESSAGE_ID";
 
   const _dropdownCreate = Blockly.FieldVariable.dropdownCreate;
   Blockly.FieldVariable.dropdownCreate = function () {
@@ -12,7 +13,7 @@ export default async function ({ addon, msg }) {
       this.sourceBlock_.workspace.getVariableTypes().includes("broadcast_msg")
     ) {
       // Disabled when workspace has no actual broadcast to rename
-      options.push([msg("RENAME_BROADCAST"), Blockly.RENAME_BROADCAST_MESSAGE_ID]);
+      options.push([msg("RENAME_BROADCAST"), RENAME_BROADCAST_MESSAGE_ID]);
     }
     return options;
   };
@@ -21,7 +22,7 @@ export default async function ({ addon, msg }) {
   Blockly.FieldVariable.prototype.onItemSelected = function (menu, menuItem) {
     const workspace = this.sourceBlock_.workspace;
     if (this.sourceBlock_ && workspace) {
-      if (menuItem.getValue() === Blockly.RENAME_BROADCAST_MESSAGE_ID) {
+      if (menuItem.getValue() === RENAME_BROADCAST_MESSAGE_ID) {
         Blockly.Variables.renameVariable(workspace, this.variable_);
         return;
       }
