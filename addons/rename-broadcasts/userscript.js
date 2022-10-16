@@ -33,6 +33,13 @@ export default async function ({ addon, msg, console }) {
     return _onItemSelected.call(this, menu, menuItem);
   };
 
+  const resetVMCaches = () => {
+    const blockContainers = new Set(vm.runtime.targets.map((i) => i.blocks));
+    for (const blocks of blockContainers) {
+      blocks.resetCache();
+    }
+  };
+
   const addUndoRedoHook = (callback) => {
     const eventQueue = Blockly.Events.FIRE_QUEUE_;
     // After a rename is emitted, some unrelated garbage events also get emitted
@@ -61,12 +68,10 @@ export default async function ({ addon, msg, console }) {
           broadcastOption.value = newName;
         }
       }
-
-      // Scratch internally caches fields. We need to clear that to make sure
-      // our changes go into effect.
-      blockContainer.resetCache();
     }
-  }
+
+    resetVMCaches();
+  };
 
   const renameBroadcast = (workspace, id, oldName, newName) => {
     // Rename it in the editor
@@ -82,6 +87,54 @@ export default async function ({ addon, msg, console }) {
       } else {
         renameBroadcastInVM(id, oldName);
       }
+    });
+  };
+
+  const mergeBroadcast = (workspace, oldId, oldName, newName) => {
+    const newVmVariable = vm.runtime.getTargetForStage().lookupBroadcastByInputValue(newName);
+    const newId = newVmVariable.id;
+
+    // Merge in editor. Undo/redo will work automatically for this.
+    Blockly.Events.setGroup(true);
+    for (const block of workspace.getAllBlocks()) {
+      for (const input of block.inputList) {
+        for (const field of input.fieldRow) {
+          if (field.name === 'BROADCAST_OPTION') {
+            field.setValue(newId);
+          }
+        }
+      }
+    }
+    Blockly.Events.setGroup(false);
+
+    // Merge in VM to update sprites that aren't open. Need to implement manual undo/redo.
+    // To figure out how to undo this operation, we track which blocks we must touch.
+    const vmBlocksToUpdate = [];
+    const blockContainers = new Set(vm.runtime.targets.map(i => i.blocks));
+    for (const blockContainer of blockContainers) {
+      for (const block of Object.values(blockContainer._blocks)) {
+        const broadcastOption = block.fields && block.fields.BROADCAST_OPTION;
+        if (broadcastOption && broadcastOption.id === oldId) {
+          vmBlocksToUpdate.push(block);
+        }
+      }
+    }
+    const applyVmEdits = (isRedo) => {
+      const idToReplaceWith = isRedo ? newId : oldId;
+      const nameToReplaceWith = isRedo ? newName : oldName;
+      for (const block of vmBlocksToUpdate) {
+        const broadcastOption = block.fields.BROADCAST_OPTION;
+        broadcastOption.id = idToReplaceWith;
+        broadcastOption.value = nameToReplaceWith;
+      }
+      resetVMCaches();
+    };
+    applyVmEdits(true);
+
+    // Earlier editor updates are guaranteed to generate at least 1 event that we can hook as the
+    // broadcast block must exist in the editor for the user to rename it.
+    addUndoRedoHook((isRedo) => {
+      applyVmEdits(isRedo);
     });
   };
 
@@ -104,10 +157,10 @@ export default async function ({ addon, msg, console }) {
 
         const variableAlreadyExists = !!workspace.getVariable(newName, BROADCAST_MESSAGE_TYPE);
         if (variableAlreadyExists) {
-          return;
+          mergeBroadcast(workspace, id, oldName, newName);
+        } else {
+          renameBroadcast(workspace, id, oldName, newName);
         }
-
-        renameBroadcast(workspace, id, oldName, newName);
       },
       modalTitle,
       BROADCAST_MESSAGE_TYPE
