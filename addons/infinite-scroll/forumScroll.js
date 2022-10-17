@@ -1,6 +1,6 @@
 export default async function ({ addon, global, console, msg }) {
-  // This line below will always return the element since it will
-  // only run on the category page based on the match.
+  // Present on forum pages with tbody. Used as a switch to
+  // query for table and posts, and determine append/insert location.
   let vf = document.getElementById("vf");
 
   let pageSeparator, pageSeparatorTd;
@@ -50,11 +50,19 @@ export default async function ({ addon, global, console, msg }) {
               table = document.getElementById("djangobbindex");
               posts = doc.getElementById("djangobbindex").getElementsByClassName("blockpost");
             }
-            for (let i = 1; i < posts.length; i++) {
+            // Use an array to iterate, since elements are removed from the live HTMLCollection
+            // 'posts' each time an element is detached during appendChild/insertBefore
+            const postArray = Array.from(posts);
+            // Element 0 is the table header. Skip it with i = 1
+            for (let i = 1; i < postArray.length; i++) {
               if (vf) {
-                table.appendChild(posts[i]);
+                table.appendChild(postArray[i]);
               } else {
-                table.insertBefore(posts[i], table.querySelector(".linksb"));
+                let insertionPoint = table.querySelector(".linksb");
+                if (!insertionPoint) {
+                  insertionPoint = table.querySelector(".postlinksb");
+                }
+                table.insertBefore(postArray[i], insertionPoint);
               }
             }
             lock = false;

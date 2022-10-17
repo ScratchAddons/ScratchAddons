@@ -19,6 +19,15 @@
       "matches": ["projects", "projectEmbeds"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "hide-icon.css",
+      "matches": ["projects", "projectEmbeds"],
+      "if": {
+        "addonEnabled": ["vol-slider"]
+      }
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.7.0",

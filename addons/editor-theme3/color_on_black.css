@@ -8,6 +8,24 @@
   filter: brightness(0) invert(1);
 }
 
+.scratchCommentRect {
+  fill: #282828;
+}
+.scratchCommentBody,
+.scratchCommentTextarea {
+  background-color: #282828;
+}
+.scratchWorkspaceCommentBorder {
+  stroke: var(--editorTheme3-commentColor);
+}
+.scratchCommentTextarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+.scratchCommentText {
+  fill: #ffffff;
+  color: #ffffff;
+}
+
 /* Compatibility */
 
 .sa-block-color {

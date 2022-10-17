@@ -154,6 +154,18 @@
   --sa-block-color: var(--editorTheme3-PenColor);
 }
 
+.sb-comment,
+.sb3-comment,
+.sb-comment-line,
+.sb3-comment-line {
+  fill: var(--editorTheme3-commentColor);
+  stroke: var(--editorTheme3-commentBorder);
+}
+.sb-comment-label,
+.sb3-comment-label {
+  fill: var(--editorTheme3-commentText);
+}
+
 .sb-input-number,
 .sb-input-number-dropdown,
 .sb-input-string {
