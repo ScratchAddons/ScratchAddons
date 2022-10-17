@@ -1,6 +1,7 @@
 export default async function ({ addon, global, console, msg }) {
   const showPropsClass = "sa-show-sprite-properties";
   const hidePropsClass = "sa-hide-sprite-properties";
+  const propsBtnClass = "sa-sprite-properties-btn";
   const propsCloseBtnClass = "sa-sprite-properties-close-btn";
 
   let propertiesPanel = await addon.tab.waitForElement('[class^="sprite-info_sprite-info_"]');
@@ -9,6 +10,16 @@ export default async function ({ addon, global, console, msg }) {
 
   init();
 
+  // Inject info bubble into current editing target
+  addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (e.detail.action.type === "scratch-gui/targets/UPDATE_TARGET_LIST") {
+      let spriteId = e.detail.action.editingTarget;
+      if (!spriteId) return;
+      let spriteIndex = e.detail.action.targets.findIndex((el) => el.id === spriteId);
+      injectInfoButton(spriteIndex);
+    }
+  });
   // Add a single event listener on the entire grid to take advantage of event bubbling
   spriteGrid.addEventListener("click", (e) => {
     let doubleClick = e.detail === 2;
@@ -51,17 +62,35 @@ export default async function ({ addon, global, console, msg }) {
     }
   }
 
+  async function injectInfoButton(spriteIndex) {
+    let selectedSprite;
+    if (spriteIndex) {
+      selectedSprite = document.querySelector(
+        `[class*='sprite-selector_sprite-wrapper_']:nth-child(${spriteIndex}) [class*="sprite-selector_sprite_"]`
+      );
+    } else {
+      selectedSprite = await addon.tab.waitForElement(`[class*="sprite-selector-item_is-selected"]`);
+    }
+    injectButton(selectedSprite, propsBtnClass, "/info.svg", msg("open-properties-panel-tooltip"));
+  }
+
   async function injectCloseButton() {
-    if (propertiesPanel.querySelector("." + propsCloseBtnClass)) return;
-    let closeBtnIcon = document.createElement("img");
-    closeBtnIcon.setAttribute("src", addon.self.dir + "/collapse.svg");
-    let closeBtn = document.createElement("button");
-    closeBtn.classList.add(propsCloseBtnClass);
-    closeBtn.setAttribute("title", msg("close-properties-panel-tooltip"));
-    closeBtn.setAttribute("tabindex", 0);
-    closeBtn.addEventListener("click", () => togglePropertiesPanel());
-    closeBtn.appendChild(closeBtnIcon);
-    propertiesPanel.querySelector("[class*='sprite-info_row_']:nth-child(2)").appendChild(closeBtn);
+    let container = propertiesPanel.querySelector("[class*='sprite-info_row_']:nth-child(2)");
+    injectButton(container, propsCloseBtnClass, "/collapse.svg", msg("close-properties-panel-tooltip"));
+  }
+
+  async function injectButton(container, className, iconPath, tooltip) {
+    if (container.querySelector("." + className)) return;
+    let btnIcon = document.createElement("img");
+    btnIcon.setAttribute("src", addon.self.dir + iconPath);
+    let btn = document.createElement("button");
+    btn.classList.add(className);
+    btn.setAttribute("title", tooltip);
+    btn.setAttribute("tabindex", 0);
+    btn.addEventListener("click", () => togglePropertiesPanel());
+    btn.appendChild(btnIcon);
+    container.appendChild(btn);
+    addon.tab.displayNoneWhileDisabled(btn, { display: "flex" });
   }
 
   function removeCloseButton() {

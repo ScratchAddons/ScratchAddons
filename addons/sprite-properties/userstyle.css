@@ -21,6 +21,30 @@
   height: calc(100% - 6.3125rem);
 }
 
+.sa-sprite-properties-btn {
+  display: none !important;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  width: 1rem;
+  height: 1rem;
+  top: -2px;
+  left: -2px;
+  border: none;
+  border-radius: 100%;
+  background-color: var(--editorDarkMode-primary, hsla(215, 100%, 65%, 1));
+}
+
+.sa-hide-sprite-properties [class*="sprite-selector-item_is-selected"] .sa-sprite-properties-btn {
+  display: flex !important;
+}
+
+.sa-sprite-properties-btn img {
+  width: calc(1rem - 6px);
+  height: calc(1rem - 6px);
+  filter: var(--editorDarkMode-primary-filter);
+}
+
 .sa-sprite-properties-close-btn {
   display: flex;
   justify-content: center;
