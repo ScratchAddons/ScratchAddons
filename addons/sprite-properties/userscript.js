@@ -4,11 +4,11 @@ export default async function ({ addon, global, console, msg }) {
   const propsBtnClass = "sa-sprite-properties-btn";
   const propsCloseBtnClass = "sa-sprite-properties-close-btn";
 
-  let propertiesPanel = await addon.tab.waitForElement('[class^="sprite-info_sprite-info_"]');
-  let spriteContainer = propertiesPanel.parentElement; // also contains sprite grid
-  let spriteGrid = await addon.tab.waitForElement('[class^="sprite-selector_scroll-wrapper_"]');
+  let propertiesPanel;
+  let spriteContainer; // also contains sprite grid
+  let spriteGrid;
 
-  init();
+  await init();
 
   // Inject info bubble into current editing target
   addon.tab.redux.initialize();
@@ -34,8 +34,14 @@ export default async function ({ addon, global, console, msg }) {
     removeCloseButton();
   });
   addon.self.addEventListener("reenabled", () => init());
+  addon.tab.addEventListener("urlchange", () => {
+    if (addon.tab.editorMode === "editor") init();
+  });
 
-  function init() {
+  async function init() {
+    propertiesPanel = await addon.tab.waitForElement('[class^="sprite-info_sprite-info_"]');
+    spriteContainer = propertiesPanel.parentElement; // also contains sprite grid
+    spriteGrid = await addon.tab.waitForElement('[class^="sprite-selector_scroll-wrapper_"]');
     toggleOnLoad();
     injectInfoButton();
     injectCloseButton();
