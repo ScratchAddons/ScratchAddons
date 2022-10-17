@@ -1,10 +1,13 @@
 [class^="sprite-info_sprite-info_"] {
   height: 0;
   padding: 0 0.75rem;
-  border: none;
   overflow: hidden;
   transition-property: height, padding, transform;
   transition-duration: var(--spriteProperties-transitionDuration);
+}
+
+.sa-hide-sprite-properties [class^="sprite-info_sprite-info_"] {
+  border: none;
 }
 
 [class^="sprite-selector_scroll-wrapper_"] {
