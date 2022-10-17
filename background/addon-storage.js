@@ -7,8 +7,8 @@ const _storageState = {};
 
 const promisify =
   (func) =>
-  (...a) =>
-    new Promise((res) => func(...a, res));
+  (...args) =>
+    new Promise((resolve) => func(...args, resolve));
 
 const saveSync = async () => {
   const syncStorage = Object.fromEntries(Object.entries(_storageState).map(([addonID, { sync }]) => [addonID, sync]));
@@ -36,6 +36,8 @@ const loadAddonStorage = async () => {
     "addonStorage"
   );
 
+  console.debug(syncData, localData);
+
   for (const addonID of [...Object.keys(syncData), ...Object.keys(localData)]) {
     if (!(addonID in _storageState)) _storageState[addonID] = createAddonStorageObj();
   }
@@ -45,17 +47,18 @@ const loadAddonStorage = async () => {
   }
   for (const [addonID, local] of Object.entries(localData)) {
     _storageState[addonID].local = local;
-  }
 
-  messageForAllTabs({
-    fireEvent: {
-      target: "storage",
-      name: "load",
-    },
-  });
+    messageForAllTabs({
+      fireEvent: {
+        target: "storage",
+        name: "load",
+      },
+    });
+  }
 };
 
-loadAddonStorage();
+// Will throw if `addonStorage` has not been set yet, but that's fine.
+loadAddonStorage().catch();
 
 function messageForAllTabs(message) {
   chrome.tabs.query({}, (tabs) =>
@@ -74,6 +77,7 @@ function stateChange(addonId, sync = null) {
   });
 
   if (typeof sync === "boolean") {
+    console.debug(sync);
     messageForAllTabs({
       fireEvent: {
         target: sync ? "storage_sync" : "storage_local",
@@ -89,21 +93,16 @@ chrome.runtime.onMessage.addListener((req, s, res) => {
     const { addonID, prop, value, sync } = req.updateAddonStorage;
     if (!(addonID in _storageState)) _storageState[addonID] = createAddonStorageObj();
     _storageState[addonID][sync ? "sync" : "local"][prop] = value;
+    if (sync) {
+      saveSync();
+    } else {
+      saveLocal();
+    }
     stateChange(addonID, sync);
     res();
   } else if (req.getFromAddonStorage) {
     const { addonID, prop, sync } = req.getFromAddonStorage;
     if (!(addonID in _storageState)) _storageState[addonID] = createAddonStorageObj();
     res(_storageState[addonID][sync ? "sync" : "local"][prop]);
-  }
-});
-
-chrome.storage.onChange.addListener((changed, area) => {
-  if (area === "sync" && "addonStorage" in changed && changed.addonStorage.newValue) {
-    const syncData = changed.addonStorage.newValue;
-    for (const [addonID, sync] of Object.entries(syncData)) {
-      _storageState[addonID].sync = sync;
-      stateChange(addonID, true);
-    }
   }
 });

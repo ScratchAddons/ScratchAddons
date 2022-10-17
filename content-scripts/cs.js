@@ -116,6 +116,7 @@ const cs = {
   updateAddonStorage(addonID, prop, value, sync) {
     // Addon called the `addon.storage.*.set` method
     return new Promise((resolve) => {
+      console.debug("set", addonID, prop, value, sync);
       chrome.runtime.sendMessage(
         {
           updateAddonStorage: {
@@ -132,6 +133,7 @@ const cs = {
   getFromAddonStorage(addonID, prop, sync) {
     // Addon called the `addon.storage.*.get` method
     return new Promise((resolve) => {
+      console.debug("get", addonID, sync);
       chrome.runtime.sendMessage(
         {
           getFromAddonStorage: {
@@ -140,7 +142,10 @@ const cs = {
             sync,
           },
         },
-        (value) => resolve(value)
+        (value) => {
+          console.debug(value);
+          resolve(value);
+        }
       );
     });
   },

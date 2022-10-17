@@ -1,4 +1,4 @@
-import Listenable from "./Listenable";
+import Listenable from "./Listenable.js";
 
 /**
  * Manages addon sync and local storage.
