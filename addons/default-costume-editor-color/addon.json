@@ -34,14 +34,14 @@
       "default": 4
     },
     {
-      "name": "Use previous color instead of default when switching tools",
+      "name": "Use previous color instead of resetting after switching tools",
       "id": "persistence",
       "type": "boolean",
       "default": true
     }
   ],
   "versionAdded": "1.26.0",
-  "tags": ["editor", "costumeEditor", "featured", "beta"],
+  "tags": ["editor", "costumeEditor", "featured"],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "enabledByDefault": false

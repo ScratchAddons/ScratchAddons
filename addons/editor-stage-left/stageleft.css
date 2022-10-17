@@ -54,7 +54,8 @@
 }
 
 .Popover {
-  z-index: 40;
+  /* See hide-flyout */
+  z-index: 51;
 }
 
 /* hide-stage compatibility */
@@ -66,7 +67,7 @@
   justify-content: flex-end;
 }
 
-.sa-stage-hidden [dir="rtl"] [class*="stage-header_stage-size-row"] {
+[dir="rtl"] .sa-stage-hidden [class*="stage-header_stage-size-row"] {
   left: auto;
   right: 0.5rem;
 }

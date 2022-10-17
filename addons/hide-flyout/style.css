@@ -1,80 +1,81 @@
 [class*="gui_tabs_"] {
+  /* overridden by other addons */
   --sa-category-width: 60px;
   --sa-flyout-width: 250px;
-  --sa-toolbox-width: calc(var(--sa-category-width) + var(--sa-flyout-width));
 }
 
-.injectionDiv {
-  border-left-color: transparent;
-}
-
-.gui[dir="rtl"] .injectionDiv {
-  border-left-color: var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
-  border-right-color: transparent;
-}
-
-.injectionDiv::after {
-  /* left border of the code area:
-     must be above the flyout and below the extension button */
-  content: "";
-  display: block;
+/* The default left-side border does not work properly when a block is being dragged, */
+/* which lets a 1 pixel column of the flyout be visible. */
+/* To fix this we use two elements that are only visible when a block is being dragged. */
+/* The first element is opaque to cover up the contents with the background color. */
+/* The other element is the transparent border color. */
+.sa-flyout-border-1,
+.sa-flyout-border-2 {
   position: absolute;
+  /* Above flyout but below add extension button */
   z-index: 40;
   top: 0;
   bottom: 8px;
   left: -1px;
-  border-left: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
 }
-
-.gui[dir="rtl"] .injectionDiv::after {
+[dir="rtl"] .sa-flyout-border-1,
+[dir="rtl"] .sa-flyout-border-2 {
   left: auto;
   right: -1px;
 }
+.sa-flyout-border-1 {
+  border-left: 1px solid var(--editorDarkMode-page, hsla(215, 100%, 95%, 1));
+}
+.sa-flyout-border-2 {
+  border-left: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+}
 
 .blocklyFlyout,
-.blocklyFlyoutScrollbar,
-.sa-lock-image {
+.blocklyFlyoutScrollbar {
   transition-property: margin;
 }
 
-.gui[dir="ltr"] .blocklyFlyout.sa-flyoutClose,
-.gui[dir="ltr"] .blocklyFlyoutScrollbar.sa-flyoutClose,
-.gui[dir="ltr"] .sa-lock-image.sa-flyoutClose {
+[dir="ltr"] .blocklyFlyout.sa-flyoutClose,
+[dir="ltr"] .blocklyFlyoutScrollbar.sa-flyoutClose {
   margin-left: calc(0px - var(--sa-flyout-width) - 10px);
 }
 
-.gui[dir="rtl"] .blocklyFlyout.sa-flyoutClose,
-.gui[dir="rtl"] .blocklyFlyoutScrollbar.sa-flyoutClose {
+[dir="rtl"] .blocklyFlyout.sa-flyoutClose,
+[dir="rtl"] .blocklyFlyoutScrollbar.sa-flyoutClose {
   margin-left: calc(var(--sa-flyout-width) + 10px);
-}
-
-.gui[dir="rtl"] .sa-lock-image.sa-flyoutClose {
-  margin-right: calc(0px - var(--sa-flyout-width) - 10px);
 }
 
 .sa-flyout-placeHolder {
   display: var(--hideFlyout-placeholderDisplay) !important;
   position: absolute;
-  top: 0;
-  left: calc(var(--sa-category-width) + 1px);
   height: 100%;
   width: calc(var(--sa-flyout-width) + 1px);
+  top: 0;
+}
+
+[dir="ltr"] .sa-flyout-placeHolder {
+  left: calc(var(--sa-category-width) + 1px);
 }
 
 [dir="rtl"] .sa-flyout-placeHolder {
-  left: auto;
   right: calc(var(--sa-category-width) + 1px);
 }
 
-.sa-lock-image {
+.sa-lock-object {
   display: var(--hideFlyout-lockDisplay) !important;
-  position: absolute;
-  z-index: 20;
-  cursor: pointer;
-  top: 4px;
-  left: calc(var(--sa-toolbox-width) - 15px - 32px);
+  transform: translate(calc(var(--sa-flyout-width) - 15px - 32px), 3px);
   width: 32px;
   height: 32px;
+}
+[dir="rtl"] .sa-lock-object {
+  transform: translate(15px, 3px);
+}
+
+.sa-lock-button {
+  display: flex;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
   padding: 0;
   justify-content: center;
   align-items: center;
@@ -83,35 +84,44 @@
   border-radius: 4px;
 }
 
-.sa-lock-image.locked {
+.sa-lock-object.locked .sa-lock-button {
   background-color: var(--editorDarkMode-primary, #4d97ff);
   border-color: var(--editorDarkMode-primary-variant, #3373cc);
 }
 
-.sa-lock-image img {
+.sa-lock-button img {
   width: 20px;
   filter: var(--editorDarkMode-accent-filter, none);
 }
 
-.sa-lock-image.locked img {
+.sa-lock-object.locked img {
   filter: var(--editorDarkMode-primary-filter, none);
-}
-
-[dir="rtl"] .sa-lock-image {
-  left: auto;
-  right: calc(var(--sa-toolbox-width) - 15px - 32px);
 }
 
 /* Setting these styles on gui_stage-and-target-wrapper breaks full screen */
 .sa-body-editor [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen"]),
 [class*="gui_target-wrapper_"] {
-  /* must cover the hidden palette when editor-stage-left is enabled */
   position: relative;
-  z-index: 31;
   padding-inline: 0.5rem;
   background-color: var(--editorDarkMode-page, hsl(215, 100%, 95%));
+}
+/* Both must be above hidden flyout when dragging block with editor-stage-left enabled */
+/* Both must be above category list when columns is enabled so dragged sprites appear aren't obscured */
+/* Stage wrapper must be above target pane so dragged sprites aren't obscured */
+.sa-body-editor [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen"]) {
+  z-index: 50;
+}
+[class*="gui_target-wrapper_"] {
+  z-index: 49;
 }
 
 [class*="gui_stage-and-target-wrapper_"] {
   padding: 0;
+}
+
+/* https://github.com/ScratchAddons/ScratchAddons/issues/4896 */
+.Popover {
+  /* Above stage wrapper and target pane */
+  /* See editor-stage-left */
+  z-index: 51;
 }
