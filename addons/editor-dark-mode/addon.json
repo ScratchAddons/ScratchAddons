@@ -791,10 +791,6 @@
   "updateUserstylesOnSettingsChange": true,
   "userscripts": [
     {
-      "url": "bubbles.js",
-      "matches": ["projects"]
-    },
-    {
       "url": "paper.js",
       "matches": ["projects"],
       "runAtComplete": false
@@ -817,13 +813,6 @@
       "matches": ["projects"],
       "if": {
         "settings": { "affectPaper": true }
-      }
-    },
-    {
-      "url": "stage.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "affectStage": true }
       }
     }
   ],
@@ -914,18 +903,6 @@
       "allowTransparency": true
     },
     {
-      "name": "Full screen background",
-      "id": "fullscreen",
-      "type": "color",
-      "default": "#000000"
-    },
-    {
-      "name": "Full screen header background",
-      "id": "stageHeader",
-      "type": "color",
-      "default": "#000000"
-    },
-    {
       "name": "Border color",
       "id": "border",
       "type": "color",
@@ -943,12 +920,6 @@
       "id": "affectPaper",
       "type": "boolean",
       "default": true
-    },
-    {
-      "name": "Change the colors of variables, lists, speech bubbles, and answer inputs on the stage",
-      "id": "affectStage",
-      "type": "boolean",
-      "default": false
     }
   ],
   "presets": [
@@ -971,8 +942,6 @@
         "workspace": "#151515",
         "categoryMenu": "#202020",
         "palette": "#202020cc",
-        "fullscreen": "#000000",
-        "stageHeader": "#000000",
         "border": "#ffffff0d",
         "dots": false
       }
@@ -996,8 +965,6 @@
         "workspace": "#273552",
         "categoryMenu": "#2f4066",
         "palette": "#2f4066cc",
-        "fullscreen": "#051638",
-        "stageHeader": "#051638",
         "border": "#00000026",
         "dots": false
       }
@@ -1021,8 +988,6 @@
         "workspace": "#444444",
         "categoryMenu": "#333333",
         "palette": "#222222cc",
-        "fullscreen": "#222222",
-        "stageHeader": "#222222",
         "border": "#111111",
         "dots": false
       }
@@ -1046,8 +1011,6 @@
         "workspace": "#282828",
         "categoryMenu": "#282828",
         "palette": "#333333cc",
-        "fullscreen": "#282828",
-        "stageHeader": "#333333",
         "border": "#444444",
         "dots": true
       }
@@ -1071,8 +1034,6 @@
         "workspace": "#1e1e1e",
         "categoryMenu": "#111111",
         "palette": "#111111cc",
-        "fullscreen": "#111111",
-        "stageHeader": "#111111",
         "border": "#ffffff26",
         "dots": true
       }
@@ -1096,8 +1057,6 @@
         "workspace": "#dddedeff",
         "categoryMenu": "#e6e8e8ff",
         "palette": "#e6e8e8cc",
-        "fullscreen": "#ffffffff",
-        "stageHeader": "#e6e8e8",
         "border": "#d0d1d2",
         "dots": true
       }
@@ -1121,8 +1080,6 @@
         "workspace": "#7c8083",
         "categoryMenu": "#969a9f",
         "palette": "#7c8083cc",
-        "fullscreen": "#000001",
-        "stageHeader": "#000001",
         "border": "#0000006b",
         "dots": false
       }
@@ -1146,8 +1103,6 @@
         "workspace": "#f9f9f9",
         "categoryMenu": "#ffffff",
         "palette": "#f9f9f9cc",
-        "fullscreen": "#ffffff",
-        "stageHeader": "#e8edf1",
         "border": "#00000026",
         "dots": true
       }

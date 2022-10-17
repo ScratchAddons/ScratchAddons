@@ -1,0 +1,269 @@
+{
+  "name": "Project player dark mode and customizable colors",
+  "description": "Customize colors used by the project player. Multiple dark themes by different authors available. If you don't need dark mode but want to change the default colors you can select the \"Scratch's default colors\" preset and tweak it.",
+  "credits": [
+    {
+      "name": "Maximouse",
+      "note": "addon, \"Experimental\" Dark",
+      "id": "addon",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
+    },
+    {
+      "name": "Samq64",
+      "note": "addon",
+      "id": "addon2",
+      "link": "https://github.com/Samq64"
+    },
+    {
+      "name": "infinitytec",
+      "note": "3.Dark, 3.Darker",
+      "id": "darker",
+      "link": "https://github.com/infinitytec"
+    },
+    {
+      "name": "_nix",
+      "note": "Dark editor",
+      "id": "dark",
+      "link": "https://github.com/towerofnix"
+    },
+    {
+      "name": "GarboMuffin",
+      "note": "TurboWarp Dark",
+      "id": "twdark",
+      "link": "https://github.com/GarboMuffin"
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "page-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "primary-filter",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        }
+      }
+    },
+    {
+      "name": "primary-transparent35",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        },
+        "a": 0.35
+      }
+    },
+    {
+      "name": "accent-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        }
+      }
+    },
+    {
+      "name": "input-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        }
+      }
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "injectAsStyleElt": true,
+  "versionAdded": "1.30.0",
+  "updateUserstylesOnSettingsChange": true,
+  "userscripts": [
+    {
+      "url": "bubbles.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "stage.css",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Page background",
+      "id": "page",
+      "type": "color",
+      "default": "#111111"
+    },
+    {
+      "name": "Highlight color",
+      "id": "primary",
+      "type": "color",
+      "default": "#4d97ff"
+    },
+    {
+      "name": "Accent background",
+      "id": "accent",
+      "type": "color",
+      "default": "#151515"
+    },
+    {
+      "name": "Input background",
+      "id": "input",
+      "type": "color",
+      "default": "#202020"
+    },
+    {
+      "name": "Full screen background",
+      "id": "fullscreen",
+      "type": "color",
+      "default": "#000000"
+    },
+    {
+      "name": "Full screen header background",
+      "id": "stageHeader",
+      "type": "color",
+      "default": "#000000"
+    },
+    {
+      "name": "Border color",
+      "id": "border",
+      "type": "color",
+      "default": "#ffffff0d",
+      "allowTransparency": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "3.Darker",
+      "id": "3darker",
+      "description": "A dark theme based on a userscript by infinitytec",
+      "values": {
+        "page": "#111111",
+        "primary": "#4d97ff",
+        "accent": "#151515",
+        "input": "#202020",
+        "fullscreen": "#000000",
+        "stageHeader": "#000000",
+        "border": "#ffffff0d"
+      }
+    },
+    {
+      "name": "3.Dark",
+      "id": "3dark",
+      "description": "A dark blue theme based on a userscript by infinitytec",
+      "values": {
+        "page": "#051638",
+        "primary": "#4d97ff",
+        "accent": "#273552",
+        "input": "#2f4066",
+        "fullscreen": "#051638",
+        "stageHeader": "#051638",
+        "border": "#00000026"
+      }
+    },
+    {
+      "name": "Dark Editor",
+      "id": "darkEditor",
+      "description": "A dark theme based on a userstyle by _nix",
+      "values": {
+        "page": "#2e2e2e",
+        "primary": "#47566b",
+        "accent": "#333333",
+        "input": "#444444",
+        "fullscreen": "#222222",
+        "stageHeader": "#222222",
+        "border": "#111111"
+      }
+    },
+    {
+      "name": "\"Experimental\" Dark",
+      "id": "experimentalDark",
+      "description": "A dark theme by Maximouse based on a userstyle. Not experimental",
+      "values": {
+        "page": "#263241",
+        "primary": "#4d97ff",
+        "accent": "#282828",
+        "input": "#282828",
+        "fullscreen": "#282828",
+        "stageHeader": "#333333",
+        "border": "#444444"
+      }
+    },
+    {
+      "name": "TurboWarp Dark",
+      "id": "tw-dark",
+      "description": "A dark theme based on TurboWarp's dark mode.",
+      "values": {
+        "page": "#111111",
+        "primary": "#ff4d4d",
+        "accent": "#111111",
+        "input": "#1e1e1e",
+        "fullscreen": "#111111",
+        "stageHeader": "#111111",
+        "border": "#ffffff26"
+      }
+    },
+    {
+      "name": "Scratch 2.0",
+      "id": "scratch2",
+      "description": "A theme based on Scratch 2.0's colors.",
+      "values": {
+        "page": "#ffffffff",
+        "primary": "#179fd7ff",
+        "accent": "#f2f2f2",
+        "input": "#ffffffff",
+        "fullscreen": "#ffffffff",
+        "stageHeader": "#e6e8e8",
+        "border": "#d0d1d2"
+      }
+    },
+    {
+      "name": "Scratch 1.x",
+      "id": "scratch1",
+      "description": "A theme based on Scratch 1.x's colors.",
+      "values": {
+        "page": "#c0c3c6",
+        "primary": "#5498c7",
+        "accent": "#959a9f",
+        "input": "#5f6265",
+        "fullscreen": "#000001",
+        "stageHeader": "#000001",
+        "border": "#0000006b"
+      }
+    },
+    {
+      "name": "Scratch's default colors",
+      "id": "scratch",
+      "description": "The colors normally used by Scratch",
+      "values": {
+        "page": "#e5f0ff",
+        "primary": "#4d97ff",
+        "accent": "#ffffff",
+        "input": "#ffffff",
+        "fullscreen": "#ffffff",
+        "stageHeader": "#e8edf1",
+        "border": "#00000026"
+      }
+    }
+  ],
+  "tags": ["editor", "projectPlayer", "theme"],
+  "enabledByDefault": false
+}

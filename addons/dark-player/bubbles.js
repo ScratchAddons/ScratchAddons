@@ -6,7 +6,6 @@ export default async function ({ addon, console }) {
     addon.tab.traps.vm.runtime.once("PROJECT_LOADED", resolve);
   });
   const renderer = addon.tab.traps.vm.runtime.renderer;
-  let usingModifiedCreateTextSkin = false;
 
   const overrideCreateTextSkin = () => {
     const oldCreateTextSkin = renderer.createTextSkin.bind(renderer);
@@ -16,7 +15,7 @@ export default async function ({ addon, console }) {
       const oldRenderTextBubble = skin._renderTextBubble.bind(skin);
       skin._renderTextBubble = (scale) => {
         // Based on code from scratch-render/src/TextBubbleSkin.js
-        if (addon.self.disabled || !addon.settings.get("affectStage")) return oldRenderTextBubble(scale);
+        if (addon.self.disabled) return oldRenderTextBubble(scale);
 
         const BubbleStyle = {
           STROKE_WIDTH: 4, // Thickness of the stroke around the bubble. Only half's visible because it's drawn under the fill
@@ -145,15 +144,9 @@ export default async function ({ addon, console }) {
     }
   };
 
-  if (addon.settings.get("affectStage")) {
-    overrideCreateTextSkin();
-    usingModifiedCreateTextSkin = true;
-  }
+  overrideCreateTextSkin();
+
   addon.settings.addEventListener("change", () => {
-    if (addon.settings.get("affectStage") && !usingModifiedCreateTextSkin) {
-      overrideCreateTextSkin();
-      usingModifiedCreateTextSkin = true;
-    }
     updateBubbles();
   });
   addon.self.addEventListener("disabled", updateBubbles);

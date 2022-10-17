@@ -327,16 +327,6 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
   fill: var(--editorDarkMode-palette-scrollbar);
 }
 
-/* Full screen background */
-.stage-wrapper_stage-wrapper_2bejr.stage-wrapper_full-screen_2hjMb {
-  background-color: var(--editorDarkMode-fullscreen);
-}
-
-/* Full screen stage header background */
-.stage-header_stage-header-wrapper-overlay_5vfJa {
-  background-color: var(--editorDarkMode-stageHeader);
-}
-
 /* Primary color */
 .sprite-selector-item_is-selected_24tQj .sprite-selector-item_sprite-info_-I0i_,
 .delete-button_delete-button-visible_kym6v,
