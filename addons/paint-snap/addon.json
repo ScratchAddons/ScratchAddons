@@ -2,7 +2,7 @@
   "name": "Costume editor snapping",
   "description": "Snap objects in the costume editor to bounding boxes and vector nodes.",
   "tags": ["editor", "costumeEditor", "featured"],
-  "versionAdded": "1.29.0",
+  "versionAdded": "1.30.0",
   "userscripts": [
     {
       "matches": ["projects"],
