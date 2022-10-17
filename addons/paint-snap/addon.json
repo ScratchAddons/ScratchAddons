@@ -31,14 +31,20 @@
     },
     {
       "type": "boolean",
-      "id": "pageEdges",
-      "name": "Snap to page edges",
+      "id": "pageCenter",
+      "name": "Snap to page center",
       "default": true
     },
     {
       "type": "boolean",
-      "id": "pageCenter",
-      "name": "Snap to page center",
+      "id": "pageAxes",
+      "name": "Snap to page x and y axes",
+      "default": true
+    },
+    {
+      "type": "boolean",
+      "id": "pageEdges",
+      "name": "Snap to page edges",
       "default": true
     },
     {
@@ -57,6 +63,12 @@
       "type": "boolean",
       "id": "objectCenters",
       "name": "Snap to object centers",
+      "default": true
+    },
+    {
+      "type": "boolean",
+      "id": "objectMidlines",
+      "name": "Snap to object midlines",
       "default": true
     },
     {

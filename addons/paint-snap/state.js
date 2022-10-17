@@ -5,9 +5,11 @@ export let snapOn = true;
 export const snapTo = {
   pageEdges: true,
   pageCenter: true,
+  pageAxes: true,
   pageCorners: false,
   objectEdges: true,
   objectCenters: true,
+  objectMidlines: true,
   objectCorners: false,
 };
 export const snapFrom = {

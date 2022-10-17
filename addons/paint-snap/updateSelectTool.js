@@ -162,6 +162,10 @@ export const updateSelectTool = (paper, tool, settings) => {
                 type: "point",
                 value: CENTER,
               },
+            }
+          : {}),
+        ...(snapTo.pageAxes
+          ? {
               bounds_cx: {
                 type: "xcoord",
                 value: CENTER.x,
@@ -309,6 +313,15 @@ export const updateSelectTool = (paper, tool, settings) => {
                       value: item.bounds.center,
                     },
                   ],
+                ])
+                .flat(1)
+            )
+          : {}),
+        ...(snapTo.objectMidlines
+          ? Object.fromEntries(
+              paintLayer.children
+                .filter((item) => !item.selected)
+                .map((item) => [
                   [
                     `item_${item.id}_cx`,
                     {
@@ -395,7 +408,7 @@ export const updateSelectTool = (paper, tool, settings) => {
         snapPoints: generateSnapPointsFor(point.add(dragVector)),
       }));
 
-      const priority = ["point", "itemSideVert", "itemSideHoriz", "xcoord", "ycoord", "generated", undefined];
+      const priority = ["itemSideVert", "itemSideHoriz", "point", "xcoord", "ycoord", "generated", undefined];
 
       const sortByPrioOrDist = (a, b) => {
         const prioDiff = priority.indexOf(a.snapPointType) - priority.indexOf(b.snapPointType);

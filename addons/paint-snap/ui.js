@@ -248,9 +248,11 @@ export function initUI({ addon, msg }) {
   const snapToSection = createSection(
     msg("snapTo"),
     createSnapToSetting("pageCenter"),
+    createSnapToSetting("pageAxes"),
     createSnapToSetting("pageEdges"),
     createSnapToSetting("pageCorners"),
     createSnapToSetting("objectCenters"),
+    createSnapToSetting("objectMidlines"),
     createSnapToSetting("objectEdges"),
     createSnapToSetting("objectCorners")
   );
