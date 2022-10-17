@@ -36,8 +36,6 @@ const loadAddonStorage = async () => {
     "addonStorage"
   );
 
-  console.debug(syncData, localData);
-
   for (const addonID of [...Object.keys(syncData), ...Object.keys(localData)]) {
     if (!(addonID in _storageState)) _storageState[addonID] = createAddonStorageObj();
   }
@@ -77,7 +75,6 @@ function stateChange(addonId, sync = null) {
   });
 
   if (typeof sync === "boolean") {
-    console.debug(sync);
     messageForAllTabs({
       fireEvent: {
         target: sync ? "storage_sync" : "storage_local",
