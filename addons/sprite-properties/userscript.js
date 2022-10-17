@@ -34,7 +34,7 @@ export default async function ({ addon, global, console, msg }) {
     removeCloseButton();
   });
   addon.self.addEventListener("reenabled", () => init());
-  addon.tab.addEventListener("urlchange", () => {
+  addon.tab.addEventListener("urlChange", () => {
     if (addon.tab.editorMode === "editor") init();
   });
 
