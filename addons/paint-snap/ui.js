@@ -55,6 +55,14 @@ export function initUI({ addon, msg }) {
 
   const toggleButton = createButton();
   toggleButton.addEventListener("click", () => {
+    if (!snapOn) {
+      if (!Object.values(snapTo).some((e) => e)) {
+        setSnapTo("pageCenter", true);
+      }
+      if (!Object.values(snapFrom).some((e) => e)) {
+        setSnapFrom("boxCenter", true);
+      }
+    }
     toggle(!snapOn);
     toggleButton.dataset.enabled = snapOn;
   });
@@ -69,9 +77,21 @@ export function initUI({ addon, msg }) {
   settingButton.appendChild(createButtonImage("settings"));
   controlsGroup.appendChild(settingButton);
 
+  const settingsOpenUpdaters = [];
+
   const setSettingsOpen = (open) => {
     settingButton.dataset.enabled = open;
     settingsPage.dataset.visible = open;
+    if (open)
+      settingsOpenUpdaters.forEach((f) => {
+        try {
+          f?.();
+        } catch {}
+      });
+    else if (Object.values(snapFrom).every((e) => !e) || Object.values(snapTo).every((e) => !e)) {
+      toggle(false);
+      toggleButton.dataset.enabled = false;
+    }
   };
   const areSettingsOpen = () => settingsPage.dataset.visible === "true";
 
@@ -154,14 +174,27 @@ export function initUI({ addon, msg }) {
     return group;
   };
 
-  const createSettingWithLabel = (label, settingElem) => {
+  const createSettingWithLabel = (settingId, settingElem) => {
     const container = document.createElement("label");
     container.className = "sa-paint-snap-settings-line";
 
     const labelElem = document.createElement("div");
     labelElem.className = "sa-paint-snap-settings-label";
-    labelElem.textContent = label;
+    labelElem.textContent = msg(settingId);
     container.append(labelElem, settingElem);
+
+    settingsOpenUpdaters.push(() => {
+      const onBtn = settingElem.querySelector(`[aria-label="${msg("on")}"]`);
+      const offBtn = settingElem.querySelector(`[aria-label="${msg("off")}"]`);
+      if (settingId in snapTo) {
+        onBtn.dataset.enabled = !!snapTo[settingId];
+        offBtn.dataset.enabled = !snapTo[settingId];
+      }
+      if (settingId in snapFrom) {
+        onBtn.dataset.enabled = !!snapFrom[settingId];
+        offBtn.dataset.enabled = !snapFrom[settingId];
+      }
+    });
 
     return container;
   };
@@ -203,9 +236,11 @@ export function initUI({ addon, msg }) {
   ];
   const createSnapToSetting = (forPoint) =>
     createSettingWithLabel(
-      msg(forPoint),
+      forPoint,
       createToggle(
         ...toggleParams(snapTo[forPoint], (enabled) => {
+          toggle(true);
+          toggleButton.dataset.enabled = true;
           setSnapTo(forPoint, enabled);
         })
       )
@@ -222,7 +257,7 @@ export function initUI({ addon, msg }) {
 
   const createSnapFromSetting = (forPoint) =>
     createSettingWithLabel(
-      msg(forPoint),
+      forPoint,
       createToggle(
         ...toggleParams(snapFrom[forPoint], (enabled) => {
           setSnapFrom(forPoint, enabled);
