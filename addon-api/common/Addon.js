@@ -1,18 +1,21 @@
 import Auth from "./Auth.js";
 import Self from "./Self.js";
 import Settings from "../common/Settings.js";
+import Storage from "./Storage.js";
 
 /**
  * An addon.
  * @property {Self} self
  * @property {Auth} auth
  * @property {Settings} settings
+ * @property {Storage} storage
  */
 export default class Addon {
   constructor(info) {
     this.self = new Self(this, info);
     this.auth = new Auth(this);
     this.settings = new Settings(this);
+    this.storage = new Storage(this);
   }
 
   /**

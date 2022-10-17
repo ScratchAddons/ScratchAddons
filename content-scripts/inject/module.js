@@ -8,6 +8,9 @@ scratchAddons.eventTargets = {
   settings: [],
   tab: [],
   self: [],
+  storage: [],
+  storage_sync: [],
+  storage_local: [],
 };
 scratchAddons.session = {};
 scratchAddons.loadedScripts = {};
@@ -196,6 +199,9 @@ function onDataReady() {
     return _cs_.copyImage(dataURL);
   };
   scratchAddons.methods.getEnabledAddons = (tag) => _cs_.getEnabledAddons(tag);
+  scratchAddons.methods.updateAddonStorage = (addonID, prop, value, sync) =>
+    _cs_.updateAddonStorage(addonID, prop, value, sync);
+  scratchAddons.methods.getFromAddonStorage = (addonID, prop, sync) => _cs_.getFromAddonStorage(addonID, prop, sync);
 
   scratchAddons.sharedObserver = new SharedObserver();
 

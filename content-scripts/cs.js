@@ -113,6 +113,37 @@ const cs = {
       );
     });
   },
+  updateAddonStorage(addonID, prop, value, sync) {
+    // Addon called the `addon.storage.*.set` method
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage(
+        {
+          updateAddonStorage: {
+            addonID,
+            prop,
+            value,
+            sync,
+          },
+        },
+        () => resolve()
+      );
+    });
+  },
+  getFromAddonStorage(addonID, prop, sync) {
+    // Addon called the `addon.storage.*.get` method
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage(
+        {
+          getFromAddonStorage: {
+            addonID,
+            prop,
+            sync,
+          },
+        },
+        (value) => resolve(value)
+      );
+    });
+  },
 };
 Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow));
 
@@ -533,7 +564,6 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
     } else if (request === "refetchSession") {
       _page_.refetchSession();
     }
-    //!
   });
 }
 

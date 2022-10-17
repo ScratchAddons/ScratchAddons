@@ -130,6 +130,24 @@ async function refetchSession(addon) {
       },
     });
 
+  scratchAddons.methods.updateAddonStorage = (addonID, prop, value, sync) =>
+    sendMessage({
+      updateAddonStorage: {
+        addonID,
+        prop,
+        value,
+        sync,
+      },
+    });
+  scratchAddons.methods.getFromAddonStorage = (addonID, prop, sync) =>
+    sendMessage({
+      getFromAddonStorage: {
+        addonID,
+        prop,
+        sync,
+      },
+    });
+
   await refetchCookies();
 
   const addon = new Addon({
