@@ -74,13 +74,12 @@ export default async function ({ addon, msg, console }) {
   };
 
   const renameBroadcast = (workspace, id, oldName, newName) => {
-    // Rename it in the editor
+    // Rename in editor. Undo/redo will work automatically.
     workspace.renameVariableById(id, newName);
 
-    // Rename it in the VM
+    // Rename in VM. Need to manually implement undo/redo.
     renameBroadcastInVM(id, newName);
 
-    // Undo/redo will automatically update the editor, but VM still needs to be updated
     addUndoRedoHook((isRedo) => {
       if (isRedo) {
         renameBroadcastInVM(id, newName);
@@ -108,7 +107,8 @@ export default async function ({ addon, msg, console }) {
     Blockly.Events.setGroup(false);
 
     // Merge in VM to update sprites that aren't open. Need to implement manual undo/redo.
-    // To figure out how to undo this operation, we track which blocks we must touch.
+    // To figure out how to undo this operation, we first figure out which blocks we're
+    // going to touch and keep hold of that list.
     const vmBlocksToUpdate = [];
     const blockContainers = new Set(vm.runtime.targets.map((i) => i.blocks));
     for (const blockContainer of blockContainers) {
