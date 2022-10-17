@@ -99,7 +99,7 @@ export default async function ({ addon, msg, console }) {
     for (const block of workspace.getAllBlocks()) {
       for (const input of block.inputList) {
         for (const field of input.fieldRow) {
-          if (field.name === "BROADCAST_OPTION") {
+          if (field.name === "BROADCAST_OPTION" && field.getValue() === oldId) {
             field.setValue(newId);
           }
         }
