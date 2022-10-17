@@ -202,8 +202,7 @@ img.tool-select-base_tool-select-icon_tJ-rr,
 .paint-editor_button-group-button-icon_10kVn,
 .mode-tools_mode-tools-icon_23c7i,
 img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
-.library-item_featured-extension-metadata-detail_1M9BV img,
-.sa-sprite-properties-close-btn img {
+.library-item_featured-extension-metadata-detail_1M9BV img{
   filter: var(--editorDarkMode-accent-filter);
 }
 .sa-body-editor .stage-header_stage-button-toggled-off_AJ8yG,

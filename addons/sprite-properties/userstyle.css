@@ -1,6 +1,7 @@
 [class^="sprite-info_sprite-info_"] {
   height: 0;
   padding: 0 0.75rem;
+  border: none;
   overflow: hidden;
   transition-property: height, padding, transform;
   transition-duration: var(--spriteProperties-transitionDuration);
@@ -51,4 +52,8 @@
   align-items: center;
   border: none;
   background-color: transparent;
+}
+
+.sa-sprite-properties-close-btn img {
+  filter: var(--editorDarkMode-accent-filter);
 }
