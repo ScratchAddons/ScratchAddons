@@ -214,7 +214,7 @@ export function initUI({ addon, msg }) {
   };
 
   const threshSetting = createSettingWithLabel(
-    msg("threshold"),
+    "threshold",
     createNumberInput(
       threshold,
       (value) => {
