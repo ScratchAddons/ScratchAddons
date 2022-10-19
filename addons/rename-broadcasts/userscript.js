@@ -94,6 +94,7 @@ export default async function ({ addon, msg, console }) {
     const newId = newVmVariable.id;
 
     // Merge in editor. Undo/redo will work automatically for this.
+    // Use group so that everything here is undone/redone at the same time.
     Blockly.Events.setGroup(true);
     for (const block of workspace.getAllBlocks()) {
       for (const input of block.inputList) {
@@ -104,9 +105,12 @@ export default async function ({ addon, msg, console }) {
         }
       }
     }
+    // Remove the broadcast from the editor so it doesn't appear in dropdowns.
+    // Undo/redo will work automatically for this.
+    workspace.deleteVariableById(oldId);
     Blockly.Events.setGroup(false);
 
-    // Merge in VM to update sprites that aren't open. Need to implement manual undo/redo.
+    // Merge in VM to update sprites that aren't open. Need to manually implement undo/redo.
     // To figure out how to undo this operation, we first figure out which blocks we're
     // going to touch and keep hold of that list.
     const vmBlocksToUpdate = [];
