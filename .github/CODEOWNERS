@@ -1,1 +1,7 @@
 /.github/ @Hans5958
+/addons/addons.json @WorldLanguages  # New addons
+/addon-api @WorldLanguages @apple502j
+/background @WorldLanguages @apple502j
+/content-scripts @WorldLanguages @apple502j
+/libraries @WorldLanguages @apple502j
+manifest.json @WorldLanguages @apple502j
