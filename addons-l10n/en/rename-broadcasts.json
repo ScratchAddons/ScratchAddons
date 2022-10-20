@@ -1,0 +1,5 @@
+{
+  "rename-broadcasts/RENAME_BROADCAST": "Rename broadcast",
+  "rename-broadcasts/RENAME_BROADCAST_TITLE": "Rename all \"{name}\" broadcasts to:",
+  "rename-broadcasts/RENAME_BROADCAST_MODAL_TITLE": "Rename Broadcast"
+}

@@ -1,6 +1,6 @@
 @import url("../editor-theme3/compatibility.css");
 
-.find-bar {
+.sa-find-bar {
   display: flex;
   align-items: center;
   white-space: nowrap;
@@ -9,7 +9,7 @@
   height: 100%;
 }
 
-.find-bar > label {
+.sa-find-bar > label {
   /* padding instead of margin so clicking on the empty area will select the input */
   padding-left: 1.5em;
   padding-right: 1em;
@@ -21,12 +21,12 @@
   padding-top: 2px;
 }
 
-[dir="rtl"] .find-bar > label {
+[dir="rtl"] .sa-find-bar > label {
   padding-right: 1.5em;
   padding-left: 1em;
 }
 
-.find-wrapper {
+.sa-find-wrapper {
   overflow: visible;
   position: relative;
   height: 2rem;
@@ -34,7 +34,7 @@
   max-width: 16em;
 }
 
-.find-dropdown-out {
+.sa-find-dropdown-out {
   display: block;
   top: -6px;
   z-index: 100;
@@ -47,7 +47,7 @@
   margin-top: 6px;
 }
 
-.find-dropdown-out.visible {
+.sa-find-dropdown-out.visible {
   position: absolute;
   width: 16em;
   box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
@@ -63,7 +63,7 @@
   flex-grow: 0;
 }
 
-.find-input {
+.sa-find-input {
   width: 100%;
   box-sizing: border-box !important;
   /* !important required for extension, because CSS injection method (and hence order) differs from addon */
@@ -75,12 +75,12 @@
   padding-left: 0.4em;
 }
 
-.find-input:focus {
+.sa-find-input:focus {
   /* Change Scratch default styles */
   box-shadow: none;
 }
 
-.find-dropdown {
+.sa-find-dropdown {
   display: none;
   position: relative;
   padding: 0.2em 0;
@@ -95,11 +95,11 @@
   border: none;
 }
 
-.find-dropdown-out.visible > .find-dropdown {
+.sa-find-dropdown-out.visible > .sa-find-dropdown {
   display: block;
 }
 
-.find-dropdown > li {
+.sa-find-dropdown > li {
   display: block;
   padding: 0.5em 0.3em;
   white-space: nowrap;
@@ -109,50 +109,39 @@
   overflow: hidden;
 }
 
-.find-dropdown > li > b {
+.sa-find-dropdown > li > b {
   background-color: #aaffaa;
   color: black;
 }
 
 /* Drop down items */
-.find-dropdown > li:hover,
-.find-dropdown > li.sel {
+.sa-find-dropdown > li:hover,
+.sa-find-dropdown > li.sel {
   color: white;
   cursor: pointer;
 }
 
-.find-dropdown > li::before {
+.sa-find-dropdown > li::before {
   content: "\25CF "; /* ● */
 }
 
-.flag {
+.sa-find-flag {
   color: #4cbf56;
 }
-.flag:hover,
-.flag.sel {
+.sa-find-flag:hover,
+.sa-find-flag.sel {
   background-color: #4cbf56;
 }
 
-.costume,
-.sound {
-  color: rgb(26, 66, 255);
-}
-.costume:hover,
-.costume.sel,
-.sound:hover,
-.sound.sel {
-  background-color: rgb(26, 66, 255);
-}
-
-.find-dropdown .sa-block-color {
+.sa-find-dropdown .sa-block-color {
   color: var(--sa-block-colored-text);
 }
-.find-dropdown .sa-block-color:hover,
-.find-dropdown .sa-block-color.sel {
+.sa-find-dropdown .sa-block-color:hover,
+.sa-find-dropdown .sa-block-color.sel {
   background-color: var(--sa-block-bright-background);
 }
 
-.find-carousel {
+.sa-find-carousel {
   font-weight: normal;
   position: absolute;
   right: 0;
@@ -162,10 +151,10 @@
   padding: 0;
 }
 
-.find-carousel-control {
+.sa-find-carousel-control {
   padding: 0 6px;
 }
 
-.find-carousel-control:hover {
+.sa-find-carousel-control:hover {
   color: #ffff80;
 }

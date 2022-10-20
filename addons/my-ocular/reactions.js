@@ -3,7 +3,7 @@ export default async function ({ addon, global, console, msg }) {
   const isLoggedIn = await addon.auth.fetchIsLoggedIn();
   const username = await addon.auth.fetchUsername();
 
-  posts.forEach(async (i) => {
+  for (const i of posts) {
     let postID = i.id.split("p")[1];
 
     let viewOnOcularContainer = document.createElement("li");
@@ -149,9 +149,9 @@ export default async function ({ addon, global, console, msg }) {
       });
       addon.tab.appendToSharedSpace({ space: "forumsBeforePostReport", scope: i, element: reactionList, order: 0 });
 
-      makeReactionList();
+      await makeReactionList();
     }
-  });
+  }
 
   async function fetchReactions(id) {
     const response = await fetch(`https://my-ocular.jeffalo.net/api/reactions/${id}`);
