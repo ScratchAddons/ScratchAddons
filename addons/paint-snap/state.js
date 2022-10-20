@@ -34,6 +34,7 @@ export function loadSettings({ settings }) {
     if (Object.prototype.hasOwnProperty.call(snapFrom, point)) setSnapFrom(point, settings.get(point));
   }
   setThreshold(settings.get("threshold"));
+  toggle(settings.get("enable-default"));
 }
 
 // Will update for addon storage api, but not yet.
