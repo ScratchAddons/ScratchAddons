@@ -8,11 +8,12 @@ const getMoveTool = (tool) => {
 
 /** @type {(paper: any, tool: any, settings: import("../../addon-api/content-script/typedef").UserscriptAddon["settings"]) => Promise<void>} */
 export const updateSelectTool = (paper, tool, settings) => {
+  const lib = loadModules(paper);
   const {
     math: { checkPointsClose, snapDeltaToAngle },
     view: { getActionBounds, CENTER, ART_BOARD_BOUNDS, MAX_WORKSPACE_BOUNDS },
     layer: { getDragCrosshairLayer, CROSSHAIR_FULL_OPACITY, getLayer },
-  } = loadModules(paper);
+  } = lib;
 
   const moveTool = getMoveTool(tool);
 
@@ -378,8 +379,6 @@ export const updateSelectTool = (paper, tool, settings) => {
             )
           : {}),
       };
-
-      if (!window.snapPointDefs) window.snapPointDefs = snapPointDefs;
 
       const configDefFn = (pointDef) => {
         if (!pointDef.clamp)
