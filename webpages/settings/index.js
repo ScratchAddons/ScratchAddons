@@ -110,7 +110,9 @@ let fuse;
       } else {
         addonsEnabled[addonId] = addonValue.enabled;
       }
-      addonSettings[addonId] = Object.assign({}, addonSettings[addonId], addonValue.settings);
+      addonSettings[addonId] = Object.assign({}, addonSettings[addonId]);
+      delete addonSettings[addonId]._version;
+      Object.assign(addonSettings[addonId], addonValue.settings);
     }
     if (handleConfirmClicked) confirmElem.removeEventListener("click", handleConfirmClicked, { once: true });
     let resolvePromise = null;
