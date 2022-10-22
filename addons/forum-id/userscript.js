@@ -1,5 +1,7 @@
+import { setupForumId, getIDLink } from "../better-quoter/module.js";
 /* global $, paste */
 export default async function ({ addon, console, msg }) {
+  setupForumId(addon);
   const buttons = document.querySelectorAll(".postfootright");
   buttons.forEach(function (elm) {
     const addBtn = document.createElement("li");
@@ -15,7 +17,7 @@ export default async function ({ addon, console, msg }) {
     let idName = e.target.closest(".blockpost").querySelector(".box-head > .conr").textContent;
     let id = e.target.closest(".blockpost").id.substring(1);
     window.paste(getIDLink(id, idName, true));
-  }
+  }/*
   function getIDLink(id, name, addSpace) {
     return `[url=https://scratch.mit.edu/discuss/post/${id}/]${name}[/url]${addSpace ? " " : ""}`;
   }
@@ -28,16 +30,14 @@ export default async function ({ addon, console, msg }) {
     }
     var post = $("#" + id);
     var username = post.find(".username").text();
-    $.ajax("/discuss/post/" + id.substr(1) + "/source/").done(function (data) {
-      paste(
+    paste(
         "[quote=" +
           username +
           "][small](" +
           getIDLink(id.substring(1), post["0"].querySelector(".box-head > .conr").textContent, false) +
           ")[/small]\n" +
-          data +
+          getPostText(id) +
           "[/quote]\n"
       );
-    });
-  };
+  };*/
 }
