@@ -1,8 +1,7 @@
 export default async function ({ addon }) {
   const query = addon.settings.get("allPosts") == true ? ".post_body_html > img, blockquote > img" : "blockquote > img";
 
-  document.querySelectorAll(query).forEach(image => {
-
+  document.querySelectorAll(query).forEach((image) => {
     let details = document.createElement("details");
     let summary = document.createElement("summary");
     let newImage = document.createElement("img");
@@ -17,5 +16,5 @@ export default async function ({ addon }) {
     summary.style.fontStyle = "italic";
     details.style.cursor = "pointer";
     details.style.userSelect = "none";
-  })
+  });
 }

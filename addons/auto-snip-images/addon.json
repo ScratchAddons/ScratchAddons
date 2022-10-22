@@ -10,9 +10,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "https://scratch.mit.edu/discuss/topic/*"
-      ]
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
     }
   ],
   "versionAdded": "1.29.0",
@@ -26,8 +24,5 @@
       "default": false
     }
   ],
-  "tags": [
-    "forums",
-    "community"
-  ]
+  "tags": ["forums", "community"]
 }
