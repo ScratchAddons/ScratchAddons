@@ -1,0 +1,33 @@
+{
+  "name": "Auto snip images in forums",
+  "description": "Auto snip images in forums",
+  "credits": [
+    {
+      "name": "Chiroyce",
+      "link": "https://github.com/Chiroyce1"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": [
+        "https://scratch.mit.edu/discuss/topic/*"
+      ]
+    }
+  ],
+  "versionAdded": "1.29.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "settings": [
+    {
+      "name": "Snip all images (even ones outside a quote)",
+      "id": "allPosts",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "tags": [
+    "forums",
+    "community"
+  ]
+}
