@@ -7,13 +7,39 @@
       "matches": ["https://scratch.mit.edu/"]
     }
   ],
-  "userstyles": [
+  "settings": [
     {
-      "url": "userstyle.css",
-      "matches": ["https://scratch.mit.edu/"]
+      "name": "rows",
+      "id": "rowData",
+      "type": "table",
+      "row": [
+        {
+          "name": "Name",
+          "id": "rowName",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "name": "Show",
+          "id": "rowVisibility",
+          "type": "boolean",
+          "default": true
+        }
+      ],
+      "default": [
+        { "rowName": "What's Happening", "rowVisibility": true },
+        { "rowName": "Scratch News", "rowVisibility": true },
+        { "rowName": "Featured Projects", "rowVisibility": true },
+        { "rowName": "Featured Studios", "rowVisibility": true },
+        { "rowName": "Projects Curated by", "rowVisibility": true },
+        { "rowName": "Scratch Design Studio", "rowVisibility": true },
+        { "rowName": "Projects Loved by Scratchers I'm Following", "rowVisibility": true },
+        { "rowName": "What the Community is Remixing", "rowVisibility": true },
+        { "rowName": "What the Community is Loving", "rowVisibility": true }
+      ]
     }
   ],
-  "versionAdded": "1.26.1",
+  "versionAdded": "1.29.0",
   "tags": ["community"],
   "enabledByDefault": false,
   "dynamicDisable": true,
