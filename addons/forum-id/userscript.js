@@ -17,7 +17,7 @@ export default async function ({ addon, console, msg }) {
     let idName = e.target.closest(".blockpost").querySelector(".box-head > .conr").textContent;
     let id = e.target.closest(".blockpost").id.substring(1);
     window.paste(getIDLink(id, idName, true));
-  }/*
+  } /*
   function getIDLink(id, name, addSpace) {
     return `[url=https://scratch.mit.edu/discuss/post/${id}/]${name}[/url]${addSpace ? " " : ""}`;
   }
