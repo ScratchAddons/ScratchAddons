@@ -114,7 +114,7 @@ export default async function ({ addon, console }) {
   };
   const textColor = (field) => {
     if (addon.self.disabled || textMode === "white") return "#ffffff";
-    if (textMode === "black") return "#575e75";
+    if (textMode === "black") return "#000000";
     if (field) return field.sourceBlock_.getColourTertiary();
     return "#000000";
   };

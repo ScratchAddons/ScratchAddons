@@ -1,7 +1,10 @@
-.sb-label {
-  fill: black;
-}
+.sb-label,
 .sb3-label,
 #sb3-dropdownArrow path {
-  fill: #575e75;
+  fill: black;
+}
+
+.sb3-label.sb3-literal-number,
+.sb3-label.sb3-literal-string {
+  fill: var(--editorTheme3-inputColor-blackText);
 }
