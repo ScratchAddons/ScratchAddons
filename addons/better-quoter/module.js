@@ -177,7 +177,7 @@ function getSelectionBBCode(selection) {
     );
     quote.insertAdjacentText("beforeend", "[/quote]\n");
   }
-  
+
   // remove any 'copy code' buttons added by forums-copy-code
   const copyCodeBtns = html.querySelectorAll("div.sa-copyCodeDiv");
   for (const ccbtn of copyCodeBtns) {
