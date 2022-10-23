@@ -117,7 +117,7 @@
 /* Drop down items */
 .sa-find-dropdown > li:hover,
 .sa-find-dropdown > li.sel {
-  color: white;
+  color: var(--sa-block-text-on-bright-background);
   cursor: pointer;
 }
 

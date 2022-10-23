@@ -117,6 +117,8 @@ export default async function ({ addon, console }) {
     }
     if (isColoredTextMode())
       return alphaBlend(primaryColor(category), multiply(addon.settings.get(category.settingId), { a: 0.25 }));
+    if (textMode === "black")
+      return brighten(primaryColor(category), { r: 0.4, g: 0.4, b: 0.4 });
     return tertiaryColor(category);
   };
   const textColor = (field) => {

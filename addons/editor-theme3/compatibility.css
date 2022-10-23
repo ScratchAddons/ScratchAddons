@@ -2,7 +2,7 @@
 
 .sa-block-color {
   --sa-block-colored-background: var(--sa-block-background-primary);
-  --sa-block-colored-background-secondary: var(--sa-block-background-tertiary);
+  --sa-block-colored-background-secondary: var(--sa-block-field-background);
   --sa-block-bright-background: var(--sa-block-background-primary);
   --sa-block-text: white;
   --sa-block-gray-text: white;
