@@ -1,3 +1,5 @@
+@namespace xlink url("http://www.w3.org/1999/xlink");
+
 .scratchCategoryItemBubble::after {
   /* block-palette-icons */
   filter: brightness(0);
@@ -8,6 +10,12 @@
 }
 .blocklyHtmlInput {
   color: var(--editorTheme3-inputColor-blackText);
+}
+
+[class*="blocks_blocks_"] image[xlink|href$="/rotate-left.svg"],
+[class*="blocks_blocks_"] image[xlink|href$="/rotate-right.svg"],
+[class*="blocks_blocks_"] image[xlink|href$="/repeat.svg"] {
+  filter: invert(1) hue-rotate(180deg);
 }
 
 .blocklyDropDownDiv .goog-menuitem,

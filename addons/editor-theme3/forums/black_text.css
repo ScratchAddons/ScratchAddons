@@ -51,7 +51,10 @@
 
 .sb-label,
 .sb3-label,
-#sb3-dropdownArrow path {
+#sb3-dropdownArrow path,
+#sb3-loopArrow path[fill="#fff"],
+#sb3-turnLeft path[fill="#fff"],
+#sb3-turnRight path[fill="#fff"] {
   fill: black;
 }
 
