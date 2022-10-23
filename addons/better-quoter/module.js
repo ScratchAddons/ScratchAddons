@@ -1,3 +1,5 @@
+/* global $, paste */
+
 let forumIdAddon = null;
 let betterQuoterAddon = null;
 let isSetup = false;
@@ -175,7 +177,7 @@ function getSelectionBBCode(selection) {
     );
     quote.insertAdjacentText("beforeend", "[/quote]\n");
   }
-
+  
   // remove any 'copy code' buttons added by forums-copy-code
   const copyCodeBtns = html.querySelectorAll("div.sa-copyCodeDiv");
   for (const ccbtn of copyCodeBtns) {
@@ -187,7 +189,7 @@ function getSelectionBBCode(selection) {
 
 function setup() {
   if (isSetup) return;
-
+  isSetup = true;
   const originalCopyPaste = window.copy_paste;
   window.copy_paste = function (id) {
     const post = $("#" + id);
