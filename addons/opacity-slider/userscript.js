@@ -192,6 +192,9 @@ export default async function ({ addon, console, msg }) {
     rowHeader.appendChild(labelReadout);
     saOpacitySlider.appendChild(saOpacitySliderBg);
     saOpacitySlider.appendChild(saOpacityHandle);
-    element.parentElement.querySelector("div:nth-child(4)").after(containerWrapper);
+    const brightnessSlider = Array.from(element.parentElement.children).filter(
+      (e) => !e.querySelector("div[class*=color-picker_gradient-picker-row]")
+    )[2];
+    brightnessSlider.after(containerWrapper);
   }
 }
