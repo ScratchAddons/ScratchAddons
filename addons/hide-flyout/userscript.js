@@ -17,9 +17,9 @@ export default async function ({ addon, global, console, msg }) {
   function getSpeedValue() {
     let data = {
       none: "0",
-      short: "0.19",
-      default: "0.31",
-      long: "0.46",
+      short: "0.2",
+      default: "0.3",
+      long: "0.5",
     };
     return data[addon.settings.get("speed")];
   }
