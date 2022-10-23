@@ -186,6 +186,8 @@ export default async function ({ addon, console, msg }) {
     };
     addon.tab.redux.addEventListener("statechanged", prevEventHandler);
 
+    if (addon.tab.redux.state.scratchPaint.format !== "VECTOR") continue;
+
     containerWrapper.appendChild(rowHeader);
     containerWrapper.appendChild(saOpacitySlider);
     rowHeader.appendChild(saLabelName);
