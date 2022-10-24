@@ -1,14 +1,13 @@
 import createSnapPoints from "./genSnapPoints.js";
 import { loadModules, Modes, BitmapModes } from "./helpers.js";
 
-import { snapOn, threshold, toggle, setGuideColor, guideColor } from "./state.js";
+import { snapOn, threshold, guideColor } from "./state.js";
 
 const getMoveTool = (tool) => {
   return tool.boundingBoxTool._modeMap.MOVE;
 };
 
-/** @type {(paper: any, tool: any, settings: import("../../addon-api/content-script/typedef").UserscriptAddon["settings"]) => Promise<void>} */
-export const updateSelectTool = (paper, tool, settings) => {
+export const updateSelectTool = (paper, tool) => {
   const lib = loadModules(paper);
   const {
     math: { checkPointsClose, snapDeltaToAngle },
@@ -17,10 +16,6 @@ export const updateSelectTool = (paper, tool, settings) => {
   } = lib;
 
   const moveTool = getMoveTool(tool);
-
-  toggle(settings.get("enable-default"));
-  setGuideColor(settings.get("guide-color"));
-  settings.addEventListener("change", () => setGuideColor(settings.get("guide-color")));
 
   // https://github.com/LLK/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/helper/selection-tools/move-tool.js
 
@@ -37,7 +32,6 @@ export const updateSelectTool = (paper, tool, settings) => {
       noSelect: true,
       noHover: true,
       saPaintSnapGuide: true,
-      saPaintSnapGuideLine: true,
     },
     selected: false,
   });
@@ -164,7 +158,7 @@ export const updateSelectTool = (paper, tool, settings) => {
         snapPoints: generateSnapPointsFor(point.add(dragVector)),
       }));
 
-      const priority = ["itemSideVert", "itemSideHoriz", "point", "xcoord", "ycoord", "generated", undefined];
+      const priority = ["point", "itemSideVert", "itemSideHoriz", "xcoord", "ycoord", "generated", undefined];
 
       const sortByPrioOrDist = (a, b) => {
         const prioDiff = priority.indexOf(a.snapPointType) - priority.indexOf(b.snapPointType);
