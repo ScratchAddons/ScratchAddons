@@ -12,7 +12,7 @@ export const updateScaleTool = (paper, tool) => {
   window.paper = paper;
   const lib = loadModules(paper);
   const {
-    view: { getActionBounds, MAX_WORKSPACE_BOUNDS },
+    view: { getActionBounds },
     layer: { getLayer },
   } = lib;
 
@@ -418,8 +418,8 @@ export const updateScaleTool = (paper, tool) => {
         }
         case "xcoord":
         case "itemSideVert": {
-          axisLineX.firstSegment.point = new paper.Point(closestSnapX.coord.value, MAX_WORKSPACE_BOUNDS.top);
-          axisLineX.lastSegment.point = new paper.Point(closestSnapX.coord.value, MAX_WORKSPACE_BOUNDS.bottom);
+          axisLineX.firstSegment.point = new paper.Point(closestSnapX.coord.value, bounds.top);
+          axisLineX.lastSegment.point = new paper.Point(closestSnapX.coord.value, bounds.bottom);
           axisLineX.visible = true;
           axisLineX.bringToFront();
           break;
@@ -485,8 +485,8 @@ export const updateScaleTool = (paper, tool) => {
         }
         case "ycoord":
         case "itemSideHoriz": {
-          axisLineY.firstSegment.point = new paper.Point(MAX_WORKSPACE_BOUNDS.left, closestSnapY.coord.value);
-          axisLineY.lastSegment.point = new paper.Point(MAX_WORKSPACE_BOUNDS.right, closestSnapY.coord.value);
+          axisLineY.firstSegment.point = new paper.Point(bounds.left, closestSnapY.coord.value);
+          axisLineY.lastSegment.point = new paper.Point(bounds.right, closestSnapY.coord.value);
           axisLineY.visible = true;
           axisLineY.bringToFront();
           break;

@@ -11,7 +11,7 @@ export const updateSelectTool = (paper, tool) => {
   const lib = loadModules(paper);
   const {
     math: { checkPointsClose, snapDeltaToAngle },
-    view: { getActionBounds, CENTER, ART_BOARD_BOUNDS, MAX_WORKSPACE_BOUNDS },
+    view: { getActionBounds, CENTER },
     layer: { getDragCrosshairLayer, CROSSHAIR_FULL_OPACITY, getLayer },
   } = lib;
 
@@ -208,16 +208,16 @@ export const updateSelectTool = (paper, tool) => {
             }
             case "xcoord":
             case "itemSideVert": {
-              guideLine.firstSegment.point = new paper.Point(closestSnapPoint.snapPoint.x, MAX_WORKSPACE_BOUNDS.top);
-              guideLine.lastSegment.point = new paper.Point(closestSnapPoint.snapPoint.x, MAX_WORKSPACE_BOUNDS.bottom);
+              guideLine.firstSegment.point = new paper.Point(closestSnapPoint.snapPoint.x, actionBounds.top);
+              guideLine.lastSegment.point = new paper.Point(closestSnapPoint.snapPoint.x, actionBounds.bottom);
               guideLine.visible = true;
               guideLine.bringToFront();
               break;
             }
             case "ycoord":
             case "itemSideHoriz": {
-              guideLine.firstSegment.point = new paper.Point(MAX_WORKSPACE_BOUNDS.left, closestSnapPoint.snapPoint.y);
-              guideLine.lastSegment.point = new paper.Point(MAX_WORKSPACE_BOUNDS.right, closestSnapPoint.snapPoint.y);
+              guideLine.firstSegment.point = new paper.Point(actionBounds.left, closestSnapPoint.snapPoint.y);
+              guideLine.lastSegment.point = new paper.Point(actionBounds.right, closestSnapPoint.snapPoint.y);
               guideLine.visible = true;
               guideLine.bringToFront();
               break;
