@@ -76,7 +76,7 @@ let fuse;
 
   const serializeSettings = async () => {
     const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
-    const storedSettings = await syncGet(["globalTheme", "addonSettings", "addonsEnabled"]);
+    const storedSettings = await syncGet(["globalTheme", "addonSettings", "addonsEnabled", "addonStorage"]);
     const serialized = {
       core: {
         lightTheme: storedSettings.globalTheme,
@@ -88,6 +88,7 @@ let fuse;
       serialized.addons[addonId] = {
         enabled: storedSettings.addonsEnabled[addonId],
         settings: storedSettings.addonSettings[addonId] || {},
+        storage: storedSettings.addonStorage[addonId] || {},
       };
     }
     return JSON.stringify(serialized);
@@ -97,7 +98,11 @@ let fuse;
     const obj = JSON.parse(str);
     const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
     const syncSet = promisify(chrome.storage.sync.set.bind(chrome.storage.sync));
-    const { addonSettings, addonsEnabled } = await syncGet(["addonSettings", "addonsEnabled"]);
+    const { addonSettings, addonsEnabled, addonStorage } = await syncGet([
+      "addonSettings",
+      "addonsEnabled",
+      "addonStorage",
+    ]);
     const pendingPermissions = {};
     for (const addonId of Object.keys(obj.addons)) {
       const addonValue = obj.addons[addonId];
@@ -111,6 +116,7 @@ let fuse;
         addonsEnabled[addonId] = addonValue.enabled;
       }
       addonSettings[addonId] = Object.assign({}, addonSettings[addonId], addonValue.settings);
+      addonStorage[addonId] = Object.assign({}, addonStorage[addonId], addonValue.storage);
     }
     if (handleConfirmClicked) confirmElem.removeEventListener("click", handleConfirmClicked, { once: true });
     let resolvePromise = null;
@@ -132,6 +138,7 @@ let fuse;
         globalTheme: !!obj.core.lightTheme,
         addonsEnabled,
         addonSettings: minifySettings(addonSettings, prerelease ? null : manifests),
+        addonStorage,
       });
       resolvePromise();
     };
