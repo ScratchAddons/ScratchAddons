@@ -72,7 +72,7 @@ export default function createScalePoints(paper, lib, objects, sx, sy) {
             ? {
                 bounds_w: {
                   type: "width",
-                  value: new paper.Point(CENTER.x, CENTER.y),
+                  value: CENTER.y,
                   clamp: {
                     min: ART_BOARD_BOUNDS.left,
                     max: ART_BOARD_BOUNDS.right,
@@ -84,7 +84,7 @@ export default function createScalePoints(paper, lib, objects, sx, sy) {
             ? {
                 bounds_h: {
                   type: "height",
-                  value: new paper.Point(CENTER.x, CENTER.y),
+                  value: CENTER.x,
                   clamp: {
                     min: ART_BOARD_BOUNDS.bottom,
                     max: ART_BOARD_BOUNDS.top,
