@@ -16,8 +16,6 @@ export default class DevTools {
     this.costTab = null;
     this.costTabBody = null;
     this.selVarID = null;
-    this.floatInp = null;
-    this.blockCursor = null;
     this.canShare = false;
 
     this.mouseXY = { x: 0, y: 0 };

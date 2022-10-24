@@ -41,7 +41,7 @@
   font-size: 0.75rem;
   line-height: 1;
   overflow-y: auto;
-  max-height: 65vh;
+  min-height: 128px;
   user-select: none;
   max-width: 100%;
   max-height: 200px;

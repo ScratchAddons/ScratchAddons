@@ -104,6 +104,15 @@ export default async function ({ addon, msg, global, console }) {
         return;
       }
 
+      this.createDraggingBlock(sel, e);
+
+      if (e.shiftKey) {
+        this.floatBar.style.display = "";
+        this.floatInput.focus();
+      }
+    }
+
+    createDraggingBlock(sel, e) {
       let option = sel.data.option;
       // block:option.block, dom:option.dom, option:option.option
       if (option.option) {
@@ -113,7 +122,7 @@ export default async function ({ addon, msg, global, console }) {
           field.innerText = option.option[0];
           field.setAttribute("id", option.option[1] + "-" + option.option[0]);
         } else {
-          field.innerText = option.option[1]; // griffpatch - oops! option.option[1] not 0?
+          field.innerText = option.option[1];
         }
 
         // Handle "stop other scripts in sprite"
@@ -122,22 +131,13 @@ export default async function ({ addon, msg, global, console }) {
         }
       }
 
-      this.createDraggingBlock(option.dom, e, sel);
-
-      if (e.shiftKey) {
-        this.floatBar.style.display = "";
-        this.floatInput.focus();
-      }
-    }
-
-    createDraggingBlock(xml, e, sel) {
       // This is mostly copied from https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/scratch_blocks_utils.js#L171
       // Some bits were removed or changed to fit our needs.
       this.workspace.setResizesEnabled(false);
 
       Blockly.Events.disable();
       try {
-        var newBlock = Blockly.Xml.domToBlock(xml, this.workspace);
+        var newBlock = Blockly.Xml.domToBlock(option.dom, this.workspace);
 
         Blockly.scratchBlocksUtils.changeObscuredShadowIds(newBlock);
 
@@ -324,6 +324,7 @@ export default async function ({ addon, msg, global, console }) {
         li.innerText = desc;
         li.data = { text: desc, lower: " " + desc.toLowerCase(), option: option };
 
+        // Todo: Blocks creates by SA should have isScratchExtension set true.
         li.className =
           "sa-block-color-" + (option.block.isScratchExtension ? "pen" : option.block.getCategory()) + " sa-" + bType;
         if (count > this.DROPDOWN_BLOCK_LIST_MAX_ROWS) {
