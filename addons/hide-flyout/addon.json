@@ -86,17 +86,17 @@
       "default": "cathover"
     },
     {
-      "name": "Animation speed",
+      "name": "Animation duration",
       "id": "speed",
       "type": "select",
       "potentialValues": [
         {
           "id": "none",
-          "name": "Instant"
+          "name": "None"
         },
         {
           "id": "short",
-          "name": "Quick"
+          "name": "Short"
         },
         {
           "id": "default",
@@ -104,7 +104,7 @@
         },
         {
           "id": "long",
-          "name": "Slow"
+          "name": "Long"
         }
       ],
       "default": "default"
