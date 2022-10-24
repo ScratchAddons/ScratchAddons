@@ -1,4 +1,4 @@
-import { snapFrom, snapTo, snapOn, threshold, toggle, setGuideColor, guideColor } from "./state.js";
+import { snapFrom, snapTo } from "./state.js";
 
 export default function createSnapPoints(paper, selectionBounds, lib, objects) {
   const {
@@ -216,7 +216,7 @@ export default function createSnapPoints(paper, selectionBounds, lib, objects) {
     ...(snapTo.objectCorners
       ? Object.fromEntries(
           objects
-            .filter((item) => !item.selected)
+            .filter((item) => !(item.selected || item.data.isHelperItem))
             .map((item) => [
               [
                 `item_${item.id}_tl`,
