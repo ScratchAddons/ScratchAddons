@@ -1,7 +1,7 @@
 @import url("../editor-theme3/compatibility.css");
 
 /* Find Input Box */
-.sa-floatBarInput {
+.sa-float-bar-input {
   width: 100%;
   box-sizing: border-box !important;
   /* !important required for extension, because CSS injection method (and hence order) differs from addon */
@@ -13,13 +13,13 @@
   padding-left: 0.4em;
 }
 
-.sa-floatBarInput:focus {
+.sa-float-bar-input:focus {
   /* Change Scratch default styles */
   box-shadow: none;
 }
 
 /* Drop down from find button */
-.sa-floatBarDropdownOut {
+.sa-float-bar-dropdown-out {
   display: block;
   top: -6px;
   z-index: 100;
@@ -34,26 +34,27 @@
 }
 
 /* Drop down from find button */
-.sa-floatBarDropdown {
+.sa-float-bar-dropdown {
   display: none;
   position: relative;
   padding: 0.2em 0;
   font-size: 0.75rem;
   line-height: 1;
   overflow-y: auto;
-  min-height: 128px;
   max-height: 65vh;
   user-select: none;
   max-width: 100%;
+  max-height: 200px;
+  margin-bottom: 0;
 }
 
-.sa-floatBarDropdownOut.vis .sa-floatBarDropdown {
+.sa-float-bar-dropdown-out.vis .sa-float-bar-dropdown {
   display: block;
   border: none;
 }
 
 /* Drop down items */
-.sa-floatBarDropdown > li {
+.sa-float-bar-dropdown > li {
   display: block;
   padding: 0.5em 0.3em;
   white-space: nowrap;
@@ -64,20 +65,20 @@
   cursor: pointer;
 }
 
-.sa-floatBarDropdown > li > b {
+.sa-float-bar-dropdown > li > b {
   background-color: #aaffaa;
   color: black;
 }
 
-.sa-floatBarDropdown > li {
+.sa-float-bar-dropdown > li {
   background-color: var(--sa-block-background-primary);
 }
-.sa-floatBarDropdown > li:hover,
-.sa-floatBarDropdown > li.sel {
+.sa-float-bar-dropdown > li:hover,
+.sa-float-bar-dropdown > li.sel {
   background-color: var(--sa-block-field-background);
 }
 
-.sa-floatBarDropdown > li {
+.sa-float-bar-dropdown > li {
   height: 19px;
   padding: 3px 8px;
   margin: 2px 0.3em;
@@ -88,20 +89,20 @@
   width: min-content;
 }
 
-.sa-floatBarDropdown > li.sa-hat {
+.sa-float-bar-dropdown > li.sa-hat {
   border-radius: 14px 14px 3px 3px;
 }
-.sa-floatBarDropdown > li.sa-block {
+.sa-float-bar-dropdown > li.sa-block {
   border-radius: 3px;
 }
-.sa-floatBarDropdown > li.sa-reporter {
+.sa-float-bar-dropdown > li.sa-reporter {
   border-radius: 10px;
 }
 
-.sa-floatBarDropdown > li.sa-boolean {
+.sa-float-bar-dropdown > li.sa-boolean {
   width: min-content;
 }
-.sa-floatBarDropdown > li.sa-boolean::before {
+.sa-float-bar-dropdown > li.sa-boolean::before {
   content: "";
   position: absolute;
   left: 0;
@@ -112,7 +113,7 @@
   border-top: 9px solid white;
   border-bottom: 10px solid white;
 }
-.sa-floatBarDropdown > li.sa-boolean::after {
+.sa-float-bar-dropdown > li.sa-boolean::after {
   content: "";
   position: absolute;
   right: 0;
@@ -124,7 +125,7 @@
   border-bottom: 10px solid white;
 }
 
-.sa-floatBar {
+.sa-float-bar {
   display: flex;
   white-space: nowrap;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -138,13 +139,7 @@
   z-index: 999;
 }
 
-/* Drop down from find button */
-.sa-floatBarDropdown {
-  max-height: 200px;
-  margin-bottom: 0;
-}
-
-.sa-floatBarDropdown > li > b {
+.sa-float-bar-dropdown > li > b {
   background-color: rgba(0, 0, 0, 0.6);
   color: white;
 }

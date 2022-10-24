@@ -27,21 +27,21 @@ export default async function ({ addon, msg, global, console }) {
     createDom() {
       // Popup new input box for block injection
       this.floatBar = document.body.appendChild(document.createElement("div"));
-      this.floatBar.className = "sa-floatBar";
+      this.floatBar.className = "sa-float-bar";
       this.floatBar.dir = addon.tab.direction;
       this.floatBar.style.display = "none";
 
       this.dropdownOut = this.floatBar.appendChild(document.createElement("div"));
-      this.dropdownOut.className = "sa-floatBarDropdownOut";
+      this.dropdownOut.className = "sa-float-bar-dropdown-out";
 
       this.floatInput = this.dropdownOut.appendChild(document.createElement("input"));
-      this.floatInput.className = "sa-floatBarInput";
+      this.floatInput.className = "sa-float-bar-input";
       this.floatInput.className = addon.tab.scratchClass("input_input-form", {
-        others: "sa-floatBarInput",
+        others: "sa-float-bar-input",
       });
 
       this.dropdown = this.dropdownOut.appendChild(document.createElement("ul"));
-      this.dropdown.className = "sa-floatBarDropdown";
+      this.dropdown.className = "sa-float-bar-dropdown";
 
       this.floatInput.addEventListener("keyup", () => this.inputChange());
       this.floatInput.addEventListener("focus", () => this.inputChange());
