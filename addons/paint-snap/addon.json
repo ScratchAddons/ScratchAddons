@@ -27,7 +27,8 @@
       "type": "color",
       "id": "guide-color",
       "name": "Snapping guide color",
-      "default": "#ff0000"
+      "default": "#ff0000",
+      "allowTransparency": true
     },
     {
       "type": "boolean",
