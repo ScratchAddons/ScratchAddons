@@ -2,18 +2,16 @@ name: 🐛 Bug
 description: Report a bug.
 labels: ["status: needs triage", "type: bug"]
 body:
-  - type: checkboxes
-    id: readfirst
+  - type: markdown
     attributes:
-      label: READ BEFORE CREATING!
-      description: |
-        - Avoid creating duplicates! Read the FAQ page and search through Issues and Discussions before creating one.
+      value: |
+        ### Read before creating!
+
+        - Avoid creating duplicates! Read the FAQ page and search through issues and discussions before creating one.
         - Try to make a simple but descriptive title, and include the detailed information below. This could save a lot of time and help us fix issues swiftly.
         - Make sure to use the latest version of Scratch Addons.
-        - For help, check our [FAQ page](https://scratchaddons.com/faq) or ask on [Discussions](https://github.com/ScratchAddons/ScratchAddons/discussions) or our [Discord server](https://discord.gg/R5NBqwMjNc).
-      options:
-        - label: I understand
-          required: true
+        - For help, check our [FAQ page](https://scratchaddons.com/faq), open a [discussion](https://github.com/ScratchAddons/ScratchAddons/discussions) or ask on our [Discord server](https://discord.gg/R5NBqwMjNc).
+        - If you found a security vulnerability, please read our [security policy](https://github.com/ScratchAddons/ScratchAddons/security/policy).
 
   - type: textarea
     id: description
@@ -44,9 +42,7 @@ body:
     id: additonalcontext
     attributes:
       label: Demonstration(s) and additional context
-      description: If applicable, insert screenshots or a live example to help demonstrate your problem, as well as any other useful infomation here.
-    validations:
-      required: false
+      description: If applicable, insert screenshots or a live example to help demonstrate your problem, as well as any other useful information here.
 
   - type: textarea
     id: environment

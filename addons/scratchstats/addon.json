@@ -12,7 +12,8 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/users/*/"]
+      "matches": ["https://scratch.mit.edu/users/*/"],
+      "runAtComplete": false
     }
   ],
   "userstyles": [
