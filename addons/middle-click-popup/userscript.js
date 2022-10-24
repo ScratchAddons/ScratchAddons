@@ -76,6 +76,7 @@ export default async function ({ addon, msg, global, console }) {
       this.floatBar.style.left = (e.clientX ?? mouse.x) + 16 + "px";
       this.floatBar.style.top = (e.clientY ?? mouse.y) - 8 + "px";
       this.floatBar.style.display = "";
+      this.floatInput.value = "";
       this.floatInput.focus();
     }
 
