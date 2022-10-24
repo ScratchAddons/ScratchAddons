@@ -187,15 +187,15 @@ export const updateScaleTool = (paper, tool) => {
   const priority = ["width", "height", "itemSideVert", "itemSideHoriz", "xcoord", "ycoord", "generated", undefined];
 
   const removeGuides = () => {
-    selectionSizeGuide.group.visible = false;
     selectionSizeGuide.group.remove();
-    matchingSizeGuide.group.visible = false;
+    selectionSizeGuide.group.visible = false;
     matchingSizeGuide.group.remove();
+    matchingSizeGuide.group.visible = false;
 
-    axisLineX.visible = false;
     axisLineX.remove();
-    axisLineY.visible = false;
+    axisLineX.visible = false;
     axisLineY.remove();
+    axisLineY.visible = false;
   };
 
   scaleTool.constructor.prototype.onMouseDrag = function (event) {
@@ -249,8 +249,8 @@ export const updateScaleTool = (paper, tool) => {
     };
     const paintLayer = getLayer("isPaintingLayer");
 
-    const doesSx = (this.isCorner && !event.modifiers.shift) || Math.abs(this.origSize.x) > 0.0000001;
-    const doesSy = (this.isCorner && !event.modifiers.shift) || Math.abs(this.origSize.y) > 0.0000001;
+    const doesSx = snapOn && ((this.isCorner && !event.modifiers.shift) || Math.abs(this.origSize.x) > 0.0000001);
+    const doesSy = snapOn && ((this.isCorner && !event.modifiers.shift) || Math.abs(this.origSize.y) > 0.0000001);
 
     const scaledThreshold = threshold / paper.view.zoom;
 
