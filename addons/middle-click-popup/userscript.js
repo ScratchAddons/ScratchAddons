@@ -145,8 +145,10 @@ export default async function ({ addon, msg, global, console }) {
           throw new Error("newBlock is not rendered.");
         }
 
-        // TODO: Make this work ;(
-        newBlock.moveBy(0, 0);
+        let blockBounds = newBlock.svgPath_.getBoundingClientRect();
+        let newBlockX = Math.floor((mouse.x - (blockBounds.left + blockBounds.right) / 2) / this.workspace.scale);
+        let newBlockY = Math.floor((mouse.y - (blockBounds.top + blockBounds.bottom) / 2) / this.workspace.scale);
+        newBlock.moveBy(newBlockX, newBlockY);
       } finally {
         Blockly.Events.enable();
       }
