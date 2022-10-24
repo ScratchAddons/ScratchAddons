@@ -348,11 +348,20 @@ export const updateScaleTool = (paper, tool) => {
       sy *= signy;
     }
 
+    sx = signx * Math.max(Math.abs(sx), MIN_SCALE_FACTOR);
+    sy = signy * Math.max(Math.abs(sy), MIN_SCALE_FACTOR);
+
+    this.itemGroup.scale(sx / this.lastSx, sy / this.lastSy, this.pivot);
+    if (this.selectionAnchor) {
+      this.selectionAnchor.scale(this.lastSx / sx, this.lastSy / sy);
+    }
+
     removeGuides();
 
-    if ((oldSX === sx && closestSnapX) || (oldSY === sy && closestSnapY)) fixGuideSizes();
+    if ((Math.abs(oldSX) === Math.abs(sx) && closestSnapX) || (Math.abs(oldSY) === Math.abs(sy) && closestSnapY))
+      fixGuideSizes();
 
-    if (oldSX === sx && closestSnapX) {
+    if (Math.abs(oldSX) === Math.abs(sx) && closestSnapX) {
       switch (closestSnapX.type) {
         case "width": {
           const matchy = closestSnapX.coord.value;
@@ -419,7 +428,7 @@ export const updateScaleTool = (paper, tool) => {
           break;
       }
     }
-    if (oldSY === sy && closestSnapY) {
+    if (Math.abs(oldSY) === Math.abs(sy) && closestSnapY) {
       switch (closestSnapY.type) {
         case "height": {
           const matchx = closestSnapY.coord.value;
@@ -485,14 +494,6 @@ export const updateScaleTool = (paper, tool) => {
         default:
           break;
       }
-    }
-
-    sx = signx * Math.max(Math.abs(sx), MIN_SCALE_FACTOR);
-    sy = signy * Math.max(Math.abs(sy), MIN_SCALE_FACTOR);
-
-    this.itemGroup.scale(sx / this.lastSx, sy / this.lastSy, this.pivot);
-    if (this.selectionAnchor) {
-      this.selectionAnchor.scale(this.lastSx / sx, this.lastSy / sy);
     }
 
     this.lastSx = sx;
