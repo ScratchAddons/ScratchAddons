@@ -327,9 +327,14 @@ export default async function ({ addon, msg, global, console }) {
         li.innerText = desc;
         li.data = { text: desc, lower: " " + desc.toLowerCase(), option: option };
 
-        // Todo: Blocks creates by SA should have isScratchExtension set true.
-        li.className =
-          "sa-block-color-" + (option.block.isScratchExtension ? "pen" : option.block.getCategory()) + " sa-" + bType;
+        let ending = option.block.getCategory();
+        if (option.block.isScratchExtension) {
+          ending = "pen";
+        } else if (addon.tab.getCustomBlock(option.block.procCode_)) {
+          ending = "addon-custom-block";
+        }
+
+        li.className = "sa-block-color-" + ending + " sa-" + bType;
         if (count > this.DROPDOWN_BLOCK_LIST_MAX_ROWS) {
           // Limit maximum number of rows to prevent lag when no filter is applied
           li.style.display = "none";
