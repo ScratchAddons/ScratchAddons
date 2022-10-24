@@ -284,12 +284,15 @@ export default async function ({ addon, msg, global, console }) {
     buildFilterList() {
       let options = [];
 
-      let t = this.workspace.getToolbox();
+      let toolbox = this.workspace.getToolbox();
 
-      let blocks = t.flyout_.getWorkspace().getTopBlocks();
+      // This can happen during custom block creation, for example
+      if (!toolbox) return;
+
+      let blocks = toolbox.flyout_.getWorkspace().getTopBlocks();
       // 107 blocks, not in order... but we can sort by y value or description right :)
 
-      let fullDom = Blockly.Xml.workspaceToDom(t.flyout_.getWorkspace());
+      let fullDom = Blockly.Xml.workspaceToDom(toolbox.flyout_.getWorkspace());
       const doms = {};
       for (const x of fullDom.children) {
         if (x.tagName === "BLOCK") {
