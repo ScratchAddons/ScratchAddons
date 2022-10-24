@@ -22,10 +22,16 @@ export default (env, manifest) => {
       manifest.optional_permissions = manifest.optional_permissions.filter(
         (permission) => !PERMISSIONS_IGNORED_IN_CHROME.includes(permission)
       );
+      manifest.permissions = manifest.permissions.filter(
+        (permission) => !PERMISSIONS_IGNORED_IN_CHROME.includes(permission)
+      );
       break;
     }
     case "firefox": {
       manifest.optional_permissions = manifest.optional_permissions.filter(
+        (permission) => !PERMISSIONS_IGNORED_IN_FIREFOX.includes(permission)
+      );
+      manifest.permissions = manifest.permissions.filter(
         (permission) => !PERMISSIONS_IGNORED_IN_FIREFOX.includes(permission)
       );
       break;
