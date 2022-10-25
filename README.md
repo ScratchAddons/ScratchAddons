@@ -65,8 +65,8 @@ No build is required. You may download the source code by doing one of these ste
 
 After downloading the extension to your computer, just load it by following these steps.
 
-- Google Chrome
-  1. Open `chrome://extensions` to open the Extension Management page by typing it into your address bar.
+- Google Chrome/Microsoft Edge
+  1. Open `chrome://extensions` or `edge://extensions` to open the Extension Management page by typing it into your address bar.
   2. Enable Developer Mode by clicking the toggle switch next to Developer mode.
   3. Click the `Load unpacked` button on the top and select the extension directory which has the `manifest.json` file in it. 
 
