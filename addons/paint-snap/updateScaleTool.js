@@ -408,11 +408,11 @@ export const updateScaleTool = (paper, tool) => {
           );
           selectionSizeGuide.line.firstSegment.point = new paper.Point(
             this.itemGroup.bounds.left,
-            selectiony + 5 / paper.view.zoom
+            selectiony + 4.5 / paper.view.zoom
           );
           selectionSizeGuide.line.lastSegment.point = new paper.Point(
             this.itemGroup.bounds.right,
-            selectiony + 5 / paper.view.zoom
+            selectiony + 4.5 / paper.view.zoom
           );
           selectionSizeGuide.group.visible = true;
           selectionSizeGuide.group.bringToFront();
@@ -474,11 +474,11 @@ export const updateScaleTool = (paper, tool) => {
             this.itemGroup.bounds.bottom
           );
           selectionSizeGuide.line.firstSegment.point = new paper.Point(
-            selectionx - 5 / paper.view.zoom,
+            selectionx - 4.5 / paper.view.zoom,
             this.itemGroup.bounds.top
           );
           selectionSizeGuide.line.lastSegment.point = new paper.Point(
-            selectionx - 5 / paper.view.zoom,
+            selectionx - 4.5 / paper.view.zoom,
             this.itemGroup.bounds.bottom
           );
           selectionSizeGuide.group.visible = true;
