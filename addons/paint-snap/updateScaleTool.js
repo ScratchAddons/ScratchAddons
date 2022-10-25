@@ -9,7 +9,6 @@ const getScaleTool = (tool) => {
 };
 
 export const updateScaleTool = (paper, tool) => {
-  window.paper = paper;
   const lib = loadModules(paper);
   const {
     view: { getActionBounds },
