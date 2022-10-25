@@ -1,6 +1,6 @@
 {
   "name": "Customizable front page rows",
-  "description": "Lets you hide and add new rows of Scratch front page.",
+  "description": "Lets you hide and rename rows on the Scratch front page.",
   "userscripts": [
     {
       "url": "userscript.js",
