@@ -111,9 +111,7 @@ export default async function ({ addon, msg, global, console }) {
       const options = this.querier.queryWorkspace(this.floatInput.value);
       // const options = this.querier.queryWorkspace("1 + 1 * 5");
       console.log(options);
-      if (options.length !== 0)
-        this.createDraggingBlock(this.querier.createBlock(options[0]), e, sel);
-
+      if (options.length !== 0) this.createDraggingBlock(this.querier.createBlock(options[0]), e, sel);
 
       // let option = sel.data.option;
       // // block:option.block, dom:option.dom, option:option.option
@@ -274,8 +272,7 @@ export default async function ({ addon, msg, global, console }) {
         this.querier.indexWorkspace(this.workspace);
         const options = this.querier.queryWorkspace(this.floatInput.value);
         console.log(options);
-        if (options.length !== 0)
-          this.createDraggingBlock(this.querier.createBlock(options[0]), e, e.target);
+        if (options.length !== 0) this.createDraggingBlock(this.querier.createBlock(options[0]), e, e.target);
 
         // this.onClick(e);
         this.hide();
