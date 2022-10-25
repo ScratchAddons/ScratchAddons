@@ -117,6 +117,8 @@ export const updateScaleTool = (paper, tool) => {
   matchingSizeGuide.endRight.remove();
   selectionSizeGuide.line.remove();
   matchingSizeGuide.line.remove();
+  selectionSizeGuide.group.remove();
+  matchingSizeGuide.group.remove();
 
   selectionSizeGuide.group.addChildren([
     selectionSizeGuide.endLeft,
@@ -188,6 +190,7 @@ export const updateScaleTool = (paper, tool) => {
   const removeGuides = () => {
     selectionSizeGuide.group.remove();
     selectionSizeGuide.group.visible = false;
+
     matchingSizeGuide.group.remove();
     matchingSizeGuide.group.visible = false;
 
@@ -500,8 +503,8 @@ export const updateScaleTool = (paper, tool) => {
   };
 
   const oldMouseUp = scaleTool.constructor.prototype.onMouseUp;
-  scaleTool.constructor.prototype.onMouseUp = function (...a) {
+  scaleTool.constructor.prototype.onMouseUp = function () {
     removeGuides();
-    oldMouseUp.apply(this, a);
+    oldMouseUp.call(this);
   };
 };
