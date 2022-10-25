@@ -1,3 +1,5 @@
+import WorkspaceQuerier from "./WorkspaceQuerier.js";
+
 export default async function ({ addon, msg, global, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
   let mouse = { x: 0, y: 0 };
@@ -12,6 +14,7 @@ export default async function ({ addon, msg, global, console }) {
       this.prevVal = "";
 
       this.DROPDOWN_BLOCK_LIST_MAX_ROWS = 25;
+      this.querier = new WorkspaceQuerier(Blockly);
 
       this.createDom();
     }
@@ -104,25 +107,33 @@ export default async function ({ addon, msg, global, console }) {
         return;
       }
 
-      let option = sel.data.option;
-      // block:option.block, dom:option.dom, option:option.option
-      if (option.option) {
-        // We need to tweak the dropdown in this xml...
-        let field = option.dom.querySelector("field[name=" + option.pickField + "]");
-        if (field.getAttribute("id")) {
-          field.innerText = option.option[0];
-          field.setAttribute("id", option.option[1] + "-" + option.option[0]);
-        } else {
-          field.innerText = option.option[1]; // griffpatch - oops! option.option[1] not 0?
-        }
+      this.querier.indexWorkspace(this.workspace);
+      const options = this.querier.queryWorkspace(this.floatInput.value);
+      // const options = this.querier.queryWorkspace("1 + 1 * 5");
+      console.log(options);
+      if (options.length !== 0)
+        this.createDraggingBlock(this.querier.createBlock(options[0]), e, sel);
 
-        // Handle "stop other scripts in sprite"
-        if (option.option[1] === "other scripts in sprite") {
-          option.dom.querySelector("mutation").setAttribute("hasnext", "true");
-        }
-      }
 
-      this.createDraggingBlock(option.dom, e, sel);
+      // let option = sel.data.option;
+      // // block:option.block, dom:option.dom, option:option.option
+      // if (option.option) {
+      //   // We need to tweak the dropdown in this xml...
+      //   let field = option.dom.querySelector("field[name=" + option.pickField + "]");
+      //   if (field.getAttribute("id")) {
+      //     field.innerText = option.option[0];
+      //     field.setAttribute("id", option.option[1] + "-" + option.option[0]);
+      //   } else {
+      //     field.innerText = option.option[1]; // griffpatch - oops! option.option[1] not 0?
+      //   }
+
+      //   // Handle "stop other scripts in sprite"
+      //   if (option.option[1] === "other scripts in sprite") {
+      //     option.dom.querySelector("mutation").setAttribute("hasnext", "true");
+      //   }
+      // }
+
+      // this.createDraggingBlock(option.dom, e, sel);
 
       if (e.shiftKey) {
         this.floatBar.style.display = "";
@@ -130,15 +141,13 @@ export default async function ({ addon, msg, global, console }) {
       }
     }
 
-    createDraggingBlock(xml, e, sel) {
+    createDraggingBlock(newBlock, e, sel) {
       // This is mostly copied from https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/scratch_blocks_utils.js#L171
       // Some bits were removed or changed to fit our needs.
       this.workspace.setResizesEnabled(false);
 
       Blockly.Events.disable();
       try {
-        var newBlock = Blockly.Xml.domToBlock(xml, this.workspace);
-
         Blockly.scratchBlocksUtils.changeObscuredShadowIds(newBlock);
 
         var svgRootNew = newBlock.getSvgRoot();
@@ -157,19 +166,19 @@ export default async function ({ addon, msg, global, console }) {
         Blockly.Events.fire(new Blockly.Events.BlockCreate(newBlock));
       }
 
-      var fakeEvent = {
-        clientX: mouse.x,
-        clientY: mouse.y,
-        type: "mousedown",
-        preventDefault: function () {
-          e.preventDefault();
-        },
-        stopPropagation: function () {
-          e.stopPropagation();
-        },
-        target: sel,
-      };
-      this.workspace.startDragWithFakeEvent(fakeEvent, newBlock);
+      // var fakeEvent = {
+      //   clientX: mouse.x,
+      //   clientY: mouse.y,
+      //   type: "mousedown",
+      //   preventDefault: function () {
+      //     e.preventDefault();
+      //   },
+      //   stopPropagation: function () {
+      //     e.stopPropagation();
+      //   },
+      //   target: sel,
+      // };
+      // this.workspace.startDragWithFakeEvent(fakeEvent, newBlock);
     }
 
     inputChange() {
@@ -260,10 +269,17 @@ export default async function ({ addon, msg, global, console }) {
       if (e.keyCode === 13) {
         // Enter
         let sel = this.dropdown.querySelector(".sel");
-        if (sel) {
-          this.onClick(e);
-          this.hide();
-        }
+        // if (sel) {
+
+        this.querier.indexWorkspace(this.workspace);
+        const options = this.querier.queryWorkspace(this.floatInput.value);
+        console.log(options);
+        if (options.length !== 0)
+          this.createDraggingBlock(this.querier.createBlock(options[0]), e, e.target);
+
+        // this.onClick(e);
+        this.hide();
+        // }
         e.cancelBubble = true;
         e.preventDefault();
         return;
