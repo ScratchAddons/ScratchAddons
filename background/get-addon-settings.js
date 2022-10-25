@@ -5,6 +5,7 @@ import minifySettings from "../libraries/common/minify-settings.js";
  the versions separately. Current versions:
 
  - editor-dark-mode 2 (bumped in v1.23 twice)
+ - editor-theme3 4 (last bumped in v1.29)
  */
 
 const updatePresetIfMatching = (settings, version, oldPreset = null, preset = null) => {
@@ -23,7 +24,12 @@ const updatePresetIfMatching = (settings, version, oldPreset = null, preset = nu
     if (preset === null) return;
     const map = {};
     for (const key of Object.keys(oldPreset)) {
-      if (settings[key] !== oldPreset[key]) return;
+      if (settings[key] !== oldPreset[key]) return console.log(settings, oldPreset, key);
+      map[key] = preset.values[key];
+    }
+
+    // For newly added keys
+    for (const key of Object.keys(preset.values).filter((k) => !Object.prototype.hasOwnProperty.call(oldPreset, k))) {
       map[key] = preset.values[key];
     }
     Object.assign(settings, map);
@@ -138,6 +144,58 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
         }
 
         if (addonId === "editor-dark-mode") updatePresetIfMatching(settings, 2);
+
+        if (addonId === "editor-theme3") {
+          madeAnyChanges = madeChangesToAddon = true;
+          updatePresetIfMatching(
+            settings,
+            1,
+            {
+              "motion-color": "#4a6cd4",
+              "looks-color": "#8a55d7",
+              "sounds-color": "#bb42c3",
+              "events-color": "#c88330",
+              "control-color": "#e1a91a",
+              "sensing-color": "#2ca5e2",
+              "operators-color": "#5cb712",
+              "data-color": "#ee7d16",
+              "data-lists-color": "#cc5b22",
+              "custom-color": "#632d99",
+              "Pen-color": "#0e9a6c",
+              "sa-color": "#29beb8",
+              "input-color": "#ffffff",
+              text: "white",
+            },
+            manifest.presets.find((p) => p.id === "original")
+          );
+          updatePresetIfMatching(
+            settings,
+            2,
+            {
+              "motion-color": "#004099",
+              "looks-color": "#220066",
+              "sounds-color": "#752475",
+              "events-color": "#997300",
+              "control-color": "#664100",
+              "sensing-color": "#1f5f7a",
+              "operators-color": "#235c23",
+              "data-color": "#b35900",
+              "data-lists-color": "#993300",
+              "custom-color": "#99004d",
+              "Pen-color": "#064734",
+              "sa-color": "#166966",
+              "input-color": "#202020",
+              text: "white",
+            },
+            manifest.presets.find((p) => p.id === "dark")
+          );
+
+          if (addonSettings["editor-dark-mode"]?.darkComments === false) {
+            // Transition v1.28 to v1.29
+            // Override the preset color if dark comments are not enabled
+            addonSettings["comment-color"] = "#FEF49C";
+          }
+        }
       }
 
       if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;
