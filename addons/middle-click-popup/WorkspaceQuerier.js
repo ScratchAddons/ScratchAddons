@@ -103,7 +103,7 @@ class TokenTypeNumberLiteral extends TokenType {
       for (let i = idx + 2; i <= querier.query.length; i++) {
         const char = querier.query[i];
         if (TokenTypeStringLiteral.TERMINATORS.indexOf(char) !== -1) {
-          yield new Token(idx, i, this, querier.query.substring(idx, i));
+          if (i !== idx) yield new Token(idx, i, this, querier.query.substring(idx, i));
           break;
         }
         if (TokenTypeNumberLiteral.HEX_CHARS.indexOf(char.toLowerCase()) === -1) break;
@@ -171,7 +171,8 @@ class TokenTypeBlock extends TokenType {
           if (field.className_ === "blocklyText blocklyDropdownText") {
             const fieldOptions = field.getOptions();
             for (let i = 0; i < fieldOptions.length; i++) {
-              if (TokenTypeBlock.INVALID_FIELDS.indexOf(fieldOptions[i][1]) !== -1) fieldOptions.splice(i, 1);
+                if (typeof fieldOptions[i][1] !== "string" || 
+                  TokenTypeBlock.INVALID_FIELDS.indexOf(fieldOptions[i][1]) !== -1) fieldOptions.splice(i, 1);
             }
             this.tokenTypeGroups.push(new TokenTypeGroup(null, false, new TokenTypeStringEnum(fieldOptions)));
           } else if (field.argType_) {
@@ -396,7 +397,7 @@ export default class WorkspaceQuerier {
 
     for (const option of this.tokenTypeGroupBlocks.parseTokens(this, 0)) {
       if (option.end === query.length) options.push(option);
-      if (options.length > 200) break;
+      if (options.length > 1000) break;
     }
 
     return options.sort((a, b) => b.score - a.score);
