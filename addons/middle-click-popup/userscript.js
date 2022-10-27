@@ -53,7 +53,7 @@ export default async function ({ addon, msg, global, console }) {
       this.dropdown = this.dropdownOut.appendChild(document.createElement("ul"));
       this.dropdown.className = "sa-float-bar-dropdown";
 
-      this.floatInput.addEventListener("input", () => this.inputChange())
+      this.floatInput.addEventListener("input", () => this.inputChange());
       this.floatInput.addEventListener("keydown", (...e) => this.inputKeyDown(...e));
       this.floatInput.addEventListener("focus", () => this.inputChange());
       this.floatInput.addEventListener("focusout", () => this.hide());
@@ -186,7 +186,7 @@ export default async function ({ addon, msg, global, console }) {
     }
 
     inputChange() {
-      var startTime = performance.now()
+      var startTime = performance.now();
 
       const query = this.floatInput.innerText;
 
@@ -212,10 +212,8 @@ export default async function ({ addon, msg, global, console }) {
         this.floatInputSuggestion.innerText = "";
       }
 
-      var endTime = performance.now()
+      var endTime = performance.now();
       console.log(`Worksapce query took ${endTime - startTime} milliseconds`);
-
-
 
       // Filter the list...
       let val = (this.floatInput.innerText || "").toLowerCase();
@@ -291,11 +289,14 @@ export default async function ({ addon, msg, global, console }) {
     }
 
     inputKeyDown(e) {
-
-      if (e.keyCode == 9) { // Tab
+      if (e.keyCode == 9) {
+        // Tab
         e.preventDefault();
         if (this.queryAutocompleteResult?.isTruncated) {
-          this.floatInput.innerText = this.queryAutocompleteResult.autocomplete.replaceAll(" ", String.fromCharCode(160));
+          this.floatInput.innerText = this.queryAutocompleteResult.autocomplete.replaceAll(
+            " ",
+            String.fromCharCode(160)
+          );
           // Move cursor to the end of the newly inserted text
           let selection = window.getSelection();
           selection.selectAllChildren(this.floatInput);
@@ -303,15 +304,18 @@ export default async function ({ addon, msg, global, console }) {
 
           this.inputChange(e);
         }
-      } else if (e.keyCode === 38) { // Arrow up
+      } else if (e.keyCode === 38) {
+        // Arrow up
         this.navigateFloatFilter(-1);
         e.preventDefault();
         return;
-      } else if (e.keyCode === 40) { // Arrow down
+      } else if (e.keyCode === 40) {
+        // Arrow down
         this.navigateFloatFilter(1);
         e.preventDefault();
         return;
-      } else if (e.keyCode === 13) { // Enter
+      } else if (e.keyCode === 13) {
+        // Enter
         let sel = this.dropdown.querySelector(".sel");
         // if (sel) {
 
@@ -325,7 +329,8 @@ export default async function ({ addon, msg, global, console }) {
         e.cancelBubble = true;
         e.preventDefault();
         return;
-      } else if (e.keyCode === 27) { // Escape
+      } else if (e.keyCode === 27) {
+        // Escape
         if (this.floatInput.innerText.length > 0) {
           this.floatInput.innerText = ""; // Clear search first, then close on second press
           this.inputChange(e);
