@@ -37,18 +37,25 @@ export default async function ({ addon, msg, global, console }) {
       this.dropdownOut = this.floatBar.appendChild(document.createElement("div"));
       this.dropdownOut.className = "sa-float-bar-dropdown-out";
 
-      this.floatInput = this.dropdownOut.appendChild(document.createElement("input"));
-      this.floatInput.className = "sa-float-bar-input";
-      this.floatInput.className = addon.tab.scratchClass("input_input-form", {
-        others: "sa-float-bar-input",
+      this.floatInputWrapper = this.dropdownOut.appendChild(document.createElement("div"));
+      this.floatInputWrapper.className = addon.tab.scratchClass("input_input-form", {
+        others: "sa-float-bar-input-wrapper",
       });
+
+      this.floatInput = this.floatInputWrapper.appendChild(document.createElement("span"));
+      this.floatInput.contentEditable = true;
+      this.floatInput.className = "sa-float-bar-input";
+
+      this.floatInputSuggestion = this.floatInputWrapper.appendChild(document.createElement("span"));
+      this.floatInputSuggestion.contentEditable = false;
+      this.floatInputSuggestion.className = "sa-float-bar-input-suggestion";
 
       this.dropdown = this.dropdownOut.appendChild(document.createElement("ul"));
       this.dropdown.className = "sa-float-bar-dropdown";
 
-      this.floatInput.addEventListener("keyup", () => this.inputChange());
-      this.floatInput.addEventListener("focus", () => this.inputChange());
+      this.floatInput.addEventListener("input", () => this.inputChange())
       this.floatInput.addEventListener("keydown", (...e) => this.inputKeyDown(...e));
+      this.floatInput.addEventListener("focus", () => this.inputChange());
       this.floatInput.addEventListener("focusout", () => this.hide());
 
       this.dropdownOut.addEventListener("mousedown", (...e) => this.onClick(...e));
@@ -75,11 +82,12 @@ export default async function ({ addon, msg, global, console }) {
       e.preventDefault();
 
       this.buildFilterList();
+      this.querier.indexWorkspace(this.workspace);
 
       this.floatBar.style.left = (e.clientX ?? mouse.x) + 16 + "px";
       this.floatBar.style.top = (e.clientY ?? mouse.y) - 8 + "px";
       this.floatBar.style.display = "";
-      this.floatInput.value = "";
+      this.floatInput.innerText = "";
       this.floatInput.focus();
     }
 
@@ -107,11 +115,9 @@ export default async function ({ addon, msg, global, console }) {
         return;
       }
 
-      this.querier.indexWorkspace(this.workspace);
-      const options = this.querier.queryWorkspace(this.floatInput.value);
-      // const options = this.querier.queryWorkspace("1 + 1 * 5");
-      console.log(options);
-      if (options.length !== 0) this.createDraggingBlock(this.querier.createBlock(options[0]), e, sel);
+      if (this.queryResult) {
+        this.createDraggingBlock(this.queryResult.createBlock(), e, sel);
+      }
 
       // let option = sel.data.option;
       // // block:option.block, dom:option.dom, option:option.option
@@ -180,8 +186,39 @@ export default async function ({ addon, msg, global, console }) {
     }
 
     inputChange() {
+      var startTime = performance.now()
+
+      const query = this.floatInput.innerText;
+
+      this.queryResults = this.querier.queryWorkspace(query);
+      this.queryResult = null;
+      this.queryAutocompleteResult = null;
+
+      console.log(this.queryResults);
+
+      for (let i = 0; i < this.queryResults.length; i++) {
+        const result = this.queryResults[i];
+        if (result.isTruncated) {
+          if (!this.queryAutocompleteResult) this.queryAutocompleteResult = result;
+        } else {
+          if (!this.queryResult) this.queryResult = result;
+        }
+      }
+
+      if (this.queryAutocompleteResult) {
+        this.floatInputSuggestion.innerText = this.queryAutocompleteResult.autocomplete.substring(query.length);
+        this.floatInputSuggestion.scrollIntoView();
+      } else {
+        this.floatInputSuggestion.innerText = "";
+      }
+
+      var endTime = performance.now()
+      console.log(`Worksapce query took ${endTime - startTime} milliseconds`);
+
+
+
       // Filter the list...
-      let val = (this.floatInput.value || "").toLowerCase();
+      let val = (this.floatInput.innerText || "").toLowerCase();
       if (val === this.prevVal) {
         return;
       }
@@ -254,25 +291,33 @@ export default async function ({ addon, msg, global, console }) {
     }
 
     inputKeyDown(e) {
-      if (e.keyCode === 38) {
+
+      if (e.keyCode == 9) { // Tab
+        e.preventDefault();
+        if (this.queryAutocompleteResult?.isTruncated) {
+          this.floatInput.innerText = this.queryAutocompleteResult.autocomplete.replaceAll(" ", String.fromCharCode(160));
+          // Move cursor to the end of the newly inserted text
+          let selection = window.getSelection();
+          selection.selectAllChildren(this.floatInput);
+          selection.collapseToEnd();
+
+          this.inputChange(e);
+        }
+      } else if (e.keyCode === 38) { // Arrow up
         this.navigateFloatFilter(-1);
         e.preventDefault();
         return;
-      }
-      if (e.keyCode === 40) {
+      } else if (e.keyCode === 40) { // Arrow down
         this.navigateFloatFilter(1);
         e.preventDefault();
         return;
-      }
-      if (e.keyCode === 13) {
-        // Enter
+      } else if (e.keyCode === 13) { // Enter
         let sel = this.dropdown.querySelector(".sel");
         // if (sel) {
 
-        this.querier.indexWorkspace(this.workspace);
-        const options = this.querier.queryWorkspace(this.floatInput.value);
-        console.log(options);
-        if (options.length !== 0) this.createDraggingBlock(this.querier.createBlock(options[0]), e, e.target);
+        if (this.queryResult) {
+          this.createDraggingBlock(this.queryResult.createBlock(), e, sel);
+        }
 
         // this.onClick(e);
         this.hide();
@@ -280,11 +325,9 @@ export default async function ({ addon, msg, global, console }) {
         e.cancelBubble = true;
         e.preventDefault();
         return;
-      }
-      if (e.keyCode === 27) {
-        // Escape
-        if (this.floatInput.value.length > 0) {
-          this.floatInput.value = ""; // Clear search first, then close on second press
+      } else if (e.keyCode === 27) { // Escape
+        if (this.floatInput.innerText.length > 0) {
+          this.floatInput.innerText = ""; // Clear search first, then close on second press
           this.inputChange(e);
         } else {
           this.hide();
@@ -462,6 +505,7 @@ export default async function ({ addon, msg, global, console }) {
 
     hide() {
       this.floatBar.style.display = "none";
+      this.querier.clearWorkspaceIndex();
     }
   }
   const floatingInput = new FloatingInput();

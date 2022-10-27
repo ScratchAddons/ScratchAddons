@@ -1,7 +1,7 @@
 @import url("../editor-theme3/compatibility.css");
 
 /* Find Input Box */
-.sa-float-bar-input {
+.sa-float-bar-input-wrapper {
   width: 100%;
   box-sizing: border-box !important;
   /* !important required for extension, because CSS injection method (and hence order) differs from addon */
@@ -11,11 +11,28 @@
   border-radius: 0.25rem;
   font-size: 0.75rem;
   padding-left: 0.4em;
+  padding-top: 0.3rem;
 }
 
-.sa-float-bar-input:focus {
+.sa-float-bar-input-wrapper:focus {
   /* Change Scratch default styles */
   box-shadow: none;
+}
+
+.sa-float-bar-input {
+  outline: 0px solid transparent;
+  display: inline-block;
+}
+
+/* https://stackoverflow.com/questions/4038489/contenteditable-adds-a-br-when-i-hit-space */
+.sa-float-bar-input br { 
+  display: none;
+}
+
+.sa-float-bar-input-suggestion {
+  color: hsla(225, 15%, 40%, 0.65);
+  /* When scrolled into view, leave a bit of extra room on the right */
+  padding-right: 10px;
 }
 
 /* Drop down from find button */
