@@ -29,25 +29,27 @@ export default async function ({ addon, global, console, msg }) {
       const link = projectColumns.childNodes[i].childNodes[1].childNodes[3].childNodes[1].childNodes[0].href;
       const projectID = link.replace("https://scratch.mit.edu/projects/", "").replace("/", "");
       const token = await addon.auth.fetchXToken();
-      const projectDetails = await (await fetch(`https://api.scratch.mit.edu/projects/${projectID}/`, {
-        headers: {
-          "content-type": "application/json",
-          "x-csrftoken": addon.auth.crsfToken,
-          "x-token": token,
-        },
-      })).json();
+      const projectDetails = await (
+        await fetch(`https://api.scratch.mit.edu/projects/${projectID}/`, {
+          headers: {
+            "content-type": "application/json",
+            "x-csrftoken": addon.auth.crsfToken,
+            "x-token": token,
+          },
+        })
+      ).json();
       let instructions = projectDetails.instructions;
 
       if (instructions.includes("#_")) {
-        instructions = instructions.split('\n');
+        instructions = instructions.split("\n");
 
         for (let j = 0; j < instructions.length; j++) {
-          if (instructions[j].includes('#_')) {
-            if (!foldersJSON.folders.includes(instructions[j].replace('#_', ''))) {
-              foldersJSON.folders.push({ name: instructions[j].replace('#_', ''), projects: [link] });
+          if (instructions[j].includes("#_")) {
+            if (!foldersJSON.folders.includes(instructions[j].replace("#_", ""))) {
+              foldersJSON.folders.push({ name: instructions[j].replace("#_", ""), projects: [link] });
             } else {
               for (let l = 0; l < foldersJSON.folders.length; l++) {
-                if (foldersJSON.folders[l] === instructions[j].replace('#_', '')) {
+                if (foldersJSON.folders[l] === instructions[j].replace("#_", "")) {
                   foldersJSON.folders[l].projects.push(link);
                 }
               }
@@ -103,7 +105,7 @@ export default async function ({ addon, global, console, msg }) {
 
     newFolderButton.addEventListener("click", () => {
       const folderName = prompt(msg("folderNamePrompt"));
-      if (folderName !== '') {
+      if (folderName !== "") {
         createFolder(folderName);
       }
     });
@@ -139,11 +141,11 @@ export default async function ({ addon, global, console, msg }) {
       });
 
       closeButton.addEventListener("click", remove);
-      backdrop.addEventListener('click', remove);
+      backdrop.addEventListener("click", remove);
 
-      const projectDiv = document.createElement('div');
-      projectDiv.classList.add('sa-folder-projects');
-      content.appendChild()
+      const projectDiv = document.createElement("div");
+      projectDiv.classList.add("sa-folder-projects");
+      content.appendChild();
     });
   }
 }
