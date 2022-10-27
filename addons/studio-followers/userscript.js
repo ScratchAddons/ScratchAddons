@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   const { redux } = addon.tab;
   // Same waitForState as remix-button
   await redux.waitForState((state) => typeof state.session.session?.user === "object");
