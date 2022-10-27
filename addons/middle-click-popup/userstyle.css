@@ -25,7 +25,7 @@
 }
 
 /* https://stackoverflow.com/questions/4038489/contenteditable-adds-a-br-when-i-hit-space */
-.sa-float-bar-input br { 
+.sa-float-bar-input br {
   display: none;
 }
 

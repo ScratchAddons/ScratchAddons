@@ -30,14 +30,13 @@ class TokenTypeGroup {
     }
     for (const parent of this.parents) yield* parent._parseTokens(querier, idx);
 
-    if (this.tokenCacheQueryID !== querier.queryID)
-      this.tokenCache = [];
+    if (this.tokenCacheQueryID !== querier.queryID) this.tokenCache = [];
 
     if (this.tokenCache[idx]) {
       yield* this.tokenCache[idx];
     } else {
       this.tokenCacheQueryID = querier.queryID;
-      let tokens = this.tokenCache[idx] = [];
+      let tokens = (this.tokenCache[idx] = []);
 
       for (const tokenType of this.tokenTypes) {
         for (const token of tokenType.parse(querier, idx)) {
@@ -88,7 +87,7 @@ class TokenType {
   }
 
   isBlock(token) {
-    return false;    
+    return false;
   }
 }
 
@@ -109,15 +108,14 @@ class TokenTypeStringEnum extends TokenType {
           yield new Token(idx, end, this, value[1], undefined, undefined, true);
         }
       } else {
-        if (querier.query.startsWith(value[0], idx))
-          yield new Token(idx, idx + value[0].length, this, value[1]);
+        if (querier.query.startsWith(value[0], idx)) yield new Token(idx, idx + value[0].length, this, value[1]);
       }
     }
   }
 
   createText(token, querier, autocomplete) {
     if (token.isTruncated && autocomplete) autocomplete[0] = false;
-    return this.values.find(value => value[1] === token.value)[0];
+    return this.values.find((value) => value[1] === token.value)[0];
   }
 }
 
@@ -161,8 +159,7 @@ class TokenTypeNumberLiteral extends TokenType {
       for (let i = idx + 2; i <= querier.query.length; i++) {
         const char = querier.query[i];
         if (TokenTypeStringLiteral.TERMINATORS.indexOf(char) !== -1) {
-          if (i !== idx + 2)
-            yield new Token(idx, i, this, querier.query.substring(idx, i));
+          if (i !== idx + 2) yield new Token(idx, i, this, querier.query.substring(idx, i));
           break;
         }
         if (TokenTypeNumberLiteral.HEX_CHARS.indexOf(char.toLowerCase()) === -1) break;
@@ -225,8 +222,7 @@ class TokenTypeBrackets extends TokenType {
     if (autocomplete && !autocomplete[0]) {
       return text;
     }
-    if (token.innerToken.end !== token.end)
-      text += querier.query.substring(token.innerToken.end, token.end - 1);
+    if (token.innerToken.end !== token.end) text += querier.query.substring(token.innerToken.end, token.end - 1);
     text += ")";
     return text;
   }
@@ -266,8 +262,11 @@ class TokenTypeBlock extends TokenType {
           if (field.className_ === "blocklyText blocklyDropdownText") {
             const fieldOptions = field.getOptions();
             for (let i = 0; i < fieldOptions.length; i++) {
-              if (typeof fieldOptions[i][1] !== "string" ||
-                TokenTypeBlock.INVALID_FIELDS.indexOf(fieldOptions[i][1]) !== -1) fieldOptions.splice(i, 1);
+              if (
+                typeof fieldOptions[i][1] !== "string" ||
+                TokenTypeBlock.INVALID_FIELDS.indexOf(fieldOptions[i][1]) !== -1
+              )
+                fieldOptions.splice(i, 1);
             }
             this.tokenTypeGroups.push(new TokenTypeGroup(null, false, new TokenTypeStringEnum(fieldOptions)));
           } else if (field.argType_) {
@@ -315,8 +314,7 @@ class TokenTypeBlock extends TokenType {
           ++fullyTrauncated;
         } else score += subtoken.score / 2;
         if (subtoken.precedence < this.block.precedence) score += 5;
-        if (subtoken.type?.isDefiningFeature && subtoken.start < querier.query.length)
-          hasDefiningFeature = true;
+        if (subtoken.type?.isDefiningFeature && subtoken.start < querier.query.length) hasDefiningFeature = true;
       }
       if (!hasDefiningFeature) return;
       score = Math.floor(score + 1000 * (1 - fullyTrauncated / subtokens.length));
@@ -381,8 +379,7 @@ class TokenTypeBlock extends TokenType {
   }
 
   createText(token, querier, autocomplete) {
-    if (!token.isTruncated)
-      return querier.query.substring(token.start, token.end);
+    if (!token.isTruncated) return querier.query.substring(token.start, token.end);
     let text = "";
     if (token.start !== token.value.at(-1).start) {
       text += querier.query.substring(token.start, token.value.at(-1).start);
@@ -423,12 +420,12 @@ class QueryOption {
 
   get text() {
     if (this._text) return this._text;
-    return this._text = this.token.type?.createText(this.token, this.querier) ?? "";
+    return (this._text = this.token.type?.createText(this.token, this.querier) ?? "");
   }
 
   get autocomplete() {
     if (this._autocomplete) return this._autocomplete;
-    return this._autocomplete = this.token.type?.createText(this.token, this.querier, [true]);
+    return (this._autocomplete = this.token.type?.createText(this.token, this.querier, [true]));
   }
 
   createBlock() {
@@ -508,10 +505,18 @@ export default class WorkspaceQuerier {
     //// Round value reporter blocks ////
     this.tokenTypeGroupValues = new TokenTypeGroup(null, true);
     // Round Reporters + Triangle Reports + String Literals + Brackets
-    this.tokenTypeGroupString = new TokenTypeGroup([this.tokenTypeGroupValues, this.tokenTypeGroupBooleanBlocks], true, new TokenTypeStringLiteral());
+    this.tokenTypeGroupString = new TokenTypeGroup(
+      [this.tokenTypeGroupValues, this.tokenTypeGroupBooleanBlocks],
+      true,
+      new TokenTypeStringLiteral()
+    );
     this.tokenTypeGroupString.tokenTypes.push(new TokenTypeBrackets(this.tokenTypeGroupString));
     // Round Reporters + Triangle Reports + Number Literals + Brackets
-    this.tokenTypeGroupNumber = new TokenTypeGroup([this.tokenTypeGroupValues, this.tokenTypeGroupBooleanBlocks], true, new TokenTypeNumberLiteral());
+    this.tokenTypeGroupNumber = new TokenTypeGroup(
+      [this.tokenTypeGroupValues, this.tokenTypeGroupBooleanBlocks],
+      true,
+      new TokenTypeNumberLiteral()
+    );
     this.tokenTypeGroupNumber.tokenTypes.push(new TokenTypeBrackets(this.tokenTypeGroupNumber));
 
     // We still want to try autocomplete 'round' things like variable where booleans should go

@@ -53,7 +53,7 @@ export default async function ({ addon, msg, global, console }) {
       this.dropdown = this.dropdownOut.appendChild(document.createElement("ul"));
       this.dropdown.className = "sa-float-bar-dropdown";
 
-      this.floatInput.addEventListener("input", () => this.inputChange())
+      this.floatInput.addEventListener("input", () => this.inputChange());
       this.floatInput.addEventListener("keydown", (...e) => this.inputKeyDown(...e));
       this.floatInput.addEventListener("focus", () => this.inputChange());
       this.floatInput.addEventListener("focusout", () => this.hide());
@@ -165,7 +165,7 @@ export default async function ({ addon, msg, global, console }) {
     }
 
     inputChange() {
-      var startTime = performance.now()
+      var startTime = performance.now();
 
       const query = this.floatInput.innerText;
 
@@ -191,7 +191,7 @@ export default async function ({ addon, msg, global, console }) {
         this.floatInputSuggestion.innerText = "";
       }
 
-      var endTime = performance.now()
+      var endTime = performance.now();
       console.log(`Worksapce query took ${endTime - startTime} milliseconds`);
     }
 
@@ -199,7 +199,10 @@ export default async function ({ addon, msg, global, console }) {
 
       if (e.keyCode == 9) { // Tab
         if (this.queryAutocompleteResult?.isTruncated) {
-          this.floatInput.innerText = this.queryAutocompleteResult.autocomplete.replaceAll(" ", String.fromCharCode(160));
+          this.floatInput.innerText = this.queryAutocompleteResult.autocomplete.replaceAll(
+            " ",
+            String.fromCharCode(160)
+          );
           // Move cursor to the end of the newly inserted text
           let selection = window.getSelection();
           selection.selectAllChildren(this.floatInput);
@@ -209,7 +212,8 @@ export default async function ({ addon, msg, global, console }) {
         }
         e.stopPropagation();
         e.preventDefault();
-      } else if (e.keyCode === 13) { // Enter
+      } else if (e.keyCode === 13) {
+        // Enter
         let sel = this.dropdown.querySelector(".sel");
 
         if (this.queryResult) {
@@ -220,7 +224,8 @@ export default async function ({ addon, msg, global, console }) {
         e.stopPropagation();
         e.preventDefault();
         return;
-      } else if (e.keyCode === 27) { // Escape
+      } else if (e.keyCode === 27) {
+        // Escape
         if (this.floatInput.innerText.length > 0) {
           this.floatInput.innerText = ""; // Clear search first, then close on second press
           this.inputChange(e);
