@@ -575,6 +575,7 @@ export default class WorkspaceQuerier {
   }
 
   queryWorkspace(query) {
+    if (query.length === 0) return [];
     this.query = query.replaceAll(String.fromCharCode(160), " ");
     ++this.queryID;
     const options = [];
