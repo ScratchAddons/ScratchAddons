@@ -1,0 +1,24 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
+  "name": "Skewing in costume editor",
+  "description": "Hold Ctrl while scaling an object on its sides to skew it. Hold Alt while skewing an object to skew it from its center.",
+  "credits": [
+    {
+      "name": "CST1229",
+	  "link": "https://github.com/CST1229/"
+    }
+  ],
+  "tags": [
+    "editor",
+    "costumeEditor"
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": [
+        "projects"
+      ]
+    }
+  ],
+  "versionAdded": "1.30.0"
+}
