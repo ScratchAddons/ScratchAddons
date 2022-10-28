@@ -6,11 +6,15 @@ export default async function ({ addon, msg, global, console }) {
   // We only want to handle color picker events from the user clicking on the button, not from
   // addons or other scripts pressing it with click().
   let isMostRecentClickUserInitiated = false;
-  document.addEventListener('click', (e) => {
-    isMostRecentClickUserInitiated = e.isTrusted;
-  }, {
-    capture: true
-  });
+  document.addEventListener(
+    "click",
+    (e) => {
+      isMostRecentClickUserInitiated = e.isTrusted;
+    },
+    {
+      capture: true,
+    }
+  );
 
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
