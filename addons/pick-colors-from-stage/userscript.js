@@ -57,6 +57,8 @@ export default async function ({ addon, msg, global, console }) {
       });
     }
 
+    // Don't check for addon being disabled here in case we were dynamically disabled while color
+    // picking. This code won't do anything anyways when the previous code doesn't run.
     if (action.type === "scratch-paint/eye-dropper/DEACTIVATE_COLOR_PICKER") {
       setIsPicking(false);
 
