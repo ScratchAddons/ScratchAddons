@@ -30,6 +30,7 @@ export default async function ({ addon }) {
 		const ogMouseDrag = ST.prototype.onMouseDrag;
 		ST.prototype.onMouseDrag = function(event) {
 			if (!this.active) return;
+			if (addon.self.disabled) return ogMouseDrag.call(this, event);
 			
 			const bounds = this.skewBounds;
 			const doShear = (skx, sky) => {
@@ -80,7 +81,7 @@ export default async function ({ addon }) {
 			this.lastSkx = 0;
 			this.lastSky = 0;
 			
-			if (!addon.self.disabled && event.modifiers.control && !this.isCorner) {
+			if (event.modifiers.control && !this.isCorner) {
 				// Skew
 				if (this.isSkew === false) {
 					// Reset position
