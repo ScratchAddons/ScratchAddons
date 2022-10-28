@@ -5,19 +5,14 @@
   "credits": [
     {
       "name": "CST1229",
-	  "link": "https://github.com/CST1229/"
+      "link": "https://github.com/CST1229/"
     }
   ],
-  "tags": [
-    "editor",
-    "costumeEditor"
-  ],
+  "tags": ["editor", "costumeEditor"],
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "projects"
-      ]
+      "matches": ["projects"]
     }
   ],
   "versionAdded": "1.30.0"
