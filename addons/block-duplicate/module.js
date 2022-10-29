@@ -51,9 +51,8 @@ export async function load(addon) {
       this.targetBlock_.type !== "procedures_definition";
 
     const isCherryPickingInverted = invertCherryPicking && !isRightClickDuplicate && block.getParent();
-    const isCherryPicking = isDuplicating
-      ? ctrlOrMetaPressed
-      : enableCherryPicking && ctrlOrMetaPressed === !isCherryPickingInverted && !block.isShadow();
+    const canCherryPick = enableCherryPicking || isDuplicating;
+    const isCherryPicking = canCherryPick && ctrlOrMetaPressed === !isCherryPickingInverted && !block.isShadow();
 
     if (isDuplicating || isCherryPicking) {
       if (!ScratchBlocks.Events.getGroup()) {
