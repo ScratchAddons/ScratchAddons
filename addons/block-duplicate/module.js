@@ -2,7 +2,9 @@ let enableCherryPicking = false;
 let invertCherryPicking = false;
 export function setCherryPicking(newEnabled, newInverted) {
   enableCherryPicking = newEnabled;
-  invertCherryPicking = newInverted;
+  // If cherry picking is disabled, also disable invert. Duplicating blocks can still cause
+  // this setting to be used.
+  invertCherryPicking = newEnabled && newInverted;
 }
 
 let enableDuplication = false;
