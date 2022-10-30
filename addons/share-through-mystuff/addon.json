@@ -1,6 +1,6 @@
 {
   "name": "Share through My Stuff",
-  "description": "Let's you share your projects through mystuff My Stuff.",
+  "description": "Share projects through the My Stuff page.",
   "credits": [
     {
       "name": "Steve0Greatness",
@@ -20,17 +20,9 @@
       "runAtComplete": true
     }
   ],
-  "settings": [
-    {
-      "name": "Display share text on a newline.",
-      "id": "newline",
-      "type": "boolean",
-      "default": false
-    }
-  ],
+  "settings": [],
   "dynamicDisable": true,
   "dynamicEnable": true,
   "tags": ["community"],
-  "versionAdded": "",
   "enabledByDefault": false
 }
