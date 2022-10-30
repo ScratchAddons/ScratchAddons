@@ -1,18 +1,11 @@
 .media-item-content .media-action a.media-share, .media-item-content .media-action a.media-trash {
     float: initial !important;
     position: initial !important;
-    top: 0px;
-    left: 0px;
-    margin:3px !important;
+    margin: 3px !important;
 }
 
 .media-action div {
     position: relative;
     float: left;
     top: 20px;
-    left: 10px;
-}
-
-.media_share_newline {
-    display:block;
 }
