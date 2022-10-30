@@ -1,0 +1,36 @@
+{
+  "name": "Share through My Stuff",
+  "description": "Let's you share your projects through mystuff My Stuff.",
+  "credits": [
+    {
+      "name": "Steve0Greatness",
+      "link": "https://scratch.mit.edu/users/Steve0Greatness/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/mystuff"]
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/mystuff"],
+      "runAtComplete": true
+    }
+  ],
+  "settings": [
+    {
+      "name": "Display share text on a newline.",
+      "id": "newline",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "tags": ["community"],
+  "versionAdded": "",
+  "enabledByDefault": false
+}
