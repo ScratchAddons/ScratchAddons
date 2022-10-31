@@ -1,5 +1,6 @@
 import { setupForumId, getIDLink } from "../better-quoter/module.js";
 export default async function ({ addon, console, msg }) {
+  if (!document.querySelector('textarea')) return;
   setupForumId(addon);
   const buttons = document.querySelectorAll(".postfootright");
   buttons.forEach(function (elm) {
