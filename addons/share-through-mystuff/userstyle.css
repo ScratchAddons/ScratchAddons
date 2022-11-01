@@ -1,11 +1,12 @@
-.media-item-content .media-action a.media-share, .media-item-content .media-action a.media-trash {
-    float: initial !important;
-    position: initial !important;
-    margin: 3px !important;
+.media-item-content .media-action a.media-share,
+.media-item-content .media-action a.media-trash {
+  float: initial !important;
+  position: initial !important;
+  margin: 3px !important;
 }
 
 .media-action div {
-    position: relative;
-    float: left;
-    top: 20px;
+  position: relative;
+  float: left;
+  top: 20px;
 }
