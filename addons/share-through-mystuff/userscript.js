@@ -3,7 +3,7 @@ export default async function ({ addon, global, console }) {
   async function prompt(e) {
     let confirmation = confirm("Would you like to share this project?");
     if (!confirmation) return;
-    e.target.parentElement.querySelector("media-share").click();
+    e.target.parentElement.querySelector(".media-share").click();
   }
   function make(display) { // function that creates the share button
     let share_link = document.createElement("a");
@@ -11,6 +11,7 @@ export default async function ({ addon, global, console }) {
     share_link.classList.add("media-share");
     share_link.dataset.control = "share";
     share_link.innerText = display;
+    share_link.addEventListener("click", check_shared)
     if (!addon.settings.get("prompt")) return share_link;
     share_link.innerText = "";
     let prompt_link = document.createElement("a");
@@ -41,7 +42,7 @@ export default async function ({ addon, global, console }) {
   }
   function event(wait = 500) {
     console.log("Event Triggered")
-    setTimeout(basics, wait); // allows for time to load
+    setTimeout(basics, wait); // allows for time to load. And no, I've tried it, addon.waitForElement isn't working for this... for some reason.
   }
   addon.tab.addEventListener("urlChange", event);
   next_button.addEventListener("click", () => event(1500))
