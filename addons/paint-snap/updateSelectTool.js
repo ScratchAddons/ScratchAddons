@@ -185,7 +185,7 @@ export const updateSelectTool = (paper, tool) => {
             point: origPoint,
             snapPoint: snapPoints[closestSnapPoint.pos]?.point,
             snapPointType: snapPoints[closestSnapPoint.pos]?.type,
-            distance: closestSnapPoint[1],
+            distance: closestSnapPoint.distance,
           };
         })
         .sort(sortByPrioOrDist);
