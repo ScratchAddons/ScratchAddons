@@ -10,7 +10,8 @@
       "link": "https://scratch.mit.edu/users/TheColaber/"
     }
   ],
-  "tags": ["editor"],
+  "tags": ["editor", "recommended"],
+  "enabledByDefualt": true,
   "userscripts": [
     {
       "url": "userscript.js",
