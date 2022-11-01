@@ -34,6 +34,9 @@ export function loadModules(paper) {
   const getDragCrosshairLayer = function () {
     return _getLayer("isDragCrosshairLayer");
   };
+  const getGuideLayer = function () {
+    return _getLayer("isGuideLayer");
+  };
 
   // https://github.com/LLK/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/helper/view.js
 
@@ -67,6 +70,33 @@ export function loadModules(paper) {
     return paper.view.bounds.unite(ART_BOARD_BOUNDS).intersect(MAX_WORKSPACE_BOUNDS);
   };
 
+  const setDefaultGuideStyle = function (item) {
+    item.strokeWidth = 1 / paper.view.zoom;
+    item.opacity = 1;
+    item.blendMode = "normal";
+    item.guide = true;
+  };
+
+  const GUIDE_BLUE = "#009dec";
+
+  const hoverBounds = function (item, expandBy) {
+    let bounds = item.internalBounds;
+    if (expandBy) {
+      bounds = bounds.expand(expandBy);
+    }
+    const rect = new paper.Path.Rectangle(bounds);
+    rect.matrix = item.matrix;
+    setDefaultGuideStyle(rect);
+    rect.parent = getGuideLayer();
+    rect.strokeColor = GUIDE_BLUE;
+    rect.fillColor = null;
+    rect.data.isHelperItem = true;
+    rect.data.origItem = item;
+    rect.bringToFront();
+
+    return rect;
+  };
+
   return {
     math: {
       checkPointsClose,
@@ -74,6 +104,7 @@ export function loadModules(paper) {
     },
     layer: { CROSSHAIR_FULL_OPACITY, getDragCrosshairLayer, getLayer: _getLayer },
     view: { CENTER, ART_BOARD_BOUNDS, MAX_WORKSPACE_BOUNDS, getActionBounds },
+    guide: { hoverBounds },
   };
 }
 

@@ -13,6 +13,7 @@ export const updateSelectTool = (paper, tool) => {
     math: { checkPointsClose, snapDeltaToAngle },
     view: { getActionBounds, CENTER },
     layer: { getDragCrosshairLayer, CROSSHAIR_FULL_OPACITY, getLayer },
+    guide: { hoverBounds },
   } = lib;
 
   const moveTool = getMoveTool(tool);
@@ -45,6 +46,8 @@ export const updateSelectTool = (paper, tool) => {
   // Paper adds them by default, and we don't want them in the canvas yet.
   guideLine.remove();
   guidePoint.remove();
+
+  let itemIndicator;
 
   const fixGuideSizes = () => {
     guidePointParts.shadow = new paper.Path.Circle({
@@ -119,6 +122,8 @@ export const updateSelectTool = (paper, tool) => {
       guidePoint.remove();
       guidePoint.visible = false;
       guideLine.visible = false;
+      itemIndicator?.remove();
+      if (itemIndicator) itemIndicator.visible = false;
       resetAnchorColor();
     };
 
@@ -186,6 +191,7 @@ export const updateSelectTool = (paper, tool) => {
             snapPoint: snapPoints[closestSnapPoint.pos]?.point,
             snapPointType: snapPoints[closestSnapPoint.pos]?.type,
             distance: closestSnapPoint.distance,
+            pos: closestSnapPoint.pos,
           };
         })
         .sort(sortByPrioOrDist);
@@ -195,6 +201,16 @@ export const updateSelectTool = (paper, tool) => {
       if (closestSnapPoint?.snapPoint) {
         fixGuideSizes();
         snapVector = closestSnapPoint.snapPoint.subtract(closestSnapPoint.point);
+        const itemID = closestSnapPoint.pos.match(/item_(\d+)_/)?.[1];
+        if (itemID) {
+          const item = paper.project.getItem({
+            id: parseInt(itemID, 10),
+          });
+
+          if (item) {
+            itemIndicator = hoverBounds(item);
+          }
+        }
         if (closestSnapPoint.point.equals(this.selectionCenter) && closestSnapPoint.snapPointType === "point") {
           selectionAnchor.fillColor = selectionAnchor.strokeColor = new paper.Color(guideColor);
         } else {
