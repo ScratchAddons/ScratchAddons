@@ -3,7 +3,7 @@ html,
 body {
   background-color: var(--darkWww-page);
   color: var(--darkWww-page-scratchr2Text);
-  color-scheme: var(--darkWww-page-colorScheme);
+  /*color-scheme: var(--darkWww-page-colorScheme);*/
 }
 h1,
 h2,
