@@ -20,6 +20,14 @@
       "runAtComplete": true
     }
   ],
+  "settings": [
+    {
+      "name": "Ask if the project should be shared",
+      "id": "prompt",
+      "type": "boolean",
+      "default": true
+    }
+  ],
   "dynamicDisable": true,
   "dynamicEnable": true,
   "tags": ["community"],

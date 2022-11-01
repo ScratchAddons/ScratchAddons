@@ -1,12 +1,26 @@
 export default async function ({ addon, global, console }) {
   const next_button_selector = ".grey.button:not(.small)";
+  async function prompt(e) {
+    let confirmation = confirm("Would you like to share this project?");
+    if (!confirmation) return;
+    e.target.parentElement.querySelector("media-share").click();
+  }
   function make(display) { // function that creates the share button
     let share_link = document.createElement("a");
     share_link.href = "#";
     share_link.classList.add("media-share");
     share_link.dataset.control = "share";
     share_link.innerText = display;
-    return share_link;
+    if (!addon.settings.get("prompt")) return share_link;
+    share_link.innerText = "";
+    let prompt_link = document.createElement("a");
+    prompt_link.href = "#";
+    prompt_link.innerText = display;
+    prompt_link.addEventListener("click", prompt);
+    let container = document.createElement("span");
+    container.append(prompt_link, share_link);
+    container.classList.add("sa_mystuff_sharing_button");
+    return container;
   }
   var next_button = document.querySelector(next_button_selector);
   async function run(runs, elements) { // main script
