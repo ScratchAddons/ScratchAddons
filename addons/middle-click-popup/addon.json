@@ -11,7 +11,7 @@
     }
   ],
   "tags": ["editor", "recommended"],
-  "enabledByDefualt": true,
+  "enabledByDefault": true,
   "userscripts": [
     {
       "url": "userscript.js",
