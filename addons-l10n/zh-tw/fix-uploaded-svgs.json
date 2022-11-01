@@ -1,0 +1,1 @@
+{"fix-uploaded-svgs/@name":"SVG 圖片上傳修復","fix-uploaded-svgs/@description":"修復 Scratch 編輯器上的已知問題，如果上傳的是由 Affinity Designer 之類的圖像軟體製作的 SVG，圖像會損壞。"}

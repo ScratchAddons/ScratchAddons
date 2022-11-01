@@ -1,3 +1,13 @@
+.sa-volume {
+  /* Same lateral padding as .clone-container-container */
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+.sa-vol-slider-small .sa-volume {
+  display: none !important;
+}
+
 .sa-volume > * {
   vertical-align: middle;
   margin-top: 6px;
