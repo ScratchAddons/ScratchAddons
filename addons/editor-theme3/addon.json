@@ -15,9 +15,8 @@
     }
   ],
   "latestUpdate": {
-    "version": "1.29.0",
-    "temporaryNotice": "The \"Dark comments\" setting from \"Editor dark mode and customizable colors\" has been moved here and is now customizable.",
-    "newSettings": ["comment-color"]
+    "version": "1.30.0",
+    "temporaryNotice": "Two new presets have been added, including a preset for Scratch's upcoming block colors that were shown in Scratch Lab."
   },
   "customCssVariables": [
     {
