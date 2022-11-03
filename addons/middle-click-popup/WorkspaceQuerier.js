@@ -257,6 +257,7 @@ class TokenTypeBlock extends TokenType {
     this.hasSubTokens = true;
 
     const _appendTokenTypeGroups = (block) => {
+      let hasDefiningFeature = false;
       for (const input of block.inputList) {
         for (const field of input.fieldRow) {
           if (field.className_ === "blocklyText blocklyDropdownText") {
@@ -272,6 +273,7 @@ class TokenTypeBlock extends TokenType {
               fieldOptions[i][0] = fieldOptions[i][0].toLowerCase();
             }
             this.tokenTypeGroups.push(new TokenTypeGroup(null, false, new TokenTypeStringEnum(fieldOptions)));
+            hasDefiningFeature = true;
           } else if (field.argType_) {
             if (field.argType_[0] === "colour") {
               // TODO
@@ -282,8 +284,9 @@ class TokenTypeBlock extends TokenType {
             }
           } else {
             this.tokenTypeGroups.push(
-              new TokenTypeGroup(null, false, new TokenTypeStringEnum([[field.getText().toLowerCase(), null]]))
+              new TokenTypeGroup(null, hasDefiningFeature, new TokenTypeStringEnum([[field.getText().toLowerCase(), null]]))
             );
+            hasDefiningFeature = true;
           }
         }
 

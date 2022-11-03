@@ -181,6 +181,7 @@ export default async function ({ addon, msg, global, console }) {
           if (!this.queryAutocompleteResult) this.queryAutocompleteResult = result;
         } else {
           if (!this.queryResult) this.queryResult = result;
+          break;
         }
       }
 
