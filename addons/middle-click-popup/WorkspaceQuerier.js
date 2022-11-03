@@ -162,7 +162,7 @@ class TokenTypeNumberLiteral extends TokenType {
           if (i !== idx + 2) yield new Token(idx, i, this, querier.query.substring(idx, i));
           break;
         }
-        if (TokenTypeNumberLiteral.HEX_CHARS.indexOf(char.toLowerCase()) === -1) break;
+        if (TokenTypeNumberLiteral.HEX_CHARS.indexOf(char) === -1) break;
       }
     }
 
@@ -265,8 +265,11 @@ class TokenTypeBlock extends TokenType {
               if (
                 typeof fieldOptions[i][1] !== "string" ||
                 TokenTypeBlock.INVALID_FIELDS.indexOf(fieldOptions[i][1]) !== -1
-              )
+              ) {
                 fieldOptions.splice(i, 1);
+                continue;
+              }
+              fieldOptions[i][0] = fieldOptions[i][0].toLowerCase();
             }
             this.tokenTypeGroups.push(new TokenTypeGroup(null, false, new TokenTypeStringEnum(fieldOptions)));
           } else if (field.argType_) {
@@ -279,7 +282,7 @@ class TokenTypeBlock extends TokenType {
             }
           } else {
             this.tokenTypeGroups.push(
-              new TokenTypeGroup(null, false, new TokenTypeStringEnum([[field.getText(), null]]))
+              new TokenTypeGroup(null, false, new TokenTypeStringEnum([[field.getText().toLowerCase(), null]]))
             );
           }
         }
@@ -581,7 +584,7 @@ export default class WorkspaceQuerier {
 
   queryWorkspace(query) {
     if (query.length === 0) return [];
-    this.query = query.replaceAll(String.fromCharCode(160), " ");
+    this.query = query.replaceAll(String.fromCharCode(160), " ").toLowerCase();
     ++this.queryID;
     const options = [];
 
