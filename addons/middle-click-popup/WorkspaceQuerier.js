@@ -36,19 +36,19 @@ class TokenProviderGroup extends TokenProvider {
   }
 
   pushProviders(...providers) {
-    if (!this.hasCachable) for (const provider of providers) {
-      if (provider.shouldCache) {
-        this.hasCachable = true;
-        break;
+    if (!this.hasCachable)
+      for (const provider of providers) {
+        if (provider.shouldCache) {
+          this.hasCachable = true;
+          break;
+        }
       }
-    }
     this.providers.push(...providers);
   }
 
   *parseTokens(query, idx) {
     if (!this.hasCachable) {
-      for (const provider of this.providers)
-        yield* provider.parseTokens(query, idx, false);
+      for (const provider of this.providers) yield* provider.parseTokens(query, idx, false);
       return;
     }
 
@@ -458,8 +458,7 @@ class TokenTypeBlock extends TokenType {
         if (nextStart !== subtoken.end) {
           text += query.str.substring(subtoken.end, nextStart);
         } else {
-          if (subtokenText.length !== 0 && QueryInfo.IGNORABLE_CHARS.indexOf(subtokenText.at(-1)) === -1)
-            text += " ";
+          if (subtokenText.length !== 0 && QueryInfo.IGNORABLE_CHARS.indexOf(subtokenText.at(-1)) === -1) text += " ";
         }
       }
     }
@@ -585,7 +584,7 @@ export default class WorkspaceQuerier {
     this.tokenGroupBoolean = new TokenProviderOptional(new TokenProviderGroup());
     this.tokenGroupBoolean.inner.pushProviders(
       this.tokenGroupBooleanBlocks,
-      new TokenTypeBrackets(this.tokenGroupBoolean),
+      new TokenTypeBrackets(this.tokenGroupBoolean)
     );
 
     // Anything that fits into a number hole. (Round blocks + Boolean blocks + Number Literals + Brackets)
@@ -594,7 +593,7 @@ export default class WorkspaceQuerier {
       new TokenTypeNumberLiteral(),
       this.tokenGroupRoundBlocks,
       this.tokenGroupBooleanBlocks,
-      new TokenTypeBrackets(this.tokenGroupNumber),
+      new TokenTypeBrackets(this.tokenGroupNumber)
     );
 
     // Anything that fits into a string hole (Round blocks + Boolean blocks + String Literals + Brackets)
@@ -603,7 +602,7 @@ export default class WorkspaceQuerier {
       new TokenTypeStringLiteral(),
       this.tokenGroupRoundBlocks,
       this.tokenGroupBooleanBlocks,
-      new TokenTypeBrackets(this.tokenGroupString),
+      new TokenTypeBrackets(this.tokenGroupString)
     );
 
     // Anything that fits into a c shaped hole (Stackable blocks)
