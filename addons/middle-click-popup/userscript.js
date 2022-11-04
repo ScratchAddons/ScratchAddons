@@ -197,8 +197,8 @@ export default async function ({ addon, msg, global, console }) {
     }
 
     inputKeyDown(e) {
-
-      if (e.keyCode == 9) { // Tab
+      if (e.keyCode == 9) {
+        // Tab
         if (this.queryAutocompleteResult?.isTruncated) {
           this.floatInput.innerText = this.queryAutocompleteResult.autocomplete.replaceAll(
             " ",
@@ -208,7 +208,7 @@ export default async function ({ addon, msg, global, console }) {
           let selection = window.getSelection();
           selection.selectAllChildren(this.floatInput);
           selection.collapseToEnd();
-          
+
           this.inputChange(e);
         }
         e.stopPropagation();
