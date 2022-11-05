@@ -246,8 +246,7 @@ class TokenTypeColor extends TokenType {
   *parseTokens(query, idx) {
     if (!query.str.startsWith("#", idx)) return;
     for (let i = 0; i < 6; i++) {
-      if (TokenTypeNumberLiteral.HEX_CHARS.indexOf(query.lowercase[idx + i + 1]) === -1)
-        return;
+      if (TokenTypeNumberLiteral.HEX_CHARS.indexOf(query.lowercase[idx + i + 1]) === -1) return;
     }
     yield new Token(idx, idx + 7, this, query.str.substring(idx, idx + 7));
   }
@@ -388,18 +387,17 @@ class TokenTypeBlock extends TokenType {
       for (const subtoken of subtokens) {
         isTruncated |= subtoken.isTruncated;
         if (!subtoken.isTruncated) score += subtoken.score;
-        else if (subtoken.end !== subtoken.start)
-          score += subtoken.score / 2;
+        else if (subtoken.end !== subtoken.start) score += subtoken.score / 2;
         if (subtoken.precedence < this.block.precedence) score += 5;
         if (subtoken.type.isDefiningFeature && subtoken.start < query.length) hasDefiningFeature = true;
       }
       if (!hasDefiningFeature) continue;
-      score = Math.floor(score + 1000 * (1 - (subtokens.length / this.tokenProviders.length)));
+      score = Math.floor(score + 1000 * (1 - subtokens.length / this.tokenProviders.length));
       yield new Token(idx, subtokens[0].end, this, subtokens, score, this.block.precedence, isTruncated);
     }
   }
 
-  * _parseSubtokens(idx, tokenProviderIdx, query, parseSubSubTokens = true) {
+  *_parseSubtokens(idx, tokenProviderIdx, query, parseSubSubTokens = true) {
     idx = query.skipIgnorable(idx);
     let tokenProvider = this.tokenProviders[tokenProviderIdx];
 
