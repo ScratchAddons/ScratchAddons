@@ -21,7 +21,6 @@ class TokenProviderOptional extends TokenProvider {
 
   *parseTokens(query, idx) {
     yield new Token(idx, idx, TokenTypeBlank.INSTANCE, null, -1);
-    if (idx >= query.length) return;
     yield* this.inner.parseTokens(query, idx);
   }
 }
@@ -165,10 +164,13 @@ class TokenTypeStringEnum extends TokenType {
       if (remainingChar < value[0].length) {
         if (value[0].startsWith(query.lowercase.substring(idx))) {
           const end = remainingChar < 0 ? 0 : query.length;
-          yield new Token(idx, end, this, value[1], undefined, undefined, true);
+          yield new Token(idx, end, this, value[1], 100000, undefined, true);
         }
       } else {
-        if (query.lowercase.startsWith(value[0], idx)) yield new Token(idx, idx + value[0].length, this, value[1]);
+        if (query.lowercase.startsWith(value[0], idx)) {
+          if (TokenTypeStringLiteral.TERMINATORS.indexOf(query.lowercase[idx + value[0].length]) !== -1)
+            yield new Token(idx, idx + value[0].length, this, value[1]);
+        }
       }
     }
   }
@@ -187,7 +189,8 @@ class TokenTypeStringLiteral extends TokenType {
     for (let i = idx; i <= query.length; i++) {
       if (TokenTypeStringLiteral.TERMINATORS.indexOf(query.str[i]) !== -1) {
         if (!wasTerminator || i === query.length) {
-          yield new Token(idx, i, this, query.str.substring(idx, i), -1000);
+          const value = query.str.substring(idx, i);
+          yield new Token(idx, i, this, value, -300 * value.length);
         }
         wasTerminator = true;
       } else {
@@ -206,20 +209,15 @@ class TokenTypeNumberLiteral extends TokenType {
   static HEX_CHARS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
 
   *parseTokens(query, idx) {
-    if (idx >= query.length) {
-      yield new Token(idx, idx, this, "", undefined, undefined, true);
-      return;
-    }
-
     if (query.str.startsWith("0x", idx)) {
       if (idx + 2 === query.length) {
-        yield new Token(idx, idx + 2, this, "0x0", undefined, undefined, true);
+        yield new Token(idx, idx + 2, this, "0x0", 100000, undefined, true);
         return;
       }
       for (let i = idx + 2; i <= query.length; i++) {
         const char = query.str[i];
         if (TokenTypeStringLiteral.TERMINATORS.indexOf(char) !== -1) {
-          if (i !== idx + 2) yield new Token(idx, i, this, query.str.substring(idx, i));
+          if (i !== idx + 2) yield new Token(idx, i, this, query.str.substring(idx, i), 100000);
           break;
         }
         if (TokenTypeNumberLiteral.HEX_CHARS.indexOf(char) === -1) break;
@@ -229,7 +227,7 @@ class TokenTypeNumberLiteral extends TokenType {
     for (let i = idx; i <= query.length; i++) {
       const char = query.str[i];
       if (TokenTypeStringLiteral.TERMINATORS.indexOf(char) !== -1) {
-        if (i !== idx) yield new Token(idx, i, this, query.str.substring(idx, i));
+        if (i !== idx) yield new Token(idx, i, this, query.str.substring(idx, i), 100000);
         break;
       }
       if (TokenTypeNumberLiteral.NUM_CHAR.indexOf(char) === -1) break;
@@ -238,6 +236,23 @@ class TokenTypeNumberLiteral extends TokenType {
 
   createText(token, query) {
     if (token.isTruncated) return token.value;
+    return query.query.substring(token.start, token.end);
+  }
+}
+
+class TokenTypeColor extends TokenType {
+  static INSTANCE = new TokenProviderOptional(new TokenTypeColor());
+
+  *parseTokens(query, idx) {
+    if (!query.str.startsWith("#", idx)) return;
+    for (let i = 0; i < 6; i++) {
+      if (TokenTypeNumberLiteral.HEX_CHARS.indexOf(query.lowercase[idx + i + 1]) === -1)
+        return;
+    }
+    yield new Token(idx, idx + 7, this, query.str.substring(idx, idx + 7));
+  }
+
+  createText(token, query) {
     return query.query.substring(token.start, token.end);
   }
 }
@@ -330,14 +345,15 @@ class TokenTypeBlock extends TokenType {
             hasDefiningFeature = true;
           } else if (field.argType_) {
             if (field.argType_[0] === "colour") {
-              // TODO
+              this.tokenProviders.push(TokenTypeColor.INSTANCE);
             } else if (field.argType_[1] === "number") {
               this.tokenProviders.push(querier.tokenGroupNumber);
             } else {
               this.tokenProviders.push(querier.tokenGroupString);
             }
           } else {
-            const provider = new TokenTypeStringEnum([[field.getText().toLowerCase(), null]]);
+            const fieldText = field.getText().toLowerCase();
+            const provider = new TokenTypeStringEnum([[fieldText, fieldText]]);
             if (!hasDefiningFeature) {
               this.tokenProviders.push(provider);
               hasDefiningFeature = true;
@@ -367,25 +383,23 @@ class TokenTypeBlock extends TokenType {
   *parseTokens(query, idx) {
     for (const subtokens of this._parseSubtokens(idx, 0, query)) {
       let score = 0;
-      let isTruncated = false;
-      let fullyTrauncated = 0;
+      let isTruncated = subtokens.length < this.tokenProviders.length;
       let hasDefiningFeature = false;
       for (const subtoken of subtokens) {
         isTruncated |= subtoken.isTruncated;
         if (!subtoken.isTruncated) score += subtoken.score;
-        else if (subtoken.end === subtoken.start) {
-          ++fullyTrauncated;
-        } else score += subtoken.score / 2;
+        else if (subtoken.end !== subtoken.start)
+          score += subtoken.score / 2;
         if (subtoken.precedence < this.block.precedence) score += 5;
         if (subtoken.type.isDefiningFeature && subtoken.start < query.length) hasDefiningFeature = true;
       }
       if (!hasDefiningFeature) continue;
-      score = Math.floor(score + 1000 * (1 - fullyTrauncated / subtokens.length));
+      score = Math.floor(score + 1000 * (1 - (subtokens.length / this.tokenProviders.length)));
       yield new Token(idx, subtokens[0].end, this, subtokens, score, this.block.precedence, isTruncated);
     }
   }
 
-  *_parseSubtokens(idx, tokenProviderIdx, query) {
+  * _parseSubtokens(idx, tokenProviderIdx, query, parseSubSubTokens = true) {
     idx = query.skipIgnorable(idx);
     let tokenProvider = this.tokenProviders[tokenProviderIdx];
 
@@ -395,10 +409,10 @@ class TokenTypeBlock extends TokenType {
         if (token.precedence === this.block.precedence && tokenProviderIdx !== 0) continue;
       }
 
-      if (tokenProviderIdx === this.tokenProviders.length - 1) {
+      if (!parseSubSubTokens || tokenProviderIdx === this.tokenProviders.length - 1) {
         yield [token];
       } else {
-        for (const subTokenArr of this._parseSubtokens(token.end, tokenProviderIdx + 1, query)) {
+        for (const subTokenArr of this._parseSubtokens(token.end, tokenProviderIdx + 1, query, !token.isTruncated)) {
           subTokenArr.push(token);
           yield subTokenArr;
         }
@@ -408,19 +422,21 @@ class TokenTypeBlock extends TokenType {
 
   createBlock(token, query) {
     const block = query.querier.Blockly.Xml.domToBlock(this.block.domForm, query.querier.workspace);
-    let tokenIdx = token.value.length;
+    let tokenIdx = this.tokenProviders.length;
 
     for (const input of block.inputList) {
       for (const field of input.fieldRow) {
+        if (--tokenIdx >= token.value.length) continue;
         if (field.className_ === "blocklyText blocklyDropdownText") {
-          field.setValue(token.value[--tokenIdx].value);
+          field.setValue(token.value[tokenIdx].value);
         } else if (!field.argType_) {
-          --tokenIdx;
+          tokenIdx;
         }
       }
 
       if (input.connection) {
-        const innerToken = token.value[--tokenIdx];
+        if (--tokenIdx >= token.value.length) continue;
+        const innerToken = token.value[tokenIdx];
         if (innerToken.value !== null) {
           if (innerToken.type.isBlock(innerToken)) {
             const innerBlock = innerToken.type.createBlock(innerToken, query);
@@ -474,6 +490,7 @@ class QueryOption {
   constructor(query, token) {
     this.query = query;
     this.token = token;
+    // let debug = this.autocomplete;
   }
 
   get isTruncated() {
