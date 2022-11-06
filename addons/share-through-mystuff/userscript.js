@@ -10,10 +10,7 @@ export default async function ({ addon, global, console }) {
     share_link.href = "#";
     share_link.classList.add("media-share");
     share_link.dataset.control = "share";
-    share_link.innerText = display;
     share_link.addEventListener("click", check_shared)
-    if (!addon.settings.get("prompt")) return share_link;
-    share_link.innerText = "";
     let prompt_link = document.createElement("a");
     prompt_link.href = "#";
     prompt_link.innerText = display;
