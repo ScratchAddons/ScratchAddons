@@ -327,7 +327,7 @@ a.message-type-title-text {
 .popout {
   height: 10px;
   vertical-align: baseline;
-  margin-left: 5px;
+  margin-inline-start: 5px;
   opacity: 0.6;
   filter: var(--content-icon-filter);
 }

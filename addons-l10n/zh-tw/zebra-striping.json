@@ -1,0 +1,1 @@
+{"zebra-striping/@name":"替換巢狀程式顏色","zebra-striping/@description":"讓控制類程式在巢狀化的時候，能夠替換裡面程式的積木顏色，這樣會比較好辨識（這種高亮語法的方式叫 zebra striping）。","zebra-striping/@settings-name-shade":"陰影","zebra-striping/@settings-select-shade-lighter":"變亮","zebra-striping/@settings-select-shade-darker":"變暗","zebra-striping/@settings-name-intensity":"程式（0-100%）"}
