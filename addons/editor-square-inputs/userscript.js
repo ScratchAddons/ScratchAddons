@@ -44,4 +44,5 @@ export default async function ({ addon, msg, global, console }) {
   addon.self.addEventListener("disabled", updateAllBlocks);
   addon.self.addEventListener("reenabled", updateAllBlocks);
   addon.settings.addEventListener("change", updateAllBlocks);
+  updateAllBlocks();
 }
