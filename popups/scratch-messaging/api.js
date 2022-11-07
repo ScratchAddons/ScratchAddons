@@ -197,7 +197,7 @@ export async function fetchMigratedComments(
     const getReplies = async (offset) => {
       const repliesRes = await fetch(getRepliesUrl(parentId, offset));
       if (!repliesRes.ok) {
-        if (repliesRes.status === 404 || repliesRes === 403) return;
+        if (repliesRes.status === 404 || repliesRes.status === 403) return;
         throw HTTPError.fromResponse(`Ignoring comment ${resourceType}/${commentId}`, repliesRes);
       }
       const repliesJson = await repliesRes.json();
