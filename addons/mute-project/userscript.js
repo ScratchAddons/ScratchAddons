@@ -6,6 +6,7 @@ export default async function ({ addon, global, console }) {
   icon.src = "/static/assets/e21225ab4b675bc61eed30cfb510c288.svg";
   icon.loading = "lazy";
   icon.style.display = "none";
+  icon.style.userSelect = "none";
   icon.className = "sa-mute-icon";
   const toggleMute = (e) => {
     if (!addon.self.disabled && (e.ctrlKey || e.metaKey)) {

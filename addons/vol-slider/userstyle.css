@@ -11,6 +11,7 @@
 .sa-volume > * {
   vertical-align: middle;
   margin-top: 6px;
+  user-select: none;
 }
 
 .sa-volume input[type="range"] {
