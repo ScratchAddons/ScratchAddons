@@ -21,7 +21,7 @@ export default async function ({ addon, global, console }) {
     }
   };
   addon.self.addEventListener("disabled", () => {
-    setVol(1);
+    setVol(getDefVol());
     icon.style.display = "none";
   });
 

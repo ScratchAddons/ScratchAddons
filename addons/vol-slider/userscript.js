@@ -52,7 +52,8 @@ export default async function ({ addon, global, console }) {
   slider.addEventListener("input", function (e) {
     setVol(this.value);
   });
-
+  
+  let i = 0;
   while (true) {
     await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
       markAsSeen: true,
@@ -62,8 +63,11 @@ export default async function ({ addon, global, console }) {
     addon.tab.appendToSharedSpace({ space: "afterStopButton", element: container, order: 0 });
     container.appendChild(icon);
     container.appendChild(slider);
-    setup(vm);
-    setDefVol(addon.settings.get("defVol") / 100);
-    setVol(getDefVol());
+    if (i < 1) {
+      setup(vm);
+      setDefVol(addon.settings.get("defVol") / 100);
+      setVol(getDefVol());
+    }
+    i++;
   }
 }
