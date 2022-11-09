@@ -52,7 +52,7 @@ export default async function ({ addon, global, console }) {
   slider.addEventListener("input", function (e) {
     setVol(this.value);
   });
-  
+
   let i = 0;
   while (true) {
     await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
