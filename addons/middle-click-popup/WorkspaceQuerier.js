@@ -3,13 +3,16 @@
 //  Wish you luck <3
 //
 
+import BlockTypeInfo from "./BlockTypeInfo.js";
+
 class TokenProvider {
   constructor(shouldCache) {
+    if (this.constructor == TokenProvider) throw new Error("Abstract classes can't be instantiated.");
     this.shouldCache = shouldCache;
   }
 
   *parseTokens(query, idx) {
-    throw new Error("Sub-class must implement interface member parseTokens");
+    throw new Error("Sub-class must override abstract method.");
   }
 }
 
@@ -106,6 +109,12 @@ class Token {
     this.precedence = precedence;
     this.isTruncated = isTruncated;
   }
+
+  createBlockValue(query) {
+    return this.type.createBlockValue(this, query);
+  }
+
+  // TODO createText
 }
 
 class TokenType extends TokenProvider {
@@ -124,16 +133,12 @@ class TokenType extends TokenProvider {
     this.hasSubTokens = false;
   }
 
-  createBlock(token, query) {
-    throw new Error("Cannot create a block from this token type.");
+  createBlockValue(token, query) {
+    return token.value;
   }
 
   createText(token, query, autocomplete) {
-    throw new Error("Sub-classes must override this method.");
-  }
-
-  isBlock(token) {
-    return false;
+    throw new Error("Sub-class must override abstract method.");
   }
 }
 
@@ -153,23 +158,26 @@ class TokenTypeBlank extends TokenType {
 class TokenTypeStringEnum extends TokenType {
   constructor(values) {
     super();
-    this.values = values;
+    this.values = [];
+    for (const value of values) {
+      this.values.push({ lower: value.string.toLowerCase(), value });
+    }
     this.isDefiningFeature = true;
     this.isConstant = this.values.length === 1;
   }
 
   *parseTokens(query, idx) {
-    for (const value of this.values) {
+    for (const valueInfo of this.values) {
       const remainingChar = query.length - idx;
-      if (remainingChar < value[0].length) {
-        if (value[0].startsWith(query.lowercase.substring(idx))) {
+      if (remainingChar < valueInfo.lower.length) {
+        if (valueInfo.lower.startsWith(query.lowercase.substring(idx))) {
           const end = remainingChar < 0 ? 0 : query.length;
-          yield new Token(idx, end, this, value[1], 100000, undefined, true);
+          yield new Token(idx, end, this, valueInfo.value, 100000, undefined, true);
         }
       } else {
-        if (query.lowercase.startsWith(value[0], idx)) {
-          if (TokenTypeStringLiteral.TERMINATORS.indexOf(query.lowercase[idx + value[0].length]) !== -1)
-            yield new Token(idx, idx + value[0].length, this, value[1]);
+        if (query.lowercase.startsWith(valueInfo.lower, idx)) {
+          if (TokenTypeStringLiteral.TERMINATORS.indexOf(query.lowercase[idx + valueInfo.lower.length]) !== -1)
+            yield new Token(idx, idx + valueInfo.lower.length, this, valueInfo.value);
         }
       }
     }
@@ -177,7 +185,7 @@ class TokenTypeStringEnum extends TokenType {
 
   createText(token, query, autocomplete) {
     if (token.isTruncated && autocomplete) autocomplete[0] = false;
-    return this.values.find((value) => value[1] === token.value)[0];
+    return token.value.string; // TODO Return capitalization in that's used in the query
   }
 }
 
@@ -281,12 +289,8 @@ class TokenTypeBrackets extends TokenType {
     }
   }
 
-  isBlock(token) {
-    return token.innerToken.type.isBlock(token.innerToken);
-  }
-
-  createBlock(token, query) {
-    return token.innerToken.type.createBlock(token.innerToken, query);
+  createBlockValue(token, query) {
+    return token.innerToken.createBlockValue(token.innerToken, query);
   }
 
   createText(token, query, autocomplete) {
@@ -321,66 +325,47 @@ class TokenTypeBlock extends TokenType {
 
     this.block = block;
     this.tokenProviders = [];
-
     this.hasSubTokens = true;
 
-    const _appendTokenProviders = (block) => {
-      let hasDefiningFeature = false;
-      for (const input of block.inputList) {
-        for (const field of input.fieldRow) {
-          if (field.className_ === "blocklyText blocklyDropdownText") {
-            const fieldOptions = field.getOptions();
-            for (let i = 0; i < fieldOptions.length; i++) {
-              if (
-                typeof fieldOptions[i][1] !== "string" ||
-                TokenTypeBlock.INVALID_FIELDS.indexOf(fieldOptions[i][1]) !== -1
-              ) {
-                fieldOptions.splice(i, 1);
-                continue;
-              }
-              fieldOptions[i][0] = fieldOptions[i][0].toLowerCase();
-            }
-            this.tokenProviders.push(new TokenTypeStringEnum(fieldOptions));
-            hasDefiningFeature = true;
-          } else if (field.argType_) {
-            if (field.argType_[0] === "colour") {
-              this.tokenProviders.push(TokenTypeColor.INSTANCE);
-            } else if (field.argType_[1] === "number") {
-              this.tokenProviders.push(querier.tokenGroupNumber);
-            } else {
-              this.tokenProviders.push(querier.tokenGroupString);
-            }
-          } else {
-            const fieldText = field.getText().toLowerCase();
-            const provider = new TokenTypeStringEnum([[fieldText, fieldText]]);
-            if (!hasDefiningFeature) {
-              this.tokenProviders.push(provider);
-              hasDefiningFeature = true;
-            } else {
-              this.tokenProviders.push(new TokenProviderOptional(provider));
-            }
-          }
-        }
+    let hasDefiningFeature = false;
 
-        if (input.connection) {
-          const innerBlock = input.connection.targetBlock();
-          if (innerBlock) {
-            _appendTokenProviders(innerBlock);
-          } else {
-            if (input.outlinePath) {
-              this.tokenProviders.push(querier.tokenGroupBoolean);
-            } else {
-              this.tokenProviders.push(querier.tokenGroupStack);
-            }
-          }
+    for (const blockPart of this.block.parts) {
+      let tokenProvider;
+      if (typeof (blockPart) === "string") {
+        tokenProvider = new TokenTypeStringEnum([{ value: null, string: blockPart }]);
+        if (hasDefiningFeature) {
+          tokenProvider = new TokenProviderOptional(tokenProvider);
+        } else hasDefiningFeature = true;
+      } else {
+        switch (blockPart.type) {
+          case (BlockTypeInfo.BLOCK_INPUT_ENUM):
+            tokenProvider = new TokenTypeStringEnum(blockPart.values);
+            hasDefiningFeature = true;
+            break;
+          case (BlockTypeInfo.BLOCK_INPUT_STRING):
+            tokenProvider = querier.tokenGroupString;
+            break;
+          case (BlockTypeInfo.BLOCK_INPUT_NUMBER):
+            tokenProvider = querier.tokenGroupNumber;
+            break;
+          case (BlockTypeInfo.BLOCK_INPUT_COLOUR):
+            tokenProvider = TokenTypeColor.INSTANCE;
+            break;
+          case (BlockTypeInfo.BLOCK_INPUT_BOOLEAN):
+            tokenProvider = querier.tokenGroupBoolean;
+            break;
+          case (BlockTypeInfo.BLOCK_INPUT_BLOCK):
+            tokenProvider = querier.tokenGroupStackBlocks;
+            break;
         }
       }
-    };
-    _appendTokenProviders(block.workspaceForm);
+      this.tokenProviders.push(tokenProvider);
+    }
   }
 
   *parseTokens(query, idx) {
     for (const subtokens of this._parseSubtokens(idx, 0, query)) {
+      subtokens.reverse();
       let score = 0;
       let isTruncated = subtokens.length < this.tokenProviders.length;
       let hasDefiningFeature = false;
@@ -393,7 +378,8 @@ class TokenTypeBlock extends TokenType {
       }
       if (!hasDefiningFeature) continue;
       score = Math.floor(score + 1000 * (1 - subtokens.length / this.tokenProviders.length));
-      yield new Token(idx, subtokens[0].end, this, subtokens, score, this.block.precedence, isTruncated);
+      const end = query.skipIgnorable(subtokens[subtokens.length - 1].end);
+      yield new Token(idx, end, this, subtokens, score, this.block.precedence, isTruncated);
     }
   }
 
@@ -418,57 +404,35 @@ class TokenTypeBlock extends TokenType {
     }
   }
 
-  createBlock(token, query) {
-    const block = query.querier.Blockly.Xml.domToBlock(this.block.domForm, query.querier.workspace);
-    let tokenIdx = this.tokenProviders.length;
+  createBlockValue(token, query) {
+    const blockInputs = [];
 
-    for (const input of block.inputList) {
-      for (const field of input.fieldRow) {
-        if (--tokenIdx >= token.value.length) continue;
-        if (field.className_ === "blocklyText blocklyDropdownText") {
-          field.setValue(token.value[tokenIdx].value);
-        } else if (!field.argType_) {
-          tokenIdx;
-        }
-      }
-
-      if (input.connection) {
-        if (--tokenIdx >= token.value.length) continue;
-        const innerToken = token.value[tokenIdx];
-        if (innerToken.value !== null) {
-          if (innerToken.type.isBlock(innerToken)) {
-            const innerBlock = innerToken.type.createBlock(innerToken, query);
-            if (innerBlock.outputConnection) {
-              innerBlock.outputConnection.connect(input.connection);
-            } else {
-              innerBlock.previousConnection.connect(input.connection);
-            }
-          } else {
-            const innerBlock = input.connection.targetBlock();
-            if (innerBlock) innerBlock.inputList[0].fieldRow[0].setValue(innerToken.value.toString());
-          }
-        }
-      }
+    for (let i = 0; i < token.value.length; i++) {
+      const blockPart = this.block.parts[i];
+      if (typeof (blockPart) !== "string")
+        blockInputs.push(token.value[i].createBlockValue(query));
     }
+    while (blockInputs.length < this.block.inputs.length)
+      blockInputs.push(null);
 
-    if (tokenIdx !== 0) throw new Error();
-    return block;
+    return this.block.createBlock(...blockInputs);
   }
 
   createText(token, query, autocomplete) {
     if (!token.isTruncated) return query.str.substring(token.start, token.end);
     let text = "";
-    if (token.start !== token.value.at(-1).start) {
-      text += query.str.substring(token.start, token.value.at(-1).start);
+    if (token.start !== token.value[0].start) {
+      text += query.str.substring(token.start, token.value[0].start);
     }
-    for (let i = token.value.length - 1; i >= 0; i--) {
+    for (let i = 0; i < token.value.length; i++) {
       const subtoken = token.value[i];
       const subtokenText = subtoken.type.createText(subtoken, query, autocomplete) ?? "";
       text += subtokenText;
-      if (i !== 0) {
-        if (autocomplete && !autocomplete[0] && (subtoken.type.hasSubTokens || !token.value[i - 1].type.isConstant))
+      if (i !== token.value.length - 1) {
+        const next = token.value[i + 1];
+        if (autocomplete && !autocomplete[0] && (subtoken.type.hasSubTokens || !next.type.isConstant))
           return text;
-        const nextStart = token.value[i - 1].start;
+        const nextStart = next.start;
         if (nextStart !== subtoken.end) {
           text += query.str.substring(subtoken.end, nextStart);
         } else {
@@ -478,17 +442,12 @@ class TokenTypeBlock extends TokenType {
     }
     return text;
   }
-
-  isBlock(token) {
-    return true;
-  }
 }
 
 class QueryOption {
   constructor(query, token) {
     this.query = query;
     this.token = token;
-    // let debug = this.autocomplete;
   }
 
   get isTruncated() {
@@ -506,7 +465,7 @@ class QueryOption {
   }
 
   createBlock() {
-    return this.token.type.createBlock(this.token, this.query);
+    return this.token.createBlockValue(this.query);
   }
 }
 
@@ -560,6 +519,7 @@ export default class WorkspaceQuerier {
 
   constructor(blockly) {
     this.Blockly = blockly;
+    window.querier = this;
   }
 
   indexWorkspace(workspace) {
@@ -634,32 +594,13 @@ export default class WorkspaceQuerier {
   }
 
   _poppulateTokenGroups() {
-    const flyoutWorkspace = this.workspace.getToolbox().flyout_.getWorkspace(); // TODO Handle undefined
-
-    // Firstly, enumerate all the blocks. Each blocks has two representations;
-    //  'DOM form' and 'Workspace form'.
-    const blocks = [];
-    {
-      const flyoutDom = Blockly.Xml.workspaceToDom(flyoutWorkspace);
-
-      const flyoutDomBlockMap = {};
-      for (const blockDom of flyoutDom.children) {
-        if (blockDom.tagName === "BLOCK") {
-          let id = blockDom.getAttribute("id");
-          flyoutDomBlockMap[id] = blockDom;
-        }
-      }
-      for (const workspaceBlock of flyoutWorkspace.getTopBlocks()) {
-        blocks.push({
-          id: workspaceBlock.id,
-          workspaceForm: workspaceBlock,
-          domForm: flyoutDomBlockMap[workspaceBlock.id],
-          precedence: WorkspaceQuerier.ORDER_OF_OPERATIONS.indexOf(workspaceBlock.id),
-        });
-      }
-    }
+    const blocks = BlockTypeInfo.getBlocks(this.Blockly, this.workspace);
+    console.log(blocks);
 
     // Apply order of operations
+    for (const block of blocks) {
+      block.precedence = WorkspaceQuerier.ORDER_OF_OPERATIONS.indexOf(block.id);
+    }
     for (let i = blocks.length - 1; i >= 0; i--) {
       const block = blocks[i];
       if (block.precedence !== -1) {
@@ -672,36 +613,23 @@ export default class WorkspaceQuerier {
       }
     }
 
-    // Create the token types
-    {
-      const BLOCK_SHAPE_STACK = 0;
-      const BLOCK_SHAPE_BOOLEAN = 1;
-      const BLOCK_SHAPE_ROUND = 2;
-      const BLOCK_SHAPE_HAT = 3;
+    for (const block of blocks) {
+      const blockTokenType = new TokenTypeBlock(block, this);
+      if (block.id === "operator_contains") console.log(blockTokenType);
 
-      const _getBlockShape = (block) => {
-        switch (block.edgeShape_) {
-          case 1:
-          case 2:
-            return block.edgeShape_;
-          default:
-            return block.startHat_ ? BLOCK_SHAPE_HAT : BLOCK_SHAPE_STACK;
-        }
-      };
-
-      for (const block of blocks) {
-        const blockTokenType = new TokenTypeBlock(block, this);
-        const blockShape = _getBlockShape(block.workspaceForm);
-
-        if (blockShape === BLOCK_SHAPE_ROUND) {
+      switch (block.shape) {
+        case BlockTypeInfo.BLOCK_SHAPE_ROUND:
           this.tokenGroupRoundBlocks.pushProviders(blockTokenType);
-        } else if (blockShape === BLOCK_SHAPE_BOOLEAN) {
+          break;
+        case BlockTypeInfo.BLOCK_SHAPE_BOOLEAN:
           this.tokenGroupBooleanBlocks.pushProviders(blockTokenType);
-        } else if (blockShape === BLOCK_SHAPE_STACK) {
+          break;
+        case BlockTypeInfo.BLOCK_SHAPE_STACK:
           this.tokenGroupStackBlocks.pushProviders(blockTokenType);
-        } else {
+          break;
+        case BlockTypeInfo.BLOCK_SHAPE_HAT:
           this.tokenGroupHatBlocks.pushProviders(blockTokenType);
-        }
+          break;
       }
     }
   }
