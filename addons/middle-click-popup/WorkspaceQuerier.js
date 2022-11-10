@@ -331,30 +331,30 @@ class TokenTypeBlock extends TokenType {
 
     for (const blockPart of this.block.parts) {
       let tokenProvider;
-      if (typeof (blockPart) === "string") {
+      if (typeof blockPart === "string") {
         tokenProvider = new TokenTypeStringEnum([{ value: null, string: blockPart }]);
         if (hasDefiningFeature) {
           tokenProvider = new TokenProviderOptional(tokenProvider);
         } else hasDefiningFeature = true;
       } else {
         switch (blockPart.type) {
-          case (BlockTypeInfo.BLOCK_INPUT_ENUM):
+          case BlockTypeInfo.BLOCK_INPUT_ENUM:
             tokenProvider = new TokenTypeStringEnum(blockPart.values);
             hasDefiningFeature = true;
             break;
-          case (BlockTypeInfo.BLOCK_INPUT_STRING):
+          case BlockTypeInfo.BLOCK_INPUT_STRING:
             tokenProvider = querier.tokenGroupString;
             break;
-          case (BlockTypeInfo.BLOCK_INPUT_NUMBER):
+          case BlockTypeInfo.BLOCK_INPUT_NUMBER:
             tokenProvider = querier.tokenGroupNumber;
             break;
-          case (BlockTypeInfo.BLOCK_INPUT_COLOUR):
+          case BlockTypeInfo.BLOCK_INPUT_COLOUR:
             tokenProvider = TokenTypeColor.INSTANCE;
             break;
-          case (BlockTypeInfo.BLOCK_INPUT_BOOLEAN):
+          case BlockTypeInfo.BLOCK_INPUT_BOOLEAN:
             tokenProvider = querier.tokenGroupBoolean;
             break;
-          case (BlockTypeInfo.BLOCK_INPUT_BLOCK):
+          case BlockTypeInfo.BLOCK_INPUT_BLOCK:
             tokenProvider = querier.tokenGroupStackBlocks;
             break;
         }
@@ -409,11 +409,9 @@ class TokenTypeBlock extends TokenType {
 
     for (let i = 0; i < token.value.length; i++) {
       const blockPart = this.block.parts[i];
-      if (typeof (blockPart) !== "string")
-        blockInputs.push(token.value[i].createBlockValue(query));
+      if (typeof blockPart !== "string") blockInputs.push(token.value[i].createBlockValue(query));
     }
-    while (blockInputs.length < this.block.inputs.length)
-      blockInputs.push(null);
+    while (blockInputs.length < this.block.inputs.length) blockInputs.push(null);
 
     return this.block.createBlock(...blockInputs);
   }
@@ -430,8 +428,7 @@ class TokenTypeBlock extends TokenType {
       text += subtokenText;
       if (i !== token.value.length - 1) {
         const next = token.value[i + 1];
-        if (autocomplete && !autocomplete[0] && (subtoken.type.hasSubTokens || !next.type.isConstant))
-          return text;
+        if (autocomplete && !autocomplete[0] && (subtoken.type.hasSubTokens || !next.type.isConstant)) return text;
         const nextStart = next.start;
         if (nextStart !== subtoken.end) {
           text += query.str.substring(subtoken.end, nextStart);

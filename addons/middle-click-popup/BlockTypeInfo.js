@@ -1,4 +1,3 @@
-
 class BlockInput {
   constructor(Blockly, type, inputIdx) {
     if (this.constructor == BlockInput) throw new Error("Abstract classes can't be instantiated.");
@@ -24,8 +23,7 @@ class BlockInputRound extends BlockInput {
 
   setValue(block, value) {
     if (value instanceof this.Blockly.BlockSvg) {
-      if (!value.outputConnection)
-        throw new Error("Cannot put block \"" + value.id + "\" into a round type input.");
+      if (!value.outputConnection) throw new Error('Cannot put block "' + value.id + '" into a round type input.');
       innerBlock.outputConnection.connect(this.getInput(block).connection);
     } else {
       this.getInput(block).connection.targetBlock().inputList[0].fieldRow[0].setValue(this._toFieldValue(value));
@@ -43,7 +41,7 @@ class BlockInputString extends BlockInputRound {
   }
 
   _toFieldValue(value) {
-    const type = typeof (value);
+    const type = typeof value;
     if (type === "number") return value;
     if (type === "string") return value;
     throw new Error("Cannot set round type input to value of type " + type);
@@ -56,11 +54,11 @@ class BlockInputNumber extends BlockInputRound {
   }
 
   _toFieldValue(value) {
-    const type = typeof (value);
+    const type = typeof value;
     if (type === "number") return value;
     if (type === "string") {
       const number = parseFloat(value);
-      if (isNaN(number)) throw new Error("Cannot set numeric type input to string \"" + value + "\".");
+      if (isNaN(number)) throw new Error('Cannot set numeric type input to string "' + value + '".');
       return value;
     }
     throw new Error("Cannot set round type input to value of type " + type);
@@ -75,7 +73,7 @@ class BlockInputBoolean extends BlockInput {
   setValue(block, value) {
     if (value instanceof this.Blockly.BlockSvg) {
       if (!value.outputConnection || value.edgeShape_ !== BlockTypeInfo.BLOCK_SHAPE_BOOLEAN)
-        throw new Error("Cannot put block \"" + value.id + "\" into a boolean type input.");
+        throw new Error('Cannot put block "' + value.id + '" into a boolean type input.');
       innerBlock.outputConnection.connect(this.getInput(block).connection);
     } else {
       throw new Error("Boolean type inputs can only contain blocks.");
@@ -89,8 +87,8 @@ class BlockInputColour extends BlockInput {
   }
 
   setValue(block, value) {
-    if (typeof (value) !== "string") throw new Error("Cannot set color type input to value of type " + typeof (type));
-    if (!value.match(/^#[0-9a-fA-F]{6}$/)) throw new Error("Invalid color \"" + value + "\".");
+    if (typeof value !== "string") throw new Error("Cannot set color type input to value of type " + typeof type);
+    if (!value.match(/^#[0-9a-fA-F]{6}$/)) throw new Error('Invalid color "' + value + '".');
     this.getInput(block).connection.targetBlock().inputList[0].fieldRow[0].setValue(value);
   }
 }
@@ -134,7 +132,7 @@ class BlockInputBlock extends BlockInput {
   setValue(input, value) {
     if (value instanceof this.Blockly.BlockSvg) {
       if (!innerBlock.previousConnection || value.edgeShape_ !== BlockTypeInfo.BLOCK_SHAPE_BOOLEAN)
-        throw new Error("Cannot put block \"" + value.id + "\" into a block type input.");
+        throw new Error('Cannot put block "' + value.id + '" into a block type input.');
       innerBlock.previousConnection.connect(input.connection);
     } else {
       throw new Error("Block type inputs can only contain blocks.");
@@ -143,7 +141,6 @@ class BlockInputBlock extends BlockInput {
 }
 
 export default class BlockTypeInfo {
-
   static BLOCK_SHAPE_STACK = 0;
   static BLOCK_SHAPE_BOOLEAN = 1;
   static BLOCK_SHAPE_ROUND = 2;
@@ -178,8 +175,10 @@ export default class BlockTypeInfo {
   }
 
   static getBlockShape(workspaceBlock) {
-    if (workspaceBlock.edgeShape_ === BlockTypeInfo.BLOCK_SHAPE_ROUND
-      || workspaceBlock.edgeShape_ === BlockTypeInfo.BLOCK_SHAPE_BOOLEAN) {
+    if (
+      workspaceBlock.edgeShape_ === BlockTypeInfo.BLOCK_SHAPE_ROUND ||
+      workspaceBlock.edgeShape_ === BlockTypeInfo.BLOCK_SHAPE_BOOLEAN
+    ) {
       return workspaceBlock.edgeShape_;
     } else {
       if (workspaceBlock.startHat_) return BlockTypeInfo.BLOCK_SHAPE_HAT;
@@ -201,7 +200,7 @@ export default class BlockTypeInfo {
     const addInput = (input) => {
       this.parts.push(input);
       this.inputs.push(input);
-    }
+    };
 
     for (let inputIdx = 0; inputIdx < this.workspaceForm.inputList.length; inputIdx++) {
       const input = this.workspaceForm.inputList[inputIdx];
@@ -246,12 +245,12 @@ export default class BlockTypeInfo {
   }
 
   createBlock(...inputs) {
-    if (inputs.length !== this.inputs.length) throw new Error("Wrong number of inputs to block. Expected " + this.inputs.length);
+    if (inputs.length !== this.inputs.length)
+      throw new Error("Wrong number of inputs to block. Expected " + this.inputs.length);
 
     const block = this.Blockly.Xml.domToBlock(this.domForm, this.workspace);
     for (let i = 0; i < inputs.length; i++) {
-      if (inputs[i] != null)
-        this.inputs[i].setValue(block, inputs[i]);
+      if (inputs[i] != null) this.inputs[i].setValue(block, inputs[i]);
     }
 
     return block;
