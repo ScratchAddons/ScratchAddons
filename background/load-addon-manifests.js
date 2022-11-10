@@ -34,12 +34,18 @@ const localizeSettings = (addonId, setting, tableId) => {
 };
 
 (async function () {
+  const forceEnglish = await new Promise((resolve) => {
+    chrome.storage.local.get("forceEnglish", (obj) => {
+      resolve(!!obj.forceEnglish);
+    });
+  });
+
   const addonIds = await (await fetch("/addons/addons.json")).json();
   addonIds.forEach((addonId, i) => {
     if (addonIds.lastIndexOf(addonId) !== i) throw new Error(`Duplicated value "${addonId}" in /addons/addons.json`);
   });
   await scratchAddons.l10n.load(addonIds);
-  const useDefault = scratchAddons.l10n.locale.startsWith("en");
+  const useDefault = forceEnglish || scratchAddons.l10n.locale.startsWith("en");
   for (const addonId of addonIds) {
     if (addonId.startsWith("//")) continue;
     let manifest;

@@ -2,6 +2,13 @@
 html,
 body {
   background-color: var(--darkWww-page);
+  color-scheme: var(--darkWww-page-colorScheme);
+}
+.sa-body-editor {
+  /* If website dark mode is enabled and editor dark mode
+  is disabled, inputs and scrollbars in the editor should
+  have a light background. */
+  color-scheme: light;
 }
 #view,
 .crash-container,
@@ -164,6 +171,7 @@ body:not(.sa-body-editor) input.formik-radio-input,
 .studio-compose-container .sa-emoji-picker {
   background-color: var(--darkWww-box);
   color: var(--darkWww-box-text);
+  color-scheme: var(--darkWww-box-colorScheme);
 }
 body:not(.sa-body-editor) .button.white,
 .intro-banner .intro-button,
@@ -232,6 +240,7 @@ body:not(.sa-body-editor) .join-flow-privacy-message,
 .thumbnail .thumbnail-favorites::before,
 .thumbnail .thumbnail-remixes::before,
 .thumbnail .thumbnail-views::before,
+.ttt-item img,
 .tabs li:not(.active) .tab-icon,
 body:not(.sa-body-editor) .stage-header_stage-button-icon_3zzFK,
 .overflow-menu-container .overflow-menu-trigger img {
@@ -344,6 +353,7 @@ p.callout,
 .sa-annual-report-2021 .leadership-section .leadership-scratch-team .avatar-item img {
   background-color: var(--darkWww-blue);
   color: var(--darkWww-blue-text);
+  color-scheme: var(--darkWww-blue-colorScheme);
 }
 .empty h4,
 .thumbnail-column .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
@@ -359,6 +369,9 @@ p.callout,
 .studio-tab-nav a.nav_link:hover > li,
 .studio-info-box .studio-info-close-button {
   background-color: var(--darkWww-blue-tab);
+}
+.studio-list-inner-scrollbox::-webkit-scrollbar-thumb {
+  background-color: var(--darkWww-blue-tabHover);
 }
 .studio-info textarea.studio-title:not(:focus),
 .studio-info textarea.studio-description:not(:focus),
@@ -376,6 +389,7 @@ p.callout,
 .studio-info .studio-description.uneditable,
 .studio-info-box {
   background-color: var(--darkWww-blue-20);
+  color-scheme: var(--darKWww-blue-colorScheme);
 }
 .replies.collapsed > .comment:last-of-type::after,
 .studio-list-bottom-gradient {
@@ -439,6 +453,7 @@ input[type="radio"].formik-radio-button:checked::after,
 .banner-button {
   background-color: #ffab1a;
 }
+a.ttt-try-tutorial-button > span,
 .row .checkbox input[type="checkbox"]:checked::after {
   color: var(--darkWww-button-text);
 }
@@ -720,6 +735,7 @@ p.callout,
 .news li:nth-child(even),
 .thumbnail .thumbnail-image img,
 .video-player,
+.ttt-content-chunk + .ttt-content-chunk,
 .messages-social-list,
 .social-message,
 .comment-text,
