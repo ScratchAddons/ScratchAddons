@@ -1,8 +1,9 @@
-import "../../libraries/thirdparty/cs/chart.min.js";
 import { onPauseChanged, isPaused } from "./module.js";
 
 export default async function createPerformanceTab({ debug, addon, console, msg }) {
   const vm = addon.tab.traps.vm;
+
+  await import("../../libraries/thirdparty/cs/chart.min.js");
 
   const tab = debug.createHeaderTab({
     text: msg("tab-performance"),
