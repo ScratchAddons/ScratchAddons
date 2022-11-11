@@ -187,7 +187,7 @@ class TokenTypeBlank extends TokenType {
   }
 
   createToken(idx) {
-    return new Token(idx, idx, this, null, -1);
+    return new Token(idx, idx, this, null, -5000);
   }
 
   createText(token, query, autocomplete) {
@@ -230,7 +230,6 @@ class StringEnum {
 
     *parseTokens(query, idx) {
       const fullValues = this.values.getFullValues(query, idx);
-      // if (this.values.values[0].lower === "then") debugger;
       outer: for (let valueIdx = 0; valueIdx < this.values.length; valueIdx++) {
         if (fullValues[valueIdx]) {
           if (!fullValues[valueIdx].isTruncated) continue;
@@ -238,19 +237,42 @@ class StringEnum {
         const valueInfo = this.values.values[valueIdx];
         let i = idx;
 
-        for (const part of valueInfo.parts) {
-          const queryPartEnd = query.skipUnignorable(i);
+        for (let j = 0; j < valueInfo.parts.length; j++) {
+          const part = valueInfo.parts[j];
+          let queryPartEnd = query.skipUnignorable(i);
           const queryPart = query.lowercase.substring(i, queryPartEnd);
-          if (!part.startsWith(queryPart) || queryPart.length === 0) continue outer;
+          const queryMatch = part.startsWith(queryPart);
+          if (!queryMatch || queryPartEnd >= query.length) {
+            if (j !== 0) {
+              if (!queryMatch) queryPartEnd = i;
+              yield new Token(idx, queryPartEnd, this,
+                {
+                  valueInfo,
+                  part: j,
+                  length: queryPartEnd - i,
+                },
+                10000, undefined, queryPartEnd >= query.length);
+            }
+            continue outer;
+          }
           i = query.skipIgnorable(queryPartEnd);
         }
 
-        yield new Token(idx, i, this, valueInfo.value, 10000);
+        yield new Token(idx, i, this, { valueInfo }, 10000);
       }
     }
 
+    createBlockValue(token, query) {
+      return token.value.valueInfo.value; // I may have named too many things 'value'
+    }
+
     createText(token, query, autocomplete) {
-      return query.str.substring(token.start, token.end);
+      if (!token.isTruncated) {
+        return query.str.substring(token.start, token.end);
+      }
+      const str = query.str.substring(token.start, token.end - token.value.length);
+      const part = token.value.valueInfo.parts[token.value.part];
+      return str + part;
     }
   };
 
@@ -468,11 +490,11 @@ class TokenTypeBlock extends TokenType {
             break;
           case BlockTypeInfo.BLOCK_INPUT_STRING:
             fullTokenProvider = querier.tokenGroupString;
-            griffTokenProvider = querier.tokenTypeStringLiteral;
+            griffTokenProvider = new TokenProviderOptional(querier.tokenTypeStringLiteral);
             break;
           case BlockTypeInfo.BLOCK_INPUT_NUMBER:
             fullTokenProvider = querier.tokenGroupNumber;
-            griffTokenProvider = querier.tokenTypeNumberLiteral;
+            griffTokenProvider = new TokenProviderOptional(querier.tokenTypeNumberLiteral);
             break;
           case BlockTypeInfo.BLOCK_INPUT_COLOUR:
             fullTokenProvider = TokenTypeColor.INSTANCE;
@@ -516,7 +538,7 @@ class TokenTypeBlock extends TokenType {
         if (subtoken.type.isDefiningFeature && subtoken.start < query.length) hasDefiningFeature = true;
       }
       if (!hasDefiningFeature) continue;
-      score = Math.floor(score + 1000 * (1 - subtokens.length / this.tokenProviders.length));
+      score += Math.floor(1000 * (subtokens.length / this.tokenProviders.length));
       const end = query.skipIgnorable(subtokens[subtokens.length - 1].end);
       yield new Token(idx, end, this, subtokens, score, this.block.precedence, isTruncated);
     }
@@ -747,7 +769,6 @@ export default class WorkspaceQuerier {
 
   _poppulateTokenGroups() {
     const blocks = BlockTypeInfo.getBlocks(this.Blockly, this.workspace);
-    console.log(blocks);
 
     // Apply order of operations
     for (const block of blocks) {
@@ -767,6 +788,9 @@ export default class WorkspaceQuerier {
 
     for (const block of blocks) {
       for (const blockTokenType of TokenTypeBlock.createBlockTokenTypes(this, block)) {
+        if (block.id === "motion_setx") {
+          console.log(blockTokenType);
+        }
         switch (block.shape) {
           case BlockTypeInfo.BLOCK_SHAPE_ROUND:
             this.tokenGroupRoundBlocks.pushProviders(blockTokenType);

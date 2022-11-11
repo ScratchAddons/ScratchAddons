@@ -177,12 +177,8 @@ export default async function ({ addon, msg, global, console }) {
 
       for (let i = 0; i < this.queryResults.length; i++) {
         const result = this.queryResults[i];
-        if (result.isTruncated) {
-          if (!this.queryAutocompleteResult) this.queryAutocompleteResult = result;
-        } else {
-          if (!this.queryResult) this.queryResult = result;
-          break;
-        }
+        if (!this.queryResult || (this.queryResult.isTruncated && !result.isTruncated)) this.queryResult = result;
+        if (result.isTruncated && !this.queryAutocompleteResult) this.queryAutocompleteResult = result;
       }
 
       if (this.queryAutocompleteResult) {
