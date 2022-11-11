@@ -243,7 +243,7 @@ export default class BlockTypeInfo {
           addInput(new BlockInputString(Blockly, inputIdx, fieldIdx));
         }
       }
-    }
+    };
 
     for (let inputIdx = 0; inputIdx < this.workspaceForm.inputList.length; inputIdx++) {
       const input = this.workspaceForm.inputList[inputIdx];

@@ -216,7 +216,7 @@ class StringEnum {
     }
   };
 
-  // Griffpatch waneted to be able to query things like 'br p b' 
+  // Griffpatch waneted to be able to query things like 'br p b'
   //  and have it suggest 'broadcast Paint Block'. This token type
   //  is for these tokens where everything but the first letter can
   //  be omitted. Hense, this is called the GriffTokenType™
@@ -302,7 +302,12 @@ class StringEnum {
       } else {
         if (query.lowercase.startsWith(valueInfo.lower, idx)) {
           if (TokenTypeStringLiteral.TERMINATORS.indexOf(query.lowercase[idx + valueInfo.lower.length]) !== -1)
-            cacheEntry[valueIdx] = new Token(idx, idx + valueInfo.lower.length, this.fullTokenProvider, valueInfo.value);
+            cacheEntry[valueIdx] = new Token(
+              idx,
+              idx + valueInfo.lower.length,
+              this.fullTokenProvider,
+              valueInfo.value
+            );
         }
       }
     }
@@ -437,7 +442,6 @@ class TokenTypeBrackets extends TokenType {
 
 class TokenTypeBlock extends TokenType {
   static createBlockTokenTypes(querier, block) {
-
     let fullTokenProviders = [];
     let griffTokenProviders = [];
 
