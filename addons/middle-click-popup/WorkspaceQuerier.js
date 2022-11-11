@@ -245,13 +245,19 @@ class StringEnum {
           if (!queryMatch || queryPartEnd >= query.length) {
             if (j !== 0) {
               if (!queryMatch) queryPartEnd = i;
-              yield new Token(idx, queryPartEnd, this,
+              yield new Token(
+                idx,
+                queryPartEnd,
+                this,
                 {
                   valueInfo,
                   part: j,
                   length: queryPartEnd - i,
                 },
-                10000, undefined, queryPartEnd >= query.length);
+                10000,
+                undefined,
+                queryPartEnd >= query.length
+              );
             }
             continue outer;
           }
