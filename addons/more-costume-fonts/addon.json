@@ -1,0 +1,40 @@
+{
+	"name": "More costume fonts",
+	"description": "Added new fonts for the costume editor.",
+	"tags": ["editor", "costumeEditor"],
+	"info": [
+		{
+			"type": "notice",
+			"text": "Some fonts may not be compatible with all devices.",
+			"id": "font-compatibilities"
+		}
+	],
+	"credits": [
+		{
+			"name": "Valmontechno",
+			"link": "https://scratch.mit.edu/users/valmontechno/"
+		},
+		{
+			"name": "CST1229",
+			"link": "https://github.com/CST1229/"
+		},
+		{
+			"name": "rgantzos",
+			"link": "https://github.com/rgantzos"
+		}
+	],
+	"userscripts": [
+		{
+			"url": "userscript.js",
+			"matches": ["projects"]
+		}
+	],
+	"userstyles": [
+		{
+			"url": "style.css",
+			"matches": ["projects"]
+		}
+	],
+	"enabledByDefault": false,
+	"versionAdded": "1.30.0"
+}

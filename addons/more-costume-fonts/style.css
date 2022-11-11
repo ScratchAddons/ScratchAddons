@@ -1,0 +1,20 @@
+[class*='font-dropdown_mod-menu-item'] {
+	margin-right: 4px;
+}
+
+[class*='font-dropdown_mod-menu-item'] span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+[class*='font-dropdown_mod-context-menu'][class*='input-group_input-group'] {
+	height: 400px;
+	overflow: auto scroll;
+	color-scheme: var(--editorDarkMode-selector-colorScheme);
+}
+
+[class*='font-dropdown_displayed-font-name'] {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
