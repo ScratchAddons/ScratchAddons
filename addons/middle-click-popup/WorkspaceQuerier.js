@@ -23,7 +23,7 @@ class TokenProviderOptional extends TokenProvider {
   }
 
   *parseTokens(query, idx) {
-    yield new Token(idx, idx, TokenTypeBlank.INSTANCE, null, -1);
+    yield TokenTypeBlank.INSTANCE.createToken(idx);
     yield* this.inner.parseTokens(query, idx);
   }
 }
@@ -32,7 +32,7 @@ class TokenProviderGroup extends TokenProvider {
   constructor() {
     super(false);
     this.providers = [];
-    this.cache = [];
+    this.cache = null;
     this.cacheQueryID = null;
     this.hasCachable = false;
   }
@@ -118,8 +118,8 @@ class Token {
 }
 
 class TokenType extends TokenProvider {
-  constructor() {
-    super(true);
+  constructor(dontCache = false) {
+    super(!dontCache);
 
     if (this.constructor == TokenType) throw new Error("Abstract classes can't be instantiated.");
     // If we see this token, should we know what block it's connected to?
@@ -142,6 +142,38 @@ class TokenType extends TokenProvider {
   }
 }
 
+class TokenTypeCache extends TokenType {
+  constructor(inner) {
+    super(false);
+    this.inner = inner;
+    if (this.inner.shouldCache) {
+      this.cache = [];
+      this.cacheQueryID = null;
+    }
+  }
+
+  *parseTokens(query, idx) {
+    if (!this.inner.shouldCache) {
+      yield* this.inner.parseTokens();
+      return;
+    }
+    if (this.cacheQueryID !== query.id) {
+      this.cache = [];
+      this.cacheQueryID = query.id;
+    }
+    let cacheEntry = this.cache[idx];
+    if (cacheEntry) {
+      yield* cacheEntry;
+      return;
+    }
+    this.cacheEntry = [];
+    for (const token of this.inner.parseTokens(query, idx)) {
+      this.cacheEntry.push(token);
+      yield token;
+    }
+  }
+}
+
 class TokenTypeBlank extends TokenType {
   static INSTANCE = new TokenTypeBlank();
 
@@ -150,42 +182,139 @@ class TokenTypeBlank extends TokenType {
     this.isConstant = true;
   }
 
+  *parseTokens(query, idx) {
+    yield this.createToken(idx);
+  }
+
+  createToken(idx) {
+    return new Token(idx, idx, this, null, -1);
+  }
+
   createText(token, query, autocomplete) {
     return "";
   }
 }
 
-class TokenTypeStringEnum extends TokenType {
+class StringEnum {
+  static FullTokenType = class extends TokenType {
+    constructor(stringEnum) {
+      super();
+      this.stringEnum = stringEnum;
+      this.isDefiningFeature = true;
+      this.isConstant = stringEnum.isConstant;
+    }
+
+    *parseTokens(query, idx) {
+      for (const token of this.stringEnum.getFullValues(query, idx)) {
+        if (token) yield token;
+      }
+    }
+
+    createText(token, query, autocomplete) {
+      if (token.isTruncated && autocomplete) autocomplete[0] = false;
+      return token.value.string; // TODO Return capitalization in that's used in the query
+    }
+  };
+
+  // Griffpatch waneted to be able to query things like 'br p b' 
+  //  and have it suggest 'broadcast Paint Block'. This token type
+  //  is for these tokens where everything but the first letter can
+  //  be omitted. Hense, this is called the GriffTokenType™
+  static GriffTokenType = class extends TokenType {
+    constructor(enumValues) {
+      super();
+      this.values = enumValues;
+      this.isConstant = this.values.length === 1;
+      this.isDefiningFeature = this.isConstant;
+    }
+
+    *parseTokens(query, idx) {
+      const fullValues = this.values.getFullValues(query, idx);
+      // if (this.values.values[0].lower === "then") debugger;
+      outer: for (let valueIdx = 0; valueIdx < this.values.length; valueIdx++) {
+        if (fullValues[valueIdx]) {
+          if (!fullValues[valueIdx].isTruncated) continue;
+        }
+        const valueInfo = this.values.values[valueIdx];
+        let i = idx;
+
+        for (const part of valueInfo.parts) {
+          const queryPartEnd = query.skipUnignorable(i);
+          const queryPart = query.lowercase.substring(i, queryPartEnd);
+          if (!part.startsWith(queryPart) || queryPart.length === 0) continue outer;
+          i = query.skipIgnorable(queryPartEnd);
+        }
+
+        yield new Token(idx, i, this, valueInfo.value, 10000);
+      }
+    }
+
+    createText(token, query, autocomplete) {
+      return query.str.substring(token.start, token.end);
+    }
+  };
+
   constructor(values) {
-    super();
     this.values = [];
     for (const value of values) {
-      this.values.push({ lower: value.string.toLowerCase(), value });
+      const lower = value.string.toLowerCase();
+      const parts = [];
+      {
+        let lastPart = 0;
+        for (let i = 0; i <= lower.length; i++) {
+          const char = lower[i];
+          if (QueryInfo.IGNORABLE_CHARS.indexOf(char) !== -1 || !char) {
+            parts.push(lower.substring(lastPart, i));
+            i = QueryInfo.skipIgnorable(lower, i);
+            lastPart = i;
+          }
+        }
+      }
+      this.values.push({ lower, parts, value });
     }
-    this.isDefiningFeature = true;
-    this.isConstant = this.values.length === 1;
+    this.cache = null;
+    this.cacheQueryID = null;
+
+    this.fullTokenProvider = new StringEnum.FullTokenType(this);
+    this.griffTokenProvider = new StringEnum.GriffTokenType(this);
+    this.bothTokenProvider = new TokenProviderGroup();
+    this.bothTokenProvider.pushProviders(this.fullTokenProvider, this.griffTokenProvider);
   }
 
-  *parseTokens(query, idx) {
-    for (const valueInfo of this.values) {
+  getFullValues(query, idx) {
+    if (this.cacheQueryID !== query.id) {
+      this.cacheQueryID = query.id;
+      this.cache = [];
+    }
+    let cacheEntry = this.cache[idx];
+    if (cacheEntry) return cacheEntry;
+    cacheEntry = this.cache[idx] = [];
+
+    for (let valueIdx = 0; valueIdx < this.length; valueIdx++) {
+      const valueInfo = this.values[valueIdx];
+      cacheEntry.push(null);
       const remainingChar = query.length - idx;
       if (remainingChar < valueInfo.lower.length) {
         if (valueInfo.lower.startsWith(query.lowercase.substring(idx))) {
           const end = remainingChar < 0 ? 0 : query.length;
-          yield new Token(idx, end, this, valueInfo.value, 100000, undefined, true);
+          cacheEntry[valueIdx] = new Token(idx, end, this.fullTokenProvider, valueInfo.value, 100000, undefined, true);
         }
       } else {
         if (query.lowercase.startsWith(valueInfo.lower, idx)) {
           if (TokenTypeStringLiteral.TERMINATORS.indexOf(query.lowercase[idx + valueInfo.lower.length]) !== -1)
-            yield new Token(idx, idx + valueInfo.lower.length, this, valueInfo.value);
+            cacheEntry[valueIdx] = new Token(idx, idx + valueInfo.lower.length, this.fullTokenProvider, valueInfo.value);
         }
       }
     }
+    return cacheEntry;
   }
 
-  createText(token, query, autocomplete) {
-    if (token.isTruncated && autocomplete) autocomplete[0] = false;
-    return token.value.string; // TODO Return capitalization in that's used in the query
+  get length() {
+    return this.values.length;
+  }
+
+  get isConstant() {
+    return this.length === 1;
   }
 }
 
@@ -307,60 +436,66 @@ class TokenTypeBrackets extends TokenType {
 }
 
 class TokenTypeBlock extends TokenType {
-  static INVALID_FIELDS = [
-    "DELETE_VARIABLE_ID",
-    "RENAME_VARIABLE_ID",
-    "NEW_BROADCAST_MESSAGE_ID",
-    "NEW_BROADCAST_MESSAGE_ID",
-    // editor-searchable-dropdowns compatibility
-    "createGlobalVariable",
-    "createLocalVariable",
-    "createGlobalList",
-    "createLocalList",
-    "createBroadcast",
-  ];
+  static createBlockTokenTypes(querier, block) {
 
-  constructor(block, querier) {
-    super();
-
-    this.block = block;
-    this.tokenProviders = [];
-    this.hasSubTokens = true;
+    let fullTokenProviders = [];
+    let griffTokenProviders = [];
 
     let hasDefiningFeature = false;
 
-    for (const blockPart of this.block.parts) {
-      let tokenProvider;
+    for (const blockPart of block.parts) {
+      let fullTokenProvider;
+      let griffTokenProvider;
       if (typeof blockPart === "string") {
-        tokenProvider = new TokenTypeStringEnum([{ value: null, string: blockPart }]);
+        const stringEnum = new StringEnum([{ value: null, string: blockPart }]);
+        fullTokenProvider = stringEnum.fullTokenProvider;
+        griffTokenProvider = stringEnum.griffTokenProvider;
         if (hasDefiningFeature) {
-          tokenProvider = new TokenProviderOptional(tokenProvider);
+          fullTokenProvider = new TokenProviderOptional(fullTokenProvider);
+          griffTokenProvider = new TokenProviderOptional(stringEnum.bothTokenProvider);
         } else hasDefiningFeature = true;
       } else {
         switch (blockPart.type) {
           case BlockTypeInfo.BLOCK_INPUT_ENUM:
-            tokenProvider = new TokenTypeStringEnum(blockPart.values);
+            const stringEnum = new StringEnum(blockPart.values);
+            fullTokenProvider = stringEnum.fullTokenProvider;
+            griffTokenProvider = stringEnum.griffTokenProvider;
             hasDefiningFeature = true;
             break;
           case BlockTypeInfo.BLOCK_INPUT_STRING:
-            tokenProvider = querier.tokenGroupString;
+            fullTokenProvider = querier.tokenGroupString;
+            griffTokenProvider = querier.tokenTypeStringLiteral;
             break;
           case BlockTypeInfo.BLOCK_INPUT_NUMBER:
-            tokenProvider = querier.tokenGroupNumber;
+            fullTokenProvider = querier.tokenGroupNumber;
+            griffTokenProvider = querier.tokenTypeNumberLiteral;
             break;
           case BlockTypeInfo.BLOCK_INPUT_COLOUR:
-            tokenProvider = TokenTypeColor.INSTANCE;
+            fullTokenProvider = TokenTypeColor.INSTANCE;
+            griffTokenProvider = TokenTypeColor.INSTANCE;
             break;
           case BlockTypeInfo.BLOCK_INPUT_BOOLEAN:
-            tokenProvider = querier.tokenGroupBoolean;
+            fullTokenProvider = querier.tokenGroupBoolean;
+            griffTokenProvider = TokenTypeBlank.INSTANCE;
             break;
           case BlockTypeInfo.BLOCK_INPUT_BLOCK:
-            tokenProvider = querier.tokenGroupStackBlocks;
+            fullTokenProvider = querier.tokenGroupStack;
+            griffTokenProvider = TokenTypeBlank.INSTANCE;
             break;
         }
       }
-      this.tokenProviders.push(tokenProvider);
+      fullTokenProviders.push(fullTokenProvider);
+      griffTokenProviders.push(griffTokenProvider);
     }
+
+    return [new TokenTypeBlock(block, fullTokenProviders), new TokenTypeBlock(block, griffTokenProviders)];
+  }
+
+  constructor(block, tokenProviders) {
+    super();
+    this.block = block;
+    this.tokenProviders = tokenProviders;
+    this.hasSubTokens = true;
   }
 
   *parseTokens(query, idx) {
@@ -476,9 +611,22 @@ class QueryInfo {
     this.id = id;
   }
 
-  skipIgnorable(idx) {
-    while (QueryInfo.IGNORABLE_CHARS.indexOf(this.str[idx]) !== -1) ++idx;
+  static skipIgnorable(str, idx) {
+    while (QueryInfo.IGNORABLE_CHARS.indexOf(str[idx]) !== -1) ++idx;
     return idx;
+  }
+
+  skipIgnorable(idx) {
+    return QueryInfo.skipIgnorable(this.queryLc, idx);
+  }
+
+  static skipUnignorable(str, idx) {
+    while (QueryInfo.IGNORABLE_CHARS.indexOf(str[idx]) === -1 && idx < str.length) ++idx;
+    return idx;
+  }
+
+  skipUnignorable(idx) {
+    return QueryInfo.skipUnignorable(this.queryLc, idx);
   }
 
   get length() {
@@ -547,6 +695,9 @@ export default class WorkspaceQuerier {
   }
 
   _createTokenGroups() {
+    this.tokenTypeStringLiteral = new TokenTypeCache(new TokenTypeStringLiteral());
+    this.tokenTypeNumberLiteral = new TokenTypeCache(new TokenTypeNumberLiteral());
+
     this.tokenGroupRoundBlocks = new TokenProviderGroup(); // Round blocks like (() + ()) or (my variable)
     this.tokenGroupBooleanBlocks = new TokenProviderGroup(); // Boolean blocks like <not ()>
     this.tokenGroupStackBlocks = new TokenProviderGroup(); // Stackable blocks like `move (10) steps`
@@ -562,7 +713,7 @@ export default class WorkspaceQuerier {
     // Anything that fits into a number hole. (Round blocks + Boolean blocks + Number Literals + Brackets)
     this.tokenGroupNumber = new TokenProviderOptional(new TokenProviderGroup());
     this.tokenGroupNumber.inner.pushProviders(
-      new TokenTypeNumberLiteral(),
+      this.tokenTypeNumberLiteral,
       this.tokenGroupRoundBlocks,
       this.tokenGroupBooleanBlocks,
       new TokenTypeBrackets(this.tokenGroupNumber)
@@ -571,7 +722,7 @@ export default class WorkspaceQuerier {
     // Anything that fits into a string hole (Round blocks + Boolean blocks + String Literals + Brackets)
     this.tokenGroupString = new TokenProviderOptional(new TokenProviderGroup());
     this.tokenGroupString.inner.pushProviders(
-      new TokenTypeStringLiteral(),
+      this.tokenTypeStringLiteral,
       this.tokenGroupRoundBlocks,
       this.tokenGroupBooleanBlocks,
       new TokenTypeBrackets(this.tokenGroupString)
@@ -611,27 +762,29 @@ export default class WorkspaceQuerier {
     }
 
     for (const block of blocks) {
-      const blockTokenType = new TokenTypeBlock(block, this);
-      if (block.id === "operator_contains") console.log(blockTokenType);
-
-      switch (block.shape) {
-        case BlockTypeInfo.BLOCK_SHAPE_ROUND:
-          this.tokenGroupRoundBlocks.pushProviders(blockTokenType);
-          break;
-        case BlockTypeInfo.BLOCK_SHAPE_BOOLEAN:
-          this.tokenGroupBooleanBlocks.pushProviders(blockTokenType);
-          break;
-        case BlockTypeInfo.BLOCK_SHAPE_STACK:
-          this.tokenGroupStackBlocks.pushProviders(blockTokenType);
-          break;
-        case BlockTypeInfo.BLOCK_SHAPE_HAT:
-          this.tokenGroupHatBlocks.pushProviders(blockTokenType);
-          break;
+      for (const blockTokenType of TokenTypeBlock.createBlockTokenTypes(this, block)) {
+        switch (block.shape) {
+          case BlockTypeInfo.BLOCK_SHAPE_ROUND:
+            this.tokenGroupRoundBlocks.pushProviders(blockTokenType);
+            break;
+          case BlockTypeInfo.BLOCK_SHAPE_BOOLEAN:
+            this.tokenGroupBooleanBlocks.pushProviders(blockTokenType);
+            break;
+          case BlockTypeInfo.BLOCK_SHAPE_STACK:
+            this.tokenGroupStackBlocks.pushProviders(blockTokenType);
+            break;
+          case BlockTypeInfo.BLOCK_SHAPE_HAT:
+            this.tokenGroupHatBlocks.pushProviders(blockTokenType);
+            break;
+        }
       }
     }
   }
 
   _destroyTokenGroups() {
+    this.tokenTypeStringLiteral = null;
+    this.tokenTypeNumberLiteral = null;
+
     this.tokenGroupBooleanBlocks = null;
     this.tokenGroupRoundBlocks = null;
     this.tokenGroupStackBlocks = null;

@@ -1,8 +1,9 @@
 class BlockInput {
-  constructor(Blockly, type, inputIdx) {
+  constructor(Blockly, type, inputIdx, fieldIdx) {
     if (this.constructor == BlockInput) throw new Error("Abstract classes can't be instantiated.");
     this.type = type;
     this.inputIdx = inputIdx;
+    this.fieldIdx = fieldIdx;
     this.Blockly = Blockly;
   }
 
@@ -13,20 +14,28 @@ class BlockInput {
   getInput(block) {
     return block.inputList[this.inputIdx];
   }
+
+  getField(block) {
+    if (this.fieldIdx === -1) {
+      return this.getInput(block).connection.targetBlock().inputList[0].fieldRow[0];
+    } else {
+      return this.getInput(block).fieldRow[this.fieldIdx];
+    }
+  }
 }
 
 class BlockInputRound extends BlockInput {
-  constructor(Blockly, type, inputIdx) {
-    super(Blockly, type, inputIdx);
+  constructor(Blockly, type, inputIdx, fieldIdx) {
+    super(Blockly, type, inputIdx, fieldIdx);
     if (this.constructor == BlockInputRound) throw new Error("Abstract classes can't be instantiated.");
   }
 
   setValue(block, value) {
     if (value instanceof this.Blockly.BlockSvg) {
       if (!value.outputConnection) throw new Error('Cannot put block "' + value.id + '" into a round type input.');
-      innerBlock.outputConnection.connect(this.getInput(block).connection);
+      value.outputConnection.connect(this.getInput(block).connection);
     } else {
-      this.getInput(block).connection.targetBlock().inputList[0].fieldRow[0].setValue(this._toFieldValue(value));
+      this.getField(block).setValue(this._toFieldValue(value));
     }
   }
 
@@ -36,8 +45,8 @@ class BlockInputRound extends BlockInput {
 }
 
 class BlockInputString extends BlockInputRound {
-  constructor(Blockly, inputIdx) {
-    super(Blockly, BlockTypeInfo.BLOCK_INPUT_STRING, inputIdx);
+  constructor(Blockly, inputIdx, fieldIdx) {
+    super(Blockly, BlockTypeInfo.BLOCK_INPUT_STRING, inputIdx, fieldIdx);
   }
 
   _toFieldValue(value) {
@@ -49,8 +58,8 @@ class BlockInputString extends BlockInputRound {
 }
 
 class BlockInputNumber extends BlockInputRound {
-  constructor(Blockly, inputIdx) {
-    super(Blockly, BlockTypeInfo.BLOCK_INPUT_NUMBER, inputIdx);
+  constructor(Blockly, inputIdx, fieldIdx) {
+    super(Blockly, BlockTypeInfo.BLOCK_INPUT_NUMBER, inputIdx, fieldIdx);
   }
 
   _toFieldValue(value) {
@@ -66,15 +75,15 @@ class BlockInputNumber extends BlockInputRound {
 }
 
 class BlockInputBoolean extends BlockInput {
-  constructor(Blockly, inputIdx) {
-    super(Blockly, BlockTypeInfo.BLOCK_INPUT_BOOLEAN, inputIdx);
+  constructor(Blockly, inputIdx, fieldIdx) {
+    super(Blockly, BlockTypeInfo.BLOCK_INPUT_BOOLEAN, inputIdx, fieldIdx);
   }
 
   setValue(block, value) {
     if (value instanceof this.Blockly.BlockSvg) {
       if (!value.outputConnection || value.edgeShape_ !== BlockTypeInfo.BLOCK_SHAPE_BOOLEAN)
         throw new Error('Cannot put block "' + value.id + '" into a boolean type input.');
-      innerBlock.outputConnection.connect(this.getInput(block).connection);
+      value.outputConnection.connect(this.getInput(block).connection);
     } else {
       throw new Error("Boolean type inputs can only contain blocks.");
     }
@@ -82,14 +91,14 @@ class BlockInputBoolean extends BlockInput {
 }
 
 class BlockInputColour extends BlockInput {
-  constructor(Blockly, inputIdx) {
-    super(Blockly, BlockTypeInfo.BLOCK_INPUT_COLOUR, inputIdx);
+  constructor(Blockly, inputIdx, fieldIdx) {
+    super(Blockly, BlockTypeInfo.BLOCK_INPUT_COLOUR, inputIdx, fieldIdx);
   }
 
   setValue(block, value) {
     if (typeof value !== "string") throw new Error("Cannot set color type input to value of type " + typeof type);
     if (!value.match(/^#[0-9a-fA-F]{6}$/)) throw new Error('Invalid color "' + value + '".');
-    this.getInput(block).connection.targetBlock().inputList[0].fieldRow[0].setValue(value);
+    this.getField(block).setValue(value);
   }
 }
 
@@ -108,8 +117,7 @@ class BlockInputEnum extends BlockInput {
   ];
 
   constructor(Blockly, options, inputIdx, fieldIdx) {
-    super(Blockly, BlockTypeInfo.BLOCK_INPUT_ENUM, inputIdx);
-    this.fieldIdx = fieldIdx;
+    super(Blockly, BlockTypeInfo.BLOCK_INPUT_ENUM, inputIdx, fieldIdx);
     this.values = [];
     for (let i = 0; i < options.length; i++) {
       if (typeof options[i][1] === "string" && BlockInputEnum.INVALID_VALUES.indexOf(options[i][1]) === -1) {
@@ -120,20 +128,20 @@ class BlockInputEnum extends BlockInput {
 
   setValue(block, value) {
     if (this.values.indexOf(value) === -1) throw new Error("Invalid enum value. Expected item from the options list.");
-    this.getInput(block).fieldRow[this.fieldIdx].setValue(value.value);
+    this.getField(block).setValue(value.value);
   }
 }
 
 class BlockInputBlock extends BlockInput {
-  constructor(Blockly, inputIdx) {
-    super(Blockly, BlockTypeInfo.BLOCK_INPUT_BLOCK, inputIdx);
+  constructor(Blockly, inputIdx, fieldIdx) {
+    super(Blockly, BlockTypeInfo.BLOCK_INPUT_BLOCK, inputIdx, fieldIdx);
   }
 
-  setValue(input, value) {
+  setValue(block, value) {
     if (value instanceof this.Blockly.BlockSvg) {
-      if (!innerBlock.previousConnection || value.edgeShape_ !== BlockTypeInfo.BLOCK_SHAPE_BOOLEAN)
+      if (!value.previousConnection || BlockTypeInfo.getBlockShape(value) !== BlockTypeInfo.BLOCK_SHAPE_STACK)
         throw new Error('Cannot put block "' + value.id + '" into a block type input.');
-      innerBlock.previousConnection.connect(input.connection);
+      value.previousConnection.connect(this.getInput(block).connection);
     } else {
       throw new Error("Block type inputs can only contain blocks.");
     }
@@ -202,21 +210,45 @@ export default class BlockTypeInfo {
       this.inputs.push(input);
     };
 
+    const addFieldInputs = (field, inputIdx, fieldIdx) => {
+      if (field.className_ === "blocklyText blocklyDropdownText") {
+        const options = field.getOptions();
+        if (options.length === 1) {
+          this.parts.push(options[0][0]);
+        } else {
+          addInput(new BlockInputEnum(Blockly, options, inputIdx, fieldIdx));
+        }
+      } else if (field instanceof Blockly.FieldImage) {
+        switch (field.src_) {
+          case "/static/blocks-media/green-flag.svg":
+            // TODO
+            break;
+          case "/static/blocks-media/rotate-right.svg":
+            // TODO
+            break;
+          case "/static/blocks-media/rotate-left.svg":
+            // TODO
+            break;
+          case "/static/blocks-media/repeat.svg":
+            break;
+        }
+      } else {
+        if (!field.argType_) {
+          this.parts.push(field.getText());
+        } else if (field.argType_[0] === "colour") {
+          addInput(new BlockInputColour(Blockly, inputIdx, fieldIdx));
+        } else if (field.argType_[1] === "number") {
+          addInput(new BlockInputNumber(Blockly, inputIdx, fieldIdx));
+        } else {
+          addInput(new BlockInputString(Blockly, inputIdx, fieldIdx));
+        }
+      }
+    }
+
     for (let inputIdx = 0; inputIdx < this.workspaceForm.inputList.length; inputIdx++) {
       const input = this.workspaceForm.inputList[inputIdx];
       for (let fieldIdx = 0; fieldIdx < input.fieldRow.length; fieldIdx++) {
-        const field = input.fieldRow[fieldIdx];
-
-        if (field.className_ === "blocklyText blocklyDropdownText") {
-          const options = field.getOptions();
-          if (options.length === 1) {
-            this.parts.push(options[0][0]);
-          } else {
-            addInput(new BlockInputEnum(Blockly, options, inputIdx, fieldIdx));
-          }
-        } else {
-          this.parts.push(field.getText());
-        }
+        addFieldInputs(input.fieldRow[fieldIdx], inputIdx, fieldIdx);
       }
 
       if (input.connection) {
@@ -225,19 +257,12 @@ export default class BlockTypeInfo {
           if (innerBlock.inputList.length !== 1 || innerBlock.inputList[0].fieldRow.length !== 1)
             throw new Error("This should never happen.");
           const innerField = innerBlock.inputList[0].fieldRow[0];
-          if (!innerField.argType_) throw new Error("This should also never happen.");
-          if (innerField.argType_[0] === "colour") {
-            addInput(new BlockInputColour(Blockly, inputIdx));
-          } else if (innerField.argType_[1] === "number") {
-            addInput(new BlockInputNumber(Blockly, inputIdx));
-          } else {
-            addInput(new BlockInputString(Blockly, inputIdx));
-          }
+          addFieldInputs(innerField, inputIdx, -1);
         } else {
           if (input.outlinePath) {
-            this.inputs.push(new BlockInputBoolean(Blockly, inputIdx));
+            addInput(new BlockInputBoolean(Blockly, inputIdx, -1));
           } else {
-            this.inputs.push(new BlockInputBlock(Blockly, inputIdx));
+            addInput(new BlockInputBlock(Blockly, inputIdx, -1));
           }
         }
       }
