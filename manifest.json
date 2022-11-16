@@ -8,11 +8,7 @@
   "background": {
     "page": "background/background.html"
   },
-  "browser_action": {
-    "default_icon": "images/icon-blue.png",
-    "default_popup": "webpages/popup/index.html",
-    "default_title": "Scratch Addons"
-  },
+  "browser_action": { "default_popup": "webpages/popup/index.html" },
   "icons": {
     "16": "images/icon-blue-16.png",
     "32": "images/icon-blue-32.png",
