@@ -1,6 +1,6 @@
 {
   "name": "Line breaks in comments",
-  "description": "Makes line breaks (pressing Enter) in comments on the website visible instead of converting them to spaces.",
+  "description": "Allows adding line breaks (by pressing Enter/Return) in comments you're writing.",
   "credits": [
     {
       "name": "TheColaber",
@@ -34,10 +34,10 @@
       "name": "Add scroll bars to tall comments",
       "id": "scrollbars",
       "type": "boolean",
-      "default": true
+      "default": false
     },
     {
-      "name": "Maximum number of lines",
+      "name": "Maximum number of lines visible at once",
       "id": "height",
       "type": "integer",
       "min": 1,
