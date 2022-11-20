@@ -54,7 +54,7 @@ export default async function ({ addon, global, console, msg }) {
           if (instructions[j].includes("#_")) {
             let folderExists = false;
             for (let k = 0; k < foldersJSON.folders.length; k++) {
-              if (foldersJSON.folders[k].name === instructions[j].replace('#_', '')) {
+              if (foldersJSON.folders[k].name === instructions[j].replace("#_", "")) {
                 foldersJSON.folders[k].projects.push(link);
                 folderExists = true;
                 break;
@@ -62,7 +62,7 @@ export default async function ({ addon, global, console, msg }) {
             }
 
             if (folderExists === false) {
-              foldersJSON.folders.push({ name: instructions[j].replace('#_', ''), projects: [link] });
+              foldersJSON.folders.push({ name: instructions[j].replace("#_", ""), projects: [link] });
             }
           }
         }
@@ -101,7 +101,6 @@ export default async function ({ addon, global, console, msg }) {
     const realFolderDiv = document.createElement("div");
     realFolderDiv.className = "folders";
     folderDiv.appendChild(realFolderDiv);
-
 
     let projectHeader = document.createElement("h4");
     projectHeader.textContent = msg("projectHeader");
@@ -159,18 +158,18 @@ export default async function ({ addon, global, console, msg }) {
 
         console.log(projectDetails);
 
-        const project = document.createElement('div');
-        project.classList.add('project');
+        const project = document.createElement("div");
+        project.classList.add("project");
         projectDiv.appendChild(project);
 
-        const img = document.createElement('img');
+        const img = document.createElement("img");
         img.src = `https://uploads.scratch.mit.edu/get_image/project/${projectID}_200x160.png`;
-        img.classList.add('sa-folder-project-img');
+        img.classList.add("sa-folder-project-img");
         project.appendChild(img);
 
-        project.appendChild(document.createElement('br'));
-        
-        const projectLink = document.createElement('a');
+        project.appendChild(document.createElement("br"));
+
+        const projectLink = document.createElement("a");
         projectLink.textContent = projectDetails.title;
         projectLink.href = projects[i];
         project.appendChild(projectLink);
