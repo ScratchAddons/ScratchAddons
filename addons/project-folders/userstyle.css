@@ -28,3 +28,20 @@ button.project-right-float-btn {
 .folder {
   overflow: hidden;
 }
+
+.project {
+  width: 150px;
+  text-align: center;
+  margin: 10px;
+}
+
+.sa-folder-project-img {
+  height: 100px;
+}
+
+.sa-folder-projects {
+  display: flex;
+  align-items: center;
+  overflow: overlay;
+  padding: 20px;
+}

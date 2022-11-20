@@ -4,7 +4,23 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   createFolderAreaAndButton();
-  load();
+  const foldersJSON = await load();
+  console.log(foldersJSON);
+
+  async function getProjectDetails(projectID) {
+    const token = await addon.auth.fetchXToken();
+    const projectDetails = await (
+      await fetch(`https://api.scratch.mit.edu/projects/${projectID}/`, {
+        headers: {
+          "content-type": "application/json",
+          "x-csrftoken": addon.auth.crsfToken,
+          "x-token": token,
+        },
+      })
+    ).json();
+
+    return projectDetails;
+  }
 
   async function load() {
     const foldersJSON = { folders: [] };
@@ -28,16 +44,7 @@ export default async function ({ addon, global, console, msg }) {
 
       const link = projectColumns.childNodes[i].childNodes[1].childNodes[3].childNodes[1].childNodes[0].href;
       const projectID = link.replace("https://scratch.mit.edu/projects/", "").replace("/", "");
-      const token = await addon.auth.fetchXToken();
-      const projectDetails = await (
-        await fetch(`https://api.scratch.mit.edu/projects/${projectID}/`, {
-          headers: {
-            "content-type": "application/json",
-            "x-csrftoken": addon.auth.crsfToken,
-            "x-token": token,
-          },
-        })
-      ).json();
+      const projectDetails = await getProjectDetails(projectID);
       let instructions = projectDetails.instructions;
 
       if (instructions.includes("#_")) {
@@ -45,14 +52,17 @@ export default async function ({ addon, global, console, msg }) {
 
         for (let j = 0; j < instructions.length; j++) {
           if (instructions[j].includes("#_")) {
-            if (!foldersJSON.folders.includes(instructions[j].replace("#_", ""))) {
-              foldersJSON.folders.push({ name: instructions[j].replace("#_", ""), projects: [link] });
-            } else {
-              for (let l = 0; l < foldersJSON.folders.length; l++) {
-                if (foldersJSON.folders[l] === instructions[j].replace("#_", "")) {
-                  foldersJSON.folders[l].projects.push(link);
-                }
+            let folderExists = false;
+            for (let k = 0; k < foldersJSON.folders.length; k++) {
+              if (foldersJSON.folders[k].name === instructions[j].replace('#_', '')) {
+                foldersJSON.folders[k].projects.push(link);
+                folderExists = true;
+                break;
               }
+            }
+
+            if (folderExists === false) {
+              foldersJSON.folders.push({ name: instructions[j].replace('#_', ''), projects: [link] });
             }
           }
         }
@@ -73,6 +83,8 @@ export default async function ({ addon, global, console, msg }) {
     for (let k = 0; k < foldersJSON.folders.length; k++) {
       createFolder(foldersJSON.folders[k].name);
     }
+
+    return foldersJSON;
   }
 
   function createFolderAreaAndButton() {
@@ -90,25 +102,10 @@ export default async function ({ addon, global, console, msg }) {
     realFolderDiv.className = "folders";
     folderDiv.appendChild(realFolderDiv);
 
-    const projectHeader = document.createElement("h4");
+
+    let projectHeader = document.createElement("h4");
     projectHeader.textContent = msg("projectHeader");
     columns.insertBefore(projectHeader, columns.childNodes[1]);
-
-    const buttonArea = document.querySelectorAll(".buttons")[0];
-    const newFolderButton = document.createElement("button");
-    newFolderButton.className = "button small grey";
-    buttonArea.appendChild(newFolderButton);
-
-    const newFolderSpan = document.createElement("span");
-    newFolderSpan.textContent = msg("createFolder");
-    newFolderButton.appendChild(newFolderSpan);
-
-    newFolderButton.addEventListener("click", () => {
-      const folderName = prompt(msg("folderNamePrompt"));
-      if (folderName !== "") {
-        createFolder(folderName);
-      }
-    });
   }
 
   function createFolder(name) {
@@ -134,7 +131,7 @@ export default async function ({ addon, global, console, msg }) {
     folderName.textContent = name;
     folder.appendChild(folderName);
 
-    folder.addEventListener("click", () => {
+    folder.addEventListener("click", async () => {
       const { backdrop, container, content, closeButton, remove } = addon.tab.createModal(folderName.textContent, {
         isOpen: true,
         useEditorClasses: true,
@@ -145,7 +142,39 @@ export default async function ({ addon, global, console, msg }) {
 
       const projectDiv = document.createElement("div");
       projectDiv.classList.add("sa-folder-projects");
-      content.appendChild();
+      content.appendChild(projectDiv);
+
+      const folders = foldersJSON.folders;
+      let projects;
+      for (let i = 0; i < folders.length; i++) {
+        if (folders[i].name === folderName.textContent) {
+          projects = folders[i].projects;
+          break;
+        }
+      }
+
+      for (let i = 0; i < projects.length; i++) {
+        const projectID = projects[i].replace("https://scratch.mit.edu/projects/", "").replace("/", "");
+        const projectDetails = await getProjectDetails(projectID);
+
+        console.log(projectDetails);
+
+        const project = document.createElement('div');
+        project.classList.add('project');
+        projectDiv.appendChild(project);
+
+        const img = document.createElement('img');
+        img.src = `https://uploads.scratch.mit.edu/get_image/project/${projectID}_200x160.png`;
+        img.classList.add('sa-folder-project-img');
+        project.appendChild(img);
+
+        project.appendChild(document.createElement('br'));
+        
+        const projectLink = document.createElement('a');
+        projectLink.textContent = projectDetails.title;
+        projectLink.href = projects[i];
+        project.appendChild(projectLink);
+      }
     });
   }
 }
