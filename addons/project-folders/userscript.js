@@ -5,7 +5,7 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   let foldersJSON;
-  const projectTab = document.querySelectorAll('li.first')[0];
+  const projectTab = document.querySelectorAll("li.first")[0];
   projectTab.childNodes[0].onclick = async () => {
     projectColumns = await addon.tab.waitForElement("ul.media-list", {
       markAsSeen: true,
@@ -14,7 +14,7 @@ export default async function ({ addon, global, console, msg }) {
     foldersJSON = await load();
   };
 
-  if (document.querySelectorAll('div.folders-container')[0] === undefined) {
+  if (document.querySelectorAll("div.folders-container")[0] === undefined) {
     createFolderAreaAndButton();
     foldersJSON = await load();
   }
