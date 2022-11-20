@@ -1,11 +1,23 @@
 export default async function ({ addon, global, console, msg }) {
-  const projectColumns = await addon.tab.waitForElement("ul.media-list", {
+  let projectColumns;
+  projectColumns = await addon.tab.waitForElement("ul.media-list", {
     markAsSeen: true,
   });
 
-  createFolderAreaAndButton();
-  const foldersJSON = await load();
-  console.log(foldersJSON);
+  let foldersJSON;
+  const projectTab = document.querySelectorAll('li.first')[0];
+  projectTab.childNodes[0].onclick = async () => {
+    projectColumns = await addon.tab.waitForElement("ul.media-list", {
+      markAsSeen: true,
+    });
+    createFolderAreaAndButton();
+    foldersJSON = await load();
+  };
+
+  if (document.querySelectorAll('div.folders-container')[0] === undefined) {
+    createFolderAreaAndButton();
+    foldersJSON = await load();
+  }
 
   async function getProjectDetails(projectID) {
     const token = await addon.auth.fetchXToken();
@@ -43,7 +55,6 @@ export default async function ({ addon, global, console, msg }) {
       loader.setAttribute("value", (i / (projectColumns.childNodes.length - 2)) * 100);
 
       const link = projectColumns.childNodes[i + 2].childNodes[1].childNodes[3].childNodes[1].childNodes[0].href;
-      console.log(projectColumns.childNodes[i + 2]);
       const projectID = link.replace("https://scratch.mit.edu/projects/", "").replace("/", "");
       const projectDetails = await getProjectDetails(projectID);
       let instructions = projectDetails.instructions;
