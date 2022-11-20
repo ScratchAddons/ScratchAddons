@@ -45,3 +45,7 @@ button.project-right-float-btn {
   overflow: overlay;
   padding: 20px;
 }
+
+ul.media-list {
+  padding: 10px;
+}

@@ -39,10 +39,11 @@ export default async function ({ addon, global, console, msg }) {
     loader.setAttribute("max", "100");
     folderDiv.appendChild(loader);
 
-    for (let i = 0; i < projectColumns.childNodes.length; i++) {
-      loader.setAttribute("value", (i / projectColumns.childNodes.length) * 100);
+    for (let i = 0; i < projectColumns.childNodes.length - 2; i++) {
+      loader.setAttribute("value", (i / (projectColumns.childNodes.length - 2)) * 100);
 
-      const link = projectColumns.childNodes[i].childNodes[1].childNodes[3].childNodes[1].childNodes[0].href;
+      const link = projectColumns.childNodes[i + 2].childNodes[1].childNodes[3].childNodes[1].childNodes[0].href;
+      console.log(projectColumns.childNodes[i + 2]);
       const projectID = link.replace("https://scratch.mit.edu/projects/", "").replace("/", "");
       const projectDetails = await getProjectDetails(projectID);
       let instructions = projectDetails.instructions;
@@ -88,10 +89,10 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   function createFolderAreaAndButton() {
-    const columns = document.querySelectorAll(".col-12")[0];
+    //const columns = document.querySelectorAll(".col-12")[0];
     const folderDiv = document.createElement("div");
     folderDiv.className = "folders-container";
-    columns.insertBefore(folderDiv, columns.childNodes[0]);
+    projectColumns.insertBefore(folderDiv, projectColumns.childNodes[0]);
 
     const folderHeader = document.createElement("h4");
     folderHeader.textContent = msg("header");
@@ -104,7 +105,7 @@ export default async function ({ addon, global, console, msg }) {
 
     let projectHeader = document.createElement("h4");
     projectHeader.textContent = msg("projectHeader");
-    columns.insertBefore(projectHeader, columns.childNodes[1]);
+    projectColumns.insertBefore(projectHeader, projectColumns.childNodes[1]);
   }
 
   function createFolder(name) {
