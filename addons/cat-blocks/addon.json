@@ -18,7 +18,7 @@
   ],
   "info": [
     {
-      "type": "warning",
+      "type": "notice",
       "text": "The \"Watch mouse cursor\" option may impact performance when the editor is open.",
       "id": "watch"
     }
