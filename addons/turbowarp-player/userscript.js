@@ -27,12 +27,22 @@ export default async function ({ addon, console, msg }) {
   }
 
   button.onclick = async () => {
+    const projectId = window.location.pathname.split("/")[2];
     let search = "";
+    let projectToken = (
+      await (
+        await fetch(`https://api.scratch.mit.edu/projects/${projectId}`, {
+          headers: {
+            "x-token": addon.auth._lastXToken,
+          },
+        })
+      ).json()
+    ).project_token;
     if (
       addon.tab.redux.state?.preview?.projectInfo?.public === false &&
       addon.tab.redux.state.preview.projectInfo.project_token
     ) {
-      search = `#?token=${addon.tab.redux.state.preview.projectInfo.project_token}`;
+      search = `#?token=${projectToken}`;
     }
     if (action === "player") {
       playerToggled = !playerToggled;
@@ -41,7 +51,6 @@ export default async function ({ addon, console, msg }) {
         const usp = new URLSearchParams();
         usp.set("settings-button", "1");
         if (username) usp.set("username", username);
-        const projectId = window.location.pathname.split("/")[2];
         if (addon.settings.get("addons")) {
           const enabledAddons = await addon.self.getEnabledAddons("editor");
           usp.set("addons", enabledAddons.join(","));
