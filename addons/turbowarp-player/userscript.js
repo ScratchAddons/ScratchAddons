@@ -33,7 +33,7 @@ export default async function ({ addon, console, msg }) {
       await (
         await fetch(`https://api.scratch.mit.edu/projects/${projectId}&nocache=${Date.now()}`, {
           headers: {
-            "x-token": addon.auth._lastXToken,
+            "x-token": await addon.auth.fetchXToken(),
           },
         })
       ).json()
