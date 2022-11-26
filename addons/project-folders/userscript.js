@@ -4,20 +4,21 @@ export default async function ({ addon, global, console, msg }) {
     markAsSeen: true,
   });
 
-  let foldersJSON;
+  let foldersArray;
   const projectTab = document.querySelectorAll("li.first")[0];
   projectTab.childNodes[0].onclick = async () => {
     projectColumns = await addon.tab.waitForElement("ul.media-list", {
       markAsSeen: true,
     });
     createFolderAreaAndButton();
-    foldersJSON = await load();
+    foldersArray = await load();
   };
 
   if (document.querySelectorAll("div.folders-container")[0] === undefined) {
     createFolderAreaAndButton();
-    foldersJSON = await load();
+    foldersArray = await load();
   }
+  console.log(foldersArray)
 
   async function getProjectDetails(projectID) {
     const token = await addon.auth.fetchXToken();
@@ -35,7 +36,7 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   async function load() {
-    const foldersJSON = { folders: [] };
+    const folders = [];
 
     const folderDiv = document.querySelectorAll(".folders")[0];
 
@@ -65,16 +66,16 @@ export default async function ({ addon, global, console, msg }) {
         for (let j = 0; j < instructions.length; j++) {
           if (instructions[j].includes("#_")) {
             let folderExists = false;
-            for (let k = 0; k < foldersJSON.folders.length; k++) {
-              if (foldersJSON.folders[k].name === instructions[j].replace("#_", "")) {
-                foldersJSON.folders[k].projects.push(link);
+            for (let k = 0; k < folders.length; k++) {
+              if (folders[k].name === instructions[j].replace("#_", "")) {
+                folders[k].projects.push({ link: link, name: projectDetails.title });
                 folderExists = true;
                 break;
               }
             }
 
             if (folderExists === false) {
-              foldersJSON.folders.push({ name: instructions[j].replace("#_", ""), projects: [link] });
+              folders.push({ name: instructions[j].replace("#_", ""), projects: [{ link: link, name: projectDetails.title }] });
             }
           }
         }
@@ -86,21 +87,20 @@ export default async function ({ addon, global, console, msg }) {
     loader.remove();
     tempBR.remove();
 
-    if (foldersJSON.folders.length === 0) {
+    if (folders.length === 0) {
       noFolderSpan.textContent = msg("noFolder");
     } else {
       noFolderSpan.remove();
     }
 
-    for (let k = 0; k < foldersJSON.folders.length; k++) {
-      createFolder(foldersJSON.folders[k].name);
+    for (let k = 0; k < folders.length; k++) {
+      createFolder(folders[k].name);
     }
 
-    return foldersJSON;
+    return folders;
   }
 
   function createFolderAreaAndButton() {
-    //const columns = document.querySelectorAll(".col-12")[0];
     const folderDiv = document.createElement("div");
     folderDiv.className = "folders-container";
     projectColumns.insertBefore(folderDiv, projectColumns.childNodes[0]);
@@ -155,7 +155,7 @@ export default async function ({ addon, global, console, msg }) {
       projectDiv.classList.add("sa-folder-projects");
       content.appendChild(projectDiv);
 
-      const folders = foldersJSON.folders;
+      const folders = foldersArray;
       let projects;
       for (let i = 0; i < folders.length; i++) {
         if (folders[i].name === folderName.textContent) {
@@ -165,10 +165,7 @@ export default async function ({ addon, global, console, msg }) {
       }
 
       for (let i = 0; i < projects.length; i++) {
-        const projectID = projects[i].replace("https://scratch.mit.edu/projects/", "").replace("/", "");
-        const projectDetails = await getProjectDetails(projectID);
-
-        console.log(projectDetails);
+        const projectID = projects[i].link.replace("https://scratch.mit.edu/projects/", "").replace("/", "");
 
         const project = document.createElement("div");
         project.classList.add("project");
@@ -182,7 +179,7 @@ export default async function ({ addon, global, console, msg }) {
         project.appendChild(document.createElement("br"));
 
         const projectLink = document.createElement("a");
-        projectLink.textContent = projectDetails.title;
+        projectLink.textContent = projects[i].name;
         projectLink.href = projects[i];
         project.appendChild(projectLink);
       }
