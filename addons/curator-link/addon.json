@@ -1,16 +1,30 @@
 {
-  "name": "Front page curator link",
-  "description": "Makes the username of the front page curator a clickable link to their profile.",
+  "name": "Clickable usernames",
+  "description": "Makes the front page curator and mentions on the forums clickable links to their profile.",
   "credits": [
     {
       "name": "Hans5958",
       "link": "https://github.com/Hans5958/userscripts/blob/master/Scratch/Curator%20Links.user.js"
+    },
+    {
+      "name": "Samq64",
+      "link": "https://github.com/Samq64"
     }
   ],
   "userscripts": [
     {
       "url": "script.js",
-      "matches": ["https://scratch.mit.edu/"]
+      "matches": ["https://scratch.mit.edu/"],
+      "if": {
+        "settings": { "curator": true }
+      }
+    },
+    {
+      "url": "mentions.js",
+      "matches": ["topics"],
+      "if": {
+        "settings": { "mentions": true }
+      }
     }
   ],
   "userstyles": [
@@ -24,15 +38,34 @@
   ],
   "settings": [
     {
+      "id": "mentions",
+      "name": "Make forum mentions clickable",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "id": "curator",
+      "name": "Make front page curator cickable",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "id": "styleAsNormalText",
       "name": "Style as normal text",
       "type": "boolean",
-      "default": false
+      "default": false,
+      "if": {
+        "settings": { "curator": true }
+      }
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.4.0",
-  "tags": ["community"],
+  "latestUpdate": {
+    "version": "1.30.0",
+    "newSettings": ["mentions"]
+  },
+  "tags": ["community", "forums"],
   "enabledByDefault": false
 }
