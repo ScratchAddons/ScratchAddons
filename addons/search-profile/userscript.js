@@ -15,8 +15,7 @@ export default async function ({ addon, global, console, msg }) {
   if (valid) tab.href = "/users/" + user + "/";
   //Check if whats entered is a valid username
   if (!valid) {
-    img.style.filter = "grayscale(100%) brightness(100%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(1)";
-    span.style.color = "red";
+    tab.classList.add("sa-search-profile-invalid");
     li.title = msg("invalid-username", { username: user });
   }
 }

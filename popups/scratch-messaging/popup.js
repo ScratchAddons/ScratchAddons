@@ -283,6 +283,7 @@ export default async ({ addon, msg, safeMsg }) => {
         yourProfileMsg: msg("your-profile"),
         loadingMsg: msg("loading"),
         loggedOutMsg: msg("logged-out"),
+        loggedOutLinkMsg: msg("logged-out-link"),
         serverErrorMsg: msg("server-error"),
         networkErrorMsg: msg("network-error"),
         unknownFatalErrorMsg: msg("unknown-fatal-error"),
@@ -320,7 +321,7 @@ export default async ({ addon, msg, safeMsg }) => {
     computed: {
       feedbackUrl() {
         const manifest = chrome.runtime.getManifest();
-        return `https://scratchaddons.com/feedback/?ext_version=${manifest.version_name}&utm_source=extension&utm_medium=messagingcrash&utm_campaign=v${manifest.versions}`;
+        return `https://scratchaddons.com/feedback/?ext_version=${manifest.version_name}&utm_source=extension&utm_medium=messagingcrash&utm_campaign=v${manifest.version}`;
       },
       profilesOrdered() {
         // Own profile first, then others

@@ -83,13 +83,13 @@ h1 {
     border: 1px solid var(--content-border);
   }
   25% {
-    border: 1px solid var(--brand-orange);
+    border: 1px solid var(--orange);
   }
   50% {
     border: 1px solid var(--content-border);
   }
   75% {
-    border: 1px solid var(--brand-orange);
+    border: 1px solid var(--orange);
   }
   100% {
     border: 1px solid var(--content-border);
@@ -150,8 +150,9 @@ h1 {
   /* needs !important because it conflicts with display: block */
   display: none !important;
 }
-#confirmImport {
-  border-color: var(--brand-orange);
+#confirmImport,
+#applyLanguageSettingsButton {
+  border-color: var(--orange);
 }
 
 #search-not-found {

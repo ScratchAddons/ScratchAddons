@@ -5,9 +5,10 @@ import minifySettings from "../libraries/common/minify-settings.js";
  the versions separately. Current versions:
 
  - editor-dark-mode 2 (bumped in v1.23 twice)
+ - editor-theme3 4 (last bumped in v1.29)
  */
 
-const updatePresetIfMatching = (preset, settings, oldPreset, version) => {
+const updatePresetIfMatching = (settings, version, oldPreset = null, preset = null) => {
   if ((settings._version || 0) < version) {
     /**
      Version must be set even if transition is unnecessary;
@@ -15,11 +16,20 @@ const updatePresetIfMatching = (preset, settings, oldPreset, version) => {
      2) User updates, transition aborts
      3) User changes settings to old preset values
      4) Without version, this change will revert after reload!
+
+     Therefore, DO NOT REMOVE CALLS TO THIS METHOD. Instead omit oldPreset and preset
+     when transition is no longer necessary.
      */
     settings._version = version;
+    if (preset === null) return;
     const map = {};
     for (const key of Object.keys(oldPreset)) {
-      if (settings[key] !== oldPreset[key]) return;
+      if (settings[key] !== oldPreset[key]) return console.log(settings, oldPreset, key);
+      map[key] = preset.values[key];
+    }
+
+    // For newly added keys
+    for (const key of Object.keys(preset.values).filter((k) => !Object.prototype.hasOwnProperty.call(oldPreset, k))) {
       map[key] = preset.values[key];
     }
     Object.assign(settings, map);
@@ -47,92 +57,35 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       // to its default (false) inside the for loop below.
     }
 
+    if (addonsEnabled["editor-devtools"] === false) {
+      // Transition 1.27.0 to 1.28.0
+      // Disable addons previously part of devtools, if devtools is disabled
+      if (addonsEnabled["find-bar"] === undefined) {
+        madeAnyChanges = true;
+        addonsEnabled["find-bar"] = false;
+      }
+      if (addonsEnabled["jump-to-def"] === undefined) {
+        madeAnyChanges = true;
+        addonsEnabled["jump-to-def"] = false;
+      }
+    }
+
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
       const settings = addonSettings[addonId] || {};
       let madeChangesToAddon = false;
-      if (addonId === "project-info" && settings.editorCount) {
-        // Transition v1.22 to v1.23
-        // project-info was split into 2 addons
-        madeChangesToAddon = madeAnyChanges = true;
-        delete settings.editorCount;
-        addonsEnabled["block-count"] = true;
-      }
+
       if (addonId === "editor-dark-mode") {
-        // Transition v1.22 to v1.23
-        // TurboWarp Dark preset changes:
-        updatePresetIfMatching(
-          manifest.presets.find((p) => p.id === "tw-dark"),
-          settings,
-          {
-            page: "#111111",
-            primary: "#ff4d4d",
-            highlightText: "#ff4d4d",
-            menuBar: "#333333",
-            activeTab: "#1e1e1e",
-            tab: "#2e2e2e",
-            selector: "#1e1e1e",
-            selector2: "#2e2e2e",
-            selectorSelection: "#111111",
-            accent: "#111111",
-            input: "#1e1e1e",
-            workspace: "#1e1e1e",
-            categoryMenu: "#111111",
-            palette: "#111111",
-            fullscreen: "#111111",
-            stageHeader: "#111111",
-            border: "#ffffff0d",
-          },
-          1
-        );
-        // Experimental Dark changes:
-        updatePresetIfMatching(
-          manifest.presets.find((p) => p.id === "experimentalDark"),
-          settings,
-          {
-            page: "#001533",
-            primary: "#4d97ff",
-            highlightText: "#4d97ff",
-            menuBar: "#4d97ff",
-            activeTab: "#282828",
-            tab: "#192f4d",
-            selector: "#030b16",
-            selector2: "#192f4d",
-            selectorSelection: "#282828",
-            accent: "#282828",
-            input: "#282828",
-            workspace: "#282828",
-            categoryMenu: "#282828",
-            palette: "#333333",
-            fullscreen: "#282828",
-            stageHeader: "#333333",
-            border: "#444444",
-          },
-          2
-        );
-      }
-      if (manifest.settings) {
-        if (
-          addonId === "discuss-button" &&
-          addonsEnabled["discuss-button"] === true &&
-          (settings.buttonName || settings.removeIdeasBtn)
-        ) {
-          // Transition v1.23.0 modes to v1.24.0 settings
-          madeChangesToAddon = true;
-          madeAnyChanges = true;
-
-          let option = manifest.settings.find((option) => option.id === "items");
-          settings.items = [...option.default];
-          settings.items.splice(2, 0, {
-            name: settings.buttonName,
-            url: "/discuss",
-          });
-          if (settings.removeIdeasBtn) settings.items.splice(3, 1);
-
-          delete settings.removeIdeasBtn;
-          delete settings.buttonName;
+        // Transition v1.27 to v1.28
+        // editor-dark-mode enabled opacity to the block palette.
+        // We append "cc" to the color so that it's the same as before this update.
+        if (settings.palette !== undefined && settings.palette.length === 7) {
+          settings.palette += "cc";
+          madeAnyChanges = madeChangesToAddon = true;
         }
+      }
 
+      if (manifest.settings) {
         for (const option of manifest.settings) {
           if (settings[option.id] === undefined) {
             madeChangesToAddon = true;
@@ -187,6 +140,60 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
             if (typeof scratchr2.linkColor === "string") settings.link = scratchr2.linkColor;
             delete scratchr2.primaryColor;
             delete scratchr2.linkColor;
+          }
+        }
+
+        if (addonId === "editor-dark-mode") updatePresetIfMatching(settings, 2);
+
+        if (addonId === "editor-theme3") {
+          madeAnyChanges = madeChangesToAddon = true;
+          updatePresetIfMatching(
+            settings,
+            1,
+            {
+              "motion-color": "#4a6cd4",
+              "looks-color": "#8a55d7",
+              "sounds-color": "#bb42c3",
+              "events-color": "#c88330",
+              "control-color": "#e1a91a",
+              "sensing-color": "#2ca5e2",
+              "operators-color": "#5cb712",
+              "data-color": "#ee7d16",
+              "data-lists-color": "#cc5b22",
+              "custom-color": "#632d99",
+              "Pen-color": "#0e9a6c",
+              "sa-color": "#29beb8",
+              "input-color": "#ffffff",
+              text: "white",
+            },
+            manifest.presets.find((p) => p.id === "original")
+          );
+          updatePresetIfMatching(
+            settings,
+            2,
+            {
+              "motion-color": "#004099",
+              "looks-color": "#220066",
+              "sounds-color": "#752475",
+              "events-color": "#997300",
+              "control-color": "#664100",
+              "sensing-color": "#1f5f7a",
+              "operators-color": "#235c23",
+              "data-color": "#b35900",
+              "data-lists-color": "#993300",
+              "custom-color": "#99004d",
+              "Pen-color": "#064734",
+              "sa-color": "#166966",
+              "input-color": "#202020",
+              text: "white",
+            },
+            manifest.presets.find((p) => p.id === "dark")
+          );
+
+          if (addonSettings["editor-dark-mode"]?.darkComments === false) {
+            // Transition v1.28 to v1.29
+            // Override the preset color if dark comments are not enabled
+            addonSettings["comment-color"] = "#FEF49C";
           }
         }
       }

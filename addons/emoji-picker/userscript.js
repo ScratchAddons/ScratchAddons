@@ -1,9 +1,7 @@
 import { emojis, unicodeEmojis } from "./emojis.js";
 export default async function ({ addon, global, console, msg }) {
-  //Constants
-
+  let lastParent = null;
   //Functions
-
   const setEmojiPickerPos = function () {
     emojiPicker.classList.remove("sa-emoji-picker-offscreen");
     //scratchr2 makes the body and root <html>'s height value the size of the screen somehow so this has to be done
@@ -19,7 +17,10 @@ export default async function ({ addon, global, console, msg }) {
     if (!event.target.classList.contains("sa-emoji-button")) return; //Only attempt to show when clicking button, not picker
     unicodeContainer.style.display = "none";
     pickerDivider.style.display = "none";
-
+    if (lastParent === this) {
+      lastParent = null;
+      return;
+    }
     setSeeMoreText();
 
     this.appendChild(emojiPicker);
@@ -51,9 +52,9 @@ export default async function ({ addon, global, console, msg }) {
         textBox.value.substring(textBox.selectionEnd - 1, textBox.value.length);
     }
   };
-
   document.addEventListener("mouseup", function (event) {
     if (!emojiPicker.contains(event.target)) {
+      lastParent = emojiPicker.parentElement;
       emojiPicker.remove();
     }
   });
@@ -75,7 +76,6 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   //Addon
-
   //Create the emoji picker
   const emojiPicker = document.createElement("div");
   emojiPicker.className = "sa-emoji-picker";
