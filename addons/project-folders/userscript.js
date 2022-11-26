@@ -18,7 +18,6 @@ export default async function ({ addon, global, console, msg }) {
     createFolderAreaAndButton();
     foldersArray = await load();
   }
-  console.log(foldersArray);
 
   async function getProjectDetails(projectID) {
     const token = await addon.auth.fetchXToken();
@@ -183,7 +182,7 @@ export default async function ({ addon, global, console, msg }) {
 
         const projectLink = document.createElement("a");
         projectLink.textContent = projects[i].name;
-        projectLink.href = projects[i];
+        projectLink.href = projects[i].link;
         project.appendChild(projectLink);
       }
     });
