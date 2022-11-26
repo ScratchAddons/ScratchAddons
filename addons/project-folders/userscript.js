@@ -18,7 +18,7 @@ export default async function ({ addon, global, console, msg }) {
     createFolderAreaAndButton();
     foldersArray = await load();
   }
-  console.log(foldersArray)
+  console.log(foldersArray);
 
   async function getProjectDetails(projectID) {
     const token = await addon.auth.fetchXToken();
@@ -75,7 +75,10 @@ export default async function ({ addon, global, console, msg }) {
             }
 
             if (folderExists === false) {
-              folders.push({ name: instructions[j].replace("#_", ""), projects: [{ link: link, name: projectDetails.title }] });
+              folders.push({
+                name: instructions[j].replace("#_", ""),
+                projects: [{ link: link, name: projectDetails.title }],
+              });
             }
           }
         }
