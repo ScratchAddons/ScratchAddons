@@ -35,7 +35,7 @@ export default async function ({ addon, console, msg }) {
     }
     let projectToken = (
       await (
-        await fetch(`https://api.scratch.mit.edu/projects/${projectId}&nocache=${Date.now()}`, {
+        await fetch(`https://api.scratch.mit.edu/projects/${projectId}?nocache=${Date.now()}`, {
           headers: fetchHeaders
         })
       ).json()
