@@ -15,6 +15,8 @@ let steppingThread = null;
 
 const eventTarget = new EventTarget();
 
+let audioContextStateChange = Promise.resolve();
+
 export const isPaused = () => paused;
 
 const pauseThread = (thread) => {
@@ -90,7 +92,9 @@ export const setPaused = (_paused) => {
   }
 
   if (_paused) {
-    vm.runtime.audioEngine.audioContext.suspend();
+    audioContextStateChange = audioContextStateChange.then(() => {
+      return vm.runtime.audioEngine.audioContext.suspend();
+    });
     if (!vm.runtime.ioDevices.clock._paused) {
       vm.runtime.ioDevices.clock.pause();
     }
@@ -102,7 +106,9 @@ export const setPaused = (_paused) => {
       eventTarget.dispatchEvent(new CustomEvent("step"));
     }
   } else {
-    vm.runtime.audioEngine.audioContext.resume();
+    audioContextStateChange = audioContextStateChange.then(() => {
+      return vm.runtime.audioEngine.audioContext.resume();
+    });
     vm.runtime.ioDevices.clock.resume();
     for (const thread of vm.runtime.threads) {
       const pauseState = pausedThreadState.get(thread);
