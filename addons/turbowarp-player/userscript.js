@@ -29,21 +29,16 @@ export default async function ({ addon, console, msg }) {
   button.onclick = async () => {
     const projectId = window.location.pathname.split("/")[2];
     let search = "";
-    let fetchHeaders = {}
-    if (await addon.auth.fetchXToken()) {
-      fetchHeaders['x-token'] = await addon.auth.fetchXToken()
-    }
-    let projectToken = (
-      await (
-        await fetch(`https://api.scratch.mit.edu/projects/${projectId}?nocache=${Date.now()}`, {
-          headers: fetchHeaders
-        })
-      ).json()
-    ).project_token;
-    if (
-      addon.tab.redux.state?.preview?.projectInfo?.public === false &&
-      addon.tab.redux.state.preview.projectInfo.project_token
-    ) {
+    if (addon.tab.redux.state?.preview?.projectInfo?.public === false) {
+      let projectToken = (
+        await (
+          await fetch(`https://api.scratch.mit.edu/projects/${projectId}?nocache=${Date.now()}`, {
+            headers: {
+              "x-token": await addon.auth.fetchXToken(),
+            },
+          })
+        ).json()
+      ).project_token;
       search = `#?token=${projectToken}`;
     }
     if (action === "player") {
