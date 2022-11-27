@@ -309,8 +309,18 @@ export default async function ({ addon, global, console, msg }) {
     new Utils(addon).scrollBlockIntoView(blockId);
   };
 
-  // May be slightly incorrect in some edge cases.
-  const formatProcedureCode = (proccode) => proccode.replace(/%[nbs]/g, "()");
+  /**
+   * @param {string} procedureCode
+   * @returns {string}
+   */
+  const formatProcedureCode = (procedureCode) => {
+    const customBlock = addon.tab.getCustomBlock(procedureCode);
+    if (customBlock) {
+      procedureCode = customBlock.displayName;
+    }
+    // May be slightly incorrect in some edge cases.
+    return procedureCode.replace(/%[nbs]/g, "()");
+  };
 
   // May be slightly incorrect in some edge cases.
   const formatBlocklyBlockData = (jsonData) => {
