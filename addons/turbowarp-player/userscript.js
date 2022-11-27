@@ -29,14 +29,14 @@ export default async function ({ addon, console, msg }) {
   button.onclick = async () => {
     const projectId = window.location.pathname.split("/")[2];
     let search = "";
-    let fetchHeaders = {}
+    let fetchHeaders = {};
     if (await addon.auth.fetchXToken()) {
-      fetchHeaders['x-token'] = await addon.auth.fetchXToken()
+      fetchHeaders["x-token"] = await addon.auth.fetchXToken();
     }
     let projectToken = (
       await (
         await fetch(`https://api.scratch.mit.edu/projects/${projectId}?nocache=${Date.now()}`, {
-          headers: fetchHeaders
+          headers: fetchHeaders,
         })
       ).json()
     ).project_token;
