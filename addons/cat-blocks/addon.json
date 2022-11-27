@@ -19,7 +19,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "The \"Watch mouse cursor\" option may impact performance when the editor is open.",
+      "text": "The \"watch mouse cursor\" setting may impact performance when the editor is open.",
       "id": "watch"
     }
   ],
