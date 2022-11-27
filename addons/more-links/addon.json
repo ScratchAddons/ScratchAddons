@@ -1,6 +1,6 @@
 {
-  "name": "More links",
-  "description": "Adds links for URLs pointing outside scratch.mit.edu.",
+  "name": "Clickable external links",
+  "description": "Makes URLs pointing outside scratch.mit.edu clickable.",
   "credits": [
     {
       "name": "Hans5958"
