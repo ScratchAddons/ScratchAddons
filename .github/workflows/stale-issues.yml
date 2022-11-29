@@ -1,0 +1,21 @@
+name: Send comment on stale issues
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'ScratchAddons'
+    steps:
+      - uses: actions/stale@v6
+        with:
+          stale-issue-message: 'Ping! There has been no activity for 7 days.'
+          only-label: 'status: awaiting answer/followup'
+          days-before-issue-stale: 7
+          days-before-close: -1
+          stale-issue-label: ''
+          operations-per-run: 5
+          days-before-pr-stale: -1
+    permissions:
+      issues: write
