@@ -4,7 +4,7 @@ export default async function ({ addon, global, console }) {
   });
 
   const projectId = window.location.pathname.split("/")[2];
-  const thumb = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png`;
+  const thumb = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_4000x3000.png`;
   setThumb();
 
   addon.self.addEventListener("disabled", () => (el.style.backgroundImage = "none"));
