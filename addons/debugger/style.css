@@ -35,6 +35,9 @@
   background-color: white;
   width: 565px;
   height: 25rem;
+  resize: both;
+  min-width: 565px;
+  min-height: 25rem;
 }
 
 .sa-debugger-interface [class*="card_header-buttons_"] {
