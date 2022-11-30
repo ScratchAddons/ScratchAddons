@@ -14,17 +14,7 @@
   "userscripts": [
     {
       "url": "script.js",
-      "matches": ["https://scratch.mit.edu/"],
-      "if": {
-        "settings": { "curator": true }
-      }
-    },
-    {
-      "url": "mentions.js",
-      "matches": ["topics"],
-      "if": {
-        "settings": { "mentions": true }
-      }
+      "matches": ["https://scratch.mit.edu/", "topics"]
     }
   ],
   "userstyles": [
