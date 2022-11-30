@@ -133,6 +133,15 @@ export default async function ({ template }) {
         if (newValue === true) this.everExpanded = true;
       },
     },
+    ready() {
+      const onHashChange = () => {
+        if (location.hash.replace(/^#addon-/, "") === this.addon._addonId) {
+          this.expanded = true;
+        }
+      };
+      window.addEventListener("hashchange", onHashChange, { capture: false });
+      setTimeout(onHashChange, 0);
+    },
   });
   Vue.component("addon-body", AddonBody);
 }

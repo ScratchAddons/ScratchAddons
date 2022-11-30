@@ -1,0 +1,39 @@
+.u-dropdown-searchbar {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.u-dropdown-searchbar:focus {
+  background-color: var(--editorTheme3-hoveredItem);
+}
+.blocklyDropDownDiv .goog-menuitem-checkbox {
+  filter: brightness(0) invert(1);
+}
+
+.scratchCommentRect {
+  fill: #282828;
+}
+.scratchCommentBody,
+.scratchCommentTextarea {
+  background-color: #282828;
+}
+.scratchWorkspaceCommentBorder {
+  stroke: var(--editorTheme3-commentColor);
+}
+.scratchCommentTextarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+.scratchCommentText {
+  fill: #ffffff;
+  color: #ffffff;
+}
+
+/* Compatibility */
+
+.sa-block-color {
+  --sa-block-colored-background: var(--sa-block-background-secondary);
+  --sa-block-colored-background-secondary: var(--sa-block-field-background);
+  --sa-block-bright-background: var(--sa-block-background-tertiary);
+  --sa-block-text: var(--sa-block-background-tertiary);
+  --sa-block-gray-text: white;
+  --sa-block-colored-text: var(--sa-block-background-tertiary);
+  --sa-block-text-on-bright-background: white;
+}

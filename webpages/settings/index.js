@@ -110,7 +110,9 @@ let fuse;
       } else {
         addonsEnabled[addonId] = addonValue.enabled;
       }
-      addonSettings[addonId] = Object.assign({}, addonSettings[addonId], addonValue.settings);
+      addonSettings[addonId] = Object.assign({}, addonSettings[addonId]);
+      delete addonSettings[addonId]._version;
+      Object.assign(addonSettings[addonId], addonValue.settings);
     }
     if (handleConfirmClicked) confirmElem.removeEventListener("click", handleConfirmClicked, { once: true });
     let resolvePromise = null;
@@ -146,6 +148,8 @@ let fuse;
       return {
         smallMode: false,
         theme: initialTheme,
+        forceEnglishSetting: null,
+        forceEnglishSettingInitial: null,
         switchPath: "../../images/icons/switch.svg",
         moreSettingsOpen: false,
         categoryOpen: true,
@@ -341,6 +345,10 @@ let fuse;
         document.body.appendChild(inputElem);
         inputElem.click();
       },
+      applyLanguageSettings() {
+        alert(chrome.i18n.getMessage("importSuccess"));
+        chrome.runtime.reload();
+      },
       openFullSettings() {
         window.open(
           `${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${
@@ -396,6 +404,9 @@ let fuse;
         });
         if (newValue === "forums") this.addonGroups.find((group) => group.id === "forums").expanded = true;
       },
+      forceEnglishSetting(newValue, oldValue) {
+        if (oldValue !== null) chrome.storage.local.set({ forceEnglish: this.forceEnglishSetting });
+      },
     },
     ready() {
       // Autofocus search bar in iframe mode for both browsers
@@ -423,6 +434,27 @@ let fuse;
             .map(() => JSON.parse(JSON.stringify(exampleAddonListItem)));
         }
       }, 0);
+
+      chrome.storage.local.get("forceEnglish", ({ forceEnglish }) => {
+        this.forceEnglishSettingInitial = forceEnglish;
+        this.forceEnglishSetting = forceEnglish;
+      });
+
+      window.addEventListener(
+        "hashchange",
+        (e) => {
+          const addonId = location.hash.replace(/^#addon-/, "");
+          const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
+          if (!groupWithAddon) return; //Don't run if hash is invalid
+          const addon = this.manifestsById[addonId];
+
+          groupWithAddon.expanded = true;
+          this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
+          this.clearSearch();
+          setTimeout(() => document.getElementById("addon-" + addonId)?.scrollIntoView(), 0);
+        },
+        { capture: false }
+      );
     },
   });
 
@@ -617,21 +649,25 @@ let fuse;
 
     vue.loaded = true;
     setTimeout(() => {
-      // Set hash again after loading addons, to force scroll to addon
-      let hash = window.location.hash;
-      if (hash) {
-        window.location.hash = "";
-        window.location.hash = hash;
-        if (hash.startsWith("#addon-")) {
-          const addonId = hash.substring(7);
-          const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
-          groupWithAddon.expanded = true;
-          setTimeout(() => {
-            // Only required in Firefox
-            window.location.hash = "";
-            window.location.hash = hash;
-          }, 0);
-        }
+      const hash = window.location.hash;
+      if (hash.startsWith("#addon-")) {
+        const addonId = hash.substring(7);
+        const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
+        if (!groupWithAddon) return;
+        groupWithAddon.expanded = true;
+
+        const addon = vue.manifestsById[addonId];
+        vue.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
+        setTimeout(() => {
+          const addonElem = document.getElementById("addon-" + addonId);
+          if (!addonElem) return;
+          addonElem.scrollIntoView();
+          // Browsers sometimes ignore :target for the elements dynamically appended.
+          // Use CSS class to initiate the blink animation.
+          addonElem.classList.add("addon-blink");
+          // 2s (animation length) + 1ms
+          setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
+        }, 0);
       }
     }, 0);
 

@@ -2,7 +2,7 @@ import { isPaused, setPaused, onPauseChanged, setup } from "./module.js";
 import createLogsTab from "./logs.js";
 import createThreadsTab from "./threads.js";
 import createPerformanceTab from "./performance.js";
-import DevtoolsUtils from "../editor-devtools/blockly/Utils.js";
+import Utils from "../find-bar/blockly/Utils.js";
 
 const removeAllChildren = (element) => {
   while (element.firstChild) {
@@ -91,11 +91,7 @@ export default async function ({ addon, global, console, msg }) {
   debuggerButton.addEventListener("click", () => setInterfaceVisible(true));
 
   const setHasUnreadMessage = (unreadMessage) => {
-    // setting image.src is slow, only do it when necessary
-    const newImage = addon.self.dir + (unreadMessage ? "/icons/debug-unread.svg" : "/icons/debug.svg");
-    if (debuggerButtonImage.src !== newImage) {
-      debuggerButtonImage.src = newImage;
-    }
+    debuggerButtonContent.classList.toggle("sa-debugger-unread", unreadMessage);
   };
 
   const interfaceContainer = Object.assign(document.createElement("div"), {
@@ -310,11 +306,21 @@ export default async function ({ addon, global, console, msg }) {
     // Don't scroll to blocks in the flyout
     if (block.workspace.isFlyout) return;
 
-    new DevtoolsUtils(addon).scrollBlockIntoView(blockId);
+    new Utils(addon).scrollBlockIntoView(blockId);
   };
 
-  // May be slightly incorrect in some edge cases.
-  const formatProcedureCode = (proccode) => proccode.replace(/%[nbs]/g, "()");
+  /**
+   * @param {string} procedureCode
+   * @returns {string}
+   */
+  const formatProcedureCode = (procedureCode) => {
+    const customBlock = addon.tab.getCustomBlock(procedureCode);
+    if (customBlock) {
+      procedureCode = customBlock.displayName;
+    }
+    // May be slightly incorrect in some edge cases.
+    return procedureCode.replace(/%[nbs]/g, "()");
+  };
 
   // May be slightly incorrect in some edge cases.
   const formatBlocklyBlockData = (jsonData) => {
@@ -382,7 +388,6 @@ export default async function ({ addon, global, console, msg }) {
     let text;
     let category;
     let shape;
-    let color;
     if (
       block.opcode === "data_variable" ||
       block.opcode === "data_listcontents" ||
@@ -404,7 +409,6 @@ export default async function ({ addon, global, console, msg }) {
       const customBlock = addon.tab.getCustomBlock(proccode);
       if (customBlock) {
         category = "addon-custom-block";
-        color = customBlock.color;
       } else {
         category = "more";
       }
@@ -440,7 +444,7 @@ export default async function ({ addon, global, console, msg }) {
       if (!text) {
         return null;
       }
-      category = jsonData.category;
+      category = jsonData.extensions.includes("scratch_extension") ? "pen" : jsonData.category;
       const isStatement =
         (jsonData.extensions &&
           (jsonData.extensions.includes("shape_statement") ||
@@ -454,33 +458,12 @@ export default async function ({ addon, global, console, msg }) {
       return null;
     }
 
-    if (!color) {
-      const blocklyCategoryMap = {
-        "data-lists": "data_lists",
-        list: "data_lists",
-        events: "event",
-      };
-      const blocklyColor = ScratchBlocks.Colours[blocklyCategoryMap[category] || category];
-      if (blocklyColor) {
-        color = blocklyColor.primary;
-      } else {
-        // block probably belongs to an extension
-        color = ScratchBlocks.Colours.pen.primary;
-      }
-    }
-
     const element = document.createElement("span");
-    element.className = "sa-debugger-block-preview";
+    element.className = "sa-debugger-block-preview sa-block-color";
     element.textContent = text;
-    element.style.backgroundColor = color;
     element.dataset.shape = shape;
 
-    // data-category is used for editor-theme3 compatibility
-    const colorCategoryMap = {
-      list: "data-lists",
-      more: "custom",
-    };
-    element.dataset.category = colorCategoryMap[category] || category;
+    element.classList.add(`sa-block-color-${category}`);
 
     return element;
   };

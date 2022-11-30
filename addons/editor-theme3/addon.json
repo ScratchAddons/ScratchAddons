@@ -11,30 +11,105 @@
     }
   ],
   "latestUpdate": {
-    "version": "1.24.0",
-    "temporaryNotice": "New setting to enable changing the colors of blocks in the forums.",
-    "newSettings": ["forums"]
+    "version": "1.29.0",
+    "temporaryNotice": "The \"Dark comments\" setting from \"Editor dark mode and customizable colors\" has been moved here and is now customizable.",
+    "newSettings": ["comment-color"]
   },
   "customCssVariables": [
     {
       "name": "inputColor-text",
       "value": {
-        "type": "textColor",
+        "type": "alphaThreshold",
         "source": {
           "type": "settingValue",
           "settingId": "input-color"
+        },
+        "opaque": {
+          "type": "textColor",
+          "source": {
+            "type": "settingValue",
+            "settingId": "input-color"
+          }
+        },
+        "transparent": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "text"
+          },
+          "options": {
+            "white": "#ffffff",
+            "black": "#575e75",
+            "colorOnWhite": "#575e75",
+            "colorOnBlack": "#ffffff"
+          }
         }
       }
     },
     {
       "name": "inputColor-forumText",
       "value": {
-        "type": "textColor",
-        "black": "#000000",
+        "type": "alphaThreshold",
         "source": {
           "type": "settingValue",
           "settingId": "input-color"
+        },
+        "opaque": {
+          "type": "textColor",
+          "black": "#000000",
+          "source": {
+            "type": "settingValue",
+            "settingId": "input-color"
+          }
+        },
+        "transparent": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "text"
+          },
+          "options": {
+            "white": "#ffffff",
+            "black": "#000000",
+            "colorOnWhite": "#000000",
+            "colorOnBlack": "#ffffff"
+          }
         }
+      }
+    },
+    {
+      "name": "commentText",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "comment-color"
+        }
+      }
+    },
+    {
+      "name": "commentTextTransparent",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.50)",
+        "white": "rgba(255, 255, 255, 0.50)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "comment-color"
+        }
+      }
+    },
+    {
+      "name": "commentBorder",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "comment-color"
+        },
+        "r": 0.7,
+        "g": 0.7,
+        "b": 0.7
       }
     }
   ],
@@ -53,6 +128,27 @@
     {
       "url": "theme3.css",
       "matches": ["projects"]
+    },
+    {
+      "url": "black_text.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "text": "black" }
+      }
+    },
+    {
+      "url": "color_on_white.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "text": "colorOnWhite" }
+      }
+    },
+    {
+      "url": "color_on_black.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "text": "colorOnBlack" }
+      }
     },
     {
       "url": "forums/base.css",
@@ -184,7 +280,14 @@
       "name": "Block inputs",
       "id": "input-color",
       "type": "color",
-      "default": "#FFFFFF"
+      "default": "#FFFFFF",
+      "allowTransparency": true
+    },
+    {
+      "name": "Comments",
+      "id": "comment-color",
+      "type": "color",
+      "default": "#FEF49C"
     },
     {
       "name": "Text color",
@@ -237,6 +340,7 @@
         "custom-color": "#5f49d8",
         "Pen-color": "#0FBD8C",
         "sa-color": "#29BEB8",
+        "comment-color": "#FEF49C",
         "input-color": "#FFFFFF",
         "text": "white"
       }
@@ -258,6 +362,7 @@
         "custom-color": "#632d99",
         "Pen-color": "#0e9a6c",
         "sa-color": "#29beb8",
+        "comment-color": "#FFFFD2",
         "input-color": "#ffffff",
         "text": "white"
       }
@@ -279,6 +384,7 @@
         "custom-color": "#99004d",
         "Pen-color": "#064734",
         "sa-color": "#166966",
+        "comment-color": "#423f24",
         "input-color": "#202020",
         "text": "white"
       }
@@ -300,6 +406,7 @@
         "custom-color": "#FF6680",
         "Pen-color": "#0FBD8C",
         "sa-color": "#29BEB8",
+        "comment-color": "#FEF49C",
         "input-color": "#202020",
         "text": "colorOnBlack"
       }
