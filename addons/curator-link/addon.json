@@ -13,7 +13,8 @@
   ],
   "info": [
     {
-      "text": "Mentions styled with BBCode are clickable.",
+      "type": "notice",
+      "text": "This addon doesn't work with forum mentions styled with BBCode.",
       "id": "BBCode"
     }
   ],
