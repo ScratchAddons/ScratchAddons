@@ -3,12 +3,12 @@ import { pingifyTextNode } from "../../libraries/common/cs/fast-linkify.js";
 
 export default async function ({ addon }) {
   if (window.location.href === "https://scratch.mit.edu/" && addon.settings.get("curator")) {
-    console.log("ak")
+    console.log("ak");
     const heading = await addon.tab.waitForElement(".inner.mod-splash:nth-child(2) h4", {
       reduxCondition: (state) => state.splash.featured.status === "FETCHED",
       reduxEvents: ["SET_FETCH_STATUS", "SET_ROWS"],
     });
-  
+
     const curator = addon.tab.redux.state.splash.featured.rows.curator_top_projects[0].curator_name;
     const link = document.createElement("a");
     link.textContent = curator;
