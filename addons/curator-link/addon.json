@@ -11,6 +11,12 @@
       "link": "https://github.com/Samq64"
     }
   ],
+  "info": [
+    {
+      "text": "Mentions styled with BBCode are clickable.",
+      "id": "BBCode"
+    }
+  ],
   "userscripts": [
     {
       "url": "script.js",
