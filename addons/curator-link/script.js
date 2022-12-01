@@ -7,7 +7,7 @@ export default async function ({ addon }) {
       reduxCondition: (state) => state.splash.featured.status === "FETCHED",
       reduxEvents: ["SET_FETCH_STATUS", "SET_ROWS"],
     });
-  
+
     const curator = addon.tab.redux.state.splash.featured.rows.curator_top_projects[0].curator_name;
     const link = document.createElement("a");
     link.textContent = curator;
