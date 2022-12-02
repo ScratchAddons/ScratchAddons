@@ -1,6 +1,6 @@
 {
-  "name": "Expanded backpack",
-  "description": "Adds multiple rows, better previews and vertical scrolling to the editor backpack.",
+  "name": "Multiple rows in backpack",
+  "description": "Display the contents of the editor backpack into a two-way grid similar to the costume library and increases the size of thumbnails to make it easier to find things.",
   "credits": [
     {
       "name": "pumpkinhasapatch",
@@ -16,11 +16,11 @@
       "id": "rows",
       "type": "integer",
       "min": 1,
-      "max": 3,
+      "max": 4,
       "default": 2
     },
     {
-      "name": "Larger costume and script previews",
+      "name": "Improved costume and script previews",
       "id": "upscale",
       "type": "boolean",
       "default": true
