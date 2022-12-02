@@ -707,15 +707,6 @@ export default class DevTools {
 
   eventMouseUp(e) {
     this.updateMousePosition(e);
-<<<<<<< HEAD
-
-    if (e.button === 1 && e.target.closest("svg.blocklySvg")) {
-      // On Linux systems, middle click is often treated as a paste.
-      // We do not want this as we assign our own functionality to middle mouse.
-      e.preventDefault();
-    }
-=======
->>>>>>> 4be778357722c2f407e49c455ce7e2b5633d00cb
   }
 
   initInner(root) {
