@@ -103,6 +103,7 @@
 .modal_modal-content_1h3ll.modal_full-screen_FA4cr,
 .library_library-scroll-grid_1jyXm {
   background-color: var(--editorDarkMode-selector);
+  color-scheme: var(--editorDarkMode-selector-colorScheme);
 }
 .sprite-selector-item_sprite-info_-I0i_ {
   color: var(--editorDarkMode-selector-text);
@@ -114,6 +115,7 @@
 /* Asset list background */
 .selector_wrapper_8_BHs {
   background-color: var(--editorDarkMode-selector2);
+  color-scheme: var(--editorDarkMode-selector2-colorScheme);
 }
 .sprite-selector-item_sprite-selector-item_kQm-i,
 .selector_list-item_3N_u7 .sprite-selector-item_sprite-info_-I0i_ {
@@ -152,6 +154,7 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .library-item_library-item_1DcMO,
 .s3devDDOut.vis, /* devtools style */
 .sa-find-dropdown-out.visible, /* find-bar style */
+.sa-float-bar-dropdown-out, /* middle-click-popup style */
 .prompt_body_18Z-I,
 .custom-procedures_body_SQBv6,
 .slider-prompt_body_2ZkXL,
@@ -160,6 +163,7 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .sa-debugger-tabs li.sa-debugger-tab-selected {
   background-color: var(--editorDarkMode-accent);
   color: var(--editorDarkMode-accent-text);
+  color-scheme: var(--editorDarkMode-accent-colorScheme);
 }
 .color-button_color-button-swatch_37evk[style="background: white;"] {
   background-color: var(--editorDarkMode-accent) !important;
@@ -185,11 +189,11 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .selector_new-buttons_2qHDd::before {
   background: linear-gradient(var(--editorDarkMode-accent-opacity0), var(--editorDarkMode-accent));
 }
-.s3devDD > li.boolean::before /* devtools style */ {
+.sa-float-bar-dropdown > li.sa-boolean::before /* middle-click-popup style */ {
   border-top: 9px solid var(--editorDarkMode-accent);
   border-bottom: 10px solid var(--editorDarkMode-accent);
 }
-.s3devDD > li.boolean::after  /* devtools style */ {
+.sa-float-bar-dropdown > li.sa-boolean::after  /* middle-click-popup style */ {
   border-top: 9px solid var(--editorDarkMode-accent);
   border-bottom: 10px solid var(--editorDarkMode-accent);
 }
@@ -404,7 +408,7 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .action-menu_main-button_3ccfy {
   box-shadow: 0 0 0 4px var(--editorDarkMode-primary-transparent35);
 }
-.input_input-form_l9eYg:not(.project-title-input_title-field_en5Gd):not(.sa-find-input):focus,
+.input_input-form_l9eYg:not(.project-title-input_title-field_en5Gd):not(.sa-find-input, .sa-float-bar-input):focus,
 .input_input-form_1Y0wX:focus,
 .sprite-selector-item_sprite-selector-item_kQm-i.sprite-selector-item_is-selected_24tQj,
 .stage-selector_stage-selector_3oWOr.stage-selector_is-selected_2x2r_,
@@ -594,9 +598,30 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 .blocklyWidgetDiv .goog-menuitem-highlight {
   border-color: transparent !important;
 }
+
+.sa-opacity-slider {
+  background-image: linear-gradient(
+      45deg,
+      var(--editorDarkMode-accent-paintEditorBackground) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--editorDarkMode-accent-paintEditorBackground) 75%
+    ),
+    linear-gradient(
+      45deg,
+      var(--editorDarkMode-accent-paintEditorBackground) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--editorDarkMode-accent-paintEditorBackground) 75%
+    );
+}
 .sa-color-picker > .sa-color-picker-color {
   /* Use the dark version of the browser's default button appearance. */
   color-scheme: dark;
+}
+.Popover .resize-sensor {
+  /* The <object> gets a white background if color-scheme is dark. */
+  color-scheme: light;
 }
 /* For `editor-comment-previews` */
 .sa-comment-preview-inner {

@@ -3,6 +3,7 @@ html,
 body {
   background-color: var(--darkWww-page);
   color: var(--darkWww-page-scratchr2Text);
+  color-scheme: var(--darkWww-page-colorScheme);
 }
 h1,
 h2,
@@ -662,4 +663,11 @@ input.link.black {
 .stats li.data {
   background-image: url("%addon-self-dir%/assets/meow.png");
   background-size: 20px 15px;
+}
+
+/* If the color scheme of an iframe element is different from that
+   of the document inside, it gets an opaque backgound. The .iframeshim
+   is meant to be entirely transparent. */
+.iframeshim {
+  color-scheme: light;
 }

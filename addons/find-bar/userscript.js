@@ -451,13 +451,13 @@ export default async function ({ addon, msg, console }) {
       item.innerText = proc.procCode;
       item.data = proc;
       const colorIds = {
-        receive: "event",
-        event: "event",
+        receive: "events",
+        event: "events",
         define: "more",
         var: "data",
         VAR: "data",
-        list: "data_lists",
-        LIST: "data_lists",
+        list: "data-lists",
+        LIST: "data-lists",
         costume: "looks",
         sound: "sounds",
       };
