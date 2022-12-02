@@ -201,7 +201,6 @@ export default async function ({ addon, msg, global, console }) {
         this.testGroup.setAttribute("transform", "translate(0, 30) scale(1)");
         renderBlock(this.queryResults[0].createBlock(), this.testGroup);
         this.testGroup.setAttribute("transform", "translate(0, 30) scale(0.65)");
-
       }
 
       var endTime = performance.now();

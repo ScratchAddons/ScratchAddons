@@ -96,7 +96,6 @@
   --sa-block-field-background: var(--editorTheme3-sa-field, #3aa8a4);
 }
 
-
 .sa-block-color-all {
   --sa-block-background-primary-motion: var(--editorTheme3-motion-primary, #4c97ff);
   --sa-block-background-secondary-motion: var(--editorTheme3-motion-secondary, #4280d7);

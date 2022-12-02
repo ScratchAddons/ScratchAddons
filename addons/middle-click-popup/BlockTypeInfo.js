@@ -34,7 +34,8 @@ export class BlockInputRound extends BlockInput {
   setValue(block, value) {
     if (value instanceof BlockInstance) {
       const subblock = value.createWorkspaceForm();
-      if (!subblock.outputConnection) throw new Error('Cannot put block "' + subblock.typeInfo.id + '" into a round type input.');
+      if (!subblock.outputConnection)
+        throw new Error('Cannot put block "' + subblock.typeInfo.id + '" into a round type input.');
       subblock.outputConnection.connect(this.getInput(block).connection);
     } else {
       this.getField(block).setValue(this._toFieldValue(value));
@@ -154,8 +155,8 @@ export class BlockInputBlock extends BlockInput {
 
 export class BlockInstance {
   constructor(typeInfo, ...inputs) {
-    /** 
-     * @type {BlockTypeInfo} 
+    /**
+     * @type {BlockTypeInfo}
      * @public
      * */
     this.typeInfo = typeInfo;
@@ -197,7 +198,7 @@ export class BlockShape {
   }
 
   constructor(canStackUp, canStackDown, canBeRound) {
-    this.canStackUp = canStackUp
+    this.canStackUp = canStackUp;
     this.canStackDown = canStackDown;
     this.canBeRound = canBeRound;
   }
@@ -219,7 +220,7 @@ export class BlockTypeInfo {
     if (block.isScratchExtension) return "pen";
     // These two blocks don't have `category_` set for reasons I'm too tired to figure out.
     if (block.type === "sensing_of") return "sensing";
-    if (block.type === "event_whenbackdropswitchesto") return "event;"
+    if (block.type === "event_whenbackdropswitchesto") return "event;";
     return block.category_;
   }
 
