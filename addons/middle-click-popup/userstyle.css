@@ -1,5 +1,12 @@
 @import url("../editor-theme3/compatibility.css");
 
+/* .sa-float-bar-block- */
+
+/* .test {
+  fill: var(--sa-block-background-primary);
+  stroke: var(--sa-block-background-tertiary);
+} */
+
 /* Find Input Box */
 .sa-float-bar-input-wrapper {
   width: 100%;
@@ -40,10 +47,10 @@
   display: block;
   top: -6px;
   z-index: 100;
-  max-width: 20em;
+  max-width: 60em;
   padding: 4px;
   position: absolute;
-  width: 20em;
+  width: 60em;
   box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
   background-color: white;
   border: none;
@@ -51,7 +58,7 @@
 }
 
 /* Drop down from find button */
-.sa-float-bar-dropdown {
+/* .sa-float-bar-dropdown {
   display: none;
   position: relative;
   padding: 0.2em 0;
@@ -63,7 +70,7 @@
   max-width: 100%;
   max-height: 200px;
   margin-bottom: 0;
-}
+} */
 
 .sa-float-bar-dropdown-out.vis .sa-float-bar-dropdown {
   display: block;
@@ -148,7 +155,7 @@
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   position: absolute;
-  min-width: 128px;
+  min-width: 256px;
   background-color: white;
   border-radius: 4px;
   box-shadow: rgba(0, 0, 0, 0.3) 0 0 3px, rgba(0, 0, 0, 0.2) 0 3px 10px;

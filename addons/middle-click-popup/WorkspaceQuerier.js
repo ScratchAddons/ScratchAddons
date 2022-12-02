@@ -3,7 +3,7 @@
 //  Wish you luck <3
 //
 
-import BlockTypeInfo from "./BlockTypeInfo.js";
+import { BlockShape, BlockTypeInfo } from "./BlockTypeInfo.js";
 
 class TokenProvider {
   constructor(shouldCache) {
@@ -794,20 +794,21 @@ export default class WorkspaceQuerier {
 
     for (const block of blocks) {
       for (const blockTokenType of TokenTypeBlock.createBlockTokenTypes(this, block)) {
-        if (block.id === "motion_setx") {
+        if (block.id === "control_if") {
           console.log(blockTokenType);
         }
         switch (block.shape) {
-          case BlockTypeInfo.BLOCK_SHAPE_ROUND:
+          case BlockShape.Round:
             this.tokenGroupRoundBlocks.pushProviders(blockTokenType);
             break;
-          case BlockTypeInfo.BLOCK_SHAPE_BOOLEAN:
+          case BlockShape.Boolean:
             this.tokenGroupBooleanBlocks.pushProviders(blockTokenType);
             break;
-          case BlockTypeInfo.BLOCK_SHAPE_STACK:
+          case BlockShape.Stack:
+          case BlockShape.End:
             this.tokenGroupStackBlocks.pushProviders(blockTokenType);
             break;
-          case BlockTypeInfo.BLOCK_SHAPE_HAT:
+          case BlockShape.Hat:
             this.tokenGroupHatBlocks.pushProviders(blockTokenType);
             break;
         }
