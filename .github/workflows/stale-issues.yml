@@ -20,3 +20,4 @@ jobs:
           operations-per-run: 5
     permissions:
       issues: write
+      pull-requests: write
