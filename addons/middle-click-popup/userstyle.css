@@ -1,6 +1,5 @@
 @import url("../editor-theme3/compatibility.css");
 
-<<<<<<< HEAD
 /* .sa-float-bar-block- */
 
 /* .test {
@@ -10,10 +9,6 @@
 
 /* Find Input Box */
 .sa-float-bar-input-wrapper {
-=======
-/* Find Input Box */
-.sa-float-bar-input {
->>>>>>> 4be778357722c2f407e49c455ce7e2b5633d00cb
   width: 100%;
   box-sizing: border-box !important;
   /* !important required for extension, because CSS injection method (and hence order) differs from addon */
@@ -26,11 +21,7 @@
   padding-top: 0.3rem;
 }
 
-<<<<<<< HEAD
 .sa-float-bar-input-wrapper:focus {
-=======
-.sa-float-bar-input:focus {
->>>>>>> 4be778357722c2f407e49c455ce7e2b5633d00cb
   /* Change Scratch default styles */
   box-shadow: none;
 }
@@ -56,17 +47,10 @@
   display: block;
   top: -6px;
   z-index: 100;
-<<<<<<< HEAD
   max-width: 60em;
   padding: 4px;
   position: absolute;
   width: 60em;
-=======
-  max-width: 16em;
-  padding: 4px;
-  position: absolute;
-  width: 16em;
->>>>>>> 4be778357722c2f407e49c455ce7e2b5633d00cb
   box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
   background-color: white;
   border: none;
@@ -74,31 +58,19 @@
 }
 
 /* Drop down from find button */
-<<<<<<< HEAD
 /* .sa-float-bar-dropdown {
-=======
-.sa-float-bar-dropdown {
->>>>>>> 4be778357722c2f407e49c455ce7e2b5633d00cb
   display: none;
   position: relative;
   padding: 0.2em 0;
   font-size: 0.75rem;
   line-height: 1;
   overflow-y: auto;
-<<<<<<< HEAD
   max-height: 65vh;
-=======
-  min-height: 128px;
->>>>>>> 4be778357722c2f407e49c455ce7e2b5633d00cb
   user-select: none;
   max-width: 100%;
   max-height: 200px;
   margin-bottom: 0;
-<<<<<<< HEAD
 } */
-=======
-}
->>>>>>> 4be778357722c2f407e49c455ce7e2b5633d00cb
 
 .sa-float-bar-dropdown-out.vis .sa-float-bar-dropdown {
   display: block;
