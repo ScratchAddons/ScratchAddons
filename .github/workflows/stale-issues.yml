@@ -10,7 +10,8 @@ jobs:
     steps:
       - uses: actions/stale@v6
         with:
-          stale-message: 'Ping! There has been no activity for 7 days.'
+          stale-issue-message: 'Ping! There has been no activity for 7 days.'
+          stale-pr-message: 'Ping! There has been no activity for 7 days.'
           only-label: 'status: awaiting answer/followup'
           days-before-stale: 7
           days-before-close: -1
