@@ -1,6 +1,6 @@
 {
   "name": "Multiple rows in backpack",
-  "description": "Display the contents of the editor backpack into a two-way grid similar to the costume library and increases the size of thumbnails to make it easier to find things.",
+  "description": "Display the contents of the editor backpack in an expandable two-way grid similar to the costume library and increase the size of thumbnails to improve ease of use.",
   "credits": [
     {
       "name": "pumpkinhasapatch",
