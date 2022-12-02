@@ -14,7 +14,8 @@ jobs:
           only-label: 'status: awaiting answer/followup'
           days-before-stale: 7
           days-before-close: -1
-          stale-label: ''
+          stale-issue-label: ''
+          stale-pr-label: ''
           operations-per-run: 5
     permissions:
       issues: write
