@@ -4,13 +4,13 @@
 
 The most recent release of the Scratch Addons browser extension (available at the Chrome Web Store, Add-ons for Firefox, and Microsoft Edge Add-ons) should be secure, and that is the top priority of the Scratch Addons open source project.  
 Vulnerabilities found on other repositories belonging to the GitHub organization are also considered.  
-See <https://scratchaddons.com/docs/getting-started/installing/> for a list of supported browsers by the Scratch Addons browser extension. Vulnerabilities that only affect unsupported browsers will also be considered, but will not be triaged as critical.  
+See <https://scratchaddons.com/docs/getting-started/installing/> for a list of browsers supported by the Scratch Addons browser extension. Vulnerabilities that only affect unsupported browsers will also be considered, but will not be triaged as critical.  
 
 ## Reporting a vulnerability
 
 To report a security vulnerability, contact World_Languages privately by emailing `security@scratchaddons.com` (security [at] scratchaddons [dot] com).  
-Please do not report vulnerabilities publicly. A short period of time after the patch is released, the details of the vulnerability will be publicly disclosed on GitHub. The reporter may ask to stay anonymous, otherwise they will be credited for the finding.  
-If there's no email response after 48 hours, please [open a GitHub discussion](https://github.com/ScratchAddons/ScratchAddons/discussions) on the ScratchAddons/ScratchAddons GitHub repository titled "I've reported a security vulnerability". Do not disclose the vulnerability publicly, only mention that you've reported one recently to the appropriate email address.  
+**Do not report vulnerabilities publicly.** A short period of time after the patch is released, the details of the vulnerability will be publicly disclosed on GitHub. The reporter may ask to stay anonymous, otherwise they will be credited for the finding.  
+If there's no email response after 48 hours, please [open a GitHub discussion](https://github.com/ScratchAddons/ScratchAddons/discussions) titled "I've reported a security vulnerability" on the ScratchAddons/ScratchAddons GitHub repository. Do not disclose the details of the vulnerability publicly, only mention that you've reported one recently to the appropriate email address.  
 English is the preferred language for vulnerability reports.
 
 ## Vulnerabilities disclosed
