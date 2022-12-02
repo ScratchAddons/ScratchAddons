@@ -22,7 +22,7 @@ const BlockShapes = {
     minWidth: 20,
     backgroundPath: (width) => `m -20 -20 m 20 0 h ${width} l 20 20 l -20 20 H 0 l -20 -20 l 20 -20 z`,
 
-    snugglePadding: 0 ,
+    snugglePadding: 0,
     get snuggleWith() {
       return [BlockShapes.Boolean];
     },
@@ -32,23 +32,25 @@ const BlockShapes = {
   Stack: {
     padding: 8,
     minWidth: 60,
-    backgroundPath: (width) => `m -8 -20 A 4 4 0 0 1 -4 -24 H 4 c 2 0 3 1 4 2 l 4 4 c 1 1 2 2 4 2 h 12 c 2 0 3 -1 4 -2 l 4 -4 C 37 -23 38 -24 40 -24 H ${width} a 4 4 0 0 1 4 4 v 40 a 4 4 0 0 1 -4 4 H 40 c -2 0 -3 1 -4 2 l -4 4 c -1 1 -2 2 -4 2 h -12 c -2 0 -3 -1 -4 -2 l -4 -4 c -1 -1 -2 -2 -4 -2 H -4 a 4 4 0 0 1 -4 -4 z`,
+    backgroundPath: (width) =>
+      `m -8 -20 A 4 4 0 0 1 -4 -24 H 4 c 2 0 3 1 4 2 l 4 4 c 1 1 2 2 4 2 h 12 c 2 0 3 -1 4 -2 l 4 -4 C 37 -23 38 -24 40 -24 H ${width} a 4 4 0 0 1 4 4 v 40 a 4 4 0 0 1 -4 4 H 40 c -2 0 -3 1 -4 2 l -4 4 c -1 1 -2 2 -4 2 h -12 c -2 0 -3 -1 -4 -2 l -4 -4 c -1 -1 -2 -2 -4 -2 H -4 a 4 4 0 0 1 -4 -4 z`,
   },
 
   // eg when I start as a clone
   Hat: {
     padding: 8,
     minWidth: 60,
-    backgroundPath: (width) => `m -8 -20 A 4 4 0 0 1 -4 -24 H ${width} a 4 4 0 0 1 4 4 v 40 a 4 4 0 0 1 -4 4 H 40 c -2 0 -3 1 -4 2 l -4 4 c -1 1 -2 2 -4 2 h -12 c -2 0 -3 -1 -4 -2 l -4 -4 c -1 -1 -2 -2 -4 -2 H -4 a 4 4 0 0 1 -4 -4 z`,
+    backgroundPath: (width) =>
+      `m -8 -20 A 4 4 0 0 1 -4 -24 H ${width} a 4 4 0 0 1 4 4 v 40 a 4 4 0 0 1 -4 4 H 40 c -2 0 -3 1 -4 2 l -4 4 c -1 1 -2 2 -4 2 h -12 c -2 0 -3 -1 -4 -2 l -4 -4 c -1 -1 -2 -2 -4 -2 H -4 a 4 4 0 0 1 -4 -4 z`,
   },
 
   // eg delete this clone
   End: {
     padding: 8,
     minWidth: 60,
-    backgroundPath: (width) => `m -8 -20 A 4 4 0 0 1 -4 -24 H 4 c 2 0 3 1 4 2 l 4 4 c 1 1 2 2 4 2 h 12 c 2 0 3 -1 4 -2 l 4 -4 C 37 -23 38 -24 40 -24 H ${width} a 4 4 0 0 1 4 4 v 40 a 4 4 0 0 1 -4 4 H -4 a 4 4 0 0 1 -4 -4 z`,
+    backgroundPath: (width) =>
+      `m -8 -20 A 4 4 0 0 1 -4 -24 H 4 c 2 0 3 1 4 2 l 4 4 c 1 1 2 2 4 2 h 12 c 2 0 3 -1 4 -2 l 4 -4 C 37 -23 38 -24 40 -24 H ${width} a 4 4 0 0 1 4 4 v 40 a 4 4 0 0 1 -4 4 H -4 a 4 4 0 0 1 -4 -4 z`,
   },
-
 
   /*
 
@@ -82,13 +84,16 @@ M -6 -22 a 2 2 0 0 1 2 -2 h 60 a 2 2 0 0 1 2 2 v 4 c 0 2 -1 3 -2 4 l -4 4 c -1 1
   HorizontalBlock: {
     padding: 16,
     minWidth: 45,
-    backgroundPath: (width) => `M -4 -20 a 4 4 0 0 1 4 -4 H ${width + 8} a 4 4 0 0 1 4 4 v 2 c 0 2 -1 3 -2 4 l -4 4 c -1 1 -2 2 -2 4 v 12 c 0 2 1 3 2 4 l 4 4 c 1 1 2 2 2 4 v 2 a 4 4 0 0 1 -4 4 H 0 a 4 4 0 0 1 -4 -4 v -2 c 0 -2 -1 -3 -2 -4 l -4 -4 c -1 -1 -2 -2 -2 -4 v -12 c 0 -2 1 -3 2 -4 l 4 -4 c 1 -1 2 -2 2 -4 z`,
-  }
-}
+    backgroundPath: (width) =>
+      `M -4 -20 a 4 4 0 0 1 4 -4 H ${
+        width + 8
+      } a 4 4 0 0 1 4 4 v 2 c 0 2 -1 3 -2 4 l -4 4 c -1 1 -2 2 -2 4 v 12 c 0 2 1 3 2 4 l 4 4 c 1 1 2 2 2 4 v 2 a 4 4 0 0 1 -4 4 H 0 a 4 4 0 0 1 -4 -4 v -2 c 0 -2 -1 -3 -2 -4 l -4 -4 c -1 -1 -2 -2 -2 -4 v -12 c 0 -2 1 -3 2 -4 l 4 -4 c 1 -1 2 -2 2 -4 z`,
+  },
+};
 
 /**
  * Gets the block shape info from {@link BlockShapes} given a {@link BlockShape}.
- * @param {BlockShape} shape 
+ * @param {BlockShape} shape
  */
 function getShapeInfo(shape, isVertical) {
   if (shape === BlockShape.Round) return BlockShapes.Round;
@@ -165,13 +170,18 @@ function createBlockComponent(container, shape, fillCategory, strokeCategory, wi
   if (width < shape.minWidth) width = shape.minWidth;
   const background = container.children[0];
   let style = "";
-  if (fillCategory) style += `fill: var(--sa-block-background-${fillColorType}-${fillCategory});`
+  if (fillCategory) style += `fill: var(--sa-block-background-${fillColorType}-${fillCategory});`;
   if (strokeCategory) style += `stroke: var(--sa-block-background-tertiary-${strokeCategory});`;
   background.setAttribute("style", style);
   background.setAttribute("d", shape.backgroundPath(width));
-  return new BlockComponent(container, shape.padding, width + shape.padding * 2, shape.snuggleWith, shape.snugglePadding);
+  return new BlockComponent(
+    container,
+    shape.padding,
+    width + shape.padding * 2,
+    shape.snuggleWith,
+    shape.snugglePadding
+  );
 }
-
 
 function createBackedTextedComponent(text, container, shape, fillCategory, strokeCategory, fillColorType) {
   const blockContainer = createBlockContainer();
@@ -182,14 +192,21 @@ function createBackedTextedComponent(text, container, shape, fillCategory, strok
     textElement.dom.setAttribute("x", (shape.minWidth - textElement.width) / 2);
   }
 
-  const blockElement = createBlockComponent(blockContainer, shape, fillCategory, strokeCategory, textElement.width, fillColorType);
+  const blockElement = createBlockComponent(
+    blockContainer,
+    shape,
+    fillCategory,
+    strokeCategory,
+    textElement.width,
+    fillColorType
+  );
   return blockElement;
 }
 
 /**
  * Renders a block, with the center of it's leftmost side located at 0, 0.
- * @param {BlockInstance} block 
- * @param {SVGElement} container 
+ * @param {BlockInstance} block
+ * @param {SVGElement} container
  */
 export default function renderBlock(block, container) {
   var blockComponent = _renderBlock(block, container, block.typeInfo.category, true);
@@ -200,8 +217,8 @@ export default function renderBlock(block, container) {
 
 /**
  * Renders a block, with the center of it's leftmost side located at 0, 0.
- * @param {BlockInstance} block 
- * @param {SVGAElement} container 
+ * @param {BlockInstance} block
+ * @param {SVGAElement} container
  * @param {string} parentCategory The category of this blocks parnet. If no parent, than this blocks category.
  * @returns {BlockComponent} The rendered component.
  */
@@ -213,7 +230,6 @@ function _renderBlock(block, container, parentCategory, isVertical) {
   let inputIdx = 0;
 
   for (let partIdx = 0; partIdx < block.typeInfo.parts.length; partIdx++) {
-
     const blockPart = block.typeInfo.parts[partIdx];
 
     let component;
@@ -268,7 +284,6 @@ function _renderBlock(block, container, parentCategory, isVertical) {
 
     if (partIdx === 0 || partIdx === block.typeInfo.parts.length - 1) {
       if (component.snuggleWith && component.snuggleWith.indexOf(shape) !== -1) {
-
         const positionDelta = component.snugglePadding - component.padding;
         component.width += positionDelta;
 
@@ -278,10 +293,15 @@ function _renderBlock(block, container, parentCategory, isVertical) {
       }
     }
 
-
     component.dom.setAttribute("transform", `translate(${xTranslation}, 0)`);
     xOffset += BLOCK_ELEMENT_SPACING + component.width;
   }
 
-  return createBlockComponent(blockContainer, shape, block.typeInfo.category, parentCategory, xOffset - BLOCK_ELEMENT_SPACING);
+  return createBlockComponent(
+    blockContainer,
+    shape,
+    block.typeInfo.category,
+    parentCategory,
+    xOffset - BLOCK_ELEMENT_SPACING
+  );
 }
