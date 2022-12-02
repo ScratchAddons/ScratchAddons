@@ -5,8 +5,8 @@ export default async function ({ addon }) {
   const add = async () => {
     if (!span && (await addon.auth.fetchIsLoggedIn())) {
       const username = await addon.auth.fetchUsername();
-      const container = document.querySelector(".dropdown");
-      const dropdown = container.querySelector(".dropdown-menu .user-nav");
+      const container = await addon.tab.waitForElement(".dropdown");
+      const dropdown = await addon.tab.waitForElement(".dropdown-menu .user-nav");
       const profileSpans = dropdown.childNodes[0].childNodes[0];
       span = profileSpans.appendChild(document.createElement("span"));
       span.className = "sa-profile-name";
