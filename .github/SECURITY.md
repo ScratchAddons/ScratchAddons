@@ -8,7 +8,7 @@ See <https://scratchaddons.com/docs/getting-started/installing/> for a list of b
 
 ## Reporting a vulnerability
 
-To report a security vulnerability, either use the [GitHub vulnerability report form](https://github.com/ScratchAddons/ScratchAddons/security/advisories) or contact World_Languages privately by emailing `security@scratchaddons.com` (security [at] scratchaddons [dot] com).
+To report a security vulnerability, either use the [GitHub vulnerability report form](https://github.com/ScratchAddons/ScratchAddons/security/advisories) ("report a vulnerability" button) or contact World_Languages privately by emailing `security@scratchaddons.com` (security [at] scratchaddons [dot] com).
 **Do not report vulnerabilities publicly.** A short period of time after the patch is released, the details of the vulnerability will be publicly disclosed on GitHub. The reporter may ask to stay anonymous, otherwise they will be credited for the finding.
 If there's no response after 48 hours, please [open a GitHub discussion](https://github.com/ScratchAddons/ScratchAddons/discussions) titled "I've reported a security vulnerability" on the ScratchAddons/ScratchAddons GitHub repository. Do not disclose the details of the vulnerability publicly, only mention that you've reported one recently to the report form or the appropriate email address.
 English is the preferred language for vulnerability reports.
