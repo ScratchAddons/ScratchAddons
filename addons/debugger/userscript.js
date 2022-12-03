@@ -309,8 +309,18 @@ export default async function ({ addon, console, msg }) {
     new Utils(addon).scrollBlockIntoView(blockId);
   };
 
-  // May be slightly incorrect in some edge cases.
-  const formatProcedureCode = (proccode) => proccode.replace(/%[nbs]/g, "()");
+  /**
+   * @param {string} procedureCode
+   * @returns {string}
+   */
+  const formatProcedureCode = (procedureCode) => {
+    const customBlock = addon.tab.getCustomBlock(procedureCode);
+    if (customBlock) {
+      procedureCode = customBlock.displayName;
+    }
+    // May be slightly incorrect in some edge cases.
+    return procedureCode.replace(/%[nbs]/g, "()");
+  };
 
   // May be slightly incorrect in some edge cases.
   const formatBlocklyBlockData = (jsonData) => {
@@ -453,13 +463,7 @@ export default async function ({ addon, console, msg }) {
     element.textContent = text;
     element.dataset.shape = shape;
 
-    const colorIds = {
-      "addon-custom-block": "sa",
-      "data-lists": "data_lists",
-      list: "data_lists",
-      events: "event",
-    };
-    element.classList.add(`sa-block-color-${colorIds[category] || category}`);
+    element.classList.add(`sa-block-color-${category}`);
 
     return element;
   };
