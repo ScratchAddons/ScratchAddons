@@ -1,5 +1,6 @@
 try {
   if (window.parent.location.origin !== "https://scratch.mit.edu") throw "Scratch Addons: not first party iframe";
+  if (window.frameElement && window.frameElement.getAttribute("src") === null) throw "Ignored iframe without src attribute";
 } catch {
   throw "Scratch Addons: not first party iframe";
 }
