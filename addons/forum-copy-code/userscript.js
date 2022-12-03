@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   while (true) {
     const codeBlock = await addon.tab.waitForElement("div.code", {
       markAsSeen: true,

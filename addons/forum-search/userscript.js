@@ -233,7 +233,7 @@ function appendSearch(box, query, page, term, msg) {
     });
 }
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   if (!window.scratchAddons._scratchblocks3Enabled) {
     window.scratchblocks = (await import(addon.self.lib + "/thirdparty/cs/scratchblocks.min.es.js")).default;
   }

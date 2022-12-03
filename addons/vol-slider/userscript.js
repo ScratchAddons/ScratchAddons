@@ -1,6 +1,6 @@
 import { setup, setVol, getDefVol, setDefVol, isMuted } from "./module.js";
 
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
   let icon = document.createElement("img");
   icon.loading = "lazy";

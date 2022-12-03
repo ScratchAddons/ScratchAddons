@@ -1,6 +1,6 @@
 import { setup, isMuted, setVol, getDefVol } from "../vol-slider/module.js";
 
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
   let icon = document.createElement("img");
   icon.src = "/static/assets/e21225ab4b675bc61eed30cfb510c288.svg";
