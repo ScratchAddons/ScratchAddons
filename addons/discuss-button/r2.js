@@ -27,7 +27,7 @@ export default async function ({ addon }) {
     span = null;
     const icon = document.querySelector(".user-icon");
     if (icon) {
-      icon.classList.remove("sa-compact-profile-icon")
+      icon.classList.remove("sa-compact-profile-icon");
     }
   };
 
