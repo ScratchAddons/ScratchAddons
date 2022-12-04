@@ -1,0 +1,19 @@
+{
+  "name": "Always show number pad",
+  "description": "Show Scratch's number pad input when editing number fields on all devices instead of only touchscreen devices.",
+  "credits": [
+    {
+      "name": "GarboMuffin"
+    }
+  ],
+  "tags": ["editor", "codeEditor"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.28.0"
+}
