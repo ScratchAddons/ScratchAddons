@@ -1,5 +1,5 @@
 import WorkspaceQuerier from "./WorkspaceQuerier.js";
-// import renderBlock from "./BlockRenderer.js";
+import renderBlock from "./BlockRenderer.js";
 
 export default async function ({ addon, msg, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
@@ -54,12 +54,10 @@ export default async function ({ addon, msg, console }) {
       this.dropdown = this.dropdownOut.appendChild(document.createElement("div"));
       this.dropdown.className = "sa-float-bar-dropdown";
 
-      // this.testSvg = this.dropdown.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "svg"));
-      // this.testSvg.setAttribute("width", "100%");
-      // this.testSvg.setAttribute("height", "400px");
-      // this.testSvg.setAttribute("viewBox", "0 25");
-
-      // this.testGroup = this.testSvg.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "g"));
+      this.testSvg = this.dropdown.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "svg"));
+      this.testSvg.setAttribute("width", "100%");
+      this.testSvg.setAttribute("height", "400px");
+      this.testSvg.setAttribute("viewBox", "0 25");
 
       this.floatInput.addEventListener("input", () => this.inputChange());
       this.floatInput.addEventListener("keydown", (...e) => this.inputKeyDown(...e));
@@ -196,12 +194,24 @@ export default async function ({ addon, msg, console }) {
         this.floatInputSuggestion.innerText = "";
       }
 
+
       // if (this.testGroup.children[0]) this.testGroup.children[0].remove();
-      // if (this.queryResults[0]) {
-      //   this.testGroup.setAttribute("transform", "translate(0, 30) scale(1)");
-      //   renderBlock(this.queryResults[0].createBlock(), this.testGroup);
-      //   this.testGroup.setAttribute("transform", "translate(0, 30) scale(0.65)");
-      // }
+      while (this.testSvg.firstChild) this.testSvg.removeChild(this.testSvg.lastChild);
+
+      const blockScale = 0.65;
+      let canvasWidth = this.testSvg.getBoundingClientRect().width / blockScale;
+
+      for (let i = 0; i < this.queryResults.length && i < 10; i++) {
+        let container = this.testSvg.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "g"));
+        
+        let blockComponent = renderBlock(this.queryResults[i].createBlock(), container);
+        var xTranslation = 0;
+        if (blockComponent.width > canvasWidth) {
+          xTranslation = (canvasWidth - blockComponent.width) * blockScale;
+        }
+  
+        container.setAttribute("transform", `translate(${xTranslation}, ${i * 40 + 20}) scale(0.65)`);
+      }
 
       var endTime = performance.now();
       console.log(`Worksapce query took ${endTime - startTime} milliseconds`);
@@ -272,8 +282,8 @@ export default async function ({ addon, msg, console }) {
     }
 
     hide() {
-      this.floatBar.style.display = "none";
-      this.querier.clearWorkspaceIndex();
+      // this.floatBar.style.display = "none";
+      // this.querier.clearWorkspaceIndex();
     }
   }
   const floatingInput = new FloatingInput();

@@ -52,12 +52,6 @@ const BlockShapes = {
       `m -8 -20 A 4 4 0 0 1 -4 -24 H 4 c 2 0 3 1 4 2 l 4 4 c 1 1 2 2 4 2 h 12 c 2 0 3 -1 4 -2 l 4 -4 C 37 -23 38 -24 40 -24 H ${width} a 4 4 0 0 1 4 4 v 40 a 4 4 0 0 1 -4 4 H -4 a 4 4 0 0 1 -4 -4 z`,
   },
 
-  /*
-
-M -8 -20 a 4 4 0 0 1 4 -4 H 60 a 4 4 0 0 1 4 4 v 2 c 0 2 -1 3 -2 4 l -4 4 c -1 1 -2 2 -2 4 v 12 c 0 2 1 3 2 4 l 4 4 c 1 1 2 2 2 4 v 2 a 4 4 0 0 1 -4 4 H -4 a 4 4 0 0 1 -4 -4 v -2 c 0 -2 -1 -3 -2 -4 l -4 -4 c -1 -1 -2 -2 -2 -4 v -12 c 0 -2 1 -3 2 -4 l 4 -4 c 1 -1 2 -2 2 -4 z
-M -6 -22 a 2 2 0 0 1 2 -2 h 60 a 2 2 0 0 1 2 2 v 4 c 0 2 -1 3 -2 4 l -4 4 c -1 1 -2 2 -2 4 v 12 c 0 2 1 3 2 4 l 4 4 c 1 1 2 2 2 4 v 4 a 2 2 0 0 1 -2 2 H -4 a 2 2 0 0 1 -2 -2 v -4 c 0 -2 -1 -3 -2 -4 l -4 -4 c -1 -1 -2 -2 -2 -4 v -12 c 0 -2 1 -3 2 -4 l 4 -4 c 1 -1 2 -2 2 -4 z
-  */
-
   // The white oval for text or number inputs
   TextInput: {
     padding: 12,
@@ -207,12 +201,13 @@ function createBackedTextedComponent(text, container, shape, fillCategory, strok
  * Renders a block, with the center of it's leftmost side located at 0, 0.
  * @param {BlockInstance} block
  * @param {SVGElement} container
+ * @returns {Object} The renderered block
  */
 export default function renderBlock(block, container) {
   var blockComponent = _renderBlock(block, container, block.typeInfo.category, true);
   blockComponent.dom.classList.add("sa-block-color-all");
   blockComponent.dom.setAttribute("transform", `translate(${blockComponent.padding}, 0)`);
-  return blockComponent.dom;
+  return blockComponent;
 }
 
 /**
