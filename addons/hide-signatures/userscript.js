@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   // get signatures
   const posts = document.querySelectorAll(".blockpost");
 
