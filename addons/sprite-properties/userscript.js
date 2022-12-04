@@ -1,8 +1,8 @@
 export default async function ({ addon, global, console, msg }) {
-  const showPropsClass = "sa-show-sprite-properties";
-  const hidePropsClass = "sa-hide-sprite-properties";
-  const propsBtnClass = "sa-sprite-properties-btn";
-  const propsCloseBtnClass = "sa-sprite-properties-close-btn";
+  const SHOW_PROPS_CLASS = "sa-show-sprite-properties";
+  const HIDE_PROPS_CLASS = "sa-hide-sprite-properties";
+  const PROPS_BTN_CLASS = "sa-sprite-properties-btn";
+  const PROPS_CLOSE_BTN_CLASS = "sa-sprite-properties-close-btn";
 
   let propertiesPanel;
   let spriteContainer; // also contains sprite grid
@@ -48,22 +48,22 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   function toggleOnLoad() {
-    spriteContainer.classList.toggle(hidePropsClass);
+    spriteContainer.classList.toggle(HIDE_PROPS_CLASS);
     if (!addon.settings.get("hideByDefault")) togglePropertiesPanel();
   }
 
   function togglePropertiesPanel() {
     if (!addon.self.disabled) {
-      spriteContainer.classList.toggle(showPropsClass);
-      spriteContainer.classList.toggle(hidePropsClass);
+      spriteContainer.classList.toggle(SHOW_PROPS_CLASS);
+      spriteContainer.classList.toggle(HIDE_PROPS_CLASS);
     } else {
-      spriteContainer.classList.remove(showPropsClass);
-      spriteContainer.classList.remove(hidePropsClass);
+      spriteContainer.classList.remove(SHOW_PROPS_CLASS);
+      spriteContainer.classList.remove(HIDE_PROPS_CLASS);
     }
   }
 
   function autoHidePanel() {
-    if (addon.settings.get("autoCollapse") && spriteContainer.classList.contains(showPropsClass)) {
+    if (addon.settings.get("autoCollapse") && spriteContainer.classList.contains(SHOW_PROPS_CLASS)) {
       togglePropertiesPanel();
     }
   }
@@ -77,12 +77,12 @@ export default async function ({ addon, global, console, msg }) {
     } else {
       selectedSprite = await addon.tab.waitForElement(`[class*="sprite-selector-item_is-selected"]`);
     }
-    injectButton(selectedSprite, propsBtnClass, "/info.svg", msg("open-properties-panel-tooltip"));
+    injectButton(selectedSprite, PROPS_BTN_CLASS, "/info.svg", msg("open-properties-panel-tooltip"));
   }
 
   async function injectCloseButton() {
     let container = propertiesPanel.querySelector("[class*='sprite-info_row_']:nth-child(2)");
-    injectButton(container, propsCloseBtnClass, "/collapse.svg", msg("close-properties-panel-tooltip"));
+    injectButton(container, PROPS_CLOSE_BTN_CLASS, "/collapse.svg", msg("close-properties-panel-tooltip"));
   }
 
   async function injectButton(container, className, iconPath, tooltip) {
@@ -100,7 +100,7 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   function removeCloseButton() {
-    let closeBtn = document.querySelector("." + propsCloseBtnClass);
+    let closeBtn = document.querySelector("." + PROPS_CLOSE_BTN_CLASS);
     if (closeBtn) closeBtn.remove();
   }
 }
