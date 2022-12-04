@@ -7,7 +7,7 @@ export default async function ({ addon }) {
       const username = await addon.auth.fetchUsername();
       const container = await addon.tab.waitForElement(".dropdown");
       const dropdown = await addon.tab.waitForElement(".dropdown-menu .user-nav");
-      (await addon.tab.waitForElement(".user-icon")).classList.add("sa-compact-profile-icon")
+      (await addon.tab.waitForElement(".user-icon")).classList.add("sa-compact-profile-icon");
       const profileSpans = dropdown.childNodes[0].childNodes[0];
       span = profileSpans.appendChild(document.createElement("span"));
       span.className = "sa-profile-name";
