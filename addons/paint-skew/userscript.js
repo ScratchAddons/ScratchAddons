@@ -73,8 +73,7 @@ export default async function ({ addon }) {
       let sky = 0;
       this.lastSkx = 0;
       this.lastSky = 0;
-
-      if (event.modifiers.control && !this.isCorner) {
+      if ((event.modifiers.control || event.modifiers.command) && !this.isCorner) {
         // Skew
         if (this.isSkew === false) {
           // Reset position
