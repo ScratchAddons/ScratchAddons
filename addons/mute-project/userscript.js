@@ -1,28 +1,33 @@
-import { setup, isMuted, setVol, getDefVol } from "../vol-slider/module.js";
+import { setup, isMuted, setVolume, onVolumeChanged, toggleMuted } from "../vol-slider/module.js";
 
 export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.vm;
-  let icon = document.createElement("img");
-  icon.src = "/static/assets/e21225ab4b675bc61eed30cfb510c288.svg";
+  setup(vm);
+
+  const icon = document.createElement("img");
   icon.loading = "lazy";
-  icon.style.display = "none";
-  icon.className = "sa-mute-icon";
-  const toggleMute = (e) => {
+  icon.src = addon.self.dir + "/mute.svg";
+  icon.className = "sa-mute-project-icon";
+  addon.tab.displayNoneWhileDisabled(icon);
+
+  const updateIcon = () => {
+    icon.style.display = (addon.self.disabled || !isMuted()) ? 'none' : '';
+  };
+  onVolumeChanged(updateIcon);
+  updateIcon();
+
+  const clickMuteButton = (e) => {
     if (!addon.self.disabled && (e.ctrlKey || e.metaKey)) {
       e.cancelBubble = true;
       e.preventDefault();
-      if (isMuted()) {
-        setVol(getDefVol());
-        icon.style.display = "none";
-      } else {
-        setVol(0);
-        icon.style.display = "block";
-      }
+      toggleMuted();
     }
   };
+
   addon.self.addEventListener("disabled", () => {
-    setVol(1);
-    icon.style.display = "none";
+    if (isMuted()) {
+      setVolume(1);
+    }
   });
 
   while (true) {
@@ -31,8 +36,7 @@ export default async function ({ addon, global, console }) {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
     addon.tab.appendToSharedSpace({ space: "afterStopButton", element: icon, order: 0 });
-    setup(vm);
-    button.addEventListener("click", toggleMute);
-    button.addEventListener("contextmenu", toggleMute);
+    button.addEventListener("click", clickMuteButton);
+    button.addEventListener("contextmenu", clickMuteButton);
   }
 }
