@@ -13,7 +13,7 @@ export const setVolume = (newVolume) => {
   } else {
     volumeBeforeFinishSetup = newVolume;
   }
-  callbacks.forEach(i => i());
+  callbacks.forEach((i) => i());
 };
 
 export const getVolume = () => {

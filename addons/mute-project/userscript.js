@@ -12,7 +12,7 @@ export default async function ({ addon, global, console }) {
   addon.tab.displayNoneWhileDisabled(icon);
 
   const updateIcon = () => {
-    icon.style.display = (addon.self.disabled || !isMuted()) ? 'none' : '';
+    icon.style.display = addon.self.disabled || !isMuted() ? "none" : "";
   };
   onVolumeChanged(updateIcon);
   updateIcon();

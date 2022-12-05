@@ -14,11 +14,11 @@ export default async function ({ addon, global, console }) {
   const updateIcon = () => {
     const newVolume = getVolume();
     if (newVolume == 0) {
-      icon.dataset.icon = 'mute';
+      icon.dataset.icon = "mute";
     } else if (newVolume < 0.5) {
-      icon.dataset.icon = 'quiet';
+      icon.dataset.icon = "quiet";
     } else {
-      icon.dataset.icon = 'loud';
+      icon.dataset.icon = "loud";
     }
   };
   onVolumeChanged(updateIcon);
@@ -51,7 +51,7 @@ export default async function ({ addon, global, console }) {
   container.appendChild(icon);
   container.appendChild(slider);
   addon.tab.displayNoneWhileDisabled(container, {
-    display: 'flex'
+    display: "flex",
   });
 
   if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
