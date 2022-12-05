@@ -8,6 +8,7 @@ export default async function ({ addon, global, console }) {
   icon.loading = "lazy";
   icon.src = addon.self.dir + "/mute.svg";
   icon.className = "sa-mute-project-icon";
+  icon.style.userSelect = "none";
   addon.tab.displayNoneWhileDisabled(icon);
 
   const updateIcon = () => {
