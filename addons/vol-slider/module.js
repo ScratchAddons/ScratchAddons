@@ -23,12 +23,12 @@ export const setUnmutedVolume = (newUnmuteVolume) => {
   unmuteVolume = newUnmuteVolume;
 };
 
-export const toggleMuted = () => {
-  if (isMuted()) {
-    setVolume(unmuteVolume);
-  } else {
+export const setMuted = (newMuted) => {
+  if (newMuted) {
     setUnmutedVolume(getVolume());
     setVolume(0);
+  } else {
+    setVolume(unmuteVolume);
   }
 };
 

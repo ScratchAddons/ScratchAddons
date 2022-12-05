@@ -1,4 +1,4 @@
-import { setup, setVolume, onVolumeChanged, getVolume, toggleMuted, setUnmutedVolume, isMuted } from "./module.js";
+import { setup, setVolume, onVolumeChanged, getVolume, setMuted, setUnmutedVolume, isMuted } from "./module.js";
 
 export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.vm;
@@ -8,7 +8,7 @@ export default async function ({ addon, global, console }) {
   const icon = document.createElement("div");
   icon.className = "sa-vol-slider-icon";
   icon.addEventListener("click", () => {
-    toggleMuted();
+    setMuted(!isMuted());
   });
 
   const updateIcon = () => {

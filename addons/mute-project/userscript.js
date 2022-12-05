@@ -1,4 +1,4 @@
-import { setup, isMuted, setVolume, onVolumeChanged, toggleMuted } from "../vol-slider/module.js";
+import { setup, isMuted, onVolumeChanged, setMuted } from "../vol-slider/module.js";
 
 export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.vm;
@@ -20,13 +20,13 @@ export default async function ({ addon, global, console }) {
     if (!addon.self.disabled && (e.ctrlKey || e.metaKey)) {
       e.cancelBubble = true;
       e.preventDefault();
-      toggleMuted();
+      setMuted(!isMuted());
     }
   };
 
   addon.self.addEventListener("disabled", () => {
     if (isMuted()) {
-      setVolume(1);
+      setMuted(false);
     }
   });
 
