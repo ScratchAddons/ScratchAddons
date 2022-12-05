@@ -1,30 +1,29 @@
-.backpack_backpack-list_MOp5X {
+[class^="backpack_backpack-list"] {
     /* set height of the backpack picker, 5.5rem is the height of 1 row so multiply it by the rows setting */
     min-height: calc(var(--expandedBackpack-rows) * 5.5rem);
 }
 
-.backpack_backpack-list-inner_10a2A {
+[class^="backpack_backpack-list-inner"] {
     /* move backpack items to the top left instead of vertically centering them */
-    -webkit-align-items: start;
-        -ms-align-items: start;
+    align-items: start;
     /* force horizontal wrapping and enable vertical scrolling */
     flex-wrap: wrap;
     overflow-x: hidden;
     overflow-y: auto;
 }
 
-.backpack_backpack-item_hwqzQ {
+[class^="backpack_backpack-item"] {
     /* add vertical margin to make stacked buttons look nicer */
-    margin: 0.25rem 0.25rem;
+    margin: 0.25rem;
 }
 
 /* non-backpacked sprite, costume and sound thumbnails use the same .sprite-selector and .react classes so check parents to see if it's part of the backpack */
-.backpack_backpack-list-inner_10a2A > .react-contextmenu-wrapper > .sprite-selector-item_sprite-image-outer_Xs0wN > .sprite-selector-item_sprite-image-inner_3oSwi {
+[class^="backpack_backpack-list-inner"] > .react-contextmenu-wrapper > [class^="sprite-selector-item_sprite-image-outer"] > [class^="sprite-selector-item_sprite-image-inner"] {
     /* fill area around thumbnail to make the image background blend in when using dark mode/custom theme */
     background-color: var(--expandedBackpack-bgcolor);
 }
 
-.backpack_backpack-list-inner_10a2A > .react-contextmenu-wrapper > .sprite-selector-item_sprite-image-outer_Xs0wN > .sprite-selector-item_sprite-image-inner_3oSwi > .sprite-selector-item_sprite-image_2QWuK {
+[class^="backpack_backpack-list-inner"] > .react-contextmenu-wrapper > [class^="sprite-selector-item_sprite-image-outer"] > [class^="sprite-selector-item_sprite-image-inner"] > [class^="sprite-selector-item_sprite-image"] {
     /* make thumbnails use all avaliable space inside the button instead of being downscaled to 32x32 pixels */
     max-width: var(--expandedBackpack-imgsize);
     max-height: var(--expandedBackpack-imgsize);

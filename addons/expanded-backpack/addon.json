@@ -1,13 +1,13 @@
 {
-  "name": "Expanded backpack",
-  "description": "Adds multiple rows, better previews and vertical scrolling to the editor backpack.",
+  "name": "Multiple rows in backpack",
+  "description": "Display the contents of the editor backpack in an expandable two-way grid similar to the costume library and increase the size of thumbnails to improve ease of use.",
   "credits": [
     {
       "name": "pumpkinhasapatch",
       "link": "https://github.com/pumpkinhasapatch"
     }
   ],
-  "versionAdded": "1.29.0",
+  "versionAdded": "1.30.0",
   "tags": ["editor"],
   "enabledByDefault": false,
   "settings": [
@@ -16,11 +16,11 @@
       "id": "rows",
       "type": "integer",
       "min": 1,
-      "max": 3,
+      "max": 4,
       "default": 2
     },
     {
-      "name": "Larger costume and script previews",
+      "name": "Larger costume and script thumbnails",
       "id": "upscale",
       "type": "boolean",
       "default": true
@@ -48,7 +48,7 @@
           "settingId": "upscale"
         },
         "true": "white",
-        "false": "none"
+        "false": "transparent"
       }
     }
   ],
@@ -58,7 +58,6 @@
       "matches": ["projects"]
     }
   ],
-  "updateUserstylesOnSettingsChange": true,
   "dynamicEnable": true,
   "dynamicDisable": true
 }
