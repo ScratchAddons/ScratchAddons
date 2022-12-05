@@ -1,18 +1,26 @@
 // Volumes in this file are always in 0-1.
 
-let vm;
-/** @type {GainNode} */
-let gainNode;
+let hasSetup = false;
+/** @type {AudioParam|null} */
+let gainNode = null;
 let unmuteVolume = 1;
+let volumeBeforeFinishSetup = 1;
 const callbacks = [];
 
 export const setVolume = (newVolume) => {
-  gainNode.value = newVolume;
+  if (gainNode) {
+    gainNode.value = newVolume;
+  } else {
+    volumeBeforeFinishSetup = newVolume;
+  }
   callbacks.forEach(i => i());
 };
 
 export const getVolume = () => {
-  return gainNode.value;
+  if (gainNode) {
+    return gainNode.value;
+  }
+  return volumeBeforeFinishSetup;
 };
 
 export const isMuted = () => {
@@ -36,8 +44,23 @@ export const onVolumeChanged = (callback) => {
   callbacks.push(callback);
 };
 
-export const setup = (_vm) => {
-  if (vm) return;
-  vm = _vm;
-  gainNode = vm.runtime.audioEngine.inputNode.gain;
+const gotAudioEngine = (audioEngine) => {
+  gainNode = audioEngine.inputNode.gain;
+  gainNode.value = volumeBeforeFinishSetup;
+};
+
+export const setup = (vm) => {
+  if (hasSetup) {
+    return;
+  }
+  hasSetup = true;
+
+  const audioEngine = vm.runtime.audioEngine;
+  if (audioEngine) {
+    gotAudioEngine(audioEngine);
+  } else {
+    vm.runtime.once("PROJECT_LOADED", () => {
+      gotAudioEngine(vm.runtime.audioEngine);
+    });
+  }
 };
