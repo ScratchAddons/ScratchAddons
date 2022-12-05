@@ -1,0 +1,20 @@
+{
+  "name": "Remove default values in flyout",
+  "description": "todo",
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+  ],
+  "tags": ["editor"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}
