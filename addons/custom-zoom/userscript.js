@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   await addon.tab.traps.getBlockly();
 
   let controlsRect;

@@ -1,4 +1,4 @@
-export default async function ({ addon, msg, global, console }) {
+export default async function ({ addon, msg, console }) {
   const brand = Symbol();
 
   const setIsPicking = (picking) => document.body.classList.toggle("sa-stage-color-picker-picking", picking);
