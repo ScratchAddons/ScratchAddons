@@ -1,10 +1,12 @@
 export default async function ({ addon, msg }) {
   const showMenu = addon.settings.get("showMenu");
-  const forceAlternative = addon.settings.get("forceAlternative");
-  const alternativePlayer = addon.settings.get("alternativePlayer");
+  const player = addon.settings.get("alternativePlayer");
   const autoPlay = addon.settings.get("autoPlay");
   const enableTWAddons = addon.settings.get("enableTWAddons");
+  const shareUsername = addon.settings.get("shareUsername");
+
   const enabledAddons = await addon.self.getEnabledAddons("editor");
+  const username = await addon.auth.fetchUsername();
 
   const stageElement = document.querySelector(".stage");
   const projectId = window.Scratch.INIT_DATA.PROFILE.featuredProject.id;
@@ -75,32 +77,20 @@ export default async function ({ addon, msg }) {
     const usp = new URLSearchParams();
     if (autoPlay) usp.set("autoplay", "");
     if (enableTWAddons) usp.set("addons", enabledAddons.join(","));
+    if (shareUsername) usp.set("username", username);
     iframeElement.setAttribute("src", `https://turbowarp.org/${projectId}/embed?${usp}`);
     wrapperElement.dataset.player = "turbowarp";
     if (!showMenu) iframeElement.setAttribute("height", "260");
   };
 
-  const loadForkphorus = () => {
-    wrapperElement.dataset.player = "forkphorus";
-    iframeElement.setAttribute(
-      "src",
-      `https://forkphorus.github.io/embed.html?id=${projectId}&auto-start=${autoPlay}&ui=${showMenu}`
-    );
-  };
-
   // Start loading the players
 
-  if (forceAlternative && alternativePlayer !== "none") {
-    if (alternativePlayer === "turbowarp") loadTurboWarp();
-    else if (alternativePlayer === "forkphorus") loadForkphorus();
-  } else {
-    loadScratch();
-    iframeElement.addEventListener("load", () => {
-      if (iframeElement.contentDocument.querySelector(".not-available-outer") !== null) {
-        if (alternativePlayer === "turbowarp") loadTurboWarp();
-        else if (alternativePlayer === "forkphorus") loadForkphorus();
-        else stageElement.removeChild(wrapperElement);
-      }
-    });
-  }
+  if (player === "turbowarp") loadTurboWarp();
+  else loadScratch();
+  iframeElement.addEventListener("load", () => {
+    if (iframeElement.contentDocument.querySelector(".not-available-outer") !== null) {
+      // Project is unshared and cannot be accessed
+      stageElement.removeChild(wrapperElement);
+    }
+  });
 }
