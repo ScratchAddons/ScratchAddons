@@ -64,11 +64,11 @@
     },
     {
       "id": "autoPlay",
-      "name": "Auto-play projects (for alternative players)",
+      "name": "Auto-play projects",
       "type": "boolean",
       "default": false,
       "if": {
-        "settings": { "alternativePlayer": ["turbowarp", "forkphorus"] }
+        "settings": { "alternativePlayer": ["turbowarp"] }
       }
     },
     {
