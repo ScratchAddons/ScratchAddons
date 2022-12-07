@@ -12,6 +12,19 @@
       "name": "Hans5958",
       "note": "remake",
       "id": "remake"
+    },
+    {
+      "name": "ErrorGamer2000",
+      "link": "https://github.com/ErrorGamer2000",
+      "note": "update",
+      "id": "update"
+    }
+  ],
+  "info": [
+    {
+      "id": "privacy",
+      "type": "warning",
+      "text": "Enabling the \"Use Scratch username\" when using the TurboWarp player will give TurboWarp access to your Scratch username."
     }
   ],
   "userscripts": [
@@ -35,21 +48,17 @@
     },
     {
       "id": "alternativePlayer",
-      "name": "Alternative player",
+      "name": "Project player",
       "type": "select",
       "default": "none",
       "potentialValues": [
         {
           "id": "none",
-          "name": "None"
+          "name": "Scratch"
         },
         {
           "id": "turbowarp",
           "name": "TurboWarp"
-        },
-        {
-          "id": "forkphorus",
-          "name": "forkphorus"
         }
       ]
     },
@@ -63,17 +72,17 @@
       }
     },
     {
-      "id": "forceAlternative",
-      "name": "Force using alternative player",
+      "id": "enableTWAddons",
+      "name": "Enable TurboWarp addons",
       "type": "boolean",
-      "default": false,
+      "default": true,
       "if": {
-        "settings": { "alternativePlayer": ["turbowarp", "forkphorus"] }
+        "settings": { "alternativePlayer": ["turbowarp"] }
       }
     },
     {
-      "id": "enableTWAddons",
-      "name": "Enable TurboWarp addons",
+      "id": "shareUsername",
+      "name": "Use Scratch username",
       "type": "boolean",
       "default": true,
       "if": {
