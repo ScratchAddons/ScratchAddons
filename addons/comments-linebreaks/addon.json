@@ -7,6 +7,12 @@
       "link": "https://scratch.mit.edu/users/TheColaber/"
     }
   ],
+  "info": [
+    {
+      "text": "The line breaks are only visible to you. Line breaks in your own comments will not appear as new lines to everyone.",
+      "id": "nomessagecount"
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
