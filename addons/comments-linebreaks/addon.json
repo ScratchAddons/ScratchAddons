@@ -10,7 +10,7 @@
   "info": [
     {
       "text": "The line breaks are only visible to you. Line breaks in your own comments will not appear as new lines to everyone.",
-      "id": "nomessagecount"
+      "id": "ownLineBreaks"
     }
   ],
   "userscripts": [
