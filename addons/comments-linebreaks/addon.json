@@ -9,7 +9,7 @@
   ],
   "info": [
     {
-      "text": "The line breaks are only visible to you. Line breaks in your own comments will not appear as new lines to everyone.",
+      "text": "Line breaks are only visible to users with this addon enabled. They will appear as spaces for others.",
       "id": "ownLineBreaks"
     }
   ],
