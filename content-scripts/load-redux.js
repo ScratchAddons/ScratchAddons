@@ -63,9 +63,7 @@ fix this warning."
       };
     }
     args.splice(1, 0, ReDucks.applyMiddleware(middleware));
-    return newerCompose
-      ? newerCompose.apply(this, args)
-      : ReDucks.compose.apply(this, args);
+    return newerCompose ? newerCompose.apply(this, args) : ReDucks.compose.apply(this, args);
   }
 
   Object.defineProperty(window, "__REDUX_DEVTOOLS_EXTENSION_COMPOSE__", {
