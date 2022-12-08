@@ -9,6 +9,7 @@
   ],
   "info": [
     {
+      "type": "notice",
       "text": "Line breaks are only visible to users with this addon enabled. They will appear as spaces for others.",
       "id": "ownLineBreaks"
     }
