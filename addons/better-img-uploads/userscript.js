@@ -52,19 +52,16 @@ export default async function ({ addon, console, msg }) {
     const spriteSelector = '[class*="sprite-selector_sprite-selector_"] [class*="action-menu_more-buttons_"]';
     const stageSelector = '[class*="stage-selector_stage-selector_"] [class*="action-menu_more-buttons_"]';
     const costumeSelector = '[data-tabs] > :nth-child(3) [class*="action-menu_more-buttons_"]';
-    let menu = await addon.tab.waitForElement(
-      `${spriteSelector}, ${stageSelector}, ${costumeSelector}`,
-      {
-        markAsSeen: true,
-        reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
-        reduxEvents: [
-          "scratch-gui/mode/SET_PLAYER",
-          "fontsLoaded/SET_FONTS_LOADED",
-          "scratch-gui/locales/SELECT_LOCALE",
-          "scratch-gui/navigation/ACTIVATE_TAB"
-        ],
-      }
-    );
+    let menu = await addon.tab.waitForElement(`${spriteSelector}, ${stageSelector}, ${costumeSelector}`, {
+      markAsSeen: true,
+      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+      reduxEvents: [
+        "scratch-gui/mode/SET_PLAYER",
+        "fontsLoaded/SET_FONTS_LOADED",
+        "scratch-gui/locales/SELECT_LOCALE",
+        "scratch-gui/navigation/ACTIVATE_TAB",
+      ],
+    });
     let button = menu.parentElement.previousElementSibling.previousElementSibling; //The base button that the popup menu is from
 
     let id = button.getAttribute("aria-label").replace(/\s+/g, "_");
