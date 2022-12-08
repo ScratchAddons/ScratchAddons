@@ -20,16 +20,13 @@ export default class Trap extends Listenable {
    * @type {object}
    */
   get vm() {
-    if (!this._getEditorMode())
-      throw new Error("Cannot access vm on non-project page");
+    if (!this._getEditorMode()) throw new Error("Cannot access vm on non-project page");
     if (this._cache.vm) return this._cache.vm;
     const app = document.querySelector("#app");
     if (!app) throw new Error("Unable to access vm through redux");
     return (this._cache.vm =
       app[
-        Object.keys(app).find((key) =>
-          key.startsWith(this.REACT_CONTAINER_PREFIX)
-        )
+        Object.keys(app).find((key) => key.startsWith(this.REACT_CONTAINER_PREFIX))
       ].child.stateNode.store.getState().scratchGui.vm);
   }
 
@@ -58,9 +55,7 @@ export default class Trap extends Listenable {
     if (this._cache.Blockly) return this._cache.Blockly;
     const editorMode = this._getEditorMode();
     if (!editorMode || editorMode === "embed")
-      throw new Error(
-        `Cannot access Blockly on ${editorMode} page (${location.pathname})`
-      );
+      throw new Error(`Cannot access Blockly on ${editorMode} page (${location.pathname})`);
     const BLOCKS_CLASS = '[class^="gui_blocks-wrapper"]';
     let elem = document.querySelector(BLOCKS_CLASS);
     if (!elem) {
@@ -69,17 +64,12 @@ export default class Trap extends Listenable {
       });
     }
     if (!this._react_internal_key) {
-      this._react_internal_key = Object.keys(elem).find((key) =>
-        key.startsWith(this.REACT_INTERNAL_PREFIX)
-      );
+      this._react_internal_key = Object.keys(elem).find((key) => key.startsWith(this.REACT_INTERNAL_PREFIX));
     }
     const internal = elem[this._react_internal_key];
     let childable = internal;
     /* eslint-disable no-empty */
-    while (
-      ((childable = childable.child),
-      !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks)
-    ) {}
+    while (((childable = childable.child), !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks)) {}
     /* eslint-enable no-empty */
     return (this._cache.Blockly = childable.stateNode.ScratchBlocks);
   }
@@ -91,9 +81,7 @@ export default class Trap extends Listenable {
    */
   getInternalKey(elem) {
     if (!this._react_internal_key) {
-      this._react_internal_key = Object.keys(elem).find((key) =>
-        key.startsWith(this.REACT_INTERNAL_PREFIX)
-      );
+      this._react_internal_key = Object.keys(elem).find((key) => key.startsWith(this.REACT_INTERNAL_PREFIX));
     }
     return this._react_internal_key;
   }
@@ -107,19 +95,13 @@ export default class Trap extends Listenable {
   async getPaper() {
     if (this._cache.paper) return this._cache.paper;
     const editorMode = this._getEditorMode();
-    if (!editorMode || editorMode === "embed")
-      throw new Error("Cannot access paper on this page");
+    if (!editorMode || editorMode === "embed") throw new Error("Cannot access paper on this page");
     // We can access paper through .tool on tools, for example:
     // https://github.com/LLK/scratch-paint/blob/develop/src/containers/bit-brush-mode.jsx#L60-L62
     // It happens that paper's Tool objects contain a reference to the entirety of paper's scope.
-    const modeSelector = await this._waitForElement(
-      "[class*='paint-editor_mode-selector']",
-      {
-        reduxCondition: (state) =>
-          state.scratchGui.editorTab.activeTabIndex === 1 &&
-          !state.scratchGui.mode.isPlayerOnly,
-      }
-    );
+    const modeSelector = await this._waitForElement("[class*='paint-editor_mode-selector']", {
+      reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
+    });
     const internalState = modeSelector[this.getInternalKey(modeSelector)].child;
     // .tool or .blob.tool only exists on the selected tool
     let toolState = internalState;
