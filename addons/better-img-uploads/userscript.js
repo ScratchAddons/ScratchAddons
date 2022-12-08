@@ -81,6 +81,10 @@ export default async function ({ addon, console, msg }) {
     menu.prepend(menuItem);
 
     hdButton.addEventListener("click", (e) => {
+      // When clicking on the button in the "add backdrop menu", don't switch to the stage before
+      // a file was selected.
+      e.stopPropagation();
+
       input.files = new FileList(); //Empty the input to make sure the change event fires even if the same file was uploaded.
       input.click();
     });
