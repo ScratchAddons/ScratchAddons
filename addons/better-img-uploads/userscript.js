@@ -54,7 +54,16 @@ export default async function ({ addon, console, msg }) {
     const costumeSelector = '[data-tabs] > :nth-child(3) [class*="action-menu_more-buttons_"]';
     let menu = await addon.tab.waitForElement(
       `${spriteSelector}, ${stageSelector}, ${costumeSelector}`,
-      { markAsSeen: true }
+      {
+        markAsSeen: true,
+        reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+        reduxEvents: [
+          "scratch-gui/mode/SET_PLAYER",
+          "fontsLoaded/SET_FONTS_LOADED",
+          "scratch-gui/locales/SELECT_LOCALE",
+          "scratch-gui/navigation/ACTIVATE_TAB"
+        ],
+      }
     );
     let button = menu.parentElement.previousElementSibling.previousElementSibling; //The base button that the popup menu is from
 
