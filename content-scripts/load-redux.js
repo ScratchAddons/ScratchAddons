@@ -1,12 +1,5 @@
 function injectRedux() {
   window.__scratchAddonsRedux = {};
-  if (typeof window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ !== "undefined") {
-    return console.warn(
-      "Redux feature is disabled due to conflict. \
-Some addons will not work. Uninstall other browser extensions to \
-fix this warning."
-    );
-  }
 
   // ReDucks: Redux ducktyped
   // Not actual Redux, but should be compatible
@@ -39,7 +32,7 @@ fix this warning."
     }
   }
 
-  let newerCompose;
+  let newerCompose = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
   function compose(...args) {
     const scratchAddonsRedux = window.__scratchAddonsRedux;
     const reduxTarget = (scratchAddonsRedux.target = new EventTarget());
