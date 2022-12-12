@@ -58,6 +58,12 @@
       "matches": ["projects"]
     }
   ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true
 }
