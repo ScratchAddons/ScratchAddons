@@ -56,8 +56,8 @@ export default async function ({ addon, console, msg }) {
           // TurboWarp player fullscreen uses dark mode if dark-www is enabled.
           // This might be consistent or not with the vanilla Scratch fullscreen,
           // depending on the moment you're reading this.
-          usp.set("fullscreen-background", "#000000");
-          // Color #000000 is the default TurboWarp embed bg color if system dark mode detected
+          usp.set("fullscreen-background", "#111111");
+          // Color #111111 is the default TurboWarp embed bg color if system dark mode detected
         }
         const iframeUrl = `https://turbowarp.org/${projectId}/embed?${usp}${search}`;
         twIframe.src = "";
