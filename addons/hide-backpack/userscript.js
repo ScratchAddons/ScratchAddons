@@ -14,7 +14,7 @@ export default async function ({ addon }) {
 
   while (true) {
     originalBackpack = await getBackpackElement();
-    changeBackpackVisibility();
+    if (!addon.self.disabled) changeBackpackVisibility();
   }
 
   async function getBackpackElement() {
