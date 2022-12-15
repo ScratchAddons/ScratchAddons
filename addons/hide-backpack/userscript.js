@@ -3,7 +3,7 @@ export default async function ({ addon }) {
     markAsSeen: true,
   });
 
-  changeBackpackVisibility(addon);
+  changeBackpackVisibility();
 
   // Event listeners that add dynamic enable/disable + setting change
   addon.settings.addEventListener("change", () => changeBackpackVisibility(addon));
@@ -20,10 +20,10 @@ export default async function ({ addon }) {
       markAsSeen: true,
     });
 
-    changeBackpackVisibility(addon);
+    changeBackpackVisibility();
   }
 
-  function changeBackpackVisibility(addon) {
+  function changeBackpackVisibility() {
     originalBackpack.style.display = "none";
     let backpackEl = document.querySelector(".sa-backpack-button");
     if (addon.settings.get("showButton")) {
