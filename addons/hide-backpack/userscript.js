@@ -1,8 +1,5 @@
 export default async function ({ addon }) {
-  let originalBackpack = await addon.tab.waitForElement("[class^=backpack_backpack-header_]", {
-    markAsSeen: true,
-  });
-
+  let originalBackpack = await getBackpackElement();
   changeBackpackVisibility();
 
   // Event listeners that add dynamic enable/disable + setting change
@@ -16,11 +13,15 @@ export default async function ({ addon }) {
   });
 
   while (true) {
-    originalBackpack = await addon.tab.waitForElement("[class^=backpack_backpack-header_]", {
-      markAsSeen: true,
-    });
-
+    originalBackpack = await getBackpackElement();
     changeBackpackVisibility();
+  }
+
+  async function getBackpackElement() {
+    return await addon.tab.waitForElement("[class^=backpack_backpack-header_]", {
+      markAsSeen: true,
+      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+    });
   }
 
   function changeBackpackVisibility() {
