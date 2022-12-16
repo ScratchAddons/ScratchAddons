@@ -1,0 +1,62 @@
+[class^="sprite-info_sprite-info_"] {
+  height: 0;
+  padding: 0 0.75rem;
+  overflow: hidden;
+  transition-property: height, padding, transform;
+  transition-duration: var(--spriteProperties-transitionDuration);
+}
+
+.sa-hide-sprite-properties [class^="sprite-info_sprite-info_"] {
+  border: none;
+}
+
+[class^="sprite-selector_scroll-wrapper_"] {
+  height: 100%;
+  transition-property: height;
+  transition-duration: var(--spriteProperties-transitionDuration);
+}
+
+.sa-show-sprite-properties [class^="sprite-info_sprite-info_"] {
+  height: 6.3125rem;
+  padding: 0.75rem;
+}
+
+.sa-show-sprite-properties [class^="sprite-selector_scroll-wrapper_"] {
+  height: calc(100% - 6.3125rem);
+}
+
+.sa-sprite-properties-btn {
+  display: none !important;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  width: 1rem;
+  height: 1rem;
+  top: -2px;
+  left: -2px;
+  border: none;
+  border-radius: 100%;
+  background-color: var(--editorDarkMode-primary, hsla(215, 100%, 65%, 1));
+}
+
+.sa-hide-sprite-properties [class*="sprite-selector-item_is-selected"] .sa-sprite-properties-btn {
+  display: flex !important;
+}
+
+.sa-sprite-properties-btn img {
+  width: calc(1rem - 6px);
+  height: calc(1rem - 6px);
+  filter: var(--editorDarkMode-primary-filter);
+}
+
+.sa-sprite-properties-close-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background-color: transparent;
+}
+
+.sa-sprite-properties-close-btn img {
+  filter: var(--editorDarkMode-accent-filter);
+}
