@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   let posts = document.querySelectorAll(".blockpost");
   let cache = Object.create(null);
 
@@ -19,7 +19,7 @@ export default async function ({ addon, global, console, msg }) {
     status.title = msg("status-hover");
     status.innerText = userStatus;
     status.style.fontStyle = "italic";
-    addon.tab.displayNoneWhileDisabled(status, { display: "inline-block" });
+    addon.tab.displayNoneWhileDisabled(status);
 
     // Create my-ocular dot
     let dot = document.createElement("span");

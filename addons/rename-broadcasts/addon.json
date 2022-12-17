@@ -1,0 +1,23 @@
+{
+  "name": "Rename broadcasts",
+  "description": "Adds an option to rename broadcast messages in the broadcast blocks' dropdowns.",
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    },
+    {
+      "name": "GarboMuffin"
+    }
+  ],
+  "tags": ["editor", "featured"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.29.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}

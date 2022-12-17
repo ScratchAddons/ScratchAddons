@@ -1,13 +1,13 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   await addon.tab.traps.getBlockly();
 
   let controlsRect;
   let previousIsHovered = false;
   const speeds = {
     none: "0s",
-    short: "0.25s",
-    default: "0.5s",
-    long: "1s",
+    short: "0.2s",
+    default: "0.3s",
+    long: "0.5s",
   };
 
   const customZoomAreaElement = document.createElement("div");

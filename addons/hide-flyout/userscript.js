@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   let placeHolderDiv = null;
   let lockObject = null;
   let lockButton = null;
@@ -17,9 +17,9 @@ export default async function ({ addon, global, console, msg }) {
   function getSpeedValue() {
     let data = {
       none: "0",
-      short: "0.25",
-      default: "0.5",
-      long: "1",
+      short: "0.2",
+      default: "0.3",
+      long: "0.5",
     };
     return data[addon.settings.get("speed")];
   }
