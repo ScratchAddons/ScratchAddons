@@ -185,6 +185,24 @@ button[class*="action-menu_more-button"] {
   height: 2rem;
 }
 
+/* Project player */
+[class*=stage-header_stage-menu-wrapper_] {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  height: 2rem;
+}
+[class*="green-flag_green-flag_"], .pause-btn, [class*="stop-all_stop-all_"], [class*="stage-header_stage-button_"] {
+  padding: 0.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+[class*="green-flag_green-flag_"], .pause-btn {
+  margin-inline-end: 0.125rem;
+}
+[class*="gui_stage-and-target-wrapper_"] [class*="stage-wrapper_full-screen_"] {
+  top: 2rem;
+}
+
 /* Tabs area */
 [class*="gui_tab-list"] {
   height: 2rem;
