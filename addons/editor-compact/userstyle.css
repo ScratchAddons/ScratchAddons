@@ -85,8 +85,15 @@ body::-webkit-scrollbar {
 }
 
 /* Sprites area */
-[class*="sprite-info_sprite-info"] {
+[class^="sprite-info_sprite-info_"],
+.sa-show-sprite-properties [class^="sprite-info_sprite-info_"] {
   padding: 0.5rem;
+  height: 4.75rem;
+}
+.sa-hide-sprite-properties [class^="sprite-info_sprite-info_"] {
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 [class*="sprite-info_row"] {
   justify-content: flex-start;
