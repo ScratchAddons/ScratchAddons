@@ -70,7 +70,7 @@ body::-webkit-scrollbar {
   font-size: 0.75rem;
 }
 [class*="menu-bar_growable"] [class*="input_input-form"]:focus {
-  box-shadow: 0 0 0 calc(0.5rem * .25) hsla(0, 100%, 100%, 0.25);
+  box-shadow: 0 0 0 calc(0.5rem * 0.25) hsla(0, 100%, 100%, 0.25);
 }
 
 .sa-editormessages-count {
