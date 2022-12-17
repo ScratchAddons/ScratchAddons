@@ -1,6 +1,6 @@
 {
   "name": "Compact editor",
-  "description": "Decreases the size of the menu bars and buttons in the editor, similar to the appearance of Scratch 2.0.",
+  "description": "Decreases the size of the menu bars and buttons in the editor, making more space for components such as the code workspace, the costume editor, and costume previews, as was the case in Scratch 2.0.",
   "tags": ["editor", "theme"],
   "credits": [
     {
@@ -22,6 +22,6 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.24.0",
+  "versionAdded": "1.30.0",
   "enabledByDefault": false
 }
