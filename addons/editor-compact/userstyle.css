@@ -340,6 +340,7 @@ button[class*="action-menu_more-button"] {
   border-radius: 0.25rem;
 }
 [class*="asset-panel_detail-area"] [class*="labeled-icon-button_edit-field-icon"],
+[class*="mode-tools_mode-tools-icon_"],
 [class*="sound-editor_button_"] img,
 [class*="sound-editor_tool-button"] img {
   width: 20px;
