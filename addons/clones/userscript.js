@@ -6,17 +6,18 @@ export default async function ({ addon, console, msg }) {
   if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
     document.body.classList.add("sa-clones-small");
   }
-  document.addEventListener(
-    "click",
-    (e) => {
-      if (e.target.closest("[class*='stage-header_stage-button-first']")) {
-        document.body.classList.add("sa-clones-small");
-      } else if (e.target.closest("[class*='stage-header_stage-button-last']")) {
-        document.body.classList.remove("sa-clones-small");
-      }
-    },
-    { capture: true }
-  );
+
+  (async () => {
+    while (true) {
+      let lastSize = addon.tab.redux.state.scratchGui.stageSize.stageSize;
+      await addon.tab.redux.waitForState((state) => state.scratchGui.stageSize.stageSize !== lastSize, {
+        actions: ["scratch-gui/StageSize/SET_STAGE_SIZE"],
+      });
+
+      if (lastSize === "small") document.body.classList.remove("sa-clones-small");
+      else document.body.classList.add("sa-clones-small");
+    }
+  })();
 
   let countContainerContainer = document.createElement("div");
 

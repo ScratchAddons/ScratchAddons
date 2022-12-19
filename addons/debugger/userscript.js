@@ -530,20 +530,18 @@ export default async function ({ addon, console, msg }) {
   if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
     document.body.classList.add("sa-debugger-small");
   }
-  document.addEventListener(
-    "click",
-    (e) => {
-      if (e.target.closest("[class*='stage-header_stage-button-first']:not(.sa-hide-stage-button)")) {
-        document.body.classList.add("sa-debugger-small");
-      } else if (
-        e.target.closest("[class*='stage-header_stage-button-last']") ||
-        e.target.closest(".sa-hide-stage-button")
-      ) {
-        document.body.classList.remove("sa-debugger-small");
-      }
-    },
-    { capture: true }
-  );
+
+  (async () => {
+    while (true) {
+      let lastSize = addon.tab.redux.state.scratchGui.stageSize.stageSize;
+      await addon.tab.redux.waitForState((state) => state.scratchGui.stageSize.stageSize !== lastSize, {
+        actions: ["scratch-gui/StageSize/SET_STAGE_SIZE"],
+      });
+
+      if (lastSize === "small") document.body.classList.remove("sa-debugger-small");
+      else document.body.classList.add("sa-debugger-small");
+    }
+  })();
 
   const ogGreenFlag = vm.runtime.greenFlag;
   vm.runtime.greenFlag = function (...args) {
