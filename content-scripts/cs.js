@@ -1,5 +1,7 @@
 try {
   if (window.parent.location.origin !== "https://scratch.mit.edu") throw "Scratch Addons: not first party iframe";
+  if (window.frameElement && window.frameElement.getAttribute("src") === null)
+    throw "Ignored iframe without src attribute";
 } catch {
   throw "Scratch Addons: not first party iframe";
 }
@@ -640,7 +642,7 @@ const showBanner = () => {
     line-height: 1em;`,
   });
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=e_70jvFOmfI",
+    href: "https://www.youtube.com/watch?v=OCaaH-TtQB0",
     target: "_blank",
     rel: "noopener",
     referrerPolicy: "strict-origin-when-cross-origin",

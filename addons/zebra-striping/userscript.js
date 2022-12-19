@@ -1,4 +1,4 @@
-export default async function ({ addon, msg, global, console }) {
+export default async function ({ addon, msg, console }) {
   const vm = addon.tab.traps.vm;
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 

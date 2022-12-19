@@ -1,7 +1,7 @@
 import { getRunningThread } from "../debugger/module.js";
 import Highlighter from "./highlighter.js";
 
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
 
   const highlighter = new Highlighter(0, addon.settings.get("highlight-color"));
