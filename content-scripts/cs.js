@@ -115,6 +115,16 @@ const cs = {
       );
     });
   },
+  updateAddonSettings(addonId, newSettings) {
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage(
+        {
+          changeAddonSettings: { addonId, newSettings, fromPage: false },
+        },
+        (res) => resolve(res)
+      );
+    });
+  },
 };
 Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow));
 

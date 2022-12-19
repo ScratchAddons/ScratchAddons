@@ -198,6 +198,8 @@ function onDataReady() {
   };
   scratchAddons.methods.getEnabledAddons = (tag) => _cs_.getEnabledAddons(tag);
 
+  scratchAddons.methods.updateAddonSettings = (addonId, newSettings) => _cs_.updateAddonSettings(addonId, newSettings);
+
   scratchAddons.sharedObserver = new SharedObserver();
 
   const runUserscripts = () => {

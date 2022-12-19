@@ -24,8 +24,68 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     const { addonId, newState } = request.changeEnabledState;
     changeAddonState(addonId, newState);
   } else if (request.changeAddonSettings) {
-    const { addonId, newSettings } = request.changeAddonSettings;
-    scratchAddons.globalState.addonSettings[addonId] = newSettings;
+    const { addonId, newSettings, fromPage } = request.changeAddonSettings;
+    if (!fromPage) {
+      // Validate the new value to prevent issues.
+      const addonSettings =
+        scratchAddons.manifests.find(({ addonId: manifestAddon }) => manifestAddon === addonId)?.manifest.settings ||
+        [];
+      for (const settingId in newSettings) {
+        if (Object.prototype.hasOwnProperty.call(newSettings, settingId)) {
+          const settingDef = addonSettings.find((setting) => setting.id === settingId);
+          if (!settingDef) {
+            return sendResponse({
+              error: "Invalid setting ID",
+            });
+          }
+          if (!settingDef.settable) {
+            return sendResponse({
+              error: "Cannot change that setting programmatically.",
+            });
+          }
+
+          function isValid(settingDef, value) {
+            switch (settingDef.type) {
+              case "boolean":
+                return typeof value === "boolean";
+              case "string":
+              case "untranslated":
+                return (
+                  typeof value === "string" &&
+                  value.length >= (settingDef.min ?? 0) &&
+                  value.length <= (settingDef.max ?? Infinity)
+                );
+              case "integer":
+                return typeof value === "number" && Math.round(value) === value;
+              case "positive_integer":
+                return typeof value === "number" && Math.round(value) === value && value >= 0;
+              case "color":
+                return (
+                  typeof value === "string" &&
+                  (settingDef.allowTransparency ? /^#([0-9a-fA-F]{2}){1,4}$/ : /^#([0-9a-fA-F]{2}){1,3}$/).test(value)
+                );
+              case "select":
+                return settingDef.potentialValues
+                  .map((potv) => (typeof potv === "object" ? potv.id : potv))
+                  .includes(value);
+              case "table":
+                return value.every((value) => settingDef.row.every((item) => isValid(item, value[item.id])));
+              default:
+                return false;
+            }
+          }
+
+          const settingValid = isValid(settingDef, newSettings[settingId]);
+
+          if (!settingValid) {
+            return sendResponse({
+              error: `Invalid value for setting ${settingId}`,
+            });
+          }
+        }
+      }
+    }
+    Object.assign(scratchAddons.globalState.addonSettings[addonId], newSettings);
     const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
     chrome.storage.sync.set({
       // Store target so arrays don't become objects
@@ -42,5 +102,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         new CustomEvent("updateUserstylesSettingsChange", { detail: { addonId, manifest, newSettings } })
       );
     if (addonId === "msg-count-badge") updateBadge(scratchAddons.cookieStoreId);
+    if (!fromPage) sendResponse({});
   }
 });
