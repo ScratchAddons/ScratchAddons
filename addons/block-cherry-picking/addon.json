@@ -1,6 +1,6 @@
 {
-  "name": "Grab single block with Ctrl key",
-  "description": "Adds the ability to drag a single block out of the middle of a script (instead of the entire stack attached below it) while holding the Ctrl key.",
+  "name": "Single block grabbing",
+  "description": "Allows you to hold Ctrl to drag a single block out of the middle of a script (instead of the entire stack attached below it).",
   "info": [
     {
       "text": "On macOS, use the Cmd key instead of the Ctrl key.",
