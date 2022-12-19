@@ -1,6 +1,6 @@
 import blockToDom from "./blockToDom.js";
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
 
@@ -791,11 +791,11 @@ export default async function ({ addon, global, console, msg }) {
             enabled: true,
             text,
             callback: menuCallbackFactory(block, opcodeData),
-            separator: addon.settings.get("border") && i === 0,
+            separator: i === 0,
           });
         });
 
-        if (addon.settings.get("border") && (block.type === "data_variable" || block.type === "data_listcontents")) {
+        if (block.type === "data_variable" || block.type === "data_listcontents") {
           // Add top border to first variable (if it exists)
           const delBlockIndex = items.findIndex((item) => item.text === ScratchBlocks.Msg.DELETE_BLOCK);
           // firstVariableItem might be undefined, a variable to switch to,

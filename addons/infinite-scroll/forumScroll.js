@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   // Present on forum pages with tbody. Used as a switch to
   // query for table and posts, and determine append/insert location.
   let vf = document.getElementById("vf");
