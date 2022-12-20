@@ -20,6 +20,7 @@ export default async function ({ addon, global, console, msg }) {
     }
   });
 
+  // Open the properties panel when double clicking in the sprite grid
   document.addEventListener("click", (e) => {
     if (e.detail === 2 && e.target.closest('[class^="sprite-selector_scroll-wrapper_"]')) {
       togglePropertiesPanel();
@@ -27,7 +28,13 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   // Close properties panel when mouse leaves the entire sprite panel
-  spriteContainer.addEventListener("mouseleave", () => autoHidePanel());
+  document.addEventListener("mouseleave", (e) => {
+    if (e.target.matches('[class*="sprite-selector_sprite-selector_2KgCX"]')) {
+      autoHidePanel();
+    }
+  }, {
+    capture: true
+  });
 
   addon.settings.addEventListener("change", () => autoHidePanel());
   addon.self.addEventListener("disabled", () => {
