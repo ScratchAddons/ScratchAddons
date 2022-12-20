@@ -6,7 +6,6 @@ export default async function ({ addon, global, console, msg }) {
 
   let propertiesPanel;
   let spriteContainer; // also contains sprite grid
-  let spriteGrid;
 
   await init();
 
@@ -20,11 +19,13 @@ export default async function ({ addon, global, console, msg }) {
       injectInfoButton(spriteIndex);
     }
   });
-  // Add a single event listener on the entire grid to take advantage of event bubbling
-  spriteGrid.addEventListener("click", (e) => {
-    let doubleClick = e.detail === 2;
-    if (doubleClick) togglePropertiesPanel();
+
+  document.addEventListener("click", (e) => {
+    if (e.detail === 2 && e.target.closest('[class^="sprite-selector_scroll-wrapper_"]')) {
+      togglePropertiesPanel();
+    }
   });
+
   // Close properties panel when mouse leaves the entire sprite panel
   spriteContainer.addEventListener("mouseleave", () => autoHidePanel());
 
@@ -41,7 +42,6 @@ export default async function ({ addon, global, console, msg }) {
   async function init() {
     propertiesPanel = await addon.tab.waitForElement('[class^="sprite-info_sprite-info_"]');
     spriteContainer = propertiesPanel.parentElement; // also contains sprite grid
-    spriteGrid = await addon.tab.waitForElement('[class^="sprite-selector_scroll-wrapper_"]');
     toggleOnLoad();
     injectInfoButton();
     injectCloseButton();
