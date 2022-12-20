@@ -41,7 +41,7 @@ export default async function ({ addon, global, console, msg }) {
 
   addon.settings.addEventListener("change", () => autoHidePanel());
   addon.self.addEventListener("disabled", () => {
-    togglePropertiesPanel();
+    setPropertiesPanelVisible(true);
     removeCloseButton();
   });
   addon.self.addEventListener("reenabled", () => init());
@@ -52,29 +52,24 @@ export default async function ({ addon, global, console, msg }) {
   async function init() {
     propertiesPanel = await addon.tab.waitForElement('[class^="sprite-info_sprite-info_"]');
     spriteContainer = propertiesPanel.parentElement; // also contains sprite grid
-    toggleOnLoad();
+    setPropertiesPanelVisible(!addon.settings.get("hideByDefault"));
     injectInfoButton();
     injectCloseButton();
   }
 
-  function toggleOnLoad() {
-    spriteContainer.classList.toggle(HIDE_PROPS_CLASS);
-    if (!addon.settings.get("hideByDefault")) togglePropertiesPanel();
+  function setPropertiesPanelVisible(visible) {
+    spriteContainer.classList.toggle(SHOW_PROPS_CLASS, visible);
+    spriteContainer.classList.toggle(HIDE_PROPS_CLASS, !visible);
   }
 
   function togglePropertiesPanel() {
-    if (!addon.self.disabled) {
-      spriteContainer.classList.toggle(SHOW_PROPS_CLASS);
-      spriteContainer.classList.toggle(HIDE_PROPS_CLASS);
-    } else {
-      spriteContainer.classList.remove(SHOW_PROPS_CLASS);
-      spriteContainer.classList.remove(HIDE_PROPS_CLASS);
-    }
+    const isCurrentlyOpen = spriteContainer.classList.contains(SHOW_PROPS_CLASS);
+    setPropertiesPanelVisible(!isCurrentlyOpen);
   }
 
   function autoHidePanel() {
-    if (addon.settings.get("autoCollapse") && spriteContainer.classList.contains(SHOW_PROPS_CLASS)) {
-      togglePropertiesPanel();
+    if (addon.settings.get("autoCollapse")) {
+      setPropertiesPanelVisible(false);
     }
   }
 
