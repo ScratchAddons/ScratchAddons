@@ -8,40 +8,39 @@
   margin-inline-start: 10px;
   border-bottom: 2px solid #111;
   white-space: nowrap;
+  color: #000;
 }
 .badge .tooltiptext {
   white-space: normal;
 }
 
 .badge.blue {
-  background: #175ef8;
-  border-color: #0e44b8;
+  background: #56a9ff;
+  border-color: #3c88d7;
 }
 .badge.green {
   background: #78fd2b;
-  color: #333;
   border-color: #53b31c;
 }
 .badge.yellow {
   background: #fddd2b;
-  color: #333;
   border-color: #fdab12;
 }
 .badge.red {
-  background: #fd662b;
-  border-color: #d84a12;
+  background: #ff9031;
+  border-color: #cb5e00;
 }
 .badge.darkred {
-  background: #fd2b2b;
-  border-color: #d81212;
+  background: #ff7272;
+  border-color: #d53b3b;
 }
 .badge.darkgreen {
-  background: #00b1a8;
-  border-color: #047773;
+  background: #0cd1c7;
+  border-color: #12a39e;
 }
 .badge.purple {
-  background: rgb(177, 23, 248);
-  border-color: #b20eb8;
+  background: #ff67de;
+  border-color: #e137bd;
 }
 .filter-option.sel.blue {
   background: #175ef8;
