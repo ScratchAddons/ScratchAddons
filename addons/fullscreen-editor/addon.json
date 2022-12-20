@@ -1,0 +1,36 @@
+{
+  "name": "Fullscreen editor",
+  "description": "Adds a fullscreen toggle to the editor, and improves the layout when in fullscreen mode.",
+  "tags": ["editor"],
+  "versionAdded": "1.31.0",
+  "userscripts": [
+    {
+      "matches": ["projects"],
+      "runAtComplete": true,
+      "url": "userscript.js"
+    }
+  ],
+  "userstyles": [
+    {
+      "matches": ["projects"],
+      "url": "userstyle.css"
+    }
+  ],
+  "settings": [
+    {
+      "id": "shrinkStage",
+      "name": "Shrink stage",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "id": "hide",
+      "name": "Hide stage",
+      "type": "boolean",
+      "default": false,
+      "if": {
+        "addonEnabled": "hide-stage"
+      }
+    }
+  ]
+}

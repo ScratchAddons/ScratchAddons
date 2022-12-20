@@ -1,0 +1,46 @@
+.sa-fullscreeneditor {
+  display: block;
+  position: relative;
+  width: 1.7rem;
+}
+
+.sa-fullscreeneditor::before {
+  /* Icon is in a pseudo-element so dark mode can apply a filter to it
+  without affecting the message count */
+  content: "";
+  display: block;
+  position: absolute;
+  width: 1.7rem;
+  height: 100%;
+  background: url(https://scratch.mit.edu/static/assets/422b48c2206d5240a6717c92496ba21a.svg) no-repeat center center;
+  background-size: 65.9%;
+  filter: brightness(0) invert(1);
+}
+
+body:fullscreen .sa-fullscreeneditor::before {
+  background: url(https://scratch.mit.edu/static/assets/dd55f4c6c20f5d25e520b6f5bfb090c5.svg) no-repeat center center;
+}
+
+body:fullscreen [class*="menu-bar_menu-bar_"] {
+  margin-top: -2.5rem;
+  position: fixed;
+  width: 100%;
+  transition: margin 0.5s ease;
+}
+
+body:fullscreen [class*="menu-bar_menu-bar_"]:hover {
+  margin-top: 0rem;
+}
+
+body:fullscreen [class*="gui_body-wrapper_"] {
+  margin-top: 0.5rem;
+  height: calc(100% - 0.5rem);
+}
+
+body:fullscreen [class*="menu-bar_menu-bar_"] [class*="menu_menu_"] {
+  display: none;
+}
+
+body:fullscreen [class*="menu-bar_menu-bar_"]:hover [class*="menu_menu_"] {
+  display: block !important;
+}

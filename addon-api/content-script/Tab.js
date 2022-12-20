@@ -356,6 +356,7 @@ export default class Tab extends Listenable {
    * assetContextMenuAfterExport - after the export button of asset (sprite, costume, etc)'s context menu
    * assetContextMenuAfterDelete - after the delete button of asset (sprite, costume, etc)'s context menu
    * monitor - after the end of the stage monitor context menu
+   * beforeEditorProfile - Before the profile menu in the editor
    *
    * @param {object} opts - options.
    * @param {string} opts.space - the shared space name.
@@ -552,6 +553,11 @@ export default class Tab extends Listenable {
           return [potential[potential.length - 1]];
         },
         until: () => [],
+      },
+      beforeEditorProfile: {
+        element: () => q("[class^='menu-bar_account-info-group']"),
+        from: () => [],
+        until: () => [q("[class^='menu-bar_account-info-group'] > [href^='/my']")],
       },
     };
 
