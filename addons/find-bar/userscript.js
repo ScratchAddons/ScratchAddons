@@ -373,11 +373,11 @@ export default async function ({ addon, msg, console }) {
           continue;
         }
 
-        let eventName = '';
+        let eventName = "";
         if (broadcastInput.type === "event_broadcast_menu") {
           eventName = broadcastInput.inputList[0].fieldRow[0].getText();
         } else {
-          eventName = msg('complex-broadcast');
+          eventName = msg("complex-broadcast");
         }
         if (!alreadyFound.has(eventName)) {
           alreadyFound.add(eventName);
