@@ -363,17 +363,12 @@ export default async function ({ addon, msg, console }) {
       const uses = []; // Definition First, then calls to it
       const found = {};
 
-      let topBlocks = this.workspace.getTopBlocks();
-      for (const topBlock of topBlocks) {
-        /** @type {!Array<!Blockly.Block>} */
-        let kids = topBlock.getDescendants();
-        for (const block of kids) {
-          if (block.type === "event_broadcast" || block.type === "event_broadcastandwait") {
-            const eventName = block.getChildren()[0].inputList[0].fieldRow[0].getText();
-            if (!found[eventName]) {
-              found[eventName] = block;
-              uses.push({ eventName: eventName, block: block });
-            }
+      for (const block of this.workspace.getAllBlocks()) {
+        if (block.type === "event_broadcast" || block.type === "event_broadcastandwait") {
+          const eventName = block.getChildren()[0].inputList[0].fieldRow[0].getText();
+          if (!found[eventName]) {
+            found[eventName] = block;
+            uses.push({ eventName: eventName, block: block });
           }
         }
       }
