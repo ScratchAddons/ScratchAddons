@@ -31,13 +31,17 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   // Close properties panel when mouse leaves the entire sprite panel
-  document.addEventListener("mouseleave", (e) => {
-    if (e.target.matches('[class*="sprite-selector_sprite-selector_2KgCX"]')) {
-      autoHidePanel();
+  document.addEventListener(
+    "mouseleave",
+    (e) => {
+      if (e.target.matches('[class*="sprite-selector_sprite-selector_2KgCX"]')) {
+        autoHidePanel();
+      }
+    },
+    {
+      capture: true,
     }
-  }, {
-    capture: true
-  });
+  );
 
   addon.settings.addEventListener("change", () => autoHidePanel());
   addon.self.addEventListener("disabled", () => {
