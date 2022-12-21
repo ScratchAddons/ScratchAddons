@@ -52,13 +52,12 @@ export default async function ({ addon, console, msg }) {
           const enabledAddons = await addon.self.getEnabledAddons("editor");
           usp.set("addons", enabledAddons.join(","));
         }
-        if ((await addon.self.getEnabledAddons("theme")).includes("dark-www")) {
-          // TurboWarp player fullscreen uses dark mode if dark-www is enabled.
-          // This might be consistent or not with the vanilla Scratch fullscreen,
-          // depending on the moment you're reading this.
-          usp.set("fullscreen-background", "#111111");
-          // Color #111111 is the default TurboWarp embed bg color if system dark mode detected
-        }
+        // Apply the same fullscreen background color, consistently with the vanilla Scratch fullscreen behavior.
+        // It's not expected here to support dynamicDisable/dyanmicEnable of editor-dark-mode to work exactly
+        // like it does with vanilla.
+        const fullscreenBackground =
+          document.documentElement.style.getPropertyValue("--editorDarkMode-fullscreen") || "white";
+        usp.set("fullscreen-background", fullscreenBackground);
         const iframeUrl = `https://turbowarp.org/${projectId}/embed?${usp}${search}`;
         twIframe.src = "";
         scratchStage.parentElement.prepend(twIframeContainer);
