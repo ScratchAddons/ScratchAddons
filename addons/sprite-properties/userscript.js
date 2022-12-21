@@ -81,8 +81,7 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   async function injectCloseButton() {
-    let container = propertiesPanel.querySelector("[class*='sprite-info_row_']:nth-child(2)");
-    injectButton(container, PROPS_CLOSE_BTN_CLASS, "/collapse.svg", msg("close-properties-panel-tooltip"));
+    injectButton(propertiesPanel, PROPS_CLOSE_BTN_CLASS, "/collapse.svg", msg("close-properties-panel-tooltip"));
   }
 
   async function injectButton(container, className, iconPath, tooltip) {
