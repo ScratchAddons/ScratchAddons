@@ -1,11 +1,16 @@
 try {
-  if (window.parent.location.origin !== "https://scratch.mit.edu") throw "Scratch Addons: not first party iframe";
-  if (window.frameElement && window.frameElement.getAttribute("src") === null)
-    throw "Ignored iframe without src attribute";
+  // Property window.top.location.origin matches the origin that corresponds to
+  // the URL displayed on the address bar, for this tab.
+  // Meanwhile, window.location.origin can only correspond to one of the content
+  // script matches which are declared in the manifest.json file. In normal use,
+  // it will always equal `https://scratch.mit.edu`.
+  if (window.top.location.origin !== window.location.origin) throw "";
 } catch {
-  throw "Scratch Addons: not first party iframe";
+  throw "Scratch Addons: cross-origin iframe ignored";
 }
-if (document.documentElement instanceof SVGElement) throw "Top-level SVG document (this can be ignored)";
+if (window.frameElement && window.frameElement.getAttribute("src") === null)
+  throw "Scratch Addons: iframe without src attribute ignored";
+if (document.documentElement instanceof SVGElement) throw "Scratch Addons: SVG document ignored";
 
 const MAX_USERSTYLES_PER_ADDON = 100;
 
