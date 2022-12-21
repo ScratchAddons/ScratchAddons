@@ -360,7 +360,7 @@ export default async function ({ addon, msg, console }) {
     }
 
     getCallsToEvents() {
-      const uses = []; // Definition First, then calls to it
+      const uses = [];
       const found = {};
 
       for (const block of this.workspace.getAllBlocks()) {
