@@ -1,7 +1,7 @@
 {
   "name": "Copy reporters",
   "description": "Adds buttons to copy the value of reporter balloons and monitors.",
-  "credits": [{"name": "TheKodeToad"}],
+  "credits": [{ "name": "TheKodeToad" }],
   "tags": ["editor", "codeEditor"],
   "userscripts": [
     {
