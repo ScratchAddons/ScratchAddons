@@ -361,13 +361,13 @@ export default async function ({ addon, msg, console }) {
 
     getCallsToEvents() {
       const uses = [];
-      const found = {};
+      const alreadyFound = new Set();
 
       for (const block of this.workspace.getAllBlocks()) {
         if (block.type === "event_broadcast" || block.type === "event_broadcastandwait") {
           const eventName = block.getChildren()[0].inputList[0].fieldRow[0].getText();
-          if (!found[eventName]) {
-            found[eventName] = block;
+          if (!alreadyFound.has(eventName)) {
+            alreadyFound.add(eventName);
             uses.push({ eventName: eventName, block: block });
           }
         }
