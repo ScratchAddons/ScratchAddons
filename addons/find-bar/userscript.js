@@ -369,12 +369,16 @@ export default async function ({ addon, msg, console }) {
         }
 
         const broadcastInput = block.getChildren()[0];
-        // If this is a block like "broadcast (1 + 1)", don't index it.
-        if (!broadcastInput || broadcastInput.type !== "event_broadcast_menu") {
+        if (!broadcastInput) {
           continue;
         }
 
-        const eventName = broadcastInput.inputList[0].fieldRow[0].getText();
+        let eventName = '';
+        if (broadcastInput.type === "event_broadcast_menu") {
+          eventName = broadcastInput.inputList[0].fieldRow[0].getText();
+        } else {
+          eventName = msg('complex-broadcast');
+        }
         if (!alreadyFound.has(eventName)) {
           alreadyFound.add(eventName);
           uses.push({ eventName: eventName, block: block });
@@ -619,13 +623,16 @@ export default async function ({ addon, msg, console }) {
           } else if (block.opcode === "event_broadcast" || block.opcode === "event_broadcastandwait") {
             const broadcastInputBlockId = block.inputs.BROADCAST_INPUT.block;
             const broadcastInputBlock = blocks._blocks[broadcastInputBlockId];
-            // Don't try to index blocks like "broadcast (1 + 1)"
-            if (
-              broadcastInputBlock &&
-              broadcastInputBlock.opcode === "event_broadcast_menu" &&
-              broadcastInputBlock.fields.BROADCAST_OPTION.value === name
-            ) {
-              uses.push(new BlockInstance(target, block));
+            if (broadcastInputBlock) {
+              let eventName;
+              if (broadcastInputBlock.opcode === "event_broadcast_menu") {
+                eventName = broadcastInputBlock.fields.BROADCAST_OPTION.value;
+              } else {
+                eventName = msg("complex-broadcast");
+              }
+              if (eventName === name) {
+                uses.push(new BlockInstance(target, block));
+              }
             }
           }
         }
