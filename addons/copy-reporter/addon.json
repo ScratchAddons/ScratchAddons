@@ -1,6 +1,6 @@
 {
   "name": "Copy Reporter",
-  "description": "Select and copy the contents of reporter popups and monitors.",
+  "description": "Copy and select the contents of reporter balloons and monitors.",
   "credits": [{"name": "TheKodeToad"}],
   "tags": ["editor", "codeEditor"],
   "userscripts": [
