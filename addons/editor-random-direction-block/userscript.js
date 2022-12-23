@@ -36,7 +36,6 @@ export default async function ({ addon, global, cons, msg }) {
         if (!input) {
           continue;
         }
-        console.log(input.fieldRow);
         const field = input.fieldRow.find((i) => i && typeof i.menuGenerator_ === "function");
         if (!field) {
           continue;
