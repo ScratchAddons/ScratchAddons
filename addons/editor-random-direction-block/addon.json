@@ -1,28 +1,28 @@
 {
-    "name": "Point towards random direction block",
-    "description": "Adds a \"random position\" option to the \"point towards ()\" block that makes the sprite point in a random direction. This will work for everyone using the project.",
-    "userscripts": [
-      {
-        "url": "userscript.js",
-        "matches": ["projects"]
-      }
-    ],
-    "versionAdded": "1.31.0",
-    "tags": ["editor"],
-    "enabledByDefault": false,
-    "dynamicEnable": true,
-    "dynamicDisable": true,
-    "credits": [
-      {
-        "name": "Tacodude7729",
-        "link": "https://scratch.mit.edu/users/Tacodude7729/"
-        },
-      {
-        "name": "pufferfish101007",
-        "link": "https://scratch.mit.edu/users/pufferfish101007/"
-      },
-      {
-        "name": "winwinlmfao"
-      }
-    ]
-  }
+  "name": "Point towards random direction block",
+  "description": "Adds a \"random position\" option to the \"point towards ()\" block that makes the sprite point in a random direction. This will work for everyone using the project.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.31.0",
+  "tags": ["editor"],
+  "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "credits": [
+    {
+      "name": "Tacodude7729",
+      "link": "https://scratch.mit.edu/users/Tacodude7729/"
+    },
+    {
+      "name": "pufferfish101007",
+      "link": "https://scratch.mit.edu/users/pufferfish101007/"
+    },
+    {
+      "name": "winwinlmfao"
+    }
+  ]
+}
