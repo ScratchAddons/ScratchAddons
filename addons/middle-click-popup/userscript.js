@@ -282,8 +282,8 @@ export default async function ({ addon, msg, console }) {
     }
 
     hide() {
-      // this.floatBar.style.display = "none";
-      // this.querier.clearWorkspaceIndex();
+      this.floatBar.style.display = "none";
+      this.querier.clearWorkspaceIndex();
     }
   }
   const floatingInput = new FloatingInput();
