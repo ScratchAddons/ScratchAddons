@@ -1,3 +1,10 @@
+/**
+ * @file Contains the code for rendering the blocks in the middle click dropdown.
+ * Main function is {@link renderBlock} which takes in a block and returns a renderer SVG element.
+ * @author Tacodude
+ */
+
+
 import { BlockShape, BlockInstance, BlockInputEnum, BlockInputBoolean, BlockInputBlock } from "./BlockTypeInfo.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
@@ -9,6 +16,13 @@ const BlockShapes = {
     minWidth: 20,
     backgroundPath: (width) => `m -12 -20 m 20 0 h ${width - 16} a 20 20 0 0 1 0 40 H 8 a 20 20 0 0 1 0 -40 z`,
 
+    /**
+     * 'Snuggling' is my wholsome term for when a block can sit extra close to a block
+     * of the same shape as it. Take a look at the blocks ( ( "" + "" ) - "" ) and 
+     * ( < "" = "" > - "" ), observe how there's a lot more blank space in the outer
+     * block in the second example, this is because in the first example the '+' block
+     * can snuggle with the '-' block.
+     */
     snugglePadding: 0,
     get snuggleWith() {
       // Don't feel bad BlockShapes.Round, I only snuggle with myself too :_(
@@ -79,8 +93,7 @@ const BlockShapes = {
     padding: 16,
     minWidth: 45,
     backgroundPath: (width) =>
-      `M -4 -20 a 4 4 0 0 1 4 -4 H ${
-        width + 8
+      `M -4 -20 a 4 4 0 0 1 4 -4 H ${width + 8
       } a 4 4 0 0 1 4 4 v 2 c 0 2 -1 3 -2 4 l -4 4 c -1 1 -2 2 -2 4 v 12 c 0 2 1 3 2 4 l 4 4 c 1 1 2 2 2 4 v 2 a 4 4 0 0 1 -4 4 H 0 a 4 4 0 0 1 -4 -4 v -2 c 0 -2 -1 -3 -2 -4 l -4 -4 c -1 -1 -2 -2 -2 -4 v -12 c 0 -2 1 -3 2 -4 l 4 -4 c 1 -1 2 -2 2 -4 z`,
   },
 };
@@ -152,7 +165,7 @@ function createBlockContainer() {
 }
 
 /**
- * Creates a block component from a container containing all it's components.
+ * Creates a block component from a container containing all its components.
  * @param {SVGElement} container The block container, created by {@link createBlockContainer}.
  * @param {object} shape An object containing information of the shape of the block to be created. From the {@link BlockShapes} object.
  * @param {string} fillCategory The category of the block, used for filling the background.

@@ -1,21 +1,74 @@
+/**
+ * @file Contains the code for enumerating the different types of blocks in a workspace,
+ * and provides a more friendly way to create instances blocks with some inputs.
+ */
+
 import * as SABlocks from "../../addon-api/content-script/blocks.js";
 
+/**
+ * A neumeric value to represent the type of an {@link BlockInput}
+ * @readonly
+ * @enum {number}
+ */
+export const BlockInputType = {
+  STRING: 0,
+  NUMBER: 1,
+  BOOLEAN: 2,
+  COLOUR: 3,
+  ENUM: 4,
+  BLOCK: 5,
+}
+
+/** 
+ * @abstract
+ */
 export class BlockInput {
+  /**
+   * @param {BlockInputType} type 
+   * @param {number} inputIdx 
+   * @param {number} fieldIdx 
+   */
   constructor(type, inputIdx, fieldIdx) {
     if (this.constructor == BlockInput) throw new Error("Abstract classes can't be instantiated.");
+    /** @type {BlockInputType} */
     this.type = type;
+    /** @type {number} The index of this input in the workspace version of the block's input array.  */
     this.inputIdx = inputIdx;
+    /**
+     * The index of this input in the workspace version of the block's field array.
+     * The speical case of -1 means that in the workspace version, this input is inside a sub-block,
+     * that has been abstracted away.
+     *  @type {number} 
+     */
     this.fieldIdx = fieldIdx;
   }
 
+  /**
+   * Sets the field this input refers to on a block to a value.  
+   * @param {BlockInstance} block 
+   * @param {*} value 
+   * @abstract
+   */
   setValue(block, value) {
     throw new Error("Sub-class must override abstract method.");
   }
 
+  /**
+   * Gets the input this block input refers to on block.
+   * @param {BlockInstance} block 
+   * @returns {*}
+   * @protected
+   */
   getInput(block) {
     return block.inputList[this.inputIdx];
   }
-
+  
+  /**
+   * Gets the field this block input refers to on block.
+   * @param {BlockInstance} block 
+   * @returns {*}
+   * @protected
+   */
   getField(block) {
     if (this.fieldIdx === -1) {
       return this.getInput(block).connection.targetBlock().inputList[0].fieldRow[0];
@@ -25,6 +78,10 @@ export class BlockInput {
   }
 }
 
+/**
+ * The base class for any round input.
+ * @abstract
+ */
 export class BlockInputRound extends BlockInput {
   constructor(type, inputIdx, fieldIdx) {
     super(type, inputIdx, fieldIdx);
@@ -42,6 +99,11 @@ export class BlockInputRound extends BlockInput {
     }
   }
 
+  /**
+   * Converts a value passed in to setValue to a value we can set the block's field to.
+   * @param {*} value
+   * @protected 
+   */
   _toFieldValue(value) {
     throw new Error("Sub-class must override abstract method.");
   }
@@ -49,7 +111,7 @@ export class BlockInputRound extends BlockInput {
 
 export class BlockInputString extends BlockInputRound {
   constructor(inputIdx, fieldIdx) {
-    super(BlockTypeInfo.BLOCK_INPUT_STRING, inputIdx, fieldIdx);
+    super(BlockInputType.STRING, inputIdx, fieldIdx);
   }
 
   _toFieldValue(value) {
@@ -62,7 +124,7 @@ export class BlockInputString extends BlockInputRound {
 
 export class BlockInputNumber extends BlockInputRound {
   constructor(inputIdx, fieldIdx) {
-    super(BlockTypeInfo.BLOCK_INPUT_NUMBER, inputIdx, fieldIdx);
+    super(BlockTypeInfo.BlockInputType.NUMBER, inputIdx, fieldIdx);
   }
 
   _toFieldValue(value) {
@@ -79,7 +141,7 @@ export class BlockInputNumber extends BlockInputRound {
 
 export class BlockInputBoolean extends BlockInput {
   constructor(inputIdx, fieldIdx) {
-    super(BlockTypeInfo.BLOCK_INPUT_BOOLEAN, inputIdx, fieldIdx);
+    super(BlockTypeInfo.BlockInputType.BOOLEAN, inputIdx, fieldIdx);
   }
 
   setValue(block, value) {
@@ -96,7 +158,7 @@ export class BlockInputBoolean extends BlockInput {
 
 export class BlockInputColour extends BlockInput {
   constructor(inputIdx, fieldIdx) {
-    super(BlockTypeInfo.BLOCK_INPUT_COLOUR, inputIdx, fieldIdx);
+    super(BlockTypeInfo.BlockInputType.COLOUR, inputIdx, fieldIdx);
   }
 
   setValue(block, value) {
@@ -106,6 +168,16 @@ export class BlockInputColour extends BlockInput {
   }
 }
 
+/**
+ * @typedef BlockInputEnumOption
+ * @property {string} value The internal name of this input option
+ * @property {string} string The localized name of this input option.
+ */
+
+/**
+ * A block input that can be one of a list of values.
+ * Usually represented by a dropdown menu in Scratch.
+ */
 export class BlockInputEnum extends BlockInput {
   static INVALID_VALUES = [
     "DELETE_VARIABLE_ID",
@@ -120,8 +192,14 @@ export class BlockInputEnum extends BlockInput {
     "createBroadcast",
   ];
 
+  /**
+   * @param {Array} options 
+   * @param {number} inputIdx 
+   * @param {number} fieldIdx 
+   */
   constructor(options, inputIdx, fieldIdx) {
-    super(BlockTypeInfo.BLOCK_INPUT_ENUM, inputIdx, fieldIdx);
+    super(BlockTypeInfo.BlockInputType.ENUM, inputIdx, fieldIdx);
+    /** @type {BlockInputEnumOption[]} */
     this.values = [];
     for (let i = 0; i < options.length; i++) {
       if (typeof options[i][1] === "string" && BlockInputEnum.INVALID_VALUES.indexOf(options[i][1]) === -1) {
@@ -130,15 +208,22 @@ export class BlockInputEnum extends BlockInput {
     }
   }
 
+  /**
+   * @param {BlockInputEnumOption} value 
+   */
   setValue(block, value) {
     if (this.values.indexOf(value) === -1) throw new Error("Invalid enum value. Expected item from the options list.");
     this.getField(block).setValue(value.value);
   }
 }
 
+/**
+ * A block input that is a stack of blocks.
+ * The 'if' block has a single block input, the 'if else' block has two block inputs.
+ */
 export class BlockInputBlock extends BlockInput {
   constructor(inputIdx, fieldIdx) {
-    super(BlockTypeInfo.BLOCK_INPUT_BLOCK, inputIdx, fieldIdx);
+    super(BlockTypeInfo.BlockInputType.BLOCK, inputIdx, fieldIdx);
   }
 
   setValue(block, value) {
@@ -153,16 +238,23 @@ export class BlockInputBlock extends BlockInput {
   }
 }
 
+/**
+ * Because everyone was thinking "You know what Scratch really needs, ANOTHER way to represent blocks!"
+ * 
+ * Another way to represent a Scratch block.
+ */
 export class BlockInstance {
   constructor(typeInfo, ...inputs) {
-    /**
-     * @type {BlockTypeInfo}
-     * @public
-     * */
+    /** @type {BlockTypeInfo} */
     this.typeInfo = typeInfo;
+    /** @type {Array} */
     this.inputs = inputs ?? [];
   }
 
+  /**
+   * Creates a real Scratch block from this imaginary representation.
+   * @returns {*} A 'workspace form' block.
+   */
   createWorkspaceForm() {
     if (this.inputs.length !== this.typeInfo.inputs.length)
       throw new Error("Wrong number of inputs to block. Expected " + this.inputs.length);
@@ -176,6 +268,10 @@ export class BlockInstance {
   }
 }
 
+/**
+ * An enum for the different shapes of blocks.
+ * Contains information on what each type of block can do.
+ */
 export class BlockShape {
   static Round = new BlockShape(false, false, true);
   static Boolean = new BlockShape(false, false, true);
@@ -198,20 +294,25 @@ export class BlockShape {
   }
 
   constructor(canStackUp, canStackDown, canBeRound) {
+    /** @type {boolean} Can blocks be stacked above this block? */
     this.canStackUp = canStackUp;
+    /** @type {boolean} Can blocks be stacked below this block? */
     this.canStackDown = canStackDown;
+    /** @type {boolean} Does this block fit into a round hole? */
     this.canBeRound = canBeRound;
   }
 }
 
+/**
+ * A type of Scratch block, like 'move () steps'. Every instance of the 'move () steps'
+ * block shares this type info.
+ */
 export class BlockTypeInfo {
-  static BLOCK_INPUT_STRING = 0;
-  static BLOCK_INPUT_NUMBER = 1;
-  static BLOCK_INPUT_BOOLEAN = 2;
-  static BLOCK_INPUT_COLOUR = 3;
-  static BLOCK_INPUT_ENUM = 4;
-  static BLOCK_INPUT_BLOCK = 5;
 
+  /**
+   * @param {*} block Block in workspace form
+   * @returns {string} The block's category
+   */
   static getBlockCategory(block) {
     if (block.type === "procedures_call") {
       if (SABlocks.getCustomBlock(block.getProcCode())) return "addon-custom-block";
@@ -224,6 +325,12 @@ export class BlockTypeInfo {
     return block.category_;
   }
 
+  /**
+   * Enumerates all the different types of blocks, given a workspace.
+   * @param {Blockly} Blockly 
+   * @param {*} workspace 
+   * @returns {BlockTypeInfo[]}
+   */
   static getBlocks(Blockly, workspace) {
     const flyoutWorkspace = workspace.getToolbox()?.flyout_.getWorkspace();
     if (!flyoutWorkspace) return [];
@@ -246,15 +353,32 @@ export class BlockTypeInfo {
   }
 
   constructor(workspace, Blockly, workspaceForm, domForm) {
+    /** @type {string} */
     this.id = workspaceForm.id;
     this.workspaceForm = workspaceForm;
     this.domForm = domForm;
+    /** @type {BlockShape} */
     this.shape = BlockShape.getBlockShape(this.workspaceForm);
+    /** @type {string} */
     this.category = BlockTypeInfo.getBlockCategory(this.workspaceForm);
     this.workspace = workspace;
     this.Blockly = Blockly;
 
+    /** 
+     * A list of all the 'parts' of this block. Each part is either an instance
+     * of BlockInput or a string for some text which is a part of a block.
+     * 
+     * For example, for the 'say' block, the first element of the array would be
+     * the string 'say', and the second element would be a BlockInput of type 
+     * BlockInputString.
+     * @type {(BlockInput | string)[]} 
+     */
     this.parts = [];
+    /** 
+     * A list of all this block's inputs. The same as this.parts, but with the 
+     * strings omitted.
+     * @type {BlockInput[]}
+     */
     this.inputs = [];
 
     const addInput = (input) => {
@@ -281,6 +405,7 @@ export class BlockTypeInfo {
           case "/static/blocks-media/rotate-left.svg":
             // TODO
             break;
+          // TODO Pen omission
           case "/static/blocks-media/repeat.svg":
             break;
         }
@@ -321,6 +446,11 @@ export class BlockTypeInfo {
     }
   }
 
+  /**
+   * Creates a block of this type with the given inputs
+   * @param  {...any} inputs 
+   * @returns {BlockInstance}
+   */
   createBlock(...inputs) {
     return new BlockInstance(this, ...inputs);
   }
