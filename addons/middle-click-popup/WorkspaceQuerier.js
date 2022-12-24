@@ -2,11 +2,11 @@
  * @file Contains all the logic for the parsing of queries by the {@link WorkspaceQuerier}.
  * I'm really sorry if somebody other than me ever has to debug this
  * Wish you luck <3
- * 
- * Once you *think* you understand the function of the major classes, read the docs on 
+ *
+ * Once you *think* you understand the function of the major classes, read the docs on
  * {@link WorkspaceQuerier._createTokenGroups} for some more specifics on the algoithm works,
  * and to achieve maximum enlightenment.
- * 
+ *
  * @author Tacodude
  */
 
@@ -14,18 +14,18 @@ import { BlockInputType, BlockInstance, BlockShape, BlockTypeInfo } from "./Bloc
 
 /**
  * A token represents a part of a query, and how that part of the query is interpereted.
- * 
+ *
  * A token is a part of a query that is interpereted in a specific way. In the query
  * '1 + 69 = Hello World', the base tokens are '1', '+', '60', '=' and 'Hello World'.
  * Each token contains where in the query it is located and what {@link TokenType} it is.
- * 
+ *
  * Sometimes the same section of a query has multiple tokens because there are differnt
  * interpetations of the type of token it is. For example, in the query 'Hello = and', the
  * 'and' could be interpereted as a string, resulting in `< "Hello" = "and" >` or it could
  * be interpereted as the block 'and', resulting in `< < "Hello" = "" > and <> >`. Both of
  * these interpertations are valid, so there would be two tokens for 'and', one for the
  * block and the other for the string.
- * 
+ *
  * Tokens are a heriarchy, and some tokens encapsulate other tokens. Going back to the
  * '1 + 69 = Hello World' example, there are two tokens which encapsulate multiple tokens,
  * there is a token for the whole '1 + 69' section (A token of type = {@link TokenTypeBlock})
@@ -37,12 +37,12 @@ import { BlockInputType, BlockInstance, BlockShape, BlockTypeInfo } from "./Bloc
 class Token {
   /**
    * @param {number} start
-   * @param {number} end 
-   * @param {TokenType} type 
-   * @param {*} value 
-   * @param {number} score 
-   * @param {number} precedence 
-   * @param {boolean} isTruncated 
+   * @param {number} end
+   * @param {TokenType} type
+   * @param {*} value
+   * @param {number} score
+   * @param {number} precedence
+   * @param {boolean} isTruncated
    */
   constructor(start, end, type, value, score = 100, precedence = -1, isTruncated = false) {
     /** @type {number} The index of the first letter of this token in the query */
@@ -67,17 +67,17 @@ class Token {
      * Sometimes, tokens are trauncated. Imagine the query 'say Hello for 10 se', here the last
      * token should be 'seconds', but it's trauncated. For this token, the isTruncated value is set
      * to true. Additionally, the token for the whole block (which contains the tokens 'say', 'Hello',
-     * 'for', '10' and 'se') also has it's isTrauncated value set to true, because it contains a 
+     * 'for', '10' and 'se') also has it's isTrauncated value set to true, because it contains a
      * trunacted token.
-     * @type {boolean} 
+     * @type {boolean}
      */
     this.isTruncated = isTruncated;
   }
 
   /**
    * @see {TokenType.createBlockValue}
-   * @param {QueryInfo} query 
-   * @returns 
+   * @param {QueryInfo} query
+   * @returns
    */
   createBlockValue(query) {
     return this.type.createBlockValue(this, query);
@@ -87,17 +87,16 @@ class Token {
 /**
  * The parent of any class that can create tokens given a query and a location within that
  * query to search.
- * 
+ *
  * As the same token can have multiple interpertations (see {@link Token}), every token
  * provider can return multiple tokens for the same index. The {@link parseTokens} function
- * finds tokens which start at an index. 
- * 
+ * finds tokens which start at an index.
+ *
  * @abstract
  */
 class TokenProvider {
-
   /**
-   * @param {boolean} shouldCache Can the results of this token provider be stored? True 
+   * @param {boolean} shouldCache Can the results of this token provider be stored? True
    * if {@link parseTokens} will always return the same thing for the same inputs or if
    * this token provider already caches it's result, so caching it again is redundant.
    */
@@ -121,7 +120,7 @@ class TokenProvider {
 /**
  * A token provider which wraps around another token provider, always retuning a blank token in
  * addition to whatever the inner token provider returns.
- * 
+ *
  * Used for tokens that can possibiliy be ommited, like numbers. For the root token of the query
  * '1 +', it's subtokens are '1', '+' and a blank token.
  */
@@ -147,7 +146,7 @@ class TokenProviderOptional extends TokenProvider {
  */
 class TokenProviderSingleCache extends TokenProvider {
   /**
-   * @param {TokenProvider} inner 
+   * @param {TokenProvider} inner
    */
   constructor(inner) {
     super(false);
@@ -158,7 +157,7 @@ class TokenProviderSingleCache extends TokenProvider {
       this.cache = [];
       /** @type {number?} */
       this.cacheQueryID = null;
-    }  
+    }
   }
 
   *parseTokens(query, idx) {
@@ -209,7 +208,7 @@ class TokenProviderGroup extends TokenProvider {
 
   /**
    * Adds token providers to this token provider group.
-   * @param  {...TokenProvider} providers 
+   * @param  {...TokenProvider} providers
    */
   pushProviders(...providers) {
     if (!this.hasCachable)
@@ -282,10 +281,10 @@ class TokenProviderGroup extends TokenProvider {
 
 /**
  * A class representing the type of a token (see {@link Token.type})
- * 
+ *
  * All token types extend from {@link TokenProvider} and they provide all the tokens
  * of their type they can find.
- * 
+ *
  * @abstract
  */
 class TokenType extends TokenProvider {
@@ -296,11 +295,11 @@ class TokenType extends TokenProvider {
 
     /**
      * If we see this token, should we know what block it's connected to?
-     * 
+     *
      * IE TokenTypeStringEnum is a defining feature because we can narrow down
      * what block it's from based only on it's value. TokenTypeStringLiteral is
      * not as it could be a part of lot's of different blocks.
-     * 
+     *
      * Used to help eliminate some dodgey interpertations of queries, if a block
      * has no subtokens marked a defining feature it's disguarded.
      * @type {boolean}
@@ -309,13 +308,13 @@ class TokenType extends TokenProvider {
     /** @type {boolean} Is this token type always represented by the same string of characters? */
     this.isConstant = false;
     /** @type {boolean} Does this token contain other tokens? */
-    this.hasSubTokens = false; 
+    this.hasSubTokens = false;
   }
 
   /**
    * Turns `token` into a value which can be passed into the {@link BlockTypeInfo} constructor.
-   * @param {Token} token 
-   * @param {QueryInfo} query 
+   * @param {Token} token
+   * @param {QueryInfo} query
    * @returns {*}
    */
   createBlockValue(token, query) {
@@ -324,9 +323,9 @@ class TokenType extends TokenProvider {
 
   /**
    * I'm probably gonna redo how this works.
-   * @param {Token} token 
-   * @param {QueryInfo} query 
-   * @param {boolean[]} autocomplete 
+   * @param {Token} token
+   * @param {QueryInfo} query
+   * @param {boolean[]} autocomplete
    */
   createText(token, query, autocomplete) {
     throw new Error("Sub-class must override abstract method.");
@@ -367,7 +366,7 @@ class TokenTypeBlank extends TokenType {
  * Represents a token who's value must be one of a predetermined set of stirngs.
  * For example, a variable token like the one in `set [my variable] to x` is a string enum,
  * as the value must be one of a set of strings.
- * 
+ *
  * String enums are also used for values that can only be one specific value (like the 'set' from
  * `set [my variable] to x`). These cases are just string enums with one possible value.
  */
@@ -377,7 +376,7 @@ class StringEnum {
    */
   static FullTokenType = class extends TokenType {
     /**
-     * @param {StringEnum} stringEnum 
+     * @param {StringEnum} stringEnum
      */
     constructor(stringEnum) {
       super();
@@ -401,18 +400,18 @@ class StringEnum {
   /**
    * Griffpatch waneted to be able to query things like 'br p b' and have it suggest
    * `broadcast [Paint Block]`. GriffTokenType tokens are for these instances where
-   * everything but the first letter can be ommited (hense, this is called the 
+   * everything but the first letter can be ommited (hense, this is called the
    * GriffTokenType™)
-   * 
+   *
    * These results cannot just be a part of {@link FullTokenType} because they are used in
    * different places. See {@link TokenTypeBlock.createBlockTokenTypes} for more info on how griff
    * tokens work.
-   * 
+   *
    * I may change how this works later, but that's future me's problem.
    */
   static GriffTokenType = class extends TokenType {
     /**
-     * @param {StringEnum} stringEnum 
+     * @param {StringEnum} stringEnum
      */
     constructor(enumValues) {
       super();
@@ -487,7 +486,7 @@ class StringEnum {
    */
 
   /**
-   * @param {(import("./BlockTypeInfo").BlockInputEnumOption[]} values 
+   * @param {(import("./BlockTypeInfo").BlockInputEnumOption[]} values
    */
   constructor(values) {
     /** @type {StringEnumValue[]} */
@@ -526,8 +525,8 @@ class StringEnum {
    * Gets a list of FullTokenType tokens for this string enum at idx. This can be though of as an
    * implimentation of {@link FullTokenType.parseTokens}, but it's cached so {@link GriffTokenType} can use
    * it to without repeating the search.
-   * @param {QueryInfo} query 
-   * @param {number} idx 
+   * @param {QueryInfo} query
+   * @param {number} idx
    * @returns {Token?[]} Map of value indecies to their corresponding tokens.
    */
   getFullValues(query, idx) {
@@ -581,7 +580,7 @@ class StringEnum {
 class TokenTypeStringLiteral extends TokenType {
   static TERMINATORS = [undefined, " ", "+", "-", "*", "/", "=", "<", ">", "(", ")"];
 
-  /** 
+  /**
    * Each time we encounter a 'terminator' we have to return the string we've read so far as a
    * possible interpertation. If we didn't, when looking for a string at index 4 of 'say Hello
    * World for 10 seconds' we would just return 'Hello World for 10 seconds', leading to the
@@ -671,7 +670,7 @@ class TokenTypeColor extends TokenType {
  */
 class TokenTypeBrackets extends TokenType {
   /**
-   * @param {TokenProvider} tokenProvider 
+   * @param {TokenProvider} tokenProvider
    */
   constructor(tokenProvider) {
     super();
@@ -722,15 +721,15 @@ class TokenTypeBrackets extends TokenType {
 class TokenTypeBlock extends TokenType {
   /**
    * Creates all the possible block token types for a given block.
-   * 
+   *
    * Note that each block has two token types, one version is allowed to use griff
    * tokens and the other isn't. The block that supports griff tokens doesn't support
    * nested blocks. This is needed because queries like 'i t = t' have a rediculus number
    * of possible interpertations ('i t = t' has 4941), so to avoid this we disallow
    * nested blocks when you're using griff tokens.
-   * 
-   * @param {WorkspaceQuerier} querier 
-   * @param {*} block 
+   *
+   * @param {WorkspaceQuerier} querier
+   * @param {*} block
    * @returns {TokenTypeBlock[]} The possible block token types.
    */
   static createBlockTokenTypes(querier, block) {
@@ -790,21 +789,21 @@ class TokenTypeBlock extends TokenType {
   }
 
   /**
-   * @param {BlockInstance} block 
-   * @param {TokenProvider[]} tokenProviders 
+   * @param {BlockInstance} block
+   * @param {TokenProvider[]} tokenProviders
    * @private
    */
   constructor(block, tokenProviders) {
     super();
     this.block = block;
-    /** 
+    /**
      * The list of token types that make up this block.
-     * 
+     *
      * For example, for the non-griff version of the 'say' block this array would contains two
      * providers, the first is a {@link StringEnum.FullTokenType} containing only the value 'say'
      * and the second is equal to querier.tokenGroupString.
-     * 
-     * @type {TokenProvider[]} 
+     *
+     * @type {TokenProvider[]}
      */
     this.tokenProviders = tokenProviders;
     this.hasSubTokens = true;
@@ -836,14 +835,14 @@ class TokenTypeBlock extends TokenType {
    * Parse all the tokens from this.tokenProviders[tokenProviderIdx] then
    * recursively call this for the next token. Returns a list of tokens for
    * each combination of possible interpertations of the subtokens.
-   * 
+   *
    * Note that the tokens in the returned token arrays are in reverse to the
    * order of their providers in this.tokenProviders, just to confuse you :P
-   * 
-   * @param {number} idx 
-   * @param {number} tokenProviderIdx 
-   * @param {QueryInfo} query 
-   * @param {boolean} parseSubSubTokens 
+   *
+   * @param {number} idx
+   * @param {number} tokenProviderIdx
+   * @param {QueryInfo} query
+   * @param {boolean} parseSubSubTokens
    * @yields {Token[]}
    */
   *_parseSubtokens(idx, tokenProviderIdx, query, parseSubSubTokens = true) {
@@ -905,7 +904,7 @@ class TokenTypeBlock extends TokenType {
 }
 
 /**
- * A single interpertation of a query. 
+ * A single interpertation of a query.
  */
 export class QueryResult {
   constructor(query, token) {
@@ -916,7 +915,7 @@ export class QueryResult {
     this.query = query;
     /**
      * The root token of this result.
-     * 
+     *
      * The root token is a token which encapulates the entire query.
      * @type {Token}
      */
@@ -962,7 +961,7 @@ class QueryInfo {
   }
 
   /**
-   * @param {string} str 
+   * @param {string} str
    * @param {number} idx The index to start at.
    * @returns {number} The index of the next non-ignorable character in str, after idx.
    */
@@ -980,7 +979,7 @@ class QueryInfo {
   }
 
   /**
-   * @param {string} str 
+   * @param {string} str
    * @param {number} idx The index to start at.
    * @returns {number} The index of the next ignorable character in str, after idx.
    */
@@ -1014,7 +1013,7 @@ class QueryInfo {
 }
 
 /**
- * Workspace queriers keep track of all the data needed to query a given workspace (refered to as 
+ * Workspace queriers keep track of all the data needed to query a given workspace (refered to as
  * the 'workspace index') and provides the methods to execute queries on the indexed workspace.
  */
 export default class WorkspaceQuerier {
@@ -1041,7 +1040,7 @@ export default class WorkspaceQuerier {
   static MAX_TOKENS = 1000;
 
   /**
-   * @param {Blockly} blockly 
+   * @param {Blockly} blockly
    */
   constructor(blockly) {
     this.Blockly = blockly;
@@ -1087,14 +1086,14 @@ export default class WorkspaceQuerier {
 
   /**
    * Creates the token group hierarchy used by this querier.
-   * 
+   *
    * Each of these token groups represents a list of all the tokens that could be encountered
    * when we're looking for a specific type of input. For example, tokenGroupString contains all
    * the tokens that could be encountered when we're looking for a string input (like after the
    * word 'say' for the `say ()` block). tokenGroupBlocks is an interesting one, it contains all
    * the tokens that could be the root token of a query result. In practice, this just means all
    * the stackable blocks (like 'say') and all the reporter blocks (like '+').
-   * 
+   *
    * But wait, there's a problem. Blocks like `() + ()` have two inputs, both of which are numbers.
    * The issue arrises when you realize the block '+' itself also returns a number. So when we
    * try to call parseTokens on the '+' block, it will try to look for it's first parameter can
@@ -1108,11 +1107,11 @@ export default class WorkspaceQuerier {
    * tokenGroupNumber for the second time it finds only the number literal '1'. It then finds the
    * second number literal '2' and yields the block '1 + 2' which gets added to tokenGroupNumber's
    * cache. '1 + 2' then gets disguarded by the queryWorkspace function because it doesn't cover the
-   * whole query. But the '+' block's query to tokenGroupNumber never finished, so it will continue 
+   * whole query. But the '+' block's query to tokenGroupNumber never finished, so it will continue
    * and, because the first one we found is now a part of the cache, tokenGroupNumber will yield
    * '1 + 2' as a result. The + block will continue parsing, find the second '+' and the number '3'
    * and yield '(1 + 2) + 3'. No infinite loops!
-   * 
+   *
    * A consiquence of this system is something I implicitly implied in the above paragraph "when the
    * + block calls tokenGroupNumber for the second time it finds only the number literal '1'" This
    * is only true if 'TokenTypeNumberLiteral' is searched before the '+' block. This is why the order
@@ -1120,11 +1119,11 @@ export default class WorkspaceQuerier {
    * work out why, but the same parsing order problems crops up when implimenting order of operations.
    * If a suggestion that should show up isn't showing up, it's probably because the token providers
    * in one of the groups is in the wrong order. Ordering the providers within the base groups is delt
-   * with by {@link _poppulateTokenGroups} and the inter-group ordering is delt with below, by the 
+   * with by {@link _poppulateTokenGroups} and the inter-group ordering is delt with below, by the
    * order they are passed into pushProviders.
-   * 
+   *
    * I should write a CS paper on this lmao. If only I had a snappy name for the algorithm.
-   * 
+   *
    * @private
    */
   _createTokenGroups() {

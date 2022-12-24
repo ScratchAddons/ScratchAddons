@@ -194,7 +194,6 @@ export default async function ({ addon, msg, console }) {
         this.floatInputSuggestion.innerText = "";
       }
 
-
       // if (this.testGroup.children[0]) this.testGroup.children[0].remove();
       while (this.testSvg.firstChild) this.testSvg.removeChild(this.testSvg.lastChild);
 
@@ -203,13 +202,13 @@ export default async function ({ addon, msg, console }) {
 
       for (let i = 0; i < this.queryResults.length && i < 10; i++) {
         let container = this.testSvg.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "g"));
-        
+
         let blockComponent = renderBlock(this.queryResults[i].createBlock(), container);
         var xTranslation = 0;
         if (blockComponent.width > canvasWidth) {
           xTranslation = (canvasWidth - blockComponent.width) * blockScale;
         }
-  
+
         container.setAttribute("transform", `translate(${xTranslation}, ${i * 40 + 20}) scale(0.65)`);
       }
 

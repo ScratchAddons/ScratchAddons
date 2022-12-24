@@ -4,7 +4,6 @@
  * @author Tacodude
  */
 
-
 import { BlockShape, BlockInstance, BlockInputEnum, BlockInputBoolean, BlockInputBlock } from "./BlockTypeInfo.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
@@ -18,7 +17,7 @@ const BlockShapes = {
 
     /**
      * 'Snuggling' is my wholsome term for when a block can sit extra close to a block
-     * of the same shape as it. Take a look at the blocks ( ( "" + "" ) - "" ) and 
+     * of the same shape as it. Take a look at the blocks ( ( "" + "" ) - "" ) and
      * ( < "" = "" > - "" ), observe how there's a lot more blank space in the outer
      * block in the second example, this is because in the first example the '+' block
      * can snuggle with the '-' block.
@@ -93,7 +92,8 @@ const BlockShapes = {
     padding: 16,
     minWidth: 45,
     backgroundPath: (width) =>
-      `M -4 -20 a 4 4 0 0 1 4 -4 H ${width + 8
+      `M -4 -20 a 4 4 0 0 1 4 -4 H ${
+        width + 8
       } a 4 4 0 0 1 4 4 v 2 c 0 2 -1 3 -2 4 l -4 4 c -1 1 -2 2 -2 4 v 12 c 0 2 1 3 2 4 l 4 4 c 1 1 2 2 2 4 v 2 a 4 4 0 0 1 -4 4 H 0 a 4 4 0 0 1 -4 -4 v -2 c 0 -2 -1 -3 -2 -4 l -4 -4 c -1 -1 -2 -2 -2 -4 v -12 c 0 -2 1 -3 2 -4 l 4 -4 c 1 -1 2 -2 2 -4 z`,
   },
 };

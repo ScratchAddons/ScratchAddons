@@ -17,16 +17,16 @@ export const BlockInputType = {
   COLOUR: 3,
   ENUM: 4,
   BLOCK: 5,
-}
+};
 
-/** 
+/**
  * @abstract
  */
 export class BlockInput {
   /**
-   * @param {BlockInputType} type 
-   * @param {number} inputIdx 
-   * @param {number} fieldIdx 
+   * @param {BlockInputType} type
+   * @param {number} inputIdx
+   * @param {number} fieldIdx
    */
   constructor(type, inputIdx, fieldIdx) {
     if (this.constructor == BlockInput) throw new Error("Abstract classes can't be instantiated.");
@@ -38,15 +38,15 @@ export class BlockInput {
      * The index of this input in the workspace version of the block's field array.
      * The speical case of -1 means that in the workspace version, this input is inside a sub-block,
      * that has been abstracted away.
-     *  @type {number} 
+     *  @type {number}
      */
     this.fieldIdx = fieldIdx;
   }
 
   /**
-   * Sets the field this input refers to on a block to a value.  
-   * @param {BlockInstance} block 
-   * @param {*} value 
+   * Sets the field this input refers to on a block to a value.
+   * @param {BlockInstance} block
+   * @param {*} value
    * @abstract
    */
   setValue(block, value) {
@@ -55,17 +55,17 @@ export class BlockInput {
 
   /**
    * Gets the input this block input refers to on block.
-   * @param {BlockInstance} block 
+   * @param {BlockInstance} block
    * @returns {*}
    * @protected
    */
   getInput(block) {
     return block.inputList[this.inputIdx];
   }
-  
+
   /**
    * Gets the field this block input refers to on block.
-   * @param {BlockInstance} block 
+   * @param {BlockInstance} block
    * @returns {*}
    * @protected
    */
@@ -102,7 +102,7 @@ export class BlockInputRound extends BlockInput {
   /**
    * Converts a value passed in to setValue to a value we can set the block's field to.
    * @param {*} value
-   * @protected 
+   * @protected
    */
   _toFieldValue(value) {
     throw new Error("Sub-class must override abstract method.");
@@ -193,9 +193,9 @@ export class BlockInputEnum extends BlockInput {
   ];
 
   /**
-   * @param {Array} options 
-   * @param {number} inputIdx 
-   * @param {number} fieldIdx 
+   * @param {Array} options
+   * @param {number} inputIdx
+   * @param {number} fieldIdx
    */
   constructor(options, inputIdx, fieldIdx) {
     super(BlockTypeInfo.BlockInputType.ENUM, inputIdx, fieldIdx);
@@ -209,7 +209,7 @@ export class BlockInputEnum extends BlockInput {
   }
 
   /**
-   * @param {BlockInputEnumOption} value 
+   * @param {BlockInputEnumOption} value
    */
   setValue(block, value) {
     if (this.values.indexOf(value) === -1) throw new Error("Invalid enum value. Expected item from the options list.");
@@ -240,7 +240,7 @@ export class BlockInputBlock extends BlockInput {
 
 /**
  * Because everyone was thinking "You know what Scratch really needs, ANOTHER way to represent blocks!"
- * 
+ *
  * Another way to represent a Scratch block.
  */
 export class BlockInstance {
@@ -308,7 +308,6 @@ export class BlockShape {
  * block shares this type info.
  */
 export class BlockTypeInfo {
-
   /**
    * @param {*} block Block in workspace form
    * @returns {string} The block's category
@@ -327,8 +326,8 @@ export class BlockTypeInfo {
 
   /**
    * Enumerates all the different types of blocks, given a workspace.
-   * @param {Blockly} Blockly 
-   * @param {*} workspace 
+   * @param {Blockly} Blockly
+   * @param {*} workspace
    * @returns {BlockTypeInfo[]}
    */
   static getBlocks(Blockly, workspace) {
@@ -364,18 +363,18 @@ export class BlockTypeInfo {
     this.workspace = workspace;
     this.Blockly = Blockly;
 
-    /** 
+    /**
      * A list of all the 'parts' of this block. Each part is either an instance
      * of BlockInput or a string for some text which is a part of a block.
-     * 
+     *
      * For example, for the 'say' block, the first element of the array would be
-     * the string 'say', and the second element would be a BlockInput of type 
+     * the string 'say', and the second element would be a BlockInput of type
      * BlockInputString.
-     * @type {(BlockInput | string)[]} 
+     * @type {(BlockInput | string)[]}
      */
     this.parts = [];
-    /** 
-     * A list of all this block's inputs. The same as this.parts, but with the 
+    /**
+     * A list of all this block's inputs. The same as this.parts, but with the
      * strings omitted.
      * @type {BlockInput[]}
      */
@@ -448,7 +447,7 @@ export class BlockTypeInfo {
 
   /**
    * Creates a block of this type with the given inputs
-   * @param  {...any} inputs 
+   * @param  {...any} inputs
    * @returns {BlockInstance}
    */
   createBlock(...inputs) {
