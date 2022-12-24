@@ -1,5 +1,5 @@
 {
-  "name": "Copy reporters",
+  "name": "Copy reporter values",
   "description": "Adds buttons to copy the value of reporter balloons and monitors.",
   "credits": [{ "name": "TheKodeToad" }],
   "tags": ["editor", "codeEditor"],
