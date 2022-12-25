@@ -27,6 +27,12 @@
   ],
   "settings": [
     {
+      "id": "editoronly",
+      "name": "Only show in editor",
+      "default": true,
+      "type": "boolean"
+    },
+    {
       "id": "showicononly",
       "name": "Show icon only",
       "default": false,
