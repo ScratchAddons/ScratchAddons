@@ -1,0 +1,33 @@
+{
+  "name": "Custom brand image",
+  "description": "Allows you to change the Scratch brand image to any image from any URL.",
+  "credits": [
+    {
+      "name": "TJ20201",
+      "link": "https://github.com/TJ20201"
+    }
+  ],
+  "versionAdded": "1.30.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "settings": [
+    {
+      "id": "imageurl",
+      "name": "Custom image url",
+      "default": "",
+      "type": "string"
+    },
+    {
+      "id": "showbrand",
+      "name": "Show brand image (TOGGLING REQUIRES PAGE REFRESH)",
+      "default": true,
+      "type": "boolean"
+    }
+  ],
+  "tags": ["community", "theme"],
+  "enabledByDefault": false
+}
