@@ -8,6 +8,10 @@
     {
       "name": "OregSam",
       "link": "https://github.com/OregSamSas"
+    },
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
     }
   ],
   "dynamicEnable": true,
@@ -40,9 +44,8 @@
     }
   ],
   "latestUpdate": {
-    "version": "1.28.0",
-    "newSettings": ["showicononly"],
-    "isMajor": false
+    "version": "1.30.0",
+    "temporaryNotice": "You can now choose whether the clone counter shows up only in the editor or also on the project page."
   },
   "tags": ["editor", "projectPlayer", "recommended"],
   "enabledByDefault": false
