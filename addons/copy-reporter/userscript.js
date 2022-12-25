@@ -1,6 +1,4 @@
 export default async function ({ addon, console, msg }) {
-  const copySvg = await fetch(addon.self.dir + "/copy.svg").then((response) => response.text());
-
   addon.tab.createEditorContextMenu(
     (ctx) => {
       // ugly hack to get the string value
@@ -57,20 +55,17 @@ export default async function ({ addon, console, msg }) {
     };
 
     if (value.length !== 0) {
-      let copyButton = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      const copyButton = document.createElement("img");
       copyButton.setAttribute("role", "button");
       copyButton.setAttribute("tabindex", "0");
       copyButton.setAttribute("alt", msg("copy-to-clipboard"));
+      // cannot be done in CSS because of a bug
       copyButton.setAttribute("width", "14px");
       copyButton.setAttribute("height", "14px");
-      copyButton.setAttribute("viewBox", "0 0 24 24");
+      copyButton.setAttribute("src", addon.self.dir + "/copy.svg");
 
-      copyButton.style.cursor = "pointer";
-      copyButton.style.float = "right";
-      copyButton.style.display = "block";
-      copyButton.style.userSelect = "none";
+      copyButton.classList.add("copy-reporter-icon");
 
-      copyButton.innerHTML = copySvg;
       copyButton.onclick = () => navigator.clipboard.writeText(value);
       valueReportBox.appendChild(copyButton);
     }

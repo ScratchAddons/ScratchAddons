@@ -1,0 +1,7 @@
+.copy-reporter-icon {
+  cursor: pointer;
+  float: right;
+  display: block;
+  user-select: none;
+  filter: var(--editorDarkMode-accent-filter, none);
+}
