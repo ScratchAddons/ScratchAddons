@@ -59,6 +59,10 @@
         {
           "id": "turbowarp",
           "name": "TurboWarp"
+        },
+        {
+          "id": "forkphorus",
+          "name": "forkphorus"
         }
       ]
     },
@@ -68,7 +72,7 @@
       "type": "boolean",
       "default": false,
       "if": {
-        "settings": { "alternativePlayer": ["turbowarp"] }
+        "settings": { "alternativePlayer": ["turbowarp", "forkphorus"] }
       }
     },
     {

@@ -83,9 +83,18 @@ export default async function ({ addon, msg }) {
     if (!showMenu) iframeElement.setAttribute("height", "260");
   };
 
+  const loadForkphorus = () => {
+    wrapperElement.dataset.player = "forkphorus";
+    iframeElement.setAttribute(
+      "src",
+      `https://forkphorus.github.io/embed.html?id=${projectId}&auto-start=${autoPlay}&ui=${showMenu}`
+    );
+  };
+
   // Start loading the players
 
   if (player === "turbowarp") loadTurboWarp();
+  else if (player === "forkphorus") loadForkphorus();
   else loadScratch();
   iframeElement.addEventListener("load", () => {
     if (iframeElement.contentDocument.querySelector(".not-available-outer") !== null) {
