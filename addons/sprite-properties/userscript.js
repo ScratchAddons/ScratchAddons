@@ -31,7 +31,7 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   // Close properties panel when mouse leaves the entire sprite panel
-  document.addEventListener(
+  document.body.addEventListener(
     "mouseleave",
     (e) => {
       if (e.target.matches('[class*="sprite-selector_sprite-selector_2KgCX"]')) {
