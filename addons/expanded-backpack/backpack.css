@@ -1,3 +1,5 @@
+/* override styles in https://github.com/LLK/scratch-gui/blob/develop/src/components/backpack/backpack.css */
+
 [class^="backpack_backpack-list"] {
     /* set height of the backpack picker, 5.5rem is the height of 1 row so multiply it by the rows setting */
     height: calc(var(--expandedBackpack-rows) * 5.5rem);
@@ -8,6 +10,8 @@
     align-items: flex-start;
     /* force horizontal wrapping and enable vertical scrolling */
     flex-wrap: wrap;
+    height: auto;
+    max-height: 100%;
 }
 
 [class*="backpack_backpack-item"] {
