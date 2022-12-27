@@ -1,22 +1,22 @@
-.sa-onion-button {
+.sa-paint-snap-button {
   position: relative;
 }
-.sa-onion-button:active {
+.sa-paint-snap-button:active {
   background-color: hsla(215, 100%, 65%, 0.2);
 }
-.sa-onion-button[data-enabled="true"] .sa-onion-image {
+.sa-paint-snap-button[data-enabled="true"] .sa-paint-snap-image {
   filter: brightness(0) invert(1);
 }
-.sa-onion-button[data-enabled="true"] {
+.sa-paint-snap-button[data-enabled="true"] {
   background-color: #4c97ff;
 }
 
-.sa-onion-group {
+.sa-paint-snap-group {
   position: relative;
   flex-direction: row;
 }
 
-.sa-onion-settings-wrapper {
+.sa-paint-snap-settings-wrapper {
   position: absolute;
   justify-items: center;
   left: 50%;
@@ -25,7 +25,7 @@
   display: grid;
 }
 
-.sa-onion-settings {
+.sa-paint-snap-settings {
   position: absolute;
   bottom: 0px;
   /* based on the styles for the color dropdown */
@@ -46,20 +46,19 @@
   flex-direction: column;
   gap: 0.25em;
 }
-.sa-onion-settings[data-visible="true"] {
+.sa-paint-snap-settings[data-visible="true"] {
   bottom: calc(100% + 22px);
   pointer-events: auto;
   opacity: 1;
 }
 
-.sa-onion-settings-line {
+.sa-paint-snap-settings-line {
   display: flex;
   justify-content: flex-end;
   align-items: baseline;
-  gap: 0.25em;
 }
 
-.sa-onion-settings-input {
+.sa-paint-snap-settings-input {
   position: absolute;
   top: 0;
   left: 0;
@@ -74,23 +73,50 @@
   outline: 0;
 }
 
-.sa-onion-settings-input::-webkit-outer-spin-button,
-.sa-onion-settings-input::-webkit-inner-spin-button {
+.sa-paint-snap-settings-input::-webkit-outer-spin-button,
+.sa-paint-snap-settings-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-.sa-onion-settings-tip {
+.sa-paint-snap-settings-tip {
   position: absolute;
   bottom: 0;
   transform: translateY(100%);
   right: calc(50% - 7px);
 }
-.sa-onion-settings-polygon {
+.sa-paint-snap-settings-polygon {
   fill: white;
   stroke: #ddd;
 }
 
-.sa-onion-label {
+.sa-paint-snap-settings-separator {
+  flex-grow: 1;
+  border-bottom: 1px solid currentColor;
+  margin: 4px;
+  opacity: 0.25;
+}
+
+.sa-paint-snap-settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.sa-paint-snap-settings-section-title {
+  font-size: 1.2em;
+  font-weight: 500;
+  align-self: flex-start;
+  margin-left: 4px;
+}
+
+.sa-paint-snap-settings-label {
   white-space: nowrap;
+}
+
+.sa-paint-snap-image[data-shrink="true"] {
+  height: 1em;
+  width: 1em;
 }
