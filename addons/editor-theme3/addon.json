@@ -152,14 +152,14 @@
     },
     {
       "url": "forums/base.css",
-      "matches": ["editingScreens"],
+      "matches": ["https://scratch.mit.edu/discuss/*"],
       "if": {
         "settings": { "forums": true }
       }
     },
     {
       "url": "forums/black_text.css",
-      "matches": ["editingScreens"],
+      "matches": ["https://scratch.mit.edu/discuss/*"],
       "if": {
         "settings": {
           "forums": true,
@@ -169,7 +169,7 @@
     },
     {
       "url": "forums/color_on_white.css",
-      "matches": ["editingScreens"],
+      "matches": ["https://scratch.mit.edu/discuss/*"],
       "if": {
         "settings": {
           "forums": true,
@@ -179,7 +179,7 @@
     },
     {
       "url": "forums/color_on_black.css",
-      "matches": ["editingScreens"],
+      "matches": ["https://scratch.mit.edu/discuss/*"],
       "if": {
         "settings": {
           "forums": true,

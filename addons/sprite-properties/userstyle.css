@@ -1,0 +1,81 @@
+[class^="sprite-info_sprite-info_"] {
+  height: 0;
+  padding: 0 0.75rem;
+  overflow: hidden;
+  transition-property: height, padding, transform;
+  transition-duration: var(--spriteProperties-transitionDuration);
+}
+
+.sa-hide-sprite-properties [class^="sprite-info_sprite-info_"] {
+  border: none;
+}
+
+[class^="sprite-selector_scroll-wrapper_"] {
+  height: 100%;
+  transition-property: height;
+  transition-duration: var(--spriteProperties-transitionDuration);
+}
+
+.sa-show-sprite-properties [class^="sprite-info_sprite-info_"] {
+  /* The height needs to be known for the animation to work.
+     6.5rem + 5px is the exact height of sprite info when
+     this addon is enabled:
+       0.75rem (top padding)
+     + 2rem + 2px (.icon-wrappers in the first row)
+     + 0.5rem (margin between rows)
+     + 2rem + 2px (.icon-wrappers in the second row)
+     + 1.25rem (close button)
+     + 1px (bottom border) */
+  height: calc(6.5rem + 5px);
+  padding: 0.75rem;
+  padding-bottom: 0;
+}
+
+.sa-show-sprite-properties [class^="sprite-selector_scroll-wrapper_"] {
+  height: calc(100% - 6.5rem - 5px);
+}
+
+.sa-sprite-properties-btn {
+  display: none !important;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  width: 1rem;
+  height: 1rem;
+  top: -2px;
+  left: -2px;
+  border: none;
+  border-radius: 100%;
+  background-color: var(--editorDarkMode-primary, hsla(215, 100%, 65%, 1));
+}
+
+.sa-hide-sprite-properties [class*="sprite-selector-item_is-selected"] .sa-sprite-properties-btn {
+  display: flex !important;
+}
+
+.sa-sprite-properties-btn img {
+  width: calc(1rem - 6px);
+  height: calc(1rem - 6px);
+  filter: var(--editorDarkMode-primary-filter);
+}
+
+.sa-sprite-properties-close-btn {
+  width: 100%;
+  height: 1.25rem;
+  padding: 0;
+  padding-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background-color: transparent;
+}
+
+.sa-sprite-properties-close-btn img {
+  filter: var(--editorDarkMode-accent-filter);
+  transition: opacity 0.25s ease-out;
+}
+
+.sa-sprite-properties-close-btn:hover img {
+  opacity: 0.75;
+}

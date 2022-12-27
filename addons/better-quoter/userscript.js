@@ -1,5 +1,5 @@
 /* global copy_paste */
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   function getSelectionBBCode() {
     var selection = window.getSelection();
     if (selection.rangeCount > 0) {
