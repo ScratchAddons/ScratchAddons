@@ -25,5 +25,5 @@ jobs:
           days-before-close: -1
           stale-issue-label: ''
           stale-pr-label: ''
-          operations-per-run: 5
+          operations-per-run: 30
           repo-token: ${{ steps.generate-token.outputs.token }}
