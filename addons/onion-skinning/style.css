@@ -27,7 +27,7 @@
 
 .sa-onion-settings {
   position: absolute;
-  bottom: 0px;
+  bottom: 100%;
   /* based on the styles for the color dropdown */
   padding: 4px;
   border-radius: 4px;
