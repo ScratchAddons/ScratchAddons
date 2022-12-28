@@ -31,9 +31,9 @@
   ],
   "settings": [
     {
-      "id": "editoronly",
-      "name": "Only show in editor",
-      "default": true,
+      "id": "projectpage",
+      "name": "Also show on project page",
+      "default": false,
       "type": "boolean"
     },
     {
