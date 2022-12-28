@@ -52,6 +52,12 @@ export default async function ({ addon, console, msg }) {
           const enabledAddons = await addon.self.getEnabledAddons("editor");
           usp.set("addons", enabledAddons.join(","));
         }
+        // Apply the same fullscreen background color, consistently with the vanilla Scratch fullscreen behavior.
+        // It's not expected here to support dynamicDisable/dyanmicEnable of editor-dark-mode to work exactly
+        // like it does with vanilla.
+        const fullscreenBackground =
+          document.documentElement.style.getPropertyValue("--editorDarkMode-fullscreen") || "white";
+        usp.set("fullscreen-background", fullscreenBackground);
         const iframeUrl = `https://turbowarp.org/${projectId}/embed?${usp}${search}`;
         twIframe.src = "";
         scratchStage.parentElement.prepend(twIframeContainer);

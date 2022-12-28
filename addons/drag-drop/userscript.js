@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   const DRAG_OVER_CLASS = "sa-dragged-over";
 
   const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;

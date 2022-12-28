@@ -1,4 +1,4 @@
-export default async function ({ addon, msg, global, console }) {
+export default async function ({ addon, msg, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
   let mouse = { x: 0, y: 0 };
 

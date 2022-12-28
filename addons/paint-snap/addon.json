@@ -1,0 +1,110 @@
+{
+  "name": "Costume editor snapping",
+  "description": "Snap objects in the costume editor to bounding boxes and vector nodes.",
+  "tags": ["editor", "costumeEditor", "featured"],
+  "versionAdded": "1.30.0",
+  "userscripts": [
+    {
+      "matches": ["projects"],
+      "url": "userscript.js",
+      "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "matches": ["projects"],
+      "url": "userstyle.css"
+    }
+  ],
+  "settings": [
+    {
+      "type": "boolean",
+      "id": "enable-default",
+      "name": "Enable by default",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "guide-color",
+      "name": "Snapping guide color",
+      "default": "#ff0000",
+      "allowTransparency": true
+    },
+    {
+      "type": "boolean",
+      "id": "pageCenter",
+      "name": "Snap to page center",
+      "default": true
+    },
+    {
+      "type": "boolean",
+      "id": "pageAxes",
+      "name": "Snap to page x and y axes",
+      "default": true
+    },
+    {
+      "type": "boolean",
+      "id": "pageEdges",
+      "name": "Snap to page edges",
+      "default": true
+    },
+    {
+      "type": "boolean",
+      "id": "pageCorners",
+      "name": "Snap to page corners",
+      "default": false
+    },
+    {
+      "type": "boolean",
+      "id": "objectEdges",
+      "name": "Snap to object edges",
+      "default": true
+    },
+    {
+      "type": "boolean",
+      "id": "objectCenters",
+      "name": "Snap to object centers",
+      "default": true
+    },
+    {
+      "type": "boolean",
+      "id": "objectMidlines",
+      "name": "Snap to object midlines",
+      "default": true
+    },
+    {
+      "type": "boolean",
+      "id": "objectCorners",
+      "name": "Snap to object corners",
+      "default": false
+    },
+    {
+      "type": "boolean",
+      "id": "boxCenter",
+      "name": "Snap from selection box center",
+      "default": true
+    },
+    {
+      "type": "boolean",
+      "id": "boxCorners",
+      "name": "Snap from selection box corners",
+      "default": false
+    },
+    {
+      "type": "boolean",
+      "id": "boxEdgeMids",
+      "name": "Snap from selection box edge midpoints",
+      "default": false
+    },
+    {
+      "type": "positive_integer",
+      "id": "threshold",
+      "name": "Snapping distance",
+      "default": 10,
+      "min": 4,
+      "max": 100
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}

@@ -360,21 +360,28 @@ export default async function ({ addon, msg, console }) {
     }
 
     getCallsToEvents() {
-      const uses = []; // Definition First, then calls to it
-      const found = {};
+      const uses = [];
+      const alreadyFound = new Set();
 
-      let topBlocks = this.workspace.getTopBlocks();
-      for (const topBlock of topBlocks) {
-        /** @type {!Array<!Blockly.Block>} */
-        let kids = topBlock.getDescendants();
-        for (const block of kids) {
-          if (block.type === "event_broadcast" || block.type === "event_broadcastandwait") {
-            const eventName = block.getChildren()[0].inputList[0].fieldRow[0].getText();
-            if (!found[eventName]) {
-              found[eventName] = block;
-              uses.push({ eventName: eventName, block: block });
-            }
-          }
+      for (const block of this.workspace.getAllBlocks()) {
+        if (block.type !== "event_broadcast" && block.type !== "event_broadcastandwait") {
+          continue;
+        }
+
+        const broadcastInput = block.getChildren()[0];
+        if (!broadcastInput) {
+          continue;
+        }
+
+        let eventName = "";
+        if (broadcastInput.type === "event_broadcast_menu") {
+          eventName = broadcastInput.inputList[0].fieldRow[0].getText();
+        } else {
+          eventName = msg("complex-broadcast");
+        }
+        if (!alreadyFound.has(eventName)) {
+          alreadyFound.add(eventName);
+          uses.push({ eventName: eventName, block: block });
         }
       }
 
@@ -611,13 +618,22 @@ export default async function ({ addon, msg, console }) {
 
         for (const id of Object.keys(blocks._blocks)) {
           const block = blocks._blocks[id];
-          // To find event broadcaster blocks, we look for the nested "event_broadcast_menu" blocks first that match the event name
-          if (block.opcode === "event_broadcast_menu" && block.fields.BROADCAST_OPTION.value === name) {
-            // Now get the parent block that is the actual broadcast or broadcast and wait
-            const broadcastBlock = blocks.getBlock(block.parent);
-            uses.push(new BlockInstance(target, broadcastBlock));
-          } else if (block.opcode === "event_whenbroadcastreceived" && block.fields.BROADCAST_OPTION.value === name) {
+          if (block.opcode === "event_whenbroadcastreceived" && block.fields.BROADCAST_OPTION.value === name) {
             uses.push(new BlockInstance(target, block));
+          } else if (block.opcode === "event_broadcast" || block.opcode === "event_broadcastandwait") {
+            const broadcastInputBlockId = block.inputs.BROADCAST_INPUT.block;
+            const broadcastInputBlock = blocks._blocks[broadcastInputBlockId];
+            if (broadcastInputBlock) {
+              let eventName;
+              if (broadcastInputBlock.opcode === "event_broadcast_menu") {
+                eventName = broadcastInputBlock.fields.BROADCAST_OPTION.value;
+              } else {
+                eventName = msg("complex-broadcast");
+              }
+              if (eventName === name) {
+                uses.push(new BlockInstance(target, block));
+              }
+            }
           }
         }
       }

@@ -126,10 +126,13 @@
   "zebra-striping",
   "find-bar",
   "jump-to-def",
+  "paint-snap",
   "vol-slider",
   "pick-colors-from-stage",
+  "sprite-properties",
   "rename-broadcasts",
   "middle-click-popup",
+  "number-pad",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
