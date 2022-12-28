@@ -1,7 +1,7 @@
 export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
-  let alsoShowOnProjectPage = addon.settings.get("editoronly");
+  let alsoShowOnProjectPage = addon.settings.get("projectpage");
   let showIconOnly = addon.settings.get("showicononly");
 
   if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
