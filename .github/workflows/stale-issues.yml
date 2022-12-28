@@ -8,7 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'ScratchAddons'
     steps:
-      - uses: actions/stale@v6
+      - name: Generate token
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.BOT_APP_ID }}
+          private_key: ${{ secrets.BOT_PRIVATE_KEY }}
+      - name: Execute Action
+        uses: actions/stale@v6
         with:
           stale-issue-message: 'Ping! There has been no activity for 7 days.'
           stale-pr-message: 'Ping! There has been no activity for 7 days.'
@@ -18,6 +25,4 @@ jobs:
           stale-issue-label: ''
           stale-pr-label: ''
           operations-per-run: 5
-    permissions:
-      issues: write
-      pull-requests: write
+          repo-token: ${{ steps.generate-token.outputs.token }}
