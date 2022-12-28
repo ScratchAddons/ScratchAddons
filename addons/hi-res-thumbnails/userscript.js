@@ -21,7 +21,8 @@ export default async function ({ addon, console }) {
     }
   });
   main: while (true) {
-    const image = await addon.tab.waitForElement("img", {
+    // Images in forum posts are ignored.
+    const image = await addon.tab.waitForElement("img:not(.postmsg *)", {
       markAsSeen: true,
     });
 
