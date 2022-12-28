@@ -35,8 +35,6 @@ export default async function ({ addon, console }) {
       let rowsSetting = addon.settings.get("rows");
       rowsSetting.forEach((item, i) => {
         let specificRow = rowsWithIds.find((e) => e.key == item.id);
-        console.log(item.id);
-        console.log(specificRow);
         if (specificRow) specificRow.obj.style.order = i;
       });
     });

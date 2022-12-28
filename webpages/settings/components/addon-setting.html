@@ -35,7 +35,7 @@
                 :table-child="true"
                 :setting="getTableSetting(id)"
                 :addon-settings="row"
-                :class="{'el': !setting.enableEditing}"
+                :class="{'el': setting.disableEditing}"
               ></addon-setting>
             </div>
           </div>

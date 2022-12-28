@@ -19,6 +19,7 @@
       "name": "Rows",
       "id": "rows",
       "type": "table",
+      "disableEditing": true,
       "default": [
         { "name": "Featured Projects", "id": "community_featured_projects" },
         { "name": "Featured Studios", "id": "community_featured_studios" },
