@@ -111,7 +111,6 @@ export default async function ({ template }) {
         return this.setting.row.find((setting) => setting.id === id);
       },
       shouldHide(id) {
-        console.log(id)
         return id == "id";
       },
       deleteTableRow(i) {
