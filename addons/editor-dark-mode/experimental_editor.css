@@ -26,11 +26,13 @@
 }
 .menu-bar_menu-bar-item_oLDa-,
 .input_input-form_l9eYg.project-title-input_title-field_en5Gd,
+.author-info_author-info_2Pliw,
 .inline-message_info_E7dNO,
 .modal_header-item_2zQTd {
   color: var(--editorDarkMode-menuBar-text);
 }
-.share-button_share-button_Nxxf0 {
+.share-button_share-button_Nxxf0,
+.menu-bar_remix-button_2LQQc {
   color: white;
 }
 .inline-message_success_1jfE0 {
