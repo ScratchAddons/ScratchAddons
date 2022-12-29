@@ -48,8 +48,8 @@ export default async function ({ addon, console }) {
     }*/
   };
   window.vm = vm;
- const init = () => {
-        const oldSpeakAndWait = vm.runtime._primitives.text2speech_speakAndWait;
+  const init = () => {
+    const oldSpeakAndWait = vm.runtime._primitives.text2speech_speakAndWait;
     vm.runtime._primitives.text2speech_speakAndWait = function (args, util) {
       const text = args.WORDS;
       console.log(text);
@@ -58,9 +58,9 @@ export default async function ({ addon, console }) {
       return oldSpeakAndWait.call(this, args, util);
     };
     vm.runtime.targets.forEach((targ) => targ.blocks.resetCache());
- }
+  };
   vm.on("RUNTIME_STARTED", init);
-  vm.on("PROJECT_START", init)
+  vm.on("PROJECT_START", init);
 
   while (true) {
     const location = await addon.tab.waitForElement(".inner > div:nth-child(2)", { markAsSeen: true });
