@@ -426,7 +426,9 @@ export default async function ({ addon, msg, console }) {
             code === "createLocalVariable" ||
             code === "createGlobalList" ||
             code === "createLocalList" ||
-            code === "createBroadcast"
+            code === "createBroadcast" ||
+            // rename-broadcasts compatibility
+            code === "RENAME_BROADCAST_MESSAGE_ID"
           ) {
             continue; // Skip these
           }
