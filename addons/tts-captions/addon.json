@@ -1,0 +1,27 @@
+{
+  "name": "TTS Captions",
+  "description": "Replaces links to the embedded site with real YouTube links.",
+  "credits": [
+    {
+      "name": "GrahamSH"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": false,
+  "versionAdded": "1.0.0",
+  "tags": ["community", "forums"],
+  "enabledByDefault": false
+}

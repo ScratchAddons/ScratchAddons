@@ -1,0 +1,55 @@
+.sa-debugger-log-outer {
+  height: 100%;
+  width: 100%;
+}
+
+.sa-debugger-log-inner {
+  position: relative;
+  overflow-y: auto;
+  font-size: 12px;
+  line-height: 1.2;
+  height: 100%;
+  contain: strict;
+}
+
+.sa-debugger-log-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 20px;
+  font-style: italic;
+}
+
+.sa-debugger-log-end {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.sa-debugger-log {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  padding-left: 4px;
+  font-family: monospace;
+}
+.sa-tts-captions-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    cursor: auto;
+    z-index: 492;
+    width: 565px;
+    height: 5rem;
+    display:flex;
+}
