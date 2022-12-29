@@ -244,6 +244,7 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .u-dropdown-searchbar:focus {
   background-color: var(--editorDarkMode-input);
   color: var(--editorDarkMode-input-text);
+  color-scheme: var(--editorDarkMode-input-colorScheme);
 }
 .u-dropdown-searchbar,
 .project-title-input_title-field_en5Gd {
@@ -623,10 +624,6 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
       transparent 75%,
       var(--editorDarkMode-accent-paintEditorBackground) 75%
     );
-}
-.sa-color-picker > .sa-color-picker-color {
-  /* Use the dark version of the browser's default button appearance. */
-  color-scheme: dark;
 }
 .Popover .resize-sensor {
   /* The <object> gets a white background if color-scheme is dark. */
