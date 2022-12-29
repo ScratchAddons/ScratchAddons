@@ -3,3 +3,8 @@
   border: 0 !important;
   border-radius: 0 !important;
 }
+
+[class*="stage_stage-overlays_"][class*="stage_full-screen_"] {
+  top: 0;
+  left: 0;
+}
