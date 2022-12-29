@@ -449,6 +449,7 @@ export default async function ({ addon, msg, console }) {
         nxt = dir === -1 ? nxt.previousSibling : nxt.nextSibling;
       }
       if (nxt) {
+        nxt.scrollIntoView({ block: "nearest" });
         this.onItemClick(nxt);
       }
     }
