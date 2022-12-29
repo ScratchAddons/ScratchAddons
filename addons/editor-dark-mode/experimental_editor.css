@@ -590,7 +590,8 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 }
 
 /* Miscellaneous styles */
-[class*="stage-wrapper_"] {
+[class*="stage-wrapper_"],
+.paint-editor_canvas-container_x2D0a {
   color: #575e75;
 }
 .sprite-selector_sprite-selector_2KgCX {
