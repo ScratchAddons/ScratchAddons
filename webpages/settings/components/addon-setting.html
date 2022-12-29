@@ -30,12 +30,12 @@
             </div>
             <div class="setting-table-row-settings">
               <addon-setting
-                v-for="(id, val) of getTableSettings(row)"
+                v-for="(id, val) of row"
                 :addon="addon"
                 :table-child="true"
                 :setting="getTableSetting(id)"
                 :addon-settings="row"
-                :class="{'el': setting.disableEditing}"
+                :class="{'disableEditing': setting.disableEditing, 'hide': shouldHide(id)}"
               ></addon-setting>
             </div>
           </div>
@@ -406,10 +406,10 @@
     border-top-left-radius: 4px;
     border-top-right-radius: 0;
   }
-  .editable {
-    background: red;
+  .hide {
+    display: none;
   }
-  .el input {
+  .disableEditing input {
     pointer-events: none;
     border: none;
   }

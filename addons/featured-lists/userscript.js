@@ -8,12 +8,16 @@ export default async function ({ addon, console }) {
     modSplashes[1].style.display = "block";
   });
   addon.self.addEventListener("reenabled", changeRowsOrder);
+  addon.settings.addEventListener("change", changeRowsOrder);
 
   async function changeRowsOrder() {
     addon.tab.waitForElement(".mod-splash").then((modSplash) => {
       // Rows are splited to 2 different elements, so order doesn't work. This code moves
       document.querySelectorAll(".mod-splash")[1]?.prepend(document.querySelectorAll(".mod-splash .box")[3]);
       document.querySelectorAll(".mod-splash")[1]?.prepend(document.querySelectorAll(".mod-splash .box")[2]);
+      
+      // Remove strange margin
+      document.querySelectorAll(".mod-splash")[1].style.marginTop = "0px";
 
       // Create list of rowsObjects and keys
       let rowsWithIds = [];
@@ -33,6 +37,7 @@ export default async function ({ addon, console }) {
 
       // Change order of rows
       let rowsSetting = addon.settings.get("rows");
+      console.log(rowsSetting)
       rowsSetting.forEach((item, i) => {
         let specificRow = rowsWithIds.find((e) => e.key == item.id);
         if (specificRow) specificRow.obj.style.order = i;
