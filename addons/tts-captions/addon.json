@@ -1,6 +1,6 @@
 {
-  "name": "TTS Captions",
-  "description": "Replaces links to the embedded site with real YouTube links.",
+  "name": "Text to Speech Captions",
+  "description": "Adds live captions for the text to speech voice.",
   "credits": [
     {
       "name": "GrahamSH"
@@ -19,9 +19,9 @@
       "runAtComplete": false
     }
   ],
-  "dynamicEnable": true,
+  "dynamicEnable": false,
   "dynamicDisable": false,
-  "versionAdded": "1.0.0",
-  "tags": ["community", "forums"],
+  "versionAdded": "1.30.0",
+  "tags": ["projectPage"],
   "enabledByDefault": false
 }
