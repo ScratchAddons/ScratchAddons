@@ -1,4 +1,8 @@
 {
   "_locale": "en",
-  "_locale_name": "English"
+  "_locale_name": "English",
+
+  "global/green-flag": "green flag",
+  "global/clockwise": "clockwise",
+  "global/anticlockwise": "anti-clockwise"
 }

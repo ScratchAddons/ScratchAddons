@@ -15,7 +15,7 @@ export default async function ({ addon, msg, console }) {
       this.prevVal = "";
 
       this.DROPDOWN_BLOCK_LIST_MAX_ROWS = 25;
-      this.querier = new WorkspaceQuerier(Blockly);
+      this.querier = new WorkspaceQuerier(Blockly, msg);
 
       this.createDom();
     }
@@ -220,10 +220,7 @@ export default async function ({ addon, msg, console }) {
       if (e.keyCode == 9) {
         // Tab
         if (this.queryAutocompleteResult?.isTruncated) {
-          this.floatInput.innerText = this.queryAutocompleteResult.autocomplete.replaceAll(
-            " ",
-            String.fromCharCode(160)
-          );
+          this.floatInput.innerText = this.queryAutocompleteResult.autocomplete;
           // Move cursor to the end of the newly inserted text
           let selection = window.getSelection();
           selection.selectAllChildren(this.floatInput);

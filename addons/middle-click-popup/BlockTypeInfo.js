@@ -330,9 +330,10 @@ export class BlockTypeInfo {
    * Enumerates all the different types of blocks, given a workspace.
    * @param {Blockly} Blockly
    * @param {*} workspace
+   * @param {*} locale The translations used for converting icons into text
    * @returns {BlockTypeInfo[]}
    */
-  static getBlocks(Blockly, workspace) {
+  static getBlocks(Blockly, workspace, locale) {
     const flyoutWorkspace = workspace.getToolbox()?.flyout_.getWorkspace();
     if (!flyoutWorkspace) return [];
 
@@ -347,13 +348,13 @@ export class BlockTypeInfo {
       }
     }
     for (const workspaceBlock of flyoutWorkspace.getTopBlocks()) {
-      blocks.push(new BlockTypeInfo(workspace, Blockly, workspaceBlock, flyoutDomBlockMap[workspaceBlock.id]));
+      blocks.push(new BlockTypeInfo(workspace, Blockly, locale, workspaceBlock, flyoutDomBlockMap[workspaceBlock.id]));
     }
 
     return blocks;
   }
 
-  constructor(workspace, Blockly, workspaceForm, domForm) {
+  constructor(workspace, Blockly, locale, workspaceForm, domForm) {
     /** @type {string} */
     this.id = workspaceForm.id;
     this.workspaceForm = workspaceForm;
@@ -398,21 +399,19 @@ export class BlockTypeInfo {
       } else if (field instanceof Blockly.FieldImage) {
         switch (field.src_) {
           case "/static/blocks-media/green-flag.svg":
-            // TODO
+            this.parts.push(locale("/global/green-flag"))
             break;
           case "/static/blocks-media/rotate-right.svg":
-            // TODO
+            this.parts.push(locale("/global/clockwise"))
             break;
           case "/static/blocks-media/rotate-left.svg":
-            // TODO
-            break;
-          // TODO Pen omission
-          case "/static/blocks-media/repeat.svg":
+            this.parts.push(locale("/global/anticlockwise"))
             break;
         }
       } else {
         if (!field.argType_) {
-          this.parts.push(field.getText());
+          if (field.getText().trim().length !== 0)
+            this.parts.push(field.getText());
         } else if (field.argType_[0] === "colour") {
           addInput(new BlockInputColour(inputIdx, fieldIdx));
         } else if (field.argType_[1] === "number") {
@@ -423,7 +422,7 @@ export class BlockTypeInfo {
       }
     };
 
-    for (let inputIdx = 0; inputIdx < this.workspaceForm.inputList.length; inputIdx++) {
+    for (let inputIdx = 0; inputIdx < this.workspaceForm.inputList?.length; inputIdx++) {
       const input = this.workspaceForm.inputList[inputIdx];
       for (let fieldIdx = 0; fieldIdx < input.fieldRow.length; fieldIdx++) {
         addFieldInputs(input.fieldRow[fieldIdx], inputIdx, fieldIdx);

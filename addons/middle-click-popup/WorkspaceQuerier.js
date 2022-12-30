@@ -1035,8 +1035,9 @@ export default class WorkspaceQuerier {
   /**
    * @param {Blockly} blockly
    */
-  constructor(blockly) {
+  constructor(blockly, locale) {
     this.Blockly = blockly;
+    this.locale = locale;
     window.querier = this;
   }
 
@@ -1172,7 +1173,7 @@ export default class WorkspaceQuerier {
    * @private
    */
   _poppulateTokenGroups() {
-    const blocks = BlockTypeInfo.getBlocks(this.Blockly, this.workspace);
+    const blocks = BlockTypeInfo.getBlocks(this.Blockly, this.workspace, this.locale);
 
     // Apply order of operations
     for (const block of blocks) {
