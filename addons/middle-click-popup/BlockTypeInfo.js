@@ -399,19 +399,18 @@ export class BlockTypeInfo {
       } else if (field instanceof Blockly.FieldImage) {
         switch (field.src_) {
           case "/static/blocks-media/green-flag.svg":
-            this.parts.push(locale("/global/green-flag"))
+            this.parts.push(locale("/global/green-flag"));
             break;
           case "/static/blocks-media/rotate-right.svg":
-            this.parts.push(locale("/global/clockwise"))
+            this.parts.push(locale("/global/clockwise"));
             break;
           case "/static/blocks-media/rotate-left.svg":
-            this.parts.push(locale("/global/anticlockwise"))
+            this.parts.push(locale("/global/anticlockwise"));
             break;
         }
       } else {
         if (!field.argType_) {
-          if (field.getText().trim().length !== 0)
-            this.parts.push(field.getText());
+          if (field.getText().trim().length !== 0) this.parts.push(field.getText());
         } else if (field.argType_[0] === "colour") {
           addInput(new BlockInputColour(inputIdx, fieldIdx));
         } else if (field.argType_[1] === "number") {
