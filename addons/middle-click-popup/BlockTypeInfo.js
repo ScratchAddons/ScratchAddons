@@ -124,7 +124,7 @@ export class BlockInputString extends BlockInputRound {
 
 export class BlockInputNumber extends BlockInputRound {
   constructor(inputIdx, fieldIdx) {
-    super(BlockTypeInfo.BlockInputType.NUMBER, inputIdx, fieldIdx);
+    super(BlockInputType.NUMBER, inputIdx, fieldIdx);
   }
 
   _toFieldValue(value) {
@@ -141,7 +141,7 @@ export class BlockInputNumber extends BlockInputRound {
 
 export class BlockInputBoolean extends BlockInput {
   constructor(inputIdx, fieldIdx) {
-    super(BlockTypeInfo.BlockInputType.BOOLEAN, inputIdx, fieldIdx);
+    super(BlockInputType.BOOLEAN, inputIdx, fieldIdx);
   }
 
   setValue(block, value) {
@@ -158,7 +158,7 @@ export class BlockInputBoolean extends BlockInput {
 
 export class BlockInputColour extends BlockInput {
   constructor(inputIdx, fieldIdx) {
-    super(BlockTypeInfo.BlockInputType.COLOUR, inputIdx, fieldIdx);
+    super(BlockInputType.COLOUR, inputIdx, fieldIdx);
   }
 
   setValue(block, value) {
@@ -198,7 +198,7 @@ export class BlockInputEnum extends BlockInput {
    * @param {number} fieldIdx
    */
   constructor(options, inputIdx, fieldIdx) {
-    super(BlockTypeInfo.BlockInputType.ENUM, inputIdx, fieldIdx);
+    super(BlockInputType.ENUM, inputIdx, fieldIdx);
     /** @type {BlockInputEnumOption[]} */
     this.values = [];
     for (let i = 0; i < options.length; i++) {
@@ -223,7 +223,7 @@ export class BlockInputEnum extends BlockInput {
  */
 export class BlockInputBlock extends BlockInput {
   constructor(inputIdx, fieldIdx) {
-    super(BlockTypeInfo.BlockInputType.BLOCK, inputIdx, fieldIdx);
+    super(BlockInputType.BLOCK, inputIdx, fieldIdx);
   }
 
   setValue(block, value) {

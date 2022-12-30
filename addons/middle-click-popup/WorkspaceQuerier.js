@@ -751,7 +751,7 @@ class TokenTypeBlock extends TokenType {
         } else hasDefiningFeature = true;
       } else {
         switch (blockPart.type) {
-          case BlockTypeInfo.BlockInputType.ENUM:
+          case BlockInputType.ENUM:
             const stringEnum = new StringEnum(blockPart.values);
             fullTokenProvider = stringEnum.fullTokenProvider;
             griffTokenProvider = stringEnum.griffTokenProvider;
@@ -762,20 +762,20 @@ class TokenTypeBlock extends TokenType {
             // Only allow literals for griff token blocks
             griffTokenProvider = new TokenProviderOptional(querier.tokenTypeStringLiteral);
             break;
-          case BlockTypeInfo.BlockInputType.NUMBER:
+          case BlockInputType.NUMBER:
             fullTokenProvider = querier.tokenGroupNumber;
             // Only allow literals for griff token blocks
             griffTokenProvider = new TokenProviderOptional(querier.tokenTypeNumberLiteral);
             break;
-          case BlockTypeInfo.BlockInputType.COLOUR:
+          case BlockInputType.COLOUR:
             fullTokenProvider = TokenTypeColor.INSTANCE;
             griffTokenProvider = TokenTypeColor.INSTANCE;
             break;
-          case BlockTypeInfo.BlockInputType.BOOLEAN:
+          case BlockInputType.BOOLEAN:
             fullTokenProvider = querier.tokenGroupBoolean;
             griffTokenProvider = TokenTypeBlank.INSTANCE;
             break;
-          case BlockTypeInfo.BlockInputType.BLOCK:
+          case BlockInputType.BLOCK:
             fullTokenProvider = querier.tokenGroupStack;
             griffTokenProvider = TokenTypeBlank.INSTANCE;
             break;
