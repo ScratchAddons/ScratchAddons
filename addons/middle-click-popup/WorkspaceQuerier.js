@@ -427,9 +427,7 @@ class StringEnum {
     *parseTokens(query, idx) {
       const fullValues = this.values.getFullValues(query, idx);
       outer: for (let valueIdx = 0; valueIdx < this.values.length; valueIdx++) {
-        if (fullValues[valueIdx]) {
-          if (!fullValues[valueIdx].isTruncated) continue;
-        }
+        if (fullValues[valueIdx]) continue;
         const valueInfo = this.values.values[valueIdx];
         let i = idx;
 
@@ -578,7 +576,7 @@ class StringEnum {
  * The token type for a litteral string, like 'Hello World' in the query `say Hello World`
  */
 class TokenTypeStringLiteral extends TokenType {
-  static TERMINATORS = [undefined, " ", "+", "-", "*", "/", "=", "<", ">", "(", ")"];
+  static TERMINATORS = [undefined, " ", "+", "-", "*", "/", "=", "<", ">", ")"];
 
   /**
    * Each time we encounter a 'terminator' we have to return the string we've read so far as a
@@ -590,7 +588,7 @@ class TokenTypeStringLiteral extends TokenType {
     let wasTerminator = false;
     for (let i = idx; i <= query.length; i++) {
       if (TokenTypeStringLiteral.TERMINATORS.indexOf(query.str[i]) !== -1) {
-        if (!wasTerminator || i === query.length) {
+        if (!wasTerminator && i !== idx) {
           const value = query.str.substring(idx, i);
           yield new Token(idx, i, this, value, -300 * value.length);
         }
@@ -684,6 +682,8 @@ class TokenTypeBrackets extends TokenType {
     if (query.str[idx++] !== "(") return;
     idx = query.skipIgnorable(idx);
     for (const token of this.tokenProvider.parseTokens(query, idx)) {
+      if (token.type instanceof TokenTypeBlank)
+        continue; // Do not allow empty brackets like '()'
       var tokenEnd = query.skipIgnorable(token.end);
       let isTruncated = token.isTruncated;
       if (!isTruncated) {
@@ -736,8 +736,6 @@ class TokenTypeBlock extends TokenType {
     let fullTokenProviders = [];
     let griffTokenProviders = [];
 
-    let hasDefiningFeature = false;
-
     for (const blockPart of block.parts) {
       let fullTokenProvider;
       let griffTokenProvider;
@@ -745,17 +743,12 @@ class TokenTypeBlock extends TokenType {
         const stringEnum = new StringEnum([{ value: null, string: blockPart }]);
         fullTokenProvider = stringEnum.fullTokenProvider;
         griffTokenProvider = stringEnum.griffTokenProvider;
-        if (hasDefiningFeature) {
-          fullTokenProvider = new TokenProviderOptional(fullTokenProvider);
-          griffTokenProvider = new TokenProviderOptional(stringEnum.bothTokenProvider);
-        } else hasDefiningFeature = true;
       } else {
         switch (blockPart.type) {
           case BlockInputType.ENUM:
             const stringEnum = new StringEnum(blockPart.values);
             fullTokenProvider = stringEnum.fullTokenProvider;
             griffTokenProvider = stringEnum.griffTokenProvider;
-            hasDefiningFeature = true;
             break;
           case BlockInputType.STRING:
             fullTokenProvider = querier.tokenGroupString;
