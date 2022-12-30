@@ -190,6 +190,8 @@ export class BlockInputEnum extends BlockInput {
     "createGlobalList",
     "createLocalList",
     "createBroadcast",
+    // rename-broadcasts compatibility
+    "RENAME_BROADCAST_MESSAGE_ID",
   ];
 
   /**
