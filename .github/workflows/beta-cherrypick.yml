@@ -1,0 +1,22 @@
+name: Cherry-pick hotfixes & translations to `beta` branch
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  beta-cherrypick:
+    name: Cherry-pick hotfixes & translations to `beta` branch
+    if: github.event.pull_request.merged == true && (github.event.label.name == 'type: bug' || github.event.pull_request.user.login == 'scratchaddons-bot')
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+    - uses: actions/checkout@v3
+    
+    - name: Merge into `beta` branch
+      uses: devmasx/merge-branch@1.4.0
+      with:
+        type: now
+        from_branch: ${{ github.ref }}
+        target_branch: beta
+        github_token: ${{ github.token }}
