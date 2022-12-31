@@ -35,6 +35,7 @@ export default async function ({ addon, msg, console }) {
       this.dropdownOut.className = "sa-float-bar-dropdown-out";
 
       this.floatInput = this.dropdownOut.appendChild(document.createElement("input"));
+      this.floatInput.placeholder = msg("start-typing");
       this.floatInput.className = "sa-float-bar-input";
       this.floatInput.className = addon.tab.scratchClass("input_input-form", {
         others: "sa-float-bar-input",
