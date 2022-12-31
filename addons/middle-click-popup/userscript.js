@@ -334,7 +334,7 @@ export default async function ({ addon, msg, console }) {
           ending = "addon-custom-block";
         }
 
-        li.className = "sa-block-color-" + ending + " sa-" + bType;
+        li.className = "sa-block-color sa-block-color-" + ending + " sa-" + bType;
         if (count > this.DROPDOWN_BLOCK_LIST_MAX_ROWS) {
           // Limit maximum number of rows to prevent lag when no filter is applied
           li.style.display = "none";
