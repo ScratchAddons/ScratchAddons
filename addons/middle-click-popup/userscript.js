@@ -328,7 +328,9 @@ export default async function ({ addon, msg, console }) {
         li.innerText = desc;
         li.data = { text: desc, lower: " " + desc.toLowerCase(), option: option };
 
-        let ending = option.block.getCategory();
+        // Many of the sensing_of blocks in the flyout have a category of `null` for some reason,
+        // the same as procedures.
+        let ending = option.block.type === "sensing_of" ? "sensing" : option.block.getCategory();
         if (option.block.isScratchExtension) {
           ending = "pen";
         } else if (addon.tab.getCustomBlock(option.block.procCode_)) {
