@@ -29,7 +29,6 @@ scratchAddons.console = {
   warnForAddon: (addonId) => _realConsole.warn.bind(_realConsole, ...consoleOutput(addonId)),
   errorForAddon: (addonId) => _realConsole.error.bind(_realConsole, ...consoleOutput(addonId)),
 };
-window.scratchAddons.traps = Object.create(null);
 
 const pendingPromises = {};
 pendingPromises.msgCount = [];
