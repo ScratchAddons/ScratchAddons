@@ -75,7 +75,7 @@
       "default": false
     }
   ],
-  "tags": ["editor", "featured"],
+  "tags": ["editor", "codeEditor", "featured"],
   "enabledByDefault": false,
   "versionAdded": "1.16.0",
   "latestUpdate": {
