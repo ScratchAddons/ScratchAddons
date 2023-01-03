@@ -168,10 +168,10 @@ export default async function ({ addon, console, msg }) {
         if (this.target.isStage) {
           // Global variables must not conflict with any global variables or local variables in any sprite.
           const existingNames = vm.runtime.getAllVarNamesOfType(this.scratchVariable.type);
-          nameAlreadyUsed = existingNames.includes(newName)
+          nameAlreadyUsed = existingNames.includes(newName);
         } else {
           // Local variables must not conflict with any global variables or local variables in this sprite.
-          nameAlreadyUsed = !!workspace.getVariable(newName, this.scratchVariable.type)
+          nameAlreadyUsed = !!workspace.getVariable(newName, this.scratchVariable.type);
         }
 
         const isEmpty = !newName.trim();
