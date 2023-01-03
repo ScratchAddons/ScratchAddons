@@ -71,7 +71,7 @@ export default async function ({ addon, msg, console }) {
       this.findInput.addEventListener("focusout", () => this.hideDropDown());
     }
 
-    tabChanged () {
+    tabChanged() {
       if (!this.findBarOuter) {
         return;
       }
