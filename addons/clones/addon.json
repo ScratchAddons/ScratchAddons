@@ -45,7 +45,7 @@
   ],
   "latestUpdate": {
     "version": "1.30.0",
-    "newSettings": "projectpage"
+    "newSettings": ["projectpage"]
   },
   "tags": ["editor", "projectPlayer", "recommended"],
   "enabledByDefault": false
