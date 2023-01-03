@@ -1,7 +1,7 @@
 export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
-  let alsoShowOnProjectPage = addon.settings.get("projectpage");
+  let showOnProjectPage = addon.settings.get("projectpage");
   let showIconOnly = addon.settings.get("showicononly");
 
   if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
@@ -57,7 +57,7 @@ export default async function ({ addon, console, msg }) {
 
   addon.settings.addEventListener("change", () => {
     showIconOnly = addon.settings.get("showicononly");
-    alsoShowOnProjectPage = addon.settings.get("projectpage");
+    showOnProjectPage = addon.settings.get("projectpage");
     doCloneChecks(true);
   });
 
@@ -78,7 +78,7 @@ export default async function ({ addon, console, msg }) {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
 
-    if (addon.tab.editorMode === "editor" || alsoShowOnProjectPage) {
+    if (addon.tab.editorMode === "editor" || showOnProjectPage) {
       addon.tab.appendToSharedSpace({ space: "afterStopButton", element: countContainerContainer, order: 2 });
     }
   }
