@@ -328,9 +328,14 @@ export default async function ({ addon, msg, console }) {
         li.innerText = desc;
         li.data = { text: desc, lower: " " + desc.toLowerCase(), option: option };
 
-        // Many of the sensing_of blocks in the flyout have a category of `null` for some reason,
-        // the same as procedures.
-        let ending = option.block.type === "sensing_of" ? "sensing" : option.block.getCategory();
+        const blockTypes = {
+          // Some of these blocks in the flyout have a category of `null` for some reason, the
+          // same as procedures. Without making bigger changes to the custom block color system
+          // hardcoding these is the best solution for now.
+          sensing_of: "sensing",
+          event_whenbackdropswitchesto: "events"
+        };
+        let ending = option.block.getCategory() || blockTypes[option.block.type] || 'null';
         if (option.block.isScratchExtension) {
           ending = "pen";
         } else if (addon.tab.getCustomBlock(option.block.procCode_)) {
