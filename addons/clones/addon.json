@@ -45,7 +45,7 @@
   ],
   "latestUpdate": {
     "version": "1.30.0",
-    "temporaryNotice": "You can now choose whether the clone counter shows up only in the editor or also on the project page."
+    "newSettings": "projectpage"
   },
   "tags": ["editor", "projectPlayer", "recommended"],
   "enabledByDefault": false
