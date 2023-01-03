@@ -21,8 +21,6 @@
 .sa-stage-hidden [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen_"]),
 .sa-stage-hidden [class*="gui_target-wrapper_"] {
   padding: 0;
-  /* override hide-flyout */
-  padding-inline: 0;
 }
 
 .sa-stage-hidden
