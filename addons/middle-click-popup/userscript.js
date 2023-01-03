@@ -52,6 +52,10 @@ export default async function ({ addon, msg, console }) {
       this.dropdownOut.addEventListener("mousedown", (...e) => this.onClick(...e));
 
       document.addEventListener("keydown", (e) => {
+        if (addon.tab.editorMode !== 'editor') {
+          return;
+        }
+
         let ctrlKey = e.ctrlKey || e.metaKey;
 
         if (e.key === " " && ctrlKey) {
