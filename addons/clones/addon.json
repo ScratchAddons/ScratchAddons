@@ -32,7 +32,7 @@
   "settings": [
     {
       "id": "projectpage",
-      "name": "Also show on project page",
+      "name": "Show on project page",
       "default": false,
       "type": "boolean"
     },
