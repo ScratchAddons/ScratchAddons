@@ -1,7 +1,7 @@
 .sa-paint-snap-button {
   position: relative;
 }
-.sa-paint-snap-button:active {
+.sa-paint-snap-button:focus-within {
   background-color: hsla(215, 100%, 65%, 0.2);
 }
 .sa-paint-snap-button[data-enabled="true"] .sa-paint-snap-image {
@@ -27,7 +27,7 @@
 
 .sa-paint-snap-settings {
   position: absolute;
-  bottom: 0px;
+  bottom: 100%;
   /* based on the styles for the color dropdown */
   padding: 4px;
   border-radius: 4px;
