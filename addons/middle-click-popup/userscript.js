@@ -52,7 +52,7 @@ export default async function ({ addon, msg, console }) {
       this.dropdownOut.addEventListener("mousedown", (...e) => this.onClick(...e));
 
       document.addEventListener("keydown", (e) => {
-        if (addon.tab.editorMode !== 'editor') {
+        if (addon.tab.editorMode !== "editor") {
           return;
         }
 
@@ -337,9 +337,9 @@ export default async function ({ addon, msg, console }) {
           // same as procedures. Without making bigger changes to the custom block color system
           // hardcoding these is the best solution for now.
           sensing_of: "sensing",
-          event_whenbackdropswitchesto: "events"
+          event_whenbackdropswitchesto: "events",
         };
-        let ending = option.block.getCategory() || blockTypes[option.block.type] || 'null';
+        let ending = option.block.getCategory() || blockTypes[option.block.type] || "null";
         if (option.block.isScratchExtension) {
           ending = "pen";
         } else if (addon.tab.getCustomBlock(option.block.procCode_)) {
