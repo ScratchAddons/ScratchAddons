@@ -31,59 +31,59 @@ export default async function ({ addon, console, msg }) {
         noopSwitch,
         {
           opcode: "motion_changexby",
-          remap: { X: "DX" },
+          remapInputName: { X: "DX" },
         },
         {
           opcode: "motion_sety",
-          remap: { X: "Y" },
+          remapInputName: { X: "Y" },
         },
         {
           opcode: "motion_changeyby",
-          remap: { X: "DY" },
+          remapInputName: { X: "DY" },
         },
       ];
       blockSwitches["motion_changexby"] = [
         {
           opcode: "motion_setx",
-          remap: { DX: "X" },
+          remapInputName: { DX: "X" },
         },
         noopSwitch,
         {
           opcode: "motion_sety",
-          remap: { DX: "Y" },
+          remapInputName: { DX: "Y" },
         },
         {
           opcode: "motion_changeyby",
-          remap: { DX: "DY" },
+          remapInputName: { DX: "DY" },
         },
       ];
       blockSwitches["motion_sety"] = [
         {
           opcode: "motion_setx",
-          remap: { Y: "X" },
+          remapInputName: { Y: "X" },
         },
         {
           opcode: "motion_changexby",
-          remap: { Y: "DX" },
+          remapInputName: { Y: "DX" },
         },
         noopSwitch,
         {
           opcode: "motion_changeyby",
-          remap: { Y: "DY" },
+          remapInputName: { Y: "DY" },
         },
       ];
       blockSwitches["motion_changeyby"] = [
         {
           opcode: "motion_setx",
-          remap: { DY: "X" },
+          remapInputName: { DY: "X" },
         },
         {
           opcode: "motion_changexby",
-          remap: { DY: "DX" },
+          remapInputName: { DY: "DX" },
         },
         {
           opcode: "motion_sety",
-          remap: { DY: "Y" },
+          remapInputName: { DY: "Y" },
         },
         noopSwitch,
       ];
@@ -106,13 +106,13 @@ export default async function ({ addon, console, msg }) {
         noopSwitch,
         {
           opcode: "looks_changeeffectby",
-          remap: { VALUE: "CHANGE" },
+          remapInputName: { VALUE: "CHANGE" },
         },
       ];
       blockSwitches["looks_changeeffectby"] = [
         {
           opcode: "looks_seteffectto",
-          remap: { CHANGE: "VALUE" },
+          remapInputName: { CHANGE: "VALUE" },
         },
         noopSwitch,
       ];
@@ -120,13 +120,13 @@ export default async function ({ addon, console, msg }) {
         noopSwitch,
         {
           opcode: "looks_changesizeby",
-          remap: { SIZE: "CHANGE" },
+          remapInputName: { SIZE: "CHANGE" },
         },
       ];
       blockSwitches["looks_changesizeby"] = [
         {
           opcode: "looks_setsizeto",
-          remap: { CHANGE: "SIZE" },
+          remapInputName: { CHANGE: "SIZE" },
         },
         noopSwitch,
       ];
@@ -268,7 +268,7 @@ export default async function ({ addon, console, msg }) {
       blockSwitches["control_if_else"] = [
         {
           opcode: "control_if",
-          remap: { SUBSTACK2: "split" },
+          splitInputs: ["SUBSTACK2"]
         },
         noopSwitch,
       ];
@@ -276,11 +276,11 @@ export default async function ({ addon, console, msg }) {
         noopSwitch,
         {
           opcode: "control_wait_until",
-          remap: { SUBSTACK: "split" },
+          splitInputs: ["SUBSTACK"]
         },
         {
           opcode: "control_forever",
-          remap: { CONDITION: "split" },
+          splitInputs: ["CONDITION"]
         },
       ];
       blockSwitches["control_forever"] = [
@@ -434,13 +434,13 @@ export default async function ({ addon, console, msg }) {
         noopSwitch,
         {
           opcode: "data_changevariableby",
-          remapValueType: { VALUE: "math_number" },
+          remapInputType: { VALUE: "math_number" },
         },
       ];
       blockSwitches["data_changevariableby"] = [
         {
           opcode: "data_setvariableto",
-          remapValueType: { VALUE: "text" },
+          remapInputType: { VALUE: "text" },
         },
         noopSwitch,
       ];
@@ -654,40 +654,35 @@ export default async function ({ addon, console, msg }) {
 
     const pasteSeparately = [];
 
-    // Apply input remappings.
-    if (opcodeData.remap) {
-      for (const child of Array.from(xml.children)) {
-        const oldName = child.getAttribute("name");
-        const newName = opcodeData.remap[oldName];
-        if (newName) {
-          if (newName === "split") {
-            // This input will be split off into its own script.
-            const inputXml = child.firstChild;
-            const inputId = inputXml.id;
-            const inputBlock = workspace.getBlockById(inputId);
-            const position = inputBlock.getRelativeToSurfaceXY();
-            inputXml.setAttribute("x", Math.round(workspace.RTL ? -position.x : position.x));
-            inputXml.setAttribute("y", Math.round(position.y));
-            pasteSeparately.push(inputXml);
-            xml.removeChild(child);
-          } else {
-            child.setAttribute("name", newName);
-          }
-        }
+    for (const child of Array.from(xml.children)) {
+      const oldName = child.getAttribute("name");
+
+      const newName = opcodeData.remapInputName && opcodeData.remapInputName[oldName];
+      if (newName) {
+        child.setAttribute("name", newName);
+      }
+
+      const newType = opcodeData.remapInputType && opcodeData.remapInputType[oldName];
+      if (newType) {
+        const valueNode = child.firstChild;
+        const fieldNode = valueNode.firstChild;
+        valueNode.setAttribute("type", newType);
+        fieldNode.setAttribute("name", newType === "text" ? "TEXT" : "NUM");
+      }
+
+      const shouldBeSplit = opcodeData.splitInputs && opcodeData.splitInputs.includes(oldName);
+      if (shouldBeSplit) {
+        const inputXml = child.firstChild;
+        const inputId = inputXml.id;
+        const inputBlock = workspace.getBlockById(inputId);
+        const position = inputBlock.getRelativeToSurfaceXY();
+        inputXml.setAttribute("x", Math.round(workspace.RTL ? -position.x : position.x));
+        inputXml.setAttribute("y", Math.round(position.y));
+        pasteSeparately.push(inputXml);
+        xml.removeChild(child);  
       }
     }
-    if (opcodeData.remapValueType) {
-      for (const child of Array.from(xml.children)) {
-        const name = child.getAttribute("name");
-        const newType = opcodeData.remapValueType[name];
-        if (newType) {
-          const valueNode = child.firstChild;
-          const fieldNode = valueNode.firstChild;
-          valueNode.setAttribute("type", newType);
-          fieldNode.setAttribute("name", newType === "text" ? "TEXT" : "NUM");
-        }
-      }
-    }
+
     if (opcodeData.mutate) {
       const mutation = xml.querySelector("mutation");
       for (const [key, value] of Object.entries(opcodeData.mutate)) {
