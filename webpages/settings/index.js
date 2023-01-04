@@ -358,7 +358,7 @@ let fuse;
         setTimeout(() => window.parent.close(), 100);
       },
       hidePopup() {
-        document.querySelector(".popup").style.animation = "closePopup 1.6s 1";
+        document.querySelector(".popup").style.animation = "closePopup 1s 1";
         document.querySelector(".popup").addEventListener(
           "animationend",
           () => {

@@ -96,7 +96,7 @@ export default async function ({ template }) {
           if (result === false) {
             if (isIframe) {
               this.$root.addonToEnable = this.addon;
-              document.querySelector(".popup").style.animation = "dropDown 1.6s 1";
+              document.querySelector(".popup").style.animation = "dropDown 0.5s 1";
               this.$root.showPopupModal = true;
             } else
               chrome.permissions.request(
