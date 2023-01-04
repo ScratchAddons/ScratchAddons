@@ -171,9 +171,9 @@ export default async function ({ addon, console, msg }) {
           createInputs: {
             SECS: {
               shadowType: "math_number",
-              value: "2"
-            }
-          }
+              value: "2",
+            },
+          },
         },
         {
           opcode: "looks_think",
@@ -183,9 +183,9 @@ export default async function ({ addon, console, msg }) {
           createInputs: {
             SECS: {
               shadowType: "math_number",
-              value: "2"
-            }
-          }
+              value: "2",
+            },
+          },
         },
       ];
       blockSwitches["looks_think"] = [
@@ -197,9 +197,9 @@ export default async function ({ addon, console, msg }) {
           createInputs: {
             SECS: {
               shadowType: "math_number",
-              value: "2"
-            }
-          }
+              value: "2",
+            },
+          },
         },
         noopSwitch,
         {
@@ -207,9 +207,9 @@ export default async function ({ addon, console, msg }) {
           createInputs: {
             SECS: {
               shadowType: "math_number",
-              value: "2"
-            }
-          }
+              value: "2",
+            },
+          },
         },
       ];
       blockSwitches["looks_sayforsecs"] = [
@@ -355,7 +355,7 @@ export default async function ({ addon, console, msg }) {
       blockSwitches["control_if_else"] = [
         {
           opcode: "control_if",
-          splitInputs: ["SUBSTACK2"]
+          splitInputs: ["SUBSTACK2"],
         },
         noopSwitch,
       ];
@@ -363,11 +363,11 @@ export default async function ({ addon, console, msg }) {
         noopSwitch,
         {
           opcode: "control_wait_until",
-          splitInputs: ["SUBSTACK"]
+          splitInputs: ["SUBSTACK"],
         },
         {
           opcode: "control_forever",
-          splitInputs: ["CONDITION"]
+          splitInputs: ["CONDITION"],
         },
       ];
       blockSwitches["control_forever"] = [
@@ -521,9 +521,9 @@ export default async function ({ addon, console, msg }) {
           createInputs: {
             COLOR2: {
               shadowType: "colour_picker",
-              value: "#ff4c4c"
-            }
-          }
+              value: "#ff4c4c",
+            },
+          },
         },
       ];
       blockSwitches["sensing_coloristouchingcolor"] = [
@@ -590,7 +590,7 @@ export default async function ({ addon, console, msg }) {
         noopSwitch,
         {
           opcode: "data_deletealloflist",
-          splitInputs: ["INDEX"]
+          splitInputs: ["INDEX"],
         },
       ];
       blockSwitches["data_deletealloflist"] = [
@@ -599,9 +599,9 @@ export default async function ({ addon, console, msg }) {
           createInputs: {
             INDEX: {
               shadowType: "math_integer",
-              value: "1"
-            }
-          }
+              value: "1",
+            },
+          },
         },
         noopSwitch,
       ];
@@ -749,8 +749,8 @@ export default async function ({ addon, console, msg }) {
     // Similar to https://github.com/LLK/scratch-blocks/blob/7575c9a0f2c267676569c4b102b76d77f35d9fd6/core/workspace_svg.js#L1020
     // but without the collision checking.
     const block = ScratchBlocks.Xml.domToBlock(xmlBlock, workspace);
-    const x = +xmlBlock.getAttribute('x');
-    const y = +xmlBlock.getAttribute('y');
+    const x = +xmlBlock.getAttribute("x");
+    const y = +xmlBlock.getAttribute("y");
     block.moveBy(x, y);
     return block;
   };
@@ -822,7 +822,9 @@ export default async function ({ addon, console, msg }) {
       if (parentBlock) {
         // If the block has a parent, find the parent -> child connection that will be reattached later.
         const parentConnections = parentBlock.getConnections_();
-        parentConnection = parentConnections.find((c) => c.targetConnection && c.targetConnection.sourceBlock_ === block);
+        parentConnection = parentConnections.find(
+          (c) => c.targetConnection && c.targetConnection.sourceBlock_ === block
+        );
         // There's two types of connections from child -> parent. We need to figure out which one is used.
         const blockConnections = block.getConnections_();
         const blockToParentConnection = blockConnections.find(
@@ -860,7 +862,7 @@ export default async function ({ addon, console, msg }) {
         if (fieldValueMap && child.tagName === "FIELD") {
           const oldValue = child.innerText;
           const newValue = fieldValueMap[oldValue];
-          if (typeof newValue === 'string') {
+          if (typeof newValue === "string") {
             child.innerText = newValue;
           }
         }
