@@ -164,27 +164,27 @@ export default async function ({ addon, console, msg }) {
         },
         noopSwitch,
       ];
-      blockSwitches["looks_think"] = [
-        noopSwitch,
-        {
-          opcode: "looks_say",
-        },
-      ];
       blockSwitches["looks_say"] = [
+        noopSwitch,
         {
           opcode: "looks_think",
         },
-        noopSwitch,
       ];
-      blockSwitches["looks_thinkforsecs"] = [
-        noopSwitch,
+      blockSwitches["looks_think"] = [
         {
-          opcode: "looks_sayforsecs",
+          opcode: "looks_say",
         },
+        noopSwitch,
       ];
       blockSwitches["looks_sayforsecs"] = [
+        noopSwitch,
         {
           opcode: "looks_thinkforsecs",
+        },
+      ];
+      blockSwitches["looks_thinkforsecs"] = [
+        {
+          opcode: "looks_sayforsecs",
         },
         noopSwitch,
       ];
