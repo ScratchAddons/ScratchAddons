@@ -432,13 +432,13 @@ export default async function ({ addon, console, msg }) {
         noopSwitch,
         {
           opcode: "data_changevariableby",
-          remapInputType: { VALUE: "math_number" },
+          remapShadowType: { VALUE: "math_number" },
         },
       ];
       blockSwitches["data_changevariableby"] = [
         {
           opcode: "data_setvariableto",
-          remapInputType: { VALUE: "text" },
+          remapShadowType: { VALUE: "text" },
         },
         noopSwitch,
       ];
@@ -647,6 +647,18 @@ export default async function ({ addon, console, msg }) {
     return block;
   };
 
+  /**
+   * @param {string} shadowType The type of shadow eg. "math_number"
+   * @returns {string} The name of the shadow's inner field that contains the user-visible value
+   */
+  const getShadowFieldName = (shadowType) => {
+    // This is non-comprehensive.
+    if (shadowType === "text") {
+      return "TEXT";
+    }
+    return "NUM";
+  };
+
   const menuCallbackFactory = (block, opcodeData) => () => {
     if (opcodeData.isNoop) {
       return;
@@ -714,12 +726,12 @@ export default async function ({ addon, console, msg }) {
           child.setAttribute("name", newName);
         }
 
-        const newType = opcodeData.remapInputType && opcodeData.remapInputType[oldName];
-        if (newType) {
+        const newShadowType = opcodeData.remapShadowType && opcodeData.remapShadowType[oldName];
+        if (newShadowType) {
           const valueNode = child.firstChild;
           const fieldNode = valueNode.firstChild;
-          valueNode.setAttribute("type", newType);
-          fieldNode.setAttribute("name", newType === "text" ? "TEXT" : "NUM");
+          valueNode.setAttribute("type", newShadowType);
+          fieldNode.setAttribute("name", getShadowFieldName(newShadowType));
         }
       }
 
@@ -739,7 +751,7 @@ export default async function ({ addon, console, msg }) {
           shadowElement.setAttribute("type", inputData.shadowType);
 
           const shadowFieldElement = document.createElement("field");
-          shadowFieldElement.setAttribute("name", "NUM");
+          shadowFieldElement.setAttribute("name", getShadowFieldName(inputData.shadowType));
           shadowFieldElement.innerText = inputData.value;
 
           shadowElement.appendChild(shadowFieldElement);
