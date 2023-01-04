@@ -638,72 +638,72 @@ export default async function ({ addon, console, msg }) {
       return;
     }
 
-    const workspace = block.workspace;
-
-    // Make a copy of the block with the proper type set.
-    // It doesn't seem to be possible to change a Block's type after it's created, so we'll just make a new block instead.
-    const xml = ScratchBlocks.Xml.blockToDomWithXY(block);
-    if (opcodeData.opcode) {
-      xml.setAttribute("type", opcodeData.opcode);
-    }
-
-    const id = block.id;
-    const parent = block.getParent();
-
-    let parentConnection;
-    let blockConnectionType;
-    if (parent) {
-      // If the block has a parent, find the parent -> child connection that will be reattached later.
-      const parentConnections = parent.getConnections_();
-      parentConnection = parentConnections.find((c) => c.targetConnection && c.targetConnection.sourceBlock_ === block);
-      // There's two types of connections from child -> parent. We need to figure out which one is used.
-      const blockConnections = block.getConnections_();
-      const blockToParentConnection = blockConnections.find(
-        (c) => c.targetConnection && c.targetConnection.sourceBlock_ === parent
-      );
-      blockConnectionType = blockToParentConnection.type;
-    }
-
-    const pasteSeparately = [];
-
-    for (const child of Array.from(xml.children)) {
-      const oldName = child.getAttribute("name");
-
-      const newName = opcodeData.remapInputName && opcodeData.remapInputName[oldName];
-      if (newName) {
-        child.setAttribute("name", newName);
-      }
-
-      const newType = opcodeData.remapInputType && opcodeData.remapInputType[oldName];
-      if (newType) {
-        const valueNode = child.firstChild;
-        const fieldNode = valueNode.firstChild;
-        valueNode.setAttribute("type", newType);
-        fieldNode.setAttribute("name", newType === "text" ? "TEXT" : "NUM");
-      }
-
-      const shouldBeSplit = opcodeData.splitInputs && opcodeData.splitInputs.includes(oldName);
-      if (shouldBeSplit) {
-        const inputXml = child.firstChild;
-        const inputId = inputXml.id;
-        const inputBlock = workspace.getBlockById(inputId);
-        const position = inputBlock.getRelativeToSurfaceXY();
-        inputXml.setAttribute("x", Math.round(workspace.RTL ? -position.x : position.x));
-        inputXml.setAttribute("y", Math.round(position.y));
-        pasteSeparately.push(inputXml);
-        xml.removeChild(child);  
-      }
-    }
-
-    if (opcodeData.mutate) {
-      const mutation = xml.querySelector("mutation");
-      for (const [key, value] of Object.entries(opcodeData.mutate)) {
-        mutation.setAttribute(key, value);
-      }
-    }
-
     try {
       ScratchBlocks.Events.setGroup(true);
+
+      const workspace = block.workspace;
+
+      // Make a copy of the block with the proper type set.
+      // It doesn't seem to be possible to change a Block's type after it's created, so we'll just make a new block instead.
+      const xml = ScratchBlocks.Xml.blockToDomWithXY(block);
+      if (opcodeData.opcode) {
+        xml.setAttribute("type", opcodeData.opcode);
+      }
+
+      const id = block.id;
+      const parent = block.getParent();
+
+      let parentConnection;
+      let blockConnectionType;
+      if (parent) {
+        // If the block has a parent, find the parent -> child connection that will be reattached later.
+        const parentConnections = parent.getConnections_();
+        parentConnection = parentConnections.find((c) => c.targetConnection && c.targetConnection.sourceBlock_ === block);
+        // There's two types of connections from child -> parent. We need to figure out which one is used.
+        const blockConnections = block.getConnections_();
+        const blockToParentConnection = blockConnections.find(
+          (c) => c.targetConnection && c.targetConnection.sourceBlock_ === parent
+        );
+        blockConnectionType = blockToParentConnection.type;
+      }
+
+      const pasteSeparately = [];
+
+      for (const child of Array.from(xml.children)) {
+        const oldName = child.getAttribute("name");
+
+        const newName = opcodeData.remapInputName && opcodeData.remapInputName[oldName];
+        if (newName) {
+          child.setAttribute("name", newName);
+        }
+
+        const newType = opcodeData.remapInputType && opcodeData.remapInputType[oldName];
+        if (newType) {
+          const valueNode = child.firstChild;
+          const fieldNode = valueNode.firstChild;
+          valueNode.setAttribute("type", newType);
+          fieldNode.setAttribute("name", newType === "text" ? "TEXT" : "NUM");
+        }
+
+        const shouldBeSplit = opcodeData.splitInputs && opcodeData.splitInputs.includes(oldName);
+        if (shouldBeSplit) {
+          const inputXml = child.firstChild;
+          const inputId = inputXml.id;
+          const inputBlock = workspace.getBlockById(inputId);
+          const position = inputBlock.getRelativeToSurfaceXY();
+          inputXml.setAttribute("x", Math.round(workspace.RTL ? -position.x : position.x));
+          inputXml.setAttribute("y", Math.round(position.y));
+          pasteSeparately.push(inputXml);
+          xml.removeChild(child);
+        }
+      }
+
+      if (opcodeData.mutate) {
+        const mutation = xml.querySelector("mutation");
+        for (const [key, value] of Object.entries(opcodeData.mutate)) {
+          mutation.setAttribute(key, value);
+        }
+      }
 
       // Remove the old block and insert the new one.
       block.dispose();
