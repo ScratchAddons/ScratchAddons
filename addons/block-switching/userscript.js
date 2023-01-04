@@ -167,22 +167,74 @@ export default async function ({ addon, console, msg }) {
       blockSwitches["looks_say"] = [
         noopSwitch,
         {
+          opcode: "looks_sayforsecs",
+          createInputs: {
+            SECS: {
+              shadowType: "math_number",
+              value: "2"
+            }
+          }
+        },
+        {
           opcode: "looks_think",
+        },
+        {
+          opcode: "looks_thinkforsecs",
+          createInputs: {
+            SECS: {
+              shadowType: "math_number",
+              value: "2"
+            }
+          }
         },
       ];
       blockSwitches["looks_think"] = [
         {
           opcode: "looks_say",
         },
+        {
+          opcode: "looks_sayforsecs",
+          createInputs: {
+            SECS: {
+              shadowType: "math_number",
+              value: "2"
+            }
+          }
+        },
         noopSwitch,
+        {
+          opcode: "looks_thinkforsecs",
+          createInputs: {
+            SECS: {
+              shadowType: "math_number",
+              value: "2"
+            }
+          }
+        },
       ];
       blockSwitches["looks_sayforsecs"] = [
+        {
+          opcode: "looks_say",
+          splitInputs: ["SECS"],
+        },
+        {
+          opcode: "looks_think",
+          splitInputs: ["SECS"],
+        },
         noopSwitch,
         {
           opcode: "looks_thinkforsecs",
         },
       ];
       blockSwitches["looks_thinkforsecs"] = [
+        {
+          opcode: "looks_say",
+          splitInputs: ["SECS"],
+        },
+        {
+          opcode: "looks_think",
+          splitInputs: ["SECS"],
+        },
         {
           opcode: "looks_sayforsecs",
         },
