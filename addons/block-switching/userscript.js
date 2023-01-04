@@ -785,6 +785,7 @@ export default async function ({ addon, console, msg }) {
 
       const workspace = block.workspace;
 
+      const blocksToBringToForeground = [];
       // Split inputs before we clone the block.
       if (opcodeData.splitInputs) {
         for (const inputName of opcodeData.splitInputs) {
@@ -802,6 +803,7 @@ export default async function ({ addon, console, msg }) {
               // Deleting shadows is handled later.
             } else {
               connection.disconnect();
+              blocksToBringToForeground.push(targetBlock);
             }
           }
         }
@@ -898,6 +900,13 @@ export default async function ({ addon, console, msg }) {
         const newBlockConnections = newBlock.getConnections_();
         const newBlockConnection = newBlockConnections.find((c) => c.type === blockConnectionType);
         newBlockConnection.connect(parentConnection);
+      }
+
+      for (const otherBlock of blocksToBringToForeground) {
+        // By re-appending the element, we move it to the end, which will make it display
+        // on top.
+        const svgRoot = otherBlock.getSvgRoot();
+        svgRoot.parentNode.appendChild(svgRoot);
       }
     } finally {
       ScratchBlocks.Events.setGroup(false);
