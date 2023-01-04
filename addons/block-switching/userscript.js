@@ -1,5 +1,3 @@
-import blockToDom from "./blockToDom.js";
-
 export default async function ({ addon, console, msg }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
@@ -616,6 +614,20 @@ export default async function ({ addon, console, msg }) {
   buildSwitches();
   addon.settings.addEventListener("change", buildSwitches);
 
+  /**
+   * @param {*} workspace
+   * @param {Element} xmlBlock
+   */
+  const pasteBlockXML = (workspace, xmlBlock) => {
+    // Similar to https://github.com/LLK/scratch-blocks/blob/7575c9a0f2c267676569c4b102b76d77f35d9fd6/core/workspace_svg.js#L1020
+    // but without the collision checking.
+    const block = ScratchBlocks.Xml.domToBlock(xmlBlock, workspace);
+    const x = +xmlBlock.getAttribute('x');
+    const y = +xmlBlock.getAttribute('y');
+    block.moveBy(x, y);
+    return block;
+  };
+
   const menuCallbackFactory = (block, opcodeData) => () => {
     if (opcodeData.isNoop) {
       return;
@@ -695,12 +707,11 @@ export default async function ({ addon, console, msg }) {
 
       // Remove the old block and insert the new one.
       block.dispose();
-      workspace.paste(xml);
+      const newBlock = pasteBlockXML(workspace, xml);
       for (const separateBlock of pasteSeparately) {
-        workspace.paste(separateBlock);
+        pasteBlockXML(workspace, separateBlock);
       }
-      // The new block will have the same ID as the old one.
-      const newBlock = workspace.getBlockById(id);
+
       if (parentConnection) {
         // Search for the same type of connection on the new block as on the old block.
         const newBlockConnections = newBlock.getConnections_();
