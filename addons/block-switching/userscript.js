@@ -650,19 +650,17 @@ export default async function ({ addon, console, msg }) {
         xml.setAttribute("type", opcodeData.opcode);
       }
 
-      const id = block.id;
-      const parent = block.getParent();
-
+      const parentBlock = block.getParent();
       let parentConnection;
       let blockConnectionType;
-      if (parent) {
+      if (parentBlock) {
         // If the block has a parent, find the parent -> child connection that will be reattached later.
-        const parentConnections = parent.getConnections_();
+        const parentConnections = parentBlock.getConnections_();
         parentConnection = parentConnections.find((c) => c.targetConnection && c.targetConnection.sourceBlock_ === block);
         // There's two types of connections from child -> parent. We need to figure out which one is used.
         const blockConnections = block.getConnections_();
         const blockToParentConnection = blockConnections.find(
-          (c) => c.targetConnection && c.targetConnection.sourceBlock_ === parent
+          (c) => c.targetConnection && c.targetConnection.sourceBlock_ === parentBlock
         );
         blockConnectionType = blockToParentConnection.type;
       }
