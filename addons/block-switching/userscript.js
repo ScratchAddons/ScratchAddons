@@ -425,6 +425,25 @@ export default async function ({ addon, console, msg }) {
         },
         noopSwitch,
       ];
+      blockSwitches["sensing_touchingcolor"] = [
+        noopSwitch,
+        {
+          opcode: "sensing_coloristouchingcolor",
+          createInputs: {
+            COLOR2: {
+              shadowType: "colour_picker",
+              value: "#ff4c4c"
+            }
+          }
+        },
+      ];
+      blockSwitches["sensing_coloristouchingcolor"] = [
+        {
+          opcode: "sensing_touchingcolor",
+          splitInputs: ["COLOR2"],
+        },
+        noopSwitch,
+      ];
     }
 
     if (addon.settings.get("data")) {
@@ -655,6 +674,9 @@ export default async function ({ addon, console, msg }) {
     // This is non-comprehensive.
     if (shadowType === "text") {
       return "TEXT";
+    }
+    if (shadowType === "colour_picker") {
+      return "COLOUR";
     }
     return "NUM";
   };
