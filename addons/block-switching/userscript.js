@@ -630,7 +630,7 @@ export default async function ({ addon, console, msg }) {
 
     // Make a copy of the block with the proper type set.
     // It doesn't seem to be possible to change a Block's type after it's created, so we'll just make a new block instead.
-    const xml = blockToDom(block);
+    const xml = ScratchBlocks.Xml.blockToDomWithXY(block);
     if (opcodeData.opcode) {
       xml.setAttribute("type", opcodeData.opcode);
     }
