@@ -252,6 +252,43 @@ export default async function ({ addon, console, msg }) {
         },
         noopSwitch,
       ];
+      blockSwitches["looks_gotofrontback"] = [
+        noopSwitch,
+        {
+          opcode: "looks_goforwardbackwardlayers",
+          remapInputName: {
+            FRONT_BACK: "FORWARD_BACKWARD",
+          },
+          mapFieldValues: {
+            FRONT_BACK: {
+              front: "forward",
+              back: "backward",
+            },
+          },
+          createInputs: {
+            NUM: {
+              shadowType: "math_integer",
+              value: "1",
+            },
+          },
+        },
+      ];
+      blockSwitches["looks_goforwardbackwardlayers"] = [
+        {
+          opcode: "looks_gotofrontback",
+          splitInputs: ["NUM"],
+          remapInputName: {
+            FORWARD_BACKWARD: "FRONT_BACK",
+          },
+          mapFieldValues: {
+            FORWARD_BACKWARD: {
+              forward: "front",
+              backward: "back",
+            },
+          },
+        },
+        noopSwitch,
+      ];
     }
 
     if (addon.settings.get("sound")) {
@@ -815,6 +852,15 @@ export default async function ({ addon, console, msg }) {
           const fieldNode = valueNode.firstChild;
           valueNode.setAttribute("type", newShadowType);
           fieldNode.setAttribute("name", getShadowFieldName(newShadowType));
+        }
+
+        const fieldValueMap = opcodeData.mapFieldValues && opcodeData.mapFieldValues[oldName];
+        if (fieldValueMap && child.tagName === "FIELD") {
+          const oldValue = child.innerText;
+          const newValue = fieldValueMap[oldValue];
+          if (typeof newValue === 'string') {
+            child.innerText = newValue;
+          }
         }
       }
 
