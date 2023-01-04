@@ -478,6 +478,25 @@ export default async function ({ addon, console, msg }) {
         },
         noopSwitch,
       ];
+      blockSwitches["data_deleteoflist"] = [
+        noopSwitch,
+        {
+          opcode: "data_deletealloflist",
+          splitInputs: ["INDEX"]
+        },
+      ];
+      blockSwitches["data_deletealloflist"] = [
+        {
+          opcode: "data_deleteoflist",
+          createInputs: {
+            INDEX: {
+              shadowType: "math_integer",
+              value: "1"
+            }
+          }
+        },
+        noopSwitch,
+      ];
     }
 
     if (addon.settings.get("extension")) {
@@ -655,7 +674,12 @@ export default async function ({ addon, console, msg }) {
             continue;
           }
           if (connection.isConnected()) {
-            connection.disconnect();
+            const targetBlock = connection.targetBlock();
+            if (targetBlock.isShadow()) {
+              targetBlock.dispose();
+            } else {
+              connection.disconnect();
+            }
           }
         }
       }
@@ -703,6 +727,24 @@ export default async function ({ addon, console, msg }) {
         const mutation = xml.querySelector("mutation");
         for (const [key, value] of Object.entries(opcodeData.mutate)) {
           mutation.setAttribute(key, value);
+        }
+      }
+
+      if (opcodeData.createInputs) {
+        for (const [inputName, inputData] of Object.entries(opcodeData.createInputs)) {
+          const valueElement = document.createElement("value");
+          valueElement.setAttribute("name", inputName);
+
+          const shadowElement = document.createElement("shadow");
+          shadowElement.setAttribute("type", inputData.shadowType);
+
+          const shadowFieldElement = document.createElement("field");
+          shadowFieldElement.setAttribute("name", "NUM");
+          shadowFieldElement.innerText = inputData.value;
+
+          shadowElement.appendChild(shadowFieldElement);
+          valueElement.appendChild(shadowElement);
+          xml.appendChild(valueElement);
         }
       }
 
