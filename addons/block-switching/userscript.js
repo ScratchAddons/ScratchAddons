@@ -643,6 +643,23 @@ export default async function ({ addon, console, msg }) {
 
       const workspace = block.workspace;
 
+      // Split inputs before we clone the block.
+      if (opcodeData.splitInputs) {
+        for (const inputName of opcodeData.splitInputs) {
+          const input = block.getInput(inputName);
+          if (!input) {
+            continue;
+          }
+          const connection = input.connection;
+          if (!connection) {
+            continue;
+          }
+          if (connection.isConnected()) {
+            connection.disconnect();
+          }
+        }
+      }
+
       // Make a copy of the block with the proper type set.
       // It doesn't seem to be possible to change a Block's type after it's created, so we'll just make a new block instead.
       const xml = ScratchBlocks.Xml.blockToDomWithXY(block);
@@ -665,8 +682,6 @@ export default async function ({ addon, console, msg }) {
         blockConnectionType = blockToParentConnection.type;
       }
 
-      const pasteSeparately = [];
-
       for (const child of Array.from(xml.children)) {
         const oldName = child.getAttribute("name");
 
@@ -682,18 +697,6 @@ export default async function ({ addon, console, msg }) {
           valueNode.setAttribute("type", newType);
           fieldNode.setAttribute("name", newType === "text" ? "TEXT" : "NUM");
         }
-
-        const shouldBeSplit = opcodeData.splitInputs && opcodeData.splitInputs.includes(oldName);
-        if (shouldBeSplit) {
-          const inputXml = child.firstChild;
-          const inputId = inputXml.id;
-          const inputBlock = workspace.getBlockById(inputId);
-          const position = inputBlock.getRelativeToSurfaceXY();
-          inputXml.setAttribute("x", Math.round(workspace.RTL ? -position.x : position.x));
-          inputXml.setAttribute("y", Math.round(position.y));
-          pasteSeparately.push(inputXml);
-          xml.removeChild(child);
-        }
       }
 
       if (opcodeData.mutate) {
@@ -706,9 +709,6 @@ export default async function ({ addon, console, msg }) {
       // Remove the old block and insert the new one.
       block.dispose();
       const newBlock = pasteBlockXML(workspace, xml);
-      for (const separateBlock of pasteSeparately) {
-        pasteBlockXML(workspace, separateBlock);
-      }
 
       if (parentConnection) {
         // Search for the same type of connection on the new block as on the old block.
