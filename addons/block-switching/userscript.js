@@ -688,7 +688,7 @@ export default async function ({ addon, console, msg }) {
           if (connection.isConnected()) {
             const targetBlock = connection.targetBlock();
             if (targetBlock.isShadow()) {
-              targetBlock.dispose();
+              // Deleting shadows is handled later.
             } else {
               connection.disconnect();
             }
@@ -718,8 +718,17 @@ export default async function ({ addon, console, msg }) {
         blockConnectionType = blockToParentConnection.type;
       }
 
+      // Array.from creates a clone of the children list. This is important as we may remove
+      // children as we iterate.
       for (const child of Array.from(xml.children)) {
         const oldName = child.getAttribute("name");
+
+        // Any inputs that were supposed to be split that were not should be removed.
+        // (eg. shadow inputs)
+        if (opcodeData.splitInputs && opcodeData.splitInputs.includes(oldName)) {
+          xml.removeChild(child);
+          continue;
+        }
 
         const newName = opcodeData.remapInputName && opcodeData.remapInputName[oldName];
         if (newName) {
