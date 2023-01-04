@@ -457,28 +457,6 @@
         "input-color": "#202020",
         "text": "colorOnBlack"
       }
-    },
-    {
-      "name": "Scratch's default colors",
-      "id": "old3",
-      "description": "The colors normally used by Scratch",
-      "values": {
-        "motion-color": "#4C97FF",
-        "looks-color": "#9966FF",
-        "sounds-color": "#CF63CF",
-        "events-color": "#FFBF00",
-        "control-color": "#FFAB19",
-        "sensing-color": "#5CB1D6",
-        "operators-color": "#59C059",
-        "data-color": "#FF8C1A",
-        "data-lists-color": "#FF661A",
-        "custom-color": "#FF6680",
-        "Pen-color": "#0FBD8C",
-        "sa-color": "#29BEB8",
-        "comment-color": "#FEF49C",
-        "input-color": "#FFFFFF",
-        "text": "white"
-      }
     }
   ],
   "presetPreview": {
