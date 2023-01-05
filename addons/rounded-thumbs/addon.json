@@ -12,7 +12,7 @@
   "dynamicDisable": true,
   "injectAsStyleElt": true,
   "updateUserstylesOnSettingsChange": true,
-  "versionAdded": "1.30.0",
+  "versionAdded": "1.31.0",
   "userstyles": [
     {
       "url": "scratch3.css",
