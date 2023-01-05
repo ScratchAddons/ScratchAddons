@@ -34,12 +34,12 @@ export default async function ({ addon, console }) {
       modSplashes = document.querySelectorAll(".mod-splash");
       modSplashes[0].style.display = "grid"; // If user is not logged in
       modSplashes[1].style.display = "grid";
-      
-      console.log(rowsWithIds)
+
+      console.log(rowsWithIds);
 
       // Change order of rows
       let rowsSetting = addon.settings.get("rows");
-      console.log(rowsSetting)
+      console.log(rowsSetting);
       rowsSetting.forEach((item, i) => {
         let specificRow = rowsWithIds.find((e) => e.key == item.id)?.obj;
         if (specificRow) {

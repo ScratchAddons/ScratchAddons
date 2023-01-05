@@ -30,8 +30,16 @@
         { "name": "Projects Curated by", "id": "curator_top_projects", "rowVisibility": true },
         { "name": "Scratch Design Studio", "id": "scratch_design_studio", "rowVisibility": true },
         { "name": "Projects by Scratchers I'm Following", "id": "custom_projects_by_following", "rowVisibility": true },
-        { "name": "Projects Loved by Scratchers I'm Following", "id": "custom_projects_loved_by_following", "rowVisibility": true },
-        { "name": "Projects in Studios I'm Following", "id": "custom_projects_in_studios_following", "rowVisibility": true },
+        {
+          "name": "Projects Loved by Scratchers I'm Following",
+          "id": "custom_projects_loved_by_following",
+          "rowVisibility": true
+        },
+        {
+          "name": "Projects in Studios I'm Following",
+          "id": "custom_projects_in_studios_following",
+          "rowVisibility": true
+        },
         { "name": "What the Community is Remixing", "id": "community_most_remixed_projects", "rowVisibility": true },
         { "name": "What the Community is Loving", "id": "community_most_loved_projects", "rowVisibility": true }
       ],
@@ -74,23 +82,43 @@
         },
         {
           "name": "Projects by Scratchers I'm Following",
-          "values": { "name": "Projects by Scratchers I'm Following", "id": "custom_projects_by_following", "rowVisibility": true }
+          "values": {
+            "name": "Projects by Scratchers I'm Following",
+            "id": "custom_projects_by_following",
+            "rowVisibility": true
+          }
         },
         {
           "name": "Projects Loved by Scratchers I'm Following",
-          "values": { "name": "Projects Loved by Scratchers I'm Following", "id": "custom_projects_loved_by_following", "rowVisibility": true }
+          "values": {
+            "name": "Projects Loved by Scratchers I'm Following",
+            "id": "custom_projects_loved_by_following",
+            "rowVisibility": true
+          }
         },
         {
           "name": "Projects in Studios I'm Following",
-          "values": { "name": "Projects in Studios I'm Following", "id": "custom_projects_in_studios_following", "rowVisibility": true }
+          "values": {
+            "name": "Projects in Studios I'm Following",
+            "id": "custom_projects_in_studios_following",
+            "rowVisibility": true
+          }
         },
         {
           "name": "What the Community is Remixing",
-          "values": { "name": "What the Community is Remixing", "id": "community_most_remixed_projects", "rowVisibility": true }
+          "values": {
+            "name": "What the Community is Remixing",
+            "id": "community_most_remixed_projects",
+            "rowVisibility": true
+          }
         },
         {
           "name": "What the Community is Loving",
-          "values": { "name": "What the Community is Loving", "id": "community_most_loved_projects", "rowVisibility": true }
+          "values": {
+            "name": "What the Community is Loving",
+            "id": "community_most_loved_projects",
+            "rowVisibility": true
+          }
         }
       ]
     }
