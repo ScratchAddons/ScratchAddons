@@ -34,12 +34,18 @@ export default async function ({ addon, console }) {
       modSplashes = document.querySelectorAll(".mod-splash");
       modSplashes[0].style.display = "grid"; // If user is not logged in
       modSplashes[1].style.display = "grid";
+      
+      console.log(rowsWithIds)
 
       // Change order of rows
       let rowsSetting = addon.settings.get("rows");
+      console.log(rowsSetting)
       rowsSetting.forEach((item, i) => {
-        let specificRow = rowsWithIds.find((e) => e.key == item.id);
-        if (specificRow) specificRow.obj.style.order = i;
+        let specificRow = rowsWithIds.find((e) => e.key == item.id)?.obj;
+        if (specificRow) {
+          if (!item.rowVisibility) specificRow.style.display = "none";
+          specificRow.style.order = i;
+        }
       });
     });
   }

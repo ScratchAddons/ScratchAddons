@@ -5,6 +5,10 @@
     {
       "name": "Norbiros",
       "link": "https://scratch.mit.edu/users/norbir/"
+    },
+    {
+      "name": "Platformer444",
+      "link": "https://scratch.mit.edu/users/Platformer444/"
     }
   ],
   "userscripts": [
@@ -21,15 +25,15 @@
       "type": "table",
       "disableEditing": true,
       "default": [
-        { "name": "Featured Projects", "id": "community_featured_projects" },
-        { "name": "Featured Studios", "id": "community_featured_studios" },
-        { "name": "Projects Curated by", "id": "curator_top_projects" },
-        { "name": "Scratch Design Studio", "id": "scratch_design_studio" },
-        { "name": "Projects by Scratchers I'm Following", "id": "custom_projects_by_following" },
-        { "name": "Projects Loved by Scratchers I'm Following", "id": "custom_projects_loved_by_following" },
-        { "name": "Projects in Studios I'm Following", "id": "custom_projects_in_studios_following" },
-        { "name": "What the Community is Remixing", "id": "community_most_remixed_project" },
-        { "name": "What the Community is Loving", "id": "community_most_loved_projects" }
+        { "name": "Featured Projects", "id": "community_featured_projects", "rowVisibility": true },
+        { "name": "Featured Studios", "id": "community_featured_studios", "rowVisibility": true },
+        { "name": "Projects Curated by", "id": "curator_top_projects", "rowVisibility": true },
+        { "name": "Scratch Design Studio", "id": "scratch_design_studio", "rowVisibility": true },
+        { "name": "Projects by Scratchers I'm Following", "id": "custom_projects_by_following", "rowVisibility": true },
+        { "name": "Projects Loved by Scratchers I'm Following", "id": "custom_projects_loved_by_following", "rowVisibility": true },
+        { "name": "Projects in Studios I'm Following", "id": "custom_projects_in_studios_following", "rowVisibility": true },
+        { "name": "What the Community is Remixing", "id": "community_most_remixed_projects", "rowVisibility": true },
+        { "name": "What the Community is Loving", "id": "community_most_loved_projects", "rowVisibility": true }
       ],
       "row": [
         {
@@ -43,51 +47,57 @@
           "id": "id",
           "type": "untranslated",
           "default": ""
+        },
+        {
+          "name": "Show",
+          "id": "rowVisibility",
+          "type": "boolean",
+          "default": true
         }
       ],
       "presets": [
         {
           "name": "Featured Projects",
-          "values": { "name": "Featured Projects", "id": "community_featured_projects" }
+          "values": { "name": "Featured Projects", "id": "community_featured_projects", "rowVisibility": true }
         },
         {
           "name": "Featured Studios",
-          "values": { "name": "Featured Studios", "id": "community_featured_studios" }
+          "values": { "name": "Featured Studios", "id": "community_featured_studios", "rowVisibility": true }
         },
         {
           "name": "Projects Curated by",
-          "values": { "name": "Projects Curated by", "id": "curator_top_projects" }
+          "values": { "name": "Projects Curated by", "id": "curator_top_projects", "rowVisibility": true }
         },
         {
           "name": "Scratch Design Studio",
-          "values": { "name": "Scratch Design Studio", "id": "scratch_design_studio" }
+          "values": { "name": "Scratch Design Studio", "id": "scratch_design_studio", "rowVisibility": true }
         },
         {
           "name": "Projects by Scratchers I'm Following",
-          "values": { "name": "Projects by Scratchers I'm Following", "id": "custom_projects_by_following" }
+          "values": { "name": "Projects by Scratchers I'm Following", "id": "custom_projects_by_following", "rowVisibility": true }
         },
         {
           "name": "Projects Loved by Scratchers I'm Following",
-          "values": { "name": "Projects Loved by Scratchers I'm Following", "id": "custom_projects_loved_by_following" }
+          "values": { "name": "Projects Loved by Scratchers I'm Following", "id": "custom_projects_loved_by_following", "rowVisibility": true }
         },
         {
           "name": "Projects in Studios I'm Following",
-          "values": { "name": "Projects in Studios I'm Following", "id": "custom_projects_in_studios_following" }
+          "values": { "name": "Projects in Studios I'm Following", "id": "custom_projects_in_studios_following", "rowVisibility": true }
         },
         {
           "name": "What the Community is Remixing",
-          "values": { "name": "What the Community is Remixing", "id": "community_most_remixed_project" }
+          "values": { "name": "What the Community is Remixing", "id": "community_most_remixed_projects", "rowVisibility": true }
         },
         {
           "name": "What the Community is Loving",
-          "values": { "name": "What the Community is Loving", "id": "community_most_loved_projects" }
+          "values": { "name": "What the Community is Loving", "id": "community_most_loved_projects", "rowVisibility": true }
         }
       ]
     }
   ],
   "dynamicDisable": true,
   "dynamicEnable": true,
-  "versionAdded": "1.28.0",
+  "versionAdded": "1.31.0",
   "tags": ["community", "featured"],
   "enabledByDefault": false
 }
