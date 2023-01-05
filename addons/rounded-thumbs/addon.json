@@ -24,7 +24,11 @@
     },
     {
       "url": "profile.css",
-      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/projects/*/remixes/", "https://scratch.mit.edu/projects/*/studios/"]
+      "matches": [
+        "https://scratch.mit.edu/users/*",
+        "https://scratch.mit.edu/projects/*/remixes/",
+        "https://scratch.mit.edu/projects/*/studios/"
+      ]
     },
     {
       "url": "mystuff.css",
