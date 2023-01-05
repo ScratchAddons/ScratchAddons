@@ -1,6 +1,6 @@
 {
   "name": "Rounded thumbnail corners",
-  "description": "Rounds out the corners of project/studio thumbnails and profile pictures around the website.",
+  "description": "Makes the corners of project/studio thumbnails and profile pictures round.",
   "credits": [
     {
       "name": "DNin01",
@@ -12,7 +12,7 @@
   "dynamicDisable": true,
   "injectAsStyleElt": true,
   "updateUserstylesOnSettingsChange": true,
-  "versionAdded": "1.30.0",
+  "versionAdded": "1.31.0",
   "userstyles": [
     {
       "url": "scratch3.css",
