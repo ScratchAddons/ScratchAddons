@@ -1,6 +1,6 @@
 {
   "name": "Rounded thumbnail corners",
-  "description": "Makes the corners of project/studio thumbnails and profile pictures round.",
+  "description": "Rounds out the corners of project/studio thumbnails and profile pictures around the website.",
   "credits": [
     {
       "name": "DNin01",
@@ -12,7 +12,7 @@
   "dynamicDisable": true,
   "injectAsStyleElt": true,
   "updateUserstylesOnSettingsChange": true,
-  "versionAdded": "1.31.0",
+  "versionAdded": "1.30.0",
   "userstyles": [
     {
       "url": "scratch3.css",
@@ -24,11 +24,7 @@
     },
     {
       "url": "profile.css",
-      "matches": [
-        "https://scratch.mit.edu/users/*",
-        "https://scratch.mit.edu/projects/*/remixes/",
-        "https://scratch.mit.edu/projects/*/studios/"
-      ]
+      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/projects/*/remixes/", "https://scratch.mit.edu/projects/*/studios/"]
     },
     {
       "url": "mystuff.css",
@@ -37,6 +33,16 @@
     {
       "url": "messages.css",
       "matches": ["https://scratch.mit.edu/messages/"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Corner radius",
+      "id": "round-size",
+      "type": "integer",
+      "min": 3,
+      "max": 15,
+      "default": 6
     }
   ]
 }

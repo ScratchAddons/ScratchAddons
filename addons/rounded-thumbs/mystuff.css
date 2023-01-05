@@ -1,3 +1,3 @@
 .media-item-content .media-thumb img {
-  border-radius: 0.625rem;
+  border-radius: calc(var(--roundedThumbs-roundSize) * 0.8px);
 }

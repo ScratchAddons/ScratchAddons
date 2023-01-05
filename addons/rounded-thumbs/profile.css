@@ -1,11 +1,11 @@
 img {
-  border-radius: 0.625rem;
+  border-radius: calc(var(--roundedThumbs-roundSize) * 1px);
 }
 
 .gallery.thumb span.image {
-  border-radius: 0.75rem;
+  border-radius: calc(var(--roundedThumbs-roundSize) * 1.35px);
 }
 
 #profile-box .player {
-  border-radius: 0.625rem;
+  border-radius: calc(var(--roundedThumbs-roundSize) * 1px);
 }

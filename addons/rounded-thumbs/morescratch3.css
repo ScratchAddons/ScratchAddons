@@ -1,7 +1,7 @@
 .thumbnail .thumbnail-image img {
-  border-radius: 0.625rem !important;
+  border-radius: calc(var(--roundedThumbs-roundSize) * 1px) !important;
 }
 
 .grid .thumbnail {
-  border-radius: 0.775rem;
+  border-radius: calc(var(--roundedThumbs-roundSize) * 1.35px);
 }
