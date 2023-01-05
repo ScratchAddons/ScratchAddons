@@ -1,0 +1,11 @@
+img {
+  border-radius: 0.625rem;
+}
+
+.gallery.thumb span.image {
+  border-radius: 0.75rem;
+}
+
+#profile-box .player {
+  border-radius: 0.625rem;
+}

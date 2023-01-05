@@ -1,0 +1,38 @@
+{
+  "name": "Rounded thumbnail corners",
+  "description": "Makes the corners of project/studio thumbnails and profile pictures round.",
+  "credits": [
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
+    }
+  ],
+  "tags": ["community", "theme"],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "injectAsStyleElt": true,
+  "updateUserstylesOnSettingsChange": true,
+  "versionAdded": "1.30.0",
+  "userstyles": [
+    {
+      "url": "scratch3.css",
+      "matches": ["https://scratch.mit.edu/"]
+    },
+    {
+      "url": "morescratch3.css",
+      "matches": ["https://scratch.mit.edu/search/*", "https://scratch.mit.edu/explore/*"]
+    },
+    {
+      "url": "profile.css",
+      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/projects/*/remixes/", "https://scratch.mit.edu/projects/*/studios/"]
+    },
+    {
+      "url": "mystuff.css",
+      "matches": ["https://scratch.mit.edu/mystuff/*"]
+    },
+    {
+      "url": "messages.css",
+      "matches": ["https://scratch.mit.edu/messages/"]
+    }
+  ]
+}

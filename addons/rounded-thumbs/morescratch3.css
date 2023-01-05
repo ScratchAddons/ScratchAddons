@@ -1,0 +1,7 @@
+.thumbnail .thumbnail-image img {
+  border-radius: 0.625rem !important;
+}
+
+.grid .thumbnail {
+  border-radius: 0.775rem;
+}
