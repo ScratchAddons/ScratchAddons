@@ -12,9 +12,9 @@ export default async function ({ addon, console }) {
   async function changeRowsOrder() {
     addon.tab.waitForElement(".mod-splash").then(async function () {
       modSplashes = document.querySelectorAll(".mod-splash");
-      
-      let loggedIndex = await addon.auth.fetchIsLoggedIn() ? 2 : 0;
-      console.log(loggedIndex)
+
+      let loggedIndex = (await addon.auth.fetchIsLoggedIn()) ? 2 : 0;
+      console.log(loggedIndex);
       modSplashes[1].appendChild(document.querySelectorAll(".mod-splash .box")[loggedIndex]);
       modSplashes[1].appendChild(document.querySelectorAll(".mod-splash .box")[loggedIndex]);
 
