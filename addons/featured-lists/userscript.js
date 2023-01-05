@@ -1,20 +1,22 @@
 export default async function ({ addon, console }) {
-  let modSplashes;
+  let modSplashes = document.querySelectorAll(".mod-splash");
   changeRowsOrder();
 
   addon.self.addEventListener("disabled", function () {
-    modSplashes = document.querySelectorAll(".mod-splash");
-    modSplashes[0].style.display = "block"; // If user is not logged in
-    modSplashes[1].style.display = "block";
+    modSplashes[addon.auth.fetchIsLoggedIn() ? 1 : 0].style.display = "block";
   });
   addon.self.addEventListener("reenabled", changeRowsOrder);
   addon.settings.addEventListener("change", changeRowsOrder);
+  addon.auth.addEventListener("change", changeRowsOrder);
 
   async function changeRowsOrder() {
-    addon.tab.waitForElement(".mod-splash").then((modSplash) => {
-      // Rows are splited to 2 different elements, so order doesn't work. This code moves
-      document.querySelectorAll(".mod-splash")[1]?.prepend(document.querySelectorAll(".mod-splash .box")[3]);
-      document.querySelectorAll(".mod-splash")[1]?.prepend(document.querySelectorAll(".mod-splash .box")[2]);
+    addon.tab.waitForElement(".mod-splash").then(async function () {
+      modSplashes = document.querySelectorAll(".mod-splash");
+      
+      let loggedIndex = await addon.auth.fetchIsLoggedIn() ? 2 : 0;
+      console.log(loggedIndex)
+      modSplashes[1].appendChild(document.querySelectorAll(".mod-splash .box")[loggedIndex]);
+      modSplashes[1].appendChild(document.querySelectorAll(".mod-splash .box")[loggedIndex]);
 
       // Remove strange margin
       document.querySelectorAll(".mod-splash")[1].style.marginTop = "0px";
@@ -31,15 +33,11 @@ export default async function ({ addon, console }) {
       });
 
       // Change style to grid
-      modSplashes = document.querySelectorAll(".mod-splash");
       modSplashes[0].style.display = "grid"; // If user is not logged in
       modSplashes[1].style.display = "grid";
 
-      console.log(rowsWithIds);
-
       // Change order of rows
       let rowsSetting = addon.settings.get("rows");
-      console.log(rowsSetting);
       rowsSetting.forEach((item, i) => {
         let specificRow = rowsWithIds.find((e) => e.key == item.id)?.obj;
         if (specificRow) {

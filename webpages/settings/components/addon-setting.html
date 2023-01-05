@@ -20,7 +20,7 @@
                 :disabled="!addon._enabled"
                 class="addon-buttons"
                 @click="deleteTableRow(i)"
-                v-if="setting.disableEditing != true"
+                v-if="setting.disableEditingText != true"
               >
                 <img class="icon-type" src="../../images/icons/close.svg" />
               </button>
@@ -35,7 +35,7 @@
                 :table-child="true"
                 :setting="getTableSetting(id)"
                 :addon-settings="row"
-                :class="{'disableEditing': setting.disableEditing, 'hide': shouldHide(id)}"
+                :class="{'disableEditing': setting.disableEditingText, 'hide': shouldHide(id)}"
               ></addon-setting>
             </div>
           </div>
@@ -43,7 +43,7 @@
         <div
           class="addon-split-button setting-table-dropdown"
           :class="{open: rowDropdownOpen}"
-          v-if="setting.disableEditing != true"
+          v-if="setting.disableAddingPresets != true"
         >
           <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-button" @click="addTableRow()">
             <img class="icon-type" src="../../images/icons/plus.svg" />
