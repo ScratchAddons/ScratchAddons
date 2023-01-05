@@ -18,11 +18,14 @@ export default async function ({ addon, msg, console }) {
 
       this.prevValue = "";
 
+      this.findBarOuter = null;
       this.findLabel = null;
       this.findWrapper = null;
       this.findInput = null;
       this.dropdownOut = null;
       this.dropdown = new Dropdown(this.utils);
+
+      document.addEventListener("keydown", (e) => this.eventKeyDown(e), true);
     }
 
     get workspace() {
@@ -30,15 +33,16 @@ export default async function ({ addon, msg, console }) {
     }
 
     createDom(root) {
-      const findBar = root.appendChild(document.createElement("div"));
-      findBar.className = "sa-find-bar";
-      addon.tab.displayNoneWhileDisabled(findBar, { display: "flex" });
+      this.findBarOuter = document.createElement("div");
+      this.findBarOuter.className = "sa-find-bar";
+      addon.tab.displayNoneWhileDisabled(this.findBarOuter, { display: "flex" });
+      root.appendChild(this.findBarOuter);
 
-      this.findLabel = findBar.appendChild(document.createElement("label"));
+      this.findLabel = this.findBarOuter.appendChild(document.createElement("label"));
       this.findLabel.htmlFor = "sa-find-input";
       this.findLabel.textContent = msg("find");
 
-      this.findWrapper = findBar.appendChild(document.createElement("span"));
+      this.findWrapper = this.findBarOuter.appendChild(document.createElement("span"));
       this.findWrapper.className = "sa-find-wrapper";
 
       this.dropdownOut = this.findWrapper.appendChild(document.createElement("label"));
@@ -48,6 +52,8 @@ export default async function ({ addon, msg, console }) {
       this.findInput.className = addon.tab.scratchClass("input_input-form", {
         others: "sa-find-input",
       });
+      // for <label>
+      this.findInput.id = "sa-find-input";
       this.findInput.type = "search";
       this.findInput.placeholder = msg("find-placeholder");
       this.findInput.autocomplete = "off";
@@ -55,6 +61,7 @@ export default async function ({ addon, msg, console }) {
       this.dropdownOut.appendChild(this.dropdown.createDom());
 
       this.bindEvents();
+      this.tabChanged();
     }
 
     bindEvents() {
@@ -62,8 +69,15 @@ export default async function ({ addon, msg, console }) {
       this.findInput.addEventListener("keydown", (e) => this.inputKeyDown(e));
       this.findInput.addEventListener("keyup", () => this.inputChange());
       this.findInput.addEventListener("focusout", () => this.hideDropDown());
+    }
 
-      document.addEventListener("keydown", (e) => this.eventKeyDown(e), true);
+    tabChanged() {
+      if (!this.findBarOuter) {
+        return;
+      }
+      const tab = addon.tab.redux.state.scratchGui.editorTab.activeTabIndex;
+      const visible = tab === 0 || tab === 1 || tab === 2;
+      this.findBarOuter.hidden = !visible;
     }
 
     inputChange() {
@@ -127,7 +141,7 @@ export default async function ({ addon, msg, console }) {
     }
 
     eventKeyDown(e) {
-      if (addon.self.disabled) return;
+      if (addon.self.disabled || !this.findBarOuter) return;
 
       let ctrlKey = e.ctrlKey || e.metaKey;
 
@@ -808,6 +822,13 @@ export default async function ({ addon, msg, console }) {
 
     _doBlockClick_.call(this);
   };
+
+  addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (e.detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB") {
+      findBar.tabChanged();
+    }
+  });
 
   while (true) {
     const root = await addon.tab.waitForElement("ul[class*=gui_tab-list_]", {
