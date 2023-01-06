@@ -37,11 +37,15 @@
     {
       "url": "messages.css",
       "matches": ["https://scratch.mit.edu/messages/"]
+    },
+    {
+      "url": "studios.css",
+      "matches": ["https://scratch.mit.edu/studios/*"]
     }
   ],
   "settings": [
     {
-      "name": "Corner radius",
+      "name": "Corner radius (px)",
       "id": "round-size",
       "type": "integer",
       "min": 0,

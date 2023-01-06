@@ -1,0 +1,12 @@
+.studio-project-tile {
+    border-radius: calc(var(--roundedThumbs-roundSize) * 1.333px);
+  }
+  
+  .studio-project-tile .studio-project-image {
+    border-top-left-radius: calc(var(--roundedThumbs-roundSize) * 1.333px);
+    border-top-right-radius: calc(var(--roundedThumbs-roundSize) * 1.333px);
+  }
+  
+  .studio-info .studio-image {
+    border-radius: calc(var(--roundedThumbs-roundSize) * 1.333px);
+  }
