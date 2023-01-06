@@ -44,7 +44,7 @@
       "name": "Corner radius",
       "id": "round-size",
       "type": "integer",
-      "min": 3,
+      "min": 0,
       "max": 15,
       "default": 6
     }
