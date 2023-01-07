@@ -23,6 +23,6 @@
   "dynamicDisable": true,
   "dynamicEnable": true,
   "tags": ["community"],
-  "versionAdded": "1.30.0",
+  "versionAdded": "1.31.0",
   "enabledByDefault": false
 }
