@@ -106,7 +106,7 @@
 [data-too-big="true"] .sa-var-manager-too-big {
   display: block;
 }
-[data-too-big="true"] .sa-var-manager-input {
+[data-too-big="true"] .sa-var-manager-value-input {
   display: none;
 }
 

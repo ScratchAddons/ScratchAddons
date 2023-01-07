@@ -236,7 +236,7 @@ export default async function ({ addon, console, msg }) {
       } else {
         input = document.createElement("input");
       }
-      input.className = "sa-var-manager-input";
+      input.className = "sa-var-manager-value-input";
       input.id = id;
       this.input = input;
 
@@ -270,8 +270,8 @@ export default async function ({ addon, console, msg }) {
         manager.classList.remove("freeze");
       });
 
-      valueCell.appendChild(tooBigElement);
       valueCell.appendChild(input);
+      valueCell.appendChild(tooBigElement);
       row.appendChild(labelCell);
       row.appendChild(valueCell);
 
