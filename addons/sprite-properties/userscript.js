@@ -21,6 +21,12 @@ export default async function ({ addon, global, console, msg }) {
         injectInfoButton(spriteIndex);
       }
     }
+
+    if (e.detail.action.type === "scratch-gui/locales/SELECT_LOCALE") {
+      queueMicrotask(() => {
+        init();
+      });
+    }
   });
 
   // Open the properties panel when double clicking in the sprite grid
