@@ -4,28 +4,27 @@ export default async function ({ addon, global, console, msg }) {
   const PROPS_BTN_CLASS = "sa-sprite-properties-btn";
   const PROPS_CLOSE_BTN_CLASS = "sa-sprite-properties-close-btn";
 
+  /** @type {HTMLElement} */
   let propertiesPanel;
+  /** @type {HTMLElement} */
   let spriteContainer; // also contains sprite grid
 
-  await init();
-
-  // Inject info bubble into current editing target
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type === "scratch-gui/targets/UPDATE_TARGET_LIST") {
-      let spriteId = e.detail.action.editingTarget;
-      if (!spriteId) return;
-      let spriteIndex = e.detail.action.targets.findIndex((el) => el.id === spriteId);
-      // The focused sprite might not be in the target list if, for example, we are editing a clone.
-      if (spriteIndex !== -1) {
-        injectInfoButton(spriteIndex);
-      }
-    }
+    const action = e.detail.action;
 
-    if (e.detail.action.type === "scratch-gui/locales/SELECT_LOCALE") {
-      queueMicrotask(() => {
-        init();
-      });
+    // When target list changes, move icon to the focused sprite.
+    if (action.type === "scratch-gui/targets/UPDATE_TARGET_LIST") {
+      const spriteId = action.editingTarget;
+      if (spriteId) {
+        const spriteIndex = action.targets.findIndex((el) => el.id === spriteId);
+        // The focused sprite might not be in the target list if, for example, we are editing a clone.
+        if (spriteIndex !== -1) {
+          queueMicrotask(() => {
+            injectInfoButton(spriteIndex);
+          });
+        }
+      }
     }
   });
 
@@ -54,29 +53,12 @@ export default async function ({ addon, global, console, msg }) {
     setPropertiesPanelVisible(true);
     removeCloseButton();
   });
-  addon.self.addEventListener("reenabled", () => init());
-  addon.tab.addEventListener("urlChange", () => {
-    if (addon.tab.editorMode === "editor") init();
-  });
-
-  async function init() {
-    propertiesPanel = await addon.tab.waitForElement('[class^="sprite-info_sprite-info_"]');
-    spriteContainer = propertiesPanel.parentElement; // also contains sprite grid
-
-    // Certain languages, such as Japanese, use a different layout for the sprite info panel
-    // Easiest way to detect this without hardcoding a language list is with this selector that only
-    // exists when the sprite info panel is using the larger layout with text above the input.
-    const isWideLocale = !!propertiesPanel.querySelector("[class^=label_input-group-column_]");
-    document.body.classList.toggle('sa-sprite-properties-wide-locale', isWideLocale);
-
-    setPropertiesPanelVisible(!addon.settings.get("hideByDefault"));
-    injectInfoButton();
-    injectCloseButton();
-  }
 
   function setPropertiesPanelVisible(visible) {
-    spriteContainer.classList.toggle(SHOW_PROPS_CLASS, visible);
-    spriteContainer.classList.toggle(HIDE_PROPS_CLASS, !visible);
+    if (spriteContainer) {
+      spriteContainer.classList.toggle(SHOW_PROPS_CLASS, visible);
+      spriteContainer.classList.toggle(HIDE_PROPS_CLASS, !visible);
+    }
   }
 
   function togglePropertiesPanel() {
@@ -90,16 +72,18 @@ export default async function ({ addon, global, console, msg }) {
     }
   }
 
-  async function injectInfoButton(spriteIndex) {
+  function injectInfoButton(spriteIndex) {
     let selectedSprite;
-    if (spriteIndex) {
+    if (typeof spriteIndex === 'number') {
       selectedSprite = document.querySelector(
         `[class*='sprite-selector_sprite-wrapper_']:nth-child(${spriteIndex}) [class*="sprite-selector_sprite_"]`
       );
     } else {
-      selectedSprite = await addon.tab.waitForElement(`[class*="sprite-selector-item_is-selected"]`);
+      selectedSprite = document.querySelector('[class*="sprite-selector-item_is-selected"]');
     }
-    injectButton(selectedSprite, PROPS_BTN_CLASS, "/info.svg", msg("open-properties-panel-tooltip"));
+    if (selectedSprite) {
+      injectButton(selectedSprite, PROPS_BTN_CLASS, "/info.svg", msg("open-properties-panel-tooltip"));
+    }
   }
 
   async function injectCloseButton() {
@@ -123,5 +107,27 @@ export default async function ({ addon, global, console, msg }) {
   function removeCloseButton() {
     let closeBtn = document.querySelector("." + PROPS_CLOSE_BTN_CLASS);
     if (closeBtn) closeBtn.remove();
+  }
+
+  while (true) {
+    propertiesPanel = await addon.tab.waitForElement('[class^="sprite-info_sprite-info_"]', {
+      markAsSeen: true,
+      reduxEvents: [
+        "scratch-gui/mode/SET_PLAYER",
+        "fontsLoaded/SET_FONTS_LOADED",
+        "scratch-gui/locales/SELECT_LOCALE",
+      ],
+    });
+    spriteContainer = propertiesPanel.parentElement; // also contains sprite grid
+
+    // Certain languages, such as Japanese, use a different layout for the sprite info panel
+    // Easiest way to detect this without hardcoding a language list is with this selector that only
+    // exists when the sprite info panel is using the larger layout with text above the input.
+    const isWideLocale = !!propertiesPanel.querySelector("[class^=label_input-group-column_]");
+    document.body.classList.toggle('sa-sprite-properties-wide-locale', isWideLocale);
+
+    setPropertiesPanelVisible(!addon.settings.get("hideByDefault"));
+    injectInfoButton();
+    injectCloseButton();
   }
 }
