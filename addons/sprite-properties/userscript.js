@@ -109,6 +109,28 @@ export default async function ({ addon, global, console, msg }) {
     if (closeBtn) closeBtn.remove();
   }
 
+  function updateWideLocaleMode() {
+    // Certain languages, such as Japanese, use a different layout for the sprite info panel
+    // Easiest way to detect this without hardcoding a language list is with this selector that only
+    // exists when the sprite info panel is using the larger layout with text above the input.
+    const isWideLocale = !!propertiesPanel.querySelector("[class^=label_input-group-column_]");
+    document.body.classList.toggle('sa-sprite-properties-wide-locale', isWideLocale);
+  }
+
+  document.addEventListener(
+    "click",
+    (e) => {
+      // In small stage mode, wide locales use the same properties panel as other languages.
+      if (
+        e.target.closest("[class*='stage-header_stage-button-first']") ||
+        e.target.closest("[class*='stage-header_stage-button-last']")
+      ) {
+        setTimeout(updateWideLocaleMode);
+      }
+    },
+    { capture: true }
+  );
+
   while (true) {
     propertiesPanel = await addon.tab.waitForElement('[class^="sprite-info_sprite-info_"]', {
       markAsSeen: true,
@@ -119,13 +141,7 @@ export default async function ({ addon, global, console, msg }) {
       ],
     });
     spriteContainer = propertiesPanel.parentElement; // also contains sprite grid
-
-    // Certain languages, such as Japanese, use a different layout for the sprite info panel
-    // Easiest way to detect this without hardcoding a language list is with this selector that only
-    // exists when the sprite info panel is using the larger layout with text above the input.
-    const isWideLocale = !!propertiesPanel.querySelector("[class^=label_input-group-column_]");
-    document.body.classList.toggle('sa-sprite-properties-wide-locale', isWideLocale);
-
+    updateWideLocaleMode();
     setPropertiesPanelVisible(!addon.settings.get("hideByDefault"));
     injectInfoButton();
     injectCloseButton();

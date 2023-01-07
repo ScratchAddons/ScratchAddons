@@ -32,7 +32,7 @@
 }
 .sa-sprite-properties-wide-locale .sa-show-sprite-properties [class^="sprite-info_sprite-info_"] {
   /* In wide languages, add in addition to the previous:
-     + 2 * 0.625rem * 1.2 (extra row's text now uses vertical space)
+     + 2 * 0.625rem * 1.2 (each row's text label now uses vertical space)
      + 2 * 0.25rem (each row has extra padding) */
   height: calc(6.5rem + 5px + 2rem);
 }
