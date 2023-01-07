@@ -18,3 +18,11 @@
 .studio-member-tile .studio-member-image {
   border-radius: calc(var(--roundedThumbs-roundSize) * 0.9px);
 }
+
+.preview img.avatar {
+  border-radius: calc(var(--roundedThumbs-roundSize) * 1px);
+}
+
+.comment .avatar {
+  border-radius: calc(var(--roundedThumbs-roundSize) * 1px);
+}
