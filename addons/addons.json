@@ -133,7 +133,6 @@
   "rename-broadcasts",
   "middle-click-popup",
   "number-pad",
-  "rounded-thumbs",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
@@ -150,6 +149,7 @@
   "material-forum-editor-buttons",
   "forum-quote-code-beautifier",
   "horizontal-mystuff-tabs",
+  "rounded-thumbs",
   "// For editor:",
   "editor-dark-mode",
   "editor-colored-context-menus",
