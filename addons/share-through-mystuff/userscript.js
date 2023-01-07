@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global }) {
   const share_function = document.createElement("a");
   share_function.classList.add("media-share");
   share_function.dataset.control = "share";
@@ -6,7 +6,6 @@ export default async function ({ addon, global, console }) {
 
   const share_button = document.createElement("a");
   function share_confirmation(event) {
-    console.log("confirmation triggered");
     let confirmation = confirm("Would you like to share this project?");
     if (confirmation) event.target.parentElement.querySelector(".media-share").click();
   }
