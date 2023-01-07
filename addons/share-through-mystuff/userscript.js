@@ -6,7 +6,7 @@ export default async function ({ addon, global, console }) {
 
   const share_button = document.createElement("a");
   function share_confirmation(event) {
-    console.log("confirmation triggered")
+    console.log("confirmation triggered");
     let confirmation = confirm("Would you like to share this project?");
     if (confirmation) event.target.parentElement.querySelector(".media-share").click();
   }
@@ -20,7 +20,7 @@ export default async function ({ addon, global, console }) {
     });
     project.querySelector(".media-action div").appendChild(share_function.cloneNode());
     let local_share = share_button.cloneNode(true);
-    local_share.addEventListener("click", share_confirmation)
+    local_share.addEventListener("click", share_confirmation);
     project.querySelector(".media-action div").appendChild(local_share);
   }
 }
