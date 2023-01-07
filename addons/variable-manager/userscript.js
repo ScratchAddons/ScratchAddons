@@ -91,12 +91,19 @@ export default async function ({ addon, console, msg }) {
     updateValue(force) {
       if (!this.visible && !force) return;
       let newValue;
+      let tooBig;
       if (this.scratchVariable.type === "list") {
         newValue = this.scratchVariable.value.join("\n");
+        tooBig = newValue.length > 200000 * 100;
       } else {
         newValue = this.scratchVariable.value;
+        tooBig = newValue.length > 2000000;
       }
-      if (newValue !== this.input.value) {
+      if (tooBig) {
+        this.input.disabled = true;
+        this.input.value = msg("too-big");
+      } else if (newValue !== this.input.value) {
+        this.input.disabled = false;
         this.input.value = newValue;
       }
     }

@@ -86,6 +86,11 @@
   resize: none;
 }
 
+.sa-var-manager input:disabled, .sa-var-manager textarea:disabled {
+  font-style: italic;
+  opacity: 0.8;
+}
+
 .sa-var-manager table {
   border-radius: 5px;
   border-collapse: collapse;
