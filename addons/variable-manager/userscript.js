@@ -93,13 +93,16 @@ export default async function ({ addon, console, msg }) {
       if (!this.visible && !force) return;
 
       let newValue;
+      let maxSafeLength;
       if (this.scratchVariable.type === "list") {
         newValue = this.scratchVariable.value.join("\n");
+        maxSafeLength = 5000000;
       } else {
         newValue = this.scratchVariable.value;
+        maxSafeLength = 1000000;
       }
 
-      if (!this.ignoreTooBig && newValue.length > 1000000) {
+      if (!this.ignoreTooBig && newValue.length > maxSafeLength) {
         this.input.value = "";
         this.row.dataset.tooBig = true;
         return;
