@@ -94,6 +94,7 @@ export default async function ({ addon, global, console, msg }) {
     if (container.querySelector("." + className)) return;
     let btnIcon = document.createElement("img");
     btnIcon.setAttribute("src", addon.self.dir + iconPath);
+    btnIcon.draggable = false;
     let btn = document.createElement("button");
     btn.classList.add(className);
     btn.setAttribute("title", tooltip);
