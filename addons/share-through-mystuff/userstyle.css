@@ -5,3 +5,8 @@
 .__share_button__ {
   display: block;
 }
+
+.media-item-content.not-shared .media-trash {
+  position: initial;
+  float: none;
+}
