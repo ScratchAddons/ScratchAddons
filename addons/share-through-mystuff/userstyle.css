@@ -3,10 +3,14 @@
 }
 
 .__share_button__ {
+  position: relative;
   display: block;
+  left: 20px;
 }
 
 .media-item-content.not-shared .media-trash {
-  position: initial;
+  position: relative;
   float: none;
+  top: 0;
+  left: 20px;
 }
