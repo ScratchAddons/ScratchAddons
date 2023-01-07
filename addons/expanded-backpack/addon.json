@@ -1,13 +1,13 @@
 {
   "name": "Multiple rows in backpack",
-  "description": "Display the contents of the editor backpack in an expandable two-way grid similar to the costume library and increase the size of thumbnails to improve ease of use.",
+  "description": "Arranges the contents of the editor backpack into an expandable two-way grid, similar to the costume library and increases the size of certain thumbnails.",
   "credits": [
     {
       "name": "pumpkinhasapatch",
       "link": "https://github.com/pumpkinhasapatch"
     }
   ],
-  "versionAdded": "1.30.0",
+  "versionAdded": "1.31.0",
   "tags": ["editor"],
   "enabledByDefault": false,
   "settings": [
