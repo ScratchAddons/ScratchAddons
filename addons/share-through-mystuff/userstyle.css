@@ -1,12 +1,7 @@
-.media-item-content .media-action a.media-share,
-.media-item-content .media-action a.media-trash {
-  float: initial !important;
-  position: initial !important;
-  margin: 3px !important;
+.media-item-content.not-shared .media-action {
+    top: 20px !important;
 }
 
-.media-action div {
-  position: relative;
-  float: left;
-  top: 20px;
+.__share_button__ {
+    display: block;
 }
