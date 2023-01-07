@@ -68,6 +68,11 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
         madeAnyChanges = true;
         addonsEnabled["jump-to-def"] = false;
       }
+      // Transition 1.29.0 to 1.30.0
+      if (addonsEnabled["middle-click-popup"] === undefined) {
+        madeAnyChanges = true;
+        addonsEnabled["middle-click-popup"] = false;
+      }
     }
 
     for (const { manifest, addonId } of scratchAddons.manifests) {

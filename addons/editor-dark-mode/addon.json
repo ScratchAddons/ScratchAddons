@@ -563,6 +563,19 @@
       }
     },
     {
+      "name": "input-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        },
+        "threshold": 128
+      }
+    },
+    {
       "name": "input-transparent90",
       "value": {
         "type": "multiply",

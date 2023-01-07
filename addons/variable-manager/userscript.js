@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
   let localVariables = [];
@@ -164,8 +164,17 @@ export default async function ({ addon, global, console, msg }) {
           }
         }
 
+        let nameAlreadyUsed = false;
+        if (this.target.isStage) {
+          // Global variables must not conflict with any global variables or local variables in any sprite.
+          const existingNames = vm.runtime.getAllVarNamesOfType(this.scratchVariable.type);
+          nameAlreadyUsed = existingNames.includes(newName);
+        } else {
+          // Local variables must not conflict with any global variables or local variables in this sprite.
+          nameAlreadyUsed = !!workspace.getVariable(newName, this.scratchVariable.type);
+        }
+
         const isEmpty = !newName.trim();
-        const nameAlreadyUsed = !!workspace.getVariable(newName, this.scratchVariable.type);
         if (isEmpty || nameAlreadyUsed) {
           label.value = this.scratchVariable.name;
         } else {

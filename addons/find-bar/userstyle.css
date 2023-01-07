@@ -8,6 +8,10 @@
   width: 100%;
   height: 100%;
 }
+.sa-find-bar[hidden] {
+  /* !important to override displayNoneWhileDisabled */
+  display: none !important;
+}
 
 .sa-find-bar > label {
   /* padding instead of margin so clicking on the empty area will select the input */

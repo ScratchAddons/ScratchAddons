@@ -2,17 +2,13 @@
   "manifest_version": 2,
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
-  "version": "1.30.0",
-  "version_name": "1.30.0-prerelease",
+  "version": "1.31.0",
+  "version_name": "1.31.0-prerelease",
   "default_locale": "en",
   "background": {
     "page": "background/background.html"
   },
-  "browser_action": {
-    "default_icon": "images/icon-blue.png",
-    "default_popup": "webpages/popup/index.html",
-    "default_title": "Scratch Addons"
-  },
+  "browser_action": { "default_popup": "webpages/popup/index.html" },
   "icons": {
     "16": "images/icon-blue-16.png",
     "32": "images/icon-blue-32.png",
