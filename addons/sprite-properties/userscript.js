@@ -11,19 +11,13 @@ export default async function ({ addon, global, console, msg }) {
 
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
-    const action = e.detail.action;
-
-    // When target list changes, move icon to the focused sprite.
-    if (action.type === "scratch-gui/targets/UPDATE_TARGET_LIST") {
-      const spriteId = action.editingTarget;
-      if (spriteId) {
-        const spriteIndex = action.targets.findIndex((el) => el.id === spriteId);
-        // The focused sprite might not be in the target list if, for example, we are editing a clone.
-        if (spriteIndex !== -1) {
-          queueMicrotask(() => {
-            injectInfoButton(spriteIndex);
-          });
-        }
+    if (e.detail.action.type === "scratch-gui/targets/UPDATE_TARGET_LIST") {
+      let spriteId = e.detail.action.editingTarget;
+      if (!spriteId) return;
+      let spriteIndex = e.detail.action.targets.findIndex((el) => el.id === spriteId);
+      // The focused sprite might not be in the target list if, for example, we are editing a clone.
+      if (spriteIndex !== -1) {
+        injectInfoButton(spriteIndex);
       }
     }
   });
