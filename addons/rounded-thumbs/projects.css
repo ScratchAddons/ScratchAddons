@@ -1,9 +1,9 @@
 .preview img.avatar {
-  border-radius: calc(var(--roundedThumbs-roundSize) * 1px)
+  border-radius: calc(var(--roundedThumbs-roundSize) * 1px);
 }
 
 .comment .avatar {
-  border-radius: calc(var(--roundedThumbs-roundSize) * 1px)
+  border-radius: calc(var(--roundedThumbs-roundSize) * 1px);
 }
 
 .thumbnail-image {

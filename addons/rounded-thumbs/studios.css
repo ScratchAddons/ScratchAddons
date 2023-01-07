@@ -16,5 +16,5 @@
 }
 
 .studio-member-tile .studio-member-image {
-  border-radius: calc(var(--roundedThumbs-roundSize) * 0.9px);  
+  border-radius: calc(var(--roundedThumbs-roundSize) * 0.9px);
 }

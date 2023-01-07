@@ -22,7 +22,8 @@ img {
   border-radius: calc(var(--roundedThumbs-roundSize) * 1.35px);
 }
 
-#profile-box .player [data-control="edit"], #lfp-change-featured {
+#profile-box .player [data-control="edit"],
+#lfp-change-featured {
   border-top-left-radius: calc(var(--roundedThumbs-roundSize) * 1px);
 }
 
