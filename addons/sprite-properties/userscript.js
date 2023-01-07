@@ -134,6 +134,7 @@ export default async function ({ addon, global, console, msg }) {
         "fontsLoaded/SET_FONTS_LOADED",
         "scratch-gui/locales/SELECT_LOCALE",
       ],
+      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
     spriteContainer = propertiesPanel.parentElement; // also contains sprite grid
     updateWideLocaleMode();
