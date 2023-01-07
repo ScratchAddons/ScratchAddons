@@ -41,6 +41,10 @@
     {
       "url": "studios.css",
       "matches": ["https://scratch.mit.edu/studios/*"]
+    },
+    {
+      "url": "projects.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
   "settings": [

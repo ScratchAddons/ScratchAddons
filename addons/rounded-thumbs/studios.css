@@ -14,3 +14,7 @@
 .studio-project-tile .studio-project-avatar {
   border-radius: calc(var(--roundedThumbs-roundSize) * 0.9px);
 }
+
+.studio-member-tile .studio-member-image {
+  border-radius: calc(var(--roundedThumbs-roundSize) * 0.9px);  
+}

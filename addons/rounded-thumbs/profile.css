@@ -21,3 +21,11 @@ img {
 .media-grid .gallery.thumb.item {
   border-radius: calc(var(--roundedThumbs-roundSize) * 1.35px);
 }
+
+#profile-box .player [data-control="edit"], #lfp-change-featured {
+  border-top-left-radius: calc(var(--roundedThumbs-roundSize) * 1px);
+}
+
+#profile-box .player .stage img {
+  border-radius: calc(var(--roundedThumbs-roundSize) * 1px) !important;
+}
