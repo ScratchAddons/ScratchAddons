@@ -5,19 +5,22 @@ export default async function ({ addon, global, console }) {
   share_function.href = "#";
 
   const share_button = document.createElement("a");
+  function share_confirmation(event) {
+    console.log("confirmation triggered")
+    let confirmation = confirm("Would you like to share this project?");
+    if (confirmation) event.target.parentElement.querySelector(".media-share").click();
+  }
   share_button.href = "#";
   share_button.classList.add("__share_button__");
   share_button.innerText = "Share";
-  share_button.addEventListener("click", (event) => {
-    let confirmation = confirm("Would you like to share this project?");
-    if (confirmation) event.target.parentElement.querySelector(".media-share").click();
-  });
 
   while (true) {
     const project = await addon.tab.waitForElement("div.media-item-content.not-shared", {
       markAsSeen: true,
     });
     project.querySelector(".media-action div").appendChild(share_function.cloneNode());
-    project.querySelector(".media-action div").appendChild(share_button.cloneNode(true));
+    let local_share = share_button.cloneNode(true);
+    local_share.addEventListener("click", share_confirmation)
+    project.querySelector(".media-action div").appendChild(local_share);
   }
 }
