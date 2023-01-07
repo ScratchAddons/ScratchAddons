@@ -86,9 +86,28 @@
   resize: none;
 }
 
-.sa-var-manager input:disabled, .sa-var-manager textarea:disabled {
+.sa-var-manager-too-big {
+  display: none;
+  cursor: pointer;
+  font: inherit;
   font-style: italic;
+  color: inherit;
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 8px;
   opacity: 0.8;
+  width: 100%;
+  text-align: left;
+}
+.sa-var-manager-too-big:hover {
+  text-decoration: underline;
+}
+[data-too-big="true"] .sa-var-manager-too-big {
+  display: block;
+}
+[data-too-big="true"] .sa-var-manager-input {
+  display: none;
 }
 
 .sa-var-manager table {
