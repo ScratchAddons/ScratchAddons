@@ -68,7 +68,7 @@ export default async function ({ addon, global, console, msg }) {
 
   function injectInfoButton(spriteIndex) {
     let selectedSprite;
-    if (typeof spriteIndex === 'number') {
+    if (typeof spriteIndex === "number") {
       selectedSprite = document.querySelector(
         `[class*='sprite-selector_sprite-wrapper_']:nth-child(${spriteIndex}) [class*="sprite-selector_sprite_"]`
       );
@@ -109,7 +109,7 @@ export default async function ({ addon, global, console, msg }) {
     // Easiest way to detect this without hardcoding a language list is with this selector that only
     // exists when the sprite info panel is using the larger layout with text above the input.
     const isWideLocale = !!propertiesPanel.querySelector("[class^=label_input-group-column_]");
-    document.body.classList.toggle('sa-sprite-properties-wide-locale', isWideLocale);
+    document.body.classList.toggle("sa-sprite-properties-wide-locale", isWideLocale);
   }
 
   document.addEventListener(
@@ -129,11 +129,7 @@ export default async function ({ addon, global, console, msg }) {
   while (true) {
     propertiesPanel = await addon.tab.waitForElement('[class^="sprite-info_sprite-info_"]', {
       markAsSeen: true,
-      reduxEvents: [
-        "scratch-gui/mode/SET_PLAYER",
-        "fontsLoaded/SET_FONTS_LOADED",
-        "scratch-gui/locales/SELECT_LOCALE",
-      ],
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
     spriteContainer = propertiesPanel.parentElement; // also contains sprite grid
