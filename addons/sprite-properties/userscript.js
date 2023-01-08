@@ -65,8 +65,8 @@ export default async function ({ addon, global, console, msg }) {
 
   addon.self.addEventListener("disabled", () => {
     setPropertiesPanelVisible(true);
-    removeCloseButton();
   });
+  addon.self.addEventListener("reenabled", applySettings);
 
   function injectInfoButton(spriteIndex) {
     let selectedSprite;
@@ -99,11 +99,6 @@ export default async function ({ addon, global, console, msg }) {
     btn.appendChild(btnIcon);
     container.appendChild(btn);
     addon.tab.displayNoneWhileDisabled(btn, { display: "flex" });
-  }
-
-  function removeCloseButton() {
-    let closeBtn = document.querySelector("." + PROPS_CLOSE_BTN_CLASS);
-    if (closeBtn) closeBtn.remove();
   }
 
   function updateWideLocaleMode() {
