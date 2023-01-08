@@ -251,7 +251,7 @@ export const updateScaleTool = (paper, tool) => {
     };
     const paintLayer = getLayer("isPaintingLayer");
 
-    let snapActive = (!ctrlOn || (event.modifiers.control || event.modifiers.meta) === (ctrlAction === "enable"));
+    let snapActive = !ctrlOn || (event.modifiers.control || event.modifiers.meta) === (ctrlAction === "enable");
 
     const doesSx =
       snapOn && snapActive && ((this.isCorner && !event.modifiers.shift) || Math.abs(this.origSize.x) > 0.0000001);
