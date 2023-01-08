@@ -27,19 +27,6 @@ export default async function ({ addon, global, console, msg }) {
     }
   });
 
-  // Close properties panel when mouse leaves the entire sprite panel
-  document.body.addEventListener(
-    "mouseleave",
-    (e) => {
-      if (e.target.matches('[class*="sprite-selector_sprite-selector_2KgCX"]')) {
-        autoHidePanel();
-      }
-    },
-    {
-      capture: true,
-    }
-  );
-
   function setPropertiesPanelVisible(visible) {
     document.body.classList.toggle(SHOW_PROPS_CLASS, visible);
     document.body.classList.toggle(HIDE_PROPS_CLASS, !visible);
@@ -55,18 +42,30 @@ export default async function ({ addon, global, console, msg }) {
       setPropertiesPanelVisible(false);
     }
   }
+  // Close properties panel when mouse leaves the entire sprite panel
+  document.body.addEventListener(
+    "mouseleave",
+    (e) => {
+      if (e.target.matches('[class*="sprite-selector_sprite-selector_2KgCX"]')) {
+        autoHidePanel();
+      }
+    },
+    {
+      capture: true,
+    }
+  );  
+  addon.settings.addEventListener("change", autoHidePanel);
 
   function applySettings() {
     autoHidePanel();
     setPropertiesPanelVisible(!addon.settings.get("hideByDefault"));
   }
-  addon.settings.addEventListener("change", applySettings);
+  addon.self.addEventListener("reenabled", applySettings);
   applySettings();
 
   addon.self.addEventListener("disabled", () => {
     setPropertiesPanelVisible(true);
   });
-  addon.self.addEventListener("reenabled", applySettings);
 
   function injectInfoButton(spriteIndex) {
     let selectedSprite;
