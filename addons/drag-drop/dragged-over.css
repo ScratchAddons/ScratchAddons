@@ -1,13 +1,11 @@
 /* Based on the `stage-selector_raised` class */
 [class*="stage-selector_header_"],
 [class*="sprite-selector_sprite-selector"],
-[class*="sprite-info_sprite-info"],
 [class*="monitor_list-body"] {
   transition: background-color 0.25s ease;
 }
 .sa-dragged-over,
 .sa-dragged-over [class*="stage-selector_header_"],
-.sa-dragged-over [class*="sprite-info_sprite-info"],
 .sa-dragged-over [class*="monitor_list-body"] {
   background-color: hsla(215, 100%, 77%, 1);
 }
