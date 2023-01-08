@@ -62,6 +62,10 @@
   border-radius: 100%;
   background-color: var(--editorDarkMode-primary, hsla(215, 100%, 65%, 1));
 }
+[dir="rtl"] .sa-sprite-properties-info-btn {
+  left: auto;
+  right: -2px;
+}
 
 .sa-hide-sprite-properties [class*="sprite-selector-item_is-selected"] .sa-sprite-properties-info-btn {
   display: flex !important;
