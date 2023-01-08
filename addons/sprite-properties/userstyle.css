@@ -49,7 +49,7 @@
   height: calc(100% - 6.5rem - 5px - 2rem);
 }
 
-.sa-sprite-properties-btn {
+.sa-sprite-properties-info-btn {
   display: none !important;
   position: absolute;
   justify-content: center;
@@ -63,11 +63,11 @@
   background-color: var(--editorDarkMode-primary, hsla(215, 100%, 65%, 1));
 }
 
-.sa-hide-sprite-properties [class*="sprite-selector-item_is-selected"] .sa-sprite-properties-btn {
+.sa-hide-sprite-properties [class*="sprite-selector-item_is-selected"] .sa-sprite-properties-info-btn {
   display: flex !important;
 }
 
-.sa-sprite-properties-btn img {
+.sa-sprite-properties-info-btn img {
   width: calc(1rem - 6px);
   height: calc(1rem - 6px);
   filter: var(--editorDarkMode-primary-filter);

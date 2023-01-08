@@ -1,7 +1,7 @@
 export default async function ({ addon, global, console, msg }) {
   const SHOW_PROPS_CLASS = "sa-show-sprite-properties";
   const HIDE_PROPS_CLASS = "sa-hide-sprite-properties";
-  const PROPS_BTN_CLASS = "sa-sprite-properties-btn";
+  const PROPS_INFO_BTN_CLASS = "sa-sprite-properties-info-btn";
   const PROPS_CLOSE_BTN_CLASS = "sa-sprite-properties-close-btn";
 
   /** @type {HTMLElement} */
@@ -76,7 +76,7 @@ export default async function ({ addon, global, console, msg }) {
       selectedSprite = document.querySelector('[class*="sprite-selector-item_is-selected"]');
     }
     if (selectedSprite) {
-      injectButton(selectedSprite, PROPS_BTN_CLASS, "/info.svg", msg("open-properties-panel-tooltip"));
+      injectButton(selectedSprite, PROPS_INFO_BTN_CLASS, "/info.svg", msg("open-properties-panel-tooltip"));
     }
   }
 
