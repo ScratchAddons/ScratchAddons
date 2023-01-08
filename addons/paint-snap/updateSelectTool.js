@@ -128,8 +128,8 @@ export const updateSelectTool = (paper, tool) => {
     };
 
     removeGuides();
-    
-    let snapActive = (!ctrlOn || (event.modifiers.control || event.modifiers.meta) === (ctrlAction === "enable"));
+
+    let snapActive = !ctrlOn || (event.modifiers.control || event.modifiers.meta) === (ctrlAction === "enable");
 
     if (snapOn && snapActive && !event.modifiers.shift && this.mode !== Modes.RESHAPE) {
       const paintLayer = getLayer("isPaintingLayer");
