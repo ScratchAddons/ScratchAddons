@@ -80,11 +80,11 @@ export default async function ({ addon, global, console, msg }) {
     }
   }
 
-  async function injectCloseButton() {
+  function injectCloseButton() {
     injectButton(propertiesPanel, PROPS_CLOSE_BTN_CLASS, "/collapse.svg", msg("close-properties-panel-tooltip"));
   }
 
-  async function injectButton(container, className, iconPath, tooltip) {
+  function injectButton(container, className, iconPath, tooltip) {
     if (container.querySelector("." + className)) return;
     let btnIcon = document.createElement("img");
     btnIcon.setAttribute("src", addon.self.dir + iconPath);
