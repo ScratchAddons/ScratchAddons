@@ -40,16 +40,6 @@ export default async function ({ addon, global, console, msg }) {
     }
   );
 
-  // When auto hide setting is enabled, immediately hide the panel.
-  addon.settings.addEventListener("change", () => {
-    autoHidePanel();
-  });
-
-  addon.self.addEventListener("disabled", () => {
-    setPropertiesPanelVisible(true);
-    removeCloseButton();
-  });
-
   function setPropertiesPanelVisible(visible) {
     document.body.classList.toggle(SHOW_PROPS_CLASS, visible);
     document.body.classList.toggle(HIDE_PROPS_CLASS, !visible);
@@ -65,6 +55,18 @@ export default async function ({ addon, global, console, msg }) {
       setPropertiesPanelVisible(false);
     }
   }
+
+  function applySettings() {
+    autoHidePanel();
+    setPropertiesPanelVisible(!addon.settings.get("hideByDefault"));
+  }
+  addon.settings.addEventListener("change", applySettings);
+  applySettings();
+
+  addon.self.addEventListener("disabled", () => {
+    setPropertiesPanelVisible(true);
+    removeCloseButton();
+  });
 
   function injectInfoButton(spriteIndex) {
     let selectedSprite;
@@ -136,7 +138,6 @@ export default async function ({ addon, global, console, msg }) {
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
     updateWideLocaleMode();
-    setPropertiesPanelVisible(!addon.settings.get("hideByDefault"));
     injectInfoButton();
     injectCloseButton();
   }
