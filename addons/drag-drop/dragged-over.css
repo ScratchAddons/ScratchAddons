@@ -1,11 +1,13 @@
 /* Based on the `stage-selector_raised` class */
-[class*="stage-selector_header_"],
-[class*="sprite-selector_sprite-selector"],
-[class*="monitor_list-body"] {
+div[class*="stage-selector_header_"],
+div[class*="sprite-selector_sprite-selector"],
+div[class*="sprite-info_sprite-info"],
+div[class*="monitor_list-body"] {
   transition: background-color 0.25s ease;
 }
 .sa-dragged-over,
-.sa-dragged-over [class*="stage-selector_header_"],
-.sa-dragged-over [class*="monitor_list-body"] {
+.sa-dragged-over div[class*="stage-selector_header_"],
+.sa-dragged-over div[class*="sprite-info_sprite-info"],
+.sa-dragged-over div[class*="monitor_list-body"] {
   background-color: hsla(215, 100%, 77%, 1);
 }
