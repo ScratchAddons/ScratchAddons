@@ -32,6 +32,31 @@
     },
     {
       "type": "boolean",
+      "id": "ctrl",
+      "name": "Ctrl key modifier",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "ctrlAction",
+      "name": "Ctrl key action",
+      "potentialValues": [
+        {
+          "id": "enable",
+          "name": "Enable snapping"
+        },
+        {
+          "id": "disable",
+          "name": "Disable snapping"
+        }
+      ],
+      "default": "disable",
+      "if": {
+        "settings": { "ctrl": true }
+      }
+    },
+    {
+      "type": "boolean",
       "id": "pageCenter",
       "name": "Snap to page center",
       "default": true
