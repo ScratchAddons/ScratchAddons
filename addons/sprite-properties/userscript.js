@@ -6,8 +6,6 @@ export default async function ({ addon, global, console, msg }) {
 
   /** @type {HTMLElement} */
   let propertiesPanel;
-  /** @type {HTMLElement} */
-  let spriteContainer; // also contains sprite grid
 
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
@@ -49,14 +47,12 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   function setPropertiesPanelVisible(visible) {
-    if (spriteContainer) {
-      spriteContainer.classList.toggle(SHOW_PROPS_CLASS, visible);
-      spriteContainer.classList.toggle(HIDE_PROPS_CLASS, !visible);
-    }
+    document.body.classList.toggle(SHOW_PROPS_CLASS, visible);
+    document.body.classList.toggle(HIDE_PROPS_CLASS, !visible);
   }
 
   function togglePropertiesPanel() {
-    const isCurrentlyOpen = spriteContainer.classList.contains(SHOW_PROPS_CLASS);
+    const isCurrentlyOpen = document.body.classList.contains(SHOW_PROPS_CLASS);
     setPropertiesPanelVisible(!isCurrentlyOpen);
   }
 
@@ -132,7 +128,6 @@ export default async function ({ addon, global, console, msg }) {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
-    spriteContainer = propertiesPanel.parentElement; // also contains sprite grid
     updateWideLocaleMode();
     setPropertiesPanelVisible(!addon.settings.get("hideByDefault"));
     injectInfoButton();
