@@ -20,7 +20,7 @@ export default async function ({ addon, global, console, msg }) {
     }
   });
 
-  // Open the properties panel when double clicking in the sprite grid
+  // Toggle the properties panel when double clicking in the sprite grid
   document.addEventListener("click", (e) => {
     if (e.detail === 2 && e.target.closest('[class^="sprite-selector_scroll-wrapper_"]')) {
       togglePropertiesPanel();
@@ -40,7 +40,11 @@ export default async function ({ addon, global, console, msg }) {
     }
   );
 
-  addon.settings.addEventListener("change", () => autoHidePanel());
+  // When auto hide setting is enabled, immediately hide the panel.
+  addon.settings.addEventListener("change", () => {
+    autoHidePanel();
+  });
+
   addon.self.addEventListener("disabled", () => {
     setPropertiesPanelVisible(true);
     removeCloseButton();
@@ -101,9 +105,13 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   function updateWideLocaleMode() {
-    // Certain languages, such as Japanese, use a different layout for the sprite info panel
-    // Easiest way to detect this without hardcoding a language list is with this selector that only
-    // exists when the sprite info panel is using the larger layout with text above the input.
+    // Certain "wide" languages such as Japanese use a different layout for the sprite info panel
+    // Easiest way to detect this is with this selector that only exists when the sprite info panel
+    // is using the layout with text above the input.
+    // Note that when the stage is in small mode, "wide" languages use the same info panel as other
+    // languages.
+    // List of languages is here:
+    // https://github.com/LLK/scratch-gui/blob/e15b2dfa3a2e58e80fae8d1586c7f56aa0cc0ede/src/lib/locale-utils.js#L6-L18
     const isWideLocale = !!propertiesPanel.querySelector("[class^=label_input-group-column_]");
     document.body.classList.toggle("sa-sprite-properties-wide-locale", isWideLocale);
   }
@@ -111,7 +119,6 @@ export default async function ({ addon, global, console, msg }) {
   document.addEventListener(
     "click",
     (e) => {
-      // In small stage mode, wide locales use the same properties panel as other languages.
       if (
         e.target.closest("[class*='stage-header_stage-button-first']") ||
         e.target.closest("[class*='stage-header_stage-button-last']")
