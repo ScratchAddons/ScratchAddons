@@ -31,6 +31,14 @@
       "allowTransparency": true
     },
     {
+      "type": "positive_integer",
+      "id": "threshold",
+      "name": "Snapping distance",
+      "default": 10,
+      "min": 4,
+      "max": 100
+    },
+    {
       "type": "boolean",
       "id": "ctrl",
       "name": "Ctrl key modifier",
@@ -120,14 +128,6 @@
       "id": "boxEdgeMids",
       "name": "Snap from selection box edge midpoints",
       "default": false
-    },
-    {
-      "type": "positive_integer",
-      "id": "threshold",
-      "name": "Snapping distance",
-      "default": 10,
-      "min": 4,
-      "max": 100
     }
   ],
   "dynamicDisable": true,

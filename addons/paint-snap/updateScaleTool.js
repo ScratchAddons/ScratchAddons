@@ -2,7 +2,7 @@ import createScalePoints from "./genScalePoints.js";
 import createSnapPoints from "./genSnapPoints.js";
 import { loadModules, Modes, BitmapModes } from "./helpers.js";
 
-import { snapOn, threshold, guideColor } from "./state.js";
+import { snapOn, ctrlOn, ctrlAction, threshold, guideColor } from "./state.js";
 
 const getScaleTool = (tool) => {
   return tool.boundingBoxTool._modeMap.SCALE;
@@ -251,8 +251,10 @@ export const updateScaleTool = (paper, tool) => {
     };
     const paintLayer = getLayer("isPaintingLayer");
 
-    const doesSx = snapOn && ((this.isCorner && !event.modifiers.shift) || Math.abs(this.origSize.x) > 0.0000001);
-    const doesSy = snapOn && ((this.isCorner && !event.modifiers.shift) || Math.abs(this.origSize.y) > 0.0000001);
+    let snapActive = (!ctrlOn || (event.modifiers.control || event.modifiers.meta) === (ctrlAction === "enable"));
+
+    const doesSx = snapOn && snapActive && ((this.isCorner && !event.modifiers.shift) || Math.abs(this.origSize.x) > 0.0000001);
+    const doesSy = snapOn && snapActive && ((this.isCorner && !event.modifiers.shift) || Math.abs(this.origSize.y) > 0.0000001);
 
     const scaledThreshold = threshold / paper.view.zoom;
 

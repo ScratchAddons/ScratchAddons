@@ -22,6 +22,9 @@ export let threshold = 10;
 
 export let guideColor;
 
+export let ctrlOn;
+export let ctrlAction;
+
 /**
  *
  * @param {import("../../addon-api/content-script/typedef").UserscriptAddon} addon
@@ -33,6 +36,7 @@ export function loadSettings({ settings }) {
   for (const point in snapFrom) {
     if (Object.prototype.hasOwnProperty.call(snapFrom, point)) setSnapFrom(point, settings.get(point));
   }
+  setCtrlAction(settings.get("ctrl"), settings.get("ctrlAction"));
   setThreshold(settings.get("threshold"));
   toggle(settings.get("enable-default"));
 }
@@ -52,6 +56,11 @@ if (ls.getItem("sa-paint-snap-threshold")) {
   const stored = JSON.parse(ls.getItem("sa-paint-snap-threshold"));
   threshold = stored;
 }*/
+
+export function setCtrlAction(enabled, action) {
+  ctrlOn = enabled;
+  ctrlAction = action;
+}
 
 export function setSnapTo(point, to) {
   snapTo[point] = !!to;
