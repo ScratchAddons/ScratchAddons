@@ -1,6 +1,9 @@
 export default async function ({ addon, console }) {
   const ACTIVE_COLOR = "hsla(215, 100%, 77%, 1)";
-  const ANIMATION_DURATION = 250;
+  const ANIMATION_OPTIONS = {
+    duration: 250,
+    easing: 'ease'
+  };
 
   /** @type {HTMLElement|null} */
   let currentDraggingElement = null;
@@ -113,9 +116,7 @@ export default async function ({ addon, console }) {
       const animation = el.animate({
         backgroundColor: ['', ACTIVE_COLOR],
         easing: 'ease'
-      }, {
-        duration: ANIMATION_DURATION
-      });
+      }, ANIMATION_OPTIONS);
       animation.onfinish = () => {
         el.style.backgroundColor = ACTIVE_COLOR;
       };
@@ -154,9 +155,7 @@ export default async function ({ addon, console }) {
       for (const el of elementsToAnimate) {
         el.animate({
           backgroundColor: [ACTIVE_COLOR, '']
-        }, {
-          duration: ANIMATION_DURATION
-        });
+        }, ANIMATION_OPTIONS);
         el.style.backgroundColor = '';
       }
     };
