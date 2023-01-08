@@ -1,5 +1,9 @@
 export default async function ({ addon, console }) {
-  const DRAG_OVER_CLASS = "sa-dragged-over";
+  const ACTIVE_COLOR = "hsla(215, 100%, 77%, 1)";
+  const ANIMATION_DURATION = 250;
+
+  /** @type {HTMLElement|null} */
+  let currentDraggingElement = null;
 
   const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
   const reactAwareSetValue = (el, value) => {
@@ -94,10 +98,29 @@ export default async function ({ addon, console }) {
 
     e.preventDefault();
 
-    if (el.classList.contains(DRAG_OVER_CLASS)) {
+    if (el === currentDraggingElement) {
       return;
     }
-    el.classList.add(DRAG_OVER_CLASS);
+    currentDraggingElement = el;
+
+    const elementsToAnimate = [
+      el,
+      el.querySelector('div[class*="stage-selector_header_"]'),
+      el.querySelector('div[class*="sprite-info_sprite-info"]'),
+      el.querySelector('div[class*="monitor_list-body"]')
+    ].filter(i => i);
+    const openingAnimations = elementsToAnimate.map(el => {
+      const animation = el.animate({
+        backgroundColor: ['', ACTIVE_COLOR],
+        easing: 'ease'
+      }, {
+        duration: ANIMATION_DURATION
+      });
+      animation.onfinish = () => {
+        el.style.backgroundColor = ACTIVE_COLOR;
+      };
+      return animation;
+    });
 
     const handleDrop = (e) => {
       e.preventDefault();
@@ -119,10 +142,23 @@ export default async function ({ addon, console }) {
     };
 
     const cleanup = () => {
-      el.classList.remove(DRAG_OVER_CLASS);
+      currentDraggingElement = null;
+
       el.removeEventListener("dragover", handleDragOver);
       el.removeEventListener("dragleave", handleDragLeave);
       el.removeEventListener("drop", handleDrop);
+
+      for (const animation of openingAnimations) {
+        animation.cancel();
+      }
+      for (const el of elementsToAnimate) {
+        el.animate({
+          backgroundColor: [ACTIVE_COLOR, '']
+        }, {
+          duration: ANIMATION_DURATION
+        });
+        el.style.backgroundColor = '';
+      }
     };
 
     el.addEventListener("dragover", handleDragOver);
