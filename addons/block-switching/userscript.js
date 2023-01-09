@@ -756,6 +756,7 @@ export default async function ({ addon, console, msg }) {
     const block = ScratchBlocks.Xml.domToBlock(xmlBlock, workspace);
     const x = +xmlBlock.getAttribute("x");
     const y = +xmlBlock.getAttribute("y");
+    // Don't need to handle RTL here
     block.moveBy(x, y);
     return block;
   };
@@ -828,7 +829,11 @@ export default async function ({ addon, console, msg }) {
 
       // Make a copy of the block with the proper type set.
       // It doesn't seem to be possible to change a Block's type after it's created, so we'll just make a new block instead.
-      const xml = ScratchBlocks.Xml.blockToDomWithXY(block);
+      const xml = ScratchBlocks.Xml.blockToDom(block);
+      // blockToDomWithXY's handling of RTL is strange, so we encode the position ourselves.
+      const position = block.getRelativeToSurfaceXY();
+      xml.setAttribute("x", position.x);
+      xml.setAttribute("y", position.y);
       if (opcodeData.opcode) {
         xml.setAttribute("type", opcodeData.opcode);
       }
