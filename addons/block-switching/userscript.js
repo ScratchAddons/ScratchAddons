@@ -8,6 +8,11 @@ export default async function ({ addon, console, msg }) {
     isNoop: true,
   };
 
+  const randomColor = () => {
+    const num = Math.floor(Math.random() * 256 * 256 * 256);
+    return `#${num.toString(16).padStart(6, '0')}`;
+  };
+
   const buildSwitches = () => {
     blockSwitches = {};
     procedureSwitches = {};
@@ -521,7 +526,7 @@ export default async function ({ addon, console, msg }) {
           createInputs: {
             COLOR2: {
               shadowType: "colour_picker",
-              value: "#ff4c4c",
+              value: randomColor,
             },
           },
         },
@@ -770,6 +775,18 @@ export default async function ({ addon, console, msg }) {
     return "NUM";
   };
 
+  /**
+   * @template T
+   * @param {T|()=>T} value
+   * @returns {T}
+   */
+  const callIfFunction = (value) => {
+    if (typeof value === 'function') {
+      return value();
+    }
+    return value;
+  };
+
   const menuCallbackFactory = (block, opcodeData) => () => {
     if (opcodeData.isNoop) {
       return;
@@ -885,7 +902,7 @@ export default async function ({ addon, console, msg }) {
 
           const shadowFieldElement = document.createElement("field");
           shadowFieldElement.setAttribute("name", getShadowFieldName(inputData.shadowType));
-          shadowFieldElement.innerText = inputData.value;
+          shadowFieldElement.innerText = callIfFunction(inputData.value);
 
           shadowElement.appendChild(shadowFieldElement);
           valueElement.appendChild(shadowElement);
