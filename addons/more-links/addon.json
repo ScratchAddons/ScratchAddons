@@ -10,7 +10,7 @@
     {
       "url": "userscript.js",
       "matches": [
-        "https://scratch.mit.edu/projects/*",
+        "projects",
         "https://scratch.mit.edu/studios/*",
         "https://scratch.mit.edu/users/*"
       ]
