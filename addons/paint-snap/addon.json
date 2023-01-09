@@ -3,6 +3,12 @@
   "description": "Snap objects in the costume editor to bounding boxes and vector nodes.",
   "tags": ["editor", "costumeEditor", "featured"],
   "versionAdded": "1.30.0",
+  "info": [
+    {
+      "text": "On macOS, use the Cmd key instead of the Ctrl key.",
+      "id": "macContextDisabled"
+    }
+  ],
   "userscripts": [
     {
       "matches": ["projects"],
