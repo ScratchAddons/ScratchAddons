@@ -1,12 +1,42 @@
 export default async function ({ addon, console }) {
-  const ACTIVE_COLOR = "hsla(215, 100%, 77%, 1)";
-  const ANIMATION_OPTIONS = {
-    duration: 250,
-    easing: 'ease'
-  };
-
   /** @type {HTMLElement|null} */
   let currentDraggingElement = null;
+
+  /** @type {WeakMap<HTMLElement, Animation>} */
+  const allAnimations = new WeakMap();
+
+  const FORWARD = 1;
+  const REVERSE = -1;
+
+  /**
+   * @param {HTMLElement} element
+   * @param {number} direction
+   * @returns {Animation}
+   */
+  const animateElement = (element, direction) => {
+    /** @type {Animation} */
+    let animation;
+    if (allAnimations.has(element)) {
+      animation = allAnimations.get(element);
+    } else {
+      animation = element.animate([
+        {
+          // this object intentionally empty so the element animates from whatever its default value
+          // is in CSS.
+        },
+        {
+          backgroundColor: "hsla(215, 100%, 77%, 1)"
+        }
+      ], {
+        duration: 250,
+        fill: "forwards",
+        easing: "ease"
+      });
+      allAnimations.set(element, animation);
+    }
+
+    animation.playbackRate = direction;
+  };
 
   const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
   const reactAwareSetValue = (el, value) => {
@@ -106,22 +136,16 @@ export default async function ({ addon, console }) {
     }
     currentDraggingElement = el;
 
+    /** @type {HTMLElement[]} */
     const elementsToAnimate = [
       el,
       el.querySelector('div[class*="stage-selector_header_"]'),
       el.querySelector('div[class*="sprite-info_sprite-info"]'),
       el.querySelector('div[class*="monitor_list-body"]')
     ].filter(i => i);
-    const openingAnimations = elementsToAnimate.map(el => {
-      const animation = el.animate({
-        backgroundColor: ['', ACTIVE_COLOR],
-        easing: 'ease'
-      }, ANIMATION_OPTIONS);
-      animation.onfinish = () => {
-        el.style.backgroundColor = ACTIVE_COLOR;
-      };
-      return animation;
-    });
+    for (const el of elementsToAnimate) {
+      animateElement(el, FORWARD);
+    }
 
     const handleDrop = (e) => {
       e.preventDefault();
@@ -149,14 +173,8 @@ export default async function ({ addon, console }) {
       el.removeEventListener("dragleave", handleDragLeave);
       el.removeEventListener("drop", handleDrop);
 
-      for (const animation of openingAnimations) {
-        animation.cancel();
-      }
       for (const el of elementsToAnimate) {
-        el.animate({
-          backgroundColor: [ACTIVE_COLOR, '']
-        }, ANIMATION_OPTIONS);
-        el.style.backgroundColor = '';
+        animateElement(el, REVERSE);
       }
     };
 
