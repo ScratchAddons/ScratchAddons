@@ -19,19 +19,22 @@ export default async function ({ addon, console }) {
     if (allAnimations.has(element)) {
       animation = allAnimations.get(element);
     } else {
-      animation = element.animate([
+      animation = element.animate(
+        [
+          {
+            // this object intentionally empty so the element animates from whatever its default value
+            // is in CSS.
+          },
+          {
+            backgroundColor: "hsla(215, 100%, 77%, 1)",
+          },
+        ],
         {
-          // this object intentionally empty so the element animates from whatever its default value
-          // is in CSS.
-        },
-        {
-          backgroundColor: "hsla(215, 100%, 77%, 1)"
+          duration: 250,
+          fill: "forwards",
+          easing: "ease",
         }
-      ], {
-        duration: 250,
-        fill: "forwards",
-        easing: "ease"
-      });
+      );
       allAnimations.set(element, animation);
     }
 
@@ -141,8 +144,8 @@ export default async function ({ addon, console }) {
       el,
       el.querySelector('div[class*="stage-selector_header_"]'),
       el.querySelector('div[class*="sprite-info_sprite-info"]'),
-      el.querySelector('div[class*="monitor_list-body"]')
-    ].filter(i => i);
+      el.querySelector('div[class*="monitor_list-body"]'),
+    ].filter((i) => i);
     for (const el of elementsToAnimate) {
       animateElement(el, FORWARD);
     }
