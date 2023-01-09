@@ -165,8 +165,8 @@ export default async function ({ addon, console, msg }) {
   }
 
   function performSearch() {
-    const rawQuery = searchBar.value.trim();
-    const query = rawQuery.toLowerCase();
+    const rawQuery = searchBar.value;
+    const query = rawQuery.trim().toLowerCase();
 
     const rank = (item, index) => {
       // Negative number will hide
@@ -180,7 +180,7 @@ export default async function ({ addon, console, msg }) {
           return -1;
         }
         const addonInfo = ADDON_ITEMS[optionId];
-        if (addonInfo.enabled(query)) {
+        if (addonInfo.enabled(rawQuery)) {
           item.element.lastChild.lastChild.textContent = getMenuItemMessage(optionId)[0];
           return 0;
         }
