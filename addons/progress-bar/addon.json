@@ -32,7 +32,7 @@
       "type": "integer",
       "min": 3,
       "max": 25,
-      "default": 5
+      "default": 10
     }
   ],
   "dynamicEnable": true,
