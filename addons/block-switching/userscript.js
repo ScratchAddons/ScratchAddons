@@ -10,7 +10,7 @@ export default async function ({ addon, console, msg }) {
 
   const randomColor = () => {
     const num = Math.floor(Math.random() * 256 * 256 * 256);
-    return `#${num.toString(16).padStart(6, '0')}`;
+    return `#${num.toString(16).padStart(6, "0")}`;
   };
 
   const buildSwitches = () => {
@@ -782,7 +782,7 @@ export default async function ({ addon, console, msg }) {
    * @returns {T}
    */
   const callIfFunction = (value) => {
-    if (typeof value === 'function') {
+    if (typeof value === "function") {
       return value();
     }
     return value;
