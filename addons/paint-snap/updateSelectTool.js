@@ -110,7 +110,7 @@ export const updateSelectTool = (paper, tool) => {
       return p1.getDistance(p2);
     };
 
-    const selectionAnchor = getLayer("isGuideLayer").children.find((c) => c.data.isSelectionBound).selectionAnchor;
+    const selectionAnchor = getLayer("isGuideLayer").children.find((c) => c.data.isSelectionBound)?.selectionAnchor ?? {};
 
     const resetAnchorColor = () => {
       selectionAnchor.strokeColor = new paper.Color(0.30196078431372547, 0.592156862745098, 1);
