@@ -15,7 +15,10 @@ export default async function ({ addon, global, console, msg }) {
       let spriteIndex = e.detail.action.targets.findIndex((el) => el.id === spriteId);
       // The focused sprite might not be in the target list if, for example, we are editing a clone.
       if (spriteIndex !== -1) {
-        injectInfoButton(spriteIndex);
+        // Wait for React to finish updating DOM before injecting the button.
+        queueMicrotask(() => {
+          injectInfoButton(spriteIndex);
+        });
       }
     }
   });
