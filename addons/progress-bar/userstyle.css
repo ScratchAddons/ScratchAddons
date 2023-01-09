@@ -3,11 +3,13 @@
   height: calc(1px * var(--progressBar-height));
   box-sizing: border-box;
   border: 1px solid white;
+  border-radius: calc(1px * var(--progressBar-height));
 }
 .u-progress-bar-inner {
   width: 0;
   height: 100%;
   background-color: white;
+  border-radius: calc(1px * var(--progressBar-height));
 }
 
 .u-progress-bar-top {
