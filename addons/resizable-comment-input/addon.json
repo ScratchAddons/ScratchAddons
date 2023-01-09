@@ -15,11 +15,7 @@
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": [
-        "projects",
-        "https://scratch.mit.edu/users/*/",
-        "https://scratch.mit.edu/studios/*"
-      ]
+      "matches": ["projects", "https://scratch.mit.edu/users/*/", "https://scratch.mit.edu/studios/*"]
     }
   ],
   "enabledByDefault": true
