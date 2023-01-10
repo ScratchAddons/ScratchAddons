@@ -26,21 +26,23 @@
       "disableEditingText": true,
       "disableAddingPresets": true,
       "default": [
-        { "name": "Featured Projects", "id": "community_featured_projects" },
-        { "name": "Featured Studios", "id": "community_featured_studios" },
-        { "name": "Projects Curated by", "id": "curator_top_projects" },
-        { "name": "Scratch Design Studio", "id": "scratch_design_studio" },
-        { "name": "Projects by Scratchers I'm Following", "id": "custom_projects_by_following" },
+        { "name": "Featured Projects", "id": "community_featured_projects", "rowVisibility": true },
+        { "name": "Featured Studios", "id": "community_featured_studios", "rowVisibility": true },
+        { "name": "Projects Curated by", "id": "curator_top_projects", "rowVisibility": true },
+        { "name": "Scratch Design Studio", "id": "scratch_design_studio", "rowVisibility": true },
+        { "name": "Projects by Scratchers I'm Following", "id": "custom_projects_by_following", "rowVisibility": true },
         {
           "name": "Projects Loved by Scratchers I'm Following",
-          "id": "custom_projects_loved_by_following"
+          "id": "custom_projects_loved_by_following",
+          "rowVisibility": true
         },
         {
           "name": "Projects in Studios I'm Following",
-          "id": "custom_projects_in_studios_following"
+          "id": "custom_projects_in_studios_following",
+          "rowVisibility": true
         },
-        { "name": "What the Community is Remixing", "id": "community_most_remixed_projects" },
-        { "name": "What the Community is Loving", "id": "community_most_loved_projects" }
+        { "name": "What the Community is Remixing", "id": "community_most_remixed_projects", "rowVisibility": true },
+        { "name": "What the Community is Loving", "id": "community_most_loved_projects", "rowVisibility": true }
       ],
       "row": [
         {
