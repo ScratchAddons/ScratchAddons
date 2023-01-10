@@ -135,7 +135,7 @@ export default async function ({ addon, console, msg }) {
       if (Object.prototype.hasOwnProperty.call(ADDON_ITEMS, optionId)) {
         const addonItem = ADDON_ITEMS[optionId];
         Blockly.Events.setGroup(true);
-        const variable = addonItem.createVariable(workspace, searchBar.value);
+        const variable = addonItem.createVariable(workspace, searchBar.value.trim());
         if (this.sourceBlock_) this.setValue(variable.getId());
         Blockly.Events.setGroup(false);
         return;
@@ -165,7 +165,7 @@ export default async function ({ addon, console, msg }) {
   }
 
   function performSearch() {
-    const rawQuery = searchBar.value;
+    const rawQuery = searchBar.value.trim();
     const query = rawQuery.trim().toLowerCase();
 
     const rank = (item, index) => {
@@ -306,6 +306,6 @@ export default async function ({ addon, console, msg }) {
   function getMenuItemMessage(message) {
     // Format used internally by Scratch:
     // [human readable name, internal name]
-    return [msg(message, { name: searchBar?.value || "" }), message];
+    return [msg(message, { name: searchBar?.value.trim() || "" }), message];
   }
 }
