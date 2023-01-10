@@ -10,16 +10,11 @@ export default async function ({ addon, global, console, msg }) {
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
     if (e.detail.action.type === "scratch-gui/targets/UPDATE_TARGET_LIST") {
-      let spriteId = e.detail.action.editingTarget;
-      if (!spriteId) return;
-      let spriteIndex = e.detail.action.targets.findIndex((el) => el.id === spriteId);
-      // The focused sprite might not be in the target list if, for example, we are editing a clone.
-      if (spriteIndex !== -1) {
-        // Wait for React to finish updating DOM before injecting the button.
-        queueMicrotask(() => {
-          injectInfoButton(spriteIndex);
-        });
-      }
+      // This event happens when targets are rearranged, move, switch costumes, etc.
+      // Wait for React to finish updating DOM before injecting the button.
+      queueMicrotask(() => {
+        injectInfoButton();
+      });
     }
   });
 
@@ -70,37 +65,43 @@ export default async function ({ addon, global, console, msg }) {
     setPropertiesPanelVisible(true);
   });
 
-  function injectInfoButton(spriteIndex) {
-    let selectedSprite;
-    if (typeof spriteIndex === "number") {
-      selectedSprite = document.querySelector(
-        `[class*='sprite-selector_sprite-wrapper_']:nth-child(${spriteIndex}) [class*="sprite-selector_sprite_"]`
-      );
-    } else {
-      selectedSprite = document.querySelector('[class*="sprite-selector-item_is-selected"]');
+  function createButton(className, iconPath, tooltip) {
+    const buttonIcon = document.createElement("img");
+    buttonIcon.setAttribute("src", addon.self.dir + iconPath);
+    buttonIcon.draggable = false;
+    const button = document.createElement("button");
+    button.classList.add(className);
+    button.title = tooltip;
+    button.addEventListener("click", () => togglePropertiesPanel());
+    button.appendChild(buttonIcon);
+    addon.tab.displayNoneWhileDisabled(button, { display: "flex" });
+    return button;
+  }
+
+  /** @type {HTMLElement} */
+  let infoButton;
+  /** @type {HTMLElement} */
+  let closeButton;
+
+  function injectInfoButton() {
+    if (!infoButton) {
+      infoButton = createButton(PROPS_INFO_BTN_CLASS, "/info.svg", msg("open-properties-panel-tooltip"));
     }
-    if (selectedSprite) {
-      injectButton(selectedSprite, PROPS_INFO_BTN_CLASS, "/info.svg", msg("open-properties-panel-tooltip"));
+    const selectedSprite = propertiesPanel.parentNode.querySelector('[class*="sprite-selector-item_is-selected"]');
+    if (infoButton.parentNode !== selectedSprite) {
+      if (selectedSprite) {
+        selectedSprite.appendChild(infoButton);
+      } else {
+        infoButton.remove();
+      }
     }
   }
 
   function injectCloseButton() {
-    injectButton(propertiesPanel, PROPS_CLOSE_BTN_CLASS, "/collapse.svg", msg("close-properties-panel-tooltip"));
-  }
-
-  function injectButton(container, className, iconPath, tooltip) {
-    if (container.querySelector("." + className)) return;
-    let btnIcon = document.createElement("img");
-    btnIcon.setAttribute("src", addon.self.dir + iconPath);
-    btnIcon.draggable = false;
-    let btn = document.createElement("button");
-    btn.classList.add(className);
-    btn.setAttribute("title", tooltip);
-    btn.setAttribute("tabindex", 0);
-    btn.addEventListener("click", () => togglePropertiesPanel());
-    btn.appendChild(btnIcon);
-    container.appendChild(btn);
-    addon.tab.displayNoneWhileDisabled(btn, { display: "flex" });
+    if (!closeButton) {
+      closeButton = createButton(PROPS_CLOSE_BTN_CLASS, "/collapse.svg", msg("close-properties-panel-tooltip"));
+    }
+    propertiesPanel.appendChild(closeButton);
   }
 
   function updateWideLocaleMode() {

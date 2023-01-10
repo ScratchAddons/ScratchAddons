@@ -50,7 +50,7 @@
 }
 
 .sa-sprite-properties-info-btn {
-  display: none !important;
+  display: flex;
   position: absolute;
   justify-content: center;
   align-items: center;
@@ -65,10 +65,6 @@
 [dir="rtl"] .sa-sprite-properties-info-btn {
   left: auto;
   right: -2px;
-}
-
-.sa-hide-sprite-properties [class*="sprite-selector-item_is-selected"] .sa-sprite-properties-info-btn {
-  display: flex !important;
 }
 
 .sa-sprite-properties-info-btn img {
