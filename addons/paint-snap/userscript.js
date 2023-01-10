@@ -1,5 +1,5 @@
 import { isSelectTool, updateSelectTool } from "./updateSelectTool.js";
-import { enable, disable, loadSettings, setGuideColor, setCtrlAction, toggle } from "./state.js";
+import { enable, disable, loadSettings, setGuideColor, toggle } from "./state.js";
 import { initUI } from "./ui.js";
 import { updateScaleTool } from "./updateScaleTool.js";
 
@@ -16,7 +16,6 @@ export default async function (api) {
   setGuideColor(addon.settings.get("guide-color"));
   addon.settings.addEventListener("change", () => {
     setGuideColor(addon.settings.get("guide-color"));
-    setCtrlAction(addon.settings.get("ctrl"));
   });
 
   if (isSelectTool(tool)) {

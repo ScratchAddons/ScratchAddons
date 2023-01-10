@@ -1,7 +1,7 @@
 import createSnapPoints from "./genSnapPoints.js";
 import { loadModules, Modes, BitmapModes } from "./helpers.js";
 
-import { snapOn, ctrlOn, threshold, guideColor } from "./state.js";
+import { snapOn, threshold, guideColor } from "./state.js";
 
 const getMoveTool = (tool) => {
   return tool.boundingBoxTool._modeMap.MOVE;
@@ -129,7 +129,7 @@ export const updateSelectTool = (paper, tool) => {
 
     removeGuides();
 
-    let snapActive = !ctrlOn || (event.modifiers.control || event.modifiers.meta) !== snapOn;
+    let snapActive = (event.modifiers.control || event.modifiers.meta) !== snapOn;
 
     if (snapActive && !event.modifiers.shift && this.mode !== Modes.RESHAPE) {
       const paintLayer = getLayer("isPaintingLayer");

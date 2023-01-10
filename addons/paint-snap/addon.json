@@ -5,8 +5,8 @@
   "versionAdded": "1.30.0",
   "info": [
     {
-      "text": "On macOS, use the Cmd key instead of the Ctrl key.",
-      "id": "macContextDisabled"
+      "text": "Hold ctrl (cmd on macOS) to temporarily toggle snapping.",
+      "id": "ctrlToggle"
     }
   ],
   "userscripts": [
@@ -43,12 +43,6 @@
       "default": 10,
       "min": 4,
       "max": 100
-    },
-    {
-      "type": "boolean",
-      "id": "ctrl",
-      "name": "Hold ctrl to enable / disable",
-      "default": false
     },
     {
       "type": "boolean",
