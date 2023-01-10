@@ -87,6 +87,7 @@
   align-items: center;
   border: none;
   background-color: transparent;
+  user-select: none;
 }
 
 .sa-sprite-properties-close-btn img {
@@ -96,4 +97,9 @@
 
 .sa-sprite-properties-close-btn:hover img {
   opacity: 0.75;
+}
+
+/* Prevent double clicking from highlighting the "Choose a sprite" button */
+[class*="action-menu_main-button_"] {
+  user-select: none;
 }
