@@ -30,7 +30,7 @@
   padding: 0.75rem;
   padding-bottom: 0;
 }
-.sa-sprite-properties-wide-locale .sa-show-sprite-properties [class^="sprite-info_sprite-info_"] {
+.sa-sprite-properties-wide-locale.sa-show-sprite-properties [class^="sprite-info_sprite-info_"] {
   /* In wide languages, add in addition to the previous:
      + 2 * 0.625rem * 1.2 (each row's text label now uses vertical space)
      + 2 * 0.25rem (each row has extra padding) */
@@ -45,7 +45,7 @@
 .sa-show-sprite-properties [class^="sprite-selector_scroll-wrapper_"] {
   height: calc(100% - 6.5rem - 5px);
 }
-.sa-sprite-properties-wide-locale .sa-show-sprite-properties [class^="sprite-selector_scroll-wrapper_"] {
+.sa-sprite-properties-wide-locale.sa-show-sprite-properties [class^="sprite-selector_scroll-wrapper_"] {
   height: calc(100% - 6.5rem - 5px - 2rem);
 }
 
