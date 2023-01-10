@@ -7,6 +7,8 @@ export default async function ({ addon, console, msg }) {
   /** @type {HTMLElement} */
   let propertiesPanel;
 
+  // A mutation observer is the only reliable way to detect when a different sprite has
+  // been selected or when the folder that contains the focused sprite has been opened.
   const observer = new MutationObserver(() => {
     injectInfoButton();
   });
