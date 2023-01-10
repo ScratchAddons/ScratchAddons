@@ -130,11 +130,15 @@ export default async function ({ addon, console, msg }) {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
-    observer.observe(propertiesPanel.parentNode, {
+
+    const spriteSelector = propertiesPanel.parentNode;
+    const scrollWrapper = spriteSelector.querySelector('[class*="sprite-selector_scroll-wrapper_"]');
+    const itemsWrapper = scrollWrapper.firstChild;
+    observer.observe(itemsWrapper, {
       childList: true,
-      attributes: true,
       subtree: true,
     });
+
     updateWideLocaleMode();
     injectInfoButton();
     injectCloseButton();
