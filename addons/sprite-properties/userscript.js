@@ -7,15 +7,8 @@ export default async function ({ addon, global, console, msg }) {
   /** @type {HTMLElement} */
   let propertiesPanel;
 
-  addon.tab.redux.initialize();
-  addon.tab.redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type === "scratch-gui/targets/UPDATE_TARGET_LIST") {
-      // This event happens when targets are rearranged, move, switch costumes, etc.
-      // Wait for React to finish updating DOM before injecting the button.
-      queueMicrotask(() => {
-        injectInfoButton();
-      });
-    }
+  const observer = new MutationObserver(() => {
+    injectInfoButton();
   });
 
   // Toggle the properties panel when double clicking in the sprite grid
@@ -134,6 +127,11 @@ export default async function ({ addon, global, console, msg }) {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+    });
+    observer.observe(propertiesPanel.parentNode, {
+      childList: true,
+      attributes: true,
+      subtree: true,
     });
     updateWideLocaleMode();
     injectInfoButton();
