@@ -12,7 +12,7 @@ export default async function ({ addon, console, msg }) {
 
   const canUseAsGlobalVariableName = (name, type) => {
     return !vm.runtime.getAllVarNamesOfType(type).includes(name);
-  }
+  };
 
   const canUseAsLocalVariableName = (name, type) => {
     return !vm.editingTarget.lookupVariableByNameAndType(name, type);
@@ -38,7 +38,7 @@ export default async function ({ addon, console, msg }) {
     createBroadcast: {
       enabled: (name) => canUseAsGlobalVariableName(name, "broadcast_msg"),
       createVariable: (workspace, name) => workspace.createVariable(name, "broadcast_msg"),
-    }
+    },
   };
 
   let blocklyDropDownContent = null;
