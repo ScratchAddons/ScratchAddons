@@ -671,3 +671,7 @@ input.link.black {
 .iframeshim {
   color-scheme: light;
 }
+
+.message-count, .notificationsCount {
+  background-color: var(--darkWww-message-indicator-color) !important; 
+}
