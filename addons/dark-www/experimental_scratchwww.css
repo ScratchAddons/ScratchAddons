@@ -864,5 +864,5 @@ p {
 }
 
 .message-count, .notificationsCount {
-  background-color: var(----darkWww-messageIndicatorColor); 
+  background-color: var(--darkWww-message-indicator-color) !important; 
 }
