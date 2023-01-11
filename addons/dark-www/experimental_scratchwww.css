@@ -864,5 +864,5 @@ p {
 }
 
 #navigation .messages .message-count.show {
-  background-color: var(--darkWww-message-indicator-color); 
+  background-color: var(--darkWww-messageIndicatorColor); 
 }
