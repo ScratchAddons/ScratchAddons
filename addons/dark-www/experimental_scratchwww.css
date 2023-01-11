@@ -862,3 +862,7 @@ p {
   /* Change the solid color background to a transparent one */
   background-color: rgba(0, 165, 0, 0.07);
 }
+
+.message-count, .notificationsCount {
+  background-color: var(----darkWww-messageIndicatorColor); 
+}
