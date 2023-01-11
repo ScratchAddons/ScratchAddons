@@ -347,6 +347,17 @@
         }
       }
     },
+      "name": "message-indicator-color",
+      "value": {
+        "type": "multiply",
+        "black": "none",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "messageIndicatorColor"
+        }
+      }
+    },
     {
       "name": "box-eyeFilter",
       "value": {
