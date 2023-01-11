@@ -347,6 +347,7 @@
         }
       }
     },
+    {
       "name": "message-indicator-color",
       "value": {
         "type": "multiply",
