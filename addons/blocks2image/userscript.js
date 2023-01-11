@@ -175,10 +175,14 @@ export default async function ({ addon, console, msg }) {
     let svgchild = block.svgGroup_;
     svgchild = svgchild.cloneNode(true);
     let dataShapes = svgchild.getAttribute("data-shapes");
-    svgchild.setAttribute(
-      "transform",
-      `translate(0,${dataShapes === "hat" ? "18" : "0"}) ${isExportPNG ? "scale(2)" : ""}`
-    );
+    let translateY = 0; // blocks no hat
+    if (dataShapes === "c-block c-1 hat") {
+      translateY = 40; // for My block
+    }
+    if (dataShapes === "hat") {
+      translateY = 33; // for Events
+    }
+    svgchild.setAttribute("transform", `translate(0,${translateY}) ${isExportPNG ? "scale(2)" : ""}`);
     setCSSVars(svg);
     svg.append(makeStyle());
     svg.append(svgchild);
@@ -238,7 +242,6 @@ export default async function ({ addon, console, msg }) {
     document.body.append(iframe);
     iframe.contentDocument.write(serializer.serializeToString(svg));
     let { width, height } = iframe.contentDocument.body.querySelector("svg g").getBoundingClientRect();
-    height = height + 20 * 2; //  hat block height restore
     svg.setAttribute("width", width + "px");
     svg.setAttribute("height", height + "px");
 
