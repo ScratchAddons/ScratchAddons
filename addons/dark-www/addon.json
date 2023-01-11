@@ -2039,6 +2039,12 @@
       "id": "darkForumCode",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "Message indicator color",
+      "id": "messageIndicatorColor",
+      "type": "color",
+      "default": "#ffab1a"
     }
   ],
   "presets": [
