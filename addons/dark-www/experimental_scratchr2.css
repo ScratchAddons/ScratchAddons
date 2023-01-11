@@ -673,5 +673,5 @@ input.link.black {
 }
 
 #topnav ul.account-nav .messages .notificationsCount {
-  background-color: var(--darkWww-message-indicator-color); 
+  background-color: var(--darkWww-messageIndicatorColor); 
 }
