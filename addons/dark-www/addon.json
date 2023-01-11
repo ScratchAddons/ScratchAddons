@@ -2015,6 +2015,12 @@
       "default": "#606060"
     },
     {
+      "name": "Message indicator color",
+      "id": "messageIndicatorColor",
+      "type": "color",
+      "default": "#ffab1a"
+    },
+    {
       "name": "Colored areas",
       "id": "darkBanners",
       "type": "select",
@@ -2040,12 +2046,6 @@
       "type": "boolean",
       "default": true
     },
-    {
-      "name": "Message indicator color",
-      "id": "messageIndicatorColor",
-      "type": "color",
-      "default": "#ffab1a"
-    }
   ],
   "presets": [
     {
