@@ -863,6 +863,6 @@ p {
   background-color: rgba(0, 165, 0, 0.07);
 }
 
-.message-count, .notificationsCount {
-  background-color: var(--darkWww-message-indicator-color) !important; 
+#navigation .messages .message-count.show {
+  background-color: var(--darkWww-message-indicator-color); 
 }
