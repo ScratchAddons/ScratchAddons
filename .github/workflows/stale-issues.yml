@@ -20,10 +20,10 @@ jobs:
         with:
           stale-issue-message: 'Ping! There has been no activity for 7 days.'
           stale-pr-message: 'Ping! There has been no activity for 7 days.'
-          only-label: 'status: awaiting answer/followup'
+          only-labels: 'status: awaiting answer/followup'
           days-before-stale: 7
           days-before-close: -1
-          stale-issue-label: ''
-          stale-pr-label: ''
+          stale-issue-label: 'Stale'
+          stale-pr-label: 'Stale'
           operations-per-run: 30
           repo-token: ${{ steps.generate-token.outputs.token }}
