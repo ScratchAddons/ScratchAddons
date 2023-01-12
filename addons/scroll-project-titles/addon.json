@@ -1,28 +1,22 @@
 {
-  "name": "Scroll project titles",
-  "description": "Allows you to scroll and view the entire title of projects that you don't own.",
-  "credits": [
+  "name":"Scroll project titles",
+  "description":"Allows you to scroll and view the entire title of projects that you don't own.",
+  "credits":[
     {
-      "name": "ActuallyRonan",
-      "link": "https://github.com/ActuallyRonan"
+      "name":"ActuallyRonan",
+      "link":"https://github.com/ActuallyRonan"
     }
   ],
-  "userstyles": [
+  "userstyles":[
     {
-      "url": "style.css",
-      "matches": ["projects"]
+      "url":"style.css",
+      "matches":[
+        "projects"
+      ]
     }
   ],
-  "userscripts": [
-    {
-      "url": "script.js",
-      "matches": ["projects"],
-      "runAtComplete": false
-    }
-  ],
-  "versionAdded": "1.31.0",
-  "tags": ["community", "projectPage"],
-  "dynamicDisable": true,
-  "dynamicEnable": true,
-  "enabledByDefault": false
+  "versionAdded":"1.31.0",
+  "dynamicDisable":true,
+  "dynamicEnable":true,
+  "enabledByDefault":false
 }
