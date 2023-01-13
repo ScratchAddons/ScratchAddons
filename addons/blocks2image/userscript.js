@@ -176,13 +176,14 @@ export default async function ({ addon, console, msg }) {
     svgchild = svgchild.cloneNode(true);
     let dataShapes = svgchild.getAttribute("data-shapes");
     let translateY = 0; // blocks no hat
+    const scale = isExportPNG ? 2 : 1;
     if (dataShapes === "c-block c-1 hat") {
-      translateY = 40; // for My block
+      translateY = 20; // for My block
     }
     if (dataShapes === "hat") {
-      translateY = 33; // for Events
+      translateY = 16; // for Events
     }
-    svgchild.setAttribute("transform", `translate(0,${translateY}) ${isExportPNG ? "scale(2)" : ""}`);
+    svgchild.setAttribute("transform", `translate(0,${scale * translateY}) scale(${scale})`);
     setCSSVars(svg);
     svg.append(makeStyle());
     svg.append(svgchild);
