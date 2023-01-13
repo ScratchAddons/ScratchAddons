@@ -1885,18 +1885,14 @@
       "url": "banners/darker.css",
       "matches": ["projects", "scratchWWWNoProject"],
       "if": {
-        "settings": {
-          "darkBanners": "darker"
-        }
+        "settings": { "darkBanners": "darker" }
       }
     },
     {
       "url": "banners/desaturated.css",
       "matches": ["projects", "scratchWWWNoProject"],
       "if": {
-        "settings": {
-          "darkBanners": "desaturated"
-        }
+        "settings": { "darkBanners": "desaturated" }
       }
     },
     {
@@ -1910,9 +1906,7 @@
       "url": "banners/darker_scratchr2.css",
       "matches": ["isNotScratchWWW"],
       "if": {
-        "settings": {
-          "darkBanners": "darker"
-        },
+        "settings": { "darkBanners": "darker" },
         "addonEnabled": ["scratchr2"]
       }
     },
@@ -1920,9 +1914,7 @@
       "url": "banners/desaturated_scratchr2.css",
       "matches": ["isNotScratchWWW"],
       "if": {
-        "settings": {
-          "darkBanners": "desaturated"
-        },
+        "settings": { "darkBanners": "desaturated" },
         "addonEnabled": ["scratchr2"]
       }
     },
@@ -1938,18 +1930,14 @@
       "url": "banners/desaturated_explore.css",
       "matches": ["https://scratch.mit.edu/explore/*"],
       "if": {
-        "settings": {
-          "darkBanners": "desaturated"
-        }
+        "settings": { "darkBanners": "desaturated" }
       }
     },
     {
       "url": "banners/desaturated_search.css",
       "matches": ["https://scratch.mit.edu/search/*"],
       "if": {
-        "settings": {
-          "darkBanners": "desaturated"
-        }
+        "settings": { "darkBanners": "desaturated" }
       }
     },
     {
@@ -1960,9 +1948,7 @@
       "url": "pygments.css",
       "matches": ["forums"],
       "if": {
-        "settings": {
-          "darkForumCode": true
-        }
+        "settings": { "darkForumCode": true }
       }
     }
   ],
