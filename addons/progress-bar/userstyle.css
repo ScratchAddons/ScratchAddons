@@ -23,6 +23,7 @@
 }
 .u-progress-bar-top .u-progress-bar-inner {
   transition: width 0.2s;
+  border-radius: 0px;
 }
 
 .u-progress-bar-caption {
