@@ -1,5 +1,5 @@
 {
-    "project-source-button/@name":"Project source button",
-    "project-source-button/@description":"Add a button to display JSON files and assets in the project source.",
-    "project-source-button/hover":"Open project's sources viewer."
+  "project-source-button/@name": "Project source button",
+  "project-source-button/@description": "Add a button to display JSON files and assets in the project source.",
+  "project-source-button/hover": "Open project's sources viewer."
 }

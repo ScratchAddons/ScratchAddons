@@ -1,13 +1,13 @@
-#view-json-btn{
-    background-image: url("icon.svg");
-    width: 2.5rem;
-    height: 2.5rem;
-    display: inline-block;
-    background-size: cover;
-    border-radius:0.25rem;
-    border: 0.1px solid #000;
-    padding: 0px;
-    margin: 0px;
-    position: relative;
-    top: 13px;
+#view-json-btn {
+  background-image: url("icon.svg");
+  width: 2.5rem;
+  height: 2.5rem;
+  display: inline-block;
+  background-size: cover;
+  border-radius: 0.25rem;
+  border: 0.1px solid #000;
+  padding: 0px;
+  margin: 0px;
+  position: relative;
+  top: 13px;
 }
