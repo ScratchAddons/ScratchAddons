@@ -251,11 +251,16 @@ body.iframe .addon-setting.boolean-setting .setting-label {
 }
 body.iframe .presets-column > .setting-label {
   margin-inline-start: 0;
+  margin-top: 10px;
   margin-bottom: 0;
+  width: 100%;
 }
 body.iframe .presets-column > .addon-setting {
   margin: 5px 0;
   margin-inline-end: 10px;
+}
+body.iframe .presets-column > .addon-setting:last-child {
+  margin-inline-end: 0;
 }
 
 body.iframe .addons-container {
