@@ -23,7 +23,7 @@ jobs:
           only-labels: 'status: awaiting answer/followup'
           days-before-stale: 7
           days-before-close: -1
-          stale-issue-label: 'Stale'
-          stale-pr-label: 'Stale'
+          stale-issue-label: 'status: stale'
+          stale-pr-label: 'status: stale'
           operations-per-run: 30
           repo-token: ${{ steps.generate-token.outputs.token }}
