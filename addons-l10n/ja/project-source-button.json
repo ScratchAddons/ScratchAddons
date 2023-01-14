@@ -1,0 +1,5 @@
+{
+    "project-source-button/@name":"プロジェクトソース表示ボタン",
+    "project-source-button/@description":"プロジェクトのソースのJSONファイルやアセットを表示するボタンを追加する",
+    "project-source-button/hover":"プロジェクトソースビューワーを開く"
+}

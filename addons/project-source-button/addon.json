@@ -1,0 +1,29 @@
+{
+    "name": "Project source button",
+    "description": "View a Scratch project's source json and source assets.",
+    "tags": ["community","projectPage"],
+    "enabledByDefault": false,
+    "runAtComplete":true,
+    "userscripts": [
+        {
+          "url": "userscript.js",
+          "matches": ["projects"]
+        }
+    ],
+    "userstyles": [
+      {
+        "url": "style.css",
+        "matches": ["projects"]
+      }
+    ],
+    "credits":[
+      {
+        "name":"nakasyou",
+        "link":"https://scratch.mit.edu/users/nakasyou1103"
+      },
+      {
+        "name":"Prism.js",
+        "link":"https://prismjs.com/"
+      }
+    ]
+}
