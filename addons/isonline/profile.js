@@ -1,9 +1,7 @@
-import { isOnline, getProjectId } from "./common.js";
+import { isOnline } from "./common.js";
 async function updateProfile() {
   let username = window.location.pathname.split("/users/")[1].split("/")[0];
-  let projectId = await getProjectId(username);
-  if (!projectId) return;
-  let online = await isOnline(projectId);
+  let online = await isOnline(username);
   let image = document.querySelector(".avatar");
   image.className = online ? "avatar online" : "avatar offline";
 }
