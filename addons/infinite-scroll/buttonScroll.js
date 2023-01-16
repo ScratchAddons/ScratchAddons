@@ -2,6 +2,7 @@ async function commentLoader(addon, heightControl, selector, pathname, { yProvid
   let func;
   let prevScrollDetector;
   const yProviderValue = yProvider;
+  let prevHeight = 0;
   while (true) {
     const el = await addon.tab.waitForElement(selector, {
       markAsSeen: true,
@@ -17,11 +18,11 @@ async function commentLoader(addon, heightControl, selector, pathname, { yProvid
     prevScrollDetector = scrollDetecter;
     func = () => {
       const threshold = yProvider ? yProvider.scrollTop + yProvider.clientHeight : window.scrollY + window.innerHeight;
+      let height = el.closest(heightControl).offsetHeight;
       if (typeof pathname === "string" && (window.location.pathname.split("/")[3] || "") !== pathname) return;
-      if (threshold >= el.closest(heightControl).offsetHeight - 500) {
-        if (el) {
-          el.click();
-        }
+      if (threshold >= height - 500 && height > prevHeight) {
+          prevHeight = height;
+          el.click(); 
       }
     };
     scrollDetecter.addEventListener("scroll", func, { passive: true });
