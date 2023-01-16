@@ -34,12 +34,6 @@
       "default": true
     },
     {
-      "name": "Studio Comments",
-      "id": "studioScroll",
-      "type": "boolean",
-      "default": true
-    },
-    {
       "name": "Studio Projects",
       "id": "studioProjectScroll",
       "type": "boolean",
@@ -48,6 +42,12 @@
     {
       "name": "Add to Studio Menu",
       "id": "studioBrowseProjectScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Studio Comments",
+      "id": "studioScroll",
       "type": "boolean",
       "default": true
     },
