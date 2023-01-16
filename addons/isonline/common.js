@@ -3,6 +3,6 @@ export const isOnline = async (user) => {
   let data = await res.json();
   if (data.statusCode == 404) {
     throw new Error();
-  } 
+  }
   return data.online;
 };
