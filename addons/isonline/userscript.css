@@ -23,6 +23,6 @@
   width: 40px;
   color: white;
 }
-.avatar.online:hover::before {
+.box-head:hover .avatar.online::before {
   content: "Online" !important;
 }
