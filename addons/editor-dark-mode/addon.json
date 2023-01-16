@@ -563,6 +563,19 @@
       }
     },
     {
+      "name": "input-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        },
+        "threshold": 128
+      }
+    },
+    {
       "name": "input-transparent90",
       "value": {
         "type": "multiply",
@@ -825,13 +838,6 @@
       "if": {
         "settings": { "affectStage": true }
       }
-    },
-    {
-      "url": "dark_comments.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "darkComments": true }
-      }
     }
   ],
   "settings": [
@@ -956,12 +962,6 @@
       "id": "affectStage",
       "type": "boolean",
       "default": false
-    },
-    {
-      "name": "Dark comments",
-      "id": "darkComments",
-      "type": "boolean",
-      "default": true
     }
   ],
   "presets": [
@@ -987,8 +987,7 @@
         "fullscreen": "#000000",
         "stageHeader": "#000000",
         "border": "#ffffff0d",
-        "dots": false,
-        "darkComments": true
+        "dots": false
       }
     },
     {
@@ -1013,8 +1012,7 @@
         "fullscreen": "#051638",
         "stageHeader": "#051638",
         "border": "#00000026",
-        "dots": false,
-        "darkComments": true
+        "dots": false
       }
     },
     {
@@ -1039,8 +1037,7 @@
         "fullscreen": "#222222",
         "stageHeader": "#222222",
         "border": "#111111",
-        "dots": false,
-        "darkComments": true
+        "dots": false
       }
     },
     {
@@ -1065,8 +1062,7 @@
         "fullscreen": "#282828",
         "stageHeader": "#333333",
         "border": "#444444",
-        "dots": true,
-        "darkComments": true
+        "dots": true
       }
     },
     {
@@ -1091,8 +1087,7 @@
         "fullscreen": "#111111",
         "stageHeader": "#111111",
         "border": "#ffffff26",
-        "dots": true,
-        "darkComments": true
+        "dots": true
       }
     },
     {
@@ -1117,8 +1112,7 @@
         "fullscreen": "#ffffffff",
         "stageHeader": "#e6e8e8",
         "border": "#d0d1d2",
-        "dots": true,
-        "darkComments": false
+        "dots": true
       }
     },
     {
@@ -1143,8 +1137,7 @@
         "fullscreen": "#000001",
         "stageHeader": "#000001",
         "border": "#0000006b",
-        "dots": false,
-        "darkComments": false
+        "dots": false
       }
     },
     {
@@ -1169,8 +1162,7 @@
         "fullscreen": "#ffffff",
         "stageHeader": "#e8edf1",
         "border": "#00000026",
-        "dots": true,
-        "darkComments": false
+        "dots": true
       }
     }
   ],

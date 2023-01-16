@@ -60,7 +60,7 @@
   "userstyles": [
     {
       "url": "style.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "versionAdded": "1.8.0",
@@ -86,17 +86,17 @@
       "default": "cathover"
     },
     {
-      "name": "Animation duration",
+      "name": "Animation speed",
       "id": "speed",
       "type": "select",
       "potentialValues": [
         {
           "id": "none",
-          "name": "None"
+          "name": "Instant"
         },
         {
           "id": "short",
-          "name": "Short"
+          "name": "Quick"
         },
         {
           "id": "default",
@@ -104,7 +104,7 @@
         },
         {
           "id": "long",
-          "name": "Long"
+          "name": "Slow"
         }
       ],
       "default": "default"

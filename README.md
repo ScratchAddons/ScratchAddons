@@ -65,8 +65,8 @@ No build is required. You may download the source code by doing one of these ste
 
 After downloading the extension to your computer, just load it by following these steps.
 
-- Google Chrome
-  1. Open `chrome://extensions` to open the Extension Management page by typing it into your address bar.
+- Google Chrome/Microsoft Edge
+  1. Open `chrome://extensions` or `edge://extensions` to open the Extension Management page by typing it into your address bar.
   2. Enable Developer Mode by clicking the toggle switch next to Developer mode.
   3. Click the `Load unpacked` button on the top and select the extension directory which has the `manifest.json` file in it. 
 
@@ -77,7 +77,7 @@ After downloading the extension to your computer, just load it by following thes
 
 ## Contribute
 
-If you found a bug, or want to suggest new features, please use the [issues tab](https://github.com/ScratchAddons/ScratchAddons/issues). If you want to help with the code or add a new addon, fork this repository, and then create a [pull request](https://github.com/ScratchAddons/ScratchAddons/pulls). Also, please read our [contributing guidelines](https://github.com/ScratchAddons/ScratchAddons/blob/master/CONTRIBUTING.md).
+If you found a bug, or want to suggest new features, please use the [issues tab](https://github.com/ScratchAddons/ScratchAddons/issues). If you want to help with the code or add a new addon, fork this repository, and then create a [pull request](https://github.com/ScratchAddons/ScratchAddons/pulls). Also, please read our [contributing guidelines](https://github.com/ScratchAddons/ScratchAddons/blob/master/.github/CONTRIBUTING.md).
 
 ## License
 

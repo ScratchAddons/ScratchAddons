@@ -68,7 +68,8 @@
   background-image: url(done.svg) !important;
 }
 #ibbBtn,
-#uploadButton {
+#uploadButton,
+.sa-image-upload-button {
   background-image: url(uploader.svg) !important;
 }
 

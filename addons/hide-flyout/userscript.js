@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   let placeHolderDiv = null;
   let lockObject = null;
   let lockButton = null;
@@ -17,9 +17,9 @@ export default async function ({ addon, global, console, msg }) {
   function getSpeedValue() {
     let data = {
       none: "0",
-      short: "0.25",
-      default: "0.5",
-      long: "1",
+      short: "0.2",
+      default: "0.3",
+      long: "0.5",
     };
     return data[addon.settings.get("speed")];
   }
@@ -81,6 +81,12 @@ export default async function ({ addon, global, console, msg }) {
     }, speed * 1000);
   }
 
+  const updateIsFullScreen = () => {
+    const isFullScreen = addon.tab.redux.state.scratchGui.mode.isFullScreen;
+    document.documentElement.classList.toggle("sa-hide-flyout-not-fullscreen", !isFullScreen);
+  };
+  updateIsFullScreen();
+
   let didOneTimeSetup = false;
   function doOneTimeSetup() {
     if (didOneTimeSetup) {
@@ -105,6 +111,9 @@ export default async function ({ addon, global, console, msg }) {
           }
           break;
         }
+        case "scratch-gui/mode/SET_FULL_SCREEN":
+          updateIsFullScreen();
+          break;
       }
     });
 

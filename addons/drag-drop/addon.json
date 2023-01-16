@@ -12,12 +12,6 @@
       "matches": ["projects"]
     }
   ],
-  "userstyles": [
-    {
-      "url": "dragged-over.css",
-      "matches": ["projects"]
-    }
-  ],
   "settings": [
     {
       "id": "use-hd-upload",

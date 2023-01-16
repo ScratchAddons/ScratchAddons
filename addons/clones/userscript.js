@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
   let showIconOnly = addon.settings.get("showicononly");
@@ -69,6 +69,16 @@ export default async function ({ addon, global, console, msg }) {
     doCloneChecks();
     return ret;
   };
+
+  if (addon.self.enabledLate) {
+    // Clone count might be inaccurate if the user deleted sprites
+    // before enabling the addon
+    let count = 0;
+    for (let target of vm.runtime.targets) {
+      if (!target.isOriginal) ++count;
+    }
+    vm.runtime._cloneCounter = count;
+  }
 
   while (true) {
     await addon.tab.waitForElement('[class*="controls_controls-container"]', {
