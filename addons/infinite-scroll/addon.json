@@ -96,7 +96,8 @@
         "projects",
         "https://scratch.mit.edu/studios/*",
         "https://scratch.mit.edu/users/*",
-        "https://scratch.mit.edu/messages"
+        "https://scratch.mit.edu/messages",
+        "https://scratch.mit.edu/explore/*"
       ]
     },
     {
