@@ -1,16 +1,12 @@
 {
   "name": "IsOnline",
-  "description": "Adds a button to the bottom-right of the project page to set the thumbnail of your project to any image (including gifs).",
+  "description": "Adds an indicator to usernames that shows whether they're online or not, in addition to letting others see if you're online or not.",
   "userscripts": [
     {
       "matches": ["https://scratch.mit.edu/*"],
       "url": "userscript.js"
     },
-    { "matches": ["profiles"], "url": "profile.js" },
-    {
-      "matches": ["https://scratch.mit.edu/404/"],
-      "url": "getstarted.js"
-    }
+    { "matches": ["profiles"], "url": "profile.js" }
   ],
   "userstyles": [
     {
@@ -20,7 +16,7 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "tags": ["community", "projectPage", "recommended"],
-  "versionAdded": "1.3.0",
-  "enabledByDefault": true
+  "tags": ["community", "recommended"],
+  "versionAdded": "1.31.0",
+  "enabledByDefault": false
 }
