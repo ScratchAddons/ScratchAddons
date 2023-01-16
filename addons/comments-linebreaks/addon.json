@@ -7,6 +7,13 @@
       "link": "https://scratch.mit.edu/users/TheColaber/"
     }
   ],
+  "info": [
+    {
+      "type": "notice",
+      "text": "Line breaks are only visible to users with this addon enabled. They will appear as spaces for others.",
+      "id": "ownLineBreaks"
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
@@ -37,7 +44,7 @@
       "default": true
     },
     {
-      "name": "Maximum number of lines",
+      "name": "Maximum number of lines visible at once",
       "id": "height",
       "type": "integer",
       "min": 1,

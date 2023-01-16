@@ -3,7 +3,6 @@ import Addon from "../../addon-api/content-script/Addon.js";
 export default async function runAddonUserscripts({ addonId, scripts, enabledLate = false }) {
   const addonObj = new Addon({ id: addonId, enabledLate });
   addonObj.auth._update(scratchAddons.session);
-  const globalObj = Object.create(null);
   for (const scriptInfo of scripts) {
     const { url: scriptPath, runAtComplete } = scriptInfo;
     const scriptUrl = `${new URL(import.meta.url).origin}/addons/${addonId}/${scriptPath}`;
@@ -23,7 +22,6 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
       };
       module.default({
         addon: addonObj,
-        global: globalObj,
         console: { ...console, ...localConsole },
         msg,
         safeMsg: (key, placeholders) =>

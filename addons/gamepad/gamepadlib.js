@@ -153,6 +153,7 @@ class GamepadData {
   }
 
   resetMappings() {
+    this.hints = this.gamepadLib.getHints();
     this.buttonMappings = this.getDefaultButtonMappings().map(transformAndCopyMapping);
     this.axesMappings = this.getDefaultAxisMappings().map(transformAndCopyMapping);
   }
@@ -164,10 +165,10 @@ class GamepadData {
 
   getDefaultButtonMappings() {
     let buttons;
-    if (this.gamepadLib.hints.importedSettings) {
-      buttons = this.gamepadLib.hints.importedSettings.buttons;
+    if (this.hints.importedSettings) {
+      buttons = this.hints.importedSettings.buttons;
     } else {
-      const usedKeys = this.gamepadLib.hints.usedKeys;
+      const usedKeys = this.hints.usedKeys;
       const alreadyUsedKeys = new Set();
       const { usesArrows, usesWASD } = getMovementConfiguration(usedKeys);
       if (usesWASD) {
@@ -359,14 +360,14 @@ class GamepadData {
 
   getDefaultAxisMappings() {
     let axes = [];
-    if (this.gamepadLib.hints.importedSettings) {
-      axes = this.gamepadLib.hints.importedSettings.axes;
+    if (this.hints.importedSettings) {
+      axes = this.hints.importedSettings.axes;
     } else {
       // Only return default axis mappings when there are 4 axes, like an xbox controller
       // If there isn't exactly 4, we can't really predict what the axes mean
       // Some controllers map the dpad to *both* buttons and axes at the same time, which would cause conflicts.
       if (this.gamepad.axes.length === 4) {
-        const usedKeys = this.gamepadLib.hints.usedKeys;
+        const usedKeys = this.hints.usedKeys;
         const { usesArrows, usesWASD } = getMovementConfiguration(usedKeys);
         if (usesWASD) {
           axes.push(defaultAxesMappings.wasd[0]);
@@ -421,8 +422,6 @@ class GamepadLib extends EventTarget {
 
     this.connectCallbacks = [];
 
-    this.hints = defaultHints();
-
     this.keysPressedThisFrame = new Set();
     this.oldKeysPressed = new Set();
 
@@ -451,19 +450,16 @@ class GamepadLib extends EventTarget {
     });
   }
 
-  ensureHintsGenerated() {
-    if (this.hints.generated) {
-      return;
-    }
-    if (this.getHintsLazily) {
-      Object.assign(this.hints, this.getHintsLazily());
-    }
-    this.hints.generated = true;
+  getHints() {
+    return Object.assign(defaultHints(), this.getUserHints());
+  }
+
+  getUserHints() {
+    // to be overridden by users
+    return {};
   }
 
   resetControls() {
-    this.hints = defaultHints();
-    this.ensureHintsGenerated();
     for (const gamepad of this.gamepads.values()) {
       gamepad.resetMappings();
     }
@@ -476,7 +472,6 @@ class GamepadLib extends EventTarget {
   }
 
   handleConnect(e) {
-    this.ensureHintsGenerated();
     for (const callback of this.connectCallbacks) {
       callback();
     }
