@@ -51,7 +51,9 @@ export default async function ({ addon, console, msg }) {
 
   function applySettings() {
     autoHidePanel();
-    setPropertiesPanelVisible(!addon.settings.get("hideByDefault"));
+
+    const visibleByDefault = !addon.settings.get("autoCollapse") && !addon.settings.get("hideByDefault");
+    setPropertiesPanelVisible(visibleByDefault);
   }
   addon.self.addEventListener("reenabled", applySettings);
   applySettings();
