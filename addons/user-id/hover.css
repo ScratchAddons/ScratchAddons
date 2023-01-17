@@ -1,7 +1,3 @@
-.header-text > h2:hover:nth-child(1) > :nth-child(1) {
-  opacity: 1;
-}
-
-.sa-user-id {
-  opacity: 0;
+.header-text > h2:not(:hover) > .sa-user-id {
+  display: none !important;
 }
