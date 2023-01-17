@@ -4,9 +4,13 @@
     <meta charset="utf-8" />
     <style>
       #viewer {
-        overflow: scroll;
         width: 50vw;
         height: 90vh;
+      }
+      #json-code {
+        overflow: scroll;
+        width: 100%;
+        height: 90%;
       }
       html,
       body {
@@ -18,13 +22,34 @@
         width: 50vw;
         height: 90vh;
       }
+      #ctrl span{
+        font-size: 1.5rem;
+      }
+      #ctrl{
+        margin: 0 auto;
+        text-align: center;
+      }
+      #next,#back{
+        background-color: grey;
+      }
     </style>
   </head>
   <body>
     <h1 id="h-title">Loding...</h1>
     <div style="display: flex">
       <div id="viewer">
-        <pre class="line-numbers"><code class="language-json"></code></pre>
+        <div id="json-code">
+          <pre class="line-numbers"><code class="language-json"></code></pre>
+        </div>
+        <div id="ctrl">
+          <button id="back">←</button>
+          <span>
+            <span id="page">1</span>
+            <span>/</span>
+            <span id="max-page">1</span>
+          </span>
+          <button id="next">→</button>
+        </div>
       </div>
       <div id="assets"></div>
     </div>

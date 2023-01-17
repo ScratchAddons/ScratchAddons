@@ -8,6 +8,11 @@ const queries = (() => {
   }
   return queries;
 })();
+async function loadDom(){
+  window.addEventListener('load',e=>{
+    Promise.resolve();
+  });
+}
 (async function(){
   const cssLink=document.createElement('link');
   cssLink.rel="stylesheet";
@@ -18,15 +23,35 @@ const queries = (() => {
   prismScript.src = location.protocol+"//"+location.hostname+"/libraries/common/cs/prism.js"; //prism.js address
   document.head.appendChild(prismScript);
 })();
+let pageNum=1;
+const maxLines=1000;
 (async function () {
+  loadDom();
   document.getElementById("h-title").textContent="Loding...";
 
   const jsonData = await (await fetch(`https://projects.scratch.mit.edu/${queries.id}?token=${queries.token}`)).json();
 
   const jsonText=JSON.stringify(jsonData, null, "  ");
-  const highlightHTML=Prism.highlight(jsonText, Prism.languages.json, 'json');
-  document.getElementsByClassName("language-json")[0].innerHTML = highlightHTML;
+  
+  const lineLength=jsonText.split("\n").length;
+  const pages=Math.ceil(lineLength/maxLines);
 
+  document.getElementById("max-page").textContent=pages;
+  function updatePage(){
+    document.getElementById("page").textContent=pageNum;
+    viewJSON(jsonText.split("\n").slice((pageNum-1)*maxLines,pageNum*maxLines-1).join("\n"))
+  }
+  document.getElementById("next").addEventListener('click',e=>{
+    if(pageNum===pages) return;
+    pageNum++;
+    updatePage();
+  })
+  document.getElementById("back").addEventListener('click',e=>{
+    if(pageNum===1) return ;
+    pageNum--;
+    updatePage();
+  })
+  updatePage();
   let assets = [];
   function assetsSearch(arg) {
     if (arg === null) {
@@ -51,6 +76,7 @@ const queries = (() => {
   function assetsInfo(obj) {
     const tr = document.createElement("tr");
     function addtd(arr) {
+      // add td tag function
       arr.forEach((elem) => {
         const td = document.createElement("td");
         td.innerHTML = elem;
@@ -81,3 +107,7 @@ const queries = (() => {
 
   document.getElementById("h-title").textContent="Sources";
 })();
+function viewJSON(text){
+  const highlightHTML=Prism.highlight(text, Prism.languages.json, 'json');
+  document.getElementsByClassName("language-json")[0].innerHTML = highlightHTML;
+}
