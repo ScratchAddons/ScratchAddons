@@ -8,23 +8,23 @@ const queries = (() => {
   }
   return queries;
 })();
-(async function(){
-  const cssLink=document.createElement('link');
-  cssLink.rel="stylesheet";
-  cssLink.href=location.protocol+"//"+location.hostname+"/libraries/common/cs/prism.css"; //prism.css address
+(async function () {
+  const cssLink = document.createElement("link");
+  cssLink.rel = "stylesheet";
+  cssLink.href = location.protocol + "//" + location.hostname + "/libraries/common/cs/prism.css"; //prism.css address
   document.head.appendChild(cssLink);
 
   const prismScript = document.createElement("script");
-  prismScript.src = location.protocol+"//"+location.hostname+"/libraries/common/cs/prism.js"; //prism.js address
+  prismScript.src = location.protocol + "//" + location.hostname + "/libraries/common/cs/prism.js"; //prism.js address
   document.head.appendChild(prismScript);
 })();
 (async function () {
-  document.getElementById("h-title").textContent="Loding...";
+  document.getElementById("h-title").textContent = "Loding...";
 
   const jsonData = await (await fetch(`https://projects.scratch.mit.edu/${queries.id}?token=${queries.token}`)).json();
 
-  const jsonText=JSON.stringify(jsonData, null, "  ");
-  const highlightHTML=Prism.highlight(jsonText, Prism.languages.json, 'json');
+  const jsonText = JSON.stringify(jsonData, null, "  ");
+  const highlightHTML = Prism.highlight(jsonText, Prism.languages.json, "json");
   document.getElementsByClassName("language-json")[0].innerHTML = highlightHTML;
 
   let assets = [];
@@ -79,5 +79,5 @@ const queries = (() => {
   assets.forEach((elem) => assetsTable.appendChild(assetsInfo(elem)));
   assetsElem.appendChild(assetsTable);
 
-  document.getElementById("h-title").textContent="Sources";
+  document.getElementById("h-title").textContent = "Sources";
 })();
