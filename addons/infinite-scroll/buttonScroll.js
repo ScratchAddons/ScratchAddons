@@ -69,7 +69,7 @@ export default async function ({ addon, console }) {
     commentLoader(addon, "#view", "div > .studio-members:last-child .studio-grid-load-more > button", "curators"); // Only scrolling curators for now
   if (isStudio && addon.settings.get("studioActivityScroll"))
     commentLoader(addon, "#view", ".studio-activity .studio-grid-load-more > button", "activity");
-  if (window.location.pathname.split("/")[1] === "explore" && addon.settings.get("exploreScroll")) //temporary comment so Jazza don't get lost
+  if (window.location.pathname.split("/")[1] === "explore" && addon.settings.get("exploreScroll"))
     commentLoader(addon, "#projectBox", "#projectBox button");
 
   // Enable scrolling for studio-followers
