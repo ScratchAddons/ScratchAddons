@@ -38,12 +38,6 @@
 [class*="inline-message_success_"] {
   color: var(--editorDarkMode-menuBar-dimText);
 }
-.u-progress-bar-outer {
-  border-color: var(--editorDarkMode-menuBar-text);
-}
-.u-progress-bar-inner {
-  background-color: var(--editorDarkMode-menuBar-text);
-}
 [class*="spinner_spinner_"][class*="spinner_info_"] {
   border-color: var(--editorDarkMode-menuBar-transparentText);
 }
