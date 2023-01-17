@@ -20,7 +20,7 @@ async function loadDom(){
   document.head.appendChild(cssLink);
 
   const prismScript = document.createElement("script");
-  prismScript.src = location.protocol+"//"+location.hostname+"/libraries/common/cs/prism.js"; //prism.js address
+  prismScript.src = location.protocol + "//" + location.hostname + "/libraries/common/cs/prism.js"; //prism.js address
   document.head.appendChild(prismScript);
 })();
 let pageNum=1;
@@ -105,7 +105,7 @@ const maxLines=1000;
   assets.forEach((elem) => assetsTable.appendChild(assetsInfo(elem)));
   assetsElem.appendChild(assetsTable);
 
-  document.getElementById("h-title").textContent="Sources";
+  document.getElementById("h-title").textContent = "Sources";
 })();
 function viewJSON(text){
   const highlightHTML=Prism.highlight(text, Prism.languages.json, 'json');
