@@ -8,13 +8,24 @@ const queries = (() => {
   }
   return queries;
 })();
-(async function () {
-  const jsonData = await (await fetch(`https://projects.scratch.mit.edu/${queries.id}?token=${queries.token}`)).json();
-  document.getElementsByClassName("language-json")[0].textContent = JSON.stringify(jsonData, null, "  ");
+(async function(){
+  const cssLink=document.createElement('link');
+  cssLink.rel="stylesheet";
+  cssLink.href=location.protocol+"//"+location.hostname+"/libraries/common/cs/prism.css"; //prism.css address
+  document.head.appendChild(cssLink);
 
   const prismScript = document.createElement("script");
-  prismScript.src = "prism.js";
-  document.body.appendChild(prismScript);
+  prismScript.src = location.protocol+"//"+location.hostname+"/libraries/common/cs/prism.js"; //prism.js address
+  document.head.appendChild(prismScript);
+})();
+(async function () {
+  document.getElementById("h-title").textContent="Loding...";
+
+  const jsonData = await (await fetch(`https://projects.scratch.mit.edu/${queries.id}?token=${queries.token}`)).json();
+
+  const jsonText=JSON.stringify(jsonData, null, "  ");
+  const highlightHTML=Prism.highlight(jsonText, Prism.languages.json, 'json');
+  document.getElementsByClassName("language-json")[0].innerHTML = highlightHTML;
 
   let assets = [];
   function assetsSearch(arg) {
@@ -32,11 +43,7 @@ const queries = (() => {
         } else {
           assetsSearch(arg[key]);
         }
-      } /*else if(typeof arg[key]==="string"){
-                if(key==="md5ext"){
-                    assets.push(arg[key]);
-                }
-            }*/
+      }
     });
   }
   assetsSearch(jsonData);
@@ -71,4 +78,6 @@ const queries = (() => {
   assetsTable.appendChild(ths);
   assets.forEach((elem) => assetsTable.appendChild(assetsInfo(elem)));
   assetsElem.appendChild(assetsTable);
+
+  document.getElementById("h-title").textContent="Sources";
 })();

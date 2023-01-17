@@ -12,5 +12,6 @@
   "Sora": "OFL",
   "sortable": "MIT",
   "fuse": "Apache-2.0",
-  "idb": "ISC"
+  "idb": "ISC",
+  "Prism.js":"MIT"
 }
