@@ -4,6 +4,13 @@
   "tags": ["popup", "recommended"],
   "enabledByDefault": true,
   "versionAdded": "1.0.0",
+  "info": [
+    {
+      "type": "notice",
+      "text": "Turning on Do Not Disturb (right-click extension icon \u2192 Do not disturb) will hide the message count.",
+      "id": "dndtohide"
+    }
+  ],
   "settings": [
     {
       "name": "Badge color",
