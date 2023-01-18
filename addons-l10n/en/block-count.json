@@ -1,3 +1,3 @@
 {
-  "block-count/blocks": "{num, plural, one {1 block} other {# blocks}}"
+  "block-count/blocks": "{num, plural, one {1} other {#}}"
 }
