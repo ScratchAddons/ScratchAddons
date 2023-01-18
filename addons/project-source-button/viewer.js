@@ -28,7 +28,7 @@ const maxLines = 1000;
 (async function () {
   loadDom();
   document.getElementById("h-title").textContent = "Loding...";
-
+  
   const jsonData = await (await fetch(`https://projects.scratch.mit.edu/${queries.id}?token=${queries.token}`)).json();
 
   const jsonText = JSON.stringify(jsonData, null, "  ");
@@ -55,6 +55,15 @@ const maxLines = 1000;
     if (pageNum === 1) return;
     pageNum--;
     updatePage();
+  });
+  document.getElementById("all-view").addEventListener("click",e=>{
+    const allView=window.open("about:blank");
+    const pre=document.createElement("pre");
+    const jsonElem=document.createElement("code");
+    jsonElem.textContent=jsonText;
+    jsonElem.style["font-size"]="1rem";
+    pre.appendChild(jsonElem)
+    allView.document.body.appendChild(pre);
   });
   updatePage();
   let assets = [];
