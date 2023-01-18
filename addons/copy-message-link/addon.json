@@ -15,7 +15,7 @@
     },
     {
       "url": "project.js",
-      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
+      "matches": ["projects", "https://scratch.mit.edu/studios/*"],
       "runAtComplete": false
     }
   ],
@@ -26,7 +26,7 @@
     },
     {
       "url": "project.css",
-      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"]
+      "matches": ["projects", "https://scratch.mit.edu/studios/*"]
     }
   ],
   "dynamicEnable": true,
