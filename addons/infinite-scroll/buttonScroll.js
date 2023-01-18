@@ -21,8 +21,8 @@ async function commentLoader(addon, heightControl, selector, pathname, { yProvid
       let height = el.closest(heightControl).offsetHeight;
       if (typeof pathname === "string" && (window.location.pathname.split("/")[3] || "") !== pathname) return;
       if (threshold >= height - 500 && height > prevHeight) {
-          prevHeight = height;
-          el.click(); 
+        prevHeight = height;
+        el.click();
       }
     };
     scrollDetecter.addEventListener("scroll", func, { passive: true });
