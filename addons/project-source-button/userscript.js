@@ -19,13 +19,16 @@ export default async function ({ addon, global, console, msg }) {
       projectToken = (
         await (
           await fetch(`https://api.scratch.mit.edu/projects/${projectId}?nocache=${Date.now()}`, {
-            headers: { "x-token": await addon.auth.fetchXToken() },
+            headers: {"x-token":await addon.auth.fetchXToken()},
+            mode: 'cors'
           })
         ).json()
       ).project_token;
     } else {
       projectToken = (
-        await (await fetch(`https://api.scratch.mit.edu/projects/${projectId}?nocache=${Date.now()}`, {})).json()
+        await (await fetch(`https://api.scratch.mit.edu/projects/${projectId}?nocache=${Date.now()}`, {
+          mode:'cors'
+        })).json()
       ).project_token;
     }
     return projectToken;
