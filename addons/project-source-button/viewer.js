@@ -24,11 +24,11 @@ async function loadDom() {
   document.head.appendChild(prismScript);
 })();
 let pageNum = 1;
-const maxLines = 1000;
+const maxLines = parseInt(queries.maxlines);
 (async function () {
   loadDom();
   document.getElementById("h-title").textContent = "Loding...";
-  
+
   const jsonData = await (await fetch(`https://projects.scratch.mit.edu/${queries.id}?token=${queries.token}`)).json();
 
   const jsonText = JSON.stringify(jsonData, null, "  ");

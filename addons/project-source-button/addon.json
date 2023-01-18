@@ -25,5 +25,13 @@
       "name": "Prism.js",
       "link": "https://prismjs.com/"
     }
+  ],
+  "settings": [
+    {
+      "name": "Max Lines",
+      "id": "max_lines",
+      "type": "positive_integer",
+      "default": 1000
+    }
   ]
 }

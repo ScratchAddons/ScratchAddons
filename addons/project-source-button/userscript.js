@@ -45,7 +45,7 @@ export default async function ({ addon, global, console, msg }) {
     pjtBtns.prepend(icon);
     document.getElementById("view-json-btn").addEventListener("click", async (e) => {
       const projectToken = await getToken();
-      const viewer = window.open(getFilePath("viewer.html") + `?id=${projectId}&token=${projectToken}`);
+      const viewer = window.open(getFilePath("viewer.html") + `?id=${projectId}&token=${projectToken}&maxlines=${addon.settings.get("max_lines")}`);
     });
   }
 }
