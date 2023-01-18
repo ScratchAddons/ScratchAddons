@@ -56,13 +56,13 @@ const maxLines = parseInt(queries.maxlines);
     pageNum--;
     updatePage();
   });
-  document.getElementById("all-view").addEventListener("click",e=>{
-    const allView=window.open("about:blank");
-    const pre=document.createElement("pre");
-    const jsonElem=document.createElement("code");
-    jsonElem.textContent=jsonText;
-    jsonElem.style["font-size"]="1rem";
-    pre.appendChild(jsonElem)
+  document.getElementById("all-view").addEventListener("click", (e) => {
+    const allView = window.open("about:blank");
+    const pre = document.createElement("pre");
+    const jsonElem = document.createElement("code");
+    jsonElem.textContent = jsonText;
+    jsonElem.style["font-size"] = "1rem";
+    pre.appendChild(jsonElem);
     allView.document.body.appendChild(pre);
   });
   updatePage();
