@@ -127,9 +127,9 @@
   ],
   "tags": ["community", "featured"],
   "versionAdded": "1.2.0",
-   "latestUpdate": {
-     "version": "1.31.0",
-     "newSettings": ["exploreScroll"]
+  "latestUpdate": {
+    "version": "1.31.0",
+    "newSettings": ["exploreScroll"]
   },
   "enabledByDefault": false
-} 
+}
