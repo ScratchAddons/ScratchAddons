@@ -38,10 +38,6 @@ export default async function ({ addon, msg, console }) {
       addon.tab.displayNoneWhileDisabled(this.findBarOuter, { display: "flex" });
       root.appendChild(this.findBarOuter);
 
-      this.findLabel = this.findBarOuter.appendChild(document.createElement("label"));
-      this.findLabel.htmlFor = "sa-find-input";
-      this.findLabel.textContent = msg("find");
-
       this.findWrapper = this.findBarOuter.appendChild(document.createElement("span"));
       this.findWrapper.className = "sa-find-wrapper";
 
