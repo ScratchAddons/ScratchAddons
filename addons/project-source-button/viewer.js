@@ -16,11 +16,11 @@ async function loadDom() {
 (async function () {
   const cssLink = document.createElement("link");
   cssLink.rel = "stylesheet";
-  cssLink.href = location.protocol + "//" + location.hostname + "/libraries/common/cs/prism.css"; //prism.css address
+  cssLink.href = "../../libraries/common/cs/prism.css"; //prism.css address
   document.head.appendChild(cssLink);
 
   const prismScript = document.createElement("script");
-  prismScript.src = location.protocol + "//" + location.hostname + "/libraries/common/cs/prism.js"; //prism.js address
+  prismScript.src = "../../libraries/common/cs/prism.js"; //prism.js address
   document.head.appendChild(prismScript);
 })();
 let pageNum = 1;
