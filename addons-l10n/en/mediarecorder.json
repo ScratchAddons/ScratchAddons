@@ -10,7 +10,7 @@
   "mediarecorder/record-audio-description": "This does not include Text-to-Speech.",
   "mediarecorder/record-after-flag": "Do not start recording until the Green Flag is clicked",
   "mediarecorder/record-until-stop": "Stop recording after the project has stopped",
-  "mediarecorder/record-description": "Record the stage as a WebM file (without variable monitors and lists). You can save it to your computer after the recording is finished.",
+  "mediarecorder/record-description": "Record the stage as a WebM file. You can save it to your computer after the recording is finished.\nNote: stage monitors and lists will not be visible.",
   "mediarecorder/start": "Start",
   "mediarecorder/cancel": "Cancel",
   "mediarecorder/added-by": "Added by Scratch Addons browser extension",
