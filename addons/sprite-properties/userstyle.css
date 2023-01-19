@@ -30,13 +30,28 @@
   padding: 0.75rem;
   padding-bottom: 0;
 }
+.sa-sprite-properties-wide-locale.sa-show-sprite-properties [class^="sprite-info_sprite-info_"] {
+  /* In wide languages, add in addition to the previous:
+     + 2 * 0.625rem * 1.2 (each row's text label now uses vertical space)
+     + 2 * 0.25rem (each row has extra padding) */
+  height: calc(6.5rem + 5px + 2rem);
+}
+[class^="label_input-group-column_"] {
+  /* Default line-height: normal is inconsistent across browsers, but above style needs constant line-height. */
+  line-height: 1.2;
+}
 
+/* see heights in above selectors */
 .sa-show-sprite-properties [class^="sprite-selector_scroll-wrapper_"] {
   height: calc(100% - 6.5rem - 5px);
 }
+.sa-sprite-properties-wide-locale.sa-show-sprite-properties [class^="sprite-selector_scroll-wrapper_"] {
+  height: calc(100% - 6.5rem - 5px - 2rem);
+}
 
-.sa-sprite-properties-btn {
-  display: none !important;
+.sa-sprite-properties-info-btn {
+  /* !important to override displayNoneWhileDisabled's inline styles */
+  display: flex !important;
   position: absolute;
   justify-content: center;
   align-items: center;
@@ -48,12 +63,15 @@
   border-radius: 100%;
   background-color: var(--editorDarkMode-primary, hsla(215, 100%, 65%, 1));
 }
-
-.sa-hide-sprite-properties [class*="sprite-selector-item_is-selected"] .sa-sprite-properties-btn {
-  display: flex !important;
+[dir="rtl"] .sa-sprite-properties-info-btn {
+  left: auto;
+  right: -2px;
+}
+.sa-show-sprite-properties .sa-sprite-properties-info-btn {
+  display: none !important;
 }
 
-.sa-sprite-properties-btn img {
+.sa-sprite-properties-info-btn img {
   width: calc(1rem - 6px);
   height: calc(1rem - 6px);
   filter: var(--editorDarkMode-primary-filter);
@@ -69,6 +87,7 @@
   align-items: center;
   border: none;
   background-color: transparent;
+  user-select: none;
 }
 
 .sa-sprite-properties-close-btn img {
@@ -78,4 +97,9 @@
 
 .sa-sprite-properties-close-btn:hover img {
   opacity: 0.75;
+}
+
+/* Prevent double clicking from highlighting the "Choose a sprite" button */
+[class*="action-menu_main-button_"] {
+  user-select: none;
 }

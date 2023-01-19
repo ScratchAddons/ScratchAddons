@@ -124,10 +124,8 @@ export const createScratchWwwModal = (title, { isOpen = false, useSizesClass = t
 
 export const createScratchr2Modal = (title, { isOpen = false } = {}) => {
   const backdrop = Object.assign(document.createElement("div"), {
-    className: "modal-backdrop fade",
+    className: "modal-backdrop fade hide",
   });
-  if (isOpen) backdrop.classList.add("in");
-  else backdrop.classList.add("hide");
   document.body.appendChild(backdrop);
   const modal = Object.assign(document.createElement("div"), {
     className: "modal fade hide",
@@ -157,7 +155,7 @@ export const createScratchr2Modal = (title, { isOpen = false } = {}) => {
     setTimeout(() => {
       backdrop.classList.add("in");
       modal.classList.add("in");
-    }, 300);
+    }, 0);
   };
   const close = () => {
     modal.classList.remove("in");
