@@ -19,7 +19,6 @@ export default async function ({ addon, msg, console }) {
       this.prevValue = "";
 
       this.findBarOuter = null;
-      this.findLabel = null;
       this.findWrapper = null;
       this.findInput = null;
       this.dropdownOut = null;
@@ -211,9 +210,8 @@ export default async function ({ addon, msg, console }) {
         }
       }
 
-      this.findLabel = null;
       this.utils.offsetX =
-        this.dropdownOut.getBoundingClientRect().right - this.findLabel.getBoundingClientRect().left + 26;
+        this.dropdownOut.getBoundingClientRect().right + 26;
       this.utils.offsetY = 32;
     }
 
