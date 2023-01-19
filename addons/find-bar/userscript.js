@@ -211,6 +211,7 @@ export default async function ({ addon, msg, console }) {
         }
       }
 
+      this.findLabel = null;
       this.utils.offsetX =
         this.dropdownOut.getBoundingClientRect().right - this.findLabel.getBoundingClientRect().left + 26;
       this.utils.offsetY = 32;
