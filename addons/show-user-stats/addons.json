@@ -1,0 +1,18 @@
+{
+    "name": "User Statistics on Profiles",
+    "description": "Replaces the 'What I've been doing' section on profile pages with the user's statistics such as follower count, ranks and views. You can still switch beetween the statistics and 'What I've been doing'.",
+    "credits": [
+      {
+        "name": "Dr_Lego",
+        "link": "https://scratch.mit.edu/users/Dr_Lego/"
+      }
+    ],
+    "userscripts": [
+      {
+        "url": "userscript.js",
+        "matches": ["https://scratch.mit.edu/users/*"]
+      }
+    ],
+    "tags": ["community"],
+    "enabledByDefault": false
+  }
