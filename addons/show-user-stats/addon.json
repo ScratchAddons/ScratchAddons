@@ -14,5 +14,7 @@
       }
     ],
     "tags": ["community"],
+    "dynamicEnable": true,
+    "dynamicDisable": true,
     "enabledByDefault": false
   }
