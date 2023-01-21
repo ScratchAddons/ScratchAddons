@@ -1,7 +1,7 @@
 //@ts-check
 
 import WorkspaceQuerier, { QueryResult } from "./WorkspaceQuerier.js";
-import renderBlock from "./BlockRenderer.js";
+import renderBlock, { BlockComponent } from "./BlockRenderer.js";
 
 export default async function ({ addon, msg, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
@@ -10,6 +10,7 @@ export default async function ({ addon, msg, console }) {
   const POPUP_HEIGHT_PX = 420;
 
   const PREVIEW_SCALE = 0.65;
+  const PREVIEW_LIMIT = 30;
 
   const popupRoot = document.body.appendChild(document.createElement("div"));
   popupRoot.id = "sa-mcp-root";
@@ -51,6 +52,7 @@ export default async function ({ addon, msg, console }) {
   /**
    * @typedef ResultPreview
    * @property {QueryResult} result
+   * @property {BlockComponent} block
    * @property {SVGGElement} svgBlock
    * @property {SVGRectElement} svgBackground
    */
@@ -104,6 +106,9 @@ export default async function ({ addon, msg, console }) {
     // Get the list of blocks to display using the input content
     const queryResults = querier.queryWorkspace(getQueryString());
 
+    if (queryResults.length > PREVIEW_LIMIT)
+      queryResults.length = PREVIEW_LIMIT;
+
     // @ts-ignore Delete the old previews
     while (popupPreviewSVG.firstChild) popupPreviewSVG.removeChild(popupPreviewSVG.lastChild);
 
@@ -135,24 +140,19 @@ export default async function ({ addon, msg, console }) {
       svgBackground.addEventListener("mousedown", mouseDownListener);
 
       const svgBlock = popupPreviewSVG.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "g"));
-      const block = renderBlock(result.createBlock(), svgBlock);
-
-      // If the block is too long to fit in the preview, move it over so we can see end
-      var blockX = 0;
-      if (block.width > POPUP_WIDTH_PX / PREVIEW_SCALE)
-        blockX = (POPUP_WIDTH_PX / PREVIEW_SCALE - block.width) * PREVIEW_SCALE;
-
-      svgBlock.setAttribute("transform", `translate(${blockX + 5}, ${blockY + 20}) scale(${PREVIEW_SCALE})`);
       svgBlock.addEventListener("mousemove", mouseMoveListener);
       svgBlock.addEventListener("mousedown", mouseDownListener);
 
-      queryPreviews.push({ result, svgBlock, svgBackground });
+      const block = renderBlock(result.createBlock(), svgBlock);
+
+      queryPreviews.push({ result, block, svgBlock, svgBackground });
     }
 
     popupPreviewSVG.setAttribute("height", `${queryPreviews.length * 40}px`);
 
     selectedPreviewIdx = -1;
     updateSelection(0);
+    updateCursor();
   }
 
   function updateSelection(newIdx) {
@@ -182,6 +182,26 @@ export default async function ({ addon, msg, console }) {
     }
 
     selectedPreviewIdx = newIdx;
+  }
+
+  function updateCursor() {
+    const selection = document.getSelection();
+    if (!selection || !popupPosition) return;
+
+    const cursorPos = selection.focusOffset;
+    const cursorPosRel = cursorPos / getQueryString().length;
+
+    for (let previewIdx = 0; previewIdx < queryPreviews.length; previewIdx++) {
+      const preview = queryPreviews[previewIdx];
+      
+      var blockX = 5;
+      if (blockX + preview.block.width > POPUP_WIDTH_PX / PREVIEW_SCALE)
+        blockX += (POPUP_WIDTH_PX / PREVIEW_SCALE - blockX - preview.block.width) * PREVIEW_SCALE * cursorPosRel;
+
+      var blockY = previewIdx * 40 + 20;
+
+      preview.svgBlock.setAttribute("transform", `translate(${blockX}, ${blockY}) scale(${PREVIEW_SCALE})`);
+    }
   }
 
   function selectBlock(startDrag = false) {
@@ -219,8 +239,8 @@ export default async function ({ addon, msg, console }) {
         clientX: mousePosition.x,
         clientY: mousePosition.y,
         type: "mousedown",
-        stopPropagation: function () {},
-        preventDefault: function () {},
+        stopPropagation: function () { },
+        preventDefault: function () { },
         target: selectedPreview.svgBlock,
       };
       workspace.startDragWithFakeEvent(fakeEvent, newBlock);
@@ -238,6 +258,8 @@ export default async function ({ addon, msg, console }) {
       selection.collapseToEnd();
     }
   }
+
+  document.addEventListener("selectionchange", updateCursor);
 
   popupInput.addEventListener("keydown", (e) => {
     switch (e.key) {

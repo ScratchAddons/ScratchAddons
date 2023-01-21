@@ -847,6 +847,9 @@ class TokenTypeBlock extends TokenType {
     let tokenProvider = this.tokenProviders[tokenProviderIdx];
 
     for (const token of tokenProvider.parseTokens(query, idx)) {
+      ++query.tokenCount;
+      if (!query.canCreateMoreTokens()) break;
+      
       if (this.block.precedence !== -1) {
         if (token.precedence > this.block.precedence) continue;
         if (token.precedence === this.block.precedence && tokenProviderIdx !== 0) continue;
@@ -959,6 +962,8 @@ class QueryInfo {
     this.queryLc = this.query.toLowerCase();
     /** @type {number} A unique identifier for this query */
     this.id = id;
+    /** @type{number} The number of tokens we've found so far */
+    this.tokenCount = 0;
   }
 
   /**
@@ -1011,6 +1016,10 @@ class QueryInfo {
   get lowercase() {
     return this.queryLc;
   }
+
+  canCreateMoreTokens() {
+    return this.tokenCount < WorkspaceQuerier.MAX_TOKENS;
+  }
 }
 
 /**
@@ -1036,9 +1045,14 @@ export default class WorkspaceQuerier {
   ];
 
   /**
+   * The maximum number of results to find before giving up.
+   */
+  static MAX_RESULTS = 1000;
+
+  /**
    * The maximum number of tokens to find before giving up.
    */
-  static MAX_TOKENS = 1000;
+  static MAX_TOKENS = 5000;
 
   /**
    * @param {Blockly} blockly
@@ -1079,7 +1093,11 @@ export default class WorkspaceQuerier {
         results.push(new QueryResult(query, option));
       }
       ++foundTokenCount;
-      if (foundTokenCount > WorkspaceQuerier.MAX_TOKENS) {
+      if (foundTokenCount > WorkspaceQuerier.MAX_RESULTS) {
+        console.log("Warning: Workspace query exceeded maximum result count.");
+        break;
+      }
+      if (!query.canCreateMoreTokens()) {
         console.log("Warning: Workspace query exceeded maximum token count.");
         break;
       }
