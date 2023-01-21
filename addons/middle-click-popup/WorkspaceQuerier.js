@@ -682,8 +682,7 @@ class TokenTypeBrackets extends TokenType {
     if (query.str[idx++] !== "(") return;
     idx = query.skipIgnorable(idx);
     for (const token of this.tokenProvider.parseTokens(query, idx)) {
-      if (token.type instanceof TokenTypeBlank)
-        continue; // Do not allow empty brackets like '()'
+      if (token.type instanceof TokenTypeBlank) continue; // Do not allow empty brackets like '()'
       var tokenEnd = query.skipIgnorable(token.end);
       let isTruncated = token.isTruncated;
       if (!isTruncated) {
