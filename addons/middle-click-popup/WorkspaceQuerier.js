@@ -7,7 +7,7 @@
  * {@link WorkspaceQuerier._createTokenGroups} for some more specifics on the algoithm works,
  * and to achieve maximum enlightenment.
  *
- * @author Tacodude
+ * @author Tacodiva
  */
 
 import { BlockInputType, BlockInstance, BlockShape, BlockTypeInfo } from "./BlockTypeInfo.js";

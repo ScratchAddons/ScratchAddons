@@ -1,7 +1,7 @@
 /**
  * @file Contains the code for rendering the blocks in the middle click dropdown.
  * Main function is {@link renderBlock} which takes in a block and returns a renderer SVG element.
- * @author Tacodude
+ * @author Tacodiva
  */
 
 import { BlockShape, BlockInstance, BlockInputEnum, BlockInputBoolean, BlockInputBlock } from "./BlockTypeInfo.js";
