@@ -922,7 +922,7 @@ export class QueryResult {
     if (this._text) return this._text;
     return (this._text = this.token.type.createText(this.token, this.query) ?? "");
   }
-  
+
   /**
    * @returns {string}
    */
@@ -930,7 +930,7 @@ export class QueryResult {
     if (this._autocomplete) return this._autocomplete;
     return (this._autocomplete = this.token.type.createText(this.token, this.query, [true]));
   }
-  
+
   /**
    * @returns {BlockInstance}
    */
