@@ -552,12 +552,7 @@ class StringEnum {
         }
       } else {
         if (query.lowercase.startsWith(valueInfo.lower, idx)) {
-          cacheEntry[valueIdx] = new Token(
-            idx,
-            idx + valueInfo.lower.length,
-            this.fullTokenProvider,
-            valueInfo.value
-          );
+          cacheEntry[valueIdx] = new Token(idx, idx + valueInfo.lower.length, this.fullTokenProvider, valueInfo.value);
         }
       }
     }
@@ -592,7 +587,7 @@ class TokenTypeStringLiteral extends TokenType {
     let wasTerminator = false;
     for (let i = idx; i <= query.length; i++) {
       const isTerminator = TokenTypeStringLiteral.TERMINATORS.indexOf(query.str[i]) !== -1;
-      if ((wasTerminator !== isTerminator) && i !== idx) {
+      if (wasTerminator !== isTerminator && i !== idx) {
         const value = query.str.substring(idx, i);
         yield new Token(idx, i, this, value, -300 * value.length);
       }
@@ -610,7 +605,6 @@ class TokenTypeStringLiteral extends TokenType {
  * This token type also supports hexadecimal numbers, like 'Hello + 0x45'
  */
 class TokenTypeNumberLiteral extends TokenType {
-
   static isValidNumber(str) {
     return !isNaN(str) && !isNaN(parseFloat(str));
   }
