@@ -325,9 +325,8 @@ class TokenType extends TokenProvider {
    * I'm probably gonna redo how this works.
    * @param {Token} token
    * @param {QueryInfo} query
-   * @param {boolean[]} autocomplete
    */
-  createText(token, query, autocomplete) {
+  createText(token, query) {
     throw new Error("Sub-class must override abstract method.");
   }
 }
@@ -357,7 +356,7 @@ class TokenTypeBlank extends TokenType {
     return new Token(idx, idx, this, null, -5000);
   }
 
-  createText(token, query, autocomplete) {
+  createText(token, query) {
     return "";
   }
 }
@@ -391,8 +390,7 @@ class StringEnum {
       }
     }
 
-    createText(token, query, autocomplete) {
-      if (token.isTruncated && autocomplete) autocomplete[0] = false;
+    createText(token, query) {
       return token.value.string; // TODO Return capitalization in that's used in the query
     }
   };
@@ -466,7 +464,7 @@ class StringEnum {
       return token.value.valueInfo.value; // I may have named too many things 'value'
     }
 
-    createText(token, query, autocomplete) {
+    createText(token, query) {
       if (!token.isTruncated) {
         return query.str.substring(token.start, token.end);
       }
@@ -599,7 +597,7 @@ class TokenTypeStringLiteral extends TokenType {
     }
   }
 
-  createText(token, query, autocomplete) {
+  createText(token, query) {
     return token.value;
   }
 }
@@ -701,13 +699,10 @@ class TokenTypeBrackets extends TokenType {
     return token.innerToken.createBlockValue(token.innerToken, query);
   }
 
-  createText(token, query, autocomplete) {
+  createText(token, query) {
     let text = "(";
     text += query.str.substring(token.start + 1, token.innerToken.start);
-    text += token.innerToken.type.createText(token.innerToken, query, autocomplete);
-    if (autocomplete && !autocomplete[0]) {
-      return text;
-    }
+    text += token.innerToken.type.createText(token.innerToken, query);
     if (token.innerToken.end !== token.end) text += query.str.substring(token.innerToken.end, token.end - 1);
     text += ")";
     return text;
@@ -870,7 +865,7 @@ class TokenTypeBlock extends TokenType {
     return this.block.createBlock(...blockInputs);
   }
 
-  createText(token, query, autocomplete) {
+  createText(token, query) {
     if (!token.isTruncated) return query.str.substring(token.start, token.end);
     let text = "";
     if (token.start !== token.value[0].start) {
@@ -878,11 +873,10 @@ class TokenTypeBlock extends TokenType {
     }
     for (let i = 0; i < token.value.length; i++) {
       const subtoken = token.value[i];
-      const subtokenText = subtoken.type.createText(subtoken, query, autocomplete) ?? "";
+      const subtokenText = subtoken.type.createText(subtoken, query) ?? "";
       text += subtokenText;
       if (i !== token.value.length - 1) {
         const next = token.value[i + 1];
-        if (autocomplete && !autocomplete[0] && (subtoken.type.hasSubTokens || !next.type.isConstant)) return text;
         const nextStart = next.start;
         if (nextStart !== subtoken.end) {
           text += query.str.substring(subtoken.end, nextStart);
@@ -918,17 +912,12 @@ export class QueryResult {
     return this.token.isTruncated;
   }
 
-  get text() {
-    if (this._text) return this._text;
-    return (this._text = this.token.type.createText(this.token, this.query) ?? "");
-  }
-
   /**
    * @returns {string}
    */
-  get autocomplete() {
-    if (this._autocomplete) return this._autocomplete;
-    return (this._autocomplete = this.token.type.createText(this.token, this.query, [true]));
+  get text() {
+    if (this._text) return this._text;
+    return (this._text = this.token.type.createText(this.token, this.query) ?? "");
   }
 
   /**

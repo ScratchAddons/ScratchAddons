@@ -175,7 +175,7 @@ export default async function ({ addon, msg, console }) {
         behavior: Math.abs(newIdx - selectedPreviewIdx) > 1 ? "smooth" : "auto",
       });
 
-      popupInputSuggestion.innerText = newSelection.result.autocomplete.substring(getQueryString().length);
+      popupInputSuggestion.innerText = newSelection.result.text.substring(getQueryString().length);
 
       // Move the selected block to the front
       popupPreviewSVG.appendChild(newSelection.svgBackground);
