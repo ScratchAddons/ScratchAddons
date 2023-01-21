@@ -307,8 +307,6 @@ class TokenType extends TokenProvider {
     this.isDefiningFeature = false;
     /** @type {boolean} Is this token type always represented by the same string of characters? */
     this.isConstant = false;
-    /** @type {boolean} Does this token contain other tokens? */
-    this.hasSubTokens = false;
   }
 
   /**
@@ -328,6 +326,15 @@ class TokenType extends TokenProvider {
    */
   createText(token, query) {
     throw new Error("Sub-class must override abstract method.");
+  }
+
+  /**
+   * @param {Token} token 
+   * @param {QueryInfo} query 
+   * @returns {Token[]}
+   */
+  getSubtokens(token, query) {
+    return undefined;
   }
 }
 
@@ -672,7 +679,6 @@ class TokenTypeBrackets extends TokenType {
     super();
     /** @type {TokenProvider} The tokens to look for between the brackets */
     this.tokenProvider = tokenProvider;
-    this.hasSubTokens = true;
   }
 
   *parseTokens(query, idx) {
@@ -706,6 +712,10 @@ class TokenTypeBrackets extends TokenType {
     if (token.innerToken.end !== token.end) text += query.str.substring(token.innerToken.end, token.end - 1);
     text += ")";
     return text;
+  }
+
+  getSubtokens(token, query) {
+    return [token.innerToken];
   }
 }
 
@@ -741,8 +751,8 @@ class TokenTypeBlock extends TokenType {
         switch (blockPart.type) {
           case BlockInputType.ENUM:
             const stringEnum = new StringEnum(blockPart.values);
-            fullTokenProvider = stringEnum.fullTokenProvider;
-            griffTokenProvider = stringEnum.griffTokenProvider;
+            fullTokenProvider = stringEnum.bothTokenProvider;
+            griffTokenProvider = stringEnum.bothTokenProvider;
             break;
           case BlockInputType.STRING:
             fullTokenProvider = querier.tokenGroupString;
@@ -886,6 +896,10 @@ class TokenTypeBlock extends TokenType {
       }
     }
     return text;
+  }
+
+  getSubtokens(token, query) {
+    return token.value;
   }
 }
 
@@ -1070,7 +1084,37 @@ export default class WorkspaceQuerier {
         break;
       }
     }
-    return results.sort((a, b) => b.token.score - a.token.score);
+
+    // Eliminate blocks who's strings can be parsed as something else.
+    //  This step removes silly suggestions like `if <(1 + 1) = "2 then"> then`
+    const canBeString = Array(queryStr.length).fill(true);
+    function searchToken(token) {
+      const subtokens = token.type.getSubtokens(token, query);
+      if (subtokens) for (const subtoken of subtokens)
+        searchToken(subtoken)
+      else if (!(token.type instanceof TokenTypeStringLiteral))
+        for (let i = token.start; i < token.end; i++) {
+          canBeString[i] = false;
+        }
+    }
+    for (const result of results) searchToken(result.token);
+    function checkValidity(token) {
+      const subtokens = token.type.getSubtokens(token, query);
+      if (subtokens) {
+        for (const subtoken of subtokens)
+          if (!checkValidity(subtoken)) return false;
+      } else if (token.type instanceof TokenTypeStringLiteral) {
+        for (let i = token.start; i < token.end; i++)
+          if (!canBeString[i]) return false;
+      }
+      return true;
+    }
+    const validResults = [];
+    for (const result of results)
+      if (checkValidity(result.token))
+        validResults.push(result);
+
+    return validResults.sort((a, b) => b.token.score - a.token.score);
   }
 
   /**
