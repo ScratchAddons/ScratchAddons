@@ -8,6 +8,8 @@
   --sa-block-gray-text: white;
   --sa-block-colored-text: var(--sa-block-background-primary);
   --sa-block-text-on-bright-background: white;
+  --sa-block-input-color: var(--editorTheme3-inputColor, white);
+  --sa-block-input-text: var(--editorTheme3-inputColor-text, #575e75);
 }
 
 .sa-block-color-motion {
@@ -94,66 +96,4 @@
   --sa-block-background-secondary: var(--editorTheme3-sa-secondary, #3aa8a4);
   --sa-block-background-tertiary: var(--editorTheme3-sa-tertiary, #3aa8a4);
   --sa-block-field-background: var(--editorTheme3-sa-field, #3aa8a4);
-}
-
-.sa-block-color-all {
-  --sa-block-background-primary-motion: var(--editorTheme3-motion-primary, #4c97ff);
-  --sa-block-background-secondary-motion: var(--editorTheme3-motion-secondary, #4280d7);
-  --sa-block-background-tertiary-motion: var(--editorTheme3-motion-tertiary, #3373cc);
-  --sa-block-field-background-motion: var(--editorTheme3-motion-field, #3373cc);
-
-  --sa-block-background-primary-looks: var(--editorTheme3-looks-primary, #9966ff);
-  --sa-block-background-secondary-looks: var(--editorTheme3-looks-secondary, #855cd6);
-  --sa-block-background-tertiary-looks: var(--editorTheme3-looks-tertiary, #774dcb);
-  --sa-block-field-background-looks: var(--editorTheme3-looks-field, #774dcb);
-
-  --sa-block-background-primary-sounds: var(--editorTheme3-sounds-primary, #cf63cf);
-  --sa-block-background-secondary-sounds: var(--editorTheme3-sounds-secondary, #c94fc9);
-  --sa-block-background-tertiary-sounds: var(--editorTheme3-sounds-tertiary, #bd42bd);
-  --sa-block-field-background-sounds: var(--editorTheme3-sounds-field, #bd42bd);
-
-  --sa-block-background-primary-events: var(--editorTheme3-event-primary, #ffbf00);
-  --sa-block-background-secondary-events: var(--editorTheme3-event-secondary, #e6ac00);
-  --sa-block-background-tertiary-events: var(--editorTheme3-event-tertiary, #cc9900);
-  --sa-block-field-background-events: var(--editorTheme3-event-field, #cc9900);
-
-  --sa-block-background-primary-control: var(--editorTheme3-control-primary, #ffab19);
-  --sa-block-background-secondary-control: var(--editorTheme3-control-secondary, #ec9c13);
-  --sa-block-background-tertiary-control: var(--editorTheme3-control-tertiary, #cf8b17);
-  --sa-block-field-background-control: var(--editorTheme3-control-field, #cf8b17);
-
-  --sa-block-background-primary-sensing: var(--editorTheme3-sensing-primary, #5cb1d6);
-  --sa-block-background-secondary-sensing: var(--editorTheme3-sensing-secondary, #47a8d1);
-  --sa-block-background-tertiary-sensing: var(--editorTheme3-sensing-tertiary, #2e8eb8);
-  --sa-block-field-background-sensing: var(--editorTheme3-sensing-field, #2e8eb8);
-
-  --sa-block-background-primary-operators: var(--editorTheme3-operators-primary, #59c059);
-  --sa-block-background-secondary-operators: var(--editorTheme3-operators-secondary, #46b946);
-  --sa-block-background-tertiary-operators: var(--editorTheme3-operators-tertiary, #389438);
-  --sa-block-field-background-operators: var(--editorTheme3-operators-field, #389438);
-
-  --sa-block-background-primary-data: var(--editorTheme3-data-primary, #ff8c1a);
-  --sa-block-background-secondary-data: var(--editorTheme3-data-secondary, #ff8000);
-  --sa-block-background-tertiary-data: var(--editorTheme3-data-tertiary, #db6e00);
-  --sa-block-field-background-data: var(--editorTheme3-data-field, #db6e00);
-
-  --sa-block-background-primary-data-lists: var(--editorTheme3-data_lists-primary, #ff661a);
-  --sa-block-background-secondary-data-lists: var(--editorTheme3-data_lists-secondary, #ff5500);
-  --sa-block-background-tertiary-data-lists: var(--editorTheme3-data_lists-tertiary, #e64d00);
-  --sa-block-field-background-data-lists: var(--editorTheme3-data_lists-field, #e64d00);
-
-  --sa-block-background-primary-more: var(--editorTheme3-more-primary, #ff6680);
-  --sa-block-background-secondary-more: var(--editorTheme3-more-secondary, #ff4d6a);
-  --sa-block-background-tertiary-more: var(--editorTheme3-more-tertiary, #ff3355);
-  --sa-block-field-background-more: var(--editorTheme3-more-field, #ff3355);
-
-  --sa-block-background-primary-pen: var(--editorTheme3-pen-primary, #0fbd8c);
-  --sa-block-background-secondary-pen: var(--editorTheme3-pen-secondary, #0da57a);
-  --sa-block-background-tertiary-pen: var(--editorTheme3-pen-tertiary, #0b8e69);
-  --sa-block-field-background-pen: var(--editorTheme3-pen-field, #0b8e69);
-
-  --sa-block-background-primary-addon-custom-block: var(--editorTheme3-sa-primary, #29beb8);
-  --sa-block-background-secondary-addon-custom-block: var(--editorTheme3-sa-secondary, #3aa8a4);
-  --sa-block-background-tertiary-addon-custom-block: var(--editorTheme3-sa-tertiary, #3aa8a4);
-  --sa-block-field-background-addon-custom-block: var(--editorTheme3-sa-field, #3aa8a4);
 }

@@ -1,3 +1,5 @@
+@import url("../editor-theme3/compatibility.css");
+
 #sa-mcp-root {
   display: flex;
   white-space: nowrap;
@@ -77,5 +79,6 @@
 }
 
 .sa-mcp-preview-block-bg-selection {
-  fill: #ffff00aa;
+  fill: #ff793bbb;
 }
+

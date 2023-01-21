@@ -53,7 +53,7 @@ class Token {
     this.type = type;
     /** @type {*} Additional information about this token, controled and interperted by the token type. */
     this.value = value;
-    /** @type {number} The score TODO Document score better. */
+    /** @type {number} A number which represents how 'good' this interpertation of the query is. */
     this.score = score;
     /**
      * The precedence of this token. Used to impliment order of operations, tokens with higher
@@ -320,9 +320,11 @@ class TokenType extends TokenProvider {
   }
 
   /**
-   * I'm probably gonna redo how this works.
+   * Creates the string form of this token in the same format that was used in the query.
+   * If the token was only partially typed in the query, creating the text will complete the token.
    * @param {Token} token
    * @param {QueryInfo} query
+   * @returns {string}
    */
   createText(token, query) {
     throw new Error("Sub-class must override abstract method.");
@@ -398,7 +400,7 @@ class StringEnum {
     }
 
     createText(token, query) {
-      return token.value.string; // TODO Return capitalization in that's used in the query
+      return token.value.string;
     }
   };
 
@@ -411,8 +413,6 @@ class StringEnum {
    * These results cannot just be a part of {@link FullTokenType} because they are used in
    * different places. See {@link TokenTypeBlock.createBlockTokenTypes} for more info on how griff
    * tokens work.
-   *
-   * I may change how this works later, but that's future me's problem.
    */
   static GriffTokenType = class extends TokenType {
     /**
