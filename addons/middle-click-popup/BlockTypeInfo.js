@@ -113,7 +113,6 @@ export class BlockInputRound extends BlockInput {
 export class BlockInputString extends BlockInputRound {
   constructor(inputIdx, fieldIdx, defaultValue) {
     super(BlockInputType.STRING, inputIdx, fieldIdx, defaultValue);
-
   }
 
   _toFieldValue(value) {
@@ -264,7 +263,8 @@ export class BlockInstance {
       throw new Error("Wrong number of inputs to block. Expected " + this.inputs.length);
 
     if (this.typeInfo.id === "control_stop") {
-      this.typeInfo.domForm.querySelector("mutation")
+      this.typeInfo.domForm
+        .querySelector("mutation")
         .setAttribute("hasnext", "" + (this.inputs[0].value === "other scripts in sprite"));
     }
 
