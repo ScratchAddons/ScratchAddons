@@ -36,17 +36,19 @@ export default async function ({ addon, msg, console }) {
   const popupPreviewContainer = popupContainer.appendChild(document.createElement("div"));
   popupPreviewContainer.id = "sa-mcp-preview-container";
 
-  const popupPreviewSVG = popupPreviewContainer.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "svg"));
+  const popupPreviewSVG = popupPreviewContainer.appendChild(
+    document.createElementNS("http://www.w3.org/2000/svg", "svg")
+  );
   popupPreviewSVG.id = "sa-mcp-preview";
 
   const querier = new WorkspaceQuerier(Blockly, msg);
 
   let mousePosition = { x: 0, y: 0 };
-  document.addEventListener("mousemove", e => {
-    mousePosition = { x: e.clientX, y: e.clientY }
+  document.addEventListener("mousemove", (e) => {
+    mousePosition = { x: e.clientX, y: e.clientY };
   });
 
-  /** 
+  /**
    * @typedef ResultPreview
    * @property {QueryResult} result
    * @property {SVGGElement} svgBlock
@@ -59,18 +61,15 @@ export default async function ({ addon, msg, console }) {
   let allowMenuClose = true;
 
   function openMenu() {
-    if (addon.self.disabled)
-      return;
+    if (addon.self.disabled) return;
 
     // Don't show the menu if we're not in the code editor
-    if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 0)
-      return;
+    if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 0) return;
 
     querier.indexWorkspace(Blockly.getMainWorkspace());
 
     let top = mousePosition.y - 8;
-    if (top + POPUP_HEIGHT_PX > window.innerHeight)
-      top = window.innerHeight - POPUP_HEIGHT_PX;
+    if (top + POPUP_HEIGHT_PX > window.innerHeight) top = window.innerHeight - POPUP_HEIGHT_PX;
     popupRoot.style.top = top + "px";
 
     popupRoot.style.left = mousePosition.x + 16 + "px";
@@ -91,18 +90,16 @@ export default async function ({ addon, msg, console }) {
     let queryString = popupInput.innerText;
 
     // Fix for firefox bug https://bugzilla.mozilla.org/show_bug.cgi?id=1615852
-    if (popupInput.lastElementChild?.tagName === "BR")
-      queryString = queryString.substring(0, queryString.length - 1);
+    if (popupInput.lastElementChild?.tagName === "BR") queryString = queryString.substring(0, queryString.length - 1);
 
     return queryString;
   }
 
   function updateInput() {
-
     // Get the list of blocks to display using the input content
     const queryResults = querier.queryWorkspace(getQueryString());
 
-    // @ts-ignore Delete the old previews 
+    // @ts-ignore Delete the old previews
     while (popupPreviewSVG.firstChild) popupPreviewSVG.removeChild(popupPreviewSVG.lastChild);
 
     // Create the new previews
@@ -114,7 +111,7 @@ export default async function ({ addon, msg, console }) {
 
       const mouseMoveListener = () => {
         updateSelection(resultIdx);
-      }
+      };
 
       const svgBackground = popupPreviewSVG.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "rect"));
       svgBackground.setAttribute("transform", `translate(0, ${blockY})`);
@@ -131,7 +128,7 @@ export default async function ({ addon, msg, console }) {
 
       svgBlock.setAttribute("transform", `translate(${blockX + 5}, ${blockY + 20}) scale(${PREVIEW_SCALE})`);
       svgBlock.addEventListener("mousemove", mouseMoveListener);
-      svgBlock.addEventListener("mousedown", e => {
+      svgBlock.addEventListener("mousedown", (e) => {
         e.stopPropagation();
         e.preventDefault();
         updateSelection(resultIdx);
@@ -164,7 +161,7 @@ export default async function ({ addon, msg, console }) {
 
       newSelection.svgBackground.scrollIntoView({
         block: "nearest",
-        behavior: Math.abs(newIdx - selectedPreviewIdx) > 1 ? "smooth" : "auto"
+        behavior: Math.abs(newIdx - selectedPreviewIdx) > 1 ? "smooth" : "auto",
       });
 
       popupInputSuggestion.innerText = newSelection.result.autocomplete.substring(getQueryString().length);
@@ -214,9 +211,9 @@ export default async function ({ addon, msg, console }) {
         clientX: mousePosition.x,
         clientY: mousePosition.y,
         type: "mousedown",
-        stopPropagation: function () { },
-        preventDefault: function () { },
-        target: selectedPreview.svgBlock
+        stopPropagation: function () {},
+        preventDefault: function () {},
+        target: selectedPreview.svgBlock,
       };
       workspace.startDragWithFakeEvent(fakeEvent, newBlock);
     }
@@ -234,7 +231,7 @@ export default async function ({ addon, msg, console }) {
     }
   }
 
-  popupInput.addEventListener("keydown", e => {
+  popupInput.addEventListener("keydown", (e) => {
     switch (e.key) {
       case "Escape":
         // If there's something in the input, clear it
@@ -260,18 +257,14 @@ export default async function ({ addon, msg, console }) {
         e.preventDefault();
         break;
       case "ArrowDown":
-        if (selectedPreviewIdx + 1 >= queryPreviews.length)
-          updateSelection(0);
-        else
-          updateSelection(selectedPreviewIdx + 1);
+        if (selectedPreviewIdx + 1 >= queryPreviews.length) updateSelection(0);
+        else updateSelection(selectedPreviewIdx + 1);
         e.stopPropagation();
         e.preventDefault();
         break;
       case "ArrowUp":
-        if (selectedPreviewIdx - 1 < 0)
-          updateSelection(queryPreviews.length - 1);
-        else
-          updateSelection(selectedPreviewIdx - 1);
+        if (selectedPreviewIdx - 1 < 0) updateSelection(queryPreviews.length - 1);
+        else updateSelection(selectedPreviewIdx - 1);
         e.stopPropagation();
         e.preventDefault();
         break;
@@ -279,11 +272,11 @@ export default async function ({ addon, msg, console }) {
   });
 
   // Prevent pasting rich text by converting it into plain text
-  popupInput.addEventListener("paste", e => {
+  popupInput.addEventListener("paste", (e) => {
     if (e.clipboardData) {
       e.preventDefault();
-      var text = e.clipboardData.getData('text/plain');
-      document.execCommand('insertText', false, text);
+      var text = e.clipboardData.getData("text/plain");
+      document.execCommand("insertText", false, text);
     }
   });
 
@@ -303,8 +296,7 @@ export default async function ({ addon, msg, console }) {
   // Open on mouse wheel button
   const _doWorkspaceClick_ = Blockly.Gesture.prototype.doWorkspaceClick_;
   Blockly.Gesture.prototype.doWorkspaceClick_ = function () {
-    if (this.mostRecentEvent_.button === 1 || this.mostRecentEvent_.shiftKey)
-      openMenu();
+    if (this.mostRecentEvent_.button === 1 || this.mostRecentEvent_.shiftKey) openMenu();
     _doWorkspaceClick_.call(this);
   };
 }

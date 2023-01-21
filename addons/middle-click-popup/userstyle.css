@@ -1,81 +1,81 @@
 #sa-mcp-root {
-    display: flex;
-    white-space: nowrap;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  display: flex;
+  white-space: nowrap;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-    position: absolute;
-    min-width: 100px;
-    background-color: white;
-    border-radius: 4px;
-    box-shadow: rgba(0, 0, 0, 0.3) 0 0 3px, rgba(0, 0, 0, 0.2) 0 3px 10px;
-    
-    z-index: 999;
+  position: absolute;
+  min-width: 100px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0 0 3px, rgba(0, 0, 0, 0.2) 0 3px 10px;
+
+  z-index: 999;
 }
 
 #sa-mcp-container {
-    display: flex;
-    flex-flow: column;
-    top: -6px;
-    z-index: 100;
-    position: absolute;
-    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
-    background-color: white;
-    border: none;
-    border-radius: 4px;
+  display: flex;
+  flex-flow: column;
+  top: -6px;
+  z-index: 100;
+  position: absolute;
+  box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
+  background-color: white;
+  border: none;
+  border-radius: 4px;
 }
 
 #sa-mcp-input-wrapper {
-    margin: 4px;
-    width: 100% - 8px;
-    /* !important required for extension, because CSS injection method (and hence order) differs from addon */
-    box-sizing: border-box !important;
-    height: 1.5rem;
-    min-height: 1.5rem;
+  margin: 4px;
+  width: 100% - 8px;
+  /* !important required for extension, because CSS injection method (and hence order) differs from addon */
+  box-sizing: border-box !important;
+  height: 1.5rem;
+  min-height: 1.5rem;
 
-    /* Change Scratch default styles */
-    border-radius: 0.25rem;
-    font-size: 0.75rem;
-    padding-left: 0.4em;
-    padding-top: 0.3rem;
+  /* Change Scratch default styles */
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  padding-left: 0.4em;
+  padding-top: 0.3rem;
 }
 
 #sa-mcp-input-wrapper:focus {
-    /* Change Scratch default styles */
-    box-shadow: none;
+  /* Change Scratch default styles */
+  box-shadow: none;
 }
 
 #sa-mcp-input {
-    display: inline-block;
-    border: 0;
-    background-color: transparent;
-    outline: none;
+  display: inline-block;
+  border: 0;
+  background-color: transparent;
+  outline: none;
 }
 
 #sa-mcp-input-suggestion {
-    color: hsla(225, 15%, 40%, 0.65);
-    /* When scrolled into view, leave a bit of extra room on the right */
-    padding-right: 10px;
+  color: hsla(225, 15%, 40%, 0.65);
+  /* When scrolled into view, leave a bit of extra room on the right */
+  padding-right: 10px;
 }
 
 #sa-mcp-preview-container {
-    flex: auto;
-    overflow-y: scroll;
-    min-height: min-content;
+  flex: auto;
+  overflow-y: scroll;
+  min-height: min-content;
 }
 
 #sa-mcp-preview {
-    width: 100%;
-    min-height: 100%;
-    /* https://stackoverflow.com/a/22166728/8448397 */
-    float: left;
+  width: 100%;
+  min-height: 100%;
+  /* https://stackoverflow.com/a/22166728/8448397 */
+  float: left;
 }
 
 .sa-mcp-preview-block-bg {
-    width: 100%;
-    height: 45px;
-    fill: transparent;
+  width: 100%;
+  height: 45px;
+  fill: transparent;
 }
 
 .sa-mcp-preview-block-bg-selection {
-    fill: #FFFF00AA;
+  fill: #ffff00aa;
 }
