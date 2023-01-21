@@ -312,11 +312,15 @@ export default async function ({ addon, msg, console }) {
   const _isDeleteArea = Blockly.WorkspaceSvg.prototype.isDeleteArea;
   Blockly.WorkspaceSvg.prototype.isDeleteArea = function (e) {
     if (popupPosition) {
-      if (e.clientX > popupPosition.x && e.clientX < popupPosition.x + POPUP_WIDTH_PX &&
-        e.clientY > popupPosition.y && e.clientY < popupPosition.y + POPUP_HEIGHT_PX) {
+      if (
+        e.clientX > popupPosition.x &&
+        e.clientX < popupPosition.x + POPUP_WIDTH_PX &&
+        e.clientY > popupPosition.y &&
+        e.clientY < popupPosition.y + POPUP_HEIGHT_PX
+      ) {
         return Blockly.DELETE_AREA_TOOLBOX;
       }
     }
     return _isDeleteArea.call(this, e);
-  }
+  };
 }
