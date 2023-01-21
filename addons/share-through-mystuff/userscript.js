@@ -10,7 +10,7 @@ export default async function ({ addon, global }) {
     if (confirmation) event.target.parentElement.querySelector(".media-share").click();
   }
   share_button.href = "#";
-  share_button.classList.add("__share_button__");
+  share_button.classList.add("sa-share-button");
   share_button.innerText = "Share";
 
   while (true) {
