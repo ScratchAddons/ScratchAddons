@@ -330,7 +330,7 @@ export class BlockTypeInfo {
    * Enumerates all the different types of blocks, given a workspace.
    * @param {Blockly} Blockly
    * @param {*} workspace
-   * @param {*} locale The translations used for converting icons into text
+   * @param {(string) => string} locale The translations used for converting icons into text
    * @returns {BlockTypeInfo[]}
    */
   static getBlocks(Blockly, workspace, locale) {

@@ -116,7 +116,7 @@ const BLOCK_ELEMENT_SPACING = 8;
 /**
  * A part of a block. Think of these like the different parts in the 'make a block' menu.
  */
-class BlockComponent {
+export class BlockComponent {
   constructor(element, padding, width, snuggleWith, snugglePadding) {
     this.dom = element;
     this.padding = padding;
@@ -214,7 +214,7 @@ function createBackedTextedComponent(text, container, shape, fillCategory, strok
  * Renders a block, with the center of it's leftmost side located at 0, 0.
  * @param {BlockInstance} block
  * @param {SVGElement} container
- * @returns {Object} The renderered block
+ * @returns {BlockComponent} The renderered block
  */
 export default function renderBlock(block, container) {
   var blockComponent = _renderBlock(block, container, block.typeInfo.category, true);

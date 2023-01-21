@@ -923,12 +923,18 @@ export class QueryResult {
     if (this._text) return this._text;
     return (this._text = this.token.type.createText(this.token, this.query) ?? "");
   }
-
+  
+  /**
+   * @returns {string}
+   */
   get autocomplete() {
     if (this._autocomplete) return this._autocomplete;
     return (this._autocomplete = this.token.type.createText(this.token, this.query, [true]));
   }
-
+  
+  /**
+   * @returns {BlockInstance}
+   */
   createBlock() {
     return this.token.createBlockValue(this.query);
   }
@@ -1034,6 +1040,7 @@ export default class WorkspaceQuerier {
 
   /**
    * @param {Blockly} blockly
+   * @param {(string) => string} locale
    */
   constructor(blockly, locale) {
     this.Blockly = blockly;

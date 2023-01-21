@@ -154,7 +154,7 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .library-item_library-item_1DcMO,
 .s3devDDOut.vis, /* devtools style */
 .sa-find-dropdown-out.visible, /* find-bar style */
-.sa-float-bar-dropdown-out, /* middle-click-popup style */
+#sa-mcp-container, /* middle-click-popup style */
 .prompt_body_18Z-I,
 .custom-procedures_body_SQBv6,
 .slider-prompt_body_2ZkXL,
