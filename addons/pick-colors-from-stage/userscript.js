@@ -3,6 +3,19 @@ export default async function ({ addon, msg, console }) {
 
   const setIsPicking = (picking) => document.body.classList.toggle("sa-stage-color-picker-picking", picking);
 
+  // We only want to handle color picker events from the user clicking on the button, not from
+  // addons or other scripts pressing it with click().
+  let isMostRecentClickUserInitiated = false;
+  document.addEventListener(
+    "click",
+    (e) => {
+      isMostRecentClickUserInitiated = e.isTrusted;
+    },
+    {
+      capture: true,
+    }
+  );
+
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
     const action = e.detail.action;
@@ -12,7 +25,11 @@ export default async function ({ addon, msg, console }) {
       return;
     }
 
-    if (!addon.self.disabled && action.type === "scratch-paint/eye-dropper/ACTIVATE_COLOR_PICKER") {
+    if (
+      !addon.self.disabled &&
+      isMostRecentClickUserInitiated &&
+      action.type === "scratch-paint/eye-dropper/ACTIVATE_COLOR_PICKER"
+    ) {
       setIsPicking(true);
 
       // When scratch-paint's color picker is activated, also activate scratch-gui's color picker.
@@ -44,6 +61,8 @@ export default async function ({ addon, msg, console }) {
       });
     }
 
+    // Don't check for addon being disabled here in case we were dynamically disabled while color
+    // picking. This code won't do anything anyways when the previous code doesn't run.
     if (action.type === "scratch-paint/eye-dropper/DEACTIVATE_COLOR_PICKER") {
       setIsPicking(false);
 

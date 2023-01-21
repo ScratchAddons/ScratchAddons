@@ -242,14 +242,14 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_29": {
-    "message": "New addon: \"opacity slider\", which adds an opacity slider to the costume editor color picker. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_30": {
+    "message": "New addon: \"costume editor snapping\", which lets you snap objects in the costume editor to bounding boxes and vector nodes. Go to $1 to enable it."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_29": {
-    "message": "Other new addons added this update are \"project volume slider\", \"rename broadcasts\", and \"select stage colors in the costume editor\"."
+  "extensionUpdateInfo2_v1_30": {
+    "message": "Other new addons added this update are \"collapsing sprite properties\", \"insert blocks by name\", and \"always show number pad\"."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
