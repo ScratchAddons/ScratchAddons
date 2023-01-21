@@ -552,13 +552,12 @@ class StringEnum {
         }
       } else {
         if (query.lowercase.startsWith(valueInfo.lower, idx)) {
-          if (TokenTypeStringLiteral.TERMINATORS.indexOf(query.lowercase[idx + valueInfo.lower.length]) !== -1)
-            cacheEntry[valueIdx] = new Token(
-              idx,
-              idx + valueInfo.lower.length,
-              this.fullTokenProvider,
-              valueInfo.value
-            );
+          cacheEntry[valueIdx] = new Token(
+            idx,
+            idx + valueInfo.lower.length,
+            this.fullTokenProvider,
+            valueInfo.value
+          );
         }
       }
     }
@@ -592,15 +591,12 @@ class TokenTypeStringLiteral extends TokenType {
   *parseTokens(query, idx) {
     let wasTerminator = false;
     for (let i = idx; i <= query.length; i++) {
-      if (TokenTypeStringLiteral.TERMINATORS.indexOf(query.str[i]) !== -1) {
-        if (!wasTerminator && i !== idx) {
-          const value = query.str.substring(idx, i);
-          yield new Token(idx, i, this, value, -300 * value.length);
-        }
-        wasTerminator = true;
-      } else {
-        wasTerminator = false;
+      const isTerminator = TokenTypeStringLiteral.TERMINATORS.indexOf(query.str[i]) !== -1;
+      if ((wasTerminator !== isTerminator) && i !== idx) {
+        const value = query.str.substring(idx, i);
+        yield new Token(idx, i, this, value, -300 * value.length);
       }
+      wasTerminator = isTerminator;
     }
   }
 
@@ -614,37 +610,24 @@ class TokenTypeStringLiteral extends TokenType {
  * This token type also supports hexadecimal numbers, like 'Hello + 0x45'
  */
 class TokenTypeNumberLiteral extends TokenType {
-  static NUM_CHAR = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-", "."];
-  static HEX_CHARS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
+
+  static isValidNumber(str) {
+    return !isNaN(str) && !isNaN(parseFloat(str));
+  }
 
   *parseTokens(query, idx) {
-    if (query.str.startsWith("0x", idx)) {
-      if (idx + 2 === query.length) {
-        yield new Token(idx, idx + 2, this, "0x0", 100000, undefined, true);
-        return;
-      }
-      for (let i = idx + 2; i <= query.length; i++) {
-        const char = query.str[i];
-        if (TokenTypeStringLiteral.TERMINATORS.indexOf(char) !== -1) {
-          if (i !== idx + 2) yield new Token(idx, i, this, query.str.substring(idx, i), 100000);
+    for (let i = idx; i <= query.length; i++) {
+      if (TokenTypeStringLiteral.TERMINATORS.indexOf(query.str[i]) !== -1 && i !== idx) {
+        const value = query.str.substring(idx, i);
+        if (TokenTypeNumberLiteral.isValidNumber(value)) {
+          yield new Token(idx, i, this, value, 100000);
           break;
         }
-        if (TokenTypeNumberLiteral.HEX_CHARS.indexOf(char) === -1) break;
       }
-    }
-
-    for (let i = idx; i <= query.length; i++) {
-      const char = query.str[i];
-      if (TokenTypeStringLiteral.TERMINATORS.indexOf(char) !== -1) {
-        if (i !== idx) yield new Token(idx, i, this, query.str.substring(idx, i), 100000);
-        break;
-      }
-      if (TokenTypeNumberLiteral.NUM_CHAR.indexOf(char) === -1) break;
     }
   }
 
   createText(token, query) {
-    if (token.isTruncated) return token.value;
     return query.query.substring(token.start, token.end);
   }
 }
@@ -1119,7 +1102,7 @@ export default class WorkspaceQuerier {
       const subtokens = token.type.getSubtokens(token, query);
       if (subtokens) {
         for (const subtoken of subtokens) if (!checkValidity(subtoken)) return false;
-      } else if (token.type instanceof TokenTypeStringLiteral) {
+      } else if (token.type instanceof TokenTypeStringLiteral && !TokenTypeNumberLiteral.isValidNumber(token.value)) {
         for (let i = token.start; i < token.end; i++) if (!canBeString[i]) return false;
       }
       return true;
