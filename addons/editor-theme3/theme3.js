@@ -303,6 +303,7 @@ export default async function ({ addon, console }) {
     const flyoutWorkspace = flyout.getWorkspace();
     Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
     toolbox.populate_(workspace.options.languageTree);
+    workspace.toolboxRefreshEnabled_ = true;
   };
 
   updateColors();

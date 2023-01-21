@@ -71,22 +71,19 @@
 }
 
 .sa-float-bar-dropdown > li {
-  background-color: var(--sa-block-background-primary);
-}
-.sa-float-bar-dropdown > li:hover,
-.sa-float-bar-dropdown > li.sel {
-  background-color: var(--sa-block-field-background);
-}
-
-.sa-float-bar-dropdown > li {
   height: 19px;
   padding: 3px 8px;
   margin: 2px 0.3em;
   box-sizing: border-box;
   position: relative;
-  color: white;
+  background-color: var(--sa-block-colored-background);
+  color: var(--sa-block-text);
   font-weight: bold;
   width: min-content;
+}
+.sa-float-bar-dropdown > li:hover,
+.sa-float-bar-dropdown > li.sel {
+  background-color: var(--sa-block-colored-background-secondary);
 }
 
 .sa-float-bar-dropdown > li.sa-hat {

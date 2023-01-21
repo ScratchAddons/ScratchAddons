@@ -35,6 +35,7 @@ export default async function ({ addon, msg, console }) {
       this.dropdownOut.className = "sa-float-bar-dropdown-out";
 
       this.floatInput = this.dropdownOut.appendChild(document.createElement("input"));
+      this.floatInput.placeholder = msg("start-typing");
       this.floatInput.className = "sa-float-bar-input";
       this.floatInput.className = addon.tab.scratchClass("input_input-form", {
         others: "sa-float-bar-input",
@@ -51,6 +52,10 @@ export default async function ({ addon, msg, console }) {
       this.dropdownOut.addEventListener("mousedown", (...e) => this.onClick(...e));
 
       document.addEventListener("keydown", (e) => {
+        if (addon.tab.editorMode !== "editor") {
+          return;
+        }
+
         let ctrlKey = e.ctrlKey || e.metaKey;
 
         if (e.key === " " && ctrlKey) {
@@ -327,14 +332,21 @@ export default async function ({ addon, msg, console }) {
         li.innerText = desc;
         li.data = { text: desc, lower: " " + desc.toLowerCase(), option: option };
 
-        let ending = option.block.getCategory();
+        const blockTypes = {
+          // Some of these blocks in the flyout have a category of `null` for some reason, the
+          // same as procedures. Without making bigger changes to the custom block color system
+          // hardcoding these is the best solution for now.
+          sensing_of: "sensing",
+          event_whenbackdropswitchesto: "events",
+        };
+        let ending = option.block.getCategory() || blockTypes[option.block.type] || "null";
         if (option.block.isScratchExtension) {
           ending = "pen";
         } else if (addon.tab.getCustomBlock(option.block.procCode_)) {
           ending = "addon-custom-block";
         }
 
-        li.className = "sa-block-color-" + ending + " sa-" + bType;
+        li.className = "sa-block-color sa-block-color-" + ending + " sa-" + bType;
         if (count > this.DROPDOWN_BLOCK_LIST_MAX_ROWS) {
           // Limit maximum number of rows to prevent lag when no filter is applied
           li.style.display = "none";
