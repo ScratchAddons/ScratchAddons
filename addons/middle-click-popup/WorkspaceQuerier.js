@@ -331,8 +331,8 @@ class TokenType extends TokenProvider {
   }
 
   /**
-   * @param {Token} token 
-   * @param {QueryInfo} query 
+   * @param {Token} token
+   * @param {QueryInfo} query
    * @returns {Token[]}
    */
   getSubtokens(token, query) {
@@ -1090,8 +1090,7 @@ export default class WorkspaceQuerier {
     const canBeString = Array(queryStr.length).fill(true);
     function searchToken(token) {
       const subtokens = token.type.getSubtokens(token, query);
-      if (subtokens) for (const subtoken of subtokens)
-        searchToken(subtoken)
+      if (subtokens) for (const subtoken of subtokens) searchToken(subtoken);
       else if (!(token.type instanceof TokenTypeStringLiteral))
         for (let i = token.start; i < token.end; i++) {
           canBeString[i] = false;
@@ -1101,18 +1100,14 @@ export default class WorkspaceQuerier {
     function checkValidity(token) {
       const subtokens = token.type.getSubtokens(token, query);
       if (subtokens) {
-        for (const subtoken of subtokens)
-          if (!checkValidity(subtoken)) return false;
+        for (const subtoken of subtokens) if (!checkValidity(subtoken)) return false;
       } else if (token.type instanceof TokenTypeStringLiteral) {
-        for (let i = token.start; i < token.end; i++)
-          if (!canBeString[i]) return false;
+        for (let i = token.start; i < token.end; i++) if (!canBeString[i]) return false;
       }
       return true;
     }
     const validResults = [];
-    for (const result of results)
-      if (checkValidity(result.token))
-        validResults.push(result);
+    for (const result of results) if (checkValidity(result.token)) validResults.push(result);
 
     return validResults.sort((a, b) => b.token.score - a.token.score);
   }
