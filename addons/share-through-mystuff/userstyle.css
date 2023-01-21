@@ -11,6 +11,6 @@
 .media-item-content.not-shared .media-trash {
   position: relative;
   float: none;
-  top: 0;
+  top: 0px;
   left: 20px;
 }
