@@ -13,7 +13,7 @@ export default async function ({ addon, global, console, msg }) {
     createFolderAreaAndButton();
     foldersArray = await load();
   };
-
+  
   if (document.querySelectorAll("div.folders-container")[0] === undefined) {
     createFolderAreaAndButton();
     foldersArray = await load();
