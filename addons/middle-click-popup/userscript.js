@@ -9,7 +9,7 @@ export default async function ({ addon, msg, console }) {
   const POPUP_WIDTH_PX = 320;
   const POPUP_HEIGHT_PX = 420;
 
-  const PREVIEW_SCALE = 0.65;
+  const PREVIEW_SCALE = 0.675;
   const PREVIEW_LIMIT = 30;
 
   const popupRoot = document.body.appendChild(document.createElement("div"));
