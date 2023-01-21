@@ -83,9 +83,10 @@ export class BlockInput {
  * @abstract
  */
 export class BlockInputRound extends BlockInput {
-  constructor(type, inputIdx, fieldIdx) {
+  constructor(type, inputIdx, fieldIdx, defaultValue) {
     super(type, inputIdx, fieldIdx);
     if (this.constructor == BlockInputRound) throw new Error("Abstract classes can't be instantiated.");
+    this.defaultValue = defaultValue;
   }
 
   setValue(block, value) {
@@ -110,8 +111,9 @@ export class BlockInputRound extends BlockInput {
 }
 
 export class BlockInputString extends BlockInputRound {
-  constructor(inputIdx, fieldIdx) {
-    super(BlockInputType.STRING, inputIdx, fieldIdx);
+  constructor(inputIdx, fieldIdx, defaultValue) {
+    super(BlockInputType.STRING, inputIdx, fieldIdx, defaultValue);
+
   }
 
   _toFieldValue(value) {
@@ -123,8 +125,8 @@ export class BlockInputString extends BlockInputRound {
 }
 
 export class BlockInputNumber extends BlockInputRound {
-  constructor(inputIdx, fieldIdx) {
-    super(BlockInputType.NUMBER, inputIdx, fieldIdx);
+  constructor(inputIdx, fieldIdx, defaultValue) {
+    super(BlockInputType.NUMBER, inputIdx, fieldIdx, defaultValue);
   }
 
   _toFieldValue(value) {
@@ -261,6 +263,11 @@ export class BlockInstance {
     if (this.inputs.length !== this.typeInfo.inputs.length)
       throw new Error("Wrong number of inputs to block. Expected " + this.inputs.length);
 
+    if (this.typeInfo.id === "control_stop") {
+      this.typeInfo.domForm.querySelector("mutation")
+        .setAttribute("hasnext", "" + (this.inputs[0].value === "other scripts in sprite"));
+    }
+
     const block = this.typeInfo.Blockly.Xml.domToBlock(this.typeInfo.domForm, this.typeInfo.workspace);
     for (let i = 0; i < this.inputs.length; i++) {
       if (this.inputs[i] != null) this.typeInfo.inputs[i].setValue(block, this.inputs[i]);
@@ -288,7 +295,7 @@ export class BlockShape {
       return BlockShape.Boolean;
     } else if (workspaceBlock.startHat_) {
       return BlockShape.Hat;
-    } else if (workspaceBlock.squareTopLeftCorner_) {
+    } else if (!workspaceBlock.nextConnection) {
       return BlockShape.End;
     } else {
       return BlockShape.Stack;
@@ -322,7 +329,7 @@ export class BlockTypeInfo {
     if (block.isScratchExtension) return "pen";
     // These two blocks don't have `category_` set for reasons I'm too tired to figure out.
     if (block.type === "sensing_of") return "sensing";
-    if (block.type === "event_whenbackdropswitchesto") return "event;";
+    if (block.type === "event_whenbackdropswitchesto") return "events";
     return block.category_;
   }
 
@@ -399,13 +406,13 @@ export class BlockTypeInfo {
       } else if (field instanceof Blockly.FieldImage) {
         switch (field.src_) {
           case "/static/blocks-media/green-flag.svg":
-            this.parts.push(locale("/global/green-flag"));
+            this.parts.push(locale("/global/blocks/green-flag"));
             break;
           case "/static/blocks-media/rotate-right.svg":
-            this.parts.push(locale("/global/clockwise"));
+            this.parts.push(locale("/global/blocks/clockwise"));
             break;
           case "/static/blocks-media/rotate-left.svg":
-            this.parts.push(locale("/global/anticlockwise"));
+            this.parts.push(locale("/global/blocks/anticlockwise"));
             break;
         }
       } else {
@@ -414,9 +421,9 @@ export class BlockTypeInfo {
         } else if (field.argType_[0] === "colour") {
           addInput(new BlockInputColour(inputIdx, fieldIdx));
         } else if (field.argType_[1] === "number") {
-          addInput(new BlockInputNumber(inputIdx, fieldIdx));
+          addInput(new BlockInputNumber(inputIdx, fieldIdx, field.text_));
         } else {
-          addInput(new BlockInputString(inputIdx, fieldIdx));
+          addInput(new BlockInputString(inputIdx, fieldIdx, field.text_));
         }
       }
     };

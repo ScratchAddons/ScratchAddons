@@ -250,7 +250,7 @@ function _renderBlock(block, container, parentCategory, isVertical) {
         component = _renderBlock(blockInput, blockContainer, block.typeInfo.category, false);
       } else if (blockPart instanceof BlockInputEnum) {
         component = createBackedTextedComponent(
-          blockInput?.string ?? "",
+          blockInput?.string ?? blockPart.values[0].string,
           blockContainer,
           BlockShapes.TextInput,
           block.typeInfo.category,
@@ -277,7 +277,7 @@ function _renderBlock(block, container, parentCategory, isVertical) {
         );
       } else {
         component = createBackedTextedComponent(
-          blockInput?.toString() ?? "",
+          blockInput?.toString() ?? blockPart.defaultValue ?? "",
           blockContainer,
           BlockShapes.TextInput,
           null,

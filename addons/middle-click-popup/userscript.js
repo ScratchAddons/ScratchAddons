@@ -121,10 +121,21 @@ export default async function ({ addon, msg, console }) {
         updateSelection(resultIdx);
       };
 
+      const mouseDownListener = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        updateSelection(resultIdx);
+        allowMenuClose = !e.shiftKey;
+        selectBlock(true);
+        allowMenuClose = true;
+        if (e.shiftKey) popupInput.focus();
+      };
+
       const svgBackground = popupPreviewSVG.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "rect"));
       svgBackground.setAttribute("transform", `translate(0, ${blockY})`);
       svgBackground.classList.add("sa-mcp-preview-block-bg");
       svgBackground.addEventListener("mousemove", mouseMoveListener);
+      svgBackground.addEventListener("mousedown", mouseDownListener);
 
       const svgBlock = popupPreviewSVG.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "g"));
       const block = renderBlock(result.createBlock(), svgBlock);
@@ -136,15 +147,7 @@ export default async function ({ addon, msg, console }) {
 
       svgBlock.setAttribute("transform", `translate(${blockX + 5}, ${blockY + 20}) scale(${PREVIEW_SCALE})`);
       svgBlock.addEventListener("mousemove", mouseMoveListener);
-      svgBlock.addEventListener("mousedown", (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        updateSelection(resultIdx);
-        allowMenuClose = !e.shiftKey;
-        selectBlock(true);
-        allowMenuClose = true;
-        if (e.shiftKey) popupInput.focus();
-      });
+      svgBlock.addEventListener("mousedown", mouseDownListener);
 
       queryPreviews.push({ result, svgBlock, svgBackground });
     }
@@ -219,8 +222,8 @@ export default async function ({ addon, msg, console }) {
         clientX: mousePosition.x,
         clientY: mousePosition.y,
         type: "mousedown",
-        stopPropagation: function () {},
-        preventDefault: function () {},
+        stopPropagation: function () { },
+        preventDefault: function () { },
         target: selectedPreview.svgBlock,
       };
       workspace.startDragWithFakeEvent(fakeEvent, newBlock);

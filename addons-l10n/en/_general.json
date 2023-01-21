@@ -2,7 +2,7 @@
   "_locale": "en",
   "_locale_name": "English",
 
-  "global/green-flag": "green flag",
-  "global/clockwise": "clockwise",
-  "global/anticlockwise": "anti-clockwise"
+  "global/blocks/green-flag": "green flag",
+  "global/blocks/clockwise": "clockwise",
+  "global/blocks/anticlockwise": "anti-clockwise"
 }
