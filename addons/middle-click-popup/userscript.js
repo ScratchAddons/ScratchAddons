@@ -106,8 +106,7 @@ export default async function ({ addon, msg, console }) {
     // Get the list of blocks to display using the input content
     const queryResults = querier.queryWorkspace(getQueryString());
 
-    if (queryResults.length > PREVIEW_LIMIT)
-      queryResults.length = PREVIEW_LIMIT;
+    if (queryResults.length > PREVIEW_LIMIT) queryResults.length = PREVIEW_LIMIT;
 
     // @ts-ignore Delete the old previews
     while (popupPreviewSVG.firstChild) popupPreviewSVG.removeChild(popupPreviewSVG.lastChild);
@@ -193,7 +192,7 @@ export default async function ({ addon, msg, console }) {
 
     for (let previewIdx = 0; previewIdx < queryPreviews.length; previewIdx++) {
       const preview = queryPreviews[previewIdx];
-      
+
       var blockX = 5;
       if (blockX + preview.block.width > POPUP_WIDTH_PX / PREVIEW_SCALE)
         blockX += (POPUP_WIDTH_PX / PREVIEW_SCALE - blockX - preview.block.width) * PREVIEW_SCALE * cursorPosRel;
@@ -239,8 +238,8 @@ export default async function ({ addon, msg, console }) {
         clientX: mousePosition.x,
         clientY: mousePosition.y,
         type: "mousedown",
-        stopPropagation: function () { },
-        preventDefault: function () { },
+        stopPropagation: function () {},
+        preventDefault: function () {},
         target: selectedPreview.svgBlock,
       };
       workspace.startDragWithFakeEvent(fakeEvent, newBlock);

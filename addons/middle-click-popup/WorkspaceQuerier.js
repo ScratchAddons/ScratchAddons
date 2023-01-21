@@ -849,7 +849,7 @@ class TokenTypeBlock extends TokenType {
     for (const token of tokenProvider.parseTokens(query, idx)) {
       ++query.tokenCount;
       if (!query.canCreateMoreTokens()) break;
-      
+
       if (this.block.precedence !== -1) {
         if (token.precedence > this.block.precedence) continue;
         if (token.precedence === this.block.precedence && tokenProviderIdx !== 0) continue;
