@@ -1,7 +1,7 @@
 .sa-onion-button {
   position: relative;
 }
-.sa-onion-button:active {
+.sa-onion-button:focus-within {
   background-color: hsla(215, 100%, 65%, 0.2);
 }
 .sa-onion-button[data-enabled="true"] .sa-onion-image {
@@ -27,7 +27,7 @@
 
 .sa-onion-settings {
   position: absolute;
-  bottom: 0px;
+  bottom: 100%;
   /* based on the styles for the color dropdown */
   padding: 4px;
   border-radius: 4px;
@@ -91,6 +91,6 @@
   stroke: #ddd;
 }
 
-.sa-onion-label {
+.sa-onion-settings-label {
   white-space: nowrap;
 }

@@ -11,6 +11,7 @@ export default class Trap extends Listenable {
     this._isWWW = () => tab.clientVersion === "scratch-www";
     this._getEditorMode = () => this._isWWW() && tab.editorMode;
     this._waitForElement = tab.waitForElement.bind(tab);
+    this._cache = Object.create(null);
   }
 
   /**
@@ -20,20 +21,7 @@ export default class Trap extends Listenable {
    */
   get vm() {
     if (!this._getEditorMode()) throw new Error("Cannot access vm on non-project page");
-    if (window.scratchAddons.traps.vm) return window.scratchAddons.traps.vm;
-    const app = document.querySelector("#app");
-    if (!app) throw new Error("Unable to access vm through redux");
-    return (window.scratchAddons.traps.vm =
-      app[
-        Object.keys(app).find((key) => key.startsWith(this.REACT_CONTAINER_PREFIX))
-      ].child.stateNode.store.getState().scratchGui.vm);
-  }
-
-  /**
-   * @private
-   */
-  get REACT_CONTAINER_PREFIX() {
-    return "__reactContainer";
+    return __scratchAddonsTraps._onceMap.vm;
   }
 
   /**
@@ -51,7 +39,7 @@ export default class Trap extends Listenable {
    * @returns {Promise<object>}
    */
   async getBlockly() {
-    if (window.scratchAddons.traps.Blockly) return window.scratchAddons.traps.Blockly;
+    if (this._cache.Blockly) return this._cache.Blockly;
     const editorMode = this._getEditorMode();
     if (!editorMode || editorMode === "embed")
       throw new Error(`Cannot access Blockly on ${editorMode} page (${location.pathname})`);
@@ -70,7 +58,7 @@ export default class Trap extends Listenable {
     /* eslint-disable no-empty */
     while (((childable = childable.child), !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks)) {}
     /* eslint-enable no-empty */
-    return (window.scratchAddons.traps.Blockly = childable.stateNode.ScratchBlocks);
+    return (this._cache.Blockly = childable.stateNode.ScratchBlocks);
   }
 
   /**
@@ -92,7 +80,7 @@ export default class Trap extends Listenable {
    * @returns {Promise<object>}
    */
   async getPaper() {
-    if (window.scratchAddons.traps.paper) return window.scratchAddons.traps.paper;
+    if (this._cache.paper) return this._cache.paper;
     const editorMode = this._getEditorMode();
     if (!editorMode || editorMode === "embed") throw new Error("Cannot access paper on this page");
     // We can access paper through .tool on tools, for example:
@@ -119,7 +107,7 @@ export default class Trap extends Listenable {
     }
     if (tool) {
       const paperScope = tool._scope;
-      window.scratchAddons.traps.paper = paperScope;
+      this._cache.paper = paperScope;
       return paperScope;
     }
     throw new Error("cannot find paper :(");
