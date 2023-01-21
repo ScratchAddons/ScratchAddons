@@ -74,10 +74,10 @@
 
 .sa-mcp-preview-block-bg {
   width: 100%;
-  height: 45px;
+  height: 40px;
   fill: transparent;
 }
 
 .sa-mcp-preview-block-bg-selection {
-  fill: #ff793bbb;
+  fill: #7774;
 }

@@ -116,7 +116,7 @@ export default async function ({ addon, msg, console }) {
     for (let resultIdx = 0; resultIdx < queryResults.length; resultIdx++) {
       const result = queryResults[resultIdx];
 
-      var blockY = resultIdx * 40;
+      var blockY = resultIdx * 40 + 2;
 
       const mouseMoveListener = () => {
         updateSelection(resultIdx);
