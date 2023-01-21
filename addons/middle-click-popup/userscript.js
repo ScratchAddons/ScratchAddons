@@ -57,6 +57,7 @@ export default async function ({ addon, msg, console }) {
   let selectedPreviewIdx = 0;
 
   let allowMenuClose = true;
+  let popupPosition = null;
 
   function openMenu() {
     if (addon.self.disabled)
@@ -71,9 +72,12 @@ export default async function ({ addon, msg, console }) {
     let top = mousePosition.y - 8;
     if (top + POPUP_HEIGHT_PX > window.innerHeight)
       top = window.innerHeight - POPUP_HEIGHT_PX;
-    popupRoot.style.top = top + "px";
 
-    popupRoot.style.left = mousePosition.x + 16 + "px";
+    let left = mousePosition.x + 16;
+
+    popupPosition = { x: left, y: top };
+    popupRoot.style.top = top + "px";
+    popupRoot.style.left = left + "px";
     popupRoot.style.display = "";
     popupInput.innerText = "";
     popupInput.focus();
@@ -82,6 +86,7 @@ export default async function ({ addon, msg, console }) {
 
   function closeMenu() {
     if (allowMenuClose) {
+      popupPosition = null;
       popupRoot.style.display = "none";
       querier.clearWorkspaceIndex();
     }
@@ -307,4 +312,16 @@ export default async function ({ addon, msg, console }) {
       openMenu();
     _doWorkspaceClick_.call(this);
   };
+
+  // The popup should delete blocks dragged ontop of it
+  const _isDeleteArea = Blockly.WorkspaceSvg.prototype.isDeleteArea;
+  Blockly.WorkspaceSvg.prototype.isDeleteArea = function (e) {
+    if (popupPosition) {
+      if (e.clientX > popupPosition.x && e.clientX < popupPosition.x + POPUP_WIDTH_PX &&
+        e.clientY > popupPosition.y && e.clientY < popupPosition.y + POPUP_HEIGHT_PX) {
+        return Blockly.DELETE_AREA_TOOLBOX;
+      }
+    }
+    return _isDeleteArea.call(this, e);
+  }
 }
