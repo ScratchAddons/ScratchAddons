@@ -76,9 +76,6 @@ export default async function ({ addon, msg, console }) {
 
     popupPosition = { x: left, y: top };
     popupRoot.style.top = top + "px";
-
-    popupPosition = { x: left, y: top };
-    popupRoot.style.top = top + "px";
     popupRoot.style.left = left + "px";
     popupRoot.style.display = "";
     popupInput.innerText = "";
