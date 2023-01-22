@@ -66,7 +66,6 @@ export default async function ({ addon, msg, console }) {
   );
   popupPreviewBlocks.id = "sa-mcp-preview-blocks";
 
-
   const querier = new WorkspaceQuerier(Blockly, msg);
 
   let mousePosition = { x: 0, y: 0 };
@@ -158,7 +157,9 @@ export default async function ({ addon, msg, console }) {
         if (e.shiftKey) popupInput.focus();
       };
 
-      const svgBackground = popupPreviewBlocks.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "rect"));
+      const svgBackground = popupPreviewBlocks.appendChild(
+        document.createElementNS("http://www.w3.org/2000/svg", "rect")
+      );
       svgBackground.setAttribute("transform", `translate(0, ${blockY})`);
       svgBackground.classList.add("sa-mcp-preview-block-bg");
       svgBackground.addEventListener("mousemove", mouseMoveListener);
@@ -242,7 +243,7 @@ export default async function ({ addon, msg, console }) {
       return;
     }
 
-    const scrollbarHeight = PREVIEW_HEIGHT_PX / scrollY * PREVIEW_HEIGHT_PX;
+    const scrollbarHeight = (PREVIEW_HEIGHT_PX / scrollY) * PREVIEW_HEIGHT_PX;
     const scrollbarY = (scrollTop / scrollY) * PREVIEW_HEIGHT_PX;
 
     popupPreviewScrollbarSVG.style.display = "";
@@ -285,8 +286,8 @@ export default async function ({ addon, msg, console }) {
         clientX: mousePosition.x,
         clientY: mousePosition.y,
         type: "mousedown",
-        stopPropagation: function () { },
-        preventDefault: function () { },
+        stopPropagation: function () {},
+        preventDefault: function () {},
         target: selectedPreview.svgBlock,
       };
       workspace.startDragWithFakeEvent(fakeEvent, newBlock);
