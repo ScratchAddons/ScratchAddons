@@ -867,8 +867,7 @@ class TokenTypeBlock extends TokenType {
   }
 
   createBlockValue(token, query) {
-    if (!token.isLegal)
-      throw new Error("Cannot create a block from an illegal token.");
+    if (!token.isLegal) throw new Error("Cannot create a block from an illegal token.");
     const blockInputs = [];
 
     for (let i = 0; i < token.value.length; i++) {
@@ -1046,12 +1045,7 @@ export default class WorkspaceQuerier {
     "operator_not",
   ];
 
-  static CATEGORY_PRIORITY = [
-    "control",
-    "events",
-    "data",
-    "operators"
-  ];
+  static CATEGORY_PRIORITY = ["control", "events", "data", "operators"];
 
   /**
    * The maximum number of results to find before giving up.
@@ -1200,11 +1194,9 @@ export default class WorkspaceQuerier {
     this.tokenGroupBoolean = new TokenProviderOptional(new TokenProviderGroup());
     this.tokenGroupBoolean.inner.pushProviders([
       this.tokenGroupBooleanBlocks,
-      new TokenTypeBrackets(this.tokenGroupBoolean)
+      new TokenTypeBrackets(this.tokenGroupBoolean),
     ]);
-    this.tokenGroupBoolean.inner.pushProviders([
-      this.tokenGroupRoundBlocks
-    ], false);
+    this.tokenGroupBoolean.inner.pushProviders([this.tokenGroupRoundBlocks], false);
 
     // Anything that fits into a number hole. (Round blocks + Boolean blocks + Number Literals + Brackets)
     this.tokenGroupNumber = new TokenProviderOptional(new TokenProviderGroup());
@@ -1212,7 +1204,7 @@ export default class WorkspaceQuerier {
       this.tokenTypeNumberLiteral,
       this.tokenGroupRoundBlocks,
       this.tokenGroupBooleanBlocks,
-      new TokenTypeBrackets(this.tokenGroupNumber)
+      new TokenTypeBrackets(this.tokenGroupNumber),
     ]);
 
     // Anything that fits into a string hole (Round blocks + Boolean blocks + String Literals + Brackets)
@@ -1221,7 +1213,7 @@ export default class WorkspaceQuerier {
       this.tokenTypeStringLiteral,
       this.tokenGroupRoundBlocks,
       this.tokenGroupBooleanBlocks,
-      new TokenTypeBrackets(this.tokenGroupString)
+      new TokenTypeBrackets(this.tokenGroupString),
     ]);
 
     // Anything that fits into a c shaped hole (Stackable blocks)
@@ -1233,7 +1225,7 @@ export default class WorkspaceQuerier {
       this.tokenGroupStackBlocks,
       this.tokenGroupBooleanBlocks,
       this.tokenGroupRoundBlocks,
-      this.tokenGroupHatBlocks
+      this.tokenGroupHatBlocks,
     ]);
   }
 
@@ -1244,7 +1236,10 @@ export default class WorkspaceQuerier {
    */
   _poppulateTokenGroups() {
     const blocks = BlockTypeInfo.getBlocks(this.Blockly, this.workspace, this.locale);
-    blocks.sort((a, b) => WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(b.category) - WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(a.category));
+    blocks.sort(
+      (a, b) =>
+        WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(b.category) - WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(a.category)
+    );
 
     // Apply order of operations
     for (const block of blocks) {
