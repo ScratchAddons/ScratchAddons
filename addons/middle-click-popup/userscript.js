@@ -23,18 +23,16 @@ export default async function ({ addon, msg, console }) {
   const popupInputContainer = popupContainer.appendChild(document.createElement("div"));
   popupInputContainer.classList.add(addon.tab.scratchClass("input_input-form"));
   popupInputContainer.id = "sa-mcp-input-wrapper";
+  popupInputContainer.style.width = PREVIEW_WIDTH_PX + "px";
 
-  const popupInput = popupInputContainer.appendChild(document.createElement("div"));
-  popupInput.contentEditable = "true";
-  popupInput.id = "sa-mcp-input";
-
-  const popupInputSuggestion = popupInputContainer.appendChild(document.createElement("span"));
-  popupInputSuggestion.contentEditable = "false";
+  const popupInputSuggestion = popupInputContainer.appendChild(document.createElement("input"));
   popupInputSuggestion.id = "sa-mcp-input-suggestion";
+
+  const popupInput = popupInputContainer.appendChild(document.createElement("input"));
+  popupInput.id = "sa-mcp-input";
 
   const popupPreviewContainer = popupContainer.appendChild(document.createElement("div"));
   popupPreviewContainer.id = "sa-mcp-preview-container";
-  popupPreviewContainer.style.width = PREVIEW_WIDTH_PX + "px";
   popupPreviewContainer.style.height = PREVIEW_HEIGHT_PX + "px";
 
   const popupPreviewScrollbarSVG = popupContainer.appendChild(
@@ -105,31 +103,24 @@ export default async function ({ addon, msg, console }) {
     popupRoot.style.top = top + "px";
     popupRoot.style.left = left + "px";
     popupRoot.style.display = "";
-    popupInput.innerText = "";
+    popupInput.value = "";
     popupInput.focus();
     updateInput();
   }
 
   function closePopup() {
-    if (allowMenuClose) {
-      popupPosition = null;
-      popupRoot.style.display = "none";
-      querier.clearWorkspaceIndex();
-    }
+    // if (allowMenuClose) {
+    //   popupPosition = null;
+    //   popupRoot.style.display = "none";
+    //   querier.clearWorkspaceIndex();
+    // }
   }
 
-  function getQueryString() {
-    let queryString = popupInput.innerText;
-
-    // Fix for firefox bug https://bugzilla.mozilla.org/show_bug.cgi?id=1615852
-    if (popupInput.lastElementChild?.tagName === "BR") queryString = queryString.substring(0, queryString.length - 1);
-
-    return queryString;
-  }
+  popupInput.addEventListener("input", updateInput);
 
   function updateInput() {
     // Get the list of blocks to display using the input content
-    const queryResults = querier.queryWorkspace(getQueryString());
+    const queryResults = querier.queryWorkspace(popupInput.value);
 
     if (queryResults.length > PREVIEW_LIMIT) queryResults.length = PREVIEW_LIMIT;
 
@@ -202,24 +193,27 @@ export default async function ({ addon, msg, console }) {
         behavior: Math.abs(newIdx - selectedPreviewIdx) > 1 ? "smooth" : "auto",
       });
 
-      popupInputSuggestion.innerText = newSelection.result.text.substring(getQueryString().length);
+      popupInputSuggestion.value = popupInput.value + newSelection.result.text.substring(popupInput.value.length);
 
       // Move the selected block to the front
       popupPreviewBlocks.appendChild(newSelection.svgBackground);
       popupPreviewBlocks.appendChild(newSelection.svgBlock);
     } else {
-      popupInputSuggestion.innerText = "";
+      popupInputSuggestion.value = "";
     }
 
     selectedPreviewIdx = newIdx;
   }
 
+  // @ts-ignore
+  document.addEventListener("selectionchange", updateCursor);
+
   function updateCursor(forceEnd = false) {
     const selection = window.getSelection();
     if (!selection || !popupPosition) return;
 
-    const cursorPos = forceEnd ? getQueryString().length : selection.focusOffset;
-    const cursorPosRel = cursorPos / getQueryString().length;
+    const cursorPos = forceEnd ? popupInput.value.length : selection.focusOffset;
+    const cursorPosRel = cursorPos / popupInput.value.length;
 
     for (let previewIdx = 0; previewIdx < queryPreviews.length; previewIdx++) {
       const preview = queryPreviews[previewIdx];
@@ -232,6 +226,8 @@ export default async function ({ addon, msg, console }) {
 
       preview.svgBlock.setAttribute("transform", `translate(${blockX}, ${blockY}) scale(${PREVIEW_SCALE})`);
     }
+
+    popupInputSuggestion.scrollLeft = popupInput.scrollLeft;
   }
 
   popupPreviewContainer.addEventListener("scroll", updateScrollbar);
@@ -288,8 +284,8 @@ export default async function ({ addon, msg, console }) {
         clientX: mousePosition.x,
         clientY: mousePosition.y,
         type: "mousedown",
-        stopPropagation: function () {},
-        preventDefault: function () {},
+        stopPropagation: function () { },
+        preventDefault: function () { },
         target: selectedPreview.svgBlock,
       };
       workspace.startDragWithFakeEvent(fakeEvent, newBlock);
@@ -297,27 +293,24 @@ export default async function ({ addon, msg, console }) {
   }
 
   function acceptAutocomplete() {
-    if (popupInputSuggestion.innerText.length === 0) return;
-    popupInput.innerText = getQueryString() + popupInputSuggestion.innerText;
+    if (popupInputSuggestion.value.length === 0) return;
+    popupInput.value += popupInputSuggestion.value.substring(popupInput.value.length);
     // Move cursor to the end of the newly inserted text
+    updateInput();
     let selection = window.getSelection();
     if (selection) {
       selection.selectAllChildren(popupInput);
       selection.collapseToEnd();
     }
-    updateInput();
     updateCursor(true);
   }
-
-  // @ts-ignore
-  document.addEventListener("selectionchange", updateCursor);
 
   popupInput.addEventListener("keydown", (e) => {
     switch (e.key) {
       case "Escape":
         // If there's something in the input, clear it
-        if (popupInput.innerText.length > 0) {
-          popupInput.innerText = "";
+        if (popupInput.value.length > 0) {
+          popupInput.value = "";
           updateInput();
         } else {
           // If not, close the menu
@@ -349,12 +342,15 @@ export default async function ({ addon, msg, console }) {
         e.stopPropagation();
         e.preventDefault();
         break;
+      case "ArrowLeft":
     }
   });
 
   // Prevent pasting rich text by converting it into plain text
   popupInput.addEventListener("paste", (e) => {
-    if (e.clipboardData) {
+    console.log(window.getSelection());
+
+    if (e.clipboardData && popupPosition) {
       e.preventDefault();
       var text = e.clipboardData.getData("text/plain");
       text = text.replace("\n", "");
@@ -362,9 +358,9 @@ export default async function ({ addon, msg, console }) {
     }
   });
 
-  popupInput.addEventListener("input", updateInput);
-
-  popupInput.addEventListener("focusout", closePopup);
+  popupInput.addEventListener("focusout", (e) => {
+    closePopup();
+  });
 
   // Open on ctrl + space
   document.addEventListener("keydown", (e) => {
