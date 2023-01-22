@@ -62,14 +62,26 @@
 #sa-mcp-preview-container {
   flex: auto;
   overflow-y: scroll;
-  min-height: min-content;
+  scrollbar-width: none;
 }
 
-#sa-mcp-preview {
+#sa-mcp-preview-container::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+#sa-mcp-preview-blocks {
   width: 100%;
   min-height: 100%;
   /* https://stackoverflow.com/a/22166728/8448397 */
   float: left;
+}
+
+#sa-mcp-preview-scrollbar {
+  position: absolute;
+  width: 11px;
+  right: 0;
+  bottom: 0;
 }
 
 .sa-mcp-preview-block-bg {

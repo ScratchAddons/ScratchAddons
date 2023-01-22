@@ -6,11 +6,11 @@ import renderBlock, { BlockComponent } from "./BlockRenderer.js";
 export default async function ({ addon, msg, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
-  const POPUP_WIDTH_PX = 320;
-  const POPUP_HEIGHT_PX = 420;
+  const PREVIEW_WIDTH_PX = 320;
+  const PREVIEW_HEIGHT_PX = 400;
 
   const PREVIEW_SCALE = 0.675;
-  const PREVIEW_LIMIT = 30;
+  const PREVIEW_LIMIT = 50;
 
   const popupRoot = document.body.appendChild(document.createElement("div"));
   popupRoot.id = "sa-mcp-root";
@@ -19,8 +19,6 @@ export default async function ({ addon, msg, console }) {
 
   const popupContainer = popupRoot.appendChild(document.createElement("div"));
   popupContainer.id = "sa-mcp-container";
-  popupContainer.style.width = POPUP_WIDTH_PX + "px";
-  popupContainer.style.height = POPUP_HEIGHT_PX + "px";
 
   const popupInputContainer = popupContainer.appendChild(document.createElement("div"));
   popupInputContainer.classList.add(addon.tab.scratchClass("input_input-form"));
@@ -36,11 +34,38 @@ export default async function ({ addon, msg, console }) {
 
   const popupPreviewContainer = popupContainer.appendChild(document.createElement("div"));
   popupPreviewContainer.id = "sa-mcp-preview-container";
+  popupPreviewContainer.style.width = PREVIEW_WIDTH_PX + "px";
+  popupPreviewContainer.style.height = PREVIEW_HEIGHT_PX + "px";
 
-  const popupPreviewSVG = popupPreviewContainer.appendChild(
+  const popupPreviewScrollbarSVG = popupContainer.appendChild(
     document.createElementNS("http://www.w3.org/2000/svg", "svg")
   );
-  popupPreviewSVG.id = "sa-mcp-preview";
+  popupPreviewScrollbarSVG.id = "sa-mcp-preview-scrollbar";
+  popupPreviewScrollbarSVG.classList.add("blocklyScrollbarVertical", "blocklyMainWorkspaceScrollbar");
+  popupPreviewScrollbarSVG.style.height = PREVIEW_HEIGHT_PX + "px";
+  popupPreviewScrollbarSVG.style.display = "none";
+
+  const popupPreviewScrollbarBackground = popupPreviewScrollbarSVG.appendChild(
+    document.createElementNS("http://www.w3.org/2000/svg", "rect")
+  );
+  popupPreviewScrollbarBackground.setAttribute("width", "11");
+  popupPreviewScrollbarBackground.setAttribute("height", "" + PREVIEW_HEIGHT_PX);
+  popupPreviewScrollbarBackground.classList.add("blocklyScrollbarBackground");
+
+  const popupPreviewScrollbarHandle = popupPreviewScrollbarSVG.appendChild(
+    document.createElementNS("http://www.w3.org/2000/svg", "rect")
+  );
+  popupPreviewScrollbarHandle.setAttribute("rx", "3");
+  popupPreviewScrollbarHandle.setAttribute("ry", "3");
+  popupPreviewScrollbarHandle.setAttribute("width", "6");
+  popupPreviewScrollbarHandle.setAttribute("x", "2.5");
+  popupPreviewScrollbarHandle.classList.add("blocklyScrollbarHandle");
+
+  const popupPreviewBlocks = popupPreviewContainer.appendChild(
+    document.createElementNS("http://www.w3.org/2000/svg", "svg")
+  );
+  popupPreviewBlocks.id = "sa-mcp-preview-blocks";
+
 
   const querier = new WorkspaceQuerier(Blockly, msg);
 
@@ -72,7 +97,8 @@ export default async function ({ addon, msg, console }) {
     querier.indexWorkspace(Blockly.getMainWorkspace());
 
     let top = mousePosition.y - 8;
-    if (top + POPUP_HEIGHT_PX > window.innerHeight) top = window.innerHeight - POPUP_HEIGHT_PX;
+    const popupDimensions = popupContainer.getBoundingClientRect();
+    if (top + popupDimensions.height > window.innerHeight) top = window.innerHeight - popupDimensions.height;
 
     let left = mousePosition.x + 16;
 
@@ -109,7 +135,7 @@ export default async function ({ addon, msg, console }) {
     if (queryResults.length > PREVIEW_LIMIT) queryResults.length = PREVIEW_LIMIT;
 
     // @ts-ignore Delete the old previews
-    while (popupPreviewSVG.firstChild) popupPreviewSVG.removeChild(popupPreviewSVG.lastChild);
+    while (popupPreviewBlocks.firstChild) popupPreviewBlocks.removeChild(popupPreviewBlocks.lastChild);
 
     // Create the new previews
     queryPreviews.length = 0;
@@ -132,13 +158,13 @@ export default async function ({ addon, msg, console }) {
         if (e.shiftKey) popupInput.focus();
       };
 
-      const svgBackground = popupPreviewSVG.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "rect"));
+      const svgBackground = popupPreviewBlocks.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "rect"));
       svgBackground.setAttribute("transform", `translate(0, ${blockY})`);
       svgBackground.classList.add("sa-mcp-preview-block-bg");
       svgBackground.addEventListener("mousemove", mouseMoveListener);
       svgBackground.addEventListener("mousedown", mouseDownListener);
 
-      const svgBlock = popupPreviewSVG.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "g"));
+      const svgBlock = popupPreviewBlocks.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "g"));
       svgBlock.addEventListener("mousemove", mouseMoveListener);
       svgBlock.addEventListener("mousedown", mouseDownListener);
       svgBlock.classList.add("sa-mcp-preview-block");
@@ -148,11 +174,12 @@ export default async function ({ addon, msg, console }) {
       queryPreviews.push({ result, block, svgBlock, svgBackground });
     }
 
-    popupPreviewSVG.setAttribute("height", `${queryPreviews.length * 40}px`);
+    popupPreviewBlocks.setAttribute("height", `${queryPreviews.length * 40}px`);
 
     selectedPreviewIdx = -1;
     updateSelection(0);
     updateCursor();
+    updateScrollbar();
   }
 
   function updateSelection(newIdx) {
@@ -175,8 +202,8 @@ export default async function ({ addon, msg, console }) {
       popupInputSuggestion.innerText = newSelection.result.text.substring(getQueryString().length);
 
       // Move the selected block to the front
-      popupPreviewSVG.appendChild(newSelection.svgBackground);
-      popupPreviewSVG.appendChild(newSelection.svgBlock);
+      popupPreviewBlocks.appendChild(newSelection.svgBackground);
+      popupPreviewBlocks.appendChild(newSelection.svgBlock);
     } else {
       popupInputSuggestion.innerText = "";
     }
@@ -195,13 +222,32 @@ export default async function ({ addon, msg, console }) {
       const preview = queryPreviews[previewIdx];
 
       var blockX = 5;
-      if (blockX + preview.block.width > POPUP_WIDTH_PX / PREVIEW_SCALE)
-        blockX += (POPUP_WIDTH_PX / PREVIEW_SCALE - blockX - preview.block.width) * PREVIEW_SCALE * cursorPosRel;
+      if (blockX + preview.block.width > PREVIEW_WIDTH_PX / PREVIEW_SCALE)
+        blockX += (PREVIEW_WIDTH_PX / PREVIEW_SCALE - blockX - preview.block.width) * PREVIEW_SCALE * cursorPosRel;
 
       var blockY = previewIdx * 40 + 20;
 
       preview.svgBlock.setAttribute("transform", `translate(${blockX}, ${blockY}) scale(${PREVIEW_SCALE})`);
     }
+  }
+
+  popupPreviewContainer.addEventListener("scroll", updateScrollbar);
+
+  function updateScrollbar() {
+    const scrollTop = popupPreviewContainer.scrollTop;
+    const scrollY = popupPreviewContainer.scrollHeight;
+
+    if (scrollY <= PREVIEW_HEIGHT_PX) {
+      popupPreviewScrollbarSVG.style.display = "none";
+      return;
+    }
+
+    const scrollbarHeight = PREVIEW_HEIGHT_PX / scrollY * PREVIEW_HEIGHT_PX;
+    const scrollbarY = (scrollTop / scrollY) * PREVIEW_HEIGHT_PX;
+
+    popupPreviewScrollbarSVG.style.display = "";
+    popupPreviewScrollbarHandle.setAttribute("height", "" + scrollbarHeight);
+    popupPreviewScrollbarHandle.setAttribute("y", "" + scrollbarY);
   }
 
   function selectBlock(startDrag = false) {
@@ -239,8 +285,8 @@ export default async function ({ addon, msg, console }) {
         clientX: mousePosition.x,
         clientY: mousePosition.y,
         type: "mousedown",
-        stopPropagation: function () {},
-        preventDefault: function () {},
+        stopPropagation: function () { },
+        preventDefault: function () { },
         target: selectedPreview.svgBlock,
       };
       workspace.startDragWithFakeEvent(fakeEvent, newBlock);
@@ -336,9 +382,9 @@ export default async function ({ addon, msg, console }) {
     if (popupPosition) {
       if (
         e.clientX > popupPosition.x &&
-        e.clientX < popupPosition.x + POPUP_WIDTH_PX &&
+        e.clientX < popupPosition.x + PREVIEW_WIDTH_PX &&
         e.clientY > popupPosition.y &&
-        e.clientY < popupPosition.y + POPUP_HEIGHT_PX
+        e.clientY < popupPosition.y + PREVIEW_HEIGHT_PX
       ) {
         return Blockly.DELETE_AREA_TOOLBOX;
       }
