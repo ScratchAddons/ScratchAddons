@@ -5,3 +5,7 @@
   user-select: none;
   filter: var(--editorDarkMode-accent-filter, none);
 }
+
+.valueReportBox {
+  user-select: text;
+}
