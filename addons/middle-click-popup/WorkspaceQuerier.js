@@ -1054,8 +1054,8 @@ export default class WorkspaceQuerier {
    * An artificial way to increase the score of common blocks so they show up first.
    */
   static SCORE_BUMP = {
-    "control_if": 1000,
-    "data_setvariableto": 999
+    control_if: 1000,
+    data_setvariableto: 999,
   };
 
   /**
