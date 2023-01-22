@@ -48,7 +48,7 @@ export default async function ({ addon, console, msg }) {
     valueReportBox.setAttribute("tabindex", "0");
     // if the user pressed Ctrl+C, prevent propagation to Blockly
     valueReportBox.onkeydown = (event) => {
-      if ((event.altKey || event.ctrlKey || event.metaKey) && event.key === "c") {
+      if ((event.altKey || event.ctrlKey || event.metaKey) && event.code === "KeyC") {
         event.stopPropagation();
       }
     };
