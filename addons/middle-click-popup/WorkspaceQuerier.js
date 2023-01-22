@@ -43,8 +43,9 @@ class Token {
    * @param {number} score
    * @param {number} precedence
    * @param {boolean} isTruncated
+   * @param {boolean} isLegal
    */
-  constructor(start, end, type, value, score = 100, precedence = -1, isTruncated = false) {
+  constructor(start, end, type, value, score = 100, precedence = -1, isTruncated = false, isLegal = true) {
     /** @type {number} The index of the first letter of this token in the query */
     this.start = start;
     /** @type {number} The index of the last letter of this token in the query */
@@ -72,6 +73,10 @@ class Token {
      * @type {boolean}
      */
     this.isTruncated = isTruncated;
+    /**
+     * TODO
+     */
+    this.isLegal = isLegal;
   }
 
   /**
@@ -192,6 +197,8 @@ class TokenProviderGroup extends TokenProvider {
     super(false);
     /** @type {TokenProvider[]} The providers that make up this group */
     this.providers = [];
+    /** @type {TokenProvider[]} Providers that are a part of the group, but tokens they produce are illegal */
+    this.illegalProviders = [];
     /** @type {Object<number, CacheEntry>?} The cache */
     this.cache = null;
     /** @type {number?} The query ID of the query whos results are currently cached */
@@ -208,9 +215,10 @@ class TokenProviderGroup extends TokenProvider {
 
   /**
    * Adds token providers to this token provider group.
-   * @param  {...TokenProvider} providers
+   * @param {TokenProvider[]} providers
+   * @param {boolean} legal
    */
-  pushProviders(...providers) {
+  pushProviders(providers, legal = true) {
     if (!this.hasCachable)
       for (const provider of providers) {
         if (provider.shouldCache) {
@@ -218,7 +226,8 @@ class TokenProviderGroup extends TokenProvider {
           break;
         }
       }
-    this.providers.push(...providers);
+    if (legal) this.providers.push(...providers);
+    else this.illegalProviders.push(...providers);
   }
 
   *parseTokens(query, idx) {
@@ -274,6 +283,13 @@ class TokenProviderGroup extends TokenProvider {
         }
         providerCache.push(provider);
         yield* provider.parseTokens(query, idx, false);
+      }
+    }
+    for (const provider of this.illegalProviders) {
+      for (let token of provider.parseTokens(query, idx, false)) {
+        token = { ...token, isLegal: false };
+        tokenCache.push(token);
+        yield token;
       }
     }
   }
@@ -521,7 +537,7 @@ class StringEnum {
     this.griffTokenProvider = new StringEnum.GriffTokenType(this);
     /** @type {TokenProviderGroup} A token provider group for either the full token or a griff abreviation */
     this.bothTokenProvider = new TokenProviderGroup();
-    this.bothTokenProvider.pushProviders(this.fullTokenProvider, this.griffTokenProvider);
+    this.bothTokenProvider.pushProviders([this.fullTokenProvider, this.griffTokenProvider]);
   }
 
   /**
@@ -674,7 +690,7 @@ class TokenTypeBrackets extends TokenType {
         else continue;
       }
       // Note that for bracket tokens, precidence = 0
-      const newToken = new Token(start, tokenEnd, this, token.value, token.score + 100, 0, isTruncated);
+      const newToken = new Token(start, tokenEnd, this, token.value, token.score + 100, 0, isTruncated, token.isLegal);
       newToken.innerToken = token;
       yield newToken;
     }
@@ -733,7 +749,7 @@ class TokenTypeBlock extends TokenType {
             fullTokenProvider = stringEnum.bothTokenProvider;
             if (blockPart.isRound) {
               const enumGroup = new TokenProviderGroup();
-              enumGroup.pushProviders(fullTokenProvider, querier.tokenGroupRoundBlocks);
+              enumGroup.pushProviders([fullTokenProvider, querier.tokenGroupRoundBlocks]);
               fullTokenProvider = enumGroup;
             }
             griffTokenProvider = stringEnum.bothTokenProvider;
@@ -794,21 +810,21 @@ class TokenTypeBlock extends TokenType {
     for (const subtokens of this._parseSubtokens(idx, 0, query)) {
       subtokens.reverse();
       let score = 0;
+      let isLegal = true;
       let isTruncated = subtokens.length < this.tokenProviders.length;
       // Calculate the score of this block, through some magic.
       let hasDefiningFeature = false;
       for (const subtoken of subtokens) {
         isTruncated |= subtoken.isTruncated;
+        isLegal &&= subtoken.isLegal;
         if (!subtoken.isTruncated) score += subtoken.score;
-        else if (subtoken.end !== subtoken.start) score += subtoken.score / 2;
-        if (subtoken.precedence < this.block.precedence) score += 5;
         if (subtoken.type.isDefiningFeature && subtoken.start < query.length) hasDefiningFeature = true;
       }
       /** See {@link TokenType.isDefiningFeature} */
       if (!hasDefiningFeature) continue;
       score += Math.floor(1000 * (subtokens.length / this.tokenProviders.length));
       const end = query.skipIgnorable(subtokens[subtokens.length - 1].end);
-      yield new Token(idx, end, this, subtokens, score, this.block.precedence, isTruncated);
+      yield new Token(idx, end, this, subtokens, score, this.block.precedence, isTruncated, isLegal);
     }
   }
 
@@ -839,7 +855,7 @@ class TokenTypeBlock extends TokenType {
         if (token.precedence === this.block.precedence && tokenProviderIdx !== 0) continue;
       }
 
-      if (!parseSubSubTokens || tokenProviderIdx === this.tokenProviders.length - 1) {
+      if (!parseSubSubTokens || !token.isLegal || tokenProviderIdx === this.tokenProviders.length - 1) {
         yield [token];
       } else {
         for (const subTokenArr of this._parseSubtokens(token.end, tokenProviderIdx + 1, query, !token.isTruncated)) {
@@ -851,6 +867,8 @@ class TokenTypeBlock extends TokenType {
   }
 
   createBlockValue(token, query) {
+    if (!token.isLegal)
+      throw new Error("Cannot create a block from an illegal token.");
     const blockInputs = [];
 
     for (let i = 0; i < token.value.length; i++) {
@@ -1028,6 +1046,13 @@ export default class WorkspaceQuerier {
     "operator_not",
   ];
 
+  static CATEGORY_PRIORITY = [
+    "control",
+    "events",
+    "data",
+    "operators"
+  ];
+
   /**
    * The maximum number of results to find before giving up.
    */
@@ -1062,19 +1087,24 @@ export default class WorkspaceQuerier {
   /**
    * Queries the indexed workspace for blocks matching the query string.
    * @param {string} queryStr The query.
-   * @returns {QueryResult[]} A list of the results of the query, sorted by their relevance score.
+   * @returns {{results: QueryResult[], illegalResult: QueryResult | null}} A list of the results of the query, sorted by their relevance score.
    */
   queryWorkspace(queryStr) {
     if (!this.workspace) throw new Error("A workspace must be indexed before it can be queried!");
-    if (queryStr.length === 0) return [];
+    if (queryStr.length === 0) return { results: [], illegalResult: null };
 
     const query = new QueryInfo(this, queryStr, this._queryCounter++);
     const results = [];
     let foundTokenCount = 0;
+    let bestIllegalResult = null;
 
     for (const option of this.tokenGroupBlocks.parseTokens(query, 0)) {
       if (option.end >= queryStr.length) {
-        results.push(new QueryResult(query, option));
+        if (option.isLegal) {
+          results.push(new QueryResult(query, option));
+        } else if (!bestIllegalResult || option.score > bestIllegalResult.score) {
+          bestIllegalResult = new QueryResult(query, option);
+        }
       }
       ++foundTokenCount;
       if (foundTokenCount > WorkspaceQuerier.MAX_RESULTS) {
@@ -1111,7 +1141,7 @@ export default class WorkspaceQuerier {
     const validResults = [];
     for (const result of results) if (checkValidity(result.token)) validResults.push(result);
 
-    return validResults.sort((a, b) => b.token.score - a.token.score);
+    return { results: validResults.sort((a, b) => b.token.score - a.token.score), illegalResult: bestIllegalResult };
     // return results.sort((a, b) => b.token.score - a.token.score);
   }
 
@@ -1168,40 +1198,43 @@ export default class WorkspaceQuerier {
 
     // Anything that fits into a boolean hole. (Boolean blocks + Brackets)
     this.tokenGroupBoolean = new TokenProviderOptional(new TokenProviderGroup());
-    this.tokenGroupBoolean.inner.pushProviders(
+    this.tokenGroupBoolean.inner.pushProviders([
       this.tokenGroupBooleanBlocks,
       new TokenTypeBrackets(this.tokenGroupBoolean)
-    );
+    ]);
+    this.tokenGroupBoolean.inner.pushProviders([
+      this.tokenGroupRoundBlocks
+    ], false);
 
     // Anything that fits into a number hole. (Round blocks + Boolean blocks + Number Literals + Brackets)
     this.tokenGroupNumber = new TokenProviderOptional(new TokenProviderGroup());
-    this.tokenGroupNumber.inner.pushProviders(
+    this.tokenGroupNumber.inner.pushProviders([
       this.tokenTypeNumberLiteral,
       this.tokenGroupRoundBlocks,
       this.tokenGroupBooleanBlocks,
       new TokenTypeBrackets(this.tokenGroupNumber)
-    );
+    ]);
 
     // Anything that fits into a string hole (Round blocks + Boolean blocks + String Literals + Brackets)
     this.tokenGroupString = new TokenProviderOptional(new TokenProviderGroup());
-    this.tokenGroupString.inner.pushProviders(
+    this.tokenGroupString.inner.pushProviders([
       this.tokenTypeStringLiteral,
       this.tokenGroupRoundBlocks,
       this.tokenGroupBooleanBlocks,
       new TokenTypeBrackets(this.tokenGroupString)
-    );
+    ]);
 
     // Anything that fits into a c shaped hole (Stackable blocks)
     this.tokenGroupStack = new TokenProviderOptional(this.tokenGroupStackBlocks);
 
     // Anything you can spawn using the menu (All blocks)
     this.tokenGroupBlocks = new TokenProviderGroup();
-    this.tokenGroupBlocks.pushProviders(
+    this.tokenGroupBlocks.pushProviders([
       this.tokenGroupStackBlocks,
       this.tokenGroupBooleanBlocks,
       this.tokenGroupRoundBlocks,
       this.tokenGroupHatBlocks
-    );
+    ]);
   }
 
   /**
@@ -1211,6 +1244,7 @@ export default class WorkspaceQuerier {
    */
   _poppulateTokenGroups() {
     const blocks = BlockTypeInfo.getBlocks(this.Blockly, this.workspace, this.locale);
+    blocks.sort((a, b) => WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(b.category) - WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(a.category));
 
     // Apply order of operations
     for (const block of blocks) {
@@ -1232,17 +1266,17 @@ export default class WorkspaceQuerier {
       for (const blockTokenType of TokenTypeBlock.createBlockTokenTypes(this, block)) {
         switch (block.shape) {
           case BlockShape.Round:
-            this.tokenGroupRoundBlocks.pushProviders(blockTokenType);
+            this.tokenGroupRoundBlocks.pushProviders([blockTokenType]);
             break;
           case BlockShape.Boolean:
-            this.tokenGroupBooleanBlocks.pushProviders(blockTokenType);
+            this.tokenGroupBooleanBlocks.pushProviders([blockTokenType]);
             break;
           case BlockShape.Stack:
           case BlockShape.End:
-            this.tokenGroupStackBlocks.pushProviders(blockTokenType);
+            this.tokenGroupStackBlocks.pushProviders([blockTokenType]);
             break;
           case BlockShape.Hat:
-            this.tokenGroupHatBlocks.pushProviders(blockTokenType);
+            this.tokenGroupHatBlocks.pushProviders([blockTokenType]);
             break;
         }
       }

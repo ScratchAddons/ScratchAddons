@@ -75,6 +75,8 @@ export default async function ({ addon, msg, console }) {
    */
   /** @type {ResultPreview[]} */
   let queryPreviews = [];
+  /** @type {QueryResult | null} */
+  let queryIllegalResult = null;
   let selectedPreviewIdx = 0;
 
   let allowMenuClose = true;
@@ -123,7 +125,9 @@ export default async function ({ addon, msg, console }) {
 
   function updateInput() {
     // Get the list of blocks to display using the input content
-    const queryResults = querier.queryWorkspace(popupInput.value);
+    const queryResultObj = querier.queryWorkspace(popupInput.value);
+    const queryResults = queryResultObj.results;
+    queryIllegalResult = queryResultObj.illegalResult;
 
     if (queryResults.length > PREVIEW_LIMIT) queryResults.length = PREVIEW_LIMIT;
 
@@ -169,7 +173,7 @@ export default async function ({ addon, msg, console }) {
       queryPreviews.push({ result, block, svgBlock, svgBackground });
     }
 
-    const height = queryPreviews.length * 40;
+    const height = queryPreviews.length * 40 + 5;
 
     if (height < previewMinHeight) previewHeight = previewMinHeight;
     else if (height > previewMaxHeight) previewHeight = previewMaxHeight;
@@ -193,6 +197,11 @@ export default async function ({ addon, msg, console }) {
     if (oldSelection) {
       oldSelection.svgBackground.classList.remove("sa-mcp-preview-block-bg-selection");
       oldSelection.svgBlock.classList.remove("sa-mcp-preview-block-selection");
+    }
+
+    if (queryPreviews.length === 0 && queryIllegalResult) {
+      popupInputSuggestion.value = popupInput.value + queryIllegalResult.text.substring(popupInput.value.length);
+      return;
     }
 
     const newSelection = queryPreviews[newIdx];
@@ -288,8 +297,8 @@ export default async function ({ addon, msg, console }) {
       clientX: mousePosition.x,
       clientY: mousePosition.y,
       type: "mousedown",
-      stopPropagation: function () {},
-      preventDefault: function () {},
+      stopPropagation: function () { },
+      preventDefault: function () { },
       target: selectedPreview.svgBlock,
     };
     workspace.startDragWithFakeEvent(fakeEvent, newBlock);
