@@ -600,15 +600,30 @@ class TokenTypeStringLiteral extends TokenType {
    * only result being `say "Hello World for 10 seconds"`
    */
   *parseTokens(query, idx) {
+    // First, look for strings in quotes
+    let quoteEnd = -1;
+    if (query.str[idx] === '"' || query.str[idx] == '"') {
+      const quote = query.str[idx];
+      for (let i = idx + 1; i <= query.length; i++) {
+        if (query.str[i] === "\\") {
+          ++i;
+        } else if (query.str[i] === quote) {
+          yield new Token(idx, i + 1, this, query.str.substring(idx + 1, i), 100000);
+          quoteEnd = i + 1;
+          break;
+        }
+      }
+    }
+    // Then all the other strings
     let wasTerminator = false,
       wasIgnorable = false;
     for (let i = idx; i <= query.length; i++) {
       const isTerminator = TokenTypeStringLiteral.TERMINATORS.indexOf(query.str[i]) !== -1;
-      if (wasTerminator !== isTerminator && !wasIgnorable && i !== idx) {
+      if (wasTerminator !== isTerminator && !wasIgnorable && i !== idx && i !== quoteEnd) {
         const value = query.str.substring(idx, i);
-        let score = -300 * value.length;
+        let score = 0;
         if (TokenTypeNumberLiteral.isValidNumber(value))
-          score = 1000;
+          score = 100000;
         yield new Token(idx, i, this, value, score);
       }
       wasTerminator = isTerminator;
@@ -617,7 +632,7 @@ class TokenTypeStringLiteral extends TokenType {
   }
 
   createText(token, query) {
-    return token.value;
+    return query.str.substring(token.start, token.end);
   }
 }
 
@@ -1054,8 +1069,9 @@ export default class WorkspaceQuerier {
    * An artificial way to increase the score of common blocks so they show up first.
    */
   static SCORE_BUMP = {
-    control_if: 1000,
-    data_setvariableto: 999,
+    control_if: 100000,
+    control_if_else: 100000,
+    data_setvariableto: 99999,
   };
 
   /**
@@ -1106,7 +1122,7 @@ export default class WorkspaceQuerier {
     for (const option of this.tokenGroupBlocks.parseTokens(query, 0)) {
       if (option.end >= queryStr.length) {
         if (option.isLegal) {
-          option.score += WorkspaceQuerier.SCORE_BUMP[option.type.block.id];
+          option.score += WorkspaceQuerier.SCORE_BUMP[option.type.block.id] ?? 0;
           results.push(new QueryResult(query, option));
         } else if (!bestIllegalResult || option.score > bestIllegalResult.score) {
           bestIllegalResult = new QueryResult(query, option);
@@ -1129,7 +1145,7 @@ export default class WorkspaceQuerier {
     function searchToken(token) {
       const subtokens = token.type.getSubtokens(token, query);
       if (subtokens) for (const subtoken of subtokens) searchToken(subtoken);
-      else if (!(token.type instanceof TokenTypeStringLiteral))
+      else if (!(token.type instanceof TokenTypeStringLiteral) && !token.isTruncated)
         for (let i = token.start; i < token.end; i++) {
           canBeString[i] = false;
         }
