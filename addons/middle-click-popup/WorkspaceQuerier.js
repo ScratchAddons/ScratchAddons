@@ -622,8 +622,7 @@ class TokenTypeStringLiteral extends TokenType {
       if (wasTerminator !== isTerminator && !wasIgnorable && i !== idx && i !== quoteEnd) {
         const value = query.str.substring(idx, i);
         let score = 0;
-        if (TokenTypeNumberLiteral.isValidNumber(value))
-          score = 100000;
+        if (TokenTypeNumberLiteral.isValidNumber(value)) score = 1000;
         yield new Token(idx, i, this, value, score);
       }
       wasTerminator = isTerminator;
