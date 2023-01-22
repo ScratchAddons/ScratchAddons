@@ -109,11 +109,11 @@ export default async function ({ addon, msg, console }) {
   }
 
   function closePopup() {
-    // if (allowMenuClose) {
-    //   popupPosition = null;
-    //   popupRoot.style.display = "none";
-    //   querier.clearWorkspaceIndex();
-    // }
+    if (allowMenuClose) {
+      popupPosition = null;
+      popupRoot.style.display = "none";
+      querier.clearWorkspaceIndex();
+    }
   }
 
   popupInput.addEventListener("input", updateInput);
