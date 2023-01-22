@@ -200,7 +200,7 @@ export class BlockInputEnum extends BlockInput {
    * @param {number} inputIdx
    * @param {number} fieldIdx
    */
-  constructor(options, inputIdx, fieldIdx) {
+  constructor(options, inputIdx, fieldIdx, isRound) {
     super(BlockInputType.ENUM, inputIdx, fieldIdx);
     /** @type {BlockInputEnumOption[]} */
     this.values = [];
@@ -209,14 +209,19 @@ export class BlockInputEnum extends BlockInput {
         this.values.push({ value: options[i][1], string: options[i][0].replaceAll(String.fromCharCode(160), " ") });
       }
     }
+    this.isRound = isRound;
   }
 
   /**
    * @param {BlockInputEnumOption} value
    */
   setValue(block, value) {
-    if (this.values.indexOf(value) === -1) throw new Error("Invalid enum value. Expected item from the options list.");
-    this.getField(block).setValue(value.value);
+    if (this.isRound && value instanceof BlockInstance) {
+      value.createWorkspaceForm().outputConnection.connect(this.getInput(block).connection);
+    } else {
+      if (this.values.indexOf(value) === -1) throw new Error("Invalid enum value. Expected item from the options list.");
+      this.getField(block).setValue(value.value);
+    }
   }
 }
 
@@ -398,11 +403,7 @@ export class BlockTypeInfo {
     const addFieldInputs = (field, inputIdx, fieldIdx) => {
       if (field.className_ === "blocklyText blocklyDropdownText") {
         const options = field.getOptions();
-        if (options.length === 1) {
-          this.parts.push(options[0][0]);
-        } else {
-          addInput(new BlockInputEnum(options, inputIdx, fieldIdx));
-        }
+        addInput(new BlockInputEnum(options, inputIdx, fieldIdx, fieldIdx === -1));
       } else if (field instanceof Blockly.FieldImage) {
         switch (field.src_) {
           case "/static/blocks-media/green-flag.svg":

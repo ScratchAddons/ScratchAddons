@@ -731,6 +731,11 @@ class TokenTypeBlock extends TokenType {
           case BlockInputType.ENUM:
             const stringEnum = new StringEnum(blockPart.values);
             fullTokenProvider = stringEnum.bothTokenProvider;
+            if (blockPart.isRound) {
+              const enumGroup = new TokenProviderGroup();
+              enumGroup.pushProviders(fullTokenProvider, querier.tokenGroupRoundBlocks);
+              fullTokenProvider = enumGroup;
+            }
             griffTokenProvider = stringEnum.bothTokenProvider;
             break;
           case BlockInputType.STRING:

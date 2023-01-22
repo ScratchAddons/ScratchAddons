@@ -41,6 +41,13 @@ const BlockShapes = {
     },
   },
 
+  // Square dropdowns like variables
+  SquareInput: {
+    padding: 8,
+    minWidth: 20,
+    backgroundPath: (width) => `m -2 -16 h ${width + 4} a 4 4 0 0 1 4 4 V 12 a 4 4 0 0 1 -4 4 H -2 a 4 4 0 0 1 -4 -4 V -12 a 4 4 0 0 1 4 -4`
+  },
+
   // eg show
   Stack: {
     padding: 8,
@@ -92,8 +99,7 @@ const BlockShapes = {
     padding: 16,
     minWidth: 45,
     backgroundPath: (width) =>
-      `M -4 -20 a 4 4 0 0 1 4 -4 H ${
-        width + 8
+      `M -4 -20 a 4 4 0 0 1 4 -4 H ${width + 8
       } a 4 4 0 0 1 4 4 v 2 c 0 2 -1 3 -2 4 l -4 4 c -1 1 -2 2 -2 4 v 12 c 0 2 1 3 2 4 l 4 4 c 1 1 2 2 2 4 v 2 a 4 4 0 0 1 -4 4 H 0 a 4 4 0 0 1 -4 -4 v -2 c 0 -2 -1 -3 -2 -4 l -4 -4 c -1 -1 -2 -2 -2 -4 v -12 c 0 -2 1 -3 2 -4 l 4 -4 c 1 -1 2 -2 2 -4 z`,
   },
 };
@@ -252,15 +258,27 @@ function _renderBlock(block, container, parentCategory, isVertical) {
       if (blockInput instanceof BlockInstance) {
         component = _renderBlock(blockInput, blockContainer, block.typeInfo.category, false);
       } else if (blockPart instanceof BlockInputEnum) {
-        component = createBackedTextedComponent(
-          blockInput?.string ?? blockPart.values[0].string,
-          blockContainer,
-          BlockShapes.TextInput,
-          categoryClass,
-          "--sa-block-background-secondary",
-          "--sa-block-colored-background-secondary",
-          "--sa-block-text"
-        );
+        if (blockPart.isRound) {
+          component = createBackedTextedComponent(
+            blockInput?.string ?? blockPart.values[0].string,
+            blockContainer,
+            BlockShapes.TextInput,
+            categoryClass,
+            "--sa-block-background-secondary",
+            "--sa-block-colored-background-secondary",
+            "--sa-block-text"
+          );
+        } else {
+          component = createBackedTextedComponent(
+            blockInput?.string ?? blockPart.values[0].string,
+            blockContainer,
+            BlockShapes.SquareInput,
+            categoryClass,
+            "--sa-block-background-primary",
+            "--sa-block-background-tertiary",
+            "--sa-block-text"
+          );
+        }
       } else if (blockPart instanceof BlockInputBoolean) {
         component = createBackedTextedComponent(
           "",
