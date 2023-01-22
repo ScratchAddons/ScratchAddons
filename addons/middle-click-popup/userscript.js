@@ -208,11 +208,8 @@ export default async function ({ addon, msg, console }) {
   // @ts-ignore
   document.addEventListener("selectionchange", updateCursor);
 
-  function updateCursor(forceEnd = false) {
-    const selection = window.getSelection();
-    if (!selection || !popupPosition) return;
-
-    const cursorPos = forceEnd ? popupInput.value.length : selection.focusOffset;
+  function updateCursor() {
+    const cursorPos = popupInput.selectionStart ?? 0;
     const cursorPosRel = cursorPos / popupInput.value.length;
 
     for (let previewIdx = 0; previewIdx < queryPreviews.length; previewIdx++) {
@@ -284,8 +281,8 @@ export default async function ({ addon, msg, console }) {
         clientX: mousePosition.x,
         clientY: mousePosition.y,
         type: "mousedown",
-        stopPropagation: function () {},
-        preventDefault: function () {},
+        stopPropagation: function () { },
+        preventDefault: function () { },
         target: selectedPreview.svgBlock,
       };
       workspace.startDragWithFakeEvent(fakeEvent, newBlock);
@@ -296,13 +293,8 @@ export default async function ({ addon, msg, console }) {
     if (popupInputSuggestion.value.length === 0) return;
     popupInput.value += popupInputSuggestion.value.substring(popupInput.value.length);
     // Move cursor to the end of the newly inserted text
+    popupInput.selectionStart = popupInput.value.length;
     updateInput();
-    let selection = window.getSelection();
-    if (selection) {
-      selection.selectAllChildren(popupInput);
-      selection.collapseToEnd();
-    }
-    updateCursor(true);
   }
 
   popupInput.addEventListener("keydown", (e) => {
@@ -348,8 +340,6 @@ export default async function ({ addon, msg, console }) {
 
   // Prevent pasting rich text by converting it into plain text
   popupInput.addEventListener("paste", (e) => {
-    console.log(window.getSelection());
-
     if (e.clipboardData && popupPosition) {
       e.preventDefault();
       var text = e.clipboardData.getData("text/plain");
@@ -358,9 +348,7 @@ export default async function ({ addon, msg, console }) {
     }
   });
 
-  popupInput.addEventListener("focusout", (e) => {
-    closePopup();
-  });
+  popupInput.addEventListener("focusout", closePopup);
 
   // Open on ctrl + space
   document.addEventListener("keydown", (e) => {
