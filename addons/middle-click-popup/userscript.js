@@ -87,7 +87,7 @@ export default async function ({ addon, msg, console }) {
   let allowMenuClose = true;
   let popupPosition = null;
 
-  function openMenu() {
+  function openPopup() {
     if (addon.self.disabled) return;
 
     // Don't show the menu if we're not in the code editor
@@ -110,7 +110,7 @@ export default async function ({ addon, msg, console }) {
     updateInput();
   }
 
-  function closeMenu() {
+  function closePopup() {
     if (allowMenuClose) {
       popupPosition = null;
       popupRoot.style.display = "none";
@@ -189,11 +189,13 @@ export default async function ({ addon, msg, console }) {
     const oldSelection = queryPreviews[selectedPreviewIdx];
     if (oldSelection) {
       oldSelection.svgBackground.classList.remove("sa-mcp-preview-block-bg-selection");
+      oldSelection.svgBlock.classList.remove("sa-mcp-preview-block-selection");
     }
 
     const newSelection = queryPreviews[newIdx];
     if (newSelection) {
       newSelection.svgBackground.classList.add("sa-mcp-preview-block-bg-selection");
+      newSelection.svgBlock.classList.add("sa-mcp-preview-block-selection");
 
       newSelection.svgBackground.scrollIntoView({
         block: "nearest",
@@ -212,11 +214,11 @@ export default async function ({ addon, msg, console }) {
     selectedPreviewIdx = newIdx;
   }
 
-  function updateCursor() {
-    const selection = document.getSelection();
+  function updateCursor(forceEnd = false) {
+    const selection = window.getSelection();
     if (!selection || !popupPosition) return;
 
-    const cursorPos = selection.focusOffset;
+    const cursorPos = forceEnd ? getQueryString().length : selection.focusOffset;
     const cursorPosRel = cursorPos / getQueryString().length;
 
     for (let previewIdx = 0; previewIdx < queryPreviews.length; previewIdx++) {
@@ -286,8 +288,8 @@ export default async function ({ addon, msg, console }) {
         clientX: mousePosition.x,
         clientY: mousePosition.y,
         type: "mousedown",
-        stopPropagation: function () {},
-        preventDefault: function () {},
+        stopPropagation: function () { },
+        preventDefault: function () { },
         target: selectedPreview.svgBlock,
       };
       workspace.startDragWithFakeEvent(fakeEvent, newBlock);
@@ -297,15 +299,17 @@ export default async function ({ addon, msg, console }) {
   function acceptAutocomplete() {
     if (popupInputSuggestion.innerText.length === 0) return;
     popupInput.innerText = getQueryString() + popupInputSuggestion.innerText;
-    updateInput();
     // Move cursor to the end of the newly inserted text
     let selection = window.getSelection();
     if (selection) {
       selection.selectAllChildren(popupInput);
       selection.collapseToEnd();
     }
+    updateInput();
+    updateCursor(true);
   }
 
+  // @ts-ignore
   document.addEventListener("selectionchange", updateCursor);
 
   popupInput.addEventListener("keydown", (e) => {
@@ -317,7 +321,7 @@ export default async function ({ addon, msg, console }) {
           updateInput();
         } else {
           // If not, close the menu
-          closeMenu();
+          closePopup();
         }
         e.stopPropagation();
         e.preventDefault();
@@ -329,7 +333,7 @@ export default async function ({ addon, msg, console }) {
         break;
       case "Enter":
         selectBlock();
-        closeMenu();
+        closePopup();
         e.stopPropagation();
         e.preventDefault();
         break;
@@ -353,18 +357,19 @@ export default async function ({ addon, msg, console }) {
     if (e.clipboardData) {
       e.preventDefault();
       var text = e.clipboardData.getData("text/plain");
+      text = text.replace('\n', "");
       document.execCommand("insertText", false, text);
     }
   });
 
   popupInput.addEventListener("input", updateInput);
 
-  popupInput.addEventListener("focusout", closeMenu);
+  popupInput.addEventListener("focusout", closePopup);
 
   // Open on ctrl + space
   document.addEventListener("keydown", (e) => {
     if (e.key === " " && (e.ctrlKey || e.metaKey)) {
-      openMenu();
+      openPopup();
       e.preventDefault();
       e.stopPropagation();
     }
@@ -373,7 +378,7 @@ export default async function ({ addon, msg, console }) {
   // Open on mouse wheel button
   const _doWorkspaceClick_ = Blockly.Gesture.prototype.doWorkspaceClick_;
   Blockly.Gesture.prototype.doWorkspaceClick_ = function () {
-    if (this.mostRecentEvent_.button === 1 || this.mostRecentEvent_.shiftKey) openMenu();
+    if (this.mostRecentEvent_.button === 1 || this.mostRecentEvent_.shiftKey) openPopup();
     _doWorkspaceClick_.call(this);
   };
 

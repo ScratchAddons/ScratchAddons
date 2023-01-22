@@ -57,6 +57,7 @@
   color: hsla(225, 15%, 40%, 0.65);
   /* When scrolled into view, leave a bit of extra room on the right */
   padding-right: 10px;
+  pointer-events: none;
 }
 
 #sa-mcp-preview-container {
@@ -92,7 +93,12 @@
 }
 
 .sa-mcp-preview-block {
+  filter: brightness(95%);
   cursor: grab;
+}
+
+.sa-mcp-preview-block-selection {
+  filter: brightness(103%);
 }
 
 .sa-mcp-preview-block-bg-selection {

@@ -584,14 +584,15 @@ class TokenTypeStringLiteral extends TokenType {
    * only result being `say "Hello World for 10 seconds"`
    */
   *parseTokens(query, idx) {
-    let wasTerminator = false;
+    let wasTerminator = false, wasIgnorable = false;
     for (let i = idx; i <= query.length; i++) {
       const isTerminator = TokenTypeStringLiteral.TERMINATORS.indexOf(query.str[i]) !== -1;
-      if (wasTerminator !== isTerminator && i !== idx) {
+      if (wasTerminator !== isTerminator && !wasIgnorable && i !== idx) {
         const value = query.str.substring(idx, i);
         yield new Token(idx, i, this, value, -300 * value.length);
       }
       wasTerminator = isTerminator;
+      wasIgnorable = QueryInfo.IGNORABLE_CHARS.indexOf(query.str[i]) !== -1;
     }
   }
 
