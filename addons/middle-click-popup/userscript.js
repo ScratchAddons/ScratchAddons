@@ -25,24 +25,22 @@ export default async function ({ addon, msg, console }) {
 
   const popupInput = popupInputContainer.appendChild(document.createElement("input"));
   popupInput.id = "sa-mcp-input";
+  popupInput.setAttribute("autocomplete", "off")
 
   const popupPreviewContainer = popupContainer.appendChild(document.createElement("div"));
   popupPreviewContainer.id = "sa-mcp-preview-container";
-  // popupPreviewContainer.style.height = PREVIEW_HEIGHT_PX + "px";
 
   const popupPreviewScrollbarSVG = popupContainer.appendChild(
     document.createElementNS("http://www.w3.org/2000/svg", "svg")
   );
   popupPreviewScrollbarSVG.id = "sa-mcp-preview-scrollbar";
   popupPreviewScrollbarSVG.classList.add("blocklyScrollbarVertical", "blocklyMainWorkspaceScrollbar");
-  // popupPreviewScrollbarSVG.style.height = PREVIEW_HEIGHT_PX + "px";
   popupPreviewScrollbarSVG.style.display = "none";
 
   const popupPreviewScrollbarBackground = popupPreviewScrollbarSVG.appendChild(
     document.createElementNS("http://www.w3.org/2000/svg", "rect")
   );
   popupPreviewScrollbarBackground.setAttribute("width", "11");
-  // popupPreviewScrollbarBackground.setAttribute("height", "" + PREVIEW_HEIGHT_PX);
   popupPreviewScrollbarBackground.classList.add("blocklyScrollbarBackground");
 
   const popupPreviewScrollbarHandle = popupPreviewScrollbarSVG.appendChild(
