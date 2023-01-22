@@ -25,7 +25,7 @@ export default async function ({ addon, msg, console }) {
 
   const popupInput = popupInputContainer.appendChild(document.createElement("input"));
   popupInput.id = "sa-mcp-input";
-  popupInput.setAttribute("autocomplete", "off")
+  popupInput.setAttribute("autocomplete", "off");
 
   const popupPreviewContainer = popupContainer.appendChild(document.createElement("div"));
   popupPreviewContainer.id = "sa-mcp-preview-container";
