@@ -288,8 +288,8 @@ export default async function ({ addon, msg, console }) {
         clientX: mousePosition.x,
         clientY: mousePosition.y,
         type: "mousedown",
-        stopPropagation: function () { },
-        preventDefault: function () { },
+        stopPropagation: function () {},
+        preventDefault: function () {},
         target: selectedPreview.svgBlock,
       };
       workspace.startDragWithFakeEvent(fakeEvent, newBlock);
@@ -357,7 +357,7 @@ export default async function ({ addon, msg, console }) {
     if (e.clipboardData) {
       e.preventDefault();
       var text = e.clipboardData.getData("text/plain");
-      text = text.replace('\n', "");
+      text = text.replace("\n", "");
       document.execCommand("insertText", false, text);
     }
   });
