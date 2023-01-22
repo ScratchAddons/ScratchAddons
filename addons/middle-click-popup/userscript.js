@@ -143,7 +143,7 @@ export default async function ({ addon, msg, console }) {
         e.preventDefault();
         updateSelection(resultIdx);
         allowMenuClose = !e.shiftKey;
-        selectBlock(true);
+        selectBlock();
         allowMenuClose = true;
         if (e.shiftKey) popupInput.focus();
       };
@@ -246,7 +246,7 @@ export default async function ({ addon, msg, console }) {
     popupPreviewScrollbarHandle.setAttribute("y", "" + scrollbarY);
   }
 
-  function selectBlock(startDrag = false) {
+  function selectBlock() {
     const selectedPreview = queryPreviews[selectedPreviewIdx];
     if (!selectedPreview) return;
 
@@ -276,17 +276,15 @@ export default async function ({ addon, msg, console }) {
       Blockly.Events.fire(new Blockly.Events.BlockCreate(newBlock));
     }
 
-    if (startDrag) {
-      let fakeEvent = {
-        clientX: mousePosition.x,
-        clientY: mousePosition.y,
-        type: "mousedown",
-        stopPropagation: function () {},
-        preventDefault: function () {},
-        target: selectedPreview.svgBlock,
-      };
-      workspace.startDragWithFakeEvent(fakeEvent, newBlock);
-    }
+    let fakeEvent = {
+      clientX: mousePosition.x,
+      clientY: mousePosition.y,
+      type: "mousedown",
+      stopPropagation: function () { },
+      preventDefault: function () { },
+      target: selectedPreview.svgBlock,
+    };
+    workspace.startDragWithFakeEvent(fakeEvent, newBlock);
   }
 
   function acceptAutocomplete() {
