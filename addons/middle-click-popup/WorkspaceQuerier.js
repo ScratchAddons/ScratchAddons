@@ -1081,7 +1081,7 @@ export default class WorkspaceQuerier {
   /**
    * The maximum number of tokens to find before giving up.
    */
-  static MAX_TOKENS = 5000;
+  static MAX_TOKENS = 10000;
 
   /**
    * @param {Blockly} blockly

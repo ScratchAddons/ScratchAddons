@@ -171,7 +171,7 @@ export default async function ({ addon, msg, console }) {
       queryPreviews.push({ result, block, svgBlock, svgBackground });
     }
 
-    const height = queryPreviews.length * 40 + 5;
+    const height = (queryPreviews.length * 60 + 8) * previewScale;
 
     if (height < previewMinHeight) previewHeight = previewMinHeight;
     else if (height > previewMaxHeight) previewHeight = previewMaxHeight;
