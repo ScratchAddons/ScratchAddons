@@ -1048,6 +1048,14 @@ export default class WorkspaceQuerier {
   static CATEGORY_PRIORITY = ["control", "events", "data", "operators"];
 
   /**
+   * An artificial way to increase the score of common blocks so they show up first.
+   */
+  static SCORE_BUMP = {
+    "control_if": 1000,
+    "data_setvariableto": 999
+  };
+
+  /**
    * The maximum number of results to find before giving up.
    */
   static MAX_RESULTS = 1000;
@@ -1095,6 +1103,7 @@ export default class WorkspaceQuerier {
     for (const option of this.tokenGroupBlocks.parseTokens(query, 0)) {
       if (option.end >= queryStr.length) {
         if (option.isLegal) {
+          option.score += WorkspaceQuerier.SCORE_BUMP[option.type.block.id];
           results.push(new QueryResult(query, option));
         } else if (!bestIllegalResult || option.score > bestIllegalResult.score) {
           bestIllegalResult = new QueryResult(query, option);
