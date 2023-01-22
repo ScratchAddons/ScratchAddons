@@ -1082,31 +1082,32 @@ export default class WorkspaceQuerier {
       }
     }
 
-    // Eliminate blocks who's strings can be parsed as something else.
-    //  This step removes silly suggestions like `if <(1 + 1) = "2 then"> then`
-    const canBeString = Array(queryStr.length).fill(true);
-    function searchToken(token) {
-      const subtokens = token.type.getSubtokens(token, query);
-      if (subtokens) for (const subtoken of subtokens) searchToken(subtoken);
-      else if (!(token.type instanceof TokenTypeStringLiteral))
-        for (let i = token.start; i < token.end; i++) {
-          canBeString[i] = false;
-        }
-    }
-    for (const result of results) searchToken(result.token);
-    function checkValidity(token) {
-      const subtokens = token.type.getSubtokens(token, query);
-      if (subtokens) {
-        for (const subtoken of subtokens) if (!checkValidity(subtoken)) return false;
-      } else if (token.type instanceof TokenTypeStringLiteral && !TokenTypeNumberLiteral.isValidNumber(token.value)) {
-        for (let i = token.start; i < token.end; i++) if (!canBeString[i]) return false;
-      }
-      return true;
-    }
-    const validResults = [];
-    for (const result of results) if (checkValidity(result.token)) validResults.push(result);
+    // // Eliminate blocks who's strings can be parsed as something else.
+    // //  This step removes silly suggestions like `if <(1 + 1) = "2 then"> then`
+    // const canBeString = Array(queryStr.length).fill(true);
+    // function searchToken(token) {
+    //   const subtokens = token.type.getSubtokens(token, query);
+    //   if (subtokens) for (const subtoken of subtokens) searchToken(subtoken);
+    //   else if (!(token.type instanceof TokenTypeStringLiteral))
+    //     for (let i = token.start; i < token.end; i++) {
+    //       canBeString[i] = false;
+    //     }
+    // }
+    // for (const result of results) searchToken(result.token);
+    // function checkValidity(token) {
+    //   const subtokens = token.type.getSubtokens(token, query);
+    //   if (subtokens) {
+    //     for (const subtoken of subtokens) if (!checkValidity(subtoken)) return false;
+    //   } else if (token.type instanceof TokenTypeStringLiteral && !TokenTypeNumberLiteral.isValidNumber(token.value)) {
+    //     for (let i = token.start; i < token.end; i++) if (!canBeString[i]) return false;
+    //   }
+    //   return true;
+    // }
+    // const validResults = [];
+    // for (const result of results) if (checkValidity(result.token)) validResults.push(result);
 
-    return validResults.sort((a, b) => b.token.score - a.token.score);
+    // return validResults.sort((a, b) => b.token.score - a.token.score);
+    return results.sort((a, b) => b.token.score - a.token.score);
   }
 
   /**

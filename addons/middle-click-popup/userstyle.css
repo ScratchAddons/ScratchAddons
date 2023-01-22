@@ -29,7 +29,6 @@
 #sa-mcp-input-wrapper {
   position: relative;
   margin: 4px;
-  width: 100% - 8px;
   /* !important required for extension, because CSS injection method (and hence order) differs from addon */
   box-sizing: border-box !important;
   height: 1.5rem;
@@ -38,7 +37,8 @@
   /* Change Scratch default styles */
   border-radius: 0.25rem;
   font-size: 0.75rem;
-  padding-left: 0;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
 }
 
 #sa-mcp-input-wrapper:focus {
@@ -54,6 +54,7 @@
   width: 100%;
   height: 100%;
   line-height: 100%;
+  box-sizing: border-box;
 }
 
 #sa-mcp-input-suggestion {
