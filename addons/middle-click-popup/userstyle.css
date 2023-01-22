@@ -76,6 +76,11 @@
   width: 100%;
   height: 40px;
   fill: transparent;
+  cursor: grab;
+}
+
+.sa-mcp-preview-block {
+  cursor: grab;
 }
 
 .sa-mcp-preview-block-bg-selection {

@@ -141,6 +141,7 @@ export default async function ({ addon, msg, console }) {
       const svgBlock = popupPreviewSVG.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "g"));
       svgBlock.addEventListener("mousemove", mouseMoveListener);
       svgBlock.addEventListener("mousedown", mouseDownListener);
+      svgBlock.classList.add("sa-mcp-preview-block");
 
       const block = renderBlock(result.createBlock(), svgBlock);
 
