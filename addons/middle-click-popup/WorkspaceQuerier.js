@@ -606,7 +606,10 @@ class TokenTypeStringLiteral extends TokenType {
       const isTerminator = TokenTypeStringLiteral.TERMINATORS.indexOf(query.str[i]) !== -1;
       if (wasTerminator !== isTerminator && !wasIgnorable && i !== idx) {
         const value = query.str.substring(idx, i);
-        yield new Token(idx, i, this, value, -300 * value.length);
+        let score = -300 * value.length;
+        if (TokenTypeNumberLiteral.isValidNumber(value))
+          score = 1000;
+        yield new Token(idx, i, this, value, score);
       }
       wasTerminator = isTerminator;
       wasIgnorable = QueryInfo.IGNORABLE_CHARS.indexOf(query.str[i]) !== -1;

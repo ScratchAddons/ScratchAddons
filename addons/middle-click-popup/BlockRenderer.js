@@ -100,10 +100,16 @@ const BlockShapes = {
     padding: 16,
     minWidth: 45,
     backgroundPath: (width) =>
-      `M -4 -20 a 4 4 0 0 1 4 -4 H ${
-        width + 8
+      `M -4 -20 a 4 4 0 0 1 4 -4 H ${width + 8
       } a 4 4 0 0 1 4 4 v 2 c 0 2 -1 3 -2 4 l -4 4 c -1 1 -2 2 -2 4 v 12 c 0 2 1 3 2 4 l 4 4 c 1 1 2 2 2 4 v 2 a 4 4 0 0 1 -4 4 H 0 a 4 4 0 0 1 -4 -4 v -2 c 0 -2 -1 -3 -2 -4 l -4 -4 c -1 -1 -2 -2 -2 -4 v -12 c 0 -2 1 -3 2 -4 l 4 -4 c 1 -1 2 -2 2 -4 z`,
   },
+
+  HorizontalBlockEnd: {
+    padding: 16,
+    minWidth: 45,
+    backgroundPath: (width) =>
+      `M -4 -20 a 4 4 0 0 1 4 -4 H ${width + 8} a 4 4 0 0 1 4 4 V 20 a 4 4 0 0 1 -4 4 H 0 a 4 4 0 0 1 -4 -4 v -2 c 0 -2 -1 -3 -2 -4 l -4 -4 c -1 -1 -2 -2 -2 -4 v -12 c 0 -2 1 -3 2 -4 l 4 -4 c 1 -1 2 -2 2 -4 z`
+  }
 };
 
 /**
@@ -115,7 +121,7 @@ function getShapeInfo(shape, isVertical) {
   if (shape === BlockShape.Boolean) return BlockShapes.Boolean;
   if (shape === BlockShape.Stack) return isVertical ? BlockShapes.Stack : BlockShapes.HorizontalBlock;
   if (shape === BlockShape.Hat) return BlockShapes.Hat;
-  if (shape === BlockShape.End) return BlockShapes.End;
+  if (shape === BlockShape.End) return isVertical ? BlockShapes.End : BlockShapes.HorizontalBlockEnd;
   throw new Error(shape);
 }
 
