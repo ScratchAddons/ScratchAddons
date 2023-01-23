@@ -251,8 +251,10 @@ export const updateScaleTool = (paper, tool) => {
     };
     const paintLayer = getLayer("isPaintingLayer");
 
-    const doesSx = snapOn && ((this.isCorner && !event.modifiers.shift) || Math.abs(this.origSize.x) > 0.0000001);
-    const doesSy = snapOn && ((this.isCorner && !event.modifiers.shift) || Math.abs(this.origSize.y) > 0.0000001);
+    let snapActive = (event.modifiers.control || event.modifiers.meta) !== snapOn;
+
+    const doesSx = snapActive && ((this.isCorner && !event.modifiers.shift) || Math.abs(this.origSize.x) > 0.0000001);
+    const doesSy = snapActive && ((this.isCorner && !event.modifiers.shift) || Math.abs(this.origSize.y) > 0.0000001);
 
     const scaledThreshold = threshold / paper.view.zoom;
 

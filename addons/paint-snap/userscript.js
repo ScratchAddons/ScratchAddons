@@ -14,7 +14,9 @@ export default async function (api) {
 
   toggle(addon.settings.get("enable-default"));
   setGuideColor(addon.settings.get("guide-color"));
-  addon.settings.addEventListener("change", () => setGuideColor(addon.settings.get("guide-color")));
+  addon.settings.addEventListener("change", () => {
+    setGuideColor(addon.settings.get("guide-color"));
+  });
 
   if (isSelectTool(tool)) {
     updateSelectTool(paper, tool);

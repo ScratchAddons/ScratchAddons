@@ -130,7 +130,9 @@ export const updateSelectTool = (paper, tool) => {
 
     removeGuides();
 
-    if (snapOn && !event.modifiers.shift && this.mode !== Modes.RESHAPE) {
+    let snapActive = (event.modifiers.control || event.modifiers.meta) !== snapOn;
+
+    if (snapActive && !event.modifiers.shift && this.mode !== Modes.RESHAPE) {
       const paintLayer = getLayer("isPaintingLayer");
 
       const snapPoints = createSnapPoints(paper, selectionBounds, lib, paintLayer.children);

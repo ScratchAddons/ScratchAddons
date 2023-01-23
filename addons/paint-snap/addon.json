@@ -3,6 +3,12 @@
   "description": "Snap objects in the costume editor to bounding boxes and vector nodes.",
   "tags": ["editor", "costumeEditor", "featured"],
   "versionAdded": "1.30.0",
+  "info": [
+    {
+      "text": "Hold ctrl (cmd on macOS) to temporarily toggle snapping.",
+      "id": "ctrlToggle"
+    }
+  ],
   "userscripts": [
     {
       "matches": ["projects"],
@@ -29,6 +35,14 @@
       "name": "Snapping guide color",
       "default": "#ff0000",
       "allowTransparency": true
+    },
+    {
+      "type": "positive_integer",
+      "id": "threshold",
+      "name": "Snapping distance",
+      "default": 10,
+      "min": 4,
+      "max": 100
     },
     {
       "type": "boolean",
@@ -95,14 +109,6 @@
       "id": "boxEdgeMids",
       "name": "Snap from selection box edge midpoints",
       "default": false
-    },
-    {
-      "type": "positive_integer",
-      "id": "threshold",
-      "name": "Snapping distance",
-      "default": 10,
-      "min": 4,
-      "max": 100
     }
   ],
   "dynamicDisable": true,
