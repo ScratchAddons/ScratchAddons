@@ -7,7 +7,7 @@
   "info": [
     {
       "type": "info",
-      "text": "You can use Do Not Disturb (right-click extension icon \u2192 Do not disturb) to hide the message count.",
+      "text": "You can use Do Not Disturb (right click extension icon \u2192 Do not disturb) to temporarily hide the message count.",
       "id": "dndtohide"
     }
   ],

@@ -18,7 +18,7 @@
   "info": [
     {
       "type": "info",
-      "text": "You can use Do Not Disturb (right-click extension icon \u2192 Do not disturb) to temporarily disable notifications from Scratch Addons.",
+      "text": "You can use Do Not Disturb (right click extension icon \u2192 Do not disturb) to temporarily disable notifications.",
       "id": "dndtosilence"
     }
   ],
