@@ -11,3 +11,7 @@
   position: relative;
   top: 13px;
 }
+#ace-editor{
+  width:100vw;
+  height: 50vh;
+}

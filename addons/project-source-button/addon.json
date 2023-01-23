@@ -24,6 +24,10 @@
     {
       "name": "Prism.js",
       "link": "https://prismjs.com/"
+    },
+    {
+      "name":"Ace",
+      "link":"https://ace.c9.io/"
     }
   ],
   "settings": [
