@@ -23,8 +23,8 @@ async function loadDom() {
   prismScript.src = "../../libraries/common/cs/prism.js"; //prism.js address
   document.head.appendChild(prismScript);
 
-  const aceScript= document.createElement("script");
-  aceScript.src="../../libraries/common/cs/ace.js";
+  const aceScript = document.createElement("script");
+  aceScript.src = "../../libraries/common/cs/ace.js";
   document.head.appendChild(aceScript);
 })();
 let pageNum = 1;
@@ -36,21 +36,21 @@ const maxLines = parseInt(queries.maxlines);
   const jsonData = await (await fetch(`https://projects.scratch.mit.edu/${queries.id}?token=${queries.token}`)).json();
 
   let jsonText = JSON.stringify(jsonData, null, "  ");
-  let lineLength,pages;
-  const editor=ace.edit("ace-editor");
-      editor.setValue(jsonText);
-      editor.getSession().setMode("ace/mode/json");
-      editor.clearSelection();
-    
-  function updatePageInfo(){
-    jsonText=editor.getValue();
+  let lineLength, pages;
+  const editor = ace.edit("ace-editor");
+  editor.setValue(jsonText);
+  editor.getSession().setMode("ace/mode/json");
+  editor.clearSelection();
+
+  function updatePageInfo() {
+    jsonText = editor.getValue();
     lineLength = jsonText.split("\n").length;
     pages = Math.ceil(lineLength / maxLines);
     document.getElementById("max-page").textContent = pages;
   }
-  updatePageInfo()
+  updatePageInfo();
   function updatePage() {
-    jsonText=editor.getValue();
+    jsonText = editor.getValue();
     document.getElementById("page").textContent = pageNum;
     viewJSON(
       jsonText
@@ -78,16 +78,16 @@ const maxLines = parseInt(queries.maxlines);
     pre.appendChild(jsonElem);
     allView.document.body.appendChild(pre);
   });
-  document.getElementById("ace-mode").addEventListener("click",e=>{
+  document.getElementById("ace-mode").addEventListener("click", (e) => {
     updatePageInfo();
     updatePage();
-    if(document.getElementById("ace-editor").hidden){
-      document.getElementById("ace-editor").hidden=false;
-    }else{
-      document.getElementById("ace-editor").hidden=true;
+    if (document.getElementById("ace-editor").hidden) {
+      document.getElementById("ace-editor").hidden = false;
+    } else {
+      document.getElementById("ace-editor").hidden = true;
     }
-    document.getElementById("json-code").hidden=!document.getElementById("ace-editor").hidden;
-    jsonText=editor.getValue();
+    document.getElementById("json-code").hidden = !document.getElementById("ace-editor").hidden;
+    jsonText = editor.getValue();
   });
   updatePage();
   let assets = [];
