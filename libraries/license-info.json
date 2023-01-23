@@ -14,5 +14,6 @@
   "fuse": "Apache-2.0",
   "idb": "ISC",
   "Prism.js": "MIT",
-  "Ace": "BSD-3-Clause"
+  "Ace": "BSD-3-Clause",
+  "JSZip":"MIT"
 }
