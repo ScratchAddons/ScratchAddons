@@ -40,7 +40,6 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "injectAsStyleElt": true,
   "updateUserstylesOnSettingsChange": true,
   "tags": ["community", "profiles"],
   "versionAdded": "1.19.0",
