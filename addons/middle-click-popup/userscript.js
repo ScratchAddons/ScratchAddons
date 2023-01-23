@@ -97,7 +97,7 @@ export default async function ({ addon, msg, console }) {
     querier.indexWorkspace(Blockly.getMainWorkspace());
 
     previewWidth = 0.16 * window.innerWidth;
-    previewScale = previewWidth < 300 ? 0.4861 : 0.675;
+    previewScale = window.innerWidth * 0.0001 + 0.4861;
     previewMaxHeight = 0.4 * window.innerHeight;
 
     popupContainer.style.width = previewWidth + "px";
@@ -137,7 +137,6 @@ export default async function ({ addon, msg, console }) {
     for (let resultIdx = 0; resultIdx < queryResults.length; resultIdx++) {
       const result = queryResults[resultIdx];
 
-      var blockY = resultIdx * 40 + 2;
 
       const mouseMoveListener = () => {
         updateSelection(resultIdx);
@@ -156,7 +155,8 @@ export default async function ({ addon, msg, console }) {
       const svgBackground = popupPreviewBlocks.appendChild(
         document.createElementNS("http://www.w3.org/2000/svg", "rect")
       );
-      svgBackground.setAttribute("transform", `translate(0, ${blockY})`);
+      svgBackground.setAttribute("transform", `translate(0, ${(resultIdx * 60 + 3) * previewScale})`);
+      svgBackground.setAttribute("height", (60 * previewScale) + "px");
       svgBackground.classList.add("sa-mcp-preview-block-bg");
       svgBackground.addEventListener("mousemove", mouseMoveListener);
       svgBackground.addEventListener("mousedown", mouseDownListener);
@@ -234,7 +234,7 @@ export default async function ({ addon, msg, console }) {
       if (blockX + preview.block.width > previewWidth / previewScale)
         blockX += (previewWidth / previewScale - blockX - preview.block.width) * previewScale * cursorPosRel;
 
-      var blockY = previewIdx * 40 + 20;
+      var blockY = (previewIdx * 60 + 30) * previewScale;
 
       preview.svgBlock.setAttribute("transform", `translate(${blockX}, ${blockY}) scale(${previewScale})`);
     }
@@ -295,8 +295,8 @@ export default async function ({ addon, msg, console }) {
       clientX: mousePosition.x,
       clientY: mousePosition.y,
       type: "mousedown",
-      stopPropagation: function () {},
-      preventDefault: function () {},
+      stopPropagation: function () { },
+      preventDefault: function () { },
       target: selectedPreview.svgBlock,
     };
     workspace.startDragWithFakeEvent(fakeEvent, newBlock);
