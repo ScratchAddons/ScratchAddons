@@ -58,9 +58,6 @@ export default async function ({ addon, console, msg }) {
       copyButton.setAttribute("role", "button");
       copyButton.setAttribute("tabindex", "0");
       copyButton.setAttribute("alt", msg("copy-to-clipboard"));
-      // cannot be done in CSS because of a bug
-      copyButton.setAttribute("width", "14px");
-      copyButton.setAttribute("height", "14px");
       copyButton.setAttribute("src", addon.self.dir + "/copy.svg");
 
       copyButton.classList.add("copy-reporter-icon");
