@@ -3,7 +3,6 @@ import { setup, setVolume, onVolumeChanged, getVolume, setMuted, setUnmutedVolum
 export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
   setup(vm);
-  setVolume(addon.settings.get("defVol") / 100);
 
   const icon = document.createElement("div");
   icon.className = "sa-vol-slider-icon";
@@ -22,7 +21,6 @@ export default async function ({ addon, console }) {
     }
   };
   onVolumeChanged(updateIcon);
-  updateIcon();
 
   const slider = document.createElement("input");
   slider.className = "sa-vol-slider-input";
@@ -39,12 +37,14 @@ export default async function ({ addon, console }) {
       setUnmutedVolume(getVolume());
     }
   });
+
   onVolumeChanged(() => {
     const newVolume = getVolume();
     if (newVolume !== +slider.value) {
       slider.value = newVolume;
     }
   });
+  setVolume(addon.settings.get("defVol") / 100);
 
   const container = document.createElement("div");
   container.className = "sa-vol-slider";

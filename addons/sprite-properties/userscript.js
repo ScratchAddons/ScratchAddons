@@ -6,7 +6,6 @@ export default async function ({ addon, global, console, msg }) {
 
   let propertiesPanel;
   let spriteContainer; // also contains sprite grid
-  let spriteGrid;
 
   await init();
 
@@ -17,20 +16,36 @@ export default async function ({ addon, global, console, msg }) {
       let spriteId = e.detail.action.editingTarget;
       if (!spriteId) return;
       let spriteIndex = e.detail.action.targets.findIndex((el) => el.id === spriteId);
-      injectInfoButton(spriteIndex);
+      // The focused sprite might not be in the target list if, for example, we are editing a clone.
+      if (spriteIndex !== -1) {
+        injectInfoButton(spriteIndex);
+      }
     }
   });
-  // Add a single event listener on the entire grid to take advantage of event bubbling
-  spriteGrid.addEventListener("click", (e) => {
-    let doubleClick = e.detail === 2;
-    if (doubleClick) togglePropertiesPanel();
+
+  // Open the properties panel when double clicking in the sprite grid
+  document.addEventListener("click", (e) => {
+    if (e.detail === 2 && e.target.closest('[class^="sprite-selector_scroll-wrapper_"]')) {
+      togglePropertiesPanel();
+    }
   });
+
   // Close properties panel when mouse leaves the entire sprite panel
-  spriteContainer.addEventListener("mouseleave", () => autoHidePanel());
+  document.body.addEventListener(
+    "mouseleave",
+    (e) => {
+      if (e.target.matches('[class*="sprite-selector_sprite-selector_2KgCX"]')) {
+        autoHidePanel();
+      }
+    },
+    {
+      capture: true,
+    }
+  );
 
   addon.settings.addEventListener("change", () => autoHidePanel());
   addon.self.addEventListener("disabled", () => {
-    togglePropertiesPanel();
+    setPropertiesPanelVisible(true);
     removeCloseButton();
   });
   addon.self.addEventListener("reenabled", () => init());
@@ -41,30 +56,24 @@ export default async function ({ addon, global, console, msg }) {
   async function init() {
     propertiesPanel = await addon.tab.waitForElement('[class^="sprite-info_sprite-info_"]');
     spriteContainer = propertiesPanel.parentElement; // also contains sprite grid
-    spriteGrid = await addon.tab.waitForElement('[class^="sprite-selector_scroll-wrapper_"]');
-    toggleOnLoad();
+    setPropertiesPanelVisible(!addon.settings.get("hideByDefault"));
     injectInfoButton();
     injectCloseButton();
   }
 
-  function toggleOnLoad() {
-    spriteContainer.classList.toggle(HIDE_PROPS_CLASS);
-    if (!addon.settings.get("hideByDefault")) togglePropertiesPanel();
+  function setPropertiesPanelVisible(visible) {
+    spriteContainer.classList.toggle(SHOW_PROPS_CLASS, visible);
+    spriteContainer.classList.toggle(HIDE_PROPS_CLASS, !visible);
   }
 
   function togglePropertiesPanel() {
-    if (!addon.self.disabled) {
-      spriteContainer.classList.toggle(SHOW_PROPS_CLASS);
-      spriteContainer.classList.toggle(HIDE_PROPS_CLASS);
-    } else {
-      spriteContainer.classList.remove(SHOW_PROPS_CLASS);
-      spriteContainer.classList.remove(HIDE_PROPS_CLASS);
-    }
+    const isCurrentlyOpen = spriteContainer.classList.contains(SHOW_PROPS_CLASS);
+    setPropertiesPanelVisible(!isCurrentlyOpen);
   }
 
   function autoHidePanel() {
-    if (addon.settings.get("autoCollapse") && spriteContainer.classList.contains(SHOW_PROPS_CLASS)) {
-      togglePropertiesPanel();
+    if (addon.settings.get("autoCollapse")) {
+      setPropertiesPanelVisible(false);
     }
   }
 
@@ -81,8 +90,7 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   async function injectCloseButton() {
-    let container = propertiesPanel.querySelector("[class*='sprite-info_row_']:nth-child(2)");
-    injectButton(container, PROPS_CLOSE_BTN_CLASS, "/collapse.svg", msg("close-properties-panel-tooltip"));
+    injectButton(propertiesPanel, PROPS_CLOSE_BTN_CLASS, "/collapse.svg", msg("close-properties-panel-tooltip"));
   }
 
   async function injectButton(container, className, iconPath, tooltip) {

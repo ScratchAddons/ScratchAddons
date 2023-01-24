@@ -1,5 +1,8 @@
-[class^="stage-header_stage-button-icon"] {
+[dir="ltr"] [class^="stage-header_stage-size-toggle-group"] [class^="stage-header_stage-button-icon"] {
   transform: scaleX(-1);
+}
+[dir="rtl"] [class^="stage-header_stage-size-toggle-group"] [class^="stage-header_stage-button-icon"] {
+  transform: none;
 }
 [class^="target-pane_target-pane"] {
   flex-direction: row-reverse;

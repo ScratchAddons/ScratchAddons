@@ -357,6 +357,7 @@ export default class Tab extends Listenable {
    * assetContextMenuAfterDelete - after the delete button of asset (sprite, costume, etc)'s context menu
    * monitor - after the end of the stage monitor context menu
    * beforeEditorProfile - Before the profile menu in the editor
+   * paintEditorZoomControls - before the zoom controls in the paint editor
    *
    * @param {object} opts - options.
    * @param {string} opts.space - the shared space name.
@@ -558,6 +559,31 @@ export default class Tab extends Listenable {
         element: () => q("[class^='menu-bar_account-info-group']"),
         from: () => [],
         until: () => [q("[class^='menu-bar_account-info-group'] > [href^='/my']")],
+      },
+      paintEditorZoomControls: {
+        element: () => {
+          return (
+            q(".sa-paintEditorZoomControls-wrapper") ||
+            (() => {
+              const wrapper = Object.assign(document.createElement("div"), {
+                className: "sa-paintEditorZoomControls-wrapper",
+              });
+
+              wrapper.style.display = "flex";
+              wrapper.style.flexDirection = "row-reverse";
+              wrapper.style.height = "calc(1.95rem + 2px)";
+
+              const zoomControls = q("[class^='paint-editor_zoom-controls']");
+
+              zoomControls.replaceWith(wrapper);
+              wrapper.appendChild(zoomControls);
+
+              return wrapper;
+            })()
+          );
+        },
+        from: () => [],
+        until: () => [],
       },
     };
 
