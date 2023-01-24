@@ -12,6 +12,9 @@ export default async function ({ addon, global }) {
   shareButton.href = "#";
   shareButton.classList.add("sa-share-button");
   shareButton.innerText = "Share";
+  addon.tab.displayNoneWhileDisabled(shareButton, {
+    display: "block",
+  });
 
   while (true) {
     const project = await addon.tab.waitForElement("div.media-item-content.not-shared", {
