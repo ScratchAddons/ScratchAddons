@@ -672,6 +672,6 @@ input.link.black {
   color-scheme: light;
 }
 
-#topnav ul.account-nav .messages .notificationsCount {
+#topnav ul.account-nav .messages .notificationsCount, .messages-header-unread {
   background-color: var(--darkWww-messageIndicatorColor);
 }
