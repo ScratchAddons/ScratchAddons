@@ -1,23 +1,19 @@
+import { getStageSize, setup, stageEventTarget } from "../mouse-pos/stage-size.js";
+
 export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
+  setup(addon.tab.redux);
 
   let showIconOnly = addon.settings.get("showicononly");
 
-  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
+  if (getStageSize() === "small") {
     document.body.classList.add("sa-clones-small");
   }
 
-  (async () => {
-    while (true) {
-      let lastSize = addon.tab.redux.state.scratchGui.stageSize.stageSize;
-      await addon.tab.redux.waitForState((state) => state.scratchGui.stageSize.stageSize !== lastSize, {
-        actions: ["scratch-gui/StageSize/SET_STAGE_SIZE"],
-      });
-
-      if (lastSize === "small") document.body.classList.remove("sa-clones-small");
-      else document.body.classList.add("sa-clones-small");
-    }
-  })();
+  stageEventTarget.addEventListener("sizechanged", ({ detail }) => {
+    if (detail.newSize === "small") document.body.classList.add("sa-clones-small");
+    else document.body.classList.remove("sa-clones-small");
+  });
 
   let countContainerContainer = document.createElement("div");
 

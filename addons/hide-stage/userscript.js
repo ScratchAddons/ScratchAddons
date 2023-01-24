@@ -1,12 +1,13 @@
+import { getStageSize, setStageSize, setup, stageEventTarget } from "../mouse-pos/stage-size.js";
+
 export default async function ({ addon, console, msg }) {
-  let stageHidden = false;
+  setup(addon.tab.redux);
   let bodyWrapper;
   let smallStageButton;
   let largeStageButton;
   let hideStageButton;
 
   function hideStage() {
-    stageHidden = true;
     if (!bodyWrapper) return;
     document.body.classList.add("sa-stage-hidden-outer");
     // Inner class is applied to body wrapper so that it won't affect the project page.
@@ -16,7 +17,6 @@ export default async function ({ addon, console, msg }) {
   }
 
   function unhideStage(e) {
-    stageHidden = false;
     if (!bodyWrapper) return;
     document.body.classList.remove("sa-stage-hidden-outer");
     bodyWrapper.classList.remove("sa-stage-hidden");
@@ -25,6 +25,14 @@ export default async function ({ addon, console, msg }) {
   }
 
   addon.self.addEventListener("disabled", () => unhideStage());
+
+  stageEventTarget.addEventListener("sizechanged", ({ detail }) => {
+    if (detail.newSize === "hidden") {
+      hideStage();
+    } else {
+      unhideStage();
+    }
+  });
 
   while (true) {
     const stageControls = await addon.tab.waitForElement("[class*='stage-header_stage-size-toggle-group_']", {
@@ -54,10 +62,10 @@ export default async function ({ addon, console, msg }) {
         draggable: false,
       })
     );
-    if (stageHidden) hideStage();
+    if (getStageSize() === "hidden") hideStage();
     else unhideStage();
-    hideStageButton.addEventListener("click", hideStage);
-    smallStageButton.addEventListener("click", unhideStage);
-    largeStageButton.addEventListener("click", unhideStage);
+    hideStageButton.addEventListener("click", () => {
+      setStageSize("hidden");
+    });
   }
 }

@@ -3,6 +3,7 @@ import createLogsTab from "./logs.js";
 import createThreadsTab from "./threads.js";
 import createPerformanceTab from "./performance.js";
 import Utils from "../find-bar/blockly/Utils.js";
+import { stageEventTarget, setup as setupStage, getStageSize } from "../mouse-pos/stage-size.js";
 
 const removeAllChildren = (element) => {
   while (element.firstChild) {
@@ -12,6 +13,7 @@ const removeAllChildren = (element) => {
 
 export default async function ({ addon, console, msg }) {
   setup(addon.tab.traps.vm);
+  setupStage(addon.tab.redux);
 
   let logsTab;
   const messagesLoggedBeforeLogsTabLoaded = [];
@@ -527,21 +529,14 @@ export default async function ({ addon, console, msg }) {
   }
   setActiveTab(allTabs[0]);
 
-  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
+  if (getStageSize() === "small") {
     document.body.classList.add("sa-debugger-small");
   }
 
-  (async () => {
-    while (true) {
-      let lastSize = addon.tab.redux.state.scratchGui.stageSize.stageSize;
-      await addon.tab.redux.waitForState((state) => state.scratchGui.stageSize.stageSize !== lastSize, {
-        actions: ["scratch-gui/StageSize/SET_STAGE_SIZE"],
-      });
-
-      if (lastSize === "small") document.body.classList.remove("sa-debugger-small");
-      else document.body.classList.add("sa-debugger-small");
-    }
-  })();
+  stageEventTarget.addEventListener("sizechanged", ({ detail }) => {
+    if (detail.newSize === "small") document.body.classList.add("sa-debugger-small");
+    else document.body.classList.remove("sa-debugger-small");
+  });
 
   const ogGreenFlag = vm.runtime.greenFlag;
   vm.runtime.greenFlag = function (...args) {

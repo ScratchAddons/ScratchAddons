@@ -1,6 +1,8 @@
+import { getStageSize, setup, stageEventTarget } from "../mouse-pos/stage-size.js";
 import GamepadLib from "./gamepadlib.js";
 
 export default async function ({ addon, console, msg }) {
+  setup(addon.tab.redux);
   const vm = addon.tab.traps.vm;
 
   // Wait for the project to finish loading. Renderer and scripts will not be fully available until this happens.
@@ -286,21 +288,14 @@ export default async function ({ addon, console, msg }) {
     editor.focus();
   });
 
-  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
+  if (getStageSize() === "small") {
     document.body.classList.add("sa-gamepad-small");
   }
 
-  (async () => {
-    while (true) {
-      let lastSize = addon.tab.redux.state.scratchGui.stageSize.stageSize;
-      await addon.tab.redux.waitForState((state) => state.scratchGui.stageSize.stageSize !== lastSize, {
-        actions: ["scratch-gui/StageSize/SET_STAGE_SIZE"],
-      });
-
-      if (lastSize === "small") document.body.classList.remove("sa-gamepad-small");
-      else document.body.classList.add("sa-gamepad-small");
-    }
-  })();
+  stageEventTarget.addEventListener("sizechanged", ({ detail }) => {
+    if (detail.newSize === "small") document.body.classList.add("sa-gamepad-small");
+    else document.body.classList.remove("sa-gamepad-small");
+  });
 
   const virtualCursorElement = document.createElement("img");
   virtualCursorElement.hidden = true;

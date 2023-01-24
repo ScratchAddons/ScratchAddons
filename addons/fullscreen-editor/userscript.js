@@ -1,8 +1,11 @@
+import { setStageSize, setup } from "../mouse-pos/stage-size.js";
+
 /**
  *
  * @param {import("../../addon-api/content-script/typedef.js").UserscriptUtilities} param0
  */
 export default async function ({ addon, console, msg }) {
+  setup(addon.tab.redux);
   const fullscreen = document.createElement("a");
   fullscreen.title = msg("fullscreen");
   fullscreen.className = addon.tab.scratchClass("menu-bar_menu-bar-item", "menu-bar_hoverable", {
@@ -15,12 +18,9 @@ export default async function ({ addon, console, msg }) {
     document.body.requestFullscreen();
     if (addon.settings.get("shrinkStage")) {
       if (!addon.settings.get("hide")) {
-        addon.tab.redux.dispatch({
-          type: "scratch-gui/StageSize/SET_STAGE_SIZE",
-          stageSize: "small",
-        });
+        setStageSize("small");
       } else {
-        document.querySelector(".sa-hide-stage-button").click();
+        setStageSize("hidden");
       }
     }
   };
@@ -28,14 +28,7 @@ export default async function ({ addon, console, msg }) {
   const exitFullscreen = () => {
     document.exitFullscreen();
     if (addon.settings.get("shrinkStage")) {
-      if (!addon.settings.get("hide")) {
-        addon.tab.redux.dispatch({
-          type: "scratch-gui/StageSize/SET_STAGE_SIZE",
-          stageSize: "large",
-        });
-      } else {
-        document.querySelector('[class*="stage-header_stage-button-last_"]').click();
-      }
+      setStageSize("large");
     }
     isFullscreen = false;
   };

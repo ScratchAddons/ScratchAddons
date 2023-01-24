@@ -1,6 +1,8 @@
+import { getStageSize, stageEventTarget, setup as setupSize } from "../mouse-pos/stage-size.js";
 import { setup, setVolume, onVolumeChanged, getVolume, setMuted, setUnmutedVolume, isMuted } from "./module.js";
 
 export default async function ({ addon, console }) {
+  setupSize(addon.tab.redux);
   const vm = addon.tab.traps.vm;
   setup(vm);
 
@@ -54,20 +56,14 @@ export default async function ({ addon, console }) {
     display: "flex",
   });
 
-  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
+  if (getStageSize() === "small") {
     document.body.classList.add("sa-vol-slider-small");
   }
-  (async () => {
-    while (true) {
-      let lastSize = addon.tab.redux.state.scratchGui.stageSize.stageSize;
-      await addon.tab.redux.waitForState((state) => state.scratchGui.stageSize.stageSize !== lastSize, {
-        actions: ["scratch-gui/StageSize/SET_STAGE_SIZE"],
-      });
 
-      if (lastSize === "small") document.body.classList.remove("sa-vol-slider-small");
-      else document.body.classList.add("sa-vol-slider-small");
-    }
-  })();
+  stageEventTarget.addEventListener("sizechanged", ({ detail }) => {
+    if (detail.newSize === "small") document.body.classList.add("sa-vol-slider-small");
+    else document.body.classList.remove("sa-vol-slider-small");
+  });
 
   addon.self.addEventListener("disabled", () => {
     setVolume(1);
