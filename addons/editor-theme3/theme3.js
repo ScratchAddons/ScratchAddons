@@ -81,7 +81,7 @@ export default async function ({ addon, console }) {
   };
 
   let textModeSetting = addon.settings.get("text");
-  const textMode = () => addon.self.disabled ? "white" : textModeSetting;
+  const textMode = () => (addon.self.disabled ? "white" : textModeSetting);
   const isColoredTextMode = () => textMode() === "colorOnWhite" || textMode() === "colorOnBlack";
 
   const primaryColor = (category) => {
