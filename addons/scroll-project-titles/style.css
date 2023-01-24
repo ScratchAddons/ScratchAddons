@@ -1,4 +1,4 @@
 .project-title.no-edit {
-  overflow-x: scroll !important;
-  text-overflow: clip !important;
+  overflow-x: scroll;
+  text-overflow: clip;
 }
