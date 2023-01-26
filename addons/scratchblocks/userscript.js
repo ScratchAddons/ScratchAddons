@@ -27,7 +27,7 @@ async function getLocales(addon) {
     59: "fa",
   };
 
-  if (location.pathname.split("/")[2] === "settings") {
+  if (["settings", "search"].includes(location.pathname.split("/")[2])) {
     return ["en"];
   }
 
