@@ -1,6 +1,6 @@
 {
   "name": "Clickable usernames",
-  "description": "Makes the front page curator and mentions on the forums clickable links to their profile.",
+  "description": "Makes forum mentions and the front page curator's username clickable links to their profile.",
   "credits": [
     {
       "name": "Hans5958",
@@ -14,7 +14,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "This addon doesn't work with forum mentions styled with BBCode.",
+      "text": "Forum mentions styled with BBCode wont't be clickbale.",
       "id": "BBCode"
     }
   ],
@@ -42,7 +42,7 @@
     },
     {
       "id": "curator",
-      "name": "Make front page curator cickable",
+      "name": "Make the cuator's username clickable",
       "type": "boolean",
       "default": true
     },
@@ -60,7 +60,7 @@
   "dynamicDisable": true,
   "versionAdded": "1.4.0",
   "latestUpdate": {
-    "version": "1.30.0",
+    "version": "1.31.0",
     "newSettings": ["mentions"]
   },
   "tags": ["community", "forums"],
