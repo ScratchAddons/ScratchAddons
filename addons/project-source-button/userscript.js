@@ -48,20 +48,17 @@ export default async function ({ addon, global, console, msg }) {
     icon.title = msg("hover");
     const pjtBtns = document.getElementsByClassName("project-buttons")[0];
     pjtBtns.prepend(icon);
-    let msgs={};
-    [
-      "edit_warn",
-      "please_reopen"
-    ].forEach(elem=>{
-      msgs[elem]=msg(elem);
-    })
+    let msgs = {};
+    ["edit_warn", "please_reopen"].forEach((elem) => {
+      msgs[elem] = msg(elem);
+    });
     document.getElementById("view-json-btn").addEventListener("click", async (e) => {
       let projectToken;
-      try{
+      try {
         projectToken = await getToken();
-      }catch(e){
-        if(window.confirm(msg("json_fetch_err"))){
-          location.reload()
+      } catch (e) {
+        if (window.confirm(msg("json_fetch_err"))) {
+          location.reload();
         }
       }
       const viewer = window.open(

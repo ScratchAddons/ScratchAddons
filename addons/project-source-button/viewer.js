@@ -14,7 +14,7 @@ async function loadDom() {
   });
 }
 
-const msgs=JSON.parse(decodeURI(location.hash.slice(1)));
+const msgs = JSON.parse(decodeURI(location.hash.slice(1)));
 
 (async function () {
   const cssLink = document.createElement("link");
@@ -28,14 +28,14 @@ const msgs=JSON.parse(decodeURI(location.hash.slice(1)));
 })();
 let pageNum = 1;
 const maxLines = parseInt(queries.maxlines);
-let acceptEdit=false;
+let acceptEdit = false;
 (async function () {
   loadDom();
   document.getElementById("h-title").textContent = "Loding...";
   let jsonData;
-  try{
+  try {
     jsonData = await (await fetch(`https://projects.scratch.mit.edu/${queries.id}?token=${queries.token}`)).json();
-  }catch(e){
+  } catch (e) {
     alert(msgs.please_reopen);
     window.close();
   }
@@ -51,8 +51,8 @@ let acceptEdit=false;
     lineLength = jsonText.split("\n").length;
     pages = Math.ceil(lineLength / maxLines);
     document.getElementById("max-page").textContent = pages;
-    if(pages<pageNum){
-      pageNum=pages;
+    if (pages < pageNum) {
+      pageNum = pages;
     }
   }
 
@@ -86,10 +86,10 @@ let acceptEdit=false;
     allView.document.body.appendChild(pre);
   });
   document.getElementById("edit-mode").addEventListener("click", (e) => {
-    if(!acceptEdit){
-      if(window.confirm(msgs.edit_warn)){
-        acceptEdit=true;
-      }else{
+    if (!acceptEdit) {
+      if (window.confirm(msgs.edit_warn)) {
+        acceptEdit = true;
+      } else {
         return;
       }
     }
@@ -105,9 +105,9 @@ let acceptEdit=false;
     }
     document.getElementById("json-code").hidden = !document.getElementById("json-editor").hidden;
     jsonText = document.getElementById("json-editor").value;
-    if(jsonText===""){
-      jsonText=baseJsonText
-      document.getElementById("json-editor").value=jsonText;
+    if (jsonText === "") {
+      jsonText = baseJsonText;
+      document.getElementById("json-editor").value = jsonText;
     }
   });
   document.getElementById("save-sb3").addEventListener("click", async (e) => {
