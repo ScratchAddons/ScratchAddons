@@ -40,12 +40,14 @@ let acceptEdit=false;
     window.close();
   }
   let jsonText = JSON.stringify(jsonData, null, "  ");
-  const baseJsonText=jsonText;
+  const baseJsonText = jsonText;
   let lineLength, pages;
 
   function updatePageInfo() {
     jsonText = document.getElementById("json-editor").value;
-    if(jsonText===""){jsonText=baseJsonText}
+    if (jsonText === "") {
+      jsonText = baseJsonText;
+    }
     lineLength = jsonText.split("\n").length;
     pages = Math.ceil(lineLength / maxLines);
     document.getElementById("max-page").textContent = pages;
@@ -97,7 +99,9 @@ let acceptEdit=false;
       document.getElementById("json-editor").hidden = false;
     } else {
       document.getElementById("json-editor").hidden = true;
-      if(document.getElementById("json-editor").value===""){document.getElementById("json-editor").value=baseJsonText}
+      if (document.getElementById("json-editor").value === "") {
+        document.getElementById("json-editor").value = baseJsonText;
+      }
     }
     document.getElementById("json-code").hidden = !document.getElementById("json-editor").hidden;
     jsonText = document.getElementById("json-editor").value;
