@@ -49,6 +49,9 @@ let acceptEdit=false;
     lineLength = jsonText.split("\n").length;
     pages = Math.ceil(lineLength / maxLines);
     document.getElementById("max-page").textContent = pages;
+    if(pages<pageNum){
+      pageNum=pages;
+    }
   }
 
   updatePageInfo();
