@@ -48,11 +48,25 @@ export default async function ({ addon, global, console, msg }) {
     icon.title = msg("hover");
     const pjtBtns = document.getElementsByClassName("project-buttons")[0];
     pjtBtns.prepend(icon);
+    let msgs={};
+    [
+      "edit_warn",
+      "please_reopen"
+    ].forEach(elem=>{
+      msgs[elem]=msg(elem);
+    })
     document.getElementById("view-json-btn").addEventListener("click", async (e) => {
-      const projectToken = await getToken();
+      let projectToken;
+      try{
+        projectToken = await getToken();
+      }catch(e){
+        if(window.confirm(msg("json_fetch_err"))){
+          location.reload()
+        }
+      }
       const viewer = window.open(
         getFilePath("viewer.html") +
-          `?id=${projectId}&token=${projectToken}&maxlines=${addon.settings.get("max_lines")}`
+          `?id=${projectId}&token=${projectToken}&maxlines=${addon.settings.get("max_lines")}#${JSON.stringify(msgs)}`
       );
     });
   }

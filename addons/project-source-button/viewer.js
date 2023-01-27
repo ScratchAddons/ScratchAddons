@@ -13,6 +13,9 @@ async function loadDom() {
     Promise.resolve();
   });
 }
+
+const msgs=JSON.parse(decodeURI(location.hash.slice(1)));
+
 (async function () {
   const cssLink = document.createElement("link");
   cssLink.rel = "stylesheet";
@@ -25,12 +28,17 @@ async function loadDom() {
 })();
 let pageNum = 1;
 const maxLines = parseInt(queries.maxlines);
+let acceptEdit=false;
 (async function () {
   loadDom();
   document.getElementById("h-title").textContent = "Loding...";
-
-  const jsonData = await (await fetch(`https://projects.scratch.mit.edu/${queries.id}?token=${queries.token}`)).json();
-
+  let jsonData;
+  try{
+    jsonData = await (await fetch(`https://projects.scratch.mit.edu/${queries.id}?token=${queries.token}`)).json();
+  }catch(e){
+    alert(msgs.please_reopen);
+    window.close();
+  }
   let jsonText = JSON.stringify(jsonData, null, "  ");
   const baseJsonText=jsonText;
   let lineLength, pages;
@@ -73,6 +81,13 @@ const maxLines = parseInt(queries.maxlines);
     allView.document.body.appendChild(pre);
   });
   document.getElementById("edit-mode").addEventListener("click", (e) => {
+    if(!acceptEdit){
+      if(window.confirm(msgs.edit_warn)){
+        acceptEdit=true;
+      }else{
+        return;
+      }
+    }
     updatePageInfo();
     updatePage();
     if (document.getElementById("json-editor").hidden) {
@@ -83,7 +98,10 @@ const maxLines = parseInt(queries.maxlines);
     }
     document.getElementById("json-code").hidden = !document.getElementById("json-editor").hidden;
     jsonText = document.getElementById("json-editor").value;
-    if(jsonText===""){jsonText=baseJsonText}
+    if(jsonText===""){
+      jsonText=baseJsonText
+      document.getElementById("json-editor").value=jsonText;
+    }
   });
   document.getElementById("save-sb3").addEventListener("click", async (e) => {
     const sb3 = new JSZip();
