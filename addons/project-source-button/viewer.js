@@ -16,16 +16,6 @@ async function loadDom() {
 
 const msgs = JSON.parse(decodeURI(location.hash.slice(1)));
 
-(async function () {
-  const cssLink = document.createElement("link");
-  cssLink.rel = "stylesheet";
-  cssLink.href = "../../libraries/common/cs/prism.css"; //prism.css address
-  document.head.appendChild(cssLink);
-
-  const prismScript = document.createElement("script");
-  prismScript.src = "../../libraries/common/cs/prism.js"; //prism.js address
-  document.head.appendChild(prismScript);
-})();
 let pageNum = 1;
 const maxLines = parseInt(queries.maxlines);
 let acceptEdit = false;
