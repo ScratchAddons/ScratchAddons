@@ -22,10 +22,6 @@ async function loadDom() {
   const prismScript = document.createElement("script");
   prismScript.src = "../../libraries/common/cs/prism.js"; //prism.js address
   document.head.appendChild(prismScript);
-
-  const aceScript = document.createElement("script");
-  aceScript.src = "../../libraries/common/cs/ace.js";
-  document.head.appendChild(aceScript);
 })();
 let pageNum = 1;
 const maxLines = parseInt(queries.maxlines);
@@ -36,21 +32,19 @@ const maxLines = parseInt(queries.maxlines);
   const jsonData = await (await fetch(`https://projects.scratch.mit.edu/${queries.id}?token=${queries.token}`)).json();
 
   let jsonText = JSON.stringify(jsonData, null, "  ");
+  const baseJsonText=jsonText;
   let lineLength, pages;
-  const editor = ace.edit("ace-editor");
-  editor.setValue(jsonText);
-  editor.getSession().setMode("ace/mode/json");
-  editor.clearSelection();
 
   function updatePageInfo() {
-    jsonText = editor.getValue();
+    jsonText = document.getElementById("json-editor").value;
+    if(jsonText===""){jsonText=baseJsonText}
     lineLength = jsonText.split("\n").length;
     pages = Math.ceil(lineLength / maxLines);
     document.getElementById("max-page").textContent = pages;
   }
+
   updatePageInfo();
   function updatePage() {
-    jsonText = editor.getValue();
     document.getElementById("page").textContent = pageNum;
     viewJSON(
       jsonText
@@ -78,16 +72,18 @@ const maxLines = parseInt(queries.maxlines);
     pre.appendChild(jsonElem);
     allView.document.body.appendChild(pre);
   });
-  document.getElementById("ace-mode").addEventListener("click", (e) => {
+  document.getElementById("edit-mode").addEventListener("click", (e) => {
     updatePageInfo();
     updatePage();
-    if (document.getElementById("ace-editor").hidden) {
-      document.getElementById("ace-editor").hidden = false;
+    if (document.getElementById("json-editor").hidden) {
+      document.getElementById("json-editor").hidden = false;
     } else {
-      document.getElementById("ace-editor").hidden = true;
+      document.getElementById("json-editor").hidden = true;
+      if(document.getElementById("json-editor").value===""){document.getElementById("json-editor").value=baseJsonText}
     }
-    document.getElementById("json-code").hidden = !document.getElementById("ace-editor").hidden;
-    jsonText = editor.getValue();
+    document.getElementById("json-code").hidden = !document.getElementById("json-editor").hidden;
+    jsonText = document.getElementById("json-editor").value;
+    if(jsonText===""){jsonText=baseJsonText}
   });
   document.getElementById("save-sb3").addEventListener("click",async e=>{
     const sb3=new JSZip();

@@ -8,7 +8,7 @@
         height: 90vh;
       }
       #json-code,
-      #ace-editor {
+      #json-editor {
         width: 100%;
         height: 90%;
       }
@@ -39,7 +39,7 @@
       #all-view {
         background-color: #ddd;
       }
-      #ace-mode {
+      #edit-mode {
         background-color: azure;
       }
     </style>
@@ -49,7 +49,7 @@
     <h1 id="h-title">Loding...</h1>
     <div style="display: flex">
       <div id="viewer">
-        <div id="ace-editor" hidden></div>
+        <textarea id="json-editor" hidden></textarea>
         <div id="json-code">
           <pre class="line-numbers"><code class="language-json"></code></pre>
         </div>
@@ -63,7 +63,7 @@
           <button id="next">→</button>
           <br />
           <button id="all-view">All view</button>
-          <button id="ace-mode">Edit/View</button>
+          <button id="edit-mode">Edit/View</button>
           <button id="save-sb3">Save sb3 file</button>
         </div>
       </div>
