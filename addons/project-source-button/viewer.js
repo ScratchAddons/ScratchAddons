@@ -85,15 +85,15 @@ const maxLines = parseInt(queries.maxlines);
     jsonText = document.getElementById("json-editor").value;
     if(jsonText===""){jsonText=baseJsonText}
   });
-  document.getElementById("save-sb3").addEventListener("click",async e=>{
-    const sb3=new JSZip();
-    sb3.file("project.json",jsonText);
-    const blob=await sb3.generateAsync({type:'blob'});
-    const atag=document.createElement("a");
-    atag.href=window.URL.createObjectURL(blob);
-    atag.download="project.sb3";
+  document.getElementById("save-sb3").addEventListener("click", async (e) => {
+    const sb3 = new JSZip();
+    sb3.file("project.json", jsonText);
+    const blob = await sb3.generateAsync({ type: "blob" });
+    const atag = document.createElement("a");
+    atag.href = window.URL.createObjectURL(blob);
+    atag.download = "project.sb3";
     atag.click();
-  })
+  });
   updatePage();
   let assets = [];
   function assetsSearch(arg) {
