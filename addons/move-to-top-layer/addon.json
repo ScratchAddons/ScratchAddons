@@ -1,0 +1,31 @@
+{
+  "name":"Move Sprite to Top Layer",
+  "description":"This addon allows you to move a selected sprite to the top layer",
+  "info": [
+    {
+      "type": "notice",
+      "text": "Press \"Shift\" while clicking a sprite in the sprite list to both select and move it to the top layer.",
+      "id": "shortcuts"
+    }
+  ],
+  "credits": [
+    {
+      "name": "Norbiros",
+      "link": "https://scratch.mit.edu/users/Norbir/"
+    },
+    {
+      "name": "s_federici",
+      "link": "https://scratch.mit.edu/users/s_federici/"
+    }
+  ],
+  "userscripts":[
+    {
+      "url":"userscript.js",
+      "matches":["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "tags": ["editor", "codeEditor", "beta"],
+  "versionAdded": "1.30.1"
+}
