@@ -32,12 +32,14 @@ const maxLines = parseInt(queries.maxlines);
   const jsonData = await (await fetch(`https://projects.scratch.mit.edu/${queries.id}?token=${queries.token}`)).json();
 
   let jsonText = JSON.stringify(jsonData, null, "  ");
-  const baseJsonText=jsonText;
+  const baseJsonText = jsonText;
   let lineLength, pages;
 
   function updatePageInfo() {
     jsonText = document.getElementById("json-editor").value;
-    if(jsonText===""){jsonText=baseJsonText}
+    if (jsonText === "") {
+      jsonText = baseJsonText;
+    }
     lineLength = jsonText.split("\n").length;
     pages = Math.ceil(lineLength / maxLines);
     document.getElementById("max-page").textContent = pages;
@@ -79,11 +81,15 @@ const maxLines = parseInt(queries.maxlines);
       document.getElementById("json-editor").hidden = false;
     } else {
       document.getElementById("json-editor").hidden = true;
-      if(document.getElementById("json-editor").value===""){document.getElementById("json-editor").value=baseJsonText}
+      if (document.getElementById("json-editor").value === "") {
+        document.getElementById("json-editor").value = baseJsonText;
+      }
     }
     document.getElementById("json-code").hidden = !document.getElementById("json-editor").hidden;
     jsonText = document.getElementById("json-editor").value;
-    if(jsonText===""){jsonText=baseJsonText}
+    if (jsonText === "") {
+      jsonText = baseJsonText;
+    }
   });
   document.getElementById("save-sb3").addEventListener("click", async (e) => {
     const sb3 = new JSZip();
