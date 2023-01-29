@@ -8,10 +8,12 @@ const queries = (() => {
   }
   return queries;
 })();
-async function loadDom() {
-  window.addEventListener("load", (e) => {
-    Promise.resolve();
-  });
+function loadDom() {
+  return new Promise(resolve=>{
+    window.addEventListener("load", (e) => {
+      resolve();
+    });
+  })
 }
 
 const msgs = JSON.parse(decodeURI(location.hash.slice(1)));
