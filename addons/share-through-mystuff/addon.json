@@ -11,6 +11,13 @@
     {
       "url": "userstyle.css",
       "matches": ["https://scratch.mit.edu/mystuff"]
+    },
+    {
+      "url": "scratchr2.css",
+      "matches": ["https://scratch.mit.edu/mystuff"],
+      "if": {
+        "addonEnabled": ["scratchr2"]
+      }
     }
   ],
   "userscripts": [

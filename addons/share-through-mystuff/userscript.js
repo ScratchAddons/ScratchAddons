@@ -1,4 +1,4 @@
-export default async function ({ addon, global }) {
+export default async function ({ addon }) {
   const shareFunction = document.createElement("a");
   shareFunction.classList.add("media-share");
   shareFunction.dataset.control = "share";
