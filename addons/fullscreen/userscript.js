@@ -47,6 +47,10 @@ export default async function ({ addon, console }) {
     stage = await addon.tab.waitForElement('[class*="stage-wrapper_full-screen"] [class*="stage_stage"]');
     resizeObserver = new ResizeObserver(() => {
       const stageSize = stage.getBoundingClientRect();
+      // When switching between project page and editor, the canvas
+      // is removed from the DOM and inserted again in a different place.
+      // This causes the size to be reported as 0x0.
+      if (!stageSize.width || !stageSize.height) return;
       // Width and height attributes of the canvas need to match the actual size.
       const renderer = addon.tab.traps.vm.runtime.renderer;
       if (renderer) renderer.resize(stageSize.width, stageSize.height);

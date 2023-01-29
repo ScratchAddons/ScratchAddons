@@ -19,7 +19,6 @@ export default async function ({ addon, msg, console }) {
       this.prevValue = "";
 
       this.findBarOuter = null;
-      this.findLabel = null;
       this.findWrapper = null;
       this.findInput = null;
       this.dropdownOut = null;
@@ -37,10 +36,6 @@ export default async function ({ addon, msg, console }) {
       this.findBarOuter.className = "sa-find-bar";
       addon.tab.displayNoneWhileDisabled(this.findBarOuter, { display: "flex" });
       root.appendChild(this.findBarOuter);
-
-      this.findLabel = this.findBarOuter.appendChild(document.createElement("label"));
-      this.findLabel.htmlFor = "sa-find-input";
-      this.findLabel.textContent = msg("find");
 
       this.findWrapper = this.findBarOuter.appendChild(document.createElement("span"));
       this.findWrapper.className = "sa-find-wrapper";
@@ -215,8 +210,7 @@ export default async function ({ addon, msg, console }) {
         }
       }
 
-      this.utils.offsetX =
-        this.dropdownOut.getBoundingClientRect().right - this.findLabel.getBoundingClientRect().left + 26;
+      this.utils.offsetX = this.dropdownOut.getBoundingClientRect().right + 26;
       this.utils.offsetY = 32;
     }
 

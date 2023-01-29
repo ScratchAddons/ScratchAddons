@@ -85,18 +85,32 @@ export default async function ({ addon, console, msg }) {
       this.scratchVariable = scratchVariable;
       this.target = target;
       this.visible = false;
+      this.ignoreTooBig = false;
       this.buildDOM();
     }
 
     updateValue(force) {
       if (!this.visible && !force) return;
+
       let newValue;
+      let maxSafeLength;
       if (this.scratchVariable.type === "list") {
         newValue = this.scratchVariable.value.join("\n");
+        maxSafeLength = 5000000;
       } else {
         newValue = this.scratchVariable.value;
+        maxSafeLength = 1000000;
       }
+
+      if (!this.ignoreTooBig && newValue.length > maxSafeLength) {
+        this.input.value = "";
+        this.row.dataset.tooBig = true;
+        return;
+      }
+
+      this.row.dataset.tooBig = false;
       if (newValue !== this.input.value) {
+        this.input.disabled = false;
         this.input.value = newValue;
       }
     }
@@ -207,12 +221,22 @@ export default async function ({ addon, console, msg }) {
       const valueCell = document.createElement("td");
       valueCell.className = "sa-var-manager-value";
 
+      const tooBigElement = document.createElement("button");
+      this.tooBigElement = tooBigElement;
+      tooBigElement.textContent = msg("too-big");
+      tooBigElement.className = "sa-var-manager-too-big";
+      tooBigElement.addEventListener("click", () => {
+        this.ignoreTooBig = true;
+        this.updateValue(true);
+      });
+
       let input;
       if (this.scratchVariable.type === "list") {
         input = document.createElement("textarea");
       } else {
         input = document.createElement("input");
       }
+      input.className = "sa-var-manager-value-input";
       input.id = id;
       this.input = input;
 
@@ -247,6 +271,7 @@ export default async function ({ addon, console, msg }) {
       });
 
       valueCell.appendChild(input);
+      valueCell.appendChild(tooBigElement);
       row.appendChild(labelCell);
       row.appendChild(valueCell);
 

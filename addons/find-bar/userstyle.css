@@ -7,27 +7,11 @@
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   width: 100%;
   height: 100%;
+  margin-left: 1em;
 }
 .sa-find-bar[hidden] {
   /* !important to override displayNoneWhileDisabled */
   display: none !important;
-}
-
-.sa-find-bar > label {
-  /* padding instead of margin so clicking on the empty area will select the input */
-  padding-left: 1.5em;
-  padding-right: 1em;
-  font-weight: bold;
-  font-size: 0.625rem;
-  user-select: none;
-  cursor: default;
-  white-space: nowrap;
-  padding-top: 2px;
-}
-
-[dir="rtl"] .sa-find-bar > label {
-  padding-right: 1.5em;
-  padding-left: 1em;
 }
 
 .sa-find-wrapper {
