@@ -9,11 +9,11 @@ const queries = (() => {
   return queries;
 })();
 function loadDom() {
-  return new Promise(resolve=>{
+  return new Promise((resolve) => {
     window.addEventListener("load", (e) => {
       resolve();
     });
-  })
+  });
 }
 
 const msgs = JSON.parse(decodeURI(location.hash.slice(1)));
