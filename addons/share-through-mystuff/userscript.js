@@ -5,8 +5,8 @@ export default async function ({ addon, global }) {
   shareFunction.href = "#";
 
   const shareButton = document.createElement("a");
-  function shareConfirmation(event) {
-    let confirmation = confirm("Would you like to share this project?");
+  async function shareConfirmation(event) {
+    let confirmation = await addon.tab.confirm("Share this project?", "Are you sure you want to share this project?");
     if (confirmation) event.target.parentElement.querySelector(".media-share").click();
   }
   shareButton.href = "#";
