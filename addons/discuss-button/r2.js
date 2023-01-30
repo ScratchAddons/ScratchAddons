@@ -5,8 +5,9 @@ export default async function ({ addon }) {
   const add = async () => {
     if (!span && (await addon.auth.fetchIsLoggedIn())) {
       const username = await addon.auth.fetchUsername();
-      const container = document.querySelector(".dropdown");
-      const dropdown = container.querySelector(".dropdown-menu .user-nav");
+      const container = await addon.tab.waitForElement(".dropdown");
+      const dropdown = await addon.tab.waitForElement(".dropdown-menu .user-nav");
+      (await addon.tab.waitForElement(".user-icon")).classList.add("sa-compact-profile-icon");
       const profileSpans = dropdown.childNodes[0].childNodes[0];
       span = profileSpans.appendChild(document.createElement("span"));
       span.className = "sa-profile-name";
@@ -24,6 +25,10 @@ export default async function ({ addon }) {
     }
     span?.remove();
     span = null;
+    const icon = document.querySelector(".user-icon");
+    if (icon) {
+      icon.classList.remove("sa-compact-profile-icon");
+    }
   };
 
   if (addon.settings.get("compact-nav")) add();

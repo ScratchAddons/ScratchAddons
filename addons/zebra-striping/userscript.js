@@ -1,4 +1,4 @@
-export default async function ({ addon, msg, global, console }) {
+export default async function ({ addon, msg, console }) {
   const vm = addon.tab.traps.vm;
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
@@ -19,7 +19,7 @@ export default async function ({ addon, msg, global, console }) {
         if (parent) {
           if (block.isShadow()) {
             isStriped = !!stripeState.get(parent);
-          } else if (parent.getCategory() === block.getCategory()) {
+          } else if (parent.getColour() === block.getColour()) {
             isStriped = !stripeState.get(parent);
           }
         }
@@ -52,7 +52,7 @@ export default async function ({ addon, msg, global, console }) {
   // when the workspace is reloaded (which includes loading the page and
   // seeing the project page then seeing inside).
   // As we need to stack the filter with the striping filter in the
-  // userstyle, we need to use the usersciript to get the filter's ID
+  // userstyle, we need to use the userscript to get the filter's ID
   // and set a CSS variable on the document's root.
   while (true) {
     const replacementGlowEl = await addon.tab.waitForElement('filter[id*="blocklyReplacementGlowFilter"]', {

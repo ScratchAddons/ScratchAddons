@@ -4,7 +4,7 @@ labels: ["status: needs triage", "type: bug"]
 body:
   - type: markdown
     attributes:
-      value: | 
+      value: |
         ### Read before creating!
 
         - Avoid creating duplicates! Read the FAQ page and search through issues and discussions before creating one.
@@ -42,7 +42,7 @@ body:
     id: additonalcontext
     attributes:
       label: Demonstration(s) and additional context
-      description: If applicable, insert screenshots or a live example to help demonstrate your problem, as well as any other useful infomation here.
+      description: If applicable, insert screenshots or a live example to help demonstrate your problem, as well as any other useful information here.
 
   - type: textarea
     id: environment
