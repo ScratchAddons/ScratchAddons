@@ -1,10 +1,14 @@
 {
   "name": "Customizable profile picture border",
-  "description": "Allows you to hide or change the outline around profile pictures in project and studio comments.",
+  "description": "Allows you to hide or change the outline around profile pictures in project and studio comments and change the shape of their corners.",
   "credits": [
     {
       "name": "CST1229",
       "link": "https://github.com/CST1229"
+    },
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
     }
   ],
   "userstyles": [
@@ -95,9 +99,44 @@
           "fill-transparent": true
         }
       }
+    },
+    {
+      "name": "Custom shape",
+      "id": "rounding",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Shape",
+      "id": "round-style",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "square",
+          "name": "Square"
+        },
+        {
+          "id": "round",
+          "name": "Rounded square"
+        },
+        {
+          "id": "circle",
+          "name": "Circle"
+        }
+      ],
+      "default": "round",
+      "if": {
+        "settings": {
+          "rounding": true
+        }
+      }
     }
   ],
   "tags": ["community", "theme"],
   "versionAdded": "1.18.0",
+  "latestUpdate": {
+    "version": "1.31.0",
+    "newSettings": ["rounding", "round-style"]
+  },
   "enabledByDefault": false
 }
