@@ -4,8 +4,9 @@ import { pingifyTextNode } from "../../libraries/common/cs/fast-linkify.js";
 export default async function ({ addon, console }) {
   const pageType = document.location.pathname.substring(1).split("/")[0];
   console.log(pageType);
-  
-  if (pageType === "" && addon.settings.get("curator")) { // Empty string means the front page
+
+  if (pageType === "" && addon.settings.get("curator")) {
+    // Empty string means the front page
     const heading = await addon.tab.waitForElement(".inner.mod-splash + .inner.mod-splash h4", {
       reduxCondition: (state) => state.splash.featured.status === "FETCHED",
       reduxEvents: ["SET_FETCH_STATUS", "SET_ROWS"],
@@ -36,7 +37,7 @@ export default async function ({ addon, console }) {
       );
     });
   }
-  
+
   if (pageType === "discuss" && addon.settings.get("mentions")) {
     const linkified = [];
     addon.self.addEventListener("disabled", () => {
