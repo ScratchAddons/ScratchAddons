@@ -3,7 +3,6 @@ import { pingifyTextNode } from "../../libraries/common/cs/fast-linkify.js";
 
 export default async function ({ addon, console }) {
   const pageType = document.location.pathname.substring(1).split("/")[0];
-  console.log(pageType);
 
   if (pageType === "" && addon.settings.get("curator")) {
     // Empty string means the front page
