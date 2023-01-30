@@ -6,14 +6,8 @@ img {
   border-radius: calc(var(--roundedThumbs-roundSize) * 1.35px);
 }
 
-#profile-box .player {
-  border-radius: calc(var(--roundedThumbs-roundSize) * 1px);
-}
-
-.media-grid .thumb {
-  border-radius: calc(var(--roundedThumbs-roundSize) * 1px);
-}
-
+#profile-box .player,
+.media-grid .thumb,
 .gallery.thumb span.image img {
   border-radius: calc(var(--roundedThumbs-roundSize) * 1px);
 }
