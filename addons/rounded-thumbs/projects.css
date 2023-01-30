@@ -1,19 +1,7 @@
-.preview img.avatar {
-  border-radius: calc(var(--roundedThumbs-roundSize) * 1px);
-}
-
-.comment .avatar {
-  border-radius: calc(var(--roundedThumbs-roundSize) * 1px);
-}
-
 .thumbnail-image {
   border-radius: calc(var(--roundedThumbs-roundSize) * 1px) !important;
 }
 
 .thumbnail-image img {
   border-radius: calc(var(--roundedThumbs-roundSize) * 1px) !important;
-}
-
-.thumbnail-column .thumbnail .thumbnail-info .creator-image img {
-  border-radius: calc(var(--roundedThumbs-roundSize) * 0.65px);
 }

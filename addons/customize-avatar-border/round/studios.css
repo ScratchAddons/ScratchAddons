@@ -1,0 +1,5 @@
+.comment .avatar,
+.studio-project-tile .studio-project-avatar,
+.studio-member-tile .studio-member-image {
+  border-radius: calc(var(--customizeAvatarBorder-radius));
+}

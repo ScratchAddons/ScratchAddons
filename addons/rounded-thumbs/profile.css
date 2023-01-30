@@ -1,4 +1,4 @@
-img {
+.slider-carousel .project.thumb img {
   border-radius: calc(var(--roundedThumbs-roundSize) * 1px);
 }
 

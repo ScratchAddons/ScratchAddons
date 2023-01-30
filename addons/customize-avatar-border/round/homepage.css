@@ -1,0 +1,5 @@
+.activity-img {
+  margin-right: 13.200px;
+  padding-right: 0px;
+  border-radius: calc(var(--customizeAvatarBorder-radius));
+}

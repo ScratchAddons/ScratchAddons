@@ -35,10 +35,6 @@
       "matches": ["https://scratch.mit.edu/mystuff/*"]
     },
     {
-      "url": "messages.css",
-      "matches": ["https://scratch.mit.edu/messages/"]
-    },
-    {
       "url": "studios.css",
       "matches": ["https://scratch.mit.edu/studios/*"]
     },

@@ -1,9 +1,3 @@
 .thumbnail .thumbnail-image img {
   border-radius: calc(var(--roundedThumbs-roundSize) * 1px);
 }
-
-.activity-img {
-  margin-right: 13.2px;
-  padding-right: 0px;
-  border-radius: calc(var(--roundedThumbs-roundSize) * 0.75px);
-}

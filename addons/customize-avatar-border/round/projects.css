@@ -1,0 +1,4 @@
+.preview img.avatar,
+.thumbnail-column .thumbnail .thumbnail-info .creator-image img {
+  border-radius: calc(var(--customizeAvatarBorder-radius));
+}
