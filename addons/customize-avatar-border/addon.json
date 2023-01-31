@@ -74,7 +74,7 @@
       "matches": ["https://scratch.mit.edu/users/*"],
       "if": {
         "settings": {
-          "rounding": true
+          "round-style": ["square", "round", "circle"]
         }
       }
     },
@@ -83,7 +83,7 @@
       "matches": ["https://scratch.mit.edu/messages"],
       "if": {
         "settings": {
-          "rounding": true
+          "round-style": ["square", "round", "circle"]
         }
       }
     },
@@ -92,7 +92,7 @@
       "matches": ["https://scratch.mit.edu/"],
       "if": {
         "settings": {
-          "rounding": true
+          "round-style": ["square", "round", "circle"]
         }
       }
     },
@@ -101,7 +101,7 @@
       "matches": ["https://scratch.mit.edu/search/*", "https://scratch.mit.edu/explore/*"],
       "if": {
         "settings": {
-          "rounding": true
+          "round-style": ["square", "round", "circle"]
         }
       }
     },
@@ -110,7 +110,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"],
       "if": {
         "settings": {
-          "rounding": true
+          "round-style": ["square", "round", "circle"]
         }
       }
     },
@@ -119,7 +119,7 @@
       "matches": ["https://scratch.mit.edu/studios/*"],
       "if": {
         "settings": {
-          "rounding": true
+          "round-style": ["square", "round", "circle"]
         }
       }
     }
@@ -172,16 +172,14 @@
       }
     },
     {
-      "name": "Custom shape",
-      "id": "rounding",
-      "type": "boolean",
-      "default": false
-    },
-    {
       "name": "Shape",
       "id": "round-style",
       "type": "select",
       "potentialValues": [
+        {
+          "id": "default",
+          "name": "Default (don't change)"
+        },
         {
           "id": "square",
           "name": "Square"
@@ -195,12 +193,7 @@
           "name": "Circle"
         }
       ],
-      "default": "round",
-      "if": {
-        "settings": {
-          "rounding": true
-        }
-      }
+      "default": "default"
     },
     {
       "name": "Corner radius (%)",
@@ -211,7 +204,6 @@
       "default": 12,
       "if": {
         "settings": {
-          "rounding": true,
           "round-style": "round"
         }
       }
@@ -221,7 +213,7 @@
   "versionAdded": "1.18.0",
   "latestUpdate": {
     "version": "1.31.0",
-    "newSettings": ["rounding", "radius"]
+    "newSettings": ["round-style"]
   },
   "enabledByDefault": false
 }
