@@ -128,9 +128,11 @@
 .sa-find-flag {
   color: #4cbf56;
 }
-.sa-find-flag:hover,
-.sa-find-flag.sel {
+/* .sa-find-dropdown added for specificity */
+.sa-find-dropdown > .sa-find-flag:hover,
+.sa-find-dropdown > .sa-find-flag.sel {
   background-color: #4cbf56;
+  color: white;
 }
 
 .sa-find-dropdown .sa-block-color {
