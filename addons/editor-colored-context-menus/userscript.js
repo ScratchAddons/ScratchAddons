@@ -1,6 +1,6 @@
 import { removeAlpha } from "../../libraries/common/cs/text-color.esm.js";
 
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   const applyContextMenuColor = (block) => {

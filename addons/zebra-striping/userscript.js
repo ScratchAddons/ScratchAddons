@@ -1,4 +1,4 @@
-export default async function ({ addon, msg, global, console }) {
+export default async function ({ addon, msg, console }) {
   const vm = addon.tab.traps.vm;
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
@@ -19,7 +19,7 @@ export default async function ({ addon, msg, global, console }) {
         if (parent) {
           if (block.isShadow()) {
             isStriped = !!stripeState.get(parent);
-          } else if (parent.getCategory() === block.getCategory()) {
+          } else if (parent.getColour() === block.getColour()) {
             isStriped = !stripeState.get(parent);
           }
         }
