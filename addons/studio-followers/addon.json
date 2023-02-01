@@ -25,6 +25,5 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.17.0",
-  "tags": ["community", "studios", "featured"],
-  "enabledByDefault": false
+  "tags": ["community", "studios", "featured"]
 }

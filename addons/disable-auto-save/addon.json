@@ -22,6 +22,5 @@
     }
   ],
   "versionAdded": "1.8.0",
-  "tags": ["editor", "editorMenuBar", "danger"],
-  "enabledByDefault": false
+  "tags": ["editor", "editorMenuBar", "danger"]
 }

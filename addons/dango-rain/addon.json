@@ -35,6 +35,5 @@
     }
   ],
   "versionAdded": "1.12.0",
-  "tags": ["easterEgg", "community", "profiles"],
-  "enabledByDefault": false
+  "tags": ["easterEgg", "community", "profiles"]
 }

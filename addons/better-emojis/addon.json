@@ -20,6 +20,5 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "enabledByDefault": false,
   "versionAdded": "1.1.0"
 }

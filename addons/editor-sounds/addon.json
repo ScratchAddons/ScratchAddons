@@ -15,6 +15,5 @@
     }
   ],
   "tags": ["editor", "codeEditor"],
-  "enabledByDefault": false,
   "versionAdded": "1.14.0"
 }

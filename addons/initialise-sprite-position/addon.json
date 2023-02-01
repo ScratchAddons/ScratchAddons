@@ -64,6 +64,5 @@
     "version": "1.28.0",
     "newSettings": ["duplicate"]
   },
-  "tags": ["editor", "featured"],
-  "enabledByDefault": false
+  "tags": ["editor", "featured"]
 }

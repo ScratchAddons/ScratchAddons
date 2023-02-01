@@ -38,6 +38,5 @@
     "newSettings": ["showicononly"],
     "isMajor": false
   },
-  "tags": ["editor", "projectPlayer", "recommended"],
-  "enabledByDefault": false
+  "tags": ["editor", "projectPlayer", "recommended"]
 }

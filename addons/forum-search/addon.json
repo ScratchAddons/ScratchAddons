@@ -24,7 +24,6 @@
     }
   ],
   "tags": ["forums", "community"],
-  "enabledByDefault": false,
   "versionAdded": "1.1.0",
   "libraries": ["scratchblocks"]
 }

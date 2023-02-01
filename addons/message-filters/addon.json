@@ -27,6 +27,5 @@
     }
   ],
   "tags": ["community"],
-  "versionAdded": "1.15.0",
-  "enabledByDefault": false
+  "versionAdded": "1.15.0"
 }

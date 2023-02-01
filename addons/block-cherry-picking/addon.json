@@ -37,6 +37,5 @@
   "tags": ["editor", "codeEditor", "featured"],
   "dynamicDisable": true,
   "dynamicEnable": true,
-  "enabledByDefault": false,
   "versionAdded": "1.20.0"
 }

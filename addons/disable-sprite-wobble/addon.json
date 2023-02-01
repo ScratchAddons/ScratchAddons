@@ -18,7 +18,6 @@
     }
   ],
   "tags": ["editor"],
-  "enabledByDefault": false,
   "versionAdded": "1.24.0",
   "dynamicEnable": true,
   "dynamicDisable": true

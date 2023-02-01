@@ -9,7 +9,6 @@
   ],
   "versionAdded": "1.31.0",
   "tags": ["editor", "featured"],
-  "enabledByDefault": false,
   "settings": [
     {
       "name": "Number of displayed rows",

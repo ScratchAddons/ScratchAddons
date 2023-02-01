@@ -116,6 +116,5 @@
     }
   ],
   "tags": ["community", "featured"],
-  "versionAdded": "1.2.0",
-  "enabledByDefault": false
+  "versionAdded": "1.2.0"
 }

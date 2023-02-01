@@ -1173,6 +1173,5 @@
     "type": "palette",
     "colors": ["primary", "menuBar", "page", "accent", "workspace", "selector"]
   },
-  "tags": ["editor", "theme", "featured"],
-  "enabledByDefault": false
+  "tags": ["editor", "theme", "featured"]
 }

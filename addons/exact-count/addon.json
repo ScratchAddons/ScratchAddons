@@ -61,6 +61,5 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.2.0",
-  "tags": ["community", "recommended", "profiles", "forums", "studios"],
-  "enabledByDefault": false
+  "tags": ["community", "recommended", "profiles", "forums", "studios"]
 }

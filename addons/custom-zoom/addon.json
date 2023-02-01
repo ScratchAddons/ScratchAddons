@@ -9,7 +9,6 @@
     }
   ],
   "versionAdded": "1.13.0",
-  "enabledByDefault": false,
   "userscripts": [
     {
       "url": "userscript.js",

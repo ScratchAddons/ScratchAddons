@@ -98,6 +98,5 @@
     }
   ],
   "tags": ["community", "theme"],
-  "versionAdded": "1.18.0",
-  "enabledByDefault": false
+  "versionAdded": "1.18.0"
 }

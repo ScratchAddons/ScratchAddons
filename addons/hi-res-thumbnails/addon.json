@@ -34,6 +34,5 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.23.0",
-  "enabledByDefault": false
+  "versionAdded": "1.23.0"
 }

@@ -116,6 +116,5 @@
       "default": true
     }
   ],
-  "libraries": ["scratch-blocks"],
-  "enabledByDefault": false
+  "libraries": ["scratch-blocks"]
 }

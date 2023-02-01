@@ -105,6 +105,5 @@
   "versionAdded": "1.5.0",
   "tags": ["editor", "costumeEditor", "recommended"],
   "dynamicEnable": true,
-  "dynamicDisable": true,
-  "enabledByDefault": false
+  "dynamicDisable": true
 }

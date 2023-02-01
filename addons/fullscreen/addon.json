@@ -73,6 +73,5 @@
     }
   ],
   "tags": ["editor", "projectPlayer", "featured"],
-  "versionAdded": "1.21.0",
-  "enabledByDefault": false
+  "versionAdded": "1.21.0"
 }

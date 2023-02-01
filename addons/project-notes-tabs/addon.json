@@ -21,6 +21,5 @@
     }
   ],
   "versionAdded": "1.4.0",
-  "tags": ["community", "projectPage"],
-  "enabledByDefault": false
+  "tags": ["community", "projectPage"]
 }

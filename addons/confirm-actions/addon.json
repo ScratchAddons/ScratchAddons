@@ -65,6 +65,5 @@
     "version": "1.28.0",
     "newSettings": ["removingprojects"]
   },
-  "tags": ["community", "recommended"],
-  "enabledByDefault": false
+  "tags": ["community", "recommended"]
 }

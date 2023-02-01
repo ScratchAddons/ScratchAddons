@@ -17,6 +17,5 @@
   "versionAdded": "1.0.0",
   "dynamicDisable": false,
   "dynamicEnable": false,
-  "tags": ["community", "forums"],
-  "enabledByDefault": false
+  "tags": ["community", "forums"]
 }

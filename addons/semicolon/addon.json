@@ -22,6 +22,5 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.7.0",
-  "tags": ["community", "easterEgg"],
-  "enabledByDefault": false
+  "tags": ["community", "easterEgg"]
 }

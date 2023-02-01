@@ -36,6 +36,5 @@
       "default": false
     }
   ],
-  "tags": ["editor", "codeEditor", "recommended"],
-  "enabledByDefault": false
+  "tags": ["editor", "codeEditor", "recommended"]
 }

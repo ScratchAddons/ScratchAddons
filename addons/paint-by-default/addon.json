@@ -113,6 +113,5 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.19.0",
-  "tags": ["editor", "recommended"],
-  "enabledByDefault": false
+  "tags": ["editor", "recommended"]
 }

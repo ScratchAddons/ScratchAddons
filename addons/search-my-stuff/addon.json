@@ -30,6 +30,5 @@
   "libraries": ["fuse"],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.22.0",
-  "enabledByDefault": false
+  "versionAdded": "1.22.0"
 }

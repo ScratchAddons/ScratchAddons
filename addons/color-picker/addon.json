@@ -26,6 +26,5 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.6.0",
-  "libraries": ["tinycolor2"],
-  "enabledByDefault": false
+  "libraries": ["tinycolor2"]
 }

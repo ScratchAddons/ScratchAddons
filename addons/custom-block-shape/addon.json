@@ -17,7 +17,6 @@
     }
   ],
   "versionAdded": "1.12.0",
-  "enabledByDefault": false,
   "dynamicEnable": true,
   "dynamicDisable": true,
   "userscripts": [

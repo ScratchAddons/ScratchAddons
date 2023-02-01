@@ -31,7 +31,6 @@
     }
   ],
   "tags": ["editor", "projectPlayer", "featured"],
-  "enabledByDefault": false,
   "versionAdded": "1.14.0",
   "dynamicEnable": true,
   "dynamicDisable": true

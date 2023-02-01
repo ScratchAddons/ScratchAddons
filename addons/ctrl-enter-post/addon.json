@@ -50,6 +50,5 @@
     }
   ],
   "versionAdded": "1.18.0",
-  "tags": ["community"],
-  "enabledByDefault": false
+  "tags": ["community"]
 }

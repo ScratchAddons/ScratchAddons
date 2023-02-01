@@ -22,6 +22,5 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "tags": ["community", "profiles"],
-  "versionAdded": "1.19.0",
-  "enabledByDefault": false
+  "versionAdded": "1.19.0"
 }

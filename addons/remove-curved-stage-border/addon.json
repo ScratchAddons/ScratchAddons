@@ -8,7 +8,6 @@
       "link": "https://github.com/Tacodiva"
     }
   ],
-  "enabledByDefault": false,
   "dynamicDisable": true,
   "dynamicEnable": true,
   "versionAdded": "1.14.0",

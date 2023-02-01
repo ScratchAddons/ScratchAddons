@@ -27,6 +27,5 @@
     }
   ],
   "versionAdded": "1.11.0",
-  "tags": ["editor", "recommended"],
-  "enabledByDefault": false
+  "tags": ["editor", "recommended"]
 }

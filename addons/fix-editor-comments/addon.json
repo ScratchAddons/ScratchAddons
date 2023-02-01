@@ -74,6 +74,5 @@
     "version": "1.23.0",
     "isMajor": true,
     "newSettings": ["leash", "straighten"]
-  },
-  "enabledByDefault": false
+  }
 }

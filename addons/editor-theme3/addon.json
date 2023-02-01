@@ -321,7 +321,6 @@
     }
   ],
   "tags": ["editor", "theme", "codeEditor", "featured"],
-  "enabledByDefault": false,
   "presets": [
     {
       "name": "3.0 Tweaks",

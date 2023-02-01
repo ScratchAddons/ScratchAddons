@@ -22,6 +22,5 @@
   "dynamicDisable": true,
   "versionAdded": "1.0.0",
   "tags": ["forums", "community"],
-  "enabledByDefault": false,
   "libraries": ["spark-md5", "text-field-edit"]
 }

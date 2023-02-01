@@ -86,7 +86,6 @@
   ],
   "versionAdded": "1.4.0",
   "tags": ["forums", "profiles", "community"],
-  "enabledByDefault": false,
   "latestUpdate": {
     "version": "1.29.0",
     "newSettings": ["show-status"]

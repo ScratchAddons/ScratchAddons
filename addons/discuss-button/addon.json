@@ -97,6 +97,5 @@
     "isMajor": false
   },
   "tags": ["community", "featured"],
-  "enabledByDefault": false,
   "updateUserstylesOnSettingsChange": true
 }

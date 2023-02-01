@@ -14,7 +14,6 @@
   ],
   "versionAdded": "1.0.0",
   "tags": ["community", "featured"],
-  "enabledByDefault": false,
   "dynamicEnable": true,
   "dynamicDisable": true
 }

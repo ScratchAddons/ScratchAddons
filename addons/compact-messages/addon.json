@@ -50,6 +50,5 @@
   "dynamicEnable": true,
   "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.18.0",
-  "tags": ["community", "theme"],
-  "enabledByDefault": false
+  "tags": ["community", "theme"]
 }

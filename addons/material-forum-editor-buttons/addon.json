@@ -21,7 +21,6 @@
       "link": "https://github.com/Secret-chest"
     }
   ],
-  "enabledByDefault": false,
   "dynamicEnable": true,
   "dynamicDisable": true
 }

@@ -18,6 +18,5 @@
     }
   ],
   "versionAdded": "1.0.0",
-  "tags": ["editor", "codeEditor", "featured"],
-  "enabledByDefault": false
+  "tags": ["editor", "codeEditor", "featured"]
 }
