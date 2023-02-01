@@ -32,6 +32,12 @@ body {
 .sa-project-info img {
   filter: var(--darkWww-page-filter);
 }
+.project-loves::before {
+  background-image: url("%addon-self-dir%/assets/love_transparent.svg");
+}
+.project-favorites::before {
+  background-image: url("%addon-self-dir%/assets/favorite_transparent.svg");
+}
 .project-loves.loved::before,
 .project-favorites.favorited::before {
   filter: none;
