@@ -105,7 +105,7 @@
 /* Drop down items */
 .sa-find-dropdown > li:hover,
 .sa-find-dropdown > li.sel {
-  color: white;
+  color: var(--sa-block-text-on-bright-background);
   cursor: pointer;
 }
 
@@ -116,9 +116,11 @@
 .sa-find-flag {
   color: #4cbf56;
 }
-.sa-find-flag:hover,
-.sa-find-flag.sel {
+/* .sa-find-dropdown added for specificity */
+.sa-find-dropdown > .sa-find-flag:hover,
+.sa-find-dropdown > .sa-find-flag.sel {
   background-color: #4cbf56;
+  color: white;
 }
 
 .sa-find-dropdown .sa-block-color {
