@@ -1,0 +1,6 @@
+.box .box-head .portrait img,
+.user.thumb img,
+.avatar,
+#topnav ul.account-nav .logged-in-user .user-icon {
+  border-radius: calc(var(--customizeAvatarBorder-radius)) !important;
+}

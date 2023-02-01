@@ -1,5 +1,0 @@
-.box .box-head .portrait img,
-.user.thumb img,
-.avatar {
-  border-radius: calc(var(--customizeAvatarBorder-radius)) !important;
-}

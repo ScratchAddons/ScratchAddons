@@ -1,0 +1,16 @@
+.activity-img {
+  margin-right: 13.200px;
+  padding-right: 0px;
+  border-radius: calc(var(--customizeAvatarBorder-radius));
+}
+
+.grid .thumbnail .thumbnail-info .creator-image img,
+.comment-message-info-img,
+.preview img.avatar,
+.thumbnail-column .thumbnail .thumbnail-info .creator-image img,
+.comment .avatar,
+.studio-project-tile .studio-project-avatar,
+.studio-member-tile .studio-member-image,
+.account-nav .user-info .avatar {
+  border-radius: calc(var(--customizeAvatarBorder-radius));
+}
