@@ -1,6 +1,7 @@
 .box .box-head .portrait img,
 .user.thumb img,
 .avatar,
-#topnav ul.account-nav .logged-in-user .user-icon {
+#topnav ul.account-nav .logged-in-user .user-icon,
+.djangobb img:not(.postmsg img, img.breadcrumb_rss) {
   border-radius: calc(var(--customizeAvatarBorder-radius)) !important;
 }

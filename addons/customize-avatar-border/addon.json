@@ -71,7 +71,7 @@
     },
     {
       "url": "scratchr2/round.css",
-      "matches": ["https://scratch.mit.edu/users/*"],
+      "matches": ["isNotScratchWWW"],
       "if": {
         "settings": {
           "round-style": ["square", "round", "circle"]
@@ -80,14 +80,7 @@
     },
     {
       "url": "round.css",
-      "matches": [
-        "https://scratch.mit.edu/",
-        "https://scratch.mit.edu/messages",
-        "https://scratch.mit.edu/search/*",
-        "https://scratch.mit.edu/explore/*",
-        "https://scratch.mit.edu/projects/*",
-        "https://scratch.mit.edu/studios/*"
-      ],
+      "matches": ["scratchWWWNoProject", "projects"],
       "if": {
         "settings": {
           "round-style": ["square", "round", "circle"]
