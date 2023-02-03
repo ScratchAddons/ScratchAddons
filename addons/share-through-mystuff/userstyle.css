@@ -2,6 +2,16 @@
   top: 20px;
 }
 
+.media-list {
+  display: block !important;
+  opacity: 1 !important;
+}
+
+.sa-justShared {
+  animation: sa-STMS-fadeOut 1s;
+  animation-fill-mode: forwards;
+}
+
 .sa-share-button {
   position: relative;
   display: block;
@@ -13,4 +23,15 @@
   float: none;
   top: 0px;
   left: 20px;
+}
+
+@keyframes sa-STMS-fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+  }
 }

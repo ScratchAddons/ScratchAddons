@@ -13,6 +13,10 @@ export default async function ({ addon, console }) {
     event.preventDefault();
     let confirmation = await addon.tab.confirm("Share this project?", "Are you sure you want to share this project?");
     if (confirmation) {
+      if (location.hash == "#unshared") {
+        let container = event.target.parentElement.parentElement.parentElement.parentElement;
+        container.classList.add("sa-justShared");
+      }
       event.target.parentElement.querySelector(".media-share").click();
     }
   }
