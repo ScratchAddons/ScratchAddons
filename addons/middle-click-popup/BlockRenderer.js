@@ -100,7 +100,8 @@ const BlockShapes = {
     padding: 16,
     minWidth: 45,
     backgroundPath: (width) =>
-      `M -4 -20 a 4 4 0 0 1 4 -4 H ${width + 8
+      `M -4 -20 a 4 4 0 0 1 4 -4 H ${
+        width + 8
       } a 4 4 0 0 1 4 4 v 2 c 0 2 -1 3 -2 4 l -4 4 c -1 1 -2 2 -2 4 v 12 c 0 2 1 3 2 4 l 4 4 c 1 1 2 2 2 4 v 2 a 4 4 0 0 1 -4 4 H 0 a 4 4 0 0 1 -4 -4 v -2 c 0 -2 -1 -3 -2 -4 l -4 -4 c -1 -1 -2 -2 -2 -4 v -12 c 0 -2 1 -3 2 -4 l 4 -4 c 1 -1 2 -2 2 -4 z`,
   },
 
@@ -108,7 +109,8 @@ const BlockShapes = {
     padding: 16,
     minWidth: 45,
     backgroundPath: (width) =>
-      `M -4 -20 a 4 4 0 0 1 4 -4 H ${width + 8
+      `M -4 -20 a 4 4 0 0 1 4 -4 H ${
+        width + 8
       } a 4 4 0 0 1 4 4 V 20 a 4 4 0 0 1 -4 4 H 0 a 4 4 0 0 1 -4 -4 v -2 c 0 -2 -1 -3 -2 -4 l -4 -4 c -1 -1 -2 -2 -2 -4 v -12 c 0 -2 1 -3 2 -4 l 4 -4 c 1 -1 2 -2 2 -4 z`,
   },
 };
@@ -162,7 +164,7 @@ const textWidthCacheSize = 1000;
 
 /**
  * Gets the width of an svg text element, with caching.
- * @param {SVGTextElement} textElement 
+ * @param {SVGTextElement} textElement
  */
 function getTextWidth(textElement) {
   let string = textElement.innerHTML;
