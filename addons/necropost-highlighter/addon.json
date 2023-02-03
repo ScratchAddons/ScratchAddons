@@ -16,9 +16,8 @@
   ],
   "dynamicDisable": true,
   "dynamicEnable": true,
-  "enabledByDefault": false,
   "tags": ["community", "forums"],
-  "versionAdded": "1.28.0",
+  "versionAdded": "1.31.0",
   "userscripts": [
     {
       "url": "userscript.js",
@@ -35,7 +34,9 @@
     {
       "name": "Roughly how many months is 'old'?",
       "id": "monthCountConsideredOld",
-      "type": "positive_integer",
+      "type": "integer",
+      "min": 1,
+      "max": 24,
       "default": 1
     },
     {
