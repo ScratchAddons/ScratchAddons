@@ -257,7 +257,7 @@ export class BlockInstance {
     /** @type {BlockTypeInfo} */
     this.typeInfo = typeInfo;
     /** @type {Array} */
-    this.inputs = inputs ?? [];
+    this.inputs = inputs;
   }
 
   /**
@@ -265,9 +265,6 @@ export class BlockInstance {
    * @returns {*} A 'workspace form' block.
    */
   createWorkspaceForm() {
-    if (this.inputs.length !== this.typeInfo.inputs.length)
-      throw new Error("Wrong number of inputs to block. Expected " + this.inputs.length);
-
     if (this.typeInfo.id === "control_stop") {
       this.typeInfo.domForm
         .querySelector("mutation")
