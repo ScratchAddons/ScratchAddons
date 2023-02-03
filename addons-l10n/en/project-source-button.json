@@ -1,6 +1,4 @@
 {
-  "project-source-button/@name": "Project source button",
-  "project-source-button/@description": "Add a button to display JSON files and assets in the project source.",
   "project-source-button/hover": "Open project's sources viewer.",
   "project-source-button/edit_warn": "Sometimes it crashes when trying to edit big projects. Do you want to edit?",
   "project-source-button/please_reopen": "Your access token has expired. please open it again.",
