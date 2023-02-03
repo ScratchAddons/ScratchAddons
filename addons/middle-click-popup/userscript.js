@@ -101,7 +101,7 @@ export default async function ({ addon, msg, console }) {
     blockTypes = BlockTypeInfo.getBlocks(Blockly, Blockly.getMainWorkspace(), msg);
     querier.indexWorkspace([...blockTypes]);
     blockTypes.sort((a, b) => {
-      const prio = block => ["operators", "data"].indexOf(block.category) - block.id.startsWith("data_");
+      const prio = (block) => ["operators", "data"].indexOf(block.category) - block.id.startsWith("data_");
       return prio(b) - prio(a);
     });
 
@@ -145,7 +145,7 @@ export default async function ({ addon, msg, console }) {
       if (blockTypes)
         for (const blockType of blockTypes) {
           blockList.push({
-            block: blockType.createBlock()
+            block: blockType.createBlock(),
           });
         }
     } else {
@@ -159,7 +159,7 @@ export default async function ({ addon, msg, console }) {
       for (const queryResult of queryResults) {
         blockList.push({
           block: queryResult.createBlock(),
-          autocompleteFactory: () => queryResult.text
+          autocompleteFactory: () => queryResult.text,
         });
       }
     }
@@ -171,7 +171,6 @@ export default async function ({ addon, msg, console }) {
     queryPreviews.length = 0;
     for (let resultIdx = 0; resultIdx < blockList.length; resultIdx++) {
       const result = blockList[resultIdx];
-
 
       const mouseMoveListener = () => {
         updateSelection(resultIdx);
@@ -191,7 +190,7 @@ export default async function ({ addon, msg, console }) {
         document.createElementNS("http://www.w3.org/2000/svg", "rect")
       );
       svgBackground.setAttribute("transform", `translate(0, ${(resultIdx * 60 + 3) * previewScale})`);
-      svgBackground.setAttribute("height", (60 * previewScale) + "px");
+      svgBackground.setAttribute("height", 60 * previewScale + "px");
       svgBackground.classList.add("sa-mcp-preview-block-bg");
       svgBackground.addEventListener("mousemove", mouseMoveListener);
       svgBackground.addEventListener("mousedown", mouseDownListener);
@@ -203,7 +202,13 @@ export default async function ({ addon, msg, console }) {
 
       const renderedBlock = renderBlock(result.block, svgBlock);
 
-      queryPreviews.push({ block: result.block, autocompleteFactory: result.autocompleteFactory ?? null, renderedBlock, svgBlock, svgBackground });
+      queryPreviews.push({
+        block: result.block,
+        autocompleteFactory: result.autocompleteFactory ?? null,
+        renderedBlock,
+        svgBlock,
+        svgBackground,
+      });
     }
 
     const height = (queryPreviews.length * 60 + 8) * previewScale;
@@ -247,7 +252,8 @@ export default async function ({ addon, msg, console }) {
         behavior: Math.abs(newIdx - selectedPreviewIdx) > 1 ? "smooth" : "auto",
       });
 
-      popupInputSuggestion.value = popupInput.value + newSelection.autocompleteFactory().substring(popupInput.value.length);
+      popupInputSuggestion.value =
+        popupInput.value + newSelection.autocompleteFactory().substring(popupInput.value.length);
     } else {
       popupInputSuggestion.value = "";
     }
@@ -330,8 +336,8 @@ export default async function ({ addon, msg, console }) {
       clientX: mousePosition.x,
       clientY: mousePosition.y,
       type: "mousedown",
-      stopPropagation: function () { },
-      preventDefault: function () { },
+      stopPropagation: function () {},
+      preventDefault: function () {},
       target: selectedPreview.svgBlock,
     };
     workspace.startDragWithFakeEvent(fakeEvent, newBlock);
