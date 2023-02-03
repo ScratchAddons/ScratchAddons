@@ -1,4 +1,4 @@
-export default async function ({ addon }) {
+export default async function ({ addon, console }) {
   const shareFunction = document.createElement("a");
   shareFunction.classList.add("media-share");
   shareFunction.dataset.control = "share";
@@ -10,8 +10,11 @@ export default async function ({ addon }) {
     display: "block",
   });
   async function shareConfirmation(event) {
+    event.preventDefault();
     let confirmation = await addon.tab.confirm("Share this project?", "Are you sure you want to share this project?");
-    if (confirmation) event.target.parentElement.querySelector(".media-share").click();
+    if (confirmation) {
+      event.target.parentElement.querySelector(".media-share").click();
+    }
   }
 
   while (true) {
@@ -19,10 +22,10 @@ export default async function ({ addon }) {
       markAsSeen: true,
     });
     let localShareFunction = shareFunction.cloneNode();
-    let localShare = shareButton.cloneNode(true);
-    localShareFunction.href = `${location.hash}`;
-    localShare.href = localShareFunction.href;
+    localShareFunction.href = location.hash || "#";
     project.querySelector(".media-action div").appendChild(localShareFunction);
+    let localShare = shareButton.cloneNode(true);
+    localShare.href = localShareFunction.href;
     localShare.addEventListener("click", shareConfirmation);
     project.querySelector(".media-action div").appendChild(localShare);
   }
