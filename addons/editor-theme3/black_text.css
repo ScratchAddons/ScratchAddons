@@ -1,21 +1,36 @@
+@namespace xlink url("http://www.w3.org/1999/xlink");
+
 .scratchCategoryItemBubble::after {
   /* block-palette-icons */
   filter: brightness(0);
-  opacity: 0.6;
+}
+
+.blocklyEditableText > text {
+  fill: var(--editorTheme3-inputColor-blackText);
+}
+.blocklyHtmlInput {
+  color: var(--editorTheme3-inputColor-blackText);
+}
+
+[class*="blocks_blocks_"] image[xlink|href$="/rotate-left.svg"],
+[class*="blocks_blocks_"] image[xlink|href$="/rotate-right.svg"],
+[class*="blocks_blocks_"] image[xlink|href$="/repeat.svg"] {
+  filter: invert(1) hue-rotate(180deg);
 }
 
 .blocklyDropDownDiv .goog-menuitem,
 .sa-contextmenu-colored .blocklyContextMenu .goog-menuitem .goog-menuitem-content {
-  color: #575e75;
+  color: black;
 }
 .blocklyDropDownDiv .blocklyText {
-  fill: #575e75;
+  fill: black;
 }
 
 /* Compatibility */
 
 .sa-block-color {
-  --sa-block-text: #575e75;
-  --sa-block-gray-text: #575e75;
-  --sa-block-text-on-bright-background: #575e75;
+  --sa-block-text: black;
+  --sa-block-gray-text: black;
+  --sa-block-colored-text: var(--sa-block-background-tertiary);
+  --sa-block-text-on-bright-background: black;
 }

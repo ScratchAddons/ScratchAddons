@@ -15,6 +15,13 @@
     }
   ],
   "permissions": ["notifications"],
+  "info": [
+    {
+      "type": "info",
+      "text": "You can use Do Not Disturb (right click extension icon \u2192 Do not disturb) to temporarily disable notifications.",
+      "id": "dndtosilence"
+    }
+  ],
   "settings": [
     {
       "name": "Mark all messages as read after clicking notification",

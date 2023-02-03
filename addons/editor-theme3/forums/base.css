@@ -179,7 +179,7 @@
 .sb-label.sb-literal-number-dropdown,
 .sb-literal-number-dropdown + polygon /* dropdown arrow */,
 .sb-label.sb-literal-string {
-  fill: var(--editorTheme3-inputColor-forumText);
+  fill: var(--editorTheme3-inputColor-blackText);
 }
 .sb3-label.sb3-literal-number,
 .sb3-label.sb3-literal-string {
