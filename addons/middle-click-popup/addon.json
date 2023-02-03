@@ -18,18 +18,52 @@
       "link": "https://github.com/CST1229"
     }
   ],
-  "tags": ["editor", "codeEditor", "recommended"],
+  "tags": [
+    "editor",
+    "codeEditor",
+    "recommended"
+  ],
   "enabledByDefault": true,
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["projects"]
+      "matches": [
+        "projects"
+      ]
     }
   ],
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": ["projects"]
+      "matches": [
+        "projects"
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Popup Block Size",
+      "id": "popup_scale",
+      "type": "integer",
+      "min": 1,
+      "max": 100,
+      "default": 48
+    },
+    {
+      "name": "Popup Width",
+      "id": "popup_width",
+      "type": "integer",
+      "min": 1,
+      "max": 100,
+      "default": 16
+    },
+    {
+      "name": "Popup Maximum Height",
+      "id": "popup_max_height",
+      "type": "integer",
+      "min": 1,
+      "max": 100,
+      "default": 40
     }
   ],
   "versionAdded": "1.30.0",
