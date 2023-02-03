@@ -835,6 +835,7 @@ class TokenTypeBlock extends TokenType {
         isTruncated |= subtoken.isTruncated;
         isLegal &&= subtoken.isLegal;
         if (!subtoken.isTruncated) score += subtoken.score;
+        else score -= 10;
         if (subtoken.type.isDefiningFeature && subtoken.start < query.length) hasDefiningFeature = true;
       }
       /** See {@link TokenType.isDefiningFeature} */
@@ -1083,25 +1084,19 @@ export default class WorkspaceQuerier {
    */
   static MAX_TOKENS = 10000;
 
-  /**
-   * @param {Blockly} blockly
-   * @param {(string) => string} locale
-   */
-  constructor(blockly, locale) {
-    this.Blockly = blockly;
-    this.locale = locale;
+  constructor() {
     window.querier = this;
   }
 
   /**
    * Indexes a workspace in preperation for querying it.
-   * @param {*} workspace The Blockly workspace.
+   * @param {BlockTypeInfo[]} blocks The list of blocks in the workspace.
    */
-  indexWorkspace(workspace) {
-    this.workspace = workspace;
+  indexWorkspace(blocks) {
     this._queryCounter = 0;
     this._createTokenGroups();
-    this._poppulateTokenGroups();
+    this._poppulateTokenGroups(blocks);
+    this.workspaceIndexed = true;
   }
 
   /**
@@ -1110,7 +1105,7 @@ export default class WorkspaceQuerier {
    * @returns {{results: QueryResult[], illegalResult: QueryResult | null}} A list of the results of the query, sorted by their relevance score.
    */
   queryWorkspace(queryStr) {
-    if (!this.workspace) throw new Error("A workspace must be indexed before it can be queried!");
+    if (!this.workspaceIndexed) throw new Error("A workspace must be indexed before it can be queried!");
     if (queryStr.length === 0) return { results: [], illegalResult: null };
 
     const query = new QueryInfo(this, queryStr, this._queryCounter++);
@@ -1259,10 +1254,10 @@ export default class WorkspaceQuerier {
   /**
    * Poppulates the token groups created by {@link _createTokenGroups} with the blocks
    * found in the workspace.
+   * @param {BlockTypeInfo[]} blocks The list of blocks in the workspace.
    * @private
    */
-  _poppulateTokenGroups() {
-    const blocks = BlockTypeInfo.getBlocks(this.Blockly, this.workspace, this.locale);
+  _poppulateTokenGroups(blocks) {
     blocks.sort(
       (a, b) =>
         WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(b.category) - WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(a.category)
@@ -1309,7 +1304,7 @@ export default class WorkspaceQuerier {
    * Clears the memory used by the workspace index.
    */
   clearWorkspaceIndex() {
-    this.workspace = null;
+    this.workspaceIndexed = false;
     this._destroyTokenGroups();
   }
 

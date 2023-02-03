@@ -2,6 +2,7 @@
 
 import WorkspaceQuerier, { QueryResult } from "./WorkspaceQuerier.js";
 import renderBlock, { BlockComponent } from "./BlockRenderer.js";
+import { BlockInstance, BlockTypeInfo } from "./BlockTypeInfo.js";
 
 export default async function ({ addon, msg, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
@@ -57,7 +58,7 @@ export default async function ({ addon, msg, console }) {
   );
   popupPreviewBlocks.id = "sa-mcp-preview-blocks";
 
-  const querier = new WorkspaceQuerier(Blockly, msg);
+  const querier = new WorkspaceQuerier();
 
   let mousePosition = { x: 0, y: 0 };
   document.addEventListener("mousemove", (e) => {
@@ -66,8 +67,9 @@ export default async function ({ addon, msg, console }) {
 
   /**
    * @typedef ResultPreview
-   * @property {QueryResult} result
-   * @property {BlockComponent} block
+   * @property {BlockInstance} block
+   * @property {(() => string)?} autocompleteFactory
+   * @property {BlockComponent} renderedBlock
    * @property {SVGGElement} svgBlock
    * @property {SVGRectElement} svgBackground
    */
@@ -76,6 +78,8 @@ export default async function ({ addon, msg, console }) {
   /** @type {QueryResult | null} */
   let queryIllegalResult = null;
   let selectedPreviewIdx = 0;
+  /** @type {BlockTypeInfo[]?} */
+  let blockTypes = null;
 
   let allowMenuClose = true;
   let popupPosition = null;
@@ -94,7 +98,12 @@ export default async function ({ addon, msg, console }) {
     // Don't show the menu if we're not in the code editor
     if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 0) return;
 
-    querier.indexWorkspace(Blockly.getMainWorkspace());
+    blockTypes = BlockTypeInfo.getBlocks(Blockly, Blockly.getMainWorkspace(), msg);
+    querier.indexWorkspace([...blockTypes]);
+    blockTypes.sort((a, b) => {
+      const prio = block => ["operators", "data"].indexOf(block.category) - block.id.startsWith("data_");
+      return prio(b) - prio(a);
+    });
 
     previewWidth = 0.16 * window.innerWidth;
     previewScale = window.innerWidth * 0.0001 + 0.4861;
@@ -115,6 +124,7 @@ export default async function ({ addon, msg, console }) {
     if (allowMenuClose) {
       popupPosition = null;
       popupRoot.style.display = "none";
+      blockTypes = null;
       querier.clearWorkspaceIndex();
     }
   }
@@ -122,20 +132,45 @@ export default async function ({ addon, msg, console }) {
   popupInput.addEventListener("input", updateInput);
 
   function updateInput() {
-    // Get the list of blocks to display using the input content
-    const queryResultObj = querier.queryWorkspace(popupInput.value);
-    const queryResults = queryResultObj.results;
-    queryIllegalResult = queryResultObj.illegalResult;
+    /**
+     * @typedef MenuItem
+     * @property {BlockInstance} block
+     * @property {() => string} [autocompleteFactory]
+     */
+    /** @type {MenuItem[]} */
+    const blockList = [];
 
-    if (queryResults.length > PREVIEW_LIMIT) queryResults.length = PREVIEW_LIMIT;
+    if (popupInput.value.length === 0) {
+      queryIllegalResult = null;
+      if (blockTypes)
+        for (const blockType of blockTypes) {
+          blockList.push({
+            block: blockType.createBlock()
+          });
+        }
+    } else {
+      // Get the list of blocks to display using the input content
+      const queryResultObj = querier.queryWorkspace(popupInput.value);
+      const queryResults = queryResultObj.results;
+      queryIllegalResult = queryResultObj.illegalResult;
+
+      if (queryResults.length > PREVIEW_LIMIT) queryResults.length = PREVIEW_LIMIT;
+
+      for (const queryResult of queryResults) {
+        blockList.push({
+          block: queryResult.createBlock(),
+          autocompleteFactory: () => queryResult.text
+        });
+      }
+    }
 
     // @ts-ignore Delete the old previews
     while (popupPreviewBlocks.firstChild) popupPreviewBlocks.removeChild(popupPreviewBlocks.lastChild);
 
     // Create the new previews
     queryPreviews.length = 0;
-    for (let resultIdx = 0; resultIdx < queryResults.length; resultIdx++) {
-      const result = queryResults[resultIdx];
+    for (let resultIdx = 0; resultIdx < blockList.length; resultIdx++) {
+      const result = blockList[resultIdx];
 
 
       const mouseMoveListener = () => {
@@ -166,9 +201,9 @@ export default async function ({ addon, msg, console }) {
       svgBlock.addEventListener("mousedown", mouseDownListener);
       svgBlock.classList.add("sa-mcp-preview-block");
 
-      const block = renderBlock(result.createBlock(), svgBlock);
+      const renderedBlock = renderBlock(result.block, svgBlock);
 
-      queryPreviews.push({ result, block, svgBlock, svgBackground });
+      queryPreviews.push({ block: result.block, autocompleteFactory: result.autocompleteFactory ?? null, renderedBlock, svgBlock, svgBackground });
     }
 
     const height = (queryPreviews.length * 60 + 8) * previewScale;
@@ -203,7 +238,7 @@ export default async function ({ addon, msg, console }) {
     }
 
     const newSelection = queryPreviews[newIdx];
-    if (newSelection) {
+    if (newSelection && newSelection.autocompleteFactory) {
       newSelection.svgBackground.classList.add("sa-mcp-preview-block-bg-selection");
       newSelection.svgBlock.classList.add("sa-mcp-preview-block-selection");
 
@@ -212,7 +247,7 @@ export default async function ({ addon, msg, console }) {
         behavior: Math.abs(newIdx - selectedPreviewIdx) > 1 ? "smooth" : "auto",
       });
 
-      popupInputSuggestion.value = popupInput.value + newSelection.result.text.substring(popupInput.value.length);
+      popupInputSuggestion.value = popupInput.value + newSelection.autocompleteFactory().substring(popupInput.value.length);
     } else {
       popupInputSuggestion.value = "";
     }
@@ -231,8 +266,8 @@ export default async function ({ addon, msg, console }) {
       const preview = queryPreviews[previewIdx];
 
       var blockX = 5;
-      if (blockX + preview.block.width > previewWidth / previewScale)
-        blockX += (previewWidth / previewScale - blockX - preview.block.width) * previewScale * cursorPosRel;
+      if (blockX + preview.renderedBlock.width > previewWidth / previewScale)
+        blockX += (previewWidth / previewScale - blockX - preview.renderedBlock.width) * previewScale * cursorPosRel;
 
       var blockY = (previewIdx * 60 + 30) * previewScale;
 
@@ -265,7 +300,7 @@ export default async function ({ addon, msg, console }) {
     const selectedPreview = queryPreviews[selectedPreviewIdx];
     if (!selectedPreview) return;
 
-    const newBlock = selectedPreview.result.createBlock().createWorkspaceForm();
+    const newBlock = selectedPreview.block.createWorkspaceForm();
     const workspace = Blockly.getMainWorkspace();
     // This is mostly copied from https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/scratch_blocks_utils.js#L171
     // Some bits were removed or changed to fit our needs.
