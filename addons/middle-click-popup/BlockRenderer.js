@@ -100,8 +100,7 @@ const BlockShapes = {
     padding: 16,
     minWidth: 45,
     backgroundPath: (width) =>
-      `M -4 -20 a 4 4 0 0 1 4 -4 H ${
-        width + 8
+      `M -4 -20 a 4 4 0 0 1 4 -4 H ${width + 8
       } a 4 4 0 0 1 4 4 v 2 c 0 2 -1 3 -2 4 l -4 4 c -1 1 -2 2 -2 4 v 12 c 0 2 1 3 2 4 l 4 4 c 1 1 2 2 2 4 v 2 a 4 4 0 0 1 -4 4 H 0 a 4 4 0 0 1 -4 -4 v -2 c 0 -2 -1 -3 -2 -4 l -4 -4 c -1 -1 -2 -2 -2 -4 v -12 c 0 -2 1 -3 2 -4 l 4 -4 c 1 -1 2 -2 2 -4 z`,
   },
 
@@ -109,8 +108,7 @@ const BlockShapes = {
     padding: 16,
     minWidth: 45,
     backgroundPath: (width) =>
-      `M -4 -20 a 4 4 0 0 1 4 -4 H ${
-        width + 8
+      `M -4 -20 a 4 4 0 0 1 4 -4 H ${width + 8
       } a 4 4 0 0 1 4 4 V 20 a 4 4 0 0 1 -4 4 H 0 a 4 4 0 0 1 -4 -4 v -2 c 0 -2 -1 -3 -2 -4 l -4 -4 c -1 -1 -2 -2 -2 -4 v -12 c 0 -2 1 -3 2 -4 l 4 -4 c 1 -1 2 -2 2 -4 z`,
   },
 };
@@ -137,35 +135,46 @@ export class BlockComponent {
   constructor(element, padding, width, snuggleWith, snugglePadding) {
     this.dom = element;
     this.padding = padding;
-    this._width = width;
+    this.width = width;
     this.snuggleWith = snuggleWith;
     this.snugglePadding = snugglePadding;
-  }
-
-  get width() {
-    if (this._width) return this._width;
-    this._width = this.dom.getBoundingClientRect().width + this.padding * 2;
-    return this._width;
-  }
-
-  set width(value) {
-    this._width = value;
   }
 }
 
 /**
  * Creates a BlockComponent with some text. Like the 'label' element in the make a block menu.
  * @param {string} text The contents of the component.
+ * @param {SVGElement} container The element to add the text to.
  * @returns {BlockComponent} The BlockComponent.
  */
-function createTextComponent(text, fillVar) {
-  let textElement = document.createElementNS(SVG_NS, "text");
+function createTextComponent(text, fillVar, container) {
+  let textElement = container.appendChild(document.createElementNS(SVG_NS, "text"));
   textElement.setAttribute("class", "blocklyText");
   textElement.style.fill = `var(${fillVar})`;
   textElement.setAttribute("dominant-baseline", "middle");
   textElement.setAttribute("dy", 1);
   textElement.appendChild(document.createTextNode(text));
-  return new BlockComponent(textElement, 0);
+  return new BlockComponent(textElement, 0, getTextWidth(textElement));
+}
+
+const textWidthCache = new Map();
+const textWidthCacheSize = 1000;
+
+/**
+ * Gets the width of an svg text element, with caching.
+ * @param {SVGTextElement} textElement 
+ */
+function getTextWidth(textElement) {
+  let string = textElement.innerHTML;
+  if (string.length === 0) return 0;
+  let width = textWidthCache.get(string);
+  if (width) return width;
+  width = textElement.getBoundingClientRect().width;
+  textWidthCache.set(string, width);
+  if (textWidthCache.size > textWidthCacheSize) {
+    textWidthCache.delete(textWidthCache.keys().next());
+  }
+  return width;
 }
 
 /**
@@ -212,8 +221,7 @@ function createBlockComponent(container, shape, categoryClass, fillVar, strokeVa
 function createBackedTextedComponent(text, container, shape, categoryClass, fillVar, strokeVar, textVar) {
   const blockContainer = createBlockContainer();
   container.appendChild(blockContainer);
-  const textElement = createTextComponent(text, textVar);
-  blockContainer.appendChild(textElement.dom);
+  const textElement = createTextComponent(text, textVar, blockContainer);
   if (textElement.width < shape.minWidth) {
     textElement.dom.setAttribute("x", (shape.minWidth - textElement.width) / 2);
   }
@@ -262,8 +270,7 @@ function _renderBlock(block, container, parentCategory, isVertical) {
 
     let component;
     if (typeof blockPart === "string") {
-      component = createTextComponent(blockPart, "--sa-block-text");
-      blockContainer.appendChild(component.dom);
+      component = createTextComponent(blockPart, "--sa-block-text", blockContainer);
     } else {
       const blockInput = block.inputs[inputIdx++];
       if (blockInput instanceof BlockInstance) {
