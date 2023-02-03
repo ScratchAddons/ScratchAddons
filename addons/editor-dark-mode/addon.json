@@ -811,6 +811,10 @@
       "url": "paper.js",
       "matches": ["projects"],
       "runAtComplete": false
+    },
+    {
+      "url": "extension_icons.js",
+      "matches": ["projects"]
     }
   ],
   "userstyles": [
