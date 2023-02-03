@@ -106,8 +106,8 @@ export default async function ({ addon, msg, console }) {
     });
 
     previewScale = window.innerWidth * 0.00005 + addon.settings.get("popup_scale") / 100;
-    previewWidth = window.innerWidth * addon.settings.get("popup_width") / 100;
-    previewMaxHeight = window.innerHeight * addon.settings.get("popup_max_height") / 100;
+    previewWidth = (window.innerWidth * addon.settings.get("popup_width")) / 100;
+    previewMaxHeight = (window.innerHeight * addon.settings.get("popup_max_height")) / 100;
 
     popupContainer.style.width = previewWidth + "px";
 
@@ -121,12 +121,12 @@ export default async function ({ addon, msg, console }) {
   }
 
   function closePopup() {
-      if (allowMenuClose) {
-        popupPosition = null;
-        popupRoot.style.display = "none";
-        blockTypes = null;
-        querier.clearWorkspaceIndex();
-      }
+    if (allowMenuClose) {
+      popupPosition = null;
+      popupRoot.style.display = "none";
+      blockTypes = null;
+      querier.clearWorkspaceIndex();
+    }
   }
 
   popupInput.addEventListener("input", updateInput);
@@ -335,8 +335,8 @@ export default async function ({ addon, msg, console }) {
       clientX: mousePosition.x,
       clientY: mousePosition.y,
       type: "mousedown",
-      stopPropagation: function () { },
-      preventDefault: function () { },
+      stopPropagation: function () {},
+      preventDefault: function () {},
       target: selectedPreview.svgBlock,
     };
     workspace.startDragWithFakeEvent(fakeEvent, newBlock);

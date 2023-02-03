@@ -18,26 +18,18 @@
       "link": "https://github.com/CST1229"
     }
   ],
-  "tags": [
-    "editor",
-    "codeEditor",
-    "recommended"
-  ],
+  "tags": ["editor", "codeEditor", "recommended"],
   "enabledByDefault": true,
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "projects"
-      ]
+      "matches": ["projects"]
     }
   ],
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": [
-        "projects"
-      ]
+      "matches": ["projects"]
     }
   ],
   "settings": [
