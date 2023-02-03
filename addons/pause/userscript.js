@@ -1,6 +1,6 @@
 import { isPaused, setPaused, onPauseChanged, setup } from "../debugger/module.js";
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   setup(addon.tab.traps.vm);
 
   const img = document.createElement("img");

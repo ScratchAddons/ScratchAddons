@@ -1,6 +1,6 @@
 import GamepadLib from "./gamepadlib.js";
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
   // Wait for the project to finish loading. Renderer and scripts will not be fully available until this happens.
@@ -86,7 +86,7 @@ export default async function ({ addon, global, console, msg }) {
   GamepadLib.setConsole(console);
   const gamepad = new GamepadLib();
 
-  gamepad.getHintsLazily = () => {
+  gamepad.getUserHints = () => {
     const parsedOptions = parseOptionsComment();
     if (parsedOptions) {
       return {
