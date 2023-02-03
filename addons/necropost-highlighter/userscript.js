@@ -152,22 +152,22 @@ export default async function ({ addon, global, console, msg }) {
       possibleTopicCells = document.querySelectorAll(".tcl");
     }
     let theForum = forumOrSearchPageName; // usually, but overridden per cell if on a search page
-    for (let i = 0; i < possibleTopicCells.length; i++) {
+    for (const cell of possibleTopicCells) {
       if (forumOrSearchPageName.includes(searchResultsPageName)) {
         // the cell to the right of the topic cell lists the forum, in search results
-        if (!possibleTopicCells[i].nextElementSibling) {
+        if (!cell.nextElementSibling) {
           // synthetic "Page n" rows attached by Infinite Scrolling on search pages
           // have no sibling, because they span all 4 columns
           continue;
         }
-        theForum = possibleTopicCells[i].nextElementSibling.innerText;
+        theForum = cell.nextElementSibling.innerText;
       }
-      const theTopicId = extractTopicIdFrom(possibleTopicCells[i]);
+      const theTopicId = extractTopicIdFrom(cell);
       if (theTopicId !== 0) {
         // No restoreCell property at this point. Only added if the cell is modified
         const topic = {
           topicId: theTopicId,
-          topicCell: possibleTopicCells[i],
+          topicCell: cell,
           forum: theForum,
         };
         topics.push(topic);
@@ -283,9 +283,9 @@ export default async function ({ addon, global, console, msg }) {
 
   function highestTopicIdFrom(topics) {
     let highestSoFar = -1;
-    for (let i = 0; i < topics.length; i++) {
-      if (topics[i].topicId > highestSoFar) {
-        highestSoFar = topics[i].topicId;
+    for (const topic of topics) {
+      if (topic.topicId > highestSoFar) {
+        highestSoFar = topic.topicId;
       }
     }
     return highestSoFar;
