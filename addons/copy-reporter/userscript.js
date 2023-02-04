@@ -1,17 +1,8 @@
 export default async function ({ addon, console, msg }) {
   addon.tab.createEditorContextMenu(
     (ctx) => {
-      // ugly hack to get the string value
-      let element = ctx.target.lastChild.lastChild;
-
-      if (ctx.type === "monitor_slider") {
-        element = element.children[element.children.length - 2].lastChild;
-      } else {
-        element = element.lastChild;
-        if (ctx.type === "monitor_default") {
-          element = element.lastChild;
-        }
-      }
+      const className = ctx.type === "monitor_large" ? "monitor_large-value" : "monitor_value";
+      const element = ctx.target.querySelector(`[class*='${className}_']`);
 
       if (element.innerText.length !== 0) {
         navigator.clipboard.writeText(element.innerText);
