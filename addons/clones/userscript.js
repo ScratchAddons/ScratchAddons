@@ -51,7 +51,8 @@ export default async function ({ addon, console, msg }) {
       count.dataset.str = cache[v] || msg("clones", { cloneCount: v });
     }
 
-    if (v === 0) countContainerContainer.style.display = "none";
+    if (v === 0 || (addon.tab.editorMode !== "editor" && !showOnProjectPage))
+      countContainerContainer.style.display = "none";
     else addon.tab.displayNoneWhileDisabled(countContainerContainer, { display: "flex" });
   }
 
@@ -78,8 +79,7 @@ export default async function ({ addon, console, msg }) {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
 
-    if (addon.tab.editorMode === "editor" || showOnProjectPage) {
-      addon.tab.appendToSharedSpace({ space: "afterStopButton", element: countContainerContainer, order: 2 });
-    }
+    addon.tab.appendToSharedSpace({ space: "afterStopButton", element: countContainerContainer, order: 2 });
+    doCloneChecks(true);
   }
 }
