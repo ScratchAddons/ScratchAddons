@@ -10,7 +10,7 @@ const removeAllChildren = (element) => {
   }
 };
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   setup(addon.tab.traps.vm);
 
   let logsTab;
@@ -444,7 +444,8 @@ export default async function ({ addon, global, console, msg }) {
       if (!text) {
         return null;
       }
-      category = jsonData.extensions.includes("scratch_extension") ? "pen" : jsonData.category;
+      // jsonData.extensions is not guaranteed to exist
+      category = jsonData.extensions?.includes("scratch_extension") ? "pen" : jsonData.category;
       const isStatement =
         (jsonData.extensions &&
           (jsonData.extensions.includes("shape_statement") ||

@@ -90,7 +90,6 @@ export default async function ({ addon, console, msg }) {
   };
 
   const handleClickBackground = (event) => {
-    if (event.target !== saOpacitySlider) return;
     handleClickOffset = HANDLE_WIDTH / 2;
     changeOpacity(scaleMouseToSliderPosition(event));
   };
@@ -163,6 +162,7 @@ export default async function ({ addon, console, msg }) {
       className: `sa-opacity-handle ${addon.tab.scratchClass("slider_handle")}`,
     });
     saOpacityHandle.addEventListener("mousedown", handleMouseDown);
+    saOpacityHandle.addEventListener("click", (event) => event.stopPropagation());
     const lastSlider = document.querySelector('[class*="slider_last"]');
     lastSlider.className = addon.tab.scratchClass("slider_container");
     setHandlePos(defaultAlpha);

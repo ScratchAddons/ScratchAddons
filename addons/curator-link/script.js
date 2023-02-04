@@ -1,6 +1,6 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 export default async function ({ addon }) {
-  const heading = await addon.tab.waitForElement(".inner.mod-splash:nth-child(2) h4", {
+  const heading = await addon.tab.waitForElement(".inner.mod-splash + .inner.mod-splash h4", {
     reduxCondition: (state) => state.splash.featured.status === "FETCHED",
     reduxEvents: ["SET_FETCH_STATUS", "SET_ROWS"],
   });
