@@ -327,7 +327,7 @@ body > #pagewrapper {
   font-weight: normal;
 }
 .inew,
-.isticky {
+.isticky:not(.iclosed) {
   filter: var(--darkWww-link-iconFilter, var(--scratchr2-defaultLinkIconFilter));
 }
 .djangobb > .postmsg {
