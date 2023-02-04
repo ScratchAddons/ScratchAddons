@@ -304,6 +304,9 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .blocklyMainWorkspaceScrollbar .blocklyScrollbarHandle {
   fill: var(--editorDarkMode-workspace-scrollbar);
 }
+.blocklyInsertionMarker > .blocklyPath {
+  fill: var(--editorDarkMode-workspace-insertionMarker);
+}
 
 /* Block category menu background */
 .blocklyToolboxDiv,
