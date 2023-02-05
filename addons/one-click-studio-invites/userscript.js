@@ -42,7 +42,7 @@ export default async function (
     }
 
     addon.tab.displayNoneWhileDisabled(button, { display: "block" });
-    
+
     button.addEventListener("click", async () => {
       if (userProfile.invited) {
         button.classList.add("loading");
