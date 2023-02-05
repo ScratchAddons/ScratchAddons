@@ -675,6 +675,17 @@
       }
     },
     {
+      "name": "workspace-insertionMarker",
+      "value": {
+        "type": "textColor",
+        "black": "#000000",
+        "source": {
+          "type": "settingValue",
+          "settingId": "workspace"
+        }
+      }
+    },
+    {
       "name": "categoryMenu-text",
       "value": {
         "type": "textColor",
@@ -811,6 +822,10 @@
       "url": "paper.js",
       "matches": ["projects"],
       "runAtComplete": false
+    },
+    {
+      "url": "extension_icons.js",
+      "matches": ["projects"]
     }
   ],
   "userstyles": [

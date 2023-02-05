@@ -298,14 +298,14 @@
 }
 #comments #comment-form {
   padding: 0;
-  margin-top: 30px;
-  margin-bottom: 56px;
+  margin-bottom: 32px;
 }
 #comments #comment-form .template-feature-off {
+  margin-left: 62px;
   height: auto;
   padding: 24px;
-  background-color: rgba(77, 151, 255, 0.1);
-  border-color: rgba(77, 151, 255, 0.25);
+  background-color: var(--darkWww-blue-20, rgba(77, 151, 255, 0.1));
+  border-color: var(--darkWww-border, rgba(77, 151, 255, 0.25));
   color: var(--darkWww-blue-text);
   font-size: 16px;
 }
@@ -315,8 +315,8 @@
 }
 #comments .comment form {
   margin-left: 8px;
-  padding-top: 54px;
-  padding-bottom: 28px;
+  padding-top: 32px;
+  padding-bottom: 8px;
 }
 #comments #comment-form textarea,
 #comments .comment form textarea {
@@ -328,7 +328,6 @@
 #comments #comment-form .button,
 #comments .comment form .button {
   margin-top: 6.4px;
-  margin-bottom: 6.4px;
   height: auto;
   border-radius: 4px;
   font-size: 12.8px;
