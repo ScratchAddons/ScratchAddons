@@ -342,7 +342,7 @@
         "data-lists-color": "#FF9966",
         "custom-color": "#FF99AA",
         "Pen-color": "#13ECAF",
-        "sa-color": "#12EDD5",
+        "sa-color": "#34E4D0",
         "comment-color": "#FEF49C",
         "input-color": "#FFFFFF",
         "text": "black"
@@ -357,7 +357,7 @@
         "looks-color": "#633EAC",
         "sounds-color": "#863286",
         "events-color": "#AE8500",
-        "control-color": "#B07700",
+        "control-color": "#B07200",
         "sensing-color": "#468CAF",
         "operators-color": "#438C43",
         "data-color": "#B46313",
@@ -365,7 +365,7 @@
         "custom-color": "#973545",
         "Pen-color": "#2A7468",
         "sa-color": "#2A797C",
-        "comment-color": "#242422",
+        "comment-color": "#423F24",
         "input-color": "#FFFFFF",
         "text": "white"
       }
