@@ -42,13 +42,13 @@
     },
     {
       "id": "curator",
-      "name": "Make the cuator's username clickable",
+      "name": "Make curator username clickable",
       "type": "boolean",
       "default": true
     },
     {
       "id": "styleAsNormalText",
-      "name": "Style as normal text",
+      "name": "Style curator as normal text",
       "type": "boolean",
       "default": false,
       "if": {
