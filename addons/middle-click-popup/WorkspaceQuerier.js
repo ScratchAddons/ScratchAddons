@@ -972,8 +972,7 @@ export class QueryResult {
    * @returns {string}
    */
   toText(endOnly) {
-    if (!endOnly)
-      debugger;
+    if (!endOnly) debugger;
     return this.token.type.createText(this.token, this.query, endOnly) ?? "";
   }
 
