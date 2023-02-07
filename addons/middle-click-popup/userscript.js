@@ -156,7 +156,6 @@ export default async function ({ addon, msg, console }) {
     } else {
       // Get the list of blocks to display using the input content
       const queryResultObj = querier.queryWorkspace(popupInput.value);
-      console.log(queryResultObj);
       const queryResults = queryResultObj.results;
       queryIllegalResult = queryResultObj.illegalResult;
       limited = queryResultObj.limited;
