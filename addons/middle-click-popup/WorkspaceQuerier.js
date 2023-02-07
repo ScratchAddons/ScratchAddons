@@ -340,9 +340,10 @@ class TokenType extends TokenProvider {
    * If the token was only partially typed in the query, creating the text will complete the token.
    * @param {Token} token
    * @param {QueryInfo} query
+   * @param {boolean} endOnly
    * @returns {string}
    */
-  createText(token, query) {
+  createText(token, query, endOnly) {
     throw new Error("Sub-class must override abstract method.");
   }
 
@@ -415,7 +416,7 @@ class StringEnum {
       }
     }
 
-    createText(token, query) {
+    createText(token, query, endOnly) {
       return token.value.string;
     }
   };
@@ -462,7 +463,7 @@ class StringEnum {
               if (!queryMatch) queryPartEnd = i;
               yield new Token(
                 idx,
-                queryPartEnd,
+                queryPartEnd - 1,
                 this,
                 {
                   valueInfo,
@@ -479,7 +480,7 @@ class StringEnum {
           i = query.skipIgnorable(queryPartEnd);
         }
 
-        yield new Token(idx, i, this, { valueInfo }, 10000);
+        yield new Token(idx, i - 1, this, { valueInfo }, 10000);
       }
     }
 
@@ -487,7 +488,9 @@ class StringEnum {
       return token.value.valueInfo.value; // I may have named too many things 'value'
     }
 
-    createText(token, query) {
+    createText(token, query, endOnly) {
+      if (!endOnly)
+        return token.value.valueInfo.lower;
       if (!token.isTruncated) {
         return query.str.substring(token.start, token.end);
       }
@@ -630,7 +633,7 @@ class TokenTypeStringLiteral extends TokenType {
     }
   }
 
-  createText(token, query) {
+  createText(token, query, endOnly) {
     return query.str.substring(token.start, token.end);
   }
 }
@@ -656,7 +659,7 @@ class TokenTypeNumberLiteral extends TokenType {
     }
   }
 
-  createText(token, query) {
+  createText(token, query, endOnly) {
     return query.query.substring(token.start, token.end);
   }
 }
@@ -675,7 +678,7 @@ class TokenTypeColor extends TokenType {
     yield new Token(idx, idx + 7, this, query.str.substring(idx, idx + 7));
   }
 
-  createText(token, query) {
+  createText(token, query, endOnly) {
     return query.query.substring(token.start, token.end);
   }
 }
@@ -717,10 +720,10 @@ class TokenTypeBrackets extends TokenType {
     return token.innerToken.createBlockValue(token.innerToken, query);
   }
 
-  createText(token, query) {
+  createText(token, query, endOnly) {
     let text = "(";
     text += query.str.substring(token.start + 1, token.innerToken.start);
-    text += token.innerToken.type.createText(token.innerToken, query);
+    text += token.innerToken.type.createText(token.innerToken, query, endOnly);
     if (token.innerToken.end !== token.end) text += query.str.substring(token.innerToken.end, token.end - 1);
     text += ")";
     return text;
@@ -909,15 +912,15 @@ class TokenTypeBlock extends TokenType {
     return this.block.createBlock(...blockInputs);
   }
 
-  createText(token, query) {
-    if (!token.isTruncated) return query.str.substring(token.start, token.end);
+  createText(token, query, endOnly) {
+    if (!token.isTruncated && endOnly) return query.str.substring(token.start, token.end);
     let text = "";
     if (token.start !== token.value[0].start) {
       text += query.str.substring(token.start, token.value[0].start);
     }
     for (let i = 0; i < token.value.length; i++) {
       const subtoken = token.value[i];
-      const subtokenText = subtoken.type.createText(subtoken, query) ?? "";
+      const subtokenText = subtoken.type.createText(subtoken, query, endOnly) ?? "";
       text += subtokenText;
       if (i !== token.value.length - 1) {
         const next = token.value[i + 1];
@@ -966,11 +969,11 @@ export class QueryResult {
   }
 
   /**
+   * @param {boolean} endOnly
    * @returns {string}
    */
-  get text() {
-    if (this._text) return this._text;
-    return (this._text = this.token.type.createText(this.token, this.query) ?? "");
+  toText(endOnly) {
+    return this.token.type.createText(this.token, this.query, endOnly) ?? "";
   }
 
   /**

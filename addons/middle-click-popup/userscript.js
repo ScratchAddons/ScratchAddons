@@ -71,7 +71,7 @@ export default async function ({ addon, msg, console }) {
   /**
    * @typedef ResultPreview
    * @property {BlockInstance} block
-   * @property {(() => string)?} autocompleteFactory
+   * @property {((endOnly: boolean) => string)?} autocompleteFactory
    * @property {BlockComponent} renderedBlock
    * @property {SVGGElement} svgBlock
    * @property {SVGRectElement} svgBackground
@@ -139,7 +139,7 @@ export default async function ({ addon, msg, console }) {
     /**
      * @typedef MenuItem
      * @property {BlockInstance} block
-     * @property {() => string} [autocompleteFactory]
+     * @property {(endOnly: boolean) => string} [autocompleteFactory]
      */
     /** @type {MenuItem[]} */
     const blockList = [];
@@ -165,7 +165,7 @@ export default async function ({ addon, msg, console }) {
       for (const queryResult of queryResults) {
         blockList.push({
           block: queryResult.createBlock(),
-          autocompleteFactory: () => queryResult.text,
+          autocompleteFactory: endOnly => queryResult.toText(endOnly),
         });
       }
     }
@@ -245,7 +245,7 @@ export default async function ({ addon, msg, console }) {
     }
 
     if (queryPreviews.length === 0 && queryIllegalResult) {
-      popupInputSuggestion.value = popupInput.value + queryIllegalResult.text.substring(popupInput.value.length);
+      popupInputSuggestion.value = popupInput.value + queryIllegalResult.toText(true).substring(popupInput.value.length);
       return;
     }
 
@@ -260,7 +260,7 @@ export default async function ({ addon, msg, console }) {
       });
 
       popupInputSuggestion.value =
-        popupInput.value + newSelection.autocompleteFactory().substring(popupInput.value.length);
+        popupInput.value + newSelection.autocompleteFactory(true).substring(popupInput.value.length);
     } else {
       popupInputSuggestion.value = "";
     }
@@ -350,8 +350,9 @@ export default async function ({ addon, msg, console }) {
   }
 
   function acceptAutocomplete() {
-    if (popupInputSuggestion.value.length === 0) return;
-    popupInput.value = popupInputSuggestion.value;
+    const factory = queryPreviews[selectedPreviewIdx].autocompleteFactory;
+    if (popupInputSuggestion.value.length === 0 || !factory) return;
+    popupInput.value = factory(false);
     // Move cursor to the end of the newly inserted text
     popupInput.selectionStart = popupInput.value.length + 1;
     updateInput();
