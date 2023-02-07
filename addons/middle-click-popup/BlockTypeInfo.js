@@ -440,7 +440,14 @@ export class BlockTypeInfo {
             throw new Error("This should never happen.");
           let innerField = innerBlock.inputList[0].fieldRow[0];
           if (innerBlock.id === "sensing_of_object_menu") {
-            addInput(new BlockInputEnum([[Blockly.ScratchMsgs.translate('SENSING_OF_STAGE', 'Stage'), '_stage_']], inputIdx, -1, true));
+            addInput(
+              new BlockInputEnum(
+                [[Blockly.ScratchMsgs.translate("SENSING_OF_STAGE", "Stage"), "_stage_"]],
+                inputIdx,
+                -1,
+                true
+              )
+            );
           } else {
             addFieldInputs(innerField, inputIdx, -1);
           }

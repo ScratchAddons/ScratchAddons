@@ -129,7 +129,7 @@ function getShapeInfo(shape, isVertical) {
 }
 
 /**
- * @param {BlockInstance} block 
+ * @param {BlockInstance} block
  * @returns {number}
  */
 export function getBlockHeight(block) {
