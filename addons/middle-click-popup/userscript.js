@@ -10,32 +10,31 @@ export default async function ({ addon, msg, console }) {
   const PREVIEW_LIMIT = 50;
 
   const popupRoot = document.body.appendChild(document.createElement("div"));
-  popupRoot.id = "sa-mcp-root";
+  popupRoot.classList.add("sa-mcp-root");
   popupRoot.dir = addon.tab.direction;
   popupRoot.style.display = "none";
 
   const popupContainer = popupRoot.appendChild(document.createElement("div"));
-  popupContainer.id = "sa-mcp-container";
+  popupContainer.classList.add("sa-mcp-container");
 
   const popupInputContainer = popupContainer.appendChild(document.createElement("div"));
   popupInputContainer.classList.add(addon.tab.scratchClass("input_input-form"));
-  popupInputContainer.id = "sa-mcp-input-wrapper";
+  popupInputContainer.classList.add("sa-mcp-input-wrapper");
 
   const popupInputSuggestion = popupInputContainer.appendChild(document.createElement("input"));
-  popupInputSuggestion.id = "sa-mcp-input-suggestion";
+  popupInputSuggestion.classList.add("sa-mcp-input-suggestion");
 
   const popupInput = popupInputContainer.appendChild(document.createElement("input"));
-  popupInput.id = "sa-mcp-input";
+  popupInput.classList.add("sa-mcp-input");
   popupInput.setAttribute("autocomplete", "off");
 
   const popupPreviewContainer = popupContainer.appendChild(document.createElement("div"));
-  popupPreviewContainer.id = "sa-mcp-preview-container";
+  popupPreviewContainer.classList.add("sa-mcp-preview-container");
 
   const popupPreviewScrollbarSVG = popupContainer.appendChild(
     document.createElementNS("http://www.w3.org/2000/svg", "svg")
   );
-  popupPreviewScrollbarSVG.id = "sa-mcp-preview-scrollbar";
-  popupPreviewScrollbarSVG.classList.add("blocklyScrollbarVertical", "blocklyMainWorkspaceScrollbar");
+  popupPreviewScrollbarSVG.classList.add("sa-mcp-preview-scrollbar", "blocklyScrollbarVertical", "blocklyMainWorkspaceScrollbar");
   popupPreviewScrollbarSVG.style.display = "none";
 
   const popupPreviewScrollbarBackground = popupPreviewScrollbarSVG.appendChild(
@@ -56,7 +55,7 @@ export default async function ({ addon, msg, console }) {
   const popupPreviewBlocks = popupPreviewContainer.appendChild(
     document.createElementNS("http://www.w3.org/2000/svg", "svg")
   );
-  popupPreviewBlocks.id = "sa-mcp-preview-blocks";
+  popupPreviewBlocks.classList.add("sa-mcp-preview-blocks");
 
   const querier = new WorkspaceQuerier();
 
