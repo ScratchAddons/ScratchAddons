@@ -198,6 +198,7 @@ export default async function ({ addon, msg, console }) {
       );
 
       const height = getBlockHeight(result.block);
+      svgBackground.setAttribute("transform", `translate(0, ${(y + height / 10) * previewScale})`);
       svgBackground.setAttribute("height", height * previewScale + "px");
       svgBackground.classList.add("sa-mcp-preview-block-bg");
       svgBackground.addEventListener("mousemove", mouseMoveListener);
