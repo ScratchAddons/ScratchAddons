@@ -1084,10 +1084,6 @@ export default class WorkspaceQuerier {
    */
   static MAX_TOKENS = 10000;
 
-  constructor() {
-    window.querier = this;
-  }
-
   /**
    * Indexes a workspace in preperation for querying it.
    * @param {BlockTypeInfo[]} blocks The list of blocks in the workspace.
