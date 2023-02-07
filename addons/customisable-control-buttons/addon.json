@@ -1,0 +1,118 @@
+{
+    "name": "Customisable control buttons",
+    "description": "Allows you to customise the play, pause (if you have the addon enabled) and stop buttons.",
+    "credits": [
+      {
+        "name": "Callumjt",
+        "link": "https://scratch.mit.edu/users/callumjt/"
+      }
+    ],
+    "versionAdded": "1.31.0",
+    "userstyles": [
+      {
+        "url": "style.css",
+        "matches": ["projects"]
+      },
+      {
+        "url": "color.css",
+        "matches": ["projects"],
+        "if": {
+          "settings": { "buttonsBackground": true }
+        }
+      }
+    ],
+    "tags": ["projectPlayer"],
+    "enabledByDefault": false,
+    "dynamicEnable": true,
+    "dynamicDisable": true,
+    "settings": [
+      {
+        "name": "Button width (32-48px)",
+        "id": "buttonWidth",
+        "type": "integer",
+        "min": 32,
+        "default": 32,
+        "max": 48
+      },
+      {
+        "name": "Button gap (0-5px)",
+        "id": "buttonGap",
+        "type": "integer",
+        "min": 0,
+        "default": 3,
+        "max": 5
+      },
+      {
+        "name": "Buttons background (must refresh to apply)",
+        "id": "buttonsBackground",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "name": "Play button background",
+        "id": "playBack",
+        "type": "color",
+        "default": "rgba(0, 128, 0, 1)",
+        "allowTransparency": true
+      },
+      {
+        "name": "Pause button background",
+        "id": "pauseBack",
+        "type": "color",
+        "default": "rgba(255, 255, 0, 1)",
+        "allowTransparency": true
+      },
+      {
+        "name": "Stop button background",
+        "id": "stopBack",
+        "type": "color",
+        "default": "rgba(255, 0, 0, 1)",
+        "allowTransparency": true
+      }
+    ],
+    "customCssVariables": [
+      {
+        "name": "width",
+        "value": {
+            "type": "settingValue",
+            "settingId": "buttonWidth"
+          }
+      },
+      {
+        "name": "gap",
+        "value": {
+            "type": "settingValue",
+            "settingId": "buttonGap"
+          }
+      },
+      {
+        "name": "background",
+        "value": {
+            "type": "settingValue",
+            "settingId": "buttonsBackground"
+          }
+      },
+      {
+        "name": "flag",
+        "value": {
+            "type": "settingValue",
+            "settingId": "playBack"
+          }
+      },
+      {
+        "name": "pause",
+        "value": {
+            "type": "settingValue",
+            "settingId": "pauseBack"
+          }
+      },
+      {
+        "name": "stop",
+        "value": {
+            "type": "settingValue",
+            "settingId": "stopBack"
+          }
+      }
+    ]
+  }
+  
