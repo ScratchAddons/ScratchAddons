@@ -343,8 +343,8 @@ export default async function ({ addon, msg, console }) {
       clientX: mousePosition.x,
       clientY: mousePosition.y,
       type: "mousedown",
-      stopPropagation: function () {},
-      preventDefault: function () {},
+      stopPropagation: function () { },
+      preventDefault: function () { },
       target: selectedPreview.svgBlock,
     };
     if (workspace.getGesture(fakeEvent)) {
@@ -353,7 +353,11 @@ export default async function ({ addon, msg, console }) {
   }
 
   function acceptAutocomplete() {
-    const factory = queryPreviews[selectedPreviewIdx].autocompleteFactory;
+    let factory;
+    if (queryPreviews[selectedPreviewIdx])
+      factory = queryPreviews[selectedPreviewIdx].autocompleteFactory;
+    else
+      factory = () => popupInputSuggestion.value;
     if (popupInputSuggestion.value.length === 0 || !factory) return;
     popupInput.value = factory(false);
     // Move cursor to the end of the newly inserted text

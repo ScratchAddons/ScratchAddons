@@ -417,7 +417,11 @@ class StringEnum {
     }
 
     createText(token, query, endOnly) {
-      return token.value.string;
+      return token.value.lower;
+    }
+
+    createBlockValue(token, query) {
+      return token.value.value;
     }
   };
 
@@ -513,7 +517,9 @@ class StringEnum {
     /** @type {StringEnumValue[]} */
     this.values = [];
     for (const value of values) {
-      const lower = value.string.toLowerCase();
+      let lower = value.string.toLowerCase();
+      // Strip emoji
+      lower = lower.replaceAll(/\p{Extended_Pictographic}/ug, '');
       const parts = [];
       {
         let lastPart = 0;
@@ -566,11 +572,11 @@ class StringEnum {
       if (remainingChar < valueInfo.lower.length) {
         if (valueInfo.lower.startsWith(query.lowercase.substring(idx))) {
           const end = remainingChar < 0 ? 0 : query.length;
-          cacheEntry[valueIdx] = new Token(idx, end, this.fullTokenProvider, valueInfo.value, 100000, undefined, true);
+          cacheEntry[valueIdx] = new Token(idx, end, this.fullTokenProvider, valueInfo, 100000, undefined, true);
         }
       } else {
         if (query.lowercase.startsWith(valueInfo.lower, idx)) {
-          cacheEntry[valueIdx] = new Token(idx, idx + valueInfo.lower.length, this.fullTokenProvider, valueInfo.value);
+          cacheEntry[valueIdx] = new Token(idx, idx + valueInfo.lower.length, this.fullTokenProvider, valueInfo, 100000);
         }
       }
     }
@@ -849,7 +855,7 @@ class TokenTypeBlock extends TokenType {
         isTruncated |= subtoken.isTruncated;
         isLegal &&= subtoken.isLegal;
         if (!subtoken.isTruncated) score += subtoken.score;
-        else score -= 10;
+        else score += subtoken.score / 100000 - 10;
         if (subtoken.type.isDefiningFeature && subtoken.start < query.length) hasDefiningFeature = true;
       }
       /** See {@link TokenType.isDefiningFeature} */
@@ -1135,7 +1141,7 @@ export default class WorkspaceQuerier {
         if (option.isLegal) {
           option.score += WorkspaceQuerier.SCORE_BUMP[option.type.block.id] ?? 0;
           results.push(new QueryResult(query, option));
-        } else if (!bestIllegalResult || option.score > bestIllegalResult.score) {
+        } else if (!bestIllegalResult || option.score >= bestIllegalResult.token.score) {
           bestIllegalResult = new QueryResult(query, option);
         }
       }
