@@ -489,8 +489,7 @@ class StringEnum {
     }
 
     createText(token, query, endOnly) {
-      if (!endOnly)
-        return token.value.valueInfo.lower;
+      if (!endOnly) return token.value.valueInfo.lower;
       if (!token.isTruncated) {
         return query.str.substring(token.start, token.end);
       }

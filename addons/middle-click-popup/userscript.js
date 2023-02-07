@@ -165,7 +165,7 @@ export default async function ({ addon, msg, console }) {
       for (const queryResult of queryResults) {
         blockList.push({
           block: queryResult.createBlock(),
-          autocompleteFactory: endOnly => queryResult.toText(endOnly),
+          autocompleteFactory: (endOnly) => queryResult.toText(endOnly),
         });
       }
     }
@@ -245,7 +245,8 @@ export default async function ({ addon, msg, console }) {
     }
 
     if (queryPreviews.length === 0 && queryIllegalResult) {
-      popupInputSuggestion.value = popupInput.value + queryIllegalResult.toText(true).substring(popupInput.value.length);
+      popupInputSuggestion.value =
+        popupInput.value + queryIllegalResult.toText(true).substring(popupInput.value.length);
       return;
     }
 
