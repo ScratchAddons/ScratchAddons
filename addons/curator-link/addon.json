@@ -14,7 +14,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "Forum mentions styled with BBCode wont't be clickbale.",
+      "text": "Forum mentions styled with BBCode won't be clickable.",
       "id": "BBCode"
     }
   ],
