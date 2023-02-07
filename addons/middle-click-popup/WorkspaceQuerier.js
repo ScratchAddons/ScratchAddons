@@ -913,7 +913,7 @@ class TokenTypeBlock extends TokenType {
         if (nextStart !== subtoken.end) {
           text += query.str.substring(subtoken.end, nextStart);
         } else {
-          if (subtokenText.length !== 0 && QueryInfo.IGNORABLE_CHARS.indexOf(subtokenText.at(-1)) === -1) text += " ";
+          if (text.length >= query.length && subtokenText.length !== 0 && QueryInfo.IGNORABLE_CHARS.indexOf(subtokenText.at(-1)) === -1) text += " ";
         }
       }
     }
