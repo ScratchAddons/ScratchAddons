@@ -752,13 +752,17 @@ class TokenTypeBlock extends TokenType {
     let fullTokenProviders = [];
     let griffTokenProviders = [];
 
-    for (const blockPart of block.parts) {
+    for (let blockPartIdx = 0; blockPartIdx < block.parts.length; blockPartIdx++) {
+      const blockPart = block.parts[blockPartIdx];
       let fullTokenProvider;
       let griffTokenProvider;
       if (typeof blockPart === "string") {
         const stringEnum = new StringEnum([{ value: null, string: blockPart }]);
         fullTokenProvider = stringEnum.fullTokenProvider;
-        griffTokenProvider = stringEnum.griffTokenProvider;
+        if (blockPartIdx === 0)
+          griffTokenProvider = stringEnum.griffTokenProvider;
+        else
+          griffTokenProvider = stringEnum.bothTokenProvider;
       } else {
         switch (blockPart.type) {
           case BlockInputType.ENUM:
