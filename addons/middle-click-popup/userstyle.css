@@ -46,7 +46,11 @@
   box-shadow: none;
 }
 
-#sa-mcp-input-wrapper > input {
+#sa-mcp-input-wrapper[data-error="true"] {
+  border-color: red;
+}
+
+#sa-mcp-input-wrapper>input {
   position: absolute;
   border: 0;
   background-color: transparent;

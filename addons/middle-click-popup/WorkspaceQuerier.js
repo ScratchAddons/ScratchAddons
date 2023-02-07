@@ -1102,16 +1102,17 @@ export default class WorkspaceQuerier {
   /**
    * Queries the indexed workspace for blocks matching the query string.
    * @param {string} queryStr The query.
-   * @returns {{results: QueryResult[], illegalResult: QueryResult | null}} A list of the results of the query, sorted by their relevance score.
+   * @returns {{results: QueryResult[], illegalResult: QueryResult | null, limited: boolean}} A list of the results of the query, sorted by their relevance score.
    */
   queryWorkspace(queryStr) {
     if (!this.workspaceIndexed) throw new Error("A workspace must be indexed before it can be queried!");
-    if (queryStr.length === 0) return { results: [], illegalResult: null };
+    if (queryStr.length === 0) return { results: [], illegalResult: null, limited: false };
 
     const query = new QueryInfo(this, queryStr, this._queryCounter++);
     const results = [];
     let foundTokenCount = 0;
     let bestIllegalResult = null;
+    let limited = false;
 
     for (const option of this.tokenGroupBlocks.parseTokens(query, 0)) {
       if (option.end >= queryStr.length) {
@@ -1125,10 +1126,12 @@ export default class WorkspaceQuerier {
       ++foundTokenCount;
       if (foundTokenCount > WorkspaceQuerier.MAX_RESULTS) {
         console.log("Warning: Workspace query exceeded maximum result count.");
+        limited = true;
         break;
       }
       if (!query.canCreateMoreTokens()) {
         console.log("Warning: Workspace query exceeded maximum token count.");
+        limited = true;
         break;
       }
     }
@@ -1157,7 +1160,7 @@ export default class WorkspaceQuerier {
     const validResults = [];
     for (const result of results) if (checkValidity(result.token)) validResults.push(result);
 
-    return { results: validResults.sort((a, b) => b.token.score - a.token.score), illegalResult: bestIllegalResult };
+    return { results: validResults.sort((a, b) => b.token.score - a.token.score), illegalResult: bestIllegalResult, limited };
     // return results.sort((a, b) => b.token.score - a.token.score);
   }
 

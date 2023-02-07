@@ -80,6 +80,7 @@ export default async function ({ addon, msg, console }) {
   let selectedPreviewIdx = 0;
   /** @type {BlockTypeInfo[]?} */
   let blockTypes = null;
+  let limited = false;
 
   let allowMenuClose = true;
   let popupPosition = null;
@@ -121,12 +122,12 @@ export default async function ({ addon, msg, console }) {
   }
 
   function closePopup() {
-    if (allowMenuClose) {
-      popupPosition = null;
-      popupRoot.style.display = "none";
-      blockTypes = null;
-      querier.clearWorkspaceIndex();
-    }
+    // if (allowMenuClose) {
+    //   popupPosition = null;
+    //   popupRoot.style.display = "none";
+    //   blockTypes = null;
+    //   querier.clearWorkspaceIndex();
+    // }
   }
 
   popupInput.addEventListener("input", updateInput);
@@ -148,11 +149,13 @@ export default async function ({ addon, msg, console }) {
             block: blockType.createBlock(),
           });
         }
+      limited = false;
     } else {
       // Get the list of blocks to display using the input content
       const queryResultObj = querier.queryWorkspace(popupInput.value);
       const queryResults = queryResultObj.results;
       queryIllegalResult = queryResultObj.illegalResult;
+      limited = queryResultObj.limited;
 
       if (queryResults.length > PREVIEW_LIMIT) queryResults.length = PREVIEW_LIMIT;
 
@@ -221,6 +224,7 @@ export default async function ({ addon, msg, console }) {
     popupPreviewContainer.style.height = previewHeight + "px";
     popupPreviewScrollbarSVG.style.height = previewHeight + "px";
     popupPreviewScrollbarBackground.setAttribute("height", "" + previewHeight);
+    popupInputContainer.dataset["error"] = "" + limited;
 
     selectedPreviewIdx = -1;
     updateSelection(0);
@@ -335,8 +339,8 @@ export default async function ({ addon, msg, console }) {
       clientX: mousePosition.x,
       clientY: mousePosition.y,
       type: "mousedown",
-      stopPropagation: function () {},
-      preventDefault: function () {},
+      stopPropagation: function () { },
+      preventDefault: function () { },
       target: selectedPreview.svgBlock,
     };
     workspace.startDragWithFakeEvent(fakeEvent, newBlock);
