@@ -463,7 +463,7 @@ class StringEnum {
               if (!queryMatch) queryPartEnd = i;
               yield new Token(
                 idx,
-                queryPartEnd - 1,
+                queryPartEnd,
                 this,
                 {
                   valueInfo,
@@ -480,7 +480,7 @@ class StringEnum {
           i = query.skipIgnorable(queryPartEnd);
         }
 
-        yield new Token(idx, i - 1, this, { valueInfo }, 10000);
+        yield new Token(idx, i, this, { valueInfo }, 10000);
       }
     }
 
@@ -928,7 +928,7 @@ class TokenTypeBlock extends TokenType {
           text += query.str.substring(subtoken.end, nextStart);
         } else {
           if (
-            nextStart >= query.length &&
+            (!endOnly || nextStart >= query.length) &&
             subtokenText.length !== 0 &&
             QueryInfo.IGNORABLE_CHARS.indexOf(subtokenText.at(-1)) === -1
           )
@@ -972,6 +972,8 @@ export class QueryResult {
    * @returns {string}
    */
   toText(endOnly) {
+    if (!endOnly)
+      debugger;
     return this.token.type.createText(this.token, this.query, endOnly) ?? "";
   }
 
