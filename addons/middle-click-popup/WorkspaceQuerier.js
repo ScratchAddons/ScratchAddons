@@ -925,7 +925,12 @@ class TokenTypeBlock extends TokenType {
         if (nextStart !== subtoken.end) {
           text += query.str.substring(subtoken.end, nextStart);
         } else {
-          if (nextStart >= query.length && subtokenText.length !== 0 && QueryInfo.IGNORABLE_CHARS.indexOf(subtokenText.at(-1)) === -1) text += " ";
+          if (
+            nextStart >= query.length &&
+            subtokenText.length !== 0 &&
+            QueryInfo.IGNORABLE_CHARS.indexOf(subtokenText.at(-1)) === -1
+          )
+            text += " ";
         }
       }
     }
@@ -1168,7 +1173,11 @@ export default class WorkspaceQuerier {
     const validResults = [];
     for (const result of results) if (checkValidity(result.token)) validResults.push(result);
 
-    return { results: validResults.sort((a, b) => b.token.score - a.token.score), illegalResult: bestIllegalResult, limited };
+    return {
+      results: validResults.sort((a, b) => b.token.score - a.token.score),
+      illegalResult: bestIllegalResult,
+      limited,
+    };
     // return results.sort((a, b) => b.token.score - a.token.score);
   }
 

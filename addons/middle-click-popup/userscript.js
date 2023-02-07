@@ -34,7 +34,11 @@ export default async function ({ addon, msg, console }) {
   const popupPreviewScrollbarSVG = popupContainer.appendChild(
     document.createElementNS("http://www.w3.org/2000/svg", "svg")
   );
-  popupPreviewScrollbarSVG.classList.add("sa-mcp-preview-scrollbar", "blocklyScrollbarVertical", "blocklyMainWorkspaceScrollbar");
+  popupPreviewScrollbarSVG.classList.add(
+    "sa-mcp-preview-scrollbar",
+    "blocklyScrollbarVertical",
+    "blocklyMainWorkspaceScrollbar"
+  );
   popupPreviewScrollbarSVG.style.display = "none";
 
   const popupPreviewScrollbarBackground = popupPreviewScrollbarSVG.appendChild(
@@ -339,8 +343,8 @@ export default async function ({ addon, msg, console }) {
       clientX: mousePosition.x,
       clientY: mousePosition.y,
       type: "mousedown",
-      stopPropagation: function () { },
-      preventDefault: function () { },
+      stopPropagation: function () {},
+      preventDefault: function () {},
       target: selectedPreview.svgBlock,
     };
     workspace.startDragWithFakeEvent(fakeEvent, newBlock);

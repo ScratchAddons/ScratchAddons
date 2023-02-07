@@ -50,7 +50,7 @@
   border-color: red;
 }
 
-.sa-mcp-input-wrapper>input {
+.sa-mcp-input-wrapper > input {
   position: absolute;
   border: 0;
   background-color: transparent;
