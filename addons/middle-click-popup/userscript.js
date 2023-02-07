@@ -1,8 +1,8 @@
 //@ts-check
 
 import WorkspaceQuerier, { QueryResult } from "./WorkspaceQuerier.js";
-import renderBlock, { BlockComponent } from "./BlockRenderer.js";
-import { BlockInstance, BlockTypeInfo } from "./BlockTypeInfo.js";
+import renderBlock, { BlockComponent, getBlockHeight } from "./BlockRenderer.js";
+import { BlockInstance, BlockShape, BlockTypeInfo } from "./BlockTypeInfo.js";
 
 export default async function ({ addon, msg, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
@@ -175,6 +175,7 @@ export default async function ({ addon, msg, console }) {
 
     // Create the new previews
     queryPreviews.length = 0;
+    let y = 0;
     for (let resultIdx = 0; resultIdx < blockList.length; resultIdx++) {
       const result = blockList[resultIdx];
 
@@ -195,8 +196,9 @@ export default async function ({ addon, msg, console }) {
       const svgBackground = popupPreviewBlocks.appendChild(
         document.createElementNS("http://www.w3.org/2000/svg", "rect")
       );
-      svgBackground.setAttribute("transform", `translate(0, ${(resultIdx * 60 + 3) * previewScale})`);
-      svgBackground.setAttribute("height", 60 * previewScale + "px");
+
+      const height = getBlockHeight(result.block);
+      svgBackground.setAttribute("height", height * previewScale + "px");
       svgBackground.classList.add("sa-mcp-preview-block-bg");
       svgBackground.addEventListener("mousemove", mouseMoveListener);
       svgBackground.addEventListener("mousedown", mouseDownListener);
@@ -215,9 +217,11 @@ export default async function ({ addon, msg, console }) {
         svgBlock,
         svgBackground,
       });
+
+      y += height;
     }
 
-    const height = (queryPreviews.length * 60 + 8) * previewScale;
+    const height = (y + 8) * previewScale;
 
     if (height < previewMinHeight) previewHeight = previewMinHeight;
     else if (height > previewMaxHeight) previewHeight = previewMaxHeight;
@@ -276,15 +280,18 @@ export default async function ({ addon, msg, console }) {
     const cursorPos = popupInput.selectionStart ?? 0;
     const cursorPosRel = popupInput.value.length === 0 ? 0 : cursorPos / popupInput.value.length;
 
+    let y = 0;
     for (let previewIdx = 0; previewIdx < queryPreviews.length; previewIdx++) {
       const preview = queryPreviews[previewIdx];
 
       var blockX = 5;
       if (blockX + preview.renderedBlock.width > previewWidth / previewScale)
         blockX += (previewWidth / previewScale - blockX - preview.renderedBlock.width) * previewScale * cursorPosRel;
-      var blockY = (previewIdx * 60 + 30) * previewScale;
+      var blockY = (y + 30) * previewScale;
 
       preview.svgBlock.setAttribute("transform", `translate(${blockX}, ${blockY}) scale(${previewScale})`);
+
+      y += getBlockHeight(preview.block);
     }
 
     popupInputSuggestion.scrollLeft = popupInput.scrollLeft;
@@ -343,8 +350,8 @@ export default async function ({ addon, msg, console }) {
       clientX: mousePosition.x,
       clientY: mousePosition.y,
       type: "mousedown",
-      stopPropagation: function () {},
-      preventDefault: function () {},
+      stopPropagation: function () { },
+      preventDefault: function () { },
       target: selectedPreview.svgBlock,
     };
     if (workspace.getGesture(fakeEvent)) {

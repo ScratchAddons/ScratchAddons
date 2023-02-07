@@ -128,6 +128,23 @@ function getShapeInfo(shape, isVertical) {
   throw new Error(shape);
 }
 
+/**
+ * @param {BlockInstance} block 
+ * @returns {number}
+ */
+export function getBlockHeight(block) {
+  switch (block.typeInfo.shape) {
+    case BlockShape.End:
+    case BlockShape.Hat:
+    case BlockShape.Stack:
+      return 62;
+    case BlockShape.Boolean:
+    case BlockShape.Round:
+      return 48;
+  }
+  return 0;
+}
+
 const BLOCK_ELEMENT_SPACING = 8;
 
 /**
