@@ -351,7 +351,7 @@ export default async function ({ addon, msg, console }) {
     if (popupInputSuggestion.value.length === 0) return;
     popupInput.value = popupInputSuggestion.value;
     // Move cursor to the end of the newly inserted text
-    popupInput.selectionStart = popupInput.value.length;
+    popupInput.selectionStart = popupInput.value.length + 1;
     updateInput();
   }
 
