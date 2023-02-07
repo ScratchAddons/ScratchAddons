@@ -519,7 +519,7 @@ class StringEnum {
     for (const value of values) {
       let lower = value.string.toLowerCase();
       // Strip emoji
-      lower = lower.replaceAll(/\p{Extended_Pictographic}/ug, '');
+      lower = lower.replaceAll(/\p{Extended_Pictographic}/gu, "");
       const parts = [];
       {
         let lastPart = 0;
@@ -576,7 +576,13 @@ class StringEnum {
         }
       } else {
         if (query.lowercase.startsWith(valueInfo.lower, idx)) {
-          cacheEntry[valueIdx] = new Token(idx, idx + valueInfo.lower.length, this.fullTokenProvider, valueInfo, 100000);
+          cacheEntry[valueIdx] = new Token(
+            idx,
+            idx + valueInfo.lower.length,
+            this.fullTokenProvider,
+            valueInfo,
+            100000
+          );
         }
       }
     }
