@@ -752,17 +752,20 @@ class TokenTypeBlock extends TokenType {
     let fullTokenProviders = [];
     let griffTokenProviders = [];
 
-    for (let blockPartIdx = 0; blockPartIdx < block.parts.length; blockPartIdx++) {
-      const blockPart = block.parts[blockPartIdx];
+    let hasGriffableToken = false;
+
+    for (const blockPart of block.parts) {
       let fullTokenProvider;
       let griffTokenProvider;
       if (typeof blockPart === "string") {
         const stringEnum = new StringEnum([{ value: null, string: blockPart }]);
         fullTokenProvider = stringEnum.fullTokenProvider;
-        if (blockPartIdx === 0)
-          griffTokenProvider = stringEnum.griffTokenProvider;
-        else
+        if (hasGriffableToken) {
           griffTokenProvider = stringEnum.bothTokenProvider;
+        } else {
+          griffTokenProvider = stringEnum.griffTokenProvider;
+          hasGriffableToken = true;
+        }
       } else {
         switch (blockPart.type) {
           case BlockInputType.ENUM:
@@ -773,7 +776,12 @@ class TokenTypeBlock extends TokenType {
               enumGroup.pushProviders([fullTokenProvider, querier.tokenGroupRoundBlocks]);
               fullTokenProvider = enumGroup;
             }
-            griffTokenProvider = stringEnum.bothTokenProvider;
+            if (hasGriffableToken) {
+              griffTokenProvider = stringEnum.bothTokenProvider;
+            } else {
+              griffTokenProvider = stringEnum.griffTokenProvider;
+              hasGriffableToken = true;
+            }
             break;
           case BlockInputType.STRING:
             fullTokenProvider = querier.tokenGroupString;
@@ -917,7 +925,7 @@ class TokenTypeBlock extends TokenType {
         if (nextStart !== subtoken.end) {
           text += query.str.substring(subtoken.end, nextStart);
         } else {
-          if (text.length >= query.length && subtokenText.length !== 0 && QueryInfo.IGNORABLE_CHARS.indexOf(subtokenText.at(-1)) === -1) text += " ";
+          if (nextStart >= query.length && subtokenText.length !== 0 && QueryInfo.IGNORABLE_CHARS.indexOf(subtokenText.at(-1)) === -1) text += " ";
         }
       }
     }
