@@ -438,8 +438,12 @@ export class BlockTypeInfo {
         if (innerBlock) {
           if (innerBlock.inputList.length !== 1 || innerBlock.inputList[0].fieldRow.length !== 1)
             throw new Error("This should never happen.");
-          const innerField = innerBlock.inputList[0].fieldRow[0];
-          addFieldInputs(innerField, inputIdx, -1);
+          let innerField = innerBlock.inputList[0].fieldRow[0];
+          if (innerBlock.id === "sensing_of_object_menu") {
+            addInput(new BlockInputEnum([[Blockly.ScratchMsgs.translate('SENSING_OF_STAGE', 'Stage'), '_stage_']], inputIdx, -1, true));
+          } else {
+            addFieldInputs(innerField, inputIdx, -1);
+          }
         } else {
           if (input.outlinePath) {
             addInput(new BlockInputBoolean(inputIdx, -1));
