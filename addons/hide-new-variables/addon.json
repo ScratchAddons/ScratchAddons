@@ -1,6 +1,6 @@
 {
   "name": "Hide new variables",
-  "description": "Do not automatically create monitors for newly created variables or lists.",
+  "description": "Do not automatically show new variables or lists on the project player.",
   "credits": [
     {
       "name": "GarboMuffin"
