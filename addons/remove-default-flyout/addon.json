@@ -1,6 +1,6 @@
 {
-  "name": "Remove default values in flyout",
-  "description": "todo",
+  "name": "Remove default block values",
+  "description": "Removes the default values of text and number inputs in blocks, leaving them blank.",
   "credits": [
     {
       "name": "TheColaber",
