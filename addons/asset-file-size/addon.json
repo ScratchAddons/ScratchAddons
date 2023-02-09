@@ -1,0 +1,24 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
+  "name": "Asset file size",
+  "description": "Shows file sizes of costumes, sounds and backdrops (collectively referred to as assets). If an asset exceeds 10MB, the project will not save.",
+  "credits": [
+    {
+      "name": "CST1229"
+    }
+  ],
+  "tags": ["editor"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.30.0"
+}

@@ -1,0 +1,37 @@
+.sa-size-text {
+  position: absolute;
+  bottom: 0;
+  font-size: 0.625rem;
+  z-index: 2;
+}
+[dir="ltr"] .sa-size-text {
+  left: 0.15rem;
+}
+[dir="rtl"] .sa-size-text {
+  right: 0.15rem;
+}
+.sa-size-limit-warn {
+  color: red;
+  font-weight: bold;
+}
+
+/* taken from animated-thumb */
+.sa-file-size-popup {
+  box-sizing: border-box;
+  width: 700px;
+  max-height: min(800px, 80vh);
+  max-width: 85%;
+  margin-top: 12vh;
+  overflow-y: auto !important;
+}
+.sa-file-size-popup-content {
+  padding: 1.5rem 2.25rem;
+}
+.sa-file-size-info {
+  font-style: italic;
+  color: #aaa;
+}
+
+.sa-file-size-popup p {
+  margin: 0.5em 0;
+}
