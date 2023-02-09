@@ -38,7 +38,7 @@ export default async function ({ addon, msg, global, console }) {
       const sizeText = `${getSizeString(bytes, true, 1000)}/${getSizeString(PROJECT_SIZE_LIMIT, true)}`;
 
       const text = c.appendChild(document.createElement("p"));
-      text.textContent = msg("project-json-size", {fileSize: sizeText});
+      text.textContent = msg("project-json-size", { fileSize: sizeText });
     }
 
     // large assets list
@@ -60,9 +60,9 @@ export default async function ({ addon, msg, global, console }) {
         const fileSize = `${getSizeString(asset.size, false, 1000)}/${getSizeString(ASSET_SIZE_LIMIT)}`;
         const sprite = asset.target.sprite.name;
 
-        const costumeString = msg("assets-none-costume", {assetName, fileSize, sprite});
-        const backdropString = msg("assets-none-backdrop", {assetName, fileSize});
-        const soundString = msg("assets-none-sound", {assetName, fileSize, sprite});
+        const costumeString = msg("assets-none-costume", { assetName, fileSize, sprite });
+        const backdropString = msg("assets-none-backdrop", { assetName, fileSize });
+        const soundString = msg("assets-none-sound", { assetName, fileSize, sprite });
 
         noLargeAssets.textContent =
           asset.type === "sound" ? soundString : asset.type === "backdrop" ? backdropString : costumeString;
@@ -74,10 +74,10 @@ export default async function ({ addon, msg, global, console }) {
           const assetName = asset.asset.name;
           const fileSize = `${getSizeString(asset.size, false, 1000)}`;
           const sprite = asset.target.sprite.name;
-  
-          const costumeString = msg("assets-item-costume", {assetName, fileSize, sprite});
-          const backdropString = msg("assets-item-backdrop", {assetName, fileSize});
-          const soundString = msg("assets-item-sound", {assetName, fileSize, sprite});
+
+          const costumeString = msg("assets-item-costume", { assetName, fileSize, sprite });
+          const backdropString = msg("assets-item-backdrop", { assetName, fileSize });
+          const soundString = msg("assets-item-sound", { assetName, fileSize, sprite });
 
           li.textContent =
             asset.type === "sound" ? soundString : asset.type === "backdrop" ? backdropString : costumeString;
@@ -206,9 +206,7 @@ export default async function ({ addon, msg, global, console }) {
 
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
-    if (
-      e.detail.action.type === "scratch-gui/targets/UPDATE_TARGET_LIST"
-    ) {
+    if (e.detail.action.type === "scratch-gui/targets/UPDATE_TARGET_LIST") {
       // occasionally this event fires before the DOM updates
       // (for exmaple, when restoring a sprite)
       queueMicrotask(updateAssetSizes);

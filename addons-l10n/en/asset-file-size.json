@@ -1,20 +1,19 @@
 {
-	"asset-file-size/menu-item": "Project file size",
-	"asset-file-size/modal-title": "Project File Sizes",
+  "asset-file-size/menu-item": "Project file size",
+  "asset-file-size/modal-title": "Project File Sizes",
 
-	"asset-file-size/project-json-title": "project.json File",
-	"asset-file-size/project-json-description": "This is the file that stores the project's code, variables, lists and most costume, sound, backdrop and sprite info. If it exceeds 5MiB, the project will not save.",
-	"asset-file-size/project-json-size": "The project.json file is {fileSize} large.",
+  "asset-file-size/project-json-title": "project.json File",
+  "asset-file-size/project-json-description": "This is the file that stores the project's code, variables, lists and most costume, sound, backdrop and sprite info. If it exceeds 5MiB, the project will not save.",
+  "asset-file-size/project-json-size": "The project.json file is {fileSize} large.",
 
-	"asset-file-size/assets-title": "Large Assets",
-	"asset-file-size/assets-description": "Costumes, backdrops and sounds that exceed 10MB. If any of them exceeds this limit, the project will not save.",
+  "asset-file-size/assets-title": "Large Assets",
+  "asset-file-size/assets-description": "Costumes, backdrops and sounds that exceed 10MB. If any of them exceeds this limit, the project will not save.",
 
-	"asset-file-size/assets-none-costume": "There are no large assets. The currently largest asset is the costume \"{assetName}\" ({fileSize}) in {sprite}.",
-	"asset-file-size/assets-none-backdrop": "There are no large assets. The currently largest asset is the backdrop \"{assetName}\" ({fileSize}).",
-	"asset-file-size/assets-none-sound": "There are no large assets. The currently largest asset is the sound \"{assetName}\" ({fileSize}) in {sprite}.",
-	
-	"asset-file-size/assets-item-costume": "Costume \"{assetName}\" ({fileSize}) in {sprite}",
-	"asset-file-size/assets-item-backdrop": "Backdrop \"{assetName}\" ({fileSize})",
-	"asset-file-size/assets-item-sound": "Sound \"{assetName}\" ({fileSize}) in {sprite}"
+  "asset-file-size/assets-none-costume": "There are no large assets. The currently largest asset is the costume \"{assetName}\" ({fileSize}) in {sprite}.",
+  "asset-file-size/assets-none-backdrop": "There are no large assets. The currently largest asset is the backdrop \"{assetName}\" ({fileSize}).",
+  "asset-file-size/assets-none-sound": "There are no large assets. The currently largest asset is the sound \"{assetName}\" ({fileSize}) in {sprite}.",
 
+  "asset-file-size/assets-item-costume": "Costume \"{assetName}\" ({fileSize}) in {sprite}",
+  "asset-file-size/assets-item-backdrop": "Backdrop \"{assetName}\" ({fileSize})",
+  "asset-file-size/assets-item-sound": "Sound \"{assetName}\" ({fileSize}) in {sprite}"
 }
