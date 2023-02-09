@@ -1,19 +1,8 @@
-.green-flag_green-flag_1kiAo {
+.green-flag_green-flag_1kiAo, .pause-btn, .stop-all_stop-all_1Y8P9 {
     width: calc(var(--customisableControlButtons-width) * 1px);
-}
-
-.pause-btn {
-    width: calc(var(--customisableControlButtons-width) * 1px);
-}
-
-.stop-all_stop-all_1Y8P9 {
-    width: calc(var(--customisableControlButtons-width) * 1px);
+    border-radius: calc(var(--customisableControlButtons-border) * 1px);
 }
 
 .controls_controls-container_2xinB {
     gap: calc(var(--customisableControlButtons-gap) * 1px);
-}
-
-.green-flag_green-flag_1kiAo:hover {
-    background-color: var(--customisableControlButtons-playBack);
 }

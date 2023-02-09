@@ -19,6 +19,20 @@
         "if": {
           "settings": { "buttonsBackground": true }
         }
+      },
+      {
+        "url": "hover.css",
+        "matches": ["projects"],
+        "if": {
+          "settings": { "hover": true, "buttonsBackground": false }
+        }
+      },
+      {
+        "url": "hover2.css",
+        "matches": ["projects"],
+        "if": {
+          "settings": { "hover": true, "buttonsBackground": true }
+        }
       }
     ],
     "tags": ["projectPlayer"],
@@ -43,6 +57,20 @@
         "max": 5
       },
       {
+        "name": "Border radius (0-100px)",
+        "id": "borderRadius",
+        "type": "integer",
+        "min": 0,
+        "default": 4,
+        "max": 100
+      },
+      {
+        "name": "Remove hover (must refresh to apply)",
+        "id": "hover",
+        "type": "boolean",
+        "default": false
+      },
+      {
         "name": "Buttons background (must refresh to apply)",
         "id": "buttonsBackground",
         "type": "boolean",
@@ -53,21 +81,30 @@
         "id": "playBack",
         "type": "color",
         "default": "rgba(0, 128, 0, 1)",
-        "allowTransparency": true
+        "allowTransparency": true,
+        "if": {
+          "settings": { "buttonsBackground": true }
+        }
       },
       {
         "name": "Pause button background",
         "id": "pauseBack",
         "type": "color",
         "default": "rgba(255, 255, 0, 1)",
-        "allowTransparency": true
+        "allowTransparency": true,
+        "if": {
+          "settings": { "buttonsBackground": true }
+        }
       },
       {
         "name": "Stop button background",
         "id": "stopBack",
         "type": "color",
         "default": "rgba(255, 0, 0, 1)",
-        "allowTransparency": true
+        "allowTransparency": true,
+        "if": {
+          "settings": { "buttonsBackground": true }
+        }
       }
     ],
     "customCssVariables": [
@@ -83,6 +120,13 @@
         "value": {
             "type": "settingValue",
             "settingId": "buttonGap"
+          }
+      },
+      {
+        "name": "border",
+        "value": {
+            "type": "settingValue",
+            "settingId": "borderRadius"
           }
       },
       {

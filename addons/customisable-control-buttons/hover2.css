@@ -1,0 +1,11 @@
+.green-flag_green-flag_1kiAo:hover {
+    background-color: var(--customisableControlButtons-playBack) !important;
+}
+
+.pause-btn:hover {
+    background-color: var(--customisableControlButtons-pauseBack) !important;
+}
+
+.stop-all_stop-all_1Y8P9:hover {
+    background-color: var(--customisableControlButtons-stopBack) !important;
+}
