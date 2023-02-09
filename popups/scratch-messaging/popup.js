@@ -200,7 +200,7 @@ export default async ({ addon, msg, safeMsg }) => {
         return vue.username;
       },
       commentTimeAgo() {
-        const timeFormatter = new Intl.RelativeTimeFormat("en", {
+        const timeFormatter = new Intl.RelativeTimeFormat(msg.locale, {
           localeMatcher: "best fit",
           numeric: "auto",
           style: "short",

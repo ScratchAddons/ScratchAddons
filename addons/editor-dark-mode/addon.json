@@ -563,6 +563,19 @@
       }
     },
     {
+      "name": "input-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        },
+        "threshold": 128
+      }
+    },
+    {
       "name": "input-transparent90",
       "value": {
         "type": "multiply",
@@ -655,6 +668,17 @@
         "type": "textColor",
         "black": "rgba(0, 0, 0, 0.13)",
         "white": "rgba(255, 255, 255, 0.13)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "workspace"
+        }
+      }
+    },
+    {
+      "name": "workspace-insertionMarker",
+      "value": {
+        "type": "textColor",
+        "black": "#000000",
         "source": {
           "type": "settingValue",
           "settingId": "workspace"
@@ -798,6 +822,10 @@
       "url": "paper.js",
       "matches": ["projects"],
       "runAtComplete": false
+    },
+    {
+      "url": "extension_icons.js",
+      "matches": ["projects"]
     }
   ],
   "userstyles": [

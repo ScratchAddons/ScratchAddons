@@ -1,106 +1,145 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   const SHOW_PROPS_CLASS = "sa-show-sprite-properties";
   const HIDE_PROPS_CLASS = "sa-hide-sprite-properties";
-  const PROPS_BTN_CLASS = "sa-sprite-properties-btn";
+  const PROPS_INFO_BTN_CLASS = "sa-sprite-properties-info-btn";
   const PROPS_CLOSE_BTN_CLASS = "sa-sprite-properties-close-btn";
 
+  /** @type {HTMLElement} */
   let propertiesPanel;
-  let spriteContainer; // also contains sprite grid
-  let spriteGrid;
 
-  await init();
+  // A mutation observer is the only reliable way to detect when a different sprite has
+  // been selected or when the folder that contains the focused sprite has been opened.
+  const observer = new MutationObserver(() => {
+    injectInfoButton();
+  });
 
-  // Inject info bubble into current editing target
-  addon.tab.redux.initialize();
-  addon.tab.redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type === "scratch-gui/targets/UPDATE_TARGET_LIST") {
-      let spriteId = e.detail.action.editingTarget;
-      if (!spriteId) return;
-      let spriteIndex = e.detail.action.targets.findIndex((el) => el.id === spriteId);
-      injectInfoButton(spriteIndex);
+  // Toggle the properties panel when double clicking in the sprite grid
+  document.addEventListener("click", (e) => {
+    if (e.detail === 2 && e.target.closest('[class^="sprite-selector_scroll-wrapper_"]')) {
+      togglePropertiesPanel();
     }
   });
-  // Add a single event listener on the entire grid to take advantage of event bubbling
-  spriteGrid.addEventListener("click", (e) => {
-    let doubleClick = e.detail === 2;
-    if (doubleClick) togglePropertiesPanel();
-  });
-  // Close properties panel when mouse leaves the entire sprite panel
-  spriteContainer.addEventListener("mouseleave", () => autoHidePanel());
 
-  addon.settings.addEventListener("change", () => autoHidePanel());
-  addon.self.addEventListener("disabled", () => {
-    togglePropertiesPanel();
-    removeCloseButton();
-  });
-  addon.self.addEventListener("reenabled", () => init());
-  addon.tab.addEventListener("urlChange", () => {
-    if (addon.tab.editorMode === "editor") init();
-  });
-
-  async function init() {
-    propertiesPanel = await addon.tab.waitForElement('[class^="sprite-info_sprite-info_"]');
-    spriteContainer = propertiesPanel.parentElement; // also contains sprite grid
-    spriteGrid = await addon.tab.waitForElement('[class^="sprite-selector_scroll-wrapper_"]');
-    toggleOnLoad();
-    injectInfoButton();
-    injectCloseButton();
-  }
-
-  function toggleOnLoad() {
-    spriteContainer.classList.toggle(HIDE_PROPS_CLASS);
-    if (!addon.settings.get("hideByDefault")) togglePropertiesPanel();
+  function setPropertiesPanelVisible(visible) {
+    document.body.classList.toggle(SHOW_PROPS_CLASS, visible);
+    document.body.classList.toggle(HIDE_PROPS_CLASS, !visible);
   }
 
   function togglePropertiesPanel() {
-    if (!addon.self.disabled) {
-      spriteContainer.classList.toggle(SHOW_PROPS_CLASS);
-      spriteContainer.classList.toggle(HIDE_PROPS_CLASS);
-    } else {
-      spriteContainer.classList.remove(SHOW_PROPS_CLASS);
-      spriteContainer.classList.remove(HIDE_PROPS_CLASS);
-    }
+    const isCurrentlyOpen = document.body.classList.contains(SHOW_PROPS_CLASS);
+    setPropertiesPanelVisible(!isCurrentlyOpen);
   }
 
   function autoHidePanel() {
-    if (addon.settings.get("autoCollapse") && spriteContainer.classList.contains(SHOW_PROPS_CLASS)) {
-      togglePropertiesPanel();
+    if (addon.settings.get("autoCollapse")) {
+      setPropertiesPanelVisible(false);
+    }
+  }
+  // Close properties panel when mouse leaves the entire sprite panel
+  document.body.addEventListener(
+    "mouseleave",
+    (e) => {
+      if (e.target.matches('[class*="sprite-selector_sprite-selector_2KgCX"]')) {
+        autoHidePanel();
+      }
+    },
+    {
+      capture: true,
+    }
+  );
+  addon.settings.addEventListener("change", autoHidePanel);
+
+  function applySettings() {
+    const visibleByDefault = !addon.settings.get("autoCollapse") && !addon.settings.get("hideByDefault");
+    setPropertiesPanelVisible(visibleByDefault);
+  }
+  addon.self.addEventListener("reenabled", applySettings);
+  applySettings();
+
+  addon.self.addEventListener("disabled", () => {
+    setPropertiesPanelVisible(true);
+  });
+
+  function createButton(className, iconPath, tooltip) {
+    const buttonIcon = document.createElement("img");
+    buttonIcon.setAttribute("src", addon.self.dir + iconPath);
+    buttonIcon.draggable = false;
+    const button = document.createElement("button");
+    button.classList.add(className);
+    button.title = tooltip;
+    button.addEventListener("click", () => togglePropertiesPanel());
+    button.appendChild(buttonIcon);
+    addon.tab.displayNoneWhileDisabled(button, { display: "flex" });
+    return button;
+  }
+
+  /** @type {HTMLElement} */
+  let infoButton;
+  /** @type {HTMLElement} */
+  let closeButton;
+
+  function injectInfoButton() {
+    if (!infoButton) {
+      infoButton = createButton(PROPS_INFO_BTN_CLASS, "/info.svg", msg("open-properties-panel-tooltip"));
+    }
+    const selectedSprite = propertiesPanel.parentNode.querySelector('[class*="sprite-selector-item_is-selected"]');
+    if (infoButton.parentNode !== selectedSprite) {
+      if (selectedSprite) {
+        selectedSprite.appendChild(infoButton);
+      } else {
+        infoButton.remove();
+      }
     }
   }
 
-  async function injectInfoButton(spriteIndex) {
-    let selectedSprite;
-    if (spriteIndex) {
-      selectedSprite = document.querySelector(
-        `[class*='sprite-selector_sprite-wrapper_']:nth-child(${spriteIndex}) [class*="sprite-selector_sprite_"]`
-      );
-    } else {
-      selectedSprite = await addon.tab.waitForElement(`[class*="sprite-selector-item_is-selected"]`);
+  function injectCloseButton() {
+    if (!closeButton) {
+      closeButton = createButton(PROPS_CLOSE_BTN_CLASS, "/collapse.svg", msg("close-properties-panel-tooltip"));
     }
-    injectButton(selectedSprite, PROPS_BTN_CLASS, "/info.svg", msg("open-properties-panel-tooltip"));
+    propertiesPanel.appendChild(closeButton);
   }
 
-  async function injectCloseButton() {
-    let container = propertiesPanel.querySelector("[class*='sprite-info_row_']:nth-child(2)");
-    injectButton(container, PROPS_CLOSE_BTN_CLASS, "/collapse.svg", msg("close-properties-panel-tooltip"));
+  function updateWideLocaleMode() {
+    // Certain "wide" languages such as Japanese use a different layout for the sprite info panel
+    // Easiest way to detect this is with this selector that only exists when the sprite info panel
+    // is using the layout with text above the input.
+    // Note that when the stage is in small mode, "wide" languages use the same info panel as other
+    // languages.
+    // List of languages is here:
+    // https://github.com/LLK/scratch-gui/blob/e15b2dfa3a2e58e80fae8d1586c7f56aa0cc0ede/src/lib/locale-utils.js#L6-L18
+    const isWideLocale = !!propertiesPanel.querySelector("[class^=label_input-group-column_]");
+    document.body.classList.toggle("sa-sprite-properties-wide-locale", isWideLocale);
   }
 
-  async function injectButton(container, className, iconPath, tooltip) {
-    if (container.querySelector("." + className)) return;
-    let btnIcon = document.createElement("img");
-    btnIcon.setAttribute("src", addon.self.dir + iconPath);
-    let btn = document.createElement("button");
-    btn.classList.add(className);
-    btn.setAttribute("title", tooltip);
-    btn.setAttribute("tabindex", 0);
-    btn.addEventListener("click", () => togglePropertiesPanel());
-    btn.appendChild(btnIcon);
-    container.appendChild(btn);
-    addon.tab.displayNoneWhileDisabled(btn, { display: "flex" });
-  }
+  document.addEventListener(
+    "click",
+    (e) => {
+      if (
+        e.target.closest("[class*='stage-header_stage-button-first']") ||
+        e.target.closest("[class*='stage-header_stage-button-last']")
+      ) {
+        setTimeout(updateWideLocaleMode);
+      }
+    },
+    { capture: true }
+  );
 
-  function removeCloseButton() {
-    let closeBtn = document.querySelector("." + PROPS_CLOSE_BTN_CLASS);
-    if (closeBtn) closeBtn.remove();
+  while (true) {
+    propertiesPanel = await addon.tab.waitForElement('[class^="sprite-info_sprite-info_"]', {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+    });
+
+    const spriteSelector = propertiesPanel.parentNode;
+    const itemsWrapper = spriteSelector.querySelector('[class*="sprite-selector_items-wrapper_"]');
+    observer.observe(itemsWrapper, {
+      childList: true,
+      subtree: true,
+    });
+
+    updateWideLocaleMode();
+    injectInfoButton();
+    injectCloseButton();
   }
 }

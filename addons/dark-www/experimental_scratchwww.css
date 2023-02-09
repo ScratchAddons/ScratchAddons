@@ -32,6 +32,12 @@ body {
 .sa-project-info img {
   filter: var(--darkWww-page-filter);
 }
+.project-loves::before {
+  background-image: url("%addon-self-dir%/assets/love_transparent.svg");
+}
+.project-favorites::before {
+  background-image: url("%addon-self-dir%/assets/favorite_transparent.svg");
+}
 .project-loves.loved::before,
 .project-favorites.favorited::before {
   filter: none;
@@ -153,7 +159,7 @@ body:not(.sa-body-editor) .formik-input,
 .extension-landing .project-card,
 .extension-landing .hardware-card,
 .promote-modal .cancel-button,
-body:not(.sa-body-editor) .stage-header_stage-button_hkl9B,
+body:not(.sa-body-editor) [class*="stage-header_stage-button_"],
 .studio-adder-section .studio-adder-row input,
 .studio-adder-section .studio-adder-row .studio-adder-vertical-divider,
 .avatar-item img,
@@ -243,7 +249,7 @@ body:not(.sa-body-editor) .join-flow-privacy-message,
 .thumbnail .thumbnail-views::before,
 .ttt-item img,
 .tabs li:not(.active) .tab-icon,
-body:not(.sa-body-editor) .stage-header_stage-button-icon_3zzFK,
+body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .overflow-menu-container .overflow-menu-trigger img {
   filter: var(--darkWww-box-filter);
 }
@@ -742,8 +748,8 @@ p.callout,
 .social-message,
 .comment-text,
 .comment-text::before,
-body:not(.sa-body-editor) .stage_stage_1fD7k,
-body:not(.sa-body-editor) .stage-header_stage-button_hkl9B,
+body:not(.sa-body-editor) [class*="stage_stage_"],
+body:not(.sa-body-editor) [class*="stage-header_stage-button_"],
 .social-form,
 .studio-info .studio-image,
 .studio-report-modal .studio-report-tile-image,

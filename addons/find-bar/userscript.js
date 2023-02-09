@@ -18,11 +18,13 @@ export default async function ({ addon, msg, console }) {
 
       this.prevValue = "";
 
-      this.findLabel = null;
+      this.findBarOuter = null;
       this.findWrapper = null;
       this.findInput = null;
       this.dropdownOut = null;
       this.dropdown = new Dropdown(this.utils);
+
+      document.addEventListener("keydown", (e) => this.eventKeyDown(e), true);
     }
 
     get workspace() {
@@ -30,15 +32,12 @@ export default async function ({ addon, msg, console }) {
     }
 
     createDom(root) {
-      const findBar = root.appendChild(document.createElement("div"));
-      findBar.className = "sa-find-bar";
-      addon.tab.displayNoneWhileDisabled(findBar, { display: "flex" });
+      this.findBarOuter = document.createElement("div");
+      this.findBarOuter.className = "sa-find-bar";
+      addon.tab.displayNoneWhileDisabled(this.findBarOuter, { display: "flex" });
+      root.appendChild(this.findBarOuter);
 
-      this.findLabel = findBar.appendChild(document.createElement("label"));
-      this.findLabel.htmlFor = "sa-find-input";
-      this.findLabel.textContent = msg("find");
-
-      this.findWrapper = findBar.appendChild(document.createElement("span"));
+      this.findWrapper = this.findBarOuter.appendChild(document.createElement("span"));
       this.findWrapper.className = "sa-find-wrapper";
 
       this.dropdownOut = this.findWrapper.appendChild(document.createElement("label"));
@@ -48,6 +47,8 @@ export default async function ({ addon, msg, console }) {
       this.findInput.className = addon.tab.scratchClass("input_input-form", {
         others: "sa-find-input",
       });
+      // for <label>
+      this.findInput.id = "sa-find-input";
       this.findInput.type = "search";
       this.findInput.placeholder = msg("find-placeholder");
       this.findInput.autocomplete = "off";
@@ -55,6 +56,7 @@ export default async function ({ addon, msg, console }) {
       this.dropdownOut.appendChild(this.dropdown.createDom());
 
       this.bindEvents();
+      this.tabChanged();
     }
 
     bindEvents() {
@@ -62,8 +64,15 @@ export default async function ({ addon, msg, console }) {
       this.findInput.addEventListener("keydown", (e) => this.inputKeyDown(e));
       this.findInput.addEventListener("keyup", () => this.inputChange());
       this.findInput.addEventListener("focusout", () => this.hideDropDown());
+    }
 
-      document.addEventListener("keydown", (e) => this.eventKeyDown(e), true);
+    tabChanged() {
+      if (!this.findBarOuter) {
+        return;
+      }
+      const tab = addon.tab.redux.state.scratchGui.editorTab.activeTabIndex;
+      const visible = tab === 0 || tab === 1 || tab === 2;
+      this.findBarOuter.hidden = !visible;
     }
 
     inputChange() {
@@ -127,7 +136,7 @@ export default async function ({ addon, msg, console }) {
     }
 
     eventKeyDown(e) {
-      if (addon.self.disabled) return;
+      if (addon.self.disabled || !this.findBarOuter) return;
 
       let ctrlKey = e.ctrlKey || e.metaKey;
 
@@ -201,8 +210,7 @@ export default async function ({ addon, msg, console }) {
         }
       }
 
-      this.utils.offsetX =
-        this.dropdownOut.getBoundingClientRect().right - this.findLabel.getBoundingClientRect().left + 26;
+      this.utils.offsetX = this.dropdownOut.getBoundingClientRect().width + 32;
       this.utils.offsetY = 32;
     }
 
@@ -360,21 +368,28 @@ export default async function ({ addon, msg, console }) {
     }
 
     getCallsToEvents() {
-      const uses = []; // Definition First, then calls to it
-      const found = {};
+      const uses = [];
+      const alreadyFound = new Set();
 
-      let topBlocks = this.workspace.getTopBlocks();
-      for (const topBlock of topBlocks) {
-        /** @type {!Array<!Blockly.Block>} */
-        let kids = topBlock.getDescendants();
-        for (const block of kids) {
-          if (block.type === "event_broadcast" || block.type === "event_broadcastandwait") {
-            const eventName = block.getChildren()[0].inputList[0].fieldRow[0].getText();
-            if (!found[eventName]) {
-              found[eventName] = block;
-              uses.push({ eventName: eventName, block: block });
-            }
-          }
+      for (const block of this.workspace.getAllBlocks()) {
+        if (block.type !== "event_broadcast" && block.type !== "event_broadcastandwait") {
+          continue;
+        }
+
+        const broadcastInput = block.getChildren()[0];
+        if (!broadcastInput) {
+          continue;
+        }
+
+        let eventName = "";
+        if (broadcastInput.type === "event_broadcast_menu") {
+          eventName = broadcastInput.inputList[0].fieldRow[0].getText();
+        } else {
+          eventName = msg("complex-broadcast");
+        }
+        if (!alreadyFound.has(eventName)) {
+          alreadyFound.add(eventName);
+          uses.push({ eventName: eventName, block: block });
         }
       }
 
@@ -442,6 +457,7 @@ export default async function ({ addon, msg, console }) {
         nxt = dir === -1 ? nxt.previousSibling : nxt.nextSibling;
       }
       if (nxt) {
+        nxt.scrollIntoView({ block: "nearest" });
         this.onItemClick(nxt);
       }
     }
@@ -611,13 +627,22 @@ export default async function ({ addon, msg, console }) {
 
         for (const id of Object.keys(blocks._blocks)) {
           const block = blocks._blocks[id];
-          // To find event broadcaster blocks, we look for the nested "event_broadcast_menu" blocks first that match the event name
-          if (block.opcode === "event_broadcast_menu" && block.fields.BROADCAST_OPTION.value === name) {
-            // Now get the parent block that is the actual broadcast or broadcast and wait
-            const broadcastBlock = blocks.getBlock(block.parent);
-            uses.push(new BlockInstance(target, broadcastBlock));
-          } else if (block.opcode === "event_whenbroadcastreceived" && block.fields.BROADCAST_OPTION.value === name) {
+          if (block.opcode === "event_whenbroadcastreceived" && block.fields.BROADCAST_OPTION.value === name) {
             uses.push(new BlockInstance(target, block));
+          } else if (block.opcode === "event_broadcast" || block.opcode === "event_broadcastandwait") {
+            const broadcastInputBlockId = block.inputs.BROADCAST_INPUT.block;
+            const broadcastInputBlock = blocks._blocks[broadcastInputBlockId];
+            if (broadcastInputBlock) {
+              let eventName;
+              if (broadcastInputBlock.opcode === "event_broadcast_menu") {
+                eventName = broadcastInputBlock.fields.BROADCAST_OPTION.value;
+              } else {
+                eventName = msg("complex-broadcast");
+              }
+              if (eventName === name) {
+                uses.push(new BlockInstance(target, block));
+              }
+            }
           }
         }
       }
@@ -791,6 +816,13 @@ export default async function ({ addon, msg, console }) {
 
     _doBlockClick_.call(this);
   };
+
+  addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (e.detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB") {
+      findBar.tabChanged();
+    }
+  });
 
   while (true) {
     const root = await addon.tab.waitForElement("ul[class*=gui_tab-list_]", {
