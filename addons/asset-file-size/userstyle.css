@@ -1,18 +1,10 @@
-.sa-size-text {
-  position: absolute;
-  bottom: 0;
-  font-size: 0.625rem;
-  z-index: 2;
+[class*="sprite-selector-item_sprite-details"] {
+  text-overflow: clip;
 }
-[dir="ltr"] .sa-size-text {
-  left: 0.15rem;
-}
-[dir="rtl"] .sa-size-text {
-  right: 0.15rem;
-}
+
 .sa-size-limit-warn {
-  color: red;
   font-weight: bold;
+  text-decoration: underline;
 }
 
 /* taken from animated-thumb */

@@ -12,7 +12,7 @@ export default async function ({ addon, msg, global, console }) {
   const MiB = 1024 * KiB;
   const PROJECT_SIZE_LIMIT = 5 * MiB;
 
-  const fileSizesModal = addon.tab.createModal("Project File Sizes", { useEditorClasses: true });
+  const fileSizesModal = addon.tab.createModal(msg("modal-title"), { useEditorClasses: true });
   fileSizesModal.closeButton.addEventListener("click", fileSizesModal.close);
 
   fileSizesModal.container.classList.add("sa-file-size-popup");
@@ -29,21 +29,16 @@ export default async function ({ addon, msg, global, console }) {
     // project.json size
     {
       const heading = c.appendChild(document.createElement("h3"));
-      heading.textContent = "project.json";
+      heading.textContent = msg("project-json-title");
       const info = c.appendChild(document.createElement("p"));
       info.classList.add("sa-file-size-info");
-      info.textContent = `This is the file that stores the project's code, variables, lists and most costume, sound, backdrop and sprite info. If it exceeds 5MiB, the project will not save.`;
+      info.textContent = msg("project-json-description");
 
       const bytes = vm.toJSON().length;
-      const sizeText = `${getSizeString(bytes, true)}/${getSizeString(PROJECT_SIZE_LIMIT, true)}`;
-
-      const advice =
-        bytes > PROJECT_SIZE_LIMIT
-          ? `Try clearing large lists and decreasing the number of blocks in the project.`
-          : "";
+      const sizeText = `${getSizeString(bytes, true, 1000)}/${getSizeString(PROJECT_SIZE_LIMIT, true)}`;
 
       const text = c.appendChild(document.createElement("p"));
-      text.textContent = `The size of the project.json file is ${sizeText}. ${advice}`;
+      text.textContent = msg("project-json-size", {fileSize: sizeText});
     }
 
     // large assets list
@@ -51,22 +46,23 @@ export default async function ({ addon, msg, global, console }) {
       const { largestAsset, largeAssets } = getLargeAssetList();
 
       const heading = c.appendChild(document.createElement("h3"));
-      heading.textContent = "Large Assets";
+      heading.textContent = msg("assets-title");
       const info = c.appendChild(document.createElement("p"));
       info.classList.add("sa-file-size-info");
-      info.textContent = `Costumes, backdrops and sounds that exceed 10MB. If any asset exceeds this limit, the project will not save.`;
+      info.textContent = msg("assets-description");
 
       if (largeAssets.length < 1) {
         const noLargeAssets = c.appendChild(document.createElement("p"));
 
         const asset = largestAsset;
 
-        const whichAsset = `"${asset.asset.name}" (${getSizeString(asset.size)}/${getSizeString(ASSET_SIZE_LIMIT)})`;
-        const whichSprite = ` in ${asset.target.sprite.name}`;
+        const assetName = asset.asset.name;
+        const fileSize = `${getSizeString(asset.size, false, 1000)}/${getSizeString(ASSET_SIZE_LIMIT)}`;
+        const sprite = asset.target.sprite.name;
 
-        const costumeString = `There are no large assets. The currently largest asset is the costume ${whichAsset}${whichSprite}.`;
-        const backdropString = `There are no large assets. The currently largest asset is the backdrop ${whichAsset}.`;
-        const soundString = `There are no large assets. The currently largest asset is the sound ${whichAsset}${whichSprite}.`;
+        const costumeString = msg("assets-none-costume", {assetName, fileSize, sprite});
+        const backdropString = msg("assets-none-backdrop", {assetName, fileSize});
+        const soundString = msg("assets-none-sound", {assetName, fileSize, sprite});
 
         noLargeAssets.textContent =
           asset.type === "sound" ? soundString : asset.type === "backdrop" ? backdropString : costumeString;
@@ -75,19 +71,17 @@ export default async function ({ addon, msg, global, console }) {
         for (const asset of largeAssets) {
           const li = largeAssetsList.appendChild(document.createElement("li"));
 
-          const whichAsset = `"${asset.asset.name}" (${getSizeString(asset.size)})`;
-          const whichSprite = ` in ${asset.target.sprite.name}`;
-
-          const costumeString = `Costume ${whichAsset}${whichSprite}`;
-          const backdropString = `Backdrop ${whichAsset}.`;
-          const soundString = `Sound ${whichAsset}${whichSprite}`;
+          const assetName = asset.asset.name;
+          const fileSize = `${getSizeString(asset.size, false, 1000)}`;
+          const sprite = asset.target.sprite.name;
+  
+          const costumeString = msg("assets-item-costume", {assetName, fileSize, sprite});
+          const backdropString = msg("assets-item-backdrop", {assetName, fileSize});
+          const soundString = msg("assets-item-sound", {assetName, fileSize, sprite});
 
           li.textContent =
             asset.type === "sound" ? soundString : asset.type === "backdrop" ? backdropString : costumeString;
         }
-        const advice = c.appendChild(document.createElement("p"));
-        advice.textContent =
-          "For large sounds, try splitting them up into smaller pieces or converting them to MP3 using other tools and not editing them in Scratch.";
       }
     }
 
@@ -146,18 +140,30 @@ export default async function ({ addon, msg, global, console }) {
 
     for (const index in assets) {
       const card = assetList.children[index];
-      if (!card) return;
+      if (!card) continue;
 
-      const spriteImage = card.querySelector("[class*='sprite-selector-item_sprite-image-outer']");
+      const spriteInfo = card.querySelector("[class*='sprite-selector-item_sprite-details']");
 
-      let sizeText = spriteImage.querySelector(".sa-size-text");
+      // compact costume image sizes, to make space for the filesize
+      if (spriteInfo.textContent.includes(" x ")) {
+        spriteInfo.textContent = spriteInfo.textContent.replace(" x ", "x");
+      }
+
+      let sizeText = spriteInfo.querySelector(".sa-size-text");
       if (!sizeText) {
-        sizeText = spriteImage.appendChild(document.createElement("span"));
-        sizeText.className = "sa-size-text";
+        const space = spriteInfo.appendChild(document.createElement("span"));
+        space.textContent = " ";
+
+        sizeText = spriteInfo.appendChild(document.createElement("span"));
+        sizeText.classList.add("sa-size-text");
       }
 
       const assetSize = assets[index].asset.data.byteLength;
-      sizeText.textContent = getSizeString(assetSize);
+      // more available space on sound asset cards;
+      // and it's more likely you'll run into the asset size limit
+      // from sounds rather than costumes
+      sizeText.textContent = `(${getSizeString(assetSize, false, isSounds ? 100 : 1)})`;
+      sizeText.title = getSizeString(assetSize, false, 1000);
 
       if (assetSize > ASSET_SIZE_LIMIT) {
         sizeText.classList.add("sa-size-limit-warn");
@@ -168,7 +174,7 @@ export default async function ({ addon, msg, global, console }) {
   }
 
   // converts a number of bytes into a human-friendly display string
-  function getSizeString(bytes, isMebi = false) {
+  function getSizeString(bytes, isMebi = false, precision = 100) {
     let number, measurement;
 
     if (isMebi) {
@@ -176,10 +182,10 @@ export default async function ({ addon, msg, global, console }) {
         number = bytes;
         measurement = "B";
       } else if (bytes < MiB) {
-        number = Math.floor((bytes / KiB) * 100) / 100;
+        number = Math.floor((bytes / KiB) * precision) / precision;
         measurement = "KiB";
       } else {
-        number = Math.floor((bytes / MiB) * 100) / 100;
+        number = Math.floor((bytes / MiB) * precision) / precision;
         measurement = "MiB";
       }
     } else {
@@ -187,10 +193,10 @@ export default async function ({ addon, msg, global, console }) {
         number = bytes;
         measurement = "B";
       } else if (bytes < MB) {
-        number = Math.floor((bytes / KB) * 100) / 100;
+        number = Math.floor((bytes / KB) * precision) / precision;
         measurement = "KB";
       } else {
-        number = Math.floor((bytes / MB) * 100) / 100;
+        number = Math.floor((bytes / MB) * precision) / precision;
         measurement = "MB";
       }
     }
@@ -200,8 +206,12 @@ export default async function ({ addon, msg, global, console }) {
 
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type === "scratch-gui/targets/UPDATE_TARGET_LIST") {
-      updateAssetSizes();
+    if (
+      e.detail.action.type === "scratch-gui/targets/UPDATE_TARGET_LIST"
+    ) {
+      // occasionally this event fires before the DOM updates
+      // (for exmaple, when restoring a sprite)
+      queueMicrotask(updateAssetSizes);
     }
   });
 
@@ -223,7 +233,7 @@ export default async function ({ addon, msg, global, console }) {
       const menuItem = fileMenu.appendChild(document.createElement("li"));
       menuItem.className = addon.tab.scratchClass("menu_menu-item", "menu_hoverable", "menu_menu-section");
 
-      menuItem.textContent = "Project file size";
+      menuItem.textContent = msg("menu-item");
 
       menuItem.addEventListener("click", (e) => {
         addon.tab.redux.dispatch({
