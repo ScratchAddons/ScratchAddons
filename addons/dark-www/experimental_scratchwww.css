@@ -221,6 +221,7 @@ body:not(.sa-body-editor) .button.white,
 .tabs li.active:hover,
 .grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
 .unsupported-browser .faq-link-text,
+a.social-messages-profile-link,
 a.social-messages-profile-link:link,
 .studio-selector-button-text-unselected,
 .studio-project-tile .studio-project-username,
@@ -613,9 +614,9 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button:checked {
 }
 
 /* Link color */
-a,
+a:not(a.social-messages-profile-link),
 a:link,
-a:visited,
+a:visited:not(a.social-messages-profile-link),
 body:not(.sa-body-editor) .button.white,
 .news li h4,
 .intro-banner .intro-button,
