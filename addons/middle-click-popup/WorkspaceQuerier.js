@@ -1,6 +1,6 @@
 /**
  * @file Contains all the logic for the parsing of queries by the {@link WorkspaceQuerier}.
- * I'm really sorry if somebody other than me ever has to debug this
+ * I'm really sorry if somebody other than me ever has to debug this.
  * Wish you luck <3
  *
  * Once you *think* you understand the function of the major classes, read the docs on
@@ -13,26 +13,29 @@
 import { BlockInputType, BlockInstance, BlockShape, BlockTypeInfo } from "./BlockTypeInfo.js";
 
 /**
- * A token represents a part of a query, and how that part of the query is interpereted.
  *
- * A token is a part of a query that is interpereted in a specific way. In the query
- * '1 + 69 = Hello World', the base tokens are '1', '+', '60', '=' and 'Hello World'.
+ * A token is a part of a query that is interpereted in a specific way. 
+ * 
+ * In the query 'say 1 = Hello World', the base tokens are 'say', '1', '=, and 'Hello World'.
  * Each token contains where in the query it is located and what {@link TokenType} it is.
  *
  * Sometimes the same section of a query has multiple tokens because there are differnt
- * interpetations of the type of token it is. For example, in the query 'Hello = and', the
- * 'and' could be interpereted as a string, resulting in `< "Hello" = "and" >` or it could
- * be interpereted as the block 'and', resulting in `< < "Hello" = "" > and <> >`. Both of
- * these interpertations are valid, so there would be two tokens for 'and', one for the
- * block and the other for the string.
+ * interpetations of what type of token it is. For example, imagine you had a variable named
+ * 'x'. The query 'set x to 10', is ambiguous because you could be referring to the motion block
+ * `set x to ()` or the data block `set [x] to ()`. This ambiguity results in two different
+ * tokens being creating for 'x', one is 'set x to' referring to the motion block, and the other
+ * is just 'x', referring to the variable. 
  *
- * Tokens are a heriarchy, and some tokens encapsulate other tokens. Going back to the
- * '1 + 69 = Hello World' example, there are two tokens which encapsulate multiple tokens,
- * there is a token for the whole '1 + 69' section (A token of type = {@link TokenTypeBlock})
- * and this block token type contains the tokens '1', '+' and '69'. There is also a token
- * for the equals block, which contains the token for the + block '1 + 69', '=' and
- * 'Hello World'. The token that encapsulates the whole query (in this case, the token for the
- * equals block) is called the root token.
+ * Calling this a 'token' is somewhat misleading, often language interperters will have a 'parse tree'
+ * with tokens and an 'abstract syntax tree' with higher level elements, but I have chosen to make these
+ * two trees one in the same. Because of this, every token represents a logical part of a block.
+ * Going back to the 'say 1 = Hello World' example, there are two 'parent' tokens, both are of type 
+ * {@link TokenTypeBlock}. The first is for the equals block, which contains three subtokens; '1', 
+ * '=' and 'Hello World'. The second is the say block, whos first child is 'say' and second child is
+ * the token for the equals block (which itself has three children). For a query result to be valid,
+ * it must have a token which encapsulates the entire query, in this case the say block token starts
+ * at the first letter and ends at the last letter, so it's a valid interpetation. The token which
+ * encapsulates the whole query is referred to as the root token.
  */
 class Token {
   /**
@@ -54,12 +57,19 @@ class Token {
     this.type = type;
     /** @type {*} Additional information about this token, controled and interperted by the token type. */
     this.value = value;
-    /** @type {number} A number which represents how 'good' this interpertation of the query is. */
+    /** 
+     * A number which represents how 'good' this interpertation of the query is. This value is used
+     * to order the results once the query is finished from best to worst ('best' being the result we
+     * think is most likley the interpertation the user intended).
+     * The score of a parent block incorporates the scores of its children so results are ordered based
+     * on the score of their root token.
+     * @type {number} 
+     */
     this.score = score;
     /**
-     * The precedence of this token. Used to impliment order of operations, tokens with higher
-     * precidence should be evaluated after those with a lower precidence. Brackets have a
-     * precidence of 0 so they are always evalulated first. A precidence of -1 means that predience
+     * The precedence of this token, used to implement order of operations. Tokens with a higher
+     * precedence should be evaluated *after* those with a lower precedence. Brackets have a
+     * precedence of 0 so they are always evalulated first. A precedence of -1 means that precedence
      * is not specified and the parser makes no guarantees about the order of operations.
      * @type {number}
      */
@@ -74,7 +84,11 @@ class Token {
      */
     this.isTruncated = isTruncated;
     /**
-     * TODO
+     * Used to generate autocomplete text, even if that autocomplete text doesn't make a valid query
+     * by itself. For example in the query 'if my varia', we want to autocomplete to 'my variable',
+     * but the query 'if my variable' is still not valid, because my variable is not a boolean. In
+     * this case, the 'my variable' token would still be emitted as the second child of the 'if' token,
+     * but it would be marked as illegal.
      */
     this.isLegal = isLegal;
   }
@@ -90,28 +104,31 @@ class Token {
 }
 
 /**
- * The parent of any class that can create tokens given a query and a location within that
+ * The parent of any class that can enumerate tokens given a query and a location within that
  * query to search.
  *
- * As the same token can have multiple interpertations (see {@link Token}), every token
- * provider can return multiple tokens for the same index. The {@link parseTokens} function
- * finds tokens which start at an index.
+ * As the same position in a query can have multiple interpertations (see {@link Token}), every
+ * token provider's {@link parseTokens} method can return multiple tokens for the same index.
+ * 
+ * Like tokens, there is a token provider tree. See {@link WorkspaceQuerier._createTokenGroups}
+ * for more info on this tree.
  *
  * @abstract
  */
 class TokenProvider {
-  /**
-   * @param {boolean} shouldCache Can the results of this token provider be stored? True
-   * if {@link parseTokens} will always return the same thing for the same inputs or if
-   * this token provider already caches it's result, so caching it again is redundant.
-   */
   constructor(shouldCache) {
     if (this.constructor == TokenProvider) throw new Error("Abstract classes can't be instantiated.");
+    /**
+     * Can the results of this token provider be stored? True
+     * if {@link parseTokens} will always return the same thing for the same inputs or if
+     * this token provider already caches it's result, so caching it again is redundant.
+     * @type {boolean}
+     */
     this.shouldCache = shouldCache;
   }
 
   /**
-   * Return the tokens found by this token provider in query at character number idx.
+   * Return the tokens found by this token provider in `query` at character `idx`.
    * @param {QueryInfo} query The query to search
    * @param {number} idx The index to start the search at
    * @yields {Token} All the tokens found
@@ -123,11 +140,12 @@ class TokenProvider {
 }
 
 /**
- * A token provider which wraps around another token provider, always retuning a blank token in
+ * A token provider which wraps around another token provider, always returning a blank token in
  * addition to whatever the inner token provider returns.
  *
- * Used for tokens that can possibiliy be ommited, like numbers. For the root token of the query
- * '1 +', it's subtokens are '1', '+' and a blank token.
+ * Used for tokens that can possibiliy be ommited, like numbers. For example, the '+' block always
+ * needs three inputs, but the user could query '1 +'. In this case its subtokens are '1', '+' and
+ * a {@link TokenTypeBlank}, provided by this provider.
  */
 class TokenProviderOptional extends TokenProvider {
   /**
@@ -216,7 +234,7 @@ class TokenProviderGroup extends TokenProvider {
   /**
    * Adds token providers to this token provider group.
    * @param {TokenProvider[]} providers
-   * @param {boolean} legal
+   * @param {boolean} legal Are the reuslts of this provider legal in the current context?
    */
   pushProviders(providers, legal = true) {
     if (!this.hasCachable)
@@ -312,11 +330,12 @@ class TokenType extends TokenProvider {
     /**
      * If we see this token, should we know what block it's connected to?
      *
-     * IE TokenTypeStringEnum is a defining feature because we can narrow down
-     * what block it's from based only on it's value. TokenTypeStringLiteral is
-     * not as it could be a part of lot's of different blocks.
+     * For example, in the query 'say Hi', 'say' is a defining feature because
+     * we can narrow down what block it's from based only the fact that it's prsent.
+     * 'Hi', however, is not a defining feature as it could be a part of lots of
+     * different blocks.
      *
-     * Used to help eliminate some dodgey interpertations of queries, if a block
+     * This is used to help eliminate some dodgey interpertations of queries, if a block
      * has no subtokens marked a defining feature it's disguarded.
      * @type {boolean}
      */
@@ -326,7 +345,9 @@ class TokenType extends TokenProvider {
   }
 
   /**
-   * Turns `token` into a value which can be passed into the {@link BlockTypeInfo} constructor.
+   * Turns `token` into a value which can be passed into the {@link BlockInstance} constructor.
+   * For example, in string literal tokens, this gets the string value of the token which can then
+   * be used to create a block.
    * @param {Token} token
    * @param {QueryInfo} query
    * @returns {*}
@@ -340,7 +361,9 @@ class TokenType extends TokenProvider {
    * If the token was only partially typed in the query, creating the text will complete the token.
    * @param {Token} token
    * @param {QueryInfo} query
-   * @param {boolean} endOnly
+   * @param {boolean} endOnly Should we only append to the end of the query. If this is false, we
+   * can create text in the middle of the query that wasn't there. This is used to autocomplete
+   * {@link StringEnum.GriffTokenType} tokens in the middle of a query.
    * @returns {string}
    */
   createText(token, query, endOnly) {
@@ -388,9 +411,9 @@ class TokenTypeBlank extends TokenType {
 }
 
 /**
- * Represents a token who's value must be one of a predetermined set of stirngs.
- * For example, a variable token like the one in `set [my variable] to x` is a string enum,
- * as the value must be one of a set of strings.
+ * Represents a token whos value must be one of a predetermined set of stirngs.
+ * For example, a token for a dropdown menu (like the one in `set [my variable] to x`) is a
+ * string enum, because the value must be one of a set of strings.
  *
  * String enums are also used for values that can only be one specific value (like the 'set' from
  * `set [my variable] to x`). These cases are just string enums with one possible value.
@@ -448,7 +471,8 @@ class StringEnum {
 
     /**
      * Importantly, this does not return a token if {@link FullTokenType} would have already returned
-     * an identical token.
+     * an identical token. If it did, there would be duplicate results for every block, one which internally
+     * uses griff tokens the other which uses full tokens.
      */
     *parseTokens(query, idx) {
       const fullValues = this.values.getFullValues(query, idx);
@@ -611,7 +635,10 @@ class TokenTypeStringLiteral extends TokenType {
    * Each time we encounter a 'terminator' we have to return the string we've read so far as a
    * possible interpertation. If we didn't, when looking for a string at index 4 of 'say Hello
    * World for 10 seconds' we would just return 'Hello World for 10 seconds', leading to the
-   * only result being `say "Hello World for 10 seconds"`
+   * only result being `say "Hello World for 10 seconds"`. This also means in addition to
+   * 'Hello World' we also return 'Hello', 'Hello World for', 'Hello World for 10' and '
+   * Hello World for 10 seconds', but that's just the price we pay for trying to enumerate every
+   * interpetation. 
    */
   *parseTokens(query, idx) {
     // First, look for strings in quotes
@@ -651,7 +678,8 @@ class TokenTypeStringLiteral extends TokenType {
 
 /**
  * The token type for a litteral number, like 69 in the query 'Hello + 69'
- * This token type also supports hexadecimal numbers, like 'Hello + 0x45'
+ * This token type also supports numbers in formats scratch doesn't let you type,
+ * but accepts like '0xFF', 'Infinity' or '1e3'.
  */
 class TokenTypeNumberLiteral extends TokenType {
   static isValidNumber(str) {
@@ -855,18 +883,21 @@ class TokenTypeBlock extends TokenType {
       let score = 0;
       let isLegal = true;
       let isTruncated = subtokens.length < this.tokenProviders.length;
-      // Calculate the score of this block, through some magic.
       let hasDefiningFeature = false;
+
+      // Calculate the score of this block, through a lot of arbitrary math that seems to work ok.
+      
       for (const subtoken of subtokens) {
-        isTruncated |= subtoken.isTruncated;
-        isLegal &&= subtoken.isLegal;
+        isTruncated |= subtoken.isTruncated; // If any of our kids are trauncated, so are we
+        isLegal &&= subtoken.isLegal; // If any of our kids are illegal, so are we
         if (!subtoken.isTruncated) score += subtoken.score;
-        else score += subtoken.score / 100000 - 10;
+        else score += subtoken.score / 100000 - 10; // Big score penalty if trauncated
         if (subtoken.type.isDefiningFeature && subtoken.start < query.length) hasDefiningFeature = true;
       }
+      score += Math.floor(1000 * (subtokens.length / this.tokenProviders.length));
+      
       /** See {@link TokenType.isDefiningFeature} */
       if (!hasDefiningFeature) continue;
-      score += Math.floor(1000 * (subtokens.length / this.tokenProviders.length));
       const end = query.skipIgnorable(subtokens[subtokens.length - 1].end);
       yield new Token(idx, end, this, subtokens, score, this.block.precedence, isTruncated, isLegal);
     }
@@ -894,8 +925,16 @@ class TokenTypeBlock extends TokenType {
       ++query.tokenCount;
       if (!query.canCreateMoreTokens()) break;
 
-      if (this.block.precedence !== -1) {
+      if (this.block.precedence !== -1) { // If we care about the precedence of this block
+        // Discard this token if its precedence is higher than ours, meaning it should be calculated
+        //  before us not afterward.
         if (token.precedence > this.block.precedence) continue;
+        /**
+         * This check eliminates thousands of results by making sure blocks with equal precedence
+         * can only contain themselves as their own first input. Without this, the query '1 + 2 + 3'
+         * would have two interpretations '(1 + 2) + 3' and '1 + (2 + 3)'. This rule makes the second
+         * of those invalid because the root '+' block contains itself as its third token.
+         */
         if (token.precedence === this.block.precedence && tokenProviderIdx !== 0) continue;
       }
 
@@ -1207,14 +1246,14 @@ export default class WorkspaceQuerier {
    *
    * But wait, there's a problem. Blocks like `() + ()` have two inputs, both of which are numbers.
    * The issue arrises when you realize the block '+' itself also returns a number. So when we
-   * try to call parseTokens on the '+' block, it will try to look for it's first parameter can
-   * call parseTokens on tokenGroupNumber, which will call parseTokens on the '+' block again
-   * (because + can return a number) which will call tokenGroupNumber again and we're in an
-   * infinite loop. We can't just exclude blocks from being their own first parameter because than
+   * try to call parseTokens on the '+' block, it will try to look for it's first parameter thus
+   * calling parseTokens on tokenGroupNumber, which will call parseTokens on the '+' block again
+   * (because + can return a number) which will call tokenGroupNumber again... and we're in an
+   * infinite loop. We can't just exclude blocks from being their own first parameter because then
    * queries like '1 + 2 + 3' wouldn't work. The solution is something you might have only thought
    * of as a performance boost; caching. When tokenGroupNumber gets queried for the second time,
-   * it's mid way though building its cache. If this happens, it just returns all the tokens the first
-   * query has already cached but no more. So in the example above, when the + block calls
+   * it's mid way though building its cache from the first query. If this happens, it just returns
+   * all the tokens it had already found, but no more. So in the example above, when the + block calls
    * tokenGroupNumber for the second time it finds only the number literal '1'. It then finds the
    * second number literal '2' and yields the block '1 + 2' which gets added to tokenGroupNumber's
    * cache. '1 + 2' then gets disguarded by the queryWorkspace function because it doesn't cover the
@@ -1223,17 +1262,15 @@ export default class WorkspaceQuerier {
    * '1 + 2' as a result. The + block will continue parsing, find the second '+' and the number '3'
    * and yield '(1 + 2) + 3'. No infinite loops!
    *
-   * A consiquence of this system is something I implicitly implied in the above paragraph "when the
+   * A consequence of this system is something I implicitly implied in the above paragraph "when the
    * + block calls tokenGroupNumber for the second time it finds only the number literal '1'" This
    * is only true if 'TokenTypeNumberLiteral' is searched before the '+' block. This is why the order
    * the token providers are in is critically important. I'll leave it as an exercise to the reader to
-   * work out why, but the same parsing order problems crops up when implimenting order of operations.
+   * work out why, but the same parsing order problems crops up when implementing order of operations.
    * If a suggestion that should show up isn't showing up, it's probably because the token providers
    * in one of the groups is in the wrong order. Ordering the providers within the base groups is delt
    * with by {@link _poppulateTokenGroups} and the inter-group ordering is delt with below, by the
    * order they are passed into pushProviders.
-   *
-   * I should write a CS paper on this lmao. If only I had a snappy name for the algorithm.
    *
    * @private
    */
