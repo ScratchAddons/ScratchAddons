@@ -46,9 +46,9 @@ export default async function ({ addon, global, console, msg }) {
     const icon = document.createElement("button");
     icon.id = "view-json-btn";
     icon.title = msg("hover");
-    icon.textContent=msg("open");
+    icon.textContent = msg("open");
     const pjtBtns = document.getElementsByClassName("flex-row action-buttons")[0];
-    
+
     pjtBtns.prepend(icon);
     let msgs = {};
     ["edit_warn", "please_reopen"].forEach((elem) => {
