@@ -6,6 +6,9 @@ export default async function ({ addon, msg, global, console }) {
   // from my testing, a 9999999 byte long wav file can be saved,
   // but a 10000000 byte one can't
   const ASSET_SIZE_LIMIT = 10 * MB - 1;
+  // prevent the project file sizes dialog from
+  // displaying it as 9.999MB
+  const VISIBLE_ASSET_SIZE_LIMIT = 10 * MB;
 
   // source: https://scratch.mit.edu/discuss/post/6084224
   // apparently the project.json size limit is in mebibytes
@@ -61,7 +64,7 @@ export default async function ({ addon, msg, global, console }) {
         const asset = largestAsset;
 
         const assetName = asset.asset.name;
-        const fileSize = `${getSizeString(asset.size, false, 1000)}/${getSizeString(ASSET_SIZE_LIMIT)}`;
+        const fileSize = `${getSizeString(asset.size, false, 1000)}/${getSizeString(VISIBLE_ASSET_SIZE_LIMIT)}`;
         const sprite = asset.target.sprite.name;
 
         const costumeString = msg("assets-none-costume", { assetName, fileSize, sprite });
