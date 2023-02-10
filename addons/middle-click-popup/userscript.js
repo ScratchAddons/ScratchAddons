@@ -351,8 +351,8 @@ export default async function ({ addon, msg, console }) {
       clientX: mousePosition.x,
       clientY: mousePosition.y,
       type: "mousedown",
-      stopPropagation: function () {},
-      preventDefault: function () {},
+      stopPropagation: function () { },
+      preventDefault: function () { },
       target: selectedPreview.svgBlock,
     };
     if (workspace.getGesture(fakeEvent)) {
@@ -409,16 +409,6 @@ export default async function ({ addon, msg, console }) {
         e.preventDefault();
         break;
       case "ArrowLeft":
-    }
-  });
-
-  // Prevent pasting rich text by converting it into plain text
-  popupInput.addEventListener("paste", (e) => {
-    if (e.clipboardData && popupPosition) {
-      e.preventDefault();
-      var text = e.clipboardData.getData("text/plain");
-      text = text.replace("\n", "");
-      document.execCommand("insertText", false, text);
     }
   });
 
