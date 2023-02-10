@@ -14,8 +14,8 @@ import { BlockInputType, BlockInstance, BlockShape, BlockTypeInfo } from "./Bloc
 
 /**
  *
- * A token is a part of a query that is interpereted in a specific way. 
- * 
+ * A token is a part of a query that is interpereted in a specific way.
+ *
  * In the query 'say 1 = Hello World', the base tokens are 'say', '1', '=, and 'Hello World'.
  * Each token contains where in the query it is located and what {@link TokenType} it is.
  *
@@ -24,13 +24,13 @@ import { BlockInputType, BlockInstance, BlockShape, BlockTypeInfo } from "./Bloc
  * 'x'. The query 'set x to 10', is ambiguous because you could be referring to the motion block
  * `set x to ()` or the data block `set [x] to ()`. This ambiguity results in two different
  * tokens being creating for 'x', one is 'set x to' referring to the motion block, and the other
- * is just 'x', referring to the variable. 
+ * is just 'x', referring to the variable.
  *
  * Calling this a 'token' is somewhat misleading, often language interperters will have a 'parse tree'
  * with tokens and an 'abstract syntax tree' with higher level elements, but I have chosen to make these
  * two trees one in the same. Because of this, every token represents a logical part of a block.
- * Going back to the 'say 1 = Hello World' example, there are two 'parent' tokens, both are of type 
- * {@link TokenTypeBlock}. The first is for the equals block, which contains three subtokens; '1', 
+ * Going back to the 'say 1 = Hello World' example, there are two 'parent' tokens, both are of type
+ * {@link TokenTypeBlock}. The first is for the equals block, which contains three subtokens; '1',
  * '=' and 'Hello World'. The second is the say block, whos first child is 'say' and second child is
  * the token for the equals block (which itself has three children). For a query result to be valid,
  * it must have a token which encapsulates the entire query, in this case the say block token starts
@@ -57,13 +57,13 @@ class Token {
     this.type = type;
     /** @type {*} Additional information about this token, controled and interperted by the token type. */
     this.value = value;
-    /** 
+    /**
      * A number which represents how 'good' this interpertation of the query is. This value is used
      * to order the results once the query is finished from best to worst ('best' being the result we
      * think is most likley the interpertation the user intended).
      * The score of a parent block incorporates the scores of its children so results are ordered based
      * on the score of their root token.
-     * @type {number} 
+     * @type {number}
      */
     this.score = score;
     /**
@@ -109,7 +109,7 @@ class Token {
  *
  * As the same position in a query can have multiple interpertations (see {@link Token}), every
  * token provider's {@link parseTokens} method can return multiple tokens for the same index.
- * 
+ *
  * Like tokens, there is a token provider tree. See {@link WorkspaceQuerier._createTokenGroups}
  * for more info on this tree.
  *
@@ -638,7 +638,7 @@ class TokenTypeStringLiteral extends TokenType {
    * only result being `say "Hello World for 10 seconds"`. This also means in addition to
    * 'Hello World' we also return 'Hello', 'Hello World for', 'Hello World for 10' and '
    * Hello World for 10 seconds', but that's just the price we pay for trying to enumerate every
-   * interpetation. 
+   * interpetation.
    */
   *parseTokens(query, idx) {
     // First, look for strings in quotes
@@ -886,7 +886,7 @@ class TokenTypeBlock extends TokenType {
       let hasDefiningFeature = false;
 
       // Calculate the score of this block, through a lot of arbitrary math that seems to work ok.
-      
+
       for (const subtoken of subtokens) {
         isTruncated |= subtoken.isTruncated; // If any of our kids are trauncated, so are we
         isLegal &&= subtoken.isLegal; // If any of our kids are illegal, so are we
@@ -895,7 +895,7 @@ class TokenTypeBlock extends TokenType {
         if (subtoken.type.isDefiningFeature && subtoken.start < query.length) hasDefiningFeature = true;
       }
       score += Math.floor(1000 * (subtokens.length / this.tokenProviders.length));
-      
+
       /** See {@link TokenType.isDefiningFeature} */
       if (!hasDefiningFeature) continue;
       const end = query.skipIgnorable(subtokens[subtokens.length - 1].end);
@@ -925,7 +925,8 @@ class TokenTypeBlock extends TokenType {
       ++query.tokenCount;
       if (!query.canCreateMoreTokens()) break;
 
-      if (this.block.precedence !== -1) { // If we care about the precedence of this block
+      if (this.block.precedence !== -1) {
+        // If we care about the precedence of this block
         // Discard this token if its precedence is higher than ours, meaning it should be calculated
         //  before us not afterward.
         if (token.precedence > this.block.precedence) continue;
