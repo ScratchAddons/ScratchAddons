@@ -37,16 +37,18 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   const prjBtnEvt = setInterval((e) => {
-    if (document.getElementsByClassName("project-buttons")[0]) {
+    if (document.getElementsByClassName("flex-row action-buttons")[0]) {
       clearInterval(prjBtnEvt);
       setup();
     }
   }, 100);
   async function setup() {
-    const icon = document.createElement("div");
+    const icon = document.createElement("button");
     icon.id = "view-json-btn";
     icon.title = msg("hover");
-    const pjtBtns = document.getElementsByClassName("project-buttons")[0];
+    icon.textContent=msg("open");
+    const pjtBtns = document.getElementsByClassName("flex-row action-buttons")[0];
+    
     pjtBtns.prepend(icon);
     let msgs = {};
     ["edit_warn", "please_reopen"].forEach((elem) => {

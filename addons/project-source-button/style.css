@@ -1,13 +1,12 @@
 #view-json-btn {
-  background-image: url("icon.svg");
-  width: 2.5rem;
-  height: 2.5rem;
-  display: inline-block;
-  background-size: cover;
-  border-radius: 0.25rem;
-  border: 0.1px solid #000;
-  padding: 0px;
-  margin: 0px;
-  position: relative;
-  top: 13px;
+  margin: 0 0 0 .5rem;
+  border-radius: 19px;
+  background-color: #4d97ff;
+  padding: 0 .75rem;
+  height: 2rem;
+  text-decoration: none;
+  line-height: .875rem;
+  font-size: .75rem;
+  font-weight: bold;
+  border:none;
 }
