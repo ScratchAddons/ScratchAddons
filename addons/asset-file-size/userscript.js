@@ -3,11 +3,15 @@ export default async function ({ addon, msg, global, console }) {
 
   const KB = 1000;
   const MB = 1000 * KB;
-  const ASSET_SIZE_LIMIT = 10 * MB;
+  // from my testing, a 9999999 byte long wav file can be saved,
+  // but a 10000000 byte one can't
+  const ASSET_SIZE_LIMIT = 10 * MB - 1;
 
   // source: https://scratch.mit.edu/discuss/post/6084224
   // apparently the project.json size limit is in mebibytes
   // instead of megabytes for some reason
+  // from my testing, a 5242880 byte long project.json
+  // CAN be saved, unlike assets
   const KiB = 1024;
   const MiB = 1024 * KiB;
   const PROJECT_SIZE_LIMIT = 5 * MiB;
