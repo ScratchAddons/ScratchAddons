@@ -1,25 +1,21 @@
 {
-    "name": "Remember Closed Categories",
-    "description": "Fixes the forums not remembering what forum categories you've closed.",
-    "credits": [
-      {
-        "name": "Steve0Greatness",
-        "link": "https://scratch.mit.edu/users/Steve0Greatness/"
-      }
-    ],
-    "userscripts": [
-      {
-        "url": "userscript.js",
-        "matches": ["https://scratch.mit.edu/discuss/"],
-        "runAtComplete": false
-      }
-    ],
-    "tags": [
-        "community",
-        "forums"
-    ],
-    "dynamicDisable": true,
-    "dynamicEnable": true,
-    "versionAdded": "1.31.0"
-  }
-  
+  "name": "Remember Closed Categories",
+  "description": "Fixes the forums not remembering what forum categories you've closed.",
+  "credits": [
+    {
+      "name": "Steve0Greatness",
+      "link": "https://scratch.mit.edu/users/Steve0Greatness/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/discuss/"],
+      "runAtComplete": false
+    }
+  ],
+  "tags": ["community", "forums"],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "versionAdded": "1.31.0"
+}
