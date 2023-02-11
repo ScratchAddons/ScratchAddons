@@ -46,8 +46,8 @@ export default async function ({ addon, console, msg }) {
         `https://turbowarp.org/${window.location.pathname.split("/")[2]}${search}`,
         "_blank",
         "noopener,noreferrer"
-        );
-      } else if (action === "player") {
+      );
+    } else if (action === "player") {
       playerToggled = !playerToggled;
       if (playerToggled) {
         const username = await addon.auth.fetchUsername();
