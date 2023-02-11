@@ -4,7 +4,7 @@ export default async function ({ console }) {
     let categoryBody = categories[i];
 
     let categoryCollapse = categoryBody.querySelector(".toggle");
-    categoryCollapse.addEventListener("click", event => {
+    categoryCollapse.addEventListener("click", (event) => {
       event.preventDefault();
       let categoryHead = event.target.parentElement;
       if (categoryHead.classList.contains("sa-collapsed")) {
@@ -19,8 +19,8 @@ export default async function ({ console }) {
 
     let categoryNumber = categoryBody.id.split("_").pop();
     if (!shouldCollapseCategory(categoryNumber)) {
-        removeCategoryCookie(categoryNumber)
-        continue;
+      removeCategoryCookie(categoryNumber);
+      continue;
     }
     changeCategoryCookieExistenceLength(categoryNumber);
 
@@ -37,14 +37,14 @@ export default async function ({ console }) {
 
   function shouldCollapseCategory(categoryNumber) {
     let cookieName = `category_body_${categoryNumber}`;
-    let storedInCookie = document.cookie.includes(`${cookieName}=collapsed`)
+    let storedInCookie = document.cookie.includes(`${cookieName}=collapsed`);
     return storedInCookie;
   }
 
   function changeCategoryCookieExistenceLength(categoryNumber) {
     let cookieName = `category_body_${categoryNumber}`;
-    console.log(`Extending ${cookieName} for an extra 30 days`)
-    document.cookie = `${cookieName}=collapsed;max-age=${30*24*60*60}`;
+    console.log(`Extending ${cookieName} for an extra 30 days`);
+    document.cookie = `${cookieName}=collapsed;max-age=${30 * 24 * 60 * 60}`;
   }
 
   function removeCategoryCookie(categoryNumber) {
