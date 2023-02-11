@@ -76,7 +76,7 @@ export default async function ({ addon, console, msg }) {
         addon.tab.traps.vm.stopAll();
       } else removeIframe();
     }
-  };
+  }
 
   let showAlert = true;
   while (true) {
