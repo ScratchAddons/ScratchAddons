@@ -41,7 +41,14 @@ export default async function ({ addon, console, msg }) {
       ).project_token;
       search = `#?token=${projectToken}`;
     }
-    if (action === "player") {
+
+    if ((action === "link") || (e.ctrlKey) || (e.metaKey)) {
+      window.open(
+        `https://turbowarp.org/${window.location.pathname.split("/")[2]}${search}`,
+        "_blank",
+        "noopener,noreferrer"
+      );
+    } else if (action === "player") {
       playerToggled = !playerToggled;
       if (playerToggled) {
         const username = await addon.auth.fetchUsername();
@@ -69,34 +76,28 @@ export default async function ({ addon, console, msg }) {
         button.title = "Scratch";
         addon.tab.traps.vm.stopAll();
       } else removeIframe();
-    } else {
-      window.open(
-        `https://turbowarp.org/${window.location.pathname.split("/")[2]}${search}`,
-        "_blank",
-        "noopener,noreferrer"
-      );
+    };
+
+    let showAlert = true;
+    while (true) {
+      const seeInside = await addon.tab.waitForElement(".see-inside-button", {
+        markAsSeen: true,
+        reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+      });
+
+      seeInside.addEventListener("click", function seeInsideClick(event) {
+        if (!playerToggled || !showAlert) return;
+
+        if (confirm(msg("confirmation"))) {
+          showAlert = false;
+        } else {
+          event.stopPropagation();
+        }
+      });
+
+      addon.tab.appendToSharedSpace({ space: "beforeRemixButton", element: button, order: 1 });
+
+      scratchStage = document.querySelector(".guiPlayer");
     }
-  };
-
-  let showAlert = true;
-  while (true) {
-    const seeInside = await addon.tab.waitForElement(".see-inside-button", {
-      markAsSeen: true,
-      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
-    });
-
-    seeInside.addEventListener("click", function seeInsideClick(event) {
-      if (!playerToggled || !showAlert) return;
-
-      if (confirm(msg("confirmation"))) {
-        showAlert = false;
-      } else {
-        event.stopPropagation();
-      }
-    });
-
-    addon.tab.appendToSharedSpace({ space: "beforeRemixButton", element: button, order: 1 });
-
-    scratchStage = document.querySelector(".guiPlayer");
   }
 }

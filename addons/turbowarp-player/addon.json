@@ -11,6 +11,11 @@
       "type": "notice",
       "text": "TurboWarp has separate cloud data servers. \"Replace player\" mode will send your Scratch username to TurboWarp.org for use in cloud data.",
       "id": "cloudData"
+    },
+    {
+      "type": "info",
+      "text": "If the Replace player mode is selected, you can Ctrl+Click the button to open in new tab.",
+      "id": "ctrlToOpen"
     }
   ],
   "credits": [
