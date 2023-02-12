@@ -1,6 +1,12 @@
 {
   "name": "Old Scratch Icons",
   "description": "Reverts the new colorblind-friendly icons to the old ones.",
+  "credits": [
+    {
+      "name": "illogicalapple",
+      "link": "https://github.com/illogicalapple"
+    }
+  ],
   "userstyles": [
     {
       "url": "style.css",
