@@ -1,0 +1,14 @@
+{
+  "name": "Old Scratch Icons",
+  "description": "Reverts the new colorblind-friendly icons to the old ones.",
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "tags": ["community"],
+  "versionAdded": "1.30.2"
+}
