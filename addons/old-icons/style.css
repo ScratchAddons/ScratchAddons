@@ -1,23 +1,29 @@
 .project-loves::before {
   background-image: url(icons/love-gray.svg);
+  opacity: 0.5;
 }
 
 .project-loves.loved::before {
   background-image: url(icons/love-red.svg);
+  opacity: 0.5;
 }
 
 .project-favorites::before {
   background-image: url(icons/fav-gray.svg);
+  opacity: 0.5;
 }
 
 .project-favorites.favorited::before {
   background-image: url(icons/fav-yellow.svg);
+  opacity: 0.5;
 }
 
 .project-remixes::before {
   background-image: url(icons/remix-gray.svg);
+  opacity: 0.5;
 }
 
 .project-views::before {
   background-image: url(icons/views-gray.svg);
+  opacity: 0.5;
 }
