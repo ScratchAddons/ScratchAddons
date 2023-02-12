@@ -5,7 +5,7 @@
 
 .project-loves.loved::before {
   background-image: url(icons/love-red.svg);
-  opacity: 0.5;
+  opacity: 1;
 }
 
 .project-favorites::before {
@@ -15,7 +15,7 @@
 
 .project-favorites.favorited::before {
   background-image: url(icons/fav-yellow.svg);
-  opacity: 0.5;
+  opacity: 1;
 }
 
 .project-remixes::before {
