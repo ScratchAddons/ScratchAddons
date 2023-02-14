@@ -1,6 +1,6 @@
 {
   "name": "Customizable new sprite position",
-  "description": "Change where newly created sprites are placed.",
+  "description": "Change where newly created sprites are placed on the stage.",
   "credits": [
     {
       "name": "pufferfish101007",
