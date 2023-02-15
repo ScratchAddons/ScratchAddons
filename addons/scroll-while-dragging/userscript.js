@@ -66,7 +66,7 @@ export default async function ({ addon, msg, console }) {
 
     e.preventDefault();
   };
-  
+
   const originalBounds = ScratchBlocks.WorkspaceSvg.prototype.getBlocksBoundingBox;
   ScratchBlocks.WorkspaceSvg.prototype.getBlocksBoundingBox = function () {
     // "Store" bounds while dragging something,
@@ -75,7 +75,8 @@ export default async function ({ addon, msg, console }) {
     if (
       addon.self.disabled ||
       !this.storedBounds ||
-      !this.currentGesture_ || this.currentGesture_.isDraggingWorkspace_
+      !this.currentGesture_ ||
+      this.currentGesture_.isDraggingWorkspace_
     ) {
       this.storedBounds = originalBounds.call(this);
     }
