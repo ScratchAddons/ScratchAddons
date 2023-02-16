@@ -1,6 +1,6 @@
 {
-  "name": "Remember Closed Categories",
-  "description": "Fixes the forums not remembering what forum categories you've closed.",
+  "name": "Remember collapsed forum categories",
+  "description": "Categories you collapsed on the forum home page (the list of forums) will stay collapsed when you leave and come back.",
   "credits": [
     {
       "name": "Steve0Greatness",
