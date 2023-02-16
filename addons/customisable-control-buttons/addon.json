@@ -33,12 +33,20 @@
         "if": {
           "settings": { "hover": true, "buttonsBackground": true }
         }
+      },
+      {
+        "url": "userstyle.css",
+        "matches": ["projects"],
+        "if": {
+          "settings": { "reverse order of project controls": true }
+        }
       }
     ],
     "tags": ["projectPlayer"],
     "enabledByDefault": false,
     "dynamicEnable": true,
     "dynamicDisable": true,
+    "updateUserstylesOnSettingsChange": true,
     "settings": [
       {
         "name": "Button width (32-48px)",
@@ -49,29 +57,19 @@
         "max": 48
       },
       {
-        "name": "Button gap (0-5px)",
-        "id": "buttonGap",
-        "type": "integer",
-        "min": 0,
-        "default": 3,
-        "max": 5
-      },
-      {
-        "name": "Border radius (0-100px)",
-        "id": "borderRadius",
-        "type": "integer",
-        "min": 0,
-        "default": 4,
-        "max": 100
-      },
-      {
-        "name": "Remove hover (must refresh to apply)",
+        "name": "Remove hover",
         "id": "hover",
         "type": "boolean",
         "default": false
       },
       {
-        "name": "Buttons background (must refresh to apply)",
+        "name": "Reverse order",
+        "id": "reverse order of project controls",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "name": "Buttons background",
         "id": "buttonsBackground",
         "type": "boolean",
         "default": false
@@ -113,20 +111,6 @@
         "value": {
             "type": "settingValue",
             "settingId": "buttonWidth"
-          }
-      },
-      {
-        "name": "gap",
-        "value": {
-            "type": "settingValue",
-            "settingId": "buttonGap"
-          }
-      },
-      {
-        "name": "border",
-        "value": {
-            "type": "settingValue",
-            "settingId": "borderRadius"
           }
       },
       {
