@@ -777,6 +777,17 @@
       }
     },
     {
+      "name": "gray-darkText",
+      "value": {
+        "type": "textColor",
+        "black": "#3b3b3b",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
       "name": "gray-boxHighlight",
       "value": {
         "type": "textColor",
