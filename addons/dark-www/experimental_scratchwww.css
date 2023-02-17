@@ -317,9 +317,12 @@ body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
 }
 .outer .categories li {
   background-color: var(--darkWww-gray-tab);
+  border-color: var(--darkWww-gray-darkText);
+  color: var(--darkWww-gray-text);
 }
 .outer .categories li:hover {
   background-color: var(--darkWww-gray-tabHover);
+  color: var(--darkWww-gray-darkText);
 }
 .toggle-switch .slider {
   background-color: var(--darkWww-gray-darker);
