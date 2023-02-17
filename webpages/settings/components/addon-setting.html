@@ -16,7 +16,12 @@
         <div class="setting-table-list" v-sortable>
           <div class="setting-table-row" v-for="(i, row) of addonSettings[setting.id]">
             <div class="setting-table-options">
-              <button :disabled="!addon._enabled" class="addon-buttons" @click="deleteTableRow(i)">
+              <button
+                :disabled="!addon._enabled"
+                class="addon-buttons"
+                @click="deleteTableRow(i)"
+                v-if="setting.disableEditingText != true"
+              >
                 <img class="icon-type" src="../../images/icons/close.svg" />
               </button>
               <button :disabled="!addon._enabled" class="addon-buttons handle">
@@ -30,11 +35,16 @@
                 :table-child="true"
                 :setting="getTableSetting(id)"
                 :addon-settings="row"
+                :class="{'disableEditing': setting.disableEditingText, 'hide': shouldHide(id)}"
               ></addon-setting>
             </div>
           </div>
         </div>
-        <div class="addon-split-button setting-table-dropdown" :class="{open: rowDropdownOpen}">
+        <div
+          class="addon-split-button setting-table-dropdown"
+          :class="{open: rowDropdownOpen}"
+          v-if="setting.disableAddingPresets != true"
+        >
           <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-button" @click="addTableRow()">
             <img class="icon-type" src="../../images/icons/plus.svg" />
           </button>
@@ -395,5 +405,12 @@
     right: 0;
     border-top-left-radius: 4px;
     border-top-right-radius: 0;
+  }
+  .hide {
+    display: none;
+  }
+  .disableEditing input[type="text"] {
+    pointer-events: none;
+    border: none;
   }
 </style>

@@ -1,0 +1,74 @@
+{
+  "name": "Front page rows",
+  "description": "Changes the order of rows on the front page or hides them.",
+  "credits": [
+    {
+      "name": "Norbiros",
+      "link": "https://scratch.mit.edu/users/norbir/"
+    },
+    {
+      "name": "Platformer444",
+      "link": "https://scratch.mit.edu/users/Platformer444/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/"],
+      "runAtComplete": true
+    }
+  ],
+  "settings": [
+    {
+      "name": "Rows",
+      "id": "rows",
+      "type": "table",
+      "disableEditingText": true,
+      "disableAddingPresets": true,
+      "default": [
+        { "name": "Featured Projects", "id": "community_featured_projects", "rowVisibility": true },
+        { "name": "Featured Studios", "id": "community_featured_studios", "rowVisibility": true },
+        { "name": "Projects Curated by", "id": "curator_top_projects", "rowVisibility": true },
+        { "name": "Scratch Design Studio", "id": "scratch_design_studio", "rowVisibility": true },
+        { "name": "Projects by Scratchers I'm Following", "id": "custom_projects_by_following", "rowVisibility": true },
+        {
+          "name": "Projects Loved by Scratchers I'm Following",
+          "id": "custom_projects_loved_by_following",
+          "rowVisibility": true
+        },
+        {
+          "name": "Projects in Studios I'm Following",
+          "id": "custom_projects_in_studios_following",
+          "rowVisibility": true
+        },
+        { "name": "What the Community is Remixing", "id": "community_most_remixed_projects", "rowVisibility": true },
+        { "name": "What the Community is Loving", "id": "community_most_loved_projects", "rowVisibility": true }
+      ],
+      "row": [
+        {
+          "name": "Name",
+          "id": "name",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "name": "Id",
+          "id": "id",
+          "type": "untranslated",
+          "default": ""
+        },
+        {
+          "name": "Show",
+          "id": "rowVisibility",
+          "type": "boolean",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "versionAdded": "1.31.0",
+  "tags": ["community", "featured"],
+  "enabledByDefault": false
+}

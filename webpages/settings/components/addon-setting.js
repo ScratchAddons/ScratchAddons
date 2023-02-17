@@ -6,6 +6,7 @@ export default async function ({ template }) {
       return {
         rowDropdownOpen: false,
         noResetDropdown: ["table", "boolean", "select"].includes(this.setting.type),
+        display: true,
       };
     },
     ready() {
@@ -110,6 +111,9 @@ export default async function ({ template }) {
       },
       getTableSetting(id) {
         return this.setting.row.find((setting) => setting.id === id);
+      },
+      shouldHide(id) {
+        return id == "id";
       },
       deleteTableRow(i) {
         this.addonSettings[this.setting.id].splice(i, 1);
