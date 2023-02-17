@@ -1,0 +1,26 @@
+{
+  "name": "Auto Follow Topics",
+  "description": "Automatically follow forum topics you post on",
+  "tags": [
+    "forums"
+  ],
+  "credits": [
+    {
+      "name": "Chiroyce",
+      "link": "https://github.com/Chiroyce1"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": [
+        "https://scratch.mit.edu/discuss/topic/*"
+      ]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "enabledByDefault": false,
+  "runAtComplete": true,
+  "versionAdded": "1.32.0"
+}
