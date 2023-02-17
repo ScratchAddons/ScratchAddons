@@ -1,9 +1,7 @@
 {
   "name": "Auto Follow Topics",
   "description": "Automatically follow forum topics you post on",
-  "tags": [
-    "forums"
-  ],
+  "tags": ["forums"],
   "credits": [
     {
       "name": "Chiroyce",
@@ -13,9 +11,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "https://scratch.mit.edu/discuss/topic/*"
-      ]
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
     }
   ],
   "dynamicEnable": true,
