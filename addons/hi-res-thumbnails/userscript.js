@@ -1,8 +1,30 @@
 export default async function ({ addon, console }) {
   const CDN2_REGEX = /(.*\/get_image\/.*?\/[0-9]+?_)([0-9]+?)x([0-9]+?)(\.[a-z]+)/;
   const UPLOADS_REGEX = /^https?:\/\/uploads\.scratch\.mit\.edu\//;
+  const thumbnails = [];
+  addon.self.addEventListener("disabled", () => {
+    for (const { image, src, lazy } of thumbnails) {
+      if (lazy) {
+        image.dataset.original = src;
+      }
+      if (image.src) {
+        image.src = src;
+      }
+    }
+  });
+  addon.self.addEventListener("reenabled", () => {
+    for (const { image, src, lazy, newSrc } of thumbnails) {
+      if (lazy) {
+        image.dataset.original = newSrc;
+      }
+      if (image.src) {
+        image.src = newSrc;
+      }
+    }
+  });
   main: while (true) {
-    const image = await addon.tab.waitForElement("img", {
+    // Images in forum posts are ignored.
+    const image = await addon.tab.waitForElement("img:not(.postmsg *)", {
       markAsSeen: true,
     });
 
@@ -48,13 +70,7 @@ export default async function ({ addon, console }) {
       newSrc = cdn2[1].replace("cdn2", "uploads") + width + "x" + height + cdn2[4];
     }
 
-    if (lazy) {
-      image.dataset.original = newSrc;
-    }
-
-    if (image.src) {
-      image.src = newSrc;
-    }
+    reloadImageSafe(image, src, newSrc, { lazy });
   }
 
   function resizeToScreenRes(width, height, image) {
@@ -121,5 +137,19 @@ export default async function ({ addon, console }) {
     height = Math.round(height);
 
     return [width, height];
+  }
+  function reloadImageSafe(image, src, newSrc, { lazy = false } = {}) {
+    thumbnails.push({
+      image,
+      src,
+      lazy,
+      newSrc,
+    });
+    if (lazy) {
+      image.dataset.original = newSrc;
+    }
+    if (image.src) {
+      image.src = newSrc;
+    }
   }
 }

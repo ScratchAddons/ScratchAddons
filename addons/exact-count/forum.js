@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   const cache = Object.create(null);
   addon.self.addEventListener("disabled", () => {
     for (const cached of Object.keys(cache)) {

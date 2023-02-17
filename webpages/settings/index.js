@@ -117,7 +117,9 @@ let fuse;
       } else {
         addonsEnabled[addonId] = addonValue.enabled;
       }
-      addonSettings[addonId] = Object.assign({}, addonSettings[addonId], addonValue.settings);
+      addonSettings[addonId] = Object.assign({}, addonSettings[addonId]);
+      delete addonSettings[addonId]._version;
+      Object.assign(addonSettings[addonId], addonValue.settings);
     }
     if (handleConfirmClicked) confirmElem.removeEventListener("click", handleConfirmClicked, { once: true });
     let resolvePromise = null;
@@ -156,6 +158,8 @@ let fuse;
         theme: initialTheme,
         themeSyncAddons: themeSyncAddons,
         smallMode: false,
+        forceEnglishSetting: null,
+        forceEnglishSettingInitial: null,
         switchPath: "../../images/icons/switch.svg",
         moreSettingsOpen: false,
         categoryOpen: true,
@@ -374,6 +378,10 @@ let fuse;
         document.body.appendChild(inputElem);
         inputElem.click();
       },
+      applyLanguageSettings() {
+        alert(chrome.i18n.getMessage("importSuccess"));
+        chrome.runtime.reload();
+      },
       openFullSettings() {
         window.open(
           `${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${
@@ -383,7 +391,7 @@ let fuse;
         setTimeout(() => window.parent.close(), 100);
       },
       hidePopup() {
-        document.querySelector(".popup").style.animation = "closePopup 1.6s 1";
+        document.querySelector(".popup").style.animation = "closePopup 0.6s 1";
         document.querySelector(".popup").addEventListener(
           "animationend",
           () => {
@@ -429,6 +437,9 @@ let fuse;
         });
         if (newValue === "forums") this.addonGroups.find((group) => group.id === "forums").expanded = true;
       },
+      forceEnglishSetting(newValue, oldValue) {
+        if (oldValue !== null) chrome.storage.local.set({ forceEnglish: this.forceEnglishSetting });
+      },
     },
     ready() {
       // Autofocus search bar in iframe mode for both browsers
@@ -456,6 +467,11 @@ let fuse;
             .map(() => JSON.parse(JSON.stringify(exampleAddonListItem)));
         }
       }, 0);
+
+      chrome.storage.local.get("forceEnglish", ({ forceEnglish }) => {
+        this.forceEnglishSettingInitial = forceEnglish;
+        this.forceEnglishSetting = forceEnglish;
+      });
 
       window.addEventListener(
         "hashchange",

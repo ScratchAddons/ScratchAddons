@@ -1,4 +1,4 @@
-export default async function ({ addon, msg, global, console }) {
+export default async function ({ addon, msg, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const originalCreateVariable = ScratchBlocks.Variables.createVariable;
   // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/variables.js#L277

@@ -22,18 +22,6 @@
   "tags": ["editor", "codeEditor", "recommended"],
   "settings": [
     {
-      "name": "Show option to change block to self",
-      "id": "noop",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Add border",
-      "id": "border",
-      "type": "boolean",
-      "default": true
-    },
-    {
       "name": "Motion blocks",
       "id": "motion",
       "type": "boolean",
@@ -120,8 +108,13 @@
       "if": {
         "settings": { "customargs": true }
       }
+    },
+    {
+      "name": "Show option to change block to self",
+      "id": "noop",
+      "type": "boolean",
+      "default": true
     }
   ],
-  "libraries": ["scratch-blocks"],
   "enabledByDefault": false
 }

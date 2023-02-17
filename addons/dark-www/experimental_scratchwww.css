@@ -2,6 +2,13 @@
 html,
 body {
   background-color: var(--darkWww-page);
+  color-scheme: var(--darkWww-page-colorScheme);
+}
+.sa-body-editor {
+  /* If website dark mode is enabled and editor dark mode
+  is disabled, inputs and scrollbars in the editor should
+  have a light background. */
+  color-scheme: light;
 }
 #view,
 .crash-container,
@@ -24,6 +31,12 @@ body {
 .project-views::before,
 .sa-project-info img {
   filter: var(--darkWww-page-filter);
+}
+.project-loves::before {
+  background-image: url("%addon-self-dir%/assets/love_transparent.svg");
+}
+.project-favorites::before {
+  background-image: url("%addon-self-dir%/assets/favorite_transparent.svg");
 }
 .project-loves.loved::before,
 .project-favorites.favorited::before {
@@ -144,8 +157,9 @@ body:not(.sa-body-editor) .formik-input,
 .green.pull-quote,
 .card,
 .extension-landing .project-card,
+.extension-landing .hardware-card,
 .promote-modal .cancel-button,
-body:not(.sa-body-editor) .stage-header_stage-button_hkl9B,
+body:not(.sa-body-editor) [class*="stage-header_stage-button_"],
 .studio-adder-section .studio-adder-row input,
 .studio-adder-section .studio-adder-row .studio-adder-vertical-divider,
 .avatar-item img,
@@ -164,6 +178,7 @@ body:not(.sa-body-editor) input.formik-radio-input,
 .studio-compose-container .sa-emoji-picker {
   background-color: var(--darkWww-box);
   color: var(--darkWww-box-text);
+  color-scheme: var(--darkWww-box-colorScheme);
 }
 body:not(.sa-body-editor) .button.white,
 .intro-banner .intro-button,
@@ -206,6 +221,7 @@ body:not(.sa-body-editor) .button.white,
 .tabs li.active:hover,
 .grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
 .unsupported-browser .faq-link-text,
+a.social-messages-profile-link:visited,
 a.social-messages-profile-link:link,
 .studio-selector-button-text-unselected,
 .studio-project-tile .studio-project-username,
@@ -232,8 +248,9 @@ body:not(.sa-body-editor) .join-flow-privacy-message,
 .thumbnail .thumbnail-favorites::before,
 .thumbnail .thumbnail-remixes::before,
 .thumbnail .thumbnail-views::before,
+.ttt-item img,
 .tabs li:not(.active) .tab-icon,
-body:not(.sa-body-editor) .stage-header_stage-button-icon_3zzFK,
+body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .overflow-menu-container .overflow-menu-trigger img {
   filter: var(--darkWww-box-filter);
 }
@@ -300,9 +317,12 @@ body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
 }
 .outer .categories li {
   background-color: var(--darkWww-gray-tab);
+  border-color: var(--darkWww-gray-darkText);
+  color: var(--darkWww-gray-text);
 }
 .outer .categories li:hover {
   background-color: var(--darkWww-gray-tabHover);
+  color: var(--darkWww-gray-darkText);
 }
 .toggle-switch .slider {
   background-color: var(--darkWww-gray-darker);
@@ -334,6 +354,7 @@ p.callout,
 .sa-annual-report-2019 .leadership-section,
 .extension-landing .blue,
 .extension-landing .tip-box,
+.extension-landing .hardware-card-image,
 .transfer-host-modal .transfer-selection-heading,
 .transfer-host-modal .transfer-selection-scroll-pane,
 .transfer-host-modal .transfer-outcome,
@@ -344,6 +365,7 @@ p.callout,
 .sa-annual-report-2021 .leadership-section .leadership-scratch-team .avatar-item img {
   background-color: var(--darkWww-blue);
   color: var(--darkWww-blue-text);
+  color-scheme: var(--darkWww-blue-colorScheme);
 }
 .empty h4,
 .thumbnail-column .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
@@ -359,6 +381,9 @@ p.callout,
 .studio-tab-nav a.nav_link:hover > li,
 .studio-info-box .studio-info-close-button {
   background-color: var(--darkWww-blue-tab);
+}
+.studio-list-inner-scrollbox::-webkit-scrollbar-thumb {
+  background-color: var(--darkWww-blue-tabHover);
 }
 .studio-info textarea.studio-title:not(:focus),
 .studio-info textarea.studio-description:not(:focus),
@@ -376,6 +401,7 @@ p.callout,
 .studio-info .studio-description.uneditable,
 .studio-info-box {
   background-color: var(--darkWww-blue-20);
+  color-scheme: var(--darKWww-blue-colorScheme);
 }
 .replies.collapsed > .comment:last-of-type::after,
 .studio-list-bottom-gradient {
@@ -439,6 +465,7 @@ input[type="radio"].formik-radio-button:checked::after,
 .banner-button {
   background-color: #ffab1a;
 }
+a.ttt-try-tutorial-button > span,
 .row .checkbox input[type="checkbox"]:checked::after {
   color: var(--darkWww-button-text);
 }
@@ -720,12 +747,13 @@ p.callout,
 .news li:nth-child(even),
 .thumbnail .thumbnail-image img,
 .video-player,
+.ttt-content-chunk + .ttt-content-chunk,
 .messages-social-list,
 .social-message,
 .comment-text,
 .comment-text::before,
-body:not(.sa-body-editor) .stage_stage_1fD7k,
-body:not(.sa-body-editor) .stage-header_stage-button_hkl9B,
+body:not(.sa-body-editor) [class*="stage_stage_"],
+body:not(.sa-body-editor) [class*="stage-header_stage-button_"],
 .social-form,
 .studio-info .studio-image,
 .studio-report-modal .studio-report-tile-image,
@@ -754,6 +782,7 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
 .extension-landing hr,
 .extension-landing .screenshot,
 .extension-landing .project-card,
+.extension-landing .hardware-card,
 .transfer-host-modal .transfer-password-input,
 .comments-container .sa-emoji-picker,
 .studio-compose-container .sa-emoji-picker,

@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const resize = () => {
     const workspace = Blockly.getMainWorkspace();
