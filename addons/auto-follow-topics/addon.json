@@ -1,7 +1,10 @@
 {
-  "name": "Auto Follow Topics",
-  "description": "Automatically follow forum topics you post on",
-  "tags": ["forums"],
+  "name": "Auto follow topics",
+  "description": "Automatically follow forum topics you post on.",
+  "tags": [
+    "forums",
+    "community"
+  ],
   "credits": [
     {
       "name": "Chiroyce",
@@ -11,12 +14,13 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+      "matches": [
+        "https://scratch.mit.edu/discuss/topic/*"
+      ]
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "enabledByDefault": false,
-  "runAtComplete": true,
   "versionAdded": "1.32.0"
 }
