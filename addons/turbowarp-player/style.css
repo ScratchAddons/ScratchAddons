@@ -1,13 +1,13 @@
 .preview .sa-tw-button {
   padding: 0px 5px 0px 11px;
-  background: #ff4d4d;
+  background: #b32525;
   margin-top: 0;
   border-radius: 0.25rem;
   height: 2.5rem;
   font-size: 0.875rem;
 }
 .preview .sa-tw-button.scratch {
-  background: #bf3b3b;
+  background: #a3660d;
 }
 .preview .sa-tw-button:before {
   background-image: url(icon.svg);
