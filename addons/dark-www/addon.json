@@ -1973,8 +1973,8 @@
     {
       "name": "Navigation bar background",
       "id": "navbar",
-      "allowTransparency": true,
       "type": "color",
+      "allowTransparency": true,
       "default": "#4d97ff"
     },
     {
