@@ -1,6 +1,6 @@
 {
   "name": "Insert blocks by name",
-  "description": "Middle click on the code area, use Ctrl+Space or Shift+Click to bring up a floating input box where you can type the name of a block (or parts of it) and drag the block into the code area. Hold Shift while dragging to avoid closing the box when adding multiple blocks at once.",
+  "description": "Middle click or Shift+Click on the code area, or press Ctrl+Space to bring up a block-search window, then type the name of a block (or parts of it) and drag it out of the window to insert it without finding it in the block palette. To add multiple blocks at once, hold Shift while dragging the blocks out to avoid closing the window.",
   "credits": [
     {
       "name": "Tacodiva",
@@ -58,7 +58,11 @@
       "default": 40
     }
   ],
-  "versionAdded": "1.31.0",
+  "versionAdded": "1.30.0",
+  "latestUpdate": {
+    "version": "1.31.0",
+    "temporaryNotice": "..."
+  },
   "info": [
     {
       "text": "This addon was previously part of the \"developer tools\" addon but has moved here.",
