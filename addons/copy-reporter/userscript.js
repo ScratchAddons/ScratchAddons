@@ -35,26 +35,28 @@ export default async function ({ addon, console, msg }) {
     let valueReportBox = document.createElement("div");
     valueReportBox.setAttribute("class", "valueReportBox");
     valueReportBox.innerText = value;
-    // use to get focus and event priority
-    valueReportBox.setAttribute("tabindex", "0");
-    // if the user pressed Ctrl+C, prevent propagation to Blockly
-    valueReportBox.onkeydown = (event) => {
-      if ((event.altKey || event.ctrlKey || event.metaKey) && event.code === "KeyC") {
-        event.stopPropagation();
+    if (!addon.self.disabled) {
+      // use to get focus and event priority
+      valueReportBox.setAttribute("tabindex", "0");
+      // if the user pressed Ctrl+C, prevent propagation to Blockly
+      valueReportBox.onkeydown = (event) => {
+        if ((event.altKey || event.ctrlKey || event.metaKey) && event.code === "KeyC") {
+          event.stopPropagation();
+        }
+      };
+
+      if (value.length !== 0) {
+        const copyButton = document.createElement("img");
+        copyButton.setAttribute("role", "button");
+        copyButton.setAttribute("tabindex", "0");
+        copyButton.setAttribute("alt", msg("copy-to-clipboard"));
+        copyButton.setAttribute("src", addon.self.dir + "/copy.svg");
+
+        copyButton.classList.add("copy-reporter-icon");
+
+        copyButton.onclick = () => navigator.clipboard.writeText(value);
+        valueReportBox.appendChild(copyButton);
       }
-    };
-
-    if (value.length !== 0) {
-      const copyButton = document.createElement("img");
-      copyButton.setAttribute("role", "button");
-      copyButton.setAttribute("tabindex", "0");
-      copyButton.setAttribute("alt", msg("copy-to-clipboard"));
-      copyButton.setAttribute("src", addon.self.dir + "/copy.svg");
-
-      copyButton.classList.add("copy-reporter-icon");
-
-      copyButton.onclick = () => navigator.clipboard.writeText(value);
-      valueReportBox.appendChild(copyButton);
     }
 
     contentDiv.appendChild(valueReportBox);

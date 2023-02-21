@@ -15,5 +15,6 @@
       "matches": ["projects"]
     }
   ],
-  "dynamicEnable": true
+  "dynamicEnable": true,
+  "dynamicDisable": true
 }
