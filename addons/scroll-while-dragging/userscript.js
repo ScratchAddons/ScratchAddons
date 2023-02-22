@@ -24,9 +24,29 @@ export default async function ({ addon, msg, console }) {
       var PIXELS_PER_ZOOM_STEP = 50;
       var delta = (-e.deltaY / PIXELS_PER_ZOOM_STEP) * multiplier;
       var position = ScratchBlocks.utils.mouseToSvg(e, _this.getParentSvg(), _this.getInverseScreenCTM());
+
+      const oldScale = _this.scale;
+
       _this.zoom(position.x, position.y, delta);
+
+      if (_this.currentGesture_ && !addon.self.disabled) {
+        const gesture = _this.currentGesture_;
+        const Coordinate = gesture.currentDragDeltaXY_.constructor;
+
+        const deltaOffX = (
+          gesture.currentDragDeltaXY_.x / oldScale * _this.scale
+        ) - gesture.currentDragDeltaXY_.x;
+        const deltaOffY = (
+          gesture.currentDragDeltaXY_.y / oldScale * _this.scale
+        ) - gesture.currentDragDeltaXY_.y;
+
+        gesture.mouseDownXY_ = new Coordinate(
+          gesture.mouseDownXY_.x - (_this.scrollX - oldScrollX) - deltaOffX,
+          gesture.mouseDownXY_.y - (_this.scrollY - oldScrollY) - deltaOffY,
+        );
+      }
     } else {
-      // _this is a regular mouse wheel event - scroll the workspace
+      // This is a regular mouse wheel event - scroll the workspace
       // First hide the WidgetDiv without animation
       // (mouse scroll makes field out of place with div)
       ScratchBlocks.WidgetDiv.hide(true);
@@ -37,7 +57,7 @@ export default async function ({ addon, msg, console }) {
 
       if (e.shiftKey && e.deltaX === 0) {
         // Scroll horizontally (based on vertical scroll delta)
-        // _this is needed as for some browser/system combinations which do not
+        // This is needed as for some browser/system combinations which do not
         // set deltaX. See LLK/scratch-blocks#1662.
         x = _this.scrollX - e.deltaY * multiplier;
         y = _this.scrollY; // Don't scroll vertically
@@ -52,14 +72,16 @@ export default async function ({ addon, msg, console }) {
 
     const gesture = _this.currentGesture_;
     if (
+      !addon.self.disabled &&
       gesture &&
       gesture.mostRecentEvent_ &&
       (gesture.mostRecentEvent_.type === "mousemove" || gesture.mostRecentEvent_.type === "touchmove")
-    ) {
+     ) {
       const Coordinate = gesture.mouseDownXY_.constructor;
 
       // Hack to move the dragged blocks
       gesture.mouseDownXY_ = new Coordinate(gesture.mouseDownXY_.x + deltaX, gesture.mouseDownXY_.y + deltaY);
+      
       // Make scratch-blocks update the dragging again
       document.dispatchEvent(gesture.mostRecentEvent_);
     }
