@@ -33,16 +33,12 @@ export default async function ({ addon, msg, console }) {
         const gesture = _this.currentGesture_;
         const Coordinate = gesture.currentDragDeltaXY_.constructor;
 
-        const deltaOffX = (
-          gesture.currentDragDeltaXY_.x / oldScale * _this.scale
-        ) - gesture.currentDragDeltaXY_.x;
-        const deltaOffY = (
-          gesture.currentDragDeltaXY_.y / oldScale * _this.scale
-        ) - gesture.currentDragDeltaXY_.y;
+        const deltaOffX = (gesture.currentDragDeltaXY_.x / oldScale) * _this.scale - gesture.currentDragDeltaXY_.x;
+        const deltaOffY = (gesture.currentDragDeltaXY_.y / oldScale) * _this.scale - gesture.currentDragDeltaXY_.y;
 
         gesture.mouseDownXY_ = new Coordinate(
           gesture.mouseDownXY_.x - (_this.scrollX - oldScrollX) - deltaOffX,
-          gesture.mouseDownXY_.y - (_this.scrollY - oldScrollY) - deltaOffY,
+          gesture.mouseDownXY_.y - (_this.scrollY - oldScrollY) - deltaOffY
         );
       }
     } else {
@@ -76,12 +72,12 @@ export default async function ({ addon, msg, console }) {
       gesture &&
       gesture.mostRecentEvent_ &&
       (gesture.mostRecentEvent_.type === "mousemove" || gesture.mostRecentEvent_.type === "touchmove")
-     ) {
+    ) {
       const Coordinate = gesture.mouseDownXY_.constructor;
 
       // Hack to move the dragged blocks
       gesture.mouseDownXY_ = new Coordinate(gesture.mouseDownXY_.x + deltaX, gesture.mouseDownXY_.y + deltaY);
-      
+
       // Make scratch-blocks update the dragging again
       document.dispatchEvent(gesture.mostRecentEvent_);
     }
