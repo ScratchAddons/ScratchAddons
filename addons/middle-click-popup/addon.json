@@ -3,11 +3,19 @@
   "description": "Middle click on the code area, use Ctrl+Space or Shift+Click to bring up a floating input box where you can type the name of a block (or parts of it) and drag the block into the code area. Hold Shift while dragging to avoid closing the box when adding multiple blocks at once.",
   "credits": [
     {
+      "name": "Tacodiva",
+      "link": "https://github.com/Tacodiva"
+    },
+    {
       "name": "griffpatch"
     },
     {
       "name": "TheColaber",
       "link": "https://scratch.mit.edu/users/TheColaber/"
+    },
+    {
+      "name": "CST1229",
+      "link": "https://github.com/CST1229"
     }
   ],
   "tags": ["editor", "codeEditor", "recommended"],
@@ -24,7 +32,33 @@
       "matches": ["projects"]
     }
   ],
-  "versionAdded": "1.30.0",
+  "settings": [
+    {
+      "name": "Popup Block Size",
+      "id": "popup_scale",
+      "type": "integer",
+      "min": 1,
+      "max": 100,
+      "default": 48
+    },
+    {
+      "name": "Popup Width",
+      "id": "popup_width",
+      "type": "integer",
+      "min": 1,
+      "max": 100,
+      "default": 16
+    },
+    {
+      "name": "Popup Maximum Height",
+      "id": "popup_max_height",
+      "type": "integer",
+      "min": 1,
+      "max": 100,
+      "default": 40
+    }
+  ],
+  "versionAdded": "1.31.0",
   "info": [
     {
       "text": "This addon was previously part of the \"developer tools\" addon but has moved here.",
