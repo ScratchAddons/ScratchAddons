@@ -1,4 +1,4 @@
 import { setupBetterQuoter } from "./module.js";
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   setupBetterQuoter(addon);
 }
