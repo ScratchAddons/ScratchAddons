@@ -1,6 +1,6 @@
 {
   "name": "Rename broadcasts",
-  "description": "Adds an option to rename broadcasts in the broadcast blocks' dropdowns.",
+  "description": "Adds an option to rename broadcast messages in the broadcast blocks' dropdowns.",
   "credits": [
     {
       "name": "TheColaber",

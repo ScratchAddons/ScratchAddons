@@ -110,7 +110,9 @@ let fuse;
       } else {
         addonsEnabled[addonId] = addonValue.enabled;
       }
-      addonSettings[addonId] = Object.assign({}, addonSettings[addonId], addonValue.settings);
+      addonSettings[addonId] = Object.assign({}, addonSettings[addonId]);
+      delete addonSettings[addonId]._version;
+      Object.assign(addonSettings[addonId], addonValue.settings);
     }
     if (handleConfirmClicked) confirmElem.removeEventListener("click", handleConfirmClicked, { once: true });
     let resolvePromise = null;
@@ -356,7 +358,7 @@ let fuse;
         setTimeout(() => window.parent.close(), 100);
       },
       hidePopup() {
-        document.querySelector(".popup").style.animation = "closePopup 1.6s 1";
+        document.querySelector(".popup").style.animation = "closePopup 0.6s 1";
         document.querySelector(".popup").addEventListener(
           "animationend",
           () => {

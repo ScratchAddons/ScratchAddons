@@ -1,5 +1,12 @@
-import { removeAlpha, multiply, alphaBlend, recolorFilter } from "../../libraries/common/cs/text-color.esm.js";
+import {
+  removeAlpha,
+  multiply,
+  brighten,
+  alphaBlend,
+  recolorFilter,
+} from "../../libraries/common/cs/text-color.esm.js";
 
+const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$");
 const extensionsCategory = {
   id: null,
   settingId: "Pen-color",
@@ -74,47 +81,52 @@ export default async function ({ addon, console }) {
     tertiary: "#3aa8a4",
   };
 
-  let textMode = addon.settings.get("text");
-  const isColoredTextMode = () => !addon.self.disabled && (textMode === "colorOnWhite" || textMode === "colorOnBlack");
+  let textModeSetting = addon.settings.get("text");
+  const textMode = () => (addon.self.disabled ? "white" : textModeSetting);
+  const isColoredTextMode = () => textMode() === "colorOnWhite" || textMode() === "colorOnBlack";
 
   const primaryColor = (category) => {
     if (addon.self.disabled) return originalColors[category.colorId].primary;
     // Colored on white: can't use #ffffff because of editor-dark-mode dropdown div handling
-    if (textMode === "colorOnWhite") return "#feffff";
-    if (textMode === "colorOnBlack") return "#282828";
+    if (textMode() === "colorOnWhite") return "#feffff";
+    if (textMode() === "colorOnBlack") return "#282828";
     return addon.settings.get(category.settingId);
   };
   const secondaryColor = (category) => {
     if (addon.self.disabled) return originalColors[category.colorId].secondary;
     if (isColoredTextMode())
       return alphaBlend(primaryColor(category), multiply(addon.settings.get(category.settingId), { a: 0.15 }));
+    if (textMode() === "black") return brighten(addon.settings.get(category.settingId), { r: 0.6, g: 0.6, b: 0.6 });
     return multiply(addon.settings.get(category.settingId), { r: 0.9, g: 0.9, b: 0.9 });
   };
   const tertiaryColor = (category) => {
     if (addon.self.disabled) return originalColors[category.colorId].tertiary;
     if (isColoredTextMode()) return addon.settings.get(category.settingId);
+    if (textMode() === "black") return multiply(addon.settings.get(category.settingId), { r: 0.65, g: 0.65, b: 0.65 });
     return multiply(addon.settings.get(category.settingId), { r: 0.8, g: 0.8, b: 0.8 });
   };
   const fieldBackground = (category) => {
-    // Background color for open dropdowns and Boolean inputs
+    // Background color for open dropdowns and (in some textModes) Boolean inputs
     // The argument can be a block, field, or category
     if (category instanceof Blockly.Block || category instanceof Blockly.Field) {
       const block = category instanceof Blockly.Block ? category : category.sourceBlock_;
-      if (isColoredTextMode()) {
+      if (isColoredTextMode() || textMode() === "black") {
         let primary;
         if (block.isShadow() && block.getParent()) primary = block.getParent().getColour();
         else primary = block.getColour();
-        return alphaBlend(primary, multiply(block.getColourTertiary(), { a: 0.25 }));
+        if (isColoredTextMode()) return alphaBlend(primary, multiply(block.getColourTertiary(), { a: 0.25 }));
+        else return brighten(primary, { r: 0.4, g: 0.4, b: 0.4 });
       }
       return block.getColourTertiary();
     }
     if (isColoredTextMode())
       return alphaBlend(primaryColor(category), multiply(addon.settings.get(category.settingId), { a: 0.25 }));
+    if (textMode() === "black") return brighten(primaryColor(category), { r: 0.4, g: 0.4, b: 0.4 });
     return tertiaryColor(category);
   };
   const textColor = (field) => {
-    if (addon.self.disabled || textMode === "white") return "#ffffff";
-    if (textMode === "black") return "#575e75";
+    if (addon.self.disabled || textMode() === "white") return "#ffffff";
+    if (textMode() === "black") return "#000000";
     if (field) return field.sourceBlock_.getColourTertiary();
     return "#000000";
   };
@@ -142,6 +154,21 @@ export default async function ({ addon, console }) {
   const oldCategoryCreateDom = Blockly.Toolbox.Category.prototype.createDom;
   Blockly.Toolbox.Category.prototype.createDom = function () {
     // Category bubbles
+    if (this.iconURI_) {
+      if (addon.self.disabled) return oldCategoryCreateDom.call(this);
+      if (!["sa-blocks", "videoSensing", "text2speech"].includes(this.id_)) return oldCategoryCreateDom.call(this);
+
+      const match = dataUriRegex.exec(this.iconURI_);
+      if (match) {
+        const oldSvg = atob(match[1]);
+        const category = this.id_ === "sa-blocks" ? saCategory : extensionsCategory;
+        const newColor = isColoredTextMode ? tertiaryColor(category) : primaryColor(category);
+        if (newColor) {
+          const newSvg = oldSvg.replace(/#29beb8|#0ebd8c/gi, newColor);
+          this.iconURI_ = `data:image/svg+xml;base64,${btoa(newSvg)}`;
+        }
+      }
+    }
     oldCategoryCreateDom.call(this);
     if (this.iconURI_) return;
     const category = categories.find((item) => item.id === this.id_);
@@ -165,9 +192,11 @@ export default async function ({ addon, console }) {
   Blockly.BlockSvg.prototype.updateColour = function () {
     oldBlockUpdateColour.call(this);
     // Boolean inputs
-    for (const input of this.inputList) {
-      if (input.outlinePath) {
-        input.outlinePath.setAttribute("fill", fieldBackground(this));
+    if (isColoredTextMode()) {
+      for (const input of this.inputList) {
+        if (input.outlinePath) {
+          input.outlinePath.setAttribute("fill", fieldBackground(this));
+        }
       }
     }
   };
@@ -260,10 +289,17 @@ export default async function ({ addon, console }) {
     return oldFieldMatrixCreateButton.call(this, fill);
   };
 
+  const oldFieldVerticalSeparatorInit = Blockly.FieldVerticalSeparator.prototype.init;
+  Blockly.FieldVerticalSeparator.prototype.init = function () {
+    // Vertical line between extension icon and block label
+    oldFieldVerticalSeparatorInit.call(this);
+    if (textMode() === "black") this.lineElement_.setAttribute("stroke", this.sourceBlock_.getColourTertiary());
+  };
+
   const updateColors = () => {
     const vm = addon.tab.traps.vm;
 
-    textMode = addon.settings.get("text");
+    textModeSetting = addon.settings.get("text");
 
     for (const category of categories) {
       // CSS variables are used for compatibility with other addons
@@ -303,6 +339,7 @@ export default async function ({ addon, console }) {
     const flyoutWorkspace = flyout.getWorkspace();
     Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
     toolbox.populate_(workspace.options.languageTree);
+    workspace.toolboxRefreshEnabled_ = true;
   };
 
   updateColors();

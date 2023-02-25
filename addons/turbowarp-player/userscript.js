@@ -27,12 +27,19 @@ export default async function ({ addon, console, msg }) {
   }
 
   button.onclick = async () => {
+    const projectId = window.location.pathname.split("/")[2];
     let search = "";
-    if (
-      addon.tab.redux.state?.preview?.projectInfo?.public === false &&
-      addon.tab.redux.state.preview.projectInfo.project_token
-    ) {
-      search = `#?token=${addon.tab.redux.state.preview.projectInfo.project_token}`;
+    if (addon.tab.redux.state?.preview?.projectInfo?.public === false) {
+      let projectToken = (
+        await (
+          await fetch(`https://api.scratch.mit.edu/projects/${projectId}?nocache=${Date.now()}`, {
+            headers: {
+              "x-token": await addon.auth.fetchXToken(),
+            },
+          })
+        ).json()
+      ).project_token;
+      search = `#?token=${projectToken}`;
     }
     if (action === "player") {
       playerToggled = !playerToggled;
@@ -41,11 +48,16 @@ export default async function ({ addon, console, msg }) {
         const usp = new URLSearchParams();
         usp.set("settings-button", "1");
         if (username) usp.set("username", username);
-        const projectId = window.location.pathname.split("/")[2];
         if (addon.settings.get("addons")) {
           const enabledAddons = await addon.self.getEnabledAddons("editor");
           usp.set("addons", enabledAddons.join(","));
         }
+        // Apply the same fullscreen background color, consistently with the vanilla Scratch fullscreen behavior.
+        // It's not expected here to support dynamicDisable/dyanmicEnable of editor-dark-mode to work exactly
+        // like it does with vanilla.
+        const fullscreenBackground =
+          document.documentElement.style.getPropertyValue("--editorDarkMode-fullscreen") || "white";
+        usp.set("fullscreen-background", fullscreenBackground);
         const iframeUrl = `https://turbowarp.org/${projectId}/embed?${usp}${search}`;
         twIframe.src = "";
         scratchStage.parentElement.prepend(twIframeContainer);

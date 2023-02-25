@@ -48,4 +48,8 @@
   margin-top: -3px;
 
   border: none;
+
+  /* Transparency only works if the iframe has the same color-scheme
+     as the document inside */
+  color-scheme: light;
 }

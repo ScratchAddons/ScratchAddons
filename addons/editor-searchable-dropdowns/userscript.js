@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   const Blockly = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
 
@@ -10,13 +10,36 @@ export default async function ({ addon, global, console, msg }) {
     "RENAME_BROADCAST_MESSAGE_ID",
   ];
 
-  const ADDON_ITEMS = [
-    "createGlobalVariable",
-    "createLocalVariable",
-    "createGlobalList",
-    "createLocalList",
-    "createBroadcast",
-  ];
+  const canUseAsGlobalVariableName = (name, type) => {
+    return !vm.runtime.getAllVarNamesOfType(type).includes(name);
+  };
+
+  const canUseAsLocalVariableName = (name, type) => {
+    return !vm.editingTarget.lookupVariableByNameAndType(name, type);
+  };
+
+  const ADDON_ITEMS = {
+    createGlobalVariable: {
+      enabled: (name) => canUseAsGlobalVariableName(name, ""),
+      createVariable: (workspace, name) => workspace.createVariable(name),
+    },
+    createLocalVariable: {
+      enabled: (name) => canUseAsLocalVariableName(name, ""),
+      createVariable: (workspace, name) => workspace.createVariable(name, "", null, true),
+    },
+    createGlobalList: {
+      enabled: (name) => canUseAsGlobalVariableName(name, "list"),
+      createVariable: (workspace, name) => workspace.createVariable(name, "list"),
+    },
+    createLocalList: {
+      enabled: (name) => canUseAsLocalVariableName(name, "list"),
+      createVariable: (workspace, name) => workspace.createVariable(name, "list", null, true),
+    },
+    createBroadcast: {
+      enabled: (name) => canUseAsGlobalVariableName(name, "broadcast_msg"),
+      createVariable: (workspace, name) => workspace.createVariable(name, "broadcast_msg"),
+    },
+  };
 
   let blocklyDropDownContent = null;
   let blocklyDropdownMenu = null;
@@ -107,45 +130,15 @@ export default async function ({ addon, global, console, msg }) {
     const sourceBlock = this.sourceBlock_;
     if (sourceBlock && sourceBlock.workspace && searchBar.value.length !== 0) {
       const workspace = sourceBlock.workspace;
-      const id = menuItem.getValue();
-      switch (id) {
-        case "createGlobalVariable": {
-          Blockly.Events.setGroup(true);
-          const variable = workspace.createVariable(searchBar.value);
-          // Creating a variable can cause blocks in the flyout to be disposed and recreated
-          // That could cause setValue to throw
-          if (this.sourceBlock_) this.setValue(variable.getId());
-          Blockly.Events.setGroup(false);
-          return;
-        }
-        case "createLocalVariable": {
-          Blockly.Events.setGroup(true);
-          const variable = workspace.createVariable(searchBar.value, "", null, true);
-          if (this.sourceBlock_) this.setValue(variable.getId());
-          Blockly.Events.setGroup(false);
-          return;
-        }
-        case "createGlobalList": {
-          Blockly.Events.setGroup(true);
-          const variable = workspace.createVariable(searchBar.value, "list");
-          if (this.sourceBlock_) this.setValue(variable.getId());
-          Blockly.Events.setGroup(false);
-          return;
-        }
-        case "createLocalList": {
-          Blockly.Events.setGroup(true);
-          const variable = workspace.createVariable(searchBar.value, "list", null, true);
-          if (this.sourceBlock_) this.setValue(variable.getId());
-          Blockly.Events.setGroup(false);
-          return;
-        }
-        case "createBroadcast": {
-          Blockly.Events.setGroup(true);
-          const variable = workspace.createVariable(searchBar.value, "broadcast_msg");
-          this.setValue(variable.getId());
-          Blockly.Events.setGroup(false);
-          return;
-        }
+      const optionId = menuItem.getValue();
+
+      if (Object.prototype.hasOwnProperty.call(ADDON_ITEMS, optionId)) {
+        const addonItem = ADDON_ITEMS[optionId];
+        Blockly.Events.setGroup(true);
+        const variable = addonItem.createVariable(workspace, searchBar.value.trim());
+        if (this.sourceBlock_) this.setValue(variable.getId());
+        Blockly.Events.setGroup(false);
+        return;
       }
     }
     return oldFieldVariableOnItemSelected.call(this, menu, menuItem);
@@ -172,16 +165,26 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   function performSearch() {
-    const query = searchBar.value.toLowerCase().trim();
+    const rawQuery = searchBar.value.trim();
+    const query = rawQuery.trim().toLowerCase();
+
     const rank = (item, index) => {
       // Negative number will hide
       // Higher numbers will appear first
       const option = currentDropdownOptions[index];
-      if (SCRATCH_ITEMS_TO_HIDE.includes(option[1])) {
+      const optionId = option[1];
+      if (SCRATCH_ITEMS_TO_HIDE.includes(optionId)) {
         return query ? -1 : 0;
-      } else if (ADDON_ITEMS.includes(option[1])) {
-        item.element.lastChild.lastChild.textContent = getMenuItemMessage(option[1])[0];
-        return query ? 0 : -1;
+      } else if (Object.prototype.hasOwnProperty.call(ADDON_ITEMS, optionId)) {
+        if (!query) {
+          return -1;
+        }
+        const addonInfo = ADDON_ITEMS[optionId];
+        if (addonInfo.enabled(rawQuery)) {
+          item.element.lastChild.lastChild.textContent = getMenuItemMessage(optionId)[0];
+          return 0;
+        }
+        return -1;
       }
       const itemText = item.text.toLowerCase();
       if (query === itemText) {
@@ -303,6 +306,6 @@ export default async function ({ addon, global, console, msg }) {
   function getMenuItemMessage(message) {
     // Format used internally by Scratch:
     // [human readable name, internal name]
-    return [msg(message, { name: searchBar?.value || "" }), message];
+    return [msg(message, { name: searchBar?.value.trim() || "" }), message];
   }
 }

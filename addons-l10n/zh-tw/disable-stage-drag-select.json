@@ -1,0 +1,1 @@
+{"disable-stage-drag-select/@name":"編輯器內不可拖曳角色","disable-stage-drag-select/@description":"移除原來在編輯器上可以任意拖曳舞台上的角色的功能。除非設定該角色為可拖曳，或是你可以按住 Shift 鍵加以拖曳。"}

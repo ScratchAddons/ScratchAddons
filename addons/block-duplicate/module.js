@@ -2,7 +2,9 @@ let enableCherryPicking = false;
 let invertCherryPicking = false;
 export function setCherryPicking(newEnabled, newInverted) {
   enableCherryPicking = newEnabled;
-  invertCherryPicking = newInverted;
+  // If cherry picking is disabled, also disable invert. Duplicating blocks can still cause
+  // this setting to be used.
+  invertCherryPicking = newEnabled && newInverted;
 }
 
 let enableDuplication = false;
@@ -51,9 +53,8 @@ export async function load(addon) {
       this.targetBlock_.type !== "procedures_definition";
 
     const isCherryPickingInverted = invertCherryPicking && !isRightClickDuplicate && block.getParent();
-    const isCherryPicking = isDuplicating
-      ? ctrlOrMetaPressed
-      : enableCherryPicking && ctrlOrMetaPressed === !isCherryPickingInverted && !block.isShadow();
+    const canCherryPick = enableCherryPicking || isDuplicating;
+    const isCherryPicking = canCherryPick && ctrlOrMetaPressed === !isCherryPickingInverted && !block.isShadow();
 
     if (isDuplicating || isCherryPicking) {
       if (!ScratchBlocks.Events.getGroup()) {

@@ -1,11 +1,11 @@
 {
-  "name": "Extra key support",
-  "description": "Adds more keys to the \"key () pressed?\" and \"when () key pressed\" block dropdowns, such as enter, dot, comma, and more.",
+  "name": "Extra key options",
+  "description": "Adds more keys to the \"key () pressed?\" and \"when () key pressed\" block dropdowns, such as enter, dot, comma, and more. These keys will work even for users who do not have this addon.",
   "tags": ["editor", "codeEditor", "beta"],
   "credits": [
     {
-      "name": "Tacodude7729",
-      "link": "https://scratch.mit.edu/users/Tacodude7729/"
+      "name": "Tacodiva",
+      "link": "https://github.com/Tacodiva"
     }
   ],
   "info": [
@@ -22,13 +22,13 @@
   ],
   "settings": [
     {
-      "name": "Enable experimental keys",
+      "name": "Show experimental keys",
       "id": "experimentalKeys",
       "type": "boolean",
       "default": false
     },
     {
-      "name": "Enable Shift keys",
+      "name": "Show Shift keys",
       "id": "shiftKeys",
       "type": "boolean",
       "default": false

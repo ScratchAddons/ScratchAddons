@@ -90,7 +90,6 @@ export default async function ({ addon, console, msg }) {
   };
 
   const handleClickBackground = (event) => {
-    if (event.target !== saOpacitySlider) return;
     handleClickOffset = HANDLE_WIDTH / 2;
     changeOpacity(scaleMouseToSliderPosition(event));
   };
@@ -163,6 +162,7 @@ export default async function ({ addon, console, msg }) {
       className: `sa-opacity-handle ${addon.tab.scratchClass("slider_handle")}`,
     });
     saOpacityHandle.addEventListener("mousedown", handleMouseDown);
+    saOpacityHandle.addEventListener("click", (event) => event.stopPropagation());
     const lastSlider = document.querySelector('[class*="slider_last"]');
     lastSlider.className = addon.tab.scratchClass("slider_container");
     setHandlePos(defaultAlpha);
@@ -186,12 +186,17 @@ export default async function ({ addon, console, msg }) {
     };
     addon.tab.redux.addEventListener("statechanged", prevEventHandler);
 
+    if (addon.tab.redux.state.scratchPaint.format.startsWith("BITMAP")) continue;
+
     containerWrapper.appendChild(rowHeader);
     containerWrapper.appendChild(saOpacitySlider);
     rowHeader.appendChild(saLabelName);
     rowHeader.appendChild(labelReadout);
     saOpacitySlider.appendChild(saOpacitySliderBg);
     saOpacitySlider.appendChild(saOpacityHandle);
-    element.parentElement.querySelector("div:nth-child(4)").after(containerWrapper);
+    const brightnessSlider = Array.from(element.parentElement.children).filter(
+      (e) => !e.querySelector("div[class*=color-picker_gradient-picker-row]")
+    )[2];
+    brightnessSlider.after(containerWrapper);
   }
 }
