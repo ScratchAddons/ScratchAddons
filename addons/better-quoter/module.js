@@ -22,7 +22,8 @@ export function getPostText(id, post, selection) {
   return new Promise((resolve) => {
     const selectionStr = selection.toString();
     if (
-      betterQuoterAddon?.disabled ||
+      !betterQuoterAddon ||
+      betterQuoterAddon?.self?.disabled ||
       !(
         selectionStr &&
         selection.anchorNode &&
