@@ -1,28 +1,28 @@
 {
-    "name": "Compact editor menu bar",
-    "description": "Hides the username from the account dropdown in the editor.",
-    "credits": [
-        {
-          "name": "philipp2007",
-          "link": "https://scratch.mit.edu/users/philipp2007/"
-        },
-        {
-            "name": "World_Languages"
-        }
-      ],
-    "tags": ["editor", "theme", "editorMenuBar"],
-    "enabledByDefault": false,
-    "versionAdded": "1.32.0",
-    "userscripts": [
-        {
-          "url": "userscript.js",
-          "matches": ["projects"]
-        }
-      ],
-      "userstyles": [
-        {
-          "url": "userstyle.css",
-          "matches": ["projects"]
-        }
-      ]
+  "name": "Compact editor menu bar",
+  "description": "Hides the username from the account dropdown in the editor.",
+  "credits": [
+    {
+      "name": "philipp2007",
+      "link": "https://scratch.mit.edu/users/philipp2007/"
+    },
+    {
+      "name": "World_Languages"
+    }
+  ],
+  "tags": ["editor", "theme", "editorMenuBar"],
+  "enabledByDefault": false,
+  "versionAdded": "1.32.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ]
 }
