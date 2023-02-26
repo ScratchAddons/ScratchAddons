@@ -6,12 +6,9 @@ export default async function ({ addon }) {
             const dropdown = await addon.tab.waitForElement(".account-nav_profile-name_2oRiV");
             span = dropdown;
             span?.remove();
-            li = null;
-            const profileSpans = dropdown.childNodes[0].childNodes[0];
+            const profileSpans = await addon.tab.waitForElement(".menu_menu-item_3EwYA.menu_hoverable_3u9dt");
             li = profileSpans.appendChild(document.createElement("span"));
             li.className = "sa-profile-name";
             li.textContent = username;
         }
-    addon.self.addEventListener("disabled", init);
-    addon.self.addEventListener("reenabled", init);
 }
