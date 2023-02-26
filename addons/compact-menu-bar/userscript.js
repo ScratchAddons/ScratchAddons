@@ -1,6 +1,7 @@
 export default async function ({ addon }) {
     let span;
     let li;
+    while (true) {
         if (await addon.auth.fetchIsLoggedIn()) {
             const username = await addon.auth.fetchUsername();
             const dropdown = await addon.tab.waitForElement(".account-nav_profile-name_2oRiV");
@@ -11,4 +12,5 @@ export default async function ({ addon }) {
             li.className = "sa-profile-name";
             li.textContent = username;
         }
+    }
 }
