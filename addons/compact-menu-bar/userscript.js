@@ -1,8 +1,8 @@
 export default async function ({ addon }) {
   let span;
   let li;
-  while (true) {
-    if (await addon.auth.fetchIsLoggedIn()) {
+  if (await addon.auth.fetchIsLoggedIn()) {
+    while (true) {
       // Remove username from bar
       const username = await addon.auth.fetchUsername();
       const dropdown = await addon.tab.waitForElement(".account-nav_profile-name_2oRiV");
