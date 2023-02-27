@@ -10,7 +10,7 @@
       "name": "World_Languages"
     }
   ],
-  "tags": ["editor", "theme", "editorMenuBar"],
+  "tags": ["editor", "editorMenuBar", "beta"],
   "enabledByDefault": false,
   "versionAdded": "1.32.0",
   "userscripts": [
