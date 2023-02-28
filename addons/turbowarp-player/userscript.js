@@ -41,7 +41,7 @@ export default async function ({ addon, console, msg }) {
       ).project_token;
       search = `#?token=${projectToken}`;
     }
-    if ((action === "link") || (e.ctrlKey) || (e.metaKey)) {
+    if (action === "link" || e.ctrlKey || e.metaKey) {
       window.open(
         `https://turbowarp.org/${window.location.pathname.split("/")[2]}${search}`,
         "_blank",
@@ -76,7 +76,7 @@ export default async function ({ addon, console, msg }) {
         addon.tab.traps.vm.stopAll();
       } else removeIframe();
     }
-  }
+  };
 
   let showAlert = true;
   while (true) {
