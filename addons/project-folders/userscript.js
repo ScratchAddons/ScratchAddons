@@ -1,28 +1,31 @@
 export default async function ({ addon, global, console, msg }) {
-  const projects = await (await fetch('https://scratch.mit.edu/site-api/projects/all')).json();
+  const projects = await (await fetch("https://scratch.mit.edu/site-api/projects/all")).json();
 
   async function loadFolders() {
     const folders = [];
     for (let i = 0; i < projects.length; i++) {
       const projectID = projects[i].pk;
       const token = await addon.auth.fetchXToken();
-      const projectDetails = await (await fetch(`https://api.scratch.mit.edu/projects/${projectID}`, {
-        headers: {
-          "content-type": "application/json",
-          "x-csrftoken": addon.auth.crsfToken,
-          "x-token": token
-      }})).json();
-      const instructions = projectDetails.instructions.split('\n');
-      const folder = instructions.filter(element => {
-        if (element.includes('#_')) {
+      const projectDetails = await (
+        await fetch(`https://api.scratch.mit.edu/projects/${projectID}`, {
+          headers: {
+            "content-type": "application/json",
+            "x-csrftoken": addon.auth.crsfToken,
+            "x-token": token,
+          },
+        })
+      ).json();
+      const instructions = projectDetails.instructions.split("\n");
+      const folder = instructions.filter((element) => {
+        if (element.includes("#_")) {
           return true;
         }
       });
       if (folder.length === 0) continue;
 
       for (let j = 0; j < folder.length; j++) {
-        const matches = folders.filter(element => {
-          if (element.name === folder[j].replace('#_', '')) {
+        const matches = folders.filter((element) => {
+          if (element.name === folder[j].replace("#_", "")) {
             return true;
           } else {
             return false;
@@ -30,9 +33,16 @@ export default async function ({ addon, global, console, msg }) {
         });
 
         if (matches.length === 0) {
-          folders.push({ name: folder[j].replace('#_', ''), projects: [{ name: projectDetails.title, id: projectDetails.id, thumbnail: projectDetails.image }] });
+          folders.push({
+            name: folder[j].replace("#_", ""),
+            projects: [{ name: projectDetails.title, id: projectDetails.id, thumbnail: projectDetails.image }],
+          });
         } else {
-          folders[folders.indexOf(matches[0])].projects.push({ name: projectDetails.title, id: projectDetails.id, thumbnail: projectDetails.image });
+          folders[folders.indexOf(matches[0])].projects.push({
+            name: projectDetails.title,
+            id: projectDetails.id,
+            thumbnail: projectDetails.image,
+          });
         }
       }
     }
@@ -71,7 +81,7 @@ export default async function ({ addon, global, console, msg }) {
 
     const folder = document.createElement("button");
     folder.className = "folder";
-    folder.setAttribute('folder-data', folderdata);
+    folder.setAttribute("folder-data", folderdata);
     folderDiv.appendChild(folder);
 
     const image = document.createElement("img");
@@ -91,7 +101,7 @@ export default async function ({ addon, global, console, msg }) {
         useEditorClasses: true,
       });
 
-      const folderData = JSON.parse(folder.getAttribute('folder-data'));
+      const folderData = JSON.parse(folder.getAttribute("folder-data"));
 
       closeButton.addEventListener("click", remove);
       backdrop.addEventListener("click", remove);
@@ -101,16 +111,16 @@ export default async function ({ addon, global, console, msg }) {
       content.appendChild(projectDiv);
 
       for (let i = 0; i < folderData.projects.length; i++) {
-        const project = document.createElement('div');
-        project.classList.add('project');
+        const project = document.createElement("div");
+        project.classList.add("project");
         projectDiv.appendChild(project);
 
-        const projectIMG = document.createElement('img');
-        projectIMG.classList.add('sa-folder-project-img');
+        const projectIMG = document.createElement("img");
+        projectIMG.classList.add("sa-folder-project-img");
         projectIMG.src = folderData.projects[i].thumbnail;
         project.appendChild(projectIMG);
 
-        const projectLink = document.createElement('a');
+        const projectLink = document.createElement("a");
         projectLink.href = `https://scratch.mit.edu/project/${folderData.projects[i].id}`;
         projectLink.textContent = folderData.projects[i].name;
         project.appendChild(projectLink);
