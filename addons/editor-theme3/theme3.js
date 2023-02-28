@@ -6,6 +6,7 @@ import {
   recolorFilter,
 } from "../../libraries/common/cs/text-color.esm.js";
 
+const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$");
 const extensionsCategory = {
   id: null,
   settingId: "Pen-color",
@@ -153,6 +154,21 @@ export default async function ({ addon, console }) {
   const oldCategoryCreateDom = Blockly.Toolbox.Category.prototype.createDom;
   Blockly.Toolbox.Category.prototype.createDom = function () {
     // Category bubbles
+    if (this.iconURI_) {
+      if (addon.self.disabled) return oldCategoryCreateDom.call(this);
+      if (!["sa-blocks", "videoSensing", "text2speech"].includes(this.id_)) return oldCategoryCreateDom.call(this);
+
+      const match = dataUriRegex.exec(this.iconURI_);
+      if (match) {
+        const oldSvg = atob(match[1]);
+        const category = this.id_ === "sa-blocks" ? saCategory : extensionsCategory;
+        const newColor = isColoredTextMode ? tertiaryColor(category) : primaryColor(category);
+        if (newColor) {
+          const newSvg = oldSvg.replace(/#29beb8|#0ebd8c/gi, newColor);
+          this.iconURI_ = `data:image/svg+xml;base64,${btoa(newSvg)}`;
+        }
+      }
+    }
     oldCategoryCreateDom.call(this);
     if (this.iconURI_) return;
     const category = categories.find((item) => item.id === this.id_);

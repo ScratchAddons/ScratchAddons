@@ -36,10 +36,10 @@
     "message": "Until I turn it back on"
   },
   "muteFor": {
-    "message": "Mute"
+    "message": "Do not disturb"
   },
   "unmute": {
-    "message": "Unmute"
+    "message": "Turn off Do not disturb"
   },
   "recommended": {
     "message": "Recommended"
