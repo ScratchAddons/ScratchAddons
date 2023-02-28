@@ -1,7 +1,4 @@
-.user-info > .avatar {
-  margin-right: 0 !important;
-}
-.user-info > .profile-name {
+.account-nav_profile-name_2oRiV {
   display: none;
 }
 
@@ -11,8 +8,4 @@
   font-weight: normal;
   line-height: 0px;
   padding-bottom: 15px;
-}
-
-.sa-compact-profile-icon {
-  margin-right: 0px !important;
 }
