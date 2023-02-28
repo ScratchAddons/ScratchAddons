@@ -12,7 +12,7 @@
   ],
   "tags": ["editor", "editorMenuBar", "beta"],
   "enabledByDefault": false,
-  "versionAdded": "1.31.0",
+  "versionAdded": "",
   "userscripts": [
     {
       "url": "userscript.js",
