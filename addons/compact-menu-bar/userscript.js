@@ -11,7 +11,9 @@ export default async function ({ addon }) {
   if (await addon.auth.fetchIsLoggedIn()) {
     const username = await addon.auth.fetchUsername();
     while (true) {
-      const profileSpans = await addon.tab.waitForElement(".menu_menu-item_3EwYA.menu_hoverable_3u9dt", { markAsSeen: true });
+      const profileSpans = await addon.tab.waitForElement(".menu_menu-item_3EwYA.menu_hoverable_3u9dt", {
+        markAsSeen: true,
+      });
       addSpan(username, profileSpans);
     }
   }
