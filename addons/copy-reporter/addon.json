@@ -1,6 +1,6 @@
 {
   "name": "Copy reporter values",
-  "description": "Adds buttons to copy the value of reporter balloons and monitors.",
+  "description": "Adds buttons to copy the value of reporter balloons and monitors by right clicking the variable readout on the project.",
   "credits": [{ "name": "TheKodeToad" }],
   "tags": ["editor", "codeEditor"],
   "userscripts": [
