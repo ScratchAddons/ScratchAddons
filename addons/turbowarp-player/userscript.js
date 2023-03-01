@@ -47,7 +47,7 @@ export default async function ({ addon, console, msg }) {
         "_blank",
         "noopener,noreferrer"
       );
-    } else if (action === "player") {
+    } else {
       playerToggled = !playerToggled;
       if (playerToggled) {
         const username = await addon.auth.fetchUsername();
