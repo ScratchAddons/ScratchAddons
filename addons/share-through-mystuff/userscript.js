@@ -11,11 +11,11 @@ export default async function ({ addon, console, msg }) {
   });
   async function shareConfirmation(event) {
     event.preventDefault();
-    let confirmation = await addon.tab.confirm(msg("confirmation-title"), msg("confirmation"));
+    const confirmation = await addon.tab.confirm(msg("confirmation-title"), msg("confirmation"));
     if (confirmation) {
-      if (location.hash == "#unshared") {
-        let container = event.target.parentElement.parentElement.parentElement.parentElement;
-        container.classList.add("sa-justShared");
+      if (location.hash === "#unshared") {
+        let container = event.target.closest(".media-list > li");
+        container.classList.add("sa-just-shared");
       }
       event.target.parentElement.querySelector(".media-share").click();
     }
@@ -25,10 +25,10 @@ export default async function ({ addon, console, msg }) {
     const project = await addon.tab.waitForElement("div.media-item-content.not-shared", {
       markAsSeen: true,
     });
-    let localShareFunction = shareFunction.cloneNode();
+    const localShareFunction = shareFunction.cloneNode();
     localShareFunction.href = location.hash || "#";
     project.querySelector(".media-action div").appendChild(localShareFunction);
-    let localShare = shareButton.cloneNode(true);
+    const localShare = shareButton.cloneNode(true);
     localShare.href = localShareFunction.href;
     localShare.addEventListener("click", shareConfirmation);
     project.querySelector(".media-action div").appendChild(localShare);

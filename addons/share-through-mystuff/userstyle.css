@@ -7,7 +7,7 @@
   opacity: 1 !important;
 }
 
-.sa-justShared {
+.sa-just-shared {
   animation: sa-STMS-fadeOut 1s;
   animation-fill-mode: forwards;
 }
