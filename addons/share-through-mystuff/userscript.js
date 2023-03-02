@@ -1,17 +1,17 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, msg }) {
   const shareFunction = document.createElement("a");
   shareFunction.classList.add("media-share");
   shareFunction.dataset.control = "share";
 
   const shareButton = document.createElement("a");
   shareButton.classList.add("sa-share-button");
-  shareButton.innerText = "Share";
+  shareButton.innerText = msg("share");
   addon.tab.displayNoneWhileDisabled(shareButton, {
     display: "block",
   });
   async function shareConfirmation(event) {
     event.preventDefault();
-    let confirmation = await addon.tab.confirm("Share this project?", "Are you sure you want to share this project?");
+    let confirmation = await addon.tab.confirm(msg("confirmation-title"), msg("confirmation"));
     if (confirmation) {
       if (location.hash == "#unshared") {
         let container = event.target.parentElement.parentElement.parentElement.parentElement;
