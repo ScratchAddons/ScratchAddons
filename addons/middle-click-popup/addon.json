@@ -61,7 +61,7 @@
   "versionAdded": "1.30.0",
   "latestUpdate": {
     "version": "1.31.0",
-    "temporaryNotice": "..."
+    "temporaryNotice": "This addon was completely reworked. You can now type inputs and reporters inside other blocks, and autocomplete using the Tab key."
   },
   "info": [
     {
