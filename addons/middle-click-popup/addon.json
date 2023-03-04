@@ -1,6 +1,6 @@
 {
   "name": "Insert blocks by name",
-  "description": "Middle click or Shift+Click on the code area, or press Ctrl+Space to bring up a block-search window, then type the name of a block (or parts of it) and drag it out of the window to insert it without finding it in the block palette. To add multiple blocks at once, hold Shift while dragging the blocks out to avoid closing the window.",
+  "description": "Middle or shift-click the code area, or press Ctrl+Space to bring up a block search window. Type block names (or parts of them) and drag them into the code area to add them to your project. The menu can be navigated with the arrow keys and Enter and supports autocompleting with Tab. To prevent the menu from closing, hold Shift while dragging blocks out of it.",
   "credits": [
     {
       "name": "Tacodiva",
