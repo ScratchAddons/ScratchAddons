@@ -1,6 +1,8 @@
-[class*="stage_green-flag-overlay-wrapper"] {
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  background-color: white;
+.sa-project-thumb {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 0; /* -1 is too low, but 0 is too high */
 }

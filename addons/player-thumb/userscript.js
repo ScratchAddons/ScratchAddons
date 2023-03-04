@@ -1,16 +1,25 @@
-export default async function ({ addon, global, console }) {
-  const el = await addon.tab.waitForElement('div[class*="stage_green-flag-overlay-wrapper_"]', {
+export default async function ({ addon, console }) {
+  const stage = await addon.tab.waitForElement('div[class*="stage_stage"]', {
     markAsSeen: true,
   });
 
   const projectId = window.location.pathname.split("/")[2];
-  const thumb = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_4000x3000.png`;
-  setThumb();
+  const thumbUrl = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png`;
+  const thumb = document.createElement("img");
+  thumb.src = thumbUrl;
+  thumb.id = "sa-project-thumb";
+  thumb.classList.add("sa-project-thumb");
+  stage.appendChild(thumb);
 
-  addon.self.addEventListener("disabled", () => (el.style.backgroundImage = "none"));
-  addon.self.addEventListener("reenabled", () => setThumb());
+  addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (e.detail.action.type == "scratch-gui/vm-status/SET_STARTED_STATE") {
+      console.log("hide thumb");
+      document.getElementById("sa-project-thumb").remove();
+    }
+  });
 
-  function setThumb() {
-    el.style.backgroundImage = `url(${thumb})`;
-  }
+  addon.tab.displayNoneWhileDisabled(thumb, {
+    display: "inline",
+  });
 }
