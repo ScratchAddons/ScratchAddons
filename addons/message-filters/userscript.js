@@ -125,11 +125,24 @@ export default async function ({ addon, console, msg }) {
   // Add the checkboxes element.
   document.querySelector(".messages-social-title").appendChild(container);
   // Loop waiting for more messages then load more messages and/or display them appropriately.
+
+  let lastClick = null;
+  function clickLoadMoreButton() {
+    // Temporal bug fix for #5697
+    console.log("Called clickLoadMoreButton()");
+    if (!lastClick || Date.now() - lastClick > 250) {
+      lastClick = Date.now();
+      document.querySelector(".messages-social-loadmore").click();
+    } else {
+      setTimeout(clickLoadMoreButton, 100);
+    }
+  }
+
   while (true) {
     if (count < 40) {
       console.log("Loading more messages...");
       // Click the load more button.
-      document.querySelector(".messages-social-loadmore").click();
+      clickLoadMoreButton();
       await addon.tab.waitForElement(".social-message", {
         markAsSeen: true,
       });
