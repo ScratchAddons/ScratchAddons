@@ -1,0 +1,26 @@
+{
+  "name": "Code analysis",
+  "description": "Analyze the code of the Scratch Community Project",
+  "tags": ["analysis", "community", "project"],
+  "credits": [
+    {
+      "name": "Gandi IDE",
+      "link": "https://github.com/Gandi-IDE"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*/"],
+      "runAtComplete": true
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/projects/*/"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}

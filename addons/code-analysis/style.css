@@ -1,0 +1,312 @@
+.ps-container {
+  position: relative;
+  background: #393943;
+  width: 960px;
+  height: 640px;
+  border-radius: 13px
+}
+
+.ps-header {
+  position: absolute;
+  left: 15px;
+  top: 12px;
+  background: #ffffff;
+  width: 232px;
+  height: 64px;
+  border-radius: 13px
+}
+
+.ps-header-content {
+  position: absolute;
+  left: 14px;
+  top: 5px;
+  color: #393943;
+  font-size: 18pt;
+  font-weight: bold
+}
+
+.ps-content {
+  position: absolute;
+  top: 54px;
+  left: 15px;
+  background: #ffffff;
+  width: 930px;
+  height: 570px;
+  border-radius: 13px
+}
+
+.ps-slider-container {
+  position: relative;
+  width: inherit;
+  height: 160px;
+}
+
+span.ps-slider-bg {
+  position: absolute;
+  background: #8cbaf6;
+  top: 15px;
+  width: 160px;
+  height: 48px;
+  border-radius: 22px;
+}
+
+span.sprite {
+  left: 8%;
+}
+
+span.code {
+  left: 30%;
+}
+
+span.function {
+  left: 52%;
+}
+
+span.costume {
+  left: 74%;
+}
+
+.ps-slider-title {
+  position: absolute;
+  width: inherit;
+  color: #ffffff;
+  font-size: 18pt;
+  font-weight: bold;
+  text-align: center;
+  line-height: 48px;
+}
+
+.ps-slider-content {
+  position: absolute;
+  top: 50px;
+  width: inherit;
+  font-size: 44pt;
+  color: #4693f7;
+  font-weight: bold;
+  text-align: center;
+}
+
+.ps-horizontal-gradient-container {
+  position: relative;
+  height: 100px;
+}
+
+.ps-arrow {
+  position: absolute;
+  top: 14%;
+  width: 83px;
+  height: 55px;
+  left: 4%;
+}
+
+[class^="ps-edge"] {
+  position: absolute;
+  top: 11%;
+  width: 50px;
+  height: 113px;
+}
+
+.ps-edge01 {
+  left: 2%;
+}
+
+.ps-edge02 {
+  left: 92.33%;
+  transform: rotateY(180deg);
+}
+
+.ps-horizontal-gradient {
+  position: absolute;
+  left: 5%;
+  top: 30%;
+  width: 90%;
+  height: 43px;
+  border-radius: 22px;
+  background: linear-gradient(to right, #2F80ED, #1AD268, #F2994A);
+}
+
+[class^="ps-horizontal-description"] {
+  position: absolute;
+  top: 80px;
+  font-size: 17pt;
+  font-weight: bold
+}
+
+.ps-horizontal-description-motion {
+  left: 6%;
+}
+
+.ps-horizontal-description-logic {
+  left: 71%;
+}
+
+.ps-code-genetic {
+  position: relative;
+  top: 20px;
+  height: 24%;
+}
+
+.ps-code-genetic-bg {
+  position: absolute;
+  background: #575757;
+  top: 14%;
+  left: 5%;
+  width: 90%;
+  height: 100px;
+}
+
+span.motion {
+  background-color: #548AF6;
+}
+
+span.looks {
+  background-color: #865DF3;
+}
+
+span.sound {
+  background-color: #C059CA;
+}
+
+span.events {
+  background-color: #F6D13F;
+}
+
+span.control {
+  background-color: #F0A43B;
+}
+
+span.sensing {
+  background-color: #62B5DE;
+}
+
+span.operators {
+  background-color: #5CB550;
+}
+
+span.variables {
+  background-color: #EE8734;
+}
+
+span.my-blocks {
+  background-color: #E86577;
+}
+
+[class^="ps-code-genetic-block"] {
+  position: absolute;
+  top: 14%;
+  height: 100px;
+}
+
+.ps-code-genetic-table {
+  position: relative;
+  top: 10px;
+  height: 100px;
+}
+
+.ps-code-genetic-table > [class^="ps-code-genetic-item"] {
+  position: absolute;
+  font-size: 18pt;
+  font-weight: bold
+}
+
+span.row0 {
+  top: 1px;
+}
+
+span.row1 {
+  top: 35px;
+}
+
+span.row2 {
+  top: 69px;
+}
+
+span.col0 {
+  left: 170px;
+}
+
+span.col1 {
+  left: 390px;
+}
+
+span.col2 {
+  left: 635px;
+}
+
+span.col3 {
+  left: 874px;
+}
+
+.ps-code-genetic-item-motion {
+  left: 39px;
+  color: #548AF6;
+  text-transform: capitalize;
+}
+
+.ps-code-genetic-item-looks {
+  left: 50px;
+  top: 34px;
+  color: #865DF3;
+  text-transform: capitalize;
+}
+
+.ps-code-genetic-item-sound {
+  left: 47px;
+  top: 68px;
+  color: #C059CA;
+  text-transform: capitalize;
+}
+
+.ps-code-genetic-item-events {
+  left: 263px;
+  color: #F6D13F;
+  text-transform: capitalize;
+}
+
+.ps-code-genetic-item-control {
+  left: 255px;
+  top: 34px;
+  color: #EE8734;
+  text-transform: capitalize;
+}
+
+.ps-code-genetic-item-sensing {
+  left: 250px;
+  top: 68px;
+  color: #62B5DE;
+  text-transform: capitalize;
+}
+
+.ps-code-genetic-item-operators {
+  left: 469px;
+  color: #5CB550;
+  text-transform: capitalize;
+}
+
+.ps-code-genetic-item-variables {
+  left: 478px;
+  top: 34px;
+  color: #EE8734;
+  text-transform: capitalize;
+}
+
+.ps-code-genetic-item-my-blocks {
+  left: 465px;
+  top: 68px;
+  color: #E86577;
+  text-transform: capitalize;
+}
+
+.ps-code-genetic-item-extensions {
+  left: 713px;
+  color: #575757;
+  text-transform: capitalize;
+}
+
+.ps-code-genetic-footer {
+  position: absolute;
+  top: 115px;
+  left: 354px;
+  font-size: 18pt;
+  font-weight: bold
+}
