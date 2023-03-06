@@ -1,10 +1,12 @@
-export default async function ({ console }) {
-  const categories = document.querySelectorAll('[id^="category_body_"]');
-  for (let i = 0; i < categories.length; i++) {
-    let categoryBody = categories[i];
+export default async function ({ console, addon }) {
+  while (true) {
+    const categoryBody = await addon.tab.waitForElement('[id^="category_body_"]', {
+      markAsSeen: true,
+    });
+    console.log(`Found category ${categoryBody.id}`);
 
     let categoryCollapse = categoryBody.querySelector(".toggle");
-    categoryCollapse.addEventListener("click", (event) => {
+    categoryCollapse.addEventListener("click", event => {
       event.preventDefault();
       let categoryHead = event.target.parentElement;
       if (categoryHead.classList.contains("sa-collapsed")) {
@@ -13,7 +15,7 @@ export default async function ({ console }) {
         return;
       } else {
         categoryHead.classList.add("sa-collapsed");
-        changeCategoryCookieExistenceLength(categoryNumber);
+        extendCategoryCookieExistenceLength(categoryNumber);
       }
     });
 
@@ -22,7 +24,7 @@ export default async function ({ console }) {
       removeCategoryCookie(categoryNumber);
       continue;
     }
-    changeCategoryCookieExistenceLength(categoryNumber);
+    extendCategoryCookieExistenceLength(categoryNumber);
 
     let categoryContent = categoryBody.querySelector(".box-content");
     categoryContent.style.display = "none";
@@ -41,7 +43,7 @@ export default async function ({ console }) {
     return storedInCookie;
   }
 
-  function changeCategoryCookieExistenceLength(categoryNumber) {
+  function extendCategoryCookieExistenceLength(categoryNumber) {
     let cookieName = `category_body_${categoryNumber}`;
     console.log(`Extending ${cookieName} for an extra 30 days`);
     document.cookie = `${cookieName}=collapsed;max-age=${30 * 24 * 60 * 60}`;
@@ -49,6 +51,7 @@ export default async function ({ console }) {
 
   function removeCategoryCookie(categoryNumber) {
     let cookieName = `category_body_${categoryNumber}`;
+    console.log(`Removing ${cookieName} due to the category being closed.`);
     document.cookie = `${cookieName}=;max-age=0;`;
   }
 }
