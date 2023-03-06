@@ -1,8 +1,8 @@
 {
   "name": "Code analysis",
   "description": "Analyze the code of the Scratch Community Project",
-  "tags": ["analysis", "community", "project"],
-  "version": "1.31.0",
+  "tags": ["community", "projectPage"],
+  "versionAdded": "1.32.0",
   "credits": [
     {
       "name": "Gandi IDE",
@@ -12,16 +12,14 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*/"],
+      "matches": ["projects"],
       "runAtComplete": true
     }
   ],
   "userstyles": [
     {
       "url": "style.css",
-      "matches": ["https://scratch.mit.edu/projects/*/"]
+      "matches": ["projects"]
     }
-  ],
-  "dynamicEnable": true,
-  "dynamicDisable": true
+  ]
 }
