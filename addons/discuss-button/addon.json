@@ -27,6 +27,15 @@
           "compact-nav": true
         }
       }
+    },
+    {
+      "url": "stick.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "if": {
+        "settings": {
+          "stick": true
+        }
+      }
     }
   ],
   "settings": [
@@ -84,6 +93,12 @@
     {
       "name": "Compact user dropdown",
       "id": "compact-nav",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "dont stick",
+      "id": "stick",
       "type": "boolean",
       "default": false
     }
