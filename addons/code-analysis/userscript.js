@@ -28,9 +28,7 @@ export default async function({ addon, msg, console }) {
     if (vm.editingTarget) return resolve();
     vm.runtime.once("PROJECT_LOADED", resolve);
   });
-  const runtime = addon.tab.traps.vm.runtime;
-  const targets = await runtime.targets;
-  console.log(addon.tab.traps.vm.runtime);
+  const targets = addon.tab.traps.vm.runtime.targets;
   const result = analysisCode(targets);
   const content = await addon.tab.waitForElement("#view > div > div.inner");
   const projectStatsContainer = document.createElement("div");
@@ -45,7 +43,6 @@ export default async function({ addon, msg, console }) {
 }
 
 function analysisCode(targets) {
-  console.log(targets);
   const spriteCount = Object.values(targets).filter((o) => !o.isStage).length;
   let functionCount = 0;
   let codeCount = 0;
@@ -83,7 +80,7 @@ function analysisCode(targets) {
 
 function renderStats(addon, container, result) {
   const psHeader = createElement("ps-header", "div");
-  psHeader.appendChild(createElementWithInnerHTML("ps-header-content", "span", "Project Statistics"));
+  psHeader.appendChild(createElementWithTextContent("ps-header-content", "span", "Project Statistics"));
   container.appendChild(psHeader);
   const psContent = createContent(addon, result);
   container.appendChild(psContent);
@@ -126,8 +123,8 @@ function createHorizontalGradient(addon, total, appearanceCount) {
   }
   arrow.style.left = `${location}px`;
   horizontalGradientContainer.appendChild(arrow);
-  horizontalGradientContainer.appendChild(createElementWithInnerHTML("ps-horizontal-description-motion", "span", "Motion and Appearance"));
-  horizontalGradientContainer.appendChild(createElementWithInnerHTML("ps-horizontal-description-logic", "span", "Logic and Algorithm"));
+  horizontalGradientContainer.appendChild(createElementWithTextContent("ps-horizontal-description-motion", "span", "Motion and Appearance"));
+  horizontalGradientContainer.appendChild(createElementWithTextContent("ps-horizontal-description-logic", "span", "Logic and Algorithm"));
   return horizontalGradientContainer;
 }
 
@@ -163,22 +160,22 @@ function createCodeGeneticTable(total, classifiedCodeMap) {
   let sum = 0;
   codeGeneticTableList.forEach((items, index) => {
     items.forEach((item, nestedIndex) => {
-      codeGeneticTable.appendChild(createElementWithInnerHTML(`ps-code-genetic-item-${item}`, "span", `${item.replace("-", " ")}:`));
+      codeGeneticTable.appendChild(createElementWithTextContent(`ps-code-genetic-item-${item}`, "span", `${item.replace("-", " ")}:`));
       const codeSum = getterMap[item](classifiedCodeMap);
-      codeGeneticTable.appendChild(createElementWithInnerHTML(`ps-code-genetic-item row${index} col${nestedIndex}`, "span", codeSum));
+      codeGeneticTable.appendChild(createElementWithTextContent(`ps-code-genetic-item row${index} col${nestedIndex}`, "span", codeSum));
       sum += codeSum;
     });
   });
-  codeGeneticTable.appendChild(createElementWithInnerHTML("ps-code-genetic-item-extensions", "span", "Extensions:"));
-  codeGeneticTable.appendChild(createElementWithInnerHTML("ps-code-genetic-item row0 col3", "span", total - sum));
-  codeGeneticTable.appendChild(createElementWithInnerHTML("ps-code-genetic-footer", "span", "Code Genetic Map"));
+  codeGeneticTable.appendChild(createElementWithTextContent("ps-code-genetic-item-extensions", "span", "Extensions:"));
+  codeGeneticTable.appendChild(createElementWithTextContent("ps-code-genetic-item row0 col3", "span", total - sum));
+  codeGeneticTable.appendChild(createElementWithTextContent("ps-code-genetic-footer", "span", "Code Genetic Map"));
   return codeGeneticTable;
 }
 
 function createSliderBG(name, value) {
   const psSliderBG = createElement(`ps-slider-bg ${name}`, "span");
-  psSliderBG.appendChild(createElementWithInnerHTML("ps-slider-title", "text", name.toUpperCase()));
-  psSliderBG.appendChild(createElementWithInnerHTML("ps-slider-content", "text", value));
+  psSliderBG.appendChild(createElementWithTextContent("ps-slider-title", "text", name.toUpperCase()));
+  psSliderBG.appendChild(createElementWithTextContent("ps-slider-content", "text", value));
   return psSliderBG;
 }
 
@@ -188,8 +185,8 @@ function createElement(className, label) {
   return element;
 }
 
-function createElementWithInnerHTML(className, label, innerHTML) {
+function createElementWithTextContent(className, label, textContent) {
   const element = createElement(className, label);
-  element.innerHTML = innerHTML;
+  element.textContent = textContent;
   return element;
 }
