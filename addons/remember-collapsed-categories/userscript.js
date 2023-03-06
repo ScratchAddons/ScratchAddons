@@ -6,7 +6,7 @@ export default async function ({ console, addon }) {
     console.log(`Found category ${categoryBody.id}`);
 
     let categoryCollapse = categoryBody.querySelector(".toggle");
-    categoryCollapse.addEventListener("click", event => {
+    categoryCollapse.addEventListener("click", (event) => {
       event.preventDefault();
       let categoryHead = event.target.parentElement;
       if (categoryHead.classList.contains("sa-collapsed")) {
