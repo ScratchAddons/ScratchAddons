@@ -3,26 +3,40 @@ const functionOpcode = "procedures_definition";
 const appearanceCodeTypeList = ["motion", "looks", "sound"];
 
 const getterMap = {
-  "motion": (data) => isNaN(data["motion"]) ? 0 : data["motion"],
-  "looks": (data) => isNaN(data["looks"]) ? 0 : data["looks"],
-  "sound": (data) => isNaN(data["sound"]) ? 0 : data["sound"],
-  "events": (data) => isNaN(data["event"]) ? 0 : data["event"],
-  "control": (data) => isNaN(data["control"]) ? 0 : data["control"],
-  "sensing": (data) => isNaN(data["sensing"]) ? 0 : data["sensing"],
-  "operators": (data) => isNaN(data["operator"]) ? 0 : data["operator"],
-  "variables": (data) => isNaN(data["data"]) ? 0 : data["data"],
+  motion: (data) => (isNaN(data["motion"]) ? 0 : data["motion"]),
+  looks: (data) => (isNaN(data["looks"]) ? 0 : data["looks"]),
+  sound: (data) => (isNaN(data["sound"]) ? 0 : data["sound"]),
+  events: (data) => (isNaN(data["event"]) ? 0 : data["event"]),
+  control: (data) => (isNaN(data["control"]) ? 0 : data["control"]),
+  sensing: (data) => (isNaN(data["sensing"]) ? 0 : data["sensing"]),
+  operators: (data) => (isNaN(data["operator"]) ? 0 : data["operator"]),
+  variables: (data) => (isNaN(data["data"]) ? 0 : data["data"]),
   "my-blocks": (data) => {
     const argument = isNaN(data["argument"]) ? 0 : data["argument"];
     const procedures = isNaN(data["procedures"]) ? 0 : data["procedures"];
     return argument + procedures;
-  }
+  },
 };
 
-const codeGeneticList = ["motion", "looks", "sound", "events", "control", "sensing", "operators", "variables", "my-blocks"];
+const codeGeneticList = [
+  "motion",
+  "looks",
+  "sound",
+  "events",
+  "control",
+  "sensing",
+  "operators",
+  "variables",
+  "my-blocks",
+];
 
-const codeGeneticTableList = [["motion", "events", "operators"], ["looks", "control", "variables"], ["sound", "sensing", "my-blocks"]];
+const codeGeneticTableList = [
+  ["motion", "events", "operators"],
+  ["looks", "control", "variables"],
+  ["sound", "sensing", "my-blocks"],
+];
 
-export default async function({ addon, msg, console }) {
+export default async function ({ addon, msg, console }) {
   const vm = addon.tab.traps.vm;
   await new Promise((resolve) => {
     if (vm.editingTarget) return resolve();
@@ -59,11 +73,12 @@ function analysisCode(targets) {
       }
       codeCount++;
       let codeType = opcode.split("_", 1)[0];
-      isNaN(classifiedCodeMap[codeType]) ? classifiedCodeMap[codeType] = 1.0 : classifiedCodeMap[codeType]++;
+      isNaN(classifiedCodeMap[codeType]) ? (classifiedCodeMap[codeType] = 1.0) : classifiedCodeMap[codeType]++;
     }
     costumeCount += target.sprite.costumes_.length;
   });
-  const appearanceCount = appearanceCodeTypeList.map((item) => classifiedCodeMap[item])
+  const appearanceCount = appearanceCodeTypeList
+    .map((item) => classifiedCodeMap[item])
     .filter((item) => !isNaN(item))
     .reduce((total, item) => {
       return total + item;
@@ -74,7 +89,7 @@ function analysisCode(targets) {
     codeCount: codeCount,
     costumeCount: costumeCount,
     appearanceCount: appearanceCount,
-    classifiedCodeMap: classifiedCodeMap
+    classifiedCodeMap: classifiedCodeMap,
   };
 }
 
@@ -91,7 +106,7 @@ function createContent(addon, result) {
   const psContent = createElement("ps-content", "div");
   const psSliderContainer = createSlider(addon, result);
   psContent.appendChild(psSliderContainer);
-  const classifiedCodeMap = result.classifiedCodeMap ??= {};
+  const classifiedCodeMap = (result.classifiedCodeMap ??= {});
   const horizontalGradientContainer = createHorizontalGradient(addon, total, result.appearanceCount);
   psContent.appendChild(horizontalGradientContainer);
   const codeGenetic = createCodeGenetic(addon, total, classifiedCodeMap);
@@ -115,16 +130,20 @@ function createHorizontalGradient(addon, total, appearanceCount) {
   horizontalGradientContainer.appendChild(createElement("ps-horizontal-gradient", "span"));
   const arrow = Object.assign(document.createElement("img"), {
     className: "ps-arrow",
-    src: addon.self.dir + "/arrow.svg"
+    src: addon.self.dir + "/arrow.svg",
   });
   let location = 428;
   if (total !== 0) {
-    location = (1 - (Number.parseInt(appearanceCount) / total)) * 787;
+    location = (1 - Number.parseInt(appearanceCount) / total) * 787;
   }
   arrow.style.left = `${location}px`;
   horizontalGradientContainer.appendChild(arrow);
-  horizontalGradientContainer.appendChild(createElementWithTextContent("ps-horizontal-description-motion", "span", "Motion and Appearance"));
-  horizontalGradientContainer.appendChild(createElementWithTextContent("ps-horizontal-description-logic", "span", "Logic and Algorithm"));
+  horizontalGradientContainer.appendChild(
+    createElementWithTextContent("ps-horizontal-description-motion", "span", "Motion and Appearance")
+  );
+  horizontalGradientContainer.appendChild(
+    createElementWithTextContent("ps-horizontal-description-logic", "span", "Logic and Algorithm")
+  );
   return horizontalGradientContainer;
 }
 
@@ -138,20 +157,24 @@ function createCodeGenetic(addon, total, classifiedCodeMap) {
     }
     const block = createElement(`ps-code-genetic-block ${item}`, "span");
     const num = getterMap[item](classifiedCodeMap);
-    const width = num * 837 / total;
+    const width = (num * 837) / total;
     block.style.left = `${baseLine}px`;
     block.style.width = `${width}px`;
     horizontalSlider.appendChild(block);
     baseLine += width;
   });
-  horizontalSlider.appendChild(Object.assign(document.createElement("img"), {
-    className: "ps-edge01",
-    src: addon.self.dir + "/edge.svg"
-  }));
-  horizontalSlider.appendChild(Object.assign(document.createElement("img"), {
-    className: "ps-edge02",
-    src: addon.self.dir + "/edge.svg"
-  }));
+  horizontalSlider.appendChild(
+    Object.assign(document.createElement("img"), {
+      className: "ps-edge01",
+      src: addon.self.dir + "/edge.svg",
+    })
+  );
+  horizontalSlider.appendChild(
+    Object.assign(document.createElement("img"), {
+      className: "ps-edge02",
+      src: addon.self.dir + "/edge.svg",
+    })
+  );
   return horizontalSlider;
 }
 
@@ -160,9 +183,13 @@ function createCodeGeneticTable(total, classifiedCodeMap) {
   let sum = 0;
   codeGeneticTableList.forEach((items, index) => {
     items.forEach((item, nestedIndex) => {
-      codeGeneticTable.appendChild(createElementWithTextContent(`ps-code-genetic-item-${item}`, "span", `${item.replace("-", " ")}:`));
+      codeGeneticTable.appendChild(
+        createElementWithTextContent(`ps-code-genetic-item-${item}`, "span", `${item.replace("-", " ")}:`)
+      );
       const codeSum = getterMap[item](classifiedCodeMap);
-      codeGeneticTable.appendChild(createElementWithTextContent(`ps-code-genetic-item row${index} col${nestedIndex}`, "span", codeSum));
+      codeGeneticTable.appendChild(
+        createElementWithTextContent(`ps-code-genetic-item row${index} col${nestedIndex}`, "span", codeSum)
+      );
       sum += codeSum;
     });
   });

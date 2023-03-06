@@ -3,7 +3,7 @@
   background: #393943;
   width: 960px;
   height: 640px;
-  border-radius: 13px
+  border-radius: 13px;
 }
 
 .ps-header {
@@ -13,7 +13,7 @@
   background: #ffffff;
   width: 232px;
   height: 64px;
-  border-radius: 13px
+  border-radius: 13px;
 }
 
 .ps-header-content {
@@ -22,7 +22,7 @@
   top: 5px;
   color: #393943;
   font-size: 18pt;
-  font-weight: bold
+  font-weight: bold;
 }
 
 .ps-content {
@@ -32,7 +32,7 @@
   background: #ffffff;
   width: 930px;
   height: 570px;
-  border-radius: 13px
+  border-radius: 13px;
 }
 
 .ps-slider-container {
@@ -122,14 +122,14 @@ span.costume {
   width: 90%;
   height: 43px;
   border-radius: 22px;
-  background: linear-gradient(to right, #2F80ED, #1AD268, #F2994A);
+  background: linear-gradient(to right, #2f80ed, #1ad268, #f2994a);
 }
 
 [class^="ps-horizontal-description"] {
   position: absolute;
   top: 80px;
   font-size: 17pt;
-  font-weight: bold
+  font-weight: bold;
 }
 
 .ps-horizontal-description-motion {
@@ -156,39 +156,39 @@ span.costume {
 }
 
 span.motion {
-  background-color: #548AF6;
+  background-color: #548af6;
 }
 
 span.looks {
-  background-color: #865DF3;
+  background-color: #865df3;
 }
 
 span.sound {
-  background-color: #C059CA;
+  background-color: #c059ca;
 }
 
 span.events {
-  background-color: #F6D13F;
+  background-color: #f6d13f;
 }
 
 span.control {
-  background-color: #F0A43B;
+  background-color: #f0a43b;
 }
 
 span.sensing {
-  background-color: #62B5DE;
+  background-color: #62b5de;
 }
 
 span.operators {
-  background-color: #5CB550;
+  background-color: #5cb550;
 }
 
 span.variables {
-  background-color: #EE8734;
+  background-color: #ee8734;
 }
 
 span.my-blocks {
-  background-color: #E86577;
+  background-color: #e86577;
 }
 
 [class^="ps-code-genetic-block"] {
@@ -206,7 +206,7 @@ span.my-blocks {
 .ps-code-genetic-table > [class^="ps-code-genetic-item"] {
   position: absolute;
   font-size: 18pt;
-  font-weight: bold
+  font-weight: bold;
 }
 
 span.row0 {
@@ -239,61 +239,61 @@ span.col3 {
 
 .ps-code-genetic-item-motion {
   left: 39px;
-  color: #548AF6;
+  color: #548af6;
   text-transform: capitalize;
 }
 
 .ps-code-genetic-item-looks {
   left: 50px;
   top: 34px;
-  color: #865DF3;
+  color: #865df3;
   text-transform: capitalize;
 }
 
 .ps-code-genetic-item-sound {
   left: 47px;
   top: 68px;
-  color: #C059CA;
+  color: #c059ca;
   text-transform: capitalize;
 }
 
 .ps-code-genetic-item-events {
   left: 263px;
-  color: #F6D13F;
+  color: #f6d13f;
   text-transform: capitalize;
 }
 
 .ps-code-genetic-item-control {
   left: 255px;
   top: 34px;
-  color: #EE8734;
+  color: #ee8734;
   text-transform: capitalize;
 }
 
 .ps-code-genetic-item-sensing {
   left: 250px;
   top: 68px;
-  color: #62B5DE;
+  color: #62b5de;
   text-transform: capitalize;
 }
 
 .ps-code-genetic-item-operators {
   left: 469px;
-  color: #5CB550;
+  color: #5cb550;
   text-transform: capitalize;
 }
 
 .ps-code-genetic-item-variables {
   left: 478px;
   top: 34px;
-  color: #EE8734;
+  color: #ee8734;
   text-transform: capitalize;
 }
 
 .ps-code-genetic-item-my-blocks {
   left: 465px;
   top: 68px;
-  color: #E86577;
+  color: #e86577;
   text-transform: capitalize;
 }
 
@@ -308,5 +308,5 @@ span.col3 {
   top: 115px;
   left: 354px;
   font-size: 18pt;
-  font-weight: bold
+  font-weight: bold;
 }
