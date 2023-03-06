@@ -22,7 +22,7 @@ export default async function ({ addon, console }) {
     addon.self.addEventListener("disabled", () => unLinkifyCurator());
     addon.self.addEventListener("reenabled", () => linkifyCurator());
     addon.settings.addEventListener("change", () => {
-      (addon.settings.get("curator")) ? linkifyCurator() : unLinkifyCurator();
+      addon.settings.get("curator") ? linkifyCurator() : unLinkifyCurator();
     });
 
     function linkifyCurator() {
@@ -44,7 +44,7 @@ export default async function ({ addon, console }) {
     addon.self.addEventListener("disabled", () => unLinkifyMentions());
     addon.self.addEventListener("reenabled", () => linkifyMentions());
     addon.settings.addEventListener("change", () => {
-      (addon.settings.get("mentions")) ? linkifyMentions() : unLinkifyMentions();
+      addon.settings.get("mentions") ? linkifyMentions() : unLinkifyMentions();
     });
     function linkifyMentions() {
       for (const { element } of linkified) {
