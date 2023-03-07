@@ -43,7 +43,7 @@ export default async function ({ addon, msg, console }) {
     vm.runtime.once("PROJECT_LOADED", resolve);
   });
   const targets = addon.tab.traps.vm.runtime.targets;
-  const result = analysisCode(targets);
+  const result = analyseCode(targets);
   const content = await addon.tab.waitForElement("#view > div > div.inner");
   const projectStatsContainer = document.createElement("div");
   content.appendChild(projectStatsContainer);
@@ -56,7 +56,7 @@ export default async function ({ addon, msg, console }) {
   renderStats(addon, container, result);
 }
 
-function analysisCode(targets) {
+function analyseCode(targets) {
   const spriteCount = Object.values(targets).filter((o) => !o.isStage).length;
   let functionCount = 0;
   let codeCount = 0;
