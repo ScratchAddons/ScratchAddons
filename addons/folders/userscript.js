@@ -1225,7 +1225,7 @@ export default async function ({ addon, console, msg }) {
       const target = this.runtime.getTargetById(args[1]);
       if (!target) {
         // Avoid reading property from null
-        return Promise.reject();
+        return Promise.reject(new Error("Dropping sound into folder is not supported"));
         // This would also work no matter what we returned, probably
         // Original method returns a promise, so here too
       }
