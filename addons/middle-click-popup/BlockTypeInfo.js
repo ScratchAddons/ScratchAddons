@@ -359,7 +359,16 @@ export class BlockTypeInfo {
       }
     }
     for (const workspaceBlock of flyoutWorkspace.getTopBlocks()) {
-      blocks.push(...BlockTypeInfo._createBlocks(workspace, vm, Blockly, locale, workspaceBlock, flyoutDomBlockMap[workspaceBlock.id]));
+      blocks.push(
+        ...BlockTypeInfo._createBlocks(
+          workspace,
+          vm,
+          Blockly,
+          locale,
+          workspaceBlock,
+          flyoutDomBlockMap[workspaceBlock.id]
+        )
+      );
     }
 
     return blocks;
@@ -436,19 +445,19 @@ export class BlockTypeInfo {
       const baseTargetInputIdx = parts.indexOf(baseTargetInput);
 
       const stageOptions = [
-        [Blockly.Msg.SENSING_OF_BACKDROPNUMBER, 'backdrop #'],
-        [Blockly.Msg.SENSING_OF_BACKDROPNAME, 'backdrop name'],
-        [Blockly.Msg.SENSING_OF_VOLUME, 'volume']
+        [Blockly.Msg.SENSING_OF_BACKDROPNUMBER, "backdrop #"],
+        [Blockly.Msg.SENSING_OF_BACKDROPNAME, "backdrop name"],
+        [Blockly.Msg.SENSING_OF_VOLUME, "volume"],
       ];
 
       const spriteOptions = [
-        [Blockly.Msg.SENSING_OF_XPOSITION, 'x position'],
-        [Blockly.Msg.SENSING_OF_YPOSITION, 'y position'],
-        [Blockly.Msg.SENSING_OF_DIRECTION, 'direction'],
-        [Blockly.Msg.SENSING_OF_COSTUMENUMBER, 'costume #'],
-        [Blockly.Msg.SENSING_OF_COSTUMENAME, 'costume name'],
-        [Blockly.Msg.SENSING_OF_SIZE, 'size'],
-        [Blockly.Msg.SENSING_OF_VOLUME, 'volume']
+        [Blockly.Msg.SENSING_OF_XPOSITION, "x position"],
+        [Blockly.Msg.SENSING_OF_YPOSITION, "y position"],
+        [Blockly.Msg.SENSING_OF_DIRECTION, "direction"],
+        [Blockly.Msg.SENSING_OF_COSTUMENUMBER, "costume #"],
+        [Blockly.Msg.SENSING_OF_COSTUMENAME, "costume name"],
+        [Blockly.Msg.SENSING_OF_SIZE, "size"],
+        [Blockly.Msg.SENSING_OF_VOLUME, "volume"],
       ];
 
       for (const targetInput of baseTargetInput.values) {
@@ -456,17 +465,17 @@ export class BlockTypeInfo {
         const isStage = targetInput.value === "_stage_";
 
         if (isStage) {
-          const stageVariableOptions = vm.runtime.getTargetForStage().getAllVariableNamesInScopeByType('');
-          options = stageVariableOptions.map(variable => [variable, variable]).concat(stageOptions);
+          const stageVariableOptions = vm.runtime.getTargetForStage().getAllVariableNamesInScopeByType("");
+          options = stageVariableOptions.map((variable) => [variable, variable]).concat(stageOptions);
         } else {
           const sprite = vm.runtime.getSpriteTargetByName(targetInput.value);
-          const spriteVariableOptions = sprite.getAllVariableNamesInScopeByType('', true);
-          options = spriteVariableOptions.map(variable => [variable, variable]).concat(spriteOptions);
+          const spriteVariableOptions = sprite.getAllVariableNamesInScopeByType("", true);
+          options = spriteVariableOptions.map((variable) => [variable, variable]).concat(spriteOptions);
         }
 
         const ofInputs = [
           new BlockInputEnum(options, 0, 0, false),
-          new BlockInputEnum([[targetInput.string, targetInput.value]], 0, -1, isStage)
+          new BlockInputEnum([[targetInput.string, targetInput.value]], 0, -1, isStage),
         ];
 
         const ofParts = [...parts];
