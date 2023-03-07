@@ -471,14 +471,11 @@ class TokenTypeStringEnum extends TokenType {
           yieldedToken = true;
         }
       } else {
-        if (query.lowercase.startsWith(valueInfo.lower, idx) && TokenTypeStringLiteral.TERMINATORS.indexOf(query.lowercase[idx + valueInfo.lower.length]) !== -1) {
-          yield new Token(
-            idx,
-            idx + valueInfo.lower.length,
-            this,
-            { griff: false, valueInfo },
-            100000
-          );
+        if (
+          query.lowercase.startsWith(valueInfo.lower, idx) &&
+          TokenTypeStringLiteral.TERMINATORS.indexOf(query.lowercase[idx + valueInfo.lower.length]) !== -1
+        ) {
+          yield new Token(idx, idx + valueInfo.lower.length, this, { griff: false, valueInfo }, 100000);
           yieldedToken = true;
         }
       }
@@ -531,7 +528,7 @@ class TokenTypeStringEnum extends TokenType {
     const part = token.value.valueInfo.parts[token.value.part];
     return str + part;
   }
-};
+}
 
 /**
  * The token type for a litteral string, like 'Hello World' in the query `say Hello World`
@@ -736,7 +733,7 @@ class TokenTypeBlock extends TokenType {
             } else {
               fullTokenProvider = new TokenTypeStringEnum(blockPart.values, false);
               griffTokenProvider = new TokenTypeStringEnum(blockPart.values, true);
-              hasGriffToken = true;    
+              hasGriffToken = true;
             }
             if (blockPart.isRound) {
               const enumGroup = new TokenProviderGroup();
@@ -791,14 +788,14 @@ class TokenTypeBlock extends TokenType {
           inputs.push(null);
         }
       }
-      const score = -100 * strings.flatMap(s => s.length).reduce((a, b) => a + b + 1);
+      const score = -100 * strings.flatMap((s) => s.length).reduce((a, b) => a + b + 1);
       this.stringForms.push({ strings, inputs, score });
     };
 
     enumerateStringForms();
   }
 
-  * parseTokens(query, idx) {
+  *parseTokens(query, idx) {
     let yieldedTokens = false;
 
     for (const subtokens of this._parseSubtokens(query, idx, this.fullTokenProviders)) {
@@ -851,7 +848,7 @@ class TokenTypeBlock extends TokenType {
    * @param {QueryInfo} query
    * @param {number} idx
    * @param {TokenProvider[]} subtokenProviders
-   * @param {Token[]} subtokens 
+   * @param {Token[]} subtokens
    * @returns {Token?}
    */
   _createToken(query, idx, subtokenProviders, subtokens) {
@@ -894,7 +891,7 @@ class TokenTypeBlock extends TokenType {
    * @param {boolean} parseSubSubTokens
    * @yields {Token[]}
    */
-  * _parseSubtokens(query, idx, subtokenProviders, tokenProviderIdx = 0, parseSubSubTokens = true) {
+  *_parseSubtokens(query, idx, subtokenProviders, tokenProviderIdx = 0, parseSubSubTokens = true) {
     idx = query.skipIgnorable(idx);
     let tokenProvider = subtokenProviders[tokenProviderIdx];
 
@@ -919,7 +916,13 @@ class TokenTypeBlock extends TokenType {
       if (!parseSubSubTokens || !token.isLegal || tokenProviderIdx === subtokenProviders.length - 1) {
         yield [token];
       } else {
-        for (const subTokenArr of this._parseSubtokens(query, token.end, subtokenProviders, tokenProviderIdx + 1, !token.isTruncated)) {
+        for (const subTokenArr of this._parseSubtokens(
+          query,
+          token.end,
+          subtokenProviders,
+          tokenProviderIdx + 1,
+          !token.isTruncated
+        )) {
           subTokenArr.push(token);
           yield subTokenArr;
         }
@@ -943,7 +946,6 @@ class TokenTypeBlock extends TokenType {
       while (blockInputs.length < this.block.inputs.length) blockInputs.push(null);
     }
 
-
     return this.block.createBlock(...blockInputs);
   }
 
@@ -954,9 +956,11 @@ class TokenTypeBlock extends TokenType {
         if (token.value.sequence === -1) {
           return query.str.substring(token.start, token.end);
         } else {
-          return query.str.substring(token.start, token.end) +
-            (query.str[query.length - 1] === ' ' ? "" : " ") +
-            token.value.stringForm.strings.slice(token.value.sequence + 1).join(" ");
+          return (
+            query.str.substring(token.start, token.end) +
+            (query.str[query.length - 1] === " " ? "" : " ") +
+            token.value.stringForm.strings.slice(token.value.sequence + 1).join(" ")
+          );
         }
       }
 
@@ -1049,7 +1053,7 @@ class QueryInfo {
     /** @type {string} A lowercase version of the query. Used for case insensitive comparisons. */
     this.lowercase = this.str.toLowerCase();
     /** @type {string} The lowercase query split up by spaces */
-    this.parts = this.lowercase.split(" ").filter(part => part.trim().length !== 0);
+    this.parts = this.lowercase.split(" ").filter((part) => part.trim().length !== 0);
     /** @type {number} A unique identifier for this query */
     this.id = id;
     /** @type{number} The number of tokens we've found so far */
