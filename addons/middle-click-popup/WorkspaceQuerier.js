@@ -433,7 +433,7 @@ class TokenTypeStringEnum extends TokenType {
   constructor(values, allowGriff) {
     super();
     this.isConstant = values.length === 1;
-    this.isDefiningFeature = this.isConstant;
+    this.isDefiningFeature = true;
     this.allowGriff = allowGriff;
 
     /** @type {StringEnumValue[]} */
@@ -519,8 +519,8 @@ class TokenTypeStringEnum extends TokenType {
   }
 
   createText(token, query, endOnly) {
-    if (!token.value.griff) return token.value.valueInfo.lower;
-    if (!endOnly) return token.value.valueInfo.lower;
+    if (!token) return this.values[0].lower;
+    if (!endOnly || !token.value.griff) return token.value.valueInfo.lower;
     if (!token.isTruncated) {
       return query.str.substring(token.start, token.end);
     }
@@ -958,7 +958,7 @@ class TokenTypeBlock extends TokenType {
         } else {
           return (
             query.str.substring(token.start, token.end) +
-            (query.str[query.length - 1] === " " ? "" : " ") +
+            (query.str.endsWith(" ") ? "" : " ") +
             token.value.stringForm.strings.slice(token.value.sequence + 1).join(" ")
           );
         }
@@ -971,7 +971,8 @@ class TokenTypeBlock extends TokenType {
     if (token.start !== subtokens[0].start) {
       text += query.str.substring(token.start, subtokens[0].start);
     }
-    for (let i = 0; i < subtokens.length; i++) {
+    let i;
+    for (i = 0; i < subtokens.length; i++) {
       const subtoken = subtokens[i];
       const subtokenText = subtoken.type.createText(subtoken, query, endOnly) ?? "";
       text += subtokenText;
@@ -989,6 +990,12 @@ class TokenTypeBlock extends TokenType {
             text += " ";
         }
       }
+    }
+    for (; i < this.fullTokenProviders.length; i++) {
+      const provider = this.fullTokenProviders[i];
+      if (!provider.isConstant) break;
+      if (!text.endsWith(" ")) text += " ";
+      text += provider.createText();
     }
     return text;
   }
