@@ -834,8 +834,7 @@ class TokenTypeBlock extends TokenType {
           }
         }
 
-        if (match === -1) continue outer;
-        if (match < sequence) sequence = -1;
+        if (match === -1 || match < sequence) continue outer;
         else sequence = match;
       }
 
