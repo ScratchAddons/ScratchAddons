@@ -781,7 +781,11 @@ class TokenTypeBlock extends TokenType {
           strings.push(...blockPart.toLowerCase().split(" "));
         } else if (blockPart.type === BlockInputType.ENUM) {
           for (const enumValue of blockPart.values) {
-            enumerateStringForms(partIdx + 1, [...strings, ...enumValue.string.toLowerCase().split(" ")], [...inputs, enumValue]);
+            enumerateStringForms(
+              partIdx + 1,
+              [...strings, ...enumValue.string.toLowerCase().split(" ")],
+              [...inputs, enumValue]
+            );
           }
           return;
         } else {
