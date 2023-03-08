@@ -842,7 +842,7 @@ class TokenTypeBlock extends TokenType {
         else sequence = match + 1;
       }
 
-      yield new Token(0, query.length, this, { stringForm, sequence }, stringForm.score, -1, true);
+      yield new Token(0, query.length, this, { stringForm, sequence }, stringForm.score, -1, false);
     }
   }
 
