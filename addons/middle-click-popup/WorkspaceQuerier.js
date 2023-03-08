@@ -781,14 +781,14 @@ class TokenTypeBlock extends TokenType {
           strings.push(...blockPart.toLowerCase().split(" "));
         } else if (blockPart.type === BlockInputType.ENUM) {
           for (const enumValue of blockPart.values) {
-            enumerateStringForms(partIdx + 1, [...strings, enumValue.string.toLowerCase()], [...inputs, enumValue]);
+            enumerateStringForms(partIdx + 1, [...strings, ...enumValue.string.toLowerCase().split(" ")], [...inputs, enumValue]);
           }
           return;
         } else {
           inputs.push(null);
         }
       }
-      const score = -100 * strings.flatMap((s) => s.length).reduce((a, b) => a + b + 1);
+      const score = -10 * strings.flatMap((s) => s.length).reduce((a, b) => a + b + 1);
       this.stringForms.push({ strings, inputs, score });
     };
 
@@ -820,12 +820,12 @@ class TokenTypeBlock extends TokenType {
     if (idx !== 0) return;
 
     outer: for (const stringForm of this.stringForms) {
-      let sequence = null;
+      let sequence = 0;
 
       for (const queryPart of query.parts) {
         let match = -1;
 
-        for (let formPartIdx = 0; formPartIdx < stringForm.strings.length; formPartIdx++) {
+        for (let formPartIdx = sequence; formPartIdx < stringForm.strings.length; formPartIdx++) {
           const stringFormPart = stringForm.strings[formPartIdx];
 
           if (stringFormPart.startsWith(queryPart)) {
@@ -834,8 +834,8 @@ class TokenTypeBlock extends TokenType {
           }
         }
 
-        if (match === -1 || match < sequence) continue outer;
-        else sequence = match;
+        if (match === -1) continue outer;
+        else sequence = match + 1;
       }
 
       yield new Token(0, query.length, this, { stringForm, sequence }, stringForm.score, -1, true);
