@@ -14,6 +14,6 @@ export default async function ({ addon }) {
       if (e.detail.action.menu !== "accountMenu") return;
       const profileSpans = await addon.tab.waitForElement(".menu_menu-item_3EwYA.menu_hoverable_3u9dt");
       addSpan(username, profileSpans);
-    })
+    });
   }
 }
