@@ -1,6 +1,6 @@
 {
   "name": "Copy reporter values",
-  "description": "Adds buttons to copy the value of reporter balloons and monitors.",
+  "description": "Adds the option to copy values displayed by variable monitors (from the right click context menu) and block reporter balloons.",
   "credits": [{ "name": "TheKodeToad" }],
   "tags": ["editor", "codeEditor"],
   "userscripts": [
