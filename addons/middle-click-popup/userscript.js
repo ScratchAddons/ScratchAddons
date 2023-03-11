@@ -145,7 +145,7 @@ export default async function ({ addon, msg, console }) {
     /** @type {MenuItem[]} */
     const blockList = [];
 
-    if (popupInput.value.length === 0) {
+    if (popupInput.value.trim().length === 0) {
       queryIllegalResult = null;
       if (blockTypes)
         for (const blockType of blockTypes) {

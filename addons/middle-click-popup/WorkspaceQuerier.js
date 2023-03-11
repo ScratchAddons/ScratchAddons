@@ -428,13 +428,11 @@ class TokenTypeStringEnum extends TokenType {
 
   /**
    * @param {(import("./BlockTypeInfo").BlockInputEnumOption[]} values
-   * @param {boolean} allowGriff
    */
-  constructor(values, allowGriff) {
+  constructor(values) {
     super();
     this.isConstant = values.length === 1;
     this.isDefiningFeature = true;
-    this.allowGriff = allowGriff;
 
     /** @type {StringEnumValue[]} */
     this.values = [];
@@ -467,7 +465,7 @@ class TokenTypeStringEnum extends TokenType {
       if (remainingChar < valueInfo.lower.length) {
         if (valueInfo.lower.startsWith(query.lowercase.substring(idx))) {
           const end = remainingChar < 0 ? 0 : query.length;
-          yield new Token(idx, end, this, { griff: false, valueInfo }, 100000, undefined, true);
+          yield new Token(idx, end, this, valueInfo, 100000, undefined, true);
           yieldedToken = true;
         }
       } else {
@@ -475,58 +473,20 @@ class TokenTypeStringEnum extends TokenType {
           query.lowercase.startsWith(valueInfo.lower, idx) &&
           TokenTypeStringLiteral.TERMINATORS.indexOf(query.lowercase[idx + valueInfo.lower.length]) !== -1
         ) {
-          yield new Token(idx, idx + valueInfo.lower.length, this, { griff: false, valueInfo }, 100000);
+          yield new Token(idx, idx + valueInfo.lower.length, this, valueInfo, 100000);
           yieldedToken = true;
         }
-      }
-
-      if (!yieldedToken && this.allowGriff) {
-        let i = idx;
-        for (let j = 0; j < valueInfo.parts.length; j++) {
-          const part = valueInfo.parts[j];
-          let queryPartEnd = query.skipUnignorable(i);
-          const queryPart = query.lowercase.substring(i, queryPartEnd);
-          const queryMatch = part.startsWith(queryPart);
-          if (!queryMatch || queryPartEnd >= query.length) {
-            if (j !== 0) {
-              if (!queryMatch) queryPartEnd = i;
-              yield new Token(
-                idx,
-                queryPartEnd,
-                this,
-                {
-                  griff: true,
-                  valueInfo,
-                  part: j,
-                  length: queryPartEnd - i,
-                },
-                10000,
-                undefined,
-                queryPartEnd > query.length
-              );
-            }
-            continue outer;
-          }
-          i = query.skipIgnorable(queryPartEnd);
-        }
-        yield new Token(idx, i, this, { griff: true, valueInfo }, 10000);
       }
     }
   }
 
   createBlockValue(token, query) {
-    return token.value.valueInfo.value; // I may have named too many things 'value'
+    return token.value.value;
   }
 
   createText(token, query, endOnly) {
     if (!token) return this.values[0].lower;
-    if (!endOnly || !token.value.griff) return token.value.valueInfo.lower;
-    if (!token.isTruncated) {
-      return query.str.substring(token.start, token.end);
-    }
-    const str = query.str.substring(token.start, token.end - token.value.length);
-    const part = token.value.valueInfo.parts[token.value.part];
-    return str + part;
+    return token.value.lower
   }
 }
 
@@ -701,40 +661,15 @@ class TokenTypeBlock extends TokenType {
      * @type {TokenProvider[]}
      */
     this.fullTokenProviders = [];
-    /**
-     * The list of token types that make up this block, but without allowing other blocks as subtokens.
-     *
-     * For example, for the non-griff version of the 'say' block this array would contains two
-     * providers, the first is a {@link StringEnum.FullTokenType} containing only the value 'say'
-     * and the second is equal to querier.tokenGroupString.
-     *
-     * @type {TokenProvider[]}
-     */
-    this.griffTokenProviders = [];
-
-    let hasGriffToken = false;
 
     for (const blockPart of block.parts) {
       let fullTokenProvider;
-      let griffTokenProvider;
       if (typeof blockPart === "string") {
-        if (hasGriffToken) {
-          fullTokenProvider = griffTokenProvider = new TokenTypeStringEnum([{ value: null, string: blockPart }], true);
-        } else {
-          fullTokenProvider = new TokenTypeStringEnum([{ value: null, string: blockPart }], false);
-          griffTokenProvider = new TokenTypeStringEnum([{ value: null, string: blockPart }], true);
-          hasGriffToken = true;
-        }
+        fullTokenProvider = new TokenTypeStringEnum([{ value: null, string: blockPart }]);
       } else {
         switch (blockPart.type) {
           case BlockInputType.ENUM:
-            if (hasGriffToken) {
-              fullTokenProvider = griffTokenProvider = new TokenTypeStringEnum(blockPart.values, true);
-            } else {
-              fullTokenProvider = new TokenTypeStringEnum(blockPart.values, false);
-              griffTokenProvider = new TokenTypeStringEnum(blockPart.values, true);
-              hasGriffToken = true;
-            }
+            fullTokenProvider = new TokenTypeStringEnum(blockPart.values);
             if (blockPart.isRound) {
               const enumGroup = new TokenProviderGroup();
               enumGroup.pushProviders([fullTokenProvider, querier.tokenGroupRoundBlocks]);
@@ -743,30 +678,22 @@ class TokenTypeBlock extends TokenType {
             break;
           case BlockInputType.STRING:
             fullTokenProvider = querier.tokenGroupString;
-            // Only allow literals for griff token blocks
-            griffTokenProvider = new TokenProviderOptional(querier.tokenTypeStringLiteral);
             break;
           case BlockInputType.NUMBER:
             fullTokenProvider = querier.tokenGroupNumber;
-            // Only allow literals for griff token blocks
-            griffTokenProvider = new TokenProviderOptional(querier.tokenTypeNumberLiteral);
             break;
           case BlockInputType.COLOUR:
             fullTokenProvider = TokenTypeColor.INSTANCE;
-            griffTokenProvider = TokenTypeColor.INSTANCE;
             break;
           case BlockInputType.BOOLEAN:
             fullTokenProvider = querier.tokenGroupBoolean;
-            griffTokenProvider = TokenTypeBlank.INSTANCE;
             break;
           case BlockInputType.BLOCK:
             fullTokenProvider = querier.tokenGroupStack;
-            griffTokenProvider = TokenTypeBlank.INSTANCE;
             break;
         }
       }
       this.fullTokenProviders.push(fullTokenProvider);
-      this.griffTokenProviders.push(griffTokenProvider);
     }
 
     /**
@@ -799,6 +726,12 @@ class TokenTypeBlock extends TokenType {
     enumerateStringForms();
   }
 
+  /**
+   * 
+   * @param {QueryInfo} query 
+   * @param {*} idx 
+   * @returns 
+   */
   *parseTokens(query, idx) {
     let yieldedTokens = false;
 
@@ -812,37 +745,44 @@ class TokenTypeBlock extends TokenType {
 
     if (yieldedTokens) return;
 
-    for (const subtokens of this._parseSubtokens(query, idx, this.griffTokenProviders)) {
-      let token = this._createToken(query, idx, this.griffTokenProviders, subtokens);
-      if (token) {
-        yield token;
-        yieldedTokens = true;
-      }
-    }
-
-    if (yieldedTokens) return;
-    if (idx !== 0) return;
-
     outer: for (const stringForm of this.stringForms) {
-      let sequence = 0;
 
-      for (const queryPart of query.parts) {
-        let match = -1;
+      let lastPartIdx = -1;
+      let i = idx;
+      let hasDefiningFeature = false;
 
-        for (let formPartIdx = sequence; formPartIdx < stringForm.strings.length; formPartIdx++) {
-          const stringFormPart = stringForm.strings[formPartIdx];
+      while (i < query.length) {
+        i = query.skipIgnorable(i);
 
-          if (stringFormPart.startsWith(queryPart)) {
-            match = formPartIdx;
-            break;
+        const wordEnd = query.skipUnignorable(i);
+
+        if (wordEnd === i) {
+          yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx: -1 }, stringForm.score, -1, false);
+        } else {
+          const word = query.lowercase.substring(i, wordEnd);
+          let match = -1;
+
+          for (let formPartIdx = lastPartIdx + 1; formPartIdx < stringForm.strings.length; formPartIdx++) {
+            const stringFormPart = stringForm.strings[formPartIdx];
+
+            if (stringFormPart.startsWith(word)) {
+              match = formPartIdx;
+              break;
+            }
           }
+
+          if (match === -1) continue outer;
+          lastPartIdx = match;
+
+          hasDefiningFeature ||= !TokenTypeNumberLiteral.isValidNumber(word);
+
+          if (hasDefiningFeature)
+            yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx, i }, stringForm.score, -1, false);
+          i = wordEnd;
         }
 
-        if (match === -1) continue outer;
-        else sequence = match + 1;
       }
 
-      yield new Token(0, query.length, this, { stringForm, sequence }, stringForm.score, -1, false);
     }
   }
 
@@ -953,22 +893,23 @@ class TokenTypeBlock extends TokenType {
   }
 
   createText(token, query, endOnly) {
-    if (!token.isTruncated && endOnly) return query.str.substring(token.start, token.end);
     if (token.value.stringForm) {
       if (endOnly) {
-        if (token.value.sequence === -1) {
+        if (token.value.lastPartIdx === -1) {
           return query.str.substring(token.start, token.end);
         } else {
           return (
             query.str.substring(token.start, token.end) +
-            (query.str.endsWith(" ") ? "" : " ") +
-            token.value.stringForm.strings.slice(token.value.sequence + 1).join(" ")
+            token.value.stringForm.strings[token.value.lastPartIdx].substring(token.end - token.value.i) +
+            " " +
+            token.value.stringForm.strings.slice(token.value.lastPartIdx + 1).join(" ")
           );
         }
       }
 
       return token.value.stringForm.strings.join(" ");
     }
+    if (!token.isTruncated && endOnly) return query.str.substring(token.start, token.end);
     const subtokens = token.value.subtokens;
     let text = "";
     if (token.start !== subtokens[0].start) {
@@ -1062,8 +1003,6 @@ class QueryInfo {
     this.str = query.replaceAll(String.fromCharCode(160), " ");
     /** @type {string} A lowercase version of the query. Used for case insensitive comparisons. */
     this.lowercase = this.str.toLowerCase();
-    /** @type {string} The lowercase query split up by spaces */
-    this.parts = this.lowercase.split(" ").filter((part) => part.trim().length !== 0);
     /** @type {number} A unique identifier for this query */
     this.id = id;
     /** @type{number} The number of tokens we've found so far */
@@ -1177,7 +1116,7 @@ export default class WorkspaceQuerier {
    */
   queryWorkspace(queryStr) {
     if (!this.workspaceIndexed) throw new Error("A workspace must be indexed before it can be queried!");
-    if (queryStr.length === 0) return { results: [], illegalResult: null, limited: false };
+    if (queryStr.trim().length === 0) return { results: [], illegalResult: null, limited: false };
 
     const query = new QueryInfo(this, queryStr, this._queryCounter++);
     const results = [];
