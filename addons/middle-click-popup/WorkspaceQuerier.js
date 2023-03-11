@@ -486,7 +486,7 @@ class TokenTypeStringEnum extends TokenType {
 
   createText(token, query, endOnly) {
     if (!token) return this.values[0].lower;
-    return token.value.lower
+    return token.value.lower;
   }
 }
 
@@ -727,10 +727,10 @@ class TokenTypeBlock extends TokenType {
   }
 
   /**
-   * 
-   * @param {QueryInfo} query 
-   * @param {*} idx 
-   * @returns 
+   *
+   * @param {QueryInfo} query
+   * @param {*} idx
+   * @returns
    */
   *parseTokens(query, idx) {
     let yieldedTokens = false;
@@ -746,7 +746,6 @@ class TokenTypeBlock extends TokenType {
     if (yieldedTokens) return;
 
     outer: for (const stringForm of this.stringForms) {
-
       let lastPartIdx = -1;
       let i = idx;
       let hasDefiningFeature = false;
@@ -780,9 +779,7 @@ class TokenTypeBlock extends TokenType {
             yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx, i }, stringForm.score, -1, false);
           i = wordEnd;
         }
-
       }
-
     }
   }
 
