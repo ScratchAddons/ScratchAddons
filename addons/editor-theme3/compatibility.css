@@ -8,6 +8,8 @@
   --sa-block-gray-text: white;
   --sa-block-colored-text: var(--sa-block-background-primary);
   --sa-block-text-on-bright-background: white;
+  --sa-block-input-color: var(--editorTheme3-inputColor, white);
+  --sa-block-input-text: var(--editorTheme3-inputColor-text, #575e75);
 }
 
 .sa-block-color-motion {
