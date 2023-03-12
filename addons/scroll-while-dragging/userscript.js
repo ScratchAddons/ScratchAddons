@@ -30,16 +30,21 @@ export default async function ({ addon, msg, console }) {
       _this.zoom(position.x, position.y, delta);
 
       if (_this.currentGesture_ && !addon.self.disabled) {
-        const gesture = _this.currentGesture_;
-        const Coordinate = gesture.currentDragDeltaXY_.constructor;
+        // for now, don't allow zooming while dragging a block
+        // (I don't think it is as needed as scrolling anyways)
+        _this.currentGesture_.cancel();
+        /*
+          const gesture = _this.currentGesture_;
+          const Coordinate = gesture.currentDragDeltaXY_.constructor;
 
-        const deltaOffX = (gesture.currentDragDeltaXY_.x / oldScale) * _this.scale - gesture.currentDragDeltaXY_.x;
-        const deltaOffY = (gesture.currentDragDeltaXY_.y / oldScale) * _this.scale - gesture.currentDragDeltaXY_.y;
+          const deltaOffX = (gesture.currentDragDeltaXY_.x / oldScale) * _this.scale - gesture.currentDragDeltaXY_.x;
+          const deltaOffY = (gesture.currentDragDeltaXY_.y / oldScale) * _this.scale - gesture.currentDragDeltaXY_.y;
 
-        gesture.mouseDownXY_ = new Coordinate(
-          gesture.mouseDownXY_.x - (_this.scrollX - oldScrollX) - deltaOffX,
-          gesture.mouseDownXY_.y - (_this.scrollY - oldScrollY) - deltaOffY
-        );
+          gesture.mouseDownXY_ = new Coordinate(
+            gesture.mouseDownXY_.x - (_this.scrollX - oldScrollX) - deltaOffX,
+            gesture.mouseDownXY_.y - (_this.scrollY - oldScrollY) - deltaOffY
+          );
+        */
       }
     } else {
       // This is a regular mouse wheel event - scroll the workspace
