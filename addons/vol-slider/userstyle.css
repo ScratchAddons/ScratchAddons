@@ -20,7 +20,8 @@
 .sa-vol-slider-icon[data-icon="loud"] {
   background-image: url("./loud.svg");
 }
-.sa-vol-slider-icon:hover, .sa-vol-slider-input:hover {
+.sa-vol-slider-icon:hover,
+.sa-vol-slider-input:hover {
   cursor: pointer;
 }
 
