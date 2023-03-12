@@ -57,9 +57,3 @@
   border-radius: 50%;
   background-color: #c234c2;
 }
-
-.sa-vol-slider:not(:hover) > .sa-vol-slider-input {
-  opacity: 0;
-  width: 0;
-  margin-left: -3px;
-}

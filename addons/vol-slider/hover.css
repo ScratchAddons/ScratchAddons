@@ -1,0 +1,5 @@
+.sa-vol-slider:not(:hover) > .sa-vol-slider-input {
+  opacity: 0;
+  width: 0;
+  margin-left: -3px;
+}
