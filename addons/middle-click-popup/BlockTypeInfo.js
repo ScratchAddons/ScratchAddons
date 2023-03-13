@@ -316,24 +316,41 @@ export class BlockShape {
 }
 
 /**
+ * @typedef BlockCategory
+ * @property {string} name
+ * @property {string} colorPrimary
+ * @property {string} colorSecondary
+ * @property {string} colorTertiary
+ */
+
+/**
  * A type of Scratch block, like 'move () steps'. Every instance of the 'move () steps'
  * block shares this type info.
  */
 export class BlockTypeInfo {
   /**
    * @param {*} block Block in workspace form
-   * @returns {string} The block's category
+   * @param {*} vm
+   * @returns {BlockCategory} The block's category
    */
-  static getBlockCategory(block) {
+  static getBlockCategory(block, vm) {
+    let name;
+
     if (block.type === "procedures_call") {
-      if (SABlocks.getCustomBlock(block.getProcCode())) return "addon-custom-block";
-      return "more";
+      if (SABlocks.getCustomBlock(block.getProcCode())) name = "addon-custom-block";
+      else name = "more";
     }
-    if (block.isScratchExtension) return "pen";
-    // These two blocks don't have `category_` set for reasons I'm too tired to figure out.
-    if (block.type === "sensing_of") return "sensing";
-    if (block.type === "event_whenbackdropswitchesto") return "events";
-    return block.category_;
+    else if (block.isScratchExtension) name = "pen";
+    else if (block.type === "sensing_of") name = "sensing";
+    else if (block.type === "event_whenbackdropswitchesto") name = "events";
+    else name = block.category_;
+
+    return {
+      name,
+      colorPrimary: block.colour_,
+      colorSecondary: block.colourSecondary_,
+      colorTertiary: block.colourTertiary_
+    }
   }
 
   /**
@@ -482,24 +499,24 @@ export class BlockTypeInfo {
         ofParts[baseVarInputIdx] = ofInputs[0];
         ofParts[baseTargetInputIdx] = ofInputs[1];
 
-        blocks.push(new BlockTypeInfo(workspace, Blockly, workspaceForm, domForm, ofParts, ofInputs));
+        blocks.push(new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, ofParts, ofInputs));
       }
 
       return blocks;
     }
 
-    return [new BlockTypeInfo(workspace, Blockly, workspaceForm, domForm, parts, inputs)];
+    return [new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, parts, inputs)];
   }
 
-  constructor(workspace, Blockly, workspaceForm, domForm, parts, inputs) {
+  constructor(workspace, Blockly, vm, workspaceForm, domForm, parts, inputs) {
     /** @type {string} */
     this.id = workspaceForm.id;
     this.workspaceForm = workspaceForm;
     this.domForm = domForm;
     /** @type {BlockShape} */
     this.shape = BlockShape.getBlockShape(this.workspaceForm);
-    /** @type {string} */
-    this.category = BlockTypeInfo.getBlockCategory(this.workspaceForm);
+    /** @type {BlockCategory} */
+    this.category = BlockTypeInfo.getBlockCategory(this.workspaceForm, vm);
     this.workspace = workspace;
     this.Blockly = Blockly;
 

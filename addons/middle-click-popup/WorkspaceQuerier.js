@@ -1274,7 +1274,7 @@ export default class WorkspaceQuerier {
   _poppulateTokenGroups(blocks) {
     blocks.sort(
       (a, b) =>
-        WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(b.category) - WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(a.category)
+        WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(b.category.name) - WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(a.category.name)
     );
 
     // Apply order of operations

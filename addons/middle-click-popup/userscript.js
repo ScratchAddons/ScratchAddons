@@ -106,7 +106,7 @@ export default async function ({ addon, msg, console }) {
     blockTypes = BlockTypeInfo.getBlocks(Blockly, vm, Blockly.getMainWorkspace(), msg);
     querier.indexWorkspace([...blockTypes]);
     blockTypes.sort((a, b) => {
-      const prio = (block) => ["operators", "data"].indexOf(block.category) - block.id.startsWith("data_");
+      const prio = (block) => ["operators", "data"].indexOf(block.category.name) - block.id.startsWith("data_");
       return prio(b) - prio(a);
     });
 
