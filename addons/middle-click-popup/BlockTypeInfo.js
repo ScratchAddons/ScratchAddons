@@ -339,8 +339,7 @@ export class BlockTypeInfo {
     if (block.type === "procedures_call") {
       if (SABlocks.getCustomBlock(block.getProcCode())) name = "addon-custom-block";
       else name = "more";
-    }
-    else if (block.isScratchExtension) name = "pen";
+    } else if (block.isScratchExtension) name = "pen";
     else if (block.type === "sensing_of") name = "sensing";
     else if (block.type === "event_whenbackdropswitchesto") name = "events";
     else name = block.category_;
@@ -349,8 +348,8 @@ export class BlockTypeInfo {
       name,
       colorPrimary: block.colour_,
       colorSecondary: block.colourSecondary_,
-      colorTertiary: block.colourTertiary_
-    }
+      colorTertiary: block.colourTertiary_,
+    };
   }
 
   /**

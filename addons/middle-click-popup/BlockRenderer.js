@@ -245,14 +245,7 @@ function createBackedTextedComponent(text, container, shape, categoryClass, fill
     textElement.dom.setAttribute("x", (shape.minWidth - textElement.width) / 2);
   }
 
-  const blockElement = createBlockComponent(
-    blockContainer,
-    shape,
-    categoryClass,
-    fill,
-    stroke,
-    textElement.width
-  );
+  const blockElement = createBlockComponent(blockContainer, shape, categoryClass, fill, stroke, textElement.width);
   return blockElement;
 }
 
