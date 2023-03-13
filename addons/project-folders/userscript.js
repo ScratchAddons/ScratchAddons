@@ -3,7 +3,7 @@ export default async function ({ addon, global, console, msg }) {
 
   async function loadFolders() {
     const folders = [];
-    const folderDiv = document.querySelectorAll('div.folders')[0];
+    const folderDiv = document.querySelectorAll("div.folders")[0];
     for (let i = 0; i < projects.length; i++) {
       folderDiv.childNodes[2].value = (i / projects.length) * 100;
 
@@ -48,7 +48,7 @@ export default async function ({ addon, global, console, msg }) {
 
     for (let i = 0; i < 2; i++) folderDiv.childNodes[1].remove();
 
-    if (folders.length === 0) folderDiv.childNodes[0].textContent = msg("noFolder")
+    if (folders.length === 0) folderDiv.childNodes[0].textContent = msg("noFolder");
     else folderDiv.childNodes[0].remove();
 
     for (let i = 0; i < folders.length; i++) createFolder(folders[i].name, JSON.stringify(folders[i]));
@@ -68,15 +68,15 @@ export default async function ({ addon, global, console, msg }) {
     realFolderDiv.className = "folders";
     folderDiv.appendChild(realFolderDiv);
 
-    const textSpan = document.createElement('span');
-    textSpan.textContent = msg('loading');
+    const textSpan = document.createElement("span");
+    textSpan.textContent = msg("loading");
     realFolderDiv.appendChild(textSpan);
 
-    realFolderDiv.appendChild(document.createElement('br'));
+    realFolderDiv.appendChild(document.createElement("br"));
 
-    const progressBar = document.createElement('progress');
-    progressBar.setAttribute('value', 0);
-    progressBar.setAttribute('max', 100);
+    const progressBar = document.createElement("progress");
+    progressBar.setAttribute("value", 0);
+    progressBar.setAttribute("max", 100);
     realFolderDiv.appendChild(progressBar);
 
     const projectHeader = document.createElement("h4");
