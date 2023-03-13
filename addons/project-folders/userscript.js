@@ -3,7 +3,10 @@ export default async function ({ addon, global, console, msg }) {
 
   async function loadFolders() {
     const folders = [];
+    const folderDiv = document.querySelectorAll('div.folders')[0];
     for (let i = 0; i < projects.length; i++) {
+      folderDiv.childNodes[2].value = (i / projects.length) * 100;
+
       const projectID = projects[i].pk;
       const token = await addon.auth.fetchXToken();
       const projectDetails = await (
@@ -25,11 +28,7 @@ export default async function ({ addon, global, console, msg }) {
 
       for (let j = 0; j < folder.length; j++) {
         const matches = folders.filter((element) => {
-          if (element.name === folder[j].replace("#_", "")) {
-            return true;
-          } else {
-            return false;
-          }
+          return element.name === folder[j].replace("#_", "");
         });
 
         if (matches.length === 0) {
@@ -47,9 +46,12 @@ export default async function ({ addon, global, console, msg }) {
       }
     }
 
-    for (let i = 0; i < folders.length; i++) {
-      createFolder(folders[i].name, JSON.stringify(folders[i]));
-    }
+    for (let i = 0; i < 2; i++) folderDiv.childNodes[1].remove();
+
+    if (folders.length === 0) folderDiv.childNodes[0].textContent = msg("noFolder")
+    else folderDiv.childNodes[0].remove();
+
+    for (let i = 0; i < folders.length; i++) createFolder(folders[i].name, JSON.stringify(folders[i]));
   }
 
   function createFolderAreaAndButton(projectColumns) {
@@ -66,7 +68,18 @@ export default async function ({ addon, global, console, msg }) {
     realFolderDiv.className = "folders";
     folderDiv.appendChild(realFolderDiv);
 
-    let projectHeader = document.createElement("h4");
+    const textSpan = document.createElement('span');
+    textSpan.textContent = msg('loading');
+    realFolderDiv.appendChild(textSpan);
+
+    realFolderDiv.appendChild(document.createElement('br'));
+
+    const progressBar = document.createElement('progress');
+    progressBar.setAttribute('value', 0);
+    progressBar.setAttribute('max', 100);
+    realFolderDiv.appendChild(progressBar);
+
+    const projectHeader = document.createElement("h4");
     projectHeader.textContent = msg("projectHeader");
     projectColumns.insertBefore(projectHeader, projectColumns.childNodes[1]);
   }
@@ -121,7 +134,7 @@ export default async function ({ addon, global, console, msg }) {
         project.appendChild(projectIMG);
 
         const projectLink = document.createElement("a");
-        projectLink.href = `https://scratch.mit.edu/project/${folderData.projects[i].id}`;
+        projectLink.href = `https://scratch.mit.edu/projects/${folderData.projects[i].id}`;
         projectLink.textContent = folderData.projects[i].name;
         project.appendChild(projectLink);
       }
