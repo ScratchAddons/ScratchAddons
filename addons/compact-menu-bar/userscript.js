@@ -4,12 +4,12 @@ export default async function ({ addon }) {
     profile.textContent = username;
     profile.className = "sa-profile-name";
   }
-  
+
   if (await addon.auth.fetchIsLoggedIn()) {
     const username = await addon.auth.fetchUsername();
     addon.tab.redux.initialize(); // Start listening to Redux events
     addon.tab.redux.addEventListener("statechanged", async (e) => {
-      if ((e.detail.action.type !== "scratch-gui/menus/OPEN_MENU") || (e.detail.action.menu !== "accountMenu")) return; // Leave if another Redux event occurs
+      if (e.detail.action.type !== "scratch-gui/menus/OPEN_MENU" || e.detail.action.menu !== "accountMenu") return; // Leave if another Redux event occurs
       const profileSpans = await addon.tab.waitForElement(".menu_menu-item_3EwYA.menu_hoverable_3u9dt"); // Do this if the menu is opened
       addSpan(username, profileSpans);
     });
