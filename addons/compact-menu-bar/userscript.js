@@ -1,4 +1,4 @@
-export default async function ({ addon }) {  
+export default async function ({ addon }) {
   if (await addon.auth.fetchIsLoggedIn()) {
     const username = await addon.auth.fetchUsername();
     addon.tab.redux.initialize(); // Start listening to Redux events
