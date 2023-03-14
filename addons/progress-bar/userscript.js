@@ -187,7 +187,6 @@ export default async function ({ addon, console, msg }) {
   const originalPostMessage = Worker.prototype.postMessage;
   Worker.prototype.postMessage = function (message, options) {
     if (!addon.self.disabled && message && typeof message.id === "string" && typeof message.url === "string") {
-
       if (BACKPACK_REGEX.test(message.url)) {
         message.url = "";
         originalPostMessage.call(this, message, options);
