@@ -12,6 +12,8 @@
     }
   ],
   "tags": ["editor", "editorMenuBar"],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
   "enabledByDefault": false,
   "versionAdded": "1.32.0",
   "userscripts": [
