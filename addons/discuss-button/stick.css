@@ -1,3 +1,4 @@
-#navigation {
+#navigation, #topnav {
+
     position: absolute !important;
 }
