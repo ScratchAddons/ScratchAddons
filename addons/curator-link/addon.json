@@ -1,6 +1,6 @@
 {
   "name": "Clickable usernames",
-  "description": "Makes forum mentions and the front page curator's username clickable links to their profile.",
+  "description": "Makes the front page curator's username and forum mentions clickable links to their profiles.",
   "credits": [
     {
       "name": "Hans5958",
@@ -60,7 +60,7 @@
   "dynamicDisable": true,
   "versionAdded": "1.4.0",
   "latestUpdate": {
-    "version": "1.31.0",
+    "version": "1.32.0",
     "newSettings": ["mentions"]
   },
   "tags": ["community", "forums"],
