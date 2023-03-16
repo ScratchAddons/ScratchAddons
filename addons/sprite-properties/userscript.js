@@ -132,8 +132,7 @@ export default async function ({ addon, console, msg }) {
     });
 
     const spriteSelector = propertiesPanel.parentNode;
-    const scrollWrapper = spriteSelector.querySelector('[class*="sprite-selector_scroll-wrapper_"]');
-    const itemsWrapper = scrollWrapper.firstChild;
+    const itemsWrapper = spriteSelector.querySelector('[class*="sprite-selector_items-wrapper_"]');
     observer.observe(itemsWrapper, {
       childList: true,
       subtree: true,

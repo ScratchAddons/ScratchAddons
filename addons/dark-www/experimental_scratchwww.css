@@ -32,6 +32,12 @@ body {
 .sa-project-info img {
   filter: var(--darkWww-page-filter);
 }
+.project-loves::before {
+  background-image: url("%addon-self-dir%/assets/love_transparent.svg");
+}
+.project-favorites::before {
+  background-image: url("%addon-self-dir%/assets/favorite_transparent.svg");
+}
 .project-loves.loved::before,
 .project-favorites.favorited::before {
   filter: none;
@@ -215,6 +221,7 @@ body:not(.sa-body-editor) .button.white,
 .tabs li.active:hover,
 .grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
 .unsupported-browser .faq-link-text,
+a.social-messages-profile-link:visited,
 a.social-messages-profile-link:link,
 .studio-selector-button-text-unselected,
 .studio-project-tile .studio-project-username,
@@ -310,9 +317,12 @@ body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
 }
 .outer .categories li {
   background-color: var(--darkWww-gray-tab);
+  border-color: var(--darkWww-gray-darkText);
+  color: var(--darkWww-gray-text);
 }
 .outer .categories li:hover {
   background-color: var(--darkWww-gray-tabHover);
+  color: var(--darkWww-gray-darkText);
 }
 .toggle-switch .slider {
   background-color: var(--darkWww-gray-darker);
