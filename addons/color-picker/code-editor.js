@@ -82,6 +82,7 @@ export default async ({ addon, console, msg }) => {
       if (div) {
         const saColorPickerColor = div.querySelector(".sa-color-picker-color.sa-color-picker-code-color");
         const saColorPickerText = div.querySelector(".sa-color-picker-text.sa-color-picker-code-text");
+        if (!saColorPickerColor || !saColorPickerText) return r;
         const color = this.getValue();
         saColorPickerColor.value = color || "#000000";
         saColorPickerText.value = color || "";
