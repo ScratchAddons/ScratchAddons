@@ -220,7 +220,7 @@ function addStyle(addon) {
       link.setAttribute("data-addon-id", addon.addonId);
       link.setAttribute("data-addon-index", styleIndex);
       link.classList.add("scratch-addons-style");
-      link.href = userstyle.href;
+      link.href = userstyle.href + "?" + Math.floor(Math.random() * 1e16);
       appendByIndex(link, styleIndex);
     }
   }
