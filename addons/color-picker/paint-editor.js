@@ -106,7 +106,9 @@ export default async ({ addon, console, msg }) => {
       if (
         detail.action.type === "scratch-paint/color-index/CHANGE_COLOR_INDEX" ||
         detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR" ||
-        detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR_2"
+        detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR_2" ||
+        (detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_GRADIENT_TYPE" &&
+          detail.action.gradientType === "SOLID")
       ) {
         rateLimiter.limit(() => updateColor(element));
       }
