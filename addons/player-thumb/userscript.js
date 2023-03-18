@@ -2,6 +2,7 @@ export default async function ({ addon, console }) {
   const stage = await addon.tab.waitForElement('div[class*="stage_stage"]', {
     markAsSeen: true,
   });
+  const greenFlagOverlay = stage.querySelector('[class*="stage_green-flag-overlay-wrapper_"]');
 
   const projectId = window.location.pathname.split("/")[2];
   const thumbUrl = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png`;
@@ -9,7 +10,7 @@ export default async function ({ addon, console }) {
   thumb.src = thumbUrl;
   thumb.id = "sa-project-thumb";
   thumb.classList.add("sa-project-thumb");
-  stage.appendChild(thumb);
+  stage.insertBefore(thumb, greenFlagOverlay);
 
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
