@@ -459,7 +459,7 @@ input.link.black:active,
   color: var(--darkWww-link-scratchr2);
 }
 .inew,
-.isticky {
+.isticky:not(.iclosed) {
   filter: var(--darkWww-link-scratchr2IconFilter);
 }
 

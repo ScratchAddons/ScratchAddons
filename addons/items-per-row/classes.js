@@ -9,12 +9,19 @@ function setClasses(setting, value, thresholds) {
     if (value <= threshold) document.body.classList.add(className);
     else document.body.classList.remove(className);
   }
+  if (thresholds.exact) {
+    for (let threshold of thresholds.exact) {
+      const className = `items-per-row-${setting}-${threshold}`;
+      if (value === threshold) document.body.classList.add(className);
+      else document.body.classList.remove(className);
+    }
+  }
 }
 
 export default async function ({ addon, console }) {
   await addon.tab.waitForElement("body");
   const updateClasses = () => {
-    setClasses("search", addon.settings.get("search"), { min: [5], max: [2] });
+    setClasses("search", addon.settings.get("search"), { min: [5], max: [2], exact: [4] });
     setClasses("studio-projects", addon.settings.get("studioProjects"), { min: [4, 5], max: [] });
     setClasses("studio-curators", addon.settings.get("studioCurators"), { min: [4, 5], max: [2] });
     setClasses("projects", addon.settings.get("projects"), { min: [6, 7], max: [4, 3] });

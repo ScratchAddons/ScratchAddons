@@ -777,6 +777,17 @@
       }
     },
     {
+      "name": "gray-darkText",
+      "value": {
+        "type": "textColor",
+        "black": "#3b3b3b",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
       "name": "gray-boxHighlight",
       "value": {
         "type": "textColor",
@@ -1963,6 +1974,7 @@
       "name": "Navigation bar background",
       "id": "navbar",
       "type": "color",
+      "allowTransparency": true,
       "default": "#4d97ff"
     },
     {
