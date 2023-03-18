@@ -22,7 +22,6 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.30.0",
+  "versionAdded": "1.32.0",
   "tags": ["community", "projectPage"],
-  "enabledByDefault": false
 }
