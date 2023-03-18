@@ -4,5 +4,7 @@
   bottom: 1px;
   left: 1px;
   right: 1px;
+  width: calc(100% - 1px);
+  height: calc(100% - 1px);
   border-radius: calc(0.5rem - 1px);
 }
