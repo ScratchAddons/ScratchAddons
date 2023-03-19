@@ -12,15 +12,7 @@
     "userscripts": [
       {
         "url": "info.js",
-        "matches": ["https://scratch.mit.edu/accounts/settings/"]
-      },
-      {
-        "url": "info.js",
-        "matches": ["https://scratch.mit.edu/accounts/password_change/"]
-      },
-      {
-        "url": "info.js",
-        "matches": ["https://scratch.mit.edu/accounts/email_change/"]
+        "matches": ["https://scratch.mit.edu/accounts/settings/", "https://scratch.mit.edu/accounts/password_change/", "https://scratch.mit.edu/accounts/email_change/"]
       }
     ],
     "tags": ["community"],

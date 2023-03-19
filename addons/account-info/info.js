@@ -27,9 +27,10 @@ export default async function ({ addon, console, msg }) {
     }
 
     // console.log("Adding info button");
-    let li = document.createElement("li")
+    let li = document.querySelector(".tabs-index ul").children[2].cloneNode(true);
     li.classList.add("info")
-    let a = document.createElement("a")
+    // console.log(li)
+    let a = li.querySelector("a")
     a.innerText = msg("Info")
     a.href = "https://scratch.mit.edu/accounts/settings/#info"
     a.onclick = () => {
@@ -202,7 +203,7 @@ export default async function ({ addon, console, msg }) {
 
         // console.log(userInfo)
         // console.log(addon)
-        console.log(userInfo)
+        // console.log(userInfo)
 
 
         // console.log("Changed page to accont info");
