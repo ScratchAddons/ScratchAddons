@@ -295,7 +295,6 @@ export default async function ({ addon, console, msg }) {
         type: "scratch-gui/navigation/ACTIVATE_TAB",
         activeTabIndex: 0,
       });
-      window.dispatchEvent(new Event("resize"));
     }
   };
 
