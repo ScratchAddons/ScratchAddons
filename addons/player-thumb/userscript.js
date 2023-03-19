@@ -1,4 +1,5 @@
 export default async function ({ addon, console }) {
+  if (addon.tab.editorMode === "editor") return;
   const stage = await addon.tab.waitForElement('div[class*="stage_stage"]', {
     markAsSeen: true,
   });
