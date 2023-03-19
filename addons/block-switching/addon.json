@@ -115,6 +115,5 @@
       "type": "boolean",
       "default": true
     }
-  ],
-  "libraries": ["scratch-blocks"]
+  ]
 }
