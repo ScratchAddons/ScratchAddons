@@ -209,7 +209,7 @@ function addStyle(addon) {
       style.textContent = userstyle.text;
       appendByIndex(style, styleIndex);
     } else {
-      const existingEl = addonStyles.find((style) => style.href === userstyle.href);
+      const existingEl = addonStyles.find((style) => style.dataset.styleHref === userstyle.href);
       if (existingEl) {
         existingEl.disabled = false;
         continue;
@@ -234,7 +234,7 @@ function removeAddonStyles(addonId) {
 }
 function removeAddonStylesPartial(addonId, stylesToRemove) {
   document.querySelectorAll(`[data-addon-id='${addonId}']`).forEach((style) => {
-    if (stylesToRemove.includes(style.href || style.dataset.styleHref)) style.disabled = true;
+    if (stylesToRemove.includes(style.dataset.styleHref)) style.disabled = true;
   });
 }
 
