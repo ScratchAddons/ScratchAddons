@@ -9,12 +9,11 @@ export default async function ({ console, addon }) {
     categoryCollapse.addEventListener("click", (event) => {
       event.preventDefault();
       let categoryHead = event.target.parentElement;
+      categoryHead.classList.toggle("sa-collapsed");
       if (categoryHead.classList.contains("sa-collapsed")) {
-        categoryHead.classList.remove("sa-collapsed");
         console.log(`${categoryHead.id.split("_")[2]} is being opened`);
         return;
       } else {
-        categoryHead.classList.add("sa-collapsed");
         extendCategoryCookieExistenceLength(categoryNumber);
       }
     });
