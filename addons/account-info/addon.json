@@ -1,0 +1,30 @@
+{
+    "name": "Account Information",
+    "description": "Adds an info tab on the account settings page. Where you can see all of the information about your account.",
+    "credits": [
+      {
+        "name": "stio_studio",
+        "link": "https://scratch.mit.edu/users/stio_studio/"
+      }
+    ],
+    "dynamicEnable": true,
+    "dynamicDisable": true,
+    "userscripts": [
+      {
+        "url": "info.js",
+        "matches": ["https://scratch.mit.edu/accounts/settings/"]
+      },
+      {
+        "url": "info.js",
+        "matches": ["https://scratch.mit.edu/accounts/password_change/"]
+      },
+      {
+        "url": "info.js",
+        "matches": ["https://scratch.mit.edu/accounts/email_change/"]
+      }
+    ],
+    "tags": ["community"],
+    "versionAdded": "1.31.0",
+    "enabledByDefault": true
+  }
+  
