@@ -15,7 +15,6 @@ export default async function ({ addon, console }) {
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
     if (e.detail.action.type == "scratch-gui/vm-status/SET_STARTED_STATE") {
-      console.log("hide thumb");
       document.getElementById("sa-project-thumb").remove();
     }
   });
