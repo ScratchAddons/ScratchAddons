@@ -4,7 +4,7 @@ export default async function ({ addon, console, msg }) {
   const postError = () => Boolean(document.querySelector(".errorlist"));
   const topicID = location.href.split("/")[5];
 
-  document.querySelector("[name=AddPostForm]").addEventListener("click", (event) => {
+  document.querySelector("[name=AddPostForm]")?.addEventListener("click", (event) => {
     let ids = getTopics();
     ids.push(topicID);
     setTopics(ids);
