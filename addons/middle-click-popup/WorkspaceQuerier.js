@@ -573,17 +573,18 @@ class TokenTypeNumberLiteral extends TokenType {
  */
 class TokenTypeColor extends TokenType {
   static INSTANCE = new TokenProviderOptional(new TokenTypeColor());
+  static HEX_CHARS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
 
   *parseTokens(query, idx) {
     if (!query.str.startsWith("#", idx)) return;
     for (let i = 0; i < 6; i++) {
-      if (TokenTypeNumberLiteral.HEX_CHARS.indexOf(query.lowercase[idx + i + 1]) === -1) return;
+      if (TokenTypeColor.HEX_CHARS.indexOf(query.lowercase[idx + i + 1]) === -1) return;
     }
     yield new Token(idx, idx + 7, this, query.str.substring(idx, idx + 7));
   }
 
   createText(token, query, endOnly) {
-    return query.str.substring(token.start, token.end);
+    return query.query.substring(token.start, token.end);
   }
 }
 
