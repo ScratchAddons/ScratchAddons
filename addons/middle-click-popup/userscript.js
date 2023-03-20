@@ -428,6 +428,7 @@ export default async function ({ addon, msg, console }) {
   const _doWorkspaceClick_ = Blockly.Gesture.prototype.doWorkspaceClick_;
   Blockly.Gesture.prototype.doWorkspaceClick_ = function () {
     if (this.mostRecentEvent_.button === 1 || this.mostRecentEvent_.shiftKey) openPopup();
+    mousePosition = { x: this.mostRecentEvent_.clientX, y: this.mostRecentEvent_.clientY };
     _doWorkspaceClick_.call(this);
   };
 
