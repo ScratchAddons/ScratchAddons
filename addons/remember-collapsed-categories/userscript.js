@@ -5,8 +5,7 @@ export default async function ({ addon }) {
     });
 
     const categoryNumber = categoryBody.id.split("_").pop();
-    if (!shouldCollapseCategory(categoryNumber))
-      continue;
+    if (!shouldCollapseCategory(categoryNumber)) continue;
     extendCategoryCookieExistenceLength(categoryNumber);
 
     const categoryContent = categoryBody.querySelector(".box-content");
