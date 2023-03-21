@@ -29,7 +29,7 @@ body > #pagewrapper {
   padding-bottom: 8px;
   border: none;
   border-radius: 0;
-  background: #0fbd8c;
+  background: #328554;
   color: #fff;
 }
 #brdheader > .box-head {
@@ -337,10 +337,10 @@ body > #pagewrapper {
 .my-ocular-reaction-button,
 .my-ocular-reaction-button:hover {
   color: var(--darkWww-gray-text, #575e75);
-  box-shadow: 0 0 2px #0fbd8c;
+  box-shadow: 0 0 2px #328554;
 }
 .my-ocular-reaction-button.selected {
-  background-color: #0fbd8c;
+  background-color: #328554;
   color: white;
 }
 .my-ocular-popup {
