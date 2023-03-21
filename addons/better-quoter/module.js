@@ -197,7 +197,11 @@ function setup() {
     const username = post.find(".username").text();
     const idText =
       !forumIdAddon?.self?.disabled && forumIdAddon?.settings?.get?.("auto_add")
-        ? getIDLink(id.substring(1), post["0"].querySelector(".box-head > .conr").textContent, false)
+        ? `[small](${getIDLink(
+            id.substring(1),
+            post["0"].querySelector(".box-head > .conr").textContent,
+            false
+          )})[/small]`
         : "";
     getPostText(id, post[0], window.getSelection()).then((text) => {
       paste(`[quote=${username}]${idText}\n${text}\n[/quote]\n`);
