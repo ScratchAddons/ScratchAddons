@@ -28,6 +28,7 @@ export default async function ({ addon, console, msg }) {
 
     // console.log("Adding info button");
     let li = document.querySelector(".tabs-index ul").children[2].cloneNode(true);
+    li.classList.remove("active");
     li.classList.add("info")
     // console.log(li)
     let a = li.querySelector("a")
