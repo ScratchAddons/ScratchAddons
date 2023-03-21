@@ -1,6 +1,6 @@
 {
   "name": "Insert blocks by name",
-  "description": "Middle click on the code area, use Ctrl+Space or Shift+Click to bring up a floating input box where you can type the name of a block (or parts of it) and drag the block into the code area. Hold Shift while dragging to avoid closing the box when adding multiple blocks at once.",
+  "description": "Middle or shift-click the code area, or press Ctrl+Space to bring up a block search window. Type block names (or parts of them) and drag them into the code area to add them to your project. The menu can be navigated with the arrow keys and Enter and supports autocompleting with Tab. To prevent the menu from closing, hold Shift while dragging blocks out of it.",
   "credits": [
     {
       "name": "Tacodiva",
@@ -58,7 +58,12 @@
       "default": 40
     }
   ],
-  "versionAdded": "1.31.0",
+  "versionAdded": "1.30.0",
+  "latestUpdate": {
+    "version": "1.31.0",
+    "temporaryNotice": "This addon was completely reworked. You can now type inputs and reporters inside other blocks, and autocomplete using the Tab key.",
+    "isMajor": true
+  },
   "info": [
     {
       "text": "This addon was previously part of the \"developer tools\" addon but has moved here.",

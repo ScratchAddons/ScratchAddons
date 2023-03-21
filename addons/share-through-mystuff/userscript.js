@@ -1,4 +1,11 @@
 export default async function ({ addon, console, msg }) {
+  Scratch.MyStuff.ProjectThumbnailCollectionView.prototype.shared = function (project) {
+    // Scratch's implementation incorrectly calls fadeOut on the entire list
+    if (this.model.options.collectionType === "notshared") {
+      project.$el.fadeOut();
+    }
+  };
+
   const shareFunction = document.createElement("a");
   shareFunction.classList.add("media-share");
   shareFunction.dataset.control = "share";
@@ -13,10 +20,6 @@ export default async function ({ addon, console, msg }) {
     event.preventDefault();
     const confirmation = await addon.tab.confirm(msg("confirmation-title"), msg("confirmation"));
     if (confirmation) {
-      if (location.hash === "#unshared") {
-        let container = event.target.closest(".media-list > li");
-        container.classList.add("sa-just-shared");
-      }
       event.target.parentElement.querySelector(".media-share").click();
     }
   }
