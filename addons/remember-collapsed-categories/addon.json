@@ -15,7 +15,6 @@
     }
   ],
   "tags": ["community", "forums"],
-  "dynamicDisable": true,
   "dynamicEnable": true,
   "versionAdded": "1.31.0"
 }
