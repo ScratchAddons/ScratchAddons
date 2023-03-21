@@ -10,9 +10,6 @@ export default async function ({ addon, console, msg }) {
         userInfo = await (await fetch("https://scratch.mit.edu/session/", {
             "headers": {
               "accept": "*/*",
-              "sec-fetch-dest": "empty",
-              "sec-fetch-mode": "cors",
-              "sec-fetch-site": "same-origin",
               "x-requested-with": "XMLHttpRequest"
             },
             "referrer": "https://scratch.mit.edu/session/",

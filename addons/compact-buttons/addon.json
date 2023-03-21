@@ -1,0 +1,22 @@
+{
+    "name": "Compact Buttons",
+    "description": "Buttons in projects get smaller/more compact",
+    "credits": [
+      {
+        "name": "stio_studio",
+        "link": "https://scratch.mit.edu/users/stio_studio/"
+      }
+    ],
+    "dynamicEnable": true,
+    "dynamicDisable": true,
+    "userscripts": [
+      {
+        "url": "button.js",
+        "matches": ["projects"]
+      }
+    ],
+    "tags": ["community", "beta"],
+    "versionAdded": "1.31.1",
+    "enabledByDefault": false
+  }
+  

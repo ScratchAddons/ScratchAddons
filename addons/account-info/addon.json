@@ -17,6 +17,6 @@
     ],
     "tags": ["community"],
     "versionAdded": "1.31.0",
-    "enabledByDefault": true
+    "enabledByDefault": false
   }
   
