@@ -15,6 +15,12 @@ export default async function ({ addon, console, msg }) {
   setSrc();
   onPauseChanged(setSrc);
 
+  addon.settings.addEventListener("change", () => {
+    console.log("Settings changed!");
+    if (addon.settings.get("auto-pause") === true) document.addEventListener("focusout", setPaused(false));
+    else if (addon.settings.get("auto-pause") === false) document.removeEventListener("focusout", setPaused(false));
+  });
+
   while (true) {
     await addon.tab.waitForElement("[class^='green-flag']", {
       markAsSeen: true,
