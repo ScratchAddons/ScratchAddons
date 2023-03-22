@@ -17,7 +17,7 @@ export default async function ({ addon, console, msg }) {
 
   addon.settings.addEventListener("change", () => {
     console.log("Settings changed!");
-    if (addon.settings.get("auto-pause") === true) document.addEventListener("focusout", setPaused(false));
+    if (addon.settings.get("auto-pause") === true) document.addEventListener("focusout", setPaused(true));
     else if (addon.settings.get("auto-pause") === false) document.removeEventListener("focusout", setPaused(false));
   });
 
