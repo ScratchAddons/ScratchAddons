@@ -1,5 +1,8 @@
 
-export default async function ({ addon, console, msg}) {
-    await (await addon.tab.waitForElement(".see-inside-button span")).remove()
-    await (await addon.tab.waitForElement(".remix-button span")).remove()
+export default async function ({ addon, console, msg }) {
+
+    let rem = document.querySelector(".project-buttons")
+    await rem.insertBefore((await (await addon.tab.waitForElement(".banner-button"))), rem.firstChild)
+    await (await addon.tab.waitForElement(".banner-outer")).remove()
+
 }
