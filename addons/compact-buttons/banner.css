@@ -1,0 +1,13 @@
+.banner-text {
+    display: none;
+}
+
+.banner-outer {
+    min-height: 0px;
+    height: 0px;
+}
+
+.flex-row .inner .banner-inner {
+    min-height: 0px;
+    height: 0px;
+}

@@ -1,0 +1,32 @@
+.preview .see-inside-button {
+    padding: 0px 5px 0px 11px;
+    margin-top: 0;
+    border-radius: 0.25rem;
+    height: 2.5rem;
+    font-size: 0.875rem;
+}
+.preview .see-inside-button:before {
+    display: inline-block;
+    margin-top: -2px;
+    margin-right: 0.4375rem;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    width: 1.125rem;
+    height: 1.125rem;
+    vertical-align: middle;
+    content: "";
+}
+.preview .see-inside-button span {
+    display: none;
+}
+
+.community-button_community-button_2Lo_g {
+    padding: 0px 5px 0px 11px;
+    margin-top: 0;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+}
+.community-button_community-button_2Lo_g .button_content_3jdgj {
+    display: none;
+}
