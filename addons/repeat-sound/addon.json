@@ -1,0 +1,26 @@
+{
+  "name": "Repeat sound button",
+  "description": "Adds a loop button in the sound editor.",
+  "tags": ["editor"],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "credits": [
+    {
+      "name": "valmontechno",
+      "link": "https://scratch.mit.edu/users/valmontechno/"
+    }
+  ],
+  "versionAdded": "1.31.0"
+}
