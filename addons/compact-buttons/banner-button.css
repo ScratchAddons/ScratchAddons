@@ -43,6 +43,9 @@
     vertical-align: middle;
     content: "";
 }
+.sa-unshare-button .button_content_3jdgj {
+    background-image: url(unshare.svg);
+}
 .share-button_share-button_Nxxf0 .button_content_3jdgj span {
     display: none;
 }
