@@ -9,12 +9,6 @@
     ],
     "dynamicEnable": true,
     "dynamicDisable": true,
-    "userscripts": [
-      {
-        "url": "button.js",
-        "matches": ["projects"]
-      }
-    ],
     "userstyles": [
       {
         "url": "banner-button.css",
