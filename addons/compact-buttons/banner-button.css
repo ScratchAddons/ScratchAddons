@@ -1,0 +1,51 @@
+.banner-button {
+    padding: 0px 5px 0px 11px;
+    margin-top: 0;
+    border-radius: 0.25rem;
+    height: 2.5rem;
+    font-size: 0.875rem;
+    min-width: 0px;
+}
+.banner-button:before {
+    background-image: url(upload.svg);
+    display: inline-block;
+    margin-top: -2px;
+    margin-right: 0.4375rem;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    width: 1.125rem;
+    height: 1.125rem;
+    vertical-align: middle;
+    content: "";
+}
+.banner-button span {
+    display: none;
+}
+
+.share-button_share-button_Nxxf0 {
+    padding: 0px 5px 0px 11px;
+    margin-top: 0;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    min-width: 0px;
+}
+.share-button_share-button_Nxxf0 .button_content_3jdgj {
+    background-image: url(upload.svg);
+    display: inline-block;
+    margin-top: -2px;
+    margin-right: 0.4375rem;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    width: 1.125rem;
+    height: 1.125rem;
+    vertical-align: middle;
+    content: "";
+}
+.sa-unshare-button .button_content_3jdgj {
+    background-image: url(unshare.svg);
+}
+.share-button_share-button_Nxxf0 .button_content_3jdgj span {
+    display: none;
+}

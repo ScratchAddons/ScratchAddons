@@ -1,0 +1,30 @@
+{
+    "name": "Compact buttons",
+    "description": "Turns the text on some buttons on project and editor pages into icons to save space.",
+    "credits": [
+      {
+        "name": "stio_studio",
+        "link": "https://scratch.mit.edu/users/stio_studio/"
+      }
+    ],
+    "dynamicEnable": true,
+    "dynamicDisable": true,
+    "userstyles": [
+      {
+        "url": "banner-button.css",
+        "matches": ["projects"]
+      },
+      {
+        "url": "remix-button.css",
+        "matches": ["projects"]
+      },
+      {
+        "url": "see-inside-button.css",
+        "matches": ["projects"]
+      }
+    ],
+    "tags": ["community"],
+    "versionAdded": "1.32.0",
+    "enabledByDefault": false
+  }
+  
