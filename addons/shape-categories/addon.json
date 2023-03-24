@@ -1,0 +1,21 @@
+{
+    "name": "Old Shaped Categories",
+    "description": "Removes the round shape of categories and change into thin square, just like Scratch 2.0",
+    "tags": ["editor", "theme", "category"],
+    "credits": [
+      {
+        "name": "Wildmonk",
+        "link": "https://scratch.mit.edu/users/Wildmonk-2"
+      }
+    ],
+    "enabledByDefault": false,
+    "dynamicDisable": true,
+    "dynamicEnable": true,
+    "versionAdded": "1.31.1",
+    "userstyles": [
+      {
+        "url": "userstyle.css",
+        "matches": ["projects"]
+      }
+    ]
+}
