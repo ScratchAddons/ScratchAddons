@@ -21,7 +21,16 @@ const featuredDangoProjects = [
   },
 ];
 
+// Our April Fools changes have historically lasted 48 hours
+const MARCH_31_TIMESTAMP = 1680264000; // Fri, 31 Mar 2023 12:00:00 GMT
+const APRIL_2_TIMESTAMP = 1680436800; // Sun, 2 Apr 2023 12:00:00 GMT
+// Go to scratch.mit.edu/#dangos to bypass date check
+
 export default async function ({ addon, console, msg }) {
+  const now = new Date().getTime() / 1000;
+  const runDangos = location.hash === "#dangos" || (now < APRIL_2_TIMESTAMP && now > MARCH_31_TIMESTAMP);
+  if (!runDangos) return;
+
   // Wait until Featured Projects row loads
   const firstThumbnail = await addon.tab.waitForElement(".carousel .thumbnail");
 
