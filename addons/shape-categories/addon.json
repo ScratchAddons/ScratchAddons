@@ -1,5 +1,5 @@
 {
-    "name": "Old Shaped Categories",
+    "name": "Old shaped categories",
     "description": "Removes the round shape of categories and change into thin square, just like Scratch 2.0",
     "tags": ["editor", "theme"],
     "credits": [
@@ -11,7 +11,7 @@
     "enabledByDefault": false,
     "dynamicDisable": true,
     "dynamicEnable": true,
-    "versionAdded": "1.31.1",
+    "versionAdded": "1.31.0",
     "userstyles": [
       {
         "url": "userstyle.css",
