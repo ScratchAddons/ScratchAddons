@@ -306,8 +306,8 @@ export default async function ({ addon, msg, console }) {
       let vars = map.getVariablesOfType("");
       for (const row of vars) {
         addBlock(
-          row.isLocal ? msg("var") + " " : msg("VAR") + " ",
-          (row.isLocal ? msg("var") + " " : msg("VAR") + " ") + row.name,
+          row.isLocal ? "var" : "VAR",
+          (row.isLocal ? msg("var-local") + " " : msg("var-global") + " ") + row.name,
           row
         );
       }
@@ -315,8 +315,8 @@ export default async function ({ addon, msg, console }) {
       let lists = map.getVariablesOfType("list");
       for (const row of lists) {
         addBlock(
-          row.isLocal ? msg("list") + " " : msg("LIST") + " ",
-          (row.isLocal ? msg("list") + " " : msg("LIST") + " ") + row.name,
+          row.isLocal ? "list" : "LIST",
+          (row.isLocal ? msg("list-local") + " " : msg("list-global") + " ") + row.name,
           row
         );
       }
