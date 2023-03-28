@@ -307,7 +307,7 @@ export default async function ({ addon, msg, console }) {
       for (const row of vars) {
         addBlock(
           row.isLocal ? "var" : "VAR",
-          (row.isLocal ? msg("var-local", {name: row.name}) : msg("var-global", {name: row.name})),
+          row.isLocal ? msg("var-local", { name: row.name }) : msg("var-global", { name: row.name }),
           row
         );
       }
@@ -316,14 +316,14 @@ export default async function ({ addon, msg, console }) {
       for (const row of lists) {
         addBlock(
           row.isLocal ? "list" : "LIST",
-          (row.isLocal ? msg("list-local", {name: row.name}): msg("list-global", {name: row.name})),
+          row.isLocal ? msg("list-local", { name: row.name }) : msg("list-global", { name: row.name }),
           row
         );
       }
 
       const events = this.getCallsToEvents();
       for (const event of events) {
-        addBlock("receive", msg("event", {name: event.eventName}), event.block).eventName = event.eventName;
+        addBlock("receive", msg("event", { name: event.eventName }), event.block).eventName = event.eventName;
       }
 
       const clsOrder = { flag: 0, receive: 1, event: 2, define: 3, var: 4, VAR: 5, list: 6, LIST: 7 };
