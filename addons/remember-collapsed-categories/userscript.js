@@ -4,8 +4,8 @@ export default async function ({ addon }) {
       markAsSeen: true,
     });
 
-    const categoryToggle = categoryBody.querySelector(".toggle")
-    categoryToggle.addEventListener("click", (e) => e.preventDefault())
+    const categoryToggle = categoryBody.querySelector(".toggle");
+    categoryToggle.addEventListener("click", (e) => e.preventDefault());
 
     const categoryNumber = categoryBody.id.split("_").pop();
     if (!shouldCollapseCategory(categoryNumber)) continue;
