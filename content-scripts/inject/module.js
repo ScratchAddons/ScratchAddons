@@ -1,5 +1,6 @@
 import runAddonUserscripts from "./run-userscript.js";
 import Localization from "./l10n.js";
+import "/libraries/thirdparty/cs/comlink.js";
 
 window.scratchAddons = {};
 scratchAddons.classNames = { loaded: false };

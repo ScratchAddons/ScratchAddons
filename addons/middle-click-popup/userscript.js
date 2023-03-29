@@ -6,6 +6,7 @@ import { BlockInstance, BlockShape, BlockTypeInfo } from "./BlockTypeInfo.js";
 
 export default async function ({ addon, msg, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
+  const vm = addon.tab.traps.vm;
 
   const PREVIEW_LIMIT = 50;
 
@@ -102,10 +103,10 @@ export default async function ({ addon, msg, console }) {
     // Don't show the menu if we're not in the code editor
     if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 0) return;
 
-    blockTypes = BlockTypeInfo.getBlocks(Blockly, Blockly.getMainWorkspace(), msg);
+    blockTypes = BlockTypeInfo.getBlocks(Blockly, vm, Blockly.getMainWorkspace(), msg);
     querier.indexWorkspace([...blockTypes]);
     blockTypes.sort((a, b) => {
-      const prio = (block) => ["operators", "data"].indexOf(block.category) - block.id.startsWith("data_");
+      const prio = (block) => ["operators", "data"].indexOf(block.category.name) - block.id.startsWith("data_");
       return prio(b) - prio(a);
     });
 
@@ -144,7 +145,7 @@ export default async function ({ addon, msg, console }) {
     /** @type {MenuItem[]} */
     const blockList = [];
 
-    if (popupInput.value.length === 0) {
+    if (popupInput.value.trim().length === 0) {
       queryIllegalResult = null;
       if (blockTypes)
         for (const blockType of blockTypes) {
@@ -321,14 +322,15 @@ export default async function ({ addon, msg, console }) {
     const selectedPreview = queryPreviews[selectedPreviewIdx];
     if (!selectedPreview) return;
 
-    const newBlock = selectedPreview.block.createWorkspaceForm();
     const workspace = Blockly.getMainWorkspace();
     // This is mostly copied from https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/scratch_blocks_utils.js#L171
     // Some bits were removed or changed to fit our needs.
     workspace.setResizesEnabled(false);
 
+    let newBlock;
     Blockly.Events.disable();
     try {
+      newBlock = selectedPreview.block.createWorkspaceForm();
       Blockly.scratchBlocksUtils.changeObscuredShadowIds(newBlock);
 
       var svgRootNew = newBlock.getSvgRoot();
@@ -408,7 +410,6 @@ export default async function ({ addon, msg, console }) {
         e.stopPropagation();
         e.preventDefault();
         break;
-      case "ArrowLeft":
     }
   });
 
@@ -427,6 +428,7 @@ export default async function ({ addon, msg, console }) {
   const _doWorkspaceClick_ = Blockly.Gesture.prototype.doWorkspaceClick_;
   Blockly.Gesture.prototype.doWorkspaceClick_ = function () {
     if (this.mostRecentEvent_.button === 1 || this.mostRecentEvent_.shiftKey) openPopup();
+    mousePosition = { x: this.mostRecentEvent_.clientX, y: this.mostRecentEvent_.clientY };
     _doWorkspaceClick_.call(this);
   };
 
