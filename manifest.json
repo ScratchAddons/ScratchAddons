@@ -16,13 +16,13 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://scratch.mit.edu/*", "https://llk.github.io/scratch-gui/*"],
+      "matches": ["https://scratch.mit.edu/*"],
       "run_at": "document_start",
       "js": ["libraries/thirdparty/cs/comlink.js", "libraries/common/cs/text-color.js", "content-scripts/cs.js"],
       "all_frames": true
     },
     {
-      "matches": ["https://scratch.mit.edu/*", "https://llk.github.io/scratch-gui/*"],
+      "matches": ["https://scratch.mit.edu/*"],
       "run_at": "document_start",
       "js": ["content-scripts/prototype-handler.js", "content-scripts/load-redux.js", "content-scripts/fix-console.js"],
       "all_frames": true
@@ -38,7 +38,6 @@
     "https://scratch.mit.edu/*",
     "https://api.scratch.mit.edu/*",
     "https://clouddata.scratch.mit.edu/*",
-    "https://llk.github.io/scratch-gui/*",
     "cookies",
     "webRequest",
     "webRequestBlocking",

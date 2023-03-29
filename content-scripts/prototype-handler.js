@@ -23,11 +23,7 @@ function injectPrototype() {
   };
 }
 
-if (
-  !(document.documentElement instanceof SVGElement) &&
-  (location.pathname.split("/")[1] === "projects" ||
-    (location.origin === "https://llk.github.io" && location.pathname.startsWith("/scratch-gui")))
-) {
+if (!(document.documentElement instanceof SVGElement) && location.pathname.split("/")[1] === "projects") {
   const injectPrototypeScript = document.createElement("script");
   injectPrototypeScript.append(document.createTextNode("(" + injectPrototype + ")()"));
   (document.head || document.documentElement).appendChild(injectPrototypeScript);
