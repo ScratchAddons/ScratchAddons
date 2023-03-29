@@ -31,6 +31,7 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get clientVersion() {
+    if (location.origin !== "https://scratch.mit.edu") return "scratch-www"; // scratchr2 cannot be self-hosted
     if (!this._clientVersion)
       this._clientVersion = document.querySelector("meta[name='format-detection']")
         ? "scratch-www"
@@ -822,5 +823,10 @@ export default class Tab extends Listenable {
    */
   prompt(title, message, defaultValue, opts) {
     return modal.prompt(this, title, message, defaultValue, opts);
+  }
+  isScratchAprilFools23() {
+    if (!this.redux.state) return true; // better safe than sorry
+    if (typeof this.redux.state?.scratchGui?.timeTravel === "object") return true;
+    return false;
   }
 }
