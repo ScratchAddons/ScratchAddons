@@ -3,7 +3,7 @@
   "description": "View a Scratch project's source json and source assets.",
   "tags": ["community", "projectPage"],
   "enabledByDefault": false,
-  "versionAdded": "v1.32.0",
+  "versionAdded": "1.32.0",
   "runAtComplete": true,
   "userscripts": [
     {
