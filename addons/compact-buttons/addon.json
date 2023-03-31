@@ -1,6 +1,6 @@
 {
-    "name": "Compact Buttons",
-    "description": "Buttons in projects get smaller/more compact",
+    "name": "Compact buttons",
+    "description": "Turns the text on some buttons on project and editor pages into icons to save space.",
     "credits": [
       {
         "name": "stio_studio",
