@@ -20,3 +20,25 @@
 .preview .remix-button span {
     display: none;
 }
+
+.menu-bar_remix-button_2LQQc {
+    padding: 0px 5px 0px 11px;
+    margin-top: 0;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+}
+.menu-bar_remix-button_2LQQc .button_icon_77d8G {
+    display: inline-block;
+    margin-top: -2px;
+    margin-right: 0.4375rem;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    width: 1.125rem;
+    height: 1.125rem;
+    vertical-align: middle;
+    content: "";
+}
+.menu-bar_remix-button_2LQQc span {
+    display: none;
+}
