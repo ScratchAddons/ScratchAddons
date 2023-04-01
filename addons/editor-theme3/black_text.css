@@ -25,6 +25,11 @@
 .blocklyDropDownDiv .blocklyText {
   fill: black;
 }
+.blocklyDropDownDiv .goog-menuitem-highlight,
+.blocklyDropDownDiv .goog-menuitem-hover,
+.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight {
+  background-color: var(--editorTheme3-hoveredItem, rgba(255, 255, 255, 0.3));
+}
 
 /* Compatibility */
 
