@@ -1,0 +1,40 @@
+{
+    "name": "Edit the tabs in editor",
+    "description": "wow sutch cool description change this lmao",
+    "tags": ["editor","theme"],
+    "credits": [
+        {
+          "name": "Yande",
+          "link": "https://github.com/YandeMC"
+        }
+      ],
+    "dynamicEnable": true,
+    "dynamicDisable": true,
+    "userstyles": [
+        {
+          "url": "hide.css",
+          "matches": ["projects"],
+          "if": { "settings": { "icon": true } }
+        },
+        {
+          "url": "chip.css",
+          "matches": ["projects"],
+          "if": { "settings": { "chip": true } }
+        }
+      ],
+      "settings": [
+        {
+          "name": "Only show icon",
+          "id": "icon",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "Use chip instead of tab",
+          "id": "chip",
+          "type": "boolean",
+          "default": false
+        }
+      ],
+    "versionAdded": "1.31.0"
+  }
