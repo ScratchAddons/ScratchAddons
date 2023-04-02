@@ -370,5 +370,8 @@
   "extensionStoreDescription4": {
     "message": "This project is not affiliated, associated, or in any way officially connected with the Scratch website or the organizations that maintain it.",
     "description": "Used in the description for the extension stores"
+  },
+  "favouriteAddons": {
+    "message": "Favourite Addons"
   }
 }

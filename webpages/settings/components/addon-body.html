@@ -11,6 +11,9 @@
         </div>
         <addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
       </div>
+      <div class="addon-favourite" @click="favouriteAddon" :id="addon._addonId">
+        <img :src="addonFavouriteStar">
+      </div>
       <div class="addon-description" v-show="!expanded" dir="auto">{{ addon.description }}</div>
       <div class="addon-check">
         <div
@@ -112,6 +115,7 @@
 <style>
   .addon-description {
     margin-inline: 15px;
+    margin-left: 0px;
     color: var(--gray-text);
     overflow: hidden;
     white-space: nowrap;
@@ -395,5 +399,23 @@
   }
   [dir="rtl"] .switch[state="on"]::before {
     left: 5px;
+  }
+
+  .addon-favourite {
+    padding: 4px;
+    margin: 6px;
+    background-color: var(--content-background);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .addon-favourite:hover {
+    background-color: var(--hover-highlight);
+  }
+
+  .addon-favourite img {
+    height: 18px;
+    width: 18px;
+    filter: var(--content-icon-filter);
   }
 </style>
