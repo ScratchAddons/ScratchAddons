@@ -11,7 +11,6 @@ export default async function ({ template }) {
         everExpanded: this.getDefaultExpanded(),
         hoveredSettingId: null,
         highlightedSettingId: null,
-        favourite: this.getfavourite(),
       };
     },
     computed: {
@@ -38,9 +37,11 @@ export default async function ({ template }) {
         return extMajor === addonMajor && extMinor === addonMinor;
       },
       addonFavouriteStar() {
-        if (!JSON.parse(localStorage.getItem("favouriteAddons")).includes(this.addon._addonId))
-          return "../../../images/icons/star.svg";
-        else return "../../../images/icons/star-filled.svg";
+        if (!JSON.parse(localStorage.getItem("favouriteAddons"))) return "../../../images/icons/star.svg"
+        else {
+          if (!JSON.parse(localStorage.getItem("favouriteAddons")).includes(this.addon._addonId)) return "../../../images/icons/star.svg";
+          else return "../../../images/icons/star-filled.svg";
+        }
       },
     },
     methods: {
@@ -127,33 +128,23 @@ export default async function ({ template }) {
       },
       favouriteAddon() {
         const addonID = this.addon._addonId;
-        const favourite = this.favourite;
         let favouriteAddons = JSON.parse(localStorage.getItem("favouriteAddons"));
+        let favourite = favouriteAddons.includes(addonID);
         const starButtons = document.querySelectorAll(`div.addon-favourite[id="${addonID}"]`);
-        const addonElement = document.querySelectorAll(`div.addon-body[id="addon-${addonID}"]`);
 
         if (!favouriteAddons) favouriteAddons = [addonID];
         else {
-          if (!favourite) favouriteAddons.push(addonID);
-          else favouriteAddons.splice(favouriteAddons.indexOf(addonID), 1);
+          if (favourite) favouriteAddons.splice(favouriteAddons.indexOf(addonID), 1);
+          else favouriteAddons.push(addonID);
         }
-        this.favourite = !favourite;
+        favourite = !favourite;
 
         localStorage.setItem("favouriteAddons", JSON.stringify(favouriteAddons));
 
         starButtons.forEach((el) => {
-          if (!favourite) el.childNodes[1].src = "../../../images/icons/star.svg";
-          else el.childNodes[1].src = "../../../images/icons/star-filled.svg";
+          if (favourite) el.childNodes[1].src = "../../../images/icons/star-filled.svg";
+          else el.childNodes[1].src = "../../../images/icons/star.svg";
         });
-
-        if (favourite) addonElement[0].style.display = "block";
-        else addonElement[0].style.display = "none";
-      },
-      getfavourite() {
-        return (
-          JSON.parse(localStorage.getItem("favouriteAddons")) !== null &&
-          JSON.parse(localStorage.getItem("favouriteAddons")).includes(this.addon._addonId)
-        );
       },
     },
     watch: {

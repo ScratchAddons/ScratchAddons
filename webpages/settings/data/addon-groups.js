@@ -28,7 +28,7 @@ export default [
   {
     id: "favouriteAddons",
     name: chrome.i18n.getMessage("favouriteAddons"),
-    addonIds: JSON.parse(localStorage.getItem("favouriteAddons")),
+    addonIds: !JSON.parse(localStorage.getItem("favouriteAddons")) ? [] : JSON.parse(localStorage.getItem("favouriteAddons")),
     expanded: true,
     iframeShow: true,
     fullscreenShow: true,
