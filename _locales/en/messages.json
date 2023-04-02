@@ -344,7 +344,7 @@
     "message": "No results found in \"$1\". Perhaps try different keywords?"
   },
   "captureCommentError": {
-    "message": "Message added by Scratch Addons: it appears that your comment doesn't follow $1, which asks Scratchers not to advertise or name browser extensions. This comment wasn't posted because it will probably result in your account getting muted from commenting for 5 minutes."
+    "message": "Message added by Scratch Addons: it appears that your comment doesn't follow $1, which asks Scratchers not to advertise or name browser extensions for safety reasons. This comment wasn't posted because mentioning the name of browser extensions violates the aforementioned policy."
   },
   "captureCommentPolicy": {
     "message": "Scratch Community's Browser Extension/Userscript Policy"
@@ -353,7 +353,7 @@
     "message": "Post anyway"
   },
   "captureCommentConfirm": {
-    "message": "Are you sure you want to post this comment? Scratch will probably mute your account from commenting anywhere on Scratch for at least 5 minutes."
+    "message": "Are you sure you want to post this comment?"
   },
   "extensionStoreDescription1": {
     "message": "Choose from 100+ options:",
