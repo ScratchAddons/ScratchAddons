@@ -38,9 +38,10 @@ export default async function ({ template }) {
         return extMajor === addonMajor && extMinor === addonMinor;
       },
       addonFavouriteStar() {
-        if (!JSON.parse(localStorage.getItem("favouriteAddons")).includes(this.addon._addonId)) return "../../../images/icons/star.svg";
-        else return "../../../images/icons/star-filled.svg"
-      }
+        if (!JSON.parse(localStorage.getItem("favouriteAddons")).includes(this.addon._addonId))
+          return "../../../images/icons/star.svg";
+        else return "../../../images/icons/star-filled.svg";
+      },
     },
     methods: {
       getDefaultExpanded() {
@@ -130,7 +131,7 @@ export default async function ({ template }) {
         let favouriteAddons = JSON.parse(localStorage.getItem("favouriteAddons"));
         const starButtons = document.querySelectorAll(`div.addon-favourite[id="${addonID}"]`);
         const addonElement = document.querySelectorAll(`div.addon-body[id="addon-${addonID}"]`);
-        
+
         if (!favouriteAddons) favouriteAddons = [addonID];
         else {
           if (!favourite) favouriteAddons.push(addonID);
@@ -138,19 +139,22 @@ export default async function ({ template }) {
         }
         this.favourite = !favourite;
 
-        localStorage.setItem("favouriteAddons", JSON.stringify(favouriteAddons))
+        localStorage.setItem("favouriteAddons", JSON.stringify(favouriteAddons));
 
-        starButtons.forEach(el => {
+        starButtons.forEach((el) => {
           if (!favourite) el.childNodes[1].src = "../../../images/icons/star.svg";
           else el.childNodes[1].src = "../../../images/icons/star-filled.svg";
         });
 
-        if (favourite) addonElement[0].style.display = "block"
+        if (favourite) addonElement[0].style.display = "block";
         else addonElement[0].style.display = "none";
       },
       getfavourite() {
-        return JSON.parse(localStorage.getItem("favouriteAddons")) !== null && JSON.parse(localStorage.getItem("favouriteAddons")).includes(this.addon._addonId);
-      }
+        return (
+          JSON.parse(localStorage.getItem("favouriteAddons")) !== null &&
+          JSON.parse(localStorage.getItem("favouriteAddons")).includes(this.addon._addonId)
+        );
+      },
     },
     watch: {
       groupId(newValue) {

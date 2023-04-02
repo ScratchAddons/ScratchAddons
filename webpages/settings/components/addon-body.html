@@ -12,7 +12,7 @@
         <addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
       </div>
       <div class="addon-favourite" @click="favouriteAddon" :id="addon._addonId">
-        <img :src="addonFavouriteStar">
+        <img :src="addonFavouriteStar" />
       </div>
       <div class="addon-description" v-show="!expanded" dir="auto">{{ addon.description }}</div>
       <div class="addon-check">
