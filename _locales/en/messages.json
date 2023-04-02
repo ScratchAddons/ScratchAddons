@@ -347,7 +347,7 @@
     "message": "Message added by Scratch Addons: it appears that your comment doesn't follow $1, which asks Scratchers not to advertise or name browser extensions for safety reasons. This comment wasn't posted because mentioning the name of browser extensions violates the aforementioned policy."
   },
   "captureCommentPolicy": {
-    "message": "Scratch Community's Browser Extension/Userscript Policy"
+    "message": "Scratch's Browser Extension/Userscript Policy"
   },
   "captureCommentPostAnyway": {
     "message": "Post anyway"
