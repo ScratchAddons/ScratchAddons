@@ -1,0 +1,20 @@
+{
+  "name": "Auto-Bumper",
+  "description": "Bump a topic automatically just by clicking one button.",
+  "tags": ["community", "forums"],
+  "settings": [
+    {
+      "id": "bumptext",
+      "name": "Bump Text",
+      "type": "string",
+      "default": "Bump!"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["discuss", "https://scratch.mit.edu/"]
+    }
+  ],
+  "enabledByDefault": false
+}
