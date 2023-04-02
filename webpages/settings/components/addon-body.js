@@ -37,9 +37,10 @@ export default async function ({ template }) {
         return extMajor === addonMajor && extMinor === addonMinor;
       },
       addonFavouriteStar() {
-        if (!JSON.parse(localStorage.getItem("favouriteAddons"))) return "../../../images/icons/star.svg"
+        if (!JSON.parse(localStorage.getItem("favouriteAddons"))) return "../../../images/icons/star.svg";
         else {
-          if (!JSON.parse(localStorage.getItem("favouriteAddons")).includes(this.addon._addonId)) return "../../../images/icons/star.svg";
+          if (!JSON.parse(localStorage.getItem("favouriteAddons")).includes(this.addon._addonId))
+            return "../../../images/icons/star.svg";
           else return "../../../images/icons/star-filled.svg";
         }
       },
