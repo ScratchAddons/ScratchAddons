@@ -20,24 +20,6 @@
             "matches": ["projects"]
         }
     ],
-    "settings": [
-        {
-            "id": "default",
-            "name": "default color",
-            "type": "select",
-            "default": "black",
-            "potentialValues": [
-                {
-                    "id": "black",
-                    "name": "Black"
-                },
-                {
-                    "id": "white",
-                    "name": "White"
-                }
-            ]
-        }
-    ],
     "customCssVariables": [
         {
             "name": "color",
