@@ -1,0 +1,50 @@
+{
+    "name": "Scene color",
+    "description": "Adds a button to change the canvas color in the editor.",
+    "tags": ["projects"],
+    "credits": [
+      {
+        "name": "callumjt",
+        "link": "https://scratch.mit.edu/users/callumjt/"
+      }
+    ],
+    "userstyles": [
+        {
+            "url": "userstyle.css",
+            "matches": ["projects"]
+        }
+    ],
+    "userscripts": [
+        {
+            "url": "userscript.js",
+            "matches": ["projects"]
+        }
+    ],
+    "settings": [
+        {
+            "id": "default",
+            "name": "default color",
+            "type": "select",
+            "default": "black",
+            "potentialValues": [
+                {
+                    "id": "black",
+                    "name": "Black"
+                },
+                {
+                    "id": "white",
+                    "name": "White"
+                }
+            ]
+        }
+    ],
+    "customCssVariables": [
+        {
+            "name": "color",
+            "value": "default"
+        }
+    ],
+    "enabledByDefault": false,
+    "dynamicEnable": true,
+    "dynamicDisable": true
+}
