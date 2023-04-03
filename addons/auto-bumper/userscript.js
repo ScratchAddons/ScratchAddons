@@ -1,4 +1,5 @@
 export default async function ({ addon, console }) {
+  if (!document.querySelector('.form-submit')) return; // the topic is closed
   
   // create a button and append it
   const button = document.createElement('button');
