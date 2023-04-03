@@ -17,6 +17,7 @@ export default async function ({ addon, console }) {
   
   // listen to the bump button click
   button.addEventListener("click", async () => {
+    if (!prompt('Are you sure you would like to bump this topic?')) return;
     textarea.value = addon.settings.get('bumptext');
     postButton.click();
   });
