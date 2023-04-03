@@ -90,7 +90,6 @@ export default async function ({ addon, console, msg }) {
 
   const PROJECT_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\d+/;
   const ASSET_REGEX = /^https:\/\/assets\.scratch\.mit\.edu\//;
-  const BACKPACK_REGEX = /^https:\/\/backpack\.scratch\.mit\.edu\//;
 
   // Scratch uses fetch() to download the project JSON and upload project assets.
   const originalFetch = window.fetch;
@@ -136,16 +135,6 @@ export default async function ({ addon, console, msg }) {
           return response;
         });
       }
-      if (opts.method.toLowerCase() === "get" && BACKPACK_REGEX.test(url)) {
-        return new Promise((resolve) => {
-          resolve(
-            new Response("", {
-              status: 403,
-              statusText: "Forbidden",
-            })
-          );
-        });
-      }
     }
 
     return originalFetch(url, opts);
@@ -187,12 +176,6 @@ export default async function ({ addon, console, msg }) {
   const originalPostMessage = Worker.prototype.postMessage;
   Worker.prototype.postMessage = function (message, options) {
     if (!addon.self.disabled && message && typeof message.id === "string" && typeof message.url === "string") {
-      if (BACKPACK_REGEX.test(message.url)) {
-        message.url = "";
-        originalPostMessage.call(this, message, options);
-        return;
-      }
-
       // This is a message passed to the worker to start an asset download.
       setLoadingPhase(LOAD_ASSETS);
       totalTasks++;

@@ -1,0 +1,22 @@
+{
+  "name": "Faster project loading",
+  "description": "Makes project loading faster when opening directly to the editor.",
+  "credits": [
+    {
+      "name": "Tacodiva",
+      "link": "https://github.com/Tacodiva"
+    }
+  ],
+
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "tags": ["editor", "recommended"],
+  "enabledByDefault": true
+}
