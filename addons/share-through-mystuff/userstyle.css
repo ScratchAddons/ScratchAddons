@@ -1,37 +1,11 @@
-.media-item-content.not-shared .media-action {
-  top: 20px;
-}
-
-.media-list {
-  display: block !important;
-  opacity: 1 !important;
-}
-
-.sa-just-shared {
-  animation: sa-STMS-fadeOut 1s;
-  animation-fill-mode: forwards;
-}
-
 .sa-share-button {
+  /* Same styles as .media-trash */
+  float: left;
+  clear: both;
   position: relative;
-  display: block;
-  left: 20px;
+  left: 10px;
 }
 
 .media-item-content.not-shared .media-trash {
-  position: relative;
-  float: none;
-  top: 0px;
-  left: 20px;
-}
-
-@keyframes sa-STMS-fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-    visibility: hidden;
-    position: absolute;
-  }
+  top: 0;
 }

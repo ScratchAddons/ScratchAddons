@@ -437,6 +437,18 @@
       }
     },
     {
+      "name": "box-tabSelected",
+      "value": {
+        "type": "textColor",
+        "black": "#328554",
+        "white": "#13ecaf",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
       "name": "box-buttonDisabled",
       "value": {
         "type": "textColor",
