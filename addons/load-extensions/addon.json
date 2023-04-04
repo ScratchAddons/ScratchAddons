@@ -31,10 +31,20 @@
       "id": "translate",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Makey Makey",
+      "id": "makeymakey",
+      "type": "boolean",
+      "default": false
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.10.0",
+  "latestUpdate": {
+    "version": "1.32.0",
+    "newSettings": ["makeymakey"]
+  },
   "tags": ["editor", "codeEditor", "featured"]
 }
