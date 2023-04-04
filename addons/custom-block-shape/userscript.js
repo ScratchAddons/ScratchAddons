@@ -26,6 +26,7 @@ export default async function ({ addon, console }) {
     function applyChanges(
       paddingSize = addon.settings.get("paddingSize"),
       cornerSize = addon.settings.get("cornerSize"),
+      wall = cornerSize = addon.settings.get("cornerSize"),
       notchSize = addon.settings.get("notchSize")
     ) {
       let multiplier = paddingSize / 100;
@@ -166,7 +167,7 @@ export default async function ({ addon, console }) {
       BlockSvg.DROPDOWN_ARROW_PADDING = 2 * GRID_UNIT * multiplier;
       BlockSvg.FIELD_WIDTH_MIN_EDIT = 8 * GRID_UNIT * multiplier;
       BlockSvg.INPUT_AND_FIELD_MIN_X = 12 * GRID_UNIT * multiplier;
-      BlockSvg.INLINE_PADDING_Y = 1 * GRID_UNIT * multiplier; // For when reporters are inside reporters
+      BlockSvg.INLINE_PADDING_Y = 1 * wall * GRID_UNIT * multiplier; // For when reporters are inside reporters
       BlockSvg.SHAPE_IN_SHAPE_PADDING[1][0] = 5 * GRID_UNIT * multiplier;
       BlockSvg.SHAPE_IN_SHAPE_PADDING[1][2] = 5 * GRID_UNIT * multiplier;
       BlockSvg.SHAPE_IN_SHAPE_PADDING[1][3] = 5 * GRID_UNIT * multiplier;

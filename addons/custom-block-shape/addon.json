@@ -52,7 +52,7 @@
     },
     {
       "name": "Reporter wall thickness (0-200%)",
-      "id": "repwal",
+      "id": "repWal",
       "type": "integer",
       "min": 0,
       "default": 100,
