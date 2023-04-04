@@ -51,6 +51,14 @@
       "max": 300
     },
     {
+      "name": "Reporter wall thickness (0-200%)",
+      "id": "repwal",
+      "type": "integer",
+      "min": 0,
+      "default": 100,
+      "max": 200
+    },
+    {
       "name": "Notch height (0-150%)",
       "id": "notchSize",
       "type": "integer",
