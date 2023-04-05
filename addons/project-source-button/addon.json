@@ -4,7 +4,6 @@
   "tags": ["community", "projectPage"],
   "enabledByDefault": false,
   "versionAdded": "1.32.0",
-  "runAtComplete": true,
   "userscripts": [
     {
       "url": "userscript.js",
@@ -17,6 +16,7 @@
       "matches": ["projects"]
     }
   ],
+  "runAtComplete": true,
   "credits": [
     {
       "name": "nakasyou",
