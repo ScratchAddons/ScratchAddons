@@ -12,6 +12,10 @@
       "link": "https://scratch.mit.edu/users/lisa_wolfgang/"
     },
     {
+      "name": "Yande",
+      "link": "https://scratch.mit.edu/users/YandeMC/"
+    },
+    {
       "name": "GarboMuffin",
       "link": "https://scratch.mit.edu/users/GarboMuffin/"
     }
@@ -51,12 +55,18 @@
       "max": 300
     },
     {
-      "name": "Reporter wall thickness (0-200%)",
-      "id": "repWal",
+      "name": "Reporter Wall Thiccness (0-150%)",
+      "id": "wall",
       "type": "integer",
       "min": 0,
       "default": 100,
-      "max": 200
+      "max": 150
+    },
+    {
+      "name": "Flat Hats",
+      "id": "flat",
+      "type": "boolean",
+      "default": false
     },
     {
       "name": "Notch height (0-150%)",
