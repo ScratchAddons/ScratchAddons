@@ -1,23 +1,30 @@
 // This is a fix for https://github.com/LLK/scratch-gui/issues/8805
 
 export default async function ({ addon, console, msg }) {
-  const { storage } = addon.tab.traps.vm.runtime;
+  const BACKPACK_URL = "https://backpack.scratch.mit.edu/";
+  const originalOpen = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function (method, url) {
+    if (method === "GET" && url.startsWith(BACKPACK_URL)) {
+      /*
+              We don't want to block actual requests for backpack assets.
+              A backpack request URL looks like:
+                https://backpack.scratch.mit.edu/Tacodiva?limit=20&offset=0
+              We can check for the '?' to differentiate them from wrong requests which look like:
+                https://backpack.scratch.mit.edu/de9e1ed35f087dcb297f1339b16deaf6.svg
+            */
 
-  const oldAddStore = storage.webHelper.addStore;
-  storage.webHelper.addStore = function (...args) {
-    if (storage.webHelper.stores.length === 1 && storage._hasAddedBackpackSource) {
-      // Backpack store has been added too early!
-      // It's now the first store in the array, which causes the bug we're trying to fix.
-      const backpackStore = storage.webHelper.stores[0];
-
-      // Wait until the 3 "official" stores are added.
-      // https://github.com/LLK/scratch-gui/blob/4564cf6be66d16712ae252a807f600c412dddf99/src/lib/storage.js#L14
-      queueMicrotask(() => {
-        // Move backpack store to end of array.
-        this.stores.splice(0, 1);
-        this.stores.push(backpackStore);
-      });
+      if (url.indexOf("?") == -1) throw new Error("Request blocked by Scratch Addons faster project loading. ");
     }
-    return oldAddStore.call(this, ...args);
+    return originalOpen.call(this, method, url);
+  };
+
+  const originalPostMessage = Worker.prototype.postMessage;
+  Worker.prototype.postMessage = function (message, options) {
+    if (!addon.self.disabled && message && typeof message.id === "string" && typeof message.url === "string") {
+      if (message.url.startsWith(BACKPACK_URL)) {
+        throw new Error("Request blocked by Scratch Addons faster project loading.");
+      }
+    }
+    originalPostMessage.call(this, message, options);
   };
 }
