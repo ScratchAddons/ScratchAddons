@@ -55,7 +55,7 @@
       "max": 300
     },
     {
-      "name": "Reporter Wall Thiccness (0-150%)",
+      "name": "Reporter Wall Thickness (0-150%)",
       "id": "wall",
       "type": "integer",
       "min": 0,
@@ -85,7 +85,9 @@
       "values": {
         "paddingSize": 100,
         "cornerSize": 100,
-        "notchSize": 100
+        "notchSize": 100,
+        "wall": 100,
+        "flat": false
       }
     },
     {
@@ -95,27 +97,33 @@
       "values": {
         "paddingSize": 70,
         "cornerSize": 150,
-        "notchSize": 75
+        "notchSize": 75,
+        "wall": 100,
+        "flat": false
       }
     },
     {
       "name": "3.0 Flat",
       "id": "flat3",
-      "description": "Scratch 3.0 blocks with notches and corners removed",
+      "description": "Scratch 3.0 blocks with notches, corners, and hat bumps removed",
       "values": {
         "paddingSize": 100,
         "cornerSize": 0,
-        "notchSize": 0
+        "notchSize": 0,
+        "wall": 100,
+        "flat": true
       }
     },
     {
       "name": "2.0 Flat",
       "id": "flat2",
-      "description": "Scratch 2.0 blocks with notches and corners removed",
+      "description": "Scratch 2.0 blocks with notches, corners, and hat bumps removed",
       "values": {
         "paddingSize": 70,
         "cornerSize": 0,
-        "notchSize": 0
+        "notchSize": 0,
+        "wall": 100,
+        "flat": true
       }
     }
   ]
