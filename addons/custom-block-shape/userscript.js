@@ -49,10 +49,9 @@ export default async function ({ addon, console }) {
       BlockSvg.NOTCH_START_PADDING = 3 * GRID_UNIT; //* multiplier
       BlockSvg.ICON_SEPARATOR_HEIGHT = 10 * GRID_UNIT * multiplier;
       if (flat) {
-      BlockSvg.START_HAT_PATH = "c 0,-0 0,0 0,0";
-      }
-      else {
-      BlockSvg.START_HAT_PATH = "c 25,-22 71,-22 96,0";
+        BlockSvg.START_HAT_PATH = "c 0,-0 0,0 0,0";
+      } else {
+        BlockSvg.START_HAT_PATH = "c 25,-22 71,-22 96,0";
       }
       BlockSvg.NOTCH_PATH_LEFT =
         "c 2,0 3," +
