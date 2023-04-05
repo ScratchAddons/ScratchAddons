@@ -26,12 +26,14 @@ export default async function ({ addon, console }) {
     function applyChanges(
       paddingSize = addon.settings.get("paddingSize"),
       cornerSize = addon.settings.get("cornerSize"),
-      wall = (cornerSize = addon.settings.get("cornerSize")),
+      wall = addon.settings.get("wall"),
+      flat = addon.settings.get("flat"),
       notchSize = addon.settings.get("notchSize")
     ) {
       let multiplier = paddingSize / 100;
       cornerSize = cornerSize / 100;
       notchSize = notchSize / 100;
+      wall = wall / 100;
       BlockSvg.SEP_SPACE_Y = 2 * GRID_UNIT * multiplier;
       BlockSvg.MIN_BLOCK_X = 16 * GRID_UNIT * multiplier;
       BlockSvg.MIN_BLOCK_X_OUTPUT = 12 * GRID_UNIT * multiplier;
@@ -46,6 +48,12 @@ export default async function ({ addon, console }) {
       BlockSvg.NOTCH_HEIGHT = 2 * GRID_UNIT * multiplier * notchSize;
       BlockSvg.NOTCH_START_PADDING = 3 * GRID_UNIT; //* multiplier
       BlockSvg.ICON_SEPARATOR_HEIGHT = 10 * GRID_UNIT * multiplier;
+      if (flat) {
+      BlockSvg.START_HAT_PATH = "c 0,-0 0,0 0,0";
+      }
+      else {
+      BlockSvg.START_HAT_PATH = "c 25,-22 71,-22 96,0";
+      }
       BlockSvg.NOTCH_PATH_LEFT =
         "c 2,0 3," +
         1 * notchSize +
@@ -167,7 +175,7 @@ export default async function ({ addon, console }) {
       BlockSvg.DROPDOWN_ARROW_PADDING = 2 * GRID_UNIT * multiplier;
       BlockSvg.FIELD_WIDTH_MIN_EDIT = 8 * GRID_UNIT * multiplier;
       BlockSvg.INPUT_AND_FIELD_MIN_X = 12 * GRID_UNIT * multiplier;
-      BlockSvg.INLINE_PADDING_Y = 1 * wall * GRID_UNIT * multiplier; // For when reporters are inside reporters
+      BlockSvg.INLINE_PADDING_Y = wall * GRID_UNIT * multiplier; // For when reporters are inside reporters
       BlockSvg.SHAPE_IN_SHAPE_PADDING[1][0] = 5 * GRID_UNIT * multiplier;
       BlockSvg.SHAPE_IN_SHAPE_PADDING[1][2] = 5 * GRID_UNIT * multiplier;
       BlockSvg.SHAPE_IN_SHAPE_PADDING[1][3] = 5 * GRID_UNIT * multiplier;
@@ -241,12 +249,12 @@ export default async function ({ addon, console }) {
         BlockSvg.DEFINE_HAT_CORNER_RADIUS +
         "," +
         BlockSvg.DEFINE_HAT_CORNER_RADIUS +
-        " 0 0,1 " +
+        " 0 0,40 " +
         BlockSvg.DEFINE_HAT_CORNER_RADIUS +
         "," +
         BlockSvg.DEFINE_HAT_CORNER_RADIUS +
         " v " +
-        (1 * GRID_UNIT - BlockSvg.CORNER_RADIUS);
+        (0 * GRID_UNIT - BlockSvg.CORNER_RADIUS);
 
       BlockSvg.STATEMENT_INPUT_INNER_SPACE = 2.8 * GRID_UNIT - 0.9 * GRID_UNIT * cornerSize;
     }
@@ -260,7 +268,7 @@ export default async function ({ addon, console }) {
 
     addon.self.addEventListener("disabled", () => {
       // Scratch 3.0 blocks
-      applyAndUpdate(100, 100, 100);
+      applyAndUpdate(100, 100, 100, true, 100);
     });
 
     addon.self.addEventListener("reenabled", () => applyAndUpdate());
