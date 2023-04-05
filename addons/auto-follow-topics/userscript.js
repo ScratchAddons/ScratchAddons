@@ -5,12 +5,12 @@ export default async function ({ addon, console, msg }) {
   const topicID = location.href.split("/")[5];
 
   document.querySelector("[name=AddPostForm]")?.addEventListener("click", (event) => {
-    let ids = getTopics();
+    const ids = getTopics();
     ids.push(topicID);
     setTopics(ids);
   });
 
-  let topics = getTopics();
+  const topics = getTopics();
   if (topics.includes(topicID) && !postError()) {
     // Check if the user ran into the 60 second rule as well
     const followBtn = document.querySelectorAll(".follow-button")[1];
