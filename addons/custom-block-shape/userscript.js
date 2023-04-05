@@ -248,12 +248,12 @@ export default async function ({ addon, console }) {
         BlockSvg.DEFINE_HAT_CORNER_RADIUS +
         "," +
         BlockSvg.DEFINE_HAT_CORNER_RADIUS +
-        " 0 0,40 " +
+        " 0 0,1 " +
         BlockSvg.DEFINE_HAT_CORNER_RADIUS +
         "," +
         BlockSvg.DEFINE_HAT_CORNER_RADIUS +
         " v " +
-        (0 * GRID_UNIT - BlockSvg.CORNER_RADIUS);
+        (1 * GRID_UNIT - BlockSvg.CORNER_RADIUS);
 
       BlockSvg.STATEMENT_INPUT_INNER_SPACE = 2.8 * GRID_UNIT - 0.9 * GRID_UNIT * cornerSize;
     }
