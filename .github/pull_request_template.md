@@ -12,7 +12,7 @@ Resolves #
 
 ### Tests
 
-- [ ] Chrome
+- [ ] Chrome/Chromium-based browser
 - [ ] Firefox
 
 <!-- Please add any known issues or other test notes here. -->
