@@ -316,34 +316,51 @@ export class BlockShape {
 }
 
 /**
+ * @typedef BlockCategory
+ * @property {string} name
+ * @property {string} colorPrimary
+ * @property {string} colorSecondary
+ * @property {string} colorTertiary
+ */
+
+/**
  * A type of Scratch block, like 'move () steps'. Every instance of the 'move () steps'
  * block shares this type info.
  */
 export class BlockTypeInfo {
   /**
    * @param {*} block Block in workspace form
-   * @returns {string} The block's category
+   * @param {*} vm
+   * @returns {BlockCategory} The block's category
    */
-  static getBlockCategory(block) {
+  static getBlockCategory(block, vm) {
+    let name;
+
     if (block.type === "procedures_call") {
-      if (SABlocks.getCustomBlock(block.getProcCode())) return "addon-custom-block";
-      return "more";
-    }
-    if (block.isScratchExtension) return "pen";
-    // These two blocks don't have `category_` set for reasons I'm too tired to figure out.
-    if (block.type === "sensing_of") return "sensing";
-    if (block.type === "event_whenbackdropswitchesto") return "events";
-    return block.category_;
+      if (SABlocks.getCustomBlock(block.getProcCode())) name = "addon-custom-block";
+      else name = "more";
+    } else if (block.isScratchExtension) name = "pen";
+    else if (block.type === "sensing_of") name = "sensing";
+    else if (block.type === "event_whenbackdropswitchesto") name = "events";
+    else name = block.category_;
+
+    return {
+      name,
+      colorPrimary: block.colour_,
+      colorSecondary: block.colourSecondary_,
+      colorTertiary: block.colourTertiary_,
+    };
   }
 
   /**
    * Enumerates all the different types of blocks, given a workspace.
    * @param {Blockly} Blockly
+   * @param {*} vm
    * @param {*} workspace
    * @param {(string) => string} locale The translations used for converting icons into text
    * @returns {BlockTypeInfo[]}
    */
-  static getBlocks(Blockly, workspace, locale) {
+  static getBlocks(Blockly, vm, workspace, locale) {
     const flyoutWorkspace = workspace.getToolbox()?.flyout_.getWorkspace();
     if (!flyoutWorkspace) return [];
 
@@ -358,21 +375,147 @@ export class BlockTypeInfo {
       }
     }
     for (const workspaceBlock of flyoutWorkspace.getTopBlocks()) {
-      blocks.push(new BlockTypeInfo(workspace, Blockly, locale, workspaceBlock, flyoutDomBlockMap[workspaceBlock.id]));
+      blocks.push(
+        ...BlockTypeInfo._createBlocks(
+          workspace,
+          vm,
+          Blockly,
+          locale,
+          workspaceBlock,
+          flyoutDomBlockMap[workspaceBlock.id]
+        )
+      );
     }
 
     return blocks;
   }
 
-  constructor(workspace, Blockly, locale, workspaceForm, domForm) {
+  static _createBlocks(workspace, vm, Blockly, locale, workspaceForm, domForm) {
+    let parts = [];
+    let inputs = [];
+
+    const addInput = (input) => {
+      parts.push(input);
+      inputs.push(input);
+    };
+
+    const addFieldInputs = (field, inputIdx, fieldIdx) => {
+      if (field.className_ === "blocklyText blocklyDropdownText") {
+        const options = field.getOptions();
+        addInput(new BlockInputEnum(options, inputIdx, fieldIdx, fieldIdx === -1));
+      } else if (field instanceof Blockly.FieldImage) {
+        switch (field.src_) {
+          case "/static/blocks-media/green-flag.svg":
+            parts.push(locale("/global/blocks/green-flag"));
+            break;
+          case "/static/blocks-media/rotate-right.svg":
+            parts.push(locale("/global/blocks/clockwise"));
+            break;
+          case "/static/blocks-media/rotate-left.svg":
+            parts.push(locale("/global/blocks/anticlockwise"));
+            break;
+        }
+      } else {
+        if (!field.argType_) {
+          if (field.getText().trim().length !== 0) parts.push(field.getText());
+        } else if (field.argType_[0] === "colour") {
+          addInput(new BlockInputColour(inputIdx, fieldIdx));
+        } else if (field.argType_[1] === "number") {
+          addInput(new BlockInputNumber(inputIdx, fieldIdx, field.text_));
+        } else {
+          addInput(new BlockInputString(inputIdx, fieldIdx, field.text_));
+        }
+      }
+    };
+
+    for (let inputIdx = 0; inputIdx < workspaceForm.inputList?.length; inputIdx++) {
+      const input = workspaceForm.inputList[inputIdx];
+      for (let fieldIdx = 0; fieldIdx < input.fieldRow.length; fieldIdx++) {
+        addFieldInputs(input.fieldRow[fieldIdx], inputIdx, fieldIdx);
+      }
+
+      if (input.connection) {
+        const innerBlock = input.connection.targetBlock();
+        if (innerBlock) {
+          if (innerBlock.inputList.length !== 1 || innerBlock.inputList[0].fieldRow.length !== 1)
+            throw new Error("This should never happen.");
+          let innerField = innerBlock.inputList[0].fieldRow[0];
+          addFieldInputs(innerField, inputIdx, -1);
+        } else {
+          if (input.outlinePath) {
+            addInput(new BlockInputBoolean(inputIdx, -1));
+          } else {
+            addInput(new BlockInputBlock(inputIdx, -1));
+          }
+        }
+      }
+    }
+
+    if (workspaceForm.id === "of") {
+      // Adapted from https://github.com/LLK/scratch-gui/blob/cc6e6324064493cf1788f3c7c0ff31e4057964ee/src/lib/blocks.js#L230
+      let blocks = [];
+
+      const baseVarInput = inputs[0];
+      const baseVarInputIdx = parts.indexOf(baseVarInput);
+      const baseTargetInput = inputs[1];
+      const baseTargetInputIdx = parts.indexOf(baseTargetInput);
+
+      const stageOptions = [
+        [Blockly.Msg.SENSING_OF_BACKDROPNUMBER, "backdrop #"],
+        [Blockly.Msg.SENSING_OF_BACKDROPNAME, "backdrop name"],
+        [Blockly.Msg.SENSING_OF_VOLUME, "volume"],
+      ];
+
+      const spriteOptions = [
+        [Blockly.Msg.SENSING_OF_XPOSITION, "x position"],
+        [Blockly.Msg.SENSING_OF_YPOSITION, "y position"],
+        [Blockly.Msg.SENSING_OF_DIRECTION, "direction"],
+        [Blockly.Msg.SENSING_OF_COSTUMENUMBER, "costume #"],
+        [Blockly.Msg.SENSING_OF_COSTUMENAME, "costume name"],
+        [Blockly.Msg.SENSING_OF_SIZE, "size"],
+        [Blockly.Msg.SENSING_OF_VOLUME, "volume"],
+      ];
+
+      for (const targetInput of baseTargetInput.values) {
+        let options;
+        const isStage = targetInput.value === "_stage_";
+
+        if (isStage) {
+          const stageVariableOptions = vm.runtime.getTargetForStage().getAllVariableNamesInScopeByType("");
+          options = stageVariableOptions.map((variable) => [variable, variable]).concat(stageOptions);
+        } else {
+          const sprite = vm.runtime.getSpriteTargetByName(targetInput.value);
+          const spriteVariableOptions = sprite.getAllVariableNamesInScopeByType("", true);
+          options = spriteVariableOptions.map((variable) => [variable, variable]).concat(spriteOptions);
+        }
+
+        const ofInputs = [
+          new BlockInputEnum(options, 0, 0, false),
+          new BlockInputEnum([[targetInput.string, targetInput.value]], 0, -1, isStage),
+        ];
+
+        const ofParts = [...parts];
+        ofParts[baseVarInputIdx] = ofInputs[0];
+        ofParts[baseTargetInputIdx] = ofInputs[1];
+
+        blocks.push(new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, ofParts, ofInputs));
+      }
+
+      return blocks;
+    }
+
+    return [new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, parts, inputs)];
+  }
+
+  constructor(workspace, Blockly, vm, workspaceForm, domForm, parts, inputs) {
     /** @type {string} */
     this.id = workspaceForm.id;
     this.workspaceForm = workspaceForm;
     this.domForm = domForm;
     /** @type {BlockShape} */
     this.shape = BlockShape.getBlockShape(this.workspaceForm);
-    /** @type {string} */
-    this.category = BlockTypeInfo.getBlockCategory(this.workspaceForm);
+    /** @type {BlockCategory} */
+    this.category = BlockTypeInfo.getBlockCategory(this.workspaceForm, vm);
     this.workspace = workspace;
     this.Blockly = Blockly;
 
@@ -385,81 +528,13 @@ export class BlockTypeInfo {
      * BlockInputString.
      * @type {(BlockInput | string)[]}
      */
-    this.parts = [];
+    this.parts = parts;
     /**
      * A list of all this block's inputs. The same as this.parts, but with the
      * strings omitted.
      * @type {BlockInput[]}
      */
-    this.inputs = [];
-
-    const addInput = (input) => {
-      this.parts.push(input);
-      this.inputs.push(input);
-    };
-
-    const addFieldInputs = (field, inputIdx, fieldIdx) => {
-      if (field.className_ === "blocklyText blocklyDropdownText") {
-        const options = field.getOptions();
-        addInput(new BlockInputEnum(options, inputIdx, fieldIdx, fieldIdx === -1));
-      } else if (field instanceof Blockly.FieldImage) {
-        switch (field.src_) {
-          case "/static/blocks-media/green-flag.svg":
-            this.parts.push(locale("/global/blocks/green-flag"));
-            break;
-          case "/static/blocks-media/rotate-right.svg":
-            this.parts.push(locale("/global/blocks/clockwise"));
-            break;
-          case "/static/blocks-media/rotate-left.svg":
-            this.parts.push(locale("/global/blocks/anticlockwise"));
-            break;
-        }
-      } else {
-        if (!field.argType_) {
-          if (field.getText().trim().length !== 0) this.parts.push(field.getText());
-        } else if (field.argType_[0] === "colour") {
-          addInput(new BlockInputColour(inputIdx, fieldIdx));
-        } else if (field.argType_[1] === "number") {
-          addInput(new BlockInputNumber(inputIdx, fieldIdx, field.text_));
-        } else {
-          addInput(new BlockInputString(inputIdx, fieldIdx, field.text_));
-        }
-      }
-    };
-
-    for (let inputIdx = 0; inputIdx < this.workspaceForm.inputList?.length; inputIdx++) {
-      const input = this.workspaceForm.inputList[inputIdx];
-      for (let fieldIdx = 0; fieldIdx < input.fieldRow.length; fieldIdx++) {
-        addFieldInputs(input.fieldRow[fieldIdx], inputIdx, fieldIdx);
-      }
-
-      if (input.connection) {
-        const innerBlock = input.connection.targetBlock();
-        if (innerBlock) {
-          if (innerBlock.inputList.length !== 1 || innerBlock.inputList[0].fieldRow.length !== 1)
-            throw new Error("This should never happen.");
-          let innerField = innerBlock.inputList[0].fieldRow[0];
-          if (innerBlock.id === "sensing_of_object_menu") {
-            addInput(
-              new BlockInputEnum(
-                [[Blockly.ScratchMsgs.translate("SENSING_OF_STAGE", "Stage"), "_stage_"]],
-                inputIdx,
-                -1,
-                true
-              )
-            );
-          } else {
-            addFieldInputs(innerField, inputIdx, -1);
-          }
-        } else {
-          if (input.outlinePath) {
-            addInput(new BlockInputBoolean(inputIdx, -1));
-          } else {
-            addInput(new BlockInputBlock(inputIdx, -1));
-          }
-        }
-      }
-    }
+    this.inputs = inputs;
   }
 
   /**
