@@ -36,11 +36,22 @@ export default async function ({ addon, console, msg }) {
     }
   }
   // Close properties panel when mouse leaves the entire sprite panel
+  let popoverAbove;
   document.body.addEventListener(
-    "mouseleave",
+    "mousemove",
     (e) => {
-      if (e.target.matches('[class*="sprite-selector_sprite-selector_2KgCX"]')) {
+      let popoverAbove = document.querySelector('[class*="Popover-above"]');
+      if (
+        !(
+          document
+            .querySelector('[class*="sprite-selector_sprite-selector_2KgCX"]')
+            .contains(e.target) ||
+          popoverAbove?.contains(e.target) ||
+          e.buttons
+        )
+      ) {
         autoHidePanel();
+        if (popoverAbove) popoverAbove.style.display = "none";
       }
     },
     {
