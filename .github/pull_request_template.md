@@ -1,4 +1,4 @@
-<!-- Which issue(s) does this pull request fix or resolve? If there aren't any, please create one first unless this is a bug fix or minor string update -->
+<!-- Which issue(s) does this pull request fix or resolve? If there aren't any, please submit one first unless this is a minor string update or bug fix. -->
 
 Resolves #
 
@@ -16,3 +16,7 @@ Resolves #
 - [ ] Firefox
 
 <!-- Please add any known issues or other test notes here. -->
+
+### Additional context
+
+<!-- Any other information like screenshots, videos, or context about this pull request -->
