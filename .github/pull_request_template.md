@@ -1,4 +1,4 @@
-<!-- Which issue(s) does this pull request fix or resolve? -->
+<!-- Which issue(s) does this pull request fix or resolve? If there aren't any, please create one first unless this is a bug fix or minor string update -->
 
 Resolves #
 
@@ -12,4 +12,7 @@ Resolves #
 
 ### Tests
 
-<!-- If applicable. Have you tested this pull request? If so, how? -->
+- [ ] Chrome
+- [ ] Firefox
+
+<!-- Please add any known issues or other test notes here. -->
