@@ -15,7 +15,7 @@ Resolves #
 - [ ] Chrome/Chromium-based browser
 - [ ] Firefox
 
-<!-- Please add any known issues or other test notes here. -->
+<!-- Please test your chnages in at least one of the above browsers and add any known issues or other test notes here. -->
 
 ### Additional context
 
