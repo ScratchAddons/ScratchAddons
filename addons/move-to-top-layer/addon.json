@@ -1,5 +1,5 @@
 {
-  "name":"Move Sprite to Top Layer",
+  "name":"Move sprite to front layer",
   "description":"This addon allows you to move a selected sprite to the top layer",
   "info": [
     {
