@@ -418,115 +418,7 @@ class TokenTypeBlank extends TokenType {
  * String enums are also used for values that can only be one specific value (like the 'set' from
  * `set [my variable] to x`). These cases are just string enums with one possible value.
  */
-class StringEnum {
-  /**
-   * The simple implimentation of TokenType for this string enum.
-   */
-  static FullTokenType = class extends TokenType {
-    /**
-     * @param {StringEnum} stringEnum
-     */
-    constructor(stringEnum) {
-      super();
-      this.stringEnum = stringEnum;
-      this.isDefiningFeature = true;
-      this.isConstant = stringEnum.isConstant;
-    }
-
-    *parseTokens(query, idx) {
-      for (const token of this.stringEnum.getFullValues(query, idx)) {
-        if (token) yield token;
-      }
-    }
-
-    createText(token, query, endOnly) {
-      return token.value.lower;
-    }
-
-    createBlockValue(token, query) {
-      return token.value.value;
-    }
-  };
-
-  /**
-   * Griffpatch waneted to be able to query things like 'br p b' and have it suggest
-   * `broadcast [Paint Block]`. GriffTokenType tokens are for these instances where
-   * everything but the first letter can be ommited (hense, this is called the
-   * GriffTokenType™)
-   *
-   * These results cannot just be a part of {@link FullTokenType} because they are used in
-   * different places. See {@link TokenTypeBlock.createBlockTokenTypes} for more info on how griff
-   * tokens work.
-   */
-  static GriffTokenType = class extends TokenType {
-    /**
-     * @param {StringEnum} stringEnum
-     */
-    constructor(enumValues) {
-      super();
-      this.values = enumValues;
-      this.isConstant = this.values.length === 1;
-      this.isDefiningFeature = this.isConstant;
-    }
-
-    /**
-     * Importantly, this does not return a token if {@link FullTokenType} would have already returned
-     * an identical token. If it did, there would be duplicate results for every block, one which internally
-     * uses griff tokens the other which uses full tokens.
-     */
-    *parseTokens(query, idx) {
-      const fullValues = this.values.getFullValues(query, idx);
-      outer: for (let valueIdx = 0; valueIdx < this.values.length; valueIdx++) {
-        if (fullValues[valueIdx]) continue;
-        const valueInfo = this.values.values[valueIdx];
-        let i = idx;
-
-        for (let j = 0; j < valueInfo.parts.length; j++) {
-          const part = valueInfo.parts[j];
-          let queryPartEnd = query.skipUnignorable(i);
-          const queryPart = query.lowercase.substring(i, queryPartEnd);
-          const queryMatch = part.startsWith(queryPart);
-          if (!queryMatch || queryPartEnd >= query.length) {
-            if (j !== 0) {
-              if (!queryMatch) queryPartEnd = i;
-              yield new Token(
-                idx,
-                queryPartEnd,
-                this,
-                {
-                  valueInfo,
-                  part: j,
-                  length: queryPartEnd - i,
-                },
-                10000,
-                undefined,
-                queryPartEnd >= query.length
-              );
-            }
-            continue outer;
-          }
-          i = query.skipIgnorable(queryPartEnd);
-        }
-
-        yield new Token(idx, i, this, { valueInfo }, 10000);
-      }
-    }
-
-    createBlockValue(token, query) {
-      return token.value.valueInfo.value; // I may have named too many things 'value'
-    }
-
-    createText(token, query, endOnly) {
-      if (!endOnly) return token.value.valueInfo.lower;
-      if (!token.isTruncated) {
-        return query.str.substring(token.start, token.end);
-      }
-      const str = query.str.substring(token.start, token.end - token.value.length);
-      const part = token.value.valueInfo.parts[token.value.part];
-      return str + part;
-    }
-  };
-
+class TokenTypeStringEnum extends TokenType {
   /**
    * @typedef StringEnumValue
    * @property {string} value The string that needs to be in the query
@@ -538,6 +430,10 @@ class StringEnum {
    * @param {(import("./BlockTypeInfo").BlockInputEnumOption[]} values
    */
   constructor(values) {
+    super();
+    this.isConstant = values.length === 1;
+    this.isDefiningFeature = true;
+
     /** @type {StringEnumValue[]} */
     this.values = [];
     for (const value of values) {
@@ -558,70 +454,39 @@ class StringEnum {
       }
       this.values.push({ lower, parts, value });
     }
-    /** @type {Token?[][]?} */
-    this.cache = null;
-    /** @type {number?} */
-    this.cacheQueryID = null;
-
-    /** @type {StringEnum.FullTokenType} */
-    this.fullTokenProvider = new StringEnum.FullTokenType(this);
-    /** @type {StringEnum.GriffTokenType} */
-    this.griffTokenProvider = new StringEnum.GriffTokenType(this);
-    /** @type {TokenProviderGroup} A token provider group for either the full token or a griff abreviation */
-    this.bothTokenProvider = new TokenProviderGroup();
-    this.bothTokenProvider.pushProviders([this.fullTokenProvider, this.griffTokenProvider]);
   }
 
-  /**
-   * Gets a list of FullTokenType tokens for this string enum at idx. This can be though of as an
-   * implimentation of {@link FullTokenType.parseTokens}, but it's cached so {@link GriffTokenType} can use
-   * it to without repeating the search.
-   * @param {QueryInfo} query
-   * @param {number} idx
-   * @returns {Token?[]} Map of value indecies to their corresponding tokens.
-   */
-  getFullValues(query, idx) {
-    if (this.cacheQueryID !== query.id) {
-      this.cacheQueryID = query.id;
-      this.cache = [];
-    }
-    let cacheEntry = this.cache[idx];
-    if (cacheEntry) return cacheEntry;
-    cacheEntry = this.cache[idx] = [];
-
-    for (let valueIdx = 0; valueIdx < this.length; valueIdx++) {
+  *parseTokens(query, idx) {
+    outer: for (let valueIdx = 0; valueIdx < this.values.length; valueIdx++) {
       const valueInfo = this.values[valueIdx];
-      cacheEntry.push(null);
+      let yieldedToken = false;
+
       const remainingChar = query.length - idx;
       if (remainingChar < valueInfo.lower.length) {
         if (valueInfo.lower.startsWith(query.lowercase.substring(idx))) {
           const end = remainingChar < 0 ? 0 : query.length;
-          cacheEntry[valueIdx] = new Token(idx, end, this.fullTokenProvider, valueInfo, 100000, undefined, true);
+          yield new Token(idx, end, this, valueInfo, 100000, undefined, true);
+          yieldedToken = true;
         }
       } else {
-        if (query.lowercase.startsWith(valueInfo.lower, idx)) {
-          cacheEntry[valueIdx] = new Token(
-            idx,
-            idx + valueInfo.lower.length,
-            this.fullTokenProvider,
-            valueInfo,
-            100000
-          );
+        if (
+          query.lowercase.startsWith(valueInfo.lower, idx) &&
+          TokenTypeStringLiteral.TERMINATORS.indexOf(query.lowercase[idx + valueInfo.lower.length]) !== -1
+        ) {
+          yield new Token(idx, idx + valueInfo.lower.length, this, valueInfo, 100000);
+          yieldedToken = true;
         }
       }
     }
-    return cacheEntry;
   }
 
-  /**
-   * @returns {number} The number of values in this enum.
-   */
-  get length() {
-    return this.values.length;
+  createBlockValue(token, query) {
+    return token.value.value;
   }
 
-  get isConstant() {
-    return this.length === 1;
+  createText(token, query, endOnly) {
+    if (!token) return this.values[0].lower;
+    return token.value.lower;
   }
 }
 
@@ -699,7 +564,7 @@ class TokenTypeNumberLiteral extends TokenType {
   }
 
   createText(token, query, endOnly) {
-    return query.query.substring(token.start, token.end);
+    return query.str.substring(token.start, token.end);
   }
 }
 
@@ -708,11 +573,12 @@ class TokenTypeNumberLiteral extends TokenType {
  */
 class TokenTypeColor extends TokenType {
   static INSTANCE = new TokenProviderOptional(new TokenTypeColor());
+  static HEX_CHARS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
 
   *parseTokens(query, idx) {
     if (!query.str.startsWith("#", idx)) return;
     for (let i = 0; i < 6; i++) {
-      if (TokenTypeNumberLiteral.HEX_CHARS.indexOf(query.lowercase[idx + i + 1]) === -1) return;
+      if (TokenTypeColor.HEX_CHARS.indexOf(query.lowercase[idx + i + 1]) === -1) return;
     }
     yield new Token(idx, idx + 7, this, query.str.substring(idx, idx + 7));
   }
@@ -778,92 +644,14 @@ class TokenTypeBrackets extends TokenType {
  */
 class TokenTypeBlock extends TokenType {
   /**
-   * Creates all the possible block token types for a given block.
-   *
-   * Note that each block has two token types, one version is allowed to use griff
-   * tokens and the other isn't. The block that supports griff tokens doesn't support
-   * nested blocks. This is needed because queries like 'i t = t' have a rediculus number
-   * of possible interpertations ('i t = t' has 4941), so to avoid this we disallow
-   * nested blocks when you're using griff tokens.
-   *
    * @param {WorkspaceQuerier} querier
-   * @param {*} block
-   * @returns {TokenTypeBlock[]} The possible block token types.
-   */
-  static createBlockTokenTypes(querier, block) {
-    let fullTokenProviders = [];
-    let griffTokenProviders = [];
-
-    let hasGriffableToken = false;
-
-    for (const blockPart of block.parts) {
-      let fullTokenProvider;
-      let griffTokenProvider;
-      if (typeof blockPart === "string") {
-        const stringEnum = new StringEnum([{ value: null, string: blockPart }]);
-        fullTokenProvider = stringEnum.fullTokenProvider;
-        if (hasGriffableToken) {
-          griffTokenProvider = stringEnum.bothTokenProvider;
-        } else {
-          griffTokenProvider = stringEnum.griffTokenProvider;
-          hasGriffableToken = true;
-        }
-      } else {
-        switch (blockPart.type) {
-          case BlockInputType.ENUM:
-            const stringEnum = new StringEnum(blockPart.values);
-            fullTokenProvider = stringEnum.bothTokenProvider;
-            if (blockPart.isRound) {
-              const enumGroup = new TokenProviderGroup();
-              enumGroup.pushProviders([fullTokenProvider, querier.tokenGroupRoundBlocks]);
-              fullTokenProvider = enumGroup;
-            }
-            if (hasGriffableToken) {
-              griffTokenProvider = stringEnum.bothTokenProvider;
-            } else {
-              griffTokenProvider = stringEnum.griffTokenProvider;
-              hasGriffableToken = true;
-            }
-            break;
-          case BlockInputType.STRING:
-            fullTokenProvider = querier.tokenGroupString;
-            // Only allow literals for griff token blocks
-            griffTokenProvider = new TokenProviderOptional(querier.tokenTypeStringLiteral);
-            break;
-          case BlockInputType.NUMBER:
-            fullTokenProvider = querier.tokenGroupNumber;
-            // Only allow literals for griff token blocks
-            griffTokenProvider = new TokenProviderOptional(querier.tokenTypeNumberLiteral);
-            break;
-          case BlockInputType.COLOUR:
-            fullTokenProvider = TokenTypeColor.INSTANCE;
-            griffTokenProvider = TokenTypeColor.INSTANCE;
-            break;
-          case BlockInputType.BOOLEAN:
-            fullTokenProvider = querier.tokenGroupBoolean;
-            griffTokenProvider = TokenTypeBlank.INSTANCE;
-            break;
-          case BlockInputType.BLOCK:
-            fullTokenProvider = querier.tokenGroupStack;
-            griffTokenProvider = TokenTypeBlank.INSTANCE;
-            break;
-        }
-      }
-      fullTokenProviders.push(fullTokenProvider);
-      griffTokenProviders.push(griffTokenProvider);
-    }
-
-    return [new TokenTypeBlock(block, fullTokenProviders), new TokenTypeBlock(block, griffTokenProviders)];
-  }
-
-  /**
    * @param {BlockInstance} block
-   * @param {TokenProvider[]} tokenProviders
    * @private
    */
-  constructor(block, tokenProviders) {
+  constructor(querier, block) {
     super();
     this.block = block;
+    this.hasSubTokens = true;
     /**
      * The list of token types that make up this block.
      *
@@ -873,34 +661,159 @@ class TokenTypeBlock extends TokenType {
      *
      * @type {TokenProvider[]}
      */
-    this.tokenProviders = tokenProviders;
-    this.hasSubTokens = true;
+    this.fullTokenProviders = [];
+
+    for (const blockPart of block.parts) {
+      let fullTokenProvider;
+      if (typeof blockPart === "string") {
+        fullTokenProvider = new TokenTypeStringEnum([{ value: null, string: blockPart }]);
+      } else {
+        switch (blockPart.type) {
+          case BlockInputType.ENUM:
+            fullTokenProvider = new TokenTypeStringEnum(blockPart.values);
+            if (blockPart.isRound) {
+              const enumGroup = new TokenProviderGroup();
+              enumGroup.pushProviders([fullTokenProvider, querier.tokenGroupRoundBlocks]);
+              fullTokenProvider = enumGroup;
+            }
+            break;
+          case BlockInputType.STRING:
+            fullTokenProvider = querier.tokenGroupString;
+            break;
+          case BlockInputType.NUMBER:
+            fullTokenProvider = querier.tokenGroupNumber;
+            break;
+          case BlockInputType.COLOUR:
+            fullTokenProvider = TokenTypeColor.INSTANCE;
+            break;
+          case BlockInputType.BOOLEAN:
+            fullTokenProvider = querier.tokenGroupBoolean;
+            break;
+          case BlockInputType.BLOCK:
+            fullTokenProvider = querier.tokenGroupStack;
+            break;
+        }
+      }
+      this.fullTokenProviders.push(fullTokenProvider);
+    }
+
+    /**
+     * @type {{strings: string[], inputs: [], score: number}[]}
+     */
+    this.stringForms = [];
+
+    const enumerateStringForms = (partIdx = 0, strings = [], inputs = []) => {
+      for (; partIdx < block.parts.length; partIdx++) {
+        let blockPart = block.parts[partIdx];
+        if (typeof blockPart === "string") {
+          strings.push(...blockPart.toLowerCase().split(" "));
+        } else if (blockPart.type === BlockInputType.ENUM) {
+          for (const enumValue of blockPart.values) {
+            enumerateStringForms(
+              partIdx + 1,
+              [...strings, ...enumValue.string.toLowerCase().split(" ")],
+              [...inputs, enumValue]
+            );
+          }
+          return;
+        } else {
+          inputs.push(null);
+        }
+      }
+      const score = -10 * strings.flatMap((s) => s.length).reduce((a, b) => a + b + 1);
+      this.stringForms.push({ strings, inputs, score });
+    };
+
+    enumerateStringForms();
   }
 
+  /**
+   *
+   * @param {QueryInfo} query
+   * @param {*} idx
+   * @returns
+   */
   *parseTokens(query, idx) {
-    for (const subtokens of this._parseSubtokens(idx, 0, query)) {
-      subtokens.reverse();
-      let score = 0;
-      let isLegal = true;
-      let isTruncated = subtokens.length < this.tokenProviders.length;
+    let yieldedTokens = false;
+
+    for (const subtokens of this._parseSubtokens(query, idx, this.fullTokenProviders)) {
+      let token = this._createToken(query, idx, this.fullTokenProviders, subtokens);
+      if (token) {
+        yield token;
+        yieldedTokens = true;
+      }
+    }
+
+    if (yieldedTokens) return;
+
+    outer: for (const stringForm of this.stringForms) {
+      let lastPartIdx = -1;
+      let i = idx;
       let hasDefiningFeature = false;
 
-      // Calculate the score of this block, through a lot of arbitrary math that seems to work ok.
+      while (i < query.length) {
+        i = query.skipIgnorable(i);
 
-      for (const subtoken of subtokens) {
-        isTruncated |= subtoken.isTruncated; // If any of our kids are trauncated, so are we
-        isLegal &&= subtoken.isLegal; // If any of our kids are illegal, so are we
-        if (!subtoken.isTruncated) score += subtoken.score;
-        else score += subtoken.score / 100000 - 10; // Big score penalty if trauncated
-        if (subtoken.type.isDefiningFeature && subtoken.start < query.length) hasDefiningFeature = true;
+        const wordEnd = query.skipUnignorable(i);
+
+        if (wordEnd === i) {
+          yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx: -1 }, stringForm.score, -1, false);
+        } else {
+          const word = query.lowercase.substring(i, wordEnd);
+          let match = -1;
+
+          for (let formPartIdx = lastPartIdx + 1; formPartIdx < stringForm.strings.length; formPartIdx++) {
+            const stringFormPart = stringForm.strings[formPartIdx];
+
+            if (stringFormPart.startsWith(word)) {
+              match = formPartIdx;
+              break;
+            }
+          }
+
+          if (match === -1) continue outer;
+          lastPartIdx = match;
+
+          hasDefiningFeature ||= !TokenTypeNumberLiteral.isValidNumber(word);
+
+          if (hasDefiningFeature)
+            yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx, i }, stringForm.score, -1, false);
+          i = wordEnd;
+        }
       }
-      score += Math.floor(1000 * (subtokens.length / this.tokenProviders.length));
-
-      /** See {@link TokenType.isDefiningFeature} */
-      if (!hasDefiningFeature) continue;
-      const end = query.skipIgnorable(subtokens[subtokens.length - 1].end);
-      yield new Token(idx, end, this, subtokens, score, this.block.precedence, isTruncated, isLegal);
     }
+  }
+
+  /**
+   * @private
+   * @param {QueryInfo} query
+   * @param {number} idx
+   * @param {TokenProvider[]} subtokenProviders
+   * @param {Token[]} subtokens
+   * @returns {Token?}
+   */
+  _createToken(query, idx, subtokenProviders, subtokens) {
+    subtokens.reverse();
+    let score = 0;
+    let isLegal = true;
+    let isTruncated = subtokens.length < subtokenProviders.length;
+    let hasDefiningFeature = false;
+
+    // Calculate the score of this block, through a lot of arbitrary math that seems to work ok.
+
+    for (const subtoken of subtokens) {
+      isTruncated |= subtoken.isTruncated; // If any of our kids are trauncated, so are we
+      isLegal &&= subtoken.isLegal; // If any of our kids are illegal, so are we
+      if (!subtoken.isTruncated) score += subtoken.score;
+      else score += subtoken.score / 100000 - 10; // Big score penalty if trauncated
+      if (subtoken.type.isDefiningFeature && subtoken.start < query.length) hasDefiningFeature = true;
+    }
+    score += Math.floor(1000 * (subtokens.length / subtokenProviders.length));
+
+    /** See {@link TokenType.isDefiningFeature} */
+    if (!hasDefiningFeature) return null;
+    const end = query.skipIgnorable(subtokens[subtokens.length - 1].end);
+    return new Token(idx, end, this, { subtokens }, score, this.block.precedence, isTruncated, isLegal);
   }
 
   /**
@@ -911,15 +824,17 @@ class TokenTypeBlock extends TokenType {
    * Note that the tokens in the returned token arrays are in reverse to the
    * order of their providers in this.tokenProviders, just to confuse you :P
    *
-   * @param {number} idx
-   * @param {number} tokenProviderIdx
+   * @private
    * @param {QueryInfo} query
+   * @param {number} idx
+   * @param {TokenProvider[]} subtokenProviders
+   * @param {number} tokenProviderIdx
    * @param {boolean} parseSubSubTokens
    * @yields {Token[]}
    */
-  *_parseSubtokens(idx, tokenProviderIdx, query, parseSubSubTokens = true) {
+  *_parseSubtokens(query, idx, subtokenProviders, tokenProviderIdx = 0, parseSubSubTokens = true) {
     idx = query.skipIgnorable(idx);
-    let tokenProvider = this.tokenProviders[tokenProviderIdx];
+    let tokenProvider = subtokenProviders[tokenProviderIdx];
 
     for (const token of tokenProvider.parseTokens(query, idx)) {
       ++query.tokenCount;
@@ -939,10 +854,16 @@ class TokenTypeBlock extends TokenType {
         if (token.precedence === this.block.precedence && tokenProviderIdx !== 0) continue;
       }
 
-      if (!parseSubSubTokens || !token.isLegal || tokenProviderIdx === this.tokenProviders.length - 1) {
+      if (!parseSubSubTokens || !token.isLegal || tokenProviderIdx === subtokenProviders.length - 1) {
         yield [token];
       } else {
-        for (const subTokenArr of this._parseSubtokens(token.end, tokenProviderIdx + 1, query, !token.isTruncated)) {
+        for (const subTokenArr of this._parseSubtokens(
+          query,
+          token.end,
+          subtokenProviders,
+          tokenProviderIdx + 1,
+          !token.isTruncated
+        )) {
           subTokenArr.push(token);
           yield subTokenArr;
         }
@@ -952,29 +873,53 @@ class TokenTypeBlock extends TokenType {
 
   createBlockValue(token, query) {
     if (!token.isLegal) throw new Error("Cannot create a block from an illegal token.");
-    const blockInputs = [];
+    let blockInputs;
 
-    for (let i = 0; i < token.value.length; i++) {
-      const blockPart = this.block.parts[i];
-      if (typeof blockPart !== "string") blockInputs.push(token.value[i].createBlockValue(query));
+    if (token.value.stringForm) {
+      blockInputs = token.value.stringForm.inputs;
+    } else {
+      const subtokens = token.value.subtokens;
+      blockInputs = [];
+      for (let i = 0; i < subtokens.length; i++) {
+        const blockPart = this.block.parts[i];
+        if (typeof blockPart !== "string") blockInputs.push(subtokens[i].createBlockValue(query));
+      }
+      while (blockInputs.length < this.block.inputs.length) blockInputs.push(null);
     }
-    while (blockInputs.length < this.block.inputs.length) blockInputs.push(null);
 
     return this.block.createBlock(...blockInputs);
   }
 
   createText(token, query, endOnly) {
-    if (!token.isTruncated && endOnly) return query.str.substring(token.start, token.end);
-    let text = "";
-    if (token.start !== token.value[0].start) {
-      text += query.str.substring(token.start, token.value[0].start);
+    if (token.value.stringForm) {
+      if (endOnly) {
+        if (token.value.lastPartIdx === -1) {
+          return query.str.substring(token.start, token.end);
+        } else {
+          return (
+            query.str.substring(token.start, token.end) +
+            token.value.stringForm.strings[token.value.lastPartIdx].substring(token.end - token.value.i) +
+            " " +
+            token.value.stringForm.strings.slice(token.value.lastPartIdx + 1).join(" ")
+          );
+        }
+      }
+
+      return token.value.stringForm.strings.join(" ");
     }
-    for (let i = 0; i < token.value.length; i++) {
-      const subtoken = token.value[i];
+    if (!token.isTruncated && endOnly) return query.str.substring(token.start, token.end);
+    const subtokens = token.value.subtokens;
+    let text = "";
+    if (token.start !== subtokens[0].start) {
+      text += query.str.substring(token.start, subtokens[0].start);
+    }
+    let i;
+    for (i = 0; i < subtokens.length; i++) {
+      const subtoken = subtokens[i];
       const subtokenText = subtoken.type.createText(subtoken, query, endOnly) ?? "";
       text += subtokenText;
-      if (i !== token.value.length - 1) {
-        const next = token.value[i + 1];
+      if (i !== subtokens.length - 1) {
+        const next = subtokens[i + 1];
         const nextStart = next.start;
         if (nextStart !== subtoken.end) {
           text += query.str.substring(subtoken.end, nextStart);
@@ -988,11 +933,17 @@ class TokenTypeBlock extends TokenType {
         }
       }
     }
+    for (; i < this.fullTokenProviders.length; i++) {
+      const provider = this.fullTokenProviders[i];
+      if (!provider.isConstant) break;
+      if (!text.endsWith(" ")) text += " ";
+      text += provider.createText();
+    }
     return text;
   }
 
   getSubtokens(token, query) {
-    return token.value;
+    return token.value.subtokens;
   }
 }
 
@@ -1047,9 +998,9 @@ class QueryInfo {
     /** @type {WorkspaceQuerier} */
     this.querier = querier;
     /** @type {string} The query */
-    this.query = query.replaceAll(String.fromCharCode(160), " ");
+    this.str = query.replaceAll(String.fromCharCode(160), " ");
     /** @type {string} A lowercase version of the query. Used for case insensitive comparisons. */
-    this.queryLc = this.query.toLowerCase();
+    this.lowercase = this.str.toLowerCase();
     /** @type {number} A unique identifier for this query */
     this.id = id;
     /** @type{number} The number of tokens we've found so far */
@@ -1071,7 +1022,7 @@ class QueryInfo {
    * @returns {number} The index of the next non-ignorable character in the query, after idx.
    */
   skipIgnorable(idx) {
-    return QueryInfo.skipIgnorable(this.queryLc, idx);
+    return QueryInfo.skipIgnorable(this.lowercase, idx);
   }
 
   /**
@@ -1089,22 +1040,12 @@ class QueryInfo {
    * @returns {number} The index of the next ignorable character in the query, after idx.
    */
   skipUnignorable(idx) {
-    return QueryInfo.skipUnignorable(this.queryLc, idx);
+    return QueryInfo.skipUnignorable(this.lowercase, idx);
   }
 
   /** @type {number} The length in characters of the query. */
   get length() {
-    return this.query.length;
-  }
-
-  /** @type {string} The query. */
-  get str() {
-    return this.query;
-  }
-
-  /** @type {string} The lowercase version of the query. */
-  get lowercase() {
-    return this.queryLc;
+    return this.str.length;
   }
 
   canCreateMoreTokens() {
@@ -1173,7 +1114,7 @@ export default class WorkspaceQuerier {
    */
   queryWorkspace(queryStr) {
     if (!this.workspaceIndexed) throw new Error("A workspace must be indexed before it can be queried!");
-    if (queryStr.length === 0) return { results: [], illegalResult: null, limited: false };
+    if (queryStr.trim().length === 0) return { results: [], illegalResult: null, limited: false };
 
     const query = new QueryInfo(this, queryStr, this._queryCounter++);
     const results = [];
@@ -1232,7 +1173,6 @@ export default class WorkspaceQuerier {
       illegalResult: bestIllegalResult,
       limited,
     };
-    // return results.sort((a, b) => b.token.score - a.token.score);
   }
 
   /**
@@ -1332,7 +1272,8 @@ export default class WorkspaceQuerier {
   _poppulateTokenGroups(blocks) {
     blocks.sort(
       (a, b) =>
-        WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(b.category) - WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(a.category)
+        WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(b.category.name) -
+        WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(a.category.name)
     );
 
     // Apply order of operations
@@ -1352,22 +1293,21 @@ export default class WorkspaceQuerier {
     }
 
     for (const block of blocks) {
-      for (const blockTokenType of TokenTypeBlock.createBlockTokenTypes(this, block)) {
-        switch (block.shape) {
-          case BlockShape.Round:
-            this.tokenGroupRoundBlocks.pushProviders([blockTokenType]);
-            break;
-          case BlockShape.Boolean:
-            this.tokenGroupBooleanBlocks.pushProviders([blockTokenType]);
-            break;
-          case BlockShape.Stack:
-          case BlockShape.End:
-            this.tokenGroupStackBlocks.pushProviders([blockTokenType]);
-            break;
-          case BlockShape.Hat:
-            this.tokenGroupHatBlocks.pushProviders([blockTokenType]);
-            break;
-        }
+      const blockTokenType = new TokenTypeBlock(this, block);
+      switch (block.shape) {
+        case BlockShape.Round:
+          this.tokenGroupRoundBlocks.pushProviders([blockTokenType]);
+          break;
+        case BlockShape.Boolean:
+          this.tokenGroupBooleanBlocks.pushProviders([blockTokenType]);
+          break;
+        case BlockShape.Stack:
+        case BlockShape.End:
+          this.tokenGroupStackBlocks.pushProviders([blockTokenType]);
+          break;
+        case BlockShape.Hat:
+          this.tokenGroupHatBlocks.pushProviders([blockTokenType]);
+          break;
       }
     }
   }
