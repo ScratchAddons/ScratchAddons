@@ -1,0 +1,21 @@
+{
+  "name": "Rounded corners UI",
+  "description": "Makes the Scratch's UI more pleasant by rounding the corners of some objects.",
+  "tags": ["community"],
+  "credits": [
+    {
+      "name": "Valer",
+      "link": "https://github.com/Valer100"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "versionAdded": "1.31.2",
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "enabledByDefault": false
+}
