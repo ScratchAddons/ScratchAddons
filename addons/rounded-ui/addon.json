@@ -14,7 +14,7 @@
       "matches": ["https://scratch.mit.edu/*"]
     }
   ],
-  "versionAdded": "1.31.2",
+  "versionAdded": "1.32.0",
   "dynamicEnable": true,
   "dynamicDisable": true,
   "enabledByDefault": false
