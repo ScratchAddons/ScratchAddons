@@ -30,7 +30,7 @@
     {
       "url": "text-large.css",
       "matches": ["projects"],
-      "if": { "settings": { "large": true }}
+      "if": { "settings": { "large": true } }
     }
   ],
   "settings": [
