@@ -19,8 +19,7 @@ export default async function ({ addon, console, msg }) {
   addon.settings.addEventListener("change", () => {
     console.log("Settings changed!");
     if (addon.settings.get("auto-pause") === true) window.addEventListener("blur", () => setPaused(true));
-    else if (addon.settings.get("auto-pause") === false)
-      document.removeEventListener("focusout", () => setPaused(false));
+    else window.removeEventListener("blur", () => setPaused(true));
   });
 
   while (true) {
