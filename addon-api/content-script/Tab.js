@@ -824,9 +824,4 @@ export default class Tab extends Listenable {
   prompt(title, message, defaultValue, opts) {
     return modal.prompt(this, title, message, defaultValue, opts);
   }
-  isScratchAprilFools23() {
-    if (!this.redux.state) return true; // better safe than sorry
-    if (typeof this.redux.state?.scratchGui?.timeTravel === "object") return true;
-    return false;
-  }
 }
