@@ -1,8 +1,8 @@
 {
   "find-bar/find-placeholder": "Find (Ctrl+F)",
   "find-bar/complex-broadcast": "(expression)",
-  "find-bar/var-local": "variable {name}",
-  "find-bar/var-global": "VARIABLE {name}",
+  "find-bar/var-local": "var {name}",
+  "find-bar/var-global": "VAR {name}",
   "find-bar/list-local": "list {name}",
   "find-bar/list-global": "LIST {name}",
   "find-bar/event": "event {name}"
