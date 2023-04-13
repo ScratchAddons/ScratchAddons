@@ -15,11 +15,13 @@ export default async function ({ addon, console, msg }) {
   setSrc();
   onPauseChanged(setSrc);
 
-  if (addon.settings.get("auto-pause")) window.addEventListener("blur", () => setPaused(true));
+  function autoPause() { setPaused(true); }
+
+  if (addon.settings.get("auto-pause")) window.addEventListener("blur", autoPause);
   addon.settings.addEventListener("change", () => {
     console.log("Settings changed!");
-    if (addon.settings.get("auto-pause") === true) window.addEventListener("blur", () => setPaused(true));
-    else window.removeEventListener("blur", () => setPaused(true));
+    if (addon.settings.get("auto-pause") === true) window.addEventListener("blur", autoPause);
+    else window.removeEventListener("blur", autoPause);
   });
 
   while (true) {
