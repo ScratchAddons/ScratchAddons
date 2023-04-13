@@ -20,7 +20,7 @@ export default async function ({ addon, console, msg }) {
     }
   });
   addon.self.addEventListener("reenabled", () => {
-    if (addon.settings.get("auto-pause")) window.addEventListener("blur", autoPause)
+    if (addon.settings.get("auto-pause")) window.addEventListener("blur", autoPause);
   });
   setSrc();
   onPauseChanged(setSrc);
