@@ -9,9 +9,19 @@ export default async function ({ addon, console, msg }) {
   img.title = msg("pause");
 
   const setSrc = () => (img.src = addon.self.dir + (isPaused() ? "/play.svg" : "/pause.svg"));
-  img.addEventListener("click", () => setPaused(!isPaused()));
+  img.addEventListener("click", () => setPaused(!isPaused())); // Toggle when clicking the button
   addon.tab.displayNoneWhileDisabled(img);
-  addon.self.addEventListener("disabled", () => setPaused(false));
+  addon.self.addEventListener("disabled", () => {
+    setPaused(false);
+    try {
+      window.removeEventListener("blur", autoPause);
+    } catch {
+      /*Avoids throwing an error message if the event listener is not found*/
+    }
+  });
+  addon.self.addEventListener("reenabled", () => {
+    if (addon.settings.get("auto-pause")) window.addEventListener("blur", autoPause)
+  });
   setSrc();
   onPauseChanged(setSrc);
 
@@ -22,7 +32,7 @@ export default async function ({ addon, console, msg }) {
   if (addon.settings.get("auto-pause")) window.addEventListener("blur", autoPause);
   addon.settings.addEventListener("change", () => {
     console.log("Settings changed!");
-    if (addon.settings.get("auto-pause") === true) window.addEventListener("blur", autoPause);
+    if (addon.settings.get("auto-pause")) window.addEventListener("blur", autoPause);
     else window.removeEventListener("blur", autoPause);
   });
 

@@ -28,7 +28,7 @@
     {
       "type": "boolean",
       "id": "auto-pause",
-      "name": "Pause when page loses focus",
+      "name": "Pause automatically when clicking outside of page",
       "default": false
     }
   ],
