@@ -1,10 +1,10 @@
-<!-- Which issue(s) does this pull request fix or resolve? If there aren't any, please submit one first unless this is a minor string update or bug fix. -->
+<!-- Which issue(s) does this pull request fix or resolve? If there aren't any, please submit one first unless this is a hotfix or minor string update. -->
 
 Resolves #
 
 ### Changes
 
-<!-- Please describe the changes you've made. Add any screenshots or videos here. -->
+<!-- Please describe the changes you've made. Add any screenshots or videos here if applicable. -->
 
 ### Reason for changes
 
