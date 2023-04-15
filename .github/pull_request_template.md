@@ -12,4 +12,4 @@ Resolves #
 
 ### Tests
 
-<!-- Please test your chnages in a Chromium based browser and add any known issues or other testing notes here. Bigger changes should also be tested on Firefox. -->
+<!-- Please test your changes in a Chromium-based browser and add any known issues or other testing notes here. Bigger changes should also be tested on Firefox. -->
