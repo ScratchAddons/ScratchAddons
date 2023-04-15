@@ -1203,7 +1203,7 @@
     "type": "palette",
     "colors": ["primary", "menuBar", "page", "accent", "workspace", "selector"]
   },
-    "latestUpdate": {
+  "latestUpdate": {
     "version": "1.32.0",
     "newSettings": ["popup"]
   },
