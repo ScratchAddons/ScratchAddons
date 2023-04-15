@@ -4,7 +4,7 @@ Resolves #
 
 ### Changes
 
-<!-- Please describe the changes you've made. -->
+<!-- Please describe the changes you've made. Add any screenshots or videos here. -->
 
 ### Reason for changes
 
@@ -12,12 +12,4 @@ Resolves #
 
 ### Tests
 
-- [ ] Chrome/Chromium-based browser
-- [ ] Firefox
-
-<!-- Please test your changes in at least one of the above browsers and add any known issues or other test notes here. -->
-
-### Additional context
-
-<!-- Any other information like screenshots, videos, or context about this pull request -->
-N/A
+<!-- Please test your chnages in a Chromium based browser and add any known issues or other testing notes here. Bigger changes should also be tested on Firefox. -->
