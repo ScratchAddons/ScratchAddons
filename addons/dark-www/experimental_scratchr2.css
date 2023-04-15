@@ -612,14 +612,6 @@ input.link.black {
 }
 
 /* Some images are designed for a light background */
-.markItUpHeader > ul > li > a {
-  margin-right: 4px;
-  margin-bottom: 4px;
-  width: 12px;
-  height: 12px;
-  background-position: 1px 1px;
-  border-radius: 3px;
-}
 .markItUpButton1 > a {
   background-image: var(--darkWww-forum-bold-button) !important;
 }
@@ -649,10 +641,9 @@ input.link.black {
 }
 .markItUpHeader > ul > .markItUpDropMenu {
   background-image: none !important;
-  margin-right: 4px !important;
 }
 .markItUpHeader > ul > .markItUpDropMenu::after {
-  /* Move icon into a pseudo-element so it appears in front of child element's white background */
+  /* Move icon into a pseudo-element so filters can be applied to it separately */
   content: "";
   display: block;
   position: absolute;
@@ -661,21 +652,10 @@ input.link.black {
   bottom: 0;
   right: 0;
   background: url(https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/skins/simple/images/menu.png)
-    no-repeat 115% 60%;
+    no-repeat 115% 50%;
   pointer-events: none;
-  filter: var(--darkWww-page-eyeFilter);
-}
-.markItUpHeader > ul > .markItUpDropMenu > a {
-  width: 16px;
-  margin-right: 1px;
-}
-.markItUp .browser-os-button a {
-  margin-left: 2px;
-  margin-right: 2px;
-  background-position: 1px 1px !important;
-}
-.markItUpHeader > ul > li.uploadStatus {
-  background: transparent !important;
+  filter: var(--darkWww-page-filter);
+  opacity: 0.9;
 }
 
 #comments .easter-egg[src$="meow.png"] {
