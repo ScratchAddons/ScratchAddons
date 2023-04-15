@@ -1203,6 +1203,10 @@
     "type": "palette",
     "colors": ["primary", "menuBar", "page", "accent", "workspace", "selector"]
   },
+    "latestUpdate": {
+    "version": "1.32.0",
+    "newSettings": ["popup"]
+  },
   "tags": ["editor", "theme", "featured"],
   "enabledByDefault": false
 }
