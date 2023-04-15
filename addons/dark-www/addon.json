@@ -1865,11 +1865,23 @@
       }
     },
     {
-      "name": "forum-bold-button",
+      "name": "forumBoldButton",
       "value": {
         "type": "textColor",
-        "black": "url(https://cdn.scratch.mit.edu/scratchr2/static/__e65d8a7c03267938d906e22792610478__//djangobb_forum/js/markitup/sets/bbcode/images/bold.png)",
-        "white": "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAhFBMVEUAAADe3t7T09POzs7s7Ozg4ODn5+fh4eHY2Njz8/PT09P19fX7+/vv7+/c3Nz4+PjV1dXOzs7g4ODa2trLy8v39/fu7u7s7Ozo6OjT09Po6Ojm5ub6+vr4+Pjl5eXY2Njl5eXLy8vu7u7h4eHj4+Pd3d3a2trX19fS0tLz8/Pm5ubMzMxZSeJAAAAAInRSTlMAf79/z8+/v5+Pf3AgEBDv7+/f38+/v7+vr5+fj39/f2BgO3gytQAAAGJJREFUGNOdykUOgDAARNEp7u5Ocbj//SAEGtj27+ZlwFcfHb6Ye5rDRFwFQJvlP5BpZGAsApxgKD8QEnlQwGpnFSh2yX6BTBfYlJoM7vtG6xeaUQJM6lrP7rI00fW4ssDXCeLqBY1pf6pbAAAAAElFTkSuQmCC)",
+        "black": "var(--darkWww-forumBoldButtonBlack)",
+        "white": "var(--darkWww-forumBoldButtonWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId":"box"
+        }
+      }
+    },
+    {
+      "name": "forumBrowserOsButton",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-forumBrowserOsButtonBlack)",
+        "white": "var(--darkWww-forumBrowserOsButtonWhite)",
         "source": {
           "type": "settingValue",
           "settingId": "box"
@@ -1877,11 +1889,11 @@
       }
     },
     {
-      "name": "forum-browser-os-button",
+      "name": "forumItalicButton",
       "value": {
         "type": "textColor",
-        "black": "url(https://cdn.scratch.mit.edu/scratchr2/static/__e65d8a7c03267938d906e22792610478__//djangobb_forum/img/browser-os.png)",
-        "white": "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAMAAAAMCGV4AAAAflBMVEUAAADp6enp6enp6enq6urp6enp6enq6uri4uLp6enp6enp6enp6enp6enp6eno6Ojp6eno6Ojp6eno6Ojo6Ojp6enp6enp6enp6eno6Ojp6enp6enp6enp6enq6uro6Ojq6uro6Ojp6enp6eno6Ojp6enq6urq6urp6enp6eliU15fAAAAKXRSTlMA/PjEKN2sWQXs5/HkYN+5o56SD9nOy7CIg3Vxa2QuHQrTupp9UUw4Iv01xW4AAACkSURBVAjXJY7XFoMwDEPtpElIgFL2Ht3V//9gDdwnW/KxRELkrElMltLJRTMMHrnSl2P18MHWhchehEiz4qbc6AbFOiIHxPlH7gqlGI4sqi/ttDAJWzLV7Vjf2LkS+3ySL/RkBYFMp70T3yk+/GyUgP5HtKaiWJrvL4D3H2UCyGVdjMBEG82QfOkXdzaU4vcIR+GlCfGwLsNV+p+kbYiTLI1k/AMfwgum1aDQGgAAAABJRU5ErkJggg==)",
+        "black": "var(--darkWww-forumItalicButtonBlack)",
+        "white": "var(--darkWww-forumItalicButtonWhite)",
         "source": {
           "type": "settingValue",
           "settingId": "box"
@@ -1889,11 +1901,11 @@
       }
     },
     {
-      "name": "forum-italic-button",
+      "name": "forumListBulletButton",
       "value": {
         "type": "textColor",
-        "black": "url(https://cdn.scratch.mit.edu/scratchr2/static/__e65d8a7c03267938d906e22792610478__//djangobb_forum/js/markitup/sets/bbcode/images/italic.png)",
-        "white": "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAVFBMVEUAAADt7e3p6enl5eXd3d3Y2NjT09Pm5ubd3d3W1tby8vLa2tr09PTp6eng4ODj4+Pa2tro6OjQ0NDc3Nzn5+fe3t7W1tbh4eHY2Njn5+ft7e3b29vko3JzAAAAF3RSTlMAwFDw8PDw4ODgwMCwoKCQkICAYEAwMJxATbwAAABASURBVBjTYyAfCLFJsHKjiHBKCKPwxSRYULUISPOhCnCIM6HwRcWZURXwi/OiCrBLouoQkZRC4QsyMnLxkO8pABAnAfVOI8beAAAAAElFTkSuQmCC)",
+        "black": "var(--darkWww-forumListBulletButtonBlack)",
+        "white": "var(--darkWww-forumListBulletButtonWhite)",
         "source": {
           "type": "settingValue",
           "settingId": "box"
@@ -1901,11 +1913,11 @@
       }
     },
     {
-      "name": "forum-list-bullet-button",
+      "name": "forumListItemButton",
       "value": {
         "type": "textColor",
-        "black": "url(https://cdn.scratch.mit.edu/scratchr2/static/__e65d8a7c03267938d906e22792610478__//djangobb_forum/js/markitup/sets/bbcode/images/list-bullet.png)",
-        "white": "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAWlBMVEUAAABqnuOVuutflt47btKIsehSitx1peV0o+NFedbp6enW1tbLy8vt7e3Z2dn7+/vk5OTd3d3Pz8/MzMz9/f339/f19fXx8fG1z/GlxO2Ptuno6OjV1dXT09P/LaZjAAAADXRSTlMAcODgcOBw4OBwa2trC4ozSQAAAE5JREFUGNOVykcOgDAMAEHHTkK10+jl/99EHC1xCHscLVRk0GjADWEsJef7ElFHfcZ5DW5vYJCUYjyZX/BtBz+zZDXQQdAzr8scwqSP7x46VQJ22R0s+AAAAABJRU5ErkJggg==)",
+        "black": "var(--darkWww-forumListItemButtonBlack)",
+        "white": "var(--darkWww-forumListItemButtonWhite)",
         "source": {
           "type": "settingValue",
           "settingId": "box"
@@ -1913,11 +1925,11 @@
       }
     },
     {
-      "name": "forum-list-item-button",
+      "name": "forumListNumericButton",
       "value": {
         "type": "textColor",
-        "black": "url(https://cdn.scratch.mit.edu/scratchr2/static/__e65d8a7c03267938d906e22792610478__//djangobb_forum/js/markitup/sets/bbcode/images/list-item.png)",
-        "white": "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAALVBMVEUAAACHsOhzo+RRidxjmOJEeNbW1tbe3t7v7++kw+3s7Ozo6Ojl5eXi4uLZ2dkQr1vEAAAAB3RSTlMA4OBwcHBroWU/7wAAABxJREFUCNdjoBCwCEMZjJPYnteeXsHAwKxKiXkA+BoDsLjDFW0AAAAASUVORK5CYII=)",
+        "black": "var(--darkWww-forumListNumericButtonBlack)",
+        "white": "var(--darkWww-forumListNumericButtonWhite)",
         "source": {
           "type": "settingValue",
           "settingId": "box"
@@ -1925,11 +1937,11 @@
       }
     },
     {
-      "name": "forum-list-numeric-button",
+      "name": "forumStrokeButton",
       "value": {
         "type": "textColor",
-        "black": "url(https://cdn.scratch.mit.edu/scratchr2/static/__e65d8a7c03267938d906e22792610478__//djangobb_forum/js/markitup/sets/bbcode/images/list-numeric.png)",
-        "white": "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAXVBMVEUAAABVjd47btI+ctTp6enW1tbLy8tsn+Oiw+5zo+Pt7e3Z2dnNzc37+/uIsefk5OR2puPd3d3S0tL9/f339/f19fXx8fGiwe6dv+2avOuNtOno6OiBrOV8quXV1dXorqYoAAAACHRSTlMAJCSIa2trJIMR8SMAAABUSURBVBjTfcpHDsAgEENRhzQYOun1/sdM200k/s5Pxr9WMpAccENjjEnp1Pp7TMg3LwWTYmXbAbWO0fuN6AG3H8gXgmKiBAOhUBGNQ29t9x5UiVwXbwcCy597wiUAAAAASUVORK5CYII=)",
+        "black": "var(--darkWww-forumStrokeButtonBlack)",
+        "white": "var(--darkWww-forumStrokeButtonWhite)",
         "source": {
           "type": "settingValue",
           "settingId": "box"
@@ -1937,11 +1949,11 @@
       }
     },
     {
-      "name": "forum-stroke-button",
+      "name": "forumCenterButton",
       "value": {
         "type": "textColor",
-        "black": "url(https://cdn.scratch.mit.edu/scratchr2/static/__e65d8a7c03267938d906e22792610478__//djangobb_forum/js/markitup/sets/bbcode/images/stroke.png)",
-        "white": "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAdVBMVEUAAADo6Ojw8PDY2NjY2Nj19fXQ0ND8/Pzl5eXV1dX29vbs7OzOzs719fXs7Ozl5eXf39/Ozs76+vrT09Pj4+PW1tbLy8v09PTg4ODQ0NDOzs7R0dHd3d3q6urLy8v////n5+fW1tb09PTc3Nzf39/Z2dnS0tIHyGp9AAAAHnRSTlMAZsy7mXd3dUQR7u7u3d3Mu5mIiHd3dWZmZmZEMxFHVmQAAAAAXklEQVQY02MgF3AKSrKxMCMJ8LAxMIgqI/hSasJAUgAhIK2oyCLDwIGkhVlVWYUfJiAmBwKKCkryQMAOtQSIGfkUmOA6JERApBIvXIBRQRZIcrEjBLiZWMVZhcj1FgB+LASwnY0szQAAAABJRU5ErkJggg==)",
+        "black": "var(--darkWww-forumCenterButtonBlack)",
+        "white": "var(--darkWww-forumCenterButtonWhite)",
         "source": {
           "type": "settingValue",
           "settingId": "box"
@@ -1949,23 +1961,11 @@
       }
     },
     {
-      "name": "forum-text-align-center-button",
+      "name": "forumUnderlineButton",
       "value": {
         "type": "textColor",
-        "black": "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAB8SURBVCjPY/zPgB8wMVCqgAVElP//x/AHDH+D4S8w/sWwl5GBgfE/MSYwMORk/54C0w2FOcemgmSIMyH1P7LNCHiLBDcEZ/+agqwXaFbOIxLc4P0f1e7fUPiZGDcw/AdD02z9/5r/Vf7L/Zf8L/Kf/z/3f/ZsiAwjxbEJAKUIVgAswNGVAAAAAElFTkSuQmCC)",
-        "white": "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAARVBMVEUAAADn5+f7+/vy8vLb29vQ0NDi4uLd3d3s7OzW1tb09PTp6enm5ubw8PDu7u7f39/T09PPz8/6+vr4+Pja2trZ2dnMzMx0/D1WAAAABnRSTlMAa2tra2t0iB+yAAAATElEQVQY02MgC4iJCQoKCnCKirDzs+FQwirAySnKzs7GxohDAVAepJ2Hh5uDD4cSFqA8UJqDlxmHAqDxIO28XFzCQjiUMMLkmYjyGQCIigLnEk7HaQAAAABJRU5ErkJggg==)",
-        "source": {
-          "type": "settingValue",
-          "settingId": "box"
-        }
-      }
-    },
-    {
-      "name": "forum-underline-button",
-      "value": {
-        "type": "textColor",
-        "black": "url(https://cdn.scratch.mit.edu/scratchr2/static/__e65d8a7c03267938d906e22792610478__//djangobb_forum/js/markitup/sets/bbcode/images/underline.png)",
-        "white": "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAb1BMVEUAAADv7+/MzMzm5ubl5eXX19fz8/Pw8PDj4+PLy8vz8/Pm5uba2trq6ure3t7Q0NDV1dXq6urd3d3Ly8va2trLy8vj4+P29vb19fXY2Nj8/PzMzMzx8fHW1tb39/f19fXs7Ozd3d3c3NzY2NjQ0NBZjtXcAAAAGnRSTlMAv78gv7+PQO/vz8/Pv7+/r5+Pj3BgUDAgEKqGKK0AAABdSURBVBjTYyAKiHJKCwMpAVkRmAiTNIiU5GFAFWDgQwiogCkWuAC/LJoAqzKY4kUIKIEpRriAkKIYkGRngwswc3AzM7BzSTAgRAQZGdnE8bhdQUZGXk5KSoo4nwIAuEgDYKhctjEAAAAASUVORK5CYII=)",
+        "black": "var(--darkWww-forumUnderlineButtonBlack)",
+        "white": "var(--darkWww-forumUnderlineButtonWhite)",
         "source": {
           "type": "settingValue",
           "settingId": "box"
