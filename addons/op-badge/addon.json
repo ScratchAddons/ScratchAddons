@@ -1,0 +1,18 @@
+{
+    "name": "Show OP badge in forums",
+    "description": "Adds a OP badge to the user that created the forum topic.",
+    "tags": ["community", "forums"],
+    "enabledByDefault": false,
+    "userscripts": [
+        {
+            "url": "userscript.js",
+            "matches": ["https://scratch.mit.edu/discuss/topic/*/"]
+        }
+    ],
+    "credits": [
+        {
+          "name": "MDWalters",
+          "link": "https://scratch.mit.edu/users/MDWalters/"
+        }
+    ]
+}
