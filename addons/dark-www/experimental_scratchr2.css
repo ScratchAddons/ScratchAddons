@@ -577,7 +577,7 @@ ul.pagination span /* mobile forums */,
   --darkWww-forumBoldButtonWhite: url("%addon-self-dir%/assets/forum_buttons/bold.png");
   --darkWww-forumBrowserOsButtonBlack: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/img/browser-os.png");
   --darkWww-forumBrowserOsButtonWhite: url("%addon-self-dir%/assets/forum_buttons/browser_os.png");
-  --darkWww-forumCenterButtonBlack: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAB8SURBVCjPY/zPgB8wMVCqgAVElP//x/AHDH+D4S8w/sWwl5GBgfE/MSYwMORk/54C0w2FOcemgmSIMyH1P7LNCHiLBDcEZ/+agqwXaFbOIxLc4P0f1e7fUPiZGDcw/AdD02z9/5r/Vf7L/Zf8L/Kf/z/3f/ZsiAwjxbEJAKUIVgAswNGVAAAAAElFTkSuQmCC");
+  --darkWww-forumCenterButtonBlack: url("%addon-self-dir%/../forum-toolbar/text_align_center.png");
   --darkWww-forumCenterButtonWhite: url("%addon-self-dir%/assets/forum_buttons/center.png");
   --darkWww-forumItalicButtonBlack: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/italic.png");
   --darkWww-forumItalicButtonWhite: url("%addon-self-dir%/assets/forum_buttons/italic.png");
