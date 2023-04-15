@@ -1872,7 +1872,7 @@
         "white": "var(--darkWww-forumBoldButtonWhite)",
         "source": {
           "type": "settingValue",
-          "settingId":"box"
+          "settingId": "box"
         }
       }
     },
