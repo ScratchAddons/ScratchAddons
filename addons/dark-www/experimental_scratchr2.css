@@ -632,31 +632,31 @@ input.link.black {
 
 /* Some images are designed for a light background */
 .markItUpButton1 > a {
-  background-image: var(--darkWww-forumBoldButton) !important;
+  background-image: var(--darkWww-box-forumBoldButton) !important;
 }
 .markItUpButton2 > a {
-  background-image: var(--darkWww-forumItalicButton) !important;
+  background-image: var(--darkWww-box-forumItalicButton) !important;
 }
 .markItUpButton3 > a {
-  background-image: var(--darkWww-forumUnderlineButton) !important;
+  background-image: var(--darkWww-box-forumUnderlineButton) !important;
 }
 .markItUpButton4 > a {
-  background-image: var(--darkWww-forumStrokeButton) !important;
+  background-image: var(--darkWww-box-forumStrokeButton) !important;
 }
 .markItUpButton8 > a {
-  background-image: var(--darkWww-forumListBulletButton) !important;
+  background-image: var(--darkWww-box-forumListBulletButton) !important;
 }
 .markItUpButton9 > a {
-  background-image: var(--darkWww-forumListNumericButton) !important;
+  background-image: var(--darkWww-box-forumListNumericButton) !important;
 }
 .markItUpButton10 > a {
-  background-image: var(--darkWww-forumListItemButton) !important;
+  background-image: var(--darkWww-box-forumListItemButton) !important;
 }
 .sa-forum-toolbar-center > a {
-  background-image: var(--darkWww-forumCenterButton) !important;
+  background-image: var(--darkWww-box-forumCenterButton) !important;
 }
 .markItUpButton13 > a {
-  background-image: var(--darkWww-forumBrowserOsButton) !important;
+  background-image: var(--darkWww-box-forumBrowserOsButton) !important;
 }
 
 .markItUpHeader > ul > .markItUpDropMenu {

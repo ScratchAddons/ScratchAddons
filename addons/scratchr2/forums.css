@@ -368,6 +368,60 @@ body > #pagewrapper {
 .djangobb label {
   margin-bottom: 10px;
 }
+.markItUpButton1 > a {
+  background-image: var(
+    --darkWww-page-forumBoldButton,
+    url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/bold.png")
+  ) !important;
+}
+.markItUpButton2 > a {
+  background-image: var(
+    --darkWww-page-forumItalicButton,
+    url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/italic.png")
+  ) !important;
+}
+.markItUpButton3 > a {
+  background-image: var(
+    --darkWww-page-forumUnderlineButton,
+    url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/underline.png")
+  ) !important;
+}
+.markItUpButton4 > a {
+  background-image: var(
+    --darkWww-page-forumStrokeButton,
+    url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/stroke.png")
+  ) !important;
+}
+.markItUpButton8 > a {
+  background-image: var(
+    --darkWww-page-forumListBulletButton,
+    url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/list-bullet.png")
+  ) !important;
+}
+.markItUpButton9 > a {
+  background-image: var(
+    --darkWww-page-forumListNumericButton,
+    url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/list-numeric.png")
+  ) !important;
+}
+.markItUpButton10 > a {
+  background-image: var(
+    --darkWww-page-forumListItemButton,
+    url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/list-item.png")
+  ) !important;
+}
+.sa-forum-toolbar-center > a {
+  background-image: var(
+    --darkWww-page-forumCenterButton,
+    url("%addon-self-dir%/../forum-toolbar/text_align_center.png")
+  ) !important;
+}
+.markItUpButton13 > a {
+  background-image: var(
+    --darkWww-page-forumBrowserOsButton,
+    url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/img/browser-os.png")
+  ) !important;
+}
 .form-submit {
   margin-top: 10px;
 }

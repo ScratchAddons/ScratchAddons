@@ -1865,7 +1865,7 @@
       }
     },
     {
-      "name": "forumBoldButton",
+      "name": "box-forumBoldButton",
       "value": {
         "type": "textColor",
         "black": "var(--darkWww-forumBoldButtonBlack)",
@@ -1877,7 +1877,7 @@
       }
     },
     {
-      "name": "forumBrowserOsButton",
+      "name": "box-forumBrowserOsButton",
       "value": {
         "type": "textColor",
         "black": "var(--darkWww-forumBrowserOsButtonBlack)",
@@ -1889,7 +1889,7 @@
       }
     },
     {
-      "name": "forumItalicButton",
+      "name": "box-forumItalicButton",
       "value": {
         "type": "textColor",
         "black": "var(--darkWww-forumItalicButtonBlack)",
@@ -1901,7 +1901,7 @@
       }
     },
     {
-      "name": "forumListBulletButton",
+      "name": "box-forumListBulletButton",
       "value": {
         "type": "textColor",
         "black": "var(--darkWww-forumListBulletButtonBlack)",
@@ -1913,7 +1913,7 @@
       }
     },
     {
-      "name": "forumListItemButton",
+      "name": "box-forumListItemButton",
       "value": {
         "type": "textColor",
         "black": "var(--darkWww-forumListItemButtonBlack)",
@@ -1925,7 +1925,7 @@
       }
     },
     {
-      "name": "forumListNumericButton",
+      "name": "box-forumListNumericButton",
       "value": {
         "type": "textColor",
         "black": "var(--darkWww-forumListNumericButtonBlack)",
@@ -1937,7 +1937,7 @@
       }
     },
     {
-      "name": "forumStrokeButton",
+      "name": "box-forumStrokeButton",
       "value": {
         "type": "textColor",
         "black": "var(--darkWww-forumStrokeButtonBlack)",
@@ -1949,7 +1949,7 @@
       }
     },
     {
-      "name": "forumCenterButton",
+      "name": "box-forumCenterButton",
       "value": {
         "type": "textColor",
         "black": "var(--darkWww-forumCenterButtonBlack)",
@@ -1961,7 +1961,7 @@
       }
     },
     {
-      "name": "forumUnderlineButton",
+      "name": "box-forumUnderlineButton",
       "value": {
         "type": "textColor",
         "black": "var(--darkWww-forumUnderlineButtonBlack)",
@@ -1969,6 +1969,114 @@
         "source": {
           "type": "settingValue",
           "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "page-forumBoldButton",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-forumBoldButtonBlack)",
+        "white": "var(--darkWww-forumBoldButtonWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-forumBrowserOsButton",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-forumBrowserOsButtonBlack)",
+        "white": "var(--darkWww-forumBrowserOsButtonWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-forumItalicButton",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-forumItalicButtonBlack)",
+        "white": "var(--darkWww-forumItalicButtonWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-forumListBulletButton",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-forumListBulletButtonBlack)",
+        "white": "var(--darkWww-forumListBulletButtonWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-forumListItemButton",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-forumListItemButtonBlack)",
+        "white": "var(--darkWww-forumListItemButtonWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-forumListNumericButton",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-forumListNumericButtonBlack)",
+        "white": "var(--darkWww-forumListNumericButtonWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-forumStrokeButton",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-forumStrokeButtonBlack)",
+        "white": "var(--darkWww-forumStrokeButtonWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-forumCenterButton",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-forumCenterButtonBlack)",
+        "white": "var(--darkWww-forumCenterButtonWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-forumUnderlineButton",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-forumUnderlineButtonBlack)",
+        "white": "var(--darkWww-forumUnderlineButtonWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
         }
       }
     }
