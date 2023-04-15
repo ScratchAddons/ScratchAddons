@@ -617,9 +617,35 @@ input.link.black {
   margin-bottom: 4px;
   width: 12px;
   height: 12px;
-  background-color: white;
   background-position: 1px 1px;
   border-radius: 3px;
+}
+.markItUpButton1 > a {
+  background-image: var(--darkWww-forum-bold-button) !important;
+}
+.markItUpButton2 > a {
+  background-image: var(--darkWww-forum-italic-button) !important;
+}
+.markItUpButton3 > a {
+  background-image: var(--darkWww-forum-underline-button) !important;
+}
+.markItUpButton4 > a {
+  background-image: var(--darkWww-forum-stroke-button) !important;
+}
+.markItUpButton8 > a {
+  background-image: var(--darkWww-forum-list-bullet-button) !important;
+}
+.markItUpButton9 > a {
+  background-image: var(--darkWww-forum-list-numeric-button) !important;
+}
+.markItUpButton10 > a {
+  background-image: var(--darkWww-forum-list-item-button) !important;
+}
+.sa-forum-toolbar-center > a {
+  background-image: var(--darkWww-forum-text-align-center-button) !important;
+}
+.markItUpButton13 > a {
+  background-image: var(--darkWww-forum-browser-os-button) !important;
 }
 .markItUpHeader > ul > .markItUpDropMenu {
   background-image: none !important;
@@ -637,6 +663,7 @@ input.link.black {
   background: url(https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/skins/simple/images/menu.png)
     no-repeat 115% 60%;
   pointer-events: none;
+  filter: var(--darkWww-page-eyeFilter);
 }
 .markItUpHeader > ul > .markItUpDropMenu > a {
   width: 16px;
