@@ -870,7 +870,7 @@
       "default": "#202020"
     },
     {
-      "name": "Popup curtain color",
+      "name": "Popup backdrop color",
       "id": "popup",
       "type": "color",
       "default": "#4d97ffe6",
