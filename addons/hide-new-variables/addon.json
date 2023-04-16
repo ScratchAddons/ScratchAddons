@@ -1,6 +1,6 @@
 {
   "name": "Hide new variables",
-  "description": "Do not automatically show new variables or lists on the stage.",
+  "description": "Do not automatically show monitors for newly created variables or lists.",
   "credits": [
     {
       "name": "GarboMuffin"
