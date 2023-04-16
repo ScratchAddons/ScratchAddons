@@ -141,17 +141,6 @@
       }
     },
     {
-      "name": "primary-overlay",
-      "value": {
-        "type": "multiply",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primary"
-        },
-        "a": 0.9
-      }
-    },
-    {
       "name": "primary-variant",
       "value": {
         "type": "textColor",
