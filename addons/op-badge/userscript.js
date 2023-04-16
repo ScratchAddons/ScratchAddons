@@ -1,10 +1,11 @@
 export default async function({ addon, console, msg }) {
     const posts = document.querySelectorAll(".blockpost");
 
-    const op = await fetch(`https://scratchdb.lefty.one/v3/forum/topic/posts/${window.location.href.split("/")[5]}/0?o=oldest`).then(res => res.json());
+    const html = new DOMParser().parseFromString(await fetch(`https://scratch.mit.edu/discuss/topic/${window.location.href.split("/")[5]}/`).then(res => res.text()), "text/html");
+    const op = html.querySelectorAll(".blockpost")[0].querySelector(".username").innerText;
 
     for (const i of posts) {
-        if (i.querySelector(".username").innerText == op[0].username) {
+        if (op == i.querySelectorAll(".username")[0].innerText) {
             let op_badge = document.createElement("div");
 
             op_badge.innerText = msg("op");
