@@ -540,6 +540,7 @@ select:focus {
 #topnav ul.account-nav ul.user-nav li a {
   color: var(--darkWww-navbar-text, white);
   font-size: 13px;
+  white-space: normal;
 }
 #topnav ul.account-nav ul.user-nav li:hover {
   background: var(--darkWww-navbar-border, rgba(0, 0, 0, 0.1));

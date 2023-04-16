@@ -267,6 +267,10 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .tabs li:hover {
   border-color: var(--darkWww-box-tabHover);
 }
+.tabs li.active,
+.tabs li.active:hover {
+  border-color: var(--darkWww-box-tabSelected);
+}
 .social-message-icon {
   opacity: var(--darkWww-box-messageIconOpacity);
 }
