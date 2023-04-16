@@ -26,13 +26,13 @@
       "url": "hover.css",
       "matches": ["profiles"],
       "if": {
-        "settings": { "onlyonhover": true }
+        "settings": { "only-on-hover": true }
       }
     }
   ],
   "settings": [
     {
-      "id": "onlyonhover",
+      "id": "only-on-hover",
       "name": "Only show when hovering over username",
       "default": false,
       "type": "boolean"
@@ -45,7 +45,7 @@
   "versionAdded": "1.19.0",
   "latestUpdate": {
     "version": "1.32.0",
-    "newSettings": ["onlyonhover"]
+    "newSettings": ["only-on-hover"]
   },
   "enabledByDefault": false
 }
