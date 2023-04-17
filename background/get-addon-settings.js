@@ -36,7 +36,28 @@ const updatePresetIfMatching = (settings, version, oldPreset = null, preset = nu
   }
 };
 
-chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {}, addonsEnabled = {} }) => {
+async function transitionToNewStorageKeys(addonSettings) {
+  // This will not delete the addonSettings storage item
+  chrome.storage.sync.set(
+    {
+      ...minifySettings(addonSettings, null),
+    },
+    () => {
+      // Reload extension after 500ms
+      setTimeout(() => chrome.runtime.reload(), 500);
+    }
+  );
+}
+
+const ADDON_SETTINGS_KEYS = ["addonSettings", "addonSettings1", "addonSettings2", "addonSettings3"];
+chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems) => {
+  if (storageItems.addonSettings && !storageItems.addonSettings3) {
+    return transitionToNewStorageKeys(storageItems.addonSettings);
+  }
+  const addonsEnabled = storageItems.addonsEnabled || {};
+  const addonSettings = storageItems["addonSettings3"]
+    ? { ...storageItems.addonSettings1, ...storageItems.addonSettings2, ...storageItems.addonSettings3 }
+    : {};
   const func = () => {
     let madeAnyChanges = false;
 
@@ -214,7 +235,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
     const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
     if (madeAnyChanges)
       chrome.storage.sync.set({
-        addonSettings: minifySettings(addonSettings, prerelease ? null : scratchAddons.manifests),
+        ...minifySettings(addonSettings, prerelease ? null : scratchAddons.manifests),
         addonsEnabled,
       });
     scratchAddons.globalState.addonSettings = addonSettings;

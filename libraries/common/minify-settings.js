@@ -12,6 +12,13 @@ export default (settings, manifests) => {
       a[b._addonId || b.addonId] = b.manifest || b;
       return a;
     }, {});
+
+  const storageItems = {
+    addonSettings1: {},
+    addonSettings2: {},
+    addonSettings3: {},
+  };
+
   for (const [addonId, setting] of Object.entries(newSettings)) {
     if (manifestObj && !manifestObj[addonId]) {
       // Delete settings from addons that no longer exist
@@ -34,6 +41,10 @@ export default (settings, manifests) => {
         delete newSettings[addonId];
       }
     }
+
+    if (addonId[0].match(/[a-d]/)) storageItems.addonSettings1[addonId] = newSettings[addonId];
+    else if (addonId[0].match(/[f-m]/)) storageItems.addonSettings2[addonId] = newSettings[addonId];
+    else storageItems.addonSettings3[addonId] = newSettings[addonId];
   }
-  return newSettings;
+  return storageItems;
 };
