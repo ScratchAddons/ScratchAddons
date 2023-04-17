@@ -39,7 +39,7 @@ export default async function ({ addon, console, msg }) {
 
     // Use correct project author
     project.querySelector(".thumbnail-creator").firstElementChild.innerText = username;
-    project.querySelector(".thumbnail-creator").firstElementChild.href = `/users/${username}/`
+    project.querySelector(".thumbnail-creator").firstElementChild.href = `/users/${username}/`;
   });
 
   // Add our own row after the Featured Projects row
