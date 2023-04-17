@@ -1,6 +1,6 @@
 {
   "name": "Necropost highlighter",
-  "description": "Spot old forum topics brought back to life, before opening the message. Topics started much earlier than others listed on the same page are highlighted (in selected forums). If you've wasted time reading zombie messages or a help/question/request that was actually asked years ago, this is for you!",
+  "description": "Highlights topics started much earlier than others on the same page in selected forums, so you don't waste time reading zombie messages or replies to help, question or request topics that were actually asked long ago.",
   "info": [
     {
       "type": "notice",
