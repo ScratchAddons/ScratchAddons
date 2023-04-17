@@ -201,6 +201,12 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
             addonSettings["comment-color"] = "#FEF49C";
           }
         }
+
+        // Transition 1.31.1 to 1.32.0
+        if (addonsEnabled["featured-dangos"]) {
+          madeAnyChanges = true;
+          addonsEnabled["Featured-dangos"] = false;
+        }
       }
 
       if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;
