@@ -1,7 +1,7 @@
 export default async function({ addon, console, msg }) {
     const posts = document.querySelectorAll(".blockpost");
 
-    if (window.location.href.split("?")[1] == "page=1" || window.location.href.split("?").length == 1) {
+    if ((new URLSearchParams(location.search).get("page")) || 1 == 1) {
         const html = document.querySelectorAll(".blockpost");
         var op = html[0].querySelector(".username").innerText;
     } else {
