@@ -1,35 +1,11 @@
-const featuredDangoProjects = [
-  {
-    projectId: 683954771,
-    projectTitle: "Dango Clicker",
-  },
-  {
-    projectId: 297794351,
-    projectTitle: "❤️How to make Japanese Dango❤️",
-  },
-  {
-    projectId: 538669082,
-    projectTitle: "dango: the game",
-  },
-  {
-    projectId: 754385820,
-    projectTitle: "dango clicker",
-  },
-  {
-    projectId: 619174229,
-    projectTitle: "Kawaii Dango Creator!",
-  },
-];
-
-// Our April Fools changes have historically lasted 48 hours
-const MARCH_31_TIMESTAMP = 1680264000; // Fri, 31 Mar 2023 12:00:00 GMT
-const APRIL_2_TIMESTAMP = 1680436800; // Sun, 2 Apr 2023 12:00:00 GMT
-// Go to scratch.mit.edu/#dangos to bypass date check
-
 export default async function ({ addon, console, msg }) {
-  const now = new Date().getTime() / 1000;
-  const runDangos = location.hash === "#dangos" || (now < APRIL_2_TIMESTAMP && now > MARCH_31_TIMESTAMP);
-  if (!runDangos) return;
+  // Fetch projects from a studio
+  const fetchStudio = async (studio) => {
+    const response = await fetch(`https://api.scratch.mit.edu/studios/${studio}/projects/`);
+    return response.json();
+  };
+
+  const projects = await fetchStudio("33036797");
 
   // Wait until Featured Projects row loads
   const firstThumbnail = await addon.tab.waitForElement(".carousel .thumbnail");
@@ -47,23 +23,23 @@ export default async function ({ addon, console, msg }) {
   // Change row title
   featuredDangosRow.querySelector(".box-header > h4").textContent = msg("row-title");
 
-  // Take advantage of existing empty <p> to add our own message
-  featuredDangosRow.querySelector(".box-header > p").classList.add("sa-featured-dangos-message");
-  featuredDangosRow.querySelector(".box-header > p").textContent = msg("note");
-
   featuredDangosRow.querySelectorAll(".thumbnail").forEach((project, i) => {
     // For each project
-    const { projectId, projectTitle } = featuredDangoProjects[i];
+    const { id, title, username } = projects[i];
 
     // Link to correct project
-    project.querySelectorAll("a").forEach((link) => (link.href = `/projects/${projectId}/`));
+    project.querySelectorAll("a").forEach((link) => (link.href = `/projects/${id}/`));
 
     // Use correct project thumbnail
-    project.querySelector("img").src = `//uploads.scratch.mit.edu/projects/thumbnails/${projectId}.png`;
+    project.querySelector("img").src = `//uploads.scratch.mit.edu/projects/thumbnails/${id}.png`;
 
     // Use correct project title
-    project.querySelector("a[title]").textContent = projectTitle;
-    project.querySelector("a[title]").title = projectTitle;
+    project.querySelector("a[title]").textContent = title;
+    project.querySelector("a[title]").title = title;
+
+    // Use correct project author
+    project.querySelector(".thumbnail-creator").firstElementChild.innerText = username;
+    project.querySelector(".thumbnail-creator").firstElementChild.href = `/users/${username}/`
   });
 
   // Add our own row after the Featured Projects row

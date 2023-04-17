@@ -3,12 +3,6 @@
   display: none !important;
 }
 
-/* Hide project author in our row */
-/* Only will have effect if real featured projects happened to load before we cloned */
-.sa-featured-dangos-row .thumbnail-creator {
-  display: none;
-}
-
 .sa-featured-dangos-message {
   font-size: 0.6rem !important;
 }

@@ -1,6 +1,6 @@
 {
-  "name": "Featured Dangos (April Fools 2023)",
-  "description": "Adds some dango-related projects to the front page.",
+  "name": "Featured dangos",
+  "description": "An Apil Fools joke from 2023 that adds a row to the front page for dango-related projects.",
   "userscripts": [
     {
       "url": "userscript.js",
@@ -13,7 +13,6 @@
       "matches": ["https://scratch.mit.edu/"]
     }
   ],
-  "tags": ["community", "easterEgg", "featured"],
-  "versionAdded": "1.31.1",
-  "enabledByDefault": true
+  "tags": ["community", "easterEgg"],
+  "versionAdded": "1.31.1"
 }
