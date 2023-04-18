@@ -151,7 +151,7 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 [class*="library-item_library-item_"],
 .s3devDDOut.vis, /* devtools style */
 .sa-find-dropdown-out.visible, /* find-bar style */
-.sa-float-bar-dropdown-out, /* middle-click-popup style */
+.sa-mcp-container, /* middle-click-popup style */
 [class*="prompt_body_"],
 [class*="custom-procedures_body_"],
 [class*="slider-prompt_body_"],
@@ -303,6 +303,9 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 }
 .blocklyMainWorkspaceScrollbar .blocklyScrollbarHandle {
   fill: var(--editorDarkMode-workspace-scrollbar);
+}
+.blocklyInsertionMarker > .blocklyPath {
+  fill: var(--editorDarkMode-workspace-insertionMarker);
 }
 
 /* Block category menu background */

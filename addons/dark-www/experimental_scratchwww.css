@@ -131,7 +131,7 @@ body {
 .tab-background,
 .outer .tab-background,
 .tabs,
-.tabs li:hover,
+.tabs button:hover,
 .os-chooser,
 .studio-tab-nav li,
 .user-projects-modal .user-projects-modal-nav button,
@@ -216,11 +216,12 @@ body:not(.sa-body-editor) .button.white,
 .thumbnail .thumbnail-favorites,
 .thumbnail .thumbnail-remixes,
 .thumbnail .thumbnail-views,
-.tabs li,
-.tabs li:hover,
-.tabs li.active:hover,
+.tabs button,
+.tabs button:hover,
+.tabs button.active:hover,
 .grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
 .unsupported-browser .faq-link-text,
+a.social-messages-profile-link:visited,
 a.social-messages-profile-link:link,
 .studio-selector-button-text-unselected,
 .studio-project-tile .studio-project-username,
@@ -248,7 +249,7 @@ body:not(.sa-body-editor) .join-flow-privacy-message,
 .thumbnail .thumbnail-remixes::before,
 .thumbnail .thumbnail-views::before,
 .ttt-item img,
-.tabs li:not(.active) .tab-icon,
+.tabs button:not(.active) .tab-icon,
 body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .overflow-menu-container .overflow-menu-trigger img {
   filter: var(--darkWww-box-filter);
@@ -263,8 +264,15 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .os-chooser .button {
   background-color: var(--darkWww-box-tab);
 }
-.tabs li:hover {
+.sub-nav button:active {
+  background-color: var(--darkWww-box-tabHover);
+}
+.tabs button:hover {
   border-color: var(--darkWww-box-tabHover);
+}
+.tabs button.active,
+.tabs button.active:hover {
+  border-color: var(--darkWww-box-tabSelected);
 }
 .social-message-icon {
   opacity: var(--darkWww-box-messageIconOpacity);
@@ -316,9 +324,12 @@ body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
 }
 .outer .categories li {
   background-color: var(--darkWww-gray-tab);
+  border-color: var(--darkWww-gray-darkText);
+  color: var(--darkWww-gray-text);
 }
 .outer .categories li:hover {
   background-color: var(--darkWww-gray-tabHover);
+  color: var(--darkWww-gray-darkText);
 }
 .toggle-switch .slider {
   background-color: var(--darkWww-gray-darker);
