@@ -1,13 +1,5 @@
-const queries = (() => {
-  const query = window.location.search.slice(1);
-  const queries = {};
-  if (!query) return {};
-  for (let text of query.split("&")) {
-    text = text.split("=");
-    queries[text[0]] = text[1];
-  }
-  return queries;
-})();
+const queries = new URLSearchParams(window.location.search);
+
 function loadDom() {
   return new Promise((resolve) => {
     window.addEventListener("load", (e) => {
@@ -19,14 +11,14 @@ function loadDom() {
 const msgs = JSON.parse(decodeURI(location.hash.slice(1)));
 
 let pageNum = 1;
-const maxLines = parseInt(queries.maxlines);
+const maxLines = parseInt(queries.get("maxlines"));
 let acceptEdit = false;
 (async function () {
   loadDom();
   document.getElementById("h-title").textContent = "Loding...";
   let jsonData;
   try {
-    jsonData = await (await fetch(`https://projects.scratch.mit.edu/${queries.id}?token=${queries.token}`)).json();
+    jsonData = await (await fetch(`https://projects.scratch.mit.edu/${queries.get("id")}?token=${queries.get("token")}`)).json();
   } catch (e) {
     alert(msgs.please_reopen);
     window.close();
