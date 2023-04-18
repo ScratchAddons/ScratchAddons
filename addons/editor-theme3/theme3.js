@@ -338,7 +338,8 @@ export default async function ({ addon, console }) {
   Blockly.FieldVerticalSeparator.prototype.init = function () {
     // Vertical line between extension icon and block label
     oldFieldVerticalSeparatorInit.call(this);
-    if (textMode() === "black") this.lineElement_.setAttribute("stroke", this.sourceBlock_.getColourTertiary());
+    if (isColoredTextMode() || textMode() === "black")
+      this.lineElement_.setAttribute("stroke", this.sourceBlock_.getColourTertiary());
   };
 
   const updateColors = () => {
