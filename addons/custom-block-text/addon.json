@@ -41,16 +41,25 @@
       "default": false
     },
     {
+      "name": "Shadow under text",
+      "id": "shadow",
+      "type": "boolean",
+      "default": false
+    },
+    {
       "name": "Large text",
       "id": "large",
       "type": "boolean",
       "default": false
     },
     {
-      "name": "Shadow under text",
-      "id": "shadow",
-      "type": "boolean",
-      "default": false
+      "name": "Text size",
+      "id": "size",
+      "type": "integer",
+      "min": 1,
+      "max": 5,
+      "default": 3,
+      "if": { "settings": { "large": true }}
     }
   ],
   "dynamicEnable": true,
