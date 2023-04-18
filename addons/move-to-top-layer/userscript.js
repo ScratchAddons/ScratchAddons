@@ -3,23 +3,21 @@
 export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
 
-  // look for sprite list
-  let spriteList = document.getElementsByClassName("sprite-selector_items-wrapper_4bcOj box_box_2jjDp");
-  // add event triggered by mouse click on sprite list
-  spriteList[0].addEventListener(
-    "click",
-    // when the sprite list is clicked
-    function (e) {
-      // if shift is pressed
+  while (true) {
+    const spriteList = await addon.tab.waitForElement("div[class^='sprite-selector_items-wrapper']", {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+    });
+
+    spriteList.addEventListener("click", (e) => {
       if (e.shiftKey) {
         // get the sprite thumbnail closest to the click
-        let parentDiv = event.target.closest(".sprite-selector_sprite-wrapper_1C5Mq");
-        // get the name of the sprite
-        let name = parentDiv.querySelector(".sprite-selector-item_sprite-name_1PXjh").innerText;
+        const parentDiv = e.target.closest("div[class^='sprite-selector_sprite-wrapper']");
+        const spriteName = parentDiv.querySelector("div[class^='sprite-selector-item_sprite-name']").innerText;
         // move the sprite with that name to front
-        vm.runtime.getSpriteTargetByName(name).goToFront();
+        vm.runtime.getSpriteTargetByName(spriteName).goToFront();
       }
-    },
-    false
-  );
+    });
+  }
 }
