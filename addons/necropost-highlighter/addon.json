@@ -17,7 +17,7 @@
   "dynamicDisable": true,
   "dynamicEnable": true,
   "tags": ["community", "forums"],
-  "versionAdded": "1.31.0",
+  "versionAdded": "1.32.0",
   "userscripts": [
     {
       "url": "userscript.js",
