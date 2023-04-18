@@ -1,6 +1,6 @@
 {
   "project-source-button/hover": "Open project's sources viewer.",
-  "project-source-button/edit_warn": "Sometimes it crashes when trying to edit big projects. Do you want to edit?",
+  "project-source-button/edit_warn": "The page may crash when editing large projects. Are you sure you want to edit it?",
   "project-source-button/please_reopen": "Your access token has expired. please open it again.",
   "project-source-button/json_fetch_err": "Failed to fetch JSON. A reload might fix it. Do you want to reload?",
   "project-source-button/open": "Open project sources"
