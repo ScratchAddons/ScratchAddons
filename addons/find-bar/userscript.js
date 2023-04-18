@@ -191,10 +191,10 @@ export default async function ({ addon, msg, console }) {
         this.selectedTab === 0
           ? this.getScratchBlocks()
           : this.selectedTab === 1
-          ? this.getScratchCostumes()
-          : this.selectedTab === 2
-          ? this.getScratchSounds()
-          : [];
+            ? this.getScratchCostumes()
+            : this.selectedTab === 2
+              ? this.getScratchSounds()
+              : [];
 
       this.dropdown.empty();
 
@@ -285,7 +285,7 @@ export default async function ({ addon, msg, console }) {
         if (root.type === "event_whenbroadcastreceived") {
           const fieldRow = root.inputList[0].fieldRow;
           let eventName = fieldRow.find((input) => input.name === "BROADCAST_OPTION").getText();
-          addBlock("receive", msg("event") + " " + eventName, root).eventName = eventName;
+          addBlock("receive", msg("event", { name: eventName }), root).eventName = eventName;
 
           continue;
         }
