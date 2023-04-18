@@ -11,7 +11,7 @@ export default async function ({ addon, console }) {
     });
 
     spriteList.addEventListener("click", (e) => {
-      if (e.shiftKey) {
+      if (e.shiftKey && !addon.self.disabled) {
         // get the sprite thumbnail closest to the click
         const parentDiv = e.target.closest("div[class^='sprite-selector_sprite-wrapper']");
         const spriteName = parentDiv.querySelector("div[class^='sprite-selector-item_sprite-name']").innerText;
