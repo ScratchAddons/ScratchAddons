@@ -18,7 +18,9 @@ let acceptEdit = false;
   document.getElementById("h-title").textContent = "Loding...";
   let jsonData;
   try {
-    jsonData = await (await fetch(`https://projects.scratch.mit.edu/${queries.get("id")}?token=${queries.get("token")}`)).json();
+    jsonData = await (
+      await fetch(`https://projects.scratch.mit.edu/${queries.get("id")}?token=${queries.get("token")}`)
+    ).json();
   } catch (e) {
     alert(msgs.please_reopen);
     window.close();
