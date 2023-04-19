@@ -4,6 +4,7 @@
   padding-right: 0.25rem;
   display: flex;
   align-items: center;
+  transition: margin 0.25s ease;
 }
 
 .sa-vol-slider-icon {

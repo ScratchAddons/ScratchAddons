@@ -3,3 +3,17 @@
   width: 0;
   margin-left: -3px;
 }
+
+.sa-vol-slider:hover {
+  margin-right: -56px;
+  z-index: 1;
+}
+
+.pos-container-container, .clone-container-container {
+  transition: opacity 0.25s ease;
+}
+
+.sa-vol-slider:hover ~ .pos-container-container,
+.sa-vol-slider:hover ~ .clone-container-container {
+  opacity: 0;
+}
