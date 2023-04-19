@@ -33,16 +33,15 @@
         margin: 0 auto;
         text-align: center;
       }
-      #next,
-      #back,
-      #all-view,
-      #edit-mode,
-      #save-sb3 {
+      .btn {
         background-color: #4d97ff;
         color: #fff;
         border: none;
         border-radius: 3px;
         font-size: 1.2em;
+      }
+      .edit-mode-label{
+        font-size: 1em;
       }
     </style>
     <script src="../../libraries/common/cs/jszip.min.js"></script>
@@ -58,17 +57,20 @@
           <pre class="line-numbers"><code class="language-json"></code></pre>
         </div>
         <div id="ctrl">
-          <button id="back">←</button>
+          <button id="back" class="btn">←</button>
           <span>
             <span id="page">1</span>
             <span>/</span>
             <span id="max-page">1</span>
           </span>
-          <button id="next">→</button>
+          <button id="next" class="btn">→</button>
           <br />
-          <button id="all-view">All view</button>
-          <button id="edit-mode">Edit/View</button>
-          <button id="save-sb3">Save sb3 file</button>
+          <button id="all-view" class="btn">All view</button>
+          <button id="save-sb3" class="btn">Save sb3 file</button>
+          <span>
+            <input id="edit-mode" type="checkbox">
+            <label for="edit-mode" class="edit-mode-label">Edit</label>
+          </span>
         </div>
       </div>
       <div id="assets"></div>

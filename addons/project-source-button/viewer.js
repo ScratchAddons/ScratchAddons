@@ -71,7 +71,7 @@ let acceptEdit = false;
     pre.appendChild(jsonElem);
     allView.document.body.appendChild(pre);
   });
-  document.getElementById("edit-mode").addEventListener("click", (e) => {
+  document.getElementById("edit-mode").addEventListener("change", (e) => {
     if (!acceptEdit) {
       if (window.confirm(msgs.edit_warn)) {
         acceptEdit = true;
@@ -81,9 +81,11 @@ let acceptEdit = false;
     }
     updatePageInfo();
     updatePage();
-    if (document.getElementById("json-editor").hidden) {
+    if (e.target.checked) {
+      // edit mode
       document.getElementById("json-editor").hidden = false;
     } else {
+      // view mode
       document.getElementById("json-editor").hidden = true;
       if (document.getElementById("json-editor").value === "") {
         document.getElementById("json-editor").value = baseJsonText;
