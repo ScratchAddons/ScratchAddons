@@ -84,9 +84,11 @@ let acceptEdit = false;
     if (e.target.checked) {
       // edit mode
       document.getElementById("json-editor").hidden = false;
+      document.getElementById("page-ctrl").hidden = true;
     } else {
       // view mode
       document.getElementById("json-editor").hidden = true;
+      document.getElementById("page-ctrl").hidden = false;
       if (document.getElementById("json-editor").value === "") {
         document.getElementById("json-editor").value = baseJsonText;
       }
