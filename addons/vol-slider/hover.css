@@ -9,7 +9,8 @@
   z-index: 1;
 }
 
-.pos-container-container, .clone-container-container {
+.pos-container-container,
+.clone-container-container {
   transition: opacity 0.25s ease;
 }
 
