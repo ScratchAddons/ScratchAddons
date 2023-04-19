@@ -1063,7 +1063,7 @@
         "primary": "#4d97ff",
         "highlightText": "#4d97ff",
         "menuBar": "#4d97ff",
-        "popup": "#333a",
+        "popup": "#000a",
         "activeTab": "#282828",
         "tab": "#202020",
         "selector": "#252c37",
