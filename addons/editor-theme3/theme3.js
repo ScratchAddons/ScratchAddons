@@ -1,5 +1,6 @@
-import { removeAlpha, multiply, alphaBlend, recolorFilter } from "../../libraries/common/cs/text-color.esm.js";
+import { removeAlpha, multiply, brighten, alphaBlend } from "../../libraries/common/cs/text-color.esm.js";
 
+const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$");
 const extensionsCategory = {
   id: null,
   settingId: "Pen-color",
@@ -64,6 +65,13 @@ const categories = [
   saCategory,
 ];
 
+// From scratch-blocks/media/dropdown-arrow.svg
+const arrowPath =
+  "M6.36,7.79a1.43,1.43,0,0,1-1-.42L1.42,3.45a1.44,1.44,0,0,1,0-2c0.56-.56,9.31-0.56,9.87,0a1.44,1.44,0,0,1,0,2L7.37,7.37A1.43,1.43,0,0,1,6.36,7.79Z";
+const arrowShadowPath =
+  "M12.71,2.44A2.41,2.41,0,0,1,12,4.16L8.08,8.08a2.45,2.45,0,0,1-3.45,0L0.72,4.16A2.42,2.42,0,0,1,0,2.44,2.48,2.48,0,0,1,.71.71C1,0.47,1.43,0,6.36,0S11.75,0.46,12,.71A2.44,2.44,0,0,1,12.71,2.44Z";
+const arrowShadowColor = "#231f20";
+
 export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
@@ -74,47 +82,52 @@ export default async function ({ addon, console }) {
     tertiary: "#3aa8a4",
   };
 
-  let textMode = addon.settings.get("text");
-  const isColoredTextMode = () => !addon.self.disabled && (textMode === "colorOnWhite" || textMode === "colorOnBlack");
+  let textModeSetting = addon.settings.get("text");
+  const textMode = () => (addon.self.disabled ? "white" : textModeSetting);
+  const isColoredTextMode = () => textMode() === "colorOnWhite" || textMode() === "colorOnBlack";
 
   const primaryColor = (category) => {
     if (addon.self.disabled) return originalColors[category.colorId].primary;
     // Colored on white: can't use #ffffff because of editor-dark-mode dropdown div handling
-    if (textMode === "colorOnWhite") return "#feffff";
-    if (textMode === "colorOnBlack") return "#282828";
+    if (textMode() === "colorOnWhite") return "#feffff";
+    if (textMode() === "colorOnBlack") return "#282828";
     return addon.settings.get(category.settingId);
   };
   const secondaryColor = (category) => {
     if (addon.self.disabled) return originalColors[category.colorId].secondary;
     if (isColoredTextMode())
       return alphaBlend(primaryColor(category), multiply(addon.settings.get(category.settingId), { a: 0.15 }));
+    if (textMode() === "black") return brighten(addon.settings.get(category.settingId), { r: 0.6, g: 0.6, b: 0.6 });
     return multiply(addon.settings.get(category.settingId), { r: 0.9, g: 0.9, b: 0.9 });
   };
   const tertiaryColor = (category) => {
     if (addon.self.disabled) return originalColors[category.colorId].tertiary;
     if (isColoredTextMode()) return addon.settings.get(category.settingId);
+    if (textMode() === "black") return multiply(addon.settings.get(category.settingId), { r: 0.65, g: 0.65, b: 0.65 });
     return multiply(addon.settings.get(category.settingId), { r: 0.8, g: 0.8, b: 0.8 });
   };
   const fieldBackground = (category) => {
-    // Background color for open dropdowns and Boolean inputs
+    // Background color for open dropdowns and (in some textModes) Boolean inputs
     // The argument can be a block, field, or category
     if (category instanceof Blockly.Block || category instanceof Blockly.Field) {
       const block = category instanceof Blockly.Block ? category : category.sourceBlock_;
-      if (isColoredTextMode()) {
+      if (isColoredTextMode() || textMode() === "black") {
         let primary;
         if (block.isShadow() && block.getParent()) primary = block.getParent().getColour();
         else primary = block.getColour();
-        return alphaBlend(primary, multiply(block.getColourTertiary(), { a: 0.25 }));
+        if (isColoredTextMode()) return alphaBlend(primary, multiply(block.getColourTertiary(), { a: 0.25 }));
+        else return brighten(primary, { r: 0.4, g: 0.4, b: 0.4 });
       }
       return block.getColourTertiary();
     }
     if (isColoredTextMode())
       return alphaBlend(primaryColor(category), multiply(addon.settings.get(category.settingId), { a: 0.25 }));
+    if (textMode() === "black") return brighten(primaryColor(category), { r: 0.4, g: 0.4, b: 0.4 });
     return tertiaryColor(category);
   };
   const textColor = (field) => {
-    if (addon.self.disabled || textMode === "white") return "#ffffff";
-    if (textMode === "black") return "#575e75";
+    if (addon.self.disabled || textMode() === "white") return "#ffffff";
+    if (textMode() === "black") return "#000000";
     if (field) return field.sourceBlock_.getColourTertiary();
     return "#000000";
   };
@@ -142,6 +155,21 @@ export default async function ({ addon, console }) {
   const oldCategoryCreateDom = Blockly.Toolbox.Category.prototype.createDom;
   Blockly.Toolbox.Category.prototype.createDom = function () {
     // Category bubbles
+    if (this.iconURI_) {
+      if (addon.self.disabled) return oldCategoryCreateDom.call(this);
+      if (!["sa-blocks", "videoSensing", "text2speech"].includes(this.id_)) return oldCategoryCreateDom.call(this);
+
+      const match = dataUriRegex.exec(this.iconURI_);
+      if (match) {
+        const oldSvg = atob(match[1]);
+        const category = this.id_ === "sa-blocks" ? saCategory : extensionsCategory;
+        const newColor = isColoredTextMode ? tertiaryColor(category) : primaryColor(category);
+        if (newColor) {
+          const newSvg = oldSvg.replace(/#29beb8|#0ebd8c/gi, newColor);
+          this.iconURI_ = `data:image/svg+xml;base64,${btoa(newSvg)}`;
+        }
+      }
+    }
     oldCategoryCreateDom.call(this);
     if (this.iconURI_) return;
     const category = categories.find((item) => item.id === this.id_);
@@ -165,9 +193,11 @@ export default async function ({ addon, console }) {
   Blockly.BlockSvg.prototype.updateColour = function () {
     oldBlockUpdateColour.call(this);
     // Boolean inputs
-    for (const input of this.inputList) {
-      if (input.outlinePath) {
-        input.outlinePath.setAttribute("fill", fieldBackground(this));
+    if (isColoredTextMode()) {
+      for (const input of this.inputList) {
+        if (input.outlinePath) {
+          input.outlinePath.setAttribute("fill", fieldBackground(this));
+        }
       }
     }
   };
@@ -194,12 +224,56 @@ export default async function ({ addon, console }) {
     this.box_.setAttribute("fill", fieldBackground(this));
   };
 
+  const oldFieldImageSetValue = Blockly.FieldImage.prototype.setValue;
+  Blockly.FieldImage.prototype.setValue = function (src) {
+    // Icons
+    if (textMode() === "black" || textMode() === "colorOnWhite") {
+      if (src.startsWith("data:") && this.sourceBlock_) {
+        // Extension icon
+        const iconsToReplace = ["music", "pen", "text2speech", "translate", "videoSensing"];
+        const extensionId = this.sourceBlock_.type.split("_")[0];
+        if (iconsToReplace.includes(extensionId)) {
+          src = `${addon.self.dir}/icons/black_text/extensions/${extensionId}.svg`;
+        }
+      } else {
+        const iconsToReplace = ["repeat.svg", "rotate-left.svg", "rotate-right.svg"];
+        const iconName = src.split("/").at(-1);
+        if (iconsToReplace.includes(iconName)) {
+          src = `${addon.self.dir}/icons/black_text/${iconName}`;
+        }
+      }
+    }
+    return oldFieldImageSetValue.call(this, src);
+  };
+
   const oldFieldDropdownInit = Blockly.FieldDropdown.prototype.init;
   Blockly.FieldDropdown.prototype.init = function () {
     // Dropdowns
     oldFieldDropdownInit.call(this);
     this.textElement_.style.setProperty("fill", textColor(this), "important");
-    if (textColor(this) !== "#ffffff") this.arrow_.style.filter = recolorFilter(textColor(this));
+    if (textColor(this) !== "#ffffff") {
+      // Replace arrow image with path elements to change the fill color
+      this.arrow_.remove();
+      this.arrow_ = Blockly.utils.createSvgElement("g");
+      this.arrow_.appendChild(
+        Blockly.utils.createSvgElement("path", {
+          d: arrowShadowPath,
+          fill: arrowShadowColor,
+          "fill-opacity": 0.1,
+        })
+      );
+      this.arrow_.appendChild(
+        Blockly.utils.createSvgElement("path", {
+          d: arrowPath,
+          fill: textColor(this),
+        })
+      );
+      // Redraw arrow
+      this.arrowY_ = 12;
+      const text = this.text_;
+      this.text_ = null;
+      this.setText(text);
+    }
   };
 
   const oldFieldDropdownShowEditor = Blockly.FieldDropdown.prototype.showEditor_;
@@ -260,10 +334,18 @@ export default async function ({ addon, console }) {
     return oldFieldMatrixCreateButton.call(this, fill);
   };
 
+  const oldFieldVerticalSeparatorInit = Blockly.FieldVerticalSeparator.prototype.init;
+  Blockly.FieldVerticalSeparator.prototype.init = function () {
+    // Vertical line between extension icon and block label
+    oldFieldVerticalSeparatorInit.call(this);
+    if (isColoredTextMode() || textMode() === "black")
+      this.lineElement_.setAttribute("stroke", this.sourceBlock_.getColourTertiary());
+  };
+
   const updateColors = () => {
     const vm = addon.tab.traps.vm;
 
-    textMode = addon.settings.get("text");
+    textModeSetting = addon.settings.get("text");
 
     for (const category of categories) {
       // CSS variables are used for compatibility with other addons

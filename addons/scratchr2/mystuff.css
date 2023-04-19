@@ -184,11 +184,14 @@
   text-align: right;
 }
 .media-item-content .media-action {
-  top: 28px;
+  top: 50%;
   right: 12px;
+  transform: translateY(-50%);
   width: auto;
 }
-.media-item-content .media-trash {
+.media-item-content .media-trash,
+.sa-share-button {
+  float: right;
   top: 0;
   left: 0;
 }

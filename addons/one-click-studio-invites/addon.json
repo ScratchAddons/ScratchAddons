@@ -20,5 +20,7 @@
     }
   ],
   "tags": ["community", "studios"],
-  "versionAdded": "1.27.0"
+  "versionAdded": "1.27.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true
 }
