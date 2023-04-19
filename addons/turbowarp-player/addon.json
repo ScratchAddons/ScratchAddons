@@ -14,7 +14,7 @@
     },
     {
       "type": "info",
-      "text": "If the \"Replace player\" mode is selected, you can Ctrl+Click the button to open the project in a new TurboWarp tab.",
+      "text": "If the \"Replace player\" mode is selected, you can Ctrl+Click (Cmd+Click on macOS) the button to open the project in a new TurboWarp tab.",
       "id": "ctrlToOpen"
     }
   ],
