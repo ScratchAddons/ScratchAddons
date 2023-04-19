@@ -873,7 +873,7 @@
       "name": "Popup backdrop color",
       "id": "popup",
       "type": "color",
-      "default": "#333a",
+      "default": "#000a",
       "allowTransparency": true
     },
     {
