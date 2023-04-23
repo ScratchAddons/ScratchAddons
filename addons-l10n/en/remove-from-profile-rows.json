@@ -4,5 +4,6 @@
   "remove-from-profile-rows/failed-unfavoriting": "Failed unfavoriting project. This could be because the project doesn't exist anymore.",
   "remove-from-profile-rows/failed-unfollowing-studio": "Failed unfollowing studio. This could be because the studio doesn't exist anymore.",
   "remove-from-profile-rows/failed-leaving": "Failed leaving studio. This could be because the studio doesn't exist anymore, or you own the studio.",
-  "remove-from-profile-rows/failed-unfollowing-user": "Failed unfollowing user. This could be because the user doesn't exist anymore."
+  "remove-from-profile-rows/failed-unfollowing-user": "Failed unfollowing user. This could be because the user doesn't exist anymore.",
+  "remove-from-profile-rows/confirm": "Are you sure you want to remove this item from this row?"
 }

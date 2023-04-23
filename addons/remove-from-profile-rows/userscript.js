@@ -22,6 +22,9 @@ export default async function ({ addon, console, msg }) {
     button.dataset.object = el.querySelector("a").href.match(lastPathFromURL)[1];
     button.addEventListener("click", (e) => {
       e.preventDefault();
+      if (!addon.settings.get("show_confirmation") || !confirm(msg("confirm"))) {
+        return;
+      }
       const { action, object } = e.target.dataset;
       const item = e.target.parentElement;
       if (action === "projects") {

@@ -30,6 +30,12 @@
       "default": true
     },
     {
+      "name": "Always show confirmation message before removing item",
+      "id": "show_confirmation",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "Show button in \"Shared Projects\"",
       "id": "show_on_projects",
       "type": "boolean",
