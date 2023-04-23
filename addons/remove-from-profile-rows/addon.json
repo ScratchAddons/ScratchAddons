@@ -92,5 +92,7 @@
         }
       }
     }
-  ]
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
 }

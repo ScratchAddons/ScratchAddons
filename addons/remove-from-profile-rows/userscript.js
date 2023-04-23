@@ -91,13 +91,22 @@ export default async function ({ addon, console, msg }) {
       ].forEach((el) => createButton(el, action));
     }
   };
-
-  if (location.pathname === `/users/${username}/`) {
-    removableRows.forEach(addButtons);
-  } else {
-    const action = location.pathname.match(lastPathFromURL)[1];
-    if (removableRows.includes(action)) {
-      [...document.querySelectorAll(".item")].forEach((el) => createButton(el, action));
+  const enable = () => {
+    if (location.pathname === `/users/${username}/`) {
+      removableRows.forEach(addButtons);
+    } else {
+      const action = location.pathname.match(lastPathFromURL)[1];
+      if (removableRows.includes(action)) {
+        [...document.querySelectorAll(".item")].forEach((el) => createButton(el, action));
+      }
     }
   }
+
+  addon.self.addEventListener("reenabled", enable);
+
+  addon.self.addEventListener("disabled", () => {
+    [...document.querySelectorAll(".sa-remove-button")].forEach((el) => el.remove());
+  });
+
+  enable();
 }
