@@ -1,0 +1,90 @@
+{
+  "name": "Button for removing items from profile rows",
+  "description": "On rows like \"Favorite Projects\" on your profile, add the option to remove projects/users from the list. For example, this will unfavorite a project when used on the \"Favorite Projects\" row.",
+  "tags": ["community", "profiles"],
+  "enabledByDefault": false,
+  "versionAdded": "1.32.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["profiles", "https://scratch.mit.edu/users/*/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["profiles", "https://scratch.mit.edu/users/*/*"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Only show on the dedicated pages",
+      "id": "dedicated_pages",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Only show the button on hover",
+      "id": "only_on_hover",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show button in \"Shared Projects\"",
+      "id": "show_on_projects",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show button in \"Favorite Projects\"",
+      "id": "show_on_favorites",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show button on \"Studios I'm Following\"",
+      "id": "show_on_studios_following",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show button on \"Studios I Curate\"",
+      "id": "show_on_studios",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show button on \"Following\"",
+      "id": "show_on_following",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld"
+    }
+  ],
+  "info": [
+    {
+      "type": "notice",
+      "text": "It might take a short while for removed items to actually be removed from the rows themselves, as Scratch caches the rows.",
+      "id": "row-caching"
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "unhoveredOpacity",
+      "value": {
+        "type": "ternary",
+        "true": "0",
+        "false": ".9",
+        "source": {
+          "type": "settingValue",
+          "settingId": "only_on_hover"
+        }
+      }
+    }
+  ]
+}
