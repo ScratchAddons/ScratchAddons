@@ -48,19 +48,19 @@
       "default": true
     },
     {
-      "name": "Show button on \"Studios I'm Following\"",
+      "name": "Show button in \"Studios I'm Following\"",
       "id": "show_on_studios_following",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "Show button on \"Studios I Curate\"",
+      "name": "Show button in \"Studios I Curate\"",
       "id": "show_on_studios",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "Show button on \"Following\"",
+      "name": "Show button in \"Following\"",
       "id": "show_on_following",
       "type": "boolean",
       "default": true
