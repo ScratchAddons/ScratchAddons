@@ -30,10 +30,19 @@
       "default": true
     },
     {
-      "name": "Always show confirmation message before removing item",
+      "name": "Show confirmation message before removing item",
       "id": "show_confirmation",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "Only show confirmation on destructive actions (Unsharing, leaving studios)",
+      "id": "only_destructive",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": {"show_confirmation": true}
+      }
     },
     {
       "name": "Show button in \"Shared Projects\"",

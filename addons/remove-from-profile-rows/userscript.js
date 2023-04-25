@@ -9,9 +9,7 @@ export default async function ({ addon, console, msg }) {
 
   const username = await addon.auth.fetchUsername();
   const xToken = await addon.auth.fetchXToken();
-  const removableRows = ["projects", "favorites", "studios_following", "studios", "following"].filter((row) =>
-    addon.settings.get(`show_on_${row}`)
-  );
+  const destructiveActions = ["projects", "studios"];
 
   const createButton = (el, action) => {
     const button = document.createElement("button");
@@ -22,10 +20,15 @@ export default async function ({ addon, console, msg }) {
     button.dataset.object = el.querySelector("a").href.match(lastPathFromURL)[1];
     button.addEventListener("click", (e) => {
       e.preventDefault();
-      if (!addon.settings.get("show_confirmation") || !confirm(msg("confirm"))) {
+      const onlyDestructive = addon.settings.get("only_destructive");
+      const { action, object } = e.target.dataset;
+      if (
+        addon.settings.get("show_confirmation") &&
+        ((onlyDestructive && destructiveActions.includes(action)) || !onlyDestructive) &&
+        !confirm(msg("confirm"))
+      ) {
         return;
       }
-      const { action, object } = e.target.dataset;
       const item = e.target.parentElement;
       if (action === "projects") {
         request(`/site-api/projects/all/${object}/`, "PUT", msg("failed-unsharing"));
@@ -92,6 +95,9 @@ export default async function ({ addon, console, msg }) {
     }
   };
   const enable = () => {
+    const removableRows = ["projects", "favorites", "studios_following", "studios", "following"].filter((row) =>
+      addon.settings.get(`show_on_${row}`)
+    );
     if (location.pathname === `/users/${username}/`) {
       removableRows.forEach(addButtons);
     } else {
@@ -100,12 +106,16 @@ export default async function ({ addon, console, msg }) {
         [...document.querySelectorAll(".item")].forEach((el) => createButton(el, action));
       }
     }
-  }
+  };
+  const disable = () => {
+    [...document.querySelectorAll(".sa-remove-button")].forEach((el) => el.remove());
+  };
 
   addon.self.addEventListener("reenabled", enable);
-
-  addon.self.addEventListener("disabled", () => {
-    [...document.querySelectorAll(".sa-remove-button")].forEach((el) => el.remove());
+  addon.self.addEventListener("disabled", () => disable);
+  addon.settings.addEventListener("change", () => {
+    disable();
+    enable();
   });
 
   enable();
