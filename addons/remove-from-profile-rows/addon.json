@@ -24,7 +24,7 @@
       "default": false
     },
     {
-      "name": "Only show the button on hover",
+      "name": "Only show remove button while hovering over items",
       "id": "only_on_hover",
       "type": "boolean",
       "default": true
