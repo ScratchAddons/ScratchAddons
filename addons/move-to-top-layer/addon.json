@@ -1,6 +1,6 @@
 {
   "name":"Move sprite to front layer",
-  "description":"This addon allows you to move a selected sprite to the top layer",
+  "description": "Shift+Click a sprite within the sprite pane to move it to the front (top layer) of the stage.",
   "info": [
     {
       "type": "notice",
