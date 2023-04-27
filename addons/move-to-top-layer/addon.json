@@ -19,6 +19,6 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "tags": ["editor", "codeEditor", "beta"],
+  "tags": ["editor", "featured"],
   "versionAdded": "1.32.0"
 }
