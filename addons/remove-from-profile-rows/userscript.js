@@ -10,62 +10,54 @@ export default async function ({ addon, console, msg }) {
   const username = await addon.auth.fetchUsername();
   const xToken = await addon.auth.fetchXToken();
   const destructiveActions = ["projects", "studios"];
+  const requests = {
+    projects: {
+      req: (object) => `/site-api/projects/all/${object}/`,
+      method: "PUT",
+    },
+    favorites: {
+      req: (object) => `https://api.scratch.mit.edu/proxy/projects/${object}/favorites/user/${username}`,
+      method: "DELETE",
+    },
+    studios_following: {
+      req: (object) => `/site-api/users/bookmarkers/${object}/remove/?usernames=${username}`,
+      method: "PUT",
+    },
+    studios: {
+      req: (object) => `/site-api/users/curators-in/${object}/remove/?usernames=${username}`,
+      method: "PUT",
+    },
+    following: {
+      req: (object) => `/site-api/users/followers/${object}/remove/?usernames=${username}`,
+      method: "PUT",
+    },
+  };
 
   const createButton = (el, action) => {
     const button = document.createElement("button");
-    button.title = msg("row-remove");
+    button.title = msg("title-text");
     button.textContent = "X";
     button.classList.add("sa-remove-button");
     button.dataset.action = action;
     button.dataset.object = el.querySelector("a").href.match(lastPathFromURL)[1];
+    button.dataset.name = el.querySelector(".title").textContent.trim();
     button.addEventListener("click", (e) => {
       e.preventDefault();
       const onlyDestructive = addon.settings.get("only_destructive");
-      const { action, object } = e.target.dataset;
+      const { action, object, name } = e.target.dataset;
       if (
         addon.settings.get("show_confirmation") &&
         ((onlyDestructive && destructiveActions.includes(action)) || !onlyDestructive) &&
-        !confirm(msg("confirm"))
+        !confirm(msg(`confirm-${action}`, { name }))
       ) {
         return;
       }
-      const item = e.target.parentElement;
-      if (action === "projects") {
-        request(`/site-api/projects/all/${object}/`, "PUT", msg("failed-unsharing"));
-      } else if (action === "favorites") {
-        request(
-          `https://api.scratch.mit.edu/proxy/projects/${object}/favorites/user/${username}`,
-          "DELETE",
-          msg("failed-unfavoriting"),
-          item
-        );
-      } else if (action === "studios_following") {
-        request(
-          `https://scratch.mit.edu/site-api/users/bookmarkers/${object}/remove/?usernames=${username}`,
-          "PUT",
-          msg("failed-unfollowing-studio"),
-          item
-        );
-      } else if (action === "studios") {
-        request(
-          `https://scratch.mit.edu/site-api/users/curators-in/${object}/remove/?usernames=${username}`,
-          "PUT",
-          msg("failed-leaving"),
-          item
-        );
-      } else if (action === "following") {
-        request(
-          `https://scratch.mit.edu/site-api/users/followers/${object}/remove/?usernames=${username}`,
-          "PUT",
-          msg("failed-unfollowing-user"),
-          e.target.parentElement,
-          item
-        );
-      }
+      const { req, method } = requests[action];
+      request(req(object), method, action, name, e.target.parentElement);
     });
     el.insertBefore(button, el.firstChild);
   };
-  const request = (url, method, message, item) => {
+  const request = (url, method, action, name, item) => {
     fetch(url, {
       headers: {
         "x-csrftoken": addon.auth.csrfToken,
@@ -81,7 +73,7 @@ export default async function ({ addon, console, msg }) {
       if (response.status === 200) {
         item.style.display = "none";
       } else {
-        alert(message);
+        alert(msg(`fail-${action}`, { name }));
       }
     });
   };
