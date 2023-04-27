@@ -112,7 +112,7 @@ export default async function ({ addon, console, msg }) {
   };
 
   addon.self.addEventListener("reenabled", enable);
-  addon.self.addEventListener("disabled", () => disable);
+  addon.self.addEventListener("disabled", disable);
   addon.settings.addEventListener("change", () => {
     disable();
     enable();
