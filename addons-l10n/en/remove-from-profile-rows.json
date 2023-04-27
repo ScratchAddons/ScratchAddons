@@ -4,7 +4,7 @@
   "remove-from-profile-rows/fail-favorites": "Failed unfavoriting \"{name}\". This could be because the project doesn't exist anymore, or you're signed out.",
   "remove-from-profile-rows/fail-studios_following": "Failed unfollowing \"{name}\". This could be because the studio doesn't exist anymore, or you're signed out.",
   "remove-from-profile-rows/fail-studios": "Failed leaving \"{name}\". This could be because the studio doesn't exist anymore, you own the studio, or you're signed out.",
-  "remove-from-profile-rows/failed-following": "Failed unfollowing {name}. This could be because the user doesn't exist anymore, or you're signed out.",
+  "remove-from-profile-rows/fail-following": "Failed unfollowing {name}. This could be because the user doesn't exist anymore, or you're signed out.",
   "remove-from-profile-rows/confirm-project": "Are you sure you want to unshare \"{name}\"?",
   "remove-from-profile-rows/confirm-favorites": "Are you sure you want to unfavorite \"{name}\"?",
   "remove-from-profile-rows/confirm-studios_following": "Are you sure you want to unfollow \"{name}\"?",
