@@ -1,5 +1,5 @@
 {
-  "name":"Move sprite to front layer",
+  "name": "Move sprite to front layer",
   "description": "Shift+Click a sprite within the sprite pane to move it to the front (top layer) of the stage.",
   "info": [
     {
@@ -18,10 +18,10 @@
       "link": "https://scratch.mit.edu/users/s_federici/"
     }
   ],
-  "userscripts":[
+  "userscripts": [
     {
-      "url":"userscript.js",
-      "matches":["projects"]
+      "url": "userscript.js",
+      "matches": ["projects"]
     }
   ],
   "dynamicEnable": true,
