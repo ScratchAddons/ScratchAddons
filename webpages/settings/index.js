@@ -633,7 +633,16 @@ let fuse;
         obj.manifest = vue.manifestsById[addonId];
         obj.group = group;
         obj.matchesSearch = false; // Later set to true by vue.addonList if needed
-        const shouldHideAsEasterEgg = obj.manifest._categories[0] === "easterEgg" && obj.manifest._enabled === false;
+        let shouldHideAsEasterEgg = obj.manifest._categories[0] === "easterEgg" && obj.manifest._enabled === false;
+        if (addonId === "featured-dangos") {
+          // April Fools 2023 addon
+          const MARCH_31_TIMESTAMP = 1680264000;
+          const APRIL_2_TIMESTAMP = 1680436800;
+          const now = new Date().getTime() / 1000;
+          // Hide as easter egg if addon is enabled but not functional
+          // Also, show even if disabled while it's April Fools
+          shouldHideAsEasterEgg = !(now < APRIL_2_TIMESTAMP && now > MARCH_31_TIMESTAMP);
+        }
         obj.matchesCategory = !shouldHideAsEasterEgg;
         obj.naturalIndex = naturalIndex;
         obj.headerAbove = groupIndex === 0;
@@ -705,19 +714,19 @@ let fuse;
   // Konami code easter egg
   let cursor = 0;
   const KONAMI_CODE = [
-    "ArrowUp",
-    "ArrowUp",
-    "ArrowDown",
-    "ArrowDown",
-    "ArrowLeft",
-    "ArrowRight",
-    "ArrowLeft",
-    "ArrowRight",
-    "KeyB",
-    "KeyA",
+    "arrowup",
+    "arrowup",
+    "arrowdown",
+    "arrowdown",
+    "arrowleft",
+    "arrowright",
+    "arrowleft",
+    "arrowright",
+    "b",
+    "a",
   ];
   document.addEventListener("keydown", (e) => {
-    cursor = e.code === KONAMI_CODE[cursor] ? cursor + 1 : 0;
+    cursor = e.key.toLowerCase() === KONAMI_CODE[cursor] ? cursor + 1 : 0;
     if (cursor === KONAMI_CODE.length) {
       vue.selectedCategory = "easterEgg";
       setTimeout(() => (vue.searchInputReal = ""), 0); // Allow konami code in autofocused search bar
