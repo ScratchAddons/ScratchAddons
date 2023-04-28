@@ -1,6 +1,6 @@
 {
   "name": "Faster project loading",
-  "description": "Makes project loading faster when opening directly to the editor.",
+  "description": "Fixes a Scratch bug that slows down project loading if the editor is opened from a link.",
   "credits": [
     {
       "name": "Tacodiva",
