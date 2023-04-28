@@ -4,7 +4,7 @@ export default async function ({ addon, console, msg }) {
   const BACKPACK_URL = "https://backpack.scratch.mit.edu/";
   const originalOpen = XMLHttpRequest.prototype.open;
   XMLHttpRequest.prototype.open = function (method, url) {
-    if (method === "GET" && url.startsWith(BACKPACK_URL)) {
+    if (!addon.self.disabled && method === "GET" && url.startsWith(BACKPACK_URL)) {
       /*
               We don't want to block actual requests for backpack assets.
               A backpack request URL looks like:
