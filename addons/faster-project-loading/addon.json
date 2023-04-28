@@ -18,5 +18,6 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "tags": ["editor", "recommended"],
+  "versionAdded": "1.32.0",
   "enabledByDefault": true
 }
