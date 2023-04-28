@@ -4,9 +4,6 @@
  */
 
 export default async function ({ addon, console }) {
-  // Use vanilla experience when possible
-  if (addon.tab.isScratchAprilFools23()) return;
-
   const Blockly = await addon.tab.traps.getBlockly();
 
   const shouldWatchMouseCursor = addon.settings.get("watch");
