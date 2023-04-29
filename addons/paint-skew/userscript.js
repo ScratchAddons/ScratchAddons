@@ -1,3 +1,5 @@
+import {addons, initialize} from "../paint-snap/compatibility.js";
+
 export default async function ({ addon }) {
   const paper = await addon.tab.traps.getPaper();
 
@@ -24,10 +26,9 @@ export default async function ({ addon }) {
       this.skewBounds = this.itemGroup.bounds.clone();
     };
 
-    const ogMouseDrag = ST.prototype.onMouseDrag;
-    ST.prototype.onMouseDrag = function (event) {
+    addons.paintSkew = function (event, original) {
       if (!this.active) return;
-      if (addon.self.disabled) return ogMouseDrag.call(this, event);
+      if (addon.self.disabled) return original();
 
       const bounds = this.skewBounds;
       const doShear = (skx, sky) => {
@@ -112,11 +113,13 @@ export default async function ({ addon }) {
         doShear(skx, sky);
       } else {
         // Scale
-        ogMouseDrag.call(this, event);
+        original();
       }
       this.lastSkx = skx;
       this.lastSky = sky;
     };
+
+    initialize(paper, ST);
   };
 
   addon.tab.redux.initialize();
