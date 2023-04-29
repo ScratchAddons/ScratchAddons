@@ -55,7 +55,8 @@
   "versionAdded": "1.29.0",
   "latestUpdate": {
     "version": "1.32.0",
-    "newSettings": ["always"]
+    "newSettings": ["always"],
+    "isMajor": true
   },
   "tags": ["editor", "projectPlayer", "recommended"]
 }
