@@ -1,6 +1,6 @@
 import createScalePoints from "./genScalePoints.js";
 import { loadModules, Modes, BitmapModes } from "./helpers.js";
-import {addons, initialize} from "./compatibility.js";
+import { addons, initialize } from "./compatibility.js";
 
 import { snapOn, threshold, guideColor } from "./state.js";
 
