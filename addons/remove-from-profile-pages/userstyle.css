@@ -1,7 +1,8 @@
 .sa-remove-button {
   position: absolute;
   opacity: var(--removeFromProfileRows-unhoveredOpacity);
-  right: 0;
+  right: -10px;
+  top: -10px;
 }
 
 .item:hover>.sa-remove-button {

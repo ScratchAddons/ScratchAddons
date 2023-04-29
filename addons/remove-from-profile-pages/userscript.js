@@ -43,11 +43,10 @@ export default async function ({ addon, console, msg }) {
     button.dataset.name = el.querySelector(".title").textContent.trim();
     button.addEventListener("click", (e) => {
       e.preventDefault();
-      const onlyDestructive = addon.settings.get("only_destructive");
       const { action, object, name } = e.target.dataset;
+      const confirmations = addon.settings.get("confirmations");
       if (
-        addon.settings.get("show_confirmation") &&
-        ((onlyDestructive && destructiveActions.includes(action)) || !onlyDestructive) &&
+        (confirmations === "all" || (confirmations === "destructive" && destructiveActions.includes(action))) &&
         !confirm(msg(`confirm-${action}`, { name }))
       ) {
         return;
@@ -77,26 +76,13 @@ export default async function ({ addon, console, msg }) {
       }
     });
   };
-  const addButtons = (action) => {
-    if (!addon.settings.get("dedicated_pages")) {
-      [
-        ...document
-          .querySelector(`[data-control=view-all][href$="/${action}/"]`)
-          .parentElement.parentElement.querySelectorAll(".item"),
-      ].forEach((el) => createButton(el, action));
-    }
-  };
   const enable = () => {
     const removableRows = ["projects", "favorites", "studios_following", "studios", "following"].filter((row) =>
       addon.settings.get(`show_on_${row}`)
     );
-    if (location.pathname === `/users/${username}/`) {
-      removableRows.forEach(addButtons);
-    } else {
-      const action = location.pathname.match(lastPathFromURL)[1];
-      if (removableRows.includes(action)) {
-        [...document.querySelectorAll(".item")].forEach((el) => createButton(el, action));
-      }
+    const action = location.pathname.match(lastPathFromURL)[1];
+    if (removableRows.includes(action)) {
+      [...document.querySelectorAll(".item")].forEach((el) => createButton(el, action));
     }
   };
   const disable = () => {
