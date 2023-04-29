@@ -31,6 +31,7 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get clientVersion() {
+    if (location.origin !== "https://scratch.mit.edu") return "scratch-www"; // scratchr2 cannot be self-hosted
     if (!this._clientVersion)
       this._clientVersion = document.querySelector("meta[name='format-detection']")
         ? "scratch-www"

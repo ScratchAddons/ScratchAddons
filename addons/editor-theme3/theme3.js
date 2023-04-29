@@ -1,10 +1,4 @@
-import {
-  removeAlpha,
-  multiply,
-  brighten,
-  alphaBlend,
-  recolorFilter,
-} from "../../libraries/common/cs/text-color.esm.js";
+import { removeAlpha, multiply, brighten, alphaBlend } from "../../libraries/common/cs/text-color.esm.js";
 
 const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$");
 const extensionsCategory = {
@@ -70,6 +64,13 @@ const categories = [
   extensionsCategory,
   saCategory,
 ];
+
+// From scratch-blocks/media/dropdown-arrow.svg
+const arrowPath =
+  "M6.36,7.79a1.43,1.43,0,0,1-1-.42L1.42,3.45a1.44,1.44,0,0,1,0-2c0.56-.56,9.31-0.56,9.87,0a1.44,1.44,0,0,1,0,2L7.37,7.37A1.43,1.43,0,0,1,6.36,7.79Z";
+const arrowShadowPath =
+  "M12.71,2.44A2.41,2.41,0,0,1,12,4.16L8.08,8.08a2.45,2.45,0,0,1-3.45,0L0.72,4.16A2.42,2.42,0,0,1,0,2.44,2.48,2.48,0,0,1,.71.71C1,0.47,1.43,0,6.36,0S11.75,0.46,12,.71A2.44,2.44,0,0,1,12.71,2.44Z";
+const arrowShadowColor = "#231f20";
 
 export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
@@ -223,12 +224,56 @@ export default async function ({ addon, console }) {
     this.box_.setAttribute("fill", fieldBackground(this));
   };
 
+  const oldFieldImageSetValue = Blockly.FieldImage.prototype.setValue;
+  Blockly.FieldImage.prototype.setValue = function (src) {
+    // Icons
+    if (textMode() === "black" || textMode() === "colorOnWhite") {
+      if (src.startsWith("data:") && this.sourceBlock_) {
+        // Extension icon
+        const iconsToReplace = ["music", "pen", "text2speech", "translate", "videoSensing"];
+        const extensionId = this.sourceBlock_.type.split("_")[0];
+        if (iconsToReplace.includes(extensionId)) {
+          src = `${addon.self.dir}/icons/black_text/extensions/${extensionId}.svg`;
+        }
+      } else {
+        const iconsToReplace = ["repeat.svg", "rotate-left.svg", "rotate-right.svg"];
+        const iconName = src.split("/").at(-1);
+        if (iconsToReplace.includes(iconName)) {
+          src = `${addon.self.dir}/icons/black_text/${iconName}`;
+        }
+      }
+    }
+    return oldFieldImageSetValue.call(this, src);
+  };
+
   const oldFieldDropdownInit = Blockly.FieldDropdown.prototype.init;
   Blockly.FieldDropdown.prototype.init = function () {
     // Dropdowns
     oldFieldDropdownInit.call(this);
     this.textElement_.style.setProperty("fill", textColor(this), "important");
-    if (textColor(this) !== "#ffffff") this.arrow_.style.filter = recolorFilter(textColor(this));
+    if (textColor(this) !== "#ffffff") {
+      // Replace arrow image with path elements to change the fill color
+      this.arrow_.remove();
+      this.arrow_ = Blockly.utils.createSvgElement("g");
+      this.arrow_.appendChild(
+        Blockly.utils.createSvgElement("path", {
+          d: arrowShadowPath,
+          fill: arrowShadowColor,
+          "fill-opacity": 0.1,
+        })
+      );
+      this.arrow_.appendChild(
+        Blockly.utils.createSvgElement("path", {
+          d: arrowPath,
+          fill: textColor(this),
+        })
+      );
+      // Redraw arrow
+      this.arrowY_ = 12;
+      const text = this.text_;
+      this.text_ = null;
+      this.setText(text);
+    }
   };
 
   const oldFieldDropdownShowEditor = Blockly.FieldDropdown.prototype.showEditor_;
@@ -293,7 +338,8 @@ export default async function ({ addon, console }) {
   Blockly.FieldVerticalSeparator.prototype.init = function () {
     // Vertical line between extension icon and block label
     oldFieldVerticalSeparatorInit.call(this);
-    if (textMode() === "black") this.lineElement_.setAttribute("stroke", this.sourceBlock_.getColourTertiary());
+    if (isColoredTextMode() || textMode() === "black")
+      this.lineElement_.setAttribute("stroke", this.sourceBlock_.getColourTertiary());
   };
 
   const updateColors = () => {
