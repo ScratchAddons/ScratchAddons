@@ -13,18 +13,18 @@ function updateCssVariables(node, addon) {
   if (addon.self.disabled) {
     node.style.setProperty("--darkWww-page", "#ffffff");
     node.style.setProperty("--darkWww-page-scratchr2Text", "#322f31");
+    node.style.setProperty("--darkWww-page-colorScheme", "light");
     node.style.setProperty("--darkWww-link-scratchr2", "#1aa0d8");
     node.style.setProperty("--darkWww-gray-scratchr2", "#f7f7f7");
     node.style.setProperty("--darkWww-gray-scratchr2Text", "#322f31");
     node.style.setProperty("--darkWww-border-15", "#cccccc");
     const pygmentsStyle = node.querySelector("link[href$='dark-www/pygments.css']");
     if (pygmentsStyle) pygmentsStyle.disabled = true;
-    const scrollbarStyle = node.querySelector("link[href$='dark-www/scrollbar.css']");
-    if (scrollbarStyle) scrollbarStyle.disabled = true;
     return;
   }
   node.style.setProperty("--darkWww-page", addon.settings.get("box"));
   node.style.setProperty("--darkWww-page-scratchr2Text", textColor(addon.settings.get("box"), "#322f31"));
+  node.style.setProperty("--darkWww-page-colorScheme", textColor(addon.settings.get("box"), "light", "dark"));
   node.style.setProperty("--darkWww-link-scratchr2", multiply(addon.settings.get("link"), { r: 0.66, b: 0.85 }));
   node.style.setProperty(
     "--darkWww-gray-scratchr2",
@@ -39,8 +39,6 @@ function updateCssVariables(node, addon) {
   node.style.setProperty("--darkWww-border-15", brighten(addon.settings.get("border"), { a: 0.94 }));
   const pygmentsStyle = node.querySelector("link[href$='dark-www/pygments.css']");
   if (pygmentsStyle) pygmentsStyle.disabled = !addon.settings.get("darkForumCode");
-  const scrollbarStyle = node.querySelector("link[href$='dark-www/scrollbar.css']");
-  if (scrollbarStyle) scrollbarStyle.disabled = !addon.settings.get("darkScrollbars");
 }
 
 export default async function ({ addon, console }) {
@@ -58,9 +56,6 @@ export default async function ({ addon, console }) {
             preview.contentDocument.head.appendChild(createStyle(addon.self.dir + "/experimental_scratchr2.css"));
             preview.contentDocument.head.appendChild(
               createStyle(addon.self.dir + "/pygments.css", !addon.settings.get("darkForumCode"))
-            );
-            preview.contentDocument.head.appendChild(
-              createStyle(addon.self.dir + "/scrollbar.css", !addon.settings.get("darkScrollbars"))
             );
           }
         }
