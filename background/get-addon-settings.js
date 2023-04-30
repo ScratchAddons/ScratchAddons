@@ -5,7 +5,7 @@ import minifySettings from "../libraries/common/minify-settings.js";
  the versions separately. Current versions:
 
  - editor-dark-mode 2 (bumped in v1.23 twice)
- - editor-theme3 4 (last bumped in v1.29)
+ - editor-theme3 4 (last bumped in v1.32)
  */
 
 const updatePresetIfMatching = (settings, version, oldPreset = null, preset = null) => {
@@ -193,6 +193,25 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
               text: "white",
             },
             manifest.presets.find((p) => p.id === "dark")
+          );
+          updatePresetIfMatching(
+            settings,
+            3,
+            {
+              "motion-color": "#4C97FF",
+              "looks-color": "#9966FF",
+              "sounds-color": "#CF63CF",
+              "events-color": "#FFBF00",
+              "control-color": "#FFAB19",
+              "sensing-color": "#5CB1D6",
+              "operators-color": "#59C059",
+              "data-color": "#FF8C1A",
+              "data-lists-color": "#FF661A",
+              "custom-color": "#FF6680",
+              "Pen-color": "#0FBD8C",
+              "sa-color": "#29BEB8",
+            },
+            manifest.presets.find((p) => p.id === "black")
           );
 
           if (addonSettings["editor-dark-mode"]?.darkComments === false) {
