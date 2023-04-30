@@ -5,8 +5,8 @@
   top: -10px;
 }
 
-.item:hover>.sa-remove-button {
-  opacity: .9;
+.item:hover > .sa-remove-button {
+  opacity: 0.9;
 }
 
 .item {
