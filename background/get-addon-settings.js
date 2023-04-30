@@ -210,6 +210,9 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
               "custom-color": "#FF6680",
               "Pen-color": "#0FBD8C",
               "sa-color": "#29BEB8",
+              "comment-color": "#FEF49C",
+              "input-color": "#202020",
+              text: "colorOnBlack",
             },
             manifest.presets.find((p) => p.id === "black")
           );
