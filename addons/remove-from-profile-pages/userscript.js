@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, msg }) {
   const lastPathFromURL = /\/([^\/]*)\/$/;
   if (
     !(await addon.auth.fetchIsLoggedIn()) ||
