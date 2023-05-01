@@ -53,12 +53,12 @@
       "default": false
     },
     {
-      "name": "Text size",
+      "name": "Text size (%)",
       "id": "size",
       "type": "integer",
-      "min": 1,
-      "max": 5,
-      "default": 3,
+      "min": 101,
+      "max": 150,
+      "default": 130,
       "if": { "settings": { "large": true } }
     }
   ],
