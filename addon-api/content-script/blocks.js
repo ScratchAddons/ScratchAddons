@@ -6,6 +6,10 @@ const color = {
   tertiaryColor: "#3aa8a4",
 };
 
+export const setCustomBlockColor = (newColor) => {
+  Object.assign(color, newColor);
+};
+
 const ICON =
   "data:image/svg+xml;base64," +
   btoa(
@@ -85,9 +89,6 @@ export const addBlock = (proccode, { args, callback, hidden, displayName }) => {
 
   const blockData = {
     id: proccode,
-    color: color.color,
-    secondaryColor: color.secondaryColor,
-    tertiaryColor: color.tertiaryColor,
     args,
     handler: callback,
     hide: !!hidden,
@@ -129,12 +130,12 @@ const injectWorkspace = (ScratchBlocks) => {
   const oldUpdateColour = BlockSvg.prototype.updateColour;
   BlockSvg.prototype.updateColour = function (...args) {
     // procedures_prototype also have a procedure code but we do not want to color them.
-    if (this.type === "procedures_call") {
+    if (!this.isInsertionMarker() && this.type === "procedures_call") {
       const block = this.procCode_ && getCustomBlock(this.procCode_);
       if (block) {
-        this.colour_ = block.color;
-        this.colourSecondary_ = block.secondaryColor;
-        this.colourTertiary_ = block.tertiaryColor;
+        this.colour_ = color.color;
+        this.colourSecondary_ = color.secondaryColor;
+        this.colourTertiary_ = color.tertiaryColor;
         this.customContextMenu = null;
       }
     }

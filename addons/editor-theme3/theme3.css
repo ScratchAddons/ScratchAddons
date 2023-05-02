@@ -1,41 +1,31 @@
-path.blocklyBlockBackground[fill="#FF6680"],
-path.blocklyBlockBackground[fill="#5CB1D6"],
-path.blocklyBlockBackground[fill="#FFBF00"],
-path.blocklyBlockBackground[fill="#29beb8"],
-g[data-category] > path.blocklyBlockBackground {
-  stroke: #0003;
-}
-g[data-argument-type="dropdown"] > path,
-g[data-argument-type="variable"] > path,
-path[data-argument-type="boolean"],
-g[data-shapes="c-block c-1 hat"] > g[data-shapes="stack"]:not(.blocklyDraggable) > path /* block preview in define block */ {
-  stroke: #0003;
-  fill: #0001;
-}
-g[data-argument-type="dropdown"] > rect,
-g[data-argument-type="variable"] > rect {
-  stroke: #0003;
-  fill: #0000;
-}
-g[data-argument-type*="text"] > path,
-[data-category] g > line {
-  stroke: #0002;
-}
-.scratchCategoryItemBubble {
-  border-color: #0003 !important;
-}
-
-.fieldTextInput {
-  border-color: #0003 !important;
-}
-
-.blocklyBlockBackground[fill="#FFFFFF"] {
-  fill: var(--editorTheme3-inputColor);
-}
 .blocklyEditableText > text {
   fill: var(--editorTheme3-inputColor-text);
 }
 .blocklyHtmlInput {
   background-color: var(--editorTheme3-inputColor);
   color: var(--editorTheme3-inputColor-text);
+}
+
+.blocklyDropDownDiv .goog-menuitem-highlight,
+.blocklyDropDownDiv .goog-menuitem-hover,
+.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight {
+  background-color: var(--editorTheme3-hoveredItem, rgba(0, 0, 0, 0.2));
+}
+
+.scratchCommentRect {
+  fill: var(--editorTheme3-commentColor);
+}
+.scratchCommentBody,
+.scratchCommentTextarea {
+  background-color: var(--editorTheme3-commentColor);
+}
+.scratchWorkspaceCommentBorder {
+  stroke: var(--editorTheme3-commentBorder);
+}
+.scratchCommentTextarea::placeholder {
+  color: var(--editorTheme3-commentTextTransparent);
+}
+.scratchCommentText {
+  fill: var(--editorTheme3-commentText);
+  color: var(--editorTheme3-commentText);
 }

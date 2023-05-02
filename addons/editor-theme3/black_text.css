@@ -1,0 +1,33 @@
+.scratchCategoryItemBubble::after {
+  /* block-palette-icons */
+  filter: brightness(0);
+}
+
+.blocklyEditableText > text {
+  fill: var(--editorTheme3-inputColor-blackText);
+}
+.blocklyHtmlInput {
+  color: var(--editorTheme3-inputColor-blackText);
+}
+
+.blocklyDropDownDiv .goog-menuitem,
+.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem .goog-menuitem-content {
+  color: black;
+}
+.blocklyDropDownDiv .blocklyText {
+  fill: black;
+}
+.blocklyDropDownDiv .goog-menuitem-highlight,
+.blocklyDropDownDiv .goog-menuitem-hover,
+.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight {
+  background-color: var(--editorTheme3-hoveredItem, rgba(255, 255, 255, 0.3));
+}
+
+/* Compatibility */
+
+.sa-block-color {
+  --sa-block-text: black;
+  --sa-block-gray-text: black;
+  --sa-block-colored-text: var(--sa-block-background-tertiary);
+  --sa-block-text-on-bright-background: black;
+}

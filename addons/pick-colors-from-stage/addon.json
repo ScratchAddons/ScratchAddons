@@ -1,0 +1,25 @@
+{
+  "name": "Pick colors on stage with eyedropper",
+  "description": "Allows the eyedropper in the costume editor to also pick colors from the stage.",
+  "credits": [
+    {
+      "name": "GarboMuffin"
+    }
+  ],
+  "tags": ["editor", "costumeEditor", "featured"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.29.0"
+}

@@ -1,5 +1,6 @@
 import runAddonUserscripts from "./run-userscript.js";
 import Localization from "./l10n.js";
+import "/libraries/thirdparty/cs/comlink.js";
 
 window.scratchAddons = {};
 scratchAddons.classNames = { loaded: false };
@@ -10,6 +11,7 @@ scratchAddons.eventTargets = {
   self: [],
 };
 scratchAddons.session = {};
+scratchAddons.loadedScripts = {};
 const consoleOutput = (logAuthor = "[page]") => {
   const style = {
     // Remember to change these as well on cs.js

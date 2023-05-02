@@ -1,0 +1,1 @@
+{"block-count/blocks":"{num, plural, one {1 lohko} other {# lohkoa}}","block-count/@name":"Lohkomäärä","block-count/@description":"Näyttää editorin valikkorivillä projektin lohkojen kokonaismäärän. Aikaisemmin osa \"hahmo- ja skriptimäärä\" -lisäosaa."}

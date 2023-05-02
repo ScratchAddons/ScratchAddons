@@ -1,11 +1,23 @@
 .project-loves {
-  visibility: hidden;
+  font-size: 0;
+  padding-right: 1rem;
 }
 
-.project-loves::before {
-  visibility: visible;
+.sa-stat-display .project-loves {
+  font-size: 16px;
+  padding-right: 2rem;
 }
 
+.project-loves.hidden {
+  display: none;
+}
+
+/* Front page */
 .thumbnail .thumbnail-loves {
+  display: none;
+}
+
+/* My Stuff */
+.media-stats span.stat:nth-child(3) {
   display: none;
 }

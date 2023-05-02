@@ -3,7 +3,7 @@
  * It has been modified to work properly in our environment and fix some bugs.
  */
 
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
   const shouldWatchMouseCursor = addon.settings.get("watch");

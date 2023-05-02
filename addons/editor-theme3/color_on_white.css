@@ -1,0 +1,51 @@
+.scratchCategoryItemBubble::after {
+  /* block-palette-icons */
+  filter: brightness(0);
+  opacity: 0.6;
+}
+
+.u-dropdown-searchbar,
+.u-dropdown-searchbar:focus,
+.blocklyDropDownDiv .goog-menuitem,
+.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem .goog-menuitem-content {
+  color: #575e75;
+}
+.u-dropdown-searchbar:focus {
+  background-color: var(--editorTheme3-hoveredItem);
+}
+
+.blocklyAngleDragHandle {
+  stroke: black;
+  stroke-opacity: 0.15;
+  paint-order: stroke fill;
+}
+
+.scratchCommentRect {
+  fill: #feffff;
+}
+.scratchCommentBody,
+.scratchCommentTextarea {
+  background-color: #ffffff;
+}
+.scratchWorkspaceCommentBorder {
+  stroke: var(--editorTheme3-commentColor);
+}
+.scratchCommentTextarea::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+.scratchCommentText {
+  fill: #575e75;
+  color: #575e75;
+}
+
+/* Compatibility */
+
+.sa-block-color {
+  --sa-block-colored-background: var(--sa-block-background-secondary);
+  --sa-block-colored-background-secondary: var(--sa-block-field-background);
+  --sa-block-bright-background: var(--sa-block-background-tertiary);
+  --sa-block-text: var(--sa-block-background-tertiary);
+  --sa-block-gray-text: #575e75;
+  --sa-block-colored-text: var(--sa-block-background-tertiary);
+  --sa-block-text-on-bright-background: white;
+}

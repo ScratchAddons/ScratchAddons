@@ -1,6 +1,4 @@
-import blockToDom from "./blockToDom.js";
-
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
 
@@ -8,6 +6,11 @@ export default async function ({ addon, global, console, msg }) {
   let procedureSwitches = {};
   const noopSwitch = {
     isNoop: true,
+  };
+
+  const randomColor = () => {
+    const num = Math.floor(Math.random() * 256 * 256 * 256);
+    return `#${num.toString(16).padStart(6, "0")}`;
   };
 
   const buildSwitches = () => {
@@ -31,59 +34,59 @@ export default async function ({ addon, global, console, msg }) {
         noopSwitch,
         {
           opcode: "motion_changexby",
-          remap: { X: "DX" },
+          remapInputName: { X: "DX" },
         },
         {
           opcode: "motion_sety",
-          remap: { X: "Y" },
+          remapInputName: { X: "Y" },
         },
         {
           opcode: "motion_changeyby",
-          remap: { X: "DY" },
+          remapInputName: { X: "DY" },
         },
       ];
       blockSwitches["motion_changexby"] = [
         {
           opcode: "motion_setx",
-          remap: { DX: "X" },
+          remapInputName: { DX: "X" },
         },
         noopSwitch,
         {
           opcode: "motion_sety",
-          remap: { DX: "Y" },
+          remapInputName: { DX: "Y" },
         },
         {
           opcode: "motion_changeyby",
-          remap: { DX: "DY" },
+          remapInputName: { DX: "DY" },
         },
       ];
       blockSwitches["motion_sety"] = [
         {
           opcode: "motion_setx",
-          remap: { Y: "X" },
+          remapInputName: { Y: "X" },
         },
         {
           opcode: "motion_changexby",
-          remap: { Y: "DX" },
+          remapInputName: { Y: "DX" },
         },
         noopSwitch,
         {
           opcode: "motion_changeyby",
-          remap: { Y: "DY" },
+          remapInputName: { Y: "DY" },
         },
       ];
       blockSwitches["motion_changeyby"] = [
         {
           opcode: "motion_setx",
-          remap: { DY: "X" },
+          remapInputName: { DY: "X" },
         },
         {
           opcode: "motion_changexby",
-          remap: { DY: "DX" },
+          remapInputName: { DY: "DX" },
         },
         {
           opcode: "motion_sety",
-          remap: { DY: "Y" },
+          remapInputName: { DY: "Y" },
         },
         noopSwitch,
       ];
@@ -106,13 +109,13 @@ export default async function ({ addon, global, console, msg }) {
         noopSwitch,
         {
           opcode: "looks_changeeffectby",
-          remap: { VALUE: "CHANGE" },
+          remapInputName: { VALUE: "CHANGE" },
         },
       ];
       blockSwitches["looks_changeeffectby"] = [
         {
           opcode: "looks_seteffectto",
-          remap: { CHANGE: "VALUE" },
+          remapInputName: { CHANGE: "VALUE" },
         },
         noopSwitch,
       ];
@@ -120,13 +123,13 @@ export default async function ({ addon, global, console, msg }) {
         noopSwitch,
         {
           opcode: "looks_changesizeby",
-          remap: { SIZE: "CHANGE" },
+          remapInputName: { SIZE: "CHANGE" },
         },
       ];
       blockSwitches["looks_changesizeby"] = [
         {
           opcode: "looks_setsizeto",
-          remap: { CHANGE: "SIZE" },
+          remapInputName: { CHANGE: "SIZE" },
         },
         noopSwitch,
       ];
@@ -166,27 +169,79 @@ export default async function ({ addon, global, console, msg }) {
         },
         noopSwitch,
       ];
-      blockSwitches["looks_think"] = [
-        noopSwitch,
-        {
-          opcode: "looks_say",
-        },
-      ];
       blockSwitches["looks_say"] = [
-        {
-          opcode: "looks_think",
-        },
-        noopSwitch,
-      ];
-      blockSwitches["looks_thinkforsecs"] = [
         noopSwitch,
         {
           opcode: "looks_sayforsecs",
+          createInputs: {
+            SECS: {
+              shadowType: "math_number",
+              value: "2",
+            },
+          },
+        },
+        {
+          opcode: "looks_think",
+        },
+        {
+          opcode: "looks_thinkforsecs",
+          createInputs: {
+            SECS: {
+              shadowType: "math_number",
+              value: "2",
+            },
+          },
+        },
+      ];
+      blockSwitches["looks_think"] = [
+        {
+          opcode: "looks_say",
+        },
+        {
+          opcode: "looks_sayforsecs",
+          createInputs: {
+            SECS: {
+              shadowType: "math_number",
+              value: "2",
+            },
+          },
+        },
+        noopSwitch,
+        {
+          opcode: "looks_thinkforsecs",
+          createInputs: {
+            SECS: {
+              shadowType: "math_number",
+              value: "2",
+            },
+          },
         },
       ];
       blockSwitches["looks_sayforsecs"] = [
         {
+          opcode: "looks_say",
+          splitInputs: ["SECS"],
+        },
+        {
+          opcode: "looks_think",
+          splitInputs: ["SECS"],
+        },
+        noopSwitch,
+        {
           opcode: "looks_thinkforsecs",
+        },
+      ];
+      blockSwitches["looks_thinkforsecs"] = [
+        {
+          opcode: "looks_say",
+          splitInputs: ["SECS"],
+        },
+        {
+          opcode: "looks_think",
+          splitInputs: ["SECS"],
+        },
+        {
+          opcode: "looks_sayforsecs",
         },
         noopSwitch,
       ];
@@ -199,6 +254,43 @@ export default async function ({ addon, global, console, msg }) {
       blockSwitches["looks_switchbackdroptoandwait"] = [
         {
           opcode: "looks_switchbackdropto",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["looks_gotofrontback"] = [
+        noopSwitch,
+        {
+          opcode: "looks_goforwardbackwardlayers",
+          remapInputName: {
+            FRONT_BACK: "FORWARD_BACKWARD",
+          },
+          mapFieldValues: {
+            FRONT_BACK: {
+              front: "forward",
+              back: "backward",
+            },
+          },
+          createInputs: {
+            NUM: {
+              shadowType: "math_integer",
+              value: "1",
+            },
+          },
+        },
+      ];
+      blockSwitches["looks_goforwardbackwardlayers"] = [
+        {
+          opcode: "looks_gotofrontback",
+          splitInputs: ["NUM"],
+          remapInputName: {
+            FORWARD_BACKWARD: "FRONT_BACK",
+          },
+          mapFieldValues: {
+            FORWARD_BACKWARD: {
+              forward: "front",
+              backward: "back",
+            },
+          },
         },
         noopSwitch,
       ];
@@ -268,7 +360,7 @@ export default async function ({ addon, global, console, msg }) {
       blockSwitches["control_if_else"] = [
         {
           opcode: "control_if",
-          remap: { SUBSTACK2: "split" },
+          splitInputs: ["SUBSTACK2"],
         },
         noopSwitch,
       ];
@@ -276,11 +368,11 @@ export default async function ({ addon, global, console, msg }) {
         noopSwitch,
         {
           opcode: "control_wait_until",
-          remap: { SUBSTACK: "split" },
+          splitInputs: ["SUBSTACK"],
         },
         {
           opcode: "control_forever",
-          remap: { CONDITION: "split" },
+          splitInputs: ["CONDITION"],
         },
       ];
       blockSwitches["control_forever"] = [
@@ -427,6 +519,25 @@ export default async function ({ addon, global, console, msg }) {
         },
         noopSwitch,
       ];
+      blockSwitches["sensing_touchingcolor"] = [
+        noopSwitch,
+        {
+          opcode: "sensing_coloristouchingcolor",
+          createInputs: {
+            COLOR2: {
+              shadowType: "colour_picker",
+              value: randomColor,
+            },
+          },
+        },
+      ];
+      blockSwitches["sensing_coloristouchingcolor"] = [
+        {
+          opcode: "sensing_touchingcolor",
+          splitInputs: ["COLOR2"],
+        },
+        noopSwitch,
+      ];
     }
 
     if (addon.settings.get("data")) {
@@ -434,13 +545,13 @@ export default async function ({ addon, global, console, msg }) {
         noopSwitch,
         {
           opcode: "data_changevariableby",
-          remapValueType: { VALUE: "math_number" },
+          remapShadowType: { VALUE: "math_number" },
         },
       ];
       blockSwitches["data_changevariableby"] = [
         {
           opcode: "data_setvariableto",
-          remapValueType: { VALUE: "text" },
+          remapShadowType: { VALUE: "text" },
         },
         noopSwitch,
       ];
@@ -477,6 +588,25 @@ export default async function ({ addon, global, console, msg }) {
       blockSwitches["data_insertatlist"] = [
         {
           opcode: "data_replaceitemoflist",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["data_deleteoflist"] = [
+        noopSwitch,
+        {
+          opcode: "data_deletealloflist",
+          splitInputs: ["INDEX"],
+        },
+      ];
+      blockSwitches["data_deletealloflist"] = [
+        {
+          opcode: "data_deleteoflist",
+          createInputs: {
+            INDEX: {
+              shadowType: "math_integer",
+              value: "1",
+            },
+          },
         },
         noopSwitch,
       ];
@@ -616,6 +746,48 @@ export default async function ({ addon, global, console, msg }) {
   buildSwitches();
   addon.settings.addEventListener("change", buildSwitches);
 
+  /**
+   * @param {*} workspace
+   * @param {Element} xmlBlock
+   */
+  const pasteBlockXML = (workspace, xmlBlock) => {
+    // Similar to https://github.com/LLK/scratch-blocks/blob/7575c9a0f2c267676569c4b102b76d77f35d9fd6/core/workspace_svg.js#L1020
+    // but without the collision checking.
+    const block = ScratchBlocks.Xml.domToBlock(xmlBlock, workspace);
+    const x = +xmlBlock.getAttribute("x");
+    const y = +xmlBlock.getAttribute("y");
+    // Don't need to handle RTL here
+    block.moveBy(x, y);
+    return block;
+  };
+
+  /**
+   * @param {string} shadowType The type of shadow eg. "math_number"
+   * @returns {string} The name of the shadow's inner field that contains the user-visible value
+   */
+  const getShadowFieldName = (shadowType) => {
+    // This is non-comprehensive.
+    if (shadowType === "text") {
+      return "TEXT";
+    }
+    if (shadowType === "colour_picker") {
+      return "COLOUR";
+    }
+    return "NUM";
+  };
+
+  /**
+   * @template T
+   * @param {T|()=>T} value
+   * @returns {T}
+   */
+  const callIfFunction = (value) => {
+    if (typeof value === "function") {
+      return value();
+    }
+    return value;
+  };
+
   const menuCallbackFactory = (block, opcodeData) => () => {
     if (opcodeData.isNoop) {
       return;
@@ -626,91 +798,139 @@ export default async function ({ addon, global, console, msg }) {
       return;
     }
 
-    const workspace = block.workspace;
-
-    // Make a copy of the block with the proper type set.
-    // It doesn't seem to be possible to change a Block's type after it's created, so we'll just make a new block instead.
-    const xml = blockToDom(block);
-    if (opcodeData.opcode) {
-      xml.setAttribute("type", opcodeData.opcode);
-    }
-
-    const id = block.id;
-    const parent = block.getParent();
-
-    let parentConnection;
-    let blockConnectionType;
-    if (parent) {
-      // If the block has a parent, find the parent -> child connection that will be reattached later.
-      const parentConnections = parent.getConnections_();
-      parentConnection = parentConnections.find((c) => c.targetConnection && c.targetConnection.sourceBlock_ === block);
-      // There's two types of connections from child -> parent. We need to figure out which one is used.
-      const blockConnections = block.getConnections_();
-      const blockToParentConnection = blockConnections.find(
-        (c) => c.targetConnection && c.targetConnection.sourceBlock_ === parent
-      );
-      blockConnectionType = blockToParentConnection.type;
-    }
-
-    const pasteSeparately = [];
-
-    // Apply input remappings.
-    if (opcodeData.remap) {
-      for (const child of Array.from(xml.children)) {
-        const oldName = child.getAttribute("name");
-        const newName = opcodeData.remap[oldName];
-        if (newName) {
-          if (newName === "split") {
-            // This input will be split off into its own script.
-            const inputXml = child.firstChild;
-            const inputId = inputXml.id;
-            const inputBlock = workspace.getBlockById(inputId);
-            const position = inputBlock.getRelativeToSurfaceXY();
-            inputXml.setAttribute("x", Math.round(workspace.RTL ? -position.x : position.x));
-            inputXml.setAttribute("y", Math.round(position.y));
-            pasteSeparately.push(inputXml);
-            xml.removeChild(child);
-          } else {
-            child.setAttribute("name", newName);
-          }
-        }
-      }
-    }
-    if (opcodeData.remapValueType) {
-      for (const child of Array.from(xml.children)) {
-        const name = child.getAttribute("name");
-        const newType = opcodeData.remapValueType[name];
-        if (newType) {
-          const valueNode = child.firstChild;
-          const fieldNode = valueNode.firstChild;
-          valueNode.setAttribute("type", newType);
-          fieldNode.setAttribute("name", newType === "text" ? "TEXT" : "NUM");
-        }
-      }
-    }
-    if (opcodeData.mutate) {
-      const mutation = xml.querySelector("mutation");
-      for (const [key, value] of Object.entries(opcodeData.mutate)) {
-        mutation.setAttribute(key, value);
-      }
-    }
-
     try {
       ScratchBlocks.Events.setGroup(true);
 
+      const workspace = block.workspace;
+
+      const blocksToBringToForeground = [];
+      // Split inputs before we clone the block.
+      if (opcodeData.splitInputs) {
+        for (const inputName of opcodeData.splitInputs) {
+          const input = block.getInput(inputName);
+          if (!input) {
+            continue;
+          }
+          const connection = input.connection;
+          if (!connection) {
+            continue;
+          }
+          if (connection.isConnected()) {
+            const targetBlock = connection.targetBlock();
+            if (targetBlock.isShadow()) {
+              // Deleting shadows is handled later.
+            } else {
+              connection.disconnect();
+              blocksToBringToForeground.push(targetBlock);
+            }
+          }
+        }
+      }
+
+      // Make a copy of the block with the proper type set.
+      // It doesn't seem to be possible to change a Block's type after it's created, so we'll just make a new block instead.
+      const xml = ScratchBlocks.Xml.blockToDom(block);
+      // blockToDomWithXY's handling of RTL is strange, so we encode the position ourselves.
+      const position = block.getRelativeToSurfaceXY();
+      xml.setAttribute("x", position.x);
+      xml.setAttribute("y", position.y);
+      if (opcodeData.opcode) {
+        xml.setAttribute("type", opcodeData.opcode);
+      }
+
+      const parentBlock = block.getParent();
+      let parentConnection;
+      let blockConnectionType;
+      if (parentBlock) {
+        // If the block has a parent, find the parent -> child connection that will be reattached later.
+        const parentConnections = parentBlock.getConnections_();
+        parentConnection = parentConnections.find(
+          (c) => c.targetConnection && c.targetConnection.sourceBlock_ === block
+        );
+        // There's two types of connections from child -> parent. We need to figure out which one is used.
+        const blockConnections = block.getConnections_();
+        const blockToParentConnection = blockConnections.find(
+          (c) => c.targetConnection && c.targetConnection.sourceBlock_ === parentBlock
+        );
+        blockConnectionType = blockToParentConnection.type;
+      }
+
+      // Array.from creates a clone of the children list. This is important as we may remove
+      // children as we iterate.
+      for (const child of Array.from(xml.children)) {
+        const oldName = child.getAttribute("name");
+
+        // Any inputs that were supposed to be split that were not should be removed.
+        // (eg. shadow inputs)
+        if (opcodeData.splitInputs && opcodeData.splitInputs.includes(oldName)) {
+          xml.removeChild(child);
+          continue;
+        }
+
+        const newName = opcodeData.remapInputName && opcodeData.remapInputName[oldName];
+        if (newName) {
+          child.setAttribute("name", newName);
+        }
+
+        const newShadowType = opcodeData.remapShadowType && opcodeData.remapShadowType[oldName];
+        if (newShadowType) {
+          const valueNode = child.firstChild;
+          const fieldNode = valueNode.firstChild;
+          valueNode.setAttribute("type", newShadowType);
+          fieldNode.setAttribute("name", getShadowFieldName(newShadowType));
+        }
+
+        const fieldValueMap = opcodeData.mapFieldValues && opcodeData.mapFieldValues[oldName];
+        if (fieldValueMap && child.tagName === "FIELD") {
+          const oldValue = child.innerText;
+          const newValue = fieldValueMap[oldValue];
+          if (typeof newValue === "string") {
+            child.innerText = newValue;
+          }
+        }
+      }
+
+      if (opcodeData.mutate) {
+        const mutation = xml.querySelector("mutation");
+        for (const [key, value] of Object.entries(opcodeData.mutate)) {
+          mutation.setAttribute(key, value);
+        }
+      }
+
+      if (opcodeData.createInputs) {
+        for (const [inputName, inputData] of Object.entries(opcodeData.createInputs)) {
+          const valueElement = document.createElement("value");
+          valueElement.setAttribute("name", inputName);
+
+          const shadowElement = document.createElement("shadow");
+          shadowElement.setAttribute("type", inputData.shadowType);
+
+          const shadowFieldElement = document.createElement("field");
+          shadowFieldElement.setAttribute("name", getShadowFieldName(inputData.shadowType));
+          shadowFieldElement.innerText = callIfFunction(inputData.value);
+
+          shadowElement.appendChild(shadowFieldElement);
+          valueElement.appendChild(shadowElement);
+          xml.appendChild(valueElement);
+        }
+      }
+
       // Remove the old block and insert the new one.
       block.dispose();
-      workspace.paste(xml);
-      for (const separateBlock of pasteSeparately) {
-        workspace.paste(separateBlock);
-      }
-      // The new block will have the same ID as the old one.
-      const newBlock = workspace.getBlockById(id);
+      const newBlock = pasteBlockXML(workspace, xml);
+
       if (parentConnection) {
         // Search for the same type of connection on the new block as on the old block.
         const newBlockConnections = newBlock.getConnections_();
         const newBlockConnection = newBlockConnections.find((c) => c.type === blockConnectionType);
         newBlockConnection.connect(parentConnection);
+      }
+
+      for (const otherBlock of blocksToBringToForeground) {
+        // By re-appending the element, we move it to the end, which will make it display
+        // on top.
+        const svgRoot = otherBlock.getSvgRoot();
+        svgRoot.parentNode.appendChild(svgRoot);
       }
     } finally {
       ScratchBlocks.Events.setGroup(false);
@@ -791,11 +1011,11 @@ export default async function ({ addon, global, console, msg }) {
             enabled: true,
             text,
             callback: menuCallbackFactory(block, opcodeData),
-            separator: addon.settings.get("border") && i === 0,
+            separator: i === 0,
           });
         });
 
-        if (addon.settings.get("border") && (block.type === "data_variable" || block.type === "data_listcontents")) {
+        if (block.type === "data_variable" || block.type === "data_listcontents") {
           // Add top border to first variable (if it exists)
           const delBlockIndex = items.findIndex((item) => item.text === ScratchBlocks.Msg.DELETE_BLOCK);
           // firstVariableItem might be undefined, a variable to switch to,

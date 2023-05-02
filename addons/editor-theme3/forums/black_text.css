@@ -1,7 +1,88 @@
-.sb-label {
+.sb3-motion,
+.sb3-looks,
+.sb3-sound,
+.sb3-events,
+.sb3-control,
+.sb3-sensing,
+.sb3-operators,
+.sb3-variables,
+.sb3-list,
+.sb3-custom,
+.sb3-custom-arg,
+.sb3-extension,
+.sb3-pen {
+  stroke: rgba(0, 0, 0, 0.35);
+}
+
+.sb3-motion-alt,
+.sb3-looks-alt,
+.sb3-sound-alt,
+.sb3-events-alt,
+.sb3-control-alt,
+.sb3-sensing-alt,
+.sb3-operators-alt,
+.sb3-variables-alt,
+.sb3-list-alt,
+.sb3-custom-alt,
+.sb3-custom-arg-alt,
+.sb3-extension-alt,
+.sb3-pen-alt {
+  fill: rgba(255, 255, 255, 0.4);
+  stroke: rgba(0, 0, 0, 0.4);
+}
+.sb3-motion-dark,
+.sb3-looks-dark,
+.sb3-sound-dark,
+.sb3-events-dark,
+.sb3-control-dark,
+.sb3-sensing-dark,
+.sb3-operators-dark,
+.sb3-variables-dark,
+.sb3-list-dark,
+.sb3-custom-dark,
+.sb3-custom-arg-dark,
+.sb3-extension-dark,
+.sb3-pen-dark {
+  fill: rgba(0, 0, 0, 0.35);
+}
+.sb3-extension-line {
+  stroke: rgba(0, 0, 0, 0.35);
+}
+
+.sb-motion ~ .sb-label,
+.sb-looks ~ .sb-label,
+.sb-sound ~ .sb-label,
+.sb-events ~ .sb-label,
+.sb-control ~ .sb-label,
+.sb-sensing ~ .sb-label,
+.sb-operators ~ .sb-label,
+.sb-variables ~ .sb-label,
+.sb-list ~ .sb-label,
+.sb-custom ~ .sb-label,
+.sb-custom-arg ~ .sb-label,
+.sb-extension ~ .sb-label,
+.sb-pen ~ .sb-label,
+.sb3-motion ~ .sb3-label,
+.sb3-looks ~ .sb3-label,
+.sb3-sound ~ .sb3-label,
+.sb3-events ~ .sb3-label,
+.sb3-control ~ .sb3-label,
+.sb3-sensing ~ .sb3-label,
+.sb3-operators ~ .sb3-label,
+.sb3-variables ~ .sb3-label,
+.sb3-list ~ .sb3-label,
+.sb3-custom ~ .sb3-label,
+.sb3-custom-arg ~ .sb3-label,
+.sb3-extension ~ .sb3-label,
+.sb3-pen ~ .sb3-label,
+#sb3-dropdownArrow path,
+#sb3-loopArrow path[fill="#fff"],
+#sb3-turnLeft path[fill="#fff"],
+#sb3-turnRight path[fill="#fff"] {
   fill: black;
 }
-.sb3-label,
-#sb3-dropdownArrow path {
-  fill: #575e75;
+
+.sb3-label.sb3-literal-number,
+.sb3-label.sb3-literal-string {
+  fill: var(--editorTheme3-inputColor-blackText);
 }

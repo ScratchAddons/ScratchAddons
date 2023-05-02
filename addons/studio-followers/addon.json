@@ -13,13 +13,13 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/studios/*"]
+      "matches": ["studios"]
     }
   ],
   "userstyles": [
     {
       "url": "modal.css",
-      "matches": ["https://scratch.mit.edu/studios/*"]
+      "matches": ["studios"]
     }
   ],
   "dynamicEnable": true,

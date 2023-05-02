@@ -13,6 +13,7 @@ export default class Self extends Listenable {
     this._addonId = info.id; // In order to receive fireEvent messages from background
     this.id = info.id;
     this._addonObj = addonObj;
+    // catches both Chrome and Chromium
     this.browser = /Chrom/.test(navigator.userAgent) ? "chrome" : "firefox";
     this.disabled = false;
     this.addEventListener("disabled", () => (this.disabled = true));

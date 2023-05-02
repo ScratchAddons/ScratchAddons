@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg, safeMsg }) {
+export default async function ({ addon, console, msg, safeMsg }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   const SMALL_GAP = 8;

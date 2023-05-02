@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   var posContainerContainer = document.createElement("div");
   addon.tab.displayNoneWhileDisabled(posContainerContainer, { display: "flex" });
 
