@@ -5,7 +5,7 @@ export default async function ({ addon, console, msg }) {
     return response.json();
   };
 
-  const projects = await fetchStudio("33036797");
+  const projects = await fetchStudio("33286407");
 
   // Wait until Featured Projects row loads
   const firstThumbnail = await addon.tab.waitForElement(".carousel .thumbnail");
