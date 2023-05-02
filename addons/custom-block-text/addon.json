@@ -29,8 +29,7 @@
     },
     {
       "url": "text-large.css",
-      "matches": ["projects"],
-      "if": { "settings": { "large": true } }
+      "matches": ["projects"]
     }
   ],
   "settings": [
@@ -47,19 +46,12 @@
       "default": false
     },
     {
-      "name": "Large text",
-      "id": "large",
-      "type": "boolean",
-      "default": false
-    },
-    {
       "name": "Text size (%)",
       "id": "size",
       "type": "integer",
-      "min": 101,
+      "min": 100,
       "max": 150,
-      "default": 130,
-      "if": { "settings": { "large": true } }
+      "default": 100
     }
   ],
   "dynamicEnable": true,
@@ -68,7 +60,7 @@
   "versionAdded": "1.24.0",
   "latestUpdate": {
     "version": "1.32.0",
-    "newSettings": ["large"]
+    "newSettings": ["size"]
   },
   "enabledByDefault": false
 }
