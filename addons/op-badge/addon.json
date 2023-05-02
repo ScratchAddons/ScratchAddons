@@ -1,12 +1,16 @@
 {
-    "name": "Show OP badge in forums",
-    "description": "Adds a OP badge to the user that created the forum topic.",
+    "name": "Show OP badge in forums and projects",
+    "description": "Adds a OP badge to the user that created the forum topic, or the project.",
     "tags": ["community", "forums"],
     "enabledByDefault": false,
     "userscripts": [
         {
-            "url": "userscript.js",
-            "matches": ["https://scratch.mit.edu/discuss/topic/*/"]
+            "url": "forums.js",
+            "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+        },
+        {
+            "url": "projects.js",
+            "matches": ["https://scratch.mit.edu/projects/*"]
         }
     ],
     "credits": [
