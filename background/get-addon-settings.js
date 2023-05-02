@@ -74,9 +74,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
         addonsEnabled["middle-click-popup"] = false;
       }
     }
-    if (addonsEnabled["live-featured-project"]?.alternativePlayer === "forkphorus") {
-      addonsEnabled["live-featured-project"].alternativePlayer = "turbowarp";
-    }
+
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
       const settings = addonSettings[addonId] || {};

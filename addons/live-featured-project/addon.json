@@ -23,8 +23,8 @@
   "info": [
     {
       "id": "privacy",
-      "type": "warning",
-      "text": "Enabling the \"Use Scratch username\" when using the TurboWarp player will give TurboWarp access to your Scratch username."
+      "type": "notice",
+      "text": "The \"Use Scratch username\" setting will send your Scratch username to TurboWarp.org for use in cloud data. TurboWarp has separate cloud data servers, so the cloud variables will be different than the ones on the Scratch player."
     }
   ],
   "userscripts": [
@@ -77,11 +77,11 @@
     },
     {
       "id": "enableTWAddons",
-      "name": "Enable TurboWarp addons",
+      "name": "Enable addons",
       "type": "boolean",
       "default": true,
       "if": {
-        "settings": { "alternativePlayer": ["turbowarp"] }
+        "settings": { "alternativePlayer": "turbowarp" }
       }
     },
     {
