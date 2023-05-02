@@ -75,10 +75,10 @@
       "default": false
     },
     {
-      "name": "Faster graph rendering",
-      "id": "graphs_optimization",
+      "name": "Fill and animate graphs",
+      "id": "fancy_graphs",
       "type": "boolean",
-      "default": false
+      "default": true
     }
   ],
   "tags": ["editor", "featured"],
@@ -86,7 +86,7 @@
   "versionAdded": "1.16.0",
   "latestUpdate": {
     "version": "1.28.0",
-    "newSettings": ["graphs_optimization"]
+    "newSettings": ["fancy_graphs"]
   },
   "libraries": ["chartjs"]
 }
