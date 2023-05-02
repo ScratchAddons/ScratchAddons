@@ -5,7 +5,7 @@ import minifySettings from "../libraries/common/minify-settings.js";
  the versions separately. Current versions:
 
  - editor-dark-mode 2 (bumped in v1.23 twice)
- - editor-theme3 4 (last bumped in v1.32)
+ - editor-theme3 3 (last bumped in v1.32)
  */
 
 const updatePresetIfMatching = (settings, version, oldPreset = null, preset = null) => {
