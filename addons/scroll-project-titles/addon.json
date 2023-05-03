@@ -15,6 +15,12 @@
       ]
     }
   ],
+  "userscripts": [
+    {
+      "url": "script.js",
+      "matches": ["projects"]
+    }
+  ],
   "versionAdded":"1.31.0",
   "dynamicDisable":true,
   "dynamicEnable":true,
