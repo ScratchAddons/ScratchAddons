@@ -1,14 +1,14 @@
-.loader_background_2DPrW {
+[class*="loader_background_"] {
   background-color: var(--darkWww-navbar);
   color: var(--darkWww-navbar-text);
 }
-.loader_background_2DPrW img {
+[class*="loader_background_"] img {
   filter: var(--darkWww-navbar-filter);
 }
-.stage-wrapper_stage-wrapper_2bejr.stage-wrapper_full-screen_2hjMb,
-.stage-header_stage-header-wrapper-overlay_5vfJa {
+[class*="stage-wrapper_stage-wrapper_"][class*="stage-wrapper_full-screen_"],
+[class*="stage-header_stage-header-wrapper-overlay_"] {
   background-color: var(--darkWww-box);
 }
-.stage_stage_1fD7k.stage_full-screen_ZO7xi {
+[class*="stage_stage_"][class*="stage_full-screen_"] {
   border-color: var(--darkWww-border);
 }

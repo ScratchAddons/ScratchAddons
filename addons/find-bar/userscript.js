@@ -19,7 +19,6 @@ export default async function ({ addon, msg, console }) {
       this.prevValue = "";
 
       this.findBarOuter = null;
-      this.findLabel = null;
       this.findWrapper = null;
       this.findInput = null;
       this.dropdownOut = null;
@@ -37,10 +36,6 @@ export default async function ({ addon, msg, console }) {
       this.findBarOuter.className = "sa-find-bar";
       addon.tab.displayNoneWhileDisabled(this.findBarOuter, { display: "flex" });
       root.appendChild(this.findBarOuter);
-
-      this.findLabel = this.findBarOuter.appendChild(document.createElement("label"));
-      this.findLabel.htmlFor = "sa-find-input";
-      this.findLabel.textContent = msg("find");
 
       this.findWrapper = this.findBarOuter.appendChild(document.createElement("span"));
       this.findWrapper.className = "sa-find-wrapper";
@@ -215,8 +210,7 @@ export default async function ({ addon, msg, console }) {
         }
       }
 
-      this.utils.offsetX =
-        this.dropdownOut.getBoundingClientRect().right - this.findLabel.getBoundingClientRect().left + 26;
+      this.utils.offsetX = this.dropdownOut.getBoundingClientRect().width + 32;
       this.utils.offsetY = 32;
     }
 
@@ -291,7 +285,7 @@ export default async function ({ addon, msg, console }) {
         if (root.type === "event_whenbroadcastreceived") {
           const fieldRow = root.inputList[0].fieldRow;
           let eventName = fieldRow.find((input) => input.name === "BROADCAST_OPTION").getText();
-          addBlock("receive", "event " + eventName, root).eventName = eventName;
+          addBlock("receive", msg("event", { name: eventName }), root).eventName = eventName;
 
           continue;
         }
@@ -311,17 +305,25 @@ export default async function ({ addon, msg, console }) {
 
       let vars = map.getVariablesOfType("");
       for (const row of vars) {
-        addBlock(row.isLocal ? "var" : "VAR", (row.isLocal ? "var " : "VAR ") + row.name, row);
+        addBlock(
+          row.isLocal ? "var" : "VAR",
+          row.isLocal ? msg("var-local", { name: row.name }) : msg("var-global", { name: row.name }),
+          row
+        );
       }
 
       let lists = map.getVariablesOfType("list");
       for (const row of lists) {
-        addBlock(row.isLocal ? "list" : "LIST", (row.isLocal ? "list " : "LIST ") + row.name, row);
+        addBlock(
+          row.isLocal ? "list" : "LIST",
+          row.isLocal ? msg("list-local", { name: row.name }) : msg("list-global", { name: row.name }),
+          row
+        );
       }
 
       const events = this.getCallsToEvents();
       for (const event of events) {
-        addBlock("receive", "event " + event.eventName, event.block).eventName = event.eventName;
+        addBlock("receive", msg("event", { name: event.eventName }), event.block).eventName = event.eventName;
       }
 
       const clsOrder = { flag: 0, receive: 1, event: 2, define: 3, var: 4, VAR: 5, list: 6, LIST: 7 };

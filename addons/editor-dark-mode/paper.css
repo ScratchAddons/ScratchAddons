@@ -1,12 +1,12 @@
-.paint-editor_canvas-container_x2D0a {
+[class*="paint-editor_canvas-container_"] {
   color: var(--editorDarkMode-accent-text);
 }
 
-.paper-canvas_paper-canvas_1y588 {
+[class*="paper-canvas_paper-canvas_"] {
   background-color: var(--editorDarkMode-accent-paintEditorBackground);
 }
 
-.scrollable-canvas_vertical-scrollbar_lbD_c,
-.scrollable-canvas_horizontal-scrollbar_2w6OD {
+[class*="scrollable-canvas_vertical-scrollbar_"],
+[class*="scrollable-canvas_horizontal-scrollbar_"] {
   background-color: var(--editorDarkMode-accent-paintEditorScrollbar);
 }

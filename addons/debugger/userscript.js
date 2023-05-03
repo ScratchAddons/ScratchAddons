@@ -346,9 +346,11 @@ export default async function ({ addon, console, msg }) {
           } else if (type === "field_image") {
             const src = argInfo.src;
             if (src.endsWith("rotate-left.svg")) {
-              formattedMessage += "↩";
+              formattedMessage += msg("/global/blocks/anticlockwise");
             } else if (src.endsWith("rotate-right.svg")) {
-              formattedMessage += "↪";
+              formattedMessage += msg("/global/blocks/clockwise");
+            } else if (src.endsWith("green-flag.svg")) {
+              formattedMessage += msg("/global/blocks/green-flag");
             }
           } else {
             formattedMessage += "()";
