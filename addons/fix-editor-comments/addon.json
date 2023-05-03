@@ -43,7 +43,7 @@
       "default": true
     },
     {
-      "name": "Add scroll bars to clipped comments",
+      "name": "Add scroll bars",
       "id": "scroll",
       "description": "Adds scroll bars to long comments and allows you to scroll through them with the scroll wheel.",
       "type": "boolean",
@@ -64,7 +64,7 @@
       "default": true
     },
     {
-      "name": "Keep block comment connections straight",
+      "name": "Keep connections straight",
       "id": "straighten",
       "description": "Keeps the line connecting comments to blocks horizontal.",
       "type": "boolean",

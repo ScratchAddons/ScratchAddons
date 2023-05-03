@@ -19,7 +19,7 @@
     {
       "name": "Show experimental keys",
       "id": "experimentalKeys",
-      "description": "Includes equals, slash, semicolon and more.",
+      "description": "Includes keys such as equals, slash, semicolon and others that don't typically require holding shift",
       "type": "boolean",
       "default": false
     },
