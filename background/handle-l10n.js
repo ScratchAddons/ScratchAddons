@@ -6,7 +6,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     return sendResponse(
       Object.fromEntries(
         Object.keys(scratchAddons.l10n.messages)
-          .filter((value) => value.startsWith(`${request.l10nAddonId}/`))
+          .filter((value) => value.startsWith(`${request.l10nAddonId}/`) || value.startsWith(`_`))
           .map((value) => [value, scratchAddons.l10n.messages[value]])
       )
     );

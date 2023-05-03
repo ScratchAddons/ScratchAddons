@@ -32,7 +32,8 @@
 .sa-annual-report-2021 .reach-section,
 .sa-annual-report-2021 .reach-scratch-jr,
 .card .card-button,
-.microbit .extension-header {
+.microbit .extension-header,
+.link .extension-header /* Scratch Link download */ {
   background-color: #064734;
 }
 .hoc-banner .hoc-banner-image,

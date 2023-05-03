@@ -162,7 +162,7 @@ export async function fetchMigratedComments(
     const res = await fetch(getCommentUrl(commentId));
 
     if (!res.ok) {
-      if (res.status === 404) continue;
+      if (res.status === 404 || res.status === 403) continue;
       throw HTTPError.fromResponse(`Error when fetching comment ${resourceType}/${commentId}`, res);
     }
     const json = await res.json();
@@ -197,7 +197,7 @@ export async function fetchMigratedComments(
     const getReplies = async (offset) => {
       const repliesRes = await fetch(getRepliesUrl(parentId, offset));
       if (!repliesRes.ok) {
-        if (repliesRes.status === 404) return;
+        if (repliesRes.status === 404 || repliesRes.status === 403) return;
         throw HTTPError.fromResponse(`Ignoring comment ${resourceType}/${commentId}`, repliesRes);
       }
       const repliesJson = await repliesRes.json();

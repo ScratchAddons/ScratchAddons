@@ -18,12 +18,6 @@
   padding-right: 0;
 }
 
-.studio-project-tile .studio-project-image,
-.studio-project-tile .studio-project-avatar,
-.studio-member-tile .studio-member-image {
-  vertical-align: middle;
-}
-
 .items-per-row-studio-curators-min5 .studio-member-tile .studio-member-image {
   width: 24px;
   height: 24px;
@@ -33,10 +27,6 @@
   height: 60px;
 }
 
-.studio-project-tile .studio-project-bottom {
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
 .items-per-row-studio-projects-min4 .studio-project-tile .studio-project-bottom {
   padding-left: 8px;
   padding-right: 0;

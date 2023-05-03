@@ -1,6 +1,6 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   // The basic premise of how this addon works is relative simple.
   // scratch-gui renders the sprite selectors and asset selectors in a hierarchy like this:
   // <SelectorHOC>
@@ -1217,6 +1217,19 @@ export default async function ({ addon, global, console, msg }) {
         soundIndex,
         newIndex
       );
+    };
+
+    // Temporal bug fix for #5762
+    const originalShareSoundToTarget = vm.shareSoundToTarget;
+    vm.shareSoundToTarget = function (...args) {
+      const target = this.runtime.getTargetById(args[1]);
+      if (!target) {
+        // Avoid reading property from null
+        return Promise.reject(new Error("Dropping sound into folder is not supported"));
+        // This would also work no matter what we returned, probably
+        // Original method returns a promise, so here too
+      }
+      return originalShareSoundToTarget.call(this, ...args);
     };
   };
 

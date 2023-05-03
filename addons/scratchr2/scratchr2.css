@@ -540,6 +540,7 @@ select:focus {
 #topnav ul.account-nav ul.user-nav li a {
   color: var(--darkWww-navbar-text, white);
   font-size: 13px;
+  white-space: normal;
 }
 #topnav ul.account-nav ul.user-nav li:hover {
   background: var(--darkWww-navbar-border, rgba(0, 0, 0, 0.1));
@@ -703,25 +704,4 @@ select:focus {
   border: 1px solid var(--darkWww-border, rgba(0, 0, 0, 0.1));
   background: var(--darkWww-box, white);
   color: var(--darkWww-link, #4d97ff);
-}
-
-/* Spinner animation code */
-/* From https://github.com/LLK/scratch-www/blob/develop/src/components/spinner/spinner.scss */
-@keyframes spin-intro {
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-@keyframes spin {
-  0% {
-    transform: rotate(0);
-  }
-  100% {
-    transform: rotate(359deg);
-  }
 }

@@ -130,7 +130,7 @@ const injectWorkspace = (ScratchBlocks) => {
   const oldUpdateColour = BlockSvg.prototype.updateColour;
   BlockSvg.prototype.updateColour = function (...args) {
     // procedures_prototype also have a procedure code but we do not want to color them.
-    if (this.type === "procedures_call") {
+    if (!this.isInsertionMarker() && this.type === "procedures_call") {
       const block = this.procCode_ && getCustomBlock(this.procCode_);
       if (block) {
         this.colour_ = color.color;

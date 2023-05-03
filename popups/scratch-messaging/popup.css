@@ -36,7 +36,7 @@ button {
   box-shadow: var(--content-shadow);
 }
 .message-type-admin {
-  border-color: var(--danger-orange);
+  border-color: var(--orange);
 }
 
 .message-type-title {
@@ -78,6 +78,7 @@ button {
 }
 .thread-list {
   padding-bottom: 20px;
+  overflow-wrap: break-word;
 }
 .thread-list:first-child,
 .username-list {
@@ -327,7 +328,7 @@ a.message-type-title-text {
 .popout {
   height: 10px;
   vertical-align: baseline;
-  margin-left: 5px;
+  margin-inline-start: 5px;
   opacity: 0.6;
   filter: var(--content-icon-filter);
 }
