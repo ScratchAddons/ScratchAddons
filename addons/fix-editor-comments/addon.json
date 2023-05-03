@@ -38,30 +38,35 @@
     {
       "name": "Fix dragging blocks with comments",
       "id": "fix-drag",
+      "description": "Fixes a bug where if you move a block with a comment attached to it, the comment will appear to move with it initially, but then jump back to where it was before after switching sprites or reloading.",
       "type": "boolean",
       "default": true
     },
     {
       "name": "Add scroll bars to clipped comments",
       "id": "scroll",
+      "description": "Adds scroll bars to long comments and allows you to scroll through them with the scroll wheel.",
       "type": "boolean",
       "default": true
     },
     {
       "name": "Directly edit standalone comments",
       "id": "standalone-edit",
+      "description": "Fixes a problem with comments that are not attached to blocks where if you click to edit a comment's contents, the text caret will not always get placed where you click.",
       "type": "boolean",
       "default": true
     },
     {
       "name": "Always spawn block comments next to block",
       "id": "leash",
+      "description": "If you add a comment attached to a block and there are any blocks below it that are longer, the comment will be placed to the right of those blocks and potentially end up off-screen, even if it has room to be placed next to the block you're attaching it to. With this setting, comments will always be inserted right next to the block you're attaching it to.",
       "type": "boolean",
       "default": true
     },
     {
       "name": "Keep block comment connections straight",
       "id": "straighten",
+      "description": "Keeps the line connecting comments to blocks horizontal.",
       "type": "boolean",
       "default": false
     }
