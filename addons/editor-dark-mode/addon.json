@@ -1194,7 +1194,8 @@
   },
   "latestUpdate": {
     "version": "1.32.0",
-    "newSettings": ["popup"]
+    "newSettings": ["popup"],
+    "temporaryNotice": "You can now customize the color of popup backdrops (the solid-color background behind prompts for actions like naming a new variable) separately."
   },
   "tags": ["editor", "theme", "featured"],
   "enabledByDefault": false
