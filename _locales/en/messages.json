@@ -183,7 +183,7 @@
     "message": "Sunrise"
   },
   "syncAddonsWithTheme": {
-    "message": "Make dark mode addon sync with these settings"
+    "message": "Disable dark mode addons when using light theme"
   },
   "licensesTitle": {
     "message": "Licenses - Scratch Addons"
