@@ -2288,6 +2288,7 @@
     {
       "name": "Dark code blocks on the forums",
       "id": "darkForumCode",
+      "description": "Makes [code][/code] blocks dark.",
       "type": "boolean",
       "default": true
     }
