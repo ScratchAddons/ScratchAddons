@@ -400,7 +400,7 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
   background-color: var(--editorDarkMode-primary-transparent35);
 }
 [class*="modal_modal-overlay_"] {
-  background-color: var(--editorDarkMode-primary-overlay);
+  background-color: var(--editorDarkMode-popup);
 }
 [class*="delete-button_delete-button-visible_"],
 [class*="filter_filter_"]:focus-within {
