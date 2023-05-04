@@ -26,7 +26,7 @@ export default async function ({ addon, msg }) {
     if (/\p{Extended_Pictographic}/u.test(editor.value)) {
       const notInForumojiSetting = addon.settings.get("not-in-forumoji");
       if (notInForumojiSetting === "remove" || (notInForumojiSetting === "ask" && confirm(msg("not-in-forumoji")))) {
-        editor.value = editor.value.replaceAll(/\p{Extended_Pictographic}/ug, "");
+        editor.value = editor.value.replaceAll(/\p{Extended_Pictographic}/gu, "");
         originalPostButton.click();
       }
     } else {
