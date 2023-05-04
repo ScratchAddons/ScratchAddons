@@ -1,6 +1,6 @@
 {
-  "name": "Forumoji emojis when posting in the forums",
-  "description": "Replaces Unicode emojis with Forumoji emojis before posting a post in the forums",
+  "name": "Forumoji emoji when posting in the forums",
+  "description": "Replaces Unicode emoji with Forumoji emoji before posting a post in the forums",
   "tags": ["community", "forums"],
   "versionAdded": "1.32.0",
   "userscripts": [
@@ -11,7 +11,7 @@
   ],
   "settings": [
     {
-      "name": "Action if Emojis are not in Forumoji",
+      "name": "Action if Emoji are not in Forumoji",
       "id": "not-in-forumoji",
       "type": "select",
       "default": "ask",
