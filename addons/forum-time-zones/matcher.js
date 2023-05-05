@@ -1,7 +1,5 @@
 export default async function ({ addon, global, console }) {
-  // check if setting enabled
-  if (addon.settings.get("twelve-hour-time") === false) return;
-
+  const twelveHourTime = addon.settings.get("twelve-hour-time") === true;
   const boxHeads = document.querySelectorAll(".box-head");
   boxHeads.forEach((el) => {
     if (!el.getElementsByTagName("a")[0]) return;
@@ -14,7 +12,7 @@ export default async function ({ addon, global, console }) {
 
   function handleFormatting(text) {
     const formatter = new Intl.DateTimeFormat("default", {
-      hour12: true,
+      hour12: twelveHourTime,
       timeStyle: "medium",
       dateStyle: "long",
     });
@@ -55,7 +53,7 @@ export default async function ({ addon, global, console }) {
     let formattedDate = formatter.format(date);
     if (isRelative && addon.settings.get("relative-dates") === true) {
       const resetFormatter = new Intl.DateTimeFormat("default", {
-        hour12: true,
+        hour12: twelveHourTime === true,
         dateStyle: "long",
       });
       formattedDate = formattedDate.replace(resetFormatter.format(date), day);
