@@ -1,0 +1,5 @@
+nav#navigation {
+    background: rgb(0,236,255);
+    background: linear-gradient(90deg, rgba(0,236,255,1) 0%, rgba(190,29,253,1) 100%);
+    /* blue to purple gradient */
+}
