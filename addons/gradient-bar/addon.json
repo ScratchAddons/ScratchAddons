@@ -12,7 +12,7 @@
       "matches": [
         "https://scratch.mit.edu/explore/projects/*", "https://scratch.mit.edu/",
          "https://scratch.mit.edu/about", "https://scratch.mit.edu/ideas",
-         "https://scratch.mit.edu/messages"
+         "https://scratch.mit.edu/messages", "https://scratch.mit.edu/projects/*"
         ]
     }
   ],
