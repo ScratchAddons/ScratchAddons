@@ -1,0 +1,12 @@
+#sa-forum-post-countdown {
+  background: black;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  opacity: .7;
+  font-size: 16px;
+  text-shadow: none;
+  color: white;
+  padding: 5px;
+  z-index: 999;
+}

@@ -1,0 +1,38 @@
+{
+  "name": "Countdown for posting the forums",
+  "description": "When posting in the forums, show a countdown on every page showing when you can post again.",
+  "tags": ["community", "forums"],
+  "versionAdded": "1.32.0",
+  "userscripts": [
+    {
+      "url": "post-create.js",
+      "matches": ["newPostScreens"]
+    },
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Use 120 second rule (if you are a New Scratcher)",
+      "id": "120-second",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld/"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}
