@@ -1,5 +1,5 @@
 {
-  "name": "Countdown for posting the forums",
+  "name": "Countdown for posting in the forums",
   "description": "When posting in the forums, show a countdown on every page showing when you can post again.",
   "tags": ["community", "forums"],
   "versionAdded": "1.32.0",
