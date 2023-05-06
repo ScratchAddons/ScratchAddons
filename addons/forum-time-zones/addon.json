@@ -47,12 +47,5 @@
       "default": true
     }
   ],
-  "info": [
-    {
-      "type": "notice",
-      "text": "The forum timezone changer connects to ScratchDB.",
-      "id": "scratchDBNotice"
-    }
-  ],
   "enabledByDefault": false
 }
