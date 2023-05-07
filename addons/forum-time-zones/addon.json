@@ -6,11 +6,6 @@
       "url": "timezones.js",
       "matches": ["topics"],
       "runAtComplete": false
-    },
-    {
-      "url": "matcher.js",
-      "matches": ["topics"],
-      "runAtComplete": false
     }
   ],
   "credits": [
