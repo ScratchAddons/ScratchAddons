@@ -9,14 +9,14 @@ export default async function () {
           return;
         }
         e.preventDefault();
-        if (e.altKey) {
-          // Because of JavaScript math like 0.1+0.2=0.30000000000000004
-          elt.value = (Number(elt.value) * 10 + (e.code === "ArrowUp" ? 1 : -1)) / 10;
-        } else {
-          elt.value =
-            Number(elt.value) +
-            (e.altKey ? 0.1 : e.shiftKey ? 10 : e.ctrlKey ? 100 : 1) * (e.code === "ArrowUp" ? 1 : -1);
-        }
+        // if (e.altKey) {
+        //   // Because of JavaScript math like 0.1+0.2=0.30000000000000004
+        //   elt.value = (Number(elt.value) * 10 + (e.code === "ArrowUp" ? 1 : -1)) / 10;
+        // } else {
+        elt.value =
+          Number(elt.value) +
+          (e.shiftKey ? 10 : e.ctrlKey ? 100 : e.altKey ? 1000 : 1) * (e.code === "ArrowUp" ? 1 : -1);
+        // }
       });
       elt.classList.add("sa-editor-number-arrow-keys");
     });
