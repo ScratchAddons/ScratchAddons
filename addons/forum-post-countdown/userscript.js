@@ -10,9 +10,9 @@ export default async function ({ addon, msg }) {
   elt.id = "sa-forum-post-countdown";
   document.body.appendChild(elt);
 
-  setInterval(() => {
+  setInterval(async () => {
     const now = Date.now();
-    if (now > Number(countdown) + secondCount * 1000) {
+    if (now > Number(countdown) + secondCount * 1000 || !(await addon.auth.fetchIsLoggedIn())) {
       localStorage.removeItem("sa-forum-post-countdown");
       elt.remove();
       return;
