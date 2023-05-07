@@ -1,6 +1,6 @@
 {
-  "name": "Countdown for posting in the forums",
-  "description": "When posting in the forums, show a countdown on every page showing when you can post again.",
+  "name": "Cooldown display for posting in the forums",
+  "description": "After submitting a forum post, display a countdown showing when you can post again.",
   "tags": ["community", "forums"],
   "versionAdded": "1.32.0",
   "userscripts": [
