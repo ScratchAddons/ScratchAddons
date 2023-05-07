@@ -1,8 +1,11 @@
-export default async function ({ addon }) {
+export default async function () {
   setInterval(() => {
     [...document.querySelectorAll(".blocklyHtmlInput:not(.sa-editor-number-arrow-keys)")].forEach((elt) => {
       elt.addEventListener("keydown", (e) => {
-        if (!["ArrowUp", "ArrowDown"].includes(e.code) || Number(elt.value).toString() !== elt.value) {
+        if (
+          !["ArrowUp", "ArrowDown"].includes(e.code) ||
+          Number(elt.value).toString().replace(/^0*/, "") !== elt.value.replace(/^0*/, "")
+        ) {
           return;
         }
         e.preventDefault();
