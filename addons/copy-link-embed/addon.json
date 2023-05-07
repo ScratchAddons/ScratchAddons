@@ -1,0 +1,40 @@
+{
+  "name": "Separation of Copy Link and Copy Embed buttons",
+  "description": "Seperates the embed copying and link copying functionality of the \"Copy Link\" button by moving it into two separate buttons.",
+  "tags": ["community", "projectPage"],
+  "versionAdded": "1.32.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Show \"Copy Link\" button",
+      "id": "copy-link",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show \"Copy Embed\" button",
+      "id": "copy-embed",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}
