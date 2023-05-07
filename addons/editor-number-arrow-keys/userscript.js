@@ -11,7 +11,7 @@ export default async function () {
         e.preventDefault();
         if (e.altKey) {
           // Because of JavaScript math like 0.1+0.2=0.30000000000000004
-          elt.value = (Number(elt.value) * 10 + 1) / 10;
+          elt.value = (Number(elt.value) * 10 + (e.code === "ArrowUp" ? 1 : -1)) / 10;
         } else {
           elt.value =
             Number(elt.value) +
