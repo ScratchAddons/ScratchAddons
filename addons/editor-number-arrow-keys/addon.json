@@ -1,0 +1,18 @@
+{
+  "name": "Arrow key shortcuts for number input in editor",
+  "description": "Use the up and down arrow keys to increase or decrease numbers. Holding Alt increments it by 0.1, holding Shift increments it by 10 and holding Ctrl increments it by 100.",
+  "tags": ["editor", "codeEditor"],
+  "versionAdded": "1.32.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld/"
+    }
+  ]
+}
