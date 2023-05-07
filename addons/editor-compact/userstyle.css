@@ -150,11 +150,22 @@ body::-webkit-scrollbar {
 [class*="delete-button_delete-button-visible"] {
   width: 1rem;
   height: 1rem;
+  box-shadow: 0 0 0 1px var(--editorDarkMode-primary-transparent35, hsl(215deg 100% 65% / 35%));
 }
 [class*="delete-button_delete-icon"] {
-  width: 2rem;
-  height: 2rem;
-  bottom: 0.25rem;
+  display: none;
+}
+[class*="delete-button_delete-button-visible"]::after {
+  content: "";
+  position: absolute;
+  display: block;
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  height: 50%;
+  background-image: url(https://scratch.mit.edu/static/assets/cb666b99d3528f91b52f985dfb102afa.svg);
+  transform: rotate(45deg);
+  filter: var(--editorDarkMode-primary-filter, none);
 }
 img[class*="sprite-selector-item_sprite-image"] {
   max-width: 56px;
@@ -281,9 +292,6 @@ button[class*="action-menu_more-button"] {
 }
 [class*="selector_list-area"] > div:first-child {
   margin-top: 0.25rem;
-}
-[class*="selector_list-area"] [class*="sprite-selector-item_delete-button"] {
-  top: -0.5rem;
 }
 [class*="selector_list-area"] img[class*="sprite-selector-item_sprite-image"] {
   max-width: 52px;
