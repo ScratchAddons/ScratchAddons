@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   const semicolon = document.createElement("p");
   semicolon.textContent = ";";
   semicolon.classList.add("semicolon");

@@ -1,0 +1,73 @@
+{
+  "name": "Insert blocks by name",
+  "description": "Middle or shift-click the code area, or press Ctrl+Space to bring up a block search window. Type block names (or parts of them) and drag them into the code area to add them to your project. The menu can be navigated with the arrow keys and Enter and supports autocompleting with Tab. To prevent the menu from closing, hold Shift while dragging blocks out of it.",
+  "credits": [
+    {
+      "name": "Tacodiva",
+      "link": "https://github.com/Tacodiva"
+    },
+    {
+      "name": "griffpatch"
+    },
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber/"
+    },
+    {
+      "name": "CST1229",
+      "link": "https://github.com/CST1229"
+    }
+  ],
+  "tags": ["editor", "codeEditor", "recommended"],
+  "enabledByDefault": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Popup Block Size",
+      "id": "popup_scale",
+      "type": "integer",
+      "min": 1,
+      "max": 100,
+      "default": 48
+    },
+    {
+      "name": "Popup Width",
+      "id": "popup_width",
+      "type": "integer",
+      "min": 1,
+      "max": 100,
+      "default": 16
+    },
+    {
+      "name": "Popup Maximum Height",
+      "id": "popup_max_height",
+      "type": "integer",
+      "min": 1,
+      "max": 100,
+      "default": 40
+    }
+  ],
+  "versionAdded": "1.30.0",
+  "latestUpdate": {
+    "version": "1.31.0",
+    "temporaryNotice": "This addon was completely reworked. You can now type inputs and reporters inside other blocks, and autocomplete using the Tab key.",
+    "isMajor": true
+  },
+  "info": [
+    {
+      "text": "This addon was previously part of the \"developer tools\" addon but has moved here.",
+      "id": "developer-tools"
+    }
+  ]
+}

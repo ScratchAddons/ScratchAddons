@@ -1,10 +1,11 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   const originalFileReader = window.FileReader;
   window.FileReader = function () {
     const realFileReader = new originalFileReader();
     const readAsArrayBuffer = Symbol();
     realFileReader[readAsArrayBuffer] = realFileReader.readAsArrayBuffer;
     realFileReader.readAsArrayBuffer = function (file) {
+      if (addon.self.disabled) return realFileReader[readAsArrayBuffer](file);
       (async () => {
         if (file.type === "image/svg+xml") {
           try {

@@ -75,7 +75,6 @@ export default async function ({ template }) {
           ),
           primaryTransparent: multiply(this.settings.primary, { a: 0.35 }),
           inputTransparent: multiply(this.settings.input, { a: 0.25 }),
-          palette: multiply(this.settings.palette, { a: 0.8 }),
         };
       },
     },

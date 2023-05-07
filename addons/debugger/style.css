@@ -12,6 +12,22 @@
   display: none !important;
 }
 
+.sa-debugger-container [class*="button_content_"] {
+  position: relative;
+}
+
+.sa-debugger-unread::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  right: 0;
+  display: block;
+  width: 6px;
+  height: 6px;
+  background-color: var(--editorDarkMode-highlightText, #4d97ff);
+  border-radius: 50%;
+}
+
 .sa-debugger-interface {
   display: none;
   position: absolute;

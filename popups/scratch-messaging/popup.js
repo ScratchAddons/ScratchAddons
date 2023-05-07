@@ -200,7 +200,7 @@ export default async ({ addon, msg, safeMsg }) => {
         return vue.username;
       },
       commentTimeAgo() {
-        const timeFormatter = new Intl.RelativeTimeFormat("en", {
+        const timeFormatter = new Intl.RelativeTimeFormat(msg.locale, {
           localeMatcher: "best fit",
           numeric: "auto",
           style: "short",
@@ -321,7 +321,7 @@ export default async ({ addon, msg, safeMsg }) => {
     computed: {
       feedbackUrl() {
         const manifest = chrome.runtime.getManifest();
-        return `https://scratchaddons.com/feedback/?ext_version=${manifest.version_name}&utm_source=extension&utm_medium=messagingcrash&utm_campaign=v${manifest.versions}`;
+        return `https://scratchaddons.com/feedback/?ext_version=${manifest.version_name}&utm_source=extension&utm_medium=messagingcrash&utm_campaign=v${manifest.version}`;
       },
       profilesOrdered() {
         // Own profile first, then others

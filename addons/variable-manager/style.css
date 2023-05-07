@@ -1,17 +1,17 @@
 /* Change z-indexes to allow more than 3 tabs */
-.gui_tab_27Unf.gui_is-selected_sHAiu {
+[class*="gui_tab_"][class*="gui_is-selected_"] {
   z-index: 10 !important;
 }
-.gui_tab_27Unf:nth-of-type(1) {
+[class*="gui_tab_"]:nth-of-type(1) {
   z-index: 9;
 }
-.gui_tab_27Unf:nth-of-type(2) {
+[class*="gui_tab_"]:nth-of-type(2) {
   z-index: 8;
 }
-.gui_tab_27Unf:nth-of-type(3) {
+[class*="gui_tab_"]:nth-of-type(3) {
   z-index: 7;
 }
-.gui_tab_27Unf:nth-of-type(4) {
+[class*="gui_tab_"]:nth-of-type(4) {
   z-index: 6;
 }
 
@@ -84,6 +84,30 @@
   height: 100%;
   line-height: 2em;
   resize: none;
+}
+
+.sa-var-manager-too-big {
+  display: none;
+  cursor: pointer;
+  font: inherit;
+  font-style: italic;
+  color: inherit;
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 8px;
+  opacity: 0.8;
+  width: 100%;
+  text-align: left;
+}
+.sa-var-manager-too-big:hover {
+  text-decoration: underline;
+}
+[data-too-big="true"] .sa-var-manager-too-big {
+  display: block;
+}
+[data-too-big="true"] .sa-var-manager-value-input {
+  display: none;
 }
 
 .sa-var-manager table {

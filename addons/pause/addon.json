@@ -1,6 +1,6 @@
 {
   "name": "Pause button",
-  "description": "Adds a pause button next to the green flag.",
+  "description": "Adds a button to pause the project next to the green flag.",
   "credits": [
     {
       "name": "Jeffalo"
@@ -25,5 +25,5 @@
     }
   ],
   "tags": ["player", "recommended"],
-  "enabledByDefault": false
+  "enabledByDefault": true
 }

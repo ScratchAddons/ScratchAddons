@@ -1,8 +1,8 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   let { redux } = addon.tab;
 
   await redux.waitForState((state) => state.preview.status.project === "FETCHED", {
-    actions: ["SET_INFO"],
+    actions: ["SET_PROJECT_INFO"],
   });
 
   let data = redux.state.preview.projectInfo;

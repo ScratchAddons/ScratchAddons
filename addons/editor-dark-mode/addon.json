@@ -141,17 +141,6 @@
       }
     },
     {
-      "name": "primary-overlay",
-      "value": {
-        "type": "multiply",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primary"
-        },
-        "a": 0.9
-      }
-    },
-    {
       "name": "primary-variant",
       "value": {
         "type": "textColor",
@@ -286,6 +275,19 @@
       }
     },
     {
+      "name": "selector-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "selector"
+        },
+        "threshold": 128
+      }
+    },
+    {
       "name": "selector2-text",
       "value": {
         "type": "textColor",
@@ -305,6 +307,19 @@
           "type": "settingValue",
           "settingId": "selector2"
         }
+      }
+    },
+    {
+      "name": "selector2-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "selector2"
+        },
+        "threshold": 128
       }
     },
     {
@@ -393,6 +408,19 @@
       }
     },
     {
+      "name": "accent-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "threshold": 128
+      }
+    },
+    {
       "name": "accent-opacity0",
       "value": {
         "type": "multiply",
@@ -444,6 +472,39 @@
       }
     },
     {
+      "name": "accent-paintEditorScrollbar",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "accent"
+          },
+          "r": 0.75,
+          "g": 0.75,
+          "b": 0.75,
+          "a": 0.8
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "accent"
+          },
+          "r": 0.8,
+          "g": 0.8,
+          "b": 0.8,
+          "a": 0.8
+        },
+        "threshold": 110
+      }
+    },
+    {
       "name": "input-text",
       "value": {
         "type": "textColor",
@@ -488,6 +549,19 @@
           "type": "settingValue",
           "settingId": "input"
         }
+      }
+    },
+    {
+      "name": "input-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        },
+        "threshold": 128
       }
     },
     {
@@ -583,6 +657,17 @@
         "type": "textColor",
         "black": "rgba(0, 0, 0, 0.13)",
         "white": "rgba(255, 255, 255, 0.13)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "workspace"
+        }
+      }
+    },
+    {
+      "name": "workspace-insertionMarker",
+      "value": {
+        "type": "textColor",
+        "black": "#000000",
         "source": {
           "type": "settingValue",
           "settingId": "workspace"
@@ -726,6 +811,10 @@
       "url": "paper.js",
       "matches": ["projects"],
       "runAtComplete": false
+    },
+    {
+      "url": "extension_icons.js",
+      "matches": ["projects"]
     }
   ],
   "userstyles": [
@@ -753,20 +842,6 @@
       "if": {
         "settings": { "affectStage": true }
       }
-    },
-    {
-      "url": "dark_comments.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "darkComments": true }
-      }
-    },
-    {
-      "url": "scrollbar.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "darkScrollbars": true }
-      }
     }
   ],
   "settings": [
@@ -793,6 +868,13 @@
       "id": "menuBar",
       "type": "color",
       "default": "#202020"
+    },
+    {
+      "name": "Popup backdrop color",
+      "id": "popup",
+      "type": "color",
+      "default": "#000a",
+      "allowTransparency": true
     },
     {
       "name": "Active tab background",
@@ -891,18 +973,6 @@
       "id": "affectStage",
       "type": "boolean",
       "default": false
-    },
-    {
-      "name": "Dark comments",
-      "id": "darkComments",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Dark scrollbars",
-      "id": "darkScrollbars",
-      "type": "boolean",
-      "default": true
     }
   ],
   "presets": [
@@ -915,6 +985,7 @@
         "primary": "#4d97ff",
         "highlightText": "#4d97ff",
         "menuBar": "#202020",
+        "popup": "#000a",
         "activeTab": "#202020",
         "tab": "#151515",
         "selector": "#202020",
@@ -928,9 +999,7 @@
         "fullscreen": "#000000",
         "stageHeader": "#000000",
         "border": "#ffffff0d",
-        "dots": false,
-        "darkComments": true,
-        "darkScrollbars": true
+        "dots": false
       }
     },
     {
@@ -942,6 +1011,7 @@
         "primary": "#4d97ff",
         "highlightText": "#4d97ff",
         "menuBar": "#2f4066",
+        "popup": "#000a",
         "activeTab": "#2f4066",
         "tab": "#273552",
         "selector": "#2f4066",
@@ -955,9 +1025,7 @@
         "fullscreen": "#051638",
         "stageHeader": "#051638",
         "border": "#00000026",
-        "dots": false,
-        "darkComments": true,
-        "darkScrollbars": true
+        "dots": false
       }
     },
     {
@@ -969,6 +1037,7 @@
         "primary": "#47566b",
         "highlightText": "#4d97ff",
         "menuBar": "#47566b",
+        "popup": "#47566be6",
         "activeTab": "#555555",
         "tab": "#444444",
         "selector": "#333333",
@@ -982,9 +1051,7 @@
         "fullscreen": "#222222",
         "stageHeader": "#222222",
         "border": "#111111",
-        "dots": false,
-        "darkComments": true,
-        "darkScrollbars": true
+        "dots": false
       }
     },
     {
@@ -996,6 +1063,7 @@
         "primary": "#4d97ff",
         "highlightText": "#4d97ff",
         "menuBar": "#4d97ff",
+        "popup": "#000a",
         "activeTab": "#282828",
         "tab": "#202020",
         "selector": "#252c37",
@@ -1009,9 +1077,7 @@
         "fullscreen": "#282828",
         "stageHeader": "#333333",
         "border": "#444444",
-        "dots": true,
-        "darkComments": true,
-        "darkScrollbars": true
+        "dots": true
       }
     },
     {
@@ -1023,6 +1089,7 @@
         "primary": "#ff4d4d",
         "highlightText": "#ff4d4d",
         "menuBar": "#333333",
+        "popup": "#333a",
         "activeTab": "#1e1e1e",
         "tab": "#2e2e2e",
         "selector": "#1e1e1e",
@@ -1036,9 +1103,7 @@
         "fullscreen": "#111111",
         "stageHeader": "#111111",
         "border": "#ffffff26",
-        "dots": true,
-        "darkComments": true,
-        "darkScrollbars": true
+        "dots": true
       }
     },
     {
@@ -1050,6 +1115,7 @@
         "primary": "#179fd7ff",
         "highlightText": "#1e9ed6",
         "menuBar": "#9c9ea2ff",
+        "popup": "#00000099",
         "activeTab": "#e6e8e8",
         "tab": "#f1f2f2ff",
         "selector": "#e6e8e8",
@@ -1063,9 +1129,7 @@
         "fullscreen": "#ffffffff",
         "stageHeader": "#e6e8e8",
         "border": "#d0d1d2",
-        "dots": true,
-        "darkComments": false,
-        "darkScrollbars": false
+        "dots": true
       }
     },
     {
@@ -1077,6 +1141,7 @@
         "primary": "#5498c7",
         "highlightText": "#21211f",
         "menuBar": "#c0c3c6",
+        "popup": "#00000099",
         "activeTab": "#b9d7e5",
         "tab": "#adadb5",
         "selector": "#6a6a6a",
@@ -1090,9 +1155,7 @@
         "fullscreen": "#000001",
         "stageHeader": "#000001",
         "border": "#0000006b",
-        "dots": false,
-        "darkComments": false,
-        "darkScrollbars": false
+        "dots": false
       }
     },
     {
@@ -1104,6 +1167,7 @@
         "primary": "#4d97ff",
         "highlightText": "#4d97ff",
         "menuBar": "#4d97ff",
+        "popup": "#4d97ffe6",
         "activeTab": "#ffffff",
         "tab": "#d9e3f2",
         "selector": "#e9f1fc",
@@ -1117,9 +1181,7 @@
         "fullscreen": "#ffffff",
         "stageHeader": "#e8edf1",
         "border": "#00000026",
-        "dots": true,
-        "darkComments": false,
-        "darkScrollbars": false
+        "dots": true
       }
     }
   ],
@@ -1129,6 +1191,11 @@
   "presetPreview": {
     "type": "palette",
     "colors": ["primary", "menuBar", "page", "accent", "workspace", "selector"]
+  },
+  "latestUpdate": {
+    "version": "1.32.0",
+    "newSettings": ["popup"],
+    "temporaryNotice": "You can now customize the color of popup backdrops (the solid-color background behind prompts for actions like naming a new variable) separately."
   },
   "tags": ["editor", "theme", "featured"],
   "enabledByDefault": false

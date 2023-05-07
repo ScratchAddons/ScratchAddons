@@ -10,7 +10,7 @@ const removeAllChildren = (element) => {
   }
 };
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   setup(addon.tab.traps.vm);
 
   let logsTab;
@@ -91,11 +91,7 @@ export default async function ({ addon, global, console, msg }) {
   debuggerButton.addEventListener("click", () => setInterfaceVisible(true));
 
   const setHasUnreadMessage = (unreadMessage) => {
-    // setting image.src is slow, only do it when necessary
-    const newImage = addon.self.dir + (unreadMessage ? "/icons/debug-unread.svg" : "/icons/debug.svg");
-    if (debuggerButtonImage.src !== newImage) {
-      debuggerButtonImage.src = newImage;
-    }
+    debuggerButtonContent.classList.toggle("sa-debugger-unread", unreadMessage);
   };
 
   const interfaceContainer = Object.assign(document.createElement("div"), {
@@ -313,8 +309,18 @@ export default async function ({ addon, global, console, msg }) {
     new Utils(addon).scrollBlockIntoView(blockId);
   };
 
-  // May be slightly incorrect in some edge cases.
-  const formatProcedureCode = (proccode) => proccode.replace(/%[nbs]/g, "()");
+  /**
+   * @param {string} procedureCode
+   * @returns {string}
+   */
+  const formatProcedureCode = (procedureCode) => {
+    const customBlock = addon.tab.getCustomBlock(procedureCode);
+    if (customBlock) {
+      procedureCode = customBlock.displayName;
+    }
+    // May be slightly incorrect in some edge cases.
+    return procedureCode.replace(/%[nbs]/g, "()");
+  };
 
   // May be slightly incorrect in some edge cases.
   const formatBlocklyBlockData = (jsonData) => {
@@ -340,9 +346,11 @@ export default async function ({ addon, global, console, msg }) {
           } else if (type === "field_image") {
             const src = argInfo.src;
             if (src.endsWith("rotate-left.svg")) {
-              formattedMessage += "↩";
+              formattedMessage += msg("/global/blocks/anticlockwise");
             } else if (src.endsWith("rotate-right.svg")) {
-              formattedMessage += "↪";
+              formattedMessage += msg("/global/blocks/clockwise");
+            } else if (src.endsWith("green-flag.svg")) {
+              formattedMessage += msg("/global/blocks/green-flag");
             }
           } else {
             formattedMessage += "()";
@@ -438,7 +446,8 @@ export default async function ({ addon, global, console, msg }) {
       if (!text) {
         return null;
       }
-      category = jsonData.extensions.includes("scratch_extension") ? "pen" : jsonData.category;
+      // jsonData.extensions is not guaranteed to exist
+      category = jsonData.extensions?.includes("scratch_extension") ? "pen" : jsonData.category;
       const isStatement =
         (jsonData.extensions &&
           (jsonData.extensions.includes("shape_statement") ||
@@ -457,13 +466,7 @@ export default async function ({ addon, global, console, msg }) {
     element.textContent = text;
     element.dataset.shape = shape;
 
-    const colorIds = {
-      "addon-custom-block": "sa",
-      "data-lists": "data_lists",
-      list: "data_lists",
-      events: "event",
-    };
-    element.classList.add(`sa-block-color-${colorIds[category] || category}`);
+    element.classList.add(`sa-block-color-${category}`);
 
     return element;
   };
