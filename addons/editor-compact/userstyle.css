@@ -124,10 +124,6 @@ body::-webkit-scrollbar {
 [class*="gui_body-wrapper_"] [class*="stage-selector_is-selected_"] {
   box-shadow: 0px 0px 0px 2px var(--editorDarkMode-primary-transparent35, hsl(215deg 100% 65% / 35%));
 }
-[class*="sprite-selector-item_is-selected"] [class*="sprite-selector-item_sprite-info"] {
-  background: none;
-  color: inherit;
-}
 [class*="input_input-small"],
 [class*="sprite-info_larger-input"] input {
   width: 2.5rem;
@@ -299,6 +295,10 @@ button[class*="action-menu_more-button"] {
 [class*="selector_list-area"] [class*="sprite-selector-item_sprite-info"] {
   padding-top: 0;
   padding-bottom: 0.125rem;
+}
+[class*="selector_list-area"] [class*="sprite-selector-item_is-selected"] [class*="sprite-selector-item_sprite-info"] {
+  background-color: transparent;
+  color: inherit;
 }
 
 /* Asset editor */
