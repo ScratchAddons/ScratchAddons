@@ -1,4 +1,4 @@
-export default async function () {
+export default async function ({ addon }) {
   setInterval(() => {
     [...document.querySelectorAll(".blocklyHtmlInput:not(.sa-editor-number-arrow-keys)")].forEach((elt) => {
       elt.addEventListener("keydown", (e) => {
@@ -15,7 +15,14 @@ export default async function () {
         // } else {
         elt.value =
           Number(elt.value) +
-          (e.shiftKey ? 10 : e.ctrlKey ? 100 : e.altKey ? 1000 : 1) * (e.code === "ArrowUp" ? 1 : -1);
+          (e.shiftKey
+            ? addon.settings.get("shift")
+            : e.ctrlKey
+            ? addon.settings.get("ctrl")
+            : e.altKey
+            ? addon.settings.get("alt")
+            : addon.settings.get("regular")) *
+            (e.code === "ArrowUp" ? 1 : -1);
         // }
       });
       elt.classList.add("sa-editor-number-arrow-keys");
