@@ -1,7 +1,36 @@
 [class*="stage-wrapper_full-screen"] [class*="stage-header_stage-header-wrapper-overlay"] {
-  display: none;
+  display: block;
 }
 
 [class*="stage-wrapper_full-screen"] {
   top: 0rem !important;
+}
+
+[class*="stage-header_stage-header-wrapper-overlay"] {
+  background: rgba(0, 0, 0, 0);
+}
+
+[class*="stage-header_stage-menu-wrapper"] {
+  padding: 8px;
+  height: fit-content;
+}
+
+[class*="controls_controls-container"] {
+  background: rgb(255, 255, 255);
+  border-width: 1px !important;
+  border-radius: 4px;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  padding: 0px;
+}
+
+[class*="stage-header_stage-button"] {
+  top: 0rem;
+}
+
+.pause-btn,
+[class*="green-flag_green-flag"],
+[class*="stop-all_stop-all"] {
+  padding: 6px !important;
+  width: 32px;
+  height: 32px;
 }
