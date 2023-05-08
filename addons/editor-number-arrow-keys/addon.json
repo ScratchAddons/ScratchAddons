@@ -1,6 +1,6 @@
 {
-  "name": "Arrow key shortcuts for number input in editor",
-  "description": "Use the up and down arrow keys to increase or decrease numbers. Holding Shift increments it by 10, holding Ctrl increments it by 100 and holding Alt increments it by 1000.",
+  "name": "Arrow key incrementation in editor",
+  "description": "Use the up and down arrow keys to increase or decrease number values in block inputs. Holding Shift changes by 10, holding Ctrl changes by 100 and holding Alt changes by 1,000.",
   "tags": ["editor", "codeEditor"],
   "versionAdded": "1.32.0",
   "userscripts": [
