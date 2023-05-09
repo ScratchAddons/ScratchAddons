@@ -1,8 +1,8 @@
 export default function () {
   const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
   if (prerelease) {
-    const blue = getComputedStyle(document.documentElement).getPropertyValue("--blue");
-    document.documentElement.style.setProperty("--brand-orange", blue);
+    const blue = getComputedStyle(document.documentElement).getPropertyValue("--prerelease-brand-color");
+    document.documentElement.style.setProperty("--brand-color", blue);
     const favicon = document.getElementById("favicon");
     if (favicon) favicon.href = chrome.runtime.getURL("/images/icon-blue.png");
   }

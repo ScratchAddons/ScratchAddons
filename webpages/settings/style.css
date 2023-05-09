@@ -18,7 +18,7 @@ body {
 
 .navbar {
   height: 60px;
-  background: var(--brand-orange);
+  background: var(--brand-color);
   color: var(--white-text);
   display: flex;
   align-items: center;

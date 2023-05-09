@@ -1,6 +1,7 @@
 :root {
-  --brand-orange-min-font-weight: 600;
+  --brand-color-min-font-weight: 600;
   --green-text: var(--green);
+  --blue: #0074d7;
   --blue-text: var(--blue);
 
   --page-background: #fcfcfc;
@@ -17,6 +18,7 @@
   --comment-background: #f0f0f0;
   --unread-comment-background: #fff;
   --notice-background: rgba(253, 221, 43, 0.25);
+  --notice-border: #efc811;
   --notice-text: #222;
   --notice-icon-filter: none;
   --warning-background: var(--red);
@@ -36,6 +38,7 @@
   --control-border: #aaa;
 
   --content-text: #222;
+  --content-text-invert: #fff;
   --content-icon-filter: brightness(0);
   --description-text: #444;
   --description-icon-filter: brightness(0) invert(0.27);
