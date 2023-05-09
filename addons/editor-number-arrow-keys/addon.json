@@ -15,28 +15,28 @@
       "id": "regular",
       "type": "integer",
       "min": 0,
-      "default": "1"
+      "default": 1
     },
     {
       "name": "Change on Shift+Key",
       "id": "shift",
       "type": "integer",
       "min": 0,
-      "default": "10"
+      "default": 10
     },
     {
       "name": "Change on Ctrl+Key",
       "id": "ctrl",
       "type": "integer",
       "min": 0,
-      "default": "100"
+      "default": 100
     },
     {
       "name": "Change on Alt+Key",
       "id": "alt",
       "type": "integer",
       "min": 0,
-      "default": "1000"
+      "default": 1000
     }
   ],
   "credits": [
