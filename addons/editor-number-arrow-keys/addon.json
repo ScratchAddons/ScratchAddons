@@ -13,25 +13,29 @@
     {
       "name": "Change on regular key press",
       "id": "regular",
-      "type": "positive_integer",
+      "type": "integer",
+      "min": 0,
       "default": "1"
     },
     {
       "name": "Change on Shift+Key",
       "id": "shift",
-      "type": "positive_integer",
+      "type": "integer",
+      "min": 0,
       "default": "10"
     },
     {
       "name": "Change on Ctrl+Key",
       "id": "ctrl",
-      "type": "positive_integer",
+      "type": "integer",
+      "min": 0,
       "default": "100"
     },
     {
       "name": "Change on Alt+Key",
       "id": "alt",
-      "type": "positive_integer",
+      "type": "integer",
+      "min": 0,
       "default": "1000"
     }
   ],
