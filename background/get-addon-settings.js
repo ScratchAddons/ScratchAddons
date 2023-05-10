@@ -24,10 +24,10 @@ const areColorsEqual = (currentColor, oldPresetColor) => {
       : hexColor;
 
   // Convert both colors to #{rr}{gg}{bb}{aa}
-  const currentColorRGBA = getRRGGBBAA(currentColorLowercase);
-  const oldPresetColorRGBA = getRRGGBBAA(oldPresetLowercase);
+  const currentColorRRGGBBAA = getRRGGBBAA(currentColorLowercase);
+  const oldPresetColorRRGGBBAA = getRRGGBBAA(oldPresetLowercase);
 
-  return currentColorRGBA === oldPresetColorRGBA;
+  return currentColorRRGGBBAA === oldPresetColorRRGGBBAA;
 };
 
 const areSettingsEqual = (currentValue, oldPresetValue) => {
