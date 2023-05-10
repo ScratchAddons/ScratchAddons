@@ -1,4 +1,4 @@
-export default async function ({ addon }) {
+export default async function () {
   const submitButtons = document.querySelectorAll("#djangobbwrap .form-submit [type=submit]");
   const submitButton = submitButtons[submitButtons.length - 1];
 
