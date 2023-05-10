@@ -19,14 +19,6 @@
       "matches": ["https://scratch.mit.edu/*"]
     }
   ],
-  "settings": [
-    {
-      "name": "Use 120 second rule (if you are a New Scratcher)",
-      "id": "120-second",
-      "type": "boolean",
-      "default": false
-    }
-  ],
   "credits": [
     {
       "name": "mybearworld",

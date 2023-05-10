@@ -1,10 +1,14 @@
-export default async function ({ addon, msg }) {
+export default async function ({ addon, msg, console }) {
   const countdown = localStorage.getItem("sa-forum-post-countdown");
   if (!countdown) {
     return;
   }
 
-  let secondCount = addon.settings.get("120-second") ? 120 : 60;
+  let secondCount = (
+    await fetch("/session", { headers: { "x-requested-with": "XMLHttpRequest" } }).then((resp) => resp.json())
+  ).permissions.new_scratcher
+    ? 120
+    : 60;
 
   const elt = document.createElement("div");
   elt.id = "sa-forum-post-countdown";
