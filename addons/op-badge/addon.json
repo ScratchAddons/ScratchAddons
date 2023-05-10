@@ -1,6 +1,6 @@
 {
     "name": "Show OP badge in forums and projects",
-    "description": "Adds a OP badge to the user that created the forum topic, or the project.",
+    "description": "Adds a OP badge to the user that created a forum topic or project.",
     "tags": ["community", "forums", "projects"],
     "enabledByDefault": false,
     "userscripts": [
