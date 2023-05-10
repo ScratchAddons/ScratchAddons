@@ -1,4 +1,4 @@
-export default async function ({ addon, msg, console }) {
+export default async function ({ addon, msg }) {
   const countdown = localStorage.getItem("sa-forum-post-countdown");
   if (!countdown) {
     return;
