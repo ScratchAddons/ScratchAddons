@@ -18,7 +18,7 @@ Contributions are welcome! If you know how to fix an issue, you can create a pul
 
 ### Learn more about making addons
 
-If you're making a new addon, our ["Creating an Addon" FAQ page](https://scratchaddons.com/docs/develop/getting-started/creating-an-addon/) will teach you how to make one.
+If you're making a new addon, our ["Creating an Addon" guide](https://scratchaddons.com/docs/develop/getting-started/creating-an-addon/) will teach you how to make one.
 
 ### Opening a pull request
 
