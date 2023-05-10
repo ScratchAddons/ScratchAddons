@@ -183,7 +183,8 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
         }
 
         if (addonId === "editor-dark-mode") {
-          madeAnyChanges = madeChangesToAddon = true;
+          const migratingPresetsV1_32 = settings._version && settings._version < 3;
+          let newPopupSettingValue = null;
           updatePresetIfMatching(
             settings,
             3,
@@ -206,9 +207,95 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
               border: "#111111",
             },
             () => {
-              settings.popup = "#47566be6";
+              newPopupSettingValue = "#47566be6";
             }
           );
+          updatePresetIfMatching(
+            settings,
+            4,
+            {
+              // "TurboWarp dark" preset
+              page: "#111111",
+              primary: "#ff4d4d",
+              highlightText: "#ff4d4d",
+              menuBar: "#333333",
+              activeTab: "#1e1e1e",
+              tab: "#2e2e2e",
+              selector: "#1e1e1e",
+              selector2: "#2e2e2e",
+              selectorSelection: "#111111",
+              accent: "#111111",
+              input: "#1e1e1e",
+              workspace: "#1e1e1e",
+              categoryMenu: "#111111",
+              palette: "#111111cc",
+              border: "#ffffff26",
+            },
+            () => {
+              newPopupSettingValue = "#333a";
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            5,
+            {
+              // "Scratch 2.0" preset
+              page: "#ffffffff",
+              primary: "#179fd7ff",
+              highlightText: "#1e9ed6",
+              menuBar: "#9c9ea2ff",
+              activeTab: "#e6e8e8",
+              tab: "#f1f2f2ff",
+              selector: "#e6e8e8",
+              selector2: "#e6e8e8",
+              selectorSelection: "#d0d0d0ff",
+              accent: "#f2f2f2",
+              input: "#ffffffff",
+              workspace: "#dddedeff",
+              categoryMenu: "#e6e8e8ff",
+              palette: "#e6e8e8cc",
+              border: "#d0d1d2",
+            },
+            () => {
+              newPopupSettingValue = "#00000099";
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            6,
+            {
+              // "Scratch 1.x" preset
+              page: "#c0c3c6",
+              primary: "#5498c7",
+              highlightText: "#21211f",
+              menuBar: "#c0c3c6",
+              activeTab: "#b9d7e5",
+              tab: "#adadb5",
+              selector: "#6a6a6a",
+              selector2: "#7c8083",
+              selectorSelection: "#404143",
+              accent: "#959a9f",
+              input: "#5f6265",
+              workspace: "#7c8083",
+              categoryMenu: "#969a9f",
+              palette: "#7c8083cc",
+              border: "#0000006b",
+            },
+            () => {
+              newPopupSettingValue = "#00000099";
+            }
+          );
+
+          if (!newPopupSettingValue && migratingPresetsV1_32) {
+            // https://github.com/ScratchAddons/ScratchAddons/pull/5931#issuecomment-1529426595
+            if (settings.highlightText) newPopupSettingValue = settings.highlightText.substring(0, 7) + "e6";
+          }
+
+          if (newPopupSettingValue) {
+            console.log("Migrated `popup` setting from editor-dark-mode to: ", newPopupSettingValue);
+            settings.popup = newPopupSettingValue;
+            madeAnyChanges = madeChangesToAddon = true;
+          }
         }
 
         if (addonId === "editor-theme3") {
