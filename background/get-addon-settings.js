@@ -4,7 +4,7 @@ import minifySettings from "../libraries/common/minify-settings.js";
  Since presets can change independently of others, we have to keep track of
  the versions separately. Current versions:
 
- - editor-dark-mode 2 (bumped in v1.23 twice)
+ - editor-dark-mode 2 (bumped in v1.23 twice) (TODO: update this line)
  - editor-theme3 3 (last bumped in v1.32)
  */
 
@@ -178,7 +178,30 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
           }
         }
 
-        if (addonId === "editor-dark-mode") updatePresetIfMatching(settings, 2);
+        if (addonId === "editor-dark-mode") {
+          updatePresetIfMatching(
+            settings,
+            3,
+            {
+              page: "#2e2e2e",
+              primary: "#47566b",
+              highlightText: "#4d97ff",
+              menuBar: "#47566b",
+              activeTab: "#555555",
+              tab: "#444444",
+              selector: "#333333",
+              selector2: "#333333",
+              selectorSelection: "#3a3a3a",
+              accent: "#333333",
+              input: "#444444",
+              workspace: "#444444",
+              categoryMenu: "#333333",
+              palette: "#222222cc",
+              border: "#111111",
+            },
+            manifest.presets.find((p) => p.id === "darkEditor")
+          );
+        }
 
         if (addonId === "editor-theme3") {
           madeAnyChanges = madeChangesToAddon = true;
