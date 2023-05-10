@@ -93,6 +93,13 @@ export default async function ({ addon, console }) {
       });
     }
   });
+  // Moving the mouse to the top of the screen displays the navigation bar.
+  document.addEventListener("mousemove", (event) => {
+    if (addon.tab.redux.state.scratchGui.mode.isFullScreen && addon.settings.get("hideToolbar")) {
+      var header = document.querySelector("[class*=\"stage-header_stage-header-wrapper-overlay\"]");
+      header.classList.toggle("stage-header-hover", event.clientY <= 20);
+    }
+  });
   // These handle the case of the user already being in Scratch fullscreen
   // (without being in browser fullscreen) when the addon or sync option are
   // dynamically enabled.

@@ -1,15 +1,12 @@
 [class*="stage-wrapper_full-screen"] [class*="stage-header_stage-header-wrapper-overlay"] {
-  display: block;
+  display: none;
 }
 
 [class*="stage-wrapper_full-screen"] {
   top: 0rem !important;
 }
 
-[class*="stage-header_stage-header-wrapper-overlay"] {
+.stage-header-hover {
   top: 0rem;
+  display: block !important;
 }
-
-/* [class*="stage-header_stage-header-wrapper-overlay"] :hover {
-  
-} */
