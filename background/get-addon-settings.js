@@ -8,6 +8,36 @@ import minifySettings from "../libraries/common/minify-settings.js";
  - editor-theme3 4 (last bumped in v1.29)
  */
 
+const areColorsEqual = (currentColor, oldPresetColor) => {
+  // Case insensitive
+  const currentColorLowercase = currentColor.toLowerCase();
+  const oldPresetLowercase = oldPresetColor.toLowerCase();
+
+  // Converts  three/four/six value syntax into eight value syntax
+  const getRRGGBBAA = (hexColor) =>
+    hexColor.length === 7 // #{rr}{gg}{bb}  →  #{rr}{gg}{bb}ff
+      ? `${hexColor}ff`
+      : hexColor.length === 5 // #{r}{g}{b}{a}  →  #{rr}{gg}{bb}{aa}
+      ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}${hexColor[4].repeat(2)}`
+      : hexColor.length === 4 // #{r}{g}{b}  →  #{rr}{gg}{bb}ff
+      ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}ff`
+      : hexColor;
+
+  // Convert both colors to #{rr}{gg}{bb}{aa}
+  const currentColorRGBA = getRRGGBBAA(currentColorLowercase);
+  const oldPresetColorRGBA = getRRGGBBAA(oldPresetLowercase);
+
+  return currentColorRGBA === oldPresetColorRGBA;
+};
+
+const areSettingsEqual = (currentValue, oldPresetValue) => {
+  if (typeof oldPresetValue === "string" && oldPresetValue.startsWith("#")) {
+    // We assume this is a color setting.
+    return areColorsEqual(currentValue, oldPresetValue);
+  }
+  return currentValue === oldPresetValue;
+};
+
 const updatePresetIfMatching = (settings, version, oldPreset = null, preset = null) => {
   if ((settings._version || 0) < version) {
     /**
@@ -24,7 +54,7 @@ const updatePresetIfMatching = (settings, version, oldPreset = null, preset = nu
     if (preset === null) return;
     const map = {};
     for (const key of Object.keys(oldPreset)) {
-      if (settings[key] !== oldPreset[key]) return console.log(settings, oldPreset, key);
+      if (!areSettingsEqual(settings[key], oldPreset[key])) return console.log(settings, oldPreset, key);
       map[key] = preset.values[key];
     }
 
