@@ -1,20 +1,20 @@
 # Contributing guidelines
 
-For anyone who knows JavaScript basics: feel free to contribute to this repository! Our code is open source.
+Whether you want to send us feedback, fix a problem, create a new addon, or something else, feel free to contribute! Our code is open source.
+
+You can learn more about the types of contributions you can make [here](https://scratchaddons.com/docs/faq/#contributing).
 
 Be sure to follow our [code of conduct](https://github.com/ScratchAddons/ScratchAddons/blob/master/.github/CODE_OF_CONDUCT.md).
 
 ## Reporting bugs and suggesting features
 
-Found a bug? You can open an [issue](https://github.com/ScratchAddons/ScratchAddons/issues) to report it! But first, be sure to check if it was already reported by using the search bar [here](https://github.com/ScratchAddons/ScratchAddons/issues). If there are no similar issues, you can create a new one. We will take a look at it.
+Found a bug? Have an idea? You can open an [issue](https://github.com/ScratchAddons/ScratchAddons/issues) to report bugs and send feedback! But first, be sure to [search for existing issues](https://github.com/ScratchAddons/ScratchAddons/issues). If there are no similar issues, you can create a new one. We will take a look at it.
 
-Also, feel free to ask questions, suggest new features, and more.
+You can also suggest ideas or ask questions in [Discussions](https://github.com/ScratchAddons/ScratchAddons/discussions).
 
-Another way to suggest an idea or to ask a question is to start a [discussion](https://github.com/ScratchAddons/ScratchAddons/discussions).
+## Contributing code
 
-## Making contributions
-
-Contributions are welcome! If you know how to fix an issue, you can create a pull request to propose the necessary changes which we can then add to Scratch Addons.
+If you are familiar with JavaScript, HTML, and CSS, you can contribute by fixing bugs, making adjustments, or adding features. Just follow the steps below to open a pull request to propose your changes which we can then add to Scratch Addons.
 
 ### Learn more about making addons
 
