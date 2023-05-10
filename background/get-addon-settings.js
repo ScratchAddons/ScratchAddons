@@ -38,7 +38,7 @@ const areSettingsEqual = (currentValue, oldPresetValue) => {
   return currentValue === oldPresetValue;
 };
 
-const updatePresetIfMatching = (settings, version, oldPreset = null, preset = null) => {
+const updatePresetIfMatching = (settings, version, oldPreset = null, presetOrFn = null) => {
   if ((settings._version || 0) < version) {
     /**
      Version must be set even if transition is unnecessary;
@@ -51,12 +51,16 @@ const updatePresetIfMatching = (settings, version, oldPreset = null, preset = nu
      when transition is no longer necessary.
      */
     settings._version = version;
-    if (preset === null) return;
+    if (presetOrFn === null) return;
     const map = {};
     for (const key of Object.keys(oldPreset)) {
       if (!areSettingsEqual(settings[key], oldPreset[key])) return console.log(settings, oldPreset, key);
-      map[key] = preset.values[key];
+      if (typeof presetOrFn === "object") map[key] = presetOrFn.values[key];
     }
+
+    if (typeof presetOrFn === "function") return presetOrFn(); // Custom migration logic if preset matches
+
+    const preset = presetOrFn;
 
     // For newly added keys
     for (const key of Object.keys(preset.values).filter((k) => !Object.prototype.hasOwnProperty.call(oldPreset, k))) {
@@ -179,10 +183,12 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
         }
 
         if (addonId === "editor-dark-mode") {
+          madeAnyChanges = madeChangesToAddon = true;
           updatePresetIfMatching(
             settings,
             3,
             {
+              // "Dark editor" preset
               page: "#2e2e2e",
               primary: "#47566b",
               highlightText: "#4d97ff",
@@ -199,7 +205,9 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
               palette: "#222222cc",
               border: "#111111",
             },
-            manifest.presets.find((p) => p.id === "darkEditor")
+            () => {
+              settings.popup = "#47566be6";
+            }
           );
         }
 
