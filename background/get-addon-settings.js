@@ -4,7 +4,7 @@ import minifySettings from "../libraries/common/minify-settings.js";
  Since presets can change independently of others, we have to keep track of
  the versions separately. Current versions:
 
- - editor-dark-mode 2 (bumped in v1.23 twice) (TODO: update this line)
+ - editor-dark-mode 6 (bumped in v1.32 four times)
  - editor-theme3 3 (last bumped in v1.32)
  */
 
