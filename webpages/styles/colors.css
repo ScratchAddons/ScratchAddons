@@ -27,8 +27,8 @@
   --button-hover-background: #1a1a1a;
   --input-background: #222;
   --search-input-background: #111;
-  --switch-background: #111;
-  --switch-inner-background: #aaa;
+  --switch-background: #bbb;
+  --switch-inner-background: var(--white-text);
   --tooltip-background: #000;
   --comment-background: #222;
   --unread-comment-background: #000;
@@ -48,7 +48,7 @@
   --modal-overlay: rgba(0, 0, 0, 0.65);
   --hover-highlight: rgba(255, 255, 255, 0.05);
   --hover-highlight-reduced: rgba(255, 255, 255, 0.02);
-  --hover-darken: rgba(0, 0, 0, 0.1);
+  --hover-darken: rgba(0, 0, 0, 0.2);
 
   --large-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   --large-shadow-filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
