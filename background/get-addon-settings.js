@@ -288,7 +288,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
 
           if (!newPopupSettingValue && migratingPresetsV1_32) {
             // https://github.com/ScratchAddons/ScratchAddons/pull/5931#issuecomment-1529426595
-            if (settings.highlightText) newPopupSettingValue = settings.highlightText.substring(0, 7) + "e6";
+            if (settings.primary) newPopupSettingValue = settings.primary.substring(0, 7) + "e6";
           }
 
           if (newPopupSettingValue) {
