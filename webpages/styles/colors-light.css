@@ -1,5 +1,7 @@
 :root {
+  --brand-color-light: var(--brand-color);
   --brand-color-min-font-weight: 600;
+  --prerelease-brand-color-light: var(--prerelease-brand-color);
   --green-text: var(--green);
   --blue: #0074d7;
   --blue-text: var(--blue);

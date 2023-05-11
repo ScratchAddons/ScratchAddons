@@ -30,7 +30,7 @@ body {
   left: 0;
   width: 0;
   height: 4px;
-  background-color: var(--brand-orange);
+  background-color: var(--blue);
 }
 
 .error {
@@ -110,7 +110,12 @@ body {
   border: 1px solid var(--blue-variant);
 }
 
-.opened .title {
+.opened .title, .opened .title a {
   background: var(--blue);
   border-color: var(--blue-variant);
+  color: var(--content-text-invert);
+}
+
+.opened .small-icon {
+  filter: var(--content-icon-filter) invert(1);
 }

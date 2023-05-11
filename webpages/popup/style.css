@@ -92,8 +92,8 @@ body {
   border-inline-end: none;
 }
 .popup-name.sel {
-  background: var(--brand-color);
-  color: var(--white-text);
+  background: var(--brand-color-light);
+  color: var(--content-text-invert);
 }
 .popup-name img {
   vertical-align: middle;
@@ -102,7 +102,7 @@ body {
   height: 18px;
 }
 .popup-name.sel img {
-  filter: brightness(0) invert(1);
+  filter: var(--content-icon-filter) invert(1);
 }
 .popup-title {
   padding-inline-start: 5px;

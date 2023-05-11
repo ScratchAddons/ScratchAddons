@@ -240,7 +240,7 @@ a.message-type-title-text {
 }
 .reply-textarea:focus {
   outline: none;
-  border-color: var(--brand-orange);
+  border-color: var(--brand-color);
   box-shadow: var(--input-focus-shadow);
 }
 .reply-box-buttons {
@@ -254,7 +254,7 @@ a.message-type-title-text {
 }
 .post-button {
   background-color: var(--blue);
-  color: var(--white-text);
+  color: var(--content-text-invert);
 }
 .post-button:hover:not([disabled]) {
   background-color: var(--blue);
@@ -313,10 +313,10 @@ a.message-type-title-text {
   padding: 8px 0;
 }
 #bottom-bar > a {
-  font-weight: var(--brand-orange-min-font-weight);
+  font-weight: var(--brand-color-min-font-weight);
 }
 #bottom-bar > a:hover {
-  color: var(--brand-orange);
+  color: var(--brand-color);
   text-decoration: none;
 }
 #bottom-bar .separator {
