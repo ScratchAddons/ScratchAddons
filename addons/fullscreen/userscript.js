@@ -98,7 +98,10 @@ export default async function ({ addon, console }) {
     if (addon.settings.get("hideToolbar") && addon.settings.get("hoverToolbar")) {
       if (addon.tab.redux.state.scratchGui.mode.isFullScreen) {
         var header = document.querySelector('[class*="stage-header_stage-header-wrapper-overlay"]');
-        header.classList.toggle("stage-header-hover", event.clientY <= 2 + 42 * (header.classList.contains("stage-header-hover")));
+        header.classList.toggle(
+          "stage-header-hover",
+          event.clientY <= 2 + 42 * header.classList.contains("stage-header-hover")
+        );
       }
     }
   });
