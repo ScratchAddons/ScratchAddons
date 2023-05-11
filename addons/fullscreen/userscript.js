@@ -100,7 +100,7 @@ export default async function ({ addon, console }) {
         var header = document.querySelector('[class*="stage-header_stage-header-wrapper-overlay"]');
         header.classList.toggle(
           "stage-header-hover",
-          event.clientY <= 2 + 42 * header.classList.contains("stage-header-hover")
+          event.clientY <= 2 + (header.getBoundingClientRect().height - 2) * header.classList.contains("stage-header-hover")
         );
       }
     }

@@ -4,14 +4,12 @@
 }
 
 [class*="stage-header_stage-header-wrapper-overlay"] {
-  top: -44px;
-  display: none;
+  transform: translateY(-101%);
+  display: block;
+  transition-property: transform;
+  transition-duration: 0.3s;
 }
 
 .stage-header-hover {
-  display: block !important;
-  top: 0rem !important;
-  bottom: auto !important;
-  transition-property: top;
-  transition-duration: 0.3s;
+  transform: translateY(0%);
 }
