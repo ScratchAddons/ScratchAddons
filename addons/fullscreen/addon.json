@@ -26,6 +26,15 @@
       "id": "hideToolbar",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Show toolbar when hovered",
+      "id": "hoverToolbar",
+      "type": "boolean",
+      "default": false,
+      "if": {
+        "settings": { "hideToolbar": true }
+      }
     }
   ],
   "dynamicEnable": true,

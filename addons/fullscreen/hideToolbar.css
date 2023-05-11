@@ -1,12 +1,17 @@
-[class*="stage-wrapper_full-screen"] [class*="stage-header_stage-header-wrapper-overlay"] {
-  display: none;
-}
-
 [class*="stage-wrapper_full-screen"] {
+  display: none;
   top: 0rem !important;
 }
 
+[class*="stage-header_stage-header-wrapper-overlay"] {
+  top: -44px;
+  display: none;
+}
+
 .stage-header-hover {
-  top: 0rem;
   display: block !important;
+  top: 0rem !important;
+  bottom: auto !important;
+  transition-property: top;
+  transition-duration: 0.3s;
 }
