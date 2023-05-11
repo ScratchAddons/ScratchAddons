@@ -110,7 +110,8 @@ body {
   border: 1px solid var(--blue-variant);
 }
 
-.opened .title, .opened .title a {
+.opened .title,
+.opened .title a {
   background: var(--blue);
   border-color: var(--blue-variant);
   color: var(--content-text-invert);
