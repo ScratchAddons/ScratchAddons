@@ -6,10 +6,10 @@
 [class*="stage-header_stage-header-wrapper-overlay"] {
   transform: translateY(-101%);
   display: block;
-  transition-property: transform;
-  transition-duration: 0.3s;
+  transition: transform 0.3s;
 }
 
 .stage-header-hover {
   transform: translateY(0%);
+  transition: transform 0.3s 0.25s;
 }
