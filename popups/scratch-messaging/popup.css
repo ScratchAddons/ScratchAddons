@@ -240,7 +240,7 @@ a.message-type-title-text {
 }
 .reply-textarea:focus {
   outline: none;
-  border-color: var(--brand-color);
+  border-color: var(--orange);
   box-shadow: var(--input-focus-shadow);
 }
 .reply-box-buttons {
@@ -316,7 +316,7 @@ a.message-type-title-text {
   font-weight: var(--brand-color-min-font-weight);
 }
 #bottom-bar > a:hover {
-  color: var(--brand-color);
+  color: var(--blue);
   text-decoration: none;
 }
 #bottom-bar .separator {
