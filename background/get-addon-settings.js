@@ -33,7 +33,7 @@ const areColorsEqual = (currentColor, oldPresetColor) => {
 const areSettingsEqual = (currentValue, oldPresetValue) => {
   if (typeof oldPresetValue === "string" && oldPresetValue.startsWith("#")) {
     // We assume this is a color setting.
-    return areColorsEqual(currentValue, oldPresetValue);
+    if (typeof currentValue === "string") return areColorsEqual(currentValue, oldPresetValue);
   }
   return currentValue === oldPresetValue;
 };
