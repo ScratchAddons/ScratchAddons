@@ -1,0 +1,130 @@
+<template>
+  <div
+    class="category"
+    :class="{
+        sel: category.id === selectedCategory,
+        hasParent: category.parent,
+      }"
+    v-show="shouldShow"
+    transition="expand"
+    :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"
+    @click="onClick($event)"
+  >
+    <img :src="'../../images/icons/' + category.icon + '.svg'" />
+    <span>{{ category.name }}</span>
+  </div>
+</template>
+
+<style>
+  .category {
+    transition: background-color 0.2s ease, padding 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+    padding: 20px 20px;
+    position: relative;
+    user-select: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  .category.category-small {
+    padding: 15px 20px 15px 20px;
+  }
+
+  /* Classes used by index.html */
+  a.category {
+    color: inherit;
+    text-decoration: inherit;
+  }
+  a.category > span > img {
+    height: 10px;
+    vertical-align: middle;
+  }
+
+  .category.sel {
+    color: var(--orange);
+    font-weight: var(--brand-orange-min-font-weight);
+  }
+  .category.hasParent {
+    padding-inline: 40px 20px;
+    box-sizing: border-box;
+    padding-block: 10px;
+    opacity: 1;
+  }
+  .category.expand-enter,
+  .category.expand-leave {
+    padding-block: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  .category:hover {
+    background: var(--hover-darken);
+  }
+  .category::before {
+    content: "";
+    transition: all 0.2s ease;
+    display: block;
+    width: 4px;
+    border-radius: 0 4px 4px 0;
+    height: 40px;
+    background: var(--orange);
+    position: absolute;
+    left: 0;
+    opacity: 0;
+  }
+  [dir="rtl"] .category::before {
+    right: 0;
+    border-radius: 4px 0 0 4px;
+  }
+  .category.sel::before {
+    opacity: 1;
+  }
+  .category.hasParent::before {
+    height: 25px;
+  }
+
+  .category img {
+    height: 18px;
+    width: 18px;
+    filter: var(--content-icon-filter);
+  }
+  .category.sel img {
+    filter: none;
+  }
+  .category span {
+    margin-inline-start: 15px;
+  }
+</style>
+<script>
+export default {
+    props: ["category"],
+    data() {
+      return {
+        lastClick: 0,
+      };
+    },
+    computed: {
+      selectedCategory() {
+        return this.$root.selectedCategory;
+      },
+      shouldShow() {
+        const categoriesWithParent = this.$root.categories
+          .filter((category) => category.parent === this.category.parent)
+          .map((category) => category.id);
+        return !this.category.parent || [this.category.parent, ...categoriesWithParent].includes(this.selectedCategory);
+      },
+    },
+    methods: {
+      onClick(event) {
+        event.stopPropagation();
+        if (this.selectedCategory === this.category.id && !this.category.parent && Date.now() - this.lastClick > 350) {
+          this.$root.selectedCategory = "all";
+        } else {
+          this.$root.selectedCategory = this.category.id;
+        }
+        this.lastClick = Date.now();
+      },
+    },
+  
+
+}
+</script>
