@@ -619,7 +619,8 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button:checked {
 .conf2017-title-band,
 .sa-annual-report-2019 .subnavigation,
 .sa-annual-report-2020 .initiatives-section .initiatives-subsection-header.community,
-.initiatives-section .initiatives-subsection-header.SEC {
+.initiatives-section .initiatives-subsection-header.SEC,
+.privacy-banner {
   background-color: var(--darkWww-button-bannerVariant);
 }
 
@@ -671,6 +672,7 @@ a:hover,
   color: var(--darkWww-link-variant);
 }
 .banner a,
+.privacy-banner a,
 .subnavigation a,
 .subnavigation a:active {
   color: white;
@@ -791,6 +793,8 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
 .extension-landing .project-card,
 .extension-landing .hardware-card,
 .transfer-host-modal .transfer-password-input,
+.cookies-table td,
+.cookies-table th,
 .comments-container .sa-emoji-picker,
 .studio-compose-container .sa-emoji-picker,
 .sa-emoji-picker-divider {
