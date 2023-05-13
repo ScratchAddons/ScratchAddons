@@ -538,7 +538,7 @@ export default {
       if (newValue === true) this.everExpanded = true;
     },
   },
-  ready() {
+  mounted() {
     const onHashChange = () => {
       if (location.hash.replace(/^#addon-/, "") === this.addon._addonId) {
         this.expanded = true;

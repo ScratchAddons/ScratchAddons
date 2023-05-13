@@ -2,6 +2,9 @@
 @import "./buttons.css";
 @import "./categories.css";
 @import "./search.css";
+@import "./filter.css";
+@import "../../../libraries/thirdparty/Sora.css";
+@import "./tooltips.css";
 @import "./smallmode.css" html {
   background: var(--content-background);
 }

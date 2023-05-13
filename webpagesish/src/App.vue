@@ -238,6 +238,8 @@ header {
 import Fuse from "fuse.js";
 import addonGroups from "../data/addon-groups.js";
 import categories from "../data/categories.js";
+import exampleManifest from "../data/example-manifest.js";
+
 import getDirection from "./lib/rtl-list.js";
 import tags from "../data/tags.js";
 import fuseOptions from "../data/fuse-options.js";
@@ -740,7 +742,7 @@ export default {
       if (oldValue !== null) chrome.storage.local.set({ forceEnglish: this.forceEnglishSetting });
     },
   },
-  ready() {
+  mounted() {
     // Autofocus search bar in iframe mode for both browsers
     // autofocus attribute only works in Chrome for us, so
     // we also manually focus on Firefox, even in fullscreen

@@ -77,7 +77,7 @@
           type="number"
           class="setting-input number"
           v-model="addonSettings[setting.id]"
-          @change="checkValidity() || updateSettings()"
+          @change="checkValidity($event) || updateSettings()"
           :disabled="!addon._enabled"
           min="0"
           number
@@ -88,7 +88,7 @@
           type="number"
           class="setting-input number"
           v-model="addonSettings[setting.id]"
-          @change="checkValidity() || updateSettings()"
+          @change="checkValidity($event) || updateSettings()"
           :disabled="!addon._enabled"
           :min="setting.min"
           :max="setting.max"
@@ -100,7 +100,7 @@
           type="text"
           class="setting-input string"
           v-model="addonSettings[setting.id]"
-          @change="checkValidity() || updateSettings()"
+          @change="checkValidity($event) || updateSettings()"
           :disabled="!addon._enabled"
           :placeholder="setting.default"
           :maxlength="setting.max || 100"
@@ -405,12 +405,15 @@ export default {
 
   props: ["addon", "tableChild", "setting", "addon-settings"],
   data() {
+        console.log(this.setting, this.addon);
+
     return {
       rowDropdownOpen: false,
       noResetDropdown: ["table", "boolean", "select"].includes(this.setting.type),
     };
   },
-  ready() {
+  mounted() {
+
     this.$root.$on("close-reset-dropdowns", (except) => {
       if (this.rowDropdownOpen && this !== except) {
         this.rowDropdownOpen = false;
@@ -485,9 +488,9 @@ export default {
         }
       });
     },
-    checkValidity() {
+    checkValidity(event) {
       // Needed to get just changed input to enforce it's min, max, and integer rule if the user "manually" sets the input to a value.
-      let input = this.$event.target;
+      let input = event.target;
       this.addonSettings[this.setting.id] = input.validity.valid ? input.value : this.setting.default;
     },
     keySettingKeyDown(e) {

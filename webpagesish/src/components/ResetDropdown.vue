@@ -39,7 +39,7 @@ export default {
       isOpen: false,
     };
   },
-  ready() {
+  mounted() {
     this.$root.$on("close-reset-dropdowns", (except) => {
       if (this.isOpen && this !== except) {
         this.isOpen = false;
