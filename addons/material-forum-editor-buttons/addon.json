@@ -24,7 +24,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["topics"]
+      "matches": ["editingScreens"]
     }
   ],
   "settings": [
@@ -41,10 +41,11 @@
           "name": "Filled",
           "id": "fill"
         }
-      ]
+      ],
+      "default": "outline"
     }
   ],
-  "enabledByDefault": true,
+  "enabledByDefault": false,
   "dynamicEnable": true,
   "dynamicDisable": true
 }

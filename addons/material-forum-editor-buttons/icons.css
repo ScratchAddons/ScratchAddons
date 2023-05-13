@@ -1,16 +1,45 @@
 .markItUpHeader > ul > li > a {
-  margin: 0;
-  width: 16px;
-  height: 16px;
-  background-color: transparent;
+  /* margin: 3px; */
+  width: 22px;
+  height: 22px;
   background-size: 20px;
   background-position: 0 0;
   border-radius: 0;
   filter: var(--darkWww-box-filter, none);
+  padding: 0;
 }
 
-.markItUpButton {
+.markItUp .markItUpButton a {
   background-image: none !important;
+}
+
+@font-face {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  src: url(MaterialSymbolsOutlined.woff2) format('woff2');
+}
+
+.materialIcon {
+  font-family: 'Material Symbols Outlined';
+  font-size: 22px;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 22;
+  position: absolute;
+  bottom: 3px;
+}
+
+.markItUpHeader ul a {
+  text-indent: 0px !important;
 }
 
 .markItUp .markItUpButton7 ul a,
@@ -102,25 +131,20 @@
 }*/
 
 .markItUpHeader > ul > .markItUpDropMenu {
-  margin: 0 !important;
   background: transparent !important;
 }
-.markItUpHeader > ul > .markItUpDropMenu::after {
-  content: "";
-  position: absolute;
-  left: auto;
-  right: -2px;
-  top: 5px;
-  width: 12px;
-  height: 12px;
-  background-image: url(expand.svg);
-  background-size: 100%;
-  filter: var(--darkWww-box-filter, none);
-  pointer-events: none;
+
+.markItUpHeader > ul > .markItUpDropMenu > a > span.dropMenuExpandButton.materialIcon {
+  left: 16px;
+  bottom: 4px;
+  font-size: 16px;
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 16
+  !important;
 }
 .markItUpHeader > ul > .markItUpDropMenu > a {
-  width: 21px;
-}
-.markItUpHeader ul ul {
-  top: 22px !important;
+  width: 26px;
 }
