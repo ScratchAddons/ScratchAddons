@@ -6,14 +6,13 @@
       "name": "SolomonkJr",
       "link": "https://scratch.mit.edu/users/SolomonkJr/"
     }
-  ],
+    ],
   "userscripts": [
     {
       "url": "userscript.js",
       "matches": ["projects", "projectEmbeds"]
     }
-  ],
-
+    ],
   "info": [
     {
       "type": "info",
@@ -36,7 +35,7 @@
 	    {"id": "arial", "name": "Arial"},
 	    {"id": "verdana", "name": "Verdana"},
 	    {"id": "comicSans", "name": "Comic Sans"}
-	  ]
+	]
 	},
 	{
 	  "name": "Letra Tamaina",
@@ -64,7 +63,7 @@
       "type": "boolean",
       "default": true
     }
-  ],
+    ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.31.2",
