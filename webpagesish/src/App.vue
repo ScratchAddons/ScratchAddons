@@ -23,7 +23,6 @@ import TheWelcome from "./components/TheWelcome.vue";
         v-cloak
         class="category category-small"
         style="margin-top: auto"
-        href="https://scratchaddons.com/credits/"
         :href="sidebarUrls.contributors"
         target="_blank"
       >
