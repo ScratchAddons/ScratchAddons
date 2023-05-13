@@ -8,6 +8,11 @@
   border-radius: 0;
   filter: var(--darkWww-box-filter, none);
 }
+
+.markItUpButton {
+  background-image: none !important;
+}
+
 .markItUp .markItUpButton7 ul a,
 .sa-forum-toolbar-link ul a {
   background-size: 20px;
@@ -15,7 +20,7 @@
   filter: var(--darkWww-box-filter, none);
 }
 
-.markItUp .markItUpButton1 a {
+/*.markItUp .markItUpButton1 a {
   background-image: url(bold.svg) !important;
 }
 .markItUp .markItUpButton2 a {
@@ -94,7 +99,7 @@
 }
 .sa-forum-toolbar-color a {
   background-image: url(color.svg);
-}
+}*/
 
 .markItUpHeader > ul > .markItUpDropMenu {
   margin: 0 !important;

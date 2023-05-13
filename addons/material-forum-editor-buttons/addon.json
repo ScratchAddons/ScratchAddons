@@ -21,7 +21,30 @@
       "link": "https://github.com/Secret-chest"
     }
   ],
-  "enabledByDefault": false,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["topics"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Icon style",
+      "id": "style",
+      "type": "select",
+      "potentialValues": [
+        {
+          "name": "Outlined",
+          "id": "outline"
+        },
+        {
+          "name": "Filled",
+          "id": "fill"
+        }
+      ]
+    }
+  ],
+  "enabledByDefault": true,
   "dynamicEnable": true,
   "dynamicDisable": true
 }
