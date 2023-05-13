@@ -240,13 +240,13 @@ import Fuse from "fuse.js";
 import addonGroups from "../data/addon-groups.js";
 import categories from "../data/categories.js";
 import getDirection from "./lib/rtl-list.js";
-import tags from '../data/tags.js';
+import tags from "../data/tags.js";
 import fuseOptions from "../data/fuse-options.js";
 
 import Modal from "./components/Modal.vue";
-import AddonBody from './components/AddonBody.vue';
-import AddonGroupHeader from './components/AddonGroupHeader.vue';
-import CategorySelector from './components/CategorySelector.vue';
+import AddonBody from "./components/AddonBody.vue";
+import AddonGroupHeader from "./components/AddonGroupHeader.vue";
+import CategorySelector from "./components/CategorySelector.vue";
 let initialTheme = "";
 let isIframe = false;
 const browserLevelPermissions = ["notifications"];
@@ -419,7 +419,7 @@ export default {
       this.manifests = manifests.map(({ manifest }) => manifest);
 
       fuse = new Fuse(cleanManifests, fuseOptions);
-console.log(this.manifests);
+      console.log(this.manifests);
       const checkTag = (tagOrTags, manifestA, manifestB) => {
         const tags = Array.isArray(tagOrTags) ? tagOrTags : [tagOrTags];
         const aHasTag = tags.some((tag) => manifestA.tags.includes(tag));

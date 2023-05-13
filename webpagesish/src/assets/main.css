@@ -1,9 +1,8 @@
-@import './base.css';
-@import './buttons.css';
-@import './categories.css';
-@import './search.css';
-@import './smallmode.css'
-html {
+@import "./base.css";
+@import "./buttons.css";
+@import "./categories.css";
+@import "./search.css";
+@import "./smallmode.css" html {
   background: var(--content-background);
 }
 
