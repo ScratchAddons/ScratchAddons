@@ -1,6 +1,6 @@
 {
-  "name": "Eskuragarritasun doikuntzak",
-  "description": "Editorearentzat eskuragarritasun bisual, kognitibo eta motorrak bermatzeko aldaketak.",
+  "name": "Accessibility settings",
+  "description": "More settings for the editor for visual and cognitive aid.",
   "credits": [
     {
       "name": "SolomonkJr",
@@ -16,18 +16,18 @@
   "info": [
     {
       "type": "info",
-      "text": "Piktogramak kentzeko aukera itzali eta orria birkargatu.",
+      "text": "Reload the page after deactivating the pictogram option to delete them.",
       "id": "pictoRestart"
     },
     {
       "type": "notice",
-      "text": "\"Blokeak izkutatu\" atalean, F8 tekla sakatu izkutatu nahi duzun blokearen gainean. Blokea berreskuratzeko, birkargatu saioa.",
+      "text": "In the \"Hide Blocks\" section, press the F8 key on the block you want to hide. To restore the blocks, refresh the page.",
       "id": "f8Key"
     }
   ],
   "settings": [
     {
-      "name": "Letra Mota",
+      "name": "Set Font",
       "id": "fontSelector",
       "type": "select",
       "default": "arial",
@@ -47,7 +47,7 @@
       ]
     },
     {
-      "name": "Letra Tamaina",
+      "name": "Font Size",
       "id": "fontSizer",
       "type": "positive_integer",
       "default": 12,
@@ -55,26 +55,24 @@
       "max": 30
     },
     {
-      "name": "@brush2.svg Piktogramak",
+      "name": "@brush2.svg Pictograms",
       "id": "texToPic",
       "type": "boolean",
       "default": false
     },
     {
-      "name": "@list.svg Blokeak izkutatu (F8)",
+      "name": "@list.svg Hide Blocks (F8)",
       "id": "hideBlocks",
       "type": "boolean",
       "default": false
     },
     {
-      "name": "@comment.svg Testua Ozen Irakurri",
+      "name": "@comment.svg Text-To-Speech",
       "id": "textToSpeechEnabled",
       "type": "boolean",
       "default": true
     }
   ],
-  "dynamicEnable": true,
-  "dynamicDisable": true,
   "versionAdded": "1.33.0",
   "tags": ["editor", "codeEditor", "editorMenuBar"]
 }
