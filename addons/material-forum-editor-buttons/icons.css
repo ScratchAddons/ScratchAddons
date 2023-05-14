@@ -1,3 +1,7 @@
+:root {
+  --filledMaterialIcons: 0
+}
+
 .markItUpHeader > ul > li > a {
   /* margin: 3px; */
   width: 22px;
@@ -9,8 +13,22 @@
   padding: 0;
 }
 
-.markItUp .markItUpButton a {
+.markItUp .markItUpButton a,
+.markItUp .markItUpDropMenu ul li {
   background-image: none !important;
+}
+
+.markItUpHeader > ul > .markItUpButton > a > .materialIcon {
+  font-size: 22px;
+  bottom: 3px;
+  position: absolute;
+}
+
+.markItUpDropMenu .markItUpButton .materialIcon {
+  font-size: 20px;
+  position: absolute;
+  left: 4px;
+  pointer-events: none;
 }
 
 @font-face {
@@ -21,7 +39,6 @@
 
 .materialIcon {
   font-family: 'Material Symbols Outlined';
-  font-size: 22px;
   display: inline-block;
   line-height: 1;
   text-transform: none;
@@ -30,12 +47,10 @@
   white-space: nowrap;
   direction: ltr;
   font-variation-settings:
-  'FILL' 0,
+  'FILL' var(--filledMaterialIcons),
   'wght' 400,
   'GRAD' 0,
   'opsz' 22;
-  position: absolute;
-  bottom: 3px;
 }
 
 .markItUpHeader ul a {
@@ -49,87 +64,6 @@
   filter: var(--darkWww-box-filter, none);
 }
 
-/*.markItUp .markItUpButton1 a {
-  background-image: url(bold.svg) !important;
-}
-.markItUp .markItUpButton2 a {
-  background-image: url(italic.svg) !important;
-}
-.markItUp .markItUpButton3 a {
-  background-image: url(underlined.svg) !important;
-}
-
-.markItUp .markItUpButton4 a {
-  background-image: url(strikethrough.svg) !important;
-}
-
-.markItUp .markItUpButton5 a {
-  background-image: url(image.svg) !important;
-}
-.markItUp .markItUpButton6 a {
-  background-image: url(link.svg) !important;
-}
-
-.markItUp .markItUpButton7 a {
-  background-image: url(size.svg) !important;
-}
-.markItUp .markItUpButton8 a {
-  background-image: url(bullet_list.svg) !important;
-}
-.markItUp .markItUpButton9 a {
-  background-image: url(number_list.svg) !important;
-}
-.markItUp .markItUpButton10 a {
-  background-image: url(list_item.svg) !important;
-}
-
-.markItUp .markItUpButton11 a {
-  background-image: url(quote.svg) !important;
-}
-.markItUp .markItUpButton12 > a {
-  background-image: url(smiley.svg) !important;
-}
-.markItUp .scratchblocks-button > a {
-  background-image: url(scratchblocks.svg) !important;
-}
-.markItUp .browser-os-button a {
-  background-image: url(computer.svg) !important;
-}
-.markItUp .clean a {
-  background-image: url(clear.svg) !important;
-}
-.markItUp .preview a {
-  background-image: url(done.svg) !important;
-}
-#ibbBtn,
-#uploadButton,
-.sa-image-upload-button {
-  background-image: url(uploader.svg) !important;
-}
-
-.sa-forum-toolbar-link > a {
-  background-image: url(link.svg);
-}
-.sa-forum-toolbar-center a {
-  background-image: url(center.svg);
-}
-.sa-forum-toolbar-wp a,
-.sa-forum-toolbar-wiki a {
-  background-image: url(wp.svg);
-}
-.sa-forum-toolbar-google a {
-  background-image: url(google.svg);
-}
-.sa-forum-toolbar-dictionary a {
-  background-image: url(dictionary.svg);
-}
-.sa-forum-toolbar-code a {
-  background-image: url(code.svg);
-}
-.sa-forum-toolbar-color a {
-  background-image: url(color.svg);
-}*/
-
 .markItUpHeader > ul > .markItUpDropMenu {
   background: transparent !important;
 }
@@ -139,12 +73,26 @@
   bottom: 4px;
   font-size: 16px;
   font-variation-settings:
-  'FILL' 0,
+  'FILL' var(--filledMaterialIcons),
   'wght' 400,
   'GRAD' 0,
-  'opsz' 16
+  'opsz' 20
   !important;
 }
+
+.markItUpHeader > ul > .markItUpDropMenu a > span.subDropMenuExpandButton.materialIcon {
+  position: absolute;
+  left: 120px;
+  margin-top: 3px;
+  font-size: 16px;
+  font-variation-settings:
+  'FILL' var(--filledMaterialIcons),
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 20
+  !important;
+}
+
 .markItUpHeader > ul > .markItUpDropMenu > a {
   width: 26px;
 }
