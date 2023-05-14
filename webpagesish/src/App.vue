@@ -201,34 +201,6 @@
   </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
 <script>
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import globalTheme from "../../libraries/common/global-theme.js";
@@ -241,7 +213,7 @@ import tags from "../data/tags.js";
 import fuseOptions from "../data/fuse-options.js";
 
 import getDirection from "./lib/rtl-list.js";
-import bus from './lib/eventbus'
+import bus from "./lib/eventbus";
 import Modal from "./components/Modal.vue";
 import AddonBody from "./components/AddonBody.vue";
 import AddonGroupHeader from "./components/AddonGroupHeader.vue";
@@ -332,9 +304,9 @@ const deserializeSettings = async (str, manifests, confirmElem) => {
 };
 let initialTheme, setGlobalTheme;
 (async () => {
-   const { theme, setGlobalTheme:sGT } = await globalTheme();
-   initialTheme = theme; 
-   setGlobalTheme = sGT;
+  const { theme, setGlobalTheme: sGT } = await globalTheme();
+  initialTheme = theme;
+  setGlobalTheme = sGT;
 })();
 
 export default {
@@ -793,6 +765,18 @@ export default {
         this.sidebarToggle();
       }
     },
+    resizeEvent() {
+      console.log('hi');
+      if (window.innerWidth < 1100) {
+        this.smallMode = true;
+        this.categoryOpen = false;
+        this.switchPath = "../../images/icons/switch.svg";
+      } else if (this.smallMode !== false) {
+        this.smallMode = false;
+        this.categoryOpen = true;
+        this.switchPath = "../../images/icons/close.svg";
+      }
+    },
   },
 
   watch: {
@@ -863,6 +847,9 @@ export default {
       },
       { capture: false }
     );
+
+    window.addEventListener("resize", this.resizeEvent);
+    this.resizeEvent();
   },
 };
 </script>

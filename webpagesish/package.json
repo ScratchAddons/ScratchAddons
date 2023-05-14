@@ -11,10 +11,8 @@
     "fuse.js": "^6.6.2",
     "sortablejs": "^1.15.0",
     "tiny-emitter": "^2.1.0",
-    "verte": "^0.0.12",
-    "vite-plugin-vuetify": "^1.0.2",
     "vue": "^3.3.2",
-    "vuetify": "^3.2.4"
+    "vue-accessible-color-picker": "^4.1.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",

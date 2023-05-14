@@ -6,28 +6,34 @@
       :class="{ 'action-disabled': !addon._enabled, open: isOpen }"
       @click="toggle(addon, setting)"
     ></button>
-    <v-color-picker v-model="color" id="picker" v-show="isOpen" dir="ltr"></v-color-picker>
+    <ColorPicker
+      :color="color"
+      :alpha-channel="alphaEnabled ? 'show' : 'hide'"
+      id="picker"
+      v-show="isOpen"
+      dir="ltr"
+      @color-change="change"
+    ></ColorPicker>
   </div>
 </template>
 <script>
 import bus from "../lib/eventbus";
-
+import { ColorPicker } from "vue-accessible-color-picker";
+import debounce from "../lib/debounce";
 export default {
+  components: { ColorPicker },
   // bind to the color prop and update addon settings
-  props: ["addon", "setting", "value"],
+  props: ["addon", "setting", "value", "alphaEnabled"],
   data() {
     return {
       isOpen: false,
       color: this.value,
-      noAlphaString: "true",
       canCloseOutside: false,
     };
   },
   watch: {
     color(value) {
       console.log("color changed", value);
-      this.$parent.addonSettings[this.setting.id] = value;
-      this.$parent.updateSettings(this.addon, { wait: 250, settingId: this.setting.id });
     },
   },
   // write method to toggle the color picker
@@ -55,7 +61,7 @@ export default {
       if (callCloseDropdowns) this.$root.closeResetDropdowns({ isTrusted: true }); // close other dropdowns
       this.opening = false;
       //this.color = "#" + this.$els.pickr.hex8;
-      this.$parent.addonSettings[setting.id] =  this.color;
+      this.$parent.addonSettings[setting.id] = this.color;
       this.$parent.updateSettings(addon, { wait: 250, settingId: setting.id });
 
       this.canCloseOutside = false;
@@ -63,10 +69,22 @@ export default {
         this.canCloseOutside = true;
       }, 0);
     },
-    change(value) {
-      console.log("change", value);
-      this.color = value;
-    },
+    change: debounce(function (value) {
+      const newColor = value.colors.hex;
+      this.$parent.addonSettings[this.setting.id] = newColor;
+      this.$parent.updateSettings(this.addon, { wait: 250, settingId: this.setting.id });
+
+      console.log("change", newColor);
+      this.color = newColor;
+    }, 250),
   },
 };
 </script>
+<style>
+.vacp-color-picker {
+  position: absolute;
+  width: max-content;
+  z-index: 2;
+  top: 32px;
+}
+</style>

@@ -127,7 +127,7 @@
         
           :setting="setting"
           :addon="addon"
-          :no_alpha="!setting.allowTransparency"
+          :alphaEnabled="setting.allowTransparency"
           v-click-outside="closePickers"
         ></picker
       ></template>
