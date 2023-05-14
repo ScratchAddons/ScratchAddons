@@ -1,43 +1,56 @@
 export default async function ({ addon, console, msg }) {
-    let style = addon.settings.get("style") + "";
-    document.querySelector(":root").style.setProperty("--filledMaterialIcons", style === "fill" ? 1 : 0);
+    setIconStyle(addon.settings.get("iconStyle"));
 
+    // All buttons in the forum toolbar, including the options on dropdown menus.
     let buttons = document.querySelectorAll(".markItUpHeader .markItUpButton");
 
     buttons.forEach(button => {
+        // This span contains the icon.
         let span = document.createElement("span");
+
         span.textContent = getIconName(button, 1);
         span.classList.add("materialIcon");
         span.id = "buttonIcon";
 
-        let aElement = button.getElementsByTagName("a")[0];
+        // The <a> link tag inside the button.
+        let buttonLink = button.getElementsByTagName("a")[0];
 
-        if (!isDropMenuOption(button)) {
-            aElement.childNodes[0].remove();
-            aElement.prepend(span);
-        }
-        else {
+        if (isDropMenuOption(button)) {
+            // Option inside a dropdown menu.
             button.prepend(span);
         }
+        else {
+            // Regular button, not a dropdown menu option.
+            buttonLink.childNodes[0].remove(); // Remove the text inside the button, which otherwise interferes with the icon span.
+            buttonLink.prepend(span); // Add the span before all the other children of the butten (required for the dropdown menus).
+        }
 
+        // Adds the expand arrow to dropdown menus.
         if (button.classList.contains("markItUpDropMenu")) {
-            span = document.createElement("span");
+            span = document.createElement("span"); // This span contains the expand arrow.
+
+            // Adds a "subDropMenuExpandButton" or "dropMenuExpandButton" class. This is required for the emoji menu, which has sub-dropdowns.
+            // The main dropdown buttons get arrows pointing downwards, the sub dropdown buttons get arrows pointing to the right.
             span.classList.add("materialIcon", `${isDropMenuOption(button) ? "subD" : "d"}ropMenuExpandButton`);
             span.textContent = getIconName(span, 1);
 
-            aElement.prepend(span);
+            buttonLink.prepend(span);
         }
     });
 }
 
+function setIconStyle (style) {
+    // The icon font needs a value of 1 for filled icons and 0 for outlined - basically a boolean.
+    document.querySelector(":root").style.setProperty("--filledMaterialIcons", style === "fill" ? 1 : 0);
+}
+
+// Checks if a button is an option inside a dropdown menu.
 function isDropMenuOption(button) {
     return button.parentElement.parentElement.classList.contains("markItUpDropMenu");
 }
 
-function isEmojiOption(button) {
-    return button.parentElement.parentElement.classList.contains("markItUpButton12");
-}
-
+// This function gets the name of the icon glyph based on the element's class.
+// If the first class it checks doesn't have a match on the switch statement, it tries the next class.
 function getIconName(element, classIndex) {
     switch (element.classList[classIndex]) {
         case "dropMenuExpandButton":

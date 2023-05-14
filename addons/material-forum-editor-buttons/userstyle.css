@@ -3,7 +3,6 @@
 }
 
 .markItUpHeader > ul > li > a {
-  /* margin: 3px; */
   width: 22px;
   height: 22px;
   background-size: 20px;
@@ -68,7 +67,7 @@
   background: transparent !important;
 }
 
-.markItUpHeader > ul > .markItUpDropMenu > a > span.dropMenuExpandButton.materialIcon {
+.markItUpHeader > ul > .markItUpDropMenu > a > .dropMenuExpandButton {
   left: 16px;
   bottom: 4px;
   font-size: 16px;
@@ -80,7 +79,7 @@
   !important;
 }
 
-.markItUpHeader > ul > .markItUpDropMenu a > span.subDropMenuExpandButton.materialIcon {
+.markItUpHeader > ul > .markItUpDropMenu a > .subDropMenuExpandButton {
   position: absolute;
   left: 120px;
   margin-top: 3px;

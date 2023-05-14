@@ -3,7 +3,7 @@
   "description": "Changes the icons for buttons in the forum post editor from pixelated bitmaps to Material icons.",
   "userstyles": [
     {
-      "url": "icons.css",
+      "url": "userstyle.css",
       "matches": ["editingScreens"]
     }
   ],
@@ -30,7 +30,7 @@
   "settings": [
     {
       "name": "Icon style",
-      "id": "style",
+      "id": "iconStyle",
       "type": "select",
       "potentialValues": [
         {
