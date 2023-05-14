@@ -8,8 +8,8 @@
   background-size: 20px;
   background-position: 0 0;
   border-radius: 0;
-  filter: var(--darkWww-box-filter, none);
   padding: 0;
+  font-size: 0px;
 }
 
 .markItUp .markItUpButton a,
@@ -18,7 +18,7 @@
 }
 
 .markItUpHeader > ul > .markItUpButton > a > .materialIcon {
-  font-size: 22px;
+  font-size: 22px !important;
   bottom: 3px;
   position: absolute;
 }
@@ -37,7 +37,9 @@
 }
 
 .materialIcon {
+  filter: var(--darkWww-box-filter);
   font-family: 'Material Symbols Outlined';
+  color: black;
   display: inline-block;
   line-height: 1;
   text-transform: none;
@@ -80,9 +82,10 @@
 }
 
 .markItUpHeader > ul > .markItUpDropMenu a > .subDropMenuExpandButton {
-  position: absolute;
-  left: 120px;
-  margin-top: 3px;
+  display: inline-block;
+  width: inherit;
+  height: inherit;
+  text-align: right;
   font-size: 16px;
   font-variation-settings:
   'FILL' var(--filledMaterialIcons),

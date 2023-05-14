@@ -1,6 +1,9 @@
 export default async function ({ addon, console, msg }) {
     setIconStyle(addon.settings.get("iconStyle"));
 
+    // await addon.tab.waitForElement(".sa-forum-toolbar-code");
+    // await addon.tab.waitForElement(".markItUpButton17");
+
     // All buttons in the forum toolbar, including the options on dropdown menus.
     let buttons = document.querySelectorAll(".markItUpHeader .markItUpButton");
 
@@ -17,11 +20,12 @@ export default async function ({ addon, console, msg }) {
 
         if (isDropMenuOption(button)) {
             // Option inside a dropdown menu.
-            button.prepend(span);
+            if (!(button.parentElement.parentElement.classList.contains("markItUpButton12") || isScratchblocksubOption(button)))
+                button.prepend(span); // Don't prepend the child if it's inside the emoji or scratchblocks menu.
         }
         else {
             // Regular button, not a dropdown menu option.
-            buttonLink.childNodes[0].remove(); // Remove the text inside the button, which otherwise interferes with the icon span.
+            buttonLink.childNodes[0]?.remove(); // Remove the text inside the button, which otherwise interferes with the icon span.
             buttonLink.prepend(span); // Add the span before all the other children of the butten (required for the dropdown menus).
         }
 
@@ -47,6 +51,11 @@ function setIconStyle (style) {
 // Checks if a button is an option inside a dropdown menu.
 function isDropMenuOption(button) {
     return button.parentElement.parentElement.classList.contains("markItUpDropMenu");
+}
+
+function isScratchblocksubOption(button) {
+    let scratchblocksButton = document.querySelector(".scratchblocks-button");
+    return scratchblocksButton.contains(button); // Returns true if button is a descendant (at any level) of the scratchblocks button.
 }
 
 // This function gets the name of the icon glyph based on the element's class.
