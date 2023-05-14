@@ -1325,6 +1325,8 @@
 }
 </style>
 <script>
+import { textColor, multiply, alphaBlend, makeHsv } from "../../../../libraries/common/cs/text-color.esm.js";
+
 export default {
   props: ["options", "settings", "hoveredSettingId"],
   data() {

@@ -67,7 +67,7 @@
       >
         <div class="setting-label">{{ msg("preview") }}</div>
         <component
-          :is="'preview-' + addon.addonPreview.type"
+          :is="addon.addonPreview.type"
           :options="addon.addonPreview"
           :settings="addonSettings"
           :hovered-setting-id="hoveredSettingId"
@@ -403,10 +403,12 @@
 <script>
 import AddonSetting from "./AddonSetting.vue";
 import AddonTag from "./AddonTag.vue";
+import EditorDarkMode from "./previews/EditorDarkMode.vue";
+
 const isIframe = window.parent !== window;
 
 export default {
-  components: { AddonTag, AddonSetting },
+  components: { AddonTag, AddonSetting, EditorDarkMode },
 
   props: ["addon", "groupId", "groupExpanded", "visible"],
   data() {
