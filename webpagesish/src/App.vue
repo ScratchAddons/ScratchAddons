@@ -766,7 +766,7 @@ export default {
       }
     },
     resizeEvent() {
-      console.log('hi');
+      console.log("hi");
       if (window.innerWidth < 1100) {
         this.smallMode = true;
         this.categoryOpen = false;
