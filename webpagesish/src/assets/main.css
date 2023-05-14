@@ -6,7 +6,7 @@
 @import "./search.css";
 @import "./tooltips.css";
 @import "./smallmode.css";
-@import './popup.css';
+@import "./popup.css";
 @import "../../../libraries/thirdparty/Sora.css";
 html {
   background: var(--content-background);

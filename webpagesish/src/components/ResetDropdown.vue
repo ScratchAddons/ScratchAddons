@@ -31,7 +31,7 @@
   </div>
 </template>
 <script>
-import bus from '../lib/eventbus'
+import bus from "../lib/eventbus";
 export default {
   props: ["enabled", "setting", "presets"],
   data() {

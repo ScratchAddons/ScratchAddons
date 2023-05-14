@@ -55,7 +55,7 @@ export default {
       if (callCloseDropdowns) this.$root.closeResetDropdowns({ isTrusted: true }); // close other dropdowns
       this.opening = false;
       //this.color = "#" + this.$els.pickr.hex8;
-      this.$parent.addonSettings[setting.id] =  this.color;
+      this.$parent.addonSettings[setting.id] = this.color;
       this.$parent.updateSettings(addon, { wait: 250, settingId: setting.id });
 
       this.canCloseOutside = false;

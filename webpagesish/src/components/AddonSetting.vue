@@ -13,7 +13,7 @@
     </div>
     <template v-if="noResetDropdown">
       <div v-if="setting.type === 'table'" class="setting-table">
-        <div class="setting-table-list" v-sortable="{update, enabled: addon._enabled}">
+        <div class="setting-table-list" v-sortable="{ update, enabled: addon._enabled }">
           <div class="setting-table-row" v-for="(i, row) of addonSettings[setting.id]">
             <div class="setting-table-options">
               <button :disabled="!addon._enabled" class="addon-buttons" @click="deleteTableRow(i)">
@@ -124,7 +124,6 @@
       <template v-if="setting.type === 'color'">
         <picker
           :value="addonSettings[setting.id]"
-        
           :setting="setting"
           :addon="addon"
           :no_alpha="!setting.allowTransparency"
@@ -401,14 +400,14 @@
 <script>
 import Picker from "./Picker.vue";
 import ResetDropdown from "./ResetDropdown.vue";
-import Sortable from 'sortablejs';
-import bus from '../lib/eventbus'
+import Sortable from "sortablejs";
+import bus from "../lib/eventbus";
 export default {
   components: { Picker, ResetDropdown },
 
   props: ["addon", "tableChild", "setting", "addon-settings"],
   data() {
-        console.log(this.setting, this.addon);
+    console.log(this.setting, this.addon);
 
     return {
       rowDropdownOpen: false,
@@ -416,7 +415,6 @@ export default {
     };
   },
   mounted() {
-
     bus.$on("close-reset-dropdowns", (except) => {
       if (this.rowDropdownOpen && this !== except) {
         this.rowDropdownOpen = false;
@@ -476,12 +474,10 @@ export default {
     },
   },
   methods: {
-    update(event) { 
-      
-            let list = this.addonSettings[this.setting.id];
-            list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
-            this.updateSettings();
-          
+    update(event) {
+      let list = this.addonSettings[this.setting.id];
+      list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
+      this.updateSettings();
     },
     settingsName(addon) {
       const name = this.setting.name;
@@ -563,7 +559,7 @@ export default {
     },
 
     closePickers(...params) {
-      console.log('hi');
+      console.log("hi");
       return this.$root.closePickers(...params);
     },
     closeResetDropdowns(...params) {
@@ -572,7 +568,7 @@ export default {
   },
   directives: {
     sortable: {
-      mounted: (el, binding,vnode) => {
+      mounted: (el, binding, vnode) => {
         console.log(binding.instance);
         const sortable = new Sortable(el, {
           handle: ".handle",
@@ -583,7 +579,6 @@ export default {
         /*vnode.ctx.$parent.$on("toggle-addon-request", (state) => {
           sortable.option("disabled", !state);
         });*/
-      
       },
     },
   },

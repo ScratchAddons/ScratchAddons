@@ -241,7 +241,7 @@ import tags from "../data/tags.js";
 import fuseOptions from "../data/fuse-options.js";
 
 import getDirection from "./lib/rtl-list.js";
-import bus from './lib/eventbus'
+import bus from "./lib/eventbus";
 import Modal from "./components/Modal.vue";
 import AddonBody from "./components/AddonBody.vue";
 import AddonGroupHeader from "./components/AddonGroupHeader.vue";
@@ -332,9 +332,9 @@ const deserializeSettings = async (str, manifests, confirmElem) => {
 };
 let initialTheme, setGlobalTheme;
 (async () => {
-   const { theme, setGlobalTheme:sGT } = await globalTheme();
-   initialTheme = theme; 
-   setGlobalTheme = sGT;
+  const { theme, setGlobalTheme: sGT } = await globalTheme();
+  initialTheme = theme;
+  setGlobalTheme = sGT;
 })();
 
 export default {
