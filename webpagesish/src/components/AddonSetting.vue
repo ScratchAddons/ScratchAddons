@@ -123,7 +123,8 @@
       /></template>
       <template v-if="setting.type === 'color'">
         <picker
-          v-model="addonSettings[setting.id]"
+          :value="addonSettings[setting.id]"
+        
           :setting="setting"
           :addon="addon"
           :no_alpha="!setting.allowTransparency"
@@ -401,7 +402,7 @@
 import Picker from "./Picker.vue";
 import ResetDropdown from "./ResetDropdown.vue";
 import Sortable from 'sortablejs';
-
+import bus from '../lib/eventbus'
 export default {
   components: { Picker, ResetDropdown },
 
@@ -416,11 +417,11 @@ export default {
   },
   mounted() {
 
-    this.$root.$on("close-reset-dropdowns", (except) => {
+    bus.$on("close-reset-dropdowns", (except) => {
       if (this.rowDropdownOpen && this !== except) {
         this.rowDropdownOpen = false;
       }
-    });*/
+    });
   },
   computed: {
     show() {
@@ -562,6 +563,7 @@ export default {
     },
 
     closePickers(...params) {
+      console.log('hi');
       return this.$root.closePickers(...params);
     },
     closeResetDropdowns(...params) {

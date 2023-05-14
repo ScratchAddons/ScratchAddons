@@ -31,6 +31,7 @@
   </div>
 </template>
 <script>
+import bus from '../lib/eventbus'
 export default {
   props: ["enabled", "setting", "presets"],
   data() {
@@ -40,11 +41,11 @@ export default {
     };
   },
   mounted() {
-    /*this.$root.$on("close-reset-dropdowns", (except) => {
+    bus.$on("close-reset-dropdowns", (except) => {
       if (this.isOpen && this !== except) {
         this.isOpen = false;
       }
-    });*/
+    });
   },
   methods: {
     toggle() {

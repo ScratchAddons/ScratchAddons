@@ -10,6 +10,8 @@
   </div>
 </template>
 <script>
+import bus from "../lib/eventbus";
+
 export default {
   // bind to the color prop and update addon settings
   props: ["addon", "setting", "value"],
@@ -18,6 +20,7 @@ export default {
       isOpen: false,
       color: this.value,
       noAlphaString: "true",
+      canCloseOutside: false,
     };
   },
   watch: {
@@ -28,16 +31,37 @@ export default {
     },
   },
   // write method to toggle the color picker
+  mounted() {
+    bus.$on("close-pickers", (except) => {
+      if (this.isOpen && this !== except) {
+        const addon = this.$parent.addon;
+        const setting = this.$parent.setting;
+        this.toggle(addon, setting, false, {
+          // I trust callers
+          callCloseDropdowns: false,
+          callClosePickers: false,
+        });
+      }
+    });
+  },
   methods: {
-    toggle(addon, setting) {
-      this.isOpen = !this.isOpen;
-      // close all other popups and dropdowns
-      this.$root.closePickers({ isTrusted: true }, null, {
-        callCloseDropdowns: false,
-      });
-      this.$root.closeResetDropdowns({ isTrusted: true }, null, {
-        callCloseDropdowns: false,
-      });
+    toggle(addon, setting, value = !this.isOpen, { callCloseDropdowns = true, callClosePickers = true } = {}) {
+      this.isOpen = value;
+      this.opening = true;
+      if (callClosePickers)
+        this.$root.closePickers({ isTrusted: true }, this, {
+          callCloseDropdowns: false,
+        });
+      if (callCloseDropdowns) this.$root.closeResetDropdowns({ isTrusted: true }); // close other dropdowns
+      this.opening = false;
+      //this.color = "#" + this.$els.pickr.hex8;
+      this.$parent.addonSettings[setting.id] =  this.color;
+      this.$parent.updateSettings(addon, { wait: 250, settingId: setting.id });
+
+      this.canCloseOutside = false;
+      setTimeout(() => {
+        this.canCloseOutside = true;
+      }, 0);
     },
     change(value) {
       console.log("change", value);

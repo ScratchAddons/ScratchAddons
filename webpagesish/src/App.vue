@@ -241,12 +241,11 @@ import tags from "../data/tags.js";
 import fuseOptions from "../data/fuse-options.js";
 
 import getDirection from "./lib/rtl-list.js";
-
+import bus from './lib/eventbus'
 import Modal from "./components/Modal.vue";
 import AddonBody from "./components/AddonBody.vue";
 import AddonGroupHeader from "./components/AddonGroupHeader.vue";
 import CategorySelector from "./components/CategorySelector.vue";
-let initialTheme = "";
 let isIframe = false;
 const browserLevelPermissions = ["notifications"];
 if (typeof browser !== "undefined") browserLevelPermissions.push("clipboardWrite");
@@ -331,7 +330,12 @@ const deserializeSettings = async (str, manifests, confirmElem) => {
   confirmElem.addEventListener("click", handleConfirmClicked, { once: true });
   return resolveOnConfirmPromise;
 };
-const { theme: initialTheme, setGlobalTheme } = await globalTheme();
+let initialTheme, setGlobalTheme;
+(async () => {
+   const { theme, setGlobalTheme:sGT } = await globalTheme();
+   initialTheme = theme; 
+   setGlobalTheme = sGT;
+})();
 
 export default {
   components: { Modal, AddonBody, AddonGroupHeader, CategorySelector },
@@ -699,11 +703,11 @@ export default {
       }, wait);
     },
     closePickers(e, leaveOpen, { callCloseDropdowns = true } = {}) {
-      this.$emit("close-pickers", leaveOpen);
+      bus.$emit("close-pickers", leaveOpen);
       if (callCloseDropdowns) this.closeResetDropdowns();
     },
     closeResetDropdowns(e, leaveOpen) {
-      this.$emit("close-reset-dropdowns", leaveOpen);
+      bus.$emit("close-reset-dropdowns", leaveOpen);
     },
     exportSettings() {
       serializeSettings().then((serialized) => {
@@ -783,13 +787,12 @@ export default {
       const firstVisibleGroup = this.addonGroups.find((group) => this.groupShownCount(group) > 0);
       return group !== firstVisibleGroup;
     },
-        closesidebar(event) {
+    closesidebar(event) {
       if (event?.target.classList[0] === "toggle") return;
       if (this.categoryOpen && this.smallMode) {
         this.sidebarToggle();
       }
     },
-
   },
 
   watch: {
