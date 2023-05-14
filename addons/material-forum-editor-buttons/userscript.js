@@ -70,9 +70,9 @@ function getIconName(element, classIndex) {
         case "markItUpButton1":
             return "format_bold";
         case "markItUpButton2":
-            return "format_underlined";
-        case "markItUpButton3":
             return "format_italic";
+        case "markItUpButton3":
+            return "format_underlined";
         case "markItUpButton4":
             return "strikethrough_s";
         case "markItUpButton5":
