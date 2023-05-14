@@ -407,7 +407,7 @@ export default {
 
   props: ["addon", "tableChild", "setting", "addon-settings"],
   data() {
-    console.log(this.setting, this.addon);
+        console.log(this.setting, this.addon);
 
     return {
       rowDropdownOpen: false,
@@ -415,7 +415,8 @@ export default {
     };
   },
   mounted() {
-    /*this.$root.$on("close-reset-dropdowns", (except) => {
+
+    this.$root.$on("close-reset-dropdowns", (except) => {
       if (this.rowDropdownOpen && this !== except) {
         this.rowDropdownOpen = false;
       }
