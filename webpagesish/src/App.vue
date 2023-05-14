@@ -358,221 +358,221 @@ export default {
     };
   },
   created() {
-      chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
-        console.log('it runs??');
-        this.addonSettings = addonSettings;
-        const cleanManifests = [];
-        let iframeData;
-        if (isIframe) {
-          iframeData = await getRunningAddons(manifests, addonsEnabled);
-        }
-        const deepClone = (obj) => JSON.parse(JSON.stringify(obj));
-        for (const { manifest, addonId } of manifests) {
-          manifest._categories = [];
-          manifest._categories[0] = manifest.tags.includes("popup")
-            ? "popup"
-            : manifest.tags.includes("easterEgg")
-            ? "easterEgg"
-            : manifest.tags.includes("theme")
-            ? "theme"
-            : manifest.tags.includes("community")
-            ? "community"
-            : "editor";
+    chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
+      console.log("it runs??");
+      this.addonSettings = addonSettings;
+      const cleanManifests = [];
+      let iframeData;
+      if (isIframe) {
+        iframeData = await getRunningAddons(manifests, addonsEnabled);
+      }
+      const deepClone = (obj) => JSON.parse(JSON.stringify(obj));
+      for (const { manifest, addonId } of manifests) {
+        manifest._categories = [];
+        manifest._categories[0] = manifest.tags.includes("popup")
+          ? "popup"
+          : manifest.tags.includes("easterEgg")
+          ? "easterEgg"
+          : manifest.tags.includes("theme")
+          ? "theme"
+          : manifest.tags.includes("community")
+          ? "community"
+          : "editor";
 
-          const addCategoryIfTag = (arr) => {
-            let count = 0;
-            for (const objOrString of arr) {
-              const tagName = typeof objOrString === "object" ? objOrString.tag : objOrString;
-              const categoryName = typeof objOrString === "object" ? objOrString.category : tagName;
-              if (manifest.tags.includes(tagName)) {
-                manifest._categories.push(categoryName);
-                count++;
-              }
+        const addCategoryIfTag = (arr) => {
+          let count = 0;
+          for (const objOrString of arr) {
+            const tagName = typeof objOrString === "object" ? objOrString.tag : objOrString;
+            const categoryName = typeof objOrString === "object" ? objOrString.category : tagName;
+            if (manifest.tags.includes(tagName)) {
+              manifest._categories.push(categoryName);
+              count++;
             }
-            return count;
-          };
-          if (manifest._categories[0] === "theme") {
-            // All themes should have either "editor" or "community" tag
+          }
+          return count;
+        };
+        if (manifest._categories[0] === "theme") {
+          // All themes should have either "editor" or "community" tag
+          addCategoryIfTag([
+            {
+              tag: "editor",
+              category: "themesForEditor",
+            },
+          ]) ||
             addCategoryIfTag([
               {
-                tag: "editor",
-                category: "themesForEditor",
+                tag: "community",
+                category: "themesForWebsite",
               },
-            ]) ||
-              addCategoryIfTag([
-                {
-                  tag: "community",
-                  category: "themesForWebsite",
-                },
-              ]);
-          } else if (manifest._categories[0] === "editor") {
-            const addedCategories = addCategoryIfTag(["codeEditor", "costumeEditor", "projectPlayer"]);
-            if (addedCategories === 0) manifest._categories.push("editorOthers");
-          } else if (manifest._categories[0] === "community") {
-            const addedCategories = addCategoryIfTag(["profiles", "projectPage", "forums"]);
-            if (addedCategories === 0) manifest._categories.push("communityOthers");
+            ]);
+        } else if (manifest._categories[0] === "editor") {
+          const addedCategories = addCategoryIfTag(["codeEditor", "costumeEditor", "projectPlayer"]);
+          if (addedCategories === 0) manifest._categories.push("editorOthers");
+        } else if (manifest._categories[0] === "community") {
+          const addedCategories = addCategoryIfTag(["profiles", "projectPage", "forums"]);
+          if (addedCategories === 0) manifest._categories.push("communityOthers");
+        }
+
+        // Exception: show cat-blocks after konami code, even tho
+        // it's categorized as an editor addon, not as easterEgg
+        if (addonId === "cat-blocks") manifest._categories.push("easterEgg");
+
+        manifest._icon = manifest._categories[0];
+
+        manifest._enabled = addonsEnabled[addonId];
+        manifest._wasEverEnabled = manifest._enabled;
+        manifest._addonId = addonId;
+        manifest._groups = [];
+
+        if (manifest.versionAdded) {
+          const [extMajor, extMinor, _] = this.version.split(".");
+          const [addonMajor, addonMinor, __] = manifest.versionAdded.split(".");
+          if (extMajor === addonMajor && extMinor === addonMinor) {
+            manifest.tags.push("new");
+            manifest._groups.push(
+              manifest.tags.includes("recommended") || manifest.tags.includes("featured") ? "featuredNew" : "new"
+            );
           }
+        }
 
-          // Exception: show cat-blocks after konami code, even tho
-          // it's categorized as an editor addon, not as easterEgg
-          if (addonId === "cat-blocks") manifest._categories.push("easterEgg");
+        if (manifest.latestUpdate) {
+          const [extMajor, extMinor, _] = this.version.split(".");
+          const [addonMajor, addonMinor, __] = manifest.latestUpdate.version.split(".");
+          if (extMajor === addonMajor && extMinor === addonMinor) {
+            manifest.tags.push(manifest.latestUpdate.newSettings?.length ? "updatedWithSettings" : "updated");
+            manifest._groups.push(manifest.latestUpdate.isMajor ? "featuredNew" : "new");
+          }
+        }
 
-          manifest._icon = manifest._categories[0];
+        // Sort tags to preserve consistent order
+        const order = tags.map((obj) => obj.matchName);
+        manifest.tags.sort((b, a) => order.indexOf(b) - order.indexOf(a));
 
-          manifest._enabled = addonsEnabled[addonId];
-          manifest._wasEverEnabled = manifest._enabled;
-          manifest._addonId = addonId;
-          manifest._groups = [];
+        // Iframe only
+        if (iframeData?.addonsCurrentlyOnTab.includes(addonId)) manifest._groups.push("runningOnTab");
+        else if (iframeData?.addonsPreviouslyOnTab.includes(addonId)) manifest._groups.push("recentlyUsed");
 
-          if (manifest.versionAdded) {
-            const [extMajor, extMinor, _] = this.version.split(".");
-            const [addonMajor, addonMinor, __] = manifest.versionAdded.split(".");
-            if (extMajor === addonMajor && extMinor === addonMinor) {
-              manifest.tags.push("new");
-              manifest._groups.push(
-                manifest.tags.includes("recommended") || manifest.tags.includes("featured") ? "featuredNew" : "new"
-              );
+        if (manifest._enabled) manifest._groups.push("enabled");
+        else {
+          // Addon is disabled
+          if (manifest.tags.includes("recommended")) manifest._groups.push("recommended");
+          else if (manifest.tags.includes("featured")) manifest._groups.push("featured");
+          else if (manifest.tags.includes("beta") || manifest.tags.includes("danger")) manifest._groups.push("beta");
+          else if (manifest.tags.includes("forums")) manifest._groups.push("forums");
+          else manifest._groups.push("others");
+        }
+
+        for (const groupId of manifest._groups) {
+          this.addonGroups.find((g) => g.id === groupId)?.addonIds.push(manifest._addonId);
+        }
+        cleanManifests.push(deepClone(manifest));
+      }
+
+      // Manifest objects will now be owned by Vue
+      for (const { manifest } of manifests) {
+        this.manifestsById[manifest._addonId] = manifest;
+      }
+      this.manifests = manifests.map(({ manifest }) => manifest);
+
+      fuse = new Fuse(cleanManifests, fuseOptions);
+      console.log(this.manifests);
+      const checkTag = (tagOrTags, manifestA, manifestB) => {
+        const tags = Array.isArray(tagOrTags) ? tagOrTags : [tagOrTags];
+        const aHasTag = tags.some((tag) => manifestA.tags.includes(tag));
+        const bHasTag = tags.some((tag) => manifestB.tags.includes(tag));
+        if (aHasTag ^ bHasTag) {
+          // If only one has the tag
+          return bHasTag - aHasTag;
+        } else if (aHasTag && bHasTag) return manifestA.name.localeCompare(manifestB.name);
+        else return null;
+      };
+      const order = [["danger", "beta"], "editor", "community", "popup"];
+
+      this.addonGroups.forEach((group) => {
+        group.addonIds = group.addonIds
+          .map((id) => this.manifestsById[id])
+          .sort((manifestA, manifestB) => {
+            for (const tag of group.customOrder || order) {
+              const val = checkTag(tag, manifestA, manifestB);
+              if (val !== null) return val;
             }
-          }
-
-          if (manifest.latestUpdate) {
-            const [extMajor, extMinor, _] = this.version.split(".");
-            const [addonMajor, addonMinor, __] = manifest.latestUpdate.version.split(".");
-            if (extMajor === addonMajor && extMinor === addonMinor) {
-              manifest.tags.push(manifest.latestUpdate.newSettings?.length ? "updatedWithSettings" : "updated");
-              manifest._groups.push(manifest.latestUpdate.isMajor ? "featuredNew" : "new");
-            }
-          }
-
-          // Sort tags to preserve consistent order
-          const order = tags.map((obj) => obj.matchName);
-          manifest.tags.sort((b, a) => order.indexOf(b) - order.indexOf(a));
-
-          // Iframe only
-          if (iframeData?.addonsCurrentlyOnTab.includes(addonId)) manifest._groups.push("runningOnTab");
-          else if (iframeData?.addonsPreviouslyOnTab.includes(addonId)) manifest._groups.push("recentlyUsed");
-
-          if (manifest._enabled) manifest._groups.push("enabled");
-          else {
-            // Addon is disabled
-            if (manifest.tags.includes("recommended")) manifest._groups.push("recommended");
-            else if (manifest.tags.includes("featured")) manifest._groups.push("featured");
-            else if (manifest.tags.includes("beta") || manifest.tags.includes("danger")) manifest._groups.push("beta");
-            else if (manifest.tags.includes("forums")) manifest._groups.push("forums");
-            else manifest._groups.push("others");
-          }
-
-          for (const groupId of manifest._groups) {
-            this.addonGroups.find((g) => g.id === groupId)?.addonIds.push(manifest._addonId);
-          }
-          cleanManifests.push(deepClone(manifest));
-        }
-
-        // Manifest objects will now be owned by Vue
-        for (const { manifest } of manifests) {
-          this.manifestsById[manifest._addonId] = manifest;
-        }
-        this.manifests = manifests.map(({ manifest }) => manifest);
-
-        fuse = new Fuse(cleanManifests, fuseOptions);
-        console.log(this.manifests);
-        const checkTag = (tagOrTags, manifestA, manifestB) => {
-          const tags = Array.isArray(tagOrTags) ? tagOrTags : [tagOrTags];
-          const aHasTag = tags.some((tag) => manifestA.tags.includes(tag));
-          const bHasTag = tags.some((tag) => manifestB.tags.includes(tag));
-          if (aHasTag ^ bHasTag) {
-            // If only one has the tag
-            return bHasTag - aHasTag;
-          } else if (aHasTag && bHasTag) return manifestA.name.localeCompare(manifestB.name);
-          else return null;
-        };
-        const order = [["danger", "beta"], "editor", "community", "popup"];
-
-        this.addonGroups.forEach((group) => {
-          group.addonIds = group.addonIds
-            .map((id) => this.manifestsById[id])
-            .sort((manifestA, manifestB) => {
-              for (const tag of group.customOrder || order) {
-                const val = checkTag(tag, manifestA, manifestB);
-                if (val !== null) return val;
-              }
-              return 0; // just to suppress linter
-            })
-            .map((addon) => addon._addonId);
-        });
-
-        if (isIframe) {
-          const addonsInGroups = [];
-          for (const group of this.addonGroups) group.addonIds.forEach((addonId) => addonsInGroups.push(addonId));
-          const searchGroup = this.addonGroups.find((group) => group.id === "_iframeSearch");
-          searchGroup.addonIds = Object.keys(this.manifestsById).filter(
-            (addonId) => addonsInGroups.indexOf(addonId) === -1
-          );
-        }
-
-        let naturalIndex = 0; // Index when not searching
-        for (const group of this.addonGroups) {
-          group.addonIds.forEach((addonId, groupIndex) => {
-            const cachedObj = this.addonListObjs.find((o) => o.manifest._addonId === "example");
-            const obj = cachedObj || {};
-            // Some addons might be twice in the list, such as in "new" and "enabled"
-            // Before setting manifest, check whether this object will be a duplicate.
-            obj.duplicate = Boolean(this.addonListObjs.find((addon) => addon.manifest._addonId === addonId));
-            obj.manifest = this.manifestsById[addonId];
-            obj.group = group;
-            obj.matchesSearch = false; // Later set to true by this.addonList if needed
-            let shouldHideAsEasterEgg = obj.manifest._categories[0] === "easterEgg" && obj.manifest._enabled === false;
-            if (addonId === "featured-dangos") {
-              // April Fools 2023 addon
-              const MARCH_31_TIMESTAMP = 1680264000;
-              const APRIL_2_TIMESTAMP = 1680436800;
-              const now = new Date().getTime() / 1000;
-              // Hide as easter egg if addon is enabled but not functional
-              // Also, show even if disabled while it's April Fools
-              shouldHideAsEasterEgg = !(now < APRIL_2_TIMESTAMP && now > MARCH_31_TIMESTAMP);
-            }
-            obj.matchesCategory = !shouldHideAsEasterEgg;
-            obj.naturalIndex = naturalIndex;
-            obj.headerAbove = groupIndex === 0;
-            obj.footerBelow = groupIndex === group.addonIds.length - 1;
-            // Note: when adding new properties here, make sure to also add them to the
-            // exampleAddonListItem object on the this.ready method, so that it's reactive!
-            if (!cachedObj) this.addonListObjs.push(obj);
-            naturalIndex++;
-          });
-        }
-        // Remove unused remaining cached objects. Can only happen in iframe mode
-        this.addonListObjs = this.addonListObjs.filter((o) => o.manifest._addonId !== "example");
-
-        this.loaded = true;
-        setTimeout(() => {
-          const hash = window.location.hash;
-          if (hash.startsWith("#addon-")) {
-            const addonId = hash.substring(7);
-            const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
-            if (!groupWithAddon) return;
-            groupWithAddon.expanded = true;
-
-            const addon = this.manifestsById[addonId];
-            this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
-            setTimeout(() => {
-              const addonElem = document.getElementById("addon-" + addonId);
-              if (!addonElem) return;
-              addonElem.scrollIntoView();
-              // Browsers sometimes ignore :target for the elements dynamically appended.
-              // Use CSS class to initiate the blink animation.
-              addonElem.classList.add("addon-blink");
-              // 2s (animation length) + 1ms
-              setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
-            }, 0);
-          }
-        }, 0);
-
-        let binaryNum = "";
-        manifests.forEach(({ addonId }) => (binaryNum += addonsEnabled[addonId] === true ? "1" : "0"));
-        const addonsEnabledBase36 = BigInt(`0b${binaryNum}`).toString(36);
-        this.sidebarUrls.feedback += `#_${addonsEnabledBase36}`;
+            return 0; // just to suppress linter
+          })
+          .map((addon) => addon._addonId);
       });
+
+      if (isIframe) {
+        const addonsInGroups = [];
+        for (const group of this.addonGroups) group.addonIds.forEach((addonId) => addonsInGroups.push(addonId));
+        const searchGroup = this.addonGroups.find((group) => group.id === "_iframeSearch");
+        searchGroup.addonIds = Object.keys(this.manifestsById).filter(
+          (addonId) => addonsInGroups.indexOf(addonId) === -1
+        );
+      }
+
+      let naturalIndex = 0; // Index when not searching
+      for (const group of this.addonGroups) {
+        group.addonIds.forEach((addonId, groupIndex) => {
+          const cachedObj = this.addonListObjs.find((o) => o.manifest._addonId === "example");
+          const obj = cachedObj || {};
+          // Some addons might be twice in the list, such as in "new" and "enabled"
+          // Before setting manifest, check whether this object will be a duplicate.
+          obj.duplicate = Boolean(this.addonListObjs.find((addon) => addon.manifest._addonId === addonId));
+          obj.manifest = this.manifestsById[addonId];
+          obj.group = group;
+          obj.matchesSearch = false; // Later set to true by this.addonList if needed
+          let shouldHideAsEasterEgg = obj.manifest._categories[0] === "easterEgg" && obj.manifest._enabled === false;
+          if (addonId === "featured-dangos") {
+            // April Fools 2023 addon
+            const MARCH_31_TIMESTAMP = 1680264000;
+            const APRIL_2_TIMESTAMP = 1680436800;
+            const now = new Date().getTime() / 1000;
+            // Hide as easter egg if addon is enabled but not functional
+            // Also, show even if disabled while it's April Fools
+            shouldHideAsEasterEgg = !(now < APRIL_2_TIMESTAMP && now > MARCH_31_TIMESTAMP);
+          }
+          obj.matchesCategory = !shouldHideAsEasterEgg;
+          obj.naturalIndex = naturalIndex;
+          obj.headerAbove = groupIndex === 0;
+          obj.footerBelow = groupIndex === group.addonIds.length - 1;
+          // Note: when adding new properties here, make sure to also add them to the
+          // exampleAddonListItem object on the this.ready method, so that it's reactive!
+          if (!cachedObj) this.addonListObjs.push(obj);
+          naturalIndex++;
+        });
+      }
+      // Remove unused remaining cached objects. Can only happen in iframe mode
+      this.addonListObjs = this.addonListObjs.filter((o) => o.manifest._addonId !== "example");
+
+      this.loaded = true;
+      setTimeout(() => {
+        const hash = window.location.hash;
+        if (hash.startsWith("#addon-")) {
+          const addonId = hash.substring(7);
+          const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
+          if (!groupWithAddon) return;
+          groupWithAddon.expanded = true;
+
+          const addon = this.manifestsById[addonId];
+          this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
+          setTimeout(() => {
+            const addonElem = document.getElementById("addon-" + addonId);
+            if (!addonElem) return;
+            addonElem.scrollIntoView();
+            // Browsers sometimes ignore :target for the elements dynamically appended.
+            // Use CSS class to initiate the blink animation.
+            addonElem.classList.add("addon-blink");
+            // 2s (animation length) + 1ms
+            setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
+          }, 0);
+        }
+      }, 0);
+
+      let binaryNum = "";
+      manifests.forEach(({ addonId }) => (binaryNum += addonsEnabled[addonId] === true ? "1" : "0"));
+      const addonsEnabledBase36 = BigInt(`0b${binaryNum}`).toString(36);
+      this.sidebarUrls.feedback += `#_${addonsEnabledBase36}`;
+    });
   },
   computed: {
     themePath() {
