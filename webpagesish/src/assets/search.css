@@ -14,7 +14,7 @@
   border-radius: 4px 0 0 4px;
   color: var(--content-text);
   width: 150px;
-  height: 32px;
+  height: 16px;
 }
 [dir="rtl"] .search-box input {
   border-radius: 0 4px 4px 0;

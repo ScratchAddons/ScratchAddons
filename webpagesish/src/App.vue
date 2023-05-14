@@ -1,8 +1,3 @@
-<script setup>
-import HelloWorld from "./components/CategorySelector.vue";
-import TheWelcome from "./components/TheWelcome.vue";
-</script>
-
 <template>
   <div class="navbar">
     <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-cloak v-show="smallMode" alt="Logo" />
@@ -235,14 +230,17 @@ header {
 }
 </style>
 <script>
+import downloadBlob from "../../libraries/common/cs/download-blob.js";
+import globalTheme from "../../libraries/common/global-theme.js";
+
 import Fuse from "fuse.js";
 import addonGroups from "../data/addon-groups.js";
 import categories from "../data/categories.js";
 import exampleManifest from "../data/example-manifest.js";
-
-import getDirection from "./lib/rtl-list.js";
 import tags from "../data/tags.js";
 import fuseOptions from "../data/fuse-options.js";
+
+import getDirection from "./lib/rtl-list.js";
 
 import Modal from "./components/Modal.vue";
 import AddonBody from "./components/AddonBody.vue";
@@ -261,6 +259,80 @@ updateGrantedPermissions();
 chrome.permissions.onAdded?.addListener(updateGrantedPermissions);
 chrome.permissions.onRemoved?.addListener(updateGrantedPermissions);
 let fuse;
+const promisify =
+  (callbackFn) =>
+  (...args) =>
+    new Promise((resolve) => callbackFn(...args, resolve));
+
+const serializeSettings = async () => {
+  const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
+  const storedSettings = await syncGet(["globalTheme", "addonSettings", "addonsEnabled"]);
+  const serialized = {
+    core: {
+      lightTheme: storedSettings.globalTheme,
+      version: chrome.runtime.getManifest().version_name,
+    },
+    addons: {},
+  };
+  for (const addonId of Object.keys(storedSettings.addonsEnabled)) {
+    serialized.addons[addonId] = {
+      enabled: storedSettings.addonsEnabled[addonId],
+      settings: storedSettings.addonSettings[addonId] || {},
+    };
+  }
+  return JSON.stringify(serialized);
+};
+
+const deserializeSettings = async (str, manifests, confirmElem) => {
+  const obj = JSON.parse(str);
+  const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
+  const syncSet = promisify(chrome.storage.sync.set.bind(chrome.storage.sync));
+  const { addonSettings, addonsEnabled } = await syncGet(["addonSettings", "addonsEnabled"]);
+  const pendingPermissions = {};
+  for (const addonId of Object.keys(obj.addons)) {
+    const addonValue = obj.addons[addonId];
+    const addonManifest = manifests.find((m) => m._addonId === addonId);
+    if (!addonManifest) continue;
+    const permissionsRequired = addonManifest.permissions || [];
+    const browserPermissionsRequired = permissionsRequired.filter((p) => browserLevelPermissions.includes(p));
+    if (addonValue.enabled && browserPermissionsRequired.length) {
+      pendingPermissions[addonId] = browserPermissionsRequired;
+    } else {
+      addonsEnabled[addonId] = addonValue.enabled;
+    }
+    addonSettings[addonId] = Object.assign({}, addonSettings[addonId]);
+    delete addonSettings[addonId]._version;
+    Object.assign(addonSettings[addonId], addonValue.settings);
+  }
+  if (handleConfirmClicked) confirmElem.removeEventListener("click", handleConfirmClicked, { once: true });
+  let resolvePromise = null;
+  const resolveOnConfirmPromise = new Promise((resolve) => {
+    resolvePromise = resolve;
+  });
+  handleConfirmClicked = async () => {
+    handleConfirmClicked = null;
+    if (Object.keys(pendingPermissions).length) {
+      const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({
+        permissions: Object.values(pendingPermissions).flat(),
+      });
+      Object.keys(pendingPermissions).forEach((addonId) => {
+        addonsEnabled[addonId] = granted;
+      });
+    }
+    const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
+    await syncSet({
+      globalTheme: !!obj.core.lightTheme,
+      addonsEnabled,
+      addonSettings: minifySettings(addonSettings, prerelease ? null : manifests),
+    });
+    resolvePromise();
+  };
+  confirmElem.classList.remove("hidden-button");
+  confirmElem.addEventListener("click", handleConfirmClicked, { once: true });
+  return resolveOnConfirmPromise;
+};
+const { theme: initialTheme, setGlobalTheme } = await globalTheme();
+
 export default {
   components: { Modal, AddonBody, AddonGroupHeader, CategorySelector },
   data() {
@@ -711,15 +783,15 @@ export default {
       const firstVisibleGroup = this.addonGroups.find((group) => this.groupShownCount(group) > 0);
       return group !== firstVisibleGroup;
     },
-  },
-  events: {
-    closesidebar(event) {
+        closesidebar(event) {
       if (event?.target.classList[0] === "toggle") return;
       if (this.categoryOpen && this.smallMode) {
         this.sidebarToggle();
       }
     },
+
   },
+
   watch: {
     searchInputReal(newValue) {
       if (newValue === "") return (this.searchInput = newValue);

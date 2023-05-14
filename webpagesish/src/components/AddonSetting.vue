@@ -13,7 +13,7 @@
     </div>
     <template v-if="noResetDropdown">
       <div v-if="setting.type === 'table'" class="setting-table">
-        <div class="setting-table-list" v-sortable>
+        <div class="setting-table-list" v-sortable="{update, enabled: addon._enabled}">
           <div class="setting-table-row" v-for="(i, row) of addonSettings[setting.id]">
             <div class="setting-table-options">
               <button :disabled="!addon._enabled" class="addon-buttons" @click="deleteTableRow(i)">
@@ -400,25 +400,26 @@
 <script>
 import Picker from "./Picker.vue";
 import ResetDropdown from "./ResetDropdown.vue";
+import Sortable from 'sortablejs';
+
 export default {
   components: { Picker, ResetDropdown },
 
   props: ["addon", "tableChild", "setting", "addon-settings"],
   data() {
-        console.log(this.setting, this.addon);
+    console.log(this.setting, this.addon);
 
     return {
       rowDropdownOpen: false,
-      noResetDropdown: ["table", "boolean", "select"].includes(this.setting.type),
+      noResetDropdown: ["table", "boolean", "select"].includes(this.setting?.type),
     };
   },
   mounted() {
-
-    this.$root.$on("close-reset-dropdowns", (except) => {
+    /*this.$root.$on("close-reset-dropdowns", (except) => {
       if (this.rowDropdownOpen && this !== except) {
         this.rowDropdownOpen = false;
       }
-    });
+    });*/
   },
   computed: {
     show() {
@@ -473,6 +474,13 @@ export default {
     },
   },
   methods: {
+    update(event) { 
+      
+            let list = this.addonSettings[this.setting.id];
+            list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
+            this.updateSettings();
+          
+    },
     settingsName(addon) {
       const name = this.setting.name;
       const regex = /([\\]*)(@|#)([a-zA-Z0-9.\-\/_]*)/g;
@@ -551,8 +559,7 @@ export default {
       this.addonSettings[this.setting.id] = newValue;
       this.updateSettings();
     },
-  },
-  events: {
+
     closePickers(...params) {
       return this.$root.closePickers(...params);
     },
@@ -561,20 +568,20 @@ export default {
     },
   },
   directives: {
-    sortable() {
-      const sortable = new window.Sortable(this.el, {
-        handle: ".handle",
-        animation: 300,
-        onUpdate: (event) => {
-          let list = this.vm.addonSettings[this.vm.setting.id];
-          list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
-          this.vm.updateSettings();
-        },
-        disabled: !this.vm.addon._enabled,
-      });
-      this.vm.$parent.$on("toggle-addon-request", (state) => {
-        sortable.option("disabled", !state);
-      });
+    sortable: {
+      mounted: (el, binding,vnode) => {
+        console.log(binding.instance);
+        const sortable = new Sortable(el, {
+          handle: ".handle",
+          animation: 300,
+          onUpdate: binding.value.update,
+          disabled: !binding.value.enabled,
+        });
+        /*vnode.ctx.$parent.$on("toggle-addon-request", (state) => {
+          sortable.option("disabled", !state);
+        });*/
+      
+      },
     },
   },
 };
