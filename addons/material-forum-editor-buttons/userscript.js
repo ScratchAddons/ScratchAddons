@@ -51,6 +51,7 @@ function isDropMenuOption(button) {
 
 // This function gets the name of the icon glyph based on the element's class.
 // If the first class it checks doesn't have a match on the switch statement, it tries the next class.
+// If no class names match and the class name is empty, a question mark icon is returned.
 function getIconName(element, classIndex) {
     switch (element.classList[classIndex]) {
         case "dropMenuExpandButton":
@@ -94,17 +95,17 @@ function getIconName(element, classIndex) {
             return "mop";
         case "markItUpButton16":
             return "visibility";
+        case "markItUpButton17": // image uploader
+            return "file_upload";
         case "sa-forum-toolbar-color":
             return "format_color_fill";
         case "sa-forum-toolbar-center":
             return "format_align_center"
         case "sa-forum-toolbar-code":
             return "code";
-        case "markItUpDropMenu":
-            console.log("not found, increasing index");
-            return getIconName(element, ++classIndex);
-        default:
-            console.log("default :(");
+        case undefined:
             return "question_mark";
+        default:
+            return getIconName(element, ++classIndex);
     }
 }
