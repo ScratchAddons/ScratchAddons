@@ -1,8 +1,4 @@
-@font-face {
-  font-family: 'Material Symbols Outlined';
-  font-style: normal;
-  src: url(MaterialSymbolsOutlined.woff2) format('woff2');
-}
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
 
 .markItUpHeader > ul > .markItUpButton > a::after {
   content: attr(iconName);
