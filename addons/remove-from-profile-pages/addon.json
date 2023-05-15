@@ -3,7 +3,7 @@
   "description": "On pages like \"Favorite Projects\" on your profile, add a button to remove projects/users from the list. For example, this will unfavorite a project when used on the \"Favorite Projects\" row.",
   "tags": ["community", "profiles"],
   "enabledByDefault": false,
-  "versionAdded": "1.32.0",
+  "versionAdded": "1.33.0",
   "userscripts": [
     {
       "url": "userscript.js",
