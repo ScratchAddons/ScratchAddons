@@ -207,6 +207,7 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get editorMode() {
+    if (location.origin === "https://scratchfoundation.github.io") return "editor";
     const pathname = location.pathname.toLowerCase();
     const split = pathname.split("/").filter(Boolean);
     if (!split[0] || split[0] !== "projects") return null;
@@ -307,6 +308,12 @@ export default class Tab extends Listenable {
     res = res.slice(0, -1);
     // Sanitize just in case
     res = res.replace(/"/g, "");
+
+    if (res === "" && location.origin === "https://scratchfoundation.github.io" && !window._scratchClassAlert) {
+      window._scratchClassAlert = true;
+      alert("addon.tab.scratchClass might have failed in this page load. Please reload.");
+    }
+
     return res;
   }
 

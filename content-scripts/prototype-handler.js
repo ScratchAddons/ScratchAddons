@@ -23,7 +23,8 @@ function injectPrototype() {
   };
 }
 
-if (!(document.documentElement instanceof SVGElement) && location.pathname.split("/")[1] === "projects") {
+const isSF = location.origin === "https://scratchfoundation.github.io";
+if ((!(document.documentElement instanceof SVGElement) && location.pathname.split("/")[1] === "projects") || isSF) {
   const injectPrototypeScript = document.createElement("script");
   injectPrototypeScript.append(document.createTextNode("(" + injectPrototype + ")()"));
   (document.head || document.documentElement).appendChild(injectPrototypeScript);

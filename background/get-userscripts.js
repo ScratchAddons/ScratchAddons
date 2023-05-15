@@ -400,8 +400,16 @@ function matchesIf(injectable, settings) {
 function userscriptMatches(data, scriptOrStyle, addonId) {
   if (scriptOrStyle.if && !matchesIf(scriptOrStyle, scratchAddons.globalState.addonSettings[addonId])) return false;
 
+  /*
   const url = data.url;
   const parsedURL = new URL(url);
+  */
+  let url = data.url;
+  let parsedURL = new URL(url);
+  if (parsedURL.origin === "https://scratchfoundation.github.io" && parsedURL.pathname.startsWith("/scratch-gui")) {
+    url = "https://scratch.mit.edu/projects/104/editor";
+    parsedURL = new URL(url);
+  }
   const { matches, _scratchDomainImplied } = scriptOrStyle;
   const parsedPathname = parsedURL.pathname;
   const parsedOrigin = parsedURL.origin;
