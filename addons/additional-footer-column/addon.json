@@ -2,7 +2,7 @@
   "name": "Additional footer column",
   "description": "Choose a list of links to be displayed in the footer.",
   "tags": ["community"],
-  "versionAdded": "1.32.0",
+  "versionAdded": "1.33.0",
   "userscripts": [
     {
       "url": "userscript.js",
