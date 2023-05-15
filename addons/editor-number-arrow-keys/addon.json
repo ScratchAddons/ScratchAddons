@@ -2,7 +2,7 @@
   "name": "Arrow key incrementation in editor",
   "description": "Use the up and down arrow keys to increase or decrease number values in block inputs.",
   "tags": ["editor", "codeEditor"],
-  "versionAdded": "1.32.0",
+  "versionAdded": "1.33.0",
   "userscripts": [
     {
       "url": "userscript.js",
