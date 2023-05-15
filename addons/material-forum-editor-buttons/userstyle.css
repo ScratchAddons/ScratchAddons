@@ -80,10 +80,6 @@
   padding-left: 30px !important;
 }
 
-.markItUpDropMenu > ul > li > a {
-  filter: var(--darkWww-box-filter, none);
-}
-
 .markItUpHeader > ul > .markItUpDropMenu {
   background: transparent !important;
   margin-right: 0 !important;
