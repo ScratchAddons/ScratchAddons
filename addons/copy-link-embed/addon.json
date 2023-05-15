@@ -2,7 +2,7 @@
   "name": "Separate \"Copy Link\" and \"Copy Embed\" buttons on project page",
   "description": "Seperates the embed copying and link copying functionality of the \"Copy Link\" button by moving it into two separate buttons.",
   "tags": ["community", "projectPage"],
-  "versionAdded": "1.32.0",
+  "versionAdded": "1.33.0",
   "userscripts": [
     {
       "url": "userscript.js",
