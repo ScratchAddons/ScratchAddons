@@ -406,7 +406,7 @@ function userscriptMatches(data, scriptOrStyle, addonId) {
   */
   let url = data.url;
   let parsedURL = new URL(url);
-  if (parsedURL.origin === "https://scratchfoundation.github.io" && parsedURL.pathname.startsWith("/scratch-gui")) {
+  if (parsedURL.origin === "https://scratchfoundation.github.io" || parsedURL.port === "8601") {
     url = "https://scratch.mit.edu/projects/104/editor";
     parsedURL = new URL(url);
   }
@@ -415,7 +415,7 @@ function userscriptMatches(data, scriptOrStyle, addonId) {
   const parsedOrigin = parsedURL.origin;
   const originPath = parsedOrigin + parsedPathname;
   const matchURL = _scratchDomainImplied ? parsedPathname : originPath;
-  const scratchOrigin = "https://scratch.mit.edu";
+  const scratchOrigin = parsedURL.port === "8333" ? "http://localhost:8333" : "https://scratch.mit.edu";
   const isScratchOrigin = parsedOrigin === scratchOrigin;
   // "*" is used for any URL on Scratch origin
   if (matches === "*") return isScratchOrigin;

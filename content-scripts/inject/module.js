@@ -223,7 +223,8 @@ function onDataReady() {
 }
 
 function bodyIsEditorClassCheck() {
-  if (location.origin === "https://scratchfoundation.github.io") return document.body.classList.add("sa-body-editor");
+  if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601")
+    return document.body.classList.add("sa-body-editor");
   const pathname = location.pathname.toLowerCase();
   const split = pathname.split("/").filter(Boolean);
   if (!split[0] || split[0] !== "projects") return;
