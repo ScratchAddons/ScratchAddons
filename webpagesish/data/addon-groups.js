@@ -2,9 +2,7 @@ export default [
   // Only popup:
   {
     id: "recentlyUsed",
-    name: () => {
-      chrome.i18n.getMessage("recentlyUsed");
-    },
+    name: () => chrome.i18n.getMessage("recentlyUsed"),
     addonIds: [],
     expanded: true,
     iframeShow: true,
