@@ -1,21 +1,11 @@
 export default async function ({ addon, console, msg }) {
-    // await addon.tab.waitForElement(".sa-forum-toolbar-code");
-    // await addon.tab.waitForElement(".markItUpButton17");
-
-    // All buttons in the forum toolbar, including the options on dropdown menus.
+        // All buttons in the forum toolbar, including the options on dropdown menus.
     let buttons = document.querySelectorAll(".markItUpHeader ul > .markItUpButton");
-
-    console.log(`queryselector done, ${buttons.length} elements`);
 
     buttons.forEach(button => {
         button.querySelector("A").setAttribute("iconName", getIconName(button, 1));
     });
 }
-
-// function setIconStyle (style) {
-//     // The icon font needs a value of 1 for filled icons and 0 for outlined - basically a boolean.
-//     document.querySelector(":root").style.setProperty("--filledMaterialIcons", style === "fill" ? 1 : 0);
-// }
 
 // This function gets the name of the icon glyph based on the element's class.
 // If the first class it checks doesn't have a match on the switch statement, it tries the next class.
