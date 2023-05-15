@@ -35,14 +35,14 @@
       "potentialValues": [
         {
           "name": "Outlined",
-          "id": "outline"
+          "id": "0"
         },
         {
           "name": "Filled",
-          "id": "fill"
+          "id": "1"
         }
       ],
-      "default": "outline"
+      "default": "0"
     }
   ],
   "enabledByDefault": false,

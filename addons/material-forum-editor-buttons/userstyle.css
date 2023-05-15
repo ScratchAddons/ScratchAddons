@@ -1,42 +1,12 @@
-:root {
-  --filledMaterialIcons: 0
-}
-
-.markItUpHeader > ul > li > a {
-  width: 22px;
-  height: 22px;
-  background-size: 20px;
-  background-position: 0 0;
-  border-radius: 0;
-  padding: 0;
-  font-size: 0px;
-}
-
-.markItUp .markItUpButton a,
-.markItUp .markItUpDropMenu ul li {
-  background-image: none !important;
-}
-
-.markItUpHeader > ul > .markItUpButton > a > .materialIcon {
-  font-size: 22px !important;
-  bottom: 3px;
-  position: absolute;
-}
-
-.markItUpDropMenu .markItUpButton .materialIcon {
-  font-size: 20px;
-  position: absolute;
-  left: 4px;
-  pointer-events: none;
-}
-
 @font-face {
   font-family: 'Material Symbols Outlined';
   font-style: normal;
   src: url(MaterialSymbolsOutlined.woff2) format('woff2');
 }
 
-.materialIcon {
+.markItUpHeader > ul > .markItUpButton > a::after {
+  content: attr(iconName);
+  font-size: 22px !important;
   filter: var(--darkWww-box-filter);
   font-family: 'Material Symbols Outlined';
   color: black;
@@ -48,53 +18,122 @@
   white-space: nowrap;
   direction: ltr;
   font-variation-settings:
-  'FILL' var(--filledMaterialIcons),
+  'FILL' var(--materialForumEditorButtons-iconStyle),
   'wght' 400,
   'GRAD' 0,
   'opsz' 22;
+  bottom: 3px;
+  position: absolute;
+}
+
+.markItUpHeader > ul > .markItUpDropMenu:not(.markItUpButton12, .markItUpButton14) > ul > .markItUpButton > a::before {
+  content: attr(iconName);
+  font-size: 20px;
+  filter: var(--darkWww-box-filter);
+  font-family: 'Material Symbols Outlined';
+  color: black;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  font-variation-settings:
+  'FILL' var(--materialForumEditorButtons-iconStyle),
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 20;
+  left: 4px;
+  bottom: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.markItUpHeader > ul > .markItUpDropMenu > a::after {
+  content: attr(iconName)"expand_more";
+  letter-spacing: -5px !important;
+}
+
+.markItUpHeader > ul > .markItUpButton > a {
+  width: 22px;
+  height: 22px;
+  background-size: 20px;
+  background-position: 0 0;
+  border-radius: 0;
+  padding: 0;
+  font-size: 0px;
+}
+
+.markItUpHeader > ul > .markItUpButton > a,
+.markItUpDropMenu:not(.markItUpButton12) ul a,
+.markItUpButton14 > ul > li
+{
+  background-image: none !important;
 }
 
 .markItUpHeader ul a {
   text-indent: 0px !important;
 }
 
-.markItUp .markItUpButton7 ul a,
-.sa-forum-toolbar-link ul a {
-  background-size: 20px;
+.markItUpDropMenu:not(.markItUpButton12, .markItUpButton14) > ul > li > a {
   padding-left: 30px !important;
+}
+
+.markItUpDropMenu > ul > li > a {
   filter: var(--darkWww-box-filter, none);
 }
 
 .markItUpHeader > ul > .markItUpDropMenu {
   background: transparent !important;
+  margin-right: 0 !important;
 }
 
-.markItUpHeader > ul > .markItUpDropMenu > a > .dropMenuExpandButton {
-  left: 16px;
-  bottom: 4px;
-  font-size: 16px;
-  font-variation-settings:
-  'FILL' var(--filledMaterialIcons),
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 20
-  !important;
-}
-
-.markItUpHeader > ul > .markItUpDropMenu a > .subDropMenuExpandButton {
+.markItUpDropMenu > ul > .markItUpDropMenu > a::before {
+  content: "chevron_right";
+  filter: var(--darkWww-box-filter);
+  font-family: 'Material Symbols Outlined';
+  color: black;
   display: inline-block;
-  width: inherit;
-  height: inherit;
-  text-align: right;
-  font-size: 16px;
+  position: absolute;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
   font-variation-settings:
-  'FILL' var(--filledMaterialIcons),
+  'FILL' var(--materialForumEditorButtons-iconStyle),
   'wght' 400,
   'GRAD' 0,
-  'opsz' 20
-  !important;
+  'opsz' 20;
+  font-size: 20px;
+  width: inherit;
+  text-align: right;
 }
 
 .markItUpHeader > ul > .markItUpDropMenu > a {
-  width: 26px;
+  width: 34px;
+}
+
+/* These have to be in the userstyle because forum-toolbar and image-uploader load after material-forum-editor-buttons is done */
+
+.markItUpButton17 > a::after {
+  content: "file_upload" !important;
+}
+
+.sa-forum-toolbar-color > a::after {
+  content: "palette" !important;
+}
+
+.sa-forum-toolbar-center > a::after {
+  content: "format_align_center" !important;
+}
+
+.sa-forum-toolbar-code > a::after {
+  content: "code" !important;
+}
+
+.sa-forum-toolbar-link > a::after {
+  content: "add_linkexpand_more" !important;
 }
