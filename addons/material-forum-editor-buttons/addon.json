@@ -5,6 +5,10 @@
     {
       "url": "userstyle.css",
       "matches": ["editingScreens"]
+    },
+    {
+      "url": "icons.css",
+      "matches": ["editingScreens"]
     }
   ],
   "versionAdded": "1.14.0",

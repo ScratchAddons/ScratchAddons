@@ -1,7 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
 
-.markItUpHeader > ul > .markItUpButton > a::after {
-  content: attr(iconName);
+.markItUpHeader > ul > .markItUpButton > a::before {
   font-size: 22px !important;
   filter: var(--darkWww-box-filter);
   font-family: 'Material Symbols Outlined';
@@ -23,7 +22,6 @@
 }
 
 .markItUpHeader > ul > .markItUpDropMenu:not(.markItUpButton12, .markItUpButton14) > ul > .markItUpButton > a::before {
-  content: attr(iconName);
   font-size: 20px;
   filter: var(--darkWww-box-filter);
   font-family: 'Material Symbols Outlined';
@@ -47,8 +45,25 @@
 }
 
 .markItUpHeader > ul > .markItUpDropMenu > a::after {
-  content: attr(iconName)"expand_more";
-  letter-spacing: -5px !important;
+  content: "expand_more";
+  /* letter-spacing: -5px !important; */
+  left: 20px;
+  font-size: 16px !important;
+  filter: var(--darkWww-box-filter);
+  font-family: 'Material Symbols Outlined';
+  color: black;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  font-variation-settings:
+  'FILL' var(--materialForumEditorButtons-iconStyle),
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 20;
+  position: relative;
 }
 
 .markItUpHeader > ul > .markItUpButton > a {
@@ -61,9 +76,10 @@
   font-size: 0px;
 }
 
-.markItUpHeader > ul > .markItUpButton > a,
-.markItUpDropMenu:not(.markItUpButton12) ul a,
-.markItUpButton14 > ul > li
+.markItUpHeader > ul > .markItUpButton > a, /* Bitmap icon and dropdown expand button */
+.markItUpDropMenu:not(.markItUpButton12) ul a, /* Bitmap dropdown option icons, excluding emojis */
+.markItUpButton14 > ul > li, /* Expand buttons of scratchblocks category buttons */
+.markItUpDropMenu::after /* dark-www white dropdown expand buttons */
 {
   background-image: none !important;
 }
@@ -106,26 +122,4 @@
 
 .markItUpHeader > ul > .markItUpDropMenu > a {
   width: 34px;
-}
-
-/* These have to be in the userstyle because forum-toolbar and image-uploader load after material-forum-editor-buttons is done */
-
-.markItUpButton17 > a::after {
-  content: "file_upload" !important;
-}
-
-.sa-forum-toolbar-color > a::after {
-  content: "palette" !important;
-}
-
-.sa-forum-toolbar-center > a::after {
-  content: "format_align_center" !important;
-}
-
-.sa-forum-toolbar-code > a::after {
-  content: "code" !important;
-}
-
-.sa-forum-toolbar-link > a::after {
-  content: "add_linkexpand_more" !important;
 }

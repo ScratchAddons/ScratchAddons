@@ -1,0 +1,124 @@
+/* This file contains all the icon names */
+/* This is a separate file for better readability and easy modification */
+
+/* This one is a default for button that don't have an icon in this stylesheet */
+
+.markItUpButton1 > a::before  {
+    content: "format_bold";
+}
+
+.markItUpButton2 > a::before  {
+    content: "format_italic";
+}
+
+.markItUpButton3 > a::before  {
+    content: "format_underlined";
+}
+
+.markItUpButton4 > a::before  {
+    content: "strikethrough_s";
+}
+
+.markItUpButton5 > a::before  {
+    content: "add_photo_alternate";
+}
+
+.markItUpButton6 > a::before  {
+    content: "add_link";
+}
+
+.markItUpButton7 > a::before  {
+    content: "format_size";
+}
+
+.markItUpButton-1 > a::before  {
+    content: "text_increase";
+}
+
+.markItUpButton-2 > a::before  {
+    content: "text-decrease";
+}
+
+.markItUpButton8 > a::before  {
+    content: "format_list_bulleted";
+}
+
+.markItUpButton9 > a::before  {
+    content: "format_list_numbered";
+}
+
+.markItUpButton10 > a::before  {
+    content: "format_list_bulleted_add";
+}
+
+.markItUpButton11 > a::before  {
+    content: "format_quote";
+}
+
+.markItUpButton12 > a::before  {
+    content: "add_reaction";
+}
+
+.markItUpButton13 > a::before  {
+    content: "devices";
+}
+
+/* Scratchblocks button, no google material icon (yet) */
+.markItUpButton14 > a::before  {
+    content: "question_mark";
+}
+
+.markItUpButton15 > a::before  {
+    content: "mop";
+}
+
+.markItUpButton16 > a::before  {
+    content: "visibility";
+}
+
+/* The rest of these are added by other addons */
+
+/* Image Uploader [image-uploader] */
+.markItUpButton17 > a::before {
+    content: "file_upload";
+}
+
+/* Color [forum-toolbar] */
+.sa-forum-toolbar-color > a::before {
+    content: "palette";
+}
+
+/* Center [forum-toolbar] */
+.sa-forum-toolbar-center > a::before {
+    content: "format_align_center" !important;
+}
+
+/* Code [forum-toolbar] */
+.sa-forum-toolbar-code > a::before {
+    content: "code" !important;
+}
+
+/* Extra Link Options (dropdown) [forum-toolbar] */
+.sa-forum-toolbar-link > a::before {
+    content: "add_link" !important;
+}
+
+/* Google Link Option [forum-toolbar] */
+.sa-forum-toolbar-google > a::before {
+    content: "search";
+}
+
+/* Wikipedia Link Option [forum-toolbar] */
+/* .sa-forum-toolbar-wp > a::before {
+    content: "";
+} */
+
+/* Scratch Wiki Link Option [forum-toolbar] */
+/* .sa-forum-toolbar-wiki > a::before {
+    content: "";
+} */
+
+/* Dictionary Link Option [forum-toolbar] */
+/* .sa-forum-toolbar-dictionary > a::before {
+    content: "";
+} */
