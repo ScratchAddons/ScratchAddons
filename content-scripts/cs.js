@@ -142,7 +142,7 @@ if (path[path.length - 1] !== "/") path += "/";
 const pathArr = path.split("/");
 if (pathArr[0] === "scratch-addons-extension") {
   if (pathArr[1] === "settings") {
-    let url = chrome.runtime.getURL(`webpages/settings/index.html${window.location.search}`);
+    let url = chrome.runtime.getURL(`webpages/settings/dist/index.html${window.location.search}`);
     if (location.hash) url += location.hash;
     chrome.runtime.sendMessage({ replaceTabWithUrl: url });
   }

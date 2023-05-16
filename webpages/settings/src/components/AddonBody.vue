@@ -3,7 +3,7 @@
     <div class="addon-topbar">
       <div class="clickable-area" @click="expanded = !expanded">
         <div class="btn-dropdown">
-          <img src="../../../images/icons/expand.svg" alt="v" :class="{ reverted: expanded }" />
+          <img src="../../../../images/icons/expand.svg" alt="v" :class="{ reverted: expanded }" />
         </div>
         <div class="addon-name">
           <img :src="addonIconSrc" class="icon-type" />
@@ -20,7 +20,7 @@
           title="{{ msg('resetToDefault') }}"
           @click="loadDefaults"
         >
-          <img src="../../../images/icons/undo.svg" class="icon-type" />
+          <img src="../../../../images/icons/undo.svg" class="icon-type" />
         </div>
         <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest"></div>
       </div>
@@ -35,7 +35,7 @@
         <div :class="['addon-message', 'addon-' + (info.type || 'info')]">
           <img
             :src="
-              '../../images/icons/' +
+              '../../../images/icons/' +
               {
                 warning: 'warning.svg',
                 notice: 'notice.svg',
@@ -432,7 +432,7 @@ export default {
         easterEgg: "egg-easter",
         popup: "popup",
       };
-      return `../../images/icons/${map[this.addon._icon]}.svg`;
+      return `../../../images/icons/${map[this.addon._icon]}.svg`;
     },
     addonSettings() {
       return this.$root.addonSettings[this.addon._addonId];

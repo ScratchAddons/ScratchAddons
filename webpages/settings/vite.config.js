@@ -14,7 +14,7 @@ export default defineConfig({
     },
   },
 
-  base: "/webpagesish/dist/",
+  base: "/webpages/settings/dist/",
   plugins: [vue()],
   resolve: {
     alias: {

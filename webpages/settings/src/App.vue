@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
     <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-cloak v-show="smallMode" alt="Logo" />
-    <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" />
+    <img src="../../../images/icon-transparent.svg" class="logo" alt="Logo" />
     <h1 v-cloak>{{ msg("settings") }}</h1>
     <img v-cloak @click="setTheme(!theme)" class="theme-switch" :src="themePath" />
   </div>
@@ -21,18 +21,18 @@
         :href="sidebarUrls.contributors"
         target="_blank"
       >
-        <img src="../../images/icons/users.svg" />
-        <span>{{ msg("credits") }} <img src="../../images/icons/popout.svg" /></span>
+        <img src="../../../images/icons/users.svg" />
+        <span>{{ msg("credits") }} <img src="../../../images/icons/popout.svg" /></span>
       </a>
       <!--
         <div class="category category-small" @click="openReview()">
-          <img src="../../images/icons/star.svg" />
+          <img src="../../../images/icons/star.svg" />
           <span v-cloak>{{ msg("review") }}</span>
         </div>
         -->
       <a v-cloak class="category category-small" href="https://scratchaddons.com/translate" target="_blank">
-        <img src="../../images/icons/translate.svg" />
-        <span>{{ msg("translate") }} <img src="../../images/icons/popout.svg" /></span>
+        <img src="../../../images/icons/translate.svg" />
+        <span>{{ msg("translate") }} <img src="../../../images/icons/popout.svg" /></span>
       </a>
       <a
         v-cloak
@@ -41,16 +41,16 @@
         :href="sidebarUrls.feedback"
         target="_blank"
       >
-        <img src="../../images/icons/comment.svg" />
-        <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" /></span>
+        <img src="../../../images/icons/comment.svg" />
+        <span>{{ msg("feedback") }} <img src="../../../images/icons/popout.svg" /></span>
       </a>
       <div v-cloak class="category" style="margin-top: 12px; margin-bottom: 14px" @click="openMoreSettings()">
-        <img src="../../images/icons/wrench.svg" />
+        <img src="../../../images/icons/wrench.svg" />
         <span>{{ msg("moreSettings") }}</span>
       </div>
     </div>
     <div v-show="!isIframe && smallMode === false" class="categories-shrink" @click="sidebarToggle()">
-      <img src="../../images/icons/left-arrow.svg" :class="{ flipped: categoryOpen === (direction() === 'rtl') }" />
+      <img src="../../../images/icons/left-arrow.svg" :class="{ flipped: categoryOpen === (direction() === 'rtl') }" />
     </div>
 
     <!-- This is the main menu, where the searchbar and the addon items are located -->
@@ -99,7 +99,7 @@
       <div class="addon-body">
         <div class="addon-topbar">
           <span class="addon-name"
-            ><img src="../../images/icons/theme.svg" class="icon-type" /> {{ msg("scratchAddonsTheme") }}
+            ><img src="../../../images/icons/theme.svg" class="icon-type" /> {{ msg("scratchAddonsTheme") }}
           </span>
         </div>
         <div class="addon-settings">
@@ -122,7 +122,7 @@
       <div class="addon-body">
         <div class="addon-topbar">
           <span class="addon-name"
-            ><img src="../../images/icons/import-export.svg" class="icon-type" :class="{ dark: theme === false }" />
+            ><img src="../../../images/icons/import-export.svg" class="icon-type" :class="{ dark: theme === false }" />
             {{ msg("exportAndImportSettings") }}
           </span>
         </div>
@@ -146,7 +146,7 @@
       <div class="addon-body">
         <div class="addon-topbar">
           <span class="addon-name"
-            ><img src="../../images/icons/translate.svg" class="icon-type" />{{ msg("language") }}
+            ><img src="../../../images/icons/translate.svg" class="icon-type" />{{ msg("language") }}
           </span>
         </div>
         <div class="addon-settings">
@@ -203,8 +203,8 @@
 </template>
 
 <script>
-import downloadBlob from "../../libraries/common/cs/download-blob.js";
-import globalTheme from "../../libraries/common/global-theme.js";
+import downloadBlob from "../../../libraries/common/cs/download-blob.js";
+import globalTheme from "../../../libraries/common/global-theme.js";
 
 import Fuse from "fuse.js";
 import addonGroups from "../data/addon-groups.js";
@@ -257,7 +257,7 @@ export default {
       theme: initialTheme,
       forceEnglishSetting: null,
       forceEnglishSettingInitial: null,
-      switchPath: "../../images/icons/switch.svg",
+      switchPath: "../../../images/icons/switch.svg",
       moreSettingsOpen: false,
       categoryOpen: true,
       loaded: false,
@@ -510,7 +510,7 @@ export default {
   },
   computed: {
     themePath() {
-      return this.theme ? "../../images/icons/moon.svg" : "../../images/icons/theme.svg";
+      return this.theme ? "../../../images/icons/moon.svg" : "../../../images/icons/theme.svg";
     },
     addonList() {
       if (!this.searchInput) {
@@ -574,9 +574,9 @@ export default {
     sidebarToggle: function () {
       this.categoryOpen = !this.categoryOpen;
       if (this.categoryOpen) {
-        this.switchPath = "../../images/icons/close.svg";
+        this.switchPath = "../../../images/icons/close.svg";
       } else {
-        this.switchPath = "../../images/icons/switch.svg";
+        this.switchPath = "../../../images/icons/switch.svg";
       }
     },
     msg(message, ...params) {
@@ -711,11 +711,11 @@ export default {
       if (window.innerWidth < 1100) {
         this.smallMode = true;
         this.categoryOpen = false;
-        this.switchPath = "../../images/icons/switch.svg";
+        this.switchPath = "../../../images/icons/switch.svg";
       } else if (this.smallMode !== false) {
         this.smallMode = false;
         this.categoryOpen = true;
-        this.switchPath = "../../images/icons/close.svg";
+        this.switchPath = "../../../images/icons/close.svg";
       }
     },
   },

@@ -29,7 +29,7 @@
     }
   ],
   "options_ui": {
-    "page": "webpages/settings/index.html",
+    "page": "webpages/settings/dist/index.html",
     "open_in_tab": true
   },
   "homepage_url": "https://scratchaddons.com",
