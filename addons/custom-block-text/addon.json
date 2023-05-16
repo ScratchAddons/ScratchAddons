@@ -59,7 +59,7 @@
   "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.24.0",
   "latestUpdate": {
-    "version": "1.32.0",
+    "version": "1.33.0",
     "newSettings": ["size"]
   },
   "enabledByDefault": false
