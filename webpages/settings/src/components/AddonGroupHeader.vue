@@ -1,7 +1,7 @@
 <template>
   <div class="addon-group" v-show="shouldShow" @click="toggle" :class="{ 'margin-above': marginAbove }">
     <img src="../../../../images/icons/expand.svg" alt="v" :class="{ reverted: group.expanded }" />
-    {{ group.name() }} ({{ shownCount }})
+    {{ group.name }} ({{ shownCount }})
   </div>
 </template>
 
