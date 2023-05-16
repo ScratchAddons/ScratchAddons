@@ -49,8 +49,8 @@
       "name": "Text size (%)",
       "id": "size",
       "type": "integer",
-      "min": 100,
-      "max": 150,
+      "min": 75,
+      "max": 200,
       "default": 100
     }
   ],
