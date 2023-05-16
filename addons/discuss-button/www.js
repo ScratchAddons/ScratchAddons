@@ -11,9 +11,11 @@ export default async function ({ addon }) {
         return;
       }
       const profileSpans = dropdown.childNodes[0].childNodes[0];
-      span = profileSpans.appendChild(document.createElement("span"));
-      span.className = "sa-profile-name";
-      span.textContent = username;
+      if (!document.querySelector(".sa-profile-name")) {
+        span = profileSpans.appendChild(document.createElement("span"));
+        span.className = "sa-profile-name";
+        span.textContent = username;
+      }
     }
   };
   if (addon.settings.get("compact-nav")) change(true);

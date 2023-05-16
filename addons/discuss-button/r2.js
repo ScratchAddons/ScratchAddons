@@ -9,9 +9,11 @@ export default async function ({ addon }) {
       const dropdown = await addon.tab.waitForElement(".dropdown-menu .user-nav");
       (await addon.tab.waitForElement(".user-icon")).classList.add("sa-compact-profile-icon");
       const profileSpans = dropdown.childNodes[0].childNodes[0];
-      span = profileSpans.appendChild(document.createElement("span"));
-      span.className = "sa-profile-name";
-      span.textContent = username;
+      if (!document.querySelector(".sa-profile-name")) {
+        span = profileSpans.appendChild(document.createElement("span"));
+        span.className = "sa-profile-name";
+        span.textContent = username;
+      }
 
       // Remove username next to icon.
       container.firstChild.childNodes[1].textContent = "";
