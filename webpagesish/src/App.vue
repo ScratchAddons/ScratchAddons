@@ -215,8 +215,8 @@ import fuseOptions from "../data/fuse-options.js";
 
 import getDirection from "./lib/rtl-list.js";
 import bus from "./lib/eventbus";
-import {getRunningAddons} from './lib/tools.js';
-import { serializeSettings,deserializeSettings } from "./lib/serialize";
+import { getRunningAddons } from "./lib/tools.js";
+import { serializeSettings, deserializeSettings } from "./lib/serialize";
 import Modal from "./components/Modal.vue";
 import AddonBody from "./components/AddonBody.vue";
 import AddonGroupHeader from "./components/AddonGroupHeader.vue";
