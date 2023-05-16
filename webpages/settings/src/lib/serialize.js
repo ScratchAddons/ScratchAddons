@@ -65,5 +65,3 @@ export const serializeSettings = async () => {
   }
   return JSON.stringify(serialized);
 };
-
-
