@@ -791,6 +791,9 @@ export default {
 
     window.addEventListener("resize", this.resizeEvent);
     this.resizeEvent();
+    document.title = chrome.i18n.getMessage("settingsTitle");
+
   },
 };
+
 </script>

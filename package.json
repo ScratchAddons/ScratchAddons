@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "vite-plugin-preload": "^0.2.0"
+  }
+}

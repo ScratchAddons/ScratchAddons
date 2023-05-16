@@ -1,6 +1,6 @@
-# webpagesish
+# Settings Page
 
-This template should help get you started developing with Vue 3 in Vite.
+This directory is built, but is has already been compiled. You may recompile it only if you make changes.
 
 ## Recommended IDE Setup
 
@@ -16,7 +16,7 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Compile with Watcher for Development
 
 ```sh
 npm run dev
