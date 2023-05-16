@@ -11,7 +11,7 @@ export default async function ({ addon }) {
         return;
       }
       const profileSpans = dropdown.childNodes[0].childNodes[0];
-      if (!document.querySelector(".sa-profile-name")) {
+      if (!span) {
         span = profileSpans.appendChild(document.createElement("span"));
         span.className = "sa-profile-name";
         span.textContent = username;
