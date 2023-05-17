@@ -404,7 +404,7 @@
 import AddonSetting from "./AddonSetting.vue";
 import AddonTag from "./AddonTag.vue";
 import EditorDarkMode from "./previews/EditorDarkMode.vue";
-import bus from '../lib/eventbus.js'
+import bus from "../lib/eventbus.js";
 const isIframe = window.parent !== window;
 
 export default {
