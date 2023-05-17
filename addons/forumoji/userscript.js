@@ -1,6 +1,5 @@
 export default async function ({ addon, msg }) {
-  const originalPostButton = document.querySelector("#djangobbwrap [method=post] [type=submit]");
-  const addonPostButton = originalPostButton.cloneNode(true);
+  const postButton = document.querySelector("#djangobbwrap [method=post] [type=submit]");
   const forumoji = await fetch("https://raw.githubusercontent.com/lopste/forumoji/main/resources/forumoji.json").then(
     (response) => response.json()
   );
@@ -18,8 +17,10 @@ export default async function ({ addon, msg }) {
     ] = emoji.url;
   });
 
-  addonPostButton.addEventListener("click", (e) => {
-    e.preventDefault();
+  postButton.addEventListener("click", (e) => {
+    if (addon.self.disabled) {
+      return;
+    }
     Object.entries(emojiList).forEach(([emoji, image]) => {
       editor.value = editor.value.replaceAll(emoji, `[img]${image}[/img]`);
     });
@@ -27,23 +28,11 @@ export default async function ({ addon, msg }) {
       const notInForumojiSetting = addon.settings.get("not-in-forumoji");
       if (notInForumojiSetting === "remove" || (notInForumojiSetting === "ask" && confirm(msg("not-in-forumoji")))) {
         editor.value = editor.value.replaceAll(/\p{Extended_Pictographic}/gu, "");
-        originalPostButton.click();
+      } else {
+        e.preventDefault();
       }
     } else {
-      originalPostButton.click();
+      e.preventDefault();
     }
   });
-
-  originalPostButton.parentElement.insertBefore(addonPostButton, originalPostButton);
-
-  const enable = () => {
-    addonPostButton.style.display = "";
-    originalPostButton.style.display = "none";
-  };
-  addon.self.addEventListener("disabled", () => {
-    addonPostButton.style.display = "none";
-    originalPostButton.style.display = "";
-  });
-  addon.self.addEventListener("reenabled", enable);
-  enable();
 }
