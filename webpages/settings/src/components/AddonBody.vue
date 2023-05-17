@@ -404,7 +404,7 @@
 import AddonSetting from "./AddonSetting.vue";
 import AddonTag from "./AddonTag.vue";
 import EditorDarkMode from "./previews/EditorDarkMode.vue";
-
+import bus from '../lib/eventbus.js'
 const isIframe = window.parent !== window;
 
 export default {
@@ -488,7 +488,7 @@ export default {
             ? false
             : newState;
         chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
-        this.$emit("toggle-addon-request", newState);
+        bus.$emit(`toggle-addon-request-${this.addon.id}`, newState);
       };
 
       const requiredPermissions = (this.addon.permissions || []).filter((value) =>

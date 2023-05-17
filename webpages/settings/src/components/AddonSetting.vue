@@ -13,7 +13,7 @@
     </div>
     <template v-if="noResetDropdown">
       <div v-if="setting.type === 'table'" class="setting-table">
-        <div class="setting-table-list" v-sortable>
+        <div class="setting-table-list" v-sortable="{update: updateTable, enabled: addon._enabled, id: addon.id}">
           <div class="setting-table-row" v-for="(row, i) of addonSettings[setting.id]">
             <div class="setting-table-options">
               <button :disabled="!addon._enabled" class="addon-buttons" @click="deleteTableRow(i)">
@@ -474,7 +474,7 @@ export default {
     },
   },
   methods: {
-    update(event) {
+    updateTable(event) {
       let list = this.addonSettings[this.setting.id];
       list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
       this.updateSettings();
@@ -559,7 +559,6 @@ export default {
     },
 
     closePickers(...params) {
-      console.log("hi");
       return this.$root.closePickers(...params);
     },
     closeResetDropdowns(...params) {
@@ -573,12 +572,12 @@ export default {
         const sortable = new Sortable(el, {
           handle: ".handle",
           animation: 300,
-          onUpdate: binding.value.update,
+         onUpdate: binding.value.update,
           disabled: !binding.value.enabled,
         });
-        /*vnode.ctx.$parent.$on("toggle-addon-request", (state) => {
+        bus.$on(`toggle-addon-request-${binding.value.id}`, (state) => {
           sortable.option("disabled", !state);
-        });*/
+        });
       },
     },
   },
