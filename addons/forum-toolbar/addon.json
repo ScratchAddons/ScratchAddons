@@ -48,12 +48,6 @@
       "default": true
     },
     {
-      "name": "@wrench.svg Color",
-      "id": "color",
-      "type": "boolean",
-      "default": true
-    },
-    {
       "name": "Image",
       "id": "image",
       "type": "boolean",
@@ -64,30 +58,6 @@
       "id": "url",
       "type": "boolean",
       "default": true
-    },
-    {
-      "name": "@wrench.svg Wikipedia",
-      "id": "wp",
-      "type": "boolean",
-      "default": false
-    },
-    {
-      "name": "@wrench.svg Scratch Wiki",
-      "id": "wiki",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "@wrench.svg Google Search",
-      "id": "google",
-      "type": "boolean",
-      "default": false
-    },
-    {
-      "name": "@wrench.svg Dictionary.com",
-      "id": "dictionary",
-      "type": "boolean",
-      "default": false
     },
     {
       "name": "Font size",
@@ -126,18 +96,6 @@
       "default": true
     },
     {
-      "name": "@wrench.svg Center",
-      "id": "center",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "@wrench.svg Code",
-      "id": "code",
-      "type": "boolean",
-      "default": true
-    },
-    {
       "name": "Browser/OS",
       "id": "browser-os",
       "type": "boolean",
@@ -154,12 +112,48 @@
       "id": "clean",
       "type": "boolean",
       "default": true
-    }
-  ],
-  "info": [
+    },
     {
-      "text": "Every button that is entirely created by Scratch Addons is marked with a wrench.",
-      "id": "wrenches-new-buttons"
+      "name": "Color",
+      "id": "color",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Wikipedia",
+      "id": "wp",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Scratch Wiki",
+      "id": "wiki",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Google Search",
+      "id": "google",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Dictionary.com",
+      "id": "dictionary",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Center",
+      "id": "center",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Code",
+      "id": "code",
+      "type": "boolean",
+      "default": true
     }
   ],
   "customCssVariables": [
