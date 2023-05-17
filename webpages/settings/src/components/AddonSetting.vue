@@ -34,7 +34,7 @@
             </div>
           </div>
         </div>
-        <div class="addon-split-button setting-table-dropdown" :class="{open: rowDropdownOpen}">
+        <div class="addon-split-button setting-table-dropdown" :class="{ open: rowDropdownOpen }">
           <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-button" @click="addTableRow()">
             <img class="icon-type" src="../../../../images/icons/plus.svg" />
           </button>
