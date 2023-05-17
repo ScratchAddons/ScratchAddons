@@ -13,7 +13,7 @@
     </div>
     <template v-if="noResetDropdown">
       <div v-if="setting.type === 'table'" class="setting-table">
-        <div class="setting-table-list" v-sortable="{update: updateTable, enabled: addon._enabled, id: addon.id}">
+        <div class="setting-table-list" v-sortable="{ update: updateTable, enabled: addon._enabled, id: addon.id }">
           <div class="setting-table-row" v-for="(row, i) of addonSettings[setting.id]">
             <div class="setting-table-options">
               <button :disabled="!addon._enabled" class="addon-buttons" @click="deleteTableRow(i)">
@@ -407,8 +407,6 @@ export default {
 
   props: ["addon", "tableChild", "setting", "addon-settings"],
   data() {
-    console.log(this.setting, this.addon);
-
     return {
       rowDropdownOpen: false,
       noResetDropdown: ["table", "boolean", "select"].includes(this.setting?.type),
@@ -416,7 +414,7 @@ export default {
   },
   mounted() {
     bus.$on("close-reset-dropdowns", (except) => {
-      if (this.rowDropdownOpen && this !== except) {
+      if (this.rowDropdownOpen && this.setting.id !== except) {
         this.rowDropdownOpen = false;
       }
     });
@@ -544,7 +542,7 @@ export default {
       this.$root.closePickers({ isTrusted: true }, null, {
         callCloseDropdowns: false,
       });
-      this.$root.closeResetDropdowns({ isTrusted: true }, this); // close other dropdowns
+      this.$root.closeResetDropdowns({ isTrusted: true }, this.setting.id); // close other dropdowns
     },
     msg(...params) {
       return this.$root.msg(...params);
@@ -568,11 +566,10 @@ export default {
   directives: {
     sortable: {
       mounted: (el, binding, vnode) => {
-        console.log(binding.instance);
         const sortable = new Sortable(el, {
           handle: ".handle",
           animation: 300,
-         onUpdate: binding.value.update,
+          onUpdate: binding.value.update,
           disabled: !binding.value.enabled,
         });
         bus.$on(`toggle-addon-request-${binding.value.id}`, (state) => {

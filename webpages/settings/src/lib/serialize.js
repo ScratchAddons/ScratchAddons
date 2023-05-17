@@ -1,3 +1,8 @@
+const promisify =
+  (callbackFn) =>
+  (...args) =>
+    new Promise((resolve) => callbackFn(...args, resolve));
+
 export const deserializeSettings = async (str, manifests, confirmElem) => {
   const obj = JSON.parse(str);
   const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));

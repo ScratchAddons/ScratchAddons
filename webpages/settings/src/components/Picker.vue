@@ -74,7 +74,6 @@ export default {
       this.$parent.addonSettings[this.setting.id] = newColor;
       this.$parent.updateSettings(this.addon, { wait: 250, settingId: this.setting.id });
 
-      console.log("change", newColor);
       this.color = newColor;
     }, 250),
   },

@@ -42,18 +42,21 @@ export default {
   },
   mounted() {
     bus.$on("close-reset-dropdowns", (except) => {
-      if (this.isOpen && this !== except) {
+
+      if (this.isOpen && this.setting.id !== except) {
+
         this.isOpen = false;
       }
     });
   },
   methods: {
     toggle() {
+      
       this.isOpen = !this.isOpen;
       this.$root.closePickers({ isTrusted: true }, null, {
         callCloseDropdowns: false,
       });
-      this.$root.closeResetDropdowns({ isTrusted: true }, this); // close other dropdowns
+      this.$root.closeResetDropdowns({ isTrusted: true }, this.setting.id); // close other dropdowns
     },
     resetToDefault() {
       this.$parent.addonSettings[this.setting.id] = this.setting.default;

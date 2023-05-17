@@ -232,10 +232,6 @@ updateGrantedPermissions();
 chrome.permissions.onAdded?.addListener(updateGrantedPermissions);
 chrome.permissions.onRemoved?.addListener(updateGrantedPermissions);
 let fuse;
-const promisify =
-  (callbackFn) =>
-  (...args) =>
-    new Promise((resolve) => callbackFn(...args, resolve));
 
 let initialTheme, setGlobalTheme;
 (async () => {
@@ -253,6 +249,7 @@ export default {
   components: { Modal, AddonBody, AddonGroupHeader, CategorySelector },
   data() {
     return {
+      bus,
       smallMode: false,
       theme: initialTheme,
       forceEnglishSetting: null,
@@ -293,7 +290,6 @@ export default {
   },
   created() {
     chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
-      console.log("it runs??");
       this.addonSettings = addonSettings;
       const cleanManifests = [];
       let iframeData;
