@@ -13,7 +13,7 @@
     </div>
     <template v-if="noResetDropdown">
       <div v-if="setting.type === 'table'" class="setting-table">
-        <div class="setting-table-list" v-sortable="{update: updateTable, enabled: addon._enabled, id: addon.id}">
+        <div class="setting-table-list" v-sortable="{ update: updateTable, enabled: addon._enabled, id: addon.id }">
           <div class="setting-table-row" v-for="(row, i) of addonSettings[setting.id]">
             <div class="setting-table-options">
               <button :disabled="!addon._enabled" class="addon-buttons" @click="deleteTableRow(i)">
@@ -572,7 +572,7 @@ export default {
         const sortable = new Sortable(el, {
           handle: ".handle",
           animation: 300,
-         onUpdate: binding.value.update,
+          onUpdate: binding.value.update,
           disabled: !binding.value.enabled,
         });
         bus.$on(`toggle-addon-request-${binding.value.id}`, (state) => {
