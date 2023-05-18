@@ -787,6 +787,27 @@ export default {
     window.addEventListener("resize", this.resizeEvent);
     this.resizeEvent();
     document.title = chrome.i18n.getMessage("settingsTitle");
+    let cursor = 0;
+    const KONAMI_CODE = [
+      "arrowup",
+      "arrowup",
+      "arrowdown",
+      "arrowdown",
+      "arrowleft",
+      "arrowright",
+      "arrowleft",
+      "arrowright",
+      "b",
+      "a",
+    ];
+    let self = this;
+    document.addEventListener("keydown", (e) => {
+      cursor = e.key.toLowerCase() === KONAMI_CODE[cursor] ? cursor + 1 : 0;
+      if (cursor === KONAMI_CODE.length) {
+        self.selectedCategory = "easterEgg";
+        setTimeout(() => (vue.searchInputReal = ""), 0); // Allow konami code in autofocused search bar
+      }
+    });
   },
 };
 </script>
