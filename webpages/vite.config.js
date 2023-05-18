@@ -7,6 +7,8 @@ import preload from "vite-plugin-preload";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  //assetsInclude: ["**/*.css"],
+
   build: {
     rollupOptions: {
       input: {

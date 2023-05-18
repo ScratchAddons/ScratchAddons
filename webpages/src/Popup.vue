@@ -34,7 +34,7 @@
         </div>
       </div>
     </div>
-    <iframe
+  <iframe
       v-cloak
       v-for="popup in popupsWithIframes"
       v-show="currentPopup === popup"
@@ -45,7 +45,6 @@
 </template>
 <script>
 import globalTheme from "../../libraries/common/global-theme.js";
-
 globalTheme();
 
 function calculatePopupSize() {

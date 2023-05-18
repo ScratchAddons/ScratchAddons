@@ -1,4 +1,4 @@
-import "./assets/main.css";
+import "../public/assets/main.css";
 
 import { createApp } from "vue";
 import App from "./Popup.vue";

@@ -1,7 +1,7 @@
 import "./set-lang.js";
 import Addon from "../../addon-api/popup/Addon.js";
 import WebsiteLocalizationProvider from "../../libraries/common/website-l10n.js";
-import globalTheme from "../../libraries/common/global-theme.js";
+import globalTheme from "../../../libraries/common/global-theme.js";
 
 const scratchAddons = (window.scratchAddons = {});
 // Store event targets for addon.* API events
