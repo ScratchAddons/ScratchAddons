@@ -9,4 +9,4 @@ _locales/*/messages.json
 
 .github/*
 
-webpages/settings/dist/*
+webpages/dist/*

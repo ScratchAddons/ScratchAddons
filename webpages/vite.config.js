@@ -13,11 +13,12 @@ export default defineConfig({
         main: resolve("./index.html"),
         licenses: resolve("./licenses.html"),
         popup: resolve("./popup.html"),
+        permissions: resolve("./permissions.html"),
       },
     },
   },
 
-  base: "/webpages/settings/dist/",
+  base: "/webpages/dist/",
   plugins: [vue()],
   resolve: {
     alias: {

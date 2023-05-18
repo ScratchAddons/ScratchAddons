@@ -89,7 +89,7 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
   popupObjects.push({
     name: chrome.i18n.getMessage("quickSettings"),
     icon: "../../images/icons/wrench.svg",
-    html: "../../webpages/settings/dist/index.html",
+    html: "../../webpages/dist/index.html",
     _addonId: "__settings__",
   });
   vue.popups = popupObjects;

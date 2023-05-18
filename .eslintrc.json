@@ -6,7 +6,7 @@
     ".github/*",
     "addons-l10n/*",
     "libraries/thirdparty/*",
-    "webpages/settings/dist/*"
+    "webpages/dist/*"
   ],
   "parserOptions": {
     "sourceType": "module"
