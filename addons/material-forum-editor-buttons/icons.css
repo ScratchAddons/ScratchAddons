@@ -3,75 +3,93 @@
 
 /* This one is a default for button that don't have an icon in this stylesheet */
 
+/* Bold */
 .markItUpButton1 > a::before  {
     content: "format_bold";
 }
 
+/* Italic */
 .markItUpButton2 > a::before  {
     content: "format_italic";
 }
 
+/* Underline */
 .markItUpButton3 > a::before  {
     content: "format_underlined";
 }
 
+/* Strikethrough / Stroke */
 .markItUpButton4 > a::before  {
     content: "strikethrough_s";
 }
 
+/* Photo / Picture */
 .markItUpButton5 > a::before  {
     content: "add_photo_alternate";
 }
 
+/* Link */
 .markItUpButton6 > a::before  {
     content: "add_link";
 }
 
+/* Size */
 .markItUpButton7 > a::before  {
     content: "format_size";
 }
 
+/* Size Large */
 .markItUpButton-1 > a::before  {
     content: "text_increase";
 }
 
+/* Size Small */
 .markItUpButton-2 > a::before  {
     content: "text-decrease";
 }
 
+/* Bulleted list */
 .markItUpButton8 > a::before  {
     content: "format_list_bulleted";
 }
 
+/* Numeric list */
 .markItUpButton9 > a::before  {
     content: "format_list_numbered";
 }
 
+/* List item */
 .markItUpButton10 > a::before  {
     content: "format_list_bulleted_add";
 }
 
+/* Quotes */
 .markItUpButton11 > a::before  {
     content: "format_quote";
 }
 
+/* Emojis / Smiles */
 .markItUpButton12 > a::before  {
     content: "add_reaction";
 }
 
+/* Paste browser / operating system versions */
 .markItUpButton13 > a::before  {
     content: "devices";
 }
 
-/* Scratchblocks button, no google material icon (yet) */
+/* Scratchblocks */
+/* No google material icon yet */
 .markItUpButton14 > a::before  {
     content: "question_mark";
 }
 
+/* Clean / Clear formatting */
 .markItUpButton15 > a::before  {
     content: "mop";
 }
 
+/* Preview */
 .markItUpButton16 > a::before  {
     content: "visibility";
 }
