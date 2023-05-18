@@ -25,11 +25,11 @@
           <a
             v-if="popup.fullscreen"
             class="popout"
-            :href="`../../../popups/${ popup._addonId }/popup.html`"
+            :href="`../../../popups/${popup._addonId}/popup.html`"
             target="_blank"
             @click="closePopup()"
           >
-            <img src="../../images/icons/popout.svg" class="popout-img" :title=" msg('openInNewTab') " />
+            <img src="../../images/icons/popout.svg" class="popout-img" :title="msg('openInNewTab')" />
           </a>
         </div>
       </div>

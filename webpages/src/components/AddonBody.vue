@@ -56,7 +56,7 @@
         </span>
       </div>
       <div class="addon-license" v-if="addon.libraries && addon.libraries.length">
-        <a target="_blank" :href="`./licenses.html?libraries=${ addon.libraries.join(',') }`">{{
+        <a target="_blank" :href="`./licenses.html?libraries=${addon.libraries.join(',')}`">{{
           msg("viewLicenses")
         }}</a>
       </div>
