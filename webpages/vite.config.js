@@ -12,12 +12,13 @@ export default defineConfig({
       input: {
         main: resolve("./index.html"),
         licenses: resolve("./licenses.html"),
+        popup: resolve("./popup.html"),
       },
     },
   },
 
   base: "/webpages/settings/dist/",
-  plugins: [vue(), ],
+  plugins: [vue()],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)).at,
