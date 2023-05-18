@@ -11,12 +11,13 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve("./index.html"),
+        licenses: resolve("./licenses.html"),
       },
     },
   },
 
   base: "/webpages/settings/dist/",
-  plugins: [vue(), preload()],
+  plugins: [vue(), ],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)).at,

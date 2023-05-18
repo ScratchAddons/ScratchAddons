@@ -1,14 +1,6 @@
-@import "./base.css";
-@import "./badges.css";
-@import "./buttons.css";
-@import "./filter.css";
-@import "./categories.css";
-@import "./search.css";
-@import "./tooltips.css";
-@import "./smallmode.css";
-@import "./popup.css";
-@import "./enablepopup.css";
 @import "../../../../libraries/thirdparty/Sora.css";
+@import "./base.css";
+
 html {
   background: var(--content-background);
 }
