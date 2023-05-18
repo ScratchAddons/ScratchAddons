@@ -94,7 +94,7 @@
     </div>
   </div>
 
-  <modal class="more-settings" :is-open.sync="moreSettingsOpen" :title="msg('moreSettings')" v-cloak>
+  <modal class="more-settings" v-model="moreSettingsOpen" :title="msg('moreSettings')" v-cloak>
     <div class="addon-block settings-block">
       <div class="addon-body">
         <div class="addon-topbar">
