@@ -24,7 +24,7 @@ export default {
   components: { ColorPicker },
   // bind to the color prop and update addon settings
   props: ["addon", "setting", "modelValue", "alphaEnabled"],
-    emits: ['update:modelValue'],
+  emits: ["update:modelValue"],
 
   data() {
     return {
@@ -33,15 +33,15 @@ export default {
     };
   },
 
-    computed: {
+  computed: {
     color: {
       get() {
-        return this.modelValue
+        return this.modelValue;
       },
       set(value) {
-        this.$emit('update:modelValue', value)
-      }
-    }
+        this.$emit("update:modelValue", value);
+      },
+    },
   },
 
   // write method to toggle the color picker
@@ -95,6 +95,6 @@ export default {
   top: 32px;
 }
 .vacp-color-picker {
-    color: black;
+  color: black;
 }
 </style>
