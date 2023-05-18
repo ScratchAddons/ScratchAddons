@@ -56,7 +56,6 @@ export default {
   },
   watch: {
     modelValue(value) {
-      
       if (value) {
         setTimeout(() => {
           this.canCloseOutside = true;
@@ -66,15 +65,15 @@ export default {
       }
     },
   },
-    computed: {
+  computed: {
     isOpen: {
       get() {
-        return this.modelValue
+        return this.modelValue;
       },
       set(value) {
-        this.$emit('update:modelValue', value)
-      }
-    }
+        this.$emit("update:modelValue", value);
+      },
+    },
   },
 
   methods: {
