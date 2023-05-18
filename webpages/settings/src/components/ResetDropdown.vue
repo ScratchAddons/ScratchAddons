@@ -42,16 +42,13 @@ export default {
   },
   mounted() {
     bus.$on("close-reset-dropdowns", (except) => {
-
       if (this.isOpen && this.setting.id !== except) {
-
         this.isOpen = false;
       }
     });
   },
   methods: {
     toggle() {
-      
       this.isOpen = !this.isOpen;
       this.$root.closePickers({ isTrusted: true }, null, {
         callCloseDropdowns: false,

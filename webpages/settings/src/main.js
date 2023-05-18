@@ -9,13 +9,13 @@ const app = createApp(App);
 app.directive("click-outside", {
   mounted: function (el, binding, vnode) {
     el.addEventListener("click", (e) => e.stopPropagation());
-        el.addEventListener("click", (e) => e.stopPropagation());
+    el.addEventListener("click", (e) => e.stopPropagation());
 
-el.controlled = binding.value.prevent;
+    el.controlled = binding.value.prevent;
 
     el.clickOutsideEvent = function (event) {
       // here I check that click was outside the el and his children
-      
+
       if (!(el == event.target || el.contains(event.target)) && !el.controlled) {
         // and if it did, call method provided in attribute value
         binding.value(event);
