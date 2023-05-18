@@ -63,11 +63,12 @@ function calculatePopupSize() {
 window.addEventListener("load", () => setTimeout(calculatePopupSize, 0));
 
 export default {
-  data() {return {
-    popups: [],
-    currentPopup: null,
-    popupsWithIframes: [],
-  }
+  data() {
+    return {
+      popups: [],
+      currentPopup: null,
+      popupsWithIframes: [],
+    };
   },
   methods: {
     msg(message, ...params) {
@@ -98,71 +99,73 @@ export default {
     },
   },
   mounted() {
-let manifests = null;
-// If order unspecified, addon goes first. All new popups should be added here.
-const TAB_ORDER = ["scratch-messaging", "cloud-games", "__settings__"];
+    let manifests = null;
+    // If order unspecified, addon goes first. All new popups should be added here.
+    const TAB_ORDER = ["scratch-messaging", "cloud-games", "__settings__"];
 
-chrome.runtime.sendMessage("getSettingsInfo", (res) => {
-  manifests = res.manifests;
-  const popupObjects = Object.keys(res.addonsEnabled)
-    .filter((addonId) => res.addonsEnabled[addonId] === true)
-    .map((addonId) => manifests.find((addon) => addon.addonId === addonId))
-    // Note an enabled addon might not exist anymore!
-    .filter((findManifest) => findManifest !== undefined)
-    .filter(({ manifest }) => manifest.popup)
-    .sort(({ addonId: addonIdB }, { addonId: addonIdA }) => TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA))
-    .map(
-      ({ addonId, manifest }) =>
-        (manifest.popup._addonId = addonId) &&
-        Object.assign(manifest.popup, {
-          html: `../../../popups/${addonId}/${manifest.popup.html}`,
-        })
-    );
-  popupObjects.push({
-    name: chrome.i18n.getMessage("quickSettings"),
-    icon: "../../../images/icons/wrench.svg",
-    html: "../../../webpages/settings/dist/index.html",
-    _addonId: "__settings__",
-  });
-  this.popups = popupObjects;
-  chrome.storage.local.get("lastSelectedPopup", ({ lastSelectedPopup }) => {
-    let id = 0;
-    if (typeof lastSelectedPopup === "string") {
-      id = this.popups.findIndex((popup) => popup._addonId === lastSelectedPopup);
-      if (id === -1) id = 0;
-    }
-    this.setPopup(this.popups[id]);
-  });
-});
-
-// Dynamic Popups
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.changeEnabledState) {
-    const { addonId, newState } = request.changeEnabledState;
-    const { manifest } = manifests.find((addon) => addon.addonId === addonId);
-    if (!manifest.popup) return;
-    if (newState === true) {
-      manifest.popup._addonId = addonId;
-      Object.assign(manifest.popup, {
-        html: `../../../popups/${addonId}/${manifest.popup.html}`,
+    chrome.runtime.sendMessage("getSettingsInfo", (res) => {
+      manifests = res.manifests;
+      const popupObjects = Object.keys(res.addonsEnabled)
+        .filter((addonId) => res.addonsEnabled[addonId] === true)
+        .map((addonId) => manifests.find((addon) => addon.addonId === addonId))
+        // Note an enabled addon might not exist anymore!
+        .filter((findManifest) => findManifest !== undefined)
+        .filter(({ manifest }) => manifest.popup)
+        .sort(
+          ({ addonId: addonIdB }, { addonId: addonIdA }) => TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA)
+        )
+        .map(
+          ({ addonId, manifest }) =>
+            (manifest.popup._addonId = addonId) &&
+            Object.assign(manifest.popup, {
+              html: `../../../popups/${addonId}/${manifest.popup.html}`,
+            })
+        );
+      popupObjects.push({
+        name: chrome.i18n.getMessage("quickSettings"),
+        icon: "../../../images/icons/wrench.svg",
+        html: "../../../webpages/settings/dist/index.html",
+        _addonId: "__settings__",
       });
+      this.popups = popupObjects;
+      chrome.storage.local.get("lastSelectedPopup", ({ lastSelectedPopup }) => {
+        let id = 0;
+        if (typeof lastSelectedPopup === "string") {
+          id = this.popups.findIndex((popup) => popup._addonId === lastSelectedPopup);
+          if (id === -1) id = 0;
+        }
+        this.setPopup(this.popups[id]);
+      });
+    });
 
-      this.popups.push(manifest.popup);
-      this.popups = this.popups.sort(
-        ({ _addonId: addonIdB }, { _addonId: addonIdA }) => TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA)
-      );
-    } else {
-      let removeIndex = this.popupsWithIframes.findIndex((popup) => popup._addonId === addonId);
-      if (removeIndex !== -1) this.popupsWithIframes.splice(removeIndex, 1);
-      removeIndex = this.popups.findIndex((popup) => popup._addonId === addonId);
-      this.popups.splice(removeIndex, 1);
-      if (!this.popups.includes(this.currentPopup)) {
-        this.setPopup(this.popups[0]); // set to default popup if current popup is no longer available
+    // Dynamic Popups
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if (request.changeEnabledState) {
+        const { addonId, newState } = request.changeEnabledState;
+        const { manifest } = manifests.find((addon) => addon.addonId === addonId);
+        if (!manifest.popup) return;
+        if (newState === true) {
+          manifest.popup._addonId = addonId;
+          Object.assign(manifest.popup, {
+            html: `../../../popups/${addonId}/${manifest.popup.html}`,
+          });
+
+          this.popups.push(manifest.popup);
+          this.popups = this.popups.sort(
+            ({ _addonId: addonIdB }, { _addonId: addonIdA }) =>
+              TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA)
+          );
+        } else {
+          let removeIndex = this.popupsWithIframes.findIndex((popup) => popup._addonId === addonId);
+          if (removeIndex !== -1) this.popupsWithIframes.splice(removeIndex, 1);
+          removeIndex = this.popups.findIndex((popup) => popup._addonId === addonId);
+          this.popups.splice(removeIndex, 1);
+          if (!this.popups.includes(this.currentPopup)) {
+            this.setPopup(this.popups[0]); // set to default popup if current popup is no longer available
+          }
+        }
       }
-    }
-  }
-});
-
+    });
   },
   computed: {
     changelogLink() {
@@ -179,9 +182,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   },
 };
 
-
 chrome.runtime.sendMessage("checkPermissions");
-
 </script>
 <style>
 html,
