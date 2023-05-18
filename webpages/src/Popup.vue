@@ -4,11 +4,11 @@
       <img src="../../images/icon-transparent.svg" id="logo" alt="Logo" />
       <span id="title-text" v-cloak>
         {{ msg("extensionName") }}
-        <a id="version" :href="changelogLink" target="_blank" title="{{ msg('changelog') }}">v{{ version }}</a>
+        <a id="version" :href="changelogLink" target="_blank" :title="msg('changelog')">v{{ version }}</a>
       </span>
     </div>
     <div id="settings" @click="openSettingsPage()">
-      <img src="../../images/icons/settings.svg" id="settings-icon" title="{{ msg('settings') }}" />
+      <img src="../../images/icons/settings.svg" id="settings-icon" :title="msg('settings')" />
     </div>
   </div>
   <div id="popups">
@@ -25,11 +25,11 @@
           <a
             v-if="popup.fullscreen"
             class="popout"
-            href="../../../popups/{{ popup._addonId }}/popup.html"
+            :href="`../../../popups/${ popup._addonId }/popup.html`"
             target="_blank"
             @click="closePopup()"
           >
-            <img src="../../images/icons/popout.svg" class="popout-img" title="{{ msg('openInNewTab') }}" />
+            <img src="../../images/icons/popout.svg" class="popout-img" :title=" msg('openInNewTab') " />
           </a>
         </div>
       </div>

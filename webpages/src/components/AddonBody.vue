@@ -49,14 +49,14 @@
         <span>{{ msg("creditTo") }}</span>
         <span v-for="credit of addon.credits">
           <span v-if="credit.link">
-            <a href="{{ credit.link }}" rel="noreferrer noopener" target="_blank">{{ credit.name }}</a>
+            <a :href="credit.link" rel="noreferrer noopener" target="_blank">{{ credit.name }}</a>
           </span>
           <span v-else="credit.link">{{ credit.name }}</span>
           <span v-if="credit.note">({{ credit.note }})</span>
         </span>
       </div>
       <div class="addon-license" v-if="addon.libraries && addon.libraries.length">
-        <a target="_blank" href="./licenses.html?libraries={{ addon.libraries.join(',') }}">{{
+        <a target="_blank" :href="`./licenses.html?libraries=${ addon.libraries.join(',') }`">{{
           msg("viewLicenses")
         }}</a>
       </div>
