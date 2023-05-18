@@ -127,9 +127,9 @@
 }
 
 /* Wikipedia Link Option [forum-toolbar] */
-/* .sa-forum-toolbar-wp > a::before {
-    content: "";
-} */
+.sa-forum-toolbar-wp > a::before {
+    content: "public";
+}
 
 /* Scratch Wiki Link Option [forum-toolbar] */
 /* .sa-forum-toolbar-wiki > a::before {
@@ -137,6 +137,6 @@
 } */
 
 /* Dictionary Link Option [forum-toolbar] */
-/* .sa-forum-toolbar-dictionary > a::before {
-    content: "";
-} */
+.sa-forum-toolbar-dictionary > a::before {
+    content: "library_books";
+}
