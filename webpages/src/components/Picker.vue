@@ -23,19 +23,27 @@ import debounce from "../lib/debounce";
 export default {
   components: { ColorPicker },
   // bind to the color prop and update addon settings
-  props: ["addon", "setting", "value", "alphaEnabled"],
+  props: ["addon", "setting", "modelValue", "alphaEnabled"],
+    emits: ['update:modelValue'],
+
   data() {
     return {
       isOpen: false,
-      color: this.value,
       canCloseOutside: false,
     };
   },
-  watch: {
-    color(value) {
-      console.log("color changed", value);
-    },
+
+    computed: {
+    color: {
+      get() {
+        return this.modelValue
+      },
+      set(value) {
+        this.$emit('update:modelValue', value)
+      }
+    }
   },
+
   // write method to toggle the color picker
   mounted() {
     bus.$on("close-pickers", (except) => {
@@ -85,5 +93,8 @@ export default {
   width: max-content;
   z-index: 2;
   top: 32px;
+}
+.vacp-color-picker {
+    color: black;
 }
 </style>

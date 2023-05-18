@@ -123,7 +123,7 @@
       /></template>
       <template v-if="setting.type === 'color'">
         <picker
-          :value="addonSettings[setting.id]"
+          v-model="addonSettings[setting.id]"
           :setting="setting"
           :addon="addon"
           :alphaEnabled="setting.allowTransparency"
