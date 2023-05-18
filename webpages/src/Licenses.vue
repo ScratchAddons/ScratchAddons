@@ -69,7 +69,6 @@ export default {
 document.title = chrome.i18n.getMessage("licensesTitle");
 </script>
 <style>
-
 .licenses {
   height: 100%;
   min-height: 100vh;
