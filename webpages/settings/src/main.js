@@ -2,10 +2,8 @@ import "./assets/main.css";
 
 import { createApp } from "vue";
 import App from "./App.vue";
-import clickOutside from "./lib/click-outside.js";
 
 const app = createApp(App);
-//app.directive("click-outside", clickOutside);
 app.directive("click-outside", {
   mounted: function (el, binding, vnode) {
     el.addEventListener("click", (e) => e.stopPropagation());
