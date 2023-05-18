@@ -34,7 +34,7 @@
         </div>
       </div>
     </div>
-  <iframe
+    <iframe
       v-cloak
       v-for="popup in popupsWithIframes"
       v-show="currentPopup === popup"
