@@ -1430,6 +1430,17 @@
       }
     },
     {
+      "name": "highlight-transparent20",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "a": 0.2
+      }
+    },
+    {
       "name": "button-overlay",
       "value": {
         "type": "multiply",

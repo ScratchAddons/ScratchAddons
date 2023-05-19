@@ -224,6 +224,28 @@ export default async function ({ addon, console }) {
     this.box_.setAttribute("fill", fieldBackground(this));
   };
 
+  const oldFieldImageSetValue = Blockly.FieldImage.prototype.setValue;
+  Blockly.FieldImage.prototype.setValue = function (src) {
+    // Icons
+    if (textMode() === "black" || textMode() === "colorOnWhite") {
+      if (src.startsWith("data:") && this.sourceBlock_) {
+        // Extension icon
+        const iconsToReplace = ["music", "pen", "text2speech", "translate", "videoSensing"];
+        const extensionId = this.sourceBlock_.type.split("_")[0];
+        if (iconsToReplace.includes(extensionId)) {
+          src = `${addon.self.dir}/icons/black_text/extensions/${extensionId}.svg`;
+        }
+      } else {
+        const iconsToReplace = ["repeat.svg", "rotate-left.svg", "rotate-right.svg"];
+        const iconName = src.split("/").at(-1);
+        if (iconsToReplace.includes(iconName)) {
+          src = `${addon.self.dir}/icons/black_text/${iconName}`;
+        }
+      }
+    }
+    return oldFieldImageSetValue.call(this, src);
+  };
+
   const oldFieldDropdownInit = Blockly.FieldDropdown.prototype.init;
   Blockly.FieldDropdown.prototype.init = function () {
     // Dropdowns
@@ -316,7 +338,8 @@ export default async function ({ addon, console }) {
   Blockly.FieldVerticalSeparator.prototype.init = function () {
     // Vertical line between extension icon and block label
     oldFieldVerticalSeparatorInit.call(this);
-    if (textMode() === "black") this.lineElement_.setAttribute("stroke", this.sourceBlock_.getColourTertiary());
+    if (isColoredTextMode() || textMode() === "black")
+      this.lineElement_.setAttribute("stroke", this.sourceBlock_.getColourTertiary());
   };
 
   const updateColors = () => {
