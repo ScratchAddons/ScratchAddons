@@ -855,13 +855,13 @@
       "name": "Highlight color",
       "id": "primary",
       "type": "color",
-      "default": "#9966ff"
+      "default": "#855cd6"
     },
     {
       "name": "Text and icon highlight color",
       "id": "highlightText",
       "type": "color",
-      "default": "#ad7eff"
+      "default": "#ccb3ff"
     },
     {
       "name": "Menu bar background",
@@ -982,8 +982,8 @@
       "description": "A dark theme based on a userscript by infinitytec",
       "values": {
         "page": "#111111",
-        "primary": "#9966ff",
-        "highlightText": "#ad7eff",
+        "primary": "#855cd6",
+        "highlightText": "#ccb3ff",
         "menuBar": "#202020",
         "popup": "#000a",
         "activeTab": "#202020",
@@ -1085,14 +1085,14 @@
       "id": "experimentalDark",
       "description": "A dark theme by Maximouse based on a userstyle. Not experimental",
       "values": {
-        "page": "#2f2641",
-        "primary": "#9966ff",
-        "highlightText": "#ad7eff",
+        "page": "#2e3238",
+        "primary": "#855cd6",
+        "highlightText": "#ccb3ff",
         "menuBar": "#855cd6",
         "popup": "#000a",
         "activeTab": "#282828",
         "tab": "#202020",
-        "selector": "#2b2537",
+        "selector": "#292d32",
         "selector2": "#202020",
         "selectorSelection": "#282828",
         "accent": "#282828",
