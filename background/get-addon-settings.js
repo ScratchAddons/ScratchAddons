@@ -4,7 +4,7 @@ import minifySettings from "../libraries/common/minify-settings.js";
  Since presets can change independently of others, we have to keep track of
  the versions separately. Current versions:
 
- - editor-dark-mode 6 (bumped in v1.32 four times)
+ - editor-dark-mode 7 (last bumped in v1.33)
  - editor-theme3 3 (last bumped in v1.32)
  */
 
@@ -296,6 +296,19 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
             settings.popup = newPopupSettingValue;
             madeAnyChanges = madeChangesToAddon = true;
           }
+
+          updatePresetIfMatching(
+            settings,
+            7,
+            {
+              // Old highlight color (blue)
+              primary: "#4d97ff",
+            },
+            () => {
+              madeAnyChanges = madeChangesToAddon = true;
+              settings.primary = "#9966ff";
+            }
+          );
         }
 
         if (addonId === "editor-theme3") {
