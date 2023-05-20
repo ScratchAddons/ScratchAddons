@@ -111,18 +111,12 @@ export default async function ({ addon, console, msg }) {
     document.body.classList.toggle("sa-sprite-properties-wide-locale", isWideLocale);
   }
 
-  document.addEventListener(
-    "click",
-    (e) => {
-      if (
-        e.target.closest("[class*='stage-header_stage-button-first']") ||
-        e.target.closest("[class*='stage-header_stage-button-last']")
-      ) {
-        setTimeout(updateWideLocaleMode);
-      }
-    },
-    { capture: true }
-  );
+  addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (e.detail.action.type === "scratch-gui/StageSize/SET_STAGE_SIZE") {
+      setTimeout(updateWideLocaleMode);
+    }
+  });
 
   while (true) {
     propertiesPanel = await addon.tab.waitForElement('[class^="sprite-info_sprite-info_"]', {
