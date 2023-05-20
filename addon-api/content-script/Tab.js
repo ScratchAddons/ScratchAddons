@@ -207,6 +207,7 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get editorMode() {
+    if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601") return "editor";
     const pathname = location.pathname.toLowerCase();
     const split = pathname.split("/").filter(Boolean);
     if (!split[0] || split[0] !== "projects") return null;
