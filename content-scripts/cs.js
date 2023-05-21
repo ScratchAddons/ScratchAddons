@@ -755,10 +755,16 @@ const isStudio = pathArr[0] === "studios";
 const isProject = pathArr[0] === "projects";
 
 if (isProfile || isStudio || isProject) {
+  const removeReiteratedChars = (string) =>
+    string
+      .split("")
+      .filter((char, i, charArr) => (i === 0 ? true : charArr[i - 1] !== char))
+      .join("");
+
   const shouldCaptureComment = (value) => {
-    const regex = /scratch[ ]?add[ ]?ons/;
     const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, ""); // Trim like scratchr2
-    const limitedValue = trimmedValue.toLowerCase().replace(/[^a-z /]+/g, "");
+    const limitedValue = removeReiteratedChars(trimmedValue.toLowerCase().replace(/[^a-z]+/g, ""));
+    const regex = /scratchadons/;
     return regex.test(limitedValue);
   };
   const extensionPolicyLink = document.createElement("a");
