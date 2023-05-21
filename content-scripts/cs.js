@@ -845,7 +845,7 @@ if (isProfile || isStudio || isProject) {
                 const res = confirm(confirmMsg);
                 if (res) {
                   form.setAttribute("data-sa-send-anyway", "");
-                  possiblePostBtn.click();
+                  form.querySelector(".compose-post")?.click();
                 }
               };
               sendAnyway.textContent = sendAnywayMsg;
