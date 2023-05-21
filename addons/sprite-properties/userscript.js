@@ -35,12 +35,14 @@ export default async function ({ addon, console, msg }) {
       setPropertiesPanelVisible(false);
     }
   }
+  const isDirectionPopoverOpen = () =>
+    document.querySelector("body > div.Popover > div > div > [class*=direction-picker_button-row_]");
   // Close properties panel when mouse leaves the entire sprite panel
   document.body.addEventListener(
     "mouseleave",
     (e) => {
       if (e.target.matches('[class*="sprite-selector_sprite-selector_2KgCX"]')) {
-        autoHidePanel();
+        if (!isDirectionPopoverOpen()) autoHidePanel();
       }
     },
     {
