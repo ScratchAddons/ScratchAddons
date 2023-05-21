@@ -782,15 +782,9 @@ if (isProfile || isStudio || isProject) {
       window.addEventListener(
         "click",
         (e) => {
-          const path = e.composedPath();
-          if (
-            path[1] &&
-            path[1] !== document &&
-            path[1].getAttribute("data-control") === "post" &&
-            path[1].hasAttribute("data-commentee-id")
-          ) {
-            const form = path[3];
-            if (form.tagName !== "FORM") return;
+          if (e.target.tagName !== "A" || !e.target.parentElement.matches("div.button[data-commentee-id]")) return;
+            const form = e.target.closest("form");
+            if (!form) return;
             if (form.hasAttribute("data-sa-send-anyway")) {
               form.removeAttribute("data-sa-send-anyway");
               return;
@@ -817,54 +811,18 @@ if (isProfile || isStudio || isProject) {
               });
               form.querySelector("[data-control=error] .text").appendChild(sendAnyway);
               form.querySelector(".control-group").classList.add("error");
-            }
           }
         },
         { capture: true }
       );
     } else if (isProject || isStudio) {
-      // For projects, we want to be careful not to hurt performance.
-      // Let's capture the event in the comments container instead
-      // of the whole window. There will be a new comment container
-      // each time the user goes inside the project then outside.
-      let observer;
-      const waitForContainer = () => {
-        if (document.querySelector(".comments-container, .studio-compose-container")) return Promise.resolve();
-        return new Promise((resolve) => {
-          observer = new MutationObserver((mutationsList) => {
-            if (document.querySelector(".comments-container, .studio-compose-container")) {
-              resolve();
-              observer.disconnect();
-            }
-          });
-          observer.observe(document.documentElement, { childList: true, subtree: true });
-        });
-      };
-      const getEditorMode = () => {
-        // From addon-api/content-script/Tab.js
-        const pathname = location.pathname.toLowerCase();
-        const split = pathname.split("/").filter(Boolean);
-        if (!split[0] || split[0] !== "projects") return null;
-        if (split.includes("editor")) return "editor";
-        if (split.includes("fullscreen")) return "fullscreen";
-        if (split.includes("embed")) return "embed";
-        return "projectpage";
-      };
-      const addListener = () =>
-        document.querySelector(".comments-container, .studio-compose-container").addEventListener(
+        window.addEventListener(
           "click",
           (e) => {
-            const path = e.composedPath();
-            // When clicking the post button, e.path[0] might
-            // be <span>Post</span> or the <button /> element
-            const possiblePostBtn = path[0].tagName === "SPAN" ? path[1] : path[0];
-            if (!possiblePostBtn) return;
-            if (possiblePostBtn.tagName !== "BUTTON") return;
-            if (!possiblePostBtn.classList.contains("compose-post")) return;
-            const form = path[0].tagName === "SPAN" ? path[3] : path[2];
+            if (!(e.target.tagName === "SPAN" || e.target.tagName === "BUTTON")) return;
+            if (!e.target.closest("button.compose-post")) return;
+            const form = e.target.closest("form.full-width-form");
             if (!form) return;
-            if (form.tagName !== "FORM") return;
-            if (!form.classList.contains("full-width-form")) return;
             // Remove error when about to send comment anyway, if it exists
             form.parentNode.querySelector(".sa-compose-error-row")?.remove();
             if (form.hasAttribute("data-sa-send-anyway")) {
@@ -915,22 +873,6 @@ if (isProfile || isStudio || isProject) {
           },
           { capture: true }
         );
-
-      const check = async () => {
-        if (
-          // Note: do not use pathArr here below! pathArr is calculated
-          // on load, pathname can change dynamically with replaceState
-          (isStudio && location.pathname.split("/")[3] === "comments") ||
-          (isProject && getEditorMode() === "projectpage")
-        ) {
-          await waitForContainer();
-          addListener();
-        } else {
-          observer?.disconnect();
         }
-      };
-      check();
-      csUrlObserver.addEventListener("change", (e) => check());
-    }
-  });
+  }, { once: true });
 }
