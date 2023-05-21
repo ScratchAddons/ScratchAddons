@@ -95,12 +95,20 @@ export default async function ({ addon, msg }) {
     else if (alternativePlayer === "forkphorus") loadForkphorus();
   } else {
     loadScratch();
-    iframeElement.addEventListener("load", () => {
-      if (iframeElement.contentDocument.querySelector(".not-available-outer") !== null) {
-        if (alternativePlayer === "turbowarp") loadTurboWarp();
-        else if (alternativePlayer === "forkphorus") loadForkphorus();
-        else stageElement.removeChild(wrapperElement);
+    let interval;
+    const hideOn404 = () => {
+      if (iframeElement.contentDocument.querySelector("[class^=stage]")) {
+        clearInterval(interval);
+        return;
       }
+      if (iframeElement.contentDocument.querySelector(".not-available-outer") !== null) {
+        stageElement.removeChild(wrapperElement);
+        clearInterval(interval);
+        return;
+      }
+    };
+    iframeElement.addEventListener("load", () => {
+      interval = setInterval(hideOn404);
     });
   }
 }
