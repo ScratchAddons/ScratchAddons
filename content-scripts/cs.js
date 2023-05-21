@@ -757,8 +757,7 @@ const isProject = pathArr[0] === "projects";
 if (isProfile || isStudio || isProject) {
   const shouldCaptureComment = (value) => {
     const regex = /scratch[ ]?add[ ]?ons/;
-    // Trim like scratchr2
-    const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+    const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, ""); // Trim like scratchr2
     const limitedValue = trimmedValue.toLowerCase().replace(/[^a-z /]+/g, "");
     return regex.test(limitedValue);
   };
