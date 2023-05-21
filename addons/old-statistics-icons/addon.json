@@ -1,0 +1,21 @@
+{
+  "name": "Old statistics icons",
+  "description": "Show old statistics icons on project pages.",
+  "tags": ["community"],
+  "credits": [
+    {
+      "name": "Valmontechno",
+      "link": "https://scratch.mit.edu/users/valmontechno/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.33.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "enabledByDefault": false
+}
