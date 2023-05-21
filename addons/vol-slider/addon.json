@@ -8,6 +8,10 @@
     },
     {
       "name": "GarboMuffin"
+    },
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
     }
   ],
   "userscripts": [
@@ -20,6 +24,13 @@
     {
       "url": "userstyle.css",
       "matches": ["projects", "projectEmbeds"]
+    },
+    {
+      "url": "hover.css",
+      "matches": ["projects", "projectEmbeds"],
+      "if": {
+        "settings": { "always": false }
+      }
     }
   ],
   "settings": [
@@ -30,10 +41,22 @@
       "min": 0,
       "max": 100,
       "default": 100
+    },
+    {
+      "name": "Always show slider",
+      "id": "always",
+      "type": "boolean",
+      "default": false
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.29.0",
+  "latestUpdate": {
+    "version": "1.32.0",
+    "newSettings": ["always"],
+    "isMajor": true
+  },
   "tags": ["editor", "projectPlayer", "recommended"]
 }

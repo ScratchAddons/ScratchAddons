@@ -48,8 +48,12 @@ export default async function ({ addon, console }) {
 
   const container = document.createElement("div");
   container.className = "sa-vol-slider";
-  container.appendChild(icon);
-  container.appendChild(slider);
+  // Nested elements are needed for hover animation - see hover.css
+  const innerContainer = document.createElement("div");
+  innerContainer.className = "sa-vol-slider-inner";
+  innerContainer.appendChild(icon);
+  innerContainer.appendChild(slider);
+  container.appendChild(innerContainer);
   addon.tab.displayNoneWhileDisabled(container, {
     display: "flex",
   });
