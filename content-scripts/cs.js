@@ -682,6 +682,11 @@ const showBanner = () => {
     target: "_blank",
     textContent: chrome.i18n.getMessage("notifChangelog"),
   });
+  const notifFooterBlog = Object.assign(document.createElement("a"), {
+    href: `https://scratchaddons.com/blog/`,
+    target: "_blank",
+    textContent: chrome.i18n.getMessage("notifBlog"),
+  });
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
     href: `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${
       chrome.runtime.getManifest().version
@@ -698,6 +703,8 @@ const showBanner = () => {
     textContent: chrome.i18n.getMessage("notAffiliated"),
   });
   notifFooter.appendChild(notifFooterChangelog);
+  notifFooter.appendChild(document.createTextNode(" | "));
+  notifFooter.appendChild(notifFooterBlog);
   notifFooter.appendChild(document.createTextNode(" | "));
   notifFooter.appendChild(notifFooterFeedback);
   notifFooter.appendChild(document.createTextNode(" | "));

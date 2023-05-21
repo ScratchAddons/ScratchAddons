@@ -20,6 +20,9 @@
   "notifChangelog": {
     "message": "View Changelog"
   },
+  "notifBlog": {
+    "message": "Visit Blog"
+  },
   "15min": {
     "message": "For 15 minutes"
   },
