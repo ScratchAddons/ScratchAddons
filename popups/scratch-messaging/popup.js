@@ -71,6 +71,11 @@ export default async ({ addon, msg, safeMsg }) => {
     },
     methods: {
       postComment() {
+        const removeReiteratedChars = (string) =>
+          string
+            .split("")
+            .filter((char, i, charArr) => (i === 0 ? true : charArr[i - 1] !== char))
+            .join("");
         const shouldCaptureComment = (value) => {
           // From content-scripts/cs.js
           const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, ""); // Trim like scratchr2
