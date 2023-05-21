@@ -777,12 +777,14 @@ if (isProfile || isStudio || isProject) {
   const sendAnywayMsg = chrome.i18n.getMessage("captureCommentPostAnyway");
   const confirmMsg = chrome.i18n.getMessage("captureCommentConfirm");
 
-  window.addEventListener("load", () => {
-    if (isProfile) {
-      window.addEventListener(
-        "click",
-        (e) => {
-          if (e.target.tagName !== "A" || !e.target.parentElement.matches("div.button[data-commentee-id]")) return;
+  window.addEventListener(
+    "load",
+    () => {
+      if (isProfile) {
+        window.addEventListener(
+          "click",
+          (e) => {
+            if (e.target.tagName !== "A" || !e.target.parentElement.matches("div.button[data-commentee-id]")) return;
             const form = e.target.closest("form");
             if (!form) return;
             if (form.hasAttribute("data-sa-send-anyway")) {
@@ -811,11 +813,11 @@ if (isProfile || isStudio || isProject) {
               });
               form.querySelector("[data-control=error] .text").appendChild(sendAnyway);
               form.querySelector(".control-group").classList.add("error");
-          }
-        },
-        { capture: true }
-      );
-    } else if (isProject || isStudio) {
+            }
+          },
+          { capture: true }
+        );
+      } else if (isProject || isStudio) {
         window.addEventListener(
           "click",
           (e) => {
@@ -873,6 +875,8 @@ if (isProfile || isStudio || isProject) {
           },
           { capture: true }
         );
-        }
-  }, { once: true });
+      }
+    },
+    { once: true }
+  );
 }
