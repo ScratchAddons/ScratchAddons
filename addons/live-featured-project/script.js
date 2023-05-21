@@ -1,6 +1,5 @@
 export default async function ({ addon, msg }) {
   const showMenu = addon.settings.get("showMenu");
-  const forceAlternative = addon.settings.get("forceAlternative");
   const alternativePlayer = addon.settings.get("alternativePlayer");
   const autoPlay = addon.settings.get("autoPlay");
   const enableTWAddons = addon.settings.get("enableTWAddons");
@@ -90,7 +89,7 @@ export default async function ({ addon, msg }) {
 
   // Start loading the players
 
-  if (forceAlternative && alternativePlayer !== "none") {
+  if (alternativePlayer !== "none") {
     if (alternativePlayer === "turbowarp") loadTurboWarp();
     else if (alternativePlayer === "forkphorus") loadForkphorus();
   } else {

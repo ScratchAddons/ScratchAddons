@@ -63,15 +63,6 @@
       }
     },
     {
-      "id": "forceAlternative",
-      "name": "Force using alternative player",
-      "type": "boolean",
-      "default": false,
-      "if": {
-        "settings": { "alternativePlayer": ["turbowarp", "forkphorus"] }
-      }
-    },
-    {
       "id": "enableTWAddons",
       "name": "Enable TurboWarp addons",
       "type": "boolean",
