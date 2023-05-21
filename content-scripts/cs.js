@@ -776,9 +776,6 @@ if (isProfile || isStudio || isProject) {
   const sendAnywayMsg = chrome.i18n.getMessage("captureCommentPostAnyway");
   const confirmMsg = chrome.i18n.getMessage("captureCommentConfirm");
 
-  window.addEventListener(
-    "load",
-    () => {
       if (isProfile) {
         window.addEventListener(
           "click",
@@ -875,7 +872,4 @@ if (isProfile || isStudio || isProject) {
           { capture: true }
         );
       }
-    },
-    { once: true }
-  );
 }
