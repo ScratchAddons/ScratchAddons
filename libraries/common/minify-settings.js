@@ -1,3 +1,7 @@
+const STORE_1_REGEX = /\d|[a-d]/;
+const STORE_2_REGEX = /[e-k]/;
+// Store 3 is used for all other cases (when addon ID starts with L-Z).
+
 /**
  * Removes unnecessary settings entry to reduce storage size.
  * @param {object} settings the settings object
@@ -42,8 +46,8 @@ export default (settings, manifests) => {
       }
     }
 
-    if (addonId[0].match(/[a-d]/)) storageItems.addonSettings1[addonId] = newSettings[addonId];
-    else if (addonId[0].match(/[f-m]/)) storageItems.addonSettings2[addonId] = newSettings[addonId];
+    if (addonId[0].match(STORE_1_REGEX)) storageItems.addonSettings1[addonId] = newSettings[addonId];
+    else if (addonId[0].match(STORE_2_REGEX)) storageItems.addonSettings2[addonId] = newSettings[addonId];
     else storageItems.addonSettings3[addonId] = newSettings[addonId];
   }
   return storageItems;

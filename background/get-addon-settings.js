@@ -37,27 +37,32 @@ const updatePresetIfMatching = (settings, version, oldPreset = null, preset = nu
 };
 
 async function transitionToNewStorageKeys(addonSettings) {
-  // This will not delete the addonSettings storage item
   chrome.storage.sync.set(
     {
       ...minifySettings(addonSettings, null),
+      addonSettingsOld: addonSettings,
     },
     () => {
-      // Reload extension after 500ms
-      setTimeout(() => chrome.runtime.reload(), 500);
+      chrome.storage.sync.remove("addonSettings", () => {
+        // Reload extension after 500ms
+        setTimeout(() => chrome.runtime.reload(), 500);
+      });
     }
   );
 }
 
 const ADDON_SETTINGS_KEYS = ["addonSettings", "addonSettings1", "addonSettings2", "addonSettings3"];
 chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems) => {
-  if (storageItems.addonSettings && !storageItems.addonSettings3) {
-    return transitionToNewStorageKeys(storageItems.addonSettings);
+  const isSettingsStorageTransitionPending = storageItems.addonSettings && !storageItems.addonSettings3;
+  if (isSettingsStorageTransitionPending) {
+    transitionToNewStorageKeys(storageItems.addonSettings);
+    return;
   }
   const addonsEnabled = storageItems.addonsEnabled || {};
-  const addonSettings = storageItems["addonSettings3"]
-    ? { ...storageItems.addonSettings1, ...storageItems.addonSettings2, ...storageItems.addonSettings3 }
-    : {};
+  const areAddonSettingsEmpty = storageItems["addonSettings3"];
+  const addonSettings = areAddonSettingsEmpty
+    ? {} // Default value
+    : { ...storageItems.addonSettings1, ...storageItems.addonSettings2, ...storageItems.addonSettings3 };
   const func = () => {
     let madeAnyChanges = false;
 
