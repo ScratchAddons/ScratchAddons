@@ -776,100 +776,100 @@ if (isProfile || isStudio || isProject) {
   const sendAnywayMsg = chrome.i18n.getMessage("captureCommentPostAnyway");
   const confirmMsg = chrome.i18n.getMessage("captureCommentConfirm");
 
-      if (isProfile) {
-        window.addEventListener(
-          "click",
-          (e) => {
-            if (e.target.tagName !== "A" || !e.target.parentElement.matches("div.button[data-commentee-id]")) return;
-            const form = e.target.closest("form");
-            if (!form) return;
-            if (form.hasAttribute("data-sa-send-anyway")) {
-              form.removeAttribute("data-sa-send-anyway");
-              return;
-            }
-            const textarea = form.querySelector("textarea[name=content]");
-            if (!textarea) return;
-            if (shouldCaptureComment(textarea.value)) {
-              e.stopPropagation();
-              e.preventDefault(); // Avoid location.hash being set to null
+  if (isProfile) {
+    window.addEventListener(
+      "click",
+      (e) => {
+        if (e.target.tagName !== "A" || !e.target.parentElement.matches("div.button[data-commentee-id]")) return;
+        const form = e.target.closest("form");
+        if (!form) return;
+        if (form.hasAttribute("data-sa-send-anyway")) {
+          form.removeAttribute("data-sa-send-anyway");
+          return;
+        }
+        const textarea = form.querySelector("textarea[name=content]");
+        if (!textarea) return;
+        if (shouldCaptureComment(textarea.value)) {
+          e.stopPropagation();
+          e.preventDefault(); // Avoid location.hash being set to null
 
-              form.querySelector("[data-control=error] .text").innerHTML = errorMsgHtml + " ";
-              const sendAnyway = document.createElement("a");
-              sendAnyway.onclick = () => {
-                const res = confirm(confirmMsg);
-                if (res) {
-                  form.setAttribute("data-sa-send-anyway", "");
-                  form.querySelector("[data-control=post]").click();
-                }
-              };
-              sendAnyway.textContent = sendAnywayMsg;
-              Object.assign(sendAnyway.style, {
-                textDecoration: "underline",
-                color: "white",
-              });
-              form.querySelector("[data-control=error] .text").appendChild(sendAnyway);
-              form.querySelector(".control-group").classList.add("error");
+          form.querySelector("[data-control=error] .text").innerHTML = errorMsgHtml + " ";
+          const sendAnyway = document.createElement("a");
+          sendAnyway.onclick = () => {
+            const res = confirm(confirmMsg);
+            if (res) {
+              form.setAttribute("data-sa-send-anyway", "");
+              form.querySelector("[data-control=post]").click();
             }
-          },
-          { capture: true }
-        );
-      } else if (isProject || isStudio) {
-        window.addEventListener(
-          "click",
-          (e) => {
-            if (!(e.target.tagName === "SPAN" || e.target.tagName === "BUTTON")) return;
-            if (!e.target.closest("button.compose-post")) return;
-            const form = e.target.closest("form.full-width-form");
-            if (!form) return;
-            // Remove error when about to send comment anyway, if it exists
-            form.parentNode.querySelector(".sa-compose-error-row")?.remove();
-            if (form.hasAttribute("data-sa-send-anyway")) {
-              form.removeAttribute("data-sa-send-anyway");
-              return;
+          };
+          sendAnyway.textContent = sendAnywayMsg;
+          Object.assign(sendAnyway.style, {
+            textDecoration: "underline",
+            color: "white",
+          });
+          form.querySelector("[data-control=error] .text").appendChild(sendAnyway);
+          form.querySelector(".control-group").classList.add("error");
+        }
+      },
+      { capture: true }
+    );
+  } else if (isProject || isStudio) {
+    window.addEventListener(
+      "click",
+      (e) => {
+        if (!(e.target.tagName === "SPAN" || e.target.tagName === "BUTTON")) return;
+        if (!e.target.closest("button.compose-post")) return;
+        const form = e.target.closest("form.full-width-form");
+        if (!form) return;
+        // Remove error when about to send comment anyway, if it exists
+        form.parentNode.querySelector(".sa-compose-error-row")?.remove();
+        if (form.hasAttribute("data-sa-send-anyway")) {
+          form.removeAttribute("data-sa-send-anyway");
+          return;
+        }
+        const textarea = form.querySelector("textarea[name=compose-comment]");
+        if (!textarea) return;
+        if (shouldCaptureComment(textarea.value)) {
+          e.stopPropagation();
+          const errorRow = document.createElement("div");
+          errorRow.className = "flex-row compose-error-row sa-compose-error-row";
+          const errorTip = document.createElement("div");
+          errorTip.className = "compose-error-tip";
+          const span = document.createElement("span");
+          span.innerHTML = errorMsgHtml + " ";
+          const sendAnyway = document.createElement("a");
+          sendAnyway.onclick = () => {
+            const res = confirm(confirmMsg);
+            if (res) {
+              form.setAttribute("data-sa-send-anyway", "");
+              form.querySelector(".compose-post")?.click();
             }
-            const textarea = form.querySelector("textarea[name=compose-comment]");
-            if (!textarea) return;
-            if (shouldCaptureComment(textarea.value)) {
-              e.stopPropagation();
-              const errorRow = document.createElement("div");
-              errorRow.className = "flex-row compose-error-row sa-compose-error-row";
-              const errorTip = document.createElement("div");
-              errorTip.className = "compose-error-tip";
-              const span = document.createElement("span");
-              span.innerHTML = errorMsgHtml + " ";
-              const sendAnyway = document.createElement("a");
-              sendAnyway.onclick = () => {
-                const res = confirm(confirmMsg);
-                if (res) {
-                  form.setAttribute("data-sa-send-anyway", "");
-                  form.querySelector(".compose-post")?.click();
-                }
-              };
-              sendAnyway.textContent = sendAnywayMsg;
-              errorTip.appendChild(span);
-              errorTip.appendChild(sendAnyway);
-              errorRow.appendChild(errorTip);
-              form.parentNode.prepend(errorRow);
+          };
+          sendAnyway.textContent = sendAnywayMsg;
+          errorTip.appendChild(span);
+          errorTip.appendChild(sendAnyway);
+          errorRow.appendChild(errorTip);
+          form.parentNode.prepend(errorRow);
 
-              // Hide error after typing like scratch-www does
-              textarea.addEventListener(
-                "input",
-                () => {
-                  errorRow.remove();
-                },
-                { once: true }
-              );
-              // Hide error after clicking cancel like scratch-www does
-              form.querySelector(".compose-cancel").addEventListener(
-                "click",
-                () => {
-                  errorRow.remove();
-                },
-                { once: true }
-              );
-            }
-          },
-          { capture: true }
-        );
-      }
+          // Hide error after typing like scratch-www does
+          textarea.addEventListener(
+            "input",
+            () => {
+              errorRow.remove();
+            },
+            { once: true }
+          );
+          // Hide error after clicking cancel like scratch-www does
+          form.querySelector(".compose-cancel").addEventListener(
+            "click",
+            () => {
+              errorRow.remove();
+            },
+            { once: true }
+          );
+        }
+      },
+      { capture: true }
+    );
+  }
 }
