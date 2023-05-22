@@ -65,7 +65,7 @@ function analyseCode(targets) {
   targets.map((target) => {
     for (const [, v] of Object.entries(target.sprite.blocks._blocks)) {
       let opcode = v.opcode;
-      if (opcode === undefined || opcode.indexOf("_") <= 0 || v.shadow) {
+      if (opcode === undefined || opcode.indexOf("_") <= 0 || v.shadow || opcode==='data_variable') {
         continue;
       }
       if (functionOpcode === opcode) {
