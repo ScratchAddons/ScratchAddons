@@ -97,6 +97,12 @@ function renderStats(addon, container, result) {
   const psHeader = createElement("ps-header", "div");
   psHeader.appendChild(createElementWithTextContent("ps-header-content", "span", "Project Statistics"));
   container.appendChild(psHeader);
+  const psHeaderRight = createElement("ps-header-right", "div");
+  const rightContent = createElementWithTextContent("ps-header-right-content", "a", "🔗 View Details")
+  const projectId = location.href.match(/\d+/)?.[0];
+  rightContent.href= "https://tools.getgandi.com/projects/"+ projectId
+  psHeaderRight.appendChild(rightContent)
+  container.appendChild(psHeaderRight);
   const psContent = createContent(addon, result);
   container.appendChild(psContent);
 }

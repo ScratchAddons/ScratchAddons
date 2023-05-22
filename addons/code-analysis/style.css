@@ -16,6 +16,24 @@
   border-radius: 13px;
 }
 
+.ps-header-right {
+  position: absolute;
+  float: right;
+  right: 47px;
+  background: #ffffff;
+  width: 212px;
+  height: 46px;
+  border-radius: 9px;
+}
+
+.ps-header-right-content {
+  position: absolute;
+  left: 15px;
+  top: 9px;
+  font-size: 18pt;
+  font-weight: bold;
+}
+
 .ps-header-content {
   position: absolute;
   left: 14px;
