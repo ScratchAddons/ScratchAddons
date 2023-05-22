@@ -1,8 +1,4 @@
 export default async function ({ addon, console, msg }) {
-  // Weird glitch when cat blocks mode is enabled if
-  // active Scratch tab is costumes or sounds
-  if (addon.tab.isScratchAprilFools23()) return;
-
   let placeHolderDiv = null;
   let lockObject = null;
   let lockButton = null;

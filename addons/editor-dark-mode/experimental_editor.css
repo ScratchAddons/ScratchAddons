@@ -19,10 +19,14 @@
 /* Menu bar background */
 [class*="menu-bar_menu-bar_"],
 [class*="menu_menu_"],
+[class*="menu_submenu_"] > [class*="menu_menu_"]::-webkit-scrollbar-track,
 [class*="loader_background_"],
 [class*="modal_header_"] {
   background-color: var(--editorDarkMode-menuBar);
   color: var(--editorDarkMode-menuBar-text);
+}
+[class*="menu_submenu_"] > [class*="menu_menu_"]::-webkit-scrollbar-thumb {
+  border-color: var(--editorDarkMode-menuBar);
 }
 [class*="menu-bar_menu-bar-item_"],
 [class*="input_input-form_"][class*="project-title-input_title-field_"],
@@ -46,6 +50,13 @@
 }
 [class*="menu-bar_language-icon_"],
 [class*="menu-bar_language-caret_"],
+[class*="menu-bar_file-group_"] [class*="menu-bar_hoverable_"] > img,
+[class*="menu-bar_menu-bar-menu_"]
+  > [class*="menu_menu_"]
+  > [class*="menu_menu-item_"]:first-child
+  [class*="settings-menu_icon_"] /* language icon */,
+[class*="settings-menu_expand-caret_"],
+[class*="settings-menu_check_"],
 [class*="menu-bar_help-icon_"],
 [class*="community-button_community-button-icon_"],
 [class*="menu-bar_mystuff-icon_"],
@@ -76,7 +87,8 @@
 [class*="menu-bar_menu-bar-item_"][class*="menu-bar_active_"],
 [class*="menu-bar_menu-bar-item_"][class*="menu-bar_hoverable_"]:hover,
 [class*="menu_menu-item_"][class*="menu_active_"],
-[class*="menu_menu-item_"]:hover {
+[class*="menu_menu-item_"]:hover,
+[class*="menu_submenu_"] > [class*="menu_menu_"]::-webkit-scrollbar-thumb {
   background-color: var(--editorDarkMode-menuBar-border);
 }
 
@@ -165,6 +177,13 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 [class*="color-button_color-button-swatch_"][style="background: white;"] {
   background-color: var(--editorDarkMode-accent) !important;
 }
+.sa-body-editor [class*="stage-header_stage-size-row_"] > *,
+.sa-body-editor [class*="stage-header_unselect-wrapper_"] {
+  /* This will be needed when Scratch releases the high contrast colors.
+     The border radius makes it look good in the current version. */
+  background-color: var(--editorDarkMode-accent);
+  border-radius: 0.25rem;
+}
 [class*="stage-selector_header-title_"],
 [class*="stage-selector_label_"],
 [class*="stage-selector_count_"],
@@ -194,7 +213,7 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
   border-top: 9px solid var(--editorDarkMode-accent);
   border-bottom: 10px solid var(--editorDarkMode-accent);
 }
-.sa-body-editor [class*="stage-header_stage-button-icon_"],
+.sa-body-editor [class*="stage-header_stage-button_"] [class*="stage-header_stage-button-icon_"],
 [class*="sprite-info_icon-wrapper_"]:not([class*="sprite-info_radio_"]),
 img[class*="tool-select-base_tool-select-icon_"],
 [class*="paint-editor_button-group-button-icon_"],
@@ -210,6 +229,9 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .sa-body-editor [class*="stage-header_stage-button-toggled-off_"] [class*="stage-header_stage-button-icon_"],
 [class*="sprite-info_radio_"]:not([class*="sprite-info_is-active_"]) img {
   filter: var(--editorDarkMode-accent-desaturateFilter);
+}
+[class*="toggle-buttons_button_"] > img {
+  filter: var(--editorDarkMode-accent-desaturateFilterNew);
 }
 [class*="font-dropdown_font-dropdown_"][class*="dropdown_mod-open_"] {
   color: var(--editorDarkMode-accent-openFontDropdownText);
@@ -370,14 +392,17 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
   border-color: var(--editorDarkMode-primary);
 }
 [class*="input_input-form_"]:not([class*="project-title-input_title-field_"]):hover,
+[class*="toggle-buttons_button_"]:focus::before,
 [class*="sprite-selector-item_sprite-selector-item_"]:hover,
 [class*="stage-selector_stage-selector_"]:hover,
+[class*="sound-editor_button_"]:focus::before,
 [class*="library-item_library-item_"]:hover {
   border-color: var(--editorDarkMode-primary);
 }
 [class*="green-flag_green-flag_"]:hover,
 [class*="stop-all_stop-all_"]:hover,
 .pause-btn:hover,
+[class*="toggle-buttons_button_"][aria-pressed="true"],
 [class*="icon-button_container_"]:not([class*="tool-select-base_is-selected_"]):active,
 [class*="record-modal_waveform-container_"] {
   background-color: var(--editorDarkMode-primary-transparent15);
@@ -396,11 +421,14 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .sa-body-editor ::selection {
   background-color: var(--editorDarkMode-primary-transparent25);
 }
-[class*="library_filter-bar_"] {
+[class*="library_filter-bar_"],
+.sa-body-editor [class*="stage-header_stage-button_"]:active,
+[class*="toggle-buttons_button_"]:active,
+[class*="sound-editor_button_"]:active {
   background-color: var(--editorDarkMode-primary-transparent35);
 }
 [class*="modal_modal-overlay_"] {
-  background-color: var(--editorDarkMode-primary-overlay);
+  background-color: var(--editorDarkMode-popup);
 }
 [class*="delete-button_delete-button-visible_"],
 [class*="filter_filter_"]:focus-within {
@@ -488,6 +516,7 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
   [class*="stage-header_stage-size-toggle-group_"]
   [class*="stage-header_stage-button_"]:not([class*="stage-header_stage-button-toggled-off_"])
   [class*="stage-header_stage-button-icon_"],
+[class*="toggle-buttons_button_"][aria-pressed="true"] > img,
 [class*="sprite-info_is-active_"] [class*="sprite-info_icon_"],
 [class*="fixed-tools_button-group-button-icon_"],
 [class*="color-picker_swap-button_"] [class*="labeled-icon-button_edit-field-icon_"],
@@ -516,6 +545,8 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 [class*="backpack_backpack-list_"],
 .sa-body-editor [class*="stage_stage_"],
 .sa-body-editor [class*="stage-header_stage-button_"],
+[class*="toggle-buttons_button_"],
+[dir="rtl"] [class*="toggle-buttons_button_"]:not(:last-child),
 [class*="sprite-selector_sprite-selector_"],
 [class*="input_input-form_"],
 [class*="input_input-form_"],

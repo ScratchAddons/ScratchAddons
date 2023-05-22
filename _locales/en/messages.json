@@ -242,14 +242,14 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_31": {
-    "message": "The \"insert blocks by name\" addon was completely reworked. You can now type inputs and reporters inside other blocks, and autocomplete using the Tab key. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_32": {
+    "message": "New addon: \"move sprite to front layer\", which lets you Shift+Click a sprite within the sprite pane to move it to the front (top layer) of the stage. Go to $1 to enable it."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_31": {
-    "message": "The new addons added this update are \"multiple rows in backpack\", \"copy reporter values\", and \"share through My Stuff\"."
+  "extensionUpdateInfo2_v1_32": {
+    "message": "Other new addons added this update are \"faster project loading\", \"follow topics after posting\", \"necropost highlighter\", and \"remember collapsed forum categories\"."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."

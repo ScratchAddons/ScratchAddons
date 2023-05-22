@@ -207,6 +207,7 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get editorMode() {
+    if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601") return "editor";
     const pathname = location.pathname.toLowerCase();
     const split = pathname.split("/").filter(Boolean);
     if (!split[0] || split[0] !== "projects") return null;
@@ -823,10 +824,5 @@ export default class Tab extends Listenable {
    */
   prompt(title, message, defaultValue, opts) {
     return modal.prompt(this, title, message, defaultValue, opts);
-  }
-  isScratchAprilFools23() {
-    if (!this.redux.state) return true; // better safe than sorry
-    if (typeof this.redux.state?.scratchGui?.timeTravel === "object") return true;
-    return false;
   }
 }
