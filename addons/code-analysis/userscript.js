@@ -65,7 +65,7 @@ function analyseCode(targets) {
   targets.map((target) => {
     for (const [, v] of Object.entries(target.sprite.blocks._blocks)) {
       let opcode = v.opcode;
-      if (opcode === undefined || opcode.indexOf("_") <= 0 || v.shadow || opcode==='data_variable') {
+      if (opcode === undefined || opcode.indexOf("_") <= 0 || v.shadow || opcode === "data_variable") {
         continue;
       }
       if (FUNCTION_OPCODE === opcode) {
@@ -77,8 +77,7 @@ function analyseCode(targets) {
     }
     costumeCount += target.sprite.costumes_.length;
   });
-  const appearanceCount = APPEARANCE_CODE_TYPE_LIST
-    .map((item) => classifiedCodeMap[item])
+  const appearanceCount = APPEARANCE_CODE_TYPE_LIST.map((item) => classifiedCodeMap[item])
     .filter((item) => !isNaN(item))
     .reduce((total, item) => {
       return total + item;
@@ -98,10 +97,10 @@ function renderStats(addon, container, result) {
   psHeader.appendChild(createElementWithTextContent("ps-header-content", "span", "Project Statistics"));
   container.appendChild(psHeader);
   const psHeaderRight = createElement("ps-header-right", "div");
-  const rightContent = createElementWithTextContent("ps-header-right-content", "a", "🔗 View Details")
+  const rightContent = createElementWithTextContent("ps-header-right-content", "a", "🔗 View Details");
   const projectId = location.href.match(/\d+/)?.[0];
-  rightContent.href= "https://tools.getgandi.com/projects/"+ projectId
-  psHeaderRight.appendChild(rightContent)
+  rightContent.href = "https://tools.getgandi.com/projects/" + projectId;
+  psHeaderRight.appendChild(rightContent);
   container.appendChild(psHeaderRight);
   const psContent = createContent(addon, result);
   container.appendChild(psContent);
