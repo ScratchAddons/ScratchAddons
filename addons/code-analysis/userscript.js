@@ -1,8 +1,8 @@
-const functionOpcode = "procedures_definition";
+const FUNCTION_OPCODE = "procedures_definition";
 
-const appearanceCodeTypeList = ["motion", "looks", "sound"];
+const APPEARANCE_CODE_TYPE_LIST = ["motion", "looks", "sound"];
 
-const getterMap = {
+const GETTER_MAP = {
   motion: (data) => (isNaN(data["motion"]) ? 0 : data["motion"]),
   looks: (data) => (isNaN(data["looks"]) ? 0 : data["looks"]),
   sound: (data) => (isNaN(data["sound"]) ? 0 : data["sound"]),
@@ -18,7 +18,7 @@ const getterMap = {
   },
 };
 
-const codeGeneticList = [
+const CODE_GENETIC_LIST = [
   "motion",
   "looks",
   "sound",
@@ -30,7 +30,7 @@ const codeGeneticList = [
   "my-blocks",
 ];
 
-const codeGeneticTableList = [
+const CODE_GENETIC_TABLE_LIST = [
   ["motion", "events", "operators"],
   ["looks", "control", "variables"],
   ["sound", "sensing", "my-blocks"],
@@ -68,7 +68,7 @@ function analyseCode(targets) {
       if (opcode === undefined || opcode.indexOf("_") <= 0 || v.shadow || opcode==='data_variable') {
         continue;
       }
-      if (functionOpcode === opcode) {
+      if (FUNCTION_OPCODE === opcode) {
         functionCount++;
       }
       codeCount++;
@@ -77,7 +77,7 @@ function analyseCode(targets) {
     }
     costumeCount += target.sprite.costumes_.length;
   });
-  const appearanceCount = appearanceCodeTypeList
+  const appearanceCount = APPEARANCE_CODE_TYPE_LIST
     .map((item) => classifiedCodeMap[item])
     .filter((item) => !isNaN(item))
     .reduce((total, item) => {
@@ -157,12 +157,12 @@ function createCodeGenetic(addon, total, classifiedCodeMap) {
   const horizontalSlider = createElement("ps-code-genetic", "div");
   horizontalSlider.appendChild(createElement("ps-code-genetic-bg", "span"));
   let baseLine = 46;
-  codeGeneticList.forEach((item) => {
+  CODE_GENETIC_LIST.forEach((item) => {
     if (total === 0) {
       return;
     }
     const block = createElement(`ps-code-genetic-block ${item}`, "span");
-    const num = getterMap[item](classifiedCodeMap);
+    const num = GETTER_MAP[item](classifiedCodeMap);
     const width = (num * 837) / total;
     block.style.left = `${baseLine}px`;
     block.style.width = `${width}px`;
@@ -187,12 +187,12 @@ function createCodeGenetic(addon, total, classifiedCodeMap) {
 function createCodeGeneticTable(total, classifiedCodeMap) {
   const codeGeneticTable = createElement("ps-code-genetic-table", "div");
   let sum = 0;
-  codeGeneticTableList.forEach((items, index) => {
+  CODE_GENETIC_TABLE_LIST.forEach((items, index) => {
     items.forEach((item, nestedIndex) => {
       codeGeneticTable.appendChild(
         createElementWithTextContent(`ps-code-genetic-item-${item}`, "span", `${item.replace("-", " ")}:`)
       );
-      const codeSum = getterMap[item](classifiedCodeMap);
+      const codeSum = GETTER_MAP[item](classifiedCodeMap);
       codeGeneticTable.appendChild(
         createElementWithTextContent(`ps-code-genetic-item row${index} col${nestedIndex}`, "span", codeSum)
       );
