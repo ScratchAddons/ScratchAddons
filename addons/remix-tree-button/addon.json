@@ -1,6 +1,6 @@
 {
   "name": "Remix tree link",
-  "description": "Brings back the option to visit the remix tree, a feature from Scratch 2.0.",
+  "description": "Brings back the option to open the remix tree, a feature from Scratch 2.0.",
   "tags": ["community", "recommended", "projectPage"],
   "credits": [
     {
@@ -33,7 +33,7 @@
       "potentialValues": [
         {
           "id": "replace",
-          "name": "Replace \"Remixes \u2192 View all\" button"
+          "name": "Replace \"Remixes \u2192 View all\" link"
         },
         {
           "id": "new",
