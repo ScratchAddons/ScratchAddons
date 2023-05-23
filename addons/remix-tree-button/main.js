@@ -1,7 +1,7 @@
 export default async function ({ addon, console, msg }) {
   //define remix tree button elements
   function loadRemixButton() {
-    if (document.querySelector("#scratchAddonsRemixTreeBtn") && (addon.settings.get("type") === "new")) {
+    if (document.querySelector("#scratchAddonsRemixTreeBtn") && addon.settings.get("type") === "new") {
       document.querySelector("#scratchAddonsRemixTreeBtn").style.display = "block";
     } else {
       if (addon.tab.editorMode === "projectpage") {
@@ -14,7 +14,7 @@ export default async function ({ addon, console, msg }) {
             if (addon.self.disabled) return;
             if (addon.settings.get("type") === "replace") {
               // Change the link from ".../remixes" to ".../remixtree"
-              addon.tab.waitForElement(".remix-list",).then(() => {
+              addon.tab.waitForElement(".remix-list").then(() => {
                 document.querySelector(".remix-list a").href = window.location.href + "remixtree";
                 document.querySelector(".remix-list a span").textContent = "Remix tree";
               });
@@ -44,7 +44,7 @@ export default async function ({ addon, console, msg }) {
       document.querySelector("#scratchAddonsRemixTreeBtn").style.display = "none";
     }
   }
-  
+
   function undoChangeLink() {
     if (document.querySelector(".remix-list")) {
       document.querySelector(".remix-list a").href = window.location.href + "remixes";
@@ -73,7 +73,7 @@ export default async function ({ addon, console, msg }) {
       undoLoadRemixButton();
       loadRemixButton();
     } else {
-      // Setting changed to new - revert link and add button      
+      // Setting changed to new - revert link and add button
       undoChangeLink();
       loadRemixButton();
     }
