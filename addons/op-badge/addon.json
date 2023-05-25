@@ -1,22 +1,22 @@
 {
-    "name": "Show OP badge in forums and projects",
-    "description": "Adds a OP badge to the user that created a forum topic or project.",
-    "tags": ["community", "forums", "projects"],
-    "enabledByDefault": false,
-    "userscripts": [
-        {
-            "url": "forums.js",
-            "matches": ["https://scratch.mit.edu/discuss/topic/*"]
-        },
-        {
-            "url": "projects.js",
-            "matches": ["https://scratch.mit.edu/projects/*"]
-        }
-    ],
-    "credits": [
-        {
-          "name": "MDWalters",
-          "link": "https://scratch.mit.edu/users/MDWalters/"
-        }
-    ]
+  "name": "Show OP badge in forums and projects",
+  "description": "Adds a OP badge to the user that created a forum topic or project.",
+  "tags": ["community", "forums", "projects"],
+  "enabledByDefault": false,
+  "userscripts": [
+    {
+      "url": "forums.js",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+    },
+    {
+      "url": "projects.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "credits": [
+    {
+      "name": "MDWalters",
+      "link": "https://scratch.mit.edu/users/MDWalters/"
+    }
+  ]
 }
