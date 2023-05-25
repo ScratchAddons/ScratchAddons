@@ -1,6 +1,13 @@
 {
   "name": "Automatically add extensions",
   "description": "Auto-shows music, pen, and other extensions in the block category menu in the editor.",
+  "info": [
+    {
+      "type": "warning",
+      "text": "When the video sensing option is enabled, the webcam will turn on every time the editor is opened.",
+      "id": "webcam"
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
@@ -19,6 +26,12 @@
       "id": "pen",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "Video Sensing",
+      "id": "videoSensing",
+      "type": "boolean",
+      "default": false
     },
     {
       "name": "Text to Speech",
