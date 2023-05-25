@@ -42,7 +42,7 @@
           />{{ info.text }}
         </div>
       </div>
-      <div class="related-addons" v-if="addon._relatedAddons">
+      <div class="related-addons" v-if="addon._relatedAddons && !isIframe">
         <div class="addon-message addon-info">
           <span>{{msg('relatedAddons')}}</span>
           <span v-for="addonManifest of addon._relatedAddons">
