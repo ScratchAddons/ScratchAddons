@@ -1,48 +1,18 @@
-export default async function({ addon, console, msg }) {
-    const comments = document.querySelectorAll(".comments-list")
-    const replies = document.querySelector(".comments-list")
-        .querySelector(".comment-container")
-        .querySelector(".comment")
-        .querySelectorAll(".replies")
-    const op = document.querySelector(".project-header")
-        .querySelector("img")
-        .alt;
+export default async function ({ addon, console, msg }) {
+  while (true) {
+    const comment = await addon.tab.waitForElement("div.comment", {
+      markAsSeen: true,
+      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+    });
+    if (comment.querySelector("form")) continue; // Comment input
 
-    for (const comment of comments) {
-        if (op == comment.querySelector(".comment-container")
-            .querySelector(".comment")
-            .querySelector(".comment-body")
-            .querySelector(".comment-top-row")
-            .querySelector(".username")
-            .innerText
-        ) {
-            let op_badge = document.createElement("small");
+    const commentAuthor = new URL(comment.querySelector(".comment-top-row .username").href).pathname.split("/")[2];
+    const projectAuthor = addon.tab.redux.state.preview.projectInfo.author.username;
 
-            op_badge.innerText = msg("op");
-
-            comment.querySelector(".comment-container")
-                .querySelector(".comment")
-                .querySelector(".comment-body")
-                .querySelector(".comment-top-row")
-                .appendChild(op_badge);
-        }
+    if (commentAuthor === projectAuthor) {
+      const opBadge = document.createElement("small");
+      opBadge.innerText = msg("op");
+      comment.querySelector(".comment-top-row").appendChild(opBadge);
     }
-
-    for (const reply of replies) {
-        if (op == reply.querySelector(".comment")
-            .querySelector(".comment-body")
-            .querySelector(".comment-top-row")
-            .querySelector(".username")
-            .innerText
-        ) {
-            let op_badge = document.createElement("small");
-
-            op_badge.innerText = msg("op");
-
-            reply.querySelector(".comment")
-                .querySelector(".comment-body")
-                .querySelector(".comment-top-row")
-                .appendChild(op_badge);
-        }
-    }
+  }
 }
