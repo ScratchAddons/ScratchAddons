@@ -15,7 +15,9 @@ export default async function ({ addon, console, msg }) {
   for (const post of posts) {
     if (opUsername === post.querySelector(".username").innerText) {
       let opBadge = document.createElement("div");
+      opBadge.classList.add("sa-original-poster");
       opBadge.innerText = msg("op");
+      post.querySelector(".postleft dl").appendChild(document.createElement("br"));
       post.querySelector(".postleft dl").appendChild(opBadge);
     }
   }

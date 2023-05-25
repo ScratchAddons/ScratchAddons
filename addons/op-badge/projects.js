@@ -11,8 +11,10 @@ export default async function ({ addon, console, msg }) {
 
     if (commentAuthor === projectAuthor) {
       const opBadge = document.createElement("small");
+      opBadge.classList.add("sa-original-poster");
       opBadge.innerText = msg("op");
-      comment.querySelector(".comment-top-row").appendChild(opBadge);
+      comment.querySelector(".comment-top-row .username").classList.add("sa-username-is-op");
+      comment.querySelector(".comment-top-row .username").after(opBadge);
     }
   }
 }
