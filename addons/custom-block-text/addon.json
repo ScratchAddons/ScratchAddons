@@ -12,6 +12,7 @@
       "link": "https://github.com/towerofnix"
     }
   ],
+  "relatedAddons": ["editor-theme3", "zebra-striping", "custom-block-shape"],
   "userstyles": [
     {
       "url": "text-bold.css",

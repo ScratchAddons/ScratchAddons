@@ -64,7 +64,6 @@
     "temporaryNotice": "This addon was completely reworked. You can now type inputs and reporters inside other blocks, and autocomplete using the Tab key.",
     "isMajor": true
   },
-  "relatedAddons": ["editor-devtools", "jump-to-def", "find-bar", "move-to-top-bottom"],
   "info": [
     {
       "text": "This addon was previously part of the \"developer tools\" addon but has moved here.",

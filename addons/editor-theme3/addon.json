@@ -14,6 +14,7 @@
       "link": "https://github.com/DNin01"
     }
   ],
+  "relatedAddons": ["zebra-striping", "custom-block-text", "custom-block-shape"],
   "latestUpdate": {
     "version": "1.31.0",
     "temporaryNotice": "Two new presets have been added, including a preset for the new high-contrast block colors coming to Scratch soon."
