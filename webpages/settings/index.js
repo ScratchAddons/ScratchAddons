@@ -108,7 +108,12 @@ let fuse;
     const obj = JSON.parse(str);
     const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
     const syncSet = promisify(chrome.storage.sync.set.bind(chrome.storage.sync));
-    const {addonsEnabled, ...storageItems} = await syncGet(["addonSettings1", "addonSettings2", "addonSettings3", "addonsEnabled"]);
+    const { addonsEnabled, ...storageItems } = await syncGet([
+      "addonSettings1",
+      "addonSettings2",
+      "addonSettings3",
+      "addonsEnabled",
+    ]);
     const addonSettings = {
       ...storageItems.addonSettings1,
       ...storageItems.addonSettings2,
