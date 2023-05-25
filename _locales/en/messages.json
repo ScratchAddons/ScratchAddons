@@ -140,6 +140,9 @@
   "resetToDefault": {
     "message": "Reset to default settings"
   },
+  "relatedAddons": {
+    "message": "Related addons:"
+  },
   "creditTo": {
     "message": "Credit to:"
   },

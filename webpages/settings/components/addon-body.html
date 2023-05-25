@@ -42,6 +42,14 @@
           />{{ info.text }}
         </div>
       </div>
+      <div class="related-addons" v-if="addon._relatedAddons">
+        <div class="addon-message addon-info">
+          <span>{{msg('relatedAddons')}}</span>
+          <span v-for="addonManifest of addon._relatedAddons">
+            <a @click="openRelated(addonManifest)">{{addonManifest.name}}</a>
+          </span>
+        </div>
+      </div>
       <div class="addon-credits" v-if="addon.credits">
         <span>{{ msg("creditTo") }}</span>
         <span v-for="credit of addon.credits">
@@ -134,16 +142,23 @@
     font-size: 0.9em;
   }
   .addon-credits a,
+  .related-addons a,
   .addon-license a {
     color: var(--blue-text);
+    cursor: pointer;
   }
 
-  .addon-credits > span {
+  .addon-credits > span,
+  .related-addons span {
     margin-inline-end: 0.5rem;
   }
 
-  .addon-credits > span:not(:first-child):not(:last-child)::after {
+  .addon-credits > span:not(:first-child):not(:last-child)::after,
+  .related-addons span:not(:first-child):not(:last-child)::after {
     content: ",";
+  }
+  .related-addons span:first-child {
+    font-weight: bold;
   }
   .addon-name {
     margin-inline-start: 10px;
@@ -174,6 +189,9 @@
     border: 1px solid var(--content-border);
     border-radius: 4px;
     box-shadow: var(--content-shadow);
+  }
+  .modal .addon-body {
+    scroll-margin: 75px;
   }
   .addon-body:target,
   .addon-blink {

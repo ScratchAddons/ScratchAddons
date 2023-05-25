@@ -1,7 +1,7 @@
 <template>
   <div v-cloak v-show="isOpen" class="modal">
-    <div class="modal-content" v-click-outside="clickOutside">
-      <div>
+    <div class="modal-content" v-click-outside="clickOutside" @click="closePickers">
+      <div class="modal-title">
         <img @click="isOpen = false" class="close" :title="msg('close')" src="../../../images/icons/close.svg" />
         <h1>{{ title }}</h1>
       </div>
@@ -25,16 +25,30 @@
     justify-content: center;
   }
 
+  .modal-title {
+    position: sticky;
+    top: 0;
+    background-color: inherit;
+    padding-block: 20px;
+    z-index: 99;
+  }
+
   .modal-content {
     background-color: var(--page-background);
     margin: auto;
     padding: 20px;
+    padding-top: 0px;
     width: 50rem;
-    max-width: 75%;
+    max-width: 80%;
     border-radius: 10px;
     height: 75%;
     display: flex;
     flex-direction: column;
+  }
+
+  .related-addons-modal .modal-content {
+    width: 80%;
+    overflow-y: scroll;
   }
 
   .close {

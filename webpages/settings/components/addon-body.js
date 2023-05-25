@@ -119,6 +119,15 @@ export default async function ({ template }) {
       msg(...params) {
         return this.$root.msg(...params);
       },
+      openRelated(clickedAddon) {
+        this.$root.openRelatedAddons(this.addon);
+        setTimeout(() => {
+          const addonElem = document.querySelector(`.modal #addon-${clickedAddon._addonId}`);
+          addonElem.scrollIntoView({ behavior: "smooth" });
+          addonElem.classList.add("addon-blink");
+          setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
+        }, 0);
+      },
     },
     watch: {
       groupId(newValue) {

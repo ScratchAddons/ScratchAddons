@@ -1189,5 +1189,6 @@
     "colors": ["primary", "menuBar", "page", "accent", "workspace", "selector"]
   },
   "tags": ["editor", "theme", "featured"],
+  "relatedAddons": ["dark-www", "user-id", "editor-theme3"],
   "enabledByDefault": false
 }
