@@ -120,6 +120,13 @@ export default async function ({ template }) {
         return this.$root.msg(...params);
       },
       openRelated(clickedAddon) {
+        if (this.$el.closest(".modal")) {
+          // We're inside a modal. Open in a new tab instead.
+          const url = new URL(location.href);
+          url.hash = `addon-${clickedAddon._addonId}`;
+          window.open(url.href);
+          return;
+        }
         this.$root.openRelatedAddons(this.addon);
         setTimeout(() => {
           const addonElem = document.querySelector(`.modal #addon-${clickedAddon._addonId}`);
