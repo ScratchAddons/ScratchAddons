@@ -74,12 +74,13 @@ export default async function ({ template }) {
           this.addon._wasEverEnabled = this.addon._enabled || newState;
           this.addon._enabled = newState;
           // Do not extend when enabling in popup mode, unless addon has warnings
-          this.expanded =
-            isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
-              ? false
-              : event.shiftKey
-              ? false
-              : newState;
+          this.expanded = this.$el.closest(".modal")
+            ? this.expanded
+            : isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
+            ? false
+            : event.shiftKey
+            ? false
+            : newState;
           chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
           this.$emit("toggle-addon-request", newState);
         };
