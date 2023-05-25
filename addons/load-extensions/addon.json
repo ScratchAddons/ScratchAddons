@@ -37,6 +37,36 @@
       "id": "makeymakey",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "micro:bit",
+      "id": "microbit",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "LEGO MINDSTORMS EV3",
+      "id": "ev3",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "LEGO BOOST",
+      "id": "boost",
+      "type": "boolean",
+      "default": false
+    }
+    {
+      "name": "LEGO Education WeDo 2.0",
+      "id": "wedo2",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Go Direct Force & Acceleration",
+      "id": "gdxfor",
+      "type": "boolean",
+      "default": false
     }
   ],
   "dynamicEnable": true,
