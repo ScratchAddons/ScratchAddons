@@ -23,6 +23,10 @@
     {
       "name": "MDWalters",
       "link": "https://scratch.mit.edu/users/MDWalters/"
+    },
+    {
+      "name": "World_Languages"
     }
-  ]
+  ],
+  "versionAdded": "1.33.0"
 }
