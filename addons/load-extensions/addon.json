@@ -1,6 +1,6 @@
 {
   "name": "Automatically add extensions",
-  "description": "Auto-shows music, pen, and other extensions in the block category menu in the editor.",
+  "description": "Automatically adds the selected block extensions such as music or pen to the block category menu in the editor.",
   "info": [
     {
       "type": "warning",
@@ -68,7 +68,7 @@
       "id": "boost",
       "type": "boolean",
       "default": false
-    }
+    },
     {
       "name": "LEGO Education WeDo 2.0",
       "id": "wedo2",
@@ -86,8 +86,8 @@
   "dynamicDisable": true,
   "versionAdded": "1.10.0",
   "latestUpdate": {
-    "version": "1.32.0",
-    "newSettings": ["makeymakey"]
+    "version": "1.33.0",
+    "newSettings": ["videoSensing", "makeymakey", "microbit", "ev3", "boost", "wedo2", "gdxfor"]
   },
   "tags": ["editor", "codeEditor", "featured"]
 }
