@@ -6,11 +6,11 @@
   "userscripts": [
     {
       "url": "forums.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+      "matches": ["topics"]
     },
     {
       "url": "projects.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "credits": [
