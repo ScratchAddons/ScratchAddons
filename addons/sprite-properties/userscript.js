@@ -41,7 +41,7 @@ export default async function ({ addon, console, msg }) {
   document.body.addEventListener(
     "mouseleave",
     (e) => {
-      if (e.target.matches('[class*="sprite-selector_sprite-selector_2KgCX"]')) {
+      if (e.target.matches('[class*="sprite-selector_sprite-selector_"]')) {
         if (!isDirectionPopoverOpen()) autoHidePanel();
       }
     },
