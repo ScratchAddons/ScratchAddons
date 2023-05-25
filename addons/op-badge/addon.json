@@ -28,5 +28,6 @@
       "name": "World_Languages"
     }
   ],
-  "versionAdded": "1.33.0"
+  "versionAdded": "1.33.0",
+  "dynamicEnable": true
 }
