@@ -59,7 +59,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
     return;
   }
   const addonsEnabled = storageItems.addonsEnabled || {};
-  const areAddonSettingsEmpty = storageItems["addonSettings3"];
+  const areAddonSettingsEmpty = !storageItems["addonSettings3"];
   const addonSettings = areAddonSettingsEmpty
     ? {} // Default value
     : { ...storageItems.addonSettings1, ...storageItems.addonSettings2, ...storageItems.addonSettings3 };
