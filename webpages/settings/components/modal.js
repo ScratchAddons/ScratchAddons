@@ -25,7 +25,7 @@ export default async function ({ template }) {
       closePickers(e) {
         if (e.target.closest(".setting-input-container")) return;
         this.$root.closePickers();
-      }
+      },
     },
     events: {
       clickOutside(e) {
