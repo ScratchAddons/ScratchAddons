@@ -1,6 +1,6 @@
 {
   "name": "Featured dangos",
-  "description": "An Apil Fools joke from 2023 that adds a row to the front page for dango-related projects.",
+  "description": "An April Fools joke from 2023 that adds a row to the front page for dango-related projects.",
   "userscripts": [
     {
       "url": "userscript.js",
