@@ -1,6 +1,12 @@
 {
   "name": "Pause button",
   "description": "Adds a pause button next to the green flag.",
+  "info": [
+    {
+      "text": "The project can also be paused with Alt+X.",
+      "id": "keybind"
+    }
+  ],
   "credits": [
     {
       "name": "Jeffalo"
@@ -25,18 +31,9 @@
     }
   ],
   "tags": ["editor", "projectPlayer", "recommended"],
-  "enabledByDefault": false,
-  "settings": [
-    {
-      "name": "Alt+X keybind",
-      "id": "keybindEnabled",
-      "type": "boolean",
-      "default": false
-    }
-  ],
   "latestUpdate": {
-    "version": "1.29.0",
-    "newSettings": ["keybindEnabled"],
+    "version": "1.33.0",
+    "temporaryNotice": "There's now a keybind to pause projects.",
     "isMajor": false
   }
 }

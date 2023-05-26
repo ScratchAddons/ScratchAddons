@@ -18,12 +18,10 @@ export default async function ({ addon, global, console, msg }) {
   while (true) {
     if (!document.querySelector(".pause-btn")) {
       document.addEventListener("keydown", function (e) {
-        if (addon.settings.get("keybindEnabled")) {
           if (e.altKey && e.code === "KeyX") {
             e.preventDefault();
             setPaused(!isPaused());
           }
-        }
       });
     }
     await addon.tab.waitForElement("[class^='green-flag']", {
