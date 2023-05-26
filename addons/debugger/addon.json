@@ -85,7 +85,7 @@
   "versionAdded": "1.16.0",
   "latestUpdate": {
     "version": "1.33.0",
-    "temporaryNotice": "There is now the option to disable the filling and animating of graphs",
+    "temporaryNotice": "There is now the option to disable the filling and animating of graphs.",
     "newSettings": ["fancy_graphs"]
   },
   "libraries": ["chartjs"]
