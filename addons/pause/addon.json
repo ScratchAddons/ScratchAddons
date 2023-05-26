@@ -3,7 +3,7 @@
   "description": "Adds a button to pause the project next to the green flag.",
   "info": [
     {
-      "text": "The project can also be paused with Alt+X.",
+      "text": "The project can also be paused with Alt+X (Option+X on macOS).",
       "id": "keybind"
     }
   ],
