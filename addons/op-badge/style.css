@@ -2,7 +2,7 @@
   display: inline-block;
   background-color: var(--darkWww-button, #4d97ff);
   color: var(--darkWww-button-text, white);
-  border-radius: 10%;
+  border-radius: 8px;
   text-shadow: none;
   padding: 4px;
 }
