@@ -16,7 +16,8 @@
   border-radius: 0;
 }
 
-.sa-stage-hidden [class*="gui_stage-and-target-wrapper_"],
+/* [class*="gui_flex-wrapper_"] is for specificity over hide-flyout */
+.sa-stage-hidden [class*="gui_flex-wrapper_"] [class*="gui_stage-and-target-wrapper_"],
 .sa-stage-hidden [class*="stage-wrapper_stage-wrapper_"]:not([class*="stage-wrapper_full-screen_"]),
 .sa-stage-hidden [class*="gui_target-wrapper_"] {
   padding: 0;

@@ -262,6 +262,34 @@
             </div>
           </div>
         </div>
+        <div class="addon-body">
+          <div class="addon-topbar">
+            <span class="addon-name"
+              ><img src="../../images/icons/translate.svg" class="icon-type" />{{ msg("language") }}
+            </span>
+          </div>
+          <div class="addon-settings">
+            <div class="addon-setting" style="margin-top: 0">
+              <input
+                type="checkbox"
+                class="setting-input check"
+                v-model="forceEnglishSetting"
+                style="margin-inline-start: 0; margin-inline-end: 8px"
+              />
+              <span>Show addon names and descriptions in English</span>
+              <div class="badge red">{{ msg("beta") }}</div>
+              <button
+                class="large-button"
+                id="applyLanguageSettingsButton"
+                v-show="forceEnglishSetting !== null && forceEnglishSetting !== this.forceEnglishSettingInitial"
+                @click="applyLanguageSettings()"
+                style="margin-inline-start: 16px"
+              >
+                {{ msg("applySettings") }}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="footer">
         <p>

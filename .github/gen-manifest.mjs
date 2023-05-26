@@ -11,7 +11,6 @@ const PERMISSIONS_IGNORED_IN_FIREFOX = ["declarativeNetRequestWithHostAccess"];
 export default (env, manifest) => {
   // Deep-clone
   manifest = JSON.parse(JSON.stringify(manifest));
-  manifest.browser_action["default_icon"] = "images/icon.png";
   manifest.icons["1024"] = "images/icon.png";
   manifest.icons["32"] = "images/icon-32.png";
   manifest.icons["16"] = "images/icon-16.png";
@@ -22,10 +21,16 @@ export default (env, manifest) => {
       manifest.optional_permissions = manifest.optional_permissions.filter(
         (permission) => !PERMISSIONS_IGNORED_IN_CHROME.includes(permission)
       );
+      manifest.permissions = manifest.permissions.filter(
+        (permission) => !PERMISSIONS_IGNORED_IN_CHROME.includes(permission)
+      );
       break;
     }
     case "firefox": {
       manifest.optional_permissions = manifest.optional_permissions.filter(
+        (permission) => !PERMISSIONS_IGNORED_IN_FIREFOX.includes(permission)
+      );
+      manifest.permissions = manifest.permissions.filter(
         (permission) => !PERMISSIONS_IGNORED_IN_FIREFOX.includes(permission)
       );
       break;

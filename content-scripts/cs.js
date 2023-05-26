@@ -1,9 +1,16 @@
 try {
-  if (window.parent.location.origin !== "https://scratch.mit.edu") throw "Scratch Addons: not first party iframe";
+  // Property window.top.location.origin matches the origin that corresponds to
+  // the URL displayed on the address bar, for this tab.
+  // Meanwhile, window.location.origin can only correspond to one of the content
+  // script matches which are declared in the manifest.json file. In normal use,
+  // it will always equal `https://scratch.mit.edu`.
+  if (window.top.location.origin !== window.location.origin) throw "";
 } catch {
-  throw "Scratch Addons: not first party iframe";
+  throw "Scratch Addons: cross-origin iframe ignored";
 }
-if (document.documentElement instanceof SVGElement) throw "Top-level SVG document (this can be ignored)";
+if (window.frameElement && window.frameElement.getAttribute("src") === null)
+  throw "Scratch Addons: iframe without src attribute ignored";
+if (document.documentElement instanceof SVGElement) throw "Scratch Addons: SVG document ignored";
 
 const MAX_USERSTYLES_PER_ADDON = 100;
 
@@ -115,10 +122,6 @@ const cs = {
   },
 };
 Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow));
-
-const pageComlinkScript = document.createElement("script");
-pageComlinkScript.src = chrome.runtime.getURL("libraries/thirdparty/cs/comlink.js");
-document.documentElement.appendChild(pageComlinkScript);
 
 const moduleScript = document.createElement("script");
 moduleScript.type = "module";
@@ -603,16 +606,19 @@ const showBanner = () => {
     box-shadow: 0 0 20px 0px #0000009e;
     line-height: 1em;`,
   });
+  /*
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=e_70jvFOmfI",
+    href: "https://www.youtube.com/watch?v=oRo0tMWEpiA",
     target: "_blank",
     rel: "noopener",
     referrerPolicy: "strict-origin-when-cross-origin",
   });
+  // Thumbnails were 100px height
+  */
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/yt-thumbnail.jpg"),
-    style: "height: 100px; border-radius: 5px; padding: 20px",
+    src: chrome.runtime.getURL("/images/cs/icon.png"),
+    style: "height: 150px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
@@ -642,7 +648,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_28", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_32", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -661,7 +667,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_28"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_32"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -710,9 +716,9 @@ const showBanner = () => {
   notifText.appendChild(makeBr());
   notifText.appendChild(notifFooter);
 
-  notifImageLink.appendChild(notifImage);
+  // notifImageLink.appendChild(notifImage);
 
-  notifInnerBody.appendChild(notifImageLink);
+  notifInnerBody.appendChild(notifImage);
   notifInnerBody.appendChild(notifText);
 
   notifOuterBody.appendChild(notifInnerBody);

@@ -1,5 +1,6 @@
 import runAddonUserscripts from "./run-userscript.js";
 import Localization from "./l10n.js";
+import "/libraries/thirdparty/cs/comlink.js";
 
 window.scratchAddons = {};
 scratchAddons.classNames = { loaded: false };
@@ -90,13 +91,14 @@ const page = {
   },
   isFetching: false,
   async refetchSession() {
+    if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601") return;
     let res;
     let d;
     if (this.isFetching) return;
     this.isFetching = true;
     scratchAddons.eventTargets.auth.forEach((auth) => auth._refresh());
     try {
-      res = await fetch("https://scratch.mit.edu/session/", {
+      res = await fetch("/session/", {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
         },
@@ -221,6 +223,8 @@ function onDataReady() {
 }
 
 function bodyIsEditorClassCheck() {
+  if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601")
+    return document.body.classList.add("sa-body-editor");
   const pathname = location.pathname.toLowerCase();
   const split = pathname.split("/").filter(Boolean);
   if (!split[0] || split[0] !== "projects") return;
