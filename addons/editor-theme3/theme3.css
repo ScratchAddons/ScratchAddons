@@ -32,7 +32,7 @@
 
 .sa-colormode-submenu li:nth-child(1) div,
 .sa-colormode-submenu li:nth-child(2) div {
-  filter: blur(1px) grayscale(1);
+  filter: opacity(0.5) grayscale(1);
 }
 .sa-colormode-submenu li:nth-child(1) div img:first-child,
 .sa-colormode-submenu li:nth-child(2) div img:first-child {
