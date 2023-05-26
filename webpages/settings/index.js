@@ -285,7 +285,11 @@ let fuse;
         setTimeout(() => {
           if (!settingId || this.addonSettings[addon._addonId][settingId] === value) {
             chrome.runtime.sendMessage({
-              changeAddonSettings: { addonId: addon._addonId, newSettings: this.addonSettings[addon._addonId] },
+              changeAddonSettings: {
+                addonId: addon._addonId,
+                newSettings: this.addonSettings[addon._addonId],
+                fromPage: true,
+              },
             });
             console.log("Updated", this.addonSettings[addon._addonId]);
           }
