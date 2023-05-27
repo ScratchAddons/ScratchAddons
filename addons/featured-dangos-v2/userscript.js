@@ -37,7 +37,7 @@ export default async function ({ addon, console, msg }) {
     project.querySelector("a[title]").textContent = title;
     project.querySelector("a[title]").title = title;
 
-    // Use correct project author
+    // Use correct project author, skip if element doesn't exist.
     const author = project.querySelector(".thumbnail-creator")?.firstElementChild;
     if (author) {
       author.textContent = username;
