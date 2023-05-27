@@ -38,8 +38,11 @@ export default async function ({ addon, console, msg }) {
     project.querySelector("a[title]").title = title;
 
     // Use correct project author
-    project.querySelector(".thumbnail-creator").firstElementChild.innerText = username;
-    project.querySelector(".thumbnail-creator").firstElementChild.href = `/users/${username}/`;
+    const author = project.querySelector(".thumbnail-creator")?.firstElementChild;
+    if (author) {
+      author.textContent = username;
+      author.href = `/users/${username}/`;
+    }
   });
 
   // Add our own row after the Featured Projects row
