@@ -141,17 +141,6 @@
       }
     },
     {
-      "name": "primary-overlay",
-      "value": {
-        "type": "multiply",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primary"
-        },
-        "a": 0.9
-      }
-    },
-    {
       "name": "primary-variant",
       "value": {
         "type": "textColor",
@@ -400,6 +389,18 @@
         "type": "textColor",
         "black": "saturate(0)",
         "white": "brightness(0) invert(1) opacity(0.7)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        }
+      }
+    },
+    {
+      "name": "accent-desaturateFilterNew",
+      "value": {
+        "type": "textColor",
+        "black": "grayscale(100%) opacity(0.5)",
+        "white": "brightness(0) invert(1) opacity(0.3)",
         "source": {
           "type": "settingValue",
           "settingId": "accent"
@@ -881,6 +882,13 @@
       "default": "#202020"
     },
     {
+      "name": "Popup backdrop color",
+      "id": "popup",
+      "type": "color",
+      "default": "#000a",
+      "allowTransparency": true
+    },
+    {
       "name": "Active tab background",
       "id": "activeTab",
       "type": "color",
@@ -989,6 +997,7 @@
         "primary": "#4d97ff",
         "highlightText": "#4d97ff",
         "menuBar": "#202020",
+        "popup": "#000a",
         "activeTab": "#202020",
         "tab": "#151515",
         "selector": "#202020",
@@ -1014,6 +1023,7 @@
         "primary": "#4d97ff",
         "highlightText": "#4d97ff",
         "menuBar": "#2f4066",
+        "popup": "#000a",
         "activeTab": "#2f4066",
         "tab": "#273552",
         "selector": "#2f4066",
@@ -1039,6 +1049,7 @@
         "primary": "#47566b",
         "highlightText": "#4d97ff",
         "menuBar": "#47566b",
+        "popup": "#47566be6",
         "activeTab": "#555555",
         "tab": "#444444",
         "selector": "#333333",
@@ -1064,6 +1075,7 @@
         "primary": "#4d97ff",
         "highlightText": "#4d97ff",
         "menuBar": "#4d97ff",
+        "popup": "#000a",
         "activeTab": "#282828",
         "tab": "#202020",
         "selector": "#252c37",
@@ -1089,6 +1101,7 @@
         "primary": "#ff4d4d",
         "highlightText": "#ff4d4d",
         "menuBar": "#333333",
+        "popup": "#333a",
         "activeTab": "#1e1e1e",
         "tab": "#2e2e2e",
         "selector": "#1e1e1e",
@@ -1114,6 +1127,7 @@
         "primary": "#179fd7ff",
         "highlightText": "#1e9ed6",
         "menuBar": "#9c9ea2ff",
+        "popup": "#00000099",
         "activeTab": "#e6e8e8",
         "tab": "#f1f2f2ff",
         "selector": "#e6e8e8",
@@ -1139,6 +1153,7 @@
         "primary": "#5498c7",
         "highlightText": "#21211f",
         "menuBar": "#c0c3c6",
+        "popup": "#00000099",
         "activeTab": "#b9d7e5",
         "tab": "#adadb5",
         "selector": "#6a6a6a",
@@ -1164,6 +1179,7 @@
         "primary": "#4d97ff",
         "highlightText": "#4d97ff",
         "menuBar": "#4d97ff",
+        "popup": "#4d97ffe6",
         "activeTab": "#ffffff",
         "tab": "#d9e3f2",
         "selector": "#e9f1fc",
@@ -1187,6 +1203,11 @@
   "presetPreview": {
     "type": "palette",
     "colors": ["primary", "menuBar", "page", "accent", "workspace", "selector"]
+  },
+  "latestUpdate": {
+    "version": "1.32.0",
+    "newSettings": ["popup"],
+    "temporaryNotice": "You can now customize the color of popup backdrops (the solid-color background behind prompts for actions like naming a new variable) separately."
   },
   "tags": ["editor", "theme", "featured"],
   "enabledByDefault": false
