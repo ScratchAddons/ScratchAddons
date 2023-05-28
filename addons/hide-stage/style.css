@@ -1,3 +1,8 @@
+.sa-hide-stage-button [class*="stage-header_stage-button-icon_"] {
+  /* Preserve aspect ratio */
+  height: auto;
+}
+
 .sa-stage-button-middle > [class*="stage-header_stage-button_"] {
   border-radius: 0;
 }

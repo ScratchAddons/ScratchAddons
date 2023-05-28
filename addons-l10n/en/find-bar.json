@@ -1,4 +1,21 @@
 {
   "find-bar/find-placeholder": "Find (Ctrl+F)",
-  "find-bar/complex-broadcast": "(expression)"
+  "find-bar/complex-broadcast": "(expression)",
+  "find-bar/var-local": {
+    "string": "var {name}",
+    "developer_comment": "Lowercase 'var' refers to a local variable."
+  },
+  "find-bar/var-global": {
+    "string": "VAR {name}",
+    "developer_comment": "Uppercase 'VAR' refers to a global variable."
+  },
+  "find-bar/list-local": {
+    "string": "list {name}",
+    "developer_comment": "Lowercase 'list' refers to a local list."
+  },
+  "find-bar/list-global": {
+    "string": "LIST {name}",
+    "developer_comment": "Uppercase 'LIST' refers to a global list."
+  },
+  "find-bar/event": "event {name}"
 }

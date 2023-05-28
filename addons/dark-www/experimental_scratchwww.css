@@ -131,7 +131,7 @@ body {
 .tab-background,
 .outer .tab-background,
 .tabs,
-.tabs li:hover,
+.tabs button:hover,
 .os-chooser,
 .studio-tab-nav li,
 .user-projects-modal .user-projects-modal-nav button,
@@ -216,9 +216,9 @@ body:not(.sa-body-editor) .button.white,
 .thumbnail .thumbnail-favorites,
 .thumbnail .thumbnail-remixes,
 .thumbnail .thumbnail-views,
-.tabs li,
-.tabs li:hover,
-.tabs li.active:hover,
+.tabs button,
+.tabs button:hover,
+.tabs button.active:hover,
 .grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
 .unsupported-browser .faq-link-text,
 a.social-messages-profile-link:visited,
@@ -249,7 +249,7 @@ body:not(.sa-body-editor) .join-flow-privacy-message,
 .thumbnail .thumbnail-remixes::before,
 .thumbnail .thumbnail-views::before,
 .ttt-item img,
-.tabs li:not(.active) .tab-icon,
+.tabs button:not(.active) .tab-icon,
 body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .overflow-menu-container .overflow-menu-trigger img {
   filter: var(--darkWww-box-filter);
@@ -264,11 +264,14 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .os-chooser .button {
   background-color: var(--darkWww-box-tab);
 }
-.tabs li:hover {
+.sub-nav button:active {
+  background-color: var(--darkWww-box-tabHover);
+}
+.tabs button:hover {
   border-color: var(--darkWww-box-tabHover);
 }
-.tabs li.active,
-.tabs li.active:hover {
+.tabs button.active,
+.tabs button.active:hover {
   border-color: var(--darkWww-box-tabSelected);
 }
 .social-message-icon {
@@ -616,7 +619,8 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button:checked {
 .conf2017-title-band,
 .sa-annual-report-2019 .subnavigation,
 .sa-annual-report-2020 .initiatives-section .initiatives-subsection-header.community,
-.initiatives-section .initiatives-subsection-header.SEC {
+.initiatives-section .initiatives-subsection-header.SEC,
+.privacy-banner {
   background-color: var(--darkWww-button-bannerVariant);
 }
 
@@ -668,6 +672,7 @@ a:hover,
   color: var(--darkWww-link-variant);
 }
 .banner a,
+.privacy-banner a,
 .subnavigation a,
 .subnavigation a:active {
   color: white;
@@ -788,6 +793,8 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
 .extension-landing .project-card,
 .extension-landing .hardware-card,
 .transfer-host-modal .transfer-password-input,
+.cookies-table td,
+.cookies-table th,
 .comments-container .sa-emoji-picker,
 .studio-compose-container .sa-emoji-picker,
 .sa-emoji-picker-divider {
