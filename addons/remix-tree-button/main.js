@@ -13,13 +13,13 @@ export default async function ({ addon, console, msg }) {
             if (!document.querySelector(".copy-link-button")) return;
             if (addon.self.disabled) return;
             if (addon.settings.get("type") === "replace") {
-              // Change the link from ".../remixes" to ".../remixtree"
+              // Change the link from ".../remixes" to ".../remixtree".
               addon.tab.waitForElement(".remix-list").then(() => {
                 document.querySelector(".remix-list a").href = window.location.href + "remixtree";
                 document.querySelector(".remix-list a span").textContent = msg("remix-tree-link");
               });
             } else {
-              // Add a button next to "Copy Link"
+              // Add a button next to "Copy Link".
               if (document.querySelector("#scratchAddonsRemixTreeBtn")) return; // Check again because we're inside a promise
               const remixtree = document.createElement("button");
               const remixtreeSpan = document.createElement("span");
@@ -96,7 +96,7 @@ export default async function ({ addon, console, msg }) {
 
   // Events:
   addon.tab.addEventListener("urlChange", () => {
-    // When the user comes back to the project page from the editor (or vice versa), we need to re-add the links.
+    // When the user comes back to the project page from the editor, we need to re-add the links.
     loadRemixButton();
     addIconLink();
   });
