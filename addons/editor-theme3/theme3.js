@@ -430,7 +430,7 @@ export default async function ({ addon, console, msg }) {
     const addonSettingsLink = elementToClone.cloneNode(true);
     addon.tab.displayNoneWhileDisabled(addonSettingsLink, { display: "block" });
     addonSettingsLink.classList.add("sa-theme3-link");
-    addonSettingsLink.classList.add(addon.tab.scratchClass("menu_menu-section"));
+    addonSettingsLink.classList.add(addon.tab.scratchClass("menu_menu-section") || "_");
     addonSettingsLink.querySelector("div span").textContent = msg("/global/meta/addonSettings");
     addonSettingsLink.querySelector("img[class*=settings-menu_icon_]").src = SA_ICON_URL;
     const addonSettingsImg = document.createElement("img");
