@@ -401,12 +401,16 @@ export default async function ({ addon, console, msg }) {
         reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
       }
     );
+    // We're running in the new version of the editor that includes this menu.
 
     colorModeSubmenu.addEventListener(
       "click",
       (e) => {
         if (addon.self.disabled) return;
-        if (!e.target.closest(".sa-colormode-submenu")) return;
+        if (!e.target.closest(".sa-colormode-submenu")) {
+          // Something went wrong with the code below this event listener
+          return;
+        }
         if (e.target.closest(".sa-theme3-link")) {
           window.open("https://scratch.mit.edu/scratch-addons-extension/settings#addon-editor-theme3");
           e.stopPropagation();
