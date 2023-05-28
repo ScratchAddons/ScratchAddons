@@ -207,6 +207,7 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get editorMode() {
+    if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601") return "editor";
     const pathname = location.pathname.toLowerCase();
     const split = pathname.split("/").filter(Boolean);
     if (!split[0] || split[0] !== "projects") return null;
@@ -284,6 +285,9 @@ export default class Tab extends Listenable {
    * @returns {string} Hashed class names.
    */
   scratchClass(...args) {
+    if (!this._calledScratchClassReady)
+      throw new Error("Wait until addon.tab.scratchClassReady() resolves before using addon.tab.scratchClass");
+
     let res = "";
     args
       .filter((arg) => typeof arg === "string")
@@ -295,7 +299,7 @@ export default class Tab extends Listenable {
                 className.startsWith(classNameToFind + "_") && className.length === classNameToFind.length + 6
             ) || "";
         } else {
-          res += `scratchAddonsScratchClass/${classNameToFind}`;
+          throw new Error("addon.tab.scratchClass call failed. Class names are not ready yet");
         }
         res += " ";
       });
@@ -308,6 +312,19 @@ export default class Tab extends Listenable {
     // Sanitize just in case
     res = res.replace(/"/g, "");
     return res;
+  }
+
+  scratchClassReady() {
+    // Make sure to return a resolved promise if this is not a project!
+    const isProject = location.pathname.split("/")[1] === "projects" && location.pathname.split("/")[3] !== "embed";
+    const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
+    if (!isProject && !isScratchGui) return Promise.resolve();
+
+    this._calledScratchClassReady = true;
+    if (scratchAddons.classNames.loaded) return Promise.resolve();
+    return new Promise((resolve) => {
+      window.addEventListener("scratchAddonsClassNamesReady", resolve, { once: true });
+    });
   }
 
   /**
