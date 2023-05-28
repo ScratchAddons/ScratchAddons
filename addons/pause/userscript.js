@@ -15,15 +15,14 @@ export default async function ({ addon, console, msg }) {
   setSrc();
   onPauseChanged(setSrc);
 
-  while (true) {
-    if (!document.querySelector(".pause-btn")) {
-      document.addEventListener("keydown", function (e) {
-        if (e.altKey && e.code === "KeyX") {
-          e.preventDefault();
-          setPaused(!isPaused());
-        }
-      });
+  document.addEventListener("keydown", function (e) {
+    if (e.altKey && e.code === "KeyX") {
+      e.preventDefault();
+      setPaused(!isPaused());
     }
+  });
+
+  while (true) {
     await addon.tab.waitForElement("[class^='green-flag']", {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
