@@ -41,6 +41,12 @@
         }
       ],
       "default": "new"
+    },
+    {
+      "name": "Open remix tree by clicking remixes icon next to @heart.svg@star.svg",
+      "id": "open-with-icon",
+      "type": "boolean",
+      "default": true
     }
   ],
   "dynamicEnable": true,
@@ -49,6 +55,6 @@
   "latestUpdate": {
     "version": "1.33.0",
     "temporaryNotice": "The link to the remix tree has moved. If you'd like to go back to the old behavior, you can change the setting below.",
-    "newSettings": ["type"]
+    "newSettings": ["type", "open-with-icon"]
   }
 }

@@ -16,7 +16,7 @@ export default async function ({ addon, console, msg }) {
               // Change the link from ".../remixes" to ".../remixtree"
               addon.tab.waitForElement(".remix-list").then(() => {
                 document.querySelector(".remix-list a").href = window.location.href + "remixtree";
-                document.querySelector(".remix-list a span").textContent = "Remix tree";
+                document.querySelector(".remix-list a span").textContent = msg("remix-tree-link");
               });
             } else {
               // Add a button next to "Copy Link"
@@ -28,14 +28,20 @@ export default async function ({ addon, console, msg }) {
               remixtree.id = "scratchAddonsRemixTreeBtn";
               remixtree.appendChild(remixtreeSpan);
               remixtree.addEventListener("click", () => {
-                window.location.href = `https://scratch.mit.edu/projects/${
-                  window.location.href.split("projects")[1].split("/")[1]
-                }/remixtree`;
+                goToRemixTree();
               });
               addon.tab.appendToSharedSpace({ space: "afterCopyLinkButton", element: remixtree, order: 0 });
             }
           });
       }
+    }
+  }
+
+  function goToRemixTree() {
+    if (addon.settings.get("open-with-icon") && !addon.self.disabled) {
+      window.location.href = `https://scratch.mit.edu/projects/${
+        window.location.href.split("projects")[1].split("/")[1]
+      }/remixtree`;
     }
   }
 
@@ -53,8 +59,11 @@ export default async function ({ addon, console, msg }) {
   }
 
   loadRemixButton();
+  addIconLink();
+
   addon.tab.addEventListener("urlChange", () => {
     loadRemixButton();
+    addIconLink();
   });
 
   addon.self.addEventListener("disabled", () => {
@@ -63,9 +72,13 @@ export default async function ({ addon, console, msg }) {
     } else {
       undoLoadRemixButton();
     }
+    if (addon.settings.get("open-with-icon")) {
+      removeIconLink();
+    }
   });
   addon.self.addEventListener("reenabled", () => {
     loadRemixButton();
+    addIconLink();
   });
   addon.settings.addEventListener("change", () => {
     if (addon.settings.get("type") === "replace") {
@@ -77,5 +90,36 @@ export default async function ({ addon, console, msg }) {
       undoChangeLink();
       loadRemixButton();
     }
+    if (addon.settings.get("open-with-icon")) {
+      addIconLink();
+    } else {
+      removeIconLink();
+    }
   });
+
+  function addIconLink() {
+    if (addon.settings.get("open-with-icon")) {
+      if (addon.self.disabled) return;
+      if (addon.tab.editorMode === "projectpage") {
+        addon.tab
+          .waitForElement(".flex-row.subactions", {
+            reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+          })
+          .then(() => {
+            const remixesIcon = document.querySelector(".project-remixes");
+            remixesIcon.style.cursor = "pointer";
+            remixesIcon.title = msg("go-to-remix-tree");
+            remixesIcon.addEventListener("click", () => {
+              goToRemixTree();
+            });
+          });
+      }
+    }
+  }
+
+  function removeIconLink() {
+    const remixesIcon = document.querySelector(".project-remixes");
+    remixesIcon.removeAttribute("style");
+    remixesIcon.removeAttribute("title");
+  }
 }

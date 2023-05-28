@@ -1,3 +1,5 @@
 {
-  "remix-tree-button/remix-tree": "Remix Tree"
+  "remix-tree-button/remix-tree": "Remix Tree",
+  "remix-tree-button/remix-tree-link": "Remix tree",
+  "remix-tree-button/go-to-remix-tree": "Go to the remix tree"
 }
