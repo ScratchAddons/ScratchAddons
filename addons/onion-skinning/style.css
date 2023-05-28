@@ -8,6 +8,7 @@
   filter: brightness(0) invert(1);
 }
 .sa-onion-button[data-enabled="true"] {
+  color: white;
   background-color: #855cd6;
 }
 
