@@ -96,10 +96,21 @@ export default async function ({ addon, msg }) {
   if (player === "turbowarp") loadTurboWarp();
   else if (player === "forkphorus") loadForkphorus();
   else loadScratch();
-  iframeElement.addEventListener("load", () => {
+
+  let interval;
+  const hideOn404 = () => {
+    if (iframeElement.contentDocument.querySelector("[class^=stage]")) {
+      clearInterval(interval);
+      return;
+    }
     if (iframeElement.contentDocument.querySelector(".not-available-outer") !== null) {
       // Project is unshared and cannot be accessed
       stageElement.removeChild(wrapperElement);
+      clearInterval(interval);
+      return;
     }
+  };
+  iframeElement.addEventListener("load", () => {
+    interval = setInterval(hideOn404);
   });
 }
