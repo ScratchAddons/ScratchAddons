@@ -289,20 +289,16 @@ export default async function ({ addon, console, msg }) {
   if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
     document.body.classList.add("sa-gamepad-small");
   }
-  document.addEventListener(
-    "click",
-    (e) => {
-      if (e.target.closest("[class*='stage-header_stage-button-first']:not(.sa-hide-stage-button)")) {
+  addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (e.detail.action.type === "scratch-gui/StageSize/SET_STAGE_SIZE") {
+      if (e.detail.action.stageSize === "small") {
         document.body.classList.add("sa-gamepad-small");
-      } else if (
-        e.target.closest("[class*='stage-header_stage-button-last']") ||
-        e.target.closest(".sa-hide-stage-button")
-      ) {
+      } else {
         document.body.classList.remove("sa-gamepad-small");
       }
-    },
-    { capture: true }
-  );
+    }
+  });
 
   const virtualCursorElement = document.createElement("img");
   virtualCursorElement.hidden = true;
