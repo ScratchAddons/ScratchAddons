@@ -1,0 +1,13 @@
+/*Set the cursor to default when hovering and dragging blocks*/
+
+path.blocklyPath.blocklyBlockBackground {
+  cursor: default;
+}
+
+text.blocklyText {
+  cursor: default;
+}
+
+g g image {
+  cursor: default;
+}
