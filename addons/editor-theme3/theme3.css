@@ -48,7 +48,9 @@
   background-color: inherit;
   cursor: default;
 }
-.sa-theme3-link [class*="settings-menu_expand-caret_"] {
+.sa-theme3-link .sa-theme3-new-tab {
   margin-left: auto;
-  transform: rotate(-135deg);
+  height: 1.25rem;
+  width: 1.25rem;
+  filter: brightness(0) invert(1);
 }

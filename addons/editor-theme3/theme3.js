@@ -419,20 +419,23 @@ export default async function ({ addon, console, msg }) {
 
     const elementToClone = colorModeSubmenu.querySelector("[class*=settings-menu_selected_]").closest("li");
 
+    const SA_ICON_URL = addon.self.dir + "../../../images/cs/icon.svg";
+
     const managedBySa = elementToClone.cloneNode(true);
     addon.tab.displayNoneWhileDisabled(managedBySa, { display: "block" });
     managedBySa.classList.add("sa-theme3-managed");
     managedBySa.querySelector("div span").textContent = msg("/global/meta/managedBySa");
-    managedBySa.querySelector("img[class*=settings-menu_icon_]").src = addon.self.dir + "../../../images/cs/icon.svg";
+    managedBySa.querySelector("img[class*=settings-menu_icon_]").src = SA_ICON_URL;
 
     const addonSettingsLink = elementToClone.cloneNode(true);
     addon.tab.displayNoneWhileDisabled(addonSettingsLink, { display: "block" });
     addonSettingsLink.classList.add("sa-theme3-link");
     addonSettingsLink.classList.add(addon.tab.scratchClass("menu_menu-section"));
     addonSettingsLink.querySelector("div span").textContent = msg("/global/meta/addonSettings");
-    addonSettingsLink.querySelector("img[class*=settings-menu_icon_]").src =
-      addon.self.dir + "../../../images/cs/icon.svg";
-    const addonSettingsImg = document.querySelector("[class*=settings-menu_expand-caret_]").cloneNode();
+    addonSettingsLink.querySelector("img[class*=settings-menu_icon_]").src = SA_ICON_URL;
+    const addonSettingsImg = document.createElement("img");
+    addonSettingsImg.classList.add("sa-theme3-new-tab");
+    addonSettingsImg.src = addon.self.dir + "/open-link.svg";
     addonSettingsLink.querySelector("div").appendChild(addonSettingsImg);
 
     colorModeSubmenu.classList.add("sa-colormode-submenu");
