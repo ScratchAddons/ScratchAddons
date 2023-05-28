@@ -29,7 +29,7 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
       });
     };
     if (runAtComplete && document.readyState !== "complete") {
-      window.addEventListener("load", () => loadUserscript(), { once: true });
+      window.addEventListener("load", () => addonObj.tab.scratchClassReady().then(loadUserscript), { once: true });
     } else {
       await loadUserscript();
     }
