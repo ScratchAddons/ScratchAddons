@@ -51,7 +51,7 @@
       "default": false
     },
     {
-      "name": "Log when max clones exceeded",
+      "name": "Log when clone limit exceeded",
       "id": "log_failed_clone_creation",
       "type": "boolean",
       "default": true
@@ -75,7 +75,7 @@
       "default": false
     },
     {
-      "name": "Fill and animate graphs",
+      "name": "High detail graphs",
       "id": "fancy_graphs",
       "type": "boolean",
       "default": false
@@ -85,7 +85,7 @@
   "versionAdded": "1.16.0",
   "latestUpdate": {
     "version": "1.33.0",
-    "temporaryNotice": "There is now an option to disable the filling and animating of graphs.",
+    "temporaryNotice": "There's now a low detail mode for graphs to increase performance. Turning on \"high detail graphs\" fills and animates graphs.",
     "newSettings": ["fancy_graphs"]
   },
   "libraries": ["chartjs"]
