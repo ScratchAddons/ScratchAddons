@@ -303,7 +303,9 @@ function loadClasses() {
   window.dispatchEvent(new CustomEvent("scratchAddonsClassNamesReady"));
 }
 
-const isProject = location.pathname.split("/")[1] === "projects" && location.pathname.split("/")[3] !== "embed";
+const isProject =
+  location.pathname.split("/")[1] === "projects" &&
+  !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
 const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
 if (isScratchGui || isProject) {
   // Stylesheets are considered to have loaded if this element exists
