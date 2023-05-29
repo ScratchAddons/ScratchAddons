@@ -11,6 +11,9 @@ export default async function ({ addon, msg }) {
   const stageElement = document.querySelector(".stage");
   const projectId = window.Scratch.INIT_DATA.PROFILE.featuredProject.id;
 
+  const fetchedProject = await fetch(`https://api.scratch.mit.edu/projects/${projectId}`);
+  if (fetchedProject.status >= 400) return; // project is probably unshared
+
   // Create and append elements
 
   const iframeElement = document.createElement("iframe");
@@ -96,21 +99,4 @@ export default async function ({ addon, msg }) {
   if (player === "turbowarp") loadTurboWarp();
   else if (player === "forkphorus") loadForkphorus();
   else loadScratch();
-
-  let interval;
-  const hideOn404 = () => {
-    if (iframeElement.contentDocument.querySelector("[class^=stage]")) {
-      clearInterval(interval);
-      return;
-    }
-    if (iframeElement.contentDocument.querySelector(".not-available-outer") !== null) {
-      // Project is unshared and cannot be accessed
-      stageElement.removeChild(wrapperElement);
-      clearInterval(interval);
-      return;
-    }
-  };
-  iframeElement.addEventListener("load", () => {
-    interval = setInterval(hideOn404);
-  });
 }
