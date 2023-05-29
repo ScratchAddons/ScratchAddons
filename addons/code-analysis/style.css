@@ -2,7 +2,7 @@
   position: relative;
   background: #393943;
   width: 960px;
-  height: 640px;
+  height: 283px;
   border-radius: 13px;
 }
 
@@ -11,8 +11,8 @@
   left: 15px;
   top: 12px;
   background: #ffffff;
-  width: 232px;
-  height: 64px;
+  width: 159px;
+  height: 44px;
   border-radius: 13px;
 }
 
@@ -21,8 +21,8 @@
   float: right;
   right: 47px;
   background: #ffffff;
-  width: 212px;
-  height: 46px;
+  width: 144px;
+  height: 39px;
   border-radius: 9px;
 }
 
@@ -30,7 +30,7 @@
   position: absolute;
   left: 15px;
   top: 9px;
-  font-size: 18pt;
+  font-size: 1rem;
   font-weight: bold;
 }
 
@@ -39,89 +39,25 @@
   left: 14px;
   top: 5px;
   color: #393943;
-  font-size: 18pt;
+  font-size: 1rem;
   font-weight: bold;
 }
 
 .ps-content {
   position: absolute;
-  top: 54px;
+  top: 36px;
   left: 15px;
   background: #ffffff;
   width: 930px;
-  height: 570px;
+  height: 233px;
   border-radius: 13px;
-}
-
-.ps-slider-container {
-  position: relative;
-  width: inherit;
-  height: 160px;
-}
-
-span.ps-slider-bg {
-  position: absolute;
-  background: #8cbaf6;
-  top: 15px;
-  width: 160px;
-  height: 48px;
-  border-radius: 22px;
-}
-
-span.sprite {
-  left: 8%;
-}
-
-span.code {
-  left: 30%;
-}
-
-span.function {
-  left: 52%;
-}
-
-span.costume {
-  left: 74%;
-}
-
-.ps-slider-title {
-  position: absolute;
-  width: inherit;
-  color: #ffffff;
-  font-size: 18pt;
-  font-weight: bold;
-  text-align: center;
-  line-height: 48px;
-}
-
-.ps-slider-content {
-  position: absolute;
-  top: 50px;
-  width: inherit;
-  font-size: 44pt;
-  color: #4693f7;
-  font-weight: bold;
-  text-align: center;
-}
-
-.ps-horizontal-gradient-container {
-  position: relative;
-  height: 100px;
-}
-
-.ps-arrow {
-  position: absolute;
-  top: 14%;
-  width: 83px;
-  height: 55px;
-  left: 4%;
 }
 
 [class^="ps-edge"] {
   position: absolute;
   top: 11%;
   width: 50px;
-  height: 113px;
+  height: 80px;
 }
 
 .ps-edge01 {
@@ -133,35 +69,9 @@ span.costume {
   transform: rotateY(180deg);
 }
 
-.ps-horizontal-gradient {
-  position: absolute;
-  left: 5%;
-  top: 30%;
-  width: 90%;
-  height: 43px;
-  border-radius: 22px;
-  background: linear-gradient(to right, #2f80ed, #1ad268, #f2994a);
-}
-
-[class^="ps-horizontal-description"] {
-  position: absolute;
-  top: 80px;
-  font-size: 17pt;
-  font-weight: bold;
-}
-
-.ps-horizontal-description-motion {
-  left: 6%;
-}
-
-.ps-horizontal-description-logic {
-  left: 71%;
-}
-
 .ps-code-genetic {
   position: relative;
-  top: 20px;
-  height: 24%;
+  height: 100px;
 }
 
 .ps-code-genetic-bg {
@@ -170,7 +80,7 @@ span.costume {
   top: 14%;
   left: 5%;
   width: 90%;
-  height: 100px;
+  height: 68px;
 }
 
 span.motion {
@@ -212,18 +122,17 @@ span.my-blocks {
 [class^="ps-code-genetic-block"] {
   position: absolute;
   top: 14%;
-  height: 100px;
+  height: 68px;
 }
 
 .ps-code-genetic-table {
   position: relative;
-  top: 10px;
   height: 100px;
 }
 
 .ps-code-genetic-table > [class^="ps-code-genetic-item"] {
   position: absolute;
-  font-size: 18pt;
+  font-size: 1rem;
   font-weight: bold;
 }
 
@@ -232,15 +141,15 @@ span.row0 {
 }
 
 span.row1 {
-  top: 35px;
+  top: 31px;
 }
 
 span.row2 {
-  top: 69px;
+  top: 62px;
 }
 
 span.col0 {
-  left: 170px;
+  left: 201px;
 }
 
 span.col1 {
@@ -248,83 +157,83 @@ span.col1 {
 }
 
 span.col2 {
-  left: 635px;
+  left: 601px;
 }
 
 span.col3 {
-  left: 874px;
+  left: 802px;
 }
 
 .ps-code-genetic-item-motion {
-  left: 39px;
+  left: 89px;
   color: #548af6;
   text-transform: capitalize;
 }
 
 .ps-code-genetic-item-looks {
-  left: 50px;
-  top: 34px;
+  left: 97px;
+  top: 30px;
   color: #865df3;
   text-transform: capitalize;
 }
 
 .ps-code-genetic-item-sound {
-  left: 47px;
-  top: 68px;
+  left: 97px;
+  top: 60px;
   color: #c059ca;
   text-transform: capitalize;
 }
 
 .ps-code-genetic-item-events {
-  left: 263px;
+  left: 286px;
   color: #f6d13f;
   text-transform: capitalize;
 }
 
 .ps-code-genetic-item-control {
-  left: 255px;
-  top: 34px;
+  left: 282px;
+  top: 30px;
   color: #ee8734;
   text-transform: capitalize;
 }
 
 .ps-code-genetic-item-sensing {
-  left: 250px;
-  top: 68px;
+  left: 279px;
+  top: 60px;
   color: #62b5de;
   text-transform: capitalize;
 }
 
 .ps-code-genetic-item-operators {
-  left: 469px;
+  left: 474px;
   color: #5cb550;
   text-transform: capitalize;
 }
 
 .ps-code-genetic-item-variables {
-  left: 478px;
-  top: 34px;
+  left: 481px;
+  top: 30px;
   color: #ee8734;
   text-transform: capitalize;
 }
 
 .ps-code-genetic-item-my-blocks {
-  left: 465px;
-  top: 68px;
+  left: 471px;
+  top: 60px;
   color: #e86577;
   text-transform: capitalize;
 }
 
 .ps-code-genetic-item-extensions {
-  left: 713px;
+  left: 676px;
   color: #575757;
   text-transform: capitalize;
 }
 
 .ps-code-genetic-footer {
   position: absolute;
-  top: 115px;
+  top: 100px;
   left: 354px;
-  font-size: 18pt;
+  font-size: 1rem;
   font-weight: bold;
 }

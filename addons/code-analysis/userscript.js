@@ -57,10 +57,7 @@ export default async function ({ addon, msg, console }) {
 }
 
 function analyseCode(targets) {
-  const spriteCount = Object.values(targets).filter((o) => !o.isStage).length;
-  let functionCount = 0;
   let codeCount = 0;
-  let costumeCount = 0;
   let classifiedCodeMap = {};
   targets.map((target) => {
     for (const [, v] of Object.entries(target.sprite.blocks._blocks)) {
@@ -68,26 +65,13 @@ function analyseCode(targets) {
       if (opcode === undefined || opcode.indexOf("_") <= 0 || v.shadow || opcode === "data_variable") {
         continue;
       }
-      if (FUNCTION_OPCODE === opcode) {
-        functionCount++;
-      }
       codeCount++;
       let codeType = opcode.split("_", 1)[0];
       isNaN(classifiedCodeMap[codeType]) ? (classifiedCodeMap[codeType] = 1.0) : classifiedCodeMap[codeType]++;
     }
-    costumeCount += target.sprite.costumes_.length;
   });
-  const appearanceCount = APPEARANCE_CODE_TYPE_LIST.map((item) => classifiedCodeMap[item])
-    .filter((item) => !isNaN(item))
-    .reduce((total, item) => {
-      return total + item;
-    }, 0);
   return {
-    spriteCount: spriteCount,
-    functionCount: functionCount,
     codeCount: codeCount,
-    costumeCount: costumeCount,
-    appearanceCount: appearanceCount,
     classifiedCodeMap: classifiedCodeMap,
   };
 }
@@ -109,47 +93,12 @@ function renderStats(addon, container, result) {
 function createContent(addon, result) {
   const total = result.codeCount;
   const psContent = createElement("ps-content", "div");
-  const psSliderContainer = createSlider(addon, result);
-  psContent.appendChild(psSliderContainer);
   const classifiedCodeMap = (result.classifiedCodeMap ??= {});
-  const horizontalGradientContainer = createHorizontalGradient(addon, total, result.appearanceCount);
-  psContent.appendChild(horizontalGradientContainer);
   const codeGenetic = createCodeGenetic(addon, total, classifiedCodeMap);
   psContent.appendChild(codeGenetic);
   const codeGeneticTable = createCodeGeneticTable(total, classifiedCodeMap);
   psContent.appendChild(codeGeneticTable);
   return psContent;
-}
-
-function createSlider(addon, result) {
-  const psSliderContainer = createElement("ps-slider-container", "div");
-  psSliderContainer.appendChild(createSliderBG("sprite", result.spriteCount));
-  psSliderContainer.appendChild(createSliderBG("code", result.codeCount));
-  psSliderContainer.appendChild(createSliderBG("function", result.functionCount));
-  psSliderContainer.appendChild(createSliderBG("costume", result.costumeCount));
-  return psSliderContainer;
-}
-
-function createHorizontalGradient(addon, total, appearanceCount) {
-  const horizontalGradientContainer = createElement("ps-horizontal-gradient-container", "div");
-  horizontalGradientContainer.appendChild(createElement("ps-horizontal-gradient", "span"));
-  const arrow = Object.assign(document.createElement("img"), {
-    className: "ps-arrow",
-    src: addon.self.dir + "/arrow.svg",
-  });
-  let location = 428;
-  if (total !== 0) {
-    location = (1 - Number.parseInt(appearanceCount) / total) * 787;
-  }
-  arrow.style.left = `${location}px`;
-  horizontalGradientContainer.appendChild(arrow);
-  horizontalGradientContainer.appendChild(
-    createElementWithTextContent("ps-horizontal-description-motion", "span", "Motion and Appearance")
-  );
-  horizontalGradientContainer.appendChild(
-    createElementWithTextContent("ps-horizontal-description-logic", "span", "Logic and Algorithm")
-  );
-  return horizontalGradientContainer;
 }
 
 function createCodeGenetic(addon, total, classifiedCodeMap) {
