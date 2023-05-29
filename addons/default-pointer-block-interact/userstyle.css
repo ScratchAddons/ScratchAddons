@@ -1,5 +1,6 @@
 /*Set the cursor to default when hovering and dragging blocks*/
 
+/* For blocks */
 path.blocklyPath.blocklyBlockBackground {
   cursor: default;
 }
@@ -9,5 +10,10 @@ text.blocklyText {
 }
 
 g g image {
+  cursor: default;
+}
+
+/* For comments */
+rect.blocklyDraggable.scratchCommentTopBar {
   cursor: default;
 }
