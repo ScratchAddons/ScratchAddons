@@ -1,6 +1,6 @@
 {
   "name": "Forum time changer",
-  "description": "Changes the times for posts in the forums.",
+  "description": "Changes the way the date and time is displayed on the forums.",
   "userscripts": [
     {
       "url": "timezones.js",
