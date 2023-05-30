@@ -2313,6 +2313,25 @@
       }
     },
     {
+      "name": "\"Experimental\" Dark (blue)",
+      "id": "experimentalDark",
+      "description": "A dark theme by Maximouse based on a userstyle. Not experimental",
+      "values": {
+        "page": "#202020",
+        "navbar": "#4d97ff",
+        "box": "#282828",
+        "gray": "#333333",
+        "blue": "#252c37",
+        "input": "#202020",
+        "button": "#4d97ff",
+        "link": "#67a7ff",
+        "footer": "#333333",
+        "border": "#606060",
+        "darkBanners": "darker",
+        "darkForumCode": true
+      }
+    },
+    {
       "name": "Dark WWW",
       "id": "darkWww",
       "description": "A dark theme by Ucrash",
