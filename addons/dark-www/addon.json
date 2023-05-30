@@ -2353,7 +2353,7 @@
     {
       "name": "Scratch's default colors (blue)",
       "id": "scratch",
-      "description": "The colors normally used by Scratch",
+      "description": "The colors originally used by Scratch",
       "values": {
         "page": "#fcfcfc",
         "navbar": "#4d97ff",
