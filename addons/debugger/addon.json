@@ -85,7 +85,7 @@
   "versionAdded": "1.16.0",
   "latestUpdate": {
     "version": "1.33.0",
-    "temporaryNotice": "There's now a low detail mode for graphs to increase performance. Turning on \"high detail graphs\" fills and animates graphs.",
+    "temporaryNotice": "There is now a low-detail mode for graphs to increase performance. Turning on \"high detail graphs\" fills and animates graphs.",
     "newSettings": ["fancy_graphs"]
   },
   "libraries": ["chartjs"]
