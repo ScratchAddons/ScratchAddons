@@ -5,14 +5,15 @@ export default async function ({ addon, msg }) {
   const enableTWAddons = addon.settings.get("enableTWAddons");
   const shareUsername = addon.settings.get("shareUsername");
 
-  const enabledAddons = await addon.self.getEnabledAddons("editor");
-  const username = await addon.auth.fetchUsername();
-
   const stageElement = document.querySelector(".stage");
   const projectId = window.Scratch.INIT_DATA.PROFILE.featuredProject.id;
 
-  const fetchedProject = await fetch(`https://api.scratch.mit.edu/projects/${projectId}`);
-  if (fetchedProject.status >= 400) return; // project is probably unshared
+  // Check if project is unshared before doing anything
+  const featuredProject = await fetch(`https://api.scratch.mit.edu/projects/${projectId}`);
+  if (featuredProject.status >= 400) return; // project is probably unshared
+
+  const enabledAddons = await addon.self.getEnabledAddons("editor");
+  const username = await addon.auth.fetchUsername();
 
   // Create and append elements
 
