@@ -25,11 +25,7 @@
         "http://localhost:8601/*"
       ],
       "run_at": "document_start",
-      "js": [
-        "libraries/thirdparty/cs/comlink.js",
-        "libraries/common/cs/text-color.js",
-        "content-scripts/cs.js"
-      ],
+      "js": ["libraries/thirdparty/cs/comlink.js", "libraries/common/cs/text-color.js", "content-scripts/cs.js"],
       "all_frames": true
     },
     {
@@ -40,11 +36,7 @@
         "http://localhost:8601/*"
       ],
       "run_at": "document_start",
-      "js": [
-        "content-scripts/prototype-handler.js",
-        "content-scripts/load-redux.js",
-        "content-scripts/fix-console.js"
-      ],
+      "js": ["content-scripts/prototype-handler.js", "content-scripts/load-redux.js", "content-scripts/fix-console.js"],
       "all_frames": true
     }
   ],
@@ -69,10 +61,7 @@
     "contextMenus",
     "alarms"
   ],
-  "optional_permissions": [
-    "notifications",
-    "clipboardWrite"
-  ],
+  "optional_permissions": ["notifications", "clipboardWrite"],
   "web_accessible_resources": [
     "content-scripts/inject/*",
     "addon-api/*",
