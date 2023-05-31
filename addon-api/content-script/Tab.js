@@ -316,7 +316,9 @@ export default class Tab extends Listenable {
 
   scratchClassReady() {
     // Make sure to return a resolved promise if this is not a project!
-    const isProject = location.pathname.split("/")[1] === "projects" && location.pathname.split("/")[3] !== "embed";
+    const isProject =
+      location.pathname.split("/")[1] === "projects" &&
+      !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
     const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
     if (!isProject && !isScratchGui) return Promise.resolve();
 
