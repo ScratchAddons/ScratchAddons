@@ -98,7 +98,6 @@
   "versionAdded": "1.3.0",
   "latestUpdate": {
     "version": "1.33.0",
-    "temporaryNotice": "There is now an option to use your Scratch username with TurboWarp and the other settings have been adjusted so they are easier to understand.",
     "newSettings": ["shareUsername"]
   }
 }
