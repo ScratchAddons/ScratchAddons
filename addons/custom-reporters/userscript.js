@@ -159,7 +159,22 @@ export default async function ({ addon, msg, console }) {
         console.log(oldReduxCb.toString());
         addon.tab.redux.dispatch({
             type: "scratch-gui/custom-procedures/SET_CALLBACK",
-            callback: () => null,
+            callback: function(t){
+              if(t){
+                t = '<xml><block type="procedures_definition"><statement name="custom_block"><shadow type="procedures_prototype">'
+                  + Blockly.Xml.domToText(t) 
+                  + "</shadow></statement></block></xml>",
+                  t = Blockly.Xml.textToDom(t).firstChild,
+                  Blockly.Events.setGroup(!0),
+                  t = Blockly.Xml.domToBlock(t,e);
+                var o=e.scale,
+                  n = -e.scrollX;
+                  n = e.RTL ? n + (e.getMetrics().contentWidth - 30) : n + 30,
+                  t.moveBy(n / o,(30 - e.scrollY) / o),
+                  t.scheduleSnapAndBump(),
+                  Blockly.Events.setGroup(!1)
+              }
+            },
         });
         
         modal.querySelector("div[class*=custom-procedures_checkbox-row] input").addEventListener("change", (e) => {
