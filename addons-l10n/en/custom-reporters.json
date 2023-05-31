@@ -1,0 +1,6 @@
+{
+    "custom-reporters/return": "return",
+    "custom-reporters/stack": "Stack",
+    "custom-reporters/numortext": "Number or text",
+    "custom-reporters/boolean": "Boolean"
+}
