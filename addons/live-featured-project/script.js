@@ -9,7 +9,7 @@ export default async function ({ addon, msg }) {
   const projectId = window.Scratch.INIT_DATA.PROFILE.featuredProject.id;
 
   // Check if project is unshared before doing anything
-  const featuredProject = await fetch(`https://api.scratch.mit.edu/projects/${projectId}`);
+  const featuredProject = await fetch(`https://api.scratch.mit.edu/projects/${projectId}`, { 'method': 'HEAD' });
   if (featuredProject.status >= 400) return; // project is probably unshared
 
   const enabledAddons = await addon.self.getEnabledAddons("editor");
