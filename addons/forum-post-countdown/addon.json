@@ -25,12 +25,6 @@
       "link": "https://scratch.mit.edu/users/mybearworld/"
     }
   ],
-  "info": [
-    {
-      "type": "notice",
-      "text": "This will not always be 100% accurate, for example with switching accounts or devices. However, these cases rarely occur."
-    }
-  ],
   "dynamicDisable": true,
   "dynamicEnable": true
 }
