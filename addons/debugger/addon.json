@@ -75,7 +75,7 @@
       "default": false
     },
     {
-      "name": "High detail graphs",
+      "name": "Animated graphs (may affect performance)",
       "id": "fancy_graphs",
       "type": "boolean",
       "default": false
