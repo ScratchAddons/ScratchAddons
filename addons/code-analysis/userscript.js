@@ -44,9 +44,9 @@ export default async function ({ addon, msg, console }) {
   });
   const targets = addon.tab.traps.vm.runtime.targets;
   const result = analyseCode(targets);
-  const content = await addon.tab.waitForElement("#view > div > div.inner");
+  const statsNode = await addon.tab.waitForElement("#view > div > div.inner > div:nth-child(3)");
   const projectStatsContainer = document.createElement("div");
-  content.appendChild(projectStatsContainer);
+  statsNode.after(projectStatsContainer);
   projectStatsContainer.className = "flex-row preview-row";
   const projectStatsContent = document.createElement("div");
   projectStatsContainer.appendChild(projectStatsContent);
@@ -78,14 +78,12 @@ function analyseCode(targets) {
 
 function renderStats(addon, container, result) {
   const psHeader = createElement("ps-header", "div");
-  psHeader.appendChild(createElementWithTextContent("ps-header-content", "span", "Project Statistics"));
+  psHeader.appendChild(createElementWithTextContent("ps-header-content project-textlabel", "span", "Code Genetic Map"));
   container.appendChild(psHeader);
-  const psHeaderRight = createElement("ps-header-right", "div");
-  const rightContent = createElementWithTextContent("ps-header-right-content", "a", "🔗 View Details");
+  const rightContent = createElementWithTextContent("ps-header-right-content project-textlabel", "a", "🔗 View Details");
   const projectId = location.href.match(/\d+/)?.[0];
   rightContent.href = "https://tools.getgandi.com/projects/" + projectId;
-  psHeaderRight.appendChild(rightContent);
-  container.appendChild(psHeaderRight);
+  container.appendChild(rightContent);
   const psContent = createContent(addon, result);
   container.appendChild(psContent);
 }
@@ -111,7 +109,8 @@ function createCodeGenetic(addon, total, classifiedCodeMap) {
     }
     const block = createElement(`ps-code-genetic-block ${item}`, "span");
     const num = GETTER_MAP[item](classifiedCodeMap);
-    const width = (num * 837) / total;
+    // Minus 0.01 is used as the accuracy compensation
+    const width = (num * 837) / total - 0.01;
     block.style.left = `${baseLine}px`;
     block.style.width = `${width}px`;
     horizontalSlider.appendChild(block);
@@ -149,7 +148,6 @@ function createCodeGeneticTable(total, classifiedCodeMap) {
   });
   codeGeneticTable.appendChild(createElementWithTextContent("ps-code-genetic-item-extensions", "span", "Extensions:"));
   codeGeneticTable.appendChild(createElementWithTextContent("ps-code-genetic-item row0 col3", "span", total - sum));
-  codeGeneticTable.appendChild(createElementWithTextContent("ps-code-genetic-footer", "span", "Code Genetic Map"));
   return codeGeneticTable;
 }
 

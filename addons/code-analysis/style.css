@@ -1,62 +1,52 @@
+.project-stats-content {
+  width: 100%;
+}
+
 .ps-container {
   position: relative;
-  background: #393943;
-  width: 960px;
-  height: 283px;
+  background: #eaf1fc;
+  width: 100%;
+  height: 239px;
   border-radius: 13px;
 }
 
 .ps-header {
   position: absolute;
-  left: 15px;
+  left: 1.6%;
   top: 12px;
   background: #ffffff;
-  width: 159px;
+  width: 18%;
   height: 44px;
   border-radius: 13px;
 }
 
-.ps-header-right {
-  position: absolute;
-  float: right;
-  right: 47px;
-  background: #ffffff;
-  width: 144px;
-  height: 39px;
-  border-radius: 9px;
-}
-
 .ps-header-right-content {
   position: absolute;
-  left: 15px;
+  float: right;
+  right: 2%;
   top: 9px;
-  font-size: 1rem;
-  font-weight: bold;
 }
 
 .ps-header-content {
   position: absolute;
-  left: 14px;
-  top: 5px;
-  color: #393943;
-  font-size: 1rem;
-  font-weight: bold;
+  left: 7%;
+  top: 2px;
 }
 
 .ps-content {
   position: absolute;
   top: 36px;
-  left: 15px;
+  left: 1.6%;
   background: #ffffff;
-  width: 930px;
-  height: 233px;
+  width: 96.8%;
+  height: 190px;
   border-radius: 13px;
 }
 
 [class^="ps-edge"] {
   position: absolute;
   top: 11%;
-  width: 50px;
+  width: 6%;
   height: 80px;
 }
 
@@ -130,10 +120,11 @@ span.my-blocks {
   height: 100px;
 }
 
-.ps-code-genetic-table > [class^="ps-code-genetic-item"] {
+.ps-code-genetic-table>[class^="ps-code-genetic-item"] {
   position: absolute;
   font-size: 1rem;
   font-weight: bold;
+  text-transform: capitalize;
 }
 
 span.row0 {
@@ -149,91 +140,73 @@ span.row2 {
 }
 
 span.col0 {
-  left: 201px;
+  left: 20.8%;
 }
 
 span.col1 {
-  left: 390px;
+  left: 42.4%;
 }
 
 span.col2 {
-  left: 601px;
+  left: 65.4%;
 }
 
 span.col3 {
-  left: 802px;
+  left: 88.2%;
 }
 
 .ps-code-genetic-item-motion {
-  left: 89px;
+  left: 9.9%;
   color: #548af6;
-  text-transform: capitalize;
 }
 
 .ps-code-genetic-item-looks {
-  left: 97px;
+  left: 10.6%;
   top: 30px;
   color: #865df3;
-  text-transform: capitalize;
 }
 
 .ps-code-genetic-item-sound {
-  left: 97px;
+  left: 10.6%;
   top: 60px;
   color: #c059ca;
-  text-transform: capitalize;
 }
 
 .ps-code-genetic-item-events {
-  left: 286px;
+  left: 31.8%;
   color: #f6d13f;
-  text-transform: capitalize;
 }
 
 .ps-code-genetic-item-control {
-  left: 282px;
+  left: 31.3%;
   top: 30px;
   color: #ee8734;
-  text-transform: capitalize;
 }
 
 .ps-code-genetic-item-sensing {
-  left: 279px;
+  left: 30.9%;
   top: 60px;
   color: #62b5de;
-  text-transform: capitalize;
 }
 
 .ps-code-genetic-item-operators {
-  left: 474px;
+  left: 51.9%;
   color: #5cb550;
-  text-transform: capitalize;
 }
 
 .ps-code-genetic-item-variables {
-  left: 481px;
+  left: 52.7%;
   top: 30px;
   color: #ee8734;
-  text-transform: capitalize;
 }
 
 .ps-code-genetic-item-my-blocks {
-  left: 471px;
+  left: 51.9%;
   top: 60px;
   color: #e86577;
-  text-transform: capitalize;
 }
 
 .ps-code-genetic-item-extensions {
-  left: 676px;
+  left: 74.1%;
   color: #575757;
-  text-transform: capitalize;
-}
-
-.ps-code-genetic-footer {
-  position: absolute;
-  top: 100px;
-  left: 354px;
-  font-size: 1rem;
-  font-weight: bold;
 }
