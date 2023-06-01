@@ -4,5 +4,7 @@
 
   "global/blocks/green-flag": "flag",
   "global/blocks/clockwise": "clockwise",
-  "global/blocks/anticlockwise": "anti-clockwise"
+  "global/blocks/anticlockwise": "anti-clockwise",
+  "global/meta/managedBySa": "Managed by Scratch Addons",
+  "global/meta/addonSettings": "Addon Settings"
 }
