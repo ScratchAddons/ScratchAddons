@@ -29,3 +29,33 @@
   fill: var(--editorTheme3-commentText);
   color: var(--editorTheme3-commentText);
 }
+
+.sa-colormode-submenu li:nth-child(1) div,
+.sa-colormode-submenu li:nth-child(2) div {
+  filter: opacity(0.5) grayscale(1);
+}
+.sa-theme3-managed {
+  filter: opacity(0.5);
+}
+.sa-colormode-submenu li:nth-child(1) div img:first-child,
+.sa-colormode-submenu li:nth-child(2) div img:first-child,
+.sa-theme3-link div img:first-child {
+  visibility: hidden;
+}
+.sa-colormode-submenu li:nth-child(1):hover,
+.sa-colormode-submenu li:nth-child(2):hover,
+.sa-theme3-managed:hover {
+  background-color: inherit;
+  cursor: default;
+}
+.sa-theme3-link .sa-theme3-new-tab {
+  margin-left: auto;
+  height: 1.25rem;
+  width: 1.25rem;
+  filter: var(--editorDarkMode-menuBar-filter, none);
+}
+[dir="rtl"] .sa-theme3-link .sa-theme3-new-tab {
+  margin-left: 0;
+  margin-right: auto;
+  transform: rotate(-90deg);
+}
