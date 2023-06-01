@@ -251,7 +251,7 @@
   "extensionUpdateInfo2_v1_33": {
     "message": "Multiple addons have been adjusted to work with the upcoming Scratch changes. This update also brings performance improvements, increased storage for addon settings, and more."
   },
-  "extensionUpdateInfo3_v1_33": {
+  "readTheBlogPost": {
     "message": "Read the $1 for more information.",
     "description": "The placeholder is \"blog post\""
   },
