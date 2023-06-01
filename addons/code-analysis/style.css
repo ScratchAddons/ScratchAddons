@@ -120,7 +120,7 @@ span.my-blocks {
   height: 100px;
 }
 
-.ps-code-genetic-table>[class^="ps-code-genetic-item"] {
+.ps-code-genetic-table > [class^="ps-code-genetic-item"] {
   position: absolute;
   font-size: 1rem;
   font-weight: bold;

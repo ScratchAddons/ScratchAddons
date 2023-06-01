@@ -80,7 +80,11 @@ function renderStats(addon, container, result) {
   const psHeader = createElement("ps-header", "div");
   psHeader.appendChild(createElementWithTextContent("ps-header-content project-textlabel", "span", "Code Genetic Map"));
   container.appendChild(psHeader);
-  const rightContent = createElementWithTextContent("ps-header-right-content project-textlabel", "a", "🔗 View Details");
+  const rightContent = createElementWithTextContent(
+    "ps-header-right-content project-textlabel",
+    "a",
+    "🔗 View Details"
+  );
   const projectId = location.href.match(/\d+/)?.[0];
   rightContent.href = "https://tools.getgandi.com/projects/" + projectId;
   container.appendChild(rightContent);
