@@ -9,7 +9,6 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
     const loadUserscript = async () => {
       await scratchAddons.l10n.loadByAddonId(addonId);
       const module = await import(scriptUrl);
-      await addonObj.tab.scratchClassReady();
       const msg = (key, placeholders) =>
         scratchAddons.l10n.get(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders);
       msg.locale = scratchAddons.l10n.locale;
@@ -30,7 +29,7 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
       });
     };
     if (runAtComplete && document.readyState !== "complete") {
-      window.addEventListener("load", () => loadUserscript(), { once: true });
+      window.addEventListener("load", () => addonObj.tab.scratchClassReady().then(loadUserscript), { once: true });
     } else {
       await loadUserscript();
     }
