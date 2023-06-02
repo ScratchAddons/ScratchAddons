@@ -157,9 +157,9 @@ export default async function ({ addon, msg, console }) {
         mutationRoot.focusLastEditor_();
       });
     };
-    
+
     let hasSetUpInputButtons = false;
-    
+
     const selectBlockTypeFactory = (type) => {
       return () => {
         // don't set these listeners up until we first change the block type,
@@ -212,21 +212,22 @@ export default async function ({ addon, msg, console }) {
         }
       },
     });*/
-    
+
     const oldCreateProcedureCallbackFactory = ScratchBlocks.Procedures.createProcedureCallbackFactory_;
-    ScratchBlocks.Procedures.createProcedureCallbackFactory_ = function(workspace) {
-      return function(mutation) {
+    ScratchBlocks.Procedures.createProcedureCallbackFactory_ = function (workspace) {
+      return function (mutation) {
         if (mutation) {
-          var blockText = '<xml>' +
-              '<block type="procedures_definition">' +
-              '<statement name="custom_block">' +
-              '<shadow type="procedures_prototype">' +
-              ScratchBlocks.Xml.domToText(mutation) +
-              '</shadow>' +
-              '</statement>' +
-              '</block>' +
-              '<block type="looks_say"></block>' +
-              '</xml>';
+          var blockText =
+            "<xml>" +
+            '<block type="procedures_definition">' +
+            '<statement name="custom_block">' +
+            '<shadow type="procedures_prototype">' +
+            ScratchBlocks.Xml.domToText(mutation) +
+            "</shadow>" +
+            "</statement>" +
+            "</block>" +
+            '<block type="looks_say"></block>' +
+            "</xml>";
           var blockDom = ScratchBlocks.Xml.textToDom(blockText).firstChild;
           ScratchBlocks.Events.setGroup(true);
           var block = ScratchBlocks.Xml.domToBlock(blockDom, workspace);
@@ -245,7 +246,6 @@ export default async function ({ addon, msg, console }) {
         }
       };
     };
-
 
     modal.querySelector("div[class*=custom-procedures_checkbox-row] input").addEventListener("change", (e) => {
       mutationRoot.setWarp(e.target.checked);
