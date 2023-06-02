@@ -64,7 +64,8 @@ export default async function ({ addon, msg, console }) {
       return originalInit.call(this, ...args);
     };
 
-    // ignore any calls from scratch to add labels/inputs, as it tries to add them to a block that probably won't exist
+    // ignore any calls from scratch to add labels/inputs, as it tries to add them to a block that probably won't exist anymore
+    // yet it will add an extra inputs after first page load if you don't change the block type?
     const oldAddLabel = ScratchBlocks.Blocks.procedures_declaration.addLabelExternal;
     ScratchBlocks.Blocks.procedures_declaration.addLabelExternal = function (isSA) {
       if (isSA) {
@@ -156,9 +157,23 @@ export default async function ({ addon, msg, console }) {
         mutationRoot.focusLastEditor_();
       });
     };
-
+    
+    let hasSetUpInputButtons = false;
+    
     const selectBlockTypeFactory = (type) => {
       return () => {
+        // don't set these listeners up until we first change the block type,
+        // since before that scratch will add them just fine for some reason
+        if (!hasSetUpInputButtons) {
+          const inputAddButtons = modal.querySelectorAll("div[class*=custom-procedures_body] > div > div");
+          inputAddButtons[0].addEventListener("click", () => mutationRoot.addStringNumberExternal(true));
+          inputAddButtons[1].addEventListener("click", () => mutationRoot.addBooleanExternal(true));
+          inputAddButtons[2].addEventListener("click", () => mutationRoot.addLabelExternal(true));
+          hasSetUpInputButtons = true;
+        }
+        // scratch-gui doesn't seem to keep track of the mutator
+        // so we do it instead, so inputs aren't lost when changing block type
+        addon.tab.redux.state.scratchGui.customProcedures.mutator = mutationRoot.mutationToDom();
         selectedType = type;
         rtlOffset = 0;
         ScratchBlocks.duplicate_(workspace.topBlocks_[0]);
@@ -176,40 +191,69 @@ export default async function ({ addon, msg, console }) {
     }
 
     const oldReduxCb = addon.tab.redux.state.scratchGui.customProcedures.callback;
-    console.log(oldReduxCb.toString());
+    /*console.log(oldReduxCb.toString());
     addon.tab.redux.dispatch({
       type: "scratch-gui/custom-procedures/SET_CALLBACK",
       callback: function (t) {
         if (t) {
           (t =
             '<xml><block type="procedures_definition"><statement name="custom_block"><shadow type="procedures_prototype">' +
-            Blockly.Xml.domToText(t) +
+            ScratchBlocks.Xml.domToText(t) +
             "</shadow></statement></block></xml>"),
-            (t = Blockly.Xml.textToDom(t).firstChild),
-            Blockly.Events.setGroup(!0),
-            (t = Blockly.Xml.domToBlock(t, e));
+            (t = ScratchBlocks.Xml.textToDom(t).firstChild),
+            ScratchBlocks.Events.setGroup(!0),
+            (t = ScratchBlocks.Xml.domToBlock(t, e));
           var o = e.scale,
             n = -e.scrollX;
           (n = e.RTL ? n + (e.getMetrics().contentWidth - 30) : n + 30),
             t.moveBy(n / o, (30 - e.scrollY) / o),
             t.scheduleSnapAndBump(),
-            Blockly.Events.setGroup(!1);
+            ScratchBlocks.Events.setGroup(!1);
         }
       },
-    });
+    });*/
+    
+    const oldCreateProcedureCallbackFactory = ScratchBlocks.Procedures.createProcedureCallbackFactory_;
+    ScratchBlocks.Procedures.createProcedureCallbackFactory_ = function(workspace) {
+      return function(mutation) {
+        if (mutation) {
+          var blockText = '<xml>' +
+              '<block type="procedures_definition">' +
+              '<statement name="custom_block">' +
+              '<shadow type="procedures_prototype">' +
+              ScratchBlocks.Xml.domToText(mutation) +
+              '</shadow>' +
+              '</statement>' +
+              '</block>' +
+              '<block type="looks_say"></block>' +
+              '</xml>';
+          var blockDom = ScratchBlocks.Xml.textToDom(blockText).firstChild;
+          ScratchBlocks.Events.setGroup(true);
+          var block = ScratchBlocks.Xml.domToBlock(blockDom, workspace);
+          var scale = workspace.scale; // To convert from pixel units to workspace units
+          // Position the block so that it is at the top left of the visible workspace,
+          // padded from the edge by 30 units. Position in the top right if RTL.
+          var posX = -workspace.scrollX;
+          if (workspace.RTL) {
+            posX += workspace.getMetrics().contentWidth - 30;
+          } else {
+            posX += 30;
+          }
+          block.moveBy(posX / scale, (-workspace.scrollY + 30) / scale);
+          block.scheduleSnapAndBump();
+          ScratchBlocks.Events.setGroup(false);
+        }
+      };
+    };
+
 
     modal.querySelector("div[class*=custom-procedures_checkbox-row] input").addEventListener("change", (e) => {
       mutationRoot.setWarp(e.target.checked);
     });
 
-    const inputAddButtons = modal.querySelectorAll("div[class*=custom-procedures_body] > div > div");
-    inputAddButtons[0].addEventListener("click", () => mutationRoot.addStringNumberExternal(true));
-    inputAddButtons[1].addEventListener("click", () => mutationRoot.addBooleanExternal(true));
-    inputAddButtons[2].addEventListener("click", () => mutationRoot.addLabelExternal(true));
-
-    modal.querySelector("button[class*=custom-procedures_ok-button]").addEventListener("click", () => {
+    /*modal.querySelector("button[class*=custom-procedures_ok-button]").addEventListener("click", () => {
       console.log(mutationRoot.mutationToDom(true));
       oldReduxCb(mutationRoot.mutationToDom(true));
-    });
+    });*/
   }
 }
