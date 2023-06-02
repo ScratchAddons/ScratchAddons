@@ -72,7 +72,7 @@ const arrowShadowPath =
   "M12.71,2.44A2.41,2.41,0,0,1,12,4.16L8.08,8.08a2.45,2.45,0,0,1-3.45,0L0.72,4.16A2.42,2.42,0,0,1,0,2.44,2.48,2.48,0,0,1,.71.71C1,0.47,1.43,0,6.36,0S11.75,0.46,12,.71A2.44,2.44,0,0,1,12.71,2.44Z";
 const arrowShadowColor = "#231f20";
 
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, msg }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
   const originalColors = JSON.parse(JSON.stringify(Blockly.Colours));
@@ -392,4 +392,58 @@ export default async function ({ addon, console }) {
   addon.settings.addEventListener("change", updateColors);
   addon.self.addEventListener("disabled", updateColors);
   addon.self.addEventListener("reenabled", updateColors);
+
+  while (true) {
+    const colorModeSubmenu = await addon.tab.waitForElement(
+      "[class*=menu-bar_menu-bar-menu_] > ul > li:nth-child(2) ul",
+      {
+        markAsSeen: true,
+        reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+      }
+    );
+    // We're running in the new version of the editor that includes this menu.
+
+    colorModeSubmenu.addEventListener(
+      "click",
+      (e) => {
+        if (addon.self.disabled) return;
+        if (!e.target.closest(".sa-colormode-submenu")) {
+          // Something went wrong with the code below this event listener
+          return;
+        }
+        if (e.target.closest(".sa-theme3-link")) {
+          window.open("https://scratch.mit.edu/scratch-addons-extension/settings#addon-editor-theme3");
+          e.stopPropagation();
+          return;
+        }
+        e.stopPropagation();
+      },
+      { capture: true }
+    );
+
+    const elementToClone = colorModeSubmenu.querySelector("[class*=settings-menu_selected_]").closest("li");
+
+    const SA_ICON_URL = addon.self.dir + "../../../images/cs/icon.svg";
+
+    const managedBySa = elementToClone.cloneNode(true);
+    addon.tab.displayNoneWhileDisabled(managedBySa, { display: "block" });
+    managedBySa.classList.add("sa-theme3-managed");
+    managedBySa.querySelector("div span").textContent = msg("/global/meta/managedBySa");
+    managedBySa.querySelector("img[class*=settings-menu_icon_]").src = SA_ICON_URL;
+
+    const addonSettingsLink = elementToClone.cloneNode(true);
+    addon.tab.displayNoneWhileDisabled(addonSettingsLink, { display: "block" });
+    addonSettingsLink.classList.add("sa-theme3-link");
+    addonSettingsLink.classList.add(addon.tab.scratchClass("menu_menu-section") || "_");
+    addonSettingsLink.querySelector("div span").textContent = msg("/global/meta/addonSettings");
+    addonSettingsLink.querySelector("img[class*=settings-menu_icon_]").src = SA_ICON_URL;
+    const addonSettingsImg = document.createElement("img");
+    addonSettingsImg.classList.add("sa-theme3-new-tab");
+    addonSettingsImg.src = addon.self.dir + "/open-link.svg";
+    addonSettingsLink.querySelector("div").appendChild(addonSettingsImg);
+
+    colorModeSubmenu.classList.add("sa-colormode-submenu");
+    colorModeSubmenu.appendChild(managedBySa);
+    colorModeSubmenu.appendChild(addonSettingsLink);
+  }
 }
