@@ -1,40 +1,5 @@
 export default async function ({ addon, msg, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
-  addon.tab.redux.initialize();
-  const vm = addon.tab.traps.vm;
-  const wksp = ScratchBlocks.getMainWorkspace();
-
-  const cleanJson = (json) => {
-    for (const block of json?.blocks || []) {
-      switch (block.opcode) {
-        case "procedures_prototype_reporter": {
-          block.opcode = "procedures_prototype";
-          break;
-        }
-        case "procedures_prototype_boolean": {
-          block.opcode = "procedures_prototype";
-          break;
-        }
-        case "procedures_definition_reporter": {
-          block.opcode = "procedures_definition";
-          break;
-        }
-      }
-    }
-  };
-
-  const originalToJson = vm.constructor.prototype.toJson;
-  vm.constructor.prototype.toJson = function (optTargetId) {
-    const json = JSON.parse(originalToJson.call(this, optTargetId));
-    if (Object.prototype.hasOwnProperty.call(json, "targets")) {
-      for (const target of targets) {
-        cleanJson(target);
-      }
-    } else {
-      cleanJson(json);
-    }
-    return JSON.stringify(json);
-  };
 
   ScratchBlocks.Blocks["procedures_prototype_reporter"] = {
     /**
@@ -129,10 +94,49 @@ export default async function ({ addon, msg, console }) {
     },
   };
 
+  addon.tab.redux.initialize();
+  const vm = addon.tab.traps.vm;
+  //vm.emitWorkspaceUpdate();
+  const wksp = ScratchBlocks.getMainWorkspace();
+
+  const cleanJson = (json) => {
+    for (const block in json?.blocks || []) {
+      switch (block.opcode) {
+        case "procedures_prototype_reporter": {
+          block.opcode = "procedures_prototype";
+          break;
+        }
+        case "procedures_prototype_boolean": {
+          block.opcode = "procedures_prototype";
+          break;
+        }
+        case "procedures_definition_reporter": {
+          block.opcode = "procedures_definition";
+          break;
+        }
+      }
+    }
+  };
+
+  const originalToJson = vm.constructor.prototype.toJSON;
+  vm.constructor.prototype.toJSON = function (optTargetId) {
+    const json = JSON.parse(originalToJson.call(this, optTargetId));
+    if (Object.prototype.hasOwnProperty.call(json, "targets")) {
+      for (const target of targets) {
+        cleanJson(target);
+      }
+    } else {
+      cleanJson(json);
+    }
+    return JSON.stringify(json);
+  };
+
+  let hasSetUpInputButtons = false;
   while (true) {
     const modal = (
       await addon.tab.waitForElement("div[class*=custom-procedures_modal-content_]", { markAsSeen: true })
     ).querySelector("div");
+    alert('modal')
     const header = modal.querySelector("div[class*=modal_header]");
     const selectTypeDiv = Object.assign(document.createElement("div"), {
       className: addon.tab.scratchClass("custom-procedures_options-row", "custom-procedures4body box_box"),
@@ -285,8 +289,6 @@ export default async function ({ addon, msg, console }) {
         mutationRoot.focusLastEditor_();
       });
     };
-
-    let hasSetUpInputButtons = false;
 
     const setUpButtons = () => {
       const inputAddButtons = modal.querySelectorAll("div[class*=custom-procedures_body] > div > div");
