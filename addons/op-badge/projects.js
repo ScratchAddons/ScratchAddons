@@ -10,7 +10,7 @@ export default async function ({ addon, console, msg }) {
     const projectAuthor = addon.tab.redux.state.preview.projectInfo.author.username;
 
     if (commentAuthor === projectAuthor) {
-      const opBadge = document.createElement("small");
+      const opBadge = document.createElement("span");
       opBadge.classList.add("sa-original-poster");
       opBadge.innerText = msg("project-author");
       comment.querySelector(".comment-top-row .username").classList.add("sa-username-is-op");
