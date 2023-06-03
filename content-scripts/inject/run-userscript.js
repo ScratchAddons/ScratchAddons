@@ -9,7 +9,7 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
     const loadUserscript = async () => {
       await scratchAddons.l10n.loadByAddonId(addonId);
       const module = await import(scriptUrl);
-      await addonObj.tab.scratchClassReady();
+      if (runAtComplete) await addonObj.tab.scratchClassReady();
       const msg = (key, placeholders) =>
         scratchAddons.l10n.get(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders);
       msg.locale = scratchAddons.l10n.locale;
