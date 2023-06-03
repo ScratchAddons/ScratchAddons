@@ -1,19 +1,16 @@
 .sa-original-poster {
-  display: inline-block;
   background-color: var(--darkWww-button, #4d97ff);
   color: var(--darkWww-button-text, white);
   border-radius: 16px;
-  text-shadow: none;
   padding: 4px;
   padding-left: 6px;
   padding-right: 6px;
 }
 
-/* Project page CSS */
-.comment .comment-top-row .username.sa-username-is-op {
+.comment-top-row .username.sa-username-is-op {
   margin-right: 0;
 }
-.comment .comment-top-row .sa-original-poster {
+.comment-top-row .sa-original-poster {
   font-size: 12px;
   margin-left: 4px;
   margin-right: auto;

@@ -15,8 +15,12 @@
   ],
   "userstyles": [
     {
-      "url": "style.css",
-      "matches": ["topics", "projects"]
+      "url": "projectpage.css",
+      "matches": ["projects"]
+    },
+    {
+      "url": "forums.css",
+      "matches": ["topics"]
     }
   ],
   "credits": [
