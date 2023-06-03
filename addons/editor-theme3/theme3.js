@@ -393,6 +393,20 @@ export default async function ({ addon, console, msg }) {
   addon.self.addEventListener("disabled", updateColors);
   addon.self.addEventListener("reenabled", updateColors);
 
+  // inject() and overrideColours() are called when changing the Scratch theme, language, or editor mode
+  const oldInject = Blockly.inject;
+  Blockly.inject = function (...args) {
+    const workspace = oldInject.call(this, ...args);
+    updateColors();
+    return workspace;
+  }
+  Blockly.inject.bindDocumentEvents_ = oldInject.bindDocumentEvents_;
+  Blockly.inject.loadSounds_ = oldInject.loadSounds_;
+  Blockly.Colours.overrideColours = function (newColors) {
+    if (!newColors) return;
+    Object.assign(originalColors, newColors);
+  }
+
   while (true) {
     const colorModeSubmenu = await addon.tab.waitForElement(
       "[class*=menu-bar_menu-bar-menu_] > ul > li:nth-child(2) ul",
