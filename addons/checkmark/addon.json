@@ -1,47 +1,39 @@
 {
-    "name": "Verification checkmark",
-    "description": "adds a checkmark to scratch team and some others",
-    "credits": [
-        {
-            "name": "Yande",
-            "link": "https://github.com/Yandemc"
-        }
-    ],
-    "dynamicEnable": true,
-    "dynamicDisable": true,
-    "versionAdded": "---",
-    "userscripts": [
-        {
-            "url": "userscript.js",
-            "matches": [
-                "https://scratch.mit.edu/*"
-            ]
-        }
-    ],
-    "settings": [
-        {
-            "id": "projectpage",
-            "name": "Show on project page",
-            "default": false,
-            "type": "boolean"
-        },
-        {
-            "id": "showicononly",
-            "name": "Show icon only",
-            "default": false,
-            "type": "boolean"
-        }
-    ],
-    "latestUpdate": {
-        "version": "1.31.0",
-        "newSettings": [
-            "projectpage"
-        ]
+  "name": "Verification checkmark",
+  "description": "adds a checkmark to scratch team and some others",
+  "credits": [
+    {
+      "name": "Yande",
+      "link": "https://github.com/Yandemc"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "---",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "settings": [
+    {
+      "id": "projectpage",
+      "name": "Show on project page",
+      "default": false,
+      "type": "boolean"
     },
-    "tags": [
-        "editor",
-        "projectPlayer",
-        "recommended"
-    ],
-    "enabledByDefault": false
+    {
+      "id": "showicononly",
+      "name": "Show icon only",
+      "default": false,
+      "type": "boolean"
+    }
+  ],
+  "latestUpdate": {
+    "version": "1.31.0",
+    "newSettings": ["projectpage"]
+  },
+  "tags": ["editor", "projectPlayer", "recommended"],
+  "enabledByDefault": false
 }
