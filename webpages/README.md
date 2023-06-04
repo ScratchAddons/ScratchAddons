@@ -1,6 +1,6 @@
 # Settings Page
 
-This directory is built, but is has already been compiled. You may recompile it only if you make changes.
+This directory is built, but has already been compiled. You may recompile it only if you make changes.
 
 ## Recommended IDE Setup
 
