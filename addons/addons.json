@@ -140,11 +140,11 @@
   "share-through-mystuff",
   "faster-project-loading",
   "auto-follow-topics",
-   "featured-dangos",
+  "featured-dangos",
   "checkmark",
-   "remember-collapsed-categories",
+  "remember-collapsed-categories",
   "featured-dangos-v2",
-  
+
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
   "// because the first in the list gets their CSS injected first,",
