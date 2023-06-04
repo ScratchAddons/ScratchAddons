@@ -32,6 +32,7 @@ body {
   padding: 0 20px;
 }
 #logo {
+  width: 30px;
   height: 30px;
   margin-inline-end: 20px;
   vertical-align: middle;
@@ -44,6 +45,7 @@ body {
   justify-content: center;
 }
 #settings > img {
+  width: 24px;
   height: 24px;
 }
 
@@ -96,6 +98,7 @@ body {
 .popup-name img {
   vertical-align: middle;
   filter: var(--content-icon-filter);
+  width: 18px;
   height: 18px;
 }
 .popup-name.sel img {
@@ -107,6 +110,7 @@ body {
 .popout > .popout-img {
   display: inline-block;
   vertical-align: -3px;
+  width: 10px;
   height: 10px;
   padding: 2px;
   margin-inline-start: 3px;

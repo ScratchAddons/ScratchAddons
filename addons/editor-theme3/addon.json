@@ -14,6 +14,18 @@
       "link": "https://github.com/DNin01"
     }
   ],
+  "info": [
+    {
+      "id": "disablesMenuBar",
+      "type": "notice",
+      "text": "If you want to access Scratch's \"Color Mode\" menu, disable this feature."
+    },
+    {
+      "id": "aboutHighContrast",
+      "type": "info",
+      "text": "The new High Contrast block colors are available as a preset below."
+    }
+  ],
   "latestUpdate": {
     "version": "1.31.0",
     "temporaryNotice": "Two new presets have been added, including a preset for the new high-contrast block colors coming to Scratch soon."
@@ -327,6 +339,28 @@
   "enabledByDefault": false,
   "presets": [
     {
+      "name": "High contrast",
+      "id": "contrast",
+      "description": "Scratch 3.0's high contrast block color palette",
+      "values": {
+        "motion-color": "#80B5FF",
+        "looks-color": "#CCB3FF",
+        "sounds-color": "#E19DE1",
+        "events-color": "#FFD966",
+        "control-color": "#FFBE4C",
+        "sensing-color": "#85C4E0",
+        "operators-color": "#7ECE7E",
+        "data-color": "#FFA54C",
+        "data-lists-color": "#FF9966",
+        "custom-color": "#FF99AA",
+        "Pen-color": "#13ECAF",
+        "sa-color": "#34E4D0",
+        "comment-color": "#FEF49C",
+        "input-color": "#FFFFFF",
+        "text": "black"
+      }
+    },
+    {
       "name": "Dark",
       "id": "new-dark",
       "description": "Dark versions of the default colors that look good in dark themes",
@@ -419,28 +453,6 @@
       "id": "black",
       "description": "Makes block backgrounds black and borders/text colored",
       "values": {
-        "motion-color": "#4C97FF",
-        "looks-color": "#9966FF",
-        "sounds-color": "#CF63CF",
-        "events-color": "#FFBF00",
-        "control-color": "#FFAB19",
-        "sensing-color": "#5CB1D6",
-        "operators-color": "#59C059",
-        "data-color": "#FF8C1A",
-        "data-lists-color": "#FF661A",
-        "custom-color": "#FF6680",
-        "Pen-color": "#0FBD8C",
-        "sa-color": "#29BEB8",
-        "comment-color": "#FEF49C",
-        "input-color": "#202020",
-        "text": "colorOnBlack"
-      }
-    },
-    {
-      "name": "High contrast",
-      "id": "contrast",
-      "description": "Scratch 3.0's new, high-contrast block color palette shown in Scratch Lab",
-      "values": {
         "motion-color": "#80B5FF",
         "looks-color": "#CCB3FF",
         "sounds-color": "#E19DE1",
@@ -454,8 +466,8 @@
         "Pen-color": "#13ECAF",
         "sa-color": "#34E4D0",
         "comment-color": "#FEF49C",
-        "input-color": "#FFFFFF",
-        "text": "black"
+        "input-color": "#202020",
+        "text": "colorOnBlack"
       }
     }
   ],
