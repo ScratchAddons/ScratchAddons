@@ -163,6 +163,7 @@ let acceptEdit = false;
   assetsElem.appendChild(assetsTable);
 
   document.getElementById("loding").hidden = true;
+  document.getElementsByTagName("title")[0].textContent = `${queries.get("id")} | Scratch Project Souce`
 })();
 function viewJSON(text) {
   const highlightHTML = Prism.highlight(text, Prism.languages.json, "json");
