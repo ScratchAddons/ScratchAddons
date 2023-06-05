@@ -15,7 +15,6 @@ const maxLines = parseInt(queries.get("maxlines"));
 let acceptEdit = false;
 (async function () {
   loadDom();
-  document.getElementById("h-title").textContent = "Loding...";
   let jsonData;
   try {
     jsonData = await (
@@ -163,7 +162,7 @@ let acceptEdit = false;
   assets.forEach((elem) => assetsTable.appendChild(assetsInfo(elem)));
   assetsElem.appendChild(assetsTable);
 
-  document.getElementById("h-title").textContent = "Sources";
+  document.getElementById("loding").hidden = true;
 })();
 function viewJSON(text) {
   const highlightHTML = Prism.highlight(text, Prism.languages.json, "json");

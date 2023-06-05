@@ -43,14 +43,42 @@
       .edit-mode-label {
         font-size: 1em;
       }
+      .navbar {
+        background-color: #4d97ff;
+        box-shadow: 0 0 3px rgba(0,0,0,.25);
+        display: flex;
+        justify-content: center;
+      }
+      .title{
+        font-size: 2em;
+      }
+      .white{
+        color: #fff; 
+      }
+      table th {
+        background-color: #bbd8ff;
+      }
+      table {
+        border-collapse: collapse;
+      }
+      table td {
+        border-left: solid 1px black;
+        /*実線 1px 黒*/
+      }
+      table tr:nth-child(odd) {
+        background-color: #f8f8f8;
+      }
     </style>
     <script src="../../libraries/common/cs/jszip.min.js"></script>
     <link rel="stylesheet" href="../../libraries/common/cs/prism.css" />
     <script src="../../libraries/common/cs/prism.js"></script>
   </head>
   <body>
-    <h1 id="h-title">Loding...</h1>
-    <div style="display: flex">
+    <div class="navbar">
+      <div class="title white" style="margin: 0 10px;">Sources</div>
+    </div>
+    <div id="loding" style="text-align: center; font-size: 2em;">Now Loding...</div>
+    <div style="display: flex; margin-top: 1em;">
       <div id="viewer">
         <textarea id="json-editor" hidden></textarea>
         <div id="json-code">
