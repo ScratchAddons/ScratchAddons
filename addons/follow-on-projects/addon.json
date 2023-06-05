@@ -1,0 +1,26 @@
+{
+  "name": "Follow button on projects",
+  "description": "Adds a button to every project that allows you to follow the project creator.",
+  "tags": ["community", "projectPage"],
+  "versionAdded": "1.33.0",
+  "userscripts": [
+    {
+      "matches": ["projects"],
+      "url": "userscript.js"
+    }
+  ],
+  "userstyles": [
+    {
+      "matches": ["projects"],
+      "url": "userstyle.css"
+    }
+  ],
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld/"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}

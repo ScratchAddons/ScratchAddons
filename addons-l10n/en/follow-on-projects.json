@@ -1,0 +1,7 @@
+{
+  "follow-on-projects/follow": "Follow",
+  "follow-on-projects/unfollow": "Unfollow",
+  "follow-on-projects/failed-following": "Failed following {name}. Make sure the account is not deleted and you are logged in.",
+  "follow-on-projects/failed-unfollowing": "Failed unfollowing {name}. Make sure the account is not deleted and you are logged in.",
+  "follow-on-projects/nonexistent": "{name}'s account is deleted."
+}
