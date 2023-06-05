@@ -179,7 +179,7 @@ export default async function ({ addon, console, msg, safeMsg }) {
           if (extension.id === "data") return extension;
           else return callback(extension);
         });
-      }
+      };
     }
     return result;
   };
