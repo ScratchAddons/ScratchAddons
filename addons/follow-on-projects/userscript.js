@@ -1,4 +1,6 @@
 export default async function ({ addon, msg }) {
+  addon.tab.waitForElement(".title");
+
   const followUser = async (user, doFollow) => {
     return fetch(
       `https://scratch.mit.edu/site-api/users/followers/${user}/${doFollow ? "add" : "remove"}/?usernames=${username}`,
