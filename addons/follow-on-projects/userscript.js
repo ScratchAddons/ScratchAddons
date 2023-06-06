@@ -1,4 +1,6 @@
 export default async function ({ addon, msg }) {
+  addon.tab.waitForElement(".title");
+
   const followUser = async (user, doFollow) => {
     return fetch(
       `https://scratch.mit.edu/site-api/users/followers/${user}/${doFollow ? "add" : "remove"}/?usernames=${username}`,
@@ -18,11 +20,11 @@ export default async function ({ addon, msg }) {
     if (following) {
       followButton.textContent = msg("unfollow");
       followButton.title = msg("unfollow");
-      followButton.classList.add("unfollow");
+      followButton.classList.remove("notfollowing");
     } else {
       followButton.textContent = msg("follow");
       followButton.title = msg("follow");
-      followButton.classList.remove("unfollow");
+      followButton.classList.add("notfollowing");
     }
     followButton.title = userExists ? followButton.title : msg("nonexistent", { name: creator });
   };
@@ -33,6 +35,7 @@ export default async function ({ addon, msg }) {
     // this project is by the user running the addon
     return;
   }
+  title.id = "profile-data"; // for confirm-actions
 
   const creator = title.querySelector("a").textContent;
   const userPage = await fetch(`https://scratch.mit.edu/users/${creator}/`).then((response) => ({
@@ -48,11 +51,10 @@ export default async function ({ addon, msg }) {
   }
 
   const followButton = document.createElement("button");
-  followButton.classList.add("button");
+  followButton.classList.add("button", "follow-button"); // follow-button for confirm-actions
   followButton.id = "sa-follow-button";
   if (!userExists) {
     followButton.disabled = true;
-    followButton.classList.add("disabled");
   }
   adjustButton();
   followButton.addEventListener("click", async () => {
@@ -65,5 +67,16 @@ export default async function ({ addon, msg }) {
     }
   });
   addon.tab.displayNoneWhileDisabled(followButton);
+
+  // for confirm-actions
+  const followText = document.createElement("span");
+  followText.classList.add("follow", "sa-follow-on-projects-confirm-actions");
+  followText.textContent = msg("follow");
+  followButton.appendChild(followText);
+  const unfollowText = document.createElement("span");
+  unfollowText.classList.add("unfollow", "sa-follow-on-projects-confirm-actions");
+  unfollowText.textContent = msg("unfollow");
+  followButton.appendChild(unfollowText);
+
   title.appendChild(followButton);
 }

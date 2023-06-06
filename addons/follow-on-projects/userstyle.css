@@ -4,11 +4,15 @@
   padding: 0.25em 1em;
 }
 
-#sa-follow-button.unfollow,
-#sa-follow-button.disabled {
+#sa-follow-button:not(.notfollowing),
+#sa-follow-button:disabled {
   background-color: var(--darkWww-gray-darker, #b3b3b3);
 }
 
-#sa-follow-button.disabled:hover {
+#sa-follow-button:disabled:hover {
   cursor: not-allowed;
+}
+
+.sa-follow-on-projects-confirm-actions {
+  display: none;
 }
