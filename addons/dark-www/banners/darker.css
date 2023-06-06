@@ -21,6 +21,7 @@
   background-color: #99004d;
 }
 .hoc-banner,
+.feature-banner,
 .developers .title-banner.masthead,
 .sa-annual-report-2019 .reach-section,
 .initiatives-section .initiatives-subsection-header.tools,
@@ -37,6 +38,7 @@
   background-color: #064734;
 }
 .hoc-banner .hoc-banner-image,
+.feature-banner .feature-banner-image,
 .initiatives-section .initiatives-tools .abhi-quote .comment-text,
 .initiatives-section .initiatives-tools .abhi-quote .comment-text::before,
 .initiatives-section .initiatives-tools .abhi-quote .comment-text::after {
