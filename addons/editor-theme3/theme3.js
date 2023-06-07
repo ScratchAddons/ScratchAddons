@@ -163,9 +163,9 @@ export default async function ({ addon, console, msg }) {
       if (match) {
         const oldSvg = atob(match[1]);
         const category = this.id_ === "sa-blocks" ? saCategory : extensionsCategory;
-        const newColor = isColoredTextMode ? tertiaryColor(category) : primaryColor(category);
+        const newColor = textMode() === "white" ? primaryColor(category) : tertiaryColor(category);
         if (newColor) {
-          const newSvg = oldSvg.replace(/#29beb8|#0ebd8c/gi, newColor);
+          const newSvg = oldSvg.replace(/#29beb8|#229487|#0ebd8c/gi, newColor);
           this.iconURI_ = `data:image/svg+xml;base64,${btoa(newSvg)}`;
         }
       }
