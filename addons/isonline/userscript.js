@@ -1,5 +1,5 @@
 const checkIn = async (username) => {
-  let res = await fetch(`https://isoffline.grahamsh.com/ping`, {
+  let res = await fetch(`https://isoffline.grahamsh.com/online`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
