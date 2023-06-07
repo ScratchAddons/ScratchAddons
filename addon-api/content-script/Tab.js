@@ -293,7 +293,7 @@ export default class Tab extends Listenable {
       scratchAddons.console.warn("addon.tab.scratchClass() was used outside a project page");
       return "";
     }
-    
+
     if (!this._calledScratchClassReady)
       throw new Error("Wait until addon.tab.scratchClassReady() resolves before using addon.tab.scratchClass");
 
