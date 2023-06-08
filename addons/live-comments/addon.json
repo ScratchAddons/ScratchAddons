@@ -1,0 +1,32 @@
+{
+  "name": "Live Page Comments",
+  "description": "Displays new comments and replies live",
+  "credits": [
+    {
+      "name": "MeechaPooch",
+      "note": "original",
+      "id": "original",
+      "link": "https://github.com/MeechaPooch"
+    }
+  ],
+  "info": [],
+  "userscripts": [
+    {
+      "url": "script.js",
+      "matches": ["profiles"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["profiles"]
+    }
+  ],
+  "settings": [],
+  "tags": ["community", "profiles", "comments"],
+  "versionAdded": "1.3.0",
+  "latestUpdate": {
+    "version": "1.33.0",
+    "newSettings": ["shareUsername"]
+  }
+}
