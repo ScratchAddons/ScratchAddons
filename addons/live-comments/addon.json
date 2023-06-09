@@ -37,7 +37,7 @@
       "matches": ["profiles", "projects", "studios"]
     }
   ],
-  "tags": ["comments", "community", "live"],
+  "tags": ["comments", "community"],
   "versionAdded": "1.33.0",
   "latestUpdate": {
     "version": "1.33.0",
