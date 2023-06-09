@@ -1,11 +1,9 @@
 {
-  "name": "Live Page Comments",
-  "description": "Displays new comments and replies live",
+  "name": "Live Profile Comments",
+  "description": "Adds new comments and replies to comments on the profile page in real-time",
   "credits": [
     {
       "name": "MeechaPooch",
-      "note": "original",
-      "id": "original",
       "link": "https://github.com/MeechaPooch"
     }
   ],

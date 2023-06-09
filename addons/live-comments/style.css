@@ -1,0 +1,13 @@
+@keyframes newComment {
+    100% {
+        background-color: hsla(142, 100%, 50%, 0.212);
+    }
+    0% {
+        background-color: hsla(142, 100%, 50%, 0);
+    }
+}
+
+.newCom {
+    animation: newComment 0.5s 4 0s linear alternate;
+    animation-fill-mode: both;
+}
