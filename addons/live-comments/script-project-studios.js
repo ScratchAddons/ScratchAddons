@@ -67,7 +67,6 @@ export default async function ({ addon, global, console, msg }) {
   let newest = Date.now();
 
   while (true) {
-
     if (enabled) {
       const loopOffset = 40;
       let offset = -loopOffset;
