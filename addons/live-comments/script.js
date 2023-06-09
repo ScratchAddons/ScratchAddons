@@ -1,5 +1,4 @@
 export default async function ({ addon, msg }) {
-
   let path = window.location.pathname;
   let username = path.split("/")[2];
 
@@ -72,8 +71,8 @@ export default async function ({ addon, msg }) {
             let rolderSiblingAlreadyOnPage = document.getElementById(rolderSiblingId)?.parentElement;
             // console.log("rolder", rolderSiblingAlreadyOnPage);
             rli.classList.remove("truncated"); // having truncated hides the comment element
-            rli.classList.add('newCom')
-            $(rli.querySelector('span.time'))?.timeago()
+            rli.classList.add("newCom");
+            $(rli.querySelector("span.time"))?.timeago();
             if (rolderSiblingAlreadyOnPage) {
               rolderSiblingAlreadyOnPage.after(rli);
               rolderSiblingAlreadyOnPage.classList.remove("last");
@@ -86,8 +85,8 @@ export default async function ({ addon, msg }) {
         // console.log("SOMETHING NEW!!!");
         // get older sibling id, and append new comment after that sibling on the document
         let olderSiblingId = tlr.previousElementSibling?.firstElementChild?.id;
-        tlr.classList.add('newCom')
-        $(tlr.querySelector('span.time')).timeago()
+        tlr.classList.add("newCom");
+        $(tlr.querySelector("span.time")).timeago();
         let olderSiblingAlreadyOnPage = document.getElementById(olderSiblingId)?.parentElement;
         if (olderSiblingAlreadyOnPage) {
           olderSiblingAlreadyOnPage.after(tlr);
