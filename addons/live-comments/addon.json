@@ -28,7 +28,7 @@
     },
     {
       "url": "script-project-studios.js",
-      "matches": ["projects", "https://scratch.mit.edu/studios/*/comments"]
+      "matches": ["projects", "studios"]
     }
   ],
   "userstyles": [
