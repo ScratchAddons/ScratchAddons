@@ -2,7 +2,40 @@ export default async function ({ addon, msg }) {
   let path = window.location.pathname;
   let username = path.split("/")[2];
 
+
+
+
+  let eButton = document.createElement('button')
+
+  function addButton() {
+    let commentsText = Array.from(document.querySelectorAll('h4'))
+    .find(el => el.innerText==('Comments'));
+   
+    function setButtonStyles(){
+      eButton.innerHTML = eButton.enabled ? 'Live on' : 'Live off'
+      eButton.classList.add(eButton.enabled ? 'live-button-enabled' : 'live-button-disabled')
+      eButton.classList.remove((!eButton.enabled) ? 'live-button-enabled' : 'live-button-disabled')
+      refreshComments()
+    }
+
+    eButton.onclick = (e)=>{
+      eButton.enabled=!eButton.enabled;
+      setButtonStyles()
+    }
+
+    eButton.classList.add('live-button')
+    eButton.enabled = true
+    setButtonStyles()
+   
+   
+   // place button
+    commentsText?.after(eButton)
+  }
+  addButton()
+
+
   async function refreshComments() {
+    if(!eButton.enabled) {return}
     //// FUNCTIONS
 
     ///// CODE
