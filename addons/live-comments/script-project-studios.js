@@ -114,7 +114,6 @@ export default async function ({ addon, global, console, msg }) {
         offset = -loopOffset;
 
         while (true) {
-          console.log("yo");
           if (!enabled) {
             break;
           }
