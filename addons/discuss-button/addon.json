@@ -27,6 +27,15 @@
           "compact-nav": true
         }
       }
+    },
+    {
+      "url": "stick.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "if": {
+        "settings": {
+          "stick": "page"
+        }
+      }
     }
   ],
   "settings": [
@@ -86,14 +95,30 @@
       "id": "compact-nav",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Stick to",
+      "id": "stick",
+      "type": "select",
+      "default": "screen",
+      "potentialValues": [
+        {
+          "id": "screen",
+          "name": "Top of screen"
+        },
+        {
+          "id": "page",
+          "name": "Top of page"
+        }
+      ]
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.0.0",
   "latestUpdate": {
-    "version": "1.28.0",
-    "newSettings": ["compact-nav"],
+    "version": "1.32.0",
+    "newSettings": ["stick"],
     "isMajor": false
   },
   "tags": ["community", "featured"],

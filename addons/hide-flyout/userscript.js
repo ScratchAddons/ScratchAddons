@@ -1,8 +1,4 @@
 export default async function ({ addon, console, msg }) {
-  // Weird glitch when cat blocks mode is enabled if
-  // active Scratch tab is costumes or sounds
-  if (addon.tab.isScratchAprilFools23()) return;
-
   let placeHolderDiv = null;
   let lockObject = null;
   let lockButton = null;
@@ -233,7 +229,12 @@ export default async function ({ addon, console, msg }) {
   while (true) {
     flyOut = await addon.tab.waitForElement(".blocklyFlyout", {
       markAsSeen: true,
-      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "scratch-gui/locales/SELECT_LOCALE", "fontsLoaded/SET_FONTS_LOADED"],
+      reduxEvents: [
+        "scratch-gui/mode/SET_PLAYER",
+        "scratch-gui/locales/SELECT_LOCALE",
+        "scratch-gui/theme/SET_THEME",
+        "fontsLoaded/SET_FONTS_LOADED",
+      ],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
     scrollBar = document.querySelector(".blocklyFlyoutScrollbar");

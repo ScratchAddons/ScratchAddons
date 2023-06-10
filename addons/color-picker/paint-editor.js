@@ -35,9 +35,7 @@ export default async ({ addon, console, msg }) => {
       setTimeout(() => {
         const previousTool = addon.tab.redux.state.scratchPaint.color.eyeDropper.previousTool;
         if (previousTool) previousTool.activate();
-        addon.tab.redux.state.scratchPaint.color.eyeDropper.callback(
-          tinycolor(hex).setAlpha(scratchAddons.opacitySliderAlpha).toRgbString()
-        );
+        addon.tab.redux.state.scratchPaint.color.eyeDropper.callback(tinycolor(hex).toHexString());
         addon.tab.redux.dispatch({
           type: "scratch-paint/eye-dropper/DEACTIVATE_COLOR_PICKER",
         });
@@ -46,6 +44,20 @@ export default async ({ addon, console, msg }) => {
     addon.tab.redux.addEventListener("statechanged", onEyeDropperOpened);
     element.children[1].children[0].click();
   };
+  function updateColor(element) {
+    setTimeout(() => {
+      const color = getColor(element);
+      const saColorPickerColor = element?.parentElement?.querySelector(
+        ".sa-color-picker-color.sa-color-picker-paint-color"
+      );
+      const saColorPickerText = element?.parentElement?.querySelector(
+        ".sa-color-picker-text.sa-color-picker-paint-text"
+      );
+      if (!saColorPickerColor || !saColorPickerText) return;
+      saColorPickerColor.value = color || "#000000";
+      saColorPickerText.value = color || "";
+    }, 50);
+  }
   while (true) {
     const element = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', {
       markAsSeen: true,
@@ -89,12 +101,14 @@ export default async ({ addon, console, msg }) => {
       setColor((saColorPickerColor.value = normalizeHex(value)), element);
     });
     prevEventHandler = ({ detail }) => {
-      if (detail.action.type === "scratch-paint/color-index/CHANGE_COLOR_INDEX") {
-        setTimeout(() => {
-          const color = getColor(element);
-          saColorPickerColor.value = color || "#000000";
-          saColorPickerText.value = color || "";
-        }, 100);
+      if (
+        detail.action.type === "scratch-paint/color-index/CHANGE_COLOR_INDEX" ||
+        detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR" ||
+        detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR_2" ||
+        (detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_GRADIENT_TYPE" &&
+          detail.action.gradientType === "SOLID")
+      ) {
+        rateLimiter.limit(() => updateColor(element));
       }
     };
     addon.tab.redux.addEventListener("statechanged", prevEventHandler);
