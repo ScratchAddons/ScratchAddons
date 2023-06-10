@@ -3,7 +3,7 @@
   "description": "Automatically adds the selected block extensions such as music or pen to the block category menu in the editor.",
   "info": [
     {
-      "type": "warning",
+      "type": "notice",
       "text": "When the video sensing option is enabled, the webcam will turn on every time the editor is opened.",
       "id": "webcam"
     },
