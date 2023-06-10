@@ -42,32 +42,24 @@ Other extensions (and even forks of Scratch) can also provide their users with m
 
 ## Install
 
-### From extension stores
+No build is required, just download the source and load it into a web browser.
 
-[![](https://img.shields.io/chrome-web-store/v/fbeffbjdlemaoicjdapfpikkikjoneco?style=flat-square&logo=google-chrome&logoColor=white&label=Chrome&color=4285F4)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
-[![](https://img.shields.io/amo/v/scratch-messaging-extension?style=flat-square&logo=firefox-browser&logoColor=white&label=Firefox&color=FF7139)](https://addons.mozilla.org/firefox/addon/scratch-messaging-extension/)
-[![](https://img.shields.io/badge/dynamic/json?style=flat-square&logo=microsoftedge&label=Microsft+Edge&prefix=v&color=028A0F&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Filiepgjnemckemgnledoipfiilhajdjj)](https://microsoftedge.microsoft.com/addons/detail/scratch-addons/iliepgjnemckemgnledoipfiilhajdjj)
 
-Scratch Addons is available on the Chrome Web Store, Firefox Add-ons and Microsoft Edge Add-ons. The Chrome version should work on other Chromium-based browsers such as Opera, Vivaldi or Brave. Safari is not supported.
-
-### From source
-
-No build is required. Just download the source and load it into a web browser.
-
-The source can also be downloaded as a zip, but cloning the repository with Git is recommended for development.
 ```
 git clone https://github.com/ScratchAddons/ScratchAddons.git
 ```
 
-#### Loading the extension (Chrome)
+For other installation methods and browser support, check [the documentation](https//scratchaddons.com/docs/getting-started/installing).
 
-Use this method for other Chromium-based browsers such as Microsoft Edge (v79+), Opera, Brave or Vivaldi.
+### Loading the extension (Chrome)
+
+Use this method on Microsoft Edge, Opera, Brave, Vivaldi and other Chromium-based browsers.
 
 1. Type `chrome://extensions` into your address bar to open the Extension Management page.
 2. Enable the Developer Mode toggle in the top-right corner.
 3. Click the `Load unpacked` button on the top and select the extension folder which has the `manifest.json` file in it. 
 
-#### Loading the extension (Firefox)
+### Loading the extension (Firefox)
 1. Type `about:debugging` into the address bar to open the debugging page by typing it into your address bar.
 2. Click `This Firefox` on the left-hand menu.
 3. Click `Load Temporary Add-on...` and select the `manifest.json` file.
