@@ -10,7 +10,7 @@
 [![](https://img.shields.io/github/license/ScratchAddons/ScratchAddons?style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/blob/master/LICENSE)
 [![](https://img.shields.io/badge/chat-on_discord-7289da.svg?style=flat-square)](https://discord.gg/R5NBqwMjNc) [![](https://img.shields.io/badge/website-scratchaddons.com-ff7b26.svg?style=flat-square)](https://scratchaddons.com)
 
-<img src="images/demo.png" alt="Scratch Addons demo" max-height=500px style="text-align:center;"></img>
+<img src="images/demo.png" alt="Scratch Addons demo" height=500px></img>
 
 ## About
 
@@ -51,7 +51,7 @@ git clone https://github.com/ScratchAddons/ScratchAddons.git
 
 For other installation methods and browser support, check [the documentation](https//scratchaddons.com/docs/getting-started/installing).
 
-### Loading the extension (Chrome)
+### Load the extension (Chrome)
 
 Use this method on Microsoft Edge, Opera, Brave, Vivaldi and other Chromium-based browsers.
 
@@ -59,7 +59,7 @@ Use this method on Microsoft Edge, Opera, Brave, Vivaldi and other Chromium-base
 2. Enable the Developer Mode toggle in the top-right corner.
 3. Click the `Load unpacked` button on the top and select the extension folder which has the `manifest.json` file in it. 
 
-### Loading the extension (Firefox)
+### Load the extension (Firefox)
 1. Type `about:debugging` into the address bar to open the debugging page by typing it into your address bar.
 2. Click `This Firefox` on the left-hand menu.
 3. Click `Load Temporary Add-on...` and select the `manifest.json` file.
