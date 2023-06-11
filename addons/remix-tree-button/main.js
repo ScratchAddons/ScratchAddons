@@ -125,7 +125,7 @@ export default async function ({ addon, console, msg }) {
       .then(() => {
         loadRemixButton();
         addIconLink();
-        
+
         // This will make it possible to click the remixes icon to go to the remix tree,
         // but the function will only redirect if the appropriate setting is enabled.
         document.querySelector(".project-remixes").addEventListener("click", (e) => {
