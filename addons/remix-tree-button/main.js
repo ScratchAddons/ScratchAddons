@@ -3,6 +3,7 @@ export default async function ({ addon, console, msg }) {
   function loadRemixButton() {
     if (document.querySelector("#scratchAddonsRemixTreeBtn") && addon.settings.get("type") === "new") {
       document.querySelector("#scratchAddonsRemixTreeBtn").style.display = "block";
+      linkOpensInSameTab();
     } else {
       if (addon.tab.editorMode === "projectpage") {
         addon.tab
@@ -16,10 +17,16 @@ export default async function ({ addon, console, msg }) {
               // Change the link from ".../remixes" to ".../remixtree".
               addon.tab.waitForElement(".remix-list").then(() => {
                 document.querySelector(".remix-list a").href = window.location.href + "remixtree";
+                if (addon.settings.get("new-tab")) {
+                  linkOpensInNewTab();
+                } else {
+                  linkOpensInSameTab();
+                }
                 document.querySelector(".remix-list a span").textContent = msg("remix-tree-link");
               });
             } else {
               // Add a button next to "Copy Link".
+              linkOpensInSameTab();
               if (document.querySelector("#scratchAddonsRemixTreeBtn")) return; // Check again because we're inside a promise
               const remixtree = document.createElement("button");
               const remixtreeSpan = document.createElement("span");
@@ -27,8 +34,8 @@ export default async function ({ addon, console, msg }) {
               remixtree.className = "button action-button remixtree-button";
               remixtree.id = "scratchAddonsRemixTreeBtn";
               remixtree.appendChild(remixtreeSpan);
-              remixtree.addEventListener("click", () => {
-                goToRemixTree();
+              remixtree.addEventListener("click", (e) => {
+                goToRemixTree(e);
               });
               addon.tab.appendToSharedSpace({ space: "afterCopyLinkButton", element: remixtree, order: 0 });
             }
@@ -37,12 +44,22 @@ export default async function ({ addon, console, msg }) {
     }
   }
 
-  function goToRemixTree() {
+  function goToRemixTree(e) {
     // Follow the link to the remix tree after clicking the button.
     if (addon.settings.get("open-with-icon") && !addon.self.disabled) {
-      window.location.href = `https://scratch.mit.edu/projects/${
-        window.location.href.split("projects")[1].split("/")[1]
-      }/remixtree`;
+      if (addon.settings.get("new-tab") || e.ctrlKey || e.metaKey) {
+        window.open(
+          `https://scratch.mit.edu/projects/${
+            window.location.href.split("projects")[1].split("/")[1]
+          }/remixtree`,
+          "_blank",
+          "noopener,noreferrer"
+        );
+      } else {
+        window.location.href = `https://scratch.mit.edu/projects/${
+          window.location.href.split("projects")[1].split("/")[1]
+        }/remixtree`;
+      }
     }
   }
 
@@ -73,8 +90,8 @@ export default async function ({ addon, console, msg }) {
             const remixesIcon = document.querySelector(".project-remixes");
             remixesIcon.style.cursor = "pointer";
             remixesIcon.title = msg("go-to-remix-tree");
-            remixesIcon.addEventListener("click", () => {
-              goToRemixTree();
+            remixesIcon.addEventListener("click", (e) => {
+              goToRemixTree(e);
             });
           });
       }
@@ -87,6 +104,18 @@ export default async function ({ addon, console, msg }) {
       const remixesIcon = document.querySelector(".project-remixes");
       remixesIcon.style.removeProperty("cursor");
       remixesIcon.removeAttribute("title");
+    }
+  }
+
+  function linkOpensInNewTab() {
+    document.querySelector(".remix-list a").target = "_blank";
+    document.querySelector(".remix-list a").rel = "noopener noreferrer";
+  }
+
+  function linkOpensInSameTab() {
+    if (addon.tab.editorMode === "projectpage") {
+      document.querySelector(".remix-list a").removeAttribute("target");
+      document.querySelector(".remix-list a").removeAttribute("rel");
     }
   }
 
