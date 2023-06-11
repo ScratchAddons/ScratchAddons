@@ -26,8 +26,8 @@
 }
 .live-button-disabled {
   background: rgb(255, 255, 255) !important;
-  color:#575e75;
+  color: #575e75;
 }
-.live-button-disabled:hover{
-  color:rgb(121, 28, 28) !important;
+.live-button-disabled:hover {
+  color: rgb(121, 28, 28) !important;
 }
