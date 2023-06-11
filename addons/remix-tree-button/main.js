@@ -85,7 +85,7 @@ export default async function ({ addon, console, msg }) {
     // Removes the link from the remixes statistic icon.
     if (addon.tab.editorMode === "projectpage") {
       const remixesIcon = document.querySelector(".project-remixes");
-      remixesIcon.removeAttribute("style");
+      remixesIcon.style.removeProperty("cursor");
       remixesIcon.removeAttribute("title");
     }
   }
