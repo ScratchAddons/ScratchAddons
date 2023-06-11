@@ -313,13 +313,18 @@ if (isScratchGui || isProject) {
 
   if (document.querySelector(elementSelector)) loadClasses();
   else {
+    let foundElement = false;
     const stylesObserver = new MutationObserver((mutationsList) => {
       if (document.querySelector(elementSelector)) {
+        foundElement = true;
         stylesObserver.disconnect();
         loadClasses();
       }
     });
     stylesObserver.observe(document.documentElement, { childList: true, subtree: true });
+    setTimeout(() => {
+      if (!foundElement) scratchAddons.console.log("Did not find elementSelector element after 10 seconds.");
+    }, 10000);
   }
 }
 
