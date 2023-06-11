@@ -49,9 +49,7 @@ export default async function ({ addon, console, msg }) {
     if (addon.settings.get("open-with-icon") && !addon.self.disabled) {
       if (addon.settings.get("new-tab") || e.ctrlKey || e.metaKey) {
         window.open(
-          `https://scratch.mit.edu/projects/${
-            window.location.href.split("projects")[1].split("/")[1]
-          }/remixtree`,
+          `https://scratch.mit.edu/projects/${window.location.href.split("projects")[1].split("/")[1]}/remixtree`,
           "_blank",
           "noopener,noreferrer"
         );
