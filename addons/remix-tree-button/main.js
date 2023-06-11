@@ -88,9 +88,6 @@ export default async function ({ addon, console, msg }) {
             const remixesIcon = document.querySelector(".project-remixes");
             remixesIcon.style.cursor = "pointer";
             remixesIcon.title = msg("go-to-remix-tree");
-            remixesIcon.addEventListener("click", (e) => {
-              goToRemixTree(e);
-            });
           });
       }
     }
@@ -118,8 +115,24 @@ export default async function ({ addon, console, msg }) {
   }
 
   // Initialize:
-  loadRemixButton();
-  addIconLink();
+  initialSetup();
+
+  function initialSetup() {
+    addon.tab
+      .waitForElement(".flex-row.subactions", {
+        reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+      })
+      .then(() => {
+        loadRemixButton();
+        addIconLink();
+        
+        // This will make it possible to click the remixes icon to go to the remix tree,
+        // but the function will only redirect if the appropriate setting is enabled.
+        document.querySelector(".project-remixes").addEventListener("click", (e) => {
+          goToRemixTree(e);
+        });
+      });
+  }
 
   // Events:
   addon.tab.addEventListener("urlChange", () => {
