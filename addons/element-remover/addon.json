@@ -1,0 +1,53 @@
+{
+  "name": "Element remover",
+  "description": "Remove elements inside scratch",
+  "userstyles": [
+    {
+      "url": "username.css",
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ],
+      "if": {
+        "settings": { "username": true}
+      }
+    },
+    {
+      "url": "publish.css",
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ],
+      "if": {
+        "settings": { "publish": true}
+      }
+    }
+  ],
+  "tags": [
+    "community",
+    "projectPage",
+    "projectPlayer"
+  ],
+  "credits": [
+    {
+      "name": "Onako2",
+      "link": "https://scratch.mit.edu/users/Onako2"
+    }
+  ],
+  "latestUpdate": {
+    "version": "1.0.0"
+  },
+  "versionAdded": "1.33.0",
+  "settings": [
+    {
+      "name": "Remove username Sensing block warning",
+      "id": "username",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "remove publish project banner on project page",
+      "id": "publish",
+      "type": "boolean",
+      "default": false
+    }
+  ]
+}
