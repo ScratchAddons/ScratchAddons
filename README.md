@@ -71,7 +71,7 @@ For other installation methods and browser support, check [the documentation](ht
 
 ### Load the extension (Chrome)
 
-Use this method on Microsoft Edge, Opera, Brave, Vivaldi and other Chromium-based browsers.
+Use this method on Google Chrome, Microsoft Edge, Opera, Brave, Vivaldi and other Chromium-based browsers.
 
 1. Type `chrome://extensions` into your address bar to open the Extension Management page.
 2. Enable the Developer Mode toggle in the top-right corner.
