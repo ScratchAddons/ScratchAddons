@@ -40,6 +40,20 @@ Scratch Addons by itself is just an addon loader. Its main tasks are to:
 
 Other extensions and even forks of Scratch can also provide their users with most addons from Scratch Addons, as long as a compatibility layer for `addon.*` and other parts of the addon loader are present. A notable example is the [TurboWarp](https://github.com/TurboWarp/scratch-gui/tree/develop/src/addons) editor. These also inherit translations from the Scratch Addons project.
 
+### Structure
+
+- `.github`: GitHub templates, workflows and contributing files.
+- `_locales`: Translations for the settings page, popup and everything else except addons.
+- `addon-api`: The code for the `addon-*` APIs.
+- `addons-l10n`: Translations for strings userscripts add to a page. Each addon has its own file.
+- `addons`: The addons themselves. Each addon has it own directory with an `addon.json` and an entry in `addons.json`.
+- `background`: Background scripts for handling things such as addon settings.
+- `content-scripts`: The main extension script and addon injector.
+- `images`: Logos, screenshots and icons. Images only used by addons go in that addon's directory instead.
+- `libraries`: Libraries for things such as handling the global theme. There are also some third-party libraries.
+- `popups`: The code for popup addons, but not the addons tab. The `addon.json` for popup addons are still located in the `addons` directory.
+- `webpages`: The settings page and popup.
+
 ## Install
 
 No build is required, just download the source and load it into a web browser.
