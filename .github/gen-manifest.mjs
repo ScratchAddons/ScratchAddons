@@ -1,5 +1,6 @@
 const PERMISSIONS_IGNORED_IN_CHROME = ["clipboardWrite"];
-const PERMISSIONS_IGNORED_IN_FIREFOX = ["declarativeNetRequestWithHostAccess"];
+// Previously included declarativeNetRequestWithHostAccess.
+const PERMISSIONS_IGNORED_IN_FIREFOX = [];
 // These should be removed during production manifest gen.
 const PERMISSIONS_ALWAYS_IGNORED = [
   "https://scratchfoundation.github.io/scratch-gui/*",
