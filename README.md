@@ -101,7 +101,7 @@ We recommend Visual Studio Code as the code editor.
 
 ### Translations
 
-Translations are handled by Trasifex. If you are interested in translating the extension, read [Joining the Localization Team](https://scratchaddons.com/docs/localization/joining-the-localization-team/)
+Translations are handled by Transifex. If you are interested in translating the extension, read [Joining the Localization Team](https://scratchaddons.com/docs/localization/joining-the-localization-team/)
 
 ### Documentation
 
