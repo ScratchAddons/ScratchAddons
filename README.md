@@ -14,7 +14,7 @@
 
 ## About
 
-Scratch Addons combines new and existing features and themes for the Scratch website and project editor into one easy-to-access and configurable browser extension. The mission is to provide a centralized, up-to-date platform for community development of new features and themes for Scratch.
+[Scratch Addons](https://github.com/ScratchAddons) combines new and existing features and themes for the Scratch website and project editor into one easy-to-access and configurable browser extension. The mission is to provide a centralized, up-to-date platform for community development of new features and themes for Scratch.
 
 ### What is an addon?
 
@@ -85,21 +85,23 @@ Note that Firefox extensions loaded this way are removed when the browser is clo
 
 ### Suggestions and bug reports
 
-If you found a bug in Scratch Addons or have a suggestion, [create an issue](https://github.com/ScratchAddons/ScratchAddons/issues/new/choose) after checking for duplicates. Alternatively, you can open a [discussion](https://github.com/ScratchAddons/ScratchAddons/discussions/new/choose) or use our [Feedback page](https://scratchaddons.com/feedback/)
-
-If you found a security vulnerability, please don't report the bug publicly, instead follow the instructions in our [Security Policy](.github/SECURITY.md)
+If you found a bug or have a suggestion, checking for duplicates and [create an issue](https://github.com/ScratchAddons/ScratchAddons/issues/new/choose) if there isn't one already.
 
 ### Code
 
-If you want to help with the code or add a new addon, fork this repository, and then create a [pull request](https://github.com/ScratchAddons/ScratchAddons/pulls). Also, please read our [contributing guidelines](https://github.com/ScratchAddons/ScratchAddons/blob/master/.github/CONTRIBUTING.md).
+Before contributing code, please read our [contributing guidelines](https://github.com/ScratchAddons/ScratchAddons/blob/master/.github/CONTRIBUTING.md).
+
+Follow the installation instructions above to setup the extension. Please only submit pull requests for open issues and test your changes.
+
+We recommend Visual Studio Code as the code editor.
 
 ### Translations
 
-Scratch Addons translations are handled by Trasfix. If you are interested in translating Scratch Addons, read [Joining the Localization Team](https://scratchaddons.com/docs/localization/joining-the-localization-team/)
+Translations are handled by Trasfix. If you are interested in translating the extension, read [Joining the Localization Team](https://scratchaddons.com/docs/localization/joining-the-localization-team/)
 
 ### Documentation
 
-The Scratch Addons documentation is located in the [website-v2](https://github.com/ScratchAddons/website-v2/tree/master/content/docs) repository as markdown files. Documentation
+Most documentation is located in the [website-v2](https://github.com/ScratchAddons/website-v2) repository in [/content/docs](https://github.com/ScratchAddons/website-v2/tree/master/content/docs) as markdown files.
 
 ## License
 
