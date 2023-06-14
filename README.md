@@ -16,13 +16,13 @@
 
 Scratch Addons combines new and existing features and themes for the Scratch website and project editor into one easy-to-access and configurable browser extension. The mission is to provide a centralized, up-to-date platform for community development of new features and themes for Scratch.
 
-### What is an "addon"?
+### What is an addon?
 
-An addon is similar to an extension or a userscript, but they use special APIs provided by the Scratch Addons extension. These APIs allow addons to run scripts on a Scratch page (userscripts) or apply styles to the Scratch website (userstyles).
+An addon is one or more [userscripts](https://scratchaddons.com/docs/develop/userscripts/) or [userstyles](https://scratchaddons.com/docs/develop/userstyles/) that run on the Scratch website or project editor.
 
-Userscripts can use the `addon.*` JavaScript APIs, which allow them to obtain Scratch-related information (for example, get the current logged in user) and also use extension APIs (like sending notifications).
+Userscripts can use the `addon.*` JavaScript APIs provided by Scratch Addons, which allows them to obtain Scratch-related information like the currently logged in user and use extension APIs like sending notifications.
 
-Converting an existing extension or userscript into an addon, or writing your own, is very easy. [Check out the guide](https://scratchaddons.com/docs/develop/getting-started/creating-an-addon/).
+See the [documentation](https://scratchaddons.com/docs/develop/getting-started/addon-basics/) for more information about addons.
 
 ### If everything is an addon, what does Scratch Addons do?
 
@@ -38,7 +38,7 @@ Scratch Addons by itself is just an addon loader. Its main tasks are to:
 
 ### Addons outside of Scratch Addons itself
 
-Other extensions (and even forks of Scratch) can also provide their users with most addons from Scratch Addons, as long as a compatibility layer for `addon.*` and other parts of the addon loader is present. A notable example is the [TurboWarp](https://github.com/TurboWarp/scratch-gui/tree/develop/src/addons) editor. These also inherit translations from the Scratch Addons project.
+Other extensions and even forks of Scratch can also provide their users with most addons from Scratch Addons, as long as a compatibility layer for `addon.*` and other parts of the addon loader are present. A notable example is the [TurboWarp](https://github.com/TurboWarp/scratch-gui/tree/develop/src/addons) editor. These also inherit translations from the Scratch Addons project.
 
 ## Install
 
@@ -60,13 +60,32 @@ Use this method on Microsoft Edge, Opera, Brave, Vivaldi and other Chromium-base
 3. Click the `Load unpacked` button on the top and select the extension folder which has the `manifest.json` file in it. 
 
 ### Load the extension (Firefox)
+
 1. Type `about:debugging` into the address bar to open the debugging page by typing it into your address bar.
 2. Click `This Firefox` on the left-hand menu.
 3. Click `Load Temporary Add-on...` and select the `manifest.json` file.
 
+Note that Firefox extensions loaded this way are removed when the browser is closed.
+
 ## Contribute
 
-If you found a bug, or want to suggest new features, please open an [issues](https://github.com/ScratchAddons/ScratchAddons/issues/new). If you want to help with the code or add a new addon, fork this repository, and then create a [pull request](https://github.com/ScratchAddons/ScratchAddons/pulls). Also, please read our [contributing guidelines](https://github.com/ScratchAddons/ScratchAddons/blob/master/.github/CONTRIBUTING.md).
+### Suggestions and bug reports
+
+If you found a bug in Scratch Addons or have a suggestion, [create an issue](https://github.com/ScratchAddons/ScratchAddons/issues/new/choose) after checking for duplicates. Alternatively, you can open a [discussion](https://github.com/ScratchAddons/ScratchAddons/discussions/new/choose) or use our [Feedback page](https://scratchaddons.com/feedback/)
+
+If you found a security vulnerability, please don't report the bug publicly, instead follow the instructions in our [Security Policy](.github/SECURITY.md)
+
+### Code
+
+If you want to help with the code or add a new addon, fork this repository, and then create a [pull request](https://github.com/ScratchAddons/ScratchAddons/pulls). Also, please read our [contributing guidelines](https://github.com/ScratchAddons/ScratchAddons/blob/master/.github/CONTRIBUTING.md).
+
+### Translations
+
+Scratch Addons translations are handled by Trasfix. If you are interested in translating Scratch Addons, read [Joining the Localization Team](https://scratchaddons.com/docs/localization/joining-the-localization-team/)
+
+### Documentation
+
+The Scratch Addons documentation is located in the [website-v2](https://github.com/ScratchAddons/website-v2/tree/master/content/docs) repository as markdown files. Documentation
 
 ## License
 
