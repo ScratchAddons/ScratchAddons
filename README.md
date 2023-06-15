@@ -1,10 +1,6 @@
 <img src="https://raw.githubusercontent.com/ScratchAddons/ScratchAddons/master/images/icon.svg" alt="Scratch Addons logo" align="right" width="128px"></img>
 # Scratch Addons browser extension
 
-[![Chrome Web Store](images/badges/cws-badge.png)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
-[![Firefox Add-ons](images/badges/ff-addon-badge.png)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
-[![Edge Add-ons](images/badges/unofficial-edge-badge.svg)](https://microsoftedge.microsoft.com/addons/detail/iliepgjnemckemgnledoipfiilhajdjj)
-
 ![](https://img.shields.io/chrome-web-store/v/fbeffbjdlemaoicjdapfpikkikjoneco?style=flat-square&logo=google-chrome&logoColor=white&label=version&color=E23A2E)
 ![](https://img.shields.io/amo/v/scratch-messaging-extension?style=flat-square&logo=firefox-browser&logoColor=white&label=version&color=FF7139)
 ![](https://img.shields.io/badge/dynamic/json?style=flat-square&logo=microsoftedge&label=version&prefix=v&color=067FD8&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Filiepgjnemckemgnledoipfiilhajdjj) 
@@ -13,8 +9,6 @@
 [![](https://img.shields.io/github/license/ScratchAddons/ScratchAddons?style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/blob/master/LICENSE)
 [![](https://img.shields.io/badge/chat-on_discord-7289da.svg?style=flat-square)](https://discord.gg/R5NBqwMjNc)
 [![](https://img.shields.io/badge/website-scratchaddons.com-ff7b26.svg?style=flat-square)](https://scratchaddons.com)
-
-<img src="images/demo.png" alt="Scratch Addons demo" height=500px></img>
 
 ## About
 
@@ -40,27 +34,13 @@ Scratch Addons by itself is just an addon loader. Its main tasks are to:
 - Avoid addons from interfering with each other.
 - Avoid duplicate work from different addons.
 
-### Addons outside of Scratch Addons itself
-
-Other extensions and even forks of Scratch can also provide their users with most addons from Scratch Addons, as long as a compatibility layer for `addon.*` and other parts of the addon loader are present. A notable example is the [TurboWarp](https://github.com/TurboWarp/scratch-gui/tree/develop/src/addons) editor. These also inherit translations from the Scratch Addons project.
-
-### Structure
-
-- `.github`: GitHub templates, workflows and contributing files.
-- `_locales`: Translations for the settings page, popup and everything else except addons.
-- `addon-api`: The code for the `addon-*` APIs.
-- `addons-l10n`: Translations for strings userscripts add to a page. Each addon has its own file.
-- `addons`: The addons themselves. Each addon has it own directory with an `addon.json` and an entry in `addons.json`.
-- `background`: Background scripts for handling things such as addon settings.
-- `content-scripts`: The main extension script and addon injector.
-- `images`: Logos, screenshots and icons. Images only used by addons go in that addon's directory instead.
-- `libraries`: Libraries for things such as handling the global theme. There are also some third-party libraries.
-- `popups`: The code for popup addons, but not the addons tab. The `addon.json` for popup addons are still located in the `addons` directory.
-- `webpages`: The settings page and popup.
-
 ## Install
 
-No build is required, just download the source and load it into a web browser.
+[![Chrome Web Store](images/badges/cws-badge.png)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
+[![Firefox Add-ons](images/badges/ff-addon-badge.png)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
+[![Edge Add-ons](images/badges/unofficial-edge-badge.svg)](https://microsoftedge.microsoft.com/addons/detail/iliepgjnemckemgnledoipfiilhajdjj)
+
+No build is required to install from source, just download the source and load it into a web browser.
 
 
 ```
@@ -84,6 +64,10 @@ Use this method on Google Chrome, Microsoft Edge, Opera, Brave, Vivaldi and othe
 3. Click `Load Temporary Add-on...` and select the `manifest.json` file.
 
 Note that Firefox extensions loaded this way are removed when the browser is closed.
+
+## Screenshots
+
+![Scratch Addons demo](images/demo.png)
 
 ## Contribute
 
