@@ -11,6 +11,7 @@ export default async function ({ addon }) {
       .querySelectorAll(
         [
           ".comment-content", // Project/studio comments
+          ".description-block", // Insturctions / Notes and Credits
           ".comment .content", // Profile comments
           "#user-details", // About me / What I'm working on
           ".post_body_html", // Forum posts
