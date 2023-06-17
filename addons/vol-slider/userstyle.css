@@ -2,9 +2,11 @@
   /* Same lateral padding as .clone-container-container */
   padding-left: 0.25rem;
   padding-right: 0.25rem;
+}
+
+.sa-vol-slider-inner {
   display: flex;
   align-items: center;
-  transition: margin 0.25s ease;
 }
 
 .sa-vol-slider-icon {
@@ -38,8 +40,15 @@
   height: 6px;
   border-radius: 3px;
   background-color: #de91de;
-  margin-left: 3px;
   transition: all 0.25s ease;
+}
+
+[dir="ltr"] .sa-vol-slider-input {
+  margin-left: 3px;
+}
+
+[dir="rtl"] .sa-vol-slider-input {
+  margin-right: 3px;
 }
 
 .sa-vol-slider-input::-webkit-slider-thumb {
