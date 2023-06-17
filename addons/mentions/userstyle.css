@@ -6,3 +6,7 @@
   margin-block: 1px;
   border-radius: 99999px;
 }
+
+.sa-mention::selection {
+  background-color: rgba(0, 0, 0, 15%);
+}
