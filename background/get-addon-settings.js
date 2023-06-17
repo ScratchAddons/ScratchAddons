@@ -4,11 +4,41 @@ import minifySettings from "../libraries/common/minify-settings.js";
  Since presets can change independently of others, we have to keep track of
  the versions separately. Current versions:
 
- - editor-dark-mode 2 (bumped in v1.23 twice)
- - editor-theme3 4 (last bumped in v1.29)
+ - editor-dark-mode 6 (bumped in v1.32 four times)
+ - editor-theme3 3 (last bumped in v1.32)
  */
 
-const updatePresetIfMatching = (settings, version, oldPreset = null, preset = null) => {
+const areColorsEqual = (currentColor, oldPresetColor) => {
+  // Case insensitive
+  const currentColorLowercase = currentColor.toLowerCase();
+  const oldPresetLowercase = oldPresetColor.toLowerCase();
+
+  // Converts  three/four/six value syntax into eight value syntax
+  const getRRGGBBAA = (hexColor) =>
+    hexColor.length === 7 // #{rr}{gg}{bb}  →  #{rr}{gg}{bb}ff
+      ? `${hexColor}ff`
+      : hexColor.length === 5 // #{r}{g}{b}{a}  →  #{rr}{gg}{bb}{aa}
+      ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}${hexColor[4].repeat(2)}`
+      : hexColor.length === 4 // #{r}{g}{b}  →  #{rr}{gg}{bb}ff
+      ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}ff`
+      : hexColor;
+
+  // Convert both colors to #{rr}{gg}{bb}{aa}
+  const currentColorRRGGBBAA = getRRGGBBAA(currentColorLowercase);
+  const oldPresetColorRRGGBBAA = getRRGGBBAA(oldPresetLowercase);
+
+  return currentColorRRGGBBAA === oldPresetColorRRGGBBAA;
+};
+
+const areSettingsEqual = (currentValue, oldPresetValue) => {
+  if (typeof oldPresetValue === "string" && oldPresetValue.startsWith("#")) {
+    // We assume this is a color setting.
+    if (typeof currentValue === "string") return areColorsEqual(currentValue, oldPresetValue);
+  }
+  return currentValue === oldPresetValue;
+};
+
+const updatePresetIfMatching = (settings, version, oldPreset = null, presetOrFn = null) => {
   if ((settings._version || 0) < version) {
     /**
      Version must be set even if transition is unnecessary;
@@ -21,12 +51,16 @@ const updatePresetIfMatching = (settings, version, oldPreset = null, preset = nu
      when transition is no longer necessary.
      */
     settings._version = version;
-    if (preset === null) return;
+    if (presetOrFn === null) return;
     const map = {};
     for (const key of Object.keys(oldPreset)) {
-      if (settings[key] !== oldPreset[key]) return console.log(settings, oldPreset, key);
-      map[key] = preset.values[key];
+      if (!areSettingsEqual(settings[key], oldPreset[key])) return console.log(settings, oldPreset, key);
+      if (typeof presetOrFn === "object") map[key] = presetOrFn.values[key];
     }
+
+    if (typeof presetOrFn === "function") return presetOrFn(); // Custom migration logic if preset matches
+
+    const preset = presetOrFn;
 
     // For newly added keys
     for (const key of Object.keys(preset.values).filter((k) => !Object.prototype.hasOwnProperty.call(oldPreset, k))) {
@@ -36,7 +70,33 @@ const updatePresetIfMatching = (settings, version, oldPreset = null, preset = nu
   }
 };
 
-chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {}, addonsEnabled = {} }) => {
+async function transitionToNewStorageKeys(addonSettings) {
+  chrome.storage.sync.set(
+    {
+      ...minifySettings(addonSettings, null),
+      addonSettingsOld: addonSettings,
+    },
+    () => {
+      chrome.storage.sync.remove("addonSettings", () => {
+        // Reload extension after 500ms
+        setTimeout(() => chrome.runtime.reload(), 500);
+      });
+    }
+  );
+}
+
+const ADDON_SETTINGS_KEYS = ["addonSettings", "addonSettings1", "addonSettings2", "addonSettings3"];
+chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems) => {
+  const isSettingsStorageTransitionPending = storageItems.addonSettings && !storageItems.addonSettings3;
+  if (isSettingsStorageTransitionPending) {
+    transitionToNewStorageKeys(storageItems.addonSettings);
+    return;
+  }
+  const addonsEnabled = storageItems.addonsEnabled || {};
+  const areAddonSettingsEmpty = !storageItems["addonSettings3"]; // Would be indistinct to check any of the three
+  const addonSettings = areAddonSettingsEmpty
+    ? {} // Default value
+    : { ...storageItems.addonSettings1, ...storageItems.addonSettings2, ...storageItems.addonSettings3 };
   const func = () => {
     let madeAnyChanges = false;
 
@@ -148,7 +208,121 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
           }
         }
 
-        if (addonId === "editor-dark-mode") updatePresetIfMatching(settings, 2);
+        if (addonId === "editor-dark-mode") {
+          const migratingPresetsV1_32 = settings._version && settings._version < 3;
+          let newPopupSettingValue = null;
+          updatePresetIfMatching(
+            settings,
+            3,
+            {
+              // "Dark editor" preset
+              page: "#2e2e2e",
+              primary: "#47566b",
+              highlightText: "#4d97ff",
+              menuBar: "#47566b",
+              activeTab: "#555555",
+              tab: "#444444",
+              selector: "#333333",
+              selector2: "#333333",
+              selectorSelection: "#3a3a3a",
+              accent: "#333333",
+              input: "#444444",
+              workspace: "#444444",
+              categoryMenu: "#333333",
+              palette: "#222222cc",
+              border: "#111111",
+            },
+            () => {
+              newPopupSettingValue = "#47566be6";
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            4,
+            {
+              // "TurboWarp dark" preset
+              page: "#111111",
+              primary: "#ff4d4d",
+              highlightText: "#ff4d4d",
+              menuBar: "#333333",
+              activeTab: "#1e1e1e",
+              tab: "#2e2e2e",
+              selector: "#1e1e1e",
+              selector2: "#2e2e2e",
+              selectorSelection: "#111111",
+              accent: "#111111",
+              input: "#1e1e1e",
+              workspace: "#1e1e1e",
+              categoryMenu: "#111111",
+              palette: "#111111cc",
+              border: "#ffffff26",
+            },
+            () => {
+              newPopupSettingValue = "#333a";
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            5,
+            {
+              // "Scratch 2.0" preset
+              page: "#ffffffff",
+              primary: "#179fd7ff",
+              highlightText: "#1e9ed6",
+              menuBar: "#9c9ea2ff",
+              activeTab: "#e6e8e8",
+              tab: "#f1f2f2ff",
+              selector: "#e6e8e8",
+              selector2: "#e6e8e8",
+              selectorSelection: "#d0d0d0ff",
+              accent: "#f2f2f2",
+              input: "#ffffffff",
+              workspace: "#dddedeff",
+              categoryMenu: "#e6e8e8ff",
+              palette: "#e6e8e8cc",
+              border: "#d0d1d2",
+            },
+            () => {
+              newPopupSettingValue = "#00000099";
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            6,
+            {
+              // "Scratch 1.x" preset
+              page: "#c0c3c6",
+              primary: "#5498c7",
+              highlightText: "#21211f",
+              menuBar: "#c0c3c6",
+              activeTab: "#b9d7e5",
+              tab: "#adadb5",
+              selector: "#6a6a6a",
+              selector2: "#7c8083",
+              selectorSelection: "#404143",
+              accent: "#959a9f",
+              input: "#5f6265",
+              workspace: "#7c8083",
+              categoryMenu: "#969a9f",
+              palette: "#7c8083cc",
+              border: "#0000006b",
+            },
+            () => {
+              newPopupSettingValue = "#00000099";
+            }
+          );
+
+          if (!newPopupSettingValue && migratingPresetsV1_32) {
+            // https://github.com/ScratchAddons/ScratchAddons/pull/5931#issuecomment-1529426595
+            if (settings.primary) newPopupSettingValue = settings.primary.substring(0, 7) + "e6";
+          }
+
+          if (newPopupSettingValue) {
+            console.log("Migrated `popup` setting from editor-dark-mode to: ", newPopupSettingValue);
+            settings.popup = newPopupSettingValue;
+            madeAnyChanges = madeChangesToAddon = true;
+          }
+        }
 
         if (addonId === "editor-theme3") {
           madeAnyChanges = madeChangesToAddon = true;
@@ -194,6 +368,28 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
             },
             manifest.presets.find((p) => p.id === "dark")
           );
+          updatePresetIfMatching(
+            settings,
+            3,
+            {
+              "motion-color": "#4C97FF",
+              "looks-color": "#9966FF",
+              "sounds-color": "#CF63CF",
+              "events-color": "#FFBF00",
+              "control-color": "#FFAB19",
+              "sensing-color": "#5CB1D6",
+              "operators-color": "#59C059",
+              "data-color": "#FF8C1A",
+              "data-lists-color": "#FF661A",
+              "custom-color": "#FF6680",
+              "Pen-color": "#0FBD8C",
+              "sa-color": "#29BEB8",
+              "comment-color": "#FEF49C",
+              "input-color": "#202020",
+              text: "colorOnBlack",
+            },
+            manifest.presets.find((p) => p.id === "black")
+          );
 
           if (addonSettings["editor-dark-mode"]?.darkComments === false) {
             // Transition v1.28 to v1.29
@@ -214,7 +410,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
     const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
     if (madeAnyChanges)
       chrome.storage.sync.set({
-        addonSettings: minifySettings(addonSettings, prerelease ? null : scratchAddons.manifests),
+        ...minifySettings(addonSettings, prerelease ? null : scratchAddons.manifests),
         addonsEnabled,
       });
     scratchAddons.globalState.addonSettings = addonSettings;

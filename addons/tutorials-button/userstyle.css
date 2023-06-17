@@ -1,7 +1,13 @@
-/* Hides the Tutorials button and its right divider. */
+/* For current version of Scratch: hides the Tutorials button and its right divider. */
 [class*="menu-bar_main-menu"] > [class*="menu-bar_menu-bar-item"][class*="menu-bar_hoverable"],
 [class*="menu-bar_main-menu"]
   > [class*="menu-bar_menu-bar-item"][class*="menu-bar_hoverable"]
   + [class*="divider_divider"][class*="menu-bar_divider"] {
+  display: none;
+}
+
+/* For color contrast update: the button is the last item. */
+[class*="menu-bar_main-menu"] > [class*="menu-bar_divider"]:nth-last-child(2),
+[class*="menu-bar_main-menu"] > :last-child > [class*="menu-bar_menu-bar-item"] {
   display: none;
 }
