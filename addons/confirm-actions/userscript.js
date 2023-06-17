@@ -62,6 +62,7 @@ export default async function ({ addon, console, msg }) {
       if (cancelMessage !== null) {
         e.preventDefault();
         e.stopPropagation();
+        addon.tab.scratchClassReady().then(() => {
         addon.tab
           .confirm(title, cancelMessage, {
             okButtonLabel: msg("yes"),
@@ -74,6 +75,7 @@ export default async function ({ addon, console, msg }) {
               e.target.click();
             }
           });
+        });
       }
     },
     { capture: true }
