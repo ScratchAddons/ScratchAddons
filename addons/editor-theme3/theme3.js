@@ -72,7 +72,7 @@ const arrowShadowPath =
   "M12.71,2.44A2.41,2.41,0,0,1,12,4.16L8.08,8.08a2.45,2.45,0,0,1-3.45,0L0.72,4.16A2.42,2.42,0,0,1,0,2.44,2.48,2.48,0,0,1,.71.71C1,0.47,1.43,0,6.36,0S11.75,0.46,12,.71A2.44,2.44,0,0,1,12.71,2.44Z";
 const arrowShadowColor = "#231f20";
 
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, msg }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
   const originalColors = JSON.parse(JSON.stringify(Blockly.Colours));
@@ -83,7 +83,16 @@ export default async function ({ addon, console }) {
   };
 
   let textModeSetting = addon.settings.get("text");
-  const textMode = () => (addon.self.disabled ? "white" : textModeSetting);
+  const textMode = () => {
+    if (addon.self.disabled) {
+      if (originalColors.textFieldText) {
+        // Color contrast update
+        return originalColors.text === "#000000" ? "black" : "white";
+      }
+      return "white";
+    }
+    return textModeSetting;
+  };
   const isColoredTextMode = () => textMode() === "colorOnWhite" || textMode() === "colorOnBlack";
 
   const primaryColor = (category) => {
@@ -126,23 +135,58 @@ export default async function ({ addon, console }) {
     return tertiaryColor(category);
   };
   const textColor = (field) => {
-    if (addon.self.disabled || textMode() === "white") return "#ffffff";
+    if (addon.self.disabled) {
+      if (originalColors.textFieldText) {
+        // Color contrast update
+        return originalColors.text;
+      }
+      return "#ffffff";
+    }
+    if (textMode() === "white") return "#ffffff";
     if (textMode() === "black") return "#000000";
     if (field) return field.sourceBlock_.getColourTertiary();
     return "#000000";
   };
   const uncoloredTextColor = () => {
-    if (addon.self.disabled) return "#ffffff";
     return {
       white: "#ffffff",
-      black: "#575e75",
-      colorOnWhite: "#575e75",
+      black: "#000000",
+      colorOnWhite: "#000000",
       colorOnBlack: "#ffffff",
-    }[textMode];
+    }[textMode()];
   };
   const otherColor = (settingId, colorId) => {
     if (addon.self.disabled) return originalColors[colorId];
     return addon.settings.get(settingId);
+  };
+  const useBlackIcons = () => {
+    return {
+      white: false,
+      black: true,
+      colorOnWhite: true,
+      colorOnBlack: false,
+    }[textMode()];
+  };
+  const iconPath = () => `${addon.self.dir}/icons/${useBlackIcons() ? "black_text" : "white_text"}`;
+
+  const makeDropdownArrow = (color) => {
+    const arrow = Blockly.utils.createSvgElement("g");
+    arrow.appendChild(
+      Blockly.utils.createSvgElement("path", {
+        d: arrowShadowPath,
+        fill: arrowShadowColor,
+        "fill-opacity": 0.1,
+        transform: "translate(0, 1.6)",
+      })
+    );
+    arrow.appendChild(
+      Blockly.utils.createSvgElement("path", {
+        d: arrowPath,
+        fill: color,
+        transform: "translate(0, 1.6)",
+      })
+    );
+    return arrow;
   };
 
   // Blockly doesn't handle colors with transparency
@@ -163,9 +207,9 @@ export default async function ({ addon, console }) {
       if (match) {
         const oldSvg = atob(match[1]);
         const category = this.id_ === "sa-blocks" ? saCategory : extensionsCategory;
-        const newColor = isColoredTextMode ? tertiaryColor(category) : primaryColor(category);
+        const newColor = textMode() === "white" ? primaryColor(category) : tertiaryColor(category);
         if (newColor) {
-          const newSvg = oldSvg.replace(/#29beb8|#0ebd8c/gi, newColor);
+          const newSvg = oldSvg.replace(/#29beb8|#229487|#0ebd8c/gi, newColor);
           this.iconURI_ = `data:image/svg+xml;base64,${btoa(newSvg)}`;
         }
       }
@@ -227,20 +271,19 @@ export default async function ({ addon, console }) {
   const oldFieldImageSetValue = Blockly.FieldImage.prototype.setValue;
   Blockly.FieldImage.prototype.setValue = function (src) {
     // Icons
-    if (textMode() === "black" || textMode() === "colorOnWhite") {
-      if (src.startsWith("data:") && this.sourceBlock_) {
-        // Extension icon
-        const iconsToReplace = ["music", "pen", "text2speech", "translate", "videoSensing"];
-        const extensionId = this.sourceBlock_.type.split("_")[0];
-        if (iconsToReplace.includes(extensionId)) {
-          src = `${addon.self.dir}/icons/black_text/extensions/${extensionId}.svg`;
-        }
-      } else {
-        const iconsToReplace = ["repeat.svg", "rotate-left.svg", "rotate-right.svg"];
-        const iconName = src.split("/").at(-1);
-        if (iconsToReplace.includes(iconName)) {
-          src = `${addon.self.dir}/icons/black_text/${iconName}`;
-        }
+    if ((src.startsWith("data:") || src.includes("static/assets")) && this.sourceBlock_) {
+      // Extension icon
+      const iconsToReplace = ["music", "pen", "text2speech", "translate", "videoSensing"];
+      const extensionId = this.sourceBlock_.type.split("_")[0];
+      if (iconsToReplace.includes(extensionId)) {
+        if (extensionId === "translate" && !useBlackIcons()) src = `${iconPath()}/extensions/translate.png`;
+        else src = `${iconPath()}/extensions/${extensionId}.svg`;
+      }
+    } else {
+      const iconsToReplace = ["repeat.svg", "rotate-left.svg", "rotate-right.svg"];
+      const iconName = src.split("/").at(-1);
+      if (iconsToReplace.includes(iconName)) {
+        src = `${iconPath()}/${iconName}`;
       }
     }
     return oldFieldImageSetValue.call(this, src);
@@ -251,29 +294,12 @@ export default async function ({ addon, console }) {
     // Dropdowns
     oldFieldDropdownInit.call(this);
     this.textElement_.style.setProperty("fill", textColor(this), "important");
-    if (textColor(this) !== "#ffffff") {
-      // Replace arrow image with path elements to change the fill color
-      this.arrow_.remove();
-      this.arrow_ = Blockly.utils.createSvgElement("g");
-      this.arrow_.appendChild(
-        Blockly.utils.createSvgElement("path", {
-          d: arrowShadowPath,
-          fill: arrowShadowColor,
-          "fill-opacity": 0.1,
-        })
-      );
-      this.arrow_.appendChild(
-        Blockly.utils.createSvgElement("path", {
-          d: arrowPath,
-          fill: textColor(this),
-        })
-      );
-      // Redraw arrow
-      this.arrowY_ = 12;
-      const text = this.text_;
-      this.text_ = null;
-      this.setText(text);
-    }
+    this.arrow_.remove();
+    this.arrow_ = makeDropdownArrow(textColor(this));
+    // Redraw arrow
+    const text = this.text_;
+    this.text_ = null;
+    this.setText(text);
   };
 
   const oldFieldDropdownShowEditor = Blockly.FieldDropdown.prototype.showEditor_;
@@ -316,9 +342,38 @@ export default async function ({ addon, console }) {
     this.textElement_.style.fill = textColor(this);
   };
 
+  const oldFieldNoteAddOctaveButton = Blockly.FieldNote.prototype.addOctaveButton_;
+  Blockly.FieldNote.prototype.addOctaveButton_ = function (...args) {
+    // Octave buttons in "play note" dropdown
+    const group = oldFieldNoteAddOctaveButton.call(this, ...args);
+    group
+      .querySelector("image")
+      .setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", `${iconPath()}/arrow_button.svg`);
+    return group;
+  };
+
+  // Matrix inputs
+  const oldFieldMatrixInit = Blockly.FieldMatrix.prototype.init;
+  Blockly.FieldMatrix.prototype.init = function () {
+    oldFieldMatrixInit.call(this);
+    const arrowTransform = this.arrow_.getAttribute("transform");
+    this.arrow_.remove();
+    this.arrow_ = makeDropdownArrow(textColor(this));
+    this.arrow_.setAttribute("transform", arrowTransform);
+    this.arrow_.style.cursor = "default";
+    this.fieldGroup_.appendChild(this.arrow_);
+  };
+  const oldFieldMatrixShowEditor = Blockly.FieldMatrix.prototype.showEditor_;
+  Blockly.FieldMatrix.prototype.showEditor_ = function () {
+    oldFieldMatrixShowEditor.call(this);
+    let primaryColor;
+    if (this.sourceBlock_.isShadow() && this.sourceBlock_.getParent())
+      primaryColor = this.sourceBlock_.getParent().getColour();
+    else primaryColor = this.sourceBlock_.getColour();
+    Blockly.DropDownDiv.DIV_.style.backgroundColor = removeAlpha(primaryColor);
+  };
   const oldFieldMatrixUpdateMatrix = Blockly.FieldMatrix.prototype.updateMatrix_;
   Blockly.FieldMatrix.prototype.updateMatrix_ = function () {
-    // Matrix inputs
     oldFieldMatrixUpdateMatrix.call(this);
     for (let i = 0; i < this.matrix_.length; i++) {
       if (this.matrix_[i] !== "0") {
@@ -327,7 +382,6 @@ export default async function ({ addon, console }) {
       }
     }
   };
-
   const oldFieldMatrixCreateButton = Blockly.FieldMatrix.prototype.createButton_;
   Blockly.FieldMatrix.prototype.createButton_ = function (fill) {
     if (fill === "#FFFFFF") fill = uncoloredTextColor();
@@ -371,7 +425,7 @@ export default async function ({ addon, console }) {
       tertiaryColor: tertiaryColor(saCategory),
     });
     Blockly.Colours.textField = otherColor("input-color", "textField");
-    if (uncoloredTextColor() === "#575e75") Blockly.Colours.fieldShadow = "rgba(0, 0, 0, 0.15)";
+    if (textMode() === "colorOnWhite") Blockly.Colours.fieldShadow = "rgba(0, 0, 0, 0.15)";
     else Blockly.Colours.fieldShadow = originalColors.fieldShadow;
 
     const workspace = Blockly.getMainWorkspace();
@@ -392,4 +446,72 @@ export default async function ({ addon, console }) {
   addon.settings.addEventListener("change", updateColors);
   addon.self.addEventListener("disabled", updateColors);
   addon.self.addEventListener("reenabled", updateColors);
+
+  // inject() and overrideColours() are called when changing the Scratch theme, language, or editor mode
+  const oldInject = Blockly.inject;
+  Blockly.inject = function (...args) {
+    const workspace = oldInject.call(this, ...args);
+    updateColors();
+    return workspace;
+  };
+  Blockly.inject.bindDocumentEvents_ = oldInject.bindDocumentEvents_;
+  Blockly.inject.loadSounds_ = oldInject.loadSounds_;
+  Blockly.Colours.overrideColours = function (newColors) {
+    if (!newColors) return;
+    Object.assign(originalColors, newColors);
+  };
+
+  while (true) {
+    const colorModeSubmenu = await addon.tab.waitForElement(
+      "[class*=menu-bar_menu-bar-menu_] > ul > li:nth-child(2) ul",
+      {
+        markAsSeen: true,
+        reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+      }
+    );
+    // We're running in the new version of the editor that includes this menu.
+
+    colorModeSubmenu.addEventListener(
+      "click",
+      (e) => {
+        if (addon.self.disabled) return;
+        if (!e.target.closest(".sa-colormode-submenu")) {
+          // Something went wrong with the code below this event listener
+          return;
+        }
+        if (e.target.closest(".sa-theme3-link")) {
+          window.open("https://scratch.mit.edu/scratch-addons-extension/settings#addon-editor-theme3");
+          e.stopPropagation();
+          return;
+        }
+        e.stopPropagation();
+      },
+      { capture: true }
+    );
+
+    const elementToClone = colorModeSubmenu.querySelector("[class*=settings-menu_selected_]").closest("li");
+
+    const SA_ICON_URL = addon.self.dir + "../../../images/cs/icon.svg";
+
+    const managedBySa = elementToClone.cloneNode(true);
+    addon.tab.displayNoneWhileDisabled(managedBySa, { display: "block" });
+    managedBySa.classList.add("sa-theme3-managed");
+    managedBySa.querySelector("div span").textContent = msg("/global/meta/managedBySa");
+    managedBySa.querySelector("img[class*=settings-menu_icon_]").src = SA_ICON_URL;
+
+    const addonSettingsLink = elementToClone.cloneNode(true);
+    addon.tab.displayNoneWhileDisabled(addonSettingsLink, { display: "block" });
+    addonSettingsLink.classList.add("sa-theme3-link");
+    addonSettingsLink.classList.add(addon.tab.scratchClass("menu_menu-section") || "_");
+    addonSettingsLink.querySelector("div span").textContent = msg("/global/meta/addonSettings");
+    addonSettingsLink.querySelector("img[class*=settings-menu_icon_]").src = SA_ICON_URL;
+    const addonSettingsImg = document.createElement("img");
+    addonSettingsImg.classList.add("sa-theme3-new-tab");
+    addonSettingsImg.src = addon.self.dir + "/open-link.svg";
+    addonSettingsLink.querySelector("div").appendChild(addonSettingsImg);
+
+    colorModeSubmenu.classList.add("sa-colormode-submenu");
+    colorModeSubmenu.appendChild(managedBySa);
+    colorModeSubmenu.appendChild(addonSettingsLink);
+  }
 }

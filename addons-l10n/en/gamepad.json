@@ -18,7 +18,7 @@
   "gamepad/keyinput-title": "Click and press a key or click to change button. Escape to cancel. Backspace or delete to clear.",
   "gamepad/browser-support": "This browser and operating system have known bugs that may make this addon difficult to use. Try another browser if you encounter problems.",
   "gamepad/config-header": "This comment contains configuration for gamepad support in third-party tools or websites such as https://turbowarp.org/\nDo not edit by hand",
-  "gamepad/store-in-project": "Store these settings in the project to override the default configuration (Experimental tool for project creators)",
+  "gamepad/store-in-project": "Store the mappings set above inside the project. After saving the project, these mappings will become the new default configuration.",
   "gamepad/reset": "Reset all controls to project defaults",
   "gamepad/clear": "Clear all controls"
 }
