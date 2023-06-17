@@ -6,14 +6,6 @@
   color: var(--editorTheme3-inputColor-text);
 }
 
-/* Override Scratch's high contrast theme */
-.blocklyDropDownDiv .goog-menuitem {
-  color: white;
-}
-.blocklyDropDownDiv .blocklyText {
-  /* "Play note" dropdown */
-  fill: white;
-}
 .blocklyDropDownDiv .goog-menuitem-highlight,
 .blocklyDropDownDiv .goog-menuitem-hover,
 .sa-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight {
