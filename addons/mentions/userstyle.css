@@ -1,6 +1,6 @@
 .sa-mention {
-  background-color: var(--darkWww-button, #4d97ff);
-  color: var(--darkWww-button-text, white) !important;
+  background-color: var(--mentions-color);
+  color: var(--mentions-button-text) !important;
   padding: 0 4px;
   display: inline-block;
   margin-block: 1px;
