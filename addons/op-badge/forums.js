@@ -2,7 +2,7 @@ export default async function ({ addon, console, msg }) {
   const posts = document.querySelectorAll(".blockpost");
   let opUsername;
 
-  if ((new URLSearchParams(location.search).get("page") || 1) === 1) {
+  if ((new URLSearchParams(location.search).get("page") || "1") === "1") {
     opUsername = posts[0].querySelector(".username").innerText;
   } else {
     const firstPageDocument = new DOMParser().parseFromString(
