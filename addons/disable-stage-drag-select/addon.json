@@ -16,6 +16,14 @@
       "matches": ["projects"]
     }
   ],
+  "settings": [
+    {
+      "name": "Allow dragging while project is stopped",
+      "id": "drag_while_stopped",
+      "type": "boolean",
+      "default": false
+    }
+  ],
   "tags": ["editor", "featured"],
   "enabledByDefault": false,
   "dynamicDisable": true,
