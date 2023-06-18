@@ -396,6 +396,18 @@
       }
     },
     {
+      "name": "accent-desaturateFilterNew",
+      "value": {
+        "type": "textColor",
+        "black": "grayscale(100%) opacity(0.5)",
+        "white": "brightness(0) invert(1) opacity(0.3)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        }
+      }
+    },
+    {
       "name": "accent-invertedFilter",
       "value": {
         "type": "textColor",

@@ -8,7 +8,7 @@
   margin-left: 0.2rem;
 }
 
-.sa-debugger-small .sa-debugger-container {
+.sa-debugger-small [class*="gui_body-wrapper_"]:not(.sa-stage-hidden) .sa-debugger-container {
   display: none !important;
 }
 
