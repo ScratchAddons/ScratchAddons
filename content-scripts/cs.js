@@ -895,10 +895,9 @@ if (isProfile || isStudio || isProject || isForums) {
         existingWarning.scrollIntoView({ behavior: "smooth" });
         return;
       }
-      const textarea = form.querySelector("textarea .markItUpEditor");
+      const textarea = form.querySelector("textarea.markItUpEditor");
       if (!textarea) return;
       if (shouldCaptureComment(textarea.value)) {
-        e.preventDefault();
         const errorTip = document.createElement("li");
         errorTip.classList.add("errorlist", "sa-extension-policy-warning");
         errorTip.style.scrollMarginTop = "50px";
@@ -914,6 +913,8 @@ if (isProfile || isStudio || isProject || isForums) {
         sendAnyway.textContent = sendAnywayMsg;
         errorTip.appendChild(sendAnyway);
 
+        const postArea = form.querySelector("label");
+        if (!postArea) return;
         let errorList = form.querySelector("label > ul");
         if (!errorList) {
           const typeArea = postArea.querySelector("strong");
@@ -924,6 +925,7 @@ if (isProfile || isStudio || isProject || isForums) {
 
         errorList.appendChild(errorTip);
         errorTip.scrollIntoView({ behavior: "smooth" });
+        e.preventDefault();
 
         // Hide error after typing
         textarea.addEventListener(
