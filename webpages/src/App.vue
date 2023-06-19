@@ -512,8 +512,7 @@ export default {
       if (!this.searchInput) {
         this.addonListObjs.forEach((obj) => {
           // Hide addons from _iframeSearch pseudogroup when not searching (popup)
-          if (obj.group.id === "_iframeSearch") obj.matchesSearch = false;
-          else obj.matchesSearch = true;
+          obj.matchesSearch = obj.group.id !== "_iframeSearch";
         });
         return this.addonListObjs.sort((b, a) => b.naturalIndex - a.naturalIndex);
       }
