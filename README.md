@@ -16,7 +16,7 @@
 
 <img src="images/demo.png" alt="Scratch Addons demo" height=500px></img>
 
-## About
+## What is Scratch Addons?
 
 [Scratch Addons](https://github.com/ScratchAddons) combines new and existing features and themes for the Scratch website and project editor into one easy-to-access and configurable browser extension. The mission is to provide a centralized, up-to-date platform for community development of new features and themes for Scratch.
 
@@ -58,7 +58,7 @@ Other extensions and even forks of Scratch can also provide their users with mos
 - `popups`: The code for popup addons, but not the addons tab. The `addon.json` for popup addons are still located in the `addons` directory.
 - `webpages`: The settings page and popup.
 
-## Install
+## Installation
 
 No build is required, just download the source and load it into a web browser.
 
