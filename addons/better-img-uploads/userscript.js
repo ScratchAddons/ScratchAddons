@@ -110,7 +110,7 @@ export default async function ({ addon, console, msg }) {
     let processed = new Array();
 
     for (let file of files) {
-      if (file.type.includes("svg") || (file.name.includes(".sprite3") && file.type === "")) {
+      if (file.type.endsWith("/svg") || file.name.endsWith(".sprite3")) {
         // The file is either an SVG or a sprite3 file, we should not change it...
         processed.push(file);
         continue;
