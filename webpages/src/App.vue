@@ -12,7 +12,7 @@
       v-show="categoryOpen && !isIframe"
       :class="{ smallMode: smallMode === true }"
     >
-      <category-selector v-for="category of categories" :category="category"></category-selector>
+      <CategorySelector v-for="category of categories" :category="category"></CategorySelector>
 
       <a
         v-cloak
@@ -77,18 +77,18 @@
             <span>{{ msg("exploreAllAddons", [addonAmt]) }}</span>
             <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
           </div>
-          <addon-group-header
+          <AddonGroupHeader
             v-if="addon.headerAbove"
             :group="addon.group"
             :shown-count="groupShownCount(addon.group)"
             :margin-above="groupMarginAbove(addon.group)"
-          ></addon-group-header>
-          <addon-body
+          ></AddonGroupHeader>
+          <AddonBody
             :visible="addon.matchesSearch && addon.matchesCategory"
             :addon="addon.manifest"
             :group-id="addon.group.id"
             :group-expanded="addon.group.expanded"
-          ></addon-body>
+          ></AddonBody>
         </template>
       </div>
     </div>

@@ -15,7 +15,7 @@
         <li
           v-if="
             preset.values.hasOwnProperty(setting.id) && setting.type === 'color'
-              ? preset.values[setting.id].toLowerCase() != setting.default.toLowerCase()
+              ? preset.values[setting.id].toLowerCase() !== setting.default.toLowerCase()
               : preset.values[setting.id] !== setting.default
           "
           @click="resetToPreset(preset)"
