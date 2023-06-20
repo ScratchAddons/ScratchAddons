@@ -53,10 +53,21 @@ const updatePresetIfMatching = (settings, version, oldPreset = null, presetOrFn 
     settings._version = version;
     if (presetOrFn === null) return;
     const map = {};
+    console.groupCollapsed("updatePresetIfMatching log");
     for (const key of Object.keys(oldPreset)) {
-      if (!areSettingsEqual(settings[key], oldPreset[key])) return console.log(settings, oldPreset, key);
+      if (!areSettingsEqual(settings[key], oldPreset[key])) {
+        console.log(`Did not match old preset (version ${version})`, {
+          settingsSnapshot: JSON.parse(JSON.stringify(settings)),
+          checkedAgainst: oldPreset,
+          keyFailed: key,
+        });
+        console.groupEnd();
+        return;
+      }
       if (typeof presetOrFn === "object") map[key] = presetOrFn.values[key];
     }
+    console.groupEnd();
+    console.warn(`Matched old preset (version ${version}) with settings:`, JSON.parse(JSON.stringify(settings)));
 
     if (typeof presetOrFn === "function") return presetOrFn(); // Custom migration logic if preset matches
 
