@@ -932,6 +932,9 @@ if (isProfile || isStudio || isProject || isForums) {
           "input",
           () => {
             errorTip.remove();
+            if (errorList.querySelector("li") === null) {
+              errorList.remove();
+            }
           },
           { once: true }
         );
