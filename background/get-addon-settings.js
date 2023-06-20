@@ -332,7 +332,6 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
               primary: "#4d97ff",
               highlightText: "#4d97ff",
               menuBar: "#4d97ff",
-              popup: "#000a", // TODO: will this work for users migrating directly v1.31 → v1.33.2 ?
               activeTab: "#282828",
               tab: "#202020",
               selector: "#252c37",
@@ -365,7 +364,6 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             primary: "#4d97ff",
             highlightText: "#4d97ff",
             menuBar: "#202020",
-            popup: "#000a", // TODO: will this work for users migrating directly v1.31 → v1.33.2 ? (also applies to migrations #8 and #9)
             activeTab: "#202020",
             tab: "#151515",
             selector: "#202020",
@@ -395,7 +393,6 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             primary: "#4d97ff",
             highlightText: "#4d97ff",
             menuBar: "#4d97ff",
-            popup: "#4d97ffe6",
             activeTab: "#ffffff",
             tab: "#d9e3f2",
             selector: "#e9f1fc",
