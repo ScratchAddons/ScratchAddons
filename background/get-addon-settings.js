@@ -354,79 +354,79 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
               settings.selector = "292d32";
             }
           );
+          updatePresetIfMatching(
+            settings,
+            8,
+            {
+              // "3.Darker" preset
+              page: "#111111",
+              primary: "#4d97ff",
+              highlightText: "#4d97ff",
+              menuBar: "#202020",
+              activeTab: "#202020",
+              tab: "#151515",
+              selector: "#202020",
+              selector2: "#202020",
+              selectorSelection: "#111111",
+              accent: "#151515",
+              input: "#202020",
+              workspace: "#151515",
+              categoryMenu: "#202020",
+              palette: "#202020cc",
+              border: "#ffffff0d",
+            },
+            () => {
+              console.log("Migrated 3.Darker preset.");
+              madeAnyChanges = madeChangesToAddon = true;
+              // Applies only 2 of the 5 changes from migration #7 with the exact same colors.
+              settings.primary = "#855cd6";
+              settings.highlightText = "#ccb3ff";
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            9,
+            {
+              // "Scratch 3.0 default colors" preset (as of v1.33.1 - now renamed)
+              page: "#e5f0ff",
+              primary: "#4d97ff",
+              highlightText: "#4d97ff",
+              menuBar: "#4d97ff",
+              activeTab: "#ffffff",
+              tab: "#d9e3f2",
+              selector: "#e9f1fc",
+              selector2: "#d9e3f2",
+              selectorSelection: "#ffffff",
+              accent: "#ffffff",
+              input: "#ffffff",
+              workspace: "#f9f9f9",
+              categoryMenu: "#ffffff",
+              palette: "#f9f9f9cc",
+              border: "#00000026",
+            },
+            () => {
+              console.log("Migrated Scratch 3.0 default colors preset.");
+              madeAnyChanges = madeChangesToAddon = true;
+              // Applies the same color (#855cd6) to the "highlight color" and "text and icon highlight color" settings.
+              settings.primary = "#855cd6";
+              settings.highlightText = "#855cd6";
+              // Changing the menuBar ("menu bar background") setting is handled by migration #10.
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            10,
+            {
+              // Old vanilla "menu bar background" (blue)
+              menuBar: "#4d97ff",
+            },
+            () => {
+              console.log("Migrated 'menu bar background' setting from old blue to new purple.");
+              madeAnyChanges = madeChangesToAddon = true;
+              settings.menuBar = "#9966ff"; // New vanilla "menu bar background" (purple)
+            }
+          );
         }
-        updatePresetIfMatching(
-          settings,
-          8,
-          {
-            // "3.Darker" preset
-            page: "#111111",
-            primary: "#4d97ff",
-            highlightText: "#4d97ff",
-            menuBar: "#202020",
-            activeTab: "#202020",
-            tab: "#151515",
-            selector: "#202020",
-            selector2: "#202020",
-            selectorSelection: "#111111",
-            accent: "#151515",
-            input: "#202020",
-            workspace: "#151515",
-            categoryMenu: "#202020",
-            palette: "#202020cc",
-            border: "#ffffff0d",
-          },
-          () => {
-            console.log("Migrated 3.Darker preset.");
-            madeAnyChanges = madeChangesToAddon = true;
-            // Applies only 2 of the 5 changes from migration #7 with the exact same colors.
-            settings.primary = "#855cd6";
-            settings.highlightText = "#ccb3ff";
-          }
-        );
-        updatePresetIfMatching(
-          settings,
-          9,
-          {
-            // "Scratch 3.0 default colors" preset (as of v1.33.1 - now renamed)
-            page: "#e5f0ff",
-            primary: "#4d97ff",
-            highlightText: "#4d97ff",
-            menuBar: "#4d97ff",
-            activeTab: "#ffffff",
-            tab: "#d9e3f2",
-            selector: "#e9f1fc",
-            selector2: "#d9e3f2",
-            selectorSelection: "#ffffff",
-            accent: "#ffffff",
-            input: "#ffffff",
-            workspace: "#f9f9f9",
-            categoryMenu: "#ffffff",
-            palette: "#f9f9f9cc",
-            border: "#00000026",
-          },
-          () => {
-            console.log("Migrated Scratch 3.0 default colors preset.");
-            madeAnyChanges = madeChangesToAddon = true;
-            // Applies the same color (#855cd6) to the "highlight color" and "text and icon highlight color" settings.
-            settings.primary = "#855cd6";
-            settings.highlightText = "#855cd6";
-            // Changing the menuBar ("menu bar background") setting is handled by migration #10.
-          }
-        );
-        updatePresetIfMatching(
-          settings,
-          10,
-          {
-            // Old vanilla "menu bar background" (blue)
-            menuBar: "#4d97ff",
-          },
-          () => {
-            console.log("Migrated 'menu bar background' setting from old blue to new purple.");
-            madeAnyChanges = madeChangesToAddon = true;
-            settings.menuBar = "#9966ff"; // New vanilla "menu bar background" (purple)
-          }
-        );
 
         if (addonId === "editor-theme3") {
           madeAnyChanges = madeChangesToAddon = true;
