@@ -381,7 +381,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
           () => {
             console.log("Migrated 3.Darker preset.");
             madeAnyChanges = madeChangesToAddon = true;
-            // Applies only 2 of the 5 changes from migration #8 with the exact same colors.
+            // Applies only 2 of the 5 changes from migration #7 with the exact same colors.
             settings.primary = "#855cd6";
             settings.highlightText = "#ccb3ff";
           }
