@@ -18,7 +18,7 @@ export default class Utils {
     // this._myFlash = { block: null, timerID: null, colour: null };
     this.offsetX = 32;
     this.offsetY = 32;
-    this.navigationHistory = new NavigationHistory();
+    this.navigationHistory = new NavigationHistory(() => addon.tab.traps.getWorkspace());
     /**
      * The workspace
      */
@@ -48,7 +48,7 @@ export default class Utils {
    * @returns !Blockly.Workspace
    */
   getWorkspace() {
-    const currentWorkspace = Blockly.getMainWorkspace();
+    const currentWorkspace = this.addon.tab.traps.getWorkspace();
     if (currentWorkspace.getToolbox()) {
       // Sadly get get workspace does not always return the 'real' workspace... Not sure how to get that at the moment,
       //  but we can work out whether it's the right one by whether it has a toolbox.
@@ -128,12 +128,16 @@ export default class Utils {
 }
 
 class NavigationHistory {
+  constructor(workspaceGetter) {
+    this.workspaceGetter = workspaceGetter;
+  }
+
   /**
    * Keep a record of the scroll and zoom position
    */
   storeView(next, dist) {
     forward = [];
-    let workspace = Blockly.getMainWorkspace(),
+    let workspace = this.workspaceGetter(),
       s = workspace.getMetrics();
 
     let pos = { left: s.viewLeft, top: s.viewTop };
@@ -147,7 +151,7 @@ class NavigationHistory {
   }
 
   goBack() {
-    const workspace = Blockly.getMainWorkspace(),
+    const workspace = this.workspaceGetter(),
       s = workspace.getMetrics();
 
     let pos = { left: s.viewLeft, top: s.viewTop };
@@ -199,7 +203,7 @@ class NavigationHistory {
     }
     views.push(view);
 
-    let workspace = Blockly.getMainWorkspace(),
+    let workspace = this.workspaceGetter(),
       s = workspace.getMetrics();
 
     let sx = view.left - s.contentLeft,

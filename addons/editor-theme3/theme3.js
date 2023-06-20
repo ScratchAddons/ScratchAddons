@@ -374,7 +374,7 @@ export default async function ({ addon, console, msg }) {
     if (uncoloredTextColor() === "#575e75") Blockly.Colours.fieldShadow = "rgba(0, 0, 0, 0.15)";
     else Blockly.Colours.fieldShadow = originalColors.fieldShadow;
 
-    const workspace = Blockly.getMainWorkspace();
+    const workspace = addon.tab.traps.getWorkspace();
     const flyout = workspace.getFlyout();
     const toolbox = workspace.getToolbox();
 

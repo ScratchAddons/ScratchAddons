@@ -58,7 +58,7 @@ export default async function ({ addon, console, msg }) {
       flyOut.classList.remove("sa-flyoutClose");
       scrollBar.classList.remove("sa-flyoutClose");
       setTimeout(() => {
-        Blockly.getMainWorkspace().recordCachedAreas();
+        addon.tab.traps.getWorkspace().recordCachedAreas();
         removeTransition();
       }, speed * 1000);
     }
@@ -76,7 +76,7 @@ export default async function ({ addon, console, msg }) {
     flyOut.classList.add("sa-flyoutClose");
     scrollBar.classList.add("sa-flyoutClose");
     setTimeout(() => {
-      Blockly.getMainWorkspace().recordCachedAreas();
+      addon.tab.traps.getWorkspace().recordCachedAreas();
       removeTransition();
     }, speed * 1000);
   }
@@ -125,25 +125,28 @@ export default async function ({ addon, console, msg }) {
     });
 
     if (addon.self.enabledLate && getToggleSetting() === "category") {
-      Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
+      addon.tab.traps.getWorkspace().getToolbox().selectedItem_.setSelected(false);
     }
     addon.self.addEventListener("disabled", () => {
-      Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
+      const workspace = addon.tab.traps.getWorkspace();
+      workspace.getToolbox().selectedItem_.setSelected(true);
       // update workspace dimensions
-      Blockly.svgResize(Blockly.getMainWorkspace());
+      Blockly.svgResize(workspace);
     });
     addon.self.addEventListener("reenabled", () => {
+      const workspace = addon.tab.traps.getWorkspace();
       if (getToggleSetting() === "category") {
-        Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
+        workspace.getToolbox().selectedItem_.setSelected(false);
         onmouseleave(null, 0);
         toggle = false;
       }
       // update workspace dimensions
-      Blockly.svgResize(Blockly.getMainWorkspace());
+      Blockly.svgResize(workspace);
     });
 
     addon.settings.addEventListener("change", () => {
       if (addon.self.disabled) return;
+      const workspace = addon.tab.traps.getWorkspace();
       if (getToggleSetting() === "category") {
         // switching to category click mode
         // close the flyout unless it's locked
@@ -152,16 +155,16 @@ export default async function ({ addon, console, msg }) {
           flyoutLock = false;
           updateLockDisplay();
         } else {
-          Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
+          workspace.getToolbox().selectedItem_.setSelected(false);
           onmouseleave(null, 0);
           toggle = false;
         }
       } else {
         onmouseleave();
-        Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
+        workspace.getToolbox().selectedItem_.setSelected(true);
       }
       // update workspace dimensions
-      Blockly.svgResize(Blockly.getMainWorkspace());
+      Blockly.svgResize(workspace);
     });
 
     // category click mode
@@ -222,8 +225,8 @@ export default async function ({ addon, console, msg }) {
         viewWidth: metrics.viewWidth + 250,
       };
     };
-    if (Blockly.getMainWorkspace())
-      Blockly.getMainWorkspace().getMetrics = Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
+    const workspace = addon.tab.traps.getWorkspace();
+    if (workspace) workspace.getMetrics = Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
   }
 
   while (true) {
@@ -302,7 +305,7 @@ export default async function ({ addon, console, msg }) {
     doOneTimeSetup();
     if (getToggleSetting() !== "hover") {
       // update workspace dimensions
-      Blockly.svgResize(Blockly.getMainWorkspace());
+      Blockly.svgResize(addon.tab.traps.getWorkspace());
     }
   }
 }

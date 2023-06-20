@@ -8,7 +8,7 @@ export default async function ({ addon, console }) {
     const { GRID_UNIT } = BlockSvg;
 
     function updateAllBlocks() {
-      const workspace = Blockly.getMainWorkspace();
+      const workspace = addon.tab.traps.getWorkspace();
       if (workspace) {
         if (vm.editingTarget) {
           vm.emitWorkspaceUpdate();

@@ -46,8 +46,9 @@ const removeHighlight = (element, highlighter) => {
 };
 
 class Highlighter {
-  constructor(priority, color) {
+  constructor(priority, color, workspaceGetter) {
     this.priority = priority;
+    this.workspaceGetter = workspaceGetter;
 
     const id = `sa_glower_filter${nextGlowerId++}`;
     this.filter = `url("#${id}")`;
@@ -104,7 +105,7 @@ class Highlighter {
 
   setGlowingThreads(threads) {
     const elementsToHighlight = new Set();
-    const workspace = Blockly.getMainWorkspace();
+    const workspace = this.workspaceGetter();
 
     if (workspace) {
       for (const thread of threads) {

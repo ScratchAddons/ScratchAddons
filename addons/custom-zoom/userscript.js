@@ -18,10 +18,11 @@ export default async function ({ addon, console }) {
 
     if (addon.tab.editorMode !== "editor") return;
 
-    Blockly.getMainWorkspace().options.zoomOptions.maxScale = addon.settings.get("maxZoom") / 100;
-    Blockly.getMainWorkspace().options.zoomOptions.minScale = addon.settings.get("minZoom") / 100;
-    Blockly.getMainWorkspace().options.zoomOptions.startScale = addon.settings.get("startZoom") / 100;
-    Blockly.getMainWorkspace().options.zoomOptions.scaleSpeed = 1 + 0.2 * (addon.settings.get("zoomSpeed") / 100);
+    const workspace = addon.tab.traps.getWorkspace();
+    workspace.options.zoomOptions.maxScale = addon.settings.get("maxZoom") / 100;
+    workspace.options.zoomOptions.minScale = addon.settings.get("minZoom") / 100;
+    workspace.options.zoomOptions.startScale = addon.settings.get("startZoom") / 100;
+    workspace.options.zoomOptions.scaleSpeed = 1 + 0.2 * (addon.settings.get("zoomSpeed") / 100);
 
     const svgGroup = getZoomControls();
     const autohide = addon.settings.get("autohide");
@@ -35,7 +36,7 @@ export default async function ({ addon, console }) {
   }
 
   function getZoomControls() {
-    const zoomControls = Blockly.getMainWorkspace().zoomControls_;
+    const zoomControls = addon.tab.traps.getWorkspace().zoomControls_;
     if (zoomControls) return zoomControls.svgGroup_;
     return null;
   }

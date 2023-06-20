@@ -21,7 +21,7 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
   logView.outerElement.classList.add("sa-debugger-threads");
   logView.placeholderElement.textContent = msg("no-threads-running");
 
-  const highlighter = new Highlighter(10, "#ff0000");
+  const highlighter = new Highlighter(10, "#ff0000", () => addon.tab.traps.getWorkspace());
 
   logView.generateRow = (row) => {
     const root = document.createElement("div");

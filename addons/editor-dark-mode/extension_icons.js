@@ -24,7 +24,7 @@ export default async function ({ addon, console }) {
   };
 
   const reloadToolbox = () => {
-    const workspace = Blockly.getMainWorkspace();
+    const workspace = addon.tab.traps.getWorkspace();
     const flyout = workspace.getFlyout();
     const toolbox = workspace.getToolbox();
     const flyoutWorkspace = flyout.getWorkspace();

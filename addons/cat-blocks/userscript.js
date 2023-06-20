@@ -327,7 +327,7 @@ export default async function ({ addon, console }) {
     this.CALL_FREQUENCY_MS = 60;
   };
 
-  const workspace = Blockly.getMainWorkspace();
+  const workspace = addon.tab.traps.getWorkspace();
   if (workspace) {
     const vm = addon.tab.traps.vm;
     if (vm.editingTarget) {

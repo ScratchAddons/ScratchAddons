@@ -133,7 +133,7 @@ export default async function ({ addon, msg, console }) {
   };
 
   function updateToolbox() {
-    const workspace = Blockly.getMainWorkspace();
+    const workspace = addon.tab.traps.getWorkspace();
     const toolbox = workspace.getToolbox();
     if (!toolbox) return;
     const categoryMenu = toolbox.categoryMenu_;

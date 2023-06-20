@@ -299,7 +299,7 @@ export default async function ({ addon, console, msg }) {
   };
 
   const goToBlock = (blockId) => {
-    const workspace = Blockly.getMainWorkspace();
+    const workspace = addon.tab.traps.getWorkspace();
     const block = workspace.getBlockById(blockId);
     if (!block) return;
 

@@ -1,6 +1,6 @@
 export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
-  let workspace = Blockly.getMainWorkspace();
+  let workspace = addon.tab.traps.getWorkspace();
   // Handle future workspaces
   const originalInit = Blockly.init_;
   Blockly.init_ = function (...args) {
