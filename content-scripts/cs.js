@@ -901,6 +901,7 @@ if (isProfile || isStudio || isProject || isForums) {
         const errorTip = document.createElement("li");
         errorTip.classList.add("errorlist", "sa-extension-policy-warning");
         errorTip.style.scrollMarginTop = "50px";
+        errorTip.style.fontWeight = "bold";
         errorTip.innerHTML = errorMsgHtml + " ";
         const sendAnyway = document.createElement("a");
         sendAnyway.onclick = () => {
