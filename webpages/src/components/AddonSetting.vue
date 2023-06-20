@@ -128,26 +128,27 @@
           :addon="addon"
           :alphaEnabled="setting.allowTransparency"
           v-click-outside="closePickers"
-        ></picker
-      ></template>
-      <template v-if="showResetDropdown"
-        ><reset-dropdown
+        ></picker>
+      </template>
+      <template v-if="showResetDropdown">
+        <reset-dropdown
           :setting="setting"
           :enabled="addon._enabled"
           :presets="addon.presets"
           v-click-outside="closeResetDropdowns"
-        ></reset-dropdown
-      ></template>
-      <template v-if="!tableChild && !showResetDropdown"
-        ><button
+        ></reset-dropdown>
+      </template>
+      <template v-if="!tableChild && !showResetDropdown">
+        <button
           type="button"
           class="large-button clear-button"
           :disabled="!addon._enabled"
           :title="msg('reset')"
           @click="updateOption(setting.default || '')"
         >
-          <img src="../../../images/icons/undo.svg" class="icon-type" /></button
-      ></template>
+          <img src="../../../images/icons/undo.svg" class="icon-type" />
+        </button>
+      </template>
     </div>
   </div>
 </template>
@@ -161,6 +162,7 @@
   align-items: center;
   position: relative;
 }
+
 .setting-input {
   color: var(--content-text);
   background: var(--input-background);
@@ -173,12 +175,15 @@
   transition: 0.2s ease;
   transition-property: box-shadow, border;
 }
+
 [dir="rtl"] .setting-input {
   border-radius: 0 4px 4px 0;
 }
+
 .full-radius .setting-input {
   border-radius: 4px;
 }
+
 .setting-input:focus-visible {
   outline: none;
   border-color: var(--orange);
@@ -210,6 +215,7 @@
   border-radius: 5px;
   transition: all 0.25s ease;
 }
+
 [dir="rtl"] .setting-input.check::before {
   left: 25px;
 }
@@ -222,6 +228,7 @@
   background-color: var(--white-text);
   left: 25px;
 }
+
 [dir="rtl"] .setting-input.check:checked::before {
   left: 5px;
 }
@@ -230,9 +237,11 @@
   max-width: 150px;
   border-radius: 16px 0 0 16px;
 }
+
 [dir="rtl"] .setting-input.number {
   border-radius: 0 16px 16px 0;
 }
+
 .full-radius .setting-input.number {
   border-radius: 16px;
 }
@@ -260,19 +269,24 @@
 .setting-table-dropdown {
   position: relative;
 }
+
 .setting-dropdown.open .clear-button {
   border-bottom-right-radius: 0;
   background: var(--button-hover-background);
 }
+
 [dir="rtl"] .setting-dropdown.open .clear-button {
   border-bottom-left-radius: 0;
 }
+
 .iframe .setting-dropdown.open .clear-button {
   border-bottom-right-radius: 4px;
 }
+
 .iframe[dir="rtl"] .setting-dropdown.open .clear-button {
   border-bottom-left-radius: 4px;
 }
+
 .setting-dropdown ul,
 .setting-table-dropdown ul {
   position: absolute;
@@ -288,26 +302,31 @@
   color: var(--content-text);
   border: 1px solid var(--control-border);
 }
+
 .iframe .setting-dropdown ul {
   right: auto;
   left: -100px;
   border-top-right-radius: 4px;
 }
+
 [dir="rtl"] .setting-dropdown ul {
   right: auto;
   left: 0;
   border-top-right-radius: 4px;
   border-top-left-radius: 0;
 }
+
 .iframe[dir="rtl"] .setting-dropdown ul {
   left: auto;
   right: -100px;
   border-top-left-radius: 4px;
 }
+
 .setting-dropdown.open ul,
 .setting-table-dropdown.open ul {
   display: block;
 }
+
 .setting-dropdown li,
 .setting-table-dropdown li {
   padding: 6px 12px;
@@ -317,13 +336,16 @@
   transition: 0.2s ease;
   user-select: none;
 }
+
 .setting-dropdown li:hover,
 .setting-table-dropdown li:hover {
   background: var(--button-hover-background);
 }
+
 .setting-dropdown li > * {
   vertical-align: middle;
 }
+
 .setting-dropdown .color-preview {
   display: inline-block;
   width: 18px;
@@ -336,6 +358,7 @@
   background-size: 6px 6px;
   background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
 }
+
 .setting-dropdown .color-preview span {
   display: inline-block;
   width: 100%;
@@ -344,6 +367,7 @@
   border-radius: 4px;
   border: 1px solid var(--control-border);
 }
+
 .setting-dropdown .text-preview {
   margin-left: 12px;
   color: var(--label-text);
@@ -354,14 +378,17 @@
   display: flex;
   flex-direction: column;
 }
+
 .setting-table-list {
   display: flex;
   flex-direction: column;
 }
+
 .setting-table-row {
   display: flex;
   margin: 10px 0px;
 }
+
 .setting-table-row-settings {
   display: flex;
   flex-direction: column;
@@ -370,26 +397,31 @@
   background: var(--navigation-background);
   border-radius: 10px;
 }
+
 .setting-table-row-settings .addon-setting {
   margin-inline-end: 10px;
   margin-bottom: 0;
   flex-wrap: wrap;
 }
+
 .setting-table-options {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
+
 .setting-table-dropdown {
   align-self: flex-start;
   display: flex;
 }
+
 .setting-table-dropdown ul {
   right: auto;
   left: 0;
   border-radius: 4px;
   border-top-left-radius: 0;
 }
+
 [dir="rtl"] .setting-table-dropdown ul {
   left: auto;
   right: 0;
@@ -402,6 +434,7 @@ import Picker from "./Picker.vue";
 import ResetDropdown from "./ResetDropdown.vue";
 import Sortable from "sortablejs";
 import bus from "../lib/eventbus";
+
 export default {
   components: { Picker, ResetDropdown },
 
