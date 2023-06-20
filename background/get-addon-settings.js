@@ -361,8 +361,8 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
               settings.page = "#2e3238";
               settings.primary = "#855cd6";
               settings.highlightText = "#ccb3ff";
-              settings.menuBar = "855cd6";
-              settings.selector = "292d32";
+              settings.menuBar = "#855cd6";
+              settings.selector = "#292d32";
             }
           );
           updatePresetIfMatching(
