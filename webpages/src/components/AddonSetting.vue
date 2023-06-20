@@ -24,13 +24,13 @@
               </button>
             </div>
             <div class="setting-table-row-settings">
-              <addon-setting
+              <AddonSetting
                 v-for="(val, id) of row"
                 :addon="addon"
                 :table-child="true"
                 :setting="getTableSetting(id)"
                 :addon-settings="row"
-              ></addon-setting>
+              ></AddonSetting>
             </div>
           </div>
         </div>
