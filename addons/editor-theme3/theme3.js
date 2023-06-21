@@ -436,6 +436,7 @@ export default async function ({ addon, console, msg }) {
     if (vm.editingTarget) {
       vm.emitWorkspaceUpdate();
     }
+    if (!flyout || !toolbox) return;
     const flyoutWorkspace = flyout.getWorkspace();
     Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
     toolbox.populate_(workspace.options.languageTree);
@@ -447,11 +448,16 @@ export default async function ({ addon, console, msg }) {
   addon.self.addEventListener("disabled", updateColors);
   addon.self.addEventListener("reenabled", updateColors);
 
-  // inject() and overrideColours() are called when changing the Scratch theme, language, or editor mode
+  /* inject() and overrideColours() are called when a new Blockly instance is created,
+     which usually happens when changing the Scratch theme, language, or editor mode.
+     They will also be called when the Make a Block modal is opened. */
   const oldInject = Blockly.inject;
   Blockly.inject = function (...args) {
     const workspace = oldInject.call(this, ...args);
-    updateColors();
+    /* Scratch doesn't pass color options to inject() when creating a custom block
+       editing workspace, so we don't need to call updateColors() in that case.
+       The custom block workspace doesn't have a toolbox. */
+    if (workspace.getToolbox()) updateColors();
     return workspace;
   };
   Blockly.inject.bindDocumentEvents_ = oldInject.bindDocumentEvents_;
