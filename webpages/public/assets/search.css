@@ -47,4 +47,5 @@
 
 .search-clear-button {
   background-image: url(/images/icons/x.svg);
+  background-size: 25px 25px;
 }
