@@ -100,6 +100,7 @@
         <div class="addon-topbar">
           <span class="addon-name"
             ><img src="../../images/icons/theme.svg" class="icon-type" /> {{ msg("scratchAddonsTheme") }}
+            {{ theme }}
           </span>
         </div>
         <div class="addon-settings">
@@ -221,6 +222,7 @@ import Modal from "./components/Modal.vue";
 import AddonBody from "./components/AddonBody.vue";
 import AddonGroupHeader from "./components/AddonGroupHeader.vue";
 import CategorySelector from "./components/CategorySelector.vue";
+import { ref } from "vue";
 const browserLevelPermissions = ["notifications"];
 if (typeof browser !== "undefined") browserLevelPermissions.push("clipboardWrite");
 let grantedOptionalPermissions = [];
@@ -233,12 +235,16 @@ chrome.permissions.onAdded?.addListener(updateGrantedPermissions);
 chrome.permissions.onRemoved?.addListener(updateGrantedPermissions);
 let fuse;
 
-let initialTheme, setGlobalTheme;
+/*
+Here we're only getting the method.
+Below, in setup(), we'll get the current theme asynchronously.
+ */
+let setGlobalTheme;
 (async () => {
-  const { theme, setGlobalTheme: sGT } = await globalTheme();
-  initialTheme = theme;
+  const { setGlobalTheme: sGT } = await globalTheme();
   setGlobalTheme = sGT;
 })();
+
 let isIframe = false;
 if (window.parent !== window) {
   // We're in a popup!
@@ -251,7 +257,6 @@ export default {
     return {
       bus,
       smallMode: false,
-      theme: initialTheme,
       forceEnglishSetting: null,
       forceEnglishSettingInitial: null,
       switchPath: "../../images/icons/switch.svg",
@@ -289,6 +294,7 @@ export default {
     };
   },
   created() {
+    console.log("created");
     chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
       this.addonSettings = addonSettings;
       const cleanManifests = [];
@@ -557,7 +563,21 @@ export default {
       return this.categories.find((category) => category.id === this.selectedCategory)?.name;
     },
   },
+  setup() {
+    /*
+    Because the theme might take some time to get, we'll use a reactive variable.
+     */
+    const theme = ref(null);
+    (async () => {
+      const { theme: asyncTheme } = await globalTheme();
+      theme.value = asyncTheme;
+    })();
 
+    // Here we can't return methods!
+    return {
+      theme,
+    };
+  },
   methods: {
     openMoreSettings: function () {
       this.closePickers();
