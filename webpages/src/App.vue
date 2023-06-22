@@ -100,7 +100,6 @@
         <div class="addon-topbar">
           <span class="addon-name"
             ><img src="../../images/icons/theme.svg" class="icon-type" /> {{ msg("scratchAddonsTheme") }}
-            {{ theme }}
           </span>
         </div>
         <div class="addon-settings">
