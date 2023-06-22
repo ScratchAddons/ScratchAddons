@@ -293,7 +293,6 @@ export default {
     };
   },
   created() {
-    console.log("created");
     chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
       this.addonSettings = addonSettings;
       const cleanManifests = [];
@@ -410,7 +409,6 @@ export default {
       this.manifests = manifests.map(({ manifest }) => manifest);
 
       fuse = new Fuse(cleanManifests, fuseOptions);
-      console.log(this.manifests);
       const checkTag = (tagOrTags, manifestA, manifestB) => {
         const tags = Array.isArray(tagOrTags) ? tagOrTags : [tagOrTags];
         const aHasTag = tags.some((tag) => manifestA.tags.includes(tag));
