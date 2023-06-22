@@ -16,6 +16,11 @@ export default defineConfig({
         popup: resolve("./popup.html"),
         permissions: resolve("./permissions.html"),
       },
+      output: {
+        entryFileNames: `assets/[name].js`,
+        chunkFileNames: `assets/[name].js`,
+        assetFileNames: `assets/[name].[ext]`,
+      },
     },
   },
 
