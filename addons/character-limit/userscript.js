@@ -1,16 +1,16 @@
 export default async function ({ addon, console, msg }) {
   var maxLength = 5000;
   var className = "desc-limit";
-  var area = "project"
+  var area = "project";
   if (location.pathname.split("/").includes("studios")) {
     className = "studio-desc-limit";
-    area = "studio"
+    area = "studio";
   }
 
   var threshold = null;
   function updateThreshold() {
     if (addon.settings.get("display") === "low") {
-      threshold = addon.settings.get("threshold")
+      threshold = addon.settings.get("threshold");
     } else {
       threshold = Infinity;
     }
@@ -38,7 +38,7 @@ export default async function ({ addon, console, msg }) {
 
     function newCharLimitCounter(location, field) {
       const element = document.createElement("span");
-      element.textContent = msg("left", { num: maxLength })
+      element.textContent = msg("left", { num: maxLength });
       element.className = className + " limit-hidden";
 
       const counter = location.appendChild(element);
@@ -81,13 +81,19 @@ export default async function ({ addon, console, msg }) {
 
     if (area === "studio") {
       // Studio Description
-      newCharLimitCounter(document.getElementsByClassName("studio-info-section")[3], document.querySelector(".inplace-textarea.studio-description"));
+      newCharLimitCounter(
+        document.getElementsByClassName("studio-info-section")[3],
+        document.querySelector(".inplace-textarea.studio-description")
+      );
     } else {
       // Project Page > Instructions
       newCharLimitCounter(document.querySelector(".project-textlabel"), document.getElementsByName("instructions")[0]);
 
       // Project Page > Notes and Credits
-      newCharLimitCounter(document.querySelectorAll(".project-textlabel")[1], document.querySelector('textarea[name="description"]'));
+      newCharLimitCounter(
+        document.querySelectorAll(".project-textlabel")[1],
+        document.querySelector('textarea[name="description"]')
+      );
     }
   }
 }
