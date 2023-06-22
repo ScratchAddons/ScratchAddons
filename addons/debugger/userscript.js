@@ -625,18 +625,22 @@ export default async function ({ addon, console, msg }) {
   };
 
   while (true) {
-    await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {
-      markAsSeen: true,
-      reduxEvents: [
-        "scratch-gui/mode/SET_PLAYER",
-        "scratch-gui/mode/SET_FULL_SCREEN",
-        "fontsLoaded/SET_FONTS_LOADED",
-        "scratch-gui/locales/SELECT_LOCALE",
-      ],
-    });
+    await addon.tab.waitForElement(
+      '[class^="stage-header_stage-size-row"] [class^="button_outlined-button"], [class^="stage-header_stage-menu-wrapper"] > [class^="button_outlined-button"], [class*="stage-header_unselect-wrapper_"] > [class^="button_outlined-button"]',
+      {
+        markAsSeen: true,
+        reduxEvents: [
+          "scratch-gui/mode/SET_PLAYER",
+          "scratch-gui/mode/SET_FULL_SCREEN",
+          "fontsLoaded/SET_FONTS_LOADED",
+          "scratch-gui/locales/SELECT_LOCALE",
+        ],
+      }
+    );
     if (addon.tab.editorMode === "editor") {
       addon.tab.appendToSharedSpace({ space: "stageHeader", element: debuggerButtonOuter, order: 0 });
     } else {
+      debuggerButtonOuter.remove();
       setInterfaceVisible(false);
     }
   }
