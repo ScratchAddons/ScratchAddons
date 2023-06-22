@@ -648,7 +648,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_33", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_33_2", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -667,7 +667,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_33"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_33_2"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -728,8 +728,14 @@ const showBanner = () => {
 
 const handleBanner = async () => {
   const currentVersion = chrome.runtime.getManifest().version;
-  const [major, minor, _] = currentVersion.split(".");
-  const currentVersionMajorMinor = `${major}.${minor}`;
+  const [major, minor, _patch] = currentVersion.split(".");
+  let currentVersionMajorMinor = `${major}.${minor}`;
+  if (currentVersionMajorMinor === "1.33" && _patch > 1) {
+    // Consider this a different SA version.
+    // Note that versions are never compared as numbers. Having a distinct
+    // string that uniquely identifies v1.33.x (with x>1) is enough.
+    currentVersionMajorMinor = "1.33.x";
+  }
   // Making this configurable in the future?
   // Using local because browser extensions may not be updated at the same time across browsers
   const settings = await promisify(chrome.storage.local.get.bind(chrome.storage.local))(["bannerSettings"]);
