@@ -1,10 +1,27 @@
-.tabs button:disabled {
+.user-tab {
+  display: grid !important;
+  align-items: end;
+  justify-items: center;
+}
+
+.user-tab:not(:disabled) img {
+  border-radius: 3px;
+}
+
+.user-tab span {
+  max-width: 8em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-tab:disabled {
   opacity: 0.5;
   cursor: default;
 }
 
-.tabs button:disabled:hover,
-.tabs button:disabled:active {
+.user-tab:disabled:hover,
+.user-tab:disabled:active {
   background-color: transparent;
   border: none;
 }
