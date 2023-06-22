@@ -2097,9 +2097,9 @@
   "injectAsStyleElt": true,
   "versionAdded": "1.4.0",
   "latestUpdate": {
-    "version": "1.33.2",
-    "temporaryNotice": "TODO.",
-    "isMajor": true
+    "version": "1.23.0",
+    "isMajor": true,
+    "temporaryNotice": "You can now completely customize the appearance of the Scratch website."
   },
   "updateUserstylesOnSettingsChange": true,
   "userscripts": [
