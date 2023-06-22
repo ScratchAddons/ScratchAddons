@@ -1,0 +1,23 @@
+.project-loves:before {
+	background-image: url("icons/love-gray.svg");
+}
+
+.project-loves.loved:before {
+    background-image: url("icons/love-red.svg");
+}
+
+.project-favorites:before {
+	background-image: url("icons/fav-gray.svg");
+}
+
+.project-favorites.favorited:before {
+    background-image: url("icons/fav-yellow.svg");
+}
+
+.project-remixes:before {
+    background-image: url("icons/remix.svg");
+}
+
+.project-views:before {
+    background-image: url("icons/views.svg");
+}
