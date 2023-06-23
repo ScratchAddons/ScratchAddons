@@ -45,9 +45,9 @@ export default async function ({ addon, console, msg }) {
 
       function updateVisibility() {
         if (5000 - field.value.length <= threshold) {
-          counter.className = "desc-limit";
+          counter.className = className;
         } else {
-          counter.className = "desc-limit limit-hidden";
+          counter.className = className + " limit-hidden";
         }
       }
 
@@ -57,7 +57,7 @@ export default async function ({ addon, console, msg }) {
         updateVisibility();
       });
       field.addEventListener("blur", () => {
-        counter.className = "desc-limit limit-hidden";
+        counter.className = className + " limit-hidden";
       });
 
       addon.tab.displayNoneWhileDisabled(counter);
