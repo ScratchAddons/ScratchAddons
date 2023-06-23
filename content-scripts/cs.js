@@ -753,8 +753,9 @@ if (document.readyState !== "loading") {
 const isProfile = pathArr[0] === "users" && pathArr[2] === "";
 const isStudio = pathArr[0] === "studios";
 const isProject = pathArr[0] === "projects";
+const isForums = pathArr[0] === "discuss";
 
-if (isProfile || isStudio || isProject) {
+if (isProfile || isStudio || isProject || isForums) {
   const removeReiteratedChars = (string) =>
     string
       .split("")
@@ -773,7 +774,7 @@ if (isProfile || isStudio || isProject) {
   extensionPolicyLink.innerText = chrome.i18n.getMessage("captureCommentPolicy");
   Object.assign(extensionPolicyLink.style, {
     textDecoration: "underline",
-    color: "white",
+    color: isForums ? "" : "white",
   });
   const errorMsgHtml = escapeHTML(chrome.i18n.getMessage("captureCommentError", DOLLARS)).replace(
     "$1",
@@ -877,5 +878,68 @@ if (isProfile || isStudio || isProject) {
       },
       { capture: true }
     );
+  } else if (isForums) {
+    window.addEventListener("click", (e) => {
+      const potentialPostButton = e.target.closest("button[type=submit]");
+      if (!potentialPostButton) return;
+      const form = e.target.closest("form");
+      if (!form) return;
+      if (form.hasAttribute("data-sa-send-anyway")) {
+        form.removeAttribute("data-sa-send-anyway");
+        return;
+      }
+      const existingWarning = form.parentElement.querySelector(".sa-extension-policy-warning");
+      if (existingWarning) {
+        // Do nothing. The warning automatically disappears after typing into the form.
+        e.preventDefault();
+        existingWarning.scrollIntoView({ behavior: "smooth" });
+        return;
+      }
+      const textarea = form.querySelector("textarea.markItUpEditor");
+      if (!textarea) return;
+      if (shouldCaptureComment(textarea.value)) {
+        const errorTip = document.createElement("li");
+        errorTip.classList.add("errorlist", "sa-extension-policy-warning");
+        errorTip.style.scrollMarginTop = "50px";
+        errorTip.style.fontWeight = "bold";
+        errorTip.innerHTML = errorMsgHtml + " ";
+        const sendAnyway = document.createElement("a");
+        sendAnyway.onclick = () => {
+          const res = confirm(confirmMsg);
+          if (res) {
+            form.setAttribute("data-sa-send-anyway", "");
+            form.querySelector("button[type=submit]")?.click();
+          }
+        };
+        sendAnyway.textContent = sendAnywayMsg;
+        errorTip.appendChild(sendAnyway);
+
+        const postArea = form.querySelector("label");
+        if (!postArea) return;
+        let errorList = form.querySelector("label > ul");
+        if (!errorList) {
+          const typeArea = postArea.querySelector("strong");
+          errorList = document.createElement("ul");
+          errorList.classList.add("errorlist");
+          postArea.insertBefore(errorList, typeArea);
+        }
+
+        errorList.appendChild(errorTip);
+        errorTip.scrollIntoView({ behavior: "smooth" });
+        e.preventDefault();
+
+        // Hide error after typing
+        textarea.addEventListener(
+          "input",
+          () => {
+            errorTip.remove();
+            if (errorList.querySelector("li") === null) {
+              errorList.remove();
+            }
+          },
+          { once: true }
+        );
+      }
+    });
   }
 }
