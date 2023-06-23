@@ -1206,7 +1206,7 @@
   },
   "latestUpdate": {
     "version": "1.33.2",
-    "temporaryNotice": "TODO.",
+    "temporaryNotice": "The presets for this addon have been updated to use Scratch's new purple accent color. Presets that use blue are still available as well.",
     "isMajor": true
   },
   "tags": ["editor", "theme", "featured"],
