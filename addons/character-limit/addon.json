@@ -1,6 +1,6 @@
 {
   "name": "Character limit display",
-  "description": "Adds character limit displays for instructions, notes and credits, studio descriptions and forum signatures.",
+  "description": "Adds character limit displays for instructions, notes and credits and studio descriptions.",
   "tags": ["community", "projectPage"],
   "credits": [
     {
