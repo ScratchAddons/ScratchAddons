@@ -10,7 +10,10 @@
   "userstyles": [
     {
       "url": "hide_outline.css",
-      "matches": ["projects", "https://scratch.mit.edu/studios/*"],
+      "matches": [
+        "projects",
+        "https://scratch.mit.edu/studios/*"
+      ],
       "if": {
         "settings": {
           "hide-outline": true
@@ -19,7 +22,10 @@
     },
     {
       "url": "outline_color.css",
-      "matches": ["projects", "https://scratch.mit.edu/studios/*"],
+      "matches": [
+        "projects",
+        "https://scratch.mit.edu/studios/*"
+      ],
       "if": {
         "settings": {
           "hide-outline": false
@@ -28,7 +34,10 @@
     },
     {
       "url": "fill_transparent.css",
-      "matches": ["projects", "https://scratch.mit.edu/studios/*"],
+      "matches": [
+        "projects",
+        "https://scratch.mit.edu/studios/*"
+      ],
       "if": {
         "settings": {
           "fill-transparent": true
@@ -37,32 +46,47 @@
     },
     {
       "url": "scratchr2/hide_outline.css",
-      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/discuss/*"],
+      "matches": [
+        "https://scratch.mit.edu/users/*",
+        "https://scratch.mit.edu/discuss/*"
+      ],
       "if": {
         "settings": {
           "hide-outline": true
         },
-        "addonEnabled": ["scratchr2"]
+        "addonEnabled": [
+          "scratchr2"
+        ]
       }
     },
     {
       "url": "scratchr2/outline_color.css",
-      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/discuss/*"],
+      "matches": [
+        "https://scratch.mit.edu/users/*",
+        "https://scratch.mit.edu/discuss/*"
+      ],
       "if": {
         "settings": {
           "hide-outline": false
         },
-        "addonEnabled": ["scratchr2"]
+        "addonEnabled": [
+          "scratchr2"
+        ]
       }
     },
     {
       "url": "scratchr2/fill_transparent.css",
-      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/discuss/*"],
+      "matches": [
+        "https://scratch.mit.edu/users/*",
+        "https://scratch.mit.edu/discuss/*"
+      ],
       "if": {
         "settings": {
           "fill-transparent": true
         },
-        "addonEnabled": ["scratchr2"]
+        "addonEnabled": [
+          "scratchr2"
+        ]
       }
     }
   ],
@@ -88,7 +112,7 @@
       "id": "outline-color",
       "type": "color",
       "allowTransparency": true,
-      "default": "#4d97ff40",
+      "default": "#396db540",
       "if": {
         "settings": {
           "hide-outline": false,
@@ -97,7 +121,10 @@
       }
     }
   ],
-  "tags": ["community", "theme"],
+  "tags": [
+    "community",
+    "theme"
+  ],
   "versionAdded": "1.18.0",
   "enabledByDefault": false
 }

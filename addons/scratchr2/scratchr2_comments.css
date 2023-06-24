@@ -118,7 +118,7 @@
   border-radius: 8px;
 }
 #comments .comment .info .name a {
-  color: var(--darkWww-link, #4d97ff);
+  color: var(--darkWww-link, #396db5);
 }
 #comments .comment .info .name a:hover {
   color: var(--darkWww-link-hover, #4280d7);
@@ -170,7 +170,7 @@
   padding: 0 8px;
   background-color: var(--darkWww-blue, #eaf1fc);
   border: none;
-  color: var(--darkWww-link, #4d97ff);
+  color: var(--darkWww-link, #396db5);
   font-weight: bold;
 }
 #comments .more-replies:hover .pulldown {
