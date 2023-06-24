@@ -1205,9 +1205,9 @@
     "colors": ["primary", "menuBar", "page", "accent", "workspace", "selector"]
   },
   "latestUpdate": {
-    "version": "1.32.0",
-    "newSettings": ["popup"],
-    "temporaryNotice": "You can now customize the color of popup backdrops (the solid-color background behind prompts for actions like naming a new variable) separately."
+    "version": "1.33.2",
+    "temporaryNotice": "The presets for this addon have been updated to use Scratch's new purple accent color. Presets that use blue are still available as well.",
+    "isMajor": true
   },
   "tags": ["editor", "theme", "featured"],
   "enabledByDefault": false
