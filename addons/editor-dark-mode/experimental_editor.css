@@ -323,7 +323,9 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 [id^="blocklyGridPattern"] line {
   stroke: var(--editorDarkMode-workspace-dots);
 }
-.blocklyMainWorkspaceScrollbar .blocklyScrollbarHandle {
+.blocklyMainWorkspaceScrollbar .blocklyScrollbarHandle,
+.blocklyMainWorkspaceScrollbar .blocklyScrollbarBackground:hover + .blocklyScrollbarHandle,
+.blocklyMainWorkspaceScrollbar .blocklyScrollbarHandle:hover {
   fill: var(--editorDarkMode-workspace-scrollbar);
 }
 .blocklyInsertionMarker > .blocklyPath {
@@ -350,7 +352,9 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .blocklyFlyoutButton .blocklyText {
   fill: var(--editorDarkMode-palette-text);
 }
-.blocklyFlyoutScrollbar .blocklyScrollbarHandle {
+.blocklyFlyoutScrollbar .blocklyScrollbarHandle,
+.blocklyFlyoutScrollbar .blocklyScrollbarBackground:hover + .blocklyScrollbarHandle,
+.blocklyFlyoutScrollbar .blocklyScrollbarHandle:hover {
   fill: var(--editorDarkMode-palette-scrollbar);
 }
 
