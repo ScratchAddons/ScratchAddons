@@ -1,0 +1,12 @@
+{
+    "name": "Show exact join date",
+    "description": "Shows the exact join date on profiles.",
+    "userscripts":[
+        {
+            "url": "script.js",
+            "matches": ["https://scratch.mit.edu/users/*/"]
+        }
+    ],
+    "tags": ["profiles", "beta"],
+    "versionAdded": "1.30.1"
+}
