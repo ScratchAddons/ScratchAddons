@@ -15,7 +15,7 @@
   padding-top: 20px;
   padding-bottom: 8px;
   border-radius: 0;
-  background: #396db5;
+  background: #855cd6;
   border: none;
 }
 #content > .cols > .col-12 > .box > .box-head h2 {
@@ -58,7 +58,7 @@
   border-color: var(--darkWww-border, rgba(0, 0, 0, 0.1));
 }
 .v-tabs li.active {
-  background-color: var(--darkWww-button, #396db5);
+  background-color: var(--darkWww-button, #855cd6);
   border: 1px solid rgba(0, 0, 0, 0.15);
 }
 .v-tabs li.active:hover {

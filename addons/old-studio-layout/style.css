@@ -81,7 +81,7 @@
 }
 .studio-info .studio-info-footer-report button:hover {
   background: transparent;
-  color: var(--darkWww-link-hover, #396db5);
+  color: var(--darkWww-link-hover, #855cd6);
 }
 .studio-info .studio-info-footer-report button img {
   filter: var(--darkWww-link-iconFilter, var(--oldStudioLayout-defaultLinkIconFilter));

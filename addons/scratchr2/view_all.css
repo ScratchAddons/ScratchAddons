@@ -107,7 +107,7 @@ body,
   color: var(--darkWww-gray-text, #575e75);
 }
 .box .box-content .pagination .active {
-  background-color: var(--darkWww-button, #396db5);
+  background-color: var(--darkWww-button, #855cd6);
   border-color: rgba(0, 0, 0, 0.15);
   color: var(--darkWww-button-text, white);
 }
