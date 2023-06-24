@@ -4,7 +4,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "Projects will run twice as fast at 60FPS, because they typically run at 30FPS.",
+      "text": "Many projects won't behave properly when running at 60 FPS, because increasing the frame rate also increases the speed at which scripts run.",
       "id": "projectRunsFasterNotice"
     }
   ],
