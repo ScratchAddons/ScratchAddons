@@ -44,7 +44,7 @@ export default async function ({ addon, console, msg }) {
       const counter = location.appendChild(element);
 
       function updateVisibility() {
-        if (5000 - field.value.length <= threshold) {
+        if (maxLength - field.value.length <= threshold) {
           counter.className = className;
         } else {
           counter.className = className + " limit-hidden";
