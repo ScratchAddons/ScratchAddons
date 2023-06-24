@@ -86,7 +86,7 @@
 
 .sa-lock-object.locked .sa-lock-button {
   background-color: var(--editorDarkMode-primary, #855cd6);
-  border-color: var(--editorDarkMode-primary-variant, #5846ab);
+  border-color: var(--editorDarkMode-primary-variant, #714eb6);
 }
 
 .sa-lock-button img {
