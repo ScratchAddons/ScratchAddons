@@ -361,8 +361,8 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
               settings.page = "#2e3238";
               settings.primary = "#855cd6";
               settings.highlightText = "#ccb3ff";
-              settings.menuBar = "#855cd6";
               settings.selector = "#292d32";
+              // Changing the menuBar ("menu bar background") setting is handled by migration #10.
             }
           );
           updatePresetIfMatching(
@@ -434,7 +434,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             () => {
               console.log("Migrated 'menu bar background' setting from old blue to new purple.");
               madeAnyChanges = madeChangesToAddon = true;
-              settings.menuBar = "#9966ff"; // New vanilla "menu bar background" (purple)
+              settings.menuBar = "#855cd6"; // New vanilla "menu bar background" (purple)
             }
           );
         }
