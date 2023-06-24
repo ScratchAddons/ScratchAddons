@@ -6,6 +6,7 @@ import minifySettings from "../libraries/common/minify-settings.js";
 
  - editor-dark-mode 6 (bumped in v1.32 four times)
  - editor-theme3 3 (last bumped in v1.32)
+ - dark-www 2 (bumped twice in v1.33.2)
  */
 
 const areColorsEqual = (currentColor, oldPresetColor) => {
@@ -206,6 +207,31 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             delete scratchr2.primaryColor;
             delete scratchr2.linkColor;
           }
+
+          updatePresetIfMatching(
+            settings,
+            1,
+            {
+              navbar: "#4d97ff",
+            },
+            () => {
+              settings.navbar = "#855cd6";
+              madeAnyChanges = madeChangesToAddon = true;
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            2,
+            {
+              // Old blue "highlight color" setting
+              button: "#4d97ff", // Same old color as "navbar" setting.
+            },
+            () => {
+              settings.button = "#855cd6"; // Same new color as migration #1
+              madeAnyChanges = madeChangesToAddon = true;
+            }
+          );
+          // TODO: migrate "link" setting for each preset.
         }
 
         if (addonId === "editor-dark-mode") {
