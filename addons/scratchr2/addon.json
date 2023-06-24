@@ -1,11 +1,7 @@
 {
   "name": "Scratch 2.0 \u2192 3.0",
   "description": "Makes Scratch 2.0-styled pages look like Scratch 3.0.",
-  "tags": [
-    "community",
-    "theme",
-    "recommended"
-  ],
+  "tags": ["community", "theme", "recommended"],
   "credits": [
     {
       "name": "Maximouse",
@@ -29,27 +25,19 @@
   "userstyles": [
     {
       "url": "scratchr2.css",
-      "matches": [
-        "isNotScratchWWW"
-      ]
+      "matches": ["isNotScratchWWW"]
     },
     {
       "url": "scratchr2_errors.css",
-      "matches": [
-        "isNotScratchWWW"
-      ]
+      "matches": ["isNotScratchWWW"]
     },
     {
       "url": "forums.css",
-      "matches": [
-        "https://scratch.mit.edu/discuss/*"
-      ]
+      "matches": ["https://scratch.mit.edu/discuss/*"]
     },
     {
       "url": "forums_bubbles.css",
-      "matches": [
-        "https://scratch.mit.edu/discuss/*"
-      ],
+      "matches": ["https://scratch.mit.edu/discuss/*"],
       "if": {
         "settings": {
           "postStyle": "bubble"
@@ -58,9 +46,7 @@
     },
     {
       "url": "forums_topic.css",
-      "matches": [
-        "https://scratch.mit.edu/discuss/topic/*/"
-      ]
+      "matches": ["https://scratch.mit.edu/discuss/topic/*/"]
     },
     {
       "url": "forums_subpage.css",
@@ -73,28 +59,19 @@
     },
     {
       "url": "forums_yt.css",
-      "matches": [
-        "https://scratch.mit.edu/discuss/youtube/*/"
-      ]
+      "matches": ["https://scratch.mit.edu/discuss/youtube/*/"]
     },
     {
       "url": "profile.css",
-      "matches": [
-        "https://scratch.mit.edu/users/*/",
-        "https://scratch.mit.edu/classes/*/"
-      ]
+      "matches": ["https://scratch.mit.edu/users/*/", "https://scratch.mit.edu/classes/*/"]
     },
     {
       "url": "scratchr2_comments.css",
-      "matches": [
-        "https://scratch.mit.edu/users/*/"
-      ]
+      "matches": ["https://scratch.mit.edu/users/*/"]
     },
     {
       "url": "remixtree.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/remixtree/"
-      ]
+      "matches": ["https://scratch.mit.edu/projects/*/remixtree/"]
     },
     {
       "url": "v_tabs.css",
@@ -107,9 +84,7 @@
     },
     {
       "url": "mystuff.css",
-      "matches": [
-        "https://scratch.mit.edu/mystuff/"
-      ]
+      "matches": ["https://scratch.mit.edu/mystuff/"]
     },
     {
       "url": "settings.css",

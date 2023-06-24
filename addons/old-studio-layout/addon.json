@@ -12,12 +12,7 @@
       "id": "itemsPerRow"
     }
   ],
-  "tags": [
-    "community",
-    "theme",
-    "studios",
-    "featured"
-  ],
+  "tags": ["community", "theme", "studios", "featured"],
   "credits": [
     {
       "name": "Maximouse",
@@ -48,24 +43,18 @@
   "userscripts": [
     {
       "url": "classes.js",
-      "matches": [
-        "https://scratch.mit.edu/studios/*"
-      ],
+      "matches": ["https://scratch.mit.edu/studios/*"],
       "runAtComplete": false
     }
   ],
   "userstyles": [
     {
       "url": "style.css",
-      "matches": [
-        "https://scratch.mit.edu/studios/*"
-      ]
+      "matches": ["https://scratch.mit.edu/studios/*"]
     },
     {
       "url": "default.css",
-      "matches": [
-        "https://scratch.mit.edu/studios/*"
-      ],
+      "matches": ["https://scratch.mit.edu/studios/*"],
       "if": {
         "settings": {
           "version": "default"
@@ -74,9 +63,7 @@
     },
     {
       "url": "scratchr2.css",
-      "matches": [
-        "https://scratch.mit.edu/studios/*"
-      ],
+      "matches": ["https://scratch.mit.edu/studios/*"],
       "if": {
         "settings": {
           "version": "scratchr2"
