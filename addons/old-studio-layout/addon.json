@@ -31,7 +31,7 @@
       "name": "defaultLinkHoverIconFilter",
       "value": {
         "type": "recolorFilter",
-        "source": "#855cd6"
+        "source": "#7854c0"
       }
     }
   ],

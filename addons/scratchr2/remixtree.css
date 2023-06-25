@@ -1,5 +1,5 @@
 a:visited {
-  color: #855cd6;
+  color: var(--darkWww-link), #855cd6;
 }
 a:active,
 a:active:hover,
