@@ -352,13 +352,18 @@ export default {
         if (manifest.versionAdded) {
           const [extMajor, extMinor, _] = this.version.split(".");
           const [addonMajor, addonMinor, __] = manifest.versionAdded.split(".");
-          if (extMajor === addonMajor && extMinor === addonMinor) {
+          const excluded_1_33_0 = manifest.versionAdded === "1.33.0";
+          if (!excluded_1_33_0 && extMajor === addonMajor && extMinor === addonMinor) {
             manifest.tags.push("new");
             manifest._groups.push(
               manifest.tags.includes("recommended") || manifest.tags.includes("featured") ? "featuredNew" : "new"
             );
+          } else if (excluded_1_33_0) {
+            // Addon: op-badge
+            // TODO: remove this for v1.34.0 release.
+            manifest.tags.push("new");
+            manifest._groups.push("new");
           }
-        }
 
         if (manifest.latestUpdate) {
           const [extMajor, extMinor, _] = this.version.split(".");
@@ -445,16 +450,7 @@ export default {
           obj.manifest = this.manifestsById[addonId];
           obj.group = group;
           obj.matchesSearch = false; // Later set to true by this.addonList if needed
-          let shouldHideAsEasterEgg = obj.manifest._categories[0] === "easterEgg" && obj.manifest._enabled === false;
-          if (addonId === "featured-dangos") {
-            // April Fools 2023 addon
-            const MARCH_31_TIMESTAMP = 1680264000;
-            const APRIL_2_TIMESTAMP = 1680436800;
-            const now = new Date().getTime() / 1000;
-            // Hide as easter egg if addon is enabled but not functional
-            // Also, show even if disabled while it's April Fools
-            shouldHideAsEasterEgg = !(now < APRIL_2_TIMESTAMP && now > MARCH_31_TIMESTAMP);
-          }
+          const shouldHideAsEasterEgg = obj.manifest._categories[0] === "easterEgg" && obj.manifest._enabled === false;
           obj.matchesCategory = !shouldHideAsEasterEgg;
           obj.naturalIndex = naturalIndex;
           obj.headerAbove = groupIndex === 0;
