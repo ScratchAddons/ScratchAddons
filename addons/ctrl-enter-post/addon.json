@@ -46,11 +46,7 @@
     },
     {
       "url": "comments.js",
-      "matches": [
-        "https://scratch.mit.edu/studios/*",
-        "https://scratch.mit.edu/users/*",
-        "projects"
-      ],
+      "matches": ["https://scratch.mit.edu/studios/*", "https://scratch.mit.edu/users/*", "projects"],
       "if": {
         "settings": {
           "comments": true
@@ -59,8 +55,6 @@
     }
   ],
   "versionAdded": "1.18.0",
-  "tags": [
-    "community"
-  ],
+  "tags": ["community"],
   "enabledByDefault": false
 }
