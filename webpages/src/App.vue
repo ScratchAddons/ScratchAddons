@@ -234,16 +234,8 @@ chrome.permissions.onAdded?.addListener(updateGrantedPermissions);
 chrome.permissions.onRemoved?.addListener(updateGrantedPermissions);
 let fuse;
 
-/*
-Here we're only getting the method.
-Below, in setup(), we'll get the current theme asynchronously.
- */
+ 
 let setGlobalTheme;
-(async () => {
-  const { setGlobalTheme: sGT } = await globalTheme();
-  setGlobalTheme = sGT;
-})();
-
 let isIframe = false;
 if (window.parent !== window) {
   // We're in a popup!
@@ -566,8 +558,9 @@ export default {
      */
     const theme = ref(null);
     (async () => {
-      const { theme: asyncTheme } = await globalTheme();
+      const { theme: asyncTheme, setGlobalTheme: sGT  } = await globalTheme();
       theme.value = asyncTheme;
+      setGlobalTheme = sGT;
     })();
 
     // Here we can't return methods!
