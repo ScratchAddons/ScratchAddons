@@ -20,7 +20,7 @@ body,
   text-shadow: none;
 }
 ::selection {
-  background-color: var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
+  background-color: rgba(77, 151, 255, 0.25);
 }
 .box .box-head h1,
 .box .box-head h2,
