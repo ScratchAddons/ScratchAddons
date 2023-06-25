@@ -112,7 +112,7 @@ body,
   color: var(--darkWww-button-text, white);
 }
 .box .box-content .pagination .active:hover {
-  background-color: var(--darkWww-button-variant, #4280d7);
+  background-color: var(--darkWww-button-variant, #7854c0);
 }
 .box .box-content .pagination .disabled {
   opacity: 0.5;

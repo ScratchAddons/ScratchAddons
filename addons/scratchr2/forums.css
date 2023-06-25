@@ -170,7 +170,7 @@ body > #pagewrapper {
   color: var(--darkWww-button-text, white);
 }
 .pagination .current:hover {
-  background-color: var(--darkWww-button-variant, #4280d7);
+  background-color: var(--darkWww-button-variant, #7854c0);
 }
 .pagination .disabled {
   opacity: 0.5;
@@ -297,7 +297,7 @@ body > #pagewrapper {
 }
 .postmsg ::selection {
   /* Don't break [color=transparent] hidden text */
-  background-color: var(--darkWww-button-variant, #4280d7);
+  background-color: var(--darkWww-button-variant, #7854c0);
   color: var(--darkWww-button-text, white);
 }
 .postfootright > ul {

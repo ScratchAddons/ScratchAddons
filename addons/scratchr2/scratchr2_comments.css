@@ -121,7 +121,7 @@
   color: var(--darkWww-link, #855cd6);
 }
 #comments .comment .info .name a:hover {
-  color: var(--darkWww-link-hover, #4280d7);
+  color: var(--darkWww-link-hover, #7854c0);
 }
 #comments .comment .info .time {
   color: var(--darkWww-box-transparentText, #b3b3b3);
@@ -174,7 +174,7 @@
   font-weight: bold;
 }
 #comments .more-replies:hover .pulldown {
-  color: var(--darkWww-link-hover, #4280d7);
+  color: var(--darkWww-link-hover, #7854c0);
 }
 #comments .comment form > .control-group:last-child {
   /* emoji-picker compatibility */

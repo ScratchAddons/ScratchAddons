@@ -41,7 +41,7 @@ input.link:hover,
 input.link:active,
 input.link.black:hover,
 input.link.black:active {
-  color: var(--darkWww-link-hover, #4280d7);
+  color: var(--darkWww-link-hover, #7854c0);
   text-decoration: none;
 }
 #content {
@@ -625,7 +625,7 @@ select:focus {
   background-color: var(--darkWww-navbar, #855cd6);
   border: none;
   color: var(--darkWww-navbar-text, white);
-  box-shadow: inset 0 -1px 0 0 var(--darkWww-navbar-variant, #4280d7);
+  box-shadow: inset 0 -1px 0 0 var(--darkWww-navbar-variant, #7854c0);
 }
 .modal .modal-header .close,
 .jqui-modal .ui-widget-header .ui-dialog-titlebar-close {
