@@ -76,7 +76,18 @@ let fuse;
 
   const serializeSettings = async () => {
     const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
-    const storedSettings = await syncGet(["globalTheme", "addonSettings", "addonsEnabled"]);
+    const storedSettings = await syncGet([
+      "globalTheme",
+      "addonSettings1",
+      "addonSettings2",
+      "addonSettings3",
+      "addonsEnabled",
+    ]);
+    const addonSettings = {
+      ...storedSettings.addonSettings1,
+      ...storedSettings.addonSettings2,
+      ...storedSettings.addonSettings3,
+    };
     const serialized = {
       core: {
         lightTheme: storedSettings.globalTheme,
@@ -87,7 +98,7 @@ let fuse;
     for (const addonId of Object.keys(storedSettings.addonsEnabled)) {
       serialized.addons[addonId] = {
         enabled: storedSettings.addonsEnabled[addonId],
-        settings: storedSettings.addonSettings[addonId] || {},
+        settings: addonSettings[addonId] || {},
       };
     }
     return JSON.stringify(serialized);
@@ -97,7 +108,17 @@ let fuse;
     const obj = JSON.parse(str);
     const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
     const syncSet = promisify(chrome.storage.sync.set.bind(chrome.storage.sync));
-    const { addonSettings, addonsEnabled } = await syncGet(["addonSettings", "addonsEnabled"]);
+    const { addonsEnabled, ...storageItems } = await syncGet([
+      "addonSettings1",
+      "addonSettings2",
+      "addonSettings3",
+      "addonsEnabled",
+    ]);
+    const addonSettings = {
+      ...storageItems.addonSettings1,
+      ...storageItems.addonSettings2,
+      ...storageItems.addonSettings3,
+    };
     const pendingPermissions = {};
     for (const addonId of Object.keys(obj.addons)) {
       const addonValue = obj.addons[addonId];
@@ -133,7 +154,7 @@ let fuse;
       await syncSet({
         globalTheme: !!obj.core.lightTheme,
         addonsEnabled,
-        addonSettings: minifySettings(addonSettings, prerelease ? null : manifests),
+        ...minifySettings(addonSettings, prerelease ? null : manifests),
       });
       resolvePromise();
     };
@@ -541,11 +562,17 @@ let fuse;
       if (manifest.versionAdded) {
         const [extMajor, extMinor, _] = vue.version.split(".");
         const [addonMajor, addonMinor, __] = manifest.versionAdded.split(".");
-        if (extMajor === addonMajor && extMinor === addonMinor) {
+        const excluded_1_33_0 = manifest.versionAdded === "1.33.0";
+        if (!excluded_1_33_0 && extMajor === addonMajor && extMinor === addonMinor) {
           manifest.tags.push("new");
           manifest._groups.push(
             manifest.tags.includes("recommended") || manifest.tags.includes("featured") ? "featuredNew" : "new"
           );
+        } else if (excluded_1_33_0) {
+          // Addon: op-badge
+          // TODO: remove this for v1.34.0 release.
+          manifest.tags.push("new");
+          manifest._groups.push("new");
         }
       }
 
@@ -633,16 +660,7 @@ let fuse;
         obj.manifest = vue.manifestsById[addonId];
         obj.group = group;
         obj.matchesSearch = false; // Later set to true by vue.addonList if needed
-        let shouldHideAsEasterEgg = obj.manifest._categories[0] === "easterEgg" && obj.manifest._enabled === false;
-        if (addonId === "featured-dangos") {
-          // April Fools 2023 addon
-          const MARCH_31_TIMESTAMP = 1680264000;
-          const APRIL_2_TIMESTAMP = 1680436800;
-          const now = new Date().getTime() / 1000;
-          // Hide as easter egg if addon is enabled but not functional
-          // Also, show even if disabled while it's April Fools
-          shouldHideAsEasterEgg = !(now < APRIL_2_TIMESTAMP && now > MARCH_31_TIMESTAMP);
-        }
+        const shouldHideAsEasterEgg = obj.manifest._categories[0] === "easterEgg" && obj.manifest._enabled === false;
         obj.matchesCategory = !shouldHideAsEasterEgg;
         obj.naturalIndex = naturalIndex;
         obj.headerAbove = groupIndex === 0;
