@@ -1,6 +1,13 @@
 {
   "root": true,
-  "ignorePatterns": ["node_modules/*", "_locales/*", ".github/*", "addons-l10n/*", "libraries/thirdparty/*"],
+  "ignorePatterns": [
+    "node_modules/*",
+    "_locales/*",
+    ".github/*",
+    "addons-l10n/*",
+    "libraries/thirdparty/*",
+    "webpages/dist/*"
+  ],
   "parserOptions": {
     "sourceType": "module"
   },

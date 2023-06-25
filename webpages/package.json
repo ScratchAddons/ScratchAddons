@@ -1,0 +1,21 @@
+{
+  "name": "webpagesish",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite build --mode development --watch",
+    "build": "vite build ",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "fuse.js": "^6.6.2",
+    "sortablejs": "^1.15.0",
+    "tiny-emitter": "^2.1.0",
+    "vue": "^3.3.2",
+    "vue-accessible-color-picker": "^4.1.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "vite": "^4.3.5"
+  }
+}

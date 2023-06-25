@@ -6,13 +6,12 @@
     <script src="../../libraries/thirdparty/vue.js" defer></script>
     <script src="../../libraries/thirdparty/idb.js" defer></script>
     <link rel="preload" href="popup.css" as="style" />
-    <link rel="preload" href="../../webpages/styles/colors-light.css" as="style" />
-    <script src="../../webpages/popup-loader.js" type="module"></script>
+    <script src="../../webpages/dist/popup-loader.js" type="module"></script>
     <style>
-      @import url("../../webpages/styles/colors.css");
-      @import url("../../webpages/styles/components/buttons.css");
-      @import url("../../webpages/styles/components/tooltips.css");
-      @import url("../../webpages/styles/components/popup.css");
+      @import url("../../webpages/dist/assets/base.css");
+      @import url("../../webpages/dist/assets/buttons.css");
+      @import url("../../webpages/dist/assets/tooltips.css");
+      @import url("../../webpages/dist/assets/popup.css");
     </style>
     <link rel="stylesheet" href="popup.css" />
     <base target="_blank" />
@@ -86,6 +85,7 @@
         </div>
       </div>
     </template>
+    <link rel="preload" href="../../webpages/dist/colors-light.css" as="style" />
   </head>
 
   <body>
