@@ -2315,7 +2315,7 @@
     {
       "name": "\"Experimental\" Dark (blue)",
       "id": "experimentalDark",
-      "description": "A dark theme by Maximouse based on a userstyle. Not experimental",
+      "description": "\"Experimental\" Dark with a blue accent color",
       "values": {
         "page": "#202020",
         "navbar": "#4d97ff",
