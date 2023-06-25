@@ -234,7 +234,6 @@ chrome.permissions.onAdded?.addListener(updateGrantedPermissions);
 chrome.permissions.onRemoved?.addListener(updateGrantedPermissions);
 let fuse;
 
- 
 let setGlobalTheme;
 let isIframe = false;
 if (window.parent !== window) {
@@ -558,7 +557,7 @@ export default {
      */
     const theme = ref(null);
     (async () => {
-      const { theme: asyncTheme, setGlobalTheme: sGT  } = await globalTheme();
+      const { theme: asyncTheme, setGlobalTheme: sGT } = await globalTheme();
       theme.value = asyncTheme;
       setGlobalTheme = sGT;
     })();
