@@ -48,8 +48,12 @@ export default async function ({ addon, console }) {
 
   const container = document.createElement("div");
   container.className = "sa-vol-slider";
-  container.appendChild(icon);
-  container.appendChild(slider);
+  // Nested elements are needed for hover animation - see hover.css
+  const innerContainer = document.createElement("div");
+  innerContainer.className = "sa-vol-slider-inner";
+  innerContainer.appendChild(icon);
+  innerContainer.appendChild(slider);
+  container.appendChild(innerContainer);
   addon.tab.displayNoneWhileDisabled(container, {
     display: "flex",
   });
@@ -57,17 +61,16 @@ export default async function ({ addon, console }) {
   if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
     document.body.classList.add("sa-vol-slider-small");
   }
-  document.addEventListener(
-    "click",
-    (e) => {
-      if (e.target.closest("[class*='stage-header_stage-button-first']")) {
+  addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (e.detail.action.type === "scratch-gui/StageSize/SET_STAGE_SIZE") {
+      if (e.detail.action.stageSize === "small") {
         document.body.classList.add("sa-vol-slider-small");
-      } else if (e.target.closest("[class*='stage-header_stage-button-last']")) {
+      } else {
         document.body.classList.remove("sa-vol-slider-small");
       }
-    },
-    { capture: true }
-  );
+    }
+  });
 
   addon.self.addEventListener("disabled", () => {
     setVolume(1);
