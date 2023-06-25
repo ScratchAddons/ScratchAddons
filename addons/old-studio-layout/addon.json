@@ -56,18 +56,14 @@
       "url": "default.css",
       "matches": ["https://scratch.mit.edu/studios/*"],
       "if": {
-        "settings": {
-          "version": "default"
-        }
+        "settings": { "version": "default" }
       }
     },
     {
       "url": "scratchr2.css",
       "matches": ["https://scratch.mit.edu/studios/*"],
       "if": {
-        "settings": {
-          "version": "scratchr2"
-        }
+        "settings": { "version": "scratchr2" }
       }
     }
   ],

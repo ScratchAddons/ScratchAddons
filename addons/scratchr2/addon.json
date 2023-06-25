@@ -39,9 +39,7 @@
       "url": "forums_bubbles.css",
       "matches": ["https://scratch.mit.edu/discuss/*"],
       "if": {
-        "settings": {
-          "postStyle": "bubble"
-        }
+        "settings": { "postStyle": "bubble" }
       }
     },
     {
