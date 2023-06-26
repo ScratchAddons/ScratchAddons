@@ -4,7 +4,7 @@ a:visited {
 a:active,
 a:active:hover,
 a:visited:hover {
-  color: #7854c0;
+  color: var(--darkWww-link-hover, #7854c0);
 }
 #zoomContainer {
   height: 24px;
