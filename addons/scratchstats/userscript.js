@@ -175,7 +175,7 @@ export default async function ({ addon, msg, console }) {
               }),
               fill: false,
               showLine: true,
-              borderColor: "#4d97ff",
+              borderColor: "#855cd6",
               lineTension: 0,
             },
           ],
