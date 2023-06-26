@@ -89,8 +89,8 @@ export const createScratchWwwModal = (title, { isOpen = false, useSizesClass = t
       height: 3rem;
       box-sizing: border-box;
       padding-top: 0.75rem;
-      background-color: var(--darkWww-navbar, #4d97ff);
-      box-shadow: 0 -1px 0 0 inset var(--darkWww-navbar-variant, #4280d7);
+      background-color: var(--darkWww-navbar, #855cd6);
+      box-shadow: 0 -1px 0 0 inset var(--darkWww-navbar-variant, #7854c0);
       color: var(--darkWww-navbar-text, white);
       text-align: center;
       font-weight: bold;
