@@ -63,6 +63,21 @@
       }
     },
     {
+      "name": "page-loader",
+      "value": {
+        "type": "textColor",
+        "black": "#4d97ff",
+        "white": {
+          "type": "settingValue",
+          "settingId": "page"
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
       "name": "primary-text",
       "value": {
         "type": "textColor",
@@ -105,17 +120,6 @@
           "settingId": "primary"
         },
         "a": 0.35
-      }
-    },
-    {
-      "name": "primary-transparent25",
-      "value": {
-        "type": "multiply",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primary"
-        },
-        "a": 0.25
       }
     },
     {
@@ -714,6 +718,18 @@
         "type": "textColor",
         "black": "rgba(87, 124, 155, 0.13)",
         "white": "rgba(255, 255, 255, 0.05)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "categoryMenu"
+        }
+      }
+    },
+    {
+      "name": "categoryMenu-hoverText",
+      "value": {
+        "type": "textColor",
+        "black": "#3373cc",
+        "white": "#80b5ff",
         "source": {
           "type": "settingValue",
           "settingId": "categoryMenu"

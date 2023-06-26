@@ -15,12 +15,14 @@
 [class*="gui_tab_"]:not([class*="gui_is-selected_"]):hover img {
   filter: var(--editorDarkMode-page-tabHoverFilter);
 }
+[class*="loader_background_"] {
+  background-color: var(--editorDarkMode-page-loader);
+}
 
 /* Menu bar background */
 [class*="menu-bar_menu-bar_"],
 [class*="menu_menu_"],
 [class*="menu_submenu_"] > [class*="menu_menu_"]::-webkit-scrollbar-track,
-[class*="loader_background_"],
 [class*="modal_header_"] {
   background-color: var(--editorDarkMode-menuBar);
   color: var(--editorDarkMode-menuBar-text);
@@ -63,8 +65,7 @@
 .sa-editormessages::before,
 [class*="account-nav_user-info_"] [class*="account-nav_dropdown-caret-position_"] img,
 [class*="modal_back-button_"] [class*="button_icon_"],
-[class*="modal_header-item-close_"] [class*="close-button_close-icon_"],
-[class*="loader_background_"] img {
+[class*="modal_header-item-close_"] [class*="close-button_close-icon_"] {
   filter: var(--editorDarkMode-menuBar-filter);
 }
 [class*="menu-bar_divider_"],
@@ -342,6 +343,9 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
   background-color: var(--editorDarkMode-categoryMenu-selection);
   color: var(--editorDarkMode-categoryMenu-text);
 }
+.scratchCategoryMenuItem:hover {
+  color: var(--editorDarkMode-categoryMenu-hoverText) !important;
+}
 
 /* Block palette background */
 .blocklyFlyoutBackground {
@@ -421,10 +425,6 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 [class*="button_mod-disabled_"]:active {
   background-color: transparent;
 }
-.sa-body-editor::selection,
-.sa-body-editor ::selection {
-  background-color: var(--editorDarkMode-primary-transparent25);
-}
 [class*="library_filter-bar_"],
 .sa-body-editor [class*="stage-header_stage-button_"]:active,
 [class*="toggle-buttons_button_"]:active,
@@ -465,12 +465,6 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 [class*="record-modal_button-row_"] button[class*="record-modal_ok-button_"] {
   color: var(--editorDarkMode-primary-text);
 }
-.checked > .blocklyFlyoutCheckbox {
-  fill: var(--editorDarkMode-primary);
-}
-.checked .blocklyFlyoutCheckboxPath {
-  stroke: var(--editorDarkMode-primary-text);
-}
 [class*="gui_extension-button-icon_"],
 [class*="delete-button_delete-icon_"],
 [class*="action-menu_main-button_"]:not(:hover) [class*="action-menu_main-icon_"],
@@ -491,9 +485,6 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 [class*="audio-trimmer_selector_"] [class*="audio-trimmer_trim-line_"] {
   border-color: var(--editorDarkMode-primary-variant);
 }
-.checked > .blocklyFlyoutCheckbox {
-  stroke: var(--editorDarkMode-primary-variant);
-}
 /* Don't affect ask prompt: */
 [class*="question_question-input_"] [class*="input_input-form_"]:hover,
 [class*="question_question-container_"] /* <-- specificity */ [class*="question_question-input_"] [class*="input_input-form_"]:focus {
@@ -511,9 +502,6 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 [class*="record-modal_button-row_"] button,
 .sa-debugger-tabs li.sa-debugger-tab-selected {
   color: var(--editorDarkMode-highlightText);
-}
-.scratchCategoryMenuItem:hover {
-  color: var(--editorDarkMode-highlightText) !important;
 }
 [class*="gui_tab_"][class*="gui_is-selected_"] img,
 .sa-body-editor
