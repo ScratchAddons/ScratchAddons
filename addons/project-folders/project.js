@@ -35,7 +35,7 @@ export default async function ({ addon, console, msg }) {
       remove();
     };
     const done = () => {
-      instructions.value = instructions.value.replace(/\n#_.*/, "") + (input.value ? `\n#_${input.value}` : "");
+      instructions.value = instructions.value.replace(/[\n]{0,}#_.*/, "") + (input.value ? `\n#_${input.value}` : "");
 
       instructions.dispatchEvent(
         new Event("blur", {
