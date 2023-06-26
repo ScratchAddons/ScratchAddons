@@ -497,10 +497,10 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 /* Don't affect ask prompt: */
 [class*="question_question-input_"] [class*="input_input-form_"]:hover,
 [class*="question_question-container_"] /* <-- specificity */ [class*="question_question-input_"] [class*="input_input-form_"]:focus {
-  border-color: #4d97ff;
+  border-color: #855cd6;
 }
 [class*="question_question-container_"] /* <-- specificity */ [class*="question_question-input_"] [class*="input_input-form_"]:focus {
-  box-shadow: 0 0 0 4px rgba(77, 151, 255, 0.35);
+  box-shadow: 0 0 0 4px rgba(133, 92, 214, 0.35);
 }
 
 /* Text and icon highlight color */
