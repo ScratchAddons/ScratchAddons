@@ -297,7 +297,7 @@ body > #pagewrapper {
 }
 .postmsg ::selection {
   /* Don't break [color=transparent] hidden text */
-  background-color: var(--darkWww-button-variant, #7854c0);
+  background-color: #3373cc;
   color: var(--darkWww-button-text, white);
 }
 .postfootright > ul {
