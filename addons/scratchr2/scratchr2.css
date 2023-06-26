@@ -675,7 +675,7 @@ select:focus {
 }
 #featured-project-modal .project.thumb.selected {
   border-color: var(--darkWww-button, #855cd6) !important;
-  box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
+  box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(133, 92, 214, 0.25));
 }
 #featured-project-modal .project.thumb img {
   border: none;
