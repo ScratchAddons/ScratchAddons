@@ -74,7 +74,6 @@ export default async function ({ addon, global, console, msg }) {
 
     realFolderDiv.appendChild(document.createElement("br"));
 
-
     const projectHeader = document.createElement("h4");
     projectHeader.textContent = msg("projectHeader");
     projectColumns.insertBefore(projectHeader, projectColumns.childNodes[1]);

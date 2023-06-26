@@ -1,5 +1,4 @@
 export default async function ({ addon, console, msg }) {
-
   const createModal = () => {
     let instructions = document.querySelector(".inplace-textarea");
     let currentFolder = instructions.value.match(/#_.*/)?.[0]?.replace("#_", "") || "";
@@ -64,8 +63,6 @@ export default async function ({ addon, console, msg }) {
     buttonRow.appendChild(closeButton);
     content.appendChild(buttonRow);
   };
-
-
 
   while (true) {
     await addon.tab.waitForElement(".flex-row.subactions > .flex-row.action-buttons", {
