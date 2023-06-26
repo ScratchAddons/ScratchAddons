@@ -186,7 +186,7 @@
       </p>
       <p>
         <a
-          href="./licenses.html?libraries=icu-message-formatter,vue,color-picker-web-component,comlink,Sora,fuse,idb,sortable"
+          href="./licenses.html?libraries=icu-message-formatter,vue3,vite,vue-accessible-color-picker,comlink,Sora,fuse,idb,sortable,tiny-emitter"
           target="_blank"
           >{{ msg("libraryCredits") }}</a
         >
@@ -205,8 +205,9 @@
 <script>
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import globalTheme from "../../libraries/common/global-theme.js";
+import Fuse from "../../libraries/thirdparty/cs/fuse.esm.min.js";
 
-import Fuse from "fuse.js";
+//import Fuse from "fuse.js";
 import addonGroups from "../data/addon-groups.js";
 import categories from "../data/categories.js";
 import exampleManifest from "../data/example-manifest.js";
