@@ -469,12 +469,6 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 [class*="record-modal_button-row_"] button[class*="record-modal_ok-button_"] {
   color: var(--editorDarkMode-primary-text);
 }
-.checked > .blocklyFlyoutCheckbox {
-  fill: var(--editorDarkMode-primary);
-}
-.checked .blocklyFlyoutCheckboxPath {
-  stroke: var(--editorDarkMode-primary-text);
-}
 [class*="gui_extension-button-icon_"],
 [class*="delete-button_delete-icon_"],
 [class*="action-menu_main-button_"]:not(:hover) [class*="action-menu_main-icon_"],
@@ -495,9 +489,6 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 [class*="audio-trimmer_selector_"] [class*="audio-trimmer_trim-line_"] {
   border-color: var(--editorDarkMode-primary-variant);
 }
-.checked > .blocklyFlyoutCheckbox {
-  stroke: var(--editorDarkMode-primary-variant);
-}
 /* Don't affect ask prompt: */
 [class*="question_question-input_"] [class*="input_input-form_"]:hover,
 [class*="question_question-container_"] /* <-- specificity */ [class*="question_question-input_"] [class*="input_input-form_"]:focus {
@@ -515,9 +506,6 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 [class*="record-modal_button-row_"] button,
 .sa-debugger-tabs li.sa-debugger-tab-selected {
   color: var(--editorDarkMode-highlightText);
-}
-.scratchCategoryMenuItem:hover {
-  color: var(--editorDarkMode-highlightText) !important;
 }
 [class*="gui_tab_"][class*="gui_is-selected_"] img,
 .sa-body-editor
