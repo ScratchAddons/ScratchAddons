@@ -89,7 +89,7 @@ textarea:focus {
 .editable-empty.write {
   border-style: solid !important;
   border-color: var(--darkWww-button, #855cd6) !important;
-  box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
+  box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(133, 92, 214, 0.25));
 }
 .editable textarea,
 .editable-empty textarea,
