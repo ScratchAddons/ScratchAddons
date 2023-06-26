@@ -425,10 +425,6 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 [class*="button_mod-disabled_"]:active {
   background-color: transparent;
 }
-.sa-body-editor::selection,
-.sa-body-editor ::selection {
-  background-color: var(--editorDarkMode-primary-transparent25);
-}
 [class*="library_filter-bar_"],
 .sa-body-editor [class*="stage-header_stage-button_"]:active,
 [class*="toggle-buttons_button_"]:active,

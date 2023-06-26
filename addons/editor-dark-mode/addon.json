@@ -123,17 +123,6 @@
       }
     },
     {
-      "name": "primary-transparent25",
-      "value": {
-        "type": "multiply",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primary"
-        },
-        "a": 0.25
-      }
-    },
-    {
       "name": "primary-transparent20",
       "value": {
         "type": "multiply",
