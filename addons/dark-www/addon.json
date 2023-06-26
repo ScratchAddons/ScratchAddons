@@ -2232,7 +2232,7 @@
       "name": "Blue background",
       "id": "blue",
       "type": "color",
-      "default": "#252c37"
+      "default": "#292d32"
     },
     {
       "name": "Input background",
