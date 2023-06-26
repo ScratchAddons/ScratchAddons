@@ -2250,7 +2250,7 @@
       "name": "Link color",
       "id": "link",
       "type": "color",
-      "default": "#292d32"
+      "default": "#ccb3ff"
     },
     {
       "name": "Footer background",
