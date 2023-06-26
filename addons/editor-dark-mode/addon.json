@@ -63,6 +63,21 @@
       }
     },
     {
+      "name": "page-loader",
+      "value": {
+        "type": "textColor",
+        "black": "#4d97ff",
+        "white": {
+          "type": "settingValue",
+          "settingId": "page"
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
       "name": "primary-text",
       "value": {
         "type": "textColor",

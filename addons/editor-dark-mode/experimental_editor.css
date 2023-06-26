@@ -15,12 +15,14 @@
 [class*="gui_tab_"]:not([class*="gui_is-selected_"]):hover img {
   filter: var(--editorDarkMode-page-tabHoverFilter);
 }
+[class*="loader_background_"] {
+  background-color: var(--editorDarkMode-page-loader);
+}
 
 /* Menu bar background */
 [class*="menu-bar_menu-bar_"],
 [class*="menu_menu_"],
 [class*="menu_submenu_"] > [class*="menu_menu_"]::-webkit-scrollbar-track,
-[class*="loader_background_"],
 [class*="modal_header_"] {
   background-color: var(--editorDarkMode-menuBar);
   color: var(--editorDarkMode-menuBar-text);
@@ -63,8 +65,7 @@
 .sa-editormessages::before,
 [class*="account-nav_user-info_"] [class*="account-nav_dropdown-caret-position_"] img,
 [class*="modal_back-button_"] [class*="button_icon_"],
-[class*="modal_header-item-close_"] [class*="close-button_close-icon_"],
-[class*="loader_background_"] img {
+[class*="modal_header-item-close_"] [class*="close-button_close-icon_"] {
   filter: var(--editorDarkMode-menuBar-filter);
 }
 [class*="menu-bar_divider_"],
