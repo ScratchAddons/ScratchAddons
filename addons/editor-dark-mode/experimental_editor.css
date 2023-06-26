@@ -343,6 +343,9 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
   background-color: var(--editorDarkMode-categoryMenu-selection);
   color: var(--editorDarkMode-categoryMenu-text);
 }
+.scratchCategoryMenuItem:hover {
+  color: var(--editorDarkMode-categoryMenu-hoverText) !important;
+}
 
 /* Block palette background */
 .blocklyFlyoutBackground {

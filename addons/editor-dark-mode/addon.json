@@ -736,6 +736,18 @@
       }
     },
     {
+      "name": "categoryMenu-hoverText",
+      "value": {
+        "type": "textColor",
+        "black": "#3373cc",
+        "white": "#80b5ff",
+        "source": {
+          "type": "settingValue",
+          "settingId": "categoryMenu"
+        }
+      }
+    },
+    {
       "name": "palette-text",
       "value": {
         "type": "textColor",
