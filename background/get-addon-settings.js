@@ -58,6 +58,8 @@ const updatePresetIfMatching = (settings, version, oldPreset = null, presetOrFn 
       if (typeof presetOrFn === "object") map[key] = presetOrFn.values[key];
     }
 
+    if (settings._appliedVersions) settings._appliedVersions.push(version);
+    else settings._appliedVersions = [version];
     if (typeof presetOrFn === "function") return presetOrFn(); // Custom migration logic if preset matches
 
     const preset = presetOrFn;
