@@ -4,27 +4,29 @@ export default async function ({ addon, global, console, msg }) {
   async function loadFolders() {
     const folders = [];
     const folderDiv = document.querySelectorAll("div.folders")[0];
-    for (let i = 0; i < projects.length; i++) {
-      folderDiv.childNodes[2].value = (i / projects.length) * 100;
-
-      const projectID = projects[i].pk;
-      const token = await addon.auth.fetchXToken();
-      const projectDetails = await (
-        await fetch(`https://api.scratch.mit.edu/projects/${projectID}`, {
-          headers: {
-            "content-type": "application/json",
-            "x-csrftoken": addon.auth.crsfToken,
-            "x-token": token,
-          },
-        })
-      ).json();
-      const instructions = projectDetails.instructions.split("\n");
+    const token = await addon.auth.fetchXToken();
+    const projectDetails = await Promise.all(
+      projects.map(async (project) => {
+        const data = await (
+          await fetch(`https://api.scratch.mit.edu/projects/${project.pk}`, {
+            headers: {
+              "content-type": "application/json",
+              "x-csrftoken": addon.auth.crsfToken,
+              "x-token": token,
+            },
+          })
+        ).json();
+        return data;
+      })
+    );
+    projectDetails.forEach((project) => {
+      const instructions = project.instructions.split("\n");
       const folder = instructions.filter((element) => {
         if (element.includes("#_")) {
           return true;
         }
       });
-      if (folder.length === 0) continue;
+      if (folder.length === 0) return;
 
       for (let j = 0; j < folder.length; j++) {
         const matches = folders.filter((element) => {
@@ -34,19 +36,17 @@ export default async function ({ addon, global, console, msg }) {
         if (matches.length === 0) {
           folders.push({
             name: folder[j].replace("#_", ""),
-            projects: [{ name: projectDetails.title, id: projectDetails.id, thumbnail: projectDetails.image }],
+            projects: [{ name: project.title, id: project.id, thumbnail: project.image }],
           });
         } else {
           folders[folders.indexOf(matches[0])].projects.push({
-            name: projectDetails.title,
-            id: projectDetails.id,
-            thumbnail: projectDetails.image,
+            name: project.title,
+            id: project.id,
+            thumbnail: project.image,
           });
         }
       }
-    }
-
-    for (let i = 0; i < 2; i++) folderDiv.childNodes[1].remove();
+    });
 
     if (folders.length === 0) folderDiv.childNodes[0].textContent = msg("noFolder");
     else folderDiv.childNodes[0].remove();
@@ -74,10 +74,6 @@ export default async function ({ addon, global, console, msg }) {
 
     realFolderDiv.appendChild(document.createElement("br"));
 
-    const progressBar = document.createElement("progress");
-    progressBar.setAttribute("value", 0);
-    progressBar.setAttribute("max", 100);
-    realFolderDiv.appendChild(progressBar);
 
     const projectHeader = document.createElement("h4");
     projectHeader.textContent = msg("projectHeader");

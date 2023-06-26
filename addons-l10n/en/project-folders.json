@@ -2,5 +2,8 @@
   "project-folders/header": "Folders",
   "project-folders/projectHeader": "All Projects",
   "project-folders/noFolder": "You currently have no folders...",
-  "project-folders/loading": "Folders Loading..."
+  "project-folders/loading": "Folders Loading...",
+  "project-folders/add-to-folder": "Add To Folder",
+  "project-folders/description": "Add project to a folder to organize your work.",
+  "project-folders/done": "Done"
 }

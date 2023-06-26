@@ -11,13 +11,15 @@
     {
       "url": "userscript.js",
       "matches": ["https://scratch.mit.edu/mystuff"]
-    }
+    },
+    { "url": "project.js", "matches": ["projects"] }
   ],
   "userstyles": [
     {
       "url": "userstyle.css",
       "matches": ["https://scratch.mit.edu/mystuff"]
-    }
+    },
+    { "url": "project.css", "matches": ["projects"] }
   ],
   "info": [
     {

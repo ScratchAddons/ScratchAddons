@@ -1,0 +1,11 @@
+.sa-project-folder-popup {
+  box-sizing: border-box;
+  width: 700px;
+  max-height: min(800px, 80vh);
+  max-width: 85%;
+  margin-top: 12vh;
+  overflow-y: auto !important;
+}
+.sa-project-folder-popup-content {
+  padding: 1.5rem 2.25rem;
+}
