@@ -24,7 +24,7 @@ export default defineConfig({
   },
 
   base: "/webpages/dist/",
-  plugins: [vue(),],
+  plugins: [vue()],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)).at,

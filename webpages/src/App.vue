@@ -34,12 +34,7 @@
         <img src="../../images/icons/translate.svg" />
         <span>{{ msg("translate") }} <img src="../../images/icons/popout.svg" /></span>
       </a>
-      <a
-        v-cloak
-        class="category category-small"
-        :href="sidebarUrls.feedback"
-        target="_blank"
-      >
+      <a v-cloak class="category category-small" :href="sidebarUrls.feedback" target="_blank">
         <img src="../../images/icons/comment.svg" />
         <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" /></span>
       </a>
