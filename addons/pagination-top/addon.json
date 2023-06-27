@@ -1,0 +1,27 @@
+{
+  "name": "Quick-access pagination",
+  "description": "Moves the page links for lists of projects and studios to the top.",
+  "tags": ["community", "profiles"],
+  "credits": [
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": [
+        "https://scratch.mit.edu/users/*/projects/",
+        "https://scratch.mit.edu/users/*/favorites/",
+        "https://scratch.mit.edu/users/*/studios/",
+        "https://scratch.mit.edu/users/*/studios_following/"
+      ],
+      "runAtComplete": false
+    }
+  ],
+  "versionAdded": "1.34.0",
+  "enabledByDefault": false
+}

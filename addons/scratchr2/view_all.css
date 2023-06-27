@@ -87,9 +87,9 @@ body,
   padding-bottom: 12px;
   cursor: default;
 }
-.box .box-content .pagination a,
-.box .box-content .pagination .active,
-.box .box-content .pagination .disabled {
+.pagination a,
+.pagination .active,
+.pagination .disabled {
   display: inline-block;
   min-width: 8px;
   padding: 0 5px;
@@ -101,19 +101,19 @@ body,
   font-weight: bold;
   text-align: center;
 }
-.box .box-content .pagination a:hover {
+.pagination a:hover {
   background-color: var(--darkWww-gray-tab, rgba(0, 0, 0, 0.1));
   border-color: var(--darkWww-border, rgba(0, 0, 0, 0.1));
   color: var(--darkWww-gray-text, #575e75);
 }
-.box .box-content .pagination .active {
+.pagination .active {
   background-color: var(--darkWww-button, #855cd6);
   border-color: rgba(0, 0, 0, 0.15);
   color: var(--darkWww-button-text, white);
 }
-.box .box-content .pagination .active:hover {
+.pagination .active:hover {
   background-color: var(--darkWww-button-variant, #7854c0);
 }
-.box .box-content .pagination .disabled {
+.pagination .disabled {
   opacity: 0.5;
 }
