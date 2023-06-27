@@ -1085,7 +1085,7 @@
   color: var(--highlightText);
 }
 .edm-tool-button-icons-not-affected .edm-tool-button .edm-icon-placeholder {
-    color: #855cd6;
+  color: #855cd6;
 }
 .edm-tool-button > .edm-text-placeholder {
   margin: 0;
