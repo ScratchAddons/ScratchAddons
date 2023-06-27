@@ -37,7 +37,6 @@
       <a
         v-cloak
         class="category category-small"
-        href="https://scratchaddons.com/feedback/"
         :href="sidebarUrls.feedback"
         target="_blank"
       >
