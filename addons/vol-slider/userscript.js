@@ -58,17 +58,22 @@ export default async function ({ addon, console }) {
     display: "flex",
   });
 
-  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
-    document.body.classList.add("sa-vol-slider-small");
-  }
+  const updateStageSize = () => {
+    if (!addon.tab.redux.state) return;
+    const isSmallStage = addon.tab.redux.state.scratchGui.stageSize.stageSize === "small";
+    const isFullScreen = addon.tab.redux.state.scratchGui.mode.isFullScreen;
+    const isPlayerOnly = addon.tab.redux.state.scratchGui.mode.isPlayerOnly;
+    document.body.classList.toggle("sa-vol-slider-small", isSmallStage && !isFullScreen && !isPlayerOnly);
+  };
+  updateStageSize();
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type === "scratch-gui/StageSize/SET_STAGE_SIZE") {
-      if (e.detail.action.stageSize === "small") {
-        document.body.classList.add("sa-vol-slider-small");
-      } else {
-        document.body.classList.remove("sa-vol-slider-small");
-      }
+    if (
+      e.detail.action.type === "scratch-gui/StageSize/SET_STAGE_SIZE"
+      || e.detail.action.type === "scratch-gui/mode/SET_FULL_SCREEN"
+      || e.detail.action.type === "scratch-gui/mode/SET_PLAYER"
+    ) {
+      updateStageSize();
     }
   });
 

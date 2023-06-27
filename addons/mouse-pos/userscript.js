@@ -43,17 +43,20 @@ export default async function ({ addon, console }) {
     },
   });
 
-  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
-    document.body.classList.add("sa-mouse-pos-small");
-  }
+  const updateStageSize = () => {
+    if (!addon.tab.redux.state) return;
+    const size = addon.tab.redux.state.scratchGui.stageSize.stageSize;
+    const isFullScreen = addon.tab.redux.state.scratchGui.mode.isFullScreen;
+    document.body.classList.toggle("sa-mouse-pos-small", size === "small" && !isFullScreen);
+  };
+  updateStageSize();
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type === "scratch-gui/StageSize/SET_STAGE_SIZE") {
-      if (e.detail.action.stageSize === "small") {
-        document.body.classList.add("sa-mouse-pos-small");
-      } else {
-        document.body.classList.remove("sa-mouse-pos-small");
-      }
+    if (
+      e.detail.action.type === "scratch-gui/StageSize/SET_STAGE_SIZE"
+      || e.detail.action.type === "scratch-gui/mode/SET_FULL_SCREEN"
+    ) {
+      updateStageSize();
     }
   });
 
