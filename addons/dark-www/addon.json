@@ -2070,7 +2070,7 @@
       "id": "navbar",
       "type": "color",
       "allowTransparency": true,
-      "default": "#4d97ff"
+      "default": "#855cd6"
     },
     {
       "name": "Content background",
@@ -2088,7 +2088,7 @@
       "name": "Blue background",
       "id": "blue",
       "type": "color",
-      "default": "#252c37"
+      "default": "#292d32"
     },
     {
       "name": "Input background",
@@ -2100,13 +2100,13 @@
       "name": "Highlight color",
       "id": "button",
       "type": "color",
-      "default": "#4d97ff"
+      "default": "#855cd6"
     },
     {
       "name": "Link color",
       "id": "link",
       "type": "color",
-      "default": "#4d97ff"
+      "default": "#ccb3ff"
     },
     {
       "name": "Footer background",
@@ -2155,6 +2155,25 @@
       "description": "A dark theme by Maximouse based on a userstyle. Not experimental",
       "values": {
         "page": "#202020",
+        "navbar": "#855cd6",
+        "box": "#282828",
+        "gray": "#333333",
+        "blue": "#292d32",
+        "input": "#202020",
+        "button": "#855cd6",
+        "link": "#ccb3ff",
+        "footer": "#333333",
+        "border": "#606060",
+        "darkBanners": "darker",
+        "darkForumCode": true
+      }
+    },
+    {
+      "name": "\"Experimental\" Dark (blue)",
+      "id": "experimentalDark",
+      "description": "\"Experimental\" Dark with a blue accent color",
+      "values": {
+        "page": "#202020",
         "navbar": "#4d97ff",
         "box": "#282828",
         "gray": "#333333",
@@ -2174,13 +2193,13 @@
       "description": "A dark theme by Ucrash",
       "values": {
         "page": "#242527",
-        "navbar": "#4d97ff",
+        "navbar": "#855cd6",
         "box": "#2f3137",
         "gray": "#424346",
         "blue": "#1b1d1f",
         "input": "#3a3a3a",
-        "button": "#4d97ff",
-        "link": "#4d97ff",
+        "button": "#855cd6",
+        "link": "#ccb3ff",
         "footer": "#17181a",
         "border": "#000000",
         "darkBanners": "desaturated",
@@ -2191,6 +2210,25 @@
       "name": "Scratch's default colors",
       "id": "scratch",
       "description": "The colors normally used by Scratch",
+      "values": {
+        "page": "#fcfcfc",
+        "navbar": "#855cd6",
+        "box": "#ffffff",
+        "gray": "#f2f2f2",
+        "blue": "#e9f1fc",
+        "input": "#fafafa",
+        "button": "#855cd6",
+        "link": "#855cd6",
+        "footer": "#f2f2f2",
+        "border": "#0000001a",
+        "darkBanners": "off",
+        "darkForumCode": false
+      }
+    },
+    {
+      "name": "Scratch's default colors (blue)",
+      "id": "scratch",
+      "description": "The colors originally used by Scratch",
       "values": {
         "page": "#fcfcfc",
         "navbar": "#4d97ff",

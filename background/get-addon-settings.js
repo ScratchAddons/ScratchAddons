@@ -6,6 +6,7 @@ import minifySettings from "../libraries/common/minify-settings.js";
 
  - editor-dark-mode 10 (bumped 4 times in v1.33.2)
  - editor-theme3 3 (last bumped in v1.32)
+ - dark-www 5 (bumped five times in v1.33.2)
  */
 
 const areColorsEqual = (currentColor, oldPresetColor) => {
@@ -208,6 +209,94 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             delete scratchr2.primaryColor;
             delete scratchr2.linkColor;
           }
+
+          updatePresetIfMatching(
+            settings,
+            1,
+            {
+              navbar: "#4d97ff",
+            },
+            () => {
+              settings.navbar = "#855cd6";
+              madeAnyChanges = madeChangesToAddon = true;
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            2,
+            {
+              // Old blue "highlight color" setting
+              button: "#4d97ff", // Same old color as "navbar" setting.
+            },
+            () => {
+              settings.button = "#855cd6"; // Same new color as migration #1
+              madeAnyChanges = madeChangesToAddon = true;
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            3,
+            {
+              // "Experimental Dark" preset (as of v1.33.1 - now renamed)
+              page: "#202020",
+              // navbar: "#4d97ff",
+              box: "#282828",
+              gray: "#333333",
+              blue: "#252c37",
+              input: "#202020",
+              // button: "#4d97ff",
+              link: "#4d97ff",
+              footer: "#333333",
+              border: "#606060",
+            },
+            () => {
+              settings.blue = "#292d32";
+              settings.link = "#ccb3ff";
+              madeAnyChanges = madeChangesToAddon = true;
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            4,
+            // "Dark WWW" preset
+            {
+              page: "#242527",
+              // navbar: "#4d97ff",
+              box: "#2f3137",
+              gray: "#424346",
+              blue: "#1b1d1f",
+              input: "#3a3a3a",
+              // button: "#4d97ff",
+              link: "#4d97ff",
+              footer: "#17181a",
+              border: "#000000",
+            },
+            () => {
+              settings.link = "#ccb3ff"; // Same new color as migration #3
+              madeAnyChanges = madeChangesToAddon = true;
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            5,
+            // "Scratch default colors" preset (as of v1.33.1 - now renamed)
+            {
+              page: "#fcfcfc",
+              // navbar: "#4d97ff",
+              box: "#ffffff",
+              gray: "#f2f2f2",
+              blue: "#e9f1fc",
+              input: "#fafafa",
+              // button: "#4d97ff",
+              link: "#4d97ff",
+              footer: "#f2f2f2",
+              border: "#0000001a",
+            },
+            () => {
+              settings.link = "#855cd6";
+              madeAnyChanges = madeChangesToAddon = true;
+            }
+          );
         }
 
         if (addonId === "editor-dark-mode") {
