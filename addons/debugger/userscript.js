@@ -10,7 +10,7 @@ const removeAllChildren = (element) => {
   }
 };
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   setup(addon.tab.traps.vm);
 
   let logsTab;
@@ -309,8 +309,18 @@ export default async function ({ addon, global, console, msg }) {
     new Utils(addon).scrollBlockIntoView(blockId);
   };
 
-  // May be slightly incorrect in some edge cases.
-  const formatProcedureCode = (proccode) => proccode.replace(/%[nbs]/g, "()");
+  /**
+   * @param {string} procedureCode
+   * @returns {string}
+   */
+  const formatProcedureCode = (procedureCode) => {
+    const customBlock = addon.tab.getCustomBlock(procedureCode);
+    if (customBlock) {
+      procedureCode = customBlock.displayName;
+    }
+    // May be slightly incorrect in some edge cases.
+    return procedureCode.replace(/%[nbs]/g, "()");
+  };
 
   // May be slightly incorrect in some edge cases.
   const formatBlocklyBlockData = (jsonData) => {
@@ -336,9 +346,11 @@ export default async function ({ addon, global, console, msg }) {
           } else if (type === "field_image") {
             const src = argInfo.src;
             if (src.endsWith("rotate-left.svg")) {
-              formattedMessage += "↩";
+              formattedMessage += msg("/global/blocks/anticlockwise");
             } else if (src.endsWith("rotate-right.svg")) {
-              formattedMessage += "↪";
+              formattedMessage += msg("/global/blocks/clockwise");
+            } else if (src.endsWith("green-flag.svg")) {
+              formattedMessage += msg("/global/blocks/green-flag");
             }
           } else {
             formattedMessage += "()";
@@ -434,7 +446,8 @@ export default async function ({ addon, global, console, msg }) {
       if (!text) {
         return null;
       }
-      category = jsonData.extensions.includes("scratch_extension") ? "pen" : jsonData.category;
+      // jsonData.extensions is not guaranteed to exist
+      category = jsonData.extensions?.includes("scratch_extension") ? "pen" : jsonData.category;
       const isStatement =
         (jsonData.extensions &&
           (jsonData.extensions.includes("shape_statement") ||
@@ -453,13 +466,7 @@ export default async function ({ addon, global, console, msg }) {
     element.textContent = text;
     element.dataset.shape = shape;
 
-    const colorIds = {
-      "addon-custom-block": "sa",
-      "data-lists": "data_lists",
-      list: "data_lists",
-      events: "event",
-    };
-    element.classList.add(`sa-block-color-${colorIds[category] || category}`);
+    element.classList.add(`sa-block-color-${category}`);
 
     return element;
   };
@@ -525,20 +532,16 @@ export default async function ({ addon, global, console, msg }) {
   if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
     document.body.classList.add("sa-debugger-small");
   }
-  document.addEventListener(
-    "click",
-    (e) => {
-      if (e.target.closest("[class*='stage-header_stage-button-first']:not(.sa-hide-stage-button)")) {
+  addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (e.detail.action.type === "scratch-gui/StageSize/SET_STAGE_SIZE") {
+      if (e.detail.action.stageSize === "small") {
         document.body.classList.add("sa-debugger-small");
-      } else if (
-        e.target.closest("[class*='stage-header_stage-button-last']") ||
-        e.target.closest(".sa-hide-stage-button")
-      ) {
+      } else {
         document.body.classList.remove("sa-debugger-small");
       }
-    },
-    { capture: true }
-  );
+    }
+  });
 
   const ogGreenFlag = vm.runtime.greenFlag;
   vm.runtime.greenFlag = function (...args) {
@@ -622,18 +625,22 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   while (true) {
-    await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {
-      markAsSeen: true,
-      reduxEvents: [
-        "scratch-gui/mode/SET_PLAYER",
-        "scratch-gui/mode/SET_FULL_SCREEN",
-        "fontsLoaded/SET_FONTS_LOADED",
-        "scratch-gui/locales/SELECT_LOCALE",
-      ],
-    });
+    await addon.tab.waitForElement(
+      '[class^="stage-header_stage-size-row"] [class^="button_outlined-button"], [class^="stage-header_stage-menu-wrapper"] > [class^="button_outlined-button"], [class*="stage-header_unselect-wrapper_"] > [class^="button_outlined-button"]',
+      {
+        markAsSeen: true,
+        reduxEvents: [
+          "scratch-gui/mode/SET_PLAYER",
+          "scratch-gui/mode/SET_FULL_SCREEN",
+          "fontsLoaded/SET_FONTS_LOADED",
+          "scratch-gui/locales/SELECT_LOCALE",
+        ],
+      }
+    );
     if (addon.tab.editorMode === "editor") {
       addon.tab.appendToSharedSpace({ space: "stageHeader", element: debuggerButtonOuter, order: 0 });
     } else {
+      debuggerButtonOuter.remove();
       setInterfaceVisible(false);
     }
   }

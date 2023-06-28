@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   const root = document.documentElement; //The :root element
   const footer = await addon.tab.waitForElement("#footer"); //The footer
   const donor = await addon.tab.waitForElement("#donor"); //The donor text

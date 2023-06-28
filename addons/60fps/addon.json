@@ -36,7 +36,7 @@
       "default": 60
     }
   ],
-  "tags": ["editor", "projectPlayer", "recommended"],
+  "tags": ["editor", "projectPlayer", "featured"],
   "versionAdded": "1.1.0",
-  "enabledByDefault": true
+  "enabledByDefault": false
 }

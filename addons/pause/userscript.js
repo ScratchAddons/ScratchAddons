@@ -1,6 +1,6 @@
 import { isPaused, setPaused, onPauseChanged, setup } from "../debugger/module.js";
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   setup(addon.tab.traps.vm);
 
   const img = document.createElement("img");
@@ -14,6 +14,13 @@ export default async function ({ addon, global, console, msg }) {
   addon.self.addEventListener("disabled", () => setPaused(false));
   setSrc();
   onPauseChanged(setSrc);
+
+  document.addEventListener("keydown", function (e) {
+    if (e.altKey && e.code === "KeyX") {
+      e.preventDefault();
+      setPaused(!isPaused());
+    }
+  });
 
   while (true) {
     await addon.tab.waitForElement("[class^='green-flag']", {
