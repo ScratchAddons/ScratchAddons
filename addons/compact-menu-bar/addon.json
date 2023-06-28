@@ -1,6 +1,6 @@
 {
-  "name": "Compact menu bar user dropdown",
-  "description": "Hides the username from the account dropdown in the editor.",
+  "name": "Compact menu bar",
+  "description": "Hides the menu and username labels from the menu bar in the editor.",
   "credits": [
     {
       "name": "philipp2007",
