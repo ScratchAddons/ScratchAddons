@@ -1,3 +1,14 @@
+.tabs button .tab-icon.profile {
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+}
+
+.tabs button:last-child span {
+  display: flex;
+  justify-content: center;
+}
+
 .tabs button:disabled {
   opacity: 0.5;
   cursor: default;

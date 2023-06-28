@@ -11,7 +11,7 @@ export default async function ({ addon, console, msg }) {
   tab.setAttribute("aria-selected", false);
   tab.tabIndex = -1; // unselected tabs should only be focusable using arrow keys
   img.src = addon.self.dir + "/user.svg";
-  img.className = "tab-icon";
+  img.className = "tab-icon profile";
   span.innerText = msg("profile");
   addon.tab.displayNoneWhileDisabled(tab);
 
@@ -55,9 +55,29 @@ export default async function ({ addon, console, msg }) {
       } else if (event.key === "Enter" || event.key === " ") {
         tabElements[focusedIndex].click();
       }
-    });
+    });    
   } else {
     tab.disabled = true;
     tab.title = msg("invalid-username", { username: user });
   }
+  function showIcon() {
+    if (valid && addon.settings.get('icon')) {
+      fetch(`https://api.scratch.mit.edu/users/${user}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.code == 'NotFound') {
+          tab.disabled = true;
+          tab.title = msg("invalid-username", { username: user });
+        } else {
+          span.innerText = data.username;
+          img.src = data.profile.images['32x32'];
+        }
+      })
+    } else {
+      img.src = addon.self.dir + "/user.svg";
+      span.innerText = msg("profile");
+    }
+  }
+  showIcon();
+  addon.settings.addEventListener("change", showIcon);
 }
