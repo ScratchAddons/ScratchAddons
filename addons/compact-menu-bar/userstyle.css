@@ -1,4 +1,16 @@
-[class*="account-nav_profile-name"] [class*="settings-menu_dropdown-label"] [class*="menu-bar_collapsible-label"] [class*="menu-bar_tutorials-label"] {
+[class*="account-nav_profile-name"] {
+  display: none;
+}
+
+[class*="settings-menu_dropdown-label"] {
+  display: none;
+}
+
+[class*="menu-bar_collapsible-label"] {
+  display: none;
+}
+
+[class*="menu-bar_tutorials-label"] {
   display: none;
 }
 
