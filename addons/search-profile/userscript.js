@@ -55,7 +55,7 @@ export default async function ({ addon, console, msg }) {
       } else if (event.key === "Enter" || event.key === " ") {
         tabElements[focusedIndex].click();
       }
-    });    
+    });
   } else {
     tab.disabled = true;
     tab.title = msg("invalid-username", { username: user });
