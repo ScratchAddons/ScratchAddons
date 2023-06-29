@@ -53,8 +53,8 @@ export default async function ({ addon, console }) {
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
     if (
-      e.detail.action.type === "scratch-gui/StageSize/SET_STAGE_SIZE"
-      || e.detail.action.type === "scratch-gui/mode/SET_FULL_SCREEN"
+      e.detail.action.type === "scratch-gui/StageSize/SET_STAGE_SIZE" ||
+      e.detail.action.type === "scratch-gui/mode/SET_FULL_SCREEN"
     ) {
       updateStageSize();
     }
