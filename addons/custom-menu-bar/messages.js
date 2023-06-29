@@ -35,10 +35,10 @@ export default async function ({ addon, console, msg }) {
   }
   createInterval();
 
-  addon.self.addEventListener("disabled", () => {
+  /*addon.self.addEventListener("disabled", () => {
     clearInterval(interval);
   });
-  addon.self.addEventListener("reenabled", createInterval);
+  addon.self.addEventListener("reenabled", createInterval);*/
 
   addon.tab.displayNoneWhileDisabled(messages);
   while (true) {
