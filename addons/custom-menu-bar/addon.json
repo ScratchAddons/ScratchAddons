@@ -82,13 +82,13 @@
       "name": "Show messages button",
       "id": "messages",
       "type": "boolean",
-      "default": "false"
+      "default": false
     },
     {
       "name": "Compact user dropdown",
       "id": "compact-username",
       "type": "boolean",
-      "default": "true"
+      "default": true
     },
     {
       "name": "Show menus",
