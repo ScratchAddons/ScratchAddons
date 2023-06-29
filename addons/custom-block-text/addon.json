@@ -22,18 +22,6 @@
       "matches": ["projects"]
     }
   ],
-  "userstyles": [
-    {
-      "url": "text-bold.css",
-      "matches": ["projects"],
-      "if": { "settings": { "bold": true } }
-    },
-    {
-      "url": "text-shadow.css",
-      "matches": ["projects"],
-      "if": { "settings": { "shadow": true } }
-    }
-  ],
   "settings": [
     {
       "name": "Bold text",
@@ -58,7 +46,6 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.24.0",
   "latestUpdate": {
     "version": "1.33.0",
