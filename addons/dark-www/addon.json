@@ -231,7 +231,7 @@
       }
     },
     {
-      "name": "navbar-scratchr2Border",
+      "name": "navbar-scratchr2ItemHover",
       "value": {
         "type": "multiply",
         "source": {
