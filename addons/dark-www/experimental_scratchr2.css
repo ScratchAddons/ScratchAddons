@@ -448,6 +448,7 @@ input.link:hover,
 input.link:active,
 input.link.black:hover,
 input.link.black:active,
+#comments .comment .info .name a:hover,
 #comments .more-replies .pulldown,
 #email-resend-box a {
   color: var(--darkWww-link);
