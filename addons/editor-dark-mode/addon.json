@@ -63,6 +63,21 @@
       }
     },
     {
+      "name": "page-loader",
+      "value": {
+        "type": "textColor",
+        "black": "#4d97ff",
+        "white": {
+          "type": "settingValue",
+          "settingId": "page"
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
       "name": "primary-text",
       "value": {
         "type": "textColor",
@@ -108,17 +123,6 @@
       }
     },
     {
-      "name": "primary-transparent25",
-      "value": {
-        "type": "multiply",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primary"
-        },
-        "a": 0.25
-      }
-    },
-    {
       "name": "primary-transparent20",
       "value": {
         "type": "multiply",
@@ -141,17 +145,6 @@
       }
     },
     {
-      "name": "primary-overlay",
-      "value": {
-        "type": "multiply",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primary"
-        },
-        "a": 0.9
-      }
-    },
-    {
       "name": "primary-variant",
       "value": {
         "type": "textColor",
@@ -165,9 +158,9 @@
             "type": "settingValue",
             "settingId": "primary"
           },
-          "r": 0.66,
-          "g": 0.76,
-          "b": 0.8
+          "r": 0.85,
+          "g": 0.85,
+          "b": 0.85
         },
         "white": {
           "type": "brighten",
@@ -400,6 +393,18 @@
         "type": "textColor",
         "black": "saturate(0)",
         "white": "brightness(0) invert(1) opacity(0.7)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        }
+      }
+    },
+    {
+      "name": "accent-desaturateFilterNew",
+      "value": {
+        "type": "textColor",
+        "black": "grayscale(100%) opacity(0.5)",
+        "white": "brightness(0) invert(1) opacity(0.3)",
         "source": {
           "type": "settingValue",
           "settingId": "accent"
@@ -720,6 +725,18 @@
       }
     },
     {
+      "name": "categoryMenu-hoverText",
+      "value": {
+        "type": "textColor",
+        "black": "#3373cc",
+        "white": "#80b5ff",
+        "source": {
+          "type": "settingValue",
+          "settingId": "categoryMenu"
+        }
+      }
+    },
+    {
       "name": "palette-text",
       "value": {
         "type": "textColor",
@@ -866,19 +883,26 @@
       "name": "Highlight color",
       "id": "primary",
       "type": "color",
-      "default": "#4d97ff"
+      "default": "#855cd6"
     },
     {
       "name": "Text and icon highlight color",
       "id": "highlightText",
       "type": "color",
-      "default": "#4d97ff"
+      "default": "#ccb3ff"
     },
     {
       "name": "Menu bar background",
       "id": "menuBar",
       "type": "color",
       "default": "#202020"
+    },
+    {
+      "name": "Popup backdrop color",
+      "id": "popup",
+      "type": "color",
+      "default": "#000a",
+      "allowTransparency": true
     },
     {
       "name": "Active tab background",
@@ -986,9 +1010,36 @@
       "description": "A dark theme based on a userscript by infinitytec",
       "values": {
         "page": "#111111",
+        "primary": "#855cd6",
+        "highlightText": "#ccb3ff",
+        "menuBar": "#202020",
+        "popup": "#000a",
+        "activeTab": "#202020",
+        "tab": "#151515",
+        "selector": "#202020",
+        "selector2": "#202020",
+        "selectorSelection": "#111111",
+        "accent": "#151515",
+        "input": "#202020",
+        "workspace": "#151515",
+        "categoryMenu": "#202020",
+        "palette": "#202020cc",
+        "fullscreen": "#000000",
+        "stageHeader": "#000000",
+        "border": "#ffffff0d",
+        "dots": false
+      }
+    },
+    {
+      "name": "3.Darker (blue)",
+      "id": "3darker-blue",
+      "description": "3.Darker with a blue accent color",
+      "values": {
+        "page": "#111111",
         "primary": "#4d97ff",
         "highlightText": "#4d97ff",
         "menuBar": "#202020",
+        "popup": "#000a",
         "activeTab": "#202020",
         "tab": "#151515",
         "selector": "#202020",
@@ -1014,6 +1065,7 @@
         "primary": "#4d97ff",
         "highlightText": "#4d97ff",
         "menuBar": "#2f4066",
+        "popup": "#000a",
         "activeTab": "#2f4066",
         "tab": "#273552",
         "selector": "#2f4066",
@@ -1039,6 +1091,7 @@
         "primary": "#47566b",
         "highlightText": "#4d97ff",
         "menuBar": "#47566b",
+        "popup": "#47566be6",
         "activeTab": "#555555",
         "tab": "#444444",
         "selector": "#333333",
@@ -1060,13 +1113,14 @@
       "id": "experimentalDark",
       "description": "A dark theme by Maximouse based on a userstyle. Not experimental",
       "values": {
-        "page": "#263241",
-        "primary": "#4d97ff",
-        "highlightText": "#4d97ff",
-        "menuBar": "#4d97ff",
+        "page": "#2e3238",
+        "primary": "#855cd6",
+        "highlightText": "#ccb3ff",
+        "menuBar": "#855cd6",
+        "popup": "#000a",
         "activeTab": "#282828",
         "tab": "#202020",
-        "selector": "#252c37",
+        "selector": "#292d32",
         "selector2": "#202020",
         "selectorSelection": "#282828",
         "accent": "#282828",
@@ -1089,6 +1143,7 @@
         "primary": "#ff4d4d",
         "highlightText": "#ff4d4d",
         "menuBar": "#333333",
+        "popup": "#333a",
         "activeTab": "#1e1e1e",
         "tab": "#2e2e2e",
         "selector": "#1e1e1e",
@@ -1114,6 +1169,7 @@
         "primary": "#179fd7ff",
         "highlightText": "#1e9ed6",
         "menuBar": "#9c9ea2ff",
+        "popup": "#00000099",
         "activeTab": "#e6e8e8",
         "tab": "#f1f2f2ff",
         "selector": "#e6e8e8",
@@ -1139,6 +1195,7 @@
         "primary": "#5498c7",
         "highlightText": "#21211f",
         "menuBar": "#c0c3c6",
+        "popup": "#00000099",
         "activeTab": "#b9d7e5",
         "tab": "#adadb5",
         "selector": "#6a6a6a",
@@ -1161,9 +1218,36 @@
       "description": "The colors normally used by Scratch",
       "values": {
         "page": "#e5f0ff",
+        "primary": "#855cd6",
+        "highlightText": "#855cd6",
+        "menuBar": "#855cd6",
+        "popup": "#4d97ffe6",
+        "activeTab": "#ffffff",
+        "tab": "#d9e3f2",
+        "selector": "#e9f1fc",
+        "selector2": "#d9e3f2",
+        "selectorSelection": "#ffffff",
+        "accent": "#ffffff",
+        "input": "#ffffff",
+        "workspace": "#f9f9f9",
+        "categoryMenu": "#ffffff",
+        "palette": "#f9f9f9cc",
+        "fullscreen": "#ffffff",
+        "stageHeader": "#e8edf1",
+        "border": "#00000026",
+        "dots": true
+      }
+    },
+    {
+      "name": "Scratch's default colors (blue)",
+      "id": "scratch-blue",
+      "description": "The colors originally used by Scratch 3.0",
+      "values": {
+        "page": "#e5f0ff",
         "primary": "#4d97ff",
         "highlightText": "#4d97ff",
         "menuBar": "#4d97ff",
+        "popup": "#4d97ffe6",
         "activeTab": "#ffffff",
         "tab": "#d9e3f2",
         "selector": "#e9f1fc",
@@ -1187,6 +1271,11 @@
   "presetPreview": {
     "type": "palette",
     "colors": ["primary", "menuBar", "page", "accent", "workspace", "selector"]
+  },
+  "latestUpdate": {
+    "version": "1.33.2",
+    "temporaryNotice": "The presets for this addon have been updated to use Scratch's new purple accent color. Presets that use blue are still available as well.",
+    "isMajor": true
   },
   "tags": ["editor", "theme", "featured"],
   "enabledByDefault": false
