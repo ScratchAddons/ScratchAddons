@@ -47,11 +47,7 @@ body {
 #navigation,
 .dropdown,
 .dropdown.with-arrow::before,
-.addToStudio-modal-header,
-.social-modal-header,
 .user-projects-modal .user-projects-modal-title,
-.promote-modal .promote-title,
-.manager-limit-modal .manager-limit-title,
 .transfer-host-modal .transfer-host-title {
   background-color: var(--darkWww-navbar);
   color: var(--darkWww-navbar-text);
@@ -64,14 +60,8 @@ body {
 .dropdown a:link,
 .dropdown a:visited,
 .dropdown a:active,
-.modal-title,
 .overflow-menu-container .overflow-menu-dropdown li button {
   color: var(--darkWww-navbar-text);
-}
-.report-modal-header .modal-title,
-.studio-report-modal .studio-report-title,
-.next-step-title {
-  color: white;
 }
 #navigation .inner > ul > li.search .input[type="text"]::placeholder {
   color: var(--darkWww-navbar-transparentText);
@@ -79,13 +69,8 @@ body {
 #navigation .inner > ul > li.search .btn-search,
 #navigation .mystuff > a,
 .account-nav .user-info::after,
-.modal-content-close-img,
 .overflow-menu-container .overflow-menu-dropdown li button > img {
   filter: var(--darkWww-navbar-filter);
-}
-.mod-report .modal-content-close-img,
-.studio-report-modal .modal-content-close-img {
-  filter: none;
 }
 #navigation .messages > a {
   background-image: none;
@@ -118,11 +103,6 @@ body {
 }
 #navigation .inner > ul > li.search .input[type="text"]:focus {
   background-color: var(--darkWww-navbar-inputFocus);
-}
-.addToStudio-modal-header,
-.social-modal-header,
-.user-projects-modal .user-projects-modal-title {
-  box-shadow: 0 -1px 0 inset var(--darkWww-navbar-variant);
 }
 
 /* Content background */
@@ -159,6 +139,7 @@ body:not(.sa-body-editor) .formik-input,
 .extension-landing .project-card,
 .extension-landing .hardware-card,
 .promote-modal .cancel-button,
+body:not(.sa-body-editor) [class*="stage-header_stage-size-row_"] > *,
 body:not(.sa-body-editor) [class*="stage-header_stage-button_"],
 .studio-adder-section .studio-adder-row input,
 .studio-adder-section .studio-adder-row .studio-adder-vertical-divider,
@@ -187,6 +168,8 @@ body:not(.sa-body-editor) .button.white,
 .hoc-banner .hoc-banner-image,
 .feature-banner .feature-learn-more,
 .feature-banner .feature-banner-image,
+.outer .categories li,
+.banner-wrapper .banner-button /* Choose a tutorial */,
 .studio-selector-button,
 .onboarding button.go-back,
 .button.mod-2019-conf-maillist-button,
@@ -274,13 +257,18 @@ body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 }
 .tabs button.active,
 .tabs button.active:hover {
-  border-color: var(--darkWww-box-tabSelected);
+  border-color: var(--darkWww-box-greenText);
+}
+.donate-banner .donate-container .donate-button,
+.banner-wrapper .banner-button /* Choose a tutorial */,
+.donate-section .donate-button {
+  color: var(--darkWww-box-greenText);
 }
 .social-message-icon {
   opacity: var(--darkWww-box-messageIconOpacity);
 }
-.studio-report-modal .studio-report-tile,
-.studio-report-modal .studio-report-tile-header {
+.studio-report-modal .studio-report-tile:not(.studio-report-selected),
+.studio-report-modal .studio-report-tile-header:not(.studio-report-header-selected) {
   background-color: var(--darkWww-box-studioReportTile);
 }
 .action-button.disabled,
@@ -324,15 +312,6 @@ body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
 .box .box-header {
   border-top-color: var(--darkWww-gray-boxHighlight);
 }
-.outer .categories li {
-  background-color: var(--darkWww-gray-tab);
-  border-color: var(--darkWww-gray-darkText);
-  color: var(--darkWww-gray-text);
-}
-.outer .categories li:hover {
-  background-color: var(--darkWww-gray-tabHover);
-  color: var(--darkWww-gray-darkText);
-}
 .toggle-switch .slider {
   background-color: var(--darkWww-gray-darker);
 }
@@ -344,6 +323,7 @@ body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
 
 /* Blue background */
 .empty,
+.intro-banner .intro-subnav,
 .social-message.mod-unread,
 .preview .remix-credit,
 .preview .project-description,
@@ -371,7 +351,9 @@ p.callout,
 .tab-choice-selected-sa,
 .sa-annual-report-2020 .initiatives-section .year-in-review,
 .initiatives-section .initiatives-subsection-content .map,
-.sa-annual-report-2021 .leadership-section .leadership-scratch-team .avatar-item img {
+.sa-annual-report-2021 .leadership-section .leadership-scratch-team .avatar-item img,
+body:not(.sa-body-editor) .gender-radio-row:hover,
+.educators .feature {
   background-color: var(--darkWww-blue);
   color: var(--darkWww-blue-text);
   color-scheme: var(--darkWww-blue-colorScheme);
@@ -412,6 +394,15 @@ p.callout,
   background-color: var(--darkWww-blue-20);
   color-scheme: var(--darKWww-blue-colorScheme);
 }
+.join-flow-footer-message {
+  background-color: var(--darkWww-blue-25);
+}
+.extension-chip,
+body:not(.sa-body-editor) .gender-radio-row-selected,
+body:not(.sa-body-editor) .gender-radio-row-selected:hover {
+  background-color: var(--darkWww-blue-25);
+  color: var(--darkWww-blue-text);
+}
 .replies.collapsed > .comment:last-of-type::after,
 .studio-list-bottom-gradient {
   background-image: linear-gradient(var(--darkWww-blue-opacity0), var(--darkWww-blue));
@@ -443,39 +434,26 @@ body:not(.sa-body-editor) .select select:focus {
 
 /* Highlight color */
 .button,
-.validation-info,
-.validation-info::before,
+.outer .categories li.active,
 .subactions .action-buttons .action-button,
 .unsupported-browser .back-button,
 .studio-status-icon-unselected,
 .studio-info .studio-info-footer-report button,
 .studio-tab-nav .active > li,
 .user-projects-modal .user-projects-modal-nav button.active,
-.navigation .dot.active,
 .os-chooser .button.active,
 .step .step-number-row .step-number,
-.download .installation-column-number,
-#footer .inner .media li,
-.initiatives-section .initiatives-community .subsection-tag,
-body:not(.sa-body-editor) [type="checkbox"].formik-checkbox:checked,
-.info-button-message,
-.info-button-message::before,
-input[type="radio"].formik-radio-button:checked::after,
-.row .checkbox input[type="checkbox"]:checked,
-.row .col-sm-9 input[type="radio"]:checked,
-.tooltip .expand,
-.tooltip .expand::before {
+.row .col-sm-9 input[type="radio"]:checked {
   background-color: var(--darkWww-button);
   color: var(--darkWww-button-text);
 }
 .forms-close-button {
   background-color: rgba(0, 0, 0, 0.1);
 }
-.banner-button {
+.banner-outer:not(.banner-danger) .banner-button /* Share */ {
   background-color: #ffab1a;
 }
-a.ttt-try-tutorial-button > span,
-.row .checkbox input[type="checkbox"]:checked::after {
+a.ttt-try-tutorial-button > span {
   color: var(--darkWww-button-text);
 }
 .row .col-sm-9 input[type="radio"]:checked::after {
@@ -491,13 +469,11 @@ a.ttt-try-tutorial-button > span,
 .inplace-input:focus,
 .inplace-textarea:focus,
 .textarea:focus,
+.outer .categories li,
 .unsupported-browser .back-button,
 body:not(.sa-body-editor) .formik-input:focus,
-body:not(.sa-body-editor) input[type="radio"].formik-radio-button:checked,
 .input:focus,
-.registration-step.demographics-step input[type="radio"]:focus,
-.onboarding button.finish-later,
-.onboarding button.go-back {
+.react-tel-input input[type="tel"]:focus {
   border-color: var(--darkWww-button);
 }
 .studio-tile-added {
@@ -521,23 +497,6 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button:checked,
 .os-chooser .button:not(.active) img {
   filter: none;
 }
-body:not(.sa-body-editor) [type="checkbox"].formik-checkbox:checked {
-  background-image: none;
-  position: relative;
-}
-body:not(.sa-body-editor) [type="checkbox"].formik-checkbox:checked::before {
-  /* move background image into a pseudo-element
-    so that the filter doesn't affect the background color */
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background: url("/svgs/forms/checkmark.svg") center;
-  filter: var(--darkWww-button-filter);
-}
 .input_label:hover {
   background-color: var(--darkWww-button-transparent10);
 }
@@ -545,20 +504,9 @@ body:not(.sa-body-editor) [type="checkbox"].formik-checkbox:checked::before {
 .user-projects-modal .user-projects-modal-nav button.active:hover {
   border-color: var(--darkWww-button-transparent10);
 }
-.studio-report-modal .studio-report-selected {
-  background-color: var(--darkWww-button-transparent15);
-}
-::selection,
-.extension-chip,
-.studio-report-modal .studio-report-header-selected,
-.user-projects-modal .user-projects-modal-nav button:hover,
-.join-flow-footer-message {
+.outer .categories li:hover,
+.user-projects-modal .user-projects-modal-nav button:hover {
   background-color: var(--darkWww-button-transparent25);
-}
-.inplace-input,
-.inplace-textarea,
-.modal-mute .nav-divider {
-  border-color: var(--darkWww-button-transparent25);
 }
 .comment .avatar {
   box-shadow: 0 0 0 1px var(--darkWww-button-transparent25);
@@ -566,63 +514,27 @@ body:not(.sa-body-editor) [type="checkbox"].formik-checkbox:checked::before {
 .inplace-input:focus,
 .inplace-textarea:focus,
 .studio-tile-added,
-body:not(.sa-body-editor) .formik-input:focus,
-body:not(.sa-body-editor) input[type="checkbox"].formik-checkbox:focus,
-body:not(.sa-body-editor) input[type="radio"].formik-radio-button:checked {
+body:not(.sa-body-editor) .formik-input:focus {
   box-shadow: 0 0 0 4px var(--darkWww-button-transparent25);
 }
-.modal-overlay {
-  background-color: var(--darkWww-button-overlay);
+body:not(.sa-body-editor) [class*="stage-header_stage-button_"]:active {
+  background-color: var(--darkWww-button-transparent35);
 }
+.outer .categories li.active:hover,
 .studio-info .studio-info-footer-report button:hover,
 .studio-tab-nav a.active.nav_link:hover > li {
   background-color: var(--darkWww-button-variant);
   color: var(--darkWww-button-text);
 }
-.navigation .dot.active {
-  border-color: var(--darkWww-button-variant);
-}
 .intro-banner .intro-container,
-.unsupported-browser,
 .title-banner.mod-messages,
 .download .download-header,
-.title-banner.mod-conference,
-.conf2019-title-band,
-.sa-annual-report-2019 .message-section,
-.sa-annual-report-2019 .initiatives-section .initiatives-subsection-header.community,
-.sa-annual-report-2019 .initiatives-section .initiatives-community .community-quotes .community-quote .comment-text,
-.title-banner.mod-blue-bg /* camp 2017 */,
-.wedo .top-banner,
-.gdxfor .extension-header {
+.link .extension-header /* Scratch Link download */,
+.information-page .title-banner.masthead,
+.modal-flush-bottom-button {
   background-color: var(--darkWww-button-banner);
 }
-.sa-annual-report-2019 .initiatives-section .initiatives-community .community-quotes .community-quote .comment-text,
-.sa-annual-report-2019
-  .initiatives-section
-  .initiatives-community
-  .community-quotes
-  .community-quote
-  .comment-text::before,
-.sa-annual-report-2019
-  .initiatives-section
-  .initiatives-community
-  .community-quotes
-  .community-quote
-  .comment-text::after {
-  border-color: var(--darkWww-button-banner);
-}
-.gradient1 {
-  background-image: linear-gradient(var(--darkWww-button-banner), black);
-}
-.blue-background,
-.parents .title-banner.masthead,
-.information-page .title-banner.masthead,
-.download .title-banner.masthead /* Scratch 2.0 and 1.4 download */,
-.conf2017-title-band,
-.sa-annual-report-2019 .subnavigation,
-.sa-annual-report-2020 .initiatives-section .initiatives-subsection-header.community,
-.initiatives-section .initiatives-subsection-header.SEC,
-.privacy-banner {
+.modal-flush-bottom-button:hover {
   background-color: var(--darkWww-button-bannerVariant);
 }
 
@@ -637,6 +549,7 @@ body:not(.sa-body-editor) .button.white,
 .hoc-banner .hoc-banner-image .hoc-image-text,
 .feature-banner .feature-learn-more,
 .feature-banner .feature-banner-image .feature-image-text,
+.outer .categories li,
 .unsupported-browser .faq-link,
 a.social-messages-profile-link:hover,
 a.social-messages-profile-link:active,
@@ -647,11 +560,6 @@ a.social-messages-profile-link:active,
 .studio-thumb-edit-button,
 .studio-manager-count,
 .promote-modal .cancel-button,
-.onboarding button.finish-later,
-.onboarding button.go-back,
-.index .title-banner p a button,
-.financials-section .financials-button,
-.donate-section .donate-button,
 .transfer-host-modal .cancel-button {
   color: var(--darkWww-link);
 }
@@ -661,19 +569,14 @@ a.social-messages-profile-link:active,
 .user-projects-modal .studio-projects-empty-text {
   color: var(--darkWww-link-transparent);
 }
-a:hover,
-.button.mod-2019-conf-maillist-button {
+a:hover {
   color: var(--darkWww-link-hover);
 }
 .sa-annual-report-2020 a,
 .sa-annual-report-2020 a:link,
 .sa-annual-report-2020 a:visited,
-.sa-annual-report-2020 a:active,
-.sa-annual-report-2021 a,
-.sa-annual-report-2021 a:link,
-.sa-annual-report-2021 a:visited,
-.sa-annual-report-2021 a:active {
-  color: var(--darkWww-link-variant);
+.sa-annual-report-2020 a:active {
+  color: #3373cc;
 }
 .banner a,
 .privacy-banner a,
@@ -687,12 +590,6 @@ a:hover,
 .studio-thumb-edit-img,
 .studio-activity .studio-activity-icon,
 .download .older-version .little-arrow,
-.conf2021-panel-row-icon-image,
-.conf2019-panel-row-icon-image,
-.conf2017-panel-row-icon-image,
-img[src^="/images/annual-report/milestones/timeline_"],
-.financials-section .financials-button img,
-.sa-annual-report-2020 .initiatives-section .year-in-review .connector,
 .transfer-host-modal .transfer-outcome-arrow {
   filter: var(--darkWww-link-iconFilter);
 }
@@ -807,6 +704,9 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
 .navigation .dot {
   background-color: var(--darkWww-border-15);
 }
+.navigation .dot.active {
+  background-color: #4d97ff;
+}
 .compose-comment .textarea-row textarea:not(:focus),
 .studio-tab-nav,
 body:not(.sa-body-editor) .formik-input,
@@ -882,8 +782,17 @@ p {
   /* Fix ugly gray shadow */
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
 }
+.wedo .banner {
+  box-shadow: none;
+}
 
 .initiatives-access > .green {
   /* Change the solid color background to a transparent one */
   background-color: rgba(0, 165, 0, 0.07);
+}
+
+.twitter-tweet iframe {
+  /* If the color scheme of an iframe element is different from that
+     of the document inside, it gets an opaque backgound. */
+  color-scheme: light;
 }

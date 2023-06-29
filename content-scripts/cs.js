@@ -648,7 +648,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_33", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_33_2", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -667,7 +667,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_33"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_33_2"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -728,8 +728,14 @@ const showBanner = () => {
 
 const handleBanner = async () => {
   const currentVersion = chrome.runtime.getManifest().version;
-  const [major, minor, _] = currentVersion.split(".");
-  const currentVersionMajorMinor = `${major}.${minor}`;
+  const [major, minor, _patch] = currentVersion.split(".");
+  let currentVersionMajorMinor = `${major}.${minor}`;
+  if (currentVersionMajorMinor === "1.33" && _patch > 1) {
+    // Consider this a different SA version.
+    // Note that versions are never compared as numbers. Having a distinct
+    // string that uniquely identifies v1.33.x (with x>1) is enough.
+    currentVersionMajorMinor = "1.33.x";
+  }
   // Making this configurable in the future?
   // Using local because browser extensions may not be updated at the same time across browsers
   const settings = await promisify(chrome.storage.local.get.bind(chrome.storage.local))(["bannerSettings"]);
@@ -753,8 +759,9 @@ if (document.readyState !== "loading") {
 const isProfile = pathArr[0] === "users" && pathArr[2] === "";
 const isStudio = pathArr[0] === "studios";
 const isProject = pathArr[0] === "projects";
+const isForums = pathArr[0] === "discuss";
 
-if (isProfile || isStudio || isProject) {
+if (isProfile || isStudio || isProject || isForums) {
   const removeReiteratedChars = (string) =>
     string
       .split("")
@@ -773,7 +780,7 @@ if (isProfile || isStudio || isProject) {
   extensionPolicyLink.innerText = chrome.i18n.getMessage("captureCommentPolicy");
   Object.assign(extensionPolicyLink.style, {
     textDecoration: "underline",
-    color: "white",
+    color: isForums ? "" : "white",
   });
   const errorMsgHtml = escapeHTML(chrome.i18n.getMessage("captureCommentError", DOLLARS)).replace(
     "$1",
@@ -877,5 +884,68 @@ if (isProfile || isStudio || isProject) {
       },
       { capture: true }
     );
+  } else if (isForums) {
+    window.addEventListener("click", (e) => {
+      const potentialPostButton = e.target.closest("button[type=submit]");
+      if (!potentialPostButton) return;
+      const form = e.target.closest("form");
+      if (!form) return;
+      if (form.hasAttribute("data-sa-send-anyway")) {
+        form.removeAttribute("data-sa-send-anyway");
+        return;
+      }
+      const existingWarning = form.parentElement.querySelector(".sa-extension-policy-warning");
+      if (existingWarning) {
+        // Do nothing. The warning automatically disappears after typing into the form.
+        e.preventDefault();
+        existingWarning.scrollIntoView({ behavior: "smooth" });
+        return;
+      }
+      const textarea = form.querySelector("textarea.markItUpEditor");
+      if (!textarea) return;
+      if (shouldCaptureComment(textarea.value)) {
+        const errorTip = document.createElement("li");
+        errorTip.classList.add("errorlist", "sa-extension-policy-warning");
+        errorTip.style.scrollMarginTop = "50px";
+        errorTip.style.fontWeight = "bold";
+        errorTip.innerHTML = errorMsgHtml + " ";
+        const sendAnyway = document.createElement("a");
+        sendAnyway.onclick = () => {
+          const res = confirm(confirmMsg);
+          if (res) {
+            form.setAttribute("data-sa-send-anyway", "");
+            form.querySelector("button[type=submit]")?.click();
+          }
+        };
+        sendAnyway.textContent = sendAnywayMsg;
+        errorTip.appendChild(sendAnyway);
+
+        const postArea = form.querySelector("label");
+        if (!postArea) return;
+        let errorList = form.querySelector("label > ul");
+        if (!errorList) {
+          const typeArea = postArea.querySelector("strong");
+          errorList = document.createElement("ul");
+          errorList.classList.add("errorlist");
+          postArea.insertBefore(errorList, typeArea);
+        }
+
+        errorList.appendChild(errorTip);
+        errorTip.scrollIntoView({ behavior: "smooth" });
+        e.preventDefault();
+
+        // Hide error after typing
+        textarea.addEventListener(
+          "input",
+          () => {
+            errorTip.remove();
+            if (errorList.querySelector("li") === null) {
+              errorList.remove();
+            }
+          },
+          { once: true }
+        );
+      }
+    });
   }
 }

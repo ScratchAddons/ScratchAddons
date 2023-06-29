@@ -15,6 +15,7 @@
   color: black;
 }
 .blocklyDropDownDiv .blocklyText {
+  /* "Play note" dropdown */
   fill: black;
 }
 .blocklyDropDownDiv .goog-menuitem-highlight,

@@ -14,9 +14,9 @@ export default async function ({ addon, console, msg }) {
     // Temporary code to support both current and future Scratch version
     if (addon.tab.scratchClass("stage-header_stage-button-toggled-off"))
       hideStageButton.classList.remove(addon.tab.scratchClass("stage-header_stage-button-toggled-off"));
-    hideStageButton.ariaPressed = true;
-    smallStageButton.ariaPressed = false;
-    largeStageButton.ariaPressed = false;
+    hideStageButton.setAttribute("aria-pressed", true);
+    smallStageButton.setAttribute("aria-pressed", false);
+    largeStageButton.setAttribute("aria-pressed", false);
     window.dispatchEvent(new Event("resize")); // resizes the code area and paint editor canvas
   }
 
@@ -28,13 +28,14 @@ export default async function ({ addon, console, msg }) {
     // Temporary code to support both current and future Scratch version
     if (addon.tab.scratchClass("stage-header_stage-button-toggled-off"))
       hideStageButton.classList.add(addon.tab.scratchClass("stage-header_stage-button-toggled-off"));
-    hideStageButton.ariaPressed = false;
+    hideStageButton.setAttribute("aria-pressed", false);
     if (e) {
       const clickedButton = e.target.closest("button");
-      if (clickedButton) clickedButton.ariaPressed = true;
+      if (clickedButton) clickedButton.setAttribute("aria-pressed", true);
     } else if (addon.tab.redux.state) {
-      if (addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") smallStageButton.ariaPressed = true;
-      else largeStageButton.ariaPressed = true;
+      if (addon.tab.redux.state.scratchGui.stageSize.stageSize === "small")
+        smallStageButton.setAttribute("aria-pressed", true);
+      else largeStageButton.setAttribute("aria-pressed", true);
     }
     window.dispatchEvent(new Event("resize")); // resizes the code area and paint editor canvas
   }
@@ -64,19 +65,18 @@ export default async function ({ addon, console, msg }) {
           )
         : addon.tab.scratchClass("toggle-buttons_button", { others: "sa-hide-stage-button" }),
       title: msg("hide-stage"),
-      ariaLabel: msg("hide-stage"),
-      ariaPressed: false,
     });
+    hideStageButton.setAttribute("aria-label", msg("hide-stage"));
+    hideStageButton.setAttribute("aria-pressed", false);
     addon.tab.displayNoneWhileDisabled(hideStageButton);
     stageControls.insertBefore(hideStageButton, smallStageButton);
-    hideStageButton.appendChild(
-      Object.assign(document.createElement("img"), {
-        className: addon.tab.scratchClass("stage-header_stage-button-icon"),
-        src: addon.self.dir + "/icon.svg",
-        draggable: false,
-        ariaHidden: true,
-      })
-    );
+    const icon = Object.assign(document.createElement("img"), {
+      className: addon.tab.scratchClass("stage-header_stage-button-icon"),
+      src: addon.self.dir + "/icon.svg",
+      draggable: false,
+    });
+    icon.setAttribute("aria-hidden", true);
+    hideStageButton.appendChild(icon);
     if (stageHidden) hideStage();
     else unhideStage();
     hideStageButton.addEventListener("click", hideStage);

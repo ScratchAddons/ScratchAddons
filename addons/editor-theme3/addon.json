@@ -27,8 +27,8 @@
     }
   ],
   "latestUpdate": {
-    "version": "1.31.0",
-    "temporaryNotice": "Two new presets have been added, including a preset for the new high-contrast block colors coming to Scratch soon."
+    "version": "1.33.2",
+    "isMajor": true
   },
   "customCssVariables": [
     {
