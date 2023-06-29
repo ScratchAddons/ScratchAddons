@@ -727,6 +727,7 @@ const showBanner = () => {
 };
 
 const handleBanner = async () => {
+  if (window.frameElement) return;
   const currentVersion = chrome.runtime.getManifest().version;
   const [major, minor, _patch] = currentVersion.split(".");
   let currentVersionMajorMinor = `${major}.${minor}`;
