@@ -14,9 +14,9 @@
       "name": "TheColaber (Editor messages)"
     },
     {
-        "name": "lisa_wolfgang (Tutorials button)",
-        "link": "https://scratch.mit.edu/users/lisa_wolfgang/"
-      }
+      "name": "lisa_wolfgang (Tutorials button)",
+      "link": "https://scratch.mit.edu/users/lisa_wolfgang/"
+    }
   ],
   "tags": ["editor", "editorMenuBar"],
   "dynamicDisable": true,
@@ -72,14 +72,14 @@
       }
     },
     {
-        "url": "tutorials-icon.css",
-        "matches": ["projects"],
-        "if": {
-          "settings": {
-            "tutorials-button": "icon"
-          }
+      "url": "tutorials-icon.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": {
+          "tutorials-button": "icon"
         }
       }
+    }
   ],
   "settings": [
     {
@@ -111,20 +111,20 @@
       "default": "both"
     },
     {
-        "name": "Tutorials button",
-        "id": "tutorials-button",
-        "type": "select",
-        "potentialValues": [
-          {
-            "name": "Show icon and text",
-            "id": "both"
-          },
-          {
-            "name": "Show icon only",
-            "id": "icon"
-          }
-        ],
-        "default": "icon"
-      }
+      "name": "Tutorials button",
+      "id": "tutorials-button",
+      "type": "select",
+      "potentialValues": [
+        {
+          "name": "Show icon and text",
+          "id": "both"
+        },
+        {
+          "name": "Show icon only",
+          "id": "icon"
+        }
+      ],
+      "default": "icon"
+    }
   ]
 }
