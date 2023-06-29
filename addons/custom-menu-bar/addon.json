@@ -103,16 +103,16 @@
       "default": true
     },
     {
-      "name": "Show menus",
+      "name": "Menus",
       "id": "menu-labels",
       "type": "select",
       "potentialValues": [
         {
-          "name": "Icons and text",
+          "name": "Show icons and text",
           "id": "both"
         },
         {
-          "name": "Icons only",
+          "name": "Show icons only",
           "id": "icons"
         }
       ],
