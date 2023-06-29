@@ -23,8 +23,7 @@ export default async function ({ addon, console }) {
       stylesheet.remove();
       stylesheetOnDocument = false;
       return;
-    }
-    else if (wantedSize === currentSize) return;
+    } else if (wantedSize === currentSize) return;
     currentSize = wantedSize;
 
     if (!stylesheetOnDocument) {
