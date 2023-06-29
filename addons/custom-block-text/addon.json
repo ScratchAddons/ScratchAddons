@@ -16,6 +16,12 @@
       "link": "https://github.com/DNin01"
     }
   ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
   "userstyles": [
     {
       "url": "text-bold.css",
@@ -26,10 +32,6 @@
       "url": "text-shadow.css",
       "matches": ["projects"],
       "if": { "settings": { "shadow": true } }
-    },
-    {
-      "url": "text-large.css",
-      "matches": ["projects"]
     }
   ],
   "settings": [

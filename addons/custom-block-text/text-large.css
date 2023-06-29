@@ -1,4 +1,0 @@
-.blocklyText,
-.blocklyHtmlInput {
-  font-size: calc(var(--customBlockText-size) * 0.12pt) !important;
-}
