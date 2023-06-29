@@ -279,7 +279,7 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
         // this is not even a color lol
         return getColor(addonId, obj.source) ? getColor(addonId, obj.true) : getColor(addonId, obj.false);
       case "map":
-        return obj.options[getColor(addonId, obj.source)];
+        return getColor(addonId, obj.options[getColor(addonId, obj.source)]) || getColor(addonId, obj.default);
       case "textColor": {
         hex = getColor(addonId, obj.source);
         let black = getColor(addonId, obj.black);

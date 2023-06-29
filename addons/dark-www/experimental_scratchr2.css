@@ -24,7 +24,7 @@ label,
 #topnav ul.account-nav .logged-in-user .dropdown-menu,
 #topnav li.logout.divider input,
 #topnav ul.account-nav .sign-in .popover {
-  background-color: var(--darkWww-navbar);
+  background-color: var(--darkWww-navbar-scratchr2);
 }
 #topnav ul.site-nav li,
 #topnav ul.site-nav li.last,
@@ -33,11 +33,11 @@ label,
 #topnav ul.account-nav.logged-in > li,
 #topnav ul.account-nav ul.user-nav li.logout.divider,
 #topnav ul.account-nav .sign-in .popover {
-  border-color: var(--darkWww-navbar);
+  border-color: var(--darkWww-navbar-scratchr2);
 }
 #topnav ul.account-nav .sign-in .popover .arrow,
 #topnav ul.account-nav .sign-in .popover .arrow::after {
-  border-bottom-color: var(--darkWww-navbar);
+  border-bottom-color: var(--darkWww-navbar-scratchr2);
 }
 #topnav ul.site-nav li a,
 #topnav ul.account-nav > li > span,
@@ -382,9 +382,9 @@ ul.pagination span /* mobile forums */ {
   color: var(--darkWww-button-scratchr2ButtonText);
 }
 .button {
-  background-color: var(--darkWww-button);
+  background-color: var(--darkWww-button-scratchr2);
   background-image: none; /* Fixes Scratch bug: https://scratch.mit.edu/discuss/topic/694218/ */
-  border-color: var(--darkWww-button);
+  border-color: var(--darkWww-button-scratchr2);
   color: var(--darkWww-button-scratchr2ButtonText);
 }
 .button a,
@@ -396,7 +396,7 @@ ul.pagination span /* mobile forums */ {
   color: var(--darkWww-button-scratchr2ButtonText);
 }
 .button:hover {
-  background-color: var(--darkWww-button-variant);
+  background-color: var(--darkWww-button-scratchr2Hover);
   background-image: none; /* Fixes Scratch bug: https://scratch.mit.edu/discuss/topic/694218/ */
 }
 input:focus,
@@ -414,14 +414,14 @@ textarea:focus,
   box-shadow: none;
 }
 .blockpost div.box {
-  background-color: var(--darkWww-button);
-  border-top-color: var(--darkWww-button);
+  background-color: var(--darkWww-button-scratchr2PostHeader);
+  border-top-color: var(--darkWww-button-scratchr2PostHeader);
 }
 .my-ocular-reaction-button {
-  box-shadow: 0 0 2px var(--darkWww-button);
+  box-shadow: 0 0 2px var(--darkWww-button-scratchr2PostHeader);
 }
 .my-ocular-reaction-button.selected {
-  background-color: var(--darkWww-button);
+  background-color: var(--darkWww-button-scratchr2PostHeader);
   color: var(--darkWww-button-scratchr2PostHeaderText);
 }
 .blockpost .box-head {
@@ -450,7 +450,7 @@ input.link.black:active,
 #comments .comment .info .name a:hover,
 #comments .more-replies .pulldown,
 #email-resend-box a {
-  color: var(--darkWww-link);
+  color: var(--darkWww-link-scratchr2);
 }
 .inew,
 .isticky:not(.iclosed) {
