@@ -2,18 +2,6 @@
   display: none;
 }
 
-[class*="settings-menu_dropdown-label"] {
-  display: none;
-}
-
-[class*="menu-bar_collapsible-label"] {
-  display: none;
-}
-
-[class*="menu-bar_tutorials-label"] {
-  display: none;
-}
-
 .sa-profile-name {
   display: block;
   font-size: 0.75rem;

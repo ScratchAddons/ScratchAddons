@@ -1,0 +1,11 @@
+[class*="settings-menu_dropdown-label"] {
+    display: none;
+}
+
+[class*="menu-bar_collapsible-label"] {
+    display: none;
+}
+
+[class*="menu-bar_tutorials-label"] {
+    display: none;
+}

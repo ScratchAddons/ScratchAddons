@@ -1,0 +1,127 @@
+{
+    "name": "Custom menu bar",
+    "description": "Allows you to customize the menu bar in the editor.",
+    "credits": [
+        {
+            "name": "philipp2007 (Update, compact profile dropdown)",
+            "link": "https://ggigabyte.repl.co/"
+        },
+        {
+            "name": "CST1229 (Compact profile dropdown)",
+            "link": "https://github.com/CST1229/"
+        },
+        {
+            "name": "TheColaber (Editor messages)"
+        }
+    ],
+    "tags": [
+        "editor",
+        "editorMenuBar"
+    ],
+    "dynamicDisable": true,
+    "dynamicEnable": true,
+    "enabledByDefault": false,
+    "versionAdded": "1.34.0",
+    "userscripts": [
+        {
+            "url": "messages.js",
+            "matches": [
+                "projects"
+            ],
+            "if": {
+                "settings": {
+                    "messages": true
+                }
+            }
+        },
+        {
+            "url": "username.js",
+            "matches": [
+                "projects"
+            ],
+            "if": {
+                "settings": {
+                    "compact-username": true
+                }
+            }
+        }
+    ],
+    "userstyles": [
+        {
+            "url": "messages.css",
+            "matches": [
+                "projects"
+            ],
+            "if": {
+                "settings": {
+                    "messages": true
+                }
+            }
+        },
+        {
+            "url": "username.css",
+            "matches": [
+                "projects"
+            ],
+            "if": {
+                "settings": {
+                    "compact-username": true
+                }
+            }
+        },
+        {
+            "url": "icons.css",
+            "matches": [
+                "projects"
+            ],
+            "if": {
+                "settings": {
+                    "menu-labels": "icons"
+                }
+            }
+        },
+        {
+            "url": "text.css",
+            "matches": [
+                "projects"
+            ],
+            "if": {
+                "settings": {
+                    "menu-labels": "text"
+                }
+            }
+        }
+    ],
+    "settings": [
+        {
+            "name": "Show messages button",
+            "id": "messages",
+            "type": "boolean"
+        },
+        {
+            "name": "Compact user dropdown",
+            "id": "compact-username",
+            "type": "boolean"
+        },
+        {
+            "name": "Show menus",
+            "id": "menu-labels",
+            "type": "select",
+            "potentialValues": [
+                {
+                    "name": "Icons and text",
+                    "id": "both"
+                },
+                {
+                    "name": "Icons only",
+                    "id": "icons"
+                },
+                {
+                    "name": "Text only",
+                    "id": "text"
+                }
+            ],
+            "default": "both"
+        }
+    ]
+}
