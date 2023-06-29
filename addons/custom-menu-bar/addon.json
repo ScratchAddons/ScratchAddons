@@ -3,22 +3,26 @@
   "description": "Allows you to customize the menu bar in the editor.",
   "credits": [
     {
-      "name": "philipp2007 (Update, compact profile dropdown)",
+      "name": "philipp2007 (Update, menus, compact profile dropdown)",
       "link": "https://ggigabyte.repl.co/"
     },
     {
-      "name": "CST1229 (Compact profile dropdown)",
+      "name": "CST1229 (Compact user dropdown)",
       "link": "https://github.com/CST1229/"
     },
     {
       "name": "TheColaber (Editor messages)"
-    }
+    },
+    {
+        "name": "lisa_wolfgang (Tutorials button)",
+        "link": "https://scratch.mit.edu/users/lisa_wolfgang/"
+      }
   ],
   "tags": ["editor", "editorMenuBar"],
   "dynamicDisable": true,
   "dynamicEnable": true,
   "enabledByDefault": false,
-  "versionAdded": "1.34.0",
+  "versionAdded": "1.33.2",
   "userscripts": [
     {
       "url": "messages.js",
@@ -59,7 +63,7 @@
       }
     },
     {
-      "url": "icons.css",
+      "url": "menu-icons.css",
       "matches": ["projects"],
       "if": {
         "settings": {
@@ -68,14 +72,14 @@
       }
     },
     {
-      "url": "text.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": {
-          "menu-labels": "text"
+        "url": "tutorials-icon.css",
+        "matches": ["projects"],
+        "if": {
+          "settings": {
+            "tutorials-button": "icon"
+          }
         }
       }
-    }
   ],
   "settings": [
     {
@@ -102,13 +106,25 @@
         {
           "name": "Icons only",
           "id": "icons"
-        },
-        {
-          "name": "Text only",
-          "id": "text"
         }
       ],
       "default": "both"
-    }
+    },
+    {
+        "name": "Tutorials button",
+        "id": "tutorials-button",
+        "type": "select",
+        "potentialValues": [
+          {
+            "name": "Show icon and text",
+            "id": "both"
+          },
+          {
+            "name": "Show icon only",
+            "id": "icon"
+          }
+        ],
+        "default": "icon"
+      }
   ]
 }
