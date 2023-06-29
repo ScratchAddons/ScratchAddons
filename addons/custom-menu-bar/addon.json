@@ -1,24 +1,32 @@
 {
   "name": "Custom menu bar",
-  "description": "Allows you to customize the menu bar in the editor.",
+  "description": "Allows you to add or remove items from the menu bar in the editor.",
   "credits": [
     {
-      "name": "philipp2007 (Update, menus, compact profile dropdown)",
-      "link": "https://ggigabyte.repl.co/"
+      "name": "philipp2007",
+      "link": "https://ggigabyte.repl.co/",
+      "note": "update, menus, compact user dropdown",
+      "id": "update"
     },
     {
-      "name": "CST1229 (Compact user dropdown)",
-      "link": "https://github.com/CST1229/"
+      "name": "CST1229",
+      "link": "https://github.com/CST1229/",
+      "note": "compact user dropdown",
+      "id": "dropdown"
     },
     {
-      "name": "TheColaber (Editor messages)"
+      "name": "TheColaber",
+      "note": "editor messages",
+      "id": "editor-messages"
     },
     {
-      "name": "lisa_wolfgang (Tutorials button)",
-      "link": "https://scratch.mit.edu/users/lisa_wolfgang/"
+      "name": "lisa_wolfgang",
+      "link": "https://scratch.mit.edu/users/lisa_wolfgang/",
+      "note": "hide tutorials button",
+      "id": "tutorials-button"
     }
   ],
-  "tags": ["editor", "editorMenuBar"],
+  "tags": ["editor", "editorMenuBar", "featured"],
   "dynamicDisable": false,
   "dynamicEnable": false,
   "enabledByDefault": false,
