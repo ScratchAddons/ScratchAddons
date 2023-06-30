@@ -26,97 +26,12 @@
       "id": "tutorials-button"
     }
   ],
-  "tags": ["editor", "editorMenuBar", "featured"],
-  "dynamicDisable": true,
-  "dynamicEnable": true,
-  "updateUserstylesOnSettingsChange": true,
-  "enabledByDefault": false,
-  "versionAdded": "1.33.2",
-  "userscripts": [
-    {
-      "url": "messages.js",
-      "matches": ["projects"]
-    },
-    {
-      "url": "username.js",
-      "matches": ["projects"]
-    }
-  ],
-  "userstyles": [
-    {
-      "url": "messages.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": {
-          "messages": true
-        }
-      }
-    },
-    {
-      "url": "username.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": {
-          "compact-username": true
-        }
-      }
-    },
-    {
-      "url": "menu-icons.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": {
-          "menu-labels": "icons"
-        }
-      }
-    },
-    {
-      "url": "tutorials-icon.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": {
-          "tutorials-button": "icon"
-        }
-      }
-    },
-    {
-      "url": "tutorials-hide.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": {
-          "tutorials-button": "hide"
-        }
-      }
-    },
-    {
-      "url": "my-stuff-hide.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": {
-          "my-stuff": "false"
-        }
-      }
-    }
+  "tags": [
+    "editor",
+    "editorMenuBar",
+    "featured"
   ],
   "settings": [
-    {
-      "name": "Show messages button",
-      "id": "messages",
-      "type": "boolean",
-      "default": false
-    },
-    {
-      "name": "Show My Stuff button (coming soon!)",
-      "id": "my-stuff",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Compact user dropdown",
-      "id": "compact-username",
-      "type": "boolean",
-      "default": true
-    },
     {
       "name": "Menus",
       "id": "menu-labels",
@@ -152,6 +67,111 @@
         }
       ],
       "default": "icon"
+    },
+    {
+      "name": "Show messages button",
+      "id": "messages",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Show My Stuff button",
+      "id": "my-stuff",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Compact user dropdown",
+      "id": "compact-username",
+      "type": "boolean",
+      "default": true
     }
-  ]
+  ],
+  "userscripts": [
+    {
+      "url": "messages.js",
+      "matches": [
+        "projects"
+      ]
+    },
+    {
+      "url": "username.js",
+      "matches": [
+        "projects"
+      ]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "messages.css",
+      "matches": [
+        "projects"
+      ],
+      "if": {
+        "settings": {
+          "messages": true
+        }
+      }
+    },
+    {
+      "url": "username.css",
+      "matches": [
+        "projects"
+      ],
+      "if": {
+        "settings": {
+          "compact-username": true
+        }
+      }
+    },
+    {
+      "url": "menu-icons.css",
+      "matches": [
+        "projects"
+      ],
+      "if": {
+        "settings": {
+          "menu-labels": "icons"
+        }
+      }
+    },
+    {
+      "url": "tutorials-icon.css",
+      "matches": [
+        "projects"
+      ],
+      "if": {
+        "settings": {
+          "tutorials-button": "icon"
+        }
+      }
+    },
+    {
+      "url": "tutorials-hide.css",
+      "matches": [
+        "projects"
+      ],
+      "if": {
+        "settings": {
+          "tutorials-button": "hide"
+        }
+      }
+    },
+    {
+      "url": "my-stuff-hide.css",
+      "matches": [
+        "projects"
+      ],
+      "if": {
+        "settings": {
+          "my-stuff": "false"
+        }
+      }
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "enabledByDefault": false,
+  "versionAdded": "1.33.2"
 }
