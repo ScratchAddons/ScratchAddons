@@ -208,6 +208,24 @@
       }
     },
     {
+      "name": "navbar-scratchr2",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        },
+        "options": {
+          "#4d97ff": "#0f8bc0",
+          "#4d97ffff": "#0f8bc0"
+        },
+        "default": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        }
+      }
+    },
+    {
       "name": "navbar-scratchr2Text",
       "value": {
         "type": "textColor",
@@ -231,16 +249,27 @@
       }
     },
     {
-      "name": "navbar-scratchr2Border",
+      "name": "navbar-scratchr2ItemHover",
       "value": {
-        "type": "multiply",
+        "type": "map",
         "source": {
           "type": "settingValue",
           "settingId": "navbar"
         },
-        "r": 0.9,
-        "g": 0.9,
-        "b": 0.9
+        "options": {
+          "#4d97ff": "#0c6185",
+          "#4d97ffff": "#0c6185"
+        },
+        "default": {
+          "type": "textColor",
+          "black": "rgba(0, 0, 0, 0.1)",
+          "white": "rgba(255, 255, 255, 0.1)",
+          "source": {
+            "type": "settingValue",
+            "settingId": "navbar"
+          },
+          "threshold": 60
+        }
       }
     },
     {
@@ -1511,6 +1540,48 @@
       }
     },
     {
+      "name": "button-scratchr2",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "options": {
+          "#4d97ff": "#18abeb",
+          "#4d97ffff": "#18abeb"
+        },
+        "default": {
+          "type": "settingValue",
+          "settingId": "button"
+        }
+      }
+    },
+    {
+      "name": "button-scratchr2Hover",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "options": {
+          "#4d97ff": "#169fdb",
+          "#4d97ffff": "#169fdb"
+        },
+        "default": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "button"
+          },
+          "r": 0.9,
+          "g": 0.9,
+          "b": 0.9
+        }
+      }
+    },
+    {
       "name": "button-scratchr2ButtonText",
       "value": {
         "type": "textColor",
@@ -1546,17 +1617,19 @@
     {
       "name": "button-scratchr2PostHeader",
       "value": {
-        "type": "brighten",
+        "type": "map",
         "source": {
-          "type": "multiply",
-          "source": {
-            "type": "settingValue",
-            "settingId": "button"
-          },
-          "r": 0.52,
-          "b": 0.85
+          "type": "settingValue",
+          "settingId": "button"
         },
-        "g": 0.85
+        "options": {
+          "#4d97ff": "#28a5da",
+          "#4d97ffff": "#28a5da"
+        },
+        "default": {
+          "type": "settingValue",
+          "settingId": "button"
+        }
       }
     },
     {
@@ -1606,6 +1679,24 @@
           "r": 0.86,
           "g": 0.85,
           "b": 0.84
+        }
+      }
+    },
+    {
+      "name": "link-scratchr2",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "link"
+        },
+        "options": {
+          "#4d97ff": "#1aa0d8",
+          "#4d97ffff": "#1aa0d8"
+        },
+        "default": {
+          "type": "settingValue",
+          "settingId": "link"
         }
       }
     },
