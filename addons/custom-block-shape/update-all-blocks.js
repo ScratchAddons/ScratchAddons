@@ -17,6 +17,4 @@ export function updateAllBlocks(vm) {
       workspace.toolboxRefreshEnabled_ = true;
     }
   }
-  // If font size has changed, middle click popup needs to clear it's cache
-  clearTextWidthCache();
 }

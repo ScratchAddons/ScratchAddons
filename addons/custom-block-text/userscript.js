@@ -40,7 +40,10 @@ export default async function ({ addon, console }) {
 
   const updateBlockly = () => {
     blocklyInstance.Field.cacheWidths_ = {}; // Clear text width cache
+    // If font size has changed, middle click popup needs to clear it's cache too
     updateAllBlocks(vm);
+    clearTextWidthCache();
+
   };
 
   const setFontSize = (wantedSize) => {
