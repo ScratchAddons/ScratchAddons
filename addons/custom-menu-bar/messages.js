@@ -33,13 +33,13 @@ export default async function ({ addon, console, msg }) {
       });
     }
   }
-  createInterval();
+  if (addon.settings.get("messages")) createInterval();
 
-  /*addon.self.addEventListener("disabled", () => {
-    clearInterval(interval);
+  addon.self.addEventListener("change", () => {
+    if (addon.settings.get("messages")) createInterval();
+    else clearInterval(interval);
   });
-  addon.self.addEventListener("reenabled", createInterval);*/
-
+  
   addon.tab.displayNoneWhileDisabled(messages);
   while (true) {
     let nav = await addon.tab.waitForElement("[class^='menu-bar_account-info-group'] > [href^='/my']", {
