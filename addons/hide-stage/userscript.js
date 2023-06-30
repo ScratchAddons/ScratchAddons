@@ -11,9 +11,6 @@ export default async function ({ addon, console, msg }) {
     document.body.classList.add("sa-stage-hidden-outer");
     // Inner class is applied to body wrapper so that it won't affect the project page.
     bodyWrapper.classList.add("sa-stage-hidden");
-    // Temporary code to support both current and future Scratch version
-    if (addon.tab.scratchClass("stage-header_stage-button-toggled-off"))
-      hideStageButton.classList.remove(addon.tab.scratchClass("stage-header_stage-button-toggled-off"));
     hideStageButton.setAttribute("aria-pressed", true);
     smallStageButton.setAttribute("aria-pressed", false);
     largeStageButton.setAttribute("aria-pressed", false);
@@ -25,9 +22,6 @@ export default async function ({ addon, console, msg }) {
     if (!bodyWrapper) return;
     document.body.classList.remove("sa-stage-hidden-outer");
     bodyWrapper.classList.remove("sa-stage-hidden");
-    // Temporary code to support both current and future Scratch version
-    if (addon.tab.scratchClass("stage-header_stage-button-toggled-off"))
-      hideStageButton.classList.add(addon.tab.scratchClass("stage-header_stage-button-toggled-off"));
     hideStageButton.setAttribute("aria-pressed", false);
     if (e) {
       const clickedButton = e.target.closest("button");
@@ -43,27 +37,19 @@ export default async function ({ addon, console, msg }) {
   addon.self.addEventListener("disabled", () => unhideStage());
 
   while (true) {
-    let stageControls = await addon.tab.waitForElement("[class*='stage-header_stage-size-toggle-group_']", {
-      markAsSeen: true,
-      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
-    });
-    // Temporary code to support both current and future Scratch version
-    stageControls = stageControls.querySelector("[class*='toggle-buttons_row_']") || stageControls;
+    const stageControls = await addon.tab.waitForElement(
+      "[class*='stage-header_stage-size-toggle-group_'] > [class*='toggle-buttons_row_']",
+      {
+        markAsSeen: true,
+        reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+      }
+    );
     bodyWrapper = document.querySelector("[class*='gui_body-wrapper_']");
     smallStageButton = stageControls.firstChild;
-    smallStageButton.classList.add("sa-stage-button-middle");
     largeStageButton = stageControls.lastChild;
     hideStageButton = Object.assign(document.createElement("button"), {
       type: "button",
-      // Temporary code to support both current and future Scratch version
-      className: addon.tab.scratchClass("stage-header_stage-button-first")
-        ? addon.tab.scratchClass(
-            "button_outlined-button",
-            "stage-header_stage-button",
-            "stage-header_stage-button-first",
-            { others: "sa-hide-stage-button" }
-          )
-        : addon.tab.scratchClass("toggle-buttons_button", { others: "sa-hide-stage-button" }),
+      className: addon.tab.scratchClass("toggle-buttons_button", { others: "sa-hide-stage-button" }),
       title: msg("hide-stage"),
     });
     hideStageButton.setAttribute("aria-label", msg("hide-stage"));
