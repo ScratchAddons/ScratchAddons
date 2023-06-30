@@ -1,7 +1,6 @@
 export default async function ({ addon, console, msg }) {
   const messages = document.createElement("a");
   messages.href = "/messages/";
-  messages.title = msg("messages");
   messages.className = addon.tab.scratchClass("menu-bar_menu-bar-item", "menu-bar_hoverable", {
     others: "sa-editormessages",
   });
