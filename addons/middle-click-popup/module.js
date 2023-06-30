@@ -30,7 +30,7 @@ export function clearTextWidthCache() {
 }
 
 /**
- * @param {() => void} func 
+ * @param {() => void} func
  */
 export function onClearTextWidthCache(func) {
   eventTarget.addEventListener(eventClearTextCache, func);
