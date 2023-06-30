@@ -261,14 +261,14 @@
           "#4d97ffff": "#0c6185"
         },
         "default": {
-          "type": "multiply",
+          "type": "textColor",
+          "black": "rgba(0, 0, 0, 0.1)",
+          "white": "rgba(255, 255, 255, 0.1)",
           "source": {
             "type": "settingValue",
             "settingId": "navbar"
           },
-          "r": 0.9,
-          "g": 0.9,
-          "b": 0.9
+          "threshold": 60
         }
       }
     },
