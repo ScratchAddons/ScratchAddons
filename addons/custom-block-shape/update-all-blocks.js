@@ -1,3 +1,5 @@
+import { clearTextWidthCache } from "../middle-click-popup/module.js";
+
 export function updateAllBlocks(vm) {
   const workspace = window.Blockly.getMainWorkspace();
   if (workspace) {
@@ -15,4 +17,6 @@ export function updateAllBlocks(vm) {
       workspace.toolboxRefreshEnabled_ = true;
     }
   }
+  // If font size has changed, middle click popup needs to clear it's cache
+  clearTextWidthCache();
 }
