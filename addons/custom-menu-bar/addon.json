@@ -1,6 +1,6 @@
 {
   "name": "Custom menu bar",
-  "description": "Allows you to add or remove items from the menu bar in the editor.",
+  "description": "Add or remove editor menu bar items.",
   "credits": [
     {
       "name": "philipp2007",

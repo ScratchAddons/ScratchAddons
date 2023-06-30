@@ -32,12 +32,15 @@ export default async function ({ addon, console, msg }) {
       });
     }
   }
-  if (addon.settings.get("messages")) createInterval();
 
-  addon.self.addEventListener("change", () => {
+  function update() {
     if (addon.settings.get("messages")) createInterval();
     else clearInterval(interval);
-  });
+  }
+  
+  update();
+  addon.settings.addEventListener("change", update);
+  addon.self.addEventListener("reenabled", update);
 
   while (true) {
     if (addon.self.disabled || !addon.settings.get("messages")) messages.style.display = "none";
