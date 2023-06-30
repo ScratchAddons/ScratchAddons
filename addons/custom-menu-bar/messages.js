@@ -40,7 +40,9 @@ export default async function ({ addon, console, msg }) {
     else clearInterval(interval);
   });
 
-  addon.tab.displayNoneWhileDisabled(messages);
+  //addon.tab.displayNoneWhileDisabled(messages);
+  if (addon.self.disabled || !addon.settings.get("messages")) messages.style.display = "none";
+  else messages.style.display = "block";
   while (true) {
     let nav = await addon.tab.waitForElement("[class^='menu-bar_account-info-group'] > [href^='/my']", {
       markAsSeen: true,
