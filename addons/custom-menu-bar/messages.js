@@ -37,7 +37,7 @@ export default async function ({ addon, console, msg }) {
     if (addon.settings.get("messages")) createInterval();
     else clearInterval(interval);
   }
-  
+
   update();
   addon.settings.addEventListener("change", update);
   addon.self.addEventListener("reenabled", update);
