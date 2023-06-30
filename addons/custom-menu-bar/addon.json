@@ -129,7 +129,7 @@
         {
           "name": "Only show icons",
           "id": "icons"
-          }
+        }
       ],
       "default": "both"
     },
