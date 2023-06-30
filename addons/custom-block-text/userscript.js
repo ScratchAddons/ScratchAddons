@@ -43,7 +43,6 @@ export default async function ({ addon, console }) {
     // If font size has changed, middle click popup needs to clear it's cache too
     updateAllBlocks(vm);
     clearTextWidthCache();
-
   };
 
   const setFontSize = (wantedSize) => {
