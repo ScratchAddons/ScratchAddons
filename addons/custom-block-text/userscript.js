@@ -1,4 +1,5 @@
 import { updateAllBlocks } from "../custom-block-shape/update-all-blocks.js";
+import { clearTextWidthCache } from "../middle-click-popup/module.js";
 
 export default async function ({ addon, console }) {
   let currentTextSize = 100;
@@ -41,8 +42,9 @@ export default async function ({ addon, console }) {
   const updateBlockly = () => {
     blocklyInstance.Field.cacheWidths_ = {}; // Clear text width cache
     // If font size has changed, middle click popup needs to clear it's cache too
-    updateAllBlocks(vm);
     clearTextWidthCache();
+    
+    updateAllBlocks(vm);
   };
 
   const setFontSize = (wantedSize) => {

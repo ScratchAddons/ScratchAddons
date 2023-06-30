@@ -1,5 +1,3 @@
-import { clearTextWidthCache } from "../middle-click-popup/module.js";
-
 export function updateAllBlocks(vm) {
   const workspace = window.Blockly.getMainWorkspace();
   if (workspace) {
