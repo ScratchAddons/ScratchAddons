@@ -1,3 +1,5 @@
+import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
+
 export default async function ({ addon, console }) {
   var posContainerContainer = document.createElement("div");
   addon.tab.displayNoneWhileDisabled(posContainerContainer, { display: "flex" });
@@ -43,22 +45,7 @@ export default async function ({ addon, console }) {
     },
   });
 
-  const updateStageSize = () => {
-    if (!addon.tab.redux.state) return;
-    const size = addon.tab.redux.state.scratchGui.stageSize.stageSize;
-    const isFullScreen = addon.tab.redux.state.scratchGui.mode.isFullScreen;
-    document.body.classList.toggle("sa-mouse-pos-small", size === "small" && !isFullScreen);
-  };
-  updateStageSize();
-  addon.tab.redux.initialize();
-  addon.tab.redux.addEventListener("statechanged", (e) => {
-    if (
-      e.detail.action.type === "scratch-gui/StageSize/SET_STAGE_SIZE" ||
-      e.detail.action.type === "scratch-gui/mode/SET_FULL_SCREEN"
-    ) {
-      updateStageSize();
-    }
-  });
+  addSmallStageClass();
 
   while (true) {
     await addon.tab.waitForElement('[class*="controls_controls-container"]', {
