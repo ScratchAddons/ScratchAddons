@@ -26,11 +26,7 @@
       "id": "tutorials-button"
     }
   ],
-  "tags": [
-    "editor",
-    "editorMenuBar",
-    "featured"
-  ],
+  "tags": ["editor", "editorMenuBar", "featured"],
   "settings": [
     {
       "name": "Menus",
@@ -90,23 +86,17 @@
   "userscripts": [
     {
       "url": "messages.js",
-      "matches": [
-        "projects"
-      ]
+      "matches": ["projects"]
     },
     {
       "url": "username.js",
-      "matches": [
-        "projects"
-      ]
+      "matches": ["projects"]
     }
   ],
   "userstyles": [
     {
       "url": "messages.css",
-      "matches": [
-        "projects"
-      ],
+      "matches": ["projects"],
       "if": {
         "settings": {
           "messages": true
@@ -115,9 +105,7 @@
     },
     {
       "url": "username.css",
-      "matches": [
-        "projects"
-      ],
+      "matches": ["projects"],
       "if": {
         "settings": {
           "compact-username": true
@@ -126,9 +114,7 @@
     },
     {
       "url": "menu-icons.css",
-      "matches": [
-        "projects"
-      ],
+      "matches": ["projects"],
       "if": {
         "settings": {
           "menu-labels": "icons"
@@ -137,9 +123,7 @@
     },
     {
       "url": "tutorials-icon.css",
-      "matches": [
-        "projects"
-      ],
+      "matches": ["projects"],
       "if": {
         "settings": {
           "tutorials-button": "icon"
@@ -148,9 +132,7 @@
     },
     {
       "url": "tutorials-hide.css",
-      "matches": [
-        "projects"
-      ],
+      "matches": ["projects"],
       "if": {
         "settings": {
           "tutorials-button": "hide"
@@ -159,9 +141,7 @@
     },
     {
       "url": "my-stuff-hide.css",
-      "matches": [
-        "projects"
-      ],
+      "matches": ["projects"],
       "if": {
         "settings": {
           "my-stuff": "false"
