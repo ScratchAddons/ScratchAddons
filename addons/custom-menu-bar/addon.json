@@ -89,7 +89,7 @@
       }
     },
     {
-      "url": "my-stuff.css",
+      "url": "my-stuff-hide.css",
       "matches": ["projects"],
       "if": {
         "settings": {
