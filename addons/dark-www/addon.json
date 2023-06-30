@@ -2261,7 +2261,7 @@
     },
     {
       "name": "\"Experimental\" Dark (blue)",
-      "id": "experimentalDark",
+      "id": "experimentalDark-blue",
       "description": "\"Experimental\" Dark with a blue accent color",
       "values": {
         "page": "#202020",
@@ -2318,7 +2318,7 @@
     },
     {
       "name": "Scratch's default colors (blue)",
-      "id": "scratch",
+      "id": "scratch-blue",
       "description": "The colors originally used by Scratch",
       "values": {
         "page": "#fcfcfc",
