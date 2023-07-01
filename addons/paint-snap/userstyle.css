@@ -2,7 +2,7 @@
   position: relative;
 }
 .sa-paint-snap-button:focus-within {
-  background-color: var(--editorDarkMode-primary-transparent20, hsla(260, 60%, 60%, 0.2));
+  background-color: var(--editorDarkMode-primary-transparent35, hsla(260, 60%, 60%, 0.35));
 }
 .sa-paint-snap-button[data-enabled="true"] .sa-paint-snap-image {
   filter: brightness(0) invert(1);
