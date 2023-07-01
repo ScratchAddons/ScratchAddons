@@ -10,6 +10,12 @@
       "link": "https://scratch.mit.edu/users/Maximouse/"
     },
     {
+      "name": "DNin01",
+      "note": "Dark Focused",
+      "id": "focused",
+      "link": "https://github.com/DNin01"
+    },
+    {
       "name": "Ucrash",
       "note": "Dark WWW",
       "id": "darkwww",
@@ -2274,6 +2280,25 @@
         "link": "#4d97ff",
         "footer": "#333333",
         "border": "#606060",
+        "darkBanners": "darker",
+        "darkForumCode": true
+      }
+    },
+    {
+      "name": "Dark Focused",
+      "id": "darkFocused",
+      "description": "Rest your eyes and focus on the content",
+      "values": {
+        "page": "#1d1d1d",
+        "navbar": "#5a4181",
+        "box": "#242424",
+        "gray": "#333333",
+        "blue": "#1f2227",
+        "input": "#202020",
+        "button": "#855cd6",
+        "link": "#ccb3ff",
+        "footer": "#1f2227",
+        "border": "#66666688",
         "darkBanners": "darker",
         "darkForumCode": true
       }
