@@ -4,7 +4,7 @@
     "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["projects", "https://scratch.mit.edu/",]
+      "matches": ["projects", "https://scratch.mit.edu/"]
     }
   ],
     "tags": ["editor"],
