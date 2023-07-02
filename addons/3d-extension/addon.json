@@ -1,0 +1,6 @@
+{
+    "name": "3D Addon",
+    "description": "Loads a 3D extension.",
+    "tags": ["editor"],
+    "enabledByDefault": true
+  }
