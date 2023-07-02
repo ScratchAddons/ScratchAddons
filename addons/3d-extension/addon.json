@@ -1,6 +1,12 @@
 {
     "name": "3D Addon",
     "description": "Loads a 3D extension.",
+    "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects", "https://scratch.mit.edu/",]
+    }
+  ],
     "tags": ["editor"],
     "enabledByDefault": true
   }
