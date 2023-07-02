@@ -619,11 +619,29 @@
       }
     },
     {
-      "name": "box-scratchr2TransparentText",
+      "name": "box-scratchr2GrayText",
       "value": {
         "type": "textColor",
-        "black": "rgba(0, 0, 0, 0.47)",
-        "white": "rgba(255, 255, 255, 0.75)",
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "box"
+          },
+          "r": 0.53,
+          "g": 0.53,
+          "b": 0.53
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "box"
+          },
+          "r": 0.25,
+          "g": 0.25,
+          "b": 0.25
+        },
         "source": {
           "type": "settingValue",
           "settingId": "box"
@@ -979,11 +997,29 @@
       }
     },
     {
-      "name": "gray-scratchr2TransparentText",
+      "name": "gray-scratchr2GrayText",
       "value": {
         "type": "textColor",
-        "black": "rgba(0, 0, 0, 0.45)",
-        "white": "rgba(255, 255, 255, 0.75)",
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "r": 0.55,
+          "g": 0.55,
+          "b": 0.55
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "r": 0.25,
+          "g": 0.25,
+          "b": 0.25
+        },
         "source": {
           "type": "settingValue",
           "settingId": "gray"

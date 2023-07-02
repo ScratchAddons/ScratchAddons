@@ -191,7 +191,7 @@ span.small-text,
 #comments .comment .delete,
 .box .box-content .pagination .disabled,
 .registration a.why-we-ask {
-  color: var(--darkWww-box-scratchr2TransparentText);
+  color: var(--darkWww-box-scratchr2GrayText);
 }
 .dropdown span.dropdown-toggle.black span.caret {
   border-top-color: var(--darkWww-box-scratchr2Caret);
@@ -304,7 +304,7 @@ button:hover,
 .activity-stream .time,
 #profile-data .footer #report-this,
 .profile-box-footer-module textarea::placeholder {
-  color: var(--darkWww-gray-scratchr2TransparentText);
+  color: var(--darkWww-gray-scratchr2GrayText);
 }
 #comments .highlighted .info .name a {
   color: var(--darkWww-gray-scratchr2LabelText);
