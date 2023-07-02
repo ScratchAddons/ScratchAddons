@@ -1,12 +1,19 @@
 {
-    "name": "3D Addon",
-    "description": "Loads a 3D extension.",
-    "userscripts": [
+  "name": "Math Extension",
+  "description": "Adds a math extension to scratch",
+  "credits": [
     {
-      "url": "userscript.js",
-      "matches": ["projects", "https://scratch.mit.edu/"]
+      "name": ["kokofixcomputers", "lolucky"]
     }
   ],
-    "tags": ["editor"],
-    "enabledByDefault": true
-  }
+  "dynamicEnable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.0.0",
+  "tags": ["editor", "codeEditor", "recommended"],
+  "enabledByDefault": true
+}
