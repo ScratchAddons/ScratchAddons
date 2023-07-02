@@ -62,7 +62,7 @@
           "id": "hide"
         }
       ],
-      "default": "icon"
+      "default": "both"
     },
     {
       "name": "Show Messages button",
@@ -80,7 +80,7 @@
       "name": "Compact user dropdown",
       "id": "compact-username",
       "type": "boolean",
-      "default": true
+      "default": false
     }
   ],
   "userscripts": [
