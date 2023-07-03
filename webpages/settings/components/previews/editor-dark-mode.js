@@ -49,11 +49,7 @@ export default async function ({ template }) {
           selector2Text: textColor(this.settings.selector2),
           pageText: textColor(this.settings.page, "rgba(87, 94, 117, 0.75)", "rgba(255, 255, 255, 0.75)"),
           menuBarBorder: textColor(this.settings.menuBar, "rgba(0, 0, 0, 0.15)", "rgba(255, 255, 255, 0.15)", 60),
-          accentTransparentText: textColor(
-            this.settings.accent,
-            "rgba(87, 94, 117, 0.5)",
-            "rgba(255, 255, 255, 0.3)"
-          ),
+          accentTransparentText: textColor(this.settings.accent, "rgba(87, 94, 117, 0.5)", "rgba(255, 255, 255, 0.3)"),
           accentArtboard: this.settings.affectPaper ? this.settings.accent : "#ffffff",
           accentCheckerboard: this.settings.affectPaper
             ? multiply(
