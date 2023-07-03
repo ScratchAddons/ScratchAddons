@@ -214,7 +214,7 @@ export default async function ({ addon, global, console, msg }) {
       return searchResultsPageName;
     }
     // check each forum we explicitly know about, so might be highlighting
-    for (let setting in customForumSettingToForum) {
+    for (let setting of Object.keys(customForumSettingToForum)) {
       let forum = customForumSettingToForum[setting];
       if (titleText.includes(forum)) {
         return forum;
