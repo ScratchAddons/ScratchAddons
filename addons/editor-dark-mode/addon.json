@@ -820,6 +820,10 @@
     {
       "url": "extension_icons.js",
       "matches": ["projects"]
+    },
+    {
+      "url": "paint_icons.js",
+      "matches": ["projects"]
     }
   ],
   "userstyles": [
