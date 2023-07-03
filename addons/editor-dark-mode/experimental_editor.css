@@ -142,9 +142,11 @@
   [class*="sprite-selector-item_sprite-info_"] {
   color: var(--editorDarkMode-selectorSelection-text);
 }
-[class*="gui_tab-panel_"]:nth-child(4) [class*="sprite-selector-item_is-selected_"]
+[class*="gui_tab-panel_"]:nth-child(4)
+  [class*="sprite-selector-item_is-selected_"]
   [class*="sprite-selector-item_sprite-image_"],
-[class*="gui_tab-panel_"]:nth-child(4) [class*="sprite-selector-item_sprite-selector-item_"]:hover
+[class*="gui_tab-panel_"]:nth-child(4)
+  [class*="sprite-selector-item_sprite-selector-item_"]:hover
   [class*="sprite-selector-item_sprite-image_"] {
   filter: var(--editorDarkMode-selectorSelection-filter);
 }
