@@ -128,8 +128,8 @@
 [class*="selector_list-item_"] [class*="sprite-selector-item_sprite-info_"] {
   color: var(--editorDarkMode-selector2-text);
 }
-img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
-  filter: var(--editorDarkMode-selector2-filter) drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.15)) !important;
+[class*="gui_tab-panel_"]:nth-child(4) [class*="sprite-selector-item_sprite-image_"] {
+  filter: var(--editorDarkMode-selector2-filter);
 }
 
 /* Selected list item background */
@@ -142,10 +142,13 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
   [class*="sprite-selector-item_sprite-info_"] {
   color: var(--editorDarkMode-selectorSelection-text);
 }
-[class*="sprite-selector-item_is-selected_"] img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"],
-[class*="sprite-selector-item_sprite-selector-item_"]:hover
-  img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
-  filter: var(--editorDarkMode-selectorSelection-filter) drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.15)) !important;
+[class*="gui_tab-panel_"]:nth-child(4)
+  [class*="sprite-selector-item_is-selected_"]
+  [class*="sprite-selector-item_sprite-image_"],
+[class*="gui_tab-panel_"]:nth-child(4)
+  [class*="sprite-selector-item_sprite-selector-item_"]:hover
+  [class*="sprite-selector-item_sprite-image_"] {
+  filter: var(--editorDarkMode-selectorSelection-filter);
 }
 
 /* Accent background */
@@ -212,7 +215,7 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 img[class*="tool-select-base_tool-select-icon_"],
 [class*="paint-editor_button-group-button-icon_"],
 [class*="mode-tools_mode-tools-icon_"],
-img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
+[class*="library-item_library-item-image_"][src*="static/assets"] /* sound icon */,
 [class*="library-item_featured-extension-metadata-detail_"] img {
   filter: var(--editorDarkMode-accent-filter);
 }
@@ -499,8 +502,8 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 [class*="sound-editor_tool-button_"] img,
 [class*="audio-trimmer_trim-handle_"] img,
 [class*="filter_filter-icon_"],
-img[src="/static/assets/d889a872f3b0985b28fa872764172ef1.svg"] /* record modal play */,
-img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal stop */,
+img[src="/static/assets/7911235b3ccae7b7452ba3da6b5e9c7f.svg"] /* record modal play */,
+img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYmxhY2siIGZpbGwtb3BhY2l0eT0iMSIgZmlsdGVyPSJ1cmwoI2ZpbHRlci0yKSIgeGxpbms6aHJlZj0iI3BhdGgtMSI+PC91c2U+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iIzg1NUNENiIg"] /* record modal stop */,
 [class*="record-modal_rerecord-button_"] img,
 .sa-debugger-tabs li.sa-debugger-tab-selected img {
   filter: var(--editorDarkMode-highlightText-iconFilter);
