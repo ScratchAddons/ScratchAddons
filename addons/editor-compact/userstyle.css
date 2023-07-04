@@ -258,22 +258,6 @@ button[class*="action-menu_more-button"] {
 }
 
 /* Code tab */
-[iscolumns="true"] .blocklyToolboxDiv,
-.blocklyFlyout {
-  width: 210px;
-}
-[class*="gui_tab-panel"]:not([iscolumns="true"]) .sa-flyout-placeHolder {
-  width: calc(210px + 1px);
-}
-.sa-lock-image {
-  left: calc(210px - 30px);
-}
-.blocklyScrollbarVertical.blocklyFlyoutScrollbar {
-  transform: translate(calc(196.5px + 60px), 2.5px) !important;
-}
-[iscolumns="true"] .blocklyScrollbarVertical.blocklyFlyoutScrollbar {
-  transform: translate(196.5px, 172.5px) !important;
-}
 .scratchCategoryMenuItem {
   padding: 0.25rem 0;
 }
@@ -292,9 +276,6 @@ button[class*="action-menu_more-button"] {
 }
 [class*="gui_tab-panel"]:not([iscolumns="true"]) [class*="gui_extension-button-container_"] {
   height: 2rem;
-}
-[iscolumns="true"] [class*="gui_extension-button-container_"] {
-  width: calc(210px - 2px - 1rem);
 }
 
 /* Assets panel */
