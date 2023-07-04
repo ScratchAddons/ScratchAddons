@@ -23,10 +23,19 @@
 }
 
 /* Menu bar */
-[class*="menu-bar_language-caret"],
+[class*="menu-bar_file-group_"] [class*="menu-bar_hoverable_"] > img,
 [class*="menu-bar_divider"],
 [class*="menu-bar_help-icon"] {
   display: none;
+}
+[class*="menu-bar_collapsible-label_"],
+[class*="settings-menu_dropdown-label_"] {
+  margin: 0;
+}
+@media (max-width: 1024px) {
+  [class*="menu-bar_file-group_"] [class*="menu-bar_hoverable_"] > img:first-child {
+    display: inline;
+  }
 }
 
 [class*="gui_menu-bar-position"][class*="menu-bar_menu-bar"][class*="box_box"],
@@ -34,16 +43,9 @@
   height: 2rem;
 }
 
-[class*="menu-bar_language-menu"] {
-  width: auto;
-}
-[class*="language-selector_language-select"] {
-  width: 2.5rem;
-  height: 2rem;
-}
-
-[class*="menu-bar_hoverable"],
-[class*="menu-bar_file-group"] > [class*="menu-bar_menu-bar-item"] {
+[class*="menu-bar_file-group_"] [class*="menu-bar_menu-bar-item_"],
+[class*="menu-bar_account-info-group_"] [class*="menu-bar_menu-bar-item_"] {
+  margin: 0;
   padding: 0 0.5rem;
 }
 [class*="menu-bar_menu-bar-menu"] {
@@ -64,6 +66,8 @@
   padding-left: 0.5rem;
 }
 [class*="menu-bar_growable"] [class*="input_input-form"] {
+  height: 1.5rem;
+  box-sizing: border-box;
   padding: 0.25rem;
   font-size: 0.75rem;
 }
@@ -102,9 +106,6 @@
 [class*="sprite-info_icon-wrapper"] {
   width: 1.5rem;
   height: 1.5rem;
-  padding: 0;
-}
-[class*="sprite-info_icon-wrapper"] img {
   padding: 0.25rem;
 }
 [class*="sprite-info_sprite-info"] [class*="input_input-form"],
@@ -119,11 +120,11 @@
 }
 [class*="gui_body-wrapper_"] [class*="sprite-info_sprite-info"] [class*="input_input-form"]:focus,
 [class*="gui_body-wrapper_"] [class*="gui_tabs"] [class*="input_input-form"]:focus {
-  box-shadow: 0 0 0 0.125rem var(--editorDarkMode-primary-transparent35, hsl(215deg 100% 65% / 35%));
+  box-shadow: 0 0 0 0.125rem var(--editorDarkMode-primary-transparent35, hsl(260deg 60% 60% / 35%));
 }
 [class*="gui_body-wrapper_"] [class*="sprite-selector-item_is-selected"],
 [class*="gui_body-wrapper_"] [class*="stage-selector_is-selected_"] {
-  box-shadow: 0px 0px 0px 2px var(--editorDarkMode-primary-transparent35, hsl(215deg 100% 65% / 35%));
+  box-shadow: 0px 0px 0px 2px var(--editorDarkMode-primary-transparent35, hsl(260deg 60% 60% / 35%));
 }
 [class*="input_input-small"],
 [class*="sprite-info_larger-input"] input {
@@ -154,7 +155,7 @@
 [class*="delete-button_delete-button-visible"] {
   width: 1rem;
   height: 1rem;
-  box-shadow: 0 0 0 1px var(--editorDarkMode-primary-transparent35, hsl(215deg 100% 65% / 35%));
+  box-shadow: 0 0 0 1px var(--editorDarkMode-primary-transparent35, hsl(260deg 60% 60% / 35%));
 }
 [class*="delete-button_delete-icon"] {
   display: none;
@@ -167,7 +168,7 @@
   left: 25%;
   width: 50%;
   height: 50%;
-  background-image: url(https://scratch.mit.edu/static/assets/cb666b99d3528f91b52f985dfb102afa.svg);
+  background-image: url("../../images/cs/close-s3.svg");
   transform: rotate(45deg);
   filter: var(--editorDarkMode-primary-filter, none);
 }
@@ -211,6 +212,9 @@ button[class*="action-menu_more-button"] {
   width: 1.5rem;
   height: 1.5rem;
 }
+.sa-body-editor [class*="stage-header_stage-button_"] {
+  padding: calc(0.25rem - 1px);
+}
 .sa-body-editor [class*="green-flag_green-flag_"],
 .sa-body-editor .pause-btn {
   margin-inline-end: 0.125rem;
@@ -221,6 +225,13 @@ button[class*="action-menu_more-button"] {
 
 .sa-body-editor [class*="monitor_list-body_"] > div::-webkit-scrollbar-thumb {
   background-color: #bec7d4;
+}
+
+/* Toggle buttons */
+[class*="toggle-buttons_button_"] {
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: calc(0.25rem - 1px);
 }
 
 /* Tabs area */
@@ -477,7 +488,7 @@ button[class*="action-menu_more-button"] {
   height: 1.5rem;
 }
 [class*="library_filter-bar-item"]:focus-within {
-  box-shadow: 0 0 0 0.125rem var(--editorDarkMode-primary-transparent35, hsl(215deg 100% 65% / 35%));
+  box-shadow: 0 0 0 0.125rem var(--editorDarkMode-primary-transparent35, hsl(260deg 60% 60% / 35%));
 }
 [dir="ltr"] [class*="filter_filter-icon"],
 [dir="rtl"] [class*="filter_filter-icon"],
