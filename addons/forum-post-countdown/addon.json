@@ -10,13 +10,13 @@
     },
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/*"]
+      "matches": ["newPostScreens"]
     }
   ],
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": ["https://scratch.mit.edu/*"]
+      "matches": ["newPostScreens"]
     }
   ],
   "credits": [
