@@ -1827,6 +1827,24 @@
       }
     },
     {
+      "name": "messageIndicatorColor-scratchr2",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "messageIndicatorColor"
+        },
+        "options": {
+          "#ffab1a": "#f9a739",
+          "#ffab1aff": "#f9a739"
+        },
+        "default": {
+          "type": "settingValue",
+          "settingId": "messageIndicatorColor"
+        }
+      }
+    },
+    {
       "name": "box-forumBoldButton",
       "value": {
         "type": "textColor",
