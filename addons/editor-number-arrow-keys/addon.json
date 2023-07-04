@@ -2,7 +2,7 @@
   "name": "Arrow key incrementation in editor",
   "description": "Use the up and down arrow keys to increase or decrease number values in block inputs.",
   "tags": ["editor", "codeEditor"],
-  "versionAdded": "1.32.0",
+  "versionAdded": "1.33.0",
   "userscripts": [
     {
       "url": "userscript.js",
@@ -13,26 +13,30 @@
     {
       "name": "Change on regular key press",
       "id": "regular",
-      "type": "positive_integer",
-      "default": "1"
+      "type": "integer",
+      "min": 0,
+      "default": 1
     },
     {
       "name": "Change on Shift+Key",
       "id": "shift",
-      "type": "positive_integer",
-      "default": "10"
+      "type": "integer",
+      "min": 0,
+      "default": 10
     },
     {
       "name": "Change on Ctrl+Key",
       "id": "ctrl",
-      "type": "positive_integer",
-      "default": "100"
+      "type": "integer",
+      "min": 0,
+      "default": 100
     },
     {
       "name": "Change on Alt+Key",
       "id": "alt",
-      "type": "positive_integer",
-      "default": "1000"
+      "type": "integer",
+      "min": 0,
+      "default": 1000
     }
   ],
   "credits": [
