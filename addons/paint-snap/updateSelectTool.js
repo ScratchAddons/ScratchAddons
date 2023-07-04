@@ -89,7 +89,7 @@ export const updateSelectTool = (paper, tool) => {
 
   let removeGuides;
 
-  moveTool.constructor.prototype.onMouseDrag = function (event) {
+  function onMouseDrag(event) {
     const point = event.point;
     const actionBounds = getActionBounds(this.mode in BitmapModes);
 
@@ -130,7 +130,7 @@ export const updateSelectTool = (paper, tool) => {
 
     removeGuides();
 
-    if (snapOn && !event.modifiers.shift && this.mode !== Modes.RESHAPE) {
+    if (!event.modifiers.shift && this.mode !== Modes.RESHAPE) {
       const paintLayer = getLayer("isPaintingLayer");
 
       const snapPoints = createSnapPoints(paper, selectionBounds, lib, paintLayer.children);
@@ -301,6 +301,17 @@ export const updateSelectTool = (paper, tool) => {
       );
     } // else the rotation center is within selection bounds, always show drag crosshair at full opacity
     getDragCrosshairLayer().opacity = CROSSHAIR_FULL_OPACITY * opacityMultiplier;
+  }
+
+  const oldMouseDrag = moveTool.constructor.prototype.onMouseDrag;
+  moveTool.constructor.prototype.onMouseDrag = onMouseDrag;
+
+  const oldMouseDown = moveTool.constructor.prototype.onMouseDown;
+  moveTool.constructor.prototype.onMouseDown = function (...a) {
+    if (snapOn) moveTool.constructor.prototype.onMouseDrag = onMouseDrag;
+    else moveTool.constructor.prototype.onMouseDrag = oldMouseDrag;
+
+    oldMouseDown.apply(this, a);
   };
 
   const oldMouseUp = moveTool.constructor.prototype.onMouseUp;

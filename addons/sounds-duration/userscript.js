@@ -9,6 +9,8 @@ export default async function ({ addon, msg, console }) {
         className: "sa-sound-duration",
       })
     );
+    addon.tab.displayNoneWhileDisabled(el);
+
     const state = container[addon.tab.traps.getInternalKey(container)].return.return.return.stateNode;
 
     function setText(running, selected) {

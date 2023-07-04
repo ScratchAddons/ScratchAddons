@@ -40,16 +40,21 @@
   ],
   "settings": [
     {
-      "name": "Collapse panel by default",
-      "id": "hideByDefault",
-      "type": "boolean",
-      "default": true
-    },
-    {
       "name": "Automatically collapse when mouse leaves sprite panel",
       "id": "autoCollapse",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Collapse panel by default",
+      "id": "hideByDefault",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": {
+          "autoCollapse": false
+        }
+      }
     },
     {
       "name": "Animation speed",

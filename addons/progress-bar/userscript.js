@@ -3,6 +3,9 @@ export default async function ({ addon, console, msg }) {
 
   const barOuter = document.createElement("div");
   barOuter.className = "u-progress-bar-outer";
+  const barBackground = document.createElement("div");
+  barBackground.className = "u-progress-bar-background";
+  barOuter.appendChild(barBackground);
   const barInner = document.createElement("div");
   barInner.className = "u-progress-bar-inner";
   barOuter.appendChild(barInner);
