@@ -18,6 +18,13 @@
       "matches": ["projects"]
     },
     {
+      "url": "hide-labels.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "hideLabels": true }
+      }
+    },
+    {
       "url": "sprite-properties.css",
       "matches": ["projects"],
       "if": {
@@ -31,8 +38,17 @@
       "matches": ["projects"]
     }
   ],
+  "settings": [
+    {
+      "id": "hideLabels",
+      "type": "boolean",
+      "name": "Hide button labels in costume and sound editor",
+      "default": true
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.30.0",
   "enabledByDefault": false
 }
