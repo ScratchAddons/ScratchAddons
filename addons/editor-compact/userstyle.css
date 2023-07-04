@@ -422,11 +422,10 @@ button[class*="action-menu_more-button"] {
 [class*="asset-panel_detail-area"] [class*="paint-editor_bitmap-button"] img {
   padding: 0;
 }
-.sa-onion-controls-container {
-  height: min-content;
-}
-.sa-onion-settings-tip {
-  right: 70px;
+[class*="paint-editor_zoom-controls_"],
+.sa-onion-group,
+.sa-paint-snap-group {
+  align-self: flex-start;
 }
 
 /* Modals and prompts */
