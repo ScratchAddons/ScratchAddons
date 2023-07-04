@@ -22,12 +22,27 @@ label,
 /* Navigation bar background */
 #topnav .innerwrap,
 #topnav ul.account-nav .logged-in-user .dropdown-menu,
-#topnav li.logout.divider input,
 #topnav ul.account-nav .sign-in .popover {
   background-color: var(--darkWww-navbar-scratchr2);
 }
-#topnav ul.account-nav .sign-in .popover .arrow:after {
+#topnav li.logout.divider input,
+#topnav li.logout.divider input:hover {
+  background-color: transparent;
+}
+#topnav ul.site-nav li,
+#topnav ul.site-nav li.last,
+#topnav ul.account-nav > li,
+#topnav ul.account-nav > li.join-scratch,
+#topnav ul.account-nav.logged-in > li,
+#topnav ul.account-nav ul.user-nav li.logout.divider,
+#topnav ul.account-nav .sign-in .popover {
+  border-color: transparent;
+}
+#topnav ul.account-nav .sign-in .popover .arrow {
   border-bottom-color: var(--darkWww-navbar-scratchr2);
+}
+#topnav ul.account-nav .sign-in .popover .arrow::after {
+  border-bottom-color: transparent;
 }
 #topnav ul.site-nav li a,
 #topnav ul.account-nav > li > span,
@@ -59,23 +74,10 @@ label,
   background: url("https://cdn.scratch.mit.edu/scratchr2/static/images/nav-notifications.png") no-repeat center center;
   filter: var(--darkWww-navbar-scratchr2ShadowFilter);
 }
-#topnav ul.site-nav li,
-#topnav ul.site-nav li.last,
-#topnav ul.account-nav > li,
-#topnav ul.account-nav > li.join-scratch,
-#topnav ul.account-nav.logged-in > li,
-#topnav ul.account-nav ul.user-nav li.logout.divider,
-#topnav ul.account-nav .sign-in .popover {
-  border-color: var(--darkWww-navbar-scratchr2Border);
-}
-#topnav ul.account-nav .sign-in .popover .arrow {
-  border-bottom-color: var(--darkWww-navbar-scratchr2Border);
-}
 #topnav ul.site-nav li:hover,
 #topnav ul.account-nav > li.sign-in:hover,
 #topnav ul.account-nav > li.sign-in.open,
-#topnav ul.account-nav.logged-in li:hover,
-#topnav li.logout.divider input:hover {
+#topnav ul.account-nav.logged-in li:hover {
   background-color: var(--darkWww-navbar-scratchr2ItemHover);
 }
 #topnav ul.account-nav .logged-in-user.dropdown.open {
@@ -189,7 +191,7 @@ span.small-text,
 #comments .comment .delete,
 .box .box-content .pagination .disabled,
 .registration a.why-we-ask {
-  color: var(--darkWww-box-scratchr2TransparentText);
+  color: var(--darkWww-box-scratchr2GrayText);
 }
 .dropdown span.dropdown-toggle.black span.caret {
   border-top-color: var(--darkWww-box-scratchr2Caret);
@@ -302,7 +304,7 @@ button:hover,
 .activity-stream .time,
 #profile-data .footer #report-this,
 .profile-box-footer-module textarea::placeholder {
-  color: var(--darkWww-gray-scratchr2TransparentText);
+  color: var(--darkWww-gray-scratchr2GrayText);
 }
 #comments .highlighted .info .name a {
   color: var(--darkWww-gray-scratchr2LabelText);
@@ -384,12 +386,9 @@ ul.pagination span /* mobile forums */ {
   color: var(--darkWww-button-scratchr2ButtonText);
 }
 .button {
-  background-image: linear-gradient(
-    var(--darkWww-button-scratchr2ButtonGradientTop),
-    var(--darkWww-button-scratchr2ButtonGradientBottom)
-  );
-  border-color: var(--darkWww-button-scratchr2ButtonBorderTop);
-  border-bottom-color: var(--darkWww-button-scratchr2ButtonBorderBottom);
+  background-color: var(--darkWww-button-scratchr2);
+  background-image: none; /* Fixes Scratch bug: https://scratch.mit.edu/discuss/topic/694218/ */
+  border-color: var(--darkWww-button-scratchr2);
   color: var(--darkWww-button-scratchr2ButtonText);
 }
 .button a,
@@ -401,10 +400,8 @@ ul.pagination span /* mobile forums */ {
   color: var(--darkWww-button-scratchr2ButtonText);
 }
 .button:hover {
-  background-image: linear-gradient(
-    var(--darkWww-button-scratchr2ButtonGradientBottom),
-    var(--darkWww-button-scratchr2ButtonGradientBottom)
-  );
+  background-color: var(--darkWww-button-scratchr2Hover);
+  background-image: none; /* Fixes Scratch bug: https://scratch.mit.edu/discuss/topic/694218/ */
 }
 input:focus,
 textarea:focus,
@@ -412,7 +409,7 @@ textarea:focus,
 .registration .modal-body input:focus,
 .registration .modal-body textarea:focus,
 .registration .modal-body select:focus {
-  border-color: var(--darkWww-button-scratchr2InputFocusBorder);
+  border-color: var(--darkWww-button);
   box-shadow: 0 1px 1px inset rgba(0, 0, 0, 0.08), 0 0 8px var(--darkWww-button-scratchr2InputFocusShadow);
 }
 .editable textarea:focus,
@@ -432,7 +429,7 @@ textarea:focus,
   color: var(--darkWww-button-scratchr2PostHeaderText);
 }
 .blockpost .box-head {
-  border-top-color: var(--darkWww-button-scratchr2PostBorder);
+  border-top-color: rgba(255, 255, 255, 0.15);
 }
 .blockpost .box-head span.conr,
 .blockpost .box-head a,
@@ -454,13 +451,14 @@ input.link:hover,
 input.link:active,
 input.link.black:hover,
 input.link.black:active,
+#comments .comment .info .name a:hover,
 #comments .more-replies .pulldown,
 #email-resend-box a {
   color: var(--darkWww-link-scratchr2);
 }
 .inew,
 .isticky:not(.iclosed) {
-  filter: var(--darkWww-link-scratchr2IconFilter);
+  filter: var(--darkWww-link-iconFilter);
 }
 
 /* Footer background */

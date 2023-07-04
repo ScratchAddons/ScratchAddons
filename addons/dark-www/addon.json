@@ -210,14 +210,19 @@
     {
       "name": "navbar-scratchr2",
       "value": {
-        "type": "multiply",
+        "type": "map",
         "source": {
           "type": "settingValue",
           "settingId": "navbar"
         },
-        "r": 0.5,
-        "g": 0.92,
-        "b": 0.75
+        "options": {
+          "#4d97ff": "#0f8bc0",
+          "#4d97ffff": "#0f8bc0"
+        },
+        "default": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        }
       }
     },
     {
@@ -226,14 +231,8 @@
         "type": "textColor",
         "black": "#322f31",
         "source": {
-          "type": "multiply",
-          "source": {
-            "type": "settingValue",
-            "settingId": "navbar"
-          },
-          "r": 0.5,
-          "g": 0.92,
-          "b": 0.75
+          "type": "settingValue",
+          "settingId": "navbar"
         }
       }
     },
@@ -244,40 +243,33 @@
         "black": "drop-shadow(0 0 1px rgba(0, 0, 0, 0.2))",
         "white": "none",
         "source": {
-          "type": "multiply",
-          "source": {
-            "type": "settingValue",
-            "settingId": "navbar"
-          },
-          "r": 0.5,
-          "g": 0.92,
-          "b": 0.75
-        }
-      }
-    },
-    {
-      "name": "navbar-scratchr2Border",
-      "value": {
-        "type": "multiply",
-        "source": {
           "type": "settingValue",
           "settingId": "navbar"
-        },
-        "r": 0.58,
-        "b": 0.8
+        }
       }
     },
     {
       "name": "navbar-scratchr2ItemHover",
       "value": {
-        "type": "multiply",
+        "type": "map",
         "source": {
           "type": "settingValue",
           "settingId": "navbar"
         },
-        "r": 0.48,
-        "g": 0.64,
-        "b": 0.52
+        "options": {
+          "#4d97ff": "#0c6185",
+          "#4d97ffff": "#0c6185"
+        },
+        "default": {
+          "type": "textColor",
+          "black": "rgba(0, 0, 0, 0.1)",
+          "white": "rgba(255, 255, 255, 0.1)",
+          "source": {
+            "type": "settingValue",
+            "settingId": "navbar"
+          },
+          "threshold": 60
+        }
       }
     },
     {
@@ -437,7 +429,7 @@
       }
     },
     {
-      "name": "box-tabSelected",
+      "name": "box-greenText",
       "value": {
         "type": "textColor",
         "black": "#328554",
@@ -534,6 +526,21 @@
       }
     },
     {
+      "name": "box-embedLoader",
+      "value": {
+        "type": "textColor",
+        "black": "#4d97ff",
+        "white": {
+          "type": "settingValue",
+          "settingId": "box"
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
       "name": "box-scratchr2Text",
       "value": {
         "type": "textColor",
@@ -612,11 +619,29 @@
       }
     },
     {
-      "name": "box-scratchr2TransparentText",
+      "name": "box-scratchr2GrayText",
       "value": {
         "type": "textColor",
-        "black": "rgba(0, 0, 0, 0.47)",
-        "white": "rgba(255, 255, 255, 0.75)",
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "box"
+          },
+          "r": 0.53,
+          "g": 0.53,
+          "b": 0.53
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "box"
+          },
+          "r": 0.25,
+          "g": 0.25,
+          "b": 0.25
+        },
         "source": {
           "type": "settingValue",
           "settingId": "box"
@@ -789,17 +814,6 @@
       }
     },
     {
-      "name": "gray-darkText",
-      "value": {
-        "type": "textColor",
-        "black": "#3b3b3b",
-        "source": {
-          "type": "settingValue",
-          "settingId": "gray"
-        }
-      }
-    },
-    {
       "name": "gray-boxHighlight",
       "value": {
         "type": "textColor",
@@ -839,18 +853,6 @@
         "type": "textColor",
         "black": "rgba(0, 0, 0, 0.1)",
         "white": "rgba(255, 255, 255, 0.1)",
-        "source": {
-          "type": "settingValue",
-          "settingId": "gray"
-        }
-      }
-    },
-    {
-      "name": "gray-tabHover",
-      "value": {
-        "type": "textColor",
-        "black": "rgba(0, 0, 0, 0.2)",
-        "white": "rgba(255, 255, 255, 0.2)",
         "source": {
           "type": "settingValue",
           "settingId": "gray"
@@ -995,11 +997,29 @@
       }
     },
     {
-      "name": "gray-scratchr2TransparentText",
+      "name": "gray-scratchr2GrayText",
       "value": {
         "type": "textColor",
-        "black": "rgba(0, 0, 0, 0.45)",
-        "white": "rgba(255, 255, 255, 0.75)",
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "r": 0.55,
+          "g": 0.55,
+          "b": 0.55
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "r": 0.25,
+          "g": 0.25,
+          "b": 0.25
+        },
         "source": {
           "type": "settingValue",
           "settingId": "gray"
@@ -1295,6 +1315,29 @@
       }
     },
     {
+      "name": "blue-25",
+      "value": {
+        "type": "textColor",
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "blue"
+          },
+          "r": 0.89,
+          "g": 0.94
+        },
+        "white": {
+          "type": "settingValue",
+          "settingId": "blue"
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "blue"
+        }
+      }
+    },
+    {
       "name": "blue-opacity0",
       "value": {
         "type": "multiply",
@@ -1408,17 +1451,6 @@
       }
     },
     {
-      "name": "button-transparent15",
-      "value": {
-        "type": "multiply",
-        "source": {
-          "type": "settingValue",
-          "settingId": "button"
-        },
-        "a": 0.15
-      }
-    },
-    {
       "name": "button-transparent25",
       "value": {
         "type": "multiply",
@@ -1427,6 +1459,17 @@
           "settingId": "button"
         },
         "a": 0.25
+      }
+    },
+    {
+      "name": "button-transparent35",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "a": 0.35
       }
     },
     {
@@ -1459,9 +1502,9 @@
           "type": "settingValue",
           "settingId": "button"
         },
-        "r": 0.86,
-        "g": 0.85,
-        "b": 0.84
+        "r": 0.9,
+        "g": 0.9,
+        "b": 0.9
       }
     },
     {
@@ -1479,9 +1522,9 @@
             "settingId": "darkBanners"
           },
           "options": {
-            "off": 0.7,
-            "darker": 1,
-            "desaturated": 0.5
+            "off": 0.57,
+            "darker": 0.57,
+            "desaturated": 0.3
           }
         },
         "v": {
@@ -1491,9 +1534,9 @@
             "settingId": "darkBanners"
           },
           "options": {
-            "off": 1,
-            "darker": 0.6,
-            "desaturated": 0.4
+            "off": 0.84,
+            "darker": 0.4,
+            "desaturated": 0.35
           }
         }
       }
@@ -1513,9 +1556,9 @@
             "settingId": "darkBanners"
           },
           "options": {
-            "off": 0.7,
-            "darker": 1,
-            "desaturated": 0.51
+            "off": 0.56,
+            "darker": 0.56,
+            "desaturated": 0.3
           }
         },
         "v": {
@@ -1525,10 +1568,52 @@
             "settingId": "darkBanners"
           },
           "options": {
-            "off": 0.84,
-            "darker": 0.54,
+            "off": 0.75,
+            "darker": 0.35,
             "desaturated": 0.3
           }
+        }
+      }
+    },
+    {
+      "name": "button-scratchr2",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "options": {
+          "#4d97ff": "#18abeb",
+          "#4d97ffff": "#18abeb"
+        },
+        "default": {
+          "type": "settingValue",
+          "settingId": "button"
+        }
+      }
+    },
+    {
+      "name": "button-scratchr2Hover",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "options": {
+          "#4d97ff": "#169fdb",
+          "#4d97ffff": "#169fdb"
+        },
+        "default": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "button"
+          },
+          "r": 0.9,
+          "g": 0.9,
+          "b": 0.9
         }
       }
     },
@@ -1538,17 +1623,8 @@
         "type": "textColor",
         "black": "#666666",
         "source": {
-          "type": "brighten",
-          "source": {
-            "type": "multiply",
-            "source": {
-              "type": "settingValue",
-              "settingId": "button"
-            },
-            "r": 0.61,
-            "b": 0.86
-          },
-          "g": 0.92
+          "type": "settingValue",
+          "settingId": "button"
         }
       }
     },
@@ -1558,141 +1634,38 @@
         "type": "textColor",
         "black": "#322f31",
         "source": {
-          "type": "brighten",
-          "source": {
-            "type": "multiply",
-            "source": {
-              "type": "settingValue",
-              "settingId": "button"
-            },
-            "r": 0.52,
-            "b": 0.85
-          },
-          "g": 0.85
+          "type": "settingValue",
+          "settingId": "button"
         }
-      }
-    },
-    {
-      "name": "button-scratchr2ButtonGradientTop",
-      "value": {
-        "type": "brighten",
-        "source": {
-          "type": "multiply",
-          "source": {
-            "type": "settingValue",
-            "settingId": "button"
-          },
-          "r": 0.65,
-          "b": 0.98
-        },
-        "g": 0.7
-      }
-    },
-    {
-      "name": "button-scratchr2ButtonGradientBottom",
-      "value": {
-        "type": "brighten",
-        "source": {
-          "type": "multiply",
-          "source": {
-            "type": "settingValue",
-            "settingId": "button"
-          },
-          "r": 0.61,
-          "b": 0.86
-        },
-        "g": 0.92
-      }
-    },
-    {
-      "name": "button-scratchr2ButtonBorderTop",
-      "value": {
-        "type": "multiply",
-        "source": {
-          "type": "settingValue",
-          "settingId": "button"
-        },
-        "r": 0.62,
-        "b": 0.77
-      }
-    },
-    {
-      "name": "button-scratchr2ButtonBorderBottom",
-      "value": {
-        "type": "multiply",
-        "source": {
-          "type": "settingValue",
-          "settingId": "button"
-        },
-        "r": 0.58,
-        "g": 0.89,
-        "b": 0.68
-      }
-    },
-    {
-      "name": "button-scratchr2InputFocusBorder",
-      "value": {
-        "type": "brighten",
-        "source": {
-          "type": "multiply",
-          "source": {
-            "type": "settingValue",
-            "settingId": "button"
-          },
-          "b": 0.93,
-          "a": 0.8
-        },
-        "r": 0.97,
-        "g": 0.84
       }
     },
     {
       "name": "button-scratchr2InputFocusShadow",
       "value": {
-        "type": "brighten",
+        "type": "multiply",
         "source": {
-          "type": "multiply",
-          "source": {
-            "type": "settingValue",
-            "settingId": "button"
-          },
-          "b": 0.93,
-          "a": 0.6
+          "type": "settingValue",
+          "settingId": "button"
         },
-        "r": 0.97,
-        "g": 0.84
+        "a": 0.6
       }
     },
     {
       "name": "button-scratchr2PostHeader",
       "value": {
-        "type": "brighten",
+        "type": "map",
         "source": {
-          "type": "multiply",
-          "source": {
-            "type": "settingValue",
-            "settingId": "button"
-          },
-          "r": 0.52,
-          "b": 0.85
+          "type": "settingValue",
+          "settingId": "button"
         },
-        "g": 0.85
-      }
-    },
-    {
-      "name": "button-scratchr2PostBorder",
-      "value": {
-        "type": "brighten",
-        "source": {
-          "type": "multiply",
-          "source": {
-            "type": "settingValue",
-            "settingId": "button"
-          },
-          "b": 0.85
+        "options": {
+          "#4d97ff": "#28a5da",
+          "#4d97ffff": "#28a5da"
         },
-        "r": 0.9,
-        "g": 0.71
+        "default": {
+          "type": "settingValue",
+          "settingId": "button"
+        }
       }
     },
     {
@@ -1714,22 +1687,9 @@
           "type": "settingValue",
           "settingId": "link"
         },
-        "r": 0.86,
-        "g": 0.85,
-        "b": 0.84
-      }
-    },
-    {
-      "name": "link-variant",
-      "value": {
-        "type": "multiply",
-        "source": {
-          "type": "settingValue",
-          "settingId": "link"
-        },
-        "r": 0.66,
-        "g": 0.76,
-        "b": 0.8
+        "r": 0.9,
+        "g": 0.9,
+        "b": 0.9
       }
     },
     {
@@ -1761,27 +1721,18 @@
     {
       "name": "link-scratchr2",
       "value": {
-        "type": "multiply",
+        "type": "map",
         "source": {
           "type": "settingValue",
           "settingId": "link"
         },
-        "r": 0.66,
-        "b": 0.85
-      }
-    },
-    {
-      "name": "link-scratchr2IconFilter",
-      "value": {
-        "type": "recolorFilter",
-        "source": {
-          "type": "multiply",
-          "source": {
-            "type": "settingValue",
-            "settingId": "link"
-          },
-          "r": 0.66,
-          "b": 0.85
+        "options": {
+          "#4d97ff": "#1aa0d8",
+          "#4d97ffff": "#1aa0d8"
+        },
+        "default": {
+          "type": "settingValue",
+          "settingId": "link"
         }
       }
     },
@@ -2097,9 +2048,9 @@
   "injectAsStyleElt": true,
   "versionAdded": "1.4.0",
   "latestUpdate": {
-    "version": "1.23.0",
-    "isMajor": true,
-    "temporaryNotice": "You can now completely customize the appearance of the Scratch website."
+    "version": "1.33.2",
+    "temporaryNotice": "The presets for this addon have been updated to use Scratch's new purple accent color. Presets that use blue are still available as well.",
+    "isMajor": true
   },
   "updateUserstylesOnSettingsChange": true,
   "userscripts": [
@@ -2177,6 +2128,17 @@
       "matches": ["https://scratch.mit.edu/become-a-scratcher"]
     },
     {
+      "url": "join.css",
+      "matches": ["https://scratch.mit.edu/join"]
+    },
+    {
+      "url": "banners/darker_explore.css",
+      "matches": ["https://scratch.mit.edu/explore/*"],
+      "if": {
+        "settings": { "darkBanners": "darker" }
+      }
+    },
+    {
       "url": "banners/desaturated_explore.css",
       "matches": ["https://scratch.mit.edu/explore/*"],
       "if": {
@@ -2184,8 +2146,29 @@
       }
     },
     {
+      "url": "banners/darker_search.css",
+      "matches": ["https://scratch.mit.edu/search/*"],
+      "if": {
+        "settings": { "darkBanners": "darker" }
+      }
+    },
+    {
       "url": "banners/desaturated_search.css",
       "matches": ["https://scratch.mit.edu/search/*"],
+      "if": {
+        "settings": { "darkBanners": "desaturated" }
+      }
+    },
+    {
+      "url": "banners/darker_join.css",
+      "matches": ["https://scratch.mit.edu/join"],
+      "if": {
+        "settings": { "darkBanners": "darker" }
+      }
+    },
+    {
+      "url": "banners/desaturated_join.css",
+      "matches": ["https://scratch.mit.edu/join"],
       "if": {
         "settings": { "darkBanners": "desaturated" }
       }
@@ -2214,7 +2197,7 @@
       "id": "navbar",
       "type": "color",
       "allowTransparency": true,
-      "default": "#4d97ff"
+      "default": "#855cd6"
     },
     {
       "name": "Content background",
@@ -2232,7 +2215,7 @@
       "name": "Blue background",
       "id": "blue",
       "type": "color",
-      "default": "#252c37"
+      "default": "#292d32"
     },
     {
       "name": "Input background",
@@ -2244,13 +2227,13 @@
       "name": "Highlight color",
       "id": "button",
       "type": "color",
-      "default": "#4d97ff"
+      "default": "#855cd6"
     },
     {
       "name": "Link color",
       "id": "link",
       "type": "color",
-      "default": "#4d97ff"
+      "default": "#ccb3ff"
     },
     {
       "name": "Footer background",
@@ -2299,6 +2282,25 @@
       "description": "A dark theme by Maximouse based on a userstyle. Not experimental",
       "values": {
         "page": "#202020",
+        "navbar": "#855cd6",
+        "box": "#282828",
+        "gray": "#333333",
+        "blue": "#292d32",
+        "input": "#202020",
+        "button": "#855cd6",
+        "link": "#ccb3ff",
+        "footer": "#333333",
+        "border": "#606060",
+        "darkBanners": "darker",
+        "darkForumCode": true
+      }
+    },
+    {
+      "name": "\"Experimental\" Dark (blue)",
+      "id": "experimentalDark-blue",
+      "description": "\"Experimental\" Dark with a blue accent color",
+      "values": {
+        "page": "#202020",
         "navbar": "#4d97ff",
         "box": "#282828",
         "gray": "#333333",
@@ -2318,13 +2320,13 @@
       "description": "A dark theme by Ucrash",
       "values": {
         "page": "#242527",
-        "navbar": "#4d97ff",
+        "navbar": "#855cd6",
         "box": "#2f3137",
         "gray": "#424346",
         "blue": "#1b1d1f",
         "input": "#3a3a3a",
-        "button": "#4d97ff",
-        "link": "#4d97ff",
+        "button": "#855cd6",
+        "link": "#ccb3ff",
         "footer": "#17181a",
         "border": "#000000",
         "darkBanners": "desaturated",
@@ -2335,6 +2337,25 @@
       "name": "Scratch's default colors",
       "id": "scratch",
       "description": "The colors normally used by Scratch",
+      "values": {
+        "page": "#fcfcfc",
+        "navbar": "#855cd6",
+        "box": "#ffffff",
+        "gray": "#f2f2f2",
+        "blue": "#e9f1fc",
+        "input": "#fafafa",
+        "button": "#855cd6",
+        "link": "#855cd6",
+        "footer": "#f2f2f2",
+        "border": "#0000001a",
+        "darkBanners": "off",
+        "darkForumCode": false
+      }
+    },
+    {
+      "name": "Scratch's default colors (blue)",
+      "id": "scratch-blue",
+      "description": "The colors originally used by Scratch",
       "values": {
         "page": "#fcfcfc",
         "navbar": "#4d97ff",

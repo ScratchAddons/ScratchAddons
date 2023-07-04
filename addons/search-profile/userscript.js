@@ -7,9 +7,9 @@ export default async function ({ addon, console, msg }) {
     user = document.querySelector('[name="q"]').value.trim(),
     valid = /^[\w-]{3,20}$/g.test(user);
   tab.type = "button";
-  tab.role = "tab";
+  tab.setAttribute("role", "tab");
+  tab.setAttribute("aria-selected", false);
   tab.tabIndex = -1; // unselected tabs should only be focusable using arrow keys
-  tab.ariaSelected = false;
   img.src = addon.self.dir + "/user.svg";
   img.className = "tab-icon";
   span.innerText = msg("profile");

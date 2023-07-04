@@ -9,7 +9,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
       - name: Pack extensions for Firefox
         uses: ScratchAddons/packer-script@main
         env:
