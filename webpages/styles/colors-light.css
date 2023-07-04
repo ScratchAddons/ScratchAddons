@@ -1,4 +1,5 @@
 :root {
+  --brand-orange-min-font-weight: 600;
   --green-text: var(--green);
   --blue-text: var(--blue);
 
