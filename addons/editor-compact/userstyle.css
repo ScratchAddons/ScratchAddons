@@ -219,6 +219,9 @@ button[class*="action-menu_more-button"] {
 .sa-body-editor .pause-btn {
   margin-inline-end: 0.125rem;
 }
+.sa-stage-hidden [class*="stage-header_stage-size-row"] {
+  height: 2rem;
+}
 [class*="gui_stage-and-target-wrapper_"] [class*="stage-wrapper_full-screen_"] {
   top: 2rem;
 }
