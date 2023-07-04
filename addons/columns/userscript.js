@@ -149,21 +149,21 @@ export default async function ({ addon, msg, console }) {
     // Reposition the toolbox, since it's likely our addon moved it.
     toolbox.position();
 
-    addAttribute();
+    addClass();
   }
 
-  function addAttribute() {
-    // Add attribute to allow editor-compact to handle this addon
+  function addClass() {
+    // Add class to allow editor-compact to handle this addon
     if (addon.tab.editorMode === "editor") {
-      if (addon.self.disabled) document.querySelector("[class*='gui_tab-panel']").setAttribute("iscolumns", "false");
-      else document.querySelector("[class*='gui_tab-panel']").setAttribute("iscolumns", "true");
+      if (addon.self.disabled) document.querySelector("[class*='gui_tab-panel']").classList.toggle("sa-columns", false);
+      else document.querySelector("[class*='gui_tab-panel']").classList.toggle("sa-columns", true);
     }
   }
 
   updateToolbox();
   addon.self.addEventListener("disabled", updateToolbox);
   addon.self.addEventListener("reenabled", updateToolbox);
-  addon.tab.addEventListener("urlChange", addAttribute);
+  addon.tab.addEventListener("urlChange", addClass);
 
   while (true) {
     const addExtensionButton = await addon.tab.waitForElement("[class*='gui_extension-button_']", {

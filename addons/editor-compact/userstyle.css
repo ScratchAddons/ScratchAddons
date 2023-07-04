@@ -258,7 +258,7 @@ button[class*="action-menu_more-button"] {
 }
 
 /* Code tab */
-.scratchCategoryMenuItem {
+[class*="gui_tab-panel"]:not(.sa-columns) .scratchCategoryMenuItem {
   padding: 0.25rem 0;
 }
 .scratchCategoryItemBubble,
@@ -267,14 +267,14 @@ button[class*="action-menu_more-button"] {
   height: 1rem;
   background-size: 1rem 1rem;
 }
-[class*="gui_tab-panel"]:not([iscolumns="true"]) .blocklyToolboxDiv {
+[class*="gui_tab-panel"]:not(.sa-columns) .blocklyToolboxDiv {
   height: calc(100% - 2rem) !important;
   scrollbar-width: none;
 }
-[class*="gui_tab-panel"]:not([iscolumns="true"]) .blocklyToolboxDiv::-webkit-scrollbar {
+[class*="gui_tab-panel"]:not(.sa-columns) .blocklyToolboxDiv::-webkit-scrollbar {
   display: none;
 }
-[class*="gui_tab-panel"]:not([iscolumns="true"]) [class*="gui_extension-button-container_"] {
+[class*="gui_tab-panel"]:not(.sa-columns) [class*="gui_extension-button-container_"] {
   height: 2rem;
 }
 
