@@ -1,1 +1,1 @@
-{"color-inputs/@name":"Entrada en selector de color","color-inputs/@description":"Le permite cambiar el valor exacto (0-100) por cada deslizador en el selector de color del editor de disfraces."}
+{"color-inputs/@name":"Entradas numéricas en el selector de color","color-inputs/@description":"Le permite ingresar un valor exacto (0-100) por cada deslizador en el selector de color del editor de disfraces escribiéndolo como número."}

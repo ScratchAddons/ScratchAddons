@@ -26,7 +26,7 @@ export default async function ({ addon, console, msg }) {
     button.title = "TurboWarp";
   }
 
-  button.onclick = async () => {
+  button.onclick = async (e) => {
     const projectId = window.location.pathname.split("/")[2];
     let search = "";
     if (addon.tab.redux.state?.preview?.projectInfo?.public === false) {
@@ -41,7 +41,13 @@ export default async function ({ addon, console, msg }) {
       ).project_token;
       search = `#?token=${projectToken}`;
     }
-    if (action === "player") {
+    if (action === "link" || e.ctrlKey || e.metaKey) {
+      window.open(
+        `https://turbowarp.org/${window.location.pathname.split("/")[2]}${search}`,
+        "_blank",
+        "noopener,noreferrer"
+      );
+    } else {
       playerToggled = !playerToggled;
       if (playerToggled) {
         const username = await addon.auth.fetchUsername();
@@ -52,6 +58,12 @@ export default async function ({ addon, console, msg }) {
           const enabledAddons = await addon.self.getEnabledAddons("editor");
           usp.set("addons", enabledAddons.join(","));
         }
+        // Apply the same fullscreen background color, consistently with the vanilla Scratch fullscreen behavior.
+        // It's not expected here to support dynamicDisable/dyanmicEnable of editor-dark-mode to work exactly
+        // like it does with vanilla.
+        const fullscreenBackground =
+          document.documentElement.style.getPropertyValue("--editorDarkMode-fullscreen") || "white";
+        usp.set("fullscreen-background", fullscreenBackground);
         const iframeUrl = `https://turbowarp.org/${projectId}/embed?${usp}${search}`;
         twIframe.src = "";
         scratchStage.parentElement.prepend(twIframeContainer);
@@ -63,12 +75,6 @@ export default async function ({ addon, console, msg }) {
         button.title = "Scratch";
         addon.tab.traps.vm.stopAll();
       } else removeIframe();
-    } else {
-      window.open(
-        `https://turbowarp.org/${window.location.pathname.split("/")[2]}${search}`,
-        "_blank",
-        "noopener,noreferrer"
-      );
     }
   };
 

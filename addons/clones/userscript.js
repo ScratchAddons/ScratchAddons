@@ -1,22 +1,12 @@
+import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
+
 export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
+  let showOnProjectPage = addon.settings.get("projectpage");
   let showIconOnly = addon.settings.get("showicononly");
 
-  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
-    document.body.classList.add("sa-clones-small");
-  }
-  document.addEventListener(
-    "click",
-    (e) => {
-      if (e.target.closest("[class*='stage-header_stage-button-first']")) {
-        document.body.classList.add("sa-clones-small");
-      } else if (e.target.closest("[class*='stage-header_stage-button-last']")) {
-        document.body.classList.remove("sa-clones-small");
-      }
-    },
-    { capture: true }
-  );
+  addSmallStageClass();
 
   let countContainerContainer = document.createElement("div");
 
@@ -50,12 +40,14 @@ export default async function ({ addon, console, msg }) {
       count.dataset.str = cache[v] || msg("clones", { cloneCount: v });
     }
 
-    if (v === 0) countContainerContainer.style.display = "none";
+    if (v === 0 || (addon.tab.editorMode !== "editor" && !showOnProjectPage))
+      countContainerContainer.style.display = "none";
     else addon.tab.displayNoneWhileDisabled(countContainerContainer, { display: "flex" });
   }
 
   addon.settings.addEventListener("change", () => {
     showIconOnly = addon.settings.get("showicononly");
+    showOnProjectPage = addon.settings.get("projectpage");
     doCloneChecks(true);
   });
 
@@ -70,14 +62,23 @@ export default async function ({ addon, console, msg }) {
     return ret;
   };
 
+  if (addon.self.enabledLate) {
+    // Clone count might be inaccurate if the user deleted sprites
+    // before enabling the addon
+    let count = 0;
+    for (let target of vm.runtime.targets) {
+      if (!target.isOriginal) ++count;
+    }
+    vm.runtime._cloneCounter = count;
+  }
+
   while (true) {
     await addon.tab.waitForElement('[class*="controls_controls-container"]', {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
 
-    if (addon.tab.editorMode === "editor") {
-      addon.tab.appendToSharedSpace({ space: "afterStopButton", element: countContainerContainer, order: 2 });
-    }
+    addon.tab.appendToSharedSpace({ space: "afterStopButton", element: countContainerContainer, order: 2 });
+    doCloneChecks(true);
   }
 }

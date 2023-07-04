@@ -128,7 +128,9 @@ export default async function ({ addon, console, msg }) {
       autoLoadMore();
     });
     // Auto-focus the search bar
-    searchBar.focus();
+    searchBar.focus({
+      preventScroll: true,
+    });
   }
 
   /**
