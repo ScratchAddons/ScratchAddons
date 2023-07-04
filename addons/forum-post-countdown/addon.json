@@ -2,7 +2,7 @@
   "name": "Cooldown display for posting in the forums",
   "description": "After submitting a forum post, display a countdown showing when you can post again.",
   "tags": ["community", "forums"],
-  "versionAdded": "1.33.0",
+  "versionAdded": "1.34.0",
   "userscripts": [
     {
       "url": "post-create.js",
