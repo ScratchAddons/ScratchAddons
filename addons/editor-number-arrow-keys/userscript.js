@@ -1,6 +1,14 @@
 export default async function ({ addon }) {
+  const settings = {
+    none: 0,
+    one: 1,
+    ten: 10,
+    hundred: 100,
+    thousand: 1000,
+  };
   document.body.addEventListener("keydown", (e) => {
-    if (!e.target.classList.add("blocklyHtmlInput")) {
+    e.target.classList;
+    if (!e.target.classList.contains("blocklyHtmlInput")) {
       return;
     }
     if (
@@ -13,12 +21,12 @@ export default async function ({ addon }) {
     e.target.value =
       Number(e.target.value) +
       (e.shiftKey
-        ? addon.settings.get("shift")
+        ? settings[addon.settings.get("shift")]
         : e.ctrlKey
-        ? addon.settings.get("ctrl")
+        ? settings[addon.settings.get("ctrl")]
         : e.altKey
-        ? addon.settings.get("alt")
-        : addon.settings.get("regular")) *
+        ? settings[addon.settings.get("alt")]
+        : settings[addon.settings.get("regular")]) *
         (e.code === "ArrowUp" ? 1 : -1);
   });
 }
