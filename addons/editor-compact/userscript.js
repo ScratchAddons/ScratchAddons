@@ -4,10 +4,12 @@ export default async function ({ addon, global, console }) {
   resizeWorkspace();
 
   let resizeObserver = new ResizeObserver(resizeWorkspace);
-  let menuBar = await addon.tab.waitForElement(
-    '[class*="gui_menu-bar-position"][class*="menu-bar_menu-bar"][class*="box_box"]'
-  );
-  resizeObserver.observe(menuBar);
+  (async () => {
+    while (true) {
+      let menuBar = await addon.tab.waitForElement('[class*="menu-bar_menu-bar"]', { markAsSeen: true });
+      resizeObserver.observe(menuBar);
+    }
+  })();
 
   async function resizeWorkspace() {
     window.dispatchEvent(new Event("resize"));
