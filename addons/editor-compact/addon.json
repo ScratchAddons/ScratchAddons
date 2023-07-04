@@ -16,6 +16,13 @@
     {
       "url": "userstyle.css",
       "matches": ["projects"]
+    },
+    {
+      "url": "sprite-properties.css",
+      "matches": ["projects"],
+      "if": {
+        "addonEnabled": ["sprite-properties"]
+      }
     }
   ],
   "userscripts": [
