@@ -31,7 +31,7 @@ export const createEditorModal = (tab, title, { isOpen = false } = {}) => {
   closeButton.appendChild(
     Object.assign(document.createElement("img"), {
       className: tab.scratchClass("close-button_close-icon"),
-      src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
+      src: import.meta.url + "/../../../images/cs/close-s3.svg",
     })
   );
   const content = Object.assign(document.createElement("div"), {
