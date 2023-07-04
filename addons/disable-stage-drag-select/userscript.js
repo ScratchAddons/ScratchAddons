@@ -18,7 +18,6 @@ export default async ({ addon, console }) => {
     const allowDrag =
       shiftKeyPressed ||
       (addon.settings.get("drag_while_stopped") && !addon.tab.redux.state.scratchGui.vmStatus.running);
-    console.log(allowDrag);
     if (allowDrag || addon.self.disabled) return oldStopDrag.call(this, ...args);
     const setEditingTarget = this.setEditingTarget;
     this.setEditingTarget = () => {};
