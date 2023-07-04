@@ -2355,6 +2355,8 @@
         "link": "#ccb3ff",
         "footer": "#333333",
         "border": "#606060",
+        "messageIndicatorColor": "#ffab1a",
+        "messageIndicatorOnMessagesPage": "#cc4400",
         "darkBanners": "darker",
         "darkForumCode": true
       }
@@ -2374,6 +2376,8 @@
         "link": "#4d97ff",
         "footer": "#333333",
         "border": "#606060",
+        "messageIndicatorColor": "#ffab1a",
+        "messageIndicatorOnMessagesPage": "#ffab1a",
         "darkBanners": "darker",
         "darkForumCode": true
       }
@@ -2393,6 +2397,8 @@
         "link": "#ccb3ff",
         "footer": "#17181a",
         "border": "#000000",
+        "messageIndicatorColor": "#ffab1a",
+        "messageIndicatorOnMessagesPage": "#cc4400",
         "darkBanners": "desaturated",
         "darkForumCode": true
       }
@@ -2412,6 +2418,8 @@
         "link": "#855cd6",
         "footer": "#f2f2f2",
         "border": "#0000001a",
+        "messageIndicatorColor": "#ffab1a",
+        "messageIndicatorOnMessagesPage": "#cc4400",
         "darkBanners": "off",
         "darkForumCode": false
       }
@@ -2431,6 +2439,8 @@
         "link": "#4d97ff",
         "footer": "#f2f2f2",
         "border": "#0000001a",
+        "messageIndicatorColor": "#ffab1a",
+        "messageIndicatorOnMessagesPage": "#ffab1a",
         "darkBanners": "off",
         "darkForumCode": false
       }
