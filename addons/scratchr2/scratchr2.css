@@ -494,6 +494,7 @@ select:focus {
   min-width: 0;
   height: auto;
   background-color: var(--darkWww-messageIndicatorColor, #ffab1a);
+  color: var(--darkWww-messageIndicatorColor-text, white) !important;
   font-size: 11.2px;
   line-height: 16px;
 }

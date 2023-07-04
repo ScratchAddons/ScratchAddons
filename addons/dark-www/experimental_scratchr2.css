@@ -565,6 +565,7 @@ ul.pagination span /* mobile forums */,
 /* Message count */
 #topnav ul.account-nav .messages .notificationsCount {
   background-color: var(--darkWww-messageIndicatorColor-scratchr2);
+  color: var(--darkWww-messageIndicatorColor-scratchr2Text) !important;
 }
 
 /* Miscellaneous styles */

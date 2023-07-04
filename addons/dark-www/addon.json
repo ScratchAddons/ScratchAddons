@@ -1827,6 +1827,17 @@
       }
     },
     {
+      "name": "messageIndicatorColor-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "messageIndicatorColor"
+        },
+        "threshold": 180
+      }
+    },
+    {
       "name": "messageIndicatorColor-scratchr2",
       "value": {
         "type": "map",
@@ -1842,6 +1853,29 @@
           "type": "settingValue",
           "settingId": "messageIndicatorColor"
         }
+      }
+    },
+    {
+      "name": "messageIndicatorColor-scratchr2Text",
+      "value": {
+        "type": "textColor",
+        "black": "#322f31",
+        "source": {
+          "type": "settingValue",
+          "settingId": "messageIndicatorColor"
+        },
+        "threshold": 180
+      }
+    },
+    {
+      "name": "messageIndicatorOnMessagesPage-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "messageIndicatorOnMessagesPage"
+        },
+        "threshold": 180
       }
     },
     {
