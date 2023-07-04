@@ -2249,10 +2249,16 @@
       "default": "#606060"
     },
     {
-      "name": "Message indicator color",
+      "name": "Message count in navigation bar",
       "id": "messageIndicatorColor",
       "type": "color",
       "default": "#ffab1a"
+    },
+    {
+      "name": "Message count on Messages page",
+      "id": "messageIndicatorOnMessagesPage",
+      "type": "color",
+      "default": "#cc4400"
     },
     {
       "name": "Colored areas",

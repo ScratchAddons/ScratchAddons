@@ -719,6 +719,14 @@ body:not(.sa-body-editor) input[type="checkbox"].formik-checkbox:not(:checked),
   border-color: rgba(0, 0, 0, 0.15);
 }
 
+/* Message count */
+#navigation .messages .message-count.show {
+  background-color: var(--darkWww-messageIndicatorColor);
+}
+.messages-header-unread {
+  background-color: var(--darkWww-messageIndicatorOnMessagesPage);
+}
+
 /* Miscellaneous styles */
 
 :root {
@@ -789,10 +797,6 @@ p {
 .initiatives-access > .green {
   /* Change the solid color background to a transparent one */
   background-color: rgba(0, 165, 0, 0.07);
-}
-
-#navigation .messages .message-count.show, .messages-header-unread {
-  background-color: var(--darkWww-messageIndicatorColor);
 }
 
 .twitter-tweet iframe {
