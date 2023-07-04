@@ -29,7 +29,9 @@
   display: none;
 }
 [class*="menu-bar_collapsible-label_"],
-[class*="settings-menu_dropdown-label_"] {
+[dir="rtl"] [class*="menu-bar_collapsible-label_"],
+[class*="settings-menu_dropdown-label_"],
+[dir="rtl"] [class*="settings-menu_dropdown-label_"] {
   margin: 0;
 }
 @media (max-width: 1024px) {
@@ -63,7 +65,7 @@
 }
 
 [class*="menu-bar_growable"] {
-  padding-left: 0.5rem;
+  padding-inline-start: 0.5rem;
 }
 [class*="menu-bar_growable"] [class*="input_input-form"] {
   height: 1.5rem;

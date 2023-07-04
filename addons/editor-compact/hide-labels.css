@@ -33,7 +33,8 @@
 [dir="ltr"] [class*="mode-tools_mod-dashed-border_"],
 [dir="rtl"] [class*="mode-tools_mod-dashed-border_"],
 [dir="ltr"] [class*="sound-editor_input-group_"],
-[dir="rtl"] [class*="sound-editor_input-group_"] {
+[dir="rtl"] [class*="sound-editor_input-group_"],
+[dir="rtl"] [class*="sound-editor_row-reverse_"] [class*="sound-editor_input-group_"] {
   margin: 0;
   border: 0;
   padding: 0;
