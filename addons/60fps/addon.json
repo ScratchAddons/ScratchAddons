@@ -4,7 +4,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "Many projects won't behave properly when running at 60 FPS, because increasing the frame rate also increases the speed at which scripts run.",
+      "text": "Many projects won't behave properly when running at 60FPS, because increasing the frame rate also increases the speed at which scripts run.",
       "id": "projectRunsFasterNotice"
     }
   ],
