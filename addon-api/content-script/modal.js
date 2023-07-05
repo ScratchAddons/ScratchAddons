@@ -18,7 +18,7 @@ export const createEditorModal = (tab, title, { isOpen = false } = {}) => {
     Object.assign(document.createElement("div"), {
       className: tab.scratchClass("modal_header-item", "modal_header-item-title"),
       innerText: title,
-    })
+    }),
   );
   const closeContainer = Object.assign(document.createElement("div"), {
     className: tab.scratchClass("modal_header-item", "modal_header-item-close"),
@@ -32,7 +32,7 @@ export const createEditorModal = (tab, title, { isOpen = false } = {}) => {
     Object.assign(document.createElement("img"), {
       className: tab.scratchClass("close-button_close-icon"),
       src: import.meta.url + "/../../../images/cs/close-s3.svg",
-    })
+    }),
   );
   const content = Object.assign(document.createElement("div"), {
     className: "sa-editor-modal-content",
@@ -81,7 +81,7 @@ export const createScratchWwwModal = (title, { isOpen = false, useSizesClass = t
     Object.assign(document.createElement("img"), {
       className: "modal-content-close-img",
       src: "/svgs/modal/close-x.svg",
-    })
+    }),
   );
   const header = Object.assign(document.createElement("div"), {
     className: "modal-header modal-title",
@@ -143,7 +143,7 @@ export const createScratchr2Modal = (title, { isOpen = false } = {}) => {
   header.appendChild(
     Object.assign(document.createElement("h3"), {
       innerText: title,
-    })
+    }),
   );
   const content = Object.assign(document.createElement("div"), {
     className: "modal-body",
@@ -202,7 +202,7 @@ const createButtonRow = (tab, mode, { okButtonLabel, cancelButtonLabel } = {}) =
           editor: "gui.prompt.cancel",
           "scratch-www": "general.cancel",
           scratchr2: "Cancel",
-        }[mode]
+        }[mode],
       ),
   });
   buttonRow.appendChild(cancelButton);
@@ -218,7 +218,7 @@ const createButtonRow = (tab, mode, { okButtonLabel, cancelButtonLabel } = {}) =
           editor: "gui.prompt.ok",
           "scratch-www": "general.okay",
           scratchr2: "OK",
-        }[mode]
+        }[mode],
       ),
   });
   buttonRow.appendChild(okButton);
@@ -241,7 +241,7 @@ export const confirm = (tab, title, message, { useEditorClasses = false, okButto
       className: { editor: tab.scratchClass("prompt_label") }[mode] || "",
       style: { "scratch-www": "margin: .9375rem 0.8275rem 0 .8275rem" }[mode] || "",
       innerText: message,
-    })
+    }),
   );
   const { buttonRow, cancelButton, okButton } = createButtonRow(tab, mode, {
     okButtonLabel,
@@ -286,7 +286,7 @@ export const prompt = (tab, title, message, defaultValue = "", { useEditorClasse
       className: { editor: tab.scratchClass("prompt_label") }[mode] || "",
       style: { "scratch-www": "margin: .9375rem 0.8275rem 1.125rem .8275rem" }[mode] || "",
       innerText: message,
-    })
+    }),
   );
   const input = Object.assign(document.createElement("input"), {
     className: { editor: tab.scratchClass("prompt_variable-name-text-input"), "scratch-www": "input" }[mode] || "",

@@ -12,7 +12,7 @@ export default async function ({ addon, msg }) {
           ["-", "-"],
           [",", ","],
           [".", "."],
-        ]
+        ],
       );
       keys.splice(5, 0, [msg("enter-key"), "enter"]);
       if (addon.settings.get("experimentalKeys")) {
@@ -26,7 +26,7 @@ export default async function ({ addon, msg }) {
             [";", ";"],
             ["'", "'"],
             ["/", "/"],
-          ]
+          ],
         );
       }
       if (enableShiftKeys && addon.settings.get("shiftKeys")) {
@@ -53,7 +53,7 @@ export default async function ({ addon, msg }) {
             ["<", "<"],
             [">", ">"],
             ["~", "~"],
-          ]
+          ],
         );
       }
     }
@@ -92,7 +92,7 @@ export default async function ({ addon, msg }) {
         }
         field.menuGenerator_ = appendKeys(
           defaultKeys ? [...defaultKeys] : field.menuGenerator_,
-          block.type === "event_whenkeypressed"
+          block.type === "event_whenkeypressed",
         );
       }
     }

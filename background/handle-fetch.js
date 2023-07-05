@@ -67,6 +67,6 @@ if (chrome.declarativeNetRequest) {
       urls: ["https://scratch.mit.edu/*", "https://api.scratch.mit.edu/*", "https://clouddata.scratch.mit.edu/*"],
       types: ["xmlhttprequest"],
     },
-    extraInfoSpec
+    extraInfoSpec,
   );
 }

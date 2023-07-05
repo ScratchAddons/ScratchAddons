@@ -258,7 +258,7 @@ async function openMessagesPage() {
         });
       }
       updateBadge(scratchAddons.cookieStoreId);
-    }
+    },
   );
 }
 
