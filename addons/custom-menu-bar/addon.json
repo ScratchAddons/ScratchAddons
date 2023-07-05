@@ -1,6 +1,6 @@
 {
   "name": "Custom menu bar",
-  "description": "Add or remove editor menu bar items.",
+  "description": "Hide specific editor menu bar items.",
   "credits": [
     {
       "name": "philipp2007",
@@ -13,11 +13,6 @@
       "link": "https://github.com/CST1229/",
       "note": "compact user dropdown",
       "id": "dropdown"
-    },
-    {
-      "name": "TheColaber",
-      "note": "editor messages",
-      "id": "editor-messages"
     },
     {
       "name": "lisa_wolfgang",
@@ -65,16 +60,10 @@
       "default": "both"
     },
     {
-      "name": "Show Messages button",
-      "id": "messages",
-      "type": "boolean",
-      "default": false
-    },
-    {
-      "name": "Show My Stuff button",
+      "name": "Hide My Stuff button",
       "id": "my-stuff",
       "type": "boolean",
-      "default": true
+      "default": false
     },
     {
       "name": "Compact user dropdown",
@@ -85,30 +74,17 @@
   ],
   "userscripts": [
     {
-      "url": "messages.js",
-      "matches": ["projects"]
-    },
-    {
       "url": "username.js",
       "matches": ["projects"]
     }
   ],
   "userstyles": [
     {
-      "url": "messages.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": {
-          "messages": true
-        }
-      }
-    },
-    {
       "url": "my-stuff-hide.css",
       "matches": ["projects"],
       "if": {
         "settings": {
-          "my-stuff": false
+          "my-stuff": true
         }
       }
     },
@@ -153,5 +129,5 @@
   "dynamicEnable": true,
   "updateUserstylesOnSettingsChange": true,
   "enabledByDefault": false,
-  "versionAdded": "1.33.2"
+  "versionAdded": "1.34.0"
 }
