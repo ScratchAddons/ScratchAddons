@@ -42,7 +42,7 @@ export default async function ({ addon, console, msg }) {
       {
         markAsSeen: true,
         reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
-      }
+      },
     );
     bodyWrapper = document.querySelector("[class*='gui_body-wrapper_']");
     smallStageButton = stageControls.firstChild;

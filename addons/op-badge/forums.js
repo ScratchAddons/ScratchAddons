@@ -7,7 +7,7 @@ export default async function ({ addon, console, msg }) {
   } else {
     const firstPageDocument = new DOMParser().parseFromString(
       await fetch(location.pathname).then((res) => res.text()),
-      "text/html"
+      "text/html",
     );
     opUsername = firstPageDocument.querySelectorAll(".blockpost")[0].querySelector(".username").innerText;
   }

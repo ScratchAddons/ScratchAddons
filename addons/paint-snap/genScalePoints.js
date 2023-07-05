@@ -150,9 +150,9 @@ export default function createScalePoints(paper, lib, objects, sx, sy) {
                     },
                   },
                 ],
-              ].filter(Boolean)
+              ].filter(Boolean),
             )
-            .flat(1)
+            .flat(1),
         )
       : {}),
     ...(snapTo.objectMidlines
@@ -175,9 +175,9 @@ export default function createScalePoints(paper, lib, objects, sx, sy) {
                     value: item.bounds.center.y,
                   },
                 ],
-              ].filter(Boolean)
+              ].filter(Boolean),
             )
-            .flat(1)
+            .flat(1),
         )
       : {}),
   };

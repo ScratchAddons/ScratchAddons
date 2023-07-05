@@ -1,27 +1,26 @@
 {
-    "name": "Messages in editor",
-    "description": "Displays your message count in the editor menu bar.",
-    "credits": [
-      {
-        "name": "TheColaber"
-      }
-    ],
-    "dynamicEnable": true,
-    "dynamicDisable": true,
-    "userscripts": [
-      {
-        "url": "userscript.js",
-        "matches": ["projects"]
-      }
-    ],
-    "userstyles": [
-      {
-        "url": "userstyle.css",
-        "matches": ["projects"]
-      }
-    ],
-    "versionAdded": "1.4.0",
-    "tags": ["editor", "editorMenuBar", "recommended"],
-    "enabledByDefault": false
-  }
-  
+  "name": "Messages in editor",
+  "description": "Displays your message count in the editor menu bar.",
+  "credits": [
+    {
+      "name": "TheColaber"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.4.0",
+  "tags": ["editor", "editorMenuBar", "recommended"],
+  "enabledByDefault": false
+}

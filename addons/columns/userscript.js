@@ -49,7 +49,7 @@ export default async function ({ addon, msg, console }) {
       // Set the scrollbars origin to be the top left of the flyout.
       this.scrollbar_.setOrigin(
         x + (this.toolboxPosition_ === Blockly.TOOLBOX_AT_RIGHT ? 0 : this.width_ - this.getWidth()),
-        y
+        y,
       );
       this.scrollbar_.resize();
     }

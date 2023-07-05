@@ -48,10 +48,10 @@ export default async function ({ addon, msg, console }) {
     followRow.className = "sa-stats-row";
     followRow.appendChild(createSimpleItem(data, (data) => data?.statistics?.followers, msg("followers")));
     followRow.appendChild(
-      createSimpleRankItem(data, (data) => data?.statistics?.ranks?.followers, msg("most-followed-global"))
+      createSimpleRankItem(data, (data) => data?.statistics?.ranks?.followers, msg("most-followed-global")),
     );
     followRow.appendChild(
-      createSimpleRankItem(data, (data) => data?.statistics?.ranks?.country?.followers, msg("most-followed-location"))
+      createSimpleRankItem(data, (data) => data?.statistics?.ranks?.country?.followers, msg("most-followed-location")),
     );
 
     const ranksRow = document.createElement("div");
@@ -62,31 +62,31 @@ export default async function ({ addon, msg, console }) {
         data,
         (data) => data?.statistics?.ranks?.loves,
         (data) => data?.statistics?.ranks?.country?.loves,
-        msg("most-loves")
-      )
+        msg("most-loves"),
+      ),
     );
     ranksRow.appendChild(
       createDoubleRankItem(
         data,
         (data) => data?.statistics?.ranks?.favorites,
         (data) => data?.statistics?.ranks?.country?.favorites,
-        msg("most-favorites")
-      )
+        msg("most-favorites"),
+      ),
     );
     ranksRow.appendChild(
       createDoubleRankItem(
         data,
         (data) => data?.statistics?.ranks?.views,
         (data) => data?.statistics?.ranks?.country?.views,
-        msg("most-views")
-      )
+        msg("most-views"),
+      ),
     );
 
     if (loading)
       element.appendChild(
         Object.assign(document.createElement("div"), {
           className: "sa-spinner",
-        })
+        }),
       );
 
     if (error)
@@ -94,7 +94,7 @@ export default async function ({ addon, msg, console }) {
         Object.assign(document.createElement("div"), {
           className: "sa-stats-error",
           innerText: msg("err"),
-        })
+        }),
       );
   };
 
@@ -105,7 +105,7 @@ export default async function ({ addon, msg, console }) {
   const content = await addon.tab.waitForElement("#content");
   // #content exists, its children might not
   const commentBox = await addon.tab.waitForElement(
-    "#content > .box:not(#profile-data):not(.slider-carousel-container):not(#page-404)"
+    "#content > .box:not(#profile-data):not(.slider-carousel-container):not(#page-404)",
   );
   const statsBox = document.createElement("div");
   content.insertBefore(statsBox, commentBox);
@@ -232,7 +232,7 @@ export default async function ({ addon, msg, console }) {
         Object.assign(document.createElement("div"), {
           className: "sa-stats-error",
           innerText: msg("err-chart"),
-        })
+        }),
       );
     });
 }
