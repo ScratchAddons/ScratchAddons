@@ -27,7 +27,6 @@ export default async function ({ addon, console, msg }) {
         .href.match(/\d+/)[0];
 
       const xhrOpen = XMLHttpRequest.prototype.open;
-      const xhrSend = XMLHttpRequest.prototype.send;
       XMLHttpRequest.prototype.open = function (method, path, ...args) {
         const newPath = `https://api.scratch.mit.edu/proxy/projects/${projectId}/share`;
         xhrOpen.call(this, "PUT", newPath, ...args);
@@ -36,7 +35,7 @@ export default async function ({ addon, console, msg }) {
         this.withCredentials = true;
         this.send = () => {
           this.setRequestHeader("X-Requested-With", ""); // Do not send this header
-          xhrSend.call(this); // Send empty body
+          XMLHttpRequest.prototype.send.call(this); // Send empty body
         };
         return undefined;
       };
@@ -44,7 +43,6 @@ export default async function ({ addon, console, msg }) {
       event.target.parentElement.querySelector(".media-share").click(); // .click() is synchronous
       // By this point, the request has already been sent. Remove traps.
       XMLHttpRequest.prototype.open = xhrOpen;
-      XMLHttpRequest.prototype.send = xhrSend;
     }
   }
 
