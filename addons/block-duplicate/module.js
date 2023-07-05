@@ -23,7 +23,7 @@ document.addEventListener(
   },
   {
     capture: true,
-  },
+  }
 );
 
 let loaded = false;

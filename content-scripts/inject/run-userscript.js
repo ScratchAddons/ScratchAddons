@@ -16,7 +16,7 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
         scratchAddons.l10n.get(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders);
       msg.locale = scratchAddons.l10n.locale;
       scratchAddons.console.logForAddon(`${addonId} [page]`)(
-        `Running ${scriptUrl}, runAtComplete: ${runAtComplete}, enabledLate: ${enabledLate}`,
+        `Running ${scriptUrl}, runAtComplete: ${runAtComplete}, enabledLate: ${enabledLate}`
       );
       const localConsole = {
         log: scratchAddons.console.logForAddon(addonId),

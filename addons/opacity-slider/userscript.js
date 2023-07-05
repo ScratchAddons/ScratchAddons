@@ -195,7 +195,7 @@ export default async function ({ addon, console, msg }) {
     saOpacitySlider.appendChild(saOpacitySliderBg);
     saOpacitySlider.appendChild(saOpacityHandle);
     const brightnessSlider = Array.from(element.parentElement.children).filter(
-      (e) => !e.querySelector("div[class*=color-picker_gradient-picker-row]"),
+      (e) => !e.querySelector("div[class*=color-picker_gradient-picker-row]")
     )[2];
     brightnessSlider.after(containerWrapper);
   }
