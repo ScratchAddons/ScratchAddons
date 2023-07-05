@@ -1,5 +1,5 @@
 name: Format code using Prettier
-on: [push, pull_request]
+on: workflow_dispatch
 
 jobs:
   format:
