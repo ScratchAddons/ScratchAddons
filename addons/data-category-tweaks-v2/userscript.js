@@ -12,7 +12,7 @@ export default async function ({ addon, console, msg, safeMsg }) {
 
   const separateVariablesByType = (toolboxXML) => {
     const listButtonIndex = toolboxXML.findIndex(
-      (i) => i.getAttribute("callbackkey") === "CREATE_LIST" || i.getAttribute("type") === "data_addtolist",
+      (i) => i.getAttribute("callbackkey") === "CREATE_LIST" || i.getAttribute("type") === "data_addtolist"
     );
     return {
       variables: toolboxXML.slice(0, listButtonIndex),

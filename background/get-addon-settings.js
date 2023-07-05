@@ -81,7 +81,7 @@ async function transitionToNewStorageKeys(addonSettings) {
         // Reload extension after 500ms
         setTimeout(() => chrome.runtime.reload(), 500);
       });
-    },
+    }
   );
 }
 
@@ -234,7 +234,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             },
             () => {
               newPopupSettingValue = "#47566be6";
-            },
+            }
           );
           updatePresetIfMatching(
             settings,
@@ -259,7 +259,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             },
             () => {
               newPopupSettingValue = "#333a";
-            },
+            }
           );
           updatePresetIfMatching(
             settings,
@@ -284,7 +284,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             },
             () => {
               newPopupSettingValue = "#00000099";
-            },
+            }
           );
           updatePresetIfMatching(
             settings,
@@ -309,7 +309,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             },
             () => {
               newPopupSettingValue = "#00000099";
-            },
+            }
           );
 
           if (!newPopupSettingValue && migratingPresetsV1_32) {
@@ -345,7 +345,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
               "input-color": "#ffffff",
               text: "white",
             },
-            manifest.presets.find((p) => p.id === "original"),
+            manifest.presets.find((p) => p.id === "original")
           );
           updatePresetIfMatching(
             settings,
@@ -366,7 +366,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
               "input-color": "#202020",
               text: "white",
             },
-            manifest.presets.find((p) => p.id === "dark"),
+            manifest.presets.find((p) => p.id === "dark")
           );
           updatePresetIfMatching(
             settings,
@@ -388,7 +388,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
               "input-color": "#202020",
               text: "colorOnBlack",
             },
-            manifest.presets.find((p) => p.id === "black"),
+            manifest.presets.find((p) => p.id === "black")
           );
 
           if (addonSettings["editor-dark-mode"]?.darkComments === false) {

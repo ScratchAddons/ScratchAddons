@@ -170,7 +170,7 @@ export default async function ({ addon, console, msg }) {
         350,
         150,
         // minimized
-        false,
+        false
       );
     }
     didChangeProject();
@@ -427,7 +427,7 @@ export default async function ({ addon, console, msg }) {
           "fontsLoaded/SET_FONTS_LOADED",
           "scratch-gui/locales/SELECT_LOCALE",
         ],
-      },
+      }
     );
     container.dataset.editorMode = addon.tab.editorMode;
     if (target.closest('[class^="stage-header_stage-size-row"]')) {
