@@ -129,5 +129,11 @@
   "dynamicEnable": true,
   "updateUserstylesOnSettingsChange": true,
   "enabledByDefault": false,
-  "versionAdded": "1.34.0"
+  "versionAdded": "1.22.0",
+  "latestUpdate": {
+    "version": "1.34.0",
+    "isMajor": true,
+    "temporaryNotice": "You can now customize the user dropdown and the menus.",
+    "newSettings": ["menu-labels", "my-stuff", "compact-username"]
+  }
 }
