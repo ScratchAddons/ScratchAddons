@@ -310,7 +310,7 @@ export default async ({ addon, console, msg }) => {
 
           recorder.start(1000);
         },
-        (delay - roundedDelay) * 1000,
+        (delay - roundedDelay) * 1000
       );
     };
     if (!recordElem) {
