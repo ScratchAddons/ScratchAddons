@@ -1,7 +1,4 @@
-[class*="settings-menu_dropdown-label"] {
-  display: none;
-}
-
+[class*="settings-menu_dropdown-label"],
 [class*="menu-bar_collapsible-label"] {
   display: none;
 }
