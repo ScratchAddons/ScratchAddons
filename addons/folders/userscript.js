@@ -756,7 +756,7 @@ export default async function ({ addon, console, msg }) {
           msg("rename-folder-prompt-title"),
           msg("rename-folder-prompt"),
           data.folder,
-          { useEditorClasses: true },
+          { useEditorClasses: true }
         );
         // Prompt cancelled, do not rename
         if (newName === null) {
@@ -820,7 +820,7 @@ export default async function ({ addon, console, msg }) {
           msg("name-prompt-title"),
           msg("name-prompt"),
           getNameWithoutFolder(data.realName),
-          { useEditorClasses: true },
+          { useEditorClasses: true }
         );
         if (name === null) {
           return;
@@ -864,7 +864,7 @@ export default async function ({ addon, console, msg }) {
               position: "assetContextMenuAfterDelete",
               order: 20 + i,
             };
-          }),
+          })
       );
     }
   });
@@ -1027,7 +1027,7 @@ export default async function ({ addon, console, msg }) {
     const abstractReorder = (
       { guiItems, getAll, set, rename, getVMItemFromGUIItem, zeroIndexed, onFolderChanged },
       itemIndex,
-      newIndex,
+      newIndex
     ) => {
       // First index depends on zeroIndexed
       itemIndex = clamp(itemIndex, zeroIndexed ? 0 : 1, zeroIndexed ? guiItems.length - 1 : guiItems.length);
@@ -1168,7 +1168,7 @@ export default async function ({ addon, console, msg }) {
           zeroIndexed: false,
         },
         targetIndex,
-        newIndex,
+        newIndex
       );
     };
 
@@ -1192,7 +1192,7 @@ export default async function ({ addon, console, msg }) {
           zeroIndexed: true,
         },
         costumeIndex,
-        newIndex,
+        newIndex
       );
     };
 
@@ -1216,7 +1216,7 @@ export default async function ({ addon, console, msg }) {
           zeroIndexed: true,
         },
         soundIndex,
-        newIndex,
+        newIndex
       );
     };
 

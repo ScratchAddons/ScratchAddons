@@ -47,7 +47,7 @@ export default async function ({ addon, console, msg }) {
     },
     {
       capture: true,
-    },
+    }
   );
   addon.settings.addEventListener("change", autoHidePanel);
 

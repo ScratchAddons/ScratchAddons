@@ -14,7 +14,7 @@ export default async function ({ addon, console }) {
     },
     {
       capture: true,
-    },
+    }
   );
 
   // Limits all script running to CTRL + click

@@ -110,7 +110,7 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
                 content: text,
               })[match]
           ) + "\n"
-        ).repeat(count),
+        ).repeat(count)
       )
       .join("");
     downloadText("logs.txt", file);

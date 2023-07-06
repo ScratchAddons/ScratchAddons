@@ -27,7 +27,7 @@ export default async ({ addon, console, msg }) => {
         Object.assign(document.createElement("p"), {
           textContent: msg("record-description"),
           className: "recordOptionDescription",
-        }),
+        })
       );
 
       // Seconds
@@ -180,7 +180,7 @@ export default async ({ addon, console, msg }) => {
             waitUntilFlag: recordOptionFlagInput.checked,
             useStopSign: !recordOptionStopInput.disabled && recordOptionStopInput.checked,
           }),
-        { once: true },
+        { once: true }
       );
       buttonRow.appendChild(startButton);
       content.appendChild(buttonRow);

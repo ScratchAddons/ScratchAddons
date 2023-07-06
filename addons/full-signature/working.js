@@ -35,7 +35,7 @@ export default async function ({ addon, console, msg }) {
             loadMore.addEventListener("click", show);
           });
       },
-      { once: true },
+      { once: true }
     );
   }
 }

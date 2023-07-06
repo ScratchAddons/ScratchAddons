@@ -222,8 +222,8 @@ export function initUI({ addon, msg }) {
       },
       4,
       50,
-      1,
-    ),
+      1
+    )
   );
 
   const toOnOff = (bool) => (bool ? "on" : "off");
@@ -242,8 +242,8 @@ export function initUI({ addon, msg }) {
           toggle(true);
           toggleButton.dataset.enabled = true;
           setSnapTo(forPoint, enabled);
-        }),
-      ),
+        })
+      )
     );
   const snapToSection = createSection(
     msg("snapTo"),
@@ -254,7 +254,7 @@ export function initUI({ addon, msg }) {
     createSnapToSetting("objectCenters"),
     createSnapToSetting("objectMidlines"),
     createSnapToSetting("objectEdges"),
-    createSnapToSetting("objectCorners"),
+    createSnapToSetting("objectCorners")
   );
 
   const createSnapFromSetting = (forPoint) =>
@@ -263,15 +263,15 @@ export function initUI({ addon, msg }) {
       createToggle(
         ...toggleParams(snapFrom[forPoint], (enabled) => {
           setSnapFrom(forPoint, enabled);
-        }),
-      ),
+        })
+      )
     );
 
   const snapFromSection = createSection(
     msg("snapFrom"),
     createSnapFromSetting("boxCenter"),
     createSnapFromSetting("boxCorners"),
-    createSnapFromSetting("boxEdgeMids"),
+    createSnapFromSetting("boxEdgeMids")
   );
 
   settingsPage.append(threshSetting, createSeparator(), snapToSection, createSeparator(), snapFromSection);
