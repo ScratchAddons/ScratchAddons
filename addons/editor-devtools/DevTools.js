@@ -70,7 +70,7 @@ export default class DevTools {
                 keyCode: 86,
                 ctrlKey: true,
                 griff: true,
-              }),
+              })
             );
 
             setTimeout(() => {
@@ -80,7 +80,7 @@ export default class DevTools {
         });
         return items;
       },
-      { workspace: true },
+      { workspace: true }
     );
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
@@ -115,7 +115,7 @@ export default class DevTools {
             callback: () => {
               this.eventCopyClick(block, 2);
             },
-          },
+          }
         );
         // const BROADCAST_BLOCKS = ["event_whenbroadcastreceived", "event_broadcast", "event_broadcastandwait"];
         // if (BROADCAST_BLOCKS.includes(block.type)) {
@@ -136,7 +136,7 @@ export default class DevTools {
         // }
         return items;
       },
-      { blocks: true },
+      { blocks: true }
     );
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
@@ -158,7 +158,7 @@ export default class DevTools {
         }
         return items;
       },
-      { blocks: true, flyout: true },
+      { blocks: true, flyout: true }
     );
   }
 

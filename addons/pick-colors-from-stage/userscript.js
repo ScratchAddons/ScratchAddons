@@ -13,7 +13,7 @@ export default async function ({ addon, msg, console }) {
     },
     {
       capture: true,
-    },
+    }
   );
 
   addon.tab.redux.initialize();

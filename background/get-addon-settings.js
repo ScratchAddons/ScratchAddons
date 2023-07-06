@@ -84,7 +84,7 @@ async function transitionToNewStorageKeys(addonSettings) {
         // Reload extension after 500ms
         setTimeout(() => chrome.runtime.reload(), 500);
       });
-    },
+    }
   );
 }
 
@@ -219,7 +219,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             () => {
               settings.navbar = "#855cd6";
               madeAnyChanges = madeChangesToAddon = true;
-            },
+            }
           );
           updatePresetIfMatching(
             settings,
@@ -231,7 +231,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             () => {
               settings.button = "#855cd6"; // Same new color as migration #1
               madeAnyChanges = madeChangesToAddon = true;
-            },
+            }
           );
           updatePresetIfMatching(
             settings,
@@ -253,7 +253,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
               settings.blue = "#292d32";
               settings.link = "#ccb3ff";
               madeAnyChanges = madeChangesToAddon = true;
-            },
+            }
           );
           updatePresetIfMatching(
             settings,
@@ -274,7 +274,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             () => {
               settings.link = "#ccb3ff"; // Same new color as migration #3
               madeAnyChanges = madeChangesToAddon = true;
-            },
+            }
           );
           updatePresetIfMatching(
             settings,
@@ -295,7 +295,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             () => {
               settings.link = "#855cd6";
               madeAnyChanges = madeChangesToAddon = true;
-            },
+            }
           );
         }
 
@@ -325,7 +325,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             },
             () => {
               newPopupSettingValue = "#47566be6";
-            },
+            }
           );
           updatePresetIfMatching(
             settings,
@@ -350,7 +350,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             },
             () => {
               newPopupSettingValue = "#333a";
-            },
+            }
           );
           updatePresetIfMatching(
             settings,
@@ -375,7 +375,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             },
             () => {
               newPopupSettingValue = "#00000099";
-            },
+            }
           );
           updatePresetIfMatching(
             settings,
@@ -400,7 +400,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             },
             () => {
               newPopupSettingValue = "#00000099";
-            },
+            }
           );
 
           if (!newPopupSettingValue && migratingPresetsV1_32) {
@@ -443,7 +443,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
               settings.highlightText = "#ccb3ff";
               settings.selector = "#292d32";
               // Changing the menuBar ("menu bar background") setting is handled by migration #10.
-            },
+            }
           );
           updatePresetIfMatching(
             settings,
@@ -472,7 +472,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
               // Applies only 2 of the 5 changes from migration #7 with the exact same colors.
               settings.primary = "#855cd6";
               settings.highlightText = "#ccb3ff";
-            },
+            }
           );
           updatePresetIfMatching(
             settings,
@@ -502,7 +502,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
               settings.primary = "#855cd6";
               settings.highlightText = "#855cd6";
               // Changing the menuBar ("menu bar background") setting is handled by migration #10.
-            },
+            }
           );
           updatePresetIfMatching(
             settings,
@@ -515,7 +515,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
               console.log("Migrated 'menu bar background' setting from old blue to new purple.");
               madeAnyChanges = madeChangesToAddon = true;
               settings.menuBar = "#855cd6"; // New vanilla "menu bar background" (purple)
-            },
+            }
           );
         }
 
@@ -540,7 +540,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
               "input-color": "#ffffff",
               text: "white",
             },
-            manifest.presets.find((p) => p.id === "original"),
+            manifest.presets.find((p) => p.id === "original")
           );
           updatePresetIfMatching(
             settings,
@@ -561,7 +561,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
               "input-color": "#202020",
               text: "white",
             },
-            manifest.presets.find((p) => p.id === "dark"),
+            manifest.presets.find((p) => p.id === "dark")
           );
           updatePresetIfMatching(
             settings,
@@ -583,7 +583,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
               "input-color": "#202020",
               text: "colorOnBlack",
             },
-            manifest.presets.find((p) => p.id === "black"),
+            manifest.presets.find((p) => p.id === "black")
           );
 
           if (addonSettings["editor-dark-mode"]?.darkComments === false) {
