@@ -7,11 +7,8 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
     const { url: scriptPath, runAtComplete } = scriptInfo;
     const scriptUrl = `${new URL(import.meta.url).origin}/addons/${addonId}/${scriptPath}`;
     const loadUserscript = async () => {
-      const [module] = await Promise.all([
-        import(scriptUrl),
-        scratchAddons.l10n.loadByAddonId(addonId),
-        runAtComplete ? addonObj.tab.scratchClassReady() : Promise.resolve(),
-      ]);
+      await scratchAddons.l10n.loadByAddonId(addonId);
+      const module = await import(scriptUrl);
       const msg = (key, placeholders) =>
         scratchAddons.l10n.get(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders);
       msg.locale = scratchAddons.l10n.locale;
@@ -34,7 +31,7 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
     if (runAtComplete && document.readyState !== "complete") {
       window.addEventListener("load", () => loadUserscript(), { once: true });
     } else {
-      loadUserscript();
+      await loadUserscript();
     }
   }
 }

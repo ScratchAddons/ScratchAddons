@@ -29,7 +29,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
     chrome.storage.sync.set({
       // Store target so arrays don't become objects
-      ...minifySettings(scratchAddons.globalState.addonSettings._target, prerelease ? null : scratchAddons.manifests),
+      addonSettings: minifySettings(
+        scratchAddons.globalState.addonSettings._target,
+        prerelease ? null : scratchAddons.manifests
+      ),
     });
 
     const manifest = scratchAddons.manifests.find((addon) => addon.addonId === addonId).manifest;

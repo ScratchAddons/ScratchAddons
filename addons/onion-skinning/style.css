@@ -2,14 +2,13 @@
   position: relative;
 }
 .sa-onion-button:focus-within {
-  background-color: var(--editorDarkMode-primary-transparent35, hsla(260, 60%, 60%, 0.35));
+  background-color: hsla(215, 100%, 65%, 0.2);
 }
 .sa-onion-button[data-enabled="true"] .sa-onion-image {
   filter: brightness(0) invert(1);
 }
 .sa-onion-button[data-enabled="true"] {
-  color: white;
-  background-color: #855cd6;
+  background-color: #4c97ff;
 }
 
 .sa-onion-group {

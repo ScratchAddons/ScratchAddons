@@ -1,7 +1,5 @@
 [class*="stage-header_stage-menu-wrapper"],
-[class*="controls_controls-container_"],
-[class*="stage-header_stage-size-row"],
-.sa-vol-slider-inner {
+[class*="stage-header_stage-size-row"] {
   flex-direction: row-reverse;
 }
 
@@ -19,35 +17,8 @@
   margin-right: 0.2rem;
 }
 
-[class*="green-flag_green-flag_"] {
-  order: -1;
-}
-
+[class*="green-flag_green-flag_"],
+[class*="stop-all_stop-all_"],
 .pause-btn {
-  order: -2;
-}
-
-[class*="stop-all_stop-all_"] {
-  order: -3;
-}
-
-[dir="ltr"] .sa-vol-slider-input {
-  margin-right: 3px;
-}
-
-[dir="rtl"] .sa-vol-slider-input {
-  margin-left: 3px;
-}
-
-/* The following rules are for the hover state of the
-   volume slider. If the slider is always shown, it will
-   have position: static, so these properties will have
-   no effect. */
-[dir="ltr"] .sa-vol-slider-inner {
-  left: auto;
-  right: 0.25rem;
-}
-[dir="rtl"] .sa-vol-slider-inner {
-  right: auto;
-  left: 0.25rem;
+  order: 1;
 }

@@ -62,20 +62,18 @@ export default async function ({ addon, console, msg }) {
       if (cancelMessage !== null) {
         e.preventDefault();
         e.stopPropagation();
-        addon.tab.scratchClassReady().then(() => {
-          addon.tab
-            .confirm(title, cancelMessage, {
-              okButtonLabel: msg("yes"),
-              cancelButtonLabel: msg("no"),
-              useEditorClasses: addon.tab.editorMode === "editor",
-            })
-            .then((confirmed) => {
-              if (confirmed) {
-                override = true;
-                e.target.click();
-              }
-            });
-        });
+        addon.tab
+          .confirm(title, cancelMessage, {
+            okButtonLabel: msg("yes"),
+            cancelButtonLabel: msg("no"),
+            useEditorClasses: addon.tab.editorMode === "editor",
+          })
+          .then((confirmed) => {
+            if (confirmed) {
+              override = true;
+              e.target.click();
+            }
+          });
       }
     },
     { capture: true }

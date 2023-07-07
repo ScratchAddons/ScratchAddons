@@ -32,7 +32,6 @@ export default async function ({ addon, console }) {
   previewInner.classList.add("sa-comment-preview-hidden");
   updateStyles();
   addon.settings.addEventListener("change", updateStyles);
-  addon.tab.displayNoneWhileDisabled(previewOuter);
   previewOuter.appendChild(previewInner);
   document.body.appendChild(previewOuter);
 
