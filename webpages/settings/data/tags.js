@@ -52,7 +52,7 @@ export default [
   {
     name: "forPlayer",
     matchName: "player",
-    color: "darkgreen", // TODO: use a new tag color
+    color: "lightblue",
     addonTabShow: {
       theme: true,
     },
