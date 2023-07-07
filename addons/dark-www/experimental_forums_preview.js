@@ -14,7 +14,7 @@ function updateCssVariables(node, addon) {
     node.style.setProperty("--darkWww-page", "#ffffff");
     node.style.setProperty("--darkWww-page-scratchr2Text", "#322f31");
     node.style.setProperty("--darkWww-page-colorScheme", "light");
-    node.style.setProperty("--darkWww-link-scratchr2", "#1aa0d8");
+    node.style.setProperty("--darkWww-link", "#855cd6");
     node.style.setProperty("--darkWww-gray-scratchr2", "#f7f7f7");
     node.style.setProperty("--darkWww-gray-scratchr2Text", "#322f31");
     node.style.setProperty("--darkWww-border-15", "#cccccc");
@@ -25,7 +25,7 @@ function updateCssVariables(node, addon) {
   node.style.setProperty("--darkWww-page", addon.settings.get("box"));
   node.style.setProperty("--darkWww-page-scratchr2Text", textColor(addon.settings.get("box"), "#322f31"));
   node.style.setProperty("--darkWww-page-colorScheme", textColor(addon.settings.get("box"), "light", "dark"));
-  node.style.setProperty("--darkWww-link-scratchr2", multiply(addon.settings.get("link"), { r: 0.66, b: 0.85 }));
+  node.style.setProperty("--darkWww-link", addon.settings.get("link"));
   node.style.setProperty(
     "--darkWww-gray-scratchr2",
     textColor(
