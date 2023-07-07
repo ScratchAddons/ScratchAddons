@@ -1,13 +1,6 @@
-.sa-stage-button-middle > [class*="stage-header_stage-button_"] {
-  border-radius: 0;
-}
-
-[dir="ltr"] .sa-stage-button-middle > [class*="stage-header_stage-button_"] {
-  border-left: none;
-}
-
-[dir="rtl"] .sa-stage-button-middle > [class*="stage-header_stage-button_"] {
-  border-right: none;
+.sa-hide-stage-button [class*="stage-header_stage-button-icon_"] {
+  /* Preserve aspect ratio */
+  height: auto;
 }
 
 .sa-stage-hidden [class*="blocks_blocks_"] .injectionDiv,
@@ -60,14 +53,6 @@
 [dir="rtl"] .sa-stage-hidden [class*="stage-header_stage-size-row"] {
   right: auto;
   left: 0.5rem;
-}
-
-.sa-stage-hidden
-  /* specificity --> */ [class*="stage-header_stage-size-row_"] /* <-- specificity */
-  [class*="stage-header_stage-button_"]:not(.sa-hide-stage-button)
-  [class*="stage-header_stage-button-icon_"] {
-  /* makes small and large stage buttons appear unselected */
-  filter: var(--editorDarkMode-accent-desaturateFilter, saturate(0));
 }
 
 .sa-stage-hidden-outer .scratchEyedropper {

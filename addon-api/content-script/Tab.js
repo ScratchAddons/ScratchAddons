@@ -31,6 +31,7 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get clientVersion() {
+    if (location.origin !== "https://scratch.mit.edu") return "scratch-www"; // scratchr2 cannot be self-hosted
     if (!this._clientVersion)
       this._clientVersion = document.querySelector("meta[name='format-detection']")
         ? "scratch-www"
@@ -283,6 +284,18 @@ export default class Tab extends Listenable {
    * @returns {string} Hashed class names.
    */
   scratchClass(...args) {
+    const isProject =
+      location.pathname.split("/")[1] === "projects" &&
+      !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
+    const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
+    if (!isProject && !isScratchGui) {
+      scratchAddons.console.warn("addon.tab.scratchClass() was used outside a project page");
+      return "";
+    }
+
+    if (!this._calledScratchClassReady)
+      throw new Error("Wait until addon.tab.scratchClassReady() resolves before using addon.tab.scratchClass");
+
     let res = "";
     args
       .filter((arg) => typeof arg === "string")
@@ -294,7 +307,7 @@ export default class Tab extends Listenable {
                 className.startsWith(classNameToFind + "_") && className.length === classNameToFind.length + 6
             ) || "";
         } else {
-          res += `scratchAddonsScratchClass/${classNameToFind}`;
+          throw new Error("addon.tab.scratchClass call failed. Class names are not ready yet");
         }
         res += " ";
       });
@@ -307,6 +320,21 @@ export default class Tab extends Listenable {
     // Sanitize just in case
     res = res.replace(/"/g, "");
     return res;
+  }
+
+  scratchClassReady() {
+    // Make sure to return a resolved promise if this is not a project!
+    const isProject =
+      location.pathname.split("/")[1] === "projects" &&
+      !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
+    const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
+    if (!isProject && !isScratchGui) return Promise.resolve();
+
+    this._calledScratchClassReady = true;
+    if (scratchAddons.classNames.loaded) return Promise.resolve();
+    return new Promise((resolve) => {
+      window.addEventListener("scratchAddonsClassNamesReady", resolve, { once: true });
+    });
   }
 
   /**

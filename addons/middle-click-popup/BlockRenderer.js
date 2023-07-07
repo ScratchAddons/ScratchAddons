@@ -215,17 +215,17 @@ function createBlockContainer() {
  * @param {SVGElement} container The block container, created by {@link createBlockContainer}.
  * @param {object} shape An object containing information of the shape of the block to be created. From the {@link BlockShapes} object.
  * @param {string} categoryClass The category of the block, used for filling the background.
- * @param {string} fillVar The name of the CSS variable used for the fill.
- * @param {string} strokeVar The name of the CSS variable used for the stroke.
+ * @param {string} fill
+ * @param {string} stroke
  * @param {number} width The width of the background of the block.
  */
-function createBlockComponent(container, shape, categoryClass, fillVar, strokeVar, width) {
+function createBlockComponent(container, shape, categoryClass, fill, stroke, width) {
   if (width < shape.minWidth) width = shape.minWidth;
   container.classList.add("sa-block-color", categoryClass);
   const background = container.children[0];
   let style = "";
-  if (fillVar) style += `fill: var(${fillVar});`;
-  if (strokeVar) style += `stroke: var(${strokeVar});`;
+  if (fill) style += `fill: var(${fill});`;
+  if (stroke) style += `stroke: var(${stroke});`;
   background.setAttribute("style", style);
   background.setAttribute("d", shape.backgroundPath(width));
   return new BlockComponent(
@@ -237,7 +237,7 @@ function createBlockComponent(container, shape, categoryClass, fillVar, strokeVa
   );
 }
 
-function createBackedTextedComponent(text, container, shape, categoryClass, fillVar, strokeVar, textVar) {
+function createBackedTextedComponent(text, container, shape, categoryClass, fill, stroke, textVar) {
   const blockContainer = createBlockContainer();
   container.appendChild(blockContainer);
   const textElement = createTextComponent(text, textVar, blockContainer);
@@ -245,14 +245,7 @@ function createBackedTextedComponent(text, container, shape, categoryClass, fill
     textElement.dom.setAttribute("x", (shape.minWidth - textElement.width) / 2);
   }
 
-  const blockElement = createBlockComponent(
-    blockContainer,
-    shape,
-    categoryClass,
-    fillVar,
-    strokeVar,
-    textElement.width
-  );
+  const blockElement = createBlockComponent(blockContainer, shape, categoryClass, fill, stroke, textElement.width);
   return blockElement;
 }
 
@@ -279,7 +272,8 @@ export default function renderBlock(block, container) {
 function _renderBlock(block, container, parentCategory, isVertical) {
   const blockContainer = container.appendChild(createBlockContainer());
   const shape = getShapeInfo(block.typeInfo.shape, isVertical);
-  const categoryClass = "sa-block-color-" + block.typeInfo.category;
+  const category = block.typeInfo.category;
+  const categoryClass = "sa-block-color-" + category.name;
 
   let xOffset = 0;
   let inputIdx = 0;
@@ -301,8 +295,8 @@ function _renderBlock(block, container, parentCategory, isVertical) {
             blockContainer,
             BlockShapes.TextInput,
             categoryClass,
-            "--sa-block-background-secondary",
-            "--sa-block-colored-background-secondary",
+            `--sa-block-background-secondary, ${category.colorSecondary}`,
+            `--sa-block-background-tertiary, ${category.colorTertiary}`,
             "--sa-block-text"
           );
         } else {
@@ -311,8 +305,8 @@ function _renderBlock(block, container, parentCategory, isVertical) {
             blockContainer,
             BlockShapes.SquareInput,
             categoryClass,
-            "--sa-block-background-primary",
-            "--sa-block-background-tertiary",
+            `--sa-block-background-primary, ${category.colorPrimary}`,
+            `--sa-block-background-tertiary, ${category.colorTertiary}`,
             "--sa-block-text"
           );
         }
@@ -322,8 +316,8 @@ function _renderBlock(block, container, parentCategory, isVertical) {
           blockContainer,
           BlockShapes.BooleanInput,
           categoryClass,
-          "--sa-block-field-background",
-          "--sa-block-field-background",
+          `--sa-block-field-background, ${category.colorTertiary}`,
+          `--sa-block-field-background, ${category.colorTertiary}`,
           "--sa-block-text"
         );
       } else if (blockPart instanceof BlockInputBlock) {
@@ -332,8 +326,8 @@ function _renderBlock(block, container, parentCategory, isVertical) {
           blockContainer,
           BlockShapes.HorizontalBlock,
           categoryClass,
-          "--sa-block-field-background",
-          "--sa-block-background-tertiary",
+          `--sa-block-field-background, ${category.colorTertiary}`,
+          `--sa-block-field-background, ${category.colorTertiary}`,
           "--sa-block-text"
         );
       } else {
@@ -342,8 +336,8 @@ function _renderBlock(block, container, parentCategory, isVertical) {
           blockContainer,
           BlockShapes.TextInput,
           categoryClass,
-          "--sa-block-input-color",
-          "--sa-block-background-tertiary",
+          `--sa-block-input-color, ${category.colorColor}`,
+          `--sa-block-background-tertiary, ${category.colorTertiary}`,
           "--sa-block-input-text"
         );
         component.dom.classList.add("blocklyNonEditableText");
@@ -371,8 +365,8 @@ function _renderBlock(block, container, parentCategory, isVertical) {
     blockContainer,
     shape,
     categoryClass,
-    "--sa-block-background-primary",
-    "--sa-block-background-tertiary",
+    `--sa-block-background-primary, ${category.colorPrimary}`,
+    `--sa-block-background-tertiary, ${category.colorTertiary}`,
     xOffset - BLOCK_ELEMENT_SPACING
   );
 }
