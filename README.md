@@ -46,16 +46,16 @@ Other extensions and even forks of Scratch can also provide their users with mos
 ### Structure
 
 - `.github`: GitHub templates, workflows and contributing files.
-- `_locales`: Translations for the settings page, popup and everything else except addons.
-- `addon-api`: The code for the `addon-*` APIs.
-- `addons-l10n`: Translations for strings userscripts add to a page. Each addon has its own file.
-- `addons`: The addons themselves. Each addon has it own directory with an `addon.json` and an entry in `addons.json`.
+- `_locales`: Translations everything except addons strings.
+- `addon-api`: The `addon.*` JavaScript APIs.
+- `addons-l10n`: Translations for strings added to the website by addons. Each addon has its own file.
+- `addons`: The addons themselves. Each addon has it own directory with an addon manifest and an entry in `addons.json`.
 - `background`: Background scripts for handling things such as addon settings.
-- `content-scripts`: The main extension script and addon injector.
-- `images`: Logos, screenshots and icons. Images only used by addons go in that addon's directory instead.
-- `libraries`: Libraries for things such as handling the global theme. There are also some third-party libraries.
-- `popups`: The code for popup addons, but not the addons tab. The `addon.json` for popup addons are still located in the `addons` directory.
-- `webpages`: The settings page and popup.
+- `content-scripts`: The main extension script (cs.js) and the addon injector. A few non-togglable things are also included in `cs.js`
+- `images`: Logos, screenshots and icons. Images used only by addons go in that addon's directory instead.
+- `libraries`: Libraries for things such as handling the global theme and third-party libraries.
+- `popups`: The code for popup addons, excluding the addons tab. The addon manifests for popup addons are still located in the `addons` directory.
+- `webpages`: The settings page, popup and addons tab.
 
 ## Installation
 
@@ -64,6 +64,17 @@ No build is required, just download the source and load it into a web browser.
 ```
 git clone https://github.com/ScratchAddons/ScratchAddons.git
 ```
+
+### Loading the extension
+
+#### Chrome
+
+To load the extension into a Chromium-based browser, go to `chrome://extensions`, turn on developer mode, click "Load unpacked" and select the `ScratchAddons` folder.
+
+#### Firefox
+
+Go to `about:debugging` click "This Firefox", click "Load Temporary Add-on..." and select the `manifest.json` file in the `ScratchAddons` folder.
+
 
 For other installation methods and browser support, check [the documentation](https//scratchaddons.com/docs/getting-started/installing).
 
@@ -83,11 +94,11 @@ Use this method on Google Chrome, Microsoft Edge, Opera, Brave, Vivaldi and othe
 
 Note that Firefox extensions loaded this way are removed when the browser is closed.
 
-## Contribute
+## Contributing
 
 ### Suggestions and bug reports
 
-If you found a bug or have a suggestion, checking for duplicates and [create an issue](https://github.com/ScratchAddons/ScratchAddons/issues/new/choose) if there isn't one already.
+If you found a bug or have a suggestion, check for duplicates and [create an issue](https://github.com/ScratchAddons/ScratchAddons/issues/new/choose) if there isn't one already.
 
 ### Code
 
@@ -95,7 +106,7 @@ Before contributing code, please read our [contributing guidelines](https://gith
 
 Follow the installation instructions above to setup the extension. Please only submit pull requests for open issues and test your changes.
 
-We recommend Visual Studio Code as the code editor.
+We recommend using Visual Studio Code as the code editor.
 
 ### Translations
 
@@ -103,7 +114,7 @@ Translations are handled by Transifex. If you are interested in translating the 
 
 ### Documentation
 
-Most documentation is located in the [website-v2](https://github.com/ScratchAddons/website-v2) repository in [/content/docs](https://github.com/ScratchAddons/website-v2/tree/master/content/docs) as markdown files.
+Most documentation is located in the [website-v2](https://github.com/ScratchAddons/website-v2) repository in [/content/docs](https://github.com/ScratchAddons/website-v2/tree/master/content/docs) as markdown files. If you know English and how the extension works, improving the documentation would be appreciated.
 
 ## License
 
