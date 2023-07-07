@@ -48,10 +48,10 @@ export default async ({ addon, console, msg }) => {
     setTimeout(() => {
       const color = getColor(element);
       const saColorPickerColor = element?.parentElement?.querySelector(
-        ".sa-color-picker-color.sa-color-picker-paint-color"
+        ".sa-color-picker-color.sa-color-picker-paint-color",
       );
       const saColorPickerText = element?.parentElement?.querySelector(
-        ".sa-color-picker-text.sa-color-picker-paint-text"
+        ".sa-color-picker-text.sa-color-picker-paint-text",
       );
       if (!saColorPickerColor || !saColorPickerText) return;
       saColorPickerColor.value = color || "#000000";
@@ -93,7 +93,7 @@ export default async ({ addon, console, msg }) => {
       value: defaultColor || "",
     });
     saColorPickerColor.addEventListener("input", () =>
-      rateLimiter.limit(() => setColor((saColorPickerText.value = saColorPickerColor.value), element))
+      rateLimiter.limit(() => setColor((saColorPickerText.value = saColorPickerColor.value), element)),
     );
     saColorPickerText.addEventListener("change", () => {
       const { value } = saColorPickerText;
