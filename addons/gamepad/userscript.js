@@ -1,4 +1,5 @@
 import GamepadLib from "./gamepadlib.js";
+import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
 
 export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
@@ -286,19 +287,7 @@ export default async function ({ addon, console, msg }) {
     editor.focus();
   });
 
-  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
-    document.body.classList.add("sa-gamepad-small");
-  }
-  addon.tab.redux.initialize();
-  addon.tab.redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type === "scratch-gui/StageSize/SET_STAGE_SIZE") {
-      if (e.detail.action.stageSize === "small") {
-        document.body.classList.add("sa-gamepad-small");
-      } else {
-        document.body.classList.remove("sa-gamepad-small");
-      }
-    }
-  });
+  addSmallStageClass();
 
   const virtualCursorElement = document.createElement("img");
   virtualCursorElement.hidden = true;
@@ -418,7 +407,8 @@ export default async function ({ addon, console, msg }) {
 
   while (true) {
     const target = await addon.tab.waitForElement(
-      '[class^="stage-header_stage-size-row"], [class^="stage-header_stage-menu-wrapper"] > [class^="button_outlined-button"]',
+      // Full screen button
+      '[class^="stage-header_stage-size-row"] [class^="button_outlined-button"], [class*="stage-header_unselect-wrapper_"] > [class^="button_outlined-button"]',
       {
         markAsSeen: true,
         reduxEvents: [
@@ -430,7 +420,7 @@ export default async function ({ addon, console, msg }) {
       }
     );
     container.dataset.editorMode = addon.tab.editorMode;
-    if (target.className.includes("stage-size-row")) {
+    if (target.closest('[class^="stage-header_stage-size-row"]')) {
       addon.tab.appendToSharedSpace({ space: "stageHeader", element: container, order: 1 });
     } else {
       addon.tab.appendToSharedSpace({ space: "fullscreenStageHeader", element: container, order: 0 });

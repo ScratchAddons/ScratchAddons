@@ -242,14 +242,15 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_33": {
-    "message": "New addon: \"highlight project creator in comments\", which adds a badge next to the project creator in project comments sections. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_33_2": {
+    "message": "Scratch just released an update that changes some of the colors around the website. If you'd like to update your settings to use these new colors, go back, or otherwise customize the colors, you can reset or change any themes from $1.",
+    "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_33": {
-    "message": "Multiple addons have been adjusted in preparation for the upcoming Scratch changes. This update also brings performance and stability improvements."
+  "extensionUpdateInfo2_v1_33_2": {
+    "message": "Scratch Addons' developers have been working hard to support the changes, but you might still experience small bugs for some time."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",
