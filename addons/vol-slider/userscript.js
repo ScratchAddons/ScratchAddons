@@ -1,4 +1,5 @@
 import { setup, setVolume, onVolumeChanged, getVolume, setMuted, setUnmutedVolume, isMuted } from "./module.js";
+import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
 
 export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
@@ -12,7 +13,7 @@ export default async function ({ addon, console }) {
 
   const updateIcon = () => {
     const newVolume = getVolume();
-    if (newVolume == 0) {
+    if (newVolume === 0) {
       icon.dataset.icon = "mute";
     } else if (newVolume < 0.5) {
       icon.dataset.icon = "quiet";
@@ -48,26 +49,17 @@ export default async function ({ addon, console }) {
 
   const container = document.createElement("div");
   container.className = "sa-vol-slider";
-  container.appendChild(icon);
-  container.appendChild(slider);
+  // Nested elements are needed for hover animation - see hover.css
+  const innerContainer = document.createElement("div");
+  innerContainer.className = "sa-vol-slider-inner";
+  innerContainer.appendChild(icon);
+  innerContainer.appendChild(slider);
+  container.appendChild(innerContainer);
   addon.tab.displayNoneWhileDisabled(container, {
     display: "flex",
   });
 
-  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
-    document.body.classList.add("sa-vol-slider-small");
-  }
-  document.addEventListener(
-    "click",
-    (e) => {
-      if (e.target.closest("[class*='stage-header_stage-button-first']")) {
-        document.body.classList.add("sa-vol-slider-small");
-      } else if (e.target.closest("[class*='stage-header_stage-button-last']")) {
-        document.body.classList.remove("sa-vol-slider-small");
-      }
-    },
-    { capture: true }
-  );
+  addSmallStageClass();
 
   addon.self.addEventListener("disabled", () => {
     setVolume(1);

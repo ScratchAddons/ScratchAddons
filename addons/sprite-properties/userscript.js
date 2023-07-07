@@ -35,12 +35,14 @@ export default async function ({ addon, console, msg }) {
       setPropertiesPanelVisible(false);
     }
   }
+  const isDirectionPopoverOpen = () =>
+    document.querySelector("body > div.Popover > div > div > [class*=direction-picker_button-row_]");
   // Close properties panel when mouse leaves the entire sprite panel
   document.body.addEventListener(
     "mouseleave",
     (e) => {
-      if (e.target.matches('[class*="sprite-selector_sprite-selector_2KgCX"]')) {
-        autoHidePanel();
+      if (e.target.matches('[class*="sprite-selector_sprite-selector_"]')) {
+        if (!isDirectionPopoverOpen()) autoHidePanel();
       }
     },
     {
@@ -111,18 +113,12 @@ export default async function ({ addon, console, msg }) {
     document.body.classList.toggle("sa-sprite-properties-wide-locale", isWideLocale);
   }
 
-  document.addEventListener(
-    "click",
-    (e) => {
-      if (
-        e.target.closest("[class*='stage-header_stage-button-first']") ||
-        e.target.closest("[class*='stage-header_stage-button-last']")
-      ) {
-        setTimeout(updateWideLocaleMode);
-      }
-    },
-    { capture: true }
-  );
+  addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (e.detail.action.type === "scratch-gui/StageSize/SET_STAGE_SIZE") {
+      setTimeout(updateWideLocaleMode);
+    }
+  });
 
   while (true) {
     propertiesPanel = await addon.tab.waitForElement('[class^="sprite-info_sprite-info_"]', {

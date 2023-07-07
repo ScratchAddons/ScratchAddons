@@ -1,9 +1,5 @@
 [class*="loader_background_"] {
-  background-color: var(--darkWww-navbar);
-  color: var(--darkWww-navbar-text);
-}
-[class*="loader_background_"] img {
-  filter: var(--darkWww-navbar-filter);
+  background-color: var(--darkWww-box-embedLoader);
 }
 [class*="stage-wrapper_stage-wrapper_"][class*="stage-wrapper_full-screen_"],
 [class*="stage-header_stage-header-wrapper-overlay_"] {
