@@ -6,7 +6,7 @@
 import * as SABlocks from "../../addon-api/content-script/blocks.js";
 
 /**
- * A neumeric value to represent the type of an {@link BlockInput}
+ * A numeric value to represent the type of an {@link BlockInput}
  * @readonly
  * @enum {number}
  */
@@ -36,7 +36,7 @@ export class BlockInput {
     this.inputIdx = inputIdx;
     /**
      * The index of this input in the workspace version of the block's field array.
-     * The speical case of -1 means that in the workspace version, this input is inside a sub-block,
+     * The special case of -1 means that in the workspace version, this input is inside a sub-block,
      * that has been abstracted away.
      *  @type {number}
      */
