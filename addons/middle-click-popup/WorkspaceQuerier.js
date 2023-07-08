@@ -117,7 +117,7 @@ class Token {
  */
 class TokenProvider {
   constructor(shouldCache) {
-    if (this.constructor == TokenProvider) throw new Error("Abstract classes can't be instantiated.");
+    if (this.constructor === TokenProvider) throw new Error("Abstract classes can't be instantiated.");
     /**
      * Can the results of this token provider be stored? True
      * if {@link parseTokens} will always return the same thing for the same inputs or if
@@ -134,7 +134,7 @@ class TokenProvider {
    * @yields {Token} All the tokens found
    * @abstract
    */
-  *parseTokens(query, idx) {
+  *parseTokens(query, idx) { // eslint-disable-line require-yield
     throw new Error("Sub-class must override abstract method.");
   }
 }
@@ -325,7 +325,7 @@ class TokenType extends TokenProvider {
   constructor(dontCache = false) {
     super(!dontCache);
 
-    if (this.constructor == TokenType) throw new Error("Abstract classes can't be instantiated.");
+    if (this.constructor === TokenType) throw new Error("Abstract classes can't be instantiated.");
 
     /**
      * If we see this token, should we know what block it's connected to?
@@ -457,7 +457,7 @@ class TokenTypeStringEnum extends TokenType {
   }
 
   *parseTokens(query, idx) {
-    outer: for (let valueIdx = 0; valueIdx < this.values.length; valueIdx++) {
+    for (let valueIdx = 0; valueIdx < this.values.length; valueIdx++) {
       const valueInfo = this.values[valueIdx];
       let yieldedToken = false;
 
@@ -508,7 +508,7 @@ class TokenTypeStringLiteral extends TokenType {
   *parseTokens(query, idx) {
     // First, look for strings in quotes
     let quoteEnd = -1;
-    if (query.str[idx] === '"' || query.str[idx] == '"') {
+    if (query.str[idx] === '"' || query.str[idx] === '"') {
       const quote = query.str[idx];
       for (let i = idx + 1; i <= query.length; i++) {
         if (query.str[i] === "\\") {
