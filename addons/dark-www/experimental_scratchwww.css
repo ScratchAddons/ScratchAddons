@@ -719,6 +719,16 @@ body:not(.sa-body-editor) input[type="checkbox"].formik-checkbox:not(:checked),
   border-color: rgba(0, 0, 0, 0.15);
 }
 
+/* Message count */
+#navigation .messages .message-count.show {
+  background-color: var(--darkWww-messageIndicatorColor);
+  color: var(--darkWww-messageIndicatorColor-text);
+}
+.messages-header-unread {
+  background-color: var(--darkWww-messageIndicatorOnMessagesPage);
+  color: var(--darkWww-messageIndicatorOnMessagesPage-text);
+}
+
 /* Miscellaneous styles */
 
 :root {
