@@ -33,7 +33,7 @@ export default async function ({ addon, console }) {
           duration: 250,
           fill: "forwards",
           easing: "ease",
-        },
+        }
       );
       allAnimations.set(element, animation);
     }

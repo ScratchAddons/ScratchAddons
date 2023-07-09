@@ -52,7 +52,7 @@ export default async function ({ template }) {
           accentTransparentText: textColor(
             this.settings.accent,
             "rgba(87, 94, 117, 0.75)",
-            "rgba(255, 255, 255, 0.75)",
+            "rgba(255, 255, 255, 0.75)"
           ),
           accentArtboard: this.settings.affectPaper ? this.settings.accent : "#ffffff",
           accentCheckerboard: this.settings.affectPaper
@@ -62,16 +62,16 @@ export default async function ({ template }) {
                   this.settings.accent,
                   alphaBlend(this.settings.accent, multiply(makeHsv(this.settings.primary, 1, 0.67), { a: 0.15 })),
                   alphaBlend(this.settings.accent, multiply(makeHsv(this.settings.primary, 0.5, 1), { a: 0.15 })),
-                  112, // threshold: #707070
+                  112 // threshold: #707070
                 ),
-                { a: 0.55 },
+                { a: 0.55 }
               )
             : "#d9e3f28c",
           tabText: textColor(this.settings.tab, "rgba(87, 94, 117, 0.75)", "rgba(255, 255, 255, 0.75)"),
           categoryMenuSelection: textColor(
             this.settings.categoryMenu,
             "rgba(87, 124, 155, 0.13)",
-            "rgba(255, 255, 255, 0.05)",
+            "rgba(255, 255, 255, 0.05)"
           ),
           primaryTransparent: multiply(this.settings.primary, { a: 0.35 }),
           inputTransparent: multiply(this.settings.input, { a: 0.25 }),
