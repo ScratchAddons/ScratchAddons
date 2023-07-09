@@ -17,7 +17,7 @@ const onReactContextMenu = function (e) {
     if (!mInternalId) return;
     ctxMenu = Array.prototype.find.call(
       document.querySelectorAll("body > nav.react-contextmenu"),
-      (candidate) => candidate[this.traps.getInternalKey(candidate)]?.return?.stateNode?.props?.id === mInternalId
+      (candidate) => candidate[this.traps.getInternalKey(candidate)]?.return?.stateNode?.props?.id === mInternalId,
     );
     if (!ctxMenu) return;
     const props = ctxTarget[this.traps.getInternalKey(ctxTarget)]?.return?.return?.return?.stateNode?.props;
@@ -73,7 +73,7 @@ const onReactContextMenu = function (e) {
           detail: {
             action: "REACT_CONTEXTMENU_HIDE",
           },
-        })
+        }),
       );
       item.callback(ctx);
     });

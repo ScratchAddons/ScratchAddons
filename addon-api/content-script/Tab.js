@@ -304,7 +304,7 @@ export default class Tab extends Listenable {
           res +=
             scratchAddons.classNames.arr.find(
               (className) =>
-                className.startsWith(classNameToFind + "_") && className.length === classNameToFind.length + 6
+                className.startsWith(classNameToFind + "_") && className.length === classNameToFind.length + 6,
             ) || "";
         } else {
           throw new Error("addon.tab.scratchClass call failed. Class names are not ready yet");
@@ -345,7 +345,7 @@ export default class Tab extends Listenable {
    */
   displayNoneWhileDisabled(el, { display = "" } = {}) {
     el.style.display = `var(--${this._addonId.replace(/-([a-z])/g, (g) =>
-      g[1].toUpperCase()
+      g[1].toUpperCase(),
     )}-_displayNoneWhileDisabledValue${display ? ", " : ""}${display})`;
   }
 
@@ -454,7 +454,7 @@ export default class Tab extends Listenable {
         from: () => [],
         until: function () {
           let reportButton = scope.querySelector(
-            ".postfootright > ul > li.postreport, .postfootright > ul > li.pseudopostreport"
+            ".postfootright > ul > li.postreport, .postfootright > ul > li.pseudopostreport",
           );
           if (!reportButton) {
             // User is logged out, so there's no report button on the post footer
@@ -473,7 +473,7 @@ export default class Tab extends Listenable {
         element: () => scope.querySelector(".postfootright > ul"),
         from: function () {
           let reportButton = scope.querySelector(
-            ".postfootright > ul > li.postreport, .postfootright > ul > li.pseudopostreport"
+            ".postfootright > ul > li.postreport, .postfootright > ul > li.pseudopostreport",
           );
           if (!reportButton) {
             // User is logged out. See comment on forumsBeforePostReport space
@@ -549,13 +549,13 @@ export default class Tab extends Listenable {
         from: () => {
           return Array.prototype.filter.call(
             scope.children,
-            (c) => c.textContent === this.scratchMessage("gui.spriteSelectorItem.contextMenuExport")
+            (c) => c.textContent === this.scratchMessage("gui.spriteSelectorItem.contextMenuExport"),
           );
         },
         until: () => {
           return Array.prototype.filter.call(
             scope.children,
-            (c) => c.textContent === this.scratchMessage("gui.spriteSelectorItem.contextMenuDelete")
+            (c) => c.textContent === this.scratchMessage("gui.spriteSelectorItem.contextMenuDelete"),
           );
         },
       },
@@ -564,7 +564,7 @@ export default class Tab extends Listenable {
         from: () => {
           return Array.prototype.filter.call(
             scope.children,
-            (c) => c.textContent === this.scratchMessage("gui.spriteSelectorItem.contextMenuDelete")
+            (c) => c.textContent === this.scratchMessage("gui.spriteSelectorItem.contextMenuDelete"),
           );
         },
         until: () => [],

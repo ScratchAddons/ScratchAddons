@@ -33,7 +33,7 @@ export default async function ({ addon, console }) {
         const flyoutWorkspace = flyout.getWorkspace();
         ScratchBlocks.Xml.clearWorkspaceAndLoadFromXml(
           ScratchBlocks.Xml.workspaceToDom(flyoutWorkspace),
-          flyoutWorkspace
+          flyoutWorkspace,
         );
         workspace.getToolbox().refreshSelection();
         workspace.toolboxRefreshEnabled_ = true;
