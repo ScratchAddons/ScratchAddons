@@ -8,7 +8,7 @@
       "link": "https://github.com/CST1229/"
     }
   ],
-  "tags": ["editor"],
+  "tags": ["editor", "codeEditor", "theme"],
   "userscripts": [
     {
       "url": "userscript.js",
@@ -31,5 +31,5 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.30.0"
+  "versionAdded": "1.34.0"
 }
