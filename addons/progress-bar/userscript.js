@@ -107,7 +107,7 @@ export default async function ({ addon, console, msg }) {
               new Response(xhr.response, {
                 status: xhr.status,
                 statusText: xhr.statusText,
-              }),
+              })
             );
           xhr.onerror = () => reject(new Error("xhr failed"));
           xhr.onloadend = () => setProgress(1);
