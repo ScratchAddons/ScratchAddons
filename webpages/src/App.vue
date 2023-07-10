@@ -217,7 +217,7 @@ import AddonBody from "./components/AddonBody.vue";
 import AddonGroupHeader from "./components/AddonGroupHeader.vue";
 import CategorySelector from "./components/CategorySelector.vue";
 import { ref } from "vue";
-const browserLevelPermissions = ["notifications"];
+const browserLevelPermissions = ["notifications"]; // also update in serialize.js if needed
 if (typeof browser !== "undefined") browserLevelPermissions.push("clipboardWrite");
 let grantedOptionalPermissions = [];
 const updateGrantedPermissions = () =>

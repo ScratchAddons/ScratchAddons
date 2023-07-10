@@ -2,6 +2,7 @@ const promisify =
   (callbackFn) =>
   (...args) =>
     new Promise((resolve) => callbackFn(...args, resolve));
+const browserLevelPermissions = ["notifications"];
 
 export const deserializeSettings = async (str, manifests, confirmElem) => {
   const obj = JSON.parse(str);
