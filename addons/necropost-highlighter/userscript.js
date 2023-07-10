@@ -73,7 +73,7 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   function onDisabled() {
-    detatchMutationObserverOnStandardSite();
+    detachMutationObserverOnStandardSite();
     removeAnyPriorHighlights();
   }
 
@@ -89,7 +89,7 @@ export default async function ({ addon, global, console, msg }) {
     }
   }
 
-  function detatchMutationObserverOnStandardSite() {
+  function detachMutationObserverOnStandardSite() {
     if (!isMobileSite) {
       tableBodyMutationObserver.takeRecords(); // and discard
       tableBodyMutationObserver.disconnect();

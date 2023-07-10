@@ -14,7 +14,7 @@ function updateCssVariables(node, addon) {
     node.style.setProperty("--darkWww-page", "#ffffff");
     node.style.setProperty("--darkWww-page-scratchr2Text", "#322f31");
     node.style.setProperty("--darkWww-page-colorScheme", "light");
-    node.style.setProperty("--darkWww-link-scratchr2", "#1aa0d8");
+    node.style.setProperty("--darkWww-link", "#855cd6");
     node.style.setProperty("--darkWww-gray-scratchr2", "#f7f7f7");
     node.style.setProperty("--darkWww-gray-scratchr2Text", "#322f31");
     node.style.setProperty("--darkWww-border-15", "#cccccc");
@@ -25,15 +25,16 @@ function updateCssVariables(node, addon) {
   node.style.setProperty("--darkWww-page", addon.settings.get("box"));
   node.style.setProperty("--darkWww-page-scratchr2Text", textColor(addon.settings.get("box"), "#322f31"));
   node.style.setProperty("--darkWww-page-colorScheme", textColor(addon.settings.get("box"), "light", "dark"));
-  node.style.setProperty("--darkWww-link-scratchr2", multiply(addon.settings.get("link"), { r: 0.66, b: 0.85 }));
+  const linkColor = addon.settings.get("link");
+  node.style.setProperty("--darkWww-link-scratchr2", linkColor.startsWith("#4d97ff") ? "#1aa0d8" : linkColor);
   node.style.setProperty(
     "--darkWww-gray-scratchr2",
     textColor(
       addon.settings.get("gray"),
       brighten(addon.settings.get("gray"), { r: 0.62, g: 0.62, b: 0.62 }),
       addon.settings.get("gray"),
-      241,
-    ),
+      241
+    )
   );
   node.style.setProperty("--darkWww-gray-scratchr2Text", textColor(addon.settings.get("gray"), "#322f31"));
   node.style.setProperty("--darkWww-border-15", brighten(addon.settings.get("border"), { a: 0.94 }));
@@ -55,7 +56,7 @@ export default async function ({ addon, console }) {
           if (node.tagName === "LINK" && node.href.endsWith("djangobb_forum/css/pygments.css")) {
             preview.contentDocument.head.appendChild(createStyle(addon.self.dir + "/experimental_scratchr2.css"));
             preview.contentDocument.head.appendChild(
-              createStyle(addon.self.dir + "/pygments.css", !addon.settings.get("darkForumCode")),
+              createStyle(addon.self.dir + "/pygments.css", !addon.settings.get("darkForumCode"))
             );
           }
         }
