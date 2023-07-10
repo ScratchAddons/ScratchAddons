@@ -59,23 +59,34 @@ Other extensions and even forks of Scratch can also provide their users with mos
 
 ## Installation
 
-No build is required, just download the source and load it into a web browser.
+Building is not required unless you're working with the settings page, just download the source and load it into a web browser.
 
-```
+The best way to download the source is with Git:
+```sh
 git clone https://github.com/ScratchAddons/ScratchAddons.git
 ```
 
-### Loading the extension
+### Building the settings page
 
-#### Chrome
+To setup the Settings page for development run these commands in the `webpages` directory:
+
+```sh
+npm install
+npm run dev
+```
+
+See [/webpages/README.md](https://github.com/ScratchAddons/ScratchAddons/tree/master/webpagess#readme) for more information about settings page development.
+
+### Loading the extension (Chrome)
 
 To load the extension into a Chromium-based browser, go to `chrome://extensions`, turn on developer mode, click "Load unpacked" and select the `ScratchAddons` folder.
 
-#### Firefox
+#### Loading the extension (Firefox)
 
 Go to `about:debugging` click "This Firefox", click "Load Temporary Add-on..." and select the `manifest.json` file in the `ScratchAddons` folder.
 
-Note that Firefox extensions loaded this way are removed when the browser is closed.
+> **Note**
+> Firefox extensions loaded this way are removed when the browser is closed.
 
 
 For other installation methods and browser support, check [the documentation](https//scratchaddons.com/docs/getting-started/installing).
