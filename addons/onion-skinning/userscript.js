@@ -235,7 +235,7 @@ export default async function ({ addon, console, msg }) {
           new Promise((resolve, reject) => {
             item.on("load", () => resolve());
             item.on("error", () => reject(new Error("Raster inside SVG failed to load")));
-          })
+          }),
         );
       }
     });
@@ -284,7 +284,7 @@ export default async function ({ addon, console, msg }) {
           ctx,
           new paper.Base({
             matrices: [matrix],
-          })
+          }),
         );
         ctx.restore();
         this.matrix.reset();
@@ -489,7 +489,7 @@ export default async function ({ addon, console, msg }) {
           } else {
             throw new Error(`Unknown data format: ${onionCostume.dataFormat}`);
           }
-        })
+        }),
       );
 
       // Make sure we haven't been cancelled
