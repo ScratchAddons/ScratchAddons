@@ -75,24 +75,10 @@ To load the extension into a Chromium-based browser, go to `chrome://extensions`
 
 Go to `about:debugging` click "This Firefox", click "Load Temporary Add-on..." and select the `manifest.json` file in the `ScratchAddons` folder.
 
+Note that Firefox extensions loaded this way are removed when the browser is closed.
+
 
 For other installation methods and browser support, check [the documentation](https//scratchaddons.com/docs/getting-started/installing).
-
-### Load the extension (Chrome)
-
-Use this method on Google Chrome, Microsoft Edge, Opera, Brave, Vivaldi and other Chromium-based browsers.
-
-1. Type `chrome://extensions` into your address bar to open the Extension Management page.
-2. Enable the Developer Mode toggle in the top-right corner.
-3. Click the `Load unpacked` button on the top and select the extension folder which has the `manifest.json` file in it.
-
-### Load the extension (Firefox)
-
-1. Type `about:debugging` into the address bar to open the debugging page by typing it into your address bar.
-2. Click `This Firefox` on the left-hand menu.
-3. Click `Load Temporary Add-on...` and select the `manifest.json` file.
-
-Note that Firefox extensions loaded this way are removed when the browser is closed.
 
 ## Contributing
 
