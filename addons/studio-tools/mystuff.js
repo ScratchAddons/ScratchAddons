@@ -10,9 +10,9 @@ export default async function ({ addon, console, msg }) {
         if (await addon.tab.confirm(msg("leave-new"), msg("leave-confirm"))) {
           await fetch(
             `https://scratch.mit.edu/site-api/users/curators-in/${leaveButton.getAttribute(
-              "data-id"
+              "data-id",
             )}/remove/?usernames=${Scratch.INIT_DATA.LOGGED_IN_USER.model.username}`,
-            { method: "PUT", headers: { "x-csrftoken": addon.auth.csrfToken, "x-requested-with": "XMLHttpRequest" } }
+            { method: "PUT", headers: { "x-csrftoken": addon.auth.csrfToken, "x-requested-with": "XMLHttpRequest" } },
           );
           window.location.reload();
         }
