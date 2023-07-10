@@ -75,7 +75,7 @@ export default class ShowBroadcast {
         const possibleElements = document.querySelectorAll('div[class*="sprite-selector-item_sprite-name"]');
         const spriteNameElem = Array.prototype.find.call(
           possibleElements,
-          (elem) => elem.textContent === target.getName(),
+          (elem) => elem.textContent === target.getName()
         );
         if (!spriteNameElem) continue;
         elem = spriteNameElem.parentElement;

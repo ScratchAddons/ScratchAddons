@@ -14,7 +14,7 @@ export default async function ({ addon, console, msg }) {
       position: "monitor",
       order: 0,
       label: msg("copy-value"),
-    },
+    }
   );
 
   // add button to reporter bubble
@@ -64,7 +64,7 @@ export default async function ({ addon, console, msg }) {
 
     ScratchBlocks.DropDownDiv.setColour(
       ScratchBlocks.Colours.valueReportBackground,
-      ScratchBlocks.Colours.valueReportBorder,
+      ScratchBlocks.Colours.valueReportBorder
     );
     ScratchBlocks.DropDownDiv.showPositionedByBlock(this, block);
   };
