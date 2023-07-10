@@ -34,7 +34,7 @@ function getCookieValue(name, getCookie, storeId) {
       (cookie) => {
         if (cookie && cookie.value) resolve(getCookie ? cookie : cookie.value);
         else resolve(null);
-      }
+      },
     );
   });
 }
@@ -143,7 +143,7 @@ async function refetchSession(addon) {
     }
     if (request.fireEvent && request.fireEvent.addonId === addonId) {
       scratchAddons.eventTargets[request.fireEvent.target]?.forEach((t) =>
-        t.dispatchEvent(new CustomEvent(request.fireEvent.name))
+        t.dispatchEvent(new CustomEvent(request.fireEvent.name)),
       );
       return;
     }
@@ -186,5 +186,5 @@ document.head.appendChild(
       ? "../../images/icon-blue.png"
       : "../../images/icon.png",
     id: "favicon",
-  })
+  }),
 );
