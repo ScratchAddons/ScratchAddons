@@ -81,13 +81,13 @@ function getSelectionBBCode(selection) {
   for (const img of imgs) {
     if (
       /\/\/cdn\.scratch\.mit\.edu\/scratchr2\/static\/__[a-z0-9]{32}__\/djangobb_forum\/img\/smilies\/[a-z_]{3,9}\.png/.test(
-        img.src
+        img.src,
       )
     ) {
       if (smilieReplaces[img.src.split("smilies/")[1].split(".")[0]]) {
         img.parentNode.insertBefore(
           document.createTextNode(smilieReplaces[img.src.split("smilies/")[1].split(".")[0]]),
-          img
+          img,
         );
       } else img.parentNode.insertBefore(document.createTextNode(`[img${img.src}[/img]`), img);
     } else img.parentNode.insertBefore(document.createTextNode(`[img]${img.src}[/img]`), img);
@@ -174,7 +174,7 @@ function getSelectionBBCode(selection) {
     if (author) author.textContent = "";
     quote.insertAdjacentText(
       "afterbegin",
-      "[quote" + (authorText ? `=${authorText.slice(0, authorText.length - 7)}]\n` : "]\n")
+      "[quote" + (authorText ? `=${authorText.slice(0, authorText.length - 7)}]\n` : "]\n"),
     );
     quote.insertAdjacentText("beforeend", "[/quote]\n");
   }
@@ -200,7 +200,7 @@ function setup() {
         ? `[small](${getIDLink(
             id.substring(1),
             post["0"].querySelector(".box-head > .conr").textContent,
-            false
+            false,
           )})[/small]`
         : "";
     getPostText(id, post[0], window.getSelection()).then((text) => {

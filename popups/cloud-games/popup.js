@@ -50,7 +50,7 @@ const strategy = async (addon, displayedGames) =>
         console.warn("Error when fetching project JSON: ", exc);
         return null;
       });
-    })
+    }),
   ).then((projects) => {
     projects = projects.flat();
     const filtered = [];
@@ -136,7 +136,7 @@ export default async ({ addon, msg, safeMsg }) => {
             let json;
             try {
               const res = await fetch(
-                `https://clouddata.scratch.mit.edu/logs?projectid=${projectObject.id}&limit=40&offset=0`
+                `https://clouddata.scratch.mit.edu/logs?projectid=${projectObject.id}&limit=40&offset=0`,
               );
               if (res.status >= 400) {
                 if (res.status >= 500) projectObject.errorMessage = msg("server-error");

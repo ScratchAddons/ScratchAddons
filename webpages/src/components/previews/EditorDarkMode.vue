@@ -629,7 +629,10 @@
   transition: box-shadow 0.2s ease;
 }
 .edm-preview * {
-  transition: box-shadow 0.2s ease, filter 0.2s ease, border-color 0.2s ease;
+  transition:
+    box-shadow 0.2s ease,
+    filter 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .edm-preview[data-setting-hovered="page"],
@@ -1139,7 +1142,11 @@
     linear-gradient(45deg, transparent 75%, var(--accent-checkerboard) 75%),
     linear-gradient(-45deg, transparent 75%, var(--accent-checkerboard) 75%);
   background-size: 16px 16px;
-  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+  background-position:
+    0 0,
+    0 8px,
+    8px -8px,
+    -8px 0;
   border: 1px solid var(--border);
   border-radius: 3px;
 }
@@ -1383,16 +1390,16 @@ export default {
                 this.settings.accent,
                 alphaBlend(this.settings.accent, multiply(makeHsv(this.settings.primary, 1, 0.67), { a: 0.15 })),
                 alphaBlend(this.settings.accent, multiply(makeHsv(this.settings.primary, 0.5, 1), { a: 0.15 })),
-                112 // threshold: #707070
+                112, // threshold: #707070
               ),
-              { a: 0.55 }
+              { a: 0.55 },
             )
           : "#d9e3f28c",
         tabText: textColor(this.settings.tab, "rgba(87, 94, 117, 0.75)", "rgba(255, 255, 255, 0.75)"),
         categoryMenuSelection: textColor(
           this.settings.categoryMenu,
           "rgba(87, 124, 155, 0.13)",
-          "rgba(255, 255, 255, 0.05)"
+          "rgba(255, 255, 255, 0.05)",
         ),
         primaryTransparent: multiply(this.settings.primary, { a: 0.35 }),
         inputTransparent: multiply(this.settings.input, { a: 0.25 }),

@@ -61,7 +61,7 @@ export default async function ({ addon, console, msg }) {
             "button_outlined-button",
             "stage-header_stage-button",
             "stage-header_stage-button-first",
-            { others: "sa-hide-stage-button" }
+            { others: "sa-hide-stage-button" },
           )
         : addon.tab.scratchClass("toggle-buttons_button", { others: "sa-hide-stage-button" }),
       title: msg("hide-stage"),
