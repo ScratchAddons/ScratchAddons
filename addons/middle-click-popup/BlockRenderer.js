@@ -233,7 +233,7 @@ function createBlockComponent(container, shape, categoryClass, fill, stroke, wid
     shape.padding,
     width + shape.padding * 2,
     shape.snuggleWith,
-    shape.snugglePadding
+    shape.snugglePadding,
   );
 }
 
@@ -297,7 +297,7 @@ function _renderBlock(block, container, parentCategory, isVertical) {
             categoryClass,
             `--sa-block-background-secondary, ${category.colorSecondary}`,
             `--sa-block-background-tertiary, ${category.colorTertiary}`,
-            "--sa-block-text"
+            "--sa-block-text",
           );
         } else {
           component = createBackedTextedComponent(
@@ -307,7 +307,7 @@ function _renderBlock(block, container, parentCategory, isVertical) {
             categoryClass,
             `--sa-block-background-primary, ${category.colorPrimary}`,
             `--sa-block-background-tertiary, ${category.colorTertiary}`,
-            "--sa-block-text"
+            "--sa-block-text",
           );
         }
       } else if (blockPart instanceof BlockInputBoolean) {
@@ -318,7 +318,7 @@ function _renderBlock(block, container, parentCategory, isVertical) {
           categoryClass,
           `--sa-block-field-background, ${category.colorTertiary}`,
           `--sa-block-field-background, ${category.colorTertiary}`,
-          "--sa-block-text"
+          "--sa-block-text",
         );
       } else if (blockPart instanceof BlockInputBlock) {
         component = createBackedTextedComponent(
@@ -328,7 +328,7 @@ function _renderBlock(block, container, parentCategory, isVertical) {
           categoryClass,
           `--sa-block-field-background, ${category.colorTertiary}`,
           `--sa-block-field-background, ${category.colorTertiary}`,
-          "--sa-block-text"
+          "--sa-block-text",
         );
       } else {
         component = createBackedTextedComponent(
@@ -338,7 +338,7 @@ function _renderBlock(block, container, parentCategory, isVertical) {
           categoryClass,
           `--sa-block-input-color, ${category.colorColor}`,
           `--sa-block-background-tertiary, ${category.colorTertiary}`,
-          "--sa-block-input-text"
+          "--sa-block-input-text",
         );
         component.dom.classList.add("blocklyNonEditableText");
       }
@@ -367,6 +367,6 @@ function _renderBlock(block, container, parentCategory, isVertical) {
     categoryClass,
     `--sa-block-background-primary, ${category.colorPrimary}`,
     `--sa-block-background-tertiary, ${category.colorTertiary}`,
-    xOffset - BLOCK_ELEMENT_SPACING
+    xOffset - BLOCK_ELEMENT_SPACING,
   );
 }

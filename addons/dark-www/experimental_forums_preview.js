@@ -32,8 +32,8 @@ function updateCssVariables(node, addon) {
       addon.settings.get("gray"),
       brighten(addon.settings.get("gray"), { r: 0.62, g: 0.62, b: 0.62 }),
       addon.settings.get("gray"),
-      241
-    )
+      241,
+    ),
   );
   node.style.setProperty("--darkWww-gray-scratchr2Text", textColor(addon.settings.get("gray"), "#322f31"));
   node.style.setProperty("--darkWww-border-15", brighten(addon.settings.get("border"), { a: 0.94 }));
@@ -55,7 +55,7 @@ export default async function ({ addon, console }) {
           if (node.tagName === "LINK" && node.href.endsWith("djangobb_forum/css/pygments.css")) {
             preview.contentDocument.head.appendChild(createStyle(addon.self.dir + "/experimental_scratchr2.css"));
             preview.contentDocument.head.appendChild(
-              createStyle(addon.self.dir + "/pygments.css", !addon.settings.get("darkForumCode"))
+              createStyle(addon.self.dir + "/pygments.css", !addon.settings.get("darkForumCode")),
             );
           }
         }

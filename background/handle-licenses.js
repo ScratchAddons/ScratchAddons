@@ -10,14 +10,14 @@ fetch("/libraries/license-info.json")
     Object.values(o).map((name) =>
       fetch(`/libraries/licenses/${name}.txt`)
         .then((res) => res.text())
-        .then((text) => ({ name, text }))
-    )
+        .then((text) => ({ name, text })),
+    ),
   )
   .then((promises) => Promise.all(promises))
   .then((a) =>
     a.forEach(({ name, text }) => {
       licenseNameToText[name] = text;
-    })
+    }),
   );
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
