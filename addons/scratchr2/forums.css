@@ -165,12 +165,12 @@ body > #pagewrapper {
   color: var(--darkWww-page-text, #575e75);
 }
 .pagination .current {
-  background-color: var(--darkWww-button, #4d97ff);
+  background-color: var(--darkWww-button, #855cd6);
   border-color: rgba(0, 0, 0, 0.15);
   color: var(--darkWww-button-text, white);
 }
 .pagination .current:hover {
-  background-color: var(--darkWww-button-variant, #4280d7);
+  background-color: var(--darkWww-button-variant, #7854c0);
 }
 .pagination .disabled {
   opacity: 0.5;
@@ -269,13 +269,13 @@ body > #pagewrapper {
   overflow: hidden;
   border-radius: 4px;
   background-color: var(--darkWww-gray, #f2f2f2);
-  color: var(--darkWww-link, #4d97ff);
+  color: var(--darkWww-link, #855cd6);
   font-size: 16px;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 .djangobb .username:visited:not(:hover) {
-  color: var(--darkWww-link, #4d97ff);
+  color: var(--darkWww-link, #855cd6);
 }
 .djangobb .username:hover {
   width: -moz-fit-content;
@@ -297,7 +297,7 @@ body > #pagewrapper {
 }
 .postmsg ::selection {
   /* Don't break [color=transparent] hidden text */
-  background-color: var(--darkWww-button-variant, #4280d7);
+  background-color: #3373cc;
   color: var(--darkWww-button-text, white);
 }
 .postfootright > ul {

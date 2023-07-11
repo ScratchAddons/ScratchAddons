@@ -15,6 +15,13 @@ export default async function ({ addon, console, msg }) {
   setSrc();
   onPauseChanged(setSrc);
 
+  document.addEventListener("keydown", function (e) {
+    if (e.altKey && e.code === "KeyX" && !addon.self.disabled) {
+      e.preventDefault();
+      setPaused(!isPaused());
+    }
+  });
+
   while (true) {
     await addon.tab.waitForElement("[class^='green-flag']", {
       markAsSeen: true,
