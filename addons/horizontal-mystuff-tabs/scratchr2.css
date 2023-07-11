@@ -57,7 +57,7 @@
 .v-tabs li.active:hover {
   background-color: transparent;
   border: none;
-  border-bottom: 3px solid var(--darkWww-box-tabSelected, #328554);
+  border-bottom: 3px solid var(--darkWww-box-greenText, #328554);
 }
 
 .button[data-control="load-more"] {
