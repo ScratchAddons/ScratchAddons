@@ -279,7 +279,7 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
         // this is not even a color lol
         return getColor(addonId, obj.source) ? getColor(addonId, obj.true) : getColor(addonId, obj.false);
       case "map":
-        return obj.options[getColor(addonId, obj.source)];
+        return getColor(addonId, obj.options[getColor(addonId, obj.source)] ?? obj.default);
       case "textColor": {
         hex = getColor(addonId, obj.source);
         let black = getColor(addonId, obj.black);
@@ -604,7 +604,8 @@ const showBanner = () => {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     text-shadow: none;
     box-shadow: 0 0 20px 0px #0000009e;
-    line-height: 1em;`,
+    font-size: 14px;
+    line-height: normal;`,
   });
   /*
   const notifImageLink = Object.assign(document.createElement("a"), {
@@ -625,7 +626,7 @@ const showBanner = () => {
     style: "margin: 12px;",
   });
   const notifTitle = Object.assign(document.createElement("span"), {
-    style: "font-size: 18px; line-height: 24px; display: inline-block; margin-bottom: 12px;",
+    style: "font-size: 18px; line-height: normal; display: inline-block; margin-bottom: 12px;",
     textContent: chrome.i18n.getMessage("extensionUpdate"),
   });
   const notifClose = Object.assign(document.createElement("img"), {
@@ -638,7 +639,8 @@ const showBanner = () => {
   });
   notifClose.addEventListener("click", () => notifInnerBody.remove(), { once: true });
 
-  const NOTIF_TEXT_STYLE = "display: block; font-size: 14px; color: white !important;";
+  const NOTIF_TEXT_STYLE = "display: block; color: white !important;";
+  const NOTIF_LINK_STYLE = "color: #1aa0d8; font-weight: normal; text-decoration: underline;";
 
   const notifInnerText0 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE + "font-weight: bold;",
@@ -648,7 +650,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_33", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_33_2", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -660,6 +662,7 @@ const showBanner = () => {
           Object.assign(document.createElement("a"), {
             href: "https://scratch.mit.edu/scratch-addons-extension/settings?source=updatenotif",
             target: "_blank",
+            style: NOTIF_LINK_STYLE,
             textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
           }).outerHTML,
         ][Number(i) - 1]
@@ -667,7 +670,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_33"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_33_2"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -680,6 +683,7 @@ const showBanner = () => {
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
     href: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
     target: "_blank",
+    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("notifChangelog"),
   });
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
@@ -687,14 +691,17 @@ const showBanner = () => {
       chrome.runtime.getManifest().version
     }&${utm}`,
     target: "_blank",
+    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("feedback"),
   });
   const notifFooterTranslate = Object.assign(document.createElement("a"), {
     href: "https://scratchaddons.com/translate",
     target: "_blank",
+    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("translate"),
   });
-  const notifFooterLegal = Object.assign(document.createElement("small"), {
+  const notifFooterLegal = Object.assign(document.createElement("span"), {
+    style: NOTIF_TEXT_STYLE + "font-size: 12px;",
     textContent: chrome.i18n.getMessage("notAffiliated"),
   });
   notifFooter.appendChild(notifFooterChangelog);
@@ -727,6 +734,7 @@ const showBanner = () => {
 };
 
 const handleBanner = async () => {
+  if (window.frameElement) return;
   const currentVersion = chrome.runtime.getManifest().version;
   const [major, minor, _] = currentVersion.split(".");
   const currentVersionMajorMinor = `${major}.${minor}`;
@@ -753,8 +761,9 @@ if (document.readyState !== "loading") {
 const isProfile = pathArr[0] === "users" && pathArr[2] === "";
 const isStudio = pathArr[0] === "studios";
 const isProject = pathArr[0] === "projects";
+const isForums = pathArr[0] === "discuss";
 
-if (isProfile || isStudio || isProject) {
+if (isProfile || isStudio || isProject || isForums) {
   const removeReiteratedChars = (string) =>
     string
       .split("")
@@ -773,7 +782,7 @@ if (isProfile || isStudio || isProject) {
   extensionPolicyLink.innerText = chrome.i18n.getMessage("captureCommentPolicy");
   Object.assign(extensionPolicyLink.style, {
     textDecoration: "underline",
-    color: "white",
+    color: isForums ? "" : "white",
   });
   const errorMsgHtml = escapeHTML(chrome.i18n.getMessage("captureCommentError", DOLLARS)).replace(
     "$1",
@@ -877,5 +886,68 @@ if (isProfile || isStudio || isProject) {
       },
       { capture: true }
     );
+  } else if (isForums) {
+    window.addEventListener("click", (e) => {
+      const potentialPostButton = e.target.closest("button[type=submit]");
+      if (!potentialPostButton) return;
+      const form = e.target.closest("form");
+      if (!form) return;
+      if (form.hasAttribute("data-sa-send-anyway")) {
+        form.removeAttribute("data-sa-send-anyway");
+        return;
+      }
+      const existingWarning = form.parentElement.querySelector(".sa-extension-policy-warning");
+      if (existingWarning) {
+        // Do nothing. The warning automatically disappears after typing into the form.
+        e.preventDefault();
+        existingWarning.scrollIntoView({ behavior: "smooth" });
+        return;
+      }
+      const textarea = form.querySelector("textarea.markItUpEditor");
+      if (!textarea) return;
+      if (shouldCaptureComment(textarea.value)) {
+        const errorTip = document.createElement("li");
+        errorTip.classList.add("errorlist", "sa-extension-policy-warning");
+        errorTip.style.scrollMarginTop = "50px";
+        errorTip.style.fontWeight = "bold";
+        errorTip.innerHTML = errorMsgHtml + " ";
+        const sendAnyway = document.createElement("a");
+        sendAnyway.onclick = () => {
+          const res = confirm(confirmMsg);
+          if (res) {
+            form.setAttribute("data-sa-send-anyway", "");
+            form.querySelector("button[type=submit]")?.click();
+          }
+        };
+        sendAnyway.textContent = sendAnywayMsg;
+        errorTip.appendChild(sendAnyway);
+
+        const postArea = form.querySelector("label");
+        if (!postArea) return;
+        let errorList = form.querySelector("label > ul");
+        if (!errorList) {
+          const typeArea = postArea.querySelector("strong");
+          errorList = document.createElement("ul");
+          errorList.classList.add("errorlist");
+          postArea.insertBefore(errorList, typeArea);
+        }
+
+        errorList.appendChild(errorTip);
+        errorTip.scrollIntoView({ behavior: "smooth" });
+        e.preventDefault();
+
+        // Hide error after typing
+        textarea.addEventListener(
+          "input",
+          () => {
+            errorTip.remove();
+            if (errorList.querySelector("li") === null) {
+              errorList.remove();
+            }
+          },
+          { once: true }
+        );
+      }
+    });
   }
 }

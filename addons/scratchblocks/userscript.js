@@ -78,7 +78,7 @@ export default async function ({ addon, msg }) {
       scaleSVG(svg, 0.75);
 
       let container = opts.document.createElement("div");
-      container.className = "scratchblocks3";
+      container.className = "scratchblocks3 scratchblocks-style-scratch3";
       container.appendChild(svg);
 
       element.innerHTML = "";
