@@ -420,7 +420,7 @@ export default async function ({ addon, console, msg }) {
       const proccode = prototypeBlock.mutation.proccode;
       text = ScratchBlocks.ScratchMsgs.translate("PROCEDURES_DEFINITION", "define %1").replace(
         "%1",
-        formatProcedureCode(proccode),
+        formatProcedureCode(proccode)
       );
       category = "more";
     } else {
@@ -560,7 +560,7 @@ export default async function ({ addon, console, msg }) {
       logsTab.addLog(
         msg("log-msg-clone-cap", { sprite: this.getName() }),
         vm.runtime.sequencer.activeThread,
-        "internal-warn",
+        "internal-warn"
       );
     }
     var clone = ogMakeClone.call(this, ...args);
@@ -568,7 +568,7 @@ export default async function ({ addon, console, msg }) {
       logsTab.addLog(
         msg("log-msg-clone-created", { sprite: this.getName() }),
         vm.runtime.sequencer.activeThread,
-        "internal",
+        "internal"
       );
     }
     return clone;
@@ -580,7 +580,7 @@ export default async function ({ addon, console, msg }) {
       logsTab.addLog(
         msg("log-msg-broadcasted", { broadcast: optMatchFields.BROADCAST_OPTION }),
         vm.runtime.sequencer.activeThread,
-        "internal",
+        "internal"
       );
     }
     return ogStartHats.call(this, hat, optMatchFields, ...args);
@@ -635,7 +635,7 @@ export default async function ({ addon, console, msg }) {
           "fontsLoaded/SET_FONTS_LOADED",
           "scratch-gui/locales/SELECT_LOCALE",
         ],
-      },
+      }
     );
     if (addon.tab.editorMode === "editor") {
       addon.tab.appendToSharedSpace({ space: "stageHeader", element: debuggerButtonOuter, order: 0 });

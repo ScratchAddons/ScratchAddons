@@ -356,11 +356,7 @@
     linear-gradient(45deg, transparent 75%, #777 75%), linear-gradient(-45deg, transparent 75%, #777 75%);
   background-color: white;
   background-size: 6px 6px;
-  background-position:
-    0 0,
-    0 3px,
-    3px -3px,
-    -3px 0px;
+  background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
 }
 
 .setting-dropdown .color-preview span {
@@ -475,7 +471,7 @@ export default {
           return arr.some(
             (possibleValue) =>
               this.addonSettings[settingName] === possibleValue ||
-              this.$parent?.addonSettings?.[settingName] === possibleValue,
+              this.$parent?.addonSettings?.[settingName] === possibleValue
           );
         });
         if (anyMatches === true) return true;
@@ -492,7 +488,7 @@ export default {
             Object.prototype.hasOwnProperty.call(preset.values, this.setting.id) &&
             (this.setting.type === "color"
               ? preset.values[this.setting.id].toLowerCase() !== this.setting.default.toLowerCase()
-              : preset.values[this.setting.id] !== this.setting.default),
+              : preset.values[this.setting.id] !== this.setting.default)
         )
       );
     },
@@ -568,7 +564,7 @@ export default {
           acc[cur.id] = cur.default;
           return acc;
         }, {}),
-        items,
+        items
       );
       this.addonSettings[this.setting.id].push(settings);
       this.updateSettings();

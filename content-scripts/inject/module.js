@@ -69,23 +69,23 @@ const page = {
       if (info.name === "disabled") {
         document.documentElement.style.setProperty(
           `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayNoneWhileDisabledValue`,
-          "none",
+          "none"
         );
       } else if (info.name === "reenabled") {
         document.documentElement.style.removeProperty(
-          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayNoneWhileDisabledValue`,
+          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayNoneWhileDisabledValue`
         );
       }
 
       // Addon specific events, like settings change and self disabled
       const eventTarget = scratchAddons.eventTargets[info.target].find(
-        (eventTarget) => eventTarget._addonId === info.addonId,
+        (eventTarget) => eventTarget._addonId === info.addonId
       );
       if (eventTarget) eventTarget.dispatchEvent(new CustomEvent(info.name));
     } else {
       // Global events, like auth change
       scratchAddons.eventTargets[info.target].forEach((eventTarget) =>
-        eventTarget.dispatchEvent(new CustomEvent(info.name)),
+        eventTarget.dispatchEvent(new CustomEvent(info.name))
       );
     }
   },
@@ -159,7 +159,7 @@ class SharedObserver {
       this.pending.add({
         resolve,
         ...opts,
-      }),
+      })
     );
   }
 }
@@ -275,11 +275,11 @@ function loadClasses() {
           (styleSheet) =>
             !(
               styleSheet.ownerNode.textContent.startsWith(
-                "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.",
+                "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library."
               ) &&
               (styleSheet.ownerNode.textContent.includes("input_input-form") ||
                 styleSheet.ownerNode.textContent.includes("label_input-group_"))
-            ),
+            )
         )
         .map((e) => {
           try {
@@ -293,7 +293,7 @@ function loadClasses() {
         .filter((e) => e)
         .map((e) => e.match(/(([\w-]+?)_([\w-]+)_([\w\d-]+))/g))
         .filter((e) => e)
-        .flat(),
+        .flat()
     ),
   ];
   scratchAddons.classNames.loaded = true;

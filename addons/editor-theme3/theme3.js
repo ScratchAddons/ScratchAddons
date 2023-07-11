@@ -177,14 +177,14 @@ export default async function ({ addon, console, msg }) {
         fill: arrowShadowColor,
         "fill-opacity": 0.1,
         transform: "translate(0, 1.6)",
-      }),
+      })
     );
     arrow.appendChild(
       Blockly.utils.createSvgElement("path", {
         d: arrowPath,
         fill: color,
         transform: "translate(0, 1.6)",
-      }),
+      })
     );
     return arrow;
   };
@@ -473,7 +473,7 @@ export default async function ({ addon, console, msg }) {
       {
         markAsSeen: true,
         reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
-      },
+      }
     );
     // We're running in the new version of the editor that includes this menu.
 
@@ -492,7 +492,7 @@ export default async function ({ addon, console, msg }) {
         }
         e.stopPropagation();
       },
-      { capture: true },
+      { capture: true }
     );
 
     const elementToClone = colorModeSubmenu.querySelector("[class*=settings-menu_selected_]").closest("li");

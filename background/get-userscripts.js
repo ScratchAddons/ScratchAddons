@@ -5,12 +5,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.replaceTabWithUrl) chrome.tabs.update(sender.tab.id, { url: request.replaceTabWithUrl });
   else if (request.getEnabledAddons) {
     let enabled = Object.keys(scratchAddons.localState.addonsEnabled).filter(
-      (addonId) => scratchAddons.localState.addonsEnabled[addonId],
+      (addonId) => scratchAddons.localState.addonsEnabled[addonId]
     );
     const tag = request.getEnabledAddons.tag;
     if (tag) {
       enabled = enabled.filter((id) =>
-        scratchAddons.manifests.some(({ addonId, manifest }) => addonId === id && manifest.tags.includes(tag)),
+        scratchAddons.manifests.some(({ addonId, manifest }) => addonId === id && manifest.tags.includes(tag))
       );
     }
     sendResponse(enabled);
@@ -54,14 +54,14 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
                       partial: !!partialDynamicEnableBy,
                     },
                   },
-                  { frameId: 0 },
+                  { frameId: 0 }
                 );
               }
             })();
           }
         });
       }
-    }),
+    })
   );
 });
 scratchAddons.localEvents.addEventListener("addonDynamicDisable", ({ detail }) => {
@@ -84,10 +84,10 @@ scratchAddons.localEvents.addEventListener("addonDynamicDisable", ({ detail }) =
             },
           },
           { frameId: 0 },
-          () => void chrome.runtime.lastError,
+          () => void chrome.runtime.lastError
         );
       }
-    }),
+    })
   );
 });
 scratchAddons.localEvents.addEventListener("updateUserstylesSettingsChange", ({ detail }) => {
@@ -114,13 +114,13 @@ scratchAddons.localEvents.addEventListener("updateUserstylesSettingsChange", ({ 
                     dynamicDisable: manifest.dynamicDisable,
                   },
                 },
-                { frameId: 0 },
+                { frameId: 0 }
               );
             })();
           }
         });
       }
-    }),
+    })
   );
 });
 
@@ -158,7 +158,7 @@ async function getAddonData({ addonId, manifest, url }) {
                 index: i,
                 addonEnabled: style.if?.addonEnabled,
               };
-            }),
+            })
         );
       } else {
         userstyles.push({
@@ -239,7 +239,7 @@ chrome.webRequest.onBeforeRequest.addListener(
   {
     urls: ["https://scratch.mit.edu/*"],
     types: ["main_frame", "sub_frame"],
-  },
+  }
 );
 
 // It is not uncommon to cache objects that will never be used
@@ -272,7 +272,7 @@ chrome.webRequest.onResponseStarted.addListener(
   {
     urls: ["https://scratch.mit.edu/*"],
     types: ["main_frame"],
-  },
+  }
 );
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -316,7 +316,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const info = await getContentScriptInfo(request.contentScriptReady.url);
         sendResponse(info);
       },
-      { once: true },
+      { once: true }
     );
     return true;
   }
@@ -328,7 +328,7 @@ chrome.tabs.query({}, (tabs) =>
     if (tab.url) {
       chrome.tabs.sendMessage(tab.id, "backgroundListenerReady", () => void chrome.runtime.lastError);
     }
-  }),
+  })
 );
 
 // Pathname patterns. Make sure NOT to set global flag!
@@ -383,14 +383,14 @@ function matchesIf(injectable, settings) {
   return !(
     (injectable.if.addonEnabled?.length &&
       (Array.isArray(injectable.if.addonEnabled) ? injectable.if.addonEnabled : [injectable.if.addonEnabled]).every(
-        (addon) => !scratchAddons.localState.addonsEnabled[addon],
+        (addon) => !scratchAddons.localState.addonsEnabled[addon]
       )) ||
     (injectable.if.settings &&
       Object.keys(injectable.if.settings).some((settingName) =>
         (Array.isArray(injectable.if.settings[settingName])
           ? injectable.if.settings[settingName]
           : [injectable.if.settings[settingName]]
-        ).every((possibleValue) => settings[settingName] !== possibleValue),
+        ).every((possibleValue) => settings[settingName] !== possibleValue)
       ))
   );
 }
