@@ -1,4 +1,5 @@
 import { setup, setVolume, onVolumeChanged, getVolume, setMuted, setUnmutedVolume, isMuted } from "./module.js";
+import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
 
 export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
@@ -12,7 +13,7 @@ export default async function ({ addon, console }) {
 
   const updateIcon = () => {
     const newVolume = getVolume();
-    if (newVolume == 0) {
+    if (newVolume === 0) {
       icon.dataset.icon = "mute";
     } else if (newVolume < 0.5) {
       icon.dataset.icon = "quiet";
@@ -58,19 +59,7 @@ export default async function ({ addon, console }) {
     display: "flex",
   });
 
-  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
-    document.body.classList.add("sa-vol-slider-small");
-  }
-  addon.tab.redux.initialize();
-  addon.tab.redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type === "scratch-gui/StageSize/SET_STAGE_SIZE") {
-      if (e.detail.action.stageSize === "small") {
-        document.body.classList.add("sa-vol-slider-small");
-      } else {
-        document.body.classList.remove("sa-vol-slider-small");
-      }
-    }
-  });
+  addSmallStageClass();
 
   addon.self.addEventListener("disabled", () => {
     setVolume(1);
