@@ -25,7 +25,8 @@ function updateCssVariables(node, addon) {
   node.style.setProperty("--darkWww-page", addon.settings.get("box"));
   node.style.setProperty("--darkWww-page-scratchr2Text", textColor(addon.settings.get("box"), "#322f31"));
   node.style.setProperty("--darkWww-page-colorScheme", textColor(addon.settings.get("box"), "light", "dark"));
-  node.style.setProperty("--darkWww-link", addon.settings.get("link"));
+  const linkColor = addon.settings.get("link");
+  node.style.setProperty("--darkWww-link-scratchr2", linkColor.startsWith("#4d97ff") ? "#1aa0d8" : linkColor);
   node.style.setProperty(
     "--darkWww-gray-scratchr2",
     textColor(
