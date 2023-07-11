@@ -91,14 +91,13 @@ const page = {
   },
   isFetching: false,
   async refetchSession() {
-    if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601") return;
     let res;
     let d;
     if (this.isFetching) return;
     this.isFetching = true;
     scratchAddons.eventTargets.auth.forEach((auth) => auth._refresh());
     try {
-      res = await fetch("/session/", {
+      res = await fetch("https://scratch.mit.edu/session/", {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
         },
@@ -223,8 +222,6 @@ function onDataReady() {
 }
 
 function bodyIsEditorClassCheck() {
-  if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601")
-    return document.body.classList.add("sa-body-editor");
   const pathname = location.pathname.toLowerCase();
   const split = pathname.split("/").filter(Boolean);
   if (!split[0] || split[0] !== "projects") return;
@@ -303,7 +300,9 @@ function loadClasses() {
   window.dispatchEvent(new CustomEvent("scratchAddonsClassNamesReady"));
 }
 
-const isProject = location.pathname.split("/")[1] === "projects" && location.pathname.split("/")[3] !== "embed";
+const isProject =
+  location.pathname.split("/")[1] === "projects" &&
+  !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
 const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
 if (isScratchGui || isProject) {
   // Stylesheets are considered to have loaded if this element exists
@@ -311,13 +310,18 @@ if (isScratchGui || isProject) {
 
   if (document.querySelector(elementSelector)) loadClasses();
   else {
+    let foundElement = false;
     const stylesObserver = new MutationObserver((mutationsList) => {
       if (document.querySelector(elementSelector)) {
+        foundElement = true;
         stylesObserver.disconnect();
         loadClasses();
       }
     });
     stylesObserver.observe(document.documentElement, { childList: true, subtree: true });
+    setTimeout(() => {
+      if (!foundElement) scratchAddons.console.log("Did not find elementSelector element after 10 seconds.");
+    }, 10000);
   }
 }
 
