@@ -1,5 +1,6 @@
 import runAddonUserscripts from "./run-userscript.js";
 import Localization from "./l10n.js";
+import "/libraries/thirdparty/cs/comlink.js";
 
 window.scratchAddons = {};
 scratchAddons.classNames = { loaded: false };
@@ -296,40 +297,32 @@ function loadClasses() {
     ),
   ];
   scratchAddons.classNames.loaded = true;
-
-  const fixPlaceHolderClasses = () =>
-    document.querySelectorAll("[class*='scratchAddonsScratchClass/']").forEach((el) => {
-      [...el.classList]
-        .filter((className) => className.startsWith("scratchAddonsScratchClass"))
-        .map((className) => className.substring(className.indexOf("/") + 1))
-        .forEach((classNameToFind) =>
-          el.classList.replace(
-            `scratchAddonsScratchClass/${classNameToFind}`,
-            scratchAddons.classNames.arr.find(
-              (className) =>
-                className.startsWith(classNameToFind + "_") && className.length === classNameToFind.length + 6
-            ) || `scratchAddonsScratchClass/${classNameToFind}`
-          )
-        );
-    });
-
-  fixPlaceHolderClasses();
-  new MutationObserver(() => fixPlaceHolderClasses()).observe(document.documentElement, {
-    attributes: false,
-    childList: true,
-    subtree: true,
-  });
+  window.dispatchEvent(new CustomEvent("scratchAddonsClassNamesReady"));
 }
 
-if (document.querySelector("title")) loadClasses();
-else {
-  const stylesObserver = new MutationObserver((mutationsList) => {
-    if (document.querySelector("title")) {
-      stylesObserver.disconnect();
-      loadClasses();
-    }
-  });
-  stylesObserver.observe(document.documentElement, { childList: true, subtree: true });
+const isProject =
+  location.pathname.split("/")[1] === "projects" &&
+  !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
+const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
+if (isScratchGui || isProject) {
+  // Stylesheets are considered to have loaded if this element exists
+  const elementSelector = isScratchGui ? "div[class*=index_app_]" : ":root > body > .ReactModalPortal";
+
+  if (document.querySelector(elementSelector)) loadClasses();
+  else {
+    let foundElement = false;
+    const stylesObserver = new MutationObserver((mutationsList) => {
+      if (document.querySelector(elementSelector)) {
+        foundElement = true;
+        stylesObserver.disconnect();
+        loadClasses();
+      }
+    });
+    stylesObserver.observe(document.documentElement, { childList: true, subtree: true });
+    setTimeout(() => {
+      if (!foundElement) scratchAddons.console.log("Did not find elementSelector element after 10 seconds.");
+    }, 10000);
+  }
 }
 
 if (location.pathname === "/discuss/3/topic/add/") {
