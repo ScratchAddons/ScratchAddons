@@ -207,7 +207,6 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get editorMode() {
-    if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601") return "editor";
     const pathname = location.pathname.toLowerCase();
     const split = pathname.split("/").filter(Boolean);
     if (!split[0] || split[0] !== "projects") return null;
@@ -285,6 +284,15 @@ export default class Tab extends Listenable {
    * @returns {string} Hashed class names.
    */
   scratchClass(...args) {
+    const isProject =
+      location.pathname.split("/")[1] === "projects" &&
+      !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
+    const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
+    if (!isProject && !isScratchGui) {
+      scratchAddons.console.warn("addon.tab.scratchClass() was used outside a project page");
+      return "";
+    }
+
     if (!this._calledScratchClassReady)
       throw new Error("Wait until addon.tab.scratchClassReady() resolves before using addon.tab.scratchClass");
 
