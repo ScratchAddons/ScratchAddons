@@ -1,1 +1,1 @@
-{"number-pad/@name":"ナンバーパッドを常に表示","number-pad/@description":"数値を編集するときに、Scratchのナンバーパッド入力をタッチスクリーンデバイス以外のすべてのデバイスで表示する。","number-pad/@info-explanation":"「x座標を変える」ブロックなどの数値を変えるときに、ナンバーパッドが表示されるようになります。"}
+{"number-pad/@name":"ナンバーパッドを常に表示","number-pad/@description":"ブロックの数値を編集するときに、Scratchのナンバーパッド入力をタッチスクリーンデバイス以外のすべてのデバイスで表示する。","number-pad/@info-explanation":"「() 歩動かす」ブロックなどの数値を変えるときに、ナンバーパッドが表示されるようになります。"}

@@ -1,6 +1,6 @@
 {
-  "name": "Select stage colors in the costume editor",
-  "description": "Allows the costume editor's eye dropper to also pick colors from the stage.",
+  "name": "Pick colors on stage with eyedropper",
+  "description": "Allows the eyedropper in the costume editor to also pick colors from the stage.",
   "credits": [
     {
       "name": "GarboMuffin"

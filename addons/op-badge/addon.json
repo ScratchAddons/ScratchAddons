@@ -1,0 +1,37 @@
+{
+  "name": "Highlight project creator in comments",
+  "description": "Adds a badge next to the project creator in project comments sections. Also adds a badge next to the original poster in forum topics.",
+  "tags": ["community", "forums", "featured", "comments"],
+  "enabledByDefault": false,
+  "userscripts": [
+    {
+      "url": "forums.js",
+      "matches": ["topics"]
+    },
+    {
+      "url": "projects.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "projectpage.css",
+      "matches": ["projects"]
+    },
+    {
+      "url": "forums.css",
+      "matches": ["topics"]
+    }
+  ],
+  "credits": [
+    {
+      "name": "MDWalters",
+      "link": "https://scratch.mit.edu/users/MDWalters/"
+    },
+    {
+      "name": "World_Languages"
+    }
+  ],
+  "versionAdded": "1.33.0",
+  "dynamicEnable": true
+}
