@@ -1827,6 +1827,58 @@
       }
     },
     {
+      "name": "messageIndicatorColor-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "messageIndicatorColor"
+        },
+        "threshold": 180
+      }
+    },
+    {
+      "name": "messageIndicatorColor-scratchr2",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "messageIndicatorColor"
+        },
+        "options": {
+          "#ffab1a": "#f9a739",
+          "#ffab1aff": "#f9a739"
+        },
+        "default": {
+          "type": "settingValue",
+          "settingId": "messageIndicatorColor"
+        }
+      }
+    },
+    {
+      "name": "messageIndicatorColor-scratchr2Text",
+      "value": {
+        "type": "textColor",
+        "black": "#322f31",
+        "source": {
+          "type": "settingValue",
+          "settingId": "messageIndicatorColor"
+        },
+        "threshold": 180
+      }
+    },
+    {
+      "name": "messageIndicatorOnMessagesPage-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "messageIndicatorOnMessagesPage"
+        },
+        "threshold": 180
+      }
+    },
+    {
       "name": "box-forumBoldButton",
       "value": {
         "type": "textColor",
@@ -2048,9 +2100,9 @@
   "injectAsStyleElt": true,
   "versionAdded": "1.4.0",
   "latestUpdate": {
-    "version": "1.33.2",
-    "temporaryNotice": "The presets for this addon have been updated to use Scratch's new purple accent color. Presets that use blue are still available as well.",
-    "isMajor": true
+    "version": "1.34.0",
+    "newSettings": ["messageIndicatorColor", "messageIndicatorOnMessagesPage"],
+    "isMajor": false
   },
   "updateUserstylesOnSettingsChange": true,
   "userscripts": [
@@ -2249,6 +2301,18 @@
       "default": "#606060"
     },
     {
+      "name": "Message count in navigation bar",
+      "id": "messageIndicatorColor",
+      "type": "color",
+      "default": "#ffab1a"
+    },
+    {
+      "name": "Message count on Messages page",
+      "id": "messageIndicatorOnMessagesPage",
+      "type": "color",
+      "default": "#cc4400"
+    },
+    {
       "name": "Colored areas",
       "id": "darkBanners",
       "type": "select",
@@ -2291,6 +2355,8 @@
         "link": "#ccb3ff",
         "footer": "#333333",
         "border": "#606060",
+        "messageIndicatorColor": "#ffab1a",
+        "messageIndicatorOnMessagesPage": "#cc4400",
         "darkBanners": "darker",
         "darkForumCode": true
       }
@@ -2310,6 +2376,8 @@
         "link": "#4d97ff",
         "footer": "#333333",
         "border": "#606060",
+        "messageIndicatorColor": "#ffab1a",
+        "messageIndicatorOnMessagesPage": "#ffab1a",
         "darkBanners": "darker",
         "darkForumCode": true
       }
@@ -2329,6 +2397,8 @@
         "link": "#ccb3ff",
         "footer": "#17181a",
         "border": "#000000",
+        "messageIndicatorColor": "#ffab1a",
+        "messageIndicatorOnMessagesPage": "#cc4400",
         "darkBanners": "desaturated",
         "darkForumCode": true
       }
@@ -2348,6 +2418,8 @@
         "link": "#855cd6",
         "footer": "#f2f2f2",
         "border": "#0000001a",
+        "messageIndicatorColor": "#ffab1a",
+        "messageIndicatorOnMessagesPage": "#cc4400",
         "darkBanners": "off",
         "darkForumCode": false
       }
@@ -2367,6 +2439,8 @@
         "link": "#4d97ff",
         "footer": "#f2f2f2",
         "border": "#0000001a",
+        "messageIndicatorColor": "#ffab1a",
+        "messageIndicatorOnMessagesPage": "#ffab1a",
         "darkBanners": "off",
         "darkForumCode": false
       }
