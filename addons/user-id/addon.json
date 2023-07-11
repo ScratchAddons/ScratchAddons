@@ -5,6 +5,10 @@
     {
       "name": "yes-i-am-lanky",
       "link": "https://scratch.mit.edu/users/yes-i-am-lanky/"
+    },
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
     }
   ],
   "userscripts": [
@@ -17,11 +21,31 @@
     {
       "url": "userstyle.css",
       "matches": ["profiles"]
+    },
+    {
+      "url": "hover.css",
+      "matches": ["profiles"],
+      "if": {
+        "settings": { "only-on-hover": true }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "id": "only-on-hover",
+      "name": "Only show when hovering over username",
+      "default": false,
+      "type": "boolean"
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
   "tags": ["community", "profiles"],
   "versionAdded": "1.19.0",
+  "latestUpdate": {
+    "version": "1.32.0",
+    "newSettings": ["only-on-hover"]
+  },
   "enabledByDefault": false
 }
