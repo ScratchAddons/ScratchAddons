@@ -8,7 +8,7 @@
   margin-left: 0.2rem;
 }
 
-.sa-debugger-small [class*="gui_body-wrapper_"]:not(.sa-stage-hidden) .sa-debugger-container {
+.sa-small-stage [class*="gui_body-wrapper_"]:not(.sa-stage-hidden) .sa-debugger-container {
   display: none !important;
 }
 
@@ -24,7 +24,7 @@
   display: block;
   width: 6px;
   height: 6px;
-  background-color: var(--editorDarkMode-highlightText, #4d97ff);
+  background-color: var(--editorDarkMode-highlightText, #855cd6);
   border-radius: 50%;
 }
 
@@ -77,7 +77,7 @@
   background-color: white;
   background-clip: padding-box;
   border-color: rgba(0, 0, 0, 0.25);
-  color: #4d97ff;
+  color: #855cd6;
 }
 .sa-debugger-tabs li img {
   margin: 0;
@@ -215,7 +215,7 @@
 }
 .sa-debugger-log-link:hover {
   text-decoration: underline;
-  color: #4d97ff;
+  color: #855cd6;
   opacity: 1;
 }
 .sa-debugger-log-link-unknown {
