@@ -51,8 +51,8 @@
           <span v-if="credit.link">
             <a :href="credit.link" rel="noreferrer noopener" target="_blank">{{ credit.name }}</a>
           </span>
-          <span v-else="credit.link">{{ credit.name }}</span>
-          <span v-if="credit.note">({{ credit.note }})</span>
+          <span v-else>{{ credit.name }}</span>
+          <span v-if="credit.note"> ({{ credit.note }})</span>
         </span>
       </div>
       <div class="addon-license" v-if="addon.libraries && addon.libraries.length">
