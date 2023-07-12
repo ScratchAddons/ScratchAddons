@@ -39,7 +39,7 @@ export default async function ({ addon, console }) {
       ".studio-adder-section .studio-adder-row button ~ button:not(.sa-pseudobutton)",
       {
         markAsSeen: true,
-      }
+      },
     );
     const button = document.createElement("button");
     button.classList = "button sa-pseudobutton";

@@ -25,7 +25,7 @@ export default async function ({ addon, console, msg }) {
             headers: {
               "X-Token": xToken,
             },
-          }
+          },
         )
           .then((response) => response.json())
           .then((rows) => {
