@@ -1,8 +1,8 @@
-<img src="https://raw.githubusercontent.com/ScratchAddons/ScratchAddons/master/images/icon.svg" alt="Scratch Addons logo" align="right" width="128px"></img>
+<img src="images/icon.svg" alt="Scratch Addons logo" align="right" width="128px"></img>
 # Scratch Addons browser extension
 
-[![Chrome Web Store](images/badges/cws-badge.png)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
-[![Firefox Add-ons](images/badges/ff-addon-badge.png)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
+[![Chrome Web Store](.github/readme-images/cws-badge.png)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
+[![Firefox Add-ons](.github/readme-images/ff-addon-badge.png)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
 
 [![](https://img.shields.io/chrome-web-store/v/fbeffbjdlemaoicjdapfpikkikjoneco?style=flat-square&logo=google-chrome&logoColor=white&label=Chrome&color=E23A2E)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
 [![](https://img.shields.io/amo/v/scratch-messaging-extension?style=flat-square&logo=firefox-browser&logoColor=white&label=Firefox&color=FF7139)](https://addons.mozilla.org/firefox/addon/scratch-messaging-extension/)
@@ -13,7 +13,7 @@
 [![](https://img.shields.io/badge/chat-on_discord-7289da.svg?style=flat-square)](https://discord.gg/R5NBqwMjNc)
 [![](https://img.shields.io/badge/website-scratchaddons.com-ff7b26.svg?style=flat-square)](https://scratchaddons.com)
 
-<img src="images/screenshots/demo.png" alt="Scratch Addons demo" height=500px></img>
+<img src=".github/readme-images/demo.png" alt="Scratch Addons demo" height=500px></img>
 
 ## What is Scratch Addons?
 
