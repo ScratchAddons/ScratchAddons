@@ -15,7 +15,7 @@
 
 ## About
 
-Scratch Addons combines new and existing features and themes for the [Scratch](https://github.com/scratchfoundation) website and project editor into one easy-to-access and configurable browser extension. The mission is to provide a centralized, up-to-date platform for community development of new features and themes for Scratch.
+Scratch Addons combines new and existing features and themes for the [Scratch](https://scratch.mit.edu) website and project editor into one easy-to-access and configurable browser extension. The mission is to provide a centralized, up-to-date platform for community development of new features and themes for Scratch.
 
 <div align="center">
 
