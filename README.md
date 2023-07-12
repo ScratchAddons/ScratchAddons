@@ -13,11 +13,15 @@
 [![](https://img.shields.io/badge/chat-on_discord-7289da.svg?style=flat-square)](https://discord.gg/R5NBqwMjNc)
 [![](https://img.shields.io/badge/website-scratchaddons.com-ff7b26.svg?style=flat-square)](https://scratchaddons.com)
 
-<img src=".github/readme-images/demo.png" alt="Scratch Addons demo" height=500px></img>
-
-## What is Scratch Addons?
+## About
 
 Scratch Addons combines new and existing features and themes for the [Scratch](https://github.com/scratchfoundation) website and project editor into one easy-to-access and configurable browser extension. The mission is to provide a centralized, up-to-date platform for community development of new features and themes for Scratch.
+
+<div align="center">
+
+![Scratch Addons screenshot](.github/readme-images/screenshot.png)
+
+</div>
 
 ### What is an addon?
 
