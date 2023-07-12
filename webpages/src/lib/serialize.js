@@ -1,8 +1,13 @@
+import minifySettings from "../../../libraries/common/minify-settings.js";
+
 const promisify =
   (callbackFn) =>
   (...args) =>
     new Promise((resolve) => callbackFn(...args, resolve));
-const browserLevelPermissions = ["notifications"];
+export const browserLevelPermissions = ["notifications"];
+if (typeof browser !== "undefined") browserLevelPermissions.push("clipboardWrite");
+
+let handleConfirmClicked = null;
 
 export const deserializeSettings = async (str, manifests, confirmElem) => {
   const obj = JSON.parse(str);
