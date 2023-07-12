@@ -75,7 +75,7 @@ For other installation methods and browser support, check [the documentation](ht
 
 To load the extension into most Chromium-based browsers, go to `chrome://extensions`, turn on developer mode, click "Load unpacked" and select the `ScratchAddons` folder.
 
-#### Loading the extension (Firefox)
+### Loading the extension (Firefox)
 
 Go to `about:debugging` select "This Firefox", click "Load Temporary Add-on..." and select the `manifest.json` file in the `ScratchAddons` folder.
 
