@@ -1,4 +1,5 @@
 <template>
+  <Transition name="expand">
   <div
     class="category"
     :class="{
@@ -6,13 +7,13 @@
       hasParent: category.parent,
     }"
     v-show="shouldShow"
-    transition="expand"
     :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"
     @click="onClick($event)"
   >
     <img :src="'../../../images/icons/' + category.icon + '.svg'" />
     <span>{{ category.name }}</span>
   </div>
+  </Transition>
 </template>
 
 <style>
@@ -49,8 +50,8 @@ a.category > span > img {
   padding-block: 10px;
   opacity: 1;
 }
-.category.expand-enter,
-.category.expand-leave {
+.category.expand-enter-active,
+.category.expand-leave-to {
   padding-block: 0;
   height: 0;
   opacity: 0;
