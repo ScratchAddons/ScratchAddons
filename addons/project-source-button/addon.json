@@ -18,20 +18,13 @@
   ],
   "credits": [
     {
-      "name": "nakasyou",
-      "link": "https://scratch.mit.edu/users/nakasyou1103"
+      "name": "GrahamSH",
+      "link": "https://github.com/grahamsh-llk/project-inspector"
     },
     {
-      "name": "Prism.js",
-      "link": "https://prismjs.com/"
+      "name": "nakasyou",
+      "link": "https://scratch.mit.edu/users/nakasyou1103"
     }
-  ],
-  "settings": [
-    {
-      "name": "Max Lines",
-      "id": "max_lines",
-      "type": "positive_integer",
-      "default": 1000
-    }
+
   ]
 }
