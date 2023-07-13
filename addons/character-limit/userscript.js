@@ -2,7 +2,7 @@ export default async function ({ addon, console, msg }) {
   var maxLength = 5000;
   var className = "desc-limit";
   var area = "project";
-  if (location.pathname.split("/").includes("studios")) {
+  if (location.pathname.split("/")[1] === "studios") {
     className = "studio-desc-limit";
     area = "studio";
   }
