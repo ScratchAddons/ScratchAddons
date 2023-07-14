@@ -1,4 +1,4 @@
-@import "../../../libraries/thirdparty/Sora.css";
+@import "../../libraries/thirdparty/Sora.css";
 @import "./base.css";
 
 html {
@@ -416,4 +416,8 @@ button.setting-input.color.open {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.vue3 {
+  font-family: monospace;
+  margin-left: 1rem;
 }
