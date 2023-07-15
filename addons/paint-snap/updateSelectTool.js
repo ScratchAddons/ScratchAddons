@@ -154,7 +154,7 @@ export const updateSelectTool = (paper, tool) => {
       };
       const generateSnapPointsFor = (point) =>
         Object.fromEntries(
-          Object.entries(toPoints).map(([k, v]) => [k, { type: v.type, point: configDefFn(v)(point) }])
+          Object.entries(toPoints).map(([k, v]) => [k, { type: v.type, point: configDefFn(v)(point) }]),
         );
 
       const generatedSnapPoints = Object.entries(fromPoints).map(([pointPos, point]) => ({
@@ -291,13 +291,13 @@ export const updateSelectTool = (paper, tool) => {
       // rotation center is above or below the selection bounding box
       opacityMultiplier = Math.max(
         0,
-        1 - (Math.abs(CENTER.y - newCenter.y) - bounds.height / 2) / (FADE_DISTANCE / paper.view.zoom)
+        1 - (Math.abs(CENTER.y - newCenter.y) - bounds.height / 2) / (FADE_DISTANCE / paper.view.zoom),
       );
     } else if (CENTER.x < bounds.left || CENTER.x > bounds.right) {
       // rotation center is left or right of the selection bounding box
       opacityMultiplier = Math.max(
         0,
-        1 - (Math.abs(CENTER.x - newCenter.x) - bounds.width / 2) / (FADE_DISTANCE / paper.view.zoom)
+        1 - (Math.abs(CENTER.x - newCenter.x) - bounds.width / 2) / (FADE_DISTANCE / paper.view.zoom),
       );
     } // else the rotation center is within selection bounds, always show drag crosshair at full opacity
     getDragCrosshairLayer().opacity = CROSSHAIR_FULL_OPACITY * opacityMultiplier;
