@@ -303,7 +303,7 @@ export const updateScaleTool = (paper, tool) => {
         case "width": {
           const newSize = new paper.Point(
             Math.abs(closestSnapX.coord.clamp.max - closestSnapX.coord.clamp.min),
-            this.corner.y,
+            this.corner.y
           );
           sx = newSize.x / this.origSize.x;
           break;
@@ -324,7 +324,7 @@ export const updateScaleTool = (paper, tool) => {
         case "height": {
           const newSize = new paper.Point(
             this.corner.x,
-            Math.abs(closestSnapY.coord.clamp.max - closestSnapY.coord.clamp.min),
+            Math.abs(closestSnapY.coord.clamp.max - closestSnapY.coord.clamp.min)
           );
           sy = newSize.y / this.origSize.y;
           break;
@@ -372,47 +372,47 @@ export const updateScaleTool = (paper, tool) => {
           matchingSizeGuide.endLeft.firstSegment.point = new paper.Point(closestSnapX.coord.clamp.min, matchy);
           matchingSizeGuide.endLeft.lastSegment.point = new paper.Point(
             closestSnapX.coord.clamp.min,
-            matchy + 5 / paper.view.zoom,
+            matchy + 5 / paper.view.zoom
           );
           matchingSizeGuide.endRight.firstSegment.point = new paper.Point(closestSnapX.coord.clamp.max, matchy);
           matchingSizeGuide.endRight.lastSegment.point = new paper.Point(
             closestSnapX.coord.clamp.max,
-            matchy + 5 / paper.view.zoom,
+            matchy + 5 / paper.view.zoom
           );
           matchingSizeGuide.line.firstSegment.point = new paper.Point(
             closestSnapX.coord.clamp.min,
-            matchy + 3 / paper.view.zoom,
+            matchy + 3 / paper.view.zoom
           );
           matchingSizeGuide.line.lastSegment.point = new paper.Point(
             closestSnapX.coord.clamp.max,
-            matchy + 3 / paper.view.zoom,
+            matchy + 3 / paper.view.zoom
           );
           matchingSizeGuide.group.visible = true;
           matchingSizeGuide.group.bringToFront();
 
           selectionSizeGuide.endLeft.firstSegment.point = new paper.Point(
             this.itemGroup.bounds.left,
-            selectiony + 2 / paper.view.zoom,
+            selectiony + 2 / paper.view.zoom
           );
           selectionSizeGuide.endLeft.lastSegment.point = new paper.Point(
             this.itemGroup.bounds.left,
-            selectiony + 7 / paper.view.zoom,
+            selectiony + 7 / paper.view.zoom
           );
           selectionSizeGuide.endRight.firstSegment.point = new paper.Point(
             this.itemGroup.bounds.right,
-            selectiony + 2 / paper.view.zoom,
+            selectiony + 2 / paper.view.zoom
           );
           selectionSizeGuide.endRight.lastSegment.point = new paper.Point(
             this.itemGroup.bounds.right,
-            selectiony + 7 / paper.view.zoom,
+            selectiony + 7 / paper.view.zoom
           );
           selectionSizeGuide.line.firstSegment.point = new paper.Point(
             this.itemGroup.bounds.left,
-            selectiony + 4.5 / paper.view.zoom,
+            selectiony + 4.5 / paper.view.zoom
           );
           selectionSizeGuide.line.lastSegment.point = new paper.Point(
             this.itemGroup.bounds.right,
-            selectiony + 4.5 / paper.view.zoom,
+            selectiony + 4.5 / paper.view.zoom
           );
           selectionSizeGuide.group.visible = true;
           selectionSizeGuide.group.bringToFront();
@@ -439,47 +439,47 @@ export const updateScaleTool = (paper, tool) => {
           matchingSizeGuide.endLeft.firstSegment.point = new paper.Point(matchx, closestSnapY.coord.clamp.min);
           matchingSizeGuide.endLeft.lastSegment.point = new paper.Point(
             matchx - 5 / paper.view.zoom,
-            closestSnapY.coord.clamp.min,
+            closestSnapY.coord.clamp.min
           );
           matchingSizeGuide.endRight.firstSegment.point = new paper.Point(matchx, closestSnapY.coord.clamp.max);
           matchingSizeGuide.endRight.lastSegment.point = new paper.Point(
             matchx - 5 / paper.view.zoom,
-            closestSnapY.coord.clamp.max,
+            closestSnapY.coord.clamp.max
           );
           matchingSizeGuide.line.firstSegment.point = new paper.Point(
             matchx - 3 / paper.view.zoom,
-            closestSnapY.coord.clamp.min,
+            closestSnapY.coord.clamp.min
           );
           matchingSizeGuide.line.lastSegment.point = new paper.Point(
             matchx - 3 / paper.view.zoom,
-            closestSnapY.coord.clamp.max,
+            closestSnapY.coord.clamp.max
           );
           matchingSizeGuide.group.visible = true;
           matchingSizeGuide.group.bringToFront();
 
           selectionSizeGuide.endLeft.firstSegment.point = new paper.Point(
             selectionx - 2 / paper.view.zoom,
-            this.itemGroup.bounds.top,
+            this.itemGroup.bounds.top
           );
           selectionSizeGuide.endLeft.lastSegment.point = new paper.Point(
             selectionx - 7 / paper.view.zoom,
-            this.itemGroup.bounds.top,
+            this.itemGroup.bounds.top
           );
           selectionSizeGuide.endRight.firstSegment.point = new paper.Point(
             selectionx - 2 / paper.view.zoom,
-            this.itemGroup.bounds.bottom,
+            this.itemGroup.bounds.bottom
           );
           selectionSizeGuide.endRight.lastSegment.point = new paper.Point(
             selectionx - 7 / paper.view.zoom,
-            this.itemGroup.bounds.bottom,
+            this.itemGroup.bounds.bottom
           );
           selectionSizeGuide.line.firstSegment.point = new paper.Point(
             selectionx - 4.5 / paper.view.zoom,
-            this.itemGroup.bounds.top,
+            this.itemGroup.bounds.top
           );
           selectionSizeGuide.line.lastSegment.point = new paper.Point(
             selectionx - 4.5 / paper.view.zoom,
-            this.itemGroup.bounds.bottom,
+            this.itemGroup.bounds.bottom
           );
           selectionSizeGuide.group.visible = true;
           selectionSizeGuide.group.bringToFront();

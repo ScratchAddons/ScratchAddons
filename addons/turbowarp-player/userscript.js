@@ -9,7 +9,7 @@ export default async function ({ addon, console, msg }) {
   twIframe.setAttribute("allowfullscreen", "true");
   twIframe.setAttribute(
     "allow",
-    "autoplay *; camera https://turbowarp.org; document-domain 'none'; fullscreen *; gamepad https://turbowarp.org; microphone https://turbowarp.org;",
+    "autoplay *; camera https://turbowarp.org; document-domain 'none'; fullscreen *; gamepad https://turbowarp.org; microphone https://turbowarp.org;"
   );
   twIframe.className = "sa-tw-iframe";
   twIframeContainer.appendChild(twIframe);
@@ -45,7 +45,7 @@ export default async function ({ addon, console, msg }) {
       window.open(
         `https://turbowarp.org/${window.location.pathname.split("/")[2]}${search}`,
         "_blank",
-        "noopener,noreferrer",
+        "noopener,noreferrer"
       );
     } else {
       playerToggled = !playerToggled;

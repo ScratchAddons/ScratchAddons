@@ -9,7 +9,7 @@ export default async ({ addon, console }) => {
     },
     {
       capture: true,
-    },
+    }
   );
 
   // Do not focus sprite after dragging it
