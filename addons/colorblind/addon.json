@@ -43,6 +43,40 @@
         }
       ],
       "default": "bold"
+    },
+    {
+      "name": "Underline style",
+      "id": "underline-style",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "solid",
+          "name": "Solid"
+        },
+        {
+          "id": "dashed",
+          "name": "Dashed"
+        },
+        {
+          "id": "dotted",
+          "name": "Dotted"
+        }
+      ],
+      "default": "solid",
+      "if": {
+        "settings": { "links": "underline" }
+      }
+    },
+    {
+      "name": "Underline opacity (%)",
+      "id": "underline-alpha",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 100,
+      "if": {
+        "settings": { "links": "underline" }
+      }
     }
   ],
   "dynamicEnable": true,

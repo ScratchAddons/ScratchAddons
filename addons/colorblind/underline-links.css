@@ -14,6 +14,8 @@ input.link.black:active,
 #comments .more-replies .pulldown,
 #email-resend-box a {
   text-decoration: underline;
+  text-decoration-style: var(--colorblind-underlineStyle);
+  text-decoration-color: hsla(260, 60%, 60%, calc(var(--colorblind-underlineAlpha) / 100));
 }
 
 a.slider-carousel-control,
