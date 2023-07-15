@@ -51,7 +51,7 @@ export default async function ({ addon, console }) {
             ahref.style.setProperty("padding", "0px", "important");
             let span = exsearch_links[i].querySelector("span");
             span.style.display = "none";
-          } //Hide them. (Make them invisible but still keyboard-focusable)
+          } //Hide them (make them invisible but maintain keyboard-focusablility)
         }
       }
       function exsearch_clickOut() {
@@ -89,7 +89,7 @@ export default async function ({ addon, console }) {
       function exsearch_clickIn() {
         //Clicking into the search bar
         if (addon.self.disabled) return; //Don't expand if addon disabled
-        exsearch_siteNav.style.width = "0px"; //Hide the site navigation
+        exsearch_siteNav.style.width = "0px"; //Hide the site navigation (make them invisible but maintain keyboard-focusablility)
       }
       function exsearch_clickOut() {
         //Clicking out of  the search bar
