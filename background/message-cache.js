@@ -72,7 +72,7 @@ export async function startCache(defaultStoreId, forceClear) {
       defaultStoreId,
       forceClear,
       scratchAddons.globalState.auth.username,
-      scratchAddons.globalState.auth.xToken
+      scratchAddons.globalState.auth.xToken,
     );
     await updateBadge(defaultStoreId);
   } catch (e) {
@@ -99,7 +99,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
           scratchAddons.cookieStoreId,
           false,
           scratchAddons.globalState.auth.username,
-          scratchAddons.globalState.auth.xToken
+          scratchAddons.globalState.auth.xToken,
         );
         await updateBadge(scratchAddons.cookieStoreId);
         if (scratchAddons.localState.addonsEnabled["scratch-notifier"]) {

@@ -17,7 +17,7 @@ export default async function ({ addon, console, msg }) {
           .appendChild(document.createElement("button"))
           .setAttribute("id", "better-change-featured-project");
         document.querySelector("#better-change-featured-project").innerText = document.querySelector(
-          '#featured-project [data-control="edit"]'
+          '#featured-project [data-control="edit"]',
         ).innerText;
         document.querySelector("#better-change-featured-project").addEventListener("click", function () {
           document.querySelector('#featured-project [data-control="edit"]').click();
@@ -63,7 +63,7 @@ export default async function ({ addon, console, msg }) {
       document.querySelector(".user-content .stage img").src.replace(/[0-9]+x[0-9]+/, "480x360"),
       document.querySelector(".user-content .stage a").href,
       document.querySelector(".featured-project-heading").innerText,
-      document.querySelector(".user-content .player .title a").innerText
+      document.querySelector(".user-content .player .title a").innerText,
     );
   } else if (document.querySelector("#profile-avatar img") !== null) {
     createBetterProfilePage(document.querySelector("#profile-avatar img").src, "", "", "");

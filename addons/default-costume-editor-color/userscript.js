@@ -157,13 +157,13 @@ export default async function ({ addon, console, msg }) {
     "fillColor",
     "scratch-paint/fill-style/CHANGE_FILL_COLOR",
     "scratch-paint/fill-style/CHANGE_FILL_COLOR_2",
-    "scratch-paint/fill-style/CHANGE_FILL_GRADIENT_TYPE"
+    "scratch-paint/fill-style/CHANGE_FILL_GRADIENT_TYPE",
   );
   const strokeStyle = new ColorStyleReducerWrapper(
     "strokeColor",
     "scratch-paint/stroke-style/CHANGE_STROKE_COLOR",
     "scratch-paint/stroke-style/CHANGE_STROKE_COLOR_2",
-    "scratch-paint/stroke-style/CHANGE_STROKE_GRADIENT_TYPE"
+    "scratch-paint/stroke-style/CHANGE_STROKE_GRADIENT_TYPE",
   );
 
   const simpleHexColor = (hex) => ({
