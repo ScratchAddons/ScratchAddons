@@ -1,7 +1,7 @@
 export default async function ({ addon, msg }) {
   const postButton = document.querySelector("#djangobbwrap [method=post] [type=submit]");
   const forumoji = await fetch("https://raw.githubusercontent.com/lopste/forumoji/main/resources/forumoji.json").then(
-    (response) => response.json(),
+    (response) => response.json()
   );
   const editor = document.querySelector(".markItUpEditor");
 
