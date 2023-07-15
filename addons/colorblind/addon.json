@@ -1,0 +1,54 @@
+{
+  "name": "Color blindness accommodations",
+  "description": "A few features to help make Scratch more accessible to colorblind users.",
+  "credits": [
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "bold-links.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "if": {
+        "settings": { "links": "bold" }
+      }
+    },
+    {
+      "url": "underline-links.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "if": {
+        "settings": { "links": "underline" }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Link style",
+      "id": "links",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "Default"
+        },
+        {
+          "id": "bold",
+          "name": "Bold"
+        },
+        {
+          "id": "underline",
+          "name": "Underlined"
+        }
+      ],
+      "default": "bold"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "versionAdded": "1.34.0",
+  "tags": ["community", "theme"],
+  "enabledByDefault": false
+}

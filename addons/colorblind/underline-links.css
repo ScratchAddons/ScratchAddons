@@ -1,0 +1,27 @@
+a,
+a:link,
+a:hover,
+a:active,
+a.black:hover,
+a.black:active,
+input.link,
+input.link:hover,
+input.link:active,
+input.link.black:hover,
+input.link.black:active,
+.news li h4,
+#footer .lists dd a,
+#comments .more-replies .pulldown,
+#email-resend-box a {
+  text-decoration: underline;
+}
+
+a.slider-carousel-control,
+a.button,
+a.nav_link,
+#navigation .link > a,
+#topnav ul.site-nav li a,
+.dropdown > li a,
+#topnav ul.account-nav ul.user-nav li a {
+  text-decoration: none;
+}
