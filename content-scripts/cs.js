@@ -736,14 +736,8 @@ const showBanner = () => {
 const handleBanner = async () => {
   if (window.frameElement) return;
   const currentVersion = chrome.runtime.getManifest().version;
-  const [major, minor, _patch] = currentVersion.split(".");
-  let currentVersionMajorMinor = `${major}.${minor}`;
-  if (currentVersionMajorMinor === "1.33" && _patch > 1) {
-    // Consider this a different SA version.
-    // Note that versions are never compared as numbers. Having a distinct
-    // string that uniquely identifies v1.33.x (with x>1) is enough.
-    currentVersionMajorMinor = "1.33.x";
-  }
+  const [major, minor, _] = currentVersion.split(".");
+  const currentVersionMajorMinor = `${major}.${minor}`;
   // Making this configurable in the future?
   // Using local because browser extensions may not be updated at the same time across browsers
   const settings = await promisify(chrome.storage.local.get.bind(chrome.storage.local))(["bannerSettings"]);
