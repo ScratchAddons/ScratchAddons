@@ -15,7 +15,6 @@ input.link.black:active,
 #email-resend-box a {
   text-decoration: underline;
   text-decoration-style: var(--colorblind-underlineStyle);
-  text-decoration-color: var(--darkWww-link);
 }
 
 a.slider-carousel-control,
