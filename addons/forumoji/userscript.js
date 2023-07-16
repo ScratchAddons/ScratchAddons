@@ -25,8 +25,7 @@ export default async function ({ addon, msg }) {
       editor.value = editor.value.replaceAll(emoji, `[img]${image}[/img]`);
     });
     if (/\p{Extended_Pictographic}/u.test(editor.value)) {
-      const notInForumojiSetting = addon.settings.get("not-in-forumoji");
-      if (notInForumojiSetting === "remove" || (notInForumojiSetting === "ask" && confirm(msg("not-in-forumoji")))) {
+      if (confirm(msg("not-in-forumoji"))) {
         editor.value = editor.value.replaceAll(/\p{Extended_Pictographic}/gu, "");
       } else {
         e.preventDefault();

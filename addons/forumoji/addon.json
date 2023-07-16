@@ -9,24 +9,6 @@
       "matches": ["editingScreens"]
     }
   ],
-  "settings": [
-    {
-      "name": "Action if Emoji are not in Forumoji",
-      "id": "not-in-forumoji",
-      "type": "select",
-      "default": "ask",
-      "potentialValues": [
-        {
-          "id": "ask",
-          "name": "Ask"
-        },
-        {
-          "id": "remove",
-          "name": "Remove"
-        }
-      ]
-    }
-  ],
   "credits": [
     {
       "name": "mybearworld",
