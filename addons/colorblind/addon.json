@@ -66,17 +66,6 @@
       "if": {
         "settings": { "links": "underline" }
       }
-    },
-    {
-      "name": "Underline opacity (%)",
-      "id": "underline-alpha",
-      "type": "integer",
-      "min": 0,
-      "max": 100,
-      "default": 100,
-      "if": {
-        "settings": { "links": "underline" }
-      }
     }
   ],
   "dynamicEnable": true,
