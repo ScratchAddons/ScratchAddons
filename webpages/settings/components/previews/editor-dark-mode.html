@@ -9,7 +9,8 @@
       '--page': settings.page,
       '--page-text': colors.pageText,
       '--primary': settings.primary,
-      '--primary-transparent': colors.primaryTransparent,
+      '--primary-transparent15': colors.primaryTransparent15,
+      '--primary-transparent35': colors.primaryTransparent35,
       '--primary-text': colors.primaryText,
       '--highlightText': settings.highlightText,
       '--menuBar': settings.menuBar,
@@ -43,15 +44,9 @@
   >
     <div class="edm-menu-bar" @mouseenter="$emit('areahover', 'menuBar')" @mouseleave="$emit('areahover', 'page')">
       <div class="edm-logo-placeholder"></div>
-      <div class="edm-menu-bar-menu edm-icon-placeholder edm-icon-placeholder-24px"><!-- Language --></div>
-      <div class="edm-menu-bar-menu edm-text-placeholder" style="--length: 4"><!-- File --></div>
-      <div class="edm-menu-bar-menu edm-text-placeholder" style="--length: 4"><!-- Edit --></div>
-      <div class="edm-menu-bar-separator"></div>
-      <div class="edm-menu-bar-menu edm-menu-bar-tutorials">
-        <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
-        <div class="edm-text-placeholder" style="--length: 9"><!-- Tutorials --></div>
-      </div>
-      <div class="edm-menu-bar-separator"></div>
+      <div class="edm-menu-bar-menu edm-icon-placeholder edm-icon-placeholder-20px"><!-- Settings --></div>
+      <div class="edm-menu-bar-menu edm-icon-placeholder edm-icon-placeholder-20px"><!-- File --></div>
+      <div class="edm-menu-bar-menu edm-icon-placeholder edm-icon-placeholder-20px"><!-- Edit --></div>
       <div class="edm-menu-bar-input">
         <!-- Project title -->
         <div class="edm-text-placeholder" style="--length: 8"></div>
@@ -66,6 +61,11 @@
         <div class="edm-text-placeholder" style="--length: 3"></div>
         <div class="edm-text-placeholder" style="--length: 7"></div>
         <div class="edm-text-placeholder" style="--length: 4"></div>
+      </div>
+      <div class="edm-menu-bar-separator"></div>
+      <div class="edm-menu-bar-menu">
+        <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
+        <div class="edm-text-placeholder" style="--length: 9"><!-- Tutorials --></div>
       </div>
       <div class="edm-spacer"></div>
       <div class="edm-menu-bar-menu edm-icon-placeholder edm-icon-placeholder-24px"><!-- My Stuff --></div>
@@ -192,7 +192,7 @@
               <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
             </div>
           </div>
-          <div class="edm-asset-editor edm-tool-button-icons-not-affected" v-if="selectedTab === 'costumes'">
+          <div class="edm-asset-editor" v-if="selectedTab === 'costumes'">
             <div class="edm-toolbar">
               <div>
                 <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7"><!-- Costume --></div>
@@ -205,10 +205,10 @@
                 </div>
               </div>
               <div>
-                <div class="edm-outlined-button edm-outlined-button-first edm-outlined-button-selected">
+                <div class="edm-outlined-button edm-outlined-button-first edm-outlined-button-colored-icon">
                   <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Undo --></div>
                 </div>
-                <div class="edm-outlined-button edm-outlined-button-last edm-outlined-button-selected">
+                <div class="edm-outlined-button edm-outlined-button-last edm-outlined-button-colored-icon">
                   <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Redo --></div>
                 </div>
               </div>
@@ -369,10 +369,10 @@
                 </div>
               </div>
               <div>
-                <div class="edm-outlined-button edm-outlined-button-first edm-outlined-button-selected">
+                <div class="edm-outlined-button edm-outlined-button-first edm-outlined-button-colored-icon">
                   <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Undo --></div>
                 </div>
-                <div class="edm-outlined-button edm-outlined-button-last edm-outlined-button-selected">
+                <div class="edm-outlined-button edm-outlined-button-last edm-outlined-button-colored-icon">
                   <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Redo --></div>
                 </div>
               </div>
@@ -445,26 +445,25 @@
           <div class="edm-icon-placeholder edm-icon-placeholder-20px edm-stop-sign"><!-- Stop --></div>
           <div class="edm-spacer"></div>
           <div
-            class="edm-outlined-button edm-outlined-button-first edm-outlined-button-selected"
+            class="edm-outlined-button-group"
             @mouseenter="$emit('areahover', 'accent')"
             @mouseleave="$emit('areahover', 'page')"
           >
-            <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Small stage --></div>
+            <div class="edm-outlined-button edm-outlined-button-first edm-outlined-button-selected">
+              <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Small stage --></div>
+            </div>
+            <div class="edm-outlined-button edm-outlined-button-last edm-outlined-button-unselected">
+              <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Large stage --></div>
+            </div>
           </div>
           <div
-            class="edm-outlined-button edm-outlined-button-last edm-outlined-button-unselected"
+            class="edm-outlined-button-group"
             @mouseenter="$emit('areahover', 'accent')"
             @mouseleave="$emit('areahover', 'page')"
           >
-            <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Large stage --></div>
-          </div>
-          <div
-            class="edm-outlined-button edm-fullscreen-toggle"
-            @mouseenter="$emit('areahover', 'accent')"
-            @mouseleave="$emit('areahover', 'page')"
-            @click="toggleFullScreenView()"
-          >
-            <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Full screen --></div>
+            <div class="edm-outlined-button edm-fullscreen-toggle" @click="toggleFullScreenView()">
+              <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Full screen --></div>
+            </div>
           </div>
         </div>
         <div class="edm-stage" @mouseenter="$emit('areahover', null)" @mouseleave="$emit('areahover', 'page')"></div>
@@ -596,12 +595,13 @@
             <div class="edm-icon-placeholder edm-icon-placeholder-20px edm-stop-sign"><!-- Stop --></div>
           </div>
           <div
-            class="edm-outlined-button edm-fullscreen-toggle"
+            class="edm-outlined-button-group"
             @mouseenter="$emit('areahover', 'accent')"
-            @mouseleave="$emit('areahover', 'stageHeader')"
-            @click="toggleFullScreenView()"
+            @mouseleave="$emit('areahover', 'page')"
           >
-            <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Exit full screen --></div>
+            <div class="edm-outlined-button edm-fullscreen-toggle" @click="toggleFullScreenView()">
+              <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Exit full screen --></div>
+            </div>
           </div>
         </div>
       </div>
@@ -627,7 +627,10 @@
     transition: box-shadow 0.2s ease;
   }
   .edm-preview * {
-    transition: box-shadow 0.2s ease, filter 0.2s ease, border-color 0.2s ease;
+    transition:
+      box-shadow 0.2s ease,
+      filter 0.2s ease,
+      border-color 0.2s ease;
   }
 
   .edm-preview[data-setting-hovered="page"],
@@ -657,10 +660,9 @@
   .edm-preview[data-setting-hovered="highlightText"]
     .edm-tab-selected
     :is(.edm-text-placeholder, .edm-icon-placeholder),
+  .edm-preview[data-setting-hovered="highlightText"] .edm-outlined-button-colored-icon .edm-icon-placeholder,
   .edm-preview[data-setting-hovered="highlightText"] .edm-outlined-button-selected .edm-icon-placeholder,
-  .edm-preview[data-setting-hovered="highlightText"]
-    .edm-tool-button:not(.edm-tool-button-icons-not-affected *)
-    .edm-icon-placeholder,
+  .edm-preview[data-setting-hovered="highlightText"] .edm-tool-button .edm-icon-placeholder,
   .edm-preview[data-setting-hovered="accent"] .edm-outlined-button,
   .edm-preview[data-setting-hovered="accent"] .edm-backpack,
   .edm-preview[data-setting-hovered="input"] .edm-input,
@@ -719,6 +721,11 @@
     color: var(--primary-text);
   }
 
+  .edm-outlined-button-group {
+    display: flex;
+    background-color: var(--accent);
+    border-radius: 3px;
+  }
   .edm-outlined-button {
     width: 14px;
     height: 14px;
@@ -730,8 +737,12 @@
     border-radius: 3px;
     color: var(--accent-text);
   }
+  .edm-outlined-button-colored-icon {
+    color: var(--highlightText);
+  }
   .edm-outlined-button-selected {
     color: var(--highlightText);
+    background-color: var(--primary-transparent15);
   }
   .edm-outlined-button-unselected {
     color: var(--accent-transparentText);
@@ -753,7 +764,8 @@
   [dir="rtl"] .edm-outlined-button-last {
     border-radius: 3px 0 0 3px;
   }
-  .edm-outlined-button + .edm-outlined-button:not(.edm-outlined-button-middle):not(.edm-outlined-button-last) {
+  .edm-outlined-button + .edm-outlined-button:not(.edm-outlined-button-middle):not(.edm-outlined-button-last),
+  .edm-outlined-button-group + .edm-outlined-button-group {
     margin-inline-start: 3px;
   }
   .edm-icon-placeholder + .edm-outlined-button,
@@ -825,7 +837,7 @@
     background-color: var(--primary);
     border-radius: 7px;
     color: var(--primary-text);
-    box-shadow: 0 0 0 1px var(--primary-transparent);
+    box-shadow: 0 0 0 1px var(--primary-transparent35);
   }
   [dir="rtl"] .edm-asset-delete {
     right: auto;
@@ -834,7 +846,7 @@
   .edm-asset-selected {
     background-color: var(--selectorSelection);
     border-color: var(--primary);
-    box-shadow: 0 0 0 2px var(--primary-transparent);
+    box-shadow: 0 0 0 2px var(--primary-transparent35);
   }
   .edm-asset-selected .edm-asset-name {
     background-color: var(--primary);
@@ -853,7 +865,7 @@
     background-color: var(--primary);
     border-radius: 11px;
     color: var(--primary-text);
-    box-shadow: 0 0 0 2px var(--primary-transparent);
+    box-shadow: 0 0 0 2px var(--primary-transparent35);
   }
 
   .edm-menu-bar {
@@ -864,20 +876,18 @@
     color: var(--menuBar-text);
   }
   .edm-logo-placeholder {
-    margin-inline: 6px;
+    margin-inline: 8px;
     width: 35px;
-    height: 6px;
+    height: 12px;
+    box-sizing: border-box;
     background-color: #f9a83a;
     border: 3px solid white;
     border-radius: 6px;
   }
   .edm-menu-bar-menu {
-    margin-inline: 6px;
+    margin-inline: 8px;
     display: flex;
     align-items: center;
-  }
-  .edm-menu-bar-tutorials {
-    margin-inline: 2px;
   }
   .edm-menu-bar-button,
   .edm-menu-bar-input {
@@ -1084,9 +1094,6 @@
     margin-bottom: 2px;
     color: var(--highlightText);
   }
-  .edm-tool-button-icons-not-affected .edm-tool-button .edm-icon-placeholder {
-    color: #4c97ff;
-  }
   .edm-tool-button > .edm-text-placeholder {
     margin: 0;
   }
@@ -1139,7 +1146,11 @@
       linear-gradient(45deg, transparent 75%, var(--accent-checkerboard) 75%),
       linear-gradient(-45deg, transparent 75%, var(--accent-checkerboard) 75%);
     background-size: 16px 16px;
-    background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+    background-position:
+      0 0,
+      0 8px,
+      8px -8px,
+      -8px 0;
     border: 1px solid var(--border);
     border-radius: 3px;
   }
@@ -1173,7 +1184,7 @@
     align-items: center;
     background-color: var(--primary);
     background-clip: padding-box;
-    border: 2px solid var(--primary-transparent);
+    border: 2px solid var(--primary-transparent35);
     border-radius: 50%;
     color: var(--primary-text);
   }
@@ -1199,6 +1210,9 @@
   }
   .edm-fullscreen-toggle {
     cursor: pointer;
+  }
+  .edm-fullscreen-toggle:active {
+    background-color: var(--primary-transparent35);
   }
   .edm-stage {
     height: 90px;

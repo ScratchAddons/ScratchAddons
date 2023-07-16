@@ -6,7 +6,7 @@
 import * as SABlocks from "../../addon-api/content-script/blocks.js";
 
 /**
- * A neumeric value to represent the type of an {@link BlockInput}
+ * A numeric value to represent the type of an {@link BlockInput}
  * @readonly
  * @enum {number}
  */
@@ -29,14 +29,14 @@ export class BlockInput {
    * @param {number} fieldIdx
    */
   constructor(type, inputIdx, fieldIdx) {
-    if (this.constructor == BlockInput) throw new Error("Abstract classes can't be instantiated.");
+    if (this.constructor === BlockInput) throw new Error("Abstract classes can't be instantiated.");
     /** @type {BlockInputType} */
     this.type = type;
     /** @type {number} The index of this input in the workspace version of the block's input array.  */
     this.inputIdx = inputIdx;
     /**
      * The index of this input in the workspace version of the block's field array.
-     * The speical case of -1 means that in the workspace version, this input is inside a sub-block,
+     * The special case of -1 means that in the workspace version, this input is inside a sub-block,
      * that has been abstracted away.
      *  @type {number}
      */
@@ -85,7 +85,7 @@ export class BlockInput {
 export class BlockInputRound extends BlockInput {
   constructor(type, inputIdx, fieldIdx, defaultValue) {
     super(type, inputIdx, fieldIdx);
-    if (this.constructor == BlockInputRound) throw new Error("Abstract classes can't be instantiated.");
+    if (this.constructor === BlockInputRound) throw new Error("Abstract classes can't be instantiated.");
     this.defaultValue = defaultValue;
   }
 
@@ -273,7 +273,7 @@ export class BlockInstance {
 
     const block = this.typeInfo.Blockly.Xml.domToBlock(this.typeInfo.domForm, this.typeInfo.workspace);
     for (let i = 0; i < this.inputs.length; i++) {
-      if (this.inputs[i] != null) this.typeInfo.inputs[i].setValue(block, this.inputs[i]);
+      if (this.inputs[i] !== null) this.typeInfo.inputs[i].setValue(block, this.inputs[i]);
     }
 
     return block;
