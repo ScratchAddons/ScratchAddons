@@ -708,6 +708,7 @@ export default async function ({ addon, console, msg }) {
     });
   };
 
+  await addon.tab.scratchClassReady();
   addon.tab.createEditorContextMenu((ctxType, ctx) => {
     if (ctxType !== "sprite" && ctxType !== "costume" && ctxType !== "sound") return;
     const component = ctx.target[addon.tab.traps.getInternalKey(ctx.target)].return.return.return.stateNode;
