@@ -1,0 +1,17 @@
+.sa-original-poster {
+  background-color: var(--darkWww-button, #855cd6);
+  color: var(--darkWww-button-text, white);
+  border-radius: 16px;
+  padding: 4px;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+.comment-top-row .username.sa-username-is-op {
+  margin-right: 0;
+}
+.comment-top-row .sa-original-poster {
+  font-size: 12px;
+  margin-left: 4px;
+  margin-right: auto;
+}

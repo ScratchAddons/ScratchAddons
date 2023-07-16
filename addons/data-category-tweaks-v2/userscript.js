@@ -159,18 +159,27 @@ export default async function ({ addon, console, msg, safeMsg }) {
         <category
           name="%{BKY_CATEGORY_VARIABLES}"
           id="variables"
-          colour="#FF8C1A"
-          secondaryColour="#DB6E00"
+          colour="${ScratchBlocks.Colours.data.primary}"
+          secondaryColour="${ScratchBlocks.Colours.data.tertiary}"
           custom="VARIABLE">
         </category>
         <category
           name="${safeMsg("list-category")}"
           id="lists"
-          colour="#FF661A"
-          secondaryColour="#FF5500"
+          colour="${ScratchBlocks.Colours.data_lists.primary}"
+          secondaryColour="${ScratchBlocks.Colours.data_lists.tertiary}"
           custom="LIST">
         </category>`,
       });
+      result.map = (callback) => {
+        // Prevent Scratch from trying to change the color of the added category in high contrast mode.
+        // https://github.com/scratchfoundation/scratch-gui/blob/44eb578/src/containers/blocks.jsx#L358-L361
+        // https://github.com/scratchfoundation/scratch-gui/blob/44eb578/src/lib/themes/blockHelpers.js#L18-L53
+        return Array.prototype.map.call(result, (extension) => {
+          if (extension.id === "data") return extension;
+          else return callback(extension);
+        });
+      };
     }
     return result;
   };
