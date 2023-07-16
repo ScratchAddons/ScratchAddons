@@ -12,10 +12,13 @@ input.link.black:hover,
 input.link.black:active,
 .button > span,
 button,
-#footer .lists dd a,
 #comments .more-replies .pulldown,
 #email-resend-box a {
   font-weight: bold;
+}
+
+#footer a {
+  font-weight: bold !important;
 }
 
 /* Exclude */
