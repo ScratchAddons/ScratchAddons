@@ -1,0 +1,38 @@
+{
+  "name": "Skip post button",
+  "description": "Add a button to every post in the forums that skips to the next post.",
+  "tags": ["community", "forums"],
+  "versionAdded": "1.33.0",
+  "userscripts": [
+    {
+      "matches": ["forums"],
+      "url": "userscript.js"
+    }
+  ],
+  "userstyles": [
+    {
+      "matches": ["forums"],
+      "url": "fix-post-header.css",
+      "if": {
+        "settings": { "fix-post-header": true }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Fix post header",
+      "id": "fix-post-header",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld/"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "updateUserstylesOnSettingsChange": true
+}
