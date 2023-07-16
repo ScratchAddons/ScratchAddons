@@ -1,3 +1,4 @@
+/* Include */
 a,
 a:link,
 a:hover,
@@ -17,6 +18,7 @@ button,
   font-weight: bold;
 }
 
+/* Exclude */
 a.slider-carousel-control,
 #topnav ul.site-nav li a,
 #topnav ul.account-nav ul.user-nav li a {

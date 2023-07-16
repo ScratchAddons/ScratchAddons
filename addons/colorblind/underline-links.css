@@ -1,3 +1,4 @@
+/* Include */
 a,
 a:link,
 a:hover,
@@ -17,6 +18,7 @@ input.link.black:active,
   text-decoration-style: var(--colorblind-underlineStyle);
 }
 
+/* Exclude */
 a.slider-carousel-control,
 a.button,
 a.nav_link,
