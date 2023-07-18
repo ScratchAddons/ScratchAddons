@@ -7,6 +7,23 @@
       "link": "https://github.com/DNin01"
     }
   ],
+  "customCssVariables": [
+    {
+      "name": "tdecoOverride",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "links"
+        },
+        "options": {
+          "default": null,
+          "bold": null,
+          "underline": "underline"
+        }
+      }
+    }
+  ],
   "userstyles": [
     {
       "url": "bold-links.css",

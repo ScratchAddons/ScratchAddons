@@ -42,7 +42,7 @@ input.link:active,
 input.link.black:hover,
 input.link.black:active {
   color: var(--darkWww-link-hover, #7854c0);
-  text-decoration: none;
+  text-decoration: var(--colorblind-tdecoOverride, none);
 }
 #content {
   padding-top: 70px;
