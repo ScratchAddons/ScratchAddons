@@ -17,8 +17,6 @@
           "settingId": "links"
         },
         "options": {
-          "default": null,
-          "bold": null,
           "underline": "underline"
         }
       }
