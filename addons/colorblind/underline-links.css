@@ -25,7 +25,8 @@ a.nav_link,
 .button a,
 #navigation .link > a,
 #topnav ul.site-nav li a,
-.dropdown > li a,
-#topnav ul.account-nav ul.user-nav li a {
+#navigation .dropdown > li a,
+#topnav ul.account-nav ul.user-nav li a,
+.extension-chip a {
   text-decoration: none;
 }
