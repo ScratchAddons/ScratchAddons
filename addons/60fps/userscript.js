@@ -7,6 +7,12 @@ export default async function ({ addon, console }) {
   let mode = false;
   let monitorUpdateFixed = false;
 
+  // Flag svg URIs
+  // Would be nice TODO: Get the flag svg URIs from the scratch html.
+  let fastFlag = "data:image/svg+xml,<svg viewBox='0 0 17 18' fill='none' xmlns='http://www.w3.org/2000/svg'><g clip-path='url(%23clip0_0_3)'><path d='M0.75 2C1.8613 1.1729 3.20969 0.726196 4.595 0.726196C5.98031 0.726196 7.3287 1.1729 8.44 2C9.5513 2.8271 10.8997 3.27381 12.285 3.27381C13.6703 3.27381 15.0187 2.8271 16.13 2V12.4C15.0187 13.2271 13.6703 13.6738 12.285 13.6738C10.8997 13.6738 9.5513 13.2271 8.44 12.4C7.3287 11.5729 5.98031 11.1262 4.595 11.1262C3.20969 11.1262 1.8613 11.5729 0.75 12.4' fill='%234CBF56'/><path d='M0.75 2C1.8613 1.1729 3.20969 0.726196 4.595 0.726196C5.98031 0.726196 7.3287 1.1729 8.44 2C9.5513 2.8271 10.8997 3.27381 12.285 3.27381C13.6703 3.27381 15.0187 2.8271 16.13 2V12.4C15.0187 13.2271 13.6703 13.6738 12.285 13.6738C10.8997 13.6738 9.5513 13.2271 8.44 12.4C7.3287 11.5729 5.98031 11.1262 4.595 11.1262C3.20969 11.1262 1.8613 11.5729 0.75 12.4' stroke='%2345993D' stroke-linecap='round' stroke-linejoin='round'/><path d='M0.75 16.75V0.75' stroke='%2345993D' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/><path d='M9.60727 12.4029L4.04607 16.4893C3.71586 16.732 3.25 16.4962 3.25 16.0864L3.25 7.91358C3.25 7.50381 3.71586 7.26802 4.04607 7.51066L9.60727 11.5971C9.87918 11.7969 9.87918 12.2031 9.60727 12.4029Z' fill='%23D8DB4A' stroke='%23B5BF42'/><path d='M15.6073 12.4029L10.0461 16.4893C9.71586 16.732 9.25 16.4962 9.25 16.0864L9.25 7.91358C9.25 7.50381 9.71586 7.26802 10.0461 7.51066L15.6073 11.5971C15.8792 11.7969 15.8792 12.2031 15.6073 12.4029Z' fill='%23D8DB4A' stroke='%23B5BF42'/></g><defs><clipPath id='clip0_0_3'><rect width='16.63' height='17.5' fill='white'/></clipPath></defs></svg>"
+  let flag = "data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNi42MyAxNy41Ij48ZGVmcz48c3R5bGU+LmNscy0xLC5jbHMtMntmaWxsOiM0Y2JmNTY7c3Ryb2tlOiM0NTk5M2Q7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO30uY2xzLTJ7c3Ryb2tlLXdpZHRoOjEuNXB4O308L3N0eWxlPjwvZGVmcz48dGl0bGU+aWNvbi0tZ3JlZW4tZmxhZzwvdGl0bGU+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNLjc1LDJBNi40NCw2LjQ0LDAsMCwxLDguNDQsMmgwYTYuNDQsNi40NCwwLDAsMCw3LjY5LDBWMTIuNGE2LjQ0LDYuNDQsMCwwLDEtNy42OSwwaDBhNi40NCw2LjQ0LDAsMCwwLTcuNjksMCIvPjxsaW5lIGNsYXNzPSJjbHMtMiIgeDE9IjAuNzUiIHkxPSIxNi43NSIgeDI9IjAuNzUiIHkyPSIwLjc1Ii8+PC9zdmc+"
+
+
   while (true) {
     let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
       markAsSeen: true,
@@ -14,7 +20,7 @@ export default async function ({ addon, console }) {
     });
 
     const updateFlag = () => {
-      button.style.filter = mode ? "hue-rotate(90deg)" : "";
+      button.src = mode ? fastFlag : flag;
     };
 
     const changeMode = (_mode = !mode) => {
