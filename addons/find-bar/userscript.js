@@ -116,14 +116,12 @@ export default async function ({ addon, msg, console }) {
     inputKeyDown(e) {
       this.dropdown.inputKeyDown(e);
 
-      // Enter
-      if (e.keyCode === 13) {
+      if (e.key === "Enter") {
         this.findInput.blur();
         return;
       }
 
-      // Escape
-      if (e.keyCode === 27) {
+      if (e.key === "Escape") {
         if (this.findInput.value.length > 0) {
           this.findInput.value = ""; // Clear search first, then close on second press
           this.inputChange();
@@ -149,7 +147,7 @@ export default async function ({ addon, msg, console }) {
         return true;
       }
 
-      if (e.keyCode === 37 && ctrlKey) {
+      if (e.key === "ArrowLeft" && ctrlKey) {
         // Ctrl + Left Arrow Key
         if (document.activeElement.tagName === "INPUT") {
           return;
@@ -163,7 +161,7 @@ export default async function ({ addon, msg, console }) {
         }
       }
 
-      if (e.keyCode === 39 && ctrlKey) {
+      if (e.key === "ArrowRight" && ctrlKey) {
         // Ctrl + Right Arrow Key
         if (document.activeElement.tagName === "INPUT") {
           return;
@@ -426,22 +424,19 @@ export default async function ({ addon, msg, console }) {
     }
 
     inputKeyDown(e) {
-      // Up Arrow
-      if (e.keyCode === 38) {
+      if (e.key === "ArrowUp") {
         this.navigateFilter(-1);
         e.preventDefault();
         return;
       }
 
-      // Down Arrow
-      if (e.keyCode === 40) {
+      if (e.key === "ArrowDown") {
         this.navigateFilter(1);
         e.preventDefault();
         return;
       }
 
-      // Enter
-      if (e.keyCode === 13) {
+      if (e.key === "Enter") {
         // Any selected on enter? if not select now
         if (this.selected) {
           this.navigateFilter(1);
@@ -726,15 +721,15 @@ export default async function ({ addon, msg, console }) {
     }
 
     inputKeyDown(e) {
-      // Left Arrow
-      if (e.keyCode === 37) {
+      // Left Arrow or Shift + F3
+      if (e.key === "ArrowLeft" || (e.key === "F3" && e.shiftKey)) {
         if (this.el && this.blocks) {
           this.navLeft(e);
         }
       }
 
-      // Right Arrow
-      if (e.keyCode === 39) {
+      // Right Arrow or F3
+      if (e.key === "ArrowRight" || (e.key === "F3" && !e.shiftKey)) {
         if (this.el && this.blocks) {
           this.navRight(e);
         }
