@@ -9,10 +9,8 @@ export default async function ({ addon, console }) {
 
   // Flag svg URIs
   // Would be nice TODO: Get the flag svg URIs from the scratch html.
-  let fastFlag =
-    addon.self.dir + "/svg/scratchFlagFastBlue.svg";
-  let flag =
-    addon.self.dir + "/svg/scratchFlag.svg";
+  let fastFlag = addon.self.dir + "/svg/scratchFlagFastBlue.svg";
+  let flag = addon.self.dir + "/svg/scratchFlag.svg";
 
   while (true) {
     let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
