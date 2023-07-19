@@ -6,14 +6,15 @@
       :class="{ 'action-disabled': !addon._enabled, open: isOpen }"
       @click="toggle(addon, setting)"
     ></button>
-    <ColorPicker
-      :color="color"
-      :alpha-channel="alphaEnabled ? 'show' : 'hide'"
-      id="picker"
-      v-show="isOpen"
-      dir="ltr"
-      @color-change="change"
-    ></ColorPicker>
+    <form>
+      <ColorPicker
+        :color="color"
+        :alpha-channel="alphaEnabled ? 'show' : 'hide'"
+        v-show="isOpen"
+        dir="ltr"
+        @color-change="change"
+      ></ColorPicker>
+    </form>
   </div>
 </template>
 <script>
@@ -44,7 +45,6 @@ export default {
     },
   },
 
-  // write method to toggle the color picker
   mounted() {
     bus.$on("close-pickers", (except) => {
       if (this.isOpen && this !== except) {
@@ -68,7 +68,6 @@ export default {
         });
       if (callCloseDropdowns) this.$root.closeResetDropdowns({ isTrusted: true }); // close other dropdowns
       this.opening = false;
-      //this.color = "#" + this.$els.pickr.hex8;
       this.$parent.addonSettings[setting.id] = this.color;
       this.$parent.updateSettings(addon, { wait: 250, settingId: setting.id });
 
@@ -87,14 +86,21 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
+form {
+  position: absolute;
+}
 .vacp-color-picker {
   position: absolute;
   width: max-content;
   z-index: 2;
   top: 32px;
+  background-color: var(--button-background) !important;
+  color: var(--content-text) !important;
 }
-.vacp-color-picker {
-  color: black;
+.vacp-color-input {
+  background: var(--input-background) !important;
+  border-radius: 16px;
+  border: 1px solid var(--control-border) !important;
 }
 </style>

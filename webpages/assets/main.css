@@ -354,16 +354,7 @@ body.iframe .search-box input {
   height: 10rem;
 }
 
-color-picker {
-  z-index: 2;
-  position: absolute;
-  top: calc(100% - 1px);
-  left: 0;
-  border: 1px solid var(--control-border);
-  --color-picker-background-color: var(--button-background);
-  --color-picker-color: var(--content-text);
-  --color-picker-font-family: Sora, sans-serif;
-}
+
 
 button.setting-input.color {
   width: 100px;
@@ -387,10 +378,7 @@ button.setting-input.color.open {
 .color-container .setting-input.color {
   cursor: pointer;
 }
-.v-color-picker {
-  position: absolute;
-  z-index: 2;
-}
+
 
 .action-disabled {
   pointer-events: none;

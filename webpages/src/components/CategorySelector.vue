@@ -1,5 +1,5 @@
 <template>
-  <Transition name="expand">
+  <Transition name="expand" mode="in-out">
   <div
     class="category"
     :class="{
