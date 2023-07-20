@@ -19,6 +19,10 @@
     {
       "url": "scratchr2.css",
       "matches": ["profiles", "forums", "https://scratch.mit.edu/404", "https://scratch.mit.edu/info/*", "https://scratch.mit.edu/statistics/", "https://scratch.mit.edu/mystuff/*", "https://scratch.mit.edu/accounts/*"]
+    },
+    {
+      "url": "messages.css",
+      "matches": ["https://scratch.mit.edu/messages/*"]
     }
   ],
   "injectAsStyleElt": true,
@@ -43,6 +47,12 @@
       "if": {
         "settings": {"highlight": true}
       }
+    },
+    {
+      "name": "Badge color on messages page",
+      "id": "messages",
+      "type": "color",
+      "default": "#cc4400"
     }
   ],
   "customCssVariables": [
@@ -53,6 +63,10 @@
     {
       "name": "alert",
       "value": {"type": "settingValue", "settingId": "alert"}
+    },
+    {
+      "name": "messages",
+      "value": {"type": "settingValue", "settingId": "messages"}
     }
   ],
   "tags": ["community"],
