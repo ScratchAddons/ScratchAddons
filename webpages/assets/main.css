@@ -118,13 +118,13 @@ h1 {
 }
 
 [dir="rtl"] .clear-button {
-  border-radius: 4px 0 0 4px;
+  border-radius: 4px 0 0 4px !important;
 }
 .number-setting .clear-button {
   border-radius: 0 16px 16px 0 !important;
 }
 [dir="rtl"] .number-setting .clear-button {
-  border-radius: 16px 0 0 16px;
+  border-radius: 16px 0 0 16px !important;
 }
 .clear-button .icon-type {
   margin: 0;

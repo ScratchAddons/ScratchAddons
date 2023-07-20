@@ -11,13 +11,14 @@
         :color="color"
         :alpha-channel="alphaEnabled ? 'show' : 'hide'"
         v-show="isOpen"
-        dir="ltr"
+        :dir="dir"
         @color-change="change"
       ></ColorPicker>
     </form>
   </div>
 </template>
 <script>
+import getDirection from '../lib/rtl-list';
 import bus from "../lib/eventbus";
 import { ColorPicker } from "vue-accessible-color-picker";
 import debounce from "../lib/debounce";
@@ -26,7 +27,7 @@ export default {
   // bind to the color prop and update addon settings
   props: ["addon", "setting", "modelValue", "alphaEnabled"],
   emits: ["update:modelValue"],
-
+  computed: {dir() {return getDirection()}},
   data() {
     return {
       isOpen: false,
