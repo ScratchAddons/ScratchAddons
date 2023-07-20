@@ -22,11 +22,12 @@ export default async function ({ addon, console }) {
   }
   const hasAlertsResult = await hasAlerts();
 
-  if (hasAlertsResult) {
+  if (hasAlertsResult && addon.settings.get("highlight")) {
     const messageBadge = document.querySelector(".message-count");
+    messageBadge.classList.add("sa-alert-badge");
     const originalText = messageBadge.innerText;
-    messageBadge.style.backgroundColor = "#cc4400";
-    messageBadge.innerText = originalText.trim() + "!";
+    //messageBadge.style.backgroundColor = "#cc4400";
+    messageBadge.innerText = originalText.trim(); // better visuals
   }
 }
 

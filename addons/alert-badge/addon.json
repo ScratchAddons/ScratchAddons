@@ -1,6 +1,6 @@
 {
-  "name": "Red alert message badge",
-  "description": "Turns the messages badge in the navbar red and adds an exclamation mark if you have alert messages from the Scratch Team.",
+  "name": "Customizable message badge",
+  "description": "Allows you to customize the colors of the message badge. Also changes its color and adds an '!' if you have alert messages from the Scratch Team.",
   "userscripts": [
     {
       "url": "userscript.js",
@@ -9,6 +9,50 @@
     {
       "url": "scratchr2.js",
       "matches": ["profiles", "forums", "https://scratch.mit.edu/404", "https://scratch.mit.edu/info/*", "https://scratch.mit.edu/statistics/", "https://scratch.mit.edu/mystuff/*", "https://scratch.mit.edu/accounts/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects", "scratchWWWNoProject"]
+    },
+    {
+      "url": "scratchr2.css",
+      "matches": ["profiles", "forums", "https://scratch.mit.edu/404", "https://scratch.mit.edu/info/*", "https://scratch.mit.edu/statistics/", "https://scratch.mit.edu/mystuff/*", "https://scratch.mit.edu/accounts/*"]
+    }
+  ],
+  "injectAsStyleElt": true,
+  "settings": [
+    {
+      "name": "Badge color",
+      "id": "default",
+      "type": "color",
+      "default": "#ffab1a"
+    },
+    {
+      "name": "Highlight alerts",
+      "id": "highlight",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Badge color when there are alerts",
+      "id": "alert",
+      "type": "color",
+      "default": "#cc4400",
+      "if": {
+        "settings": {"highlight": true}
+      }
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "default",
+      "value": {"type": "settingValue", "settingId": "default"}
+    },
+    {
+      "name": "alert",
+      "value": {"type": "settingValue", "settingId": "alert"}
     }
   ],
   "tags": ["community"],

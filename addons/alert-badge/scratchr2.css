@@ -1,0 +1,6 @@
+.notificationsCount {
+    background-color: var(--alertBadge-default) !important;
+}
+.sa-alert-badge {
+    background-color: var(--alertBadge-alert) !important;
+}

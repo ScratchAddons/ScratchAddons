@@ -21,12 +21,13 @@ export default async function ({ addon, console }) {
     }
   }
   const hasAlertsResult = await hasAlerts();
-  console.log(hasAlertsResult);
-  if (hasAlertsResult) {
+
+  if (hasAlertsResult && addon.settings.get("highlight")) {
     const messageBadge = document.querySelector(".notificationsCount");
-    const originalText = messageBadge.innerText;
-    messageBadge.style.backgroundColor = "#cc4400";
-    messageBadge.innerText = originalText.trim() + "!";
+    messageBadge.classList.add("sa-alert-badge");
+    //const originalText = messageBadge.innerText;
+    //messageBadge.style.backgroundColor = "#cc4400";
+    //messageBadge.innerText = originalText.trim() + "!";
   }
 }
 
