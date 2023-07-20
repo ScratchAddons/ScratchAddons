@@ -21,7 +21,7 @@ export default async function ({ addon, console }) {
     }
   }
   const hasAlertsResult = await hasAlerts();
-  console.log(hasAlertsResult);
+
   if (hasAlertsResult) {
     const messageBadge = document.querySelector(".message-count");
     const originalText = messageBadge.innerText;
