@@ -1,0 +1,25 @@
+{
+  "name": "Red alert message badge",
+  "description": "Turns the messages badge in the navbar red and adds an exclamation mark if you have alert messages from the Scratch Team.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects", "scratchWWWNoProject"]
+    },
+    {
+      "url": "scratchr2.js",
+      "matches": ["profiles", "forums", "https://scratch.mit.edu/404", "https://scratch.mit.edu/info/*", "https://scratch.mit.edu/statistics/", "https://scratch.mit.edu/mystuff/*", "https://scratch.mit.edu/accounts/*"]
+    }
+  ],
+  "tags": ["community"],
+  "versionAdded": "1.34.0",
+  "enabledByDefault": false,
+  "credits": [
+    {
+      "name": "Secret-chest",
+      "id": "addon",
+      "link": "https://github.com/Secret-chest"
+    }
+  ]
+}
+
