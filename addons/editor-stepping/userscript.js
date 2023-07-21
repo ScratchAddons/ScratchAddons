@@ -19,7 +19,7 @@ export default async function ({ addon, console }) {
     if (!addon.self.disabled) {
       const runningThread = getRunningThread();
       const threads = vm.runtime.threads.filter(
-        (thread) => thread !== runningThread && !thread.target.blocks.forceNoGlow
+        (thread) => thread !== runningThread && !thread.target.blocks.forceNoGlow,
       );
       highlighter.setGlowingThreads(threads);
     }
