@@ -1,0 +1,54 @@
+{
+  "name": "Additional footer column",
+  "description": "Choose a list of links to be displayed in the footer.",
+  "tags": ["community"],
+  "versionAdded": "1.33.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": "^https://scratch.mit.edu/*"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": "^https://scratch.mit.edu/*"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Category title",
+      "id": "category-title",
+      "default": "Additional",
+      "type": "string"
+    },
+    {
+      "name": "Items",
+      "id": "items",
+      "type": "table",
+      "default": [],
+      "row": [
+        {
+          "name": "Name",
+          "id": "name",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "name": "URL",
+          "id": "url",
+          "type": "string",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld/"
+    }
+  ]
+}

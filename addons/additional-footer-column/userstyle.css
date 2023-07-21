@@ -1,0 +1,19 @@
+/* For scratchr2 to display correctly */
+#footer .container {
+  width: auto;
+}
+
+#sa-additional-footer-column,
+#sa-additional-footer-column h4,
+#sa-additional-footer-column li {
+  width: auto !important;
+}
+
+#sa-additional-footer-column li {
+  display: block !important;
+}
+
+#footer .footer-col {
+  display: flex;
+  justify-content: center;
+}
