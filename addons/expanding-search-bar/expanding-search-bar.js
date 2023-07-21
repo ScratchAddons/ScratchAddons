@@ -14,7 +14,7 @@ export default async function ({ addon, console }) {
           if (!state.scratchGui) return true;
           return state.scratchGui.mode.isPlayerOnly;
         },
-      },
+      }
     );
 
     ///Events

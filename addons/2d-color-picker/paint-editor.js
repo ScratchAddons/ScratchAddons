@@ -90,7 +90,7 @@ export default async ({ addon, console, msg }) => {
       e.detail.action.type === "scratch-paint/stroke-style/CHANGE_STROKE_COLOR" ||
       e.detail.action.type === "scratch-paint/stroke-style/CHANGE_STROKE_COLOR_2"
         ? updateColor()
-        : 0,
+        : 0
     );
     if (addon.tab.redux && typeof prevEventHandler === "function") {
       addon.tab.redux.removeEventListener("statechanged", prevEventHandler);

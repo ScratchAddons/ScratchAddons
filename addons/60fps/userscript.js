@@ -31,7 +31,7 @@ export default async function ({ addon, console }) {
             addon.tab.redux.dispatch({
               type: "scratch-gui/monitors/UPDATE_MONITORS",
               monitors,
-            }),
+            })
           );
           monitorUpdateFixed = true;
         }

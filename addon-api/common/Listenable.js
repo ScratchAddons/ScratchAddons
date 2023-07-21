@@ -36,7 +36,7 @@ export default class Listenable extends EventTarget {
     if (key === null) return;
     scratchAddons.eventTargets[key].splice(
       scratchAddons.eventTargets[key].findIndex((x) => x === this),
-      1,
+      1
     );
   }
 }

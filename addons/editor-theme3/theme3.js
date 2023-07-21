@@ -260,13 +260,13 @@ export default async function ({ addon, console }) {
           d: arrowShadowPath,
           fill: arrowShadowColor,
           "fill-opacity": 0.1,
-        }),
+        })
       );
       this.arrow_.appendChild(
         Blockly.utils.createSvgElement("path", {
           d: arrowPath,
           fill: textColor(this),
-        }),
+        })
       );
       // Redraw arrow
       this.arrowY_ = 12;

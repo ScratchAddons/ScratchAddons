@@ -14,7 +14,7 @@ export default async ({ addon, console, msg }) => {
           type: "scratch-gui/restore-deletion/RESTORE_UPDATE",
           state: restoreDeletionState,
         }),
-      100,
+      100
     );
     return Promise.resolve();
   };

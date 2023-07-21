@@ -171,7 +171,7 @@ export default function createSnapPoints(paper, selectionBounds, lib, objects) {
                 },
               ],
             ])
-            .flat(1),
+            .flat(1)
         )
       : {}),
     ...(snapTo.objectCenters
@@ -187,7 +187,7 @@ export default function createSnapPoints(paper, selectionBounds, lib, objects) {
                 },
               ],
             ])
-            .flat(1),
+            .flat(1)
         )
       : {}),
     ...(snapTo.objectMidlines
@@ -210,7 +210,7 @@ export default function createSnapPoints(paper, selectionBounds, lib, objects) {
                 },
               ],
             ])
-            .flat(1),
+            .flat(1)
         )
       : {}),
     ...(snapTo.objectCorners
@@ -247,7 +247,7 @@ export default function createSnapPoints(paper, selectionBounds, lib, objects) {
                 },
               ],
             ])
-            .flat(1),
+            .flat(1)
         )
       : {}),
   };
