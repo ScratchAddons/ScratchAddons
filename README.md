@@ -31,17 +31,9 @@ Userscripts can also use the `addon.*` APIs provided by Scratch Addons, which ma
 
 Read the [documentation](https://scratchaddons.com/docs/develop/getting-started/addon-basics/) for more information about addons.
 
-### If everything is an addon, what does Scratch Addons do?
+### About the extension
 
-Scratch Addons by itself is just an addon loader. Its main tasks are to:
-
-- Allow users to enable, disable and configure addons.
-- Run addons and provide APIs to them.
-- Provide global state to addons (for example, the `addon.auth` API).
-- Pollute prototypes for use by addon userscripts.
-- Provide ways to access and modify Redux state.
-- Avoid addons from interfering with each other.
-- Avoid duplicate work from different addons.
+Scratch Addons provides a settings page to enable, disable and configure addon settings. It loads addons only when necessary and provides APIs to them. We usually release new features once a month.
 
 ### Addons beyond the Scratch Addons browser extension
 
