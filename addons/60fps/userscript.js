@@ -7,10 +7,8 @@ export default async function ({ addon, console }) {
   let mode = false;
   let monitorUpdateFixed = false;
 
-  // Flag svg URIs
-  // Would be nice TODO: Get the flag svg URIs from the scratch html.
-  let fastFlag = addon.self.dir + "/svg/scratchFlagFastBlue.svg";
-  let flag = addon.self.dir + "/svg/scratchFlag.svg";
+  const fastFlag = addon.self.dir + "/svg/fast-flag.svg";
+  let vanillaFlag = null;
 
   while (true) {
     let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
@@ -19,7 +17,8 @@ export default async function ({ addon, console }) {
     });
 
     const updateFlag = () => {
-      button.src = mode ? fastFlag : flag;
+      if (!vanillaFlag) vanillaFlag = button.src;
+      button.src = mode ? fastFlag : vanillaFlag;
     };
 
     const changeMode = (_mode = !mode) => {
