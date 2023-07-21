@@ -11,10 +11,6 @@
     "addons-l10n/[abcdefghijklmnopqrstuvwxyz][abcdefghijklmopqrstuvwxyz]*": true
   },
 
-  "explorer.autoRevealExclude": {
-    "addons/**": true
-  },
-
   "json.schemas": [
     {
       "fileMatch": ["/addons/*/addon.json"],
