@@ -25,9 +25,9 @@ Scratch Addons combines new and existing features and themes for the [Scratch](h
 
 ### About addons
 
-An addon is one or more [userscripts](https://scratchaddons.com/docs/develop/userscripts/) or [userstyles](https://scratchaddons.com/docs/develop/userstyles/) that run on the Scratch website or project editor.
+Addon are one or more [userscripts](https://scratchaddons.com/docs/develop/userscripts/) or [userstyles](https://scratchaddons.com/docs/develop/userstyles/) that run on the Scratch website or project editor.
 
-Userscripts can use the `addon.*` JavaScript APIs provided by Scratch Addons, which allows them to obtain Scratch-related information like the currently logged in user and use extension APIs to do things such as send notifications.
+Userscripts can also use the `addon.*` APIs provided by Scratch Addons, which makes it easier for them to ensure compatibility with other addons and obtain Scratch-related information such as the currently logged in user, wait until a certain element exists on the page, or get a reference to the Scratch VM object.
 
 Read the [documentation](https://scratchaddons.com/docs/develop/getting-started/addon-basics/) for more information about addons.
 
