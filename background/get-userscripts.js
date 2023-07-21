@@ -401,11 +401,11 @@ function userscriptMatches(data, scriptOrStyle, addonId) {
   if (scriptOrStyle.if && !matchesIf(scriptOrStyle, scratchAddons.globalState.addonSettings[addonId])) return false;
 
   let _url = data.url;
-  let _parsedURL = new URL(url);
+  let _parsedURL = new URL(_url);
   if (_parsedURL.origin === "https://scratchfoundation.github.io" || _parsedURL.port === "8601") {
     // Run addons on scratch-gui
     _url = "https://scratch.mit.edu/projects/104/editor";
-    _parsedURL = new URL(url);
+    _parsedURL = new URL(_url);
   }
   const url = _url;
   const parsedURL = _parsedURL;
