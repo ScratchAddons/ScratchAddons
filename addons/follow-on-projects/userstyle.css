@@ -1,0 +1,18 @@
+#sa-follow-button {
+  margin: 0;
+  margin-left: 0.4rem;
+  padding: 0.25em 1em;
+}
+
+#sa-follow-button:not(.notfollowing),
+#sa-follow-button:disabled {
+  background-color: var(--darkWww-gray-darker, #b3b3b3);
+}
+
+#sa-follow-button:disabled:hover {
+  cursor: not-allowed;
+}
+
+.sa-follow-on-projects-confirm-actions {
+  display: none;
+}
