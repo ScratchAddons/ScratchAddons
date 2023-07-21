@@ -67,6 +67,14 @@
     {
       "name": "messages",
       "value": {"type": "settingValue", "settingId": "messages"}
+    },
+    {
+      "name": "defaultfg",
+      "value": {"type": "textColor", "source": {"type": "settingValue", "settingId": "default"}, "black": "#000000", "white": "#ffffff", "threshold": 153}
+    },
+    {
+      "name": "alertfg",
+      "value": {"type": "textColor", "source": {"type": "settingValue", "settingId": "alert"}, "black": "#000000", "white": "#ffffff", "threshold": 153}
     }
   ],
   "tags": ["community"],
