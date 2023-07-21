@@ -163,7 +163,6 @@ export default async function ({ addon, msg, console }) {
   updateToolbox();
   addon.self.addEventListener("disabled", updateToolbox);
   addon.self.addEventListener("reenabled", updateToolbox);
-  addon.tab.addEventListener("urlChange", addClass);
 
   while (true) {
     const addExtensionButton = await addon.tab.waitForElement("[class*='gui_extension-button_']", {
@@ -171,6 +170,7 @@ export default async function ({ addon, msg, console }) {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       condition: () => !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
     });
+    addClass();
     const addExtensionLabel = Object.assign(document.createElement("span"), {
       className: "sa-add-extension-label",
       innerText: addon.tab.scratchMessage("gui.gui.addExtension"),
