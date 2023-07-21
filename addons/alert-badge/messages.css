@@ -1,3 +1,4 @@
 .messages-header-unread {
-    background-color: var(--alertBadge-messages)
+    background-color: var(--alertBadge-messages);
+    color: var(--alertBadge-messagesfg);
 }
