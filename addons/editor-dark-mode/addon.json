@@ -63,6 +63,21 @@
       }
     },
     {
+      "name": "page-loader",
+      "value": {
+        "type": "textColor",
+        "black": "#4d97ff",
+        "white": {
+          "type": "settingValue",
+          "settingId": "page"
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
       "name": "primary-text",
       "value": {
         "type": "textColor",
@@ -108,28 +123,6 @@
       }
     },
     {
-      "name": "primary-transparent25",
-      "value": {
-        "type": "multiply",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primary"
-        },
-        "a": 0.25
-      }
-    },
-    {
-      "name": "primary-transparent20",
-      "value": {
-        "type": "multiply",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primary"
-        },
-        "a": 0.2
-      }
-    },
-    {
       "name": "primary-transparent15",
       "value": {
         "type": "multiply",
@@ -154,9 +147,9 @@
             "type": "settingValue",
             "settingId": "primary"
           },
-          "r": 0.66,
-          "g": 0.76,
-          "b": 0.8
+          "r": 0.85,
+          "g": 0.85,
+          "b": 0.85
         },
         "white": {
           "type": "brighten",
@@ -336,8 +329,8 @@
       "name": "selectorSelection-filter",
       "value": {
         "type": "textColor",
-        "black": "none",
-        "white": "brightness(0) invert(1)",
+        "black": "drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.15)",
+        "white": "brightness(0) invert(1) drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.15)",
         "source": {
           "type": "settingValue",
           "settingId": "selectorSelection"
@@ -385,18 +378,6 @@
     },
     {
       "name": "accent-desaturateFilter",
-      "value": {
-        "type": "textColor",
-        "black": "saturate(0)",
-        "white": "brightness(0) invert(1) opacity(0.7)",
-        "source": {
-          "type": "settingValue",
-          "settingId": "accent"
-        }
-      }
-    },
-    {
-      "name": "accent-desaturateFilterNew",
       "value": {
         "type": "textColor",
         "black": "grayscale(100%) opacity(0.5)",
@@ -459,7 +440,7 @@
               "type": "makeHsv",
               "h": {
                 "type": "settingValue",
-                "settingId": "primary"
+                "settingId": "page"
               },
               "s": 1,
               "v": 0.67
@@ -468,7 +449,7 @@
               "type": "makeHsv",
               "h": {
                 "type": "settingValue",
-                "settingId": "primary"
+                "settingId": "page"
               },
               "s": 0.5,
               "v": 1
@@ -721,6 +702,18 @@
       }
     },
     {
+      "name": "categoryMenu-hoverText",
+      "value": {
+        "type": "textColor",
+        "black": "#3373cc",
+        "white": "#80b5ff",
+        "source": {
+          "type": "settingValue",
+          "settingId": "categoryMenu"
+        }
+      }
+    },
+    {
       "name": "palette-text",
       "value": {
         "type": "textColor",
@@ -827,6 +820,10 @@
     {
       "url": "extension_icons.js",
       "matches": ["projects"]
+    },
+    {
+      "url": "paint_icons.js",
+      "matches": ["projects"]
     }
   ],
   "userstyles": [
@@ -867,13 +864,13 @@
       "name": "Highlight color",
       "id": "primary",
       "type": "color",
-      "default": "#4d97ff"
+      "default": "#855cd6"
     },
     {
       "name": "Text and icon highlight color",
       "id": "highlightText",
       "type": "color",
-      "default": "#4d97ff"
+      "default": "#ccb3ff"
     },
     {
       "name": "Menu bar background",
@@ -975,7 +972,7 @@
       "default": false
     },
     {
-      "name": "Change the costume editor background and selection borders",
+      "name": "Change the costume editor background",
       "id": "affectPaper",
       "type": "boolean",
       "default": true
@@ -992,6 +989,32 @@
       "name": "3.Darker",
       "id": "3darker",
       "description": "A dark theme based on a userscript by infinitytec",
+      "values": {
+        "page": "#111111",
+        "primary": "#855cd6",
+        "highlightText": "#ccb3ff",
+        "menuBar": "#202020",
+        "popup": "#000a",
+        "activeTab": "#202020",
+        "tab": "#151515",
+        "selector": "#202020",
+        "selector2": "#202020",
+        "selectorSelection": "#111111",
+        "accent": "#151515",
+        "input": "#202020",
+        "workspace": "#151515",
+        "categoryMenu": "#202020",
+        "palette": "#202020cc",
+        "fullscreen": "#000000",
+        "stageHeader": "#000000",
+        "border": "#ffffff0d",
+        "dots": false
+      }
+    },
+    {
+      "name": "3.Darker (blue)",
+      "id": "3darker-blue",
+      "description": "3.Darker with a blue accent color",
       "values": {
         "page": "#111111",
         "primary": "#4d97ff",
@@ -1071,14 +1094,14 @@
       "id": "experimentalDark",
       "description": "A dark theme by Maximouse based on a userstyle. Not experimental",
       "values": {
-        "page": "#263241",
-        "primary": "#4d97ff",
-        "highlightText": "#4d97ff",
-        "menuBar": "#4d97ff",
+        "page": "#2e3238",
+        "primary": "#855cd6",
+        "highlightText": "#ccb3ff",
+        "menuBar": "#855cd6",
         "popup": "#000a",
         "activeTab": "#282828",
         "tab": "#202020",
-        "selector": "#252c37",
+        "selector": "#292d32",
         "selector2": "#202020",
         "selectorSelection": "#282828",
         "accent": "#282828",
@@ -1176,6 +1199,32 @@
       "description": "The colors normally used by Scratch",
       "values": {
         "page": "#e5f0ff",
+        "primary": "#855cd6",
+        "highlightText": "#855cd6",
+        "menuBar": "#855cd6",
+        "popup": "#4d97ffe6",
+        "activeTab": "#ffffff",
+        "tab": "#d9e3f2",
+        "selector": "#e9f1fc",
+        "selector2": "#d9e3f2",
+        "selectorSelection": "#ffffff",
+        "accent": "#ffffff",
+        "input": "#ffffff",
+        "workspace": "#f9f9f9",
+        "categoryMenu": "#ffffff",
+        "palette": "#f9f9f9cc",
+        "fullscreen": "#ffffff",
+        "stageHeader": "#e8edf1",
+        "border": "#00000026",
+        "dots": true
+      }
+    },
+    {
+      "name": "Scratch's default colors (blue)",
+      "id": "scratch-blue",
+      "description": "The colors originally used by Scratch 3.0",
+      "values": {
+        "page": "#e5f0ff",
         "primary": "#4d97ff",
         "highlightText": "#4d97ff",
         "menuBar": "#4d97ff",
@@ -1205,9 +1254,9 @@
     "colors": ["primary", "menuBar", "page", "accent", "workspace", "selector"]
   },
   "latestUpdate": {
-    "version": "1.32.0",
-    "newSettings": ["popup"],
-    "temporaryNotice": "You can now customize the color of popup backdrops (the solid-color background behind prompts for actions like naming a new variable) separately."
+    "version": "1.33.2",
+    "temporaryNotice": "The presets for this addon have been updated to use Scratch's new purple accent color. Presets that use blue are still available as well.",
+    "isMajor": true
   },
   "tags": ["editor", "theme", "featured"],
   "enabledByDefault": false
