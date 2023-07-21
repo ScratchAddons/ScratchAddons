@@ -31,7 +31,7 @@ export default async function ({ addon, console, msg }) {
     document.body.requestFullscreen().then(() => {
       if (addon.settings.get("hideStage")) changeStageMode("hidden");
       else if (addon.settings.get("shrinkStage")) changeStageMode("small");
-      
+
       document.body.classList.add("sa-fullscreen-editor");
     });
   };
