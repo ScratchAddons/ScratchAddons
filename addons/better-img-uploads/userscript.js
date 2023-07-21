@@ -10,7 +10,7 @@ export default async function ({ addon, console, msg }) {
     const wrapper = Object.assign(document.createElement("div"), { id });
     const button = Object.assign(document.createElement("button"), {
       className: `${addon.tab.scratchClass("action-menu_button")} ${addon.tab.scratchClass(
-        "action-menu_more-button"
+        "action-menu_more-button",
       )} sa-better-img-uploads-btn`,
       currentitem: "false",
     });
@@ -27,7 +27,7 @@ export default async function ({ addon, console, msg }) {
     const input = Object.assign(document.createElement("input"), {
       accept: ".svg, .png, .bmp, .jpg, .jpeg",
       className: `${addon.tab.scratchClass(
-        "action-menu_file-input" /* TODO: when adding dynamicDisable, ensure compat with drag-drop */
+        "action-menu_file-input" /* TODO: when adding dynamicDisable, ensure compat with drag-drop */,
       )} sa-better-img-uploads-input`,
       multiple: "true",
       type: "file",
@@ -36,7 +36,7 @@ export default async function ({ addon, console, msg }) {
     wrapper.append(button);
     const tooltip = Object.assign(document.createElement("div"), {
       className: `__react_component_tooltip place-${right ? "left" : "right"} type-dark ${addon.tab.scratchClass(
-        "action-menu_tooltip"
+        "action-menu_tooltip",
       )} sa-better-img-uploads-tooltip`,
       id: `sa-${id}-HD Upload`,
       textContent: uploadMsg,
@@ -222,8 +222,8 @@ export default async function ({ addon, console, msg }) {
           `${file.name.replace(/(.*)\..*/, "$1")}.svg`,
           {
             type: "image/svg+xml",
-          }
-        )
+          },
+        ),
       );
     }
 

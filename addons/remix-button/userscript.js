@@ -4,7 +4,7 @@ export default async function ({ addon, msg, console }) {
 
   const username = await addon.auth.fetchUsername();
   await redux.waitForState(
-    (state) => state.preview.status.project === "FETCHED" && state.preview.projectInfo.author?.username === username
+    (state) => state.preview.status.project === "FETCHED" && state.preview.projectInfo.author?.username === username,
   );
   while (true) {
     await addon.tab.waitForElement(".project-buttons .see-inside-button", {
