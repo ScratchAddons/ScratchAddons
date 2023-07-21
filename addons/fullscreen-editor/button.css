@@ -1,0 +1,22 @@
+.sa-fullscreen-editor {
+  display: block;
+  position: relative;
+  width: 1.7rem;
+}
+
+.sa-fullscreen-editor::before {
+  /* Icon is in a pseudo-element so dark mode can apply a filter to it
+    without affecting the message count */
+  content: "";
+  display: block;
+  position: absolute;
+  width: 1.7rem;
+  height: 100%;
+  background: url(./fullscreen.svg) no-repeat center center;
+  background-size: 65.9%;
+  filter: brightness(0) invert(1);
+}
+
+body:fullscreen .sa-fullscreen-editor::before {
+  background: url(./unfullscreen.svg) no-repeat center center;
+}

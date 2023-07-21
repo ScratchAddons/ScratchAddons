@@ -47,6 +47,10 @@ export default async function ({ addon, console, msg }) {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
-    document.querySelector("[class^='menu-bar_account-info-group']").insertBefore(messages, nav);
+    addon.tab.appendToSharedSpace({
+      space: "beforeEditorProfile",
+      element: messages,
+      order: 2,
+    });
   }
 }

@@ -10,7 +10,7 @@ export default async function ({ addon, console }) {
       // be enabled, and vice versa for disabling.
       if (addon.tab.redux.state.scratchGui.mode.isFullScreen && document.fullscreenElement === null) {
         document.documentElement.requestFullscreen();
-      } else if (!addon.tab.redux.state.scratchGui.mode.isFullScreen && document.fullscreenElement !== null) {
+      } else if (!addon.tab.redux.state.scratchGui.mode.isFullScreen && document.fullscreenElement !== null && !document.body.classList.contains("sa-fullscreen-editor")) {
         document.exitFullscreen();
       }
     }
