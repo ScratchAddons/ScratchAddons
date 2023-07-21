@@ -37,7 +37,7 @@ Scratch Addons provides a settings page to enable, disable and configure addon s
 
 ### Addons beyond the Scratch Addons browser extension
 
-Other extensions and even forks of Scratch can also provide their users with most addons from Scratch Addons, as long as a compatibility layer for `addon.*` and other parts of the addon loader are present. A notable example is the [TurboWarp](https://github.com/TurboWarp/scratch-gui/tree/develop/src/addons) editor. These also inherit translations from the Scratch Addons project.
+Other extensions and even forks of Scratch can also provide their users with most addons from Scratch Addons, as long as a compatibility layer for `addon.*` and other parts of the addon loader are present. Notable example are the [TurboWarp](https://github.com/TurboWarp/scratch-gui/tree/develop/src/addons) and [Adacraft](https://gitlab.com/adacraft/scratch-mod/scratch-gui/-/tree/adacraft/main/src/addons) editors. These also inherit translations from the Scratch Addons project.
 
 ### Structure
 
