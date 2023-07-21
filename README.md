@@ -68,7 +68,7 @@ Building is not required unless working with the `webpages` directory. The best 
 git clone https://github.com/ScratchAddons/ScratchAddons.git
 ```
 
-For browser support information and other installation methods, check [the documentation](https//scratchaddons.com/docs/getting-started/installing).
+For browser support information and other installation methods, check [the documentation](https://scratchaddons.com/docs/getting-started/installing).
 
 ### Loading the extension (Chrome)
 
