@@ -25,9 +25,8 @@ export default async function ({ addon, console }) {
   if (hasAlertsResult && addon.settings.get("highlight")) {
     const messageBadge = document.querySelector(".notificationsCount");
     messageBadge.classList.add("sa-alert-badge");
-    //const originalText = messageBadge.innerText;
-    //messageBadge.style.backgroundColor = "#cc4400";
-    //messageBadge.innerText = originalText.trim() + "!";
+    const originalText = messageBadge.innerText;
+    messageBadge.innerText = originalText.trim();
   }
 }
 

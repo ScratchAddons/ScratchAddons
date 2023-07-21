@@ -1,4 +1,5 @@
 export default async function ({ addon, console }) {
+  // thanks World_Languages, code from scratch-messaging
   async function fetchAlerts(username, xToken) {
     return fetch(`https://api.scratch.mit.edu/users/${username}/messages/admin`, {
       headers: {
@@ -26,8 +27,7 @@ export default async function ({ addon, console }) {
     const messageBadge = document.querySelector(".message-count");
     messageBadge.classList.add("sa-alert-badge");
     const originalText = messageBadge.innerText;
-    //messageBadge.style.backgroundColor = "#cc4400";
-    messageBadge.innerText = originalText.trim(); // better visuals
+    messageBadge.innerText = originalText.trim(); // remove space for better visuals
   }
 }
 
