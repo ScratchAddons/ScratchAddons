@@ -23,7 +23,7 @@ Scratch Addons combines new and existing features and themes for the [Scratch](h
 
 </div>
 
-### What is an addon?
+### About addons
 
 An addon is one or more [userscripts](https://scratchaddons.com/docs/develop/userscripts/) or [userstyles](https://scratchaddons.com/docs/develop/userstyles/) that run on the Scratch website or project editor.
 
