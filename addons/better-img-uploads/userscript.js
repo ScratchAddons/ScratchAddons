@@ -25,7 +25,7 @@ export default async function ({ addon, console, msg }) {
     });
     button.append(img);
     const input = Object.assign(document.createElement("input"), {
-      accept: ".svg, .png, .bmp, .jpg, .jpeg",
+      accept: ".svg, .png, .bmp, .jpg, .jpeg, .sprite2, .sprite3",
       className: `${addon.tab.scratchClass(
         "action-menu_file-input" /* TODO: when adding dynamicDisable, ensure compat with drag-drop */
       )} sa-better-img-uploads-input`,
@@ -110,8 +110,15 @@ export default async function ({ addon, console, msg }) {
     let processed = new Array();
 
     for (let file of files) {
-      if (file.type.includes("svg")) {
-        //The file is already a svg, we should not change it...
+      if (
+        !(
+          file.name.endsWith(".png") ||
+          file.name.endsWith(".bmp") ||
+          file.name.endsWith(".jpg") ||
+          file.name.endsWith(".jpeg")
+        )
+      ) {
+        // The file is not in the whitelist, so we should ignore it, and let scratch deal with it..
         processed.push(file);
         continue;
       }
@@ -150,7 +157,7 @@ export default async function ({ addon, console, msg }) {
       } //Otherwise just leave the image the same size
 
       function getResizedWidthHeight(oldWidth, oldHeight) {
-        const STAGE_WIDTH = 479;
+        const STAGE_WIDTH = 480;
         const STAGE_HEIGHT = 360;
         const STAGE_RATIO = STAGE_WIDTH / STAGE_HEIGHT;
 
