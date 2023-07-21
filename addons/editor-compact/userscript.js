@@ -32,6 +32,13 @@ export default async function ({ addon, global, console }) {
   while (true) {
     await addon.tab.waitForElement("[class*='sound-editor_editor-container_']", {
       markAsSeen: true,
+      reduxEvents: [
+        "scratch-gui/navigation/ACTIVATE_TAB",
+        "scratch-gui/mode/SET_PLAYER",
+        "fontsLoaded/SET_FONTS_LOADED",
+        "scratch-gui/locales/SELECT_LOCALE",
+        "scratch-gui/targets/UPDATE_TARGET_LIST",
+      ],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly && state.scratchGui.editorTab.activeTabIndex === 2,
     });
     updateTooltips();
