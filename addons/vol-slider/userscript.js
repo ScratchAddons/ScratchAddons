@@ -70,7 +70,7 @@ export default async function ({ addon, console }) {
         document.body.classList.remove("sa-vol-slider-small");
       }
     },
-    { capture: true },
+    { capture: true }
   );
 
   addon.self.addEventListener("disabled", () => {

@@ -112,7 +112,7 @@ export default async function ({ addon, console }) {
     },
     {
       bubble: true,
-    },
+    }
   );
   document.body.addEventListener(
     "mouseover",
@@ -135,6 +135,6 @@ export default async function ({ addon, console }) {
     },
     {
       bubble: true,
-    },
+    }
   );
 }

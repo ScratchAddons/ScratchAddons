@@ -75,7 +75,7 @@ export default async function ({ addon, console }) {
           paddedHeight,
           paddedWidth - BubbleStyle.CORNER_RADIUS,
           paddedHeight,
-          BubbleStyle.CORNER_RADIUS,
+          BubbleStyle.CORNER_RADIUS
         );
 
         // Translate the canvas so we don't have to do a bunch of width/height arithmetic
@@ -128,7 +128,7 @@ export default async function ({ addon, console }) {
             BubbleStyle.PADDING,
             BubbleStyle.PADDING +
               BubbleStyle.LINE_HEIGHT * lineNumber +
-              BubbleStyle.FONT_HEIGHT_RATIO * BubbleStyle.FONT_SIZE,
+              BubbleStyle.FONT_HEIGHT_RATIO * BubbleStyle.FONT_SIZE
           );
         }
 

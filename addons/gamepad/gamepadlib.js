@@ -851,32 +851,32 @@ class GamepadEditor extends EventTarget {
       Object.assign(document.createElement("option"), {
         textContent: this.msg("axis-none"),
         value: "none",
-      }),
+      })
     );
     selector.appendChild(
       Object.assign(document.createElement("option"), {
         textContent: this.msg("axis-cursor"),
         value: "cursor",
-      }),
+      })
     );
     selector.appendChild(
       Object.assign(document.createElement("option"), {
         // doesn't really make sense to translate
         textContent: "WASD",
         value: "wasd",
-      }),
+      })
     );
     selector.appendChild(
       Object.assign(document.createElement("option"), {
         textContent: this.msg("axis-arrows"),
         value: "arrows",
-      }),
+      })
     );
     selector.appendChild(
       Object.assign(document.createElement("option"), {
         textContent: this.msg("axis-custom"),
         value: "custom",
-      }),
+      })
     );
 
     const updateDropdownValue = () => {

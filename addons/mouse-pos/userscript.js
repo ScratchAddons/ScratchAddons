@@ -55,7 +55,7 @@ export default async function ({ addon, console }) {
         document.body.classList.remove("sa-mouse-pos-small");
       }
     },
-    { capture: true },
+    { capture: true }
   );
 
   while (true) {

@@ -7,7 +7,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   const handle = () => {
     const { addonId } = request.requestPopupInfo;
     const manifest = scratchAddons.manifests.find(
-      ({ addonId: mAddonId, manifest: mManifest }) => addonId === mAddonId && mManifest.popup,
+      ({ addonId: mAddonId, manifest: mManifest }) => addonId === mAddonId && mManifest.popup
     );
     if (!manifest) return;
     return {
