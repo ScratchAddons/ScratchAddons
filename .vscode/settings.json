@@ -1,10 +1,4 @@
 {
-  "explorer.fileNesting.enabled": true,
-  "explorer.fileNesting.expand": false,
-  "explorer.fileNesting.patterns": {
-    ".prettierrc.json": ".*, *.md, LICENSE"
-  },
-
   // Hides directories/files from sidebar.
   // Excludes them from search by default, as well as from quick open.
   "files.exclude": {
