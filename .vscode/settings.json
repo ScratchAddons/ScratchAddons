@@ -1,17 +1,14 @@
 {
-  // Hides directories/files from sidebar.
-  // Excludes them from search by default, as well as from quick open.
-  "files.exclude": {
+  "search.exclude": {
+    "libraries/thirdparty/**": true,
+    "libraries/licenses/**": true,
+
     // All languages but English
     "_locales/[abcdfghijklmnopqrstuvwxyz]*": true,
     "_locales/[abcdefghijklmnopqrstuvwxyz][abcdefghijklmopqrstuvwxyz]*": true,
     // All languages but English
     "addons-l10n/[abcdfghijklmnopqrstuvwxyz]*": true,
     "addons-l10n/[abcdefghijklmnopqrstuvwxyz][abcdefghijklmopqrstuvwxyz]*": true
-  },
-
-  "search.exclude": {
-    "libraries/**": true
   },
 
   "explorer.autoRevealExclude": {
