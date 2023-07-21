@@ -6,7 +6,15 @@ export default async function ({ addon, global, console }) {
   let resizeObserver = new ResizeObserver(resizeWorkspace);
   (async () => {
     while (true) {
-      let menuBar = await addon.tab.waitForElement('[class*="menu-bar_menu-bar"]', { markAsSeen: true });
+      let menuBar = await addon.tab.waitForElement('[class*="menu-bar_menu-bar"]', {
+        markAsSeen: true,
+        reduxEvents: [
+          "scratch-gui/mode/SET_PLAYER",
+          "fontsLoaded/SET_FONTS_LOADED",
+          "scratch-gui/locales/SELECT_LOCALE",
+        ],
+        reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+      });
       resizeObserver.observe(menuBar);
     }
   })();
