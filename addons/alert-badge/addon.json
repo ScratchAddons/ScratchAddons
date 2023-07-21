@@ -9,6 +9,10 @@
     {
       "url": "scratchr2.js",
       "matches": ["profiles", "forums", "https://scratch.mit.edu/404", "https://scratch.mit.edu/info/*", "https://scratch.mit.edu/statistics/", "https://scratch.mit.edu/mystuff/*", "https://scratch.mit.edu/accounts/*"]
+    },
+    {
+      "url": "editor.js",
+      "matches": ["https://scratch.mit.edu/projects/*/editor"]
     }
   ],
   "userstyles": [
@@ -23,6 +27,10 @@
     {
       "url": "messages.css",
       "matches": ["https://scratch.mit.edu/messages/*"]
+    },
+    {
+      "url": "editor.css",
+      "matches": ["https://scratch.mit.edu/projects/*/editor"]
     }
   ],
   "injectAsStyleElt": true,
