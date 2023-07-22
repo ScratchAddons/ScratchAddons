@@ -9,7 +9,7 @@ export default async function ({ addon }) {
 
   const amountOfDecimals = (num) => {
     if (num % 1 === 0) return 0;
-    return value.toString().split(".")[1].length;
+    return num.toString().split(".")[1].length;
   };
 
   document.body.addEventListener("keydown", (e) => {
