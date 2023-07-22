@@ -404,7 +404,7 @@ function userscriptMatches(data, scriptOrStyle, addonId) {
   let _parsedURL = new URL(_url);
   if (_parsedURL.origin === "https://scratchfoundation.github.io" || _parsedURL.port === "8601") {
     // Run addons on scratch-gui
-    _url = "https://scratch.mit.edu/projects/104/editor";
+    _url = "https://scratch.mit.edu/projects/editor/";
     _parsedURL = new URL(_url);
   }
   const url = _url;
