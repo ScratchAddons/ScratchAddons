@@ -18,6 +18,7 @@ export default async function ({ addon }) {
     if (Number(e.target.value).toString().replace(/^0*/, "") !== e.target.value.replace(/^0*/, "")) return;
     // TODO: why remove leading zeros to a result of Number().toString ?
 
+    if (e.target.value.length > 10) return;
     const currentValue = Number(e.target.value);
     if (amountOfDecimals(currentValue) > 5) return;
 
