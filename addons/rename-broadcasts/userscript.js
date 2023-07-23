@@ -167,7 +167,7 @@ export default async function ({ addon, msg, console }) {
         }
       },
       modalTitle,
-      BROADCAST_MESSAGE_TYPE,
+      BROADCAST_MESSAGE_TYPE
     );
   };
 

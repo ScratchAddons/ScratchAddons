@@ -9,9 +9,7 @@
   min-width: 100px;
   background-color: white;
   border-radius: 4px;
-  box-shadow:
-    rgba(0, 0, 0, 0.3) 0 0 3px,
-    rgba(0, 0, 0, 0.2) 0 3px 10px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0 0 3px, rgba(0, 0, 0, 0.2) 0 3px 10px;
 
   z-index: 999;
 }

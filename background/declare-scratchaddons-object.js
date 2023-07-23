@@ -23,7 +23,7 @@ console.log(
   "%cscratchAddons.globalState",
   "font-weight: bold;",
   "initialized:\n",
-  JSON.parse(JSON.stringify(scratchAddons.globalState)),
+  JSON.parse(JSON.stringify(scratchAddons.globalState))
 );
 
 scratchAddons.localState = localStateProxy;
@@ -31,7 +31,7 @@ console.log(
   "%cscratchAddons.localState",
   "font-weight: bold;",
   "initialized:\n",
-  JSON.parse(JSON.stringify(scratchAddons.localState)),
+  JSON.parse(JSON.stringify(scratchAddons.localState))
 );
 
 /**

@@ -18,7 +18,7 @@ export default (comment) => {
         }
         const firstA = Array.prototype.find.call(
           nodes,
-          (n) => n instanceof HTMLAnchorElement && (!n.previousSibling || !n.previousSibling.textContent),
+          (n) => n instanceof HTMLAnchorElement && (!n.previousSibling || !n.previousSibling.textContent)
         );
 
         if (firstA && child.previousSibling === firstA) {

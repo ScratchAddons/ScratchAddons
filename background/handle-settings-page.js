@@ -36,7 +36,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     const { updateUserstylesOnSettingsChange } = manifest;
     if (updateUserstylesOnSettingsChange)
       scratchAddons.localEvents.dispatchEvent(
-        new CustomEvent("updateUserstylesSettingsChange", { detail: { addonId, manifest, newSettings } }),
+        new CustomEvent("updateUserstylesSettingsChange", { detail: { addonId, manifest, newSettings } })
       );
     if (addonId === "msg-count-badge") updateBadge(scratchAddons.cookieStoreId);
   }
