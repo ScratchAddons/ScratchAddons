@@ -110,15 +110,8 @@ export default async function ({ addon, console, msg }) {
     let processed = new Array();
 
     for (let file of files) {
-      if (
-        !(
-          file.name.endsWith(".png") ||
-          file.name.endsWith(".bmp") ||
-          file.name.endsWith(".jpg") ||
-          file.name.endsWith(".jpeg")
-        )
-      ) {
-        // The file is not in the whitelist, so we should ignore it, and let scratch deal with it..
+      if (!/\.(png|jpe?g|bmp)$/i.test(file.name)) {
+        // The file is not processable, so we should ignore it, and let scratch deal with it..
         processed.push(file);
         continue;
       }
