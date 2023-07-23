@@ -21,20 +21,16 @@
           "name": "None"
         },
         {
+          "id": "tenth",
+          "name": "0.1"
+        },
+        {
           "id": "one",
           "name": "1"
         },
         {
           "id": "ten",
           "name": "10"
-        },
-        {
-          "id": "hundred",
-          "name": "100"
-        },
-        {
-          "id": "thousand",
-          "name": "1,000"
         }
       ]
     },
@@ -49,32 +45,8 @@
           "name": "None"
         },
         {
-          "id": "one",
-          "name": "1"
-        },
-        {
-          "id": "ten",
-          "name": "10"
-        },
-        {
-          "id": "hundred",
-          "name": "100"
-        },
-        {
-          "id": "thousand",
-          "name": "1,000"
-        }
-      ]
-    },
-    {
-      "name": "Change on Ctrl+Key",
-      "id": "ctrl",
-      "type": "select",
-      "default": "hundred",
-      "potentialValues": [
-        {
-          "id": "none",
-          "name": "None"
+          "id": "tenth",
+          "name": "0.1"
         },
         {
           "id": "one",
@@ -83,14 +55,6 @@
         {
           "id": "ten",
           "name": "10"
-        },
-        {
-          "id": "hundred",
-          "name": "100"
-        },
-        {
-          "id": "thousand",
-          "name": "1,000"
         }
       ]
     },
@@ -98,11 +62,15 @@
       "name": "Change on Alt+Key",
       "id": "alt",
       "type": "select",
-      "default": "thousand",
+      "default": "tenth",
       "potentialValues": [
         {
           "id": "none",
           "name": "None"
+        },
+        {
+          "id": "tenth",
+          "name": "0.1"
         },
         {
           "id": "one",
@@ -111,14 +79,6 @@
         {
           "id": "ten",
           "name": "10"
-        },
-        {
-          "id": "hundred",
-          "name": "100"
-        },
-        {
-          "id": "thousand",
-          "name": "1,000"
         }
       ]
     }

@@ -1,10 +1,9 @@
 export default async function ({ addon }) {
   const settings = {
     none: 0,
+    tenth: 0.1,
     one: 1,
     ten: 10,
-    hundred: 100,
-    thousand: 1000,
   };
 
   const amountOfDecimals = (num) => {
@@ -45,8 +44,6 @@ export default async function ({ addon }) {
     const changeBy =
       (e.shiftKey
         ? settings[addon.settings.get("shift")]
-        : e.ctrlKey
-        ? settings[addon.settings.get("ctrl")]
         : e.altKey
         ? settings[addon.settings.get("alt")]
         : settings[addon.settings.get("regular")]) * (e.code === "ArrowUp" ? 1 : -1);
