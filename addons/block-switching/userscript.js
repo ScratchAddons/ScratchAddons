@@ -845,12 +845,12 @@ export default async function ({ addon, console, msg }) {
         // If the block has a parent, find the parent -> child connection that will be reattached later.
         const parentConnections = parentBlock.getConnections_();
         parentConnection = parentConnections.find(
-          (c) => c.targetConnection && c.targetConnection.sourceBlock_ === block
+          (c) => c.targetConnection && c.targetConnection.sourceBlock_ === block,
         );
         // There's two types of connections from child -> parent. We need to figure out which one is used.
         const blockConnections = block.getConnections_();
         const blockToParentConnection = blockConnections.find(
-          (c) => c.targetConnection && c.targetConnection.sourceBlock_ === parentBlock
+          (c) => c.targetConnection && c.targetConnection.sourceBlock_ === parentBlock,
         );
         blockConnectionType = blockToParentConnection.type;
       }
@@ -1026,7 +1026,7 @@ export default async function ({ addon, console, msg }) {
       }
       return items;
     },
-    { blocks: true }
+    { blocks: true },
   );
 
   // https://github.com/LLK/scratch-blocks/blob/abbfe93136fef57fdfb9a077198b0bc64726f012/blocks_vertical/procedures.js#L207-L215

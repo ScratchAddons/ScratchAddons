@@ -21,7 +21,7 @@ export default async function ({ addon, console }) {
       this.strokeColor = textColor(
         addon.settings.get("accent"),
         multiply(addon.settings.get("accent"), { r: 0.67, g: 0.67, b: 0.67 }),
-        brighten(addon.settings.get("accent"), { r: 0.67, g: 0.67, b: 0.67 })
+        brighten(addon.settings.get("accent"), { r: 0.67, g: 0.67, b: 0.67 }),
       );
     }
     return oldItemDraw.apply(this, args);
@@ -40,13 +40,13 @@ export default async function ({ addon, console }) {
       artboardBackground = addon.settings.get("accent");
       workspaceBackground = alphaBlend(
         addon.settings.get("accent"),
-        multiply(makeHsv(addon.settings.get("page"), 0.7, 1), { a: 0.1 })
+        multiply(makeHsv(addon.settings.get("page"), 0.7, 1), { a: 0.1 }),
       );
       checkerboardColor = textColor(
         addon.settings.get("accent"),
         alphaBlend(addon.settings.get("accent"), multiply(makeHsv(addon.settings.get("page"), 1, 0.67), { a: 0.15 })),
         alphaBlend(addon.settings.get("accent"), multiply(makeHsv(addon.settings.get("page"), 0.5, 1), { a: 0.15 })),
-        112 // threshold: #707070
+        112, // threshold: #707070
       );
       crosshairOuterColor = textColor(addon.settings.get("accent"), "#ffffff", "#000000");
       crosshairInnerColor = textColor(addon.settings.get("accent"), "#000000", "#ffffff");

@@ -118,7 +118,7 @@ export default async function ({ addon, console, msg }) {
             let ocular = window.open(
               `https://ocular.jeffalo.net/react/${postID}?emoji=${reaction.emoji}`,
               "ocular",
-              "width=300,height=300"
+              "width=300,height=300",
             );
             let timer = setInterval(checkClosed, 500);
 

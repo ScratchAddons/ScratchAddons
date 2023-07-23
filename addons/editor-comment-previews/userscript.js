@@ -40,7 +40,7 @@ export default async function ({ addon, console }) {
   const getComment = (block) => block && block.comment && vm.editingTarget.comments[block.comment];
   const getProcedureDefinitionBlock = (procCode) => {
     const procedurePrototype = Object.values(vm.editingTarget.blocks._blocks).find(
-      (i) => i.opcode === "procedures_prototype" && i.mutation.proccode === procCode
+      (i) => i.opcode === "procedures_prototype" && i.mutation.proccode === procCode,
     );
     if (procedurePrototype) {
       // Usually `parent` will exist but sometimes it doesn't
@@ -49,7 +49,7 @@ export default async function ({ addon, console }) {
       }
       const id = procedurePrototype.id;
       return Object.values(vm.editingTarget.blocks._blocks).find(
-        (i) => i.opcode === "procedures_definition" && i.inputs.custom_block && i.inputs.custom_block.block === id
+        (i) => i.opcode === "procedures_definition" && i.inputs.custom_block && i.inputs.custom_block.block === id,
       );
     }
     return null;
@@ -146,6 +146,6 @@ export default async function ({ addon, console }) {
     },
     {
       capture: true,
-    }
+    },
   );
 }
