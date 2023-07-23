@@ -91,17 +91,4 @@ export default {
 form {
   position: absolute;
 }
-.vacp-color-picker {
-  position: absolute;
-  width: max-content;
-  z-index: 2;
-  top: 32px;
-  background-color: var(--button-background) !important;
-  color: var(--content-text) !important;
-}
-.vacp-color-input {
-  background: var(--input-background) !important;
-  border-radius: 16px;
-  border: 1px solid var(--control-border) !important;
-}
 </style>
