@@ -25,10 +25,4 @@ export default async function ({ addon, msg }) {
   });
 
 
-  addon.self.addEventListener("disabled", () => {
-    elt.style.display = "none";
-  });
-  addon.self.addEventListener("reenabled", () => {
-    elt.style.display = "";
-  });
-}
+  addon.tab.displayNoneWhileDisabled(elt);
