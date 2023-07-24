@@ -209,6 +209,12 @@ button[class*="action-menu_more-button"] {
   width: 1.5rem;
   height: 1.5rem;
 }
+.sa-body-editor [class*="turbo-mode_turbo-icon_"]:not([class*="stage-wrapper_full-screen"] *),
+.sa-body-editor .clone-icon:not([class*="stage-wrapper_full-screen"] *) {
+  /* Remove vertical margin from images that appear on the stage header */
+  margin-top: 0;
+  margin-bottom: 0;
+}
 .sa-body-editor [class*="stage-header_stage-button_"]:not([class*="stage-wrapper_full-screen"] *) {
   padding: calc(0.25rem - 1px);
 }
