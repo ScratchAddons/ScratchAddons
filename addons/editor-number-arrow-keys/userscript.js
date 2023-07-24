@@ -32,7 +32,7 @@ export default async function ({ addon }) {
     if (!e.target.classList.contains("blocklyHtmlInput")) return;
     if (!["ArrowUp", "ArrowDown"].includes(e.code)) return;
     if (
-      e.target.value &&
+      !e.target.value ||
       Number(e.target.value)
         .toString()
         .replace(/^0*|0*$/, "") !== e.target.value.replace(/^0*|0*$/, "")
