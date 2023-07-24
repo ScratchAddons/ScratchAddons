@@ -32,7 +32,6 @@ export default async function ({ addon }) {
     if (!e.target.classList.contains("blocklyHtmlInput")) return;
     if (!["ArrowUp", "ArrowDown"].includes(e.code)) return;
     if (Number(e.target.value).toString().replace(/^0*/, "") !== e.target.value.replace(/^0*/, "")) return;
-    // TODO: why remove leading zeros to a result of Number().toString ?
     // TODO: should an empty input be considered a zero?
 
     if (e.target.value.length > 10) return;
