@@ -15,6 +15,7 @@ export default class Account extends Listenable {
    * @returns {Promise<?number>} - current message count.
    */
   getMsgCount() {
+    throw new Error("Unimplemented; use fetch");
     return this._addon.auth.fetchIsLoggedIn().then((isLoggedIn) => {
       if (!isLoggedIn) return null;
       return scratchAddons.methods.getMsgCount();
