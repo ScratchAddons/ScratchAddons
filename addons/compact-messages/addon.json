@@ -70,7 +70,7 @@
   "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.18.0",
   "latestUpdate": {
-    "version": "1.33.0",
+    "version": "1.34.0",
     "newSettings": ["no_borders"]
   },
   "tags": ["community", "theme"],
