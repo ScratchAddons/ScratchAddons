@@ -85,11 +85,7 @@ export default async function ({ addon, console, msg }) {
   let textModeSetting = addon.settings.get("text");
   const textMode = () => {
     if (addon.self.disabled) {
-      if (originalColors.textFieldText) {
-        // Color contrast update
-        return originalColors.text === "#000000" ? "black" : "white";
-      }
-      return "white";
+      return originalColors.text === "#000000" ? "black" : "white";
     }
     return textModeSetting;
   };
@@ -135,13 +131,7 @@ export default async function ({ addon, console, msg }) {
     return tertiaryColor(category);
   };
   const textColor = (field) => {
-    if (addon.self.disabled) {
-      if (originalColors.textFieldText) {
-        // Color contrast update
-        return originalColors.text;
-      }
-      return "#ffffff";
-    }
+    if (addon.self.disabled) return originalColors.text;
     if (textMode() === "white") return "#ffffff";
     if (textMode() === "black") return "#000000";
     if (field) return field.sourceBlock_.getColourTertiary();

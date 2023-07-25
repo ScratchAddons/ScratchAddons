@@ -148,6 +148,16 @@ export default async function ({ addon, msg, console }) {
     toolbox.populate_(workspace.options.languageTree);
     // Reposition the toolbox, since it's likely our addon moved it.
     toolbox.position();
+
+    addClass();
+  }
+
+  function addClass() {
+    // Add class to allow editor-compact to handle this addon
+    if (addon.tab.editorMode === "editor") {
+      if (addon.self.disabled) document.querySelector("[class*='gui_tab-panel']").classList.toggle("sa-columns", false);
+      else document.querySelector("[class*='gui_tab-panel']").classList.toggle("sa-columns", true);
+    }
   }
 
   updateToolbox();
@@ -160,6 +170,7 @@ export default async function ({ addon, msg, console }) {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       condition: () => !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
     });
+    addClass();
     const addExtensionLabel = Object.assign(document.createElement("span"), {
       className: "sa-add-extension-label",
       innerText: addon.tab.scratchMessage("gui.gui.addExtension"),

@@ -35,17 +35,22 @@
       "matches": [
         "https://scratch.mit.edu/discuss/topic/*",
         "https://scratch.mit.edu/discuss/post/*",
-        "https://scratch.mit.edu/discuss/settings/*"
+        "https://scratch.mit.edu/discuss/settings/*",
+        "https://scratch.mit.edu/discuss/misc/*"
       ],
       "if": {
-        "settings": { "forums": true }
+        "settings": {
+          "forums": true
+        }
       }
     },
     {
       "url": "comments.js",
       "matches": ["https://scratch.mit.edu/studios/*", "https://scratch.mit.edu/users/*", "projects"],
       "if": {
-        "settings": { "comments": true }
+        "settings": {
+          "comments": true
+        }
       }
     }
   ],

@@ -208,6 +208,26 @@
       }
     },
     {
+      "name": "navbar-scratchr2",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        },
+        "options": {
+          "#4d97ff": "#0f8bc0",
+          "#4d97ffff": "#0f8bc0",
+          "#25aff4": "#0f8bc0",
+          "#25aff4ff": "#0f8bc0"
+        },
+        "default": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        }
+      }
+    },
+    {
       "name": "navbar-scratchr2Text",
       "value": {
         "type": "textColor",
@@ -231,16 +251,31 @@
       }
     },
     {
-      "name": "navbar-scratchr2Border",
+      "name": "navbar-scratchr2ItemHover",
       "value": {
-        "type": "multiply",
+        "type": "map",
         "source": {
           "type": "settingValue",
           "settingId": "navbar"
         },
-        "r": 0.9,
-        "g": 0.9,
-        "b": 0.9
+        "options": {
+          "#4d97ff": "#0c6185",
+          "#4d97ffff": "#0c6185",
+          "#0f8bc0": "#0c6185",
+          "#0f8bc0ff": "#0c6185",
+          "#25aff4": "#0c6185",
+          "#25aff4ff": "#0c6185"
+        },
+        "default": {
+          "type": "textColor",
+          "black": "rgba(0, 0, 0, 0.1)",
+          "white": "rgba(255, 255, 255, 0.1)",
+          "source": {
+            "type": "settingValue",
+            "settingId": "navbar"
+          },
+          "threshold": 60
+        }
       }
     },
     {
@@ -590,11 +625,29 @@
       }
     },
     {
-      "name": "box-scratchr2TransparentText",
+      "name": "box-scratchr2GrayText",
       "value": {
         "type": "textColor",
-        "black": "rgba(0, 0, 0, 0.47)",
-        "white": "rgba(255, 255, 255, 0.75)",
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "box"
+          },
+          "r": 0.53,
+          "g": 0.53,
+          "b": 0.53
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "box"
+          },
+          "r": 0.25,
+          "g": 0.25,
+          "b": 0.25
+        },
         "source": {
           "type": "settingValue",
           "settingId": "box"
@@ -905,23 +958,16 @@
     {
       "name": "gray-scratchr2",
       "value": {
-        "type": "textColor",
-        "black": {
-          "type": "brighten",
-          "source": {
-            "type": "settingValue",
-            "settingId": "gray"
-          },
-          "r": 0.62,
-          "g": 0.62,
-          "b": 0.62
-        },
-        "white": {
+        "type": "map",
+        "source": {
           "type": "settingValue",
           "settingId": "gray"
         },
-        "threshold": 241,
-        "source": {
+        "options": {
+          "#f2f2f2": "#f7f7f7",
+          "#f2f2f2ff": "#f7f7f7"
+        },
+        "default": {
           "type": "settingValue",
           "settingId": "gray"
         }
@@ -950,11 +996,29 @@
       }
     },
     {
-      "name": "gray-scratchr2TransparentText",
+      "name": "gray-scratchr2GrayText",
       "value": {
         "type": "textColor",
-        "black": "rgba(0, 0, 0, 0.45)",
-        "white": "rgba(255, 255, 255, 0.75)",
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "r": 0.55,
+          "g": 0.55,
+          "b": 0.55
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "r": 0.25,
+          "g": 0.25,
+          "b": 0.25
+        },
         "source": {
           "type": "settingValue",
           "settingId": "gray"
@@ -1038,53 +1102,59 @@
     {
       "name": "gray-scratchr2TableHeader",
       "value": {
-        "type": "textColor",
-        "black": {
-          "type": "multiply",
-          "source": {
-            "type": "settingValue",
-            "settingId": "gray"
-          },
-          "r": 0.98,
-          "g": 0.98,
-          "b": 0.98
-        },
-        "white": {
-          "type": "brighten",
-          "source": {
-            "type": "settingValue",
-            "settingId": "gray"
-          },
-          "r": 0.98,
-          "g": 0.98,
-          "b": 0.98
-        },
+        "type": "map",
         "source": {
           "type": "settingValue",
           "settingId": "gray"
+        },
+        "options": {
+          "#f2f2f2": "#eeeeee",
+          "#f2f2f2ff": "#eeeeee"
+        },
+        "default": {
+          "type": "textColor",
+          "black": {
+            "type": "multiply",
+            "source": {
+              "type": "settingValue",
+              "settingId": "gray"
+            },
+            "r": 0.96,
+            "g": 0.96,
+            "b": 0.96
+          },
+          "white": {
+            "type": "brighten",
+            "source": {
+              "type": "settingValue",
+              "settingId": "gray"
+            },
+            "r": 0.96,
+            "g": 0.96,
+            "b": 0.96
+          },
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          }
         }
       }
     },
     {
       "name": "gray-scratchr2TableCell",
       "value": {
-        "type": "textColor",
-        "black": {
-          "type": "brighten",
-          "source": {
-            "type": "settingValue",
-            "settingId": "gray"
-          },
-          "r": 0.77,
-          "g": 0.77,
-          "b": 0.77
-        },
-        "white": {
+        "type": "map",
+        "source": {
           "type": "settingValue",
           "settingId": "gray"
         },
-        "threshold": 241,
-        "source": {
+        "options": {
+          "#f2f2f2": "#f5f5f5",
+          "#f2f2f2ff": "#f5f5f5",
+          "#f7f7f7": "#f5f5f5",
+          "#f7f7f7ff": "#f5f5f5"
+        },
+        "default": {
           "type": "settingValue",
           "settingId": "gray"
         }
@@ -1511,6 +1581,54 @@
       }
     },
     {
+      "name": "button-scratchr2",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "options": {
+          "#4d97ff": "#18abeb",
+          "#4d97ffff": "#18abeb",
+          "#25aff4": "#18abeb",
+          "#25aff4ff": "#18abeb"
+        },
+        "default": {
+          "type": "settingValue",
+          "settingId": "button"
+        }
+      }
+    },
+    {
+      "name": "button-scratchr2Hover",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "options": {
+          "#4d97ff": "#169fdb",
+          "#4d97ffff": "#169fdb",
+          "#18abeb": "#169fdb",
+          "#18abebff": "#169fdb",
+          "#25aff4": "#169fdb",
+          "#25aff4ff": "#169fdb"
+        },
+        "default": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "button"
+          },
+          "r": 0.9,
+          "g": 0.9,
+          "b": 0.9
+        }
+      }
+    },
+    {
       "name": "button-scratchr2ButtonText",
       "value": {
         "type": "textColor",
@@ -1546,17 +1664,23 @@
     {
       "name": "button-scratchr2PostHeader",
       "value": {
-        "type": "brighten",
+        "type": "map",
         "source": {
-          "type": "multiply",
-          "source": {
-            "type": "settingValue",
-            "settingId": "button"
-          },
-          "r": 0.52,
-          "b": 0.85
+          "type": "settingValue",
+          "settingId": "button"
         },
-        "g": 0.85
+        "options": {
+          "#4d97ff": "#28a5da",
+          "#4d97ffff": "#28a5da",
+          "#18abeb": "#28a5da",
+          "#18abebff": "#28a5da",
+          "#25aff4": "#28a5da",
+          "#25aff4ff": "#28a5da"
+        },
+        "default": {
+          "type": "settingValue",
+          "settingId": "button"
+        }
       }
     },
     {
@@ -1610,6 +1734,26 @@
       }
     },
     {
+      "name": "link-scratchr2",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "link"
+        },
+        "options": {
+          "#4d97ff": "#1aa0d8",
+          "#4d97ffff": "#1aa0d8",
+          "#25aff4": "#1aa0d8",
+          "#25aff4ff": "#1aa0d8"
+        },
+        "default": {
+          "type": "settingValue",
+          "settingId": "link"
+        }
+      }
+    },
+    {
       "name": "footer-text",
       "value": {
         "type": "textColor",
@@ -1634,14 +1778,19 @@
     {
       "name": "footer-scratchr2",
       "value": {
-        "type": "multiply",
+        "type": "map",
         "source": {
           "type": "settingValue",
           "settingId": "footer"
         },
-        "r": 0.98,
-        "g": 0.98,
-        "b": 0.98
+        "options": {
+          "#f2f2f2": "#ececec",
+          "#f2f2f2ff": "#ececec"
+        },
+        "default": {
+          "type": "settingValue",
+          "settingId": "footer"
+        }
       }
     },
     {
@@ -1697,6 +1846,58 @@
           "settingId": "border"
         },
         "a": 0.74
+      }
+    },
+    {
+      "name": "messageIndicatorColor-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "messageIndicatorColor"
+        },
+        "threshold": 180
+      }
+    },
+    {
+      "name": "messageIndicatorColor-scratchr2",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "messageIndicatorColor"
+        },
+        "options": {
+          "#ffab1a": "#f9a739",
+          "#ffab1aff": "#f9a739"
+        },
+        "default": {
+          "type": "settingValue",
+          "settingId": "messageIndicatorColor"
+        }
+      }
+    },
+    {
+      "name": "messageIndicatorColor-scratchr2Text",
+      "value": {
+        "type": "textColor",
+        "black": "#322f31",
+        "source": {
+          "type": "settingValue",
+          "settingId": "messageIndicatorColor"
+        },
+        "threshold": 180
+      }
+    },
+    {
+      "name": "messageIndicatorOnMessagesPage-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "messageIndicatorOnMessagesPage"
+        },
+        "threshold": 180
       }
     },
     {
@@ -1921,9 +2122,9 @@
   "injectAsStyleElt": true,
   "versionAdded": "1.4.0",
   "latestUpdate": {
-    "version": "1.33.2",
-    "temporaryNotice": "The presets for this addon have been updated to use Scratch's new purple accent color. Presets that use blue are still available as well.",
-    "isMajor": true
+    "version": "1.34.0",
+    "newSettings": ["messageIndicatorColor", "messageIndicatorOnMessagesPage"],
+    "isMajor": false
   },
   "updateUserstylesOnSettingsChange": true,
   "userscripts": [
@@ -2122,6 +2323,18 @@
       "default": "#606060"
     },
     {
+      "name": "Message count in navigation bar",
+      "id": "messageIndicatorColor",
+      "type": "color",
+      "default": "#ffab1a"
+    },
+    {
+      "name": "Message count on Messages page",
+      "id": "messageIndicatorOnMessagesPage",
+      "type": "color",
+      "default": "#cc4400"
+    },
+    {
       "name": "Colored areas",
       "id": "darkBanners",
       "type": "select",
@@ -2164,13 +2377,15 @@
         "link": "#ccb3ff",
         "footer": "#333333",
         "border": "#606060",
+        "messageIndicatorColor": "#ffab1a",
+        "messageIndicatorOnMessagesPage": "#cc4400",
         "darkBanners": "darker",
         "darkForumCode": true
       }
     },
     {
       "name": "\"Experimental\" Dark (blue)",
-      "id": "experimentalDark",
+      "id": "experimentalDark-blue",
       "description": "\"Experimental\" Dark with a blue accent color",
       "values": {
         "page": "#202020",
@@ -2183,6 +2398,8 @@
         "link": "#4d97ff",
         "footer": "#333333",
         "border": "#606060",
+        "messageIndicatorColor": "#ffab1a",
+        "messageIndicatorOnMessagesPage": "#ffab1a",
         "darkBanners": "darker",
         "darkForumCode": true
       }
@@ -2202,8 +2419,48 @@
         "link": "#ccb3ff",
         "footer": "#17181a",
         "border": "#000000",
+        "messageIndicatorColor": "#ffab1a",
+        "messageIndicatorOnMessagesPage": "#cc4400",
         "darkBanners": "desaturated",
         "darkForumCode": true
+      }
+    },
+    {
+      "name": "Scratch 2.0",
+      "id": "scratchr2-blue",
+      "description": "The colors previously used on Scratch 2.0-styled pages",
+      "values": {
+        "page": "#fcfcfc",
+        "navbar": "#0f8bc0",
+        "box": "#ffffff",
+        "gray": "#f7f7f7",
+        "blue": "#e6f3fa",
+        "input": "#ffffff",
+        "button": "#18abeb",
+        "link": "#1aa0d8",
+        "footer": "#ececec",
+        "border": "#0000001a",
+        "darkBanners": "off",
+        "darkForumCode": false
+      }
+    },
+    {
+      "name": "Scratch 2.0 (2015)",
+      "id": "scratch-oldWwwBlue",
+      "description": "The colors of the home page between 2015 and 2018",
+      "values": {
+        "page": "#fcfcfc",
+        "navbar": "#25aff4",
+        "box": "#ffffff",
+        "gray": "#f2f2f2",
+        "blue": "#e6f3fa",
+        "input": "#fafafa",
+        "button": "#25aff4",
+        "link": "#25aff4",
+        "footer": "#f2f2f2",
+        "border": "#0000001a",
+        "darkBanners": "off",
+        "darkForumCode": false
       }
     },
     {
@@ -2221,13 +2478,15 @@
         "link": "#855cd6",
         "footer": "#f2f2f2",
         "border": "#0000001a",
+        "messageIndicatorColor": "#ffab1a",
+        "messageIndicatorOnMessagesPage": "#cc4400",
         "darkBanners": "off",
         "darkForumCode": false
       }
     },
     {
       "name": "Scratch's default colors (blue)",
-      "id": "scratch",
+      "id": "scratch-blue",
       "description": "The colors originally used by Scratch",
       "values": {
         "page": "#fcfcfc",
@@ -2240,6 +2499,8 @@
         "link": "#4d97ff",
         "footer": "#f2f2f2",
         "border": "#0000001a",
+        "messageIndicatorColor": "#ffab1a",
+        "messageIndicatorOnMessagesPage": "#ffab1a",
         "darkBanners": "off",
         "darkForumCode": false
       }

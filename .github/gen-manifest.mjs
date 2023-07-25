@@ -1,5 +1,12 @@
 const PERMISSIONS_IGNORED_IN_CHROME = ["clipboardWrite"];
-const PERMISSIONS_IGNORED_IN_FIREFOX = ["declarativeNetRequestWithHostAccess"];
+// Previously included declarativeNetRequestWithHostAccess.
+const PERMISSIONS_IGNORED_IN_FIREFOX = [];
+// These should be removed during production manifest gen.
+const PERMISSIONS_ALWAYS_IGNORED = [
+  "https://scratchfoundation.github.io/scratch-gui/*",
+  "http://localhost:8333/*",
+  "http://localhost:8601/*",
+];
 
 /**
  * Generates a manifest for specific browsers.
@@ -14,6 +21,12 @@ export default (env, manifest) => {
   manifest.icons["1024"] = "images/icon.png";
   manifest.icons["32"] = "images/icon-32.png";
   manifest.icons["16"] = "images/icon-16.png";
+  manifest.permissions = manifest.permissions.filter((permission) => !PERMISSIONS_ALWAYS_IGNORED.includes(permission));
+  manifest.content_scripts.forEach((content_script) => {
+    content_script.matches = content_script.matches.filter(
+      (permission) => !PERMISSIONS_ALWAYS_IGNORED.includes(permission)
+    );
+  });
   switch (env) {
     case "chrome": {
       delete manifest.browser_specific_settings;
