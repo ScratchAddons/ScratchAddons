@@ -24,12 +24,12 @@ export default async function ({ addon, console, msg }) {
   function createInterval() {
     if (addon.tab.editorMode === "editor") {
       setMessages();
-      interval = setInterval(setMessages, 30_000);
+      interval = setInterval(setMessages, 30000);
     } else {
       addon.tab.addEventListener("urlChange", function thisFunction() {
         if (addon.tab.editorMode === "editor") {
           setMessages();
-          interval = setInterval(setMessages, 30_000);
+          interval = setInterval(setMessages, 30000);
           addon.tab.removeEventListener("urlChange", thisFunction);
         }
       });
