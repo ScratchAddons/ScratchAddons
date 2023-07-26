@@ -7,6 +7,9 @@ export default async function ({ addon, console }) {
   let mode = false;
   let monitorUpdateFixed = false;
 
+  const fastFlag = addon.self.dir + "/svg/fast-flag.svg";
+  let vanillaFlag = null;
+
   while (true) {
     let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
       markAsSeen: true,
@@ -14,7 +17,8 @@ export default async function ({ addon, console }) {
     });
 
     const updateFlag = () => {
-      button.style.filter = mode ? "hue-rotate(90deg)" : "";
+      if (!vanillaFlag) vanillaFlag = button.src;
+      button.src = mode ? fastFlag : vanillaFlag;
     };
 
     const changeMode = (_mode = !mode) => {

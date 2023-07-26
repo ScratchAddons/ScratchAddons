@@ -197,7 +197,7 @@ export async function fetchMigratedComments(
     const getReplies = async (offset) => {
       const repliesRes = await fetch(getRepliesUrl(parentId, offset));
       if (!repliesRes.ok) {
-        if (repliesRes.status === 404 || repliesRes.status === 403) return;
+        if (repliesRes.status === 404 || repliesRes.status === 403) return null;
         throw HTTPError.fromResponse(`Ignoring comment ${resourceType}/${commentId}`, repliesRes);
       }
       const repliesJson = await repliesRes.json();
@@ -213,6 +213,7 @@ export async function fetchMigratedComments(
     if (parentComment.reply_count > 0) {
       while (lastRepliesLength === 40) {
         const newReplies = await getReplies(offset);
+        if (!Array.isArray(newReplies)) break;
         newReplies.forEach((c) => replies.push(c));
         lastRepliesLength = newReplies.length;
         offset += 40;

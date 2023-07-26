@@ -8,5 +8,6 @@ _locales/*/messages.json
 !_locales/en/messages.json
 
 .github/*
+!.github/*.mjs
 
 webpages/dist/*
