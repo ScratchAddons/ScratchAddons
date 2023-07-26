@@ -323,7 +323,7 @@ export default async function ({ addon, msg, console }) {
     if (!selectedPreview) return;
 
     const workspace = Blockly.getMainWorkspace();
-    // This is mostly copied from https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/scratch_blocks_utils.js#L171
+    // This is mostly copied from https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/scratch_blocks_utils.js#L171
     // Some bits were removed or changed to fit our needs.
     workspace.setResizesEnabled(false);
 
