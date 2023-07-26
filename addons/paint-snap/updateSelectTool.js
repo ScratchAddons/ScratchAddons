@@ -18,7 +18,7 @@ export const updateSelectTool = (paper, tool) => {
 
   const moveTool = getMoveTool(tool);
 
-  // https://github.com/LLK/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/helper/selection-tools/move-tool.js
+  // https://github.com/scratchfoundation/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/helper/selection-tools/move-tool.js
 
   const FADE_DISTANCE = 10;
 

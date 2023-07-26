@@ -27,7 +27,7 @@ export default async function ({ addon, console }) {
         setFPS(addon.settings.get("framerate"));
 
         // monitor updates are throttled by default
-        // https://github.com/LLK/scratch-gui/blob/ba76db7/src/reducers/monitors.js
+        // https://github.com/scratchfoundation/scratch-gui/blob/ba76db7/src/reducers/monitors.js
         if (!monitorUpdateFixed) {
           const originalListener = vm.listeners("MONITORS_UPDATE").find((f) => f.name === "onMonitorsUpdate");
           if (originalListener) vm.removeListener("MONITORS_UPDATE", originalListener);
