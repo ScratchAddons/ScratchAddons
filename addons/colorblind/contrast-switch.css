@@ -1,7 +1,0 @@
-[class*="toggle-buttons_button_"][aria-pressed="true"] > img {
-  filter: brightness(0) invert(1) !important;
-}
-
-[class*="toggle-buttons_button_"][aria-pressed="true"] {
-  background-color: var(--editorDarkMode-primary, #855cd6) !important;
-}
