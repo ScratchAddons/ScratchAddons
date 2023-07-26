@@ -737,6 +737,8 @@ export default {
     },
   },
   mounted() {
+        window.vue = this;
+
     // Autofocus search bar in iframe mode for both browsers
     // autofocus attribute only works in Chrome for us, so
     // we also manually focus on Firefox, even in fullscreen
