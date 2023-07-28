@@ -1,7 +1,7 @@
 export default async function ({ addon, msg, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
-  // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L235
+  // https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L235
   const _ToolboxPosition = Blockly.Toolbox.prototype.position;
   Blockly.Toolbox.prototype.position = function () {
     _ToolboxPosition.call(this);
@@ -15,7 +15,7 @@ export default async function ({ addon, msg, console }) {
     }
   };
 
-  // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/flyout_vertical.js#L314
+  // https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/flyout_vertical.js#L314
   const _VerticalFlyoutPosition = Blockly.VerticalFlyout.prototype.position;
   Blockly.VerticalFlyout.prototype.position = function () {
     _VerticalFlyoutPosition.call(this);
@@ -60,7 +60,7 @@ export default async function ({ addon, msg, console }) {
     container.parentElement.style.setProperty("--sa-flyout-y", `${y}px`);
   };
 
-  // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/flyout_base.js#L370
+  // https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/flyout_base.js#L370
   const _VerticalFlyoutGetWidth = Blockly.VerticalFlyout.prototype.getWidth;
   Blockly.VerticalFlyout.prototype.getWidth = function () {
     // In RTL, this will be called by Blockly to position blocks inside the flyout.
@@ -69,7 +69,7 @@ export default async function ({ addon, msg, console }) {
     return width;
   };
 
-  // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L595
+  // https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L595
   const _CategoryMenuCreateDom = Blockly.Toolbox.CategoryMenu.prototype.createDom;
   Blockly.Toolbox.CategoryMenu.prototype.createDom = function () {
     _CategoryMenuCreateDom.call(this);
@@ -81,7 +81,7 @@ export default async function ({ addon, msg, console }) {
     this.parentHtml_.appendChild(this.secondTable);
   };
 
-  // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L606
+  // https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L606
   const _CategoryMenuPopulate = Blockly.Toolbox.CategoryMenu.prototype.populate;
   Blockly.Toolbox.CategoryMenu.prototype.populate = function (domTree) {
     if (!domTree) return;
@@ -122,7 +122,7 @@ export default async function ({ addon, msg, console }) {
     }
   };
 
-  // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L639
+  // https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L639
   const _CategoryMenuDispose = Blockly.Toolbox.CategoryMenu.prototype.dispose;
   Blockly.Toolbox.CategoryMenu.prototype.dispose = function () {
     _CategoryMenuDispose.call(this);
@@ -148,6 +148,16 @@ export default async function ({ addon, msg, console }) {
     toolbox.populate_(workspace.options.languageTree);
     // Reposition the toolbox, since it's likely our addon moved it.
     toolbox.position();
+
+    addClass();
+  }
+
+  function addClass() {
+    // Add class to allow editor-compact to handle this addon
+    if (addon.tab.editorMode === "editor") {
+      if (addon.self.disabled) document.querySelector("[class*='gui_tab-panel']").classList.toggle("sa-columns", false);
+      else document.querySelector("[class*='gui_tab-panel']").classList.toggle("sa-columns", true);
+    }
   }
 
   updateToolbox();
@@ -160,6 +170,7 @@ export default async function ({ addon, msg, console }) {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       condition: () => !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
     });
+    addClass();
     const addExtensionLabel = Object.assign(document.createElement("span"), {
       className: "sa-add-extension-label",
       innerText: addon.tab.scratchMessage("gui.gui.addExtension"),

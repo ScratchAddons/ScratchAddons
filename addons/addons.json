@@ -141,7 +141,8 @@
   "share-through-mystuff",
   "faster-project-loading",
   "auto-follow-topics",
-  "featured-dangos",
+  "op-badge",
+  "featured-dangos-v2",
   "remember-collapsed-categories",
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
@@ -165,5 +166,6 @@
   "editor-stage-left",
   "editor-buttons-reverse-order",
   "columns",
+  "editor-compact",
   "editor-theme3"
 ]
