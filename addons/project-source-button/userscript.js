@@ -1,5 +1,4 @@
 export default async function ({ addon, global, console, msg }) {
-
   while (true) {
     await addon.tab.waitForElement(".flex-row.action-buttons", { markAsSeen: true });
     const isPublic = addon.tab.redux.state.preview.projectInfo.public;
