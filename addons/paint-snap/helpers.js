@@ -55,7 +55,7 @@ export function loadModules(paper) {
     -ART_BOARD_WIDTH / 4,
     -ART_BOARD_HEIGHT / 4,
     ART_BOARD_WIDTH * 1.5,
-    ART_BOARD_HEIGHT * 1.5,
+    ART_BOARD_HEIGHT * 1.5
   );
 
   /**

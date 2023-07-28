@@ -382,8 +382,8 @@ export class BlockTypeInfo {
           Blockly,
           locale,
           workspaceBlock,
-          flyoutDomBlockMap[workspaceBlock.id],
-        ),
+          flyoutDomBlockMap[workspaceBlock.id]
+        )
       );
     }
 

@@ -45,7 +45,7 @@ export default async function ({ addon, console, msg }) {
     },
     {
       capture: true,
-    },
+    }
   );
   addon.settings.addEventListener("change", autoHidePanel);
 
@@ -121,7 +121,7 @@ export default async function ({ addon, console, msg }) {
         setTimeout(updateWideLocaleMode);
       }
     },
-    { capture: true },
+    { capture: true }
   );
 
   while (true) {

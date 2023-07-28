@@ -8,7 +8,7 @@ export default async function ({ addon, console }) {
       addon.settings.get("primary"),
       multiply(addon.settings.get("primary"), { r: 0.66, g: 0.76, b: 0.8 }),
       brighten(addon.settings.get("primary"), { r: 0.75, g: 0.75, b: 0.75 }),
-      60,
+      60
     );
 
   const darkPaperDisabled = () => addon.self.disabled || !addon.settings.get("affectPaper");
@@ -31,7 +31,7 @@ export default async function ({ addon, console }) {
       this.strokeColor = textColor(
         addon.settings.get("accent"),
         multiply(addon.settings.get("accent"), { r: 0.67, g: 0.67, b: 0.67 }),
-        brighten(addon.settings.get("accent"), { r: 0.67, g: 0.67, b: 0.67 }),
+        brighten(addon.settings.get("accent"), { r: 0.67, g: 0.67, b: 0.67 })
       );
     } else if (this.parent?.data.isGuideLayer || this.parent?.parent?.data.isGuideLayer) {
       if (
@@ -70,16 +70,16 @@ export default async function ({ addon, console }) {
       artboardBackground = addon.settings.get("accent");
       workspaceBackground = alphaBlend(
         addon.settings.get("accent"),
-        multiply(addon.settings.get("primary"), { a: 0.1 }),
+        multiply(addon.settings.get("primary"), { a: 0.1 })
       );
       checkerboardColor = textColor(
         addon.settings.get("accent"),
         alphaBlend(
           addon.settings.get("accent"),
-          multiply(makeHsv(addon.settings.get("primary"), 1, 0.67), { a: 0.15 }),
+          multiply(makeHsv(addon.settings.get("primary"), 1, 0.67), { a: 0.15 })
         ),
         alphaBlend(addon.settings.get("accent"), multiply(makeHsv(addon.settings.get("primary"), 0.5, 1), { a: 0.15 })),
-        112, // threshold: #707070
+        112 // threshold: #707070
       );
       blueOutlineColor = secondaryColor();
       crosshairOuterColor = textColor(addon.settings.get("accent"), "#ffffff", "#000000");
