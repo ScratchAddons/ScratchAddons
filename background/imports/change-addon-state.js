@@ -20,7 +20,7 @@ export default (addonId, newState) => {
   } else {
     if (dynamicDisable) {
       scratchAddons.localEvents.dispatchEvent(
-        new CustomEvent("addonDynamicDisable", { detail: { addonId, manifest } })
+        new CustomEvent("addonDynamicDisable", { detail: { addonId, manifest } }),
       );
     }
   }
@@ -32,7 +32,7 @@ export default (addonId, newState) => {
       // Ignore disabled addons
       if (!scratchAddons.localState.addonsEnabled[dependentAddonId]) continue;
       const dependentManifest = scratchAddons.manifests.find(
-        (manifest) => manifest.addonId === dependentAddonId
+        (manifest) => manifest.addonId === dependentAddonId,
       ).manifest;
       // Require dynamicEnable/dynamicDisable since this is a type of dynamic enable/disable
       // and it might cause problems if applied to addons without support
@@ -45,7 +45,7 @@ export default (addonId, newState) => {
               manifest: dependentManifest,
               partialDynamicEnableBy: addonId,
             },
-          })
+          }),
         );
       } else if (!newState && dependentManifest.dynamicDisable) {
         // Dependent might have a userstyle that needs to be deactivated
@@ -56,7 +56,7 @@ export default (addonId, newState) => {
               manifest: dependentManifest,
               partialDynamicDisableBy: addonId,
             },
-          })
+          }),
         );
       }
     }

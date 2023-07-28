@@ -63,10 +63,10 @@ export default async function ({ addon, console, msg }) {
     const textBox =
       addon.tab.clientVersion === "scratch-www"
         ? this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector(
-            'textarea[id*="frc-compose-comment"]'
+            'textarea[id*="frc-compose-comment"]',
           )
         : this.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector(
-            ".control-group.tooltip.right > textarea"
+            ".control-group.tooltip.right > textarea",
           );
     insertTextToTextArea(this.dataset.text, textBox);
     //Simulate inputting so that Scratch doesn't consider
@@ -92,7 +92,7 @@ export default async function ({ addon, console, msg }) {
     item.src = addon.tab.clientVersion === "scratch-www" ? emoji.image : emoji.imager2; //We have to do a check here so that better emojis works on the picker on profiles
     item.classList.add(
       addon.tab.clientVersion === "scratch-www" ? "emoji" : "easter-egg",
-      "sa-emoji-picker-item-inner"
+      "sa-emoji-picker-item-inner",
     );
     container.appendChild(item);
     emojiPicker.appendChild(container);
@@ -156,7 +156,7 @@ export default async function ({ addon, console, msg }) {
             markAsSeen: true,
           });
     const buttonAppend = textBox.parentElement.parentElement.parentElement.querySelector(
-      ".compose-limit, .control-group.tooltip.right + .control-group"
+      ".compose-limit, .control-group.tooltip.right + .control-group",
     );
 
     const emojiButton = document.createElement("div");

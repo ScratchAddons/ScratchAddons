@@ -77,7 +77,7 @@ export default async function ({ addon, console, msg }) {
     },
     {
       rootMargin: "100px",
-    }
+    },
   );
 
   class WrappedVariable {
@@ -336,7 +336,7 @@ export default async function ({ addon, console, msg }) {
     if (visible) {
       varTab.classList.add(
         addon.tab.scratchClass("react-tabs_react-tabs__tab--selected"),
-        addon.tab.scratchClass("gui_is-selected")
+        addon.tab.scratchClass("gui_is-selected"),
       );
       const contentArea = document.querySelector("[class^=gui_tabs]");
       contentArea.insertAdjacentElement("beforeend", manager);
@@ -344,7 +344,7 @@ export default async function ({ addon, console, msg }) {
     } else {
       varTab.classList.remove(
         addon.tab.scratchClass("react-tabs_react-tabs__tab--selected"),
-        addon.tab.scratchClass("gui_is-selected")
+        addon.tab.scratchClass("gui_is-selected"),
       );
       manager.remove();
       cleanup();
