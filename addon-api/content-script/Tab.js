@@ -390,6 +390,7 @@ export default class Tab extends Listenable {
    * assetContextMenuAfterDelete - after the delete button of asset (sprite, costume, etc)'s context menu
    * monitor - after the end of the stage monitor context menu
    * paintEditorZoomControls - before the zoom controls in the paint editor
+   * beforeEditorProfile - Before the profile menu in the editor
    *
    *
    * @param {object} opts - options.
@@ -612,6 +613,12 @@ export default class Tab extends Listenable {
         },
         from: () => [],
         until: () => [],
+      },
+      beforeEditorProfile: {
+        // TODO: This element only exists when signed in (reported by Samq64)e
+        element: () => q("[class^='menu-bar_account-info-group']"),
+        from: () => [],
+        until: () => [q("[class^='menu-bar_account-info-group'] > [href^='/my']")],
       },
     };
 

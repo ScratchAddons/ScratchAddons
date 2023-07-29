@@ -1,0 +1,55 @@
+{
+  "name": "Full screen project editor",
+  "description": "Adds a full screen button to the editor, and /*(TODO) improves the layout when in fullscreen mode*/.",
+  "credits": [
+    {
+      "name": "ErrorGamer2000",
+      "link": "https://github.com/ErrorGamer2000"
+    },
+    {
+      "name": "World_Languages"
+    }
+  ],
+  "userscripts": [
+    {
+      "matches": ["projects"],
+      "url": "userscript.js"
+    }
+  ],
+  "userstyles": [
+    {
+      "matches": ["projects"],
+      "url": "button.css"
+    },
+    {
+      "matches": ["projects"],
+      "url": "menubar.css",
+      "if": { "addonSettings": { "hideMenuBar": true } }
+    }
+  ],
+  "settings": [
+    {
+      "id": "hideMenuBar",
+      "name": "Only show editor menu bar on hover",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "id": "shrinkStage",
+      "name": "Shrink stage on full screen",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "id": "hideStage",
+      "name": "Hide stage on full screen",
+      "type": "boolean",
+      "default": false,
+      "if": {
+        "addonEnabled": "hide-stage"
+      }
+    }
+  ],
+  "tags": ["editor"],
+  "versionAdded": "1.34.0"
+}

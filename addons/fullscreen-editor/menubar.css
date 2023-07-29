@@ -1,0 +1,23 @@
+body:fullscreen [class*="menu-bar_menu-bar_"] {
+  margin-top: -2.5rem;
+  position: fixed;
+  width: 100%;
+  transition: margin 0.5s ease;
+}
+
+body:fullscreen [class*="menu-bar_menu-bar_"]:hover {
+  margin-top: 0rem;
+}
+
+body:fullscreen [class*="gui_body-wrapper_"] {
+  margin-top: 0.5rem;
+  height: calc(100% - 0.5rem);
+}
+
+body:fullscreen [class*="menu-bar_menu-bar_"] [class*="menu_menu_"] {
+  display: none;
+}
+
+body:fullscreen [class*="menu-bar_menu-bar_"]:hover [class*="menu_menu_"] {
+  display: block !important;
+}
