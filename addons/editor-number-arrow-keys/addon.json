@@ -21,6 +21,10 @@
           "name": "None"
         },
         {
+          "id": "hundredth",
+          "name": "0.01"
+        },
+        {
           "id": "tenth",
           "name": "0.1"
         },
@@ -45,6 +49,10 @@
           "name": "None"
         },
         {
+          "id": "hundredth",
+          "name": "0.01"
+        },
+        {
           "id": "tenth",
           "name": "0.1"
         },
@@ -67,6 +75,10 @@
         {
           "id": "none",
           "name": "None"
+        },
+        {
+          "id": "hundredth",
+          "name": "0.01"
         },
         {
           "id": "tenth",
