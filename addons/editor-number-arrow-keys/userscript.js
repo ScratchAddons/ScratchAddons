@@ -85,6 +85,7 @@ export default async function ({ addon }) {
   };
 
   document.body.addEventListener("keydown", (e) => {
+    if (addon.self.disabled) return;
     if (!e.target.classList.contains("blocklyHtmlInput")) return;
     if (!["ArrowUp", "ArrowDown"].includes(e.code)) return;
     if (!e.target.value) return;
