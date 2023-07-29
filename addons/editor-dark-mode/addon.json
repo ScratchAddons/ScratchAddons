@@ -25,6 +25,12 @@
       "note": "TurboWarp Dark",
       "id": "twdark",
       "link": "https://github.com/GarboMuffin"
+    },
+	  {
+      "name": "Valer100",
+      "note": "Some fixes",
+      "id": "fixes",
+      "link": "https://github.com/Valer100"
     }
   ],
   "customCssVariables": [
