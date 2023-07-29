@@ -21,6 +21,10 @@
           "name": "None"
         },
         {
+          "id": "hundredth",
+          "name": "0.01"
+        },
+        {
           "id": "tenth",
           "name": "0.1"
         },
@@ -43,6 +47,10 @@
         {
           "id": "none",
           "name": "None"
+        },
+        {
+          "id": "hundredth",
+          "name": "0.01"
         },
         {
           "id": "tenth",
@@ -69,6 +77,10 @@
           "name": "None"
         },
         {
+          "id": "hundredth",
+          "name": "0.01"
+        },
+        {
           "id": "tenth",
           "name": "0.1"
         },
@@ -87,6 +99,9 @@
     {
       "name": "mybearworld",
       "link": "https://scratch.mit.edu/users/mybearworld/"
+    },
+    {
+      "name": "World_Languages"
     }
   ],
   "dynamicDisable": true,

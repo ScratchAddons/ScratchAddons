@@ -1,6 +1,7 @@
 export default async function ({ addon }) {
   const settings = {
     none: 0,
+    hundredth: 0.01,
     tenth: 0.1,
     one: 1,
     ten: 10,
