@@ -653,12 +653,12 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
   background-color: var(--editorDarkMode-input);
 }
 
-/* Variable slider accent color */
+/* Slider variable accent color */
 input.monitor_slider_1CHwk.no-drag {
   accent-color: var(--editorDarkMode-primary);
 }
 
-/* Checkboxes, radio buttons */
+/* Checkboxes and radio buttons color */
 label {
   accent-color: var(--editorDarkMode-primary);
 }
