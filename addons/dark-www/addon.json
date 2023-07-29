@@ -14,6 +14,12 @@
       "note": "Dark WWW",
       "id": "darkwww",
       "link": "https://github.com/gducrash"
+    },
+    {
+      "name": "Valer100",
+      "note": "Some fixes",
+      "id": "addon",
+      "link": "https://github.com/Valer100"
     }
   ],
   "customCssVariables": [
