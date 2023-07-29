@@ -810,11 +810,7 @@ p {
   color-scheme: light;
 }
 
-/* Fix the accent color of various elements */
+/* Fix the accent color of checkboxes and radio buttons */
 label {
-  accent-color: var(--darkWww-button);
-}
-
-input.monitor_slider_1CHwk.no-drag {
   accent-color: var(--darkWww-button);
 }
