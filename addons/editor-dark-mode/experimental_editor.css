@@ -667,3 +667,9 @@ label {
 input[class*=prompt_variable-name-text-input_] {
   outline-color: var(--editorDarkMode-primary);
 }
+
+/* Block palette checkboxes */
+g.checked > rect.blocklyFlyoutCheckbox {
+  fill: var(--editorDarkMode-primary);
+  stroke: var(--editorDarkMode-primary);
+}
