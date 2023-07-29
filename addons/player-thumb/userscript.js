@@ -30,7 +30,7 @@ export default async function ({ addon, console }) {
   });
 
   function moveThumb() {
-    console.log("moveThumb activated")
+    console.log("moveThumb activated");
     // Since the loading screen has a different size and layer
     // just remove the thumbnail and re-add it in the correct place
     document.getElementById("sa-project-thumb").remove();
