@@ -664,6 +664,6 @@ label {
 }
 
 /* Input fields from dialogs */
-input.prompt_variable-name-text-input_1iu8- {
+input[class*=prompt_variable-name-text-input_] {
   outline-color: var(--editorDarkMode-primary);
 }
