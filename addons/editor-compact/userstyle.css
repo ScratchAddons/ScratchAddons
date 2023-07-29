@@ -261,7 +261,7 @@ button[class*="action-menu_more-button"] {
 }
 
 /* Code tab */
-[class*="gui_tab-panel"]:not(.sa-columns) .scratchCategoryMenuItem {
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .scratchCategoryMenuItem {
   padding: 0.25rem 0;
 }
 .scratchCategoryItemBubble,
@@ -270,14 +270,14 @@ button[class*="action-menu_more-button"] {
   height: 1rem;
   background-size: 1rem 1rem;
 }
-[class*="gui_tab-panel"]:not(.sa-columns) .blocklyToolboxDiv {
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxDiv {
   height: calc(100% - 2rem) !important;
   scrollbar-width: none;
 }
-[class*="gui_tab-panel"]:not(.sa-columns) .blocklyToolboxDiv::-webkit-scrollbar {
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxDiv::-webkit-scrollbar {
   display: none;
 }
-[class*="gui_tab-panel"]:not(.sa-columns) [class*="gui_extension-button-container_"] {
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-button-container_"] {
   height: 2rem;
 }
 
