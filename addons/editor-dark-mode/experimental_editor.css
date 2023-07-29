@@ -662,3 +662,8 @@ input.monitor_slider_1CHwk.no-drag {
 label {
   accent-color: var(--editorDarkMode-primary);
 }
+
+/* Input fields from dialogs */
+input.prompt_variable-name-text-input_1iu8- {
+  outline-color: var(--editorDarkMode-primary);
+}
