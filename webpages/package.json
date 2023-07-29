@@ -9,11 +9,11 @@
   "dependencies": {
     "sortablejs": "^1.15.0",
     "tiny-emitter": "^2.1.0",
-    "vue": "^3.3.2",
+    "vue": "^3.3.4",
     "vue-accessible-color-picker": "^4.1.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",
-    "vite": "^4.3.5"
+    "vite": "^4.4.7"
   }
 }
