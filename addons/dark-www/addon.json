@@ -2428,7 +2428,7 @@
     {
       "name": "Scratch 2.0",
       "id": "scratchr2-blue",
-      "description": "The colors used on Scratch 2.0-styled pages before it changed to purple",
+      "description": "The colors used on Scratch 2.0-styled pages before the highlight color was changed to purple",
       "values": {
         "page": "#fcfcfc",
         "navbar": "#0f8bc0",
@@ -2447,7 +2447,7 @@
     {
       "name": "Scratch's default colors (blue)",
       "id": "scratch-blue",
-      "description": "The colors used by Scratch between 2019 and 2023",
+      "description": "The colors used by Scratch between 2018 and 2023",
       "values": {
         "page": "#fcfcfc",
         "navbar": "#4d97ff",
@@ -2485,7 +2485,7 @@
       }
     },
     {
-      "name": "Scratch's default colors",
+      "name": "Scratch's default colors (purple)",
       "id": "scratch",
       "description": "The colors Scratch uses now",
       "values": {
