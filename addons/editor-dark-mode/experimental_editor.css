@@ -684,7 +684,7 @@ div.scratchCategoryMenuItem:hover {
 }
 
 div.scratchCategoryMenuItem.categorySelected {
-  background-color: var(--editorDarkMode-primary-transparent15)
+  background-color: var(--editorDarkMode-primary-transparent15);
 }
 
 /* Green flag active background color */
