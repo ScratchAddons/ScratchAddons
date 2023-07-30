@@ -654,7 +654,7 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 }
 
 /* Slider variable accent color */
-input[class*="monitor_slider_"]no-drag {
+input[class*="monitor_slider_"] {
   accent-color: var(--editorDarkMode-primary);
 }
 
