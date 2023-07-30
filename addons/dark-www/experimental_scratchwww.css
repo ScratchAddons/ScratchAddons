@@ -814,3 +814,7 @@ p {
 label {
   accent-color: var(--darkWww-button);
 }
+
+#comments-enabled {
+  accent-color: #129804;
+}
