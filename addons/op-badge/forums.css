@@ -1,6 +1,6 @@
 .sa-original-poster {
   display: inline-block;
-  background-color: var(--darkWww-button, #855cd6);
+  background-color: var(--darkWww-button-scratchr2PostHeader, #28a5da);
   color: var(--darkWww-button-text, white);
   border-radius: 16px;
   text-shadow: none;

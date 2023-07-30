@@ -17,7 +17,7 @@ const BlockShapes = {
     backgroundPath: (width) => `m -12 -20 m 20 0 h ${width - 16} a 20 20 0 0 1 0 40 H 8 a 20 20 0 0 1 0 -40 z`,
 
     /**
-     * 'Snuggling' is my wholsome term for when a block can sit extra close to a block
+     * 'Snuggling' is my wholesome term for when a block can sit extra close to a block
      * of the same shape as it. Take a look at the blocks ( ( "" + "" ) - "" ) and
      * ( < "" = "" > - "" ), observe how there's a lot more blank space in the outer
      * block in the second example, this is because in the first example the '+' block
@@ -234,7 +234,7 @@ function createBackedTextedComponent(text, container, shape, categoryClass, fill
  * Renders a block, with the center of it's leftmost side located at 0, 0.
  * @param {BlockInstance} block
  * @param {SVGElement} container
- * @returns {BlockComponent} The renderered block
+ * @returns {BlockComponent} The rendered block
  */
 export default function renderBlock(block, container) {
   var blockComponent = _renderBlock(block, container, block.typeInfo.category, true);
@@ -247,7 +247,7 @@ export default function renderBlock(block, container) {
  * Renders a block, with the center of it's leftmost side located at 0, 0.
  * @param {BlockInstance} block
  * @param {SVGAElement} container
- * @param {string} parentCategory The category of this blocks parnet. If no parent, than this blocks category.
+ * @param {string} parentCategory The category of this blocks parent. If no parent, than this blocks category.
  * @returns {BlockComponent} The rendered component.
  */
 function _renderBlock(block, container, parentCategory, isVertical) {
