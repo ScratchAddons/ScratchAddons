@@ -143,6 +143,7 @@
   "op-badge",
   "featured-dangos-v2",
   "remember-collapsed-categories",
+  "editor-number-arrow-keys",
   "colorblind",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
@@ -167,5 +168,6 @@
   "editor-stage-left",
   "editor-buttons-reverse-order",
   "columns",
+  "editor-compact",
   "editor-theme3"
 ]

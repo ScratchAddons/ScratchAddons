@@ -5,6 +5,10 @@
     {
       "name": "yes-i-am-lanky",
       "link": "https://scratch.mit.edu/users/yes-i-am-lanky/"
+    },
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
     }
   ],
   "settings": [
@@ -12,7 +16,13 @@
       "name": "Hide message type icons",
       "id": "hide_icons",
       "type": "boolean",
-      "default": true
+      "default": false
+    },
+    {
+      "name": "Remove borders",
+      "id": "no_borders",
+      "type": "boolean",
+      "default": false
     },
     {
       "name": "Message padding (px)",
@@ -44,12 +54,25 @@
           "hide_icons": true
         }
       }
+    },
+    {
+      "url": "no_border.css",
+      "matches": ["https://scratch.mit.edu/messages"],
+      "if": {
+        "settings": {
+          "no_borders": true
+        }
+      }
     }
   ],
   "dynamicDisable": true,
   "dynamicEnable": true,
   "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.18.0",
+  "latestUpdate": {
+    "version": "1.34.0",
+    "newSettings": ["no_borders"]
+  },
   "tags": ["community", "theme"],
   "enabledByDefault": false
 }
