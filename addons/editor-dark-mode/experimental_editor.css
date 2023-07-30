@@ -673,3 +673,12 @@ g.checked > rect.blocklyFlyoutCheckbox {
   fill: var(--editorDarkMode-primary);
   stroke: var(--editorDarkMode-primary);
 }
+
+/* Block palette categories */
+div.scratchCategoryMenuItem:hover {
+  color: color-mix(in srgb, var(--editorDarkMode-primary) 70%, #FFFFFF) !important;
+}
+
+div.scratchCategoryMenuItem.categorySelected {
+  background-color: var(--editorDarkMode-primary-transparent15)
+}
