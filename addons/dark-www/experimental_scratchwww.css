@@ -815,6 +815,6 @@ label {
   accent-color: var(--darkWww-button);
 }
 
-#comments-enabled {
+input {
   accent-color: #129804;
 }
