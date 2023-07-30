@@ -654,7 +654,7 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 }
 
 /* Slider variable accent color */
-input.monitor_slider_1CHwk.no-drag {
+input[class*="monitor_slider_"]no-drag {
   accent-color: var(--editorDarkMode-primary);
 }
 
@@ -664,7 +664,7 @@ label {
 }
 
 /* Input fields from dialogs */
-input[class*=prompt_variable-name-text-input_] {
+input[class*="prompt_variable-name-text-input_"] {
   outline-color: var(--editorDarkMode-primary);
 }
 
@@ -688,6 +688,6 @@ div.scratchCategoryMenuItem.categorySelected {
 }
 
 /* Green flag active background color */
-img.green-flag_green-flag_1kiAo[class*=green-flag_is-active_] {
+img[class*="green-flag_green-flag_"][class*="green-flag_is-active_"] {
   background-color: var(--editorDarkMode-primary-transparent35);
 }
