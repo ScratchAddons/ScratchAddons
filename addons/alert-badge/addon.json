@@ -14,7 +14,15 @@
     },
     {
       "url": "scratchr2.css",
-      "matches": ["profiles", "forums", "https://scratch.mit.edu/404", "https://scratch.mit.edu/info/*", "https://scratch.mit.edu/statistics/", "https://scratch.mit.edu/mystuff/*", "https://scratch.mit.edu/accounts/*"]
+      "matches": [
+        "profiles",
+        "forums",
+        "https://scratch.mit.edu/404",
+        "https://scratch.mit.edu/info/*",
+        "https://scratch.mit.edu/statistics/",
+        "https://scratch.mit.edu/mystuff/*",
+        "https://scratch.mit.edu/accounts/*"
+      ]
     },
     {
       "url": "messages.css",
@@ -45,7 +53,7 @@
       "type": "color",
       "default": "#cc4400",
       "if": {
-        "settings": {"highlight": true}
+        "settings": { "highlight": true }
       }
     },
     {
@@ -58,27 +66,45 @@
   "customCssVariables": [
     {
       "name": "default",
-      "value": {"type": "settingValue", "settingId": "default"}
+      "value": { "type": "settingValue", "settingId": "default" }
     },
     {
       "name": "alert",
-      "value": {"type": "settingValue", "settingId": "alert"}
+      "value": { "type": "settingValue", "settingId": "alert" }
     },
     {
       "name": "messages",
-      "value": {"type": "settingValue", "settingId": "messages"}
+      "value": { "type": "settingValue", "settingId": "messages" }
     },
     {
       "name": "defaultfg",
-      "value": {"type": "textColor", "source": {"type": "settingValue", "settingId": "default"}, "black": "#000000", "white": "#ffffff", "threshold": 153}
+      "value": {
+        "type": "textColor",
+        "source": { "type": "settingValue", "settingId": "default" },
+        "black": "#000000",
+        "white": "#ffffff",
+        "threshold": 153
+      }
     },
     {
       "name": "alertfg",
-      "value": {"type": "textColor", "source": {"type": "settingValue", "settingId": "alert"}, "black": "#000000", "white": "#ffffff", "threshold": 153}
+      "value": {
+        "type": "textColor",
+        "source": { "type": "settingValue", "settingId": "alert" },
+        "black": "#000000",
+        "white": "#ffffff",
+        "threshold": 153
+      }
     },
     {
       "name": "messagesfg",
-      "value": {"type": "textColor", "source": {"type": "settingValue", "settingId": "messages"}, "black": "#000000", "white": "#ffffff", "threshold": 153}
+      "value": {
+        "type": "textColor",
+        "source": { "type": "settingValue", "settingId": "messages" },
+        "black": "#000000",
+        "white": "#ffffff",
+        "threshold": 153
+      }
     }
   ],
   "tags": ["community"],
@@ -92,4 +118,3 @@
     }
   ]
 }
-

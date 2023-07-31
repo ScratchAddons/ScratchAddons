@@ -24,7 +24,7 @@ export default async function ({ addon, console }) {
 
   async function highlightAlert() {
     if (addon.settings.get("highlight")) {
-      let selector
+      let selector;
       if (addon.tab.editorMode === "editor") {
         selector = ".sa-editormessages-count";
       } else {
@@ -48,4 +48,3 @@ export default async function ({ addon, console }) {
     highlightAlert();
   }
 }
-
