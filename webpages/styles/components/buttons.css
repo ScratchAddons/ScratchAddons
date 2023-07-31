@@ -2,6 +2,7 @@
   color: var(--content-text);
   background: var(--button-background);
   border: 1px solid var(--control-border);
+  display: flex;
   padding: 7px 12px;
   border-radius: 4px;
   transition: 0.2s ease;
