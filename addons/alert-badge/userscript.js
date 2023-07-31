@@ -21,13 +21,31 @@ export default async function ({ addon, console }) {
       return false;
     }
   }
+
+  async function highlightAlert() {
+    if (addon.settings.get("highlight")) {
+      let selector
+      if (addon.tab.editorMode === "editor") {
+        selector = ".sa-editormessages-count";
+      } else {
+        if (addon.tab.editorMode === "fullscreen") return;
+        selector = addon.tab.clientVersion === "scratchr2" ? ".notificationsCount" : ".message-count";
+      }
+      const messageBadge = await addon.tab.waitForElement(selector);
+      messageBadge.classList.add("sa-alert-badge");
+      const originalText = messageBadge.innerText;
+      messageBadge.innerText = originalText.trim(); // remove space for better visuals
+    }
+  }
+
   const hasAlertsResult = await hasAlerts();
 
-  if (hasAlertsResult && addon.settings.get("highlight")) {
-    const messageBadge = document.querySelector(".message-count");
-    messageBadge.classList.add("sa-alert-badge");
-    const originalText = messageBadge.innerText;
-    messageBadge.innerText = originalText.trim(); // remove space for better visuals
+  if (hasAlertsResult) {
+    addon.tab.addEventListener("urlChange", () => {
+      highlightAlert();
+    });
+
+    highlightAlert();
   }
 }
 
