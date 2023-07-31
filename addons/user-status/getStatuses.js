@@ -11,9 +11,7 @@ export const getStatus = async (username) => {
     (await fetch(`https://my-ocular.jeffalo.net/api/user/${username}`).then((response) => response.json()));
   const aviateResponse =
     (isCached && cache.get(username).aviateResponse) ||
-    (await fetch(`https://corsproxy.io?https://aviate.scratchers.tech/api/${username}`).then((response) =>
-      response.json()
-    ));
+    (await fetch(`https://aviate.scratchers.tech/api/${username}`).then((response) => response.json()));
   if (!isCached) {
     cache.set(username, { ocularResponse, aviateResponse });
   }
