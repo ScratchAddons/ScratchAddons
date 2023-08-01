@@ -1,6 +1,6 @@
 {
-  "name": "Customizable stage monitors",
-  "description": "Changes the color of variables and lists on the stage.",
+  "name": "Customizable stage monitor colors",
+  "description": "Changes the colors of variable and list monitors on the stage.",
   "credits": [
     {
       "name": "Samq64",
@@ -92,7 +92,7 @@
     {
       "name": "Transparent values",
       "id": "transparent",
-      "description": "Scratch's default monitors with transparent value backgrounds.",
+      "description": "Scratch's default monitor colors with transparent value backgrounds.",
       "values": {
         "monitor": "#e5f0ff",
         "listHeader": "#ffffff",
@@ -103,7 +103,7 @@
     {
       "name": "2.0 monitors",
       "id": "scratch2",
-      "description": "Makes monitors look more like they did in Scratch 2.0",
+      "description": "Makes monitors the same colors as in Scratch 2.0",
       "values": {
         "monitor": "#c1c4c7",
         "listHeader": "#c1c4c7",
@@ -127,6 +127,5 @@
   "updateUserstylesOnSettingsChange": true,
   "injectAsStyleElt": true,
   "tags": ["editor", "theme", "projectPlayer"],
-  "versionAdded": "1.24.0",
-  "enabledByDefault": false
+  "versionAdded": "1.35.0"
 }
