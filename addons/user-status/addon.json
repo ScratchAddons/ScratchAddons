@@ -36,7 +36,7 @@
       "name": "Show Aviate statuses",
       "id": "aviate",
       "type": "boolean",
-      "default": true
+      "default": false
     },
     {
       "name": "Show statuses on profiles",
