@@ -18,13 +18,3 @@
   background-color: var(--stageMonitor-header);
   color: var(--stageMonitor-headerText);
 }
-
-.monitor_monitor-container_2J9gl,
-.monitor_large-value_P-rAm {
-  border-radius: calc(var(--stageMonitor-radius) * 1px);
-}
-
-.monitor_value_3Yexa,
-.monitor_list-value_1zGfI {
-  border-radius: calc(var(--stageMonitor-valueRadius) * 1px);
-}
