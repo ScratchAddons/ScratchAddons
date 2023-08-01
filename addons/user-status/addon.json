@@ -1,6 +1,6 @@
 {
   "name": "Show user statuses from external sites",
-  "description": "Show ocular.jeffalo.net and aviate.scratchers.tech statuses on profiles and forum posts.",
+  "description": "Shows ocular.jeffalo.net and aviate.scratchers.tech statuses on profiles and forum posts.",
   "tags": ["community", "forums", "profiles"],
   "versionAdded": "1.34.0",
   "userscripts": [
