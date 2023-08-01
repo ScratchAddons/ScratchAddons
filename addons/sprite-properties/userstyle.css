@@ -86,6 +86,7 @@
   justify-content: center;
   align-items: center;
   border: none;
+  margin-left: auto;
   background-color: transparent;
   user-select: none;
 }
