@@ -1,4 +1,4 @@
-import { getStatus } from "./getStatuses.js";
+import { getStatuses } from "./getStatuses.js";
 
 export default async function ({ addon, console, msg }) {
   const username = document.querySelector("#profile-data > div.box-head > div > h2").innerText?.split("#")[0]; // Fix bug with user-id addon
@@ -9,10 +9,7 @@ export default async function ({ addon, console, msg }) {
   addon.self.addEventListener("reenabled", () => updateStatuses());
 
   // Create status element
-  let statusSpan = document.createElement("span");
-  statusSpan.innerHTML = await getStatus(username, msg("ocular-status-hover"), msg("aviate-status-hover"));
-  statusSpan.style.fontStyle = "italic";
-  statusSpan.style.setProperty("display", "inline-block", "important");
+  let statusSpan = await getStatuses(username, msg("ocular-status-hover"), msg("aviate-status-hover"));
   statusSpan.id = "sa-status-span";
 
   // Create location element

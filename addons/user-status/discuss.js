@@ -1,4 +1,4 @@
-import { getStatus } from "./getStatuses.js";
+import { getStatuses } from "./getStatuses.js";
 
 export default async function ({ addon, console, msg }) {
   let posts = document.querySelectorAll(".blockpost");
@@ -10,10 +10,7 @@ export default async function ({ addon, console, msg }) {
     // Create statusText element
     let br = document.createElement("br");
     addon.tab.displayNoneWhileDisabled(br);
-    let status = document.createElement("span");
-    addon.tab.displayNoneWhileDisabled(status);
-    status.innerHTML = await getStatus(username, msg("ocular-status-hover"), msg("aviate-status-hover"));
-    status.style.fontStyle = "italic";
+    let status = await getStatuses(username, msg("ocular-status-hover"), msg("aviate-status-hover"));
     addon.tab.displayNoneWhileDisabled(status);
 
     // Hide things

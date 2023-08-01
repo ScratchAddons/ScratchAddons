@@ -21,7 +21,7 @@
   ],
   "userstyles": [
     {
-      "url": "status-dot.css",
+      "url": "style.css",
       "matches": ["topics", "https://scratch.mit.edu/users/*/"]
     }
   ],
@@ -86,7 +86,7 @@
           "type": "settingValue",
           "settingId": "ocular"
         },
-        "true": "inline-block",
+        "true": "inline-flex",
         "false": "none"
       }
     },
@@ -98,7 +98,7 @@
           "type": "settingValue",
           "settingId": "aviate"
         },
-        "true": "inline-block",
+        "true": "inline-flex",
         "false": "none"
       }
     }
