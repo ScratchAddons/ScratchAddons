@@ -1,9 +1,5 @@
 const cache = new Map();
 
-const escape = (string) => {
-  return string.replaceAll("'", "&#39;").replaceAll("<", "&lt;");
-};
-
 const createStatus = (status, name, hover, icon, color) => {
   const result = document.createElement("span");
   result.classList.add("sa-status", `sa-status-${name}`);
