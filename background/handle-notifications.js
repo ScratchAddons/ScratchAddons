@@ -1,3 +1,5 @@
+import { updateBadge } from "./message-cache.js";
+
 const periods = [
   {
     name: chrome.i18n.getMessage("15min"),
@@ -57,10 +59,12 @@ function contextMenuUnmuted() {
       contexts: ["browser_action"],
     });
   }
+  // This seems to be run when the extension is loaded, so we'll just set the right icon here.
+  const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
   chrome.browserAction.setIcon({
     path: {
-      16: "../images/icon-16.png",
-      32: "../images/icon-32.png",
+      16: prerelease ? "../images/icon-blue-16.png" : "../images/icon-16.png",
+      32: prerelease ? "../images/icon-blue-32.png" : "../images/icon-32.png",
     },
   });
 }
@@ -84,13 +88,13 @@ function contextMenuMuted() {
 function muteForMins(mins) {
   if (mins !== Infinity) chrome.alarms.create("muted", { delayInMinutes: mins });
   scratchAddons.muted = true;
-  scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
+  updateBadge(scratchAddons.cookieStoreId);
   chrome.storage.local.set({ muted: true });
 }
 
 function unmute() {
   scratchAddons.muted = false;
-  scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
+  updateBadge(scratchAddons.cookieStoreId);
   chrome.storage.local.set({ muted: false });
 }
 

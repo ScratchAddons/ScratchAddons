@@ -1,7 +1,4 @@
 .pos-container-container {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
   align-items: center;
   padding: 0.25rem;
@@ -23,6 +20,6 @@
   content: attr(data-content);
 }
 
-.sa-mouse-pos-small .pos-container-container {
+.sa-small-stage .pos-container-container {
   display: none !important;
 }

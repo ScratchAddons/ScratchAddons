@@ -6,7 +6,9 @@
   "folders/rename-folder": "rename folder",
   "folders/remove-folder": "remove folder",
   "folders/remove-from-folder": "remove from folder",
+  "folders/rename-folder-prompt-title": "Rename Folder",
   "folders/rename-folder-prompt": "Rename folder to:",
+  "folders/name-prompt-title": "Create Folder",
   "folders/name-prompt": "Name of folder:",
   "folders/name-not-allowed": "Invalid folder name",
   "folders/confirm-backpack-folder": "Save entire folder to backpack?"

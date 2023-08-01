@@ -1,0 +1,5 @@
+html,
+body {
+  background-color: var(--darkWww-box) !important;
+  color: var(--darkWww-box-text);
+}

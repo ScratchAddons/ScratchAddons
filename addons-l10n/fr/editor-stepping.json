@@ -1,1 +1,1 @@
-{"editor-stepping/@name":"Surligner les blocs en cours d'exécution"}
+{"editor-stepping/@name":"Bordure du bloc executé","editor-stepping/@description":"Ajoute un contour bleu sur les blocs qui sont actuellement exécutés dans un projet.","editor-stepping/@settings-name-highlight-color":"Couleurs de surbrillance"}

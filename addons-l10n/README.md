@@ -3,8 +3,7 @@ This folder is for addons. For messages used by non-addons (such as options), ch
 ## Obtaining translations
 `LocalizationProvider`'s subclasses are used to obtain translations.
 - `UserscriptLocalizationProvider` fetches translations using URL provided from background in `loadByAddonId`. This can be accessed via `scratchAddons.l10n` or `msg`/`safeMsg` passed to userscript functions. This is for userscripts, which get executed inside Scratch website origin.
-- `BackgroundLocalizationProvider` fetches translations using the UI locale in `load`. This can be accessed via `scratchAddons.l10n` or `msg` passed to background script functions. This is for background scripts, such as notifications.
-- `WebsiteLocalizationProvider` fetches translations using IPC (between BackgroundLocalizationProvider). Instances may be created on all pages, and `loadMessages` is used to load messages. Popups will automatically load messages for its addon and receive `msg`/`safeMsg` function similar to userscripts. This can be used from content scripts, option screens and popups.
+- `WebsiteLocalizationProvider` fetches translations using IPC. Instances may be created on all pages, and `loadMessages` is used to load messages. Popups will automatically load messages for its addon and receive `msg`/`safeMsg` function similar to userscripts. This can be used from content scripts, option screens and popups.
 
 ## File name
 Files are placed under `addons-l10n/LOCALECODE` folder, where the locale code is lowercased IETF language tag used by Scratch (e.g. en, zh-tw). Note that 2-letter code will be used if ones with regions are unavailable; e.g. if ja-JP is unavailable, it uses ja. English (en) is used as a fallback, so if ja is unavailable, en is loaded.
@@ -49,6 +48,9 @@ Setting potential values can be translated:
 
 Popup names can be translated:
 - `popup.name` - `addon-id/@popup-name`
+
+Latest update temporary notices can be translated:
+- `latestUpdate.temporaryNotice` - `addon-id/@update`
 
 Note that in most cases you **do not have to do anything**, as English messages are fetched from the addon.json, not `addons-l10n/en`.
 

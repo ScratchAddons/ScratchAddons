@@ -5,9 +5,11 @@
   "credits": [
     {
       "name": "TheColaber",
-      "link": "https://scratch.mit.edu/users/TheColaber"
+      "link": "https://scratch.mit.edu/users/TheColaber/"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "blockcount.js",

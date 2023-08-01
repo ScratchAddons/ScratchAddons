@@ -1,28 +1,63 @@
-export default async function ({ addon, global, console }) {
-  let user1 = window.location.href.substring(30, 100);
-  let username = user1.substring(0, user1.indexOf("/"));
-  let details = ["projects", "favorites", "studios_following", "studios", "following", "followers"];
-  for (let j = 0; j < details.length; j++) {
-    fetch(`https://scratch.mit.edu/users/${username}/${details[j]}/`, { credentials: "omit" })
+export default async function ({ addon }) {
+  const CACHE = {
+    projects: null,
+    favorites: null,
+    followers: null,
+    following: null,
+    studios: null,
+    studios_following: null,
+  };
+  const details = Object.keys(CACHE);
+  const username = Scratch.INIT_DATA.PROFILE.model.username;
+  const boxes = [...document.querySelectorAll(".box-head")];
+  addon.self.addEventListener("disabled", () => {
+    for (const cached of details) {
+      if (CACHE[cached] !== null) {
+        const box = getBoxHead(cached);
+        const title = box.querySelector("h4");
+        title.innerText = title.innerText.replace(` (${CACHE[cached]})`, "");
+      }
+    }
+  });
+  addon.self.addEventListener("reenabled", () => {
+    for (const cached of details) {
+      if (CACHE[cached] !== null) {
+        const box = getBoxHead(cached);
+        box.querySelector("h4").innerText += ` (${CACHE[cached]})`;
+      }
+    }
+  });
+
+  for (const detail of details) {
+    fetch(`https://scratch.mit.edu/users/${username}/${detail}/`, { credentials: "omit" })
       .then((res) => res.text())
-      .then((response) => {
-        let find = response.search("<h2>");
-        let follownum = response.substring(find, find + 200).match(/\(([^)]+)\)/)[1];
-        let boxHeads = document.querySelectorAll(".box-head");
-        for (let i = 1; i < boxHeads.length - 1; i++) {
-          if (boxHeads[i].querySelector('a[href^="/"]')) {
-            let viewAll = new URL(boxHeads[i].querySelector("a").href).pathname;
-            let link = viewAll.toLowerCase().split("/users/" + username.toLowerCase() + "/")[1];
-            if (link.toLowerCase() === details[j].toLowerCase() + "/") {
-              let boxheadName = boxHeads[i].querySelector("h4");
-              let boxVal = boxheadName.innerText.match(/\([0-9+]+\)/g);
-              if (boxVal)
-                boxheadName.innerText = boxheadName.innerText.substring(0, boxheadName.innerText.indexOf(boxVal[0]));
-              boxheadName.innerText += ` (${follownum})`;
-              return;
-            }
+      .then((html) => {
+        const find = html.search("<h2>");
+        const num = html.substring(find, find + 200).match(/\(([^)]+)\)/)[1];
+        const box = getBoxHead(detail);
+        if (typeof box !== "undefined") {
+          const boxheadName = box.querySelector("h4");
+          let boxVal = boxheadName.innerText.match(/\([0-9+]+\)/g);
+          if (boxVal) {
+            boxheadName.innerText = boxheadName.innerText.substring(0, boxheadName.innerText.indexOf(boxVal[0]));
           }
+          CACHE[detail] = num;
+          if (!addon.self.disabled) boxheadName.innerText += ` (${num})`;
         }
-      });
+      })
+      .catch((ex) => console.error("Error when fetching", detail, "-", ex));
+  }
+
+  function getBoxHead(type) {
+    return boxes.find((box) => {
+      const match = box.querySelector('a[href^="/"]');
+      if (match) {
+        const url = new URL(match.href);
+        if (url.pathname === `/users/${username}/${type}/`) {
+          return true;
+        }
+      }
+      return false;
+    });
   }
 }

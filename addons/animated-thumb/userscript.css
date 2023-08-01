@@ -9,15 +9,7 @@
   max-height: min(800px, 80vh);
   max-width: 85%;
   margin-top: 12vh;
-  overflow-y: auto;
-  margin-left: auto;
-  margin-right: auto;
-  background: white;
-}
-
-.sa-animated-thumb-popup-header {
-  box-shadow: inset 0 -1px 0 0 #4280d7;
-  background-color: var(--scratchr2-primaryColor, #4d97ff);
+  overflow-y: auto !important;
 }
 
 .sa-animated-thumb-popup-content {
@@ -44,8 +36,6 @@
 }
 
 .sa-animated-thumb-popup-actions button {
-  background: var(--scratchr2-primaryColor, #4d97ff);
-  color: white;
   margin: 0 2rem;
 }
 

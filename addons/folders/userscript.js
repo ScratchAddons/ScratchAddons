@@ -1,4 +1,6 @@
-export default async function ({ addon, global, console, msg }) {
+import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
+
+export default async function ({ addon, console, msg }) {
   // The basic premise of how this addon works is relative simple.
   // scratch-gui renders the sprite selectors and asset selectors in a hierarchy like this:
   // <SelectorHOC>
@@ -16,8 +18,6 @@ export default async function ({ addon, global, console, msg }) {
   // We touch some things on the VM to make dragging items work properly.
 
   const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
-
-  const SVG_NS = "http://www.w3.org/2000/svg";
 
   const TYPE_SPRITES = 1;
   const TYPE_ASSETS = 2;
@@ -146,7 +146,7 @@ export default async function ({ addon, global, console, msg }) {
     },
   };
 
-  // https://github.com/LLK/scratch-gui/blob/develop/src/components/asset-panel/icon--sound.svg
+  // https://github.com/scratchfoundation/scratch-gui/blob/develop/src/components/asset-panel/icon--sound.svg
   const imageIconSource = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="100px" height="100px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <g id="Sound" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -317,44 +317,44 @@ export default async function ({ addon, global, console, msg }) {
 
   class Cache {
     constructor() {
-      this.map = new Map();
-      this.used = [];
+      this.cache = new Map();
+      this.usedThisTick = new Set();
     }
 
     has(id) {
-      return this.map.has(id);
+      return this.cache.has(id);
     }
 
     get(id) {
-      this.used.push(id);
-      return this.map.get(id);
+      this.usedThisTick.add(id);
+      return this.cache.get(id);
     }
 
     set(id, value) {
-      this.used.push(id);
-      this.map.set(id, value);
+      this.usedThisTick.add(id);
+      this.cache.set(id, value);
     }
 
-    start() {
-      this.used = [];
+    startTick() {
+      this.usedThisTick.clear();
     }
 
-    end() {
-      for (const id of Array.from(this.map.keys())) {
-        if (!this.used.includes(id)) {
-          this.map.delete(id);
+    endTick() {
+      for (const id of Array.from(this.cache.keys())) {
+        if (!this.usedThisTick.has(id)) {
+          this.cache.delete(id);
         }
       }
     }
 
     clear() {
-      this.start();
-      this.map.clear();
+      this.usedThisTick.clear();
+      this.cache.clear();
     }
   }
 
   const patchSortableHOC = (SortableHOC, type) => {
-    // SortableHOC should be: https://github.com/LLK/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/lib/sortable-hoc.jsx#L8
+    // SortableHOC should be: https://github.com/scratchfoundation/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/lib/sortable-hoc.jsx#L8
 
     const itemCache = new Cache();
     const folderItemCache = new Cache();
@@ -370,26 +370,29 @@ export default async function ({ addon, global, console, msg }) {
     ];
 
     const createFolderPreview = (items) => {
-      const svg = document.createElementNS(SVG_NS, "svg");
-      svg.setAttribute("width", PREVIEW_SIZE);
-      svg.setAttribute("height", PREVIEW_SIZE);
+      // Directly generate a string instead of using DOM API for performance as we deal with very large inlined images
+      // Because the result is only used as an img src, XSS shouldn't be a concern
+      let result = `data:image/svg+xml;,<svg xmlns="http://www.w3.org/2000/svg" width="${PREVIEW_SIZE}" height="${PREVIEW_SIZE}">`;
       for (let i = 0; i < Math.min(PREVIEW_POSITIONS.length, items.length); i++) {
         const item = items[i];
-        const image = document.createElementNS(SVG_NS, "image");
-        image.setAttribute("width", PREVIEW_SIZE / 2);
-        image.setAttribute("height", PREVIEW_SIZE / 2);
-        image.setAttribute("x", PREVIEW_POSITIONS[i][0]);
-        image.setAttribute("y", PREVIEW_POSITIONS[i][1]);
+        const width = PREVIEW_SIZE / 2;
+        const height = PREVIEW_SIZE / 2;
+        const [x, y] = PREVIEW_POSITIONS[i];
+        let src;
         if (item.asset) {
-          image.setAttribute("href", item.asset.encodeDataURI());
+          // escaping shouldn't be necessary here but we'll do it anyways for safety
+          src = escapeHTML(item.asset.encodeDataURI());
         } else if (item.costume && item.costume.asset) {
-          image.setAttribute("href", item.costume.asset.encodeDataURI());
+          src = escapeHTML(item.costume.asset.encodeDataURI());
         } else if (item.url) {
-          image.setAttribute("href", soundIconHref);
+          src = soundIconHref;
         }
-        svg.appendChild(image);
+        if (src) {
+          result += `<image width="${width}" height="${height}" x="${x}" y="${y}" href="${src}"/>`;
+        }
       }
-      return "data:image/svg+xml;," + new XMLSerializer().serializeToString(svg);
+      result += "</svg>";
+      return result;
     };
 
     const getUniqueIdOfFolderItems = (items) => {
@@ -441,9 +444,9 @@ export default async function ({ addon, global, console, msg }) {
         };
       };
 
-      itemCache.start();
-      folderItemCache.start();
-      folderAssetCache.start();
+      itemCache.startTick();
+      folderItemCache.startTick();
+      folderAssetCache.startTick();
 
       const folderOccurrences = new Map();
       const items = [];
@@ -564,9 +567,9 @@ export default async function ({ addon, global, console, msg }) {
         i++;
       }
 
-      itemCache.end();
-      folderItemCache.end();
-      folderAssetCache.end();
+      itemCache.endTick();
+      folderItemCache.endTick();
+      folderAssetCache.endTick();
 
       return result;
     };
@@ -705,6 +708,7 @@ export default async function ({ addon, global, console, msg }) {
     });
   };
 
+  await addon.tab.scratchClassReady();
   addon.tab.createEditorContextMenu((ctxType, ctx) => {
     if (ctxType !== "sprite" && ctxType !== "costume" && ctxType !== "sound") return;
     const component = ctx.target[addon.tab.traps.getInternalKey(ctx.target)].return.return.return.stateNode;
@@ -747,8 +751,13 @@ export default async function ({ addon, global, console, msg }) {
           fixSoundOrder();
         }
       };
-      const renameFolder = () => {
-        let newName = prompt(msg("rename-folder-prompt"), data.folder);
+      const renameFolder = async () => {
+        let newName = await addon.tab.prompt(
+          msg("rename-folder-prompt-title"),
+          msg("rename-folder-prompt"),
+          data.folder,
+          { useEditorClasses: true }
+        );
         // Prompt cancelled, do not rename
         if (newName === null) {
           return;
@@ -806,8 +815,13 @@ export default async function ({ addon, global, console, msg }) {
         }
       };
 
-      const createFolder = () => {
-        const name = prompt(msg("name-prompt"), getNameWithoutFolder(data.realName));
+      const createFolder = async () => {
+        const name = await addon.tab.prompt(
+          msg("name-prompt-title"),
+          msg("name-prompt"),
+          getNameWithoutFolder(data.realName),
+          { useEditorClasses: true }
+        );
         if (name === null) {
           return;
         }
@@ -1205,6 +1219,19 @@ export default async function ({ addon, global, console, msg }) {
         newIndex
       );
     };
+
+    // Temporal bug fix for #5762
+    const originalShareSoundToTarget = vm.shareSoundToTarget;
+    vm.shareSoundToTarget = function (...args) {
+      const target = this.runtime.getTargetById(args[1]);
+      if (!target) {
+        // Avoid reading property from null
+        return Promise.reject(new Error("Dropping sound into folder is not supported"));
+        // This would also work no matter what we returned, probably
+        // Original method returns a promise, so here too
+      }
+      return originalShareSoundToTarget.call(this, ...args);
+    };
   };
 
   const patchBackpack = (backpackInstance) => {
@@ -1247,10 +1274,11 @@ export default async function ({ addon, global, console, msg }) {
       const dragInfo = args[0];
       const folderItems = dragInfo && dragInfo.payload && dragInfo.payload.sa_folder_items;
       if (Array.isArray(folderItems)) {
-        if (confirm(msg("confirm-backpack-folder"))) {
+        addon.tab.confirm("", msg("confirm-backpack-folder"), { useEditorClasses: true }).then((result) => {
+          if (!result) return;
           this.sa_queuedItems = folderItems;
           this.sa_loadNextItem();
-        }
+        });
         return;
       }
       return originalHandleDrop.call(this, ...args);

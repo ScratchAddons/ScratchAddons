@@ -9,15 +9,17 @@
     },
     {
       "name": "lisa_wolfgang",
-      "link": "https://scratch.mit.edu/users/lisa_wolfgang"
+      "link": "https://scratch.mit.edu/users/lisa_wolfgang/"
     },
     {
       "name": "GarboMuffin",
-      "link": "https://scratch.mit.edu/users/GarboMuffin"
+      "link": "https://scratch.mit.edu/users/GarboMuffin/"
     }
   ],
   "versionAdded": "1.12.0",
   "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",
@@ -26,7 +28,7 @@
   ],
   "info": [
     {
-      "type": "warning",
+      "type": "notice",
       "text": "Decreasing the padding size is only visible to you, so when your projects are viewed by other users, your scripts may overlap.",
       "id": "paddingWarning"
     }

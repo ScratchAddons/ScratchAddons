@@ -1,0 +1,14 @@
+{
+  "name": "Reverse order of project controls",
+  "description": "Moves the green flag and stop buttons to the right and the full screen button to the left, like in Scratch 2.0.",
+  "tags": ["editor", "projectPlayer", "theme", "featured"],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.27.0"
+}

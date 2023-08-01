@@ -8,8 +8,8 @@ export default class Trap extends Listenable {
   constructor(tab) {
     super();
     this._react_internal_key = undefined;
-    this._isWWW = tab.clientVersion === "scratch-www";
-    this._getEditorMode = () => this._isWWW && tab.editorMode;
+    this._isWWW = () => tab.clientVersion === "scratch-www";
+    this._getEditorMode = () => this._isWWW() && tab.editorMode;
     this._waitForElement = tab.waitForElement.bind(tab);
     this._cache = Object.create(null);
   }
@@ -41,7 +41,8 @@ export default class Trap extends Listenable {
   async getBlockly() {
     if (this._cache.Blockly) return this._cache.Blockly;
     const editorMode = this._getEditorMode();
-    if (!editorMode || editorMode === "embed") throw new Error("Cannot access Blockly on this page");
+    if (!editorMode || editorMode === "embed")
+      throw new Error(`Cannot access Blockly on ${editorMode} page (${location.pathname})`);
     const BLOCKS_CLASS = '[class^="gui_blocks-wrapper"]';
     let elem = document.querySelector(BLOCKS_CLASS);
     if (!elem) {
@@ -83,7 +84,7 @@ export default class Trap extends Listenable {
     const editorMode = this._getEditorMode();
     if (!editorMode || editorMode === "embed") throw new Error("Cannot access paper on this page");
     // We can access paper through .tool on tools, for example:
-    // https://github.com/LLK/scratch-paint/blob/develop/src/containers/bit-brush-mode.jsx#L60-L62
+    // https://github.com/scratchfoundation/scratch-paint/blob/develop/src/containers/bit-brush-mode.jsx#L60-L62
     // It happens that paper's Tool objects contain a reference to the entirety of paper's scope.
     const modeSelector = await this._waitForElement("[class*='paint-editor_mode-selector']", {
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,

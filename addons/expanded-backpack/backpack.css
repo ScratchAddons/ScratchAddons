@@ -1,0 +1,39 @@
+/* override styles in https://github.com/scratchfoundation/scratch-gui/blob/develop/src/components/backpack/backpack.css */
+
+[class^="backpack_backpack-list"] {
+  /* set height of the item picker, the vanilla height of the backpack is 5.5rem so multiply it by the rows setting */
+  height: calc(var(--expandedBackpack-rows) * 5.5rem);
+}
+
+[class*="backpack_backpack-list-inner"] {
+  /* move items to the top-left of the container instead of vertically centering them */
+  align-items: flex-start;
+  /* force horizontal wrapping and enable vertical scrolling */
+  flex-wrap: wrap;
+  height: auto;
+  max-height: 100%;
+}
+
+[class*="backpack_backpack-item"] {
+  /* add vertical margin to make stacked buttons look nicer */
+  margin: 0.25rem;
+}
+
+/* non-backpacked sprite, costume and sound thumbnails use the same .sprite-selector classes so check parents to see if its part of the backpack */
+[class^="backpack_backpack-list-inner"]
+  > .react-contextmenu-wrapper
+  > [class^="sprite-selector-item_sprite-image-outer"]
+  > [class^="sprite-selector-item_sprite-image-inner"] {
+  /* fill area around thumbnail to make the image background blend in when using dark mode/custom theme */
+  background-color: var(--expandedBackpack-bgcolor);
+}
+
+[class^="backpack_backpack-list-inner"]
+  > .react-contextmenu-wrapper
+  > [class^="sprite-selector-item_sprite-image-outer"]
+  > [class^="sprite-selector-item_sprite-image-inner"]
+  > [class^="sprite-selector-item_sprite-image"] {
+  /* make thumbnails use all avaliable space inside the button instead of being downscaled to 32x32 pixels */
+  max-width: var(--expandedBackpack-imgsize);
+  max-height: var(--expandedBackpack-imgsize);
+}

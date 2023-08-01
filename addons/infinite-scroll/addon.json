@@ -63,12 +63,6 @@
       "id": "messageScroll",
       "type": "boolean",
       "default": true
-    },
-    {
-      "name": "Fix Footer",
-      "id": "showFooter",
-      "type": "boolean",
-      "default": true
     }
   ],
   "userscripts": [
@@ -82,31 +76,14 @@
     {
       "url": "buttonScroll.js",
       "matches": [
-        "https://scratch.mit.edu/projects/*",
+        "projects",
         "https://scratch.mit.edu/studios/*",
         "https://scratch.mit.edu/users/*",
         "https://scratch.mit.edu/messages"
       ]
-    },
-    {
-      "url": "moveDonor.js",
-      "matches": ["https://scratch.mit.edu/"],
-      "if": {
-        "settings": {
-          "showFooter": true
-        }
-      },
-      "runAtComplete": false
     }
   ],
   "userstyles": [
-    {
-      "url": "footer.css",
-      "matches": ["https://scratch.mit.edu/*"],
-      "if": {
-        "settings": { "showFooter": true }
-      }
-    },
     {
       "url": "discuss.css",
       "matches": ["https://scratch.mit.edu/discuss/*/"],

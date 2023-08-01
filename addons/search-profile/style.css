@@ -1,0 +1,10 @@
+.tabs button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.tabs button:disabled:hover,
+.tabs button:disabled:active {
+  background-color: transparent;
+  border: none;
+}

@@ -28,6 +28,9 @@
 .filter-option:hover {
   background: var(--button-hover-background);
 }
+.filter-option:not(.sel):hover {
+  cursor: pointer;
+}
 .filter-option:last-child {
   border-inline-end: none;
 }

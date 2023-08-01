@@ -1,0 +1,49 @@
+{
+  "name": "Live forum post preview",
+  "description": "Automatically shows a preview when you stop typing while writing or editing a forum post.",
+  "credits": [
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["editingScreens"],
+      "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["editingScreens"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Refresh rate",
+      "id": "rate",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "slow",
+          "name": "Slow"
+        },
+        {
+          "id": "default",
+          "name": "Default"
+        },
+        {
+          "id": "fast",
+          "name": "Fast"
+        }
+      ],
+      "default": "default"
+    }
+  ],
+  "tags": ["community", "forums"],
+  "versionAdded": "1.25.0"
+}

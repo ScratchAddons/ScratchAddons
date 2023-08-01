@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   while (true) {
     let item = await addon.tab.waitForElement(".media-stats", { markAsSeen: true });
     if (window.location.hash === "#galleries" && item.childElementCount === 2) {
@@ -7,7 +7,7 @@ export default async function ({ addon, global, console, msg }) {
       leaveButton.innerText = msg("leave");
       leaveButton.setAttribute("data-id", item.parentElement.querySelector(".title a").href.match(/[0-9]+/g));
       leaveButton.addEventListener("click", async function (e) {
-        if (confirm(msg("leave-confirm"))) {
+        if (await addon.tab.confirm(msg("leave-new"), msg("leave-confirm"))) {
           await fetch(
             `https://scratch.mit.edu/site-api/users/curators-in/${leaveButton.getAttribute(
               "data-id"

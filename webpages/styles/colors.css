@@ -1,7 +1,8 @@
 :root {
   --brand-orange: #ff7b26;
-  --brand-orange-opacity35: rgba(255, 123, 38, 0.35);
   --brand-orange-min-font-weight: normal;
+  --orange: #ff7b26;
+  --orange-opacity35: rgba(255, 123, 38, 0.35);
   --yellow-opacity50: rgba(253, 221, 43, 0.5);
   --green: #008000;
   --light-green-variant: #53b31c;
@@ -12,6 +13,7 @@
   --red: #fd2b2b;
   --red-opacity75: rgba(253, 43, 43, 0.75);
   --red-variant: #d81212;
+  --purple-opacity75: rgba(177, 23, 248, 0.75);
   --dark-red-variant: #d84a12;
   --dark-red-text: var(--dark-red-variant);
   --white-text: #fff;
@@ -37,12 +39,14 @@
   --warning-border: var(--red);
   --warning-text: #fff;
   --warning-icon-filter: brightness(0) invert(1);
-  --update-background: rgba(177, 23, 248, 0.25);
-  --update-border: #b20eb8;
+  --info-border: var(--content-separator);
+  --update-background: var(--navigation-background);
+  --update-border: var(--purple-opacity75);
   --update-text: #fff;
 
   --modal-overlay: rgba(0, 0, 0, 0.65);
   --hover-highlight: rgba(255, 255, 255, 0.05);
+  --hover-highlight-reduced: rgba(255, 255, 255, 0.02);
   --hover-darken: rgba(0, 0, 0, 0.1);
 
   --large-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -51,12 +55,13 @@
   --content-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
   --content-separator: #808080;
   --control-border: #000;
-  --input-focus-shadow: 0 0 0 3px var(--brand-orange-opacity35);
+  --input-focus-shadow: 0 0 0 3px var(--orange-opacity35);
   --fullscreen-popup-shadow: 0 -1px 7px rgba(0, 0, 0, 0.2);
 
   --content-text: #fff;
   --content-icon-filter: brightness(0) invert(1);
   --description-text: #ddd;
+  --description-icon-filter: brightness(0) invert(0.87);
   --label-text: #aaa;
   --gray-text: #808080;
   --placeholder-text: #777;

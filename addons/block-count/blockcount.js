@@ -30,6 +30,7 @@ export default async function ({ addon, console, msg }) {
           reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
         });
         let display = topBar.appendChild(document.createElement("span"));
+        addon.tab.displayNoneWhileDisabled(display);
         display.style.order = 1;
         display.style.padding = "9px";
         display.innerText = msg("blocks", { num: getBlockCount().blockCount });

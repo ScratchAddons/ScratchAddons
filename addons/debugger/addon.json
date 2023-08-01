@@ -1,7 +1,14 @@
 {
   "name": "Debugger",
-  "description": "Adds a new \"debugger\" block category and a \"logs\" window to the editor. The \"log\", \"warn\" and \"error\" blocks will print the specified message into the logs window. The \"breakpoint\" block will pause the project when executed.",
+  "description": "Adds a new \"debugger\" window to the editor. Allows for logging into the \"Logs\" tab of the debugger window using the \"log\", \"warn\" and \"error\" blocks. The \"breakpoint\" block will pause the project when executed. All running threads can be viewed in the \"Threads\" tab of the debugger, and when paused the \"Step\" button can be used to execute the next block. A graph of frames per second and number of clones can be viewed in the \"Performance\" tab.",
   "credits": [
+    {
+      "name": "Tacodiva",
+      "link": "https://github.com/Tacodiva"
+    },
+    {
+      "name": "GarboMuffin"
+    },
     {
       "name": "GrahamSH"
     },
@@ -24,7 +31,62 @@
       "matches": ["projects"]
     }
   ],
-  "tags": ["editor", "featured"],
-  "enabledByDefault": false,
-  "versionAdded": "1.16.0"
+  "settings": [
+    {
+      "name": "Clear logs on green flag",
+      "id": "log_clear_greenflag",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Log green flag clicks",
+      "id": "log_greenflag",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Log clone creation",
+      "id": "log_clone_create",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Log when clone limit exceeded",
+      "id": "log_failed_clone_creation",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Log broadcasts",
+      "id": "log_broadcasts",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Log when max list length exceeded",
+      "id": "log_max_list_length",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Log invalid cloud variable values",
+      "id": "log_invalid_cloud_data",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Animated graphs (may affect performance)",
+      "id": "fancy_graphs",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "tags": ["editor", "codeEditor", "featured"],
+  "versionAdded": "1.16.0",
+  "latestUpdate": {
+    "version": "1.33.0",
+    "temporaryNotice": "Graph animation is now disabled by default to increase performance. You can re-enable it if you want.",
+    "newSettings": ["fancy_graphs"]
+  },
+  "libraries": ["chartjs"]
 }

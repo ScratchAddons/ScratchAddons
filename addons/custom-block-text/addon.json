@@ -1,0 +1,46 @@
+{
+  "name": "Customizable block text style",
+  "description": "Changes the thickness of the text on blocks and optionally adds a text shadow.",
+  "tags": ["editor", "codeEditor", "featured"],
+  "credits": [
+    {
+      "name": "Secret-chest",
+      "link": "https://github.com/Secret-chest"
+    },
+    {
+      "name": "_nix",
+      "link": "https://github.com/towerofnix"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "text-bold.css",
+      "matches": ["projects"],
+      "if": { "settings": { "bold": true } }
+    },
+    {
+      "url": "text-shadow.css",
+      "matches": ["projects"],
+      "if": { "settings": { "shadow": true } }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Bold text",
+      "id": "bold",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Shadow under text",
+      "id": "shadow",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "versionAdded": "1.24.0",
+  "enabledByDefault": false
+}

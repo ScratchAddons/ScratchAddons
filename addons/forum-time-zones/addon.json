@@ -4,10 +4,12 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "matches": ["topics"],
       "runAtComplete": false
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.0.0",
   "tags": ["forums", "community"],
   "enabledByDefault": false

@@ -4,13 +4,15 @@
   "credits": [
     {
       "name": "TheColaber",
-      "link": "https://scratch.mit.edu/users/TheColaber"
+      "link": "https://scratch.mit.edu/users/TheColaber/"
     },
     {
-      "name": "Verixion",
-      "link": "https://scratch.mit.edu/users/Verixion"
+      "name": "Weredime (9gr)",
+      "link": "https://scratch.mit.edu/users/9gr/"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",

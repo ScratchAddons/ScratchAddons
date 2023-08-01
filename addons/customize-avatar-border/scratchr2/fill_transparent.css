@@ -1,0 +1,5 @@
+#comments #comment-form .avatar,
+#comments .comment img.avatar,
+.postavatar img {
+  background-color: var(--customizeAvatarBorder-outlineColor);
+}

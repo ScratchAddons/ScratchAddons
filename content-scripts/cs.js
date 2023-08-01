@@ -1,9 +1,18 @@
 try {
-  if (window.parent.location.origin !== "https://scratch.mit.edu") throw "Scratch Addons: not first party iframe";
+  // Property window.top.location.origin matches the origin that corresponds to
+  // the URL displayed on the address bar, for this tab.
+  // Meanwhile, window.location.origin can only correspond to one of the content
+  // script matches which are declared in the manifest.json file. In normal use,
+  // it will always equal `https://scratch.mit.edu`.
+  if (window.top.location.origin !== window.location.origin) throw "";
 } catch {
-  throw "Scratch Addons: not first party iframe";
+  throw "Scratch Addons: cross-origin iframe ignored";
 }
-if (document.documentElement instanceof SVGElement) throw "Top-level SVG document (this can be ignored)";
+if (window.frameElement && window.frameElement.getAttribute("src") === null)
+  throw "Scratch Addons: iframe without src attribute ignored";
+if (document.documentElement instanceof SVGElement) throw "Scratch Addons: SVG document ignored";
+
+const MAX_USERSTYLES_PER_ADDON = 100;
 
 const _realConsole = window.console;
 const consoleOutput = (logAuthor = "[cs]") => {
@@ -114,10 +123,6 @@ const cs = {
 };
 Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow));
 
-const pageComlinkScript = document.createElement("script");
-pageComlinkScript.src = chrome.runtime.getURL("libraries/thirdparty/cs/comlink.js");
-document.documentElement.appendChild(pageComlinkScript);
-
 const moduleScript = document.createElement("script");
 moduleScript.type = "module";
 moduleScript.src = chrome.runtime.getURL("content-scripts/inject/module.js");
@@ -156,8 +161,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("[Message from background]", request);
   if (request === "getInitialUrl") {
     sendResponse(pseudoUrl || initialUrl);
-  } else if (request === "getLocationHref") {
-    sendResponse(location.href);
   }
 });
 
@@ -175,10 +178,20 @@ function addStyle(addon) {
     }
   };
 
-  for (let userstyle of addon.styles) {
+  if (addon.styles.length > MAX_USERSTYLES_PER_ADDON) {
+    console.warn(
+      "Please increase MAX_USERSTYLES_PER_ADDON in content-scripts/cs.js, otherwise style priority is not guaranteed! Has",
+      addon.styles.length,
+      "styles, current max is",
+      MAX_USERSTYLES_PER_ADDON
+    );
+  }
+  for (let i = 0; i < addon.styles.length; i++) {
+    const userstyle = addon.styles[i];
+    const styleIndex = addon.index * MAX_USERSTYLES_PER_ADDON + userstyle.index;
     if (addon.injectAsStyleElt) {
       // If an existing style is already appended, just enable it instead
-      const existingEl = addonStyles.find((style) => style.textContent === userstyle);
+      const existingEl = addonStyles.find((style) => style.dataset.styleHref === userstyle.href);
       if (existingEl) {
         existingEl.disabled = false;
         continue;
@@ -187,11 +200,12 @@ function addStyle(addon) {
       const style = document.createElement("style");
       style.classList.add("scratch-addons-style");
       style.setAttribute("data-addon-id", addon.addonId);
-      style.setAttribute("data-addon-index", addon.index);
-      style.textContent = userstyle;
-      appendByIndex(style, addon.index);
+      style.setAttribute("data-addon-index", styleIndex);
+      style.setAttribute("data-style-href", userstyle.href);
+      style.textContent = userstyle.text;
+      appendByIndex(style, styleIndex);
     } else {
-      const existingEl = addonStyles.find((style) => style.href === userstyle);
+      const existingEl = addonStyles.find((style) => style.href === userstyle.href);
       if (existingEl) {
         existingEl.disabled = false;
         continue;
@@ -200,10 +214,10 @@ function addStyle(addon) {
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.setAttribute("data-addon-id", addon.addonId);
-      link.setAttribute("data-addon-index", addon.index);
+      link.setAttribute("data-addon-index", styleIndex);
       link.classList.add("scratch-addons-style");
-      link.href = userstyle;
-      appendByIndex(link, addon.index);
+      link.href = userstyle.href;
+      appendByIndex(link, styleIndex);
     }
   }
 }
@@ -212,6 +226,11 @@ function removeAddonStyles(addonId) {
   // That way, if the addon needs to be reenabled, it can just enable that style/link element instead of readding it.
   // This helps with load times for link elements.
   document.querySelectorAll(`[data-addon-id='${addonId}']`).forEach((style) => (style.disabled = true));
+}
+function removeAddonStylesPartial(addonId, stylesToRemove) {
+  document.querySelectorAll(`[data-addon-id='${addonId}']`).forEach((style) => {
+    if (stylesToRemove.includes(style.href || style.dataset.styleHref)) style.disabled = true;
+  });
 }
 
 function injectUserstyles(addonsWithUserstyles) {
@@ -251,20 +270,29 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
 
   // Set variables for customCssVariables
   const getColor = (addonId, obj) => {
-    if (typeof obj !== "object") return obj;
+    if (typeof obj !== "object" || obj === null) return obj;
     let hex;
     switch (obj.type) {
       case "settingValue":
         return addonSettings[addonId][obj.settingId];
       case "ternary":
         // this is not even a color lol
-        return getColor(addonId, obj.source) ? obj.true : obj.false;
+        return getColor(addonId, obj.source) ? getColor(addonId, obj.true) : getColor(addonId, obj.false);
+      case "map":
+        return getColor(addonId, obj.options[getColor(addonId, obj.source)] ?? obj.default);
       case "textColor": {
         hex = getColor(addonId, obj.source);
         let black = getColor(addonId, obj.black);
         let white = getColor(addonId, obj.white);
         let threshold = getColor(addonId, obj.threshold);
         return textColorLib.textColor(hex, black, white, threshold);
+      }
+      case "alphaThreshold": {
+        hex = getColor(addonId, obj.source);
+        let { a } = textColorLib.parseHex(hex);
+        let threshold = getColor(addonId, obj.threshold) || 0.5;
+        if (a >= threshold) return getColor(addonId, obj.opaque);
+        else return getColor(addonId, obj.transparent);
       }
       case "multiply": {
         hex = getColor(addonId, obj.source);
@@ -336,13 +364,147 @@ function getL10NURLs() {
 }
 
 async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscripts, addonsWithUserstyles }) {
-  // In order for the "everLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and parse
-  const everLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
-  const disabledDynamicAddons = [];
+  const everLoadedUserscriptAddons = new Set(addonsWithUserscripts.map((entry) => entry.addonId));
+  const disabledDynamicAddons = new Set();
   globalState = globalStateMsg;
   setCssVariables(globalState.addonSettings, addonsWithUserstyles);
   // Just in case, make sure the <head> loaded before injecting styles
   waitForDocumentHead().then(() => injectUserstyles(addonsWithUserstyles));
+
+  chrome.runtime.onMessage.addListener((request) => {
+    if (request.dynamicAddonEnabled) {
+      const {
+        scripts,
+        userstyles,
+        cssVariables,
+        addonId,
+        injectAsStyleElt,
+        index,
+        dynamicEnable,
+        dynamicDisable,
+        partial,
+      } = request.dynamicAddonEnabled;
+      disabledDynamicAddons.delete(addonId);
+      addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
+      if (partial) {
+        // Partial: part of userstyle was (re-)enabled.
+        // No need to deal with userscripts here.
+        const addonsWithUserstylesEntry = addonsWithUserstyles.find((entry) => entry.addonId === addonId);
+        if (addonsWithUserstylesEntry) {
+          addonsWithUserstylesEntry.styles = userstyles;
+        } else {
+          addonsWithUserstyles.push({ styles: userstyles, cssVariables, addonId, injectAsStyleElt, index });
+        }
+      } else {
+        // Non-partial: the whole addon was (re-)enabled.
+        if (everLoadedUserscriptAddons.has(addonId)) {
+          if (!dynamicDisable) return;
+          // Addon was reenabled
+          _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
+        } else {
+          if (!dynamicEnable) return;
+          // Addon was not injected in page yet
+
+          // If the the module wasn't loaded yet, don't run these scripts as they will run later anyway.
+          if (_page_) {
+            _page_.runAddonUserscripts({ addonId, scripts, enabledLate: true });
+            everLoadedUserscriptAddons.add(addonId);
+          }
+        }
+
+        addonsWithUserscripts.push({ addonId, scripts });
+        addonsWithUserstyles.push({ styles: userstyles, cssVariables, addonId, injectAsStyleElt, index });
+      }
+      setCssVariables(globalState.addonSettings, addonsWithUserstyles);
+    } else if (request.dynamicAddonDisable) {
+      // Note: partialDynamicDisabledStyles includes ones that are disabled currently, too!
+      const { addonId, partialDynamicDisabledStyles } = request.dynamicAddonDisable;
+      // This may run twice if the style-only addon was first "partially"
+      // (but in fact entirely) disabled, and it was then toggled off.
+      // Early return in this situation.
+      if (disabledDynamicAddons.has(addonId)) return;
+      const scriptIndex = addonsWithUserscripts.findIndex((a) => a.addonId === addonId);
+      const styleIndex = addonsWithUserstyles.findIndex((a) => a.addonId === addonId);
+      if (_page_) {
+        if (partialDynamicDisabledStyles) {
+          // Userstyles are partially disabled.
+          // This should not result in other parts being disabled,
+          // unless that means no scripts/styles are running on this page.
+          removeAddonStylesPartial(addonId, partialDynamicDisabledStyles);
+          if (styleIndex > -1) {
+            // This should exist... right? Safeguarding anyway
+            const userstylesEntry = addonsWithUserstyles[styleIndex];
+            userstylesEntry.styles = userstylesEntry.styles.filter(
+              (style) => !partialDynamicDisabledStyles.includes(style.href)
+            );
+            if (userstylesEntry.styles.length || scriptIndex > -1) {
+              // The addon was not completely disabled, so early return.
+              // Note: we do not need to recalculate cssVariables here
+              return;
+            }
+          }
+        } else {
+          removeAddonStyles(addonId);
+        }
+        disabledDynamicAddons.add(addonId);
+        _page_.fireEvent({ name: "disabled", addonId, target: "self" });
+      } else {
+        everLoadedUserscriptAddons.delete(addonId);
+      }
+      if (scriptIndex !== -1) addonsWithUserscripts.splice(scriptIndex, 1);
+      if (styleIndex !== -1) addonsWithUserstyles.splice(styleIndex, 1);
+
+      setCssVariables(globalState.addonSettings, addonsWithUserstyles);
+    } else if (request.updateUserstylesSettingsChange) {
+      const {
+        userstyles,
+        addonId,
+        injectAsStyleElt,
+        index,
+        dynamicEnable,
+        dynamicDisable,
+        addonSettings,
+        cssVariables,
+      } = request.updateUserstylesSettingsChange;
+      const addonIndex = addonsWithUserstyles.findIndex((addon) => addon.addonId === addonId);
+      removeAddonStyles(addonId);
+      if (addonIndex > -1 && userstyles.length === 0 && dynamicDisable) {
+        // This is actually dynamicDisable condition, but since this does not involve
+        // toggling addon state, this is not considered one by the code.
+        addonsWithUserstyles.splice(addonIndex, 1);
+        // This might race with newGlobalState, so we merge explicitly here
+        setCssVariables({ ...globalState.addonSettings, [addonId]: addonSettings }, addonsWithUserstyles);
+        console.log(`Dynamically disabling all userstyles of ${addonId} due to settings change`);
+        // Early return because we know addStyle will be no-op
+        return;
+        // Wait, but what about userscripts? Great question. No, we do not need to fire events
+        // or handle userscripts at all. This is because settings change does not cause
+        // userscripts to be enabled or disabled (only userstyles). Instead userscripts
+        // should always be executed but listen to settings change event. Thus this
+        // "dynamic disable" does not fire disable event, because userscripts aren't disabled.
+      }
+      if (addonIndex > -1 && (dynamicDisable || dynamicEnable)) {
+        // Userstyles enabled when there are already enabled ones, or
+        // userstyles partially disabled. do not call
+        // removeAddonStylesPartial as we remove and re-add instead.
+        const userstylesEntry = addonsWithUserstyles[addonIndex];
+        userstylesEntry.styles = userstyles;
+      }
+      if (addonIndex === -1 && userstyles.length > 0 && dynamicEnable) {
+        // This is actually dynamicEnable condition, but since this does not involve
+        // toggling addon state, this is not considered one by the code.
+        console.log(`Dynamically enabling userstyle addon ${addonId} due to settings change`);
+        addonsWithUserstyles.push({ styles: userstyles, cssVariables, addonId, injectAsStyleElt, index });
+        disabledDynamicAddons.delete(addonId);
+        setCssVariables({ ...globalState.addonSettings, [addonId]: addonSettings }, addonsWithUserstyles);
+        // Same goes here; enabling a setting does not run or re-enable an userscript by design.
+      }
+      // Removing the addon styles and readding them works since the background
+      // will send a different array for the new valid userstyles.
+      // Try looking for the "userscriptMatches" function.
+      addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
+    }
+  });
   if (!_page_) {
     await new Promise((resolve) => {
       // We're registering this load event after the load event that
@@ -363,47 +525,14 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
       setCssVariables(request.newGlobalState.addonSettings, addonsWithUserstyles);
     } else if (request.fireEvent) {
       _page_.fireEvent(request.fireEvent);
-    } else if (request.dynamicAddonEnabled) {
-      const { scripts, userstyles, cssVariables, addonId, injectAsStyleElt, index, dynamicEnable, dynamicDisable } =
-        request.dynamicAddonEnabled;
-      addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
-      if (everLoadedAddons.find((addon) => addon.addonId === addonId)) {
-        if (!dynamicDisable) return;
-        // Addon was reenabled
-        _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
-      } else {
-        if (!dynamicEnable) return;
-        // Addon was not injected in page yet
-        _page_.runAddonUserscripts({ addonId, scripts, enabledLate: true });
-      }
-
-      addonsWithUserscripts.push({ addonId, scripts });
-      addonsWithUserstyles.push({ styles: userstyles, cssVariables, addonId, injectAsStyleElt, index });
-      setCssVariables(globalState.addonSettings, addonsWithUserstyles);
-      everLoadedAddons.push({ addonId, scripts });
-    } else if (request.dynamicAddonDisable) {
-      const { addonId } = request.dynamicAddonDisable;
-      disabledDynamicAddons.push(addonId);
-
-      let addonIndex = addonsWithUserscripts.findIndex((a) => a.addonId === addonId);
-      if (addonIndex !== -1) addonsWithUserscripts.splice(addonIndex, 1);
-      addonIndex = addonsWithUserstyles.findIndex((a) => a.addonId === addonId);
-      if (addonIndex !== -1) addonsWithUserstyles.splice(addonIndex, 1);
-
-      removeAddonStyles(addonId);
-      _page_.fireEvent({ name: "disabled", addonId, target: "self" });
-      setCssVariables(globalState.addonSettings, addonsWithUserstyles);
-    } else if (request.updateUserstylesSettingsChange) {
-      const { userstyles, addonId, injectAsStyleElt, index } = request.updateUserstylesSettingsChange;
-      // Removing the addon styles and readding them works since the background
-      // will send a different array for the new valid userstyles.
-      // Try looking for the "userscriptMatches" function.
-      removeAddonStyles(addonId);
-      addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
     } else if (request === "getRunningAddons") {
       const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
       const userstyles = addonsWithUserstyles.map((obj) => obj.addonId);
-      sendResponse({ userscripts, userstyles, disabledDynamicAddons });
+      sendResponse({
+        userscripts,
+        userstyles,
+        disabledDynamicAddons: Array.from(disabledDynamicAddons),
+      });
     } else if (request === "refetchSession") {
       _page_.refetchSession();
     }
@@ -475,25 +604,29 @@ const showBanner = () => {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     text-shadow: none;
     box-shadow: 0 0 20px 0px #0000009e;
-    line-height: 1em;`,
+    font-size: 14px;
+    line-height: normal;`,
   });
+  /*
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=9y4IsQLz3rk",
+    href: "https://www.youtube.com/watch?v=oRo0tMWEpiA",
     target: "_blank",
     rel: "noopener",
     referrerPolicy: "strict-origin-when-cross-origin",
   });
+  // Thumbnails were 100px height
+  */
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/yt-thumbnail.jpg"),
-    style: "height: 100px; border-radius: 5px; padding: 20px",
+    src: chrome.runtime.getURL("/images/cs/icon.png"),
+    style: "height: 150px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
     style: "margin: 12px;",
   });
   const notifTitle = Object.assign(document.createElement("span"), {
-    style: "font-size: 18px; line-height: 24px; display: inline-block; margin-bottom: 12px;",
+    style: "font-size: 18px; line-height: normal; display: inline-block; margin-bottom: 12px;",
     textContent: chrome.i18n.getMessage("extensionUpdate"),
   });
   const notifClose = Object.assign(document.createElement("img"), {
@@ -506,7 +639,8 @@ const showBanner = () => {
   });
   notifClose.addEventListener("click", () => notifInnerBody.remove(), { once: true });
 
-  const NOTIF_TEXT_STYLE = "display: block; font-size: 14px; color: white !important;";
+  const NOTIF_TEXT_STYLE = "display: block; color: white !important;";
+  const NOTIF_LINK_STYLE = "color: #1aa0d8; font-weight: normal; text-decoration: underline;";
 
   const notifInnerText0 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE + "font-weight: bold;",
@@ -516,7 +650,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_22", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_33_2", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -528,6 +662,7 @@ const showBanner = () => {
           Object.assign(document.createElement("a"), {
             href: "https://scratch.mit.edu/scratch-addons-extension/settings?source=updatenotif",
             target: "_blank",
+            style: NOTIF_LINK_STYLE,
             textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
           }).outerHTML,
         ][Number(i) - 1]
@@ -535,7 +670,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_22"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_33_2"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -548,6 +683,7 @@ const showBanner = () => {
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
     href: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
     target: "_blank",
+    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("notifChangelog"),
   });
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
@@ -555,14 +691,17 @@ const showBanner = () => {
       chrome.runtime.getManifest().version
     }&${utm}`,
     target: "_blank",
+    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("feedback"),
   });
   const notifFooterTranslate = Object.assign(document.createElement("a"), {
     href: "https://scratchaddons.com/translate",
     target: "_blank",
+    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("translate"),
   });
-  const notifFooterLegal = Object.assign(document.createElement("small"), {
+  const notifFooterLegal = Object.assign(document.createElement("span"), {
+    style: NOTIF_TEXT_STYLE + "font-size: 12px;",
     textContent: chrome.i18n.getMessage("notAffiliated"),
   });
   notifFooter.appendChild(notifFooterChangelog);
@@ -584,9 +723,9 @@ const showBanner = () => {
   notifText.appendChild(makeBr());
   notifText.appendChild(notifFooter);
 
-  notifImageLink.appendChild(notifImage);
+  // notifImageLink.appendChild(notifImage);
 
-  notifInnerBody.appendChild(notifImageLink);
+  notifInnerBody.appendChild(notifImage);
   notifInnerBody.appendChild(notifText);
 
   notifOuterBody.appendChild(notifInnerBody);
@@ -595,6 +734,7 @@ const showBanner = () => {
 };
 
 const handleBanner = async () => {
+  if (window.frameElement) return;
   const currentVersion = chrome.runtime.getManifest().version;
   const [major, minor, _] = currentVersion.split(".");
   const currentVersionMajorMinor = `${major}.${minor}`;
@@ -621,13 +761,19 @@ if (document.readyState !== "loading") {
 const isProfile = pathArr[0] === "users" && pathArr[2] === "";
 const isStudio = pathArr[0] === "studios";
 const isProject = pathArr[0] === "projects";
+const isForums = pathArr[0] === "discuss";
 
-if (isProfile || isStudio || isProject) {
+if (isProfile || isStudio || isProject || isForums) {
+  const removeReiteratedChars = (string) =>
+    string
+      .split("")
+      .filter((char, i, charArr) => (i === 0 ? true : charArr[i - 1] !== char))
+      .join("");
+
   const shouldCaptureComment = (value) => {
-    const regex = / scratch[ ]?add[ ]?ons/;
-    // Trim like scratchr2
-    const trimmedValue = " " + value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
-    const limitedValue = trimmedValue.toLowerCase().replace(/[^a-z /]+/g, "");
+    const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, ""); // Trim like scratchr2
+    const limitedValue = removeReiteratedChars(trimmedValue.toLowerCase().replace(/[^a-z]+/g, ""));
+    const regex = /scratchadons/;
     return regex.test(limitedValue);
   };
   const extensionPolicyLink = document.createElement("a");
@@ -636,7 +782,7 @@ if (isProfile || isStudio || isProject) {
   extensionPolicyLink.innerText = chrome.i18n.getMessage("captureCommentPolicy");
   Object.assign(extensionPolicyLink.style, {
     textDecoration: "underline",
-    color: "white",
+    color: isForums ? "" : "white",
   });
   const errorMsgHtml = escapeHTML(chrome.i18n.getMessage("captureCommentError", DOLLARS)).replace(
     "$1",
@@ -645,160 +791,163 @@ if (isProfile || isStudio || isProject) {
   const sendAnywayMsg = chrome.i18n.getMessage("captureCommentPostAnyway");
   const confirmMsg = chrome.i18n.getMessage("captureCommentConfirm");
 
-  window.addEventListener("load", () => {
-    if (isProfile) {
-      window.addEventListener(
-        "click",
-        (e) => {
-          const path = e.composedPath();
-          if (
-            path[1] &&
-            path[1] !== document &&
-            path[1].getAttribute("data-control") === "post" &&
-            path[1].hasAttribute("data-commentee-id")
-          ) {
-            const form = path[3];
-            if (form.tagName !== "FORM") return;
-            if (form.hasAttribute("data-sa-send-anyway")) {
-              form.removeAttribute("data-sa-send-anyway");
-              return;
-            }
-            const textarea = form.querySelector("textarea[name=content]");
-            if (!textarea) return;
-            if (shouldCaptureComment(textarea.value)) {
-              e.stopPropagation();
-              e.preventDefault(); // Avoid location.hash being set to null
+  if (isProfile) {
+    window.addEventListener(
+      "click",
+      (e) => {
+        if (e.target.tagName !== "A" || !e.target.parentElement.matches("div.button[data-commentee-id]")) return;
+        const form = e.target.closest("form");
+        if (!form) return;
+        if (form.hasAttribute("data-sa-send-anyway")) {
+          form.removeAttribute("data-sa-send-anyway");
+          return;
+        }
+        const textarea = form.querySelector("textarea[name=content]");
+        if (!textarea) return;
+        if (shouldCaptureComment(textarea.value)) {
+          e.stopPropagation();
+          e.preventDefault(); // Avoid location.hash being set to null
 
-              form.querySelector("[data-control=error] .text").innerHTML = errorMsgHtml + " ";
-              const sendAnyway = document.createElement("a");
-              sendAnyway.onclick = () => {
-                const res = confirm(confirmMsg);
-                if (res) {
-                  form.setAttribute("data-sa-send-anyway", "");
-                  form.querySelector("[data-control=post]").click();
-                }
-              };
-              sendAnyway.textContent = sendAnywayMsg;
-              Object.assign(sendAnyway.style, {
-                textDecoration: "underline",
-                color: "white",
-              });
-              form.querySelector("[data-control=error] .text").appendChild(sendAnyway);
-              form.querySelector(".control-group").classList.add("error");
+          form.querySelector("[data-control=error] .text").innerHTML = errorMsgHtml + " ";
+          const sendAnyway = document.createElement("a");
+          sendAnyway.onclick = () => {
+            const res = confirm(confirmMsg);
+            if (res) {
+              form.setAttribute("data-sa-send-anyway", "");
+              form.querySelector("[data-control=post]").click();
             }
-          }
-        },
-        { capture: true }
-      );
-    } else if (isProject || isStudio) {
-      // For projects, we want to be careful not to hurt performance.
-      // Let's capture the event in the comments container instead
-      // of the whole window. There will be a new comment container
-      // each time the user goes inside the project then outside.
-      let observer;
-      const waitForContainer = () => {
-        if (document.querySelector(".comments-container, .studio-compose-container")) return Promise.resolve();
-        return new Promise((resolve) => {
-          observer = new MutationObserver((mutationsList) => {
-            if (document.querySelector(".comments-container, .studio-compose-container")) {
-              resolve();
-              observer.disconnect();
-            }
+          };
+          sendAnyway.textContent = sendAnywayMsg;
+          Object.assign(sendAnyway.style, {
+            textDecoration: "underline",
+            color: "white",
           });
-          observer.observe(document.documentElement, { childList: true, subtree: true });
-        });
-      };
-      const getEditorMode = () => {
-        // From addon-api/content-script/Tab.js
-        const pathname = location.pathname.toLowerCase();
-        const split = pathname.split("/").filter(Boolean);
-        if (!split[0] || split[0] !== "projects") return null;
-        if (split.includes("editor")) return "editor";
-        if (split.includes("fullscreen")) return "fullscreen";
-        if (split.includes("embed")) return "embed";
-        return "projectpage";
-      };
-      const addListener = () =>
-        document.querySelector(".comments-container, .studio-compose-container").addEventListener(
-          "click",
-          (e) => {
-            const path = e.composedPath();
-            // When clicking the post button, e.path[0] might
-            // be <span>Post</span> or the <button /> element
-            const possiblePostBtn = path[0].tagName === "SPAN" ? path[1] : path[0];
-            if (!possiblePostBtn) return;
-            if (possiblePostBtn.tagName !== "BUTTON") return;
-            if (!possiblePostBtn.classList.contains("compose-post")) return;
-            const form = path[0].tagName === "SPAN" ? path[3] : path[2];
-            if (!form) return;
-            if (form.tagName !== "FORM") return;
-            if (!form.classList.contains("full-width-form")) return;
-            // Remove error when about to send comment anyway, if it exists
-            form.parentNode.querySelector(".sa-compose-error-row")?.remove();
-            if (form.hasAttribute("data-sa-send-anyway")) {
-              form.removeAttribute("data-sa-send-anyway");
-              return;
+          form.querySelector("[data-control=error] .text").appendChild(sendAnyway);
+          form.querySelector(".control-group").classList.add("error");
+        }
+      },
+      { capture: true }
+    );
+  } else if (isProject || isStudio) {
+    window.addEventListener(
+      "click",
+      (e) => {
+        if (!(e.target.tagName === "SPAN" || e.target.tagName === "BUTTON")) return;
+        if (!e.target.closest("button.compose-post")) return;
+        const form = e.target.closest("form.full-width-form");
+        if (!form) return;
+        // Remove error when about to send comment anyway, if it exists
+        form.parentNode.querySelector(".sa-compose-error-row")?.remove();
+        if (form.hasAttribute("data-sa-send-anyway")) {
+          form.removeAttribute("data-sa-send-anyway");
+          return;
+        }
+        const textarea = form.querySelector("textarea[name=compose-comment]");
+        if (!textarea) return;
+        if (shouldCaptureComment(textarea.value)) {
+          e.stopPropagation();
+          const errorRow = document.createElement("div");
+          errorRow.className = "flex-row compose-error-row sa-compose-error-row";
+          const errorTip = document.createElement("div");
+          errorTip.className = "compose-error-tip";
+          const span = document.createElement("span");
+          span.innerHTML = errorMsgHtml + " ";
+          const sendAnyway = document.createElement("a");
+          sendAnyway.onclick = () => {
+            const res = confirm(confirmMsg);
+            if (res) {
+              form.setAttribute("data-sa-send-anyway", "");
+              form.querySelector(".compose-post")?.click();
             }
-            const textarea = form.querySelector("textarea[name=compose-comment]");
-            if (!textarea) return;
-            if (shouldCaptureComment(textarea.value)) {
-              e.stopPropagation();
-              const errorRow = document.createElement("div");
-              errorRow.className = "flex-row compose-error-row sa-compose-error-row";
-              const errorTip = document.createElement("div");
-              errorTip.className = "compose-error-tip";
-              const span = document.createElement("span");
-              span.innerHTML = errorMsgHtml + " ";
-              const sendAnyway = document.createElement("a");
-              sendAnyway.onclick = () => {
-                const res = confirm(confirmMsg);
-                if (res) {
-                  form.setAttribute("data-sa-send-anyway", "");
-                  possiblePostBtn.click();
-                }
-              };
-              sendAnyway.textContent = sendAnywayMsg;
-              errorTip.appendChild(span);
-              errorTip.appendChild(sendAnyway);
-              errorRow.appendChild(errorTip);
-              form.parentNode.prepend(errorRow);
+          };
+          sendAnyway.textContent = sendAnywayMsg;
+          errorTip.appendChild(span);
+          errorTip.appendChild(sendAnyway);
+          errorRow.appendChild(errorTip);
+          form.parentNode.prepend(errorRow);
 
-              // Hide error after typing like scratch-www does
-              textarea.addEventListener(
-                "input",
-                () => {
-                  errorRow.remove();
-                },
-                { once: true }
-              );
-              // Hide error after clicking cancel like scratch-www does
-              form.querySelector(".compose-cancel").addEventListener(
-                "click",
-                () => {
-                  errorRow.remove();
-                },
-                { once: true }
-              );
+          // Hide error after typing like scratch-www does
+          textarea.addEventListener(
+            "input",
+            () => {
+              errorRow.remove();
+            },
+            { once: true }
+          );
+          // Hide error after clicking cancel like scratch-www does
+          form.querySelector(".compose-cancel").addEventListener(
+            "click",
+            () => {
+              errorRow.remove();
+            },
+            { once: true }
+          );
+        }
+      },
+      { capture: true }
+    );
+  } else if (isForums) {
+    window.addEventListener("click", (e) => {
+      const potentialPostButton = e.target.closest("button[type=submit]");
+      if (!potentialPostButton) return;
+      const form = e.target.closest("form");
+      if (!form) return;
+      if (form.hasAttribute("data-sa-send-anyway")) {
+        form.removeAttribute("data-sa-send-anyway");
+        return;
+      }
+      const existingWarning = form.parentElement.querySelector(".sa-extension-policy-warning");
+      if (existingWarning) {
+        // Do nothing. The warning automatically disappears after typing into the form.
+        e.preventDefault();
+        existingWarning.scrollIntoView({ behavior: "smooth" });
+        return;
+      }
+      const textarea = form.querySelector("textarea.markItUpEditor");
+      if (!textarea) return;
+      if (shouldCaptureComment(textarea.value)) {
+        const errorTip = document.createElement("li");
+        errorTip.classList.add("errorlist", "sa-extension-policy-warning");
+        errorTip.style.scrollMarginTop = "50px";
+        errorTip.style.fontWeight = "bold";
+        errorTip.innerHTML = errorMsgHtml + " ";
+        const sendAnyway = document.createElement("a");
+        sendAnyway.onclick = () => {
+          const res = confirm(confirmMsg);
+          if (res) {
+            form.setAttribute("data-sa-send-anyway", "");
+            form.querySelector("button[type=submit]")?.click();
+          }
+        };
+        sendAnyway.textContent = sendAnywayMsg;
+        errorTip.appendChild(sendAnyway);
+
+        const postArea = form.querySelector("label");
+        if (!postArea) return;
+        let errorList = form.querySelector("label > ul");
+        if (!errorList) {
+          const typeArea = postArea.querySelector("strong");
+          errorList = document.createElement("ul");
+          errorList.classList.add("errorlist");
+          postArea.insertBefore(errorList, typeArea);
+        }
+
+        errorList.appendChild(errorTip);
+        errorTip.scrollIntoView({ behavior: "smooth" });
+        e.preventDefault();
+
+        // Hide error after typing
+        textarea.addEventListener(
+          "input",
+          () => {
+            errorTip.remove();
+            if (errorList.querySelector("li") === null) {
+              errorList.remove();
             }
           },
-          { capture: true }
+          { once: true }
         );
-
-      const check = async () => {
-        if (
-          // Note: do not use pathArr here below! pathArr is calculated
-          // on load, pathname can change dynamically with replaceState
-          (isStudio && location.pathname.split("/")[3] === "comments") ||
-          (isProject && getEditorMode() === "projectpage")
-        ) {
-          await waitForContainer();
-          addListener();
-        } else {
-          observer?.disconnect();
-        }
-      };
-      check();
-      csUrlObserver.addEventListener("change", (e) => check());
-    }
-  });
+      }
+    });
+  }
 }

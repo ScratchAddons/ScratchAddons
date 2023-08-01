@@ -1,3 +1,10 @@
+// https://github.com/fregante/text-field-edit/issues/16
+function safeTextInsert(text) {
+    if (text === '') {
+        return document.execCommand('delete');
+    }
+    return document.execCommand('insertText', false, text);
+}
 function insertTextFirefox(field, text) {
     // Found on https://www.everythingfrontend.com/posts/insert-text-into-textarea-at-cursor-position.html 🎈
     field.setRangeText(text, field.selectionStart || 0, field.selectionEnd || 0, 'end');
@@ -13,7 +20,7 @@ export function insert(field, text) {
     if (initialFocus !== field) {
         field.focus();
     }
-    if (!document.execCommand('insertText', false, text)) {
+    if (!safeTextInsert(text)) {
         insertTextFirefox(field, text);
     }
     if (initialFocus === document.body) {
@@ -42,7 +49,8 @@ export function wrapSelection(field, wrap, wrapEnd) {
     field.selectionEnd = selectionEnd + wrap.length;
 }
 /** Finds and replaces strings and regex in the field’s value, like `field.value = field.value.replace()` but better */
-export function replace(field, searchValue, replacer) {
+export function replace(field, searchValue, replacer, cursor) {
+    if (cursor === void 0) { cursor = 'select'; }
     /** Remembers how much each match offset should be adjusted */
     var drift = 0;
     field.value.replace(searchValue, function () {
@@ -57,8 +65,10 @@ export function replace(field, searchValue, replacer) {
         field.selectionEnd = matchStart + matchLength;
         var replacement = typeof replacer === 'string' ? replacer : replacer.apply(void 0, args);
         insert(field, replacement);
-        // Select replacement. Without this, the cursor would be after the replacement
-        field.selectionStart = matchStart;
+        if (cursor === 'select') {
+            // Select replacement. Without this, the cursor would be after the replacement
+            field.selectionStart = matchStart;
+        }
         drift += replacement.length - matchLength;
         return replacement;
     });

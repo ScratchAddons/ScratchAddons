@@ -1,0 +1,25 @@
+{
+  "name": "Disable sprite wobble in sprite pane",
+  "description": "Allow scripts, costumes, and sounds to be moved to different sprites without the sprites moving around within the sprite pane.",
+  "credits": [
+    {
+      "name": "Xan",
+      "link": "https://scratch.mit.edu/users/-Xanimation-/"
+    },
+    {
+      "name": "CST1229",
+      "link": "https://github.com/cst1229/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor"],
+  "enabledByDefault": false,
+  "versionAdded": "1.24.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}

@@ -1,0 +1,75 @@
+{
+  "name": "Alternating nested block colors",
+  "description": "Makes blocks of the same category alternate between lighter and darker shades when nested inside each other. This is also known as zebra striping.",
+  "credits": [
+    {
+      "name": "CST1229",
+      "link": "https://github.com/CST1229"
+    },
+    {
+      "name": "GarboMuffin"
+    },
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/thecolaber"
+    }
+  ],
+  "tags": ["editor", "codeEditor", "featured"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Shade",
+      "id": "shade",
+      "type": "select",
+      "potentialValues": [
+        {
+          "name": "Lighter",
+          "id": "lighter"
+        },
+        {
+          "name": "Darker",
+          "id": "darker"
+        }
+      ],
+      "default": "lighter"
+    },
+    {
+      "name": "Intensity (0-100%)",
+      "id": "intensity",
+      "type": "integer",
+      "min": 0,
+      "default": 20,
+      "max": 100
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "shadeNumber",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "shade"
+        },
+        "options": {
+          "lighter": "1",
+          "darker": "-1"
+        }
+      }
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.28.0"
+}

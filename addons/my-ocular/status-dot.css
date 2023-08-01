@@ -1,0 +1,14 @@
+.my-ocular-dot {
+  height: 10px;
+  width: 10px;
+  margin-left: 5px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+#my-ocular-span {
+  border-left: 1px solid rgb(204, 204, 204);
+  margin-left: 5px;
+  padding-left: 5px;
+}

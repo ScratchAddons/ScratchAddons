@@ -1,14 +1,14 @@
 {
   "name": "Better forum quoter",
-  "description": "Select text in a forum post and click quote in the bottom right corner to only quote the select text.",
+  "description": "Select text in a forum post and click quote in the bottom right corner to only quote the selected text.",
   "credits": [
     {
       "name": "TheColaber",
-      "link": "https://scratch.mit.edu/users/TheColaber"
+      "link": "https://scratch.mit.edu/users/TheColaber/"
     },
     {
       "name": "pufferfish101007",
-      "link": "https://scratch.mit.edu/users/pufferfish101007"
+      "link": "https://scratch.mit.edu/users/pufferfish101007/"
     }
   ],
   "userscripts": [
@@ -18,6 +18,8 @@
     }
   ],
   "versionAdded": "1.7.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "tags": ["forums", "community"],
   "info": [
     {

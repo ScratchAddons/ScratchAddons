@@ -26,6 +26,8 @@
       "link": "https://scratch.mit.edu/users/Sheep_maker/"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",

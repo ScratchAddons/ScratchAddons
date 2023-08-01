@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   const messages = document.createElement("a");
   messages.href = "/messages/";
   messages.title = msg("messages");
@@ -9,27 +9,40 @@ export default async function ({ addon, global, console, msg }) {
   messageCount.classList.add("sa-editormessages-count");
   messages.appendChild(messageCount);
   const setMessages = async () => {
-    const msgCount = Number(await addon.account.getMsgCount());
-    messageCount.innerText = msgCount;
-    if (msgCount === 0) {
+    const username = await addon.auth.fetchUsername();
+    if (!username) return;
+    const { count } = await (await fetch(`https://api.scratch.mit.edu/users/${username}/messages/count`)).json();
+    messageCount.innerText = count;
+    if (count === 0) {
       messageCount.setAttribute("style", `display: none;`);
     } else {
       messageCount.setAttribute("style", "");
     }
   };
-  if (addon.tab.editorMode === "editor") {
-    setMessages();
-    setInterval(setMessages, 5000);
-  } else {
-    addon.tab.addEventListener("urlChange", function thisFunction() {
-      if (addon.tab.editorMode === "editor") {
-        setMessages();
-        setInterval(setMessages, 5000);
-        addon.tab.removeEventListener("urlChange", thisFunction);
-      }
-    });
-  }
 
+  let interval;
+  function createInterval() {
+    if (addon.tab.editorMode === "editor") {
+      setMessages();
+      interval = setInterval(setMessages, 30000);
+    } else {
+      addon.tab.addEventListener("urlChange", function thisFunction() {
+        if (addon.tab.editorMode === "editor") {
+          setMessages();
+          interval = setInterval(setMessages, 30000);
+          addon.tab.removeEventListener("urlChange", thisFunction);
+        }
+      });
+    }
+  }
+  createInterval();
+
+  addon.self.addEventListener("disabled", () => {
+    clearInterval(interval);
+  });
+  addon.self.addEventListener("reenabled", createInterval);
+
+  addon.tab.displayNoneWhileDisabled(messages);
   while (true) {
     let nav = await addon.tab.waitForElement("[class^='menu-bar_account-info-group'] > [href^='/my']", {
       markAsSeen: true,

@@ -1,0 +1,27 @@
+.linkst li {
+  margin: 0;
+}
+.box,
+.box .box-head,
+.box .box-content {
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  color: var(--darkWww-page-text, #575e75);
+}
+.box .box-head {
+  padding: 16px 0;
+}
+.box .box-head h4 {
+  color: var(--darkWww-page-text, #575e75);
+  font-size: 20px;
+  line-height: 1.7em;
+}
+.box-content label {
+  color: var(--darkWww-page-text, #575e75);
+}
+#id_name {
+  border-width: 2px;
+  font-weight: bold;
+}

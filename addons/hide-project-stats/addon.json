@@ -1,10 +1,14 @@
 {
   "name": "Hide project stats",
-  "description": "Lets you hide love, favorite, remix and view counts in the front page and project pages.",
+  "description": "Lets you hide love, favorite, remix, comment, and view counts on project pages, the front page, and My Stuff.",
   "credits": [
     {
-      "name": "Verixion",
-      "link": "https://scratch.mit.edu/users/Verixion/"
+      "name": "Weredime (9gr)",
+      "link": "https://scratch.mit.edu/users/9gr/"
+    },
+    {
+      "name": "lisa_wolfgang",
+      "link": "https://scratch.mit.edu/users/lisa_wolfgang/"
     }
   ],
   "userstyles": [
@@ -49,6 +53,55 @@
       "if": {
         "settings": { "remixesFront": true }
       }
+    },
+    {
+      "url": "hide_remix_count.css",
+      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "if": {
+        "settings": { "remixes": true, "myStuff": true }
+      }
+    },
+    {
+      "url": "hide_view_count.css",
+      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "if": {
+        "settings": { "views": true, "myStuff": true }
+      }
+    },
+    {
+      "url": "hide_love_count.css",
+      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "if": {
+        "settings": { "loves": true, "myStuff": true }
+      }
+    },
+    {
+      "url": "hide_favorite_count.css",
+      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "if": {
+        "settings": { "favorites": true, "myStuff": true }
+      }
+    },
+    {
+      "url": "hide_comment_count.css",
+      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "if": {
+        "settings": { "comments": true, "myStuff": true }
+      }
+    },
+    {
+      "url": "hide_studio_count.css",
+      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "if": {
+        "settings": { "studios": true, "myStuff": true }
+      }
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": true
     }
   ],
   "settings": [
@@ -87,6 +140,36 @@
       "default": true,
       "id": "remixesFront",
       "type": "boolean"
+    },
+    {
+      "name": "Show stats on my own project pages",
+      "default": false,
+      "id": "showOwnStats",
+      "type": "boolean"
+    },
+    {
+      "name": "Hide stats on My Stuff",
+      "default": false,
+      "id": "myStuff",
+      "type": "boolean"
+    },
+    {
+      "name": "Hide comment count",
+      "default": true,
+      "id": "comments",
+      "type": "boolean",
+      "if": {
+        "settings": { "myStuff": true }
+      }
+    },
+    {
+      "name": "Hide broken (always 0) studio count",
+      "default": true,
+      "id": "studios",
+      "type": "boolean",
+      "if": {
+        "settings": { "myStuff": true }
+      }
     }
   ],
   "dynamicDisable": true,
@@ -95,5 +178,10 @@
   "injectAsStyleElt": true,
   "tags": ["community", "projectPage"],
   "versionAdded": "1.19.0",
+  "latestUpdate": {
+    "version": "1.29.0",
+    "temporaryNotice": "The padding between statistics has been fixed, there is now an option to show statistics on your own projects, and the My Stuff page is now supported.",
+    "newSettings": ["comments", "showOwnStats", "myStuff", "studios"]
+  },
   "enabledByDefault": false
 }

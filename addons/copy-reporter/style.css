@@ -1,0 +1,13 @@
+.sa-copy-reporter-icon {
+  cursor: pointer;
+  float: right;
+  display: block;
+  user-select: none;
+  filter: var(--editorDarkMode-accent-filter, none);
+  width: 14px;
+  height: 14px;
+}
+
+.valueReportBox {
+  user-select: text;
+}

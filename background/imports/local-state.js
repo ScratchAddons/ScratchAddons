@@ -8,7 +8,6 @@ const _localState = {
   },
   allReady: false,
   addonsEnabled: {},
-  badges: {},
 };
 
 class StateProxy {
@@ -43,9 +42,6 @@ function stateChange(parentObjectPath, key, value) {
     console.log("Everything ready!");
     _localState.allReady = true;
     scratchAddons.localEvents.dispatchEvent(new CustomEvent("ready"));
-  }
-  if (objectPathArr[0] === "badges") {
-    scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
   }
 }
 

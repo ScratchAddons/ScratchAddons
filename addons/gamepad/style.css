@@ -20,7 +20,8 @@
   flex-direction: column;
 }
 .sa-gamepad-popup-content {
-  background-color: white;
+  background-color: white !important;
+  color: #575e75 !important;
   padding: 1.5rem 2.25rem;
   height: 100%;
   overflow-y: auto;
@@ -46,7 +47,7 @@
   filter: invert(100%);
 }
 
-.sa-gamepad-small .sa-gamepad-container[data-editor-mode="editor"] {
+.sa-small-stage [class*="gui_body-wrapper_"]:not(.sa-stage-hidden) .sa-gamepad-container {
   display: none !important;
 }
 
@@ -59,12 +60,20 @@
   margin-bottom: 10px;
 }
 
-.sa-gamepad-store-settings {
+.sa-gamepad-extra-options {
   display: none;
+}
+.sa-gamepad-has-controller .sa-gamepad-extra-options {
+  display: block;
+}
+
+.sa-gamepad-store-settings {
+  display: block;
 }
 .sa-gamepad-store-settings > input {
   margin-right: 4px;
 }
-.sa-gamepad-has-controller .sa-gamepad-store-settings {
-  display: block;
+
+.sa-gamepad-reset-button {
+  margin: 8px 8px 8px 0;
 }

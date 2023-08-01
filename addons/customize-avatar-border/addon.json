@@ -10,7 +10,7 @@
   "userstyles": [
     {
       "url": "hide_outline.css",
-      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
+      "matches": ["projects", "https://scratch.mit.edu/studios/*"],
       "if": {
         "settings": {
           "hide-outline": true
@@ -19,7 +19,7 @@
     },
     {
       "url": "outline_color.css",
-      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
+      "matches": ["projects", "https://scratch.mit.edu/studios/*"],
       "if": {
         "settings": {
           "hide-outline": false
@@ -28,11 +28,41 @@
     },
     {
       "url": "fill_transparent.css",
-      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
+      "matches": ["projects", "https://scratch.mit.edu/studios/*"],
       "if": {
         "settings": {
           "fill-transparent": true
         }
+      }
+    },
+    {
+      "url": "scratchr2/hide_outline.css",
+      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/discuss/*"],
+      "if": {
+        "settings": {
+          "hide-outline": true
+        },
+        "addonEnabled": ["scratchr2"]
+      }
+    },
+    {
+      "url": "scratchr2/outline_color.css",
+      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/discuss/*"],
+      "if": {
+        "settings": {
+          "hide-outline": false
+        },
+        "addonEnabled": ["scratchr2"]
+      }
+    },
+    {
+      "url": "scratchr2/fill_transparent.css",
+      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/discuss/*"],
+      "if": {
+        "settings": {
+          "fill-transparent": true
+        },
+        "addonEnabled": ["scratchr2"]
       }
     }
   ],
@@ -54,14 +84,15 @@
       "default": false
     },
     {
-      "name": "Outline colour",
+      "name": "Outline color",
       "id": "outline-color",
       "type": "color",
       "allowTransparency": true,
       "default": "#4d97ff40",
       "if": {
         "settings": {
-          "hide-outline": false
+          "hide-outline": false,
+          "fill-transparent": true
         }
       }
     }
