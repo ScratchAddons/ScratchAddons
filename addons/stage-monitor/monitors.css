@@ -1,20 +1,20 @@
-.monitor_monitor-container_2J9gl,
-.monitor_list-body_2OFZ6 {
-  background-color: var(--stageMonitor-bg);
-  color: var(--stageMonitor-bgText);
+div[class*="monitor_monitor-container_"],
+div[class*="monitor_list-body_"] {
+  background-color: var(--stageMonitor-monitor);
+  color: var(--stageMonitor-monitorLabel);
 }
 
-.monitor_list-index_7tKdl {
-  color: var(--stageMonitor-bgText);
+div[class*="monitor_list-index_"] {
+  color: var(--stageMonitor-mintorLabel);
 }
 
-.monitor_label_ci1ok,
-.monitor_list-empty_1UKsB {
-  color: var(--stageMonitor-bgText) !important;
+div[class*="monitor_label_"],
+div[class*="monitor_list-empty_"] {
+  color: var(--stageMonitor-monitorLabel) !important;
 }
 
-.monitor_list-header_-cp0o,
-.monitor_list-footer_2HyG8 {
-  background-color: var(--stageMonitor-header);
-  color: var(--stageMonitor-headerText);
+div[class*="monitor_list-header_"],
+div[class*="monitor_list-footer_"] {
+  background-color: var(--stageMonitor-listHeader);
+  color: var(--stageMonitor-listHeaderText);
 }
