@@ -21,6 +21,12 @@
       "id": "tutorials-button"
     }
   ],
+  "info": [
+    {
+      "id": "tutorials-button",
+      "text": "The \"Hide Tutorials button\" addon has been moved here as a setting."
+    }
+  ],
   "tags": ["editor", "editorMenuBar", "featured"],
   "settings": [
     {
