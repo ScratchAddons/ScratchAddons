@@ -6,7 +6,7 @@
 
 .sa-editormessages::before {
   /* Icon is in a pseudo-element so dark mode can apply a filter to it
-    without affecting the message count */
+  without affecting the message count */
   content: "";
   display: block;
   position: absolute;
