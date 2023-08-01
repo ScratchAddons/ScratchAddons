@@ -1,10 +1,10 @@
 const cache = new Map();
 
 const escape = (string) => {
-  return string.replaceAll("<", "&lt;");
+  return string.replaceAll("'", "&#39;").replaceAll("<", "&lt;");
 };
 
-export const getStatus = async (username) => {
+export const getStatus = async (username, ocularHover, aviateHover) => {
   const isCached = cache.has(username);
   const ocularResponse =
     (isCached && cache.get(username).ocularResponse) ||
@@ -16,12 +16,12 @@ export const getStatus = async (username) => {
     cache.set(username, { ocularResponse, aviateResponse });
   }
   return (
-    "<span class='sa-status-ocular'>" +
+    `<span class='sa-status-ocular' title='${escape(ocularHover)}'>` +
     ("error" in ocularResponse
       ? ""
       : escape(ocularResponse.status) +
         `<span class='sa-status-dot' style='background-color:${ocularResponse.color}'></span>`) +
-    `</span><br><span class='sa-status-aviate'>` +
+    `</span><br><span class='sa-status-aviate' title='${escape(aviateHover)}'>` +
     escape(aviateResponse.status ?? "") +
     "</span>"
   );

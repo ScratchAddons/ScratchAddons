@@ -12,8 +12,7 @@ export default async function ({ addon, console, msg }) {
     addon.tab.displayNoneWhileDisabled(br);
     let status = document.createElement("span");
     addon.tab.displayNoneWhileDisabled(status);
-    status.title = msg("status-hover");
-    status.innerHTML = await getStatus(username);
+    status.innerHTML = await getStatus(username, msg("ocular-status-hover"), msg("aviate-status-hover"));
     status.style.fontStyle = "italic";
     addon.tab.displayNoneWhileDisabled(status);
 

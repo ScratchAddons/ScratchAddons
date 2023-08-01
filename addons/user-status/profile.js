@@ -10,8 +10,7 @@ export default async function ({ addon, console, msg }) {
 
   // Create status element
   let statusSpan = document.createElement("span");
-  statusSpan.title = msg("status-hover");
-  statusSpan.innerHTML = await getStatus(username);
+  statusSpan.innerHTML = await getStatus(username, msg("ocular-status-hover"), msg("aviate-status-hover"));
   statusSpan.style.fontStyle = "italic";
   statusSpan.style.setProperty("display", "inline-block", "important");
   statusSpan.id = "sa-status-span";
