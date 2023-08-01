@@ -51,6 +51,12 @@
       "default": true
     },
     {
+      "name": "Show icons",
+      "id": "icons",
+      "type": "boolean",
+      "default": false
+    },
+    {
       "name": "Show statuses",
       "id": "show-status",
       "type": "select",
@@ -99,6 +105,18 @@
           "settingId": "aviate"
         },
         "true": "inline-flex",
+        "false": "none"
+      }
+    },
+    {
+      "name": "icons",
+      "value": {
+        "type": "ternary",
+        "source": {
+          "type": "settingValue",
+          "settingId": "icons"
+        },
+        "true": "block",
         "false": "none"
       }
     }
