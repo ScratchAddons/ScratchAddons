@@ -24,8 +24,6 @@ export default async function ({ addon, msg }) {
   elt.id = "sa-forum-post-countdown";
   document.body.appendChild(elt);
 
-  const seconds = secondCount - Math.floor((now - countdown) / 100);
-
   setInterval(async () => {
     const now = Date.now();
     if (now > Number(countdown) + secondCount * 1000 || !loggedIn) {
@@ -33,7 +31,7 @@ export default async function ({ addon, msg }) {
       elt.remove();
       return;
     }
-    elt.textContent = msg("seconds-left", { seconds });
+    elt.textContent = msg("seconds-left", { seconds: secondCount - Math.floor((now - countdown) / 100) });
   }, 250);
 
   addon.tab.displayNoneWhileDisabled(elt);
