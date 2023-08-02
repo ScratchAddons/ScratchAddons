@@ -271,7 +271,7 @@ export default async function ({ addon, console, msg }) {
       }
     } else {
       const iconsToReplace = ["repeat.svg", "rotate-left.svg", "rotate-right.svg"];
-      const iconName = src.split("/").at(-1);
+      const iconName = src.split("/")[src.split("/").length - 1];
       if (iconsToReplace.includes(iconName)) {
         src = `${iconPath()}/${iconName}`;
       }

@@ -452,7 +452,7 @@ export class BlockTypeInfo {
     }
 
     if (workspaceForm.id === "of") {
-      // Adapted from https://github.com/LLK/scratch-gui/blob/cc6e6324064493cf1788f3c7c0ff31e4057964ee/src/lib/blocks.js#L230
+      // Adapted from https://github.com/scratchfoundation/scratch-gui/blob/cc6e6324064493cf1788f3c7c0ff31e4057964ee/src/lib/blocks.js#L230
       let blocks = [];
 
       const baseVarInput = inputs[0];
