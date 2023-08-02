@@ -1640,6 +1640,17 @@
       }
     },
     {
+      "name": "button-scratchr2PostHeaderText",
+      "value": {
+        "type": "textColor",
+        "black": "#322f31",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        }
+      }
+    },
+    {
       "name": "button-scratchr2InputFocusShadow",
       "value": {
         "type": "multiply",
