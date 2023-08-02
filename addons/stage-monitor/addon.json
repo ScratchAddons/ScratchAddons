@@ -1,6 +1,6 @@
 {
   "name": "Customizable stage monitors",
-  "description": "Changes the color and border radius of variable and list monitors on the stage.",
+  "description": "Changes the color and roundness of variable and list monitors on the stage.",
   "credits": [
     {
       "name": "Samq64",
@@ -26,6 +26,16 @@
   ],
   "customCssVariables": [
     {
+      "name": "monitorLabel",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "monitor"
+        }
+      }
+    },
+    {
       "name": "monitorValueText",
       "value": {
         "type": "textColor",
@@ -42,16 +52,6 @@
         "source": {
           "type": "settingValue",
           "settingId": "list-header"
-        }
-      }
-    },
-    {
-      "name": "monitorLabel",
-      "value": {
-        "type": "textColor",
-        "source": {
-          "type": "settingValue",
-          "settingId": "monitor"
         }
       }
     }
@@ -111,7 +111,7 @@
       "description": "Scratch's default monitor colors with transparent value backgrounds.",
       "values": {
         "monitor": "#e5f0ff",
-        "list-header": "#ffffff",
+        "list-header": "#e5f0ff",
         "monitor-radius": 4,
         "custom-value-color": true,
         "monitor-value-bg": "#ffffff00"
