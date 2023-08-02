@@ -2115,6 +2115,18 @@
           "settingId": "page"
         }
       }
+    },
+    {
+      "name": "page-forumErrorColor",
+      "value": {
+        "type": "textColor",
+        "black": "red",
+        "white": "lightcoral",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
     }
   ],
   "dynamicEnable": true,
