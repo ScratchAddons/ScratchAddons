@@ -72,7 +72,7 @@
       "default": "#ffffff"
     },
     {
-      "name": "Border radius (px)",
+      "name": "Monitor roundness (px)",
       "id": "monitor-radius",
       "type": "integer",
       "min": 0,
@@ -80,7 +80,7 @@
       "default": 4
     },
     {
-      "name": "Value border radius (px)",
+      "name": "Value roundness (px)",
       "id": "value-radius",
       "type": "integer",
       "min": 0,
@@ -88,13 +88,13 @@
       "default": 4
     },
     {
-      "name": "One value color",
+      "name": "Custom value color",
       "id": "custom-value-color",
       "type": "boolean",
       "default": false
     },
     {
-      "name": "Monitor value color",
+      "name": "Value color",
       "id": "monitor-value-bg",
       "type": "color",
       "allowTransparency": true,
