@@ -1,6 +1,6 @@
 {
-  "name": "Customizable stage monitor colors",
-  "description": "Changes the colors of variable and list monitors on the stage.",
+  "name": "Customizable stage monitors",
+  "description": "Changes the color and border radius of variable and list monitors on the stage.",
   "credits": [
     {
       "name": "Samq64",
@@ -72,6 +72,22 @@
       "default": "#ffffff"
     },
     {
+      "name": "Border radius (px)",
+      "id": "monitor-radius",
+      "type": "integer",
+      "min": 0,
+      "max": 11,
+      "default": 4
+    },
+    {
+      "name": "Value border radius (px)",
+      "id": "value-radius",
+      "type": "integer",
+      "min": 0,
+      "max": 11,
+      "default": 4
+    },
+    {
       "name": "One value color",
       "id": "custom-value-color",
       "type": "boolean",
@@ -96,6 +112,7 @@
       "values": {
         "monitor": "#e5f0ff",
         "listHeader": "#ffffff",
+        "monitor-radius": 4,
         "custom-value-color": true,
         "monitor-value-bg": "#ffffff00"
       }
@@ -107,6 +124,8 @@
       "values": {
         "monitor": "#c1c4c7",
         "listHeader": "#c1c4c7",
+        "monitor-radius": 4,
+        "value-radius": 4,
         "custom-value-color": false
       }
     },
@@ -117,6 +136,8 @@
       "values": {
         "monitor": "#00000040",
         "listHeader": "#00000040",
+        "monitor-radius": 4,
+        "value-radius": 4,
         "custom-value-color": true,
         "monitor-value-bg": "#00000040"
       }
