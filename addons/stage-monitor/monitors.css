@@ -19,7 +19,8 @@ div[class*="monitor_list-footer_"] {
   color: var(--stageMonitor-listHeaderText);
 }
 
-div[class*="monitor_monitor-container_"] div[class*="monitor_large-value_]P-rAm"] {
+div[class*="monitor_monitor-container_"],
+div[class*="monitor_large-value_"] {
   border-radius: calc(var(--stageMonitor-monitorRadius) * 1px);
 }
 
