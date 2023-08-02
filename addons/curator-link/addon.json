@@ -1,27 +1,16 @@
 {
-  "name": "Clickable usernames",
-  "description": "Makes the front page curator's username and forum mentions clickable links to their profiles.",
+  "name": "Front page curator link",
+  "description": "Makes the username of the front page curator a clickable link to their profile.",
   "credits": [
     {
       "name": "Hans5958",
       "link": "https://github.com/Hans5958/userscripts/blob/master/Scratch/Curator%20Links.user.js"
-    },
-    {
-      "name": "Samq64",
-      "link": "https://github.com/Samq64"
-    }
-  ],
-  "info": [
-    {
-      "type": "notice",
-      "text": "Forum mentions styled with BBCode won't be clickable.",
-      "id": "BBCode"
     }
   ],
   "userscripts": [
     {
       "url": "script.js",
-      "matches": ["https://scratch.mit.edu/", "topics"]
+      "matches": ["https://scratch.mit.edu/"]
     }
   ],
   "userstyles": [
@@ -35,35 +24,15 @@
   ],
   "settings": [
     {
-      "id": "mentions",
-      "name": "Make forum mentions clickable",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "id": "curator",
-      "name": "Make curator username clickable",
-      "type": "boolean",
-      "default": true
-    },
-    {
       "id": "styleAsNormalText",
-      "name": "Style curator as normal text",
+      "name": "Style as normal text",
       "type": "boolean",
-      "default": false,
-      "if": {
-        "settings": { "curator": true }
-      }
+      "default": false
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.4.0",
-  "latestUpdate": {
-    "version": "1.32.0",
-    "newSettings": ["mentions"]
-  },
-  "tags": ["community", "forums"],
+  "tags": ["community"],
   "enabledByDefault": false
 }
