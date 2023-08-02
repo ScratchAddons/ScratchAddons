@@ -17,7 +17,7 @@ export const updateScaleTool = (paper, tool) => {
 
   const scaleTool = getScaleTool(tool);
 
-  // https://github.com/LLK/scratch-paint/blob/develop/src/helper/selection-tools/scale-tool.js
+  // https://github.com/scratchfoundation/scratch-paint/blob/develop/src/helper/selection-tools/scale-tool.js
   const MIN_SCALE_FACTOR = 0.0001;
 
   const selectionSizeGuide = {
