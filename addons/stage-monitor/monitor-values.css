@@ -2,7 +2,7 @@ div[class*="monitor_value_"],
 div[class*="monitor_large-value_"],
 div[class*="monitor_list-value_"] {
   background-color: var(--stageMonitor-monitorValueBg) !important;
-  color: var(--stageMonitor-monitorValueText);
+  color: var(--stageMonitor-monitorValueText) !important;
 }
 
 div[class*="monitor_list-input_"] {

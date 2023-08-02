@@ -5,7 +5,7 @@ div[class*="monitor_list-body_"] {
 }
 
 div[class*="monitor_list-index_"] {
-  color: var(--stageMonitor-mintorLabel);
+  color: var(--stageMonitor-monitorLabel);
 }
 
 div[class*="monitor_label_"],
