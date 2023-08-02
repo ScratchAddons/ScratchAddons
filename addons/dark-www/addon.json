@@ -1640,17 +1640,6 @@
       }
     },
     {
-      "name": "button-scratchr2PostHeaderText",
-      "value": {
-        "type": "textColor",
-        "black": "#322f31",
-        "source": {
-          "type": "settingValue",
-          "settingId": "button"
-        }
-      }
-    },
-    {
       "name": "button-scratchr2InputFocusShadow",
       "value": {
         "type": "multiply",
@@ -1659,28 +1648,6 @@
           "settingId": "button"
         },
         "a": 0.6
-      }
-    },
-    {
-      "name": "button-scratchr2PostHeader",
-      "value": {
-        "type": "map",
-        "source": {
-          "type": "settingValue",
-          "settingId": "button"
-        },
-        "options": {
-          "#4d97ff": "#28a5da",
-          "#4d97ffff": "#28a5da",
-          "#18abeb": "#28a5da",
-          "#18abebff": "#28a5da",
-          "#25aff4": "#28a5da",
-          "#25aff4ff": "#28a5da"
-        },
-        "default": {
-          "type": "settingValue",
-          "settingId": "button"
-        }
       }
     },
     {

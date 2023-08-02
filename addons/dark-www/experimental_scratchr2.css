@@ -420,15 +420,15 @@ textarea:focus,
   box-shadow: none;
 }
 .blockpost div.box {
-  background-color: var(--darkWww-button-scratchr2PostHeader);
-  border-top-color: var(--darkWww-button-scratchr2PostHeader);
+  background-color: var(--darkWww-button);
+  border-top-color: var(--darkWww-button);
 }
 .my-ocular-reaction-button {
-  box-shadow: 0 0 2px var(--darkWww-button-scratchr2PostHeader);
+  box-shadow: 0 0 2px var(--darkWww-button);
 }
 .my-ocular-reaction-button.selected {
-  background-color: var(--darkWww-button-scratchr2PostHeader);
-  color: var(--darkWww-button-scratchr2PostHeaderText);
+  background-color: var(--darkWww-button);
+  color: var(--darkWww-buttonText);
 }
 .blockpost .box-head {
   border-top-color: rgba(255, 255, 255, 0.15);
@@ -439,7 +439,7 @@ textarea:focus,
 .blockpost .box-head a:active,
 .blockpost .box-head a:hover,
 .blockpost .box-head a:visited {
-  color: var(--darkWww-button-scratchr2PostHeaderText);
+  color: var(--darkWww-buttonText);
 }
 
 /* Link color */
