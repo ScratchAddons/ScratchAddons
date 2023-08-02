@@ -1,14 +1,10 @@
 {
   "name": "Clickable forum mentions",
-  "description": "Makes username mentions on the forums clickable links.",
+  "description": "Truns @username mentions on the forums into clickable links.",
   "credits": [
     {
       "name": "Samq64",
       "link": "https://github.com/Samq64"
-    },
-    {
-      "name": "Hans5958",
-      "link": "https://github.com/Hans5958/userscripts/blob/master/Scratch/Curator%20Links.user.js"
     }
   ],
   "info": [
@@ -26,7 +22,6 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.34.0",
   "tags": ["community", "forums"]
 }
