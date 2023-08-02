@@ -1,6 +1,5 @@
 export default async function () {
-  const submitButtons = document.querySelectorAll("#djangobbwrap .form-submit [type=submit]");
-  const submitButton = submitButtons[submitButtons.length - 1];
+  const submitButton = document.querySelector("#djangobbwrap .form-submit [type=submit]");
 
   submitButton.addEventListener("click", () => {
     if (!localStorage.getItem("sa-forum-post-countdown")) {

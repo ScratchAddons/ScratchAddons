@@ -59,7 +59,7 @@ export default async function ({ addon, console, msg }) {
           usp.set("addons", enabledAddons.join(","));
         }
         // Apply the same fullscreen background color, consistently with the vanilla Scratch fullscreen behavior.
-        // It's not expected here to support dynamicDisable/dyanmicEnable of editor-dark-mode to work exactly
+        // It's not expected here to support dynamicDisable/dynamicEnable of editor-dark-mode to work exactly
         // like it does with vanilla.
         const fullscreenBackground =
           document.documentElement.style.getPropertyValue("--editorDarkMode-fullscreen") || "white";

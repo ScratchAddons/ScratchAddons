@@ -24,14 +24,5 @@ export default async function ({ addon, msg }) {
     elt.textContent = msg("seconds-left", { seconds: secondCount - Math.floor((now - countdown) / 1000) });
   });
 
-  addon.settings.addEventListener("change", () => {
-    secondCount = addon.settings.get("120-second") ? 120 : 60;
-  });
 
-  addon.self.addEventListener("disabled", () => {
-    elt.style.display = "none";
-  });
-  addon.self.addEventListener("reenabled", () => {
-    elt.style.display = "";
-  });
-}
+  addon.tab.displayNoneWhileDisabled(elt);
