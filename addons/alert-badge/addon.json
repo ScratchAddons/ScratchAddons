@@ -75,7 +75,7 @@
         "source": { "type": "settingValue", "settingId": "default" },
         "black": "#000000",
         "white": "#ffffff",
-        "threshold": 153
+        "threshold": 180
       }
     },
     {
@@ -85,7 +85,7 @@
         "source": { "type": "settingValue", "settingId": "alert" },
         "black": "#000000",
         "white": "#ffffff",
-        "threshold": 153
+        "threshold": 180
       }
     },
     {
@@ -95,7 +95,7 @@
         "source": { "type": "settingValue", "settingId": "messages" },
         "black": "#000000",
         "white": "#ffffff",
-        "threshold": 153
+        "threshold": 180
       }
     }
   ],
