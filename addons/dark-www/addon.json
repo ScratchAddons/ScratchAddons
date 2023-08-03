@@ -1670,6 +1670,8 @@
           "settingId": "button"
         },
         "options": {
+          "#4d97ff": "#28a5da",
+          "#4d97ffff": "#28a5da",
           "#18abeb": "#28a5da",
           "#18abebff": "#28a5da",
           "#25aff4": "#28a5da",
