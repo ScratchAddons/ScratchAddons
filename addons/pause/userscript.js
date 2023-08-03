@@ -10,7 +10,7 @@ export default async function ({ addon, console, msg }) {
 
   const setSrc = () => {
     img.src = addon.self.dir + (isPaused() ? "/play.svg" : "/pause.svg");
-    img.title = (isPaused() ? msg("play") : msg("pause"))
+    img.title = isPaused() ? msg("play") : msg("pause");
   };
   img.addEventListener("click", () => setPaused(!isPaused()));
   addon.tab.displayNoneWhileDisabled(img);
