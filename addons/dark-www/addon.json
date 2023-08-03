@@ -1662,6 +1662,26 @@
       }
     },
     {
+      "name": "button-scratchr2PostHeader",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "options": {
+          "#18abeb": "#28a5da",
+          "#18abebff": "#28a5da",
+          "#25aff4": "#28a5da",
+          "#25aff4ff": "#28a5da"
+        },
+        "default": {
+          "type": "settingValue",
+          "settingId": "button"
+        }
+      }
+    },
+    {
       "name": "link-transparent",
       "value": {
         "type": "multiply",
