@@ -1,11 +1,4 @@
 export default async function ({ addon, msg }) {
-  const countdown = localStorage.getItem("sa-forum-post-countdown");
-  if (!countdown) {
-    return;
-  }
-
-  const loggedIn = await addon.auth.fetchIsLoggedIn();
-
   const submitButton = document.querySelector("#djangobbwrap .form-submit [type=submit]");
 
   submitButton.addEventListener("click", () => {
@@ -14,7 +7,13 @@ export default async function ({ addon, msg }) {
     }
   });
 
-  let secondCount = (
+  const countdown = localStorage.getItem("sa-forum-post-countdown");
+  if (!countdown) {
+    return;
+  }
+
+  const loggedIn = await addon.auth.fetchIsLoggedIn();
+  const secondCount = (
     await fetch("/session", { headers: { "x-requested-with": "XMLHttpRequest" } }).then((resp) => resp.json())
   ).permissions.new_scratcher
     ? 120
@@ -31,8 +30,8 @@ export default async function ({ addon, msg }) {
       elt.remove();
       return;
     }
-    elt.textContent = msg("seconds-left", { seconds: secondCount - Math.floor((now - countdown) / 100) });
-  }, 250);
+    elt.textContent = msg("seconds-left", { seconds: secondCount - Math.floor((now - countdown) / 1000) });
+  }, 1000);
 
   addon.tab.displayNoneWhileDisabled(elt);
 }
