@@ -1,6 +1,6 @@
 export default async function ({ addon, msg }) {
   const loggedInUser = await addon.auth.fetchUsername();
-  const projectOwner = (await addon.tab.waitForElement(".project-header .avatar")).alt;
+  const projectOwner = addon.tab.redux.state.preview.projectInfo.author.username;
   if (loggedInUser == null || loggedInUser != projectOwner) return;
 
   const actionsContainer = document.querySelector(".action-buttons");
@@ -34,8 +34,8 @@ export default async function ({ addon, msg }) {
 
   /**
    * Will attempt to toggle between the off and on states, however an override can be passed which will completely override the current value
-   * @param {string} _ 
-   * @param {boolean} override 
+   * @param {string} _
+   * @param {boolean} override
    * @returns {void}
    */
   function togglePreview(_ = null, override = !currentlyEnabled) {
@@ -56,8 +56,8 @@ export default async function ({ addon, msg }) {
   /**
    * If false: sets the element's display style to none.
    * If true:  removes the display style altogether, making it go back to it's previous value.
-   * @param {Element | Node} element 
-   * @param {boolean} shown 
+   * @param {Element | Node} element
+   * @param {boolean} shown
    * @returns {void}
    */
   function setDisplayable(element, show = true) {
