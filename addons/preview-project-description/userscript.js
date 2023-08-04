@@ -3,7 +3,7 @@ export default async function ({ addon, msg }) {
   const projectOwner = addon.tab.redux.state.preview.projectInfo.author.username;
   if (loggedInUser == null || loggedInUser != projectOwner) return;
 
-  const matchUsername = /\@([A-Z]|[a-z]|[0-9]|\-|\_){1,20}/gm
+  const matchUsername = /\@([A-Z]|[a-z]|[0-9]|\-|\_){1,20}/gm;
 
   const actionsContainer = document.querySelector(".action-buttons");
   const enableSwitcher = document.createElement("button");
@@ -56,7 +56,7 @@ export default async function ({ addon, msg }) {
     setDisplayable(notesCreditPreview, !override);
   }
   /**
-   * 
+   *
    * @param {HTMLDivElement} preview
    * @param {Element} editor
    */
