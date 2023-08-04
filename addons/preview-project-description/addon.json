@@ -11,7 +11,8 @@
     "userscripts": [
       {
         "url": "userscript.js",
-        "matches": ["projects"]
+        "matches": ["projects"],
+        "runAtComplete": true
       }
     ],
     "settings": [

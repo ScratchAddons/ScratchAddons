@@ -1,6 +1,6 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, msg }) {
     const loggedInUser = await addon.auth.fetchUsername();
-    const projectOwner = document.querySelector(".project-header a img").alt;
+    const projectOwner = document.querySelector(".project-header .avatar").alt;
     if (loggedInUser == null || loggedInUser != projectOwner)
         return;
 
@@ -32,7 +32,7 @@ export default async function ({ addon, console, msg }) {
     togglePreview(null, currentlyEnabled)
 
     function togglePreview(_ = null, override = !currentlyEnabled) {
-        enableSwitcher.innerHTML = `<span>${override ? "Disable" : "Enable"} Preview</span>`;
+        enableSwitcher.innerHTML = `<span>${override ? msg("Disable") : msg("Enable")}</span>`;
         currentlyEnabled = override;
 
         if (override) {
