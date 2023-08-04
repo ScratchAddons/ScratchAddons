@@ -39,17 +39,17 @@ export default async function ({ addon, msg }) {
       notesCreditPreview.innerText = notesCreditEditor.value;
     }
 
-    setDisplayable(instructionForm, !override)
-    setDisplayable(instructionPreview, override)
+    setDisplayable(instructionForm, !override);
+    setDisplayable(instructionPreview, override);
 
-    setDisplayable(notesCreditForm, !override)
-    setDisplayable(notesCreditPreview, override)
+    setDisplayable(notesCreditForm, !override);
+    setDisplayable(notesCreditPreview, override);
   }
-  function setDisplayable(element, shown=true) {
+  function setDisplayable(element, shown = true) {
     if (shown) {
       element.style.removeProperty("display");
     } else {
-      element.style.display = "none"
+      element.style.display = "none";
     }
   }
 }
