@@ -354,7 +354,15 @@ export default async function ({ addon, console, msg }) {
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
     if (detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB") {
-      setVisible(detail.action.activeTabIndex === 3);
+      const varManagerWasSelected = document.body.contains(manager);
+      const switchedToVarManager = detail.action.activeTabIndex === 3;
+
+      if (varManagerWasSelected && !switchedToVarManager) {
+        // Fixes #5773
+        queueMicrotask(() => window.dispatchEvent(new Event("resize")));
+      }
+
+      setVisible(switchedToVarManager);
     } else if (detail.action.type === "scratch-gui/mode/SET_PLAYER") {
       if (!detail.action.isPlayerOnly && addon.tab.redux.state.scratchGui.editorTab.activeTabIndex === 3) {
         // DOM doesn't actually exist yet
