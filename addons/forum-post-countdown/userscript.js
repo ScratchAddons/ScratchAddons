@@ -2,12 +2,12 @@ export default async function ({ addon, msg }) {
   const submitButton = document.querySelector("#djangobbwrap .form-submit [type=submit]");
 
   submitButton.addEventListener("click", () => {
-    if (!sessionStorage.getItem("sa-forum-post-countdown")) {
-      sessionStorage.setItem("sa-forum-post-countdown", Date.now());
+    if (!localStorage.getItem("sa-forum-post-countdown")) {
+      localStorage.setItem("sa-forum-post-countdown", Date.now());
     }
   });
 
-  const countdown = sessionStorage.getItem("sa-forum-post-countdown");
+  const countdown = localStorage.getItem("sa-forum-post-countdown");
   if (!countdown) {
     return;
   }
@@ -26,7 +26,7 @@ export default async function ({ addon, msg }) {
   setInterval(async () => {
     const now = Date.now();
     if (now > Number(countdown) + secondCount * 1000 || !loggedIn) {
-      sessionStorage.removeItem("sa-forum-post-countdown");
+      localStorage.removeItem("sa-forum-post-countdown");
       elt.remove();
       return;
     }
