@@ -1,6 +1,6 @@
 {
   "name": "Preview Project Descriptions",
-  "description": "Allows you to preview the what will show up in the final notes and credits. It's not 100% accurate.",
+  "description": "Allows you to preview the what will show up in the final notes and credits.",
   "credits": [
     {
       "name": "Steve0Greatness",
@@ -13,6 +13,12 @@
       "url": "userscript.js",
       "matches": ["projects"],
       "runAtComplete": true
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
     }
   ],
   "settings": [

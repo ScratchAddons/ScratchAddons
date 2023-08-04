@@ -5,9 +5,11 @@ export default async function ({ addon, msg }) {
 
   const actionsContainer = document.querySelector(".action-buttons");
   const enableSwitcher = document.createElement("button");
+  const enableSwitcherText = document.createElement("span");
   enableSwitcher.id = "sa-preview-notes-instructions";
   enableSwitcher.classList.add("button", "action-button", "sa-preview-desc");
   enableSwitcher.addEventListener("click", togglePreview);
+  enableSwitcher.appendChild(enableSwitcherText);
 
   const instructionPreview = document.createElement("div");
   const instructionEditor = document.querySelector('textarea[name="description"]');
@@ -37,7 +39,7 @@ export default async function ({ addon, msg }) {
    * @returns {void}
    */
   function togglePreview(_ = null, override = !currentlyEnabled) {
-    enableSwitcher.innerHTML = `<span>${override ? msg("Disable") : msg("Enable")}</span>`;
+    enableSwitcherText.innerText = override ? msg("Disable") : msg("Enable");
     currentlyEnabled = override;
 
     if (override) {
@@ -58,11 +60,11 @@ export default async function ({ addon, msg }) {
    * @param {boolean} shown 
    * @returns {void}
    */
-  function setDisplayable(element, shown = true) {
-    if (shown) {
-      element.style.removeProperty("display");
-    } else {
-      element.style.display = "none";
+  function setDisplayable(element, show = true) {
+    if (show) {
+      element.classList.add("sa-preview-description-hidden");
+      return;
     }
+    element.classList.remove("sa-preview-description-hidden");
   }
 }
