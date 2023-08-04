@@ -36,13 +36,6 @@
       "if": {
         "settings": { "links": "underline" }
       }
-    },
-    {
-      "url": "contrast-love.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "contrast-love": true }
-      }
     }
   ],
   "settings": [
@@ -88,12 +81,6 @@
       "if": {
         "settings": { "links": "underline" }
       }
-    },
-    {
-      "name": "High contrast @heart.svg@star.svg icons",
-      "id": "contrast-love",
-      "type": "boolean",
-      "default": false
     }
   ],
   "dynamicEnable": true,
