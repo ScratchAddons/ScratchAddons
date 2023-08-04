@@ -1,30 +1,29 @@
 {
-    "name": "Preview Project Descriptions",
-    "description": "Allows you to preview the what will show up in the final notes and credits. It's not 100% accurate.",
-    "credits": [
-      {
-        "name": "Steve0Greatness",
-        "link": "https://scratch.mit.edu/users/Steve0Greatness"
-      }
-    ],
-    "tags": ["community", "projectPage"],
-    "userscripts": [
-      {
-        "url": "userscript.js",
-        "matches": ["projects"],
-        "runAtComplete": true
-      }
-    ],
-    "settings": [
-        {
-            "type": "boolean",
-            "id": "enable-default",
-            "name": "Show preview by default",
-            "default": false
-        }
-    ],
-    "dynamicEnable": true,
-    "dynamicDisable": true,
-    "versionAdded": "1.29.0"
-  }
-  
+  "name": "Preview Project Descriptions",
+  "description": "Allows you to preview the what will show up in the final notes and credits. It's not 100% accurate.",
+  "credits": [
+    {
+      "name": "Steve0Greatness",
+      "link": "https://scratch.mit.edu/users/Steve0Greatness"
+    }
+  ],
+  "tags": ["community", "projectPage"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": true
+    }
+  ],
+  "settings": [
+    {
+      "type": "boolean",
+      "id": "enable-default",
+      "name": "Show preview by default",
+      "default": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.29.0"
+}

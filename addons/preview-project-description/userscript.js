@@ -1,8 +1,7 @@
 export default async function ({ addon, msg }) {
-    const loggedInUser = await addon.auth.fetchUsername();
-    const projectOwner = document.querySelector(".project-header .avatar").alt;
-    if (loggedInUser == null || loggedInUser != projectOwner)
-        return;
+  const loggedInUser = await addon.auth.fetchUsername();
+  const projectOwner = document.querySelector(".project-header .avatar").alt;
+  if (loggedInUser == null || loggedInUser != projectOwner) return;
 
   const actionsContainer = document.querySelector(".action-buttons");
   const enableSwitcher = document.createElement("button");
@@ -31,9 +30,9 @@ export default async function ({ addon, msg }) {
   var currentlyEnabled = addon.settings.get("enable-default");
   togglePreview(null, currentlyEnabled);
 
-    function togglePreview(_ = null, override = !currentlyEnabled) {
-        enableSwitcher.innerHTML = `<span>${override ? msg("Disable") : msg("Enable")}</span>`;
-        currentlyEnabled = override;
+  function togglePreview(_ = null, override = !currentlyEnabled) {
+    enableSwitcher.innerHTML = `<span>${override ? msg("Disable") : msg("Enable")}</span>`;
+    currentlyEnabled = override;
 
     if (override) {
       instructionForm.style.display = "none";
