@@ -1,6 +1,6 @@
 export default async function ({ addon, msg }) {
   const loggedInUser = await addon.auth.fetchUsername();
-  const projectOwner = (await addon.tab.waitForElement(".project-header .avatar")).alt;
+  const projectOwner = addon.tab.redux.state.preview.projectInfo.author.username;
   if (loggedInUser == null || loggedInUser != projectOwner) return;
 
   const actionsContainer = document.querySelector(".action-buttons");
