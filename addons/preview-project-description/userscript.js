@@ -3,6 +3,8 @@ export default async function ({ addon, msg }) {
   const projectOwner = addon.tab.redux.state.preview.projectInfo.author.username;
   if (loggedInUser == null || loggedInUser != projectOwner) return;
 
+  const matchUsername = /\@([A-Z]|[a-z]|[0-9]|\-|\_){1,20}/gm
+
   const actionsContainer = document.querySelector(".action-buttons");
   const enableSwitcher = document.createElement("button");
   const enableSwitcherText = document.createElement("span");
@@ -43,15 +45,24 @@ export default async function ({ addon, msg }) {
     currentlyEnabled = override;
 
     if (override) {
-      instructionPreview.innerText = instructionEditor.value;
-      notesCreditPreview.innerText = notesCreditEditor.value;
+      parseEditorInput(instructionPreview, instructionEditor);
+      parseEditorInput(notesCreditPreview, notesCreditEditor);
     }
 
-    setDisplayable(instructionForm, !override);
-    setDisplayable(instructionPreview, override);
+    setDisplayable(instructionForm, override);
+    setDisplayable(instructionPreview, !override);
 
-    setDisplayable(notesCreditForm, !override);
-    setDisplayable(notesCreditPreview, override);
+    setDisplayable(notesCreditForm, override);
+    setDisplayable(notesCreditPreview, !override);
+  }
+  /**
+   * 
+   * @param {HTMLDivElement} preview
+   * @param {Element} editor
+   */
+  async function parseEditorInput(preview, editor) {
+    let input = editor.value;
+    preview.innerText = input;
   }
   /**
    * If false: sets the element's display style to none.
