@@ -35,20 +35,21 @@ export default async function ({ addon, msg }) {
     currentlyEnabled = override;
 
     if (override) {
-      instructionForm.style.display = "none";
       instructionPreview.innerText = instructionEditor.value;
-      instructionPreview.style.removeProperty("display");
-
-      notesCreditForm.style.display = "none";
       notesCreditPreview.innerText = notesCreditEditor.value;
-      notesCreditPreview.style.removeProperty("display");
-      return;
     }
 
-    instructionForm.style.removeProperty("display");
-    instructionPreview.style.display = "none";
+    setDisplayable(instructionForm, !override)
+    setDisplayable(instructionPreview, override)
 
-    notesCreditForm.style.removeProperty("display");
-    notesCreditPreview.style.display = "none";
+    setDisplayable(notesCreditForm, !override)
+    setDisplayable(notesCreditPreview, override)
+  }
+  function setDisplayable(element, shown=true) {
+    if (shown) {
+      element.style.removeProperty("display");
+    } else {
+      element.style.display = "none"
+    }
   }
 }
