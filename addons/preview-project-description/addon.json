@@ -14,12 +14,12 @@
         "matches": ["projects"]
       }
     ],
-    "userstyles": [],
     "settings": [
         {
             "type": "boolean",
             "id": "enable-default",
-            "name": "Show preview by default"
+            "name": "Show preview by default",
+            "default": false
         }
     ],
     "dynamicEnable": true,
