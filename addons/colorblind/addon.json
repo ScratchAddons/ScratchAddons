@@ -1,6 +1,6 @@
 {
-  "name": "Color blindness accommodations",
-  "description": "A few features to help make Scratch more accessible to colorblind users.",
+  "name": "Customizable link style",
+  "description": "Lets you customize the style of links around the website.",
   "credits": [
     {
       "name": "DNin01",
@@ -57,7 +57,7 @@
           "name": "Underlined"
         }
       ],
-      "default": "bold"
+      "default": "underline"
     },
     {
       "name": "Underline style",
