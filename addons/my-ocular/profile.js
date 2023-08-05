@@ -1,30 +1,30 @@
 export default async function ({ addon, console, msg }) {
-  const username = Scratch.INIT_DATA.PROFILE.model.username
+  const username = Scratch.INIT_DATA.PROFILE.model.username;
   let data = await fetchStatus(username);
 
   if (typeof data.userStatus !== "string") return;
 
-  var span = document.createElement("span")
-  span.textContent = data.userStatus
-  span.className = "sa-ocular-status"
+  var span = document.createElement("span");
+  span.textContent = data.userStatus;
+  span.className = "sa-ocular-status";
 
-  span.style.borderLeft = "1px solid rgb(204, 204, 204)"
-  span.style.marginLeft = "5px"
-  span.style.paddingLeft = "5px"
-  span.style.fontStyle = "italic"
-  span.style.display = "inline-block !important"
+  span.style.borderLeft = "1px solid rgb(204, 204, 204)";
+  span.style.marginLeft = "5px";
+  span.style.paddingLeft = "5px";
+  span.style.fontStyle = "italic";
+  span.style.display = "inline-block !important";
 
-  var dot = document.createElement("span")
-  dot.title = msg("status-hover")
-  dot.style.backgroundColor = data.color
-  dot.style.width = "11px"
-  dot.style.borderRadius = "5.5px"
-  dot.style.height = "11px"
-  dot.style.marginLeft = ".25rem"
-  dot.style.position = "relative"
-  dot.style.top = "1.5px"
-  dot.style.display = "inline-block"
-  span.appendChild(dot)
+  var dot = document.createElement("span");
+  dot.title = msg("status-hover");
+  dot.style.backgroundColor = data.color;
+  dot.style.width = "11px";
+  dot.style.borderRadius = "5.5px";
+  dot.style.height = "11px";
+  dot.style.marginLeft = ".25rem";
+  dot.style.position = "relative";
+  dot.style.top = "1.5px";
+  dot.style.display = "inline-block";
+  span.appendChild(dot);
 
   if (document.querySelector(".sa-ocular-status")) return;
   addon.tab.appendToSharedSpace({
