@@ -43,13 +43,7 @@
       "default": "new"
     },
     {
-      "name": "Open remix tree by clicking remixes icon next to @heart.svg@star.svg",
-      "id": "open-with-icon",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Always open in new tab",
+      "name": "Open in new tab",
       "id": "new-tab",
       "type": "boolean",
       "default": false
