@@ -1,6 +1,6 @@
 /* Block palette categories */
 div.scratchCategoryMenuItem:hover {
-  color: var(--editorDarkMode-primary) !important;
+  color: var(--editorDarkMode-highlightText) !important;
 }
 
 div.scratchCategoryMenuItem.categorySelected {
@@ -25,4 +25,14 @@ input[class*="monitor_slider_"] {
 /* Checkboxes and radio buttons */
 label {
   accent-color: var(--editorDarkMode-primary);
+}
+
+/* Project loading screen */
+[class*="loader_background_"] {
+  background-color: var(--editorDarkMode-menuBar);
+  color: var(--editorDarkMode-menuBar-text);
+}
+
+[class*="loader_background_"] img {
+  filter: var(--editorDarkMode-menuBar-filter);
 }
