@@ -99,6 +99,7 @@
   "block-cherry-picking",
   "hide-new-variables",
   "move-to-top-bottom",
+  "move-to-top-layer",
   "search-my-stuff",
   "fullscreen",
   "echo-effect",
@@ -137,9 +138,12 @@
   "necropost-highlighter",
   "copy-reporter",
   "share-through-mystuff",
+  "faster-project-loading",
   "auto-follow-topics",
-  "featured-dangos",
+  "op-badge",
+  "featured-dangos-v2",
   "remember-collapsed-categories",
+  "editor-number-arrow-keys",
   "paint-skew",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
@@ -164,5 +168,6 @@
   "editor-stage-left",
   "editor-buttons-reverse-order",
   "columns",
+  "editor-compact",
   "editor-theme3"
 ]

@@ -1,0 +1,63 @@
+/* Asset editor */
+[class*="asset-panel_detail-area"] [class*="labeled-icon-button_mod-edit-field"],
+[class*="sound-editor_tool-button_"],
+[class*="sound-editor_row-reverse_"] > [class*="icon-button_container_"] {
+  min-width: 0;
+  margin-right: 2px;
+  padding: calc(0.125rem - 1px);
+  border: 1px solid var(--editorDarkMode-border, hsla(0, 0%, 0%, 0.15));
+  border-radius: 0.25rem;
+}
+[class*="sound-editor_tool-button"] img {
+  width: 20px;
+}
+[class*="asset-panel_detail-area"] [class*="label_input-label"],
+[class*="asset-panel_detail-area"] [class*="labeled-icon-button_edit-field-title"],
+[class*="icon-button_title_"] {
+  display: none;
+}
+[dir="ltr"] [class*="paint-editor_mod-dashed-border_"],
+[dir="rtl"] [class*="paint-editor_mod-dashed-border_"] {
+  border: none;
+}
+[class*="mode-tools_mod-labeled-icon-height"],
+[class*="paint-editor_mod-labeled-icon-height"] {
+  height: auto;
+}
+[class*="paint-editor_row_"] > [class*="tools_row_"],
+[class*="paint-editor_mod-mode-tools_"] > [class*="mode-tools_mode-tools_"] {
+  gap: calc(0.25rem);
+}
+[dir="ltr"] [class*="fixed-tools_mod-dashed-border_"],
+[dir="rtl"] [class*="fixed-tools_mod-dashed-border_"],
+[dir="ltr"] [class*="mode-tools_mod-dashed-border_"],
+[dir="rtl"] [class*="mode-tools_mod-dashed-border_"],
+[dir="ltr"] [class*="sound-editor_input-group_"],
+[dir="rtl"] [class*="sound-editor_input-group_"],
+[dir="rtl"] [class*="sound-editor_row-reverse_"] [class*="sound-editor_input-group_"] {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+[class*="sound-editor_input-group_"] {
+  gap: 2px;
+}
+[class*="sound-editor_input-group_"] > * {
+  margin: 0;
+}
+[class*="sound-editor_row_"] > [class*="icon-button_container_"] {
+  margin-left: 1rem;
+}
+[class*="sound-editor_tool-button"],
+[class*="sound-editor_row-reverse_"] > [class*="icon-button_container_"] {
+  width: 24px;
+  height: 24px;
+  flex-basis: auto;
+}
+[class*="mode-tools_mode-tools"] {
+  min-height: 0;
+}
+
+[class*="sound-editor_row-reverse_"] > [class*="icon-button_container_"] {
+  margin: 0;
+}

@@ -79,17 +79,12 @@ h1 {
 }
 
 @keyframes addonBlink {
-  10% {
+  0% {
     border: 1px solid var(--content-border);
-  }
-  25% {
-    border: 1px solid var(--orange);
   }
   50% {
-    border: 1px solid var(--content-border);
-  }
-  75% {
     border: 1px solid var(--orange);
+    filter: drop-shadow(0px 0px 4px var(--orange));
   }
   100% {
     border: 1px solid var(--content-border);
@@ -379,7 +374,11 @@ button.setting-input.color.open {
   background: linear-gradient(45deg, #777 25%, transparent 25%), linear-gradient(-45deg, #777 25%, transparent 25%),
     linear-gradient(45deg, transparent 75%, #777 75%), linear-gradient(-45deg, transparent 75%, #777 75%);
   background-size: 6px 6px;
-  background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
+  background-position:
+    0 0,
+    0 3px,
+    3px -3px,
+    -3px 0px;
   border-radius: 5px;
   background-color: white;
   display: flex;

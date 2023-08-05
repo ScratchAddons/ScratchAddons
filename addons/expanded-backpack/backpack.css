@@ -1,4 +1,4 @@
-/* override styles in https://github.com/LLK/scratch-gui/blob/develop/src/components/backpack/backpack.css */
+/* override styles in https://github.com/scratchfoundation/scratch-gui/blob/develop/src/components/backpack/backpack.css */
 
 [class^="backpack_backpack-list"] {
   /* set height of the item picker, the vanilla height of the backpack is 5.5rem so multiply it by the rows setting */
