@@ -13,6 +13,10 @@ export default async function ({ addon, msg }) {
   }
 
   const loggedIn = await addon.auth.fetchIsLoggedIn();
+  if (!loggedIn) {
+    localStorage.removeItem("sa-forum-post-countdown");
+    return;
+  }
   const secondCount = (
     await fetch("/session", { headers: { "x-requested-with": "XMLHttpRequest" } }).then((resp) => resp.json())
   ).permissions.new_scratcher
@@ -25,7 +29,7 @@ export default async function ({ addon, msg }) {
 
   setInterval(async () => {
     const now = Date.now();
-    if (now > Number(countdown) + secondCount * 1000 || !loggedIn) {
+    if (now > Number(countdown) + secondCount * 1000) {
       localStorage.removeItem("sa-forum-post-countdown");
       elt.remove();
       return;
