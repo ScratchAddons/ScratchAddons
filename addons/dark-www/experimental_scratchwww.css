@@ -811,10 +811,6 @@ p {
 }
 
 /* Fix the accent color of checkboxes and radio buttons */
-label {
-  accent-color: var(--darkWww-button);
-}
-
 input {
-  accent-color: #129804;
+  accent-color: var(--darkWww-button);
 }
