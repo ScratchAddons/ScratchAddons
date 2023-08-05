@@ -27,7 +27,7 @@ export default async function ({ addon, msg }) {
   elt.id = "sa-forum-post-countdown";
   submitButton.insertAdjacentElement("beforeend", elt);
   submitButton.setAttribute("disabled", "");
-  submitButton.title = "You have to wait to submit this post.";
+  submitButton.title = msg("disabled-button");
 
   setInterval(async () => {
     const now = Date.now();
