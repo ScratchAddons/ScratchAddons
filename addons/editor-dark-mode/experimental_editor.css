@@ -662,3 +662,20 @@ input[class*="prompt_variable-name-text-input_"] {
 img[class*="green-flag_green-flag_"][class*="green-flag_is-active_"] {
   background-color: var(--editorDarkMode-primary-transparent35);
 }
+
+/* Fixes for device searching dialog (used by extensions such as LEGO BOOST, micro:bit, etc...) */
+button[class*="connection-modal_connection-button_"] {
+  background-color: var(--editorDarkMode-primary);
+}
+
+div[class*="connection-modal_dot_"][class*="connection-modal_active-step-dot_"] {
+  background-color: var(--editorDarkMode-primary);
+}
+
+div[class*="connection-modal_dot_"][class*="connection-modal_inactive-step-dot_"] {
+  background-color: var(--editorDarkMode-primary-transparent35);
+}
+
+img[class*="connection-modal_bluetooth-centered-icon_"] {
+  background-color: var(--editorDarkMode-primary);
+}
