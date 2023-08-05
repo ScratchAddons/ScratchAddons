@@ -1,6 +1,6 @@
 /* Block palette categories */
 div.scratchCategoryMenuItem:hover {
-  color: color-mix(in srgb, var(--editorDarkMode-primary) 80%, #FFFFFF) !important;
+  color: var(--editorDarkMode-primary) !important;
 }
 
 div.scratchCategoryMenuItem.categorySelected {
