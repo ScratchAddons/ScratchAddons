@@ -11,7 +11,7 @@ export default async function ({ addon, console, msg }) {
   span.style.fontStyle = "italic";
   span.style.display = "inline-block !important";
 
-  var dot = document.createElement("span");
+  const dot = document.createElement("span");
   dot.title = msg("status-hover");
   dot.style.backgroundColor = data.color;
   span.appendChild(dot);
