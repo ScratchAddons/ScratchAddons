@@ -679,3 +679,12 @@ div[class*="connection-modal_dot_"][class*="connection-modal_inactive-step-dot_"
 img[class*="connection-modal_bluetooth-centered-icon_"] {
   background-color: var(--editorDarkMode-primary);
 }
+
+/* Fixes for the tutorial popup */
+div[class*="card_see-all-button_"] {
+  background-color: var(--editorDarkMode-primary);
+}
+
+div[class*="card_deck-name_"] {
+  color: var(--editorDarkMode-primary);
+}
