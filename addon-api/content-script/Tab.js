@@ -581,6 +581,11 @@ export default class Tab extends Listenable {
         from: () => [],
         until: () => [],
       },
+      afterProfileCountry: {
+        element: () => q("p.profile-details > .location"),
+        from: () => [],
+        until: () => [],
+      },
     };
 
     const spaceInfo = sharedSpaces[space];
