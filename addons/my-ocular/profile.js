@@ -4,7 +4,7 @@ export default async function ({ addon, console, msg }) {
 
   if (typeof data.userStatus !== "string") return;
 
-  var span = document.createElement("span");
+  const span = document.createElement("span");
   span.textContent = data.userStatus;
   span.className = "sa-ocular-status";
 
