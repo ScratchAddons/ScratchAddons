@@ -663,7 +663,7 @@ img[class*="green-flag_green-flag_"][class*="green-flag_is-active_"] {
   background-color: var(--editorDarkMode-primary-transparent35);
 }
 
-/* Fixes for device searching dialog (used by extensions such as LEGO BOOST, micro:bit, etc...) */
+/* Fixes for device searching dialogs (used by extensions such as LEGO BOOST, micro:bit, etc...) */
 button[class*="connection-modal_connection-button_"] {
   background-color: var(--editorDarkMode-primary);
 }
