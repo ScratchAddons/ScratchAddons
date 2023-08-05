@@ -1,5 +1,5 @@
 export function loadModules(paper) {
-  // https://github.com/LLK/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/helper/math.js
+  // https://github.com/scratchfoundation/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/helper/math.js
 
   const checkPointsClose = function (startPos, eventPoint, threshold) {
     const xOff = Math.abs(startPos.x - eventPoint.x);
@@ -20,7 +20,7 @@ export function loadModules(paper) {
     return new paper.Point(dirx * d, diry * d);
   };
 
-  // https://github.com/LLK/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/helper/layer.js
+  // https://github.com/scratchfoundation/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/helper/layer.js
   const CROSSHAIR_FULL_OPACITY = 0.75;
 
   const _getLayer = function (layerString) {
@@ -38,7 +38,7 @@ export function loadModules(paper) {
     return _getLayer("isGuideLayer");
   };
 
-  // https://github.com/LLK/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/helper/view.js
+  // https://github.com/scratchfoundation/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/helper/view.js
 
   // Vectors are imported and exported at SVG_ART_BOARD size.
   // Once they are imported however, both SVGs and bitmaps are on
@@ -110,7 +110,7 @@ export function loadModules(paper) {
 
 const keyMirror = (obj) => Object.fromEntries(Object.entries(obj).map(([k]) => [k, k]));
 
-// https://github.com/LLK/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/lib/modes.js
+// https://github.com/scratchfoundation/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/lib/modes.js
 
 const vectorModesObj = {
   BRUSH: null,

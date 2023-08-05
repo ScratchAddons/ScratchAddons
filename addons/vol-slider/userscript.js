@@ -1,4 +1,5 @@
 import { setup, setVolume, onVolumeChanged, getVolume, setMuted, setUnmutedVolume, isMuted } from "./module.js";
+import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
 
 export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
@@ -12,7 +13,7 @@ export default async function ({ addon, console }) {
 
   const updateIcon = () => {
     const newVolume = getVolume();
-    if (newVolume == 0) {
+    if (newVolume === 0) {
       icon.dataset.icon = "mute";
     } else if (newVolume < 0.5) {
       icon.dataset.icon = "quiet";

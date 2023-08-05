@@ -85,7 +85,7 @@ export default async function ({ addon, console }) {
         // Sometimes the menu flashes open, so force hide it.
         contextMenu.style.display = "none";
         // Override DOM methods to import the text file directly
-        // See: https://github.com/LLK/scratch-gui/blob/develop/src/lib/import-csv.js#L21-L22
+        // See: https://github.com/scratchfoundation/scratch-gui/blob/develop/src/lib/import-csv.js#L21-L22
         const appendChild = document.body.appendChild;
         document.body.appendChild = (fileInput) => {
           // Restore appendChild to <body>

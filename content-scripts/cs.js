@@ -279,7 +279,7 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
         // this is not even a color lol
         return getColor(addonId, obj.source) ? getColor(addonId, obj.true) : getColor(addonId, obj.false);
       case "map":
-        return obj.options[getColor(addonId, obj.source)];
+        return getColor(addonId, obj.options[getColor(addonId, obj.source)] ?? obj.default);
       case "textColor": {
         hex = getColor(addonId, obj.source);
         let black = getColor(addonId, obj.black);
@@ -604,7 +604,8 @@ const showBanner = () => {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     text-shadow: none;
     box-shadow: 0 0 20px 0px #0000009e;
-    line-height: 1em;`,
+    font-size: 14px;
+    line-height: normal;`,
   });
   /*
   const notifImageLink = Object.assign(document.createElement("a"), {
@@ -625,7 +626,7 @@ const showBanner = () => {
     style: "margin: 12px;",
   });
   const notifTitle = Object.assign(document.createElement("span"), {
-    style: "font-size: 18px; line-height: 24px; display: inline-block; margin-bottom: 12px;",
+    style: "font-size: 18px; line-height: normal; display: inline-block; margin-bottom: 12px;",
     textContent: chrome.i18n.getMessage("extensionUpdate"),
   });
   const notifClose = Object.assign(document.createElement("img"), {
@@ -638,7 +639,8 @@ const showBanner = () => {
   });
   notifClose.addEventListener("click", () => notifInnerBody.remove(), { once: true });
 
-  const NOTIF_TEXT_STYLE = "display: block; font-size: 14px; color: white !important;";
+  const NOTIF_TEXT_STYLE = "display: block; color: white !important;";
+  const NOTIF_LINK_STYLE = "color: #1aa0d8; font-weight: normal; text-decoration: underline;";
 
   const notifInnerText0 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE + "font-weight: bold;",
@@ -648,7 +650,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_32", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_34", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -660,6 +662,7 @@ const showBanner = () => {
           Object.assign(document.createElement("a"), {
             href: "https://scratch.mit.edu/scratch-addons-extension/settings?source=updatenotif",
             target: "_blank",
+            style: NOTIF_LINK_STYLE,
             textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
           }).outerHTML,
         ][Number(i) - 1],
@@ -667,7 +670,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_32"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_34"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -680,6 +683,7 @@ const showBanner = () => {
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
     href: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
     target: "_blank",
+    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("notifChangelog"),
   });
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
@@ -687,14 +691,17 @@ const showBanner = () => {
       chrome.runtime.getManifest().version
     }&${utm}`,
     target: "_blank",
+    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("feedback"),
   });
   const notifFooterTranslate = Object.assign(document.createElement("a"), {
     href: "https://scratchaddons.com/translate",
     target: "_blank",
+    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("translate"),
   });
-  const notifFooterLegal = Object.assign(document.createElement("small"), {
+  const notifFooterLegal = Object.assign(document.createElement("span"), {
+    style: NOTIF_TEXT_STYLE + "font-size: 12px;",
     textContent: chrome.i18n.getMessage("notAffiliated"),
   });
   notifFooter.appendChild(notifFooterChangelog);
@@ -727,6 +734,7 @@ const showBanner = () => {
 };
 
 const handleBanner = async () => {
+  if (window.frameElement) return;
   const currentVersion = chrome.runtime.getManifest().version;
   const [major, minor, _] = currentVersion.split(".");
   const currentVersionMajorMinor = `${major}.${minor}`;
@@ -753,13 +761,19 @@ if (document.readyState !== "loading") {
 const isProfile = pathArr[0] === "users" && pathArr[2] === "";
 const isStudio = pathArr[0] === "studios";
 const isProject = pathArr[0] === "projects";
+const isForums = pathArr[0] === "discuss";
 
-if (isProfile || isStudio || isProject) {
+if (isProfile || isStudio || isProject || isForums) {
+  const removeReiteratedChars = (string) =>
+    string
+      .split("")
+      .filter((char, i, charArr) => (i === 0 ? true : charArr[i - 1] !== char))
+      .join("");
+
   const shouldCaptureComment = (value) => {
-    const regex = /scratch[ ]?add[ ]?ons/;
-    // Trim like scratchr2
-    const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
-    const limitedValue = trimmedValue.toLowerCase().replace(/[^a-z /]+/g, "");
+    const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, ""); // Trim like scratchr2
+    const limitedValue = removeReiteratedChars(trimmedValue.toLowerCase().replace(/[^a-z]+/g, ""));
+    const regex = /scratchadons/;
     return regex.test(limitedValue);
   };
   const extensionPolicyLink = document.createElement("a");
@@ -768,7 +782,7 @@ if (isProfile || isStudio || isProject) {
   extensionPolicyLink.innerText = chrome.i18n.getMessage("captureCommentPolicy");
   Object.assign(extensionPolicyLink.style, {
     textDecoration: "underline",
-    color: "white",
+    color: isForums ? "" : "white",
   });
   const errorMsgHtml = escapeHTML(chrome.i18n.getMessage("captureCommentError", DOLLARS)).replace(
     "$1",
@@ -836,40 +850,48 @@ if (isProfile || isStudio || isProject) {
               resolve();
               observer.disconnect();
             }
+          };
+          sendAnyway.textContent = sendAnywayMsg;
+          Object.assign(sendAnyway.style, {
+            textDecoration: "underline",
+            color: "white",
           });
-          observer.observe(document.documentElement, { childList: true, subtree: true });
-        });
-      };
-      const getEditorMode = () => {
-        // From addon-api/content-script/Tab.js
-        const pathname = location.pathname.toLowerCase();
-        const split = pathname.split("/").filter(Boolean);
-        if (!split[0] || split[0] !== "projects") return null;
-        if (split.includes("editor")) return "editor";
-        if (split.includes("fullscreen")) return "fullscreen";
-        if (split.includes("embed")) return "embed";
-        return "projectpage";
-      };
-      const addListener = () =>
-        document.querySelector(".comments-container, .studio-compose-container").addEventListener(
-          "click",
-          (e) => {
-            const path = e.composedPath();
-            // When clicking the post button, e.path[0] might
-            // be <span>Post</span> or the <button /> element
-            const possiblePostBtn = path[0].tagName === "SPAN" ? path[1] : path[0];
-            if (!possiblePostBtn) return;
-            if (possiblePostBtn.tagName !== "BUTTON") return;
-            if (!possiblePostBtn.classList.contains("compose-post")) return;
-            const form = path[0].tagName === "SPAN" ? path[3] : path[2];
-            if (!form) return;
-            if (form.tagName !== "FORM") return;
-            if (!form.classList.contains("full-width-form")) return;
-            // Remove error when about to send comment anyway, if it exists
-            form.parentNode.querySelector(".sa-compose-error-row")?.remove();
-            if (form.hasAttribute("data-sa-send-anyway")) {
-              form.removeAttribute("data-sa-send-anyway");
-              return;
+          form.querySelector("[data-control=error] .text").appendChild(sendAnyway);
+          form.querySelector(".control-group").classList.add("error");
+        }
+      },
+      { capture: true }
+    );
+  } else if (isProject || isStudio) {
+    window.addEventListener(
+      "click",
+      (e) => {
+        if (!(e.target.tagName === "SPAN" || e.target.tagName === "BUTTON")) return;
+        if (!e.target.closest("button.compose-post")) return;
+        const form = e.target.closest("form.full-width-form");
+        if (!form) return;
+        // Remove error when about to send comment anyway, if it exists
+        form.parentNode.querySelector(".sa-compose-error-row")?.remove();
+        if (form.hasAttribute("data-sa-send-anyway")) {
+          form.removeAttribute("data-sa-send-anyway");
+          return;
+        }
+        const textarea = form.querySelector("textarea[name=compose-comment]");
+        if (!textarea) return;
+        if (shouldCaptureComment(textarea.value)) {
+          e.stopPropagation();
+          const errorRow = document.createElement("div");
+          errorRow.className = "flex-row compose-error-row sa-compose-error-row";
+          const errorTip = document.createElement("div");
+          errorTip.className = "compose-error-tip";
+          const span = document.createElement("span");
+          span.innerHTML = errorMsgHtml + " ";
+          const sendAnyway = document.createElement("a");
+          sendAnyway.onclick = () => {
+            const res = confirm(confirmMsg);
+            if (res) {
+              form.setAttribute("data-sa-send-anyway", "");
+              form.querySelector(".compose-post")?.click();
             }
             const textarea = form.querySelector("textarea[name=compose-comment]");
             if (!textarea) return;
@@ -915,22 +937,7 @@ if (isProfile || isStudio || isProject) {
           },
           { capture: true },
         );
-
-      const check = async () => {
-        if (
-          // Note: do not use pathArr here below! pathArr is calculated
-          // on load, pathname can change dynamically with replaceState
-          (isStudio && location.pathname.split("/")[3] === "comments") ||
-          (isProject && getEditorMode() === "projectpage")
-        ) {
-          await waitForContainer();
-          addListener();
-        } else {
-          observer?.disconnect();
-        }
-      };
-      check();
-      csUrlObserver.addEventListener("change", (e) => check());
-    }
-  });
+      }
+    });
+  }
 }

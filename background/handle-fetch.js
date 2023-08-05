@@ -1,5 +1,15 @@
 if (chrome.declarativeNetRequest) {
   // DNR available, use this instead
+
+  const baseUrl = new URL(chrome.runtime.getURL(""));
+  const initiatorDomains = {
+    // `domains` is deprecated and wasn't implemented by Firefox, but it's the only
+    // option for Chrome 96-100 support.
+    [baseUrl.protocol === "moz-extension:" ? "initiatorDomains" : "domains"]: [baseUrl.host],
+    // `baseUrl.host` is equivalent to `chrome.runtime.id` in Chrome. In Firefox, it's
+    // the extension id that is used in URLs (not the one specified in manifest.json)
+  };
+
   chrome.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: [1],
     addRules: [
@@ -17,7 +27,7 @@ if (chrome.declarativeNetRequest) {
           ],
         },
         condition: {
-          domains: [chrome.runtime.id],
+          ...initiatorDomains,
           regexFilter: "^https:\\/\\/(api\\.|clouddata\\.|)scratch\\.mit\\.edu\\/.*(\\?|\\&)sareferer",
           resourceTypes: ["xmlhttprequest"],
         },
@@ -26,7 +36,7 @@ if (chrome.declarativeNetRequest) {
   });
 } else {
   // DNR unavailable, falling back to webRequestBlocking
-  // Used in Chrome < 96 (lacks DNRWithHostAccess) and Firefox
+  // Used in Chrome < 96 (lacks DNRWithHostAccess) and Firefox < 113 (lacks DNR)
   const extraInfoSpec = ["blocking", "requestHeaders"];
   if (Object.prototype.hasOwnProperty.call(chrome.webRequest.OnBeforeSendHeadersOptions, "EXTRA_HEADERS"))
     extraInfoSpec.push("extraHeaders");

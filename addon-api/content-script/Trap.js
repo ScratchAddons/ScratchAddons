@@ -84,7 +84,7 @@ export default class Trap extends Listenable {
     const editorMode = this._getEditorMode();
     if (!editorMode || editorMode === "embed") throw new Error("Cannot access paper on this page");
     // We can access paper through .tool on tools, for example:
-    // https://github.com/LLK/scratch-paint/blob/develop/src/containers/bit-brush-mode.jsx#L60-L62
+    // https://github.com/scratchfoundation/scratch-paint/blob/develop/src/containers/bit-brush-mode.jsx#L60-L62
     // It happens that paper's Tool objects contain a reference to the entirety of paper's scope.
     const modeSelector = await this._waitForElement("[class*='paint-editor_mode-selector']", {
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,

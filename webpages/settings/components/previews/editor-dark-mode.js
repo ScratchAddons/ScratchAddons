@@ -73,7 +73,8 @@ export default async function ({ template }) {
             "rgba(87, 124, 155, 0.13)",
             "rgba(255, 255, 255, 0.05)",
           ),
-          primaryTransparent: multiply(this.settings.primary, { a: 0.35 }),
+          primaryTransparent15: multiply(this.settings.primary, { a: 0.15 }),
+          primaryTransparent35: multiply(this.settings.primary, { a: 0.35 }),
           inputTransparent: multiply(this.settings.input, { a: 0.25 }),
         };
       },

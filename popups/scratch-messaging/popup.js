@@ -71,12 +71,16 @@ export default async ({ addon, msg, safeMsg }) => {
     },
     methods: {
       postComment() {
+        const removeReiteratedChars = (string) =>
+          string
+            .split("")
+            .filter((char, i, charArr) => (i === 0 ? true : charArr[i - 1] !== char))
+            .join("");
         const shouldCaptureComment = (value) => {
           // From content-scripts/cs.js
-          const regex = /scratch[ ]?add[ ]?ons/;
-          // Trim like scratchr2
-          const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
-          const limitedValue = trimmedValue.toLowerCase().replace(/[^a-z /]+/g, "");
+          const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, ""); // Trim like scratchr2
+          const limitedValue = removeReiteratedChars(trimmedValue.toLowerCase().replace(/[^a-z]+/g, ""));
+          const regex = /scratchadons/;
           return regex.test(limitedValue);
         };
         if (shouldCaptureComment(this.replyBoxValue)) {

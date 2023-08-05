@@ -1,13 +1,19 @@
 export default async function ({ addon, msg }) {
   const showMenu = addon.settings.get("showMenu");
-  const forceAlternative = addon.settings.get("forceAlternative");
-  const alternativePlayer = addon.settings.get("alternativePlayer");
+  const player = addon.settings.get("alternativePlayer");
   const autoPlay = addon.settings.get("autoPlay");
   const enableTWAddons = addon.settings.get("enableTWAddons");
-  const enabledAddons = await addon.self.getEnabledAddons("editor");
+  const shareUsername = addon.settings.get("shareUsername");
 
   const stageElement = document.querySelector(".stage");
   const projectId = window.Scratch.INIT_DATA.PROFILE.featuredProject.id;
+
+  // Check if project is unshared before doing anything
+  const featuredProject = await fetch(`https://api.scratch.mit.edu/projects/${projectId}`, { method: "HEAD" });
+  if (featuredProject.status >= 400) return; // project is probably unshared
+
+  const enabledAddons = await addon.self.getEnabledAddons("editor");
+  const username = await addon.auth.fetchUsername();
 
   // Create and append elements
 
@@ -75,6 +81,7 @@ export default async function ({ addon, msg }) {
     const usp = new URLSearchParams();
     if (autoPlay) usp.set("autoplay", "");
     if (enableTWAddons) usp.set("addons", enabledAddons.join(","));
+    if (shareUsername) usp.set("username", username);
     iframeElement.setAttribute("src", `https://turbowarp.org/${projectId}/embed?${usp}`);
     wrapperElement.dataset.player = "turbowarp";
     if (!showMenu) iframeElement.setAttribute("height", "260");
@@ -90,17 +97,7 @@ export default async function ({ addon, msg }) {
 
   // Start loading the players
 
-  if (forceAlternative && alternativePlayer !== "none") {
-    if (alternativePlayer === "turbowarp") loadTurboWarp();
-    else if (alternativePlayer === "forkphorus") loadForkphorus();
-  } else {
-    loadScratch();
-    iframeElement.addEventListener("load", () => {
-      if (iframeElement.contentDocument.querySelector(".not-available-outer") !== null) {
-        if (alternativePlayer === "turbowarp") loadTurboWarp();
-        else if (alternativePlayer === "forkphorus") loadForkphorus();
-        else stageElement.removeChild(wrapperElement);
-      }
-    });
-  }
+  if (player === "turbowarp") loadTurboWarp();
+  else if (player === "forkphorus") loadForkphorus();
+  else loadScratch();
 }

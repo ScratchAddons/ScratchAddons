@@ -20,6 +20,6 @@
   content: attr(data-content);
 }
 
-.sa-mouse-pos-small .pos-container-container {
+.sa-small-stage .pos-container-container {
   display: none !important;
 }
