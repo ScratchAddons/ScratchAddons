@@ -23,14 +23,18 @@ export default async function ({ addon, msg }) {
     ? 120
     : 60;
 
-  const elt = document.createElement("div");
+  const elt = document.createElement("span");
   elt.id = "sa-forum-post-countdown";
-  document.body.appendChild(elt);
+  submitButton.insertAdjacentElement("beforeend", elt);
+  submitButton.setAttribute("disabled", "");
+  submitButton.title = "You have to wait to submit this post.";
 
   setInterval(async () => {
     const now = Date.now();
     if (now > Number(countdown) + secondCount * 1000) {
       localStorage.removeItem("sa-forum-post-countdown");
+      submitButton.removeAttribute("disabled");
+      submitButton.title = "";
       elt.remove();
       return;
     }
