@@ -16,7 +16,6 @@ export default async function ({ addon, console, msg }) {
   dot.style.backgroundColor = data.color;
   span.appendChild(dot);
 
-  if (document.querySelector(".sa-ocular-status")) return;
   addon.tab.appendToSharedSpace({
     space: "afterProfileCountry",
     element: span,
