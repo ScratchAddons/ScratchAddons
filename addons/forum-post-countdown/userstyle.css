@@ -1,9 +1,8 @@
-#djangobbwrap .form-submit [type="submit"]:disabled {
-  cursor: not-allowed;
-  opacity: 0.8;
-}
-
 #sa-forum-post-countdown {
   padding-left: 0;
   margin-left: -0.5rem;
+}
+
+.sa-forum-post-countdown-disabled {
+  opacity: 0.8;
 }

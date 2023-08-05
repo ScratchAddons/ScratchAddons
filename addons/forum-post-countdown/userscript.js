@@ -26,15 +26,15 @@ export default async function ({ addon, msg }) {
   const elt = document.createElement("span");
   elt.id = "sa-forum-post-countdown";
   submitButton.insertAdjacentElement("beforeend", elt);
-  submitButton.setAttribute("disabled", "");
-  submitButton.title = msg("disabled-button");
+  submitButton.title = msg("cant-post");
+  submitButton.classList.add("sa-forum-post-countdown-disabled");
 
   setInterval(async () => {
     const now = Date.now();
     if (now > Number(countdown) + secondCount * 1000) {
       localStorage.removeItem("sa-forum-post-countdown");
-      submitButton.removeAttribute("disabled");
       submitButton.title = "";
+      submitButton.classList.remove("sa-forum-post-countdown-disabled");
       elt.remove();
       return;
     }
