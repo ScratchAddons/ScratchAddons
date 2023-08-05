@@ -653,38 +653,9 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
   background-color: var(--editorDarkMode-input);
 }
 
-/* Slider variable accent color */
-input[class*="monitor_slider_"] {
-  accent-color: var(--editorDarkMode-primary);
-}
-
-/* Checkboxes and radio buttons color */
-label {
-  accent-color: var(--editorDarkMode-primary);
-}
-
 /* Input fields from dialogs */
 input[class*="prompt_variable-name-text-input_"] {
   outline-color: var(--editorDarkMode-primary);
-}
-
-/* Block palette checkboxes */
-g.checked > rect.blocklyFlyoutCheckbox {
-  fill: var(--editorDarkMode-primary);
-  stroke: var(--editorDarkMode-primary);
-}
-
-g.checked > path.blocklyFlyoutCheckboxPath {
-  stroke: var(--editorDarkMode-primary-text);
-}
-
-/* Block palette categories */
-div.scratchCategoryMenuItem:hover {
-  color: color-mix(in srgb, var(--editorDarkMode-primary) 80%, #FFFFFF) !important;
-}
-
-div.scratchCategoryMenuItem.categorySelected {
-  background-color: var(--editorDarkMode-primary-transparent15);
 }
 
 /* Green flag active background color */

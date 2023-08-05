@@ -949,6 +949,13 @@
         "settings": { "affectStage": true }
       }
     },
+	{
+      "url": "aditional_coloring.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "affectOtherObjects": true }
+      }
+    },
     {
       "url": "stage_compact_scrollbars.css",
       "matches": ["projects"],
@@ -1085,6 +1092,12 @@
     {
       "name": "Change the colors of variables, lists, speech bubbles, and answer inputs on the stage",
       "id": "affectStage",
+      "type": "boolean",
+      "default": false
+    },
+	{
+      "name": "Change the accent color of aditional UI elements",
+      "id": "affectOtherObjects",
       "type": "boolean",
       "default": false
     }
