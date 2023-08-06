@@ -1,11 +1,11 @@
-export default async function ({ addon, console, msg }) {  
+export default async function ({ addon, console, msg }) {
   const loggedInUser = await addon.auth.fetchUsername();
   const projectOwner = addon.tab.redux.state.preview.projectInfo.author.username;
   if (loggedInUser == null || loggedInUser != projectOwner) return;
 
   const matchUsername = /\@([A-Z]|[a-z]|[0-9]|\-|\_){1,20}/gm;
   const moreLinksEnabled = (await addon.self.getEnabledAddons()).includes("more-links");
-  const matchHyperLinks = /(https?\:\/\/)?.*\.([A-Z]|[a-z]|-){2,24}((\/.*)*)?/gm
+  const matchHyperLinks = /(https?\:\/\/)?.*\.([A-Z]|[a-z]|-){2,24}((\/.*)*)?/gm;
 
   const actionsContainer = document.querySelector(".action-buttons");
   const enableSwitcher = document.createElement("button");
@@ -70,10 +70,9 @@ export default async function ({ addon, console, msg }) {
     });
     if (moreLinksEnabled)
       rendered.replace(matchHyperLinks, (matched) => {
-        if (matched.startswith("https://") || matched.startswith("http://"))
-          matched = "//" + matched;
+        if (matched.startswith("https://") || matched.startswith("http://")) matched = "//" + matched;
         return `<a href="${matched}">${matched}</a>`;
-      })
+      });
     preview.innerHTML = rendered;
   }
 
