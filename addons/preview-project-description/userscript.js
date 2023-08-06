@@ -7,7 +7,7 @@ export default async function ({ addon, console, msg }) {
   const moreLinksEnabled = (await addon.self.getEnabledAddons()).includes("more-links");
   const matchHyperLinks = /(https?\:\/\/)?.*\.([A-Z]|[a-z]|-){2,24}((\/.*)*)?/gm;
 
-  const actionsContainer = document.querySelector(".action-buttons");
+  const actionsContainer = await addon.tab.waitForElement(".action-buttons");
   const enableSwitcher = document.createElement("button");
   const enableSwitcherText = document.createElement("span");
   enableSwitcher.id = "sa-preview-notes-instructions";
@@ -64,13 +64,13 @@ export default async function ({ addon, console, msg }) {
    * @param {Element} editor Where to grab the input to render, should be an editable with a value attribute.
    */
   async function parseEditorInput(preview, editor) {
-    let input = editor.value.replace(/\</g, "&lt;").replace(/\>/g, "&gt;").replace(/\@/g, "&amp;");
+    let input = editor.value.replace(/\</g, "&lt;").replace(/\>/g, "&gt;").replace(/\&/g, "&amp;");
     let rendered = input.replace(matchUsername, (matched) => {
       return `<a href="/users/${matched.slice(1)}">${matched}</a>`;
     });
     if (moreLinksEnabled)
       rendered.replace(matchHyperLinks, (matched) => {
-        if (matched.startswith("https://") || matched.startswith("http://")) matched = "//" + matched;
+        if (matched.startsWith("https://") || matched.startsWith("http://")) matched = "//" + matched;
         return `<a href="${matched}">${matched}</a>`;
       });
     preview.innerHTML = rendered;
