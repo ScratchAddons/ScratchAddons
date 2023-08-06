@@ -4,9 +4,13 @@ export default async function ({ addon, console, msg }) {
   // -- Make the links show/hide --
 
   function setupLinks() {
-    if (addon.tab.editorMode === "projectpage") {
-      setButton(addon.settings.get("type") === "new");
-      setViewAllLink(addon.settings.get("type") === "replace");
+    if (addon.self.disabled) {
+      hideAll();
+    } else {
+      if (addon.tab.editorMode === "projectpage") {
+        setButton(addon.settings.get("type") === "new");
+        setViewAllLink(addon.settings.get("type") === "replace");
+      }
     }
   }
 
@@ -79,30 +83,33 @@ export default async function ({ addon, console, msg }) {
 
   async function setViewAllLink(enabled) {
     // Change the "View all" link to .../remixes to link to .../remixtree
-    if (enabled) {
-      addon.tab.waitForElement(".remix-list").then(() => {
-        const link = document.querySelector(".remix-list a");
-        const linkSpan = document.querySelector(".remix-list a span");
+    addon.tab
+      .waitForElement(".remix-list", {
+        reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+      })
+      .then(() => {
+        if (enabled) {
+          const link = document.querySelector(".remix-list a");
+          const linkSpan = document.querySelector(".remix-list a span");
 
-        if (!originalTextContent) {
-          originalTextContent = linkSpan.textContent; // Store what the button's text content was before the first time we change it (because different languages).
+          if (!originalTextContent) {
+            originalTextContent = linkSpan.textContent; // Store what the button's text content was before the first time we change it (because different languages).
+          }
+
+          link.href = appendToProjectURL("remixtree");
+          setOpensInNewTab(addon.settings.get("new-tab"), link);
+          linkSpan.textContent = msg("remix-tree-link");
+        } else {
+          if (!originalTextContent) return; // If we haven't changed it to link to the remix tree, don't do anything.
+
+          const link = document.querySelector(".remix-list a");
+          const linkSpan = document.querySelector(".remix-list a span");
+
+          link.href = appendToProjectURL("remixes");
+          setOpensInNewTab(false, link);
+          linkSpan.textContent = originalTextContent;
         }
-
-        link.href = appendToProjectURL("remixtree");
-        setOpensInNewTab(addon.settings.get("new-tab"), link);
-        linkSpan.textContent = msg("remix-tree-link");
       });
-    } else {
-      addon.tab.waitForElement(".remix-list").then(() => {
-        const link = document.querySelector(".remix-list a");
-        if (link.href.split("/").includes("remixes")) return; // If we haven't changed it to link to the remix tree, don't do anything.
-        const linkSpan = document.querySelector(".remix-list a span");
-
-        link.href = appendToProjectURL("remixes");
-        setOpensInNewTab(false, link);
-        linkSpan.textContent = originalTextContent;
-      });
-    }
   }
 
   // -- Events --
