@@ -1,7 +1,7 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, msg }) {
   const loggedInUser = await addon.auth.fetchUsername();
-  const projectOwner = addon.tab.redux.state.preview.projectInfo.author.username;
-  if (loggedInUser == null || loggedInUser != projectOwner) return;
+  const projectOwner = addon?.tab?.redux?.state?.preview?.projectInfo?.author?.username;
+  if (projectOwner === undefined || loggedInUser == null || loggedInUser != projectOwner) return;
 
   const matchUsername = /\@([A-Z]|[a-z]|[0-9]|\-|\_){1,20}/gm;
   const moreLinksEnabled = (await addon.self.getEnabledAddons()).includes("more-links");
