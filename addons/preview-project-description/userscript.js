@@ -1,4 +1,4 @@
-export default async function ({ addon, msg }) {
+export default async function ({ addon, console, msg }) {
   const loggedInUser = await addon.auth.fetchUsername();
   const projectOwner = addon.tab.redux.state.preview.projectInfo.author.username;
   if (loggedInUser == null || loggedInUser != projectOwner) return;
@@ -36,8 +36,8 @@ export default async function ({ addon, msg }) {
 
   /**
    * Will attempt to toggle between the off and on states, however an override can be passed which will completely override the current value
-   * @param {string} _
-   * @param {boolean} override
+   * @param {any} _ This exists because this is used as an event body(line 13)
+   * @param {boolean} override Force to a specific value.
    * @returns {void}
    */
   function togglePreview(_ = null, override = !currentlyEnabled) {
@@ -55,20 +55,24 @@ export default async function ({ addon, msg }) {
     setDisplayable(notesCreditForm, override);
     setDisplayable(notesCreditPreview, !override);
   }
+
   /**
-   *
-   * @param {HTMLDivElement} preview
-   * @param {Element} editor
+   * 
+   * @param {HTMLDivElement} preview Where to place the rendered output.
+   * @param {Element} editor Where to grab the input to render, should be an editable with a value attribute.
    */
   async function parseEditorInput(preview, editor) {
-    let input = editor.value;
-    preview.innerText = input;
+    let input = editor.value.replace(/\</g, "&lt;").replace(/\>/g, "&gt;").replace(/\@/g, "&amp;");
+    let rendered = input.replace(matchUsername, matched => {
+      return `<a href="/users/${matched.slice(1)}">${matched}</a>`;
+    });
+    preview.innerHTML = rendered;
   }
+
   /**
-   * If false: sets the element's display style to none.
-   * If true:  removes the display style altogether, making it go back to it's previous value.
-   * @param {Element | Node} element
-   * @param {boolean} shown
+   * Toggles visibility with the class `sa-preview-description-hidden`
+   * @param {Element | Node} element Element to set visibility on.
+   * @param {boolean} shown Wether to show element or not.
    * @returns {void}
    */
   function setDisplayable(element, show = true) {
