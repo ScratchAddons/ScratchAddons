@@ -620,11 +620,11 @@ export default class Tab extends Listenable {
             const wrapper = Object.assign(document.createElement("div"), {
               className: "shared-after-country-space",
             });
-  
+
             wrapper.style.display = "inline-block";
-  
-            document.querySelector(".location").appendChild(wrapper)
-  
+
+            document.querySelector(".location").appendChild(wrapper);
+
             return wrapper;
           })(),
         from: () => [],
