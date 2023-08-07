@@ -1,22 +1,21 @@
 export default async function ({ addon, console, msg }) {
-  const username = Scratch.INIT_DATA.PROFILE.model.username
+  const username = Scratch.INIT_DATA.PROFILE.model.username;
   let data = await fetchStatus(username);
 
   if (typeof data.userStatus !== "string") return;
 
-  var span = document.createElement("span")
-  span.textContent = data.userStatus
-  span.className = "sa-ocular-status"
+  const span = document.createElement("span");
+  span.textContent = data.userStatus;
+  span.className = "sa-ocular-status";
 
-  span.style.fontStyle = "italic"
-  span.style.display = "inline-block !important"
+  span.style.fontStyle = "italic";
+  span.style.display = "inline-block !important";
 
-  var dot = document.createElement("span")
-  dot.title = msg("status-hover")
-  dot.style.backgroundColor = data.color
-  span.appendChild(dot)
+  const dot = document.createElement("span");
+  dot.title = msg("status-hover");
+  dot.style.backgroundColor = data.color;
+  span.appendChild(dot);
 
-  if (document.querySelector(".sa-ocular-status")) return;
   addon.tab.appendToSharedSpace({
     space: "afterProfileCountry",
     element: span,
