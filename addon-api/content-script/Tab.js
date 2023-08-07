@@ -614,7 +614,19 @@ export default class Tab extends Listenable {
         until: () => [],
       },
       afterProfileCountry: {
-        element: () => q("p.profile-details > .location"),
+        element: () =>
+          q(".shared-after-country-space") ||
+          (() => {
+            const wrapper = Object.assign(document.createElement("div"), {
+              className: "shared-after-country-space",
+            });
+  
+            wrapper.style.display = "inline-block";
+  
+            document.querySelector(".location").appendChild(wrapper)
+  
+            return wrapper;
+          })(),
         from: () => [],
         until: () => [],
       },
