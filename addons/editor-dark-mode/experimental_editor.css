@@ -666,6 +666,7 @@ img[class*="green-flag_green-flag_"][class*="green-flag_is-active_"] {
 /* Fixes for device searching dialogs (used by extensions such as LEGO BOOST, micro:bit, etc...) */
 button[class*="connection-modal_connection-button_"] {
   background-color: var(--editorDarkMode-primary);
+color: var(--editorDarkMode-primary-text);
 }
 
 div[class*="connection-modal_dot_"][class*="connection-modal_active-step-dot_"] {
@@ -683,6 +684,7 @@ img[class*="connection-modal_bluetooth-centered-icon_"] {
 /* Fixes for the tutorial popup */
 div[class*="card_see-all-button_"] {
   background-color: var(--editorDarkMode-primary);
+  color: var(--editorDarkMode-primary-text);
 }
 
 div[class*="card_deck-name_"] {
