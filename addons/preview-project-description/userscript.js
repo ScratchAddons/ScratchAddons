@@ -5,7 +5,7 @@ export default async function ({ addon, msg }) {
 
   const matchUsername = /\@([A-Z]|[a-z]|[0-9]|\-|\_){1,20}/gm;
   const moreLinksEnabled = (await addon.self.getEnabledAddons()).includes("more-links");
-  const matchHyperLinks = /(https?\:\/\/)?.*\.([A-Z]|[a-z]|-){2,24}((\/.*)*)?/gm;
+  const matchHyperLinks = /(https?\:\/\/)?.*((?!\/).)\.([A-Z]|[a-z]|-){2,24}((\/.*)*)?/gm;
 
   const actionsContainer = await addon.tab.waitForElement(".action-buttons");
   const enableSwitcher = document.createElement("button");
