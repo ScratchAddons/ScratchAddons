@@ -64,7 +64,7 @@ export default async function ({ addon, msg }) {
    * @param {Element} editor Where to grab the input to render, should be an editable with a value attribute.
    */
   async function parseEditorInput(preview, editor) {
-    let input = editor.value.replace(/\</g, "&lt;").replace(/\>/g, "&gt;").replace(/\&/g, "&amp;");
+    let input = editor.value.replace(/\</g, "&lt;").replace(/\>/g, "&gt;").replace(/\&/g, "&amp;").replace(/\"/g, "&qout;");
     let rendered = input.replace(matchUsername, (matched) => {
       return `<a href="/users/${matched.slice(1)}">${matched}</a>`;
     });
