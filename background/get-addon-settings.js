@@ -592,6 +592,13 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             addonSettings["comment-color"] = "#FEF49C";
           }
         }
+        if (addonId === "forum-quote-code-beautifier") {
+          if (settings.bordercolor === "#28A5DA") {
+            // Transistion v1.33 to v1.34
+            settings.bordercolor = "#855CD6";
+            madeAnyChanges = madeChangesToAddon = true;
+          }
+        }
       }
 
       if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;
