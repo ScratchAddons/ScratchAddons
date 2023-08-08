@@ -33,9 +33,10 @@ export default async function ({ addon, console, msg }) {
       reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
     });
 
-    // Skip if user cannot edit the project title.
-    // Same logic as animated-thumb/userscript.js
-    if (!document.querySelector(".form-group.project-title")) continue;
+    // TODO: also change animated-thumb/userscript.js
+    const loggedInUser = await addon.auth.fetchUsername();
+    const projectOwner = addon.tab.redux.state?.preview?.projectInfo?.author?.username;
+    if (!projectOwner || !loggedInUser || loggedInUser !== projectOwner) continue;
 
     addon.tab.appendToSharedSpace({
       space: "afterCopyLinkButton",
