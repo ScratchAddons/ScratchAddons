@@ -681,6 +681,14 @@ img[class*="connection-modal_bluetooth-centered-icon_"] {
   background-color: var(--editorDarkMode-primary);
 }
 
+div[class*="connection-modal_activityArea_"] {
+  background-color: var(--editorDarkMode-primary-transparent15);
+}
+
+div[class*="connection-modal_dots-holder_"] {
+  background-color: var(--editorDarkMode-primary-transparent15);
+}
+
 /* Fixes for the tutorial popup */
 div[class*="card_see-all-button_"] {
   background-color: var(--editorDarkMode-primary);
