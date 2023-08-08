@@ -15,13 +15,14 @@ export default async function ({ addon, msg }) {
   addon.tab.redux.addEventListener("statechanged", (e) => {
     // We don't want a state change to disable the preview mode.
     if (!addon.tab.redux.state.scratchGui.mode.isPlayerOnly) return;
-    if (currentlyEnabled && !document.querySelector(".project-description") && avoidInfiniteLoops < 10) {
-      // Restore preview mode.
-      enablePreview();
+    if (avoidInfiniteLoops > 5) console.log("Avoiding an infinite loop");
+    else if (currentlyEnabled) {
       const num = ++avoidInfiniteLoops;
+      // Restore preview mode.
+      queueMicrotask(() => enablePreview());
       setTimeout(() => {
         if (avoidInfiniteLoops === num) avoidInfiniteLoops = 0;
-      }, 100);
+      }, 0);
     }
   });
 
