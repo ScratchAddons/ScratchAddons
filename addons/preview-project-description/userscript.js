@@ -116,6 +116,30 @@ export default async function ({ addon, msg }) {
       }
     };
 
+    let step = 0;
+    // https://github.com/scratchfoundation/scratch-www/blob/59fa9cd12744ec6fcfc73d0d92c4fbbe5ca73d38/src/views/preview/project-view.jsx#L1028
+    // 1. A call to author.id.toString() with a matching function stack.
+    // 2. A call to state.session.user.id.toString() with a matching function stack (author ID = user ID).
+    // 3. A getter to `state.session.session.user.username` on the same event loop cycle. Reset to step 0.
+
+    const originalNumberToString = Number.prototype.toString;
+    Number.prototype.toString = function (...args) {
+      if (!currentlyRerendering) return originalNumberToString.apply(this, args);
+      if (this !== redux.state?.session?.session?.user?.id) return originalNumberToString.apply(this, args);
+      if (!beingCalledByMapStateToProps()) return originalNumberToString.apply(this, args);
+
+      step++;
+      if (step === 3) {
+        // Huh, weird
+        step = 0;
+        return originalNumberToString.apply(this, args);
+      }
+
+      queueMicrotask(() => (step = 0));
+
+      return originalNumberToString.apply(this, args);
+    };
+
     // The `isEditable` variable is declared as follows: (scratch-www/src/views/preview/project-view.jsx)
     //   isEditable = isLoggedIn && (authorUsername === state.session.session.user.username || state.permissions.admin === true)
     // The idea is to modify the Redux state object so that `state.session.session.user.username` is actually different from
@@ -128,8 +152,10 @@ export default async function ({ addon, msg }) {
           return Reflect.get(target, property, receiver);
         }
 
-        if (beingCalledByMapStateToProps()) {
+        if (step === 2 && beingCalledByMapStateToProps()) {
           // Return an empty string, which will not be equal to `authorUsername`, turning `isEditable` into `false`.
+          step = 0;
+          console.trace("Returning a fake username to mapStateByProps");
           return "";
         }
         return Reflect.get(target, property, receiver);
