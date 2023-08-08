@@ -1,4 +1,4 @@
-export default async function ({ addon, msg }) {
+export default async function ({ addon, console, msg }) {
   const enableSwitcher = document.createElement("button");
   const enableSwitcherText = document.createElement("span");
   enableSwitcher.id = "sa-preview-notes-instructions";
