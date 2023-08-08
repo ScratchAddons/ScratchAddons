@@ -15,20 +15,6 @@
       "runAtComplete": true
     }
   ],
-  "userstyles": [
-    {
-      "url": "userstyle.css",
-      "matches": ["projects"]
-    }
-  ],
-  "settings": [
-    {
-      "type": "boolean",
-      "id": "enable-default",
-      "name": "Show preview by default",
-      "default": false
-    }
-  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.34.0"
