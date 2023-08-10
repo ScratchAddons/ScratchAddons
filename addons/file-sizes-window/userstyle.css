@@ -18,3 +18,8 @@
 .sa-file-size-popup p {
   margin: 0.5em 0;
 }
+
+.sa-file-size-popup [class*="modal_header_"] {
+  position: sticky;
+  top: 0;
+}
