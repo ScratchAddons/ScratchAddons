@@ -6,24 +6,3 @@
   font-weight: bold;
   text-decoration: underline;
 }
-
-/* taken from animated-thumb */
-.sa-file-size-popup {
-  box-sizing: border-box;
-  width: 700px;
-  max-height: min(800px, 80vh);
-  max-width: 85%;
-  margin-top: 12vh;
-  overflow-y: auto !important;
-}
-.sa-file-size-popup-content {
-  padding: 1.5rem 2.25rem;
-}
-.sa-file-size-info {
-  font-style: italic;
-  color: #aaa;
-}
-
-.sa-file-size-popup p {
-  margin: 0.5em 0;
-}

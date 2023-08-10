@@ -1,5 +1,4 @@
 {
-  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
   "name": "Costume and sound file size",
   "description": "Shows file sizes of costumes and sounds. If any costume or sound exceeds 10MB, the project will not save.",
   "credits": [
@@ -21,5 +20,5 @@
       "matches": ["projects"]
     }
   ],
-  "versionAdded": "1.31.0"
+  "versionAdded": "1.35.0"
 }
