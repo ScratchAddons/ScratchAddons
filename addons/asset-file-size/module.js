@@ -21,27 +21,27 @@ export function getSizeString(bytes, isMebi = false, precision = 100) {
   let number, measurement;
 
   if (isMebi) {
-	if (bytes < KiB) {
-	  number = bytes;
-	  measurement = "B";
-	} else if (bytes < MiB) {
-	  number = Math.floor((bytes / KiB) * precision) / precision;
-	  measurement = "KiB";
-	} else {
-	  number = Math.floor((bytes / MiB) * precision) / precision;
-	  measurement = "MiB";
-	}
+    if (bytes < KiB) {
+      number = bytes;
+      measurement = "B";
+    } else if (bytes < MiB) {
+      number = Math.floor((bytes / KiB) * precision) / precision;
+      measurement = "KiB";
+    } else {
+      number = Math.floor((bytes / MiB) * precision) / precision;
+      measurement = "MiB";
+    }
   } else {
-	if (bytes < KB) {
-	  number = bytes;
-	  measurement = "B";
-	} else if (bytes < MB) {
-	  number = Math.floor((bytes / KB) * precision) / precision;
-	  measurement = "KB";
-	} else {
-	  number = Math.floor((bytes / MB) * precision) / precision;
-	  measurement = "MB";
-	}
+    if (bytes < KB) {
+      number = bytes;
+      measurement = "B";
+    } else if (bytes < MB) {
+      number = Math.floor((bytes / KB) * precision) / precision;
+      measurement = "KB";
+    } else {
+      number = Math.floor((bytes / MB) * precision) / precision;
+      measurement = "MB";
+    }
   }
 
   return `${number}${measurement}`;
