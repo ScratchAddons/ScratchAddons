@@ -1,5 +1,5 @@
-import * as Sizes from "module.js";
-export default async function ({ addon, msg, console }) {
+import * as Sizes from "./module.js";
+export default async function ({ addon }) {
   const vm = addon.tab.traps.vm;
 
   function updateAssetSizes() {
@@ -18,26 +18,29 @@ export default async function ({ addon, msg, console }) {
 
       const spriteInfo = card.querySelector("[class*='sprite-selector-item_sprite-details']");
 
-      // compact costume image sizes, to make space for the filesize
-      if (spriteInfo.textContent.includes(" x ")) {
-        spriteInfo.textContent = spriteInfo.textContent.replace(" x ", "x");
-      }
-
       let sizeText = spriteInfo.querySelector(".sa-size-text");
-      if (!sizeText) {
-        const space = spriteInfo.appendChild(document.createElement("span"));
-        space.textContent = " ";
+      if (sizeText) sizeText.remove();
 
-        sizeText = spriteInfo.appendChild(document.createElement("span"));
-        sizeText.classList.add("sa-size-text");
+      // compact costume image sizes, to make space for the filesize
+      spriteInfo.textContent = spriteInfo.textContent.replace(" x ", "x");
+      if (addon.self.disabled) {
+        // restore x when disabled
+        spriteInfo.textContent = spriteInfo.textContent.replace("x", " x ");
+        continue;
       }
+
+      const space = spriteInfo.appendChild(document.createElement("span"));
+      space.textContent = " ";
+
+      sizeText = spriteInfo.appendChild(document.createElement("span"));
+      sizeText.classList.add("sa-size-text");
 
       const assetSize = assets[index].asset.data.byteLength;
       // more available space on sound asset cards;
       // and it's more likely you'll run into the asset size limit
       // from sounds rather than costumes
       sizeText.textContent = `(${Sizes.getSizeString(assetSize, false, isSounds ? 100 : 1)})`;
-      sizeText.title = Sizes.getSizeString(assetSize, false, 1000);
+      sizeText.title = Sizes.getSizeString(assetSize, false, 10000);
 
       if (assetSize > Sizes.ASSET_SIZE_LIMIT) {
         sizeText.classList.add("sa-size-limit-warn");
@@ -55,6 +58,9 @@ export default async function ({ addon, msg, console }) {
       queueMicrotask(updateAssetSizes);
     }
   });
+
+  addon.self.addEventListener("disabled", updateAssetSizes);
+  addon.self.addEventListener("reenabled", updateAssetSizes);
 
   while (true) {
     await addon.tab.waitForElement("[class*='selector_list-area']", {

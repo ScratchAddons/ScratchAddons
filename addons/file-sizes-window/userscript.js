@@ -1,5 +1,7 @@
 import * as Sizes from "../asset-file-size/module.js";
-export default async function ({ addon, msg, console }) {
+export default async function ({ addon, msg }) {
+  const vm = addon.tab.traps.vm;
+
   const fileSizesModal = addon.tab.createModal(msg("modal-title"), { useEditorClasses: true });
   fileSizesModal.closeButton.addEventListener("click", fileSizesModal.close);
 
@@ -23,13 +25,11 @@ export default async function ({ addon, msg, console }) {
       info.textContent = msg("project-json-description");
 
       const bytes = vm.toJSON().length;
-      const sizeText = `${Sizes.getSizeString(bytes, true, 1000)}/${Sizes.getSizeString(
-        Sizes.PROJECT_SIZE_LIMIT,
-        true
-      )}`;
+      const sizeText = Sizes.getSizeString(bytes, true, 1000)
+      const limitText = Sizes.getSizeString(Sizes.PROJECT_SIZE_LIMIT, true);
 
       const text = c.appendChild(document.createElement("p"));
-      text.textContent = msg("project-json-size", { fileSize: sizeText });
+      text.textContent = msg("project-json-size", { fileSize: sizeText, limit: limitText });
     }
 
     // large assets list
@@ -48,14 +48,15 @@ export default async function ({ addon, msg, console }) {
         const asset = largestAsset;
 
         const assetName = asset.asset.name;
-        const fileSize = `${Sizes.getSizeString(asset.size, false, 1000)}/${Sizes.getSizeString(
+        const fileSize = Sizes.getSizeString(asset.size, false, 1000);
+        const limit = Sizes.getSizeString(
           Sizes.VISIBLE_ASSET_SIZE_LIMIT
-        )}`;
+        );
         const sprite = asset.target.sprite.name;
 
-        const costumeString = msg("assets-none-costume", { assetName, fileSize, sprite });
-        const backdropString = msg("assets-none-backdrop", { assetName, fileSize });
-        const soundString = msg("assets-none-sound", { assetName, fileSize, sprite });
+        const costumeString = msg("assets-none-costume", { assetName, fileSize, limit, sprite });
+        const backdropString = msg("assets-none-backdrop", { assetName, fileSize, limit });
+        const soundString = msg("assets-none-sound", { assetName, fileSize, limit, sprite });
 
         noLargeAssets.textContent =
           asset.type === "sound" ? soundString : asset.type === "backdrop" ? backdropString : costumeString;
@@ -65,7 +66,7 @@ export default async function ({ addon, msg, console }) {
           const li = largeAssetsList.appendChild(document.createElement("li"));
 
           const assetName = asset.asset.name;
-          const fileSize = `${Sizes.getSizeString(asset.size, false, 1000)}`;
+          const fileSize = Sizes.getSizeString(asset.size, false, 1000);
           const sprite = asset.target.sprite.name;
 
           const costumeString = msg("assets-item-costume", { assetName, fileSize, sprite });
@@ -121,9 +122,11 @@ export default async function ({ addon, msg, console }) {
     return { largestAsset, largeAssets };
   }
 
+  addon.self.addEventListener("disabled", () => fileSizesModal.close());
+
   while (true) {
     const fileMenu = await addon.tab.waitForElement(
-      "[class*='menu-bar_file-group'] > div:nth-child(3) > div > [class*='menu_menu_']",
+      "[class*='menu-bar_file-group'] > div:nth-child(3) > [class*='menu-bar_menu-bar-menu'] > [class*='menu_menu_']",
       { markAsSeen: true }
     );
 
@@ -131,6 +134,7 @@ export default async function ({ addon, msg, console }) {
     menuItem.className = addon.tab.scratchClass("menu_menu-item", "menu_hoverable", "menu_menu-section");
 
     menuItem.textContent = msg("menu-item");
+    addon.tab.displayNoneWhileDisabled(menuItem, {display: "block"});
 
     menuItem.addEventListener("click", (e) => {
       addon.tab.redux.dispatch({

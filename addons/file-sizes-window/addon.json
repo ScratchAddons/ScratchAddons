@@ -1,6 +1,6 @@
 {
   "name": "Project file sizes window",
-  "description": "Adds a menu to the File menu that shows anything that exceeds a project size limit.",
+  "description": "Adds a menu to the File menu that shows anything that exceeds the 10MB costume/sound size limit or the 5MiB project.json size limit.",
   "credits": [
     {
       "name": "CST1229",
@@ -20,5 +20,7 @@
       "matches": ["projects"]
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.35.0"
 }
