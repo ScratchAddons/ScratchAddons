@@ -123,7 +123,6 @@ export default async function ({ addon, msg, console }) {
   }
   async function uploadImage(img, fileType) {
     progressElement = toolbar.appendChild(document.createElement("li"));
-    progressElement.className = "uploadStatus";
 
     const hash = SparkMD5.ArrayBuffer.hash(img);
     progressElement.innerText = msg("uploading");

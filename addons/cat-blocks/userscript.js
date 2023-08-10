@@ -1,5 +1,5 @@
 /**
- * Based on https://github.com/LLK/scratch-blocks/compare/hotfix/totally-normal-2021 (Apache 2.0)
+ * Based on https://github.com/scratchfoundation/scratch-blocks/compare/hotfix/totally-normal-2021 (Apache 2.0)
  * It has been modified to work properly in our environment and fix some bugs.
  */
 

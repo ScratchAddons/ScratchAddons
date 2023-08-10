@@ -1,1 +1,1 @@
-{"pause/pause":"Duraklat","pause/@name":"Duraklat butonu","pause/@description":"Yeşil bayrağın yanına bir duraklat düğmesi ekler."}
+{"pause/pause":"Duraklat","pause/play":"Devam","pause/@name":"Duraklat butonu","pause/@description":"Yeşil bayrağın hemen yanına projeyi durdurabilmeniz için bir düğme ekler.","pause/@info-keybind":"Proje aynı zamanda Alt+X ile durdurulabilir (macOS'ta Option+X)","pause/@update":"Artık proje durdurma için tuş ataması yapılabilir."}
