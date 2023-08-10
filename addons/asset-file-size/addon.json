@@ -1,6 +1,6 @@
 {
   "name": "Costume and sound file size",
-  "description": "Shows file sizes of costumes and sounds. If any costume or sound exceeds 10MB, the project will not save.",
+  "description": "Shows file sizes of costumes and sounds. If any costume or sound exceeds Scratch's 10MB limit, the project will not save.",
   "credits": [
     {
       "name": "CST1229",
