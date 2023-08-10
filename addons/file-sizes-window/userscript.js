@@ -25,7 +25,7 @@ export default async function ({ addon, msg }) {
       info.textContent = msg("project-json-description");
 
       const bytes = vm.toJSON().length;
-      const sizeText = Sizes.getSizeString(bytes, true, 1000)
+      const sizeText = Sizes.getSizeString(bytes, true, 1000);
       const limitText = Sizes.getSizeString(Sizes.PROJECT_SIZE_LIMIT, true);
 
       const text = c.appendChild(document.createElement("p"));
@@ -49,9 +49,7 @@ export default async function ({ addon, msg }) {
 
         const assetName = asset.asset.name;
         const fileSize = Sizes.getSizeString(asset.size, false, 1000);
-        const limit = Sizes.getSizeString(
-          Sizes.VISIBLE_ASSET_SIZE_LIMIT
-        );
+        const limit = Sizes.getSizeString(Sizes.VISIBLE_ASSET_SIZE_LIMIT);
         const sprite = asset.target.sprite.name;
 
         const costumeString = msg("assets-none-costume", { assetName, fileSize, limit, sprite });
@@ -134,7 +132,7 @@ export default async function ({ addon, msg }) {
     menuItem.className = addon.tab.scratchClass("menu_menu-item", "menu_hoverable", "menu_menu-section");
 
     menuItem.textContent = msg("menu-item");
-    addon.tab.displayNoneWhileDisabled(menuItem, {display: "block"});
+    addon.tab.displayNoneWhileDisabled(menuItem, { display: "block" });
 
     menuItem.addEventListener("click", (e) => {
       addon.tab.redux.dispatch({
