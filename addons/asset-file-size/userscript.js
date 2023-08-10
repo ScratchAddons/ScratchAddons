@@ -1,4 +1,4 @@
-import * as Sizes from "module.js"
+import * as Sizes from "module.js";
 export default async function ({ addon, msg, console }) {
   const vm = addon.tab.traps.vm;
 

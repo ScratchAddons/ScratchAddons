@@ -1,4 +1,4 @@
-import * as Sizes from "../asset-file-size/module.js"
+import * as Sizes from "../asset-file-size/module.js";
 export default async function ({ addon, msg, console }) {
   const fileSizesModal = addon.tab.createModal(msg("modal-title"), { useEditorClasses: true });
   fileSizesModal.closeButton.addEventListener("click", fileSizesModal.close);
@@ -23,7 +23,10 @@ export default async function ({ addon, msg, console }) {
       info.textContent = msg("project-json-description");
 
       const bytes = vm.toJSON().length;
-      const sizeText = `${Sizes.getSizeString(bytes, true, 1000)}/${Sizes.getSizeString(Sizes.PROJECT_SIZE_LIMIT, true)}`;
+      const sizeText = `${Sizes.getSizeString(bytes, true, 1000)}/${Sizes.getSizeString(
+        Sizes.PROJECT_SIZE_LIMIT,
+        true
+      )}`;
 
       const text = c.appendChild(document.createElement("p"));
       text.textContent = msg("project-json-size", { fileSize: sizeText });
@@ -45,9 +48,9 @@ export default async function ({ addon, msg, console }) {
         const asset = largestAsset;
 
         const assetName = asset.asset.name;
-        const fileSize = `${Sizes.getSizeString(asset.size, false, 1000)
-          }/${Sizes.getSizeString(Sizes.VISIBLE_ASSET_SIZE_LIMIT)
-          }`;
+        const fileSize = `${Sizes.getSizeString(asset.size, false, 1000)}/${Sizes.getSizeString(
+          Sizes.VISIBLE_ASSET_SIZE_LIMIT
+        )}`;
         const sprite = asset.target.sprite.name;
 
         const costumeString = msg("assets-none-costume", { assetName, fileSize, sprite });
@@ -117,7 +120,6 @@ export default async function ({ addon, msg, console }) {
 
     return { largestAsset, largeAssets };
   }
-
 
   while (true) {
     const fileMenu = await addon.tab.waitForElement(
