@@ -15,6 +15,7 @@ export default async function ({ addon, console, msg }) {
   addon.tab.redux.addEventListener("statechanged", (e) => {
     // We don't want a state change to disable the preview mode.
     if (!addon.tab.redux.state.scratchGui.mode.isPlayerOnly) return;
+    if (e.detail.action._saProjectDescription) return;
     if (avoidInfiniteLoops > 5) console.log("Avoiding an infinite loop");
     else if (currentlyEnabled) {
       const num = ++avoidInfiniteLoops;
@@ -90,6 +91,7 @@ export default async function ({ addon, console, msg }) {
       type: "SET_FETCH_STATUS",
       infoType: "parent",
       status: addon.tab.redux.state.preview.status.parent, // We do not actually change anything here.
+      _saProjectDescription: true,
     });
   }
 
