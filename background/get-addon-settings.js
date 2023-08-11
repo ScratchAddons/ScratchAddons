@@ -7,6 +7,7 @@ import minifySettings from "../libraries/common/minify-settings.js";
  - editor-dark-mode 10 (bumped 4 times in v1.33.2)
  - editor-theme3 3 (last bumped in v1.32)
  - dark-www 5 (bumped five times in v1.33.2)
+ - forum-quote-code-beautifier 1 (last bumped in v1.34)
  */
 
 const areColorsEqual = (currentColor, oldPresetColor) => {
@@ -592,12 +593,12 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             addonSettings["comment-color"] = "#FEF49C";
           }
         }
+
         if (addonId === "forum-quote-code-beautifier") {
-          if (settings.bordercolor === "#28A5DA") {
-            // Transistion v1.33 to v1.34
-            settings.bordercolor = "#855CD6";
+          updatePresetIfMatching(settings, 1, { bordercolor: "#28A5DA" }, () => {
             madeAnyChanges = madeChangesToAddon = true;
-          }
+            settings.bordercolor = "#855cd6";
+          });
         }
       }
 
