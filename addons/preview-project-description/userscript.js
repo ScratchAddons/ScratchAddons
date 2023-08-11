@@ -157,7 +157,9 @@ export default async function ({ addon, console, msg }) {
         if (step === 2 && beingCalledByMapStateToProps()) {
           // Return an empty string, which will not be equal to `authorUsername`, turning `isEditable` into `false`.
           step = 0;
+          console.groupCollapsed("[SA] preview-project-description [page]");
           console.trace("Returning a fake username to mapStateByProps");
+          console.groupEnd();
           return "";
         }
         return Reflect.get(target, property, receiver);
