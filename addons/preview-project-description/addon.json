@@ -7,7 +7,7 @@
       "link": "https://scratch.mit.edu/users/Steve0Greatness"
     }
   ],
-  "tags": ["community", "projectPage"],
+  "tags": ["community", "projectPage", "beta"],
   "userscripts": [
     {
       "url": "userscript.js",
