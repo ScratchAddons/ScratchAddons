@@ -1,0 +1,6 @@
+.sa-nfe-checker-status {
+  text-decoration: dashed underline;
+}
+.sa-nfe-checker-status:hover {
+  cursor: help;
+}
