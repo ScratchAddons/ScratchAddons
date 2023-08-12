@@ -3,16 +3,12 @@ export default async function ({ addon, console, msg }) {
   const apiResponse = await (await fetch(`https://scratch.mit.edu/projects/${projectId}/remixtree/bare/`)).text();
   let status = "";
   if (apiResponse === "no data") {
-    console.log("no data");
     status = "unavailable";
   } else {
-    console.log("here");
     const parsedResponse = JSON.parse(apiResponse);
     const moderationStatus = parsedResponse[Number(projectId)].moderation_status;
     status = moderationStatus === "safe" ? "fe" : moderationStatus === "notsafe" ? "nfe" : "unreviewed";
   }
-
-  console.log(status);
 
   const addStatus = async () => {
     if (addon.tab.editorMode !== "projectpage") {
