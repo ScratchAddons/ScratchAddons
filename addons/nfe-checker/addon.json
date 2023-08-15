@@ -1,13 +1,6 @@
 {
   "name": "Project moderation status display",
   "description": "Show the moderation status of a project.",
-  "info": [
-    {
-      "type": "notice",
-      "text": "The way we get this information requires the project to be part of a remix tree (either have a remix or be a remix).",
-      "id": "req-remix-tree"
-    }
-  ],
   "tags": ["community", "projectPage"],
   "versionAdded": "1.34.0",
   "userscripts": [
