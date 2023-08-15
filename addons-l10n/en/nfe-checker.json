@@ -4,7 +4,7 @@
   "nfe-checker/fe": "Unrestricted",
   "nfe-checker/title-fe": "The Scratch Team has reviewed this project and deemed it safe for everyone.",
   "nfe-checker/nfe": "Restricted",
-  "nfe-checker/title-nfe": "This project reviewed by a Scratch Team member and while considered safe for Scratch, won't be available by searching for it and can't appear on the search bar. This rarely happens and it happens with reason. Do not create forum topics or otherwise try to get the Scratch Team to reconsider. If you want to ask why this decision happened, use the Contact Us link in the footer.",
+  "nfe-checker/title-nfe": "This project has been reviewed by a Scratch Team member and was considered okay for Scratch but won't be listed in search results or the Explore page. This rarely happens and it happens with reason. Do not publicly appeal (e.g. create forum topics) or otherwise try to get the Scratch Team to reconsider. If you want to ask why this decision happened, use the Contact Us link in the footer.",
   "nfe-checker/unavailable": "Unavailable",
   "nfe-checker/title-unavailable": "This project is not part of a remix tree (it has no remix and is not a remix)."
 }
