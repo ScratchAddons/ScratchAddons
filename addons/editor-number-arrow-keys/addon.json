@@ -104,6 +104,10 @@
       "name": "World_Languages"
     }
   ],
+  "latestUpdate": {
+    "version": "1.35.0",
+    "temporaryNotice": "You can now also increment input fields that are not in blocks, like the sprite properties."
+  },
   "dynamicDisable": true,
   "dynamicEnable": true
 }
