@@ -37,7 +37,7 @@ Read the [documentation](https://scratchaddons.com/docs/develop/getting-started/
 
 ### About the extension
 
-The Scratch Addons browser extension provides a settings page where users can enable, disable and configure addon settings. The extension interprets addon manifests, stores the user's settings, and provides APIs to userscripts. A new version of the extension is sent to stores at least once a month.
+The Scratch Addons browser extension provides a settings page where users can enable, disable and configure addon settings. The extension interprets addon manifests, stores the user's settings, and provides APIs to userscripts. A new version of the extension is released to the stores regularly with new addons and features.
 
 ### Addons beyond the Scratch Addons browser extension
 
