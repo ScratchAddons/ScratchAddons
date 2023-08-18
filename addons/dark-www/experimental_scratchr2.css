@@ -704,3 +704,11 @@ input.link.black {
 .iframeshim {
   color-scheme: light;
 }
+
+/* Forum errors */
+
+.djangobb ul.errorlist {
+  background-color: var(--darkWww-box);
+  border-color: var(--darkWww-page-forumErrorColor);
+  color: var(--darkWww-page-forumErrorColor);
+}

@@ -1,6 +1,6 @@
 {
-  "name": "Cooldown display for posting in the forums",
-  "description": "After submitting a forum post, displays a countdown showing when you can post again.",
+  "name": "Forum post cooldown display",
+  "description": "After submitting a forum post, displays a countdown on the submit button showing how long you have to wait before posting again.",
   "tags": ["community", "forums"],
   "versionAdded": "1.34.0",
   "userscripts": [
