@@ -27,9 +27,9 @@ Scratch Addons combines new and existing features and themes for the [Scratch](h
 
 An addon mainly consists of one or more [userscripts](https://scratchaddons.com/docs/develop/userscripts/) (written in JavaScript) or [userstyles](https://scratchaddons.com/docs/develop/userstyles/) (written in CSS) that run on the Scratch website or project editor.
 
-Each addon declares its own [addon manifest](https://scratchaddons.com/docs/reference/addon-manifest/) (`addon.json` file). This file specifies under which circumstances each one of its userscripts and userstyles should be injected into the page. It also contains user-facing information, such as the description of the feature, and more information about the addon's settings.
+Each addon declares its own [addon manifest](https://scratchaddons.com/docs/reference/addon-manifest/) (`addon.json` file). This file specifies under which circumstances each one of its userscripts and userstyles should be injected into the page. It also contains user-facing information, such as the description of the feature, and information about the addon's settings.
 
-Userscripts work similarly to [extension content scripts](https://developer.chrome.com/docs/extensions/content_scripts/), but they also have access to `addon.*` APIs. Userscripts can use these built-in utilities for various purposes: waiting until a certain element exists on the page, listening to URL change events, getting a reference to the Scratch VM object, etc.
+Userscripts have access to `addon.*` APIs. Userscripts can use these built-in utilities for various purposes: waiting until a certain element exists on the page, listening to URL change events, getting a reference to the Scratch VM object, etc.
 
 Addons are designed to be compatible with each other. They are also developed with performance, internationalization, accessibility, and privacy in mind.
 
@@ -37,7 +37,7 @@ Read the [documentation](https://scratchaddons.com/docs/develop/getting-started/
 
 ### About the extension
 
-The Scratch Addons browser extension provides a settings page where users can enable, disable and configure addon settings. The extension interprets addon manifests, stores the user's settings, and provides APIs to userscripts. A new version of the extension is released to the stores regularly with new addons and features.
+The Scratch Addons browser extension provides a settings page where users can enable, disable and configure addons. The extension interprets addon manifests, stores the user's settings, and provides APIs to userscripts. A new version of the extension is released to the stores regularly with new addons and features.
 
 ### Addons beyond the Scratch Addons browser extension
 
@@ -52,17 +52,17 @@ Other open-source projects (such as Scratch forks) can also make use of the addo
 - `libraries`: Third-party libraries and other utilities, some of which are used by addons.
 
 #### Others
-- `.github`: GitHub templates, workflows and contributing files.
-- `_locales`: Translation strings for the browser extension (excludes addons).
+- `.github`: GitHub templates, workflows, and contributing files.
+- `_locales`: Translation strings for the browser extension (excluding addons).
 - `background`: Background scripts for the extension.
 - `content-scripts`: Content scripts, which among other things, execute userscripts and inject userstyles to the page.
-- `images`: Logos, screenshots and icons. Addon-specific images belong in the addon's directory instead.
+- `images`: Logos, screenshots and icons (excluding addon-specific images).
 - `popups`: Addon pages that are only accessible through the extension popup (for example, Scratch Messaging).
 - `webpages`: The settings page, extension popup, and other pages.
 
 ## Installation
 
-Building is not required unless working with the `webpages` directory. The best way to download the source is with Git:
+No building is required. The best way to download the source is with Git:
 
 ```sh
 git clone https://github.com/ScratchAddons/ScratchAddons.git
@@ -76,7 +76,7 @@ To load the extension into most Chromium-based browsers, go to `chrome://extensi
 
 ### Loading the extension (Firefox)
 
-Go to `about:debugging`, select "This Firefox", click "Load Temporary Add-on..." and select the `manifest.json` file in the `ScratchAddons` folder.
+Go to `about:debugging`, select "This Firefox", click "Load Temporary Add-on...", and select the `manifest.json` file in the `ScratchAddons` folder.
 
 > **Note**
 > Firefox extensions loaded this way are removed when the browser is closed.
