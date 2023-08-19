@@ -81,17 +81,6 @@ Go to `about:debugging`, select "This Firefox", click "Load Temporary Add-on..."
 > **Note**
 > Firefox extensions loaded this way are removed when the browser is closed.
 
-### Building the settings page
-
-To setup the settings page for development, run these commands in the `webpages` directory:
-
-```sh
-npm install
-npm run dev
-```
-
-See [/webpages/README.md](https://github.com/ScratchAddons/ScratchAddons/tree/master/webpagess#readme) for more information about settings page development.
-
 ## Contributing
 
 ### Suggestions and bug reports
