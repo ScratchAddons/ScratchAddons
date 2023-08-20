@@ -123,12 +123,12 @@
 [class*="gui_body-wrapper_"] [class*="stage-selector_is-selected_"] {
   box-shadow: 0px 0px 0px 2px var(--editorDarkMode-primary-transparent35, hsl(260deg 60% 60% / 35%));
 }
-[class*="input_input-small"][type=text],
-[class*="sprite-info_larger-input"] input[type=text] {
+[class*="input_input-small"][type="text"],
+[class*="sprite-info_larger-input"] input[type="text"] {
   /* Vanilla is width:4rem */
   width: 2.5rem;
 }
-[class*="input_input-small"][type=number] {
+[class*="input_input-small"][type="number"] {
   /* Vanilla is width:4rem but browsers take part of it for the up/down arrows */
   width: 3.5rem;
 }
