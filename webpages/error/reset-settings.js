@@ -32,5 +32,5 @@ document.querySelector("#reset-settings-btn").onclick = () => {
   setTimeout(() => {
     alert("All settings were reset. The extension will reload.");
     chrome.runtime.reload();
-  }, 1500)
+  }, 1500);
 };
