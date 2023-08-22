@@ -84,12 +84,12 @@ export default async function ({ addon, console }) {
         //Clicking into the search bar
         if (addon.self.disabled) return; //Don't expand if addon disabled
         exsearch_siteNav.style.width = "0px"; //Hide the site navigation (make them invisible but maintain keyboard-focusablility)
-        exsearch_siteNav.style.opacity = "0";
+        exsearch_siteNav.style.overflow = "hidden";
       }
       function exsearch_clickOut() {
         //Clicking out of  the search bar
         exsearch_siteNav.style.removeProperty("width"); //Show the site nav
-        exsearch_siteNav.style.removeProperty("opacity");
+        exsearch_siteNav.style.removeProperty("overflow");
       }
       //Events
       exsearch_searchBarInput.addEventListener("focusin", exsearch_clickIn);
