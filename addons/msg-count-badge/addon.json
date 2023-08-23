@@ -1,5 +1,5 @@
 {
-  "name": "Message count on extension icon",
+  "name": "Extension icon message count",
   "description": "Adds the current message count in the Scratch Addons icon.",
   "tags": ["popup", "recommended"],
   "enabledByDefault": true,

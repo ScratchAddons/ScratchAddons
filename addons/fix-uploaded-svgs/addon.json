@@ -1,5 +1,5 @@
 {
-  "name": "SVG uploads fix",
+  "name": "Fix SVG uploads",
   "description": "Fixes a bug in the Scratch editor that makes uploaded SVG files created with some image editors, such as Affinity Designer, broken.",
   "userscripts": [
     {

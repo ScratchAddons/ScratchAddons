@@ -1,5 +1,5 @@
 {
-  "name": "Customizable navigation bar",
+  "name": "Custom navigation bar",
   "description": "Choose a list of links to be displayed in the navigation bar.",
   "userscripts": [
     {

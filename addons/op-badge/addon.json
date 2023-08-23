@@ -1,5 +1,5 @@
 {
-  "name": "Highlight project creator in comments",
+  "name": "Project creator highlighter",
   "description": "Adds a badge next to the project creator in project comments sections. Also adds a badge next to the original poster in forum topics.",
   "tags": ["community", "forums", "featured", "comments"],
   "enabledByDefault": false,

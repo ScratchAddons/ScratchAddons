@@ -1,5 +1,5 @@
 {
-  "name": "Sprite deletion confirmation",
+  "name": "Confirm sprite deletion",
   "description": "Asks if you're sure when deleting a sprite inside a project.",
   "userscripts": [
     {

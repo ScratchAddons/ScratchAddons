@@ -1,5 +1,5 @@
 {
-  "name": "Thumbnails setter",
+  "name": "Thumbnail setter",
   "description": "Adds a button to the bottom-right of the project page to set the thumbnail of your project to any image (including gifs).",
   "userscripts": [
     {
