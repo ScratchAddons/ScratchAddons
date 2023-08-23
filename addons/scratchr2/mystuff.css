@@ -216,3 +216,6 @@
   box-shadow: 0 0 0 4px hsla(163, 85%, 40%, 0.25);
   border-color: hsl(163, 85%, 40%);
 }
+#sidebar li.sub-list {
+    margin-left: 0 !important;
+}
