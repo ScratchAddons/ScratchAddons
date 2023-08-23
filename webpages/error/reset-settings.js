@@ -13,21 +13,34 @@ document.querySelector("#reset-settings-btn").onclick = () => {
 
   try {
     chrome.storage.local.clear();
-  } catch (err) {}
+  } catch (err) {
+    console.error(err);
+  }
   try {
     chrome.storage.sync.clear();
-  } catch (err) {}
+  } catch (err) {
+    console.error(err);
+  }
   try {
     localStorage.clear();
-  } catch (err) {}
+  } catch (err) {
+    console.error(err);
+  }
   try {
+    // We should try to list all IndexedDB databases here so that
+    // we can actually clear them all in Firefox.
+    const IDB_DATABASES = ["notifier", "messaging"];
+
     (async () => {
-      const dbs = await window.indexedDB.databases();
-      dbs.forEach((db) => {
-        window.indexedDB.deleteDatabase(db.name);
+      const dbs = window.indexedDB.databases ? await window.indexedDB.databases() : null;
+      const dbNames = dbs ? IDB_DATABASES : dbs.map((db) => db.name);
+      dbNames.forEach((name) => {
+        window.indexedDB.deleteDatabase(name);
       });
     })();
-  } catch (err) {}
+  } catch (err) {
+    console.error(err);
+  }
 
   setTimeout(() => {
     alert("All settings were reset. The extension will reload.");
