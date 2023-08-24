@@ -3,6 +3,14 @@
   "description": "Allow scripts, costumes, and sounds to be dragged and dropped onto different sprites without the sprites jumping around within the sprite pane.",
   "credits": [
     {
+      "name": "Xan",
+      "link": "https://scratch.mit.edu/users/-Xanimation-/"
+    },
+    {
+      "name": "CST1229",
+      "link": "https://github.com/cst1229/"
+    },
+    {
       "name": "DNin01",
       "link": "https://github.com/DNin01"
     }
