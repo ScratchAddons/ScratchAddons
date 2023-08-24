@@ -5,3 +5,9 @@ html {
 #browser-info {
   font-weight: bold;
 }
+
+#restart-url {
+  display: inline-block;
+  margin: 0 6px 0 6px;
+  font-family: monospace;
+}

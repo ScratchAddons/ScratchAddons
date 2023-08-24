@@ -16,4 +16,7 @@ const getVersion = () => {
 
 const info = getVersion();
 if (info.browser === "Chrome") info.browser = "Chrome/Edge/Brave/Chromium";
+else if (info.browser === "Firefox") {
+  $("#restart-url").textContent = "about:restartrequired";
+}
 $("#browser-info").textContent = `${info.browser} ${info.version}`;
