@@ -1,6 +1,7 @@
 /* Include */
 a,
 a:link,
+a:not([href]),
 a:hover,
 a:active,
 a.black:hover,
