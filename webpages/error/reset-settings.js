@@ -33,7 +33,7 @@ document.querySelector("#reset-settings-btn").onclick = () => {
 
     (async () => {
       const dbs = window.indexedDB.databases ? await window.indexedDB.databases() : null;
-      const dbNames = dbs ? IDB_DATABASES : dbs.map((db) => db.name);
+      const dbNames = !dbs ? IDB_DATABASES : dbs.map((db) => db.name);
       dbNames.forEach((name) => {
         window.indexedDB.deleteDatabase(name);
       });
