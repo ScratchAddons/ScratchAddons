@@ -1,5 +1,5 @@
 {
-  "name": "Forum copy code button",
+  "name": "Forum post code copier",
   "description": "Adds a \"copy code\" button above code boxes in forum posts that copies the contents into the clipboard.",
   "credits": [
     {
