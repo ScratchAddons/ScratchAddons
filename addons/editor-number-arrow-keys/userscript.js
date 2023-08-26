@@ -6,6 +6,7 @@ export default async function ({ addon }) {
     one: 1,
     ten: 10,
   };
+  const inputMap = new WeakMap();
 
   const amountOfDecimals = (numStr) => {
     if (!numStr.includes(".")) return 0;
@@ -108,6 +109,33 @@ export default async function ({ addon }) {
     if (e.target.className.includes("input_input-form_")) {
       Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());
       e.target.dispatchEvent(new Event("input", { bubbles: true }));
+
+      // The user probably wants to visualize how the sprite changes size, coordinates, direction, etc.
+      // without having to press Enter. But updating in realtime could be bad for performance.
+      const FLUSH_AFTER_MS = 300; // Number of ms to wait until the input change takes effect.
+      // Force flush after incrementing/decrementing 5 times in a row, even if it's not been 300ms:
+      const FLUSH_AFTER_N_STEPS = 5;
+
+      // https://github.com/scratchfoundation/scratch-gui/blob/develop/src/components/forms/buffered-input-hoc.jsx
+      // This function calls handleFlush() on the buffered input when called.
+      const flushInput = () => e.target.dispatchEvent(new Event("blur", { bubbles: true }));
+
+      const currentTime = document.timeline.currentTime;
+      if (!inputMap.has(e.target)) inputMap.set(e.target, { time: null, steps: -1 });
+      inputMap.get(e.target).time = currentTime;
+      const newNumOfSteps = (inputMap.get(e.target).steps += 1);
+
+      if (newNumOfSteps === FLUSH_AFTER_N_STEPS) {
+        flushInput();
+        inputMap.delete(e.target);
+      } else {
+        setTimeout(() => {
+          if (inputMap.get(e.target).time === currentTime) {
+            flushInput();
+            inputMap.delete(e.target);
+          }
+        }, FLUSH_AFTER_MS);
+      }
     } else {
       e.target.value = newValue.toString();
     }
