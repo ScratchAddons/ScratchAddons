@@ -14,14 +14,14 @@
       "link": "https://github.com/CST1229/"
     }
   ],
-  "tags": ["editor", "costumeEditor"],
+  "tags": ["editor", "costumeEditor", "featured"],
   "userscripts": [
     {
       "url": "userscript.js",
       "matches": ["projects"]
     }
   ],
-  "versionAdded": "1.30.0",
+  "versionAdded": "1.35.0",
   "dynamicEnable": true,
   "dynamicDisable": true
 }
