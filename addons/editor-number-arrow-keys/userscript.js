@@ -105,6 +105,11 @@ export default async function ({ addon }) {
       shiftDecimalPointToRight(e.target.value, 5) + shiftDecimalPointToRight(changeBy.toString(), 5);
     const newValue = shiftDecimalPointToLeft(newValueAsInt.toString(), 5);
 
-    e.target.value = newValue.toString();
+    if (e.target.className.includes("input_input-form_")) {
+      Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());
+      e.target.dispatchEvent(new Event("input", { bubbles: true }));
+    } else {
+      e.target.value = newValue.toString();
+    }
   });
 }
