@@ -4,7 +4,7 @@
   "description": "Hold Ctrl while scaling an object on its sides to skew it. Hold Alt while skewing an object to skew it from its center.",
   "info": [
     {
-      "text": "On macOS, use the Cmd key instead of the Ctrl key.",
+      "text": "On macOS, use the Command key instead of the Control key and the Option key instead of the Alt key.",
       "id": "useCmdOnMac"
     }
   ],
