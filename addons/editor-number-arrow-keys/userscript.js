@@ -89,7 +89,7 @@ export default async function ({ addon }) {
     if (addon.self.disabled) return;
     if (
       !e.target.classList.contains("blocklyHtmlInput") &&
-      !e.target.classList.contains(addon.tab.scratchClass("input_input-form"))
+      !e.target.className.includes("input_input-form_")
     )
       return;
     if (!["ArrowUp", "ArrowDown"].includes(e.code)) return;
