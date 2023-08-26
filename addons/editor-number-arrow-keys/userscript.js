@@ -137,6 +137,7 @@ export default async function ({ addon }) {
         }, FLUSH_AFTER_MS);
       }
     } else {
+      // Normal Blockly input
       e.target.value = newValue.toString();
     }
   });
