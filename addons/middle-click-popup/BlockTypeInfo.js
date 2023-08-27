@@ -404,14 +404,14 @@ export class BlockTypeInfo {
         const options = field.getOptions();
         addInput(new BlockInputEnum(options, inputIdx, fieldIdx, fieldIdx === -1));
       } else if (field instanceof Blockly.FieldImage) {
-        switch (field.src_) {
-          case "/static/blocks-media/green-flag.svg":
+        switch (field.src_.split("/").pop()) {
+          case "green-flag.svg":
             parts.push(locale("/global/blocks/green-flag"));
             break;
-          case "/static/blocks-media/rotate-right.svg":
+          case "rotate-right.svg":
             parts.push(locale("/global/blocks/clockwise"));
             break;
-          case "/static/blocks-media/rotate-left.svg":
+          case "rotate-left.svg":
             parts.push(locale("/global/blocks/anticlockwise"));
             break;
         }
