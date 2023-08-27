@@ -1,6 +1,6 @@
 {
   "name": "Customizable block text style",
-  "description": "Changes the thickness of the text on blocks and optionally adds a text shadow.",
+  "description": "Allows you to make a few adjustments to block text to make it easier to read.",
   "tags": ["editor", "codeEditor", "featured"],
   "credits": [
     {
@@ -10,18 +10,16 @@
     {
       "name": "_nix",
       "link": "https://github.com/towerofnix"
-    }
-  ],
-  "userstyles": [
-    {
-      "url": "text-bold.css",
-      "matches": ["projects"],
-      "if": { "settings": { "bold": true } }
     },
     {
-      "url": "text-shadow.css",
-      "matches": ["projects"],
-      "if": { "settings": { "shadow": true } }
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
     }
   ],
   "settings": [
@@ -36,11 +34,22 @@
       "id": "shadow",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Text size (%)",
+      "id": "size",
+      "type": "integer",
+      "min": 75,
+      "max": 200,
+      "default": 100
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.24.0",
+  "latestUpdate": {
+    "version": "1.33.0",
+    "newSettings": ["size"]
+  },
   "enabledByDefault": false
 }
