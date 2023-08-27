@@ -523,7 +523,7 @@ export class BlockTypeInfo {
       // This block is special because when "other scripts in sprite" is selected the block
       //  needs to be BlockShape.End.
       const oldInput = inputs[0];
-      const otherScriptsOptionIdx = oldInput.values.findIndex(option => option.string === "other scripts in sprite");
+      const otherScriptsOptionIdx = oldInput.values.findIndex((option) => option.string === "other scripts in sprite");
       const otherScriptsOption = oldInput.values.splice(otherScriptsOptionIdx, 1)[0];
       const newInput = new BlockInputEnum(
         [[otherScriptsOption.string, otherScriptsOption.value]],
@@ -537,7 +537,7 @@ export class BlockTypeInfo {
 
       return [
         new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, parts, inputs, BlockShape.End),
-        new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, newBlockParts, [newInput], BlockShape.Stack)
+        new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, newBlockParts, [newInput], BlockShape.Stack),
       ];
     } else {
       return [new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, parts, inputs)];

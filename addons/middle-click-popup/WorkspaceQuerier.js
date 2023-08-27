@@ -846,12 +846,9 @@ class TokenTypeBlock extends TokenType {
           //  before us not afterward.
           token.precedence > this.block.precedence &&
           // See https://github.com/ScratchAddons/ScratchAddons/issues/5981
-          (tokenProviderIdx === 0 || (
-             token.type instanceof TokenTypeBlock &&
-             token.type.id === "operator_not"
-            )
-          )
-        ) continue;
+          (tokenProviderIdx === 0 || (token.type instanceof TokenTypeBlock && token.type.id === "operator_not"))
+        )
+          continue;
         /**
          * This check eliminates thousands of results by making sure blocks with equal precedence
          * can only contain themselves as their own first input. Without this, the query '1 + 2 + 3'
