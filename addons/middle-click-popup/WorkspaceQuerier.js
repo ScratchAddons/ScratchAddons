@@ -840,10 +840,18 @@ class TokenTypeBlock extends TokenType {
       if (!query.canCreateMoreTokens()) break;
 
       if (this.block.precedence !== -1) {
-        // If we care about the precedence of this block
-        // Discard this token if its precedence is higher than ours, meaning it should be calculated
-        //  before us not afterward.
-        if (token.precedence > this.block.precedence) continue;
+        if (
+          // If we care about the precedence of this block
+          // Discard this token if its precedence is higher than ours, meaning it should be calculated
+          //  before us not afterward.
+          token.precedence > this.block.precedence &&
+          // See https://github.com/ScratchAddons/ScratchAddons/issues/5981
+          (tokenProviderIdx === 0 || (
+             token.type instanceof TokenTypeBlock &&
+             token.type.id === "operator_not"
+            )
+          )
+        ) continue;
         /**
          * This check eliminates thousands of results by making sure blocks with equal precedence
          * can only contain themselves as their own first input. Without this, the query '1 + 2 + 3'
