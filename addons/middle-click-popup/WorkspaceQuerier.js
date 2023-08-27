@@ -439,8 +439,6 @@ class TokenTypeStringEnum extends TokenType {
     this.values = [];
     for (const value of values) {
       let lower = value.string.toLowerCase();
-      // Strip emoji
-      lower = lower.replaceAll(/\p{Extended_Pictographic}/gu, "");
       const parts = [];
       {
         let lastPart = 0;
