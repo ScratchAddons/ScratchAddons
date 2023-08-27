@@ -3,7 +3,6 @@
 import WorkspaceQuerier, { QueryResult } from "./WorkspaceQuerier.js";
 import renderBlock, { BlockComponent, getBlockHeight } from "./BlockRenderer.js";
 import { BlockInstance, BlockShape, BlockTypeInfo } from "./BlockTypeInfo.js";
-import { onClearTextWidthCache } from "./module.js";
 
 export default async function ({ addon, msg, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
@@ -69,8 +68,6 @@ export default async function ({ addon, msg, console }) {
   document.addEventListener("mousemove", (e) => {
     mousePosition = { x: e.clientX, y: e.clientY };
   });
-
-  onClearTextWidthCache(closePopup);
 
   /**
    * @typedef ResultPreview
