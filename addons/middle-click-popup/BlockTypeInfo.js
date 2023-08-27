@@ -504,7 +504,12 @@ export class BlockTypeInfo {
 
         const ofInputs = [];
         ofInputs[baseVarInputIdx] = new BlockInputEnum(options, baseVarInput.inputIdx, baseVarInput.fieldIdx, false);
-        ofInputs[baseTargetInputIdx] = new BlockInputEnum([[targetInput.string, targetInput.value]], baseTargetInput.inputIdx, baseTargetInput.fieldIdx, isStage);
+        ofInputs[baseTargetInputIdx] = new BlockInputEnum(
+          [[targetInput.string, targetInput.value]],
+          baseTargetInput.inputIdx,
+          baseTargetInput.fieldIdx,
+          isStage
+        );
 
         const ofParts = [...parts];
         ofParts[baseVarPartIdx] = ofInputs[baseVarInputIdx];
