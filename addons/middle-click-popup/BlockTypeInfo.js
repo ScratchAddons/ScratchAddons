@@ -452,21 +452,27 @@ export class BlockTypeInfo {
     }
 
     if (workspaceForm.id === "of") {
-      // Adapted from https://github.com/scratchfoundation/scratch-gui/blob/cc6e6324064493cf1788f3c7c0ff31e4057964ee/src/lib/blocks.js#L230
       let blocks = [];
 
-      let baseVarInput = inputs[0];
-      let baseTargetInput = inputs[1];
-
-      // In some languages, the inputs variable and sprite inputs are the other way around.
-      //  The variable input shouldn't be round, so if it is the inputs are the other way.
+      let baseVarInputIdx, baseTargetInputIdx;
+      // In some languages, the 'of' block inputs are variable than sprite, and in others
+      //  it's the opposite. We can tell that the variable comes first if the first input
+      //  is round.
       if (inputs[0].isRound) {
-        [baseVarInput, baseTargetInput] = [baseTargetInput, baseVarInput];
+        baseVarInputIdx = 1;
+        baseTargetInputIdx = 0;
+      } else {
+        baseVarInputIdx = 0;
+        baseTargetInputIdx = 1;
       }
 
-      const baseVarInputIdx = parts.indexOf(baseVarInput);
-      const baseTargetInputIdx = parts.indexOf(baseTargetInput);
+      let baseVarInput = inputs[baseVarInputIdx];
+      let baseTargetInput = inputs[baseTargetInputIdx];
 
+      const baseVarPartIdx = parts.indexOf(baseVarInput);
+      const baseTargetPartIdx = parts.indexOf(baseTargetInput);
+
+      // Adapted from https://github.com/scratchfoundation/scratch-gui/blob/cc6e6324064493cf1788f3c7c0ff31e4057964ee/src/lib/blocks.js#L230
       const stageOptions = [
         [Blockly.Msg.SENSING_OF_BACKDROPNUMBER, "backdrop #"],
         [Blockly.Msg.SENSING_OF_BACKDROPNAME, "backdrop name"],
@@ -496,14 +502,13 @@ export class BlockTypeInfo {
           options = spriteVariableOptions.map((variable) => [variable, variable]).concat(spriteOptions);
         }
 
-        const ofInputs = [
-          new BlockInputEnum(options, 0, 0, false),
-          new BlockInputEnum([[targetInput.string, targetInput.value]], 0, -1, isStage),
-        ];
+        const ofInputs = [];
+        ofInputs[baseVarInputIdx] = new BlockInputEnum(options, baseVarInput.inputIdx, baseVarInput.fieldIdx, false);
+        ofInputs[baseTargetInputIdx] = new BlockInputEnum([[targetInput.string, targetInput.value]], baseTargetInput.inputIdx, baseTargetInput.fieldIdx, isStage);
 
         const ofParts = [...parts];
-        ofParts[baseVarInputIdx] = ofInputs[0];
-        ofParts[baseTargetInputIdx] = ofInputs[1];
+        ofParts[baseVarPartIdx] = ofInputs[baseVarInputIdx];
+        ofParts[baseTargetPartIdx] = ofInputs[baseTargetInputIdx];
 
         blocks.push(new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, ofParts, ofInputs));
       }
