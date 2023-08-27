@@ -519,18 +519,38 @@ export class BlockTypeInfo {
       }
 
       return blocks;
-    }
+    } else if (workspaceForm.id === "control_stop") {
+      // This block is special because when "other scripts in sprite" is selected the block
+      //  needs to be BlockShape.End.
+      const oldInput = inputs[0];
+      const otherScriptsOptionIdx = oldInput.values.findIndex(option => option.string === "other scripts in sprite");
+      const otherScriptsOption = oldInput.values.splice(otherScriptsOptionIdx, 1)[0];
+      const newInput = new BlockInputEnum(
+        [[otherScriptsOption.string, otherScriptsOption.value]],
+        oldInput.inputIdx,
+        oldInput.fieldIdx,
+        oldInput.isRound
+      );
 
-    return [new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, parts, inputs)];
+      const newBlockParts = [...parts];
+      newBlockParts[parts.indexOf(oldInput)] = newInput;
+
+      return [
+        new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, parts, inputs, BlockShape.End),
+        new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, newBlockParts, [newInput], BlockShape.Stack)
+      ];
+    } else {
+      return [new BlockTypeInfo(workspace, Blockly, vm, workspaceForm, domForm, parts, inputs)];
+    }
   }
 
-  constructor(workspace, Blockly, vm, workspaceForm, domForm, parts, inputs) {
+  constructor(workspace, Blockly, vm, workspaceForm, domForm, parts, inputs, shape) {
     /** @type {string} */
     this.id = workspaceForm.id;
     this.workspaceForm = workspaceForm;
     this.domForm = domForm;
     /** @type {BlockShape} */
-    this.shape = BlockShape.getBlockShape(this.workspaceForm);
+    this.shape = shape ?? BlockShape.getBlockShape(this.workspaceForm);
     /** @type {BlockCategory} */
     this.category = BlockTypeInfo.getBlockCategory(this.workspaceForm, vm);
     this.workspace = workspace;
