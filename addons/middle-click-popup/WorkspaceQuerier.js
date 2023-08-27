@@ -198,9 +198,9 @@ class TokenProviderSingleCache extends TokenProvider {
       yield* cacheEntry;
       return;
     }
-    this.cacheEntry = [];
+    this.cache[idx] = cacheEntry = [];
     for (const token of this.inner.parseTokens(query, idx)) {
-      this.cacheEntry.push(token);
+      cacheEntry.push(token);
       yield token;
     }
   }
