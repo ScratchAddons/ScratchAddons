@@ -455,9 +455,16 @@ export class BlockTypeInfo {
       // Adapted from https://github.com/scratchfoundation/scratch-gui/blob/cc6e6324064493cf1788f3c7c0ff31e4057964ee/src/lib/blocks.js#L230
       let blocks = [];
 
-      const baseVarInput = inputs[0];
+      let baseVarInput = inputs[0];
+      let baseTargetInput = inputs[1];
+
+      // In some languages, the inputs variable and sprite inputs are the other way around.
+      //  The variable input shouldn't be round, so if it is the inputs are the other way.
+      if (inputs[0].isRound) {
+        [baseVarInput, baseTargetInput] = [baseTargetInput, baseVarInput];
+      }
+
       const baseVarInputIdx = parts.indexOf(baseVarInput);
-      const baseTargetInput = inputs[1];
       const baseTargetInputIdx = parts.indexOf(baseTargetInput);
 
       const stageOptions = [
