@@ -41,6 +41,8 @@ export class BlockInput {
      *  @type {number}
      */
     this.fieldIdx = fieldIdx;
+    /** @type {*} The default value to set this input to, or null to not set it to anything. */
+    this.defaultValue = null;
   }
 
   /**
@@ -220,7 +222,7 @@ export class BlockInputEnum extends BlockInput {
       value.createWorkspaceForm().outputConnection.connect(this.getInput(block).connection);
     } else {
       if (this.values.indexOf(value) === -1)
-        throw new Error("Invalid enum value. Expected item from the options list.");
+        throw new Error("Invalid enum value. Expected item from the values list.");
       this.getField(block).setValue(value.value);
     }
   }
@@ -272,8 +274,10 @@ export class BlockInstance {
     }
 
     const block = this.typeInfo.Blockly.Xml.domToBlock(this.typeInfo.domForm, this.typeInfo.workspace);
-    for (let i = 0; i < this.inputs.length; i++) {
-      if (this.inputs[i] !== null) this.typeInfo.inputs[i].setValue(block, this.inputs[i]);
+    for (let i = 0; i < this.typeInfo.inputs.length; i++) {
+      const input = this.typeInfo.inputs[i];
+      const inputValue = this.inputs[i] ?? input.defaultValue;
+      if (inputValue != null) input.setValue(block, inputValue);
     }
 
     return block;
@@ -503,13 +507,17 @@ export class BlockTypeInfo {
         }
 
         const ofInputs = [];
-        ofInputs[baseVarInputIdx] = new BlockInputEnum(options, baseVarInput.inputIdx, baseVarInput.fieldIdx, false);
-        ofInputs[baseTargetInputIdx] = new BlockInputEnum(
+
+        const inputTarget = new BlockInputEnum(
           [[targetInput.string, targetInput.value]],
           baseTargetInput.inputIdx,
           baseTargetInput.fieldIdx,
           isStage
         );
+
+        ofInputs[baseVarInputIdx] = new BlockInputEnum(options, baseVarInput.inputIdx, baseVarInput.fieldIdx, false);
+        ofInputs[baseTargetInputIdx] = inputTarget
+        inputTarget.defaultValue = inputTarget.values[0];
 
         const ofParts = [...parts];
         ofParts[baseVarPartIdx] = ofInputs[baseVarInputIdx];
