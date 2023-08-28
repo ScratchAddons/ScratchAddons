@@ -233,7 +233,7 @@ function createBlockComponent(container, shape, categoryClass, fillVar, strokeVa
     shape.padding,
     width + shape.padding * 2,
     shape.snuggleWith,
-    shape.snugglePadding,
+    shape.snugglePadding
   );
 }
 
@@ -251,7 +251,7 @@ function createBackedTextedComponent(text, container, shape, categoryClass, fill
     categoryClass,
     fillVar,
     strokeVar,
-    textElement.width,
+    textElement.width
   );
   return blockElement;
 }
@@ -303,7 +303,7 @@ function _renderBlock(block, container, parentCategory, isVertical) {
             categoryClass,
             "--sa-block-background-secondary",
             "--sa-block-colored-background-secondary",
-            "--sa-block-text",
+            "--sa-block-text"
           );
         } else {
           component = createBackedTextedComponent(
@@ -313,7 +313,7 @@ function _renderBlock(block, container, parentCategory, isVertical) {
             categoryClass,
             "--sa-block-background-primary",
             "--sa-block-background-tertiary",
-            "--sa-block-text",
+            "--sa-block-text"
           );
         }
       } else if (blockPart instanceof BlockInputBoolean) {
@@ -324,7 +324,7 @@ function _renderBlock(block, container, parentCategory, isVertical) {
           categoryClass,
           "--sa-block-field-background",
           "--sa-block-field-background",
-          "--sa-block-text",
+          "--sa-block-text"
         );
       } else if (blockPart instanceof BlockInputBlock) {
         component = createBackedTextedComponent(
@@ -334,7 +334,7 @@ function _renderBlock(block, container, parentCategory, isVertical) {
           categoryClass,
           "--sa-block-field-background",
           "--sa-block-background-tertiary",
-          "--sa-block-text",
+          "--sa-block-text"
         );
       } else {
         component = createBackedTextedComponent(
@@ -344,7 +344,7 @@ function _renderBlock(block, container, parentCategory, isVertical) {
           categoryClass,
           "--sa-block-input-color",
           "--sa-block-background-tertiary",
-          "--sa-block-input-text",
+          "--sa-block-input-text"
         );
         component.dom.classList.add("blocklyNonEditableText");
       }
@@ -373,6 +373,6 @@ function _renderBlock(block, container, parentCategory, isVertical) {
     categoryClass,
     "--sa-block-background-primary",
     "--sa-block-background-tertiary",
-    xOffset - BLOCK_ELEMENT_SPACING,
+    xOffset - BLOCK_ELEMENT_SPACING
   );
 }

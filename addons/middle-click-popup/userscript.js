@@ -32,23 +32,23 @@ export default async function ({ addon, msg, console }) {
   popupPreviewContainer.classList.add("sa-mcp-preview-container");
 
   const popupPreviewScrollbarSVG = popupContainer.appendChild(
-    document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+    document.createElementNS("http://www.w3.org/2000/svg", "svg")
   );
   popupPreviewScrollbarSVG.classList.add(
     "sa-mcp-preview-scrollbar",
     "blocklyScrollbarVertical",
-    "blocklyMainWorkspaceScrollbar",
+    "blocklyMainWorkspaceScrollbar"
   );
   popupPreviewScrollbarSVG.style.display = "none";
 
   const popupPreviewScrollbarBackground = popupPreviewScrollbarSVG.appendChild(
-    document.createElementNS("http://www.w3.org/2000/svg", "rect"),
+    document.createElementNS("http://www.w3.org/2000/svg", "rect")
   );
   popupPreviewScrollbarBackground.setAttribute("width", "11");
   popupPreviewScrollbarBackground.classList.add("blocklyScrollbarBackground");
 
   const popupPreviewScrollbarHandle = popupPreviewScrollbarSVG.appendChild(
-    document.createElementNS("http://www.w3.org/2000/svg", "rect"),
+    document.createElementNS("http://www.w3.org/2000/svg", "rect")
   );
   popupPreviewScrollbarHandle.setAttribute("rx", "3");
   popupPreviewScrollbarHandle.setAttribute("ry", "3");
@@ -57,7 +57,7 @@ export default async function ({ addon, msg, console }) {
   popupPreviewScrollbarHandle.classList.add("blocklyScrollbarHandle");
 
   const popupPreviewBlocks = popupPreviewContainer.appendChild(
-    document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+    document.createElementNS("http://www.w3.org/2000/svg", "svg")
   );
   popupPreviewBlocks.classList.add("sa-mcp-preview-blocks");
 
@@ -194,7 +194,7 @@ export default async function ({ addon, msg, console }) {
       };
 
       const svgBackground = popupPreviewBlocks.appendChild(
-        document.createElementNS("http://www.w3.org/2000/svg", "rect"),
+        document.createElementNS("http://www.w3.org/2000/svg", "rect")
       );
 
       const height = getBlockHeight(result.block);

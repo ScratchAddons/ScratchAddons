@@ -445,8 +445,8 @@ export class BlockTypeInfo {
                 [[Blockly.ScratchMsgs.translate("SENSING_OF_STAGE", "Stage"), "_stage_"]],
                 inputIdx,
                 -1,
-                true,
-              ),
+                true
+              )
             );
           } else {
             addFieldInputs(innerField, inputIdx, -1);
