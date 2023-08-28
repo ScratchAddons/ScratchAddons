@@ -771,7 +771,9 @@ class TokenTypeBlock extends TokenType {
 
           hasDefiningFeature ||= !TokenTypeNumberLiteral.isValidNumber(word);
 
-          if (hasDefiningFeature) yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx, i }, -1, false);
+          if (query.skipIgnorable(wordEnd) < query.length) {
+            if (hasDefiningFeature) yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx, i }, -1, false);
+          }
           i = wordEnd;
         }
       }
@@ -886,7 +888,7 @@ class TokenTypeBlock extends TokenType {
   createText(token, query, endOnly) {
     if (token.value.stringForm) {
       if (endOnly) {
-        if (token.value.lastPartIdx === -1) {
+        if (token.value.lastPartIdx === -1 || token.end <= query.length) {
           return query.str.substring(token.start, token.end);
         } else {
           return (
