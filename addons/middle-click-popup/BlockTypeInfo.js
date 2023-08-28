@@ -213,6 +213,7 @@ export class BlockInputEnum extends BlockInput {
       }
     }
     this.isRound = isRound;
+    this.defaultValue = this.values[0];
   }
 
   /**
@@ -260,6 +261,10 @@ export class BlockInstance {
     this.typeInfo = typeInfo;
     /** @type {Array} */
     this.inputs = inputs;
+
+    for (let i = 0; i < this.typeInfo.inputs.length; i++) {
+      if (this.inputs[i] == null) this.inputs[i] = this.typeInfo.inputs[i].defaultValue;
+    }
   }
 
   /**
@@ -275,9 +280,8 @@ export class BlockInstance {
 
     const block = this.typeInfo.Blockly.Xml.domToBlock(this.typeInfo.domForm, this.typeInfo.workspace);
     for (let i = 0; i < this.typeInfo.inputs.length; i++) {
-      const input = this.typeInfo.inputs[i];
-      const inputValue = this.inputs[i] ?? input.defaultValue;
-      if (inputValue != null) input.setValue(block, inputValue);
+      const inputValue = this.inputs[i];
+      if (inputValue != null) this.typeInfo.inputs[i].setValue(block, inputValue);
     }
 
     return block;
@@ -508,16 +512,13 @@ export class BlockTypeInfo {
 
         const ofInputs = [];
 
-        const inputTarget = new BlockInputEnum(
+        ofInputs[baseVarInputIdx] = new BlockInputEnum(options, baseVarInput.inputIdx, baseVarInput.fieldIdx, false);
+        ofInputs[baseTargetInputIdx] = new BlockInputEnum(
           [[targetInput.string, targetInput.value]],
           baseTargetInput.inputIdx,
           baseTargetInput.fieldIdx,
           isStage
         );
-
-        ofInputs[baseVarInputIdx] = new BlockInputEnum(options, baseVarInput.inputIdx, baseVarInput.fieldIdx, false);
-        ofInputs[baseTargetInputIdx] = inputTarget;
-        inputTarget.defaultValue = inputTarget.values[0];
 
         const ofParts = [...parts];
         ofParts[baseVarPartIdx] = ofInputs[baseVarInputIdx];

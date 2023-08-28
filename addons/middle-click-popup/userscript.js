@@ -169,7 +169,7 @@ export default async function ({ addon, msg, console }) {
 
       for (const queryResult of queryResults) {
         blockList.push({
-          block: queryResult.createBlock(),
+          block: queryResult.getBlock(),
           autocompleteFactory: (endOnly) => queryResult.toText(endOnly),
         });
       }
