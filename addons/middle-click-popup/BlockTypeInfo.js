@@ -134,6 +134,7 @@ export class BlockInputNumber extends BlockInputRound {
     const type = typeof value;
     if (type === "number") return value;
     if (type === "string") {
+      if (value.length === 0) return value;
       const number = parseFloat(value);
       if (isNaN(number)) throw new Error('Cannot set numeric type input to string "' + value + '".');
       return value;
