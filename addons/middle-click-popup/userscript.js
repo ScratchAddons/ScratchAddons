@@ -90,7 +90,9 @@ export default async function ({ addon, msg, console }) {
   let limited = false;
 
   let allowMenuClose = true;
+
   let popupPosition = null;
+  let popupOrigin = null;
 
   let previewWidth = 0;
   let previewHeight = 0;
@@ -119,9 +121,7 @@ export default async function ({ addon, msg, console }) {
 
     popupContainer.style.width = previewWidth + "px";
 
-    popupPosition = { x: mousePosition.x + 16, y: mousePosition.y - 8 };
-    popupRoot.style.top = popupPosition.y + "px";
-    popupRoot.style.left = popupPosition.x + "px";
+    popupOrigin = { x: mousePosition.x, y: mousePosition.y };
     popupRoot.style.display = "";
     popupInput.value = "";
     popupInput.focus();
@@ -130,6 +130,7 @@ export default async function ({ addon, msg, console }) {
 
   function closePopup() {
     if (allowMenuClose) {
+      popupOrigin = null;
       popupPosition = null;
       popupRoot.style.display = "none";
       blockTypes = null;
@@ -237,6 +238,17 @@ export default async function ({ addon, msg, console }) {
     popupPreviewScrollbarSVG.style.height = previewHeight + "px";
     popupPreviewScrollbarBackground.setAttribute("height", "" + previewHeight);
     popupInputContainer.dataset["error"] = "" + limited;
+
+    popupPosition = { x: popupOrigin.x + 16, y: popupOrigin.y - 8 };
+
+    const popupHeight = popupContainer.getBoundingClientRect().height;
+    const popupBottom = popupPosition.y + popupHeight;
+    if (popupBottom > window.innerHeight) {
+      popupPosition.y -= popupBottom - window.innerHeight
+    }
+
+    popupRoot.style.top = popupPosition.y + "px";
+    popupRoot.style.left = popupPosition.x + "px";
 
     selectedPreviewIdx = -1;
     updateSelection(0);
