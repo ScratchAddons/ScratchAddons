@@ -221,8 +221,7 @@ export class BlockInputEnum extends BlockInput {
     if (this.isRound && value instanceof BlockInstance) {
       value.createWorkspaceForm().outputConnection.connect(this.getInput(block).connection);
     } else {
-      if (this.values.indexOf(value) === -1)
-        throw new Error("Invalid enum value. Expected item from the values list.");
+      if (this.values.indexOf(value) === -1) throw new Error("Invalid enum value. Expected item from the values list.");
       this.getField(block).setValue(value.value);
     }
   }
@@ -516,7 +515,7 @@ export class BlockTypeInfo {
         );
 
         ofInputs[baseVarInputIdx] = new BlockInputEnum(options, baseVarInput.inputIdx, baseVarInput.fieldIdx, false);
-        ofInputs[baseTargetInputIdx] = inputTarget
+        ofInputs[baseTargetInputIdx] = inputTarget;
         inputTarget.defaultValue = inputTarget.values[0];
 
         const ofParts = [...parts];
