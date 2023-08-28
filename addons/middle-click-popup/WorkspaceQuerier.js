@@ -467,7 +467,7 @@ class TokenTypeStringEnum extends TokenType {
       } else {
         if (
           query.lowercase.startsWith(valueInfo.lower, idx) &&
-          TokenTypeStringLiteral.TERMINATORS.indexOf(query.lowercase[idx + valueInfo.lower.length]) !== -1
+          TokenTypeStringLiteral.isTerminator(query.lowercase[idx + valueInfo.lower.length])
         ) {
           yield new Token(idx, idx + valueInfo.lower.length, this, valueInfo);
           yieldedToken = true;
@@ -491,6 +491,11 @@ class TokenTypeStringEnum extends TokenType {
  */
 class TokenTypeStringLiteral extends TokenType {
   static TERMINATORS = [undefined, " ", "+", "-", "*", "/", "=", "<", ">", ")"];
+  static NUMBERS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+  static isTerminator(char, includeNumbers = true) {
+    return this.TERMINATORS.includes(char) || (includeNumbers && this.NUMBERS.includes(char));
+  }
 
   /**
    * Each time we encounter a 'terminator' we have to return the string we've read so far as a
@@ -520,8 +525,8 @@ class TokenTypeStringLiteral extends TokenType {
     let wasTerminator = false,
       wasIgnorable = false;
     for (let i = idx; i <= query.length; i++) {
-      const isTerminator = TokenTypeStringLiteral.TERMINATORS.indexOf(query.str[i]) !== -1;
-      if (wasTerminator !== isTerminator && !wasIgnorable && i !== idx && i !== quoteEnd) {
+      const isTerminator = TokenTypeStringLiteral.isTerminator(query.str[i]);
+      if ((wasTerminator !== isTerminator || i == query.length) && i !== idx && i !== quoteEnd) {
         const value = query.str.substring(idx, i);
         yield new Token(idx, i, this, value);
       }
@@ -547,7 +552,7 @@ class TokenTypeNumberLiteral extends TokenType {
 
   *parseTokens(query, idx) {
     for (let i = idx; i <= query.length; i++) {
-      if (TokenTypeStringLiteral.TERMINATORS.indexOf(query.str[i]) !== -1 && i !== idx) {
+      if (TokenTypeStringLiteral.isTerminator(query.str[i], false) && i !== idx) {
         const value = query.str.substring(idx, i);
         if (TokenTypeNumberLiteral.isValidNumber(value)) {
           yield new Token(idx, i, this, value);
