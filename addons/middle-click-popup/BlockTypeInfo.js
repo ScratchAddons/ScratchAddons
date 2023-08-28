@@ -455,9 +455,9 @@ export class BlockTypeInfo {
       let blocks = [];
 
       let baseVarInputIdx, baseTargetInputIdx;
-      // In some languages, the 'of' block inputs are variable than sprite, and in others
-      //  it's the opposite. We can tell that the variable comes first if the first input
-      //  is round.
+      // In most languages, the 'of' block inputs are: [variable] of [sprite], and in others
+      // it's the opposite (sprite then variable). We can tell that the variable comes first
+      // if the first input is round.
       if (inputs[0].isRound) {
         baseVarInputIdx = 1;
         baseTargetInputIdx = 0;
