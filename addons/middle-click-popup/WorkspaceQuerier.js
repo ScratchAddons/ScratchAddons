@@ -837,7 +837,7 @@ class TokenTypeBlock extends TokenType {
           //  before us not afterward.
           token.precedence > this.block.precedence &&
           // See https://github.com/ScratchAddons/ScratchAddons/issues/5981
-          (tokenProviderIdx === 0 || (token.type instanceof TokenTypeBlock && token.type.id === "operator_not"))
+          (tokenProviderIdx === 0 || !(token.type instanceof TokenTypeBlock) || token.type.block.id !== "operator_not")
         )
           continue;
         /**
