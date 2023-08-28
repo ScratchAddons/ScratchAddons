@@ -219,7 +219,7 @@ function addStyle(addon) {
       link.rel = "stylesheet";
       link.setAttribute("data-addon-id", addon.addonId);
       link.setAttribute("data-addon-index", styleIndex);
-      style.setAttribute("data-style-href", userstyle.href);
+      link.setAttribute("data-style-href", userstyle.href);
       link.classList.add("scratch-addons-style");
       link.href = userstyle.href + `?${Date.now()}`;
       appendByIndex(link, styleIndex);
