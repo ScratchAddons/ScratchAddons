@@ -244,7 +244,7 @@ export default async function ({ addon, msg, console }) {
     const popupHeight = popupContainer.getBoundingClientRect().height;
     const popupBottom = popupPosition.y + popupHeight;
     if (popupBottom > window.innerHeight) {
-      popupPosition.y -= popupBottom - window.innerHeight
+      popupPosition.y -= popupBottom - window.innerHeight;
     }
 
     popupRoot.style.top = popupPosition.y + "px";
