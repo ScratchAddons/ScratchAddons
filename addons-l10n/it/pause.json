@@ -1,1 +1,1 @@
-{"pause/pause":"Pausa","pause/@name":"Pulsante Pausa","pause/@description":"Aggiunge un tasto pausa accanto alla bandiera verde."}
+{"pause/pause":"Pausa","pause/play":"Riprendi","pause/@name":"Pulsante Pausa","pause/@description":"Aggiunge un pulsante per mettere in pausa il progetto a fianco alla bandiera verde.","pause/@info-keybind":"Il progetto può essere messo in pausa anche con Alt+X (Opzione+X in macOS).","pause/@update":"E' ora disponibile una combinazione di tasti per mettere in pausa i progetti."}

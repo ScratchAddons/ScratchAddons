@@ -20,7 +20,7 @@ export default async function ({ addon, console, msg }) {
   // add button to reporter bubble
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
-  // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/workspace_svg.js#L979
+  // https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/workspace_svg.js#L979
   ScratchBlocks.WorkspaceSvg.prototype.reportValue = function (id, value) {
     let block = this.getBlockById(id);
     if (!block) {

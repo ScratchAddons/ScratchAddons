@@ -1,6 +1,6 @@
 {
   "root": true,
-  "ignorePatterns": ["node_modules/*", "_locales/*", ".github/*", "addons-l10n/*", "libraries/thirdparty/*"],
+  "ignorePatterns": ["node_modules/*", "_locales/*", ".github/workflows/*", "addons-l10n/*", "libraries/thirdparty/*"],
   "parserOptions": {
     "sourceType": "module"
   },
@@ -97,6 +97,17 @@
             "message": "Event.path does not exist in Firefox, use Event.composedPath()"
           }
         ]
+      }
+    },
+    {
+      // The addon uses static fields, only specified in ES13 (2022-)
+      // yet supported by older browsers.
+      // We use ES11 (2020) as everything in that version can be used by
+      // the minimum supported browser (Chrome 80, Firefox 86).
+      // To properly lint the file, add exception to the parser version.
+      "files": ["addons/middle-click-popup/*.js"],
+      "parserOptions": {
+        "ecmaVersion": 13
       }
     }
   ]
