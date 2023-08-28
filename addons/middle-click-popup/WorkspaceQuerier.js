@@ -500,7 +500,7 @@ class StringEnum {
                 },
                 10000,
                 undefined,
-                queryPartEnd >= query.length
+                queryPartEnd >= query.length,
               );
             }
             continue outer;
@@ -605,7 +605,7 @@ class StringEnum {
             idx + valueInfo.lower.length,
             this.fullTokenProvider,
             valueInfo,
-            100000
+            100000,
           );
         }
       }
@@ -1332,7 +1332,7 @@ export default class WorkspaceQuerier {
   _poppulateTokenGroups(blocks) {
     blocks.sort(
       (a, b) =>
-        WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(b.category) - WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(a.category)
+        WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(b.category) - WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(a.category),
     );
 
     // Apply order of operations

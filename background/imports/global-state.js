@@ -42,7 +42,7 @@ class StateProxy {
 
 function messageForAllTabs(message) {
   chrome.tabs.query({}, (tabs) =>
-    tabs.forEach((tab) => tab.url && chrome.tabs.sendMessage(tab.id, message, () => void chrome.runtime.lastError))
+    tabs.forEach((tab) => tab.url && chrome.tabs.sendMessage(tab.id, message, () => void chrome.runtime.lastError)),
   );
   scratchAddons.sendToPopups(message);
 }
