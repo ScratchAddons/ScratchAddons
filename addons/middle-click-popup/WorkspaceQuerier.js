@@ -10,7 +10,14 @@
  * @author Tacodiva
  */
 
-import { BlockInputType, BlockInstance, BlockShape, BlockTypeInfo, BlockInputEnum, BlockInputString } from "./BlockTypeInfo.js";
+import {
+  BlockInputType,
+  BlockInstance,
+  BlockShape,
+  BlockTypeInfo,
+  BlockInputEnum,
+  BlockInputString,
+} from "./BlockTypeInfo.js";
 
 /**
  *
@@ -764,8 +771,7 @@ class TokenTypeBlock extends TokenType {
 
           hasDefiningFeature ||= !TokenTypeNumberLiteral.isValidNumber(word);
 
-          if (hasDefiningFeature)
-            yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx, i }, -1, false);
+          if (hasDefiningFeature) yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx, i }, -1, false);
           i = wordEnd;
         }
       }
@@ -785,7 +791,6 @@ class TokenTypeBlock extends TokenType {
     let isLegal = true;
     let isTruncated = subtokens.length < subtokenProviders.length;
     let hasDefiningFeature = false;
-
 
     for (const subtoken of subtokens) {
       isTruncated |= subtoken.isTruncated; // If any of our kids are truncated, so are we
@@ -985,7 +990,6 @@ export class QueryResult {
 
     /** @type {(block: BlockInstance) => void} */
     const getBlockLengths = (block) => {
-
       let inputIdx = 0;
 
       for (const part of block.typeInfo.parts) {
@@ -1001,9 +1005,9 @@ export class QueryResult {
             stringLength += input.string.length;
           } else if (part instanceof BlockInputString && input !== part.defaultValue) {
             // Make string inputs 100x their real length so they appear at the bottom
-            stringLength += (""+input).length * 100;
+            stringLength += ("" + input).length * 100;
           } else if (input != null) {
-            stringLength += (""+input).length;
+            stringLength += ("" + input).length;
           }
         }
       }
@@ -1013,8 +1017,7 @@ export class QueryResult {
     };
 
     getBlockLengths(this.getBlock());
-    return this.lengths = {stringLength, tokenLength};
-
+    return (this.lengths = { stringLength, tokenLength });
   }
 }
 
@@ -1193,8 +1196,7 @@ export default class WorkspaceQuerier {
     validResults = validResults.sort((a, b) => {
       const aLengths = a.getLengths();
       const bLengths = b.getLengths();
-      if (aLengths.stringLength != bLengths.stringLength)
-        return aLengths.stringLength - bLengths.stringLength;
+      if (aLengths.stringLength != bLengths.stringLength) return aLengths.stringLength - bLengths.stringLength;
       return aLengths.tokenLength - bLengths.tokenLength;
     });
 
