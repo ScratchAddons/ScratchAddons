@@ -17,9 +17,9 @@ function updateCssVariables(node, addon) {
     node.style.setProperty("--darkWww-gray-scratchr2", "#f7f7f7");
     node.style.setProperty("--darkWww-gray-scratchr2Text", "#322f31");
     node.style.setProperty("--darkWww-border-15", "#cccccc");
-    const pygmentsStyle = node.querySelector("link[href$='dark-www/pygments.css']");
+    const pygmentsStyle = node.querySelector("link[data-style-href$='dark-www/pygments.css']");
     if (pygmentsStyle) pygmentsStyle.disabled = true;
-    const scrollbarStyle = node.querySelector("link[href$='dark-www/scrollbar.css']");
+    const scrollbarStyle = node.querySelector("link[data-style-href$='dark-www/scrollbar.css']");
     if (scrollbarStyle) scrollbarStyle.disabled = true;
     return;
   }
@@ -37,9 +37,9 @@ function updateCssVariables(node, addon) {
   );
   node.style.setProperty("--darkWww-gray-scratchr2Text", textColor(addon.settings.get("gray"), "#322f31"));
   node.style.setProperty("--darkWww-border-15", brighten(addon.settings.get("border"), { a: 0.94 }));
-  const pygmentsStyle = node.querySelector("link[href$='dark-www/pygments.css']");
+  const pygmentsStyle = node.querySelector("link[data-style-href$='dark-www/pygments.css']");
   if (pygmentsStyle) pygmentsStyle.disabled = !addon.settings.get("darkForumCode");
-  const scrollbarStyle = node.querySelector("link[href$='dark-www/scrollbar.css']");
+  const scrollbarStyle = node.querySelector("link[data-style-href$='dark-www/scrollbar.css']");
   if (scrollbarStyle) scrollbarStyle.disabled = !addon.settings.get("darkScrollbars");
 }
 
