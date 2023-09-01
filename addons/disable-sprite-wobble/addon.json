@@ -38,7 +38,7 @@
       "default": false
     }
   ],
-  "tags": ["editor"],
+  "tags": ["editor", "recommended"],
   "enabledByDefault": false,
   "versionAdded": "1.24.0",
   "latestUpdate": {
