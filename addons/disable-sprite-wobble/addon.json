@@ -1,6 +1,6 @@
 {
   "name": "Fix sprite pane glitching",
-  "description": "Allow scripts, costumes, and sounds to be dragged and dropped onto different sprites without the sprites jumping around within the sprite pane.",
+  "description": "Fixes a bug in the Scratch editor where scripts, costumes, and sounds can't be dragged and dropped into sprites without the sprites jumping around within the sprite pane.",
   "credits": [
     {
       "name": "Xan",
