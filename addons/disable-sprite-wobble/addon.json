@@ -25,17 +25,27 @@
       "matches": ["projects"],
       "if": {
         "settings": {
-          "disable-wobble": true
+          "mode": "no-wobble"
         }
       }
     }
   ],
   "settings": [
     {
-      "id": "disable-wobble",
-      "name": "Disable sprite wobble",
-      "type": "boolean",
-      "default": false
+      "id": "mode",
+      "name": "Mode",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "Fix bug"
+        },
+        {
+          "id": "no-wobble",
+          "name": "Fix bug and disable sprite wobble"
+        }
+      ],
+      "default": "none"
     }
   ],
   "tags": ["editor", "recommended"],
