@@ -63,6 +63,37 @@
       }
     },
     {
+      "name": "page-compactScrollbar",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        },
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "page"
+          },
+          "r": 0.83,
+          "g": 0.83,
+          "b": 0.83
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "page"
+          },
+          "r": 0.87,
+          "g": 0.87,
+          "b": 0.87
+        },
+        "threshold": 110
+      }
+    },
+    {
       "name": "page-loader",
       "value": {
         "type": "textColor",
@@ -281,6 +312,37 @@
       }
     },
     {
+      "name": "selector-compactScrollbar",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "selector"
+        },
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "selector"
+          },
+          "r": 0.83,
+          "g": 0.83,
+          "b": 0.83
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "selector"
+          },
+          "r": 0.87,
+          "g": 0.87,
+          "b": 0.87
+        },
+        "threshold": 110
+      }
+    },
+    {
       "name": "selector2-text",
       "value": {
         "type": "textColor",
@@ -313,6 +375,37 @@
           "settingId": "selector2"
         },
         "threshold": 128
+      }
+    },
+    {
+      "name": "selector2-compactScrollbar",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "selector2"
+        },
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "selector2"
+          },
+          "r": 0.83,
+          "g": 0.83,
+          "b": 0.83
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "selector2"
+          },
+          "r": 0.87,
+          "g": 0.87,
+          "b": 0.87
+        },
+        "threshold": 110
       }
     },
     {
@@ -850,6 +943,14 @@
       "matches": ["projects"],
       "if": {
         "settings": { "affectStage": true }
+      }
+    },
+    {
+      "url": "stage_compact_scrollbars.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "affectStage": true },
+        "addonEnabled": ["editor-compact"]
       }
     }
   ],
