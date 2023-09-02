@@ -111,6 +111,9 @@ export default async function ({ addon }) {
     if (!isValidNumber(e.target.value)) return;
 
     e.preventDefault();
+    // If this is a text input, this will prevent the cursor from moving to the beginning/end of the input.
+    // If this is a number input, it will prevent the default browser behavior when pressing up/down in a
+    // number input (increase or decrease by 1). If we didn't prevent, the user would be increasing twice.
 
     const changeBy =
       (e.shiftKey
