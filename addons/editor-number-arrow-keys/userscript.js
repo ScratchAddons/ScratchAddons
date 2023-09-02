@@ -120,7 +120,7 @@ export default async function ({ addon }) {
       // This function calls handleFlush() on the buffered input when called.
       const flushInput = () => e.target.dispatchEvent(new Event("blur", { bubbles: true }));
 
-      const currentTime = document.timeline.currentTime;
+      const currentTime = document.timeline.currentTime; // Similar to Date.now() but can't be changed by user unexpectedly
       if (!inputMap.has(e.target)) inputMap.set(e.target, { time: null, steps: -1 });
       inputMap.get(e.target).time = currentTime;
       const newNumOfSteps = (inputMap.get(e.target).steps += 1);
