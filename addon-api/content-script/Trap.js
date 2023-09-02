@@ -78,7 +78,7 @@ export default class Trap extends Listenable {
    */
   async getBlockly() {
     if (this._cache.Blockly) return this._cache.Blockly;
-    const childable = await this._getBlocksComponent();
+    const childable = await this._getBlocksWrapperComponent();
     return (this._cache.Blockly = childable.stateNode.ScratchBlocks);
   }
 
