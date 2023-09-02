@@ -88,15 +88,15 @@ export default async function ({ addon }) {
 
   const isSupportedElement = (el) => {
     if (el.classList.contains("blocklyHtmlInput")) return true;
-    else if (el.className.includes("input_input-form_")) {
+    else if (el.matches(".mediaRecorderPopupContent input[type=number]")) {
+      // Number inputs in `mediarecorder` addon modal
+      return true;
+    } else if (el.className.includes("input_input-form_")) {
       if (el.matches("[class*=sprite-info_sprite-info_] [class*=input_input-small_]")) {
         // Sprite X/Y coordinates, size and direction (excludes sprite name)
         return true;
       } else if (el.matches("[class*=paint-editor_editor-container-top_] input[type=number]")) {
         // Number inputs in costume editor (note that browsers already provide up/down clickable buttons for these)
-        return true;
-      } else if (el.matches(".mediaRecorderPopupContent input[type=number]")) {
-        // Number inputs in `mediarecorder` addon modal
         return true;
       } else return false;
     }
