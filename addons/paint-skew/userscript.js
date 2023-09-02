@@ -5,11 +5,9 @@ export default async function ({ addon }) {
 
   const addSkew = function () {
     if (!paper.tool || !paper.tool.boundingBoxTool) return;
-    const ST = paper.tool.boundingBoxTool._modeMap.SCALE.constructor;
-    if (!ST) {
-      return;
-    }
-    if (ST.hasSkew) {
+    // ScaleTool
+    const ST = paper.tool.boundingBoxTool._modeMap.SCALE?.constructor;
+    if (!ST || ST.hasSkew) {
       return;
     }
     ST.hasSkew = true;
@@ -19,7 +17,6 @@ export default async function ({ addon }) {
       if (this.active) return;
       this.index = hitResult.item.data.index;
       ogMouseDown.call(this, hitResult, boundsPath, selectedItems);
-      this.isSkew = false;
       this.skewCenter = false;
       this.lastSkx = 0;
       this.lastSky = 0;
@@ -76,17 +73,6 @@ export default async function ({ addon }) {
       this.lastSky = 0;
       if ((event.modifiers.control || event.modifiers.command) && !this.isCorner) {
         // Skew
-        if (this.isSkew === false) {
-          // Reset position
-          this.centered = false;
-          this.itemGroup.scale(1 / this.lastSx, 1 / this.lastSy, this.pivot);
-          if (this.selectionAnchor) {
-            this.selectionAnchor.scale(this.lastSx, this.lastSy);
-          }
-          this.lastSx = 1;
-          this.lastSy = 1;
-        }
-
         const delta = event.point.subtract(this.pivot);
         switch (this._getRectCornerNameByIndex(this.index)) {
           case "topCenter":
