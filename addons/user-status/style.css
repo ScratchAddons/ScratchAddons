@@ -1,0 +1,45 @@
+.sa-status-wrapper {
+  font-style: italic;
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.sa-status {
+  /* display is added using custom CSS variables */
+  align-items: center;
+  gap: 1rem;
+  margin: 0.4rem 0;
+}
+
+.sa-status img {
+  width: 1.25rem;
+  height: 1.25rem;
+  display: var(--userStatus-icons);
+}
+
+.sa-status-ocular {
+  display: var(--userStatus-ocular);
+}
+
+.sa-status-aviate {
+  display: var(--userStatus-aviate);
+}
+
+.sa-status-dot {
+  height: 10px;
+  width: 10px;
+  margin-left: 5px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+#sa-status-span {
+  border-left: 1px solid rgb(204, 204, 204);
+  margin-left: 5px;
+  padding-left: 5px;
+}
+
+#sa-status-old-location {
+  vertical-align: top;
+}

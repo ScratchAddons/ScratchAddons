@@ -1,6 +1,6 @@
 {
   "name": "ocular integration",
-  "description": "Shows ocular statuses and forum post reactions. Uses my-ocular.jeffalo.net to obtain data.",
+  "description": "Shows forum post reactions and a \"View on ocular\" link. Uses my-ocular.jeffalo.net to obtain data.",
   "credits": [
     {
       "name": "Jeffalo",
@@ -9,86 +9,23 @@
   ],
   "userscripts": [
     {
-      "url": "discuss.js",
-      "matches": ["topics"],
-      "if": {
-        "settings": { "discuss": true }
-      }
-    },
-    {
-      "url": "profile.js",
-      "matches": ["https://scratch.mit.edu/users/*/"],
-      "if": {
-        "settings": { "profile": true }
-      }
-    },
-    {
       "url": "reactions.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "if": {
-        "settings": { "reactions": true }
-      }
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
     }
   ],
   "userstyles": [
     {
-      "url": "status-dot.css",
-      "matches": ["topics", "https://scratch.mit.edu/users/*/"],
-      "if": {
-        "settings": { "discuss": true }
-      }
-    },
-    {
       "url": "reactions.css",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "if": {
-        "settings": { "reactions": true }
-      }
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "settings": [
-    {
-      "name": "Show statuses on profiles",
-      "id": "profile",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Show statuses on forums",
-      "id": "discuss",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Show statuses",
-      "id": "show-status",
-      "type": "select",
-      "potentialValues": [
-        {
-          "id": "everywhere",
-          "name": "Everywhere"
-        },
-        {
-          "id": "others",
-          "name": "Only on others' profiles"
-        }
-      ],
-      "default": "everywhere"
-    },
-    {
-      "name": "Show reaction buttons and \"View on ocular\" link",
-      "id": "reactions",
-      "type": "boolean",
-      "default": true
-    }
-  ],
   "versionAdded": "1.4.0",
   "tags": ["forums", "profiles", "community"],
   "enabledByDefault": false,
   "latestUpdate": {
-    "version": "1.29.0",
-    "newSettings": ["show-status"]
+    "version": "1.34.0",
+    "temporaryNotice": "This addon has been split. Statuses are now available in the \"Show user statuses from external sites\" addon."
   }
 }

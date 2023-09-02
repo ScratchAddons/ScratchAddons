@@ -1,0 +1,126 @@
+{
+  "name": "Show user statuses from external sites",
+  "description": "Shows ocular.jeffalo.net and aviate.scratchers.tech statuses on profiles and forum posts.",
+  "tags": ["community", "forums", "profiles"],
+  "versionAdded": "1.34.0",
+  "userscripts": [
+    {
+      "url": "discuss.js",
+      "matches": ["topics"],
+      "if": {
+        "settings": { "discuss": true }
+      }
+    },
+    {
+      "url": "profile.js",
+      "matches": ["https://scratch.mit.edu/users/*/"],
+      "if": {
+        "settings": { "profile": true }
+      }
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["topics", "https://scratch.mit.edu/users/*/"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Show Ocular statuses",
+      "id": "ocular",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show Aviate statuses",
+      "id": "aviate",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Show statuses on profiles",
+      "id": "profile",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show statuses on forums",
+      "id": "discuss",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show icons",
+      "id": "icons",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Show statuses",
+      "id": "show-status",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "everywhere",
+          "name": "Everywhere"
+        },
+        {
+          "id": "others",
+          "name": "Only on others' profiles"
+        }
+      ],
+      "default": "everywhere"
+    }
+  ],
+  "credits": [
+    {
+      "name": "Jeffalo",
+      "link": "https://github.com/jeffalo"
+    },
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld"
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "ocular",
+      "value": {
+        "type": "ternary",
+        "source": {
+          "type": "settingValue",
+          "settingId": "ocular"
+        },
+        "true": "inline-flex",
+        "false": "none"
+      }
+    },
+    {
+      "name": "aviate",
+      "value": {
+        "type": "ternary",
+        "source": {
+          "type": "settingValue",
+          "settingId": "aviate"
+        },
+        "true": "inline-flex",
+        "false": "none"
+      }
+    },
+    {
+      "name": "icons",
+      "value": {
+        "type": "ternary",
+        "source": {
+          "type": "settingValue",
+          "settingId": "icons"
+        },
+        "true": "block",
+        "false": "none"
+      }
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}
