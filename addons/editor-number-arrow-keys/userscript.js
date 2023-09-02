@@ -105,8 +105,8 @@ export default async function ({ addon }) {
 
   document.body.addEventListener("keydown", (e) => {
     if (addon.self.disabled) return;
-    if (!isSupportedElement(e.target)) return;
     if (!["ArrowUp", "ArrowDown"].includes(e.code)) return;
+    if (!isSupportedElement(e.target)) return;
     if (!e.target.value) return;
     if (!isValidNumber(e.target.value)) return;
 
