@@ -73,6 +73,15 @@ export default async function ({ addon }) {
       this.lastSky = 0;
       if ((event.modifiers.control || event.modifiers.command) && !this.isCorner) {
         // Skew
+        // Reset position
+        this.centered = false;
+        this.itemGroup.scale(1 / this.lastSx, 1 / this.lastSy, this.pivot);
+        if (this.selectionAnchor) {
+          this.selectionAnchor.scale(this.lastSx, this.lastSy);
+        }
+        this.lastSx = 1;
+        this.lastSy = 1;
+        
         const delta = event.point.subtract(this.pivot);
         switch (this._getRectCornerNameByIndex(this.index)) {
           case "topCenter":
