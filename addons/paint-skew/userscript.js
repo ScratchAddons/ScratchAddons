@@ -6,7 +6,7 @@ export default async function ({ addon }) {
   const addSkew = function () {
     if (!paper.tool || !paper.tool.boundingBoxTool) return;
     // ScaleTool
-    const ST = paper.tool.boundingBoxTool._modeMap.SCALE?.constructor;
+    const ST = paper.tool.boundingBoxTool._modeMap?.SCALE?.constructor;
     if (!ST || ST.hasSkew) {
       return;
     }
