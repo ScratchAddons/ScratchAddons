@@ -81,7 +81,7 @@ export default async function ({ addon }) {
         }
         this.lastSx = 1;
         this.lastSy = 1;
-        
+
         const delta = event.point.subtract(this.pivot);
         switch (this._getRectCornerNameByIndex(this.index)) {
           case "topCenter":
