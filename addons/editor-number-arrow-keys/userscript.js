@@ -86,9 +86,13 @@ export default async function ({ addon }) {
     return normalizeNumber(numStr) === Number(numStr).toString();
   };
 
+  const isSupportedElement = (el) => {
+    return el.classList.contains("blocklyHtmlInput") || el.className.includes("input_input-form_");
+  };
+
   document.body.addEventListener("keydown", (e) => {
     if (addon.self.disabled) return;
-    if (!e.target.classList.contains("blocklyHtmlInput") && !e.target.className.includes("input_input-form_")) return;
+    if (!isSupportedElement(e.target)) return;
     if (!["ArrowUp", "ArrowDown"].includes(e.code)) return;
     if (!e.target.value) return;
     if (!isValidNumber(e.target.value)) return;
