@@ -60,7 +60,7 @@ export default async function ({ addon, console, msg }) {
       setTimeout(() => {
         let workspace;
         try {
-          workspace = addon.tab.traps.getWorkspace(true);
+          workspace = addon.tab.traps.getWorkspace();
         } catch {}
         workspace?.recordCachedAreas();
         removeTransition();
@@ -82,7 +82,7 @@ export default async function ({ addon, console, msg }) {
     setTimeout(() => {
       let workspace;
       try {
-        workspace = addon.tab.traps.getWorkspace(true);
+        workspace = addon.tab.traps.getWorkspace();
       } catch {}
       workspace?.recordCachedAreas();
       removeTransition();
