@@ -1,5 +1,6 @@
 document.querySelector("#reset-settings-btn").onclick = () => {
-  if (!window.exportedSettings) {
+  // TODO: if (!window.exportedSettings) after error page gets an "export settings" button.
+  if (true) {
     const res = confirm(
       "Are you sure you want to CLEAR ALL SETTINGS? If you haven't exported your settings first, click Cancel."
     );
