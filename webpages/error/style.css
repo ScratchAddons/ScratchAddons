@@ -1,9 +1,14 @@
 html {
   font-size: 20px;
+  background-color: white;
 }
 
 #browser-info {
-  font-weight: bold;
+  font-style: italic;
+}
+
+#problem-details {
+  font-family: monospace;
 }
 
 #restart-url {

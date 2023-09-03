@@ -6,7 +6,7 @@ document.querySelector("#reset-settings-btn").onclick = () => {
     if (!res) return;
     const res2 = prompt("Type 123 to confirm. You will lose all your Scratch Addons settings.");
     if (res2 !== "123") {
-      alert("You did not type 123. Did not reset settings.");
+      alert("Settings were NOT reset.");
       return;
     }
   }

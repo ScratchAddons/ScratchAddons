@@ -3,9 +3,13 @@ const problem = url.searchParams.get("problem");
 const $ = document.querySelector.bind(document);
 
 if (problem === "unsupportedBrowser") {
+  // Currently unused
   $("#problem-type").textContent = "Unsupported browser";
 } else if (problem === "invalidManifest") {
   $("#problem-type").textContent = `Invalid JSON file: addons/${url.searchParams.get("addon")}/addon.json`;
+} else if (problem === "storage") {
+  $("#problem-type").textContent = "Extension settings are corrupted or temporarily unavailable";
+  $("#problem-details").textContent = "Error: " + (url.searchParams.get("info") || "No info");
 }
 
 const getVersion = () => {
