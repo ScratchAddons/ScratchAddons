@@ -1,6 +1,6 @@
 {
   "files.eol": "\n",
-  
+
   "search.exclude": {
     "libraries/thirdparty/**": true,
     "libraries/licenses/**": true,
