@@ -8,7 +8,7 @@
   "files.trimFinalNewlines": true,
 
   "[xml]": {
-    "files.insertFinalNewline": false,
+    "files.insertFinalNewline": false
   },
 
   "search.exclude": {
