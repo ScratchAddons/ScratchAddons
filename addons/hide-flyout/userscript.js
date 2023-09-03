@@ -58,11 +58,7 @@ export default async function ({ addon, console, msg }) {
       flyOut.classList.remove("sa-flyoutClose");
       scrollBar.classList.remove("sa-flyoutClose");
       setTimeout(() => {
-        let workspace;
-        try {
-          workspace = addon.tab.traps.getWorkspace();
-        } catch {}
-        workspace?.recordCachedAreas();
+        addon.tab.traps.getWorkspace()?.recordCachedAreas();
         removeTransition();
       }, speed * 1000);
     }
@@ -80,11 +76,7 @@ export default async function ({ addon, console, msg }) {
     flyOut.classList.add("sa-flyoutClose");
     scrollBar.classList.add("sa-flyoutClose");
     setTimeout(() => {
-      let workspace;
-      try {
-        workspace = addon.tab.traps.getWorkspace();
-      } catch {}
-      workspace?.recordCachedAreas();
+      addon.tab.traps.getWorkspace()?.recordCachedAreas();
       removeTransition();
     }, speed * 1000);
   }

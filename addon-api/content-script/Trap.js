@@ -92,7 +92,12 @@ export default class Trap extends Listenable {
    * @returns {object}
    */
   getWorkspace() {
-    return this._getBlocksWrapperComponentSync().stateNode.workspace;
+    try {
+      return this._getBlocksWrapperComponentSync().stateNode.workspace;
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
   }
 
   /**
