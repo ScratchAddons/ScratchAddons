@@ -36,7 +36,7 @@ export default async function ({ addon, console, msg }) {
           getIDLink(id.substring(1), post["0"].querySelector(".box-head > .conr").textContent, false) +
           ")[/small]\n" +
           data +
-          "[/quote]\n",
+          "[/quote]\n"
       );
     });
   };

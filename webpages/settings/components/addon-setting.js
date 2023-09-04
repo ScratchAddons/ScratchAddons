@@ -34,7 +34,7 @@ export default async function ({ template }) {
             return arr.some(
               (possibleValue) =>
                 this.addonSettings[settingName] === possibleValue ||
-                this.$parent?.addonSettings?.[settingName] === possibleValue,
+                this.$parent?.addonSettings?.[settingName] === possibleValue
             );
           });
           if (anyMatches === true) return true;
@@ -49,7 +49,7 @@ export default async function ({ template }) {
           this.addon.presets.some((preset) =>
             Object.prototype.hasOwnProperty.call(preset.values, this.setting.id) && this.setting.type === "color"
               ? preset.values[this.setting.id].toLowerCase() !== this.setting.default.toLowerCase()
-              : preset.values[this.setting.id] !== this.setting.default,
+              : preset.values[this.setting.id] !== this.setting.default
           )
         );
       },
@@ -120,7 +120,7 @@ export default async function ({ template }) {
             acc[cur.id] = cur.default;
             return acc;
           }, {}),
-          items,
+          items
         );
         this.addonSettings[this.setting.id].push(settings);
         this.updateSettings();
