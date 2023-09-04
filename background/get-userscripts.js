@@ -345,7 +345,7 @@ const WELL_KNOWN_PATTERNS = {
   // scratch-www routes, not including project pages
   // Matches /projects (an error page) but not /projects/<id>
   scratchWWWNoProject:
-    /^\/(?:(?:about|annual-report(?:\/\d+)?|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|code-of-ethics|credits|developers|DMCA|download(?:\/(?:scratch2|scratch-link))?|educators(?:\/(?:faq|register|waiting))?|explore\/(?:project|studio)s\/\w+(?:\/\w+)?|community_guidelines|faq|ideas|join|messages|parents|privacy_policy(?:\/apps)?|research|scratch_1\.4|search\/(?:project|studio)s|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?|components|become-a-scratcher|projects)\/?)?$/,
+    /^\/(?:(?:about|annual-report(?:\/\d+)?|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|code-of-ethics|credits|developers|DMCA|download(?:\/(?:scratch2|scratch-link))?|educators(?:\/(?:faq|register|waiting))?|explore\/(?:project|studio)s\/\w+(?:\/\w+)?|community_guidelines|faq|ideas|join|messages|parents|privacy_policy(?:\/apps)?|research|scratch_1\.4|search\/(?:project|studio)s|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?|components|become-a-scratcher|projects|cookies|accounts\/bad-username)\/?)?$/,
 };
 
 const WELL_KNOWN_MATCHERS = {
@@ -400,14 +400,21 @@ function matchesIf(injectable, settings) {
 function userscriptMatches(data, scriptOrStyle, addonId) {
   if (scriptOrStyle.if && !matchesIf(scriptOrStyle, scratchAddons.globalState.addonSettings[addonId])) return false;
 
-  const url = data.url;
-  const parsedURL = new URL(url);
+  let _url = data.url;
+  let _parsedURL = new URL(_url);
+  if (_parsedURL.origin === "https://scratchfoundation.github.io" || _parsedURL.port === "8601") {
+    // Run addons on scratch-gui
+    _url = "https://scratch.mit.edu/projects/editor/";
+    _parsedURL = new URL(_url);
+  }
+  const url = _url;
+  const parsedURL = _parsedURL;
   const { matches, _scratchDomainImplied } = scriptOrStyle;
   const parsedPathname = parsedURL.pathname;
   const parsedOrigin = parsedURL.origin;
   const originPath = parsedOrigin + parsedPathname;
   const matchURL = _scratchDomainImplied ? parsedPathname : originPath;
-  const scratchOrigin = "https://scratch.mit.edu";
+  const scratchOrigin = parsedURL.port === "8333" ? "http://localhost:8333" : "https://scratch.mit.edu";
   const isScratchOrigin = parsedOrigin === scratchOrigin;
   // "*" is used for any URL on Scratch origin
   if (matches === "*") return isScratchOrigin;

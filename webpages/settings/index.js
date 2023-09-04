@@ -76,7 +76,18 @@ let fuse;
 
   const serializeSettings = async () => {
     const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
-    const storedSettings = await syncGet(["globalTheme", "addonSettings", "addonsEnabled"]);
+    const storedSettings = await syncGet([
+      "globalTheme",
+      "addonSettings1",
+      "addonSettings2",
+      "addonSettings3",
+      "addonsEnabled",
+    ]);
+    const addonSettings = {
+      ...storedSettings.addonSettings1,
+      ...storedSettings.addonSettings2,
+      ...storedSettings.addonSettings3,
+    };
     const serialized = {
       core: {
         lightTheme: storedSettings.globalTheme,
@@ -87,7 +98,7 @@ let fuse;
     for (const addonId of Object.keys(storedSettings.addonsEnabled)) {
       serialized.addons[addonId] = {
         enabled: storedSettings.addonsEnabled[addonId],
-        settings: storedSettings.addonSettings[addonId] || {},
+        settings: addonSettings[addonId] || {},
       };
     }
     return JSON.stringify(serialized);
@@ -97,7 +108,17 @@ let fuse;
     const obj = JSON.parse(str);
     const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
     const syncSet = promisify(chrome.storage.sync.set.bind(chrome.storage.sync));
-    const { addonSettings, addonsEnabled } = await syncGet(["addonSettings", "addonsEnabled"]);
+    const { addonsEnabled, ...storageItems } = await syncGet([
+      "addonSettings1",
+      "addonSettings2",
+      "addonSettings3",
+      "addonsEnabled",
+    ]);
+    const addonSettings = {
+      ...storageItems.addonSettings1,
+      ...storageItems.addonSettings2,
+      ...storageItems.addonSettings3,
+    };
     const pendingPermissions = {};
     for (const addonId of Object.keys(obj.addons)) {
       const addonValue = obj.addons[addonId];
@@ -133,7 +154,7 @@ let fuse;
       await syncSet({
         globalTheme: !!obj.core.lightTheme,
         addonsEnabled,
-        addonSettings: minifySettings(addonSettings, prerelease ? null : manifests),
+        ...minifySettings(addonSettings, prerelease ? null : manifests),
       });
       resolvePromise();
     };
@@ -705,19 +726,19 @@ let fuse;
   // Konami code easter egg
   let cursor = 0;
   const KONAMI_CODE = [
-    "ArrowUp",
-    "ArrowUp",
-    "ArrowDown",
-    "ArrowDown",
-    "ArrowLeft",
-    "ArrowRight",
-    "ArrowLeft",
-    "ArrowRight",
-    "KeyB",
-    "KeyA",
+    "arrowup",
+    "arrowup",
+    "arrowdown",
+    "arrowdown",
+    "arrowleft",
+    "arrowright",
+    "arrowleft",
+    "arrowright",
+    "b",
+    "a",
   ];
   document.addEventListener("keydown", (e) => {
-    cursor = e.code === KONAMI_CODE[cursor] ? cursor + 1 : 0;
+    cursor = e.key.toLowerCase() === KONAMI_CODE[cursor] ? cursor + 1 : 0;
     if (cursor === KONAMI_CODE.length) {
       vue.selectedCategory = "easterEgg";
       setTimeout(() => (vue.searchInputReal = ""), 0); // Allow konami code in autofocused search bar
