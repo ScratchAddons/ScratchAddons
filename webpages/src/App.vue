@@ -346,17 +346,11 @@ export default {
         if (manifest.versionAdded) {
           const [extMajor, extMinor, _] = this.version.split(".");
           const [addonMajor, addonMinor, __] = manifest.versionAdded.split(".");
-          const excluded_1_33_0 = manifest.versionAdded === "1.33.0";
-          if (!excluded_1_33_0 && extMajor === addonMajor && extMinor === addonMinor) {
+          if (extMajor === addonMajor && extMinor === addonMinor) {
             manifest.tags.push("new");
             manifest._groups.push(
               manifest.tags.includes("recommended") || manifest.tags.includes("featured") ? "featuredNew" : "new"
             );
-          } else if (excluded_1_33_0) {
-            // Addon: op-badge
-            // TODO: remove this for v1.34.0 release.
-            manifest.tags.push("new");
-            manifest._groups.push("new");
           }
         }
 
@@ -737,7 +731,7 @@ export default {
     },
   },
   mounted() {
-        window.vue = this;
+    window.vue = this;
 
     // Autofocus search bar in iframe mode for both browsers
     // autofocus attribute only works in Chrome for us, so
