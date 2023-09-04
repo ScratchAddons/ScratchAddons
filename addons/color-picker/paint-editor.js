@@ -36,7 +36,7 @@ export default async ({ addon, console, msg }) => {
         const previousTool = addon.tab.redux.state.scratchPaint.color.eyeDropper.previousTool;
         if (previousTool) previousTool.activate();
         addon.tab.redux.state.scratchPaint.color.eyeDropper.callback(
-          tinycolor(hex).setAlpha(scratchAddons.opacitySliderAlpha).toRgbString()
+          tinycolor(hex).setAlpha(scratchAddons.opacitySliderAlpha).toRgbString(),
         );
         addon.tab.redux.dispatch({
           type: "scratch-paint/eye-dropper/DEACTIVATE_COLOR_PICKER",
@@ -81,7 +81,7 @@ export default async ({ addon, console, msg }) => {
       value: defaultColor || "",
     });
     saColorPickerColor.addEventListener("input", () =>
-      rateLimiter.limit(() => setColor((saColorPickerText.value = saColorPickerColor.value), element))
+      rateLimiter.limit(() => setColor((saColorPickerText.value = saColorPickerColor.value), element)),
     );
     saColorPickerText.addEventListener("change", () => {
       const { value } = saColorPickerText;

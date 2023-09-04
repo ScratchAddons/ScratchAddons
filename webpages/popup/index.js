@@ -84,7 +84,7 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
         (manifest.popup._addonId = addonId) &&
         Object.assign(manifest.popup, {
           html: `../../popups/${addonId}/${manifest.popup.html}`,
-        })
+        }),
     );
   popupObjects.push({
     name: chrome.i18n.getMessage("quickSettings"),
@@ -117,7 +117,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
       vue.popups.push(manifest.popup);
       vue.popups = vue.popups.sort(
-        ({ _addonId: addonIdB }, { _addonId: addonIdA }) => TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA)
+        ({ _addonId: addonIdB }, { _addonId: addonIdA }) => TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA),
       );
     } else {
       let removeIndex = vue.popupsWithIframes.findIndex((popup) => popup._addonId === addonId);
