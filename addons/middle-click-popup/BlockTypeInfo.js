@@ -406,13 +406,13 @@ export class BlockTypeInfo {
       } else if (field instanceof Blockly.FieldImage) {
         switch (field.src_) {
           case "/static/blocks-media/green-flag.svg":
-            parts.push(locale("/global/blocks/green-flag"));
+            parts.push(locale("/_general/blocks/green-flag"));
             break;
           case "/static/blocks-media/rotate-right.svg":
-            parts.push(locale("/global/blocks/clockwise"));
+            parts.push(locale("/_general/blocks/clockwise"));
             break;
           case "/static/blocks-media/rotate-left.svg":
-            parts.push(locale("/global/blocks/anticlockwise"));
+            parts.push(locale("/_general/blocks/anticlockwise"));
             break;
         }
       } else {
