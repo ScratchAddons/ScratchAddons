@@ -88,7 +88,6 @@ export default class Trap extends Listenable {
    * Unlike Blockly#getMainWorkspace, this always returns the editor workspace
    * (and not the custom block prompt workspace).
    * The result is not cached and should be queried every time workspace access is needed.
-   * @throws when the workspace is not available
    * @returns {object}
    */
   getWorkspace() {
