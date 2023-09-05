@@ -2115,6 +2115,18 @@
           "settingId": "page"
         }
       }
+    },
+    {
+      "name": "page-forumErrorColor",
+      "value": {
+        "type": "textColor",
+        "black": "red",
+        "white": "lightcoral",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
     }
   ],
   "dynamicEnable": true,
@@ -2124,7 +2136,7 @@
   "latestUpdate": {
     "version": "1.34.0",
     "newSettings": ["messageIndicatorColor", "messageIndicatorOnMessagesPage"],
-    "isMajor": false
+    "temporaryNotice": "There are two new presets - one resembling Scratch 2.0 and one with a light blue accent color, which was used on the front page between 2015 and 2018. The message badge color is also customizable now."
   },
   "updateUserstylesOnSettingsChange": true,
   "userscripts": [

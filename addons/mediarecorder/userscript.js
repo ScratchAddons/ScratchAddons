@@ -35,7 +35,7 @@ export default async ({ addon, console, msg }) => {
       const recordOptionSecondsInput = Object.assign(document.createElement("input"), {
         type: "number",
         min: 1,
-        max: 300,
+        max: 600,
         defaultValue: 30,
         id: "recordOptionSecondsInput",
         className: addon.tab.scratchClass("prompt_variable-name-text-input"),
@@ -53,7 +53,7 @@ export default async ({ addon, console, msg }) => {
       const recordOptionDelayInput = Object.assign(document.createElement("input"), {
         type: "number",
         min: 0,
-        max: 300,
+        max: 600,
         defaultValue: 0,
         id: "recordOptionDelayInput",
         className: addon.tab.scratchClass("prompt_variable-name-text-input"),
@@ -224,7 +224,7 @@ export default async ({ addon, console, msg }) => {
     };
     const startRecording = async (opts) => {
       // Timer
-      const secs = Math.min(300, Math.max(1, opts.secs));
+      const secs = Math.min(600, Math.max(1, opts.secs));
 
       // Initialize MediaRecorder
       recordBuffer = [];
