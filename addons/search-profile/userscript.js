@@ -11,7 +11,7 @@ export default async function ({ addon, console, msg }) {
   tab.setAttribute("aria-selected", false);
   tab.tabIndex = -1; // unselected tabs should only be focusable using arrow keys
   img.src = addon.self.dir + "/user.svg";
-  img.className = "tab-icon profile";
+  img.className = "tab-icon sa-search-profile-icon";
   span.innerText = msg("profile");
   addon.tab.displayNoneWhileDisabled(tab);
 
