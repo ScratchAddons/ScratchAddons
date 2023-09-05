@@ -19,9 +19,5 @@
   "credits": [{ "name": "Geotale" }, { "name": "pufferfish101007" }, { "name": "Hexagonal" }, { "name": "valmontechno" }],
   "tags": ["community", "recommended", "profiles"],
   "versionAdded": "1.1.0",
-  "latestUpdate": {
-    "version": "1.33.2",
-    "newSettings": ["icon"]
-  },
   "enabledByDefault": false
 }
