@@ -63,16 +63,16 @@ export default async function ({ addon, console, msg }) {
   function showIcon() {
     if (valid) {
       fetch(`https://api.scratch.mit.edu/users/${user}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.code == 'NotFound') {
-          tab.disabled = true;
-          tab.title = msg("invalid-username", { username: user });
-        } else {
-          span.innerText = data.username;
-          img.src = data.profile.images['32x32'];
-        }
-      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.code == "NotFound") {
+            tab.disabled = true;
+            tab.title = msg("invalid-username", { username: user });
+          } else {
+            span.innerText = data.username;
+            img.src = data.profile.images["32x32"];
+          }
+        });
     } else {
       img.src = addon.self.dir + "/user.svg";
       span.innerText = msg("profile");
