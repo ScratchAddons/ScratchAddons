@@ -61,7 +61,7 @@ export default async function ({ addon, console, msg }) {
     tab.title = msg("invalid-username", { username: user });
   }
   function showIcon() {
-    if (valid && addon.settings.get('icon')) {
+    if (valid) {
       fetch(`https://api.scratch.mit.edu/users/${user}`)
       .then(res => res.json())
       .then(data => {

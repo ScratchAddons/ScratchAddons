@@ -14,14 +14,6 @@
       "matches": ["https://scratch.mit.edu/search/*"]
     }
   ],
-  "settings": [
-    {
-      "name": "Show user icon",
-      "id": "icon",
-      "type": "boolean",
-      "default": true
-    }
-  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "credits": [{ "name": "Geotale" }, { "name": "pufferfish101007" }, { "name": "Hexagonal" }, { "name": "valmontechno" }],
