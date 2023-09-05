@@ -79,5 +79,4 @@ export default async function ({ addon, console, msg }) {
     }
   }
   showIcon();
-  addon.settings.addEventListener("change", showIcon);
 }
