@@ -4,7 +4,7 @@
   border-radius: 3px;
 }
 
-.tabs button:last-child span {
+.sa-search-profile-btn span {
   display: flex;
   justify-content: center;
 }
