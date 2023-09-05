@@ -32,7 +32,8 @@ function getDefaultStoreId() {
 })();
 
 const onCookiesChanged = ({ cookie, cause, removed }) => {
-  if (cookie.name === "scratchsessionsid" || cookie.name === "scratchlanguage" || cookie.name === "scratchcsrftoken") {
+  // We already know that this is true:
+  // `cookie.name === "scratchsessionsid" || cookie.name === "scratchlanguage" || cookie.name === "scratchcsrftoken"`
     if (cookie.name === "scratchlanguage") {
       setLanguage();
     } else if (!scratchAddons.cookieStoreId) {
@@ -54,7 +55,6 @@ const onCookiesChanged = ({ cookie, cause, removed }) => {
       openMessageCache(cookie.storeId, true);
     }
     notify(cookie);
-  }
 };
 
 const COOKIE_CHANGE_RATE_LIMIT = 1500; // (ms) First events get processed immediately, then rate-limit is used.
@@ -75,6 +75,12 @@ const process = ({ clearIntervalIfQueueEmpty }) => {
   }
 };
 const addToQueue = (item) => {
+  const { cookie } = item;
+  if (cookie.name !== "scratchsessionsid" && cookie.name !== "scratchlanguage" && cookie.name !== "scratchcsrftoken") {
+    // Ignore this event
+    return;
+  }
+
   queue.push(item);
   n++;
   if (timer === null) {
