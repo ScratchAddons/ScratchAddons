@@ -34,27 +34,27 @@ function getDefaultStoreId() {
 const onCookiesChanged = ({ cookie, cause, removed }) => {
   // We already know that this is true:
   // `cookie.name === "scratchsessionsid" || cookie.name === "scratchlanguage" || cookie.name === "scratchcsrftoken"`
-    if (cookie.name === "scratchlanguage") {
-      setLanguage();
-    } else if (!scratchAddons.cookieStoreId) {
-      getDefaultStoreId().then(() => checkSession());
-    } else if (
-      // do not refetch for csrf token expiration date change
-      cookie.storeId === scratchAddons.cookieStoreId &&
-      !(cookie.name === "scratchcsrftoken" && cookie.value === scratchAddons.globalState.auth.csrfToken)
-    ) {
-      checkSession().then(() => {
-        if (cookie.name === "scratchsessionsid") {
-          startCache(scratchAddons.cookieStoreId, true);
-          purgeDatabase();
-        }
-      });
-    } else if (cookie.name === "scratchsessionsid") {
-      // Clear message cache for the store
-      // This is not the main one, so we don't refetch here
-      openMessageCache(cookie.storeId, true);
-    }
-    notify(cookie);
+  if (cookie.name === "scratchlanguage") {
+    setLanguage();
+  } else if (!scratchAddons.cookieStoreId) {
+    getDefaultStoreId().then(() => checkSession());
+  } else if (
+    // do not refetch for csrf token expiration date change
+    cookie.storeId === scratchAddons.cookieStoreId &&
+    !(cookie.name === "scratchcsrftoken" && cookie.value === scratchAddons.globalState.auth.csrfToken)
+  ) {
+    checkSession().then(() => {
+      if (cookie.name === "scratchsessionsid") {
+        startCache(scratchAddons.cookieStoreId, true);
+        purgeDatabase();
+      }
+    });
+  } else if (cookie.name === "scratchsessionsid") {
+    // Clear message cache for the store
+    // This is not the main one, so we don't refetch here
+    openMessageCache(cookie.storeId, true);
+  }
+  notify(cookie);
 };
 
 const COOKIE_CHANGE_RATE_LIMIT = 1500; // (ms) First events get processed immediately, then rate-limit is used.
