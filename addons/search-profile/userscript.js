@@ -15,11 +15,27 @@ export default async function ({ addon, console, msg }) {
   span.innerText = msg("profile");
   addon.tab.displayNoneWhileDisabled(tab);
 
+  const setInvalidUsername = () => {
+    tab.disabled = true;
+    tab.title = msg("invalid-username", { username: user });
+  };
+
   // Check if a valid username is entered
   if (valid) {
     tab.addEventListener("click", () => {
       location = `/users/${user}/`;
     });
+    fetch(`https://api.scratch.mit.edu/users/${user}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code == "NotFound") {
+          setInvalidUsername();
+        } else {
+          span.innerText = data.username;
+          img.src = data.profile.images["32x32"];
+        }
+      });
+
     nav.addEventListener("keydown", (event) => {
       // Keyboard navigation
       // Modified code from scratch-www/src/components/tabs/tabs.jsx
@@ -57,26 +73,6 @@ export default async function ({ addon, console, msg }) {
       }
     });
   } else {
-    tab.disabled = true;
-    tab.title = msg("invalid-username", { username: user });
+    setInvalidUsername();
   }
-  function showIcon() {
-    if (valid) {
-      fetch(`https://api.scratch.mit.edu/users/${user}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.code == "NotFound") {
-            tab.disabled = true;
-            tab.title = msg("invalid-username", { username: user });
-          } else {
-            span.innerText = data.username;
-            img.src = data.profile.images["32x32"];
-          }
-        });
-    } else {
-      img.src = addon.self.dir + "/user.svg";
-      span.innerText = msg("profile");
-    }
-  }
-  showIcon();
 }
