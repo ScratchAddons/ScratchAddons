@@ -1,3 +1,3 @@
 {
-  "recommendations": [EditorConfig.EditorConfig, "dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "1000ch.svgo"]
+  "recommendations": ["EditorConfig.EditorConfig", "dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "1000ch.svgo"]
 }
