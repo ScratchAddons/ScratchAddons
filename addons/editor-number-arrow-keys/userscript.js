@@ -3,6 +3,9 @@ export default async function ({ addon }) {
     none: 0,
     hundredth: 0.01,
     tenth: 0.1,
+    eighth: 0.125,
+    quarter: 0.25,
+    half: 0.5,
     one: 1,
     ten: 10,
   };
