@@ -1,5 +1,4 @@
-export function updateAllBlocks(vm) {
-  const workspace = window.Blockly.getMainWorkspace();
+export function updateAllBlocks(vm, workspace) {
   if (workspace) {
     if (vm.editingTarget) {
       vm.emitWorkspaceUpdate();

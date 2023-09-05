@@ -44,7 +44,7 @@ export default async function ({ addon, console }) {
     // If font size has changed, middle click popup needs to clear it's cache too
     clearTextWidthCache();
 
-    updateAllBlocks(vm);
+    updateAllBlocks(vm, addon.tab.traps.getWorkspace());
   };
 
   const setFontSize = (wantedSize) => {
