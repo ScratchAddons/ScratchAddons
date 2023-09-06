@@ -31,7 +31,7 @@ export default async function ({ addon, console, msg }) {
       .then((data) => {
         if (data.code == "NotFound") {
           setInvalidUsername();
-        } else {
+        } else if (!data.code) {
           span.innerText = data.username;
           img.src = data.profile.images["32x32"];
         }
