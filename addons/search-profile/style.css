@@ -4,15 +4,11 @@
   border-radius: 3px;
 }
 
-.tabs button.sa-search-profile-btn {
-  /* Vanilla style is width:8.75em */
-  width: auto;
-  min-width: 8.75em;
-}
-
 .sa-search-profile-btn span {
-  display: flex;
-  justify-content: center;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
 }
 
 .tabs button:disabled {
