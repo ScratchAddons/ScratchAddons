@@ -32,7 +32,7 @@ export default async function ({ addon, console, msg }) {
         if (data.code == "NotFound") {
           setInvalidUsername();
         } else if (!data.code) {
-          span.innerText = data.username;
+          span.innerText = "@" + data.username;
           img.src = data.profile.images["32x32"];
         }
       });
