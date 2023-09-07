@@ -134,8 +134,8 @@ class TokenProvider {
    * @yields {Token} All the tokens found
    * @abstract
    */
+  // eslint-disable-next-line require-yield
   *parseTokens(query, idx) {
-    // eslint-disable-line require-yield
     throw new Error("Sub-class must override abstract method.");
   }
 }

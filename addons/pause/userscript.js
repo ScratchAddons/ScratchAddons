@@ -8,8 +8,12 @@ export default async function ({ addon, console, msg }) {
   img.draggable = false;
   img.title = msg("pause");
 
-  const setSrc = () => (img.src = addon.self.dir + (isPaused() ? "/play.svg" : "/pause.svg"));
-  img.addEventListener("click", () => setPaused(!isPaused())); // Toggle when clicking the button
+  const setSrc = () => {
+    img.src = addon.self.dir + (isPaused() ? "/play.svg" : "/pause.svg");
+    img.title = isPaused() ? msg("play") : msg("pause");
+  };
+  img.addEventListener("click", () => setPaused(!isPaused()));
+
   addon.tab.displayNoneWhileDisabled(img);
   addon.self.addEventListener("disabled", () => {
     setPaused(false);
