@@ -8,7 +8,6 @@ export default async function ({ addon }) {
     half: 0.5,
     one: 1,
     ten: 10,
-    hundred: 100,
   };
 
   const amountOfDecimals = (numStr) => {
