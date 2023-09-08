@@ -1,0 +1,34 @@
+.sa-collapse-footer, /* scratch-www */
+.sa-collapse-footer #content /* scratchr2 */ {
+  padding-bottom: 31px;
+}
+
+/*
+    thank you to ZenithKnight for the following footer CSS
+*/
+.sa-collapse-footer #footer {
+  position: fixed;
+  top: initial;
+  bottom: 0;
+  width: 100%;
+  border-top: 1px solid #d9d9d9;
+  height: 32px !important;
+  box-sizing: border-box;
+  padding-top: 4px !important;
+  z-index: 20;
+  transition-duration: 0.5s;
+}
+.sa-collapse-footer #footer .lists dl {
+  margin-top: 0;
+}
+.sa-collapse-footer #footer:hover {
+  height: var(--footer-hover-height) !important;
+}
+
+.sa-collapse-footer .page > #view {
+  margin-bottom: 0;
+}
+
+:root {
+  --footer-hover-height: 328px; /* How high the hovered footer is (for donor text fix) */
+}
