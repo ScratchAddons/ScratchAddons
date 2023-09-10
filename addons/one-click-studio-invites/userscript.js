@@ -1,5 +1,5 @@
 export default async function (
-  /** @type {import("../../addon-api/content-script/typedef").UserscriptUtilities} */ { addon, msg, console },
+  /** @type {import("../../addon-api/content-script/typedef").UserscriptUtilities} */ { addon, msg, console }
 ) {
   const STUDIO_REGEX = /https:\/\/scratch\.mit\.edu\/studios\/([0-9]+)/;
   const xToken = await addon.auth.fetchXToken();

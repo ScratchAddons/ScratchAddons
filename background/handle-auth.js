@@ -17,7 +17,7 @@ function getDefaultStoreId() {
       promisify(chrome.cookies.get)({
         url: "https://scratch.mit.edu/",
         name: "scratchcsrftoken",
-      }),
+      })
     )
     .then((cookie) => {
       return (scratchAddons.cookieStoreId = cookie.storeId);
@@ -67,7 +67,7 @@ function getCookieValue(name) {
       (cookie) => {
         if (cookie && cookie.value) resolve(cookie.value);
         else resolve(null);
-      },
+      }
     );
   });
 }
@@ -132,7 +132,7 @@ function notify(cookie) {
   // On Chrome this can cause unnecessary session re-fetch, but there should be
   // no harm (aside from extra requests) when doing so.
   chrome.tabs.query(cond, (tabs) =>
-    tabs.forEach((tab) => chrome.tabs.sendMessage(tab.id, "refetchSession", () => void chrome.runtime.lastError)),
+    tabs.forEach((tab) => chrome.tabs.sendMessage(tab.id, "refetchSession", () => void chrome.runtime.lastError))
   );
   // Notify popups, since they also fetch sessions independently
   scratchAddons.sendToPopups({ refetchSession: true });

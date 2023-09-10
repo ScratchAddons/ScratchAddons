@@ -98,7 +98,7 @@ const cs = {
         },
         (res) => {
           reject(res.toString());
-        },
+        }
       );
     });
   },
@@ -111,7 +111,7 @@ const cs = {
             tag,
           },
         },
-        (res) => resolve(res),
+        (res) => resolve(res)
       );
     });
   },
@@ -182,7 +182,7 @@ function addStyle(addon) {
       "Please increase MAX_USERSTYLES_PER_ADDON in content-scripts/cs.js, otherwise style priority is not guaranteed! Has",
       addon.styles.length,
       "styles, current max is",
-      MAX_USERSTYLES_PER_ADDON,
+      MAX_USERSTYLES_PER_ADDON
     );
   }
   for (let i = 0; i < addon.styles.length; i++) {
@@ -434,7 +434,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
             // This should exist... right? Safeguarding anyway
             const userstylesEntry = addonsWithUserstyles[styleIndex];
             userstylesEntry.styles = userstylesEntry.styles.filter(
-              (style) => !partialDynamicDisabledStyles.includes(style.href),
+              (style) => !partialDynamicDisabledStyles.includes(style.href)
             );
             if (userstylesEntry.styles.length || scriptIndex > -1) {
               // The addon was not completely disabled, so early return.
@@ -658,7 +658,7 @@ const showBanner = () => {
             target: "_blank",
             textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
           }).outerHTML,
-        ][Number(i) - 1],
+        ][Number(i) - 1]
     ),
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
@@ -768,7 +768,7 @@ if (isProfile || isStudio || isProject) {
   });
   const errorMsgHtml = escapeHTML(chrome.i18n.getMessage("captureCommentError", DOLLARS)).replace(
     "$1",
-    extensionPolicyLink.outerHTML,
+    extensionPolicyLink.outerHTML
   );
   const sendAnywayMsg = chrome.i18n.getMessage("captureCommentPostAnyway");
   const confirmMsg = chrome.i18n.getMessage("captureCommentConfirm");
@@ -816,7 +816,7 @@ if (isProfile || isStudio || isProject) {
             }
           }
         },
-        { capture: true },
+        { capture: true }
       );
     } else if (isProject || isStudio) {
       // For projects, we want to be careful not to hurt performance.
@@ -897,7 +897,7 @@ if (isProfile || isStudio || isProject) {
                 () => {
                   errorRow.remove();
                 },
-                { once: true },
+                { once: true }
               );
               // Hide error after clicking cancel like scratch-www does
               form.querySelector(".compose-cancel").addEventListener(
@@ -905,11 +905,11 @@ if (isProfile || isStudio || isProject) {
                 () => {
                   errorRow.remove();
                 },
-                { once: true },
+                { once: true }
               );
             }
           },
-          { capture: true },
+          { capture: true }
         );
 
       const check = async () => {
