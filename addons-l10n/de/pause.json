@@ -1,1 +1,1 @@
-{"pause/@name":"Pausetaste","pause/@description":"Fügt eine Pausetaste neben der grünen Flagge hinzu."}
+{"pause/play":"Fortfahren","pause/@name":"Pause-Button","pause/@description":"Fügt eine Schaltfläche neben der grünen Flagge hinzu, mit der Projekte pausiert werden können.","pause/@info-keybind":"Das Projekt kann auch mit Alt+X (auf macOS Option+X) pausiert werden.","pause/@update":"Es gibt nun eine Tastenkombination zum Pausieren von Projekten."}

@@ -58,7 +58,7 @@ export default async function ({ addon, console, msg }) {
       flyOut.classList.remove("sa-flyoutClose");
       scrollBar.classList.remove("sa-flyoutClose");
       setTimeout(() => {
-        Blockly.getMainWorkspace().recordCachedAreas();
+        addon.tab.traps.getWorkspace()?.recordCachedAreas();
         removeTransition();
       }, speed * 1000);
     }
@@ -76,10 +76,16 @@ export default async function ({ addon, console, msg }) {
     flyOut.classList.add("sa-flyoutClose");
     scrollBar.classList.add("sa-flyoutClose");
     setTimeout(() => {
-      Blockly.getMainWorkspace().recordCachedAreas();
+      addon.tab.traps.getWorkspace()?.recordCachedAreas();
       removeTransition();
     }, speed * 1000);
   }
+
+  const updateIsFullScreen = () => {
+    const isFullScreen = addon.tab.redux.state.scratchGui.mode.isFullScreen;
+    document.documentElement.classList.toggle("sa-hide-flyout-not-fullscreen", !isFullScreen);
+  };
+  updateIsFullScreen();
 
   let didOneTimeSetup = false;
   function doOneTimeSetup() {
@@ -105,6 +111,9 @@ export default async function ({ addon, console, msg }) {
           }
           break;
         }
+        case "scratch-gui/mode/SET_FULL_SCREEN":
+          updateIsFullScreen();
+          break;
       }
     });
 
@@ -220,7 +229,12 @@ export default async function ({ addon, console, msg }) {
   while (true) {
     flyOut = await addon.tab.waitForElement(".blocklyFlyout", {
       markAsSeen: true,
-      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "scratch-gui/locales/SELECT_LOCALE", "fontsLoaded/SET_FONTS_LOADED"],
+      reduxEvents: [
+        "scratch-gui/mode/SET_PLAYER",
+        "scratch-gui/locales/SELECT_LOCALE",
+        "scratch-gui/theme/SET_THEME",
+        "fontsLoaded/SET_FONTS_LOADED",
+      ],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
     scrollBar = document.querySelector(".blocklyFlyoutScrollbar");

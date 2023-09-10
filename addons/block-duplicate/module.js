@@ -36,7 +36,7 @@ export async function load(addon) {
 
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
-  // https://github.com/LLK/scratch-blocks/blob/912b8cc728bea8fd91af85078c64fcdbfe21c87a/core/gesture.js#L454
+  // https://github.com/scratchfoundation/scratch-blocks/blob/912b8cc728bea8fd91af85078c64fcdbfe21c87a/core/gesture.js#L454
   const originalStartDraggingBlock = ScratchBlocks.Gesture.prototype.startDraggingBlock_;
   ScratchBlocks.Gesture.prototype.startDraggingBlock_ = function (...args) {
     let block = this.targetBlock_;
@@ -64,7 +64,7 @@ export async function load(addon) {
     }
 
     if (isDuplicating) {
-      // Based on https://github.com/LLK/scratch-blocks/blob/feda366947432b9d82a4f212f43ff6d4ab6f252f/core/scratch_blocks_utils.js#L171
+      // Based on https://github.com/scratchfoundation/scratch-blocks/blob/feda366947432b9d82a4f212f43ff6d4ab6f252f/core/scratch_blocks_utils.js#L171
       // Setting this.shouldDuplicateOnDrag_ = true does NOT work because it doesn't call changeObscuredShadowIds
       this.startWorkspace_.setResizesEnabled(false);
       ScratchBlocks.Events.disable();

@@ -1,1 +1,1 @@
-{"comments-linebreaks/@name":"コメント内の改行を表示","comments-linebreaks/@description":"コメント中の改行を表示する。","comments-linebreaks/@settings-name-scrollbars":"スクロールバーを表示"}
+{"comments-linebreaks/@name":"コメント内の改行を表示","comments-linebreaks/@description":"コメント中の改行を表示する。","comments-linebreaks/@info-ownLineBreaks":"改行はアドオンを有効化したユーザーにのみ表示されます。その他のユーザーに対してはスペースとして表示されます。","comments-linebreaks/@settings-name-scrollbars":"スクロールバーを表示","comments-linebreaks/@settings-name-height":"一度に表示される行数"}
