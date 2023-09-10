@@ -53,12 +53,13 @@
   content: "";
   display: block;
   position: absolute;
-  right: 100%;
+  right: calc(100% + 1px);
   bottom: calc(50% - 2px);
   width: 18px;
   height: 48px;
   background-image: url("%addon-self-dir%/assets/dots.svg");
   background-repeat: no-repeat;
+  filter: var(--darkWww-page-filter, none);
   pointer-events: none;
 }
 #sidebar li:not(.sub-list) + li.sub-list::before {
