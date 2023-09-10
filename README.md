@@ -19,7 +19,7 @@ Scratch Addons combines new and existing features and themes for the [Scratch](h
 
 <div align="center">
 
-![Scratch Addons screenshot](.github/readme-images/screenshot.png)
+![Scratch Addons screenshot](https://scratchaddons.com/assets/img/showcase/intro-hero.svg)
 
 </div>
 
