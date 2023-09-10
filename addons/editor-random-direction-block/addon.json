@@ -7,7 +7,7 @@
       "matches": ["projects"]
     }
   ],
-  "versionAdded": "1.31.0",
+  "versionAdded": "1.35.0",
   "tags": ["editor"],
   "enabledByDefault": false,
   "dynamicEnable": true,
