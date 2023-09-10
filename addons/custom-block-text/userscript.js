@@ -13,10 +13,15 @@ export default async function ({ addon, console }) {
   // For example, we always want to call updateAllBlocks() after the styles
   // were updated according to the user's settings, not before.
   const fontSizeCss = document.createElement("style");
+  // Be careful with specificity because we're adding this userstyle manually
+  // to the <head> without checking if other styles are above or below.
   fontSizeCss.textContent = `
     .blocklyText,
     .blocklyHtmlInput {
       font-size: calc(var(--customBlockText-sizeSetting) * 0.12pt) !important;
+    }
+    .blocklyFlyoutLabelText {
+      font-size: calc(var(--customBlockText-sizeSetting) * 0.14pt) !important;
     }`;
   fontSizeCss.disabled = true;
   document.head.appendChild(fontSizeCss);
