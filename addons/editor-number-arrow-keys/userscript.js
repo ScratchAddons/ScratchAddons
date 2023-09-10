@@ -3,9 +3,6 @@ export default async function ({ addon }) {
     none: 0,
     hundredth: 0.01,
     tenth: 0.1,
-    eighth: 0.125,
-    quarter: 0.25,
-    half: 0.5,
     one: 1,
     ten: 10,
   };
@@ -97,12 +94,21 @@ export default async function ({ addon }) {
 
     e.preventDefault();
 
-    const changeBy =
-      (e.shiftKey
+    let changeBy = e.code === "ArrowUp" ? 1 : -1;
+    if (addon.settings.get("useCustom")) {
+        // TODO: add proper float settings
+        changeBy *= e.shiftKey
+        ? parseFloat(addon.settings.get("shiftCustom"))
+        : e.altKey
+        ? parseFloat(addon.settings.get("altCustom"))
+        : parseFloat(addon.settings.get("regularCustom"));
+    } else {
+      changeBy *= e.shiftKey
         ? settings[addon.settings.get("shift")]
         : e.altKey
         ? settings[addon.settings.get("alt")]
-        : settings[addon.settings.get("regular")]) * (e.code === "ArrowUp" ? 1 : -1);
+        : settings[addon.settings.get("regular")];
+    }
 
     const newValueAsInt =
       shiftDecimalPointToRight(e.target.value, 5) + shiftDecimalPointToRight(changeBy.toString(), 5);

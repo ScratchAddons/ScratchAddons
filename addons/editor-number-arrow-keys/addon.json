@@ -29,18 +29,6 @@
           "name": "0.1"
         },
         {
-          "id": "eighth",
-          "name": "0.125"
-        },
-        {
-          "id": "quarter",
-          "name": "0.25"
-        },
-        {
-          "id": "half",
-          "name": "0.5"
-        },
-        {
           "id": "one",
           "name": "1"
         },
@@ -48,7 +36,15 @@
           "id": "ten",
           "name": "10"
         }
-      ]
+      ],
+      "if": { "settings": { "useCustom": false } }
+    },
+    {
+      "name": "Change on regular key press",
+      "id": "regularCustom",
+      "type": "string",
+      "default": "1",
+      "if": { "settings": { "useCustom": true } }
     },
     {
       "name": "Change on Shift+Key",
@@ -69,18 +65,6 @@
           "name": "0.1"
         },
         {
-          "id": "eighth",
-          "name": "0.125"
-        },
-        {
-          "id": "quarter",
-          "name": "0.25"
-        },
-        {
-          "id": "half",
-          "name": "0.5"
-        },
-        {
           "id": "one",
           "name": "1"
         },
@@ -88,7 +72,16 @@
           "id": "ten",
           "name": "10"
         }
-      ]
+      ],
+      "if": { "settings": { "useCustom": false } }
+    },
+
+    {
+      "name": "Change on Shift+Key",
+      "id": "shiftCustom",
+      "type": "string",
+      "default": "10",
+      "if": { "settings": { "useCustom": true } }
     },
     {
       "name": "Change on Alt+Key",
@@ -109,18 +102,6 @@
           "name": "0.1"
         },
         {
-          "id": "eighth",
-          "name": "0.125"
-        },
-        {
-          "id": "quarter",
-          "name": "0.25"
-        },
-        {
-          "id": "half",
-          "name": "0.5"
-        },
-        {
           "id": "one",
           "name": "1"
         },
@@ -128,7 +109,23 @@
           "id": "ten",
           "name": "10"
         }
-      ]
+      ],
+      "if": { "settings": { "useCustom": false } }
+    },
+
+    {
+      "name": "Change on Alt+Key",
+      "id": "altCustom",
+      "type": "string",
+      "default": "0.1",
+      "if": { "settings": { "useCustom": true } }
+    },
+
+    {
+      "name": "Use custom values",
+      "id": "useCustom",
+      "type": "boolean",
+      "default": false
     }
   ],
   "credits": [
