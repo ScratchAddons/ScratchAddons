@@ -96,8 +96,8 @@ export default async function ({ addon }) {
 
     let changeBy = e.code === "ArrowUp" ? 1 : -1;
     if (addon.settings.get("useCustom")) {
-        // TODO: add proper float settings
-        changeBy *= e.shiftKey
+      // TODO: add proper float settings
+      changeBy *= e.shiftKey
         ? parseFloat(addon.settings.get("shiftCustom"))
         : e.altKey
         ? parseFloat(addon.settings.get("altCustom"))
