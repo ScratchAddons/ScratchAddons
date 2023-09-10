@@ -647,7 +647,7 @@ export default async function ({ addon, console, msg }) {
       // There's two types of connections from child -> parent. We need to figure out which one is used.
       const blockConnections = block.getConnections_();
       const blockToParentConnection = blockConnections.find(
-        (c) => c.targetConnection && c.targetConnection.sourceBlock_ === parent
+        (c) => c.targetConnection && c.targetConnection.sourceBlock_ === parent,
       );
       blockConnectionType = blockToParentConnection.type;
     }
@@ -806,7 +806,7 @@ export default async function ({ addon, console, msg }) {
       }
       return items;
     },
-    { blocks: true }
+    { blocks: true },
   );
 
   // https://github.com/LLK/scratch-blocks/blob/abbfe93136fef57fdfb9a077198b0bc64726f012/blocks_vertical/procedures.js#L207-L215

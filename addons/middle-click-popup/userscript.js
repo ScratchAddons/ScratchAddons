@@ -306,7 +306,7 @@ export default async function ({ addon, msg, console }) {
       }
 
       options.sort((a, b) =>
-        a.desc.length < b.desc.length ? -1 : a.desc.length > b.desc.length ? 1 : a.desc.localeCompare(b.desc)
+        a.desc.length < b.desc.length ? -1 : a.desc.length > b.desc.length ? 1 : a.desc.localeCompare(b.desc),
       );
 
       let count = 0;

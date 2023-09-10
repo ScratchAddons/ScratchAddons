@@ -72,7 +72,7 @@ export default async function ({ addon, global, console, msg }) {
     let selectedSprite;
     if (spriteIndex) {
       selectedSprite = document.querySelector(
-        `[class*='sprite-selector_sprite-wrapper_']:nth-child(${spriteIndex}) [class*="sprite-selector_sprite_"]`
+        `[class*='sprite-selector_sprite-wrapper_']:nth-child(${spriteIndex}) [class*="sprite-selector_sprite_"]`,
       );
     } else {
       selectedSprite = await addon.tab.waitForElement(`[class*="sprite-selector-item_is-selected"]`);

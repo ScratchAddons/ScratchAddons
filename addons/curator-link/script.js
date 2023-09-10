@@ -14,19 +14,19 @@ export default async function ({ addon }) {
   if (!addon.self.disabled) {
     heading.innerHTML = escapeHTML(addon.tab.scratchMessage("splash.projectsCuratedBy")).replace(
       "{curatorId}",
-      link.outerHTML
+      link.outerHTML,
     );
   }
   addon.self.addEventListener("disabled", () => {
     heading.innerHTML = escapeHTML(addon.tab.scratchMessage("splash.projectsCuratedBy")).replace(
       "{curatorId}",
-      curator
+      curator,
     );
   });
   addon.self.addEventListener("reenabled", () => {
     heading.innerHTML = escapeHTML(addon.tab.scratchMessage("splash.projectsCuratedBy")).replace(
       "{curatorId}",
-      link.outerHTML
+      link.outerHTML,
     );
   });
 }
