@@ -11,19 +11,19 @@
       "\t\t\t\"name\": \"$3\",",
       "\t\t\t\"link\": \"https://scratch.mit.edu/users/$4/\"",
       "\t\t}",
-      "\t],"
+      "\t],",
       "\t\"user${7:scripts}\": [",
-      "\t\t{"
-      "\t\t\t\"url\": \"${8:userscript.js}\","
-      "\t\t\t\"matches\": [$9]"
+      "\t\t{",
+      "\t\t\t\"url\": \"${8:userscript.js}\",",
+      "\t\t\t\"matches\": [$9]",
       "\t\t}",
       "\t],",
       "\t\"settings\": [$0],",
       "\t\"dynamicEnable\": false,",
       "\t\"dynamicDisable\": false,",
       "\t\"tags\": [$5],",
-      "\t\"versionAdded\": \"1.${6:0}.0\","
-      "\t\"enabledByDefault\": false"
+      "\t\"versionAdded\": \"1.${6:0}.0\",",
+      "\t\"enabledByDefault\": false",
       "}",
       ""
     ],
