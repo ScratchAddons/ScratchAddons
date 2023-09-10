@@ -14,7 +14,7 @@ You can also open a [discussion](https://github.com/ScratchAddons/ScratchAddons/
 
 ## Contributing code
 
-If you are familiar with JavaScript, HTML, and CSS, you can contribute by fixing bugs, making adjustments, or adding features. Just follow the steps below to open a pull request to propose your changes which we can then add to Scratch Addons.
+If you are familiar with JavaScript, HTML, and CSS, you can contribute by fixing bugs or adding features. Just follow the steps below to open a pull request to propose your changes which we can then add to Scratch Addons.
 
 ### Learn more about making addons
 
@@ -26,7 +26,11 @@ We recommend [using Git](https://docs.github.com/en/get-started/quickstart/set-u
 
 New to contributing? You can practice by contributing to [octocat/Spoon-Knife](https://github.com/octocat/Spoon-Knife) with the help of [this guide](https://docs.github.com/en/get-started/quickstart/contributing-to-projects).
 
-We format our code with Prettier, which makes sure all code follows the same style and makes it look nice and neat. You can install [Prettier for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) or enable the "Format code using Prettier" workflow on your fork to have Prettier format your code.
+Looking for a code editor? We recommend [Visual Studio Code](https://code.visualstudio.com/).
+
+We format our code with Prettier, which makes sure all code follows the same style and makes it look nice and neat. You can install [Prettier for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) or enable the "Format code using Prettier" workflow on your fork to have Prettier format your code. If your pull request has formatting issues, don't worry, we can fix it for you.
+
+It's a good idea to check "allow edits from maintainers" so that we can help make improvements and fixes for you. This might read "allow edits and **access to secrets** from maintainers" and [that's okay](https://github.com/DNin01/help-for-github-users/blob/main/questions/allowing-edits-and-access-to-secrets.md).
 
 Make sure you have thoroughly tested any changes you want to contribute.
 
