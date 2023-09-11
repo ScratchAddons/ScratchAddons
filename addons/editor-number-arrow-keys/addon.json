@@ -50,6 +50,7 @@
       "id": "regularCustom",
       "type": "string",
       "default": "1",
+      "max": 8,
       "if": { "settings": { "useCustom": true } }
     },
     {
@@ -87,6 +88,7 @@
       "id": "shiftCustom",
       "type": "string",
       "default": "10",
+      "max": 8,
       "if": { "settings": { "useCustom": true } }
     },
     {
@@ -124,6 +126,7 @@
       "id": "altCustom",
       "type": "string",
       "default": "0.1",
+      "max": 8,
       "if": { "settings": { "useCustom": true } }
     },
 

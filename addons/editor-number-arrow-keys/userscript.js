@@ -96,12 +96,22 @@ export default async function ({ addon }) {
 
     let changeBy = e.code === "ArrowUp" ? 1 : -1;
     if (addon.settings.get("useCustom")) {
-      // TODO: add proper float settings
-      changeBy *= e.shiftKey
-        ? parseFloat(addon.settings.get("shiftCustom"))
+      let settingValue = e.shiftKey
+        ? addon.settings.get("shiftCustom")
         : e.altKey
-        ? parseFloat(addon.settings.get("altCustom"))
-        : parseFloat(addon.settings.get("regularCustom"));
+        ? addon.settings.get("altCustom")
+        : addon.settings.get("regularCustom");
+      if (settingValue === "") settingValue = 0;
+      let valueAsFloat = parseFloat(settingValue);
+      if (valueAsFloat < 0) valueAsFloat *= -1; // If user typed a negative number, we make it positive
+      if (Number.isNaN(valueAsFloat)) {
+        return;
+      } else if (valueAsFloat === 0 || (valueAsFloat < 100000000 && valueAsFloat > 0.00000099)) {
+        // This will exclude valid floats such as `1e20` that are less than 9 characters
+        changeBy *= valueAsFloat;
+      } else {
+        return;
+      }
     } else {
       changeBy *= e.shiftKey
         ? settings[addon.settings.get("shift")]
