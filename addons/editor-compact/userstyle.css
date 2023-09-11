@@ -22,18 +22,13 @@
   border: 1px solid transparent;
 }
 
-/* Menu bar
-[class*="menu-bar_file-group_"] [class*="menu-bar_hoverable_"] > img,
-[class*="menu-bar_divider"],
-[class*="menu-bar_help-icon"] {
-  display: none;
-}*/
 [class*="menu-bar_collapsible-label_"],
 [dir="rtl"] [class*="menu-bar_collapsible-label_"],
 [class*="settings-menu_dropdown-label_"],
 [dir="rtl"] [class*="settings-menu_dropdown-label_"] {
   margin: 0;
 }
+
 @media (max-width: 1024px) {
   [class*="menu-bar_file-group_"] [class*="menu-bar_hoverable_"] > img:first-child {
     display: inline;

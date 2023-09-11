@@ -30,20 +30,20 @@
   "tags": ["editor", "editorMenuBar", "featured"],
   "settings": [
     {
-      "name": "Menus",
+      "name": "Show menu...",
       "id": "menu-labels",
       "type": "select",
       "potentialValues": [
         {
-          "name": "Show icons and text",
+          "name": "Icons and labels",
           "id": "both"
         },
         {
-          "name": "Only show icons",
+          "name": "Icons only",
           "id": "icons"
         },
         {
-          "name": "Only show labels",
+          "name": "Labels only",
           "id": "labels"
         }
       ],
@@ -53,7 +53,7 @@
       "name": "Hide Tutorials button",
       "id": "hide-tutorials-button",
       "type": "boolean",
-      "default": true
+      "default": false
     },
     {
       "name": "Hide My Stuff button",
