@@ -1,4 +1,4 @@
-[class*="menu-bar_file-group"]>[class*="menu-bar_hoverable"]>img {
+[class*="menu-bar_file-group"] > [class*="menu-bar_hoverable"] > img {
   display: none;
 }
 
@@ -6,13 +6,13 @@
   justify-content: center;
 }
 
-[class*="menu-bar_hoverable"]>span {
+[class*="menu-bar_hoverable"] > span {
   margin-right: 0;
   padding-right: 0;
 }
 
 @media (max-width: 1024px) {
-  [class*="menu-bar_file-group"]>[class*="menu-bar_hoverable"]>img {
+  [class*="menu-bar_file-group"] > [class*="menu-bar_hoverable"] > img {
     display: block;
   }
 }
