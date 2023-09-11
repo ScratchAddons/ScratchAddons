@@ -6,7 +6,7 @@
   "latestUpdate": {
     "version": "1.35",
     "isMajor": true,
-    "newSettings": ["useCustom", "regularCustom", "shiftCustom", "altCustom"],
+    "newSettings": ["useCustom"],
     "temporaryNotice": "There is now the option to fully customize the values."
   },
   "userscripts": [
