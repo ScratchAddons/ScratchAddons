@@ -23,7 +23,7 @@
   ],
   "info": [
     {
-      "id": "tutorials-button",
+      "id": "tutorials-button-update",
       "text": "The \"Hide Tutorials button\" addon has been moved here as a setting."
     }
   ],
@@ -41,29 +41,19 @@
         {
           "name": "Only show icons",
           "id": "icons"
+        },
+        {
+          "name": "Only show labels",
+          "id": "labels"
         }
       ],
       "default": "both"
     },
     {
-      "name": "Tutorials button",
-      "id": "tutorials-button",
-      "type": "select",
-      "potentialValues": [
-        {
-          "name": "Show icon and text",
-          "id": "both"
-        },
-        {
-          "name": "Only show icon",
-          "id": "icon"
-        },
-        {
-          "name": "Hide",
-          "id": "hide"
-        }
-      ],
-      "default": "both"
+      "name": "Hide Tutorials button",
+      "id": "hide-tutorials-button",
+      "type": "boolean",
+      "default": true
     },
     {
       "name": "Hide My Stuff button",
@@ -113,11 +103,11 @@
       }
     },
     {
-      "url": "tutorials-icon.css",
+      "url": "menu-labels.css",
       "matches": ["projects"],
       "if": {
         "settings": {
-          "tutorials-button": "icon"
+          "menu-labels": "labels"
         }
       }
     },
@@ -126,7 +116,7 @@
       "matches": ["projects"],
       "if": {
         "settings": {
-          "tutorials-button": "hide"
+          "hide-tutorials-button": true
         }
       }
     }
@@ -135,5 +125,5 @@
   "dynamicEnable": true,
   "updateUserstylesOnSettingsChange": true,
   "enabledByDefault": false,
-  "versionAdded": "1.34.0"
+  "versionAdded": "1.35.0"
 }

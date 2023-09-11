@@ -1,0 +1,3 @@
+[class*="menu-bar_file-group"] > [class*="menu-bar_hoverable"] > img {
+    display: none;
+}
