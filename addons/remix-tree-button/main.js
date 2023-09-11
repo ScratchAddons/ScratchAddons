@@ -23,9 +23,8 @@ export default async function ({ addon, console, msg }) {
 
   // -- Functions for the links to use --
 
-  function appendToProjectURL(appendage) {
-    return `https://scratch.mit.edu/projects/${window.location.href.split("projects")[1].split("/")[1]}/${appendage}`;
-  }
+  const appendToProjectURL = (appendage) =>
+    `https://scratch.mit.edu/projects/${window.location.href.split("projects")[1].split("/")[1]}/${appendage}`;
 
   function goToRemixTree(e) {
     if (addon.settings.get("new-tab") || e.ctrlKey || e.metaKey) {
@@ -45,7 +44,7 @@ export default async function ({ addon, console, msg }) {
     }
   }
 
-  // -- Code to show/hide links --
+  // -- Handle show/hide --
 
   async function setButton(enabled) {
     // Add a button next to "Copy Link"
@@ -90,7 +89,7 @@ export default async function ({ addon, console, msg }) {
       .then(() => {
         if (enabled) {
           const link = document.querySelector(".remix-list a");
-          const linkSpan = document.querySelector(".remix-list a span");
+          const linkSpan = link.firstChild;
 
           if (!originalTextContent) {
             originalTextContent = linkSpan.textContent; // Store what the button's text content was before the first time we change it (because different languages).
@@ -103,7 +102,7 @@ export default async function ({ addon, console, msg }) {
           if (!originalTextContent) return; // If we haven't changed it to link to the remix tree, don't do anything.
 
           const link = document.querySelector(".remix-list a");
-          const linkSpan = document.querySelector(".remix-list a span");
+          const linkSpan = link.firstChild;
 
           link.href = appendToProjectURL("remixes");
           setOpensInNewTab(false, link);
