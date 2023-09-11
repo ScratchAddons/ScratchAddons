@@ -1,0 +1,49 @@
+{
+    "Scratch Addons manifest": {
+      "prefix": "addon",
+      "body": [
+        "{",
+        "  \"name\": \"$1\",",
+        "  \"description\": \"$2\",",
+        "  \"tags\": [$3],",
+        "  \"credits\": [",
+        "  ],",
+        "  \"user${6:scripts}\": [",
+        "  ],",
+        "  \"dynamicEnable\": ${7:false},",
+        "  \"dynamicDisable\": ${8:false},",
+        "  \"versionAdded\": \"1.${9:0}.0\",",
+        "  \"enabledByDefault\": false",
+        "}",
+        "",
+      ],
+      "description": "addon.json"
+    },
+    "Credits": {
+        "prefix": "credits",
+        "body": [
+            "{",
+            "      \"name\": \"$1\",",
+            "      \"link\": \"https://scratch.mit.edu/users/$2/\"",
+            "}"
+        ]
+    },
+    "Userscript/style": {
+        "prefix": "userscript",
+        "body": [
+            "{",
+            "\"url\": \"${1:userscript.js}\",",
+            "\"matches\": [$2]",
+            "}"
+        ]
+    },
+    "Info": {
+        "prefix": "info",
+        "body": [
+            "{",
+            "\"type\": \"$1\"",
+            "\"text\": \"$2\"",
+            "\"id\": \"$3\""
+        ]
+    }
+}
