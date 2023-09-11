@@ -38,7 +38,7 @@ export default async function ({ addon, console }) {
       const tab = document.createElement("div");
       tab.classList.add("tab-choice-sa");
       const inner = document.createElement("span");
-      inner.innerText = labels[i].innerText;
+      inner.innerText = labels[i].querySelector("span").innerText;
       tab.appendChild(inner);
       tab.addEventListener("click", () => selectTab(i));
       tabButtons.push(tab);

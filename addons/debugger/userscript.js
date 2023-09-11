@@ -347,11 +347,11 @@ export default async function ({ addon, console, msg }) {
           } else if (type === "field_image") {
             const src = argInfo.src;
             if (src.endsWith("rotate-left.svg")) {
-              formattedMessage += msg("/global/blocks/anticlockwise");
+              formattedMessage += msg("/_general/blocks/anticlockwise");
             } else if (src.endsWith("rotate-right.svg")) {
-              formattedMessage += msg("/global/blocks/clockwise");
+              formattedMessage += msg("/_general/blocks/clockwise");
             } else if (src.endsWith("green-flag.svg")) {
-              formattedMessage += msg("/global/blocks/green-flag");
+              formattedMessage += msg("/_general/blocks/green-flag");
             }
           } else {
             formattedMessage += "()";
