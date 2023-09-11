@@ -1,6 +1,6 @@
 {
   "name": "Customizable menu bar",
-  "description": "Allows you to hide specific editor menu bar items or remove their labels.",
+  "description": "Allows you to hide specific editor menu bar items or remove their labels or icons.",
   "credits": [
     {
       "name": "philipp2007",
