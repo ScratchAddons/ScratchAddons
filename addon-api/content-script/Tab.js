@@ -207,6 +207,11 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get editorMode() {
+    if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601") {
+      // Note that scratch-gui does not change the URL when going fullscreen.
+      if (this.redux.state?.scratchGui?.mode?.isFullScreen) return "fullscreen";
+      return "editor";
+    }
     const pathname = location.pathname.toLowerCase();
     const split = pathname.split("/").filter(Boolean);
     if (!split[0] || split[0] !== "projects") return null;
@@ -354,7 +359,7 @@ export default class Tab extends Listenable {
    * @type {string}
    */
   get direction() {
-    // https://github.com/LLK/scratch-l10n/blob/master/src/supported-locales.js
+    // https://github.com/scratchfoundation/scratch-l10n/blob/master/src/supported-locales.js
     const rtlLocales = ["ar", "ckb", "fa", "he"];
     const lang = scratchAddons.globalState.auth.scratchLang.split("-")[0];
     return rtlLocales.includes(lang) ? "rtl" : "ltr";
