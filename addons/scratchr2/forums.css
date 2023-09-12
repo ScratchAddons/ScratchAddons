@@ -156,7 +156,6 @@ body > #pagewrapper {
   line-height: 18px;
   font-weight: bold;
   text-align: center;
-  text-decoration: none;
 }
 .linkst li:not(:last-child) a:hover,
 .linksb li:not(:last-child) a:hover,
