@@ -1,6 +1,6 @@
 {
   "name": "Arrow key incrementation in editor",
-  "description": "Use the up and down arrow keys to increase or decrease number values in block inputs.",
+  "description": "Use the up and down arrow keys to increase or decrease number values in numeric input fields such as those in blocks or the sprite properties area.",
   "tags": ["editor", "codeEditor", "recommended"],
   "versionAdded": "1.34.0",
   "userscripts": [
@@ -104,6 +104,10 @@
       "name": "World_Languages"
     }
   ],
+  "latestUpdate": {
+    "version": "1.35.0",
+    "temporaryNotice": "You can now also increment input fields that are not in blocks, like the sprite properties."
+  },
   "dynamicDisable": true,
   "dynamicEnable": true
 }
