@@ -1,0 +1,16 @@
+/* Include */
+a,
+a:link,
+a:not([href]),
+a:hover,
+a:active,
+a.black:hover,
+a.black:active,
+a.reply,
+input.link,
+input.link:hover,
+input.link:active,
+input.link.black:hover,
+input.link.black:active {
+  font-weight: normal;
+}
