@@ -639,6 +639,18 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             settings.bordercolor = "#855cd6";
           });
         }
+
+        if (addonId === "colorblind") {
+          // Transition v1.34 to v1.35
+          if (settings.links !== "underline") settings["underline-style"] = "none";
+          if (settings.links === "bold") {
+            settings.bold = "all";
+          } else {
+            settings["bold"] = "default";
+          }
+          delete settings.links;
+          madeAnyChanges = madeChangesToAddon = true;
+        }
       }
 
       if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;
