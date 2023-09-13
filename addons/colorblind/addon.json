@@ -47,7 +47,7 @@
   ],
   "settings": [
     {
-      "name": "Bold",
+      "name": "Bold links",
       "id": "bold",
       "type": "select",
       "potentialValues": [
