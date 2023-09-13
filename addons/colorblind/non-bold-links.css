@@ -11,6 +11,15 @@ input.link,
 input.link:hover,
 input.link:active,
 input.link.black:hover,
-input.link.black:active {
+input.link.black:active,
+.button > span,
+button,
+.news-description h4,
+.slider-carousel .thumb span.title a {
   font-weight: normal;
+}
+
+/* Exclude */
+.join-scratch a {
+  font-weight: bold;
 }

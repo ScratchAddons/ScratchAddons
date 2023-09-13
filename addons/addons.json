@@ -144,7 +144,6 @@
   "featured-dangos-v2",
   "remember-collapsed-categories",
   "editor-number-arrow-keys",
-  "colorblind",
   "forum-post-countdown",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
@@ -162,6 +161,7 @@
   "material-forum-editor-buttons",
   "forum-quote-code-beautifier",
   "horizontal-mystuff-tabs",
+  "colorblind",
   "// For editor:",
   "editor-dark-mode",
   "editor-colored-context-menus",
