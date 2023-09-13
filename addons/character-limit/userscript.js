@@ -1,13 +1,13 @@
 export default async function ({ addon, console, msg }) {
-  var maxLength = 5000;
-  var className = "desc-limit";
-  var area = "project";
+  let maxLength = 5000;
+  let className = "desc-limit";
+  let area = "project";
   if (location.pathname.split("/")[1] === "studios") {
     className = "studio-desc-limit";
     area = "studio";
   }
 
-  var threshold = null;
+  let threshold = null;
   function updateThreshold() {
     if (addon.settings.get("display") === "low") {
       threshold = addon.settings.get("threshold");
