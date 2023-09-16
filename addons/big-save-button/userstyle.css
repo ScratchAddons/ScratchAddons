@@ -1,4 +1,4 @@
-.save-status_save-now_2shdk span {
+[class*="save-status_save-now"] span {
     /*width: 81; 57 width for button itself*/
     margin-left: 0px;
     margin-right: 0px;
