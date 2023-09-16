@@ -12,6 +12,7 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
   "settings": [
     {
       "name": "Highlight on hover",
