@@ -8,6 +8,6 @@
     padding-bottom: calc((48px - 1em) / 2 - 2px);
 }
 
-.save-status_save-now_2shdk {
+[class*="save-status_save-now"] {
     margin: -12px;
 }
