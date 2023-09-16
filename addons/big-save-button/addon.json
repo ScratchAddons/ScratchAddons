@@ -29,7 +29,7 @@
       "url": "highlight.css",
       "matches": ["projects"],
       "if": {
-        "settings": {"highlight": true}
+        "settings": { "highlight": true }
       }
     }
   ]
