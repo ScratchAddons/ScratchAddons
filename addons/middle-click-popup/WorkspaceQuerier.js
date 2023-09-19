@@ -54,7 +54,7 @@ class Token {
    * @param {boolean} isTruncated
    * @param {boolean} isLegal
    */
-  constructor(start, end, type, value, precedence = -1, isTruncated = false, isLegal = true) {
+  constructor(start, end, type, value, { precedence = -1, isProper = true, isTruncated = false, isLegal = true, isDefiningFeature = false } = {}) {
     /** @type {number} The index of the first letter of this token in the query */
     this.start = start;
     /** @type {number} The index of the last letter of this token in the query */
@@ -72,6 +72,13 @@ class Token {
      */
     this.precedence = precedence;
     /**
+     * True if this token is fully written out. For example, in the query "m v = 10" where "m v"
+     * expands to "my variable", the token "m v" is not proper, as it is not fully written.
+     * Note that unlike trauncation, parent tokens do not inherit this property (so in the above
+     * example, the '=' block token would still be proper).
+     */
+    this.isProper = isProper;
+    /**
      * Sometimes, tokens are truncated. Imagine the query 'say Hello for 10 se', here the last
      * token should be 'seconds', but it's truncated. For this token, the isTruncated value is set
      * to true. Additionally, the token for the whole block (which contains the tokens 'say', 'Hello',
@@ -88,6 +95,19 @@ class Token {
      * but it would be marked as illegal.
      */
     this.isLegal = isLegal;
+    /**
+     * If we see this token, should we know what block it's connected to?
+     *
+     * For example, in the query 'say Hi', 'say' is a defining feature because
+     * we can narrow down what block it's from based only the fact that it's present.
+     * 'Hi', however, is not a defining feature as it could be a part of lots of
+     * different blocks.
+     *
+     * This is used to help eliminate some dodgey interpretations of queries, if a block
+     * has no subtokens marked a defining feature it's disguarded.
+     * @type {boolean}
+     */
+    this.isDefiningFeature = isDefiningFeature;
   }
 
   /**
@@ -325,19 +345,6 @@ class TokenType extends TokenProvider {
 
     if (this.constructor === TokenType) throw new Error("Abstract classes can't be instantiated.");
 
-    /**
-     * If we see this token, should we know what block it's connected to?
-     *
-     * For example, in the query 'say Hi', 'say' is a defining feature because
-     * we can narrow down what block it's from based only the fact that it's present.
-     * 'Hi', however, is not a defining feature as it could be a part of lots of
-     * different blocks.
-     *
-     * This is used to help eliminate some dodgey interpretations of queries, if a block
-     * has no subtokens marked a defining feature it's disguarded.
-     * @type {boolean}
-     */
-    this.isDefiningFeature = false;
     /** @type {boolean} Is this token type always represented by the same string of characters? */
     this.isConstant = false;
   }
@@ -430,7 +437,6 @@ class TokenTypeStringEnum extends TokenType {
   constructor(values) {
     super();
     this.isConstant = values.length === 1;
-    this.isDefiningFeature = true;
 
     /** @type {StringEnumValue[]} */
     this.values = [];
@@ -458,15 +464,21 @@ class TokenTypeStringEnum extends TokenType {
       let yieldedToken = false;
 
       const remainingChar = query.length - idx;
+      const substr = query.lowercase.substring(idx);
+
+      // If all we have is a string which could be a number, it doesn't count as a defining feature.
+      // This is to get rid of "10" constantly suggesting "10 ^ of ()"
+      let isDefiningFeature = !TokenTypeNumberLiteral.isValidNumber(substr);
+
       if (remainingChar < valueInfo.lower.length) {
-        if (valueInfo.lower.startsWith(query.lowercase.substring(idx))) {
+        if (valueInfo.lower.startsWith(substr)) {
           const end = remainingChar < 0 ? 0 : query.length;
-          yield new Token(idx, end, this, valueInfo, undefined, true);
+          yield new Token(idx, end, this, valueInfo, { isTruncated: true, isDefiningFeature });
           yieldedToken = true;
         }
       } else {
         if (query.lowercase.startsWith(valueInfo.lower, idx)) {
-          yield new Token(idx, idx + valueInfo.lower.length, this, valueInfo);
+          yield new Token(idx, idx + valueInfo.lower.length, this, valueInfo, { isDefiningFeature });
           yieldedToken = true;
         }
       }
@@ -547,7 +559,7 @@ class TokenTypeStringLiteral extends TokenType {
  */
 class TokenTypeNumberLiteral extends TokenType {
   static isValidNumber(str) {
-    return !isNaN(str) && !isNaN(parseFloat(str));
+    return !isNaN(+str) || !isNaN(parseFloat(+str));
   }
 
   *parseTokens(query, idx) {
@@ -614,7 +626,7 @@ class TokenTypeBrackets extends TokenType {
         else continue;
       }
       // Note that for bracket tokens, precedence = 0
-      const newToken = new Token(start, tokenEnd, this, token.value, 0, isTruncated, token.isLegal);
+      const newToken = new Token(start, tokenEnd, this, token.value, { precedence: 0, isTruncated, isLegal: token.isLegal });
       newToken.innerToken = token;
       yield newToken;
     }
@@ -751,13 +763,14 @@ class TokenTypeBlock extends TokenType {
       let i = idx;
       let hasDefiningFeature = false;
 
-      while (i < query.length) {
+      while (true) {
         i = query.skipIgnorable(i);
 
         const wordEnd = query.skipUnignorable(i);
 
         if (wordEnd === i) {
-          yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx: -1 }, -1, false);
+          if (hasDefiningFeature) yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx: -1 }, { isProper: false });
+          break;
         } else {
           const word = query.lowercase.substring(i, wordEnd);
           let match = -1;
@@ -777,7 +790,7 @@ class TokenTypeBlock extends TokenType {
           hasDefiningFeature ||= !TokenTypeNumberLiteral.isValidNumber(word);
 
           if (query.skipIgnorable(wordEnd) < query.length) {
-            if (hasDefiningFeature) yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx, i }, -1, false);
+            if (hasDefiningFeature) yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx, i }, { isProper: false });
           }
           i = wordEnd;
         }
@@ -802,13 +815,14 @@ class TokenTypeBlock extends TokenType {
     for (const subtoken of subtokens) {
       isTruncated |= subtoken.isTruncated; // If any of our kids are truncated, so are we
       isLegal &&= subtoken.isLegal; // If any of our kids are illegal, so are we
-      if (subtoken.type.isDefiningFeature && subtoken.start < query.length) hasDefiningFeature = true;
+      if (subtoken.isDefiningFeature && subtoken.start < query.length) hasDefiningFeature = true;
     }
 
-    /** See {@link TokenType.isDefiningFeature} */
+    /** See {@link Token.isDefiningFeature} */
     if (!hasDefiningFeature) return null;
+
     const end = query.skipIgnorable(subtokens[subtokens.length - 1].end);
-    return new Token(idx, end, this, { subtokens }, this.block.precedence, isTruncated, isLegal);
+    return new Token(idx, end, this, { subtokens }, { precedence: this.block.precedence, isTruncated, isLegal });
   }
 
   /**
@@ -916,6 +930,7 @@ class TokenTypeBlock extends TokenType {
     let i;
     for (i = 0; i < subtokens.length; i++) {
       const subtoken = subtokens[i];
+      if (!token.isLegal && subtoken.start >= query.length) break;
       const subtokenText = subtoken.type.createText(subtoken, query, endOnly) ?? "";
       text += subtokenText;
       if (i !== subtokens.length - 1) {
@@ -932,12 +947,6 @@ class TokenTypeBlock extends TokenType {
             text += " ";
         }
       }
-    }
-    for (; i < this.fullTokenProviders.length; i++) {
-      const provider = this.fullTokenProviders[i];
-      if (!provider.isConstant) break;
-      if (!text.endsWith(" ")) text += " ";
-      text += provider.createText();
     }
     return text;
   }
@@ -1150,15 +1159,21 @@ export default class WorkspaceQuerier {
     const query = new QueryInfo(this, queryStr, this._queryCounter++);
     const results = [];
     let foundTokenCount = 0;
-    let bestIllegalResult = null;
     let limited = false;
+
+    let bestIllegalResult = null;
+    let bestIllegalResultText = "";
 
     for (const option of this.tokenGroupBlocks.parseTokens(query, 0)) {
       if (option.end >= queryStr.length) {
         if (option.isLegal) {
           results.push(new QueryResult(query, option));
-        } else if (!bestIllegalResult) {
-          bestIllegalResult = new QueryResult(query, option);
+        } else {
+          const text = option.type.createText(option, query, true);
+          if (!bestIllegalResult || text.length < text) {
+            bestIllegalResult = new QueryResult(query, option);
+            bestIllegalResultText = text;
+          }
         }
       }
       ++foundTokenCount;
@@ -1174,14 +1189,14 @@ export default class WorkspaceQuerier {
       }
     }
 
-    // Used toeliminate blocks who's strings can be parsed as something else.
+    // Used to eliminate blocks whos strings can be parsed as something else.
     //  This step removes silly suggestions like `if <(1 + 1) = "2 then"> then`
     const canBeString = Array(queryStr.length).fill(true);
 
     function searchToken(token) {
       const subtokens = token.type.getSubtokens(token, query);
       if (subtokens) for (const subtoken of subtokens) searchToken(subtoken);
-      else if (!(token.type instanceof TokenTypeStringLiteral) && !token.isTruncated)
+      else if (!(token.type instanceof TokenTypeStringLiteral) && token.isProper && !token.isTruncated)
         for (let i = token.start; i < token.end; i++) {
           canBeString[i] = false;
         }
@@ -1209,7 +1224,7 @@ export default class WorkspaceQuerier {
 
     return {
       results: validResults,
-      illegalResult: bestIllegalResult,
+      illegalResult: validResults.length === 0 ? bestIllegalResult : null,
       limited,
     };
   }
