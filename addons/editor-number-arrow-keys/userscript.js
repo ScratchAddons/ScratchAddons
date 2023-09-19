@@ -115,12 +115,31 @@ export default async function ({ addon }) {
     // If this is a number input, it will prevent the default browser behavior when pressing up/down in a
     // number input (increase or decrease by 1). If we didn't prevent, the user would be increasing twice.
 
-    const changeBy =
-      (e.shiftKey
+    let changeBy = e.code === "ArrowUp" ? 1 : -1;
+    if (addon.settings.get("useCustom")) {
+      let settingValue = e.shiftKey
+        ? addon.settings.get("shiftCustom")
+        : e.altKey
+        ? addon.settings.get("altCustom")
+        : addon.settings.get("regularCustom");
+      if (settingValue === "") settingValue = 0;
+      let valueAsFloat = parseFloat(settingValue);
+      if (valueAsFloat < 0) valueAsFloat *= -1; // If user typed a negative number, we make it positive
+      if (Number.isNaN(valueAsFloat)) {
+        return;
+      } else if (valueAsFloat === 0 || (valueAsFloat < 100000000 && valueAsFloat > 0.00000099)) {
+        // This will exclude valid floats such as `1e20` that are less than 9 characters
+        changeBy *= valueAsFloat;
+      } else {
+        return;
+      }
+    } else {
+      changeBy *= e.shiftKey
         ? settings[addon.settings.get("shift")]
         : e.altKey
         ? settings[addon.settings.get("alt")]
-        : settings[addon.settings.get("regular")]) * (e.code === "ArrowUp" ? 1 : -1);
+        : settings[addon.settings.get("regular")];
+    }
 
     const newValueAsInt =
       shiftDecimalPointToRight(e.target.value, 5) + shiftDecimalPointToRight(changeBy.toString(), 5);
