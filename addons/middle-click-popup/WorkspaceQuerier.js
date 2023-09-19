@@ -54,7 +54,13 @@ class Token {
    * @param {boolean} isTruncated
    * @param {boolean} isLegal
    */
-  constructor(start, end, type, value, { precedence = -1, isProper = true, isTruncated = false, isLegal = true, isDefiningFeature = false } = {}) {
+  constructor(
+    start,
+    end,
+    type,
+    value,
+    { precedence = -1, isProper = true, isTruncated = false, isLegal = true, isDefiningFeature = false } = {}
+  ) {
     /** @type {number} The index of the first letter of this token in the query */
     this.start = start;
     /** @type {number} The index of the last letter of this token in the query */
@@ -626,7 +632,11 @@ class TokenTypeBrackets extends TokenType {
         else continue;
       }
       // Note that for bracket tokens, precedence = 0
-      const newToken = new Token(start, tokenEnd, this, token.value, { precedence: 0, isTruncated, isLegal: token.isLegal });
+      const newToken = new Token(start, tokenEnd, this, token.value, {
+        precedence: 0,
+        isTruncated,
+        isLegal: token.isLegal,
+      });
       newToken.innerToken = token;
       yield newToken;
     }
@@ -769,7 +779,8 @@ class TokenTypeBlock extends TokenType {
         const wordEnd = query.skipUnignorable(i);
 
         if (wordEnd === i) {
-          if (hasDefiningFeature) yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx: -1 }, { isProper: false });
+          if (hasDefiningFeature)
+            yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx: -1 }, { isProper: false });
           break;
         } else {
           const word = query.lowercase.substring(i, wordEnd);
@@ -790,7 +801,8 @@ class TokenTypeBlock extends TokenType {
           hasDefiningFeature ||= !TokenTypeNumberLiteral.isValidNumber(word);
 
           if (query.skipIgnorable(wordEnd) < query.length) {
-            if (hasDefiningFeature) yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx, i }, { isProper: false });
+            if (hasDefiningFeature)
+              yield new Token(idx, wordEnd, this, { stringForm, lastPartIdx, i }, { isProper: false });
           }
           i = wordEnd;
         }
