@@ -519,13 +519,16 @@ class TokenTypeStringLiteral extends TokenType {
     }
     // Then all the other strings
     let wasTerminator = false;
+    let wasIgnorable = false;
     for (let i = idx; i <= query.length; i++) {
       const isTerminator = TokenTypeStringLiteral.isTerminator(query.str[i]);
-      if ((wasTerminator !== isTerminator || i == query.length) && i !== idx && i !== quoteEnd) {
+      const isIgnorable = QueryInfo.IGNORABLE_CHARS.includes(query.str[i]);
+      if ((wasTerminator !== isTerminator || i == query.length) && !wasIgnorable && i !== idx && i !== quoteEnd) {
         const value = query.str.substring(idx, i);
         yield new Token(idx, i, this, value);
       }
       wasTerminator = isTerminator;
+      wasIgnorable = isIgnorable;
     }
   }
 
