@@ -656,7 +656,7 @@ class TokenTypeBrackets extends TokenType {
 class TokenTypeBlock extends TokenType {
   /**
    * @param {WorkspaceQuerier} querier
-   * @param {BlockInstance} block
+   * @param {BlockTypeInfo} block
    * @private
    */
   constructor(querier, block) {
@@ -865,7 +865,10 @@ class TokenTypeBlock extends TokenType {
          * would have two interpretations '(1 + 2) + 3' and '1 + (2 + 3)'. This rule makes the second
          * of those invalid because the root '+' block contains itself as its third token.
          */
-        if (token.precedence === this.block.precedence && tokenProviderIdx !== 0) continue;
+        if (token.precedence === this.block.precedence) {
+          const inputIndex = this.block.parts[tokenProviderIdx].inputIdx;
+          if (inputIndex !== 0) continue;
+        }
       }
 
       if (!parseSubSubTokens || !token.isLegal || tokenProviderIdx === subtokenProviders.length - 1) {
@@ -1111,6 +1114,7 @@ class QueryInfo {
 export default class WorkspaceQuerier {
   static ORDER_OF_OPERATIONS = [
     null, // brackets
+    "operator_join",
     "operator_round",
     "operator_mathop",
     "operator_mod",
