@@ -505,13 +505,16 @@ class TokenTypeStringLiteral extends TokenType {
   *parseTokens(query, idx) {
     // First, look for strings in quotes
     let quoteEnd = -1;
-    if (query.str[idx] === '"' || query.str[idx] === '"') {
+    if (query.str[idx] === '"' || query.str[idx] === "'") {
       const quote = query.str[idx];
+      let value = "";
+      let valueStart = idx + 1;
       for (let i = idx + 1; i <= query.length; i++) {
         if (query.str[i] === "\\") {
-          ++i;
+          value += query.str.substring(valueStart, i);
+          valueStart = ++i;
         } else if (query.str[i] === quote) {
-          yield new Token(idx, i + 1, this, query.str.substring(idx + 1, i));
+          yield new Token(idx, i + 1, this, value + query.str.substring(valueStart, i));
           quoteEnd = i + 1;
           break;
         }
