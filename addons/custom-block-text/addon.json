@@ -42,14 +42,6 @@
       "id": "shadow",
       "type": "boolean",
       "default": false
-    },
-    {
-      "name": "Text size (%)",
-      "id": "size",
-      "type": "integer",
-      "min": 75,
-      "max": 200,
-      "default": 100
     }
   ],
   "dynamicEnable": true,
