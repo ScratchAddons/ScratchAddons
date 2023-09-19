@@ -6,7 +6,8 @@ import minifySettings from "../libraries/common/minify-settings.js";
 
  - editor-dark-mode 10 (bumped 4 times in v1.33.2)
  - editor-theme3 3 (last bumped in v1.32)
- - dark-www 5 (bumped five times in v1.33.2)
+ - dark-www 7 (bumped twice in v1.34.0)
+ - forum-quote-code-beautifier 1 (last bumped in v1.34)
  */
 
 const areColorsEqual = (currentColor, oldPresetColor) => {
@@ -294,6 +295,45 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             },
             () => {
               settings.link = "#855cd6";
+              madeAnyChanges = madeChangesToAddon = true;
+            }
+          );
+
+          updatePresetIfMatching(
+            settings,
+            6,
+            // "Scratch default colors (blue)" preset
+            {
+              page: "#fcfcfc",
+              box: "#ffffff",
+              gray: "#f2f2f2",
+              blue: "#e9f1fc",
+              input: "#fafafa",
+              link: "#4d97ff",
+              footer: "#f2f2f2",
+              border: "#0000001a",
+            },
+            () => {
+              settings.messageIndicatorOnMessagesPage = "#ffab1a";
+              madeAnyChanges = madeChangesToAddon = true;
+            }
+          );
+          updatePresetIfMatching(
+            settings,
+            7,
+            // "Experimental Dark (blue)" preset
+            {
+              page: "#202020",
+              box: "#282828",
+              gray: "#333333",
+              blue: "#252c37",
+              input: "#202020",
+              link: "#4d97ff",
+              footer: "#333333",
+              border: "#606060",
+            },
+            () => {
+              settings.messageIndicatorOnMessagesPage = "#ffab1a";
               madeAnyChanges = madeChangesToAddon = true;
             }
           );
@@ -591,6 +631,13 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             // Override the preset color if dark comments are not enabled
             addonSettings["comment-color"] = "#FEF49C";
           }
+        }
+
+        if (addonId === "forum-quote-code-beautifier") {
+          updatePresetIfMatching(settings, 1, { bordercolor: "#28A5DA" }, () => {
+            madeAnyChanges = madeChangesToAddon = true;
+            settings.bordercolor = "#855cd6";
+          });
         }
       }
 
