@@ -57,13 +57,14 @@
   bottom: calc(50% - 2px);
   width: 18px;
   height: 48px;
-  background-image: url("%addon-self-dir%/assets/dots.svg");
-  background-repeat: no-repeat;
-  filter: var(--darkWww-page-filter, none);
+  background-color: var(--darkWww-border, rgba(0, 0, 0, 0.15));
+  -webkit-mask-image: url("%addon-self-dir%/assets/dots.svg");
+  mask-image: url("%addon-self-dir%/assets/dots.svg");
   pointer-events: none;
 }
 #sidebar li:not(.sub-list) + li.sub-list::before {
-  background-image: url("%addon-self-dir%/assets/dots_first.svg");
+  -webkit-mask-image: url("%addon-self-dir%/assets/dots_first.svg");
+  mask-image: url("%addon-self-dir%/assets/dots_first.svg");
 }
 #sidebar li.sub-list a {
   margin: 0;
