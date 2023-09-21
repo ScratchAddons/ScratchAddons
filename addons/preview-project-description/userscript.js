@@ -111,6 +111,8 @@ export default async function ({ addon, console, msg }) {
       // Disable the project-notes-tabs addon if it's enabled.
       disableTabs();
 
+      injectToggle();
+
       // Just in case, wait 1 event loop cycle
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
