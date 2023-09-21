@@ -1,6 +1,6 @@
 {
   "name": "Preview project instructions and notes",
-  "description": "In your own projects, adds a toggle [somewhere TODO] that lets you preview the project instructions and notes as seen by other users.",
+  "description": "In your own projects, adds a toggle above the Instructions field to preview the project instructions and notes as seen by other users.",
   "credits": [
     {
       "name": "Steve0Greatness",
