@@ -59,7 +59,9 @@ export default async function ({ addon, console, msg }) {
     }
 
     if (document.querySelector(".sa-project-tabs-wrapper")) {
-      // TODO: what if this addon runs first, and then project-tabs-notes?
+      // Since project-notes-tabs runs on runAtComplete:false, and doesn't support
+      // dynamicEnable, it's very unlikely that it hasn't executed yet.
+      // Worst that can happen is that the "preview" toggle isn't accessible until a reload.
       document.querySelector(".sa-project-tabs-wrapper").appendChild(divElement);
     } else {
       document.querySelector(".project-notes > .description-block > .project-textlabel").append(divElement);
