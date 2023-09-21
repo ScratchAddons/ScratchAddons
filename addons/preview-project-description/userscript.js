@@ -1,3 +1,5 @@
+import { disableTabs } from "../project-notes-tabs/disable-self.js";
+
 export default async function ({ addon, console, msg }) {
   const divElement = Object.assign(document.createElement("div"), {
     className: "sa-toggle-project-preview",
@@ -102,7 +104,15 @@ export default async function ({ addon, console, msg }) {
     }
   }
 
-  function enablePreview() {
+  async function enablePreview() {
+    if (document.body.classList.contains("sa-project-tabs-on")) {
+      // Disable the project-notes-tabs addon if it's enabled.
+      disableTabs();
+
+      // Just in case, wait 1 event loop cycle
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+
     currentlyRerendering = true;
     forceReactRerender();
     currentlyRerendering = false;

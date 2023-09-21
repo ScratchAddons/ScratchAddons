@@ -1,4 +1,21 @@
+import { eventTarget as disableSelfEventTarget } from "./disable-self.js";
+
 export default async function ({ addon, console }) {
+  addon.tab
+    .waitForElement(":root > body", {
+      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+    })
+    .then(() => {
+      document.body.classList.add("sa-project-tabs-on");
+    });
+
+  function disableSelf() {
+    document.querySelectorAll(".description-block").forEach((e) => (e.style.display = ""));
+    wrapper.remove();
+    document.body.classList.remove("sa-project-tabs-on");
+  }
+  disableSelfEventTarget.addEventListener("disable", disableSelf);
+
   async function remixHandler() {
     while (true) {
       await addon.tab.waitForElement(".remix-credit", {
@@ -11,6 +28,8 @@ export default async function ({ addon, console }) {
 
   let projectNotes;
   let tabs;
+  const wrapper = document.createElement("div");
+  wrapper.classList = "sa-project-tabs-wrapper";
 
   while (true) {
     projectNotes = await addon.tab.waitForElement(".project-notes", {
@@ -22,12 +41,7 @@ export default async function ({ addon, console }) {
     const descriptions = document.querySelectorAll(".description-block");
     const tabButtons = [];
     const sectionCount = descriptions.length;
-    for (const label of labels) {
-      label.remove();
-    }
 
-    const wrapper = document.createElement("div");
-    wrapper.classList = "sa-project-tabs-wrapper";
     projectNotes.insertBefore(wrapper, projectNotes.querySelector(".description-block"));
     tabs = document.createElement("div");
     wrapper.appendChild(tabs);
