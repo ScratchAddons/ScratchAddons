@@ -1,6 +1,6 @@
 {
   "name": "Point towards random direction block",
-  "description": "Adds a \"random position\" option to the \"point towards ()\" block that makes the sprite point in a random direction. This will work for everyone using the project.",
+  "description": "Adds a \"random direction\" option to the \"point towards ()\" block that makes the sprite point in a random direction. This will work for everyone using the project.",
   "userscripts": [
     {
       "url": "userscript.js",
