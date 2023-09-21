@@ -30,17 +30,13 @@ export default async function ({ addon, console }) {
   let tabs;
   const wrapper = document.createElement("div");
   wrapper.classList = "sa-project-tabs-wrapper";
-  window.fn = fn;
 
   while (true) {
     projectNotes = await addon.tab.waitForElement(".project-notes", {
       markAsSeen: true,
       reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
     });
-    // fn();
-  }
 
-  function fn() {
     const labels = document.querySelectorAll(".project-textlabel");
     const descriptions = document.querySelectorAll(".description-block");
     const tabButtons = [];
