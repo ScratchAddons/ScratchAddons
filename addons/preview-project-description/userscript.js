@@ -1,16 +1,31 @@
 export default async function ({ addon, console, msg }) {
-  const enableSwitcher = document.createElement("button");
-  const enableSwitcherText = document.createElement("span");
-  enableSwitcher.id = "sa-preview-notes-instructions";
-  enableSwitcher.classList.add("button", "action-button", "sa-preview-desc");
-  enableSwitcher.addEventListener("click", () => togglePreview());
-  enableSwitcher.appendChild(enableSwitcherText);
+  const divElement = Object.assign(document.createElement("div"), {
+    className: "sa-toggle-project-preview",
+  });
+  const span = Object.assign(document.createElement("span"), {
+    textContent: msg("preview"),
+  });
+  const label = Object.assign(document.createElement("label"), {
+    className: "toggle-switch",
+  });
+  const checkboxInput = Object.assign(document.createElement("input"), {
+    type: "checkbox",
+  });
+  const sliderSpan = Object.assign(document.createElement("span"), {
+    className: "slider",
+  });
+  label.append(checkboxInput, sliderSpan);
+  divElement.append(span, label);
+  checkboxInput.addEventListener("change", () => {
+    togglePreview(checkboxInput.checked);
+  });
 
   let currentlyEnabled = false;
   let wasEverEnabled = false;
   let currentlyRerendering = false;
 
-  let avoidInfiniteLoops = 0; // Just in case, make sure we aren't introducing an infinite loop (unsure if Redux considers this)
+  // We don't want to introduce infinite loops, if a statechanged event by itself changes state.
+  let avoidInfiniteLoops = 0;
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
     // We don't want a state change to disable the preview mode.
@@ -27,25 +42,35 @@ export default async function ({ addon, console, msg }) {
     }
   });
 
+  async function injectToggle() {
+    // Remove our element if it's already on the page
+    // This is to ensure the toggle is always next to "instructions" when editing.
+    divElement.remove();
+
+    if (!wasEverEnabled) {
+      // TODO: also change animated-thumb/userscript.js (or create new utility)
+      const loggedInUser = await addon.auth.fetchUsername();
+      const projectOwner = addon.tab.redux.state?.preview?.projectInfo?.author?.username;
+      if (!projectOwner || !loggedInUser || loggedInUser !== projectOwner) {
+        return;
+      }
+    }
+
+    if (document.querySelector(".sa-project-tabs-wrapper")) {
+      // TODO: what if this addon runs first, and then project-tabs-notes?
+      document.querySelector(".sa-project-tabs-wrapper").appendChild(divElement);
+    } else {
+      document.querySelector(".project-notes > .description-block > .project-textlabel").append(divElement);
+    }
+  }
+
   while (true) {
-    // Same waitForElement call as animated-thumb/userscript.js
-    await addon.tab.waitForElement(".flex-row.subactions > .flex-row.action-buttons", {
+    await addon.tab.waitForElement(".project-notes, .project-description", {
       markAsSeen: true,
       reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
     });
 
-    // TODO: also change animated-thumb/userscript.js
-    const loggedInUser = await addon.auth.fetchUsername();
-    const projectOwner = addon.tab.redux.state?.preview?.projectInfo?.author?.username;
-    if (!projectOwner || !loggedInUser || loggedInUser !== projectOwner) continue;
-
-    addon.tab.appendToSharedSpace({
-      space: "afterCopyLinkButton",
-      order: 1,
-      element: enableSwitcher,
-    });
-    togglePreview(false);
-    currentlyEnabled = false;
+    injectToggle();
   }
 
   /**
@@ -56,7 +81,6 @@ export default async function ({ addon, console, msg }) {
    */
   function togglePreview(override = !currentlyEnabled) {
     const oldCurentlyEnabled = currentlyEnabled;
-    enableSwitcherText.innerText = override ? msg("Disable") : msg("Enable");
     currentlyEnabled = override;
 
     if (currentlyEnabled === true && !wasEverEnabled) {
@@ -69,7 +93,12 @@ export default async function ({ addon, console, msg }) {
     }
 
     if (oldCurentlyEnabled === true && currentlyEnabled === false) {
+      // Disabling the preview is as simple as forcing a React
+      // rerender with the traps off.
       forceReactRerender();
+      // This case will not cause waitForElement to fire.
+      // Manually run the injectToggle() function:
+      queueMicrotask(injectToggle);
     }
   }
 
@@ -81,6 +110,8 @@ export default async function ({ addon, console, msg }) {
     if (!document.querySelector(".project-description")) {
       // Something went wrong for some reason...
       console.log("Failed to show preview of project notes.");
+      checkboxInput.checked = false;
+      currentlyEnabled = false;
     }
   }
 
@@ -164,6 +195,7 @@ export default async function ({ addon, console, msg }) {
           console.groupEnd();
           return "";
         }
+
         return Reflect.get(target, property, receiver);
       },
     });

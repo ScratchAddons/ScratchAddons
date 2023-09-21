@@ -26,7 +26,11 @@ export default async function ({ addon, console }) {
       label.remove();
     }
 
-    tabs = projectNotes.insertBefore(document.createElement("div"), projectNotes.querySelector(".description-block"));
+    const wrapper = document.createElement("div");
+    wrapper.classList = "sa-project-tabs-wrapper";
+    projectNotes.insertBefore(wrapper, projectNotes.querySelector(".description-block"));
+    tabs = document.createElement("div");
+    wrapper.appendChild(tabs);
     tabs.classList.add("tabs-sa");
 
     if (!remixHandler.run) {

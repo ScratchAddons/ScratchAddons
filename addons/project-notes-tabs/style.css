@@ -1,7 +1,18 @@
-.preview .project-notes .tabs-sa {
+/* preview-project-description compatibility */
+.sa-project-tabs-wrapper {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap-reverse;
+}
+.preview .project-notes > .sa-project-tabs-wrapper {
+  /* Specificity */
+  margin-bottom: 0;
+}
+
+.tabs-sa {
   display: flex;
   overflow: hidden;
-  margin-bottom: 0;
 }
 
 .tab-choice-sa {
