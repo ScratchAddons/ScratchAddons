@@ -1,6 +1,6 @@
 {
   "name": "Reveal hidden editor blocks",
-  "description": "TODO",
+  "description": "Adds some blocks from previous versions of Scratch that were later hidden to the block palette. Not all of them are still functional.",
   "tags": ["editor", "codeEditor"],
   "credits": [
     {
