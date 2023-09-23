@@ -4,7 +4,7 @@
   "tags": ["editor", "featured"],
   "info": [
     {
-      "text": "Bonus tip: Accidentally deleted a sprite, costume, or sound? You can bring it back with Edit \u2192 Restore <item> in the menu bar.",
+      "text": "Tip: If you accidentally delete a sprite, costume, or sound, you can undo the deletion by clicking Edit in the menu bar then Restore <item>.",
       "id": "restoretip"
     }
   ],
