@@ -1,6 +1,12 @@
 {
   "name": "Sprite deletion confirmation",
   "description": "Asks if you're sure when deleting a sprite inside a project.",
+  "info": [
+    {
+      "text": "Bonus tip: Accidentally deleted a sprite, costume, or sound? You can bring it back with Edit \u2192 Restore <item> in the menu bar.",
+      "id": "restoretip"
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
