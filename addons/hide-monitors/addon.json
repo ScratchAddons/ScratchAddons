@@ -1,0 +1,30 @@
+{
+  "name": "Button to hide monitors",
+  "description": "Adds a button to projects that hides monitors, like variables or lists.",
+  "tags": ["editor", "projectPage"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "info": [
+    {
+      "id": "no-unintended",
+      "text": "You are not able to click through the places where the monitors would normally be. This is done so this addon can't be used to cheat in games, or using projects in other unintended ways."
+    }
+  ],
+  "versionAdded": "1.35.0",
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld"
+    }
+  ]
+}
