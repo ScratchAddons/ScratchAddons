@@ -1,0 +1,34 @@
+{
+  "name": "Reveal hidden editor blocks",
+  "description": "Adds some blocks from previous versions of Scratch that were later hidden to the block palette. Not all of them are still functional.",
+  "tags": ["editor", "codeEditor"],
+  "credits": [
+    {
+      "name": "Tacodiva",
+      "link": "https://github.com/Tacodiva"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Show Counter blocks",
+      "id": "counterBlocks",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Show Useless blocks",
+      "id": "uselessBlocks",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.36.0"
+}
