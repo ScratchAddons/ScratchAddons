@@ -13,6 +13,10 @@
 .sb-pen {
   fill: var(--sa-block-color);
 }
+.sb-define-hat-cap {
+  fill: var(--sa-block-color);
+  stroke: var(--sa-block-color);
+}
 .sb3-motion,
 .sb3-looks,
 .sb3-sound,
@@ -137,7 +141,8 @@
 .sb-custom-arg ~ .sb-label,
 .sb3-custom-arg,
 .sb3-custom-arg-dark,
-.sb3-custom-arg ~ .sb3-label {
+.sb3-custom-arg ~ .sb3-label,
+.sb-define-hat-cap {
   --sa-block-color: var(--editorTheme3-customColor);
 }
 .sb-extension,
