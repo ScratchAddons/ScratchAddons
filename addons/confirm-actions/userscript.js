@@ -13,7 +13,7 @@ export default async function ({ addon, console, msg }) {
       let cancelMessage = null;
       if (
         addon.settings.get("projectsharing") &&
-        e.target.closest("[class*='share-button_share-button']:not([class*='is-shared']), .banner-button")
+        e.target.closest("[class*='share-button_share-button']:not([class*='is-shared']), .banner-text + .banner-button")
       ) {
         title = addon.tab.scratchMessage("project.share.shareButton"); // "Share"
         cancelMessage = msg("share");
