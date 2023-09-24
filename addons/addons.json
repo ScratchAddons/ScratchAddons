@@ -134,6 +134,7 @@
   "rename-broadcasts",
   "middle-click-popup",
   "number-pad",
+  "editor-random-direction-block",
   "necropost-highlighter",
   "copy-reporter",
   "share-through-mystuff",
@@ -147,6 +148,7 @@
   "colorblind",
   "forum-post-countdown",
   "paint-skew",
+  "preview-project-description",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
