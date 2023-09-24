@@ -1,0 +1,11 @@
+img.sa-more-pfps-pfp {
+  width: 1.5em !important;
+  height: 1.5em !important;
+  display: inline;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
+
+a.sa-more-pfps-link {
+  vertical-align: middle;
+}
