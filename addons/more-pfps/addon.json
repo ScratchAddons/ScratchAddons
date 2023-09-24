@@ -1,0 +1,42 @@
+{
+  "name": "Show profile pictures next to usernames",
+  "description": "Shows the user's profile picture next to their username in several places on the website.",
+  "tags": ["community"],
+  "userscripts": [
+    {
+      "matches": "*",
+      "url": "userscript.js"
+    }
+  ],
+  "userstyles": [
+    {
+      "matches": "*",
+      "url": "userstyle.css"
+    },
+    {
+      "matches": "*",
+      "url": "in-href.css",
+      "if": {
+        "settings": { "in-href": false }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "id": "in-href",
+      "name": "Show profile pictures even if the user is only linked",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "versionAdded": "1.35.0",
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "updateUserstylesOnSettingsChange": true
+}

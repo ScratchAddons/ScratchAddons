@@ -1,0 +1,4 @@
+.sa-more-pfps-in-href {
+  /* Important required to override displayNoneWhileDisabled */
+  display: none !important;
+}
