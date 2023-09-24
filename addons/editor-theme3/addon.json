@@ -329,6 +329,12 @@
       ]
     },
     {
+      "name": "Change the colors of variables and lists on the stage",
+      "id": "monitors",
+      "type": "boolean",
+      "default": false
+    },
+    {
       "name": "Change the colors of blocks in the forums",
       "id": "forums",
       "type": "boolean",

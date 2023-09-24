@@ -457,6 +457,52 @@ export default async function ({ addon, console, msg }) {
     Object.assign(originalColors, newColors);
   };
 
+  const updateMonitorColors = () => {
+    const allMonitors = addon.tab.redux.state.scratchGui.monitors.valueSeq();
+    const visibleMonitors = allMonitors.filter((monitor) => monitor.visible);
+    const monitorElements = document.querySelectorAll("[class*='monitor_monitor-container_']");
+    // The order of monitors in the Redux state and in the DOM is the same
+    visibleMonitors.forEach((monitor, i) => {
+      const opcodePrefix = monitor.opcode.split("_")[0];
+      let colorId =
+        {
+          sound: "sounds",
+          procedures: "more",
+        }[opcodePrefix] || opcodePrefix;
+      if (monitor.opcode === "data_listcontents") colorId = "data_lists";
+      let category = categories.find((category) => category.colorId === colorId);
+      if (!category) category = extensionsCategory;
+      for (const value of monitorElements[i].querySelectorAll(`
+        [class*="monitor_value_"],
+        [class*="monitor_large-value_"],
+        [class*="monitor_list-value_"]
+      `)) {
+        if (addon.settings.get("monitors")) {
+          value.style.backgroundColor = primaryColor(category);
+          value.style.color = isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor();
+          // Border color for list items
+          if (textMode() === "colorOnBlack") value.style.borderColor = "rgba(255, 255, 255, 0.15)";
+          else value.style.removeProperty("border-color");
+        } else {
+          value.style.backgroundColor = originalColors[category.colorId].primary;
+          value.style.color = originalColors.text;
+          value.style.removeProperty("border-color");
+        }
+      }
+    });
+  };
+  addon.tab.redux.initialize();
+  updateMonitorColors();
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (e.detail.action.type === "scratch-gui/monitors/UPDATE_MONITORS") {
+      // Timeout to wait until the elements are rendered
+      setTimeout(updateMonitorColors, 0);
+    }
+  });
+  addon.settings.addEventListener("change", updateMonitorColors);
+  addon.self.addEventListener("disabled", updateMonitorColors);
+  addon.self.addEventListener("reenabled", updateMonitorColors);
+
   while (true) {
     const colorModeSubmenu = await addon.tab.waitForElement(
       "[class*=menu-bar_menu-bar-menu_] > ul > li:nth-child(2) ul",

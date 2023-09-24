@@ -38,6 +38,10 @@
   color: var(--editorTheme3-commentText);
 }
 
+[class*="monitor_list-input_"] {
+  color: inherit !important;
+}
+
 .sa-colormode-submenu li:nth-child(1),
 .sa-colormode-submenu li:nth-child(2) {
   filter: opacity(0.5) grayscale(1);
