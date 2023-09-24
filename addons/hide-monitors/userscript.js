@@ -1,4 +1,4 @@
-export default async function ({ addon, msg }) {
+export default async function ({ addon, msg, console }) {
   let monitorsShown = true;
   const monitorWrapper = () => {
     return document.querySelector('[class^="stage_monitor-wrapper_"]');
@@ -12,6 +12,15 @@ export default async function ({ addon, msg }) {
     monitorWrapper().classList.toggle("sa-hide-monitors");
     monitorsShown = !monitorsShown;
   });
+
+  const preventClicks = (e) => {
+    if (e.target.closest('[class^="stage_monitor-wrapper_"]') && !monitorsShown) {
+      e.stopImmediatePropagation();
+    }
+  };
+
+  document.body.addEventListener("mousedown", preventClicks);
+  document.body.addEventListener("click", preventClicks);
 
   const update = () => {
     addon.tab.appendToSharedSpace({
