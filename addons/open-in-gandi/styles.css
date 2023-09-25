@@ -1,0 +1,24 @@
+.preview .sa-gd-button {
+    padding: 0px 5px 0px 11px;
+    margin-top: 0;
+    border-radius: 0.25rem;
+    height: 2.5rem;
+    font-size: 0.875rem;
+  }
+  .preview .sa-gd-button:not(.scratch) {
+    background: #0094ff;
+  }
+
+  .preview .sa-gd-button:before {
+    background-image: url(https://super-static-assets.s3.amazonaws.com/c0789e05-1ed3-46e5-9c10-baaa8afbde56/uploads/favicon/d3318337-0ffd-4687-882e-31814beb6085.png);
+    display: inline-block;
+    margin-top: -2px;
+    margin-right: 0.4375rem;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    width: 1.125rem;
+    height: 1.125rem;
+    vertical-align: middle;
+    content: "";
+  }
