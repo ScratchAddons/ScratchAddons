@@ -1,4 +1,5 @@
 {
+    "versionAdded": "1.0.0"
     "name": "Open project in Gandi IDE button",
     "description": "Add a button to a project page that will open the project in Gandi IDE when clicked.",
     "userstyles": [
