@@ -8,5 +8,5 @@ export default async function ({ addon, console, msg }) {
         window.location.href = `https://scratch.mit.edu.host/projects/${projectId}/`;
     }
 
-    addon.tab.appendToSharedSpace({ space: "beforeRemixButton", element: button, order: 1 });
+    addon.tab.appendToSharedSpace({ space: "beforeRemixButton", element: button, order: 2 });
   }
