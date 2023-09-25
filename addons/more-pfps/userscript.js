@@ -3,7 +3,7 @@ export default async function ({ addon, console }) {
   const noPfpQueries = [
     ".social-message-content", // What's Happening?
     ".studio-project-info", // Studio projects
-    ".thumbnail-title", // Explore projects
+    "#project-box", // Explore projects
     ".actor", // What I've been doing
     ".user.thumb.item", // Following / Followers
     ".comment .info .name", // scratchr2 comment usernames
@@ -48,5 +48,14 @@ export default async function ({ addon, console }) {
     element.classList.add("sa-more-pfps-link");
   };
 
-  document.querySelectorAll("a").forEach(addPfp);
+  await Promise.all([...document.querySelectorAll("a")].map(addPfp));
+  while (true) {
+    await addon.tab.waitForElement(
+      'a[href^="/users/"]:not(.sa-more-pfps-link), a[href^="https://scratch.mit.edu/users/"]:not(.sa-more-pfps-link), a[href^="http://scratch.mit.edu/users/"]:not(.sa-more-pfps-link',
+      {
+        markAsSeen: true,
+      }
+    );
+    await Promise.all([...document.querySelectorAll("a:not(.sa-more-pfps-link)")].map(addPfp));
+  }
 }
