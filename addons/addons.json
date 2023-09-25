@@ -149,6 +149,7 @@
   "forum-post-countdown",
   "paint-skew",
   "preview-project-description",
+  "open-in-gandi",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
@@ -174,5 +175,4 @@
   "columns",
   "editor-compact",
   "editor-theme3",
-  "open-in-gandi"
 ]
