@@ -20,6 +20,6 @@ export default async function ({ addon, console }) {
     const root = document.documentElement;
     const donor = await addon.tab.waitForElement("#donor");
     footer.appendChild(donor);
-    root.style.setProperty("--footer-hover-height", "426px");
+    root.style.setProperty("--footer-hover-height", "410px");
   }
 }
