@@ -1,6 +1,7 @@
 export default async function ({ addon, console }) {
   const enabledAddons = await addon.self.getEnabledAddons("community");
   const footer = await addon.tab.waitForElement("#footer");
+  const root = document.documentElement;
 
   const icon = document.createElement("img");
   icon.src = addon.self.dir + "/icon.svg";
@@ -15,9 +16,12 @@ export default async function ({ addon, console }) {
     document.body.classList.add("sa-collapse-footer");
   }
 
+  if (addon.tab.clientVersion === "scratchr2" && !enabledAddons.includes("scratchr2")) {
+    root.style.setProperty("--footer-hover-height", "250px");
+  }
+
   if (location.pathname.split("/")[1] === "") {
     // Moves the donor text into the footer on the front page
-    const root = document.documentElement;
     const donor = await addon.tab.waitForElement("#donor");
     footer.appendChild(donor);
     root.style.setProperty("--footer-hover-height", "410px");
