@@ -27,6 +27,11 @@
 }
 
 .sa-footer-arrow {
+  display: none;
+}
+
+.sa-collapse-footer .sa-footer-arrow {
+  display: block;
   margin-left: auto;
   margin-right: auto;
   padding-top: 1px;
