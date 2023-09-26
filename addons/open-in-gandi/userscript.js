@@ -5,7 +5,7 @@ export default async function ({ addon, console, msg }) {
 
   button.onclick = async (e) => {
     const projectId = window.location.pathname.split("/")[2];
-    window.location.href = `https://scratch.mit.edu.host/projects/${projectId}/`;
+    window.location.href = `https://cocrea.world/projects/${projectId}/`;
   };
 
   await addon.tab.waitForElement("div.project-buttons");
