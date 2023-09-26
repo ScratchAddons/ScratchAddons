@@ -1,6 +1,6 @@
 .sa-collapse-footer, /* scratch-www */
 .sa-collapse-footer #content /* scratchr2 */ {
-  padding-bottom: 31px;
+  padding-bottom: 23px;
 }
 
 .sa-collapse-footer #footer {
@@ -9,9 +9,9 @@
   bottom: 0;
   width: 100%;
   border-top: 1px solid #d9d9d9;
-  height: 32px !important;
+  height: 24px !important;
   box-sizing: border-box;
-  padding-top: 4px !important;
+  padding-top: 2px !important;
   z-index: 20;
   transition-duration: 0.5s;
 }
@@ -24,6 +24,13 @@
 
 .sa-collapse-footer .page > #view {
   margin-bottom: 0;
+}
+
+.sa-footer-arrow {
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 1px;
+  padding-bottom: 4px;
 }
 
 :root {
