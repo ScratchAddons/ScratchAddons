@@ -10,7 +10,7 @@
 }
 
 .preview .sa-gd-button:before {
-  background-image: 'gandi-logo.png';
+  background-image: "gandi-logo.png";
   display: inline-block;
   margin-top: -2px;
   margin-right: 0.4375rem;
