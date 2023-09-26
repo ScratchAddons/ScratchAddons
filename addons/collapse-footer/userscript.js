@@ -1,7 +1,7 @@
 export default async function ({ addon, console }) {
   const footer = await addon.tab.waitForElement("#footer");
   const icon = document.createElement("img");
-  icon.src = addon.self.dir + "/icon.svg"
+  icon.src = addon.self.dir + "/icon.svg";
   icon.height = 16;
   icon.width = 16;
   icon.className = "sa-footer-arrow";
