@@ -10,7 +10,7 @@
 }
 
 .preview .sa-gd-button:before {
-  background-image: url(https://super-static-assets.s3.amazonaws.com/c0789e05-1ed3-46e5-9c10-baaa8afbde56/uploads/favicon/d3318337-0ffd-4687-882e-31814beb6085.png);
+  background-image: 'gandi-logo.png';
   display: inline-block;
   margin-top: -2px;
   margin-right: 0.4375rem;
