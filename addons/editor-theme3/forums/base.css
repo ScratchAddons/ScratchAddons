@@ -142,6 +142,9 @@
 .sb3-custom-arg,
 .sb3-custom-arg-dark,
 .sb3-custom-arg ~ .sb3-label,
+.sb-outline,
+.sb-outline ~ .sb-label,
+.sb-label:only-of-type:not(:last-child),
 .sb-define-hat-cap {
   --sa-block-color: var(--editorTheme3-customColor);
 }
