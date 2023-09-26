@@ -11,7 +11,7 @@
   border-top: 1px solid #d9d9d9;
   height: 24px !important;
   box-sizing: border-box;
-  padding-top: 2px !important;
+  padding-top: 3px !important;
   z-index: 20;
   transition-duration: var(--collapseFooter-speed);
 }
@@ -34,7 +34,6 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
-  padding-top: 1px;
   padding-bottom: 4px;
 }
 

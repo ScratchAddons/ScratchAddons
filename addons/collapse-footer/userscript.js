@@ -22,7 +22,7 @@ export default async function ({ addon, console }) {
 
   if (location.pathname.split("/")[1] === "") {
     // Moves the donor text into the footer on the front page
-    const donor = await addon.tab.waitForElement("#donor");
+    const donor = document.getElementById("donor");
     footer.appendChild(donor);
     root.style.setProperty("--footer-hover-height", "410px");
   }
