@@ -12,6 +12,26 @@
   ],
   "settings": [
     {
+      "name": "Animation speed",
+      "id": "speed",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "0.25s",
+          "name": "Quick"
+        },
+        {
+          "id": "0.5s",
+          "name": "Default"
+        },
+        {
+          "id": "1s",
+          "name": "Slow"
+        }
+      ],
+      "default": "0.5s"
+    },
+    {
       "name": "Only on infinite scrolling pages",
       "id": "infiniteScroll",
       "type": "boolean",
