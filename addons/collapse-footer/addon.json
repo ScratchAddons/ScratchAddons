@@ -10,6 +10,23 @@
       "name": "ZenithKnight"
     }
   ],
+  "customCssVariables": [
+    {
+      "name": "expandSpeed",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "speed"
+        },
+        "options": {
+          "short": "0.25s",
+          "default": "0.5s",
+          "long": "0.75s"
+        }
+      }
+    }
+  ],
   "settings": [
     {
       "name": "Animation speed",
@@ -17,19 +34,19 @@
       "type": "select",
       "potentialValues": [
         {
-          "id": "0.25s",
+          "id": "short",
           "name": "Quick"
         },
         {
-          "id": "0.5s",
+          "id": "default",
           "name": "Default"
         },
         {
-          "id": "1s",
+          "id": "long",
           "name": "Slow"
         }
       ],
-      "default": "0.5s"
+      "default": "default"
     },
     {
       "name": "Only on infinite scrolling pages",

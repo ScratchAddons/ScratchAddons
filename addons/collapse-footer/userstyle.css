@@ -13,7 +13,7 @@
   box-sizing: border-box;
   padding-top: 3px !important;
   z-index: 20;
-  transition-duration: var(--collapseFooter-speed);
+  transition-duration: var(--collapseFooter-expandSpeed);
 }
 .sa-collapse-footer #footer .lists dl {
   margin-top: 0;
