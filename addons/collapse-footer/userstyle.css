@@ -28,6 +28,7 @@
 
 .sa-footer-arrow {
   display: none;
+  transition: opacity var(--collapseFooter-expandSpeed);
 }
 
 .sa-collapse-footer .sa-footer-arrow {
@@ -35,6 +36,10 @@
   margin-left: auto;
   margin-right: auto;
   padding-bottom: 4px;
+}
+
+.sa-collapse-footer #footer:hover .sa-footer-arrow {
+  opacity: 0;
 }
 
 :root {
