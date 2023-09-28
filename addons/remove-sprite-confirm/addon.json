@@ -3,7 +3,7 @@
   "description": "Asks if you're sure when deleting a sprite inside a project.",
   "info": [
     {
-      "text": "Tip: If you accidentally delete a sprite, costume, or sound, you can undo the deletion by clicking Edit in the menu bar then Restore <item>.",
+      "text": "Tip: If you accidentally delete a sprite, costume, or sound, you can undo the deletion by clicking Edit in the menu bar then Restore.",
       "id": "restoretip"
     }
   ],
