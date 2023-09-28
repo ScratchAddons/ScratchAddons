@@ -26,4 +26,19 @@ export default async function ({ addon, console }) {
     footer.appendChild(donor);
     root.style.setProperty("--footer-hover-height", "410px");
   }
+
+  let collapseTimeout;
+
+  footer.addEventListener("mouseover", () => {
+    footer.classList.add("expanded");
+    if (collapseTimeout) {
+      clearTimeout(collapseTimeout);
+    }
+  });
+
+  footer.addEventListener("mouseout", () => {
+    collapseTimeout = setTimeout(() => {
+      footer.classList.remove("expanded");
+    }, 200)
+  });
 }

@@ -18,8 +18,8 @@
 .sa-collapse-footer #footer .lists dl {
   margin-top: 0;
 }
-.sa-collapse-footer #footer:hover {
-  height: var(--footer-hover-height) !important;
+.sa-collapse-footer #footer.expanded {
+  height: var(--footer-hover-height);
 }
 
 .sa-collapse-footer .page > #view {
@@ -38,7 +38,7 @@
   padding-bottom: 4px;
 }
 
-.sa-collapse-footer #footer:hover .sa-footer-arrow {
+.sa-collapse-footer #footer.expanded .sa-footer-arrow {
   opacity: 0;
 }
 
