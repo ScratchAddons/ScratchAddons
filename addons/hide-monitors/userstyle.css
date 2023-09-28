@@ -1,0 +1,7 @@
+.sa-hide-monitors {
+  opacity: 0;
+}
+
+.sa-hide-monitors * {
+  user-select: none;
+}
