@@ -40,7 +40,11 @@ export default async function ({ addon, console }) {
 
   textarea.addEventListener("input", delayedPreview);
   markItUpButtons.forEach((el) => {
-    el.addEventListener("click", delayedPreview);
+    el.addEventListener("click", () => {
+      if (textarea.value) {
+        delayedPreview();
+      }
+    });
   });
   addon.self.addEventListener("disabled", () => {
     showPreview();
