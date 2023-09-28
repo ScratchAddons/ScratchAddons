@@ -39,6 +39,6 @@ export default async function ({ addon, console }) {
   footer.addEventListener("mouseout", () => {
     collapseTimeout = setTimeout(() => {
       footer.classList.remove("expanded");
-    }, 200)
+    }, 200);
   });
 }
