@@ -410,7 +410,9 @@ textarea:focus,
 .registration .modal-body textarea:focus,
 .registration .modal-body select:focus {
   border-color: var(--darkWww-button);
-  box-shadow: 0 1px 1px inset rgba(0, 0, 0, 0.08), 0 0 8px var(--darkWww-button-scratchr2InputFocusShadow);
+  box-shadow:
+    0 1px 1px inset rgba(0, 0, 0, 0.08),
+    0 0 8px var(--darkWww-button-scratchr2InputFocusShadow);
 }
 .editable textarea:focus,
 .editable-empty textarea:focus {
@@ -696,7 +698,7 @@ input.link.black {
   background-size: 20px 15px;
 }
 .stats li {
-  color: var(--darkWww-page-statsTextColor);
+  color: var(--darkWww-box-scratchr2HeaderText);
 }
 
 /* If the color scheme of an iframe element is different from that
