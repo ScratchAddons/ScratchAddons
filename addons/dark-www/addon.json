@@ -2127,18 +2127,6 @@
           "settingId": "box"
         }
       }
-    },
-    {
-      "name": "page-statsTextColor",
-      "value": {
-        "type": "textColor",
-        "black": "#554747",
-        "white": "#eae6e6",
-        "source": {
-          "type": "settingValue",
-          "settingId": "box"
-        }
-      }
     }
   ],
   "dynamicEnable": true,
