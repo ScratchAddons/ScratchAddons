@@ -150,7 +150,8 @@ select {
 .modal h2,
 .modal h3,
 .modal h4,
-.profile-box-footer-module h4 {
+.profile-box-footer-module h4,
+.stats li {
   color: var(--darkWww-box-scratchr2HeaderText);
 }
 .box-content label,
@@ -696,9 +697,6 @@ input.link.black {
 .stats li.data {
   background-image: url("%addon-self-dir%/assets/meow.png");
   background-size: 20px 15px;
-}
-.stats li {
-  color: var(--darkWww-box-scratchr2HeaderText);
 }
 
 /* If the color scheme of an iframe element is different from that
