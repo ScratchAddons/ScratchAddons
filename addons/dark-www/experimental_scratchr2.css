@@ -698,7 +698,7 @@ input.link.black {
   background-size: 20px 15px;
 }
 .stats li {
-  color: var(--darkWww-page-statsTextColor);
+  color: var(--darkWww-box-scratchr2HeaderText);
 }
 
 /* If the color scheme of an iframe element is different from that
