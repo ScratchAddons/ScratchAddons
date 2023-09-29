@@ -640,7 +640,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
           });
         }
 
-        if (addonId === "colorblind") {
+        if (addonId === "colorblind" && settings.links) {
           // Transition v1.34 to v1.35
           if (settings.links !== "underline") settings["underline-style"] = "none";
           if (settings.links === "bold") {
