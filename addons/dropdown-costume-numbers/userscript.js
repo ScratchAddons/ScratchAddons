@@ -29,7 +29,7 @@ export default async function ({ addon, console }) {
       const cutThree = COSTUME_BLOCKS[block.type];
       allItems.forEach((el, i) => {
         if (cutThree && i >= allItems.length - 3) return;
-        el.lastChild.dataset.index = i;
+        el.lastChild.dataset.index = i + 1;
       });
     } else {
       dropDownDiv.classList.remove("sa-dropdown-costume-numbers");
