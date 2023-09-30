@@ -33,6 +33,7 @@ export default async (
   while (true) {
     await redux.waitForState(
       (state) =>
+        state.session.session?.user !== undefined &&
         state.preview?.projectInfo?.author?.id === state.session?.session?.user?.id &&
         !state.preview?.projectInfo?.is_published
     );
