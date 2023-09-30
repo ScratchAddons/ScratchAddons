@@ -7,7 +7,7 @@ export default async function ({ addon, console }) {
   };
 
   const dropDownDiv = await addon.tab.waitForElement(".blocklyDropDownDiv");
-  const workspace = (await addon.tab.traps.getBlockly()).getMainWorkspace();
+  const workspace = await addon.tab.traps.getWorkspace();
 
   // This will show the original text without the numbers for a bit.
   // I'm not aware of any better way to detect dropdown close, though
