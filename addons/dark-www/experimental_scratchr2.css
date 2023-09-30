@@ -150,7 +150,8 @@ select {
 .modal h2,
 .modal h3,
 .modal h4,
-.profile-box-footer-module h4 {
+.profile-box-footer-module h4,
+.stats li {
   color: var(--darkWww-box-scratchr2HeaderText);
 }
 .box-content label,
