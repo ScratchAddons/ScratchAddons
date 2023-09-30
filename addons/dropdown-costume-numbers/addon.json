@@ -1,0 +1,24 @@
+{
+  "name": "Costume numbers in block dropdowns",
+  "description": "Shows the costume numbers when costumes are used in a dropdown.",
+  "userstyles": [
+    {
+      "matches": ["projects"],
+      "url": "userstyle.css"
+    }
+  ],
+  "userscripts": [
+    {
+      "matches": ["projects"],
+      "url": "userscript.js"
+    }
+  ],
+  "tags": ["editor", "codeEditor"],
+  "versionAdded": "1.35.0",
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld"
+    }
+  ]
+}
