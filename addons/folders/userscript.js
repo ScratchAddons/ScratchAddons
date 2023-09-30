@@ -1,6 +1,6 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   // The basic premise of how this addon works is relative simple.
   // scratch-gui renders the sprite selectors and asset selectors in a hierarchy like this:
   // <SelectorHOC>
@@ -146,7 +146,7 @@ export default async function ({ addon, global, console, msg }) {
     },
   };
 
-  // https://github.com/LLK/scratch-gui/blob/develop/src/components/asset-panel/icon--sound.svg
+  // https://github.com/scratchfoundation/scratch-gui/blob/develop/src/components/asset-panel/icon--sound.svg
   const imageIconSource = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="100px" height="100px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <g id="Sound" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -354,7 +354,7 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   const patchSortableHOC = (SortableHOC, type) => {
-    // SortableHOC should be: https://github.com/LLK/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/lib/sortable-hoc.jsx#L8
+    // SortableHOC should be: https://github.com/scratchfoundation/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/lib/sortable-hoc.jsx#L8
 
     const itemCache = new Cache();
     const folderItemCache = new Cache();
@@ -708,6 +708,7 @@ export default async function ({ addon, global, console, msg }) {
     });
   };
 
+  await addon.tab.scratchClassReady();
   addon.tab.createEditorContextMenu((ctxType, ctx) => {
     if (ctxType !== "sprite" && ctxType !== "costume" && ctxType !== "sound") return;
     const component = ctx.target[addon.tab.traps.getInternalKey(ctx.target)].return.return.return.stateNode;
@@ -1217,6 +1218,19 @@ export default async function ({ addon, global, console, msg }) {
         soundIndex,
         newIndex
       );
+    };
+
+    // Temporal bug fix for #5762
+    const originalShareSoundToTarget = vm.shareSoundToTarget;
+    vm.shareSoundToTarget = function (...args) {
+      const target = this.runtime.getTargetById(args[1]);
+      if (!target) {
+        // Avoid reading property from null
+        return Promise.reject(new Error("Dropping sound into folder is not supported"));
+        // This would also work no matter what we returned, probably
+        // Original method returns a promise, so here too
+      }
+      return originalShareSoundToTarget.call(this, ...args);
     };
   };
 

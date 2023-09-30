@@ -2,6 +2,16 @@
   display: none;
 }
 
+.sa-stat-display .project-remixes {
+  display: flex;
+}
+
+/* Front page */
 .thumbnail .thumbnail-remixes {
+  display: none;
+}
+
+/* My Stuff */
+.media-stats span.stat:nth-child(2) {
   display: none;
 }

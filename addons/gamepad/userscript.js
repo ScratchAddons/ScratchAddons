@@ -1,6 +1,7 @@
 import GamepadLib from "./gamepadlib.js";
+import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
   // Wait for the project to finish loading. Renderer and scripts will not be fully available until this happens.
@@ -86,7 +87,7 @@ export default async function ({ addon, global, console, msg }) {
   GamepadLib.setConsole(console);
   const gamepad = new GamepadLib();
 
-  gamepad.getHintsLazily = () => {
+  gamepad.getUserHints = () => {
     const parsedOptions = parseOptionsComment();
     if (parsedOptions) {
       return {
@@ -286,23 +287,7 @@ export default async function ({ addon, global, console, msg }) {
     editor.focus();
   });
 
-  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
-    document.body.classList.add("sa-gamepad-small");
-  }
-  document.addEventListener(
-    "click",
-    (e) => {
-      if (e.target.closest("[class*='stage-header_stage-button-first']:not(.sa-hide-stage-button)")) {
-        document.body.classList.add("sa-gamepad-small");
-      } else if (
-        e.target.closest("[class*='stage-header_stage-button-last']") ||
-        e.target.closest(".sa-hide-stage-button")
-      ) {
-        document.body.classList.remove("sa-gamepad-small");
-      }
-    },
-    { capture: true }
-  );
+  addSmallStageClass();
 
   const virtualCursorElement = document.createElement("img");
   virtualCursorElement.hidden = true;
@@ -422,7 +407,8 @@ export default async function ({ addon, global, console, msg }) {
 
   while (true) {
     const target = await addon.tab.waitForElement(
-      '[class^="stage-header_stage-size-row"], [class^="stage-header_stage-menu-wrapper"] > [class^="button_outlined-button"]',
+      // Full screen button
+      '[class^="stage-header_stage-size-row"] [class^="button_outlined-button"], [class*="stage-header_unselect-wrapper_"] > [class^="button_outlined-button"]',
       {
         markAsSeen: true,
         reduxEvents: [
@@ -434,7 +420,7 @@ export default async function ({ addon, global, console, msg }) {
       }
     );
     container.dataset.editorMode = addon.tab.editorMode;
-    if (target.className.includes("stage-size-row")) {
+    if (target.closest('[class^="stage-header_stage-size-row"]')) {
       addon.tab.appendToSharedSpace({ space: "stageHeader", element: container, order: 1 });
     } else {
       addon.tab.appendToSharedSpace({ space: "fullscreenStageHeader", element: container, order: 0 });

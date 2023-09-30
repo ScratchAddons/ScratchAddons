@@ -1,0 +1,36 @@
+/* Spinner animation code */
+/* From https://github.com/scratchfoundation/scratch-www/blob/develop/src/components/spinner/spinner.scss */
+
+@keyframes spin-intro {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+
+.sa-spinner {
+  display: block;
+  width: 22.8px;
+  height: 22.8px;
+  background-image: url(https://scratch.mit.edu/svgs/modal/spinner-blue.svg);
+  background-size: 100%;
+  filter: var(--darkWww-link-iconFilter, none);
+  animation-name: spin-intro, spin;
+  animation-duration: 0.25s, 1s;
+  animation-timing-function: cubic-bezier(0.3, -3, 0.6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);
+  animation-delay: 0s, 0.25s;
+  animation-iteration-count: 1, infinite;
+}

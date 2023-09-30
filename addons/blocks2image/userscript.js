@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   function makeStyle() {
     let style = document.createElement("style");
     style.textContent = `
@@ -56,6 +56,8 @@ export default async function ({ addon, global, console, msg }) {
     "dropdown-arrow.svg",
     "data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaGVpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLWFycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuNDEsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTDAuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNzFDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMCwxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNzlhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYzAuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMzdBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4="
   );
+
+  const enabledAddons = await addon.self.getEnabledAddons("codeEditor");
 
   addon.tab.createBlockContextMenu(
     (items) => {
@@ -175,10 +177,18 @@ export default async function ({ addon, global, console, msg }) {
     let svgchild = block.svgGroup_;
     svgchild = svgchild.cloneNode(true);
     let dataShapes = svgchild.getAttribute("data-shapes");
-    svgchild.setAttribute(
-      "transform",
-      `translate(0,${dataShapes === "hat" ? "18" : "0"}) ${isExportPNG ? "scale(2)" : ""}`
-    );
+    let translateY = 0; // blocks no hat
+    const scale = isExportPNG ? 2 : 1;
+    if (dataShapes === "c-block c-1 hat") {
+      translateY = 20; // for My block
+    }
+    if (dataShapes === "hat") {
+      translateY = 16; // for Events
+      if (enabledAddons.includes("cat-blocks")) {
+        translateY += 16; // for cat ears
+      }
+    }
+    svgchild.setAttribute("transform", `translate(0,${scale * translateY}) scale(${scale})`);
     setCSSVars(svg);
     svg.append(makeStyle());
     svg.append(svgchild);
@@ -238,7 +248,6 @@ export default async function ({ addon, global, console, msg }) {
     document.body.append(iframe);
     iframe.contentDocument.write(serializer.serializeToString(svg));
     let { width, height } = iframe.contentDocument.body.querySelector("svg g").getBoundingClientRect();
-    height = height + 20 * 2; //  hat block height restore
     svg.setAttribute("width", width + "px");
     svg.setAttribute("height", height + "px");
 

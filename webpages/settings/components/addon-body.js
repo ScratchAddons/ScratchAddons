@@ -96,7 +96,7 @@ export default async function ({ template }) {
           if (result === false) {
             if (isIframe) {
               this.$root.addonToEnable = this.addon;
-              document.querySelector(".popup").style.animation = "dropDown 1.6s 1";
+              document.querySelector(".popup").style.animation = "dropDown 0.35s 1";
               this.$root.showPopupModal = true;
             } else
               chrome.permissions.request(
@@ -132,6 +132,15 @@ export default async function ({ template }) {
       expanded(newValue) {
         if (newValue === true) this.everExpanded = true;
       },
+    },
+    ready() {
+      const onHashChange = () => {
+        if (location.hash.replace(/^#addon-/, "") === this.addon._addonId) {
+          this.expanded = true;
+        }
+      };
+      window.addEventListener("hashchange", onHashChange, { capture: false });
+      setTimeout(onHashChange, 0);
     },
   });
   Vue.component("addon-body", AddonBody);

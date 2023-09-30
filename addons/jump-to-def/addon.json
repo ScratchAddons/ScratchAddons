@@ -1,6 +1,6 @@
 {
   "name": "Jump to custom block definition",
-  "description": "Allows you to jump to a custom block's definition using the middle mouse button or Shift + Click on the block.",
+  "description": "Allows you to jump to a custom block's definition using the middle mouse button or Shift+Click on the block.",
   "info": [
     {
       "text": "This addon was previously part of the \"developer tools\" addon but has moved here.",

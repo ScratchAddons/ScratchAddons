@@ -1,5 +1,5 @@
 {
-  "name": "Search profile",
+  "name": "Username search",
   "description": "Allows you to go to a user's profile when you search their username.",
   "userscripts": [
     {
@@ -16,7 +16,12 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "credits": [{ "name": "Geotale" }, { "name": "pufferfish101007" }],
+  "credits": [
+    { "name": "Geotale" },
+    { "name": "pufferfish101007" },
+    { "name": "Hexagonal" },
+    { "name": "valmontechno" }
+  ],
   "tags": ["community", "recommended", "profiles"],
   "versionAdded": "1.1.0",
   "enabledByDefault": false
