@@ -4,9 +4,6 @@ import Settings from "../common/Settings.js";
 
 /**
  * An addon.
- * @property {Self} self
- * @property {Auth} auth
- * @property {Settings} settings
  */
 export default class Addon {
   constructor(info) {

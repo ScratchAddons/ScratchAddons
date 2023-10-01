@@ -14,7 +14,7 @@
  * export default async function (util)
  * Note that commonly it is done by using destructing syntax.
  * @typedef {object} Types
- * @property {UserscriptAddon} addon APIs for addons
+ * @property {UserscriptAddon} addon APIs for addons.
  * @property {MessageFunction} msg Gets localized message from addons-l10n folder. Supports placeholders and plurals.
  * @property {string} msg.locale Current locale used by msg function.
  * @property {MessageFunction} safeMsg Gets localized and HTML-escaped messages. Placeholders are NOT escaped.

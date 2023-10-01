@@ -15,8 +15,6 @@ let createdAnyBlockContextMenus = false;
 /**
  * APIs specific to userscripts.
  * @extends Listenable
- * @property {Trap} traps
- * @property {ReduxHandler} redux
  */
 export default class Tab extends Listenable {
   constructor(info) {
@@ -75,7 +73,7 @@ export default class Tab extends Listenable {
   }
   /**
    * Removes a stack block definition. Should not be called in most cases.
-   * @param {string} proccode The procedure definition code of the block
+   * @param {string} proccode The procedure definition code of the block.
    */
   removeBlock(proccode) {
     return blocks.removeBlock(proccode);
@@ -805,7 +803,7 @@ export default class Tab extends Listenable {
    * Callback to check if the item should be visible.
    * @callback Tab~EditorContextMenuItemCallback
    * @param {Tab~EditorContextMenuContext} context The context for the action.
-   * @returns {boolean} True to make it visible, false to hide
+   * @returns {boolean} True to make it visible, false to hide.
    */
 
   /**
@@ -857,9 +855,9 @@ export default class Tab extends Listenable {
    * @param {string} message The message displayed in the contents.
    * @param {object=} opts The options.
    * @param {boolean=} opts.useEditorClasses If on editor, whether to apply editor styles and not www styles.
-   * @param {string=} opts.okButtonLabel The label of the button for approving the confirmation
-   * @param {string=} opts.cancelButtonLabel The label of the button for rejecting the confirmation
-   * @returns {Promise<boolean>} Whether the confirmation was approved
+   * @param {string=} opts.okButtonLabel The label of the button for approving the confirmation.
+   * @param {string=} opts.cancelButtonLabel The label of the button for rejecting the confirmation.
+   * @returns {Promise<boolean>} Whether the confirmation was approved.
    */
   confirm(title, message, opts) {
     return modal.confirm(this, title, message, opts);
