@@ -30,7 +30,7 @@ export default async ({ addon, console, msg }) => {
       order: 1,
       label: msg("top"),
       condition: (ctx) => ctx.index !== 0,
-    }
+    },
   );
   addon.tab.createEditorContextMenu(
     (ctx) => {
@@ -52,6 +52,6 @@ export default async ({ addon, console, msg }) => {
       order: 2,
       label: msg("bottom"),
       condition: (ctx) => ctx.index !== ctx.target.parentNode.parentNode.childElementCount - 1,
-    }
+    },
   );
 };

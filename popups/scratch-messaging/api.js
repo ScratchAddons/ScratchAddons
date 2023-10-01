@@ -24,7 +24,7 @@ export async function deleteComment(addon, { resourceType, resourceId, commentId
         "x-token": xToken,
       },
       method: "DELETE",
-    }
+    },
   ).then((resp) => {
     if (!resp.ok)
       throw HTTPError.fromResponse(`Deleting ${resourceTypeUrl} comment ${commentId} of ${resourceId} failed`, resp);
@@ -139,7 +139,7 @@ export async function fetchComments(addon, { resourceType, resourceId, commentId
 
 export async function fetchMigratedComments(
   addon,
-  { resourceType, resourceId, commentIds, page = 1, commentsObj = {} }
+  { resourceType, resourceId, commentIds, page = 1, commentsObj = {} },
 ) {
   let projectAuthor;
   if (resourceType === "project") {
@@ -178,7 +178,7 @@ export async function fetchMigratedComments(
       if (!resParent.ok) {
         throw HTTPError.fromResponse(
           `Error when fetching parent ${parentId} for comment ${resourceType}/${commentId}`,
-          resParent
+          resParent,
         );
       }
       const jsonParent = await resParent.json();
@@ -224,7 +224,7 @@ export async function fetchMigratedComments(
       // Add the comment as a reply - better than crashing, because apparently it's
       // more common than I thought!
       console.error(
-        `No replies found on comment ${resourceType}/${resourceId}/${commentId} with parents ${json.parent_id}`
+        `No replies found on comment ${resourceType}/${resourceId}/${commentId} with parents ${json.parent_id}`,
       );
       replies.push(json);
     }
@@ -266,7 +266,7 @@ export async function fetchMigratedComments(
 export async function fetchLegacyComments(addon, { resourceType, resourceId, commentIds, page = 1, commentsObj = {} }) {
   const res = await fetch(
     `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/?page=${page}&nocache=${Date.now()}`,
-    { credentials: "omit" }
+    { credentials: "omit" },
   );
   if (!res.ok) {
     console.warn(`Ignoring comments ${resourceType}/${resourceId} page ${page}, status ${res.status}`);
@@ -291,7 +291,7 @@ export async function fetchLegacyComments(addon, { resourceType, resourceId, com
         foundComment = true;
         commentIds.splice(
           commentIds.findIndex((commentId) => commentId === childId),
-          1
+          1,
         );
       }
       const author = child.querySelector(".name").textContent.trim();
@@ -310,7 +310,7 @@ export async function fetchLegacyComments(addon, { resourceType, resourceId, com
       foundComment = true;
       commentIds.splice(
         commentIds.findIndex((commentId) => commentId === parentId),
-        1
+        1,
       );
     }
 
@@ -340,7 +340,7 @@ export async function fetchLegacyComments(addon, { resourceType, resourceId, com
       " ",
       resourceId,
       ", remaining ids: ",
-      JSON.parse(JSON.stringify(commentIds))
+      JSON.parse(JSON.stringify(commentIds)),
     );
     return commentsObj;
   }
