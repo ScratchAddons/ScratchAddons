@@ -308,7 +308,7 @@ export default async function ({ addon, msg, console }) {
         addBlock(
           row.isLocal ? "var" : "VAR",
           row.isLocal ? msg("var-local", { name: row.name }) : msg("var-global", { name: row.name }),
-          row
+          row,
         );
       }
 
@@ -317,7 +317,7 @@ export default async function ({ addon, msg, console }) {
         addBlock(
           row.isLocal ? "list" : "LIST",
           row.isLocal ? msg("list-local", { name: row.name }) : msg("list-global", { name: row.name }),
-          row
+          row,
         );
       }
 

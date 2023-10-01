@@ -171,7 +171,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
               "input-color": "#ffffff",
               text: "white",
             },
-            manifest.presets.find((p) => p.id === "original")
+            manifest.presets.find((p) => p.id === "original"),
           );
           updatePresetIfMatching(
             settings,
@@ -192,7 +192,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
               "input-color": "#202020",
               text: "white",
             },
-            manifest.presets.find((p) => p.id === "dark")
+            manifest.presets.find((p) => p.id === "dark"),
           );
 
           if (addonSettings["editor-dark-mode"]?.darkComments === false) {
