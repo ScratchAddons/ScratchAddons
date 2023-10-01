@@ -41,7 +41,7 @@ export default async function ({ addon, console, msg }) {
         "button_outlined-button",
         "stage-header_stage-button",
         "stage-header_stage-button-first",
-        { others: "sa-hide-stage-button" },
+        { others: "sa-hide-stage-button" }
       ),
     });
     addon.tab.displayNoneWhileDisabled(hideStageButton);
@@ -52,7 +52,7 @@ export default async function ({ addon, console, msg }) {
         src: addon.self.dir + "/icon.svg",
         alt: msg("hide-stage"),
         draggable: false,
-      }),
+      })
     );
     if (stageHidden) hideStage();
     else unhideStage();

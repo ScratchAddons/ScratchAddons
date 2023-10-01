@@ -8,7 +8,7 @@ export default async function ({ addon, console, msg }) {
     (state) => state.studio?.infoStatus === "FETCHED" && state.studio?.rolesStatus === "FETCHED",
     {
       actions: ["SET_INFO", "SET_ROLES"],
-    },
+    }
   );
   const getMembers = () =>
     [...redux.state.managers.items, ...redux.state.curators.items].map((member) => member.username);
@@ -89,7 +89,7 @@ export default async function ({ addon, console, msg }) {
         loadData(current);
       }
     },
-    { passive: true },
+    { passive: true }
   );
 
   addon.self.addEventListener("disabled", () => close());
@@ -102,7 +102,7 @@ export default async function ({ addon, console, msg }) {
     isFetching = true;
     const res = await fetch(
       `https://api.scratch.mit.edu/users/${username}/${type}?offset=${(data[type].offset +=
-        pageLimit)}&limit=${pageLimit}`,
+        pageLimit)}&limit=${pageLimit}`
     );
     if (!res.ok) {
       // Cooldown in case something went wrong
@@ -217,7 +217,7 @@ export default async function ({ addon, console, msg }) {
         },
         method: "PUT",
         credentials: "include",
-      },
+      }
     );
     await res.body.cancel(); // prevent memory leakage
     if (res.status !== 200) {

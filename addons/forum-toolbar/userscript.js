@@ -73,7 +73,7 @@ export default async ({ addon, console, msg }) => {
    */
   const createButton = (
     name,
-    { openWith, replaceWith, closeWith, tag, promptTag, promptContent, callback, defaultSelection },
+    { openWith, replaceWith, closeWith, tag, promptTag, promptContent, callback, defaultSelection }
   ) => {
     const liTag = document.createElement("li");
     liTag.classList.add("markItUpButton");
@@ -130,7 +130,7 @@ export default async ({ addon, console, msg }) => {
       tag: "color",
       promptTag: true,
     }),
-    1,
+    1
   );
 
   appendDropdown(
@@ -156,9 +156,9 @@ export default async ({ addon, console, msg }) => {
         tag: "dictionary",
         promptTag: true,
         defaultSelection: true,
-      }),
+      })
     ),
-    2,
+    2
   );
 
   appendButton(
@@ -167,7 +167,7 @@ export default async ({ addon, console, msg }) => {
       openWith: "[center]",
       closeWith: "[/center]",
     }),
-    1,
+    1
   );
   appendButton(
     "forumToolbarDecoration",
@@ -175,6 +175,6 @@ export default async ({ addon, console, msg }) => {
       tag: "code",
       promptTag: true,
     }),
-    2,
+    2
   );
 };

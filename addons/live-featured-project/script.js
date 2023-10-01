@@ -19,7 +19,7 @@ export default async function ({ addon, msg }) {
   iframeElement.setAttribute("allowfullscreen", "");
   iframeElement.setAttribute(
     "allow",
-    "autoplay 'src'; camera 'src'; document-domain 'none'; fullscreen 'src'; gamepad 'src'; microphone 'src';",
+    "autoplay 'src'; camera 'src'; document-domain 'none'; fullscreen 'src'; gamepad 'src'; microphone 'src';"
   );
   iframeElement.setAttribute("scrolling", "no");
 
@@ -67,7 +67,7 @@ export default async function ({ addon, msg }) {
         },
         {
           once: true,
-        },
+        }
       );
   };
 
@@ -84,7 +84,7 @@ export default async function ({ addon, msg }) {
     wrapperElement.dataset.player = "forkphorus";
     iframeElement.setAttribute(
       "src",
-      `https://forkphorus.github.io/embed.html?id=${projectId}&auto-start=${autoPlay}&ui=${showMenu}`,
+      `https://forkphorus.github.io/embed.html?id=${projectId}&auto-start=${autoPlay}&ui=${showMenu}`
     );
   };
 

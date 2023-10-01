@@ -19,7 +19,7 @@ const checkSitePermissions = (sendResponse) => {
         onPermissionsRevoked();
       }
       sendResponse(hasPermissions);
-    },
+    }
   );
 };
 

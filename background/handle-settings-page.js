@@ -31,7 +31,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       // Store target so arrays don't become objects
       addonSettings: minifySettings(
         scratchAddons.globalState.addonSettings._target,
-        prerelease ? null : scratchAddons.manifests,
+        prerelease ? null : scratchAddons.manifests
       ),
     });
 
@@ -39,7 +39,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     const { updateUserstylesOnSettingsChange } = manifest;
     if (updateUserstylesOnSettingsChange)
       scratchAddons.localEvents.dispatchEvent(
-        new CustomEvent("updateUserstylesSettingsChange", { detail: { addonId, manifest, newSettings } }),
+        new CustomEvent("updateUserstylesSettingsChange", { detail: { addonId, manifest, newSettings } })
       );
     if (addonId === "msg-count-badge") updateBadge(scratchAddons.cookieStoreId);
   }
