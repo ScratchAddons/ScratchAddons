@@ -74,7 +74,7 @@ const incognitoDatabase = new IncognitoDatabase();
  * @returns {number} the message count, or 0 if it errors
  */
 export async function fetchMessageCount(username) {
-  const resp = await fetch(`https://api.scratch.mit.edu/users/${username}/messages/count?timestamp=${Date.now()}`);
+  const resp = await fetch(`https://api.scratch.mit.edu/users/${username}/messages/count`);
   const json = await resp.json();
   return json.count || 0;
 }
