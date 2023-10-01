@@ -34,6 +34,26 @@
   }
 }
 
+@media (prefers-reduced-motion) {
+  @keyframes dropDown {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes closePopup {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+}
+
 .popup img {
   height: 50px;
   width: 50px;
