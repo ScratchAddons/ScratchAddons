@@ -108,7 +108,7 @@ export default async ({ addon, msg, safeMsg }) => {
                 Object.assign(document.createElement("a"), {
                   href: `https://scratch.mit.edu/users/${this.thisComment.author}`,
                   textContent: "@" + this.thisComment.author,
-                })
+                }),
               );
               newElement.append(" ");
               newElement.append(...domContent.childNodes);
@@ -444,7 +444,7 @@ export default async ({ addon, msg, safeMsg }) => {
           .then(() => {
             this.stMessages.splice(
               this.stMessages.findIndex((alert) => alert.id === id),
-              1
+              1,
             );
             this.updateMessageCount();
           })
@@ -535,7 +535,7 @@ export default async ({ addon, msg, safeMsg }) => {
                     Object.assign(document.createElement("a"), {
                       href: `https://scratch.mit.edu/users/${commentObject.replyingTo}`,
                       textContent: "@" + commentObject.replyingTo,
-                    })
+                    }),
                   );
                   newElement.append(" ");
                 }
