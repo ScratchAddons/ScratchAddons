@@ -62,8 +62,8 @@ export default class Self extends Listenable {
 
   /**
    * Gets a list of addon IDs enabled, optionally filtered using tags.
-   * @param {string=} tag - the tag for filtering.
-   * @returns {Promise<string[]>} enabled addons' IDs
+   * @param {string=} tag The tag for filtering.
+   * @returns {Promise<string[]>} Enabled addons' IDs.
    */
   getEnabledAddons(tag) {
     return scratchAddons.methods.getEnabledAddons(tag);
