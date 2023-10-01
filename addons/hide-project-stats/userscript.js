@@ -1,3 +1,4 @@
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, console }) {
   let loves = { name: "love" };
   let favorites = { name: "favorite" };

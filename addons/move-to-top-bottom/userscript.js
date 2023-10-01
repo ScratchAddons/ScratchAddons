@@ -1,3 +1,4 @@
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async ({ addon, console, msg }) => {
   const types = ["sound"];
 

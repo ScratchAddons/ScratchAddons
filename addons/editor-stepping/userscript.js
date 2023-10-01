@@ -1,6 +1,7 @@
 import { getRunningThread } from "../debugger/module.js";
 import Highlighter from "./highlighter.js";
 
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
 

@@ -1,3 +1,4 @@
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, console, msg }) {
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/tinycolor-min.js");
 

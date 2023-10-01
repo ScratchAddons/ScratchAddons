@@ -1,6 +1,7 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import LogView from "./log-view.js";
 
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function createLogsTab({ debug, addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
@@ -108,7 +109,7 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
                 sprite: targetInfo ? targetInfo.name : msg("unknown-sprite"),
                 type,
                 content: text,
-              })[match]
+              }[match])
           ) + "\n"
         ).repeat(count)
       )

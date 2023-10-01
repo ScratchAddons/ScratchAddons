@@ -3,6 +3,7 @@
  * It has been modified to work properly in our environment and fix some bugs.
  */
 
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
 

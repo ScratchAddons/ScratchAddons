@@ -4,6 +4,7 @@ import { initUI } from "./ui.js";
 import { updateScaleTool } from "./updateScaleTool.js";
 
 /** @type {(api: import("../../addon-api/content-script/typedef").UserscriptUtilities) => Promise<void>} */
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function (api) {
   const { addon } = api;
   addon.self.addEventListener("disabled", disable);

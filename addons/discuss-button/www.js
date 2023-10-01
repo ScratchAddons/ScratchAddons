@@ -1,3 +1,4 @@
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon }) {
   if (addon.tab.clientVersion === "scratchr2") return;
   let span;

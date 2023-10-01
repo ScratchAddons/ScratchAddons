@@ -11,10 +11,22 @@ import Auth from "./Auth.js";
 export default class UserscriptAddon extends Addon {
   constructor(info) {
     super(info);
+    /**
+     * @private
+     */
     this._addonId = info.id;
+    /**
+     * @private
+     */
     this.__path = `${new URL(import.meta.url).origin}/`;
+    /**
+     * Allows addon userscripts to get information about the tab they’re currently running on.
+     */
     this.tab = new Tab(info);
     this.auth.dispose();
+    /**
+     * Allows addons to get information about the current Scratch account session.
+     */
     this.auth = new Auth(this);
     this.self.disabled = false;
     this.self.enabledLate = info.enabledLate;

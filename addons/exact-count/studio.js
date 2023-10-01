@@ -1,3 +1,4 @@
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon }) {
   async function countProjects(url, page, delta) {
     const res = await fetch(url + 40 * page);

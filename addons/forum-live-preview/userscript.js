@@ -1,3 +1,4 @@
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, console }) {
   const textarea = await addon.tab.waitForElement(".markItUpEditor");
   const previewButton = await addon.tab.waitForElement(".markItUpButton.preview");

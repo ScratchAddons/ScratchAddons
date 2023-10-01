@@ -61,6 +61,7 @@ addEventListener("resize", () => {
   setEltWidth(dangoContainerRight);
 });
 
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, console, msg }) {
   const notifClose = Object.assign(document.createElement("span"), {
     style: `

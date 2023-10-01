@@ -1,3 +1,4 @@
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, console }) {
   /** @type {HTMLElement|null} */
   let currentDraggingElement = null;

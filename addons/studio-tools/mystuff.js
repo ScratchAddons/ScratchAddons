@@ -1,3 +1,4 @@
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, console, msg }) {
   while (true) {
     let item = await addon.tab.waitForElement(".media-stats", { markAsSeen: true });

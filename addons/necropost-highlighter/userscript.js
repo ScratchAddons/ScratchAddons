@@ -5,6 +5,7 @@
  * to read actual dates.
  */
 
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, global, console, msg }) {
   // Default is a little over a month's worth of topics. Reasonably stable through 2022.
   // There's a lot of tolerance. Half or twice as many topics filter pretty much the same.

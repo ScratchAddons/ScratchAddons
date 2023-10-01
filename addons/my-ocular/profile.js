@@ -1,3 +1,4 @@
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, console, msg }) {
   const username = document.querySelector("#profile-data > div.box-head > div > h2").innerText?.split("#")[0]; // Fix bug with user-id addon
   let container = document.querySelector(".location");

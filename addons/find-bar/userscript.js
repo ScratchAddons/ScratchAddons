@@ -2,6 +2,7 @@ import BlockItem from "./blockly/BlockItem.js";
 import BlockInstance from "./blockly/BlockInstance.js";
 import Utils from "./blockly/Utils.js";
 
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, msg, console }) {
   if (!addon.self._isDevtoolsExtension && window.initGUI) {
     console.log("Extension running, stopping addon");

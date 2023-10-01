@@ -1,3 +1,4 @@
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function (
   /** @type {import("../../addon-api/content-script/typedef").UserscriptUtilities} */ { addon, msg, console }
 ) {

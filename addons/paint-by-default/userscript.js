@@ -1,3 +1,4 @@
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, console }) {
   const spriteMeta = Object.assign(Object.create(null), {
     upload: {

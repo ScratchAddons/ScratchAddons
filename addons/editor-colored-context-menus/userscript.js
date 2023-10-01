@@ -1,5 +1,6 @@
 import { removeAlpha } from "../../libraries/common/cs/text-color.esm.js";
 
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 

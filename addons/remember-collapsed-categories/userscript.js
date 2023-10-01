@@ -1,3 +1,4 @@
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon }) {
   while (true) {
     const categoryBody = await addon.tab.waitForElement('[id^="category_body_"]', {

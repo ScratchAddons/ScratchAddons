@@ -1,4 +1,5 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon }) {
   const heading = await addon.tab.waitForElement(".inner.mod-splash + .inner.mod-splash h4", {
     reduxCondition: (state) => state.splash.featured.status === "FETCHED",

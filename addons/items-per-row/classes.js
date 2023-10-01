@@ -18,6 +18,7 @@ function setClasses(setting, value, thresholds) {
   }
 }
 
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, console }) {
   await addon.tab.waitForElement("body");
   const updateClasses = () => {

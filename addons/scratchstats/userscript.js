@@ -35,6 +35,7 @@ function createDoubleRankItem(data, globalGetter, countryGetter, label) {
   return createItem(number, label);
 }
 
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, msg, console }) {
   const createStatsSection = (element, { data, loading, error } = {}) => {
     // "element" is the element whose content to replace

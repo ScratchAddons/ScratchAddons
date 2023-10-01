@@ -1,5 +1,6 @@
 import formatProfileComments from "../../libraries/common/cs/format-profile-comments.js";
 
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, console }) {
   const cache = new Map();
   addon.self.addEventListener("disabled", () => {

@@ -1,3 +1,4 @@
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, console, msg }) {
   Scratch.MyStuff.ProjectThumbnailCollectionView.prototype.shared = function (project) {
     // Scratch's implementation incorrectly calls fadeOut on the entire list

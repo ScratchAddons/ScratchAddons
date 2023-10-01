@@ -2,6 +2,7 @@ import { textColor } from "../../libraries/common/cs/text-color.esm.js";
 
 const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$");
 
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
 

@@ -1,3 +1,4 @@
+/** @typedef {import("types").Types} Types @param {Types} */
 export default async function ({ addon, global, cons, msg }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
