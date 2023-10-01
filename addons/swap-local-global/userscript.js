@@ -17,8 +17,8 @@ export default async function ({ addon, msg, console }) {
         Object.values(target.blocks._blocks).find(
           (block) =>
             (block.fields.LIST && block.fields.LIST.id === id) ||
-            (block.fields.VARIABLE && block.fields.VARIABLE.id === id),
-        ),
+            (block.fields.VARIABLE && block.fields.VARIABLE.id === id)
+        )
       );
 
   // https://github.com/LLK/scratch-vm/blob/7c6f1e44fb0a9b0d0279225cd4c62fbe59b6af54/src/engine/blocks.js#L388-L394
@@ -158,13 +158,13 @@ export default async function ({ addon, msg, console }) {
             alert(
               msg("cant-convert-to-local", {
                 sprites: targets.map(getTargetName).join(", "),
-              }),
+              })
             );
           } else {
             alert(
               msg("cant-convert-used-elsewhere", {
                 sprite: getTargetName(targets[0]),
-              }),
+              })
             );
           }
           return;
@@ -176,7 +176,7 @@ export default async function ({ addon, msg, console }) {
           alert(
             msg("cant-convert-conflict", {
               sprites: targets.map(getTargetName).join(", "),
-            }),
+            })
           );
           return;
         }
@@ -286,18 +286,18 @@ export default async function ({ addon, msg, console }) {
     noLocalsInStageSection.appendChild(
       Object.assign(document.createElement("span"), {
         textContent: addon.tab.scratchMessage("gui.gui.variablePromptAllSpritesMessage"),
-      }),
+      })
     );
 
     const scopeSection = document.createElement("div");
     scopeSection.className = addon.tab.scratchClass("prompt_options-row", "prompt_cloud-option");
     const forAllSprites = createLabeledInput(
       addon.tab.scratchMessage("gui.gui.variableScopeOptionAllSprites"),
-      "global",
+      "global"
     );
     const forThisSpriteOnly = createLabeledInput(
       addon.tab.scratchMessage("gui.gui.variableScopeOptionSpriteOnly"),
-      "local",
+      "local"
     );
     forAllSprites.input.checked = !variable.isLocal;
     forThisSpriteOnly.input.checked = variable.isLocal;
@@ -340,7 +340,7 @@ export default async function ({ addon, msg, console }) {
         Object.assign(document.createElement("div"), {
           textContent: msg("edit"),
           className: "sa-swap-local-global-hint",
-        }),
+        })
       );
     }
     promptBody.insertBefore(root, promptBody.lastChild);
@@ -391,6 +391,6 @@ export default async function ({ addon, msg, console }) {
     {
       flyout: true,
       blocks: true,
-    },
+    }
   );
 }

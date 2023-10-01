@@ -26,7 +26,7 @@ export default async function ({ addon, console }) {
     function applyChanges(
       paddingSize = addon.settings.get("paddingSize"),
       cornerSize = addon.settings.get("cornerSize"),
-      notchSize = addon.settings.get("notchSize"),
+      notchSize = addon.settings.get("notchSize")
     ) {
       let multiplier = paddingSize / 100;
       cornerSize = cornerSize / 100;
