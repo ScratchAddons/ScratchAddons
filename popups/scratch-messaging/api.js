@@ -265,10 +265,9 @@ export async function fetchMigratedComments(
 }
 
 export async function fetchLegacyComments(addon, { resourceType, resourceId, commentIds, page = 1, commentsObj = {} }) {
-  const res = await fetch(
-    `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/?page=${page}`,
-    { credentials: "omit" }
-  );
+  const res = await fetch(`https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/?page=${page}`, {
+    credentials: "omit",
+  });
   if (!res.ok) {
     console.warn(`Ignoring comments ${resourceType}/${resourceId} page ${page}, status ${res.status}`);
     return commentsObj;
