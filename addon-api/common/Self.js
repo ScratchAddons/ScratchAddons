@@ -46,7 +46,7 @@ export default class Self extends Listenable {
   }
 
   /**
-   * Path to library's directory.
+   * Path to `libraries` directory.
    * @type {string}
    */
   get lib() {
