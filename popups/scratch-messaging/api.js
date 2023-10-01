@@ -154,8 +154,8 @@ export async function fetchMigratedComments(
       : `https://api.scratch.mit.edu/studios/${resourceId}/comments/${commId}`;
   const getRepliesUrl = (commId, offset) =>
     resourceType === "project"
-      ? `https://api.scratch.mit.edu/users/${projectAuthor}/projects/${resourceId}/comments/${commId}/replies?offset=${offset}&limit=40&nocache=${Date.now()}`
-      : `https://api.scratch.mit.edu/studios/${resourceId}/comments/${commId}/replies?offset=${offset}&limit=40&nocache=${Date.now()}`;
+      ? `https://api.scratch.mit.edu/users/${projectAuthor}/projects/${resourceId}/comments/${commId}/replies?offset=${offset}&limit=40`
+      : `https://api.scratch.mit.edu/studios/${resourceId}/comments/${commId}/replies?offset=${offset}&limit=40`;
   for (const commentId of commentIds) {
     if (commentsObj[`${resourceType[0]}_${commentId}`]) continue;
 
@@ -266,7 +266,7 @@ export async function fetchMigratedComments(
 
 export async function fetchLegacyComments(addon, { resourceType, resourceId, commentIds, page = 1, commentsObj = {} }) {
   const res = await fetch(
-    `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/?page=${page}&nocache=${Date.now()}`,
+    `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/?page=${page}`,
     { credentials: "omit" }
   );
   if (!res.ok) {
