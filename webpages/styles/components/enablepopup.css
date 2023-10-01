@@ -43,6 +43,10 @@
   margin-bottom: 30px;
 }
 
+.popup .large-button {
+  display: inline-flex;
+}
+
 .popup .large-button:not(:last-child) {
   margin-inline-end: 20px;
 }
