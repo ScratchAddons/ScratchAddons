@@ -4,12 +4,13 @@
 }
 
 [class*="stage-header_stage-header-wrapper-overlay"] {
-  transform: translateY(-101%);
+  opacity: 0;
+  pointer-events: all !important;
   display: block;
-  transition: transform 0.3s;
+  transition: opacity 0.3s;
 }
 
 .stage-header-hover {
-  transform: translateY(0%);
-  transition: transform 0.3s 0.25s;
+  opacity: 1;
+  transition: opacity 0.2s 0.5s;
 }

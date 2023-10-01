@@ -94,15 +94,18 @@ export default async function ({ addon, console }) {
     }
   });
   // Moving the mouse to the top of the screen displays the navigation bar.
-  document.addEventListener("mousemove", (event) => {
+  var header = document.querySelector('[class*="stage-header_stage-header-wrapper-overlay"]');
+  header.addEventListener("mouseenter", (event) => {
     if (addon.settings.get("hideToolbar") && addon.settings.get("hoverToolbar")) {
       if (addon.tab.redux.state.scratchGui.mode.isFullScreen) {
-        var header = document.querySelector('[class*="stage-header_stage-header-wrapper-overlay"]');
-        header.classList.toggle(
-          "stage-header-hover",
-          event.clientY <=
-            2 + (header.getBoundingClientRect().height - 2) * header.classList.contains("stage-header-hover")
-        );
+        header.classList.add("stage-header-hover");
+      }
+    }
+  });
+  header.addEventListener("mouseleave", (event) => {
+    if (addon.settings.get("hideToolbar") && addon.settings.get("hoverToolbar")) {
+      if (addon.tab.redux.state.scratchGui.mode.isFullScreen) {
+        header.classList.remove("stage-header-hover");
       }
     }
   });
