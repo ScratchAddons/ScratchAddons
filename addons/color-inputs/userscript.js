@@ -1,4 +1,4 @@
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, msg, console }) {
   while (true) {
     const swatchRow = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', {

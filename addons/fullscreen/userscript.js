@@ -2,7 +2,7 @@
  * Used for the automatic browser full screen setting
  * and for hiding the scrollbar in full screen.
  */
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console }) {
   // "Browser fullscreen" is defined as the mode that hides the browser UI.
   function updateBrowserFullscreen() {

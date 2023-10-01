@@ -1,4 +1,4 @@
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console }) {
   const xhrOpen = XMLHttpRequest.prototype.open;
   XMLHttpRequest.prototype.open = function (method, url, ...args) {

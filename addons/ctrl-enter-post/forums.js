@@ -1,4 +1,4 @@
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon }) {
   let type = location.pathname.split("/")[2];
 

@@ -29,7 +29,7 @@ async function commentLoader(addon, heightControl, selector, pathname, { yProvid
   }
 }
 
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console }) {
   if (window.location.pathname.split("/")[1] === "users" && addon.settings.get("profileCommentScroll"))
     commentLoader(addon, "#content", "[data-control=load-more]");

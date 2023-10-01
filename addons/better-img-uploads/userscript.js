@@ -1,4 +1,4 @@
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console, msg }) {
   let mode = addon.settings.get("fitting");
 

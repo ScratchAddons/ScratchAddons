@@ -1,4 +1,4 @@
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
   let workspace = Blockly.getMainWorkspace();

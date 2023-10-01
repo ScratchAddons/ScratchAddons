@@ -4,7 +4,7 @@
 import { normalizeHex } from "../../libraries/common/cs/normalize-color.js";
 import RateLimiter from "../../libraries/common/cs/rate-limiter.js";
 
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async ({ addon, console, msg }) => {
   let prevEventHandler;
   // 250-ms rate limit

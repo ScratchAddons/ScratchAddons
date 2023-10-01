@@ -1,5 +1,5 @@
 import { setupForumId, getIDLink } from "../better-quoter/module.js";
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console, msg }) {
   if (!document.querySelector("textarea")) return;
   setupForumId(addon);

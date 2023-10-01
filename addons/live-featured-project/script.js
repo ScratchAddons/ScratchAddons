@@ -1,4 +1,4 @@
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, msg }) {
   const showMenu = addon.settings.get("showMenu");
   const player = addon.settings.get("alternativePlayer");

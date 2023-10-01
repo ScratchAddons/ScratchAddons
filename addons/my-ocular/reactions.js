@@ -1,4 +1,4 @@
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console, msg }) {
   let posts = document.querySelectorAll(".blockpost");
   const isLoggedIn = await addon.auth.fetchIsLoggedIn();

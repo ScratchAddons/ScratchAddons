@@ -1,6 +1,6 @@
 import { updateAllBlocks } from "./update-all-blocks.js";
 
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console }) {
   var BlocklyInstance = await addon.tab.traps.getBlockly();
 

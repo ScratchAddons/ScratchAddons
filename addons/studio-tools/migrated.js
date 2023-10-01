@@ -1,4 +1,4 @@
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async ({ addon, console, msg }) => {
   const { redux } = addon.tab;
   await redux.waitForState(

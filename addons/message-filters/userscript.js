@@ -1,4 +1,4 @@
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console, msg }) {
   // Wait for the select element that is the default message filtering select then remove it.
   await addon.tab.waitForElement(".select", { markAsSeen: true });

@@ -35,7 +35,7 @@ function viewSource(post, msg) {
   };
 }
 
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console, msg }) {
   while (true) {
     const post = await addon.tab.waitForElement(".blockpost", { markAsSeen: true });

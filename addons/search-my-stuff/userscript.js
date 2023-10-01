@@ -1,7 +1,7 @@
 import Fuse from "../../libraries/thirdparty/cs/fuse.esm.min.js";
 import fuseOptions from "./fuse-options.js";
 
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console, msg }) {
   // Inject our search bar
   let search,

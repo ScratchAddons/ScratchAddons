@@ -1,4 +1,4 @@
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console }) {
   if (addon.tab.clientVersion === null) return; //if neither www or r2, exit
 

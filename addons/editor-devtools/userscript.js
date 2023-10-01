@@ -1,6 +1,6 @@
 import DevTools from "./DevTools.js";
 
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console, msg, safeMsg: m }) {
   // noinspection JSUnresolvedVariable
   if (!addon.self._isDevtoolsExtension && window.initGUI) {

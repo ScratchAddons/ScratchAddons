@@ -2,7 +2,7 @@ import ThumbSetter from "../../libraries/common/cs/thumb-setter.js";
 import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
 import { init, saveConfig, isOverwritingEnabled, blockOverwriting } from "./persistent-thumb.js";
 
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console, msg }) {
   init(console);
   let projectId = location.href.match(/\d+/)?.[0];

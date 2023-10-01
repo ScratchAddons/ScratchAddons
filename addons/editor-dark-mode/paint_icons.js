@@ -3,7 +3,7 @@ import { textColor } from "../../libraries/common/cs/text-color.esm.js";
 const iconSelector = "[class*='labeled-icon-button_edit-field-icon_']";
 const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$");
 
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console }) {
   const recolorSvg = (svg) => {
     return svg

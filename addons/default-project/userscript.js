@@ -1,4 +1,4 @@
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console, msg }) {
   // Fetch as text without parsing as JSON, because guess what,
   // the code will stringify anyway!

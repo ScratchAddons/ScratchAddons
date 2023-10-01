@@ -1,6 +1,6 @@
 import { setup, isMuted, onVolumeChanged, setMuted } from "../vol-slider/module.js";
 
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
   setup(vm);

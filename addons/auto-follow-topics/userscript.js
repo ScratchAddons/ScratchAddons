@@ -1,4 +1,4 @@
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console, msg }) {
   const getTopics = () => JSON.parse(sessionStorage.getItem("auto-follow-topics") || "[]");
   const setTopics = (topics) => sessionStorage.setItem("auto-follow-topics", JSON.stringify(topics));

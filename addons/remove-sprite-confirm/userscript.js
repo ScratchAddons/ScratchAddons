@@ -1,4 +1,4 @@
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async ({ addon, console, msg }) => {
   if (!addon.tab.redux.state) return console.warn("Redux is not available!");
   const vm = addon.tab.traps.vm;

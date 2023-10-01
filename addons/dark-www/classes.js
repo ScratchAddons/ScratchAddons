@@ -1,6 +1,6 @@
 import { textColor } from "../../libraries/common/cs/text-color.esm.js";
 
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console }) {
   addon.tab.waitForElement(".annual-report-content > .covid-response-section").then(() => {
     document.body.classList.add("sa-annual-report-2019");

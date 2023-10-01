@@ -42,7 +42,7 @@ function updateCssVariables(node, addon) {
   if (pygmentsStyle) pygmentsStyle.disabled = !addon.settings.get("darkForumCode");
 }
 
-/** @typedef {import("types").Types} Types @param {Types} */
+/** @param {import("types").Types} */
 export default async function ({ addon, console }) {
   const preview = await addon.tab.waitForElement(".markItUpPreviewFrame");
   let previewRoot;
