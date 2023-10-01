@@ -24,7 +24,7 @@ export default async function ({ addon, console, msg }) {
       Object.assign(document.createElement("p"), {
         textContent: msg("description"),
         className: "sa-animated-thumb-text",
-      }),
+      })
     );
     const modalButtons = Object.assign(document.createElement("div"), {
       className: "flex-row action-buttons sa-animated-thumb-popup-actions",
@@ -59,7 +59,7 @@ export default async function ({ addon, console, msg }) {
       Object.assign(document.createElement("p"), {
         textContent: msg("keep-thumb-desc"),
         className: "sa-animated-thumb-text",
-      }),
+      })
     );
     const modalResultArea = Object.assign(document.createElement("div"), {
       className: "sa-animated-thumb-popup-result",
@@ -71,7 +71,7 @@ export default async function ({ addon, console, msg }) {
       Object.assign(document.createElement("p"), {
         textContent: msg("successful"),
         className: "sa-animated-thumb-text sa-animated-thumb-show-on-success",
-      }),
+      })
     );
     const thumbImage = Object.assign(document.createElement("img"), {
       alt: "",
@@ -87,7 +87,7 @@ export default async function ({ addon, console, msg }) {
       Object.assign(document.createElement("p"), {
         textContent: msg("if-unsuccessful"),
         className: "sa-animated-thumb-text sa-animated-thumb-show-on-success",
-      }),
+      })
     );
 
     // Logic
@@ -143,7 +143,7 @@ export default async function ({ addon, console, msg }) {
               default:
                 modalResultArea.textContent = msg("error");
             }
-          },
+          }
         )
         .finally(() => {
           ignoreClickOutside = false;

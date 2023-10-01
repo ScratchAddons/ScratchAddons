@@ -62,7 +62,7 @@ export default async function ({ addon, console }) {
       ".user-projects-modal-grid",
       ".user-projects-modal:not(.sa-followers-main) .user-projects-modal-grid .studio-grid-load-more > button",
       "",
-      { yProvider: ".user-projects-modal-content" },
+      { yProvider: ".user-projects-modal-content" }
     );
   if (isStudio && addon.settings.get("studioCuratorScroll"))
     commentLoader(addon, "#view", "div > .studio-members:last-child .studio-grid-load-more > button", "curators"); // Only scrolling curators for now
@@ -119,14 +119,14 @@ export default async function ({ addon, console }) {
           return;
         } else if (
           e.target.closest(
-            ".user-projects-modal:not(.sa-followers-main) .user-projects-modal-grid .studio-grid-load-more > button",
+            ".user-projects-modal:not(.sa-followers-main) .user-projects-modal-grid .studio-grid-load-more > button"
           )
         ) {
           if (addon.tab.redux.state?.["user-projects"].loading) e.stopPropagation();
           return;
         }
       },
-      { capture: true },
+      { capture: true }
     );
   }
 }

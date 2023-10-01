@@ -34,7 +34,7 @@ export default (filenames) =>
           return dom.querySelector("template").innerHTML;
         })
         .then((template) => jsPromise.then((esm) => esm.default({ template })));
-    }),
+    })
   ).then(() =>
     filenames.forEach((filename) => {
       if (!styles[filename]) return;
@@ -43,5 +43,5 @@ export default (filenames) =>
       const [componentName] = filename.split("/").slice(-1);
       style.setAttribute("data-vue-component", componentName); // For debugging (has no side effects)
       document.head.insertBefore(style, document.head.querySelector("[data-below-vue-components]"));
-    }),
+    })
   );

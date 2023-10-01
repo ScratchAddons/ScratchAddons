@@ -712,7 +712,7 @@ class TokenTypeBlock extends TokenType {
             enumerateStringForms(
               partIdx + 1,
               [...strings, ...enumValue.string.toLowerCase().split(" ")],
-              [...inputs, enumValue],
+              [...inputs, enumValue]
             );
           }
           return;
@@ -862,7 +862,7 @@ class TokenTypeBlock extends TokenType {
           token.end,
           subtokenProviders,
           tokenProviderIdx + 1,
-          !token.isTruncated,
+          !token.isTruncated
         )) {
           subTokenArr.push(token);
           yield subTokenArr;
@@ -1273,7 +1273,7 @@ export default class WorkspaceQuerier {
     blocks.sort(
       (a, b) =>
         WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(b.category.name) -
-        WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(a.category.name),
+        WorkspaceQuerier.CATEGORY_PRIORITY.indexOf(a.category.name)
     );
 
     // Apply order of operations

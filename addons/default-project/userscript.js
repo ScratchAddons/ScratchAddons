@@ -58,7 +58,7 @@ export default async function ({ addon, console, msg }) {
                       "x-token": xToken,
                     },
                     credentials: "include",
-                  }),
+                  })
                 )
                 .then((resp) => {
                   if (!resp.ok) throw new Error(`HTTP status code ${resp.status} returned`);
