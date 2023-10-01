@@ -27,7 +27,7 @@
       "}",
       ""
     ],
-    "description": "addon.json"
+    "description": "addon.json template"
   },
 
   "Boolean setting": {
@@ -41,7 +41,7 @@
       "\t\"default\": ${3:false}",
       "}$0"
     ],
-    "description": "boolean setting"
+    "description": "\"boolean\" setting"
   },
 
   "Integer setting": {
@@ -57,7 +57,7 @@
       "\t\"default\": ${5:0}",
       "}$0"
     ],
-    "description": "integer setting"
+    "description": "\"integer\" setting"
   },
 
   "Radio setting": {
@@ -75,6 +75,6 @@
       "\t\"default\": \"$3\"",
       "}"
     ],
-    "description": "select setting"
+    "description": "\"select\" setting"
   }
 }
