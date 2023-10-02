@@ -6,7 +6,7 @@ export default async function ({ msg, console }) {
   const TEMPLATES = [
     {
       name: msg("duplicate"),
-      text: "This post is a duplicate of |. Could you close it?",
+      text: "This post is a duplicate of [...]. Could you close it?",
     },
     {
       name: msg("guide"),
@@ -18,7 +18,7 @@ export default async function ({ msg, console }) {
     },
     {
       name: msg("personal-information"),
-      text: "This post shows some personal information about the user. Could you remove it? It can be found in |.",
+      text: "This post shows some personal information about the user. Could you remove it? It can be found in [...].",
     },
   ];
 
@@ -29,7 +29,7 @@ export default async function ({ msg, console }) {
   templatesEl.appendChild(document.createTextNode(msg("templates") + " "));
 
   TEMPLATES.forEach(({ name, text }, index) => {
-    const cursorPosition = text.indexOf("|");
+    const cursorPosition = text.indexOf("[...]");
     const link = document.createElement("a");
     link.href = "#";
     link.textContent = name;
@@ -38,9 +38,9 @@ export default async function ({ msg, console }) {
       if (reason.value !== "" && !confirm(msg("delete-reason"))) {
         return;
       }
-      reason.value = text.replaceAll("|", "");
       reason.focus();
-      reason.setSelectionRange(cursorPosition, cursorPosition);
+      reason.value = text;
+      reason.setSelectionRange(cursorPosition, cursorPosition + 5);
     });
     templatesEl.appendChild(link);
     if (index !== TEMPLATES.length - 1) {
