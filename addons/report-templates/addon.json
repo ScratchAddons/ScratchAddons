@@ -1,0 +1,94 @@
+{
+  "name": "Report templates in the forums",
+  "description": "Adds quick shortcuts to the report page in the forums.",
+  "tags": ["community", "forums"],
+  "versionAdded": "1.35.0",
+  "userscripts": [
+    {
+      "matches": ["forums"],
+      "url": "userscript.js"
+    }
+  ],
+  "info": [
+    {
+      "id": "bar",
+      "text": "You can use a vertical bar | to make the cursor appear in that location after using the template.",
+      "type": "info"
+    }
+  ],
+  "settings": [
+    {
+      "id": "templates",
+      "name": "Templates",
+      "type": "table",
+      "row": [
+        {
+          "id": "name",
+          "name": "Name",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "id": "text",
+          "name": "Text",
+          "type": "untranslated",
+          "default": ""
+        }
+      ],
+      "default": [
+        {
+          "name": "Close as duplicate",
+          "text": "This post is a duplicate of |. Could you close it?"
+        },
+        {
+          "name": "Close as guide",
+          "text": "This post is a guide, which are not allowed in the forums currently. Could you close it?"
+        },
+        {
+          "name": "Close as spam",
+          "text": "This post seems to be spam and serves no actual purpose. Could you close/dustbin it?"
+        },
+        {
+          "name": "Remove as personal information",
+          "text": "This post shows some personal information about the user. Could you remove it? It can be found in |."
+        }
+      ],
+      "presets": [
+        {
+          "name": "Close as duplicate",
+          "values": {
+            "name": "Close as duplicate",
+            "text": "This post is a duplicate of |. Could you close it?"
+          }
+        },
+        {
+          "name": "Close as guide",
+          "values": {
+            "name": "Close as guide",
+            "text": "This post is a guide, which are not allowed in the forums currently. Could you close it?"
+          }
+        },
+        {
+          "name": "Close as spam",
+          "values": {
+            "name": "Close as spam",
+            "text": "This post seems to be spam and serves no actual purpose. Could you close/dustbin it?"
+          }
+        },
+        {
+          "name": "Remove as personal information",
+          "values": {
+            "name": "Remove as personal information",
+            "text": "This post shows some personal information about the user. Could you remove it? It can be found in |."
+          }
+        }
+      ]
+    }
+  ],
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld"
+    }
+  ]
+}
