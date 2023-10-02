@@ -1,7 +1,26 @@
-export default async function ({ addon, msg, console }) {
+export default async function ({ msg, console }) {
   if (location.pathname !== "/discuss/misc/") {
     return;
   }
+
+  const TEMPLATES = [
+    {
+      name: msg("duplicate"),
+      text: "This post is a duplicate of |. Could you close it?",
+    },
+    {
+      name: msg("guide"),
+      text: "This post is a guide, which are not allowed in the forums currently. Could you close it?",
+    },
+    {
+      name: msg("spam"),
+      text: "This post seems to be spam and serves no actual purpose. Could you close/dustbin it?",
+    },
+    {
+      name: msg("personal-information"),
+      text: "This post shows some personal information about the user. Could you remove it? It can be found in |.",
+    },
+  ];
 
   const reason = document.querySelector("#id_reason");
 
@@ -9,8 +28,7 @@ export default async function ({ addon, msg, console }) {
   templatesEl.classList.add("form-help");
   templatesEl.appendChild(document.createTextNode(msg("templates") + " "));
 
-  const templates = addon.settings.get("templates");
-  templates.forEach(({ name, text }, index) => {
+  TEMPLATES.forEach(({ name, text }, index) => {
     const cursorPosition = text.indexOf("|");
     const link = document.createElement("a");
     link.href = "#";
@@ -25,7 +43,7 @@ export default async function ({ addon, msg, console }) {
       reason.setSelectionRange(cursorPosition, cursorPosition);
     });
     templatesEl.appendChild(link);
-    if (index !== templates.length - 1) {
+    if (index !== TEMPLATES.length - 1) {
       templatesEl.appendChild(document.createTextNode(" | "));
     }
   });

@@ -1,4 +1,8 @@
 {
   "report-templates/templates": "Templates:",
-  "report-templates/delete-reason": "Are you sure you want to replace your current report reason?"
+  "report-templates/delete-reason": "Are you sure you want to replace your current report reason?",
+  "report-templates/duplicate": "Close as duplicate",
+  "report-templates/guide": "Close as guide",
+  "report-templates/spam": "Close as spam",
+  "report-templates/personal-information": "Remove personal information"
 }
