@@ -40,7 +40,9 @@ export default async function ({ msg, console }) {
       }
       reason.focus();
       reason.value = text;
-      reason.setSelectionRange(cursorPosition, cursorPosition + 5);
+      if (cursorPosition !== -1) {
+        reason.setSelectionRange(cursorPosition, cursorPosition + 5);
+      }
     });
     templatesEl.appendChild(link);
     if (index !== TEMPLATES.length - 1) {
