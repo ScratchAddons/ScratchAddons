@@ -2,7 +2,6 @@ import Listenable from "./Listenable.js";
 
 /**
  * Manages settings.
- * @extends Listenable
  */
 export default class Settings extends Listenable {
   constructor(addonObject) {

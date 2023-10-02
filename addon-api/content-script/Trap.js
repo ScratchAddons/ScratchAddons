@@ -2,7 +2,6 @@ import Listenable from "../common/Listenable.js";
 
 /**
  * Manages object trapping.
- * @extends Listenable
  */
 export default class Trap extends Listenable {
   constructor(tab) {

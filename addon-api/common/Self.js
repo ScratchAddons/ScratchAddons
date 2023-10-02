@@ -2,7 +2,6 @@ import Listenable from "./Listenable.js";
 
 /**
  * Represents information about the addon.
- * @extends Listenable
  *
  */
 export default class Self extends Listenable {

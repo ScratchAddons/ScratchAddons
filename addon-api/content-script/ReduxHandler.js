@@ -2,7 +2,6 @@ import Listenable from "../common/Listenable.js";
 
 /**
  * Handles Redux state.
- * @extends Listenable
  * @property {boolean} initialized Whether the handler is initialized or not.
  */
 export default class ReduxHandler extends Listenable {

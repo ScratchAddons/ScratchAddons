@@ -14,7 +14,6 @@ let createdAnyBlockContextMenus = false;
 
 /**
  * APIs specific to userscripts.
- * @extends Listenable
  */
 export default class Tab extends Listenable {
   constructor(info) {
