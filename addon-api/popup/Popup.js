@@ -34,7 +34,7 @@ export default class Popup {
 
   /**
    * Changes the settings of this addon.
-   * @param {object} settings the settings to merge to current
+   * @param {object} settings The settings to merge to current
    */
   changeSettings(settings = {}) {
     const settingsObj = scratchAddons.globalState.addonSettings[this._addonId] || {};
