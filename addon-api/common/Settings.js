@@ -14,7 +14,7 @@ export default class Settings extends Listenable {
   }
   /**
    * Gets a setting.
-   * @param {string} optionName - ID of the setting.
+   * @param {string} optionName ID of the setting.
    * @throws If the setting ID is invalid.
    * @returns {*} The setting.
    */
