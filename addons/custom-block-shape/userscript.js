@@ -1,3 +1,5 @@
+import { updateAllBlocks } from "./update-all-blocks.js";
+
 export default async function ({ addon, console }) {
   var BlocklyInstance = await addon.tab.traps.getBlockly();
 
@@ -6,22 +8,6 @@ export default async function ({ addon, console }) {
     var vm = addon.tab.traps.vm;
 
     const { GRID_UNIT } = BlockSvg;
-
-    function updateAllBlocks() {
-      const workspace = Blockly.getMainWorkspace();
-      if (workspace) {
-        if (vm.editingTarget) {
-          vm.emitWorkspaceUpdate();
-        }
-        const flyout = workspace.getFlyout();
-        if (flyout) {
-          const flyoutWorkspace = flyout.getWorkspace();
-          Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
-          workspace.getToolbox().refreshSelection();
-          workspace.toolboxRefreshEnabled_ = true;
-        }
-      }
-    }
 
     function applyChanges(
       paddingSize = addon.settings.get("paddingSize"),
@@ -252,7 +238,7 @@ export default async function ({ addon, console }) {
 
     function applyAndUpdate(...args) {
       applyChanges(...args);
-      updateAllBlocks();
+      updateAllBlocks(vm, addon.tab.traps.getWorkspace());
     }
 
     addon.settings.addEventListener("change", () => applyAndUpdate());

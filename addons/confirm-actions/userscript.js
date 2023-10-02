@@ -13,7 +13,9 @@ export default async function ({ addon, console, msg }) {
       let cancelMessage = null;
       if (
         addon.settings.get("projectsharing") &&
-        e.target.closest("[class*='share-button_share-button']:not([class*='is-shared']), .banner-button")
+        e.target.closest(
+          "[class*='share-button_share-button']:not([class*='is-shared']), .banner-text + .banner-button"
+        )
       ) {
         title = addon.tab.scratchMessage("project.share.shareButton"); // "Share"
         cancelMessage = msg("share");
@@ -62,18 +64,20 @@ export default async function ({ addon, console, msg }) {
       if (cancelMessage !== null) {
         e.preventDefault();
         e.stopPropagation();
-        addon.tab
-          .confirm(title, cancelMessage, {
-            okButtonLabel: msg("yes"),
-            cancelButtonLabel: msg("no"),
-            useEditorClasses: addon.tab.editorMode === "editor",
-          })
-          .then((confirmed) => {
-            if (confirmed) {
-              override = true;
-              e.target.click();
-            }
-          });
+        addon.tab.scratchClassReady().then(() => {
+          addon.tab
+            .confirm(title, cancelMessage, {
+              okButtonLabel: msg("yes"),
+              cancelButtonLabel: msg("no"),
+              useEditorClasses: addon.tab.editorMode === "editor",
+            })
+            .then((confirmed) => {
+              if (confirmed) {
+                override = true;
+                e.target.click();
+              }
+            });
+        });
       }
     },
     { capture: true }

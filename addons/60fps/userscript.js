@@ -7,6 +7,9 @@ export default async function ({ addon, console }) {
   let mode = false;
   let monitorUpdateFixed = false;
 
+  const fastFlag = addon.self.dir + "/svg/fast-flag.svg";
+  let vanillaFlag = null;
+
   while (true) {
     let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
       markAsSeen: true,
@@ -14,7 +17,8 @@ export default async function ({ addon, console }) {
     });
 
     const updateFlag = () => {
-      button.style.filter = mode ? "hue-rotate(90deg)" : "";
+      if (!vanillaFlag) vanillaFlag = button.src;
+      button.src = mode ? fastFlag : vanillaFlag;
     };
 
     const changeMode = (_mode = !mode) => {
@@ -23,7 +27,7 @@ export default async function ({ addon, console }) {
         setFPS(addon.settings.get("framerate"));
 
         // monitor updates are throttled by default
-        // https://github.com/LLK/scratch-gui/blob/ba76db7/src/reducers/monitors.js
+        // https://github.com/scratchfoundation/scratch-gui/blob/ba76db7/src/reducers/monitors.js
         if (!monitorUpdateFixed) {
           const originalListener = vm.listeners("MONITORS_UPDATE").find((f) => f.name === "onMonitorsUpdate");
           if (originalListener) vm.removeListener("MONITORS_UPDATE", originalListener);
