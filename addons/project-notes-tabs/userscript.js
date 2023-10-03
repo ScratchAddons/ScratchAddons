@@ -22,14 +22,13 @@ export default async function ({ addon, console }) {
         markAsSeen: true,
         reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
       });
-      projectNotes.insertBefore(tabs, projectNotes.querySelector(".description-block"));
+      projectNotes.insertBefore(wrapper, projectNotes.querySelector(".description-block"));
     }
   }
 
   let projectNotes;
   let tabs;
-  const wrapper = document.createElement("div");
-  wrapper.classList = "sa-project-tabs-wrapper";
+  let wrapper;
 
   while (true) {
     projectNotes = await addon.tab.waitForElement(".project-notes", {
@@ -42,6 +41,8 @@ export default async function ({ addon, console }) {
     const tabButtons = [];
     const sectionCount = descriptions.length;
 
+    wrapper = document.createElement("div");
+    wrapper.classList = "sa-project-tabs-wrapper";
     projectNotes.insertBefore(wrapper, projectNotes.querySelector(".description-block"));
     tabs = document.createElement("div");
     wrapper.appendChild(tabs);
