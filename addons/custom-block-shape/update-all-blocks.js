@@ -19,6 +19,6 @@ export function updateAllBlocks(vm, workspace, blockly) {
   }
 
   // There's no particular reason for checking whether events were originally enabled.
-  // Unconditionally enabling events at this point could, in theory, cause bugs in the future,
+  // Unconditionally enabling events at this point could, in theory, cause bugs in the future.
   if (eventsOriginallyEnabled) blockly.Events.enable(); // Re-enable events
 }
