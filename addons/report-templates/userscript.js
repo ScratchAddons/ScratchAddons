@@ -31,6 +31,8 @@ export default async function ({ msg, console }) {
   const templatesEl = document.createElement("p");
   templatesEl.classList.add("form-help");
   templatesEl.appendChild(document.createTextNode(msg("templates") + " "));
+  const br = document.createElement("br");
+  templatesEl.appendChild(br);
 
   TEMPLATES.forEach(({ name, text }, index) => {
     const cursorPosition = text.indexOf("[...]");
