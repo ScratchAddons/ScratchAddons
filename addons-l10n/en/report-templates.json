@@ -4,5 +4,6 @@
   "report-templates/duplicate": "Close as duplicate",
   "report-templates/guide": "Close as guide",
   "report-templates/spam": "Close as spam",
-  "report-templates/personal-information": "Remove personal information"
+  "report-templates/personal-information": "Remove personal information",
+  "report-templates/browser-extension": "Remove mentions of browser extensions"
 }

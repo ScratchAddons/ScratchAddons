@@ -20,6 +20,10 @@ export default async function ({ msg, console }) {
       name: msg("personal-information"),
       text: "This post shows some personal information about the user. Could you remove it? It can be found in [...].",
     },
+    {
+      name: msg("browser-extension"),
+      text: 'This post mentions the browser extension "|". Could you remove it?',
+    },
   ];
 
   const reason = document.querySelector("#id_reason");
