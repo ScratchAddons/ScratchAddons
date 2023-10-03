@@ -31,6 +31,41 @@ export default async function ({ addon, console }) {
     }
   }
 
+  // The "phantom header" is a small strip at the top of the page that
+  // brings the header into view when hovered.
+  async function updatePhantomHeader() {
+    if (
+      !addon.self.disabled &&
+      addon.tab.redux.state.scratchGui.mode.isFullScreen &&
+      addon.settings.get("hideToolbar") &&
+      addon.settings.get("hoverToolbar")
+    ) {
+      const header = await addon.tab.waitForElement('[class*="stage-header_stage-header-wrapper"]');
+      const phantom = header.parentElement.appendChild(document.createElement("div"));
+      phantom.classList.add("phantom-header");
+
+      // Make the header a child of the phantom, so that mouseleave will trigger when the
+      // mouse leaves the header OR the phantom header.
+      phantom.appendChild(header);
+
+      phantom.addEventListener("mouseenter", (event) => {
+        header.classList.add("stage-header-hover");
+      });
+      phantom.addEventListener("mouseleave", (event) => {
+        header.classList.remove("stage-header-hover");
+      });
+    } else {
+      const header = await addon.tab.waitForElement('[class*="stage-header_stage-header-wrapper"]');
+      if (header.parentElement.classList.contains("phantom-header")) {
+        const phantom = header.parentElement;
+        phantom.parentElement.appendChild(header);
+        phantom.remove();
+      }
+    }
+  }
+
+  updatePhantomHeader();
+
   async function setPageScrollbar() {
     const body = await addon.tab.waitForElement(".sa-body-editor");
     if (addon.tab.redux.state.scratchGui.mode.isFullScreen) {
@@ -77,6 +112,7 @@ export default async function ({ addon, console }) {
       initScaler();
       updateBrowserFullscreen();
       setPageScrollbar();
+      updatePhantomHeader();
     }
   });
   // Changing to or from browser fullscreen is signified by a window resize.
@@ -93,33 +129,21 @@ export default async function ({ addon, console }) {
       });
     }
   });
-  // Moving the mouse to the top of the screen displays the navigation bar.
-  var header = document.querySelector('[class*="stage-header_stage-header-wrapper-overlay"]');
-  header.addEventListener("mouseenter", (event) => {
-    if (addon.settings.get("hideToolbar") && addon.settings.get("hoverToolbar")) {
-      if (addon.tab.redux.state.scratchGui.mode.isFullScreen) {
-        header.classList.add("stage-header-hover");
-      }
-    }
-  });
-  header.addEventListener("mouseleave", (event) => {
-    if (addon.settings.get("hideToolbar") && addon.settings.get("hoverToolbar")) {
-      if (addon.tab.redux.state.scratchGui.mode.isFullScreen) {
-        header.classList.remove("stage-header-hover");
-      }
-    }
-  });
+
   // These handle the case of the user already being in Scratch fullscreen
   // (without being in browser fullscreen) when the addon or sync option are
   // dynamically enabled.
   addon.settings.addEventListener("change", () => {
     updateBrowserFullscreen();
+    updatePhantomHeader();
   });
   addon.self.addEventListener("disabled", () => {
     resizeObserver.disconnect();
+    updatePhantomHeader();
   });
   addon.self.addEventListener("reenabled", () => {
     resizeObserver.observe(stage);
     updateBrowserFullscreen();
+    updatePhantomHeader();
   });
 }
