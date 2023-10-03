@@ -114,20 +114,8 @@ export default async function ({ addon, console, msg }) {
   // -- Events --
 
   setupLinks();
-
-  addon.tab.addEventListener("urlChange", () => {
-    setupLinks();
-  });
-
-  addon.self.addEventListener("disabled", () => {
-    hideAll();
-  });
-
-  addon.self.addEventListener("reenabled", () => {
-    setupLinks();
-  });
-
-  addon.settings.addEventListener("change", () => {
-    setupLinks();
-  });
+  addon.tab.addEventListener("urlChange", setupLinks);
+  addon.self.addEventListener("disabled", hideAll);
+  addon.self.addEventListener("reenabled", setupLinks);
+  addon.settings.addEventListener("change", setupLinks);
 }
