@@ -1,5 +1,5 @@
 {
-  "Scratch Addons addon manifest": {
+  "Addon manifest template": {
     "scope": "json",
     "prefix": "addon.json",
     "body": [
@@ -41,7 +41,7 @@
       "\t\"default\": ${3|false,true|}",
       "}$0"
     ],
-    "description": "\"boolean\" setting"
+    "description": "Boolean setting"
   },
 
   "Integer setting": {
@@ -57,10 +57,10 @@
       "\t\"default\": ${5:0}",
       "}$0"
     ],
-    "description": "\"integer\" setting"
+    "description": "Integer setting"
   },
 
-  "Radio setting": {
+  "Select setting": {
     "scope": "json",
     "prefix": "settingSelect",
     "body": [
@@ -75,6 +75,6 @@
       "\t\"default\": \"$3\"",
       "}"
     ],
-    "description": "\"select\" setting"
+    "description": "Select setting"
   }
 }
