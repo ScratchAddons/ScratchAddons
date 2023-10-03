@@ -22,7 +22,7 @@ export default async function ({ msg, console }) {
     },
     {
       name: msg("browser-extension"),
-      text: 'This post mentions the browser extension "|". Could you remove it?',
+      text: 'This post mentions the browser extension "[...]". Could you remove it?',
     },
   ];
 
