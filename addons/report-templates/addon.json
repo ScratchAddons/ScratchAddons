@@ -9,6 +9,12 @@
       "url": "userscript.js"
     }
   ],
+  "userstyles": [
+    {
+      "matches": ["forums"],
+      "url": "userstyle.css"
+    }
+  ],
   "credits": [
     {
       "name": "mybearworld",

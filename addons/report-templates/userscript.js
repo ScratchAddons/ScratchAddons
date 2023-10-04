@@ -45,10 +45,11 @@ export default async function ({ msg, console }) {
   const reason = document.querySelector("#id_reason");
 
   const templatesEl = document.createElement("p");
-  templatesEl.classList.add("form-help");
-  templatesEl.appendChild(document.createTextNode(msg("templates") + " "));
-  const br = document.createElement("br");
-  templatesEl.appendChild(br);
+  templatesEl.classList.add("sa-report-templates");
+  const templatesHeading = document.createElement("span");
+  templatesHeading.textContent = "Templates:";
+  templatesHeading.classList.add("sa-report-templates-heading");
+  templatesEl.appendChild(templatesHeading);
 
   TEMPLATES.forEach(({ name, text }, index) => {
     const cursorPosition = text.indexOf("[...]");
@@ -72,5 +73,11 @@ export default async function ({ msg, console }) {
     }
   });
 
-  document.querySelector(".form-help").insertAdjacentElement("afterend", templatesEl);
+  const setWidth = () => {
+    templatesEl.style.maxWidth = reason.getBoundingClientRect().width + "px";
+  };
+  setWidth();
+  new ResizeObserver(setWidth).observe(reason);
+
+  reason.insertAdjacentElement("afterend", templatesEl);
 }
