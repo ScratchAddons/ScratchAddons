@@ -17,12 +17,28 @@ export default async function ({ msg, console }) {
       text: "This post seems to be spam and serves no actual purpose. Could you close/dustbin it?",
     },
     {
+      name: msg("rejected"),
+      text: "This suggestion is rejected ([...]). Could you close it?",
+    },
+    {
+      name: msg("resolved"),
+      text: "This topic is now resolved, as [...]. Could you close it?",
+    },
+    {
       name: msg("personal-information"),
       text: "This post shows some personal information about the user. Could you remove it? It can be found in [...].",
     },
     {
       name: msg("browser-extension"),
       text: 'This post mentions the browser extension "[...]". Could you remove it?',
+    },
+    {
+      name: msg("move"),
+      text: "This topic seems to be in the wrong category. Could you please move it to [...]?",
+    },
+    {
+      name: msg("reopen"),
+      text: "I've accidentally closed this topic. Could you reopen it?",
     },
   ];
 

@@ -4,6 +4,10 @@
   "report-templates/duplicate": "Close as duplicate",
   "report-templates/guide": "Close as guide",
   "report-templates/spam": "Close as spam",
+  "report-templates/rejected": "Close as rejected",
+  "report-templates/resolved": "Close as resolved",
   "report-templates/personal-information": "Remove personal information",
-  "report-templates/browser-extension": "Remove mentions of browser extensions"
+  "report-templates/browser-extension": "Remove mentions of browser extensions",
+  "report-templates/move": "Move topic",
+  "report-templates/reopen": "Reopen"
 }
