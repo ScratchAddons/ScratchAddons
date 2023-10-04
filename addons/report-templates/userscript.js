@@ -6,7 +6,7 @@ export default async function ({ msg, console }) {
   const TEMPLATES = [
     {
       name: msg("duplicate"),
-      text: "This post is a duplicate of [...]. Could you close it?",
+      text: "This post is a duplicate of [topic]. Could you close it?",
     },
     {
       name: msg("guide"),
@@ -18,23 +18,23 @@ export default async function ({ msg, console }) {
     },
     {
       name: msg("rejected"),
-      text: "This suggestion is rejected ([...]). Could you close it?",
+      text: "This suggestion is rejected ([number (e.g. 1.2)]). Could you close it?",
     },
     {
       name: msg("resolved"),
-      text: "This topic is now resolved, as [...]. Could you close it?",
+      text: "This topic is now resolved, as [close reason]. Could you close it?",
     },
     {
       name: msg("personal-information"),
-      text: "This post shows some personal information about the user. Could you remove it? It can be found in [...].",
+      text: "This post shows some personal information about the user. Could you remove it? It can be found in [location of personal information].",
     },
     {
       name: msg("browser-extension"),
-      text: 'This post mentions the browser extension "[...]". Could you remove it?',
+      text: 'This post mentions the browser extension "[name of browser extension]". Could you remove it?',
     },
     {
       name: msg("move"),
-      text: "This topic seems to be in the wrong category. Could you please move it to [...]?",
+      text: "This topic seems to be in the wrong category. Could you please move it to [new category]?",
     },
     {
       name: msg("reopen"),
@@ -52,7 +52,7 @@ export default async function ({ msg, console }) {
   templatesEl.appendChild(templatesHeading);
 
   TEMPLATES.forEach(({ name, text }, index) => {
-    const cursorPosition = text.indexOf("[...]");
+    const cursorMatch = text.match(/\[.*?\]/);
     const link = document.createElement("a");
     link.href = "#";
     link.textContent = name;
@@ -63,8 +63,9 @@ export default async function ({ msg, console }) {
       }
       reason.focus();
       reason.value = text;
-      if (cursorPosition !== -1) {
-        reason.setSelectionRange(cursorPosition, cursorPosition + 5);
+      if (cursorMatch !== null) {
+        console.log(cursorMatch);
+        reason.setSelectionRange(cursorMatch.index, cursorMatch.index + cursorMatch[0].length);
       }
     });
     templatesEl.appendChild(link);
