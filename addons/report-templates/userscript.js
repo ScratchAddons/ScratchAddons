@@ -66,7 +66,6 @@ export default async function ({ msg, console }) {
       reason.focus();
       reason.value = text;
       if (cursorMatch !== null) {
-        console.log(cursorMatch);
         reason.setSelectionRange(cursorMatch.index, cursorMatch.index + cursorMatch[0].length);
       }
     });
