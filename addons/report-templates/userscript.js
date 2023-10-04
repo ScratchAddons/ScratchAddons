@@ -6,7 +6,7 @@ export default async function ({ msg, console }) {
   const TEMPLATES = [
     {
       name: msg("duplicate"),
-      text: "This post is a duplicate of [topic]. Could you close it?",
+      text: `This post is a duplicate of ${msg("c-topic")}. Could you close it?`,
     },
     {
       name: msg("guide"),
@@ -18,23 +18,25 @@ export default async function ({ msg, console }) {
     },
     {
       name: msg("rejected"),
-      text: "This suggestion is rejected ([number (e.g. 1.2)]). Could you close it?",
+      text: `This suggestion is rejected (${msg("c-reject-number")}). Could you close it?`,
     },
     {
       name: msg("resolved"),
-      text: "This topic is now resolved, as [close reason]. Could you close it?",
+      text: `This topic is now resolved, as ${msg("c-close-reason")}. Could you close it?`,
     },
     {
       name: msg("personal-information"),
-      text: "This post shows some personal information about the user. Could you remove it? It can be found in [location of personal information].",
+      text: `This post shows some personal information about the user. Could you remove it? It can be found in ${msg(
+        "c-personal-information"
+      )}.`,
     },
     {
       name: msg("browser-extension"),
-      text: 'This post mentions the browser extension "[name of browser extension]". Could you remove it?',
+      text: `This post mentions the browser extension "${msg("c-browser-extension")}". Could you remove it?`,
     },
     {
       name: msg("move"),
-      text: "This topic seems to be in the wrong category. Could you please move it to [new category]?",
+      text: `This topic seems to be in the wrong category. Could you please move it to ${msg("c-new-category")}?`,
     },
     {
       name: msg("reopen"),

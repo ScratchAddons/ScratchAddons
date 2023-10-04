@@ -9,5 +9,11 @@
   "report-templates/personal-information": "Remove personal information",
   "report-templates/browser-extension": "Remove mentions of browser extensions",
   "report-templates/move": "Move topic",
-  "report-templates/reopen": "Reopen"
+  "report-templates/reopen": "Reopen",
+  "report-templates/c-topic": "[topic]",
+  "report-templates/c-reject-number": "[number (e.g. 1.2)]",
+  "report-templates/c-close-reason": "[close reason]",
+  "report-templates/c-personal-information": "[location of personal information]",
+  "report-templates/c-browser-extension": "[name of browser extension]",
+  "report-templates/c-new-category": "[new category]"
 }
