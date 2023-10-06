@@ -40,7 +40,8 @@ export default async function ({ addon, console }) {
       addon.settings.get("hideToolbar") &&
       addon.settings.get("hoverToolbar")
     ) {
-      const header = await addon.tab.waitForElement('[class*="stage-header_stage-header-wrapper"]');
+      const canvas = await addon.tab.waitForElement('[class*="stage_full-screen"] canvas');
+      const header = await addon.tab.waitForElement('[class^="stage-header_stage-header-wrapper"]');
       const phantom = header.parentElement.appendChild(document.createElement("div"));
       phantom.classList.add("phantom-header");
 
@@ -48,11 +49,27 @@ export default async function ({ addon, console }) {
       // mouse leaves the header OR the phantom header.
       phantom.appendChild(header);
 
-      phantom.addEventListener("mouseenter", (event) => {
+      phantom.addEventListener("mouseenter", () => {
         header.classList.add("stage-header-hover");
       });
-      phantom.addEventListener("mouseleave", (event) => {
+      phantom.addEventListener("mouseleave", () => {
         header.classList.remove("stage-header-hover");
+      });
+
+      phantom.addEventListener("mousedown", (e) => {
+        if (e.target.classList.contains("phantom-header")) {
+          canvas.dispatchEvent(new e.constructor(e.type, e));
+        }
+      });
+      phantom.addEventListener("touchstart", (e) => {
+        if (e.target.classList.contains("phantom-header")) {
+          canvas.dispatchEvent(new e.constructor(e.type, e));
+        }
+      });
+      phantom.addEventListener("wheel", () => {
+        if (e.target.classList.contains("phantom-header")) {
+          canvas.dispatchEvent(new e.constructor(e.type, e));
+        }
       });
     } else {
       const header = await addon.tab.waitForElement('[class*="stage-header_stage-header-wrapper"]');
