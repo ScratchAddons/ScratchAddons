@@ -66,7 +66,7 @@ export default async function ({ addon, console }) {
           canvas.dispatchEvent(new e.constructor(e.type, e));
         }
       });
-      phantom.addEventListener("wheel", () => {
+      phantom.addEventListener("wheel", (e) => {
         if (e.target.classList.contains("phantom-header")) {
           canvas.dispatchEvent(new e.constructor(e.type, e));
         }
