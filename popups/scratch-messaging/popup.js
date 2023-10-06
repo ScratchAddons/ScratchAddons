@@ -418,9 +418,9 @@ export default async ({ addon, msg, safeMsg }) => {
           });
       },
 
-      async updateMessageCount() {
+      async updateMessageCount(bypassCache = false) {
         const username = await addon.auth.fetchUsername();
-        const count = await MessageCache.fetchMessageCount(username);
+        const count = await MessageCache.fetchMessageCount(username, { bypassCache });
         const db = await MessageCache.openDatabase();
         try {
           await db.put("count", count, scratchAddons.cookieStoreId);
@@ -435,7 +435,7 @@ export default async ({ addon, msg, safeMsg }) => {
       // For UI
       markAsRead() {
         MessageCache.markAsRead(addon.auth.csrfToken)
-          .then(() => this.updateMessageCount())
+          .then(() => this.updateMessageCount(true))
           .then(() => {
             this.markedAsRead = true;
           })
@@ -450,7 +450,7 @@ export default async ({ addon, msg, safeMsg }) => {
               this.stMessages.findIndex((alert) => alert.id === id),
               1
             );
-            this.updateMessageCount();
+            this.updateMessageCount(true);
           })
           .catch((e) => console.error("Dismissing alert failed:", e));
       },

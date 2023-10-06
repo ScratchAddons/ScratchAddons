@@ -237,7 +237,8 @@ body:not(.sa-body-editor) .join-flow-privacy-message,
 .ttt-item img,
 .tabs button:not(.active) .tab-icon,
 body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
-.overflow-menu-container .overflow-menu-trigger img {
+.overflow-menu-container .overflow-menu-trigger img,
+.sa-footer-arrow {
   filter: var(--darkWww-box-filter);
 }
 .studio-tab-nav li img {
@@ -632,7 +633,7 @@ img.tips-icon {
 body:not(.sa-body-editor) .select select,
 .textarea,
 .action-button.close-button,
-#footer /* for infinite scrolling fixed footer */,
+.sa-collapse-footer #footer,
 .empty,
 .outer .sort-controls,
 .preview .comments-container .comments-turned-off,

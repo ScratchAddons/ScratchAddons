@@ -32,11 +32,14 @@ export default async function ({ addon, console, msg }) {
     if (addon.tab.redux.state?.preview?.projectInfo?.public === false) {
       let projectToken = (
         await (
-          await fetch(`https://api.scratch.mit.edu/projects/${projectId}?nocache=${Date.now()}`, {
-            headers: {
-              "x-token": await addon.auth.fetchXToken(),
-            },
-          })
+          await fetch(
+            `https://api.scratch.mit.edu/projects/${projectId}?current_time_to_get_updated_project_token=${Date.now()}`,
+            {
+              headers: {
+                "x-token": await addon.auth.fetchXToken(),
+              },
+            }
+          )
         ).json()
       ).project_token;
       search = `#?token=${projectToken}`;
