@@ -26,11 +26,15 @@ export default async function ({ addon, console, msg }) {
   locationElement.insertAdjacentElement("beforebegin", changeNickname);
 
   changeNicknameLink.addEventListener("click", async () => {
-    const nickname = await addon.tab.prompt(msg("change-nickname"), msg("which-nickname", { username }), username);
+    const nickname = await addon.tab.prompt(
+      msg("change-nickname"),
+      msg("which-nickname", { username }),
+      nicknames[username] ?? username
+    );
     if (nickname === null) {
       return;
     }
-    if (nickname === username) {
+    if (nickname === "") {
       const newNicknames = { ...nicknames };
       delete newNicknames[username];
       localStorage.setItem("sa-nicknames", JSON.stringify(newNicknames));
