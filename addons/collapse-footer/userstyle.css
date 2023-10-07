@@ -13,6 +13,9 @@
   border-top: 1px solid #d9d9d9;
   box-sizing: border-box;
   z-index: 20;
+  transition-duration: 0;
+}
+.sa-collapse-footer #footer.transition {
   transition-duration: var(--collapseFooter-expandSpeed);
 }
 .sa-collapse-footer #footer .lists dl {
