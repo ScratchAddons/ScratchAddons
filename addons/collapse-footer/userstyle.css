@@ -1,0 +1,49 @@
+.sa-collapse-footer, /* scratch-www */
+.sa-collapse-footer #content /* scratchr2 */ {
+  padding-bottom: 23px;
+}
+
+.sa-collapse-footer #footer {
+  position: fixed;
+  top: initial;
+  bottom: 0;
+  width: 100%;
+  height: 24px;
+  padding-top: 4px;
+  border-top: 1px solid #d9d9d9;
+  box-sizing: border-box;
+  z-index: 20;
+}
+.sa-collapse-footer #footer.transition {
+  transition-duration: var(--collapseFooter-expandSpeed);
+}
+.sa-collapse-footer #footer .lists dl {
+  margin-top: 0;
+}
+.sa-collapse-footer #footer.expanded {
+  height: var(--footer-hover-height);
+}
+
+.sa-collapse-footer .page > #view {
+  margin-bottom: 0;
+}
+
+.sa-footer-arrow {
+  display: none;
+  transition: opacity var(--collapseFooter-expandSpeed);
+}
+
+.sa-collapse-footer .sa-footer-arrow {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 4px;
+}
+
+.sa-collapse-footer #footer.expanded .sa-footer-arrow {
+  opacity: 0;
+}
+
+:root {
+  --footer-hover-height: 328px; /* How high the hovered footer is (for donor text fix) */
+}
