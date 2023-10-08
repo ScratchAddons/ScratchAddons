@@ -36,6 +36,8 @@ export default async function ({ addon, console }) {
       reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
     });
 
+    if (!document.body.classList.contains("sa-project-tabs-on")) continue; // We're disabled
+
     const labels = document.querySelectorAll(".project-textlabel");
     const descriptions = document.querySelectorAll(".description-block");
     const tabButtons = [];
