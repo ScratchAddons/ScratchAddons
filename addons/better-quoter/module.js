@@ -90,6 +90,13 @@ function getSelectionBBCode(selection) {
           img
         );
       } else img.parentNode.insertBefore(document.createTextNode(`[img${img.src}[/img]`), img);
+    } else if (/assets.scratch.mit.edu\/[0-9a-f]+/.test(img.src)) {
+      img.parentNode.insertBefore(
+        document.createTextNode(
+          `[img]${img.src.replace("assets.scratch.mit.edu", "assets.scratch.mit.edu/get_image/.%2E")}[/img]`
+        ),
+        img
+      );
     } else img.parentNode.insertBefore(document.createTextNode(`[img]${img.src}[/img]`), img);
   }
 
