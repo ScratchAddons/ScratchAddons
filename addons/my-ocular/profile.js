@@ -7,12 +7,12 @@ export default async function ({ addon, console, msg }) {
   const span = document.createElement("span");
   span.textContent = data.userStatus;
   span.className = "sa-ocular-status";
+  span.title = msg("status-hover");
 
   span.style.fontStyle = "italic";
   span.style.display = "inline-block !important";
 
   const dot = document.createElement("span");
-  dot.title = msg("status-hover");
   dot.style.backgroundColor = data.color;
   span.appendChild(dot);
 
