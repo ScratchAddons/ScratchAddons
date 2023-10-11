@@ -30,7 +30,9 @@ export default async function ({ addon }) {
     }
     let mathParts = value.split(operators[i]);
     if (containsMath && mathParts.length == 2) {
-      if (mathParts[1] === "") {return mathParts[0] || 0}
+      if (mathParts[1] === "") {
+        return mathParts[0] || 0;
+      }
       let returnValue = "";
       if (operators[i] === "*") {
         returnValue = mathParts[0] * mathParts[1];
@@ -46,21 +48,25 @@ export default async function ({ addon }) {
       return "0";
     } else return value;
   }
- // #Garboism
+  // #Garboism
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   var original = ScratchBlocks.FieldNumber.prototype.onHtmlInputKeyDown_;
   ScratchBlocks.FieldNumber.prototype.onHtmlInputKeyDown_ = function (...args) {
-  this.restrictor_ = /^[0-9+\-*/.]+$/;
-  return original.apply(this, args);
-  }
+    this.restrictor_ = /^[0-9+\-*/.]+$/;
+    return original.apply(this, args);
+  };
 
-  document.body.addEventListener("keydown", function handleKeyDownEvent (e) {
-    if (addon.self.disabled) return;
-    if (!isSupportedElement(e.target)) return;
-    if (e.key !== "Enter") return;
-    if (!e.target.value) return;
-    const newValue = parseMath(e.target.value);
-    Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());
-    e.target.dispatchEvent(new Event("input", { bubbles: true }));
-  }, {capture: true});
+  document.body.addEventListener(
+    "keydown",
+    function handleKeyDownEvent(e) {
+      if (addon.self.disabled) return;
+      if (!isSupportedElement(e.target)) return;
+      if (e.key !== "Enter") return;
+      if (!e.target.value) return;
+      const newValue = parseMath(e.target.value);
+      Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());
+      e.target.dispatchEvent(new Event("input", { bubbles: true }));
+    },
+    { capture: true }
+  );
 }
