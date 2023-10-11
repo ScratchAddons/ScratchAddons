@@ -50,6 +50,7 @@
       "type": "decimal",
       "default": 1,
       "min": 0,
+      "max": 100,
       "step": 0.1,
       "if": { "settings": { "useCustom": true } }
     },
@@ -89,6 +90,7 @@
       "type": "decimal",
       "default": 10,
       "min": 0,
+      "max": 100,
       "step": 0.1,
       "if": { "settings": { "useCustom": true } }
     },
@@ -128,6 +130,7 @@
       "type": "decimal",
       "default": 0.1,
       "min": 0,
+      "max": 100,
       "step": 0.01,
       "if": { "settings": { "useCustom": true } }
     },
