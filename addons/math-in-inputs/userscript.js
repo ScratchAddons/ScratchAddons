@@ -30,6 +30,7 @@ export default async function ({ addon }) {
     }
     let mathParts = value.split(operators[i]);
     if (containsMath && mathParts.length == 2) {
+      if (mathParts[1] === "") {return mathParts[0] || 0}
       let returnValue = "";
       if (operators[i] === "*") {
         returnValue = mathParts[0] * mathParts[1];
@@ -41,9 +42,9 @@ export default async function ({ addon }) {
         returnValue = mathParts[0] - mathParts[1];
       }
       return returnValue;
-    } else {
-      return value;
-    }
+    } else if (containsMath && mathParts.length > 2) {
+      return "0";
+    } else return value;
   }
  // #Garboism
   const ScratchBlocks = await addon.tab.traps.getBlockly();
