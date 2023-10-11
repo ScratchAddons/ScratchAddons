@@ -19,7 +19,7 @@ export default async function ({ addon, console, msg }) {
   addon.tab.appendToSharedSpace({
     space: "afterProfileCountry",
     element: span,
-    order: 4, // set back due to width of element
+    order: 9, // set back due to width of element
   });
 
   addon.settings.addEventListener("change", updateOcular);
