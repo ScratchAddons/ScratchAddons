@@ -1,7 +1,7 @@
 export default async function ({ addon }) {
   function getRegexFromSettings() {
     let textInInputs = addon.settings.get("textInInputs");
-    return textInInputs ? /^[0-9a-z+\-*/().]+$/ : /^[0-9+\-*/().]+$/;
+    return textInInputs ? /^[0-9a-z+\-*^/().]+$/ : /^[0-9+\-*^/().]+$/;
   }
 
   /* I 100% stole this part of the code from "editor-number-arrow-keys"
@@ -23,12 +23,19 @@ export default async function ({ addon }) {
     } else return false;
   };
 
+  function power(match, x, y) {
+    return `Math.pow(${x}, ${y})`;
+  }
+
   function parseMath(value) {
-    if (!/^[0-9+\-*/().]+$/.test(value)) {
+    if (!/^[0-9+\-*/().^]+$/.test(value)) {
       return value;
     }
+
+    const processedValue = value.replace(/(\d+)\^(\d+)/g, power);
+
     try {
-      return eval(value) || 0;
+      return eval(processedValue) || 0;
     } catch (error) {
       return 0;
     }
