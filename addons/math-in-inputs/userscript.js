@@ -4,9 +4,7 @@ export default async function ({ addon }) {
     return textInInputs ? /^[0-9a-z+\-*^/().]+$/ : /^[0-9+\-*^/().]+$/;
   }
 
-  /* I 100% stole this part of the code from "editor-number-arrow-keys"
-     Right now it only works for the sprite properties because those are the only ones that actually
-     allow the operators to be typed into them, not sure how to get around this :( */
+  // I 100% stole this part of the code from "editor-number-arrow-keys"
   const isSupportedElement = (el) => {
     if (el.classList.contains("blocklyHtmlInput")) return true;
     else if (el.matches(".mediaRecorderPopupContent input[type=number]")) {
