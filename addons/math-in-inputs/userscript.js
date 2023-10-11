@@ -1,4 +1,9 @@
 export default async function ({ addon }) {
+  function getRegexFromSettings() {
+    let textInInputs = addon.settings.get("textInInputs");
+    return textInInputs ? /^[0-9a-z+\-*/().]+$/ : /^[0-9+\-*/().]+$/;
+  }
+
   /* I 100% stole this part of the code from "editor-number-arrow-keys"
      Right now it only works for the sprite properties because those are the only ones that actually
      allow the operators to be typed into them, not sure how to get around this :( */
@@ -19,6 +24,9 @@ export default async function ({ addon }) {
   };
 
   function parseMath(value) {
+    if (!/^[0-9+\-*/().]+$/.test(value)) {
+      return value;
+    }
     try {
       return eval(value) || 0;
     } catch (error) {
@@ -26,40 +34,11 @@ export default async function ({ addon }) {
     }
   }
 
-  // const operators = ["*", "/", "+", "-"];
-  // function parseMath(value) {
-  //   let containsMath = false;
-  //   for (var i = 0; i < operators.length; i++) {
-  //     if (value.includes(operators[i])) {
-  //       containsMath = true;
-  //       break;
-  //     }
-  //   }
-  //   let mathParts = value.split(operators[i]);
-  //   if (containsMath && mathParts.length == 2) {
-  //     if (mathParts[1] === "") {
-  //       return mathParts[0] || 0;
-  //     }
-  //     let returnValue = "";
-  //     if (operators[i] === "*") {
-  //       returnValue = mathParts[0] * mathParts[1];
-  //     } else if (operators[i] === "/") {
-  //       returnValue = mathParts[0] / mathParts[1];
-  //     } else if (operators[i] === "+") {
-  //       returnValue = mathParts[0] * 1 + mathParts[1] * 1;
-  //     } else {
-  //       returnValue = mathParts[0] - mathParts[1];
-  //     }
-  //     return returnValue;
-  //   } else if (containsMath && mathParts.length > 2) {
-  //     return "0";
-  //   } else return value;
-  // }
   // #Garboism
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   var original = ScratchBlocks.FieldNumber.prototype.onHtmlInputKeyDown_;
   ScratchBlocks.FieldNumber.prototype.onHtmlInputKeyDown_ = function (...args) {
-    this.restrictor_ = /^[0-9+\-*/().]+$/;
+    this.restrictor_ = getRegexFromSettings();
     return original.apply(this, args);
   };
   function handleParseInput(e) {

@@ -17,5 +17,13 @@
       "link": "https://scratch.mit.edu/users/greeny--231/"
     }
   ],
-  "enabledByDefault": true
+  "enabledByDefault": true,
+  "settings": [
+    {
+      "name": "Allow text in number inputs",
+      "id": "textInInputs",
+      "type": "boolean",
+      "default": false
+    }
+  ]
 }
