@@ -9,63 +9,79 @@ export default async function ({ addon }) {
       return true;
     } else if (el.className.includes("input_input-form_")) {
       if (el.matches("[class*=sprite-info_sprite-info_] [class*=input_input-small_]")) {
-        // Sprite X/Y coordinates, size and direction (excludes sprite name)
-        return true;
-      } else if (el.matches("[class*=paint-editor_editor-container-top_] input[type=number]")) {
-        // Number inputs in costume editor (note that browsers already provide up/down clickable buttons for these)
-        return true;
-      } else return false;
-    }
-    return false;
+      }
+      // Sprite X/Y coordinates, size and direction (excludes sprite name)
+      return true;
+    } else if (el.matches("[class*=paint-editor_editor-container-top_] input[type=number]")) {
+      // Number inputs in costume editor (note that browsers already provide up/down clickable buttons for these)
+      return true;
+    } else return false;
   };
 
-  const operators = ["*", "/", "+", "-"];
   function parseMath(value) {
-    let containsMath = false;
-    for (var i = 0; i < operators.length; i++) {
-      if (value.includes(operators[i])) {
-        containsMath = true;
-        break;
-      }
+    try {
+      return eval(value) || 0;
+    } catch (error) {
+      return 0;
     }
-    let mathParts = value.split(operators[i]);
-    if (containsMath && mathParts.length == 2) {
-      if (mathParts[1] === "") {
-        return mathParts[0] || 0;
-      }
-      let returnValue = "";
-      if (operators[i] === "*") {
-        returnValue = mathParts[0] * mathParts[1];
-      } else if (operators[i] === "/") {
-        returnValue = mathParts[0] / mathParts[1];
-      } else if (operators[i] === "+") {
-        returnValue = mathParts[0] * 1 + mathParts[1] * 1;
-      } else {
-        returnValue = mathParts[0] - mathParts[1];
-      }
-      return returnValue;
-    } else if (containsMath && mathParts.length > 2) {
-      return "0";
-    } else return value;
   }
+
+  // const operators = ["*", "/", "+", "-"];
+  // function parseMath(value) {
+  //   let containsMath = false;
+  //   for (var i = 0; i < operators.length; i++) {
+  //     if (value.includes(operators[i])) {
+  //       containsMath = true;
+  //       break;
+  //     }
+  //   }
+  //   let mathParts = value.split(operators[i]);
+  //   if (containsMath && mathParts.length == 2) {
+  //     if (mathParts[1] === "") {
+  //       return mathParts[0] || 0;
+  //     }
+  //     let returnValue = "";
+  //     if (operators[i] === "*") {
+  //       returnValue = mathParts[0] * mathParts[1];
+  //     } else if (operators[i] === "/") {
+  //       returnValue = mathParts[0] / mathParts[1];
+  //     } else if (operators[i] === "+") {
+  //       returnValue = mathParts[0] * 1 + mathParts[1] * 1;
+  //     } else {
+  //       returnValue = mathParts[0] - mathParts[1];
+  //     }
+  //     return returnValue;
+  //   } else if (containsMath && mathParts.length > 2) {
+  //     return "0";
+  //   } else return value;
+  // }
   // #Garboism
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   var original = ScratchBlocks.FieldNumber.prototype.onHtmlInputKeyDown_;
   ScratchBlocks.FieldNumber.prototype.onHtmlInputKeyDown_ = function (...args) {
-    this.restrictor_ = /^[0-9+\-*/.]+$/;
+    this.restrictor_ = /^[0-9+\-*/().]+$/;
     return original.apply(this, args);
   };
-
+  function handleParseInput(e) {
+    if (addon.self.disabled) return;
+    if (!isSupportedElement(e.target)) return;
+    if (!e.target.value) return;
+    const newValue = parseMath(e.target.value);
+    Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());
+    e.target.dispatchEvent(new Event("input", { bubbles: true }));
+  }
   document.body.addEventListener(
     "keydown",
-    function handleKeyDownEvent(e) {
-      if (addon.self.disabled) return;
-      if (!isSupportedElement(e.target)) return;
+    (e) => {
       if (e.key !== "Enter") return;
-      if (!e.target.value) return;
-      const newValue = parseMath(e.target.value);
-      Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());
-      e.target.dispatchEvent(new Event("input", { bubbles: true }));
+      handleParseInput(e);
+    },
+    { capture: true }
+  );
+  document.body.addEventListener(
+    "blur",
+    (e) => {
+      handleParseInput(e);
     },
     { capture: true }
   );
