@@ -26,6 +26,35 @@ export default async function ({ addon }) {
     }
   }
 
+  // const operators = ["*", "/", "+", "-"];
+  // function parseMath(value) {
+  //   let containsMath = false;
+  //   for (var i = 0; i < operators.length; i++) {
+  //     if (value.includes(operators[i])) {
+  //       containsMath = true;
+  //       break;
+  //     }
+  //   }
+  //   let mathParts = value.split(operators[i]);
+  //   if (containsMath && mathParts.length == 2) {
+  //     if (mathParts[1] === "") {
+  //       return mathParts[0] || 0;
+  //     }
+  //     let returnValue = "";
+  //     if (operators[i] === "*") {
+  //       returnValue = mathParts[0] * mathParts[1];
+  //     } else if (operators[i] === "/") {
+  //       returnValue = mathParts[0] / mathParts[1];
+  //     } else if (operators[i] === "+") {
+  //       returnValue = mathParts[0] * 1 + mathParts[1] * 1;
+  //     } else {
+  //       returnValue = mathParts[0] - mathParts[1];
+  //     }
+  //     return returnValue;
+  //   } else if (containsMath && mathParts.length > 2) {
+  //     return "0";
+  //   } else return value;
+  // }
   // #Garboism
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   var original = ScratchBlocks.FieldNumber.prototype.onHtmlInputKeyDown_;
@@ -33,7 +62,6 @@ export default async function ({ addon }) {
     this.restrictor_ = /^[0-9+\-*/().]+$/;
     return original.apply(this, args);
   };
-
   function handleParseInput(e) {
     if (addon.self.disabled) return;
     if (!isSupportedElement(e.target)) return;
@@ -42,7 +70,6 @@ export default async function ({ addon }) {
     Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());
     e.target.dispatchEvent(new Event("input", { bubbles: true }));
   }
-
   document.body.addEventListener(
     "keydown",
     (e) => {
