@@ -1,7 +1,7 @@
 {
   "name": "Allow math in number inputs",
   "description": "Use math symbols (*, /, -, +, etc) in number inputs and have them automatically solve.",
-  "tags": ["editor", "codeEditor"],
+  "tags": ["editor", "codeEditor", "recommended"],
   "versionAdded": "1.35.0",
   "dynamicEnable": true,
   "dynamicDisable": true,
@@ -17,5 +17,5 @@
       "link": "https://scratch.mit.edu/users/greeny--231/"
     }
   ],
-  "enabledByDefault": false
+  "enabledByDefault": true
 }
