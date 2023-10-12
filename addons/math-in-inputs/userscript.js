@@ -1,7 +1,7 @@
 export default async function ({ addon }) {
   function getRegexFromSettings() {
     let textInInputs = addon.settings.get("textInInputs");
-    return textInInputs ? /^[0-9a-z+\-*^/().]+$/ : /^[0-9+\-*^/().]+$/;
+    return textInInputs ? /^[0-9a-z+\-*^/().]+$/i : /^[0-9+\-*^/().]+$/;
   }
 
   // I 100% stole this part of the code from "editor-number-arrow-keys"
