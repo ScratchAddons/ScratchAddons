@@ -25,7 +25,7 @@ export default async function ({ addon }) {
   // And this is stolen from SO, I love not having to code stuff
   let parens = /\(([0-9+\-*/\^ .]+)\)/; // Regex for identifying parenthetical expressions
   let exp = /(\d+(?:\.\d+)?) ?\^ ?(\d+(?:\.\d+)?)/; // Regex for identifying exponentials (x ^ y)
-  let expAlt = /(\d+(?:\.\d+)?) ?\*\* ?(\d+(?:\.\d+)?)/;
+  let expAlt = /(\d+(?:\.\d+)?) ?\*\* ?(\d+(?:\.\d+)?)/; //Regex for identifying **
   let mul = /(\d+(?:\.\d+)?) ?\* ?(\d+(?:\.\d+)?)/; // Regex for identifying multiplication (x * y)
   let div = /(\d+(?:\.\d+)?) ?\/ ?(\d+(?:\.\d+)?)/; // Regex for identifying division (x / y)
   let add = /(\d+(?:\.\d+)?) ?\+ ?(\d+(?:\.\d+)?)/; // Regex for identifying addition (x + y)
