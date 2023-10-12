@@ -43,7 +43,7 @@ export default async function ({ addon }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   var original = ScratchBlocks.FieldNumber.prototype.onHtmlInputKeyDown_;
   ScratchBlocks.FieldNumber.prototype.onHtmlInputKeyDown_ = function (...args) {
-    this.restrictor_ = getRegexFromSettings();
+    if (!addon.self.disabled) this.restrictor_ = getRegexFromSettings();
     return original.apply(this, args);
   };
   function handleParseInput(e) {
