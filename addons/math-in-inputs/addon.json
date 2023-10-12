@@ -1,6 +1,6 @@
 {
-  "name": "Allow math in number inputs",
-  "description": "Use math symbols (*, /, -, +, etc) in number inputs and have them automatically solve.",
+  "name": "Mathematical expressions in number inputs",
+  "description": "Evaluates mathematical expressions (e.g. 2+4*3) in number inputs in the editor automatically.",
   "tags": ["editor", "codeEditor", "recommended"],
   "versionAdded": "1.35.0",
   "dynamicEnable": true,
