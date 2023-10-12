@@ -90,7 +90,7 @@ function getSelectionBBCode(selection) {
           img
         );
       } else img.parentNode.insertBefore(document.createTextNode(`[img${img.src}[/img]`), img);
-    } else img.parentNode.insertBefore(document.createTextNode(`[img]${img.src}[/img]`), img);
+    } else img.parentNode.insertBefore(document.createTextNode(`[img]${img.getAttribute("src")}[/img]`), img);
   }
 
   // bold, italic, underline, strikethrough, big, small and color

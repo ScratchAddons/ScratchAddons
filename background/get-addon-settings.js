@@ -162,7 +162,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
 
             // cloning required for tables
             settings[option.id] = JSON.parse(JSON.stringify(option.default));
-          } else if (option.type === "positive_integer" || option.type === "integer") {
+          } else if (option.type === "positive_integer" || option.type === "integer" || option.type === "decimal") {
             // ^ else means typeof can't be "undefined", so it must be number
             if (typeof settings[option.id] !== "number") {
               // This setting was stringified, see #2142
