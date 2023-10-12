@@ -47,9 +47,11 @@
     {
       "name": "Change on regular key press",
       "id": "regularCustom",
-      "type": "string",
-      "default": "1",
-      "max": 8,
+      "type": "decimal",
+      "default": 1,
+      "min": 0,
+      "max": 100,
+      "step": 0.1,
       "if": { "settings": { "useCustom": true } }
     },
     {
@@ -85,9 +87,11 @@
     {
       "name": "Change on Shift+Key",
       "id": "shiftCustom",
-      "type": "string",
-      "default": "10",
-      "max": 8,
+      "type": "decimal",
+      "default": 10,
+      "min": 0,
+      "max": 100,
+      "step": 0.1,
       "if": { "settings": { "useCustom": true } }
     },
     {
@@ -123,9 +127,11 @@
     {
       "name": "Change on Alt+Key",
       "id": "altCustom",
-      "type": "string",
-      "default": "0.1",
-      "max": 8,
+      "type": "decimal",
+      "default": 0.1,
+      "min": 0,
+      "max": 100,
+      "step": 0.01,
       "if": { "settings": { "useCustom": true } }
     },
 
