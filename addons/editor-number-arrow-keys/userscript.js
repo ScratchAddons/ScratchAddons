@@ -122,9 +122,14 @@ export default async function ({ addon }) {
         : e.altKey
         ? addon.settings.get("altCustom")
         : addon.settings.get("regularCustom");
-      if (settingValue === 0 || (settingValue < 100000000 && settingValue > 0.00000099)) {
+      if (settingValue === "") settingValue = 0;
+      let valueAsFloat = parseFloat(settingValue);
+      if (valueAsFloat < 0) valueAsFloat *= -1; // If user typed a negative number, we make it positive
+      if (Number.isNaN(valueAsFloat)) {
+        return;
+      } else if (valueAsFloat === 0 || (valueAsFloat < 100000000 && valueAsFloat > 0.00000099)) {
         // This will exclude valid floats such as `1e20` that are less than 9 characters
-        changeBy *= settingValue;
+        changeBy *= valueAsFloat;
       } else {
         return;
       }
