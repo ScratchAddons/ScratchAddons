@@ -37,6 +37,7 @@
           "name": "Project/Studio URL",
           "id": "url",
           "type": "untranslated",
+          "max": 44,
           "default": ""
         }
       ],
