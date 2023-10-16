@@ -78,6 +78,7 @@ export async function fetchMessageCount(username, options) {
   const url = `https://api.scratch.mit.edu/users/${username}/messages/count`;
   const fetchOptions = {
     cache: bypassCache ? "reload" : "default",
+    credentials: "omit",
   };
   const resp = await fetch(url, fetchOptions);
   const json = await resp.json();
