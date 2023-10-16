@@ -235,7 +235,7 @@ body:not(.sa-body-editor) .join-flow-privacy-message,
 .thumbnail .thumbnail-remixes::before,
 .thumbnail .thumbnail-views::before,
 .ttt-item img,
-.tabs button:not(.active) .tab-icon,
+.tabs button:not(.active) .tab-icon:not(.sa-search-profile-profilepic),
 body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
 .overflow-menu-container .overflow-menu-trigger img,
 .sa-footer-arrow {
