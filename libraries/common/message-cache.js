@@ -75,10 +75,11 @@ const incognitoDatabase = new IncognitoDatabase();
  */
 export async function fetchMessageCount(username, options) {
   const bypassCache = options ? Boolean(options.bypassCache) : false;
-  const url = `https://api.scratch.mit.edu/users/${username}/messages/count${
-    !bypassCache ? "" : `?addons_bypass_cache_after_marking_read=${Date.now()}`
-  }`;
-  const resp = await fetch(url);
+  const url = `https://api.scratch.mit.edu/users/${username}/messages/count`;
+  const fetchOptions = {
+    cache: bypassCache ? "reload" : "default"
+  };
+  const resp = await fetch(url, fetchOptions);
   const json = await resp.json();
   return json.count || 0;
 }
