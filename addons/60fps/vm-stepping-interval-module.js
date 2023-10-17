@@ -16,7 +16,7 @@ export function polluteRuntimeStart(vm) {
     }, interval);
     this.emit("RUNTIME_STARTED");
 
-    lastInterval = { owner: intervalOwner, intervalId: this._steppingInterval};
+    lastInterval = { owner: intervalOwner, intervalId: this._steppingInterval };
   };
 }
 
