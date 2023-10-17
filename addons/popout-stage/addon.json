@@ -1,0 +1,18 @@
+{
+  "name": "Pop-out stage to a new tab",
+  "description": "Adds a button to make the stage into a separate browser tab. (TODO)",
+  "credits": [
+    {
+      "name": "World_Languages"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor", "projectPlayer", "featured", "beta"],
+  "versionAdded": "1.36.0",
+  "enabledByDefault": false
+}
