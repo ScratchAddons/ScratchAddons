@@ -1,8 +1,9 @@
+import { polluteRuntimeStart, setVmIntervalDelay, restartStepInterval } from "./vm-stepping-interval-module.js";
+
 export default async function ({ addon, console }) {
   // TODO: test whether e.altKey is true in chromebooks when alt+clicking.
   // If so, no timeout needed, similar to mute-project addon.
 
-  let global_fps = 30;
   const vm = addon.tab.traps.vm;
   let mode = false;
   let monitorUpdateFixed = false;
@@ -56,11 +57,10 @@ export default async function ({ addon, console }) {
     button.addEventListener("contextmenu", flagListener);
 
     const setFPS = (fps) => {
-      global_fps = addon.self.disabled ? 30 : fps;
+      const newFps = addon.self.disabled ? 30 : fps;
 
-      clearInterval(vm.runtime._steppingInterval);
-      vm.runtime._steppingInterval = null;
-      vm.runtime.start();
+      setVmIntervalDelay(1000 / newFps);
+      restartStepInterval(vm);
     };
     addon.settings.addEventListener("change", () => {
       if (vm.runtime._steppingInterval) {
@@ -68,15 +68,9 @@ export default async function ({ addon, console }) {
       }
     });
     addon.self.addEventListener("disabled", () => changeMode(false));
-    vm.runtime.start = function () {
-      if (this._steppingInterval) return;
-      let interval = 1000 / global_fps;
-      this.currentStepTime = interval;
-      this._steppingInterval = setInterval(() => {
-        this._step();
-      }, interval);
-      this.emit("RUNTIME_STARTED");
-    };
+
+    polluteRuntimeStart(vm);
+
     updateFlag();
   }
 }
