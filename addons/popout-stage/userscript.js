@@ -1,3 +1,10 @@
+import {
+  getIntervalOwner,
+  polluteRuntimeStart,
+  restartStepInterval,
+  setIntervalOwner,
+} from "../60fps/vm-stepping-interval-module.js";
+
 export default async function ({ addon, console, msg }) {
   function getNewTab() {
     const newWindow = window.open("");
@@ -23,9 +30,36 @@ export default async function ({ addon, console, msg }) {
     return { newWindow, video };
   }
 
+  const vm = addon.tab.traps.vm;
+  polluteRuntimeStart(vm);
+
   // Type `p()` into the console to use
   window.p = () => {
     const { newWindow: $window, video: $videoElem } = getNewTab();
+
+    setIntervalOwner($window);
+    restartStepInterval(vm);
+
+    const checkPotentialOwnerChange = () => {
+      const currentOwner = getIntervalOwner();
+      let changedOwner = false;
+
+      if (document.hidden && !$window.document.hidden) {
+        if (currentOwner !== $window) changedOwner = true;
+        setIntervalOwner($window);
+      } else {
+        if (currentOwner !== window) changedOwner = true;
+        setIntervalOwner(window);
+      }
+
+      if (changedOwner) {
+        console.log("Changed owner to ", getIntervalOwner() === window ? "self" : "$window");
+        restartStepInterval(vm);
+      }
+    };
+
+    document.addEventListener("visibilitychange", checkPotentialOwnerChange);
+    $window.document.addEventListener("visibilitychange", checkPotentialOwnerChange);
 
     const canvas = document.querySelector("canvas"); // The project stage canvas
     const stream = canvas.captureStream(30);
