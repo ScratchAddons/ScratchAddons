@@ -7,7 +7,10 @@
         </div>
         <div class="addon-name">
           <img :src="addonIconSrc" class="icon-type" />
-          <span @click="devShowAddonIds">{{ addon._displayedAddonId || addon.name }}</span>
+          <span class="tooltip" @click="devShowAddonIds">
+            {{ addon._displayedAddonId || addon.name}}
+            <span class="tooltiptext">{{ addon._addonId }}</span>
+          </span>
         </div>
         <addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
       </div>
