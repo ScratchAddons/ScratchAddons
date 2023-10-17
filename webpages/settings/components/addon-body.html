@@ -8,7 +8,7 @@
         <div class="addon-name">
           <img :src="addonIconSrc" class="icon-type" />
           <span class="tooltip">
-            {{ addon._displayedAddonId || addon.name}}
+            {{ addon.name}}
             <span v-if="devMode" class="tooltiptext">{{ addon._addonId }}</span>
           </span>
         </div>

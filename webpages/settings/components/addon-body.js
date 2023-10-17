@@ -31,7 +31,7 @@ export default async function ({ template }) {
         return this.$root.addonSettings[this.addon._addonId];
       },
       devMode() {
-        return this.$root.devMode === true;
+        return this.$root.devMode;
       },
       showUpdateNotice() {
         if (!this.addon.latestUpdate || !this.addon.latestUpdate.temporaryNotice) return false;
