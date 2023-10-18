@@ -17,73 +17,13 @@
   "settings": [
     {
       "name": "Change on regular key press",
-      "id": "regular",
-      "type": "select",
-      "default": "one",
-      "potentialValues": [
-        {
-          "id": "none",
-          "name": "None"
-        },
-        {
-          "id": "hundredth",
-          "name": "0.01"
-        },
-        {
-          "id": "tenth",
-          "name": "0.1"
-        },
-        {
-          "id": "one",
-          "name": "1"
-        },
-        {
-          "id": "ten",
-          "name": "10"
-        }
-      ],
-      "if": { "settings": { "useCustom": false } }
-    },
-    {
-      "name": "Change on regular key press",
       "id": "regularCustom",
       "type": "decimal",
       "default": 1,
       "min": 0,
       "max": 100,
-      "step": 0.1,
-      "if": { "settings": { "useCustom": true } }
+      "step": "any"
     },
-    {
-      "name": "Change on Shift+Key",
-      "id": "shift",
-      "type": "select",
-      "default": "ten",
-      "potentialValues": [
-        {
-          "id": "none",
-          "name": "None"
-        },
-        {
-          "id": "hundredth",
-          "name": "0.01"
-        },
-        {
-          "id": "tenth",
-          "name": "0.1"
-        },
-        {
-          "id": "one",
-          "name": "1"
-        },
-        {
-          "id": "ten",
-          "name": "10"
-        }
-      ],
-      "if": { "settings": { "useCustom": false } }
-    },
-
     {
       "name": "Change on Shift+Key",
       "id": "shiftCustom",
@@ -91,39 +31,8 @@
       "default": 10,
       "min": 0,
       "max": 100,
-      "step": 0.1,
-      "if": { "settings": { "useCustom": true } }
+      "step": "any"
     },
-    {
-      "name": "Change on Alt+Key",
-      "id": "alt",
-      "type": "select",
-      "default": "tenth",
-      "potentialValues": [
-        {
-          "id": "none",
-          "name": "None"
-        },
-        {
-          "id": "hundredth",
-          "name": "0.01"
-        },
-        {
-          "id": "tenth",
-          "name": "0.1"
-        },
-        {
-          "id": "one",
-          "name": "1"
-        },
-        {
-          "id": "ten",
-          "name": "10"
-        }
-      ],
-      "if": { "settings": { "useCustom": false } }
-    },
-
     {
       "name": "Change on Alt+Key",
       "id": "altCustom",
@@ -131,15 +40,7 @@
       "default": 0.1,
       "min": 0,
       "max": 100,
-      "step": 0.01,
-      "if": { "settings": { "useCustom": true } }
-    },
-
-    {
-      "name": "Use custom values",
-      "id": "useCustom",
-      "type": "boolean",
-      "default": false
+      "step": "any"
     }
   ],
   "credits": [

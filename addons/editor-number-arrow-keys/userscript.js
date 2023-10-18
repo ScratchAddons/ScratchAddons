@@ -1,11 +1,4 @@
 export default async function ({ addon }) {
-  const settings = {
-    none: 0,
-    hundredth: 0.01,
-    tenth: 0.1,
-    one: 1,
-    ten: 10,
-  };
   const inputMap = new WeakMap();
 
   const amountOfDecimals = (numStr) => {
@@ -116,25 +109,11 @@ export default async function ({ addon }) {
     // number input (increase or decrease by 1). If we didn't prevent, the user would be increasing twice.
 
     let changeBy = e.code === "ArrowUp" ? 1 : -1;
-    if (addon.settings.get("useCustom")) {
-      let settingValue = e.shiftKey
-        ? addon.settings.get("shiftCustom")
-        : e.altKey
-        ? addon.settings.get("altCustom")
-        : addon.settings.get("regularCustom");
-      if (settingValue === 0 || (settingValue < 100000000 && settingValue > 0.00000099)) {
-        // This will exclude valid floats such as `1e20` that are less than 9 characters
-        changeBy *= settingValue;
-      } else {
-        return;
-      }
-    } else {
-      changeBy *= e.shiftKey
-        ? settings[addon.settings.get("shift")]
-        : e.altKey
-        ? settings[addon.settings.get("alt")]
-        : settings[addon.settings.get("regular")];
-    }
+    changeBy *= e.shiftKey
+      ? addon.settings.get("shiftCustom")
+      : e.altKey
+      ? addon.settings.get("altCustom")
+      : addon.settings.get("regularCustom");
 
     const newValueAsInt =
       shiftDecimalPointToRight(e.target.value, 5) + shiftDecimalPointToRight(changeBy.toString(), 5);
