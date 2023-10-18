@@ -146,6 +146,7 @@ export async function openMessageCache(cookieStoreId, forceClear) {
       // Clear items last updated more than 1 hour ago
       await tx.objectStore("cache").put([], cookieStoreId);
       await tx.objectStore("count").put(0, cookieStoreId);
+      await tx.objectStore("countResId").put(null, cookieStoreId);
       // lastUpdated is only set when actually fetching
     }
     await tx.done;
