@@ -2,6 +2,12 @@
   "name": "Hide delete button",
   "description": "Hides delete button (trash can icon) from sprites, costumes and sounds. They can still be deleted using the right click context menu.",
   "tags": ["editor", "featured"],
+  "info": [
+    {
+      "text": "Tip: If you accidentally delete a sprite, costume, or sound, you can undo the deletion by clicking Edit in the menu bar then Restore.",
+      "id": "restoretip"
+    }
+  ],
   "versionAdded": "1.19.0",
   "dynamicEnable": true,
   "dynamicDisable": true,

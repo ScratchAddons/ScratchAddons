@@ -24,14 +24,14 @@
       "name": "defaultLinkIconFilter",
       "value": {
         "type": "recolorFilter",
-        "source": "#4d97ff"
+        "source": "#855cd6"
       }
     },
     {
       "name": "defaultLinkHoverIconFilter",
       "value": {
         "type": "recolorFilter",
-        "source": "#4280d7"
+        "source": "#7854c0"
       }
     }
   ],

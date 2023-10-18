@@ -2,6 +2,7 @@ async function commentLoader(addon, heightControl, selector, pathname, { yProvid
   let func;
   let prevScrollDetector;
   const yProviderValue = yProvider;
+  document.body.classList.add("sa-collapse-footer");
   while (true) {
     const el = await addon.tab.waitForElement(selector, {
       markAsSeen: true,

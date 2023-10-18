@@ -40,7 +40,7 @@
 }
 .studio-info .studio-image {
   width: 250px;
-  height: 147px;
+  height: 162.5px;
 }
 .studio-thumb-edit-img {
   padding: 0 0.25em;
@@ -75,13 +75,13 @@
   margin: 0.25em;
   padding: 0;
   background: transparent;
-  color: var(--darkWww-link, #4d97ff);
+  color: var(--darkWww-link, #855cd6);
   font-size: 1em;
   font-weight: bold;
 }
 .studio-info .studio-info-footer-report button:hover {
   background: transparent;
-  color: var(--darkWww-link-hover, #4280d7);
+  color: var(--darkWww-link-hover, #7854c0);
 }
 .studio-info .studio-info-footer-report button img {
   filter: var(--darkWww-link-iconFilter, var(--oldStudioLayout-defaultLinkIconFilter));

@@ -71,12 +71,16 @@ export default async ({ addon, msg, safeMsg }) => {
     },
     methods: {
       postComment() {
+        const removeReiteratedChars = (string) =>
+          string
+            .split("")
+            .filter((char, i, charArr) => (i === 0 ? true : charArr[i - 1] !== char))
+            .join("");
         const shouldCaptureComment = (value) => {
           // From content-scripts/cs.js
-          const regex = /scratch[ ]?add[ ]?ons/;
-          // Trim like scratchr2
-          const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
-          const limitedValue = trimmedValue.toLowerCase().replace(/[^a-z /]+/g, "");
+          const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, ""); // Trim like scratchr2
+          const limitedValue = removeReiteratedChars(trimmedValue.toLowerCase().replace(/[^a-z]+/g, ""));
+          const regex = /scratchadons/;
           return regex.test(limitedValue);
         };
         if (shouldCaptureComment(this.replyBoxValue)) {
@@ -414,9 +418,9 @@ export default async ({ addon, msg, safeMsg }) => {
           });
       },
 
-      async updateMessageCount() {
+      async updateMessageCount(bypassCache = false) {
         const username = await addon.auth.fetchUsername();
-        const count = await MessageCache.fetchMessageCount(username);
+        const count = await MessageCache.fetchMessageCount(username, { bypassCache });
         const db = await MessageCache.openDatabase();
         try {
           await db.put("count", count, scratchAddons.cookieStoreId);
@@ -431,7 +435,7 @@ export default async ({ addon, msg, safeMsg }) => {
       // For UI
       markAsRead() {
         MessageCache.markAsRead(addon.auth.csrfToken)
-          .then(() => this.updateMessageCount())
+          .then(() => this.updateMessageCount(true))
           .then(() => {
             this.markedAsRead = true;
           })
@@ -446,7 +450,7 @@ export default async ({ addon, msg, safeMsg }) => {
               this.stMessages.findIndex((alert) => alert.id === id),
               1
             );
-            this.updateMessageCount();
+            this.updateMessageCount(true);
           })
           .catch((e) => console.error("Dismissing alert failed:", e));
       },
