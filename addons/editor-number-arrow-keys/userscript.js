@@ -110,10 +110,10 @@ export default async function ({ addon }) {
 
     let changeBy = e.code === "ArrowUp" ? 1 : -1;
     changeBy *= e.shiftKey
-      ? addon.settings.get("shiftCustom")
+      ? addon.settings.get("shift")
       : e.altKey
-      ? addon.settings.get("altCustom")
-      : addon.settings.get("regularCustom");
+      ? addon.settings.get("alt")
+      : addon.settings.get("regular");
 
     const newValueAsInt =
       shiftDecimalPointToRight(e.target.value, 5) + shiftDecimalPointToRight(changeBy.toString(), 5);

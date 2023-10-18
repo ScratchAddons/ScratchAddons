@@ -639,6 +639,33 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             settings.bordercolor = "#855cd6";
           });
         }
+        if (addonId === "editor-number-arrow-keys" && settings.useCustom != null) {
+          // Transition v1.35 to v1.36
+          // Remove select settings
+          console.log(settings.useCustom);
+          if (settings.useCustom) {
+            settings.regular = Number(settings.regularCustom);
+            settings.shift = Number(settings.shiftCustom);
+            settings.alt = Number(settings.altCustom);
+          } else {
+            // This part isn't working
+            const conversions = {
+              none: 0,
+              hundredth: 0.01,
+              tenth: 0.1,
+              one: 1,
+              ten: 10,
+            };
+            settings.regular = conversions[settings.regular];
+            settings.shift = conversions[settings.shift];
+            settings.alt = conversions[settings.alt];
+          }
+          delete settings.regularCustom;
+          delete settings.shiftCustom;
+          delete settings.altCustom;
+          delete settings.useCustom;
+          madeAnyChanges = madeChangesToAddon = true;
+        }
       }
 
       if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;

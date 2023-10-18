@@ -17,7 +17,7 @@
   "settings": [
     {
       "name": "Change on regular key press",
-      "id": "regularCustom",
+      "id": "regular",
       "type": "decimal",
       "default": 1,
       "min": 0,
@@ -26,7 +26,7 @@
     },
     {
       "name": "Change on Shift+Key",
-      "id": "shiftCustom",
+      "id": "shift",
       "type": "decimal",
       "default": 10,
       "min": 0,
@@ -35,7 +35,7 @@
     },
     {
       "name": "Change on Alt+Key",
-      "id": "altCustom",
+      "id": "alt",
       "type": "decimal",
       "default": 0.1,
       "min": 0,
