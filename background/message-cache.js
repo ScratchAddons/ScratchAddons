@@ -121,7 +121,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
           if (lastResId && lastResId === resId) {
             // No need to replace the count cache. We've already seen this request.
             // We don't want to override the count as it might potentially be more up-to-date, if cache was recently bypassed by other code.
-            console.log("Ignored cached request for message count endpoint (in alarm).")
+            console.log("Ignored cached request for message count endpoint (in alarm).");
           } else {
             await db.put("count", count, scratchAddons.cookieStoreId);
           }
