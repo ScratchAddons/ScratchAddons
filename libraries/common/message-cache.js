@@ -75,14 +75,19 @@ const incognitoDatabase = new IncognitoDatabase();
  */
 export async function fetchMessageCount(username, options) {
   const bypassCache = options ? Boolean(options.bypassCache) : false;
-  const url = `https://api.scratch.mit.edu/users/${username}/messages/count`;
+  const url = `https://api.scratch.mit.edu/users/${username}/messages/count${
+    !bypassCache ? "" : `?addons_bypass_cache_after_marking_read=1`
+  }`;
   const fetchOptions = {
     cache: bypassCache ? "reload" : "default",
     credentials: "omit",
   };
   const resp = await fetch(url, fetchOptions);
   const json = await resp.json();
-  return json.count || 0;
+
+  const resId = bypassCache ? null : resp.headers.get("X-Amz-Cf-Id");
+
+  return { messageCount: json.count || 0, resId };
 }
 
 /**
@@ -117,6 +122,7 @@ export async function openDatabase() {
       d.createObjectStore("cache");
       d.createObjectStore("lastUpdated");
       d.createObjectStore("count");
+      d.createObjectStore("countResId");
     },
   });
 }
@@ -169,10 +175,20 @@ export async function openMessageCache(cookieStoreId, forceClear) {
 export async function updateMessages(cookieStoreId, forceClear, username, xToken) {
   await openMessageCache(cookieStoreId, forceClear);
   if (username === null) return [];
-  const messageCount = await fetchMessageCount(username);
-  const maxPages = Math.min(Math.ceil(messageCount / 40) + 1, 25);
+  let { messageCount, resId } = await fetchMessageCount(username);
   const db = await openDatabase();
   try {
+    const lastResId = await db.get("countResId", cookieStoreId);
+    if (lastResId && lastResId === resId) {
+      // We should ignore the message count request we just did, if possible.
+      const cachedCount = await db.get("count", cookieStoreId);
+      if (cachedCount || cachedCount === 0) {
+        messageCount = cachedCount;
+        console.log("Ignored cached request for message count endpoint.");
+      }
+    }
+    const maxPages = Math.min(Math.ceil(messageCount / 40) + 1, 25);
+
     const messages = await db.get("cache", cookieStoreId);
     const firstTimestamp = messages[0] ? new Date(messages[0].datetime_created).getTime() : 0;
     const newlyAdded = [];
@@ -192,10 +208,11 @@ export async function updateMessages(cookieStoreId, forceClear, username, xToken
     messages.length = Math.min(messages.length, maxPages * 40);
     // Only notify actual new messages, since the cache invalidation may occur
     newlyAdded.length = Math.min(newlyAdded.length, messageCount);
-    const tx = await db.transaction(["cache", "lastUpdated", "count"], "readwrite");
+    const tx = await db.transaction(["cache", "lastUpdated", "count", "countResId"], "readwrite");
     await tx.objectStore("cache").put(messages, cookieStoreId);
     await tx.objectStore("lastUpdated").put(Date.now(), cookieStoreId);
     await tx.objectStore("count").put(messageCount, cookieStoreId);
+    if (resId) await tx.objectStore("countResId").put(resId, cookieStoreId);
     await tx.done;
     return newlyAdded;
   } finally {

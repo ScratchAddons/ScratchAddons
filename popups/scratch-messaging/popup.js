@@ -419,8 +419,9 @@ export default async ({ addon, msg, safeMsg }) => {
       },
 
       async updateMessageCount(bypassCache = false) {
+        // As of October 2023, all calls to this method use bypassCache:true
         const username = await addon.auth.fetchUsername();
-        const count = await MessageCache.fetchMessageCount(username, { bypassCache });
+        const { messageCount: count } = await MessageCache.fetchMessageCount(username, { bypassCache });
         const db = await MessageCache.openDatabase();
         try {
           await db.put("count", count, scratchAddons.cookieStoreId);
