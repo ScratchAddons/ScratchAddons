@@ -26,3 +26,8 @@
   background-color: transparent;
   border: none;
 }
+
+.tabs button:not(.active) .tab-icon.sa-search-profile-profilepic {
+  /* dark-www compatibility */
+  filter: none;
+}
