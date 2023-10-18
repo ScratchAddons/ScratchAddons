@@ -181,12 +181,11 @@ export async function updateMessages(cookieStoreId, forceClear, username, xToken
   try {
     const lastResId = await db.get("countResId", cookieStoreId);
     if (lastResId && lastResId === resId) {
-      // We should ignore the message count request we just did, if possible.
+      // We should ignore the message count request we just did.
+      // Since we know `db.get("countResId")` isn't null, we can use the cached count.
       const cachedCount = await db.get("count", cookieStoreId);
-      if (cachedCount || cachedCount === 0) {
-        messageCount = cachedCount;
-        console.log("Ignored cached request for message count endpoint.");
-      }
+      messageCount = cachedCount;
+      console.log("Ignored cached request for message count endpoint.");
     }
     const maxPages = Math.min(Math.ceil(messageCount / 40) + 1, 25);
 
