@@ -7,15 +7,16 @@ export default async function ({ addon }) {
   // I 100% stole this part of the code from "editor-number-arrow-keys"
   const isSupportedElement = (el) => {
     if (el.classList.contains("blocklyHtmlInput")) return true;
-    else if (el.matches(".mediaRecorderPopupContent input[type=number]")) {
+    else if (el.matches(".mediaRecorderPopupContent input[type=text]")) {
       // Number inputs in `mediarecorder` addon modal
+      // The inputs should be type=text because I change that below to allow math symbols
       return true;
     } else if (el.className.includes("input_input-form_")) {
       if (el.matches("[class*=sprite-info_sprite-info_] [class*=input_input-small_]")) {
         // Sprite X/Y coordinates, size and direction (excludes sprite name)
         return true;
-      } else if (el.matches("[class*=paint-editor_editor-container-top_] input[type=number]")) {
-        // Number inputs in costume editor (note that browsers already provide up/down clickable buttons for these)
+      } else if (el.matches("[class*=paint-editor_editor-container-top_] input[type=text")) {
+        // Number inputs in costume editor
         return true;
       } else return false;
     }
@@ -96,6 +97,7 @@ export default async function ({ addon }) {
     if (!addon.self.disabled) this.restrictor_ = getRegexFromSettings();
     return original.apply(this, args);
   };
+
   function handleParseInput(e) {
     if (addon.self.disabled) return;
     if (!isSupportedElement(e.target)) return;
@@ -104,6 +106,7 @@ export default async function ({ addon }) {
     Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());
     e.target.dispatchEvent(new Event("input", { bubbles: true }));
   }
+
   document.body.addEventListener(
     "keydown",
     (e) => {
@@ -119,4 +122,40 @@ export default async function ({ addon }) {
     },
     { capture: true }
   );
+
+  document.addEventListener("DOMContentLoaded", function () {
+    function handleInputTypeChanges(input) {
+      if (input) {
+        input.type = "number";
+
+        input.addEventListener("focusin", function () {
+          input.type = "text";
+        });
+
+        input.addEventListener("focusout", function () {
+          input.type = "number";
+        });
+      }
+    }
+
+    var observer = new MutationObserver(function (mutationsList) {
+      mutationsList.forEach(function (mutation) {
+        if (mutation.addedNodes && mutation.addedNodes.length > 0) {
+          mutation.addedNodes.forEach(function (node) {
+            if (
+              node instanceof HTMLElement &&
+              (node.classList.contains("input_input-form_1Y0wX") ||
+                node.classList.contains("input_input-form_l9eYg") ||
+                node.classList.contains("mediaRecorderPopupContent"))
+            ) {
+              handleInputTypeChanges(node);
+            }
+          });
+        }
+      });
+    });
+
+    const observerConfig = { childList: true, subtree: true };
+    observer.observe(document.body, observerConfig);
+  });
 }

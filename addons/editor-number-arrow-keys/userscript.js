@@ -86,16 +86,21 @@ export default async function ({ addon }) {
     return normalizeNumber(numStr) === Number(numStr).toString();
   };
 
+  // Because math-in-inputs changes the type to "text", we need to check for that instead of "number"
+  const inputType = !addon.self.getEnabledAddons().contains("math-in-inputs")
+    ? "input[type=number]"
+    : "input[type=text]";
+
   const isSupportedElement = (el) => {
     if (el.classList.contains("blocklyHtmlInput")) return true;
-    else if (el.matches(".mediaRecorderPopupContent input[type=number]")) {
+    else if (el.matches(".mediaRecorderPopupContent " + inputType)) {
       // Number inputs in `mediarecorder` addon modal
       return true;
     } else if (el.className.includes("input_input-form_")) {
       if (el.matches("[class*=sprite-info_sprite-info_] [class*=input_input-small_]")) {
         // Sprite X/Y coordinates, size and direction (excludes sprite name)
         return true;
-      } else if (el.matches("[class*=paint-editor_editor-container-top_] input[type=number]")) {
+      } else if (el.matches("[class*=paint-editor_editor-container-top_] " + inputType)) {
         // Number inputs in costume editor (note that browsers already provide up/down clickable buttons for these)
         return true;
       } else return false;
