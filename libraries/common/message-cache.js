@@ -235,7 +235,7 @@ export async function getUpToDateMsgCount(cookieStoreId, { count: responseMsgCou
       return responseMsgCount;
     }
   } finally {
-    db.close();
+    await db.close();
     return responseMsgCount;
   }
 }
