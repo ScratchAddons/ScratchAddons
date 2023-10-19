@@ -92,7 +92,7 @@ export async function fetchMessageCount(username, options) {
 
   const resId = bypassCache ? null : resp.headers.get("X-Amz-Cf-Id");
 
-  return { messageCount: json.count || 0, resId };
+  return { count: json.count || 0, resId };
 }
 
 /**
@@ -188,7 +188,7 @@ export async function openMessageCache(cookieStoreId, forceClear) {
 export async function updateMessages(cookieStoreId, forceClear, username, xToken) {
   await openMessageCache(cookieStoreId, forceClear);
   if (username === null) return [];
-  let { messageCount, resId } = await fetchMessageCount(username);
+  let { count: messageCount, resId } = await fetchMessageCount(username);
   const db = await openDatabase();
   try {
     const lastResId = await db.get("countResId", cookieStoreId);

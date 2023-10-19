@@ -421,7 +421,7 @@ export default async ({ addon, msg, safeMsg }) => {
       async updateMessageCount(bypassCache = false) {
         // As of October 2023, all calls to this method use bypassCache:true
         const username = await addon.auth.fetchUsername();
-        const { messageCount: count } = await MessageCache.fetchMessageCount(username, { bypassCache });
+        const { count } = await MessageCache.fetchMessageCount(username, { bypassCache });
         const db = await MessageCache.openDatabase();
         try {
           // Always override cache count, as we just bypassed cache, so it's guaranteed to be up-to-date.

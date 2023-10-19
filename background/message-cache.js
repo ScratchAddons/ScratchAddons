@@ -112,9 +112,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     }
     case BADGE_ALARM_NAME: {
       if (scratchAddons.globalState.auth.isLoggedIn) {
-        const { messageCount: count, resId } = await MessageCache.fetchMessageCount(
-          scratchAddons.globalState.auth.username
-        );
+        const { count, resId } = await MessageCache.fetchMessageCount(scratchAddons.globalState.auth.username);
         const db = await MessageCache.openDatabase();
         try {
           const lastResId = await db.get("countResId", scratchAddons.cookieStoreId);
