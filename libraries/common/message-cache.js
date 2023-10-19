@@ -147,7 +147,7 @@ export async function openMessageCache(cookieStoreId, forceClear) {
   if (db instanceof IncognitoDatabase) return;
 
   try {
-    const tx = await db.transaction(["cache", "lastUpdated", "count"], "readwrite");
+    const tx = await db.transaction(["cache", "lastUpdated", "count", "countResId"], "readwrite");
     const lastUpdated = await tx.objectStore("lastUpdated").get(cookieStoreId);
     if (lastUpdated === undefined || forceClear || lastUpdated + 12 * 60 * 60 * 1000 < Date.now()) {
       // Clear items last updated more than 1 hour ago
