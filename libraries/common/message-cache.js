@@ -118,7 +118,7 @@ export async function fetchMessages(username, xToken, offset) {
 export async function openDatabase() {
   if (IncognitoDatabase.isIncognito()) return incognitoDatabase;
 
-  const DB_VERSION = 1; // It's preferred to keep it as 1 and migrate through other means
+  const DB_VERSION = 1; // It's preferred to keep it as 1 when possible
 
   return idb.openDB("messaging", DB_VERSION, {
     upgrade(d) {
