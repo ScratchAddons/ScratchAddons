@@ -117,12 +117,19 @@ export async function fetchMessages(username, xToken, offset) {
  */
 export async function openDatabase() {
   if (IncognitoDatabase.isIncognito()) return incognitoDatabase;
-  return idb.openDB("messaging", 1, {
-    upgrade(d) {
-      d.createObjectStore("cache");
-      d.createObjectStore("lastUpdated");
-      d.createObjectStore("count");
-      d.createObjectStore("countResId");
+
+  const DB_VERSION = 2;
+
+  return idb.openDB("messaging", DB_VERSION, {
+    upgrade(d, oldVersion, newVersion, tx) {
+      if (!oldVersion) {
+        d.createObjectStore("cache");
+        d.createObjectStore("lastUpdated");
+        d.createObjectStore("count");
+      }
+      if (!tx.objectStoreNames.contains("countResId")) {
+        d.createObjectStore("countResId");
+      }
     },
   });
 }
