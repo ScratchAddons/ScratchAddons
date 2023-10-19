@@ -428,7 +428,9 @@ export default async ({ addon, msg, safeMsg }) => {
           // We obtained the up-to-date message count, so we can safely override the cached count in IDB.
           await db.put("count", count, scratchAddons.cookieStoreId);
 
-          if (!bypassCache) await db.put("count", msgCountData.resId, `${scratchAddons.cookieStoreId}_resId`);
+          if (!bypassCache && !chrome.extension.inIncognitoContext) {
+            await db.put("count", msgCountData.resId, `${scratchAddons.cookieStoreId}_resId`);
+          }
         } finally {
           await db.close();
         }

@@ -206,7 +206,9 @@ export async function updateMessages(cookieStoreId, forceClear, username, xToken
     await tx.objectStore("cache").put(messages, cookieStoreId);
     await tx.objectStore("lastUpdated").put(Date.now(), cookieStoreId);
     await tx.objectStore("count").put(messageCount, cookieStoreId);
-    if (msgCountData.resId) await tx.objectStore("count").put(msgCountData.resId, `${cookieStoreId}_resId`);
+    if (msgCountData.resId && !(db instanceof IncognitoDatabase)) {
+      await tx.objectStore("count").put(msgCountData.resId, `${cookieStoreId}_resId`);
+    }
     await tx.done;
     return newlyAdded;
   } finally {
@@ -222,6 +224,7 @@ export async function updateMessages(cookieStoreId, forceClear, username, xToken
  */
 export async function getUpToDateMsgCount(cookieStoreId, { count: responseMsgCount, resId }) {
   const db = await openDatabase();
+  if (db instanceof IncognitoDatabase) return responseMsgCount;
   try {
     const lastResId = await db.get("count", `${cookieStoreId}_resId`);
     if (lastResId && lastResId === resId) {
