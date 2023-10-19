@@ -118,7 +118,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
         try {
           await db.put("count", count, scratchAddons.cookieStoreId);
         } finally {
-          db.close();
+          await db.close();
         }
       }
       await updateBadge(scratchAddons.cookieStoreId);
