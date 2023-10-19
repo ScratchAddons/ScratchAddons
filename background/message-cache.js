@@ -116,7 +116,11 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
         const count = await MessageCache.getUpToDateMsgCount(scratchAddons.cookieStoreId, msgCountData);
         const db = await MessageCache.openDatabase();
         try {
+          // We obtained the up-to-date message count, so we can safely override the cached count in IDB.
           await db.put("count", count, scratchAddons.cookieStoreId);
+          if (msgCountData.resId && !(db instanceof MessageCache.IncognitoDatabase)) {
+            await tx.objectStore("count").put(msgCountData.resId, `${cookieStoreId}_resId`);
+          }
         } finally {
           await db.close();
         }
