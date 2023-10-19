@@ -26,7 +26,7 @@ class IncognitoTransaction {
   }
 }
 
-class IncognitoDatabase {
+export class IncognitoDatabase {
   constructor() {
     this.messages = [];
     this.msgCount = 0;
