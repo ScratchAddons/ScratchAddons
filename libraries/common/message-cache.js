@@ -37,6 +37,8 @@ class IncognitoDatabase {
         return this.messages.slice();
       case "count":
         return this.msgCount;
+      case "countResId":
+        return null;
     }
   }
 
@@ -48,6 +50,9 @@ class IncognitoDatabase {
       }
       case "count": {
         this.msgCount = value;
+        return;
+      }
+      case "countResId": {
         return;
       }
     }
