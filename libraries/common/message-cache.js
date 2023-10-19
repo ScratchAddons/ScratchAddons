@@ -218,7 +218,7 @@ export async function updateMessages(cookieStoreId, forceClear, username, xToken
  * Returns either the received message count or the one in IDB, based on which one is more recent
  * @param {string} cookieStoreId the cookie store ID for the IDB cache
  * @param {string} resId the value of the `X-Amz-Cf-Id` response header
- * @returns {number} the most up-to-date message count, possibly identicalto the received parameter
+ * @returns {number} the most up-to-date message count, possibly identical to the received parameter
  */
 export async function getUpToDateMsgCount(cookieStoreId, { count: responseMsgCount, resId }) {
   const db = await openDatabase();
