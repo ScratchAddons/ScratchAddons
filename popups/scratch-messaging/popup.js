@@ -429,6 +429,7 @@ export default async ({ addon, msg, safeMsg }) => {
           await db.put("count", count, scratchAddons.cookieStoreId);
 
           if (!bypassCache && !chrome.extension.inIncognitoContext) {
+            // Note: as of Oct 2023, this method is never called with bypassCache:false, so this never happens
             await db.put("count", msgCountData.resId, `${scratchAddons.cookieStoreId}_resId`);
           }
         } finally {

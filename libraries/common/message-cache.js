@@ -219,7 +219,7 @@ export async function updateMessages(cookieStoreId, forceClear, username, xToken
 /**
  * Returns either the received message count or the one in IDB, based on which one is more recent
  * @param {string} cookieStoreId the cookie store ID for the IDB cache
- * @param {string} resId the value of the `X-Amz-Cf-Id` response header
+ * @param {object} msgCountData the return value from fetchMessageCount()
  * @returns {number} the most up-to-date message count, possibly identical to the received parameter
  */
 export async function getUpToDateMsgCount(cookieStoreId, { count: responseMsgCount, resId }) {
@@ -231,9 +231,9 @@ export async function getUpToDateMsgCount(cookieStoreId, { count: responseMsgCou
       // Since `lastResId` is not null, we know we have a message count in IDB we can use.
       // In some cases, the message count in IDB will be more up-to-date. In other cases,
       // it will simply match the message count of this response, leading to the same result.
-      console.log("Ignored cached request for message count endpoint.");
-      const cachedCount = await db.get("count", cookieStoreId);
-      return cachedCount;
+      console.log("Ignored network-cached response for message count endpoint.");
+      const idbCount = await db.get("count", cookieStoreId);
+      return idbCount;
     } else {
       return responseMsgCount;
     }
