@@ -37,8 +37,6 @@ class IncognitoDatabase {
         return this.messages.slice();
       case "count":
         return this.msgCount;
-      case "countResId":
-        return null;
     }
   }
 
@@ -50,9 +48,6 @@ class IncognitoDatabase {
       }
       case "count": {
         this.msgCount = value;
-        return;
-      }
-      case "countResId": {
         return;
       }
     }
@@ -123,18 +118,13 @@ export async function fetchMessages(username, xToken, offset) {
 export async function openDatabase() {
   if (IncognitoDatabase.isIncognito()) return incognitoDatabase;
 
-  const DB_VERSION = 2;
+  const DB_VERSION = 1; // It's preferred to keep it as 1 and migrate through other means
 
   return idb.openDB("messaging", DB_VERSION, {
-    upgrade(d, oldVersion, newVersion, tx) {
-      if (!oldVersion) {
-        d.createObjectStore("cache");
-        d.createObjectStore("lastUpdated");
-        d.createObjectStore("count");
-      }
-      if (!tx.objectStoreNames.contains("countResId")) {
-        d.createObjectStore("countResId");
-      }
+    upgrade(d) {
+      d.createObjectStore("cache");
+      d.createObjectStore("lastUpdated");
+      d.createObjectStore("count");
     },
   });
 }
@@ -152,13 +142,13 @@ export async function openMessageCache(cookieStoreId, forceClear) {
   if (db instanceof IncognitoDatabase) return;
 
   try {
-    const tx = await db.transaction(["cache", "lastUpdated", "count", "countResId"], "readwrite");
+    const tx = await db.transaction(["cache", "lastUpdated", "count"], "readwrite");
     const lastUpdated = await tx.objectStore("lastUpdated").get(cookieStoreId);
     if (lastUpdated === undefined || forceClear || lastUpdated + 12 * 60 * 60 * 1000 < Date.now()) {
       // Clear items last updated more than 1 hour ago
       await tx.objectStore("cache").put([], cookieStoreId);
       await tx.objectStore("count").put(0, cookieStoreId);
-      await tx.objectStore("countResId").put(null, cookieStoreId);
+      await tx.objectStore("count").put(null, `${cookieStoreId}_resId`);
       // lastUpdated is only set when actually fetching
     }
     await tx.done;
@@ -212,11 +202,11 @@ export async function updateMessages(cookieStoreId, forceClear, username, xToken
     messages.length = Math.min(messages.length, maxPages * 40);
     // Only notify actual new messages, since the cache invalidation may occur
     newlyAdded.length = Math.min(newlyAdded.length, messageCount);
-    const tx = await db.transaction(["cache", "lastUpdated", "count", "countResId"], "readwrite");
+    const tx = await db.transaction(["cache", "lastUpdated", "count"], "readwrite");
     await tx.objectStore("cache").put(messages, cookieStoreId);
     await tx.objectStore("lastUpdated").put(Date.now(), cookieStoreId);
     await tx.objectStore("count").put(messageCount, cookieStoreId);
-    if (msgCountData.resId) await tx.objectStore("countResId").put(msgCountData.resId, cookieStoreId);
+    if (msgCountData.resId) await tx.objectStore("count").put(msgCountData.resId, `${cookieStoreId}_resId`);
     await tx.done;
     return newlyAdded;
   } finally {
@@ -233,7 +223,7 @@ export async function updateMessages(cookieStoreId, forceClear, username, xToken
 export async function getUpToDateMsgCount(cookieStoreId, { count: responseMsgCount, resId }) {
   const db = await openDatabase();
   try {
-    const lastResId = await db.get("countResId", cookieStoreId);
+    const lastResId = await db.get("count", `${cookieStoreId}_resId`);
     if (lastResId && lastResId === resId) {
       // Since `lastResId` is not null, we know we have a message count in IDB we can use.
       // In some cases, the message count in IDB will be more up-to-date. In other cases,
