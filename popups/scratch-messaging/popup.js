@@ -419,17 +419,20 @@ export default async ({ addon, msg, safeMsg }) => {
       },
 
       async updateMessageCount(bypassCache = false) {
-        // As of October 2023, all calls to this method use bypassCache:true
         const username = await addon.auth.fetchUsername();
-        const { count } = await MessageCache.fetchMessageCount(username, { bypassCache });
+        const msgCountData = await MessageCache.fetchMessageCount(username, { bypassCache });
+        const count = await MessageCache.getUpToDateMsgCount(scratchAddons.cookieStoreId, msgCountData);
+
         const db = await MessageCache.openDatabase();
         try {
-          // Always override cache count, as we just bypassed cache, so it's guaranteed to be up-to-date.
+          // We obtained the up-to-date message count, so we can safely override the cached count in IDB.
           await db.put("count", count, scratchAddons.cookieStoreId);
-          // We intentionally avoid storing the resId for requets that bypassed the cache through URL params.
+
+          if (!bypassCache) await db.put("countResId", msgCountData.resId, scratchAddons.cookieStoreId);
         } finally {
           await db.close();
         }
+
         chrome.runtime.sendMessage({
           forceBadgeUpdate: { store: scratchAddons.cookieStoreId },
         });

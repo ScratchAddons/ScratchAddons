@@ -188,19 +188,11 @@ export async function openMessageCache(cookieStoreId, forceClear) {
 export async function updateMessages(cookieStoreId, forceClear, username, xToken) {
   await openMessageCache(cookieStoreId, forceClear);
   if (username === null) return [];
-  let { count: messageCount, resId } = await fetchMessageCount(username);
+  const msgCountData = await fetchMessageCount(username);
+  const messageCount = await getUpToDateMsgCount(cookieStoreId, msgCountData);
+  const maxPages = Math.min(Math.ceil(messageCount / 40) + 1, 25);
   const db = await openDatabase();
   try {
-    const lastResId = await db.get("countResId", cookieStoreId);
-    if (lastResId && lastResId === resId) {
-      // We should ignore the message count request we just did.
-      // Since we know `db.get("countResId")` isn't null, we can use the cached count.
-      const cachedCount = await db.get("count", cookieStoreId);
-      messageCount = cachedCount;
-      console.log("Ignored cached request for message count endpoint.");
-    }
-    const maxPages = Math.min(Math.ceil(messageCount / 40) + 1, 25);
-
     const messages = await db.get("cache", cookieStoreId);
     const firstTimestamp = messages[0] ? new Date(messages[0].datetime_created).getTime() : 0;
     const newlyAdded = [];
@@ -224,11 +216,37 @@ export async function updateMessages(cookieStoreId, forceClear, username, xToken
     await tx.objectStore("cache").put(messages, cookieStoreId);
     await tx.objectStore("lastUpdated").put(Date.now(), cookieStoreId);
     await tx.objectStore("count").put(messageCount, cookieStoreId);
-    if (resId) await tx.objectStore("countResId").put(resId, cookieStoreId);
+    if (msgCountData.resId) await tx.objectStore("countResId").put(msgCountData.resId, cookieStoreId);
     await tx.done;
     return newlyAdded;
   } finally {
     await db.close();
+  }
+}
+
+/**
+ * Returns either the received message count or the one in IDB, based on which one is more recent
+ * @param {string} cookieStoreId the cookie store ID for the IDB cache
+ * @param {string} resId the value of the `X-Amz-Cf-Id` response header
+ * @returns {number} the most up-to-date message count, possibly identicalto the received parameter
+ */
+export async function getUpToDateMsgCount(cookieStoreId, { count: responseMsgCount, resId }) {
+  const db = await openDatabase();
+  try {
+    const lastResId = await db.get("countResId", cookieStoreId);
+    if (lastResId && lastResId === resId) {
+      // Since `lastResId` is not null, we know we have a message count in IDB we can use.
+      // In some cases, the message count in IDB will be more up-to-date. In other cases,
+      // it will simply match the message count of this response, leading to the same result.
+      console.log("Ignored cached request for message count endpoint.");
+      const cachedCount = await db.get("count", cookieStoreId);
+      return cachedCount;
+    } else {
+      return responseMsgCount;
+    }
+  } finally {
+    db.close();
+    return responseMsgCount;
   }
 }
 
