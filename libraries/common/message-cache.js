@@ -84,8 +84,8 @@ export async function fetchMessageCount(username, options) {
     !bypassCache ? "" : `?addons_bypass_cache_after_marking_read=1`
   }`;
   const fetchOptions = {
+    credentials: "omit", // No need to send cookies, this is a public endpoint
     cache: bypassCache ? "reload" : "default",
-    credentials: "omit",
   };
   const resp = await fetch(url, fetchOptions);
   const json = await resp.json();
