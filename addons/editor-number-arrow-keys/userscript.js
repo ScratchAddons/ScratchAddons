@@ -63,39 +63,6 @@ export default async function ({ addon }) {
     return numStr ? (isNumberNegative ? "-" : "") + numStr : 0;
   };
 
-  const normalizeNumber = (numStr) => {
-    const isNumberNegative = numStr[0] === "-";
-    const numStrPositive = isNumberNegative ? numStr.substring(1) : numStr;
-
-    let normalizedNum = numStrPositive;
-
-    // Adds zero before the decimal point if necessary (.1 → 0.1)
-    if (normalizedNum[0] === ".") {
-      normalizedNum = "0" + normalizedNum;
-    }
-
-    // Removes leading zeros (02.25 → 2.25)
-    if (/^0*$/.test(numStrPositive.split(".")[0])) {
-      // Case where integerPart = (0 or 00 or 000, etc...)
-      const decimalPart = numStrPositive.split(".")[1] || "";
-      normalizedNum = `0.${decimalPart}`;
-    } else {
-      normalizedNum = normalizedNum.replace(/^0*|0*$/, "");
-    }
-
-    // Removes trailing zeros (2.250 → 2.25)
-    if (numStrPositive.includes(".")) {
-      normalizedNum = normalizedNum.replace(/0*$/, "");
-    }
-
-    // Removes the decimal point if it's the last character (2. → 2)
-    if (normalizedNum.endsWith(".")) {
-      normalizedNum = normalizedNum.slice(0, -1);
-    }
-
-    return (isNumberNegative ? "-" : "") + normalizedNum;
-  };
-
   const isValidNumber = (numStr) => {
     if (numStr.length > 100) return false;
     try {
