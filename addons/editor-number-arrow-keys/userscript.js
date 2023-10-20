@@ -90,7 +90,6 @@ export default async function ({ addon }) {
   const inputType = !addon.self.getEnabledAddons().contains("math-in-inputs")
     ? "input[type=number]"
     : "input[type=text]";
-
   const isSupportedElement = (el) => {
     if (el.classList.contains("blocklyHtmlInput")) return true;
     else if (el.matches(".mediaRecorderPopupContent " + inputType)) {

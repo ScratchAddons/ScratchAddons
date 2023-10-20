@@ -18,6 +18,9 @@ export default async function ({ addon }) {
       } else if (el.matches("[class*=paint-editor_editor-container-top_] input[type=text")) {
         // Number inputs in costume editor
         return true;
+      } else if (el.className.includes("input_input-form_l9eYg")) {
+        // Colour picker?
+        return true;
       } else return false;
     }
     return false;
@@ -105,6 +108,7 @@ export default async function ({ addon }) {
     const newValue = parseMath(e.target.value);
     Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());
     e.target.dispatchEvent(new Event("input", { bubbles: true }));
+    e.target.blur();
   }
 
   document.body.addEventListener(
@@ -123,39 +127,40 @@ export default async function ({ addon }) {
     { capture: true }
   );
 
-  document.addEventListener("DOMContentLoaded", function () {
-    function handleInputTypeChanges(input) {
-      if (input) {
+  function handleInputTypeChanges(input) {
+    if (input) {
+      input.type = "number";
+
+      input.addEventListener("focusin", function () {
+        input.type = "text";
+        const inputLength = input.value.length;
+        input.setSelectionRange(inputLength, inputLength);
+      });
+
+      input.addEventListener("focusout", function () {
         input.type = "number";
+      });
+    }
+  }
 
-        input.addEventListener("focusin", function () {
-          input.type = "text";
-        });
-
-        input.addEventListener("focusout", function () {
-          input.type = "number";
+  var observer = new MutationObserver(function (mutationsList) {
+    mutationsList.forEach(function (mutation) {
+      if (mutation.addedNodes && mutation.addedNodes.length > 0) {
+        mutation.addedNodes.forEach(function (node) {
+          if (
+            node instanceof HTMLElement &&
+            (node.className.includes("input-group_input-group_plJaJ") ||
+              node.classList.contains("input_input-form_l9eYg") ||
+              node.classList.contains("mediaRecorderPopupContent"))
+          ) {
+            handleInputTypeChanges(node);
+          }
         });
       }
-    }
-
-    var observer = new MutationObserver(function (mutationsList) {
-      mutationsList.forEach(function (mutation) {
-        if (mutation.addedNodes && mutation.addedNodes.length > 0) {
-          mutation.addedNodes.forEach(function (node) {
-            if (
-              node instanceof HTMLElement &&
-              (node.classList.contains("input_input-form_1Y0wX") ||
-                node.classList.contains("input_input-form_l9eYg") ||
-                node.classList.contains("mediaRecorderPopupContent"))
-            ) {
-              handleInputTypeChanges(node);
-            }
-          });
-        }
-      });
     });
-
-    const observerConfig = { childList: true, subtree: true };
-    observer.observe(document.body, observerConfig);
   });
+
+  const observerConfig = { childList: true, subtree: true };
+  observer.observe(document.body, observerConfig);
+  console.log("MutationObserver started, 231");
 }
