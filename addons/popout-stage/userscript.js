@@ -74,6 +74,21 @@ export default async function ({ addon, console, msg }) {
       });
     }
 
+    // The new tab/window cannot autoplay sound until there's user interaction
+    $document.addEventListener("click", () => {
+      const ctx = new $window.AudioContext();
+      const dest = ctx.createMediaStreamDestination();
+      const mediaStreamDestination = vm.runtime.audioEngine.audioContext.createMediaStreamDestination();
+      vm.runtime.audioEngine.inputNode.connect(mediaStreamDestination);
+      const audioSource = ctx.createMediaStreamSource(mediaStreamDestination.stream);
+      audioSource.connect(dest);
+      stream.addTrack(dest.stream.getAudioTracks()[0]);
+
+      $videoElem.muted = false;
+      // At this point, sound will come out of both tabs.
+      // Ideally, it should only come out from one of them at a time!
+    });
+
     // Mouse, touch, and wheel events
     // https://github.com/scratchfoundation/scratch-gui/blob/9198878ad3f1ce31e0fdaa819b9951a3469614a7/src/containers/stage.jsx#L121-L138
     redirectEventsToMainCanvas(MouseEvent, ["mousemove", "mouseup", "mousedown"], $videoElem, canvas);
