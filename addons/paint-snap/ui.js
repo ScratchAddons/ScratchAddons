@@ -78,7 +78,7 @@ export function initUI({ addon, msg }) {
   controlsGroup.appendChild(settingButton);
 
   document.body.addEventListener("click", (e) => {
-    if (!e.target.matches("[class*=sa-paint-snap-]") && areSettingsOpen()) setSettingsOpen(false);
+    if (areSettingsOpen() && !e.target.matches("[class*=sa-paint-snap-]")) setSettingsOpen(false);
   });
 
   const settingsOpenUpdaters = [];
