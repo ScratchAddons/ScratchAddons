@@ -45,7 +45,7 @@ export default async function ({ addon, console, msg }) {
       const currentOwner = getIntervalOwner();
       let changedOwner = false;
 
-      if (document.hidden && $document.hidden) {
+      if (document.hidden && !$document.hidden) {
         if (currentOwner !== $window) changedOwner = true;
         setIntervalOwner($window);
       } else {
