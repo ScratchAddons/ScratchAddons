@@ -36,6 +36,7 @@ export default async function ({ addon, console, msg }) {
   // Type `p()` into the console to use
   window.p = () => {
     const { newWindow: $window, video: $videoElem } = getNewTab();
+    const $document = $window.document;
 
     setIntervalOwner($window);
     restartStepInterval(vm);
@@ -44,7 +45,7 @@ export default async function ({ addon, console, msg }) {
       const currentOwner = getIntervalOwner();
       let changedOwner = false;
 
-      if (document.hidden && !$window.document.hidden) {
+      if (document.hidden && $document.hidden) {
         if (currentOwner !== $window) changedOwner = true;
         setIntervalOwner($window);
       } else {
@@ -59,20 +60,30 @@ export default async function ({ addon, console, msg }) {
     };
 
     document.addEventListener("visibilitychange", checkPotentialOwnerChange);
-    $window.document.addEventListener("visibilitychange", checkPotentialOwnerChange);
+    $document.addEventListener("visibilitychange", checkPotentialOwnerChange);
 
     const canvas = document.querySelector("canvas"); // The project stage canvas
     const stream = canvas.captureStream(30);
     $videoElem.srcObject = stream;
 
+    function redirectEventsToMainCanvas(eventConstructor, eventNames, sourceElement, targetElement) {
+      (Array.isArray(eventNames) ? eventNames : [eventNames]).forEach((eventName) => {
+        sourceElement.addEventListener(eventName, (e) => {
+          targetElement.dispatchEvent(new eventConstructor(eventName, e));
+        });
+      });
+    }
+
     // Mouse, touch, and wheel events
     // https://github.com/scratchfoundation/scratch-gui/blob/9198878ad3f1ce31e0fdaa819b9951a3469614a7/src/containers/stage.jsx#L121-L138
-    $videoElem.addEventListener("mousedown", (e) => {
-      canvas.dispatchEvent(new MouseEvent("mousedown", e));
-    });
-    $videoElem.addEventListener("mouseup", (e) => {
-      canvas.dispatchEvent(new MouseEvent("mouseup", e));
-    });
-    // (TODO other events)
+    redirectEventsToMainCanvas(MouseEvent, ["mousemove", "mouseup", "mousedown"], $videoElem, canvas);
+    redirectEventsToMainCanvas(TouchEvent, ["touchmove", "touchend", "touchstart"], $videoElem, canvas);
+    redirectEventsToMainCanvas(WheelEvent, "wheel", $videoElem, canvas);
+
+    // Keyboard events
+    // https://github.com/scratchfoundation/scratch-gui/blob/0c79a6bb1ee05a01cbe0ed8b32d58bfaa5c9d987/src/lib/vm-listener-hoc.jsx#L53
+    redirectEventsToMainCanvas(KeyboardEvent, ["keydown", "keyup"], $document, document);
+    // TODO: we need to be more careful with keyboard events, some addons typically listen to these events
+    // and probably don't consider they can come from the stage in another window!
   };
 }
