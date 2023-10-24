@@ -1,6 +1,6 @@
 {
   "name": "Mathematical expressions in number inputs",
-  "description": "Evaluates mathematical expressions (e.g. 2+4*3) in number inputs in the editor automatically.",
+  "description": "Evaluates mathematical expressions (e.g. 2+4*3) in number inputs in the editor automatically. Use ctrl + enter to force evaluation in any inputs.",
   "tags": ["editor", "codeEditor", "recommended"],
   "versionAdded": "1.35.0",
   "dynamicEnable": true,
@@ -15,7 +15,8 @@
     {
       "name": "Jazza",
       "link": "https://scratch.mit.edu/users/greeny--231/"
-    }
+    },
+    { "name": "Tacodiva", "link": "https://github.com/Tacodiva" }
   ],
   "enabledByDefault": true,
   "settings": [

@@ -5,15 +5,32 @@ export default async function ({ addon }) {
   }
 
   // I 100% stole this part of the code from "editor-number-arrow-keys"
-  const isSupportedElement = (el) => {
+  const isSupportedElement = (el, forChangingType) => {
+    let type = forChangingType ? " input[type=number]" : " input[type=text]";
     if (!el.classList) return false;
-    if (el.classList.contains("blocklyHtmlInput")) return true;
-    else if (el.matches(".mediaRecorderPopupContent input[type=text]")) {
+    if (el.classList.contains("blocklyHtmlInput") && !forChangingType)
+      return true; // Block inputs do not have a type to change
+    else if (el.matches("[class*=mediaRecorderPopupContent]" + type)) {
       // Number inputs in `mediarecorder` addon modal
-      // The inputs should be type=text because I change that below to allow math symbols
       return true;
-    } else if (el.className.includes("input_input-form_")) {
+    } else if (el.matches("[class*=input_input-form_]")) {
+      // The following elements have this in their class list
+      if (el.matches("[class*=sprite-info_sprite-info_] [class*=input_input-small_]") && !forChangingType) {
+        // Inputs in sprite propeties (exluding sprite name) (type does not need to be changed)
+        return true;
+      } else if (el.matches("[class*=paint-editor_editor-container-top_]" + type)) {
+        // All costume editor inputs (in the top bar: outline width, brush size, etc)
+        return true;
+      } else if (el.matches("[class*=Popover-body]" + type)) {
+        // Any inputs in the colour popover
+        return true;
+      }
+      // Doing math in the following inputs is almost useless, but for consistency we'll allow it
+    } else if (el.matches("[class*=sa-paint-snap-settings]" + type)) {
+      // The paint-snap distance setting
       return true;
+    } else if (el.matches("[class*=sa-onion-settings]" + type)) {
+      // All inputs in the onion-skinning settings
     }
     return false;
   };
@@ -91,14 +108,10 @@ export default async function ({ addon }) {
     if (!addon.self.disabled) this.restrictor_ = getRegexFromSettings();
     return original.apply(this, args);
   };
-  /**
-   *
-   * @param {Event} e
-   * @returns
-   */
-  function handleParseInput(e) {
+
+  function handleParseInput(e, ctrl) {
     if (addon.self.disabled) return;
-    if (!isSupportedElement(e.target)) return;
+    if (!isSupportedElement(e.target) && !ctrl) return;
     if (!e.target.value) return;
     const newValue = parseMath(e.target.value);
     Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());
@@ -106,14 +119,19 @@ export default async function ({ addon }) {
   document.addEventListener(
     "keydown",
     (e) => {
-      if (e.key !== "Enter") return;
-      handleParseInput(e);
+      if (addon.self.disabled) return;
+      if (e.code === "Enter" || e.code === "NumpadEnter") {
+        // Force math in ANY input if you hold ctrl
+        let ctrlKeyDown = e.ctrlKey || e.metaKey;
+        handleParseInput(e, ctrlKeyDown);
+      }
     },
     true
   );
   document.addEventListener(
     "change",
     (e) => {
+      if (addon.self.disabled) return;
       handleParseInput(e);
     },
     true
@@ -121,12 +139,10 @@ export default async function ({ addon }) {
 
   function handleInputTypeChanges(input) {
     if (input) {
-      input.type = "number";
-
       input.addEventListener("focusin", function () {
         input.type = "text";
         const inputLength = input.value?.length ?? 0;
-        input.setSelectionRange(inputLength, inputLength);
+        input.setSelectionRange(inputLength, inputLength); // Set cursor position to the end of the input
       });
 
       input.addEventListener("focusout", function () {
@@ -138,15 +154,8 @@ export default async function ({ addon }) {
   var observer = new MutationObserver(function (mutationsList) {
     mutationsList.forEach(function (mutation) {
       if (mutation.addedNodes && mutation.addedNodes.length > 0) {
-        mutation.addedNodes.forEach(function (node) {
-          if (
-            node instanceof HTMLElement &&
-            (node.classList.contains(addon.tab.scratchClass("input-group_input-group")) ||
-            node.classList.contains(addon.tab.scratchClass("input_input-form")) ||
-            node.matches("input.mediaRecorderPopupContent"))
-          ) {
-            handleInputTypeChanges(node);
-          }
+        mutation.addedNodes.forEach(function (el) {
+          if (isSupportedElement(el, true)) handleInputTypeChanges(el); // Elements that need to have their type set to "text"
         });
       }
     });
@@ -154,5 +163,4 @@ export default async function ({ addon }) {
 
   const observerConfig = { childList: true, subtree: true };
   observer.observe(document.body, observerConfig);
-  console.log("MutationObserver started, 231");
 }
