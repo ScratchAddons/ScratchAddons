@@ -1,6 +1,6 @@
 {
   "name": "Mathematical expressions in number inputs",
-  "description": "Evaluates mathematical expressions (e.g. 2+4*3) in number inputs in the editor automatically. Use ctrl + enter to force evaluation in any inputs.",
+  "description": "Evaluates mathematical expressions (e.g. 2+4*3) in number inputs in the editor automatically.",
   "tags": ["editor", "codeEditor", "recommended"],
   "versionAdded": "1.35.0",
   "dynamicEnable": true,
@@ -23,6 +23,12 @@
     {
       "name": "Allow text in number inputs",
       "id": "textInInputs",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Allow Ctrl + enter to force evaluation in ANY input",
+      "id": "ctrlEnter",
       "type": "boolean",
       "default": false
     }

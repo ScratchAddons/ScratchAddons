@@ -136,7 +136,7 @@ export default async function ({ addon }) {
       if (addon.self.disabled) return;
       if (e.code === "Enter" || e.code === "NumpadEnter") {
         // Force math in ANY input if you hold ctrl
-        let ctrlKeyDown = e.ctrlKey || e.metaKey;
+        let ctrlKeyDown = (e.ctrlKey || e.metaKey) && addon.settings.get("ctrlEnter");
         handleParseInput(e, ctrlKeyDown);
       }
     },
