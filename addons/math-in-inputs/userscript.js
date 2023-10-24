@@ -19,8 +19,11 @@ export default async function ({ addon }) {
       if (el.matches("[class*=input_input-small_]") && !forChangingType) {
         // Inputs in sprite propeties (exluding sprite name) (type does not need to be changed)
         return true;
-      } else if (el.matches("[class*=paint-editor_editor-container-top_]" + type)) {
-        // All costume editor inputs (in the top bar: outline width, brush size, etc)
+      } else if (
+        el.matches("[class*=paint-editor_editor-container-top_]" + type) &&
+        !el.matches("[class*=fixed-tools_costume-input_]")
+      ) {
+        // All costume editor inputs (in the top bar: outline width, brush size, etc) except costume name
         return true;
       } else if (el.matches("[class*=Popover-body]" + type)) {
         // Any inputs in the colour popover
