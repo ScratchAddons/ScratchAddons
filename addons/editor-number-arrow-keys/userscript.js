@@ -87,7 +87,7 @@ export default async function ({ addon }) {
   };
 
   // Because math-in-inputs changes the type to "text", we need to check for that instead of "number"
-  const inputType = !addon.self.getEnabledAddons().contains("math-in-inputs")
+  const inputType = !addon.self.getEnabledAddons().includes("math-in-inputs")
     ? "input[type=number]"
     : "input[type=text]";
   const isSupportedElement = (el) => {
