@@ -33,6 +33,7 @@ export default async function ({ addon }) {
       return true;
     } else if (el.matches("[class*=sa-onion-settings]" + type)) {
       // All inputs in the onion-skinning settings
+      return true;
     }
     return false;
   };
@@ -117,7 +118,6 @@ export default async function ({ addon }) {
     if (!e.target.value) return;
     const newValue = parseMath(e.target.value);
     Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());
-    console.log(loseFocus);
     if (loseFocus) e.target.blur();
   }
   document.addEventListener(
@@ -155,15 +155,26 @@ export default async function ({ addon }) {
     }
   }
 
+  function traverseAndHandleElements(node) {
+    if (isSupportedElement(node, true)) {
+      handleInputTypeChanges(node);
+    }
+
+    node.childNodes.forEach((child) => {
+      traverseAndHandleElements(child);
+    });
+  }
+
   var observer = new MutationObserver(function (mutationsList) {
     mutationsList.forEach(function (mutation) {
       if (mutation.addedNodes && mutation.addedNodes.length > 0) {
         mutation.addedNodes.forEach(function (el) {
-          if (isSupportedElement(el, true)) handleInputTypeChanges(el); // Elements that need to have their type set to "text"
+          // Start the recursive traversal from the newly added element
+          traverseAndHandleElements(el);
         });
       }
     });
-  });
+  }, true);
 
   const observerConfig = { childList: true, subtree: true };
   observer.observe(document.body, observerConfig);
