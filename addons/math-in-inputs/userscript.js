@@ -16,7 +16,7 @@ export default async function ({ addon }) {
       return true;
     } else if (el.matches("[class*=input_input-form_]")) {
       // The following elements have this in their class list
-      if (el.matches("[class*=sprit-info_sprite-info_] [class*=input_input-small_]") && !forChangingType) {
+      if (el.matches("[class*=input_input-small_]") && !forChangingType) {
         // Inputs in sprite propeties (exluding sprite name) (type does not need to be changed)
         return true;
       } else if (el.matches("[class*=paint-editor_editor-container-top_]" + type)) {
@@ -30,9 +30,11 @@ export default async function ({ addon }) {
       // Doing math in the following inputs is almost useless, but for consistency we'll allow it
     } else if (el.matches("[class*=sa-paint-snap-settings]" + type)) {
       // The paint-snap distance setting
+      loseFocus = true;
       return true;
     } else if (el.matches("[class*=sa-onion-settings]" + type)) {
       // All inputs in the onion-skinning settings
+      loseFocus = true;
       return true;
     }
     return false;
@@ -118,7 +120,15 @@ export default async function ({ addon }) {
     if (!e.target.value) return;
     const newValue = parseMath(e.target.value);
     Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());
-    if (loseFocus) e.target.blur();
+    // if (loseFocus)
+    e.target.blur();
+
+    var inputEvent = new InputEvent("input", {
+      bubbles: true,
+      cancelable: true,
+    });
+
+    e.target.dispatchEvent(inputEvent);
   }
   document.addEventListener(
     "keydown",
