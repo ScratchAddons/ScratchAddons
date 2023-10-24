@@ -3,9 +3,10 @@ export default async function ({ addon }) {
     let textInInputs = addon.settings.get("textInInputs");
     return textInInputs ? /^.*$/i : /^[0-9+\-*^/(). ]+$/;
   }
-
+  var loseFocus;
   // I 100% stole this part of the code from "editor-number-arrow-keys"
   const isSupportedElement = (el, forChangingType) => {
+    loseFocus = false;
     let type = forChangingType ? " input[type=number]" : " input[type=text]";
     if (!el.classList) return false;
     if (el.classList.contains("blocklyHtmlInput") && !forChangingType)
@@ -15,7 +16,7 @@ export default async function ({ addon }) {
       return true;
     } else if (el.matches("[class*=input_input-form_]")) {
       // The following elements have this in their class list
-      if (el.matches("[class*=sprite-info_sprite-info_] [class*=input_input-small_]") && !forChangingType) {
+      if (el.matches("[class*=sprit-info_sprite-info_] [class*=input_input-small_]") && !forChangingType) {
         // Inputs in sprite propeties (exluding sprite name) (type does not need to be changed)
         return true;
       } else if (el.matches("[class*=paint-editor_editor-container-top_]" + type)) {
@@ -23,6 +24,7 @@ export default async function ({ addon }) {
         return true;
       } else if (el.matches("[class*=Popover-body]" + type)) {
         // Any inputs in the colour popover
+        loseFocus = true;
         return true;
       }
       // Doing math in the following inputs is almost useless, but for consistency we'll allow it
@@ -115,6 +117,8 @@ export default async function ({ addon }) {
     if (!e.target.value) return;
     const newValue = parseMath(e.target.value);
     Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());
+    console.log(loseFocus);
+    if (loseFocus) e.target.blur();
   }
   document.addEventListener(
     "keydown",
