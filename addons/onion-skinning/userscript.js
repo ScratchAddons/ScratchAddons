@@ -632,18 +632,22 @@ export default async function ({ addon, console, msg }) {
         settingsChanged();
         return;
       }
-      let value = +currentInput.value;
-      if (value > +currentInput.max) {
-        value = +currentInput.max;
-      } else if (value < 0) {
-        value = 0;
+      let value = currentInput.value;
+      if (!isNaN(currentInput.value)) {
+        value = +currentInput.value;
+        if (value > +currentInput.max) {
+          value = +currentInput.max;
+        } else if (value < 0) {
+          value = 0;
+        }
       }
+
       currentInput.value = value;
       settings[type] = value;
       settingsChanged();
     });
     currentInput.addEventListener("blur", () => {
-      if (!currentInput.value) {
+      if (!currentInput.value || isNaN(currentInput.value)) {
         currentInput.value = "0";
       }
     });
