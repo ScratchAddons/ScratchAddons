@@ -120,8 +120,6 @@ export default async function ({ addon }) {
     if (!e.target.value) return;
     const newValue = parseMath(e.target.value);
     Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());
-    // if (loseFocus)
-    e.target.blur();
 
     var inputEvent = new InputEvent("input", {
       bubbles: true,
@@ -129,6 +127,7 @@ export default async function ({ addon }) {
     });
 
     e.target.dispatchEvent(inputEvent);
+    e.target.blur();
   }
   document.addEventListener(
     "keydown",
