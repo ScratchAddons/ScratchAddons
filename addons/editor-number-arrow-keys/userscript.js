@@ -87,22 +87,35 @@ export default async function ({ addon }) {
   };
 
   // Because math-in-inputs changes the type to "text", we need to check for that instead of "number"
-  const inputType = !addon.self.getEnabledAddons().includes("math-in-inputs")
-    ? "input[type=number]"
-    : "input[type=text]";
   const isSupportedElement = (el) => {
-    if (el.classList.contains("blocklyHtmlInput")) return true;
-    else if (el.matches(".mediaRecorderPopupContent " + inputType)) {
+    let type = " input[type=text]";
+    if (!el.classList) return false;
+    if (el.classList.contains("blocklyHtmlInput")) return true; // Block inputs do not have a type to change
+    else if (el.matches("[class*=mediaRecorderPopupContent]" + type)) {
       // Number inputs in `mediarecorder` addon modal
       return true;
-    } else if (el.className.includes("input_input-form_")) {
-      if (el.matches("[class*=sprite-info_sprite-info_] [class*=input_input-small_]")) {
-        // Sprite X/Y coordinates, size and direction (excludes sprite name)
+    } else if (el.matches("[class*=input_input-form_]")) {
+      // The following elements have this in their class list
+      if (el.matches("[class*=input_input-small_]")) {
+        // Inputs in sprite propeties (exluding sprite name)
         return true;
-      } else if (el.matches("[class*=paint-editor_editor-container-top_] " + inputType)) {
-        // Number inputs in costume editor (note that browsers already provide up/down clickable buttons for these)
+      } else if (
+        el.matches("[class*=paint-editor_editor-container-top_]" + type) &&
+        !el.matches("[class*=fixed-tools_costume-input_]")
+      ) {
+        // All costume editor inputs (in the top bar: outline width, brush size, etc) except costume name
         return true;
-      } else return false;
+      } else if (el.matches("[class*=Popover-body]" + type)) {
+        // Any inputs in the colour popover
+        return true;
+      }
+      // Doing math in the following inputs is almost useless, but for consistency we'll allow it
+    } else if (el.matches("[class*=sa-paint-snap-settings]" + type)) {
+      // The paint-snap distance setting
+      return true;
+    } else if (el.matches("[class*=sa-onion-settings]" + type)) {
+      // All inputs in the onion-skinning settings
+      return true;
     }
     return false;
   };
