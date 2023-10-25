@@ -87,8 +87,9 @@ export default async function ({ addon }) {
   };
 
   // Because math-in-inputs changes the type to "text", we need to check for that instead of "number"
-  const isSupportedElement = (el) => {
+  const isSupportedElement = (el, isSupportedChecked) => {
     let type = " input[type=text]";
+    type = !isSupportedChecked ? " input[type=text]" : " input[type=number]";
     if (!el.classList) return false;
     if (el.classList.contains("blocklyHtmlInput")) return true; // Block inputs do not have a type to change
     else if (el.matches("[class*=mediaRecorderPopupContent]" + type)) {
@@ -117,13 +118,14 @@ export default async function ({ addon }) {
       // All inputs in the onion-skinning settings
       return true;
     }
+    if (!isSupportedChecked) return isSupportedElement(el, true);
     return false;
   };
 
   document.body.addEventListener("keydown", (e) => {
     if (addon.self.disabled) return;
     if (!["ArrowUp", "ArrowDown"].includes(e.code)) return;
-    if (!isSupportedElement(e.target)) return;
+    if (!isSupportedElement(e.target, false)) return;
     if (!e.target.value) return;
     if (!isValidNumber(e.target.value)) return;
 
