@@ -153,41 +153,19 @@ export default async function ({ addon }) {
     true
   );
 
-  function handleInputTypeChanges(input) {
-    if (input) {
-      input.addEventListener("focusin", function () {
-        input.type = "text";
-        const inputLength = input.value?.length ?? 0;
-        input.setSelectionRange(inputLength, inputLength); // Set cursor position to the end of the input
-      });
-
-      input.addEventListener("focusout", function () {
-        input.type = "number";
-      });
+  document.body.addEventListener("focusin", function (event) {
+    const target = event.target;
+    if (isSupportedElement(target, true)) {
+      target.type = "text";
+      const inputLength = target.value?.length ?? 0;
+      target.setSelectionRange(inputLength, inputLength);
     }
-  }
+  });
 
-  function traverseAndHandleElements(node) {
-    if (isSupportedElement(node, true)) {
-      handleInputTypeChanges(node);
+  document.body.addEventListener("focusout", function (event) {
+    const target = event.target;
+    if (isSupportedElement(target, true)) {
+      target.type = "number";
     }
-
-    node.childNodes.forEach((child) => {
-      traverseAndHandleElements(child);
-    });
-  }
-
-  var observer = new MutationObserver(function (mutationsList) {
-    mutationsList.forEach(function (mutation) {
-      if (mutation.addedNodes && mutation.addedNodes.length > 0) {
-        mutation.addedNodes.forEach(function (el) {
-          // Start the recursive traversal from the newly added element
-          traverseAndHandleElements(el);
-        });
-      }
-    });
-  }, true);
-
-  const observerConfig = { childList: true, subtree: true };
-  observer.observe(document.body, observerConfig);
+  });
 }
