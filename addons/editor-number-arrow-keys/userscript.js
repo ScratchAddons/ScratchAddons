@@ -106,20 +106,10 @@ export default async function ({ addon }) {
       ) {
         // All costume editor inputs (in the top bar: outline width, brush size, etc) except costume name
         return true;
-      } else if (el.matches("[class*=Popover-body]" + type)) {
-        // Any inputs in the colour popover
-        return true;
       }
-      // Doing math in the following inputs is almost useless, but for consistency we'll allow it
-    } else if (el.matches("[class*=sa-paint-snap-settings]" + type)) {
-      // The paint-snap distance setting
-      return true;
-    } else if (el.matches("[class*=sa-onion-settings]" + type)) {
-      // All inputs in the onion-skinning settings
-      return true;
+      if (!isSupportedChecked) return isSupportedElement(el, true);
+      return false;
     }
-    if (!isSupportedChecked) return isSupportedElement(el, true);
-    return false;
   };
 
   document.body.addEventListener("keydown", (e) => {
