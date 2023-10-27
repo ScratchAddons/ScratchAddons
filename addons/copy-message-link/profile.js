@@ -1,4 +1,8 @@
 export default async function ({ addon, console, msg }) {
+  addon.self.addEventListener("disabled", () => {
+    document.querySelectorAll(".sa-copy-link-btn").forEach(element => element.remove());
+  })
+  
   let amtOfComments = 0;
   let pass = 0;
   while (true) {
