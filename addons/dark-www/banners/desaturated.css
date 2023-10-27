@@ -102,8 +102,13 @@
 .compose-comment .compose-error-row .compose-error-tip {
   background-color: #a37629;
 }
+#force-account-rename,
 .financials-section,
 .sa-annual-report-2020 .directors-message,
 .sa-annual-report-2021 .founders-message {
   background-color: #16171d;
+}
+.join-flow-outer-content /* username change */ {
+  background-clip: padding-box;
+  border-color: rgba(255, 255, 255, 0.25);
 }

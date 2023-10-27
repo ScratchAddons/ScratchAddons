@@ -135,6 +135,7 @@
   "rename-broadcasts",
   "middle-click-popup",
   "number-pad",
+  "editor-random-direction-block",
   "necropost-highlighter",
   "copy-reporter",
   "share-through-mystuff",
@@ -144,6 +145,12 @@
   "featured-dangos-v2",
   "remember-collapsed-categories",
   "editor-square-inputs",
+  "editor-number-arrow-keys",
+  "colorblind",
+  "forum-post-countdown",
+  "paint-skew",
+  "preview-project-description",
+  "collapse-footer",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
@@ -167,5 +174,6 @@
   "editor-stage-left",
   "editor-buttons-reverse-order",
   "columns",
+  "editor-compact",
   "editor-theme3"
 ]
