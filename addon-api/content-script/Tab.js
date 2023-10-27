@@ -632,6 +632,13 @@ export default class Tab extends Listenable {
       },
     };
 
+    if (space === "stageHeader") {
+      // Load stageHeader space CSS
+      import("./stage-header-styles.js").then((m) => {
+        m.applyStyles();
+      });
+    }
+
     const spaceInfo = sharedSpaces[space];
     const spaceElement = spaceInfo.element();
     if (!spaceElement) return false;
