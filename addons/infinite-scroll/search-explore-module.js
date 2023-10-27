@@ -18,7 +18,7 @@ XMLHttpRequest.prototype.open = function (method, path, ...args) {
       );
     }
     return request;
-  } catch(err) {
+  } catch (err) {
     console.error(err);
     return request;
   }
