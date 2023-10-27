@@ -1,4 +1,6 @@
-export default async function ({ addon, console }) {
+import {updateAllBlocks} from "../custom-block-shape/update-all-blocks.js";
+
+export default async function ({ addon }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
 
@@ -21,28 +23,12 @@ export default async function ({ addon, console }) {
     }
   };
 
-  // taken from custom-block-shape
-  function updateAllBlocks() {
-    const workspace = ScratchBlocks.getMainWorkspace();
-    if (workspace) {
-      if (vm.editingTarget) {
-        vm.emitWorkspaceUpdate();
-      }
-      const flyout = workspace.getFlyout();
-      if (flyout) {
-        const flyoutWorkspace = flyout.getWorkspace();
-        ScratchBlocks.Xml.clearWorkspaceAndLoadFromXml(
-          ScratchBlocks.Xml.workspaceToDom(flyoutWorkspace),
-          flyoutWorkspace
-        );
-        workspace.getToolbox().refreshSelection();
-        workspace.toolboxRefreshEnabled_ = true;
-      }
-    }
+  function update() {
+    updateAllBlocks(vm, addon.tab.traps.getWorkspace(), ScratchBlocks);
   }
 
-  addon.self.addEventListener("disabled", updateAllBlocks);
-  addon.self.addEventListener("reenabled", updateAllBlocks);
-  addon.settings.addEventListener("change", updateAllBlocks);
-  updateAllBlocks();
+  addon.self.addEventListener("disabled", update);
+  addon.self.addEventListener("reenabled", update);
+  addon.settings.addEventListener("change", update);
+  update();
 }
