@@ -350,7 +350,7 @@ function waitForDocumentHead() {
 }
 
 function getL10NURLs() {
-  const langCode = /scratchlanguage=([\w-]+)/.exec(document.cookie)?.[1] || "en";
+  const langCode = /scratchlanguage=([\w-]+)/.exec(document.cookie)?.[1] || navigator.language;
   const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
   if (langCode === "pt") {
     urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
