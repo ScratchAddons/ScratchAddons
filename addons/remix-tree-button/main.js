@@ -1,5 +1,5 @@
 export default async function ({ addon, console, msg }) {
-  let originalTextContent;
+  let viewAllLinkModified = false;
 
   // -- Make the links show/hide --
 
@@ -91,23 +91,20 @@ export default async function ({ addon, console, msg }) {
           const link = document.querySelector(".remix-list a");
           const linkSpan = link.firstChild;
 
-          if (!originalTextContent) {
-            originalTextContent = linkSpan.textContent; // Store what the button's text content was before the first time we change it (because different languages).
-          }
-
           link.href = appendToProjectURL("remixtree");
           setOpensInNewTab(addon.settings.get("new-tab"), link);
           linkSpan.textContent = msg("remix-tree-link");
         } else {
-          if (!originalTextContent) return; // If we haven't changed it to link to the remix tree, don't do anything.
+          if (!viewAllLinkModified) return;
 
           const link = document.querySelector(".remix-list a");
           const linkSpan = link.firstChild;
 
           link.href = appendToProjectURL("remixes");
           setOpensInNewTab(false, link);
-          linkSpan.textContent = originalTextContent;
+          linkSpan.textContent = addon.tab.scratchMessage("project.viewAllInList");
         }
+        viewAllLinkModified = enabled;
       });
   }
 
