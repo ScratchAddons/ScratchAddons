@@ -27,7 +27,7 @@
   ],
   "settings": [
     {
-      "name": "Link placement",
+      "name": "Link location",
       "id": "type",
       "type": "select",
       "potentialValues": [
@@ -53,8 +53,8 @@
   "dynamicDisable": true,
   "versionAdded": "1.2.0",
   "latestUpdate": {
-    "version": "1.33.0",
-    "temporaryNotice": "The remix tree link can now be moved so it doesn't get in the way.",
-    "newSettings": ["type", "open-with-icon"]
+    "version": "1.36.0",
+    "temporaryNotice": "The remix tree link can now be moved to the Remixes list (next to the comments) so it doesn't take up space.",
+    "newSettings": ["type", "new-tab"]
   }
 }
