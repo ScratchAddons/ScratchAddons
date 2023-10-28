@@ -57,10 +57,8 @@ function getSelectionBBCode(selection) {
     return "";
   }
 
-  console.log({ html });
   const textNodes = getTextNodes(html, ["code", "sa-copyCodeDiv"]);
   for (const textNode of textNodes) {
-    console.log({ textNode }, "in", { textNodes });
     textNode.textContent = textNode.textContent.replaceAll("[", "[[]");
   }
 
@@ -198,14 +196,12 @@ function getSelectionBBCode(selection) {
 function getTextNodes(element, excludeClasses) {
   let textNodes = [];
   for (const child of element.childNodes) {
-    console.log("going through", { child }, "of", { element }, "with", { textNodes });
     if (child.nodeType === 3) {
       textNodes.push(child);
     } else if (!excludeClasses.some((className) => child.classList.contains(className))) {
       textNodes = textNodes.concat(getTextNodes(child, excludeClasses));
     }
   }
-  console.log({ element }, "returns", { textNodes });
   return textNodes;
 }
 
