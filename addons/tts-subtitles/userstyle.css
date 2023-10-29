@@ -1,0 +1,22 @@
+.sa-tts-subtitles-box {
+  margin-top: 1rem;
+  height: 5rem;
+  /* from .project-description */
+  border: 1px solid var(--darkWww-border-5, #4d97ff1a);
+  border-radius: 8px;
+  background-color: var(--darkWww-blue, #4d97ff1a);
+  padding: 0.5rem;
+  overflow: auto;
+  white-space: pre-line;
+  overflow-wrap: break-word;
+}
+
+.sa-body-editor .sa-tts-subtitles-box {
+  margin-top: 0.5rem;
+  background-color: var(--editorDarkMode-accent, white);
+  border-color: var(--editorDarkMode-border, #00000026);
+}
+
+.sa-tts-subtitles-box:empty {
+  display: none;
+}

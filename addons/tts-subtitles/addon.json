@@ -1,0 +1,31 @@
+{
+  "name": "Text-to-speech subtitles",
+  "description": "Adds subtitles to every project that uses text-to-speech.",
+  "tags": ["community", "projectPage"],
+  "userscripts": [
+    {
+      "matches": ["projects"],
+      "url": "userscript.js"
+    }
+  ],
+  "userstyles": [
+    {
+      "matches": ["projects"],
+      "url": "userstyle.css"
+    }
+  ],
+  "versionAdded": "1.36.0",
+  "info": [
+    {
+      "id": "add-subtitles",
+      "text": "Only people that have this addon enabled will be able to see these subtitles. In your projects, make sure to add subtitles yourself, so that anyone can use these subtitles.",
+      "type": "notice"
+    }
+  ],
+  "credits": [
+    {
+      "link": "https://scratch.mit.edu/users/mybearworld",
+      "name": "mybearworld"
+    }
+  ]
+}
