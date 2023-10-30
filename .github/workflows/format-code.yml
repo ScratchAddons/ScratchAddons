@@ -23,7 +23,7 @@ jobs:
         if: steps.generate-token.outcome == 'success'
         uses: ScratchAddons/prettier_action@master
         with:
-          prettier_options: --write .
+          prettier_options: --write . --end-of-line lf
           commit_message: Format code
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
@@ -32,7 +32,7 @@ jobs:
         if: steps.generate-token.outcome != 'success'
         uses: ScratchAddons/prettier_action@master
         with:
-          prettier_options: --write .
+          prettier_options: --write . --end-of-line lf
           commit_message: Format code
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
