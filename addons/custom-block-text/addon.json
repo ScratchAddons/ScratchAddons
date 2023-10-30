@@ -1,6 +1,6 @@
 {
   "name": "Customizable block text style",
-  "description": "Allows you to adjust the size and thickness of block text or add a shadow to make it easier to read.",
+  "description": "Allows you to adjust the size and font weight of block text or add a shadow to make it easier to read.",
   "tags": ["editor", "codeEditor", "featured"],
   "credits": [
     {
