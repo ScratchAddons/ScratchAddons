@@ -90,6 +90,14 @@ export default async function ({ addon, console, msg }) {
             exportBlock(true);
           },
           separator: false,
+        },
+        {
+          enabled: true,
+          text: msg("copy_all_to_clipboard"),
+          callback: () => {
+            exportBlock(true, "", true);
+          },
+          separator: false,
         }
       );
 
@@ -126,6 +134,14 @@ export default async function ({ addon, console, msg }) {
             exportBlock(true, block);
           },
           separator: false,
+        },
+        {
+          enabled: true,
+          text: msg("copy_selected_to_clipboard"),
+          callback: () => {
+            exportBlock(true, block, true);
+          },
+          separator: false,
         }
       );
 
@@ -134,7 +150,7 @@ export default async function ({ addon, console, msg }) {
     { blocks: true }
   );
 
-  function exportBlock(isExportPNG, block) {
+  function exportBlock(isExportPNG, block, copyToClipboard) {
     let svg;
     if (block) {
       svg = selectedBlocks(isExportPNG, block);
@@ -167,7 +183,7 @@ export default async function ({ addon, console, msg }) {
     if (!isExportPNG) {
       exportData(new XMLSerializer().serializeToString(svg));
     } else {
-      exportPNG(svg);
+      exportPNG(svg, copyToClipboard);
     }
   }
 
@@ -240,7 +256,7 @@ export default async function ({ addon, console, msg }) {
     document.body.removeChild(saveLink);
   }
 
-  function exportPNG(svg) {
+  function exportPNG(svg, copy) {
     const serializer = new XMLSerializer();
 
     const iframe = document.createElement("iframe");
@@ -270,9 +286,19 @@ export default async function ({ addon, console, msg }) {
       const date = new Date();
       const timestamp = `${date.toLocaleDateString()}-${date.toLocaleTimeString()}`;
 
-      link.download = `block_${timestamp}.png`;
-      link.href = dataURL;
-      link.click();
+      if (copy) {
+        addon.tab
+          .copyImage(dataURL)
+          .then(() => console.log("Image successfully copied"))
+          .catch((e) => console.error(`Image could not be copied: ${e}`));
+      }
+
+      if (!copy) {
+        link.download = `block_${timestamp}.png`;
+        link.href = dataURL;
+        link.click();
+      }
+
       iframe.remove();
     };
   }
