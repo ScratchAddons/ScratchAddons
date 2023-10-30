@@ -29,13 +29,15 @@ export default async function ({ addon, console }) {
   // It needs to be on window.Promise for some reason
   // Otherwise, there's an error that when googled yields zero results
   window.Promise._race = Promise.race;
-  window.Promise.race = async (args) => {
-    const result = await Promise._race(args);
-    if (!("url" in result && result.url.startsWith("https://synthesis-service.scratch.mit.edu/synth?"))) {
-      return result;
-    }
-    const text = new URL(result.url).searchParams.get("text");
-    addToSubtitlesBox(text);
+  window.Promise.race = (args) => {
+    const result = Promise._race(args);
+    result.then((result) => {
+      if (!("url" in result && result.url.startsWith("https://synthesis-service.scratch.mit.edu/synth?"))) {
+        return result;
+      }
+      const text = new URL(result.url).searchParams.get("text");
+      addToSubtitlesBox(text);
+    });
     return result;
   };
 }
