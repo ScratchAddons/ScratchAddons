@@ -26,11 +26,9 @@ export default async function ({ addon, console }) {
     subtitleBox.scrollTop = subtitleBox.scrollHeight;
   };
 
-  // It needs to be on window.Promise for some reason
-  // Otherwise, there's an error that when googled yields zero results
-  window.Promise._race = Promise.race;
+  const oldRace = Promise.race;
   window.Promise.race = (args) => {
-    const result = Promise._race(args);
+    const result = oldRace.bind(Promise)(args);
     result.then((result) => {
       if (!("url" in result && result.url.startsWith("https://synthesis-service.scratch.mit.edu/synth?"))) {
         return result;
