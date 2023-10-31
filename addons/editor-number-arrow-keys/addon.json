@@ -18,7 +18,7 @@
     {
       "name": "Change on regular key press",
       "id": "regular",
-      "type": "decimal",
+      "type": "number",
       "default": 1,
       "min": 0,
       "max": 10000000,
@@ -27,7 +27,7 @@
     {
       "name": "Change on Shift+Key",
       "id": "shift",
-      "type": "decimal",
+      "type": "number",
       "default": 10,
       "min": 0,
       "max": 10000000,
@@ -36,7 +36,7 @@
     {
       "name": "Change on Alt+Key",
       "id": "alt",
-      "type": "decimal",
+      "type": "number",
       "default": 0.1,
       "min": 0,
       "max": 10000000,

@@ -4,7 +4,7 @@
     class="addon-setting"
     :class="{
     'boolean-setting': setting.type === 'boolean',
-    'number-setting': setting.type === 'integer' || setting.type === 'positive_integer' || setting.type === 'decimal',
+    'number-setting': setting.type === 'integer' || setting.type === 'positive_integer' || setting.type === 'number',
   }"
   >
     <div class="setting-label-container">
@@ -72,7 +72,7 @@
       </div>
     </template>
     <div v-else class="setting-input-container" :class="{ 'full-radius': tableChild }">
-      <template v-if="setting.type === 'decimal'">
+      <template v-if="setting.type === 'number'">
         <input
           type="number"
           class="setting-input number"
@@ -81,7 +81,7 @@
           :disabled="!addon._enabled"
           :min="setting.min"
           :max="setting.max"
-          :step="setting.step || 0.1"
+          :step="setting.step"
           number
         />
       </template>
