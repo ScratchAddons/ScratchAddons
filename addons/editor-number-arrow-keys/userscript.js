@@ -64,7 +64,7 @@ export default async function ({ addon }) {
   };
 
   const isValidNumber = (numStr) => {
-    if (numStr.length > 100) return false;
+    if (numStr.length > 30) return false;
     try {
       BigInt(numStr.replace(".", ""));
     } catch {
