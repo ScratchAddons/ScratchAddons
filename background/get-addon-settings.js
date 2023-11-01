@@ -156,14 +156,12 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
 
       if (addonId === "editor-number-arrow-keys" && settings.useCustom != null) {
         // Transition v1.35 to v1.36
-        // Remove select settings
-        console.log(settings.useCustom);
+        // Migrate all users away from select settings
         if (settings.useCustom) {
-          settings.regular = Number(settings.regularCustom);
-          settings.shift = Number(settings.shiftCustom);
-          settings.alt = Number(settings.altCustom);
+          settings.regular = settings.regularCustom;
+          settings.shift = settings.shiftCustom;
+          settings.alt = settings.altCustom;
         } else {
-          // This part isn't working
           const conversions = {
             none: 0,
             hundredth: 0.01,
