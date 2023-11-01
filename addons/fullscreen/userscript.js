@@ -56,6 +56,7 @@ export default async function ({ addon, console }) {
         header.classList.remove("stage-header-hover");
       });
 
+      // Pass click events on the phantom header onto the project player, essentially making it click-through
       phantom.addEventListener("mousedown", (e) => {
         if (e.target.classList.contains("phantom-header")) {
           canvas.dispatchEvent(new e.constructor(e.type, e));
