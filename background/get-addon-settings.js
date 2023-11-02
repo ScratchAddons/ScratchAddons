@@ -158,9 +158,9 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
         // Transition v1.35 to v1.36
         // Migrate all users away from select settings
         if (settings.useCustom) {
-          settings.regular = settings.regularCustom;
-          settings.shift = settings.shiftCustom;
-          settings.alt = settings.altCustom;
+          settings.regular = Number(settings.regularCustom);
+          settings.shift = Number(settings.shiftCustom);
+          settings.alt = Number(settings.altCustom);
         } else {
           const conversions = {
             none: 0,
@@ -188,7 +188,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
 
             // cloning required for tables
             settings[option.id] = JSON.parse(JSON.stringify(option.default));
-          } else if (option.type === "positive_integer" || option.type === "integer" || option.type === "number") {
+          } else if (option.type === "positive_integer" || option.type === "integer") {
             // ^ else means typeof can't be "undefined", so it must be number
             if (typeof settings[option.id] !== "number") {
               // This setting was stringified, see #2142
