@@ -68,25 +68,13 @@ export default async function ({ addon, console }) {
       });
 
       // Pass click events on the phantom header onto the project player, essentially making it click-through
-      function redirectEvents(eventNames, source, destination) {
-        [eventNames].forEach((eventName) => {
-          source.addEventListener(eventName, (e) => {
-            if (e.target.classList.contains("phantom-header")) {
-              destination.dispatchEvent(new e.constructor(e.type, e));
-            }
-          });
+      ["mousedown", "mousemove", "mouseup", "touchstart", "touchmove", "touchend", "wheel"].forEach((eventName) => {
+        phantom.addEventListener(eventName, (e) => {
+          if (e.target.classList.contains("phantom-header")) {
+            canvas.dispatchEvent(new e.constructor(e.type, e));
+          }
         });
-      }
-
-      redirectEvents(phantom, canvas, [
-        "mousedown",
-        "mousemove",
-        "mouseup",
-        "touchstart",
-        "touchmove",
-        "touchend",
-        "wheel",
-      ]);
+      });
     } else {
       const header = await addon.tab.waitForElement('[class*="stage-header_stage-header-wrapper"]');
       if (header.parentElement.classList.contains("phantom-header")) {
