@@ -3,6 +3,7 @@ export default async function ({ addon, console }) {
   const createSubtitleBox = async () => {
     subtitleBox?.remove?.();
     if (
+      addon.self.disabled ||
       (addon.tab.editorMode !== "projectpage" && addon.tab.editorMode !== "editor") ||
       (addon.tab.editorMode === "editor" && !addon.settings.get("show-in-editor"))
     ) {
@@ -17,6 +18,8 @@ export default async function ({ addon, console }) {
     player.insertAdjacentElement("afterend", box);
     subtitleBox = box;
   };
+  addon.self.addEventListener("disabled", createSubtitleBox);
+  addon.self.addEventListener("reenabled", createSubtitleBox);
   addon.settings.addEventListener("change", createSubtitleBox);
   addon.tab.addEventListener("urlChange", createSubtitleBox);
   createSubtitleBox();
