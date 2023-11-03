@@ -26,7 +26,7 @@
   "info": [
     {
       "id": "add-subtitles",
-      "text": "Only people that have this addon enabled will be able to see these subtitles. In your projects, make sure to add subtitles yourself, so that anyone can use these subtitles.",
+      "text": "Only users who have this addon enabled will get subtitles. If you want to offer subtitles to all users in your projects, you should include built-in subtitles.",
       "type": "notice"
     }
   ],
