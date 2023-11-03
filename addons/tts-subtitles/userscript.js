@@ -1,7 +1,11 @@
 export default async function ({ addon, console }) {
   let subtitleBox;
   const createSubtitleBox = async () => {
-    if (addon.tab.editorMode !== "projectpage" && addon.tab.editorMode !== "editor") {
+    subtitleBox?.remove?.();
+    if (
+      (addon.tab.editorMode !== "projectpage" && addon.tab.editorMode !== "editor") ||
+      (addon.tab.editorMode === "editor" && !addon.settings.get("show-in-editor"))
+    ) {
       return null;
     }
     const player =
@@ -11,12 +15,11 @@ export default async function ({ addon, console }) {
     const box = document.createElement("div");
     box.classList.add("sa-tts-subtitles-box");
     player.insertAdjacentElement("afterend", box);
-    return box;
+    subtitleBox = box;
   };
-  addon.tab.addEventListener("urlChange", async () => {
-    subtitleBox = await createSubtitleBox();
-  });
-  subtitleBox = await createSubtitleBox();
+  addon.settings.addEventListener("change", createSubtitleBox);
+  addon.tab.addEventListener("urlChange", createSubtitleBox);
+  createSubtitleBox();
 
   const addToSubtitlesBox = (text) => {
     if (!subtitleBox) {
