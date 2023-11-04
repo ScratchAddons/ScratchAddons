@@ -51,9 +51,9 @@ export function getPostText(id, post, selection) {
 
 export function getIDLink(id, name, addSpace) {
   return (
-    (markdownForumsAddon?.self?.disabled
-      ? `[url=https://scratch.mit.edu/discuss/post/${id}/]${name}[/url]`
-      : `[${name}](https://scratch.mit.edu/discuss/post/${id}/)`) + (addSpace ? " " : "")
+    (markdownForumsAddon && !markdownForumsAddon.self.disabled
+      ? `[${name}](https://scratch.mit.edu/discuss/post/${id}/)`
+      : `[url=https://scratch.mit.edu/discuss/post/${id}/]${name}[/url]`) + (addSpace ? " " : "")
   );
 }
 
@@ -210,17 +210,17 @@ function setup() {
     const idLink = getIDLink(id.substring(1), post["0"].querySelector(".box-head > .conr").textContent, false);
     const idText =
       !forumIdAddon?.self?.disabled && forumIdAddon?.settings?.get?.("auto_add")
-        ? markdownForumsAddon?.self?.disabled
-          ? `[small](${idLink})[/small]`
-          : `(${idLink})`
+        ? markdownForumsAddon && !markdownForumsAddon.self.disabled
+          ? `(${idLink})`
+          : `[small](${idLink})[/small]`
         : "";
     const quoteText = (text) => {
-      return markdownForumsAddon?.self?.disabled
-        ? `[quote=${username}]${idText}\n${text}\n[/quote]\n`
-        : `> **${username} wrote:**\n> ${idText}\n> \`\`\`raw-bbcode\n${text
+      return markdownForumsAddon && !markdownForumsAddon.self.disabled
+        ? `> **${username} wrote:**\n> ${idText}\n> \`\`\`raw-bbcode\n${text
             .split("\n")
             .map((line) => `> ${line}`)
-            .join("\n")}\n> \`\`\``;
+            .join("\n")}\n> \`\`\``
+        : `[quote=${username}]${idText}\n${text}\n[/quote]\n`;
     };
     getPostText(id, post[0], window.getSelection()).then((text) => {
       paste(quoteText(text));
