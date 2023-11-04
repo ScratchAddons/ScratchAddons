@@ -1,6 +1,14 @@
-export const options = {
-  breaks: true,
-  gfm: true,
+import { marked } from "../../libraries/thirdparty/cs/marked.esm.js";
+
+export const toBBCode = (markdown) => {
+  try {
+    return { success: true, bbcode: marked.parse(markdown, options) };
+  } catch (e) {
+    return { success: false, message: e.message.split("\n")[0] };
+  }
+};
+
+const options = {
   renderer: {
     code(code, infostring) {
       return infostring === "scratchblocks"
