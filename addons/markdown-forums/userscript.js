@@ -10,7 +10,8 @@ export default async function ({ msg, console }) {
       bbcode = marked.parse(body.value, options);
     } catch (error) {
       e.preventDefault();
-      alert(msg(error.message));
+      alert(msg(error.message.split("\n")[0]));
+      return;
     }
     body.value = bbcode;
   });
