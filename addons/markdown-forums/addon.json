@@ -21,5 +21,7 @@
       "link": "https://scratch.mit.edu/users/mybearworld"
     }
   ],
-  "libraries": ["marked"]
+  "libraries": ["marked"],
+  "dynamicDisable": true,
+  "dynamicEnable": true
 }
