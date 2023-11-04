@@ -27,6 +27,9 @@ const options = {
       if (html === "<br>") {
         return "\n";
       }
+      if (html.startsWith("<!--")) {
+        return "";
+      }
       return html;
     },
     heading(text, level) {
