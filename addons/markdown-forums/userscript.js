@@ -5,6 +5,10 @@ export default async function ({ addon, msg, console }) {
   const body = document.querySelector("#id_body");
   const submitButton = document.querySelector(".form-submit button");
 
+  body.addEventListener("input", () => {
+    console.log(toBBCode(body.value));
+  });
+
   submitButton.addEventListener("click", (e) => {
     if (addon.self.disabled) {
       return;
@@ -17,6 +21,8 @@ export default async function ({ addon, msg, console }) {
     }
     body.value = bbcode.bbcode;
   });
+
+  document.querySelector(".markItUpButton1");
 
   setupMarkdownForums(addon);
 }

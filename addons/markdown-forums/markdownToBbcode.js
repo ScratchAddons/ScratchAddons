@@ -40,7 +40,7 @@ const options = {
       return checked ? "☑" : "☐";
     },
     paragraph(text) {
-      return `${text}\n\n`;
+      return `${text}\n`;
     },
     table() {
       throw new Error("no-tables");
