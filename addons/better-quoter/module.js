@@ -50,7 +50,11 @@ export function getPostText(id, post, selection) {
 }
 
 export function getIDLink(id, name, addSpace) {
-  return `[url=https://scratch.mit.edu/discuss/post/${id}/]${name}[/url]${addSpace ? " " : ""}`;
+  return (
+    (markdownForumsAddon?.self?.disabled
+      ? `[url=https://scratch.mit.edu/discuss/post/${id}/]${name}[/url]`
+      : `[${name}](https://scratch.mit.edu/discuss/post/${id}/)`) + (addSpace ? " " : "")
+  );
 }
 
 function getSelectionBBCode(selection) {
@@ -203,18 +207,17 @@ function setup() {
   window.copy_paste = function (id) {
     const post = $("#" + id);
     const username = post.find(".username").text();
+    const idLink = getIDLink(id.substring(1), post["0"].querySelector(".box-head > .conr").textContent, false);
     const idText =
       !forumIdAddon?.self?.disabled && forumIdAddon?.settings?.get?.("auto_add")
-        ? `[small](${getIDLink(
-            id.substring(1),
-            post["0"].querySelector(".box-head > .conr").textContent,
-            false
-          )})[/small]`
+        ? markdownForumsAddon?.self?.disabled
+          ? `[small](${idLink})[/small]`
+          : `(${idLink})`
         : "";
     const quoteText = (text) => {
       return markdownForumsAddon?.self?.disabled
         ? `[quote=${username}]${idText}\n${text}\n[/quote]\n`
-        : `> **${username} wrote:**\n> \`\`\`raw-bbcode\n${text
+        : `> **${username} wrote:**\n> ${idText}\n> \`\`\`raw-bbcode\n${text
             .split("\n")
             .map((line) => `> ${line}`)
             .join("\n")}\n> \`\`\``;
