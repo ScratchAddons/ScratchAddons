@@ -23,6 +23,12 @@ const options = {
         ? `[quote ${author[1]}]${quote.split("\n").slice(1).join("\n")}[/quote]`
         : `[quote]${quote}[/quote]\n`;
     },
+    html(html) {
+      if (html === "<br>") {
+        return "\n";
+      }
+      return html;
+    },
     heading(text, level) {
       const { open, close } = HEADING_LEVELS[level];
       return `${open}${text}${close}\n`;
