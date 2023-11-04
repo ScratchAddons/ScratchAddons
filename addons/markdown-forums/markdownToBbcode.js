@@ -63,7 +63,7 @@ const options = {
     br() {
       return "\n";
     },
-    delete(text) {
+    del(text) {
       return `[s]${text}[/s]`;
     },
     link(href, title, text) {
