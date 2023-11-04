@@ -1,4 +1,4 @@
-import { marked } from "../../libraries/common/cs/marked.esm.js";
+import { marked } from "../../libraries/thirdparty/cs/marked.esm.js";
 import { options } from "./markdownToBbcode.js";
 
 export default async function ({ msg, console }) {
