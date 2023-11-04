@@ -1,7 +1,8 @@
 import { marked } from "../../libraries/thirdparty/cs/marked.esm.js";
+import { setupMarkdownForums } from "../better-quoter/module.js";
 import { options } from "./markdownToBbcode.js";
 
-export default async function ({ msg, console }) {
+export default async function ({ addon, msg, console }) {
   const body = document.querySelector("#id_body");
   const submitButton = document.querySelector(".form-submit button");
   submitButton.addEventListener("click", (e) => {
@@ -15,4 +16,6 @@ export default async function ({ msg, console }) {
     }
     body.value = bbcode;
   });
+
+  setupMarkdownForums(addon);
 }

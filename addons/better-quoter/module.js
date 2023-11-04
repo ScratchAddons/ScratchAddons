@@ -1,12 +1,20 @@
 /* global $, paste */
 
 let forumIdAddon = null;
+let markdownForumsAddon = null;
 let betterQuoterAddon = null;
 let isSetup = false;
 
 export function setupForumId(addon) {
   if (!forumIdAddon) {
     forumIdAddon = addon;
+  }
+  setup();
+}
+
+export function setupMarkdownForums(addon) {
+  if (!markdownForumsAddon) {
+    markdownForumsAddon = addon;
   }
   setup();
 }
@@ -203,8 +211,16 @@ function setup() {
             false
           )})[/small]`
         : "";
+    const quoteText = (text) => {
+      return markdownForumsAddon?.self?.disabled
+        ? `[quote=${username}]${idText}\n${text}\n[/quote]\n`
+        : `> **${username} wrote:**\n> \`\`\`raw-bbcode\n${text
+            .split("\n")
+            .map((line) => `> ${line}`)
+            .join("\n")}\n> \`\`\``;
+    };
     getPostText(id, post[0], window.getSelection()).then((text) => {
-      paste(`[quote=${username}]${idText}\n${text}\n[/quote]\n`);
+      paste(quoteText(text));
     });
   };
 }
