@@ -59,7 +59,7 @@ export const options = {
       return `[s]${text}[/s]`;
     },
     link(href, title, text) {
-      return `[a ${href}]${text}[/a]`;
+      return `[url ${href}]${text}[/url]`;
     },
     image(href, title, text) {
       return `[img ${href}]${text ? `\n[small][i]${text}[/i][/small]` : ""}`;
