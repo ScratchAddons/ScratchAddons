@@ -131,6 +131,7 @@ export default async function ({ addon, msg, console }) {
       classPrefix: "sa-markdown-forums-",
     })
   );
+  document.querySelector(".markItUpButton15").classList.add("sa-markdown-forums-original");
 
   setupMarkdownForums(addon);
 }
