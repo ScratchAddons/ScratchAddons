@@ -36,7 +36,7 @@ export const createDropdown = (name, msg, buttons, classPrefix = "sa-forum-toolb
  * 3) use promptTag/promptContent along with tag - useful for inserting a tag with parameter e.g. [url]
  * 4) use callback - useful if you're not inserting
  * This assumes that the name (and prompt-name if applicable) are messages that
- * exist.
+ * exist, or that nameMessage or promptMessage are given.
  */
 export const createButton = (
   name,
@@ -50,6 +50,8 @@ export const createButton = (
     callback,
     defaultSelection,
     msg,
+    nameMessage,
+    promptMessage,
     classPrefix = "sa-forum-toolbar-",
   }
 ) => {
@@ -58,7 +60,7 @@ export const createButton = (
   liTag.classList.add("markItUpButton");
   liTag.classList.add(classPrefix + name);
   liTag.dataset.name = name;
-  const buttonName = msg(name);
+  const buttonName = nameMessage || msg(name);
   const aTag = Object.assign(document.createElement("a"), {
     href: "#",
     textContent: buttonName,
@@ -71,13 +73,16 @@ export const createButton = (
       cw = closeWith,
       rw = replaceWith;
     if (promptTag) {
-      const value = prompt(msg("prompt-" + name), defaultSelection ? getSelection(textBox).trim() : undefined);
+      const value = prompt(
+        promptMessage || msg("prompt-" + name),
+        defaultSelection ? getSelection(textBox).trim() : undefined
+      );
       if (value !== null) {
         ow = `[${tag}${value ? `=${value}` : ""}]`;
         cw = `[/${tag}]`;
       }
     } else if (promptContent) {
-      const value = getSelection(textBox) || prompt(msg("prompt-" + name));
+      const value = getSelection(textBox) || prompt(promptMessage || msg("prompt-" + name));
       if (value !== null) rw = `[${tag}]${value}[/${tag}]`;
     }
     if (typeof rw === "string") {

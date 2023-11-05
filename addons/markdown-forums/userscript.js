@@ -38,7 +38,7 @@ export default async function ({ addon, msg, console }) {
     createButton("bold", {
       openWith: "**",
       closeWith: "**",
-      msg,
+      nameMessage: "Bold [Ctrl+B]",
       classPrefix: "sa-markdown-forums-",
     })
   );
