@@ -22,7 +22,5 @@ export default async function ({ addon, msg, console }) {
     body.value = bbcode.bbcode;
   });
 
-  document.querySelector(".markItUpButton1");
-
   setupMarkdownForums(addon);
 }
