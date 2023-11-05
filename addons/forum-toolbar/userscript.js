@@ -59,9 +59,7 @@ export default async ({ addon, console, msg }) => {
 
   appendDropdown(
     "forumToolbarLinkDecoration",
-    createDropdown(
-      "link",
-      msg,
+    createDropdown("link", msg, [
       createButton("wp", {
         tag: "wp",
         promptTag: true,
@@ -85,8 +83,8 @@ export default async ({ addon, console, msg }) => {
         promptTag: true,
         defaultSelection: true,
         msg,
-      })
-    ),
+      }),
+    ]),
     2
   );
 

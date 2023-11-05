@@ -1,10 +1,10 @@
 import { insert, wrapSelection, getSelection } from "../../libraries/thirdparty/cs/text-field-edit.js";
 
-export const createDropdown = (name, msg, ...buttons) => {
+export const createDropdown = (name, msg, buttons, classPrefix = "sa-forum-toolbar-") => {
   const liTag = document.createElement("li");
   liTag.classList.add("markItUpButton");
   liTag.classList.add("markItUpDropMenu");
-  liTag.classList.add("sa-forum-toolbar-" + name);
+  liTag.classList.add(classPrefix + name);
   liTag.dataset.name = name;
   const buttonName = msg(name);
   const aTag = Object.assign(document.createElement("a"), {
@@ -40,11 +40,22 @@ export const createDropdown = (name, msg, ...buttons) => {
  */
 export const createButton = (
   name,
-  { openWith, replaceWith, closeWith, tag, promptTag, promptContent, callback, defaultSelection, msg }
+  {
+    openWith,
+    replaceWith,
+    closeWith,
+    tag,
+    promptTag,
+    promptContent,
+    callback,
+    defaultSelection,
+    msg,
+    classPrefix = "sa-forum-toolbar-",
+  }
 ) => {
   const liTag = document.createElement("li");
   liTag.classList.add("markItUpButton");
-  liTag.classList.add("sa-forum-toolbar-" + name);
+  liTag.classList.add(classPrefix + name);
   liTag.dataset.name = name;
   const buttonName = msg(name);
   const aTag = Object.assign(document.createElement("a"), {
