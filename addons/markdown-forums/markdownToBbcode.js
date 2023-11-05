@@ -105,10 +105,10 @@ const options = {
 };
 
 const HEADING_LEVELS = {
-  1: { open: "[big][b][u]", close: "[/u][/b][/big]" },
-  2: { open: "[big][b]", close: "[/b][/big]" },
+  1: { open: "[big][b]", close: "[/b][/big]" },
+  2: { open: "[big][u]", close: "[/u][/big]" },
   3: { open: "[big]", close: "[/big]" },
   4: { open: "[b][u]", close: "[/u][/b]" },
-  5: { open: "[b]", close: "[/b]" },
-  6: { open: "", close: "" },
+  5: { open: "[u]", close: "[/u]" },
+  6: { open: "[b]", close: "[/b]" },
 };
