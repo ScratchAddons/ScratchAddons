@@ -25,8 +25,8 @@ export default async function ({ addon, msg, console }) {
 
   const replace = (query, button) => {
     const element = document.querySelector(query);
-    element.classList.add("sa-markdown-forums-original");
     button.classList.add(...element.classList);
+    element.classList.add("sa-markdown-forums-original");
     element.insertAdjacentElement("afterend", button);
     addon.tab.displayNoneWhileDisabled(button);
   };
