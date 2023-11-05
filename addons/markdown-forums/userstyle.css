@@ -1,3 +1,7 @@
 #id_body {
   font-family: monospace;
 }
+
+.sa-markdown-forums-original {
+  display: none;
+}

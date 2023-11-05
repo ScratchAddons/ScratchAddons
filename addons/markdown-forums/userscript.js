@@ -1,4 +1,5 @@
 import { setupMarkdownForums } from "../better-quoter/module.js";
+import { createButton } from "../forum-toolbar/lib.js";
 import { toBBCode } from "./markdownToBbcode.js";
 
 export default async function ({ addon, msg, console }) {
@@ -21,6 +22,26 @@ export default async function ({ addon, msg, console }) {
     }
     body.value = bbcode.bbcode;
   });
+
+  const replace = (query, button) => {
+    const element = document.querySelector(query);
+    element.classList.add("sa-markdown-forums-original");
+    button.classList.add(...element.classList);
+    element.insertAdjacentElement("afterend", button);
+    addon.tab.displayNoneWhileDisabled(button);
+  };
+
+  await addon.tab.waitForElement(".markItUpButton16");
+
+  replace(
+    ".markItUpButton1",
+    createButton("bold", {
+      openWith: "**",
+      closeWith: "**",
+      msg,
+      classPrefix: "sa-markdown-forums-",
+    })
+  );
 
   setupMarkdownForums(addon);
 }

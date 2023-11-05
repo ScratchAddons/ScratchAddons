@@ -53,6 +53,7 @@ export const createButton = (
     classPrefix = "sa-forum-toolbar-",
   }
 ) => {
+  const textBox = document.querySelector(".markItUpEditor");
   const liTag = document.createElement("li");
   liTag.classList.add("markItUpButton");
   liTag.classList.add(classPrefix + name);
