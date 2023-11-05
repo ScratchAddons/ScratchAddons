@@ -58,32 +58,37 @@ export default async ({ addon, console, msg }) => {
 
   appendDropdown(
     "forumToolbarLinkDecoration",
-    createDropdown("link", msg, [
-      createButton("wp", {
-        tag: "wp",
-        promptTag: true,
-        defaultSelection: true,
-        msg,
-      }),
-      createButton("wiki", {
-        tag: "wiki",
-        promptTag: true,
-        defaultSelection: true,
-        msg,
-      }),
-      createButton("google", {
-        tag: "google",
-        promptTag: true,
-        defaultSelection: true,
-        msg,
-      }),
-      createButton("dictionary", {
-        tag: "dictionary",
-        promptTag: true,
-        defaultSelection: true,
-        msg,
-      }),
-    ]),
+    createDropdown(
+      "link",
+      msg,
+      [
+        createButton("wp", {
+          tag: "wp",
+          promptTag: true,
+          defaultSelection: true,
+          msg,
+        }),
+        createButton("wiki", {
+          tag: "wiki",
+          promptTag: true,
+          defaultSelection: true,
+          msg,
+        }),
+        createButton("google", {
+          tag: "google",
+          promptTag: true,
+          defaultSelection: true,
+          msg,
+        }),
+        createButton("dictionary", {
+          tag: "dictionary",
+          promptTag: true,
+          defaultSelection: true,
+          msg,
+        }),
+      ],
+      "forumToolbar"
+    ),
     2
   );
 

@@ -1,12 +1,12 @@
 import { insert, wrapSelection, getSelection } from "../../libraries/thirdparty/cs/text-field-edit.js";
 
-export const createDropdown = (name, msg, buttons, classPrefix = "sa-forum-toolbar-") => {
+export const createDropdown = (name, msg, buttons, displayOnSetting = null, classPrefix = "sa-forum-toolbar-") => {
   const liTag = document.createElement("li");
   liTag.classList.add("markItUpButton");
   liTag.classList.add("markItUpDropMenu");
   liTag.classList.add(classPrefix + name);
   liTag.dataset.name = name;
-  const buttonName = msg(name);
+  const buttonName = typeof msg === "function" ? msg(name) : msg;
   const aTag = Object.assign(document.createElement("a"), {
     href: "#",
     textContent: buttonName,
@@ -16,7 +16,9 @@ export const createDropdown = (name, msg, buttons, classPrefix = "sa-forum-toolb
   const ulTag = document.createElement("ul");
   ulTag.hidden = true;
   buttons.forEach((button) => {
-    button.style.display = `var(--forumToolbar-${button.dataset.name}, none)`;
+    if (displayOnSetting !== null) {
+      button.style.display = `var(--${displayOnSetting}-${button.dataset.name}, none)`;
+    }
     ulTag.append(button);
   });
   liTag.addEventListener("click", (e) => e.preventDefault());
@@ -47,6 +49,7 @@ export const createButton = (
     tag,
     promptTag,
     promptContent,
+    promptText,
     callback,
     defaultSelection,
     msg,
@@ -84,6 +87,9 @@ export const createButton = (
     } else if (promptContent) {
       const value = getSelection(textBox) || prompt(promptMessage || msg("prompt-" + name));
       if (value !== null) rw = `[${tag}]${value}[/${tag}]`;
+    } else if (promptText) {
+      const value = getSelection(textBox) || prompt(promptMessage || msg("prompt-" + name));
+      if (value !== null) rw = `${openWith}${value}${closeWith}`;
     }
     if (typeof rw === "string") {
       insert(textBox, rw);
