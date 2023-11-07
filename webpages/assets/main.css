@@ -111,22 +111,22 @@ h1 {
   vertical-align: bottom;
 }
 
-.clear-button {
-  padding-inline: 7px !important;
-  border-radius: 0 4px 4px 0 !important;
-  border-inline-start: none !important;
+.large-button.clear-button {
+  padding-inline: 7px;
+  border-radius: 0 4px 4px 0;
+  border-inline-start: none;
 }
 
-[dir="rtl"] .clear-button {
-  border-radius: 4px 0 0 4px !important;
+[dir="rtl"] .large-button.clear-button {
+  border-radius: 4px 0 0 4px;
 }
-.number-setting .clear-button {
-  border-radius: 0 16px 16px 0 !important;
+.number-setting .large-button.clear-button {
+  border-radius: 0 16px 16px 0;
 }
-[dir="rtl"] .number-setting .clear-button {
-  border-radius: 16px 0 0 16px !important;
+[dir="rtl"] .number-setting .large-button.clear-button {
+  border-radius: 16px 0 0 16px;
 }
-.clear-button .icon-type {
+.large-button.clear-button .icon-type {
   margin: 0;
 }
 
@@ -418,17 +418,17 @@ div.vacp-color-picker {
   width: max-content;
   z-index: 2;
   top: 32px;
-  background-color: var(--button-background) !important;
-  color: var(--content-text) !important;
+  background-color: var(--button-background);
+  color: var(--content-text);
 }
 input.vacp-color-input {
-  background: var(--input-background) !important;
+  background: var(--input-background);
   border-radius: 16px;
-  border: 1px solid var(--control-border) !important;
+  border: 1px solid var(--control-border);
 }
 button.vacp-copy-button, button.vacp-format-switch-button {
-    background: var(--button-background)!important;
-    color: var(--content-text)!important;
+    background: var(--button-background);
+    color: var(--content-text);
 }
 
 
