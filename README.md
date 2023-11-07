@@ -62,7 +62,7 @@ Other open-source projects (such as Scratch forks) can also make use of the addo
 
 ## Installation
 
-No building is required. The best way to download the source is with Git:
+For settings page development see [/webpages/README.md](https://github.com/ScratchAddons/ScratchAddons/tree/master/webpages#readme), otherwise no building is required. The best way to download the source is with Git:
 
 ```sh
 git clone https://github.com/ScratchAddons/ScratchAddons.git
