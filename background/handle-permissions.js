@@ -5,7 +5,7 @@ const onPermissionsRevoked = () => {
   console.error("Site access is not granted.");
   chrome.tabs.create({
     active: true,
-    url: "/webpages/settings/permissions.html",
+    url: "/webpages/dist/permissions.html",
   });
 };
 
