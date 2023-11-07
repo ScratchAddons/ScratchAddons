@@ -114,9 +114,8 @@ h1 {
 .large-button.clear-button {
   padding-inline: 7px;
   border-radius: 0 4px 4px 0;
-  border-inline-start: none;
+  border-inline-start: none !important;
 }
-
 [dir="rtl"] .large-button.clear-button {
   border-radius: 4px 0 0 4px;
 }
@@ -355,7 +354,6 @@ body.iframe .search-box input {
 }
 
 
-
 button.setting-input.color {
   width: 100px;
   transition: border-radius 0.2s ease;
@@ -382,7 +380,6 @@ button.setting-input.color.open {
 .color-container .setting-input.color {
   cursor: pointer;
 }
-
 
 .action-disabled {
   pointer-events: none;
@@ -430,6 +427,3 @@ button.vacp-copy-button, button.vacp-format-switch-button {
     background: var(--button-background);
     color: var(--content-text);
 }
-
-
-
