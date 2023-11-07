@@ -1,0 +1,18 @@
+html {
+  font-size: 20px;
+  background-color: white;
+}
+
+#browser-info {
+  font-style: italic;
+}
+
+#problem-details {
+  font-family: monospace;
+}
+
+#restart-url {
+  display: inline-block;
+  margin: 0 6px 0 6px;
+  font-family: monospace;
+}

@@ -128,12 +128,12 @@ export default {
       });
       this.popups = popupObjects;
       chrome.storage.local.get("lastSelectedPopup", ({ lastSelectedPopup }) => {
-        let id = 0;
+        let id = -1;
         if (typeof lastSelectedPopup === "string") {
           id = this.popups.findIndex((popup) => popup._addonId === lastSelectedPopup);
-          if (id === -1) id = 0;
         }
-        this.setPopup(this.popups[id]);
+        if (id !== -1) this.setPopup(this.popups[id]);
+        else this.setPopup(this.popups.find((p) => p._addonId === "__settings__"));
       });
     });
 

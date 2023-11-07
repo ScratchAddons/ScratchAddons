@@ -100,6 +100,19 @@
 [class*="sprite-info_column_"] {
   margin-inline-end: 1rem;
 }
+[class*="sprite-info_group"]:last-child,
+[class*="sprite-info_column_"]:last-child {
+  margin-inline-end: 0;
+}
+[class*="sprite-info_column_"],
+[class*="label_input-group-column_"] {
+  flex-direction: row;
+  align-items: center;
+}
+[class*="sprite-info_column_"] span,
+[class*="label_input-group-column_"] span {
+  margin-bottom: 0;
+}
 [class*="sprite-info_icon-wrapper"] {
   width: 1.5rem;
   height: 1.5rem;
@@ -123,9 +136,14 @@
 [class*="gui_body-wrapper_"] [class*="stage-selector_is-selected_"] {
   box-shadow: 0px 0px 0px 2px var(--editorDarkMode-primary-transparent35, hsl(260deg 60% 60% / 35%));
 }
-[class*="input_input-small"],
-[class*="sprite-info_larger-input"] input {
+[class*="input_input-small"][type="text"],
+[class*="sprite-info_larger-input"] input[type="text"] {
+  /* Vanilla is width:4rem */
   width: 2.5rem;
+}
+[class*="input_input-small"][type="number"] {
+  /* Vanilla is width:4rem but browsers take part of it for the up/down arrows */
+  width: 3.5rem;
 }
 
 [class*="sprite-selector_scroll-wrapper"] {
@@ -261,7 +279,7 @@ button[class*="action-menu_more-button"] {
 }
 
 /* Code tab */
-[class*="gui_tab-panel"]:not(.sa-columns) .scratchCategoryMenuItem {
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .scratchCategoryMenuItem {
   padding: 0.25rem 0;
 }
 .scratchCategoryItemBubble,
@@ -270,14 +288,14 @@ button[class*="action-menu_more-button"] {
   height: 1rem;
   background-size: 1rem 1rem;
 }
-[class*="gui_tab-panel"]:not(.sa-columns) .blocklyToolboxDiv {
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxDiv {
   height: calc(100% - 2rem) !important;
   scrollbar-width: none;
 }
-[class*="gui_tab-panel"]:not(.sa-columns) .blocklyToolboxDiv::-webkit-scrollbar {
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] .blocklyToolboxDiv::-webkit-scrollbar {
   display: none;
 }
-[class*="gui_tab-panel"]:not(.sa-columns) [class*="gui_extension-button-container_"] {
+body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-button-container_"] {
   height: 2rem;
 }
 

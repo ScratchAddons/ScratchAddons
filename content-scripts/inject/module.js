@@ -31,9 +31,6 @@ scratchAddons.console = {
   errorForAddon: (addonId) => _realConsole.error.bind(_realConsole, ...consoleOutput(addonId)),
 };
 
-const pendingPromises = {};
-pendingPromises.msgCount = [];
-
 const comlinkIframe1 = document.getElementById("scratchaddons-iframe-1");
 const comlinkIframe2 = document.getElementById("scratchaddons-iframe-2");
 const comlinkIframe3 = document.getElementById("scratchaddons-iframe-3");
@@ -165,35 +162,12 @@ class SharedObserver {
   }
 }
 
-async function requestMsgCount() {
-  let count = null;
-  if (scratchAddons.session.user?.username) {
-    const username = scratchAddons.session.user.username;
-    try {
-      const resp = await fetch(`https://api.scratch.mit.edu/users/${username}/messages/count`);
-      count = (await resp.json()).count || 0;
-    } catch (e) {
-      scratchAddons.console.warn("Could not fetch message count: ", e);
-    }
-  }
-  pendingPromises.msgCount.forEach((resolve) => resolve(count));
-  pendingPromises.msgCount = [];
-}
-
 function onDataReady() {
   const addons = page.addonsWithUserscripts;
 
   scratchAddons.l10n = new Localization(page.l10njson);
 
   scratchAddons.methods = {};
-  scratchAddons.methods.getMsgCount = () => {
-    let promiseResolver;
-    const promise = new Promise((resolve) => (promiseResolver = resolve));
-    pendingPromises.msgCount.push(promiseResolver);
-    // 1 because the array was just pushed
-    if (pendingPromises.msgCount.length === 1) requestMsgCount();
-    return promise;
-  };
   scratchAddons.methods.copyImage = async (dataURL) => {
     return _cs_.copyImage(dataURL);
   };

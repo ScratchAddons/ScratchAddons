@@ -359,7 +359,7 @@ export default class Tab extends Listenable {
    * @type {string}
    */
   get direction() {
-    // https://github.com/LLK/scratch-l10n/blob/master/src/supported-locales.js
+    // https://github.com/scratchfoundation/scratch-l10n/blob/master/src/supported-locales.js
     const rtlLocales = ["ar", "ckb", "fa", "he"];
     const lang = scratchAddons.globalState.auth.scratchLang.split("-")[0];
     return rtlLocales.includes(lang) ? "rtl" : "ltr";
@@ -610,6 +610,23 @@ export default class Tab extends Listenable {
             })()
           );
         },
+        from: () => [],
+        until: () => [],
+      },
+      afterProfileCountry: {
+        element: () =>
+          q(".shared-after-country-space") ||
+          (() => {
+            const wrapper = Object.assign(document.createElement("div"), {
+              className: "shared-after-country-space",
+            });
+
+            wrapper.style.display = "inline-block";
+
+            document.querySelector(".location").appendChild(wrapper);
+
+            return wrapper;
+          })(),
         from: () => [],
         until: () => [],
       },
