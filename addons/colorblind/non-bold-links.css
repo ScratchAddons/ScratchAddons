@@ -12,9 +12,12 @@ input.link:hover,
 input.link:active,
 input.link.black:hover,
 input.link.black:active,
-.news-description h4,
-.slider-carousel .thumb span.title a {
+.news-description h4 {
   font-weight: normal;
+}
+
+.slider-carousel .thumb span.title a {
+  font-weight: normal !important;
 }
 
 /* Exclude */
