@@ -108,12 +108,13 @@ export default async function ({ addon }) {
     // If this is a number input, it will prevent the default browser behavior when pressing up/down in a
     // number input (increase or decrease by 1). If we didn't prevent, the user would be increasing twice.
 
-    let changeBy = e.code === "ArrowUp" ? 1 : -1;
-    changeBy *= e.shiftKey
+    let changeBy = e.shiftKey
       ? addon.settings.get("shift")
       : e.altKey
       ? addon.settings.get("alt")
       : addon.settings.get("regular");
+    if (changeBy.toString().length > 10 || amountOfDecimals(changeBy.toString()) > 5) return;
+    if (e.code === "ArrowDown") changeBy *= -1;
 
     const newValueAsInt =
       shiftDecimalPointToRight(e.target.value, 5) + shiftDecimalPointToRight(changeBy.toString(), 5);
