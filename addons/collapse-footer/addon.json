@@ -1,0 +1,77 @@
+{
+  "name": "Sticky footer",
+  "description": "Makes the website footer stick out slightly from the bottom of the window and makes it expand when hovering over it, allowing it to be quickly accessed from anywhere on the page. Previously part of \"Infinite scolling\".",
+  "credits": [
+    {
+      "name": "Samq64",
+      "link": "https://scratch.mit.edu/users/samq64"
+    },
+    {
+      "name": "ZenithKnight"
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "expandSpeed",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "speed"
+        },
+        "options": {
+          "short": "0.25s",
+          "default": "0.5s",
+          "long": "0.75s"
+        }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Animation speed",
+      "id": "speed",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "short",
+          "name": "Quick"
+        },
+        {
+          "id": "default",
+          "name": "Default"
+        },
+        {
+          "id": "long",
+          "name": "Slow"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "name": "Only on infinite scrolling pages",
+      "id": "infiniteScroll",
+      "type": "boolean",
+      "if": {
+        "addonEnabled": ["infinite-scroll"]
+      },
+      "default": false
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "tags": ["community"],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.35.0"
+}

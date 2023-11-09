@@ -150,7 +150,8 @@ select {
 .modal h2,
 .modal h3,
 .modal h4,
-.profile-box-footer-module h4 {
+.profile-box-footer-module h4,
+.stats li {
   color: var(--darkWww-box-scratchr2HeaderText);
 }
 .box-content label,
@@ -217,7 +218,8 @@ input::placeholder {
 .box-content .icon-xs.black,
 .box-content .icon-sm.black,
 .button.grey .icon-xs.black,
-.button.grey .icon-sm.black {
+.button.grey .icon-sm.black,
+.sa-footer-arrow {
   filter: var(--darkWww-box-eyeFilter);
 }
 .box,
@@ -489,7 +491,7 @@ input.link.black:active,
 .nvd3 .nv-axis line /* statistics */ {
   stroke: var(--darkWww-border);
 }
-#footer /* for infinite scrolling fixed footer */,
+.sa-collapse-footer #footer,
 .thumb img,
 .djangobb blockquote,
 .my-ocular-popup,
