@@ -4,7 +4,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "Most projects will not behave properly when running at different FPS, because increasing the frame rate also increases the speed at which scripts run. This should only be used on projects that support 60FPS.",
+      "text": "Changing the framerate of Scratch projects also affects the rate at which certain code (such as loops) runs, so most projects won't behave properly when run at a different framerate. This addon is meant to be used on projects that are designed to support a higher framerate.",
       "id": "projectRunsFasterNotice"
     }
   ],
