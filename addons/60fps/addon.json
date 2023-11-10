@@ -28,7 +28,7 @@
   ],
   "settings": [
     {
-      "name": "FPS",
+      "name": "Custom frames per second (FPS)",
       "id": "framerate",
       "type": "integer",
       "min": 31,
