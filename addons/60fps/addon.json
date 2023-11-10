@@ -3,11 +3,6 @@
   "description": "Alt+Click the green flag to toggle between Scratch's default 30FPS and a custom framerate.",
   "info": [
     {
-      "type": "info",
-      "text": "The framerate (FPS) determines how many blocks are run per second. For example, running at 60FPS doubles the execution speed.",
-      "id": "fpsExplanation"
-    },
-    {
       "type": "notice",
       "text": "Most projects will not behave properly when running at different FPS, because increasing the frame rate also increases the speed at which scripts run. This should only be used on projects that support 60FPS.",
       "id": "projectRunsFasterNotice"
