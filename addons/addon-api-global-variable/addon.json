@@ -1,0 +1,21 @@
+{
+  "name": "Addon api as global variable",
+  "description": "For development, expose the \"addon\" object as a global variable to enable access within the browser console.",
+  "tags": ["community", "easterEgg"],
+  "credits": [
+    {
+      "name": "valmontechno",
+      "link": "https://scratch.mit.edu/users/valmontechno/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "runAtComplete": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.36.0"
+}

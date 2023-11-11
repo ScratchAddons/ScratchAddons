@@ -66,6 +66,10 @@ export default async function ({ addon, console, msg }) {
     displayName: msg("block-error"),
     callback: ({ content }, thread) => {
       logMessage(content, thread, "error");
+      if (addon.settings.get("fatal_error")) {
+        setPaused(true);
+        setInterfaceVisible(true);
+      }
     },
   });
 
