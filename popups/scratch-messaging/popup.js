@@ -558,8 +558,8 @@ export default async ({ addon, msg, safeMsg }) => {
               resourceType === "project"
                 ? "getProjectObject"
                 : resourceType === "user"
-                ? "getProfileObject"
-                : "getStudioObject";
+                  ? "getProfileObject"
+                  : "getStudioObject";
             const resourceObject = this[resourceGetFunction](resourceId);
             for (const sortedId of sortedIds) resourceObject.commentChains.push(sortedId);
 
