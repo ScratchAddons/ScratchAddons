@@ -272,7 +272,7 @@ function _renderBlock(block, container, parentCategory, isVertical) {
       } else if (blockPart instanceof BlockInputEnum) {
         if (blockPart.isRound) {
           component = createBackedTextedComponent(
-            blockInput?.string ?? blockPart.values[0].string,
+            blockInput.string,
             blockContainer,
             BlockShapes.TextInput,
             categoryClass,
@@ -282,7 +282,7 @@ function _renderBlock(block, container, parentCategory, isVertical) {
           );
         } else {
           component = createBackedTextedComponent(
-            blockInput?.string ?? blockPart.values[0].string,
+            blockInput.string,
             blockContainer,
             BlockShapes.SquareInput,
             categoryClass,

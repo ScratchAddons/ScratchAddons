@@ -427,10 +427,12 @@ export default async function ({ addon, console, msg }) {
       vm.emitWorkspaceUpdate();
     }
     if (!flyout || !toolbox) return;
+    Blockly.Events.disable();
     const flyoutWorkspace = flyout.getWorkspace();
     Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
     toolbox.populate_(workspace.options.languageTree);
     workspace.toolboxRefreshEnabled_ = true;
+    Blockly.Events.enable();
   };
 
   updateColors();
