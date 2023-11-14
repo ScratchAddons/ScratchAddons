@@ -363,7 +363,8 @@
         "sa-color": "#34E4D0",
         "comment-color": "#FEF49C",
         "input-color": "#FFFFFF",
-        "text": "black"
+        "text": "black",
+        "monitors": true
       }
     },
     {
