@@ -418,15 +418,24 @@ export default async ({ addon, msg, safeMsg }) => {
           });
       },
 
-      async updateMessageCount() {
+      async updateMessageCount(bypassCache = false) {
         const username = await addon.auth.fetchUsername();
-        const count = await MessageCache.fetchMessageCount(username);
+        const msgCountData = await MessageCache.fetchMessageCount(username, { bypassCache });
+        const count = await MessageCache.getUpToDateMsgCount(scratchAddons.cookieStoreId, msgCountData);
+
         const db = await MessageCache.openDatabase();
         try {
+          // We obtained the up-to-date message count, so we can safely override the cached count in IDB.
           await db.put("count", count, scratchAddons.cookieStoreId);
+
+          if (!bypassCache && msgCountData.resId && !(db instanceof MessageCache.IncognitoDatabase)) {
+            // Note: as of Oct 2023, this method is never called with bypassCache:false, so this never happens
+            await db.put("count", msgCountData.resId, `${scratchAddons.cookieStoreId}_resId`);
+          }
         } finally {
           await db.close();
         }
+
         chrome.runtime.sendMessage({
           forceBadgeUpdate: { store: scratchAddons.cookieStoreId },
         });
@@ -435,7 +444,7 @@ export default async ({ addon, msg, safeMsg }) => {
       // For UI
       markAsRead() {
         MessageCache.markAsRead(addon.auth.csrfToken)
-          .then(() => this.updateMessageCount())
+          .then(() => this.updateMessageCount(true))
           .then(() => {
             this.markedAsRead = true;
           })
@@ -450,7 +459,7 @@ export default async ({ addon, msg, safeMsg }) => {
               this.stMessages.findIndex((alert) => alert.id === id),
               1
             );
-            this.updateMessageCount();
+            this.updateMessageCount(true);
           })
           .catch((e) => console.error("Dismissing alert failed:", e));
       },
@@ -558,8 +567,8 @@ export default async ({ addon, msg, safeMsg }) => {
               resourceType === "project"
                 ? "getProjectObject"
                 : resourceType === "user"
-                ? "getProfileObject"
-                : "getStudioObject";
+                  ? "getProfileObject"
+                  : "getStudioObject";
             const resourceObject = this[resourceGetFunction](resourceId);
             for (const sortedId of sortedIds) resourceObject.commentChains.push(sortedId);
 
