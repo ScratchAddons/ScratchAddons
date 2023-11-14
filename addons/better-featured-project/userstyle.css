@@ -130,6 +130,7 @@
 }
 .profile-details span {
   display: inline !important;
+  /* 2023: I'm not sure why !important is needed here */
 }
 #lfp-embed {
   position: absolute;

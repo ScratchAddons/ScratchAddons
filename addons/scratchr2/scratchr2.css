@@ -42,7 +42,7 @@ input.link:active,
 input.link.black:hover,
 input.link.black:active {
   color: var(--darkWww-link-hover, #7854c0);
-  text-decoration: none;
+  text-decoration: var(--colorblind-tdecoOverride, none);
 }
 #content {
   padding-top: 70px;
@@ -314,6 +314,7 @@ select:focus {
   height: 33px;
   padding: 13px 15px 4px 15px;
   color: var(--darkWww-navbar-text, white);
+  font-weight: bold; /* Override colorblind/bold-links.css */
   font-size: 13.6px;
   line-height: 24px;
 }
@@ -540,6 +541,7 @@ select:focus {
 }
 #topnav ul.account-nav ul.user-nav li a {
   color: var(--darkWww-navbar-text, white);
+  font-weight: bold; /* Override colorblind/bold-links.css */
   font-size: 13px;
   white-space: normal;
 }

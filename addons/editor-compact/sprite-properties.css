@@ -1,0 +1,15 @@
+/* These styles are in a separate file with "if" to make sure that they aren't applied
+   when sprite-properties is dynamically disabled. */
+.sa-show-sprite-properties [class^="sprite-info_sprite-info_"],
+.sa-sprite-properties-wide-locale.sa-show-sprite-properties [class^="sprite-info_sprite-info_"] {
+  height: calc(5.25rem + 1px);
+}
+.sa-sprite-properties-close-btn {
+  height: 1rem;
+  padding-top: 0.25rem;
+}
+.sa-hide-sprite-properties [class^="sprite-info_sprite-info_"] {
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}

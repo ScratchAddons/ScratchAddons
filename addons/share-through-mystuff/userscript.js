@@ -20,7 +20,29 @@ export default async function ({ addon, console, msg }) {
     event.preventDefault();
     const confirmation = await addon.tab.confirm(msg("confirmation-title"), msg("confirmation"));
     if (confirmation) {
-      event.target.parentElement.querySelector(".media-share").click();
+      const xToken = await addon.auth.fetchXToken();
+      const projectId = event.target
+        .closest(".media-item-content")
+        .querySelector(".media-thumb > a")
+        .href.match(/\d+/)[0];
+
+      const xhrOpen = XMLHttpRequest.prototype.open;
+      XMLHttpRequest.prototype.open = function (method, path, ...args) {
+        const newPath = `https://api.scratch.mit.edu/proxy/projects/${projectId}/share`;
+        xhrOpen.call(this, "PUT", newPath, ...args);
+        // CSRF token header is added by Scratch
+        this.setRequestHeader("x-token", xToken);
+        this.withCredentials = true;
+        this.send = () => {
+          this.setRequestHeader("X-Requested-With", ""); // Do not send this header
+          XMLHttpRequest.prototype.send.call(this); // Send empty body
+        };
+        return undefined;
+      };
+
+      event.target.parentElement.querySelector(".media-share").click(); // .click() is synchronous
+      // By this point, the request has already been sent. Remove traps.
+      XMLHttpRequest.prototype.open = xhrOpen;
     }
   }
 
