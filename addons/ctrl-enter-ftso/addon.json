@@ -1,0 +1,7 @@
+{
+  "name": "Ctrl + Enter to make a variable \"For this sprite only\"",
+  "description": "Yes",
+  "tags": ["editor", "codeEditor"],
+  "versionAdded": "1.35.0",
+  "userscripts": "userscript.js"
+}
