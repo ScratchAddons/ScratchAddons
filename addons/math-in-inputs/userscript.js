@@ -4,22 +4,16 @@ export default async function ({ addon }) {
     return textInInputs ? /^.*$/i : /^[0-9+\-*^/(). ]+$/;
   }
   var loseFocus;
-  // I 100% stole this part of the code from "editor-number-arrow-keys"
-  const isSupportedElement = (el, forChangingType) => {
+  const checkElForTypeChange = (el) => {
+    // These inputs need their type changed
     loseFocus = false;
-    let type = forChangingType ? " input[type=number]" : " input[type=text]";
+    let type = " input[type=number]";
     if (!el.classList) return false;
-    if (el.classList.contains("blocklyHtmlInput") && !forChangingType)
-      return true; // Block inputs do not have a type to change
-    else if (el.matches("[class*=mediaRecorderPopupContent]" + type)) {
+    if (el.matches("[class*=mediaRecorderPopupContent]" + type)) {
       // Number inputs in `mediarecorder` addon modal
       return true;
     } else if (el.matches("[class*=input_input-form_]")) {
-      // The following elements have this in their class list
-      if (el.matches("[class*=input_input-small_]") && !forChangingType) {
-        // Inputs in sprite propeties (exluding sprite name) (type does not need to be changed)
-        return true;
-      } else if (
+      if (
         el.matches("[class*=paint-editor_editor-container-top_]" + type) &&
         !el.matches("[class*=fixed-tools_costume-input_]")
       ) {
@@ -117,9 +111,8 @@ export default async function ({ addon }) {
     return original.apply(this, args);
   };
 
-  function handleParseInput(e, ctrl) {
+  function handleParseInput(e) {
     if (addon.self.disabled) return;
-    if (!isSupportedElement(e.target) && !ctrl) return;
     if (!e.target.value) return;
     const newValue = parseMath(e.target.value);
     Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());
@@ -136,26 +129,16 @@ export default async function ({ addon }) {
     "keydown",
     (e) => {
       if (addon.self.disabled) return;
-      if (e.code === "Enter" || e.code === "NumpadEnter") {
-        // Force math in ANY input if you hold ctrl
-        let ctrlKeyDown = (e.ctrlKey || e.metaKey) && addon.settings.get("ctrlEnter");
-        handleParseInput(e, ctrlKeyDown);
+      if ((e.code === "Enter" || e.code === "NumpadEnter") && (e.ctrlKey || e.metaKey)) {
+        handleParseInput(e);
       }
-    },
-    true
-  );
-  document.addEventListener(
-    "change",
-    (e) => {
-      if (addon.self.disabled) return;
-      handleParseInput(e);
     },
     true
   );
 
   document.body.addEventListener("focusin", function (event) {
     const target = event.target;
-    if (isSupportedElement(target, true)) {
+    if (checkElForTypeChange(target)) {
       target.type = "text";
       const inputLength = target.value?.length ?? 0;
       target.setSelectionRange(inputLength, inputLength);
@@ -164,7 +147,7 @@ export default async function ({ addon }) {
 
   document.body.addEventListener("focusout", function (event) {
     const target = event.target;
-    if (isSupportedElement(target, true)) {
+    if (checkElForTypeChange(target)) {
       target.type = "number";
     }
   });

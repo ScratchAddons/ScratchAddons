@@ -21,16 +21,17 @@
   "enabledByDefault": true,
   "settings": [
     {
-      "name": "Allow text in number inputs",
+      "name": "Allow text in block number inputs",
       "id": "textInInputs",
       "type": "boolean",
       "default": false
-    },
+    }
+  ],
+  "info": [
     {
-      "name": "Allow Ctrl + enter to force evaluation in ANY input",
-      "id": "ctrlEnter",
-      "type": "boolean",
-      "default": false
+      "type": "notice",
+      "text": "Use Ctrl+Enter to evaluate",
+      "id": "ctrlEnter"
     }
   ]
 }
