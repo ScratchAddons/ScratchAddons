@@ -180,17 +180,17 @@
   /* emoji-picker compatibility */
   width: auto;
 }
-#comments #comment-form .control-group.tooltip {
+#comments .control-group.tooltip {
   display: flex;
   flex-direction: column;
 }
-#comments #comment-form .tooltip textarea {
+#comments .control-group.tooltip textarea {
   margin-bottom: 0.5rem;
 }
-#comments #comment-form .tooltip.error textarea {
+#comments .control-group.tooltip.error textarea {
   box-shadow: none;
 }
-#comments #comment-form .tooltip.error #comment-alert {
+#comments .control-group.tooltip.error .hovertext {
   position: static;
   box-shadow: none;
   order: -1;
@@ -202,10 +202,10 @@
   padding: 0.25rem;
   width: 100%;
 }
-#comments #comment-form .tooltip.error textarea:focus + #comment-alert {
+#comments .control-group.tooltip.error textarea:focus + .hovertext {
   display: block !important;
 }
-#comments #comment-form .tooltip.error #comment-alert::after,
-#comments #comment-form .tooltip.error .arrow {
+#comments .control-group.tooltip.error .hovertext::after,
+#comments .control-group.tooltip.error .arrow {
   display: none;
 }
