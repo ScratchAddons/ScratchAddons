@@ -1,3 +1,5 @@
+import { shiftDecimalPointToRight, shiftDecimalPointToLeft } from "../../libraries/common/cs/math-on-decimals.js";
+
 export default async function ({ addon }) {
   const settings = {
     none: 0,
@@ -11,40 +13,6 @@ export default async function ({ addon }) {
   const amountOfDecimals = (numStr) => {
     if (!numStr.includes(".")) return 0;
     return numStr.toString().split(".")[1].length;
-  };
-
-  const shiftDecimalPointToRight = (num, times) => {
-    const isNumberNegative = num[0] === "-";
-    let numStr = isNumberNegative ? num.substring(1) : num;
-    for (let i = 0; i < times; i++) {
-      if (numStr.indexOf(".") === -1) numStr += 0;
-      else if (numStr.indexOf(".") === numStr.length - 2) numStr = numStr.replace(".", "");
-      else {
-        const index = numStr.indexOf(".");
-        const numArrFiltered = Array.from(numStr.replace(".", ""));
-        numArrFiltered.splice(index + 1, 0, ".");
-        numStr = numArrFiltered.join("");
-      }
-    }
-    return Number(numStr) * (isNumberNegative ? -1 : 1);
-  };
-  const shiftDecimalPointToLeft = (num, times) => {
-    const isNumberNegative = num[0] === "-";
-    let numStr = isNumberNegative ? num.substring(1) : num;
-    for (let i = 0; i < times; i++) {
-      if (numStr.indexOf(".") === 0) numStr = ".0" + numStr.substring(1);
-      else if (numStr.indexOf(".") === -1) {
-        const numArr = Array.from(numStr);
-        numArr.splice(numArr.length - 1, 0, ".");
-        numStr = numArr.join("");
-      } else {
-        const index = numStr.indexOf(".");
-        const numArrFiltered = Array.from(numStr.replace(".", ""));
-        numArrFiltered.splice(index - 1, 0, ".");
-        numStr = numArrFiltered.join("");
-      }
-    }
-    return Number(numStr) * (isNumberNegative ? -1 : 1);
   };
 
   const normalizeNumber = (numStr) => {
@@ -150,9 +118,8 @@ export default async function ({ addon }) {
         : settings[addon.settings.get("regular")];
     }
 
-    const newValueAsInt =
-      shiftDecimalPointToRight(e.target.value, 5) + shiftDecimalPointToRight(changeBy.toString(), 5);
-    const newValue = shiftDecimalPointToLeft(newValueAsInt.toString(), 5);
+    const newValueAsInt = shiftDecimalPointToRight(e.target.value, 5) + shiftDecimalPointToRight(changeBy, 5);
+    const newValue = shiftDecimalPointToLeft(newValueAsInt, 5);
 
     if (e.target.className.includes("input_input-form_")) {
       Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());

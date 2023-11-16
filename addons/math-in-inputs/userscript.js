@@ -1,3 +1,5 @@
+import { shiftDecimalPointToRight, shiftDecimalPointToLeft } from "../../libraries/common/cs/math-on-decimals.js";
+
 export default async function ({ addon }) {
   function getRegexFromSettings() {
     let textInInputs = addon.settings.get("textInInputs");
@@ -61,32 +63,53 @@ export default async function ({ addon }) {
         return evaluate(newExpr);
       } else if (exp.test(expr)) {
         let newExpr = expr.replace(exp, function (match, base, pow) {
-          return Math.pow(Number(base), Number(pow));
+          /*
+          Fixing floating point errors on exponents is very hard
+          This code does in fact fix them for the base being a decimal,
+          but not the exponent. I can not think of a better solution,
+          so for now, just ignore the errors
+          */
+          const isNonZeroDecimalPow = /^\d*\.\d*[1-9]\d*$|^\d*\.$/.test(pow);
+
+          if (isNonZeroDecimalPow) {
+            return shiftDecimalPointToLeft(Math.pow(Number(shiftDecimalPointToRight(base, 5)), pow), 5 * pow);
+          } else {
+            return Math.pow(Number(base), Number(pow));
+          }
         });
         return evaluate(newExpr);
       } else if (expAlt.test(expr)) {
         let newExpr = expr.replace(expAlt, function (match, base, pow) {
-          return Math.pow(Number(base), Number(pow));
+          // Check if pow is a number with a dot and not equal to zero
+          const isNonZeroDecimalPow = /^\d*\.\d*[1-9]\d*$|^\d*\.$/.test(pow);
+
+          if (isNonZeroDecimalPow) {
+            return shiftDecimalPointToLeft(Math.pow(Number(shiftDecimalPointToRight(base, 5)), pow), 5 * pow);
+          } else {
+            return Math.pow(Number(base), Number(pow));
+          }
         });
         return evaluate(newExpr);
       } else if (mul.test(expr)) {
         let newExpr = expr.replace(mul, function (match, a, b) {
-          return Number(a) * Number(b);
+          // The decimal point needs to be shifted to the left double that of which it was shifted to the right
+          return shiftDecimalPointToLeft(shiftDecimalPointToRight(a, 5) * shiftDecimalPointToRight(b, 5), 10);
         });
         return evaluate(newExpr);
       } else if (div.test(expr)) {
         let newExpr = expr.replace(div, function (match, a, b) {
-          return Number(a) / Number(b);
+          // Likewise, the decimal point does not need to be shifted at all for division
+          return shiftDecimalPointToRight(a, 5) / shiftDecimalPointToRight(b, 5);
         });
         return evaluate(newExpr);
       } else if (add.test(expr)) {
         let newExpr = expr.replace(add, function (match, a, b) {
-          return Number(a) + Number(b);
+          return shiftDecimalPointToLeft(shiftDecimalPointToRight(a, 5) + shiftDecimalPointToRight(b, 5), 5);
         });
         return evaluate(newExpr);
       } else if (sub.test(expr)) {
         let newExpr = expr.replace(sub, function (match, a, b) {
-          return Number(a) - Number(b);
+          return shiftDecimalPointToLeft(shiftDecimalPointToRight(a, 5) - shiftDecimalPointToRight(b, 5), 5);
         });
         return evaluate(newExpr);
       } else {
