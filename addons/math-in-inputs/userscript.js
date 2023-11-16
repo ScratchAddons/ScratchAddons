@@ -69,25 +69,16 @@ export default async function ({ addon }) {
           but not the exponent. I can not think of a better solution,
           so for now, just ignore the errors
           */
-          const isNonZeroDecimalPow = /^\d*\.\d*[1-9]\d*$|^\d*\.$/.test(pow);
-
-          if (isNonZeroDecimalPow) {
-            return shiftDecimalPointToLeft(Math.pow(Number(shiftDecimalPointToRight(base, 5)), pow), 5 * pow);
-          } else {
-            return Math.pow(Number(base), Number(pow));
-          }
+          return base == 1
+            ? 1
+            : shiftDecimalPointToLeft(Math.pow(Number(shiftDecimalPointToRight(base, 5)), pow), 5 * pow);
         });
         return evaluate(newExpr);
       } else if (expAlt.test(expr)) {
         let newExpr = expr.replace(expAlt, function (match, base, pow) {
-          // Check if pow is a number with a dot and not equal to zero
-          const isNonZeroDecimalPow = /^\d*\.\d*[1-9]\d*$|^\d*\.$/.test(pow);
-
-          if (isNonZeroDecimalPow) {
-            return shiftDecimalPointToLeft(Math.pow(Number(shiftDecimalPointToRight(base, 5)), pow), 5 * pow);
-          } else {
-            return Math.pow(Number(base), Number(pow));
-          }
+          return base == 1
+            ? 1
+            : shiftDecimalPointToLeft(Math.pow(Number(shiftDecimalPointToRight(base, 5)), pow), 5 * pow);
         });
         return evaluate(newExpr);
       } else if (mul.test(expr)) {
