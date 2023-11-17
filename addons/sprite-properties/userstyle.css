@@ -10,7 +10,9 @@
   border: none;
 }
 
-[class^="sprite-selector_scroll-wrapper_"] {
+[class^="sprite-selector_scroll-wrapper_"],
+/* Also take full height if `sprite-properties` is hiding the properties (specificity) */
+.sa-hide-sprite-properties [class^="sprite-selector_scroll-wrapper_"] {
   height: 100%;
   transition-property: height;
   transition-duration: var(--spriteProperties-transitionDuration);
@@ -61,7 +63,7 @@
   left: -2px;
   border: none;
   border-radius: 100%;
-  background-color: var(--editorDarkMode-primary, hsla(215, 100%, 65%, 1));
+  background-color: var(--editorDarkMode-primary, hsla(260, 60%, 60%, 1));
 }
 [dir="rtl"] .sa-sprite-properties-info-btn {
   left: auto;
@@ -86,6 +88,7 @@
   justify-content: center;
   align-items: center;
   border: none;
+  margin-left: auto;
   background-color: transparent;
   user-select: none;
 }

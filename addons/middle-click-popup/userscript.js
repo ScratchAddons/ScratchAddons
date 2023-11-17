@@ -3,6 +3,7 @@
 import WorkspaceQuerier, { QueryResult } from "./WorkspaceQuerier.js";
 import renderBlock, { BlockComponent, getBlockHeight } from "./BlockRenderer.js";
 import { BlockInstance, BlockShape, BlockTypeInfo } from "./BlockTypeInfo.js";
+import { onClearTextWidthCache } from "./module.js";
 
 export default async function ({ addon, msg, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
@@ -69,6 +70,8 @@ export default async function ({ addon, msg, console }) {
     mousePosition = { x: e.clientX, y: e.clientY };
   });
 
+  onClearTextWidthCache(closePopup);
+
   /**
    * @typedef ResultPreview
    * @property {BlockInstance} block
@@ -87,7 +90,9 @@ export default async function ({ addon, msg, console }) {
   let limited = false;
 
   let allowMenuClose = true;
+
   let popupPosition = null;
+  let popupOrigin = null;
 
   let previewWidth = 0;
   let previewHeight = 0;
@@ -116,9 +121,7 @@ export default async function ({ addon, msg, console }) {
 
     popupContainer.style.width = previewWidth + "px";
 
-    popupPosition = { x: mousePosition.x + 16, y: mousePosition.y - 8 };
-    popupRoot.style.top = popupPosition.y + "px";
-    popupRoot.style.left = popupPosition.x + "px";
+    popupOrigin = { x: mousePosition.x, y: mousePosition.y };
     popupRoot.style.display = "";
     popupInput.value = "";
     popupInput.focus();
@@ -127,6 +130,7 @@ export default async function ({ addon, msg, console }) {
 
   function closePopup() {
     if (allowMenuClose) {
+      popupOrigin = null;
       popupPosition = null;
       popupRoot.style.display = "none";
       blockTypes = null;
@@ -165,7 +169,7 @@ export default async function ({ addon, msg, console }) {
 
       for (const queryResult of queryResults) {
         blockList.push({
-          block: queryResult.createBlock(),
+          block: queryResult.getBlock(),
           autocompleteFactory: (endOnly) => queryResult.toText(endOnly),
         });
       }
@@ -234,6 +238,17 @@ export default async function ({ addon, msg, console }) {
     popupPreviewScrollbarSVG.style.height = previewHeight + "px";
     popupPreviewScrollbarBackground.setAttribute("height", "" + previewHeight);
     popupInputContainer.dataset["error"] = "" + limited;
+
+    popupPosition = { x: popupOrigin.x + 16, y: popupOrigin.y - 8 };
+
+    const popupHeight = popupContainer.getBoundingClientRect().height;
+    const popupBottom = popupPosition.y + popupHeight;
+    if (popupBottom > window.innerHeight) {
+      popupPosition.y -= popupBottom - window.innerHeight;
+    }
+
+    popupRoot.style.top = popupPosition.y + "px";
+    popupRoot.style.left = popupPosition.x + "px";
 
     selectedPreviewIdx = -1;
     updateSelection(0);
@@ -323,7 +338,7 @@ export default async function ({ addon, msg, console }) {
     if (!selectedPreview) return;
 
     const workspace = Blockly.getMainWorkspace();
-    // This is mostly copied from https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/scratch_blocks_utils.js#L171
+    // This is mostly copied from https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/scratch_blocks_utils.js#L171
     // Some bits were removed or changed to fit our needs.
     workspace.setResizesEnabled(false);
 

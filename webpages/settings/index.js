@@ -379,7 +379,9 @@ let fuse;
         setTimeout(() => window.parent.close(), 100);
       },
       hidePopup() {
-        document.querySelector(".popup").style.animation = "closePopup 0.6s 1";
+        document.querySelector(".popup").style.animation = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "closePopup 0.35s 1"
+          : "closePopup 0.6s 1";
         document.querySelector(".popup").addEventListener(
           "animationend",
           () => {
@@ -507,12 +509,12 @@ let fuse;
       manifest._categories[0] = manifest.tags.includes("popup")
         ? "popup"
         : manifest.tags.includes("easterEgg")
-        ? "easterEgg"
-        : manifest.tags.includes("theme")
-        ? "theme"
-        : manifest.tags.includes("community")
-        ? "community"
-        : "editor";
+          ? "easterEgg"
+          : manifest.tags.includes("theme")
+            ? "theme"
+            : manifest.tags.includes("community")
+              ? "community"
+              : "editor";
 
       const addCategoryIfTag = (arr) => {
         let count = 0;
@@ -562,17 +564,11 @@ let fuse;
       if (manifest.versionAdded) {
         const [extMajor, extMinor, _] = vue.version.split(".");
         const [addonMajor, addonMinor, __] = manifest.versionAdded.split(".");
-        const excluded_1_33_0 = manifest.versionAdded === "1.33.0";
-        if (!excluded_1_33_0 && extMajor === addonMajor && extMinor === addonMinor) {
+        if (extMajor === addonMajor && extMinor === addonMinor) {
           manifest.tags.push("new");
           manifest._groups.push(
             manifest.tags.includes("recommended") || manifest.tags.includes("featured") ? "featuredNew" : "new"
           );
-        } else if (excluded_1_33_0) {
-          // Addon: op-badge
-          // TODO: remove this for v1.34.0 release.
-          manifest.tags.push("new");
-          manifest._groups.push("new");
         }
       }
 
