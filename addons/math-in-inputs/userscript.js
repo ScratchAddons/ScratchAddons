@@ -5,11 +5,9 @@ export default async function ({ addon }) {
     let textInInputs = addon.settings.get("textInInputs");
     return textInInputs ? /^.*$/i : /^[0-9+\-*^/(). ]+$/;
   }
-  var loseFocus;
-  const checkElForTypeChange = (el) => {
+  const checkElForTypeChange = (el, focus) => {
     // These inputs need their type changed
-    loseFocus = false;
-    let type = " input[type=number]";
+    let type = focus === "in" ? " input[type=number]" : " input[type=text]";
     if (!el.classList) return false;
     if (el.matches("[class*=mediaRecorderPopupContent]" + type)) {
       // Number inputs in `mediarecorder` addon modal
@@ -23,17 +21,14 @@ export default async function ({ addon }) {
         return true;
       } else if (el.matches("[class*=Popover-body]" + type)) {
         // Any inputs in the colour popover
-        loseFocus = true;
         return true;
       }
       // Doing math in the following inputs is almost useless, but for consistency we'll allow it
     } else if (el.matches("[class*=sa-paint-snap-settings]" + type)) {
       // The paint-snap distance setting
-      loseFocus = true;
       return true;
     } else if (el.matches("[class*=sa-onion-settings]" + type)) {
       // All inputs in the onion-skinning settings
-      loseFocus = true;
       return true;
     }
     return false;
@@ -152,7 +147,7 @@ export default async function ({ addon }) {
 
   document.body.addEventListener("focusin", function (event) {
     const target = event.target;
-    if (checkElForTypeChange(target)) {
+    if (checkElForTypeChange(target, "in")) {
       target.type = "text";
       const inputLength = target.value?.length ?? 0;
       target.setSelectionRange(inputLength, inputLength);
@@ -161,7 +156,7 @@ export default async function ({ addon }) {
 
   document.body.addEventListener("focusout", function (event) {
     const target = event.target;
-    if (checkElForTypeChange(target)) {
+    if (checkElForTypeChange(target, "out")) {
       target.type = "number";
     }
   });
