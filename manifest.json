@@ -68,12 +68,12 @@
   "web_accessible_resources": [
     {
       "resources": [
-    "content-scripts/inject/*",
-    "addon-api/*",
-    "addons/*",
-    "libraries/*/cs/*",
-    "addons-l10n/*/*.json",
-    "images/cs/*"
+        "content-scripts/inject/*",
+        "addon-api/*",
+        "addons/*",
+        "libraries/*/cs/*",
+        "addons-l10n/*/*.json",
+        "images/cs/*"
       ],
       "matches": ["https://*.scratch.mit.edu/*", "https://scratchaddons.com/*"]
     }
