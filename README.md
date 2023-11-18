@@ -78,7 +78,7 @@ To load the extension into most Chromium-based browsers, go to `chrome://extensi
 
 Go to `about:debugging`, select "This Firefox", click "Load Temporary Add-on...", and select the `manifest.json` file in the `ScratchAddons` folder.
 
-> **Note**
+> [!NOTE]
 > Firefox extensions loaded this way are removed when the browser is closed.
 
 ## Contributing
