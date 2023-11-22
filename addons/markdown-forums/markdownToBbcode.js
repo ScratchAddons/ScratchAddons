@@ -14,8 +14,8 @@ const options = {
       return infostring === "scratchblocks"
         ? `[scratchblocks]${code}[/scratchblocks]`
         : infostring === "raw-bbcode"
-        ? code
-        : `[code${infostring === "" ? "" : ` ${infostring}`}]${code}[/code]`;
+          ? code
+          : `[code${infostring === "" ? "" : ` ${infostring}`}]${code}[/code]`;
     },
     blockquote(quote) {
       const author = quote.match(/^(?:\[b\])?(.*?) wrote:(?:\[\/b\])?/);
