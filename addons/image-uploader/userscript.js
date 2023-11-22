@@ -136,7 +136,12 @@ export default async function ({ addon, msg, console }) {
       const data = await res.json();
 
       if (data.status === "ok") {
-        insert(textBox, `[img]https://assets.scratch.mit.edu/get_image/.%2E/${data["content-name"]}[/img]`);
+        insert(
+          textBox,
+          (await addon.self.getEnabledAddons()).includes("markdown-forums")
+            ? `![](https://assets.scratch.mit.edu/get_image/.%2E/${data["content-name"]})`
+            : `[img]https://assets.scratch.mit.edu/get_image/.%2E/${data["content-name"]}[/img]`
+        );
       } else {
         progressElement?.remove();
         alert(msg("upload-error"));
