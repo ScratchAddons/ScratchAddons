@@ -27,8 +27,8 @@
     }
   ],
   "latestUpdate": {
-    "version": "1.33.2",
-    "isMajor": true
+    "version": "1.36.0",
+    "newSettings": ["monitors"]
   },
   "customCssVariables": [
     {
