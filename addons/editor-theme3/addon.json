@@ -386,7 +386,8 @@
         "sa-color": "#2A797C",
         "comment-color": "#423F24",
         "input-color": "#FFFFFF",
-        "text": "white"
+        "text": "white",
+        "monitors": false
       }
     },
     {
@@ -408,7 +409,8 @@
         "sa-color": "#166966",
         "comment-color": "#423f24",
         "input-color": "#202020",
-        "text": "white"
+        "text": "white",
+        "monitors": false
       }
     },
     {
@@ -430,7 +432,8 @@
         "sa-color": "#29BEB8",
         "comment-color": "#FEF49C",
         "input-color": "#FFFFFF",
-        "text": "white"
+        "text": "white",
+        "monitors": false
       }
     },
     {
@@ -452,7 +455,8 @@
         "sa-color": "#29beb8",
         "comment-color": "#FFFFD2",
         "input-color": "#ffffff",
-        "text": "white"
+        "text": "white",
+        "monitors": false
       }
     },
     {
@@ -474,7 +478,8 @@
         "sa-color": "#34E4D0",
         "comment-color": "#FEF49C",
         "input-color": "#202020",
-        "text": "colorOnBlack"
+        "text": "colorOnBlack",
+        "monitors": false
       }
     }
   ],
