@@ -65,6 +65,77 @@ const categories = [
   saCategory,
 ];
 
+// From scratch-gui/src/lib/themes/default/index.js
+const defaultColors = {
+  motion: {
+    primary: "#4C97FF",
+    secondary: "#4280D7",
+    tertiary: "#3373CC",
+    quaternary: "#3373CC",
+  },
+  looks: {
+    primary: "#9966FF",
+    secondary: "#855CD6",
+    tertiary: "#774DCB",
+    quaternary: "#774DCB",
+  },
+  sounds: {
+    primary: "#CF63CF",
+    secondary: "#C94FC9",
+    tertiary: "#BD42BD",
+    quaternary: "#BD42BD",
+  },
+  control: {
+    primary: "#FFAB19",
+    secondary: "#EC9C13",
+    tertiary: "#CF8B17",
+    quaternary: "#CF8B17",
+  },
+  event: {
+    primary: "#FFBF00",
+    secondary: "#E6AC00",
+    tertiary: "#CC9900",
+    quaternary: "#CC9900",
+  },
+  sensing: {
+    primary: "#5CB1D6",
+    secondary: "#47A8D1",
+    tertiary: "#2E8EB8",
+    quaternary: "#2E8EB8",
+  },
+  pen: {
+    primary: "#0fBD8C",
+    secondary: "#0DA57A",
+    tertiary: "#0B8E69",
+    quaternary: "#0B8E69",
+  },
+  operators: {
+    primary: "#59C059",
+    secondary: "#46B946",
+    tertiary: "#389438",
+    quaternary: "#389438",
+  },
+  data: {
+    primary: "#FF8C1A",
+    secondary: "#FF8000",
+    tertiary: "#DB6E00",
+    quaternary: "#DB6E00",
+  },
+  data_lists: {
+    primary: "#FF661A",
+    secondary: "#FF5500",
+    tertiary: "#E64D00",
+    quaternary: "#E64D00",
+  },
+  more: {
+    primary: "#FF6680",
+    secondary: "#FF4D6A",
+    tertiary: "#FF3355",
+    quaternary: "#FF3355",
+  },
+  text: "#FFFFFF",
+};
+
 // From scratch-blocks/media/dropdown-arrow.svg
 const arrowPath =
   "M6.36,7.79a1.43,1.43,0,0,1-1-.42L1.42,3.45a1.44,1.44,0,0,1,0-2c0.56-.56,9.31-0.56,9.87,0a1.44,1.44,0,0,1,0,2L7.37,7.37A1.43,1.43,0,0,1,6.36,7.79Z";
@@ -479,15 +550,17 @@ export default async function ({ addon, console, msg }) {
         [class*="monitor_large-value_"],
         [class*="monitor_list-value_"]
       `)) {
-        if (addon.settings.get("monitors")) {
+        if (addon.settings.get("monitors") || addon.self.disabled) {
           value.style.backgroundColor = primaryColor(category);
           value.style.color = isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor();
           // Border color for list items
           if (textMode() === "colorOnBlack") value.style.borderColor = "rgba(255, 255, 255, 0.15)";
           else value.style.removeProperty("border-color");
         } else {
-          value.style.backgroundColor = originalColors[category.colorId].primary;
-          value.style.color = originalColors.text;
+          /* If the addon is enabled but the monitors setting is disabled,
+             the default colors are used even if the Scratch theme is set to high contrast. */
+          value.style.backgroundColor = defaultColors[category.colorId].primary;
+          value.style.color = defaultColors.text;
           value.style.removeProperty("border-color");
         }
       }
