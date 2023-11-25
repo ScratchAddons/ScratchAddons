@@ -199,7 +199,7 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   background-color: #ffab1a;
-  padding: 0.25rem;
+  padding: 4px;
   width: 100%;
 }
 #comments .control-group.tooltip.error textarea:focus + .hovertext {
