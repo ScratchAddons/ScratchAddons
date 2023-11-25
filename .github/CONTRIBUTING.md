@@ -8,7 +8,7 @@ Be sure to follow our [code of conduct](https://github.com/ScratchAddons/Scratch
 
 ## Reporting bugs and suggesting features
 
-Found a bug? Have an idea? You can open an [issue](https://github.com/ScratchAddons/ScratchAddons/issues) to report bugs and send feedback! But first, be sure to [search for existing issues](https://github.com/ScratchAddons/ScratchAddons/issues). If there are no similar issues, you can create a new one. We will take a look at it.
+Found a bug? Have an idea? You can [open an issue](https://github.com/ScratchAddons/ScratchAddons/issues/new/choose) to report bugs and send feedback! But first, be sure to [search for existing issues](https://github.com/ScratchAddons/ScratchAddons/issues). If there are no similar issues, you can create a new one. We will take a look at it.
 
 You can also open a [discussion](https://github.com/ScratchAddons/ScratchAddons/discussions) to suggest ideas or ask questions. We also have a [feedback form](https://scratchaddons.com/feedback) on our website.
 
