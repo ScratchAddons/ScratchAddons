@@ -123,7 +123,6 @@ export default async function ({ addon, console, msg }) {
       type: "SET_FETCH_STATUS",
       infoType: "parent",
       status: addon.tab.redux.state.preview.status.parent, // We do not actually change anything here.
-      _saProjectDescription: true,
     });
   }
 
