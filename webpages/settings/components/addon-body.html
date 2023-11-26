@@ -5,12 +5,10 @@
         <div class="btn-dropdown">
           <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': expanded}" />
         </div>
-        <div class="addon-name">
+        <div class="addon-name tooltip">
           <img :src="addonIconSrc" class="icon-type" />
-          <span class="tooltip">
-            {{ addon.name}}
-            <span v-if="devMode" class="tooltiptext">{{ addon._addonId }}</span>
-          </span>
+          <span>{{ addon.name}}</span>
+          <span v-if="devMode" class="tooltiptext">{{ addon._addonId }}</span>
         </div>
         <addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
       </div>
