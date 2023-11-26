@@ -10,7 +10,7 @@
       "name": "World_Languages"
     }
   ],
-  "tags": ["community", "projectPage", "beta", "featured"],
+  "tags": ["community", "projectPage", "featured"],
   "userscripts": [
     {
       "url": "userscript.js",
