@@ -24,6 +24,7 @@ jobs:
         uses: ScratchAddons/prettier_action@master
         with:
           prettier_options: --write .
+          prettier_version: 3.1.0
           commit_message: Format code
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
@@ -33,6 +34,7 @@ jobs:
         uses: ScratchAddons/prettier_action@master
         with:
           prettier_options: --write .
+          prettier_version: 3.1.0
           commit_message: Format code
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
