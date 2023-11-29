@@ -5,6 +5,7 @@ export default async function ({ addon, console }) {
 
   (function (Blockly) {
     const BlockSvg = BlocklyInstance.BlockSvg;
+    var originalDropdownObject = BlocklyInstance.FieldDropdown.prototype.positionArrow;
     var vm = addon.tab.traps.vm;
 
     const { GRID_UNIT } = BlockSvg;
@@ -157,9 +158,9 @@ export default async function ({ addon, console }) {
       BlockSvg.SHAPE_IN_SHAPE_PADDING[1][2] = 5 * GRID_UNIT * multiplier;
       BlockSvg.SHAPE_IN_SHAPE_PADDING[1][3] = 5 * GRID_UNIT * multiplier;
 
-      var originalDropdownObject = BlocklyInstance.FieldDropdown.prototype.positionArrow;
       BlocklyInstance.FieldDropdown.prototype.positionArrow = function (x) {
-        this.arrowY_ = 11 * multiplier;
+        const arrowHeight = 12;
+        this.arrowY_ = (BlockSvg.FIELD_HEIGHT - arrowHeight) / 2 + 1;
         return originalDropdownObject.call(this, x);
       };
 
