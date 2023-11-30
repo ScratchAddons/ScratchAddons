@@ -359,8 +359,10 @@ body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-bu
 [class*="paint-editor_top-align-row"] {
   padding-top: 0.5rem;
 }
-[class*="paint-editor_mode-selector"] {
-  width: min-content;
+@media (min-height: 710px) {
+  [class*="paint-editor_mode-selector"] {
+    width: min-content;
+  }
 }
 
 [class*="sound-editor_row_"] + [class*="sound-editor_row_"] {
