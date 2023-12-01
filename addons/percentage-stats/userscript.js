@@ -17,9 +17,6 @@ export default async function ({ addon, console }) {
     favs: Math.round((stats.favs / stats.views) * 100) + "%",
     remixes: Math.round((stats.remixes / stats.views) * 100) + "%",
   };
-  console.log(els);
-  console.log(stats);
-  console.log(percentages);
 
   const modalL = document.createElement("div");
   modalL.className = "loves-modal";
@@ -48,10 +45,6 @@ export default async function ({ addon, console }) {
     showModal.style.left = `${rect.left}px`;
     showModal.innerText = percentages[showKey];
     showModal.style.opacity = 1;
-    console.log(rect.top);
-    console.log(showModal.offsetHeight);
-    console.log(modalMargin);
-    console.log(showModal.style.top);
   }
 
   function hideModal(hideKey) {
