@@ -41,7 +41,7 @@ export default async function ({ addon, console }) {
     }
     const rect = els[showKey].getBoundingClientRect();
     const modalMargin = 20;
-    showModal.style.top = `${rect.top - showModal.offsetHeight - modalMargin}px`;
+    showModal.style.top = `${rect.top - showModal.offsetHeight - modalMargin + window.scrollY}px`;
     showModal.style.left = `${rect.left}px`;
     showModal.innerText = percentages[showKey];
     showModal.style.opacity = 1;

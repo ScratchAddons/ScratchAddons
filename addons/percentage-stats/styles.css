@@ -2,7 +2,7 @@
 .favs-modal,
 .remixes-modal {
   display: block;
-  position: fixed;
+  position: absolute;
   background-color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 5px;
