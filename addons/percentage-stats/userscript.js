@@ -67,10 +67,11 @@ export default async function ({ addon, console }) {
       els[key].addEventListener("mouseover", () => showModal(key));
       els[key].addEventListener("mouseout", () => hideModal(key));
       els[key].addEventListener("mousedown", () => {
+        // Update modal on click of stat
         setTimeout(() => {
           showModal(key);
         }, 300);
-      }); // Update modal on click of stat
+      });
     }
   }
 }
