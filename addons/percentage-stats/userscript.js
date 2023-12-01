@@ -1,0 +1,75 @@
+export default async function ({ addon, console }) {
+  await addon.tab.waitForElement(".stats");
+  const els = {
+    views: document.querySelector(".project-views"),
+    loves: document.querySelector(".project-loves"),
+    favs: document.querySelector(".project-favorites"),
+    remixes: document.querySelector(".project-remixes"),
+  };
+  const stats = {
+    views: els.views.innerHTML,
+    loves: els.loves.innerHTML,
+    favs: els.favs.innerHTML,
+    remixes: els.remixes.innerHTML,
+  };
+  const percentages = {
+    loves: Math.round((stats.loves / stats.views) * 100) + "%",
+    favs: Math.round((stats.favs / stats.views) * 100) + "%",
+    remixes: Math.round((stats.remixes / stats.views) * 100) + "%",
+  };
+  console.log(els);
+  console.log(stats);
+  console.log(percentages);
+
+  const modalL = document.createElement("div");
+  modalL.className = "loves-modal";
+  document.body.appendChild(modalL);
+
+  const modalF = document.createElement("div");
+  modalF.className = "favs-modal";
+  document.body.appendChild(modalF);
+
+  const modalR = document.createElement("div");
+  modalR.className = "remixes-modal";
+  document.body.appendChild(modalR);
+
+  function showModal(showKey) {
+    let showModal;
+    if (showKey === "loves") {
+      showModal = modalL;
+    } else if (showKey === "favs") {
+      showModal = modalF;
+    } else {
+      showModal = modalR;
+    }
+    const rect = els[showKey].getBoundingClientRect();
+    const modalMargin = 20;
+    showModal.style.top = `${rect.top - showModal.offsetHeight - modalMargin}px`;
+    showModal.style.left = `${rect.left}px`;
+    showModal.innerText = percentages[showKey];
+    showModal.style.opacity = 1;
+    console.log(rect.top);
+    console.log(showModal.offsetHeight);
+    console.log(modalMargin);
+    console.log(showModal.style.top);
+  }
+
+  function hideModal(hideKey) {
+    let hideModal;
+    if (hideKey === "loves") {
+      hideModal = modalL;
+    } else if (hideKey === "favs") {
+      hideModal = modalF;
+    } else {
+      hideModal = modalR;
+    }
+    hideModal.style.opacity = 0;
+  }
+
+  for (const key in els) {
+    if (els.hasOwnProperty(key) && key !== "views") {
+      els[key].addEventListener("mouseover", () => showModal(key));
+      els[key].addEventListener("mouseout", () => hideModal(key));
+    }
+  }
+}
