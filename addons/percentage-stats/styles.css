@@ -12,4 +12,5 @@
   border: none;
   transition-property: opacity;
   transition-duration: 200ms;
+  opacity: 0;
 }
