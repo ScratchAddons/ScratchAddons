@@ -10,6 +10,12 @@ export default async function ({ addon, console }) {
   icon.className = "sa-footer-arrow";
   footer.insertBefore(icon, footer.firstChild);
 
+  function collapseFooter() {
+    collapseTimeout = setTimeout(() => {
+      footer.classList.remove("expanded");
+    }, 200);
+  }
+
   if (!(addon.settings.get("infiniteScroll") && enabledAddons.includes("infinite-scroll"))) {
     // If the setting is enabled, infinate-scroll
     // adds the class on the pages it runs on instead
@@ -29,16 +35,19 @@ export default async function ({ addon, console }) {
 
   let collapseTimeout;
 
-  footer.addEventListener("mouseover", () => {
+  footer.addEventListener(addon.settings.get("openOnClick") ? "click" : "mouseover", () => {
     footer.classList.add("transition", "expanded");
     if (collapseTimeout) {
       clearTimeout(collapseTimeout);
     }
   });
 
-  footer.addEventListener("mouseout", () => {
-    collapseTimeout = setTimeout(() => {
-      footer.classList.remove("expanded");
-    }, 200);
-  });
+  if (addon.settings.get("openOnClick")) {
+    document.addEventListener("click", (event) => {
+      // Only hide if the click is outside the footer
+      if (!footer.contains(event.target)) collapseFooter();
+    });
+  } else {
+    footer.addEventListener("mouseout", collapseFooter);
+  }
 }

@@ -56,6 +56,12 @@
         "addonEnabled": ["infinite-scroll"]
       },
       "default": false
+    },
+    {
+      "name": "Toggle on click",
+      "id": "openOnClick",
+      "type": "boolean",
+      "default": false
     }
   ],
   "userscripts": [
@@ -73,5 +79,10 @@
   "tags": ["community"],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.35.0"
+  "versionAdded": "1.35.0",
+  "latestUpdate": {
+    "version": "1.36.0",
+    "isMajor": true,
+    "newSettings": ["openOnClick"]
+  }
 }
