@@ -1,21 +1,24 @@
 export default async function ({ addon, console }) {
+  function getStats() {
+    const stats = {
+      views: els.views.innerHTML,
+      loves: els.loves.innerHTML,
+      favs: els.favs.innerHTML,
+      remixes: els.remixes.innerHTML,
+    };
+    return {
+      loves: Math.round((stats.loves / stats.views) * 100) + "%",
+      favs: Math.round((stats.favs / stats.views) * 100) + "%",
+      remixes: Math.round((stats.remixes / stats.views) * 100) + "%",
+    };
+  }
+
   await addon.tab.waitForElement(".stats");
   const els = {
     views: document.querySelector(".project-views"),
     loves: document.querySelector(".project-loves"),
     favs: document.querySelector(".project-favorites"),
     remixes: document.querySelector(".project-remixes"),
-  };
-  const stats = {
-    views: els.views.innerHTML,
-    loves: els.loves.innerHTML,
-    favs: els.favs.innerHTML,
-    remixes: els.remixes.innerHTML,
-  };
-  const percentages = {
-    loves: Math.round((stats.loves / stats.views) * 100) + "%",
-    favs: Math.round((stats.favs / stats.views) * 100) + "%",
-    remixes: Math.round((stats.remixes / stats.views) * 100) + "%",
   };
 
   const modalL = document.createElement("div");
@@ -43,7 +46,7 @@ export default async function ({ addon, console }) {
     const modalMargin = 30;
     showModal.style.top = `${rect.top - modalMargin + window.scrollY}px`;
     showModal.style.left = `${rect.left}px`;
-    showModal.innerText = percentages[showKey];
+    showModal.innerText = getStats()[showKey];
     showModal.style.opacity = 1;
   }
 
@@ -63,6 +66,11 @@ export default async function ({ addon, console }) {
     if (els.hasOwnProperty(key) && key !== "views") {
       els[key].addEventListener("mouseover", () => showModal(key));
       els[key].addEventListener("mouseout", () => hideModal(key));
+      els[key].addEventListener("mousedown", () => {
+        setTimeout(() => {
+          showModal(key);
+        }, 300);
+      }); // Update modal on click of stat
     }
   }
 }
