@@ -45,7 +45,7 @@ export default async function ({ addon, console }) {
   if (addon.settings.get("openOnClick")) {
     document.addEventListener("click", (event) => {
       // Only hide if the click is outside the footer
-      if (!footer.contains(event.target)) collapseFooter();
+      if (!footer.contains(event.target)) footer.classList.remove("expanded");
     });
   } else {
     footer.addEventListener("mouseout", collapseFooter);
