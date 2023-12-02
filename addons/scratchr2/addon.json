@@ -22,6 +22,12 @@
   "injectAsStyleElt": true,
   "versionAdded": "1.1.0",
   "updateUserstylesOnSettingsChange": true,
+  "userscripts": [
+    {
+      "url": "profile.js",
+      "matches": ["https://scratch.mit.edu/users/*/", "https://scratch.mit.edu/classes/*/"]
+    }
+  ],
   "userstyles": [
     {
       "url": "scratchr2.css",
