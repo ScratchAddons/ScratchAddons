@@ -6,11 +6,27 @@ export default async function ({ addon, console }) {
       favs: els.favs.innerHTML,
       remixes: els.remixes.innerHTML,
     };
-    return {
-      loves: Math.round((stats.loves / stats.views) * 100) + "%",
-      favs: Math.round((stats.favs / stats.views) * 100) + "%",
-      remixes: Math.round((stats.remixes / stats.views) * 100) + "%",
+    const realPercentages = {
+      loves: (stats.loves / stats.views) * 100,
+      favs: (stats.favs / stats.views) * 100,
+      remixes: (stats.remixes / stats.views) * 100,
     };
+
+    function modifyPercentages(stat) {
+      if (realPercentages[stat] === 0) {
+        return 0;
+      } else if (realPercentages[stat] > 0 && Math.round(realPercentages[stat] * 10) / 10 === 0) {
+        return "<0.1";
+      } else {
+        return Math.round(realPercentages[stat] * 10) / 10;
+      }
+    }
+    const percentages = {
+      loves: modifyPercentages("loves") + "%",
+      favs: modifyPercentages("favs") + "%",
+      remixes: modifyPercentages("remixes") + "%",
+    };
+    return percentages;
   }
 
   await addon.tab.waitForElement(".stats");
@@ -43,7 +59,7 @@ export default async function ({ addon, console }) {
       showModal = modalR;
     }
     const rect = els[showKey].getBoundingClientRect();
-    const modalMargin = 30;
+    const modalMargin = 35;
     showModal.style.top = `${rect.top - modalMargin + window.scrollY}px`;
     showModal.style.left = `${rect.left}px`;
     showModal.innerText = getStats()[showKey];
