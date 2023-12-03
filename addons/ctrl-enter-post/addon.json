@@ -36,7 +36,8 @@
         "https://scratch.mit.edu/discuss/topic/*",
         "https://scratch.mit.edu/discuss/post/*",
         "https://scratch.mit.edu/discuss/settings/*",
-        "https://scratch.mit.edu/discuss/misc/*"
+        "https://scratch.mit.edu/discuss/misc/*",
+        "https://scratch.mit.edu/discuss/*/topic/add/"
       ],
       "if": {
         "settings": {
@@ -46,7 +47,11 @@
     },
     {
       "url": "comments.js",
-      "matches": ["https://scratch.mit.edu/studios/*", "https://scratch.mit.edu/users/*", "projects"],
+      "matches": [
+        "https://scratch.mit.edu/studios/*",
+        "https://scratch.mit.edu/users/*",
+        "projects"
+      ],
       "if": {
         "settings": {
           "comments": true
@@ -55,6 +60,8 @@
     }
   ],
   "versionAdded": "1.18.0",
-  "tags": ["community"],
+  "tags": [
+    "community"
+  ],
   "enabledByDefault": false
 }
