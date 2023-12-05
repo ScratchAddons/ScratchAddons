@@ -1,6 +1,6 @@
 {
-  "name": "Test",
-  "Description": "Test",
+  "name": "Save the project from the project page",
+  "Description": "Allows you to save the sb3 file of the project from the project page, without pressing \"See inside\"",
   "tags": ["community", "recommended"],
   "versionAdded": "1.35.0",
   "userscripts": [
