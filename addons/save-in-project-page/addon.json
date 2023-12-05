@@ -1,8 +1,9 @@
 {
   "name": "Save the project from the project page",
   "Description": "Allows you to save the sb3 file of the project from the project page, without pressing \"See inside\"",
-  "tags": ["community", "recommended"],
+  "tags": ["community", "projectPlayer", "recommended"],
   "versionAdded": "1.35.0",
+  "credits": [{ "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" }],
   "userscripts": [
     {
       "url": "userscript.js",
