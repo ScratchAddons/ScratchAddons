@@ -1,7 +1,18 @@
 {
   "name": "Ctrl + Enter to make a variable \"For this sprite only\"",
-  "description": "Yes",
+  "description": "Hold ctrl while on the \"New Variable\" modal to automatically switch to \"for this sprite only\"",
   "tags": ["editor", "codeEditor"],
   "versionAdded": "1.35.0",
-  "userscripts": "userscript.js"
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": "projects"
+    }
+  ],
+  "credits": [
+    {
+      "name": "Jazza",
+      "url": "https://scratch.mit.edu/users/greeny--231"
+    }
+  ]
 }
