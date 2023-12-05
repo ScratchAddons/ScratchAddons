@@ -2,7 +2,7 @@ export default async function ({ addon, console }) {
   /*
 To do:
 Add support for the command key
-Find way to make ctrl + enter work like enter, variables cant be made while ctrl is pressed
+Find way to make ctrl + enter work like enter, variables cant be made while ctrl is pressed (at least on tw desktop)
 
 */
   const local = document.querySelector("input[type=radio][value=local]");
