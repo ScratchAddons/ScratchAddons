@@ -22,7 +22,7 @@ Add support for the command key?
       local()?.click();
     }
     if (e.key === "Enter") {
-      ok().click();
+      ok()?.click();
     }
   });
 
