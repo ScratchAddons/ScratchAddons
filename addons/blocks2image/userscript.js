@@ -291,9 +291,7 @@ export default async function ({ addon, console, msg }) {
           .copyImage(dataURL)
           .then(() => console.log("Image successfully copied"))
           .catch((e) => console.error(`Image could not be copied: ${e}`));
-      }
-
-      if (!copy) {
+      } else {
         link.download = `block_${timestamp}.png`;
         link.href = dataURL;
         link.click();
