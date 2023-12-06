@@ -14,12 +14,6 @@ export default async function ({ addon, console }) {
   downloadButton.onclick = download;
   downloadButton.classList = "button sa-download-button";
 
-  // Create the ::before pseudo-element
-  const beforeElement = document.createElement("div");
-  beforeElement.classList = "sa-download-icon";
-
-  downloadButton.appendChild(beforeElement);
-
   const container = document.querySelector(".project-buttons");
 
   const seeInsideButton = await addon.tab.waitForElement(".see-inside-button");
