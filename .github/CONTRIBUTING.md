@@ -50,11 +50,10 @@ If you're working on changes and something looks outdated, [sync your branch wit
 2. [Fork this repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo) if you haven't already.
 3. [Clone your fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo#cloning-your-forked-repository) and [load it into your browser](https://scratchaddons.com/docs/getting-started/installing/#installing-on-google-chrome-or-microsoft-edge) so you can make and test your changes.
 4. [Create a new branch](https://docs.github.com/en/get-started/quickstart/contributing-to-projects#creating-a-branch-to-work-on), specifying `upstream/master` as the source branch:
-  ```shell
-  git checkout -b BRANCH-NAME upstream/master
-  ```
-  Branching makes things easier later on if you have multiple pull requests open at once or ever want to contribute again. You can always delete a branch.
-
+   ```shell
+   git checkout -b BRANCH-NAME upstream/master
+   ```
+   Branching makes things easier later on if you have multiple pull requests open at once or ever want to contribute again. You can always delete a branch.
 5. Make and test your changes.
 6. [Commit and push](https://docs.github.com/en/get-started/quickstart/contributing-to-projects#making-and-pushing-changes) your changes to the branch.
 7. Go to the website to create a pull request in the source repository (ScratchAddons/ScratchAddons). There should be a banner with a button to open a pull request.
