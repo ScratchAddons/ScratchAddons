@@ -1,9 +1,4 @@
 export default async function ({ addon, console }) {
-  /*
-To do:
-Add support for the command key?
-
-*/
   function local() {
     return document.querySelector("input[type=radio][value=local]");
   }
@@ -27,7 +22,7 @@ Add support for the command key?
   });
 
   document.addEventListener("keyup", (e) => {
-    if (!(e.key === "Control")) return;
+    if (!(e.key === "Control" || e.key === "Meta")) return;
     toClick?.click();
     toClick = null;
   });
