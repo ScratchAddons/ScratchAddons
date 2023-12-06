@@ -1,7 +1,7 @@
 export default async function ({ addon, console }) {
   /*
 To do:
-Add support for the command key
+Add support for the command key?
 Find way to make ctrl + enter work like enter, variables cant be made while ctrl is pressed (at least on tw desktop)
 
 */
@@ -11,6 +11,9 @@ Find way to make ctrl + enter work like enter, variables cant be made while ctrl
   function global() {
     return document.querySelector("input[type=radio][value=global]");
   }
+  function ok() {
+    return document.querySelector("button[class*=prompt_ok-button]");
+  }
   let toClick;
 
   document.addEventListener("keydown", (e) => {
@@ -18,6 +21,9 @@ Find way to make ctrl + enter work like enter, variables cant be made while ctrl
     if (!toClick) {
       toClick = local()?.checked ? local() : global();
       local()?.click();
+    }
+    if (e.key === "Enter") {
+      ok().click();
     }
   });
 
