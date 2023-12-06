@@ -14,11 +14,14 @@ export default async function ({ addon, console }) {
   downloadButton.onclick = download;
   downloadButton.classList = "button sa-download-button";
 
-  await addon.tab.waitForElement(".see-inside-button");
+  // Create the ::before pseudo-element
+  const beforeElement = document.createElement("div");
+  beforeElement.classList = "sa-download-icon";
 
-  addon.tab.appendToSharedSpace({
-    space: "beforeRemixButton",
-    element: downloadButton,
-    order: 2,
-  });
+  downloadButton.appendChild(beforeElement);
+
+  const container = document.querySelector(".project-buttons");
+
+  const seeInsideButton = await addon.tab.waitForElement(".see-inside-button");
+  container.insertBefore(downloadButton, seeInsideButton);
 }
