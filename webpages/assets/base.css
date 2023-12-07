@@ -26,8 +26,8 @@
   --button-hover-background: #1a1a1a;
   --input-background: #222;
   --search-input-background: #111;
-  --switch-background: #111;
-  --switch-inner-background: #aaa;
+  --switch-border: #808080;
+  --switch-inner-background: #eee;
   --tooltip-background: #000;
   --comment-background: #222;
   --unread-comment-background: #000;
