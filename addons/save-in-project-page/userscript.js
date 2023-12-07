@@ -10,7 +10,7 @@ export default async function ({ addon, console }) {
   }
 
   const downloadButton = document.createElement("button");
-  downloadButton.innerHTML = "Download project";
+  downloadButton.innerText = "Download";
   downloadButton.onclick = download;
   downloadButton.classList = "button sa-download-button";
 
