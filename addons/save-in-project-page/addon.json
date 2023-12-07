@@ -1,6 +1,6 @@
 {
   "name": "Project page download button",
-  "description": "Allows you to save the sb3 file of the project from the project page, without pressing \"See inside\"",
+  "description": "Allows you to download projects directly from the project page, without having to open the editor first.",
   "tags": ["community", "projectPlayer", "recommended"],
   "versionAdded": "1.35.0",
   "credits": [{ "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" }],
