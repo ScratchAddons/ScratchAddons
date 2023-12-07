@@ -111,8 +111,8 @@ export default async function ({ addon }) {
     let changeBy = e.shiftKey
       ? addon.settings.get("shift")
       : e.altKey
-      ? addon.settings.get("alt")
-      : addon.settings.get("regular");
+        ? addon.settings.get("alt")
+        : addon.settings.get("regular");
     if (changeBy.toString().length > 10 || amountOfDecimals(changeBy.toString()) > 5) return;
     if (e.code === "ArrowDown") changeBy *= -1;
 

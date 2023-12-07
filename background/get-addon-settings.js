@@ -20,10 +20,10 @@ const areColorsEqual = (currentColor, oldPresetColor) => {
     hexColor.length === 7 // #{rr}{gg}{bb}  →  #{rr}{gg}{bb}ff
       ? `${hexColor}ff`
       : hexColor.length === 5 // #{r}{g}{b}{a}  →  #{rr}{gg}{bb}{aa}
-      ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}${hexColor[4].repeat(2)}`
-      : hexColor.length === 4 // #{r}{g}{b}  →  #{rr}{gg}{bb}ff
-      ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}ff`
-      : hexColor;
+        ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}${hexColor[4].repeat(2)}`
+        : hexColor.length === 4 // #{r}{g}{b}  →  #{rr}{gg}{bb}ff
+          ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}ff`
+          : hexColor;
 
   // Convert both colors to #{rr}{gg}{bb}{aa}
   const currentColorRRGGBBAA = getRRGGBBAA(currentColorLowercase);
@@ -664,6 +664,18 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             madeAnyChanges = madeChangesToAddon = true;
             settings.bordercolor = "#855cd6";
           });
+        }
+
+        if (addonId === "colorblind" && settings.links) {
+          // Transition v1.34 to v1.35
+          if (settings.links !== "underline") settings["underline-style"] = "none";
+          if (settings.links === "bold") {
+            settings.bold = "all";
+          } else {
+            settings["bold"] = "default";
+          }
+          delete settings.links;
+          madeAnyChanges = madeChangesToAddon = true;
         }
       }
 
