@@ -1,0 +1,150 @@
+{
+  "name": "Arrow key incrementation in editor",
+  "description": "Use the up and down arrow keys to increase or decrease number values in numeric input fields such as those in blocks or the sprite properties area.",
+  "tags": ["editor", "codeEditor", "recommended"],
+  "versionAdded": "1.34.0",
+  "latestUpdate": {
+    "version": "1.35.0",
+    "newSettings": ["useCustom"],
+    "temporaryNotice": "You can now increment input fields that are not in blocks, like the sprite properties, and fully customize the values."
+  },
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Change on regular key press",
+      "id": "regular",
+      "type": "select",
+      "default": "one",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "None"
+        },
+        {
+          "id": "hundredth",
+          "name": "0.01"
+        },
+        {
+          "id": "tenth",
+          "name": "0.1"
+        },
+        {
+          "id": "one",
+          "name": "1"
+        },
+        {
+          "id": "ten",
+          "name": "10"
+        }
+      ],
+      "if": { "settings": { "useCustom": false } }
+    },
+    {
+      "name": "Change on regular key press",
+      "id": "regularCustom",
+      "type": "untranslated",
+      "default": "1",
+      "max": 8,
+      "if": { "settings": { "useCustom": true } }
+    },
+    {
+      "name": "Change on Shift+Key",
+      "id": "shift",
+      "type": "select",
+      "default": "ten",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "None"
+        },
+        {
+          "id": "hundredth",
+          "name": "0.01"
+        },
+        {
+          "id": "tenth",
+          "name": "0.1"
+        },
+        {
+          "id": "one",
+          "name": "1"
+        },
+        {
+          "id": "ten",
+          "name": "10"
+        }
+      ],
+      "if": { "settings": { "useCustom": false } }
+    },
+
+    {
+      "name": "Change on Shift+Key",
+      "id": "shiftCustom",
+      "type": "untranslated",
+      "default": "10",
+      "max": 8,
+      "if": { "settings": { "useCustom": true } }
+    },
+    {
+      "name": "Change on Alt+Key",
+      "id": "alt",
+      "type": "select",
+      "default": "tenth",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "None"
+        },
+        {
+          "id": "hundredth",
+          "name": "0.01"
+        },
+        {
+          "id": "tenth",
+          "name": "0.1"
+        },
+        {
+          "id": "one",
+          "name": "1"
+        },
+        {
+          "id": "ten",
+          "name": "10"
+        }
+      ],
+      "if": { "settings": { "useCustom": false } }
+    },
+
+    {
+      "name": "Change on Alt+Key",
+      "id": "altCustom",
+      "type": "untranslated",
+      "default": "0.1",
+      "max": 8,
+      "if": { "settings": { "useCustom": true } }
+    },
+
+    {
+      "name": "Use custom values",
+      "id": "useCustom",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld/"
+    },
+    {
+      "name": "World_Languages"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}

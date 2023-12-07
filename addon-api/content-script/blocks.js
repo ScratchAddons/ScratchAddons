@@ -50,7 +50,7 @@ const getNamesIdsDefaults = (blockData) => [
 ];
 
 // This needs to function exactly as Scratch does:
-// https://github.com/LLK/scratch-blocks/blob/abbfe93136fef57fdfb9a077198b0bc64726f012/blocks_vertical/procedures.js#L207-L215
+// https://github.com/scratchfoundation/scratch-blocks/blob/abbfe93136fef57fdfb9a077198b0bc64726f012/blocks_vertical/procedures.js#L207-L215
 // Returns a list like ["%s", "%d"]
 const parseArguments = (code) =>
   code
@@ -158,8 +158,8 @@ const injectWorkspace = (ScratchBlocks) => {
   };
 
   // We use Scratch's extension category mechanism to create a new category.
-  // https://github.com/LLK/scratch-gui/blob/ddd2fa06f2afa140a46ec03be91796ded861e65c/src/containers/blocks.jsx#L344
-  // https://github.com/LLK/scratch-vm/blob/a0c11d6d8664a4f2d55632e70630d09ec6e9ae28/src/engine/runtime.js#L1381
+  // https://github.com/scratchfoundation/scratch-gui/blob/ddd2fa06f2afa140a46ec03be91796ded861e65c/src/containers/blocks.jsx#L344
+  // https://github.com/scratchfoundation/scratch-vm/blob/a0c11d6d8664a4f2d55632e70630d09ec6e9ae28/src/engine/runtime.js#L1381
   const originalGetBlocksXML = vm.runtime.getBlocksXML;
   vm.runtime.getBlocksXML = function (target) {
     const result = originalGetBlocksXML.call(this, target);
@@ -179,8 +179,8 @@ const injectWorkspace = (ScratchBlocks) => {
 
   // Trick Scratch into thinking addon blocks are defined somewhere.
   // This makes Scratch's "is this procedure used anywhere" check work when addon blocks exist.
-  // getDefineBlock is used in https://github.com/LLK/scratch-blocks/blob/37f12ae3e342480f4d8e7b6ba783c46e29e77988/core/block_dragger.js#L275-L297
-  // and https://github.com/LLK/scratch-blocks/blob/develop/core/procedures.js
+  // getDefineBlock is used in https://github.com/scratchfoundation/scratch-blocks/blob/37f12ae3e342480f4d8e7b6ba783c46e29e77988/core/block_dragger.js#L275-L297
+  // and https://github.com/scratchfoundation/scratch-blocks/blob/develop/core/procedures.js
   // Only block_dragger.js should be able to reference addon blocks, but if procedures.js does
   // somehow, we shim enough of the API that things shouldn't break.
   const originalGetDefineBlock = ScratchBlocks.Procedures.getDefineBlock;

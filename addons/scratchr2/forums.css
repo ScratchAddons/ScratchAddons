@@ -156,6 +156,7 @@ body > #pagewrapper {
   line-height: 18px;
   font-weight: bold;
   text-align: center;
+  text-decoration: none;
 }
 .linkst li:not(:last-child) a:hover,
 .linksb li:not(:last-child) a:hover,
@@ -192,7 +193,7 @@ body > #pagewrapper {
 }
 .follow-topic .loading:not([style="display: none;"]) {
   /* Spinner animation code */
-  /* From https://github.com/LLK/scratch-www/blob/develop/src/components/spinner/spinner.scss */
+  /* From https://github.com/scratchfoundation/scratch-www/blob/develop/src/components/spinner/spinner.scss */
   animation-name: spin-intro, spin;
   animation-duration: 0.25s, 1s;
   animation-timing-function: cubic-bezier(0.3, -3, 0.6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);
