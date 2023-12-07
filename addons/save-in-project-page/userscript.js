@@ -14,7 +14,11 @@ export default async function ({ addon, console }) {
   downloadButton.onclick = download;
   downloadButton.classList = "button sa-download-button";
 
-  const seeInsideButton = await addon.tab.waitForElement(".see-inside-button");
-  const container = document.querySelector(".project-buttons");
-  container.insertBefore(downloadButton, seeInsideButton);
+  while (true) {
+    const seeInsideButton = await addon.tab.waitForElement(".see-inside-button", {
+      markAsSeen: true,
+    });
+    const container = document.querySelector(".project-buttons");
+    container.insertBefore(downloadButton, seeInsideButton);
+  }
 }
