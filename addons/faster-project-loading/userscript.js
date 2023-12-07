@@ -1,4 +1,4 @@
-// This is a fix for https://github.com/LLK/scratch-gui/issues/8805
+// This is a fix for https://github.com/scratchfoundation/scratch-gui/issues/8805
 
 export default async function ({ addon }) {
   const BACKPACK_URL = "https://backpack.scratch.mit.edu/";
