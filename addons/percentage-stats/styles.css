@@ -15,3 +15,11 @@
   transition-duration: 200ms;
   opacity: 0;
 }
+
+.loves-modal:before,
+.favs-modal:before,
+.remixes-modal:before {
+  background-image: url("https://scratch.mit.edu/svgs/project/views-gray.svg");
+  display: block;
+  content: "";
+}
