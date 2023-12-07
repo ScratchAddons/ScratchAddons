@@ -35,14 +35,14 @@ export default async function ({ addon, console }) {
 
   let collapseTimeout;
 
-  footer.addEventListener(addon.settings.get("openOnClick") ? "click" : "mouseover", () => {
+  footer.addEventListener(addon.settings.get("mode") === "click" ? "click" : "mouseover", () => {
     footer.classList.add("transition", "expanded");
     if (collapseTimeout) {
       clearTimeout(collapseTimeout);
     }
   });
 
-  if (addon.settings.get("openOnClick")) {
+  if (addon.settings.get("mode") === "click") {
     document.addEventListener("click", (event) => {
       // Only hide if the click is outside the footer
       if (!footer.contains(event.target)) footer.classList.remove("expanded");

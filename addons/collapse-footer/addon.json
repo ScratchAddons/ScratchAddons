@@ -58,10 +58,20 @@
       "default": false
     },
     {
-      "name": "Toggle on click",
-      "id": "openOnClick",
-      "type": "boolean",
-      "default": false
+      "name": "Toggle on",
+      "id": "mode",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "hover",
+          "name": "Hover"
+        },
+        {
+          "id": "click",
+          "name": "Click"
+        }
+      ],
+      "default": "hover"
     }
   ],
   "userscripts": [
