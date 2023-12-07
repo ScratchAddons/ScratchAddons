@@ -353,7 +353,6 @@ body.iframe .search-box input {
   height: 10rem;
 }
 
-
 button.setting-input.color {
   width: 100px;
   transition: border-radius 0.2s ease;
@@ -423,7 +422,8 @@ input.vacp-color-input {
   border-radius: 16px;
   border: 1px solid var(--control-border);
 }
-button.vacp-copy-button, button.vacp-format-switch-button {
-    background: var(--button-background);
-    color: var(--content-text);
+button.vacp-copy-button,
+button.vacp-format-switch-button {
+  background: var(--button-background);
+  color: var(--content-text);
 }

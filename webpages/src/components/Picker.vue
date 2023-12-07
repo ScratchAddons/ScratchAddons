@@ -18,7 +18,7 @@
   </div>
 </template>
 <script>
-import getDirection from '../lib/rtl-list';
+import getDirection from "../lib/rtl-list";
 import bus from "../lib/eventbus";
 import { ColorPicker } from "vue-accessible-color-picker";
 import debounce from "../lib/debounce";
@@ -27,7 +27,11 @@ export default {
   // bind to the color prop and update addon settings
   props: ["addon", "setting", "modelValue", "alphaEnabled"],
   emits: ["update:modelValue"],
-  computed: {dir() {return getDirection()}},
+  computed: {
+    dir() {
+      return getDirection();
+    },
+  },
   data() {
     return {
       isOpen: false,

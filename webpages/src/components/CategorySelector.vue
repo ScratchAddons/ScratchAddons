@@ -1,24 +1,28 @@
 <template>
   <Transition name="expand" mode="in-out">
-  <div
-    class="category"
-    :class="{
-      sel: category.id === selectedCategory,
-      hasParent: category.parent,
-    }"
-    v-show="shouldShow"
-    :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"
-    @click="onClick($event)"
-  >
-    <img :src="'../../../images/icons/' + category.icon + '.svg'" />
-    <span>{{ category.name }}</span>
-  </div>
+    <div
+      class="category"
+      :class="{
+        sel: category.id === selectedCategory,
+        hasParent: category.parent,
+      }"
+      v-show="shouldShow"
+      :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"
+      @click="onClick($event)"
+    >
+      <img :src="'../../../images/icons/' + category.icon + '.svg'" />
+      <span>{{ category.name }}</span>
+    </div>
   </Transition>
 </template>
 
 <style>
 .category {
-  transition: background-color 0.2s ease, padding 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    padding 0.2s ease,
+    height 0.2s ease,
+    opacity 0.2s ease;
   padding: 20px 20px;
   position: relative;
   user-select: none;
