@@ -1,5 +1,5 @@
 {
-  "name": "Save the project from the project page",
+  "name": "Project page download button",
   "description": "Allows you to save the sb3 file of the project from the project page, without pressing \"See inside\"",
   "tags": ["community", "projectPlayer", "recommended"],
   "versionAdded": "1.35.0",
