@@ -100,6 +100,19 @@
 [class*="sprite-info_column_"] {
   margin-inline-end: 1rem;
 }
+[class*="sprite-info_group"]:last-child,
+[class*="sprite-info_column_"]:last-child {
+  margin-inline-end: 0;
+}
+[class*="sprite-info_column_"],
+[class*="label_input-group-column_"] {
+  flex-direction: row;
+  align-items: center;
+}
+[class*="sprite-info_column_"] span,
+[class*="label_input-group-column_"] span {
+  margin-bottom: 0;
+}
 [class*="sprite-info_icon-wrapper"] {
   width: 1.5rem;
   height: 1.5rem;
@@ -123,9 +136,14 @@
 [class*="gui_body-wrapper_"] [class*="stage-selector_is-selected_"] {
   box-shadow: 0px 0px 0px 2px var(--editorDarkMode-primary-transparent35, hsl(260deg 60% 60% / 35%));
 }
-[class*="input_input-small"],
-[class*="sprite-info_larger-input"] input {
+[class*="input_input-small"][type="text"],
+[class*="sprite-info_larger-input"] input[type="text"] {
+  /* Vanilla is width:4rem */
   width: 2.5rem;
+}
+[class*="input_input-small"][type="number"] {
+  /* Vanilla is width:4rem but browsers take part of it for the up/down arrows */
+  width: 3.5rem;
 }
 
 [class*="sprite-selector_scroll-wrapper"] {
@@ -346,8 +364,10 @@ body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-bu
 [class*="paint-editor_top-align-row"] {
   padding-top: 0.5rem;
 }
-[class*="paint-editor_mode-selector"] {
-  width: min-content;
+@media (min-height: 710px) {
+  [class*="paint-editor_mode-selector"] {
+    width: min-content;
+  }
 }
 
 [class*="sound-editor_row_"] + [class*="sound-editor_row_"] {

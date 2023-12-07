@@ -1,0 +1,99 @@
+{
+  "name": "Customizable link style",
+  "description": "Lets you customize the style of links around the website.",
+  "credits": [
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "tdecoOverride",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "links"
+        },
+        "options": {
+          "underline": "underline"
+        }
+      }
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "bold-links.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "if": {
+        "settings": { "bold": "all" }
+      }
+    },
+    {
+      "url": "non-bold-links.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "if": {
+        "settings": { "bold": "none" }
+      }
+    },
+    {
+      "url": "underline-links.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "if": {
+        "settings": { "underline-style": ["solid", "dashed", "dotted"] }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Bold links",
+      "id": "bold",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "None"
+        },
+        {
+          "id": "default",
+          "name": "Default"
+        },
+        {
+          "id": "all",
+          "name": "All"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "name": "Underline style",
+      "id": "underline-style",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "None"
+        },
+        {
+          "id": "solid",
+          "name": "Solid"
+        },
+        {
+          "id": "dashed",
+          "name": "Dashed"
+        },
+        {
+          "id": "dotted",
+          "name": "Dotted"
+        }
+      ],
+      "default": "none"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "versionAdded": "1.34.0",
+  "tags": ["community", "theme"]
+}
