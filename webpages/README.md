@@ -22,12 +22,6 @@ To start a watcher for development that will automatically recompile when necess
 npm run dev
 ```
 
-To compile and minify for production:
-
-```sh
-npm run build
-```
-
 ## Customize configuration
 
 See the [Vite Configuration Reference](https://vitejs.dev/config/).
