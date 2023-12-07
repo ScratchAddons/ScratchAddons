@@ -6,7 +6,7 @@ export default async function ({ addon, console }) {
   async function download() {
     const project = await vm.saveProjectSb3();
     const title = await addon.tab.waitForElement(".project-title");
-    downloadBlob(`${title.innerHTML}.sb3`, project);
+    downloadBlob(`${title.innerText}.sb3`, project);
   }
 
   const downloadButton = document.createElement("button");
