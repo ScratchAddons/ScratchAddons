@@ -41,8 +41,7 @@ a.category > span > img {
 }
 
 .category.sel {
-  color: var(--orange);
-  font-weight: var(--brand-orange-min-font-weight);
+  font-weight: 600;
 }
 .category.hasParent {
   padding-inline: 40px 20px;
@@ -57,7 +56,8 @@ a.category > span > img {
   opacity: 0;
 }
 
-.category:hover {
+.category:hover,
+.category.sel {
   background: var(--hover-darken);
 }
 .category::before {
@@ -87,9 +87,6 @@ a.category > span > img {
   height: 18px;
   width: 18px;
   filter: var(--content-icon-filter);
-}
-.category.sel img {
-  filter: none;
 }
 .category span {
   margin-inline-start: 15px;
