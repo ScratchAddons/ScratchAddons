@@ -19,9 +19,7 @@ export default async function ({ addon, msg }) {
 
     if (addon.settings.get("show_only_if_less_than_10") && remainingReplies > 10) return;
 
-    comment.querySelector(".comment-reply span").innerText = `${msg("reply")} (${remainingReplies} ${msg(
-      "remaining"
-    )})`;
+    comment.querySelector(".comment-reply span").innerText = msg("reply", { replies: remainingReplies });
   }
 
   async function waitForComment() {
