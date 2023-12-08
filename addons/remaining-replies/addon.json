@@ -1,6 +1,6 @@
 {
-  "name": "Remaining replies for studio comments",
-  "description": "Show number of remaining replies for studio comment threads.",
+  "name": "Remaining reply counter",
+  "description": "Shows you how many more replies can be posted on each comment thread in a studio.",
   "credits": [
     {
       "name": "BarelySmooth",
