@@ -1,0 +1,35 @@
+{
+  "search.exclude": {
+    "libraries/thirdparty/**": true,
+    "libraries/licenses/**": true,
+
+    // All languages but English
+    "_locales/[abcdfghijklmnopqrstuvwxyz]*": true,
+    "_locales/[abcdefghijklmnopqrstuvwxyz][abcdefghijklmopqrstuvwxyz]*": true,
+    // All languages but English
+    "addons-l10n/[abcdfghijklmnopqrstuvwxyz]*": true,
+    "addons-l10n/[abcdefghijklmnopqrstuvwxyz][abcdefghijklmopqrstuvwxyz]*": true
+  },
+
+  "json.schemas": [
+    {
+      "fileMatch": ["/addons/*/addon.json"],
+      "url": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json"
+    },
+    {
+      "fileMatch": ["/manifest.json"],
+      "url": "https://json.schemastore.org/chrome-manifest.json"
+    },
+    {
+      "fileMatch": ["/addons/addons.json"],
+      "schema": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "type": "string",
+          "pattern": "^([a-zA-Z0-9-]+|//.+)$"
+        }
+      }
+    }
+  ]
+}

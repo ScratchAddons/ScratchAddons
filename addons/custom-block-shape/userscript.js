@@ -1,35 +1,23 @@
-export default async function ({ addon, global, console }) {
+import { updateAllBlocks } from "./update-all-blocks.js";
+
+export default async function ({ addon, console }) {
   var BlocklyInstance = await addon.tab.traps.getBlockly();
 
   (function (Blockly) {
     const BlockSvg = BlocklyInstance.BlockSvg;
+    var originalDropdownObject = BlocklyInstance.FieldDropdown.prototype.positionArrow;
     var vm = addon.tab.traps.vm;
 
     const { GRID_UNIT } = BlockSvg;
-    var multiplier;
-    var cornerSize;
-    var notchSize;
 
-    function updateAllBlocks() {
-      const workspace = Blockly.getMainWorkspace();
-      if (workspace) {
-        if (vm.editingTarget) {
-          vm.emitWorkspaceUpdate();
-        }
-        const flyout = workspace.getFlyout();
-        if (flyout) {
-          const flyoutWorkspace = flyout.getWorkspace();
-          Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
-          workspace.getToolbox().refreshSelection();
-          workspace.toolboxRefreshEnabled_ = true;
-        }
-      }
-    }
-
-    function applyChanges() {
-      multiplier = addon.settings.get("paddingSize") / 100;
-      cornerSize = addon.settings.get("cornerSize") / 100;
-      notchSize = addon.settings.get("notchSize") / 100;
+    function applyChanges(
+      paddingSize = addon.settings.get("paddingSize"),
+      cornerSize = addon.settings.get("cornerSize"),
+      notchSize = addon.settings.get("notchSize")
+    ) {
+      let multiplier = paddingSize / 100;
+      cornerSize = cornerSize / 100;
+      notchSize = notchSize / 100;
       BlockSvg.SEP_SPACE_Y = 2 * GRID_UNIT * multiplier;
       BlockSvg.MIN_BLOCK_X = 16 * GRID_UNIT * multiplier;
       BlockSvg.MIN_BLOCK_X_OUTPUT = 12 * GRID_UNIT * multiplier;
@@ -136,24 +124,24 @@ export default async function ({ addon, global, console }) {
       BlockSvg.INPUT_SHAPE_HEXAGONAL_WIDTH = 12 * GRID_UNIT * multiplier;
       BlockSvg.INPUT_SHAPE_ROUND =
         "M " +
-        4 * GRID_UNIT +
+        4 * GRID_UNIT * multiplier +
         ",0" +
         " h " +
-        4 * GRID_UNIT +
+        4 * GRID_UNIT * multiplier +
         " a " +
-        4 * GRID_UNIT +
+        4 * GRID_UNIT * multiplier +
         " " +
-        4 * GRID_UNIT +
+        4 * GRID_UNIT * multiplier +
         " 0 0 1 0 " +
-        8 * GRID_UNIT +
+        8 * GRID_UNIT * multiplier +
         " h " +
-        -4 * GRID_UNIT +
+        -4 * GRID_UNIT * multiplier +
         " a " +
-        4 * GRID_UNIT +
+        4 * GRID_UNIT * multiplier +
         " " +
-        4 * GRID_UNIT +
+        4 * GRID_UNIT * multiplier +
         " 0 0 1 0 -" +
-        8 * GRID_UNIT +
+        8 * GRID_UNIT * multiplier +
         " z";
       BlockSvg.INPUT_SHAPE_ROUND_WIDTH = 12 * GRID_UNIT * multiplier;
       BlockSvg.INPUT_SHAPE_HEIGHT = 8 * GRID_UNIT * multiplier;
@@ -170,14 +158,14 @@ export default async function ({ addon, global, console }) {
       BlockSvg.SHAPE_IN_SHAPE_PADDING[1][2] = 5 * GRID_UNIT * multiplier;
       BlockSvg.SHAPE_IN_SHAPE_PADDING[1][3] = 5 * GRID_UNIT * multiplier;
 
-      var originalDropdownObject = BlocklyInstance.FieldDropdown.prototype.positionArrow;
       BlocklyInstance.FieldDropdown.prototype.positionArrow = function (x) {
-        this.arrowY_ = 11 * multiplier;
+        const arrowHeight = 12;
+        this.arrowY_ = (BlockSvg.FIELD_HEIGHT - arrowHeight) / 2 + 1;
         return originalDropdownObject.call(this, x);
       };
 
-      //Corner setting
-      BlockSvg.CORNER_RADIUS = (1 * GRID_UNIT * addon.settings.get("cornerSize")) / 100;
+      // Corner setting
+      BlockSvg.CORNER_RADIUS = (1 * GRID_UNIT * cornerSize * 100) / 100;
 
       BlockSvg.TOP_LEFT_CORNER_START = "m 0," + BlockSvg.CORNER_RADIUS;
 
@@ -249,14 +237,19 @@ export default async function ({ addon, global, console }) {
       BlockSvg.STATEMENT_INPUT_INNER_SPACE = 2.8 * GRID_UNIT - 0.9 * GRID_UNIT * cornerSize;
     }
 
-    function applyAndUpdate() {
-      applyChanges();
-      updateAllBlocks();
+    function applyAndUpdate(...args) {
+      applyChanges(...args);
+      updateAllBlocks(vm, addon.tab.traps.getWorkspace(), BlocklyInstance);
     }
 
-    addon.settings.addEventListener("change", function () {
-      applyAndUpdate();
+    addon.settings.addEventListener("change", () => applyAndUpdate());
+
+    addon.self.addEventListener("disabled", () => {
+      // Scratch 3.0 blocks
+      applyAndUpdate(100, 100, 100);
     });
+
+    addon.self.addEventListener("reenabled", () => applyAndUpdate());
 
     applyAndUpdate();
   })(window.Blockly);

@@ -112,10 +112,15 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     }
     case BADGE_ALARM_NAME: {
       if (scratchAddons.globalState.auth.isLoggedIn) {
-        const count = await MessageCache.fetchMessageCount(scratchAddons.globalState.auth.username);
+        const msgCountData = await MessageCache.fetchMessageCount(scratchAddons.globalState.auth.username);
+        const count = await MessageCache.getUpToDateMsgCount(scratchAddons.cookieStoreId, msgCountData);
         const db = await MessageCache.openDatabase();
         try {
+          // We obtained the up-to-date message count, so we can safely override the cached count in IDB.
           await db.put("count", count, scratchAddons.cookieStoreId);
+          if (msgCountData.resId && !(db instanceof MessageCache.IncognitoDatabase)) {
+            await db.put("count", msgCountData.resId, `${scratchAddons.cookieStoreId}_resId`);
+          }
         } finally {
           await db.close();
         }

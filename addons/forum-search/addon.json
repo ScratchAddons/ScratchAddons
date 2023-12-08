@@ -9,6 +9,8 @@
       "name": "Hans5958"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",

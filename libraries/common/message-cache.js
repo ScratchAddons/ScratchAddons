@@ -26,7 +26,7 @@ class IncognitoTransaction {
   }
 }
 
-class IncognitoDatabase {
+export class IncognitoDatabase {
   constructor() {
     this.messages = [];
     this.msgCount = 0;
@@ -73,10 +73,21 @@ const incognitoDatabase = new IncognitoDatabase();
  * @param {string} username the username
  * @returns {number} the message count, or 0 if it errors
  */
-export async function fetchMessageCount(username) {
-  const resp = await fetch(`https://api.scratch.mit.edu/users/${username}/messages/count?timestamp=${Date.now()}`);
+export async function fetchMessageCount(username, options) {
+  const bypassCache = options ? Boolean(options.bypassCache) : false;
+  const url = `https://api.scratch.mit.edu/users/${username}/messages/count${
+    !bypassCache ? "" : `?addons_bypass_cache_after_marking_read=1`
+  }`;
+  const fetchOptions = {
+    credentials: "omit", // No need to send cookies, this is a public endpoint
+    cache: bypassCache ? "reload" : "default",
+  };
+  const resp = await fetch(url, fetchOptions);
   const json = await resp.json();
-  return json.count || 0;
+
+  const resId = bypassCache ? null : resp.headers.get("X-Amz-Cf-Id");
+
+  return { count: json.count || 0, resId };
 }
 
 /**
@@ -106,7 +117,10 @@ export async function fetchMessages(username, xToken, offset) {
  */
 export async function openDatabase() {
   if (IncognitoDatabase.isIncognito()) return incognitoDatabase;
-  return idb.openDB("messaging", 1, {
+
+  const DB_VERSION = 1; // It's preferred to keep it as 1 when possible
+
+  return idb.openDB("messaging", DB_VERSION, {
     upgrade(d) {
       d.createObjectStore("cache");
       d.createObjectStore("lastUpdated");
@@ -134,6 +148,7 @@ export async function openMessageCache(cookieStoreId, forceClear) {
       // Clear items last updated more than 1 hour ago
       await tx.objectStore("cache").put([], cookieStoreId);
       await tx.objectStore("count").put(0, cookieStoreId);
+      await tx.objectStore("count").put(null, `${cookieStoreId}_resId`);
       // lastUpdated is only set when actually fetching
     }
     await tx.done;
@@ -163,7 +178,8 @@ export async function openMessageCache(cookieStoreId, forceClear) {
 export async function updateMessages(cookieStoreId, forceClear, username, xToken) {
   await openMessageCache(cookieStoreId, forceClear);
   if (username === null) return [];
-  const messageCount = await fetchMessageCount(username);
+  const msgCountData = await fetchMessageCount(username);
+  const messageCount = await getUpToDateMsgCount(cookieStoreId, msgCountData);
   const maxPages = Math.min(Math.ceil(messageCount / 40) + 1, 25);
   const db = await openDatabase();
   try {
@@ -190,8 +206,40 @@ export async function updateMessages(cookieStoreId, forceClear, username, xToken
     await tx.objectStore("cache").put(messages, cookieStoreId);
     await tx.objectStore("lastUpdated").put(Date.now(), cookieStoreId);
     await tx.objectStore("count").put(messageCount, cookieStoreId);
+    if (msgCountData.resId && !(db instanceof IncognitoDatabase)) {
+      await tx.objectStore("count").put(msgCountData.resId, `${cookieStoreId}_resId`);
+    }
     await tx.done;
     return newlyAdded;
+  } finally {
+    await db.close();
+  }
+}
+
+/**
+ * Returns either the received message count or the one in IDB, based on which one is more recent
+ * @param {string} cookieStoreId the cookie store ID for the IDB cache
+ * @param {object} msgCountData the return value from fetchMessageCount()
+ * @returns {number} the most up-to-date message count, possibly identical to the received parameter
+ */
+export async function getUpToDateMsgCount(cookieStoreId, { count: responseMsgCount, resId }) {
+  const db = await openDatabase();
+  if (db instanceof IncognitoDatabase) return responseMsgCount;
+  try {
+    const lastResId = await db.get("count", `${cookieStoreId}_resId`);
+    if (lastResId && lastResId === resId) {
+      // Since `lastResId` is not null, we know we have a message count in IDB we can use.
+      // In some cases, the message count in IDB will be more up-to-date. In other cases,
+      // it will simply match the message count of this response, leading to the same result.
+      console.log("Ignored network-cached response for message count endpoint.");
+      const idbCount = await db.get("count", cookieStoreId);
+      return idbCount;
+    } else {
+      return responseMsgCount;
+    }
+  } catch (err) {
+    console.error(err);
+    return responseMsgCount;
   } finally {
     await db.close();
   }

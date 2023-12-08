@@ -1,0 +1,23 @@
+{
+  "name": "Faster project loading",
+  "description": "Fixes a Scratch bug that slows down project loading if the editor is opened from a link.",
+  "credits": [
+    {
+      "name": "Tacodiva",
+      "link": "https://github.com/Tacodiva"
+    }
+  ],
+
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "tags": ["editor", "recommended"],
+  "versionAdded": "1.32.0",
+  "enabledByDefault": true
+}

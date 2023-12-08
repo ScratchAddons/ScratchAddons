@@ -4,18 +4,18 @@
   "info": [
     {
       "type": "notice",
-      "text": "Projects will run twice as fast at 60FPS, because they typically run at 30FPS.",
+      "text": "Most projects will not behave properly when running at 60FPS, because increasing the frame rate also increases the speed at which scripts run. This should only be used on projects that support 60FPS.",
       "id": "projectRunsFasterNotice"
     }
   ],
   "credits": [
     {
       "name": "Jeffalo",
-      "link": "https://scratch.mit.edu/users/Jeffalo"
+      "link": "https://scratch.mit.edu/users/Jeffalo/"
     },
     {
       "name": "TheColaber",
-      "link": "https://scratch.mit.edu/users/TheColaber"
+      "link": "https://scratch.mit.edu/users/TheColaber/"
     }
   ],
   "dynamicEnable": true,
@@ -36,7 +36,7 @@
       "default": 60
     }
   ],
-  "tags": ["editor", "projectPlayer", "recommended"],
+  "tags": ["editor", "projectPlayer", "featured"],
   "versionAdded": "1.1.0",
-  "enabledByDefault": true
+  "enabledByDefault": false
 }

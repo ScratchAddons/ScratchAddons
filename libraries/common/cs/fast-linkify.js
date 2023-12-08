@@ -62,7 +62,7 @@ export const linkifyTextNode = (elem) => {
  */
 export const linkifyTag = (elem, tagClass) => {
   for (const tag of elem.children) {
-    if (tagClass && !(elem instanceof tagClass)) continue;
+    if (tagClass && !(tag instanceof tagClass)) continue;
     for (const child of tag.childNodes) {
       _linkify(child);
     }

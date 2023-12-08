@@ -114,14 +114,18 @@ function alphaBlend(opaqueHex, transparentHex) {
   });
 }
 
+function removeAlpha(hex) {
+  return hex.substring(0, 7);
+}
+
 function makeHsv(hSource, sSource, vSource) {
   const h = typeof hSource === "number" ? hSource : convertToHsv(parseHex(hSource)).h;
   const s =
     typeof hSource !== "number" && convertToHsv(parseHex(hSource)).s === 0
       ? 0
       : typeof sSource === "number"
-      ? sSource
-      : convertToHsv(parseHex(sSource)).s;
+        ? sSource
+        : convertToHsv(parseHex(sSource)).s;
   const v = typeof vSource === "number" ? vSource : convertToHsv(parseHex(vSource)).v;
   return convertToHex(convertFromHsv({ h, s, v }));
 }
@@ -154,6 +158,7 @@ globalThis.__scratchAddonsTextColor = {
   multiply,
   brighten,
   alphaBlend,
+  removeAlpha,
   makeHsv,
   recolorFilter,
 };

@@ -4,7 +4,7 @@
   "credits": [
     {
       "name": "TheColaber",
-      "link": "https://scratch.mit.edu/users/TheColaber"
+      "link": "https://scratch.mit.edu/users/TheColaber/"
     }
   ],
   "dynamicEnable": true,
@@ -31,6 +31,18 @@
       "default": true
     },
     {
+      "name": "Confirm deleting projects",
+      "id": "removingprojects",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Confirm canceling comments",
+      "id": "cancelcomment",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "Confirm following/unfollowing users",
       "id": "followinguser",
       "type": "boolean",
@@ -49,6 +61,10 @@
       "default": false
     }
   ],
+  "latestUpdate": {
+    "version": "1.28.0",
+    "newSettings": ["removingprojects"]
+  },
   "tags": ["community", "recommended"],
   "enabledByDefault": false
 }

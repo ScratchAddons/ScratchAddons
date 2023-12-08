@@ -8,6 +8,7 @@ import categories from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
 import globalTheme from "../../libraries/common/global-theme.js";
+import minifySettings from "../../libraries/common/minify-settings.js";
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -30,6 +31,7 @@ let fuse;
     "webpages/settings/components/addon-group-header",
     "webpages/settings/components/addon-body",
     "webpages/settings/components/category-selector",
+    "webpages/settings/components/modal",
     "webpages/settings/components/previews/editor-dark-mode",
     "webpages/settings/components/previews/palette",
   ]);
@@ -74,7 +76,18 @@ let fuse;
 
   const serializeSettings = async () => {
     const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
-    const storedSettings = await syncGet(["globalTheme", "addonSettings", "addonsEnabled"]);
+    const storedSettings = await syncGet([
+      "globalTheme",
+      "addonSettings1",
+      "addonSettings2",
+      "addonSettings3",
+      "addonsEnabled",
+    ]);
+    const addonSettings = {
+      ...storedSettings.addonSettings1,
+      ...storedSettings.addonSettings2,
+      ...storedSettings.addonSettings3,
+    };
     const serialized = {
       core: {
         lightTheme: storedSettings.globalTheme,
@@ -85,7 +98,7 @@ let fuse;
     for (const addonId of Object.keys(storedSettings.addonsEnabled)) {
       serialized.addons[addonId] = {
         enabled: storedSettings.addonsEnabled[addonId],
-        settings: storedSettings.addonSettings[addonId] || {},
+        settings: addonSettings[addonId] || {},
       };
     }
     return JSON.stringify(serialized);
@@ -95,7 +108,17 @@ let fuse;
     const obj = JSON.parse(str);
     const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
     const syncSet = promisify(chrome.storage.sync.set.bind(chrome.storage.sync));
-    const { addonSettings, addonsEnabled } = await syncGet(["addonSettings", "addonsEnabled"]);
+    const { addonsEnabled, ...storageItems } = await syncGet([
+      "addonSettings1",
+      "addonSettings2",
+      "addonSettings3",
+      "addonsEnabled",
+    ]);
+    const addonSettings = {
+      ...storageItems.addonSettings1,
+      ...storageItems.addonSettings2,
+      ...storageItems.addonSettings3,
+    };
     const pendingPermissions = {};
     for (const addonId of Object.keys(obj.addons)) {
       const addonValue = obj.addons[addonId];
@@ -108,7 +131,9 @@ let fuse;
       } else {
         addonsEnabled[addonId] = addonValue.enabled;
       }
-      addonSettings[addonId] = Object.assign({}, addonSettings[addonId], addonValue.settings);
+      addonSettings[addonId] = Object.assign({}, addonSettings[addonId]);
+      delete addonSettings[addonId]._version;
+      Object.assign(addonSettings[addonId], addonValue.settings);
     }
     if (handleConfirmClicked) confirmElem.removeEventListener("click", handleConfirmClicked, { once: true });
     let resolvePromise = null;
@@ -125,10 +150,11 @@ let fuse;
           addonsEnabled[addonId] = granted;
         });
       }
+      const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
       await syncSet({
         globalTheme: !!obj.core.lightTheme,
         addonsEnabled,
-        addonSettings,
+        ...minifySettings(addonSettings, prerelease ? null : manifests),
       });
       resolvePromise();
     };
@@ -143,9 +169,10 @@ let fuse;
       return {
         smallMode: false,
         theme: initialTheme,
+        forceEnglishSetting: null,
+        forceEnglishSettingInitial: null,
         switchPath: "../../images/icons/switch.svg",
-        isOpen: false,
-        canCloseOutside: false,
+        moreSettingsOpen: false,
         categoryOpen: true,
         loaded: false,
         searchLoaded: false,
@@ -228,19 +255,18 @@ let fuse;
       addonAmt() {
         return `${Math.floor(this.manifests.filter((addon) => !addon.tags.includes("easterEgg")).length / 5) * 5}+`;
       },
+      selectedCategoryName() {
+        return this.categories.find((category) => category.id === this.selectedCategory)?.name;
+      },
     },
 
     methods: {
-      modalToggle: function () {
+      openMoreSettings: function () {
         this.closePickers();
-        this.isOpen = !this.isOpen;
+        this.moreSettingsOpen = true;
         if (vue.smallMode) {
           vue.sidebarToggle();
         }
-        this.canCloseOutside = false;
-        setTimeout(() => {
-          this.canCloseOutside = true;
-        }, 100);
       },
       sidebarToggle: function () {
         this.categoryOpen = !this.categoryOpen;
@@ -340,6 +366,10 @@ let fuse;
         document.body.appendChild(inputElem);
         inputElem.click();
       },
+      applyLanguageSettings() {
+        alert(chrome.i18n.getMessage("importSuccess"));
+        chrome.runtime.reload();
+      },
       openFullSettings() {
         window.open(
           `${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${
@@ -349,7 +379,9 @@ let fuse;
         setTimeout(() => window.parent.close(), 100);
       },
       hidePopup() {
-        document.querySelector(".popup").style.animation = "closePopup 1.6s 1";
+        document.querySelector(".popup").style.animation = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "closePopup 0.35s 1"
+          : "closePopup 0.6s 1";
         document.querySelector(".popup").addEventListener(
           "animationend",
           () => {
@@ -376,11 +408,6 @@ let fuse;
           this.sidebarToggle();
         }
       },
-      modalClickOutside: function (e) {
-        if (this.isOpen && this.canCloseOutside && e.isTrusted) {
-          this.isOpen = false;
-        }
-      },
     },
     watch: {
       searchInputReal(newValue) {
@@ -399,6 +426,9 @@ let fuse;
             !shouldHideAsEasterEgg && (newValue === "all" || obj.manifest._categories.includes(newValue));
         });
         if (newValue === "forums") this.addonGroups.find((group) => group.id === "forums").expanded = true;
+      },
+      forceEnglishSetting(newValue, oldValue) {
+        if (oldValue !== null) chrome.storage.local.set({ forceEnglish: this.forceEnglishSetting });
       },
     },
     ready() {
@@ -427,6 +457,27 @@ let fuse;
             .map(() => JSON.parse(JSON.stringify(exampleAddonListItem)));
         }
       }, 0);
+
+      chrome.storage.local.get("forceEnglish", ({ forceEnglish }) => {
+        this.forceEnglishSettingInitial = forceEnglish;
+        this.forceEnglishSetting = forceEnglish;
+      });
+
+      window.addEventListener(
+        "hashchange",
+        (e) => {
+          const addonId = location.hash.replace(/^#addon-/, "");
+          const groupWithAddon = this.addonGroups.find((group) => group.addonIds.includes(addonId));
+          if (!groupWithAddon) return; //Don't run if hash is invalid
+          const addon = this.manifestsById[addonId];
+
+          groupWithAddon.expanded = true;
+          this.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
+          this.clearSearch();
+          setTimeout(() => document.getElementById("addon-" + addonId)?.scrollIntoView(), 0);
+        },
+        { capture: false }
+      );
     },
   });
 
@@ -458,12 +509,12 @@ let fuse;
       manifest._categories[0] = manifest.tags.includes("popup")
         ? "popup"
         : manifest.tags.includes("easterEgg")
-        ? "easterEgg"
-        : manifest.tags.includes("theme")
-        ? "theme"
-        : manifest.tags.includes("community")
-        ? "community"
-        : "editor";
+          ? "easterEgg"
+          : manifest.tags.includes("theme")
+            ? "theme"
+            : manifest.tags.includes("community")
+              ? "community"
+              : "editor";
 
       const addCategoryIfTag = (arr) => {
         let count = 0;
@@ -621,21 +672,25 @@ let fuse;
 
     vue.loaded = true;
     setTimeout(() => {
-      // Set hash again after loading addons, to force scroll to addon
-      let hash = window.location.hash;
-      if (hash) {
-        window.location.hash = "";
-        window.location.hash = hash;
-        if (hash.startsWith("#addon-")) {
-          const addonId = hash.substring(7);
-          const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
-          groupWithAddon.expanded = true;
-          setTimeout(() => {
-            // Only required in Firefox
-            window.location.hash = "";
-            window.location.hash = hash;
-          }, 0);
-        }
+      const hash = window.location.hash;
+      if (hash.startsWith("#addon-")) {
+        const addonId = hash.substring(7);
+        const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
+        if (!groupWithAddon) return;
+        groupWithAddon.expanded = true;
+
+        const addon = vue.manifestsById[addonId];
+        vue.selectedCategory = addon?.tags.includes("easterEgg") ? "easterEgg" : "all";
+        setTimeout(() => {
+          const addonElem = document.getElementById("addon-" + addonId);
+          if (!addonElem) return;
+          addonElem.scrollIntoView();
+          // Browsers sometimes ignore :target for the elements dynamically appended.
+          // Use CSS class to initiate the blink animation.
+          addonElem.classList.add("addon-blink");
+          // 2s (animation length) + 1ms
+          setTimeout(() => addonElem.classList.remove("addon-blink"), 2001);
+        }, 0);
       }
     }, 0);
 
@@ -673,19 +728,19 @@ let fuse;
   // Konami code easter egg
   let cursor = 0;
   const KONAMI_CODE = [
-    "ArrowUp",
-    "ArrowUp",
-    "ArrowDown",
-    "ArrowDown",
-    "ArrowLeft",
-    "ArrowRight",
-    "ArrowLeft",
-    "ArrowRight",
-    "KeyB",
-    "KeyA",
+    "arrowup",
+    "arrowup",
+    "arrowdown",
+    "arrowdown",
+    "arrowleft",
+    "arrowright",
+    "arrowleft",
+    "arrowright",
+    "b",
+    "a",
   ];
   document.addEventListener("keydown", (e) => {
-    cursor = e.code === KONAMI_CODE[cursor] ? cursor + 1 : 0;
+    cursor = e.key.toLowerCase() === KONAMI_CODE[cursor] ? cursor + 1 : 0;
     if (cursor === KONAMI_CODE.length) {
       vue.selectedCategory = "easterEgg";
       setTimeout(() => (vue.searchInputReal = ""), 0); // Allow konami code in autofocused search bar

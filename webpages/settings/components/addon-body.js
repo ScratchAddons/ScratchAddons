@@ -30,6 +30,12 @@ export default async function ({ template }) {
       addonSettings() {
         return this.$root.addonSettings[this.addon._addonId];
       },
+      showUpdateNotice() {
+        if (!this.addon.latestUpdate || !this.addon.latestUpdate.temporaryNotice) return false;
+        const [extMajor, extMinor, _] = this.$root.version.split(".");
+        const [addonMajor, addonMinor, __] = this.addon.latestUpdate.version.split(".");
+        return extMajor === addonMajor && extMinor === addonMinor;
+      },
     },
     methods: {
       getDefaultExpanded() {
@@ -72,8 +78,8 @@ export default async function ({ template }) {
             isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
               ? false
               : event.shiftKey
-              ? false
-              : newState;
+                ? false
+                : newState;
           chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
           this.$emit("toggle-addon-request", newState);
         };
@@ -90,7 +96,7 @@ export default async function ({ template }) {
           if (result === false) {
             if (isIframe) {
               this.$root.addonToEnable = this.addon;
-              document.querySelector(".popup").style.animation = "dropDown 1.6s 1";
+              document.querySelector(".popup").style.animation = "dropDown 0.35s 1";
               this.$root.showPopupModal = true;
             } else
               chrome.permissions.request(
@@ -126,6 +132,15 @@ export default async function ({ template }) {
       expanded(newValue) {
         if (newValue === true) this.everExpanded = true;
       },
+    },
+    ready() {
+      const onHashChange = () => {
+        if (location.hash.replace(/^#addon-/, "") === this.addon._addonId) {
+          this.expanded = true;
+        }
+      };
+      window.addEventListener("hashchange", onHashChange, { capture: false });
+      setTimeout(onHashChange, 0);
     },
   });
   Vue.component("addon-body", AddonBody);

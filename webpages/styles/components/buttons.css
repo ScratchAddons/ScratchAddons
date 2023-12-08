@@ -1,0 +1,28 @@
+.large-button {
+  color: var(--content-text);
+  background: var(--button-background);
+  border: 1px solid var(--control-border);
+  display: flex;
+  align-items: center;
+  padding: 7px 12px;
+  border-radius: 4px;
+  transition: 0.2s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.large-button:hover:not([disabled]) {
+  background: var(--button-hover-background);
+  cursor: pointer;
+}
+
+.large-button:focus-visible {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: var(--input-focus-shadow);
+}
+
+.large-button > * {
+  vertical-align: middle;
+}

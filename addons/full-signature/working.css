@@ -11,5 +11,6 @@ ul.activity-stream div {
 }
 
 .load-more-wibd-container {
+  display: block !important;
   text-align: center;
 }

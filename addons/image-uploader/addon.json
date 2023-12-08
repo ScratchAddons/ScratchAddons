@@ -9,7 +9,13 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/discuss/*"]
+      "matches": ["editingScreens"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "button.css",
+      "matches": ["editingScreens"]
     }
   ],
   "dynamicEnable": true,

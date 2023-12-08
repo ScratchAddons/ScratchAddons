@@ -15,7 +15,7 @@ export default async function ({ addon, console }) {
   });
 
   // Keep "invite followers" button
-  addon.tab.waitForElement("#sa-studio-followers-btn").then((realButton) => {
+  addon.tab.waitForElement("#sa-studio-followers-button").then((realButton) => {
     const button = document.createElement("button");
     button.classList = "button";
     const span = document.createElement("span");

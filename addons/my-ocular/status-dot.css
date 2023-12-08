@@ -1,0 +1,18 @@
+/* Selectors need specificity to override better-featured-project */
+
+.profile-details .sa-ocular-status > span {
+  /* This is the dot */
+  height: 10px;
+  width: 10px;
+  margin-left: 5px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block !important;
+}
+
+.profile-details span.sa-ocular-status {
+  display: inline-block !important;
+  border-left: 1px solid rgb(204, 204, 204);
+  margin-left: 5px;
+  padding-left: 5px;
+}

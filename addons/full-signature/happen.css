@@ -11,5 +11,6 @@
 }
 
 .load-more-wh-container {
+  display: block !important;
   text-align: center;
 }

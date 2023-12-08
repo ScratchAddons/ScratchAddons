@@ -31,7 +31,7 @@ export default class LocalizationProvider extends EventTarget {
       const message = messageHandler(rawMessage.string || rawMessage);
       return this.formatter.format(message, placeholders);
     }
-    console.warn("Key missing:", key);
+    if (!fallback) (globalThis.scratchAddons?.console || console).warn("Key missing:", key);
     return fallback || key;
   }
 
