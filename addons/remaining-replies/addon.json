@@ -17,7 +17,7 @@
     {
       "url": "limit10.css",
       "matches": ["studios"],
-      "if": {"settings": {"show_only_if_less_than_10": true}}
+      "if": { "settings": { "show_only_if_less_than_10": true } }
     }
   ],
   "settings": [

@@ -20,7 +20,7 @@ export default async function ({ addon, msg }) {
     const span = document.createElement("span");
     span.classList.add("sa-replies-remaining");
     if (remainingReplies > 10) span.classList.add("sa-replies-remaining-hide");
-    span.style.marginLeft = "0.25em"
+    span.style.marginLeft = "0.25em";
     span.innerText = msg("remaining", { replies: remainingReplies });
     comment.querySelector(".comment-reply span").appendChild(span);
     addon.tab.displayNoneWhileDisabled(span);
