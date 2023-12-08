@@ -233,7 +233,7 @@ export const singleStep = () => {
           soundPlayer._createSource();
           soundPlayer.outputNode.start(
             audioContext.currentTime,
-            audioContext.currentTime - soundPlayer.startingUntil + vm.runtime.currentStepTime / 1000
+            audioContext.currentTime - soundPlayer.startingUntil + vm.runtime.currentStepTime / 1000,
           );
           soundPlayer.startingUntil -= vm.runtime.currentStepTime / 1000;
         }

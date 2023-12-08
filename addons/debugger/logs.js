@@ -102,9 +102,9 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
                 sprite: debug.getTargetInfoById(targetId).name,
                 type,
                 content: text,
-              }[match])
+              })[match],
           ) + "\n"
-        ).repeat(count)
+        ).repeat(count),
       )
       .join("");
     downloadText("logs.txt", file);

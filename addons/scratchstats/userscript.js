@@ -15,7 +15,7 @@ export default async function ({ addon, msg, console }) {
   if (!username) return;
   const content = document.querySelector("#content");
   const commentBox = document.querySelector(
-    "#content > .box:not(#profile-data):not(.slider-carousel-container):not(#page-404)"
+    "#content > .box:not(#profile-data):not(.slider-carousel-container):not(#page-404)",
   );
   if (!commentBox) return;
   const statsBox = document.createElement("div");
@@ -52,28 +52,28 @@ export default async function ({ addon, msg, console }) {
       const data = await response.json();
       followRow.appendChild(createItem(data.statistics.followers.toLocaleString(), msg("followers")));
       followRow.appendChild(
-        createItem(`#${data.statistics.ranks.followers.toLocaleString()}`, msg("most-followed-global"))
+        createItem(`#${data.statistics.ranks.followers.toLocaleString()}`, msg("most-followed-global")),
       );
       followRow.appendChild(
-        createItem(`#${data.statistics.ranks.country.followers.toLocaleString()}`, msg("most-followed-location"))
+        createItem(`#${data.statistics.ranks.country.followers.toLocaleString()}`, msg("most-followed-location")),
       );
       ranksRow.appendChild(
         createItem(
           `#${data.statistics.ranks.loves.toLocaleString()} (#${data.statistics.ranks.country.loves.toLocaleString()})`,
-          msg("most-loves")
-        )
+          msg("most-loves"),
+        ),
       );
       ranksRow.appendChild(
         createItem(
           `#${data.statistics.ranks.favorites.toLocaleString()} (#${data.statistics.ranks.country.favorites.toLocaleString()})`,
-          msg("most-favorites")
-        )
+          msg("most-favorites"),
+        ),
       );
       ranksRow.appendChild(
         createItem(
           `#${data.statistics.ranks.views.toLocaleString()} (#${data.statistics.ranks.country.views.toLocaleString()})`,
-          msg("most-views")
-        )
+          msg("most-views"),
+        ),
       );
       fetch(`https://scratchdb.lefty.one/v3/user/graph/${username}/followers?range=364&segment=6`)
         .then(async function (response) {

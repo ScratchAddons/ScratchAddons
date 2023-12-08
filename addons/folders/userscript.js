@@ -850,7 +850,7 @@ export default async function ({ addon, global, console, msg }) {
               position: "assetContextMenuAfterDelete",
               order: 20 + i,
             };
-          })
+          }),
       );
     }
   });
@@ -1013,7 +1013,7 @@ export default async function ({ addon, global, console, msg }) {
     const abstractReorder = (
       { guiItems, getAll, set, rename, getVMItemFromGUIItem, zeroIndexed, onFolderChanged },
       itemIndex,
-      newIndex
+      newIndex,
     ) => {
       // First index depends on zeroIndexed
       itemIndex = clamp(itemIndex, zeroIndexed ? 0 : 1, zeroIndexed ? guiItems.length - 1 : guiItems.length);
@@ -1154,7 +1154,7 @@ export default async function ({ addon, global, console, msg }) {
           zeroIndexed: false,
         },
         targetIndex,
-        newIndex
+        newIndex,
       );
     };
 
@@ -1178,7 +1178,7 @@ export default async function ({ addon, global, console, msg }) {
           zeroIndexed: true,
         },
         costumeIndex,
-        newIndex
+        newIndex,
       );
     };
 
@@ -1202,7 +1202,7 @@ export default async function ({ addon, global, console, msg }) {
           zeroIndexed: true,
         },
         soundIndex,
-        newIndex
+        newIndex,
       );
     };
   };

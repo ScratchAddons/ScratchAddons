@@ -13,6 +13,6 @@ export default async function ({ addon }) {
 
   oldh4.innerHTML = escapeHTML(addon.tab.scratchMessage("splash.projectsCuratedBy")).replace(
     "{curatorId}",
-    link.outerHTML
+    link.outerHTML,
   );
 }

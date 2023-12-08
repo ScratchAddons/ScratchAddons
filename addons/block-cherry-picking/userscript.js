@@ -9,7 +9,7 @@ export default async function ({ addon, global, console }) {
     },
     {
       capture: true,
-    }
+    },
   );
 
   // https://github.com/LLK/scratch-blocks/blob/102b33d14b25400c064e9bf6924a7ae1b0dcb2ab/core/block_dragger.js#L160

@@ -31,7 +31,7 @@ export default async ({ addon, msg, safeMsg }) => {
         return new Promise((resolve) => {
           setTimeout(async () => {
             const res = await fetch(
-              `https://clouddata.scratch.mit.edu/logs?projectid=${projectObject.id}&limit=40&offset=0`
+              `https://clouddata.scratch.mit.edu/logs?projectid=${projectObject.id}&limit=40&offset=0`,
             );
             const json = await res.json();
             const dateNow = Date.now();
