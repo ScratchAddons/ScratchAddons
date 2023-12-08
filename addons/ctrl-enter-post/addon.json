@@ -32,10 +32,7 @@
   "userscripts": [
     {
       "url": "forums.js",
-      "matches": [
-        "editingScreens",
-        "https://scratch.mit.edu/discuss/misc/*"
-      ],
+      "matches": ["editingScreens", "https://scratch.mit.edu/discuss/misc/*"],
       "if": {
         "settings": {
           "forums": true
