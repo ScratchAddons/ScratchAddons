@@ -7,8 +7,7 @@
   fill: var(--editorTheme3-inputColor-blackText);
 }
 
-.blocklyDropDownDiv .goog-menuitem,
-.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem .goog-menuitem-content {
+.blocklyDropDownDiv .goog-menuitem {
   color: black;
 }
 .blocklyDropDownDiv .blocklyText {
