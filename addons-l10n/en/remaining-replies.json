@@ -1,4 +1,3 @@
 {
-  "remaining-replies/reply": "reply",
-  "remaining-replies/remaining": "left"
+  "remaining-replies/reply": "reply ({replies} left)"
 }
