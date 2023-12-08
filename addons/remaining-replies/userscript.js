@@ -17,9 +17,13 @@ export default async function ({ addon, msg }) {
 
     const remainingReplies = 25 - parentCommentData?.reply_count;
 
-    if (addon.settings.get("show_only_if_less_than_10") && remainingReplies > 10) return;
-
-    comment.querySelector(".comment-reply span").innerText = msg("reply", { replies: remainingReplies });
+    const span = document.createElement("span");
+    span.classList.add("sa-replies-remaining");
+    if (remainingReplies > 10) span.classList.add("sa-replies-remaining-hide");
+    span.style.marginLeft = "0.25em"
+    span.innerText = msg("remaining", { replies: remainingReplies });
+    comment.querySelector(".comment-reply span").appendChild(span);
+    addon.tab.displayNoneWhileDisabled(span);
   }
 
   async function waitForComment() {
