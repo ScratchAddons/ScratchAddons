@@ -15,7 +15,7 @@ const localizeSettings = (addonId, setting, tableId) => {
       adminusersIcon: "@adminusers.svg",
       usersIcon: "@users.svg",
     },
-    setting.name,
+    setting.name
   );
 
   switch (setting.type) {
@@ -68,7 +68,7 @@ const localizeSettings = (addonId, setting, tableId) => {
         manifest.latestUpdate.temporaryNotice = scratchAddons.l10n.get(
           `${addonId}/@update`,
           {},
-          manifest.latestUpdate.temporaryNotice,
+          manifest.latestUpdate.temporaryNotice
         );
       }
     }
@@ -143,7 +143,7 @@ const localizeSettings = (addonId, setting, tableId) => {
               defaultValues[localizedRow] = scratchAddons.l10n.get(
                 `${addonId}/@settings-default-${setting.id}-${i}-${localizedRows}`,
                 {},
-                defaultValues[localizedRow],
+                defaultValues[localizedRow]
               );
             }
           }
@@ -154,7 +154,7 @@ const localizeSettings = (addonId, setting, tableId) => {
               preset.values[localizedRow] = scratchAddons.l10n.get(
                 `${addonId}/@preset-value-${setting.id}-${i}-${localizedRows}`,
                 {},
-                preset.values[localizedRow],
+                preset.values[localizedRow]
               );
             }
           }
@@ -171,7 +171,7 @@ const localizeSettings = (addonId, setting, tableId) => {
             preset.values[localizedSetting] = scratchAddons.l10n.get(
               `${addonId}/@preset-value-${preset.id}-${localizedSetting}`,
               {},
-              preset.values[localizedSetting],
+              preset.values[localizedSetting]
             );
           }
         }

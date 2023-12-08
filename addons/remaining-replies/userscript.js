@@ -12,7 +12,7 @@ export default async function ({ addon, msg }) {
     const parentCommentID = parentComment.getAttribute("id");
     const parentCommentData = addon.tab.redux.state.comments.comments.filter(
       // substring in order to remove the "comments-" prefix
-      (comment_in_list) => comment_in_list.id == parentCommentID.substring(9),
+      (comment_in_list) => comment_in_list.id == parentCommentID.substring(9)
     )[0];
 
     const remainingReplies = 25 - parentCommentData?.reply_count;
@@ -20,7 +20,7 @@ export default async function ({ addon, msg }) {
     if (addon.settings.get("show_only_if_less_than_10") && remainingReplies > 10) return;
 
     comment.querySelector(".comment-reply span").innerText = `${msg("reply")} (${remainingReplies} ${msg(
-      "remaining",
+      "remaining"
     )})`;
   }
 

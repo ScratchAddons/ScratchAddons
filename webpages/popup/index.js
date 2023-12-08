@@ -74,7 +74,7 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
         (manifest.popup._addonId = addonId) &&
         Object.assign(manifest.popup, {
           html: `../../popups/${addonId}/${manifest.popup.html}`,
-        }),
+        })
     );
   popupObjects.push({
     name: chrome.i18n.getMessage("quickSettings"),

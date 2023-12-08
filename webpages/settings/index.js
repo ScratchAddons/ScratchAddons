@@ -202,7 +202,7 @@ let fuse;
               acc[cur.manifest._addonId] = cur;
             }
             return acc;
-          }, Object.create(null)),
+          }, Object.create(null))
         );
         const fuseSearch = fuse.search(this.searchInput).sort((a, b) => {
           // Sort very good matches at the top no matter what
@@ -211,7 +211,7 @@ let fuse;
           else return b.item._enabled - a.item._enabled;
         });
         const results = fuseSearch.map((result) =>
-          addonListObjs.find((obj) => obj.manifest._addonId === result.item._addonId),
+          addonListObjs.find((obj) => obj.manifest._addonId === result.item._addonId)
         );
         for (const obj of addonListObjs) obj.matchesSearch = results.includes(obj);
         return addonListObjs.sort((b, a) => results.indexOf(b) - results.indexOf(a));
@@ -261,7 +261,7 @@ let fuse;
           window.open(`https://addons.mozilla.org/en-US/firefox/addon/scratch-messaging-extension/reviews/`);
         } else {
           window.open(
-            `https://chrome.google.com/webstore/detail/scratch-addons/fbeffbjdlemaoicjdapfpikkikjoneco/reviews`,
+            `https://chrome.google.com/webstore/detail/scratch-addons/fbeffbjdlemaoicjdapfpikkikjoneco/reviews`
           );
         }
       },
@@ -335,7 +335,7 @@ let fuse;
             alert(chrome.i18n.getMessage("importSuccess"));
             chrome.runtime.reload();
           },
-          { once: true },
+          { once: true }
         );
         document.body.appendChild(inputElem);
         inputElem.click();
@@ -344,7 +344,7 @@ let fuse;
         window.open(
           `${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${
             this.addonToEnable && this.addonToEnable._addonId
-          }`,
+          }`
         );
         setTimeout(() => window.parent.close(), 100);
       },
@@ -355,13 +355,13 @@ let fuse;
           () => {
             this.showPopupModal = false;
           },
-          { once: true },
+          { once: true }
         );
       },
       groupShownCount(group) {
         if (group.id === "_iframeSearch") return -1;
         return this.addonListObjs.filter(
-          (addon) => addon.group === group && addon.matchesSearch && addon.matchesCategory,
+          (addon) => addon.group === group && addon.matchesSearch && addon.matchesCategory
         ).length;
       },
       groupMarginAbove(group) {
@@ -458,12 +458,12 @@ let fuse;
       manifest._categories[0] = manifest.tags.includes("popup")
         ? "popup"
         : manifest.tags.includes("easterEgg")
-          ? "easterEgg"
-          : manifest.tags.includes("theme")
-            ? "theme"
-            : manifest.tags.includes("community")
-              ? "community"
-              : "editor";
+        ? "easterEgg"
+        : manifest.tags.includes("theme")
+        ? "theme"
+        : manifest.tags.includes("community")
+        ? "community"
+        : "editor";
 
       const addCategoryIfTag = (arr) => {
         let count = 0;
@@ -516,7 +516,7 @@ let fuse;
         if (extMajor === addonMajor && extMinor === addonMinor) {
           manifest.tags.push("new");
           manifest._groups.push(
-            manifest.tags.includes("recommended") || manifest.tags.includes("featured") ? "featuredNew" : "new",
+            manifest.tags.includes("recommended") || manifest.tags.includes("featured") ? "featuredNew" : "new"
           );
         }
       }

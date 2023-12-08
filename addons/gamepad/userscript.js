@@ -170,7 +170,7 @@ export default async function ({ addon, global, console, msg }) {
         350,
         150,
         // minimized
-        false,
+        false
       );
     }
     didChangeProject();
@@ -297,7 +297,7 @@ export default async function ({ addon, global, console, msg }) {
         document.body.classList.remove("sa-gamepad-small");
       }
     },
-    { capture: true },
+    { capture: true }
   );
 
   const virtualCursorElement = document.createElement("img");
@@ -427,7 +427,7 @@ export default async function ({ addon, global, console, msg }) {
           "fontsLoaded/SET_FONTS_LOADED",
           "scratch-gui/locales/SELECT_LOCALE",
         ],
-      },
+      }
     );
     container.dataset.editorMode = addon.tab.editorMode;
     if (target.className.includes("stage-size-row")) {

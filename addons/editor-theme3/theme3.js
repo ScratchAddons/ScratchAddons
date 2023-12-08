@@ -375,7 +375,7 @@ function updateSettings(addon, newStyle) {
 
   document.documentElement.style.setProperty(
     "--editorTheme3-inputColor-text",
-    textColor(addon.settings.get("input-color")),
+    textColor(addon.settings.get("input-color"))
   );
   newStyle.textContent = stylesheet;
 }

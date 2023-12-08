@@ -31,7 +31,7 @@ export default async ({ addon, console, msg }) => {
           className: addon.tab.scratchClass("modal_header-item", "modal_header-item-title"),
           textContent: msg("option-title"),
           title: msg("added-by"),
-        }),
+        })
       );
       recordOptionPopup.appendChild(recordOptionHeader);
       const recordOptionInner = Object.assign(document.createElement("div"), {
@@ -42,7 +42,7 @@ export default async ({ addon, console, msg }) => {
         Object.assign(document.createElement("p"), {
           textContent: msg("record-description"),
           className: "recordOptionDescription",
-        }),
+        })
       );
 
       // Seconds
@@ -196,7 +196,7 @@ export default async ({ addon, console, msg }) => {
             waitUntilFlag: recordOptionFlagInput.checked,
             useStopSign: !recordOptionStopInput.disabled && recordOptionStopInput.checked,
           }),
-        { once: true },
+        { once: true }
       );
       buttonRow.appendChild(startButton);
       recordOptionInner.appendChild(buttonRow);
@@ -324,14 +324,11 @@ export default async ({ addon, console, msg }) => {
         recordElem.textContent = msg("starting-in", { secs: roundedDelay - index });
         await new Promise((resolve) => setTimeout(resolve, 975));
       }
-      setTimeout(
-        () => {
-          recordElem.textContent = msg("stop");
+      setTimeout(() => {
+        recordElem.textContent = msg("stop");
 
-          recorder.start(1000);
-        },
-        (delay - roundedDelay) * 1000,
-      );
+        recorder.start(1000);
+      }, (delay - roundedDelay) * 1000);
     };
     if (!recordElem) {
       recordElem = Object.assign(document.createElement("div"), {

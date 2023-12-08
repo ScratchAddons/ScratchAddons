@@ -4,7 +4,7 @@ function injectRedux() {
     return console.warn(
       "Redux feature is disabled due to conflict. \
 Some addons will not work. Uninstall other browser extensions to \
-fix this warning.",
+fix this warning."
     );
   }
 

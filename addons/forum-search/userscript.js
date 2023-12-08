@@ -35,12 +35,12 @@ function cleanPost(post) {
     Array.prototype.forEach.call(elem.attributes, (attr) => {
       if (!allowed.includes(attr.name)) {
         throw new SanitizerFailed(
-          `forum-search: Warning: Potential XSS attempt found: ${attr.name} is not allowed for ${elem.tagName}`,
+          `forum-search: Warning: Potential XSS attempt found: ${attr.name} is not allowed for ${elem.tagName}`
         );
       }
       if (attr.name === "href" && !(elem.protocol === "https:" || elem.protocol === "http:")) {
         throw new SanitizerFailed(
-          `forum-search: Warning: Potential XSS attempt found: protocol ${elem.protocol} is not allowed`,
+          `forum-search: Warning: Potential XSS attempt found: protocol ${elem.protocol} is not allowed`
         );
       }
     });
@@ -153,7 +153,7 @@ function appendSearch(box, query, page, term, msg) {
               document.getElementById("forum-search-list"),
               document.getElementById("forum-search-input").value,
               document.getElementById("forum-search-dropdown").value,
-              msg,
+              msg
             );
           });
           postLeftDl.appendChild(userPostButton);
@@ -169,7 +169,7 @@ function appendSearch(box, query, page, term, msg) {
             document.getElementById("forum-search-list"),
             document.getElementById("forum-search-input").value,
             document.getElementById("forum-search-dropdown").value,
-            msg,
+            msg
           );
         });
         postLeftDl.appendChild(userGlobalButton);
@@ -182,7 +182,7 @@ function appendSearch(box, query, page, term, msg) {
 
         postLeftDl.appendChild(createTextBox(msg("last-checked"), "black username", 1));
         postLeftDl.appendChild(
-          createTextBox(scratchAddons.l10n.datetime(new Date(post.time.html_last_checked)), "", 2),
+          createTextBox(scratchAddons.l10n.datetime(new Date(post.time.html_last_checked)), "", 2)
         );
 
         let postRight = document.createElement("div");
@@ -208,8 +208,8 @@ function appendSearch(box, query, page, term, msg) {
               msg("last-edited-by", {
                 username: post.editor,
                 datetime: scratchAddons.l10n.datetime(new Date(post.time.edited)),
-              }),
-            ),
+              })
+            )
           );
           postEdit.appendChild(postEditMessage);
           postMsg.appendChild(postEdit);
