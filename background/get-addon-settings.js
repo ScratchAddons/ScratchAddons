@@ -139,6 +139,24 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
       }
     }
 
+    if (addonsEnabled["custom-menu-bar"] === undefined) {
+      // Transition v1.35 to v1.36
+      if (addonsEnabled["tutorials-button"] === true) {
+        // Hide Tutorials button is now a setting in Customizable menu bar. Enable it for existing addon users.
+        madeAnyChanges = true;
+        addonsEnabled["custom-menu-bar"] = true;
+        addonSettings["custom-menu-bar"] = { ["hide-tutorials-button"]: true };
+      }
+      if (addonsEnabled["editor-compact"] === true) {
+        // The icons on the menu bar buttons are now hidden via Customizable menu bar.
+        // Enable it for existing Compact editor users.
+        madeAnyChanges = true;
+        addonsEnabled["custom-menu-bar"] = true;
+        if (!addonSettings["custom-menu-bar"]) addonSettings["custom-menu-bar"] = {};
+        addonSettings["custom-menu-bar"]["menu-labels"] = "labels";
+      }
+    }
+
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
       const settings = addonSettings[addonId] || {};

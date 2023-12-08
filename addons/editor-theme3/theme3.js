@@ -417,6 +417,7 @@ export default async function ({ addon, console, msg }) {
     Blockly.Colours.textField = otherColor("input-color", "textField");
     if (textMode() === "colorOnWhite") Blockly.Colours.fieldShadow = "rgba(0, 0, 0, 0.15)";
     else Blockly.Colours.fieldShadow = originalColors.fieldShadow;
+    Blockly.Colours.text = uncoloredTextColor(); // used by editor-colored-context-menus
 
     const workspace = Blockly.getMainWorkspace();
     const flyout = workspace.getFlyout();
