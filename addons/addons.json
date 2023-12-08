@@ -150,6 +150,7 @@
   "paint-skew",
   "preview-project-description",
   "collapse-footer",
+  "download-button",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
@@ -157,7 +158,6 @@
   "// and so on, and we want some themes to override others.",
   "// For website:",
   "dark-www",
-  "save-in-project-page",
   "scratchr2",
   "old-studio-layout",
   "compact-messages",
