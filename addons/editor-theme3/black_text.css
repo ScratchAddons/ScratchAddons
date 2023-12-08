@@ -6,9 +6,6 @@
 .blocklyEditableText > text {
   fill: var(--editorTheme3-inputColor-blackText);
 }
-.blocklyHtmlInput {
-  color: var(--editorTheme3-inputColor-blackText);
-}
 
 .blocklyDropDownDiv .goog-menuitem,
 .sa-contextmenu-colored .blocklyContextMenu .goog-menuitem .goog-menuitem-content {
