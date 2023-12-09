@@ -613,6 +613,23 @@ export default class Tab extends Listenable {
         from: () => [],
         until: () => [],
       },
+      afterProfileCountry: {
+        element: () =>
+          q(".shared-after-country-space") ||
+          (() => {
+            const wrapper = Object.assign(document.createElement("div"), {
+              className: "shared-after-country-space",
+            });
+
+            wrapper.style.display = "inline-block";
+
+            document.querySelector(".location").appendChild(wrapper);
+
+            return wrapper;
+          })(),
+        from: () => [],
+        until: () => [],
+      },
     };
 
     const spaceInfo = sharedSpaces[space];

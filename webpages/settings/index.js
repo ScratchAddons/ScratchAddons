@@ -379,7 +379,9 @@ let fuse;
         setTimeout(() => window.parent.close(), 100);
       },
       hidePopup() {
-        document.querySelector(".popup").style.animation = "closePopup 0.6s 1";
+        document.querySelector(".popup").style.animation = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "closePopup 0.35s 1"
+          : "closePopup 0.6s 1";
         document.querySelector(".popup").addEventListener(
           "animationend",
           () => {
