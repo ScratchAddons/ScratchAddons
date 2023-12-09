@@ -417,6 +417,7 @@ export default async function ({ addon, console, msg }) {
     Blockly.Colours.textField = otherColor("input-color", "textField");
     if (textMode() === "colorOnWhite") Blockly.Colours.fieldShadow = "rgba(0, 0, 0, 0.15)";
     else Blockly.Colours.fieldShadow = originalColors.fieldShadow;
+    Blockly.Colours.text = uncoloredTextColor(); // used by editor-colored-context-menus
 
     const workspace = Blockly.getMainWorkspace();
     const flyout = workspace.getFlyout();
@@ -427,10 +428,12 @@ export default async function ({ addon, console, msg }) {
       vm.emitWorkspaceUpdate();
     }
     if (!flyout || !toolbox) return;
+    Blockly.Events.disable();
     const flyoutWorkspace = flyout.getWorkspace();
     Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
     toolbox.populate_(workspace.options.languageTree);
     workspace.toolboxRefreshEnabled_ = true;
+    Blockly.Events.enable();
   };
 
   updateColors();
