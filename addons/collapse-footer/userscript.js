@@ -9,9 +9,9 @@ export default async function ({ addon, console }) {
   icon.width = 16;
   icon.className = "sa-footer-arrow";
   footer.insertBefore(icon, footer.firstChild);
-  
+
   let collapseTimeout;
-  
+
   function collapseFooter() {
     collapseTimeout = setTimeout(() => {
       footer.classList.remove("expanded");
@@ -19,8 +19,8 @@ export default async function ({ addon, console }) {
   }
 
   function instantCollapseFooter(event) {
-      // Only hide if the click is outside the footer
-      if (!footer.contains(event.target)) footer.classList.remove("expanded");
+    // Only hide if the click is outside the footer
+    if (!footer.contains(event.target)) footer.classList.remove("expanded");
   }
 
   function expandFooter() {
@@ -46,7 +46,7 @@ export default async function ({ addon, console }) {
     footer.appendChild(donor);
     root.style.setProperty("--footer-hover-height", "410px");
   }
-  
+
   function setup() {
     footer.addEventListener(addon.settings.get("mode") === "click" ? "click" : "mouseover", expandFooter);
 
