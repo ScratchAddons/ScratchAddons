@@ -9,11 +9,25 @@ export default async function ({ addon, console }) {
   icon.width = 16;
   icon.className = "sa-footer-arrow";
   footer.insertBefore(icon, footer.firstChild);
-
+  
+  let collapseTimeout;
+  
   function collapseFooter() {
     collapseTimeout = setTimeout(() => {
       footer.classList.remove("expanded");
     }, 200);
+  }
+
+  function instantCollapseFooter(event) {
+      // Only hide if the click is outside the footer
+      if (!footer.contains(event.target)) footer.classList.remove("expanded");
+  }
+
+  function expandFooter() {
+    footer.classList.add("transition", "expanded");
+    if (collapseTimeout) {
+      clearTimeout(collapseTimeout);
+    }
   }
 
   if (!(addon.settings.get("infiniteScroll") && enabledAddons.includes("infinite-scroll"))) {
@@ -32,22 +46,23 @@ export default async function ({ addon, console }) {
     footer.appendChild(donor);
     root.style.setProperty("--footer-hover-height", "410px");
   }
+  
+  function setup() {
+    footer.addEventListener(addon.settings.get("mode") === "click" ? "click" : "mouseover", expandFooter);
 
-  let collapseTimeout;
-
-  footer.addEventListener(addon.settings.get("mode") === "click" ? "click" : "mouseover", () => {
-    footer.classList.add("transition", "expanded");
-    if (collapseTimeout) {
-      clearTimeout(collapseTimeout);
+    if (addon.settings.get("mode") === "click") {
+      document.addEventListener("mousedown", instantCollapseFooter);
+    } else {
+      footer.addEventListener("mouseout", collapseFooter);
     }
-  });
-
-  if (addon.settings.get("mode") === "click") {
-    document.addEventListener("mousedown", (event) => {
-      // Only hide if the click is outside the footer
-      if (!footer.contains(event.target)) footer.classList.remove("expanded");
-    });
-  } else {
-    footer.addEventListener("mouseout", collapseFooter);
   }
+  setup();
+
+  addon.settings.addEventListener("change", () => {
+    document.removeEventListener("mousedown", instantCollapseFooter);
+    footer.removeEventListener("mouseout", collapseFooter);
+    footer.removeEventListener("click", expandFooter);
+    footer.removeEventListener("mouseover", expandFooter);
+    setup();
+  });
 }
