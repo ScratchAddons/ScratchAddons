@@ -6,8 +6,7 @@
 
 .u-dropdown-searchbar,
 .u-dropdown-searchbar:focus,
-.blocklyDropDownDiv .goog-menuitem,
-.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem .goog-menuitem-content {
+.blocklyDropDownDiv .goog-menuitem {
   color: #575e75;
 }
 .u-dropdown-searchbar:focus {
