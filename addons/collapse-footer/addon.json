@@ -49,15 +49,6 @@
       "default": "default"
     },
     {
-      "name": "Only on infinite scrolling pages",
-      "id": "infiniteScroll",
-      "type": "boolean",
-      "if": {
-        "addonEnabled": ["infinite-scroll"]
-      },
-      "default": false
-    },
-    {
       "name": "Toggle on",
       "id": "mode",
       "type": "select",
@@ -72,6 +63,15 @@
         }
       ],
       "default": "hover"
+    },
+    {
+      "name": "Only on infinite scrolling pages",
+      "id": "infiniteScroll",
+      "type": "boolean",
+      "if": {
+        "addonEnabled": ["infinite-scroll"]
+      },
+      "default": false
     }
   ],
   "userscripts": [
