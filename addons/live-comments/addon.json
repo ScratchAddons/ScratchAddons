@@ -23,7 +23,7 @@
   ],
   "userscripts": [
     {
-      "url": "script.js",
+      "url": "profiles.js",
       "matches": ["profiles"]
     },
     {
