@@ -1,7 +1,0 @@
-bugs: 
-spews comments at top eventually
-
-fix time being a date, and not "__ minutes ago"
-- will automatically tunr to "__ ago" format when you add a reply- figure out how to manually cause that
-
-add red fade animation and sound on new reply!
