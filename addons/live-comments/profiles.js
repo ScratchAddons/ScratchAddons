@@ -55,7 +55,7 @@ export default async function ({ addon, msg }) {
           },
           cache: "no-store",
           method: "GET",
-        }
+        },
       )
     ).text();
     // console.log(newComments)

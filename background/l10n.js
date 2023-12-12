@@ -8,7 +8,7 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
 
   async load(addonIds) {
     addonIds = ["_general", ...addonIds].filter(
-      (addonId) => !addonId.startsWith("//") && !this.loaded.includes(addonId)
+      (addonId) => !addonId.startsWith("//") && !this.loaded.includes(addonId),
     );
     const ui = chrome.i18n.getUILanguage().toLowerCase();
     const locales = [ui];

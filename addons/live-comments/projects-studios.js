@@ -7,7 +7,7 @@ export default async function ({ addon, global, console, msg }) {
   async function addButton() {
     await addon.tab.waitForElement("h4>span, h2>span", { markAsSeen: true });
     let commentsText = Array.from(document.querySelectorAll("h4>span, h2>span")).find(
-      (el) => el.innerText == "Comments"
+      (el) => el.innerText == "Comments",
     );
 
     function setButtonStyles() {

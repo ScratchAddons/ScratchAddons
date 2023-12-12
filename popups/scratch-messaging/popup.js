@@ -112,7 +112,7 @@ export default async ({ addon, msg, safeMsg }) => {
                 Object.assign(document.createElement("a"), {
                   href: `https://scratch.mit.edu/users/${this.thisComment.author}`,
                   textContent: "@" + this.thisComment.author,
-                })
+                }),
               );
               newElement.append(" ");
               newElement.append(...domContent.childNodes);
@@ -448,7 +448,7 @@ export default async ({ addon, msg, safeMsg }) => {
           .then(() => {
             this.stMessages.splice(
               this.stMessages.findIndex((alert) => alert.id === id),
-              1
+              1,
             );
             this.updateMessageCount();
           })
@@ -539,7 +539,7 @@ export default async ({ addon, msg, safeMsg }) => {
                     Object.assign(document.createElement("a"), {
                       href: `https://scratch.mit.edu/users/${commentObject.replyingTo}`,
                       textContent: "@" + commentObject.replyingTo,
-                    })
+                    }),
                   );
                   newElement.append(" ");
                 }
@@ -558,8 +558,8 @@ export default async ({ addon, msg, safeMsg }) => {
               resourceType === "project"
                 ? "getProjectObject"
                 : resourceType === "user"
-                ? "getProfileObject"
-                : "getStudioObject";
+                  ? "getProfileObject"
+                  : "getStudioObject";
             const resourceObject = this[resourceGetFunction](resourceId);
             for (const sortedId of sortedIds) resourceObject.commentChains.push(sortedId);
 
