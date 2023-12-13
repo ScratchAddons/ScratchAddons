@@ -32,11 +32,14 @@ export default async function ({ addon, console, msg }) {
     if (addon.tab.redux.state?.preview?.projectInfo?.public === false) {
       let projectToken = (
         await (
-          await fetch(`https://api.scratch.mit.edu/projects/${projectId}?nocache=${Date.now()}`, {
-            headers: {
-              "x-token": await addon.auth.fetchXToken(),
-            },
-          })
+          await fetch(
+            `https://api.scratch.mit.edu/projects/${projectId}?current_time_to_get_updated_project_token=${Date.now()}`,
+            {
+              headers: {
+                "x-token": await addon.auth.fetchXToken(),
+              },
+            }
+          )
         ).json()
       ).project_token;
       search = `#?token=${projectToken}`;
@@ -59,7 +62,7 @@ export default async function ({ addon, console, msg }) {
           usp.set("addons", enabledAddons.join(","));
         }
         // Apply the same fullscreen background color, consistently with the vanilla Scratch fullscreen behavior.
-        // It's not expected here to support dynamicDisable/dyanmicEnable of editor-dark-mode to work exactly
+        // It's not expected here to support dynamicDisable/dynamicEnable of editor-dark-mode to work exactly
         // like it does with vanilla.
         const fullscreenBackground =
           document.documentElement.style.getPropertyValue("--editorDarkMode-fullscreen") || "white";

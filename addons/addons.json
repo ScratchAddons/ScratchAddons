@@ -109,7 +109,6 @@
   "editor-comment-previews",
   "swap-local-global",
   "fix-editor-comments",
-  "tutorials-button",
   "hi-res-thumbnails",
   "block-count",
   "script-snap",
@@ -135,6 +134,7 @@
   "rename-broadcasts",
   "middle-click-popup",
   "number-pad",
+  "editor-random-direction-block",
   "necropost-highlighter",
   "copy-reporter",
   "share-through-mystuff",
@@ -143,6 +143,14 @@
   "op-badge",
   "featured-dangos-v2",
   "remember-collapsed-categories",
+  "editor-square-inputs",
+  "editor-number-arrow-keys",
+  "custom-menu-bar",
+  "colorblind",
+  "forum-post-countdown",
+  "paint-skew",
+  "preview-project-description",
+  "collapse-footer",
   "live-comments",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
@@ -167,5 +175,6 @@
   "editor-stage-left",
   "editor-buttons-reverse-order",
   "columns",
+  "editor-compact",
   "editor-theme3"
 ]

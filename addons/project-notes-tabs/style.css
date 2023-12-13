@@ -1,7 +1,18 @@
+/* preview-project-description compatibility */
+.sa-project-tabs-wrapper {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap-reverse;
+}
+.preview .project-notes > .sa-project-tabs-wrapper {
+  /* Specificity */
+  margin-bottom: 0;
+}
+
 .tabs-sa {
   display: flex;
   overflow: hidden;
-  margin-bottom: 0 !important;
 }
 
 .tab-choice-sa {
@@ -30,12 +41,18 @@
   background-color: rgba(77, 151, 255, 0.1);
 }
 
-.description-block {
+body.sa-project-tabs-on .preview .description-block {
   overflow: auto;
-  margin-bottom: 0 !important;
+  margin-bottom: 0;
 }
 
-.project-description {
+body.sa-project-tabs-on .preview .project-description {
+  width: 100%;
   height: 100%;
   box-sizing: border-box;
+}
+
+body.sa-project-tabs-on .project-textlabel {
+  /* Hide labels with CSS instead of removing them with JS */
+  display: none;
 }

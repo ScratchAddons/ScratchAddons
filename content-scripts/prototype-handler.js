@@ -23,8 +23,7 @@ function injectPrototype() {
   };
 }
 
-const isLocal =
-  location.origin === "https://scratchfoundation.github.io" || location.origin.startsWith("http://localhost:");
+const isLocal = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
 if ((!(document.documentElement instanceof SVGElement) && location.pathname.split("/")[1] === "projects") || isLocal) {
   const injectPrototypeScript = document.createElement("script");
   injectPrototypeScript.append(document.createTextNode("(" + injectPrototype + ")()"));

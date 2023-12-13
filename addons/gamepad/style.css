@@ -47,7 +47,7 @@
   filter: invert(100%);
 }
 
-.sa-gamepad-small [class*="gui_body-wrapper_"]:not(.sa-stage-hidden) .sa-gamepad-container[data-editor-mode="editor"] {
+.sa-small-stage [class*="gui_body-wrapper_"]:not(.sa-stage-hidden) .sa-gamepad-container {
   display: none !important;
 }
 
