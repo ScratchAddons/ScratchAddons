@@ -1,6 +1,7 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 
 export default async function ({ addon, console }) {
+  window.addon = addon;
   const vm = addon.tab.traps.vm;
   const { redux } = addon.tab;
 
@@ -11,6 +12,7 @@ export default async function ({ addon, console }) {
   const projectAuthor = redux.state.preview.projectInfo.author?.username;
 
   const isOwn = username === projectAuthor;
+  const shared = (await addon.tab.redux.state.preview.projectInfo.is_published) == true ? true : false;
 
   async function download() {
     const project = await vm.saveProjectSb3();
@@ -27,10 +29,11 @@ export default async function ({ addon, console }) {
 
   function addbutton() {
     addon.tab.waitForElement(".flex-row .subactions", { markAsSeen: true });
+    console.log(shared);
     addon.tab.appendToSharedSpace({
-      space: "afterCopyLinkButton",
+      space: shared ? "afterCopyLinkButton" : "beforeProjectActionButtons",
       element: downloadButton,
-      order: -1,
+      order: shared ? -1 : 1,
     });
   }
 
