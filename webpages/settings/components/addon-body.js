@@ -78,14 +78,14 @@ export default async function ({ template }) {
             isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
               ? false
               : event.shiftKey
-                ? false
-                : newState;
+              ? false
+              : newState;
           chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
           this.$emit("toggle-addon-request", newState);
         };
 
         const requiredPermissions = (this.addon.permissions || []).filter((value) =>
-          this.$root.browserLevelPermissions.includes(value),
+          this.$root.browserLevelPermissions.includes(value)
         );
         if (!this.addon._enabled && this.addon.tags.includes("danger")) {
           const confirmation = confirm(chrome.i18n.getMessage("dangerWarning", [this.addon.name]));
@@ -108,7 +108,7 @@ export default async function ({ template }) {
                     console.log("Permissions granted!");
                     toggle();
                   }
-                },
+                }
               );
           } else toggle();
         } else toggle();

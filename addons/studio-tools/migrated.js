@@ -6,7 +6,7 @@ export default async ({ addon, console, msg }) => {
     // so we can ignore.
     {
       actions: ["SET_INFO", "SET_ROLES"],
-    },
+    }
   );
 
   const studioId = redux.state.studio.id;
@@ -131,7 +131,7 @@ export default async ({ addon, console, msg }) => {
         () => {
           if (redux.state.studio.managers < MAX_MANAGERS) return null;
           return msg("max-managers-reached", { max: MAX_MANAGERS });
-        },
+        }
       );
 
       rSec = makeAdder("remove-new", "remove-btn", async (u) => {

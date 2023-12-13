@@ -7,7 +7,7 @@ export default async function ({ addon, console, msg }) {
   } else {
     const firstPageDocument = new DOMParser().parseFromString(
       await fetch(`https://scratch.mit.edu/discuss/topic/${location.href.split("/")[5]}/`).then((res) => res.text()),
-      "text/html",
+      "text/html"
     );
     opUsername = firstPageDocument.querySelectorAll(".blockpost")[0].querySelector(".username").innerText;
   }

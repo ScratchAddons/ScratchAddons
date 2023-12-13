@@ -39,7 +39,7 @@ export default async function ({ addon, console }) {
             ...Array.prototype.map.call(scratchr2List.children, (item) => ({
               name: item.innerText,
               url: item.firstChild.href,
-            })),
+            }))
           );
         }
         while (scratchr2List.firstChild) {
