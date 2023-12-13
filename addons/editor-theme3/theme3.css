@@ -2,8 +2,11 @@
   fill: var(--editorTheme3-inputColor-text);
 }
 .blocklyHtmlInput {
-  background-color: var(--editorTheme3-inputColor);
-  color: var(--editorTheme3-inputColor-text);
+  /* Hide the HTML input so that only the SVG part is visible.
+     This is needed for transparent inputs. */
+  background-color: transparent;
+  color: transparent;
+  caret-color: var(--editorTheme3-inputColor-text);
 }
 
 /* Override Scratch's high contrast theme */

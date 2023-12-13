@@ -168,6 +168,7 @@ let fuse;
     data() {
       return {
         smallMode: false,
+        devMode: false,
         theme: initialTheme,
         forceEnglishSetting: null,
         forceEnglishSettingInitial: null,
@@ -724,6 +725,10 @@ let fuse;
   }
   window.onresize = resize;
   resize();
+
+  chrome.management.getSelf((info) => {
+    if (info.installType === "development") vue.devMode = true;
+  });
 
   // Konami code easter egg
   let cursor = 0;

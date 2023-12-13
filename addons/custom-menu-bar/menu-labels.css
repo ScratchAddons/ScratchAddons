@@ -1,0 +1,18 @@
+[class*="menu-bar_file-group"] > [class*="menu-bar_hoverable"] > img {
+  display: none;
+}
+
+[class*="menu-bar_hoverable"] {
+  justify-content: center;
+}
+
+[class*="menu-bar_hoverable"] > span {
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 1024px) {
+  [class*="menu-bar_file-group"] > [class*="menu-bar_hoverable"] > img {
+    display: block;
+  }
+}

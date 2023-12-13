@@ -1,0 +1,11 @@
+[class*="account-nav_profile-name"] {
+  display: none;
+}
+
+.sa-profile-name {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: normal;
+  line-height: 0px;
+  padding-bottom: 15px;
+}

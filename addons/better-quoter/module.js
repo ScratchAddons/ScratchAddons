@@ -57,6 +57,11 @@ function getSelectionBBCode(selection) {
     return "";
   }
 
+  const textNodes = getTextNodes(html, ["code", "sa-copyCodeDiv"]);
+  for (const textNode of textNodes) {
+    textNode.textContent = textNode.textContent.replaceAll("[", "[[]");
+  }
+
   // new lines
   const lineBreaks = html.querySelectorAll("br");
   for (const br of lineBreaks) br.insertAdjacentText("afterend", "\n");
@@ -186,6 +191,18 @@ function getSelectionBBCode(selection) {
   }
 
   return html.textContent;
+}
+
+function getTextNodes(element, excludeClasses) {
+  let textNodes = [];
+  for (const child of element.childNodes) {
+    if (child.nodeType === 3) {
+      textNodes.push(child);
+    } else if (!excludeClasses.some((className) => child.classList.contains(className))) {
+      textNodes = textNodes.concat(getTextNodes(child, excludeClasses));
+    }
+  }
+  return textNodes;
 }
 
 function setup() {
