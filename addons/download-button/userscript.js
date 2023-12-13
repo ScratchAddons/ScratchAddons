@@ -23,13 +23,19 @@ export default async function ({ addon, console }) {
   const downloadButton = document.createElement("button");
   downloadButton.innerText = "Download";
   downloadButton.onclick = download;
-  downloadButton.classList = "button sa-download-button";
+  downloadButton.classList = "button action-button sa-download-button";
 
-  while (true) {
-    const seeInsideButton = await addon.tab.waitForElement(".see-inside-button", {
-      markAsSeen: true,
+  function addbutton() {
+    addon.tab.waitForElement(".flex-row .subactions", { markAsSeen: true });
+    addon.tab.appendToSharedSpace({
+      space: "afterCopyLinkButton",
+      element: downloadButton,
+      order: -1,
     });
-    const container = document.querySelector(".project-buttons");
-    container.insertBefore(downloadButton, seeInsideButton);
   }
+
+  addbutton();
+  addon.tab.addEventListener("urlChange", () => {
+    addbutton();
+  });
 }
