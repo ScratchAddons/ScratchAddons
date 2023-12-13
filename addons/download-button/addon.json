@@ -15,5 +15,7 @@
       "url": "style.css",
       "matches": ["projects"]
     }
-  ]
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
 }

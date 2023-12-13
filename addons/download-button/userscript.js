@@ -38,4 +38,6 @@ export default async function ({ addon, console }) {
   addon.tab.addEventListener("urlChange", () => {
     addbutton();
   });
+
+  addon.tab.displayNoneWhileDisabled(downloadButton);
 }
