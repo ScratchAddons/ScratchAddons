@@ -7,10 +7,8 @@ export default async function ({ addon, console }) {
   await redux.waitForState((state) => typeof state.session.session?.user === "object");
   const username = await addon.auth.fetchUsername();
 
-  const projectAuthor =
-    (await redux.state.preview.status.project) === "FETCHED"
-      ? redux.state.preview.projectInfo.author?.username
-      : "Can not find project author";
+  await redux.waitForState((state) => state.preview.status.project === "FETCHED");
+  const projectAuthor = redux.state.preview.projectInfo.author?.username;
 
   const isOwn = username === projectAuthor;
 
