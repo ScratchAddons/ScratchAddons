@@ -82,7 +82,7 @@
     },
     {
       "url": "mystuff.css",
-      "matches": ["https://scratch.mit.edu/mystuff/"]
+      "matches": ["https://scratch.mit.edu/mystuff/*"]
     },
     {
       "url": "settings.css",
