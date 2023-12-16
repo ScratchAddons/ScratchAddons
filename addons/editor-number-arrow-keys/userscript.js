@@ -1,3 +1,5 @@
+import { shiftDecimalPointToRight, shiftDecimalPointToLeft } from "../../libraries/common/cs/math-on-decimals.js";
+
 export default async function ({ addon }) {
   const settings = {
     none: 0,
@@ -11,40 +13,6 @@ export default async function ({ addon }) {
   const amountOfDecimals = (numStr) => {
     if (!numStr.includes(".")) return 0;
     return numStr.toString().split(".")[1].length;
-  };
-
-  const shiftDecimalPointToRight = (num, times) => {
-    const isNumberNegative = num[0] === "-";
-    let numStr = isNumberNegative ? num.substring(1) : num;
-    for (let i = 0; i < times; i++) {
-      if (numStr.indexOf(".") === -1) numStr += 0;
-      else if (numStr.indexOf(".") === numStr.length - 2) numStr = numStr.replace(".", "");
-      else {
-        const index = numStr.indexOf(".");
-        const numArrFiltered = Array.from(numStr.replace(".", ""));
-        numArrFiltered.splice(index + 1, 0, ".");
-        numStr = numArrFiltered.join("");
-      }
-    }
-    return Number(numStr) * (isNumberNegative ? -1 : 1);
-  };
-  const shiftDecimalPointToLeft = (num, times) => {
-    const isNumberNegative = num[0] === "-";
-    let numStr = isNumberNegative ? num.substring(1) : num;
-    for (let i = 0; i < times; i++) {
-      if (numStr.indexOf(".") === 0) numStr = ".0" + numStr.substring(1);
-      else if (numStr.indexOf(".") === -1) {
-        const numArr = Array.from(numStr);
-        numArr.splice(numArr.length - 1, 0, ".");
-        numStr = numArr.join("");
-      } else {
-        const index = numStr.indexOf(".");
-        const numArrFiltered = Array.from(numStr.replace(".", ""));
-        numArrFiltered.splice(index - 1, 0, ".");
-        numStr = numArrFiltered.join("");
-      }
-    }
-    return Number(numStr) * (isNumberNegative ? -1 : 1);
   };
 
   const normalizeNumber = (numStr) => {
@@ -86,27 +54,36 @@ export default async function ({ addon }) {
     return normalizeNumber(numStr) === Number(numStr).toString();
   };
 
-  const isSupportedElement = (el) => {
-    if (el.classList.contains("blocklyHtmlInput")) return true;
-    else if (el.matches(".mediaRecorderPopupContent input[type=number]")) {
+  // Because math-in-inputs changes the type to "text", we need to check for that instead of "number"
+  const isSupportedElement = (el, isSupportedChecked) => {
+    let type = " input[type=text]";
+    type = !isSupportedChecked ? " input[type=text]" : " input[type=number]";
+    if (!el.classList) return false;
+    if (el.classList.contains("blocklyHtmlInput")) return true; // Block inputs do not have a type to change
+    else if (el.matches("[class*=mediaRecorderPopupContent]" + type)) {
       // Number inputs in `mediarecorder` addon modal
       return true;
-    } else if (el.className.includes("input_input-form_")) {
-      if (el.matches("[class*=sprite-info_sprite-info_] [class*=input_input-small_]")) {
-        // Sprite X/Y coordinates, size and direction (excludes sprite name)
+    } else if (el.matches("[class*=input_input-form_]")) {
+      // The following elements have this in their class list
+      if (el.matches("[class*=input_input-small_]")) {
+        // Inputs in sprite propeties (exluding sprite name)
         return true;
-      } else if (el.matches("[class*=paint-editor_editor-container-top_] input[type=number]")) {
-        // Number inputs in costume editor (note that browsers already provide up/down clickable buttons for these)
+      } else if (
+        el.matches("[class*=paint-editor_editor-container-top_]" + type) &&
+        !el.matches("[class*=fixed-tools_costume-input_]")
+      ) {
+        // All costume editor inputs (in the top bar: outline width, brush size, etc) except costume name
         return true;
-      } else return false;
+      }
+      if (!isSupportedChecked) return isSupportedElement(el, true);
+      return false;
     }
-    return false;
   };
 
   document.body.addEventListener("keydown", (e) => {
     if (addon.self.disabled) return;
     if (!["ArrowUp", "ArrowDown"].includes(e.code)) return;
-    if (!isSupportedElement(e.target)) return;
+    if (!isSupportedElement(e.target, false)) return;
     if (!e.target.value) return;
     if (!isValidNumber(e.target.value)) return;
 
@@ -141,9 +118,8 @@ export default async function ({ addon }) {
           : settings[addon.settings.get("regular")];
     }
 
-    const newValueAsInt =
-      shiftDecimalPointToRight(e.target.value, 5) + shiftDecimalPointToRight(changeBy.toString(), 5);
-    const newValue = shiftDecimalPointToLeft(newValueAsInt.toString(), 5);
+    const newValueAsInt = shiftDecimalPointToRight(e.target.value, 5) + shiftDecimalPointToRight(changeBy, 5);
+    const newValue = shiftDecimalPointToLeft(newValueAsInt, 5);
 
     if (e.target.className.includes("input_input-form_")) {
       Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());

@@ -1,0 +1,37 @@
+{
+  "name": "Mathematical expressions in number inputs",
+  "description": "Evaluates mathematical expressions (e.g. 2+4*3) in number inputs in the editor automatically.",
+  "tags": ["editor", "codeEditor", "recommended"],
+  "versionAdded": "1.36.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "credits": [
+    {
+      "name": "Jazza",
+      "link": "https://scratch.mit.edu/users/greeny--231/"
+    },
+    { "name": "Tacodiva", "link": "https://github.com/Tacodiva" }
+  ],
+  "enabledByDefault": true,
+  "settings": [
+    {
+      "name": "Allow text in block number inputs",
+      "id": "textInInputs",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "info": [
+    {
+      "type": "notice",
+      "text": "Use Ctrl+Enter to evaluate",
+      "id": "ctrlEnter"
+    }
+  ]
+}
