@@ -12,7 +12,7 @@ export default async function ({ addon, console }) {
   const projectAuthor = redux.state.preview.projectInfo.author?.username;
 
   const isOwn = username === projectAuthor;
-  const shared = (await addon.tab.redux.state.preview.projectInfo.is_published) == true ? true : false;
+  const shared = await addon.tab.redux.state.preview.projectInfo.is_published;
 
   async function download() {
     const project = await vm.saveProjectSb3();
