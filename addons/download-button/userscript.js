@@ -29,7 +29,6 @@ export default async function ({ addon, console }) {
 
   function addbutton() {
     addon.tab.waitForElement(".flex-row .subactions", { markAsSeen: true });
-    console.log(shared);
     addon.tab.appendToSharedSpace({
       space: shared ? "afterCopyLinkButton" : "beforeProjectActionButtons",
       element: downloadButton,
