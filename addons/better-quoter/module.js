@@ -221,7 +221,13 @@ function setup() {
           )})[/small]`
         : "";
     const selection = window.getSelection();
-    const text = post.find("[data-show-bbcode]").length !== 0 ? selection : await getPostText(id, post[0], selection);
+    const showBbcode = post.find("[data-show-bbcode]");
+    const text =
+      showBbcode.length !== 0
+        ? selection.toString() === ""
+          ? showBbcode[0].innerText
+          : selection
+        : await getPostText(id, post[0], selection);
     paste(`[quote=${username}]${idText}\n${text}\n[/quote]\n`);
   };
 }
