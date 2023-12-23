@@ -1,8 +1,13 @@
-function viewSource(post, msg) {
+function viewSource(post, msg, addon) {
   return function (event) {
     event.preventDefault();
     const body = post.querySelector(".postmsg");
     if (event.target.getAttribute("data-state") === "post") {
+      const sourceLink = "https://scratch.mit.edu/discuss/post/" + post.id.substring(1) + "/source/";
+      if (addon.settings.get("display-type") === "new-tab") {
+        open(sourceLink);
+        return;
+      }
       event.target.innerText = msg("source-button-active");
       event.target.removeAttribute("title");
       if (event.target.originalHTML === undefined) {
@@ -20,7 +25,7 @@ function viewSource(post, msg) {
       }
       event.target.setAttribute("data-state", "loading");
       source.innerText = msg("loading");
-      fetch("https://scratch.mit.edu/discuss/post/" + post.id.substring(1) + "/source/").then(function (res) {
+      fetch(sourceLink).then(function (res) {
         res.text().then(function (text) {
           event.target.setAttribute("data-state", "source");
           source.innerText = event.target.sourceText = text;
@@ -49,6 +54,6 @@ export default async function ({ addon, console, msg }) {
     sourceButton.innerText = msg("source-button");
     sourceButton.title = msg("source-button-tooltip");
     sourceButton.setAttribute("data-state", "post");
-    sourceButton.addEventListener("click", viewSource(post, msg));
+    sourceButton.addEventListener("click", viewSource(post, msg, addon));
   }
 }
