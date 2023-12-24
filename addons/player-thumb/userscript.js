@@ -15,11 +15,11 @@ export default async function ({ addon, console }) {
   if (addon.settings.get("loading")) {
     const LoaderBackground = stageWrapper.querySelector('[class*="loader_background_"]');
     stageWrapper.insertBefore(thumb, LoaderBackground);
+    thumb.classList.add("sa-project-thumb-loading");
   }
 
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
-    console.log(e.detail.action.type);
     if (e.detail.action.type == "scratch-gui/project-changed/SET_PROJECT_CHANGED") {
       moveThumb();
       // TODO: Remove listener
@@ -30,9 +30,9 @@ export default async function ({ addon, console }) {
   });
 
   function moveThumb() {
-    console.log("moveThumb activated");
     // Since the loading screen has a different size and layer
     // just remove the thumbnail and re-add it in the correct place
+    thumb.classList.remove("sa-project-thumb-loading");
     document.getElementById("sa-project-thumb").remove();
     const stage = document.querySelector('div[class*="stage_stage"]');
     const greenFlagOverlay = stage.querySelector('[class*="stage_green-flag-overlay-wrapper_"]');
