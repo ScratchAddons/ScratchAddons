@@ -18,6 +18,5 @@
   "enabledByDefault": true,
   "dynamicEnable": false,
   "dynamicDisable": false,
-  "runAtComplete": false,
   "libraries": ["scratch-blocks"]
 }

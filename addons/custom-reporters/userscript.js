@@ -1,6 +1,9 @@
 export default async function ({ addon, msg, console }) {
-  const ScratchBlocks = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
+  
+  // vm pollution handled in content-scripts/cs.js
+  
+  const ScratchBlocks = await addon.tab.traps.getBlockly();
   
   ScratchBlocks.Blocks["procedures_prototype_reporter"] = {
     /**
@@ -98,78 +101,6 @@ export default async function ({ addon, msg, console }) {
   addon.tab.redux.initialize();
   //vm.emitWorkspaceUpdate();
   const wksp = ScratchBlocks.getMainWorkspace();
-
-  const cleanJsonExport = (json) => {
-    for (const blockid in json.blocks || {}) {
-      switch (json.blocks[blockid].opcode) {
-        case "procedures_prototype_reporter": {
-          json.blocks[blockid].opcode = "procedures_prototype";
-          json.blocks[blockid].mutation.shape = "reporter";
-          break;
-        }
-        case "procedures_prototype_boolean": {
-          json.blocks[blockid].opcode = "procedures_prototype";
-          json.blocks[blockid].mutation.shape = "boolean";
-          break;
-        }
-        case "procedures_definition_reporter": {
-          json.blocks[blockid].opcode = "procedures_definition";
-          if (!json.blocks[blockid].mutation) {
-            json.blocks[blockid].mutation = {
-              tagName: "mutation",
-              children: [],
-            };
-          }
-          json.blocks[blockid].mutation.shape = "reporter";
-          break;
-        }
-      }
-    }
-  };
-
-  const originalToJson = vm.constructor.prototype.toJSON;
-  vm.constructor.prototype.toJSON = function (optTargetId) {
-    const json = JSON.parse(originalToJson.call(this, optTargetId));
-    if (Object.prototype.hasOwnProperty.call(json, "targets")) {
-      for (const target of json.targets) {
-        cleanJsonExport(target);
-      }
-    } else {
-      cleanJsonExport(json);
-    }
-    return JSON.stringify(json);
-  };
-  
-  const cleanJsonImport = (json) => {
-    console.log('cleanJsonImport')
-    for (const blockid in json.blocks || {}) {
-      if (json.blocks[blockid].opcode === "procedures_prototype") {
-        console.log('procedures_prototype')
-        if (json.blocks[blockid].mutation.shape === "reporter") {
-          json.blocks[blockid].opcode = "procedures_prototype_reporter";
-        
-          console.log('procedures_prototype_reporter')
-        } else if (json.blocks[blockid].mutation.shape === "boolean") {
-          json.blocks[blockid].opcode = "procedures_prototype_boolean";
-          console.log('procedures_prototype_boolean')
-        }
-      } else if (json.blocks[blockid].opcode === "procedures_definition" && json.blocks[blockid].mutation?.shape === "reporter") {
-        json.blocks[blockid].opcode = "procedures_definition_reporter";
-        console.log('procedures_definition_reporter')
-      }
-    }
-  }
-  
-  const originalDeserializeProject = vm.constructor.prototype.deserializeProject;
-  vm.constructor.prototype.deserializeProject = function (projectJSON, zip) {
-    // despite scratch documenting this functions firat parameter as being a string, it seems to actually be an object, and doesn't work if it's a string. Bizarre.
-    let json = typeof projectJSON === "string" ? JSON.parse(projectJSON) : projectJSON;
-    console.log(json)
-    for (const target of json.targets || []) {
-      cleanJsonImport(target);
-    }
-    return originalDeserializeProject.call(this, json, zip);
-  }
 
   let hasSetUpInputButtons = false;
   while (true) {
