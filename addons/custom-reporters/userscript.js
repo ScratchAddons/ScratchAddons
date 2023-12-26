@@ -100,7 +100,6 @@ export default async function ({ addon, msg, console }) {
 
   addon.tab.redux.initialize();
   //vm.emitWorkspaceUpdate();
-  const wksp = ScratchBlocks.getMainWorkspace();
 
   let hasSetUpInputButtons = false;
   while (true) {
@@ -332,6 +331,7 @@ export default async function ({ addon, msg, console }) {
       type: "scratch-gui/custom-procedures/SET_CALLBACK",
       callback: (mutation) => {
         if (mutation) {
+          const wksp = addon.tab.traps.getWorkspace();
           const statementOrValue = {
             stack: "statement",
             number: "value",
