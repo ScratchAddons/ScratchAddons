@@ -1,0 +1,1004 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		824F9CC62B3BD44D005F0176 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824F9CC52B3BD44D005F0176 /* AppDelegate.swift */; };
+		824F9CC82B3BD44D005F0176 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824F9CC72B3BD44D005F0176 /* SceneDelegate.swift */; };
+		824F9CCB2B3BD44D005F0176 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 824F9CC92B3BD44D005F0176 /* LaunchScreen.storyboard */; };
+		824F9CCE2B3BD44D005F0176 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 824F9CCC2B3BD44D005F0176 /* Main.storyboard */; };
+		824F9CD72B3BD44D005F0176 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824F9CD62B3BD44D005F0176 /* AppDelegate.swift */; };
+		824F9CDA2B3BD44D005F0176 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 824F9CD82B3BD44D005F0176 /* Main.storyboard */; };
+		824F9CE22B3BD44D005F0176 /* Scratch Addons Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 824F9CE12B3BD44D005F0176 /* Scratch Addons Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		824F9CEC2B3BD44D005F0176 /* Scratch Addons Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 824F9CEB2B3BD44D005F0176 /* Scratch Addons Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		824F9CF22B3BD44D005F0176 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = 824F9CB52B3BD44B005F0176 /* Main.html */; };
+		824F9CF32B3BD44D005F0176 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = 824F9CB52B3BD44B005F0176 /* Main.html */; };
+		824F9CF42B3BD44D005F0176 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 824F9CB72B3BD44B005F0176 /* Icon.png */; };
+		824F9CF52B3BD44D005F0176 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 824F9CB72B3BD44B005F0176 /* Icon.png */; };
+		824F9CF62B3BD44D005F0176 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = 824F9CB82B3BD44B005F0176 /* Style.css */; };
+		824F9CF72B3BD44D005F0176 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = 824F9CB82B3BD44B005F0176 /* Style.css */; };
+		824F9CF82B3BD44D005F0176 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = 824F9CB92B3BD44B005F0176 /* Script.js */; };
+		824F9CF92B3BD44D005F0176 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = 824F9CB92B3BD44B005F0176 /* Script.js */; };
+		824F9CFA2B3BD44D005F0176 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824F9CBA2B3BD44B005F0176 /* ViewController.swift */; };
+		824F9CFB2B3BD44D005F0176 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824F9CBA2B3BD44B005F0176 /* ViewController.swift */; };
+		824F9CFC2B3BD44D005F0176 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 824F9CBB2B3BD44D005F0176 /* Assets.xcassets */; };
+		824F9CFD2B3BD44D005F0176 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 824F9CBB2B3BD44D005F0176 /* Assets.xcassets */; };
+		824F9CFE2B3BD44D005F0176 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824F9CBD2B3BD44D005F0176 /* SafariWebExtensionHandler.swift */; };
+		824F9CFF2B3BD44D005F0176 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824F9CBD2B3BD44D005F0176 /* SafariWebExtensionHandler.swift */; };
+		824F9D1F2B3BD44D005F0176 /* background in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D112B3BD44D005F0176 /* background */; };
+		824F9D202B3BD44D005F0176 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D122B3BD44D005F0176 /* LICENSE */; };
+		824F9D212B3BD44D005F0176 /* addon-api in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D132B3BD44D005F0176 /* addon-api */; };
+		824F9D222B3BD44D005F0176 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D142B3BD44D005F0176 /* images */; };
+		824F9D232B3BD44D005F0176 /* addons in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D152B3BD44D005F0176 /* addons */; };
+		824F9D242B3BD44D005F0176 /* libraries in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D162B3BD44D005F0176 /* libraries */; };
+		824F9D252B3BD44D005F0176 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D172B3BD44D005F0176 /* README.md */; };
+		824F9D262B3BD44D005F0176 /* webpages in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D182B3BD44D005F0176 /* webpages */; };
+		824F9D272B3BD44D005F0176 /* popups in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D192B3BD44D005F0176 /* popups */; };
+		824F9D282B3BD44D005F0176 /* safari in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1A2B3BD44D005F0176 /* safari */; };
+		824F9D292B3BD44D005F0176 /* content-scripts in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1B2B3BD44D005F0176 /* content-scripts */; };
+		824F9D2A2B3BD44D005F0176 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1C2B3BD44D005F0176 /* manifest.json */; };
+		824F9D2B2B3BD44D005F0176 /* addons-l10n in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1D2B3BD44D005F0176 /* addons-l10n */; };
+		824F9D2C2B3BD44D005F0176 /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1E2B3BD44D005F0176 /* _locales */; };
+		824F9D2D2B3BD44D005F0176 /* background in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D112B3BD44D005F0176 /* background */; };
+		824F9D2E2B3BD44D005F0176 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D122B3BD44D005F0176 /* LICENSE */; };
+		824F9D2F2B3BD44D005F0176 /* addon-api in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D132B3BD44D005F0176 /* addon-api */; };
+		824F9D302B3BD44D005F0176 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D142B3BD44D005F0176 /* images */; };
+		824F9D312B3BD44D005F0176 /* addons in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D152B3BD44D005F0176 /* addons */; };
+		824F9D322B3BD44D005F0176 /* libraries in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D162B3BD44D005F0176 /* libraries */; };
+		824F9D332B3BD44D005F0176 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D172B3BD44D005F0176 /* README.md */; };
+		824F9D342B3BD44D005F0176 /* webpages in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D182B3BD44D005F0176 /* webpages */; };
+		824F9D352B3BD44D005F0176 /* popups in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D192B3BD44D005F0176 /* popups */; };
+		824F9D362B3BD44D005F0176 /* safari in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1A2B3BD44D005F0176 /* safari */; };
+		824F9D372B3BD44D005F0176 /* content-scripts in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1B2B3BD44D005F0176 /* content-scripts */; };
+		824F9D382B3BD44D005F0176 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1C2B3BD44D005F0176 /* manifest.json */; };
+		824F9D392B3BD44D005F0176 /* addons-l10n in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1D2B3BD44D005F0176 /* addons-l10n */; };
+		824F9D3A2B3BD44D005F0176 /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1E2B3BD44D005F0176 /* _locales */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		824F9CE32B3BD44D005F0176 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 824F9CAF2B3BD44B005F0176 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 824F9CE02B3BD44D005F0176;
+			remoteInfo = "Scratch Addons Extension (iOS)";
+		};
+		824F9CED2B3BD44D005F0176 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 824F9CAF2B3BD44B005F0176 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 824F9CEA2B3BD44D005F0176;
+			remoteInfo = "Scratch Addons Extension (macOS)";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		824F9D052B3BD44D005F0176 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				824F9CE22B3BD44D005F0176 /* Scratch Addons Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		824F9D0C2B3BD44D005F0176 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				824F9CEC2B3BD44D005F0176 /* Scratch Addons Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		824F9CB62B3BD44B005F0176 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = ../Base.lproj/Main.html; sourceTree = "<group>"; };
+		824F9CB72B3BD44B005F0176 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		824F9CB82B3BD44B005F0176 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		824F9CB92B3BD44B005F0176 /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
+		824F9CBA2B3BD44B005F0176 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		824F9CBB2B3BD44D005F0176 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		824F9CBD2B3BD44D005F0176 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		824F9CC22B3BD44D005F0176 /* Scratch Addons.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Scratch Addons.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		824F9CC52B3BD44D005F0176 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		824F9CC72B3BD44D005F0176 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		824F9CCA2B3BD44D005F0176 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		824F9CCD2B3BD44D005F0176 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		824F9CCF2B3BD44D005F0176 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		824F9CD42B3BD44D005F0176 /* Scratch Addons.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Scratch Addons.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		824F9CD62B3BD44D005F0176 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		824F9CD92B3BD44D005F0176 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		824F9CDB2B3BD44D005F0176 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		824F9CDC2B3BD44D005F0176 /* Scratch Addons.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Scratch Addons.entitlements"; sourceTree = "<group>"; };
+		824F9CE12B3BD44D005F0176 /* Scratch Addons Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Scratch Addons Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		824F9CE62B3BD44D005F0176 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		824F9CEB2B3BD44D005F0176 /* Scratch Addons Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Scratch Addons Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		824F9CF02B3BD44D005F0176 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		824F9CF12B3BD44D005F0176 /* Scratch Addons.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Scratch Addons.entitlements"; sourceTree = "<group>"; };
+		824F9D112B3BD44D005F0176 /* background */ = {isa = PBXFileReference; lastKnownFileType = folder; name = background; path = ../../../background; sourceTree = "<group>"; };
+		824F9D122B3BD44D005F0176 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../../../LICENSE; sourceTree = "<group>"; };
+		824F9D132B3BD44D005F0176 /* addon-api */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "addon-api"; path = "../../../addon-api"; sourceTree = "<group>"; };
+		824F9D142B3BD44D005F0176 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = ../../../images; sourceTree = "<group>"; };
+		824F9D152B3BD44D005F0176 /* addons */ = {isa = PBXFileReference; lastKnownFileType = folder; name = addons; path = ../../../addons; sourceTree = "<group>"; };
+		824F9D162B3BD44D005F0176 /* libraries */ = {isa = PBXFileReference; lastKnownFileType = folder; name = libraries; path = ../../../libraries; sourceTree = "<group>"; };
+		824F9D172B3BD44D005F0176 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../../README.md; sourceTree = "<group>"; };
+		824F9D182B3BD44D005F0176 /* webpages */ = {isa = PBXFileReference; lastKnownFileType = folder; name = webpages; path = ../../../webpages; sourceTree = "<group>"; };
+		824F9D192B3BD44D005F0176 /* popups */ = {isa = PBXFileReference; lastKnownFileType = folder; name = popups; path = ../../../popups; sourceTree = "<group>"; };
+		824F9D1A2B3BD44D005F0176 /* safari */ = {isa = PBXFileReference; lastKnownFileType = folder; name = safari; path = ../..; sourceTree = "<group>"; };
+		824F9D1B2B3BD44D005F0176 /* content-scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "content-scripts"; path = "../../../content-scripts"; sourceTree = "<group>"; };
+		824F9D1C2B3BD44D005F0176 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../../../manifest.json; sourceTree = "<group>"; };
+		824F9D1D2B3BD44D005F0176 /* addons-l10n */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "addons-l10n"; path = "../../../addons-l10n"; sourceTree = "<group>"; };
+		824F9D1E2B3BD44D005F0176 /* _locales */ = {isa = PBXFileReference; lastKnownFileType = folder; name = _locales; path = ../../../_locales; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		824F9CBF2B3BD44D005F0176 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		824F9CD12B3BD44D005F0176 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		824F9CDE2B3BD44D005F0176 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		824F9CE82B3BD44D005F0176 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		824F9CAE2B3BD44B005F0176 = {
+			isa = PBXGroup;
+			children = (
+				824F9CB32B3BD44B005F0176 /* Shared (App) */,
+				824F9CBC2B3BD44D005F0176 /* Shared (Extension) */,
+				824F9CC42B3BD44D005F0176 /* iOS (App) */,
+				824F9CD52B3BD44D005F0176 /* macOS (App) */,
+				824F9CE52B3BD44D005F0176 /* iOS (Extension) */,
+				824F9CEF2B3BD44D005F0176 /* macOS (Extension) */,
+				824F9CC32B3BD44D005F0176 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		824F9CB32B3BD44B005F0176 /* Shared (App) */ = {
+			isa = PBXGroup;
+			children = (
+				824F9CBA2B3BD44B005F0176 /* ViewController.swift */,
+				824F9CBB2B3BD44D005F0176 /* Assets.xcassets */,
+				824F9CB42B3BD44B005F0176 /* Resources */,
+			);
+			path = "Shared (App)";
+			sourceTree = "<group>";
+		};
+		824F9CB42B3BD44B005F0176 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				824F9CB52B3BD44B005F0176 /* Main.html */,
+				824F9CB72B3BD44B005F0176 /* Icon.png */,
+				824F9CB82B3BD44B005F0176 /* Style.css */,
+				824F9CB92B3BD44B005F0176 /* Script.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		824F9CBC2B3BD44D005F0176 /* Shared (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				824F9D102B3BD44D005F0176 /* Resources */,
+				824F9CBD2B3BD44D005F0176 /* SafariWebExtensionHandler.swift */,
+			);
+			path = "Shared (Extension)";
+			sourceTree = "<group>";
+		};
+		824F9CC32B3BD44D005F0176 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				824F9CC22B3BD44D005F0176 /* Scratch Addons.app */,
+				824F9CD42B3BD44D005F0176 /* Scratch Addons.app */,
+				824F9CE12B3BD44D005F0176 /* Scratch Addons Extension.appex */,
+				824F9CEB2B3BD44D005F0176 /* Scratch Addons Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		824F9CC42B3BD44D005F0176 /* iOS (App) */ = {
+			isa = PBXGroup;
+			children = (
+				824F9CC52B3BD44D005F0176 /* AppDelegate.swift */,
+				824F9CC72B3BD44D005F0176 /* SceneDelegate.swift */,
+				824F9CC92B3BD44D005F0176 /* LaunchScreen.storyboard */,
+				824F9CCC2B3BD44D005F0176 /* Main.storyboard */,
+				824F9CCF2B3BD44D005F0176 /* Info.plist */,
+			);
+			path = "iOS (App)";
+			sourceTree = "<group>";
+		};
+		824F9CD52B3BD44D005F0176 /* macOS (App) */ = {
+			isa = PBXGroup;
+			children = (
+				824F9CD62B3BD44D005F0176 /* AppDelegate.swift */,
+				824F9CD82B3BD44D005F0176 /* Main.storyboard */,
+				824F9CDB2B3BD44D005F0176 /* Info.plist */,
+				824F9CDC2B3BD44D005F0176 /* Scratch Addons.entitlements */,
+			);
+			path = "macOS (App)";
+			sourceTree = "<group>";
+		};
+		824F9CE52B3BD44D005F0176 /* iOS (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				824F9CE62B3BD44D005F0176 /* Info.plist */,
+			);
+			path = "iOS (Extension)";
+			sourceTree = "<group>";
+		};
+		824F9CEF2B3BD44D005F0176 /* macOS (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				824F9CF02B3BD44D005F0176 /* Info.plist */,
+				824F9CF12B3BD44D005F0176 /* Scratch Addons.entitlements */,
+			);
+			path = "macOS (Extension)";
+			sourceTree = "<group>";
+		};
+		824F9D102B3BD44D005F0176 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				824F9D112B3BD44D005F0176 /* background */,
+				824F9D122B3BD44D005F0176 /* LICENSE */,
+				824F9D132B3BD44D005F0176 /* addon-api */,
+				824F9D142B3BD44D005F0176 /* images */,
+				824F9D152B3BD44D005F0176 /* addons */,
+				824F9D162B3BD44D005F0176 /* libraries */,
+				824F9D172B3BD44D005F0176 /* README.md */,
+				824F9D182B3BD44D005F0176 /* webpages */,
+				824F9D192B3BD44D005F0176 /* popups */,
+				824F9D1A2B3BD44D005F0176 /* safari */,
+				824F9D1B2B3BD44D005F0176 /* content-scripts */,
+				824F9D1C2B3BD44D005F0176 /* manifest.json */,
+				824F9D1D2B3BD44D005F0176 /* addons-l10n */,
+				824F9D1E2B3BD44D005F0176 /* _locales */,
+			);
+			name = Resources;
+			path = "Shared (Extension)";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		824F9CC12B3BD44D005F0176 /* Scratch Addons (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 824F9D062B3BD44D005F0176 /* Build configuration list for PBXNativeTarget "Scratch Addons (iOS)" */;
+			buildPhases = (
+				824F9CBE2B3BD44D005F0176 /* Sources */,
+				824F9CBF2B3BD44D005F0176 /* Frameworks */,
+				824F9CC02B3BD44D005F0176 /* Resources */,
+				824F9D052B3BD44D005F0176 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				824F9CE42B3BD44D005F0176 /* PBXTargetDependency */,
+			);
+			name = "Scratch Addons (iOS)";
+			productName = "Scratch Addons (iOS)";
+			productReference = 824F9CC22B3BD44D005F0176 /* Scratch Addons.app */;
+			productType = "com.apple.product-type.application";
+		};
+		824F9CD32B3BD44D005F0176 /* Scratch Addons (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 824F9D0D2B3BD44D005F0176 /* Build configuration list for PBXNativeTarget "Scratch Addons (macOS)" */;
+			buildPhases = (
+				824F9CD02B3BD44D005F0176 /* Sources */,
+				824F9CD12B3BD44D005F0176 /* Frameworks */,
+				824F9CD22B3BD44D005F0176 /* Resources */,
+				824F9D0C2B3BD44D005F0176 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				824F9CEE2B3BD44D005F0176 /* PBXTargetDependency */,
+			);
+			name = "Scratch Addons (macOS)";
+			productName = "Scratch Addons (macOS)";
+			productReference = 824F9CD42B3BD44D005F0176 /* Scratch Addons.app */;
+			productType = "com.apple.product-type.application";
+		};
+		824F9CE02B3BD44D005F0176 /* Scratch Addons Extension (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 824F9D022B3BD44D005F0176 /* Build configuration list for PBXNativeTarget "Scratch Addons Extension (iOS)" */;
+			buildPhases = (
+				824F9CDD2B3BD44D005F0176 /* Sources */,
+				824F9CDE2B3BD44D005F0176 /* Frameworks */,
+				824F9CDF2B3BD44D005F0176 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Scratch Addons Extension (iOS)";
+			productName = "Scratch Addons Extension (iOS)";
+			productReference = 824F9CE12B3BD44D005F0176 /* Scratch Addons Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		824F9CEA2B3BD44D005F0176 /* Scratch Addons Extension (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 824F9D092B3BD44D005F0176 /* Build configuration list for PBXNativeTarget "Scratch Addons Extension (macOS)" */;
+			buildPhases = (
+				824F9CE72B3BD44D005F0176 /* Sources */,
+				824F9CE82B3BD44D005F0176 /* Frameworks */,
+				824F9CE92B3BD44D005F0176 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Scratch Addons Extension (macOS)";
+			productName = "Scratch Addons Extension (macOS)";
+			productReference = 824F9CEB2B3BD44D005F0176 /* Scratch Addons Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		824F9CAF2B3BD44B005F0176 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1510;
+				LastUpgradeCheck = 1510;
+				TargetAttributes = {
+					824F9CC12B3BD44D005F0176 = {
+						CreatedOnToolsVersion = 15.1;
+					};
+					824F9CD32B3BD44D005F0176 = {
+						CreatedOnToolsVersion = 15.1;
+					};
+					824F9CE02B3BD44D005F0176 = {
+						CreatedOnToolsVersion = 15.1;
+					};
+					824F9CEA2B3BD44D005F0176 = {
+						CreatedOnToolsVersion = 15.1;
+					};
+				};
+			};
+			buildConfigurationList = 824F9CB22B3BD44B005F0176 /* Build configuration list for PBXProject "Scratch Addons" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 824F9CAE2B3BD44B005F0176;
+			productRefGroup = 824F9CC32B3BD44D005F0176 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				824F9CC12B3BD44D005F0176 /* Scratch Addons (iOS) */,
+				824F9CD32B3BD44D005F0176 /* Scratch Addons (macOS) */,
+				824F9CE02B3BD44D005F0176 /* Scratch Addons Extension (iOS) */,
+				824F9CEA2B3BD44D005F0176 /* Scratch Addons Extension (macOS) */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		824F9CC02B3BD44D005F0176 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				824F9CF42B3BD44D005F0176 /* Icon.png in Resources */,
+				824F9CCB2B3BD44D005F0176 /* LaunchScreen.storyboard in Resources */,
+				824F9CF22B3BD44D005F0176 /* Main.html in Resources */,
+				824F9CF82B3BD44D005F0176 /* Script.js in Resources */,
+				824F9CFC2B3BD44D005F0176 /* Assets.xcassets in Resources */,
+				824F9CCE2B3BD44D005F0176 /* Main.storyboard in Resources */,
+				824F9CF62B3BD44D005F0176 /* Style.css in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		824F9CD22B3BD44D005F0176 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				824F9CF52B3BD44D005F0176 /* Icon.png in Resources */,
+				824F9CF72B3BD44D005F0176 /* Style.css in Resources */,
+				824F9CDA2B3BD44D005F0176 /* Main.storyboard in Resources */,
+				824F9CF92B3BD44D005F0176 /* Script.js in Resources */,
+				824F9CFD2B3BD44D005F0176 /* Assets.xcassets in Resources */,
+				824F9CF32B3BD44D005F0176 /* Main.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		824F9CDF2B3BD44D005F0176 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				824F9D362B3BD44D005F0176 /* safari in Resources */,
+				824F9D372B3BD44D005F0176 /* content-scripts in Resources */,
+				824F9D312B3BD44D005F0176 /* addons in Resources */,
+				824F9D392B3BD44D005F0176 /* addons-l10n in Resources */,
+				824F9D302B3BD44D005F0176 /* images in Resources */,
+				824F9D382B3BD44D005F0176 /* manifest.json in Resources */,
+				824F9D322B3BD44D005F0176 /* libraries in Resources */,
+				824F9D332B3BD44D005F0176 /* README.md in Resources */,
+				824F9D2E2B3BD44D005F0176 /* LICENSE in Resources */,
+				824F9D352B3BD44D005F0176 /* popups in Resources */,
+				824F9D2D2B3BD44D005F0176 /* background in Resources */,
+				824F9D342B3BD44D005F0176 /* webpages in Resources */,
+				824F9D3A2B3BD44D005F0176 /* _locales in Resources */,
+				824F9D2F2B3BD44D005F0176 /* addon-api in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		824F9CE92B3BD44D005F0176 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				824F9D282B3BD44D005F0176 /* safari in Resources */,
+				824F9D292B3BD44D005F0176 /* content-scripts in Resources */,
+				824F9D232B3BD44D005F0176 /* addons in Resources */,
+				824F9D2B2B3BD44D005F0176 /* addons-l10n in Resources */,
+				824F9D222B3BD44D005F0176 /* images in Resources */,
+				824F9D2A2B3BD44D005F0176 /* manifest.json in Resources */,
+				824F9D242B3BD44D005F0176 /* libraries in Resources */,
+				824F9D252B3BD44D005F0176 /* README.md in Resources */,
+				824F9D202B3BD44D005F0176 /* LICENSE in Resources */,
+				824F9D272B3BD44D005F0176 /* popups in Resources */,
+				824F9D1F2B3BD44D005F0176 /* background in Resources */,
+				824F9D262B3BD44D005F0176 /* webpages in Resources */,
+				824F9D2C2B3BD44D005F0176 /* _locales in Resources */,
+				824F9D212B3BD44D005F0176 /* addon-api in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		824F9CBE2B3BD44D005F0176 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				824F9CFA2B3BD44D005F0176 /* ViewController.swift in Sources */,
+				824F9CC62B3BD44D005F0176 /* AppDelegate.swift in Sources */,
+				824F9CC82B3BD44D005F0176 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		824F9CD02B3BD44D005F0176 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				824F9CFB2B3BD44D005F0176 /* ViewController.swift in Sources */,
+				824F9CD72B3BD44D005F0176 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		824F9CDD2B3BD44D005F0176 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				824F9CFE2B3BD44D005F0176 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		824F9CE72B3BD44D005F0176 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				824F9CFF2B3BD44D005F0176 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		824F9CE42B3BD44D005F0176 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 824F9CE02B3BD44D005F0176 /* Scratch Addons Extension (iOS) */;
+			targetProxy = 824F9CE32B3BD44D005F0176 /* PBXContainerItemProxy */;
+		};
+		824F9CEE2B3BD44D005F0176 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 824F9CEA2B3BD44D005F0176 /* Scratch Addons Extension (macOS) */;
+			targetProxy = 824F9CED2B3BD44D005F0176 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		824F9CB52B3BD44B005F0176 /* Main.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				824F9CB62B3BD44B005F0176 /* Base */,
+			);
+			name = Main.html;
+			sourceTree = "<group>";
+		};
+		824F9CC92B3BD44D005F0176 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				824F9CCA2B3BD44D005F0176 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		824F9CCC2B3BD44D005F0176 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				824F9CCD2B3BD44D005F0176 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		824F9CD82B3BD44D005F0176 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				824F9CD92B3BD44D005F0176 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		824F9D002B3BD44D005F0176 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		824F9D012B3BD44D005F0176 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		824F9D032B3BD44D005F0176 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Scratch Addons Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.scratchaddons.Scratch-Addons.Extension";
+				PRODUCT_NAME = "Scratch Addons Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		824F9D042B3BD44D005F0176 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Scratch Addons Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.scratchaddons.Scratch-Addons.Extension";
+				PRODUCT_NAME = "Scratch Addons Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		824F9D072B3BD44D005F0176 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Scratch Addons";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.scratchaddons.Scratch-Addons";
+				PRODUCT_NAME = "Scratch Addons";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		824F9D082B3BD44D005F0176 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Scratch Addons";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.scratchaddons.Scratch-Addons";
+				PRODUCT_NAME = "Scratch Addons";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		824F9D0A2B3BD44D005F0176 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/Scratch Addons.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Scratch Addons Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.scratchaddons.Scratch-Addons.Extension";
+				PRODUCT_NAME = "Scratch Addons Extension";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		824F9D0B2B3BD44D005F0176 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/Scratch Addons.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Scratch Addons Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.scratchaddons.Scratch-Addons.Extension";
+				PRODUCT_NAME = "Scratch Addons Extension";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		824F9D0E2B3BD44D005F0176 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "macOS (App)/Scratch Addons.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Scratch Addons";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.scratchaddons.Scratch-Addons";
+				PRODUCT_NAME = "Scratch Addons";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		824F9D0F2B3BD44D005F0176 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "macOS (App)/Scratch Addons.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Scratch Addons";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.scratchaddons.Scratch-Addons";
+				PRODUCT_NAME = "Scratch Addons";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		824F9CB22B3BD44B005F0176 /* Build configuration list for PBXProject "Scratch Addons" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				824F9D002B3BD44D005F0176 /* Debug */,
+				824F9D012B3BD44D005F0176 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		824F9D022B3BD44D005F0176 /* Build configuration list for PBXNativeTarget "Scratch Addons Extension (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				824F9D032B3BD44D005F0176 /* Debug */,
+				824F9D042B3BD44D005F0176 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		824F9D062B3BD44D005F0176 /* Build configuration list for PBXNativeTarget "Scratch Addons (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				824F9D072B3BD44D005F0176 /* Debug */,
+				824F9D082B3BD44D005F0176 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		824F9D092B3BD44D005F0176 /* Build configuration list for PBXNativeTarget "Scratch Addons Extension (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				824F9D0A2B3BD44D005F0176 /* Debug */,
+				824F9D0B2B3BD44D005F0176 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		824F9D0D2B3BD44D005F0176 /* Build configuration list for PBXNativeTarget "Scratch Addons (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				824F9D0E2B3BD44D005F0176 /* Debug */,
+				824F9D0F2B3BD44D005F0176 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 824F9CAF2B3BD44B005F0176 /* Project object */;
+}

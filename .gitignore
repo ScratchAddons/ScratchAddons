@@ -35,3 +35,8 @@ ehthumbs_vista.db
 
 # Development files
 node_modules/
+
+# Xcode
+*.xcuserstate
+xcuserdata/
+build/
