@@ -169,13 +169,13 @@ export default async function ({ addon, msg, console }) {
         args0: [
           {
             type: "input_value",
-            name: "return_value"
-          }
+            name: "return_value",
+          },
         ],
-        extension: ["colours_more", "shape_statement", "shape_end"]
-      })
-    }
-  }
+        extension: ["colours_more", "shape_statement", "shape_end"],
+      });
+    },
+  };
   ScratchBlocks.Blocks["procedures_return_boolean"] = {
     init: function () {
       this.jsonInit({
@@ -185,12 +185,12 @@ export default async function ({ addon, msg, console }) {
             type: "input_value",
             name: "return_value",
             check: "Boolean",
-          }
+          },
         ],
-        extension: ["colours_more", "shape_statement", "shape_end"]
-      })
-    }
-  }
+        extension: ["colours_more", "shape_statement", "shape_end"],
+      });
+    },
+  };
 
   addon.tab.redux.initialize();
   //vm.emitWorkspaceUpdate();
@@ -256,10 +256,10 @@ export default async function ({ addon, msg, console }) {
       newBlockButton.setAttribute("text", ScratchBlocks.Msg.NEW_PROCEDURE);
       newBlockButton.setAttribute("callbackKey", "CREATE_PROCEDURE");
       addon.tab.traps
-      .getWorkspace()
-      .registerButtonCallback("CREATE_PROCEDURE", () =>
-        ScratchBlocks.Procedures.createProcedureDefCallback_(addon.tab.traps.getWorkspace())
-      );
+        .getWorkspace()
+        .registerButtonCallback("CREATE_PROCEDURE", () =>
+          ScratchBlocks.Procedures.createProcedureDefCallback_(addon.tab.traps.getWorkspace())
+        );
       myBlocksCat.appendChild(newBlockButton);
       addon.tab.redux.dispatch({
         type: UPDATE_TOOLBOX_ACTION,
