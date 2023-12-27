@@ -14,7 +14,7 @@ function getDefaultStoreId() {
   })
     .catch(() => {})
     .then(() =>
-      promisify(chrome.cookies.get)({
+      promisify(chrome.cookies.get.bind(chrome.cookies))({
         url: "https://scratch.mit.edu/",
         name: "scratchcsrftoken",
       })
