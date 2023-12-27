@@ -28,10 +28,12 @@ export const createEditorModal = (tab, title, { isOpen = false } = {}) => {
     className: tab.scratchClass("close-button_close-button", "close-button_large"),
   });
   closeContainer.appendChild(closeButton);
+
+  const selfUrl = new URL(import.meta.url); // .origin does not work in Safari
   closeButton.appendChild(
     Object.assign(document.createElement("img"), {
       className: tab.scratchClass("close-button_close-icon"),
-      src: import.meta.url + "/../../../images/cs/close-s3.svg",
+      src: `${selfUrl.protocol}//${selfUrl.hostname}/../../../images/cs/close-s3.svg`,
     })
   );
   const content = Object.assign(document.createElement("div"), {

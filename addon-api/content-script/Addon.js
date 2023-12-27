@@ -12,7 +12,8 @@ export default class UserscriptAddon extends Addon {
   constructor(info) {
     super(info);
     this._addonId = info.id;
-    this.__path = `${new URL(import.meta.url).origin}/`;
+    const selfUrl = new URL(import.meta.url); // .origin does not work in Safari
+    this.__path = `${selfUrl.protocol}//${selfUrl.hostname}/`;
     this.tab = new Tab(info);
     this.auth.dispose();
     this.auth = new Auth(this);
