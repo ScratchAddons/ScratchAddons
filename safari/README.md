@@ -21,6 +21,12 @@ You just need Xcode. For development you don't need an Apple Developer Program s
 
 Once you have it running, you can edit the normal JavaScript files that all other browsers use. Note that while you don't need to use Xcode to write the rest of the extension, **you still must re-build in Xcode for changes to apply**.
 
+## Debugging tips
+
+ - There are lots of weird Safari bugs, especially when WebExtensions are rebuilt. Sometimes it helps to just restart Safari.
+ - If you've cloned the repository multiple times, you may have multiple copies of the extension installed. Instead of listing the extension twice in the list, Safari just lists it once and runs an arbitrary version. Try pressing "Uninstall" until it goes away and rebuild the proper version.
+ - To open developer tools on the background page, open the Develop menu > Web Extension Background Context > Scratch Addons.
+
 ## Sending to Apple
 
 Working on it
