@@ -1,5 +1,5 @@
 {
-  "custom-reporters/return": "return",
+  "custom-reporters/return": "return %1",
   "custom-reporters/stack": "Stack",
   "custom-reporters/numortext": "Number or text",
   "custom-reporters/boolean": "Boolean"

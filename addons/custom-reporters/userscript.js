@@ -162,6 +162,36 @@ export default async function ({ addon, msg, console }) {
     },
   };
 
+  ScratchBlocks.Blocks["procedures_return_reporter"] = {
+    init: function () {
+      this.jsonInit({
+        message0: msg("custom-reporters/return"),
+        args0: [
+          {
+            type: "input_value",
+            name: "return_value"
+          }
+        ],
+        extension: ["colours_more", "shape_statement", "shape_end"]
+      })
+    }
+  }
+  ScratchBlocks.Blocks["procedures_return_boolean"] = {
+    init: function () {
+      this.jsonInit({
+        message0: msg("custom-reporters/return"),
+        args0: [
+          {
+            type: "input_value",
+            name: "return_value",
+            check: "Boolean",
+          }
+        ],
+        extension: ["colours_more", "shape_statement", "shape_end"]
+      })
+    }
+  }
+
   addon.tab.redux.initialize();
   //vm.emitWorkspaceUpdate();
   const UPDATE_TOOLBOX_ACTION = "scratch-gui/toolbox/UPDATE_TOOLBOX";
@@ -215,10 +245,21 @@ export default async function ({ addon, msg, console }) {
       for (const block of myBlocks) {
         myBlocksCat.appendChild(block);
       }
+      myBlocksCat.innerHTML += `<block type="procedures_return_reporter">
+        <value name="return_val">
+        <shadow type="text">
+          <field name="TEXT"></field>
+        </shadow>
+        </value>
+      </block>`;
       const newBlockButton = toolboxXML.createElement("button");
       newBlockButton.setAttribute("text", ScratchBlocks.Msg.NEW_PROCEDURE);
       newBlockButton.setAttribute("callbackKey", "CREATE_PROCEDURE");
-      addon.tab.traps.getWorkspace().registerButtonCallback("CREATE_PROCEDURE", () => ScratchBlocks.Procedures.createProcedureDefCallback_(addon.tab.traps.getWorkspace()));
+      addon.tab.traps
+      .getWorkspace()
+      .registerButtonCallback("CREATE_PROCEDURE", () =>
+        ScratchBlocks.Procedures.createProcedureDefCallback_(addon.tab.traps.getWorkspace())
+      );
       myBlocksCat.appendChild(newBlockButton);
       addon.tab.redux.dispatch({
         type: UPDATE_TOOLBOX_ACTION,
