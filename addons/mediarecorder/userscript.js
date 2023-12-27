@@ -10,6 +10,13 @@ export default async ({ addon, console, msg }) => {
   let recordBuffer = [];
   let recorder;
   let timeout;
+
+  // All browsers we care about will support at least one of these.
+  const mimeType = [
+    'video/webm', // Chrome, Firefox
+    'video/mp4' // Safari
+  ].find(i => MediaRecorder.isTypeSupported(i));
+
   while (true) {
     const elem = await addon.tab.waitForElement('div[class*="menu-bar_file-group"] > div:last-child:not(.sa-record)', {
       markAsSeen: true,
@@ -215,8 +222,8 @@ export default async ({ addon, console, msg }) => {
         disposeRecorder();
       } else {
         recorder.onstop = () => {
-          const blob = new Blob(recordBuffer, { type: "video/webm" });
-          downloadBlob("video.webm", blob);
+          const blob = new Blob(recordBuffer, { type: mimeType });
+          downloadBlob(`video.${mimeType.split('/')[1]}`, blob);
           disposeRecorder();
         };
         recorder.stop();
@@ -283,7 +290,7 @@ export default async ({ addon, console, msg }) => {
       if (opts.audioEnabled || opts.micEnabled) {
         stream.addTrack(dest.stream.getAudioTracks()[0]);
       }
-      recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
+      recorder = new MediaRecorder(stream, { mimeType });
       recorder.ondataavailable = (e) => {
         recordBuffer.push(e.data);
       };
