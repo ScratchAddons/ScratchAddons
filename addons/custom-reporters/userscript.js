@@ -165,21 +165,25 @@ export default async function ({ addon, msg, console }) {
   ScratchBlocks.Blocks["procedures_return_reporter"] = {
     init: function () {
       this.jsonInit({
-        message0: msg("custom-reporters/return"),
+        id: "procedures_return_reporter",
+        message0: msg("return"),
         args0: [
           {
             type: "input_value",
             name: "return_value",
           },
         ],
-        extension: ["colours_more", "shape_statement", "shape_end"],
+        category: ScratchBlocks.Categories.more,
+        extensions: ["colours_more", "shape_end"],
       });
     },
   };
+  
   ScratchBlocks.Blocks["procedures_return_boolean"] = {
     init: function () {
       this.jsonInit({
-        message0: msg("custom-reporters/return"),
+        id: "procedures_return_boolean",
+        message0: msg("return"),
         args0: [
           {
             type: "input_value",
@@ -187,7 +191,8 @@ export default async function ({ addon, msg, console }) {
             check: "Boolean",
           },
         ],
-        extension: ["colours_more", "shape_statement", "shape_end"],
+        category: ScratchBlocks.Categories.more,
+        extensions: ["colours_more", "shape_end"],
       });
     },
   };
@@ -245,11 +250,11 @@ export default async function ({ addon, msg, console }) {
       for (const block of myBlocks) {
         myBlocksCat.appendChild(block);
       }
-      myBlocksCat.innerHTML += `<block type="procedures_return_reporter">
-        <value name="return_val">
-        <shadow type="text">
-          <field name="TEXT"></field>
-        </shadow>
+      myBlocksCat.innerHTML += `<block type="procedures_return_reporter" id="procedures_return_reporter">
+        <value name="return_value">
+          <shadow type="text">
+            <field name="TEXT"></field>
+          </shadow>
         </value>
       </block>`;
       const newBlockButton = toolboxXML.createElement("button");
