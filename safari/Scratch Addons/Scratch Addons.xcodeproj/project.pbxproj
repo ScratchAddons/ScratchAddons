@@ -38,7 +38,6 @@
 		824F9D252B3BD44D005F0176 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D172B3BD44D005F0176 /* README.md */; };
 		824F9D262B3BD44D005F0176 /* webpages in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D182B3BD44D005F0176 /* webpages */; };
 		824F9D272B3BD44D005F0176 /* popups in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D192B3BD44D005F0176 /* popups */; };
-		824F9D282B3BD44D005F0176 /* safari in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1A2B3BD44D005F0176 /* safari */; };
 		824F9D292B3BD44D005F0176 /* content-scripts in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1B2B3BD44D005F0176 /* content-scripts */; };
 		824F9D2A2B3BD44D005F0176 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1C2B3BD44D005F0176 /* manifest.json */; };
 		824F9D2B2B3BD44D005F0176 /* addons-l10n in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1D2B3BD44D005F0176 /* addons-l10n */; };
@@ -52,7 +51,6 @@
 		824F9D332B3BD44D005F0176 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D172B3BD44D005F0176 /* README.md */; };
 		824F9D342B3BD44D005F0176 /* webpages in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D182B3BD44D005F0176 /* webpages */; };
 		824F9D352B3BD44D005F0176 /* popups in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D192B3BD44D005F0176 /* popups */; };
-		824F9D362B3BD44D005F0176 /* safari in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1A2B3BD44D005F0176 /* safari */; };
 		824F9D372B3BD44D005F0176 /* content-scripts in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1B2B3BD44D005F0176 /* content-scripts */; };
 		824F9D382B3BD44D005F0176 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1C2B3BD44D005F0176 /* manifest.json */; };
 		824F9D392B3BD44D005F0176 /* addons-l10n in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1D2B3BD44D005F0176 /* addons-l10n */; };
@@ -134,7 +132,6 @@
 		824F9D172B3BD44D005F0176 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../../README.md; sourceTree = "<group>"; };
 		824F9D182B3BD44D005F0176 /* webpages */ = {isa = PBXFileReference; lastKnownFileType = folder; name = webpages; path = ../../../webpages; sourceTree = "<group>"; };
 		824F9D192B3BD44D005F0176 /* popups */ = {isa = PBXFileReference; lastKnownFileType = folder; name = popups; path = ../../../popups; sourceTree = "<group>"; };
-		824F9D1A2B3BD44D005F0176 /* safari */ = {isa = PBXFileReference; lastKnownFileType = folder; name = safari; path = ../..; sourceTree = "<group>"; };
 		824F9D1B2B3BD44D005F0176 /* content-scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "content-scripts"; path = "../../../content-scripts"; sourceTree = "<group>"; };
 		824F9D1C2B3BD44D005F0176 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../../../manifest.json; sourceTree = "<group>"; };
 		824F9D1D2B3BD44D005F0176 /* addons-l10n */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "addons-l10n"; path = "../../../addons-l10n"; sourceTree = "<group>"; };
@@ -279,7 +276,6 @@
 				824F9D172B3BD44D005F0176 /* README.md */,
 				824F9D182B3BD44D005F0176 /* webpages */,
 				824F9D192B3BD44D005F0176 /* popups */,
-				824F9D1A2B3BD44D005F0176 /* safari */,
 				824F9D1B2B3BD44D005F0176 /* content-scripts */,
 				824F9D1C2B3BD44D005F0176 /* manifest.json */,
 				824F9D1D2B3BD44D005F0176 /* addons-l10n */,
@@ -441,7 +437,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				824F9D362B3BD44D005F0176 /* safari in Resources */,
 				824F9D372B3BD44D005F0176 /* content-scripts in Resources */,
 				824F9D312B3BD44D005F0176 /* addons in Resources */,
 				824F9D392B3BD44D005F0176 /* addons-l10n in Resources */,
@@ -462,7 +457,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				824F9D282B3BD44D005F0176 /* safari in Resources */,
 				824F9D292B3BD44D005F0176 /* content-scripts in Resources */,
 				824F9D232B3BD44D005F0176 /* addons in Resources */,
 				824F9D2B2B3BD44D005F0176 /* addons-l10n in Resources */,
