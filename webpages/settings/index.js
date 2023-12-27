@@ -728,9 +728,12 @@ let fuse;
   window.onresize = resize;
   resize();
 
-  chrome.management.getSelf((info) => {
-    if (info.installType === "development") vue.devMode = true;
-  });
+  // chrome.management not supported in Safari
+  if (chrome.management) {
+    chrome.management.getSelf((info) => {
+      if (info.installType === "development") vue.devMode = true;
+    });
+  }
 
   // Konami code easter egg
   let cursor = 0;
