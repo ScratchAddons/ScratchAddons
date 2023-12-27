@@ -179,3 +179,27 @@ function notify(cookie) {
   // Notify popups, since they also fetch sessions independently
   scratchAddons.sendToPopups({ refetchSession: true });
 }
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.fetchSession) {
+    fetch("https://scratch.mit.edu/session/", {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    })
+      .then(async (res) => {
+        const json = await res.json();
+        sendResponse({
+          error: null,
+          session: json
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        sendResponse({
+          error: `${error}`
+        });
+      });
+    return true;
+  }
+});

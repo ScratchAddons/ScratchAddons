@@ -69,25 +69,21 @@ async function refetchCookies(needsRequest = true) {
 }
 
 async function refetchSession(addon) {
-  let res;
-  let d;
+  let result;
   if (scratchAddons.isFetchingSession) return;
   scratchAddons.isFetchingSession = true;
   addon.auth._refresh();
-  try {
-    res = await fetch("https://scratch.mit.edu/session/", {
-      headers: {
-        "X-Requested-With": "XMLHttpRequest",
-      },
-    });
-    d = await res.json();
-  } catch (e) {
-    d = {};
-    console.warn("Session fetch failed: ", e);
-    if ((res && !res.ok) || !res) setTimeout(() => this.refetchSession(addon), 60000);
+  // In Safari, requests to /session won't include cookies when "Prevent cross-site tracking"
+  // is enabled, but they will if the request is made from the background page.
+  result = await promisify(chrome.runtime.sendMessage.bind(chrome.runtime))({
+    fetchSession: {}
+  });
+  if (result.error !== null) {
+    console.warn("Session fetch failed", result.error);
+    setTimeout(() => this.refetchSession(addon), 60000);
   }
-  scratchAddons.session = d;
-  addon.auth._update(d);
+  scratchAddons.session = result.session;
+  addon.auth._update(result.session);
   scratchAddons.isFetchingSession = false;
 }
 
