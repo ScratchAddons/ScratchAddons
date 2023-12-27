@@ -178,7 +178,7 @@ export default async function ({ addon, msg, console }) {
       });
     },
   };
-  
+
   ScratchBlocks.Blocks["procedures_return_boolean"] = {
     init: function () {
       this.jsonInit({
