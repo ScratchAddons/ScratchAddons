@@ -4,29 +4,31 @@ Apple's support for WebExtensions is weird and needs some special treatment. Tha
 
 ## Basic structure
 
-There are actually two apps. The native one (denoted by `(App)`) just tells Safari that the extension exists and has a button for the use to find where in Safari to enable the extension.
+There are actually two apps. The native one (`App`) is a single-window app that just gives the user a button to access Safari settings quickly. This will appear in Launchpad and Spotlight.
 
-The other one (denoted by `(Extension)`) is the extension itself. This is actually itself two more apps; there is a native component and the JavaScript component that can talk to each other. We currently do not use the native component for anything but it's still there.
+The other one (`Extension`) is the actual extension. This breaks down further into two parts; there is a native component and a JavaScript component that can talk to each other. We currently do not use the native component for anything (but we could, so it's still there).
 
 ## Development
 
-You just need Xcode. For development you don't need an Apple Developer Program subscription.
+You just need to install Xcode. No Apple Developer Program subscription is needed for running it on your own computer.
 
  - Open `safari/Scratch Addons` in Xcode.
- - Switch to the macOS target. Sometimes Xcode defaults to the iOS target.
- - Build it. You may have to run the native app at least once for Safari to realize it exists.
- - In Safari settings, enable "Show features for web developers" under "Advanced" (may be different for older macOS versions).
- - In Safari settings, enable "Allow unsigned extensions" under "Developer" (may be different for older macOS versions). You have to do this each time you restart Safari.
+ - Make sure the macOS target is selected at the top of Xcode as sometimes it defaults to the iOS target.
+ - Build it (Cmd+B). You may have to run the native app at least once (Cmd+R) for Safari to realize it exists.
+ - In Safari settings, [enable "Show features for web developers" under "Advanced"](https://developer.apple.com/documentation/safari-developer-tools/enabling-developer-features).
+ - In Safari settings, [enable "Allow unsigned extensions" under "Developer" (differs in older versions of Safari)](https://developer.apple.com/documentation/safariservices/safari_web_extensions/running_your_safari_web_extension#3744467). You have to do this **each time** you start Safari.
  - In Safari settings, enable "Scratch Addons" under "Extensions"
 
-Once you have it running, you can edit the normal JavaScript files that all other browsers use. Note that while you don't need to use Xcode to write the rest of the extension, **you still must re-build in Xcode for changes to apply**.
+Once the extension is running, it uses the same manifest.json, JavaScript files, etc. that the Chrome and Firefox versions use. You can use any editor to edit the extension. However, **you still must re-build in Xcode (Cmd+B) for changes to apply**. Unlike other browsers, your changes DO NOT apply automatically.
 
 ## Debugging tips
 
- - There are lots of weird Safari bugs, especially when WebExtensions are rebuilt. Sometimes it helps to just restart Safari.
- - If you've cloned the repository multiple times, you may have multiple copies of the extension installed. Instead of listing the extension twice in the list, Safari just lists it once and runs an arbitrary version. Try pressing "Uninstall" until it goes away and rebuild the proper version.
+ - There are lots of weird Safari bugs, especially when WebExtensions are rebuilt. Restarting Safari can help.
+ - If you've cloned the repository multiple times, you may have multiple copies of the extension installed. Instead of listing each copy of the extension, Safari chooses one arbitrarily. Try uninstalling the extension from Safari's extension list until it goes away completely, then rebuild only the correct version.
  - To open developer tools on the background page, open the Develop menu > Web Extension Background Context > Scratch Addons.
+ - Sometimes the `debugger;` statement just doesn't work, especially in background pages. No known workaround.
+ - Remember: Safari and Xcode are both extremely buggy pieces of software, so always be on the lookout for exciting new ~~bugs~~ features!
 
 ## Sending to Apple
 
-Working on it
+Requires an Apple Developer Program subscription. Instructions being worked on as this gets closer to completion.
