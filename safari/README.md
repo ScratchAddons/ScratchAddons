@@ -13,8 +13,8 @@ The other one (`Extension`) is the actual extension. This breaks down further in
 You just need to install Xcode. No Apple Developer Program subscription is needed for running it on your own computer.
 
  - Open `safari/Scratch Addons` in Xcode.
- - Make sure the macOS target is selected at the top of Xcode as sometimes it defaults to the iOS target.
- - Build it (Cmd+B). You may have to run the native app at least once (Cmd+R) for Safari to realize it exists.
+ - Make sure the `Scratch Addons (macOS)` target is selected at the top of Xcode as it defaults to the iOS target, which doesn't work (yet?).
+ - Build it (Cmd+B). You may have to run the native app at least once (Cmd+R) for Safari to realize it exists. It may take over a minute for the debug build to run for the first time. It often opens behind Xcode so you'll have to focus it manually.
  - In Safari settings, [enable "Show features for web developers" under "Advanced"](https://developer.apple.com/documentation/safari-developer-tools/enabling-developer-features).
  - In Safari settings, [enable "Allow unsigned extensions" under "Developer" (differs in older versions of Safari)](https://developer.apple.com/documentation/safariservices/safari_web_extensions/running_your_safari_web_extension#3744467). You have to do this **each time** you start Safari.
  - In Safari settings, enable "Scratch Addons" under "Extensions"
