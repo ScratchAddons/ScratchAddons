@@ -36,7 +36,9 @@ document.getElementById("permissionsBtn").addEventListener("click", async () => 
 
   const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({ origins });
   if (granted) {
-    return chrome.runtime.reload();
+    chrome.runtime.reload();
+    window.close();
+    return;
   }
   alert(chrome.i18n.getMessage("permissionsDenied"));
 });

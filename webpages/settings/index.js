@@ -361,6 +361,7 @@ let fuse;
             }
             alert(chrome.i18n.getMessage("importSuccess"));
             chrome.runtime.reload();
+            window.close();
           },
           { once: true }
         );
@@ -370,6 +371,7 @@ let fuse;
       applyLanguageSettings() {
         alert(chrome.i18n.getMessage("importSuccess"));
         chrome.runtime.reload();
+        window.close();
       },
       openFullSettings() {
         window.open(
