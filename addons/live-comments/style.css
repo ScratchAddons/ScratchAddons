@@ -1,0 +1,33 @@
+@keyframes newComment {
+  100% {
+    background-color: hsla(142, 100%, 50%, 0.212);
+  }
+  0% {
+    background-color: hsla(142, 100%, 50%, 0);
+  }
+}
+
+.newCom {
+  animation: newComment 0.5s 4 0s linear alternate;
+  animation-fill-mode: both;
+}
+
+.live-button {
+  margin-left: 10px;
+  transition: 0.4s;
+  border-radius: 0.5rem;
+  border: none;
+  box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.3);
+}
+.live-button-enabled {
+  background: red !important;
+  color: white;
+  text-shadow: 0 1px 0 #000000ba !important;
+}
+.live-button-disabled {
+  background: rgb(255, 255, 255) !important;
+  color: #575e75;
+}
+.live-button-disabled:hover {
+  color: rgb(121, 28, 28) !important;
+}

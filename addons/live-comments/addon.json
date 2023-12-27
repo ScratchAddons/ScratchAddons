@@ -1,0 +1,46 @@
+{
+  "name": "Realtime Comments",
+  "description": "Adds new comments and replies to comments sections in real-time",
+  "credits": [
+    {
+      "name": "MeechaPooch (@ilhp10)",
+      "link": "https://github.com/MeechaPooch",
+      "note": "addon, profile, button",
+      "id": "addon"
+    },
+    {
+      "name": "CubeyTheCube",
+      "link": "https://github.com/CubeyTheCube",
+      "note": "project & studio",
+      "id": "project"
+    },
+    {
+      "name": "Weredime (9gr)",
+      "link": "https://scratch.mit.edu/users/9gr/",
+      "note": "improvements",
+      "id": "project2"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "profiles.js",
+      "matches": ["profiles"]
+    },
+    {
+      "url": "script-project-studios.js",
+      "matches": ["projects", "studios"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["profiles", "projects", "studios"]
+    }
+  ],
+  "tags": ["comments", "community"],
+  "versionAdded": "1.33.0",
+  "latestUpdate": {
+    "version": "1.33.0",
+    "newSettings": ["shareUsername"]
+  }
+}
