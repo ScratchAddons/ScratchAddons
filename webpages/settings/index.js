@@ -321,6 +321,22 @@ let fuse;
         this.$emit("close-reset-dropdowns", leaveOpen);
       },
       exportSettings() {
+        // In Safari, the normal <a download=""> does not work. Need to open an about:blank
+        // tab to do the download from. It closes itself after we click the link.
+        // Safari also requires us to call window.open() immediately in the click handler.
+        if (location.protocol === "safari-web-extension:") {
+          const popup = window.open("", "_blank");
+          serializeSettings().then((serialized) => {
+            const blob = new Blob([serialized], { type: "application/json" });
+            const link = popup.document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "scratch-addons-settings.json";
+            popup.document.documentElement.appendChild(link);
+            link.click();
+          });
+          return;
+        }
+      
         serializeSettings().then((serialized) => {
           const blob = new Blob([serialized], { type: "application/json" });
           downloadBlob("scratch-addons-settings.json", blob);
