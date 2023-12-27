@@ -651,7 +651,7 @@ GamepadLib.browserHasBrokenGamepadAPI = () => {
   }
   // Safari's gamepad support is unreliable. Common controllers that work in other browsers on
   // the same system don't work in Safari.
-  if (navigator.vendor === 'Apple Computer, Inc.') {
+  if (navigator.vendor === "Apple Computer, Inc.") {
     return true;
   }
   // Firefox on Linux has a broken gamepad API implementation that results in strange and sometimes unusable mappings

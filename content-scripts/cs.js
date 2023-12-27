@@ -577,7 +577,10 @@ function forumWarning(key) {
     reportLink.target = "_blank";
     reportLink.innerText = chrome.i18n.getMessage("reportItHere");
     let text1 = document.createElement("span");
-    text1.innerHTML = escapeHTML(chrome.i18n.getMessage(key, PLACEHOLDERS)).replace(PLACEHOLDERS[0], reportLink.outerHTML);
+    text1.innerHTML = escapeHTML(chrome.i18n.getMessage(key, PLACEHOLDERS)).replace(
+      PLACEHOLDERS[0],
+      reportLink.outerHTML
+    );
     addonError.appendChild(text1);
     errorList.appendChild(addonError);
   }
