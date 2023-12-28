@@ -32,7 +32,6 @@
 		824F9D1F2B3BD44D005F0176 /* background in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D112B3BD44D005F0176 /* background */; };
 		824F9D202B3BD44D005F0176 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D122B3BD44D005F0176 /* LICENSE */; };
 		824F9D212B3BD44D005F0176 /* addon-api in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D132B3BD44D005F0176 /* addon-api */; };
-		824F9D222B3BD44D005F0176 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D142B3BD44D005F0176 /* images */; };
 		824F9D232B3BD44D005F0176 /* addons in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D152B3BD44D005F0176 /* addons */; };
 		824F9D242B3BD44D005F0176 /* libraries in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D162B3BD44D005F0176 /* libraries */; };
 		824F9D252B3BD44D005F0176 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D172B3BD44D005F0176 /* README.md */; };
@@ -45,7 +44,6 @@
 		824F9D2D2B3BD44D005F0176 /* background in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D112B3BD44D005F0176 /* background */; };
 		824F9D2E2B3BD44D005F0176 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D122B3BD44D005F0176 /* LICENSE */; };
 		824F9D2F2B3BD44D005F0176 /* addon-api in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D132B3BD44D005F0176 /* addon-api */; };
-		824F9D302B3BD44D005F0176 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D142B3BD44D005F0176 /* images */; };
 		824F9D312B3BD44D005F0176 /* addons in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D152B3BD44D005F0176 /* addons */; };
 		824F9D322B3BD44D005F0176 /* libraries in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D162B3BD44D005F0176 /* libraries */; };
 		824F9D332B3BD44D005F0176 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D172B3BD44D005F0176 /* README.md */; };
@@ -55,6 +53,8 @@
 		824F9D382B3BD44D005F0176 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1C2B3BD44D005F0176 /* manifest.json */; };
 		824F9D392B3BD44D005F0176 /* addons-l10n in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1D2B3BD44D005F0176 /* addons-l10n */; };
 		824F9D3A2B3BD44D005F0176 /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = 824F9D1E2B3BD44D005F0176 /* _locales */; };
+		82DB26802B3D446800FF3EFB /* images in Resources */ = {isa = PBXBuildFile; fileRef = 82DB267F2B3D446800FF3EFB /* images */; };
+		82DB26812B3D446800FF3EFB /* images in Resources */ = {isa = PBXBuildFile; fileRef = 82DB267F2B3D446800FF3EFB /* images */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -126,7 +126,6 @@
 		824F9D112B3BD44D005F0176 /* background */ = {isa = PBXFileReference; lastKnownFileType = folder; name = background; path = ../../../background; sourceTree = "<group>"; };
 		824F9D122B3BD44D005F0176 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../../../LICENSE; sourceTree = "<group>"; };
 		824F9D132B3BD44D005F0176 /* addon-api */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "addon-api"; path = "../../../addon-api"; sourceTree = "<group>"; };
-		824F9D142B3BD44D005F0176 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = ../../../images; sourceTree = "<group>"; };
 		824F9D152B3BD44D005F0176 /* addons */ = {isa = PBXFileReference; lastKnownFileType = folder; name = addons; path = ../../../addons; sourceTree = "<group>"; };
 		824F9D162B3BD44D005F0176 /* libraries */ = {isa = PBXFileReference; lastKnownFileType = folder; name = libraries; path = ../../../libraries; sourceTree = "<group>"; };
 		824F9D172B3BD44D005F0176 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../../README.md; sourceTree = "<group>"; };
@@ -136,6 +135,7 @@
 		824F9D1C2B3BD44D005F0176 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../../../manifest.json; sourceTree = "<group>"; };
 		824F9D1D2B3BD44D005F0176 /* addons-l10n */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "addons-l10n"; path = "../../../addons-l10n"; sourceTree = "<group>"; };
 		824F9D1E2B3BD44D005F0176 /* _locales */ = {isa = PBXFileReference; lastKnownFileType = folder; name = _locales; path = ../../../_locales; sourceTree = "<group>"; };
+		82DB267F2B3D446800FF3EFB /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = ../../../images; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -269,8 +269,8 @@
 			children = (
 				824F9D112B3BD44D005F0176 /* background */,
 				824F9D122B3BD44D005F0176 /* LICENSE */,
+				82DB267F2B3D446800FF3EFB /* images */,
 				824F9D132B3BD44D005F0176 /* addon-api */,
-				824F9D142B3BD44D005F0176 /* images */,
 				824F9D152B3BD44D005F0176 /* addons */,
 				824F9D162B3BD44D005F0176 /* libraries */,
 				824F9D172B3BD44D005F0176 /* README.md */,
@@ -437,10 +437,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82DB26802B3D446800FF3EFB /* images in Resources */,
 				824F9D372B3BD44D005F0176 /* content-scripts in Resources */,
 				824F9D312B3BD44D005F0176 /* addons in Resources */,
 				824F9D392B3BD44D005F0176 /* addons-l10n in Resources */,
-				824F9D302B3BD44D005F0176 /* images in Resources */,
 				824F9D382B3BD44D005F0176 /* manifest.json in Resources */,
 				824F9D322B3BD44D005F0176 /* libraries in Resources */,
 				824F9D332B3BD44D005F0176 /* README.md in Resources */,
@@ -457,10 +457,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82DB26812B3D446800FF3EFB /* images in Resources */,
 				824F9D292B3BD44D005F0176 /* content-scripts in Resources */,
 				824F9D232B3BD44D005F0176 /* addons in Resources */,
 				824F9D2B2B3BD44D005F0176 /* addons-l10n in Resources */,
-				824F9D222B3BD44D005F0176 /* images in Resources */,
 				824F9D2A2B3BD44D005F0176 /* manifest.json in Resources */,
 				824F9D242B3BD44D005F0176 /* libraries in Resources */,
 				824F9D252B3BD44D005F0176 /* README.md in Resources */,
