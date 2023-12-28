@@ -286,6 +286,47 @@ export default async function ({ addon, msg, console }) {
   };
 
   onEnabled();
+  
+  await new Promise((resolve) => {
+    if (addon.tab.traps.vm.editingTarget) return resolve();
+    addon.tab.traps.vm.runtime.once("PROJECT_LOADED", resolve);
+  });
+  
+  const blocksPrototype = vm.editingTarget.blocks.constructor.prototype;
+  blocksPrototype.toolboxUpdateQueued = false;
+  blocksPrototype.queueToolboxUpdate = function () {
+    this.toolboxUpdateQueued = true;
+  }
+  const oldAddBlock = blocksPrototype.addBlock;
+  blocksPrototype.addBlock = function (block) {
+    oldAddBlock.call(this, block);
+    if (block.opcode === "procedures_definition" || block.opcode === "procedures_definition_reporter") {
+      this.queueToolboxUpdate();
+    }
+  }
+  const oldChangeBlock = blocksPrototype.changeBlock;
+  blocksPrototype.changeBlock = function (args) {
+    oldChangeBlock.call(this, args);
+    if (args.element === "mutation" && ["procedures_prototype", "procedures_prototype_reporter", "procedures_prototype_boolean"].includes(this._blocks[args.id].opcode)) {
+      this.queueToolboxUpdate();
+    }
+  }
+  const oldDeleteBlock = blocksPrototype.deleteBlock;
+  blocksPrototype.deleteBlock = function (blockid) {
+    const opcode = this._blocks[blockid].opcode;
+    oldDeleteBlock.call(this, blockid);
+    if (opcode === "procedures_definition" || opcode === "procedures_definition_reporter") {
+      this.queueToolboxUpdate();
+    }
+  }
+  const oldBlocklyListen = blocksPrototype.blocklyListen;
+  blocksPrototype.blocklyListen = function (e) {
+    oldBlocklyListen.call(this, e);
+    if (this.toolboxUpdateQueued) {
+      Promise.resolve().then(updateToolbox);
+      this.toolboxUpdateQueued = false;
+    }
+  }
 
   let hasSetUpInputButtons = false;
   while (true) {
