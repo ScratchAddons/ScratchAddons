@@ -120,5 +120,8 @@
   "tags": ["community", "recommended"],
   "enabledByDefault": false,
   "dynamicEnable": true,
-  "dynamicDisable": true
+  "dynamicDisable": true,
+  "browsers": {
+    "safari": false
+  }
 }

@@ -20,5 +20,8 @@
   "tags": ["popup", "recommended"],
   "enabledByDefault": true,
   "dynamicEnable": true,
-  "dynamicDisable": true
+  "dynamicDisable": true,
+  "browsers": {
+    "safari": false
+  }
 }

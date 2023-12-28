@@ -18,5 +18,8 @@
       "matches": ["projects", "https://scratch.mit.edu/users/*/", "https://scratch.mit.edu/studios/*"]
     }
   ],
-  "enabledByDefault": true
+  "enabledByDefault": true,
+  "browsers": {
+    "safari": false
+  }
 }
