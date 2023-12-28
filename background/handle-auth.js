@@ -101,16 +101,17 @@ chrome.cookies.onChanged.addListener((e) => addToQueue(e));
 
 function getCookieValue(name) {
   return new Promise((resolve) => {
-    chrome.cookies.get(
-      {
-        url: "https://scratch.mit.edu/",
-        name,
-      },
-      (cookie) => {
-        if (cookie && cookie.value) resolve(cookie.value);
-        else resolve(null);
-      }
-    );
+    resolve(null);
+    // chrome.cookies.get(
+    //   {
+    //     url: "https://scratch.mit.edu/",
+    //     name,
+    //   },
+    //   (cookie) => {
+    //     if (cookie && cookie.value) resolve(cookie.value);
+    //     else resolve(null);
+    //   }
+    // );
   });
 }
 

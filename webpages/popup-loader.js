@@ -25,17 +25,18 @@ const promisify =
 
 function getCookieValue(name, getCookie, storeId) {
   return new Promise((resolve) => {
-    chrome.cookies.get(
-      {
-        url: "https://scratch.mit.edu/",
-        name,
-        storeId,
-      },
-      (cookie) => {
-        if (cookie && cookie.value) resolve(getCookie ? cookie : cookie.value);
-        else resolve(null);
-      }
-    );
+    resolve(null);
+    // chrome.cookies.get(
+    //   {
+    //     url: "https://scratch.mit.edu/",
+    //     name,
+    //     storeId,
+    //   },
+    //   (cookie) => {
+    //     if (cookie && cookie.value) resolve(getCookie ? cookie : cookie.value);
+    //     else resolve(null);
+    //   }
+    // );
   });
 }
 
