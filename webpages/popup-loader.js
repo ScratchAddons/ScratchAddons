@@ -76,7 +76,7 @@ async function refetchSession(addon) {
   // In Safari, requests to /session won't include cookies when "Prevent cross-site tracking"
   // is enabled, but they will if the request is made from the background page.
   result = await promisify(chrome.runtime.sendMessage.bind(chrome.runtime))({
-    fetchSession: {}
+    fetchSession: {},
   });
   if (result.error !== null) {
     console.warn("Session fetch failed", result.error);

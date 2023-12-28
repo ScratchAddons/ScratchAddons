@@ -191,13 +191,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const json = await res.json();
         sendResponse({
           error: null,
-          session: json
+          session: json,
         });
       })
       .catch((error) => {
         console.error(error);
         sendResponse({
-          error: `${error}`
+          error: `${error}`,
         });
       });
     return true;

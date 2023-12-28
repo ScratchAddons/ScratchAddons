@@ -206,7 +206,7 @@ let fuse;
         })(),
         showConfirm: false,
         confirmCallback: null,
-        confirmMessage: null
+        confirmMessage: null,
       };
     },
     computed: {
@@ -339,7 +339,7 @@ let fuse;
           });
           return;
         }
-      
+
         serializeSettings().then((serialized) => {
           const blob = new Blob([serialized], { type: "application/json" });
           downloadBlob("scratch-addons-settings.json", blob);
@@ -519,10 +519,11 @@ let fuse;
   const getRunningAddons = (manifests, addonsEnabled) => {
     return new Promise((resolve) => {
       chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
-        const resolveNone = () => resolve({
-          addonsCurrentlyOnTab: [],
-          addonsPreviouslyOnTab: []
-        });
+        const resolveNone = () =>
+          resolve({
+            addonsCurrentlyOnTab: [],
+            addonsPreviouslyOnTab: [],
+          });
         if (!tabs[0].id) {
           resolveNone();
           return;

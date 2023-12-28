@@ -214,7 +214,13 @@
         </div>
       </div>
     </div>
-    <modal class="more-settings" :is-open="moreSettingsOpen" @close="moreSettingsOpen = false" :title="msg('moreSettings')" v-cloak>
+    <modal
+      class="more-settings"
+      :is-open="moreSettingsOpen"
+      @close="moreSettingsOpen = false"
+      :title="msg('moreSettings')"
+      v-cloak
+    >
       <div class="addon-block settings-block">
         <div class="addon-body">
           <div class="addon-topbar">
