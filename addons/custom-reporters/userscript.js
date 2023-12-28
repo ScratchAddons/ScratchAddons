@@ -273,7 +273,7 @@ export default async function ({ addon, msg, console }) {
       });
     }
   };
-  
+
   let updatingToolbox = false;
 
   const updateToolbox = () => {
@@ -332,7 +332,10 @@ export default async function ({ addon, msg, console }) {
   blocksPrototype.blocklyListen = function (e) {
     oldBlocklyListen.call(this, e);
     if (this.toolboxUpdateQueued) {
-      Promise.resolve().then(()=>{console.log('updatetoolbox');updateToolbox()});
+      Promise.resolve().then(() => {
+        console.log("updatetoolbox");
+        updateToolbox();
+      });
       this.toolboxUpdateQueued = false;
     }
   };
