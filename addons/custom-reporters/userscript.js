@@ -1,3 +1,15 @@
+/*
+  todo:
+  - toolbox should update on new block creation
+  - definition blocks should be flat hats, not normal hats
+  - fix errors when trying to edit blocks
+  - fix errors when editing/deleting arguments
+  - change procedures_return_reporter to procedures_return_boolean when necessary, and vice versa
+  - transpile return blocks
+  - transpile procedures_call blocks
+  - run everything correctly in the vm
+  - dynamic enable/disable?
+*/
 export default async function ({ addon, msg, console }) {
   const vm = addon.tab.traps.vm;
 
@@ -301,9 +313,9 @@ export default async function ({ addon, msg, console }) {
   blocksPrototype.queueToolboxUpdate = function () {
     this.toolboxUpdateQueued = true;
   };
-  const oldAddBlock = blocksPrototype.addBlock;
-  blocksPrototype.addBlock = function (block) {
-    oldAddBlock.call(this, block);
+  const oldCreateBlock = blocksPrototype.createBlock;
+  blocksPrototype.createBlock = function (block) {
+    oldCreateBlock.call(this, block);
     if (block.opcode === "procedures_definition" || block.opcode === "procedures_definition_reporter") {
       this.queueToolboxUpdate();
     }
