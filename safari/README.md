@@ -31,4 +31,4 @@ Once the extension is running, it uses the same manifest.json, JavaScript files,
 
 ## Sending to Apple
 
-Requires an Apple Developer Program subscription. Instructions being worked on as this gets closer to completion.
+For the most part Xcode figures this out. The code here is already configured for being signed by the right account. Just Product > Archive > Send to App Store Connect > Hope for a kind reviewer.
