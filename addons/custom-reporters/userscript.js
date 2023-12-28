@@ -206,9 +206,9 @@ export default async function ({ addon, msg, console }) {
       });
     },
   };
-  
+
   const oldRenderDrawTop = ScratchBlocks.BlockSvg.prototype.renderDrawTop_;
-  ScratchBlocks.BlockSvg.prototype.renderDrawTop_ = function(steps, rightEdge) {
+  ScratchBlocks.BlockSvg.prototype.renderDrawTop_ = function (steps, rightEdge) {
     if (this.type === "procedures_definition_reporter") {
       this.type = "procedures_definition";
       oldRenderDrawTop.call(this, steps, rightEdge);
@@ -217,9 +217,9 @@ export default async function ({ addon, msg, console }) {
       oldRenderDrawTop.call(this, steps, rightEdge);
     }
   };
-  
+
   const oldRenderDrawRight = ScratchBlocks.BlockSvg.prototype.renderDrawRight_;
-  ScratchBlocks.BlockSvg.prototype.renderDrawRight_ = function(steps, inputRows, iconWidth) {
+  ScratchBlocks.BlockSvg.prototype.renderDrawRight_ = function (steps, inputRows, iconWidth) {
     if (this.type === "procedures_definition_reporter") {
       this.type = "procedures_definition";
       const returnVal = oldRenderDrawRight.call(this, steps, inputRows, iconWidth);
@@ -228,9 +228,9 @@ export default async function ({ addon, msg, console }) {
     }
     return oldRenderDrawRight.call(this, steps, inputRows, iconWidth);
   };
-  
+
   const oldRenderCompute = ScratchBlocks.BlockSvg.prototype.renderCompute_;
-  ScratchBlocks.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
+  ScratchBlocks.BlockSvg.prototype.renderCompute_ = function (iconWidth) {
     if (this.type === "procedures_definition_reporter") {
       this.type = "procedures_definition";
       const returnVal = oldRenderCompute.call(this, iconWidth);
@@ -239,9 +239,9 @@ export default async function ({ addon, msg, console }) {
     }
     return oldRenderCompute.call(this, iconWidth);
   };
-  
+
   const oldRenderDrawLeft = ScratchBlocks.BlockSvg.prototype.renderDrawLeft_;
-  ScratchBlocks.BlockSvg.prototype.renderDrawLeft_ = function(steps) {
+  ScratchBlocks.BlockSvg.prototype.renderDrawLeft_ = function (steps) {
     oldRenderDrawLeft.call(this, steps);
     if (this.type === "procedures_definition_reporter") {
       const vIndex = steps.indexOf("v"); // presumably this might not always be in the same position (eg when cat blocks)
@@ -249,7 +249,6 @@ export default async function ({ addon, msg, console }) {
       steps[vIndex + 1] = 68; // todo: compat w/ custom-block-shape
     }
   };
-  
 
   addon.tab.redux.initialize();
   //vm.emitWorkspaceUpdate();
