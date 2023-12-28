@@ -341,6 +341,14 @@
   "skipOpenFullSettings": {
     "message": "Cancel"
   },
+  "confirmOK": {
+    "message": "OK",
+    "description": "Part of a yes/no confirmation dialogue"
+  },
+  "confirmCancel": {
+    "message": "Cancel",
+    "description": "Part of a yes/no confirmation dialogue"
+  },
   "exploreAllAddons": {
     "message": "Explore all $1 addons:",
     "description": "Placeholder is a number. Example: explore all 80+ addons"

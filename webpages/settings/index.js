@@ -204,6 +204,9 @@ let fuse;
             changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
           };
         })(),
+        showConfirm: false,
+        confirmCallback: null,
+        confirmMessage: null
       };
     },
     computed: {
@@ -418,6 +421,19 @@ let fuse;
       groupMarginAbove(group) {
         const firstVisibleGroup = this.addonGroups.find((group) => this.groupShownCount(group) > 0);
         return group !== firstVisibleGroup;
+      },
+      confirm(message) {
+        // Safari does not support window.confirm() in popups
+        return new Promise((resolve) => {
+          this.confirmCallback = (result) => {
+            this.confirmCallback = null;
+            this.confirmMessage = null;
+            this.showConfirm = false;
+            resolve(result);
+          };
+          this.confirmMessage = message;
+          this.showConfirm = true;
+        });
       },
     },
     events: {
