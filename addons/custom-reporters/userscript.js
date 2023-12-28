@@ -217,8 +217,9 @@ export default async function ({ addon, msg, console }) {
     if (e.detail.action.type === UPDATE_TOOLBOX_ACTION && !e.detail.action.saExtraBlocks) {
       const toolboxXML = xmlParser.parseFromString(e.detail.action.toolboxXML, "text/xml");
       const blocks = vm.editingTarget.blocks;
-      const myBlocksCat = toolboxXML.querySelector('category[custom="PROCEDURE"]');
+      const myBlocksCat = toolboxXML.querySelector('category#myBlocks');
       myBlocksCat.removeAttribute("custom");
+      myBlocksCat.innerHTML = "";
       const myBlocks = [];
       for (const blockid of blocks._scripts.filter((bid) => blocks._blocks[bid].opcode === "procedures_definition_reporter" || blocks._blocks[bid].opcode === "procedures_definition")) {
         const blockEl = toolboxXML.createElement("block");
@@ -274,13 +275,12 @@ export default async function ({ addon, msg, console }) {
     }
   };
 
-  let updatingToolbox = false;
-
   const updateToolbox = () => {
-    if (updatingToolbox) return;
     if (vm.editingTarget) {
-      updatingToolbox = true;
-      vm.emitWorkspaceUpdate();
+      addon.tab.redux.dispatch({
+        type: UPDATE_TOOLBOX_ACTION,
+        toolboxXML: addon.tab.redux.state.scratchGui.toolbox.toolboxXML,
+      });
     }
   };
 
