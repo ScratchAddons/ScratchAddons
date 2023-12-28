@@ -217,7 +217,7 @@ export default async function ({ addon, msg, console }) {
     if (e.detail.action.type === UPDATE_TOOLBOX_ACTION && !e.detail.action.saExtraBlocks) {
       const toolboxXML = xmlParser.parseFromString(e.detail.action.toolboxXML, "text/xml");
       const blocks = vm.editingTarget.blocks;
-      const myBlocksCat = toolboxXML.querySelector('category#myBlocks');
+      const myBlocksCat = toolboxXML.querySelector("category#myBlocks");
       myBlocksCat.removeAttribute("custom");
       myBlocksCat.innerHTML = "";
       const myBlocks = [];
