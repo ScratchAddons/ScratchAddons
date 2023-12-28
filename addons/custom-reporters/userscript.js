@@ -1,8 +1,6 @@
 /*
   todo:
-  - toolbox should update on new block creation
-  - definition blocks should be flat hats, not normal hats
-  - fix errors when trying to edit blocks
+  - fix errors when trying to edit blocks (fixup Blockly.Procedures.editProcedureCallback)
   - fix errors when editing/deleting arguments
   - change procedures_return_reporter to procedures_return_boolean when necessary, and vice versa
   - transpile return blocks
@@ -208,6 +206,50 @@ export default async function ({ addon, msg, console }) {
       });
     },
   };
+  
+  const oldRenderDrawTop = ScratchBlocks.BlockSvg.prototype.renderDrawTop_;
+  ScratchBlocks.BlockSvg.prototype.renderDrawTop_ = function(steps, rightEdge) {
+    if (this.type === "procedures_definition_reporter") {
+      this.type = "procedures_definition";
+      oldRenderDrawTop.call(this, steps, rightEdge);
+      this.type = "procedures_definition_reporter";
+    } else {
+      oldRenderDrawTop.call(this, steps, rightEdge);
+    }
+  };
+  
+  const oldRenderDrawRight = ScratchBlocks.BlockSvg.prototype.renderDrawRight_;
+  ScratchBlocks.BlockSvg.prototype.renderDrawRight_ = function(steps, inputRows, iconWidth) {
+    if (this.type === "procedures_definition_reporter") {
+      this.type = "procedures_definition";
+      const returnVal = oldRenderDrawRight.call(this, steps, inputRows, iconWidth);
+      this.type = "procedures_definition_reporter";
+      return returnVal;
+    }
+    return oldRenderDrawRight.call(this, steps, inputRows, iconWidth);
+  };
+  
+  const oldRenderCompute = ScratchBlocks.BlockSvg.prototype.renderCompute_;
+  ScratchBlocks.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
+    if (this.type === "procedures_definition_reporter") {
+      this.type = "procedures_definition";
+      const returnVal = oldRenderCompute.call(this, iconWidth);
+      this.type = "procedures_definition_reporter";
+      return returnVal;
+    }
+    return oldRenderCompute.call(this, iconWidth);
+  };
+  
+  const oldRenderDrawLeft = ScratchBlocks.BlockSvg.prototype.renderDrawLeft_;
+  ScratchBlocks.BlockSvg.prototype.renderDrawLeft_ = function(steps) {
+    oldRenderDrawLeft.call(this, steps);
+    if (this.type === "procedures_definition_reporter") {
+      const vIndex = steps.indexOf("v"); // presumably this might not always be in the same position (eg when cat blocks)
+      if (vIndex === -1) return;
+      steps[vIndex + 1] = 68; // todo: compat w/ custom-block-shape
+    }
+  };
+  
 
   addon.tab.redux.initialize();
   //vm.emitWorkspaceUpdate();
