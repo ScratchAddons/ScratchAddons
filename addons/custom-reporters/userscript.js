@@ -265,7 +265,7 @@ export default async function ({ addon, msg, console }) {
       steps[vIndex + 1] = 68; // todo: compat w/ custom-block-shape
     }
   };
-  
+
   const oldEditProcCb = ScratchBlocks.Procedures.editProcedureCallback_;
   ScratchBlocks.Procedures.editProcedureCallback_ = function (block) {
     const initialType = block.type;
@@ -276,19 +276,19 @@ export default async function ({ addon, msg, console }) {
     }
     oldEditProcCb(block);
     block.type = initialType;
-  }
-  
+  };
+
   ScratchBlocks.Blocks["procedures_declaration"].domToMutation = function (xmlElement) {
     console.log(xmlElement);
     ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionDomToMutation.call(this, xmlElement);
     this.shape_ = mutation.getAttribute("shape") || "stack";
-  }
+  };
   ScratchBlocks.Blocks["procedures_declaration"].mutationToDom = function () {
     const container = ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionMutationToDom.call(this);
     container.setAttribute("shape", this.shape_);
     console.log(container);
     return container;
-  }
+  };
 
   addon.tab.redux.initialize();
   //vm.emitWorkspaceUpdate();
