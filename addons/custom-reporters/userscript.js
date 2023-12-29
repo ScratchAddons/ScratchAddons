@@ -1,6 +1,6 @@
 /*
   todo:
-  - fix errors when trying to edit blocks (fixup Blockly.Procedures.editProcedureCallback)
+  - fix errors when trying to edit blocks (fixup ScratchBlocks,Procedures.editProcedureCallback)
   - fix errors when editing/deleting arguments
   - change procedures_return_reporter to procedures_return_boolean when necessary, and vice versa
   - transpile return blocks
@@ -42,7 +42,11 @@ export default async function ({ addon, msg, console }) {
     updateDisplay_: ScratchBlocks.ScratchBlocks.ProcedureUtils.updateDisplay_,
 
     // Exist on all three blocks, but have different implementations.
-    mutationToDom: ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionMutationToDom,
+    mutationToDom: () => {
+      const container = ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionMutationToDom.call(this);
+      container.setAttribute("shape", "reporter");
+      return container;
+    },
     domToMutation: ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionDomToMutation,
     populateArgument_: ScratchBlocks.ScratchBlocks.ProcedureUtils.populateArgumentOnPrototype_,
     addProcedureLabel_: ScratchBlocks.ScratchBlocks.ProcedureUtils.addLabelField_,
@@ -79,7 +83,11 @@ export default async function ({ addon, msg, console }) {
     updateDisplay_: ScratchBlocks.ScratchBlocks.ProcedureUtils.updateDisplay_,
 
     // Exist on all three blocks, but have different implementations.
-    mutationToDom: ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionMutationToDom,
+    mutationToDom: () => {
+      const container = ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionMutationToDom.call(this);
+      container.setAttribute("shape", "boolean");
+      return container;
+    },
     domToMutation: ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionDomToMutation,
     populateArgument_: ScratchBlocks.ScratchBlocks.ProcedureUtils.populateArgumentOnPrototype_,
     addProcedureLabel_: ScratchBlocks.ScratchBlocks.ProcedureUtils.addLabelField_,
@@ -111,7 +119,11 @@ export default async function ({ addon, msg, console }) {
     updateDisplay_: ScratchBlocks.ScratchBlocks.ProcedureUtils.updateDisplay_,
 
     // Exist on all three blocks, but have different implementations.
-    mutationToDom: ScratchBlocks.ScratchBlocks.ProcedureUtils.callerMutationToDom,
+    mutationToDom: () => {
+      const container = ScratchBlocks.ScratchBlocks.ProcedureUtils.callerMutationToDom.call(this);
+      container.setAttribute("shape", "reporter");
+      return container;
+    },
     domToMutation: ScratchBlocks.ScratchBlocks.ProcedureUtils.callerDomToMutation,
     populateArgument_: ScratchBlocks.ScratchBlocks.ProcedureUtils.populateArgumentOnCaller_,
     addProcedureLabel_: ScratchBlocks.ScratchBlocks.ProcedureUtils.addLabelField_,
@@ -143,7 +155,11 @@ export default async function ({ addon, msg, console }) {
     updateDisplay_: ScratchBlocks.ScratchBlocks.ProcedureUtils.updateDisplay_,
 
     // Exist on all three blocks, but have different implementations.
-    mutationToDom: ScratchBlocks.ScratchBlocks.ProcedureUtils.callerMutationToDom,
+    mutationToDom: () => {
+      const container = ScratchBlocks.ScratchBlocks.ProcedureUtils.callerMutationToDom.call(this);
+      container.setAttribute("shape", "boolean");
+      return container;
+    },
     domToMutation: ScratchBlocks.ScratchBlocks.ProcedureUtils.callerDomToMutation,
     populateArgument_: ScratchBlocks.ScratchBlocks.ProcedureUtils.populateArgumentOnCaller_,
     addProcedureLabel_: ScratchBlocks.ScratchBlocks.ProcedureUtils.addLabelField_,
@@ -249,6 +265,30 @@ export default async function ({ addon, msg, console }) {
       steps[vIndex + 1] = 68; // todo: compat w/ custom-block-shape
     }
   };
+  
+  const oldEditProcCb = ScratchBlocks.Procedures.editProcedureCallback_;
+  ScratchBlocks.Procedures.editProcedureCallback_ = function (block) {
+    const initialType = block.type;
+    if (initialType === "procedures_definition_reporter") {
+      block.type = "procedures_definition";
+    } else if (initialType === "procedures_call_boolean" || initialType === "procedures_call_reporter") {
+      block.type = "procedures_call";
+    }
+    oldEditProcCb(block);
+    block.type = initialType;
+  }
+  
+  ScratchBlocks.Blocks["procedures_declaration"].domToMutation = function (xmlElement) {
+    console.log(xmlElement);
+    ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionDomToMutation.call(this, xmlElement);
+    this.shape_ = mutation.getAttribute("shape") || "stack";
+  }
+  ScratchBlocks.Blocks["procedures_declaration"].mutationToDom = function () {
+    const container = ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionMutationToDom.call(this);
+    container.setAttribute("shape", this.shape_);
+    console.log(container);
+    return container;
+  }
 
   addon.tab.redux.initialize();
   //vm.emitWorkspaceUpdate();
@@ -436,11 +476,10 @@ export default async function ({ addon, msg, console }) {
             `,
     });
 
-    let selectedType = "stack";
     const blockExtensions = {
       stack: ["shape_statement"],
-      number: ["output_number", "output_string"],
-      predicate: ["output_boolean"],
+      reporter: ["output_number", "output_string"],
+      boolean: ["output_boolean"],
     };
 
     // make the custom block editor thing the right shape
@@ -451,7 +490,7 @@ export default async function ({ addon, msg, console }) {
         return originalJsonInit.call(
           this,
           Object.assign(obj, {
-            extensions: ["colours_more", ...blockExtensions[selectedType]],
+            extensions: ["colours_more", ...blockExtensions[this.shape_]],
           })
         );
       };
@@ -481,7 +520,7 @@ export default async function ({ addon, msg, console }) {
 
     const workspace = ScratchBlocks.getMainWorkspace();
     let mutationRoot = workspace.topBlocks_[0];
-
+    let selectedType = mutationRoot.shape_ || "stack";
     let rtlOffset = 0;
 
     workspace.listeners_[0] = () => null; // stop scratch from trying to move its potentially deleted block around
@@ -540,6 +579,7 @@ export default async function ({ addon, msg, console }) {
 
     const setupMutationRoot = () => {
       // from https://github.com/LLK/scratch-gui/blob/c5d4aea493b58c15570915753e1c0f9e7e812ec1/src/containers/custom-procedures.jsx
+      mutationRoot.shape_ = selectedType;
       mutationRoot.setMovable(false);
       mutationRoot.setDeletable(false);
       mutationRoot.contextMenu = false;
