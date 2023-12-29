@@ -3,7 +3,9 @@
 }
 
 .gallery.thumb span.image {
-  border-radius: calc((var(--roundedThumbs-roundSize) * 1px + 6px) * (var(--roundedThumbs-roundSize) / var(--roundedThumbs-roundSize)));
+  border-radius: calc(
+    (var(--roundedThumbs-roundSize) * 1px + 6px) * (var(--roundedThumbs-roundSize) / var(--roundedThumbs-roundSize))
+  );
 }
 
 #profile-box .player,
@@ -13,7 +15,9 @@
 }
 
 .media-grid .gallery.thumb.item {
-  border-radius: calc((var(--roundedThumbs-roundSize) * 1px + 6px) * (var(--roundedThumbs-roundSize) / var(--roundedThumbs-roundSize)));
+  border-radius: calc(
+    (var(--roundedThumbs-roundSize) * 1px + 6px) * (var(--roundedThumbs-roundSize) / var(--roundedThumbs-roundSize))
+  );
 }
 
 #profile-box .player [data-control="edit"],
