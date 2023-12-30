@@ -8,6 +8,12 @@
       "matches": ["projects", "projectEmbeds"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects", "projectEmbeds"]
+    }
+  ],
   "credits": [
     {
       "name": "batmangreen123 (michealtheratz)"

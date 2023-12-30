@@ -1,28 +1,33 @@
 export default async function ({ addon, console, msg }) {
-  const VM = addon.tab.traps.vm;
-  const canvas = VM.renderer.canvas;
+  // INVERT STAGE ADDON BY @BATMANGREEN123 (MICHEALTHERATZ)
+  const vm = addon.tab.traps.vm;
+  const canvas = vm.renderer.canvas;
 
-  // CREATING BUTTON
+  // I spent an HOUR fixing a bug until I found out I was MISSING this variable!!!!
+  // THANKS [REDACTED]!
+  let invert = false;
+
+  // CREATING THE BUTTON (Using material icons bc i'm lazy)
   const img = document.createElement("img");
-  img.className = "pause-btn";
+  img.className = "invert-btn";
   img.draggable = false;
   img.src = addon.self.dir + "/contrast.svg";
-  img.title = msg("invert");
 
-  // INVERTING THE STAGE
+  // EVENT LISTENERS
   img.addEventListener("click", () => invert = !invert);
   addon.tab.displayNoneWhileDisabled(img);
   addon.self.addEventListener("disabled", () => invert = false);
 
-  // KEEPING STAGE INVERTED
+  // HAD TO PUT THIS TO MAKE THE STAGE INVERTED EVERY FRAME
   let loop = () => {
-    canvas.style.filter = `invert(${invert ? "100" : "0"}%)`
-    window.requestAnimationFrame(loop)
+    canvas.style.filter = `invert(${invert ? "100" : "0"}%)`;
+
+    window.requestAnimationFrame(loop);
   }
-  window.requestAnimationFrame(loop)
+  window.requestAnimationFrame(loop);
 
   while (true) {
-    // ADDING BUTTON TO GUI
+    // ADDING THE BUTTON INTO THE SCRATCH-GUI
     await addon.tab.waitForElement("[class^='green-flag']", {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
