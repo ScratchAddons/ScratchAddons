@@ -1,0 +1,27 @@
+{
+  "name": "Rearrangeable custom block inputs",
+  "description": "Adds buttons for rearranging custom blocks inputs",
+  "credits": [
+    {
+      "name": "Chrome_Cat",
+      "link": "https://scratch.mit.edu/users/Chrome_Cat/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": true
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "arrows.css",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor"],
+  "enabledByDefault": true,
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}
