@@ -2,16 +2,16 @@ export default async function ({ addon, console }) {
     const Blockly = await addon.tab.traps.getBlockly();
 
     function createArrow(direction, callback) {
-        const path = direction === "left" ? "M 17 13 L 9 21 L 17 30" : "M 9 13 L 17 21 L 9 30"
-        const arrowDiv = Blockly.WidgetDiv.DIV.appendChild(document.createElement('div'));
-        arrowDiv.innerHTML = `
-        <svg width="20px" height="40px" 
-             style="left: ${direction === "left" ? "calc(50% - 20px)" : "calc(50% + 20px)"}" 
-             class="blocklyTextShiftArrow">
-            <path d="${path}" fill="none" stroke="#FF661A" stroke-width="2"></path>
-        </svg>`;
+        const path = direction === "left" ? "M 17 13 L 9 21 L 17 30" : "M 9 13 L 17 21 L 9 30";
 
-        arrowDiv.addEventListener('click', callback);
+        Blockly.WidgetDiv.DIV.insertAdjacentHTML('beforeend', `
+            <svg width="20px" height="40px" 
+                 style="left: ${direction === "left" ? "calc(50% - 20px)" : "calc(50% + 20px)"}" 
+                 class="blocklyTextShiftArrow">
+                <path d="${path}" fill="none" stroke="#FF661A" stroke-width="2"></path>
+            </svg>`);
+            
+        Blockly.WidgetDiv.DIV.lastChild.addEventListener('click', callback);
     }
 
     Blockly.ScratchBlocks.ProcedureUtils.shiftFieldCallback = function (field, direction) {
