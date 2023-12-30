@@ -9,7 +9,7 @@ export default async function ({ addon, console, msg }) {
 
   // CREATING THE BUTTON (Using material icons bc i'm lazy)
   const img = document.createElement("img");
-  img.className = "invert-btn";
+  img.className = "invert-btn btn-container";
   img.draggable = false;
   img.src = addon.self.dir + "/contrast.svg";
 
@@ -28,11 +28,10 @@ export default async function ({ addon, console, msg }) {
 
   while (true) {
     // ADDING THE BUTTON INTO THE SCRATCH-GUI
-    await addon.tab.waitForElement("[class^='green-flag']", {
+    await addon.tab.waitForElement("[class^='stage-header_stage-menu-wrapper']", {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
-    addon.tab.appendToSharedSpace({ space: "afterGreenFlag", element: img, order: 2 });
-    
+    addon.tab.appendToSharedSpace({ space: "fullscreenStageHeader", element: img, order: 2 });
   }
 }
