@@ -1,0 +1,17 @@
+{
+  "name": "Invert Stage",
+  "description": "Inverts the stage. Useful for testing contrast and people with colorblindness.",
+  "tags": ["community"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects", "projectEmbeds"]
+    }
+  ],
+  "credits": [
+    {
+      "name": "batmangreen123 (michealtheratz)"
+    }
+  ],
+  "enabledByDefault": false
+}
