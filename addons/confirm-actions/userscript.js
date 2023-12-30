@@ -77,7 +77,7 @@ export default async function ({ addon, console, msg }) {
         confirmationMessage = msg("removeproject");
       }
 
-      // If one of the actions above is being taken, intercept the click and prompt for confirmation
+      // If one of the actions above is being taken, prevent it and show confirmation prompt
       if (confirmationMessage !== null) {
         e.preventDefault();
         e.stopPropagation();
