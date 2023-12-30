@@ -13,6 +13,7 @@ export default async function ({ addon, console, msg }) {
   img.className = "sa-invert-stage-button sa-invert-stage-btn-container";
   img.draggable = false;
   img.src = addon.self.dir + "/contrast.svg";
+  img.title = msg("invert")
 
   // EVENT LISTENERS
   img.addEventListener("click", () => invert = !invert);
