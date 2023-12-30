@@ -6,7 +6,6 @@
   "scratch-notifier",
   "discuss-button",
   "editor-stepping",
-  "invert-stage",
   "image-uploader",
   "scratch-messaging",
   "forum-time-zones",
@@ -152,6 +151,7 @@
   "paint-skew",
   "preview-project-description",
   "collapse-footer",
+  "invert-stage",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",

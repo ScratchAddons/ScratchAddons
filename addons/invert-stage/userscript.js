@@ -3,13 +3,14 @@ export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
   const canvas = vm.renderer.canvas;
 
+
   // I spent an HOUR fixing a bug until I found out I was MISSING this variable!!!!
   // THANKS [REDACTED]!
   let invert = false;
 
   // CREATING THE BUTTON (Using material icons bc i'm lazy)
   const img = document.createElement("img");
-  img.className = "invert-btn btn-container";
+  img.className = "sa-invert-stage-button sa-invert-stage-btn-container";
   img.draggable = false;
   img.src = addon.self.dir + "/contrast.svg";
 
