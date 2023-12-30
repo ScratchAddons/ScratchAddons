@@ -1,7 +1,7 @@
 {
   "name": "Invert Stage",
   "description": "Inverts the stage. Useful for testing contrast and people with colorblindness.",
-  "tags": ["community"],
+  "tags": ["editor", "projectPlayer"],
   "versionAdded": "1.36.0",
   "userscripts": [
     {
