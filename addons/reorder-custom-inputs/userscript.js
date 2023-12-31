@@ -1,5 +1,5 @@
 export default async function ({ addon, console }) {
-    const Blockly = await addon.tab.traps.getBlockly();
+  const Blockly = await addon.tab.traps.getBlockly();
 
     function createArrow(direction, callback) {
         const path = direction === "left" ? "M 17 13 L 9 21 L 17 30" : "M 9 13 L 17 21 L 9 30";
