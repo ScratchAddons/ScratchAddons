@@ -22,7 +22,5 @@
   ],
   "versionAdded": "1.36.0",
   "tags": ["editor"],
-  "enabledByDefault": true,
-  "dynamicEnable": true,
-  "dynamicDisable": true
+  "enabledByDefault": false
 }
