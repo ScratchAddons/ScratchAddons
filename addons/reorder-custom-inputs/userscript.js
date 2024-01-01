@@ -35,7 +35,8 @@ export default async function ({ addon, console }) {
       }
     }
 
-    if (inputNameToShift && newPosition >= 0 && newPosition < proc.inputList.length) {
+    const initialInputListLength = proc.inputList.length;
+    if (inputNameToShift && newPosition >= 0 && newPosition < initialInputListLength) {
       const itemToMove = proc.inputList.splice(
         proc.inputList.findIndex((input) => input.name === inputNameToShift),
         1
@@ -48,6 +49,15 @@ export default async function ({ addon, console }) {
         proc.updateDisplay_();
       } finally {
         Blockly.Events.enable();
+      }
+
+      // When moving a label left, updateDisplay_() might merge it with a label that was already there
+      if (
+        direction === 'left' &&
+        itemToMove.type === Blockly.DUMMY_INPUT &&
+        proc.inputList.length !== initialInputListLength
+      ) {
+        newPosition--;
       }
 
       focusOnInput(proc.inputList[newPosition]);
