@@ -53,7 +53,7 @@ export default async function ({ addon, console }) {
 
       // When moving a label left, updateDisplay_() might merge it with a label that was already there
       if (
-        direction === 'left' &&
+        direction === "left" &&
         itemToMove.type === Blockly.DUMMY_INPUT &&
         proc.inputList.length !== initialInputListLength
       ) {
