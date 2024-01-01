@@ -42,8 +42,13 @@ export default async function ({ addon, console }) {
       )[0];
       proc.inputList.splice(newPosition, 0, itemToMove);
 
-      proc.onChangeFn();
-      proc.updateDisplay_();
+      Blockly.Events.disable();
+      try {
+        proc.onChangeFn();
+        proc.updateDisplay_();
+      } finally {
+        Blockly.Events.enable();
+      }
 
       focusOnInput(proc.inputList[newPosition]);
     }
