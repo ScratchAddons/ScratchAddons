@@ -8,6 +8,11 @@
   color: transparent;
   caret-color: var(--editorTheme3-inputColor-text);
 }
+.sa-theme3-editable-label .blocklyHtmlInput {
+  /* Labels in custom block editor */
+  background-color: var(--editorTheme3-inputColor-editableLabel);
+  color: var(--editorTheme3-inputColor-text);
+}
 
 /* Override Scratch's high contrast theme */
 .blocklyDropDownDiv .goog-menuitem {

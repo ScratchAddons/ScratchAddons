@@ -4,6 +4,10 @@
   opacity: 0.6;
 }
 
+.blocklyEditableText > .blocklyEditableLabel {
+  fill: black;
+}
+
 .u-dropdown-searchbar,
 .u-dropdown-searchbar:focus,
 .blocklyDropDownDiv .goog-menuitem {
