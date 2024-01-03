@@ -6,17 +6,16 @@ export default async function ({ addon, console, msg }) {
   let deleted;
   let target;
 
-  function getRestoreCostumeFun() {
-    deletedItems.forEach((costume) => {
-      vm.addCostume(costume.md5, costume, target.id, "");
-    });
-    deletedItems = [];
-  }
-
-  function getRestoreSoundFun() {
-    deletedItems.forEach((sound) => {
-      vm.addSound(sound, target.id);
-    });
+  function getRestoreFun(type) {
+    if (type === "costume") {
+      deletedItems.forEach((costume) => {
+        vm.addCostume(costume.md5, costume, target.id, "");
+      });
+    } else if (type === "sound") {
+      deletedItems.forEach((sound) => {
+        vm.addSound(sound, target.id);
+      });
+    }
     deletedItems = [];
   }
 
@@ -27,35 +26,20 @@ export default async function ({ addon, console, msg }) {
 
         deletedItems = [];
         target = vm.editingTarget;
-        const deleteBefore = ctx.index;
 
-        if (ctx.type === "costume") {
-          for (let i = 0; i < deleteBefore; i++) {
-            deleted = target.deleteCostume(0);
+        const loop = ctx.type === "costume" ? target.getCostumes().length - 1 : target.getSounds().length - 1;
+
+        for (let i = loop; i > -1; i--) {
+          if (i !== ctx.index) {
+            deleted = ctx.type === "costume" ? target.deleteCostume(i) : target.deleteSound(i);
             if (deleted) deletedItems.push(deleted);
-          }
-          while (true) {
-            deleted = target.deleteCostume(target.getCostumes().length - 1);
-            if (deleted) deletedItems.push(deleted);
-            else break;
-          }
-        } else {
-          for (let i = 0; i < deleteBefore; i++) {
-            deleted = target.deleteSound(0);
-            if (deleted) deletedItems.push(deleted);
-          }
-          while (true) {
-            if (target.getSounds().length > 1) deleted = target.deleteSound(target.getSounds().length - 1);
-            else break;
-            if (deleted) deletedItems.push(deleted);
-            else break;
           }
         }
 
         addon.tab.redux.dispatch({
           type: "scratch-gui/restore-deletion/RESTORE_UPDATE",
           state: {
-            restoreFun: ctx.type === "costume" ? getRestoreCostumeFun : getRestoreSoundFun,
+            restoreFun: getRestoreFun(ctx.type),
             deletedItem: type,
           },
         });
