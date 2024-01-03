@@ -1,6 +1,6 @@
 {
-  "name": "Customizable profile picture border",
-  "description": "Allows you to hide or change the outline around profile pictures in project and studio comments and change their shape.",
+  "name": "Customizable profile picture style",
+  "description": "Allows you to change the shape of profile pictures on the website, as well as their outline in project and studio comment sections.",
   "credits": [
     {
       "name": "CST1229",
