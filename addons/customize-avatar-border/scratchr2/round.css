@@ -2,6 +2,6 @@
 .user.thumb img,
 .avatar,
 #topnav ul.account-nav .logged-in-user .user-icon,
-.djangobb img:not(.postmsg img, img.breadcrumb_rss) {
+.postavatar img {
   border-radius: calc(var(--customizeAvatarBorder-radius)) !important;
 }
