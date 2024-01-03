@@ -1,6 +1,6 @@
 {
   "name": "Place backpack code at mouse",
-  "description": "Drag-and-drop code blocks to the mouse position instead of to the code area origin",
+  "description": "Drag-and-drop code blocks to the mouse position instead of to the code area corner.",
   "credits": [
     {
       "name": "Chrome_Cat"
