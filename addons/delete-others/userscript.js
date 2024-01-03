@@ -39,7 +39,7 @@ export default async function ({ addon, console, msg }) {
         addon.tab.redux.dispatch({
           type: "scratch-gui/restore-deletion/RESTORE_UPDATE",
           state: {
-            restoreFun: getRestoreFun(ctx.type),
+            restoreFun: getRestoreFun.bind(this, ctx.type),
             deletedItem: type,
           },
         });
