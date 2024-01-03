@@ -16,13 +16,17 @@ export default async function ({ addon }) {
   const newShareBlocksToTarget = function (blocks, targetId, _) {
     // Based on https://github.com/scratchfoundation/scratch-gui/blob/8be51d2239ae4e741d34f1906372b481f4246dce/src/containers/target-pane.jsx#L164
 
+    // Only proceed if we are sharing blocks to the editingTarget
+    if (vm.editingTarget.id !== targetId) return originalShareBlocksToTarget.apply(this, arguments);
+
     const BLOCKS_DEFAULT_SCALE = 0.675; // would be better if we could get this from lib/layout-constants.js
     const { targets } = redux.state.scratchGui.workspaceMetrics;
     const { isRtl } = redux.state.locales;
     const hScrollRect = Blockly.mainWorkspace.scrollbar.hScroll.outerSvg_.getBoundingClientRect();
+    const insideWorkspace = mouseX > hScrollRect.left && mouseX < hScrollRect.right;
 
     const topBlock = blocks.find((block) => block.topLevel);
-    if (topBlock) {
+    if (topBlock && insideWorkspace) {
       const { scrollX = 0, scrollY = 0, scale = BLOCKS_DEFAULT_SCALE } = targets[targetId] || {};
       const posX = isRtl ? scrollX - mouseX + hScrollRect.right : -scrollX + mouseX - hScrollRect.left;
       topBlock.x = posX / scale;
