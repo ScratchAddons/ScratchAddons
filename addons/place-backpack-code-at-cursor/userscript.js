@@ -22,15 +22,16 @@ export default async function ({ addon }) {
     const BLOCKS_DEFAULT_SCALE = 0.675; // would be better if we could get this from lib/layout-constants.js
     const { targets } = redux.state.scratchGui.workspaceMetrics;
     const { isRtl } = redux.state.locales;
-    const hScrollRect = Blockly.mainWorkspace.scrollbar.hScroll.outerSvg_.getBoundingClientRect();
-    const insideWorkspace = mouseX > hScrollRect.left && mouseX < hScrollRect.right;
 
+    const {left, right} = Blockly.mainWorkspace.scrollbar.hScroll.outerSvg_.getBoundingClientRect();
+    const {top} = Blockly.mainWorkspace.scrollbar.vScroll.outerSvg_.getBoundingClientRect();
+
+    const insideWorkspace = mouseX > left && mouseX < right;
     const topBlock = blocks.find((block) => block.topLevel);
     if (topBlock && insideWorkspace) {
       const { scrollX = 0, scrollY = 0, scale = BLOCKS_DEFAULT_SCALE } = targets[targetId] || {};
-      const posX = isRtl ? scrollX - mouseX + hScrollRect.right : -scrollX + mouseX - hScrollRect.left;
-      topBlock.x = posX / scale;
-      topBlock.y = (-scrollY - 95 + mouseY) / scale;
+      topBlock.x = (isRtl ? scrollX - mouseX + right : -scrollX + mouseX - left) / scale;
+      topBlock.y = (-scrollY - top + mouseY) / scale;
     }
 
     return originalShareBlocksToTarget.apply(this, arguments);
