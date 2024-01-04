@@ -52,15 +52,19 @@ export default async function ({ addon, console }) {
       }
 
       // When moving a label left, updateDisplay_() might merge it with a label that was already there
-      if (
-        direction === "left" &&
-        itemToMove.type === Blockly.DUMMY_INPUT &&
-        proc.inputList.length !== initialInputListLength
-      ) {
-        newPosition--;
+      let indexAfterMerge;
+      if (itemToMove.type === Blockly.DUMMY_INPUT) {
+        // for labels, we can't be sure that an input with the same name will exist after merging
+        if (direction === "left" && proc.inputList.length !== initialInputListLength) {
+          indexAfterMerge = newPosition - 1;
+        } else {
+          indexAfterMerge = newPosition;
+        }
+      } else {
+        // for arguments, same name will still exist
+        indexAfterMerge = proc.inputList.findIndex((input) => input.name === inputNameToShift);
       }
-
-      focusOnInput(proc.inputList[newPosition]);
+      focusOnInput(proc.inputList[indexAfterMerge]);
     }
   }
 
