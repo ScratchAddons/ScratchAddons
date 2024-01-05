@@ -20,8 +20,13 @@ export default async function ({ addon, console, msg }) {
   }
 
   addon.tab.createEditorContextMenu(
-    (ctx) => {
-      if (window.confirm(`Are you sure you want to delete all other ${ctx.type}s?`)) {
+    async (ctx) => {
+      if (
+        await addon.tab.confirm(
+          msg(ctx.type === "costume" ? "confirmCostume" : "confirmSound"),
+          msg(ctx.type === "costume" ? "infoCostume" : "infoSound")
+        )
+      ) {
         const type = ctx.type === "costume" ? "Costume" : "Sound";
 
         deletedItems = [];
