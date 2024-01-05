@@ -5,6 +5,7 @@ export default async function ({ addon, console, msg }) {
   let deletedItems = [];
   let deleted;
   let target;
+  let multiple;
 
   function getRestoreFun(type) {
     if (type === "costume") {
@@ -41,6 +42,9 @@ export default async function ({ addon, console, msg }) {
           }
         }
 
+        if (deletedItems.length > 1) multiple = true;
+        else multiple = false;
+
         addon.tab.redux.dispatch({
           type: "scratch-gui/restore-deletion/RESTORE_UPDATE",
           state: {
@@ -55,6 +59,7 @@ export default async function ({ addon, console, msg }) {
       position: "assetContextMenuAfterDelete",
       order: 1,
       label: msg("deleteOthers"),
+      dangerous: true,
       condition: showDeleteOthers,
     }
   );
