@@ -1,4 +1,4 @@
-export default async function ({ addon, msg, console }) {
+export default async function ({ addon }) {
 	const ScratchBlocks = await addon.tab.traps.getBlockly();
 
 	// Rerender the dragged block when updating the insertion marker
