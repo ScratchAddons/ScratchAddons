@@ -68,8 +68,6 @@ export default async function ({ addon, console, msg }) {
     }
   }
 
-  window.addon = addon;
-
   while (true) {
     const restoreButton = await addon.tab.waitForElement(
       '[class*="menu-bar_menu-bar-item_"]:nth-child(4) [class*="menu_menu-item_"]:first-child > span',
