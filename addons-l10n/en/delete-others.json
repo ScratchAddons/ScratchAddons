@@ -3,7 +3,7 @@
   "delete-others/confirmCostume": "Are you sure you want to delete all other costumes?",
   "delete-others/confirmSound": "Are you sure you want to delete all other sounds?",
   "delete-others/infoCostume": "The deleted costumes can be restored by going to Edit > Restore Costumes",
-  "delete-others/inforSound": "The deleted sounds can be restored by going to Edit > Restore Sounds",
+  "delete-others/infoSound": "The deleted sounds can be restored by going to Edit > Restore Sounds",
   "delete-others/multiCostumes": "Restore Costumes",
   "delete-others/multiSounds": "Restore Sounds"
 }
