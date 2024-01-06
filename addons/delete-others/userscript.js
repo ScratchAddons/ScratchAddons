@@ -5,7 +5,6 @@ export default async function ({ addon, console, msg }) {
   let deletedItems = [];
   let deleted;
   let target;
-  let multiple;
 
   function getRestoreFun(type) {
     if (type === "costume") {
@@ -42,14 +41,11 @@ export default async function ({ addon, console, msg }) {
           }
         }
 
-        if (deletedItems.length > 1) multiple = true;
-        else multiple = false;
-
         addon.tab.redux.dispatch({
           type: "scratch-gui/restore-deletion/RESTORE_UPDATE",
           state: {
             restoreFun: getRestoreFun.bind(this, ctx.type),
-            deletedItem: type,
+            deletedItem: `${type}${deletedItems.length > 1 ? "s" : ""}`,
           },
         });
       }
@@ -70,5 +66,18 @@ export default async function ({ addon, console, msg }) {
     } else {
       return vm.editingTarget.getSounds().length > 1;
     }
+  }
+
+  window.addon = addon;
+
+  while (true) {
+    const restoreButton = await addon.tab.waitForElement(
+      '[class*="menu-bar_menu-bar-item_"]:nth-child(4) [class*="menu_menu-item_"]:first-child > span',
+      { markAsSeen: true }
+    );
+
+    const deletedItem = addon.tab.redux.state.scratchGui.restoreDeletion.deletedItem;
+
+    if (deletedItem && deletedItem.endsWith("s")) restoreButton.innerText = msg(`multi${deletedItem}`);
   }
 }
