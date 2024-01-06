@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
+  "name": "C block chomping",
+  "description": "Makes C blocks extend when you drag them around a script, like in Scratch 2.0.",
+  "credits": [
+    {
+      "name": "CST1229",
+      "link": "https://github.com/CST1229/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": [
+    "editor",
+    "codeEditor"
+  ],
+  "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.36.0"
+}
