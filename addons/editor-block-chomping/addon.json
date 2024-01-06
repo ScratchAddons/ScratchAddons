@@ -14,10 +14,7 @@
       "matches": ["projects"]
     }
   ],
-  "tags": [
-    "editor",
-    "codeEditor"
-  ],
+  "tags": ["editor", "codeEditor"],
   "enabledByDefault": false,
   "dynamicEnable": true,
   "dynamicDisable": true,
