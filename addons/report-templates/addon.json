@@ -1,0 +1,24 @@
+{
+  "name": "Report templates in the forums",
+  "description": "Adds quick shortcuts to the report page in the forums.",
+  "tags": ["community", "forums"],
+  "versionAdded": "1.35.0",
+  "userscripts": [
+    {
+      "matches": ["forums"],
+      "url": "userscript.js"
+    }
+  ],
+  "userstyles": [
+    {
+      "matches": ["forums"],
+      "url": "userstyle.css"
+    }
+  ],
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld"
+    }
+  ]
+}
