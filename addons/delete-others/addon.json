@@ -9,5 +9,7 @@
       "url": "userscript.js"
     }
   ],
-  "credits": [{ "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" }]
+  "credits": [{ "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" }],
+  "dynamicEnable": true,
+  "dynamicDisable": true
 }

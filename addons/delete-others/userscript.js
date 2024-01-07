@@ -66,6 +66,7 @@ export default async function ({ addon, console, msg }) {
   );
 
   function showDeleteOthers(ctx) {
+    if (addon.self.disabled) return false;
     if (ctx.type === "costume") {
       return vm.editingTarget.getCostumes().length > 1;
     } else {
