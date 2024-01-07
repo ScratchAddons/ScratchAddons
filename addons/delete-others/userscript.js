@@ -32,9 +32,9 @@ export default async function ({ addon, console, msg }) {
         deletedItems = [];
         target = vm.editingTarget;
 
-        const loop = ctx.type === "costume" ? target.getCostumes().length - 1 : target.getSounds().length - 1;
+        const numberOfAssets = ctx.type === "costume" ? target.getCostumes().length - 1 : target.getSounds().length;
 
-        for (let i = loop; i > -1; i--) {
+        for (let i = numberOfAssets - 1; i > -1; i--) {
           if (i !== ctx.index) {
             deleted = ctx.type === "costume" ? target.deleteCostume(i) : target.deleteSound(i);
             if (deleted) deletedItems.push(deleted);
@@ -72,7 +72,7 @@ export default async function ({ addon, console, msg }) {
   while (true) {
     const restoreButton = await addon.tab.waitForElement(
       '[class*="menu-bar_menu-bar-item_"]:nth-child(4) [class*="menu_menu-item_"]:first-child > span',
-      { markAsSeen: true }
+      { markAsSeen: true, reduxCondition: (state) => state.scratchGui.menus.editMenu }
     );
 
     const deletedItem = addon.tab.redux.state.scratchGui.restoreDeletion.deletedItem;
