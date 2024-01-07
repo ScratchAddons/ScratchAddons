@@ -7,6 +7,7 @@ export default async function ({ addon, console, msg }) {
   let target;
 
   function getRestoreFun(type) {
+    deletedItems.reverse();
     if (type === "costume") {
       deletedItems.forEach((costume) => {
         vm.addCostume(costume.md5, costume, target.id, "");
