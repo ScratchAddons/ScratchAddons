@@ -21,10 +21,14 @@ export default async function ({ addon, console, msg }) {
 
   addon.tab.createEditorContextMenu(
     async (ctx) => {
+      const deleteOthersStr = msg("deleteOthers");
       if (
         await addon.tab.confirm(
-          msg(ctx.type === "costume" ? "confirmCostume" : "confirmSound"),
-          msg(ctx.type === "costume" ? "infoCostume" : "infoSound")
+          deleteOthersStr.charAt(0).toUpperCase() + deleteOthersStr.slice(1),
+          msg(ctx.type === "costume" ? "infoCostume" : "infoSound"),
+          {
+            useEditorClasses: true,
+          }
         )
       ) {
         const type = ctx.type === "costume" ? "Costume" : "Sound";
