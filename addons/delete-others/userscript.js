@@ -32,7 +32,7 @@ export default async function ({ addon, console, msg }) {
         deletedItems = [];
         target = vm.editingTarget;
 
-        const numberOfAssets = ctx.type === "costume" ? target.getCostumes().length - 1 : target.getSounds().length;
+        const numberOfAssets = ctx.type === "costume" ? target.getCostumes().length : target.getSounds().length;
 
         for (let i = numberOfAssets - 1; i > -1; i--) {
           if (i !== ctx.index) {
