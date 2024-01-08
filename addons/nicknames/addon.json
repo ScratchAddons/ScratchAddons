@@ -1,0 +1,30 @@
+{
+  "name": "Custom nicknames",
+  "description": "Allows you to give users custom nicknames so you can recognize them better.",
+  "tags": ["community", "profiles"],
+  "userscripts": [
+    {
+      "matches": "*",
+      "url": "userscript.js"
+    },
+    {
+      "matches": ["profiles"],
+      "url": "profiles.js"
+    }
+  ],
+  "info": [
+    {
+      "id": "personal",
+      "text": "These nicknames will only be seen by you."
+    }
+  ],
+  "versionAdded": "1.35.0",
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}
