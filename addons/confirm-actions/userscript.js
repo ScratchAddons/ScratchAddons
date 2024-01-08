@@ -48,14 +48,21 @@ export default async function ({ addon, console, msg }) {
       } else if (addon.settings.get("closingtopic") && e.target.closest("dd form button")) {
         title = msg("closetopic-title");
         cancelMessage = msg("closetopic");
-      } else if (
-        addon.settings.get("cancelcomment") &&
-        e.target.closest("div[data-control='cancel'] > a, .compose-cancel")
-      ) {
-        // Do not ask to confirm canceling empty comments
-        if (e.target.closest("form").querySelector("textarea").value === "") return;
-        title = msg("cancelcomment-title");
-        cancelMessage = msg("cancelcomment");
+      } else if (addon.settings.get("cancelcomment")) {
+        if (e.target.closest("div[data-control='cancel'] > a, .compose-cancel")) {
+          // Do not ask to confirm canceling empty comments
+          if (e.target.closest("form").querySelector("textarea").value === "") return;
+          title = msg("cancelcomment-title");
+          cancelMessage = msg("cancelcomment");
+        }
+        // Clicking "Reply" while writing a reply also discards the comment
+        else if (e.target.closest("a[data-control='reply-to'], .comment-reply")) {
+          // Do not ask to confirm canceling empty comments
+          if (e.target.closest(".comment .info, .comment-body").querySelector("textarea")?.value.length > 0) {
+            title = msg("cancelcomment-title");
+            cancelMessage = msg("cancelcomment");
+          }
+        }
       } else if (addon.settings.get("removingprojects") && e.target.closest(".media-trash")) {
         title = msg("removeproject-title");
         cancelMessage = msg("removeproject");
