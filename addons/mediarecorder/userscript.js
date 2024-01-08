@@ -12,9 +12,8 @@ export default async ({ addon, console, msg }) => {
   let timeout;
 
   const mimeType = [
-    // Chrome and Firefox only support encoding webm
-    // VP9 is preferred as its playback is more universally supported
-    // For example iOS can't play VP8 but can play VP9
+    // Chrome and Firefox only support encoding as webm
+    // VP9 is preferred as its playback is better supported across platforms
     "video/webm; codecs=vp9",
     // Firefox only supports encoding VP8
     "video/webm",
