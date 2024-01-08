@@ -19,8 +19,8 @@ export default async ({ addon, console, msg }) => {
     // Firefox only supports encoding VP8
     "video/webm",
     // Safari only supports encoding H264 as mp4
-    "video/mp4"
-  ].find(i => MediaRecorder.isTypeSupported(i));
+    "video/mp4",
+  ].find((i) => MediaRecorder.isTypeSupported(i));
 
   while (true) {
     const elem = await addon.tab.waitForElement('div[class*="menu-bar_file-group"] > div:last-child:not(.sa-record)', {
@@ -228,7 +228,7 @@ export default async ({ addon, console, msg }) => {
       } else {
         recorder.onstop = () => {
           const blob = new Blob(recordBuffer, { type: mimeType });
-          const fileExtension = mimeType.split(';')[0].split('/')[1];
+          const fileExtension = mimeType.split(";")[0].split("/")[1];
           downloadBlob(`video.${fileExtension}`, blob);
           disposeRecorder();
         };
