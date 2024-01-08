@@ -11,10 +11,15 @@ export default async ({ addon, console, msg }) => {
   let recorder;
   let timeout;
 
-  // All browsers we care about will support at least one of these.
   const mimeType = [
-    "video/webm", // Chrome, Firefox
-    "video/mp4" // Safari
+    // Chrome and Firefox only support encoding webm
+    // VP9 is preferred as its playback is more universally supported
+    // For example iOS can't play VP8 but can play VP9
+    "video/webm; codecs=vp9",
+    // Firefox only supports encoding VP8
+    "video/webm",
+    // Safari only supports encoding H264 as mp4
+    "video/mp4"
   ].find(i => MediaRecorder.isTypeSupported(i));
 
   while (true) {
@@ -223,7 +228,8 @@ export default async ({ addon, console, msg }) => {
       } else {
         recorder.onstop = () => {
           const blob = new Blob(recordBuffer, { type: mimeType });
-          downloadBlob(`video.${mimeType.split("/")[1]}`, blob);
+          const fileExtension = mimeType.split(';')[0].split('/')[1];
+          downloadBlob(`video.${fileExtension}`, blob);
           disposeRecorder();
         };
         recorder.stop();
