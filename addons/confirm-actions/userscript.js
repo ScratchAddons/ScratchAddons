@@ -62,14 +62,21 @@ export default async function ({ addon, console, msg }) {
         confirmationMessage = msg("closetopic");
       }
       // Cancel Pending Comment
-      else if (
-        addon.settings.get("cancelcomment") &&
-        e.target.closest("div[data-control='cancel'] > a, .compose-cancel")
-      ) {
-        // Do not ask to confirm canceling empty comments
-        if (e.target.closest("form").querySelector("textarea").value === "") return;
-        confirmationTitle = msg("cancelcomment-title");
-        confirmationMessage = msg("cancelcomment");
+      else if (addon.settings.get("cancelcomment")) {
+        if (e.target.closest("div[data-control='cancel'] > a, .compose-cancel")) {
+          // Do not ask to confirm canceling empty comments
+          if (e.target.closest("form").querySelector("textarea").value === "") return;
+          confirmationTitle = msg("cancelcomment-title");
+          confirmationMessage = msg("cancelcomment");
+        }
+        // Clicking "Reply" while writing a reply also discards the comment
+        else if (e.target.closest("a[data-control='reply-to'], .comment-reply")) {
+          // Do not ask to confirm canceling empty comments
+          if (e.target.closest(".comment .info, .comment-body").querySelector("textarea")?.value.length > 0) {
+            confirmationTitle = msg("cancelcomment-title");
+            confirmationMessage = msg("cancelcomment");
+          }
+        }
       }
       // Send Project to Trash
       else if (addon.settings.get("removingprojects") && e.target.closest(".media-trash")) {
