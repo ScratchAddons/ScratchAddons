@@ -57,7 +57,8 @@ const onResponse = (res) => {
 };
 chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, onResponse);
 
-const DOLLARS = ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9"];
+// DO NOT use $1, $2, etc. because that will cause an infinite loop in Safari
+const PLACEHOLDERS = ["%1", "%2", "%3", "%4", "%5", "%6", "%7", "%8", "%9"];
 
 const promisify =
   (callbackFn) =>
@@ -576,7 +577,10 @@ function forumWarning(key) {
     reportLink.target = "_blank";
     reportLink.innerText = chrome.i18n.getMessage("reportItHere");
     let text1 = document.createElement("span");
-    text1.innerHTML = escapeHTML(chrome.i18n.getMessage(key, DOLLARS)).replace("$1", reportLink.outerHTML);
+    text1.innerHTML = escapeHTML(chrome.i18n.getMessage(key, PLACEHOLDERS)).replace(
+      PLACEHOLDERS[0],
+      reportLink.outerHTML
+    );
     addonError.appendChild(text1);
     errorList.appendChild(addonError);
   }
@@ -645,13 +649,13 @@ const showBanner = () => {
   const notifInnerText0 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE + "font-weight: bold;",
     textContent: chrome.i18n
-      .getMessage("extensionHasUpdated", DOLLARS)
-      .replace(/\$(\d+)/g, (_, i) => [chrome.runtime.getManifest().version][Number(i) - 1]),
+      .getMessage("extensionHasUpdated", PLACEHOLDERS)
+      .replace(/%(\d+)/g, (_, i) => [chrome.runtime.getManifest().version][Number(i) - 1]),
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_35", DOLLARS)).replace(
-      /\$(\d+)/g,
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_35", PLACEHOLDERS)).replace(
+      /%(\d+)/g,
       (_, i) =>
         [
           /*
@@ -784,8 +788,8 @@ if (isProfile || isStudio || isProject || isForums) {
     textDecoration: "underline",
     color: isForums ? "" : "white",
   });
-  const errorMsgHtml = escapeHTML(chrome.i18n.getMessage("captureCommentError", DOLLARS)).replace(
-    "$1",
+  const errorMsgHtml = escapeHTML(chrome.i18n.getMessage("captureCommentError", PLACEHOLDERS)).replace(
+    PLACEHOLDERS[0],
     extensionPolicyLink.outerHTML
   );
   const sendAnywayMsg = chrome.i18n.getMessage("captureCommentPostAnyway");

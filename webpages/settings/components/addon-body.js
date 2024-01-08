@@ -44,8 +44,8 @@ export default async function ({ template }) {
       getDefaultExpanded() {
         return isIframe ? false : this.groupId === "enabled";
       },
-      loadPreset(preset) {
-        if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
+      async loadPreset(preset) {
+        if (await this.$root.confirm(chrome.i18n.getMessage("confirmPreset"))) {
           for (const property of Object.keys(preset.values)) {
             this.addonSettings[property] = preset.values[property];
           }
@@ -53,8 +53,8 @@ export default async function ({ template }) {
           console.log(`Loaded preset ${preset.id} for ${this.addon._addonId}`);
         }
       },
-      loadDefaults() {
-        if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
+      async loadDefaults() {
+        if (await this.$root.confirm(chrome.i18n.getMessage("confirmReset"))) {
           for (const property of this.addon.settings) {
             // Clone necessary for tables
             this.addonSettings[property.id] = JSON.parse(JSON.stringify(property.default));
@@ -63,7 +63,7 @@ export default async function ({ template }) {
           console.log(`Loaded default values for ${this.addon._addonId}`);
         }
       },
-      toggleAddonRequest(event) {
+      async toggleAddonRequest(event) {
         const toggle = () => {
           // Prevents selecting text when the shift key is being held down
           event.preventDefault();
@@ -86,7 +86,7 @@ export default async function ({ template }) {
           this.$root.browserLevelPermissions.includes(value)
         );
         if (!this.addon._enabled && this.addon.tags.includes("danger")) {
-          const confirmation = confirm(chrome.i18n.getMessage("dangerWarning", [this.addon.name]));
+          const confirmation = await this.$root.confirm(chrome.i18n.getMessage("dangerWarning", [this.addon.name]));
           if (!confirmation) return;
         }
         if (!this.addon._enabled && requiredPermissions.length) {

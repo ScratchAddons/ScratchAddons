@@ -214,7 +214,13 @@
         </div>
       </div>
     </div>
-    <modal class="more-settings" :is-open.sync="moreSettingsOpen" :title="msg('moreSettings')" v-cloak>
+    <modal
+      class="more-settings"
+      :is-open="moreSettingsOpen"
+      @close="moreSettingsOpen = false"
+      :title="msg('moreSettings')"
+      v-cloak
+    >
       <div class="addon-block settings-block">
         <div class="addon-body">
           <div class="addon-topbar">
@@ -320,5 +326,11 @@
         <button class="large-button" @click="hidePopup()">{{ msg("skipOpenFullSettings") }}</button>
       </div>
     </div>
+    <modal class="confirm" :is-open="showConfirm" @close="confirmCallback(false)" :title="confirmMessage" v-cloak>
+      <div class="confirm-buttons">
+        <button class="large-button" @click="confirmCallback(true)">{{ msg("confirmOK") }}</button>
+        <button class="large-button" @click="confirmCallback(false)">{{ msg("confirmCancel") }}</button>
+      </div>
+    </modal>
   </body>
 </html>

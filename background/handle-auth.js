@@ -14,7 +14,7 @@ function getDefaultStoreId() {
   })
     .catch(() => {})
     .then(() =>
-      promisify(chrome.cookies.get)({
+      promisify(chrome.cookies.get.bind(chrome.cookies))({
         url: "https://scratch.mit.edu/",
         name: "scratchcsrftoken",
       })
@@ -101,16 +101,17 @@ chrome.cookies.onChanged.addListener((e) => addToQueue(e));
 
 function getCookieValue(name) {
   return new Promise((resolve) => {
-    chrome.cookies.get(
-      {
-        url: "https://scratch.mit.edu/",
-        name,
-      },
-      (cookie) => {
-        if (cookie && cookie.value) resolve(cookie.value);
-        else resolve(null);
-      }
-    );
+    resolve(null);
+    // chrome.cookies.get(
+    //   {
+    //     url: "https://scratch.mit.edu/",
+    //     name,
+    //   },
+    //   (cookie) => {
+    //     if (cookie && cookie.value) resolve(cookie.value);
+    //     else resolve(null);
+    //   }
+    // );
   });
 }
 
@@ -179,3 +180,27 @@ function notify(cookie) {
   // Notify popups, since they also fetch sessions independently
   scratchAddons.sendToPopups({ refetchSession: true });
 }
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.fetchSession) {
+    fetch("https://scratch.mit.edu/session/", {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    })
+      .then(async (res) => {
+        const json = await res.json();
+        sendResponse({
+          error: null,
+          session: json,
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        sendResponse({
+          error: `${error}`,
+        });
+      });
+    return true;
+  }
+});

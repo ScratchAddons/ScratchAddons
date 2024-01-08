@@ -5,7 +5,8 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
   addonObj.auth._update(scratchAddons.session);
   for (const scriptInfo of scripts) {
     const { url: scriptPath, runAtComplete } = scriptInfo;
-    const scriptUrl = `${new URL(import.meta.url).origin}/addons/${addonId}/${scriptPath}`;
+    const selfUrl = new URL(import.meta.url); // .origin does not work in Safari
+    const scriptUrl = `${selfUrl.protocol}//${selfUrl.hostname}/addons/${addonId}/${scriptPath}`;
     const loadUserscript = async () => {
       const [module] = await Promise.all([
         import(scriptUrl),

@@ -40,6 +40,8 @@ const localizeSettings = (addonId, setting, tableId) => {
     });
   });
 
+  const isSafari = chrome.runtime.getURL("").startsWith("safari-web-extension:");
+
   const addonIds = await (await fetch("/addons/addons.json")).json();
   addonIds.forEach((addonId, i) => {
     if (addonIds.lastIndexOf(addonId) !== i) throw new Error(`Duplicated value "${addonId}" in /addons/addons.json`);
@@ -58,6 +60,11 @@ const localizeSettings = (addonId, setting, tableId) => {
       });
       throw ex;
     }
+
+    if (manifest.browsers?.safari === false && isSafari) {
+      continue;
+    }
+
     let potentiallyNeedsMissingDynamicWarning =
       manifest.updateUserstylesOnSettingsChange && !(manifest.dynamicEnable && manifest.dynamicDisable);
     if (!useDefault) {

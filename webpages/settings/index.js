@@ -204,6 +204,9 @@ let fuse;
             changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
           };
         })(),
+        showConfirm: false,
+        confirmCallback: null,
+        confirmMessage: null,
       };
     },
     computed: {
@@ -321,6 +324,22 @@ let fuse;
         this.$emit("close-reset-dropdowns", leaveOpen);
       },
       exportSettings() {
+        // In Safari, the normal <a download=""> does not work. Need to open an about:blank
+        // tab to do the download from. It closes itself after we click the link.
+        // Safari also requires us to call window.open() immediately in the click handler.
+        if (location.protocol === "safari-web-extension:") {
+          const popup = window.open("", "_blank");
+          serializeSettings().then((serialized) => {
+            const blob = new Blob([serialized], { type: "application/json" });
+            const link = popup.document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "scratch-addons-settings.json";
+            popup.document.documentElement.appendChild(link);
+            link.click();
+          });
+          return;
+        }
+
         serializeSettings().then((serialized) => {
           const blob = new Blob([serialized], { type: "application/json" });
           downloadBlob("scratch-addons-settings.json", blob);
@@ -361,6 +380,7 @@ let fuse;
             }
             alert(chrome.i18n.getMessage("importSuccess"));
             chrome.runtime.reload();
+            window.close();
           },
           { once: true }
         );
@@ -370,6 +390,7 @@ let fuse;
       applyLanguageSettings() {
         alert(chrome.i18n.getMessage("importSuccess"));
         chrome.runtime.reload();
+        window.close();
       },
       openFullSettings() {
         window.open(
@@ -400,6 +421,19 @@ let fuse;
       groupMarginAbove(group) {
         const firstVisibleGroup = this.addonGroups.find((group) => this.groupShownCount(group) > 0);
         return group !== firstVisibleGroup;
+      },
+      confirm(message) {
+        // Safari does not support window.confirm() in popups
+        return new Promise((resolve) => {
+          this.confirmCallback = (result) => {
+            this.confirmCallback = null;
+            this.confirmMessage = null;
+            this.showConfirm = false;
+            resolve(result);
+          };
+          this.confirmMessage = message;
+          this.showConfirm = true;
+        });
       },
     },
     events: {
@@ -485,13 +519,27 @@ let fuse;
   const getRunningAddons = (manifests, addonsEnabled) => {
     return new Promise((resolve) => {
       chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
-        if (!tabs[0].id) return;
+        const resolveNone = () =>
+          resolve({
+            addonsCurrentlyOnTab: [],
+            addonsPreviouslyOnTab: [],
+          });
+        if (!tabs[0].id) {
+          resolveNone();
+          return;
+        }
+
+        // This is a bad hack for Safari where sendMessage() to a tab that we can't access
+        // will silently fail instead of telling us...
+        const timeout = setTimeout(resolveNone, 1000);
+
         chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", { frameId: 0 }, (res) => {
           // Just so we don't get any errors in the console if we don't get any response from a non scratch tab.
           void chrome.runtime.lastError;
           const addonsCurrentlyOnTab = res ? [...res.userscripts, ...res.userstyles] : [];
           const addonsPreviouslyOnTab = res ? res.disabledDynamicAddons : [];
           resolve({ addonsCurrentlyOnTab, addonsPreviouslyOnTab });
+          clearTimeout(timeout);
         });
       });
     });
@@ -702,7 +750,7 @@ let fuse;
   });
 
   window.addEventListener("keydown", function (e) {
-    if (e.ctrlKey && e.key === "f") {
+    if ((e.ctrlKey || e.metaKey) && e.key === "f") {
       e.preventDefault();
       document.querySelector("#searchBox").focus();
     } else if (e.key === "Escape" && document.activeElement === document.querySelector("#searchBox")) {
@@ -726,9 +774,12 @@ let fuse;
   window.onresize = resize;
   resize();
 
-  chrome.management.getSelf((info) => {
-    if (info.installType === "development") vue.devMode = true;
-  });
+  // chrome.management not supported in Safari
+  if (chrome.management) {
+    chrome.management.getSelf((info) => {
+      if (info.installType === "development") vue.devMode = true;
+    });
+  }
 
   // Konami code easter egg
   let cursor = 0;

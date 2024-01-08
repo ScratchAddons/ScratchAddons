@@ -22,11 +22,14 @@ export default async function ({ template }) {
       msg(...params) {
         return this.$root.msg(...params);
       },
+      close() {
+        this.$emit("close");
+      },
     },
     events: {
       clickOutside(e) {
         if (this.isOpen && this.canCloseOutside && e.isTrusted) {
-          this.isOpen = false;
+          this.close();
         }
       },
     },

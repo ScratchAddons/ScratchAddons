@@ -413,3 +413,13 @@ button.setting-input.color.open {
   align-items: center;
   justify-content: center;
 }
+
+.confirm .modal-content {
+  height: auto; /* otherwise it is comically large */
+}
+.confirm-buttons {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}

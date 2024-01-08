@@ -29,14 +29,16 @@ document.getElementById("permissionsBtn").addEventListener("click", async () => 
   const manifest = chrome.runtime.getManifest();
   const origins = manifest.permissions.filter((url) => url.startsWith("https://"));
 
-  const isAlreadyGranted = await promisify(chrome.permissions.contains)({ origins });
+  const isAlreadyGranted = await promisify(chrome.permissions.contains.bind(chrome.permissions))({ origins });
   if (isAlreadyGranted) {
     return window.close();
   }
 
-  const granted = await promisify(chrome.permissions.request)({ origins });
+  const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({ origins });
   if (granted) {
-    return chrome.runtime.reload();
+    chrome.runtime.reload();
+    window.close();
+    return;
   }
   alert(chrome.i18n.getMessage("permissionsDenied"));
 });
