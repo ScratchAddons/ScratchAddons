@@ -20,6 +20,7 @@ export default async ({ addon, console, msg }) => {
     // Safari only supports encoding H264 as mp4
     "video/mp4",
   ].find((i) => MediaRecorder.isTypeSupported(i));
+  const fileExtension = mimeType.split(";")[0].split("/")[1];
 
   while (true) {
     const elem = await addon.tab.waitForElement('div[class*="menu-bar_file-group"] > div:last-child:not(.sa-record)', {
@@ -36,7 +37,9 @@ export default async ({ addon, console, msg }) => {
 
       content.appendChild(
         Object.assign(document.createElement("p"), {
-          textContent: msg("record-description"),
+          textContent: msg("record-description", {
+            extension: `.${fileExtension}`
+          }),
           className: "recordOptionDescription",
         })
       );
@@ -227,7 +230,6 @@ export default async ({ addon, console, msg }) => {
       } else {
         recorder.onstop = () => {
           const blob = new Blob(recordBuffer, { type: mimeType });
-          const fileExtension = mimeType.split(";")[0].split("/")[1];
           downloadBlob(`video.${fileExtension}`, blob);
           disposeRecorder();
         };
