@@ -38,7 +38,7 @@ export default async ({ addon, console, msg }) => {
       content.appendChild(
         Object.assign(document.createElement("p"), {
           textContent: msg("record-description", {
-            extension: `.${fileExtension}`
+            extension: `.${fileExtension}`,
           }),
           className: "recordOptionDescription",
         })
