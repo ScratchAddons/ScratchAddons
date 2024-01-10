@@ -14,6 +14,9 @@ function calculatePopupSize() {
   document.body.classList.remove("loading");
 }
 
+const res = await fetch("../../.git/ORIG_HEAD");
+const commitHash = await res.text();
+
 window.addEventListener("load", () => setTimeout(calculatePopupSize, 0));
 
 const vue = new Vue({
@@ -53,10 +56,14 @@ const vue = new Vue({
   },
   computed: {
     changelogLink() {
-      const uiLanguage = chrome.i18n.getUILanguage();
-      const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
-      const utm = `utm_source=extension&utm_medium=popup&utm_campaign=v${chrome.runtime.getManifest().version}`;
-      return `https://scratchaddons.com/${localeSlash}changelog/?${utm}#v${chrome.runtime.getManifest().version}`;
+      if (chrome.runtime.getManifest().version_name.includes("-prerelease")) {
+        return `https://github.com/ScratchAddons/ScratchAddons/commits/${commitHash}`;
+      } else {
+        const uiLanguage = chrome.i18n.getUILanguage();
+        const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
+        const utm = `utm_source=extension&utm_medium=popup&utm_campaign=v${chrome.runtime.getManifest().version}`;
+        return `https://scratchaddons.com/${localeSlash}changelog/?${utm}#v${chrome.runtime.getManifest().version}`;
+      }
     },
     version() {
       const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
