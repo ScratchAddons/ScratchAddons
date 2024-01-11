@@ -1,0 +1,18 @@
+{
+  "name": "Shiftable anchor point",
+  "description": "Allows you to rotate the selection around a point other than the center.",
+  "credits": [
+    {
+      "name": "Jazza",
+      "link": "https://scratch.mit.edu/users/greeny--231"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor", "costumeEditor", "featured", "recommended"],
+  "versionAdded": "1.35.0"
+}
