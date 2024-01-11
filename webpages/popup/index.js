@@ -27,6 +27,7 @@ const vue = new Vue({
     popups: [],
     currentPopup: null,
     popupsWithIframes: [],
+    devMode: false,
   },
   methods: {
     msg(message, ...params) {
@@ -58,7 +59,7 @@ const vue = new Vue({
   },
   computed: {
     changelogLink() {
-      if (chrome.runtime.getManifest().version_name.includes("-prerelease")) {
+      if (this.devMode) {
         return `https://github.com/ScratchAddons/ScratchAddons/commits/${commitHash}`;
       } else {
         const uiLanguage = chrome.i18n.getUILanguage();
@@ -68,9 +69,8 @@ const vue = new Vue({
       }
     },
     version() {
-      const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
       const ver = chrome.runtime.getManifest().version;
-      return prerelease ? ver + "-pre" : ver;
+      return this.devMode ? ver + "-pre" : ver;
     },
   },
 });
@@ -138,6 +138,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
     }
   }
+});
+
+chrome.management.getSelf((info) => {
+  if (info.installType === "development") vue.devMode = true;
 });
 
 chrome.runtime.sendMessage("checkPermissions");
