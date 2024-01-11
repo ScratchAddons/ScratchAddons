@@ -14,8 +14,12 @@ function calculatePopupSize() {
   document.body.classList.remove("loading");
 }
 
-const res = await fetch("../../.git/ORIG_HEAD");
-const commitHash = await res.text();
+const commitHash = await fetch("../../.git/HEAD")
+.then(res => res.text())
+.then(data => data.replace("ref: ",""))
+.then(branch => fetch(`../../.git/${branch}`)
+.then(res => res.text())
+)
 
 window.addEventListener("load", () => setTimeout(calculatePopupSize, 0));
 
