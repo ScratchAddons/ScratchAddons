@@ -1,5 +1,5 @@
 {
-  "name": "Higher project framerate",
+  "name": "Higher project framerate mode",
   "description": "Lets you run projects at more frames per second (FPS) so they look smoother. Hold Alt and click the green flag to toggle between Scratch's default 30 FPS and a custom framerate set below.",
   "info": [
     {
