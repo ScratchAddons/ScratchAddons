@@ -58,8 +58,7 @@ If you're working on changes and something looks outdated, [sync your branch wit
 6. [Commit and push](https://docs.github.com/en/get-started/quickstart/contributing-to-projects#making-and-pushing-changes) your changes to the branch.
 7. Go to the website to create a pull request in the source repository (ScratchAddons/ScratchAddons). There should be a banner with a button to open a pull request.
   ![Screenshot of the banner above the list of files.](https://docs.github.com/assets/cb-34106/mw-1440/images/help/pull_requests/pull-request-compare-pull-request.webp)
-  (If you don't see it, you can [manually open a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork) by navigating to the "Pull requests" tab, 
-  clicking "New pull request", then clicking "Compare across forks" and selecting your fork and branch next to "head repository". Then click "Create pull request" to go to the next step.)
+  (If you don't see it, you can [manually open a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork) by navigating to the "Pull requests" tab, clicking "New pull request", then clicking "Compare across forks" and selecting your fork and branch next to "head repository". Then click "Create pull request" to go to the next step.)
 8. Finally, fill out the form. Remember to check "allow edits from maintainers" in case we need to make adjustments. Once you're done, click "Create pull request"!
 
 Once your pull request is open, we will review and discuss the changes and any necessary adjustments.
