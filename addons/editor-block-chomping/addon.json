@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
-  "name": "Extend wrapped C blocks",
-  "description": "Makes C blocks extend when wrapping them around blocks, like in Scratch 2.0.",
+  "name": "Extend wrapped C blocks while dragging",
+  "description": "Makes dragged C blocks extend when wrapping them around blocks, like in Scratch 2.0.",
   "credits": [
     {
       "name": "CST1229",
