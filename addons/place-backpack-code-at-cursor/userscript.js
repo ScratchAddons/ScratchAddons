@@ -5,7 +5,7 @@ export default async function ({ addon }) {
 
   var mouseX = 0,
     mouseY = 0;
-  document.addEventListener("mousemove", ({ clientX, clientY }) => {
+  document.addEventListener("mouseup", ({ clientX, clientY }) => {
     mouseX = clientX;
     mouseY = clientY;
   });
