@@ -1,9 +1,7 @@
 export default async function ({ addon }) {
   const Blockly = await addon.tab.traps.getBlockly();
-  const {
-    traps: { vm },
-    redux,
-  } = await addon.tab;
+  const vm = addon.tab.traps.vm;
+  const redux = addon.tab.redux;
 
   var mouseX = 0,
     mouseY = 0;
