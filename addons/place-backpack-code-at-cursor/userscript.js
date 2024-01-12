@@ -1,5 +1,4 @@
 export default async function ({ addon }) {
-  const Blockly = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
   const redux = addon.tab.redux;
 
