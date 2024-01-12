@@ -14,5 +14,7 @@
       "name": "mybearworld",
       "link": "https://scratch.mit.edu/users/mybearworld"
     }
-  ]
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
 }
