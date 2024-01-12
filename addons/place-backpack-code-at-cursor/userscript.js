@@ -21,8 +21,9 @@ export default async function ({ addon }) {
     const { targets } = redux.state.scratchGui.workspaceMetrics;
     const { isRtl } = redux.state.locales;
 
-    const { left, right } = Blockly.mainWorkspace.scrollbar.hScroll.outerSvg_.getBoundingClientRect();
-    const { top } = Blockly.mainWorkspace.scrollbar.vScroll.outerSvg_.getBoundingClientRect();
+    const workspace = addon.tab.traps.getWorkspace();
+    const { left, right } = workspace.scrollbar.hScroll.outerSvg_.getBoundingClientRect();
+    const { top } = workspace.scrollbar.vScroll.outerSvg_.getBoundingClientRect();
 
     const insideWorkspace = mouseX > left && mouseX < right;
     const topBlock = blocks.find((block) => block.topLevel);
