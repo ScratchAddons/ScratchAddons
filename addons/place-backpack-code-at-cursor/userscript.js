@@ -25,7 +25,7 @@ export default async function ({ addon }) {
     const { left, right } = workspace.scrollbar.hScroll.outerSvg_.getBoundingClientRect();
     const { top } = workspace.scrollbar.vScroll.outerSvg_.getBoundingClientRect();
 
-    const insideWorkspace = mouseX > left && mouseX < right;
+    const insideWorkspace = isRtl ? mouseX > left : mouseX < right;
     const topBlock = blocks.find((block) => block.topLevel);
     if (topBlock && insideWorkspace) {
       const { scrollX = 0, scrollY = 0, scale = BLOCKS_DEFAULT_SCALE } = targets[targetId] || {};
