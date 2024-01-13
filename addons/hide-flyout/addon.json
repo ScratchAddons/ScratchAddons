@@ -81,10 +81,6 @@
         {
           "id": "category",
           "name": "Category click"
-        },
-        {
-          "id": "pageload",
-          "name": "page load"
         }
       ],
       "default": "cathover"
@@ -112,6 +108,12 @@
         }
       ],
       "default": "default"
+    },
+    {
+      "name": "Lock by default",
+      "id": "lockLoad",
+      "type": "boolean",
+      "default": false
     }
   ],
   "tags": ["editor", "codeEditor", "recommended"],

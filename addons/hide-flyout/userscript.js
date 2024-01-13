@@ -46,6 +46,14 @@ export default async function ({ addon, console, msg }) {
     lockIcon.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
   }
 
+  function autoLock() {
+    const option = addon.settings.get("lockLoad");
+    flyoutLock = option;
+    flyOut.classList.remove("sa-flyoutClose");
+    scrollBar.classList.remove("sa-flyoutClose");
+    if (option) updateLockDisplay();
+  }
+
   function onmouseenter(e, speed = {}) {
     // If a mouse event was passed, only open flyout if the workspace isn't being dragged
     if (
@@ -300,6 +308,7 @@ export default async function ({ addon, console, msg }) {
     };
 
     doOneTimeSetup();
+    autoLock()
     if (getToggleSetting() !== "hover") {
       // update workspace dimensions
       Blockly.svgResize(Blockly.getMainWorkspace());
