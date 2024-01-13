@@ -84,8 +84,8 @@
         },
         {
           "id": "pageload",
-          "name": "page load",
-        },
+          "name": "page load"
+        }
       ],
       "default": "cathover"
     },
