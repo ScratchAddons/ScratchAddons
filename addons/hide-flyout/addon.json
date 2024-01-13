@@ -81,7 +81,11 @@
         {
           "id": "category",
           "name": "Category click"
-        }
+        },
+        {
+          "id": "pageload",
+          "name": "page load",
+        },
       ],
       "default": "cathover"
     },
