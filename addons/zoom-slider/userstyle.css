@@ -21,9 +21,9 @@
 
 /* custom-zoom compatibility */
 .sa-custom-zoom-hidden > * {
-  transform: translateX(150px);
+  transform: translateX(190px);
 }
 .sa-custom-zoom-area {
-  width: 130px;
-  height: 50px;
+  width: 190px;
+  height: 70px;
 }
