@@ -656,5 +656,5 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
   background-color: var(--editorDarkMode-input);
 }
 .sa-zoom-slider {
-  color-scheme: var(--editorDarkMode-selector-colorScheme);
+  color-scheme: var(--editorDarkMode-input-colorScheme);
 }
