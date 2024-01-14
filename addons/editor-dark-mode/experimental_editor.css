@@ -655,3 +655,6 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 .sa-comment-preview-reduce-transparency {
   background-color: var(--editorDarkMode-input);
 }
+.sa-zoom-slider {
+  color-scheme: var(--editorDarkMode-selector-colorScheme);
+}

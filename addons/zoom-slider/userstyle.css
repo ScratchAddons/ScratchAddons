@@ -1,0 +1,27 @@
+.blocklyZoom image {
+  display: none;
+}
+.sa-zoom-slider-wrapper {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  width: 120px;
+}
+.sa-zoom-slider {
+  width: 120px;
+}
+.sa-zoom-slider-count {
+  padding: 0;
+  background: none;
+  border: 0;
+}
+
+/* custom-zoom compatibility */
+.sa-custom-zoom-hidden > * {
+  transform: translateX(150px);
+}
+.sa-custom-zoom-area {
+  width: 130px;
+  height: 50px;
+}
