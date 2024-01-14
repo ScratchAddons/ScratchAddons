@@ -24,7 +24,7 @@ export default async function ({ addon, msg }) {
     slider.classList.add("sa-zoom-slider");
     const count = document.createElement("input");
     count.classList.add("sa-zoom-slider-count");
-    count.textContent = percentScale(blockly.mainWorkspace.scale);
+    count.value = percentScale(blockly.mainWorkspace.scale);
     wrapperDiv.append(count, slider);
     foreignObject.append(wrapperDiv);
     zoom.append(foreignObject);
