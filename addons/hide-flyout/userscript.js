@@ -48,12 +48,19 @@ export default async function ({ addon, console, msg }) {
 
   function autoLock() {
     const option = addon.settings.get("lockLoad");
-    flyoutLock = option;
     if (option) {
+      if (getToggleSetting() === "category") {
+        console.log(Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected)
+        Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
+        onmouseleave(null, 0);
+        toggle = true;
+      } else {
+        flyoutLock = option;
+        updateLockDisplay()
+      }
       flyOut.classList.remove("sa-flyoutClose");
       scrollBar.classList.remove("sa-flyoutClose");
-      updateLockDisplay();
-    }
+    };
   }
 
   function onmouseenter(e, speed = {}) {
@@ -310,7 +317,7 @@ export default async function ({ addon, console, msg }) {
     };
 
     doOneTimeSetup();
-    autoLock();
+    autoLock()
     if (getToggleSetting() !== "hover") {
       // update workspace dimensions
       Blockly.svgResize(Blockly.getMainWorkspace());
