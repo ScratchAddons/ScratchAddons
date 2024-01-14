@@ -12,7 +12,7 @@ export default async function ({ addon, msg }) {
     foreignObject.setAttribute("height", "500");
     foreignObject.setAttribute("width", "120");
     foreignObject.setAttribute("x", "-126");
-    foreignObject.setAttribute("y", "95");
+    foreignObject.setAttribute("y", "79");
     const wrapperDiv = document.createElement("div");
     wrapperDiv.classList.add("sa-zoom-slider-wrapper");
     const slider = document.createElement("input");
@@ -23,7 +23,9 @@ export default async function ({ addon, msg }) {
     slider.value = blockly.mainWorkspace.scale;
     slider.classList.add("sa-zoom-slider");
     const count = document.createElement("input");
-    count.classList.add("sa-zoom-slider-count");
+    count.className = addon.tab.scratchClass("input_input-form", "input_input-small", {
+      others: "sa-zoom-slider-count",
+    });
     count.value = percentScale(blockly.mainWorkspace.scale);
     wrapperDiv.append(count, slider);
     foreignObject.append(wrapperDiv);

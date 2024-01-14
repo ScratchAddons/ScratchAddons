@@ -10,16 +10,13 @@
   text-align: center;
   align-items: center;
   width: 120px;
+  padding-top: 0.25rem;
 }
-.sa-zoom-slider,
-.sa-zoom-slider-count {
+.sa-zoom-slider {
   width: 120px;
 }
 .sa-zoom-slider-count {
   text-align: center;
-  padding: 0;
-  background: none;
-  border: 0;
 }
 
 /* custom-zoom compatibility */
