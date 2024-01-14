@@ -50,16 +50,15 @@ export default async function ({ addon, console, msg }) {
     const option = addon.settings.get("lockLoad");
     if (option) {
       if (getToggleSetting() === "category") {
-        Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
         onmouseleave(null, 0);
         toggle = true;
       } else {
         flyoutLock = option;
-        updateLockDisplay();
+        updateLockDisplay()
       }
       flyOut.classList.remove("sa-flyoutClose");
       scrollBar.classList.remove("sa-flyoutClose");
-    }
+    };
   }
 
   function onmouseenter(e, speed = {}) {
@@ -186,7 +185,7 @@ export default async function ({ addon, console, msg }) {
       const previousSelection = this.selectedItem_;
       oldSetSelectedItem.call(this, item, shouldScroll);
       if (addon.self.disabled || getToggleSetting() !== "category") return;
-      if (!shouldScroll) {
+      if (!shouldScroll && !toggle) {
         // ignore initial selection when updating the toolbox
         item.setSelected(false);
       } else if (item === previousSelection) {
@@ -316,7 +315,7 @@ export default async function ({ addon, console, msg }) {
     };
 
     doOneTimeSetup();
-    autoLock();
+    autoLock()
     if (getToggleSetting() !== "hover") {
       // update workspace dimensions
       Blockly.svgResize(Blockly.getMainWorkspace());
