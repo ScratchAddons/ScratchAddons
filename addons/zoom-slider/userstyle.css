@@ -1,6 +1,9 @@
 .blocklyZoom image {
   display: none;
 }
+.blocklyZoom image:last-of-type {
+  display: block;
+}
 .sa-zoom-slider-wrapper {
   display: flex;
   flex-direction: column;
@@ -8,10 +11,12 @@
   align-items: center;
   width: 120px;
 }
-.sa-zoom-slider {
+.sa-zoom-slider,
+.sa-zoom-slider-count {
   width: 120px;
 }
 .sa-zoom-slider-count {
+  text-align: center;
   padding: 0;
   background: none;
   border: 0;
