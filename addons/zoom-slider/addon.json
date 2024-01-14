@@ -21,6 +21,13 @@
       "link": "https://scratch.mit.edu/users/mybearworld"
     }
   ],
+  "info": [
+    {
+      "type": "info",
+      "id": "click-percent",
+      "text": "You can click on the percentage to reset the zoom level."
+    }
+  ],
   "dynamicDisable": true,
   "dynamicEnable": true,
   "updateUserstylesOnSettingsChange": true
