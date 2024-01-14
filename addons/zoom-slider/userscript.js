@@ -17,9 +17,9 @@ export default async function ({ addon, msg }) {
     wrapperDiv.classList.add("sa-zoom-slider-wrapper");
     const slider = document.createElement("input");
     slider.type = "range";
-    slider.min = blockly.mainWorkspace.options.zoomOptions.minScale;
-    slider.max = blockly.mainWorkspace.options.zoomOptions.maxScale;
-    slider.step = "0.01";
+    slider.min = blockly.mainWorkspace.options.zoomOptions.minScale * 100;
+    slider.max = blockly.mainWorkspace.options.zoomOptions.maxScale * 100;
+    slider.step = "1";
     slider.value = blockly.mainWorkspace.scale;
     slider.classList.add("sa-zoom-slider");
     const count = document.createElement("button");
@@ -34,21 +34,21 @@ export default async function ({ addon, msg }) {
       e.stopPropagation();
     });
     slider.addEventListener("input", async () => {
-      blockly.mainWorkspace.setScale(parseFloat(slider.value));
+      blockly.mainWorkspace.setScale(parseFloat(slider.value / 100));
       count.textContent = percentScale(slider.value);
     });
     count.addEventListener("mousedown", (e) => {
       e.stopPropagation();
     });
     count.addEventListener("click", () => {
-      slider.value = blockly.mainWorkspace.options.zoomOptions.startScale;
+      slider.value = blockly.mainWorkspace.options.zoomOptions.startScale * 100;
       slider.dispatchEvent(new Event("input"));
     });
 
     setInterval(() => {
-      slider.min = blockly.mainWorkspace.options.zoomOptions.minScale;
-      slider.max = blockly.mainWorkspace.options.zoomOptions.maxScale;
-      slider.value = blockly.mainWorkspace.scale;
+      slider.min = blockly.mainWorkspace.options.zoomOptions.minScale * 100;
+      slider.max = blockly.mainWorkspace.options.zoomOptions.maxScale * 100;
+      slider.value = blockly.mainWorkspace.scale * 100;
       slider.dispatchEvent(new Event("input"));
     }, 200);
 
@@ -57,7 +57,7 @@ export default async function ({ addon, msg }) {
     });
   };
 
-  const percentScale = (scale) => Math.round(parseFloat(scale) * 100) + "%";
+  const percentScale = (scale) => Math.round(parseFloat(scale)) + "%";
 
   addSlider();
   addon.tab.addEventListener("urlChange", addSlider);
