@@ -13,8 +13,8 @@ export default async function ({ addon }) {
   const newShareBlocksToTarget = function (blocks, targetId, _) {
     // Based on https://github.com/scratchfoundation/scratch-gui/blob/8be51d2239ae4e741d34f1906372b481f4246dce/src/containers/target-pane.jsx#L164
 
-    // Only proceed if we are sharing blocks to the editingTarget
-    if (vm.editingTarget.id !== targetId) return originalShareBlocksToTarget.apply(this, arguments);
+    // Fall back to original function if addon is disabled or target ID mismatches
+    if(addon.self.disabled || vm.editingTarget.id !== targetId) return originalShareBlocksToTarget.apply(this, arguments);
 
     const BLOCKS_DEFAULT_SCALE = 0.675; // would be better if we could get this from lib/layout-constants.js
     const { targets } = redux.state.scratchGui.workspaceMetrics;
@@ -35,10 +35,5 @@ export default async function ({ addon }) {
     return originalShareBlocksToTarget.apply(this, arguments);
   };
 
-  const enableAddon = () => {
-    vm.shareBlocksToTarget = newShareBlocksToTarget;
-  };
-  addon.self.addEventListener("reenabled", enableAddon);
-  addon.self.addEventListener("disabled", () => (vm.shareBlocksToTarget = originalShareBlocksToTarget));
-  enableAddon();
+  vm.shareBlocksToTarget = newShareBlocksToTarget;
 }
