@@ -14,7 +14,8 @@ export default async function ({ addon }) {
     // Based on https://github.com/scratchfoundation/scratch-gui/blob/8be51d2239ae4e741d34f1906372b481f4246dce/src/containers/target-pane.jsx#L164
 
     // Fall back to original function if addon is disabled or target ID mismatches
-    if(addon.self.disabled || vm.editingTarget.id !== targetId) return originalShareBlocksToTarget.apply(this, arguments);
+    if (addon.self.disabled || vm.editingTarget.id !== targetId)
+      return originalShareBlocksToTarget.apply(this, arguments);
 
     const BLOCKS_DEFAULT_SCALE = 0.675; // would be better if we could get this from lib/layout-constants.js
     const { targets } = redux.state.scratchGui.workspaceMetrics;
