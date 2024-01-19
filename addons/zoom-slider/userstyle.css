@@ -15,9 +15,6 @@
 .sa-zoom-slider {
   width: 120px;
 }
-.sa-zoom-slider-count {
-  text-align: center;
-}
 
 /* custom-zoom compatibility */
 .sa-custom-zoom-hidden > * {

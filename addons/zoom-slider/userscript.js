@@ -35,7 +35,7 @@ export default async function ({ addon, msg }) {
       e.stopPropagation();
     });
     slider.addEventListener("input", async () => {
-      blockly.mainWorkspace.setScale(parseFloat(slider.value));
+      blockly.mainWorkspace.setScale(slider.value);
       if (!countInput) {
         count.value = percentScale(slider.value);
       }
@@ -44,6 +44,14 @@ export default async function ({ addon, msg }) {
     count.addEventListener("input", async () => (countInput = true));
     count.addEventListener("blur", async () => (countInput = false));
     count.addEventListener("change", async () => {
+      const newScale = parseFloat(count.value / 100);
+      const { maxScale, minScale } = blockly.mainWorkspace.options.zoomOptions;
+      if (newScale > maxScale) {
+        count.value = maxScale * 100;
+      }
+      if (newScale < minScale) {
+        count.value = minScale * 100;
+      }
       slider.value = count.value / 100;
       slider.dispatchEvent(new Event("input"));
       countInput = false;
