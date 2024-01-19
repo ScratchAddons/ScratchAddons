@@ -52,8 +52,10 @@ export default async function ({ addon, msg }) {
     setInterval(() => {
       slider.min = blockly.mainWorkspace.options.zoomOptions.minScale;
       slider.max = blockly.mainWorkspace.options.zoomOptions.maxScale;
-      slider.value = blockly.mainWorkspace.scale;
-      slider.dispatchEvent(new Event("input"));
+      if (parseFloat(slider.value) !== blockly.mainWorkspace.scale) {
+        slider.value = blockly.mainWorkspace.scale;
+        slider.dispatchEvent(new Event("input"));
+      }
     }, 200);
 
     addon.self.addEventListener("disabled", () => {
