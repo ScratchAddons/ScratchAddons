@@ -255,7 +255,16 @@ export default async function ({ addon, console, msg }) {
     oldFieldTextInputInit.call(this);
     if (this.sourceBlock_.isShadow()) return;
     // Labels in custom block editor
-    this.box_.setAttribute("fill", fieldBackground(this));
+    this.box_.setAttribute("fill", isColoredTextMode() ? fieldBackground(this) : this.sourceBlock_.getColourTertiary());
+  };
+
+  const oldFieldTextInputRemovableShowEditor = Blockly.FieldTextInputRemovable.prototype.showEditor_;
+  Blockly.FieldTextInputRemovable.prototype.showEditor_ = function () {
+    oldFieldTextInputRemovableShowEditor.call(this);
+    if (!this.sourceBlock_.isShadow()) {
+      // Labels in custom block editor
+      Blockly.WidgetDiv.DIV.classList.add("sa-theme3-editable-label");
+    }
   };
 
   const oldFieldImageSetValue = Blockly.FieldImage.prototype.setValue;
@@ -417,6 +426,7 @@ export default async function ({ addon, console, msg }) {
     Blockly.Colours.textField = otherColor("input-color", "textField");
     if (textMode() === "colorOnWhite") Blockly.Colours.fieldShadow = "rgba(0, 0, 0, 0.15)";
     else Blockly.Colours.fieldShadow = originalColors.fieldShadow;
+    Blockly.Colours.text = uncoloredTextColor(); // used by editor-colored-context-menus
 
     const workspace = Blockly.getMainWorkspace();
     const flyout = workspace.getFlyout();

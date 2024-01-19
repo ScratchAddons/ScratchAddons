@@ -47,3 +47,14 @@
 :root {
   --footer-hover-height: 328px; /* How high the hovered footer is (for donor text fix) */
 }
+
+/* old-studio-layout compatibility */
+
+.studio-projects .studio-adder-section .studio-adder-row button ~ button:not(.sa-pseudobutton),
+.studio-tabs #sa-studio-followers-button {
+  bottom: 24px;
+}
+
+.ReactModalPortal .user-projects-modal {
+  bottom: 70px;
+}

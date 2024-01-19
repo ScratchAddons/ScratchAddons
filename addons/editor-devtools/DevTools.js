@@ -632,7 +632,7 @@ export default class DevTools {
 
     let ctrlKey = e.ctrlKey || e.metaKey;
 
-    if (e.keyCode === 37 && ctrlKey) {
+    if (e.key === "ArrowLeft" && ctrlKey) {
       // Ctrl + Left Arrow Key
       if (document.activeElement.tagName === "INPUT") {
         return;
@@ -646,7 +646,7 @@ export default class DevTools {
       }
     }
 
-    if (e.keyCode === 39 && ctrlKey) {
+    if (e.key === "ArrowRight" && ctrlKey) {
       // Ctrl + Right Arrow Key
       if (document.activeElement.tagName === "INPUT") {
         return;

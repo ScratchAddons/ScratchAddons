@@ -105,7 +105,7 @@ export default async function ({ addon }) {
 
   document.body.addEventListener("keydown", (e) => {
     if (addon.self.disabled) return;
-    if (!["ArrowUp", "ArrowDown"].includes(e.code)) return;
+    if (!["ArrowUp", "ArrowDown"].includes(e.key)) return;
     if (!isSupportedElement(e.target)) return;
     if (!e.target.value) return;
     if (!isValidNumber(e.target.value)) return;
@@ -115,7 +115,7 @@ export default async function ({ addon }) {
     // If this is a number input, it will prevent the default browser behavior when pressing up/down in a
     // number input (increase or decrease by 1). If we didn't prevent, the user would be increasing twice.
 
-    let changeBy = e.code === "ArrowUp" ? 1 : -1;
+    let changeBy = e.key === "ArrowUp" ? 1 : -1;
     if (addon.settings.get("useCustom")) {
       let settingValue = e.shiftKey
         ? addon.settings.get("shiftCustom")
