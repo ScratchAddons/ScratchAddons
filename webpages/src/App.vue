@@ -24,12 +24,6 @@
         <img src="../../images/icons/users.svg" />
         <span>{{ msg("credits") }} <img src="../../images/icons/popout.svg" /></span>
       </a>
-      <!--
-        <div class="category category-small" @click="openReview()">
-          <img src="../../images/icons/star.svg" />
-          <span v-cloak>{{ msg("review") }}</span>
-        </div>
-        -->
       <a v-cloak class="category category-small" href="https://scratchaddons.com/translate" target="_blank">
         <img src="../../images/icons/translate.svg" />
         <span>{{ msg("translate") }} <img src="../../images/icons/popout.svg" /></span>
