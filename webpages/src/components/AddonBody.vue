@@ -5,9 +5,10 @@
         <div class="btn-dropdown">
           <img src="../../../images/icons/expand.svg" alt="v" :class="{ reverted: expanded }" />
         </div>
-        <div class="addon-name">
+        <div class="addon-name tooltip">
           <img :src="addonIconSrc" class="icon-type" />
-          <span @click="devShowAddonIds">{{ addon._displayedAddonId || addon.name }}</span>
+          <span>{{ addon.name}}</span>
+          <span v-if="devMode" class="tooltiptext">{{ addon._addonId }}</span>
         </div>
         <addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
       </div>
@@ -441,6 +442,9 @@ export default {
     addonSettings() {
       return this.$root.addonSettings[this.addon._addonId];
     },
+    devMode() {
+      return this.$root.devMode;
+    },
     showUpdateNotice() {
       if (!this.addon.latestUpdate || !this.addon.latestUpdate.temporaryNotice) return false;
       const [extMajor, extMinor, _] = this.$root.version.split(".");
@@ -451,11 +455,6 @@ export default {
   methods: {
     getDefaultExpanded() {
       return isIframe ? false : this.groupId === "enabled";
-    },
-    devShowAddonIds(event) {
-      if (!this.$root.versionName.endsWith("-prerelease") || !event.ctrlKey) return;
-      event.stopPropagation();
-      Vue.set(this.addon, "_displayedAddonId", this.addon._addonId);
     },
     loadPreset(preset) {
       if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {

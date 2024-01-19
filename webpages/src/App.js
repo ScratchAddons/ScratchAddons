@@ -42,6 +42,7 @@ export default {
     return {
       bus,
       smallMode: false,
+      devMode: false,
       forceEnglishSetting: null,
       forceEnglishSettingInitial: null,
       switchPath: "../../images/icons/switch.svg",
@@ -585,6 +586,11 @@ export default {
     window.addEventListener("resize", this.resizeEvent);
     this.resizeEvent();
     document.title = chrome.i18n.getMessage("settingsTitle");
+
+    chrome.management.getSelf((info) => {
+      if (info.installType === "development") vue.devMode = true;
+    });
+
     let cursor = 0;
     const KONAMI_CODE = [
       "arrowup",
