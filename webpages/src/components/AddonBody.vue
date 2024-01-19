@@ -7,7 +7,7 @@
         </div>
         <div class="addon-name tooltip">
           <img :src="addonIconSrc" class="icon-type" />
-          <span>{{ addon.name}}</span>
+          <span>{{ addon.name }}</span>
           <span v-if="devMode" class="tooltiptext">{{ addon._addonId }}</span>
         </div>
         <addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
