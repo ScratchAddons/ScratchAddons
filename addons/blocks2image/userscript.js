@@ -95,7 +95,7 @@ export default async function ({ addon, console, msg }) {
           enabled: true,
           text: msg("copy_all_to_clipboard"),
           callback: () => {
-            exportBlock(true, "", true);
+            exportBlock(true, true);
           },
           separator: false,
         }
@@ -123,7 +123,7 @@ export default async function ({ addon, console, msg }) {
           enabled: true,
           text: msg("export_selected_to_SVG"),
           callback: () => {
-            exportBlock(false, block);
+            exportBlock(false, false, block);
           },
           separator: true,
         },
@@ -131,7 +131,7 @@ export default async function ({ addon, console, msg }) {
           enabled: true,
           text: msg("export_selected_to_PNG"),
           callback: () => {
-            exportBlock(true, block);
+            exportBlock(true, false, block);
           },
           separator: false,
         },
@@ -139,7 +139,7 @@ export default async function ({ addon, console, msg }) {
           enabled: true,
           text: msg("copy_selected_to_clipboard"),
           callback: () => {
-            exportBlock(true, block, true);
+            exportBlock(true, true, block);
           },
           separator: false,
         }
@@ -150,7 +150,7 @@ export default async function ({ addon, console, msg }) {
     { blocks: true }
   );
 
-  function exportBlock(isExportPNG, block, copyToClipboard) {
+  function exportBlock(isExportPNG, copyToClipboard, block) {
     let svg;
     if (block) {
       svg = selectedBlocks(isExportPNG, block);
@@ -287,10 +287,7 @@ export default async function ({ addon, console, msg }) {
       const timestamp = `${date.toLocaleDateString()}-${date.toLocaleTimeString()}`;
 
       if (copy) {
-        addon.tab
-          .copyImage(dataURL)
-          .then(() => console.log("Image successfully copied"))
-          .catch((e) => console.error(`Image could not be copied: ${e}`));
+        addon.tab.copyImage(dataURL).catch((e) => console.error(`Image could not be copied: ${e}`));
       } else {
         link.download = `block_${timestamp}.png`;
         link.href = dataURL;
