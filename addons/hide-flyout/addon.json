@@ -110,7 +110,7 @@
       "default": "default"
     },
     {
-      "name": "Lock by default",
+      "name": "Open by default",
       "id": "lockLoad",
       "type": "boolean",
       "default": false
