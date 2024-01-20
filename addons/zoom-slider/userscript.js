@@ -6,7 +6,6 @@ export default async function ({ addon, msg }) {
 
     const zoom = await addon.tab.waitForElement(".blocklyZoom");
     const blockly = await addon.tab.traps.getBlockly();
-    window.blockly = blockly;
 
     const foreignObject = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
     foreignObject.setAttribute("height", "500");
