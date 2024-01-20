@@ -19,7 +19,10 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "latestUpdate": "1.36.0",
+  "latestUpdate": {
+    "version": "1.36.0",
+    "newSettings": ["lockLoad"]
+  }.
   "customCssVariables": [
     {
       "name": "lockDisplay",
