@@ -1,6 +1,6 @@
 {
   "name": "Zoom slider",
-  "description": "Replaces the regular zoom buttons with a slider.",
+  "description": "Replaces the code area zoom buttons with a slider and number input.",
   "tags": ["editor", "codeEditor", "featured"],
   "userscripts": [
     {
