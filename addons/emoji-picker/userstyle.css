@@ -85,15 +85,16 @@
   width: 20px;
   height: 20px;
 }
-.sa-emoji-picker-see-more {
+.compose-comment .compose-bottom-row .sa-emoji-picker-see-more {
   width: 100%;
-  margin-top: 5px !important;
-  margin-bottom: 5px !important;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
-.sa-emoji-button-r2 .sa-emoji-picker-see-more {
+#comments #comment-form .sa-emoji-button-r2 .sa-emoji-picker-see-more,
+#comments .comment form .sa-emoji-button-r2 .sa-emoji-picker-see-more {
   width: calc(100% - 2px);
   margin-bottom: 7px;
-  margin-top: 4px !important;
+  margin-top: 4px;
 }
 
 form > .control-group:not(.tooltip) {
