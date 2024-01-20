@@ -144,21 +144,14 @@ const arrowShadowPath =
 const arrowShadowColor = "#231f20";
 
 export default async function ({ addon, console, msg }) {
-  const Blockly = await addon.tab.traps.getBlockly();
+  // Will be replaced with the current Scratch theme's colors when entering the editor
+  let originalColors = defaultColors;
 
-  const originalColors = JSON.parse(JSON.stringify(Blockly.Colours));
-  originalColors.sa = {
-    primary: "#29beb8",
-    secondary: "#3aa8a4",
-    tertiary: "#3aa8a4",
-  };
-
-  let textModeSetting = addon.settings.get("text");
   const textMode = () => {
     if (addon.self.disabled) {
       return originalColors.text === "#000000" ? "black" : "white";
     }
-    return textModeSetting;
+    return addon.settings.get("text");
   };
   const isColoredTextMode = () => textMode() === "colorOnWhite" || textMode() === "colorOnBlack";
 
@@ -182,6 +175,82 @@ export default async function ({ addon, console, msg }) {
     if (textMode() === "black") return multiply(addon.settings.get(category.settingId), { r: 0.65, g: 0.65, b: 0.65 });
     return multiply(addon.settings.get(category.settingId), { r: 0.8, g: 0.8, b: 0.8 });
   };
+  const uncoloredTextColor = () => {
+    return {
+      white: "#ffffff",
+      black: "#000000",
+      colorOnWhite: "#000000",
+      colorOnBlack: "#ffffff",
+    }[textMode()];
+  };
+
+  const updateMonitorColors = () => {
+    const allMonitors = addon.tab.redux.state.scratchGui.monitors.valueSeq();
+    const visibleMonitors = allMonitors.filter((monitor) => monitor.visible);
+    const monitorElements = document.querySelectorAll("[class*='monitor_monitor-container_']");
+    // The order of monitors in the Redux state and in the DOM is the same
+    visibleMonitors.forEach((monitor, i) => {
+      const opcodePrefix = monitor.opcode.split("_")[0];
+      let colorId =
+        {
+          sound: "sounds",
+          procedures: "more",
+        }[opcodePrefix] || opcodePrefix;
+      if (monitor.opcode === "data_listcontents") colorId = "data_lists";
+      let category = categories.find((category) => category.colorId === colorId);
+      if (!category) category = extensionsCategory;
+      for (const value of monitorElements[i].querySelectorAll(`
+        [class*="monitor_value_"],
+        [class*="monitor_large-value_"],
+        [class*="monitor_list-value_"]
+      `)) {
+        if (addon.settings.get("monitors") || addon.self.disabled) {
+          value.style.backgroundColor = primaryColor(category);
+          value.style.color = isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor();
+          // Border color for list items
+          if (textMode() === "colorOnBlack") value.style.borderColor = "rgba(255, 255, 255, 0.15)";
+          else value.style.removeProperty("border-color");
+        } else {
+          /* If the addon is enabled but the monitors setting is disabled,
+             the default colors are used even if the Scratch theme is set to high contrast. */
+          value.style.backgroundColor = defaultColors[category.colorId].primary;
+          value.style.color = defaultColors.text;
+          value.style.removeProperty("border-color");
+        }
+      }
+    });
+  };
+  addon.tab.redux.initialize();
+  updateMonitorColors();
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (
+      [
+        "scratch-gui/mode/SET_PLAYER",
+        "fontsLoaded/SET_FONTS_LOADED",
+        "scratch-gui/locales/SELECT_LOCALE",
+        "scratch-gui/theme/SET_THEME",
+        "scratch-gui/monitors/UPDATE_MONITORS",
+      ].includes(e.detail.action.type)
+    ) {
+      // Timeout to wait until the elements are rendered
+      setTimeout(updateMonitorColors, 0);
+    }
+  });
+  addon.settings.addEventListener("change", updateMonitorColors);
+  addon.self.addEventListener("disabled", updateMonitorColors);
+  addon.self.addEventListener("reenabled", updateMonitorColors);
+
+  // Blockly is only available in the editor
+  // Code that needs to work on the project page must be above this line
+  const Blockly = await addon.tab.traps.getBlockly();
+
+  originalColors = JSON.parse(JSON.stringify(Blockly.Colours));
+  originalColors.sa = {
+    primary: "#29beb8",
+    secondary: "#3aa8a4",
+    tertiary: "#3aa8a4",
+  };
+
   const fieldBackground = (category) => {
     // Background color for open dropdowns and (in some textModes) Boolean inputs
     // The argument can be a block, field, or category
@@ -207,14 +276,6 @@ export default async function ({ addon, console, msg }) {
     if (textMode() === "black") return "#000000";
     if (field) return field.sourceBlock_.getColourTertiary();
     return "#000000";
-  };
-  const uncoloredTextColor = () => {
-    return {
-      white: "#ffffff",
-      black: "#000000",
-      colorOnWhite: "#000000",
-      colorOnBlack: "#ffffff",
-    }[textMode()];
   };
   const otherColor = (settingId, colorId) => {
     if (addon.self.disabled) return originalColors[colorId];
@@ -460,8 +521,6 @@ export default async function ({ addon, console, msg }) {
   const updateColors = () => {
     const vm = addon.tab.traps.vm;
 
-    textModeSetting = addon.settings.get("text");
-
     for (const category of categories) {
       // CSS variables are used for compatibility with other addons
       const prefix = `--editorTheme3-${category.colorId}`;
@@ -529,54 +588,6 @@ export default async function ({ addon, console, msg }) {
     if (!newColors) return;
     Object.assign(originalColors, newColors);
   };
-
-  const updateMonitorColors = () => {
-    const allMonitors = addon.tab.redux.state.scratchGui.monitors.valueSeq();
-    const visibleMonitors = allMonitors.filter((monitor) => monitor.visible);
-    const monitorElements = document.querySelectorAll("[class*='monitor_monitor-container_']");
-    // The order of monitors in the Redux state and in the DOM is the same
-    visibleMonitors.forEach((monitor, i) => {
-      const opcodePrefix = monitor.opcode.split("_")[0];
-      let colorId =
-        {
-          sound: "sounds",
-          procedures: "more",
-        }[opcodePrefix] || opcodePrefix;
-      if (monitor.opcode === "data_listcontents") colorId = "data_lists";
-      let category = categories.find((category) => category.colorId === colorId);
-      if (!category) category = extensionsCategory;
-      for (const value of monitorElements[i].querySelectorAll(`
-        [class*="monitor_value_"],
-        [class*="monitor_large-value_"],
-        [class*="monitor_list-value_"]
-      `)) {
-        if (addon.settings.get("monitors") || addon.self.disabled) {
-          value.style.backgroundColor = primaryColor(category);
-          value.style.color = isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor();
-          // Border color for list items
-          if (textMode() === "colorOnBlack") value.style.borderColor = "rgba(255, 255, 255, 0.15)";
-          else value.style.removeProperty("border-color");
-        } else {
-          /* If the addon is enabled but the monitors setting is disabled,
-             the default colors are used even if the Scratch theme is set to high contrast. */
-          value.style.backgroundColor = defaultColors[category.colorId].primary;
-          value.style.color = defaultColors.text;
-          value.style.removeProperty("border-color");
-        }
-      }
-    });
-  };
-  addon.tab.redux.initialize();
-  updateMonitorColors();
-  addon.tab.redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type === "scratch-gui/monitors/UPDATE_MONITORS") {
-      // Timeout to wait until the elements are rendered
-      setTimeout(updateMonitorColors, 0);
-    }
-  });
-  addon.settings.addEventListener("change", updateMonitorColors);
-  addon.self.addEventListener("disabled", updateMonitorColors);
-  addon.self.addEventListener("reenabled", updateMonitorColors);
 
   while (true) {
     const colorModeSubmenu = await addon.tab.waitForElement(
