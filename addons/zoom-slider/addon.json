@@ -1,7 +1,7 @@
 {
   "name": "Zoom slider",
   "description": "Replaces the regular zoom buttons with a slider.",
-  "tags": ["editor"],
+  "tags": ["editor", "codeEditor", "featured"],
   "userscripts": [
     {
       "matches": ["projects"],
