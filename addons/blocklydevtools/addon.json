@@ -1,0 +1,13 @@
+{
+    "name": "Blockly Developer Tools",
+    "description": "Adds buttons next to blocks in the editor that allow you to collapse, force delete and modify their XML data. Only enable if you know what you're doing.",
+    "userscripts": [
+      {
+        "url": "userscript.js",
+        "matches": ["projects"]
+      }
+    ],
+    "versionAdded": "1.36.0",
+    "tags": ["editor", "codeEditor", "danger"],
+    "enabledByDefault": false
+}
