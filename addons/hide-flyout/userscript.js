@@ -50,7 +50,6 @@ export default async function ({ addon, console, msg }) {
     const option = addon.settings.get("lockLoad");
     if (option) {
       if (getToggleSetting() === "category") {
-        onmouseleave(null, 0);
         toggle = true;
       } else {
         flyoutLock = option;
