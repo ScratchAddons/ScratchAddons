@@ -32,10 +32,17 @@
   ],
   "userstyles": [
     {
-      "url": "status-dot.css",
+      "url": "status-dot-forums.css",
       "matches": ["topics", "https://scratch.mit.edu/users/*/"],
       "if": {
         "settings": { "discuss": true }
+      }
+    },
+    {
+      "url": "status-dot.css",
+      "matches": ["https://scratch.mit.edu/users/*/"],
+      "if": {
+        "settings": { "profile": true }
       }
     },
     {

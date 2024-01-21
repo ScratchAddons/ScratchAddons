@@ -237,7 +237,8 @@ body:not(.sa-body-editor) .join-flow-privacy-message,
 .ttt-item img,
 .tabs button:not(.active) .tab-icon,
 body:not(.sa-body-editor) [class*="stage-header_stage-button-icon_"],
-.overflow-menu-container .overflow-menu-trigger img {
+.overflow-menu-container .overflow-menu-trigger img,
+.sa-footer-arrow {
   filter: var(--darkWww-box-filter);
 }
 .studio-tab-nav li img {
@@ -350,7 +351,7 @@ p.callout,
 .transfer-host-modal .transfer-outcome,
 .filter-container,
 .tab-choice-selected-sa,
-.admin-message /* username change */,
+#bad-username-splash .admin-message /* username change */,
 .sa-annual-report-2020 .initiatives-section .year-in-review,
 .initiatives-section .initiatives-subsection-content .map,
 .sa-annual-report-2021 .leadership-section .leadership-scratch-team .avatar-item img,
@@ -363,7 +364,7 @@ body:not(.sa-body-editor) .gender-radio-row:hover,
 .empty h4,
 .thumbnail-column .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
 .studio-page #view,
-.admin-message .admin-message-date /* username change */,
+#bad-username-splash .admin-message .admin-message-date /* username change */,
 .milestones-section h2 {
   color: var(--darkWww-blue-text);
 }
@@ -508,7 +509,8 @@ body:not(.sa-body-editor) .formik-input:focus,
   border-color: var(--darkWww-button-transparent10);
 }
 .outer .categories li:hover,
-.user-projects-modal .user-projects-modal-nav button:hover {
+.user-projects-modal .user-projects-modal-nav button:hover,
+.messages-admin-list .admin-message {
   background-color: var(--darkWww-button-transparent25);
 }
 .comment .avatar {
@@ -631,7 +633,7 @@ img.tips-icon {
 body:not(.sa-body-editor) .select select,
 .textarea,
 .action-button.close-button,
-#footer /* for infinite scrolling fixed footer */,
+.sa-collapse-footer #footer,
 .empty,
 .outer .sort-controls,
 .preview .comments-container .comments-turned-off,
@@ -712,6 +714,7 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
 }
 .compose-comment .textarea-row textarea:not(:focus),
 .studio-tab-nav,
+.messages-admin-list .admin-message,
 body:not(.sa-body-editor) .formik-input,
 body:not(.sa-body-editor) input[type="checkbox"].formik-checkbox:not(:checked),
 .row .checkbox input[type="checkbox"]:not(:checked) {

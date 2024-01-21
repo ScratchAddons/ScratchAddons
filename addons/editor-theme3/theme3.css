@@ -2,7 +2,15 @@
   fill: var(--editorTheme3-inputColor-text);
 }
 .blocklyHtmlInput {
-  background-color: var(--editorTheme3-inputColor);
+  /* Hide the HTML input so that only the SVG part is visible.
+     This is needed for transparent inputs. */
+  background-color: transparent;
+  color: transparent;
+  caret-color: var(--editorTheme3-inputColor-text);
+}
+.sa-theme3-editable-label .blocklyHtmlInput {
+  /* Labels in custom block editor */
+  background-color: var(--editorTheme3-inputColor-editableLabel);
   color: var(--editorTheme3-inputColor-text);
 }
 

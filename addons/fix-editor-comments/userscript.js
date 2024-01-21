@@ -9,7 +9,7 @@ export default async function ({ addon, console }) {
   /*
    * When a block with a comment attached is dragged, the comment now properly
    * stores its updated position.
-   * https://github.com/LLK/scratch-blocks/blob/develop/core/scratch_bubble.js#L536
+   * https://github.com/scratchfoundation/scratch-blocks/blob/develop/core/scratch_bubble.js#L536
    */
   const originalBlockMove = Blockly.ScratchBubble.prototype.setAnchorLocation;
   Blockly.ScratchBubble.prototype.setAnchorLocation = function (xy) {
@@ -28,7 +28,7 @@ export default async function ({ addon, console }) {
 
   /*
    * Do not use the widest block in the stack to calculate comment location.
-   * https://github.com/LLK/scratch-blocks/blob/develop/core/scratch_block_comment.js#L307
+   * https://github.com/scratchfoundation/scratch-blocks/blob/develop/core/scratch_block_comment.js#L307
    */
   const originalPosition = Blockly.ScratchBlockComment.prototype.autoPosition_;
   Blockly.ScratchBlockComment.prototype.autoPosition_ = function () {
@@ -42,8 +42,8 @@ export default async function ({ addon, console }) {
 
   /*
    * When setting a comment's location, keep the Y position level with the block.
-   * https://github.com/LLK/scratch-blocks/blob/develop/core/bubble_dragger.js#L139
-   * https://github.com/LLK/scratch-blocks/blob/develop/core/bubble_dragger.js#L202
+   * https://github.com/scratchfoundation/scratch-blocks/blob/develop/core/bubble_dragger.js#L139
+   * https://github.com/scratchfoundation/scratch-blocks/blob/develop/core/bubble_dragger.js#L202
    */
 
   const originalCommentEndDrag = Blockly.BubbleDragger.prototype.endBubbleDrag;

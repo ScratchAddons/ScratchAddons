@@ -26,7 +26,7 @@
   background-size: 100%;
   filter: var(--darkWww-link-iconFilter, none);
   /* Spinner animation code */
-  /* From https://github.com/LLK/scratch-www/blob/develop/src/components/spinner/spinner.scss */
+  /* From https://github.com/scratchfoundation/scratch-www/blob/develop/src/components/spinner/spinner.scss */
   animation-name: spin-intro, spin;
   animation-duration: 0.25s, 1s;
   animation-timing-function: cubic-bezier(0.3, -3, 0.6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);
@@ -46,7 +46,25 @@
   position: relative;
 }
 #sidebar li.sub-list {
-  margin-left: 11px;
+  margin-left: 18px;
+  position: relative;
+}
+#sidebar li.sub-list::before {
+  content: "";
+  display: block;
+  position: absolute;
+  right: calc(100% + 1px);
+  bottom: calc(50% - 2px);
+  width: 18px;
+  height: 48px;
+  background-color: var(--darkWww-border, rgba(0, 0, 0, 0.15));
+  -webkit-mask-image: url("%addon-self-dir%/assets/dots.svg");
+  mask-image: url("%addon-self-dir%/assets/dots.svg");
+  pointer-events: none;
+}
+#sidebar li:not(.sub-list) + li.sub-list::before {
+  -webkit-mask-image: url("%addon-self-dir%/assets/dots_first.svg");
+  mask-image: url("%addon-self-dir%/assets/dots_first.svg");
 }
 #sidebar li.sub-list a {
   margin: 0;

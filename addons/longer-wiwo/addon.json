@@ -16,6 +16,6 @@
     }
   ],
   "versionAdded": "1.11.0",
-  "tags": ["community", "profiles", "featured"],
+  "tags": ["community", "profiles"],
   "enabledByDefault": false
 }

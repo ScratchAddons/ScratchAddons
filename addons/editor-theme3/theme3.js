@@ -255,7 +255,16 @@ export default async function ({ addon, console, msg }) {
     oldFieldTextInputInit.call(this);
     if (this.sourceBlock_.isShadow()) return;
     // Labels in custom block editor
-    this.box_.setAttribute("fill", fieldBackground(this));
+    this.box_.setAttribute("fill", isColoredTextMode() ? fieldBackground(this) : this.sourceBlock_.getColourTertiary());
+  };
+
+  const oldFieldTextInputRemovableShowEditor = Blockly.FieldTextInputRemovable.prototype.showEditor_;
+  Blockly.FieldTextInputRemovable.prototype.showEditor_ = function () {
+    oldFieldTextInputRemovableShowEditor.call(this);
+    if (!this.sourceBlock_.isShadow()) {
+      // Labels in custom block editor
+      Blockly.WidgetDiv.DIV.classList.add("sa-theme3-editable-label");
+    }
   };
 
   const oldFieldImageSetValue = Blockly.FieldImage.prototype.setValue;
@@ -271,7 +280,7 @@ export default async function ({ addon, console, msg }) {
       }
     } else {
       const iconsToReplace = ["repeat.svg", "rotate-left.svg", "rotate-right.svg"];
-      const iconName = src.split("/").at(-1);
+      const iconName = src.split("/")[src.split("/").length - 1];
       if (iconsToReplace.includes(iconName)) {
         src = `${iconPath()}/${iconName}`;
       }
@@ -417,6 +426,7 @@ export default async function ({ addon, console, msg }) {
     Blockly.Colours.textField = otherColor("input-color", "textField");
     if (textMode() === "colorOnWhite") Blockly.Colours.fieldShadow = "rgba(0, 0, 0, 0.15)";
     else Blockly.Colours.fieldShadow = originalColors.fieldShadow;
+    Blockly.Colours.text = uncoloredTextColor(); // used by editor-colored-context-menus
 
     const workspace = Blockly.getMainWorkspace();
     const flyout = workspace.getFlyout();
@@ -427,10 +437,12 @@ export default async function ({ addon, console, msg }) {
       vm.emitWorkspaceUpdate();
     }
     if (!flyout || !toolbox) return;
+    Blockly.Events.disable();
     const flyoutWorkspace = flyout.getWorkspace();
     Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
     toolbox.populate_(workspace.options.languageTree);
     workspace.toolboxRefreshEnabled_ = true;
+    Blockly.Events.enable();
   };
 
   updateColors();
@@ -492,14 +504,14 @@ export default async function ({ addon, console, msg }) {
     const managedBySa = elementToClone.cloneNode(true);
     addon.tab.displayNoneWhileDisabled(managedBySa, { display: "block" });
     managedBySa.classList.add("sa-theme3-managed");
-    managedBySa.querySelector("div span").textContent = msg("/global/meta/managedBySa");
+    managedBySa.querySelector("div span").textContent = msg("/_general/meta/managedBySa");
     managedBySa.querySelector("img[class*=settings-menu_icon_]").src = SA_ICON_URL;
 
     const addonSettingsLink = elementToClone.cloneNode(true);
     addon.tab.displayNoneWhileDisabled(addonSettingsLink, { display: "block" });
     addonSettingsLink.classList.add("sa-theme3-link");
     addonSettingsLink.classList.add(addon.tab.scratchClass("menu_menu-section") || "_");
-    addonSettingsLink.querySelector("div span").textContent = msg("/global/meta/addonSettings");
+    addonSettingsLink.querySelector("div span").textContent = msg("/_general/meta/addonSettings");
     addonSettingsLink.querySelector("img[class*=settings-menu_icon_]").src = SA_ICON_URL;
     const addonSettingsImg = document.createElement("img");
     addonSettingsImg.classList.add("sa-theme3-new-tab");
