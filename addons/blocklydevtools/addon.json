@@ -7,6 +7,12 @@
         "matches": ["projects"]
       }
     ],
+    "credits": [
+      {
+        "name": "ZXMushroom63",
+        "link": "https://github.com/ZXMushroom63"
+      }
+    ],
     "versionAdded": "1.36.0",
     "tags": ["editor", "codeEditor", "danger"],
     "enabledByDefault": false
