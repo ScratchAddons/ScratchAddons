@@ -16,5 +16,5 @@
   "tags": ["editor", "codeEditor", "recommended"],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "enabledByDefault": false
+  "enabledByDefault": true
 }
