@@ -266,9 +266,10 @@ export default async function ({ addon, console }) {
             var path = getSvgPathFromBlock(element);
             var bbox = path.getBBox();
 
-            //Attritbutes and styles for the foreignObject
-            devWrapper.setAttributeNS(null, "width", 0);
-            devWrapper.setAttributeNS(null, "height", 0);
+            //Attributes and styles for the foreignObject
+            //Width and height are 1 instead of 0 because firefox is won't render the element if it doesn't have a positive size.
+            devWrapper.setAttributeNS(null, "width", 1);
+            devWrapper.setAttributeNS(null, "height", 1);
 
             devWrapper.style.overflow = "visible";
             devWrapper.style.userSelect = "none";
