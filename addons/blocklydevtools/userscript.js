@@ -161,6 +161,10 @@ export default async function ({ addon, console }) {
         container.style.overflowY = "scroll";
         container.style.caretColor = "white";
 
+        //Disable spellcheck and autocomplete.
+        container.setAttribute("autocomplete", "false");
+        container.setAttribute("spellcheck", "false");
+
         //Set the editor's contents to the formatted original XML.
         container.innerHTML = formatXml(originalXml, true);
 
