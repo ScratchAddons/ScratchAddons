@@ -1,10 +1,16 @@
 {
   "name": "Rearrangeable custom block inputs",
-  "description": "Adds buttons for rearranging custom block inputs.",
+  "description": "Allows rearranging custom block parameters with the editor's \"Make a block\" screen.",
   "credits": [
     {
       "name": "Chrome_Cat",
       "link": "https://scratch.mit.edu/users/Chrome_Cat/"
+    }
+  ],
+  "info": [
+    {
+      "id": "editCustomBlock",
+      "text": "To edit a custom block, right click it and choose the edit option."
     }
   ],
   "userscripts": [
