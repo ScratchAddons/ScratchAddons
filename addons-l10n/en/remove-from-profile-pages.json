@@ -1,0 +1,13 @@
+{
+  "remove-from-profile-pages/title-text": "Remove from row",
+  "remove-from-profile-pages/fail-project": "Failed unsharing \"{name}\". This could be because the project doesn't exist anymore, or you're signed out.",
+  "remove-from-profile-pages/fail-favorites": "Failed unfavoriting \"{name}\". This could be because the project doesn't exist anymore, or you're signed out.",
+  "remove-from-profile-pages/fail-studios_following": "Failed unfollowing \"{name}\". This could be because the studio doesn't exist anymore, or you're signed out.",
+  "remove-from-profile-pages/fail-studios": "Failed leaving \"{name}\". This could be because the studio doesn't exist anymore, you own the studio, or you're signed out.",
+  "remove-from-profile-pages/fail-following": "Failed unfollowing {name}. This could be because the user doesn't exist anymore, or you're signed out.",
+  "remove-from-profile-pages/confirm-projects": "Are you sure you want to unshare \"{name}\"?",
+  "remove-from-profile-pages/confirm-favorites": "Are you sure you want to unfavorite \"{name}\"?",
+  "remove-from-profile-pages/confirm-studios_following": "Are you sure you want to unfollow \"{name}\"?",
+  "remove-from-profile-pages/confirm-studios": "Are you sure you want to leave \"{name}\"?",
+  "remove-from-profile-pages/confirm-following": "Are you sure you want to unfollow {name}?"
+}

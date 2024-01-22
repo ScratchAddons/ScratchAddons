@@ -1,0 +1,106 @@
+{
+  "name": "Button for removing items from profile pages",
+  "description": "On pages like \"Favorite Projects\" on your profile, add a button to remove projects/users from the list. For example, this will unfavorite a project when used on the \"Favorite Projects\" row.",
+  "tags": ["community", "profiles"],
+  "enabledByDefault": false,
+  "versionAdded": "1.33.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/users/*/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/users/*/*"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Show confirmations",
+      "id": "confirmations",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "all",
+          "name": "Always"
+        },
+        {
+          "id": "destructive",
+          "name": "Before unsharing projects and leaving studios"
+        },
+        {
+          "id": "none",
+          "name": "Never"
+        }
+      ],
+      "default": "destructive"
+    },
+    {
+      "name": "Only show remove button while hovering over items",
+      "id": "only_on_hover",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show button in \"Shared Projects\"",
+      "id": "show_on_projects",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show button in \"Favorite Projects\"",
+      "id": "show_on_favorites",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show button in \"Studios I'm Following\"",
+      "id": "show_on_studios_following",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show button in \"Studios I Curate\"",
+      "id": "show_on_studios",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show button in \"Following\"",
+      "id": "show_on_following",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld"
+    }
+  ],
+  "info": [
+    {
+      "type": "notice",
+      "text": "It might take a short while for removed items to actually be removed from the rows themselves, as Scratch caches the rows.",
+      "id": "row-caching"
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "unhoveredOpacity",
+      "value": {
+        "type": "ternary",
+        "true": "0",
+        "false": ".9",
+        "source": {
+          "type": "settingValue",
+          "settingId": "only_on_hover"
+        }
+      }
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}
