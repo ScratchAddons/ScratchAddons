@@ -1,9 +1,20 @@
 export default async function ({ addon, console }) {
-    await addon.tab.waitForElement("svg.blocklySvg>g.blocklyWorkspace");
+    var isScratchAddons = true; //Should the script use ScratchAddons APIs.
+    if (isScratchAddons) {
+        await addon.tab.waitForElement("svg.blocklySvg>g.blocklyWorkspace");
+    }
+
+    var Blockly = window.Blockly; //Blockly is usually exposed by default.
+    if (isScratchAddons) {
+        Blockly = await addon.tab.traps.getBlockly();
+    }
+
     if (!Blockly) { //If the Blockly global is not exposed, the script cannot do anything useful.
         return "Failed to find Blockly instance!";
     }
-    var workspace = Blockly.getMainWorkspace(); //Get the main Blockly workspace
+
+    var workspace = Blockly.getMainWorkspace();
+
     var dom = Blockly.Xml.workspaceToDom(workspace); //Export the workspace to a DOM representing the save XML.
     workspace.addChangeListener(() => { //Every time the workspace changes, update the dom variable.
         dom = Blockly.Xml.workspaceToDom(workspace);
@@ -399,4 +410,5 @@ export default async function ({ addon, console }) {
 
     //Observe canvas
     observer.observe(getBlocklyBlockCanvas(), observerConfig);
+    return "Blockly dev tools ran successfully.";
 }
