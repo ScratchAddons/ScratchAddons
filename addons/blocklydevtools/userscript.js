@@ -60,6 +60,63 @@ export default async function ({ addon, console }) {
         }
     };
 
+    function makeEditorContainer() {
+        var editor = document.createElement("div");
+
+        editor.setAttribute("data-isblocklydeveditor", "true"); //Attribute to identify element as editor
+        editor.contentEditable = true; //Allow editing of content
+
+        //Styling
+        editor.style.padding = "10px";
+        editor.style.userSelect = "text";
+        editor.style.cursor = "auto";
+        editor.style.font = "12pt monospace";
+        editor.style.boxShadow = "0px 0px 10px rgba(0,0,0,0.5)";
+        editor.style.color = "yellowgreen";
+        editor.style.border = "2px solid white";
+        editor.style.zIndex = "998";
+        editor.style.borderRadius = "0.8rem";
+        editor.style.width = "max-content";
+        editor.style.backgroundColor = "rgb(0,0,30)";
+        editor.style.overflowX = "hidden";
+        editor.style.maxHeight = "100vh";
+        editor.style.overflowY = "scroll";
+        editor.style.caretColor = "white";
+
+        //Disable spellcheck and autocomplete.
+        editor.setAttribute("autocomplete", "false");
+        editor.setAttribute("spellcheck", "false");
+
+        //Prevent events from propagating to Blockly
+        editor.addEventListener("pointerdown", (event) => {
+            event.stopPropagation();
+        }, {
+            capture: true
+        });
+        editor.addEventListener("wheel", (event) => {
+            event.stopPropagation();
+        }, {
+            capture: true
+        });
+        editor.addEventListener("scroll", (event) => {
+            event.stopPropagation();
+        }, {
+            capture: true
+        });
+        editor.addEventListener("contextmenu", (event) => {
+            event.stopPropagation();
+        }, {
+            capture: true
+        });
+        editor.addEventListener("keydown", (event) => {
+            TabManager.enableTab(event, "\u2003"); //Fix for tab key
+        }, {
+            capture: true
+        });
+
+        return editor;
+    }
+
     //CSS would normally be injected here.
 
     if (!getBlocklyWorkspace()) {
@@ -121,39 +178,18 @@ export default async function ({ addon, console }) {
         var originalXml = getXmlFromBlockId(blockId, dom); //Store the block's original, un-edited XML.
 
 
-        var container = document.createElement("div"); //Create the editor
-
-        var referencesVars = block.getVars();
-        var editorVar = referencesVars[0] || false;
-        var secondaryEditor = null;
-        var originalVarXml = editorVar ? getXmlFromVarId(editorVar, dom) : null;
-
-        container.setAttribute("data-isblocklydeveditor", "true"); //Give it an identifying attribute
-        container.contentEditable = true; //Allow it's contents to be edited
-
-        //Styling
-        container.style.padding = "10px";
-        container.style.userSelect = "text";
-        container.style.cursor = "auto";
-        container.style.font = "12pt monospace";
-        container.style.boxShadow = "0px 0px 10px rgba(0,0,0,0.5)";
-        container.style.color = "yellowgreen";
-        container.style.border = "2px solid white";
-        container.style.zIndex = "998";
-        container.style.borderRadius = "0.8rem";
-        container.style.width = "max-content";
-        container.style.backgroundColor = "rgb(0,0,30)";
-        container.style.overflowX = "hidden";
-        container.style.maxHeight = "100vh";
-        container.style.overflowY = "scroll";
-        container.style.caretColor = "white";
-
-        //Disable spellcheck and autocomplete.
-        container.setAttribute("autocomplete", "false");
-        container.setAttribute("spellcheck", "false");
+        var container = makeEditorContainer(); //Create the editor
 
         //Set the editor's contents to the formatted original XML.
         container.innerHTML = formatXml(originalXml, true);
+
+        var referencesVars = block.getVars(); //Array of variable ids referenced by block (directly)
+        var editorVar = referencesVars[0]; //The variable to display
+        var secondaryEditor = makeEditorContainer(); //Create secondary editor
+        var originalVarXml = editorVar ? getXmlFromVarId(editorVar, dom) : null;
+
+        secondaryEditor.innerHTML = originalVarXml ? formatXml(originalVarXml, true) : "";
+        secondaryEditor.style.display = originalVarXml ? "block" : "none";
 
         function update() { //Function called when the workspace updates
             originalXml = getXmlFromBlockId(blockId, dom); //Update original XML
@@ -195,59 +231,6 @@ export default async function ({ addon, console }) {
                 workspace.getToolbox().refreshSelection();
             }
         }
-
-        //Prevent events from propagating to Blockly
-        container.addEventListener("pointerdown", (event) => {
-            event.stopPropagation();
-        }, {
-            capture: true
-        });
-        container.addEventListener("wheel", (event) => {
-            event.stopPropagation();
-        }, {
-            capture: true
-        });
-        container.addEventListener("scroll", (event) => {
-            event.stopPropagation();
-        }, {
-            capture: true
-        });
-        container.addEventListener("contextmenu", (event) => {
-            event.stopPropagation();
-        }, {
-            capture: true
-        });
-        container.addEventListener("keydown", (event) => {
-            TabManager.enableTab(event, "\u2003"); //Fix for tab key
-        }, {
-            capture: true
-        });
-
-        secondaryEditor = document.createElement("div");
-        secondaryEditor.setAttribute("data-isblocklydeveditor", "true");
-        secondaryEditor.contentEditable = true;
-
-        secondaryEditor.style.padding = "10px";
-        secondaryEditor.style.userSelect = "text";
-        secondaryEditor.style.cursor = "auto";
-        secondaryEditor.style.font = "12pt monospace";
-        secondaryEditor.style.boxShadow = "0px 0px 10px rgba(0,0,0,0.5)";
-        secondaryEditor.style.color = "yellowgreen";
-        secondaryEditor.style.border = "2px solid white";
-        secondaryEditor.style.zIndex = "998";
-        secondaryEditor.style.borderRadius = "0.8rem";
-        secondaryEditor.style.width = "max-content";
-        secondaryEditor.style.backgroundColor = "rgb(0,0,30)";
-        secondaryEditor.style.overflowX = "hidden";
-        secondaryEditor.style.maxHeight = "100vh";
-        secondaryEditor.style.overflowY = "scroll";
-        secondaryEditor.style.caretColor = "white";
-        secondaryEditor.style.display = originalVarXml ? "block" : "none";
-
-        secondaryEditor.setAttribute("autocomplete", "false");
-        secondaryEditor.setAttribute("spellcheck", "false");
-
-        secondaryEditor.innerHTML = originalVarXml ? formatXml(originalVarXml, true) : "";
 
         return [container, secondaryEditor];
     }
