@@ -22,16 +22,16 @@ export default async function ({ addon, console }) {
     const observerConfig = { childList: true, characterData: false, attributes: false, subtree: true }; //Config for MutationObservers.
 
     const TabManager = { //Hacky fix to get the tab key working in the XML editor.
-        enableTab: function (keyEvent, tabChar) { //Call with the key event and a string to insert at the text caret's position
+        enableTab: function (keyEvent) { //Call with the key event and a string to insert at the text caret's position
             if (keyEvent.keyCode === 9) {
-                // Insert tabChar at cursor position
-                this.insertTab(tabChar);
+                // Insert tab at cursor position
+                this.insertTab();
 
                 // Prevent switching focus to next element
                 this.blockKeyEvent(keyEvent);
             }
         },
-        insertTab: function (tab) { //Function to insert the tab char
+        insertTab: function () { //Function to insert the tab char
             if (window.getSelection) {
                 const sel = window.getSelection();
 
@@ -44,11 +44,20 @@ export default async function ({ addon, console }) {
 
                     const node = sel.anchorNode;
 
-                    //Get text before and after caret
-                    const preText = node.nodeValue.substring(0, pos);
-                    const postText = node.nodeValue.substring(pos, node.nodeValue.length);
+                    if (node instanceof HTMLElement) {
+                        //Get text before and after caret
+                        const preText = node.innerHTML.substring(0, pos);
+                        const postText = node.innerHTML.substring(pos, node.innerHTML.length);
 
-                    node.nodeValue = preText + tab + postText; //Insert tab character
+                        node.innerHTML = preText + "&emsp;" + postText; //Insert tab character
+                    } else if (node instanceof Node) {
+                        //Get text before and after caret
+                        const preText = node.nodeValue.substring(0, pos);
+                        const postText = node.nodeValue.substring(pos, node.nodeValue.length);
+
+                        node.nodeValue = preText + "\u2003" + postText; //Insert tab character
+                    }
+                    
                     sel.setPosition(node, pos + 1); //Move text caret forward
                 }
             }
@@ -119,7 +128,7 @@ export default async function ({ addon, console }) {
             capture: true
         });
         editor.addEventListener("keydown", (event) => {
-            TabManager.enableTab(event, "\u2003"); //Fix for tab key
+            TabManager.enableTab(event); //Fix for tab key
 
         }, {
             capture: true
