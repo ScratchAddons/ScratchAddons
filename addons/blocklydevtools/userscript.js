@@ -1,12 +1,12 @@
 export default async function ({ addon, console }) {
-    await addon.tab.waitForElement("svg.blocklySvg>g.blocklyWorkspace"); //Wait for the workspace to be ready.
+    await addon.tab.waitForElement("svg.blocklySvg>g.blocklyWorkspace"); //Wait for the workspace to be ready. (Necessary for ScratchAddons)
 
     const Blockly = window.Blockly; //Blockly is usually exposed by default.
     if (!Blockly) {
-        Blockly = await addon.tab.traps.getBlockly();
+        Blockly = await addon.tab.traps.getBlockly(); //I doubt code in here will ever run.
     }
 
-    if (!Blockly) { //If the Blockly global is not exposed, the script cannot do anything useful.
+    if (!Blockly) { //If the Blockly global is not exposed or found manually, the script cannot do anything useful.
         return "Failed to find Blockly instance!";
     }
 
