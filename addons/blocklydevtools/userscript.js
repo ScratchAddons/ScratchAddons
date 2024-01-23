@@ -59,7 +59,7 @@ export default async function ({ addon, console }) {
             }
         }
     };
-    
+
     //CSS would normally be injected here.
 
     if (!getBlocklyWorkspace()) {
@@ -100,7 +100,7 @@ export default async function ({ addon, console }) {
     function isNewBlocklyBlock(node) { //Is node a block svg that has not yet been hooked.
         return node && node instanceof Element && node.tagName === "g" && node.classList.contains("blocklyDraggable") && !node.classList.contains("blocklyInsertionMarker") && node.hasAttribute("data-id") && !node.hasAttribute("data-blocklydev-hooked");
     }
-    function makeXMLEditor(blockId) { //Make the XML editor for a blockId
+    function makeXMLEditor(blockId, block) { //Make the XML editor for a blockId
         function getXmlFromBlockId(id, dom) { //Utility function to get the block's XML string from a Blockly serialised DOM.
             for (const element of dom.children) {
                 if (element.tagName.toLowerCase() === "block" && element.getAttribute("id") === id) {
@@ -109,9 +109,24 @@ export default async function ({ addon, console }) {
             }
         }
 
+        function getXmlFromVarId(id, dom) { //Utility function to get the block's XML string from a Blockly serialised DOM.
+            var variables = dom.querySelector("variables");
+            for (const element of variables.children) {
+                if (element.tagName.toLowerCase() === "variable" && element.getAttribute("id") === id) {
+                    return element.outerHTML;
+                }
+            }
+        }
+
         var originalXml = getXmlFromBlockId(blockId, dom); //Store the block's original, un-edited XML.
 
+
         var container = document.createElement("div"); //Create the editor
+
+        var referencesVars = block.getVars();
+        var editorVar = referencesVars[0] || false;
+        var secondaryEditor = null;
+        var originalVarXml = editorVar ? getXmlFromVarId(editorVar, dom) : null;
 
         container.setAttribute("data-isblocklydeveditor", "true"); //Give it an identifying attribute
         container.contentEditable = true; //Allow it's contents to be edited
@@ -146,6 +161,16 @@ export default async function ({ addon, console }) {
                 workspace.removeChangeListener(update);
                 return;
             }
+            referencesVars = block.getVars();
+            editorVar = referencesVars[0] || false;
+            originalVarXml = editorVar ? getXmlFromVarId(editorVar, dom) : null;
+            if (originalVarXml) {
+                secondaryEditor.innerHTML = formatXml(originalVarXml, true);
+                secondaryEditor.style.display = "block";
+            } else {
+                secondaryEditor.innerHTML = "";
+                secondaryEditor.style.display = "none";
+            }
             container.innerHTML = formatXml(originalXml, true); //Update contents
         }
 
@@ -157,6 +182,9 @@ export default async function ({ addon, console }) {
                 throw new Error("Workspace XML does not contain block!");
             }
             xmlStr = xmlStr.replace(originalXml, container.textContent); //Replace original XML with modified XML.
+            if (originalVarXml) {
+                xmlStr = xmlStr.replace(originalVarXml, secondaryEditor.textContent);
+            }
             //xmlStr = xmlStr.replace(/\u2003/g, "").replace(/\n/g, "");
             xmlStr = xmlStr.replace(/\u00A0/g, "\u0020"); //Replace any non-breaking spaces with normal ones.
             dom = (Blockly.Xml.textToDom || Blockly.utils.xml.textToDom)(xmlStr); //Update the DOM variable.
@@ -195,12 +223,41 @@ export default async function ({ addon, console }) {
             capture: true
         });
 
-        return [container];
+        secondaryEditor = document.createElement("div");
+        secondaryEditor.setAttribute("data-isblocklydeveditor", "true");
+        secondaryEditor.contentEditable = true;
+
+        secondaryEditor.style.padding = "10px";
+        secondaryEditor.style.userSelect = "text";
+        secondaryEditor.style.cursor = "auto";
+        secondaryEditor.style.font = "12pt monospace";
+        secondaryEditor.style.boxShadow = "0px 0px 10px rgba(0,0,0,0.5)";
+        secondaryEditor.style.color = "yellowgreen";
+        secondaryEditor.style.border = "2px solid white";
+        secondaryEditor.style.zIndex = "998";
+        secondaryEditor.style.borderRadius = "0.8rem";
+        secondaryEditor.style.width = "max-content";
+        secondaryEditor.style.backgroundColor = "rgb(0,0,30)";
+        secondaryEditor.style.overflowX = "hidden";
+        secondaryEditor.style.maxHeight = "100vh";
+        secondaryEditor.style.overflowY = "scroll";
+        secondaryEditor.style.caretColor = "white";
+        secondaryEditor.style.display = originalVarXml ? "block" : "none";
+
+        secondaryEditor.setAttribute("autocomplete", "false");
+        secondaryEditor.setAttribute("spellcheck", "false");
+
+        secondaryEditor.innerHTML = originalVarXml ? formatXml(originalVarXml, true) : "";
+
+        return [container, secondaryEditor];
     }
     function processBlock(element) { //Function to hook block svg element
         if (isNewBlocklyBlock(element)) { //Check if we have not already hooked it
             var blockId = element.getAttribute("data-id"); //Get the id
             var internalBlock = workspace.getBlockById(blockId); //Get the internal block object
+            if (!internalBlock) {
+                return;
+            }
             internalBlock.tooltip ||= internalBlock.type || "unknown"; //If the block does not have a tooltip, set it to it's opcode.
             const devWrapper = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject'); //Create a foreignObject element to allow HTML inside of SVG.
             const btnWrapper = document.createElement("div"); //Wrapper for buttons to keep them on the same row
@@ -292,7 +349,8 @@ export default async function ({ addon, console }) {
                         collapse.style.display = "none";
                     } else {
                         //Add editor if it does not exist.
-                        makeXMLEditor(blockId).forEach(editorSegment => {
+                        internalBlock = workspace.getBlockById(blockId);
+                        makeXMLEditor(blockId, internalBlock).forEach(editorSegment => {
                             devWrapper.appendChild(editorSegment);
                         });
 
@@ -309,7 +367,7 @@ export default async function ({ addon, console }) {
                 event.preventDefault();
                 if (element.hasAttribute("data-id")) {
                     blockId = element.getAttribute("data-id");
-                    var internalBlock = workspace.getBlockById(blockId);
+                    internalBlock = workspace.getBlockById(blockId);
 
                     internalBlock.setCollapsed(!internalBlock.isCollapsed()); //Toggle collapsed for the current block
 
