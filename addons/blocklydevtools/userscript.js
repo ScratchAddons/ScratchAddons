@@ -99,8 +99,7 @@ export default async function ({ addon, console }) {
     }
     function makeBlockEditor(blockId) { //Make the XML editor for a blockId
         function getXmlFromBlockId(id, dom) { //Utility function to get the block's XML string from a Blockly serialised DOM.
-            for (let i = 0; i < dom.children.length; i++) {
-                const element = dom.children[i];
+            for (const element of dom.children) {
                 if (element.tagName.toLowerCase() === "block" && element.getAttribute("id") === id) {
                     return element.outerHTML;
                 }
@@ -211,14 +210,14 @@ export default async function ({ addon, console }) {
             btn.style.zIndex = "999";
             btn.style.lineHeight = "1rem";
             btn.setAttribute("data-is-blocklydev-btn", "true");
-            btn.innerHTML = "✏️"; //📝✏️
+            btn.innerText = "✏️"; //📝✏️
 
             var save = document.createElement("span"); //Create the save button
             save.style.cursor = "pointer";
             save.style.zIndex = "999";
             save.setAttribute("data-is-blocklydev-editor-btn", "true");
             save.style.display = "none";
-            save.innerHTML = "💾";
+            save.innerText = "💾";
             save.style.lineHeight = "1rem";
 
             var collapse = document.createElement("span"); //Create the collapse/uncollapse button
@@ -226,14 +225,14 @@ export default async function ({ addon, console }) {
             collapse.style.zIndex = "999";
             collapse.setAttribute("data-is-blocklydev-editor-btn", "true");
             collapse.style.display = "none";
-            collapse.innerHTML = "⬆️";
+            collapse.innerText = "⬆️";
             collapse.style.lineHeight = "1rem";
 
             var bin = document.createElement("span"); //Create the force delete button
             bin.style.cursor = "pointer";
             bin.style.zIndex = "999";
             bin.setAttribute("data-is-blocklydev-btn", "true");
-            bin.innerHTML = "🗑️";
+            bin.innerText = "🗑️";
             bin.style.lineHeight = "1rem";
 
             //Get the block's hull and calculate bounding box. Used to calculate where to position elements.
@@ -315,9 +314,9 @@ export default async function ({ addon, console }) {
                         workspace.getBlockById(bId).setCollapsed(collapsed);
                     }
                     if (collapsed) { //Change button
-                        collapse.innerHTML = "⬇️";
+                        collapse.innerText = "⬇️";
                     } else {
-                        collapse.innerHTML = "⬆️";
+                        collapse.innerText = "⬆️";
                     }
                 }
             }, {
