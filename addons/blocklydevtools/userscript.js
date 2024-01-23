@@ -14,7 +14,9 @@ export default async function ({ addon, console }) {
 
     var dom = Blockly.Xml.workspaceToDom(workspace); //Export the workspace to a DOM representing the save XML.
     workspace.addChangeListener(() => { //Every time the workspace changes, update the dom variable.
-        dom = Blockly.Xml.workspaceToDom(workspace);
+        if (!document.querySelector("g.blocklyDraggable[data-id].blocklyInsertionMarker")) { //Blockly will try to serialise insertion markers, which will cause an internal crash.
+            dom = Blockly.Xml.workspaceToDom(workspace);
+        }
     });
 
     const observerConfig = { childList: true, characterData: false, attributes: false, subtree: true }; //Config for MutationObservers.
