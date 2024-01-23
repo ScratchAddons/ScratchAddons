@@ -172,7 +172,13 @@ export default async function ({ addon, console, msg }) {
           toggle = false;
         }
       } else {
-        onmouseleave();
+        // switching from category click to a different mode
+        if (addon.settings.get("lockLoad")) {
+          flyoutLock = true;
+          updateLockDisplay();
+        } else {
+          onmouseleave();
+        }
         Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
       }
       // update workspace dimensions
