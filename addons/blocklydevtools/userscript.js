@@ -159,9 +159,9 @@ export default async function ({ addon, console }) {
             dom = (Blockly.Xml.textToDom || Blockly.utils.xml.textToDom)(xmlStr); //Update the DOM variable.
             workspace.clear(); //Clear the workspace
             Blockly.Xml.domToWorkspace(dom, workspace); //Load the DOM
-            if (Blockly.getMainWorkspace().getToolbox() //If the blockly instance has a toolbox, it needs to be refreshed,
+            if (workspace.getToolbox() //If the blockly instance has a toolbox, it needs to be refreshed,
             ) {
-                Blockly.getMainWorkspace().getToolbox().refreshSelection();
+                workspace.getToolbox().refreshSelection();
             }
         }
 
