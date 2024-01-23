@@ -1,3 +1,5 @@
+import "../../libraries/thirdparty/cs/chart.min.js";
+
 function createItem(number, label) {
   // Creates a large number with a label below
   const item = document.createElement("div");
@@ -155,7 +157,7 @@ export default async function ({ addon, msg, console }) {
       const historyData = await response.json();
       if (historyData.length === 0) throw new Error("scratchstats: No history data");
       chartLoadingSpinner.remove();
-      await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
+      await import("../../libraries/thirdparty/cs/chart.min.js");
       const canvas = document.createElement("canvas");
       chartSection.appendChild(canvas);
       canvas.id = "sa-scratchstats-chart";
