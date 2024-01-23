@@ -139,7 +139,7 @@ export default async function ({ addon, console, msg }) {
       }
     });
 
-    if (addon.self.enabledLate && getToggleSetting() === "category") {
+    if (addon.self.enabledLate && getToggleSetting() === "category" && !addon.settings.get("lockLoad")) {
       Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
     }
     addon.self.addEventListener("disabled", () => {
@@ -148,7 +148,7 @@ export default async function ({ addon, console, msg }) {
       Blockly.svgResize(Blockly.getMainWorkspace());
     });
     addon.self.addEventListener("reenabled", () => {
-      if (getToggleSetting() === "category") {
+      if (getToggleSetting() === "category" && !addon.settings.get("lockLoad")) {
         Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
         onmouseleave(null, 0);
         toggle = false;
