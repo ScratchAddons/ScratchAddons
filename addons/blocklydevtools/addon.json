@@ -1,6 +1,6 @@
 {
     "name": "Blockly Developer Tools",
-    "description": "Adds buttons next to blocks in the editor that allow you to collapse, force delete and modify their XML data. Only enable if you know what you're doing.",
+    "description": "Adds buttons next to blocks in the editor that allow you to collapse, force delete and modify their XML data.",
     "userscripts": [
       {
         "url": "userscript.js",
@@ -11,6 +11,13 @@
       {
         "name": "ZXMushroom63",
         "link": "https://github.com/ZXMushroom63"
+      }
+    ],
+    "info": [
+      {
+        "type": "warning",
+        "text": "This addon can cause project corruption if used without caution. Only enable it if you know what you're doing.",
+        "id": "blocklydevwarning"
       }
     ],
     "versionAdded": "1.36.0",

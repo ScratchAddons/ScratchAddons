@@ -1,5 +1,6 @@
 [
   "editor-searchable-dropdowns",
+  "blocklydevtools",
   "editor-devtools",
   "forum-search",
   "msg-count-badge",
@@ -176,6 +177,5 @@
   "editor-buttons-reverse-order",
   "columns",
   "editor-compact",
-  "editor-theme3",
-  "blocklydevtools"
+  "editor-theme3"
 ]
