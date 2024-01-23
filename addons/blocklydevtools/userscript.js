@@ -100,7 +100,7 @@ export default async function ({ addon, console }) {
     function isNewBlocklyBlock(node) { //Is node a block svg that has not yet been hooked.
         return node && node instanceof Element && node.tagName === "g" && node.classList.contains("blocklyDraggable") && !node.classList.contains("blocklyInsertionMarker") && node.hasAttribute("data-id") && !node.hasAttribute("data-blocklydev-hooked");
     }
-    function makeBlockEditor(blockId) { //Make the XML editor for a blockId
+    function makeXMLEditor(blockId) { //Make the XML editor for a blockId
         function getXmlFromBlockId(id, dom) { //Utility function to get the block's XML string from a Blockly serialised DOM.
             for (const element of dom.children) {
                 if (element.tagName.toLowerCase() === "block" && element.getAttribute("id") === id) {
@@ -195,7 +195,7 @@ export default async function ({ addon, console }) {
             capture: true
         });
 
-        return container;
+        return [container];
     }
     function processBlock(element) { //Function to hook block svg element
         if (isNewBlocklyBlock(element)) { //Check if we have not already hooked it
@@ -285,11 +285,17 @@ export default async function ({ addon, console }) {
                 if (element.hasAttribute("data-id")) {
                     blockId = element.getAttribute("data-id");
                     if (devWrapper.querySelector("div[data-isblocklydeveditor]")) { //If the editor exists, remove it.
-                        devWrapper.querySelector("div[data-isblocklydeveditor]").remove();
+                        devWrapper.querySelectorAll("div[data-isblocklydeveditor]").forEach(element => {
+                            element.remove();
+                        });
                         save.style.display = "none";
                         collapse.style.display = "none";
                     } else {
-                        devWrapper.appendChild(makeBlockEditor(blockId)); //Add editor if it does not exist.
+                        //Add editor if it does not exist.
+                        makeXMLEditor(blockId).forEach(editorSegment => {
+                            devWrapper.appendChild(editorSegment);
+                        });
+
                         save.style.display = "initial";
                         collapse.style.display = "initial";
                     }
