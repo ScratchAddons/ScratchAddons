@@ -57,7 +57,7 @@ export default async function ({ addon, console }) {
 
                         node.nodeValue = preText + "\u2003" + postText; //Insert tab character
                     }
-                    
+
                     sel.setPosition(node, pos + 1); //Move text caret forward
                 }
             }
@@ -249,7 +249,7 @@ export default async function ({ addon, console }) {
             xmlStr = xmlStr.replace(/\u00A0/g, "\u0020"); //Replace any non-breaking spaces with normal ones.
             var tempDom = (Blockly.Xml.textToDom || Blockly.utils.xml.textToDom)(xmlStr);
             if (tempDom.querySelector("parsererror")) {
-                tempDom.querySelectorAll("parsererror").forEach((err) => {
+                tempDom.querySelectorAll("parsererror").forEach(err => {
                     var display = document.createElement("div");
                     display.innerText = err.querySelector("div").innerText;
                     display.style.color = "red";
@@ -260,12 +260,12 @@ export default async function ({ addon, console }) {
                     display.style.width = "max-content";
                     display.style.padding = "8px";
                     display.style.cursor = "auto";
-                    display.addEventListener("pointerdown", (event) => {event.stopPropagation();}, {capture: true});
-                    display.addEventListener("contextmenu", (event) => {event.stopPropagation();}, {capture: true});
+                    display.addEventListener("pointerdown", (event) => { event.stopPropagation(); }, { capture: true });
+                    display.addEventListener("contextmenu", (event) => { event.stopPropagation(); }, { capture: true });
                     devWrapper.appendChild(display);
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         display.classList.add("blocklyDevtoolsFadeOut");
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             display.remove();
                         }, 1000);
                     }, 3000);
@@ -273,7 +273,7 @@ export default async function ({ addon, console }) {
                 return;
             }
             dom = tempDom; //Update the DOM variable.
-            
+
             workspace.clear(); //Clear the workspace
             Blockly.Xml.domToWorkspace(dom, workspace); //Load the DOM
             if (workspace.getToolbox() //If the blockly instance has a toolbox, it needs to be refreshed,
