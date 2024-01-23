@@ -62,6 +62,14 @@ export default async function ({ addon, console }) {
         }
     };
 
+    function firefoxSpacingFix(elem) { //Fix for firefox adding a \n at the end of every text node, which makes the editor feel janky.
+        elem.childNodes.forEach(element => {
+            if (element instanceof Text) {
+                element.nodeValue = element.nodeValue.replace(/\n/g, "");
+            }
+        })
+    }
+
     function makeEditorContainer() {
         var editor = document.createElement("div");
 
@@ -112,6 +120,7 @@ export default async function ({ addon, console }) {
         });
         editor.addEventListener("keydown", (event) => {
             TabManager.enableTab(event, "\u2003"); //Fix for tab key
+
         }, {
             capture: true
         });
@@ -184,6 +193,7 @@ export default async function ({ addon, console }) {
 
         //Set the editor's contents to the formatted original XML.
         container.innerHTML = formatXml(originalXml, true);
+        firefoxSpacingFix(container);
 
         var referencesVars = block.getVars(); //Array of variable ids referenced by block (directly)
         var editorVar = referencesVars[0]; //The variable to display
@@ -192,6 +202,7 @@ export default async function ({ addon, console }) {
 
         secondaryEditor.innerHTML = originalVarXml ? formatXml(originalVarXml, true) : "";
         secondaryEditor.style.display = originalVarXml ? "block" : "none";
+        firefoxSpacingFix(container);
 
         function update() { //Function called when the workspace updates
             originalXml = getXmlFromBlockId(blockId, dom); //Update original XML
@@ -205,11 +216,13 @@ export default async function ({ addon, console }) {
             if (originalVarXml) {
                 secondaryEditor.innerHTML = formatXml(originalVarXml, true);
                 secondaryEditor.style.display = "block";
+                firefoxSpacingFix(container);
             } else {
                 secondaryEditor.innerHTML = "";
                 secondaryEditor.style.display = "none";
             }
             container.innerHTML = formatXml(originalXml, true); //Update contents
+            firefoxSpacingFix(container);
         }
 
         workspace.addChangeListener(update); //Register change listener
