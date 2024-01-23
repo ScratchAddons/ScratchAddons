@@ -7,6 +7,12 @@
         "matches": ["projects"]
       }
     ],
+    "userstyles": [
+      {
+        "url": "style.css",
+        "matches": ["projects"]
+      }
+    ],
     "credits": [
       {
         "name": "ZXMushroom63",

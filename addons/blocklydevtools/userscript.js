@@ -56,35 +56,8 @@ export default async function ({ addon, console }) {
             }
         }
     };
-    if (!document.querySelector("style[data-blocklydevtools-style]")) { //If the css has not yet been injected, inject it.
-        var style = document.createElement("style");
-        style.innerHTML = `
-        /* Hide the ✏️ button on blocks that aren't top level */
-        g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker):not(g.blocklyBlockCanvas>g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker)) [data-is-blocklydev-btn] {
-            display: none !important;
-        }
-
-        /* Hide editor buttons on blocks that aren't top level */
-        g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker):not(g.blocklyBlockCanvas>g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker)) [data-is-blocklydev-editor-btn] {
-            display: none !important;
-        }
-
-        /* Hide the XML editor on blocks that aren't top level */
-        g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker):not(g.blocklyBlockCanvas>g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker)) [data-isblocklydeveditor] {
-            display: none !important;
-        }
-
-        /* Hide scrollbars on the XML editor */
-        div[data-isblocklydeveditor]::-webkit-scrollbar {
-            display: none;
-        }
-        div[data-isblocklydeveditor] {
-            scrollbar-width: none;
-        }
-        `;
-        style.setAttribute("data-blocklydevtools-style", "true"); //Mark it, so we can know if it has already been injected.
-        document.head.appendChild(style);
-    }
+    
+    //CSS would normally be injected here.
 
     if (!getBlocklyWorkspace()) {
         return "Failed to find Blockly SvgWorkspace!";
