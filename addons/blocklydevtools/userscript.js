@@ -177,7 +177,7 @@ export default async function ({ addon, console }) {
     function isNewBlocklyBlock(node) { //Is node a block svg that has not yet been hooked.
         return node && node instanceof Element && node.tagName === "g" && node.classList.contains("blocklyDraggable") && !node.classList.contains("blocklyInsertionMarker") && node.hasAttribute("data-id") && !node.hasAttribute("data-blocklydev-hooked");
     }
-    function makeXMLEditor(blockId, block) { //Make the XML editor for a blockId
+    function makeXMLEditor(blockId, block, devWrapper) { //Make the XML editor for a blockId
         function getXmlFromBlockId(id, dom) { //Utility function to get the block's XML string from a Blockly serialised DOM.
             for (const element of dom.children) {
                 if (element.tagName.toLowerCase() === "block" && element.getAttribute("id") === id) {
@@ -247,7 +247,33 @@ export default async function ({ addon, console }) {
             }
             //xmlStr = xmlStr.replace(/\u2003/g, "").replace(/\n/g, "");
             xmlStr = xmlStr.replace(/\u00A0/g, "\u0020"); //Replace any non-breaking spaces with normal ones.
-            dom = (Blockly.Xml.textToDom || Blockly.utils.xml.textToDom)(xmlStr); //Update the DOM variable.
+            var tempDom = (Blockly.Xml.textToDom || Blockly.utils.xml.textToDom)(xmlStr);
+            if (tempDom.querySelector("parsererror")) {
+                tempDom.querySelectorAll("parsererror").forEach((err) => {
+                    var display = document.createElement("div");
+                    display.innerText = err.querySelector("div").innerText;
+                    display.style.color = "red";
+                    display.style.font = "12pt monospace";
+                    display.style.backgroundColor = "rgb(0,0,20)";
+                    display.style.border = "2px solid white";
+                    display.style.borderRadius = "0.4rem";
+                    display.style.width = "max-content";
+                    display.style.padding = "8px";
+                    display.style.cursor = "auto";
+                    display.addEventListener("pointerdown", (event) => {event.stopPropagation();}, {capture: true});
+                    display.addEventListener("contextmenu", (event) => {event.stopPropagation();}, {capture: true});
+                    devWrapper.appendChild(display);
+                    setTimeout(()=>{
+                        display.classList.add("blocklyDevtoolsFadeOut");
+                        setTimeout(()=>{
+                            display.remove();
+                        }, 1000);
+                    }, 3000);
+                });
+                return;
+            }
+            dom = tempDom; //Update the DOM variable.
+            
             workspace.clear(); //Clear the workspace
             Blockly.Xml.domToWorkspace(dom, workspace); //Load the DOM
             if (workspace.getToolbox() //If the blockly instance has a toolbox, it needs to be refreshed,
@@ -357,7 +383,7 @@ export default async function ({ addon, console }) {
                     } else {
                         //Add editor if it does not exist.
                         internalBlock = workspace.getBlockById(blockId);
-                        makeXMLEditor(blockId, internalBlock).forEach(editorSegment => {
+                        makeXMLEditor(blockId, internalBlock, devWrapper).forEach(editorSegment => {
                             devWrapper.appendChild(editorSegment);
                         });
 
