@@ -1,11 +1,8 @@
 export default async function ({ addon, console }) {
-    var isScratchAddons = true; //Should the script use ScratchAddons APIs.
-    if (isScratchAddons) {
-        await addon.tab.waitForElement("svg.blocklySvg>g.blocklyWorkspace");
-    }
+    await addon.tab.waitForElement("svg.blocklySvg>g.blocklyWorkspace"); //Wait for the workspace to be ready.
 
-    var Blockly = window.Blockly; //Blockly is usually exposed by default.
-    if (isScratchAddons) {
+    const Blockly = window.Blockly; //Blockly is usually exposed by default.
+    if (!Blockly) {
         Blockly = await addon.tab.traps.getBlockly();
     }
 
