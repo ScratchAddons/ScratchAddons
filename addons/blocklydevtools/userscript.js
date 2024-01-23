@@ -1,7 +1,7 @@
 export default async function ({ addon, console }) {
     await addon.tab.waitForElement("svg.blocklySvg>g.blocklyWorkspace"); //Wait for the workspace to be ready. (Necessary for ScratchAddons)
 
-    const Blockly = window.Blockly; //Blockly is usually exposed by default.
+    var Blockly = window.Blockly; //Blockly is usually exposed by default.
     if (!Blockly) {
         Blockly = await addon.tab.traps.getBlockly(); //I doubt code in here will ever run.
     }
@@ -16,7 +16,10 @@ export default async function ({ addon, console }) {
     workspace.addChangeListener(() => { //Every time the workspace changes, update the dom variable.
         dom = Blockly.Xml.workspaceToDom(workspace);
     });
-    var TabManager = { //Hacky fix to get the tab key working in the XML editor.
+
+    const observerConfig = { childList: true, characterData: false, attributes: false, subtree: true }; //Config for MutationObservers.
+
+    const TabManager = { //Hacky fix to get the tab key working in the XML editor.
         enableTab: function (keyEvent, tabChar) { //Call with the key event and a string to insert at the text caret's position
             if (keyEvent.keyCode === 9) {
                 // Insert tabChar at cursor position
@@ -28,20 +31,20 @@ export default async function ({ addon, console }) {
         },
         insertTab: function (tab) { //Function to insert the tab char
             if (window.getSelection) {
-                var sel = window.getSelection();
+                const sel = window.getSelection();
 
                 sel.modify("extend", "backward", "paragraphboundary"); //Alter bounds of selection
 
-                var pos = sel.anchorOffset; //Offset of caret in anchorNode (in the editor's case, this is the current Text node)
+                const pos = sel.anchorOffset; //Offset of caret in anchorNode (in the editor's case, this is the current Text node)
 
                 if (sel.anchorNode) {
                     sel.collapseToEnd();
 
-                    var node = sel.anchorNode;
+                    const node = sel.anchorNode;
 
                     //Get text before and after caret
-                    var preText = node.nodeValue.substring(0, pos);
-                    var postText = node.nodeValue.substring(pos, node.nodeValue.length);
+                    const preText = node.nodeValue.substring(0, pos);
+                    const postText = node.nodeValue.substring(pos, node.nodeValue.length);
 
                     node.nodeValue = preText + tab + postText; //Insert tab character
                     sel.setPosition(node, pos + 1); //Move text caret forward
@@ -199,20 +202,20 @@ export default async function ({ addon, console }) {
             var blockId = element.getAttribute("data-id"); //Get the id
             var internalBlock = workspace.getBlockById(blockId); //Get the internal block object
             internalBlock.tooltip ||= internalBlock.type || "unknown"; //If the block does not have a tooltip, set it to it's opcode.
-            var devWrapper = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject'); //Create a foreignObject element to allow HTML inside of SVG.
-            var btnWrapper = document.createElement("div"); //Wrapper for buttons to keep them on the same row
+            const devWrapper = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject'); //Create a foreignObject element to allow HTML inside of SVG.
+            const btnWrapper = document.createElement("div"); //Wrapper for buttons to keep them on the same row
 
             btnWrapper.style.cursor = "auto"; //Fix for cursor being the grab hand
             btnWrapper.style.width = "max-content";
 
-            var btn = document.createElement("span"); //Create the edit button
+            const btn = document.createElement("span"); //Create the edit button
             btn.style.cursor = "pointer";
             btn.style.zIndex = "999";
             btn.style.lineHeight = "1rem";
             btn.setAttribute("data-is-blocklydev-btn", "true");
             btn.innerText = "✏️"; //📝✏️
 
-            var save = document.createElement("span"); //Create the save button
+            const save = document.createElement("span"); //Create the save button
             save.style.cursor = "pointer";
             save.style.zIndex = "999";
             save.setAttribute("data-is-blocklydev-editor-btn", "true");
@@ -220,7 +223,7 @@ export default async function ({ addon, console }) {
             save.innerText = "💾";
             save.style.lineHeight = "1rem";
 
-            var collapse = document.createElement("span"); //Create the collapse/uncollapse button
+            const collapse = document.createElement("span"); //Create the collapse/uncollapse button
             collapse.style.cursor = "pointer";
             collapse.style.zIndex = "999";
             collapse.setAttribute("data-is-blocklydev-editor-btn", "true");
@@ -228,7 +231,7 @@ export default async function ({ addon, console }) {
             collapse.innerText = "⬆️";
             collapse.style.lineHeight = "1rem";
 
-            var bin = document.createElement("span"); //Create the force delete button
+            const bin = document.createElement("span"); //Create the force delete button
             bin.style.cursor = "pointer";
             bin.style.zIndex = "999";
             bin.setAttribute("data-is-blocklydev-btn", "true");
@@ -236,7 +239,7 @@ export default async function ({ addon, console }) {
             bin.style.lineHeight = "1rem";
 
             //Get the block's hull and calculate bounding box. Used to calculate where to position elements.
-            var path = getSvgPathFromBlock(element);
+            const path = getSvgPathFromBlock(element);
             var bbox = path.getBBox();
 
             //Attributes and styles for the foreignObject
@@ -364,8 +367,6 @@ export default async function ({ addon, console }) {
         }
     }
     var observer = new MutationObserver(mutationHandler);
-
-    var observerConfig = { childList: true, characterData: false, attributes: false, subtree: true };
 
     function mutationHandler(mutationRecords) { //Handler that tries to process all blocks every time the block canvas changes.
         mutationRecords.forEach(function (mutation) {
