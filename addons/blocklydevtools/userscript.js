@@ -338,7 +338,9 @@ export default async function ({ addon, console }) {
                         });
 
                         save.style.display = "initial";
-                        collapse.style.display = "initial";
+                        if (internalBlock.nextConnection || internalBlock.previousConnection) {
+                            collapse.style.display = "initial";
+                        }
                     }
                 }
             }, {
