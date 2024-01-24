@@ -1,16 +1,16 @@
-export default async function ({ addon }) {
+export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
   const redux = addon.tab.redux;
 
-  var mouseX = 0,
-    mouseY = 0;
+  let mouseX = 0;
+  let mouseY = 0;
   document.addEventListener("mouseup", ({ clientX, clientY }) => {
     mouseX = clientX;
     mouseY = clientY;
   });
 
   const originalShareBlocksToTarget = vm.shareBlocksToTarget;
-  const newShareBlocksToTarget = function (blocks, targetId, _) {
+  vm.shareBlocksToTarget = function (blocks, targetId, _) {
     // Based on https://github.com/scratchfoundation/scratch-gui/blob/8be51d2239ae4e741d34f1906372b481f4246dce/src/containers/target-pane.jsx#L164
 
     // Fall back to original function if addon is disabled or target ID mismatches
@@ -41,6 +41,4 @@ export default async function ({ addon }) {
 
     return originalShareBlocksToTarget.apply(this, arguments);
   };
-
-  vm.shareBlocksToTarget = newShareBlocksToTarget;
 }
