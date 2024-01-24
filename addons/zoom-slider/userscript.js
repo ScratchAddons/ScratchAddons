@@ -44,12 +44,8 @@ export default async function ({ addon, msg }) {
     count.addEventListener("change", async () => {
       const newScale = parseFloat(count.value / 100);
       const { maxScale, minScale } = blockly.mainWorkspace.options.zoomOptions;
-      if (newScale > maxScale) {
-        count.value = maxScale * 100;
-      }
-      if (newScale < minScale) {
-        count.value = minScale * 100;
-      }
+      if (newScale > maxScale) count.value = maxScale * 100;
+      if (newScale < minScale) count.value = minScale * 100;
       slider.value = count.value / 100;
       updateWorkspaceZoomLevel();
     });
