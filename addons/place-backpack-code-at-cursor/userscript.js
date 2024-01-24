@@ -18,10 +18,16 @@ export default async function ({ addon }) {
       return originalShareBlocksToTarget.apply(this, arguments);
 
     const BLOCKS_DEFAULT_SCALE = 0.675; // would be better if we could get this from lib/layout-constants.js
+    if (!redux.state?.scratchGui) {
+      return originalShareBlocksToTarget.apply(this, arguments);
+    }
     const { targets } = redux.state.scratchGui.workspaceMetrics;
     const { isRtl } = redux.state.locales;
 
     const workspace = addon.tab.traps.getWorkspace();
+    if (!workspace) {
+      return originalShareBlocksToTarget.apply(this, arguments);
+    }
     const { left, right } = workspace.scrollbar.hScroll.outerSvg_.getBoundingClientRect();
     const { top } = workspace.scrollbar.vScroll.outerSvg_.getBoundingClientRect();
 
