@@ -30,18 +30,17 @@ export default async function ({ addon, msg }) {
     foreignObject.append(wrapperDiv);
     zoom.append(foreignObject);
 
+    function updateWorkspaceZoomLevel() {
+      blockly.mainWorkspace.setScale(parseFloat(slider.value));
+    }
+
     slider.addEventListener("mousedown", (e) => {
       e.stopPropagation();
     });
     slider.addEventListener("input", async () => {
-      blockly.mainWorkspace.setScale(slider.value);
-      if (!countInput) {
-        count.value = percentScale(slider.value);
-      }
+      count.value = percentScale(slider.value);
+      updateWorkspaceZoomLevel();
     });
-    let countInput = false;
-    count.addEventListener("input", async () => (countInput = true));
-    count.addEventListener("blur", async () => (countInput = false));
     count.addEventListener("change", async () => {
       const newScale = parseFloat(count.value / 100);
       const { maxScale, minScale } = blockly.mainWorkspace.options.zoomOptions;
@@ -52,8 +51,7 @@ export default async function ({ addon, msg }) {
         count.value = minScale * 100;
       }
       slider.value = count.value / 100;
-      slider.dispatchEvent(new Event("input"));
-      countInput = false;
+      updateWorkspaceZoomLevel();
     });
 
     setInterval(() => {
@@ -61,7 +59,8 @@ export default async function ({ addon, msg }) {
       slider.max = blockly.mainWorkspace.options.zoomOptions.maxScale;
       if (parseFloat(slider.value) !== blockly.mainWorkspace.scale) {
         slider.value = blockly.mainWorkspace.scale;
-        slider.dispatchEvent(new Event("input"));
+        count.value = percentScale(slider.value);
+        updateWorkspaceZoomLevel();
       }
     }, 200);
 
