@@ -1,15 +1,5 @@
 /* Hide the ✏️ button on blocks that aren't top level */
-g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker):not(g.blocklyBlockCanvas>g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker)) [data-is-blocklydev-btn] {
-    display: none !important;
-}
-
-/* Hide editor buttons on blocks that aren't top level */
-g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker):not(g.blocklyBlockCanvas>g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker)) [data-is-blocklydev-editor-btn] {
-    display: none !important;
-}
-
-/* Hide the XML editor on blocks that aren't top level */
-g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker):not(g.blocklyBlockCanvas>g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker)) [data-isblocklydeveditor] {
+g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker):not(g.blocklyBlockCanvas>g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker)) .sa-blocklyDevToolsElement {
     display: none !important;
 }
 

@@ -87,6 +87,7 @@ export default async function ({ addon, console }) {
 
         //Styling
         editor.classList.add("sa-blocklyDevtoolsEditor");
+        editor.classList.add(".sa-blocklyDevToolsElement");
 
         //Disable spellcheck and autocomplete.
         editor.setAttribute("autocomplete", "false");
@@ -239,6 +240,7 @@ export default async function ({ addon, console }) {
                     var display = document.createElement("div");
                     display.innerText = err.querySelector("div").innerText;
                     display.classList.add("sa-blocklyDevtoolsError");
+                    display.classList.add(".sa-blocklyDevToolsElement");
                     display.addEventListener("pointerdown", (event) => { event.stopPropagation(); }, { capture: true });
                     display.addEventListener("contextmenu", (event) => { event.stopPropagation(); }, { capture: true });
                     devWrapper.appendChild(display);
@@ -279,23 +281,27 @@ export default async function ({ addon, console }) {
 
             const btn = document.createElement("span"); //Create the edit button
             btn.classList.add("sa-blocklyDevtoolsButton");
+            btn.classList.add(".sa-blocklyDevToolsElement");
             btn.setAttribute("data-is-blocklydev-btn", "true");
             btn.innerText = "✏️"; //📝✏️
 
             const save = document.createElement("span"); //Create the save button
             save.classList.add("sa-blocklyDevtoolsButton");
+            save.classList.add(".sa-blocklyDevToolsElement");
             save.setAttribute("data-is-blocklydev-editor-btn", "true");
             save.style.display = "none";
             save.innerText = "💾";
 
             const collapse = document.createElement("span"); //Create the collapse/uncollapse button
             collapse.classList.add("sa-blocklyDevtoolsButton");
+            collapse.classList.add(".sa-blocklyDevToolsElement");
             collapse.setAttribute("data-is-blocklydev-editor-btn", "true");
             collapse.style.display = "none";
             collapse.innerText = "⬆️";
 
             const bin = document.createElement("span"); //Create the force delete button
             bin.classList.add("sa-blocklyDevtoolsButton");
+            bin.classList.add(".sa-blocklyDevToolsElement");
             bin.setAttribute("data-is-blocklydev-btn", "true");
             bin.innerText = "🗑️";
 
