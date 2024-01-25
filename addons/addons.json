@@ -1,6 +1,5 @@
 [
   "editor-searchable-dropdowns",
-  "blocklydevtools",
   "editor-devtools",
   "forum-search",
   "msg-count-badge",
@@ -153,6 +152,7 @@
   "preview-project-description",
   "collapse-footer",
   "reorder-custom-inputs",
+  "blocklydevtools",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
