@@ -1,5 +1,5 @@
 /* Hide the ✏️ button on blocks that aren't top level */
-g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker):not(g.blocklyBlockCanvas>g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker)) .sa-blocklyDevToolsElement {
+g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker):not(g.blocklyBlockCanvas>g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker)) .sa-blocklyDevtoolsElement {
     display: none !important;
 }
 
