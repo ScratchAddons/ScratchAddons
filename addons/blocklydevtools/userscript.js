@@ -86,21 +86,7 @@ export default async function ({ addon, console }) {
         editor.contentEditable = true; //Allow editing of content
 
         //Styling
-        editor.style.padding = "10px";
-        editor.style.userSelect = "text";
-        editor.style.cursor = "auto";
-        editor.style.font = "12pt monospace";
-        editor.style.boxShadow = "0px 0px 10px rgba(0,0,0,0.5)";
-        editor.style.color = "yellowgreen";
-        editor.style.border = "2px solid white";
-        editor.style.zIndex = "998";
-        editor.style.borderRadius = "0.8rem";
-        editor.style.width = "max-content";
-        editor.style.backgroundColor = "rgb(0,0,30)";
-        editor.style.overflowX = "hidden";
-        editor.style.maxHeight = "100vh";
-        editor.style.overflowY = "scroll";
-        editor.style.caretColor = "white";
+        editor.classList.add("sa-blocklyDevtoolsEditor");
 
         //Disable spellcheck and autocomplete.
         editor.setAttribute("autocomplete", "false");
@@ -252,19 +238,12 @@ export default async function ({ addon, console }) {
                 tempDom.querySelectorAll("parsererror").forEach(err => {
                     var display = document.createElement("div");
                     display.innerText = err.querySelector("div").innerText;
-                    display.style.color = "red";
-                    display.style.font = "12pt monospace";
-                    display.style.backgroundColor = "rgb(0,0,20)";
-                    display.style.border = "2px solid white";
-                    display.style.borderRadius = "0.4rem";
-                    display.style.width = "max-content";
-                    display.style.padding = "8px";
-                    display.style.cursor = "auto";
+                    display.classList.add("sa-blocklyDevtoolsError");
                     display.addEventListener("pointerdown", (event) => { event.stopPropagation(); }, { capture: true });
                     display.addEventListener("contextmenu", (event) => { event.stopPropagation(); }, { capture: true });
                     devWrapper.appendChild(display);
                     setTimeout(() => {
-                        display.classList.add("blocklyDevtoolsFadeOut");
+                        display.classList.add("sa-blocklyDevtoolsFadeOut");
                         setTimeout(() => {
                             display.remove();
                         }, 1000);
@@ -299,34 +278,26 @@ export default async function ({ addon, console }) {
             btnWrapper.style.width = "max-content";
 
             const btn = document.createElement("span"); //Create the edit button
-            btn.style.cursor = "pointer";
-            btn.style.zIndex = "999";
-            btn.style.lineHeight = "1rem";
+            btn.classList.add("sa-blocklyDevtoolsButton");
             btn.setAttribute("data-is-blocklydev-btn", "true");
             btn.innerText = "✏️"; //📝✏️
 
             const save = document.createElement("span"); //Create the save button
-            save.style.cursor = "pointer";
-            save.style.zIndex = "999";
+            save.classList.add("sa-blocklyDevtoolsButton");
             save.setAttribute("data-is-blocklydev-editor-btn", "true");
             save.style.display = "none";
             save.innerText = "💾";
-            save.style.lineHeight = "1rem";
 
             const collapse = document.createElement("span"); //Create the collapse/uncollapse button
-            collapse.style.cursor = "pointer";
-            collapse.style.zIndex = "999";
+            collapse.classList.add("sa-blocklyDevtoolsButton");
             collapse.setAttribute("data-is-blocklydev-editor-btn", "true");
             collapse.style.display = "none";
             collapse.innerText = "⬆️";
-            collapse.style.lineHeight = "1rem";
 
             const bin = document.createElement("span"); //Create the force delete button
-            bin.style.cursor = "pointer";
-            bin.style.zIndex = "999";
+            bin.classList.add("sa-blocklyDevtoolsButton");
             bin.setAttribute("data-is-blocklydev-btn", "true");
             bin.innerText = "🗑️";
-            bin.style.lineHeight = "1rem";
 
             //Get the block's hull and calculate bounding box. Used to calculate where to position elements.
             const path = getSvgPathFromBlock(element);
