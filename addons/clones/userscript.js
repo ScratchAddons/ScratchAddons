@@ -13,7 +13,7 @@ export default async function ({ addon, global, console, msg }) {
         document.body.classList.remove("sa-clones-small");
       }
     },
-    { capture: true },
+    { capture: true }
   );
 
   let countContainerContainer = document.createElement("div");

@@ -9,7 +9,7 @@ export default async function ({ addon, global, console }) {
     },
     {
       capture: true,
-    },
+    }
   );
 
   // https://github.com/LLK/scratch-blocks/blob/912b8cc728bea8fd91af85078c64fcdbfe21c87a/core/gesture.js#L454

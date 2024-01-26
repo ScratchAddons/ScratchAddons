@@ -7,7 +7,7 @@ export default async function ({ addon, global, console, msg }) {
     (state) => state.studio?.infoStatus === "FETCHED" && state.studio?.rolesStatus === "FETCHED",
     {
       actions: ["SET_INFO", "SET_ROLES"],
-    },
+    }
   );
   const members = [...redux.state.managers.items, ...redux.state.curators.items].map((member) => member.username);
 
@@ -62,7 +62,7 @@ export default async function ({ addon, global, console, msg }) {
     const res = await fetch(
       `https://api.scratch.mit.edu/users/${await addon.auth.fetchUsername()}/${type}?offset=${
         data[type].offset
-      }&limit=${itemPageLimit}`,
+      }&limit=${itemPageLimit}`
     );
     if (!res.ok) {
       // Cooldown in case something went wrong
@@ -151,7 +151,7 @@ export default async function ({ addon, global, console, msg }) {
         loadData(currentType);
       }
     },
-    { passive: true },
+    { passive: true }
   );
 
   addon.self.addEventListener("disabled", () => (modal.style.display = "none"));

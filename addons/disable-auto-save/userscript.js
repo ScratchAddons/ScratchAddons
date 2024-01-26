@@ -36,7 +36,7 @@ export default async ({ addon, console, msg }) => {
           e.stopPropagation();
         }
       },
-      { capture: true },
+      { capture: true }
     );
   }
 };

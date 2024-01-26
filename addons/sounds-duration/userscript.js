@@ -7,7 +7,7 @@ export default async function ({ addon, msg, global, console }) {
     const el = container.querySelector("[class^=sound-editor_row]").appendChild(
       Object.assign(document.createElement("div"), {
         className: "sa-sound-duration",
-      }),
+      })
     );
     const state = container[addon.tab.traps.getInternalKey(container)].return.return.return.stateNode;
 

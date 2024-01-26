@@ -70,6 +70,6 @@ export default async function ({ addon, console, msg }) {
           });
       }
     },
-    { capture: true },
+    { capture: true }
   );
 }

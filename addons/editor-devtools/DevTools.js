@@ -84,7 +84,7 @@ export default class DevTools {
                 keyCode: 86,
                 ctrlKey: true,
                 griff: true,
-              }),
+              })
             );
 
             setTimeout(() => {
@@ -94,7 +94,7 @@ export default class DevTools {
         });
         return items;
       },
-      { workspace: true },
+      { workspace: true }
     );
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
@@ -129,7 +129,7 @@ export default class DevTools {
             callback: () => {
               this.eventCopyClick(block, 2);
             },
-          },
+          }
         );
         // const BROADCAST_BLOCKS = ["event_whenbroadcastreceived", "event_broadcast", "event_broadcastandwait"];
         // if (BROADCAST_BLOCKS.includes(block.type)) {
@@ -150,7 +150,7 @@ export default class DevTools {
         // }
         return items;
       },
-      { blocks: true },
+      { blocks: true }
     );
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
@@ -172,7 +172,7 @@ export default class DevTools {
         }
         return items;
       },
-      { blocks: true, flyout: true },
+      { blocks: true, flyout: true }
     );
   }
 
@@ -859,7 +859,7 @@ export default class DevTools {
                     <span id="s3devMulti" class="s3devMulti">
                         <span id="s3devMultiLeft" class="s3devNav">◀</span><span id="s3devMultiCount"></span><span id="s3devMultiRight" class="s3devNav">▶</span>
                     </span>
-                `,
+                `
       );
       document.getElementById("s3devMultiLeft").addEventListener("mousedown", (...e) => this.multi.navLeft(...e));
       document.getElementById("s3devMultiRight").addEventListener("mousedown", (...e) => this.multi.navRight(...e));
@@ -1643,7 +1643,7 @@ export default class DevTools {
                     </span>
                 </label>
             </div>
-        `,
+        `
     );
 
     floatBar = document.getElementById("s3devFloatingBar");
@@ -1805,7 +1805,7 @@ export default class DevTools {
 
     // Griffpatch - on second thoughts - lets sort blocks by length so that shortest ones appear at the top.
     options.sort((a, b) =>
-      a.desc.length < b.desc.length ? -1 : a.desc.length > b.desc.length ? 1 : a.desc.localeCompare(b.desc),
+      a.desc.length < b.desc.length ? -1 : a.desc.length > b.desc.length ? 1 : a.desc.localeCompare(b.desc)
     );
 
     // Previous sort was just alphabetical
@@ -2194,10 +2194,10 @@ export default class DevTools {
                 <div id="s3devToolBar">
                     <div class='title s3devLabel' id=s3devFindLabel>
                         <label for="s3devInp">${this.m("find")} ${
-                          this.addon.self._isDevtoolsExtension
-                            ? ""
-                            : '<a href="#" class="s3devAction" id="s3devHelp" style="/*s-a*/ margin-left: 0; font-size: 10px; /*s-a*/">(?)</a>'
-                        } </label>
+          this.addon.self._isDevtoolsExtension
+            ? ""
+            : '<a href="#" class="s3devAction" id="s3devHelp" style="/*s-a*/ margin-left: 0; font-size: 10px; /*s-a*/">(?)</a>'
+        } </label>
                         <span id=s3devFind class="s3devWrap">
                             <label id='s3devDDOut' class="s3devDDOut">
                                 <input id='s3devInp' class="${this.addon.tab.scratchClass("input_input-form", {
@@ -2211,11 +2211,11 @@ export default class DevTools {
                           this.addon.self._isDevtoolsExtension ? "" : 'style="display: none;"'
                         }><a href="#" class="s3devAction" id="s3devHelp"><b>${this.m("help")}</b></a>
                         <a href="https://www.youtube.com/griffpatch" class="s3devAction" target="_blank" id="s3devHelp" rel="noreferrer noopener">${this.m(
-                          "tutorials",
+                          "tutorials"
                         )}</a></div>
                     </div>
                 </div>
-            `,
+            `
       );
 
       this.find = document.getElementById("s3devFind");
@@ -2234,7 +2234,7 @@ export default class DevTools {
         document.getElementById("s3devHelp"),
         "click",
         (...e) => this.eventClickHelp(...e),
-        undefined,
+        undefined
       );
 
       this.domHelpers.bindOnce(document, "keydown", (...e) => this.eventKeyDown(...e), true);

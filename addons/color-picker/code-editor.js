@@ -66,7 +66,7 @@ export default async ({ addon, console, msg }) => {
       value: defaultColor || "",
     });
     saColorPickerColor.addEventListener("input", () =>
-      rateLimiter.limit(() => setColor((saColorPickerText.value = saColorPickerColor.value), element)),
+      rateLimiter.limit(() => setColor((saColorPickerText.value = saColorPickerColor.value), element))
     );
     saColorPickerText.addEventListener("change", () => {
       const { value } = saColorPickerText;
