@@ -61,7 +61,7 @@ function createBackpackButton(addon) {
 
 // Open backpack (we need to close it to refresh)
 function toggleBackpack() {
-  if (document.querySelector("[class^=backpack_backpack-list-inner_]")) {
+  if (document.querySelector("[class^=backpack_backpack-list_]")) {
     // Backpack is open and will be closed
     document.body.classList.remove("sa-backpack-open");
   } else {
