@@ -1,6 +1,6 @@
 {
   "name": "Larger \"Save Now\" button",
-  "description": "Extends the size of the \"Save Now\" button in the editor, making it easier to click. By default, this addon introduces no visual changes, only usability improvements.",
+  "description": "Extends the size of the \"Save Now\" button in the editor, making it easier to click.",
   "tags": ["editor", "editorMenuBar", "recommended"],
   "versionAdded": "1.35.0",
   "enabledByDefault": true,
@@ -12,26 +12,10 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "updateUserstylesOnSettingsChange": true,
-  "settings": [
-    {
-      "name": "Highlight on hover",
-      "id": "highlight",
-      "type": "boolean",
-      "default": false
-    }
-  ],
   "userstyles": [
     {
       "url": "userstyle.css",
       "matches": ["projects"]
-    },
-    {
-      "url": "highlight.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "highlight": true }
-      }
     }
   ]
 }
