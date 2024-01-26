@@ -23,7 +23,7 @@ export default ({ addon }) => {
 
   let lastSaved = 0;
   box.addEventListener("input", (e) => {
-    if (!addon.self.disabled && Date.now() - lastSaved >= 250) {
+    if (!addon.self.disabled && Date.now() - lastSaved >= 5000) {
       const update = {};
       update[topicId] = {
         cache: box.value,
@@ -47,6 +47,7 @@ function updateCache(assign) {
   const cache = Object.assign({ ...stored }, assign);
   if (cache === stored) return; // if no diff, return
   localStorage.setItem("sa-forum-post-save", JSON.stringify(cache));
+  lastSaved = Date.now();
 }
 function _getAllCache() {
   let data;
