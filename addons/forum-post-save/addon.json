@@ -1,6 +1,6 @@
 {
   "name": "Save draft posts",
-  "description": "Saves posts that you haven't sent yet at an interval.",
+  "description": "Saves forum posts that you haven't submitted.",
   "credits": [
     {
       "name": "Weredime (9gr)",
