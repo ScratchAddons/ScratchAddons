@@ -1,1 +1,1 @@
-{"editor-stepping/@name":"Выделять выполняемые в данный момент блоки"}
+{"editor-stepping/@name":"Выделять выполняемые в данный момент блоки","editor-stepping/@description":"Добавляет цветную подсветку к блокам, которые в данный момент выполняются в проекте.","editor-stepping/@settings-name-highlight-color":"Цвет подсветки"}

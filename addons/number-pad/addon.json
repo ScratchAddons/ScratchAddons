@@ -1,0 +1,25 @@
+{
+  "name": "Always show number pad",
+  "description": "Show Scratch's virtual number pad when editing number fields in blocks on all devices, instead of only touchscreen devices.",
+  "credits": [
+    {
+      "name": "GarboMuffin"
+    }
+  ],
+  "info": [
+    {
+      "text": "A number pad will show when editing number inputs from blocks such as \"move () steps\".",
+      "id": "explanation"
+    }
+  ],
+  "tags": ["editor", "codeEditor"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.30.0"
+}

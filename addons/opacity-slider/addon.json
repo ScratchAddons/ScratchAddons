@@ -1,0 +1,33 @@
+{
+  "name": "Opacity slider",
+  "description": "Adds an opacity slider to the costume editor color picker.",
+  "tags": ["editor", "costumeEditor", "beta", "featured"],
+  "info": [
+    {
+      "type": "info",
+      "text": "The opacity slider is disabled when no object is selected, or when in bitmap mode.",
+      "id": "bitmapModeincompleteInfo"
+    }
+  ],
+  "credits": [
+    {
+      "name": "itta611",
+      "link": "https://github.com/itta611/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
+  "libraries": ["tinycolor2"],
+  "enabledByDefault": false,
+  "versionAdded": "1.29.0"
+}

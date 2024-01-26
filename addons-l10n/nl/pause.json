@@ -1,1 +1,1 @@
-{"pause/pause":"Pauzeren","pause/@name":"Pauzeerknop","pause/@description":"Voegt een pauzeerknop toe naast de groene vlag."}
+{"pause/pause":"Pauzeren","pause/play":"Hervatten","pause/@name":"Pauzeerknop","pause/@description":"Voegt een knop toe naast de groene vlag om het project te pauzeren.","pause/@info-keybind":"Het project kan ook worden gepauzeerd met Alt+X (Option+X op macOS).","pause/@update":"Je kunt nu projecten pauzeren met het toetsenbord."}

@@ -7,7 +7,7 @@ export default async ({ addon, console, msg }) => {
   });
 
   // If the addon is enable late, don't use the `waitForElement` below
-  // becuase the `waitForElement` below only runs on certain redux events
+  // because the `waitForElement` below only runs on certain redux events
   if (addon.self.enabledLate) {
     addListener(document.querySelector('[class*="community-button_community-button_"]'));
   }

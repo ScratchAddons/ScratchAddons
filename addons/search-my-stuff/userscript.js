@@ -1,7 +1,7 @@
 import Fuse from "../../libraries/thirdparty/cs/fuse.esm.min.js";
 import fuseOptions from "./fuse-options.js";
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   // Inject our search bar
   let search,
     searchBar,
@@ -104,6 +104,7 @@ export default async function ({ addon, global, console, msg }) {
    * updated.
    */
   async function inject() {
+    if (addon.self.disabled) return;
     // Determine which tab we're on and switch the placeholder text
     if (window.location.href.includes("galleries")) {
       searchBar.setAttribute("placeholder", msg("studio-placeholder"));
@@ -128,7 +129,9 @@ export default async function ({ addon, global, console, msg }) {
       autoLoadMore();
     });
     // Auto-focus the search bar
-    searchBar.focus();
+    searchBar.focus({
+      preventScroll: true,
+    });
   }
 
   /**

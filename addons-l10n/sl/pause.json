@@ -1,1 +1,1 @@
-{"pause/pause":"Premor","pause/@name":"Gumb za premor","pause/@description":"Doda gumb za premor poleg zelene zastavice."}
+{"pause/pause":"Premor","pause/play":"Nadaljuj","pause/@name":"Gumb za premor","pause/@description":"Zraven zelene zastavice doda gumb, ki začasno ustavi projekt.","pause/@info-keybind":"Projekt lahko prekinete tudi z Alt+X (Option+X, če uporabljate macOS).","pause/@update":"Projekte lahko zdaj prekinete z bližnjico na tipkovnici."}

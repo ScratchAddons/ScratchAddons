@@ -1,4 +1,4 @@
-// https://github.com/LLK/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/thread.js#L198
+// https://github.com/scratchfoundation/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/thread.js#L198
 const STATUS_RUNNING = 0;
 const STATUS_PROMISE_WAIT = 1;
 const STATUS_YIELD = 2;
@@ -14,6 +14,8 @@ let pauseNewThreads = false;
 let steppingThread = null;
 
 const eventTarget = new EventTarget();
+
+let audioContextStateChange = Promise.resolve();
 
 export const isPaused = () => paused;
 
@@ -84,13 +86,17 @@ const stepUnsteppedThreads = (lastSteppedThread) => {
 };
 
 export const setPaused = (_paused) => {
-  if (paused !== _paused) {
+  const didChange = paused !== _paused;
+  if (didChange) {
     paused = _paused;
     eventTarget.dispatchEvent(new CustomEvent("change"));
   }
 
-  if (_paused) {
-    vm.runtime.audioEngine.audioContext.suspend();
+  // Don't check didChange as new threads could've started that we need to pause.
+  if (paused) {
+    audioContextStateChange = audioContextStateChange.then(() => {
+      return vm.runtime.audioEngine.audioContext.suspend();
+    });
     if (!vm.runtime.ioDevices.clock._paused) {
       vm.runtime.ioDevices.clock.pause();
     }
@@ -101,8 +107,13 @@ export const setPaused = (_paused) => {
       setSteppingThread(activeThread);
       eventTarget.dispatchEvent(new CustomEvent("step"));
     }
-  } else {
-    vm.runtime.audioEngine.audioContext.resume();
+  }
+
+  // Only run unpausing logic when pause state changed to avoid unnecessary work
+  if (!paused && didChange) {
+    audioContextStateChange = audioContextStateChange.then(() => {
+      return vm.runtime.audioEngine.audioContext.resume();
+    });
     vm.runtime.ioDevices.clock.resume();
     for (const thread of vm.runtime.threads) {
       const pauseState = pausedThreadState.get(thread);
@@ -131,7 +142,7 @@ export const onSingleStep = (listener) => {
 export const getRunningThread = () => steppingThread;
 
 // A modified version of this function
-// https://github.com/LLK/scratch-vm/blob/0e86a78a00db41af114df64255e2cd7dd881329f/src/engine/sequencer.js#L179
+// https://github.com/scratchfoundation/scratch-vm/blob/0e86a78a00db41af114df64255e2cd7dd881329f/src/engine/sequencer.js#L179
 // Returns if we should continue executing this thread.
 const singleStepThread = (thread) => {
   if (thread.status === STATUS_DONE) {
@@ -156,7 +167,7 @@ const singleStepThread = (thread) => {
     have access to that method, so we need to force the original stepThread to run
     execute for us then exit before it tries to run more blocks.
     So, we make `thread.blockGlowInFrame = ...` throw an exception, so this line:
-    https://github.com/LLK/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/sequencer.js#L214
+    https://github.com/scratchfoundation/scratch-vm/blob/bb352913b57991713a5ccf0b611fda91056e14ec/src/engine/sequencer.js#L214
     will end the function early. We then have to set it back to normal afterward.
 
     Why are we here just to suffer?

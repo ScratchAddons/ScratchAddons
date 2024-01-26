@@ -22,6 +22,28 @@
       "matches": ["editingScreens"]
     }
   ],
+  "settings": [
+    {
+      "name": "Refresh rate",
+      "id": "rate",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "slow",
+          "name": "Slow"
+        },
+        {
+          "id": "default",
+          "name": "Default"
+        },
+        {
+          "id": "fast",
+          "name": "Fast"
+        }
+      ],
+      "default": "default"
+    }
+  ],
   "tags": ["community", "forums"],
   "versionAdded": "1.25.0"
 }

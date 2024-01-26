@@ -1,12 +1,5 @@
 function injectRedux() {
   window.__scratchAddonsRedux = {};
-  if (typeof window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ !== "undefined") {
-    return console.warn(
-      "Redux feature is disabled due to conflict. \
-Some addons will not work. Uninstall other browser extensions to \
-fix this warning."
-    );
-  }
 
   // ReDucks: Redux ducktyped
   // Not actual Redux, but should be compatible
@@ -39,7 +32,8 @@ fix this warning."
     }
   }
 
-  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ = function (...args) {
+  let newerCompose = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+  function compose(...args) {
     const scratchAddonsRedux = window.__scratchAddonsRedux;
     const reduxTarget = (scratchAddonsRedux.target = new EventTarget());
     scratchAddonsRedux.state = {};
@@ -62,8 +56,15 @@ fix this warning."
       };
     }
     args.splice(1, 0, ReDucks.applyMiddleware(middleware));
-    return ReDucks.compose.apply(this, args);
-  };
+    return newerCompose ? newerCompose.apply(this, args) : ReDucks.compose.apply(this, args);
+  }
+
+  Object.defineProperty(window, "__REDUX_DEVTOOLS_EXTENSION_COMPOSE__", {
+    get: () => compose,
+    set: (v) => {
+      newerCompose = v;
+    },
+  });
 }
 
 if (!(document.documentElement instanceof SVGElement)) {

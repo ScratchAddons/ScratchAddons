@@ -25,7 +25,7 @@ export default async function ({ addon, console, msg }) {
     });
     button.append(img);
     const input = Object.assign(document.createElement("input"), {
-      accept: ".svg, .png, .bmp, .jpg, .jpeg",
+      accept: ".svg, .png, .bmp, .jpg, .jpeg, .sprite2, .sprite3",
       className: `${addon.tab.scratchClass(
         "action-menu_file-input" /* TODO: when adding dynamicDisable, ensure compat with drag-drop */
       )} sa-better-img-uploads-input`,
@@ -49,10 +49,19 @@ export default async function ({ addon, console, msg }) {
 
   while (true) {
     //Catch all upload menus as they are created
-    let menu = await addon.tab.waitForElement(
-      '[class*="sprite-selector_sprite-selector_"] [class*="action-menu_more-buttons_"], [data-tabs] > :nth-child(3) [class*="action-menu_more-buttons_"]',
-      { markAsSeen: true }
-    );
+    const spriteSelector = '[class*="sprite-selector_sprite-selector_"] [class*="action-menu_more-buttons_"]';
+    const stageSelector = '[class*="stage-selector_stage-selector_"] [class*="action-menu_more-buttons_"]';
+    const costumeSelector = '[data-tabs] > :nth-child(3) [class*="action-menu_more-buttons_"]';
+    let menu = await addon.tab.waitForElement(`${spriteSelector}, ${stageSelector}, ${costumeSelector}`, {
+      markAsSeen: true,
+      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+      reduxEvents: [
+        "scratch-gui/mode/SET_PLAYER",
+        "fontsLoaded/SET_FONTS_LOADED",
+        "scratch-gui/locales/SELECT_LOCALE",
+        "scratch-gui/navigation/ACTIVATE_TAB",
+      ],
+    });
     let button = menu.parentElement.previousElementSibling.previousElementSibling; //The base button that the popup menu is from
 
     let id = button.getAttribute("aria-label").replace(/\s+/g, "_");
@@ -69,6 +78,10 @@ export default async function ({ addon, console, msg }) {
     menu.prepend(menuItem);
 
     hdButton.addEventListener("click", (e) => {
+      // When clicking on the button in the "add backdrop menu", don't switch to the stage before
+      // a file was selected.
+      e.stopPropagation();
+
       input.files = new FileList(); //Empty the input to make sure the change event fires even if the same file was uploaded.
       input.click();
     });
@@ -97,8 +110,8 @@ export default async function ({ addon, console, msg }) {
     let processed = new Array();
 
     for (let file of files) {
-      if (file.type.includes("svg")) {
-        //The file is already a svg, we should not change it...
+      if (!/\.(png|jpe?g|bmp)$/i.test(file.name)) {
+        // The file is not processable, so we should ignore it, and let scratch deal with it..
         processed.push(file);
         continue;
       }
@@ -137,7 +150,7 @@ export default async function ({ addon, console, msg }) {
       } //Otherwise just leave the image the same size
 
       function getResizedWidthHeight(oldWidth, oldHeight) {
-        const STAGE_WIDTH = 479;
+        const STAGE_WIDTH = 480;
         const STAGE_HEIGHT = 360;
         const STAGE_RATIO = STAGE_WIDTH / STAGE_HEIGHT;
 

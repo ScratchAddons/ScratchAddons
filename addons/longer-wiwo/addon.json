@@ -4,7 +4,7 @@
   "credits": [
     {
       "name": "RedGuy7",
-      "link": "https://paul-s-reid.com/web-dev/other.php"
+      "link": "https://github.com/RedGuy12"
     }
   ],
   "dynamicEnable": true,
@@ -16,6 +16,6 @@
     }
   ],
   "versionAdded": "1.11.0",
-  "tags": ["community", "profiles", "featured"],
+  "tags": ["community", "profiles"],
   "enabledByDefault": false
 }

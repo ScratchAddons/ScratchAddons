@@ -1,0 +1,150 @@
+@import url("../editor-theme3/compatibility.css");
+
+.sa-find-bar {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  width: 100%;
+  height: 100%;
+  margin-left: 1em;
+}
+.sa-find-bar[hidden] {
+  /* !important to override displayNoneWhileDisabled */
+  display: none !important;
+}
+
+.sa-find-wrapper {
+  overflow: visible;
+  position: relative;
+  height: 2rem;
+  width: 100%;
+  max-width: 16em;
+}
+
+.sa-find-dropdown-out {
+  display: block;
+  top: -6px;
+  z-index: 100;
+  width: 100%;
+  max-width: 16em;
+  position: relative;
+  padding: 4px;
+  border: none;
+  border-radius: 4px;
+  margin-top: 6px;
+}
+
+.sa-find-dropdown-out.visible {
+  position: absolute;
+  width: 16em;
+  box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
+  background-color: white;
+}
+
+/* We need to modify Scratch styles so that the place where the find bar is injected */
+/* has actually correct size information, which is used to make the find bar not cover up controls */
+[class*="gui_tab-list_"] {
+  width: 100%;
+}
+[class*="gui_tab_"] {
+  flex-grow: 0;
+}
+
+.sa-find-input {
+  width: 100%;
+  box-sizing: border-box !important;
+  /* !important required for extension, because CSS injection method (and hence order) differs from addon */
+  height: 1.5rem;
+
+  /* Change Scratch default styles */
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  padding-left: 0.4em;
+}
+
+.sa-find-input:focus {
+  /* Change Scratch default styles */
+  box-shadow: none;
+}
+
+.sa-find-dropdown {
+  display: none;
+  position: relative;
+  padding: 0.2em 0;
+  font-size: 0.75rem;
+  line-height: 1;
+  overflow-y: auto;
+  min-height: 128px;
+  max-height: 65vh;
+  user-select: none;
+  max-width: 100%;
+  margin-top: 6px;
+  border: none;
+}
+
+.sa-find-dropdown-out.visible > .sa-find-dropdown {
+  display: block;
+}
+
+.sa-find-dropdown > li {
+  display: block;
+  padding: 0.5em 0.3em;
+  white-space: nowrap;
+  margin: 0;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.sa-find-dropdown > li > b {
+  background-color: #aaffaa;
+  color: black;
+}
+
+/* Drop down items */
+.sa-find-dropdown > li:hover,
+.sa-find-dropdown > li.sel {
+  color: var(--sa-block-text-on-bright-background);
+  cursor: pointer;
+}
+
+.sa-find-dropdown > li::before {
+  content: "\25CF "; /* ● */
+}
+
+.sa-find-flag {
+  color: #4cbf56;
+}
+/* .sa-find-dropdown added for specificity */
+.sa-find-dropdown > .sa-find-flag:hover,
+.sa-find-dropdown > .sa-find-flag.sel {
+  background-color: #4cbf56;
+  color: white;
+}
+
+.sa-find-dropdown .sa-block-color {
+  color: var(--sa-block-colored-text);
+}
+.sa-find-dropdown .sa-block-color:hover,
+.sa-find-dropdown .sa-block-color.sel {
+  background-color: var(--sa-block-bright-background);
+}
+
+.sa-find-carousel {
+  font-weight: normal;
+  position: absolute;
+  right: 0;
+  white-space: nowrap;
+  background-color: inherit;
+  z-index: 1;
+  padding: 0;
+}
+
+.sa-find-carousel-control {
+  padding: 0 6px;
+}
+
+.sa-find-carousel-control:hover {
+  color: #ffff80;
+}

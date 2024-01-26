@@ -233,7 +233,7 @@ function appendSearch(box, query, page, term, msg) {
     });
 }
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   if (!window.scratchAddons._scratchblocks3Enabled) {
     window.scratchblocks = (await import(addon.self.lib + "/thirdparty/cs/scratchblocks.min.es.js")).default;
   }
@@ -260,7 +260,7 @@ export default async function ({ addon, global, console, msg }) {
         break;
       }
       case 4: {
-        let category = document.getElementsByClassName("box-head")[1].getElementsByTagName("span")[0].innerHTML;
+        let category = document.getElementsByClassName("box-head")[1].getElementsByTagName("span")[0].textContent;
         locationQuery = ` +category:"${category}"`;
         searchPlaceholder = msg("search-cat", { cat: category });
         break;
