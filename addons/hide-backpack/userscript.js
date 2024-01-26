@@ -34,11 +34,16 @@ export default async function ({ addon }) {
         createBackpackButton(addon);
       }
     } else {
-      if (document.querySelector("[class^=backpack_backpack-list-inner_]")) originalBackpack.click();
+      if (isBackpackOpen()) originalBackpack.click();
       moveResizeButtons(0);
     }
+    document.body.classList.toggle("sa-backpack-open", isBackpackOpen());
     window.dispatchEvent(new Event("resize"));
   }
+}
+
+function isBackpackOpen() {
+  return !!document.querySelector("[class^=backpack_backpack-list_]");
 }
 
 // Create default backpack button
@@ -61,7 +66,7 @@ function createBackpackButton(addon) {
 
 // Open backpack (we need to close it to refresh)
 function toggleBackpack() {
-  if (document.querySelector("[class^=backpack_backpack-list_]")) {
+  if (isBackpackOpen()) {
     // Backpack is open and will be closed
     document.body.classList.remove("sa-backpack-open");
   } else {
