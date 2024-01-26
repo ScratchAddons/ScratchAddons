@@ -1,13 +1,6 @@
-[class*="save-status_save-now"] span {
-  /*width: 81; 57 width for button itself*/
-  margin-left: 0px;
-  margin-right: 0px;
-  padding-left: 12px;
-  padding-right: 12px;
-  padding-top: calc((48px - 1em) / 2 - 2px);
-  padding-bottom: calc((48px - 1em) / 2 - 2px);
-}
-
 [class*="save-status_save-now"] {
-  margin: -12px;
+  height: 100%;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
 }
