@@ -250,7 +250,7 @@ const getThreadIndex = (thread) => {
       otherThread.target === thread.target &&
       otherThread.topBlock === thread.topBlock &&
       otherThread.stackClick === thread.stackClick &&
-      otherThread.updateMonitor === thread.updateMonitor
+      otherThread.updateMonitor === thread.updateMonitor,
   );
 };
 
@@ -307,7 +307,7 @@ export const singleStep = () => {
           soundPlayer._createSource();
           soundPlayer.outputNode.start(
             audioContext.currentTime,
-            audioContext.currentTime - soundPlayer.startingUntil + vm.runtime.currentStepTime / 1000
+            audioContext.currentTime - soundPlayer.startingUntil + vm.runtime.currentStepTime / 1000,
           );
           soundPlayer.startingUntil -= vm.runtime.currentStepTime / 1000;
         }

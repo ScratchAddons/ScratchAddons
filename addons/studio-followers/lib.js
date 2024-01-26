@@ -108,7 +108,7 @@ export function createUser(follower, addon, msg, members) {
         },
         method: "PUT",
         credentials: "include",
-      }
+      },
     );
 
     if (res.status !== 200) {
