@@ -2,7 +2,7 @@
   "name": "Larger \"Save Now\" button",
   "description": "Extends the size of the \"Save Now\" button in the editor, making it easier to click.",
   "tags": ["editor", "editorMenuBar", "recommended"],
-  "versionAdded": "1.35.0",
+  "versionAdded": "1.36.0",
   "enabledByDefault": true,
   "credits": [
     {
