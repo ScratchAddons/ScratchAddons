@@ -1,10 +1,33 @@
-.sa-search-profile-invalid {
+.tabs button .tab-icon.sa-search-profile-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+}
+
+.sub-nav button.sa-search-profile-btn {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.sa-search-profile-btn span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+.tabs button:disabled {
   opacity: 0.5;
   cursor: default;
 }
 
-.sa-search-profile-invalid li:hover,
-.sa-search-profile-invalid li:active {
+.tabs button:disabled:hover,
+.tabs button:disabled:active {
   background-color: transparent;
   border: none;
+}
+
+.tabs button:not(.active) .tab-icon.sa-search-profile-profilepic {
+  /* dark-www compatibility */
+  filter: none;
 }

@@ -22,12 +22,27 @@ label,
 /* Navigation bar background */
 #topnav .innerwrap,
 #topnav ul.account-nav .logged-in-user .dropdown-menu,
-#topnav li.logout.divider input,
 #topnav ul.account-nav .sign-in .popover {
   background-color: var(--darkWww-navbar-scratchr2);
 }
-#topnav ul.account-nav .sign-in .popover .arrow:after {
+#topnav li.logout.divider input,
+#topnav li.logout.divider input:hover {
+  background-color: transparent;
+}
+#topnav ul.site-nav li,
+#topnav ul.site-nav li.last,
+#topnav ul.account-nav > li,
+#topnav ul.account-nav > li.join-scratch,
+#topnav ul.account-nav.logged-in > li,
+#topnav ul.account-nav ul.user-nav li.logout.divider,
+#topnav ul.account-nav .sign-in .popover {
+  border-color: transparent;
+}
+#topnav ul.account-nav .sign-in .popover .arrow {
   border-bottom-color: var(--darkWww-navbar-scratchr2);
+}
+#topnav ul.account-nav .sign-in .popover .arrow::after {
+  border-bottom-color: transparent;
 }
 #topnav ul.site-nav li a,
 #topnav ul.account-nav > li > span,
@@ -59,23 +74,10 @@ label,
   background: url("https://cdn.scratch.mit.edu/scratchr2/static/images/nav-notifications.png") no-repeat center center;
   filter: var(--darkWww-navbar-scratchr2ShadowFilter);
 }
-#topnav ul.site-nav li,
-#topnav ul.site-nav li.last,
-#topnav ul.account-nav > li,
-#topnav ul.account-nav > li.join-scratch,
-#topnav ul.account-nav.logged-in > li,
-#topnav ul.account-nav ul.user-nav li.logout.divider,
-#topnav ul.account-nav .sign-in .popover {
-  border-color: var(--darkWww-navbar-scratchr2Border);
-}
-#topnav ul.account-nav .sign-in .popover .arrow {
-  border-bottom-color: var(--darkWww-navbar-scratchr2Border);
-}
 #topnav ul.site-nav li:hover,
 #topnav ul.account-nav > li.sign-in:hover,
 #topnav ul.account-nav > li.sign-in.open,
-#topnav ul.account-nav.logged-in li:hover,
-#topnav li.logout.divider input:hover {
+#topnav ul.account-nav.logged-in li:hover {
   background-color: var(--darkWww-navbar-scratchr2ItemHover);
 }
 #topnav ul.account-nav .logged-in-user.dropdown.open {
@@ -148,7 +150,8 @@ select {
 .modal h2,
 .modal h3,
 .modal h4,
-.profile-box-footer-module h4 {
+.profile-box-footer-module h4,
+.stats li {
   color: var(--darkWww-box-scratchr2HeaderText);
 }
 .box-content label,
@@ -189,7 +192,7 @@ span.small-text,
 #comments .comment .delete,
 .box .box-content .pagination .disabled,
 .registration a.why-we-ask {
-  color: var(--darkWww-box-scratchr2TransparentText);
+  color: var(--darkWww-box-scratchr2GrayText);
 }
 .dropdown span.dropdown-toggle.black span.caret {
   border-top-color: var(--darkWww-box-scratchr2Caret);
@@ -215,7 +218,8 @@ input::placeholder {
 .box-content .icon-xs.black,
 .box-content .icon-sm.black,
 .button.grey .icon-xs.black,
-.button.grey .icon-sm.black {
+.button.grey .icon-sm.black,
+.sa-footer-arrow {
   filter: var(--darkWww-box-eyeFilter);
 }
 .box,
@@ -302,7 +306,7 @@ button:hover,
 .activity-stream .time,
 #profile-data .footer #report-this,
 .profile-box-footer-module textarea::placeholder {
-  color: var(--darkWww-gray-scratchr2TransparentText);
+  color: var(--darkWww-gray-scratchr2GrayText);
 }
 #comments .highlighted .info .name a {
   color: var(--darkWww-gray-scratchr2LabelText);
@@ -384,12 +388,9 @@ ul.pagination span /* mobile forums */ {
   color: var(--darkWww-button-scratchr2ButtonText);
 }
 .button {
-  background-image: linear-gradient(
-    var(--darkWww-button-scratchr2ButtonGradientTop),
-    var(--darkWww-button-scratchr2ButtonGradientBottom)
-  );
-  border-color: var(--darkWww-button-scratchr2ButtonBorderTop);
-  border-bottom-color: var(--darkWww-button-scratchr2ButtonBorderBottom);
+  background-color: var(--darkWww-button-scratchr2);
+  background-image: none; /* Fixes Scratch bug: https://scratch.mit.edu/discuss/topic/694218/ */
+  border-color: var(--darkWww-button-scratchr2);
   color: var(--darkWww-button-scratchr2ButtonText);
 }
 .button a,
@@ -401,10 +402,8 @@ ul.pagination span /* mobile forums */ {
   color: var(--darkWww-button-scratchr2ButtonText);
 }
 .button:hover {
-  background-image: linear-gradient(
-    var(--darkWww-button-scratchr2ButtonGradientBottom),
-    var(--darkWww-button-scratchr2ButtonGradientBottom)
-  );
+  background-color: var(--darkWww-button-scratchr2Hover);
+  background-image: none; /* Fixes Scratch bug: https://scratch.mit.edu/discuss/topic/694218/ */
 }
 input:focus,
 textarea:focus,
@@ -412,8 +411,10 @@ textarea:focus,
 .registration .modal-body input:focus,
 .registration .modal-body textarea:focus,
 .registration .modal-body select:focus {
-  border-color: var(--darkWww-button-scratchr2InputFocusBorder);
-  box-shadow: 0 1px 1px inset rgba(0, 0, 0, 0.08), 0 0 8px var(--darkWww-button-scratchr2InputFocusShadow);
+  border-color: var(--darkWww-button);
+  box-shadow:
+    0 1px 1px inset rgba(0, 0, 0, 0.08),
+    0 0 8px var(--darkWww-button-scratchr2InputFocusShadow);
 }
 .editable textarea:focus,
 .editable-empty textarea:focus {
@@ -432,7 +433,7 @@ textarea:focus,
   color: var(--darkWww-button-scratchr2PostHeaderText);
 }
 .blockpost .box-head {
-  border-top-color: var(--darkWww-button-scratchr2PostBorder);
+  border-top-color: rgba(255, 255, 255, 0.15);
 }
 .blockpost .box-head span.conr,
 .blockpost .box-head a,
@@ -454,13 +455,14 @@ input.link:hover,
 input.link:active,
 input.link.black:hover,
 input.link.black:active,
+#comments .comment .info .name a:hover,
 #comments .more-replies .pulldown,
 #email-resend-box a {
   color: var(--darkWww-link-scratchr2);
 }
 .inew,
-.isticky {
-  filter: var(--darkWww-link-scratchr2IconFilter);
+.isticky:not(.iclosed) {
+  filter: var(--darkWww-link-iconFilter);
 }
 
 /* Footer background */
@@ -489,7 +491,7 @@ input.link.black:active,
 .nvd3 .nv-axis line /* statistics */ {
   stroke: var(--darkWww-border);
 }
-#footer /* for infinite scrolling fixed footer */,
+.sa-collapse-footer #footer,
 .thumb img,
 .djangobb blockquote,
 .my-ocular-popup,
@@ -564,6 +566,12 @@ ul.pagination span /* mobile forums */,
   border-color: var(--darkWww-border-33) !important;
 }
 
+/* Message count */
+#topnav ul.account-nav .messages .notificationsCount {
+  background-color: var(--darkWww-messageIndicatorColor-scratchr2);
+  color: var(--darkWww-messageIndicatorColor-scratchr2Text) !important;
+}
+
 /* Miscellaneous styles */
 
 :root {
@@ -572,6 +580,25 @@ ul.pagination span /* mobile forums */,
   --darkWww-caretWhite: url("%addon-self-dir%/assets/caret_white.svg");
   --darkWww-caretBlackHover: url("%addon-self-dir%/assets/caret_transparent_hover.svg");
   --darkWww-caretWhiteHover: url("%addon-self-dir%/assets/caret_white_hover.svg");
+
+  --darkWww-forumBoldButtonBlack: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/bold.png");
+  --darkWww-forumBoldButtonWhite: url("%addon-self-dir%/assets/forum_buttons/bold.png");
+  --darkWww-forumBrowserOsButtonBlack: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/img/browser-os.png");
+  --darkWww-forumBrowserOsButtonWhite: url("%addon-self-dir%/assets/forum_buttons/browser_os.png");
+  --darkWww-forumCenterButtonBlack: url("%addon-self-dir%/../forum-toolbar/text_align_center.png");
+  --darkWww-forumCenterButtonWhite: url("%addon-self-dir%/assets/forum_buttons/center.png");
+  --darkWww-forumItalicButtonBlack: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/italic.png");
+  --darkWww-forumItalicButtonWhite: url("%addon-self-dir%/assets/forum_buttons/italic.png");
+  --darkWww-forumListBulletButtonBlack: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/list-bullet.png");
+  --darkWww-forumListBulletButtonWhite: url("%addon-self-dir%/assets/forum_buttons/list_bullet.png");
+  --darkWww-forumListItemButtonBlack: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/list-item.png");
+  --darkWww-forumListItemButtonWhite: url("%addon-self-dir%/assets/forum_buttons/list_item.png");
+  --darkWww-forumListNumericButtonBlack: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/list-numeric.png");
+  --darkWww-forumListNumericButtonWhite: url("%addon-self-dir%/assets/forum_buttons/list_numeric.png");
+  --darkWww-forumStrokeButtonBlack: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/stroke.png");
+  --darkWww-forumStrokeButtonWhite: url("%addon-self-dir%/assets/forum_buttons/stroke.png");
+  --darkWww-forumUnderlineButtonBlack: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/underline.png");
+  --darkWww-forumUnderlineButtonWhite: url("%addon-self-dir%/assets/forum_buttons/underline.png");
 }
 
 html,
@@ -612,21 +639,39 @@ input.link.black {
 }
 
 /* Some images are designed for a light background */
-.markItUpHeader > ul > li > a {
-  margin-right: 4px;
-  margin-bottom: 4px;
-  width: 12px;
-  height: 12px;
-  background-color: white;
-  background-position: 1px 1px;
-  border-radius: 3px;
+.markItUpButton1 > a {
+  background-image: var(--darkWww-box-forumBoldButton) !important;
 }
+.markItUpButton2 > a {
+  background-image: var(--darkWww-box-forumItalicButton) !important;
+}
+.markItUpButton3 > a {
+  background-image: var(--darkWww-box-forumUnderlineButton) !important;
+}
+.markItUpButton4 > a {
+  background-image: var(--darkWww-box-forumStrokeButton) !important;
+}
+.markItUpButton8 > a {
+  background-image: var(--darkWww-box-forumListBulletButton) !important;
+}
+.markItUpButton9 > a {
+  background-image: var(--darkWww-box-forumListNumericButton) !important;
+}
+.markItUpButton10 > a {
+  background-image: var(--darkWww-box-forumListItemButton) !important;
+}
+.sa-forum-toolbar-center > a {
+  background-image: var(--darkWww-box-forumCenterButton) !important;
+}
+.markItUpButton13 > a {
+  background-image: var(--darkWww-box-forumBrowserOsButton) !important;
+}
+
 .markItUpHeader > ul > .markItUpDropMenu {
   background-image: none !important;
-  margin-right: 4px !important;
 }
 .markItUpHeader > ul > .markItUpDropMenu::after {
-  /* Move icon into a pseudo-element so it appears in front of child element's white background */
+  /* Move icon into a pseudo-element so filters can be applied to it separately */
   content: "";
   display: block;
   position: absolute;
@@ -635,20 +680,10 @@ input.link.black {
   bottom: 0;
   right: 0;
   background: url(https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/skins/simple/images/menu.png)
-    no-repeat 115% 60%;
+    no-repeat 115% 50%;
   pointer-events: none;
-}
-.markItUpHeader > ul > .markItUpDropMenu > a {
-  width: 16px;
-  margin-right: 1px;
-}
-.markItUp .browser-os-button a {
-  margin-left: 2px;
-  margin-right: 2px;
-  background-position: 1px 1px !important;
-}
-.markItUpHeader > ul > li.uploadStatus {
-  background: transparent !important;
+  filter: var(--darkWww-page-filter);
+  opacity: 0.9;
 }
 
 #comments .easter-egg[src$="meow.png"] {
@@ -670,4 +705,12 @@ input.link.black {
    is meant to be entirely transparent. */
 .iframeshim {
   color-scheme: light;
+}
+
+/* Forum errors */
+
+.djangobb ul.errorlist {
+  background-color: var(--darkWww-box);
+  border-color: var(--darkWww-page-forumErrorColor);
+  color: var(--darkWww-page-forumErrorColor);
 }

@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   //define remix tree button elements
   function loadRemixButton() {
     if (document.querySelector("#scratchAddonsRemixTreeBtn")) return;
@@ -9,6 +9,7 @@ export default async function ({ addon, global, console, msg }) {
         })
         .then(() => {
           if (!document.querySelector(".copy-link-button")) return;
+          if (document.querySelector("#scratchAddonsRemixTreeBtn")) return; // Check again because we're inside a promise
           const remixtree = document.createElement("button");
 
           const remixtreeSpan = document.createElement("span");

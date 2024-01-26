@@ -26,7 +26,7 @@
   background-size: 100%;
   filter: var(--darkWww-link-iconFilter, none);
   /* Spinner animation code */
-  /* From https://github.com/LLK/scratch-www/blob/develop/src/components/spinner/spinner.scss */
+  /* From https://github.com/scratchfoundation/scratch-www/blob/develop/src/components/spinner/spinner.scss */
   animation-name: spin-intro, spin;
   animation-duration: 0.25s, 1s;
   animation-timing-function: cubic-bezier(0.3, -3, 0.6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);
@@ -46,7 +46,25 @@
   position: relative;
 }
 #sidebar li.sub-list {
-  margin-left: 11px;
+  margin-left: 18px;
+  position: relative;
+}
+#sidebar li.sub-list::before {
+  content: "";
+  display: block;
+  position: absolute;
+  right: calc(100% + 1px);
+  bottom: calc(50% - 2px);
+  width: 18px;
+  height: 48px;
+  background-color: var(--darkWww-border, rgba(0, 0, 0, 0.15));
+  -webkit-mask-image: url("%addon-self-dir%/assets/dots.svg");
+  mask-image: url("%addon-self-dir%/assets/dots.svg");
+  pointer-events: none;
+}
+#sidebar li:not(.sub-list) + li.sub-list::before {
+  -webkit-mask-image: url("%addon-self-dir%/assets/dots_first.svg");
+  mask-image: url("%addon-self-dir%/assets/dots_first.svg");
 }
 #sidebar li.sub-list a {
   margin: 0;
@@ -84,7 +102,7 @@
 .action-bar .inner .dropdown:focus,
 .action-bar .inner .dropdown.open {
   background-image: var(--darkWww-input-caretHover, url("%addon-self-dir%/assets/caret_hover.svg"));
-  border-color: var(--darkWww-button, #4d97ff);
+  border-color: var(--darkWww-button, #855cd6);
 }
 .action-bar .inner .dropdown .dropdown-toggle {
   display: block;
@@ -108,7 +126,7 @@
   height: 48px;
   background-color: var(--darkWww-box, white);
   border-radius: 4px;
-  color: var(--darkWww-link, #4d97ff);
+  color: var(--darkWww-link, #855cd6);
   font-size: 14px;
 }
 .action-bar .inner .button:not(.dropdown) > span {
@@ -119,7 +137,7 @@
 .box .box-head .buttons .button {
   background-color: var(--darkWww-box, white);
   border-radius: 4px;
-  color: var(--darkWww-link, #4d97ff);
+  color: var(--darkWww-link, #855cd6);
 }
 .media-list {
   padding: 0;
@@ -160,7 +178,7 @@
   top: 9px;
 }
 .media-control .dropdown-menu {
-  background-color: var(--darkWww-navbar, #4d97ff);
+  background-color: var(--darkWww-navbar, #855cd6);
   left: 0;
   border: 1px solid rgba(0, 0, 0, 0.1);
   min-width: 218px;
@@ -184,11 +202,14 @@
   text-align: right;
 }
 .media-item-content .media-action {
-  top: 28px;
+  top: 50%;
   right: 12px;
+  transform: translateY(-50%);
   width: auto;
 }
-.media-item-content .media-trash {
+.media-item-content .media-trash,
+.sa-share-button {
+  float: right;
   top: 0;
   left: 0;
 }

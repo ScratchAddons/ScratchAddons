@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   let loves = { name: "love" };
   let favorites = { name: "favorite" };
 

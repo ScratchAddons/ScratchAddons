@@ -1,6 +1,6 @@
 {
   "name": "More links",
-  "description": "Adds links for URLs pointing outside scratch.mit.edu.",
+  "description": "Makes URLs pointing outside scratch.mit.edu clickable.",
   "credits": [
     {
       "name": "Hans5958"
@@ -9,11 +9,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "https://scratch.mit.edu/projects/*",
-        "https://scratch.mit.edu/studios/*",
-        "https://scratch.mit.edu/users/*"
-      ]
+      "matches": ["projects", "https://scratch.mit.edu/studios/*", "https://scratch.mit.edu/users/*"]
     }
   ],
   "versionAdded": "1.0.0",

@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   let placeHolderDiv = null;
   let lockObject = null;
   let lockButton = null;
@@ -46,6 +46,20 @@ export default async function ({ addon, global, console, msg }) {
     lockIcon.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
   }
 
+  function autoLock() {
+    const option = addon.settings.get("lockLoad");
+    if (option) {
+      if (getToggleSetting() === "category") {
+        toggle = true;
+      } else {
+        flyoutLock = option;
+        updateLockDisplay();
+      }
+      flyOut.classList.remove("sa-flyoutClose");
+      scrollBar.classList.remove("sa-flyoutClose");
+    }
+  }
+
   function onmouseenter(e, speed = {}) {
     // If a mouse event was passed, only open flyout if the workspace isn't being dragged
     if (
@@ -58,7 +72,7 @@ export default async function ({ addon, global, console, msg }) {
       flyOut.classList.remove("sa-flyoutClose");
       scrollBar.classList.remove("sa-flyoutClose");
       setTimeout(() => {
-        Blockly.getMainWorkspace().recordCachedAreas();
+        addon.tab.traps.getWorkspace()?.recordCachedAreas();
         removeTransition();
       }, speed * 1000);
     }
@@ -76,10 +90,16 @@ export default async function ({ addon, global, console, msg }) {
     flyOut.classList.add("sa-flyoutClose");
     scrollBar.classList.add("sa-flyoutClose");
     setTimeout(() => {
-      Blockly.getMainWorkspace().recordCachedAreas();
+      addon.tab.traps.getWorkspace()?.recordCachedAreas();
       removeTransition();
     }, speed * 1000);
   }
+
+  const updateIsFullScreen = () => {
+    const isFullScreen = addon.tab.redux.state.scratchGui.mode.isFullScreen;
+    document.documentElement.classList.toggle("sa-hide-flyout-not-fullscreen", !isFullScreen);
+  };
+  updateIsFullScreen();
 
   let didOneTimeSetup = false;
   function doOneTimeSetup() {
@@ -105,6 +125,9 @@ export default async function ({ addon, global, console, msg }) {
           }
           break;
         }
+        case "scratch-gui/mode/SET_FULL_SCREEN":
+          updateIsFullScreen();
+          break;
       }
     });
 
@@ -115,7 +138,7 @@ export default async function ({ addon, global, console, msg }) {
       }
     });
 
-    if (addon.self.enabledLate && getToggleSetting() === "category") {
+    if (addon.self.enabledLate && getToggleSetting() === "category" && !addon.settings.get("lockLoad")) {
       Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
     }
     addon.self.addEventListener("disabled", () => {
@@ -124,7 +147,7 @@ export default async function ({ addon, global, console, msg }) {
       Blockly.svgResize(Blockly.getMainWorkspace());
     });
     addon.self.addEventListener("reenabled", () => {
-      if (getToggleSetting() === "category") {
+      if (getToggleSetting() === "category" && !addon.settings.get("lockLoad")) {
         Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
         onmouseleave(null, 0);
         toggle = false;
@@ -148,7 +171,13 @@ export default async function ({ addon, global, console, msg }) {
           toggle = false;
         }
       } else {
-        onmouseleave();
+        // switching from category click to a different mode
+        if (addon.settings.get("lockLoad")) {
+          flyoutLock = true;
+          updateLockDisplay();
+        } else {
+          onmouseleave();
+        }
         Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
       }
       // update workspace dimensions
@@ -161,7 +190,7 @@ export default async function ({ addon, global, console, msg }) {
       const previousSelection = this.selectedItem_;
       oldSetSelectedItem.call(this, item, shouldScroll);
       if (addon.self.disabled || getToggleSetting() !== "category") return;
-      if (!shouldScroll) {
+      if (!shouldScroll && !toggle) {
         // ignore initial selection when updating the toolbox
         item.setSelected(false);
       } else if (item === previousSelection) {
@@ -220,7 +249,12 @@ export default async function ({ addon, global, console, msg }) {
   while (true) {
     flyOut = await addon.tab.waitForElement(".blocklyFlyout", {
       markAsSeen: true,
-      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "scratch-gui/locales/SELECT_LOCALE", "fontsLoaded/SET_FONTS_LOADED"],
+      reduxEvents: [
+        "scratch-gui/mode/SET_PLAYER",
+        "scratch-gui/locales/SELECT_LOCALE",
+        "scratch-gui/theme/SET_THEME",
+        "fontsLoaded/SET_FONTS_LOADED",
+      ],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
     scrollBar = document.querySelector(".blocklyFlyoutScrollbar");
@@ -286,6 +320,7 @@ export default async function ({ addon, global, console, msg }) {
     };
 
     doOneTimeSetup();
+    autoLock();
     if (getToggleSetting() !== "hover") {
       // update workspace dimensions
       Blockly.svgResize(Blockly.getMainWorkspace());

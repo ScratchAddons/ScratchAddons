@@ -29,7 +29,7 @@ body > #pagewrapper {
   padding-bottom: 8px;
   border: none;
   border-radius: 0;
-  background: #0fbd8c;
+  background: #328554;
   color: #fff;
 }
 #brdheader > .box-head {
@@ -156,6 +156,7 @@ body > #pagewrapper {
   line-height: 18px;
   font-weight: bold;
   text-align: center;
+  text-decoration: none;
 }
 .linkst li:not(:last-child) a:hover,
 .linksb li:not(:last-child) a:hover,
@@ -165,12 +166,12 @@ body > #pagewrapper {
   color: var(--darkWww-page-text, #575e75);
 }
 .pagination .current {
-  background-color: var(--darkWww-button, #4d97ff);
+  background-color: var(--darkWww-button, #855cd6);
   border-color: rgba(0, 0, 0, 0.15);
   color: var(--darkWww-button-text, white);
 }
 .pagination .current:hover {
-  background-color: var(--darkWww-button-variant, #4280d7);
+  background-color: var(--darkWww-button-variant, #7854c0);
 }
 .pagination .disabled {
   opacity: 0.5;
@@ -192,7 +193,7 @@ body > #pagewrapper {
 }
 .follow-topic .loading:not([style="display: none;"]) {
   /* Spinner animation code */
-  /* From https://github.com/LLK/scratch-www/blob/develop/src/components/spinner/spinner.scss */
+  /* From https://github.com/scratchfoundation/scratch-www/blob/develop/src/components/spinner/spinner.scss */
   animation-name: spin-intro, spin;
   animation-duration: 0.25s, 1s;
   animation-timing-function: cubic-bezier(0.3, -3, 0.6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);
@@ -269,13 +270,13 @@ body > #pagewrapper {
   overflow: hidden;
   border-radius: 4px;
   background-color: var(--darkWww-gray, #f2f2f2);
-  color: var(--darkWww-link, #4d97ff);
+  color: var(--darkWww-link, #855cd6);
   font-size: 16px;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 .djangobb .username:visited:not(:hover) {
-  color: var(--darkWww-link, #4d97ff);
+  color: var(--darkWww-link, #855cd6);
 }
 .djangobb .username:hover {
   width: -moz-fit-content;
@@ -297,7 +298,7 @@ body > #pagewrapper {
 }
 .postmsg ::selection {
   /* Don't break [color=transparent] hidden text */
-  background-color: var(--darkWww-button-variant, #4280d7);
+  background-color: #3373cc;
   color: var(--darkWww-button-text, white);
 }
 .postfootright > ul {
@@ -327,7 +328,7 @@ body > #pagewrapper {
   font-weight: normal;
 }
 .inew,
-.isticky {
+.isticky:not(.iclosed) {
   filter: var(--darkWww-link-iconFilter, var(--scratchr2-defaultLinkIconFilter));
 }
 .djangobb > .postmsg {
@@ -337,10 +338,10 @@ body > #pagewrapper {
 .my-ocular-reaction-button,
 .my-ocular-reaction-button:hover {
   color: var(--darkWww-gray-text, #575e75);
-  box-shadow: 0 0 2px #0fbd8c;
+  box-shadow: 0 0 2px #328554;
 }
 .my-ocular-reaction-button.selected {
-  background-color: #0fbd8c;
+  background-color: #328554;
   color: white;
 }
 .my-ocular-popup {
@@ -367,6 +368,60 @@ body > #pagewrapper {
 }
 .djangobb label {
   margin-bottom: 10px;
+}
+.markItUpButton1 > a {
+  background-image: var(
+    --darkWww-page-forumBoldButton,
+    url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/bold.png")
+  ) !important;
+}
+.markItUpButton2 > a {
+  background-image: var(
+    --darkWww-page-forumItalicButton,
+    url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/italic.png")
+  ) !important;
+}
+.markItUpButton3 > a {
+  background-image: var(
+    --darkWww-page-forumUnderlineButton,
+    url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/underline.png")
+  ) !important;
+}
+.markItUpButton4 > a {
+  background-image: var(
+    --darkWww-page-forumStrokeButton,
+    url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/stroke.png")
+  ) !important;
+}
+.markItUpButton8 > a {
+  background-image: var(
+    --darkWww-page-forumListBulletButton,
+    url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/list-bullet.png")
+  ) !important;
+}
+.markItUpButton9 > a {
+  background-image: var(
+    --darkWww-page-forumListNumericButton,
+    url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/list-numeric.png")
+  ) !important;
+}
+.markItUpButton10 > a {
+  background-image: var(
+    --darkWww-page-forumListItemButton,
+    url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/list-item.png")
+  ) !important;
+}
+.sa-forum-toolbar-center > a {
+  background-image: var(
+    --darkWww-page-forumCenterButton,
+    url("%addon-self-dir%/../forum-toolbar/text_align_center.png")
+  ) !important;
+}
+.markItUpButton13 > a {
+  background-image: var(
+    --darkWww-page-forumBrowserOsButton,
+    url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/img/browser-os.png")
+  ) !important;
 }
 .form-submit {
   margin-top: 10px;

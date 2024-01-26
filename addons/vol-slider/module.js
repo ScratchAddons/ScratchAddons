@@ -1,40 +1,66 @@
-const muteIcon = "/static/assets/e21225ab4b675bc61eed30cfb510c288.svg";
-const quietIcon = "/static/assets/3547fa1f2678a483a19f46852f36b426.svg";
-const loudIcon = "/static/assets/b2c44c738c9cbc1a99cd6edfd0c2b85b.svg";
+// Volumes in this file are always in 0-1.
 
-let vm;
-let vmVol;
-let defVol = 1;
+let hasSetup = false;
+/** @type {AudioParam|null} */
+let gainNode = null;
+let unmuteVolume = 1;
+let volumeBeforeFinishSetup = 1;
+const callbacks = [];
 
-export const setVol = (v) => {
-  vmVol.value = v;
-  let slider = document.getElementById("sa-vol-slider");
-  let icon = document.getElementById("sa-vol-icon");
-  if (!slider) return;
-  slider.value = v;
-  if (v == 0) {
-    icon.src = muteIcon;
-  } else if (v < 0.5) {
-    icon.src = quietIcon;
+export const setVolume = (newVolume) => {
+  if (gainNode) {
+    gainNode.value = newVolume;
   } else {
-    icon.src = loudIcon;
+    volumeBeforeFinishSetup = newVolume;
   }
+  callbacks.forEach((i) => i());
 };
 
-export const setDefVol = (v) => {
-  defVol = v;
-};
-
-export const getDefVol = () => {
-  return defVol;
+export const getVolume = () => {
+  if (gainNode) {
+    return gainNode.value;
+  }
+  return volumeBeforeFinishSetup;
 };
 
 export const isMuted = () => {
-  return vmVol.value === 0;
+  return getVolume() === 0;
 };
 
-export const setup = (_vm) => {
-  if (vm) return;
-  vm = _vm;
-  vmVol = vm.runtime.audioEngine.inputNode.gain;
+export const setUnmutedVolume = (newUnmuteVolume) => {
+  unmuteVolume = newUnmuteVolume;
+};
+
+export const setMuted = (newMuted) => {
+  if (newMuted) {
+    setUnmutedVolume(getVolume());
+    setVolume(0);
+  } else {
+    setVolume(unmuteVolume);
+  }
+};
+
+export const onVolumeChanged = (callback) => {
+  callbacks.push(callback);
+};
+
+const gotAudioEngine = (audioEngine) => {
+  gainNode = audioEngine.inputNode.gain;
+  gainNode.value = volumeBeforeFinishSetup;
+};
+
+export const setup = (vm) => {
+  if (hasSetup) {
+    return;
+  }
+  hasSetup = true;
+
+  const audioEngine = vm.runtime.audioEngine;
+  if (audioEngine) {
+    gotAudioEngine(audioEngine);
+  } else {
+    vm.runtime.once("PROJECT_LOADED", () => {
+      gotAudioEngine(vm.runtime.audioEngine);
+    });
+  }
 };

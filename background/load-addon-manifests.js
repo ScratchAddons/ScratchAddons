@@ -54,7 +54,7 @@ const localizeSettings = (addonId, setting, tableId) => {
     } catch (ex) {
       console.error(`Failed to load addon manifest for ${addonId}, crashing:`, ex);
       chrome.tabs.create({
-        url: `data:text/plain,Scratch Addons crashed: invalid addon.json for addon with id ${addonId}. Click the "Errors" button on the extension tile for more details.`,
+        url: chrome.runtime.getURL(`/webpages/error/index.html?problem=invalidManifest&addon=${addonId}`),
       });
       throw ex;
     }

@@ -120,9 +120,6 @@ async function refetchSession(addon) {
     });
   });
 
-  scratchAddons.methods.getMsgCount = () => {
-    throw new Error("Unimplemented; fetch from IndexedDB or call MessageCache.fetchMessageCount instead");
-  };
   scratchAddons.methods.getEnabledAddons = (tag) =>
     sendMessage({
       getEnabledAddons: {
@@ -153,7 +150,6 @@ async function refetchSession(addon) {
     }
   });
 
-  const globalObj = Object.create(null);
   await scratchAddons.l10n.loadByAddonId(addonId);
   refetchSession(addon); // No await intended; session fetched asynchronously
   const msg = (key, placeholders) =>
@@ -164,7 +160,6 @@ async function refetchSession(addon) {
   const module = await import(chrome.runtime.getURL(`/popups/${addonId}/${fileName}`));
   module.default({
     addon: addon,
-    global: globalObj,
     console,
     msg,
     safeMsg: (key, placeholders) =>

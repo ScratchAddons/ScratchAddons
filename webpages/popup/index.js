@@ -56,7 +56,7 @@ const vue = new Vue({
       const uiLanguage = chrome.i18n.getUILanguage();
       const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
       const utm = `utm_source=extension&utm_medium=popup&utm_campaign=v${chrome.runtime.getManifest().version}`;
-      return `https://scratchaddons.com/${localeSlash}changelog/?${utm}`;
+      return `https://scratchaddons.com/${localeSlash}changelog/?${utm}#v${chrome.runtime.getManifest().version}`;
     },
     version() {
       const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
@@ -94,12 +94,12 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
   });
   vue.popups = popupObjects;
   chrome.storage.local.get("lastSelectedPopup", ({ lastSelectedPopup }) => {
-    let id = 0;
+    let id = -1;
     if (typeof lastSelectedPopup === "string") {
       id = vue.popups.findIndex((popup) => popup._addonId === lastSelectedPopup);
-      if (id === -1) id = 0;
     }
-    vue.setPopup(vue.popups[id]);
+    if (id !== -1) vue.setPopup(vue.popups[id]);
+    else vue.setPopup(vue.popups.find((p) => p._addonId === "__settings__"));
   });
 });
 

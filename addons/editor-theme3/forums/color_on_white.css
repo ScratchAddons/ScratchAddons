@@ -44,10 +44,6 @@
   fill: white;
   stroke: var(--editorTheme3-commentColor);
 }
-.sb-label,
-.sb3-label {
-  fill: black;
-}
 #sb3-dropdownArrow path {
   fill: #575e75;
 }
