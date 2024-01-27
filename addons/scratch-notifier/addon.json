@@ -117,7 +117,7 @@
     }
   ],
   "versionAdded": "1.0.0",
-  "tags": ["popup", "recommended"],
+  "tags": ["community", "recommended"],
   "enabledByDefault": false,
   "dynamicEnable": true,
   "dynamicDisable": true
