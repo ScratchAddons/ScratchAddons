@@ -93,6 +93,31 @@
       }
     },
     {
+      "name": "inputColor-editableLabel",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "text"
+          },
+          "options": {
+            "colorOnWhite": "#ffffff",
+            "colorOnBlack": "#282828"
+          },
+          "default": {
+            "type": "settingValue",
+            "settingId": "custom-color"
+          }
+        },
+        "transparentSource": {
+          "type": "settingValue",
+          "settingId": "input-color"
+        }
+      }
+    },
+    {
       "name": "commentText",
       "value": {
         "type": "textColor",
