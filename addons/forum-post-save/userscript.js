@@ -1,4 +1,4 @@
-export default ({ addon }) => {
+export default async function ({ addon, console }) {
   const topicId = location.pathname.split("/")[3];
   const box = document.querySelector(".markItUpContainer .markItUpEditor");
 
@@ -41,20 +41,20 @@ export default ({ addon }) => {
     };
     updateCache(update);
   });
-};
-function updateCache(assign) {
-  const stored = _getAllCache();
-  const cache = Object.assign({ ...stored }, assign);
-  if (cache === stored) return; // if no diff, return
-  localStorage.setItem("sa-forum-post-save", JSON.stringify(cache));
-  lastSaved = Date.now();
-}
-function _getAllCache() {
-  let data;
-  try {
-    data = JSON.parse(localStorage.getItem(`sa-forum-post-save`));
-  } catch {
-    localStorage.setItem("sa-forum-post-save", "{}");
+  function updateCache(assign) {
+    const stored = _getAllCache();
+    const cache = Object.assign({ ...stored }, assign);
+    if (cache === stored) return; // if no diff, return
+    localStorage.setItem("sa-forum-post-save", JSON.stringify(cache));
+    lastSaved = Date.now();
   }
-  return data || {};
-}
+  function _getAllCache() {
+    let data;
+    try {
+      data = JSON.parse(localStorage.getItem(`sa-forum-post-save`));
+    } catch {
+      localStorage.setItem("sa-forum-post-save", "{}");
+    }
+    return data || {};
+  }
+};
