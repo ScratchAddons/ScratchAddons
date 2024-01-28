@@ -15,38 +15,37 @@ export default async function ({ addon, console }) {
     }
   }
   if (madeAnyChanges) {
-    localStorage.setItem("sa-forum-post-save", JSON.stringify(cache)); // dont use updateCache here since it won't remove deleted items
+    localStorage.setItem("sa-forum-post-save", JSON.stringify(cache)); // don't use updateCache here since it won't remove deleted items
   }
   if (typeof cache[topicId]?.cache === "string") {
     box.value = cache[topicId].cache;
   }
 
-  let lastSaved = 0;
-  box.addEventListener("input", (e) => {
-    if (!addon.self.disabled && Date.now() - lastSaved >= 5000) {
-      const update = {};
-      update[topicId] = {
-        cache: box.value,
-        stamp: Date.now(),
-      };
-      updateCache(update);
-    }
+  let timeout;
+  box.addEventListener("input", () => {
+    if (addon.self.disabled) return;
+    clearTimeout(timeout);
+    timeout = setTimeout(updateCache, 2000, topicId);
+  });
+
+  box.addEventListener("blur", () => {
+    updateCache(topicId);
   });
 
   addon.self.addEventListener("reenabled", () => {
+    updateCache(topicId);
+  });
+
+  function updateCache(topic) {
     const update = {};
-    update[topicId] = {
+    update[topic] = {
       cache: box.value,
       stamp: Date.now(),
     };
-    updateCache(update);
-  });
-  function updateCache(assign) {
     const stored = _getAllCache();
-    const cache = Object.assign({ ...stored }, assign);
+    const cache = Object.assign({ ...stored }, update);
     if (cache === stored) return; // if no diff, return
     localStorage.setItem("sa-forum-post-save", JSON.stringify(cache));
-    lastSaved = Date.now();
   }
   function _getAllCache() {
     let data;
