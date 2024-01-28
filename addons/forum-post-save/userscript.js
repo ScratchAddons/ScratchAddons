@@ -57,4 +57,4 @@ export default async function ({ addon, console }) {
     }
     return data || {};
   }
-};
+}
