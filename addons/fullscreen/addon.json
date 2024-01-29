@@ -84,7 +84,7 @@
   "tags": ["editor", "projectPlayer", "featured"],
   "versionAdded": "1.21.0",
   "latestUpdate": {
-    "version": "when",
+    "version": "1.36.0",
     "isMajor": false,
     "newSettings": ["hoverToolbar"]
   },
