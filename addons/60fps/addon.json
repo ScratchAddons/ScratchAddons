@@ -3,8 +3,8 @@
   "description": "Lets you run projects at more frames per second (FPS) so they look smoother. Hold Alt and click the green flag to toggle between Scratch's default 30 FPS and a custom framerate set below.",
   "info": [
     {
-      "type": "warning",
-      "text": "Changing the framerate of Scratch projects also affects the rate at which certain code (such as loops) runs, so most projects won't behave properly when run at a different framerate. This addon is meant to be used on projects that are designed to support a higher framerate.",
+      "type": "notice",
+      "text": "Changing the framerate of Scratch projects also affects the rate at which certain code (such as loops) runs, so most projects won't behave properly when run at a different framerate. Higher framerates are only meant to be used on projects that are designed to support them.",
       "id": "projectRunsFasterNotice"
     }
   ],
