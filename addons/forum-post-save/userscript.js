@@ -37,6 +37,12 @@ export default async function ({ addon, console }) {
     updateCache(topicId);
   });
 
+  document.querySelector("[name=AddPostForm]")?.addEventListener("click", (e) => {
+    const cache = _getAllCache();
+    delete cache[topicId];
+    localStorage.setItem("sa-forum-post-save", JSON.stringify(cache));
+  });
+
   function updateCache(topic) {
     const update = {};
     update[topic] = {
