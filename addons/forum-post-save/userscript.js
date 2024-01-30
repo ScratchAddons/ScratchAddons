@@ -1,6 +1,9 @@
 export default async function ({ addon, console }) {
   const topicId = location.pathname.split("/")[3];
   const box = document.querySelector(".markItUpContainer .markItUpEditor");
+  if (!box) return;
+
+  const postError = () => Boolean(document.querySelector(".errorlist"));
 
   // Purge cache which is over two weeks old
   const cache = _getAllCache();
@@ -38,7 +41,7 @@ export default async function ({ addon, console }) {
   });
 
   document.querySelector("[name=AddPostForm]")?.addEventListener("click", (e) => {
-    if (!document.querySelector(".errorlist")) {
+    if (!postError()) {
       // Delete cache if post was successful
       const cache = _getAllCache();
       delete cache[topicId];
