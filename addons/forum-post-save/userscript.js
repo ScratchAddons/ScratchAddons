@@ -21,17 +21,18 @@ export default async function ({ addon, console }) {
     box.value = cache[topicId].cache;
   }
 
+  // Save the post contents after two seconds of no typing
   let timeout;
   box.addEventListener("input", () => {
     if (addon.self.disabled) return;
     clearTimeout(timeout);
     timeout = setTimeout(updateCache, 2000, topicId);
   });
-
+  // Also save if the text field is unfocused
   box.addEventListener("blur", () => {
     updateCache(topicId);
   });
-
+  // or if the addon is dynamically enabled
   addon.self.addEventListener("reenabled", () => {
     updateCache(topicId);
   });
