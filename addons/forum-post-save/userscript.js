@@ -38,9 +38,12 @@ export default async function ({ addon, console }) {
   });
 
   document.querySelector("[name=AddPostForm]")?.addEventListener("click", (e) => {
-    const cache = _getAllCache();
-    delete cache[topicId];
-    localStorage.setItem("sa-forum-post-save", JSON.stringify(cache));
+    if (!document.querySelector(".errorlist")) {
+      // Delete cache if post was successful
+      const cache = _getAllCache();
+      delete cache[topicId];
+      localStorage.setItem("sa-forum-post-save", JSON.stringify(cache));
+    };
   });
 
   function updateCache(topic) {
@@ -52,7 +55,7 @@ export default async function ({ addon, console }) {
     const stored = _getAllCache();
     const cache = Object.assign({ ...stored }, update);
     if (cache === stored) return; // if no diff, return
-    if (!cache[topic].cache.trim()) delete cache[topic];
+    if (!cache[topic].cache.trim()) delete cache[topic]; // Delete posts with only whitespace
     localStorage.setItem("sa-forum-post-save", JSON.stringify(cache));
   }
   function _getAllCache() {
