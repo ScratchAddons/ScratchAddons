@@ -46,6 +46,7 @@ export default async function ({ addon, console }) {
     const stored = _getAllCache();
     const cache = Object.assign({ ...stored }, update);
     if (cache === stored) return; // if no diff, return
+    if (!cache[topic].cache.trim()) delete cache[topic];
     localStorage.setItem("sa-forum-post-save", JSON.stringify(cache));
   }
   function _getAllCache() {
