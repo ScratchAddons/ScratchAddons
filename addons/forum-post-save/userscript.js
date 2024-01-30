@@ -43,7 +43,7 @@ export default async function ({ addon, console }) {
       const cache = _getAllCache();
       delete cache[topicId];
       localStorage.setItem("sa-forum-post-save", JSON.stringify(cache));
-    };
+    }
   });
 
   function updateCache(topic) {
