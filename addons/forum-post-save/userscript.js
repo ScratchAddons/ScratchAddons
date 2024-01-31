@@ -3,7 +3,18 @@ export default async function ({ addon, console }) {
   const box = document.querySelector(".markItUpContainer .markItUpEditor");
   if (!box) return;
 
+  const getTopics = () => JSON.parse(sessionStorage.getItem("sa-forum-post-save-topics") || "[]");
+  const setTopics = (topics) => sessionStorage.setItem("sa-forum-post-save-topics", JSON.stringify(topics));
   const postError = () => Boolean(document.querySelector(".errorlist"));
+  // On page load, delete cache if last post was successful
+  const topics = getTopics();
+  if (topics.includes(topicId) && !postError()) {
+    const cache = _getAllCache();
+    delete cache[topicId];
+    localStorage.setItem("sa-forum-post-save", JSON.stringify(cache));
+
+    setTopics(topics.filter((topic) => topic !== topicId));
+  }
 
   // Purge cache which is over two weeks old
   const cache = _getAllCache();
@@ -41,12 +52,10 @@ export default async function ({ addon, console }) {
   });
 
   document.querySelector("[name=AddPostForm]")?.addEventListener("click", (e) => {
-    if (!postError()) {
-      // Delete cache if post was successful
-      const cache = _getAllCache();
-      delete cache[topicId];
-      localStorage.setItem("sa-forum-post-save", JSON.stringify(cache));
-    }
+    // Store topic ID
+    const ids = getTopics();
+    ids.push(topicId);
+    setTopics(ids);
   });
 
   function updateCache(topic) {
