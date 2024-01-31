@@ -100,7 +100,6 @@ export default async function ({ addon }) {
       : e.altKey
         ? addon.settings.get("alt")
         : addon.settings.get("regular");
-    if (changeBy.toString().length > 10 || amountOfDecimals(changeBy.toString()) > 5) return;
     if (e.key === "ArrowDown") changeBy *= -1;
 
     const decimalCount = Math.max(amountOfDecimals(e.target.value), amountOfDecimals(changeBy.toString()));
