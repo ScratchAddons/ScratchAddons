@@ -1,0 +1,7 @@
+.blocklyTextShiftArrow {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  margin-left: -12.5px;
+  cursor: pointer;
+}

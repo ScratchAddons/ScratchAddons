@@ -10,6 +10,18 @@ export default async ({ addon, console, msg }) => {
   let recordBuffer = [];
   let recorder;
   let timeout;
+
+  const mimeType = [
+    // Chrome and Firefox only support encoding as webm
+    // VP9 is preferred as its playback is better supported across platforms
+    "video/webm; codecs=vp9",
+    // Firefox only supports encoding VP8
+    "video/webm",
+    // Safari only supports encoding H264 as mp4
+    "video/mp4",
+  ].find((i) => MediaRecorder.isTypeSupported(i));
+  const fileExtension = mimeType.split(";")[0].split("/")[1];
+
   while (true) {
     const elem = await addon.tab.waitForElement('div[class*="menu-bar_file-group"] > div:last-child:not(.sa-record)', {
       markAsSeen: true,
@@ -25,7 +37,9 @@ export default async ({ addon, console, msg }) => {
 
       content.appendChild(
         Object.assign(document.createElement("p"), {
-          textContent: msg("record-description"),
+          textContent: msg("record-description", {
+            extension: `.${fileExtension}`,
+          }),
           className: "recordOptionDescription",
         })
       );
@@ -215,8 +229,8 @@ export default async ({ addon, console, msg }) => {
         disposeRecorder();
       } else {
         recorder.onstop = () => {
-          const blob = new Blob(recordBuffer, { type: "video/webm" });
-          downloadBlob("video.webm", blob);
+          const blob = new Blob(recordBuffer, { type: mimeType });
+          downloadBlob(`video.${fileExtension}`, blob);
           disposeRecorder();
         };
         recorder.stop();
@@ -283,7 +297,7 @@ export default async ({ addon, console, msg }) => {
       if (opts.audioEnabled || opts.micEnabled) {
         stream.addTrack(dest.stream.getAudioTracks()[0]);
       }
-      recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
+      recorder = new MediaRecorder(stream, { mimeType });
       recorder.ondataavailable = (e) => {
         recordBuffer.push(e.data);
       };

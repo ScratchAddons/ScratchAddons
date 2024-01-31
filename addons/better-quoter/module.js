@@ -209,7 +209,7 @@ function setup() {
   if (isSetup) return;
   isSetup = true;
   const originalCopyPaste = window.copy_paste;
-  window.copy_paste = function (id) {
+  window.copy_paste = async function (id) {
     const post = $("#" + id);
     const username = post.find(".username").text();
     const idText =
@@ -220,8 +220,14 @@ function setup() {
             false
           )})[/small]`
         : "";
-    getPostText(id, post[0], window.getSelection()).then((text) => {
-      paste(`[quote=${username}]${idText}\n${text}\n[/quote]\n`);
-    });
+    const selection = window.getSelection();
+    const showBbcode = post.find("[data-show-bbcode]");
+    const text =
+      showBbcode.length !== 0
+        ? selection.toString() === ""
+          ? showBbcode[0].innerText
+          : selection
+        : await getPostText(id, post[0], selection);
+    paste(`[quote=${username}]${idText}\n${text}\n[/quote]\n`);
   };
 }
