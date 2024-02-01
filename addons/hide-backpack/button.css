@@ -1,10 +1,14 @@
 [class*="paint-editor_canvas-controls_"] {
   /* vertically align zoom buttons with backpack button */
   align-items: center;
+  /* compact-editor compatibility */
+  min-height: 36px;
 }
 
 [class*="paint-editor_bitmap-button_"] {
   align-self: stretch;
+  /* compact-editor compatibility */
+  align-items: center;
 }
 
 [class^="paint-editor_zoom-controls_"] {
