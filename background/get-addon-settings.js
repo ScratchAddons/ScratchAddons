@@ -10,6 +10,7 @@ import minifySettings from "../libraries/common/minify-settings.js";
  - forum-quote-code-beautifier 1 (last bumped in v1.34)
  */
 
+// The following three functions are helper functions for the setting migration code
 const areColorsEqual = (currentColor, oldPresetColor) => {
   // Case insensitive
   const currentColorLowercase = currentColor.toLowerCase();
@@ -74,6 +75,7 @@ const updatePresetIfMatching = (settings, version, oldPreset = null, presetOrFn 
   }
 };
 
+// Since v1.33.0, addon settings are split up across three storage keys to help stay below a storage quota.
 async function transitionToNewStorageKeys(addonSettings) {
   chrome.storage.sync.set(
     {
@@ -102,6 +104,8 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
     ? {} // Default value
     : { ...storageItems.addonSettings1, ...storageItems.addonSettings2, ...storageItems.addonSettings3 };
   const func = () => {
+    // Start by migrating settings (sometimes we add new settings or make changes to
+    // the available settings in some addons between versions)
     let madeAnyChanges = false;
 
     if (addonsEnabled["editor-devtools"] === true && addonsEnabled["move-to-top-bottom"] === undefined) {
@@ -178,7 +182,8 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             madeChangesToAddon = true;
             madeAnyChanges = true;
 
-            // cloning required for tables
+            // Fill in with default value
+            // Cloning required for tables
             settings[option.id] = JSON.parse(JSON.stringify(option.default));
           } else if (option.type === "positive_integer" || option.type === "integer") {
             // ^ else means typeof can't be "undefined", so it must be number
@@ -679,6 +684,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
       }
     }
 
+    // Finally, minify the settings and store them in the scratchAddons object
     const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
     if (madeAnyChanges)
       chrome.storage.sync.set({

@@ -46,6 +46,20 @@ export default async function ({ addon, console, msg }) {
     lockIcon.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
   }
 
+  function autoLock() {
+    const option = addon.settings.get("lockLoad");
+    if (option) {
+      if (getToggleSetting() === "category") {
+        toggle = true;
+      } else {
+        flyoutLock = option;
+        updateLockDisplay();
+      }
+      flyOut.classList.remove("sa-flyoutClose");
+      scrollBar.classList.remove("sa-flyoutClose");
+    }
+  }
+
   function onmouseenter(e, speed = {}) {
     // If a mouse event was passed, only open flyout if the workspace isn't being dragged
     if (
@@ -124,7 +138,7 @@ export default async function ({ addon, console, msg }) {
       }
     });
 
-    if (addon.self.enabledLate && getToggleSetting() === "category") {
+    if (addon.self.enabledLate && getToggleSetting() === "category" && !addon.settings.get("lockLoad")) {
       Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
     }
     addon.self.addEventListener("disabled", () => {
@@ -133,7 +147,7 @@ export default async function ({ addon, console, msg }) {
       Blockly.svgResize(Blockly.getMainWorkspace());
     });
     addon.self.addEventListener("reenabled", () => {
-      if (getToggleSetting() === "category") {
+      if (getToggleSetting() === "category" && !addon.settings.get("lockLoad")) {
         Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(false);
         onmouseleave(null, 0);
         toggle = false;
@@ -157,7 +171,13 @@ export default async function ({ addon, console, msg }) {
           toggle = false;
         }
       } else {
-        onmouseleave();
+        // switching from category click to a different mode
+        if (addon.settings.get("lockLoad")) {
+          flyoutLock = true;
+          updateLockDisplay();
+        } else {
+          onmouseleave();
+        }
         Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
       }
       // update workspace dimensions
@@ -170,7 +190,7 @@ export default async function ({ addon, console, msg }) {
       const previousSelection = this.selectedItem_;
       oldSetSelectedItem.call(this, item, shouldScroll);
       if (addon.self.disabled || getToggleSetting() !== "category") return;
-      if (!shouldScroll) {
+      if (!shouldScroll && !toggle) {
         // ignore initial selection when updating the toolbox
         item.setSelected(false);
       } else if (item === previousSelection) {
@@ -300,6 +320,7 @@ export default async function ({ addon, console, msg }) {
     };
 
     doOneTimeSetup();
+    autoLock();
     if (getToggleSetting() !== "hover") {
       // update workspace dimensions
       Blockly.svgResize(Blockly.getMainWorkspace());

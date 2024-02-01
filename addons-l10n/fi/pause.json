@@ -1,1 +1,1 @@
-{"pause/pause":"Keskeytä","pause/@name":"Keskeytä-painike"}
+{"pause/pause":"Keskeytä","pause/play":"Jatka","pause/@name":"Keskeytä-painike","pause/@description":"Lisää vihreän lipun viereen painikkeen, jolla voi keskeyttää projektin.","pause/@info-keybind":"Projektin voi keskeyttää myös Alt+X-näppäinyhdistelmällä (Optio+X macOS:ssä).","pause/@update":"Projektien keskeyttämiselle on nyt pikänäppäin."}
