@@ -1,4 +1,4 @@
-/** @param {import("types").Types} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   const xhrOpen = XMLHttpRequest.prototype.open;
   XMLHttpRequest.prototype.open = function (method, url, ...args) {

@@ -1,6 +1,6 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 
-/** @param {import("types").Types} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   // The basic premise of how this addon works is relative simple.
   // scratch-gui renders the sprite selectors and asset selectors in a hierarchy like this:

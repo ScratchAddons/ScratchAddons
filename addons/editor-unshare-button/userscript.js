@@ -1,4 +1,4 @@
-/** @param {import("types").Types} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, msg, console }) {
   const { redux } = addon.tab;
   while (true) {

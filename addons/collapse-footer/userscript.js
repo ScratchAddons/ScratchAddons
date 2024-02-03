@@ -1,4 +1,4 @@
-/** @param {import("types").Types} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   const enabledAddons = await addon.self.getEnabledAddons("community");
   const footer = await addon.tab.waitForElement("#footer");

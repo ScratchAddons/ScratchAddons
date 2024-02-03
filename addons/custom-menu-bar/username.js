@@ -1,4 +1,4 @@
-/** @param {import("types").Types} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon }) {
   if (await addon.auth.fetchIsLoggedIn()) {
     const username = await addon.auth.fetchUsername();

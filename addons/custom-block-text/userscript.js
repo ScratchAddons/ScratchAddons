@@ -1,7 +1,7 @@
 import { updateAllBlocks } from "../custom-block-shape/update-all-blocks.js";
 import { clearTextWidthCache } from "../middle-click-popup/module.js";
 
-/** @param {import("types").Types} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   let currentTextSize = 100;
 

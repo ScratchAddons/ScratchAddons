@@ -1,4 +1,4 @@
-/** @param {import("types").Types} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   function createBetterProfilePage(featuredThumb, featuredLink, featuredHeading, featuredTitle) {
     document.documentElement.style.setProperty("--featured-thumb", `url("${featuredThumb}")`);

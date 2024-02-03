@@ -1,4 +1,4 @@
-/** @param {import("types").Types} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async ({ addon, console, msg }) => {
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", ({ detail }) => {

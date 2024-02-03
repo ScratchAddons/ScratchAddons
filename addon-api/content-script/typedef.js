@@ -13,7 +13,7 @@
  * that takes this object as a sole argument, e.g.
  * export default async function (util)
  * Note that commonly it is done by using destructing syntax.
- * @typedef {object} Types
+ * @typedef {object} AddonAPI
  * @property {UserscriptAddon} addon APIs for addons.
  * @property {MessageFunction} msg Gets localized message from addons-l10n folder. Supports placeholders and plurals.
  * @property {string} msg.locale Current locale used by msg function.
