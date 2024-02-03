@@ -1,4 +1,5 @@
 import Utils from "../find-bar/blockly/Utils.js";
+
 /** @param {import("types").Types} */
 export default async function ({ addon, msg, console }) {
   if (!addon.self._isDevtoolsExtension && window.initGUI) {

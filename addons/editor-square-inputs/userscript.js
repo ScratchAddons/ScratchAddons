@@ -1,5 +1,6 @@
 import { updateAllBlocks } from "../custom-block-shape/update-all-blocks.js";
 
+/** @param {import("types").Types} */
 export default async function ({ addon }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;

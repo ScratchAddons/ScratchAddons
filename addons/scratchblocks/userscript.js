@@ -45,6 +45,7 @@ async function getLocales(addon) {
 
   return lang;
 }
+
 /** @param {import("types").Types} */
 export default async function ({ addon, msg }) {
   window.scratchAddons._scratchblocks3Enabled = true;

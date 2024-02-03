@@ -1,4 +1,5 @@
 import { emojis, unicodeEmojis } from "./emojis.js";
+
 /** @param {import("types").Types} */
 export default async function ({ addon, console, msg }) {
   let lastParent = null;

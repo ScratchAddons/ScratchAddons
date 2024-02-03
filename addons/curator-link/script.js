@@ -1,4 +1,5 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
+
 /** @param {import("types").Types} */
 export default async function ({ addon }) {
   const heading = await addon.tab.waitForElement(".inner.mod-splash + .inner.mod-splash h4", {

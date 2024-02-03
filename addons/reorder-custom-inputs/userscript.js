@@ -1,3 +1,4 @@
+/** @param {import("types").Types} */
 export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
 

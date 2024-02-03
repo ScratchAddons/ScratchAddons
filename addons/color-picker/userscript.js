@@ -3,6 +3,7 @@ import paintEditorHandler from "./paint-editor.js";
 
 // Load tinycolor here, and execute code after that
 // Note that we don't await other scripts (they block!)
+
 /** @param {import("types").Types} */
 export default async (api) => {
   const { addon } = api;

@@ -1,4 +1,5 @@
 import { insert, wrapSelection, getSelection } from "../../libraries/thirdparty/cs/text-field-edit.js";
+
 /** @param {import("types").Types} */
 export default async ({ addon, console, msg }) => {
   await addon.tab.waitForElement(".markItUpButton16");

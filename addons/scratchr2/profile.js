@@ -1,3 +1,4 @@
+/** @param {import("types").Types} */
 export default async function ({ addon, console }) {
   const oldSliderCarousel = $.fn.sliderCarousel;
   $.fn.sliderCarousel = function (...args) {
