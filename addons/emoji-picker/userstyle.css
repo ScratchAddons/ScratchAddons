@@ -9,7 +9,6 @@
   box-shadow: 0px 0px 5px #00000022;
   z-index: 2;
   padding: 5px;
-  padding-bottom: 0;
   overflow: hidden;
   line-height: 0px;
   font-size: 15px;
@@ -85,13 +84,14 @@
   width: 20px;
   height: 20px;
 }
-.sa-emoji-picker-see-more {
+.compose-comment .compose-bottom-row .sa-emoji-picker-see-more {
   width: 100%;
   margin-top: 5px;
 }
-.sa-emoji-button-r2 .sa-emoji-picker-see-more {
+#comments #comment-form .sa-emoji-button-r2 .sa-emoji-picker-see-more,
+#comments .comment form .sa-emoji-button-r2 .sa-emoji-picker-see-more {
   width: calc(100% - 2px);
-  margin-bottom: 7px;
+  margin-bottom: 2px;
   margin-top: 4px;
 }
 
