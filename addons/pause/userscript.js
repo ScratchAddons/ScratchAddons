@@ -20,7 +20,7 @@ export default async function ({ addon, console, msg }) {
   onPauseChanged(setSrc);
 
   document.addEventListener("keydown", function (e) {
-    if (e.altKey && e.code === "KeyX" && !addon.self.disabled) {
+    if (e.altKey && e.key.toLowerCase() === "x" && !addon.self.disabled) {
       e.preventDefault();
       setPaused(!isPaused());
     }

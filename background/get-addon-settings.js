@@ -10,6 +10,7 @@ import minifySettings from "../libraries/common/minify-settings.js";
  - forum-quote-code-beautifier 1 (last bumped in v1.34)
  */
 
+// The following three functions are helper functions for the setting migration code
 const areColorsEqual = (currentColor, oldPresetColor) => {
   // Case insensitive
   const currentColorLowercase = currentColor.toLowerCase();
@@ -20,10 +21,10 @@ const areColorsEqual = (currentColor, oldPresetColor) => {
     hexColor.length === 7 // #{rr}{gg}{bb}  →  #{rr}{gg}{bb}ff
       ? `${hexColor}ff`
       : hexColor.length === 5 // #{r}{g}{b}{a}  →  #{rr}{gg}{bb}{aa}
-      ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}${hexColor[4].repeat(2)}`
-      : hexColor.length === 4 // #{r}{g}{b}  →  #{rr}{gg}{bb}ff
-      ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}ff`
-      : hexColor;
+        ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}${hexColor[4].repeat(2)}`
+        : hexColor.length === 4 // #{r}{g}{b}  →  #{rr}{gg}{bb}ff
+          ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}ff`
+          : hexColor;
 
   // Convert both colors to #{rr}{gg}{bb}{aa}
   const currentColorRRGGBBAA = getRRGGBBAA(currentColorLowercase);
@@ -74,6 +75,7 @@ const updatePresetIfMatching = (settings, version, oldPreset = null, presetOrFn 
   }
 };
 
+// Since v1.33.0, addon settings are split up across three storage keys to help stay below a storage quota.
 async function transitionToNewStorageKeys(addonSettings) {
   chrome.storage.sync.set(
     {
@@ -102,6 +104,8 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
     ? {} // Default value
     : { ...storageItems.addonSettings1, ...storageItems.addonSettings2, ...storageItems.addonSettings3 };
   const func = () => {
+    // Start by migrating settings (sometimes we add new settings or make changes to
+    // the available settings in some addons between versions)
     let madeAnyChanges = false;
 
     if (addonsEnabled["editor-devtools"] === true && addonsEnabled["move-to-top-bottom"] === undefined) {
@@ -139,6 +143,24 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
       }
     }
 
+    if (addonsEnabled["custom-menu-bar"] === undefined) {
+      // Transition v1.35 to v1.36
+      if (addonsEnabled["tutorials-button"] === true) {
+        // Hide Tutorials button is now a setting in Customizable menu bar. Enable it for existing addon users.
+        madeAnyChanges = true;
+        addonsEnabled["custom-menu-bar"] = true;
+        addonSettings["custom-menu-bar"] = { ["hide-tutorials-button"]: true };
+      }
+      if (addonsEnabled["editor-compact"] === true) {
+        // The icons on the menu bar buttons are now hidden via Customizable menu bar.
+        // Enable it for existing Compact editor users.
+        madeAnyChanges = true;
+        addonsEnabled["custom-menu-bar"] = true;
+        if (!addonSettings["custom-menu-bar"]) addonSettings["custom-menu-bar"] = {};
+        addonSettings["custom-menu-bar"]["menu-labels"] = "labels";
+      }
+    }
+
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
       const settings = addonSettings[addonId] || {};
@@ -160,7 +182,8 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             madeChangesToAddon = true;
             madeAnyChanges = true;
 
-            // cloning required for tables
+            // Fill in with default value
+            // Cloning required for tables
             settings[option.id] = JSON.parse(JSON.stringify(option.default));
           } else if (option.type === "positive_integer" || option.type === "integer") {
             // ^ else means typeof can't be "undefined", so it must be number
@@ -639,6 +662,18 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             settings.bordercolor = "#855cd6";
           });
         }
+
+        if (addonId === "colorblind" && settings.links) {
+          // Transition v1.34 to v1.35
+          if (settings.links !== "underline") settings["underline-style"] = "none";
+          if (settings.links === "bold") {
+            settings.bold = "all";
+          } else {
+            settings["bold"] = "default";
+          }
+          delete settings.links;
+          madeAnyChanges = madeChangesToAddon = true;
+        }
       }
 
       if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;
@@ -649,6 +684,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
       }
     }
 
+    // Finally, minify the settings and store them in the scratchAddons object
     const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
     if (madeAnyChanges)
       chrome.storage.sync.set({

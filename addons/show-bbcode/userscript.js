@@ -12,6 +12,7 @@ function viewSource(post, msg) {
       const source = document.createElement("div");
       body.insertBefore(source, body.firstElementChild);
       source.className = "post_body_html";
+      source.dataset.showBbcode = "";
       if (event.target.sourceText !== undefined) {
         event.target.setAttribute("data-state", "source");
         source.innerText = event.target.sourceText;

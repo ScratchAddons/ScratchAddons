@@ -35,6 +35,7 @@ export default async function ({ addon, console, msg }) {
         } else if (!data.code) {
           span.innerText = "@" + data.username;
           img.src = data.profile.images["32x32"];
+          img.onload = () => img.classList.add("sa-search-profile-profilepic");
         }
       });
 

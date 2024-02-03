@@ -31,7 +31,7 @@ export default async function ({ addon, console }) {
   let collapseTimeout;
 
   footer.addEventListener("mouseover", () => {
-    footer.classList.add("expanded");
+    footer.classList.add("transition", "expanded");
     if (collapseTimeout) {
       clearTimeout(collapseTimeout);
     }

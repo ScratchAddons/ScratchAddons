@@ -130,10 +130,10 @@ export default async ({ addon, console, msg }) => {
     saColorLabel.appendChild(saColorLabelName);
     saColorLabel.appendChild(saColorLabelVal);
 
-    let keyPressed = -1;
+    let keyPressed = null;
     let originalPos = { x: 0, y: 0 };
-    window.addEventListener("keydown", (e) => (keyPressed = e.keyCode));
-    window.addEventListener("keyup", () => (keyPressed = -1));
+    window.addEventListener("keydown", (e) => (keyPressed = e.key));
+    window.addEventListener("keyup", () => (keyPressed = null));
 
     let origHue = 0;
     let el = null;
@@ -150,7 +150,7 @@ export default async ({ addon, console, msg }) => {
     function updateHandle(e, keyPressed, originalPos) {
       let cx = Math.min(Math.max(e.clientX - saColorPicker.getBoundingClientRect().x, 0), 150);
       let cy = Math.min(Math.max(e.clientY - saColorPicker.getBoundingClientRect().y, 0), 150);
-      if (keyPressed === 16) {
+      if (keyPressed === "Shift") {
         if (Math.abs(cx - originalPos.x) > Math.abs(cy - originalPos.y)) cy = originalPos.y;
         else cx = originalPos.x;
       }
@@ -180,7 +180,7 @@ export default async ({ addon, console, msg }) => {
       rateLimiter.limit(() => {
         let ox = Math.min(Math.max(e.clientX - saColorPicker.getBoundingClientRect().x, 0), 150);
         let oy = Math.min(Math.max(e.clientY - saColorPicker.getBoundingClientRect().y, 0), 150);
-        if (keyPressed === 16) {
+        if (keyPressed === "Shift") {
           if (Math.abs(ox - originalPos.x) > Math.abs(oy - originalPos.y)) oy = originalPos.y;
           else ox = originalPos.x;
         }
