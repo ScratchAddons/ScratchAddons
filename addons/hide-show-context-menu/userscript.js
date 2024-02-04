@@ -6,7 +6,7 @@ export default async function ({ addon, msg }) {
   const sharedOptions = {
     types: ["sprite"],
     position: "assetContextMenuAfterDelete",
-    order: 12, // after folders
+    order: 9, // before folders - it's unpredictable how many slots folders takes up
     border: true,
   };
   window.vm = vm;
