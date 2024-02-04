@@ -19,7 +19,8 @@ export default async function ({ addon, console, msg }) {
   onPauseChanged(setSrc);
 
   document.addEventListener("keydown", function (e) {
-    if (e.altKey && e.key.toLowerCase() === "x" && !addon.self.disabled) {
+    // Need to use e.code here as option+x on macOS actually types ≈
+    if (e.altKey && e.code === "KeyX" && !addon.self.disabled) {
       e.preventDefault();
       setPaused(!isPaused());
     }
