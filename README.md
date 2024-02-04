@@ -1,4 +1,3 @@
-
 <img src="images/icon.svg" alt="Scratch Addons logo" align="right" width="128px"></img>
 # Scratch Addons
 
