@@ -9,7 +9,6 @@ export default async function ({ addon, msg }) {
     order: 9, // before folders - it's unpredictable how many slots folders takes up
     border: true,
   };
-  window.vm = vm;
 
   [true, false].forEach((visibility) => {
     addon.tab.createEditorContextMenu(
