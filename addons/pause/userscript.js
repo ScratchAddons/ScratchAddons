@@ -19,8 +19,8 @@ export default async function ({ addon, console, msg }) {
   onPauseChanged(setSrc);
 
   document.addEventListener("keydown", function (e) {
-    // Need to use e.code here as option+x on macOS actually types ≈
-    if (e.altKey && e.code === "KeyX" && !addon.self.disabled) {
+    // On macOS, option+x types ≈ pretty universally across keyboard layouts
+    if (e.altKey && (e.key.toLowerCase() === "x" || e.key === "≈") && !addon.self.disabled) {
       e.preventDefault();
       setPaused(!isPaused());
     }
