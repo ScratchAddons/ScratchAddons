@@ -1,5 +1,5 @@
 {
-  "name": "Hide sprites via context menu",
+  "name": "Hide sprites with context menu",
   "description": "Adds an option to a sprite's right click menu to hide or show it.",
   "tags": ["editor"],
   "versionAdded": "1.36.0",
