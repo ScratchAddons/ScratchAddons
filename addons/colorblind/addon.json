@@ -93,6 +93,7 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "injectAsStyleElt": true,
   "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.34.0",
   "tags": ["community", "theme"]
