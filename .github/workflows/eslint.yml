@@ -7,12 +7,14 @@ on:
     paths:
       - '**/*.js'
       - .eslintrc.json
+      - .github/workflows/eslint.yml
   pull_request:
     branches: 
       - master
     paths:
       - '**/*.js'
       - .eslintrc.json
+      - .github/workflows/eslint.yml
 
 jobs:
   eslint:
