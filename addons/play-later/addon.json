@@ -11,10 +11,6 @@
         {
             "url": "addButton.css",
             "matches": ["projects"]
-        },
-        {
-            "url": "homePage.css",
-            "matches": ["https://scratch.mit.edu/"]
         }
     ],
     "userscripts": [
