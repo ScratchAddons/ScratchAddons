@@ -1,7 +1,7 @@
 name: Format code using Prettier
 on:
   push:
-  pull_reqeust:
+  pull_request:
   workflow_dispatch:
 
 jobs:
