@@ -1,6 +1,6 @@
 {
   "name": "Remaining reply counter",
-  "description": "Shows you how many more replies can be posted on each comment thread in a studio.",
+  "description": "Shows you how many more replies can be posted on each comment thread in a studio before reaching the limit of 25.",
   "credits": [
     {
       "name": "BarelySmooth",
