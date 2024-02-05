@@ -2,10 +2,17 @@ name: ESLint
 
 on:
   push:
-    branches: [ "master" ]
+    branches: 
+      - master
+    paths:
+      - '**/*.js'
+      - .eslintrc.json
   pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ "master" ]
+    branches: 
+      - master
+    paths:
+      - '**/*.js'
+      - .eslintrc.json
 
 jobs:
   eslint:
@@ -17,12 +24,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install ESLint
-        run: |
-          npm install eslint
-
       - name: Run ESLint
-        run: npx eslint .
-          --config .eslintrc.json
-          --ext .js
+        run: npx eslint . --config .eslintrc.json --ext .js
         continue-on-error: true
