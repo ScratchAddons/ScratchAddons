@@ -6,6 +6,10 @@
 .blocklyEditableText > text {
   fill: var(--editorTheme3-inputColor-blackText);
 }
+.sa-theme3-editable-label .blocklyHtmlInput {
+  /* Labels in custom block editor */
+  color: var(--editorTheme3-inputColor-blackText);
+}
 
 .blocklyDropDownDiv .goog-menuitem {
   color: black;
