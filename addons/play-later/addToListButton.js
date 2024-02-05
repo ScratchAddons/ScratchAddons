@@ -1,15 +1,13 @@
 import { addToList, getList, removeFromList } from './list.js';
 
-function projectId() {
-    return window.location.pathname.split('projects/')[1].split('/')[0];
-}
+const projectId = location.pathname.split('/')[2];
 
 async function addToStorage() {
-    addToList(projectId());
+    addToList(projectId);
 }
 
 async function removeFromStorage() {
-    removeFromList(projectId());
+    removeFromList(projectId);
 }
 
 export default async function ({ addon, console, msg }) {
@@ -21,7 +19,7 @@ export default async function ({ addon, console, msg }) {
             existingButton.remove();
         }
 
-        const isRemoveButton = getList().includes(projectId());
+        const isRemoveButton = getList().includes(projectId);
         let button = document.createElement('button');
         button.classList.add('button', 'action-button', 'sa-play-later-button');
         if (isRemoveButton) {
