@@ -1,10 +1,11 @@
-name: Pull and push strings via Transifex
+name: Sync strings via Transifex
 on:
   workflow_dispatch:
   schedule:
     - cron: "0 0 * * *"
 jobs:
   transifex:
+    name: Transifex
     runs-on: ubuntu-latest
     if: github.repository_owner == 'ScratchAddons'
     steps:
