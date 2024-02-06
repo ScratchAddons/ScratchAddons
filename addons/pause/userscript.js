@@ -13,8 +13,19 @@ export default async function ({ addon, console, msg }) {
     img.title = isPaused() ? msg("play") : msg("pause");
   };
   img.addEventListener("click", () => setPaused(!isPaused()));
+
   addon.tab.displayNoneWhileDisabled(img);
-  addon.self.addEventListener("disabled", () => setPaused(false));
+  addon.self.addEventListener("disabled", () => {
+    setPaused(false);
+    try {
+      window.removeEventListener("blur", autoPause);
+    } catch {
+      /*Avoids throwing an error message if the event listener is not found*/
+    }
+  });
+  addon.self.addEventListener("reenabled", () => {
+    if (addon.settings.get("auto-pause")) window.addEventListener("blur", autoPause);
+  });
   setSrc();
   onPauseChanged(setSrc);
 
@@ -23,6 +34,16 @@ export default async function ({ addon, console, msg }) {
       e.preventDefault();
       setPaused(!isPaused());
     }
+  });
+
+  function autoPause() {
+    setPaused(true);
+  }
+
+  if (addon.settings.get("auto-pause")) window.addEventListener("blur", autoPause);
+  addon.settings.addEventListener("change", () => {
+    if (addon.settings.get("auto-pause")) window.addEventListener("blur", autoPause);
+    else window.removeEventListener("blur", autoPause);
   });
 
   while (true) {
