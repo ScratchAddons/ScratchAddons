@@ -255,7 +255,12 @@ export default async function ({ addon, msg, console }) {
         let fields = root.inputList[0];
         let desc;
         for (const fieldRow of fields.fieldRow) {
-          desc = (desc ? desc + " " : "") + fieldRow.getText();
+          desc = desc ? desc + " " : "";
+          if (fieldRow instanceof Blockly.FieldImage && fieldRow.src_.endsWith("green-flag.svg")) {
+            desc += msg("/_general/blocks/green-flag");
+          } else {
+            desc += fieldRow.getText();
+          }
         }
         return desc;
       }
