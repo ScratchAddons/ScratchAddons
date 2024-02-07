@@ -1,6 +1,6 @@
 /*
   todo:
-  - fix errors when trying to edit blocks (fixup ScratchBlocks,Procedures.editProcedureCallback)
+  - fix errors when trying to edit blocks (fixup ScratchBlocks.Procedures.editProcedureCallback)
   - fix errors when editing/deleting arguments
   - change procedures_return_reporter to procedures_return_boolean when necessary, and vice versa
   - transpile return blocks
@@ -11,7 +11,7 @@
 export default async function ({ addon, msg, console }) {
   const vm = addon.tab.traps.vm;
 
-  // vm pollution handled in content-scripts/cs.js
+  // vm pollution handled in content-scripts/prototyoe-handler.js
 
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
@@ -268,25 +268,60 @@ export default async function ({ addon, msg, console }) {
 
   const oldEditProcCb = ScratchBlocks.Procedures.editProcedureCallback_;
   ScratchBlocks.Procedures.editProcedureCallback_ = function (block) {
-    const initialType = block.type;
+    /*const initialType = block.type;
     if (initialType === "procedures_definition_reporter") {
       block.type = "procedures_definition";
     } else if (initialType === "procedures_call_boolean" || initialType === "procedures_call_reporter") {
       block.type = "procedures_call";
     }
     oldEditProcCb(block);
-    block.type = initialType;
+    block.type = initialType;*/
+    // from https://github.com/scratchfoundation/scratch-blocks/blob/c941240213b74157f2e26f20279da94684cf1903/core/procedures.js#L441
+    // Edit can come from one of three block types (call, define, prototype)
+    // Normalize by setting the block to the prototype block for the procedure.
+    if (block.type === "procedures_definition" || block.type === "procedures_definition_reporter") {
+      var input = block.getInput('custom_block');
+      if (!input) {
+        alert('Bad input'); // TODO: Decide what to do about this.
+        return;
+      }
+      var conn = input.connection;
+      if (!conn) {
+        alert('Bad connection'); // TODO: Decide what to do about this.
+        return;
+      }
+      var innerBlock = conn.targetBlock();
+      if (!innerBlock ||
+          !["procedures_prototype", "procedures_prototype_reporter", "procedures_prototype_boolean"].includes(innerBlock.type)) {
+        alert('Bad inner block'); // TODO: Decide what to do about this.
+        return;
+      }
+      block = innerBlock;
+    } else if (["procedures_call", "procedures_call_reporter", "procedures_call_boolean"].includes(block.type)) {
+      // This is a call block, find the prototype corresponding to the procCode.
+      // Make sure to search the correct workspace, call block can be in flyout.
+      var workspaceToSearch = block.workspace.isFlyout ?
+          block.workspace.targetWorkspace : block.workspace;
+      block = ScratchBlocks.Procedures.getPrototypeBlock(
+          block.getProcCode(), workspaceToSearch);
+    }
+    console.log(block.procCode_)
+    // Block now refers to the procedure prototype block, it is safe to proceed.
+    ScratchBlocks.Procedures.externalProcedureDefCallback(
+        block.mutationToDom(),
+        ScratchBlocks.Procedures.editProcedureCallbackFactory_(block)
+    );
   };
 
-  ScratchBlocks.Blocks["procedures_declaration"].domToMutation = function (xmlElement) {
+  /*ScratchBlocks.Blocks["procedures_declaration"].domToMutation = function (xmlElement) {
     console.log(xmlElement);
     ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionDomToMutation.call(this, xmlElement);
-    this.shape_ = mutation.getAttribute("shape") || "stack";
-  };
-  ScratchBlocks.Blocks["procedures_declaration"].mutationToDom = function () {
-    const container = ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionMutationToDom.call(this);
+    this.shape_ = xmlElement.getAttribute("shape") || "stack";
+  };*/
+  ScratchBlocks.Blocks["procedures_declaration"].mutationToDom = function (opt_generateShadows) {
+    const container = ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionMutationToDom.call(this, opt_generateShadows);
     container.setAttribute("shape", this.shape_);
-    console.log(container);
+    console.log(this, container);
     return container;
   };
 
@@ -307,6 +342,9 @@ export default async function ({ addon, msg, console }) {
   }
 
   const reduxStateListener = async (e) => {
+    if (e.detail.action.type === "scratch-gui/custom-procedures/ACTIVATE_CUSTOM_PROCEDURES") {
+      console.log(e.detail.action)
+    }
     if (e.detail.action.type === UPDATE_TOOLBOX_ACTION && !e.detail.action.saExtraBlocks) {
       const toolboxXML = xmlParser.parseFromString(e.detail.action.toolboxXML, "text/xml");
       const blocks = vm.editingTarget.blocks;
@@ -415,7 +453,11 @@ export default async function ({ addon, msg, console }) {
   };
   const oldDeleteBlock = blocksPrototype.deleteBlock;
   blocksPrototype.deleteBlock = function (blockid) {
-    const opcode = this._blocks[blockid].opcode;
+    const block = this._blocks[blockid];
+    if (!block) {
+      return;
+    }
+    const opcode = block.opcode;
     oldDeleteBlock.call(this, blockid);
     if (opcode === "procedures_definition" || opcode === "procedures_definition_reporter") {
       this.queueToolboxUpdate();
@@ -494,7 +536,8 @@ export default async function ({ addon, msg, console }) {
           })
         );
       };
-      return originalInit.call(this, ...args);
+      originalInit.call(this, ...args);
+      console.log(this.procCode_);
     };
 
     // ignore any calls from scratch to add labels/inputs, as it tries to add them to a block that probably won't exist anymore
@@ -583,6 +626,7 @@ export default async function ({ addon, msg, console }) {
       mutationRoot.setMovable(false);
       mutationRoot.setDeletable(false);
       mutationRoot.contextMenu = false;
+      console.log(addon.tab.redux.state.scratchGui.customProcedures.mutator)
       mutationRoot.domToMutation(addon.tab.redux.state.scratchGui.customProcedures.mutator);
       mutationRoot.initSvg();
       mutationRoot.render();
@@ -610,6 +654,7 @@ export default async function ({ addon, msg, console }) {
         // scratch-gui doesn't seem to keep track of the mutator
         // so we do it instead, so inputs aren't lost when changing block type
         // addon.tab.redux.state.scratchGui.customProcedures.mutator = mutationRoot.mutationToDom();
+        console.log(mutationRoot.procCode_);
         addon.tab.redux.dispatch({
           type: "scratch-gui/custom-procedures/ACTIVATE_CUSTOM_PROCEDURES",
           mutator: mutationRoot.mutationToDom(),
