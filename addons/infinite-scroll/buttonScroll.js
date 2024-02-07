@@ -1,7 +1,14 @@
-async function commentLoader(addon, heightControl, selector, pathname, { yProvider = undefined } = {}) {
+async function commentLoader(
+  addon,
+  heightControl,
+  selector,
+  pathname,
+  { yProvider = undefined, canClick = () => true } = {}
+) {
   let func;
   let prevScrollDetector;
   const yProviderValue = yProvider;
+  document.body.classList.add("sa-collapse-footer");
   while (true) {
     const el = await addon.tab.waitForElement(selector, {
       markAsSeen: true,
@@ -20,7 +27,7 @@ async function commentLoader(addon, heightControl, selector, pathname, { yProvid
       if (typeof pathname === "string" && (window.location.pathname.split("/")[3] || "") !== pathname) return;
       if (threshold >= el.closest(heightControl).offsetHeight - 500) {
         if (el) {
-          el.click();
+          if (canClick()) el.click();
         }
       }
     };
@@ -35,6 +42,7 @@ export default async function ({ addon, console }) {
   const isStudioComments = isStudio && addon.settings.get("studioScroll");
   const isProjectComments =
     window.location.pathname.split("/")[1] === "projects" && addon.settings.get("projectScroll");
+  const isSearchOrExplore = ["search", "explore"].includes(window.location.pathname.split("/")[1]);
   if (isProjectComments || isStudioComments) {
     const buttonSelector = isStudioComments
       ? ".studio-compose-container .load-more-button"
@@ -68,6 +76,12 @@ export default async function ({ addon, console }) {
     commentLoader(addon, "#view", "div > .studio-members:last-child .studio-grid-load-more > button", "curators"); // Only scrolling curators for now
   if (isStudio && addon.settings.get("studioActivityScroll"))
     commentLoader(addon, "#view", ".studio-activity .studio-grid-load-more > button", "activity");
+  if (isSearchOrExplore && addon.settings.get("searchExploreScroll")) {
+    import("./search-explore-module.js").then((m) => {
+      const canClick = () => !m.currentlyFetchingProjects();
+      commentLoader(addon, "#view", "#projectBox > button.button", undefined, { canClick });
+    });
+  }
 
   // Enable scrolling for studio-followers
   // Disabled, see #3238

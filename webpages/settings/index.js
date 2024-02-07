@@ -168,6 +168,7 @@ let fuse;
     data() {
       return {
         smallMode: false,
+        devMode: false,
         theme: initialTheme,
         forceEnglishSetting: null,
         forceEnglishSettingInitial: null,
@@ -379,7 +380,9 @@ let fuse;
         setTimeout(() => window.parent.close(), 100);
       },
       hidePopup() {
-        document.querySelector(".popup").style.animation = "closePopup 0.6s 1";
+        document.querySelector(".popup").style.animation = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "closePopup 0.35s 1"
+          : "closePopup 0.6s 1";
         document.querySelector(".popup").addEventListener(
           "animationend",
           () => {
@@ -507,12 +510,12 @@ let fuse;
       manifest._categories[0] = manifest.tags.includes("popup")
         ? "popup"
         : manifest.tags.includes("easterEgg")
-        ? "easterEgg"
-        : manifest.tags.includes("theme")
-        ? "theme"
-        : manifest.tags.includes("community")
-        ? "community"
-        : "editor";
+          ? "easterEgg"
+          : manifest.tags.includes("theme")
+            ? "theme"
+            : manifest.tags.includes("community")
+              ? "community"
+              : "editor";
 
       const addCategoryIfTag = (arr) => {
         let count = 0;
@@ -722,6 +725,10 @@ let fuse;
   }
   window.onresize = resize;
   resize();
+
+  chrome.management.getSelf((info) => {
+    if (info.installType === "development") vue.devMode = true;
+  });
 
   // Konami code easter egg
   let cursor = 0;

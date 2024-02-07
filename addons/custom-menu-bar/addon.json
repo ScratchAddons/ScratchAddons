@@ -1,0 +1,132 @@
+{
+  "name": "Customizable menu bar",
+  "description": "Allows you to hide specific editor menu bar items or remove their labels or icons.",
+  "credits": [
+    {
+      "name": "philipp2007",
+      "link": "https://ggigabyte.repl.co/"
+    },
+    {
+      "name": "CST1229",
+      "link": "https://github.com/CST1229/",
+      "note": "compact user dropdown",
+      "id": "dropdown"
+    },
+    {
+      "name": "lisa_wolfgang",
+      "link": "https://scratch.mit.edu/users/lisa_wolfgang/",
+      "note": "hide tutorials button",
+      "id": "tutorials-button"
+    }
+  ],
+  "info": [
+    {
+      "id": "tutorials-button-update",
+      "text": "The \"Hide Tutorials button\" addon has been moved here as a setting."
+    },
+    {
+      "type": "notice",
+      "id": "small-screens",
+      "text": "The text labels may be automatically replaced by icons on smaller windows."
+    }
+  ],
+  "tags": ["editor", "editorMenuBar", "featured"],
+  "settings": [
+    {
+      "name": "Show menu...",
+      "id": "menu-labels",
+      "type": "select",
+      "potentialValues": [
+        {
+          "name": "Icons and labels",
+          "id": "both"
+        },
+        {
+          "name": "Icons only",
+          "id": "icons"
+        },
+        {
+          "name": "Labels only",
+          "id": "labels"
+        }
+      ],
+      "default": "both"
+    },
+    {
+      "name": "Hide Tutorials button",
+      "id": "hide-tutorials-button",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Hide My Stuff button",
+      "id": "my-stuff",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Compact user dropdown",
+      "id": "compact-username",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "username.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "my-stuff-hide.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": {
+          "my-stuff": true
+        }
+      }
+    },
+    {
+      "url": "username.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": {
+          "compact-username": true
+        }
+      }
+    },
+    {
+      "url": "menu-icons.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": {
+          "menu-labels": "icons"
+        }
+      }
+    },
+    {
+      "url": "menu-labels.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": {
+          "menu-labels": "labels"
+        }
+      }
+    },
+    {
+      "url": "tutorials-hide.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": {
+          "hide-tutorials-button": true
+        }
+      }
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "enabledByDefault": false,
+  "versionAdded": "1.35.0"
+}

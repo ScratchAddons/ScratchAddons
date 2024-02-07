@@ -374,11 +374,14 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="audio-trimmer_selection-background_"],
 [class*="tag-button_tag-button_"]:not([class*="tag-button_active_"]),
 [class*="action-menu_button_"],
-[class*="context-menu_menu-item_"]:not([class*="context-menu_menu-item-danger_"]):hover,
+[class*="context-menu_menu-item_"]:hover,
 .blocklyWidgetDiv .goog-menuitem-highlight,
 .blocklyWidgetDiv .goog-menuitem-hover {
   background-color: var(--editorDarkMode-primary);
   color: var(--editorDarkMode-primary-text);
+}
+[class*="context-menu_menu-item-danger_"]:hover {
+  background-color: hsla(30, 100%, 55%, 1);
 }
 [class*="gui_extension-button-container_"],
 [class*="prompt_button-row_"] button[class*="prompt_ok-button_"],

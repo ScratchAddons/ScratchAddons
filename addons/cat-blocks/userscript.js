@@ -335,10 +335,12 @@ export default async function ({ addon, console }) {
     }
     const flyout = workspace.getFlyout();
     if (flyout) {
+      Blockly.Events.disable();
       const flyoutWorkspace = flyout.getWorkspace();
       Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
       workspace.getToolbox().refreshSelection();
       workspace.toolboxRefreshEnabled_ = true;
+      Blockly.Events.enable();
     }
   }
 }
