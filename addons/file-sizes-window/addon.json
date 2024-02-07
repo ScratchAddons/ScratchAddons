@@ -1,6 +1,6 @@
 {
   "name": "Project file sizes window",
-  "description": "Adds a menu to the File menu that shows anything that exceeds that exceeds one of Scratch's project size limits.",
+  "description": "Adds a menu to the File menu that shows anything that exceeds one of Scratch's project size limits.",
   "credits": [
     {
       "name": "CST1229",
