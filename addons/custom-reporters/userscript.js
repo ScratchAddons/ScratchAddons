@@ -280,36 +280,38 @@ export default async function ({ addon, msg, console }) {
     // Edit can come from one of three block types (call, define, prototype)
     // Normalize by setting the block to the prototype block for the procedure.
     if (block.type === "procedures_definition" || block.type === "procedures_definition_reporter") {
-      var input = block.getInput('custom_block');
+      var input = block.getInput("custom_block");
       if (!input) {
-        alert('Bad input'); // TODO: Decide what to do about this.
+        alert("Bad input"); // TODO: Decide what to do about this.
         return;
       }
       var conn = input.connection;
       if (!conn) {
-        alert('Bad connection'); // TODO: Decide what to do about this.
+        alert("Bad connection"); // TODO: Decide what to do about this.
         return;
       }
       var innerBlock = conn.targetBlock();
-      if (!innerBlock ||
-          !["procedures_prototype", "procedures_prototype_reporter", "procedures_prototype_boolean"].includes(innerBlock.type)) {
-        alert('Bad inner block'); // TODO: Decide what to do about this.
+      if (
+        !innerBlock ||
+        !["procedures_prototype", "procedures_prototype_reporter", "procedures_prototype_boolean"].includes(
+          innerBlock.type
+        )
+      ) {
+        alert("Bad inner block"); // TODO: Decide what to do about this.
         return;
       }
       block = innerBlock;
     } else if (["procedures_call", "procedures_call_reporter", "procedures_call_boolean"].includes(block.type)) {
       // This is a call block, find the prototype corresponding to the procCode.
       // Make sure to search the correct workspace, call block can be in flyout.
-      var workspaceToSearch = block.workspace.isFlyout ?
-          block.workspace.targetWorkspace : block.workspace;
-      block = ScratchBlocks.Procedures.getPrototypeBlock(
-          block.getProcCode(), workspaceToSearch);
+      var workspaceToSearch = block.workspace.isFlyout ? block.workspace.targetWorkspace : block.workspace;
+      block = ScratchBlocks.Procedures.getPrototypeBlock(block.getProcCode(), workspaceToSearch);
     }
-    console.log(block.procCode_)
+    console.log(block.procCode_);
     // Block now refers to the procedure prototype block, it is safe to proceed.
     ScratchBlocks.Procedures.externalProcedureDefCallback(
-        block.mutationToDom(),
-        ScratchBlocks.Procedures.editProcedureCallbackFactory_(block)
+      block.mutationToDom(),
+      ScratchBlocks.Procedures.editProcedureCallbackFactory_(block)
     );
   };
 
@@ -319,7 +321,10 @@ export default async function ({ addon, msg, console }) {
     this.shape_ = xmlElement.getAttribute("shape") || "stack";
   };*/
   ScratchBlocks.Blocks["procedures_declaration"].mutationToDom = function (opt_generateShadows) {
-    const container = ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionMutationToDom.call(this, opt_generateShadows);
+    const container = ScratchBlocks.ScratchBlocks.ProcedureUtils.definitionMutationToDom.call(
+      this,
+      opt_generateShadows
+    );
     container.setAttribute("shape", this.shape_);
     console.log(this, container);
     return container;
@@ -343,7 +348,7 @@ export default async function ({ addon, msg, console }) {
 
   const reduxStateListener = async (e) => {
     if (e.detail.action.type === "scratch-gui/custom-procedures/ACTIVATE_CUSTOM_PROCEDURES") {
-      console.log(e.detail.action)
+      console.log(e.detail.action);
     }
     if (e.detail.action.type === UPDATE_TOOLBOX_ACTION && !e.detail.action.saExtraBlocks) {
       const toolboxXML = xmlParser.parseFromString(e.detail.action.toolboxXML, "text/xml");
@@ -626,7 +631,7 @@ export default async function ({ addon, msg, console }) {
       mutationRoot.setMovable(false);
       mutationRoot.setDeletable(false);
       mutationRoot.contextMenu = false;
-      console.log(addon.tab.redux.state.scratchGui.customProcedures.mutator)
+      console.log(addon.tab.redux.state.scratchGui.customProcedures.mutator);
       mutationRoot.domToMutation(addon.tab.redux.state.scratchGui.customProcedures.mutator);
       mutationRoot.initSvg();
       mutationRoot.render();
