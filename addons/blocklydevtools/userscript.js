@@ -422,6 +422,10 @@ export default async function ({ addon, console }) {
                     if (element.hasAttribute("data-id")) {
                         blockId = element.getAttribute("data-id");
                         workspace.getBlockById(blockId).dispose(false); //dispose(false) means "do not heal stack"
+                        if (workspace.getToolbox() //If the blockly instance has a toolbox, it needs to be refreshed,
+                        ) {
+                            workspace.getToolbox().refreshSelection();
+                        }
                     }
                 }, {
                     capture: true
