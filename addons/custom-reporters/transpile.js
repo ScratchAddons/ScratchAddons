@@ -37,7 +37,43 @@ class Transpiler {
       return json;
     };
   }
+  constructor(vm, ScratchBlocks) {
+    this.vm = vm;
+    this.ScratchBlocks = ScratchBlocks;
+    if (this.vm.editingTarget) {
+      this.transpileTargetToSA(this.vm.editingTarget);
+    }
+    const setEditingTarget = this.vm.constructor.prototype.setEditingTarget;
+    const transpilerThis = this;
+    this.vm.constructor.prototype.setEditingTarget = function (targetId) {
+      setEditingTarget.call(this, targetId);
+      transpilerThis.transpileTargetToSA(this.editingTarget);
+    };
+    const toJSON = this.vm.constructor.prototype.toJSON;
+    this.vm.constructor.prototype.toJSON = function (optTargetId) {
+      if (optTargetId) {
+        const target = this.runtime.getTargetById(optTargetId);
+        transpilerThis.transpileTargetToVanilla(target, false);
+        const json = toJSON.call(this, optTargetId);
+        transpilerThis.transpileTargetToSA(target, false);
+        return json;
+      }
+      for (const target of this.runtime.targets) {
+        transpilerThis.transpileTargetToVanilla(target, false);
+      }
+      const json = toJSON.call(this, optTargetId);
+      if (this.editingTarget) {
+        transpilerThis.transpileTargetToSA(this.editingTarget, false);
+      }
+      return json;
+    };
+  }
 
+  transpileTargetToVanilla(target, shouldEmitWorkspaceUpdate = true) {
+    if (!target.transpiledToSA) return;
+    this._toVanilla(target, (shouldEmitWorkspaceUpdate = true));
+    target.transpiledToSA = false;
+  }
   transpileTargetToVanilla(target, shouldEmitWorkspaceUpdate = true) {
     if (!target.transpiledToSA) return;
     this._toVanilla(target, (shouldEmitWorkspaceUpdate = true));
@@ -49,7 +85,15 @@ class Transpiler {
     this._toSA(target, (shouldEmitWorkspaceUpdate = true));
     target.transpiledToSA = true;
   }
+  transpileTargetToSA(target, shouldEmitWorkspaceUpdate = true) {
+    if (target.transpiledToSA) return;
+    this._toSA(target, (shouldEmitWorkspaceUpdate = true));
+    target.transpiledToSA = true;
+  }
 
+  _toVanilla(target, shouldEmitWorkspaceUpdate = true) {
+    throw new Error("transpileTargetToVanilla must be overriden by derived class");
+  }
   _toVanilla(target, shouldEmitWorkspaceUpdate = true) {
     throw new Error("transpileTargetToVanilla must be overriden by derived class");
   }
@@ -57,9 +101,15 @@ class Transpiler {
   _toSA(target, shouldEmitWorkspaceUpdate = true) {
     throw new Error("transpileTargetToSA must be overriden by derived class");
   }
+  _toSA(target, shouldEmitWorkspaceUpdate = true) {
+    throw new Error("transpileTargetToSA must be overriden by derived class");
+  }
 }
 
 export class VarTranspiler extends Transpiler {
+  constructor(vm, ScratchBlocks, getWorkspace) {
+    super(vm, ScratchBlocks, getWorkspace);
+  }
   constructor(vm, ScratchBlocks, getWorkspace) {
     super(vm, ScratchBlocks, getWorkspace);
   }
