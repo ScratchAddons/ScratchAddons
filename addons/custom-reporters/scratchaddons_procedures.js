@@ -22,26 +22,103 @@ export class ScratchAddonsProcedureBlocks {
         };
     }
 
+    _pollute(util) {
+        if (!util.saPolluted) {
+            const Util = util.constructor.prototype;
+            Util.procReturns = {};
+            Util.onProcReturn = function (id, callback) {
+                this.procReturns[id] = callback;
+            }
+            Util.procReturn = function(id, value) {
+                this.procReturns[id](value);
+            }
+            Util.saPolluted = true;
+        }
+        if (!util.thread.saPolluted) {
+            console.log('pollute!')
+            // pollute Thread to emulate `&& !thread.peekStackFrame().waitingReporter` at scratch-vm/src/engine/sequencer.js#L236
+            // this is incredibly painful and it's probably wrong
+            // of course we could just rewrite the whole function for that one change... but where's the fun in that?
+            util.thread.saPolluted = true;
+            const Thread = util.thread.constructor.prototype;
+            const stepThread = Thread.stepThread;
+            const peekStackFrame = Thread.peekStackFrame;
+            const popStack = Thread.popStack;
+            const goToNextBlock = Thread.goToNextBlock;
+            const patch = function () {
+                console.log('patch!')
+                Thread.goToNextBlock = function () {
+                    console.log('gotonextblock!')
+                    if (Thread.peekStackFrame().waitingReporter) return;
+                    goToNextBlock.call(this);
+                    Thread.goToNextBlock = goToNextBlock;
+                    Thread.peekStackFrame = peekStackFrame;
+                }
+                Thread.popStack = function () {
+                    console.log('popstack!')
+                    Thread.goToNextBlock = function () {
+                        console.log('gotonextblock2!')
+                        patch()
+                        goToNextBlock.call(this);
+                    }
+                }
+            };
+            Thread.stepThread = function (thread) {
+                console.log('stepthread!')
+                Thread.peekStackFrame = function () {
+                    console.log('peekstackframe!')
+                    patch()
+                    return peekStackFrame.call(this);
+                };
+                stepThread.call(this, thread);
+                Thread.peekStackFrame = peekStackFrame;
+                Thread.popStack = popStack;
+                Thread.goToNextBlock = goToNextBlock;
+            }
+
+            // however Thread#stopThisScript is small enough that rewriting it is ok
+            Thread.stopThisScript = function () {
+                let blockID = this.peekStack();
+                while (blockID !== null) {
+                    const block = this.target.blocks.getBlock(blockID);
+                    if ((typeof block !== 'undefined' && block.opcode === 'procedures_call') ||
+                        this.peekStackFrame().waitingReporter) {
+                        break;
+                    }
+                    this.popStack();
+                    blockID = this.peekStack();
+                }
+        
+                if (this.stack.length === 0) {
+                    // Clean up!
+                    this.requestScriptGlowInFrame = false;
+                    this.status = Thread.STATUS_DONE;
+                }
+            }
+        }
+    }
+
     definition () {
         // No-op: execute the blocks.
     }
 
     call (args, util) {
-        //this._polluteUtil(util);
+        this._pollute(util);
         console.log('called!')
         if (util.stackFrame.executed) {
-          const returnValue = stackFrame.returnValue;
+            console.log('executed!')
+          const returnValue = util.stackFrame.returnValue;
           // This stackframe will be reused for other reporters in this block, so clean it up for them.
           // Can't use reset() because that will reset too much.
           const threadStackFrame = util.thread.peekStackFrame();
           threadStackFrame.params = null;
-          delete stackFrame.returnValue;
-          delete stackFrame.executed;
+          delete util.stackFrame.returnValue;
+          delete util.stackFrame.executed;
           return returnValue;
         }
         const procedureCode = args.mutation.proccode;
         const paramNamesIdsAndDefaults = util.getProcedureParamNamesIdsAndDefaults(procedureCode);
-
+        console.log(paramNamesIdsAndDefaults)
         // If null, procedure could not be found, which can happen if custom
         // block is dragged between sprites without the definition.
         // Match Scratch 2.0 behavior and noop.
@@ -66,8 +143,22 @@ export class ScratchAddonsProcedureBlocks {
         util.stackFrame.executed = true;
         util.thread.peekStackFrame().waitingReporter = true;
         // Default return value
-        util.stackFrame.returnValue = '';
-        util.startProcedure(util.thread, procedureCode);
+        util.stackFrame.returnValue = '7';
+        //util.startProcedure(util.thread, procedureCode);
+        console.log('started procedure!')
+        // pretend we're returning a promise so the sequencer waits for a reporter
+        /*return {
+            then () {
+                console.log('then!')
+                // if the thread status is STATUS_PROMISE_WAIT, reset it to STATUS_RUNNING
+                if (util.thread.status === 1) util.thread.status = 0;
+            }
+        };*/
+        //return new Promise((r) => setTimeout(() => r(5), 1000))
+        return new Promise((resolve) => {
+            util.onProcReturn('a', (v) => resolve(v));
+            console.log(util.procReturns)
+        });
     }
 
     return (args, util) {
@@ -76,6 +167,8 @@ export class ScratchAddonsProcedureBlocks {
         // If used outside of a custom block, there may be no stackframe.
         if (util.thread.peekStackFrame()) {
             util.stackFrame.returnValue = args.return_value;
+            util.stackFrame.waitingReporter = false;
+            util.procReturn('a', args.return_value);
         }
     }
 }
