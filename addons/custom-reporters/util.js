@@ -64,6 +64,6 @@ export function getReturnVar(proccode) {
       variableType: internalVariable.type,
     };
   }
-  console.log(variable);
+  //console.log(variable);
   return variable;
 }

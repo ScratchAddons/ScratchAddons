@@ -3,6 +3,7 @@
  */
 
 import { getStackBlock, getReturnVar, uid } from "./util.js";
+import { ScratchAddonsProcedureBlocks } from "./scratchaddons_procedures.js";
 
 /**
  * Base transpiler class, to be extended for each transpilation scheme
@@ -43,6 +44,67 @@ class Transpiler {
       }
       return json;
     };
+    const registerBlockPackages = this.vm.runtime.constructor.prototype._registerBlockPackages;
+    this.vm.runtime.constructor.prototype._registerBlockPackages = function () {
+      registerBlockPackages.call(this);
+      const packageObject = new ScratchAddonsProcedureBlocks(this);
+      const packagePrimitives = packageObject.getPrimitives();
+      for (const op in packagePrimitives) {
+        if (Object.prototype.hasOwnProperty.call(packagePrimitives, op)) {
+          this._primitives[op] =
+            packagePrimitives[op].bind(packageObject);
+        }
+      }
+    }
+    this.vm.runtime._registerBlockPackages();
+    const g = this.vm.runtime.getOpcodeFunction;
+    this.vm.runtime.getOpcodeFunction = function (a) {
+      console.log(a); return g.call(this, a)
+    }
+    this.vm.editingTarget.blocks.constructor.prototype.getProcedureParamNamesIdsAndDefaults = function (name) {
+      const cachedNames = this._cache.procedureParamNames[name];
+      if (typeof cachedNames !== 'undefined') {
+        return cachedNames;
+      }
+
+      for (const id in this._blocks) {
+        if (!Object.prototype.hasOwnProperty.call(this._blocks, id)) continue;
+        const block = this._blocks[id];
+        if (['procedures_prototype', 'procedures_prototype_reporter', 'procedures_prototype_boolean'].includes(block.opcode)  &&
+          block.mutation.proccode === name) {
+          const names = JSON.parse(block.mutation.argumentnames);
+          const ids = JSON.parse(block.mutation.argumentids);
+          const defaults = JSON.parse(block.mutation.argumentdefaults);
+
+          this._cache.procedureParamNames[name] = [names, ids, defaults];
+          return this._cache.procedureParamNames[name];
+        }
+      }
+
+      this._cache.procedureParamNames[name] = null;
+      return null;
+    }
+    this.vm.editingTarget.blocks.constructor.prototype.getProcedureDefinition = function (name) {
+      const blockID = this._cache.procedureDefinitions[name];
+      if (typeof blockID !== 'undefined') {
+          return blockID;
+      }
+
+      for (const id in this._blocks) {
+          if (!Object.prototype.hasOwnProperty.call(this._blocks, id)) continue;
+          const block = this._blocks[id];
+          if (['procedures_definition', 'procedures_definition_reporter'].includes(block.opcode)) {
+              const internal = this._getCustomBlockInternal(block);
+              if (internal && internal.mutation.proccode === name) {
+                  this._cache.procedureDefinitions[name] = id; // The outer define block id
+                  return id;
+              }
+          }
+      }
+
+      this._cache.procedureDefinitions[name] = null;
+      return null;
+  }
   }
 
   transpileTargetToVanilla(target, shouldEmitWorkspaceUpdate = true) {
@@ -56,6 +118,8 @@ class Transpiler {
     this._toSA(target, (shouldEmitWorkspaceUpdate = true));
     target.transpiledToSA = true;
   }
+
+
 
   _toVanilla(target, shouldEmitWorkspaceUpdate = true) {
     throw new Error("transpileTargetToVanilla must be overriden by derived class");
@@ -233,6 +297,7 @@ export class VarTranspiler extends Transpiler {
             parent: block.parent,
             next: null,
             topLevel: false,
+            id: blockid,
           };
           const previousParentId = previousBlock.parent;
           const previousParent = blocks[previousParentId] ?? null;
