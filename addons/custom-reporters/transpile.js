@@ -217,8 +217,33 @@ export class VarTranspiler extends Transpiler {
           }
           break;
         }
-        case "data_variable":
-          console.log(block);
+        case "data_variable": {
+          const topBlock = target.blocks.getStackBlock(block);
+          const previousBlock = blocks[topBlock.parent];
+          if (previousBlock?.opcode !== "procedures_call") break;
+          const mutation =
+            previousBlock.mutation;
+          if (!mutation) break;
+          const shape = mutation.shape;
+          if (!shape) break;
+          const proccode = mutation.proccode;
+          if (target.lookupVariableById(block.fields.VARIABLE.id).name !== target.getReturnVar(proccode).value) return;
+          blocks[blockid] = {
+            ...previousBlock,
+            opcode: `procedures_call_${shape}`,
+            parent: block.parent,
+            next: null,
+            topLevel: false,
+          };
+          const previousParentId = previousBlock.parent;
+          const previousParent = blocks[previousParentId] ?? null;
+          if (previousParent) {
+            previousParent.next = topBlock.id;
+          }
+          topBlock.parent = previousParentId;
+          delete blocks[previousBlock.id];
+          break;
+        }
       }
     }
     if (shouldEmitWorkspaceUpdate) {
