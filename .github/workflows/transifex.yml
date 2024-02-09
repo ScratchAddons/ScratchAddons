@@ -1,4 +1,4 @@
-name: Sync strings via Transifex
+name: Sync strings with Transifex
 on:
   workflow_dispatch:
   schedule:
