@@ -2,16 +2,23 @@
  * Defines transpilation schemes for custom reporters
  */
 
+import { getStackBlock, getReturnVar, uid } from "./util.js";
+
 /**
  * Base transpiler class, to be extended for each transpilation scheme
  */
 class Transpiler {
-  constructor(vm, ScratchBlocks) {
+  constructor(vm) {
     this.vm = vm;
-    this.ScratchBlocks = ScratchBlocks;
-    if (this.vm.editingTarget) {
-      this.transpileTargetToSA(this.vm.editingTarget);
+  }
+
+  init() {
+    if (!this.vm.editingTarget) {
+      throw new Error("editingTarget must be ready before Transpiler#init is called");
     }
+    this.vm.editingTarget.blocks.constructor.prototype.getStackBlock = getStackBlock;
+    this.vm.editingTarget.constructor.prototype.getReturnVar = getReturnVar;
+    this.transpileTargetToSA(this.vm.editingTarget);
     const setEditingTarget = this.vm.constructor.prototype.setEditingTarget;
     const transpilerThis = this;
     this.vm.constructor.prototype.setEditingTarget = function (targetId) {
@@ -60,8 +67,8 @@ class Transpiler {
 }
 
 export class VarTranspiler extends Transpiler {
-  constructor(vm, ScratchBlocks, getWorkspace) {
-    super(vm, ScratchBlocks, getWorkspace);
+  constructor(vm) {
+    super(vm);
   }
 
   _toVanilla(target, shouldEmitWorkspaceUpdate = true) {
@@ -98,27 +105,20 @@ export class VarTranspiler extends Transpiler {
           block.opcode = "data_setvariableto";
           const proccode =
             blocks[blocks[target.blocks.getTopLevelScript(blockid)].inputs.custom_block.block].mutation.proccode;
-          const varname = `_return ${proccode}`;
-          let variable = target.lookupVariableByNameAndType(varname);
-          if (!variable) {
-            variable = {
-              value: varname,
-              id: this.ScratchBlocks.utils.genUid(),
-              variableType: "",
-            };
-            target.createVariable(variable.id, variable.value, "");
-          }
+          const variable = target.getReturnVar(proccode);
           block.fields.VARIABLE = {
             ...variable,
+            name: "VARIABLE",
           };
           delete block.inputs.return_value;
-          const nextid = this.ScratchBlocks.utils.genUid();
+          const nextid = uid();
           blocks[nextid] = {
             id: nextid,
             opcode: "control_stop",
             fields: {
               STOP_OPTION: {
                 value: "this script",
+                name: "STOP_OPTION",
               },
             },
             next: null,
@@ -132,6 +132,41 @@ export class VarTranspiler extends Transpiler {
             },
           };
           block.next = nextid;
+          break;
+        }
+        case "procedures_call_reporter":
+        case "procedures_call_boolean": {
+          const topBlock = target.blocks.getStackBlock(block);
+          const previousBlockId = topBlock.parent;
+          const previousBlock = blocks[previousBlockId] ?? null;
+          const newId = uid();
+          const newBlock = {
+            ...block,
+            id: newId,
+            next: topBlock.id,
+            parent: previousBlockId,
+            opcode: "procedures_call",
+          };
+          newBlock.mutation.shape = block.opcode.substring("procedures_call_".length);
+          blocks[newId] = newBlock;
+          topBlock.parent = newId;
+          if (previousBlock) {
+            previousBlock.next = newId;
+          }
+          const variable = target.getReturnVar(block.mutation.proccode);
+          blocks[blockid] = {
+            ...block,
+            mutation: undefined,
+            inputs: {},
+            opcode: "data_variable",
+            fields: {
+              VARIABLE: {
+                ...variable,
+                name: "VARIABLE",
+              },
+            },
+          };
+          break;
         }
       }
     }
@@ -171,7 +206,7 @@ export class VarTranspiler extends Transpiler {
             next &&
             next.opcode === "control_stop" &&
             next.fields.STOP_OPTION.value === "this script" &&
-            target.lookupVariableById(block.fields.VARIABLE.id).name === `_return ${mutation.proccode}`
+            target.lookupVariableById(block.fields.VARIABLE.id).name === target.getReturnVar(mutation.proccode).name
           ) {
             block.inputs.return_value = block.inputs.VALUE;
             block.inputs.return_value.name = "return_value";
@@ -182,6 +217,8 @@ export class VarTranspiler extends Transpiler {
           }
           break;
         }
+        case "data_variable":
+          console.log(block);
       }
     }
     if (shouldEmitWorkspaceUpdate) {

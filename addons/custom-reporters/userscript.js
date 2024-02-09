@@ -393,7 +393,8 @@ export default async function ({ addon, msg, console }) {
     }
   };
 
-  new VarTranspiler(vm, ScratchBlocks);
+  const varTranspiler = new VarTranspiler(vm, ScratchBlocks);
+  varTranspiler.init();
 
   let hasSetUpInputButtons = false;
   while (true) {
