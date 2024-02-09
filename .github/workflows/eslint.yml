@@ -1,4 +1,4 @@
-name: ESLint
+name: Scan code using ESLint
 
 on:
   push:
@@ -17,8 +17,8 @@ on:
       - .github/workflows/eslint.yml
 
 jobs:
-  eslint:
-    name: Run eslint scanning
+  scan:
+    name: Scan 
     runs-on: ubuntu-latest
     permissions:
       contents: read
