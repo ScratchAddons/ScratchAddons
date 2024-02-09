@@ -221,8 +221,7 @@ export class VarTranspiler extends Transpiler {
           const topBlock = target.blocks.getStackBlock(block);
           const previousBlock = blocks[topBlock.parent];
           if (previousBlock?.opcode !== "procedures_call") break;
-          const mutation =
-            previousBlock.mutation;
+          const mutation = previousBlock.mutation;
           if (!mutation) break;
           const shape = mutation.shape;
           if (!shape) break;
