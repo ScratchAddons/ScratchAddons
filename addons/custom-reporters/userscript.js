@@ -375,6 +375,7 @@ export default async function ({ addon, msg, console }) {
   };
   const oldDeleteBlock = blocksPrototype.deleteBlock;
   blocksPrototype.deleteBlock = function (blockid) {
+    if (!this._blocks[blockid]) return;
     const opcode = this._blocks[blockid].opcode;
     oldDeleteBlock.call(this, blockid);
     if (opcode === "procedures_definition" || opcode === "procedures_definition_reporter") {
