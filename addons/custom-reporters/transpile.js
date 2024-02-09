@@ -206,7 +206,7 @@ export class VarTranspiler extends Transpiler {
             next &&
             next.opcode === "control_stop" &&
             next.fields.STOP_OPTION.value === "this script" &&
-            target.lookupVariableById(block.fields.VARIABLE.id).name === target.getReturnVar(mutation.proccode).name
+            target.lookupVariableById(block.fields.VARIABLE.id).name === target.getReturnVar(mutation.proccode).value
           ) {
             block.inputs.return_value = block.inputs.VALUE;
             block.inputs.return_value.name = "return_value";
