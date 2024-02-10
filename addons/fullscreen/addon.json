@@ -26,6 +26,15 @@
       "id": "hideToolbar",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Show toolbar when hovered",
+      "id": "hoverToolbar",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": { "hideToolbar": true }
+      }
     }
   ],
   "dynamicEnable": true,
@@ -74,5 +83,10 @@
   ],
   "tags": ["editor", "projectPlayer", "featured"],
   "versionAdded": "1.21.0",
+  "latestUpdate": {
+    "version": "1.36.0",
+    "isMajor": false,
+    "newSettings": ["hoverToolbar"]
+  },
   "enabledByDefault": false
 }
