@@ -243,14 +243,14 @@
     "message": "Scratch Addons has updated to v$1"
   },
   "extensionUpdateInfo1_v1_36": {
-    "message": "New addon: \"place backpack code at mouse\", which lets you drag-and-drop code blocks to the mouse position instead of to the code area corner. Go to $1 to enable it.",
+    "message": "New addon: \"rearrangeable custom block inputs\", which allows rearranging custom block parameters on the \"Make a block\" screen. Go to $1 to enable it.",
     "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
   "extensionUpdateInfo2_v1_36": {
-    "message": "Other new addons added this update are \"customizable menu bar\", \"rearrangeable custom block inputs\", and \"square block text inputs\"."
+    "message": "Other new addons added this update are \"customizable menu bar\", \"place backpack code at mouse\", and \"square block text inputs\"."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",
