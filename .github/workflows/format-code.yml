@@ -1,7 +1,26 @@
 name: Format code using Prettier
 on:
   push:
+    # Please also update the paths listed on .prettierignore.
+    paths-ignore:
+      - libraries/thirdparty/*
+      - '*.md'
+      - addons-l10n/*/*.json
+      - '!addons-l10n/en/*.json'
+      - _locales/*/messages.json
+      - '!_locales/en/messages.json'
+      - .github/*
+      - '!.github/*.mjs'
   pull_request:
+    paths-ignore:
+      - libraries/thirdparty/*
+      - '*.md'
+      - addons-l10n/*/*.json
+      - '!addons-l10n/en/*.json'
+      - _locales/*/messages.json
+      - '!_locales/en/messages.json'
+      - .github/*
+      - '!.github/*.mjs'
   workflow_dispatch:
 
 jobs:
