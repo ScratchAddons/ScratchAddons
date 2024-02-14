@@ -19,7 +19,11 @@ export default async function ({ addon, console, msg }) {
   onPauseChanged(setSrc);
 
   document.addEventListener("keydown", function (e) {
-    if (e.altKey && e.key.toLowerCase() === "x" && !addon.self.disabled) {
+    // e.code is not enough because that corresponds to physical keys, ignoring keyboard layouts.
+    // e.key is not enough because on macOS, option+x types ≈ and shift+option+x types ˛
+    // e.keyCode is always 88 when pressing x regardless of modifier keys, so that's how we'll handle macOS.
+    // Because keyCode is deprecated we'll still check e.key in case keyCode is not as reliable as we think it is
+    if (e.altKey && (e.key.toLowerCase() === "x" || e.keyCode === 88) && !addon.self.disabled) {
       e.preventDefault();
       setPaused(!isPaused());
     }
