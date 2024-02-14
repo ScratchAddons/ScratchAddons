@@ -79,7 +79,7 @@ export default async function ({ addon, console }) {
     } finally {
       Blockly.Events.enable();
     }
-  
+
     focusOnInput(procedureBlock.inputList[newPosition]);
   }
 
