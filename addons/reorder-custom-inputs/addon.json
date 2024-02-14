@@ -22,10 +22,10 @@
   ],
   "settings": [
     {
-        "name": "Insert new inputs after selected input",
-        "id": "InsertInputsAfter",
-        "type": "boolean",
-        "default": false
+      "name": "Insert new inputs after selected input",
+      "id": "InsertInputsAfter",
+      "type": "boolean",
+      "default": false
     }
   ],
   "versionAdded": "1.36.0",

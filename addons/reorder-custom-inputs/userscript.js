@@ -1,4 +1,4 @@
-import {modifiedCreateAllInputs, modifiedUpdateDeclarationProcCode} from "./modified-funcs.js"
+import { modifiedCreateAllInputs, modifiedUpdateDeclarationProcCode } from "./modified-funcs.js";
 
 export default async function ({ addon, console }) {
   function createArrow(direction, callback) {
@@ -17,62 +17,61 @@ export default async function ({ addon, console }) {
     Blockly.WidgetDiv.DIV.lastChild.addEventListener("click", callback);
   }
 
-  function addInputAfter(addInputFn, fnName){
-    // TODO: 
+  function addInputAfter(addInputFn, fnName) {
+    // TODO:
     // Function currently has a bug, where if merging takes place after our inputs not before then it will wrongly subtract one to account for the merging.
-    return function() {
-      const sourceBlock = selectedField.sourceBlock_
-      const proc = sourceBlock ? (sourceBlock.parentBlock_ ? sourceBlock.parentBlock_ : sourceBlock): this;
+    return function () {
+      const sourceBlock = selectedField.sourceBlock_;
+      const proc = sourceBlock ? (sourceBlock.parentBlock_ ? sourceBlock.parentBlock_ : sourceBlock) : this;
 
       // if a label is added, scratch's code will directly append the label text to the procCode
       // We account for this with a hacky method of adding the delimiter at the end of the last label input
-      if(fnName === "addLabelExternal"){
-        const lastInput = proc.inputList[proc.inputList.length-1]
+      if (fnName === "addLabelExternal") {
+        const lastInput = proc.inputList[proc.inputList.length - 1];
         if (lastInput.type === Blockly.DUMMY_INPUT) {
-              lastInput.fieldRow[0].setValue(lastInput.fieldRow[0].getValue()+" %l");
+          lastInput.fieldRow[0].setValue(lastInput.fieldRow[0].getValue() + " %l");
         }
       }
-      
-      if(sourceBlock === null)  return addInputFn.call(this, ...arguments);
 
-      
-      let newPosition = getFieldInputNameAndIndex(selectedField, proc.inputList).index+1
-      
+      if (sourceBlock === null) return addInputFn.call(this, ...arguments);
+
+      let newPosition = getFieldInputNameAndIndex(selectedField, proc.inputList).index + 1;
+
       proc.onChangeFn();
       addInputFn.call(proc, ...arguments);
 
-      const lastInputName = proc.inputList[proc.inputList.length - 1].name
+      const lastInputName = proc.inputList[proc.inputList.length - 1].name;
       shiftInput(proc, lastInputName, newPosition);
+    };
   }
-}
 
-  function getFieldInputNameAndIndex(field, inputList){
+  function getFieldInputNameAndIndex(field, inputList) {
     for (const [i, input] of inputList.entries()) {
       const isTargetField = input.connection
         ? input.connection.targetBlock()?.getField(field.name) === field
         : input.fieldRow.includes(field);
-  
+
       if (isTargetField) {
         return {
-          "name": input.name,
-          "index": i
-        }
+          name: input.name,
+          index: i,
+        };
       }
     }
   }
 
-  function shiftInput(procedureBlock, inputNameToShift, newPosition){
+  function shiftInput(procedureBlock, inputNameToShift, newPosition) {
     const initialInputListLength = procedureBlock.inputList.length;
-  
+
     // return if inputNameToShift and newPosition are not valid
     if (!(inputNameToShift && newPosition >= 0 && newPosition <= initialInputListLength)) {
-        return false
+      return false;
     }
-  
-    const originalPosition = procedureBlock.inputList.findIndex((input) => input.name === inputNameToShift)
-    const itemToMove = procedureBlock.inputList.splice(originalPosition ,1)[0];
+
+    const originalPosition = procedureBlock.inputList.findIndex((input) => input.name === inputNameToShift);
+    const itemToMove = procedureBlock.inputList.splice(originalPosition, 1)[0];
     procedureBlock.inputList.splice(newPosition, 0, itemToMove);
-  
+
     Blockly.Events.disable();
     try {
       procedureBlock.onChangeFn();
@@ -83,7 +82,7 @@ export default async function ({ addon, console }) {
   
     focusOnInput(procedureBlock.inputList[newPosition]);
   }
-  
+
   function focusOnInput(input) {
     if (!input) return;
     if (input.type === Blockly.DUMMY_INPUT) {
@@ -94,46 +93,43 @@ export default async function ({ addon, console }) {
     }
   }
 
-
   function shiftFieldCallback(sourceBlock, field, direction) {
     const proc = sourceBlock.parentBlock_ ? sourceBlock.parentBlock_ : sourceBlock;
 
     // if inputList length is 1 there's nowhere to shift the input so we can simply return
     if (proc.inputList.length <= 1) return;
 
-    const {name, index} = getFieldInputNameAndIndex(field, proc.inputList);
+    const { name, index } = getFieldInputNameAndIndex(field, proc.inputList);
     const newPosition = direction === "left" ? index - 1 : index + 1;
-    shiftInput(proc, name, newPosition)
+    shiftInput(proc, name, newPosition);
   }
 
   function enableAddon() {
     // replace the createAllInputs function with a modified version that prevents merging
-    Blockly.Blocks['procedures_declaration'].createAllInputs_ = modifiedCreateAllInputs;
-    Blockly.Blocks['procedures_declaration'].onChangeFn = modifiedUpdateDeclarationProcCode;
+    Blockly.Blocks["procedures_declaration"].createAllInputs_ = modifiedCreateAllInputs;
+    Blockly.Blocks["procedures_declaration"].onChangeFn = modifiedUpdateDeclarationProcCode;
 
-    if(addon.settings.get("InsertInputsAfter")){
-      for(const inputFn of ["addLabelExternal", "addBooleanExternal", "addStringNumberExternal"]){
-        originalAddFns[inputFn] = Blockly.Blocks['procedures_declaration'][inputFn];
-        Blockly.Blocks['procedures_declaration'][inputFn] = addInputAfter(originalAddFns[inputFn], inputFn);
+    if (addon.settings.get("InsertInputsAfter")) {
+      for (const inputFn of ["addLabelExternal", "addBooleanExternal", "addStringNumberExternal"]) {
+        originalAddFns[inputFn] = Blockly.Blocks["procedures_declaration"][inputFn];
+        Blockly.Blocks["procedures_declaration"][inputFn] = addInputAfter(originalAddFns[inputFn], inputFn);
       }
     }
-    
+
     Blockly.FieldTextInputRemovable.prototype.showEditor_ = function () {
       originalShowEditor.call(this);
       createArrow("left", () => shiftFieldCallback(this.sourceBlock_, this, "left"));
       createArrow("right", () => shiftFieldCallback(this.sourceBlock_, this, "right"));
       selectedField = this;
     };
-
-
   }
 
   function disableAddon() {
-    Blockly.Blocks['procedures_declaration'].createAllInputs_ = originalCreateAllInputs;
-    Blockly.Blocks['procedures_declaration'].onChangeFn = originalUpdateDeclarationProcCode;
+    Blockly.Blocks["procedures_declaration"].createAllInputs_ = originalCreateAllInputs;
+    Blockly.Blocks["procedures_declaration"].onChangeFn = originalUpdateDeclarationProcCode;
 
-    for(const [inputFnName, originalFn] of Object.entries(originalAddFns)){
-      Blockly.Blocks['procedures_declaration'][inputFnName] = originalFn
+    for (const [inputFnName, originalFn] of Object.entries(originalAddFns)) {
+      Blockly.Blocks["procedures_declaration"][inputFnName] = originalFn;
     }
 
     Blockly.FieldTextInputRemovable.prototype.showEditor_ = originalShowEditor;
@@ -141,8 +137,8 @@ export default async function ({ addon, console }) {
   }
 
   const Blockly = await addon.tab.traps.getBlockly();
-  const originalCreateAllInputs = Blockly.Blocks['procedures_declaration'].createAllInputs_;
-  const originalUpdateDeclarationProcCode = Blockly.Blocks['procedures_declaration'].onChangeFn;
+  const originalCreateAllInputs = Blockly.Blocks["procedures_declaration"].createAllInputs_;
+  const originalUpdateDeclarationProcCode = Blockly.Blocks["procedures_declaration"].onChangeFn;
   const originalShowEditor = Blockly.FieldTextInputRemovable.prototype.showEditor_;
   let originalAddFns = {};
   let selectedField = null;
