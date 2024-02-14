@@ -20,6 +20,14 @@
       "matches": ["projects"]
     }
   ],
+  "settings": [
+    {
+        "name": "Insert new inputs after selected input",
+        "id": "InsertInputsAfter",
+        "type": "boolean",
+        "default": false
+    }
+  ],
   "versionAdded": "1.36.0",
   "tags": ["editor", "codeEditor", "recommended"],
   "enabledByDefault": false,
