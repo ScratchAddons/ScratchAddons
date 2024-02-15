@@ -61,11 +61,12 @@ export default async function ({ addon, console }) {
         }
       }
 
-      if (sourceBlock === null) return addInputFn.call(this, ...arguments);
+      proc.onChangeFn(true);
+      
+      if (sourceBlock === null || !addon.settings.get("InsertInputsAfter")) return addInputFn.call(this, ...arguments);
 
       let newPosition = getFieldInputNameAndIndex(selectedField, proc.inputList).index + 1;
 
-      proc.onChangeFn(true);
       addInputFn.call(proc, ...arguments);
 
       const lastInputName = proc.inputList[proc.inputList.length - 1].name;
@@ -138,11 +139,9 @@ export default async function ({ addon, console }) {
     Blockly.Blocks["procedures_declaration"].onChangeFn = modifiedUpdateDeclarationProcCode;
     Blockly.Blocks["procedures_declaration"].removeFieldCallback = modifiedRemoveFieldCallback;
 
-    if (addon.settings.get("InsertInputsAfter")) {
-      for (const inputFn of ["addLabelExternal", "addBooleanExternal", "addStringNumberExternal"]) {
-        originalAddFns[inputFn] = Blockly.Blocks["procedures_declaration"][inputFn];
-        Blockly.Blocks["procedures_declaration"][inputFn] = addInputAfter(originalAddFns[inputFn], inputFn);
-      }
+    for (const inputFn of ["addLabelExternal", "addBooleanExternal", "addStringNumberExternal"]) {
+      originalAddFns[inputFn] = Blockly.Blocks["procedures_declaration"][inputFn];
+      Blockly.Blocks["procedures_declaration"][inputFn] = addInputAfter(originalAddFns[inputFn], inputFn);
     }
 
     Blockly.FieldTextInputRemovable.prototype.showEditor_ = function () {
