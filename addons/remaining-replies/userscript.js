@@ -1,5 +1,6 @@
 export default async function ({ addon, msg }) {
   function addRemainingReplyCount(comment) {
+    if (!comment) return;
     // skip the main comment input at the top of the page
     if (comment.classList.contains("compose-row")) return;
     // commenting was turned off for the studio
@@ -17,13 +18,19 @@ export default async function ({ addon, msg }) {
 
     const remainingReplies = 25 - parentCommentData?.reply_count;
 
-    const span = document.createElement("span");
-    span.classList.add("sa-replies-remaining");
-    if (remainingReplies > 10) span.classList.add("sa-replies-remaining-hide");
-    span.style.marginLeft = "0.25em";
-    span.innerText = msg("remaining", { replies: remainingReplies });
-    comment.querySelector(".comment-reply span").appendChild(span);
-    addon.tab.displayNoneWhileDisabled(span);
+    const existingSpan = comment?.querySelector(".sa-replies-remaining");
+    if (existingSpan) {
+      console.log("Existing")
+      existingSpan.innerText = " " + msg("remaining", { replies: remainingReplies });
+    } else {
+      console.log("Non-Existing")
+      const span = document.createElement("span");
+      span.classList.add("sa-replies-remaining");
+      if (remainingReplies > 10) span.classList.add("sa-replies-remaining-hide");
+      span.innerText = " " + msg("remaining", { replies: remainingReplies });
+      comment.querySelector(".comment-reply span").appendChild(span);
+      addon.tab.displayNoneWhileDisabled(span);
+    }
   }
 
   async function waitForComment() {
@@ -46,7 +53,10 @@ export default async function ({ addon, msg }) {
       const comment = document.getElementById(`comments-${action.detail.action.comment.parent_id}`);
       addRemainingReplyCount(comment);
 
-      addon.tab.redux.state.comments.replies[action.detail.action.comment.parent_id].forEach((reply) => {
+      const replies = addon.tab.redux.state.comments.replies[action.detail.action.comment.parent_id];
+      if (!replies) return;
+
+      replies.forEach((reply) => {
         addRemainingReplyCount(document.getElementById(`comments-${reply.id}`));
       });
     }
