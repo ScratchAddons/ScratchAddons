@@ -62,7 +62,7 @@ export default async function ({ addon, console }) {
       }
 
       proc.onChangeFn(true);
-      
+
       if (sourceBlock === null || !addon.settings.get("InsertInputsAfter")) return addInputFn.call(this, ...arguments);
 
       let newPosition = getFieldInputNameAndIndex(selectedField, proc.inputList).index + 1;
