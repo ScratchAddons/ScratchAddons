@@ -20,10 +20,10 @@ export default async function ({ addon, msg }) {
 
     const existingSpan = comment?.querySelector(".sa-replies-remaining");
     if (existingSpan) {
-      console.log("Existing")
+      console.log("Existing");
       existingSpan.innerText = " " + msg("remaining", { replies: remainingReplies });
     } else {
-      console.log("Non-Existing")
+      console.log("Non-Existing");
       const span = document.createElement("span");
       span.classList.add("sa-replies-remaining");
       if (remainingReplies > 10) span.classList.add("sa-replies-remaining-hide");
