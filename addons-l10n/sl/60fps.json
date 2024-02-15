@@ -1,1 +1,1 @@
-{"60fps/@name":"60FPS način v predvajalniku projektov","60fps/@description":"Alt+kliknite zeleno zastavico, da vključite ali izključite 60FPS.","60fps/@info-projectRunsFasterNotice":"Večina projektov v načinu 60FPS ne deluje pravilno, ker večje število sličic na sekundo poveča tudi hitrost skript. Način 60FPS uporabljajte samo v projektih, ki ga podpirajo.","60fps/@settings-name-framerate":"FPS, ko pritisnete Alt + zeleno zastavico"}
+{"60fps/@settings-name-framerate":"FPS po meri"}
