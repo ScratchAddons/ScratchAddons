@@ -1,4 +1,4 @@
-import { modifiedCreateAllInputs, modifiedUpdateDeclarationProcCode} from "./modified-funcs.js";
+import { modifiedCreateAllInputs, modifiedUpdateDeclarationProcCode } from "./modified-funcs.js";
 
 export default async function ({ addon, console }) {
   function createArrow(direction, callback) {
