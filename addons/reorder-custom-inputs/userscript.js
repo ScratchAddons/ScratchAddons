@@ -1,4 +1,4 @@
-import { modifiedCreateAllInputs, modifiedUpdateDeclarationProcCode } from "./modified-funcs.js";
+import { modifiedCreateAllInputs, modifiedUpdateDeclarationProcCode} from "./modified-funcs.js";
 
 export default async function ({ addon, console }) {
   function createArrow(direction, callback) {
@@ -17,9 +17,37 @@ export default async function ({ addon, console }) {
     Blockly.WidgetDiv.DIV.lastChild.addEventListener("click", callback);
   }
 
+  //https://github.com/scratchfoundation/scratch-blocks/blob/f210e042988b91bcdc2abeca7a2d85e178edadb2/blocks_vertical/procedures.js#L674
+  function modifiedRemoveFieldCallback(field) {
+    // Do not delete if there is only one input
+    if (this.inputList.length === 1) {
+      return;
+    }
+    var inputNameToRemove = null;
+    for (var n = 0; n < this.inputList.length; n++) {
+      var input = this.inputList[n];
+      if (input.connection) {
+        var target = input.connection.targetBlock();
+        if (target.getField(field.name) == field) {
+          inputNameToRemove = input.name;
+        }
+      } else {
+        for (var j = 0; j < input.fieldRow.length; j++) {
+          if (input.fieldRow[j] == field) {
+            inputNameToRemove = input.name;
+          }
+        }
+      }
+    }
+    if (inputNameToRemove) {
+      Blockly.WidgetDiv.hide(true);
+      this.removeInput(inputNameToRemove);
+      this.onChangeFn(true);
+      this.updateDisplay_();
+    }
+  }
+
   function addInputAfter(addInputFn, fnName) {
-    // TODO:
-    // Function currently has a bug, where if merging takes place after our inputs not before then it will wrongly subtract one to account for the merging.
     return function () {
       const sourceBlock = selectedField.sourceBlock_;
       const proc = sourceBlock ? (sourceBlock.parentBlock_ ? sourceBlock.parentBlock_ : sourceBlock) : this;
@@ -37,7 +65,7 @@ export default async function ({ addon, console }) {
 
       let newPosition = getFieldInputNameAndIndex(selectedField, proc.inputList).index + 1;
 
-      proc.onChangeFn();
+      proc.onChangeFn(true);
       addInputFn.call(proc, ...arguments);
 
       const lastInputName = proc.inputList[proc.inputList.length - 1].name;
@@ -74,7 +102,7 @@ export default async function ({ addon, console }) {
 
     Blockly.Events.disable();
     try {
-      procedureBlock.onChangeFn();
+      procedureBlock.onChangeFn(true);
       procedureBlock.updateDisplay_();
     } finally {
       Blockly.Events.enable();
@@ -108,6 +136,7 @@ export default async function ({ addon, console }) {
     // replace the createAllInputs function with a modified version that prevents merging
     Blockly.Blocks["procedures_declaration"].createAllInputs_ = modifiedCreateAllInputs;
     Blockly.Blocks["procedures_declaration"].onChangeFn = modifiedUpdateDeclarationProcCode;
+    Blockly.Blocks["procedures_declaration"].removeFieldCallback = modifiedRemoveFieldCallback;
 
     if (addon.settings.get("InsertInputsAfter")) {
       for (const inputFn of ["addLabelExternal", "addBooleanExternal", "addStringNumberExternal"]) {
@@ -127,6 +156,7 @@ export default async function ({ addon, console }) {
   function disableAddon() {
     Blockly.Blocks["procedures_declaration"].createAllInputs_ = originalCreateAllInputs;
     Blockly.Blocks["procedures_declaration"].onChangeFn = originalUpdateDeclarationProcCode;
+    Blockly.Blocks["procedures_declaration"].removeFieldCallback = originalRemoveFieldCallback;
 
     for (const [inputFnName, originalFn] of Object.entries(originalAddFns)) {
       Blockly.Blocks["procedures_declaration"][inputFnName] = originalFn;
@@ -139,6 +169,7 @@ export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
   const originalCreateAllInputs = Blockly.Blocks["procedures_declaration"].createAllInputs_;
   const originalUpdateDeclarationProcCode = Blockly.Blocks["procedures_declaration"].onChangeFn;
+  const originalRemoveFieldCallback = Blockly.Blocks["procedures_declaration"].removeFieldCallback;
   const originalShowEditor = Blockly.FieldTextInputRemovable.prototype.showEditor_;
   let originalAddFns = {};
   let selectedField = null;

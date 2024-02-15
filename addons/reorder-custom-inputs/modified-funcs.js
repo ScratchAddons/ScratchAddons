@@ -37,7 +37,8 @@ export function modifiedCreateAllInputs(connectionMap) {
 }
 
 //https://github.com/scratchfoundation/scratch-blocks/blob/f210e042988b91bcdc2abeca7a2d85e178edadb2/blocks_vertical/procedures.js#L565
-export function modifiedUpdateDeclarationProcCode() {
+export function modifiedUpdateDeclarationProcCode(prefixLabels=false) {
+  console.log(prefixLabels)
   this.procCode_ = "";
   this.displayNames_ = [];
   this.argumentIds_ = [];
@@ -48,7 +49,7 @@ export function modifiedUpdateDeclarationProcCode() {
     var input = this.inputList[i];
     if (input.type == 5) {
       // replaced Blocky.DUMMY_VALUE with 5
-      this.procCode_ += "%l " + input.fieldRow[0].getValue(); // modified to prepend %l delimiter, which prevents label merging
+      this.procCode_ += (prefixLabels ? "%l " : '') + input.fieldRow[0].getValue(); // modified to prepend %l delimiter, which prevents label merging
     } else if (input.type == 1) {
       // replaced Blocky.INPUT_VALUE with 1
       // Inspect the argument editor.
