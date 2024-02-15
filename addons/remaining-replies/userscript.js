@@ -62,7 +62,6 @@ export default async function ({ addon, msg }) {
       });
     }
     if (action.detail.action.type === "COMPLETE_STUDIO_MUTATION") {
-      console.log(comments);
       comments.forEach((comment) => {
         addRemainingReplyCount(comment);
       });
