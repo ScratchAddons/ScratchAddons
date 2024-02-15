@@ -37,8 +37,7 @@ export default async function ({ addon, console }) {
     if (
       !addon.self.disabled &&
       addon.tab.redux.state.scratchGui.mode.isFullScreen &&
-      addon.settings.get("hideToolbar") &&
-      addon.settings.get("hoverToolbar")
+      addon.settings.get("toolbar") === "hover"
     ) {
       const canvas = await addon.tab.waitForElement('[class*="stage_full-screen"] canvas');
       const header = await addon.tab.waitForElement('[class^="stage-header_stage-header-wrapper"]');
