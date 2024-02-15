@@ -17,21 +17,22 @@ export default async function ({ addon, msg }) {
     )[0];
 
     const remainingReplies = 25 - parentCommentData?.reply_count;
+    const label = " " + msg("remaining", { replies: remainingReplies });
 
-    const existingSpan = comment?.querySelector(".sa-replies-remaining");
+    const existingSpan = comment.querySelector(".sa-replies-remaining");
     if (existingSpan) {
-      console.log("Existing");
-      existingSpan.innerText = " " + msg("remaining", { replies: remainingReplies });
+      existingSpan.innerText = label;
     } else {
-      console.log("Non-Existing");
       const span = document.createElement("span");
       span.classList.add("sa-replies-remaining");
       if (remainingReplies > 10) span.classList.add("sa-replies-remaining-hide");
-      span.innerText = " " + msg("remaining", { replies: remainingReplies });
+      span.innerText = label;
       comment.querySelector(".comment-reply span").appendChild(span);
       addon.tab.displayNoneWhileDisabled(span);
     }
   }
+
+  const comments = [];
 
   async function waitForComment() {
     while (true) {
@@ -40,6 +41,7 @@ export default async function ({ addon, msg }) {
         markAsSeen: true,
       });
 
+      comments.push(comment);
       addRemainingReplyCount(comment);
     }
   }
@@ -49,7 +51,6 @@ export default async function ({ addon, msg }) {
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (action, prev, next) => {
     if (action.detail.action.type === "ADD_NEW_COMMENT") {
-      console.log("parent id", action.detail.action.comment.parent_id);
       const comment = document.getElementById(`comments-${action.detail.action.comment.parent_id}`);
       addRemainingReplyCount(comment);
 
@@ -59,6 +60,12 @@ export default async function ({ addon, msg }) {
       replies.forEach((reply) => {
         addRemainingReplyCount(document.getElementById(`comments-${reply.id}`));
       });
+    }
+    if (action.detail.action.type === "COMPLETE_STUDIO_MUTATION") {
+      console.log(comments)
+      comments.forEach((comment) => {
+        addRemainingReplyCount(comment);
+      })
     }
   });
 }
