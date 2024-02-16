@@ -12,6 +12,15 @@ export default async ({ addon, console, msg }) => {
   let recorder;
   let timeout;
 
+  let lastSettings = {
+    seconds: 30,
+    delay: 0,
+    audio: true,
+    mic: false,
+    flag: true,
+    stop: true,
+  };
+
   let recordElem;
 
   const mimeType = [
@@ -62,7 +71,7 @@ export default async ({ addon, console, msg }) => {
         type: "number",
         min: 1,
         max: LENGTH_LIMIT,
-        defaultValue: 30,
+        defaultValue: lastSettings.seconds,
         id: "recordOptionSecondsInput",
         className: addon.tab.scratchClass("prompt_variable-name-text-input"),
       });
@@ -80,7 +89,7 @@ export default async ({ addon, console, msg }) => {
         type: "number",
         min: 0,
         max: LENGTH_LIMIT,
-        defaultValue: 0,
+        defaultValue: lastSettings.delay,
         id: "recordOptionDelayInput",
         className: addon.tab.scratchClass("prompt_variable-name-text-input"),
       });
@@ -98,7 +107,7 @@ export default async ({ addon, console, msg }) => {
       });
       const recordOptionAudioInput = Object.assign(document.createElement("input"), {
         type: "checkbox",
-        defaultChecked: true,
+        defaultChecked: lastSettings.audio,
         id: "recordOptionAudioInput",
       });
       const recordOptionAudioLabel = Object.assign(document.createElement("label"), {
@@ -116,7 +125,7 @@ export default async ({ addon, console, msg }) => {
       });
       const recordOptionMicInput = Object.assign(document.createElement("input"), {
         type: "checkbox",
-        defaultChecked: false,
+        defaultChecked: lastSettings.mic,
         id: "recordOptionMicInput",
       });
       const recordOptionMicLabel = Object.assign(document.createElement("label"), {
@@ -133,7 +142,7 @@ export default async ({ addon, console, msg }) => {
       });
       const recordOptionFlagInput = Object.assign(document.createElement("input"), {
         type: "checkbox",
-        defaultChecked: true,
+        defaultChecked: lastSettings.flag,
         id: "recordOptionFlagInput",
       });
       const recordOptionFlagLabel = Object.assign(document.createElement("label"), {
@@ -150,7 +159,7 @@ export default async ({ addon, console, msg }) => {
       });
       const recordOptionStopInput = Object.assign(document.createElement("input"), {
         type: "checkbox",
-        defaultChecked: true,
+        defaultChecked: lastSettings.stop,
         id: "recordOptionStopInput",
       });
       const recordOptionStopLabel = Object.assign(document.createElement("label"), {
@@ -357,6 +366,15 @@ export default async ({ addon, console, msg }) => {
             console.log("Canceled");
             return;
           }
+
+          // Remember options for next time this session
+          lastSettings.seconds = opts.secs;
+          lastSettings.delay = opts.delay;
+          lastSettings.audio = opts.audioEnabled;
+          lastSettings.mic = opts.micEnabled;
+          lastSettings.flag = opts.waitUntilFlag;
+          lastSettings.stop = opts.useStopSign;
+
           startRecording(opts);
         }
       });
