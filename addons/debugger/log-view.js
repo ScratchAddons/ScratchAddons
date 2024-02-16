@@ -122,7 +122,7 @@ class LogView {
     const bottomEdgeFromTop = topEdgeFromTop + this.rowHeight;
     const viewportStart = this.scrollTop;
     const viewportEnd = viewportStart + this.height;
-    return topEdgeFromTop >= (viewportStart + margin) && bottomEdgeFromTop <= (viewportEnd - margin);
+    return topEdgeFromTop >= viewportStart + margin && bottomEdgeFromTop <= viewportEnd - margin;
   }
 
   /**

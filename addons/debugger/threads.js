@@ -223,7 +223,7 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
         const maxScrollback = Math.floor(logView.height / logView.rowHeight);
         for (let i = 1; i < maxScrollback; i++) {
           const checkIndex = runningIndex - i;
-          if (logView.rows[checkIndex].type === 'thread-header') {
+          if (logView.rows[checkIndex].type === "thread-header") {
             logView.scrollTo(checkIndex);
             found = true;
             break;
@@ -237,7 +237,7 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
           logView.scrollTo(Math.max(0, runningIndex - maxScrollback + 5));
         }
       }
-    })
+    });
   });
 
   const show = () => {
