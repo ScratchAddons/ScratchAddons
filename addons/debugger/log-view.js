@@ -130,7 +130,7 @@ class LogView {
    */
   scrollTo(index) {
     // There is one extra pixel from this.endElement
-    const maximumScrollTop = Math.max(0, this.rows.length * this.rowHeight - this.height) + 1;
+    const maximumScrollTop = Math.max(0, this.rows.length * this.rowHeight - this.height + 1);
 
     // Try to leave the item above slightly visible to make it more obvious to the user that they can
     // still scroll.
