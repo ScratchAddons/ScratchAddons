@@ -220,7 +220,7 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
       if (runningIndex !== -1 && !logView.isInView(runningIndex, logView.rowHeight)) {
         // Try to show the entire thread if we can fit it on screen
         let found = false;
-        const maxScrollback = Math.floor(logView.height / logView.rowHeight) - 2;
+        const maxScrollback = Math.floor(logView.height / logView.rowHeight);
         for (let i = 1; i < maxScrollback; i++) {
           const checkIndex = runningIndex - i;
           if (logView.rows[checkIndex].type === 'thread-header') {
@@ -231,7 +231,10 @@ export default async function createThreadsTab({ debug, addon, console, msg }) {
         }
 
         if (!found) {
-          logView.scrollTo(runningIndex);
+          // We somehow couldn't find the header or the stack is too big for us to show the header
+          // and the current stack item at the same time. Settle for showing as much of the stack
+          // as we can while also leaving some room on the bottom for the stack to grow.
+          logView.scrollTo(Math.max(0, runningIndex - maxScrollback + 5));
         }
       }
     })
