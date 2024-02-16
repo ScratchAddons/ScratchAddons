@@ -2,7 +2,6 @@
 
 import { BACKPACK_URL, isBadRequest } from "./module.js";
 
-
 export default async function ({ addon }) {
   // Dropping a code item from the backpack into a specific sprite within the sprite-pane (NOT into the code area)
 
