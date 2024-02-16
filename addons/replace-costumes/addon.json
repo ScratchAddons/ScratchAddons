@@ -3,7 +3,7 @@
   "description": "In the costume editor, when uploading costumes with names that are already in use, choose between skipping duplicates, replacing existing costumes, or renaming new costumes.",
   "tags": ["editor", "costumeEditor", "beta"],
   "versionAdded": "1.36.0",
-  "userscripts": [{ "url": "userscript.js", "matches": "projects" }],
+  "userscripts": [{ "url": "userscript.js", "matches": ["projects"] }],
   "settings": [
     { "name": "Affect the drag and drop addon", "id": "affect-drag-drop", "type": "boolean", "default": "true" }
   ],
