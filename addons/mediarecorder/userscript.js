@@ -26,10 +26,17 @@ export default async ({ addon, console, msg }) => {
   const fileExtension = mimeType.split(";")[0].split("/")[1];
 
   while (true) {
-    const referenceElem = await addon.tab.waitForElement('div[class*="menu-bar_file-group"] > div:last-child:not(.sa-record)', {
-      markAsSeen: true,
-      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
-    });
+    const referenceElem = await addon.tab.waitForElement(
+      'div[class*="menu-bar_file-group"] > div:last-child:not(.sa-record)',
+      {
+        markAsSeen: true,
+        reduxEvents: [
+          "scratch-gui/mode/SET_PLAYER",
+          "fontsLoaded/SET_FONTS_LOADED",
+          "scratch-gui/locales/SELECT_LOCALE",
+        ],
+      }
+    );
 
     // Options modal
     const getOptions = () => {
