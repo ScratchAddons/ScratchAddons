@@ -34,7 +34,7 @@ export default async function ({ addon, global, console, msg }) {
   const tableBodyNode = document.querySelector("tbody");
 
   if (!tableBodyNode) {
-    // Standard site page without a table. Don't run on this page.
+    // No table on this page. Don't run.
     return;
   }
 
