@@ -1,5 +1,4 @@
-
-import { isBadRequest } from '../faster-project-loading/module.js'
+import { isBadRequest } from "../faster-project-loading/module.js";
 
 export default async function ({ addon, console, msg }) {
   const useTopBar = addon.settings.get("topbar");
@@ -197,8 +196,7 @@ export default async function ({ addon, console, msg }) {
         hasBadRequests |= true;
       } else {
         // Only add the task if a bad request hasn't already added it
-        if (!hasBadRequests)
-          addTask();
+        if (!hasBadRequests) addTask();
 
         // Add our own message handler once for this worker to monitor when assets have finished loading.
         if (!foundWorker) {

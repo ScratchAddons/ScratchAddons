@@ -1,12 +1,12 @@
 // This is a fix for https://github.com/scratchfoundation/scratch-gui/issues/8805
 
-import { BACKPACK_URL, SPRITE_FILE_EXTENSION, isBadRequest } from './module.js'
+import { BACKPACK_URL, SPRITE_FILE_EXTENSION, isBadRequest } from "./module.js";
 
 export default async function ({ addon }) {
   // Dropping a code item from the backpack into a specific sprite within the sprite-pane (NOT into the code area)
   // requests a JSON file (https://backpack.scratch.mit.edu/{hash}.json) which we shouldn't block
   const CODE_FILE_EXTENSION = ".json";
-  await new Promise(r => setTimeout(r, 100));
+  await new Promise((r) => setTimeout(r, 100));
   const originalOpen = XMLHttpRequest.prototype.open;
   XMLHttpRequest.prototype.open = function (method, url, ...moreArgs) {
     if (
