@@ -1,3 +1,4 @@
-#navigation > .inner{
+#navigation > .inner,
+#topnav .container {
 	width: 97%;
 }
