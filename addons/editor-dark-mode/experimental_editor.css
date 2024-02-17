@@ -378,7 +378,6 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="tag-button_tag-button_"]:not([class*="tag-button_active_"]),
 [class*="action-menu_button_"],
 [class*="context-menu_menu-item_"]:not([class*="context-menu_menu-item-danger_"]):hover,
-[class*="webgl-modal_button-row"] > button,
 .blocklyWidgetDiv .goog-menuitem-highlight,
 .blocklyWidgetDiv .goog-menuitem-hover {
   background-color: var(--editorDarkMode-primary);
@@ -387,7 +386,8 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="gui_extension-button-container_"],
 [class*="prompt_button-row_"] button[class*="prompt_ok-button_"],
 [class*="custom-procedures_button-row_"] button[class*="custom-procedures_ok-button_"],
-[class*="record-modal_button-row_"] button[class*="record-modal_ok-button_"] {
+[class*="record-modal_button-row_"] button[class*="record-modal_ok-button_"],
+[class*="webgl-modal_button-row"] > button {
   background-color: var(--editorDarkMode-primary);
   border-color: var(--editorDarkMode-primary);
 }
