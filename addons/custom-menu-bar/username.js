@@ -1,6 +1,5 @@
 export default async function ({ addon }) {
   const username = await addon.auth.fetchUsername();
-  if (!username) return;
   while (true) {
     const menuItem = await addon.tab.waitForElement("[class^=menu_menu_] > :first-child", {
       markAsSeen: true,
