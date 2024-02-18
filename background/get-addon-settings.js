@@ -676,9 +676,14 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
         }
 
         if (addonId === "fullscreen" && settings.hideToolbar !== undefined) {
-          // Transition v1.35 to v1.36
-          settings.toolbar = settings.hideToolbar ? "hide" : "show";
+          // Transition v1.36 to v1.37
+          if (settings.hoverToolbar) {
+            settings.toolbar = "hover";
+          } else {
+            settings.toolbar = settings.hideToolbar ? "hide" : "show";
+          }
           delete settings.hideToolbar;
+          delete settings.hoverToolbar;
           madeAnyChanges = madeChangesToAddon = true;
         }
       }

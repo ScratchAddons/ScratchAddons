@@ -93,7 +93,7 @@
   "latestUpdate": {
     "version": "1.36.0",
     "isMajor": false,
-    "newSettings": ["toolbar"]
+    "newSettings": ["hoverToolbar"]
   },
   "enabledByDefault": false
 }
