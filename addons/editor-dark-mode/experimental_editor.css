@@ -23,7 +23,8 @@
 [class*="menu-bar_menu-bar_"],
 [class*="menu_menu_"],
 [class*="menu_submenu_"] > [class*="menu_menu_"]::-webkit-scrollbar-track,
-[class*="modal_header_"] {
+[class*="modal_header_"],
+[class*="webgl-modal_illustration"] {
   background-color: var(--editorDarkMode-menuBar);
   color: var(--editorDarkMode-menuBar-text);
 }
@@ -172,6 +173,7 @@
 [class*="custom-procedures_body_"],
 [class*="slider-prompt_body_"],
 [class*="record-modal_body_"],
+[class*="webgl-modal_body_"],
 .sa-debugger-interface,
 .sa-debugger-tabs li.sa-debugger-tab-selected {
   background-color: var(--editorDarkMode-accent);
@@ -190,6 +192,7 @@
 [class*="sound-editor_effect-button_"],
 [class*="library-item_featured-extension-metadata_"],
 [class*="record-modal_help-text_"],
+[class*="webgl-modal_body_"] > *,
 .sa-editor-modal-content p {
   color: var(--editorDarkMode-accent-text);
 }
@@ -386,7 +389,8 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="gui_extension-button-container_"],
 [class*="prompt_button-row_"] button[class*="prompt_ok-button_"],
 [class*="custom-procedures_button-row_"] button[class*="custom-procedures_ok-button_"],
-[class*="record-modal_button-row_"] button[class*="record-modal_ok-button_"] {
+[class*="record-modal_button-row_"] button[class*="record-modal_ok-button_"],
+[class*="webgl-modal_button-row"] > button {
   background-color: var(--editorDarkMode-primary);
   border-color: var(--editorDarkMode-primary);
 }
