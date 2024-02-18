@@ -1,5 +1,4 @@
 export default async function ({ addon }) {
-  const username = await addon.auth.fetchUsername();
   while (true) {
     const menuItem = await addon.tab.waitForElement("[class^=menu_menu_] > :first-child", {
       markAsSeen: true,
@@ -7,7 +6,7 @@ export default async function ({ addon }) {
       reduxCondition: (state) => state.scratchGui.menus.accountMenu,
     });
     const usernameSpan = document.createElement("span");
-    usernameSpan.textContent = username;
+    usernameSpan.textContent = await addon.auth.fetchUsername();
     usernameSpan.className = "sa-profile-name";
     menuItem.appendChild(usernameSpan);
   }
