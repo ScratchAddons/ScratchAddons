@@ -22,8 +22,13 @@ export default async ({ addon, console, msg }) => {
     }
   };
 
+  const getProjectId = () => {
+    const id = parseInt(window.location.pathname.split("/")[2]);
+    return id ? id : 0;
+  };
+
   const storageSettings = getStoredOptions();
-  const projectId = window.location.pathname.split("/")[2];
+  const projectId = getProjectId();
 
   // Restore options from last recording if you start another one in the same project
   let lastSettings =
@@ -391,7 +396,7 @@ export default async ({ addon, console, msg }) => {
           lastSettings.mic = opts.micEnabled;
           lastSettings.flag = opts.waitUntilFlag;
           lastSettings.stop = opts.useStopSign;
-          lastSettings.projectId = window.location.pathname.split("/")[2]; // ID can change if you select File > New
+          lastSettings.projectId = getProjectId(); // ID can change if you select File > New
           localStorage.setItem("sa-record-options", JSON.stringify(lastSettings));
 
           startRecording(opts);
