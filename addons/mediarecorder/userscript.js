@@ -12,16 +12,33 @@ export default async ({ addon, console, msg }) => {
   let recorder;
   let timeout;
 
-  let lastSettings = {
-    seconds: 30,
-    delay: 0,
-    audio: true,
-    mic: false,
-    flag: true,
-    stop: true,
+  let recordElem;
+
+  const getStoredOptions = () => {
+    try {
+      return JSON.parse(localStorage.getItem("sa-record-options"));
+    } catch {
+      return {};
+    }
   };
 
-  let recordElem;
+  const storageSettings = getStoredOptions();
+  const projectId = window.location.pathname.split("/")[2];
+
+  // Restore options from last recording if you start another one in the same project
+  let lastSettings =
+    storageSettings?.projectId === projectId
+      ? storageSettings
+      : {
+          // Default options
+          seconds: 30,
+          delay: 0,
+          audio: true,
+          mic: false,
+          flag: true,
+          stop: true,
+          projectId: projectId,
+        };
 
   const mimeType = [
     // Chrome and Firefox only support encoding as webm
@@ -374,6 +391,8 @@ export default async ({ addon, console, msg }) => {
           lastSettings.mic = opts.micEnabled;
           lastSettings.flag = opts.waitUntilFlag;
           lastSettings.stop = opts.useStopSign;
+          lastSettings.projectId = window.location.pathname.split("/")[2]; // ID can change if you select File > New
+          localStorage.setItem("sa-record-options", JSON.stringify(lastSettings));
 
           startRecording(opts);
         }
