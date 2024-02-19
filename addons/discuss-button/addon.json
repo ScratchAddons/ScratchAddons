@@ -106,7 +106,7 @@
       "default": false
     },
     {
-      "name": "Expand contents to the edges",
+      "name": "Expand content to the edges",
       "id": "expand-width",
       "type": "boolean",
       "default": false
