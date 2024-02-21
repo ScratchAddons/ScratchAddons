@@ -17,28 +17,47 @@ export default async function ({ addon, console, msg }) {
   // the libraries, so this fits right in.
   searchBox.type = "text";
 
-  const search = (query) => {
+  // This function was taken from the folders addon
+  const getFolderFromName = (name) => {
+    const idx = name.indexOf("//");
+    if (idx === -1 || idx === 0) {
+      return null;
+    }
+    return name.substr(0, idx);
+  };
+
+  const search = (query, sprites) => {
     if (!spritesContainer) return;
 
     query = query.toLowerCase();
     const containsQuery = (str) => str.toLowerCase().includes(query);
 
+    const foldersWithMatchingSprites = [];
+    for (let sprite of Object.keys(sprites)) {
+      if (containsQuery(sprites[sprite].name) && getFolderFromName(sprites[sprite].name)) {
+        foldersWithMatchingSprites.push(getFolderFromName(sprites[sprite].name));
+      }
+    }
+
     for (const sprite of spritesContainer.children) {
       const visible =
         !query ||
         containsQuery(sprite.children[0].children[1].innerText) ||
-        (containsQuery(sprite.children[0].children[2].children[0].innerText) &&
+        ((containsQuery(sprite.children[0].children[2].children[0].innerText) ||
+          foldersWithMatchingSprites.includes(sprite.children[0].children[2].children[0].innerText)) &&
           sprite.children[0].classList.contains("sa-folders-folder"));
       sprite.style.display = visible ? "" : "none";
     }
   };
 
   searchBox.addEventListener("input", (e) => {
-    search(e.target.value);
+    const reduxState = addon.tab.redux.state;
+    const sprites = reduxState.scratchGui.targets.sprites;
+    search(e.target.value, sprites);
   });
 
   const reset = () => {
-    search("");
+    search("", addon.tab.redux.state.scratchGui.targets.sprites);
     searchBox.value = "";
   };
 
