@@ -26,7 +26,7 @@ export default async function ({ addon, msg }) {
       addon.tab.displayNoneWhileDisabled(span);
     }
 
-    if (remainingReplies > 10) span.classList.add("sa-replies-remaining-hide")
+    if (remainingReplies > 10) span.classList.add("sa-replies-remaining-hide");
     else span.classList.remove("sa-replies-remaining-hide");
     span.innerText = " " + msg("remaining", { replies: remainingReplies });
   }
