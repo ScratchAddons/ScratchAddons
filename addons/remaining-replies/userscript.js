@@ -17,19 +17,18 @@ export default async function ({ addon, msg }) {
     )[0];
 
     const remainingReplies = 25 - parentCommentData?.reply_count;
-    const label = " " + msg("remaining", { replies: remainingReplies });
 
-    const existingSpan = comment.querySelector(".sa-replies-remaining");
-    if (existingSpan) {
-      existingSpan.innerText = label;
-    } else {
-      const span = document.createElement("span");
+    let span = comment?.querySelector(".sa-replies-remaining");
+    if (!span) {
+      span = document.createElement("span");
       span.classList.add("sa-replies-remaining");
-      if (remainingReplies > 10) span.classList.add("sa-replies-remaining-hide");
-      span.innerText = label;
       comment.querySelector(".comment-reply span").appendChild(span);
       addon.tab.displayNoneWhileDisabled(span);
     }
+
+    if (remainingReplies > 10) span.classList.add("sa-replies-remaining-hide")
+    else span.classList.remove("sa-replies-remaining-hide");
+    span.innerText = " " + msg("remaining", { replies: remainingReplies });
   }
 
   const comments = [];
@@ -61,6 +60,8 @@ export default async function ({ addon, msg }) {
         addRemainingReplyCount(document.getElementById(`comments-${reply.id}`));
       });
     }
+
+    // Re-add when allow commenting is toggled
     if (action.detail.action.type === "COMPLETE_STUDIO_MUTATION") {
       comments.forEach((comment) => {
         addRemainingReplyCount(comment);
