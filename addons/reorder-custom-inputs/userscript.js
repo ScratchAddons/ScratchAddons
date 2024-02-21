@@ -62,7 +62,8 @@ export default async function ({ addon, console }) {
       }
 
       proc.onChangeFn(true);
-      if (sourceBlock === null || sourceBlock === undefined || !addon.settings.get("InsertInputsAfter")) return addInputFn.call(this, ...arguments);
+      if (sourceBlock === null || sourceBlock === undefined || !addon.settings.get("InsertInputsAfter"))
+        return addInputFn.call(this, ...arguments);
 
       let newPosition = getFieldInputNameAndIndex(selectedField, proc.inputList).index + 1;
 
@@ -132,20 +133,20 @@ export default async function ({ addon, console }) {
     shiftInput(proc, name, newPosition);
   }
 
-  function polluteProcedureDeclaration(procedureDeclaration, save_original = true){
+  function polluteProcedureDeclaration(procedureDeclaration, save_original = true) {
     procedureDeclaration.createAllInputs_ = modifiedCreateAllInputs;
     procedureDeclaration.onChangeFn = modifiedUpdateDeclarationProcCode;
     procedureDeclaration.removeFieldCallback = modifiedRemoveFieldCallback;
 
     for (const inputFn of ["addLabelExternal", "addBooleanExternal", "addStringNumberExternal"]) {
-      if(save_original){
+      if (save_original) {
         originalAddFns[inputFn] = procedureDeclaration[inputFn];
       }
       procedureDeclaration[inputFn] = addInputAfter(procedureDeclaration[inputFn], inputFn);
     }
   }
 
-  function depolluteProcedureDeclaration(procedureDeclaration){
+  function depolluteProcedureDeclaration(procedureDeclaration) {
     procedureDeclaration.createAllInputs_ = originalCreateAllInputs;
     procedureDeclaration.onChangeFn = originalUpdateDeclarationProcCode;
     procedureDeclaration.removeFieldCallback = originalRemoveFieldCallback;
@@ -156,12 +157,11 @@ export default async function ({ addon, console }) {
   }
 
   function enableAddon() {
-
     // pollute the procedures_declaration prototype with a modified version that prevents merging, and allows inserting after
-    polluteProcedureDeclaration(Blockly.Blocks["procedures_declaration"])
+    polluteProcedureDeclaration(Blockly.Blocks["procedures_declaration"]);
 
     // if custom procedures modal is already open we also directly pollute the existing procedures_declaration block
-    if(addon.tab.redux.state.scratchGui.customProcedures.active){
+    if (addon.tab.redux.state.scratchGui.customProcedures.active) {
       polluteProcedureDeclaration(Blockly.getMainWorkspace().getAllBlocks()[0], false);
     }
 
@@ -174,13 +174,12 @@ export default async function ({ addon, console }) {
   }
 
   function disableAddon() {
-  
     // depollute the procedures_declaration prototype
-    depolluteProcedureDeclaration(Blockly.Blocks["procedures_declaration"])
+    depolluteProcedureDeclaration(Blockly.Blocks["procedures_declaration"]);
 
-     // if custom procedures modal is already open we also directly depollute the existing procedures_declaration block
-     if(addon.tab.redux.state.scratchGui.customProcedures.active){
-      depolluteProcedureDeclaration(Blockly.getMainWorkspace().getAllBlocks()[0])
+    // if custom procedures modal is already open we also directly depollute the existing procedures_declaration block
+    if (addon.tab.redux.state.scratchGui.customProcedures.active) {
+      depolluteProcedureDeclaration(Blockly.getMainWorkspace().getAllBlocks()[0]);
     }
 
     Blockly.FieldTextInputRemovable.prototype.showEditor_ = originalShowEditor;
