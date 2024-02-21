@@ -156,13 +156,19 @@ export default async function ({ addon, console }) {
     }
   }
 
+  function getExistingProceduresDeclarationBlock(){
+    // Blockly.getMainWorkspace is required for this to work.
+    // for future reference "upgrading" to addon.tab.traps.getWorkspace() will cause bugs.
+    return Blockly.getMainWorkspace().getAllBlocks()[0];
+  }
+
   function enableAddon() {
     // pollute the procedures_declaration prototype with a modified version that prevents merging, and allows inserting after
     polluteProcedureDeclaration(Blockly.Blocks["procedures_declaration"]);
 
     // if custom procedures modal is already open we also directly pollute the existing procedures_declaration block
     if (addon.tab.redux.state.scratchGui.customProcedures.active) {
-      polluteProcedureDeclaration(Blockly.getMainWorkspace().getAllBlocks()[0], false);
+      polluteProcedureDeclaration(getExistingProceduresDeclarationBlock(), false);
     }
 
     Blockly.FieldTextInputRemovable.prototype.showEditor_ = function () {
@@ -179,7 +185,7 @@ export default async function ({ addon, console }) {
 
     // if custom procedures modal is already open we also directly depollute the existing procedures_declaration block
     if (addon.tab.redux.state.scratchGui.customProcedures.active) {
-      depolluteProcedureDeclaration(Blockly.getMainWorkspace().getAllBlocks()[0]);
+      depolluteProcedureDeclaration(getExistingProceduresDeclarationBlock());
     }
 
     Blockly.FieldTextInputRemovable.prototype.showEditor_ = originalShowEditor;
