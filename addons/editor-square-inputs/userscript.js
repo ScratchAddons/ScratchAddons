@@ -7,6 +7,7 @@ export default async function ({ addon }) {
   const opcodeToSettings = {
     text: "text",
     argument_editor_string_number: "text",
+    math_number: "number",
     colour_picker: "color",
   };
 
