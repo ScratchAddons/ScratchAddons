@@ -177,12 +177,12 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
       }
 
       if (addonId === "editor-number-arrow-keys" && settings.useCustom != null) {
-        // Transition v1.35 to v1.36
+        // Transition v1.36 to v1.37
         // Migrate all users away from select settings
         if (settings.useCustom) {
-          settings.regular = Number(settings.regularCustom);
-          settings.shift = Number(settings.shiftCustom);
-          settings.alt = Number(settings.altCustom);
+          settings.regular = Math.abs(settings.regularCustom);
+          settings.shift = Math.abs(settings.shiftCustom);
+          settings.alt = Math.abs(settings.altCustom);
         } else {
           const conversions = {
             none: 0,
