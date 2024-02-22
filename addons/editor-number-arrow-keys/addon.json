@@ -21,7 +21,7 @@
       "type": "number",
       "default": 1,
       "min": 0,
-      "max": 1000000000,
+      "max": 9999999999.999998,
       "step": "any"
     },
     {
@@ -30,7 +30,7 @@
       "type": "number",
       "default": 10,
       "min": 0,
-      "max": 1000000000,
+      "max": 9999999999.999998,
       "step": "any"
     },
     {
@@ -39,7 +39,7 @@
       "type": "number",
       "default": 0.1,
       "min": 0,
-      "max": 1000000000,
+      "max": 9999999999.999998,
       "step": "any"
     }
   ],
