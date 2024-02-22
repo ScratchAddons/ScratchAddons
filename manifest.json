@@ -2,8 +2,8 @@
   "manifest_version": 2,
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
-  "version": "1.36.0",
-  "version_name": "1.36.0-prerelease",
+  "version": "1.37.0",
+  "version_name": "1.37.0-prerelease",
   "default_locale": "en",
   "background": {
     "page": "background/background.html"
