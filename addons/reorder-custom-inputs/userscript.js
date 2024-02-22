@@ -159,7 +159,7 @@ export default async function ({ addon, console }) {
   function getExistingProceduresDeclarationBlock() {
     // Blockly.getMainWorkspace is required for this to work.
     // for future reference "upgrading" to addon.tab.traps.getWorkspace() will cause bugs.
-    return Blockly.getMainWorkspace().getAllBlocks()[0];
+    return Blockly.getMainWorkspace().getAllBlocks().find(block => block.type === 'procedures_declaration');
   }
 
   function enableAddon() {
