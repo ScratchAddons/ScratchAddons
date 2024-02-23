@@ -18,14 +18,14 @@
   --dark-red-text: var(--dark-red-variant);
   --white-text: #fff;
 
-  --page-background: #222;
-  --content-background: #2a2a2a;
+  --page-background: #1c1c1c;
+  --content-background: #222222;
   --navigation-background: #333;
   --search-toolbar-background: #2a2a2a;
-  --button-background: #222;
+  --button-background: #1c1c1c;
   --button-hover-background: #1a1a1a;
   --input-background: #222;
-  --search-input-background: #111;
+  --search-input-background: #222222;
   --switch-border: #808080;
   --switch-inner-background: #eee;
   --tooltip-background: #000;
@@ -52,7 +52,7 @@
   --large-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   --large-shadow-filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
   --content-border: #333;
-  --content-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  --content-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.25);
   --content-separator: #808080;
   --control-border: #000;
   --input-focus-shadow: 0 0 0 3px var(--orange-opacity35);

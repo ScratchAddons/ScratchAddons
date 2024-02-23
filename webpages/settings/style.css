@@ -399,7 +399,6 @@ button.setting-input.color.open {
   justify-content: center;
   border-radius: 4px;
   background-color: var(--content-background);
-  border: 1px solid var(--content-border);
   box-shadow: var(--content-shadow);
   padding: 20px 0;
   margin: 10px;

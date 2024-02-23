@@ -1,12 +1,9 @@
 .search-box {
-  background: var(--search-toolbar-background);
-  border-bottom: 1px solid var(--control-border);
   display: flex;
   align-items: center;
-  padding: 20px 30px;
   user-select: none;
+  box-shadow: var(--content-shadow);
 }
-
 .search-box input {
   background: var(--search-input-background);
   padding: 8px 12px;
