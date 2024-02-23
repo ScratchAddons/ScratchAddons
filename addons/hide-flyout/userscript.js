@@ -226,24 +226,6 @@ export default async function ({ addon, console, msg }) {
       }
       oldStepScrollAnimation.call(this);
     };
-
-    // add flyout size to the workspace dimensions
-    const oldGetMetrics = Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
-    Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function () {
-      const metrics = oldGetMetrics.call(this);
-      if (addon.self.disabled || getToggleSetting() === "hover" || this.RTL) return metrics;
-      if (this.getToolbox()?.flyout_?.getWidth() === 310) {
-        // columns is enabled
-        return metrics;
-      }
-      return {
-        ...metrics,
-        absoluteLeft: metrics.absoluteLeft - 250,
-        viewWidth: metrics.viewWidth + 250,
-      };
-    };
-    if (Blockly.getMainWorkspace())
-      Blockly.getMainWorkspace().getMetrics = Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
   }
 
   while (true) {
