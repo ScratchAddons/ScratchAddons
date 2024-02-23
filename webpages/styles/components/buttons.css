@@ -1,7 +1,7 @@
 .large-button {
   color: var(--content-text);
   background: var(--button-background);
-  border: 1px solid var(--control-border);
+  border: none;
   display: flex;
   align-items: center;
   padding: 7px 12px;
@@ -10,6 +10,7 @@
   box-sizing: border-box;
   font-family: inherit;
   font-size: 12px;
+  box-shadow: var(--content-shadow);
 }
 
 .large-button:hover:not([disabled]) {
