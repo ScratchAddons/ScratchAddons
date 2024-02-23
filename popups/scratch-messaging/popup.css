@@ -30,7 +30,6 @@ button {
 
 .message-type {
   border-radius: 4px;
-  border: 1px solid var(--content-border);
   background: var(--content-background);
   margin: 10px;
   box-shadow: var(--content-shadow);
@@ -42,12 +41,15 @@ button {
 .message-type-title {
   font-size: 12px;
   color: var(--content-text);
-  padding: 6px;
+  padding: 8px 10px;
   padding-inline-end: 9px;
   cursor: default;
   display: flex;
   align-items: center;
   user-select: none;
+}
+.message-type-details {
+  padding: 10px;
 }
 .fullscreen .message-type-title {
   padding: 10px;
@@ -143,7 +145,7 @@ a.message-type-title-text {
   padding: 3px 8px;
   background: var(--comment-background);
   border: 1px solid var(--control-border);
-  border-radius: 8px;
+  border-radius: 6px;
   margin: 8px;
   font-size: 12px;
 }

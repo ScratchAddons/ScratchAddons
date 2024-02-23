@@ -29,7 +29,7 @@
   --switch-border: #808080;
   --switch-inner-background: #eee;
   --tooltip-background: #000;
-  --comment-background: #222;
+  --comment-background: #1c1c1c;
   --unread-comment-background: #000;
   --notice-background: var(--navigation-background);
   --notice-border: var(--yellow-opacity50);

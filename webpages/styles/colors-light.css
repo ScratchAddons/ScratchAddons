@@ -13,8 +13,8 @@
   --search-input-background: #ffffff;
   --switch-inner-background: var(--content-text);
   --tooltip-background: #f1f1f1;
-  --comment-background: #f0f0f0;
-  --unread-comment-background: #fff;
+  --comment-background: #f3f3f3;
+  --unread-comment-background: #ebebeb;
   --notice-background: rgba(253, 221, 43, 0.25);
   --notice-text: #222;
   --notice-icon-filter: none;
