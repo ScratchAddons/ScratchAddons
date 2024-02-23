@@ -44,7 +44,7 @@ body {
 .title {
   font-size: 12px;
   color: var(--content-text);
-  padding: 6px 8px;
+  padding: 8px 10px;
   cursor: default;
   display: flex;
   align-items: center;
@@ -64,7 +64,7 @@ body {
 }
 
 .project-details {
-  padding: 8px;
+  padding: 10px;
   color: var(--description-text);
   font-size: 12px;
 }
@@ -76,7 +76,6 @@ body {
 
 .game {
   border-radius: 4px;
-  border: 1px solid var(--content-border);
   background: var(--content-background);
   margin: 10px;
   box-shadow: var(--content-shadow);

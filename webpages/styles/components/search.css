@@ -3,6 +3,7 @@
   align-items: center;
   user-select: none;
   box-shadow: var(--content-shadow);
+  padding: 20px 30px;
 }
 .search-box input {
   background: var(--search-input-background);
