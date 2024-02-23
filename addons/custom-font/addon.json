@@ -2,7 +2,6 @@
   "name": "Customizable website font",
   "description": "Replace scratch default font, \"Helvetica Neue\" with a font of your choice!, Currently limited to 5 fonts.",
   "tags": ["community", "theme"],
-  "versionAdded": "1.37.0",
   "userscripts": [
     {
       "url": "userscript.js",
