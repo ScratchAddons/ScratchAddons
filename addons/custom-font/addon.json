@@ -1,49 +1,34 @@
 {
-    "name": "Customizable website font",
-    "description": "Replace scratch default font, \"Helvetica Neue\" with a font of your choice!, Currently limited to 5 fonts.",
-    "tags": ["community", "theme"],
-    "versionAdded": "1.37.0",
-    "userscripts": [
-        {
-          "url": "userscript.js",
-          "matches": ["https://scratch.mit.edu/*"]
-        }
-    ],
-    "settings": [
-      {
-        "name": "Font",
-        "id": "font",
-        "type": "select",
-        "potentialValues": [
-          {
-            "id": "serif",
-            "name": "Serif"
-          },
-          {
-            "id": "sans-serif",
-            "name": "Sans-Serif"
-          },
-          {
-            "id": "monospace",
-            "name": "Monospace"
-          },
-          {
-            "id": "cursive",
-            "name": "Cursive"
-          },
-          {
-            "id": "fantasy",
-            "name": "Fantasy"
-          }
-        ],
-        "default": "sans-serif"
-      }
-    ],
-    "credits": [
-        {
-            "name": "Waakul",
-            "link": "https://scratch.mit.edu/users/Waakul/"
-        }
-    ],
-    "enabledByDefault": false
+  "name": "Customizable website font",
+  "description": "Replace scratch default font, \"Helvetica Neue\" with a font of your choice!, Currently limited to 5 fonts.",
+  "tags": ["community", "theme"],
+  "versionAdded": "1.37.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Font",
+      "id": "font",
+      "type": "select",
+      "potentialValues": [
+        {"id": "serif", "name": "Serif"},
+        {"id": "sans-serif", "name": "Sans-Serif"},
+        {"id": "monospace", "name": "Monospace"},
+        {"id": "cursive", "name": "Cursive"},
+        {"id": "fantasy", "name": "Fantasy"}
+      ],
+      "default": "sans-serif"
+    }
+  ],
+  "credits": [
+    {
+      "name": "Waakul",
+      "link": "https://scratch.mit.edu/users/Waakul/"
+    }
+  ],
+  "enabledByDefault": false
 }
