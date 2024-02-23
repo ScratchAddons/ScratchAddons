@@ -94,16 +94,12 @@ body {
 .popup-name.sel {
   background-color: var(--content-background);
   box-shadow: inset 0px -3px 0px 0px var(--brand-orange);
-  color: var(--white-text);
 }
 .popup-name img {
   vertical-align: middle;
   filter: var(--content-icon-filter);
   width: 18px;
   height: 18px;
-}
-.popup-name.sel img {
-  filter: brightness(0) invert(1);
 }
 .popup-title {
   padding-inline-start: 5px;

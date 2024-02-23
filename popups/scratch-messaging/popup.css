@@ -298,7 +298,6 @@ a.message-type-title-text {
   left: 0;
   right: 0;
   background: var(--content-background);
-  border-top: 1px solid var(--content-border);
   font-size: 12px;
   text-align: center;
   box-shadow: var(--content-shadow);

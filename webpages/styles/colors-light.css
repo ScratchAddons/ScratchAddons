@@ -3,16 +3,16 @@
   --green-text: var(--green);
   --blue-text: var(--blue);
 
-  --page-background: #fcfcfc;
-  --content-background: #f7f7f7;
+  --page-background: #f5f5f5;
+  --content-background: #ffffff;
   --navigation-background: #ecebeb;
-  --search-toolbar-background: #fcfcfc;
+  --search-toolbar-background: #f5f5f5;
   --button-background: #ecebeb;
-  --button-hover-background: #d4d3d3;
+  --button-hover-background: #dcdcdc;
   --input-background: #fff;
-  --search-input-background: #f0f0f0;
+  --search-input-background: #ffffff;
   --switch-inner-background: var(--content-text);
-  --tooltip-background: #ecebeb;
+  --tooltip-background: #f1f1f1;
   --comment-background: #f0f0f0;
   --unread-comment-background: #fff;
   --notice-background: rgba(253, 221, 43, 0.25);
