@@ -3,7 +3,7 @@
   flex-direction: column;
   flex-shrink: 0;
   flex-grow: 0;
-  background: var(--navigation-background);
+  background: var(--content-background);
   min-width: 300px;
   overflow-y: auto;
   scrollbar-width: thin;
