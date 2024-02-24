@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   user-select: none;
-  box-shadow: var(--content-shadow);
+  box-shadow: var(--searchbox-shadow);
   padding: 20px 30px;
 }
 .search-box input {
