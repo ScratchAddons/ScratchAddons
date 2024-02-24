@@ -61,6 +61,8 @@ body {
   display: flex;
   border-bottom: 1px solid var(--control-border);
   justify-content: center;
+  padding-inline-start: 25px;
+  padding-inline-end: 25px;
 }
 
 #popup-chooser {
