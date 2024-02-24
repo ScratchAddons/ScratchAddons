@@ -143,8 +143,6 @@ export default async function ({ addon, console, msg }) {
     }
     addon.self.addEventListener("disabled", () => {
       Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
-      // update workspace dimensions
-      Blockly.svgResize(Blockly.getMainWorkspace());
     });
     addon.self.addEventListener("reenabled", () => {
       if (getToggleSetting() === "category" && !addon.settings.get("lockLoad")) {
@@ -152,8 +150,6 @@ export default async function ({ addon, console, msg }) {
         onmouseleave(null, 0);
         toggle = false;
       }
-      // update workspace dimensions
-      Blockly.svgResize(Blockly.getMainWorkspace());
     });
 
     addon.settings.addEventListener("change", () => {
@@ -180,8 +176,6 @@ export default async function ({ addon, console, msg }) {
         }
         Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
       }
-      // update workspace dimensions
-      Blockly.svgResize(Blockly.getMainWorkspace());
     });
 
     // category click mode
