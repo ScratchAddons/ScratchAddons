@@ -9,4 +9,5 @@
   scrollbar-width: thin;
   scrollbar-color: var(--gray-text) transparent;
   padding: 20px 0;
+  box-shadow: var(--content-shadow);
 }
