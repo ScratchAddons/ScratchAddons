@@ -15,8 +15,8 @@
   border-radius: 4px;
   overflow: hidden;
   background: var(--button-background);
-  border: 1px solid var(--control-border);
   user-select: none;
+  box-shadow: var(--content-shadow);
 }
 
 .filter-option {
