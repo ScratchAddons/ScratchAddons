@@ -68,6 +68,7 @@ body {
   color: var(--content-text);
   height: 35px;
   overflow: hidden;
+  width: 100%;
 }
 .popup-name {
   display: flex;
@@ -80,6 +81,8 @@ body {
   border-bottom: none;
   border-radius: 12px 12px 0 0;
   transition: 0.2s ease;
+  width: 100%;
+  justify-content: center;
 }
 .popup-name:hover {
   background-color: var(--button-hover-background);
