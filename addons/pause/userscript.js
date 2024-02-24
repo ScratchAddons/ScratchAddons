@@ -25,6 +25,7 @@ export default async function ({ addon, console, msg }) {
     // Because keyCode is deprecated we'll still check e.key in case keyCode is not as reliable as we think it is
     if (e.altKey && (e.key.toLowerCase() === "x" || e.keyCode === 88) && !addon.self.disabled) {
       e.preventDefault();
+      e.stopImmediatePropagation();
       setPaused(!isPaused());
     }
   });
