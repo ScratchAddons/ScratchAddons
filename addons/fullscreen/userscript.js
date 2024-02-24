@@ -57,13 +57,13 @@ export default async function ({ addon, console }) {
       });
 
       // Listen for when the mouse moves above the page (helps to show header when not in browser full screen mode)
-      document.addEventListener("mouseleave", (e) => {
+      document.body.addEventListener("mouseleave", (e) => {
         if (e.clientY < 8) {
           header.classList.add("stage-header-hover");
         }
       });
       // and for when the mouse re-enters the page
-      document.addEventListener("mouseenter", () => {
+      document.body.addEventListener("mouseenter", () => {
         header.classList.remove("stage-header-hover");
       });
 
