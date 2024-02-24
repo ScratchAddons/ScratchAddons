@@ -1,0 +1,12 @@
+{
+  "name": "eastah egg",
+  "description": "o_0",
+  "tags": ["community"],
+  "enabledByDefault": false,
+  "userscripts": [
+    {
+      "url": "index.js",
+      "matches": ["https://scratch.mit.edu/"]
+    }
+  ]
+}
