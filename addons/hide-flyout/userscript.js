@@ -297,9 +297,5 @@ export default async function ({ addon, console, msg }) {
 
     doOneTimeSetup();
     autoLock();
-    if (getToggleSetting() !== "hover") {
-      // update workspace dimensions
-      Blockly.svgResize(Blockly.getMainWorkspace());
-    }
   }
 }
