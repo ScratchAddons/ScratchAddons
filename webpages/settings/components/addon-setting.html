@@ -164,7 +164,7 @@
   .setting-input {
     color: var(--content-text);
     background: var(--input-background);
-    border: 1px solid var(--control-border);
+    border: none;
     height: 32px;
     box-sizing: border-box;
     padding: 0 12px;
@@ -172,6 +172,7 @@
     border-radius: 4px 0 0 4px;
     transition: 0.2s ease;
     transition-property: box-shadow, border;
+    box-shadow: var(--content-shadow);
   }
   [dir="rtl"] .setting-input {
     border-radius: 0 4px 4px 0;
@@ -287,7 +288,7 @@
     border-top-right-radius: 0;
     background: var(--button-background);
     color: var(--content-text);
-    border: 1px solid var(--control-border);
+    box-shadow: var(--content-shadow);
   }
   .iframe .setting-dropdown ul {
     right: auto;
@@ -374,6 +375,7 @@
     padding-bottom: 10px;
     background: var(--navigation-background);
     border-radius: 10px;
+    box-shadow: var(--content-shadow);
   }
   .setting-table-row-settings .addon-setting {
     margin-inline-end: 10px;
