@@ -28,7 +28,7 @@ export default async function ({ addon, console, msg }) {
       e.stopImmediatePropagation();
       setPaused(!isPaused());
     }
-  });
+  }, { capture: true });
 
   while (true) {
     await addon.tab.waitForElement("[class^='green-flag']", {
