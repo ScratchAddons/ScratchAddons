@@ -1,0 +1,22 @@
+{
+  "name": "Asset Conflict Dialog",
+  "description": "Show conflict dialog when uploading assets with the same name as existing assets.",
+  "credits": [
+    {
+      "name": "Chrome_Cat",
+      "link": "https://scratch.mit.edu/users/Chrome_Cat/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": true
+    }
+  ],
+  "versionAdded": "1.37.0",
+  "tags": ["editor", "costumeEditor"],
+  "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}
