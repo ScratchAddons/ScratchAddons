@@ -27,8 +27,8 @@
     }
   ],
   "latestUpdate": {
-    "version": "1.33.2",
-    "isMajor": true
+    "version": "1.36.0",
+    "newSettings": ["monitors"]
   },
   "customCssVariables": [
     {
@@ -89,6 +89,31 @@
             "colorOnWhite": "#000000",
             "colorOnBlack": "#ffffff"
           }
+        }
+      }
+    },
+    {
+      "name": "inputColor-editableLabel",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "text"
+          },
+          "options": {
+            "colorOnWhite": "#ffffff",
+            "colorOnBlack": "#282828"
+          },
+          "default": {
+            "type": "settingValue",
+            "settingId": "custom-color"
+          }
+        },
+        "transparentSource": {
+          "type": "settingValue",
+          "settingId": "input-color"
         }
       }
     },
@@ -329,6 +354,12 @@
       ]
     },
     {
+      "name": "Change the colors of variables and lists on the stage",
+      "id": "monitors",
+      "type": "boolean",
+      "default": false
+    },
+    {
       "name": "Change the colors of blocks in the forums",
       "id": "forums",
       "type": "boolean",
@@ -357,7 +388,8 @@
         "sa-color": "#34E4D0",
         "comment-color": "#FEF49C",
         "input-color": "#FFFFFF",
-        "text": "black"
+        "text": "black",
+        "monitors": true
       }
     },
     {
@@ -379,7 +411,8 @@
         "sa-color": "#2A797C",
         "comment-color": "#423F24",
         "input-color": "#FFFFFF",
-        "text": "white"
+        "text": "white",
+        "monitors": false
       }
     },
     {
@@ -401,7 +434,8 @@
         "sa-color": "#166966",
         "comment-color": "#423f24",
         "input-color": "#202020",
-        "text": "white"
+        "text": "white",
+        "monitors": false
       }
     },
     {
@@ -423,7 +457,8 @@
         "sa-color": "#29BEB8",
         "comment-color": "#FEF49C",
         "input-color": "#FFFFFF",
-        "text": "white"
+        "text": "white",
+        "monitors": false
       }
     },
     {
@@ -445,7 +480,8 @@
         "sa-color": "#29beb8",
         "comment-color": "#FFFFD2",
         "input-color": "#ffffff",
-        "text": "white"
+        "text": "white",
+        "monitors": false
       }
     },
     {
@@ -467,7 +503,8 @@
         "sa-color": "#34E4D0",
         "comment-color": "#FEF49C",
         "input-color": "#202020",
-        "text": "colorOnBlack"
+        "text": "colorOnBlack",
+        "monitors": false
       }
     }
   ],
