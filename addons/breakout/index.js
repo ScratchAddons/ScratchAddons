@@ -9,7 +9,7 @@ export default async function ({ addon, global, console }) {
     document.body.style.overflow = "hidden";
     // create full screen canvas
     const canvas = document.createElement("canvas");
-    canvas.width = 950;
+    canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     canvas.style.position = "fixed";
     canvas.style.top = "0";
@@ -19,7 +19,7 @@ export default async function ({ addon, global, console }) {
     canvas.style.transition = "opacity 3s ease-in-out";
     canvas.style.opacity = "0.1";
 
-    canvas.style.backgroundColor = "#111";
+    //canvas.style.backgroundColor = "#111";
 
     const ctx = canvas.getContext("2d");
     ctx.fillStyle = "black";
@@ -145,11 +145,21 @@ export default async function ({ addon, global, console }) {
     }
 
     function collisionDetection() {
+      // keep within 950px centered on the canvas
+      if (x + ballRadius < canvas.width / 2 - 475 || x + ballRadius > canvas.width / 2 + 475) {
+        dx = -dx;
+      }
+
       for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
           const b = bricks[c][r];
           if (b.status > 0) {
-            if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+            if (
+              x + ballRadius > b.x &&
+              x - ballRadius < b.x + brickWidth &&
+              y + ballRadius > b.y &&
+              y - ballRadius < b.y + brickHeight
+            ) {
               dy = -dy;
               b.status--;
               score++;
@@ -162,9 +172,15 @@ export default async function ({ addon, global, console }) {
       }
     }
     let firstTransition = true;
+    function drawBg() {
+      // draw 950 px black rectangle centered on the canvas
+
+      ctx.fillStyle = "#111";
+      ctx.fillRect(canvas.width / 2 - 950 / 2, 0, 950, canvas.height);
+    }
     async function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+      drawBg();
       drawBricks();
       canvas.style.opacity = "1";
 
@@ -178,19 +194,20 @@ export default async function ({ addon, global, console }) {
       }
       collisionDetection();
 
-      if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+      if (x + dx + ballRadius > canvas.width || x + dx < ballRadius) {
         dx = -dx;
       }
       if (y + dy < ballRadius) {
         dy = -dy;
       } else if (y + dy > canvas.height - ballRadius) {
         if (x > paddleX && x < paddleX + paddleWidth) {
+          // change dy based on where the ball hits the paddle
           dy = -dy;
+          dx = 8 * ((x - (paddleX + paddleWidth / 2)) / paddleWidth);
         } else {
           lives--;
           if (!lives) {
             gameOver = true;
-            alert("GAME OVER");
           } else {
             x = canvas.width / 2;
             y = canvas.height - 30;
@@ -244,23 +261,7 @@ export default async function ({ addon, global, console }) {
         paddleX = relativeX - paddleWidth / 2;
       }
     }
-    // draw a box over given div
-    function drawBox() {
-      const div = document.querySelector(
-        "#view > div > div:nth-child(3) > div:nth-child(1) > div.box-content > div > div > div > div:nth-child(1) > a > img"
-      );
-      const rect = div.getBoundingClientRect();
-      // put in terms of canvas
 
-      ctx.beginPath();
-      ctx.rect(rect.left - window.scrollX, rect.top - window.scrollY, rect.width, rect.height);
-      ctx.strokeStyle = "red";
-      ctx.fillStyle = "#0095DD";
-
-      ctx.fill();
-      ctx.stroke();
-      ctx.closePath();
-    }
     await wait(500);
     document.addEventListener("keydown", keyDownHandler, false);
     document.addEventListener("keyup", keyUpHandler, false);
