@@ -9,7 +9,7 @@ export default async function ({ addon, global, console }) {
     document.body.style.overflow = "hidden";
     // create full screen canvas
     const canvas = document.createElement("canvas");
-    canvas.width = window.innerWidth;
+    canvas.width = 950;
     canvas.height = window.innerHeight;
     canvas.style.position = "fixed";
     canvas.style.top = "0";
@@ -19,7 +19,7 @@ export default async function ({ addon, global, console }) {
     canvas.style.transition = "opacity 3s ease-in-out";
     canvas.style.opacity = "0.1";
 
-    canvas.style.backgroundColor = "black";
+    canvas.style.backgroundColor = "#111";
 
     const ctx = canvas.getContext("2d");
     ctx.fillStyle = "black";
