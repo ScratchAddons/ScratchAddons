@@ -15,7 +15,7 @@
   height: 16px;
   transition: 0.2s ease;
 }
-.search-box input:focus{
+.search-box input:focus {
   width: 300px;
 }
 [dir="rtl"] .search-box input {
