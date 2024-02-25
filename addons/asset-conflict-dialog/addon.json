@@ -7,6 +7,12 @@
       "link": "https://scratch.mit.edu/users/Chrome_Cat/"
     }
   ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",

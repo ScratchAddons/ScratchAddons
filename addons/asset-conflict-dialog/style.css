@@ -1,0 +1,49 @@
+.conflictDialog {
+  box-sizing: border-box;
+  width: 600px;
+  max-height: 80vh;
+  max-width: 85%;
+  margin-top: 12vh;
+  overflow-y: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.conflictDialog-content {
+  padding: 1.5rem 2.25rem;
+}
+
+.conflictDialog-content>p {
+  margin-top: 0;
+}
+
+.conflictDialog-actions{
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+}
+
+.conflictDialog-button{
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  background: white;
+  border: 1px solid hsla(0, 0%, 0%, 0.15);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.conflictDialog-button:hover {
+  background-color: hsla(260, 60%, 60%, 0.15);
+}
+
+.conflictDialog-button.selected{
+  background-color: hsla(260, 60%, 60%, 1);
+  color: white;
+}
+
+.conflictDialog-footer{
+  border-top: solid 1px #aaa;
+  padding-top: 1rem;
+}
