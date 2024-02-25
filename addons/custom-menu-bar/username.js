@@ -5,6 +5,7 @@ export default async function ({ addon }) {
       reduxEvents: ["scratch-gui/menus/OPEN_MENU"],
       reduxCondition: (state) => state.scratchGui.menus.accountMenu,
     });
+    if (!addon.settings.get("compact-username")) continue;
     const usernameSpan = document.createElement("span");
     usernameSpan.textContent = await addon.auth.fetchUsername();
     usernameSpan.className = "sa-profile-name";
