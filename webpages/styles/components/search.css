@@ -1,5 +1,4 @@
 .search-box {
-  background: var(--search-toolbar-background);
   display: flex;
   align-items: center;
   user-select: none;

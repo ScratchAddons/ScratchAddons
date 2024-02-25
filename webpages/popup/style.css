@@ -19,6 +19,7 @@ body {
 #header {
   display: flex;
   height: 60px;
+  box-shadow: var(--content-shadow);
 }
 #title-text,
 #settings {
@@ -117,6 +118,7 @@ body {
   margin-inline-start: 3px;
   margin-inline-end: -2px;
   border-radius: 2px;
+  transition: 0.2s ease;
 }
 .popout:hover > .popout-img {
   background-color: var(--white-text);
