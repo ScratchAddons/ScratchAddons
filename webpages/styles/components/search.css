@@ -13,6 +13,10 @@
   color: var(--content-text);
   width: 150px;
   height: 16px;
+  transition: 0.2s ease;
+}
+.search-box input:focus{
+  width: 300px;
 }
 [dir="rtl"] .search-box input {
   border-radius: 0 4px 4px 0;
