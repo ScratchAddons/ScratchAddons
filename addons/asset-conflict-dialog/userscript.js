@@ -23,17 +23,14 @@ export default async function ({ addon, console, msg }) {
     // Add the modal content
     createAndAppendElement("p", content, { textContent: msg("dialogText", { fileName: `"${fileName}"` }) });
     const btnContainer = createAndAppendElement("div", content, { className: btnContainerClass });
-    let buttons = [];
-    ["rename", "replace", "skip"].forEach((action) => {
-      buttons.push(
-        createAndAppendElement("button", btnContainer, {
-          name: action,
-          value: action,
-          textContent: msg(action),
-          className: action === "rename" ? selectedClass : "",
-        })
-      );
-    });
+    const buttons = ["rename", "replace", "skip"].map(action =>
+      createAndAppendElement("button", btnContainer, {
+        name: action,
+        value: action,
+        textContent: msg(action),
+        className: action === "rename" ? selectedClass : ""
+      })
+    );
     const conflictFooter = createAndAppendElement("div", content, { className: "conflictDialog-footer" });
     const applyToAllCheckbox = createAndAppendElement("input", conflictFooter, {
       type: "checkbox",
