@@ -1,7 +1,6 @@
 // util function for creating and appending Elements
-function createAndAppendElement(type, parent, { textContent, ...attrs } = {}) {
+function createAndAppendElement(type, parent, attrs = {}) {
   const element = document.createElement(type);
-  if (textContent) attrs.textContent = textContent;
   Object.assign(element, attrs);
   parent.appendChild(element);
   return element;
