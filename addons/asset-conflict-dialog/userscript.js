@@ -99,7 +99,7 @@ export default async function ({ addon, console, msg }) {
               resolve(
                 originalFn.call(this, ...args).then(() => {
                   const assets = type === "costume" ? sprite.costumes_ : sprite.sounds;
-                  const assetObjIndex = assets.findIndex((e) => e.name === newName);
+                  const assetObjIndex = assets.findIndex((e) => e === assetObj);
                   const duplicateIndex = assets.findIndex((e) => e.name === originalName);
                   assets[duplicateIndex] = assets[assetObjIndex];
                   assets[duplicateIndex].name = originalName;
