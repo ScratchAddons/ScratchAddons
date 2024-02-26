@@ -1,7 +1,7 @@
 export default async function ({ addon, console, safeMsg }) {
   function createAssetConflictDialog(fileName, actionClickCallback) {
     // HTML content for the modal
-    const btnContainerClass = addon.tab.scratchClass("prompt_button-row", {others: "conflictDialog-actions"});
+    const btnContainerClass = addon.tab.scratchClass("prompt_button-row", { others: "conflictDialog-actions" });
     const selectedClass = addon.tab.scratchClass("prompt_ok-button");
     const modalContent = `
         <div class = 'conflictDialog-content'>
@@ -10,12 +10,8 @@ export default async function ({ addon, console, safeMsg }) {
               <button id="rename" name="conflictAction" value="rename" class="${selectedClass}">${safeMsg(
                 "rename"
               )}</button>
-              <button id="replace" name="conflictAction" value="replace">${safeMsg(
-                "replace"
-              )}</button>
-              <button id="skip" name="conflictAction" value="skip">${safeMsg(
-                "skip"
-              )}</button>
+              <button id="replace" name="conflictAction" value="replace">${safeMsg("replace")}</button>
+              <button id="skip" name="conflictAction" value="skip">${safeMsg("skip")}</button>
             </div>
             <div class = 'conflictDialog-footer'>
                 <input type="checkbox" id="applyToAll" name="applyToAll">
