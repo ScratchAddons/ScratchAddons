@@ -21,7 +21,7 @@
     }
   ],
   "versionAdded": "1.37.0",
-  "tags": ["editor", "costumeEditor", featured"],
+  "tags": ["editor", "costumeEditor", "featured"],
   "enabledByDefault": false,
   "dynamicEnable": true,
   "dynamicDisable": true

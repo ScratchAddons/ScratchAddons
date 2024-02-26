@@ -24,7 +24,7 @@ export default async function ({ addon, console, safeMsg }) {
     `;
 
     // Create the modal
-    const { remove, content, closeButton, container } = addon.tab.createModal("Rename, Replace or Skip Assets", {
+    const { remove, content, closeButton, container } = addon.tab.createModal(safeMsg("title"), {
       isOpen: true,
       useEditorClasses: true,
     });
