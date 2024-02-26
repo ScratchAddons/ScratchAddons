@@ -8,10 +8,6 @@ function createAndAppendElement(type, parent, attrs = {}) {
 
 export default async function ({ addon, console, msg }) {
   function createAssetConflictDialog(fileName, actionClickCallback) {
-    // HTML content for the modal
-    const btnContainerClass = addon.tab.scratchClass("prompt_button-row", { others: "conflictDialog-actions" });
-    const selectedClass = addon.tab.scratchClass("prompt_ok-button");
-
     // Create the modal
     const { remove, content, closeButton, container } = addon.tab.createModal(msg("title"), {
       isOpen: true,
@@ -20,6 +16,9 @@ export default async function ({ addon, console, msg }) {
     container.classList.add("conflictDialog");
 
     // Add the modal content
+    const btnContainerClass = addon.tab.scratchClass("prompt_button-row", { others: "conflictDialog-actions" });
+    const selectedClass = addon.tab.scratchClass("prompt_ok-button");
+
     createAndAppendElement("p", content, { textContent: msg("dialogText", { fileName: `"${fileName}"` }) });
     const btnContainer = createAndAppendElement("div", content, { className: btnContainerClass });
     const buttons = ["rename", "replace", "skip"].map((action) =>
@@ -36,7 +35,7 @@ export default async function ({ addon, console, msg }) {
       id: "applyToAll",
       name: "applyToAll",
     });
-    createAndAppendElement("label", conflictFooter, { for: "applyToAll", textContent: msg("applyToAll") });
+    createAndAppendElement("label", conflictFooter, { htmlFor: "applyToAll", textContent: msg("applyToAll") });
 
     // initially hide the conflictFooter so that later, asynchronously, when multiple conflicts are in the conflictQueue we can show it again
     if (!conflictQueue.length) {
