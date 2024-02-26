@@ -61,32 +61,36 @@ export default async function ({ addon, console, msg }) {
 
   function wrapAddAssetWithFileConflictModal(originalFn, type) {
     return function (...args) {
+
+      // handle dynamic enable/disable
+      if(addon.self.disabled) return originalFn.call(this, ...args);
+
+      //get args
+      const optTargetId = type === "costume" ? args[2] : args[1];
+      const assetObj = type === "costume" ? args[1] : args[0];
+
+      // get target and target.sprite
+      const target = optTargetId ? this.runtime.getTargetById(optTargetId) : this.editingTarget;
+      if (!target) return originalFn.call(this, ...args);
+      const sprite = target.sprite;
+
+      // check if the new asset will be renamed by adding a dummy asset and testing if it gets renamed
+      const originalName = assetObj.name;
+      type === "costume" ? target.addCostume(assetObj) : target.addSound(assetObj);
+      const newName = assetObj.name;
+
+      // remove the dummy asset we previously added
+      if (type === "costume") {
+        sprite.costumes_ = sprite.costumes_.filter((e) => e.name !== newName);
+      } else {
+        sprite.sounds = sprite.sounds.filter((e) => e.name !== newName);
+      }
+
+      // if the name is the same, there are no duplicates so we let the originalFn proceed as normal
+      if (newName === originalName) return originalFn.call(this, ...args);
+
       // Return a new Promise
       return new Promise((resolve, reject) => {
-        //get args
-        const optTargetId = type === "costume" ? args[2] : args[1];
-        const assetObj = type === "costume" ? args[1] : args[0];
-
-        // get target and target.sprite
-        const target = optTargetId ? this.runtime.getTargetById(optTargetId) : this.editingTarget;
-        if (!target) return resolve(originalFn.call(this, ...args));
-        const sprite = target.sprite;
-
-        // check if the new asset will be renamed by adding a dummy asset and testing if it gets renamed
-        const originalName = assetObj.name;
-        type === "costume" ? target.addCostume(assetObj) : target.addSound(assetObj);
-        const newName = assetObj.name;
-
-        // remove the dummy asset we previously added
-        if (type === "costume") {
-          sprite.costumes_ = sprite.costumes_.filter((e) => e.name !== newName);
-        } else {
-          sprite.sounds = sprite.sounds.filter((e) => e.name !== newName);
-        }
-
-        // if the name is the same, there are no duplicates so we let the originalFn proceed as normal
-        if (newName === originalName) return resolve(originalFn.call(this, ...args));
-
         // if there's a conflict, we need to wait for the user to make a choice in the modal dialog before we can act on this
         // Note: as the outer function is not async we can't use await
         // instead we'll create a callback that will handle the conflict once the modal is submitted and push to the conflictQueue
