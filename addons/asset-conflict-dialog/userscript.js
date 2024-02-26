@@ -1,5 +1,5 @@
 // util function for creating and appending Elements
-function createAndAppendElement(type, parent, {textContent, ...attrs} = {}) {
+function createAndAppendElement(type, parent, { textContent, ...attrs } = {}) {
   const element = document.createElement(type);
   if (textContent) attrs.textContent = textContent;
   Object.assign(element, attrs);
@@ -21,20 +21,26 @@ export default async function ({ addon, console, msg }) {
     container.classList.add("conflictDialog");
 
     // Add the modal content
-    createAndAppendElement('p', content, {textContent: msg("dialogText", {fileName: `"${fileName}"`})});
-    const btnContainer = createAndAppendElement('div', content, {className: btnContainerClass});
+    createAndAppendElement("p", content, { textContent: msg("dialogText", { fileName: `"${fileName}"` }) });
+    const btnContainer = createAndAppendElement("div", content, { className: btnContainerClass });
     let buttons = [];
-    ['rename', 'replace', 'skip'].forEach(action => {
-      buttons.push(createAndAppendElement('button', btnContainer, {
+    ["rename", "replace", "skip"].forEach((action) => {
+      buttons.push(
+        createAndAppendElement("button", btnContainer, {
           name: action,
           value: action,
           textContent: msg(action),
-          className: action === 'rename' ? selectedClass : '',
-      }));
+          className: action === "rename" ? selectedClass : "",
+        })
+      );
     });
-    const conflictFooter = createAndAppendElement('div', content, {className: 'conflictDialog-footer'});
-    const applyToAllCheckbox = createAndAppendElement('input', conflictFooter, {type: 'checkbox', id: 'applyToAll', name: 'applyToAll'});
-    createAndAppendElement('label', conflictFooter, {for: 'applyToAll', textContent: msg("applyToAll")});
+    const conflictFooter = createAndAppendElement("div", content, { className: "conflictDialog-footer" });
+    const applyToAllCheckbox = createAndAppendElement("input", conflictFooter, {
+      type: "checkbox",
+      id: "applyToAll",
+      name: "applyToAll",
+    });
+    createAndAppendElement("label", conflictFooter, { for: "applyToAll", textContent: msg("applyToAll") });
 
     // initially hide the conflictFooter so that later, asynchronously, when multiple conflicts are in the conflictQueue we can show it again
     if (!conflictQueue.length) {
