@@ -1,6 +1,6 @@
 {
   "name": "Save blocks as image",
-  "description": "Right click the code area to copy block images to the clipboard, or download them as an SVG or PNG.",
+  "description": "Right click the code area to copy block images to the clipboard, or download them as PNG or SVG files.",
   "tags": ["editor", "codeEditor"],
   "credits": [
     {
