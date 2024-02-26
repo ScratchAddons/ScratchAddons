@@ -61,9 +61,8 @@ export default async function ({ addon, console, msg }) {
 
   function wrapAddAssetWithFileConflictModal(originalFn, type) {
     return function (...args) {
-
       // handle dynamic enable/disable
-      if(addon.self.disabled) return originalFn.call(this, ...args);
+      if (addon.self.disabled) return originalFn.call(this, ...args);
 
       //get args
       const optTargetId = type === "costume" ? args[2] : args[1];
