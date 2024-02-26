@@ -1,43 +1,40 @@
-export default async function ({ addon, console, safeMsg }) {
+// util function for creating and appending Elements
+function createAndAppendElement(type, parent, {textContent, ...attrs} = {}) {
+  const element = document.createElement(type);
+  if (textContent) attrs.textContent = textContent;
+  Object.assign(element, attrs);
+  parent.appendChild(element);
+  return element;
+}
+
+export default async function ({ addon, console, msg }) {
   function createAssetConflictDialog(fileName, actionClickCallback) {
     // HTML content for the modal
     const btnContainerClass = addon.tab.scratchClass("prompt_button-row", { others: "conflictDialog-actions" });
     const selectedClass = addon.tab.scratchClass("prompt_ok-button");
-    const modalContent = `
-        <div class = 'conflictDialog-content'>
-          <div>
-            <div class="${btnContainerClass}">
-              <button id="rename" name="conflictAction" value="rename" class="${selectedClass}">${safeMsg(
-                "rename"
-              )}</button>
-              <button id="replace" name="conflictAction" value="replace">${safeMsg("replace")}</button>
-              <button id="skip" name="conflictAction" value="skip">${safeMsg("skip")}</button>
-            </div>
-            <div class = 'conflictDialog-footer'>
-                <input type="checkbox" id="applyToAll" name="applyToAll">
-                <label for="applyToAll">${safeMsg("applyToAll")}</label>
-            </div>
-          </div>
-      </div>
-    `;
 
     // Create the modal
-    const { remove, content, closeButton, container } = addon.tab.createModal(safeMsg("title"), {
+    const { remove, content, closeButton, container } = addon.tab.createModal(msg("title"), {
       isOpen: true,
       useEditorClasses: true,
     });
     container.classList.add("conflictDialog");
-    content.innerHTML = modalContent;
 
-    // Insert the vulnerable user generated content separately
-    const p = document.createElement("p");
-    p.textContent = safeMsg("dialogText", { fileName: `"${fileName}"` });
-    content.querySelector(".conflictDialog-content").prepend(p);
-
-    // get modal elements via selectors
-    applyToAllCheckbox = content.querySelector("#applyToAll");
-    const buttons = content.querySelectorAll(".conflictDialog-button");
-    conflictFooter = content.querySelector(".conflictDialog-footer");
+    // Add the modal content
+    createAndAppendElement('p', content, {textContent: msg("dialogText", {fileName: `"${fileName}"`})});
+    const btnContainer = createAndAppendElement('div', content, {className: btnContainerClass});
+    let buttons = [];
+    ['rename', 'replace', 'skip'].forEach(action => {
+      buttons.push(createAndAppendElement('button', btnContainer, {
+          name: action,
+          value: action,
+          textContent: msg(action),
+          className: action === 'rename' ? selectedClass : '',
+      }));
+    });
+    const conflictFooter = createAndAppendElement('div', content, {className: 'conflictDialog-footer'});
+    const applyToAllCheckbox = createAndAppendElement('input', conflictFooter, {type: 'checkbox', id: 'applyToAll', name: 'applyToAll'});
+    createAndAppendElement('label', conflictFooter, {for: 'applyToAll', textContent: msg("applyToAll")});
 
     // initially hide the conflictFooter so that later, asynchronously, when multiple conflicts are in the conflictQueue we can show it again
     if (!conflictQueue.length) {

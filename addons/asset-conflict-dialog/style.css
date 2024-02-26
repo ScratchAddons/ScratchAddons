@@ -9,11 +9,11 @@
   margin-right: auto;
 }
 
-.conflictDialog-content {
+.conflictDialog .sa-editor-modal-content {
   padding: 1.5rem 2.25rem;
 }
 
-.conflictDialog-content > p {
+.conflictDialog .sa-editor-modal-content  > p {
   margin-top: 0;
 }
 
