@@ -23,12 +23,12 @@ export default async function ({ addon, console, msg }) {
     // Add the modal content
     createAndAppendElement("p", content, { textContent: msg("dialogText", { fileName: `"${fileName}"` }) });
     const btnContainer = createAndAppendElement("div", content, { className: btnContainerClass });
-    const buttons = ["rename", "replace", "skip"].map(action =>
+    const buttons = ["rename", "replace", "skip"].map((action) =>
       createAndAppendElement("button", btnContainer, {
         name: action,
         value: action,
         textContent: msg(action),
-        className: action === "rename" ? selectedClass : ""
+        className: action === "rename" ? selectedClass : "",
       })
     );
     const conflictFooter = createAndAppendElement("div", content, { className: "conflictDialog-footer" });
