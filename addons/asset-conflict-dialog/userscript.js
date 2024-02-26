@@ -31,8 +31,8 @@ export default async function ({ addon, console, msg }) {
         className: action === "rename" ? selectedClass : ""
       })
     );
-    const conflictFooter = createAndAppendElement("div", content, { className: "conflictDialog-footer" });
-    const applyToAllCheckbox = createAndAppendElement("input", conflictFooter, {
+    conflictFooter = createAndAppendElement("div", content, { className: "conflictDialog-footer" });
+    applyToAllCheckbox = createAndAppendElement("input", conflictFooter, {
       type: "checkbox",
       id: "applyToAll",
       name: "applyToAll",
