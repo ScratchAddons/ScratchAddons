@@ -40,6 +40,8 @@ export default async function ({ addon, console, safeMsg }) {
     applyToAllCheckbox = content.querySelector("#applyToAll");
     const buttons = content.querySelectorAll(".conflictDialog-button");
     conflictFooter = content.querySelector(".conflictDialog-footer");
+
+    // initially hide the conflictFooter so that later, asynchronously, when multiple conflicts are in the conflictQueue we can show it again
     if (!conflictQueue.length) {
       conflictFooter.style.display = "none";
     }
