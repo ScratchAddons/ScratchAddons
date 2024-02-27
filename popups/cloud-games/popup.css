@@ -103,6 +103,9 @@ body {
 .add-button {
   text-align: center;
   padding-top: 0.5rem;
+  justify-content: center;
+  display: flex;
+  margin-left: 23px;
 }
 
 .opened {
