@@ -137,7 +137,7 @@ export default async function ({ addon, console, msg }) {
               break;
           }
         };
-        conflictQueue.push({ assetName: `${originalName}.${assetObj.dataFormat}`, conflictHandler: conflictHandler });
+        conflictQueue.push({ assetName: originalName, conflictHandler: conflictHandler });
         if (conflictQueue.length && conflictFooter && conflictChainStarted) {
           conflictFooter.style.display = "block";
         }
