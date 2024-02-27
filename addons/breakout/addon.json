@@ -1,7 +1,7 @@
 {
   "name": "Breakout",
   "description": "Allows you to play Breakout with the thumbnails on Scratch's home page.",
-  "tags": ["community"],
+  "tags": ["community", "easterEgg"],
   "enabledByDefault": false,
   "userscripts": [
     {
