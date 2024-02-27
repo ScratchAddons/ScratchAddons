@@ -224,8 +224,8 @@ export default async function ({ addon, global, console }) {
         paddleX -= 7;
       }
 
-      x += dx;
-      y += dy;
+      x += dx * 1.5;
+      y += dy * 1.5;
       if (gameOver) {
         canvas.remove();
         document.body.style.overflow = "auto";
