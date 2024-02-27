@@ -59,6 +59,27 @@ export default async function ({ addon, console, msg }) {
     });
   }
 
+  function createShareAssetWithFileConflictModal(originalShareFn, type) {
+    return function (...args) {
+      // handle dynamic enable/disable
+      if (addon.self.disabled) return originalShareFn.call(this, ...args);
+
+      // https://github.com/scratchfoundation/scratch-vm/blob/6c8079147571b7289a8ddf120a6c324c3c228d54/src/virtual-machine.js#L1290
+      // the method is a little hacky but we're going to call the original code up to the part it creates the clone
+      // then we'll simply swap to the already polluted addCostume and addSound functions
+      const [assetIndex, targetId] = args;
+      const originalAsset = (type === 'costume' ? this.editingTarget.getCostumes() : this.editingTarget.getSounds())[assetIndex];
+      const clone = Object.assign({}, originalAsset);
+      if(type === 'costume'){
+        const md5ext = `${clone.assetId}.${clone.dataFormat}`;
+        return this.addCostume.call(this, md5ext, clone, targetId, 3)
+      }else{
+        return this.addSound.call(this, clone, targetId)
+      }
+    }
+  }
+
+
   function wrapAddAssetWithFileConflictModal(originalFn, type) {
     return function (...args) {
       // handle dynamic enable/disable
@@ -106,7 +127,7 @@ export default async function ({ addon, console, msg }) {
                   const duplicateIndex = assets.findIndex((e) => e.name === originalName);
                   assets[duplicateIndex] = assets[assetObjIndex];
                   assets[duplicateIndex].name = originalName;
-                  type === "costume" ? vm.deleteCostume(assetObjIndex) : vm.deleteSound(assetObjIndex);
+                  type === "costume" ? target.deleteCostume(assetObjIndex) : target.deleteSound(assetObjIndex);
                 })
               );
               break;
@@ -175,6 +196,10 @@ export default async function ({ addon, console, msg }) {
   // pollute the costume and sound adding code to handle the replace/skip actions for assets
   const originalAddCostume = vm.addCostume;
   const originalAddSound = vm.addSound;
+  const originalShareCostume = vm.shareCostumeToTarget;
+  const originalShareSound = vm.shareSoundToTarget;
   vm.addCostume = wrapAddAssetWithFileConflictModal(originalAddCostume, "costume");
   vm.addSound = wrapAddAssetWithFileConflictModal(originalAddSound, "sound");
+  vm.shareCostumeToTarget = createShareAssetWithFileConflictModal(originalShareCostume, "costume");
+  vm.shareSoundToTarget = createShareAssetWithFileConflictModal(originalShareSound, "sound");
 }
