@@ -272,16 +272,20 @@ a.message-type-title-text {
 }
 
 .status-container {
-  padding-top: 10px;
-  padding-bottom: 20px;
+  padding-top: 15px;
+  padding-bottom: 15px;
   font-size: 1rem;
   font-weight: 600;
   text-align: center;
+  background: var(--content-background);
+  margin: 10px;
+  border-radius: 4px;
+  box-shadow: var(--content-shadow);
 }
 .status-container p,
 .status-empty {
-  display: block;
-  margin-block: 10px;
+  display: inline-block;
+  margin-bottom: 10px;
 }
 
 .buttons-container {

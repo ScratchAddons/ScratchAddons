@@ -5,6 +5,7 @@
   box-shadow: var(--searchbox-shadow);
   padding: 20px 30px;
   z-index: 1;
+  background: var(--content-background);
 }
 .search-box input {
   background: var(--search-input-background);
