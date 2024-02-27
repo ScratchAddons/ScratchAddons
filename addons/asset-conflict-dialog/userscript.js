@@ -136,12 +136,12 @@ export default async function ({ addon, console, msg }) {
                   }
 
                   // hacky method which uses a simulated click to set the tabs current asset state to the duplicate asset
-                  if(this.runtime._editingTarget === target){
+                  if (this.runtime._editingTarget === target) {
                     const tabIndex = addon.tab.redux.state.scratchGui.editorTab.activeTabIndex;
-                    const tab = document.querySelectorAll("[class *= 'gui_tab-panel']")[tabIndex]
-                    const assets = tab.querySelectorAll("[class *= 'sprite-selector-item_sprite-selector-item']")
-                    if(assets.length){
-                      setTimeout(()=>assets[duplicateIndex].click())
+                    const tab = document.querySelectorAll("[class *= 'gui_tab-panel']")[tabIndex];
+                    const assets = tab.querySelectorAll("[class *= 'sprite-selector-item_sprite-selector-item']");
+                    if (assets.length) {
+                      setTimeout(() => assets[duplicateIndex].click());
                     }
                   }
                 })
