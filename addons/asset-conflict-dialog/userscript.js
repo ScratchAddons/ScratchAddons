@@ -68,17 +68,18 @@ export default async function ({ addon, console, msg }) {
       // the method is a little hacky but we're going to call the original code up to the part it creates the clone
       // then we'll simply swap to the already polluted addCostume and addSound functions
       const [assetIndex, targetId] = args;
-      const originalAsset = (type === 'costume' ? this.editingTarget.getCostumes() : this.editingTarget.getSounds())[assetIndex];
+      const originalAsset = (type === "costume" ? this.editingTarget.getCostumes() : this.editingTarget.getSounds())[
+        assetIndex
+      ];
       const clone = Object.assign({}, originalAsset);
-      if(type === 'costume'){
+      if (type === "costume") {
         const md5ext = `${clone.assetId}.${clone.dataFormat}`;
-        return this.addCostume.call(this, md5ext, clone, targetId, 3)
-      }else{
-        return this.addSound.call(this, clone, targetId)
+        return this.addCostume.call(this, md5ext, clone, targetId, 3);
+      } else {
+        return this.addSound.call(this, clone, targetId);
       }
-    }
+    };
   }
-
 
   function wrapAddAssetWithFileConflictModal(originalFn, type) {
     return function (...args) {
