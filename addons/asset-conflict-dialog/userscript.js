@@ -154,7 +154,7 @@ export default async function ({ addon, console, msg }) {
           }
         };
         conflictQueue.push({ assetName: originalName, conflictHandler: conflictHandler });
-        if (conflictQueue.length && conflictFooter && conflictChainStarted) {
+        if (conflictFooter && conflictChainStarted) {
           conflictFooter.style.display = "block";
         }
 
