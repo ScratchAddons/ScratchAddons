@@ -51,7 +51,7 @@ body {
 }
 
 #popups {
-  background-color: var(--page-background);
+  background-color: var(--tabs-background);
   width: 100%;
   height: calc(100% - 60px);
 }
@@ -60,7 +60,6 @@ body {
   padding: 10px;
   padding-bottom: 0px;
   display: flex;
-  border-bottom: 1px solid var(--control-border);
   justify-content: center;
   padding-inline-start: 25px;
   padding-inline-end: 25px;
@@ -97,8 +96,7 @@ body {
   border-inline-end: none;
 }
 .popup-name.sel {
-  background-color: var(--content-background);
-  box-shadow: inset 0px -3px 0px 0px var(--brand-orange);
+  background-color: var(--page-background);
 }
 .popup-name img {
   vertical-align: middle;
