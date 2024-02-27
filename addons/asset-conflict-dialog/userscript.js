@@ -128,7 +128,12 @@ export default async function ({ addon, console, msg }) {
                   const duplicateIndex = assets.findIndex((e) => e.name === originalName);
                   assets[duplicateIndex] = assets[assetObjIndex];
                   assets[duplicateIndex].name = originalName;
-                  type === "costume" ? target.deleteCostume(assetObjIndex) : target.deleteSound(assetObjIndex);
+                  if(type === "costume"){
+                    target.setCostume(duplicateIndex);
+                    target.sprite.deleteCostumeAt(assetObjIndex)
+                  }else{
+                    target.deleteSound(assetObjIndex);
+                  }
                 })
               );
               break;
