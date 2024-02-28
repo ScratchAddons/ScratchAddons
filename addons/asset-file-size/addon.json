@@ -1,0 +1,26 @@
+{
+  "name": "Costume and sound file size",
+  "description": "Shows file sizes of costumes and sounds. If any costume or sound exceeds Scratch's 10MB limit, the project will not save.",
+  "credits": [
+    {
+      "name": "CST1229",
+      "link": "https://github.com/CST1229"
+    }
+  ],
+  "tags": ["editor"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.35.0"
+}

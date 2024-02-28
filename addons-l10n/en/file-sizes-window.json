@@ -1,0 +1,19 @@
+{
+  "file-sizes-window/menu-item": "Project file sizes",
+  "file-sizes-window/modal-title": "Project File Sizes",
+
+  "file-sizes-window/project-json-title": "project.json File",
+  "file-sizes-window/project-json-description": "This is the file that stores the project's code, variables, lists and costume, sound, backdrop and sprite info. If it exceeds 5MiB (5,242,880 bytes), the project will not save.",
+  "file-sizes-window/project-json-size": "The project.json file is {fileSize}/{limit} large.",
+
+  "file-sizes-window/assets-title": "Large Assets",
+  "file-sizes-window/assets-description": "Costumes, backdrops and sounds that exceed ~10MB (9,999,999 bytes). If any of them exceed this limit, the project will not save.",
+
+  "file-sizes-window/assets-none-costume": "There are no large assets. The currently largest asset is the costume \"{assetName}\" ({fileSize}/{limit}) in {sprite}.",
+  "file-sizes-window/assets-none-backdrop": "There are no large assets. The currently largest asset is the backdrop \"{assetName}\" ({fileSize}/{limit}).",
+  "file-sizes-window/assets-none-sound": "There are no large assets. The currently largest asset is the sound \"{assetName}\" ({fileSize}/{limit}) in {sprite}.",
+
+  "file-sizes-window/assets-item-costume": "Costume \"{assetName}\" ({fileSize}) in {sprite}",
+  "file-sizes-window/assets-item-backdrop": "Backdrop \"{assetName}\" ({fileSize})",
+  "file-sizes-window/assets-item-sound": "Sound \"{assetName}\" ({fileSize}) in {sprite}"
+}

@@ -1,0 +1,8 @@
+[class*="sprite-selector-item_sprite-details"] {
+  text-overflow: clip;
+}
+
+.sa-size-limit-warn {
+  font-weight: bold;
+  text-decoration: underline;
+}
