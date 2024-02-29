@@ -18,15 +18,15 @@
   --dark-red-text: var(--dark-red-variant);
   --white-text: #fff;
 
-  --page-background: #202020;
-  --tabs-background: #000000;
-  --content-background: #2c2c2c;
+  --page-background: #1c1c1c;
+  --tabs-background: #0f0f0f;
+  --content-background: #252525;
   --navigation-background: #333;
   --search-toolbar-background: #1c1c1c;
   --button-background: #1c1c1c;
   --button-hover-background: #1a1a1a;
   --input-background: #222;
-  --search-input-background: #2c2c2c;
+  --search-input-background: #252525;
   --switch-border: #808080;
   --switch-inner-background: #eee;
   --tooltip-background: #000;
