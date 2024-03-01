@@ -102,7 +102,13 @@ body {
 
 .add-button {
   text-align: center;
-  padding-top: 0.5rem;
+  padding: 15px;
+  background: var(--content-background);
+  box-shadow: var(--content-shadow);
+  border-radius: 4px;
+  justify-content: center;
+  display: flex;
+  margin: 10px;
 }
 
 .opened {
