@@ -1,6 +1,7 @@
 *.md export-ignore
 LICENSE export-ignore
 .* export-ignore
+dev export-ignore
 typedef.js export-ignore
 
 libraries/README.md -export-ignore
