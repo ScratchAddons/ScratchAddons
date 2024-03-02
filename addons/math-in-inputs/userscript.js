@@ -63,8 +63,10 @@ export default async function ({ addon, console }) {
   };
 
   function parseMath(value) {
-    let expr = parser.parse(value);
-    return expr.evaluate();
+    if (/^[0-9+\-*^/()!%. ]+$/.test(value)) {
+      let expr = parser.parse(value);
+      return expr.evaluate();
+    } else return value;
   }
 
   // #Garboism
