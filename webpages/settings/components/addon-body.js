@@ -89,6 +89,10 @@ export default async function ({ template }) {
           const confirmation = confirm(chrome.i18n.getMessage("dangerWarning", [this.addon.name]));
           if (!confirmation) return;
         }
+        if (this.addon._enabled && this.addon.tags.includes("minor")) {
+          const confirmation = confirm(chrome.i18n.getMessage("minorDisableWarning", [this.addon.name]));
+          if (!confirmation) return;
+        }
         if (!this.addon._enabled && requiredPermissions.length) {
           const result = requiredPermissions.every((p) => this.$root.grantedOptionalPermissions.includes(p));
           if (result === false) {
