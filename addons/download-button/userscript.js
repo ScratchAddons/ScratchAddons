@@ -15,6 +15,7 @@ export default async function ({ addon, console, msg }) {
 
   async function download() {
     const downloadButton = document.querySelector(".sa-download-button");
+    if (downloadButton.classList.contains("waiting")) return;
     downloadButton.classList.add("loading");
     try {
       const project = await vm.saveProjectSb3();
@@ -28,9 +29,9 @@ export default async function ({ addon, console, msg }) {
   }
 
   const downloadButton = document.createElement("button");
-  downloadButton.innerText = msg("download");
+  downloadButton.innerText = msg("loading");
   downloadButton.onclick = download;
-  downloadButton.classList = "button action-button sa-download-button";
+  downloadButton.classList = "button action-button sa-download-button waiting loading";
 
   function addbutton() {
     addon.tab.waitForElement(".flex-row .subactions", { markAsSeen: true });
@@ -47,4 +48,10 @@ export default async function ({ addon, console, msg }) {
   });
 
   addon.tab.displayNoneWhileDisabled(downloadButton);
+
+  vm.runtime.on("PROJECT_LOADED", () => {
+    downloadButton.innerText = msg("download");
+    downloadButton.classList.remove("waiting");
+    downloadButton.classList.remove("loading");
+  });
 }

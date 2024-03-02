@@ -1,3 +1,4 @@
 {
-  "download-button/download": "Download"
+  "download-button/download": "Download",
+  "download-button/loading": "Loading..."
 }
