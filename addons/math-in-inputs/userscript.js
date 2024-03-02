@@ -1,6 +1,8 @@
-import { shiftDecimalPointToRight, shiftDecimalPointToLeft } from "../../libraries/common/cs/math-on-decimals.js";
+export default async function ({ addon, console }) {
+  const script = document.createElement("script");
+  script.src = `${addon.self.lib}/thirdparty/cs/eval-expr.min.js`;
+  document.head.appendChild(script);
 
-export default async function ({ addon }) {
   function getRegexFromSettings() {
     let textInInputs = addon.settings.get("textInInputs");
     return textInInputs ? /^.*$/i : /^[0-9+\-*^/(). ]+$/;
@@ -34,82 +36,35 @@ export default async function ({ addon }) {
     return false;
   };
 
-  // And this is stolen from SO, I love not having to code stuff
-  let parens = /\(([0-9+\-*/\^ .]+)\)/; // Regex for identifying parenthetical expressions
-  let exp = /(\d+(?:\.\d+)?) *\^ *(\d+(?:\.\d+)?)/; // Regex for identifying exponentials (x ^ y)
-  let expAlt = /(\d+(?:\.\d+)?) *\*\* *(\d+(?:\.\d+)?)/; //Regex for identifying **
-  let mul = /(\d+(?:\.\d+)?) *\* *(\d+(?:\.\d+)?)/; // Regex for identifying multiplication (x * y)
-  let div = /(\d+(?:\.\d+)?) *\/ *(\d+(?:\.\d+)?)/; // Regex for identifying division (x / y)
-  let add = /(\d+(?:\.\d+)?) *\+ *(\d+(?:\.\d+)?)/; // Regex for identifying addition (x + y)
-  let sub = /(\d+(?:\.\d+)?) *- *(\d+(?:\.\d+)?)/; // Regex for identifying subtraction (x - y)
+  let parser;
+  script.onload = function () {
+    parser = new window.exprEval.Parser({
+      operators: {
+        // These default to true, but are included to be explicit
+        add: true,
+        concatenate: false,
+        conditional: false,
+        divide: true,
+        factorial: true,
+        multiply: true,
+        power: true,
+        remainder: true,
+        subtract: true,
 
-  /**
-   * Evaluates a numerical expression as a string and returns a Number
-   * Follows standard PEMDAS operation ordering
-   * @param {String} expr Numerical expression input
-   * @returns {Number} Result of expression
-   */
-  function evaluate(expr) {
-    if (isNaN(Number(expr))) {
-      if (parens.test(expr)) {
-        let newExpr = expr.replace(parens, function (match, subExpr) {
-          return evaluate(subExpr);
-        });
-        return evaluate(newExpr);
-      } else if (exp.test(expr)) {
-        let newExpr = expr.replace(exp, function (match, base, pow) {
-          /*
-          Fixing floating point errors on exponents is very hard
-          This code does in fact fix them for the base being a decimal,
-          but not the exponent. I can not think of a better solution,
-          so for now, just ignore the errors
-          */
-          return base == 1
-            ? 1
-            : shiftDecimalPointToLeft(Math.pow(Number(shiftDecimalPointToRight(base, 5)), pow), 5 * pow);
-        });
-        return evaluate(newExpr);
-      } else if (expAlt.test(expr)) {
-        let newExpr = expr.replace(expAlt, function (match, base, pow) {
-          return base == 1
-            ? 1
-            : shiftDecimalPointToLeft(Math.pow(Number(shiftDecimalPointToRight(base, 5)), pow), 5 * pow);
-        });
-        return evaluate(newExpr);
-      } else if (mul.test(expr)) {
-        let newExpr = expr.replace(mul, function (match, a, b) {
-          // The decimal point needs to be shifted to the left double that of which it was shifted to the right
-          return shiftDecimalPointToLeft(shiftDecimalPointToRight(a, 5) * shiftDecimalPointToRight(b, 5), 10);
-        });
-        return evaluate(newExpr);
-      } else if (div.test(expr)) {
-        let newExpr = expr.replace(div, function (match, a, b) {
-          // Likewise, the decimal point does not need to be shifted at all for division
-          return shiftDecimalPointToRight(a, 5) / shiftDecimalPointToRight(b, 5);
-        });
-        return evaluate(newExpr);
-      } else if (add.test(expr)) {
-        let newExpr = expr.replace(add, function (match, a, b) {
-          return shiftDecimalPointToLeft(shiftDecimalPointToRight(a, 5) + shiftDecimalPointToRight(b, 5), 5);
-        });
-        return evaluate(newExpr);
-      } else if (sub.test(expr)) {
-        let newExpr = expr.replace(sub, function (match, a, b) {
-          return shiftDecimalPointToLeft(shiftDecimalPointToRight(a, 5) - shiftDecimalPointToRight(b, 5), 5);
-        });
-        return evaluate(newExpr);
-      } else {
-        return expr;
-      }
-    }
-    return Number(expr);
-  }
+        // Disable and, or, not, <, ==, !=, etc.
+        logical: false,
+        comparison: false,
+
+        // Disable 'in' and = operators
+        in: false,
+        assignment: false,
+      },
+    });
+  };
 
   function parseMath(value) {
-    if (!/^[0-9+\-*/().^ ]+$/.test(value)) {
-      return value;
-    }
-    return evaluate(value);
+    let expr = parser.parse(value);
+    return expr.evaluate();
   }
 
   // #Garboism
