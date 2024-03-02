@@ -1,7 +1,6 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 
-export default async function ({ addon, console }) {
-  window.addon = addon;
+export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
   const { redux } = addon.tab;
 
@@ -12,7 +11,7 @@ export default async function ({ addon, console }) {
   const projectAuthor = redux.state.preview.projectInfo.author?.username;
 
   const isOwn = username === projectAuthor;
-  const shared = await addon.tab.redux.state.preview.projectInfo.is_published;
+  const shared = addon.tab.redux.state.preview.projectInfo.is_published;
 
   async function download() {
     const project = await vm.saveProjectSb3();
@@ -23,7 +22,7 @@ export default async function ({ addon, console }) {
   }
 
   const downloadButton = document.createElement("button");
-  downloadButton.innerText = "Download";
+  downloadButton.innerText = msg("download");
   downloadButton.onclick = download;
   downloadButton.classList = "button action-button sa-download-button";
 
