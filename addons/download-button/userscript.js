@@ -20,8 +20,8 @@ export default async function ({ addon, console, msg }) {
     try {
       const project = await vm.saveProjectSb3();
       const title = isOwn
-        ? await addon.tab.waitForElement(".project-title input")
-        : await addon.tab.waitForElement(".project-title");
+        ? document.querySelector(".project-title input")
+        : document.querySelector(".project-title");
       downloadBlob(`${isOwn ? title.value : title.innerText}.sb3`, project);
     } finally {
       downloadButton.classList.remove("loading");
