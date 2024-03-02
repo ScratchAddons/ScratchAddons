@@ -4,7 +4,6 @@ export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
   const { redux } = addon.tab;
 
-  await redux.waitForState((state) => typeof state.session.session?.user === "object");
   const username = await addon.auth.fetchUsername();
 
   await redux.waitForState((state) => state.preview.status.project === "FETCHED");
@@ -19,9 +18,7 @@ export default async function ({ addon, console, msg }) {
     downloadButton.classList.add("loading");
     try {
       const project = await vm.saveProjectSb3();
-      const title = isOwn
-        ? document.querySelector(".project-title input")
-        : document.querySelector(".project-title");
+      const title = isOwn ? document.querySelector(".project-title input") : document.querySelector(".project-title");
       downloadBlob(`${isOwn ? title.value : title.innerText}.sb3`, project);
     } finally {
       downloadButton.classList.remove("loading");
