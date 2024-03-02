@@ -2,7 +2,7 @@
   "name": "Mathematical expressions in number inputs",
   "description": "Evaluates mathematical expressions (e.g. 2+4*3) in number inputs in the editor automatically.",
   "tags": ["editor", "codeEditor", "recommended"],
-  "versionAdded": "1.36.0",
+  "versionAdded": "1.37.0",
   "dynamicEnable": true,
   "dynamicDisable": true,
   "userscripts": [
