@@ -2,7 +2,7 @@
   "name": "Delete other assets",
   "description": "Adds an option to the right click menu to easily delete all other costumes, backdrops, or sounds.",
   "tags": ["editor", "costumeEditor", "recommended"],
-  "versionAdded": "1.35.0",
+  "versionAdded": "1.37.0",
   "userscripts": [
     {
       "matches": ["projects"],
