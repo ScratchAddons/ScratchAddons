@@ -14,9 +14,10 @@ export default async function ({ addon, console, msg }) {
       });
     } else if (type === "sound") {
       deletedItems.forEach((sound) => {
-        vm.addSound(sound, target.id);
+        target.addSound(sound);
       });
     }
+    vm.emitTargetsUpdate();
     deletedItems = [];
   }
 
