@@ -1,6 +1,6 @@
 {
   "name": "Project page download button",
-  "description": "Allows you to download projects directly from the project page, without having to open the editor first.",
+  "description": "Allows you to download projects directly from the project page, without having to open the editor first. The Download button is added next to the Copy Link button.",
   "tags": ["community", "projectPlayer", "recommended"],
   "versionAdded": "1.36.0",
   "credits": [{ "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" }],
