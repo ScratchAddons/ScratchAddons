@@ -5,7 +5,7 @@ export default async function ({ addon, console }) {
 
   function getRegexFromSettings() {
     let textInInputs = addon.settings.get("textInInputs");
-    return textInInputs ? /^.*$/i : /^[0-9+\-*^/(). ]+$/;
+    return textInInputs ? /^.*$/i : /^[0-9+\-*^/()!%. ]+$/;
   }
   const checkElForTypeChange = (el, focus) => {
     // These inputs need their type changed
