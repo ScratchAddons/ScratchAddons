@@ -14,11 +14,17 @@ export default async function ({ addon, console, msg }) {
   const shared = addon.tab.redux.state.preview.projectInfo.is_published;
 
   async function download() {
-    const project = await vm.saveProjectSb3();
-    const title = isOwn
-      ? await addon.tab.waitForElement(".project-title input")
-      : await addon.tab.waitForElement(".project-title");
-    downloadBlob(`${isOwn ? title.value : title.innerText}.sb3`, project);
+    const downloadButton = document.querySelector(".sa-download-button");
+    downloadButton.classList.add("loading");
+    try {
+      const project = await vm.saveProjectSb3();
+      const title = isOwn
+        ? await addon.tab.waitForElement(".project-title input")
+        : await addon.tab.waitForElement(".project-title");
+      downloadBlob(`${isOwn ? title.value : title.innerText}.sb3`, project);
+    } finally {
+      downloadButton.classList.remove("loading");
+    }
   }
 
   const downloadButton = document.createElement("button");
