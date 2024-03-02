@@ -46,9 +46,8 @@ export default async function ({ addon, console, msg }) {
 
   addon.tab.displayNoneWhileDisabled(downloadButton);
 
-  vm.runtime.on("PROJECT_LOADED", () => {
-    downloadButton.innerText = msg("download");
-    downloadButton.classList.remove("waiting");
-    downloadButton.classList.remove("loading");
-  });
+  await redux.waitForState((state) => state.scratchGui.projectState.loadingState.startsWith("SHOWING"));
+  downloadButton.innerText = msg("download");
+  downloadButton.classList.remove("waiting");
+  downloadButton.classList.remove("loading");
 }
