@@ -1,13 +1,10 @@
 export default async function ({ addon }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
-  console.log("WELL WE'RE IN HERE")
-
   function update() {
     if (addon.tab.editorMode !== "editor") return;
 
     const speed = addon.settings.get("selectSpeed");
-    console.log(speed);
     const speeds = {
       none: 0,
       veryfast: 0.1,
