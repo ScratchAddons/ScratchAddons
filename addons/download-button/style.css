@@ -1,4 +1,4 @@
-.sa-download-button:before {
+#sa-download-button:before {
   background-image: url("./download.svg");
   display: inline-block;
   margin-top: -2px;
@@ -10,6 +10,11 @@
   height: 1.125rem;
   vertical-align: middle;
   content: "";
+}
+
+#sa-download-button.waiting {
+  opacity: 0.6;
+  pointer-events: none;
 }
 
 @keyframes spin-intro {
@@ -32,7 +37,7 @@
   }
 }
 
-.sa-download-button.loading:before {
+#sa-download-button.loading:before {
   background-image: url(https://scratch.mit.edu/svgs/modal/spinner-blue.svg);
   background-size: 100%;
   filter: grayscale(100%) brightness(0) invert(1);

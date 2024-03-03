@@ -26,9 +26,10 @@ export default async function ({ addon, console, msg }) {
   }
 
   const downloadButton = document.createElement("button");
-  downloadButton.innerText = msg("loading");
+  downloadButton.innerText = msg("download");
   downloadButton.onclick = download;
-  downloadButton.classList = "button action-button sa-download-button waiting loading";
+  downloadButton.classList = "button action-button sa-download-button waiting";
+  downloadButton.id = "sa-download-button";
 
   function addbutton() {
     addon.tab.waitForElement(".flex-row .subactions", { markAsSeen: true });
@@ -47,7 +48,5 @@ export default async function ({ addon, console, msg }) {
   addon.tab.displayNoneWhileDisabled(downloadButton);
 
   await redux.waitForState((state) => state.scratchGui.projectState.loadingState.startsWith("SHOWING"));
-  downloadButton.innerText = msg("download");
   downloadButton.classList.remove("waiting");
-  downloadButton.classList.remove("loading");
 }
