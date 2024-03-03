@@ -1,6 +1,6 @@
 {
   "name": "Move sprite to front layer",
-  "description": "Shift+Click a sprite within the sprite pane to move it to the front (top layer) of the stage.",
+  "description": "Right click or shift+click a sprite within the sprite pane to move it to the front (top layer) of the stage.",
   "credits": [
     {
       "name": "Norbiros",
