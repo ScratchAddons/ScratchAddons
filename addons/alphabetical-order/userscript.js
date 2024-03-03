@@ -59,6 +59,8 @@ export default async function ({ addon, msg, console }) {
           vm.editingTarget.reorderCostume(assets.indexOf(sortedAsset), index);
         } else if (type === "sounds") {
           vm.editingTarget.reorderSound(assets.indexOf(sortedAsset), index);
+        } else if (type === "sprites") {
+          vm.reorderTarget(assets.indexOf(sortedAsset) + 1, index + 1);
         }
       });
 
