@@ -85,20 +85,29 @@ export default async function ({ addon, msg, console }) {
   const msgs = ["sprites", "costumes", "sounds", "sprites"];
   let editMenu;
 
-  while (true) {
-    editMenu = await addon.tab.waitForElement("[class*=menu_right]", {
-      markAsSeen: true,
-    });
+  addon.self.addEventListener("disabled", () => (li.style.display = "none"));
+  addon.self.addEventListener("reenabled", () => (li.style.display = "block"));
 
-    const assetType = msgs[addon.tab.redux.state.scratchGui.editorTab.activeTabIndex];
-    span.textContent = msg(assetType);
-    li.setAttribute("assetType", assetType);
+  async function running() {
+    while (true) {
+      editMenu = await addon.tab.waitForElement("[class*=menu_right]", {
+        markAsSeen: true,
+      });
 
-    getAssetOrder(assetType);
+      if (!addon.self.disabled) {
+        const assetType = msgs[addon.tab.redux.state.scratchGui.editorTab.activeTabIndex];
+        span.textContent = msg(assetType);
+        li.setAttribute("assetType", assetType);
 
-    if (isSorted) li.classList.add(addon.tab.scratchClass("menu-bar_disabled"));
-    else li.classList.remove(addon.tab.scratchClass("menu-bar_disabled"));
+        getAssetOrder(assetType);
 
-    editMenu.appendChild(li);
+        if (isSorted) li.classList.add(addon.tab.scratchClass("menu-bar_disabled"));
+        else li.classList.remove(addon.tab.scratchClass("menu-bar_disabled"));
+
+        editMenu.appendChild(li);
+      }
+    }
   }
+
+  running();
 }
