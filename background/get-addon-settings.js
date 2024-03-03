@@ -163,6 +163,13 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled", "lastVersion"]
       }
     }
 
+    if (lastVersion[1] < 37) {
+      // Enable addons that became enabled by default starting v1.37.0
+      addonsEnabled["disable-sprite-wobble"] = true;
+      addonsEnabled["fix-pasted-scripts"] = true;
+      madeAnyChanges = true;
+    }
+
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
       const settings = addonSettings[addonId] || {};
