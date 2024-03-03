@@ -1,6 +1,6 @@
 {
   "name": "Sort assets in alphabetical order",
-  "description": "Adds an option in the right click menu to sort costumes, sounds, and sprites in alphabetical order",
+  "description": "Adds an option in the Edit menu to sort assets in alphabetical order",
   "tags": ["editor"],
   "versionAdded": "1.37.0",
   "userscripts": [{ "url": "userscript.js", "matches": ["projects"] }],
