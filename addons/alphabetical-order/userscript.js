@@ -40,10 +40,9 @@ export default async function ({ addon, msg, console }) {
     }
 
     // Sort assets by name
-    sortedAssets = assets
-      .map((asset) => asset.name)
-      .naturalSort()
-      .map((sortedName) => assets.find((asset) => asset.name === sortedName));
+
+    assets = assets.map((asset) => asset.name);
+    sortedAssets = assets.map((name) => name).naturalSort();
 
     isSorted = JSON.stringify(assets) === JSON.stringify(sortedAssets);
   }
@@ -53,7 +52,6 @@ export default async function ({ addon, msg, console }) {
 
     while (!isSorted) {
       getAssetOrder(type);
-
       sortedAssets.forEach((sortedAsset, index) => {
         if (type === "costumes") {
           vm.editingTarget.reorderCostume(assets.indexOf(sortedAsset), index);
@@ -62,9 +60,9 @@ export default async function ({ addon, msg, console }) {
         } else if (type === "sprites") {
           vm.reorderTarget(assets.indexOf(sortedAsset) + 1, index + 1);
         }
+        vm.emitTargetsUpdate();
+        getAssetOrder(type);
       });
-
-      vm.emitTargetsUpdate();
     }
 
     li.classList.add(addon.tab.scratchClass("menu-bar_disabled"));
