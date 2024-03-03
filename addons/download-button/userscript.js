@@ -14,7 +14,6 @@ export default async function ({ addon, console, msg }) {
 
   async function download() {
     const downloadButton = document.querySelector(".sa-download-button");
-    if (downloadButton.classList.contains("waiting")) return;
     downloadButton.classList.add("loading");
     try {
       const project = await vm.saveProjectSb3();
