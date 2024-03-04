@@ -33,5 +33,5 @@
       ]
     }
   ],
-  "info": [{ "type": "info", "id": "caseInsensitive", "text": "All string matches are case case insensitive." }]
+  "info": [{ "type": "info", "id": "caseInsensitive", "text": "All string matches are case insensitive." }]
 }
