@@ -1,0 +1,37 @@
+{
+  "name": "Hide advertising comments",
+  "description": "Automatically hides comments that contain certain strings deemed as advertising.",
+  "tags": ["comments", "community"],
+  "versionAdded": "1.37.0",
+  "credits": [{ "name": "Jazza", "link": "http://scratch.mit.edu/users/greeny--231" }],
+  "userscripts": [{ "matches": ["profiles", "projects", "studios"], "url": "userscript.js" }],
+  "settings": [
+    { "name": "Project comments", "type": "boolean", "default": true, "id": "projects" },
+    { "name": "Studio comments", "type": "boolean", "default": true, "id": "studios" },
+    { "name": "Profile comments", "type": "boolean", "default": true, "id": "profiles" },
+    {
+      "id": "matchingStrings",
+      "name": "Strings that match as advertising",
+      "type": "table",
+      "default": [
+        {
+          "match": "scratch.mit.edu/projects"
+        }
+      ],
+      "row": [
+        {
+          "name": "String/Link",
+          "id": "match",
+          "type": "untranslated",
+          "default": ""
+        }
+      ],
+      "presets": [
+        { "name": "Project links", "values": { "match": "scratch.mit.edu/projects" } },
+        { "name": "Profile links", "values": { "match": "scratch.mit.edu/users" } },
+        { "name": "Written advertising", "values": { "match": "Check out my game" } }
+      ]
+    }
+  ],
+  "info": [{ "type": "info", "id": "caseInsensitive", "text": "All string matches are case case insensitive." }]
+}
