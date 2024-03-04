@@ -58,7 +58,7 @@ export default async function ({ addon, msg, console }) {
 
   li.onclick = () => {
     if (li.classList.contains(addon.tab.scratchClass("menu-bar_disabled"))) {
-      // How do I close the menu?
+      addon.tab.redux.dispatch({ type: "scratch-gui/menus/CLOSE_MENU", menu: "editMenu" });
     }
     sortAssets(li.getAttribute("assetType"));
   };
