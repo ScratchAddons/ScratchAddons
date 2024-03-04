@@ -58,12 +58,12 @@ export default async function ({ addon, console }) {
               //We have a match somewhere, now we need to figure out where
 
               if (dsis(commentsContainer.querySelector("div.comment"), match)) {
-                // If this is true, the first comment is what contains the advertising, therefore we can hide them all
+                //If this is true, the first comment is what contains the advertising, therefore we can hide them all
                 commentsContainer.style.display = "none";
               } else {
                 //The first comment is not the offending comment, we search replies now
                 if (url.includes(settings["profiles"])) {
-                  //Profiles have a different comment structure
+                  //Projects and studios are handled below
                   const replies = commentsContainer.querySelectorAll("li.reply");
                   replies.forEach((reply) => {
                     if (dsis(reply, match)) {
