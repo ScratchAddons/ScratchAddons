@@ -70,7 +70,6 @@ body {
   display: flex;
   color: var(--content-text);
   height: 35px;
-  overflow: hidden;
   width: 100%;
 }
 .popup-name {
