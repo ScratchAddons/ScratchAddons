@@ -9,6 +9,7 @@
 .settings-block {
   margin-top: 20px;
   overflow-y: auto;
+  overflow: visible;
 }
 .more-settings .large-button {
   display: block;
