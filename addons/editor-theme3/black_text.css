@@ -11,7 +11,8 @@
   color: var(--editorTheme3-inputColor-blackText);
 }
 
-.blocklyDropDownDiv .goog-menuitem {
+.blocklyDropDownDiv .goog-menuitem,
+.blocklyNumPadButton {
   color: black;
 }
 .blocklyDropDownDiv .blocklyText {
