@@ -5,10 +5,21 @@
   "versionAdded": "1.37.0",
   "credits": [{ "name": "Jazza", "link": "http://scratch.mit.edu/users/greeny--231" }],
   "userscripts": [{ "matches": ["profiles", "projects", "studios"], "url": "userscript.js" }],
+  "userstyles": [{ "matches": ["profiles", "projects", "studios"], "url": "userstyle.css" }],
   "settings": [
     { "name": "Project comments", "type": "boolean", "default": true, "id": "projects" },
     { "name": "Studio comments", "type": "boolean", "default": true, "id": "studios" },
     { "name": "Profile comments", "type": "boolean", "default": true, "id": "profiles" },
+    {
+      "name": "Method of hiding advertising",
+      "type": "select",
+      "potentialValues": [
+        { "id": "censor", "name": "Censor content" },
+        { "id": "hide", "name": "Hide comment" }
+      ],
+      "id": "method",
+      "default": "censor"
+    },
     {
       "id": "matchingStrings",
       "name": "Strings that match as advertising",
@@ -29,7 +40,10 @@
       "presets": [
         { "name": "Project links", "values": { "match": "scratch.mit.edu/projects" } },
         { "name": "Profile links", "values": { "match": "scratch.mit.edu/users" } },
-        { "name": "Written advertising", "values": { "match": "Check out my game" } }
+        { "name": "Studio links", "values": { "match": "scratch.mit.edu/studios" } },
+        { "name": "Written advertising", "values": { "match": "my game" } },
+        { "name": "Written follow request", "values": { "match": "follow me" } },
+        { "name": "Friend for Friend", "values": { "match": "f4f" } }
       ]
     }
   ],
