@@ -16,13 +16,11 @@
   overflow: hidden;
   background: var(--button-background);
   user-select: none;
-  box-shadow: var(--content-shadow);
 }
 
 .filter-option {
   padding: 0 12px;
   line-height: 30px;
-  border-inline-end: 1px solid var(--control-border);
   transition: background 0.2s ease;
 }
 .filter-option:hover {

@@ -10,7 +10,6 @@
   box-sizing: border-box;
   font-family: inherit;
   font-size: 12px;
-  box-shadow: var(--content-shadow);
 }
 
 .large-button:hover:not([disabled]) {
