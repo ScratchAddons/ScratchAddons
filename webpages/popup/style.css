@@ -89,6 +89,7 @@ body {
 }
 .popup-name:hover {
   background-color: var(--button-hover-background);
+  box-shadow: inset 0px -3px 0px 0px var(--tab-hover-underline);
 }
 .popup-name:not(.sel):hover {
   cursor: pointer;
