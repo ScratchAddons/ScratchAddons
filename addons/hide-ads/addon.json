@@ -21,29 +21,37 @@
       "default": "censor"
     },
     {
-      "id": "matchingStrings",
       "name": "Strings that match as advertising",
+      "id": "matches",
       "type": "table",
-      "default": [
-        {
-          "match": "scratch.mit.edu/projects"
-        }
-      ],
+      "default": [{ "matchType": "link", "matchValue": "scratch.mit.edu/projects" }],
       "row": [
         {
-          "name": "String/Link",
-          "id": "match",
+          "name": "Type",
+          "id": "matchType",
+          "type": "select",
+          "default": "link",
+          "potentialValues": [
+            { "name": "Link", "id": "link" },
+            { "name": "String", "id": "string" },
+            { "name": "User", "id": "user" },
+            { "name": "RegExp", "id": "regExp" }
+          ]
+        },
+        {
+          "name": "Match",
+          "id": "matchValue",
           "type": "untranslated",
           "default": ""
         }
       ],
       "presets": [
-        { "name": "Project links", "values": { "match": "scratch.mit.edu/projects" } },
-        { "name": "Profile links", "values": { "match": "scratch.mit.edu/users" } },
-        { "name": "Studio links", "values": { "match": "scratch.mit.edu/studios" } },
-        { "name": "Written advertising", "values": { "match": "my game" } },
-        { "name": "Written follow request", "values": { "match": "follow me" } },
-        { "name": "Friend for Friend", "values": { "match": "f4f" } }
+        { "name": "Project links", "values": { "matchType": "link", "matchValue": "scratch.mit.edu/projects" } },
+        { "name": "Profile links", "values": { "matchType": "link", "matchValue": "scratch.mit.edu/users" } },
+        { "name": "Studio links", "values": { "matchType": "link", "matchValue": "scratch.mit.edu/studios" } },
+        { "name": "Written advertising", "values": { "matchType": "string", "matchValue": "my game" } },
+        { "name": "Written follow request", "values": { "matchType": "string", "matchValue": "follow me" } },
+        { "name": "Friend for friend", "values": { "matchType": "string", "matchValue": "f4f" } }
       ]
     }
   ],
