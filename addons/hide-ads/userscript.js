@@ -87,7 +87,6 @@ export default async function ({ addon, console }) {
       if (url.includes(settings[key]) && addon.settings.get(key)) {
         while (true) {
           const commentsContainer = await addon.tab.waitForElement(el, { markAsSeen: true });
-          console.log("Checking main comments");
           matches.forEach((match) => {
             if (dsis(commentsContainer.innerHTML, match)) {
               //We have a match somewhere, now we need to figure out where
@@ -118,15 +117,15 @@ export default async function ({ addon, console }) {
           });
 
           //Project and studio replies are not loaded when the comment container is, which means we have to search for them separately
-          // if (addon.settings.get("method") === "censor" && !url.includes(settings["profiles"])) {
-          //   const commentReply = await addon.tab.waitForElement("div.replies>div.comment", { markAsSeen: true });
-          //   console.log("Checing replies");
-          //   matches.forEach((match) => {
-          //     if (dsis(commentReply, match)) {
-          //       handleComment(commentReply);
-          //     }
-          //   });
-          // }
+          if (!url.includes(settings["profiles"])) {
+            const commentReply = await addon.tab.waitForElement("div.replies>div.comment", { markAsSeen: true });
+            console.log(commentReply);
+            matches.forEach((match) => {
+              if (dsis(commentReply, match)) {
+                handleComment(commentReply);
+              }
+            });
+          }
         }
       }
     }
