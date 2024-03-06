@@ -67,8 +67,14 @@ export default async function ({ addon, msg, console }) {
 
     sortAssets(li.getAttribute("assetType"));
 
-    const assetsWrapper = document.querySelector("[class*=selector_list-area]");
-    const assets = assetsWrapper.querySelectorAll("[class*=selector_list-item]");
+    const assetsWrapper =
+      li.getAttribute("assetType") === "sprites"
+        ? document.querySelector("[class*=sprite-selector_items-wrapper]")
+        : document.querySelector("[class*=selector_list-area]");
+    const assets =
+      li.getAttribute("assetType") === "sprites"
+        ? assetsWrapper.querySelectorAll("[class*=sprite-selector_sprite-wrapper]")
+        : assetsWrapper.querySelectorAll("[class*=selector_list-item]");
 
     assets.forEach((asset) => {
       const assetName = asset.querySelector("[class*=sprite-selector-item_sprite-name]").innerText;
