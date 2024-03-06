@@ -67,7 +67,12 @@ export default async function ({ addon, msg, console }) {
   let editMenu;
 
   addon.self.addEventListener("disabled", () => (li.style.display = "none"));
-  addon.self.addEventListener("reenabled", () => (li.style.display = "block"));
+  addon.self.addEventListener("reenabled", () => {
+    li.style.display = "block";
+    if (addon.tab.redux.state.scratchGui.menus.editMenu) {
+      editMenu.appendChild(li);
+    }
+  });
 
   async function running() {
     while (true) {
