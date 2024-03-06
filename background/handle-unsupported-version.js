@@ -12,7 +12,7 @@ const checkIfUnsupported = () => {
 if (checkIfUnsupported()) {
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request === "checkIfUnsupported") {
-      const url = chrome.runtime.getURL("webpages/error/unsupported-browser.html")
+      const url = chrome.runtime.getURL("webpages/error/unsupported-browser.html");
       if (sender.tab) chrome.tabs.update(sender.tab.id, { url });
       else chrome.tabs.create({ url });
     }

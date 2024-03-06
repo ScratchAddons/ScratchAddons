@@ -12,7 +12,7 @@ const IFRAME_ORIGIN = "https://scratchaddons.com";
 
 window.onmessage = async (e) => {
   if (e.origin !== IFRAME_ORIGIN) return;
-  
+
   const message = e.data;
   console.log("[SA] Message received by extension", message);
 
