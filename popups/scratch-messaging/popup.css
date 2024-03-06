@@ -143,9 +143,8 @@ a.message-type-title-text {
 }
 
 .comment {
-  padding: 3px 8px;
+  padding: 5px 10px;
   background: var(--comment-background);
-  border: 1px solid var(--control-border);
   border-radius: 6px;
   margin: 8px;
   font-size: 12px;
