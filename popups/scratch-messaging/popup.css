@@ -33,6 +33,7 @@ button {
   background: var(--content-background);
   margin: 10px;
   box-shadow: var(--content-shadow);
+  overflow: hidden;
 }
 .message-type-admin {
   border-color: var(--orange);
