@@ -60,7 +60,23 @@ export default async function ({ addon, msg, console }) {
     if (li.classList.contains(addon.tab.scratchClass("menu-bar_disabled"))) {
       addon.tab.redux.dispatch({ type: "scratch-gui/menus/CLOSE_MENU", menu: "editMenu" });
     }
+
+    const currentSelectedAssetName = document
+      .querySelector("[class*=sprite-selector-item_is-selected]")
+      .querySelector("[class*=sprite-selector-item_sprite-name]").innerText;
+
     sortAssets(li.getAttribute("assetType"));
+
+    const assetsWrapper = document.querySelector("[class*=selector_list-area]");
+    const assets = assetsWrapper.querySelectorAll("[class*=selector_list-item]");
+
+    assets.forEach((asset) => {
+      const assetName = asset.querySelector("[class*=sprite-selector-item_sprite-name]").innerText;
+      if (assetName === currentSelectedAssetName) {
+        asset.click();
+        return;
+      }
+    });
   };
 
   const msgs = ["sprites", "costumes", "sounds", "sprites"];
@@ -74,26 +90,31 @@ export default async function ({ addon, msg, console }) {
     }
   });
 
-  async function running() {
-    while (true) {
-      editMenu = await addon.tab.waitForElement("[class*=menu_right]", {
-        markAsSeen: true,
-      });
+  addon.tab.redux.initialize();
 
-      if (!addon.self.disabled) {
-        const assetType = msgs[addon.tab.redux.state.scratchGui.editorTab.activeTabIndex];
-        span.textContent = msg(assetType);
-        li.setAttribute("assetType", assetType);
+  addon.tab.redux.addEventListener("statechanged", callback);
 
-        getAssetOrder(assetType);
+  async function callback(action) {
+    if (!(action.detail.action.type === "scratch-gui/menus/OPEN_MENU" && action.detail.action.menu === "editMenu"))
+      return;
 
-        if (isSorted) li.classList.add(addon.tab.scratchClass("menu-bar_disabled"));
-        else li.classList.remove(addon.tab.scratchClass("menu-bar_disabled"));
+    editMenu = await addon.tab.waitForElement("[class*=menu_right]", {
+      markAsSeen: true,
+    });
 
+    if (!addon.self.disabled) {
+      const assetType = msgs[addon.tab.redux.state.scratchGui.editorTab.activeTabIndex];
+      span.textContent = msg(assetType);
+      li.setAttribute("assetType", assetType);
+
+      getAssetOrder(assetType);
+
+      if (isSorted) li.classList.add(addon.tab.scratchClass("menu-bar_disabled"));
+      else li.classList.remove(addon.tab.scratchClass("menu-bar_disabled"));
+
+      if (addon.tab.redux.state.scratchGui.menus.editMenu) {
         editMenu.appendChild(li);
       }
     }
   }
-
-  running();
 }
