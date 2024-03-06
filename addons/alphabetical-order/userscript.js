@@ -57,32 +57,32 @@ export default async function ({ addon, msg, console }) {
   li.appendChild(span);
 
   li.onclick = () => {
-    if (li.classList.contains(addon.tab.scratchClass("menu-bar_disabled"))) {
-      addon.tab.redux.dispatch({ type: "scratch-gui/menus/CLOSE_MENU", menu: "editMenu" });
+    if (!li.classList.contains(addon.tab.scratchClass("menu-bar_disabled"))) {
+      const currentSelectedAssetName = document
+        .querySelector("[class*=sprite-selector-item_is-selected]")
+        .querySelector("[class*=sprite-selector-item_sprite-name]").innerText;
+
+      sortAssets(li.getAttribute("assetType"));
+
+      const assetsWrapper =
+        li.getAttribute("assetType") === "sprites"
+          ? document.querySelector("[class*=sprite-selector_items-wrapper]")
+          : document.querySelector("[class*=selector_list-area]");
+      const assets =
+        li.getAttribute("assetType") === "sprites"
+          ? assetsWrapper.querySelectorAll("[class*=sprite-selector_sprite-wrapper]")
+          : assetsWrapper.querySelectorAll("[class*=selector_list-item]");
+
+      assets.forEach((asset) => {
+        const assetName = asset.querySelector("[class*=sprite-selector-item_sprite-name]").innerText;
+        if (assetName === currentSelectedAssetName) {
+          asset.click();
+          return;
+        }
+      });
     }
 
-    const currentSelectedAssetName = document
-      .querySelector("[class*=sprite-selector-item_is-selected]")
-      .querySelector("[class*=sprite-selector-item_sprite-name]").innerText;
-
-    sortAssets(li.getAttribute("assetType"));
-
-    const assetsWrapper =
-      li.getAttribute("assetType") === "sprites"
-        ? document.querySelector("[class*=sprite-selector_items-wrapper]")
-        : document.querySelector("[class*=selector_list-area]");
-    const assets =
-      li.getAttribute("assetType") === "sprites"
-        ? assetsWrapper.querySelectorAll("[class*=sprite-selector_sprite-wrapper]")
-        : assetsWrapper.querySelectorAll("[class*=selector_list-item]");
-
-    assets.forEach((asset) => {
-      const assetName = asset.querySelector("[class*=sprite-selector-item_sprite-name]").innerText;
-      if (assetName === currentSelectedAssetName) {
-        asset.click();
-        return;
-      }
-    });
+    addon.tab.redux.dispatch({ type: "scratch-gui/menus/CLOSE_MENU", menu: "editMenu" });
   };
 
   const msgs = ["sprites", "costumes", "sounds", "sprites"];
