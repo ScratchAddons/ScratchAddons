@@ -1,10 +1,23 @@
 export default async function ({ addon, console }) {
-  let el;
   let url;
+  let contentElement;
+  let containerElement;
+
   const settings = { projects: "projects", studios: "studios", profiles: "users" };
   const matches = addon.settings.get("matches");
 
   url = window.location.href;
+
+  if (url.includes("projects")) {
+    contentElement = ".comment-content";
+    containerElement = ".comment-container";
+  } else if (url.includes("studios")) {
+    contentElement = ".comment-content";
+    containerElement = ".comment-container";
+  } else if (url.includes("users")) {
+    contentElement = ".content";
+    containerElement = ".top-level-reply";
+  }
 
   const advertisingContent = "[Marked as advertising]";
   const advertisingUser = "[User's messages blocked]";
@@ -59,7 +72,6 @@ export default async function ({ addon, console }) {
   let idToContent = {};
 
   function handleComment(element, blockType) {
-    console.log(element);
     if (addon.settings.get("method") === "hide") {
       element.style.display = "none";
     } else {
@@ -99,10 +111,6 @@ export default async function ({ addon, console }) {
     }
   }
 
-  if (url.includes("projects")) el = ".comment-container";
-  else if (url.includes("studios")) el = ".comment-container";
-  else if (url.includes("users")) el = ".top-level-reply";
-
   //dsis = does string include string
   function dsis(comment, string) {
     return typeof comment === "object"
@@ -114,36 +122,33 @@ export default async function ({ addon, console }) {
     if (settings.hasOwnProperty.call(settings, key)) {
       if (url.includes(settings[key]) && addon.settings.get(key)) {
         while (true) {
-          const commentsContainer = await addon.tab.waitForElement(el, { markAsSeen: true });
+          const commentContent = await addon.tab.waitForElement(contentElement, { markAsSeen: true });
           matches.forEach((match) => {
-            const commentContents = commentsContainer.querySelectorAll(".comment-content");
-            commentContents.forEach((commentContent) => {
-              if (addon.settings.get("spamFilter")) {
-                if (filterSpamComments(commentContent.innerText)) {
-                  if (commentContent.closest(".comment").parentElement.classList.contains(".comment-container"))
-                    handleComment(commentContent.closest(".comment-container"), "spam");
-                  else handleComment(commentContent.closest(".comment"), "spam");
-                }
+            if (addon.settings.get("spamFilter")) {
+              if (filterSpamComments(commentContent.innerText)) {
+                if (commentContent.closest(".comment").parentElement.classList.contains(containerElement))
+                  handleComment(commentContent.closest(containerElement), "spam");
+                else handleComment(commentContent.closest(".comment"), "spam");
               }
+            }
 
-              if (match.matchType === "link" || match.matchType === "string") {
-                if (dsis(commentContent.innerText, match.matchValue)) {
-                  //We have a match somewhere, now we need to figure out where
-                  if (commentContent.closest(".comment").parentElement.classList.contains(".comment-container"))
-                    handleComment(commentContent.closest(".comment-container"), "content");
-                  else handleComment(commentContent.closest(".comment"), "content");
-                }
-              } else if (match.matchType === "user") {
-                const userName = commentContent.closest(".comment").querySelector(".username");
-
-                if (dsis(userName.innerText, match.matchValue)) {
-                  //We have a match to the username, now we hide or censor it
-                  if (commentContent.closest(".comment").parentElement.classList.contains(".comment-container"))
-                    handleComment(commentContent.closest(".comment-container"), "user");
-                  else handleComment(commentContent.closest(".comment"), "user");
-                }
+            if (match.matchType === "link" || match.matchType === "string") {
+              if (dsis(commentContent.innerText, match.matchValue)) {
+                //We have a match somewhere, now we need to figure out where
+                if (commentContent.closest(".comment").parentElement.classList.contains(containerElement))
+                  handleComment(commentContent.closest(containerElement), "content");
+                else handleComment(commentContent.closest(".comment"), "content");
               }
-            });
+            } else if (match.matchType === "user") {
+              const userName = commentContent.closest(".comment").querySelector(".username");
+
+              if (dsis(userName.innerText, match.matchValue)) {
+                //We have a match to the username, now we hide or censor it
+                if (commentContent.closest(".comment").parentElement.classList.contains(containerElement))
+                  handleComment(commentContent.closest(containerElement), "user");
+                else handleComment(commentContent.closest(".comment"), "user");
+              }
+            }
           });
         }
       }
