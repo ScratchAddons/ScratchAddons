@@ -1,5 +1,19 @@
 .advertising {
   text-decoration: underline;
-  color: #8ab4f8;
-  cursor: pointer;
+}
+
+.contains-advertising {
+  opacity: 0.5;
+}
+
+.contains-advertising .comment-top-row {
+  display: none;
+}
+
+.contains-advertising .comment-bottom-row {
+  display: none;
+}
+
+.contains-advertising + .replies {
+  display: none;
 }
