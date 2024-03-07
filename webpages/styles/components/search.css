@@ -14,7 +14,7 @@
   color: var(--content-text);
   width: 150px;
   height: 16px;
-  transition: none;
+  transition: width 0.2s ease;
 }
 .search-box input:focus {
   width: 300px;
