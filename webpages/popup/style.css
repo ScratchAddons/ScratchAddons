@@ -44,6 +44,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: 0.2s ease;
+}
+#settings:hover {
+  background: var(--hover-darken);
 }
 #settings > img {
   width: 24px;
