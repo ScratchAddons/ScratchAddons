@@ -6,14 +6,12 @@
   opacity: 0.5;
 }
 
-.contains-advertising .comment-top-row {
-  display: none;
-}
-
-.contains-advertising .comment-bottom-row {
-  display: none;
-}
-
-.contains-advertising + .replies {
+.contains-advertising .comment-top-row,
+.contains-advertising .comment-bottom-row,
+.contains-advertising .comment-bottom-row,
+.contains-advertising + .replies,
+.contains-advertising .actions-wrap,
+.contains-advertising .name,
+.contains-advertising .content + div {
   display: none;
 }

@@ -1,7 +1,8 @@
 export default async function ({ addon, console }) {
   let url;
-  let contentElement;
-  let containerElement;
+  let contentClass;
+  let containerClass;
+  let userClass;
 
   const settings = { projects: "projects", studios: "studios", profiles: "users" };
   const matches = addon.settings.get("matches");
@@ -9,14 +10,17 @@ export default async function ({ addon, console }) {
   url = window.location.href;
 
   if (url.includes("projects")) {
-    contentElement = ".comment-content";
-    containerElement = ".comment-container";
+    contentClass = ".comment-content";
+    containerClass = ".comment-container";
+    userClass = ".comment-user";
   } else if (url.includes("studios")) {
-    contentElement = ".comment-content";
-    containerElement = ".comment-container";
+    contentClass = ".comment-content";
+    containerClass = ".comment-container";
+    userClass = ".comment-user";
   } else if (url.includes("users")) {
-    contentElement = ".content";
-    containerElement = ".top-level-reply";
+    contentClass = ".content";
+    containerClass = ".top-level-reply";
+    userClass = ".name";
   }
 
   const advertisingContent = "[Marked as advertising]";
@@ -122,12 +126,12 @@ export default async function ({ addon, console }) {
     if (settings.hasOwnProperty.call(settings, key)) {
       if (url.includes(settings[key]) && addon.settings.get(key)) {
         while (true) {
-          const commentContent = await addon.tab.waitForElement(contentElement, { markAsSeen: true });
+          const commentContent = await addon.tab.waitForElement(contentClass, { markAsSeen: true });
           matches.forEach((match) => {
             if (addon.settings.get("spamFilter")) {
               if (filterSpamComments(commentContent.innerText)) {
-                if (commentContent.closest(".comment").parentElement.classList.contains(containerElement))
-                  handleComment(commentContent.closest(containerElement), "spam");
+                if (commentContent.closest(".comment").parentElement.classList.contains(containerClass))
+                  handleComment(commentContent.closest(containerClass), "spam");
                 else handleComment(commentContent.closest(".comment"), "spam");
               }
             }
@@ -135,17 +139,17 @@ export default async function ({ addon, console }) {
             if (match.matchType === "link" || match.matchType === "string") {
               if (dsis(commentContent.innerText, match.matchValue)) {
                 //We have a match somewhere, now we need to figure out where
-                if (commentContent.closest(".comment").parentElement.classList.contains(containerElement))
-                  handleComment(commentContent.closest(containerElement), "content");
+                if (commentContent.closest(".comment").parentElement.classList.contains(containerClass))
+                  handleComment(commentContent.closest(containerClass), "content");
                 else handleComment(commentContent.closest(".comment"), "content");
               }
             } else if (match.matchType === "user") {
-              const userName = commentContent.closest(".comment").querySelector(".username");
+              const userName = commentContent.closest(".comment").querySelector(userClass);
 
               if (dsis(userName.innerText, match.matchValue)) {
                 //We have a match to the username, now we hide or censor it
-                if (commentContent.closest(".comment").parentElement.classList.contains(containerElement))
-                  handleComment(commentContent.closest(containerElement), "user");
+                if (commentContent.closest(".comment").parentElement.classList.contains(containerClass))
+                  handleComment(commentContent.closest(containerClass), "user");
                 else handleComment(commentContent.closest(".comment"), "user");
               }
             }
