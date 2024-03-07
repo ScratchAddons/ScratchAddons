@@ -31,7 +31,8 @@
   --switch-inner-background: #eee;
   --tooltip-background: #000;
   --comment-background: #1c1c1c;
-  --unread-comment-background: #000;
+  --unread-comment-background: #0d0d0d;
+  --unread-comment-border: inset 0px 0px 0px 2px #161616;
   --notice-background: var(--navigation-background);
   --notice-border: var(--yellow-opacity50);
   --notice-text: #fff;

@@ -155,6 +155,7 @@ a.message-type-title-text {
 .comment.unread,
 .unread .comment {
   background-color: var(--unread-comment-background);
+  box-shadow: var(--unread-comment-border);
 }
 .comment-content {
   word-break: break-word;
