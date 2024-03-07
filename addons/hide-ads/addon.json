@@ -20,6 +20,7 @@
       "id": "method",
       "default": "censor"
     },
+    { "name": "Apply general spam filter", "type": "boolean", "default": true, "id": "spamFilter" },
     {
       "name": "Strings that match as advertising",
       "id": "matches",
