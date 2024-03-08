@@ -409,6 +409,7 @@ export default {
         const blob = new Blob([serialized], { type: "application/json" });
         downloadBlob("scratch-addons-settings.json", blob);
       });
+      // See also unsupported-browser.js
     },
     viewSettings() {
       const openedWindow = window.open("about:blank");
@@ -416,6 +417,7 @@ export default {
         const blob = new Blob([serialized], { type: "text/plain" });
         openedWindow.location.replace(URL.createObjectURL(blob));
       });
+      // See also unsupported-browser.js
     },
     importSettings() {
       const inputElem = Object.assign(document.createElement("input"), {
