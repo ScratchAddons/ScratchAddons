@@ -31,7 +31,6 @@ export default async function ({ addon, console }) {
   function filterSpamComments(content) {
     //These are just made by chatGPT after giving it a lot of example comments
     const repeatedCharactersRegex = /(.)\1{20,}/;
-
     const meaninglessRegex = /^[\W\s]*$/;
 
     if (repeatedCharactersRegex.test(content)) {
@@ -44,35 +43,6 @@ export default async function ({ addon, console }) {
 
     return false;
   }
-
-  /* 
-  PROFILES
-  top-level-reply
-
-  comment
-  info
-  content.innerText
-
-  replies
-  reply
-  comment
-  content.innerText
-
-  PROJECTS and STUDIOS
-  comment-container
-
-  comment
-  comment-body
-  comment-bubble
-  comment-content
-  emoji-text.innerText
-
-  replies
-  comment
-  comment-body
-  comment-bubble
-  comment-content.lastChild.innerText (in replies there are two emoji-texts)
-  */
 
   function handleDisabled(commentContent, profileReplyButton, comment, handleProfileReplyButton, blockType) {
     commentContent.innerHTML = idToContent[commentContent.closest(".comment").getAttribute("id")];
@@ -178,10 +148,12 @@ export default async function ({ addon, console }) {
     }
   }
 
-  function stringIncludesString(comment, string) {
-    return typeof comment === "object"
-      ? comment.innerHTML.toLowerCase().includes(string.toLowerCase().trim())
-      : comment.toLowerCase().includes(string.toLowerCase().trim());
+  function stringIncludesString(commentContent, string) {
+    let onlyContent = typeof commentContent === "object" ? commentContent.lastChild : commentContent;
+
+    return typeof onlyContent === "object"
+      ? onlyContent.innerText.toLowerCase().includes(string.toLowerCase().trim())
+      : onlyContent.toLowerCase().includes(string.toLowerCase().trim());
   }
 
   let foundMatch = false;
@@ -217,7 +189,7 @@ export default async function ({ addon, console }) {
 
         // Check if a match was found before applying spam filtering
         if (!foundMatch && addon.settings.get("spamFilter")) {
-          if (filterSpamComments(commentContent.innerText)) {
+          if (filterSpamComments(commentContent.lastChild.textContent.trim())) {
             if (commentContent.closest(".comment").parentElement.classList.contains(containerClass))
               handleComment(commentContent.closest(containerClass), "spam");
             else handleComment(commentContent.closest(".comment"), "spam");
