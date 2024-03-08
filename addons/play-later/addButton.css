@@ -1,0 +1,13 @@
+.sa-play-later-button::before {
+    display: inline-block;
+    margin-right: .25rem;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    width: .875rem;
+    height: .875rem;
+    vertical-align: bottom;
+    content: "";
+
+    background-image: url("./buttonIcon.svg");
+}

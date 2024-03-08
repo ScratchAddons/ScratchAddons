@@ -1,0 +1,29 @@
+{
+    "name": "Play Later",
+    "description": "Save projects to a list to be played later when you have more time. Go to a project page and click \"Play Later\" next to the Copy Link button. Go to the \"Play Later\" section of the home page to see your list.",
+    "credits": [
+        {
+            "name": "Dinosu",
+            "link": "https://scratch.mit.edu/users/Dinosu"
+        }
+    ],
+    "userstyles": [
+        {
+            "url": "addButton.css",
+            "matches": ["projects"]
+        }
+    ],
+    "userscripts": [
+        {
+            "url": "addToListButton.js",
+            "matches": ["projects"],
+            "runAtComplete": false
+        },
+        {
+            "url": "homePageList.js",
+            "matches": ["https://scratch.mit.edu/"]
+        }
+    ],
+    "versionAdded": "1.36.0",
+    "tags": ["community", "projectPage", "featured"]
+}
