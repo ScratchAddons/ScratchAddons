@@ -11,7 +11,7 @@
     { "name": "Studio comments", "type": "boolean", "default": true, "id": "studios" },
     { "name": "Profile comments", "type": "boolean", "default": true, "id": "profiles" },
     {
-      "name": "Method of hiding advertising",
+      "name": "Method of hiding comments",
       "type": "select",
       "potentialValues": [
         { "id": "censor", "name": "Censor content" },
@@ -22,7 +22,7 @@
     },
     { "name": "Apply general spam filter", "type": "boolean", "default": true, "id": "spamFilter" },
     {
-      "name": "Strings that match as advertising",
+      "name": "Links, strings, and users to match to",
       "id": "matches",
       "type": "table",
       "default": [{ "matchType": "link", "matchValue": "scratch.mit.edu/projects" }],
@@ -55,7 +55,14 @@
       ]
     }
   ],
-  "info": [{ "type": "info", "id": "caseInsensitive", "text": "All string matches are case insensitive." }],
+  "info": [
+    { "type": "info", "id": "caseInsensitive", "text": "All string matches are case insensitive." },
+    {
+      "type": "warning",
+      "id": "cantViewHidden",
+      "text": "If you choose \"Hide comment\" you will not be able to see or report any hidden comments while this addon is enabled."
+    }
+  ],
   "dynamicDisable": true,
   "dynamicEnable": true
 }
