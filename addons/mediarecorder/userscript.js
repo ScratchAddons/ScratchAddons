@@ -389,7 +389,7 @@ export default async ({ addon, console, msg }) => {
             return;
           }
 
-          // Remember options for next time this session
+          // Remember options for next time
           lastSettings.seconds = opts.secs;
           lastSettings.delay = opts.delay;
           lastSettings.audio = opts.audioEnabled;
