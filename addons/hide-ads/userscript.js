@@ -3,6 +3,7 @@ export default async function ({ addon, console }) {
   let contentClass;
   let containerClass;
   let userClass;
+  let idToContent = {};
 
   const settings = { projects: "projects", studios: "studios", profiles: "users" };
   const matches = addon.settings.get("matches");
@@ -73,7 +74,29 @@ export default async function ({ addon, console }) {
   comment-content.lastChild.innerText (in replies there are two emoji-texts)
   */
 
-  let idToContent = {};
+  function handleDisabled(commentContent, profileReplyButton, comment, handleProfileReplyButton, blockType) {
+    commentContent.innerHTML = idToContent[commentContent.closest(".comment").getAttribute("id")];
+    commentContent.classList.remove("advertising");
+    comment.classList.remove("contains-advertising");
+
+    if (handleProfileReplyButton()) {
+      profileReplyButton.style.display = "inline";
+    }
+
+    commentContent.style.cursor = "";
+  }
+  function handleReenabled(commentContent, profileReplyButton, comment, handleProfileReplyButton, blockType) {
+    commentContent.innerHTML =
+      blockType === "content" ? advertisingContent : blockType === "user" ? advertisingUser : advertisingSpam;
+    commentContent.classList.add("advertising");
+    comment.classList.add("contains-advertising");
+
+    if (handleProfileReplyButton()) {
+      profileReplyButton.style.display = "";
+    }
+
+    commentContent.style.cursor = "pointer";
+  }
 
   function handleComment(element, blockType) {
     if (addon.settings.get("method") === "hide") {
@@ -113,6 +136,7 @@ export default async function ({ addon, console }) {
       }
 
       commentContent.addEventListener("click", () => {
+        if (addon.self.disabled) return;
         if (commentContent.classList.contains("advertising")) {
           commentContent.innerHTML = idToContent[commentContent.closest(".comment").getAttribute("id")];
           commentContent.classList.remove("advertising");
@@ -132,6 +156,11 @@ export default async function ({ addon, console }) {
           }
         }
       });
+
+      const args = [commentContent, profileReplyButton, comment, handleProfileReplyButton, blockType];
+
+      addon.self.addEventListener("disabled", handleDisabled.bind(this, ...args));
+      addon.self.addEventListener("reenabled", handleReenabled.bind(this, ...args));
     }
   }
 

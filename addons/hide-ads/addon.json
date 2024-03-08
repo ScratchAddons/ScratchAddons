@@ -55,5 +55,7 @@
       ]
     }
   ],
-  "info": [{ "type": "info", "id": "caseInsensitive", "text": "All string matches are case insensitive." }]
+  "info": [{ "type": "info", "id": "caseInsensitive", "text": "All string matches are case insensitive." }],
+  "dynamicDisable": true,
+  "dynamicEnable": true
 }
