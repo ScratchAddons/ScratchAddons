@@ -5,7 +5,7 @@ export default async function ({ addon, console }) {
   let userClass;
   let idToContent = {};
 
-  const settings = { projects: "projects", studios: "studios", profiles: "users" };
+  const settingsToUrl = { projects: "projects", studios: "studios", profiles: "users" };
   const matches = addon.settings.get("matches");
 
   url = window.location.href;
@@ -85,6 +85,7 @@ export default async function ({ addon, console }) {
 
     commentContent.style.cursor = "";
   }
+
   function handleReenabled(commentContent, profileReplyButton, comment, handleProfileReplyButton, blockType) {
     commentContent.innerHTML =
       blockType === "content" ? advertisingContent : blockType === "user" ? advertisingUser : advertisingSpam;
@@ -98,6 +99,19 @@ export default async function ({ addon, console }) {
     commentContent.style.cursor = "pointer";
   }
 
+  let settings = {};
+
+  function getNewSettings() {
+    settings["projects"] = addon.settings.get("projects");
+    settings["studios"] = addon.settings.get("studios");
+    settings["profiles"] = addon.settings.get("profiles");
+    settings["method"] = addon.settings.get("method");
+    settings["spamFilter"] = addon.settings.get("spamFilter");
+    settings["matches"] = addon.settings.get("matches");
+  }
+
+  getNewSettings();
+
   function handleComment(element, blockType) {
     if (addon.settings.get("method") === "hide") {
       element.style.display = "none";
@@ -108,7 +122,7 @@ export default async function ({ addon, console }) {
       let commentContent;
       let profileReplyButton;
 
-      if (url.includes(settings["profiles"])) {
+      if (url.includes(settingsToUrl["profiles"])) {
         commentContent = element.querySelector(".info>.content");
         profileReplyButton = commentContent.nextElementSibling.lastElementChild;
       } else {
@@ -116,7 +130,7 @@ export default async function ({ addon, console }) {
       }
 
       function handleProfileReplyButton() {
-        if (profileReplyButton?.classList.contains("reply") && url.includes(settings["profiles"])) {
+        if (profileReplyButton?.classList.contains("reply") && url.includes(settingsToUrl["profiles"])) {
           return true;
         } else return false;
       }
@@ -172,43 +186,41 @@ export default async function ({ addon, console }) {
 
   let foundMatch = false;
 
-  for (const key in settings) {
-    if (settings.hasOwnProperty.call(settings, key)) {
-      if (url.includes(settings[key]) && addon.settings.get(key)) {
-        while (true) {
-          const commentContent = await addon.tab.waitForElement(contentClass, { markAsSeen: true });
+  for (const key in settingsToUrl) {
+    if (url.includes(settingsToUrl[key]) && addon.settings.get(key)) {
+      while (true) {
+        const commentContent = await addon.tab.waitForElement(contentClass, { markAsSeen: true });
 
-          foundMatch = false;
+        foundMatch = false;
 
-          matches.forEach((match) => {
-            if (match.matchType === "link" || match.matchType === "string") {
-              if (stringIncludesString(commentContent.innerText, match.matchValue)) {
-                foundMatch = true;
+        matches.forEach((match) => {
+          if (match.matchType === "link" || match.matchType === "string") {
+            if (stringIncludesString(commentContent.innerText, match.matchValue)) {
+              foundMatch = true;
 
-                if (commentContent.closest(".comment").parentElement.classList.contains(containerClass))
-                  handleComment(commentContent.closest(containerClass), "content");
-                else handleComment(commentContent.closest(".comment"), "content");
-              }
-            } else if (match.matchType === "user") {
-              const userName = commentContent.closest(".comment").querySelector(userClass);
-
-              if (stringIncludesString(userName.innerText, match.matchValue)) {
-                foundMatch = true;
-
-                if (commentContent.closest(".comment").parentElement.classList.contains(containerClass))
-                  handleComment(commentContent.closest(containerClass), "user");
-                else handleComment(commentContent.closest(".comment"), "user");
-              }
-            }
-          });
-
-          // Check if a match was found before applying spam filtering
-          if (!foundMatch && addon.settings.get("spamFilter")) {
-            if (filterSpamComments(commentContent.innerText)) {
               if (commentContent.closest(".comment").parentElement.classList.contains(containerClass))
-                handleComment(commentContent.closest(containerClass), "spam");
-              else handleComment(commentContent.closest(".comment"), "spam");
+                handleComment(commentContent.closest(containerClass), "content");
+              else handleComment(commentContent.closest(".comment"), "content");
             }
+          } else if (match.matchType === "user") {
+            const userName = commentContent.closest(".comment").querySelector(userClass);
+
+            if (stringIncludesString(userName.innerText, match.matchValue)) {
+              foundMatch = true;
+
+              if (commentContent.closest(".comment").parentElement.classList.contains(containerClass))
+                handleComment(commentContent.closest(containerClass), "user");
+              else handleComment(commentContent.closest(".comment"), "user");
+            }
+          }
+        });
+
+        // Check if a match was found before applying spam filtering
+        if (!foundMatch && addon.settings.get("spamFilter")) {
+          if (filterSpamComments(commentContent.innerText)) {
+            if (commentContent.closest(".comment").parentElement.classList.contains(containerClass))
+              handleComment(commentContent.closest(containerClass), "spam");
+            else handleComment(commentContent.closest(".comment"), "spam");
           }
         }
       }
