@@ -28,7 +28,7 @@ window.onmessage = async (e) => {
 
     if (["exportSettingsAsFile", "openSettingsAsTab"].includes(message.msgType)) {
       // See webpages/settings/index.js for main import/export settings code
-      const { serializeSettings } = await import("../settings/settings-utils.js");
+      const { serializeSettings } = await import("../src/lib/serialize.js");
       const downloadBlob = (await import("../../libraries/common/cs/download-blob.js")).default;
 
       // Export extension settings as a .json file
