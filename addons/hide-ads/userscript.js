@@ -83,9 +83,12 @@ export default async function ({ addon, console }) {
       comment.classList.add("contains-advertising");
 
       let commentContent;
+      let profileReplyButton;
 
       if (url.includes(settings["profiles"])) {
         commentContent = element.querySelector(".info>.content");
+        profileReplyButton = commentContent.nextElementSibling.lastElementChild;
+        console.log(profileReplyButton);
       } else {
         commentContent = element.querySelector(".comment-content");
       }
@@ -100,16 +103,28 @@ export default async function ({ addon, console }) {
       commentContent.classList.add("advertising");
       commentContent.style.cursor = "pointer";
 
+      if (profileReplyButton.classList.contains("reply")) {
+        profileReplyButton.style.display = "";
+      }
+
       commentContent.addEventListener("click", () => {
         if (commentContent.classList.contains("advertising")) {
           commentContent.innerHTML = idToContent[commentContent.closest(".comment").getAttribute("id")];
           commentContent.classList.remove("advertising");
           comment.classList.remove("contains-advertising");
+
+          if (profileReplyButton.classList.contains("reply")) {
+            profileReplyButton.style.display = "inline";
+          }
         } else {
           commentContent.innerHTML =
             blockType === "content" ? advertisingContent : blockType === "user" ? advertisingUser : advertisingSpam;
           commentContent.classList.add("advertising");
           comment.classList.add("contains-advertising");
+
+          if (profileReplyButton.classList.contains("reply")) {
+            profileReplyButton.style.display = "";
+          }
         }
       });
     }
