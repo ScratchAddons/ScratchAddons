@@ -129,7 +129,7 @@ export default async function ({ addon, console, msg }) {
     { blocks: true }
   );
 
-  function exportBlock(isExportPNG, block) {
+  async function exportBlock(isExportPNG, copyToClipboard, block) {
     let svg;
     if (block) {
       svg = selectedBlocks(isExportPNG, block);
