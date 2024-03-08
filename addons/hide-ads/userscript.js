@@ -12,11 +12,11 @@ export default async function ({ addon, console }) {
   if (url.includes("projects")) {
     contentClass = ".comment-content";
     containerClass = ".comment-container";
-    userClass = ".comment-user";
+    userClass = ".username";
   } else if (url.includes("studios")) {
     contentClass = ".comment-content";
     containerClass = ".comment-container";
-    userClass = ".comment-user";
+    userClass = ".username";
   } else if (url.includes("users")) {
     contentClass = ".content";
     containerClass = ".top-level-reply";
@@ -88,9 +88,14 @@ export default async function ({ addon, console }) {
       if (url.includes(settings["profiles"])) {
         commentContent = element.querySelector(".info>.content");
         profileReplyButton = commentContent.nextElementSibling.lastElementChild;
-        console.log(profileReplyButton);
       } else {
         commentContent = element.querySelector(".comment-content");
+      }
+
+      function handleProfileReplyButton() {
+        if (profileReplyButton?.classList.contains("reply") && url.includes(settings["profiles"])) {
+          return true;
+        } else return false;
       }
 
       const key = comment.getAttribute("id");
@@ -103,7 +108,7 @@ export default async function ({ addon, console }) {
       commentContent.classList.add("advertising");
       commentContent.style.cursor = "pointer";
 
-      if (profileReplyButton.classList.contains("reply")) {
+      if (handleProfileReplyButton()) {
         profileReplyButton.style.display = "";
       }
 
@@ -113,7 +118,7 @@ export default async function ({ addon, console }) {
           commentContent.classList.remove("advertising");
           comment.classList.remove("contains-advertising");
 
-          if (profileReplyButton.classList.contains("reply")) {
+          if (handleProfileReplyButton()) {
             profileReplyButton.style.display = "inline";
           }
         } else {
@@ -122,7 +127,7 @@ export default async function ({ addon, console }) {
           commentContent.classList.add("advertising");
           comment.classList.add("contains-advertising");
 
-          if (profileReplyButton.classList.contains("reply")) {
+          if (handleProfileReplyButton()) {
             profileReplyButton.style.display = "";
           }
         }
@@ -130,30 +135,27 @@ export default async function ({ addon, console }) {
     }
   }
 
-  //dsis = does string include string
-  function dsis(comment, string) {
+  function stringIncludesString(comment, string) {
     return typeof comment === "object"
-      ? comment.innerHTML.toLowerCase().includes(string.toLowerCase())
-      : comment.toLowerCase().includes(string.toLowerCase());
+      ? comment.innerHTML.toLowerCase().includes(string.toLowerCase().trim())
+      : comment.toLowerCase().includes(string.toLowerCase().trim());
   }
+
+  let foundMatch = false;
 
   for (const key in settings) {
     if (settings.hasOwnProperty.call(settings, key)) {
       if (url.includes(settings[key]) && addon.settings.get(key)) {
         while (true) {
           const commentContent = await addon.tab.waitForElement(contentClass, { markAsSeen: true });
-          matches.forEach((match) => {
-            if (addon.settings.get("spamFilter")) {
-              if (filterSpamComments(commentContent.innerText)) {
-                if (commentContent.closest(".comment").parentElement.classList.contains(containerClass))
-                  handleComment(commentContent.closest(containerClass), "spam");
-                else handleComment(commentContent.closest(".comment"), "spam");
-              }
-            }
 
+          foundMatch = false;
+
+          matches.forEach((match) => {
             if (match.matchType === "link" || match.matchType === "string") {
-              if (dsis(commentContent.innerText, match.matchValue)) {
-                //We have a match somewhere, now we need to figure out where
+              if (stringIncludesString(commentContent.innerText, match.matchValue)) {
+                foundMatch = true;
+
                 if (commentContent.closest(".comment").parentElement.classList.contains(containerClass))
                   handleComment(commentContent.closest(containerClass), "content");
                 else handleComment(commentContent.closest(".comment"), "content");
@@ -161,14 +163,24 @@ export default async function ({ addon, console }) {
             } else if (match.matchType === "user") {
               const userName = commentContent.closest(".comment").querySelector(userClass);
 
-              if (dsis(userName.innerText, match.matchValue)) {
-                //We have a match to the username, now we hide or censor it
+              if (stringIncludesString(userName.innerText, match.matchValue)) {
+                foundMatch = true;
+
                 if (commentContent.closest(".comment").parentElement.classList.contains(containerClass))
                   handleComment(commentContent.closest(containerClass), "user");
                 else handleComment(commentContent.closest(".comment"), "user");
               }
             }
           });
+
+          // Check if a match was found before applying spam filtering
+          if (!foundMatch && addon.settings.get("spamFilter")) {
+            if (filterSpamComments(commentContent.innerText)) {
+              if (commentContent.closest(".comment").parentElement.classList.contains(containerClass))
+                handleComment(commentContent.closest(containerClass), "spam");
+              else handleComment(commentContent.closest(".comment"), "spam");
+            }
+          }
         }
       }
     }
