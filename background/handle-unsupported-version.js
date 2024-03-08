@@ -12,10 +12,7 @@ const checkIfUnsupported = () => {
 if (checkIfUnsupported()) {
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request === "checkIfUnsupported") {
-      const uiLanguage = chrome.i18n.getUILanguage();
-      const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
-      const utm = `utm_source=extension&utm_medium=tabscreate&utm_campaign=v${chrome.runtime.getManifest().version}`;
-      const url = `https://scratchaddons.com/${localeSlash}unsupported-browser/?${utm}`;
+      const url = chrome.runtime.getURL("webpages/error/unsupported-browser.html");
       if (sender.tab) chrome.tabs.update(sender.tab.id, { url });
       else chrome.tabs.create({ url });
     }
