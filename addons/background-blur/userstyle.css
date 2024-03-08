@@ -4,14 +4,19 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0 0 0 0.5);
   backdrop-filter: blur(0px);
   z-index: 500;
   pointer-events: none;
-  transition-property: backdrop-filter;
+  transition-property: backdrop-filter, background-color;
   transition-duration: 200ms;
 }
 
 .sa-blur-overlay.blur {
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(calc(var(--backgroundBlur-radius) * 1px));
+  background-color: var(--editorDarkMode-popup);
+  filter: opacity(0.85);
+}
+
+.ReactModalPortal .ReactModal__Overlay {
+  background-color: initial;
 }
