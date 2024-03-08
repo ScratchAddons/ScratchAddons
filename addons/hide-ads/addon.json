@@ -35,8 +35,7 @@
           "potentialValues": [
             { "name": "Link", "id": "link" },
             { "name": "String", "id": "string" },
-            { "name": "User", "id": "user" },
-            { "name": "RegExp", "id": "regExp" }
+            { "name": "User", "id": "user" }
           ]
         },
         {
