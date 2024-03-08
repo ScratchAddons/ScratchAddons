@@ -13,7 +13,7 @@
 
 .sa-blur-overlay.blur {
   backdrop-filter: blur(calc(var(--backgroundBlur-radius) * 1px));
-  background-color: var(--editorDarkMode-popup);
+  background-color: var(--editorDarkMode-popup, hsla(215, 100%, 65%, 0.9));
   filter: opacity(0.85);
 }
 
