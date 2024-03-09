@@ -1,5 +1,5 @@
 // util function for selecting a costume or sound asset directly with the react State to avoid needing to simulate a click
-export function assetSelect(addon, assetIndex, assetType){
+export function assetSelect(addon, assetIndex, assetType) {
   const tabIndex = addon.tab.redux.state.scratchGui.editorTab.activeTabIndex;
   const tab = document.querySelectorAll("[class*='gui_tab-panel_']")[tabIndex];
 

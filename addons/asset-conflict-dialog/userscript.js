@@ -1,5 +1,5 @@
 import { addDefaultAssetFolderIfMissing } from "../folders/userscript.js";
-import { assetSelect, createAndAppendElement} from "./utils.js";
+import { assetSelect, createAndAppendElement } from "./utils.js";
 
 export default async function ({ addon, console, msg }) {
   function createAssetConflictDialog(fileName, actionClickCallback) {
