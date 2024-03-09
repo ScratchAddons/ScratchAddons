@@ -1,0 +1,23 @@
+{
+  "name": "Blur background",
+  "description": "Blurs the background when you are creating a new variable, list, or custom block.",
+  "tags": ["theme", "editor", "codeEditor"],
+  "versionAdded": "1.37.0",
+  "credits": [{ "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" }],
+  "userscripts": [{ "matches": ["projects"], "url": "userscript.js" }],
+  "userstyles": [{ "matches": ["projects"], "url": "userstyle.css" }],
+  "settings": [
+    { "id": "blurRadius", "default": 5, "type": "positive_integer", "name": "Blur radius (px)", "min": 0, "max": 100 }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "customCssVariables": [
+    {
+      "name": "radius",
+      "value": {
+        "type": "settingValue",
+        "settingId": "blurRadius"
+      }
+    }
+  ]
+}
