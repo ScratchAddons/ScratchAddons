@@ -36,7 +36,7 @@ export function assetSelect(addon, assetIndex, assetType){
   }
 }
 
-//  util function for creating and appending Elements
+// util function for creating and appending Elements
 export function createAndAppendElement(type, parent, attrs = {}) {
   const element = document.createElement(type);
   Object.assign(element, attrs);
