@@ -242,15 +242,15 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_35": {
-    "message": "New addon: \"skewing in costume editor\", which lets you hold Ctrl while scaling an object on its sides to skew it. Go to $1 to enable it.",
+  "extensionUpdateInfo1_v1_36": {
+    "message": "New addon: \"rearrangeable custom block inputs\", which allows rearranging custom block parameters on the \"Make a block\" screen. Go to $1 to enable it.",
     "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_35": {
-    "message": "Another new addon is \"preview project instructions and notes\", which in your own projects, adds a toggle above the Instructions field to preview the project instructions and notes as seen by other users."
+  "extensionUpdateInfo2_v1_36": {
+    "message": "Other new addons added this update are \"customizable menu bar\", \"place backpack code at mouse\", and \"square block text inputs\"."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",

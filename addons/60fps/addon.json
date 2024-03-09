@@ -1,10 +1,10 @@
 {
-  "name": "60FPS project player mode",
-  "description": "Alt+Click the green flag to toggle 60FPS.",
+  "name": "Higher project framerate mode",
+  "description": "Lets you run projects at more frames per second (FPS) so they look smoother. Hold Alt and click the green flag to toggle between Scratch's default 30 FPS and a custom framerate set below.",
   "info": [
     {
       "type": "notice",
-      "text": "Most projects will not behave properly when running at 60FPS, because increasing the frame rate also increases the speed at which scripts run. This should only be used on projects that support 60FPS.",
+      "text": "Changing the framerate of Scratch projects also affects the rate at which certain code (such as loops) runs, so most projects won't behave properly when run at a different framerate. Higher framerates are only meant to be used on projects that are designed to support them.",
       "id": "projectRunsFasterNotice"
     }
   ],
@@ -28,7 +28,7 @@
   ],
   "settings": [
     {
-      "name": "Alt+GreenFlag FPS",
+      "name": "Custom FPS",
       "id": "framerate",
       "type": "integer",
       "min": 31,
