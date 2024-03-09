@@ -169,7 +169,7 @@ export default async function ({ addon, console, msg }) {
                       // delay is needed so that we won't get overridden by componentWillReceiveProps
                       setTimeout(() => {
                         reactInternal.stateNode.setState({
-                          [type === "costume" ? "selectedCostumeIndex" : "selectedSoundIndex"]: duplicateIndex
+                          [type === "costume" ? "selectedCostumeIndex" : "selectedSoundIndex"]: duplicateIndex,
                         });
                       });
                     }
