@@ -1,3 +1,5 @@
+import { addDefaultAssetFolderIfMissing } from "../folders/userscript.js";
+
 // util function for creating and appending Elements
 function createAndAppendElement(type, parent, attrs = {}) {
   const element = document.createElement(type);
@@ -91,6 +93,9 @@ export default async function ({ addon, console, msg }) {
       // get args
       const optTargetId = type === "costume" ? args[2] : args[1];
       const assetObj = type === "costume" ? args[1] : args[0];
+
+      // folders addon compatibility
+      addDefaultAssetFolderIfMissing(assetObj);
 
       // get target and target.sprite
       const target = optTargetId ? this.runtime.getTargetById(optTargetId) : this.editingTarget;
