@@ -17,28 +17,12 @@
       "matches": ["isNotScratchWWW"]
     },
     {
-      "url": "messages.css",
-      "matches": ["https://scratch.mit.edu/messages/"]
-    },
-    {
       "url": "editor.css",
       "matches": ["projects"]
     }
   ],
   "injectAsStyleElt": true,
   "settings": [
-    {
-      "name": "Badge color",
-      "id": "default",
-      "type": "color",
-      "default": "#ffab1a"
-    },
-    {
-      "name": "Highlight alerts",
-      "id": "highlight",
-      "type": "boolean",
-      "default": true
-    },
     {
       "name": "Badge color when there are alerts",
       "id": "alert",
@@ -47,36 +31,12 @@
       "if": {
         "settings": { "highlight": true }
       }
-    },
-    {
-      "name": "Badge color on messages page",
-      "id": "messages",
-      "type": "color",
-      "default": "#cc4400"
     }
   ],
   "customCssVariables": [
     {
-      "name": "default",
-      "value": { "type": "settingValue", "settingId": "default" }
-    },
-    {
       "name": "alert",
       "value": { "type": "settingValue", "settingId": "alert" }
-    },
-    {
-      "name": "messages",
-      "value": { "type": "settingValue", "settingId": "messages" }
-    },
-    {
-      "name": "defaultfg",
-      "value": {
-        "type": "textColor",
-        "source": { "type": "settingValue", "settingId": "default" },
-        "black": "#000000",
-        "white": "#ffffff",
-        "threshold": 180
-      }
     },
     {
       "name": "alertfg",
@@ -87,20 +47,10 @@
         "white": "#ffffff",
         "threshold": 180
       }
-    },
-    {
-      "name": "messagesfg",
-      "value": {
-        "type": "textColor",
-        "source": { "type": "settingValue", "settingId": "messages" },
-        "black": "#000000",
-        "white": "#ffffff",
-        "threshold": 180
-      }
     }
   ],
   "tags": ["community"],
-  "versionAdded": "1.34.0",
+  "versionAdded": "1.37.0",
   "enabledByDefault": false,
   "credits": [
     {
