@@ -3,15 +3,15 @@ export default async function ({ addon, console }) {
   overlay.classList.add("sa-blur-overlay");
   document.body.insertBefore(overlay, document.body.firstChild);
 
-  while (true) {
-    await addon.tab.waitForElement(".ReactModal__Overlay", { markAsSeen: true });
-    overlay.classList.add("blur");
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      const modalOverlayExists = document.querySelector(".ReactModal__Overlay");
+      overlay.classList.toggle("blur", modalOverlayExists);
+    });
+  });
 
-    const intervalId = setInterval(() => {
-      if (!document.querySelector(".ReactModal__Overlay")) {
-        overlay.classList.remove("blur");
-        clearInterval(intervalId);
-      }
-    }, 100);
-  }
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
 }
