@@ -137,7 +137,7 @@ h1 {
   right: 0;
   position: fixed;
   cursor: pointer;
-  padding: 17px;
+  padding: 16px;
   transition: 0.2s ease;
 }
 #theme-div:hover {
