@@ -132,13 +132,15 @@ h1 {
 
 .theme-switch {
   height: 25px;
+}
+#theme-div {
   right: 0;
   position: fixed;
   cursor: pointer;
-  padding: 18px;
+  padding: 17px;
   transition: 0.2s ease;
 }
-.theme-switch:hover {
+#theme-div:hover {
   background: var(--hover-darken);
 }
 [dir="rtl"] .theme-switch {
