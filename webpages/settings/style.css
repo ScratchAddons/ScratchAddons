@@ -117,10 +117,10 @@ h1 {
   border-radius: 4px 0 0 4px;
 }
 .number-setting .clear-button {
-  border-radius: 0 16px 16px 0;
+  border-radius: 0 4px 4px 0;
 }
 [dir="rtl"] .number-setting .clear-button {
-  border-radius: 16px 0 0 16px;
+  border-radius: 4px 0 0 4px;
 }
 .clear-button .icon-type {
   margin: 0;
