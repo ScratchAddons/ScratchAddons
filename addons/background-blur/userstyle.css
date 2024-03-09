@@ -20,3 +20,13 @@
 .ReactModalPortal .ReactModal__Overlay {
   background-color: initial;
 }
+
+.ReactModal__Content {
+  opacity: 0;
+  transition-property: opacity;
+  transition-duration: 200ms;
+}
+
+.ReactModal__Content.visible {
+  opacity: 1;
+}
