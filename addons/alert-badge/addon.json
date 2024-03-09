@@ -1,6 +1,6 @@
 {
-  "name": "Customizable message badge",
-  "description": "Allows you to customize the colors of the message badge. Also changes its color and adds an '!' if you have alert messages from the Scratch Team.",
+  "name": "Highlight message badge when there are alerts",
+  "description": "When there are Scratch Team messages, the navbar's notification badge's color is changed and a '!' is added.",
   "userscripts": [
     {
       "url": "userscript.js",
