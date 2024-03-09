@@ -99,8 +99,8 @@ export default async function ({ addon, console, msg }) {
 
       // see if there is even a conflict
       const assets = type === "costume" ? sprite.costumes_ : sprite.sounds;
-      const originalName = assetObj.name || '';
-      const isConflicting = !!assets.find(i => i.name === originalName);
+      const originalName = assetObj.name || "";
+      const isConflicting = !!assets.find((i) => i.name === originalName);
       if (!isConflicting) return originalFn.call(this, ...args);
 
       // Return a new Promise
