@@ -129,6 +129,9 @@ export default async function ({ addon, console, msg }) {
                     target.deleteSound(assetObjIndex);
                   }
 
+                  // force asset list to update immediately, don't wait for the next Scratch frame
+                  this.emitTargetsUpdate();
+
                   // hacky method which uses a simulated click to set the tabs current asset state to the duplicate asset
                   if (this.runtime._editingTarget === target) {
                     const tabIndex = addon.tab.redux.state.scratchGui.editorTab.activeTabIndex;
