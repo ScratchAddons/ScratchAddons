@@ -89,8 +89,10 @@ export default async function ({ addon, console, msg }) {
 
       // handle new costume or sound via Paint/Record
       // abuses the fact that new costumes don't have an asset property and new costumes have a format property set to ""
-      const isNewAsset = (type === "costume" && !assetObj.asset) || (type === "sound" && (assetObj.format === '' && !assetObj.asset.clean));
-      if(isNewAsset) return originalFn.call(this, ...args);
+      const isNewAsset =
+        (type === "costume" && !assetObj.asset) ||
+        (type === "sound" && assetObj.format === "" && !assetObj.asset.clean);
+      if (isNewAsset) return originalFn.call(this, ...args);
 
       // folders addon compatibility
       addDefaultAssetFolderIfMissing(assetObj);
