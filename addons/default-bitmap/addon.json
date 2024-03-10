@@ -1,0 +1,20 @@
+{
+  "name": "Default to bitmap mode",
+  "description": "When creating new costumes, defaults to bitmap instead of vector mode.",
+  "tags": ["editor", "costumeEditor"],
+  "userscripts": [
+    {
+      "matches": ["projects"],
+      "url": "userscript.js"
+    }
+  ],
+  "versionAdded": "1.37.0",
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}
