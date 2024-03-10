@@ -30,6 +30,7 @@
   --hover-highlight: rgba(0, 0, 0, 0.05);
   --hover-highlight-reduced: rgba(0, 0, 0, 0.02);
   --hover-darken: var(--hover-highlight);
+  --sel-darken: rgba(0, 0, 0, 0.08);
 
   --content-border: #cfcfcf;
   --content-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
