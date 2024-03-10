@@ -126,6 +126,8 @@ export default async function ({ addon, console }) {
         if (commentContent.classList.contains("advertising")) {
           commentContent.innerHTML = idToContent[commentContent.closest(".comment").getAttribute("id")];
           commentContent.classList.remove("advertising");
+          commentContent.role = null;
+          commentContent.tabIndex = -1;
           comment.classList.remove("contains-advertising");
 
           if (handleProfileReplyButton()) {
