@@ -35,7 +35,7 @@ button {
   box-shadow: var(--content-shadow);
 }
 .message-type-admin {
-  background: var(--yellow-opacity50);
+  background: var(--notice-background);
 }
 .message-type-admin .comment {
   background: var(--admin-comment-background);
