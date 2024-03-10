@@ -1,5 +1,5 @@
 {
-  "name": "Blur background",
+  "name": "Blur editor popup backdrop",
   "description": "Blurs the background when you are creating a new variable, list, or custom block.",
   "tags": ["theme", "editor", "codeEditor"],
   "versionAdded": "1.37.0",
