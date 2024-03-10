@@ -1,10 +1,19 @@
 export default async function ({ addon, global, console }) {
-  document.addEventListener("keydown", async (e) => {
-    if (e.key == "s") {
-      await setup();
-    }
+  const button = Object.assign(document.createElement("div"), { className: "link right mystuff egg" });
+  const link = document.createElement("a");
+  link.style.backgroundImage = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fff' d='M6.89 6.36C8.23 3.91 10 2 12 2c2 0 3.77 1.91 5.11 4.36c-.85.21-1.61.71-2.11 1.41a3.712 3.712 0 0 0-5.2-.8c-.3.22-.58.49-.8.8c-.5-.7-1.26-1.2-2.11-1.41M15 18.06l-3-3l-3 3l-3-3l-1.27 1.27a7.504 7.504 0 0 0 9.11 5.43a7.529 7.529 0 0 0 5.43-5.43L18 15.06zm-6-2.12l3-3l3 3l3-3l1.5 1.5c-.13-2.31-.7-4.58-1.69-6.68c-1.16.1-2.06 1.07-2.06 2.24h-1.5A2.25 2.25 0 0 0 12 7.75A2.25 2.25 0 0 0 9.75 10h-1.5c0-1.17-.9-2.14-2.06-2.24c-.99 2.1-1.56 4.37-1.69 6.68l1.5-1.5z'/%3E%3C/svg%3E")`;
+  link.style.backgroundRepeat = "no-repeat";
+  button.append(link);
+  button.title = "with ❤️ from the Scratch Addons team";
+  document.querySelector(".search").after(button);
+  button.addEventListener("click", async () => {
+    await setup();
   });
   async function setup() {
+    // play game_theme.mp3
+    const audio = new Audio(addon.self.dir + "/game_theme.mp3");
+    audio.play();
+    audio.loop = true;
     await wait(300);
     document.body.style.overflow = "hidden";
     // create full screen canvas
@@ -77,6 +86,7 @@ export default async function ({ addon, global, console }) {
     const brickOffsetLeft = rect.left;
 
     const bricks = [];
+    let debris = [];
 
     for (let c = 0; c < brickColumnCount; c++) {
       bricks[c] = [];
@@ -89,7 +99,7 @@ export default async function ({ addon, global, console }) {
     let lives = 3;
 
     function drawScore() {
-      ctx.font = "16px Arial";
+      ctx.font = "2rem Helvetica Neue";
       ctx.fillStyle = "#0095DD";
       ctx.fillText("Score: " + score, 8, 20);
     }
@@ -128,8 +138,14 @@ export default async function ({ addon, global, console }) {
               `.box:nth-of-type(${r + 1}) > div.box-content > div > div > div > div:nth-child(${c + 1}) > a > img`
             );
 
-            ctx.drawImage(img, brickX, brickY, r == 1 ? rect3.width : brickWidth, r == 1 ? rect3.height : brickHeight);
-
+            let image = ctx.drawImage(
+              img,
+              brickX,
+              brickY,
+              r == 1 ? rect3.width : brickWidth,
+              r == 1 ? rect3.height : brickHeight
+            );
+            bricks[c][r].image = image;
             ctx.beginPath();
 
             ctx.rect(brickX, brickY, r == 1 ? rect3.width : brickWidth, r == 1 ? rect3.height : brickHeight);
@@ -162,6 +178,15 @@ export default async function ({ addon, global, console }) {
             ) {
               dy = -dy;
               b.status--;
+              debris.push({ x: x, y: y, dy: Math.random() * 2 - 1, dx: Math.random() * 2 - 1 });
+              debris.push({ x: x + 8, y: y, dy: Math.random() * 2 - 1, dx: Math.random() * 2 - 1 });
+              debris.push({ x: x - 8, y: y, dy: Math.random() * 2 - 1, dx: Math.random() * 2 - 1 });
+              debris.push({ x: x, y: y + 8, dy: Math.random() * 2 - 1, dx: Math.random() * 2 - 1 });
+              debris.push({ x: x, y: y - 8, dy: Math.random() * 2 - 1, dx: Math.random() * 2 - 1 });
+              // play sound
+              var audio = new Audio(addon.self.dir + "/break.wav");
+              audio.play();
+
               score++;
               if (score === brickRowCount * brickColumnCount * 3) {
                 gameOver = true;
@@ -176,7 +201,7 @@ export default async function ({ addon, global, console }) {
       // draw 950 px black rectangle centered on the canvas
 
       ctx.fillStyle = "#111";
-      ctx.fillRect(canvas.width / 2 - 950 / 2, 0, 950, canvas.height);
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
     async function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -193,7 +218,7 @@ export default async function ({ addon, global, console }) {
         firstTransition = false;
       }
       collisionDetection();
-
+      renderDebris(ctx);
       if (x + dx + ballRadius > canvas.width || x + dx < ballRadius) {
         dx = -dx;
       }
@@ -228,7 +253,9 @@ export default async function ({ addon, global, console }) {
       y += dy * 1.5;
       if (gameOver) {
         canvas.remove();
+
         document.body.style.overflow = "auto";
+        audio.pause();
         if (score === brickRowCount * brickColumnCount * 3) {
           addon.tab.confirm("You won!", "Happy april fools from the Scratch Addons team!");
         } else {
@@ -266,10 +293,27 @@ export default async function ({ addon, global, console }) {
     document.addEventListener("keydown", keyDownHandler, false);
     document.addEventListener("keyup", keyUpHandler, false);
     document.addEventListener("mousemove", mouseMoveHandler, false);
+    const renderDebris = () => {
+      for (let debri of debris) {
+        // draw falling rectangles
+        ctx.beginPath();
+        ctx.fillStyle = "#fff";
+        console.log(debri.x, debri.y);
+        ctx.fillRect(debri.x, debri.y, 8, 8);
+        ctx.fill();
+        ctx.closePath();
+        // make them fall and rotate
+        debri.y += debri.dy;
+        debri.x += debri.dx;
+        debri.dy += 0.1;
+        debri.dx *= 0.99;
+      }
+    };
 
     await draw();
   }
 }
+
 const wait = (s) =>
   new Promise((resolve, reject) => {
     setTimeout(() => {
