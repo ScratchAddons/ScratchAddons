@@ -1,4 +1,4 @@
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   let loves = { name: "love" };
   let favorites = { name: "favorite" };

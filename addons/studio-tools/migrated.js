@@ -1,4 +1,4 @@
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async ({ addon, console, msg }) => {
   const { redux } = addon.tab;
   await redux.waitForState(

@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "addonAPI": ["./addon-api/content-script/typedef.js"]
+    }
+  }
+}

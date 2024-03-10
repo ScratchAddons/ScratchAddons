@@ -1,4 +1,4 @@
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, msg, console }) {
   while (true) {
     const container = await addon.tab.waitForElement("[class^=sound-editor_editor-container]", {

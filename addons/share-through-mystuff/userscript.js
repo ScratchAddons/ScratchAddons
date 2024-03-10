@@ -1,4 +1,4 @@
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   Scratch.MyStuff.ProjectThumbnailCollectionView.prototype.shared = function (project) {
     // Scratch's implementation incorrectly calls fadeOut on the entire list

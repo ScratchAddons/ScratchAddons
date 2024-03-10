@@ -1,6 +1,6 @@
 import { updateAllBlocks } from "./update-all-blocks.js";
 
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   var BlocklyInstance = await addon.tab.traps.getBlockly();
 

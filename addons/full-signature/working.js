@@ -1,4 +1,4 @@
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   let activityStream = document.querySelectorAll(".activity-stream li");
   if (activityStream.length) {

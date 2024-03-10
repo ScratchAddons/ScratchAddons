@@ -1,4 +1,4 @@
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   const spriteMeta = Object.assign(Object.create(null), {
     upload: {

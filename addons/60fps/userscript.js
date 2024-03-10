@@ -1,4 +1,4 @@
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   // TODO: test whether e.altKey is true in chromebooks when alt+clicking.
   // If so, no timeout needed, similar to mute-project addon.

@@ -1,6 +1,6 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async ({ addon, console, msg }) => {
   let recordElem;
   let isRecording = false;

@@ -1,4 +1,4 @@
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   // Wait for the select element that is the default message filtering select then remove it.
   await addon.tab.waitForElement(".select", { markAsSeen: true });

@@ -1,4 +1,4 @@
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon }) {
   async function countProjects(url, page, delta) {
     const res = await fetch(url + 40 * page);

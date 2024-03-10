@@ -1,6 +1,6 @@
 // Initial code was written by Norbiros
 
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
   document.body.addEventListener("click", (e) => {

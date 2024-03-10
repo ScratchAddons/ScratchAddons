@@ -1,6 +1,6 @@
 import { isPaused, setPaused, onPauseChanged, setup } from "../debugger/module.js";
 
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   setup(addon.tab.traps.vm);
 

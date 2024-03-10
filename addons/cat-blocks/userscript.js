@@ -3,7 +3,7 @@
  * It has been modified to work properly in our environment and fix some bugs.
  */
 
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
 

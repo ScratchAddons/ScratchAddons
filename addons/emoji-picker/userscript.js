@@ -1,6 +1,6 @@
 import { emojis, unicodeEmojis } from "./emojis.js";
 
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   let lastParent = null;
   //Functions

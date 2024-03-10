@@ -1,6 +1,6 @@
 import { addons, initialize } from "../paint-snap/compatibility.js";
 
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon }) {
   const paper = await addon.tab.traps.getPaper();
 

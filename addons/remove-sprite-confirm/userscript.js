@@ -1,4 +1,4 @@
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async ({ addon, console, msg }) => {
   if (!addon.tab.redux.state) return console.warn("Redux is not available!");
   const vm = addon.tab.traps.vm;

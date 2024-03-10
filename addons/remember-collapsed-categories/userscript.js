@@ -1,4 +1,4 @@
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon }) {
   while (true) {
     const categoryBody = await addon.tab.waitForElement('[id^="category_body_"]', {

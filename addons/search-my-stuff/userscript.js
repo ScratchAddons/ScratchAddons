@@ -1,7 +1,7 @@
 import Fuse from "../../libraries/thirdparty/cs/fuse.esm.min.js";
 import fuseOptions from "./fuse-options.js";
 
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   // Inject our search bar
   let search,

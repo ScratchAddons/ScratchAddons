@@ -1,4 +1,4 @@
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   const SHOW_PROPS_CLASS = "sa-show-sprite-properties";
   const HIDE_PROPS_CLASS = "sa-hide-sprite-properties";

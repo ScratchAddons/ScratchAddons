@@ -1,4 +1,4 @@
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async ({ addon, console }) => {
   const vm = addon.tab.traps.vm;
 

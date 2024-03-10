@@ -1,4 +1,4 @@
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   await addon.tab.waitForElement(".activity-ul li");
   let activityStream = document.querySelectorAll(".activity-ul li");

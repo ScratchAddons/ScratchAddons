@@ -1,4 +1,4 @@
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   while (true) {
     const codeBlock = await addon.tab.waitForElement("div.code", {

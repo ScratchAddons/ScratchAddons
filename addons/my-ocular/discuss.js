@@ -1,4 +1,4 @@
-/** @param {AddonAPI} */
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   let posts = document.querySelectorAll(".blockpost");
   let cache = Object.create(null);
