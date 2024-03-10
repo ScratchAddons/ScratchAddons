@@ -113,6 +113,8 @@ export default async function ({ addon, console }) {
       commentContent.innerHTML =
         blockType === "content" ? advertisingContent : blockType === "user" ? advertisingUser : advertisingSpam;
       commentContent.classList.add("advertising");
+      commentContent.role = "button";
+      commentContent.tabIndex = 0;
       commentContent.style.cursor = "pointer";
 
       if (handleProfileReplyButton()) {
