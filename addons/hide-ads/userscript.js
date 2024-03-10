@@ -110,7 +110,7 @@ export default async function ({ addon, msg, console }) {
 
       idToContent[key] = value;
 
-      commentContent.innerHTML =
+      commentContent.innerText =
         blockType === "content" ? advertisingContent : blockType === "user" ? advertisingUser : advertisingSpam;
       commentContent.classList.add("advertising");
       commentContent.role = "button";
@@ -134,7 +134,7 @@ export default async function ({ addon, msg, console }) {
             profileReplyButton.style.display = "inline";
           }
         } else {
-          commentContent.innerHTML =
+          commentContent.innerText =
             blockType === "content" ? advertisingContent : blockType === "user" ? advertisingUser : advertisingSpam;
           commentContent.classList.add("advertising");
           comment.classList.add("contains-advertising");
