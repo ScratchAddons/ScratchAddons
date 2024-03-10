@@ -5,7 +5,7 @@ export default async function ({ addon, console }) {
     if (md5 === "cd21514d0531fdffb22204e0ec5ed84a.svg" && !addon.self.disabled) {
       return _addCostume.call(
         vm,
-        "8ac8569502a1fc1a33aad0ae5786f20b.png",
+        emptyBitmap.md5,
         {
           ...emptyBitmap,
           name: costume.name,
