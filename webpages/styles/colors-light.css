@@ -15,9 +15,10 @@
   --switch-inner-background: var(--content-text);
   --tooltip-background: #f1f1f1;
   --comment-background: #f3f3f3;
+  --admin-comment-background: #ffffff7a;
   --unread-comment-background: #e4e4e4;
   --unread-comment-border: inset 0px 0px 0px 2px #f3f3f3;
-  --notice-background: rgba(253, 221, 43, 0.25);
+  --notice-background: var(--yellow-opacity50);
   --notice-text: #222;
   --notice-icon-filter: none;
   --warning-background: var(--red);

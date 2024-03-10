@@ -35,9 +35,11 @@ button {
   box-shadow: var(--content-shadow);
 }
 .message-type-admin {
-  border-color: var(--orange);
+  background: var(--yellow-opacity50);
 }
-
+.message-type-admin .comment {
+  background: var(--admin-comment-background);
+}
 .message-type-title {
   font-size: 12px;
   color: var(--content-text);

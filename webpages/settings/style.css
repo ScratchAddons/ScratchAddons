@@ -154,7 +154,7 @@ h1 {
 }
 #confirmImport,
 #applyLanguageSettingsButton {
-  border-color: var(--orange);
+  background: var(--brand-orange);
 }
 
 #search-not-found {
