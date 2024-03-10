@@ -118,6 +118,7 @@ h1 {
 }
 .number-setting .clear-button {
   border-radius: 0 4px 4px 0;
+  background: var(--input-background);
 }
 [dir="rtl"] .number-setting .clear-button {
   border-radius: 4px 0 0 4px;
