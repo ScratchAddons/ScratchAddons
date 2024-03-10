@@ -288,6 +288,7 @@ body.iframe .search-box input {
   margin: 5px;
   cursor: pointer;
   user-select: none;
+  z-index: 7;
 }
 .categories-shrink img {
   vertical-align: middle;

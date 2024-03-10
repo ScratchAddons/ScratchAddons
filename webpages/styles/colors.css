@@ -34,7 +34,7 @@
   --admin-comment-background: #0000007a;
   --unread-comment-background: #0d0d0d;
   --unread-comment-border: inset 0px 0px 0px 2px #161616;
-  --notice-background: var(--yellow-opacity50);
+  --notice-background: rgb(253 221 43 / 23%);
   --notice-border: var(--yellow-opacity50);
   --notice-text: #fff;
   --notice-icon-filter: brightness(0) invert(1);
