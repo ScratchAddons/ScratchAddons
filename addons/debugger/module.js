@@ -413,7 +413,10 @@ export const setup = (addon) => {
   // All instances of AudioEngine use the same AudioContext by default,
   // which means that opening the sound library resumes the VM's context. See #6847.
   // This can be fixed by creating a separate context from the sound library.
-  addon.tab.waitForElement("[class*='play-button_play-button_']").then(() => {
+  addon.tab.waitForElement("[class*='play-button_play-button_']", {
+    reduxEvents: ["scratch-gui/modals/OPEN_MODAL"],
+  })
+  .then(() => {
     const soundTab = document.querySelector(
       "[class*='gui_tab-panel_']:nth-child(4) [class*='asset-panel_detail-area_']"
     );
