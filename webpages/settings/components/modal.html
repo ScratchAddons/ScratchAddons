@@ -1,5 +1,5 @@
 <template>
-  <div v-cloak v-show="isOpen" :class=["modal"]>
+  <div v-cloak v-show="isOpen" :class=["modal", {"visible": if()}]>
     <div class="modal-content" v-click-outside="clickOutside">
       <div>
         <img @click="isOpen = false" class="close" :title="msg('close')" src="../../../images/icons/close.svg" />
