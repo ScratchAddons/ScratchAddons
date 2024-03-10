@@ -5,12 +5,12 @@
 
   --page-background: #efefef;
   --content-background: #ffffff;
-  --navigation-background: #ecebeb;
-  --search-toolbar-background: #f5f5f5;
+  --navigation-background: #f3f3f3;
+  --search-toolbar-background: #eeeeee;
   --button-background: #e1e1e1;
   --button-hover-background: #dcdcdc;
   --tab-hover-underline: #c8c8c8;
-  --input-background: #f0f0f0;
+  --input-background: #e6e6e6;
   --search-input-background: #ffffff;
   --switch-inner-background: var(--content-text);
   --tooltip-background: #f1f1f1;
