@@ -51,7 +51,7 @@ button {
   user-select: none;
 }
 .message-type-details {
-  padding: 10px;
+  padding: 0 10px 10px 10px;
 }
 .fullscreen .message-type-title {
   padding: 10px;
