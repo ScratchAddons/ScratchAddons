@@ -3,7 +3,7 @@
  * and for hiding the scrollbar in full screen.
  */
 
-/** @param {import("addonAPI").AddonAPI} */
+/** @param {AddonAPI} */
 export default async function ({ addon, console }) {
   // "Browser fullscreen" is defined as the mode that hides the browser UI.
   function updateBrowserFullscreen() {

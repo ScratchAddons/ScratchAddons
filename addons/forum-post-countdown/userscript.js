@@ -1,4 +1,4 @@
-/** @param {import("addonAPI").AddonAPI} */
+/** @param {AddonAPI} */
 export default async function ({ addon, msg }) {
   const submitButton = document.querySelector("#djangobbwrap .form-submit [type=submit]");
 

@@ -1,6 +1,6 @@
 import * as sharedModule from "./module.js";
 
-/** @param {import("addonAPI").AddonAPI} */
+/** @param {AddonAPI} */
 export default async function ({ addon, console }) {
   const update = () => {
     sharedModule.setDuplication(!addon.self.disabled);

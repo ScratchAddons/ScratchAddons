@@ -11,7 +11,7 @@ const removeAllChildren = (element) => {
   }
 };
 
-/** @param {import("addonAPI").AddonAPI} */
+/** @param {AddonAPI} */
 export default async function ({ addon, console, msg }) {
   setup(addon.tab.traps.vm);
 

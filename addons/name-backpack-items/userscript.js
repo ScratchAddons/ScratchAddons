@@ -1,4 +1,4 @@
-/** @param {import("addonAPI").AddonAPI} */
+/** @param {AddonAPI} */
 export default async function ({ addon, msg, console }) {
   const oldSend = XMLHttpRequest.prototype.send;
 

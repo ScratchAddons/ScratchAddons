@@ -1,4 +1,4 @@
-/** @param {import("addonAPI").AddonAPI} */
+/** @param {AddonAPI} */
 export default async function (
   /** @type {import("../../addon-api/content-script/typedef").UserscriptUtilities} */ { addon, msg, console }
 ) {

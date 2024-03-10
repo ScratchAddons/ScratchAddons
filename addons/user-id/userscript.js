@@ -1,4 +1,4 @@
-/** @param {import("addonAPI").AddonAPI} */
+/** @param {AddonAPI} */
 export default function ({ addon }) {
   const usernameHeader = document.querySelector(".header-text").firstElementChild;
   const userId = Object.assign(document.createElement("span"), {

@@ -1,6 +1,6 @@
 import { onPauseChanged, isPaused } from "./module.js";
 
-/** @param {import("addonAPI").AddonAPI} */
+/** @param {AddonAPI} */
 export default async function createPerformanceTab({ debug, addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 

@@ -8,7 +8,7 @@ const concatInPlace = (copyInto, copyFrom) => {
   }
 };
 
-/** @param {import("addonAPI").AddonAPI} */
+/** @param {AddonAPI} */
 export default async function createThreadsTab({ debug, addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 

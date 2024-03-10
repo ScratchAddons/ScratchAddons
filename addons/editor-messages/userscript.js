@@ -1,4 +1,4 @@
-/** @param {import("addonAPI").AddonAPI} */
+/** @param {AddonAPI} */
 export default async function ({ addon, console, msg }) {
   const messages = document.createElement("a");
   messages.href = "/messages/";
