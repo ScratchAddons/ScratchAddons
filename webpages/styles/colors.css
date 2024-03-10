@@ -43,7 +43,7 @@
   --warning-icon-filter: brightness(0) invert(1);
   --info-border: var(--content-separator);
   --update-background: var(--navigation-background);
-  --update-bo18rder: var(--purple-opacity75);
+  --update-border: var(--purple-opacity75);
   --update-text: #fff;
 
   --modal-overlay: rgba(0, 0, 0, 0.65);
