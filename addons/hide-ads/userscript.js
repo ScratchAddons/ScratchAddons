@@ -31,7 +31,7 @@ export default async function ({ addon, msg, console }) {
   function filterSpamComments(content) {
     //These are just made by chatGPT after giving it a lot of example comments
     const repeatedCharactersRegex = /(.)\1{20,}/;
-    const meaninglessRegex = /^[\W\s]*$/;
+    const meaninglessRegex = /^(?:(?!\p{L})(?!\d).)+$/u;
 
     if (repeatedCharactersRegex.test(content)) {
       return true;
