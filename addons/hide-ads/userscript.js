@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, msg, console }) {
   let url;
   let contentClass;
   let containerClass;
@@ -24,9 +24,9 @@ export default async function ({ addon, console }) {
     userClass = ".name";
   }
 
-  const advertisingContent = "[Marked as advertising]";
-  const advertisingUser = "[User's messages blocked]";
-  const advertisingSpam = "[Marked as general spam]";
+  const advertisingContent = msg("ad");
+  const advertisingUser = msg("user");
+  const advertisingSpam = msg("spam");
 
   function filterSpamComments(content) {
     //These are just made by chatGPT after giving it a lot of example comments
