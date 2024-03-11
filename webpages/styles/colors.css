@@ -19,14 +19,14 @@
   --white-text: #fff;
 
   --page-background: #181818;
-  --content-background: #272727;
-  --navigation-background: #333;
+  --content-background: #292929;
+  --navigation-background: #1c1c1c;
   --search-toolbar-background: #1c1c1c;
   --button-background: #181818;
   --button-hover-background: #1a1a1a;
   --tab-hover-underline: #1e1e1e;
-  --input-background: #1d1d1d;
-  --search-input-background: #272727;
+  --input-background: #212121;
+  --search-input-background: var(--content-background);
   --switch-border: #808080;
   --switch-inner-background: #eee;
   --tooltip-background: #000;
