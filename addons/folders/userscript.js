@@ -54,6 +54,15 @@ const ensureNotReserved = (name) => {
 let currentSpriteFolder = null;
 let currentAssetFolder = null;
 
+/**
+ * Used for compatibility with other addons that trap the add costume or add sound functions.
+ * By default new assets are added to the folder that the user currently has open. This gets
+ * encoded in the name of the asset, but that information may not be added until late in the
+ * process. If you want to guarantee that your addon is aware of the asset name after
+ * accounting for folders, then pass it into this function. The asset will be modified in-place.
+ * It is safe to call this multiple times with the same asset.
+ * @param {{name: string}} asset a sound or costume asset
+ */
 export const addDefaultAssetFolderIfMissing = (asset) => {
   if (asset && currentAssetFolder !== null && typeof getFolderFromName(asset.name) !== "string") {
     asset.name = setFolderOfName(asset.name, currentAssetFolder);
