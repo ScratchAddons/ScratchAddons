@@ -2,8 +2,8 @@ export default async function ({ addon }) {
   let originalBackpack;
 
   // Event listeners that add dynamic enable/disable + setting change
-  addon.settings.addEventListener("change", () => changeBackpackVisibility(addon));
-  addon.self.addEventListener("reenabled", () => changeBackpackVisibility(addon));
+  addon.settings.addEventListener("change", () => changeBackpackVisibility());
+  addon.self.addEventListener("reenabled", () => changeBackpackVisibility());
   addon.self.addEventListener("disabled", () => {
     moveResizeButtons(0);
     originalBackpack.style.display = "block";
