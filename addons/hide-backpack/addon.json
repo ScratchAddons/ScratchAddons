@@ -45,6 +45,6 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "updateUserstylesOnSettingsChange": true,
-  "versionAdded": "1.36.0",
+  "versionAdded": "1.37.0",
   "enabledByDefault": false
 }
