@@ -1,4 +1,4 @@
-export default async function ({ addon }) {
+export default async function ({ addon, console }) {
   let originalBackpack;
 
   // Event listeners that add dynamic enable/disable + setting change
@@ -65,7 +65,7 @@ function toggleBackpack() {
     // Backpack is open and will be closed
     document.body.classList.remove("sa-backpack-open");
   } else {
-    // Bacpack is closed and will be opened
+    // Backpack is closed and will be opened
     document.body.classList.add("sa-backpack-open");
   }
   document.querySelector("[class^=backpack_backpack-header_]").click();
