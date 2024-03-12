@@ -679,7 +679,8 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
           // Transition v1.36 to v1.37
           if (!settings.hideToolbar) {
             settings.toolbar = "show";
-          } else if (settings?.hoverToolbar) {
+          } else if (!!settings.hoverToolbar) {
+            // hoverToolbar doesn't exist pre-1.36
             settings.toolbar = "hover";
           } else {
             settings.toolbar = "hide";
