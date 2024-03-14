@@ -1,13 +1,6 @@
 {
-  "name": "Hide backpack",
-  "description": "Removes the backpack from the bottom of the editor or adds a small button to open it.",
-  "info": [
-    {
-      "type": "warning",
-      "text": "If you disable \"show button\" setting, you have no access to backpack!",
-      "id": "disable"
-    }
-  ],
+  "name": "Replace backpack bar with button",
+  "description": "Replaces the backpack bar along the bottom of the editor with a button next to the zoom controls.",
   "credits": [
     {
       "name": "Norbiros",
@@ -18,14 +11,6 @@
       "link": "https://scratch.mit.edu/users/Maximouse/"
     }
   ],
-  "settings": [
-    {
-      "name": "Show small backpack icon",
-      "id": "showButton",
-      "type": "boolean",
-      "default": true
-    }
-  ],
   "userstyles": [
     {
       "url": "border.css",
@@ -33,10 +18,7 @@
     },
     {
       "url": "button.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "showButton": true }
-      }
+      "matches": ["projects"]
     }
   ],
   "userscripts": [
@@ -48,7 +30,6 @@
   "tags": ["editor", "codeEditor"],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.37.0",
   "enabledByDefault": false
 }

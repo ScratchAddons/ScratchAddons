@@ -1,14 +1,12 @@
 export default async function ({ addon, console }) {
   let originalBackpack;
 
-  // Event listeners that add dynamic enable/disable + setting change
-  addon.settings.addEventListener("change", () => changeBackpackVisibility());
+  // Event listeners that add dynamic enable/disable
   addon.self.addEventListener("reenabled", () => changeBackpackVisibility());
   addon.self.addEventListener("disabled", () => {
     moveResizeButtons(0);
     originalBackpack.style.display = "block";
     window.dispatchEvent(new Event("resize"));
-    document.querySelector(".sa-backpack-button").style.display = "none";
   });
 
   while (true) {
@@ -22,15 +20,10 @@ export default async function ({ addon, console }) {
   function changeBackpackVisibility() {
     originalBackpack.style.display = "none";
     let backpackEl = document.querySelector(".sa-backpack-button");
-    if (addon.settings.get("showButton")) {
-      if (backpackEl) {
-        moveResizeButtons(36);
-      } else {
-        createBackpackButton(addon);
-      }
+    if (backpackEl) {
+      moveResizeButtons(36);
     } else {
-      if (isBackpackOpen()) originalBackpack.click();
-      moveResizeButtons(0);
+      createBackpackButton(addon);
     }
     document.body.classList.toggle("sa-backpack-open", isBackpackOpen());
     window.dispatchEvent(new Event("resize"));
@@ -45,7 +38,8 @@ function isBackpackOpen() {
 function createBackpackButton(addon) {
   let backpackButton = document.createElement("div");
   backpackButton.classList.add("sa-backpack-button");
-  backpackButton.style.display = "none"; // overridden by userstyle if the setting is enabled
+  // Can't use displayNoneWhileDisabled because it updates after the resize event
+  backpackButton.style.display = "none"; // overridden by userstyle if the addon is enabled
   backpackButton.title = addon.tab.scratchMessage("gui.backpack.header");
   backpackButton.addEventListener("click", toggleBackpack);
   backpackButton.appendChild(
