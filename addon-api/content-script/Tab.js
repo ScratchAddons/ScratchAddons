@@ -36,8 +36,8 @@ export default class Tab extends Listenable {
       this._clientVersion = document.querySelector("meta[name='format-detection']")
         ? "scratch-www"
         : document.querySelector("script[type='text/javascript']")
-          ? "scratchr2"
-          : null;
+        ? "scratchr2"
+        : null;
     return this._clientVersion;
   }
   /**
