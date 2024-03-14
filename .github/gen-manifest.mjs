@@ -41,7 +41,8 @@ export default (env, manifest) => {
   PERMISSIONS_ALWAYS_IGNORED.forEach((permToRemove) => removePermission(permToRemove));
 
   switch (env) {
-    case "chrome": { // Chrome and Edge
+    case "chrome": {
+      // Chrome and Edge
       delete manifest.browser_specific_settings;
       delete manifest.background.scripts; // Might possibly be `background.page` instead
 
