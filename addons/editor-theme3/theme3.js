@@ -65,6 +65,77 @@ const categories = [
   saCategory,
 ];
 
+// From scratch-gui/src/lib/themes/default/index.js
+const defaultColors = {
+  motion: {
+    primary: "#4C97FF",
+    secondary: "#4280D7",
+    tertiary: "#3373CC",
+    quaternary: "#3373CC",
+  },
+  looks: {
+    primary: "#9966FF",
+    secondary: "#855CD6",
+    tertiary: "#774DCB",
+    quaternary: "#774DCB",
+  },
+  sounds: {
+    primary: "#CF63CF",
+    secondary: "#C94FC9",
+    tertiary: "#BD42BD",
+    quaternary: "#BD42BD",
+  },
+  control: {
+    primary: "#FFAB19",
+    secondary: "#EC9C13",
+    tertiary: "#CF8B17",
+    quaternary: "#CF8B17",
+  },
+  event: {
+    primary: "#FFBF00",
+    secondary: "#E6AC00",
+    tertiary: "#CC9900",
+    quaternary: "#CC9900",
+  },
+  sensing: {
+    primary: "#5CB1D6",
+    secondary: "#47A8D1",
+    tertiary: "#2E8EB8",
+    quaternary: "#2E8EB8",
+  },
+  pen: {
+    primary: "#0fBD8C",
+    secondary: "#0DA57A",
+    tertiary: "#0B8E69",
+    quaternary: "#0B8E69",
+  },
+  operators: {
+    primary: "#59C059",
+    secondary: "#46B946",
+    tertiary: "#389438",
+    quaternary: "#389438",
+  },
+  data: {
+    primary: "#FF8C1A",
+    secondary: "#FF8000",
+    tertiary: "#DB6E00",
+    quaternary: "#DB6E00",
+  },
+  data_lists: {
+    primary: "#FF661A",
+    secondary: "#FF5500",
+    tertiary: "#E64D00",
+    quaternary: "#E64D00",
+  },
+  more: {
+    primary: "#FF6680",
+    secondary: "#FF4D6A",
+    tertiary: "#FF3355",
+    quaternary: "#FF3355",
+  },
+  text: "#FFFFFF",
+};
+
 // From scratch-blocks/media/dropdown-arrow.svg
 const arrowPath =
   "M6.36,7.79a1.43,1.43,0,0,1-1-.42L1.42,3.45a1.44,1.44,0,0,1,0-2c0.56-.56,9.31-0.56,9.87,0a1.44,1.44,0,0,1,0,2L7.37,7.37A1.43,1.43,0,0,1,6.36,7.79Z";
@@ -73,21 +144,14 @@ const arrowShadowPath =
 const arrowShadowColor = "#231f20";
 
 export default async function ({ addon, console, msg }) {
-  const Blockly = await addon.tab.traps.getBlockly();
+  // Will be replaced with the current Scratch theme's colors when entering the editor
+  let originalColors = defaultColors;
 
-  const originalColors = JSON.parse(JSON.stringify(Blockly.Colours));
-  originalColors.sa = {
-    primary: "#29beb8",
-    secondary: "#3aa8a4",
-    tertiary: "#3aa8a4",
-  };
-
-  let textModeSetting = addon.settings.get("text");
   const textMode = () => {
     if (addon.self.disabled) {
       return originalColors.text === "#000000" ? "black" : "white";
     }
-    return textModeSetting;
+    return addon.settings.get("text");
   };
   const isColoredTextMode = () => textMode() === "colorOnWhite" || textMode() === "colorOnBlack";
 
@@ -111,6 +175,84 @@ export default async function ({ addon, console, msg }) {
     if (textMode() === "black") return multiply(addon.settings.get(category.settingId), { r: 0.65, g: 0.65, b: 0.65 });
     return multiply(addon.settings.get(category.settingId), { r: 0.8, g: 0.8, b: 0.8 });
   };
+  const uncoloredTextColor = () => {
+    return {
+      white: "#ffffff",
+      black: "#000000",
+      colorOnWhite: "#000000",
+      colorOnBlack: "#ffffff",
+    }[textMode()];
+  };
+
+  const updateMonitorColors = () => {
+    const allMonitors = addon.tab.redux.state.scratchGui.monitors.valueSeq();
+    const visibleMonitors = allMonitors.filter((monitor) => monitor.visible);
+    const monitorElements = document.querySelectorAll("[class*='monitor_monitor-container_']");
+    // The order of monitors in the Redux state and in the DOM is the same
+    visibleMonitors.forEach((monitor, i) => {
+      const opcodePrefix = monitor.opcode.split("_")[0];
+      let colorId =
+        {
+          sound: "sounds",
+          procedures: "more",
+        }[opcodePrefix] || opcodePrefix;
+      if (monitor.opcode === "data_listcontents") colorId = "data_lists";
+      let category = categories.find((category) => category.colorId === colorId);
+      if (!category) category = extensionsCategory;
+      for (const value of monitorElements[i].querySelectorAll(`
+        [class*="monitor_value_"],
+        [class*="monitor_large-value_"],
+        [class*="monitor_list-value_"]
+      `)) {
+        if (addon.settings.get("monitors") || addon.self.disabled) {
+          value.style.backgroundColor = primaryColor(category);
+          value.style.color = isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor();
+          // Border color for list items
+          if (textMode() === "colorOnBlack") value.style.borderColor = "rgba(255, 255, 255, 0.15)";
+          else value.style.removeProperty("border-color");
+        } else {
+          /* If the addon is enabled but the monitors setting is disabled,
+             the default colors are used even if the Scratch theme is set to high contrast. */
+          value.style.backgroundColor = defaultColors[category.colorId].primary;
+          value.style.color = defaultColors.text;
+          value.style.removeProperty("border-color");
+        }
+      }
+    });
+  };
+  addon.tab.redux.initialize();
+  updateMonitorColors();
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (
+      [
+        "scratch-gui/mode/SET_PLAYER",
+        "fontsLoaded/SET_FONTS_LOADED",
+        "scratch-gui/locales/SELECT_LOCALE",
+        "scratch-gui/theme/SET_THEME",
+        "scratch-gui/monitors/UPDATE_MONITORS",
+      ].includes(e.detail.action.type)
+    ) {
+      // Timeout to wait until the elements are rendered
+      setTimeout(updateMonitorColors, 0);
+    }
+  });
+  addon.settings.addEventListener("change", updateMonitorColors);
+  addon.self.addEventListener("disabled", updateMonitorColors);
+  addon.self.addEventListener("reenabled", updateMonitorColors);
+
+  // Blockly is only available in the editor
+  // Code that needs to work on the project page must be above this line
+  const Blockly = await addon.tab.traps.getBlockly();
+
+  originalColors = JSON.parse(JSON.stringify(Blockly.Colours));
+  originalColors.sa = {
+    primary: "#29beb8",
+    secondary: "#3aa8a4",
+    tertiary: "#3aa8a4",
+  };
+
+  const originalNumpadDeleteIcon = Blockly.FieldNumber.NUMPAD_DELETE_ICON;
+
   const fieldBackground = (category) => {
     // Background color for open dropdowns and (in some textModes) Boolean inputs
     // The argument can be a block, field, or category
@@ -136,14 +278,6 @@ export default async function ({ addon, console, msg }) {
     if (textMode() === "black") return "#000000";
     if (field) return field.sourceBlock_.getColourTertiary();
     return "#000000";
-  };
-  const uncoloredTextColor = () => {
-    return {
-      white: "#ffffff",
-      black: "#000000",
-      colorOnWhite: "#000000",
-      colorOnBlack: "#ffffff",
-    }[textMode()];
   };
   const otherColor = (settingId, colorId) => {
     if (addon.self.disabled) return originalColors[colorId];
@@ -255,7 +389,25 @@ export default async function ({ addon, console, msg }) {
     oldFieldTextInputInit.call(this);
     if (this.sourceBlock_.isShadow()) return;
     // Labels in custom block editor
-    this.box_.setAttribute("fill", fieldBackground(this));
+    this.box_.setAttribute("fill", isColoredTextMode() ? fieldBackground(this) : this.sourceBlock_.getColourTertiary());
+  };
+
+  const oldFieldTextInputRemovableShowEditor = Blockly.FieldTextInputRemovable.prototype.showEditor_;
+  Blockly.FieldTextInputRemovable.prototype.showEditor_ = function () {
+    oldFieldTextInputRemovableShowEditor.call(this);
+    if (!this.sourceBlock_.isShadow()) {
+      // Labels in custom block editor
+      Blockly.WidgetDiv.DIV.classList.add("sa-theme3-editable-label");
+    }
+  };
+
+  const oldFieldNumberUpdateDisplay = Blockly.FieldNumber.updateDisplay_;
+  Blockly.FieldNumber.updateDisplay_ = function (...args) {
+    /* Called when editing a number input using the numpad. Scratch's implementation
+       only updates the HTML input. The addon hides the HTML input, so the field itself
+       needs to be updated to make the change visible. */
+    oldFieldNumberUpdateDisplay.call(this, ...args);
+    Blockly.FieldNumber.activeField_.onHtmlInputChange_(new Event(""));
   };
 
   const oldFieldImageSetValue = Blockly.FieldImage.prototype.setValue;
@@ -271,7 +423,7 @@ export default async function ({ addon, console, msg }) {
       }
     } else {
       const iconsToReplace = ["repeat.svg", "rotate-left.svg", "rotate-right.svg"];
-      const iconName = src.split("/").at(-1);
+      const iconName = src.split("/")[src.split("/").length - 1];
       if (iconsToReplace.includes(iconName)) {
         src = `${iconPath()}/${iconName}`;
       }
@@ -389,8 +541,6 @@ export default async function ({ addon, console, msg }) {
   const updateColors = () => {
     const vm = addon.tab.traps.vm;
 
-    textModeSetting = addon.settings.get("text");
-
     for (const category of categories) {
       // CSS variables are used for compatibility with other addons
       const prefix = `--editorTheme3-${category.colorId}`;
@@ -417,6 +567,10 @@ export default async function ({ addon, console, msg }) {
     Blockly.Colours.textField = otherColor("input-color", "textField");
     if (textMode() === "colorOnWhite") Blockly.Colours.fieldShadow = "rgba(0, 0, 0, 0.15)";
     else Blockly.Colours.fieldShadow = originalColors.fieldShadow;
+    Blockly.Colours.text = uncoloredTextColor(); // used by editor-colored-context-menus
+
+    const safeTextColor = encodeURIComponent(uncoloredTextColor());
+    Blockly.FieldNumber.NUMPAD_DELETE_ICON = originalNumpadDeleteIcon.replace("white", safeTextColor);
 
     const workspace = Blockly.getMainWorkspace();
     const flyout = workspace.getFlyout();
@@ -427,10 +581,12 @@ export default async function ({ addon, console, msg }) {
       vm.emitWorkspaceUpdate();
     }
     if (!flyout || !toolbox) return;
+    Blockly.Events.disable();
     const flyoutWorkspace = flyout.getWorkspace();
     Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
     toolbox.populate_(workspace.options.languageTree);
     workspace.toolboxRefreshEnabled_ = true;
+    Blockly.Events.enable();
   };
 
   updateColors();
@@ -492,14 +648,14 @@ export default async function ({ addon, console, msg }) {
     const managedBySa = elementToClone.cloneNode(true);
     addon.tab.displayNoneWhileDisabled(managedBySa, { display: "block" });
     managedBySa.classList.add("sa-theme3-managed");
-    managedBySa.querySelector("div span").textContent = msg("/global/meta/managedBySa");
+    managedBySa.querySelector("div span").textContent = msg("/_general/meta/managedBySa");
     managedBySa.querySelector("img[class*=settings-menu_icon_]").src = SA_ICON_URL;
 
     const addonSettingsLink = elementToClone.cloneNode(true);
     addon.tab.displayNoneWhileDisabled(addonSettingsLink, { display: "block" });
     addonSettingsLink.classList.add("sa-theme3-link");
     addonSettingsLink.classList.add(addon.tab.scratchClass("menu_menu-section") || "_");
-    addonSettingsLink.querySelector("div span").textContent = msg("/global/meta/addonSettings");
+    addonSettingsLink.querySelector("div span").textContent = msg("/_general/meta/addonSettings");
     addonSettingsLink.querySelector("img[class*=settings-menu_icon_]").src = SA_ICON_URL;
     const addonSettingsImg = document.createElement("img");
     addonSettingsImg.classList.add("sa-theme3-new-tab");

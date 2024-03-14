@@ -1,0 +1,10 @@
+[class*="save-status_save-now"] {
+  height: 100%;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+}
+
+[class*="save-status_save-now"]:hover {
+  background-color: var(--editorDarkMode-menuBar-border, hsla(0, 0%, 0%, 0.15));
+}

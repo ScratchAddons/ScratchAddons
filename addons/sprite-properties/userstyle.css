@@ -10,7 +10,9 @@
   border: none;
 }
 
-[class^="sprite-selector_scroll-wrapper_"] {
+[class^="sprite-selector_scroll-wrapper_"],
+/* Also take full height if `sprite-properties` is hiding the properties (specificity) */
+.sa-hide-sprite-properties [class^="sprite-selector_scroll-wrapper_"] {
   height: 100%;
   transition-property: height;
   transition-duration: var(--spriteProperties-transitionDuration);
@@ -86,6 +88,7 @@
   justify-content: center;
   align-items: center;
   border: none;
+  margin-left: auto;
   background-color: transparent;
   user-select: none;
 }

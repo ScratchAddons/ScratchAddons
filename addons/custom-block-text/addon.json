@@ -1,7 +1,7 @@
 {
   "name": "Customizable block text style",
-  "description": "Changes the thickness of the text on blocks and optionally adds a text shadow.",
-  "tags": ["editor", "codeEditor", "featured"],
+  "description": "Lets you customize the style of text on blocks, including adjusting the size, using bold text, or adding a shadow.",
+  "tags": ["editor", "codeEditor", "featured", "theme"],
   "credits": [
     {
       "name": "Secret-chest",
@@ -10,21 +10,27 @@
     {
       "name": "_nix",
       "link": "https://github.com/towerofnix"
-    }
-  ],
-  "userstyles": [
-    {
-      "url": "text-bold.css",
-      "matches": ["projects"],
-      "if": { "settings": { "bold": true } }
     },
     {
-      "url": "text-shadow.css",
-      "matches": ["projects"],
-      "if": { "settings": { "shadow": true } }
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
     }
   ],
   "settings": [
+    {
+      "name": "Text size (%)",
+      "id": "size",
+      "type": "integer",
+      "min": 75,
+      "max": 200,
+      "default": 100
+    },
     {
       "name": "Bold text",
       "id": "bold",
@@ -40,7 +46,11 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.24.0",
+  "latestUpdate": {
+    "version": "1.35.0",
+    "newSettings": ["size"],
+    "isMajor": true
+  },
   "enabledByDefault": false
 }

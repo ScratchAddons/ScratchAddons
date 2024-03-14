@@ -146,7 +146,7 @@ export default async function ({ addon, console, msg }) {
     },
   };
 
-  // https://github.com/LLK/scratch-gui/blob/develop/src/components/asset-panel/icon--sound.svg
+  // https://github.com/scratchfoundation/scratch-gui/blob/develop/src/components/asset-panel/icon--sound.svg
   const imageIconSource = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="100px" height="100px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <g id="Sound" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -354,7 +354,7 @@ export default async function ({ addon, console, msg }) {
   }
 
   const patchSortableHOC = (SortableHOC, type) => {
-    // SortableHOC should be: https://github.com/LLK/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/lib/sortable-hoc.jsx#L8
+    // SortableHOC should be: https://github.com/scratchfoundation/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/lib/sortable-hoc.jsx#L8
 
     const itemCache = new Cache();
     const folderItemCache = new Cache();
@@ -993,6 +993,14 @@ export default async function ({ addon, console, msg }) {
         }
       }
       return originalInstallTargets.call(this, ...args).then((r) => {
+        fixTargetOrder();
+        return r;
+      });
+    };
+
+    const originalDuplicateSprite = vm.duplicateSprite;
+    vm.duplicateSprite = function (...args) {
+      return originalDuplicateSprite.call(this, ...args).then((r) => {
         fixTargetOrder();
         return r;
       });

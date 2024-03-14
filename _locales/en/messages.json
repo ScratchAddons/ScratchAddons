@@ -242,15 +242,15 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_33_2": {
-    "message": "Scratch just released an update that changes some of the colors around the website. If you'd like to update your settings to use these new colors, go back, or otherwise customize the colors, you can reset or change any themes from $1.",
+  "extensionUpdateInfo1_v1_36": {
+    "message": "New addon: \"rearrangeable custom block inputs\", which allows rearranging custom block parameters on the \"Make a block\" screen. Go to $1 to enable it.",
     "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_33_2": {
-    "message": "Scratch Addons' developers have been working hard to support the changes, but you might still experience small bugs for some time."
+  "extensionUpdateInfo2_v1_36": {
+    "message": "Other new addons added this update are \"customizable menu bar\", \"place backpack code at mouse\", and \"square block text inputs\"."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",

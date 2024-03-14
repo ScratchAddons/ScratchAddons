@@ -36,8 +36,8 @@ export default class Tab extends Listenable {
       this._clientVersion = document.querySelector("meta[name='format-detection']")
         ? "scratch-www"
         : document.querySelector("script[type='text/javascript']")
-        ? "scratchr2"
-        : null;
+          ? "scratchr2"
+          : null;
     return this._clientVersion;
   }
   /**
@@ -207,6 +207,11 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get editorMode() {
+    if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601") {
+      // Note that scratch-gui does not change the URL when going fullscreen.
+      if (this.redux.state?.scratchGui?.mode?.isFullScreen) return "fullscreen";
+      return "editor";
+    }
     const pathname = location.pathname.toLowerCase();
     const split = pathname.split("/").filter(Boolean);
     if (!split[0] || split[0] !== "projects") return null;
@@ -354,7 +359,7 @@ export default class Tab extends Listenable {
    * @type {string}
    */
   get direction() {
-    // https://github.com/LLK/scratch-l10n/blob/master/src/supported-locales.js
+    // https://github.com/scratchfoundation/scratch-l10n/blob/master/src/supported-locales.js
     const rtlLocales = ["ar", "ckb", "fa", "he"];
     const lang = scratchAddons.globalState.auth.scratchLang.split("-")[0];
     return rtlLocales.includes(lang) ? "rtl" : "ltr";
@@ -605,6 +610,23 @@ export default class Tab extends Listenable {
             })()
           );
         },
+        from: () => [],
+        until: () => [],
+      },
+      afterProfileCountry: {
+        element: () =>
+          q(".shared-after-country-space") ||
+          (() => {
+            const wrapper = Object.assign(document.createElement("div"), {
+              className: "shared-after-country-space",
+            });
+
+            wrapper.style.display = "inline-block";
+
+            document.querySelector(".location").appendChild(wrapper);
+
+            return wrapper;
+          })(),
         from: () => [],
         until: () => [],
       },
