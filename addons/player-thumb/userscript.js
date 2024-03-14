@@ -6,14 +6,16 @@ export default async function ({ addon, console }) {
   const thumb = document.createElement("img");
   thumb.src = thumbUrl;
   thumb.id = "sa-project-thumb";
-  thumb.classList.add("sa-project-thumb");
+  thumb.className = "sa-project-thumb";
 
   const stageWrapper = await addon.tab.waitForElement('div[class*="stage-wrapper_stage-wrapper_"]');
+  const alerts = document.querySelector(".project-info-alerts");
 
   if (addon.settings.get("loading")) {
     const LoaderBackground = stageWrapper.querySelector('[class*="loader_background_"]');
     stageWrapper.insertBefore(thumb, LoaderBackground);
     thumb.classList.add("sa-project-thumb-loading");
+    alerts.style.display = "none";
   }
 
   addon.tab.redux.initialize();
@@ -24,6 +26,7 @@ export default async function ({ addon, console }) {
       const stage = document.querySelector('div[class*="stage_stage"]');
       const greenFlagOverlay = stage.querySelector('[class*="stage_green-flag-overlay-wrapper_"]');
       stage.insertBefore(thumb, greenFlagOverlay);
+      alerts.style.display = "flex";
     }
     if (e.detail.action.type == "scratch-gui/vm-status/SET_STARTED_STATE") {
       document.getElementById("sa-project-thumb").remove();

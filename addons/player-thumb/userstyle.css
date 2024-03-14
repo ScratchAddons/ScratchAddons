@@ -7,4 +7,5 @@
   width: calc(100% - 2px);
   height: calc(100% - 2px);
   border-radius: calc(0.5rem - 1px);
+  background-color: var(--darkWww-page, #fcfcfc)
 }
