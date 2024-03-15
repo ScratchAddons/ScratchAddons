@@ -13,8 +13,10 @@ export default async function ({ addon, console }) {
 
   if (addon.settings.get("loading")) {
     const LoaderBackground = stageWrapper.querySelector('[class*="loader_background_"]');
-    stageWrapper.insertBefore(thumb, LoaderBackground);
+    // Set with JS to ensure the background color doesn't change before the image loads
+    LoaderBackground.style.backgroundColor = "rgba(0, 0, 0, 0.25)";
     thumb.classList.add("sa-project-thumb-loading");
+    stageWrapper.insertBefore(thumb, LoaderBackground);
     alerts.style.display = "none";
   }
 
