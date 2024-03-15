@@ -4,7 +4,7 @@
   right: 0;
   width: 60px;
   height: 148px;
-  z-index: 21;
+  z-index: 1;
 }
 .blocklyZoom > * {
   transition: transform var(--sa-custom-zoom-speed, 0) ease-in-out;
