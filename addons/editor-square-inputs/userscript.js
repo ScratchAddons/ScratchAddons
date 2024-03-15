@@ -7,6 +7,12 @@ export default async function ({ addon }) {
   const opcodeToSettings = {
     text: "text",
     argument_editor_string_number: "text",
+    math_number: "number",
+    math_integer: "number",
+    math_whole_number: "number",
+    math_positive_number: "number",
+    math_angle: "number",
+    note: "number",
     colour_picker: "color",
   };
 
