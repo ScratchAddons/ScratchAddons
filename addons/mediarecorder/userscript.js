@@ -24,7 +24,7 @@ export default async ({ addon, console, msg }) => {
 
   const getProjectId = () => {
     const id = parseInt(window.location.pathname.split("/")[2]);
-    return id ? id : 0;
+    return id || 0;
   };
 
   const storageSettings = getStoredOptions();
