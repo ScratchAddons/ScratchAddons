@@ -1,0 +1,30 @@
+div[class*="monitor_monitor-container_"],
+div[class*="monitor_list-body_"] {
+  background-color: var(--stageMonitor-monitor);
+  color: var(--stageMonitor-monitorLabel);
+}
+
+div[class*="monitor_list-index_"] {
+  color: var(--stageMonitor-monitorLabel);
+}
+
+div[class*="monitor_label_"],
+div[class*="monitor_list-empty_"] {
+  color: var(--stageMonitor-monitorLabel) !important;
+}
+
+div[class*="monitor_list-header_"],
+div[class*="monitor_list-footer_"] {
+  background-color: var(--stageMonitor-listHeader);
+  color: var(--stageMonitor-listHeaderText);
+}
+
+div[class*="monitor_monitor-container_"],
+div[class*="monitor_large-value_"] {
+  border-radius: calc(var(--stageMonitor-monitorRadius) * 1px);
+}
+
+div[class*="monitor_value_"],
+div[class*="monitor_list-value_"] {
+  border-radius: calc(var(--stageMonitor-valueRadius) * 1px);
+}
