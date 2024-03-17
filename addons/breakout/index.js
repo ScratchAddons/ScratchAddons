@@ -1,3 +1,7 @@
+/*please don't look to this code for best practices
+ * it's an easter egg, it's supposed to be a mess
+ * - grom
+ */
 export default async function ({ addon, global, console }) {
   const button = Object.assign(document.createElement("div"), { className: "link right mystuff egg" });
   const link = document.createElement("a");
@@ -53,18 +57,14 @@ export default async function ({ addon, global, console }) {
     let box;
     for (let div of document.querySelectorAll(".inner.mod-splash")) {
       if (div.querySelector(".news")) {
-        console.log("skipping news");
         continue;
       }
-      console.log(div.querySelectorAll(".box").length);
       if (div.querySelectorAll(".box").length >= 4) {
-        console.log("actually wtf");
         box = div;
         break;
       }
     }
     box.scrollIntoView();
-    console.log(box);
     const div = box.querySelector("div:nth-of-type(1) > a > img:nth-of-type(1)");
     const div2 = box.querySelector("div:nth-of-type(2) > a > img:nth-of-type(1)");
     const div3 = box.querySelector(
@@ -80,9 +80,7 @@ export default async function ({ addon, global, console }) {
     const brickHeight = rect.height;
     const brickPadding = rect2.x - rect.x - rect.width;
     const brickVertPadding = rect3.y - rect.y - rect.height;
-    console.log(brickVertPadding);
     const brickOffsetTop = rect.top; //- window.scrollY + 20;
-    console.log(brickOffsetTop, rect.top, window.scrollY, rect.top - window.scrollY);
     const brickOffsetLeft = rect.left;
 
     const bricks = [];
@@ -130,8 +128,16 @@ export default async function ({ addon, global, console }) {
       for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
           if (bricks[c][r].status > 0) {
+            // check if enough space to bottom of screen on last row
+
+            let tooSmall =
+              r == 2 && r * (brickHeight + brickVertPadding) + brickOffsetTop + brickHeight + 10 > canvas.height;
+            if (tooSmall) {
+              console.log("too small");
+            }
+
             const brickX = c * ((r == 1 ? rect3.width : brickWidth) + brickPadding) + brickOffsetLeft;
-            const brickY = r * ((r >= 1 ? rect3.height : brickHeight) + brickVertPadding) + brickOffsetTop;
+            const brickY = r * ((tooSmall ? 50 : brickHeight) + brickVertPadding) + brickOffsetTop;
             bricks[c][r].x = brickX;
             bricks[c][r].y = brickY;
             const img = box.querySelector(
@@ -148,7 +154,7 @@ export default async function ({ addon, global, console }) {
             bricks[c][r].image = image;
             ctx.beginPath();
 
-            ctx.rect(brickX, brickY, r == 1 ? rect3.width : brickWidth, r == 1 ? rect3.height : brickHeight);
+            ctx.rect(brickX, brickY, brickWidth, tooSmall ? 50 : brickHeight);
             ctx.fillStyle = `#000000${
               bricks[c][r].status == 3 ? "00" : bricks[c][r].status == 2 ? "66" : bricks[c][r].status == 1 ? "bb" : "ff"
             }`;
@@ -178,6 +184,7 @@ export default async function ({ addon, global, console }) {
             ) {
               dy = -dy;
               b.status--;
+
               debris.push({ x: x, y: y, dy: Math.random() * 2 - 1, dx: Math.random() * 2 - 1 });
               debris.push({ x: x + 8, y: y, dy: Math.random() * 2 - 1, dx: Math.random() * 2 - 1 });
               debris.push({ x: x - 8, y: y, dy: Math.random() * 2 - 1, dx: Math.random() * 2 - 1 });
@@ -257,8 +264,13 @@ export default async function ({ addon, global, console }) {
         document.body.style.overflow = "auto";
         audio.pause();
         if (score === brickRowCount * brickColumnCount * 3) {
+          let winNoise = new Audio(addon.self.dir + "/win_noise.mp3");
+          winNoise.play();
           addon.tab.confirm("You won!", "Happy april fools from the Scratch Addons team!");
         } else {
+          let loseNoise = new Audio(addon.self.dir + "/lose_noise.mp3");
+          loseNoise.play();
+
           addon.tab.confirm("Game over!", "Happy april fools from the Scratch Addons team!");
         }
       } else {
@@ -297,8 +309,7 @@ export default async function ({ addon, global, console }) {
       for (let debri of debris) {
         // draw falling rectangles
         ctx.beginPath();
-        ctx.fillStyle = "#fff";
-        console.log(debri.x, debri.y);
+        ctx.fillStyle = `#0095DD`;
         ctx.fillRect(debri.x, debri.y, 8, 8);
         ctx.fill();
         ctx.closePath();
