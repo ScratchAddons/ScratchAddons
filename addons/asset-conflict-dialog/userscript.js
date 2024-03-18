@@ -90,7 +90,7 @@ export default async function ({ addon, console, msg }) {
       // handle new costume or sound via Paint/Record
       // abuses the fact that new costumes don't have an asset property and new sounds have a format property set to ""
       const isNewAsset =
-        (type === "costume" && !assetObj.asset) ||
+        (type === "costume" && !assetObj.asset && assetObj?.skinId === null) ||
         (type === "sound" && assetObj.format === "" && !assetObj.asset.clean);
       if (isNewAsset) return originalFn.call(this, ...args);
 
