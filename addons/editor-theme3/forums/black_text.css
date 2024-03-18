@@ -60,6 +60,8 @@
 .sb-list ~ .sb-label,
 .sb-custom ~ .sb-label,
 .sb-custom-arg ~ .sb-label,
+.sb-outline ~ .sb-label,
+.sb-label:only-of-type:not(:last-child),
 .sb-extension ~ .sb-label,
 .sb-pen ~ .sb-label,
 .sb3-motion ~ .sb3-label,
