@@ -1,0 +1,49 @@
+/* Hide the ✏️ button on blocks that aren't top level */
+g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker):not(g.blocklyBlockCanvas>g.blocklyDraggable[data-id]:not(.blocklyInsertionMarker)) .sa-blocklyDevtoolsElement {
+    display: none !important;
+}
+
+/* Hide scrollbars on the XML editor */
+div[data-isblocklydeveditor]::-webkit-scrollbar {
+    display: none;
+}
+div[data-isblocklydeveditor] {
+    scrollbar-width: none;
+}
+.sa-blocklyDevtoolsFadeOut {
+    transition: 1s;
+    opacity: 0;
+}
+.sa-blocklyDevtoolsError {
+    color: red;
+    font: 12pt monospace;
+    background-color: rgb(0,0,20);
+    border: 2px solid white;
+    border-radius: 0.4rem;
+    width: max-content;
+    padding: 8px;
+    cursor: auto;
+}
+.sa-blocklyDevtoolsEditor {
+    padding: 10px;
+    user-select: text;
+    cursor: auto;
+    font: 12pt monospace;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+    color: yellowgreen;
+    border: 2px solid white;
+    z-index: 998;
+    border-radius: 0.8rem;
+    width: max-content;
+    background-color: rgb(0,0,30);
+    overflow-x: hidden;
+    max-height: 100vh;
+    overflow-y: scroll;
+    caret-color: white;
+}
+
+.sa-blocklyDevtoolsButton {
+    cursor: pointer;
+    z-index: 999;
+    line-height: 1rem;
+}
