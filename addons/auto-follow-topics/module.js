@@ -12,7 +12,8 @@ document.querySelector("[name=AddPostForm]")?.addEventListener("click", (event) 
 
 const topics = getTopics();
 let success = false;
-if (topics.includes(topicID) && !postError()) {
+const hasTopic = topics.includes(topicID);
+if (hasTopic && !postError()) {
   success = true;
   setTopics(topics.filter((topic) => topic !== topicID));
 }
@@ -23,8 +24,8 @@ export const onPost = (callback) => {
 };
 
 export const onSuccessfulPost = (callback) => {
-  if (success) callback(topicID);
+  if (hasTopic && success) callback(topicID);
 };
 export const onNonSuccessfulPost = (callback) => {
-  if (!success) callback(topicID);
+  if (hasTopic && !success) callback(topicID);
 };
