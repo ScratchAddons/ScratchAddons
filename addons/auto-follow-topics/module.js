@@ -1,3 +1,4 @@
+// This module should run after page load - only use this with `runAtComplete:true`
 const getTopics = () => JSON.parse(sessionStorage.getItem("auto-follow-topics") || "[]");
 const setTopics = (topics) => sessionStorage.setItem("auto-follow-topics", JSON.stringify(topics));
 const postError = () => Boolean(document.querySelector(".errorlist"));
