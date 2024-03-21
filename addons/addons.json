@@ -71,7 +71,6 @@
   "editor-sounds",
   "transparent-orphans",
   "gamepad",
-  "remove-curved-stage-border",
   "fix-pasted-scripts",
   "better-img-uploads",
   "ctrl-click-run-scripts",
@@ -120,6 +119,7 @@
   "forum-live-preview",
   "sounds-duration",
   "default-costume-editor-color",
+  "player-thumb",
   "one-click-studio-invites",
   "opacity-slider",
   "remove-search-bar-autocomplete",
@@ -177,6 +177,7 @@
   "hide-stage",
   "editor-stage-left",
   "editor-buttons-reverse-order",
+  "remove-curved-stage-border",
   "columns",
   "editor-compact",
   "editor-theme3"
