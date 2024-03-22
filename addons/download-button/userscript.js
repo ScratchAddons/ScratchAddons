@@ -31,7 +31,6 @@ export default async function ({ addon, console, msg }) {
   downloadButton.id = "sa-download-button";
 
   function addbutton() {
-    addon.tab.waitForElement(".flex-row .subactions", { markAsSeen: true });
     addon.tab.appendToSharedSpace({
       space: shared ? "afterCopyLinkButton" : "beforeProjectActionButtons",
       element: downloadButton,
@@ -39,13 +38,16 @@ export default async function ({ addon, console, msg }) {
     });
   }
 
-  addbutton();
-  addon.tab.addEventListener("urlChange", () => {
-    addbutton();
-  });
-
   addon.tab.displayNoneWhileDisabled(downloadButton);
 
   await redux.waitForState((state) => state.scratchGui.projectState.loadingState.startsWith("SHOWING"));
   downloadButton.classList.remove("waiting");
+
+  while (true) {
+    await addon.tab.waitForElement(".flex-row.subactions > .flex-row.action-buttons", {
+      markAsSeen: true,
+      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+    });
+    addbutton();
+  }
 }
