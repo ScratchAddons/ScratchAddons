@@ -9,7 +9,12 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["projects", "https://scratch.mit.edu/studios/*", "https://scratch.mit.edu/users/*"]
+      "matches": [
+        "projects",
+        "https://scratch.mit.edu/studios/*",
+        "https://scratch.mit.edu/users/*",
+        "https://scratch.mit.edu/messages/"
+      ]
     }
   ],
   "versionAdded": "1.0.0",

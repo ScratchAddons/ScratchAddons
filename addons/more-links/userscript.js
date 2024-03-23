@@ -52,6 +52,12 @@ export default async function ({ addon, console }) {
       linkifyTextNode(desc);
       break;
     }
+
+    case "messages":
+      while (true) {
+        const message = await addon.tab.waitForElement(".comment-text p", { markAsSeen: true });
+        linkifyTextNode(message);
+      }
   }
 
   (async () => {
