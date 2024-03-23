@@ -38,6 +38,8 @@ export default async function ({ addon, console, msg }) {
     });
   }
 
+  addbutton();
+
   addon.tab.displayNoneWhileDisabled(downloadButton);
 
   await redux.waitForState((state) => state.scratchGui.projectState.loadingState.startsWith("SHOWING"));
