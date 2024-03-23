@@ -138,7 +138,6 @@ h1 {
   position: fixed;
   cursor: pointer;
   padding: 16px;
-  transition: 0.2s ease;
 }
 [dir="rtl"] .theme-switch {
   right: auto;
