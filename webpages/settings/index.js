@@ -421,7 +421,9 @@ let fuse;
             ? "theme"
             : manifest.tags.includes("community")
               ? "community"
-              : "editor";
+              : manifest.tags.includes("player")
+                ? "player"
+                : "editor";
 
       const addCategoryIfTag = (arr) => {
         let count = 0;
@@ -436,7 +438,7 @@ let fuse;
         return count;
       };
       if (manifest._categories[0] === "theme") {
-        // All themes should have either "editor" or "community" tag
+        // All themes should have either the "editor", "community" or "player" tag
         addCategoryIfTag([
           {
             tag: "editor",
@@ -448,9 +450,15 @@ let fuse;
               tag: "community",
               category: "themesForWebsite",
             },
+          ]) ||
+          addCategoryIfTag([
+            {
+              tag: "player",
+              category: "themesForPlayer",
+            },
           ]);
       } else if (manifest._categories[0] === "editor") {
-        const addedCategories = addCategoryIfTag(["codeEditor", "costumeEditor", "projectPlayer"]);
+        const addedCategories = addCategoryIfTag(["codeEditor", "costumeEditor"]);
         if (addedCategories === 0) manifest._categories.push("editorOthers");
       } else if (manifest._categories[0] === "community") {
         const addedCategories = addCategoryIfTag(["profiles", "projectPage", "forums"]);
@@ -530,7 +538,7 @@ let fuse;
       } else if (aHasTag && bHasTag) return manifestA.name.localeCompare(manifestB.name);
       else return null;
     };
-    const order = [["danger", "beta"], "editor", "community", "popup"];
+    const order = [["danger", "beta"], "editor", "player", "community", "popup"];
 
     vue.addonGroups.forEach((group) => {
       group.addonIds = group.addonIds

@@ -30,7 +30,7 @@
       "matches": ["projects", "projectEmbeds"]
     }
   ],
-  "tags": ["editor", "projectPlayer", "recommended"],
+  "tags": ["player", "recommended"],
   "latestUpdate": {
     "version": "1.33.0",
     "temporaryNotice": "There's now a keybind to pause projects.",
