@@ -56,6 +56,33 @@ export default async function ({ addon, console }) {
     case "messages":
       while (true) {
         const message = await addon.tab.waitForElement(".comment-text p", { markAsSeen: true });
+
+        if (message.textContent.length === 250) {
+          // The message is truncated (unless it happens to be ecxactly 250 characters long), and so links may break. We now fetch the rest of the text for link making
+
+          const username = await addon.auth.fetchUsername();
+
+          const messageInfo = message.parentElement.parentElement.parentElement.firstChild;
+          const link = messageInfo.querySelector("a:not(.social-messages-profile-link)").href;
+
+          if (link.includes("projects")) {
+            const regex = /\/projects\/(\d+)\/#comments-(\d+)/;
+            const match = link.match(regex);
+
+            const projectId = match[1];
+            const commentId = match[2];
+
+            const response = await fetch(
+              `https://api.scratch.mit.edu/users/${username}/projects/${projectId}/comments/${commentId}`
+            );
+            const blob = await response.blob();
+            const usableResponse = JSON.parse(await blob.text());
+            console.log(usableResponse);
+
+            // Yes, using innerHTML here, this is so the browser can handle things like &apos; for a comma
+            message.innerHTML = usableResponse.content;
+          }
+        }
         linkifyTextNode(message);
       }
   }
