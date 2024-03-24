@@ -15,9 +15,6 @@ label,
 #email-resend-box .email-resend-subsection {
   color: var(--darkWww-page-scratchr2LabelText);
 }
-.list a /* mobile forums */ {
-  color: var(--darkWww-page-scratchr2Text);
-}
 
 /* Navigation bar background */
 #topnav .innerwrap,
@@ -251,10 +248,6 @@ button,
   color: var(--darkWww-box-scratchr2ButtonText);
   text-shadow: 0 1px var(--darkWww-box);
 }
-ul.pagination a:active:not(.current) span /* mobile forums */ {
-  background-color: var(--darkWww-box-scratchr2ButtonGradientBottom);
-  color: var(--darkWww-box-scratchr2InputText);
-}
 button:hover,
 .button.grey:hover {
   background-image: linear-gradient(var(--darkWww-box-scratchr2ButtonHover), var(--darkWww-box-scratchr2ButtonHover));
@@ -326,10 +319,7 @@ button:hover,
 .v-tabs li:hover {
   border-top-color: var(--darkWww-gray-boxHighlight);
 }
-.modal-footer,
-ul.pagination span /* mobile forums */,
-.post-content blockquote /* mobile forums */,
-.post-content div.code /* mobile forums */ {
+.modal-footer {
   box-shadow: 0 1px inset var(--darkWww-gray-boxHighlight);
 }
 .v-tabs li.active,
@@ -338,15 +328,9 @@ ul.pagination span /* mobile forums */,
 }
 .box .box-content .action-bar .inner,
 .contact #block-message,
-.djangobb th,
-.post-content blockquote /* mobile forums */,
-.post-content div.code /* mobile forums */ {
+.djangobb th {
   background-color: var(--darkWww-gray-scratchr2TableHeader);
   color: var(--darkWww-gray-scratchr2Text);
-}
-ul.pagination span /* mobile forums */ {
-  background-color: var(--darkWww-gray-scratchr2TableHeader);
-  color: var(--darkWww-gray-mobilePaginationText);
 }
 .tc2,
 .tc3 {
@@ -559,10 +543,7 @@ select,
   stroke: var(--darkWww-border-20);
 }
 .modal,
-.markItUpHeader ul ul,
-ul.pagination span /* mobile forums */,
-.post-content blockquote /* mobile forums */,
-.post-content div.code /* mobile forums */ {
+.markItUpHeader ul ul {
   border-color: var(--darkWww-border-33) !important;
 }
 
@@ -616,9 +597,6 @@ body {
 }
 #footer {
   box-shadow: 0 0 10px inset rgba(0, 0, 0, 0.14);
-}
-div.content > article > header /* mobile forums */ {
-  box-shadow: 0 1px inset rgba(255, 255, 255, 0.29);
 }
 ul.pagination a:active:not(.current) span {
   box-shadow: 0 1px inset rgba(255, 255, 255, 0.33);

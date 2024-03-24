@@ -1,0 +1,50 @@
+[class*="paint-editor_canvas-controls_"] {
+  /* vertically align zoom buttons with backpack button */
+  align-items: center;
+  /* compact-editor compatibility */
+  min-height: 36px;
+}
+
+[class*="paint-editor_bitmap-button_"] {
+  align-self: stretch;
+  /* compact-editor compatibility */
+  align-items: center;
+}
+
+[class^="paint-editor_zoom-controls_"] {
+  margin-inline-end: 45px;
+}
+
+.sa-backpack-button {
+  position: absolute;
+  bottom: 13px;
+  width: 36px;
+  height: 36px;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 2px; /* vertical position of the icon */
+  background-color: #575e75;
+  background-clip: padding-box;
+  border: 2px solid rgba(87, 94, 117, 0.5);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+[dir="ltr"] .sa-backpack-button {
+  right: 22px;
+}
+
+[dir="rtl"] .sa-backpack-button {
+  left: 24px;
+}
+
+.sa-backpack-open .sa-backpack-button {
+  background-color: #0b8e69;
+  border-color: rgba(11, 142, 105, 0.35);
+}
+
+.sa-backpack-button img {
+  width: 24px;
+  height: 24px;
+}
