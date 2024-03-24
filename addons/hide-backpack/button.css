@@ -48,3 +48,7 @@
   width: 24px;
   height: 24px;
 }
+
+.sa-custom-zoom-area {
+  height: 184px; /* 148px (initial) + 36px */
+}
