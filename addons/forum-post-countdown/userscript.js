@@ -1,10 +1,13 @@
+import { onPost, onNonSuccessfulPost } from "../auto-follow-topics/module.js";
+
 export default async function ({ addon, msg }) {
   const submitButton = document.querySelector("#djangobbwrap .form-submit [type=submit]");
 
-  submitButton.addEventListener("click", () => {
-    if (!localStorage.getItem("sa-forum-post-countdown")) {
-      localStorage.setItem("sa-forum-post-countdown", Date.now());
-    }
+  onPost(() => {
+    localStorage.setItem("sa-forum-post-countdown", Date.now());
+  });
+  onNonSuccessfulPost(() => {
+    localStorage.removeItem("sa-forum-post-countdown");
   });
 
   const countdown = localStorage.getItem("sa-forum-post-countdown");
