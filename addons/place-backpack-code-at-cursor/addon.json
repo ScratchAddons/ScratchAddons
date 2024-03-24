@@ -13,7 +13,7 @@
     }
   ],
   "versionAdded": "1.36.0",
-  "tags": ["editor", "codeEditor", "recommended"],
+  "tags": ["editor", "codeEditor", "recommended", "minor"],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "enabledByDefault": true

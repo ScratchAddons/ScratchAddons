@@ -85,6 +85,14 @@ export default [
     fullscreenShow: true,
   },
   {
+    id: "minor",
+    name: chrome.i18n.getMessage("minor"),
+    addonIds: [],
+    expanded: false,
+    iframeShow: false,
+    fullscreenShow: true,
+  },
+  {
     id: "beta",
     name: chrome.i18n.getMessage("beta"),
     addonIds: [],

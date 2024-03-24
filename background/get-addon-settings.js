@@ -92,7 +92,7 @@ async function transitionToNewStorageKeys(addonSettings) {
 }
 
 const ADDON_SETTINGS_KEYS = ["addonSettings", "addonSettings1", "addonSettings2", "addonSettings3"];
-chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems) => {
+chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled", "lastVersion"], (storageItems) => {
   const isSettingsStorageTransitionPending = storageItems.addonSettings && !storageItems.addonSettings3;
   if (isSettingsStorageTransitionPending) {
     transitionToNewStorageKeys(storageItems.addonSettings);
@@ -103,6 +103,8 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
   const addonSettings = areAddonSettingsEmpty
     ? {} // Default value
     : { ...storageItems.addonSettings1, ...storageItems.addonSettings2, ...storageItems.addonSettings3 };
+  const lastVersionStr = storageItems.lastVersion;
+  const lastVersion = lastVersionStr?.split(".") || ["0", "0", "0"];
   const func = () => {
     // Start by migrating settings (sometimes we add new settings or make changes to
     // the available settings in some addons between versions)
@@ -159,6 +161,13 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
         if (!addonSettings["custom-menu-bar"]) addonSettings["custom-menu-bar"] = {};
         addonSettings["custom-menu-bar"]["menu-labels"] = "labels";
       }
+    }
+
+    if (lastVersion[1] < 37) {
+      // Enable addons that became enabled by default starting v1.37.0
+      addonsEnabled["disable-sprite-wobble"] = true;
+      addonsEnabled["fix-pasted-scripts"] = true;
+      madeAnyChanges = true;
     }
 
     for (const { manifest, addonId } of scratchAddons.manifests) {
@@ -700,10 +709,16 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
 
     // Finally, minify the settings and store them in the scratchAddons object
     const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
+    const currentVersion = chrome.runtime.getManifest().version;
+    console.log(`Transitioned from ${lastVersionStr} \u2192 ${currentVersion}`);
+    if (currentVersion !== lastVersionStr) {
+      madeAnyChanges = true;
+    }
     if (madeAnyChanges)
       chrome.storage.sync.set({
         ...minifySettings(addonSettings, prerelease ? null : scratchAddons.manifests),
         addonsEnabled,
+        lastVersion: currentVersion,
       });
     scratchAddons.globalState.addonSettings = addonSettings;
     scratchAddons.localState.addonsEnabled = addonsEnabled;
