@@ -1,0 +1,45 @@
+{
+  "name": "Square block inputs",
+  "description": "Makes certain block input types (such as text or color) rectangular instead of round, like in Scratch 2.0.",
+  "credits": [
+    {
+      "name": "CST1229",
+      "link": "https://github.com/CST1229/"
+    }
+  ],
+  "tags": ["editor", "codeEditor", "theme"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Text inputs",
+      "id": "text",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Color inputs",
+      "id": "color",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Number inputs",
+      "id": "number",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.36.0",
+  "latestUpdate": {
+    "version": "1.37.0",
+    "newSettings": ["number"],
+    "isMajor": false
+  }
+}
