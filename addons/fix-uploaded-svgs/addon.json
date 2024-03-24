@@ -11,6 +11,6 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.4.0",
-  "tags": ["editor", "costumeEditor"],
+  "tags": ["editor", "costumeEditor", "bugfix"],
   "enabledByDefault": false
 }

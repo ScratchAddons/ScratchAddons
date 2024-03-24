@@ -92,4 +92,12 @@ export default [
     iframeShow: false,
     fullscreenShow: true,
   },
+  {
+    id: "bugfix",
+    name: "bugfix",
+    addonIds: [],
+    expanded: false,
+    iframeShow: false,
+    fullscreenShow: true,
+  },
 ];

@@ -57,4 +57,11 @@ export default [
       theme: true,
     },
   },
+  {
+    name: "bugfix",
+    tooltipText: "bugfixTooltip",
+    matchName: "bugfix",
+    color: "yellow",
+    iframeAlwaysShow: true,
+  },
 ];

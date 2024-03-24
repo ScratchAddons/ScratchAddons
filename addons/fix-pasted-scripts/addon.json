@@ -23,7 +23,7 @@
       "matches": ["projects"]
     }
   ],
-  "tags": ["editor", "recommended", "codeEditor"],
+  "tags": ["editor", "recommended", "codeEditor", "bugfix"],
   "versionAdded": "1.15.0",
   "enabledByDefault": false
 }
