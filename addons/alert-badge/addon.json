@@ -14,6 +14,7 @@
     }
   ],
   "injectAsStyleElt": true,
+  "updateUserstylesOnSettingsChange": true,
   "settings": [
     {
       "name": "Alert badge color",
@@ -36,11 +37,11 @@
   ],
   "tags": ["community"],
   "versionAdded": "1.37.0",
-  "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "credits": [
     {
       "name": "Secret-chest",
-      "id": "addon",
       "link": "https://github.com/Secret-chest"
     }
   ]
