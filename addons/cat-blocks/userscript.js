@@ -1,5 +1,5 @@
 /**
- * Based on https://github.com/LLK/scratch-blocks/compare/hotfix/totally-normal-2021 (Apache 2.0)
+ * Based on https://github.com/scratchfoundation/scratch-blocks/compare/hotfix/totally-normal-2021 (Apache 2.0)
  * It has been modified to work properly in our environment and fix some bugs.
  */
 
@@ -335,10 +335,12 @@ export default async function ({ addon, console }) {
     }
     const flyout = workspace.getFlyout();
     if (flyout) {
+      Blockly.Events.disable();
       const flyoutWorkspace = flyout.getWorkspace();
       Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
       workspace.getToolbox().refreshSelection();
       workspace.toolboxRefreshEnabled_ = true;
+      Blockly.Events.enable();
     }
   }
 }

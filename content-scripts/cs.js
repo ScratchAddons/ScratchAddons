@@ -350,7 +350,7 @@ function waitForDocumentHead() {
 }
 
 function getL10NURLs() {
-  const langCode = /scratchlanguage=([\w-]+)/.exec(document.cookie)?.[1] || "en";
+  const langCode = /scratchlanguage=([\w-]+)/.exec(document.cookie)?.[1] || navigator.language;
   const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
   if (langCode === "pt") {
     urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
@@ -650,7 +650,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_33_2", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_36", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -670,7 +670,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_33_2"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_36"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
