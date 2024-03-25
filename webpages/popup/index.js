@@ -25,6 +25,11 @@ const vue = new Vue({
   },
   methods: {
     msg(message, ...params) {
+      const now = Date.now() / 1000;
+      if (message === "extensionName" /*&& now < 1648911600 && now > 1648738800*/) {
+        // TODO: create whitelist of languages where this change is appropriate
+        return "Scratch Haddocks 🐟🐟";
+      }
       return chrome.i18n.getMessage(message, ...params);
     },
     direction() {
@@ -61,6 +66,7 @@ const vue = new Vue({
     version() {
       const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
       const ver = chrome.runtime.getManifest().version;
+      if (true /*&& now < 1648911600 && now > 1648738800*/) return ver;
       return prerelease ? ver + "-pre" : ver;
     },
   },
