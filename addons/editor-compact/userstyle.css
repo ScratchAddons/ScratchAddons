@@ -22,18 +22,13 @@
   border: 1px solid transparent;
 }
 
-/* Menu bar */
-[class*="menu-bar_file-group_"] [class*="menu-bar_hoverable_"] > img,
-[class*="menu-bar_divider"],
-[class*="menu-bar_help-icon"] {
-  display: none;
-}
 [class*="menu-bar_collapsible-label_"],
 [dir="rtl"] [class*="menu-bar_collapsible-label_"],
 [class*="settings-menu_dropdown-label_"],
 [dir="rtl"] [class*="settings-menu_dropdown-label_"] {
   margin: 0;
 }
+
 @media (max-width: 1024px) {
   [class*="menu-bar_file-group_"] [class*="menu-bar_hoverable_"] > img:first-child {
     display: inline;
@@ -364,8 +359,10 @@ body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-bu
 [class*="paint-editor_top-align-row"] {
   padding-top: 0.5rem;
 }
-[class*="paint-editor_mode-selector"] {
-  width: min-content;
+@media (min-height: 710px) {
+  [class*="paint-editor_mode-selector"] {
+    width: min-content;
+  }
 }
 
 [class*="sound-editor_row_"] + [class*="sound-editor_row_"] {
