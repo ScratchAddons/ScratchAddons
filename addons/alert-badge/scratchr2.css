@@ -1,7 +1,0 @@
-#topnav ul.account-nav .messages .notificationsCount.sa-alert-badge {
-  background-color: var(--alertBadge-alert) !important;
-  color: var(--alertBadge-alertfg) !important;
-}
-#topnav ul.account-nav .messages .notificationsCount.sa-alert-badge::after {
-  content: "!";
-}

@@ -23,7 +23,6 @@ export default async function ({ addon, console }) {
   }
 
   async function highlightAlert() {
-    if (addon.settings.get("highlight")) {
       let selector;
       if (addon.tab.editorMode === "editor") {
         selector = ".sa-editormessages-count";
@@ -35,7 +34,6 @@ export default async function ({ addon, console }) {
       messageBadge.classList.add("sa-alert-badge");
       const originalText = messageBadge.innerText;
       messageBadge.innerText = originalText.trim(); // remove space for better visuals
-    }
   }
 
   const hasAlertsResult = await hasAlerts();

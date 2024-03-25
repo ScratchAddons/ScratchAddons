@@ -1,43 +1,28 @@
 {
   "name": "Highlight message badge when there are alerts",
-  "description": "When there are Scratch Team messages, the navbar's notification badge's color is changed and a '!' is added.",
+  "description": "When there are Scratch Team messages, the color of the notification badge in the navigation bar is changed and an exclamation mark is added.",
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["projects", "scratchWWWNoProject", "isNotScratchWWW"]
+      "matches": ["https://scratch.mit.edu/*"]
     }
   ],
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": ["projects", "scratchWWWNoProject"]
-    },
-    {
-      "url": "scratchr2.css",
-      "matches": ["isNotScratchWWW"]
-    },
-    {
-      "url": "editor.css",
-      "matches": ["projects"]
+      "matches": ["https://scratch.mit.edu/*"]
     }
   ],
   "injectAsStyleElt": true,
   "settings": [
     {
-      "name": "Badge color when there are alerts",
+      "name": "Alert badge color",
       "id": "alert",
       "type": "color",
-      "default": "#cc4400",
-      "if": {
-        "settings": { "highlight": true }
-      }
+      "default": "#cc4400"
     }
   ],
   "customCssVariables": [
-    {
-      "name": "alert",
-      "value": { "type": "settingValue", "settingId": "alert" }
-    },
     {
       "name": "alertfg",
       "value": {
