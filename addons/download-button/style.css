@@ -40,7 +40,7 @@
 #sa-download-button.loading:before {
   background-image: url(https://scratch.mit.edu/svgs/modal/spinner-blue.svg);
   background-size: 100%;
-  filter: grayscale(100%) brightness(0) invert(1);
+  filter: grayscale(100%) brightness(0) invert(1) var(--darkWww-button-filter, grayscale(100%) brightness(0) invert(1));
   animation-name: spin-intro, spin;
   animation-duration: 0.25s, 1s;
   animation-timing-function: cubic-bezier(0.3, -3, 0.6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);
