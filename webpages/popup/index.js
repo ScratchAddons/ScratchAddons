@@ -181,7 +181,7 @@ function spawnFish(initX, initY) {
 }
 
 const now = Date.now();
-if (true /* TODO */) {
+if (!window.matchMedia("(prefers-reduced-motion)").matches /* TODO */) {
   // Is it ok to run this immediately?
   spawnFish(20, 12);
   spawnFish(340, 270);
