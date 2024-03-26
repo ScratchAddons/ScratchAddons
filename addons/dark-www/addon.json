@@ -1425,7 +1425,7 @@
       "value": {
         "type": "textColor",
         "black": "brightness(0.4)",
-        "white": "initial",
+        "white": "none",
         "source": {
           "type": "settingValue",
           "settingId": "button"
