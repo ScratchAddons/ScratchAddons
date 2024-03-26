@@ -132,9 +132,12 @@ h1 {
 
 .theme-switch {
   height: 25px;
-  right: 25px;
+}
+#theme-div {
+  right: 0;
   position: fixed;
   cursor: pointer;
+  padding: 16px;
 }
 [dir="rtl"] .theme-switch {
   right: auto;
