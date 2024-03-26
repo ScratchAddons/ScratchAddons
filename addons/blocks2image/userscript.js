@@ -69,6 +69,14 @@ export default async function ({ addon, console, msg }) {
             exportBlock(true);
           },
           separator: false,
+        },
+        {
+          enabled: true,
+          text: msg("copy_all_to_clipboard"),
+          callback: () => {
+            exportBlock(true, true);
+          },
+          separator: false,
         }
       );
 
@@ -94,7 +102,7 @@ export default async function ({ addon, console, msg }) {
           enabled: true,
           text: msg("export_selected_to_SVG"),
           callback: () => {
-            exportBlock(false, block);
+            exportBlock(false, false, block);
           },
           separator: true,
         },
@@ -102,7 +110,15 @@ export default async function ({ addon, console, msg }) {
           enabled: true,
           text: msg("export_selected_to_PNG"),
           callback: () => {
-            exportBlock(true, block);
+            exportBlock(true, false, block);
+          },
+          separator: false,
+        },
+        {
+          enabled: true,
+          text: msg("copy_selected_to_clipboard"),
+          callback: () => {
+            exportBlock(true, true, block);
           },
           separator: false,
         }
@@ -113,7 +129,7 @@ export default async function ({ addon, console, msg }) {
     { blocks: true }
   );
 
-  async function exportBlock(isExportPNG, block) {
+  async function exportBlock(isExportPNG, copyToClipboard, block) {
     let svg;
     if (block) {
       svg = selectedBlocks(isExportPNG, block);
@@ -142,7 +158,7 @@ export default async function ({ addon, console, msg }) {
     if (!isExportPNG) {
       exportData(new XMLSerializer().serializeToString(svg));
     } else {
-      exportPNG(svg);
+      exportPNG(svg, copyToClipboard);
     }
   }
 
@@ -215,7 +231,7 @@ export default async function ({ addon, console, msg }) {
     document.body.removeChild(saveLink);
   }
 
-  function exportPNG(svg) {
+  function exportPNG(svg, copy) {
     const serializer = new XMLSerializer();
 
     const iframe = document.createElement("iframe");
@@ -245,9 +261,14 @@ export default async function ({ addon, console, msg }) {
       const date = new Date();
       const timestamp = `${date.toLocaleDateString()}-${date.toLocaleTimeString()}`;
 
-      link.download = `block_${timestamp}.png`;
-      link.href = dataURL;
-      link.click();
+      if (copy) {
+        addon.tab.copyImage(dataURL).catch((e) => console.error(`Image could not be copied: ${e}`));
+      } else {
+        link.download = `block_${timestamp}.png`;
+        link.href = dataURL;
+        link.click();
+      }
+
       iframe.remove();
     };
   }
