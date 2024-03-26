@@ -28,7 +28,7 @@ const vue = new Vue({
       const now = Date.now() / 1000;
       if (message === "extensionName" /*&& now < 1648911600 && now > 1648738800*/) {
         // TODO: create whitelist of languages where this change is appropriate
-        return "Scratch Haddocks 🐟🐟";
+        return "Scratch Haddocks";
       }
       return chrome.i18n.getMessage(message, ...params);
     },
@@ -138,3 +138,52 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 chrome.runtime.sendMessage("checkPermissions");
+
+// April Fools 2024 below
+
+class Haddock {
+  constructor(elem) {
+    this.elem = elem;
+    this.facingRight = parseInt(elem.style.left) > 200;
+    (async () => {
+      while (true) {
+        this.facingRight = !this.facingRight;
+        const duration = 6 + Math.random() * 5; // 6-11 secs
+        this.cycle(duration);
+        await new Promise((r) => setTimeout(r, duration * 1000));
+      }
+    })();
+  }
+
+  cycle(duration) {
+    this.elem.style.transitionProperty = "transform, left, top";
+    this.elem.style.transitionDuration = `0.2s, ${duration}s, ${duration}s`;
+    setTimeout(() => {
+      this.elem.style.transform = `scaleX(${this.facingRight ? -1 : 1})`;
+      // If the haddock is facing left, move to anywhere on the left half of the screen.
+      // If the haddock is facing right, move to anywhere on the right half of the screen.
+      this.elem.style.left = (Math.random() + this.facingRight) * (window.innerWidth / 2) + "px";
+      this.elem.style.top = Math.random() * window.innerHeight + "px";
+    }, 0);
+  }
+}
+
+function spawnFish(initX, initY) {
+  const fishElem = document.createElement("span");
+  fishElem.textContent = "🐟";
+  fishElem.style.pointerEvents = "none";
+  fishElem.style.position = "absolute";
+  fishElem.style.left = initX + "px";
+  fishElem.style.top = initY + "px";
+  fishElem.style.fontSize = "22px";
+  fishElem.style.textShadow = "#000 0px 2px 5px";
+  new Haddock(document.body.appendChild(fishElem));
+}
+
+const now = Date.now();
+if (true /* TODO */) {
+  // Is it ok to run this immediately?
+  spawnFish(20, 12);
+  spawnFish(340, 270);
+  spawnFish(50, 575);
+}
