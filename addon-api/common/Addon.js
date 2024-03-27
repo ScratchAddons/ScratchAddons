@@ -4,14 +4,17 @@ import Settings from "../common/Settings.js";
 
 /**
  * An addon.
- * @property {Self} self
- * @property {Auth} auth
- * @property {Settings} settings
  */
 export default class Addon {
   constructor(info) {
+    /**
+     * Allows addons to get information about themselves or the browser.
+     */
     this.self = new Self(this, info);
     this.auth = new Auth(this);
+    /**
+     * Allows addons to change their behavior according to user-specified addon settings.
+     */
     this.settings = new Settings(this);
   }
 

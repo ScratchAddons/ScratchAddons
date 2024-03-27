@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   // Fetch projects from a studio
   const fetchStudio = async (studio) => {

@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, msg, console }) {
   const { redux } = addon.tab;
   await redux.waitForState((state) => typeof state.session.session?.user === "object");

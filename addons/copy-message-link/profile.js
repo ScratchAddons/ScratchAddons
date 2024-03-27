@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   let amtOfComments = 0;
   let pass = 0;

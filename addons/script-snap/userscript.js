@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
   let workspace = Blockly.getMainWorkspace();

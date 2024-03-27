@@ -1,5 +1,6 @@
 import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
 
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 

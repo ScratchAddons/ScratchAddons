@@ -61,6 +61,7 @@ addEventListener("resize", () => {
   setEltWidth(dangoContainerRight);
 });
 
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   const notifClose = Object.assign(document.createElement("span"), {
     style: `

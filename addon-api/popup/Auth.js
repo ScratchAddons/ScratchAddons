@@ -2,7 +2,6 @@ import FetchableAuth from "../common/FetchableAuth.js";
 
 /**
  * Authentication related utilities.
- * @extends FetchableAuth
  */
 export default class Auth extends FetchableAuth {
   /**

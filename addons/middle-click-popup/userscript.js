@@ -5,6 +5,7 @@ import renderBlock, { BlockComponent, getBlockHeight } from "./BlockRenderer.js"
 import { BlockInstance, BlockShape, BlockTypeInfo } from "./BlockTypeInfo.js";
 import { onClearTextWidthCache } from "./module.js";
 
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, msg, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;

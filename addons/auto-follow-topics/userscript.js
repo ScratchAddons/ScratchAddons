@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   const getTopics = () => JSON.parse(sessionStorage.getItem("auto-follow-topics") || "[]");
   const setTopics = (topics) => sessionStorage.setItem("auto-follow-topics", JSON.stringify(topics));

@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   const nav = await addon.tab.waitForElement(".sub-nav.tabs");
 

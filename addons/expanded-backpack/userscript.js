@@ -1,3 +1,4 @@
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, global, console }) {
   // fix area above the backpack displaying at the wrong height when addon settings are changed
   addon.settings.addEventListener("change", heightFix);

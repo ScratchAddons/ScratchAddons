@@ -2,7 +2,6 @@ import Listenable from "./Listenable.js";
 
 /**
  * Authentication related utilities.
- * @extends Listenable
  */
 export default class Auth extends Listenable {
   /**
