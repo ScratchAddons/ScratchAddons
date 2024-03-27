@@ -28,7 +28,7 @@ const vue = new Vue({
       const now = Date.now() / 1000;
       if (message === "extensionName" /*&& now < 1648911600 && now > 1648738800*/) {
         // TODO: create whitelist of languages where this change is appropriate
-        return "Scratch Haddocks";
+        return window.matchMedia("(prefers-reduced-motion)").matches ? "Scratch Haddocks 🐟🐟" : "Scratch Haddocks";
       }
       return chrome.i18n.getMessage(message, ...params);
     },
@@ -184,9 +184,13 @@ function spawnFish(initX, initY) {
 }
 
 const now = Date.now();
-if (!window.matchMedia("(prefers-reduced-motion)").matches /* TODO */) {
-  // Is it ok to run this immediately?
-  spawnFish(20, 40);
-  spawnFish(340, 270);
-  spawnFish(50, 520);
+if (true /* TODO */) {
+  if (window.matchMedia("(prefers-reduced-motion)").matches) {
+    document.getElementById("title-text").style.fontSize = "14px"; // To fit the fish emojis
+  } else {
+    // Is it ok to run this immediately?
+    spawnFish(20, 40);
+    spawnFish(340, 270);
+    spawnFish(50, 520);
+  }
 }
