@@ -1,28 +1,31 @@
-name: ESLint
+name: Scan code using ESLint
 
 on:
   push:
-    branches: [ "master" ]
+    branches: 
+      - master
+    paths:
+      - '**/*.js'
+      - .eslintrc.json
+      - .github/workflows/eslint.yml
   pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ "master" ]
+    branches: 
+      - master
+    paths:
+      - '**/*.js'
+      - .eslintrc.json
+      - .github/workflows/eslint.yml
 
 jobs:
-  eslint:
-    name: Run eslint scanning
+  scan:
+    name: Scan 
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Install ESLint
-        run: |
-          npm install eslint
+        uses: actions/checkout@v4
 
       - name: Run ESLint
-        run: npx eslint .
-          --config .eslintrc.json
-          --ext .js
+        run: npx eslint . --config .eslintrc.json --ext .js
         continue-on-error: true
