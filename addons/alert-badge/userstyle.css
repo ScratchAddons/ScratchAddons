@@ -1,0 +1,11 @@
+#topnav ul.account-nav .messages .notificationsCount.sa-alert-badge {
+  color: var(--alertBadge-alertfg) !important;
+}
+
+.sa-alert-badge {
+  background-color: var(--alertBadge-alert) !important;
+  color: var(--alertBadge-alertfg) !important;
+}
+.sa-alert-badge::after {
+  content: "!";
+}
