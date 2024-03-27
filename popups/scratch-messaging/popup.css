@@ -30,24 +30,28 @@ button {
 
 .message-type {
   border-radius: 4px;
-  border: 1px solid var(--content-border);
   background: var(--content-background);
   margin: 10px;
   box-shadow: var(--content-shadow);
 }
 .message-type-admin {
-  border-color: var(--orange);
+  background: var(--notice-background);
 }
-
+.message-type-admin .comment {
+  background: var(--admin-comment-background);
+}
 .message-type-title {
   font-size: 12px;
   color: var(--content-text);
-  padding: 6px;
+  padding: 8px 10px;
   padding-inline-end: 9px;
   cursor: default;
   display: flex;
   align-items: center;
   user-select: none;
+}
+.message-type-details {
+  padding: 0 10px 10px 10px;
 }
 .fullscreen .message-type-title {
   padding: 10px;
@@ -59,11 +63,8 @@ button {
   background: inherit;
   z-index: 999;
   border-bottom: 1px solid var(--content-border);
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
-}
-.message-type-title:not(.hover-reverse) .message-type-title-text {
-  margin-inline-start: 10px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 }
 
 .thread-list,
@@ -140,10 +141,9 @@ a.message-type-title-text {
 }
 
 .comment {
-  padding: 3px 8px;
+  padding: 5px 10px;
   background: var(--comment-background);
-  border: 1px solid var(--control-border);
-  border-radius: 8px;
+  border-radius: 6px;
   margin: 8px;
   font-size: 12px;
 }
@@ -153,6 +153,7 @@ a.message-type-title-text {
 .comment.unread,
 .unread .comment {
   background-color: var(--unread-comment-background);
+  box-shadow: var(--unread-comment-border);
 }
 .comment-content {
   word-break: break-word;
@@ -270,16 +271,20 @@ a.message-type-title-text {
 }
 
 .status-container {
-  padding-top: 10px;
-  padding-bottom: 20px;
+  padding-top: 15px;
+  padding-bottom: 15px;
   font-size: 1rem;
   font-weight: 600;
   text-align: center;
+  background: var(--content-background);
+  margin: 10px;
+  border-radius: 4px;
+  box-shadow: var(--content-shadow);
 }
 .status-container p,
 .status-empty {
-  display: block;
-  margin-block: 10px;
+  display: inline-block;
+  margin-bottom: 10px;
 }
 
 .buttons-container {
@@ -298,7 +303,6 @@ a.message-type-title-text {
   left: 0;
   right: 0;
   background: var(--content-background);
-  border-top: 1px solid var(--content-border);
   font-size: 12px;
   text-align: center;
   box-shadow: var(--content-shadow);

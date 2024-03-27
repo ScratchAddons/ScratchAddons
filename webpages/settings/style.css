@@ -42,7 +42,7 @@ h1 {
 .logo {
   height: 30px;
   width: 30px;
-  margin-inline-end: 9px;
+  margin-inline-end: 5px;
 }
 
 .main {
@@ -112,15 +112,17 @@ h1 {
   padding-inline: 7px;
   border-radius: 0 4px 4px 0;
   border-inline-start: none !important;
+  background: var(--input-background);
 }
 [dir="rtl"] .clear-button {
   border-radius: 4px 0 0 4px;
 }
 .number-setting .clear-button {
-  border-radius: 0 16px 16px 0;
+  border-radius: 0 4px 4px 0;
+  background: var(--input-background);
 }
 [dir="rtl"] .number-setting .clear-button {
-  border-radius: 16px 0 0 16px;
+  border-radius: 4px 0 0 4px;
 }
 .clear-button .icon-type {
   margin: 0;
@@ -132,9 +134,16 @@ h1 {
 
 .theme-switch {
   height: 25px;
-  right: 25px;
+}
+#theme-div {
+  right: 0;
   position: fixed;
   cursor: pointer;
+  padding: 16px;
+  transition: 0.2s ease;
+}
+#theme-div:hover {
+  background: var(--hover-darken);
 }
 [dir="rtl"] .theme-switch {
   right: auto;
@@ -147,7 +156,8 @@ h1 {
 }
 #confirmImport,
 #applyLanguageSettingsButton {
-  border-color: var(--orange);
+  background: var(--brand-orange);
+  color: var(--white-text);
 }
 
 #search-not-found {
@@ -218,6 +228,7 @@ body.iframe .badge {
 }
 
 body.iframe .addon-settings {
+  padding-bottom: 1px;
   padding-inline: 16px;
 }
 body.iframe .settings-column {
@@ -280,6 +291,7 @@ body.iframe .search-box input {
   margin: 5px;
   cursor: pointer;
   user-select: none;
+  z-index: 7;
 }
 .categories-shrink img {
   vertical-align: middle;
@@ -399,7 +411,6 @@ button.setting-input.color.open {
   justify-content: center;
   border-radius: 4px;
   background-color: var(--content-background);
-  border: 1px solid var(--content-border);
   box-shadow: var(--content-shadow);
   padding: 20px 0;
   margin: 10px;

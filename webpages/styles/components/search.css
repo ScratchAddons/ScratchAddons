@@ -1,12 +1,12 @@
 .search-box {
-  background: var(--search-toolbar-background);
-  border-bottom: 1px solid var(--control-border);
   display: flex;
   align-items: center;
-  padding: 20px 30px;
   user-select: none;
+  box-shadow: var(--searchbox-shadow);
+  padding: 20px 30px;
+  z-index: 1;
+  background: var(--search-toolbar-background);
 }
-
 .search-box input {
   background: var(--search-input-background);
   padding: 8px 12px;
@@ -15,6 +15,10 @@
   color: var(--content-text);
   width: 150px;
   height: 16px;
+  transition: width 0.2s ease;
+}
+.search-box input:focus {
+  width: 300px;
 }
 [dir="rtl"] .search-box input {
   border-radius: 0 4px 4px 0;

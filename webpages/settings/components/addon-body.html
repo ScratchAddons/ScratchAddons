@@ -172,7 +172,6 @@
   .addon-body {
     margin: 10px;
     background: var(--content-background);
-    border: 1px solid var(--content-border);
     border-radius: 4px;
     box-shadow: var(--content-shadow);
   }
@@ -263,7 +262,6 @@
   }
   .addon-message {
     padding: 8px;
-    border: 2px solid;
     border-radius: 5px;
     font-weight: 600;
     margin: 10px 0;
@@ -271,7 +269,6 @@
     align-items: center;
   }
   .addon-notice {
-    border-color: var(--notice-border);
     background-color: var(--notice-background);
     color: var(--notice-text);
   }
@@ -281,7 +278,6 @@
     color: var(--warning-text);
   }
   .addon-info {
-    border-color: var(--info-border);
     background-color: var(--navigation-background);
     color: var(--description-text);
     font-weight: normal;
@@ -311,6 +307,7 @@
   }
   .addon-settings {
     padding-top: 5px;
+    padding-bottom: 1px;
     padding-inline: 20px;
   }
   .addon-setting::after {
@@ -369,7 +366,6 @@
     position: relative;
     cursor: pointer;
     transition: all 0.25s ease;
-    border: 1px solid var(--switch-border);
     box-sizing: border-box;
   }
   .switch::before {
@@ -380,8 +376,8 @@
     height: 10px;
     background: var(--switch-inner-background);
     border-radius: 5px;
-    top: 4px;
-    left: 4px;
+    top: 5px;
+    left: 5px;
     transition: all 0.25s ease;
   }
 
@@ -391,13 +387,13 @@
   }
   .switch[state="on"]::before {
     background: var(--white-text);
-    left: 24px;
+    left: 25px;
   }
 
   [dir="rtl"] .switch::before {
-    left: 24px;
+    left: 25px;
   }
   [dir="rtl"] .switch[state="on"]::before {
-    left: 4px;
+    left: 5px;
   }
 </style>

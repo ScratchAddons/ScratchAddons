@@ -3,19 +3,22 @@
   --green-text: var(--green);
   --blue-text: var(--blue);
 
-  --page-background: #fcfcfc;
-  --content-background: #f7f7f7;
-  --navigation-background: #ecebeb;
-  --search-toolbar-background: #fcfcfc;
-  --button-background: #ecebeb;
-  --button-hover-background: #d4d3d3;
-  --input-background: #fff;
-  --search-input-background: #f0f0f0;
+  --page-background: #efefef;
+  --content-background: #ffffff;
+  --navigation-background: #f3f3f3;
+  --search-toolbar-background: #eeeeee;
+  --button-background: #e8e8e8;
+  --button-hover-background: #dcdcdc;
+  --tab-hover-underline: #c8c8c8;
+  --input-background: #e8e8e8;
+  --search-input-background: #ffffff;
   --switch-inner-background: var(--content-text);
-  --tooltip-background: #ecebeb;
-  --comment-background: #f0f0f0;
-  --unread-comment-background: #fff;
-  --notice-background: rgba(253, 221, 43, 0.25);
+  --tooltip-background: #f1f1f1;
+  --comment-background: #f3f3f3;
+  --admin-comment-background: #ffffff7a;
+  --unread-comment-background: #e4e4e4;
+  --unread-comment-border: inset 0px 0px 0px 2px #f3f3f3;
+  --notice-background: var(--yellow-opacity50);
   --notice-text: #222;
   --notice-icon-filter: none;
   --warning-background: var(--red);
@@ -28,9 +31,11 @@
   --hover-highlight: rgba(0, 0, 0, 0.05);
   --hover-highlight-reduced: rgba(0, 0, 0, 0.02);
   --hover-darken: var(--hover-highlight);
+  --sel-darken: rgba(0, 0, 0, 0.08);
 
   --content-border: #cfcfcf;
-  --content-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --content-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+  --searchbox-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
   --content-separator: #aaa;
   --control-border: #aaa;
 

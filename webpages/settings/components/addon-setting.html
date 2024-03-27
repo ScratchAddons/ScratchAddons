@@ -164,7 +164,7 @@
   .setting-input {
     color: var(--content-text);
     background: var(--input-background);
-    border: 1px solid var(--control-border);
+    border: none;
     height: 32px;
     box-sizing: border-box;
     padding: 0 12px;
@@ -172,6 +172,7 @@
     border-radius: 4px 0 0 4px;
     transition: 0.2s ease;
     transition-property: box-shadow, border;
+    z-index: 10;
   }
   [dir="rtl"] .setting-input {
     border-radius: 0 4px 4px 0;
@@ -195,7 +196,6 @@
     position: relative;
     cursor: pointer;
     transition: all 0.25s ease;
-    border: 1px solid var(--switch-border);
   }
 
   .setting-input.check::before {
@@ -206,8 +206,8 @@
     height: 10px;
     background-color: var(--switch-inner-background);
     border-radius: 5px;
-    top: 4px;
-    left: 4px;
+    top: 5px;
+    left: 5px;
     transition: all 0.25s ease;
   }
   [dir="rtl"] .setting-input.check::before {
@@ -229,7 +229,7 @@
 
   .setting-input.number {
     max-width: 150px;
-    border-radius: 16px 0 0 16px;
+    border-radius: 4px 0 0 4px;
   }
   [dir="rtl"] .setting-input.number {
     border-radius: 0 16px 16px 0;
@@ -287,7 +287,7 @@
     border-top-right-radius: 0;
     background: var(--button-background);
     color: var(--content-text);
-    border: 1px solid var(--control-border);
+    box-shadow: var(--content-shadow);
   }
   .iframe .setting-dropdown ul {
     right: auto;

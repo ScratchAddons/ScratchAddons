@@ -19,6 +19,7 @@ body {
 #header {
   display: flex;
   height: 60px;
+  box-shadow: var(--content-shadow);
 }
 #title-text,
 #settings {
@@ -34,7 +35,7 @@ body {
 #logo {
   width: 30px;
   height: 30px;
-  margin-inline-end: 20px;
+  margin-inline-end: 5px;
   vertical-align: middle;
 }
 #settings {
@@ -43,6 +44,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: 0.2s ease;
+}
+#settings:hover {
+  background: var(--hover-darken);
 }
 #settings > img {
   width: 24px;
@@ -50,7 +55,7 @@ body {
 }
 
 #popups {
-  background-color: var(--content-background);
+  background-color: var(--page-background);
   width: 100%;
   height: calc(100% - 60px);
 }
@@ -60,13 +65,16 @@ body {
   padding-bottom: 0px;
   display: flex;
   border-bottom: 1px solid var(--control-border);
+  justify-content: center;
+  padding-inline-start: 25px;
+  padding-inline-end: 25px;
 }
 
 #popup-chooser {
   display: flex;
   color: var(--content-text);
   height: 35px;
-  overflow: hidden;
+  width: 100%;
 }
 .popup-name {
   display: flex;
@@ -76,14 +84,15 @@ body {
   font-size: 12px;
   padding-inline-start: 10.5px;
   padding-inline-end: 12px;
-  background-color: var(--button-background);
-  border: 1px solid var(--control-border);
   border-bottom: none;
   border-radius: 12px 12px 0 0;
   transition: 0.2s ease;
+  width: 100%;
+  justify-content: center;
 }
 .popup-name:hover {
   background-color: var(--button-hover-background);
+  box-shadow: inset 0px -3px 0px 0px var(--tab-hover-underline);
 }
 .popup-name:not(.sel):hover {
   cursor: pointer;
@@ -92,17 +101,16 @@ body {
   border-inline-end: none;
 }
 .popup-name.sel {
-  background-color: var(--brand-orange);
-  color: var(--white-text);
+  background-color: var(--content-background);
+  box-shadow:
+    inset 0px -3px 0px 0px var(--brand-orange),
+    var(--content-shadow);
 }
 .popup-name img {
   vertical-align: middle;
   filter: var(--content-icon-filter);
   width: 18px;
   height: 18px;
-}
-.popup-name.sel img {
-  filter: brightness(0) invert(1);
 }
 .popup-title {
   padding-inline-start: 5px;
@@ -116,6 +124,7 @@ body {
   margin-inline-start: 3px;
   margin-inline-end: -2px;
   border-radius: 2px;
+  transition: 0.2s ease;
 }
 .popout:hover > .popout-img {
   background-color: var(--white-text);
