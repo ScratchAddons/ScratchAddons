@@ -85,6 +85,9 @@ export default async function ({ addon }) {
       } else if (el.matches("[class*=paint-editor_editor-container-top_] input[type=number]")) {
         // Number inputs in costume editor (note that browsers already provide up/down clickable buttons for these)
         return true;
+      } else if (el.matches(".sa-zoom-slider-count")) {
+        // Number input in `zoom-slider`
+        return true;
       } else return false;
     }
     return false;
