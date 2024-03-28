@@ -1,7 +1,7 @@
-import { isScratchAprilFools23 } from "../hide-flyout/april-fools.js";
+import { isScratchAprilFools24 } from "../hide-flyout/april-fools.js";
 
 export default async function ({ addon, console, msg, safeMsg }) {
-  if (isScratchAprilFools23()) return;
+  if (isScratchAprilFools24()) return;
 
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 

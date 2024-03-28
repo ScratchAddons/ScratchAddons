@@ -1,7 +1,7 @@
-import { isScratchAprilFools23 } from "../hide-flyout/april-fools.js";
+import { isScratchAprilFools24 } from "../hide-flyout/april-fools.js";
 
 export default async function ({ addon, msg, console }) {
-  if (isScratchAprilFools23()) {
+  if (isScratchAprilFools24()) {
     const removeStyles = () =>
       document.querySelector(":root > head > link[rel=stylesheet][data-addon-id=columns]").remove();
     removeStyles();

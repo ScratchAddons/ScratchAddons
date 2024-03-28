@@ -1,4 +1,4 @@
-export const isScratchAprilFools23 = () => {
+export const isScratchAprilFools24 = () => {
   let val = false;
   const now = Date.now() / 1000;
   if (!__scratchAddonsRedux.state && now < 1712059200 && now > 1711886400) val = true;
