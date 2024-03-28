@@ -190,9 +190,9 @@ if (now < 1712059200 && now > 1711886400) {
     document.getElementById("title-text").style.fontSize = "14px"; // To fit the fish emojis
   } else {
     setTimeout(() => {
-    spawnFish(20, 40);
-    spawnFish(340, 270);
-    spawnFish(50, 520);
+      spawnFish(20, 40);
+      spawnFish(340, 270);
+      spawnFish(50, 520);
     }, 100);
   }
 }
