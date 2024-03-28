@@ -7,8 +7,7 @@ export default function () {
     if (favicon) favicon.href = chrome.runtime.getURL("/images/icon-blue.png");
   }
   const now = Date.now() / 1000;
-  // TODO: update these timestamps for year 2024
-  if (/*now < 1648911600 && now > 1648738800 && */ ["popup"].includes(location.pathname.split("/")[2])) {
+  if (now < 1712059200 && now > 1711886400 && ["popup"].includes(location.pathname.split("/")[2])) {
     document.documentElement.style.setProperty("--brand-orange", "#3C69E7");
   }
   const lightThemeLink = document.createElement("link");

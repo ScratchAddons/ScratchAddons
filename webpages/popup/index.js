@@ -26,7 +26,7 @@ const vue = new Vue({
   methods: {
     msg(message, ...params) {
       const now = Date.now() / 1000;
-      if (message === "extensionName" /*&& now < 1648911600 && now > 1648738800*/) {
+      if (message === "extensionName" && now < 1712059200 && now > 1711886400) {
         // TODO: create whitelist of languages where this change is appropriate
         return window.matchMedia("(prefers-reduced-motion)").matches ? "Scratch Haddocks 🐟🐟" : "Scratch Haddocks";
       }
@@ -66,7 +66,7 @@ const vue = new Vue({
     version() {
       const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
       const ver = chrome.runtime.getManifest().version;
-      if (true /*&& now < 1648911600 && now > 1648738800*/) return ver;
+      if (now < 1712059200 && now > 1711886400) return ver;
       return prerelease ? ver + "-pre" : ver;
     },
   },
