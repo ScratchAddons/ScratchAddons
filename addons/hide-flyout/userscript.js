@@ -1,4 +1,8 @@
+import { isScratchAprilFools23 } from "./april-fools.js";
+
 export default async function ({ addon, console, msg }) {
+  if (isScratchAprilFools23()) return;
+
   let placeHolderDiv = null;
   let lockObject = null;
   let lockButton = null;

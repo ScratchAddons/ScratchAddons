@@ -3,7 +3,11 @@
  * It has been modified to work properly in our environment and fix some bugs.
  */
 
+import { isScratchAprilFools23 } from "../hide-flyout/april-fools.js";
+
 export default async function ({ addon, console }) {
+  if (isScratchAprilFools23()) return;
+
   const Blockly = await addon.tab.traps.getBlockly();
 
   const shouldWatchMouseCursor = addon.settings.get("watch");
