@@ -66,6 +66,7 @@ const vue = new Vue({
     version() {
       const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
       const ver = chrome.runtime.getManifest().version;
+      const now = Date.now();
       if (now < 1712059200 && now > 1711886400) return ver;
       return prerelease ? ver + "-pre" : ver;
     },
@@ -188,9 +189,10 @@ if (now < 1712059200 && now > 1711886400) {
   if (window.matchMedia("(prefers-reduced-motion)").matches) {
     document.getElementById("title-text").style.fontSize = "14px"; // To fit the fish emojis
   } else {
-    // Is it ok to run this immediately?
+    setTimeout(() => {
     spawnFish(20, 40);
     spawnFish(340, 270);
     spawnFish(50, 520);
+    }, 100);
   }
 }
