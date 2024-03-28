@@ -7,6 +7,5 @@ export const isScratchAprilFools24 = () => {
       ([k, v]) => k.includes("normal") && v === true
     );
   }
-  if (val === true && document.body) document.body.classList.toggle("totally-normal", true); // Only add once
   return val;
 };
