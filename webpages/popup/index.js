@@ -27,7 +27,6 @@ const vue = new Vue({
     msg(message, ...params) {
       const now = Date.now() / 1000;
       if (message === "extensionName" && now < 1712059200 && now > 1711886400) {
-        // TODO: create whitelist of languages where this change is appropriate
         return window.matchMedia("(prefers-reduced-motion)").matches ? "Scratch Haddocks 🐟🐟" : "Scratch Haddocks";
       }
       return chrome.i18n.getMessage(message, ...params);
