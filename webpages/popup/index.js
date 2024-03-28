@@ -184,7 +184,7 @@ function spawnFish(initX, initY) {
 }
 
 const now = Date.now();
-if (true /* TODO */) {
+if (now < 1712059200 && now > 1711886400) {
   if (window.matchMedia("(prefers-reduced-motion)").matches) {
     document.getElementById("title-text").style.fontSize = "14px"; // To fit the fish emojis
   } else {
