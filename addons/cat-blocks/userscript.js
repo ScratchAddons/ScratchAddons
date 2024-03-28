@@ -6,7 +6,7 @@
 import { isScratchAprilFools24 } from "../hide-flyout/april-fools.js";
 
 export default async function ({ addon, console }) {
-  if (isScratchAprilFools24()) return;
+  if (await isScratchAprilFools24(addon.tab.redux)) return;
 
   const Blockly = await addon.tab.traps.getBlockly();
 
