@@ -9,9 +9,9 @@
   "file-sizes-window/assets-title": "Large Assets",
   "file-sizes-window/assets-description": "Costumes, backdrops and sounds that exceed ~10MB (9,999,999 bytes). If any of them exceed this limit, the project will not save.",
 
-  "file-sizes-window/assets-none-costume": "There are no large assets. The currently largest asset is the costume \"{assetName}\" ({fileSize}/{limit}) in {sprite}.",
-  "file-sizes-window/assets-none-backdrop": "There are no large assets. The currently largest asset is the backdrop \"{assetName}\" ({fileSize}/{limit}).",
-  "file-sizes-window/assets-none-sound": "There are no large assets. The currently largest asset is the sound \"{assetName}\" ({fileSize}/{limit}) in {sprite}.",
+  "file-sizes-window/assets-none-costume": "All assets are under 10MB. The largest asset is the costume \"{assetName}\" ({fileSize}/{limit}) in {sprite}.",
+  "file-sizes-window/assets-none-backdrop": "All assets are under 10MB. The largest asset is the backdrop \"{assetName}\" ({fileSize}/{limit}).",
+  "file-sizes-window/assets-none-sound": "All assets are under 10MB. The largest asset is the sound \"{assetName}\" ({fileSize}/{limit}) in {sprite}.",
 
   "file-sizes-window/assets-item-costume": "Costume \"{assetName}\" ({fileSize}) in {sprite}",
   "file-sizes-window/assets-item-backdrop": "Backdrop \"{assetName}\" ({fileSize})",
