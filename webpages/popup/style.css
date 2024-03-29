@@ -21,8 +21,6 @@ body {
   height: 60px;
 }
 .header-button {
-  right: 0;
-  position: fixed;
   cursor: pointer;
   padding: 18px;
   line-height: 0;
