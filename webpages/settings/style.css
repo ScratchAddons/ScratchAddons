@@ -137,7 +137,8 @@ h1 {
   right: 0;
   position: fixed;
   cursor: pointer;
-  padding: 16px;
+  padding: 17.5px;
+  line-height: 0;
 }
 [dir="rtl"] .theme-switch {
   right: auto;
