@@ -3,7 +3,7 @@
   "file-sizes-window/modal-title": "Project File Sizes",
 
   "file-sizes-window/project-json-title": "project.json File",
-  "file-sizes-window/project-json-description": "This is the file that stores the project's code, variables, lists and costume, sound, backdrop and sprite info. If it exceeds 5MiB (5,242,880 bytes), the project will not save.",
+  "file-sizes-window/project-json-description": "This is the file that stores the project's code, variables, lists, and metadata about the project and its assets, like the properties of sprites, costumes, backdrops, and sounds. If it exceeds 5MiB (5,242,880 bytes), you won't be able to save the project.",
   "file-sizes-window/project-json-size": "The project.json file is {fileSize}/{limit} large.",
 
   "file-sizes-window/assets-title": "Large Assets",
