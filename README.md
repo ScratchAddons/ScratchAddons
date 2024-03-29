@@ -1,7 +1,4 @@
-<h1>
-  Scratch Addons
-  <img src="images/icon.svg" alt="Scratch Addons logo" align="right" width="128px"></img>
-</h1>
+# Scratch Addons <img src="images/icon.svg" alt="Scratch Addons logo" align="right" width="128px"></img>
 
 [![Chrome Web Store](.github/readme-images/cws-badge.png)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
 [![Firefox Add-ons](.github/readme-images/ff-addon-badge.png)](https://addons.mozilla.org/firefox/addon/scratch-messaging-extension/)
