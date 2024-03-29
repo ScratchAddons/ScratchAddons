@@ -20,6 +20,13 @@ body {
   display: flex;
   height: 60px;
 }
+.header-button {
+  right: 0;
+  position: fixed;
+  cursor: pointer;
+  padding: 17.5px;
+  line-height: 0;
+}
 #title-text,
 #settings {
   font-size: 18px;
@@ -37,18 +44,10 @@ body {
   margin-inline-end: 20px;
   vertical-align: middle;
 }
-#settings {
-  padding: 0 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-#settings > img {
+#settings-icon {
   width: 24px;
   height: 24px;
 }
-
 #popups {
   background-color: var(--content-background);
   width: 100%;
