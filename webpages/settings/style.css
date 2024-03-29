@@ -133,7 +133,7 @@ h1 {
 .theme-switch {
   height: 25px;
 }
-#theme-div {
+.header-button {
   right: 0;
   position: fixed;
   cursor: pointer;
