@@ -341,7 +341,6 @@ const WELL_KNOWN_PATTERNS = {
   topics: /^\/discuss\/topic\/\d+\/?$/,
   newPostScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add)\/?$/,
   editingScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add|post\/\d+\/edit|settings\/[\w-]+)\/?$/,
-  forums: /^\/discuss(?!\/m(?:$|\/))(?:\/.*)?$/,
   // scratch-www routes, not including project pages
   // Matches /projects (an error page) but not /projects/<id>
   scratchWWWNoProject:

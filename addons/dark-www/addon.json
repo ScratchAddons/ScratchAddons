@@ -2269,7 +2269,7 @@
     },
     {
       "url": "pygments.css",
-      "matches": ["forums"],
+      "matches": ["https://scratch.mit.edu/discuss/*"],
       "if": {
         "settings": { "darkForumCode": true }
       }

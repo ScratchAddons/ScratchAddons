@@ -14,13 +14,13 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["forums"]
+      "matches": ["https://scratch.mit.edu/discuss/*"]
     }
   ],
   "userstyles": [
     {
       "url": "userscript.css",
-      "matches": ["forums"]
+      "matches": ["https://scratch.mit.edu/discuss/*"]
     }
   ],
   "tags": ["forums", "community"],
