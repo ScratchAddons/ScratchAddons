@@ -28,7 +28,7 @@ body {
   line-height: 0;
 }
 #title-text,
-#settings {
+.header-button {
   font-size: 18px;
   font-weight: 400;
 }
