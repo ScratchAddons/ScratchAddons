@@ -6,8 +6,8 @@ let duringBadgeUpdate = false;
 
 const promisify =
   (callbackFn) =>
-    (...args) =>
-      new Promise((resolve) => callbackFn(...args, resolve));
+  (...args) =>
+    new Promise((resolve) => callbackFn(...args, resolve));
 
 const ALARM_NAME = "fetchMessages";
 const BADGE_ALARM_NAME = "updateBadge";
@@ -39,8 +39,11 @@ export async function updateBadge(defaultStoreId) {
       // Do not show 0, unless that 0 means logged out
       if (count || !isLoggedIn) {
         const displayCount =
-          badgeSettings.showExactCount || count < 1000 ? String(count) :
-            (count <= 9000 ? Math.floor(count / 1000) + "k" : "9k+");
+          badgeSettings.showExactCount || count < 1000
+            ? String(count)
+            : count <= 9000
+              ? Math.floor(count / 1000) + "k"
+              : "9k+";
         const text = isLoggedIn ? String(displayCount) : "?";
         const color = isLoggedIn ? badgeSettings.color : "#dd2222";
         // The badge will show incorrect message count in other auth contexts.
