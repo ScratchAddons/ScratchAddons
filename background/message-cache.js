@@ -18,7 +18,7 @@ const BADGE_ALARM_NAME = "updateBadge";
  * @param {string} defaultStoreId the default cookie store ID
  */
 export async function updateBadge(defaultStoreId) {
-  const MAX_BADGE_COUNT = 9;
+  const MAX_BADGE_COUNT = 99;
 
   if (duringBadgeUpdate) return;
   if (!defaultStoreId) return;
