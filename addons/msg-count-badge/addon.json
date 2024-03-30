@@ -23,6 +23,12 @@
       "id": "showOffline",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Show exact count",
+      "id": "showExactCount",
+      "type": "boolean",
+      "default": false
     }
   ],
   "presets": [

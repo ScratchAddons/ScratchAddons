@@ -38,8 +38,9 @@ export async function updateBadge(defaultStoreId) {
       const count = await db.get("count", defaultStoreId);
       // Do not show 0, unless that 0 means logged out
       if (count || !isLoggedIn) {
+        const displayCount = badgeSettings.showExactCount || count <= 9 ? String(count) : "9+";
         const color = isLoggedIn ? badgeSettings.color : "#dd2222";
-        const text = isLoggedIn ? String(count) : "?";
+        const text = isLoggedIn ? String(displayCount) : "?";
         // The badge will show incorrect message count in other auth contexts.
         // Blocked on Chrome implementing store ID-based tab query
         await promisify(chrome.browserAction.setBadgeBackgroundColor.bind(chrome.browserAction))({ color });
