@@ -40,7 +40,8 @@ export async function updateBadge(defaultStoreId) {
       const count = await db.get("count", defaultStoreId);
       // Do not show 0, unless that 0 means logged out
       if (count || !isLoggedIn) {
-        const displayCount = badgeSettings.showExactCount || count <= MAX_BADGE_COUNT ? String(count) : MAX_BADGE_COUNT + "+";
+        const displayCount =
+          badgeSettings.showExactCount || count <= MAX_BADGE_COUNT ? String(count) : MAX_BADGE_COUNT + "+";
         const text = isLoggedIn ? String(displayCount) : "?";
         const color = isLoggedIn ? badgeSettings.color : "#dd2222";
         // The badge will show incorrect message count in other auth contexts.
