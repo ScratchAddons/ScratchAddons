@@ -25,7 +25,7 @@
       "default": false
     },
     {
-      "name": "Show exact number for large message count",
+      "name": "Show exact number for large message counts",
       "id": "showExactCount",
       "type": "boolean",
       "default": false
