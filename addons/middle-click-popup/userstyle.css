@@ -70,6 +70,9 @@
 .sa-mcp-preview-container {
   flex: auto;
   overflow-y: scroll;
+}
+
+.sa-mcp-root /* <-- specificity */ .sa-mcp-preview-container {
   scrollbar-width: none;
 }
 

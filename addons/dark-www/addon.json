@@ -2222,6 +2222,10 @@
       "matches": ["editingScreens"]
     },
     {
+      "url": "profile.js",
+      "matches": ["profiles"]
+    },
+    {
       "url": "scratchstats.js",
       "matches": ["profiles"],
       "runAtComplete": false
