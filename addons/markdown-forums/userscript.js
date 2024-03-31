@@ -7,6 +7,7 @@ export default async function ({ addon, msg, console }) {
   const submitButton = document.querySelector(".form-submit button");
 
   body.addEventListener("input", () => {
+    // TODO: Remove this
     console.log(toBBCode(body.value));
   });
 
