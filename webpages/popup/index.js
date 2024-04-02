@@ -25,10 +25,6 @@ const vue = new Vue({
   },
   methods: {
     msg(message, ...params) {
-      const now = Date.now() / 1000;
-      if (message === "extensionName" && now < 1712059200 && now > 1711886400) {
-        return window.matchMedia("(prefers-reduced-motion)").matches ? "Scratch Haddocks 🐟🐟" : "Scratch Haddocks";
-      }
       return chrome.i18n.getMessage(message, ...params);
     },
     direction() {
@@ -65,8 +61,6 @@ const vue = new Vue({
     version() {
       const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
       const ver = chrome.runtime.getManifest().version;
-      const now = Date.now() / 1000;
-      if (now < 1712059200 && now > 1711886400) return ver;
       return prerelease ? ver + "-pre" : ver;
     },
   },
@@ -138,60 +132,3 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 chrome.runtime.sendMessage("checkPermissions");
-
-// April Fools 2024 below
-
-class Haddock {
-  constructor(elem) {
-    this.elem = elem;
-    const rect = elem.getBoundingClientRect();
-    this.width = rect.width;
-    this.height = rect.height;
-    this.facingRight = parseInt(elem.style.left) > 200;
-    (async () => {
-      while (true) {
-        this.facingRight = !this.facingRight;
-        const duration = 6 + Math.random() * 5; // 6-11 secs
-        this.cycle(duration);
-        await new Promise((r) => setTimeout(r, duration * 1000));
-      }
-    })();
-  }
-
-  cycle(duration) {
-    this.elem.style.transitionProperty = "transform, left, top";
-    this.elem.style.transitionDuration = `0.2s, ${duration}s, ${duration}s`;
-    setTimeout(() => {
-      this.elem.style.transform = `scaleX(${this.facingRight ? -1 : 1})`;
-      // If the haddock is facing left, move to anywhere on the left half of the screen.
-      // If the haddock is facing right, move to anywhere on the right half of the screen.
-      this.elem.style.left = (Math.random() + this.facingRight) * ((window.innerWidth - this.width) / 2) + "px";
-      this.elem.style.top = Math.random() * (window.innerHeight - this.height) + "px";
-    }, 0);
-  }
-}
-
-function spawnFish(initX, initY) {
-  const fishElem = document.createElement("span");
-  fishElem.textContent = "🐟";
-  fishElem.style.pointerEvents = "none";
-  fishElem.style.position = "absolute";
-  fishElem.style.left = initX + "px";
-  fishElem.style.top = initY + "px";
-  fishElem.style.fontSize = "22px";
-  fishElem.style.textShadow = "#000 0px 2px 5px";
-  new Haddock(document.body.appendChild(fishElem));
-}
-
-const now = Date.now() / 1000;
-if (now < 1712059200 && now > 1711886400) {
-  if (window.matchMedia("(prefers-reduced-motion)").matches) {
-    document.getElementById("title-text").style.fontSize = "14px"; // To fit the fish emojis
-  } else {
-    setTimeout(() => {
-      spawnFish(20, 40);
-      spawnFish(340, 270);
-      spawnFish(50, 520);
-    }, 100);
-  }
-}
