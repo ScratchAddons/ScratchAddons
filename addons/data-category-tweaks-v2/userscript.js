@@ -1,8 +1,4 @@
-import { isScratchAprilFools24 } from "../hide-flyout/april-fools.js";
-
 export default async function ({ addon, console, msg, safeMsg }) {
-  if (await isScratchAprilFools24(addon.tab.redux)) return;
-
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   const SMALL_GAP = 8;
