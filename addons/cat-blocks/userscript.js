@@ -3,11 +3,7 @@
  * It has been modified to work properly in our environment and fix some bugs.
  */
 
-import { isScratchAprilFools24 } from "../hide-flyout/april-fools.js";
-
 export default async function ({ addon, console }) {
-  if (await isScratchAprilFools24(addon.tab.redux)) return;
-
   const Blockly = await addon.tab.traps.getBlockly();
 
   const shouldWatchMouseCursor = addon.settings.get("watch");

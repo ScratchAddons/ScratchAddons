@@ -1,8 +1,4 @@
-import { isScratchAprilFools24 } from "./april-fools.js";
-
 export default async function ({ addon, console, msg }) {
-  if (await isScratchAprilFools24(addon.tab.redux)) return;
-
   let placeHolderDiv = null;
   let lockObject = null;
   let lockButton = null;

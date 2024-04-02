@@ -1,15 +1,4 @@
-import { isScratchAprilFools24 } from "../hide-flyout/april-fools.js";
-
 export default async function ({ addon, msg, console }) {
-  if (await isScratchAprilFools24(addon.tab.redux)) {
-    const removeStyles = () => {
-      document.querySelector("link[rel=stylesheet][data-addon-id=columns]").remove();
-    };
-    removeStyles();
-    addon.self.addEventListener("reenabled", () => setTimeout(removeStyles, 500));
-    return;
-  }
-
   const Blockly = await addon.tab.traps.getBlockly();
 
   // https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L235
