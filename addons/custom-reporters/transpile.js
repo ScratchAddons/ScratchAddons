@@ -56,9 +56,9 @@ class Transpiler {
       }
       const eq = this._primitives.operator_equals;
       this._primitives.operator_equals = function (...args) {
-        console.log('operator_equals!')
-        return eq(...args)
-      }
+        console.log("operator_equals!");
+        return eq(...args);
+      };
     };
     this.vm.runtime._registerBlockPackages();
     const g = this.vm.runtime.getOpcodeFunction;
