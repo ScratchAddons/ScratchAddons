@@ -63,8 +63,8 @@ function contextMenuUnmuted() {
   const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
   chrome.browserAction.setIcon({
     path: {
-      16: prerelease ? "../images/icon-blue-16.png" : "../images/icon-16.png",
-      32: prerelease ? "../images/icon-blue-32.png" : "../images/icon-32.png",
+      16: prerelease ? chrome.runtime.getURL("images/icon-blue-16.png") : chrome.runtime.getURL("images/icon-16.png"),
+      32: prerelease ? chrome.runtime.getURL("images/icon-blue-32.png") : chrome.runtime.getURL("images/icon-32.png"),
     },
   });
 }
@@ -79,8 +79,8 @@ function contextMenuMuted() {
   });
   chrome.browserAction.setIcon({
     path: {
-      16: "../images/icon-gray-16.png",
-      32: "../images/icon-gray-32.png",
+      16: chrome.runtime.getURL("images/icon-gray-16.png"),
+      32: chrome.runtime.getURL("images/icon-gray-32.png"),
     },
   });
 }
