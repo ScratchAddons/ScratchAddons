@@ -24,6 +24,10 @@ body {
   cursor: pointer;
   padding: 18px;
   line-height: 0;
+  transition: 0.2s ease;
+}
+.header-button:hover {
+  background: var(--hover-darken);
 }
 #title-text,
 .header-button {
