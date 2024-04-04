@@ -51,6 +51,8 @@ export default async function ({ addon, msg }) {
     addon.self.addEventListener("disabled", () => {
       (wrapperElement ?? wrapperDiv).remove();
     });
+
+    return wrapperDiv;
   };
 
   const addSlider = async () => {
