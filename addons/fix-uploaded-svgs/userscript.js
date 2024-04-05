@@ -1,12 +1,12 @@
 export default async function ({ addon, console }) {
   // Accounts for Scratch editor
-  function toEditorSVG(element) {    
+  function toEditorSVG(element) {
     const svg = element.cloneNode(true);
     const iframe = document.createElement("iframe");
     iframe.setAttribute("src", "about:blank");
     document.body.append(iframe);
     iframe.contentDocument.body.appendChild(svg);
-    
+
     const svgWindow = iframe.contentWindow;
     var translate, x, y, size;
 
@@ -68,7 +68,7 @@ export default async function ({ addon, console }) {
               svgElement.removeAttribute("width");
               text = xmlDocument.documentElement.outerHTML;
             }
-            
+
             const newSVGElement = toEditorSVG(xmlDocument.querySelector("svg"));
             svgElement.replaceWith(newSVGElement);
             text = xmlDocument.documentElement.outerHTML;
