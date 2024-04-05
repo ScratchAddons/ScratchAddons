@@ -35,9 +35,9 @@ export default async function ({ addon, console }) {
       textElement.setAttribute("x", "0");
       textElement.setAttribute("y", "0");
     }
-}
+  }
 
-toEditorSVG(document);
+  toEditorSVG(document);
 
   const originalFileReader = window.FileReader;
   window.FileReader = function () {
