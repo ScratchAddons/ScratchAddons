@@ -27,7 +27,7 @@ body {
   transition: 0.2s ease;
 }
 .header-button:hover {
-  background: var(--hover-darken);
+  background: var(--header-hover-darken);
 }
 #title-text,
 .header-button {

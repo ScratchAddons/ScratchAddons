@@ -138,7 +138,7 @@ h1 {
   transition: 0.2s ease;
 }
 .header-button:hover {
-  background: var(--hover-darken);
+  background: var(--header-hover-darken);
 }
 .theme-switch {
   height: 25px;
