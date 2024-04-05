@@ -59,6 +59,8 @@ export default async function ({ addon, console }) {
               text = xmlDocument.documentElement.outerHTML;
             }
 
+            toEditorSVG(svgElement);
+
             const newFile = new File([text], file.name, {
               type: file.type,
               lastModified: file.lastModified,
