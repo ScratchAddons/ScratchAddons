@@ -3,46 +3,39 @@ export default async function ({ addon, console }) {
   function toEditorSVG(svg) {
     const svgWindow = svg.defaultView;
     var translate, x, y, size;
-    
+
     for (var textElement of svg.getElementsByTagName("text")) {
       try {
-        translate = textElement
-          .getAttribute("transform")
-          .split("(")[1]
-          .split(")")[0]
-          .split(", ");
+        translate = textElement.getAttribute("transform").split("(")[1].split(")")[0].split(", ");
       } catch {
         translate = ["0", "0"];
       }
       translate[0] = Number.parseFloat(translate[0]);
       translate[1] = Number.parseFloat(translate[1]);
-    
+
       try {
         x = textElement.getAttribute("x");
       } catch {
         x = "0";
       }
       x = Number.parseFloat(x);
-      
+
       try {
         y = textElement.getAttribute("y");
       } catch {
         y = "0";
       }
       y = Number.parseFloat(y);
-    
+
       size = svgWindow.getComputedStyle(textElement).getPropertyValue("font-size");
       size = Number.parseFloat(size.split("px")[0]);
-    
-      textElement.setAttribute(
-        "transform",
-        `translate(${translate[0] + x}, ${translate[1] + y - size}) `,
-      );
+
+      textElement.setAttribute("transform", `translate(${translate[0] + x}, ${translate[1] + y - size}) `);
       textElement.setAttribute("x", "0");
       textElement.setAttribute("y", "0");
     }
   }
-  
+
   const originalFileReader = window.FileReader;
   window.FileReader = function () {
     const realFileReader = new originalFileReader();
@@ -66,8 +59,6 @@ export default async function ({ addon, console }) {
               text = xmlDocument.documentElement.outerHTML;
             }
 
-            
-            
             const newFile = new File([text], file.name, {
               type: file.type,
               lastModified: file.lastModified,
