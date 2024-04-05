@@ -1,7 +1,8 @@
 export default async function ({ addon, console }) {
   // Accounts for Scratch editor
-  function toEditorSVG(svg) {
-    const svgWindow = svg.defaultView;
+  function toEditorSVG(document) {
+    const svg = document.getElementsByTagName("svg")[0];
+    const svgWindow = document.defaultView;
     var translate, x, y, size;
 
     for (var textElement of svg.getElementsByTagName("text")) {
@@ -34,7 +35,9 @@ export default async function ({ addon, console }) {
       textElement.setAttribute("x", "0");
       textElement.setAttribute("y", "0");
     }
-  }
+}
+
+toEditorSVG(document);
 
   const originalFileReader = window.FileReader;
   window.FileReader = function () {
@@ -59,7 +62,7 @@ export default async function ({ addon, console }) {
               text = xmlDocument.documentElement.outerHTML;
             }
 
-            toEditorSVG(svgElement);
+            toEditorSVG(xmlDocument);
 
             const newFile = new File([text], file.name, {
               type: file.type,
