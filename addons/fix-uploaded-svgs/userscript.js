@@ -45,8 +45,6 @@ export default async function ({ addon, console }) {
   }
 
   const originalFileReader = window.FileReader;
-  console.log(window.FileReader);
-  console.log("separator");
   window.FileReader = function () {
     const realFileReader = new originalFileReader();
     const readAsArrayBuffer = Symbol();
