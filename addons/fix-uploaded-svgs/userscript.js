@@ -19,24 +19,22 @@ export default async function ({ addon, console }) {
       translate[0] = Number.parseFloat(translate[0]);
       translate[1] = Number.parseFloat(translate[1]);
 
-      try {
+      x = "0";
+      if (textElement.hasAttribute("x")) {
         x = textElement.getAttribute("x");
-      } catch {
-        x = "0";
       }
       x = Number.parseFloat(x);
 
-      try {
+      y = "0";
+      if (textElement.hasAttribute("y")) {
         y = textElement.getAttribute("y");
-      } catch {
-        y = "0";
       }
       y = Number.parseFloat(y);
 
-      size = svgWindow.getComputedStyle(textElement).getPropertyValue("font-size");
-      size = Number.parseFloat(size.split("px")[0]);
+      /*size = svgWindow.getComputedStyle(textElement).getPropertyValue("font-size");
+      size = Number.parseFloat(size.split("px")[0]);*/
 
-      textElement.setAttribute("transform", `translate(${translate[0] + x}, ${translate[1] + y - size}) `);
+      textElement.setAttribute("transform", `translate(${translate[0] + x}, ${translate[1] + y - 16}) `);
       textElement.setAttribute("x", "0");
       textElement.setAttribute("y", "0");
     }
