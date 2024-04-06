@@ -2,7 +2,7 @@ export const BACKPACK_URL = "https://backpack.scratch.mit.edu/";
 
 /**
  * Returns true if a web worker request is being caused by the Scratch bug
- * https://github.com/scratchfoundation/scratch-gui/issues/8805.
+ * https://github.com/scratchfoundation/scratch-gui/issues/8805
  * @param {*} message The message being sent to the web worker.
  * @returns {boolean}
  */
