@@ -242,15 +242,15 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_36": {
-    "message": "New addon: \"rearrangeable custom block inputs\", which allows rearranging custom block parameters on the \"Make a block\" screen. Go to $1 to enable it.",
+  "extensionUpdateInfo1_v1_37": {
+    "message": "New addon: \"project page download button\", which allows you to download projects directly from the project page, without having to open the editor first. Go to $1 to enable it.",
     "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_36": {
-    "message": "Other new addons added this update are \"customizable menu bar\", \"place backpack code at mouse\", and \"square block text inputs\"."
+  "extensionUpdateInfo2_v1_37": {
+    "message": "Other new addons added this update are \"larger Save Now button\", and \"replace backpack bar with button\"."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",
