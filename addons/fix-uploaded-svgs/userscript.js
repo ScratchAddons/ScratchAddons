@@ -2,16 +2,13 @@ export default async function ({ addon, console }) {
   // Fixes "x", "y", and "dominant-baseline" being ignored by Scratch, "span" causing offset
   function fixEditorSVG(element) {
     const svg = element.cloneNode(true);
-    
+
     // This fixes the previous issue of SVGs imported from Affinity Designer
-    if (
-      svg.height.baseVal.valueAsString === "100%" &&
-      svg.width.baseVal.valueAsString === "100%"
-    ) {
+    if (svg.height.baseVal.valueAsString === "100%" && svg.width.baseVal.valueAsString === "100%") {
       svg.removeAttribute("height");
       svg.removeAttribute("width");
     }
-    
+
     // This iframe is needed to correct "dominant-baseline"
     const iframe = document.createElement("iframe");
     iframe.setAttribute("src", "about:blank");
