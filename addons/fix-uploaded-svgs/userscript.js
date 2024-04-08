@@ -1,17 +1,33 @@
 export default async function ({ addon, console }) {
   // Fixes "x", "y", and "dominant-baseline" being ignored by Scratch, "span" causing offset
-  function toEditorSVG(element) {
+  function fixEditorSVG(element) {
+    const svg = element.cloneNode(true);
+    
+    // This fixes the previous issue of SVGs imported from Affinity Designer
+    if (
+      svg.height.baseVal.valueAsString === "100%" &&
+      svg.width.baseVal.valueAsString === "100%"
+    ) {
+      svg.removeAttribute("height");
+      svg.removeAttribute("width");
+    }
+    
     // This iframe is needed to correct "dominant-baseline"
     const iframe = document.createElement("iframe");
     iframe.setAttribute("src", "about:blank");
     document.body.append(iframe);
-
-    const svg = element.cloneNode(true);
     iframe.contentDocument.body.appendChild(svg);
 
-    var transform, translate, translateIndex, x, y, difference;
-    var baselineAdjust, innerTextElement, innerTextSpan;
-    for (var textElement of svg.getElementsByTagName("text")) {
+    let transform = "",
+      translate = "",
+      translateIndex = 0,
+      x = "",
+      y = "",
+      difference = 0,
+      baselineAdjust = "",
+      innerTextElement = "",
+      innerTextSpan = "";
+    for (let textElement of svg.getElementsByTagName("text")) {
       // Extracts "translate" from "transform" property
       if (textElement.hasAttribute("transform")) {
         transform = textElement.getAttribute("transform");
@@ -84,17 +100,8 @@ export default async function ({ addon, console }) {
             const xmlParser = new DOMParser();
             const xmlDocument = xmlParser.parseFromString(text, "text/xml");
             const svgElement = xmlDocument.children[0];
-            if (
-              svgElement.height.baseVal.valueAsString === "100%" &&
-              svgElement.width.baseVal.valueAsString === "100%"
-            ) {
-              svgElement.removeAttribute("height");
-              svgElement.removeAttribute("width");
-              text = xmlDocument.documentElement.outerHTML;
-            }
 
-            const newSVGElement = toEditorSVG(xmlDocument.querySelector("svg"));
-            svgElement.replaceWith(newSVGElement);
+            svgElement.replaceWith(fixEditorSVG(svgElement));
             text = xmlDocument.documentElement.outerHTML;
 
             const newFile = new File([text], file.name, {
