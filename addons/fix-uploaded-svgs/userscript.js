@@ -5,22 +5,26 @@ export default async function ({ addon, console }) {
     const iframe = document.createElement("iframe");
     iframe.setAttribute("src", "about:blank");
     document.body.append(iframe);
-    
+
     const svg = element.cloneNode(true);
     iframe.contentDocument.body.appendChild(svg);
-    
+
     var transform, translate, translateIndex, x, y, difference;
     var baselineAdjust, innerTextElement, innerTextSpan;
     for (var textElement of svg.getElementsByTagName("text")) {
-        // Extracts "translate" from "transform" property
-        if (textElement.hasAttribute("transform")) {
+      // Extracts "translate" from "transform" property
+      if (textElement.hasAttribute("transform")) {
         transform = textElement.getAttribute("transform");
         translateIndex = transform.indexOf("translate");
         if (translateIndex === -1) {
           transform += "translate(0, 0)";
           translate = ["0", "0"];
         } else {
-          translate = transform.slice(translateIndex, transform.indexOf(")")).split("(")[1].replaceAll(/\s* /g, "").split(",");
+          translate = transform
+            .slice(translateIndex, transform.indexOf(")"))
+            .split("(")[1]
+            .replaceAll(/\s* /g, "")
+            .split(",");
           translate.push("0");
         }
       } else {
@@ -57,8 +61,11 @@ export default async function ({ addon, console }) {
       difference = textElement.getBoundingClientRect().top - baselineAdjust.getBoundingClientRect().top;
       textElement.style.dominantBaseline = "auto";
       baselineAdjust.remove();
-      
-      transform = transform.replace(/translate\((\d,?\s?)+\)/, `translate(${translate[0] + x}, ${translate[1] + y + difference}) `);
+
+      transform = transform.replace(
+        /translate\((\d,?\s?)+\)/,
+        `translate(${translate[0] + x}, ${translate[1] + y + difference}) `
+      );
       textElement.setAttribute("transform", transform);
       textElement.setAttribute("x", "0");
       textElement.setAttribute("y", "0");
