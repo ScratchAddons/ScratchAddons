@@ -4,7 +4,6 @@
 import "./transition.js";
 
 // Load idb
-// TODO before merging: can we run this as an ES module?
 import "../libraries/thirdparty/idb.js";
 
 // Declare scratchAddons object, create global and local state
