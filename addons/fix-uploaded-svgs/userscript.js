@@ -23,8 +23,7 @@ export default async function ({ addon, console }) {
           translate = transform
             .slice(translateIndex, transform.indexOf(")"))
             .split("(")[1]
-            .replaceAll(/\s* /g, "")
-            .split(",");
+            .split(/,* /g);
           translate.push("0");
         }
       } else {
@@ -49,7 +48,10 @@ export default async function ({ addon, console }) {
       // Appends "tspan" instead of Scratch
       innerTextElement = textElement.firstChild;
       if (innerTextElement.tagName === undefined) {
-        innerTextSpan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+        innerTextSpan = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "tspan",
+        );
         innerTextSpan.appendChild(innerTextElement);
         textElement.appendChild(innerTextSpan);
       }
@@ -58,13 +60,15 @@ export default async function ({ addon, console }) {
       baselineAdjust = textElement.cloneNode(true);
       textElement.after(baselineAdjust);
       baselineAdjust.style.dominantBaseline = "auto";
-      difference = textElement.getBoundingClientRect().top - baselineAdjust.getBoundingClientRect().top;
+      difference =
+        textElement.getBoundingClientRect().top -
+        baselineAdjust.getBoundingClientRect().top;
       textElement.style.dominantBaseline = "auto";
       baselineAdjust.remove();
 
       transform = transform.replace(
         /translate\((\d,?\s?)+\)/,
-        `translate(${translate[0] + x}, ${translate[1] + y + difference}) `
+        `translate(${translate[0] + x}, ${translate[1] + y + difference}) `,
       );
       textElement.setAttribute("transform", transform);
       textElement.setAttribute("x", "0");
