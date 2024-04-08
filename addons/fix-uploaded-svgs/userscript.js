@@ -1,19 +1,30 @@
 export default async function ({ addon, console }) {
-  // Accounts for Scratch editor
+  // Fixes "x", "y", and "dominant-baseline" being ignored by Scratch, "span" causing offset
   function toEditorSVG(element) {
-    const svg = element.cloneNode(true);
+    // This iframe is needed to correct "dominant-baseline"
     const iframe = document.createElement("iframe");
     iframe.setAttribute("src", "about:blank");
     document.body.append(iframe);
+    
+    const svg = element.cloneNode(true);
     iframe.contentDocument.body.appendChild(svg);
-
-    const svgWindow = iframe.contentWindow;
-    var translate, x, y, size;
-
+    
+    var transform, translate, translateIndex, x, y, difference;
+    var baselineAdjust, innerTextElement, innerTextSpan;
     for (var textElement of svg.getElementsByTagName("text")) {
-      try {
-        translate = textElement.getAttribute("transform").split("(")[1].split(")")[0].split(", ");
-      } catch {
+        // Extracts "translate" from "transform" property
+        if (textElement.hasAttribute("transform")) {
+        transform = textElement.getAttribute("transform");
+        translateIndex = transform.indexOf("translate");
+        if (translateIndex === -1) {
+          transform += "translate(0, 0)";
+          translate = ["0", "0"];
+        } else {
+          translate = transform.slice(translateIndex, transform.indexOf(")")).split("(")[1].replaceAll(/\s* /g, "").split(",");
+          translate.push("0");
+        }
+      } else {
+        transform = "translate(0, 0)";
         translate = ["0", "0"];
       }
       translate[0] = Number.parseFloat(translate[0]);
@@ -31,10 +42,24 @@ export default async function ({ addon, console }) {
       }
       y = Number.parseFloat(y);
 
-      /*size = svgWindow.getComputedStyle(textElement).getPropertyValue("font-size");
-      size = Number.parseFloat(size.split("px")[0]);*/
+      // Appends "tspan" instead of Scratch
+      innerTextElement = textElement.firstChild;
+      if (innerTextElement.tagName === undefined) {
+        innerTextSpan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+        innerTextSpan.appendChild(innerTextElement);
+        textElement.appendChild(innerTextSpan);
+      }
 
-      textElement.setAttribute("transform", `translate(${translate[0] + x}, ${translate[1] + y - 16}) `);
+      // Accounts for "dominant-baseline" removal
+      baselineAdjust = textElement.cloneNode(true);
+      textElement.after(baselineAdjust);
+      baselineAdjust.style.dominantBaseline = "auto";
+      difference = textElement.getBoundingClientRect().top - baselineAdjust.getBoundingClientRect().top;
+      textElement.style.dominantBaseline = "auto";
+      baselineAdjust.remove();
+      
+      transform = transform.replace(/translate\((\d,?\s?)+\)/, `translate(${translate[0] + x}, ${translate[1] + y + difference}) `);
+      textElement.setAttribute("transform", transform);
       textElement.setAttribute("x", "0");
       textElement.setAttribute("y", "0");
     }
