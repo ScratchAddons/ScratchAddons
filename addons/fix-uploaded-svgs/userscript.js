@@ -72,7 +72,7 @@ export default async function ({ addon, console }) {
       baselineAdjust.remove();
 
       transform = transform.replace(
-        /translate\((\d,?\s?)+\)/,
+        /translate\(([\d.],?\s?)+\)/,
         `translate(${translate[0] + x}, ${translate[1] + y + difference}) `
       );
       textElement.setAttribute("transform", transform);
