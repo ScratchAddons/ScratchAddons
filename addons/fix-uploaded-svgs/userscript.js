@@ -15,81 +15,42 @@ export default async function ({ addon, console }) {
     document.body.append(iframe);
     iframe.contentDocument.body.appendChild(svg);
 
-    let transform = "",
-      translate = "",
-      translateIndex = 0,
-      x = "",
-      y = "",
-      difference = 0,
-      baselineAdjust = "",
-      innerTextElement = "",
-      innerTextSpan = "";
-    for (let textElement of svg.getElementsByTagName("text")) {
-      // Extracts "translate" from "transform" property
-      if (textElement.hasAttribute("transform")) {
-        transform = textElement.getAttribute("transform");
-        translateIndex = transform.indexOf("translate");
-        if (translateIndex === -1) {
-          transform += "translate(0, 0)";
-          translate = ["0", "0"];
-        } else {
-          translate = transform.slice(translateIndex, transform.indexOf(")")).split("(")[1].split(/,* /g);
-          translate.push("0");
-        }
-      } else {
-        transform = "translate(0, 0)";
-        translate = ["0", "0"];
-      }
-      translate[0] = Number.parseFloat(translate[0]);
-      translate[1] = Number.parseFloat(translate[1]);
-
-      x = "0";
-      if (textElement.hasAttribute("x")) {
-        x = textElement.getAttribute("x");
-      }
-      x = Number.parseFloat(x);
-
-      y = "0";
-      if (textElement.hasAttribute("y")) {
-        y = textElement.getAttribute("y");
-      }
-      y = Number.parseFloat(y);
+    for (const textElement of svg.getElementsByTagName("text")) {
+      let x = Number.parseFloat(textElement.getAttribute("x") ?? "0");
+      let y = Number.parseFloat(textElement.getAttribute("y") ?? "0");
 
       // Appends "tspan" instead of Scratch
-      innerTextElement = textElement.firstChild;
+      const innerTextElement = textElement.firstChild;
       if (innerTextElement.tagName === undefined) {
-        innerTextSpan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+        const innerTextSpan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
         innerTextSpan.appendChild(innerTextElement);
         textElement.appendChild(innerTextSpan);
       }
 
       // Accounts for "dominant-baseline" removal
-      baselineAdjust = textElement.cloneNode(true);
+      const baselineAdjust = textElement.cloneNode(true);
       textElement.after(baselineAdjust);
       baselineAdjust.style.dominantBaseline = "auto";
-      difference = textElement.getBoundingClientRect().top - baselineAdjust.getBoundingClientRect().top;
+      const difference = textElement.getBoundingClientRect().top - baselineAdjust.getBoundingClientRect().top;
       textElement.style.dominantBaseline = "auto";
       baselineAdjust.remove();
 
-      transform = transform.replace(
-        /translate\(([\d.],?\s?)+\)/,
-        `translate(${translate[0] + x}, ${translate[1] + y + difference}) `
-      );
+      let transform = textElement.getAttribute("transform") ?? "";
+      transform += ` translate(${x}, ${y + difference})`;
       textElement.setAttribute("transform", transform);
       textElement.setAttribute("x", "0");
       textElement.setAttribute("y", "0");
     }
 
-    // Fixes scratchblocks image removal
-    let referElement = "";
-    for (let useElement of svg.querySelectorAll("use")) {
-      referElement = svg.querySelector(useElement.getAttribute("href")).cloneNode(true);
-      useElement.removeAttribute("href");
-      for (let useAttribute of useElement.attributes) {
-        referElement.setAttribute(useAttribute.name, useAttribute.value);
-      }
-      useElement.replaceWith(referElement);
-      useElement.remove();
+    // Fixes scratchblocks images removal
+    for (const useElement of svg.querySelectorAll("use")) {
+        const referElement = svg.querySelector(useElement.getAttribute("href")).cloneNode(true);
+        useElement.removeAttribute("href")
+        for (let useAttribute of useElement.attributes) {
+            referElement.setAttribute(useAttribute.name, useAttribute.value);
+        }
+        useElement.replaceWith(referElement);
+        useElement.remove();
     }
 
     iframe.remove();
