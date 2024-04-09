@@ -83,13 +83,13 @@ export default async function ({ addon, console }) {
     // Fixes scratchblocks image removal
     let referElement = "";
     for (let useElement of svg.querySelectorAll("use")) {
-        referElement = svg.querySelector(useElement.getAttribute("href")).cloneNode(true);
-        useElement.removeAttribute("href")
-        for (let useAttribute of useElement.attributes) {
-            referElement.setAttribute(useAttribute.name, useAttribute.value);
-        }
-        useElement.replaceWith(referElement);
-        useElement.remove();
+      referElement = svg.querySelector(useElement.getAttribute("href")).cloneNode(true);
+      useElement.removeAttribute("href");
+      for (let useAttribute of useElement.attributes) {
+        referElement.setAttribute(useAttribute.name, useAttribute.value);
+      }
+      useElement.replaceWith(referElement);
+      useElement.remove();
     }
 
     iframe.remove();
