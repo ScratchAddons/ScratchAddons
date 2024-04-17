@@ -1,6 +1,5 @@
 export default async function ({ addon, console }) {
     const authors = document.getElementsByClassName("bb-quote-author");
-    console.log(authors.length);
 
     for (const author of authors) {
         const authorName = author.textContent.match(/.+(?= wrote:)/);
