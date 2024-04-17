@@ -1,0 +1,15 @@
+{
+    "name": "Clickable author links in forum quotes",
+    "description": "Replaces author names in forum quotes with clickable links",
+    "tags": [
+        "community",
+        "forums"
+    ],
+    "enabledByDefault": false,
+    "userscripts": [
+        {
+            "url": "userscript.js",
+            "matches": ["forums"]
+        }
+    ]
+}
