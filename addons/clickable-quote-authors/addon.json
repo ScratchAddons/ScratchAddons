@@ -11,5 +11,13 @@
             "url": "userscript.js",
             "matches": ["forums"]
         }
+    ],
+    "settings": [
+        {
+            "name": "Hidden link",
+            "id": "hidden",
+            "type":"boolean",
+            "default": false
+        }
     ]
 }
