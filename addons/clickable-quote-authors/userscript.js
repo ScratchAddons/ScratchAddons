@@ -2,7 +2,7 @@ export default async function ({ addon, console }) {
     const authors = document.getElementsByClassName("bb-quote-author");
 
     for (const author of authors) {
-        const authorName = author.textContent.match(/.+(?= wrote:)/);
+        const authorName = author.textContent.match(/(?<=^)[\w-]{2,30}(?= wrote:$)/);
 
         const link = document.createElement("a");
         link.textContent = authorName;
