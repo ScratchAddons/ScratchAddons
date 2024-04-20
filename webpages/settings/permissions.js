@@ -29,11 +29,6 @@ document.getElementById("permissionsBtn").addEventListener("click", async () => 
   const manifest = chrome.runtime.getManifest();
   const origins = manifest.permissions.filter((url) => url.startsWith("https://"));
 
-  const isAlreadyGranted = await promisify(chrome.permissions.contains)({ origins });
-  if (isAlreadyGranted) {
-    return window.close();
-  }
-
   const granted = await promisify(chrome.permissions.request)({ origins });
   if (granted) {
     return chrome.runtime.reload();
