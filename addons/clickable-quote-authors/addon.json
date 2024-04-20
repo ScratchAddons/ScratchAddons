@@ -1,27 +1,26 @@
 {
-    "name": "Clickable author links in forum quotes",
-    "description": "Replaces author names in forum quotes with clickable links.",
-    "tags": [
-        "community",
-        "forums"
-    ],
-    "userscripts": [
-        {
-            "url": "userscript.js",
-            "matches": ["forums"]
-        }
-    ],
-    "settings": [
-        {
-            "name": "Hidden link",
-            "id": "hidden",
-            "type":"boolean",
-            "default": false
-        }
-    ],
-    "credits": [{
-        "name": "just-a-hriday",
-        "link": "https://scratch.mit.edu/users/just-a-hriday"
-    }],
-    "enabledByDefault": false
+  "name": "Clickable author links in forum quotes",
+  "description": "Replaces author names in forum quotes with clickable links.",
+  "tags": ["community", "forums"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["forums"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Hidden link",
+      "id": "hidden",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "credits": [
+    {
+      "name": "just-a-hriday",
+      "link": "https://scratch.mit.edu/users/just-a-hriday"
+    }
+  ],
+  "enabledByDefault": false
 }
