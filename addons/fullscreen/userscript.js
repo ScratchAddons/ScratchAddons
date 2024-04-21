@@ -37,8 +37,7 @@ export default async function ({ addon, console }) {
     if (
       !addon.self.disabled &&
       addon.tab.redux.state.scratchGui.mode.isFullScreen &&
-      addon.settings.get("hideToolbar") &&
-      addon.settings.get("hoverToolbar")
+      addon.settings.get("toolbar") === "hover"
     ) {
       const canvas = await addon.tab.waitForElement('[class*="stage_full-screen"] canvas');
       const header = await addon.tab.waitForElement('[class^="stage-header_stage-header-wrapper"]');
@@ -57,13 +56,13 @@ export default async function ({ addon, console }) {
       });
 
       // Listen for when the mouse moves above the page (helps to show header when not in browser full screen mode)
-      document.addEventListener("mouseleave", (e) => {
+      document.body.addEventListener("mouseleave", (e) => {
         if (e.clientY < 8) {
           header.classList.add("stage-header-hover");
         }
       });
       // and for when the mouse re-enters the page
-      document.addEventListener("mouseenter", () => {
+      document.body.addEventListener("mouseenter", () => {
         header.classList.remove("stage-header-hover");
       });
 
