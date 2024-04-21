@@ -156,6 +156,7 @@
   "reorder-custom-inputs",
   "place-backpack-code-at-cursor",
   "big-save-button",
+  "global-addon-api",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
