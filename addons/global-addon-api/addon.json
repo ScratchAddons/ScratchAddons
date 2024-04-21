@@ -1,0 +1,28 @@
+{
+  "name": "Global Addon API",
+  "description": "Makes the Addon API accessible as the `window.addon` global variable in the console, for addon prototyping.",
+  "tags": ["community", "easterEgg"],
+  "versionAdded": "1.38.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "runAtComplete": false,
+  "credits": [
+    {
+      "name": "View documentation",
+      "link": "https://scratchaddons.com/docs/reference/addon-api"
+    }
+  ],
+  "info": [
+    {
+      "type": "notice",
+      "text": "For Scratch Addon developers.",
+      "id": "forDev"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}
