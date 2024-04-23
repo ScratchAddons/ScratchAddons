@@ -10,9 +10,11 @@ const onPermissionsRevoked = () => {
 };
 
 const checkSitePermissions = (sendResponse) => {
+  const HOST_PERMISSIONS_KEY_NAME = globalThis.MANIFEST_VERSION === 2 ? "permissions" : "host_permissions";
+
   chrome.permissions.contains(
     {
-      origins: chrome.runtime.getManifest().permissions.filter((url) => url.startsWith("https://")),
+      origins: chrome.runtime.getManifest()[HOST_PERMISSIONS_KEY_NAME].filter((url) => url.startsWith("https://")),
     },
     (hasPermissions) => {
       if (!hasPermissions) {
