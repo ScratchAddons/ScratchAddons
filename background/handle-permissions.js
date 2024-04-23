@@ -1,15 +1,17 @@
 import changeAddonState from "./imports/change-addon-state.js";
 import { getMissingOptionalPermissions } from "./imports/util.js";
 
-const onPermissionsRevoked = () => {
+const onPermissionsRevoked = ({ isStartup }) => {
   console.error("Site access is not granted.");
+  if (!isStartup) {
   chrome.tabs.create({
     active: true,
     url: "/webpages/settings/permissions.html",
   });
+}
 };
 
-const checkSitePermissions = (sendResponse) => {
+const checkSitePermissions = (sendResponse, { isStartup }) => {
   const HOST_PERMISSIONS_KEY_NAME = globalThis.MANIFEST_VERSION === 2 ? "permissions" : "host_permissions";
 
   chrome.permissions.contains(
@@ -18,7 +20,7 @@ const checkSitePermissions = (sendResponse) => {
     },
     (hasPermissions) => {
       if (!hasPermissions) {
-        onPermissionsRevoked();
+        onPermissionsRevoked({ isStartup });
       }
       sendResponse(hasPermissions);
     }
@@ -38,14 +40,14 @@ const checkOptionalPermissions = () => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request !== "checkPermissions") return;
-  checkSitePermissions(sendResponse);
+  checkSitePermissions(sendResponse, { isStartup: false });
   return true;
 });
 
 chrome.permissions.onRemoved?.addListener(() => {
-  checkSitePermissions(() => {});
+  checkSitePermissions(() => {}, { isStartup: false });
   checkOptionalPermissions();
 });
 
-checkSitePermissions(() => {});
+checkSitePermissions(() => {}, { isStartup: true });
 checkOptionalPermissions();
