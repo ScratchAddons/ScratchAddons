@@ -25,7 +25,7 @@ const promisify =
   (...args) =>
     new Promise((resolve) => callbackFn(...args, resolve));
 
-const MANIFEST_VERSION = 2;
+const MANIFEST_VERSION = 3;
 
 document.getElementById("permissionsBtn").addEventListener("click", async () => {
   const HOST_PERMISSIONS_KEY_NAME = MANIFEST_VERSION === 2 ? "permissions" : "host_permissions";

@@ -1,4 +1,4 @@
-globalThis.MANIFEST_VERSION = 2;
+globalThis.MANIFEST_VERSION = 3;
 
 if (globalThis.MANIFEST_VERSION === 3) {
   chrome.browserAction = chrome.action;
