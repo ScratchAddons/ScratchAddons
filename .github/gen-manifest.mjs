@@ -1,3 +1,5 @@
+// TODO: update this workflow. See draft https://github.com/ScratchAddons/ScratchAddons/pull/6877
+
 const PERMISSIONS_IGNORED_IN_CHROME = ["clipboardWrite"];
 // Previously included declarativeNetRequestWithHostAccess.
 const PERMISSIONS_IGNORED_IN_FIREFOX = [];
