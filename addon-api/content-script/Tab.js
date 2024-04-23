@@ -19,12 +19,13 @@ let createdAnyBlockContextMenus = false;
  * @property {ReduxHandler} redux
  */
 export default class Tab extends Listenable {
-  constructor(info) {
+  constructor(addonObj, info) {
     super();
     this._addonId = info.id;
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
+    this._addonObj = addonObj;
   }
   /**
    * Version of the renderer (scratch-www, scratchr2, or null if it cannot be determined).
@@ -361,7 +362,8 @@ export default class Tab extends Listenable {
   get direction() {
     // https://github.com/scratchfoundation/scratch-l10n/blob/master/src/supported-locales.js
     const rtlLocales = ["ar", "ckb", "fa", "he"];
-    const lang = scratchAddons.globalState.auth.scratchLang.split("-")[0];
+    const rawLang = this._addonObj.auth.scratchLang; // Guaranteed to exist
+    const lang = rawLang.split("-")[0];
     return rtlLocales.includes(lang) ? "rtl" : "ltr";
   }
 
