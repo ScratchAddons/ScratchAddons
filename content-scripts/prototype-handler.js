@@ -1,4 +1,19 @@
-function injectPrototype() {
+// Unfortunately `chrome.scripting.registerContentScripts` can only be set to MAIN_WORLD
+// since Chrome 102, and we want to support Chrome 96+. This is a workaround to
+// synchronously run small statically-defined functions in the main world.
+// https://crbug.com/40181146
+function immediatelyRunFunctionInMainWorld(fn) {
+  if (typeof fn !== "function") throw "Expected function";
+  const div = document.createElement("div");
+  div.setAttribute("onclick", "(" + fn + ")()");
+  document.documentElement.appendChild(div);
+  div.click();
+  div.remove();
+}
+
+const isLocal = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
+if ((!(document.documentElement instanceof SVGElement) && location.pathname.split("/")[1] === "projects") || isLocal) {
+  immediatelyRunFunctionInMainWorld(() => {
   const oldBind = Function.prototype.bind;
   // Use custom event target
   window.__scratchAddonsTraps = new EventTarget();
@@ -21,11 +36,5 @@ function injectPrototype() {
       return oldBind.apply(this, args);
     }
   };
-}
-
-const isLocal = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
-if ((!(document.documentElement instanceof SVGElement) && location.pathname.split("/")[1] === "projects") || isLocal) {
-  const injectPrototypeScript = document.createElement("script");
-  injectPrototypeScript.append(document.createTextNode("(" + injectPrototype + ")()"));
-  (document.head || document.documentElement).appendChild(injectPrototypeScript);
+  });
 }
