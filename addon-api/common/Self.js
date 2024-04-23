@@ -21,6 +21,19 @@ export default class Self extends Listenable {
   }
 
   /**
+   * Identical to import() keyword but takes a relative URL
+   * @param {string} relativeUrl - URL relative to the extension's origin
+   */
+  dynamicImport(relativeUrl) {
+    const urlObj = new URL(import.meta.url);
+    urlObj.pathname = relativeUrl;
+
+    const url = urlObj.href;
+
+    return import(url);
+  }
+
+  /**
    * path to the addon's directory.
    * @type {string}
    */
