@@ -4,11 +4,11 @@ import { getMissingOptionalPermissions } from "./imports/util.js";
 const onPermissionsRevoked = ({ isStartup }) => {
   console.error("Site access is not granted.");
   if (!isStartup) {
-  chrome.tabs.create({
-    active: true,
-    url: "/webpages/settings/permissions.html",
-  });
-}
+    chrome.tabs.create({
+      active: true,
+      url: "/webpages/settings/permissions.html",
+    });
+  }
 };
 
 const checkSitePermissions = (sendResponse, { isStartup }) => {
