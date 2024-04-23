@@ -51,3 +51,12 @@ chrome.permissions.onRemoved?.addListener(() => {
 
 checkSitePermissions(() => {}, { isStartup: true });
 checkOptionalPermissions();
+
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === "install") {
+    // If the user just installed the extension, we do not consider this startup,
+    // it's fine to open a new tab if needed in this case.
+    // This happens on Firefox when loading the extension as temporary.
+    checkSitePermissions(() => {}, { isStartup: false });
+  }
+});
