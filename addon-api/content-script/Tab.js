@@ -96,7 +96,12 @@ export default class Tab extends Listenable {
    * @param {string} url - script URL.
    * @returns {Promise}
    */
-  loadScript(url) {
+  loadScript(relativeUrl) {
+    const urlObj = new URL(import.meta.url);
+    urlObj.pathname = relativeUrl;
+
+    const url = urlObj.href;
+
     return new Promise((resolve, reject) => {
       if (scratchAddons.loadedScripts[url]) {
         const obj = scratchAddons.loadedScripts[url];
