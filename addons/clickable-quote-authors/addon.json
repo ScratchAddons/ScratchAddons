@@ -14,15 +14,15 @@
       "matches": ["forums"],
       "if": {
         "settings": {
-          "hidden": true
+          "plainText": true
         }
       }
     }
   ],
   "settings": [
     {
-      "name": "Hidden link",
-      "id": "hidden",
+      "name": "Style as normal text",
+      "id": "plainText",
       "type": "boolean",
       "default": false
     }
