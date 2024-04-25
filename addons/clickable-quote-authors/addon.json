@@ -1,5 +1,5 @@
 {
-  "name": "Clickable author links in forum quotes",
+  "name": "Clickable forum quote authors ",
   "description": "Replaces author names in forum quotes with clickable links.",
   "tags": ["community", "forums"],
   "userscripts": [
