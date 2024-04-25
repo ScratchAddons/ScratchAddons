@@ -10,8 +10,6 @@ export default async function ({ addon, console }) {
     link.textContent = authorName;
     link.href = `https://scratch.mit.edu/users/${authorName}/`;
 
-    if (addon.settings.get("hidden")) link.style.color = "inherit";
-
     author.textContent = " wrote:";
     author.prepend(link);
   }

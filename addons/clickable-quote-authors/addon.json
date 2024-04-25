@@ -8,6 +8,17 @@
       "matches": ["forums"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["forums"],
+      "if": {
+        "settings": {
+          "hidden": true
+        }
+      }
+    }
+  ],
   "settings": [
     {
       "name": "Hidden link",
@@ -22,5 +33,6 @@
       "link": "https://scratch.mit.edu/users/just-a-hriday"
     }
   ],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "updateUserstylesOnSettingsChange": true
 }
