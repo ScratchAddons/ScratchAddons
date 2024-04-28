@@ -14,11 +14,9 @@ const checkIfUnsupported = () => {
 };
 
 if (checkIfUnsupported()) {
-  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request === "checkIfUnsupported") {
-      const url = chrome.runtime.getURL("webpages/error/unsupported-browser.html");
-      if (sender.tab) chrome.tabs.update(sender.tab.id, { url });
-      else chrome.tabs.create({ url });
-    }
-  });
+  const selfUrl = new URL(location.href);
+  const isPopup = selfUrl.pathname.startsWith("/webpages/popup/");
+  const urlToOpen = chrome.runtime.getURL("webpages/error/unsupported-browser.html");
+  if (isPopup) chrome.tabs.create({ url: urlToOpen });
+  else location.href = urlToOpen;
 }
