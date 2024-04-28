@@ -17,6 +17,6 @@ if (checkIfUnsupported()) {
   const selfUrl = new URL(location.href);
   const isPopup = selfUrl.pathname.startsWith("/webpages/popup/");
   const urlToOpen = chrome.runtime.getURL("webpages/error/unsupported-browser.html");
-  if (isPopup) chrome.tabs.create({ url: urlToOpen });
+  if (isPopup) chrome.tabs.create({ url: urlToOpen, active: true });
   else location.href = urlToOpen;
 }
