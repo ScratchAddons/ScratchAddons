@@ -10,6 +10,7 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
     addonIds = ["_general", ...addonIds].filter(
       (addonId) => !addonId.startsWith("//") && !this.loaded.includes(addonId)
     );
+    // TODO: chrome.i18n.getUILanguage is not available Chrome 96-99
     const ui = chrome.i18n.getUILanguage().toLowerCase();
     const locales = [ui];
     if (ui.includes("-")) locales.push(ui.split("-")[0]);

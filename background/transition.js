@@ -5,6 +5,7 @@ if (globalThis.MANIFEST_VERSION === 3) {
 }
 
 const utm = `utm_source=extension&utm_medium=tabscreate&utm_campaign=v${chrome.runtime.getManifest().version}`;
+// TODO: chrome.i18n.getUILanguage is not available Chrome 96-99
 const uiLanguage = chrome.i18n.getUILanguage();
 const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
 chrome.runtime.onInstalled.addListener(async (details) => {
