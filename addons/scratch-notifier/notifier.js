@@ -353,6 +353,8 @@ chrome.runtime.onMessage.addListener((message) => {
 });
 
 function htmlToText(html) {
+  return html;
+  // TODO (mv3)
   if (html === undefined) return;
   const txt = document.createElement("textarea");
   txt.innerHTML = html;
