@@ -4,23 +4,24 @@ const BROWSER_ACTION = globalThis.MANIFEST_VERSION === 2 ? "browser_action" : "a
 
 const periods = [
   {
-    name: chrome.i18n.getMessage("15min"),
+    // Unfortunately, users on Chrome 96-99 will not get translations for these strings.
+    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("15min")) || "15 minutes",
     mins: 15,
   },
   {
-    name: chrome.i18n.getMessage("1hour"),
+    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("1hour")) || "1 hour",
     mins: 60,
   },
   {
-    name: chrome.i18n.getMessage("8hours"),
+    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("8hours")) || "8 hours",
     mins: 480,
   },
   {
-    name: chrome.i18n.getMessage("24hours"),
+    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("24hours")) || "24 hours",
     mins: 1440,
   },
   {
-    name: chrome.i18n.getMessage("untilEnabled"),
+    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("untilEnabled")) || "Until I turn it back on",
     mins: Infinity,
   },
 ];
@@ -50,7 +51,7 @@ function contextMenuUnmuted() {
   currentMenuItem = "mute";
   chrome.contextMenus.create({
     id: "mute",
-    title: chrome.i18n.getMessage("muteFor"),
+    title: (chrome.i18n.getMessage && chrome.i18n.getMessage("muteFor")) || "Do not disturb",
     contexts: [BROWSER_ACTION],
   });
   for (const period of periods) {
@@ -76,7 +77,7 @@ function contextMenuMuted() {
   currentMenuItem = "unmute";
   chrome.contextMenus.create({
     id: "unmute",
-    title: chrome.i18n.getMessage("unmute"),
+    title: (chrome.i18n.getMessage && chrome.i18n.getMessage("unmute")) || "Turn off Do not disturb",
     contexts: [BROWSER_ACTION],
   });
   chrome.browserAction.setIcon({
