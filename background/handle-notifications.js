@@ -1,5 +1,7 @@
 import { updateBadge } from "./message-cache.js";
 
+const BROWSER_ACTION = globalThis.MANIFEST_VERSION === 2 ? "browser_action" : "action";
+
 const periods = [
   {
     name: chrome.i18n.getMessage("15min"),
@@ -49,14 +51,14 @@ function contextMenuUnmuted() {
   chrome.contextMenus.create({
     id: "mute",
     title: chrome.i18n.getMessage("muteFor"),
-    contexts: ["browser_action"],
+    contexts: [BROWSER_ACTION],
   });
   for (const period of periods) {
     chrome.contextMenus.create({
       id: `mute_${period.mins}`,
       title: period.name,
       parentId: "mute",
-      contexts: ["browser_action"],
+      contexts: [BROWSER_ACTION],
     });
   }
   // This seems to be run when the extension is loaded, so we'll just set the right icon here.
@@ -75,7 +77,7 @@ function contextMenuMuted() {
   chrome.contextMenus.create({
     id: "unmute",
     title: chrome.i18n.getMessage("unmute"),
-    contexts: ["browser_action"],
+    contexts: [BROWSER_ACTION],
   });
   chrome.browserAction.setIcon({
     path: {
