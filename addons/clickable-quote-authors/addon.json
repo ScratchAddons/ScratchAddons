@@ -35,5 +35,6 @@
   ],
   "enabledByDefault": false,
   "dynamicEnable": true,
+  "dynamicDisable": true,
   "updateUserstylesOnSettingsChange": true
 }
