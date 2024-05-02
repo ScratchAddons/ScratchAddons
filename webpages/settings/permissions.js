@@ -25,14 +25,13 @@ const promisify =
   (...args) =>
     new Promise((resolve) => callbackFn(...args, resolve));
 
-document.getElementById("permissionsBtn").addEventListener("click", async () => {
-  const manifest = chrome.runtime.getManifest();
-  const origins = manifest.permissions.filter((url) => url.startsWith("https://"));
+const MANIFEST_VERSION = 2;
 
-  const isAlreadyGranted = await promisify(chrome.permissions.contains)({ origins });
-  if (isAlreadyGranted) {
-    return window.close();
-  }
+document.getElementById("permissionsBtn").addEventListener("click", async () => {
+  const HOST_PERMISSIONS_KEY_NAME = MANIFEST_VERSION === 2 ? "permissions" : "host_permissions";
+
+  const manifest = chrome.runtime.getManifest();
+  const origins = manifest[HOST_PERMISSIONS_KEY_NAME].filter((url) => url.startsWith("https://"));
 
   const granted = await promisify(chrome.permissions.request)({ origins });
   if (granted) {

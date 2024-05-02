@@ -19,7 +19,7 @@ export default class UserscriptAddon extends Addon {
     /**
      * Allows addon userscripts to get information about the tab they’re currently running on.
      */
-    this.tab = new Tab(info);
+    this.tab = new Tab(this, info);
     this.auth.dispose();
     /**
      * Allows addons to get information about the current Scratch account session.

@@ -1,5 +1,7 @@
 import { updateBadge } from "./message-cache.js";
 
+const BROWSER_ACTION = globalThis.MANIFEST_VERSION === 2 ? "browser_action" : "action";
+
 const periods = [
   {
     name: chrome.i18n.getMessage("15min"),
@@ -49,22 +51,22 @@ function contextMenuUnmuted() {
   chrome.contextMenus.create({
     id: "mute",
     title: chrome.i18n.getMessage("muteFor"),
-    contexts: ["browser_action"],
+    contexts: [BROWSER_ACTION],
   });
   for (const period of periods) {
     chrome.contextMenus.create({
       id: `mute_${period.mins}`,
       title: period.name,
       parentId: "mute",
-      contexts: ["browser_action"],
+      contexts: [BROWSER_ACTION],
     });
   }
   // This seems to be run when the extension is loaded, so we'll just set the right icon here.
   const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
   chrome.browserAction.setIcon({
     path: {
-      16: prerelease ? "../images/icon-blue-16.png" : "../images/icon-16.png",
-      32: prerelease ? "../images/icon-blue-32.png" : "../images/icon-32.png",
+      16: prerelease ? chrome.runtime.getURL("images/icon-blue-16.png") : chrome.runtime.getURL("images/icon-16.png"),
+      32: prerelease ? chrome.runtime.getURL("images/icon-blue-32.png") : chrome.runtime.getURL("images/icon-32.png"),
     },
   });
 }
@@ -75,12 +77,12 @@ function contextMenuMuted() {
   chrome.contextMenus.create({
     id: "unmute",
     title: chrome.i18n.getMessage("unmute"),
-    contexts: ["browser_action"],
+    contexts: [BROWSER_ACTION],
   });
   chrome.browserAction.setIcon({
     path: {
-      16: "../images/icon-gray-16.png",
-      32: "../images/icon-gray-32.png",
+      16: chrome.runtime.getURL("images/icon-gray-16.png"),
+      32: chrome.runtime.getURL("images/icon-gray-32.png"),
     },
   });
 }

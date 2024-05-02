@@ -16,7 +16,7 @@ let createdAnyBlockContextMenus = false;
  * APIs specific to userscripts.
  */
 export default class Tab extends Listenable {
-  constructor(info) {
+  constructor(addonObj, info) {
     super();
     /**
      * @private
@@ -34,6 +34,7 @@ export default class Tab extends Listenable {
      * @private
      */
     this._waitForElementSet = new WeakSet();
+    this._addonObj = addonObj;
   }
   /**
    * Version of the renderer (scratch-www, scratchr2, or null if it cannot be determined).
@@ -107,7 +108,12 @@ export default class Tab extends Listenable {
    * @param {string} url Script URL.
    * @returns {Promise}
    */
-  loadScript(url) {
+  loadScript(relativeUrl) {
+    const urlObj = new URL(import.meta.url);
+    urlObj.pathname = relativeUrl;
+
+    const url = urlObj.href;
+
     return new Promise((resolve, reject) => {
       if (scratchAddons.loadedScripts[url]) {
         const obj = scratchAddons.loadedScripts[url];
