@@ -358,8 +358,12 @@ chrome.runtime.onMessage.addListener((message) => {
 });
 
 function htmlToText(html) {
-  return html;
-  // TODO (mv3)
+  // Note: this function does not sanitize HTML. The return value of this function
+  // is shown in plain text format, as part of the notification body.
+  if (!globalThis.document) {
+    // Service worker context (Chromium)
+    return html;
+  }
   if (html === undefined) return;
   const txt = document.createElement("textarea");
   txt.innerHTML = html;
