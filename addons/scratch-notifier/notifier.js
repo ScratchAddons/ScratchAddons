@@ -332,9 +332,12 @@ export function notifyNewMessages(messages) {
       parent_title: message.parent_title, // Remixes only
     };
     if (!anyNotified && settings.notification_sound === "addons-ping") {
-      // TODO: no audio playback in service worker
+      // Note: no audio playback in service worker (Chrome)
       // https://github.com/ScratchAddons/ScratchAddons/issues/3877
-      // new Audio(chrome.runtime.getURL("./addons/scratch-notifier/ping.mp3")).play();
+      if (globalThis.Audio) {
+        // Firefox only
+        new Audio(chrome.runtime.getURL("./addons/scratch-notifier/ping.mp3")).play();
+      }
     }
     // Play the sound only once
     anyNotified = true;
