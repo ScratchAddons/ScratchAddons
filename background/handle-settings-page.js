@@ -1,19 +1,7 @@
 import changeAddonState from "./imports/change-addon-state.js";
 import minifySettings from "../libraries/common/minify-settings.js";
 import { updateBadge } from "./message-cache.js";
-
-const onReady = (fn) => {
-  if (scratchAddons.localState.allReady) {
-    fn();
-    return undefined;
-  } else {
-    scratchAddons.localEvents.addEventListener("ready", () => fn(), { once: true });
-    // https://developer.chrome.com/docs/extensions/develop/concepts/messaging#simple
-    // "The sendResponse() callback is only valid if used synchronously, or if the event
-    // handler returns true to indicate that it will respond asynchronously"
-    return true;
-  }
-};
+import { onReady } from "./imports/on-ready.js";
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // Message used to load popups as well
