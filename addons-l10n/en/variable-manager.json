@@ -1,7 +1,12 @@
 {
-  "variable-manager/for-this-sprite": "Variables for this sprite",
-  "variable-manager/for-all-sprites": "Variables for all sprites",
+  "variable-manager/vars-for-this": "Variables for this sprite",
+  "variable-manager/lists-for-this": "Lists for this sprite",
+  "variable-manager/vars-for-all": "Variables for all sprites",
+  "variable-manager/lists-for-all": "Lists for all sprites",
+  "variable-manager/cloud-variables": "Cloud variables",
   "variable-manager/variables": "Variables",
   "variable-manager/search": "Search",
-  "variable-manager/too-big": "Click to display very large value."
+  "variable-manager/empty": "(empty)",
+  "variable-manager/too-big": "Click to display very large value.",
+  "variable-manager/cloud-restrictions": "Cloud variables only support numbers and are limited to 256 digits."
 }
