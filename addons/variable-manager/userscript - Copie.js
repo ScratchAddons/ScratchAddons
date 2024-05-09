@@ -151,16 +151,16 @@ export default async function ({ addon, console, msg }) {
       if (!this.visible && !force) return;
 
       let newValue;
-      let toobig;
+      let maxSafeLength;
       if (this.scratchVariable.type === "list") {
         newValue = this.scratchVariable.value.join("\n");
-        toobig = newValue.length > 5000000 || this.scratchVariable.value.length > 10000;
+        maxSafeLength = 5000000;
       } else {
         newValue = this.scratchVariable.value;
-        toobig = newValue.length > 1000000;
+        maxSafeLength = 1000000;
       }
 
-      if (!this.ignoreTooBig && toobig) {
+      if (!this.ignoreTooBig && newValue.length > maxSafeLength) {
         this.input.value = "";
         this.row.dataset.tooBig = true;
         return;
@@ -186,19 +186,8 @@ export default async function ({ addon, console, msg }) {
 
     resizeInputIfList() {
       if (this.scratchVariable.type === "list") {
-        const length = this.input.isEmpty ? 0 : this.input.value.split("\n").length;
-        this.input.placeholder = length ? "" : msg("empty");
-        if (this.ignoreTooBig) {
-          this.lineNumbers.textContent = ""; // don't display line numbers if too big
-          this.input.style.marginLeft = "8px";
-        } else {
-          this.lineNumbers.textContent = Array.from({length: length}, (_, i) => i+1).join('\n');
-          const margin = Math.max(String(length).length, 2);
-          this.input.style.marginLeft = `calc(${margin}ch + 16px)`;
-        }
-        
         this.input.style.height = "auto";
-        const height = this.input.scrollHeight;
+        const height = Math.min(1000, this.input.scrollHeight);
         if (height > 0) {
           this.input.style.height = height + "px";
         }
@@ -218,7 +207,7 @@ export default async function ({ addon, console, msg }) {
       const id = `sa-variable-manager-${this.scratchVariable.id}`;
 
       const row = document.createElement("tr");
-      row.dataset.type = this.scratchVariable.type == "" ? "var" : "list"
+      row.setAttribute("data-type", this.scratchVariable.type == "" ? "var" : "list");
       this.row = row;
       const labelCell = document.createElement("td");
       labelCell.className = "sa-var-manager-name";
@@ -226,12 +215,12 @@ export default async function ({ addon, console, msg }) {
       const label = document.createElement("input");
       label.value = this.scratchVariable.name;
       label.htmlFor = id;
-      
-      const resizeLabel = () => {
-        label.style.maxWidth = "0";
-        label.style.maxWidth = Math.max(32, label.scrollWidth + 20) + "px";
-      }
-      
+      label.adjustWidth = () => {
+        ctx.font = window.getComputedStyle(label).getPropertyValue('font');
+        console.log(ctx.font);
+        label.style.maxWidth = ctx.measureText(label.value).width + 20 + 'px';
+      };
+      label.adjustWidth();
       const onLabelOut = (e) => {
         e.preventDefault();
         const workspace = Blockly.getMainWorkspace();
@@ -275,11 +264,9 @@ export default async function ({ addon, console, msg }) {
             label.value = newName;
           }
         }
-        resizeLabel();
+        label.adjustWidth();
       };
-      
-      label.addEventListener("input", resizeLabel);
-      
+      label.addEventListener("input", label.adjustWidth);
       label.addEventListener("keydown", (e) => {
         if (e.key === "Enter") e.target.blur();
       });
@@ -302,13 +289,6 @@ export default async function ({ addon, console, msg }) {
         label.focus();
       });
       
-      new MutationObserver((mutations, observer) => {
-        mutations.forEach(function(mutation) {
-          observer.disconnect();
-          resizeLabel();
-        });
-      }).observe(labelCell, { attributes: false, childList: true, subtree: false });
-      
       labelCell.appendChild(label);
 
       rowToVariableMap.set(row, this);
@@ -324,13 +304,11 @@ export default async function ({ addon, console, msg }) {
       tooBigElement.addEventListener("click", () => {
         this.ignoreTooBig = true;
         this.updateValue(true);
-        this.resizeInputIfList();
       });
 
       let input;
       if (this.scratchVariable.type === "list") {
         input = document.createElement("textarea");
-        input.isEmpty = this.scratchVariable.value.length === 0;
       } else {
         input = document.createElement("input");
       }
@@ -343,16 +321,14 @@ export default async function ({ addon, console, msg }) {
       this.input = input;
 
       this.updateValue(true);
-      this.input.addEventListener("input", () => {
-        if (this.scratchVariable.type === "list" && this.input.value != "")
-          this.input.isEmpty = false;
-        this.resizeInputIfList();
-      });
+      if (this.scratchVariable.type === "list") {
+        this.input.addEventListener("input", () => this.resizeInputIfList(), false);
+      }
 
       const onInputOut = (e) => {
         e.preventDefault();
         if (this.scratchVariable.type === "list") {
-          vm.setVariableValue(this.target.id, this.scratchVariable.id, input.isEmpty ? [] : input.value.split("\n"));
+          vm.setVariableValue(this.target.id, this.scratchVariable.id, input.value.split("\n"));
         } else {
           vm.setVariableValue(this.target.id, this.scratchVariable.id, input.value);
         }
@@ -360,23 +336,7 @@ export default async function ({ addon, console, msg }) {
       };
 
       input.addEventListener("keydown", (e) => {
-        if (e.target.nodeName === "INPUT") {
-          if (e.key === "Enter") {
-            e.target.blur();
-          }
-        } else {
-          if (e.target.isEmpty) {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              e.target.isEmpty = false;
-              this.resizeInputIfList();
-            }
-          } else if (e.target.value === "" && e.key === "Backspace") {
-            e.target.isEmpty = true;
-              this.resizeInputIfList();
-          }
-        }
-        
+        if (e.target.nodeName === "INPUT" && e.key === "Enter") e.target.blur();
       });
       input.addEventListener("focusout", onInputOut);
 
@@ -389,19 +349,8 @@ export default async function ({ addon, console, msg }) {
         preventUpdate = false;
         manager.classList.remove("freeze");
       });
-      
-      if (this.scratchVariable.type === "list") {
-        let box = document.createElement("div");
-        let lineNumbers = document.createElement("label");
-        lineNumbers.setAttribute("for", id)
-        box.appendChild(lineNumbers);
-        this.lineNumbers = lineNumbers;
-        box.appendChild(input);
-        valueCell.appendChild(box);
-      } else {
-        valueCell.appendChild(input);
-      }
 
+      valueCell.appendChild(input);
       valueCell.appendChild(tooBigElement);
       row.appendChild(labelCell);
       row.appendChild(valueCell);
