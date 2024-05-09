@@ -243,7 +243,7 @@
     "message": "Scratch Addons has updated to v$1"
   },
   "extensionUpdateInfo1_v1_38": {
-    "message": "We have made changes behind-the-scenes to support the new extension architecture required by browsers (Manifest V3). If you encounter any issues, please $1. There is also a button to send feedback in the settings page.",
+    "message": "This is an experimental update that we're releasing to a portion of our user base. It contains some behind-the-scenes changes to support the new extension architecture required by browsers (Manifest V3). If you encounter any issues or unexpected behavior, please $1. There is also a button to send feedback in the settings page.",
     "description": "!! The placeholder is \"send feedback\"."
   },
   "scratchAddonsSettings": {
