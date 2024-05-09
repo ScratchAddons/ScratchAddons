@@ -642,6 +642,11 @@ const showBanner = () => {
   const NOTIF_TEXT_STYLE = "display: block; color: white !important;";
   const NOTIF_LINK_STYLE = "color: #1aa0d8; font-weight: normal; text-decoration: underline;";
 
+  //
+  const _uiLanguage = chrome.i18n.getUILanguage();
+  const _localeSlash = _uiLanguage.startsWith("en") ? "" : `${_uiLanguage.split("-")[0]}/`;
+  //
+
   const notifInnerText0 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE + "font-weight: bold;",
     textContent: chrome.i18n
@@ -661,11 +666,11 @@ const showBanner = () => {
           */
           Object.assign(document.createElement("a"), {
             // href: "https://scratch.mit.edu/scratch-addons-extension/settings?source=updatenotif",
-            href: "https://scratchaddons.com/feedback?utm_source=extension&utm_medium=updatenotification&utm_campaign=mv3",
+            href: `https://scratchaddons.com/${_localeSlash}feedback?utm_source=extension&utm_medium=updatenotification&utm_campaign=mv3`,
             target: "_blank",
             style: NOTIF_LINK_STYLE,
             // textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
-            textContent: chrome.i18n.getMessage("feedback"),
+            textContent: chrome.i18n.getMessage("sendFeedbackNotification"),
           }).outerHTML,
         ][Number(i) - 1]
     ),

@@ -249,6 +249,9 @@
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
+  "sendFeedbackNotification": {
+    "message": "send feedback"
+  },
   "extensionUpdateInfo2_v1_38": {
     "message": "This update doesn't introduce any new features, but stay tuned for upcoming updates."
   },
