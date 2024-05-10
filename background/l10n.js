@@ -18,7 +18,7 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
     if (!locales.includes("en")) locales.push("en");
 
     localeLoop: for (const locale of locales) {
-      const cache = (await chrome.storage.session.get("l10nCache")).l10nCache;
+      const cache = (await chrome.storage.session?.get("l10nCache"))?.l10nCache;
       if (cache) {
         this.messages = cache;
       } else {
@@ -35,7 +35,7 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
           }
           this.messages = Object.assign(messages, this.messages);
         }
-        chrome.storage.session.set({ l10nCache: this.messages });
+        if (chrome.storage.session) chrome.storage.session.set({ l10nCache: this.messages });
       }
     }
     this._reconfigure();

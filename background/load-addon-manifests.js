@@ -46,7 +46,7 @@ const localizeSettings = (addonId, setting, tableId) => {
   });
   await scratchAddons.l10n.load(addonIds);
   const useDefault = forceEnglish || scratchAddons.l10n.locale.startsWith("en");
-  const cache = (await chrome.storage.session.get("manifests")).manifests;
+  const cache = (await chrome.storage.session?.get("manifests"))?.manifests;
   let newCache = {};
   for (const addonId of addonIds) {
     if (addonId.startsWith("//")) continue;
@@ -217,7 +217,9 @@ const localizeSettings = (addonId, setting, tableId) => {
     }
     scratchAddons.manifests.push({ addonId, manifest });
   }
-  if (!cache) chrome.storage.session.set({ manifests: newCache });
+  if (!cache) {
+    if (chrome.storage.session) chrome.storage.session.set({ manifests: newCache });
+  }
   scratchAddons.localState.ready.manifests = true;
   scratchAddons.localEvents.dispatchEvent(new CustomEvent("manifestsReady"));
 })();
