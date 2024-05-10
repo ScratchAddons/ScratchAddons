@@ -84,7 +84,9 @@ export default async function ({ addon, console, msg }) {
       if (addon.self.disabled) return originalFn.call(this, ...args);
 
       // get args
-      const optTargetId = type === "costume" ? args[2] : args[1];
+      const optTargetId = type === "costume" ? args[2] : type === "sound" ? args[1] : this.runtime.getTargetForStage();
+      // the only difference between backdrop and costume is backdrop has stage as target id
+      if(type == 'backdrop') type = "costume";
       const assetObj = type === "costume" ? args[1] : args[0];
 
       // handle new costume or sound via Paint/Record
@@ -199,6 +201,7 @@ export default async function ({ addon, console, msg }) {
   }
 
   const vm = addon.tab.traps.vm;
+  const stage = vm.runtime.getTargetForStage();
   let conflictQueue = [];
   let applyToAll = false;
   let action = null;
@@ -211,8 +214,10 @@ export default async function ({ addon, console, msg }) {
   const originalAddSound = vm.addSound;
   const originalShareCostume = vm.shareCostumeToTarget;
   const originalShareSound = vm.shareSoundToTarget;
+  const originalAddBackdrop = vm.addBackdrop;
   vm.addCostume = wrapAddAssetWithFileConflictModal(originalAddCostume, "costume");
   vm.addSound = wrapAddAssetWithFileConflictModal(originalAddSound, "sound");
+  vm.addBackdrop = wrapAddAssetWithFileConflictModal(originalAddBackdrop, "backdrop");
   vm.shareCostumeToTarget = createShareAssetWithFileConflictModal(originalShareCostume, "costume");
   vm.shareSoundToTarget = createShareAssetWithFileConflictModal(originalShareSound, "sound");
 }
