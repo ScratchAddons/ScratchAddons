@@ -201,7 +201,6 @@ export default async function ({ addon, console, msg }) {
   }
 
   const vm = addon.tab.traps.vm;
-  const stage = vm.runtime.getTargetForStage();
   let conflictQueue = [];
   let applyToAll = false;
   let action = null;
