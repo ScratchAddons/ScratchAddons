@@ -46,11 +46,19 @@ const localizeSettings = (addonId, setting, tableId) => {
   });
   await scratchAddons.l10n.load(addonIds);
   const useDefault = forceEnglish || scratchAddons.l10n.locale.startsWith("en");
+  const cache = (await chrome.storage.session.get("manifests")).manifests;
+  let newCache = {};
   for (const addonId of addonIds) {
     if (addonId.startsWith("//")) continue;
     let manifest;
     try {
-      manifest = await (await fetch(`/addons/${addonId}/addon.json`)).json();
+      if (cache) {
+        manifest = cache[addonId];
+      } else {
+        const file = await (await fetch(`/addons/${addonId}/addon.json`)).json();
+        manifest = file;
+        newCache[addonId] = file;
+      }
     } catch (ex) {
       console.error(`Failed to load addon manifest for ${addonId}, crashing:`, ex);
       chrome.tabs.create({
@@ -209,6 +217,7 @@ const localizeSettings = (addonId, setting, tableId) => {
     }
     scratchAddons.manifests.push({ addonId, manifest });
   }
+  if (!cache) chrome.storage.session.set({ manifests: newCache });
   scratchAddons.localState.ready.manifests = true;
   scratchAddons.localEvents.dispatchEvent(new CustomEvent("manifestsReady"));
 })();
