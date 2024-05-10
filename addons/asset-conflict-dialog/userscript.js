@@ -84,7 +84,7 @@ export default async function ({ addon, console, msg }) {
       if (addon.self.disabled) return originalFn.call(this, ...args);
 
       // get args
-      const optTargetId = type === "costume" ? args[2] : type === "sound" ? args[1] : this.runtime.getTargetForStage();
+      const optTargetId = type === "costume" ? args[2] : type === "backdrop" ? this.runtime.getTargetForStage(): args[1];
       // the only difference between backdrop and costume is backdrop has stage as target id
       if (type == "backdrop") type = "costume";
       const assetObj = type === "costume" ? args[1] : args[0];
