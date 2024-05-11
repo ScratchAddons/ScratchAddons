@@ -666,7 +666,9 @@ const showBanner = () => {
           */
           Object.assign(document.createElement("a"), {
             // href: "https://scratch.mit.edu/scratch-addons-extension/settings?source=updatenotif",
-            href: `https://scratchaddons.com/${_localeSlash}feedback?utm_source=extension&utm_medium=updatenotification&utm_campaign=mv3`,
+            href: `https://scratchaddons.com/${_localeSlash}feedback?ext_version=${
+              chrome.runtime.getManifest().version
+            }&utm_source=extension&utm_medium=updatenotification&utm_campaign=mv3`,
             target: "_blank",
             style: NOTIF_LINK_STYLE,
             // textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
