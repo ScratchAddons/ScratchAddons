@@ -1,4 +1,4 @@
-const PERMISSIONS_IGNORED_IN_CHROME = ["clipboardWrite"];
+const PERMISSIONS_IGNORED_IN_CHROME = ["clipboardWrite", "webRequestBlocking"];
 const PERMISSIONS_IGNORED_IN_FIREFOX = [];
 // These host permissions below should be removed during production manifest gen.
 const PERMISSIONS_ALWAYS_IGNORED = [
