@@ -27,7 +27,7 @@ export default (env, manifest) => {
     // Affects `permissions`, `host_permissions`, `optional_permissions`, `optional_host_permissions`
     // as well as content script matches.
     manifest.permissions = manifest.permissions.filter((perm) => perm !== permToRemove);
-    manifest.host_permissions = manifest.permissions.filter((perm) => perm !== permToRemove);
+    manifest.host_permissions = manifest.host_permissions.filter((perm) => perm !== permToRemove);
     manifest.optional_permissions = manifest.optional_permissions.filter((perm) => perm !== permToRemove);
     if (manifest.optional_host_permissions) {
       manifest.optional_host_permissions = manifest.optional_host_permissions.filter((perm) => perm !== permToRemove);
