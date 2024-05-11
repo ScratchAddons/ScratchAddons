@@ -200,6 +200,7 @@ export default async function ({ addon, console, msg }) {
     });
   }
 
+  // global vars needed for async functionality
   const vm = addon.tab.traps.vm;
   let conflictQueue = [];
   let applyToAll = false;
@@ -209,14 +210,9 @@ export default async function ({ addon, console, msg }) {
   let applyToAllCheckbox = null;
 
   // pollute the costume and sound adding code to handle the replace/skip actions for assets
-  const originalAddCostume = vm.addCostume;
-  const originalAddSound = vm.addSound;
-  const originalShareCostume = vm.shareCostumeToTarget;
-  const originalShareSound = vm.shareSoundToTarget;
-  const originalAddBackdrop = vm.addBackdrop;
-  vm.addCostume = wrapAddAssetWithFileConflictModal(originalAddCostume, "costume");
-  vm.addSound = wrapAddAssetWithFileConflictModal(originalAddSound, "sound");
-  vm.addBackdrop = wrapAddAssetWithFileConflictModal(originalAddBackdrop, "backdrop");
-  vm.shareCostumeToTarget = createShareAssetWithFileConflictModal(originalShareCostume, "costume");
-  vm.shareSoundToTarget = createShareAssetWithFileConflictModal(originalShareSound, "sound");
+  vm.addCostume = wrapAddAssetWithFileConflictModal(vm.addCostume, "costume");
+  vm.addSound = wrapAddAssetWithFileConflictModal(vm.addSound, "sound");
+  vm.addBackdrop = wrapAddAssetWithFileConflictModal(vm.addBackdrop, "backdrop");
+  vm.shareCostumeToTarget = createShareAssetWithFileConflictModal(vm.shareCostumeToTarget, "costume");
+  vm.shareSoundToTarget = createShareAssetWithFileConflictModal(vm.shareSoundToTarget, "sound");
 }
