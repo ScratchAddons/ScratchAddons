@@ -29,14 +29,6 @@ export default class Self extends Listenable {
   }
 
   /**
-   * path to libraries directory.
-   * @type {string}
-   */
-  get lib() {
-    return `${this._addonObj._path}libraries`;
-  }
-
-  /**
    * @private
    */
   get _eventTargetKey() {
