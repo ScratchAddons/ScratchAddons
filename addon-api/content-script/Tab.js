@@ -19,12 +19,13 @@ let createdAnyBlockContextMenus = false;
  * @property {ReduxHandler} redux
  */
 export default class Tab extends Listenable {
-  constructor(info) {
+  constructor(addonObj, info) {
     super();
     this._addonId = info.id;
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
+    this._addonObj = addonObj;
   }
   /**
    * Version of the renderer (scratch-www, scratchr2, or null if it cannot be determined).
@@ -36,8 +37,8 @@ export default class Tab extends Listenable {
       this._clientVersion = document.querySelector("meta[name='format-detection']")
         ? "scratch-www"
         : document.querySelector("script[type='text/javascript']")
-        ? "scratchr2"
-        : null;
+          ? "scratchr2"
+          : null;
     return this._clientVersion;
   }
   /**
@@ -95,7 +96,12 @@ export default class Tab extends Listenable {
    * @param {string} url - script URL.
    * @returns {Promise}
    */
-  loadScript(url) {
+  loadScript(relativeUrl) {
+    const urlObj = new URL(import.meta.url);
+    urlObj.pathname = relativeUrl;
+
+    const url = urlObj.href;
+
     return new Promise((resolve, reject) => {
       if (scratchAddons.loadedScripts[url]) {
         const obj = scratchAddons.loadedScripts[url];
@@ -610,6 +616,23 @@ export default class Tab extends Listenable {
             })()
           );
         },
+        from: () => [],
+        until: () => [],
+      },
+      afterProfileCountry: {
+        element: () =>
+          q(".shared-after-country-space") ||
+          (() => {
+            const wrapper = Object.assign(document.createElement("div"), {
+              className: "shared-after-country-space",
+            });
+
+            wrapper.style.display = "inline-block";
+
+            document.querySelector(".location").appendChild(wrapper);
+
+            return wrapper;
+          })(),
         from: () => [],
         until: () => [],
       },
