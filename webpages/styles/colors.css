@@ -48,6 +48,7 @@
   --hover-highlight: rgba(255, 255, 255, 0.05);
   --hover-highlight-reduced: rgba(255, 255, 255, 0.02);
   --hover-darken: rgba(0, 0, 0, 0.1);
+  --header-hover-darken: rgba(0, 0, 0, 0.1);
 
   --large-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   --large-shadow-filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));

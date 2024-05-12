@@ -2,7 +2,7 @@ import globalStateProxy from "./imports/global-state.js";
 import localStateProxy from "./imports/local-state.js";
 import BackgroundLocalizationProvider from "./l10n.js";
 
-window.scratchAddons = {};
+globalThis.scratchAddons = {};
 
 // Event target for local background page events
 scratchAddons.localEvents = new EventTarget();
