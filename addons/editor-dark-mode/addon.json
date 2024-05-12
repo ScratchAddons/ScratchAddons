@@ -591,6 +591,28 @@
       }
     },
     {
+      "name": "accent-success",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "transparentSource": "#08bd8c33"
+      }
+    },
+    {
+      "name": "accent-error",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "transparentSource": "#ff8c1a23"
+      }
+    },
+    {
       "name": "input-text",
       "value": {
         "type": "textColor",

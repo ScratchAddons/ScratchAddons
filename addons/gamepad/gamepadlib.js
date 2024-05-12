@@ -649,11 +649,16 @@ GamepadLib.browserHasBrokenGamepadAPI = () => {
   if (!navigator.getGamepads) {
     return true;
   }
-  // Firefox on Linux has a broken gamepad API implementation that results in strange and sometimes unusable mappings
-  // https://bugzilla.mozilla.org/show_bug.cgi?id=1643358
+  // Firefox on Linux before version 123 has a broken gamepad API that results in strange and unusable mappings
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=1680982
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1643835
   if (navigator.userAgent.includes("Firefox") && navigator.userAgent.includes("Linux")) {
-    return true;
+    const agentMatch = navigator.userAgent.match(/Firefox\/(\d+)/);
+    // If we couldn't find the version number, we'll assume that this is some distant future version of
+    // Firefox that we just can't comprehend with the technology of today. Surely gamepad will work well
+    // by then.
+    const firefoxMajorVersion = agentMatch ? agentMatch[1] : Infinity;
+    return firefoxMajorVersion < 123;
   }
   // Firefox on macOS has other bugs that result in strange and unusable mappings
   // eg. https://bugzilla.mozilla.org/show_bug.cgi?id=1434408
