@@ -257,10 +257,6 @@ button:hover,
 }
 
 /* Gray background */
-.my-ocular-reaction-button {
-  background-color: var(--darkWww-gray);
-  color: var(--darkWww-gray-scratchr2Text);
-}
 .box,
 .postleft,
 .postfootleft,
@@ -355,13 +351,9 @@ button:hover,
 }
 
 /* Input background */
-.my-ocular-popup,
 #comments .more-replies .pulldown {
   background-color: var(--darkWww-input);
   color: var(--darkWww-input-scratchr2Text);
-}
-.my-ocular-popup::after {
-  border-top-color: var(--darkWww-input);
 }
 #comments .more-replies {
   box-shadow: 0 -25px 20px -10px var(--darkWww-input);
@@ -408,13 +400,6 @@ textarea:focus,
 .blockpost div.box {
   background-color: var(--darkWww-button-scratchr2PostHeader);
   border-top-color: var(--darkWww-button-scratchr2PostHeader);
-}
-.my-ocular-reaction-button {
-  box-shadow: 0 0 2px var(--darkWww-button-scratchr2PostHeader);
-}
-.my-ocular-reaction-button.selected {
-  background-color: var(--darkWww-button-scratchr2PostHeader);
-  color: var(--darkWww-button-scratchr2PostHeaderText);
 }
 .blockpost .box-head {
   border-top-color: rgba(255, 255, 255, 0.15);
@@ -478,7 +463,6 @@ input.link.black:active,
 .sa-collapse-footer #footer,
 .thumb img,
 .djangobb blockquote,
-.my-ocular-popup,
 .media-list li,
 .media-item-content .media-thumb img,
 .header-text .profile-details .group,
@@ -491,9 +475,6 @@ input.link.black:active,
 }
 .markItUpHeader ul ul li:hover {
   border-color: var(--darkWww-border-15) !important;
-}
-.my-ocular-popup::before {
-  border-top-color: var(--darkWww-border-15);
 }
 .v-tabs li:hover {
   border-bottom-color: var(--darkWww-border-15);
