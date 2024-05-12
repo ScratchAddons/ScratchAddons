@@ -1,0 +1,14 @@
+[class*="menu-bar_account-info-group_"] > [class*="menu-bar_menu-bar-item_"]:first-child {
+  padding: 0;
+}
+
+[class*="save-status_save-now"] {
+  height: 100%;
+  padding: 0 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+[class*="save-status_save-now"]:hover {
+  background-color: var(--editorDarkMode-menuBar-border, hsla(0, 0%, 0%, 0.15));
+}

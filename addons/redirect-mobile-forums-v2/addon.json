@@ -1,6 +1,6 @@
 {
   "name": "Redirect to standard forums",
-  "description": "Redirects you to the standard (\"main\") forums when you click a link to the mobile forums.",
+  "description": "Redirects you to the standard (\"main\") view of the forums when you visit the mobile (\"m\") view of the forums, avoiding Page not found errors.",
   "credits": [
     {
       "name": "Weredime (9gr)",
@@ -10,11 +10,11 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/discuss/m/*"],
+      "matches": ["https://scratch.mit.edu/discuss/m/*", "https://scratch.mit.edu/404/"],
       "runAtComplete": false
     }
   ],
   "versionAdded": "1.16.0",
   "tags": ["community", "forums"],
-  "enabledByDefault": false
+  "enabledByDefault": true
 }
