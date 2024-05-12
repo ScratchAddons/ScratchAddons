@@ -129,12 +129,19 @@ h1 {
 .reverted {
   transform: scaleY(-1);
 }
-
-.theme-switch {
-  height: 25px;
-  right: 25px;
+.header-button {
+  right: 0;
   position: fixed;
   cursor: pointer;
+  padding: 17.5px;
+  line-height: 0;
+  transition: 0.2s ease;
+}
+.header-button:hover {
+  background: var(--header-hover-darken);
+}
+.theme-switch {
+  height: 25px;
 }
 [dir="rtl"] .theme-switch {
   right: auto;
