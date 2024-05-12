@@ -18,13 +18,13 @@
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": ["https://scratch.mit.edu/mystuff"]
+      "matches": ["https://scratch.mit.edu/mystuff/*"]
     }
   ],
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/mystuff"]
+      "matches": ["https://scratch.mit.edu/mystuff/*"]
     }
   ],
   "libraries": ["fuse"],

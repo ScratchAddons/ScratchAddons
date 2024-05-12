@@ -1,5 +1,4 @@
-<img src="images/icon.svg" alt="Scratch Addons logo" align="right" width="128px"></img>
-# Scratch Addons
+# <img src="images/icon.svg" alt="Scratch Addons logo" align="right" width="128px"></img>Scratch Addons
 
 [![Chrome Web Store](.github/readme-images/cws-badge.png)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
 [![Firefox Add-ons](.github/readme-images/ff-addon-badge.png)](https://addons.mozilla.org/firefox/addon/scratch-messaging-extension/)
@@ -29,7 +28,7 @@ An addon mainly consists of one or more [userscripts](https://scratchaddons.com/
 
 Each addon declares its own [addon manifest](https://scratchaddons.com/docs/reference/addon-manifest/) (`addon.json` file). This file specifies under which circumstances each one of its userscripts and userstyles should be injected into the page. It also contains user-facing information, such as the description of the feature, and information about the addon's settings.
 
-Userscripts work similarly to [extension content scripts](https://developer.chrome.com/docs/extensions/content_scripts/) running in the "main world" (the unprivileged context where `chrome.*` extension APIs are not available). Userscripts have access to `addon.*` APIs. They can use these built-in utilities for various purposes: waiting until a certain element exists on the page, listening to settings change events, getting a reference to the Scratch VM object, etc.
+Userscripts work similarly to [extension content scripts](https://developer.chrome.com/docs/extensions/develop/concepts/content-scripts) running in the "main world" (the unprivileged context where `chrome.*` extension APIs are not available). Userscripts have access to `addon.*` APIs. They can use these built-in utilities for various purposes: waiting until a certain element exists on the page, listening to settings change events, getting a reference to the Scratch VM object, etc.
 
 Addons are designed to be compatible with each other. They are also developed with performance, internationalization, accessibility, and privacy in mind.
 

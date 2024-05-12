@@ -15,11 +15,11 @@
   "userstyles": [
     {
       "url": "style.css",
-      "matches": ["https://scratch.mit.edu/mystuff/"]
+      "matches": ["https://scratch.mit.edu/mystuff/*"]
     },
     {
       "url": "scratchr2.css",
-      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "matches": ["https://scratch.mit.edu/mystuff/*"],
       "if": {
         "addonEnabled": ["scratchr2"]
       }
