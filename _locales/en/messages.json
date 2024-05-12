@@ -242,15 +242,18 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_36": {
-    "message": "New addon: \"rearrangeable custom block inputs\", which allows rearranging custom block parameters on the \"Make a block\" screen. Go to $1 to enable it.",
-    "description": "The placeholder is \"Scratch Addons settings\"."
+  "extensionUpdateInfo1_v1_38": {
+    "message": "This is an experimental update that we're releasing to a portion of our user base. It contains some behind-the-scenes changes to support the new extension architecture required by browsers (Manifest V3). If you encounter any issues or unexpected behavior, please $1. There is also a button to send feedback in the settings page.",
+    "description": "!! The placeholder is \"send feedback\"."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_36": {
-    "message": "Other new addons added this update are \"customizable menu bar\", \"place backpack code at mouse\", and \"square block text inputs\"."
+  "sendFeedbackNotification": {
+    "message": "send feedback"
+  },
+  "extensionUpdateInfo2_v1_38": {
+    "message": "This update doesn't introduce any new features, but stay tuned for upcoming updates."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",
