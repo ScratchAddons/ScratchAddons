@@ -94,12 +94,12 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
   });
   vue.popups = popupObjects;
   chrome.storage.local.get("lastSelectedPopup", ({ lastSelectedPopup }) => {
-    let id = 0;
+    let id = -1;
     if (typeof lastSelectedPopup === "string") {
       id = vue.popups.findIndex((popup) => popup._addonId === lastSelectedPopup);
-      if (id === -1) id = 0;
     }
-    vue.setPopup(vue.popups[id]);
+    if (id !== -1) vue.setPopup(vue.popups[id]);
+    else vue.setPopup(vue.popups.find((p) => p._addonId === "__settings__"));
   });
 });
 

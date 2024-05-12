@@ -12,7 +12,7 @@ const removeAllChildren = (element) => {
 };
 
 export default async function ({ addon, console, msg }) {
-  setup(addon.tab.traps.vm);
+  setup(addon);
 
   let logsTab;
   const messagesLoggedBeforeLogsTabLoaded = [];
