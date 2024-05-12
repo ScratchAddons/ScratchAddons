@@ -3,7 +3,9 @@
     <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-cloak v-show="smallMode" alt="Logo" />
     <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" />
     <h1 v-cloak>{{ msg("settings") }} <span class="vue3">Vue 3</span></h1>
-    <img v-cloak @click="setTheme(!theme)" class="theme-switch" :src="themePath" />
+    <div @click="setTheme(!theme)" class="header-button">
+      <img v-cloak class="theme-switch" :src="themePath" />
+    </div>
   </div>
   <div class="main">
     <div

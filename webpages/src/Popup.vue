@@ -7,7 +7,7 @@
         <a id="version" :href="changelogLink" target="_blank" :title="msg('changelog')">v{{ version }}</a>
       </span>
     </div>
-    <div id="settings" @click="openSettingsPage()">
+    <div class="header-button" @click="openSettingsPage()">
       <img src="../../images/icons/settings.svg" id="settings-icon" :title="msg('settings')" />
     </div>
   </div>
@@ -206,8 +206,17 @@ body {
   display: flex;
   height: 60px;
 }
+.header-button {
+  cursor: pointer;
+  padding: 18px;
+  line-height: 0;
+  transition: 0.2s ease;
+}
+.header-button:hover {
+  background: var(--header-hover-darken);
+}
 #title-text,
-#settings {
+.header-button {
   font-size: 18px;
   font-weight: 400;
 }
@@ -223,18 +232,10 @@ body {
   margin-inline-end: 20px;
   vertical-align: middle;
 }
-#settings {
-  padding: 0 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-#settings > img {
+#settings-icon {
   width: 24px;
   height: 24px;
 }
-
 #popups {
   background-color: var(--content-background);
   width: 100%;
