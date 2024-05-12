@@ -36,7 +36,7 @@ if (chrome.declarativeNetRequest) {
   });
 } else {
   // DNR unavailable, falling back to webRequestBlocking
-  // Used in Chrome < 96 (lacks DNRWithHostAccess) and Firefox < 113 (lacks DNR)
+  // Used in Firefox < 113 (lacks DNR)
   const extraInfoSpec = ["blocking", "requestHeaders"];
   if (Object.prototype.hasOwnProperty.call(chrome.webRequest.OnBeforeSendHeadersOptions, "EXTRA_HEADERS"))
     extraInfoSpec.push("extraHeaders");
