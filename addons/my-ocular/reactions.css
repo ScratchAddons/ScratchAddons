@@ -12,7 +12,7 @@
   display: inline-block; /* don't wrap in the middle of a reaction */
   line-height: 16px;
   border-radius: 6px;
-  box-shadow: 0 0 2px #28a5da;
+  box-shadow: 0 0 2px #855cd6;
   text-shadow: none;
   opacity: 1;
   /* transition: opacity .5s; */ /* due to the way the list is rerendered, css transitions wont do anything */
@@ -25,7 +25,7 @@
 }
 .my-ocular-reaction-button.selected {
   color: #fff;
-  background-color: #28a5da;
+  background-color: #855cd6;
 }
 
 .my-ocular-reaction-button > .my-ocular-popup {
