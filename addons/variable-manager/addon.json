@@ -30,6 +30,6 @@
   "latestUpdate": {
     "version": "1.38.0"
   },
-  "tags": ["editor", "featured"],
+  "tags": ["editor", "featured", "beta"],
   "enabledByDefault": false
 }
