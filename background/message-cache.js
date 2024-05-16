@@ -1,5 +1,6 @@
 import * as MessageCache from "../libraries/common/message-cache.js";
 import { notifyNewMessages } from "../addons/scratch-notifier/notifier.js";
+import { onReady } from "./imports/on-ready.js";
 
 let ready = false;
 let duringBadgeUpdate = false;
@@ -86,9 +87,22 @@ export async function startCache(defaultStoreId, forceClear) {
 }
 
 // Update badge without fetching messages
-chrome.alarms.create(BADGE_ALARM_NAME, {
-  periodInMinutes: 1,
-});
+export function handleBadgeAlarm() {
+  chrome.alarms.get(BADGE_ALARM_NAME, (a) => {
+    const alarmExists = a !== undefined;
+    const badgeAddonEnabled = scratchAddons.localState.addonsEnabled["msg-count-badge"];
+    if (badgeAddonEnabled && !alarmExists) {
+      chrome.alarms.create(BADGE_ALARM_NAME, {
+        periodInMinutes: 1,
+      });
+    }
+    if (!badgeAddonEnabled && alarmExists) {
+      // Remove unnecessary alarm
+      chrome.alarms.clear(BADGE_ALARM_NAME);
+    }
+  });
+}
+onReady(handleBadgeAlarm);
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (!ready) return;
