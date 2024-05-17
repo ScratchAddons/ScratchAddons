@@ -89,6 +89,7 @@
   margin: 0;
   margin-right: 0.25rem;
   width: 1rem;
+  height: 1rem;
   filter: brightness(0) invert(1);
 }
 .sa-debugger-tabs li.sa-debugger-tab-selected img {
@@ -316,4 +317,78 @@
 }
 .sa-debugger-block-preview[data-shape="stacked"] {
   border-radius: 3px;
+}
+
+.sa-timing-timer {
+  position: absolute;
+  top:0px;
+  width: 100%;
+  height: 20px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  padding-left: 4px;
+  font-family: monospace;
+  justify-content: space-around;
+}
+
+.sa-timing-content{
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensure the parent has a specific height */
+}
+
+.sa-timing-content .sa-debugger-log-outer{
+  height: auto;
+  flex-grow: 1;
+}
+
+.sa-timing-timer>span{
+  width: 90px;
+  text-align: center;
+}
+
+.sa-timing-timer>span:first-child{
+  width: 100px;
+}
+
+.sa-timing-header{
+  position: relative;
+  font-weight: bold;
+}
+
+.sa-timing-header span{
+  cursor: pointer;
+}
+
+.sa-timing-header span.active-header{
+  font-weight: bold;
+  color: #855cd6;
+}
+
+.sa-timing-toolbar {
+  background: #25aba5;
+  transform: translateY(-100%);
+  transition: transform 0.15s ease-in-out, visibility 0.15s ease-in-out, margin 0.15s ease-in-out;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 10px 0;
+  visibility: hidden;
+  color: white;
+  border-radius: 0 0 0.75rem 0.75rem;
+  margin-bottom: -51px;
+}
+
+.sa-timing-toolbar.show {
+  transform: translateY(0%);
+  visibility: visible;
+  border: 1px solid hsla(0, 0%, 0%, 0.15);
+  margin-bottom: 0px;
+}
+
+.sa-timing-content .sa-debugger-block-preview{
+  width: 100px;
+  text-wrap: nowrap;
+  text-align: center;
 }

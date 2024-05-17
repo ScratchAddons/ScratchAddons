@@ -2,6 +2,7 @@ import { isPaused, setPaused, onPauseChanged, setup } from "./module.js";
 import createLogsTab from "./logs.js";
 import createThreadsTab from "./threads.js";
 import createPerformanceTab from "./performance.js";
+import createTimingTab from "./timing/createTimingTab.js";
 import Utils from "../find-bar/blockly/Utils.js";
 import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
 
@@ -15,6 +16,7 @@ export default async function ({ addon, console, msg }) {
   setup(addon);
 
   let logsTab;
+  let timingTab;
   const messagesLoggedBeforeLogsTabLoaded = [];
   const logMessage = (...args) => {
     if (logsTab) {
@@ -66,6 +68,20 @@ export default async function ({ addon, console, msg }) {
     displayName: msg("block-error"),
     callback: ({ content }, thread) => {
       logMessage(content, thread, "error");
+    },
+  });
+  addon.tab.addBlock("\u200B\u200Bstart timer\u200B\u200B %s", {
+    args: ["content"],
+    displayName: msg("block-start-timer"),
+    callback: ({ content }, thread) => {
+      if(timingTab) timingTab.startTimer(content, thread.target.id, thread.peekStack());
+    },
+  });
+  addon.tab.addBlock("\u200B\u200Bstop timer\u200B\u200B %s", {
+    args: ["content"],
+    displayName: msg("block-stop-timer"),
+    callback: ({ content }) => {
+      if(timingTab) timingTab.stopTimer(content);
     },
   });
 
@@ -517,7 +533,8 @@ export default async function ({ addon, console, msg }) {
   logsTab = await createLogsTab(api);
   const threadsTab = await createThreadsTab(api);
   const performanceTab = await createPerformanceTab(api);
-  const allTabs = [logsTab, threadsTab, performanceTab];
+  timingTab = await createTimingTab(api);
+  const allTabs = [logsTab, threadsTab, performanceTab, timingTab];
 
   for (const message of messagesLoggedBeforeLogsTabLoaded) {
     logsTab.addLog(...message);
@@ -580,6 +597,7 @@ export default async function ({ addon, console, msg }) {
     if (addon.settings.get("log_clear_greenflag")) {
       logsTab.clearLogs();
     }
+    timingTab.clearTimers();
     if (addon.settings.get("log_greenflag")) {
       logsTab.addLog(msg("log-msg-flag-clicked"), null, "internal");
     }
