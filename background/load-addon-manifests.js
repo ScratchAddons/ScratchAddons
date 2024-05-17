@@ -47,7 +47,7 @@ const localizeSettings = (addonId, setting, tableId) => {
   await scratchAddons.l10n.load(addonIds);
   const useDefault = forceEnglish || scratchAddons.l10n.locale.startsWith("en");
   const cache = (await chrome.storage.session?.get("manifests"))?.manifests;
-  let newCache = {};
+  const newCache = {};
   for (const addonId of addonIds) {
     if (addonId.startsWith("//")) continue;
     let manifest;
