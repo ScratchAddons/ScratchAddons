@@ -6,6 +6,13 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
     this.loaded = [];
   }
 
+  loadFromCache({ messages, loaded }) {
+    // This will REMOVE any messages that were already loaded.
+    this.messages = messages;
+    this._reconfigure();
+    this.loaded = loaded;
+  }
+
   async load(addonIds) {
     addonIds = ["_general", ...addonIds].filter(
       (addonId) => !addonId.startsWith("//") && !this.loaded.includes(addonId)
@@ -18,27 +25,26 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
     if (!locales.includes("en")) locales.push("en");
 
     localeLoop: for (const locale of locales) {
-      const cache = (await chrome.storage.session?.get("l10nCache"))?.l10nCache;
-      if (cache) {
-        this.messages = cache;
-      } else {
-        for (const addonId of addonIds) {
-          let resp;
-          let messages = {};
-          const url = `/addons-l10n/${locale}/${addonId}.json`;
-          try {
-            resp = await fetch(url);
-            messages = await resp.json();
-          } catch (_) {
-            if (addonId === "_general") continue localeLoop;
-            continue;
-          }
-          this.messages = Object.assign(messages, this.messages);
+      for (const addonId of addonIds) {
+        let resp;
+        let messages = {};
+        const url = `/addons-l10n/${locale}/${addonId}.json`;
+        try {
+          resp = await fetch(url);
+          messages = await resp.json();
+        } catch (_) {
+          if (addonId === "_general") continue localeLoop;
+          continue;
         }
-        if (chrome.storage.session) chrome.storage.session.set({ l10nCache: this.messages });
+        this.messages = Object.assign(messages, this.messages);
       }
     }
     this._reconfigure();
     this.loaded = this.loaded.concat(addonIds);
+
+    const isServiceWorkerEnv = typeof browser !== "object"; // Chrome
+    if (chrome.storage.session && isServiceWorkerEnv) {
+      chrome.storage.session.set({ l10nCache: { messages: this.messages, loaded: this.loaded } });
+    }
   }
 }

@@ -44,7 +44,14 @@ const localizeSettings = (addonId, setting, tableId) => {
   addonIds.forEach((addonId, i) => {
     if (addonIds.lastIndexOf(addonId) !== i) throw new Error(`Duplicated value "${addonId}" in /addons/addons.json`);
   });
-  await scratchAddons.l10n.load(addonIds);
+  const l10nCache = (await chrome.storage.session?.get("l10nCache"))?.l10nCache;
+  if (l10nCache) {
+    // No need to fetch any localization files in the background context this time,
+    // the cache has everything we need. See PR #7417
+    scratchAddons.l10n.loadFromCache(l10nCache);
+  } else {
+    await scratchAddons.l10n.load(addonIds);
+  }
   const useDefault = forceEnglish || scratchAddons.l10n.locale.startsWith("en");
   const cache = (await chrome.storage.session?.get("manifests"))?.manifests;
   const newCache = {};
