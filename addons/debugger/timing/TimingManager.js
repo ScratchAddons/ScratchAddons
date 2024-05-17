@@ -3,12 +3,12 @@ class TimingManager {
     this.timers = {};
     this.lastTimerLabel = null;
     this.dummyProfiler = null;
-    this.settings = settings
-    this.config = config
+    this.settings = settings;
+    this.config = config;
   }
 
   startTimer(label, targetId = null, blockId = null) {
-    if (label == '') return;
+    if (label == "") return;
 
     if (label !== blockId && this.lastTimerLabel !== null && this.settings.get("auto_stop_timing")) {
       this.stopTimer(this.lastTimerLabel);
@@ -41,7 +41,7 @@ class TimingManager {
       this.timers[label].totalTime += currentTime - this.timers[label].startTime;
       if (this.config.showRTC) {
         let rtcDifference = this.dummyProfiler.totalRTC - this.timers[label].startRTC;
-        const rtcProc = this.dummyProfiler.rtcTable['procedures_call']
+        const rtcProc = this.dummyProfiler.rtcTable["procedures_call"];
         rtcDifference -= label !== this.timers[label].blockId ? rtcProc : 0;
         this.timers[label].totalRTC += rtcDifference;
       }

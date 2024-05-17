@@ -1,4 +1,4 @@
-import LogView from '../../log-view.js'; // Assuming LogView is imported from elsewhere
+import LogView from "../../log-view.js"; // Assuming LogView is imported from elsewhere
 
 function createInfoElement(text) {
   const elem = document.createElement("span");
@@ -13,20 +13,20 @@ class TableRows extends LogView {
     this.totalTime = null;
     this.minTimerTime = null;
     this.debug = debug;
-    this.tableHeader = tableHeader
+    this.tableHeader = tableHeader;
 
     this.placeholderElement.textContent = msg("no-timers");
   }
 
   getRowValues(timer) {
     const rowValues = {
-      'label': timer.label,
-      'totalTime': timer.totalTime.toFixed(1),
-      'avgTime': (timer.totalTime / timer.callCount).toFixed(2),
-      'percent': this.config.showRatioTime
+      label: timer.label,
+      totalTime: timer.totalTime.toFixed(1),
+      avgTime: (timer.totalTime / timer.callCount).toFixed(2),
+      percent: this.config.showRatioTime
         ? (timer.totalTime / this.minTimerTime).toFixed(1)
-        : (100 * timer.totalTime / this.totalTimerTime).toFixed(2),
-      'callCount': timer.callCount,
+        : ((100 * timer.totalTime) / this.totalTimerTime).toFixed(2),
+      callCount: timer.callCount,
     };
     if (this.config.showRTC) {
       rowValues.rtc = Math.floor(timer.totalRTC / timer.callCount);
@@ -45,7 +45,7 @@ class TableRows extends LogView {
       if (preview !== null) {
         labelElem.className = preview.className;
         labelElem.textContent = `${timer.idx}: ${preview.textContent}`;
-        labelElem.setAttribute('data-shape', preview.getAttribute('data-shape'));
+        labelElem.setAttribute("data-shape", preview.getAttribute("data-shape"));
       }
       if (timer.label !== timer.blockId) {
         labelElem.textContent = timer.label;
@@ -55,38 +55,42 @@ class TableRows extends LogView {
     }
 
     const { totalTime, avgTime, percent, callCount, rtc } = this.getRowValues(timer);
-    const perSymbol = this.config.showRatioTime ? '' : '%';
+    const perSymbol = this.config.showRatioTime ? "" : "%";
     const formattedValues = [
       `${totalTime} ms`,
       `${avgTime} ms`,
       `${percent} ${perSymbol}`,
       callCount,
-      ...(this.config.showRTC ? [rtc] : [])
+      ...(this.config.showRTC ? [rtc] : []),
     ];
-    const elements = [labelElem, ...formattedValues.map(v => createInfoElement(v))];
-    elements.forEach(elem => root.appendChild(elem));
+    const elements = [labelElem, ...formattedValues.map((v) => createInfoElement(v))];
+    elements.forEach((elem) => root.appendChild(elem));
     return { root, ...elements };
   }
 
   updateLogRows(timers, showLineByLine) {
-    this.tableHeader.style.display = Object.keys(timers).length === 0 ? 'none' : 'flex';
+    this.tableHeader.style.display = Object.keys(timers).length === 0 ? "none" : "flex";
     this.rows = Object.entries(timers).map(([label, value]) => ({ label, ...value }));
-    this.rows = this.rows.filter(
-      timer => showLineByLine ? timer.label === timer.blockId : timer.label !== timer.blockId
+    this.rows = this.rows.filter((timer) =>
+      showLineByLine ? timer.label === timer.blockId : timer.label !== timer.blockId
     );
-    if (this.sortHeader !== 'null') this.sortRows();
+    if (this.sortHeader !== "null") this.sortRows();
     this.totalTimerTime = this.getTotalTime();
-    this.minTimerTime = timers['control'] ? timers['control'].totalTime : Math.min(...this.rows.map((t) => t.totalTime));
+    this.minTimerTime = timers["control"]
+      ? timers["control"].totalTime
+      : Math.min(...this.rows.map((t) => t.totalTime));
     if (this.minTimerTime === 0) this.minTimerTime = 0.1;
     this.queueUpdateContent();
   }
 
   sortRows() {
     const { sortDirection, sortHeader } = this.config;
-    this.rows = this.rows.map(row => ({
-      ...row, 'avgTime': row.totalTime / row.callCount, 'rtc': row.totalRTC / row.callCount
+    this.rows = this.rows.map((row) => ({
+      ...row,
+      avgTime: row.totalTime / row.callCount,
+      rtc: row.totalRTC / row.callCount,
     }));
-    this.rows.sort((a, b) => (sortDirection === 'ascending' ? 1 : -1) * (a[sortHeader] - b[sortHeader]));
+    this.rows.sort((a, b) => (sortDirection === "ascending" ? 1 : -1) * (a[sortHeader] - b[sortHeader]));
   }
 
   getTotalTime() {

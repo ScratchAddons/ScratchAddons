@@ -1,7 +1,7 @@
 export function createTableHeader() {
   const tableHeader = Object.assign(document.createElement("div"), {
     className: "sa-timing-timer sa-timing-header",
-    style: "display:none"
+    style: "display:none",
   });
 
   tableHeader.innerHTML = `
@@ -13,35 +13,35 @@ export function createTableHeader() {
       <span class='rtcheader'>RTC</span>
     `;
 
-  const rtcHeader = tableHeader.querySelector('.rtcheader');
-  const percentHeader = tableHeader.querySelector('.percentheader');
-  rtcHeader.style.display = 'none';
+  const rtcHeader = tableHeader.querySelector(".rtcheader");
+  const percentHeader = tableHeader.querySelector(".percentheader");
+  rtcHeader.style.display = "none";
 
   // Mapping from table header textContent to timer keys
   const headerKeyMapping = {
-    'Label': 'idx',
-    'Total Time': 'totalTime',
-    'Average Time': 'avgTime',
-    'Percent Time': 'totalTime',
-    'Ratio Time': 'totalTime',
-    'Call Count': 'callCount',
-    'RTC': 'rtc'
+    Label: "idx",
+    "Total Time": "totalTime",
+    "Average Time": "avgTime",
+    "Percent Time": "totalTime",
+    "Ratio Time": "totalTime",
+    "Call Count": "callCount",
+    RTC: "rtc",
   };
 
-  tableHeader.querySelectorAll('span, a').forEach(headerElement => {
-    headerElement.style.cursor = 'pointer';
-    headerElement.addEventListener('click', () => {
+  tableHeader.querySelectorAll("span, a").forEach((headerElement) => {
+    headerElement.style.cursor = "pointer";
+    headerElement.addEventListener("click", () => {
       const headerName = headerElement.textContent.trim();
       const timerKey = headerKeyMapping[headerName];
       if (sortHeader === timerKey) {
-        sortDirection = sortDirection === 'descending' ? 'ascending' : 'descending';
+        sortDirection = sortDirection === "descending" ? "ascending" : "descending";
       } else {
         sortHeader = timerKey;
-        sortDirection = 'descending';
+        sortDirection = "descending";
       }
 
-      tableHeader.querySelectorAll('span, a').forEach(el => el.classList.remove('active-header'));
-      headerElement.classList.add('active-header');
+      tableHeader.querySelectorAll("span, a").forEach((el) => el.classList.remove("active-header"));
+      headerElement.classList.add("active-header");
     });
   });
 

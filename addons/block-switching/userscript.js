@@ -765,7 +765,7 @@ export default async function ({ addon, console, msg }) {
           msg: starttimerMessage,
           isNoop: true,
         },
-        stoptimerSwitch
+        stoptimerSwitch,
       ];
     }
 

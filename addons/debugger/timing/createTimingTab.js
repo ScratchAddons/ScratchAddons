@@ -1,9 +1,9 @@
-import TimingManager from './TimingManager.js';
-import HeatmapManager from './HeatmapManager.js';
-import Profiler from './Profiler.js';
-import { createToolbar } from './ui-components/toolbar.js';
-import { createTableHeader } from './ui-components/tableHeader.js';
-import TableRows from './ui-components/TableRows.js'; // Importing the extended LogView class
+import TimingManager from "./TimingManager.js";
+import HeatmapManager from "./HeatmapManager.js";
+import Profiler from "./Profiler.js";
+import { createToolbar } from "./ui-components/toolbar.js";
+import { createTableHeader } from "./ui-components/tableHeader.js";
+import TableRows from "./ui-components/TableRows.js"; // Importing the extended LogView class
 import downloadBlob from "../../../libraries/common/cs/download-blob.js";
 
 export default async function createTimingTab({ debug, addon, console, msg }) {
@@ -21,11 +21,11 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   function createToolsButton() {
     const toolsButton = debug.createHeaderButton({
       text: msg("tools"),
-      icon: addon.self.dir + "/icons/tools.svg"
+      icon: addon.self.dir + "/icons/tools.svg",
     });
 
     toolsButton.element.addEventListener("click", () => {
-      toolbar.classList.toggle('show');
+      toolbar.classList.toggle("show");
     });
 
     return toolsButton;
@@ -38,7 +38,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     });
 
     exportButton.element.addEventListener("click", () => {
-      const csvContent = tableRows.rows.map(row => Object.values(tableRows.getRowValues(row)).join(",")).join("\n");
+      const csvContent = tableRows.rows.map((row) => Object.values(tableRows.getRowValues(row)).join(",")).join("\n");
       const filename = `timing_${tableRows.rows[0].label}.csv`;
       if (csvContent) downloadBlob(filename, new Blob([csvContent], { type: "text/plain" }));
     });
@@ -47,9 +47,9 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   }
 
   function updatePercentageHeader() {
-    const value = addon.settings.get("show_ratio_time")
+    const value = addon.settings.get("show_ratio_time");
     config.showRatioTime = value;
-    percentHeader.textContent = value ? 'Ratio Time' : 'Percent Time';
+    percentHeader.textContent = value ? "Ratio Time" : "Percent Time";
   }
 
   // config for our block scope settings that can be modified in the toolbar
@@ -59,13 +59,13 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     showHeatmap: false,
     showRatioTime: false,
     sortHeader: null,
-    sortDirection: 'descending'
+    sortDirection: "descending",
   };
   const { tableHeader, rtcHeader, percentHeader } = createTableHeader();
   const tableRows = new TableRows(config, debug, msg, tableHeader);
 
   const timingManager = new TimingManager(addon.settings, config);
-  const heatmapManager = new HeatmapManager(() => addon.tab.traps.getWorkspace(),tableRows);
+  const heatmapManager = new HeatmapManager(() => addon.tab.traps.getWorkspace(), tableRows);
   const toolbar = createToolbar(heatmapManager, rtcHeader, config);
 
   const content = createContent();
@@ -84,7 +84,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
 
   [tableRows.outerElement, tableHeader].forEach((el) => {
     el.addEventListener("click", () => {
-      toolbar.classList.remove('show');
+      toolbar.classList.remove("show");
     });
   });
 
@@ -92,9 +92,12 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   const profiler = new Profiler(addon.tab.traps.vm, timingManager, config);
   timingManager.dummyProfiler = profiler;
   profiler.polluteStepThread();
-  fetch(addon.self.dir + '/RTC.json').then(res => res.json()).then(data => { profiler.rtcTable = data; }).catch(
-    error => console.error('Error loading JSON:', error)
-  );
+  fetch(addon.self.dir + "/RTC.json")
+    .then((res) => res.json())
+    .then((data) => {
+      profiler.rtcTable = data;
+    })
+    .catch((error) => console.error("Error loading JSON:", error));
 
   // create the tab
   const tab = debug.createHeaderTab({

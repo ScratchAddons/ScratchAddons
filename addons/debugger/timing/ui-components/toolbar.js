@@ -1,39 +1,42 @@
 export function createToolbar(heatmapManager, rtcHeader, config) {
-
   const toolbar = document.createElement("ul");
   toolbar.className = "sa-timing-toolbar sa-debugger-tabs";
 
   // create Heatmap slider
-  const heatmapSlider = Object.assign(document.createElement('input'), {
-    type: 'range', step: '0.01', min: '0.0', max: '1.0', value: '1.0', className: 'slider', style: "display:none"
+  const heatmapSlider = Object.assign(document.createElement("input"), {
+    type: "range",
+    step: "0.01",
+    min: "0.0",
+    max: "1.0",
+    value: "1.0",
+    className: "slider",
+    style: "display:none",
   });
-  heatmapSlider.addEventListener('input', () => heatmapManager.showHeatmapFn(heatmapSlider.value));
+  heatmapSlider.addEventListener("input", () => heatmapManager.showHeatmapFn(heatmapSlider.value));
 
   const items = [
     {
       initialText: "View Line-By-Line",
       toggledText: "View Timers",
-      toggleState: () => config.showLineByLine = !config.showLineByLine
+      toggleState: () => (config.showLineByLine = !config.showLineByLine),
     },
     {
       initialText: "Show RTC",
       toggledText: "Hide RTC",
       toggleState: () => {
-        rtcHeader.style.display = rtcHeader.style.display === 'none' ? "block" : "none";
+        rtcHeader.style.display = rtcHeader.style.display === "none" ? "block" : "none";
         config.showRTC = !config.showRTC;
-      }
+      },
     },
     {
       initialText: "Show Heatmap",
       toggledText: "Hide Heatmap",
       toggleState: () => {
         config.showHeatmap = !config.showHeatmap;
-        heatmapSlider.style.display = config.showHeatmap ? 'block' : 'none';
-        config.showHeatmap ?
-          heatmapManager.showHeatmapFn(heatmapSlider.value)
-          : heatmapManager.hideHeatmapFn();
-      }
-    }
+        heatmapSlider.style.display = config.showHeatmap ? "block" : "none";
+        config.showHeatmap ? heatmapManager.showHeatmapFn(heatmapSlider.value) : heatmapManager.hideHeatmapFn();
+      },
+    },
   ];
 
   items.forEach(({ initialText, toggledText, toggleState }) => {

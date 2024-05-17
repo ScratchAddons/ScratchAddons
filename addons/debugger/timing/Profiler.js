@@ -5,15 +5,19 @@ class Profiler {
     this.thread = null;
     this.vm = vm;
     this.originalStepThread;
-    this.tm = timingManager
-    this.config = config
+    this.tm = timingManager;
+    this.config = config;
     this.rtcCache = new Map();
     this.rtcTable = {};
   }
 
   // to avoid an error, we mock "idByName" and "frame"
-  idByName() { return 0; }
-  frame() { return 0; }
+  idByName() {
+    return 0;
+  }
+  frame() {
+    return 0;
+  }
 
   polluteStepThread() {
     const profiler = this;
@@ -54,13 +58,14 @@ class Profiler {
     if (block === undefined) return 0;
     const inputs = Object.values(block.inputs);
     const rtc = this.rtcTable[block.opcode];
-    let ownRTC = (block?.opcode && rtc && rtc !== "") ? rtc : 0;
-    const childrenRTC = inputs.length !== 0
-      ? inputs
-        .filter((input) => input.name !== "SUBSTACK")
-        .map((input) => this.getRTCofBlockLine(input.block, blocks))
-        .reduce((acc, curr) => acc + curr, 0)
-      : 0;
+    let ownRTC = block?.opcode && rtc && rtc !== "" ? rtc : 0;
+    const childrenRTC =
+      inputs.length !== 0
+        ? inputs
+            .filter((input) => input.name !== "SUBSTACK")
+            .map((input) => this.getRTCofBlockLine(input.block, blocks))
+            .reduce((acc, curr) => acc + curr, 0)
+        : 0;
     const totalRTC = ownRTC + childrenRTC;
     this.rtcCache.set(rootBlockId, totalRTC);
     return totalRTC;
