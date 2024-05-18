@@ -19,8 +19,8 @@ export function createToolbar(heatmapManager, rtcHeader, config, polluteStepThre
       initialText: "View Line-By-Line",
       toggledText: "View Timers",
       toggleState: () => {
-        config.showLineByLine = !config.showLineByLine
-        if(!config.isStepThreadPolluted) polluteStepThread();
+        config.showLineByLine = !config.showLineByLine;
+        if (!config.isStepThreadPolluted) polluteStepThread();
       },
     },
     {
@@ -29,7 +29,7 @@ export function createToolbar(heatmapManager, rtcHeader, config, polluteStepThre
       toggleState: () => {
         rtcHeader.style.display = rtcHeader.style.display === "none" ? "block" : "none";
         config.showRTC = !config.showRTC;
-        if(!config.isStepThreadPolluted) polluteStepThread();
+        if (!config.isStepThreadPolluted) polluteStepThread();
       },
     },
     {

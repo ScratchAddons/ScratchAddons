@@ -60,7 +60,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     showRatioTime: false,
     sortHeader: null,
     sortDirection: "descending",
-    isStepThreadPolluted: false
+    isStepThreadPolluted: false,
   };
   const { tableHeader, rtcHeader, percentHeader } = createTableHeader(config);
   const tableRows = new TableRows(config, debug, msg, tableHeader);
