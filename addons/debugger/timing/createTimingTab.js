@@ -61,7 +61,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     sortHeader: null,
     sortDirection: "descending",
   };
-  const { tableHeader, rtcHeader, percentHeader } = createTableHeader();
+  const { tableHeader, rtcHeader, percentHeader } = createTableHeader(config);
   const tableRows = new TableRows(config, debug, msg, tableHeader);
 
   const timingManager = new TimingManager(addon.settings, config);
@@ -92,7 +92,7 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   const profiler = new Profiler(addon.tab.traps.vm, timingManager, config);
   timingManager.dummyProfiler = profiler;
   profiler.polluteStepThread();
-  fetch(addon.self.dir + "/RTC.json")
+  fetch(addon.self.dir + "/timing/RTC.json")
     .then((res) => res.json())
     .then((data) => {
       profiler.rtcTable = data;

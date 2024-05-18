@@ -1,4 +1,4 @@
-export function createTableHeader() {
+export function createTableHeader(config) {
   const tableHeader = Object.assign(document.createElement("div"), {
     className: "sa-timing-timer sa-timing-header",
     style: "display:none",
@@ -33,11 +33,11 @@ export function createTableHeader() {
     headerElement.addEventListener("click", () => {
       const headerName = headerElement.textContent.trim();
       const timerKey = headerKeyMapping[headerName];
-      if (sortHeader === timerKey) {
-        sortDirection = sortDirection === "descending" ? "ascending" : "descending";
+      if (config.sortHeader === timerKey) {
+        config.sortDirection = config.sortDirection === "descending" ? "ascending" : "descending";
       } else {
-        sortHeader = timerKey;
-        sortDirection = "descending";
+        config.sortHeader = timerKey;
+        config.sortDirection = "descending";
       }
 
       tableHeader.querySelectorAll("span, a").forEach((el) => el.classList.remove("active-header"));

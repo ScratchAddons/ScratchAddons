@@ -62,7 +62,7 @@ class Profiler {
     const childrenRTC =
       inputs.length !== 0
         ? inputs
-            .filter((input) => input.name !== "SUBSTACK")
+            .filter((input) => !input.name.includes("SUBSTACK"))
             .map((input) => this.getRTCofBlockLine(input.block, blocks))
             .reduce((acc, curr) => acc + curr, 0)
         : 0;
