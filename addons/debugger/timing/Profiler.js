@@ -11,7 +11,7 @@ class Profiler {
     this.tm = null;
   }
 
-  polluteStepThread(vm){
+  polluteStepThread(vm) {
     const originalStepThread = vm.runtime.sequencer.stepThread;
     const profiler = this;
     let propSet = false;
@@ -31,11 +31,11 @@ class Profiler {
     });
 
     vm.runtime.sequencer.stepThread = function (...args) {
-      if(!propSet){
+      if (!propSet) {
         // we define the property inside stepThread because initially there isn't an activeThread for us to use.
         Object.defineProperty(Object.getPrototypeOf(this.activeThread), "blockGlowInFrame", {
           set(value) {
-            profiler.profilerActive = true
+            profiler.profilerActive = true;
             this._blockGlowInFrame = value;
           },
         });
@@ -93,8 +93,8 @@ class Profiler {
     return totalRTC;
   }
 
-  clearRtcCache(){
-    this.rtcCache.clear()
+  clearRtcCache() {
+    this.rtcCache.clear();
   }
 }
 
