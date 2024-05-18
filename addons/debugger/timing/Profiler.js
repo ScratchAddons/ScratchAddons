@@ -1,45 +1,67 @@
 class Profiler {
-  constructor(vm, timingManager, config) {
+  constructor(config) {
     this.currentBlock = null;
     this.totalRTC = 0;
     this.thread = null;
-    this.vm = vm;
     this.originalStepThread;
-    this.tm = timingManager;
     this.config = config;
     this.rtcCache = new Map();
     this.rtcTable = {};
+    this.profilerActive = false;
+    this.tm = null;
   }
 
-  // to avoid an error, we mock "idByName" and "frame"
-  idByName() {
-    return 0;
-  }
-  frame() {
-    return 0;
-  }
-
-  polluteStepThread() {
+  polluteStepThread(vm){
+    const originalStepThread = vm.runtime.sequencer.stepThread;
     const profiler = this;
-    this.originalStepThread = this.vm.runtime.sequencer.stepThread;
-    this.vm.runtime.sequencer.stepThread = function (...args) {
-      this.runtime.profiler = profiler;
-      profiler.thread = this.activeThread;
-      const result = profiler.originalStepThread.apply(this, args);
+    let propSet = false;
 
+    /* the goal is to call profile() just before execute(),
+    however without access to execute() we need to be creative in how we hook our code in.
+    The key idea is that there are two properties that are got/set just before and after execute() that we can use.
+    - runtime.profiler is got once before execute() so we start the timer here
+    - thread.blockGlowInFrame is set once after execute() so we use this to avoid checking runtime.profiler more than once.
+    */
+
+    Object.defineProperty(vm.runtime, "profiler", {
+      get() {
+        if (profiler.profilerActive) profiler.profile();
+        return null;
+      },
+    });
+
+    vm.runtime.sequencer.stepThread = function (...args) {
+      if(!propSet){
+        // we define the property inside stepThread because initially there isn't an activeThread for us to use.
+        Object.defineProperty(Object.getPrototypeOf(this.activeThread), "blockGlowInFrame", {
+          set(value) {
+            profiler.profilerActive = true
+            this._blockGlowInFrame = value;
+          },
+        });
+        propSet = true;
+      }
+
+      profiler.profilerActive = true;
+      profiler.thread = this.activeThread;
+
+      const result = originalStepThread.apply(this, args);
+
+      profiler.profilerActive = false;
       if (profiler.currentBlock !== null) profiler.tm.stopTimer(profiler.currentBlock);
       profiler.currentBlock = null;
-      this.runtime.profiler = null;
 
       return result;
     };
 
-    this.vm.runtime.on("PROJECT_CHANGED", () => this.rtcCache.clear());
+    vm.runtime.on("PROJECT_CHANGED", profiler.clearRtcCache);
   }
 
-  increment() {
+  profile() {
+    this.profilerActive = false;
+
     const blockId = this.thread.peekStack();
-    if (this.thread.blockContainer._blocks[blockId]?.isMonitored === true) return;
+    if (blockId === null || this.thread.blockContainer._blocks[blockId]?.isMonitored === true) return;
 
     if (this.config.showLineByLine) this.tm.startTimer(blockId, this.thread.target.id, blockId);
 
@@ -69,6 +91,10 @@ class Profiler {
     const totalRTC = ownRTC + childrenRTC;
     this.rtcCache.set(rootBlockId, totalRTC);
     return totalRTC;
+  }
+
+  clearRtcCache(){
+    this.rtcCache.clear()
   }
 }
 

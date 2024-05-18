@@ -1,10 +1,11 @@
 class TimingManager {
-  constructor(settings, config) {
-    this.timers = {};
-    this.lastTimerLabel = null;
-    this.dummyProfiler = null;
+  constructor(settings, config, profiler) {
+    this.dummyProfiler = profiler;
     this.settings = settings;
     this.config = config;
+
+    this.timers = {};
+    this.lastTimerLabel = null;
   }
 
   startTimer(label, targetId = null, blockId = null) {

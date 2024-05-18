@@ -64,9 +64,11 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   const { tableHeader, rtcHeader, percentHeader } = createTableHeader(config);
   const tableRows = new TableRows(config, debug, msg, tableHeader);
 
-  const timingManager = new TimingManager(addon.settings, config);
+  const profiler = new Profiler(config);
+  const timingManager = new TimingManager(addon.settings, config, profiler);
   const heatmapManager = new HeatmapManager(() => addon.tab.traps.getWorkspace(), tableRows);
   const toolbar = createToolbar(heatmapManager, rtcHeader, config);
+  profiler.tm = timingManager;
 
   const content = createContent();
   const exportButton = createExportButton();
@@ -89,9 +91,8 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
   });
 
   // pollute stepThread with our new Profiler to handle line by line profiling
-  const profiler = new Profiler(addon.tab.traps.vm, timingManager, config);
-  timingManager.dummyProfiler = profiler;
-  profiler.polluteStepThread();
+  profiler.polluteStepThread(addon.tab.traps.vm, timingManager);
+
   fetch(addon.self.dir + "/timing/RTC.json")
     .then((res) => res.json())
     .then((data) => {
