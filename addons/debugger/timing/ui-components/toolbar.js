@@ -1,4 +1,4 @@
-export function createToolbar(heatmapManager, rtcHeader, config) {
+export function createToolbar(heatmapManager, rtcHeader, config, polluteStepThread) {
   const toolbar = document.createElement("ul");
   toolbar.className = "sa-timing-toolbar sa-debugger-tabs";
 
@@ -18,7 +18,10 @@ export function createToolbar(heatmapManager, rtcHeader, config) {
     {
       initialText: "View Line-By-Line",
       toggledText: "View Timers",
-      toggleState: () => (config.showLineByLine = !config.showLineByLine),
+      toggleState: () => {
+        config.showLineByLine = !config.showLineByLine
+        if(!config.isStepThreadPolluted) polluteStepThread();
+      },
     },
     {
       initialText: "Show RTC",
@@ -26,6 +29,7 @@ export function createToolbar(heatmapManager, rtcHeader, config) {
       toggleState: () => {
         rtcHeader.style.display = rtcHeader.style.display === "none" ? "block" : "none";
         config.showRTC = !config.showRTC;
+        if(!config.isStepThreadPolluted) polluteStepThread();
       },
     },
     {

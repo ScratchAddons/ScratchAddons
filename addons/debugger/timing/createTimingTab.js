@@ -60,14 +60,18 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
     showRatioTime: false,
     sortHeader: null,
     sortDirection: "descending",
+    isStepThreadPolluted: false
   };
   const { tableHeader, rtcHeader, percentHeader } = createTableHeader(config);
   const tableRows = new TableRows(config, debug, msg, tableHeader);
 
   const profiler = new Profiler(config);
+  // function to pollute stepThread with our new Profiler to handle line by line profiling
+  const polluteStepThread = () => profiler.polluteStepThread(addon.tab.traps.vm, timingManager);
+
   const timingManager = new TimingManager(addon.settings, config, profiler);
   const heatmapManager = new HeatmapManager(() => addon.tab.traps.getWorkspace(), tableRows);
-  const toolbar = createToolbar(heatmapManager, rtcHeader, config);
+  const toolbar = createToolbar(heatmapManager, rtcHeader, config, polluteStepThread);
   profiler.tm = timingManager;
 
   const content = createContent();
@@ -89,9 +93,6 @@ export default async function createTimingTab({ debug, addon, console, msg }) {
       toolbar.classList.remove("show");
     });
   });
-
-  // pollute stepThread with our new Profiler to handle line by line profiling
-  profiler.polluteStepThread(addon.tab.traps.vm, timingManager);
 
   fetch(addon.self.dir + "/timing/RTC.json")
     .then((res) => res.json())

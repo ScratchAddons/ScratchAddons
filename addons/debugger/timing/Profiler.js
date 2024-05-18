@@ -12,6 +12,7 @@ class Profiler {
   }
 
   polluteStepThread(vm) {
+    this.config.isStepThreadPolluted = true;
     const originalStepThread = vm.runtime.sequencer.stepThread;
     const profiler = this;
     let propSet = false;
