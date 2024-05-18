@@ -54,7 +54,7 @@ class Profiler {
       return result;
     };
 
-    vm.runtime.on("PROJECT_CHANGED", ()=>profiler.clearRtcCache());
+    vm.runtime.on("PROJECT_CHANGED", () => profiler.clearRtcCache());
   }
 
   profile() {
