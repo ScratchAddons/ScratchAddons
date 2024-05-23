@@ -3,41 +3,41 @@ import nesting from "postcss-nesting";
 import prettier from "prettier";
 import { globby } from "globby";
 import fs from "fs/promises";
-import { parse } from "node-html-parser";
+
+const prettierConfig = await prettier.resolveConfig("");
 
 const cssFiles = await globby(["**.css"]);
 console.log(`Checking ${cssFiles.length} css files.`);
 for (const cssFile of cssFiles) {
   const contents = await fs.readFile(cssFile, "utf-8");
-  const res = await checkReplaceCssFile(contents);
+  const res = await nestCss(contents);
   if (res !== contents) {
     console.log(`Writing ${cssFile}.`);
-    await fs.writeFile(cssFile, res);
+    const pretty = await prettier.format(res, { parser: "css", ...prettierConfig });
+    await fs.writeFile(cssFile, pretty);
   }
 }
 const htmlFiles = await globby(["**.html"]);
 console.log(`Checking ${htmlFiles.length} html files.`);
 for (const htmlFile of htmlFiles) {
-  const contents = await fs.readFile(htmlFile, "utf-8");
-  const root = parse(contents);
-  const styleElements = root.getElementsByTagName("style");
-  for (const styleElement of styleElements) {
-    const res = await checkReplaceCssFile(styleElement.textContent);
-    if (res !== styleElement.textContent) {
-      console.log(`Writing ${htmlFile}.`);
-      styleElement.textContent = "\n" + res;
-      await fs.writeFile(htmlFile, root.toString());
+  let htmlContents = await fs.readFile(htmlFile, "utf-8");
+  const matches = htmlContents.matchAll(/<style>(.*)<\/style>/gs);
+  let replaced = false;
+  for (const [_, contents] of matches) {
+    const res = await nestCss(contents);
+    if (res != contents) {
+      htmlContents = htmlContents.replace(contents, res);
+      replaced = true;
     }
+  }
+  if (replaced) {
+    console.log(`Writing ${htmlFile}.`);
+    const pretty = await prettier.format(htmlContents, { parser: "html", ...prettierConfig });
+    await fs.writeFile(htmlFile, pretty);
   }
 }
 
-async function checkReplaceCssFile(contents) {
+async function nestCss(contents) {
   const res = await postcss([nesting()]).process(contents, { from: undefined });
-  if (contents !== res.css) {
-    const isPretty = await prettier.check(res.css, { parser: "css" });
-    if (!isPretty) {
-      res.css = await prettier.format(res.css, { parser: "css" });
-    }
-  }
   return res.css;
 }
