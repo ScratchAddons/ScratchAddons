@@ -1,0 +1,22 @@
+{
+  "name": "scratchaddons",
+  "version": "1.38.0",
+  "description": "Scratch Addons provides customizable features and themes for the scratch.mit.edu website and project editor.",
+  "main": "index.js",
+  "repository": "https://github.com/ScratchAddons/ScratchAddons.git",
+  "license": "GNU",
+  "type": "module",
+  "scripts": {
+    "transpile-css": "node scripts/css-nesting.js"
+  },
+  "private": true,
+  "devDependencies": {
+    "globby": "^14.0.1",
+    "postcss": "^8.4.38",
+    "postcss-nesting": "^12.1.4",
+    "prettier": "^3.2.5"
+  },
+  "dependencies": {
+    "node-html-parser": "^6.1.13"
+  }
+}
