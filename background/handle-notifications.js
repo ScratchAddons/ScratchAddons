@@ -2,6 +2,9 @@ import { updateBadge } from "./message-cache.js";
 
 const BROWSER_ACTION = globalThis.MANIFEST_VERSION === 2 ? "browser_action" : "action";
 
+// chrome.contextMenu is broken on Firefox mobile
+const isAndroidFirefox = navigator.userAgent.includes("Firefox") && navigator.userAgent.includes("Android");
+
 const periods = [
   {
     // Unfortunately, users on Chrome 96-99 will not get translations for these strings.
@@ -32,21 +35,25 @@ chrome.storage.local.get("muted", (obj) => {
   scratchAddons.muted = obj.muted;
 });
 
-chrome.contextMenus.removeAll();
 let currentMenuItem = null;
 
-chrome.contextMenus.onClicked.addListener(({ parentMenuItemId, menuItemId }) => {
-  if (parentMenuItemId === "mute") {
-    const mins = Number(menuItemId.split("_")[1]);
-    contextMenuMuted();
-    muteForMins(mins);
-  } else if (menuItemId === "unmute") {
-    contextMenuUnmuted();
-    unmute();
-  }
-});
+if (!isAndroidFirefox) {
+  chrome.contextMenus.removeAll();
+
+  chrome.contextMenus.onClicked.addListener(({ parentMenuItemId, menuItemId }) => {
+    if (parentMenuItemId === "mute") {
+      const mins = Number(menuItemId.split("_")[1]);
+      contextMenuMuted();
+      muteForMins(mins);
+    } else if (menuItemId === "unmute") {
+      contextMenuUnmuted();
+      unmute();
+    }
+  });
+}
 
 function contextMenuUnmuted() {
+  if (isAndroidFirefox) return;
   if (currentMenuItem === "unmute") chrome.contextMenus.remove("unmute");
   currentMenuItem = "mute";
   chrome.contextMenus.create({
@@ -73,6 +80,7 @@ function contextMenuUnmuted() {
 }
 
 function contextMenuMuted() {
+  if (isAndroidFirefox) return;
   if (currentMenuItem === "mute") chrome.contextMenus.remove("mute");
   currentMenuItem = "unmute";
   chrome.contextMenus.create({
