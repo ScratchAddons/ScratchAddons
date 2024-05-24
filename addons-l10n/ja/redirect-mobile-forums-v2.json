@@ -1,0 +1,1 @@
+{"redirect-mobile-forums-v2/@name":"モバイル版フォーラムを自動リダイレクト","redirect-mobile-forums-v2/@description":"フォーラムのモバイル版ページ(\"m\")にアクセスすると、普通のフォーラム(\"main\")ビューにリダイレクトし、ページが見つからないエラーを回避します。"}
