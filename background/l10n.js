@@ -42,9 +42,7 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
     this._reconfigure();
     this.loaded = this.loaded.concat(addonIds);
 
-    const isServiceWorkerEnv = typeof browser !== "object"; // Chrome
-    if (chrome.storage.session && isServiceWorkerEnv) {
-      chrome.storage.session.set({ l10nCache: { messages: this.messages, loaded: this.loaded } });
-    }
+    // Store in local session cache
+    chrome.storage.session?.set({ l10nCache: { messages: this.messages, loaded: this.loaded } });
   }
 }
