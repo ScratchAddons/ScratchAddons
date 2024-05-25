@@ -225,7 +225,7 @@ const localizeSettings = (addonId, setting, tableId) => {
     scratchAddons.manifests.push({ addonId, manifest });
   }
   if (!cache) {
-    if (chrome.storage.session) chrome.storage.session.set({ manifests: newCache });
+    chrome.storage.session?.set({ manifests: newCache });
   }
   scratchAddons.localState.ready.manifests = true;
   scratchAddons.localEvents.dispatchEvent(new CustomEvent("manifestsReady"));
