@@ -71,8 +71,8 @@ function contextMenuUnmuted() {
   }
   chrome.browserAction.setIcon({
     path: {
-      16: chrome.chrome.runtime.getManifest().icons["16"],
-      32: chrome.chrome.runtime.getManifest().icons["32"],
+      16: chrome.runtime.getManifest().icons["16"],
+      32: chrome.runtime.getManifest().icons["32"],
     },
   });
 }
