@@ -75,6 +75,8 @@ function contextMenuUnmuted() {
 
 function contextMenuMuted() {
   if (chrome.contextMenus === undefined) return; // Firefox for Android
+  // Note: in theory, this function is unreachable
+  // in FF for Android, but we early-return anyway.
   if (currentMenuItem === "mute") chrome.contextMenus.remove("mute");
   currentMenuItem = "unmute";
   chrome.contextMenus.create({
