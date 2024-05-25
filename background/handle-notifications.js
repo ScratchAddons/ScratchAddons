@@ -32,26 +32,24 @@ chrome.storage.local.get("muted", (obj) => {
   scratchAddons.muted = obj.muted;
 });
 
+chrome.contextMenus?.removeAll();
 let currentMenuItem = null;
 
-// chrome.contextMenus is broken on Android Firefox with MV3
-if (chrome.contextMenus !== undefined) {
-  chrome.contextMenus.removeAll();
+// NOTE: chrome.contextMenus equals `undefined` on Firefox for Android!
 
-  chrome.contextMenus.onClicked.addListener(({ parentMenuItemId, menuItemId }) => {
-    if (parentMenuItemId === "mute") {
-      const mins = Number(menuItemId.split("_")[1]);
-      contextMenuMuted();
-      muteForMins(mins);
-    } else if (menuItemId === "unmute") {
-      contextMenuUnmuted();
-      unmute();
-    }
-  });
-}
+chrome.contextMenus?.onClicked.addListener(({ parentMenuItemId, menuItemId }) => {
+  if (parentMenuItemId === "mute") {
+    const mins = Number(menuItemId.split("_")[1]);
+    contextMenuMuted();
+    muteForMins(mins);
+  } else if (menuItemId === "unmute") {
+    contextMenuUnmuted();
+    unmute();
+  }
+});
 
 function contextMenuUnmuted() {
-  if (chrome.contextMenus === undefined) return;
+  if (chrome.contextMenus === undefined) return; // Firefox for Android
   if (currentMenuItem === "unmute") chrome.contextMenus.remove("unmute");
   currentMenuItem = "mute";
   chrome.contextMenus.create({
@@ -76,7 +74,7 @@ function contextMenuUnmuted() {
 }
 
 function contextMenuMuted() {
-  if (chrome.contextMenus === undefined) return;
+  if (chrome.contextMenus === undefined) return; // Firefox for Android
   if (currentMenuItem === "mute") chrome.contextMenus.remove("mute");
   currentMenuItem = "unmute";
   chrome.contextMenus.create({
