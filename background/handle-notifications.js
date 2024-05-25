@@ -35,7 +35,7 @@ chrome.storage.local.get("muted", (obj) => {
 let currentMenuItem = null;
 
 // chrome.contextMenus is broken on Android Firefox with MV3
-if (!chrome.contextMenus === undefined) {
+if (chrome.contextMenus !== undefined) {
   chrome.contextMenus.removeAll();
 
   chrome.contextMenus.onClicked.addListener(({ parentMenuItemId, menuItemId }) => {
@@ -69,8 +69,8 @@ function contextMenuUnmuted() {
   }
   chrome.browserAction.setIcon({
     path: {
-      16: chrome.runtime.getManifest().icons["16"],
-      32: chrome.runtime.getManifest().icons["32"],
+      16: chrome.runtime.getURL(chrome.runtime.getManifest().icons["16"]),
+      32: chrome.runtime.getURL(chrome.runtime.getManifest().icons["32"]),
     },
   });
 }
