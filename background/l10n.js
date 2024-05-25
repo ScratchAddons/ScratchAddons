@@ -43,6 +43,9 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
     this.loaded = this.loaded.concat(addonIds);
 
     // Store in local session cache
-    chrome.storage.session?.set({ l10nCache: { messages: this.messages, loaded: this.loaded } });
+    chrome.storage.session?.set({ l10nCache: { messages: this.messages, loaded: this.loaded } }).catch((err) => {
+      // No problem. Cache is not crucial.
+      console.error(err);
+    });
   }
 }
