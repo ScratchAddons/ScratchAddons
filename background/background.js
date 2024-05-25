@@ -30,3 +30,5 @@ import "./get-popups.js";
 // Respond to requests by the settings page and others
 import "./handle-settings-page.js";
 import "./handle-licenses.js";
+
+import "./background-sucess-status.js";

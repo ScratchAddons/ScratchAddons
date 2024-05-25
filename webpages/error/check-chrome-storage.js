@@ -20,6 +20,21 @@ const testStorage = () => {
   });
 };
 
+const testBackgroundContext = () => {
+  return new Promise((resolve, reject) => {
+    if (!chrome.storage.session) return resolve();
+    chrome.storage.session.get("backgroundContextOk", (v) => {
+      if (chrome.runtime.lastError) {
+        // Maybe the background context is OK, but storage.session is having problems.
+        // Let's assume everything is okay.
+        return resolve();
+      }
+      if (v?.backgroundContextOk === true) return resolve();
+      reject("Extension background context is unresponsive");
+    });
+  });
+};
+
 const redirectToErrorPage = (errorInfo) => {
   const url = new URL(chrome.runtime.getURL("/webpages/error/index.html"));
   url.searchParams.set("problem", "storage");
@@ -35,3 +50,11 @@ setTimeout(() => {
       redirectToErrorPage(error);
     });
 }, 1500);
+
+// Check if background context ever executed within this session.
+// We wait 10 seconds in case the user just opened their browser
+setTimeout(() => {
+  testBackgroundContext().catch((error) => {
+    redirectToErrorPage(error);
+  });
+}, 10000);
