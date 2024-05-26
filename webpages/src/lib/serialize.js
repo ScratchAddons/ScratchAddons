@@ -9,6 +9,36 @@ if (typeof browser !== "undefined") browserLevelPermissions.push("clipboardWrite
 
 let handleConfirmClicked = null;
 
+export const serializeSettings = async () => {
+  const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
+  const storedSettings = await syncGet([
+    "globalTheme",
+    "addonSettings1",
+    "addonSettings2",
+    "addonSettings3",
+    "addonsEnabled",
+  ]);
+  const addonSettings = {
+    ...storedSettings.addonSettings1,
+    ...storedSettings.addonSettings2,
+    ...storedSettings.addonSettings3,
+  };
+  const serialized = {
+    core: {
+      lightTheme: storedSettings.globalTheme,
+      version: chrome.runtime.getManifest().version_name,
+    },
+    addons: {},
+  };
+  for (const addonId of Object.keys(storedSettings.addonsEnabled)) {
+    serialized.addons[addonId] = {
+      enabled: storedSettings.addonsEnabled[addonId],
+      settings: addonSettings[addonId] || {},
+    };
+  }
+  return JSON.stringify(serialized);
+};
+
 export const deserializeSettings = async (str, manifests, confirmElem) => {
   const obj = JSON.parse(str);
   const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
@@ -66,34 +96,4 @@ export const deserializeSettings = async (str, manifests, confirmElem) => {
   confirmElem.classList.remove("hidden-button");
   confirmElem.addEventListener("click", handleConfirmClicked, { once: true });
   return resolveOnConfirmPromise;
-};
-
-export const serializeSettings = async () => {
-  const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
-  const storedSettings = await syncGet([
-    "globalTheme",
-    "addonSettings1",
-    "addonSettings2",
-    "addonSettings3",
-    "addonsEnabled",
-  ]);
-  const addonSettings = {
-    ...storedSettings.addonSettings1,
-    ...storedSettings.addonSettings2,
-    ...storedSettings.addonSettings3,
-  };
-  const serialized = {
-    core: {
-      lightTheme: storedSettings.globalTheme,
-      version: chrome.runtime.getManifest().version_name,
-    },
-    addons: {},
-  };
-  for (const addonId of Object.keys(storedSettings.addonsEnabled)) {
-    serialized.addons[addonId] = {
-      enabled: storedSettings.addonsEnabled[addonId],
-      settings: addonSettings[addonId] || {},
-    };
-  }
-  return JSON.stringify(serialized);
 };

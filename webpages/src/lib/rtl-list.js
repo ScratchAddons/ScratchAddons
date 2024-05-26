@@ -1,5 +1,6 @@
 /* Languages for which RTL layout is enabled.
    Only included languages should be added to this list. */
+
 const rtlList = [
   // List of language codes (xx or xx-XX)
 ];
