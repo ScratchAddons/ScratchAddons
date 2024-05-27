@@ -1,4 +1,4 @@
 {
   "search-profile/profile": "Profile",
-  "search-profile/invalid-username": "\"{username}\" is not a valid username"
+  "search-profile/invalid-username": "\"{username}\" is not a valid username or the account does not exist"
 }
