@@ -41,7 +41,7 @@ export class Transpiler {
       }
       const json = toJSON.call(this, optTargetId);
       if (this.editingTarget) {
-        transpilerThis.transpileTargetToSA(this.editingTarget, false);
+        //transpilerThis.transpileTargetToSA(this.editingTarget, false);
       }
       return json;
     };
@@ -144,6 +144,8 @@ export class Transpiler {
           if (typeof maybeMatchedInputs === "object") {
             block.opcode = opcode;
             for (const [name, blockid] of Object.entries(maybeMatchedInputs)) {
+              if (!block.inputs) block.inputs = {};
+              if (!block.inputs[name]) block.inputs[name] = { name };
               block.inputs[name].block = blockid;
               blocks[blockid].parent = block.id;
             }

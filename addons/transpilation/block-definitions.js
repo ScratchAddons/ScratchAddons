@@ -45,6 +45,18 @@ export const blockDefinitions = {
     },
     map: [
       {
+        opcode: "operator_not",
+        inputs: {
+          OPERAND: {
+            opcode: "operator_gt",
+            inputs: {
+              OPERAND1: "OPERAND1",
+              OPERAND2: "OPERAND2",
+            },
+          },
+        },
+      },
+      {
         opcode: "operator_or",
         inputs: {
           OPERAND1: {
@@ -146,6 +158,18 @@ export const blockDefinitions = {
       separator: false,
     },
     map: [
+      {
+        opcode: "operator_not",
+        inputs: {
+          OPERAND: {
+            opcode: "operator_gt",
+            inputs: {
+              OPERAND1: "OPERAND1",
+              OPERAND2: "OPERAND2",
+            },
+          },
+        },
+      },
       {
         opcode: "operator_or",
         inputs: {

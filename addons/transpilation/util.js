@@ -65,12 +65,13 @@ export function arraysAreDeeplyEqual(arr1, arr2) {
  * @this {Vm.Blocks}
  */
 export function blocksAreDeeplyEqual(block1, block2) {
+  console.log(block1, block2)
   if (block1.opcode !== block2.opcode) return false;
   // same opcode, so assume same field & input names
-  for (const f in block1.fields) {
+  for (const f in (block1.fields || {})) {
     if (block1.fields[f].value !== block2.fields[f].value || block1.fields[f].id !== block2.fields[f].id) return false;
   }
-  for (const i in block1.inputs) {
+  for (const i in (block1.inputs || {})) {
     if (!this.blocksAreDeeplyEqual(this._blocks[block1.inputs[i].block], this._blocks[block2.inputs[i].block]))
       return false;
   }
@@ -92,6 +93,7 @@ export function blockMatchesMap(block, map, inputs = {}) {
   for (const [name, inputMap] of Object.entries(map.inputs || {})) {
     if (typeof inputMap === "string") {
       if (inputMap in inputs) {
+        console.log(name, inputMap, inputs, block)
         if (!this.blocksAreDeeplyEqual(this._blocks[inputs[inputMap]], this._blocks[block.inputs[name].block]))
           return false;
       } else {
