@@ -8,7 +8,7 @@ export default function () {
   }
   const lightThemeLink = document.createElement("link");
   lightThemeLink.setAttribute("rel", "stylesheet");
-  lightThemeLink.setAttribute("href", chrome.runtime.getURL("/webpages/styles/colors-light.css"));
+  lightThemeLink.setAttribute("href", chrome.runtime.getURL("/webpages/dist/colors-light.css"));
   lightThemeLink.setAttribute("data-below-vue-components", "");
   lightThemeLink.media = "not all";
   document.head.appendChild(lightThemeLink);

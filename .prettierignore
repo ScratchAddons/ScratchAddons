@@ -9,3 +9,5 @@ _locales/*/messages.json
 
 .github/*
 !.github/*.mjs
+
+webpages/dist/*
