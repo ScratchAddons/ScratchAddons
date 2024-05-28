@@ -1,0 +1,5 @@
+{
+  "transpilation/operator_gte": "%1 ≥ %2",
+  "transpilation/operator_lte": "%1 ≤ %2",
+  "transpilation/looks_previouscostume": "previous costume"
+}
