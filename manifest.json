@@ -73,7 +73,12 @@
         "addons-l10n/*/*.json",
         "images/cs/*"
       ],
-      "matches": ["https://*.scratch.mit.edu/*", "https://scratchaddons.com/*", "http://localhost/*"]
+      "matches": [
+        "https://*.scratch.mit.edu/*",
+        "https://scratchaddons.com/*",
+        "https://scratchfoundation.github.io/*",
+        "http://localhost/*"
+      ]
     }
   ],
   "browser_specific_settings": {
