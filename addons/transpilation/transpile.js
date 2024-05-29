@@ -2,7 +2,7 @@
  * Defines transpilation schemes for custom reporters
  */
 
-import { getStackBlock, uid, blocksAreDeeplyEqual, blockMatchesMap } from "./util.js";
+import { getStackBlock, uid, blocksAreDeeplyEqual, blockMatchesMap, isShadow } from "./util.js";
 
 /**
  * Transpiles blocks to/from vanilla/SA, plus patches the vm to be able to run these new blocks
@@ -89,15 +89,17 @@ export class Transpiler {
       parent,
       next: null,
       topLevel: false,
-      shadow: ["text", "math_number"].includes(mapping.opcode), // update this list as needed
+      shadow: isShadow(mapping.opcode),
       fields: Object.fromEntries(
         Object.entries(mapping.fields || {}).map(([name, { value, id }]) => [name, { name, value, id }])
       ),
       inputs: Object.fromEntries(
-        Object.entries(mapping.inputs || {}).map(([name, map]) => [
-          name,
-          typeof map === "string" ? topInputs[map] : { name, block: this._createBlock(map, id, topInputs, blocks) },
-        ])
+        Object.entries(mapping.inputs || {}).map(([name, map]) => {
+          const input =
+            typeof map === "string" ? topInputs[map] : { name, block: this._createBlock(map, id, topInputs, blocks) };
+          if (isShadow(blocks[input.block].opcode)) input.shadow = input.block;
+          return [name, input];
+        })
       ),
     };
     blocks[id] = block;
@@ -112,6 +114,7 @@ export class Transpiler {
       if (block.opcode in this.blockDefinitions) {
         let map = this.blockDefinitions[block.opcode].map[0];
         let inputs = { ...block.inputs };
+        block.inputs = {};
         block.opcode = map.opcode;
         let currentBlock = block;
         for (const [name, mapping] of Object.entries(map.inputs)) {
@@ -143,7 +146,9 @@ export class Transpiler {
           let maybeMatchedInputs = target.blocks.blockMatchesMap(block, map);
           if (typeof maybeMatchedInputs === "object") {
             block.opcode = opcode;
+            block.inputs = {};
             for (const [name, blockid] of Object.entries(maybeMatchedInputs)) {
+              console.log(blockid, blocks)
               if (!block.inputs) block.inputs = {};
               if (!block.inputs[name]) block.inputs[name] = { name };
               block.inputs[name].block = blockid;

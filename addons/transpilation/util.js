@@ -82,10 +82,13 @@ export function blocksAreDeeplyEqual(block1, block2) {
  *
  * @param block
  * @param {import('./block-definitions.js').MapInfo} map
+ * @param {string} top - the top block in this recursive call; do not delete this block!
+ * @param {Object<string, string>} [inputs={}]
+ * @param {string[]} [toDelete=[]]
  * @returns {false|Object<string, string>}
  * @this {Vm.Blocks}
  */
-export function blockMatchesMap(block, map, inputs = {}) {
+export function blockMatchesMap(block, map, top, inputs = {}, toDelete=[]) {
   if (block.opcode !== map.opcode) return false;
   for (const [name, { value, id }] of Object.entries(map.fields || {})) {
     if (block.fields[name].value !== value || block.fields[name].id !== id) return false;
@@ -100,10 +103,21 @@ export function blockMatchesMap(block, map, inputs = {}) {
         inputs[inputMap] = block.inputs[name].block;
       }
     } else {
-      const inputMatch = this.blockMatchesMap(this._blocks[block.inputs[name].block], inputMap, inputs);
+      const inputMatch = this.blockMatchesMap(this._blocks[block.inputs[name].block], inputMap, top, inputs, toDelete);
       if (!inputMatch) return false;
-      inputs = inputMatch;
+    }
+  }
+  if (block.id !== top) {
+    toDelete.push(block.id);
+  } else {
+    for (const id of toDelete) {
+      console.log(this._blocks[id])
+      delete this._blocks[id];
     }
   }
   return inputs;
+}
+
+export function isShadow(opcode) {
+  return ['text', 'math_number'].includes(opcode); // update this list as needed
 }
