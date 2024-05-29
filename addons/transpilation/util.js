@@ -88,7 +88,7 @@ export function blocksAreDeeplyEqual(block1, block2) {
  * @returns {false|Object<string, string>}
  * @this {Vm.Blocks}
  */
-export function blockMatchesMap(block, map, top, inputs = {}, toDelete=[]) {
+export function blockMatchesMap(block, map, top, inputs = {}, toDelete = []) {
   if (block.opcode !== map.opcode) return false;
   for (const [name, { value, id }] of Object.entries(map.fields || {})) {
     if (block.fields[name].value !== value || block.fields[name].id !== id) return false;
@@ -111,7 +111,7 @@ export function blockMatchesMap(block, map, top, inputs = {}, toDelete=[]) {
     toDelete.push(block.id);
   } else {
     for (const id of toDelete) {
-      console.log(this._blocks[id])
+      console.log(this._blocks[id]);
       delete this._blocks[id];
     }
   }
@@ -119,5 +119,5 @@ export function blockMatchesMap(block, map, top, inputs = {}, toDelete=[]) {
 }
 
 export function isShadow(opcode) {
-  return ['text', 'math_number'].includes(opcode); // update this list as needed
+  return ["text", "math_number"].includes(opcode); // update this list as needed
 }
