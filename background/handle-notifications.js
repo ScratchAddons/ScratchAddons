@@ -32,10 +32,12 @@ chrome.storage.local.get("muted", (obj) => {
   scratchAddons.muted = obj.muted;
 });
 
-chrome.contextMenus.removeAll();
+chrome.contextMenus?.removeAll();
 let currentMenuItem = null;
 
-chrome.contextMenus.onClicked.addListener(({ parentMenuItemId, menuItemId }) => {
+// NOTE: chrome.contextMenus equals `undefined` on Firefox for Android!
+
+chrome.contextMenus?.onClicked.addListener(({ parentMenuItemId, menuItemId }) => {
   if (parentMenuItemId === "mute") {
     const mins = Number(menuItemId.split("_")[1]);
     contextMenuMuted();
@@ -47,6 +49,7 @@ chrome.contextMenus.onClicked.addListener(({ parentMenuItemId, menuItemId }) => 
 });
 
 function contextMenuUnmuted() {
+  if (chrome.contextMenus === undefined) return; // Firefox for Android
   if (currentMenuItem === "unmute") chrome.contextMenus.remove("unmute");
   currentMenuItem = "mute";
   chrome.contextMenus.create({
@@ -62,17 +65,18 @@ function contextMenuUnmuted() {
       contexts: [BROWSER_ACTION],
     });
   }
-  // This seems to be run when the extension is loaded, so we'll just set the right icon here.
-  const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
   chrome.browserAction.setIcon({
     path: {
-      16: prerelease ? chrome.runtime.getURL("images/icon-blue-16.png") : chrome.runtime.getURL("images/icon-16.png"),
-      32: prerelease ? chrome.runtime.getURL("images/icon-blue-32.png") : chrome.runtime.getURL("images/icon-32.png"),
+      16: chrome.runtime.getURL(chrome.runtime.getManifest().icons["16"]),
+      32: chrome.runtime.getURL(chrome.runtime.getManifest().icons["32"]),
     },
   });
 }
 
 function contextMenuMuted() {
+  if (chrome.contextMenus === undefined) return; // Firefox for Android
+  // Note: in theory, this function is unreachable
+  // in FF for Android, but we early-return anyway.
   if (currentMenuItem === "mute") chrome.contextMenus.remove("mute");
   currentMenuItem = "unmute";
   chrome.contextMenus.create({
