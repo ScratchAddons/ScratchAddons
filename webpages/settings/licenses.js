@@ -26,7 +26,7 @@ let licenses = [];
 for (const library of libraries) {
   if (libraryLicensesList[library]) licenses.push(libraryLicensesList[library]);
 }
-licenses = [...new Set(Object.values(licenses))]; // Remove duplicate values
+licenses = [...new Set(licenses)]; // Remove duplicate values
 const licenseNameToText = {};
 await Promise.all(
   licenses.map((name) =>
