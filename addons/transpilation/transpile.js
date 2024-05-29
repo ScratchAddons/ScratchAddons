@@ -149,7 +149,7 @@ export class Transpiler {
             block.opcode = opcode;
             block.inputs = {};
             for (const [name, blockid] of Object.entries(maybeMatchedInputs)) {
-              console.log(blockid, blocks)
+              console.log(blockid, blocks);
               if (!block.inputs) block.inputs = {};
               if (!block.inputs[name]) block.inputs[name] = { name };
               block.inputs[name].block = blockid;
