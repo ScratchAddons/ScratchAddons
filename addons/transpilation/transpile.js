@@ -122,8 +122,12 @@ export class Transpiler {
             currentBlock.inputs[name] = { block: inputs[mapping].block, name };
             blocks[inputs[mapping].block].parent = currentBlock.id;
           } else {
-            let newId = this._createBlock(mapping, currentBlock.id, inputs, blocks)
-            currentBlock.inputs[name] = { name, block: newId, shadow: isShadow(blocks[newId].opcode) ? newId : undefined };
+            let newId = this._createBlock(mapping, currentBlock.id, inputs, blocks);
+            currentBlock.inputs[name] = {
+              name,
+              block: newId,
+              shadow: isShadow(blocks[newId].opcode) ? newId : undefined,
+            };
           }
         }
         for (const [name, { value, id }] of Object.entries(map.fields || {})) {
