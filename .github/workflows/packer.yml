@@ -19,7 +19,7 @@ jobs:
         env:
           ENVIRONMENT: chrome
       - name: Upload packed extensions
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Packed Extensions (zip)
           path: .dist/*.zip
