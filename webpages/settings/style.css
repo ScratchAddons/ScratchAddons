@@ -320,12 +320,12 @@ body.iframe .search-box input {
   box-sizing: border-box;
   max-width: fit-content;
   margin: auto;
-  padding: 1rem;
-  overflow-y: scroll;
+  padding: 2rem;
+  overflow-y: auto;
 }
 
 .permissions-block {
-  margin-top: 2rem;
+  margin-top: 1rem;
   font-size: 1.25rem;
 }
 
@@ -362,7 +362,8 @@ body.iframe .search-box input {
 }
 
 #screenshot {
-  height: 10rem;
+  width: 24rem;
+  max-width: 100%;
 }
 
 color-picker {
