@@ -318,13 +318,14 @@ body.iframe .search-box input {
 .permissions div.main {
   display: block;
   box-sizing: border-box;
-  max-width: 1000px;
+  max-width: fit-content;
   margin: auto;
   padding: 1rem;
   overflow-y: scroll;
 }
 
 .permissions-block {
+  margin-top: 2rem;
   font-size: 1.25rem;
 }
 
@@ -336,7 +337,7 @@ body.iframe .search-box input {
 .permissions-steps {
   display: flex;
   align-items: flex-end;
-  gap: 3rem;
+  gap: 2rem;
 }
 
 .permissions-steps > div {
