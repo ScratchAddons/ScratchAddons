@@ -446,6 +446,12 @@ function userscriptMatches(data, scriptOrStyle, addonId) {
 }
 
 function urlMatchesLegacyPattern(pattern, urlUrl) {
+  try {
+    new URL(pattern);
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
   const patternUrl = new URL(pattern);
   // We assume both URLs start with https://scratch.mit.edu
 
