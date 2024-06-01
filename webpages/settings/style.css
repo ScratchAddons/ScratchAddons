@@ -22,7 +22,6 @@ body {
   color: var(--white-text);
   display: flex;
   align-items: center;
-  padding: 0 14px;
   box-shadow: var(--large-shadow);
   user-select: none;
   position: relative;
@@ -35,14 +34,13 @@ h1 {
   font-weight: 400;
 }
 
-.navbar a {
-  height: 30px;
-}
-
 .logo {
-  height: 30px;
-  width: 30px;
+  height: 25px;
+  width: 25px;
   margin-inline-end: 9px;
+}
+.logo:not(.header-button) {
+  margin-inline-start: 14px;
 }
 
 .main {
@@ -130,8 +128,6 @@ h1 {
   transform: scaleY(-1);
 }
 .header-button {
-  right: 0;
-  position: fixed;
   cursor: pointer;
   padding: 17.5px;
   line-height: 0;
@@ -143,9 +139,13 @@ h1 {
 .theme-switch {
   height: 25px;
 }
-[dir="rtl"] .theme-switch {
+.header-end {
+  right: 0;
+  position: fixed;
+}
+[dir="rtl"] .header-end {
   right: auto;
-  left: 25px;
+  left: 0;
 }
 
 .hidden-button {

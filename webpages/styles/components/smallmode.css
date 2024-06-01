@@ -11,15 +11,3 @@
 .categories-block.smallMode .category:not(.hasParent) {
   padding-block: 15px;
 }
-.toggle {
-  cursor: pointer;
-  width: 24px;
-  height: 24px;
-  padding: 18px;
-  margin-inline-start: -14px;
-  margin-inline-end: 14px;
-  transition: 0.2s ease;
-}
-.toggle:hover {
-  background: var(--header-hover-darken);
-}
