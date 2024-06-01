@@ -36,10 +36,10 @@ h1 {
 
 .logo {
   height: 25px;
-  margin-inline-end: 9px;
+  margin-inline-end: 14px;
 }
 .logo:not(.header-button) {
-  margin-inline-start: 14px;
+  margin-inline-start: 19px;
 }
 
 .main {
