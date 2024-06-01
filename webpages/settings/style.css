@@ -322,6 +322,8 @@ body.iframe .search-box input {
   margin: auto;
   padding: 2rem;
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-text) transparent;
 }
 
 .permissions-block {
