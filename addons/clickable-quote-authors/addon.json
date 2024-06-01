@@ -1,0 +1,41 @@
+{
+  "versionAdded": "1.39.0",
+  "name": "Clickable forum quote authors",
+  "description": "Replaces author names in forum quotes with clickable links.",
+  "tags": ["community", "forums"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["forums"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["forums"],
+      "if": {
+        "settings": {
+          "plainText": true
+        }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Style as normal text",
+      "id": "plainText",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "credits": [
+    {
+      "name": "just-a-hriday",
+      "link": "https://scratch.mit.edu/users/just-a-hriday"
+    }
+  ],
+  "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true
+}
