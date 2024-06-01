@@ -99,7 +99,7 @@ export default async function ({ addon, console }) {
   let monitorScaler, resizeObserver, stage;
   async function initScaler() {
     monitorScaler = await addon.tab.waitForElement("[class*=monitor-list_monitor-list-scaler]");
-    stage = await addon.tab.waitForElement('[class*="stage-wrapper_full-screen"] [class*="stage_stage"]');
+    stage = await addon.tab.waitForElement('[class*="stage-wrapper_full-screen"] [class*="stage_stage"] canvas');
     resizeObserver = new ResizeObserver(() => {
       const stageSize = stage.getBoundingClientRect();
       // When switching between project page and editor, the canvas
