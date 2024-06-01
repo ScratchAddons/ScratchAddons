@@ -36,7 +36,6 @@ h1 {
 
 .logo {
   height: 25px;
-  width: 25px;
   margin-inline-end: 9px;
 }
 .logo:not(.header-button) {
