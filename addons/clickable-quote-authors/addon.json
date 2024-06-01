@@ -1,4 +1,5 @@
 {
+  "versionAdded": "1.39.0",
   "name": "Clickable forum quote authors",
   "description": "Replaces author names in forum quotes with clickable links.",
   "tags": ["community", "forums"],
