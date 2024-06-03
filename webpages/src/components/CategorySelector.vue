@@ -53,7 +53,7 @@ a.category > span > img {
   padding-block: 10px;
   opacity: 1;
 }
-.category.expand-enter-active,
+.category.expand-enter-from,
 .category.expand-leave-to {
   padding-block: 0;
   height: 0;
