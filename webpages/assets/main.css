@@ -5,7 +5,8 @@ html {
   background: var(--content-background);
 }
 
-body, #app {
+body,
+#app {
   background: var(--page-background);
   font-family: "Sora", sans-serif;
   margin: 0;
@@ -433,4 +434,13 @@ button.vacp-copy-button,
 button.vacp-format-switch-button {
   background: var(--button-background);
   color: var(--content-text);
+}
+
+@media screen and (max-width: 480px) {
+  div.addons-block {
+    max-width: 100vw;
+  }
+  div.addons-container {
+    overflow-x: hidden;
+  }
 }

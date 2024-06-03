@@ -433,6 +433,20 @@
   border-top-left-radius: 4px;
   border-top-right-radius: 0;
 }
+@media screen and (max-width: 480px) {
+  div.filter-options {
+    display: block;
+  }
+  .addon-setting:has(.setting-table) {
+    flex-direction: column;
+  }
+  .addon-setting:has(.setting-table) .setting-label-container {
+    width: 100%;
+  }
+  .setting-input.number {
+    max-width: 75px;
+  }
+}
 </style>
 <script>
 import Picker from "./Picker.vue";

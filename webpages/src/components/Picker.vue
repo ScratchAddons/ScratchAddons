@@ -92,7 +92,15 @@ export default {
 };
 </script>
 <style>
-@import url('vue-accessible-color-picker/styles');
+@import url("vue-accessible-color-picker/styles");
+.vacp-color-input-group {
+  min-width: 252px;
+}
+@media screen and (max-width: 480px) {
+  div.vacp-color-picker {
+    left: -200px;
+  }
+}
 </style>
 <style scoped>
 form {

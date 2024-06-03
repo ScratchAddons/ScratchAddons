@@ -619,8 +619,8 @@
 <style>
 .edm-preview {
   margin-top: 10px;
-  width: 512px;
-  height: 300px;
+  aspect-ratio: 512 / 300;
+  max-width: 512px;
   overflow: hidden;
   position: relative;
   background-color: var(--page);
