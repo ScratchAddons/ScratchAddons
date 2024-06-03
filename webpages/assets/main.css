@@ -5,7 +5,7 @@ html {
   background: var(--content-background);
 }
 
-body {
+body, #app {
   background: var(--page-background);
   font-family: "Sora", sans-serif;
   margin: 0;
@@ -50,7 +50,7 @@ h1 {
 
 .main {
   display: flex;
-  height: calc(100vh - 60px);
+  height: calc(100% - 60px);
   width: 100%;
   align-items: stretch;
 }
