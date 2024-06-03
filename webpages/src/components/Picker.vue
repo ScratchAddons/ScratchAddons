@@ -87,10 +87,13 @@ export default {
       this.$parent.updateSettings(this.addon, { wait: 250, settingId: this.setting.id });
 
       this.color = newColor;
-    }, 250),
+    }, 0),
   },
 };
 </script>
+<style>
+@import url('vue-accessible-color-picker/styles');
+</style>
 <style scoped>
 form {
   position: absolute;

@@ -3,6 +3,7 @@ import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
+import preload from "vite-plugin-preload";
 // https://vitejs.dev/config/
 export default defineConfig({
   //assetsInclude: ["**/*.css"],
@@ -24,7 +25,13 @@ export default defineConfig({
   },
 
   base: "/webpages/dist/",
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    preload({
+      rel: "preload",
+      include: "allAssets",
+    }),
+  ],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)).at,
