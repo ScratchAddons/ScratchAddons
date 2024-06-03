@@ -188,7 +188,7 @@ html,
 body {
   overflow: hidden;
 }
-body {
+body, #app {
   width: var(--width, 400px);
   height: var(--height, 599px);
   overflow: hidden;

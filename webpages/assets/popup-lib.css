@@ -9,7 +9,7 @@ html.fullscreen {
   font-size: 15px;
 }
 
-body {
+body, #app {
   margin: 0 auto;
   font-family: "Sora", sans-serif;
   font-size: 1rem;
