@@ -80,8 +80,13 @@ class Profiler {
     const block = blocks[rootBlockId];
     if (block === undefined) return 0;
     const inputs = Object.values(block.inputs);
-    const rtc = this.rtcTable[block.opcode];
-    let ownRTC = block?.opcode && rtc && rtc !== "" ? rtc : 0;
+    const fields = Object.values(block.fields);
+    const fieldKeys = Object.keys(block.fields);
+    const field = fields.length && ["EFFECT", "OPERATOR"].includes(fieldKeys[0])
+    ? ":" + fields[0].value.toLowerCase()
+    : "" ;
+    const rtc = this.rtcTable[block.opcode + field];
+    let ownRTC = block?.opcode && rtc && rtc != "N/A" ? rtc : 0;
     const childrenRTC =
       inputs.length !== 0
         ? inputs
