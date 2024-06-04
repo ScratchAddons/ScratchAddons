@@ -22,25 +22,38 @@ export default async function ({ addon, console }) {
       start *= scale;
       end *= scale;
 
-      let strokeWidth;
+      let strokeWidthY;
+      let strokeWidthX;
 
       switch (settings) {
         case "dots":
-          strokeWidth = scale;
+          strokeWidthY = scale;
+          strokeWidthX = scale;
           break;
         case "lines":
-          strokeWidth = scale * (this.spacing_ + 1);
+          strokeWidthX = scale * (this.spacing_ + 1);
+          strokeWidthY = scale * (this.spacing_ + 1);
           break;
         case "crosshairs":
-          strokeWidth = scale * 15;
+          strokeWidthX = scale * 15;
+          strokeWidthY = scale * 15;
           break;
         case "none":
-          strokeWidth = 0;
+          strokeWidthX = 0;
+          strokeWidthY = 0;
+          break;
+        case "vertical":
+          strokeWidthX = 0;
+          strokeWidthY = scale * (this.spacing_ + 1);
+          break;
+        case "horizontal":
+          strokeWidthX = scale * (this.spacing_ + 1);
+          strokeWidthY = 0;
           break;
       }
 
-      this.setLineAttributes_(this.line1_, strokeWidth, start, end, half, half);
-      this.setLineAttributes_(this.line2_, strokeWidth, half, half, start, end);
+      this.setLineAttributes_(this.line1_, strokeWidthY, start, end, half, half);
+      this.setLineAttributes_(this.line2_, strokeWidthX, half, half, start, end);
     };
 
     blockly.getMainWorkspace().grid_.update(blockly.getMainWorkspace().grid_.scale_);
