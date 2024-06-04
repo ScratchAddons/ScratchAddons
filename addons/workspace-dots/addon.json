@@ -1,0 +1,24 @@
+{
+  "name": "Editor workspace dots theme",
+  "description": "Allows the customisation of the style of the editor workspace dots.",
+  "tags": ["editor", "codeEditor"],
+  "versionAdded": "1.38.2",
+  "userscripts": [{ "url": "userscript.js", "matches": ["projects"] }],
+  "settings": [
+    {
+      "name": "Dots theme",
+      "id": "theme",
+      "type": "select",
+      "default": "dots",
+      "potentialValues": [
+        { "id": "dots", "name": "Default dots" },
+        { "id": "crosshairs", "name": "Crosshairs" },
+        { "id": "lines", "name": "Solid lines" },
+        { "id": "none", "name": "None" }
+      ]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "credits": [{ "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" }]
+}
