@@ -22,7 +22,7 @@ chrome.runtime.sendMessage("getLibraryInfo", (libraryLicenses) => {
   const libraries = libraryParam.split(",");
   console.log(libraryLicenses, libraries);
   for (const library of libraries) {
-    const licenseName = libraryLicenses[library];
+    const licenseName = libraryLicenses[library].filename ?? libraryLicenses[library].license;
     if (!licenseName) continue;
     if (Object.prototype.hasOwnProperty.call(licenseNameToText, licenseName)) {
       vue.libraries = [
@@ -34,7 +34,11 @@ chrome.runtime.sendMessage("getLibraryInfo", (libraryLicenses) => {
       ];
       continue;
     }
-    chrome.runtime.sendMessage({ licenseName }, ({ licenseText }) => {
+    chrome.runtime.sendMessage({ licenseName }, ({ rawLicenseText }) => {
+      let licenseText = rawLicenseText;
+      licenseText = String(licenseText).replace(" [year]", libraryLicenses[library].year ? " " + libraryLicenses[library].year : "");
+      licenseText = String(licenseText).replace(" [fullname]", libraryLicenses[library].fullname ? " " + libraryLicenses[library].fullname : "");
+      licenseText = String(licenseText).replace(" ([email])", libraryLicenses[library].email ? " (" + libraryLicenses[library].email + ")" : "");
       licenseNameToText[licenseName] = licenseText;
       vue.libraries = [
         ...vue.libraries,

@@ -7,16 +7,16 @@ fetch("/libraries/license-info.json")
     return o;
   })
   .then((o) =>
-    Object.values(o).map((name) =>
-      fetch(`/libraries/licenses/${name}.txt`)
+    Object.values(o).map((obj) =>
+      fetch(`/libraries/licenses/${obj.filename ?? obj.license}.txt`)
         .then((res) => res.text())
-        .then((text) => ({ name, text }))
+        .then((text) => ({ obj, text }))
     )
   )
   .then((promises) => Promise.all(promises))
   .then((a) =>
-    a.forEach(({ name, text }) => {
-      licenseNameToText[name] = text;
+    a.forEach(({ obj, text }) => {
+      licenseNameToText[obj.filename ?? obj.license] = text;
     })
   );
 
@@ -24,6 +24,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request === "getLibraryInfo") {
     sendResponse(libraryLicenses);
   } else if (request.licenseName) {
-    sendResponse({ licenseText: licenseNameToText[request.licenseName] });
+    sendResponse({ rawLicenseText: licenseNameToText[request.licenseName] });
   }
 });
