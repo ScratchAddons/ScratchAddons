@@ -36,9 +36,18 @@ chrome.runtime.sendMessage("getLibraryInfo", (libraryLicenses) => {
     }
     chrome.runtime.sendMessage({ licenseName }, ({ rawLicenseText }) => {
       let licenseText = rawLicenseText;
-      licenseText = String(licenseText).replace(" [year]", libraryLicenses[library].year ? " " + libraryLicenses[library].year : "");
-      licenseText = String(licenseText).replace(" [fullname]", libraryLicenses[library].fullname ? " " + libraryLicenses[library].fullname : "");
-      licenseText = String(licenseText).replace(" ([email])", libraryLicenses[library].email ? " (" + libraryLicenses[library].email + ")" : "");
+      licenseText = String(licenseText).replace(
+        " [year]",
+        libraryLicenses[library].year ? " " + libraryLicenses[library].year : ""
+      );
+      licenseText = String(licenseText).replace(
+        " [fullname]",
+        libraryLicenses[library].fullname ? " " + libraryLicenses[library].fullname : ""
+      );
+      licenseText = String(licenseText).replace(
+        " ([email])",
+        libraryLicenses[library].email ? " (" + libraryLicenses[library].email + ")" : ""
+      );
       licenseNameToText[licenseName] = licenseText;
       vue.libraries = [
         ...vue.libraries,
