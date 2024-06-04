@@ -1,0 +1,21 @@
+{
+  "name": "Sprite clone count",
+  "description": "Adds a clone count to indivudal sprites.",
+  "credits": [
+    {
+      "name": "Jazza",
+      "link": "http://scratch.mit.edu/users/greeny--231"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.35.0",
+  "tags": ["projects", "featured"],
+  "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}
