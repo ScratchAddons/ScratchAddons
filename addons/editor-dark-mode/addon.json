@@ -760,6 +760,18 @@
       }
     },
     {
+      "name": "workspace-dots",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.13)",
+        "white": "rgba(255, 255, 255, 0.13)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "workspace"
+        }
+      }
+    },
+    {
       "name": "workspace-insertionMarker",
       "value": {
         "type": "textColor",

@@ -322,6 +322,9 @@ img[class*="tool-select-base_tool-select-icon_"],
 .blocklySvg {
   background-color: var(--editorDarkMode-workspace);
 }
+[id^="blocklyGridPattern"] line {
+  stroke: var(--editorDarkMode-workspace-dots);
+}
 .blocklyMainWorkspaceScrollbar .blocklyScrollbarHandle,
 .blocklyMainWorkspaceScrollbar .blocklyScrollbarBackground:hover + .blocklyScrollbarHandle,
 .blocklyMainWorkspaceScrollbar .blocklyScrollbarHandle:hover {
