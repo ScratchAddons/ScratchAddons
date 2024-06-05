@@ -1,6 +1,15 @@
-html {
-  font-size: 20px;
-  background-color: white;
+@import url("../../libraries/thirdparty/Sora.css");
+@import url("../styles/colors.css");
+
+body {
+  color: var(--content-text);
+  background-color: var(--page-background);
+  font-size: 1.25rem;
+  font-family: "Sora", sans-serif;
+}
+
+a {
+  color: var(--blue-text);
 }
 
 #browser-info {
@@ -13,6 +22,6 @@ html {
 
 #restart-url {
   display: inline-block;
-  margin: 0 6px 0 6px;
+  margin: 0 6px;
   font-family: monospace;
 }
