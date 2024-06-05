@@ -116,18 +116,25 @@ export default async function ({ addon, console, msg }) {
         continue;
       }
 
-      let blob = await new Promise((resolve) => {
-        //Get the Blob data url for the image so that we can add it to the svg
-        let reader = new FileReader();
-        reader.addEventListener("load", () => resolve(reader.result));
-        reader.readAsDataURL(file);
-      });
-
       let i = new Image(); //New image to get the image's size
       i.src = blob;
       await new Promise((resolve) => {
         i.onload = resolve;
       });
+
+      // NOTE: we DON'T want to use the uploaded file directly.
+      // We redraw the image into a canvas first, so that:
+      // 1. We always embed a PNG file,
+      // 2. EXIF metadata (such as location, if applicable) is discarded.
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = i.width;
+      canvas.height = i.height;
+      ctx.drawImage(img, 0, 0);
+
+      let blob = await new Promise((resolve) =>
+        canvas.toBlob((blob) => resolve(URL.createObjectURL(blob)), "image/png")
+      );
 
       let dim = { width: i.width, height: i.height };
       const originalDim = JSON.parse(JSON.stringify(dim));
