@@ -1,5 +1,6 @@
 import changeAddonState from "./imports/change-addon-state.js";
 import { getMissingOptionalPermissions } from "./imports/util.js";
+import { setUserAsActive } from "./imports/inactivity.js"
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.replaceTabWithUrl) chrome.tabs.update(sender.tab.id, { url: request.replaceTabWithUrl });
@@ -223,6 +224,7 @@ const csInfoCache = new Map();
 // (example: on browser startup, with a Scratch page opening on startup).
 chrome.webRequest.onBeforeRequest.addListener(
   async (request) => {
+    setUserAsActive();
     if (!scratchAddons.localState.allReady) return;
     const identity = createCsIdentity({ tabId: request.tabId, frameId: request.frameId, url: request.url });
     const loadingObj = { loading: true };

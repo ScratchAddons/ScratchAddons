@@ -2,10 +2,12 @@ import changeAddonState from "./imports/change-addon-state.js";
 import minifySettings from "../libraries/common/minify-settings.js";
 import { updateBadge } from "./message-cache.js";
 import { onReady } from "./imports/on-ready.js";
+import { setUserAsActive } from "./imports/inactivity.js";
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // Message used to load popups as well
   if (request === "getSettingsInfo") {
+    setUserAsActive(); // User opened the popup or the settings page, consider them active.
     return onReady(() => {
       sendResponse({
         manifests: scratchAddons.manifests,
