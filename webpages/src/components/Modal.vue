@@ -90,22 +90,6 @@
 <script>
 export default {
   props: ["modelValue", "title"],
-  data() {
-    return {
-      canCloseOutside: false,
-    };
-  },
-  watch: {
-    modelValue(value) {
-      if (value) {
-        setTimeout(() => {
-          this.canCloseOutside = true;
-        }, 100);
-      } else {
-        this.canCloseOutside = false;
-      }
-    },
-  },
   computed: {
     isOpen: {
       get() {
@@ -122,11 +106,6 @@ export default {
       return this.$root.msg(...params);
     },
 
-    clickOutside(e) {
-      if (this.isOpen && this.canCloseOutside && e.isTrusted) {
-        this.isOpen = false;
-      }
-    },
   },
 };
 </script>

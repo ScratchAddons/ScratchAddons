@@ -442,5 +442,6 @@ button.vacp-format-switch-button {
   }
   div.addons-container {
     overflow-x: hidden;
+    padding: 10px 10px 10px;
   }
 }
