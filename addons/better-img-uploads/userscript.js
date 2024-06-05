@@ -138,9 +138,7 @@ export default async function ({ addon, console, msg }) {
       canvas.height = dim.height;
       ctx.drawImage(imgData._rawImg, 0, 0);
 
-      let blob = await new Promise((resolve) =>
-        canvas.toBlob((blob) => resolve(blob), "image/png")
-      );
+      let blob = await new Promise((resolve) => canvas.toBlob((blob) => resolve(blob), "image/png"));
 
       const originalDim = JSON.parse(JSON.stringify(dim));
 
