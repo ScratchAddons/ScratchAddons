@@ -117,16 +117,16 @@ export default async function ({ addon, console, msg }) {
       }
 
       const getImgData = async () => {
-        let img = new Image();
+        const img = new Image();
         img.src = URL.createObjectURL(file);
         await new Promise((resolve) => {
           img.onload = resolve;
         });
-        return { width: img.width, height: img.height, _rawImg: img };
+        return img;
       };
 
-      let imgData = await getImgData();
-      let dim = { width: imgData.width, height: imgData.height };
+      const img = await getImgData();
+      let dim = { width: img.width, height: img.height };
 
       // NOTE: we DON'T want to use the uploaded file directly.
       // We redraw the image into a canvas first, so that:
@@ -136,9 +136,10 @@ export default async function ({ addon, console, msg }) {
       const ctx = canvas.getContext("2d");
       canvas.width = dim.width;
       canvas.height = dim.height;
-      ctx.drawImage(imgData._rawImg, 0, 0);
+      ctx.drawImage(img, 0, 0);
 
-      let blob = await new Promise((resolve) => canvas.toBlob((blob) => resolve(blob), "image/png"));
+      URL.revokeObjectURL(img.src);
+      const dataURL = canvas.toDataURL();
 
       const originalDim = JSON.parse(JSON.stringify(dim));
 
@@ -223,7 +224,7 @@ export default async function ({ addon, console, msg }) {
                 width="${originalDim.width}"
                 height="${originalDim.height}"
 				transform="scale(${dim.width / originalDim.width},${dim.height / originalDim.height})"
-                xlink:href="${blob}"
+                xlink:href="${dataURL}"
             />
           </g>
         </g>
