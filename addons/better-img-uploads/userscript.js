@@ -116,27 +116,32 @@ export default async function ({ addon, console, msg }) {
         continue;
       }
 
-      let i = new Image(); //New image to get the image's size
-      i.src = blob;
-      await new Promise((resolve) => {
-        i.onload = resolve;
-      });
+      const getImgData = async () => {
+        let img = new Image();
+        img.src = URL.createObjectURL(file);
+        await new Promise((resolve) => {
+          img.onload = resolve;
+        });
+        return { width: img.width, height: img.height, _rawImg: img };
+      };
+
+      let imgData = await getImgData();
+      let dim = { width: imgData.width, height: imgData.height };
 
       // NOTE: we DON'T want to use the uploaded file directly.
       // We redraw the image into a canvas first, so that:
       // 1. We always embed a PNG file,
       // 2. EXIF metadata (such as location, if applicable) is discarded.
-      const canvas = document.getElementById("canvas");
+      const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
-      canvas.width = i.width;
-      canvas.height = i.height;
-      ctx.drawImage(img, 0, 0);
+      canvas.width = dim.width;
+      canvas.height = dim.height;
+      ctx.drawImage(imgData._rawImg, 0, 0);
 
       let blob = await new Promise((resolve) =>
-        canvas.toBlob((blob) => resolve(URL.createObjectURL(blob)), "image/png")
+        canvas.toBlob((blob) => resolve(blob), "image/png")
       );
 
-      let dim = { width: i.width, height: i.height };
       const originalDim = JSON.parse(JSON.stringify(dim));
 
       if (mode === "fit") {
