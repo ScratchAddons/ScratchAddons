@@ -236,7 +236,7 @@ function appendSearch(box, query, page, term, msg) {
 /** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, console, msg }) {
   if (!window.scratchAddons._scratchblocks3Enabled) {
-    window.scratchblocks = (await addon.self.dynamicImport("/libraries/thirdparty/cs/scratchblocks.min.es.js")).default;
+    window.scratchblocks = (await import("../../libraries/thirdparty/cs/scratchblocks.min.es.js")).default;
   }
 
   // create the search bar

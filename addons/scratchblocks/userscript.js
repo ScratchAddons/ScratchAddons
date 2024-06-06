@@ -55,8 +55,8 @@ export default async function ({ addon, msg }) {
   oldScript.remove();
 
   const [sb, loadTranslations] = await Promise.all([
-    addon.self.dynamicImport("/libraries/thirdparty/cs/scratchblocks.min.es.js").then((mod) => mod.default),
-    addon.self.dynamicImport("/libraries/thirdparty/cs/translations-all-es.js").then((mod) => mod.default),
+    import("../../libraries/thirdparty/cs/scratchblocks.min.es.js").then((mod) => mod.default),
+    import("../../libraries/thirdparty/cs/translations-all-es.js").then((mod) => mod.default),
   ]);
   window.scratchblocks = sb;
   loadTranslations(sb);

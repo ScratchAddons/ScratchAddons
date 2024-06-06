@@ -5,14 +5,14 @@
 
 .my-ocular-reaction-button {
   user-select: none;
-  background-color: #f2f2f2;
+  background-color: var(--darkWww-gray, #f2f2f2);
   margin: 0 5px;
   padding: 4px;
   vertical-align: middle;
   display: inline-block; /* don't wrap in the middle of a reaction */
   line-height: 16px;
   border-radius: 6px;
-  box-shadow: 0 0 2px #28a5da;
+  box-shadow: 0 0 2px var(--darkWww-button-scratchr2PostHeader, #855cd6);
   text-shadow: none;
   opacity: 1;
   /* transition: opacity .5s; */ /* due to the way the list is rerendered, css transitions wont do anything */
@@ -21,11 +21,11 @@
 }
 .my-ocular-reaction-button,
 .my-ocular-reaction-button:hover {
-  color: inherit;
+  color: var(--darkWww-gray-scratchr2Text, #322f31);
 }
 .my-ocular-reaction-button.selected {
-  color: #fff;
-  background-color: #28a5da;
+  color: var(--darkWww-button-scratchr2PostHeaderText, #fff);
+  background-color: var(--darkWww-button-scratchr2PostHeader, #855cd6);
 }
 
 .my-ocular-reaction-button > .my-ocular-popup {
@@ -43,10 +43,10 @@
   transform: translateX(-50%);
   width: max-content;
   padding: 6px;
-  background-color: #fafafa;
-  border: 1px solid #d9d9d9;
+  background-color: var(--darkWww-input, #fafafa);
+  border: 1px solid var(--darkWww-border-15, #d9d9d9);
   border-radius: 8px;
-  color: #322f31;
+  color: var(--darkWww-input-scratchr2Text, #322f31);
 }
 .my-ocular-popup::before {
   content: "";
@@ -57,7 +57,7 @@
   width: 0;
   height: 0;
   border: 6px solid transparent;
-  border-top-color: #d9d9d9;
+  border-top-color: var(--darkWww-border-15, #d9d9d9);
 }
 .my-ocular-popup::after {
   content: "";
@@ -68,7 +68,7 @@
   width: 0;
   height: 0;
   border: 5px solid transparent;
-  border-top-color: #fafafa;
+  border-top-color: var(--darkWww-input, #fafafa);
 }
 
 .my-ocular-reaction-menu-button {
