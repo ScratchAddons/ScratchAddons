@@ -1,12 +1,20 @@
 /* global $, paste */
 
 let forumIdAddon = null;
+let markdownForumsAddon = null;
 let betterQuoterAddon = null;
 let isSetup = false;
 
 export function setupForumId(addon) {
   if (!forumIdAddon) {
     forumIdAddon = addon;
+  }
+  setup();
+}
+
+export function setupMarkdownForums(addon) {
+  if (!markdownForumsAddon) {
+    markdownForumsAddon = addon;
   }
   setup();
 }
@@ -42,7 +50,11 @@ export function getPostText(id, post, selection) {
 }
 
 export function getIDLink(id, name, addSpace) {
-  return `[url=https://scratch.mit.edu/discuss/post/${id}/]${name}[/url]${addSpace ? " " : ""}`;
+  return (
+    (markdownForumsAddon && !markdownForumsAddon.self.disabled
+      ? `[${name}](https://scratch.mit.edu/discuss/post/${id}/)`
+      : `[url=https://scratch.mit.edu/discuss/post/${id}/]${name}[/url]`) + (addSpace ? " " : "")
+  );
 }
 
 function getSelectionBBCode(selection) {
@@ -212,13 +224,12 @@ function setup() {
   window.copy_paste = async function (id) {
     const post = $("#" + id);
     const username = post.find(".username").text();
+    const idLink = getIDLink(id.substring(1), post["0"].querySelector(".box-head > .conr").textContent, false);
     const idText =
       !forumIdAddon?.self?.disabled && forumIdAddon?.settings?.get?.("auto_add")
-        ? `[small](${getIDLink(
-            id.substring(1),
-            post["0"].querySelector(".box-head > .conr").textContent,
-            false
-          )})[/small]`
+        ? markdownForumsAddon && !markdownForumsAddon.self.disabled
+          ? `(${idLink})`
+          : `[small](${idLink})[/small]`
         : "";
     const selection = window.getSelection();
     const showBbcode = post.find("[data-show-bbcode]");
@@ -228,6 +239,14 @@ function setup() {
           ? showBbcode[0].innerText
           : selection
         : await getPostText(id, post[0], selection);
-    paste(`[quote=${username}]${idText}\n${text}\n[/quote]\n`);
+    const quoteText = (text) => {
+      return markdownForumsAddon && !markdownForumsAddon.self.disabled
+        ? `> **${username} wrote:**\n> ${idText}\n> \`\`\`raw-bbcode\n${text
+            .split("\n")
+            .map((line) => `> ${line}`)
+            .join("\n")}\n> \`\`\``
+        : `[quote=${username}]${idText}\n${text}\n[/quote]\n`;
+    };
+    paste(quoteText(text));
   };
 }
