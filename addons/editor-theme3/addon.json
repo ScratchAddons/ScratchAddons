@@ -226,7 +226,8 @@
           "text": "colorOnBlack"
         }
       }
-    }
+    },
+    { "url": "insertion_marker.css", "matches": ["projects"] }
   ],
   "settings": [
     {
@@ -370,6 +371,14 @@
       "id": "insertion-markers",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Insertion marker opacity (0-100%)",
+      "id": "insertion-marker-opacity",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 20
     }
   ],
   "tags": ["editor", "theme", "codeEditor", "featured"],
