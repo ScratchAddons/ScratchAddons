@@ -226,6 +226,10 @@
           "text": "colorOnBlack"
         }
       }
+    },
+    {
+      "url": "insertion_marker.css",
+      "matches": ["projects"]
     }
   ],
   "settings": [
