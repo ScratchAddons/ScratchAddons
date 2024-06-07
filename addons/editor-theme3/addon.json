@@ -364,6 +364,12 @@
       "id": "forums",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Colored insertion markers",
+      "id": "insertion-markers",
+      "type": "boolean",
+      "default": false
     }
   ],
   "tags": ["editor", "theme", "codeEditor", "featured"],

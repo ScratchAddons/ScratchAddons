@@ -355,7 +355,7 @@ export default async function ({ addon, console, msg }) {
       colourTertiary = tertiaryColor(extensionsCategory);
     }
 
-    if (this.isInsertionMarker()) {
+    if (this.isInsertionMarker() && addon.settings.get("insertion-markers")) {
       return true;
     }
 
