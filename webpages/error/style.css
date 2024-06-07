@@ -1,5 +1,5 @@
 @import url("../../libraries/thirdparty/Sora.css");
-@import url("../styles/colors.css");
+@import url("../styles/colors-light.css");
 
 body {
   color: var(--content-text);
