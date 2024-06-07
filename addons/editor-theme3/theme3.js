@@ -354,6 +354,11 @@ export default async function ({ addon, console, msg }) {
       colourSecondary = secondaryColor(extensionsCategory);
       colourTertiary = tertiaryColor(extensionsCategory);
     }
+
+    if (this.isInsertionMarker()) {
+      return true;
+    }
+
     return oldBlockSetColour.call(this, colour, colourSecondary, colourTertiary);
   };
 
