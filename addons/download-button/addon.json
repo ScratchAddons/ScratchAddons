@@ -1,0 +1,21 @@
+{
+  "name": "Project page download button",
+  "description": "Allows you to download projects directly from the project page, without having to open the editor first. The Download button is added next to the Copy Link button.",
+  "tags": ["community", "projectPlayer", "featured"],
+  "versionAdded": "1.37.0",
+  "credits": [{ "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" }],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}

@@ -230,7 +230,7 @@ export default async ({ addon, console, msg }) => {
       } else {
         recorder.onstop = () => {
           const blob = new Blob(recordBuffer, { type: mimeType });
-          downloadBlob(`video.${fileExtension}`, blob);
+          downloadBlob(`${addon.tab.redux.state?.preview?.projectInfo?.title || "video"}.${fileExtension}`, blob);
           disposeRecorder();
         };
         recorder.stop();
