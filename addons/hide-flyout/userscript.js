@@ -82,12 +82,7 @@ export default async function ({ addon, console, msg }) {
   function onmouseleave(e, speed = getSpeedValue()) {
     // locked palette, inputting text, and hovering over dropdown menu do not close palette
     // TODO: Need to make sure the following check took place in palette, not code section
-    if (
-      flyoutLock ||
-      document.activeElement.className == "blocklyHtmlInput" ||
-      (Blockly.DropDownDiv.DIV_.style.display !== "none" && Blockly.DropDownDiv.DIV_.style.display !== "")
-    )
-      return;
+    if (flyoutLock || Blockly.WidgetDiv.isVisible() || Blockly.DropDownDiv.isVisible()) return;
     if (e && e.buttons) {
       // dragging a block or scrollbar
       closeOnMouseUp = true;
