@@ -5,6 +5,7 @@ export default async function ({ addon, console, msg }) {
   let deletedItems = [];
   let deleted;
   let target;
+  let shouldChangeRestoreButtonText = false;
 
   function getRestoreFun(type) {
     deletedItems.reverse();
@@ -46,8 +47,13 @@ export default async function ({ addon, console, msg }) {
           type: "scratch-gui/restore-deletion/RESTORE_UPDATE",
           state: {
             restoreFun: getRestoreFun.bind(this, ctx.type),
-            deletedItem: `${type}${deletedItems.length > 1 ? "s" : ""}`,
+            deletedItem: type,
           },
+        });
+        queueMicrotask(() => {
+          if (deletedItems.length > 1) {
+            shouldChangeRestoreButtonText = true;
+          }
         });
       }
     },
@@ -70,14 +76,25 @@ export default async function ({ addon, console, msg }) {
     }
   }
 
+  addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
+    const e = detail;
+    if (!e.action || e.action.type !== "scratch-gui/restore-deletion/RESTORE_UPDATE") return;
+    shouldChangeRestoreButtonText = false;
+  });
+
   while (true) {
     const restoreButton = await addon.tab.waitForElement(
       '[class*="menu-bar_menu-bar-item_"]:nth-child(4) [class*="menu_menu-item_"]:first-child > span',
-      { markAsSeen: true, reduxCondition: (state) => state.scratchGui.menus.editMenu }
+      {
+        markAsSeen: true,
+        reduxCondition: (state) => state.scratchGui.menus.editMenu,
+        condition: () => shouldChangeRestoreButtonText,
+      }
     );
 
-    const deletedItem = addon.tab.redux.state.scratchGui.restoreDeletion.deletedItem;
-
-    if (deletedItem && deletedItem.endsWith("s")) restoreButton.innerText = msg(`multi${deletedItem}`);
+    // We know that shouldChangeRestoreButtonText = true
+    const { deletedItem } = addon.tab.redux.state.scratchGui.restoreDeletion;
+    restoreButton.innerText = msg(`multi${deletedItem}s`);
   }
 }
