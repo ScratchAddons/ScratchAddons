@@ -1,9 +1,8 @@
 export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
-  const types = ["sound", "costume"];
+  const TYPES = ["sound", "costume"];
   let deletedItems = [];
-  let deleted;
   let target;
   let shouldChangeRestoreButtonText = false;
 
@@ -38,7 +37,7 @@ export default async function ({ addon, console, msg }) {
 
         for (let i = numberOfAssets - 1; i > -1; i--) {
           if (i !== ctx.index) {
-            deleted = ctx.type === "costume" ? target.deleteCostume(i) : target.deleteSound(i);
+            let deleted = ctx.type === "costume" ? target.deleteCostume(i) : target.deleteSound(i);
             if (deleted) deletedItems.push(deleted);
           }
         }
@@ -58,7 +57,7 @@ export default async function ({ addon, console, msg }) {
       }
     },
     {
-      types,
+      types: TYPES,
       position: "assetContextMenuAfterDelete",
       order: 1,
       label: msg("deleteOthers"),
