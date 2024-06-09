@@ -1,5 +1,5 @@
 export default async function ({ addon, console, msg }) {
-  const vm = await addon.tab.traps.vm;
+  const vm = addon.tab.traps.vm;
 
   const types = ["sound", "costume"];
   let deletedItems = [];
