@@ -85,8 +85,8 @@ export default async function ({ addon, console, msg }) {
     if (
       flyoutLock ||
       document.activeElement.className == "blocklyHtmlInput" ||
-      (document.querySelector(".blocklyDropDownDiv").style.display !== "none" &&
-        document.querySelector(".blocklyDropDownDiv").style.display !== "")
+      (Blockly.DropDownDiv.DIV_.style.display !== "none" &&
+        Blockly.DropDownDiv.DIV_.style.display !== "")
     )
       return;
     if (e && e.buttons) {
