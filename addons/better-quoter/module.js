@@ -57,6 +57,11 @@ function getSelectionBBCode(selection) {
     return "";
   }
 
+  const textNodes = getTextNodes(html, ["code", "sa-copyCodeDiv"]);
+  for (const textNode of textNodes) {
+    textNode.textContent = textNode.textContent.replaceAll("[", "[[]");
+  }
+
   // new lines
   const lineBreaks = html.querySelectorAll("br");
   for (const br of lineBreaks) br.insertAdjacentText("afterend", "\n");
@@ -73,7 +78,7 @@ function getSelectionBBCode(selection) {
     tongue: ":P",
     lol: ":lol:",
     mad: ":mad:",
-    roll: ":rolleyes",
+    roll: ":rolleyes:",
     cool: ":cool:",
   });
 
@@ -90,7 +95,7 @@ function getSelectionBBCode(selection) {
           img
         );
       } else img.parentNode.insertBefore(document.createTextNode(`[img${img.src}[/img]`), img);
-    } else img.parentNode.insertBefore(document.createTextNode(`[img]${img.src}[/img]`), img);
+    } else img.parentNode.insertBefore(document.createTextNode(`[img]${img.getAttribute("src")}[/img]`), img);
   }
 
   // bold, italic, underline, strikethrough, big, small and color
@@ -188,11 +193,23 @@ function getSelectionBBCode(selection) {
   return html.textContent;
 }
 
+function getTextNodes(element, excludeClasses) {
+  let textNodes = [];
+  for (const child of element.childNodes) {
+    if (child.nodeType === 3) {
+      textNodes.push(child);
+    } else if (!excludeClasses.some((className) => child.classList.contains(className))) {
+      textNodes = textNodes.concat(getTextNodes(child, excludeClasses));
+    }
+  }
+  return textNodes;
+}
+
 function setup() {
   if (isSetup) return;
   isSetup = true;
   const originalCopyPaste = window.copy_paste;
-  window.copy_paste = function (id) {
+  window.copy_paste = async function (id) {
     const post = $("#" + id);
     const username = post.find(".username").text();
     const idText =
@@ -203,8 +220,14 @@ function setup() {
             false
           )})[/small]`
         : "";
-    getPostText(id, post[0], window.getSelection()).then((text) => {
-      paste(`[quote=${username}]${idText}\n${text}\n[/quote]\n`);
-    });
+    const selection = window.getSelection();
+    const showBbcode = post.find("[data-show-bbcode]");
+    const text =
+      showBbcode.length !== 0
+        ? selection.toString() === ""
+          ? showBbcode[0].innerText
+          : selection
+        : await getPostText(id, post[0], selection);
+    paste(`[quote=${username}]${idText}\n${text}\n[/quote]\n`);
   };
 }
