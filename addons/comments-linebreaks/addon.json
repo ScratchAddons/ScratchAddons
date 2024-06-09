@@ -12,6 +12,11 @@
       "type": "notice",
       "text": "Line breaks are only visible to users with this addon enabled. They will appear as spaces for others.",
       "id": "ownLineBreaks"
+    },
+    {
+      "type": "notice",
+      "text": "Linebreaks currently do not appear on 2.0 pages.",
+      "id": "scratchr2Linebreaks"
     }
   ],
   "userscripts": [
