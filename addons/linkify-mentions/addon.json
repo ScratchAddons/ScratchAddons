@@ -1,0 +1,27 @@
+{
+  "name": "Clickable forum mentions",
+  "description": "Turns @username mentions on the forums into clickable links.",
+  "credits": [
+    {
+      "name": "Samq64",
+      "link": "https://github.com/Samq64"
+    }
+  ],
+  "info": [
+    {
+      "type": "notice",
+      "text": "Forum mentions styled with BBCode won't be clickable.",
+      "id": "BBCode"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "script.js",
+      "matches": ["topics"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.34.0",
+  "tags": ["community", "forums"]
+}
