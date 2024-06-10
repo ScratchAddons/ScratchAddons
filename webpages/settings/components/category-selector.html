@@ -10,7 +10,7 @@
     :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"
     @click="onClick($event)"
   >
-    <img :src="'../../images/icons/' + category.icon + '.svg'" />
+    <img :src="'../../images/icons/' + category.icon + '.svg'" draggable="false" />
     <span>{{ category.name }}</span>
   </div>
 </template>

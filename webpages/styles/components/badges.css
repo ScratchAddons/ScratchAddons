@@ -8,6 +8,7 @@
   margin-inline-start: 10px;
   border-bottom: 2px solid #111;
   white-space: nowrap;
+  user-select: none;
 }
 .badge .tooltiptext {
   white-space: normal;

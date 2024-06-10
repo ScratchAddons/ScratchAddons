@@ -42,12 +42,14 @@
         :title="addButtonUsed ? '' : (addButtonType === 'project' ? messages.addProjectDescription : messages.addStudioDescription)"
       >
         <span v-show="!addButtonUsed">
-          <img class="small-icon" src="../../images/icons/plus.svg" /><span
+          <img class="small-icon" src="../../images/icons/plus.svg" draggable="false" /><span
             >{{ addButtonType === "project" ? messages.addProject : messages.addStudio }}</span
           >
         </span>
         <span v-else>
-          <img class="small-icon" src="../../images/icons/check.svg" /><span>{{ messages.added }}</span>
+          <img class="small-icon" src="../../images/icons/check.svg" draggable="false" /><span
+            >{{ messages.added }}</span
+          >
         </span>
       </button>
     </div>
@@ -58,7 +60,8 @@
             >{{ project.title }}</a
           >
           <span class="float-right"
-            ><img class="small-icon" src="../../images/icons/users.svg" /> {{ project.error ? "?" : project.amt }}</span
+            ><img class="small-icon" src="../../images/icons/users.svg" draggable="false" /> {{ project.error ? "?" :
+            project.amt }}</span
           >
         </div>
         <div class="project-details">
