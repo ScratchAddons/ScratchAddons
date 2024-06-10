@@ -24,7 +24,7 @@
       "runAtComplete": true
     }
   ],
-  "versionAdded": "1.37.0",
+  "versionAdded": "1.39.0",
   "tags": ["editor", "costumeEditor", "featured"],
   "enabledByDefault": false,
   "dynamicEnable": true,
