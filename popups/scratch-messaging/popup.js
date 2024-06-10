@@ -259,7 +259,9 @@ export default async ({ addon, msg, safeMsg }) => {
       studioPromotions: [],
       studioHostTransfers: [],
       forumActivity: [],
+      forumActivityAmt: 0,
       studioActivity: [],
+      studioActivityAmt: 0,
       remixes: [],
       profiles: [],
       studios: [],
@@ -314,7 +316,9 @@ export default async ({ addon, msg, safeMsg }) => {
         this.studioPromotions = [];
         this.studioHostTransfers = [];
         this.forumActivity = [];
+        this.forumActivityAmt = 0;
         this.studioActivity = [];
+        this.studioActivityAmt = 0;
         this.remixes = [];
         this.profiles = [];
         this.studios = [];
@@ -627,6 +631,7 @@ export default async ({ addon, msg, safeMsg }) => {
                 topicTitle: message.topic_title,
               });
             }
+            this.forumActivityAmt++;
           } else if (message.type === "remixproject") {
             this.remixes.push({
               parentTitle: message.parent_title,
@@ -642,6 +647,7 @@ export default async ({ addon, msg, safeMsg }) => {
                 studioTitle: message.title,
               });
             }
+            this.studioActivityAmt++;
           } else if (message.type === "loveproject") {
             const projectObject = this.getProjectObject(message.project_id, message.title);
             projectObject.loveCount++;
