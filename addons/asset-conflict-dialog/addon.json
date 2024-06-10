@@ -1,5 +1,5 @@
 {
-  "name": "Asset Conflict Dialog",
+  "name": "Asset conflict dialog",
   "description": "When uploading costumes or sounds with the same name as an existing one, shows a dialog with options to replace or skip them instead of always renaming them.",
   "credits": [
     {
