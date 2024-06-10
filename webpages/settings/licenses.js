@@ -15,6 +15,11 @@ const vue = new Vue({
   },
 });
 
+setTimeout(() => {
+  const element = document.getElementById("loading");
+  if (element) element.style.display = "block";
+}, 250);
+
 const libraryParam = new URLSearchParams(location.search).get("libraries");
 if (typeof libraryParam !== "string") throw new Error("Invalid libraries parameter");
 const libraries = libraryParam.split(",");
