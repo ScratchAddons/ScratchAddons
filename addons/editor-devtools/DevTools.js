@@ -1,5 +1,6 @@
 import DomHelpers from "./DomHelpers.js";
 import UndoGroup from "./UndoGroup.js";
+import { getVariableUsesById } from "./utils.js";
 
 export default class DevTools {
   constructor(addon, msg, m) {
@@ -78,7 +79,7 @@ export default class DevTools {
               let v = wksp.getVariableById(this.selVarID);
               let varName = window.prompt(this.msg("replace", { name: v.name }));
               if (varName) {
-                this.cleanupMenu.cleanupTools.doReplaceVariable(this.selVarID, varName, v.type);
+                this.doReplaceVariable(this.selVarID, varName, v.type);
               }
             },
             separator: true,
@@ -106,7 +107,7 @@ export default class DevTools {
     let newVId = v.getId();
 
     UndoGroup.startUndoGroup(wksp);
-    let blocks = this.getVariableUsesById(varId);
+    let blocks = getVariableUsesById(varId, wksp);
     for (const block of blocks) {
       try {
         if (type === "") {

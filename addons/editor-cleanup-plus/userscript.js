@@ -2,7 +2,7 @@ import doCleanUp from "./doCleanup.js";
 
 export default async function ({ addon, console, msg, safeMsg: m }) {
   const blockly = await addon.tab.traps.getBlockly();
-  const getWorkspace = () => blockly.mainWorkspace;
+  const getWorkspace = () => blockly.getMainWorkspace();
 
   let originalMsg = blockly.Msg.CLEAN_UP;
   addon.self.addEventListener("disabled", () => (blockly.Msg.CLEAN_UP = originalMsg));
