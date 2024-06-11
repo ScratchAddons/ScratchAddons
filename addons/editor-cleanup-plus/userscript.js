@@ -1,6 +1,6 @@
 import doCleanUp from "./doCleanup.js";
 
-export default async function ({ addon, console, msg}) {
+export default async function ({ addon, console, msg, safeMsg: m }) {
   const blockly = await addon.tab.traps.getBlockly();
   const getWorkspace = ()=>blockly.mainWorkspace;
 
@@ -17,6 +17,7 @@ export default async function ({ addon, console, msg}) {
 
   addon.tab.createBlockContextMenu(
     (items, block) => {
+      if (addon.self.disabled) return items;
       items.push(
         {
           enabled: true,
