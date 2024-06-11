@@ -18,17 +18,15 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
   addon.tab.createBlockContextMenu(
     (items, block) => {
       if (addon.self.disabled) return items;
-      items.push(
-        {
-          enabled: true,
-          text: m("make-space"),
-          _isDevtoolsFirstItem: true,
-          callback: () => {
-            doCleanUp(block, getWorkspace, msg);
-          },
-          separator: true,
-        }
-      );
+      items.push({
+        enabled: true,
+        text: m("make-space"),
+        _isDevtoolsFirstItem: true,
+        callback: () => {
+          doCleanUp(block, getWorkspace, msg);
+        },
+        separator: true,
+      });
       return items;
     },
     { blocks: true }
