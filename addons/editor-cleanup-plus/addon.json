@@ -1,6 +1,6 @@
 {
-  "name": "Cleanup Plus",
-  "description": "Enhances the cleanup tool with smart column-by-column block organisation and automatic removal of unused lists/variables.",
+  "name": "Enhanced clean up tool",
+  "description": "Enhances the clean up tool with smart column-by-column block organisation and automatic removal of unused lists/variables.",
   "credits": [
     {
       "name": "griffpatch"
