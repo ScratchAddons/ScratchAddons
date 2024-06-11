@@ -355,10 +355,6 @@ export default async function ({ addon, console, msg }) {
       colourTertiary = tertiaryColor(extensionsCategory);
     }
 
-    if (this.isInsertionMarker() && addon.settings.get("insertion-markers")) {
-      return true;
-    }
-
     return oldBlockSetColour.call(this, colour, colourSecondary, colourTertiary);
   };
 
@@ -373,6 +369,13 @@ export default async function ({ addon, console, msg }) {
         }
       }
     }
+  };
+
+  const oldInsertionMarkerCreateMarkerBlock = Blockly.InsertionMarkerManager.prototype.createMarkerBlock_;
+  Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function (originalBlock) {
+    const markerBlock = oldInsertionMarkerCreateMarkerBlock.call(this, originalBlock);
+    markerBlock.svgPath_.style.fill = originalBlock.getColour();
+    return markerBlock;
   };
 
   const oldBlockShowContextMenu = Blockly.BlockSvg.prototype.showContextMenu_;
