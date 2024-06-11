@@ -1,5 +1,5 @@
 import UndoGroup from "../editor-devtools/UndoGroup.js";
-import {getVariableUsesById, getOrderedTopBlockColumns} from "../editor-devtools/utils.js"
+import { getVariableUsesById, getOrderedTopBlockColumns } from "../editor-devtools/utils.js"
 
 export default function doCleanUp(block, getWorkspace, msg) {
   let workspace = getWorkspace();
