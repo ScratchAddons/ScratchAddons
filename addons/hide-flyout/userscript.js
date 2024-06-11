@@ -9,6 +9,7 @@ export default async function ({ addon, console, msg }) {
   let flyoutLock = false;
   let closeOnMouseUp = false;
   let scrollAnimation = true;
+  let notClosedByVisibleDropdownOrInput = true;
 
   const SVG_NS = "http://www.w3.org/2000/svg";
 
@@ -76,13 +77,25 @@ export default async function ({ addon, console, msg }) {
         removeTransition();
       }, speed * 1000);
     }
+    notClosedByVisibleDropdownOrInput = false; // It was closed by visible dropdown or input
     closeOnMouseUp = false; // only close if the mouseup event happens outside the flyout
   }
 
   function onmouseleave(e, speed = getSpeedValue()) {
     // locked palette, inputting text, and hovering over dropdown menu do not close palette
-    // TODO: Need to make sure the following check took place in palette, not code section
-    if (flyoutLock || Blockly.WidgetDiv.isVisible() || Blockly.DropDownDiv.isVisible()) return;
+    const widget = Blockly.WidgetDiv.owner_;
+    const dropdown = Blockly.DropDownDiv.owner_;
+    const widgetOpenedFromFlyout = widget instanceof Blockly.Field && widget.sourceBlock_?.isInFlyout;
+    const dropdownOpenedFromFlyout = dropdown instanceof Blockly.Field && dropdown.sourceBlock_?.isInFlyout;
+    const widgetOrDropdownOpenedFromFlyout = widgetOpenedFromFlyout || dropdownOpenedFromFlyout;
+    notClosedByVisibleDropdownOrInput = widgetOrDropdownOpenedFromFlyout ? false : true;
+    // Don't forgot to close when the mouse leaves the flyout even when clicking off of a dropdown or input
+    if (!notClosedByVisibleDropdownOrInput) closeOnMouseUp = true; // chef's kiss to the following conditional madness above and below
+    if (
+      flyoutLock ||
+      ((Blockly.WidgetDiv.isVisible() || Blockly.DropDownDiv.isVisible()) && widgetOrDropdownOpenedFromFlyout) // If the dropdown or input came outside of the flyout, do not keep open the flyout when cursor leaves
+    )
+      return;
     if (e && e.buttons) {
       // dragging a block or scrollbar
       closeOnMouseUp = true;
