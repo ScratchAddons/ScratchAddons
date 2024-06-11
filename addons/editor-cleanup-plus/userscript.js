@@ -1,12 +1,12 @@
 import doCleanUp from "./doCleanup.js";
 
-export default async function ({ addon, console, msg}) {
+export default async function ({ addon, console, msg }) {
   const blockly = await addon.tab.traps.getBlockly();
-  const getWorkspace = ()=>blockly.mainWorkspace;
+  const getWorkspace = () => blockly.mainWorkspace;
 
   let originalMsg = blockly.Msg.CLEAN_UP;
-  addon.self.addEventListener("disabled", () => blockly.Msg.CLEAN_UP = m("clean-plus"));
-  addon.self.addEventListener("reenabled", () => blockly.Msg.CLEAN_UP = originalMsg);
+  addon.self.addEventListener("disabled", () => (blockly.Msg.CLEAN_UP = m("clean-plus")));
+  addon.self.addEventListener("reenabled", () => (blockly.Msg.CLEAN_UP = originalMsg));
 
   const oldCleanUpFunc = blockly.WorkspaceSvg.prototype.cleanUp;
 
@@ -17,17 +17,15 @@ export default async function ({ addon, console, msg}) {
 
   addon.tab.createBlockContextMenu(
     (items, block) => {
-      items.push(
-        {
-          enabled: true,
-          text: m("make-space"),
-          _isDevtoolsFirstItem: true,
-          callback: () => {
-            doCleanUp(block, getWorkspace, msg);
-          },
-          separator: true,
-        }
-      );
+      items.push({
+        enabled: true,
+        text: m("make-space"),
+        _isDevtoolsFirstItem: true,
+        callback: () => {
+          doCleanUp(block, getWorkspace, msg);
+        },
+        separator: true,
+      });
       return items;
     },
     { blocks: true }

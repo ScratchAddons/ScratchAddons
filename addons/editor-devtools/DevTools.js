@@ -96,30 +96,30 @@ export default class DevTools {
    * @param newVarName new variable name
    * @param type type of variable ("" = variable, anything else is a list?
    */
-    doReplaceVariable(varId, newVarName, type) {
-      let wksp = this.getWorkspace();
-      let v = wksp.getVariable(newVarName, type);
-      if (!v) {
-        alert(this.msg("var-not-exist"));
-        return;
-      }
-      let newVId = v.getId();
-
-      UndoGroup.startUndoGroup(wksp);
-      let blocks = this.getVariableUsesById(varId);
-      for (const block of blocks) {
-        try {
-          if (type === "") {
-            block.getField("VARIABLE").setValue(newVId);
-          } else {
-            block.getField("LIST").setValue(newVId);
-          }
-        } catch (e) {
-          // ignore
-        }
-      }
-      UndoGroup.endUndoGroup(wksp);
+  doReplaceVariable(varId, newVarName, type) {
+    let wksp = this.getWorkspace();
+    let v = wksp.getVariable(newVarName, type);
+    if (!v) {
+      alert(this.msg("var-not-exist"));
+      return;
     }
+    let newVId = v.getId();
+
+    UndoGroup.startUndoGroup(wksp);
+    let blocks = this.getVariableUsesById(varId);
+    for (const block of blocks) {
+      try {
+        if (type === "") {
+          block.getField("VARIABLE").setValue(newVId);
+        } else {
+          block.getField("LIST").setValue(newVId);
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+    UndoGroup.endUndoGroup(wksp);
+  }
 
   getWorkspace() {
     return this.blockly.getMainWorkspace();

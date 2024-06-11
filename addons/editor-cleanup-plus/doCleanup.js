@@ -10,10 +10,10 @@ export default function doCleanUp(block, getWorkspace, msg) {
   UndoGroup.startUndoGroup(workspace);
 
   /**
-  * Find all the uses of a named variable.
-  * @param {string} id ID of the variable to find.
-  * @return {!Array.<!Blockly.Block>} Array of block usages.
-  */
+   * Find all the uses of a named variable.
+   * @param {string} id ID of the variable to find.
+   * @return {!Array.<!Blockly.Block>} Array of block usages.
+   */
   const getVariableUsesById = (id) => {
     let uses = [];
 
@@ -36,10 +36,10 @@ export default function doCleanUp(block, getWorkspace, msg) {
   };
 
   /**
-  * Split the top blocks into ordered columns
-  * @param separateOrphans true to keep all orphans separate
-  * @returns {{orphans: {blocks: [Block], x: number, count: number}, cols: [Col]}}
-  */
+   * Split the top blocks into ordered columns
+   * @param separateOrphans true to keep all orphans separate
+   * @returns {{orphans: {blocks: [Block], x: number, count: number}, cols: [Col]}}
+   */
   const getOrderedTopBlockColumns = (separateOrphans) => {
     let w = getWorkspace();
     let topBlocks = w.getTopBlocks();
@@ -236,7 +236,7 @@ export default function doCleanUp(block, getWorkspace, msg) {
 
     UndoGroup.endUndoGroup(workspace);
   }, 100);
-};
+}
 
 /**
  * Badly Orphaned - might want to delete these!
