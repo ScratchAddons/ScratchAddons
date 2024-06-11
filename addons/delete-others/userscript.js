@@ -10,7 +10,7 @@ export default async function ({ addon, console, msg }) {
     deletedItems.reverse();
     if (type === "costume") {
       deletedItems.forEach((costume) => {
-        vm.addCostume(costume.md5, costume, target.id, "");
+        target.addCostume(costume);
       });
     } else if (type === "sound") {
       deletedItems.forEach((sound) => {
