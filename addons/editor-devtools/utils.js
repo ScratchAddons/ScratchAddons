@@ -1,8 +1,8 @@
 /**
-   * Find all the uses of a named variable.
-   * @param {string} id ID of the variable to find.
-   * @return {!Array.<!Blockly.Block>} Array of block usages.
-*/
+ * Find all the uses of a named variable.
+ * @param {string} id ID of the variable to find.
+ * @return {!Array.<!Blockly.Block>} Array of block usages.
+ */
 export const getVariableUsesById = (id, workspace) => {
   let uses = [];
 
@@ -25,9 +25,9 @@ export const getVariableUsesById = (id, workspace) => {
 };
 
 /**
-   * A nicely ordered version of the top blocks
-   * @returns {[Blockly.Block]}
-*/
+ * A nicely ordered version of the top blocks
+ * @returns {[Blockly.Block]}
+ */
 export const getTopBlocks = (workspace) => {
   let result = getOrderedTopBlockColumns(false, workspace);
   let columns = result.cols;
@@ -42,10 +42,10 @@ export const getTopBlocks = (workspace) => {
 };
 
 /**
-   * Split the top blocks into ordered columns
-   * @param separateOrphans true to keep all orphans separate
-   * @returns {{orphans: {blocks: [Block], x: number, count: number}, cols: [Col]}}
-   */
+ * Split the top blocks into ordered columns
+ * @param separateOrphans true to keep all orphans separate
+ * @returns {{orphans: {blocks: [Block], x: number, count: number}, cols: [Col]}}
+ */
 export const getOrderedTopBlockColumns = (separateOrphans, workspace) => {
   let w = workspace;
   let topBlocks = w.getTopBlocks();

@@ -8,7 +8,7 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
   let originalMsg = blockly.Msg.CLEAN_UP;
   addon.self.addEventListener("disabled", () => (blockly.Msg.CLEAN_UP = originalMsg));
   addon.self.addEventListener("reenabled", () => (blockly.Msg.CLEAN_UP = m("clean-plus")));
-  blockly.Msg.CLEAN_UP = m("clean-plus")
+  blockly.Msg.CLEAN_UP = m("clean-plus");
 
   const oldCleanUpFunc = blockly.WorkspaceSvg.prototype.cleanUp;
   blockly.WorkspaceSvg.prototype.cleanUp = function () {
