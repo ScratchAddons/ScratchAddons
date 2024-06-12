@@ -87,7 +87,7 @@ export default async function ({ addon, console, msg }) {
     const dropdownOpenedFromFlyout = dropdown instanceof Blockly.Field && dropdown.sourceBlock_?.isInFlyout;
     const widgetOrDropdownOpenedFromFlyout = widgetOpenedFromFlyout || dropdownOpenedFromFlyout;
     // Don't forgot to close when the mouse leaves the flyout even when clicking off of a dropdown or input
-    if (widgetOrDropdownOpenedFromFlyout) closeOnMouseUp = true; // chef's kiss to the following conditional madness above and below
+    if (widgetOrDropdownOpenedFromFlyout) closeOnMouseUp = true;
     if (
       flyoutLock ||
       ((Blockly.WidgetDiv.isVisible() || Blockly.DropDownDiv.isVisible()) && widgetOrDropdownOpenedFromFlyout) // If the dropdown or input came outside of the flyout, do not keep open the flyout when cursor leaves
