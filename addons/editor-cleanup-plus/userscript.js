@@ -1,5 +1,5 @@
 import UndoGroup from "../editor-devtools/UndoGroup.js";
-import { getVariableUsesById, getOrderedTopBlockColumns } from "../editor-devtools/utils.js"
+import { getVariableUsesById, getOrderedTopBlockColumns } from "../editor-devtools/utils.js";
 
 export default async function ({ addon, console, msg, safeMsg: m }) {
   const blockly = await addon.tab.traps.getBlockly();
@@ -138,5 +138,5 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
 
       UndoGroup.endUndoGroup(workspace);
     }, 100);
-  }
+  };
 }
