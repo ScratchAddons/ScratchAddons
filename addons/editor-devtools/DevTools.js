@@ -109,7 +109,7 @@ export default class DevTools {
   /**
    * Pushes everything below the blocks scripts column down, and everything on it's right to the right.
    * If the workspace is in RTL mode, then we shift everything on it's left to the left instead
-   * @param varId original variable name
+   * @param targetBlock the block that we are adding space around
    */
 
   makeSpace(targetBlock) {
