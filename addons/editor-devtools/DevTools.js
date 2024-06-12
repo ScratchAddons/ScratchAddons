@@ -132,8 +132,8 @@ export default class DevTools {
       const { pos, xMax } = this.getBlockPosAndXMax(topBlock);
 
       const withinColumn = isRTL
-        ? (tPos.x > pos.x && pos.x > tXMax) || (tPos.x > xMax && xMax > tXMax)
-        : (tPos.x < pos.x && pos.x < tXMax) || (tPos.x < xMax && xMax < tXMax);
+        ? (tPos.x >= xMax) && (pos.x >= tXMax)
+        : (tPos.x <= xMax) && (pos.x <= tXMax);
 
       const shouldShiftX = pos.x < tXMax === isRTL;
       const shouldShiftY = pos.y > tPos.y && withinColumn;
