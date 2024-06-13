@@ -13,6 +13,39 @@ export default async function ({ addon, console }) {
     if (settingsToKey[key].includes(e.key)) {
       modifierHeld = true;
     }
+
+    // const workspace = ScratchBlocks.getMainWorkspace();
+    // const gesture = workspace.currentGesture_;
+
+    // console.log(gesture.targetBlock_);
+
+    // const thing = { workspace_: ScratchBlocks.mainWorkspace };
+    // console.log(thing.workspace_);
+
+    // ScratchBlocks.InsertionMarkerManager.prototype.update = function (dxy, deleteArea) {
+    //   var candidate = this.getCandidate_.call(gesture.targetBlock_, dxy);
+
+    //   this.wouldDeleteBlock_ = this.shouldDelete_(candidate, deleteArea);
+    //   var shouldUpdate = this.wouldDeleteBlock_ || this.shouldUpdatePreviews_(candidate, dxy);
+
+    //   if (shouldUpdate) {
+    //     // Don't fire events for insertion marker creation or movement.
+    //     ScratchBlocks.Events.disable();
+    //     this.maybeHidePreview_(candidate);
+    //     this.maybeShowPreview_(candidate);
+    //     ScratchBlocks.Events.enable();
+    //   }
+    // };
+
+    // if (gesture !== null) {
+
+    // ****Cannot read properties of undefined (reading 'length') at Blockly.InsertionMarkerManager.getCandidate_****
+
+    //   ScratchBlocks.InsertionMarkerManager.prototype.update(
+    //     ScratchBlocks.BlockDragger.prototype.pixelsToWorkspaceUnits_.call(thing, gesture.currentDragDeltaXY_),
+    //     1
+    //   );
+    // }
   }
 
   function keyUp(e, key) {
