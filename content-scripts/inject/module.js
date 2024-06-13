@@ -302,7 +302,7 @@ if (isScratchGui || isProject) {
   }
 }
 
-if (window.location.pathname.includes("topic")) {
+if (window.location.pathname.includes("topic") || window.location.pathname.includes("discuss/settings/")) {
   const checkUA = () => {
     if (!window.mySettings) return false;
     const ua = window.mySettings.markupSet.find((x) => x.className);
