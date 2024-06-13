@@ -1,7 +1,5 @@
 import { updateBadge } from "./message-cache.js";
 
-const BROWSER_ACTION = globalThis.MANIFEST_VERSION === 2 ? "browser_action" : "action";
-
 const periods = [
   {
     // Unfortunately, users on Chrome 96-99 will not get translations for these strings.
@@ -55,17 +53,17 @@ function contextMenuUnmuted() {
   chrome.contextMenus.create({
     id: "mute",
     title: (chrome.i18n.getMessage && chrome.i18n.getMessage("muteFor")) || "Do not disturb",
-    contexts: [BROWSER_ACTION],
+    contexts: ["action"],
   });
   for (const period of periods) {
     chrome.contextMenus.create({
       id: `mute_${period.mins}`,
       title: period.name,
       parentId: "mute",
-      contexts: [BROWSER_ACTION],
+      contexts: ["action"],
     });
   }
-  chrome.browserAction.setIcon({
+  chrome.action.setIcon({
     path: {
       16: chrome.runtime.getURL(chrome.runtime.getManifest().icons["16"]),
       32: chrome.runtime.getURL(chrome.runtime.getManifest().icons["32"]),
@@ -82,9 +80,9 @@ function contextMenuMuted() {
   chrome.contextMenus.create({
     id: "unmute",
     title: (chrome.i18n.getMessage && chrome.i18n.getMessage("unmute")) || "Turn off Do not disturb",
-    contexts: [BROWSER_ACTION],
+    contexts: ["action"],
   });
-  chrome.browserAction.setIcon({
+  chrome.action.setIcon({
     path: {
       16: chrome.runtime.getURL("images/icon-gray-16.png"),
       32: chrome.runtime.getURL("images/icon-gray-32.png"),
