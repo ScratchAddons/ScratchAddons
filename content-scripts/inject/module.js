@@ -302,7 +302,7 @@ if (isScratchGui || isProject) {
   }
 }
 
-if (location.pathname === "/discuss/3/topic/add/") {
+if (window.location.pathname.includes("topic")) {
   const checkUA = () => {
     if (!window.mySettings) return false;
     const ua = window.mySettings.markupSet.find((x) => x.className);
