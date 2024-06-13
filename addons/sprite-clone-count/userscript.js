@@ -2,7 +2,7 @@ export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
   const ogCloneCounter = vm.runtime.changeCloneCounter;
 
-  function updateCounts() {
+  function updateCounts(remove) {
     let counts = {};
 
     vm.runtime.targets
@@ -21,7 +21,7 @@ export default async function ({ addon, console }) {
 
     spriteNames.forEach((spriteName) => {
       spriteName.querySelector(".clone-count")?.remove();
-      if (counts[spriteName.innerText.split("\n")[0]] !== undefined) {
+      if ((counts[spriteName.innerText.split("\n")[0]] !== undefined) & !remove) {
         const count = document.createElement("div");
 
         count.classList.add("clone-count");
@@ -31,17 +31,32 @@ export default async function ({ addon, console }) {
     });
   }
 
-  vm.runtime.changeCloneCounter = (e) => {
-    ogCloneCounter.call(vm.runtime, e);
+  function polute() {
+    vm.runtime.changeCloneCounter = (e) => {
+      ogCloneCounter.call(vm.runtime, e);
 
-    setTimeout(() => {
-      updateCounts();
-    }, 100);
-  };
+      if (addon.self.disabled) return;
+      setTimeout(() => {
+        updateCounts();
+      }, 100);
+    };
+
+    updateCounts(false);
+  }
+
+  function unpolute() {
+    vm.runtime.changeCloneCounter = ogCloneCounter;
+    updateCounts(true);
+  }
+
+  polute();
 
   vm.addListener("targetsUpdate", () => {
     setTimeout(() => {
-      updateCounts();
+      updateCounts(addon.self.disabled);
     }, 0);
   });
+
+  addon.self.addEventListener("disabled", () => unpolute());
+  addon.self.addEventListener("reenabled", () => polute());
 }
