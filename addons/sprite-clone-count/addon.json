@@ -13,8 +13,8 @@
       "matches": ["projects"]
     }
   ],
-  "versionAdded": "1.35.0",
-  "tags": ["projects", "featured"],
+  "versionAdded": "1.39.0",
+  "tags": ["editor", "codeEditor", "featured"],
   "enabledByDefault": false,
   "dynamicEnable": true,
   "dynamicDisable": true
