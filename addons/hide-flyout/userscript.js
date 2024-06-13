@@ -145,8 +145,8 @@ export default async function ({ addon, console, msg }) {
 
     document.body.addEventListener("mouseup", () => {
       if (closeOnMouseUp) {
-        onmouseleave();
         closeOnMouseUp = false;
+        onmouseleave();
       }
     });
 
