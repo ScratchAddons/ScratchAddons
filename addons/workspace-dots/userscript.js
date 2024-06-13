@@ -4,17 +4,25 @@ export default async function ({ addon, console }) {
   const oldFunction = blockly.getMainWorkspace().grid_.update;
 
   function updateGrid() {
-    let settings = addon.settings.get("theme");
+    let themeSetting = addon.settings.get("theme");
+    let spacingSetting = addon.settings.get("useSpacing");
+    let spacingAmount = addon.settings.get("spacing");
 
     blockly.getMainWorkspace().grid_.update = function (scale) {
+      console.log(themeSetting, spacingSetting, spacingAmount);
+
       this.scale_ = scale;
+
+      let spacing = this.spacing_;
+      if (spacingSetting) spacing = spacingAmount;
+
       // MSIE freaks if it sees a 0x0 pattern, so set empty patterns to 100x100.
-      var safeSpacing = this.spacing_ * scale || 100;
+      var safeSpacing = spacing * scale || 100;
 
       this.gridPattern_.setAttribute("width", safeSpacing);
       this.gridPattern_.setAttribute("height", safeSpacing);
 
-      var half = Math.floor(this.spacing_ / 2) + 0.5;
+      var half = Math.floor(spacing / 2) + 0.5;
       var start = half - this.length_ / 2;
       var end = half + this.length_ / 2;
 
@@ -25,14 +33,14 @@ export default async function ({ addon, console }) {
       let strokeWidthY;
       let strokeWidthX;
 
-      switch (settings) {
+      switch (themeSetting) {
         case "dots":
           strokeWidthY = scale;
           strokeWidthX = scale;
           break;
         case "lines":
-          strokeWidthX = scale * (this.spacing_ + 1);
-          strokeWidthY = scale * (this.spacing_ + 1);
+          strokeWidthX = scale * (spacing + 1);
+          strokeWidthY = scale * (spacing + 1);
           break;
         case "crosshairs":
           strokeWidthX = scale * 15;
@@ -44,10 +52,10 @@ export default async function ({ addon, console }) {
           break;
         case "vertical":
           strokeWidthX = 0;
-          strokeWidthY = scale * (this.spacing_ + 1);
+          strokeWidthY = scale * (spacing + 1);
           break;
         case "horizontal":
-          strokeWidthX = scale * (this.spacing_ + 1);
+          strokeWidthX = scale * (spacing + 1);
           strokeWidthY = 0;
           break;
       }

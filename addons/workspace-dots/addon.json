@@ -18,6 +18,20 @@
         { "id": "horizontal", "name": "Horizontal Lines" },
         { "id": "none", "name": "None" }
       ]
+    },
+    {
+      "name": "Use a custom spacing value",
+      "id": "useSpacing",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Spacing value",
+      "id": "spacing",
+      "type": "positive_integer",
+      "default": 40,
+      "min": 1,
+      "if": { "settings": { "useSpacing": true } }
     }
   ],
   "dynamicEnable": true,
