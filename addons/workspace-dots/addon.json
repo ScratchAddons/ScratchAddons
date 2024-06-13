@@ -1,8 +1,8 @@
 {
   "name": "Editor workspace dots theme",
   "description": "Allows the customisation of the style of the editor workspace dots.",
-  "tags": ["editor", "codeEditor"],
-  "versionAdded": "1.38.2",
+  "tags": ["editor", "codeEditor", "themes"],
+  "versionAdded": "1.39.0",
   "userscripts": [{ "url": "userscript.js", "matches": ["projects"] }],
   "settings": [
     {
