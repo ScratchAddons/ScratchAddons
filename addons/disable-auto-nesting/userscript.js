@@ -1,17 +1,31 @@
 export default async function ({ addon, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
-  const oldFunction = ScratchBlocks.Block.prototype.getFirstStatementConnection;
-  const settingsToKey = {
-    ctrl: "Control",
-    alt: "Alt Meta",
-    shift: "Shift",
+
+  /**
+   * @param {KeyboardEvent} e
+   * @returns {boolean}
+   */
+  const evaluateModifier = (e) => {
+    const key = addon.settings.get("key");
+
+    if (key === "ctrl") {
+      return e.ctrlKey || e.metaKey;
+    } else if (key === "alt") {
+      return e.altKey;
+    } else if (key === "shift") {
+      return e.shiftKey;
+    }
+
+    console.error('unknown key', key);
+    return false;
   };
 
   let modifierHeld = false;
 
-  function keyDown(e, key) {
-    if (settingsToKey[key].includes(e.key)) {
-      modifierHeld = true;
+  const handleKeyEvent = (e) => {
+    const newModifier = evaluateModifier(e);
+    if (newModifier !== modifierHeld) {
+      modifierHeld = newModifier;
     }
 
     // const workspace = ScratchBlocks.getMainWorkspace();
@@ -46,57 +60,31 @@ export default async function ({ addon, console }) {
     //     1
     //   );
     // }
-  }
+  };
 
-  function keyUp(e, key) {
-    if (settingsToKey[key].includes(e.key)) {
-      modifierHeld = false;
+  document.addEventListener('keydown', handleKeyEvent);
+  document.addEventListener('keyup', handleKeyEvent);
+
+  const isDraggingBlock = () => {
+    const workspace = addon.tab.traps.getWorkspace();
+    if (!workspace) {
+      return false;
     }
-  }
 
-  let currentKey;
-  const keyDownListener = (e) => keyDown(e, currentKey);
-  const keyUpListener = (e) => keyUp(e, currentKey);
+    const gesture = workspace.currentGesture_;
+    if (!gesture) {
+      return false;
+    }
 
-  function addEventListeners(key) {
-    currentKey = key;
-    document.addEventListener("keydown", keyDownListener);
-    document.addEventListener("keyup", keyUpListener);
-  }
+    return !!gesture.blockDragger_;
+  };
 
-  function removeEventListeners() {
-    document.removeEventListener("keydown", keyDownListener);
-    document.removeEventListener("keyup", keyUpListener);
-  }
-
-  function polluteFunction() {
-    ScratchBlocks.Block.prototype.getFirstStatementConnection = function () {
-      if (modifierHeld) return null;
-
-      for (var i = 0, input; (input = this.inputList[i]); i++) {
-        if (input.connection && input.connection.type == ScratchBlocks.NEXT_STATEMENT) {
-          return input.connection;
-        }
-      }
+  const originalGetFirstStatementConnection = ScratchBlocks.Block.prototype.getFirstStatementConnection;
+  ScratchBlocks.Block.prototype.getFirstStatementConnection = function () {
+    if (!addon.self.disabled && isDraggingBlock() && modifierHeld) {
       return null;
-    };
-  }
+    }
 
-  polluteFunction();
-  addEventListeners(addon.settings.get("key"));
-
-  addon.self.addEventListener(
-    "disabled",
-    () => (ScratchBlocks.Block.prototype.getFirstStatementConnection = oldFunction)
-  );
-  addon.self.addEventListener("reenabled", () => {
-    polluteFunction();
-    removeEventListeners();
-    addEventListeners(addon.settings.get("key"));
-  });
-
-  addon.settings.addEventListener("change", () => {
-    removeEventListeners();
-    addEventListeners(addon.settings.get("key"));
-  });
+    return originalGetFirstStatementConnection.call(this);
+  };
 }
