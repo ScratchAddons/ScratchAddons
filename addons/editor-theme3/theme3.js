@@ -354,7 +354,6 @@ export default async function ({ addon, console, msg }) {
       colourSecondary = secondaryColor(extensionsCategory);
       colourTertiary = tertiaryColor(extensionsCategory);
     }
-
     return oldBlockSetColour.call(this, colour, colourSecondary, colourTertiary);
   };
 
