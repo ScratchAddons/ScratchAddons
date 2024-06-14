@@ -83,8 +83,11 @@ export default async function ({ addon, console, msg }) {
     // locked palette, inputting text, and hovering over dropdown menu do not close palette
     const widget = Blockly.WidgetDiv.owner_;
     const dropdown = Blockly.DropDownDiv.owner_;
-    const widgetOpenedFromFlyout = widget instanceof Blockly.Field && widget.sourceBlock_?.isInFlyout;
-    const dropdownOpenedFromFlyout = dropdown instanceof Blockly.Field && dropdown.sourceBlock_?.isInFlyout;
+    const widgetOpenedFromFlyout =
+      (widget === Blockly.ContextMenu && widget.currentBlock?.isInFlyout) ||
+      (widget instanceof Blockly.Field && widget.sourceBlock_?.isInFlyout);
+    const dropdownOpenedFromFlyout =
+      dropdown?.isInFlyout || (dropdown instanceof Blockly.Field && dropdown.sourceBlock_?.isInFlyout);
     const widgetOrDropdownOpenedFromFlyout = widgetOpenedFromFlyout || dropdownOpenedFromFlyout;
     // Don't forgot to close when the mouse leaves the flyout even when clicking off of a dropdown or input
     if (widgetOrDropdownOpenedFromFlyout) closeOnMouseUp = true;
@@ -189,6 +192,15 @@ export default async function ({ addon, console, msg }) {
         Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
       }
     });
+
+    const oldShowPositionedByBlock = Blockly.DropDownDiv.showPositionedByBlock;
+    Blockly.DropDownDiv.showPositionedByBlock = function (owner, block, ...args) {
+      const result = oldShowPositionedByBlock.call(this, owner, block, ...args);
+      // Scratch incorrectly sets owner_ to the DropDownDiv itself
+      if (owner instanceof Blockly.Field) Blockly.DropDownDiv.owner_ = owner;
+      else Blockly.DropDownDiv.owner_ = block;
+      return result;
+    };
 
     // category click mode
     const oldSetSelectedItem = Blockly.Toolbox.prototype.setSelectedItem;
