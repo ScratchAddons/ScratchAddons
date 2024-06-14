@@ -2,6 +2,23 @@ export default async function ({ addon, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   /**
+   * @returns {boolean}
+   */
+  const isDraggingBlock = () => {
+    const workspace = addon.tab.traps.getWorkspace();
+    if (!workspace) {
+      return false;
+    }
+
+    const gesture = workspace.currentGesture_;
+    if (!gesture) {
+      return false;
+    }
+
+    return !!gesture.blockDragger_;
+  };
+
+  /**
    * @param {KeyboardEvent} e
    * @returns {boolean}
    */
@@ -22,10 +39,18 @@ export default async function ({ addon, console }) {
 
   let modifierHeld = false;
 
+  /**
+   * @param {KeyboardEvent} e
+   */
   const handleKeyEvent = (e) => {
     const newModifier = evaluateModifier(e);
     if (newModifier !== modifierHeld) {
       modifierHeld = newModifier;
+
+      // Disable alt from opening menu in Firefox
+      if (!addon.self.disabled && isDraggingBlock()) {
+        e.preventDefault();
+      }
     }
 
     // const workspace = ScratchBlocks.getMainWorkspace();
@@ -64,20 +89,6 @@ export default async function ({ addon, console }) {
 
   document.addEventListener('keydown', handleKeyEvent);
   document.addEventListener('keyup', handleKeyEvent);
-
-  const isDraggingBlock = () => {
-    const workspace = addon.tab.traps.getWorkspace();
-    if (!workspace) {
-      return false;
-    }
-
-    const gesture = workspace.currentGesture_;
-    if (!gesture) {
-      return false;
-    }
-
-    return !!gesture.blockDragger_;
-  };
 
   const originalGetFirstStatementConnection = ScratchBlocks.Block.prototype.getFirstStatementConnection;
   ScratchBlocks.Block.prototype.getFirstStatementConnection = function () {
