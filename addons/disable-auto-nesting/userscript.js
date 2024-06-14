@@ -4,6 +4,7 @@ export default async function ({ addon, console }) {
   let modifierHeld = false;
   let inInsertionMarkerUpdate = false;
   let disableNextModifierRelease = false;
+  let overrideStartRadius = -1;
 
   /**
    * @returns {ScratchBlocks.Gesture|null}
@@ -71,21 +72,31 @@ export default async function ({ addon, console }) {
       return;
     }
 
-    // Hide the current preview
-    // https://github.com/scratchfoundation/scratch-blocks/blob/d0701601145ab1185f8684be9112684e606e8c54/core/insertion_marker_manager.js#L520
-    const insertionMarkerManager = gesture.blockDragger_.draggedConnectionManager_;
-    if (insertionMarkerManager.markerConnection_) {
-      ScratchBlocks.Events.disable();
-      insertionMarkerManager.hidePreview_();
-      ScratchBlocks.Events.enable();
-    }
-    insertionMarkerManager.markerConnection_ = null;
-    insertionMarkerManager.closestConnection_ = null;
-    insertionMarkerManager.localConnection_ = null;
+    try {
+      // If something is already selected, the maximum distance that Scratch will tolerate is larger
+      // than if nothing is tested. From my testing it feels right to preserve that larger difference
+      // through the gesture.handleMove() below so that it's more likely that another connection will
+      // get selected.
+      const insertionMarkerManager = gesture.blockDragger_.draggedConnectionManager_;
+      overrideStartRadius = insertionMarkerManager.getStartRadius_();
 
-    // Display a fresh preview by replaying the most recent user input
-    const mostRecentEvent = gesture.mostRecentEvent_;
-    gesture.handleMove(mostRecentEvent);
+      // Hide the current preview
+      // https://github.com/scratchfoundation/scratch-blocks/blob/d0701601145ab1185f8684be9112684e606e8c54/core/insertion_marker_manager.js#L520
+      if (insertionMarkerManager.markerConnection_) {
+        ScratchBlocks.Events.disable();
+        insertionMarkerManager.hidePreview_();
+        ScratchBlocks.Events.enable();
+      }
+      insertionMarkerManager.markerConnection_ = null;
+      insertionMarkerManager.closestConnection_ = null;
+      insertionMarkerManager.localConnection_ = null;
+
+      // Display a fresh preview by replaying the most recent user input
+      const mostRecentEvent = gesture.mostRecentEvent_;
+      gesture.handleMove(mostRecentEvent);
+    } finally {
+      overrideStartRadius = -1;
+    }
   };
 
   /**
@@ -147,6 +158,14 @@ export default async function ({ addon, console }) {
       disableNextModifierRelease = true;
     }
     return originalEndBlockDrag.apply(this, args);
+  };
+
+  const oldGetStartRadius = ScratchBlocks.InsertionMarkerManager.prototype.getStartRadius_;
+  ScratchBlocks.InsertionMarkerManager.prototype.getStartRadius_ = function () {
+    if (overrideStartRadius > 0) {
+      return overrideStartRadius;
+    }
+    return oldGetStartRadius.call(this);
   };
 
   addon.settings.addEventListener("change", () => {
