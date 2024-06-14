@@ -2,20 +2,23 @@ export default async function ({ addon, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   /**
-   * @returns {boolean}
+   * @returns {ScratchBlocks.Gesture|null}
    */
-  const isDraggingBlock = () => {
+  const getBlockDraggingGesture = () => {
     const workspace = addon.tab.traps.getWorkspace();
     if (!workspace) {
-      return false;
+      return null;
     }
 
     const gesture = workspace.currentGesture_;
     if (!gesture) {
-      return false;
+      return null;
     }
 
-    return !!gesture.blockDragger_;
+    if (!gesture.blockDragger_) {
+      return null;
+    }
+    return gesture;
   };
 
   /**
@@ -47,44 +50,29 @@ export default async function ({ addon, console }) {
     if (newModifier !== modifierHeld) {
       modifierHeld = newModifier;
 
-      // Disable alt from opening menu in Firefox
-      if (!addon.self.disabled && isDraggingBlock()) {
+      const gesture = getBlockDraggingGesture();
+      if (!addon.self.disabled && gesture) {
+        // Disable alt from opening menu in Firefox
+        // TODO: this doesnt run when someone starts dragging, holds alt, drops, then releases
         e.preventDefault();
+
+        // Reset the current preview
+        // https://github.com/scratchfoundation/scratch-blocks/blob/d0701601145ab1185f8684be9112684e606e8c54/core/insertion_marker_manager.js#L520
+        const insertionMarkerManager = gesture.blockDragger_.draggedConnectionManager_;
+        if (insertionMarkerManager.markerConnection_) {
+          ScratchBlocks.Events.disable();
+          insertionMarkerManager.hidePreview_();
+          ScratchBlocks.Events.enable();
+        }
+        insertionMarkerManager.markerConnection_ = null;
+        insertionMarkerManager.closestConnection_ = null;
+        insertionMarkerManager.localConnection_ = null;
+
+        // Display a fresh preview
+        const mostRecentEvent = gesture.mostRecentEvent_;
+        gesture.handleMove(mostRecentEvent);
       }
     }
-
-    // const workspace = ScratchBlocks.getMainWorkspace();
-    // const gesture = workspace.currentGesture_;
-
-    // console.log(gesture.targetBlock_);
-
-    // const thing = { workspace_: ScratchBlocks.mainWorkspace };
-    // console.log(thing.workspace_);
-
-    // ScratchBlocks.InsertionMarkerManager.prototype.update = function (dxy, deleteArea) {
-    //   var candidate = this.getCandidate_.call(gesture.targetBlock_, dxy);
-
-    //   this.wouldDeleteBlock_ = this.shouldDelete_(candidate, deleteArea);
-    //   var shouldUpdate = this.wouldDeleteBlock_ || this.shouldUpdatePreviews_(candidate, dxy);
-
-    //   if (shouldUpdate) {
-    //     // Don't fire events for insertion marker creation or movement.
-    //     ScratchBlocks.Events.disable();
-    //     this.maybeHidePreview_(candidate);
-    //     this.maybeShowPreview_(candidate);
-    //     ScratchBlocks.Events.enable();
-    //   }
-    // };
-
-    // if (gesture !== null) {
-
-    // ****Cannot read properties of undefined (reading 'length') at Blockly.InsertionMarkerManager.getCandidate_****
-
-    //   ScratchBlocks.InsertionMarkerManager.prototype.update(
-    //     ScratchBlocks.BlockDragger.prototype.pixelsToWorkspaceUnits_.call(thing, gesture.currentDragDeltaXY_),
-    //     1
-    //   );
-    // }
   };
 
   document.addEventListener('keydown', handleKeyEvent);
@@ -92,7 +80,7 @@ export default async function ({ addon, console }) {
 
   const originalGetFirstStatementConnection = ScratchBlocks.Block.prototype.getFirstStatementConnection;
   ScratchBlocks.Block.prototype.getFirstStatementConnection = function () {
-    if (!addon.self.disabled && isDraggingBlock() && modifierHeld) {
+    if (!addon.self.disabled && getBlockDraggingGesture() && modifierHeld) {
       return null;
     }
 
