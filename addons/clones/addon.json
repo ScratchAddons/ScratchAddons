@@ -12,6 +12,10 @@
     {
       "name": "DNin01",
       "link": "https://github.com/DNin01"
+    },
+    {
+      "name": "Jazza",
+      "link": "http://scratch.mit.edu/users/greeny--231"
     }
   ],
   "dynamicEnable": true,
@@ -20,6 +24,10 @@
   "userscripts": [
     {
       "url": "userscript.js",
+      "matches": ["projects"]
+    },
+    {
+      "url": "spriteCount.js",
       "matches": ["projects"]
     }
   ],
@@ -41,11 +49,19 @@
       "name": "Show icon only",
       "default": false,
       "type": "boolean"
+    },
+    {
+      "id": "showSpriteCount",
+      "name": "Show individual counts for each sprite",
+      "default": false,
+      "type": "boolean"
     }
   ],
   "latestUpdate": {
-    "version": "1.31.0",
-    "newSettings": ["projectpage"]
+    "version": "1.39.0",
+    "newSettings": ["showSpriteCount"],
+    "isMajor": true,
+    "temporaryNotice": "You can now display the number of clones for each sprite in the project editor."
   },
   "tags": ["editor", "projectPlayer", "recommended"],
   "enabledByDefault": false

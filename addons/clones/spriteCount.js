@@ -1,4 +1,6 @@
 export default async function ({ addon, console }) {
+  console.log("Hello");
+
   const vm = addon.tab.traps.vm;
   const ogCloneCounter = vm.runtime.changeCloneCounter;
 
@@ -32,10 +34,11 @@ export default async function ({ addon, console }) {
   }
 
   function polute() {
+    if (!addon.settings.get("showSpriteCount")) return;
+
     vm.runtime.changeCloneCounter = (e) => {
       ogCloneCounter.call(vm.runtime, e);
 
-      if (addon.self.disabled) return;
       setTimeout(() => {
         updateCounts();
       }, 100);
@@ -53,10 +56,15 @@ export default async function ({ addon, console }) {
 
   vm.addListener("targetsUpdate", () => {
     setTimeout(() => {
-      updateCounts(addon.self.disabled);
+      updateCounts(addon.self.disabled || !addon.settings.get("showSpriteCount"));
     }, 0);
   });
 
   addon.self.addEventListener("disabled", () => unpolute());
   addon.self.addEventListener("reenabled", () => polute());
+
+  addon.settings.addEventListener("change", () => {
+    if (addon.settings.get("showSpriteCount")) polute();
+    else unpolute();
+  });
 }
