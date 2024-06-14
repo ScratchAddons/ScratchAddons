@@ -302,7 +302,7 @@ if (isScratchGui || isProject) {
   }
 }
 
-if (location.pathname.match((?:https?:\/\/scratch\.mit\.edu)?\/(topic|discuss\/settings)\/;)) {
+if (location.pathname.match(/^(?:https?:\/\/scratch\.mit\.edu\/)?(topic|\/discuss\/settings)?/)) {
   const checkUA = () => {
     if (!window.mySettings) return false;
     const ua = window.mySettings.markupSet.find((x) => x.className);
