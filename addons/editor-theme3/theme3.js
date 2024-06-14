@@ -374,7 +374,7 @@ export default async function ({ addon, console, msg }) {
   const oldInsertionMarkerCreateMarkerBlock = Blockly.InsertionMarkerManager.prototype.createMarkerBlock_;
   Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function (originalBlock) {
     const markerBlock = oldInsertionMarkerCreateMarkerBlock.call(this, originalBlock);
-    markerBlock.svgPath_.style.fill = originalBlock.getColour();
+    if (addon.settings.get("insertion-markers")) markerBlock.svgPath_.style.fill = originalBlock.getColour();
     return markerBlock;
   };
 
