@@ -3,6 +3,7 @@ export default async function ({ addon, console }) {
 
   let modifierHeld = false;
   let inInsertionMarkerUpdate = false;
+  let disableNextModifierRelease = false;
 
   /**
    * @returns {ScratchBlocks.Gesture|null}
@@ -25,12 +26,14 @@ export default async function ({ addon, console }) {
   };
 
   /**
+   * Determines, for example, whether the control key is currently pressed.
+   * Note that if someone presses control while focusing another window, switches to this tab, then
+   * presses a letter, e.ctrlKey === true though we never get an event with e.key === "Control"
    * @param {KeyboardEvent} e
    * @returns {boolean}
    */
-  const evaluateModifier = (e) => {
+  const isModifierKeyHeld = (e) => {
     const key = addon.settings.get("key");
-
     if (key === "ctrl") {
       return e.ctrlKey || e.metaKey;
     } else if (key === "alt") {
@@ -38,46 +41,80 @@ export default async function ({ addon, console }) {
     } else if (key === "shift") {
       return e.shiftKey;
     }
-
-    console.error('unknown key', key);
     return false;
+  };
+
+  /**
+   * Determines, for example, whether the control key itself was pressed.
+   * @param {KeyboardEvent} e
+   * @returns {boolean}
+   */
+  const isModifierKeyExactly = (e) => {
+    const key = addon.settings.get("key");
+    if (key === "ctrl") {
+      return e.key === "Control" || e.key === "Meta";
+    } else if (key === "alt") {
+      return e.key === "Alt";
+    } else if (key === "shift") {
+      return e.key === "Shift";
+    }
+    return false;
+  };
+
+  const forceUpdateDragPreview = () => {
+    if (addon.self.disabled) {
+      return;
+    }
+
+    const gesture = getBlockDraggingGesture();
+    if (!gesture) {
+      return;
+    }
+
+    // Hide the current preview
+    // https://github.com/scratchfoundation/scratch-blocks/blob/d0701601145ab1185f8684be9112684e606e8c54/core/insertion_marker_manager.js#L520
+    const insertionMarkerManager = gesture.blockDragger_.draggedConnectionManager_;
+    if (insertionMarkerManager.markerConnection_) {
+      ScratchBlocks.Events.disable();
+      insertionMarkerManager.hidePreview_();
+      ScratchBlocks.Events.enable();
+    }
+    insertionMarkerManager.markerConnection_ = null;
+    insertionMarkerManager.closestConnection_ = null;
+    insertionMarkerManager.localConnection_ = null;
+
+    // Display a fresh preview by replaying the most recent user input
+    const mostRecentEvent = gesture.mostRecentEvent_;
+    gesture.handleMove(mostRecentEvent);
   };
 
   /**
    * @param {KeyboardEvent} e
    */
   const handleKeyEvent = (e) => {
-    const newModifier = evaluateModifier(e);
+    const isDragging = !!getBlockDraggingGesture();
+    const newModifier = isModifierKeyHeld(e);
+
     if (newModifier !== modifierHeld) {
       modifierHeld = newModifier;
-
-      const gesture = getBlockDraggingGesture();
-      if (!addon.self.disabled && gesture) {
-        // Disable alt from opening menu in Firefox
-        // TODO: this doesnt run when someone starts dragging, holds alt, drops, then releases
-        e.preventDefault();
-
-        // Reset the current preview
-        // https://github.com/scratchfoundation/scratch-blocks/blob/d0701601145ab1185f8684be9112684e606e8c54/core/insertion_marker_manager.js#L520
-        const insertionMarkerManager = gesture.blockDragger_.draggedConnectionManager_;
-        if (insertionMarkerManager.markerConnection_) {
-          ScratchBlocks.Events.disable();
-          insertionMarkerManager.hidePreview_();
-          ScratchBlocks.Events.enable();
-        }
-        insertionMarkerManager.markerConnection_ = null;
-        insertionMarkerManager.closestConnection_ = null;
-        insertionMarkerManager.localConnection_ = null;
-
-        // Display a fresh preview by replaying the most recent user input
-        const mostRecentEvent = gesture.mostRecentEvent_;
-        gesture.handleMove(mostRecentEvent);
+      if (isDragging) {
+        forceUpdateDragPreview();
       }
+    }
+
+    // Prevent, for example, pressing alt opening browser menu in Firefox.
+    // This applies while dragging a block (we expect people to use the modifier) or once
+    // after dropping a block (we epxect people to stop pressing the modifier after)
+    if (isDragging || disableNextModifierRelease) {
+      if (isModifierKeyExactly(e)) {
+        e.preventDefault();
+      }
+      disableNextModifierRelease = false;
     }
   };
 
-  document.addEventListener('keydown', handleKeyEvent);
-  document.addEventListener('keyup', handleKeyEvent);
+  document.addEventListener("keydown", handleKeyEvent);
+  document.addEventListener("keyup", handleKeyEvent);
 
   // To disable nesting, we return null here so that isSurroundingC is always false in
   // https://github.com/scratchfoundation/scratch-blocks/blob/d0701601145ab1185f8684be9112684e606e8c54/core/connection.js#L140
@@ -90,7 +127,7 @@ export default async function ({ addon, console }) {
     return originalGetFirstStatementConnection.call(this);
   };
 
-  // To reduce possible breakage, getFirstStatementConnection trap only applies when we're inside
+  // To reduce possible breakage, getFirstStatementConnection trap only applies when we"re inside
   // of insertion marker manager code as getFirstStatementConnection can be used in other places.
   const originalInsertionMarkerUpdate = ScratchBlocks.InsertionMarkerManager.prototype.update;
   ScratchBlocks.InsertionMarkerManager.prototype.update = function (...args) {
@@ -101,4 +138,22 @@ export default async function ({ addon, console }) {
       inInsertionMarkerUpdate = false;
     }
   };
+
+  // If the user is still holding the modifier when they release the block, we want to preventDefault()
+  // the once they release the modifier key.
+  const originalEndBlockDrag = ScratchBlocks.BlockDragger.prototype.endBlockDrag;
+  ScratchBlocks.BlockDragger.prototype.endBlockDrag = function (...args) {
+    if (modifierHeld) {
+      disableNextModifierRelease = true;
+    }
+    return originalEndBlockDrag.apply(this, args);
+  };
+
+  addon.settings.addEventListener("change", () => {
+    modifierHeld = false;
+    disableNextModifierRelease = false;
+    if (getBlockDraggingGesture()) {
+      forceUpdateDragPreview();
+    }
+  });
 }
