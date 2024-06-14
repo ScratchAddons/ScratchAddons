@@ -1,6 +1,4 @@
 export default async function ({ addon, console }) {
-  console.log("Hello");
-
   const vm = addon.tab.traps.vm;
   const ogCloneCounter = vm.runtime.changeCloneCounter;
 
