@@ -62,6 +62,12 @@ export default async function ({ addon, console }) {
     return false;
   };
 
+  /**
+   * Only alt tends to have side-effects that we want to disable
+   * @returns {boolean}
+   */
+  const shouldDisableModifier = () => addon.settings.get("key") === "alt";
+
   const forceUpdateDragPreview = () => {
     if (addon.self.disabled) {
       return;
@@ -113,11 +119,11 @@ export default async function ({ addon, console }) {
       }
     }
 
-    // Prevent, for example, pressing alt opening browser menu in Firefox.
+    // Disable alt opening browser menu in Firefox and stealing focus from the page.
     // This applies while dragging a block (we expect people to use the modifier) or once
     // after dropping a block (we epxect people to stop pressing the modifier after)
     if (isDragging || disableNextModifierRelease) {
-      if (isModifierKeyExactly(e)) {
+      if (isModifierKeyExactly(e) && shouldDisableModifier()) {
         e.preventDefault();
       }
       disableNextModifierRelease = false;
