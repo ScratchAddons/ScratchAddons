@@ -89,7 +89,7 @@ export default async function ({ addon, console, msg }) {
     const dropdownOpenedFromFlyout =
       dropdown?.isInFlyout || (dropdown instanceof Blockly.Field && dropdown.sourceBlock_?.isInFlyout);
     const widgetOrDropdownOpenedFromFlyout = widgetOpenedFromFlyout || dropdownOpenedFromFlyout;
-    // Don't forgot to close when the mouse leaves the flyout even when clicking off of a dropdown or input
+    // Don't forget to close when the mouse leaves the flyout even when clicking off of a dropdown or input
     if (widgetOrDropdownOpenedFromFlyout) closeOnMouseUp = true;
     if (
       flyoutLock ||
