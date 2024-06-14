@@ -1,6 +1,9 @@
 export default async function ({ addon, console }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
+  let modifierHeld = false;
+  let inInsertionMarkerUpdate = false;
+
   /**
    * @returns {ScratchBlocks.Gesture|null}
    */
@@ -40,8 +43,6 @@ export default async function ({ addon, console }) {
     return false;
   };
 
-  let modifierHeld = false;
-
   /**
    * @param {KeyboardEvent} e
    */
@@ -68,7 +69,7 @@ export default async function ({ addon, console }) {
         insertionMarkerManager.closestConnection_ = null;
         insertionMarkerManager.localConnection_ = null;
 
-        // Display a fresh preview
+        // Display a fresh preview by replaying the most recent user input
         const mostRecentEvent = gesture.mostRecentEvent_;
         gesture.handleMove(mostRecentEvent);
       }
@@ -78,12 +79,26 @@ export default async function ({ addon, console }) {
   document.addEventListener('keydown', handleKeyEvent);
   document.addEventListener('keyup', handleKeyEvent);
 
+  // To disable nesting, we return null here so that isSurroundingC is always false in
+  // https://github.com/scratchfoundation/scratch-blocks/blob/d0701601145ab1185f8684be9112684e606e8c54/core/connection.js#L140
   const originalGetFirstStatementConnection = ScratchBlocks.Block.prototype.getFirstStatementConnection;
   ScratchBlocks.Block.prototype.getFirstStatementConnection = function () {
-    if (!addon.self.disabled && getBlockDraggingGesture() && modifierHeld) {
+    if (!addon.self.disabled && inInsertionMarkerUpdate && getBlockDraggingGesture() && modifierHeld) {
       return null;
     }
 
     return originalGetFirstStatementConnection.call(this);
+  };
+
+  // To reduce possible breakage, getFirstStatementConnection trap only applies when we're inside
+  // of insertion marker manager code as getFirstStatementConnection can be used in other places.
+  const originalInsertionMarkerUpdate = ScratchBlocks.InsertionMarkerManager.prototype.update;
+  ScratchBlocks.InsertionMarkerManager.prototype.update = function (...args) {
+    try {
+      inInsertionMarkerUpdate = true;
+      return originalInsertionMarkerUpdate.apply(this, args);
+    } finally {
+      inInsertionMarkerUpdate = false;
+    }
   };
 }
