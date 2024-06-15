@@ -32,8 +32,9 @@
     }
   ],
   "latestUpdate": {
+    "isMajor": true,
     "version": "1.39.0",
-    "newSettings": ["insertionMarker", "insertionMarkerOpacity"]
+    "newSettings": ["insertionMarker", "insertionMarkerOpacity", "markerStyle"]
   },
   "customCssVariables": [
     {
