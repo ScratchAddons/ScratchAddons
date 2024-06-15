@@ -373,10 +373,15 @@ export default async function ({ addon, console, msg }) {
   const oldInsertionMarkerCreateMarkerBlock = Blockly.InsertionMarkerManager.prototype.createMarkerBlock_;
   Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function (originalBlock) {
     const markerBlock = oldInsertionMarkerCreateMarkerBlock.call(this, originalBlock);
-    if (!addon.self.disabled && addon.settings.get("insertion-markers"))
-      markerBlock.svgPath_.style.fill = isColoredTextMode()
-        ? originalBlock.getColourTertiary()
-        : originalBlock.getColour();
+    if (!addon.self.disabled && addon.settings.get("insertion-markers")) {
+      const styleColour = isColoredTextMode() ? originalBlock.getColourTertiary() : originalBlock.getColour();
+      const markerColourStyle = addon.settings.get("markerStyle");
+
+      if (markerColourStyle === "both") {
+        markerBlock.svgPath_.style.fill = styleColour;
+        markerBlock.svgPath_.style.stroke = styleColour;
+      } else markerBlock.svgPath_.style[markerColourStyle] = styleColour;
+    }
     return markerBlock;
   };
 

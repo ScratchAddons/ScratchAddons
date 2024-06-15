@@ -384,6 +384,17 @@
       "min": 0,
       "max": 100,
       "default": 20
+    },
+    {
+      "name": "Insertion marker style",
+      "id": "markerStyle",
+      "type": "select",
+      "default": "fill",
+      "potentialValues": [
+        { "id": "fill", "name": "Fill block" },
+        { "id": "stroke", "name": "Outline block" },
+        { "id": "both", "name": "Fill and outline block" }
+      ]
     }
   ],
   "tags": ["editor", "theme", "codeEditor", "featured"],
