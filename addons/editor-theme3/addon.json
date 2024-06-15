@@ -33,7 +33,7 @@
   ],
   "latestUpdate": {
     "version": "1.39.0",
-    "newSettings": ["insertion-markers", "insertion-marker-opacity"]
+    "newSettings": ["insertionMarker", "insertionMarkerOpacity"]
   },
   "customCssVariables": [
     {
@@ -373,13 +373,13 @@
     },
     {
       "name": "Colored insertion markers",
-      "id": "insertion-markers",
+      "id": "insertionMarker",
       "type": "boolean",
       "default": false
     },
     {
       "name": "Insertion marker opacity (0-100%)",
-      "id": "insertion-marker-opacity",
+      "id": "insertionMarkerOpacity",
       "type": "integer",
       "min": 0,
       "max": 100,
