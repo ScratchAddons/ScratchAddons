@@ -48,21 +48,22 @@ export default async function ({ addon, msg, console }) {
     console.log("Target Asset Names:", sortedAssetNames);
 
     while (!isSorted && iterations < maxIterations) {
-      sortedAssetNames.forEach((asset, index) => {
-        const currentIndex = currentAssetNames.indexOf(asset);
-        if (currentIndex !== index) {
-          console.log(`Reordering ${asset} from ${currentIndex} to ${index}`);
+      for (let i = 0; i < sortedAssetNames.length; i++) {
+        const currentIndex = currentAssetNames.indexOf(sortedAssetNames[i]);
+        if (currentIndex !== i) {
+          console.log(`Reordering ${sortedAssetNames[i]} from ${currentIndex} to ${i}`);
           if (type === "costumes") {
-            vm.editingTarget.reorderCostume(currentIndex, index);
+            vm.editingTarget.reorderCostume(currentIndex, i);
           } else if (type === "sounds") {
-            vm.editingTarget.reorderSound(currentIndex, index);
+            vm.editingTarget.reorderSound(currentIndex, i);
           } else if (type === "sprites") {
-            vm.reorderTarget(currentIndex + 1, index + 1);
+            vm.reorderTarget(currentIndex + 1, i + 1);
           }
           vm.emitTargetsUpdate();
           fetchAndSortAssets(type, applyNaturalSort);
+          break;
         }
-      });
+      }
 
       vm.emitTargetsUpdate();
       fetchAndSortAssets(type, applyNaturalSort);
