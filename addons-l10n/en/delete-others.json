@@ -1,0 +1,8 @@
+{
+  "delete-others/deleteOthers": "delete others",
+  "delete-others/confirmTitle": "Delete Others",
+  "delete-others/infoCostume": "Are you sure you want to delete all other costumes?\nThe deleted costumes can be restored by going to Edit \u2192 Restore Costumes.",
+  "delete-others/infoSound": "Are you sure you want to delete all other sounds?\nThe deleted sounds can be restored by going to Edit \u2192 Restore Sounds.",
+  "delete-others/multiCostumes": "Restore Costumes",
+  "delete-others/multiSounds": "Restore Sounds"
+}
