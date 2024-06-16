@@ -8,6 +8,7 @@ export default async function ({ addon, console }) {
     let spacingSetting = addon.settings.get("useSpacing");
     let spacingAmount = addon.settings.get("spacing");
 
+    // https://github.com/scratchfoundation/scratch-blocks/blob/develop/core/grid.js#L136
     blockly.getMainWorkspace().grid_.update = function (scale) {
       this.scale_ = scale;
 
