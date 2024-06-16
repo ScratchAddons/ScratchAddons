@@ -2,6 +2,7 @@ import Addon from "../../addon-api/content-script/Addon.js";
 
 export default async function runAddonUserscripts({ addonId, scripts, enabledLate = false }) {
   const addonObj = new Addon({ id: addonId, enabledLate });
+  if (window.__addon === undefined) window.__addon = addonObj;
   addonObj.auth._update(scratchAddons.session);
   for (const scriptInfo of scripts) {
     const { url: scriptPath, runAtComplete } = scriptInfo;
