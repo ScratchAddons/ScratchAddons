@@ -1,8 +1,8 @@
 {
   "name": "Sort assets in alphabetical order",
   "description": "Adds an option in the Edit menu to sort assets in alphabetical order.",
-  "tags": ["editor"],
-  "versionAdded": "1.37.0",
+  "tags": ["codeEditor", "editor"],
+  "versionAdded": "1.39.0",
   "userscripts": [{ "url": "userscript.js", "matches": ["projects"] }],
   "credits": [{ "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" }],
   "dynamicDisable": true,

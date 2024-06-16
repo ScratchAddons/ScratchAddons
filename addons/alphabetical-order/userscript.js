@@ -1,126 +1,198 @@
 export default async function ({ addon, msg, console }) {
   const vm = addon.tab.traps.vm;
 
+  // Add natural sort method to Array prototype
   Array.prototype.naturalSort = function () {
     return this.sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" }));
   };
 
-  let assets;
-  let sortedAssets;
-  let isSorted;
+  // Variables to store asset names and states
+  let currentAssetNames = [];
+  let sortedAssetNames = [];
+  let originalAssetNames = [];
+  let isSorted = false;
+  let shouldChangeRestoreButtonText = false;
 
-  function getAssetOrder(type) {
+  // Function to get and sort asset names based on the type
+  function fetchAndSortAssets(type, applyNaturalSort) {
     if (type === "costumes") {
-      assets = vm.editingTarget.getCostumes();
+      currentAssetNames = (vm.editingTarget.getCostumes() || []).map((costume) => costume.name);
     } else if (type === "sounds") {
-      assets = vm.editingTarget.getSounds();
+      currentAssetNames = (vm.editingTarget.getSounds() || []).map((sound) => sound.name);
     } else if (type === "sprites") {
       const spritePane = document.querySelector("[class*=sprite-selector_items-wrapper]");
-      const spriteInfoElements = Array.from(spritePane.querySelectorAll("[class*=sprite-selector-item_sprite-info]"));
-      assets = spriteInfoElements.map((element) => ({ name: element.textContent }));
+      const spriteElements = Array.from(spritePane.querySelectorAll("[class*=sprite-selector-item_sprite-info]"));
+      currentAssetNames = spriteElements.map((element) => element.textContent);
     }
 
-    // Sort assets by name
+    if (applyNaturalSort) {
+      sortedAssetNames = [...currentAssetNames].naturalSort();
+    } else {
+      sortedAssetNames = [...originalAssetNames];
+    }
 
-    assets = assets.map((asset) => asset.name);
-    sortedAssets = assets.map((name) => name).naturalSort();
-
-    isSorted = JSON.stringify(assets) === JSON.stringify(sortedAssets);
+    isSorted = JSON.stringify(currentAssetNames) === JSON.stringify(sortedAssetNames);
   }
 
-  function sortAssets(type) {
-    isSorted = false;
+  // Function to sort assets based on the type
+  function sortAssets(type, applyNaturalSort) {
+    fetchAndSortAssets(type, applyNaturalSort);
+    if (!currentAssetNames.length) return;
 
-    while (!isSorted) {
-      getAssetOrder(type);
-      sortedAssets.forEach((sortedAsset, index) => {
-        if (type === "costumes") {
-          vm.editingTarget.reorderCostume(assets.indexOf(sortedAsset), index);
-        } else if (type === "sounds") {
-          vm.editingTarget.reorderSound(assets.indexOf(sortedAsset), index);
-        } else if (type === "sprites") {
-          vm.reorderTarget(assets.indexOf(sortedAsset) + 1, index + 1);
+    if (applyNaturalSort) originalAssetNames = [...currentAssetNames];
+
+    let maxIterations = 1000;
+    let iterations = 0;
+
+    console.log("Current Asset Names:", currentAssetNames);
+    console.log("Target Asset Names:", sortedAssetNames);
+
+    while (!isSorted && iterations < maxIterations) {
+      sortedAssetNames.forEach((asset, index) => {
+        const currentIndex = currentAssetNames.indexOf(asset);
+        if (currentIndex !== index) {
+          console.log(`Reordering ${asset} from ${currentIndex} to ${index}`);
+          if (type === "costumes") {
+            vm.editingTarget.reorderCostume(currentIndex, index);
+          } else if (type === "sounds") {
+            vm.editingTarget.reorderSound(currentIndex, index);
+          } else if (type === "sprites") {
+            vm.reorderTarget(currentIndex + 1, index + 1);
+          }
+          vm.emitTargetsUpdate();
+          fetchAndSortAssets(type, applyNaturalSort);
         }
-        vm.emitTargetsUpdate();
-        getAssetOrder(type);
       });
+
+      vm.emitTargetsUpdate();
+      fetchAndSortAssets(type, applyNaturalSort);
+      iterations++;
     }
 
-    li.classList.add(addon.tab.scratchClass("menu-bar_disabled"));
+    if (iterations >= maxIterations) {
+      console.error("sortAssets - Possible infinite loop detected at 1000 iterations.");
+    }
+
+    console.log("Final Asset Names:", currentAssetNames);
+    toggleDisableButton(true);
   }
 
-  const li = document.createElement("li");
-  const span = document.createElement("span");
+  // Create and setup the menu item
+  const menuItem = document.createElement("li");
+  const menuItemLabel = document.createElement("span");
 
-  li.classList = addon.tab.scratchClass("menu_menu-item", "menu_hoverable");
+  menuItem.classList = addon.tab.scratchClass("menu_menu-item", "menu_hoverable");
+  menuItem.appendChild(menuItemLabel);
+  menuItem.onclick = () => handleMenuItemClick();
 
-  li.appendChild(span);
+  function handleMenuItemClick() {
+    if (!menuItem.classList.contains(addon.tab.scratchClass("menu-bar_disabled"))) {
+      const assetType = menuItem.getAttribute("assetType");
+      const selectedAssetName = document.querySelector(
+        "[class*=sprite-selector-item_is-selected] [class*=sprite-selector-item_sprite-name]"
+      ).innerText;
 
-  li.onclick = () => {
-    if (!li.classList.contains(addon.tab.scratchClass("menu-bar_disabled"))) {
-      const currentSelectedAssetName = document
-        .querySelector("[class*=sprite-selector-item_is-selected]")
-        .querySelector("[class*=sprite-selector-item_sprite-name]").innerText;
-
-      sortAssets(li.getAttribute("assetType"));
+      sortAssets(assetType, true);
 
       const assetsWrapper =
-        li.getAttribute("assetType") === "sprites"
+        assetType === "sprites"
           ? document.querySelector("[class*=sprite-selector_items-wrapper]")
           : document.querySelector("[class*=selector_list-area]");
       const assets =
-        li.getAttribute("assetType") === "sprites"
+        assetType === "sprites"
           ? assetsWrapper.querySelectorAll("[class*=sprite-selector_sprite-wrapper]")
           : assetsWrapper.querySelectorAll("[class*=selector_list-item]");
 
       assets.forEach((asset) => {
         const assetName = asset.querySelector("[class*=sprite-selector-item_sprite-name]").innerText;
-        if (assetName === currentSelectedAssetName) {
+        if (assetName === selectedAssetName) {
           asset.click();
-          return;
         }
       });
+
+      addon.tab.redux.dispatch({ type: "scratch-gui/menus/CLOSE_MENU", menu: "editMenu" });
+      setupRestoreFunction(assetType);
+      shouldChangeRestoreButtonText = true;
     }
+  }
 
-    addon.tab.redux.dispatch({ type: "scratch-gui/menus/CLOSE_MENU", menu: "editMenu" });
-  };
+  function setupRestoreFunction(type) {
+    addon.tab.redux.dispatch({
+      type: "scratch-gui/restore-deletion/RESTORE_UPDATE",
+      state: {
+        restoreFun: () => restoreAssets(type),
+        type: type,
+      },
+    });
 
-  const msgs = ["sprites", "costumes", "sounds", "sprites"];
+    queueMicrotask(() => {
+      shouldChangeRestoreButtonText = true;
+    });
+  }
+
+  function restoreAssets(type) {
+    if (originalAssetNames.length) {
+      currentAssetNames = [...originalAssetNames];
+      sortAssets(type, false);
+    }
+  }
+
+  function toggleDisableButton(disable) {
+    if (disable) {
+      menuItem.classList.add(addon.tab.scratchClass("menu-bar_disabled"));
+    } else {
+      menuItem.classList.remove(addon.tab.scratchClass("menu-bar_disabled"));
+    }
+  }
+
+  const assetTypes = ["sprites", "costumes", "sounds"];
   let editMenu;
 
-  addon.self.addEventListener("disabled", () => (li.style.display = "none"));
+  addon.self.addEventListener("disabled", () => (menuItem.style.display = "none"));
   addon.self.addEventListener("reenabled", () => {
-    li.style.display = "block";
+    menuItem.style.display = "block";
     if (addon.tab.redux.state.scratchGui.menus.editMenu) {
-      editMenu.appendChild(li);
+      editMenu.appendChild(menuItem);
     }
   });
 
   addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", handleStateChanged);
 
-  addon.tab.redux.addEventListener("statechanged", callback);
+  async function handleStateChanged(action) {
+    if (action.detail.action.type === "scratch-gui/menus/OPEN_MENU" && action.detail.action.menu === "editMenu") {
+      editMenu = await addon.tab.waitForElement("[class*=menu_right]", { markAsSeen: true });
 
-  async function callback(action) {
-    if (!(action.detail.action.type === "scratch-gui/menus/OPEN_MENU" && action.detail.action.menu === "editMenu"))
-      return;
+      if (!addon.self.disabled) {
+        const assetType = assetTypes[addon.tab.redux.state.scratchGui.editorTab.activeTabIndex];
+        menuItemLabel.textContent = msg(assetType);
+        menuItem.setAttribute("assetType", assetType);
 
-    editMenu = await addon.tab.waitForElement("[class*=menu_right]", {
-      markAsSeen: true,
-    });
+        fetchAndSortAssets(assetType, true);
+        toggleDisableButton(isSorted);
 
-    if (!addon.self.disabled) {
-      const assetType = msgs[addon.tab.redux.state.scratchGui.editorTab.activeTabIndex];
-      span.textContent = msg(assetType);
-      li.setAttribute("assetType", assetType);
-
-      getAssetOrder(assetType);
-
-      if (isSorted) li.classList.add(addon.tab.scratchClass("menu-bar_disabled"));
-      else li.classList.remove(addon.tab.scratchClass("menu-bar_disabled"));
-
-      if (addon.tab.redux.state.scratchGui.menus.editMenu) {
-        editMenu.appendChild(li);
+        if (addon.tab.redux.state.scratchGui.menus.editMenu) {
+          editMenu.appendChild(menuItem);
+        }
       }
     }
+
+    const e = action.detail;
+    if (e.action && e.action.type === "scratch-gui/restore-deletion/RESTORE_UPDATE") {
+      shouldChangeRestoreButtonText = false;
+    }
+  }
+
+  while (true) {
+    const restoreButton = await addon.tab.waitForElement(
+      '[class*="menu-bar_menu-bar-item_"]:nth-child(4) [class*="menu_menu-item_"]:first-child > span',
+      {
+        markAsSeen: true,
+        reduxCondition: (state) => state.scratchGui.menus.editMenu,
+        condition: () => shouldChangeRestoreButtonText,
+      }
+    );
+
+    restoreButton.innerText = "Restore previous order";
   }
 }
