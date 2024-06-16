@@ -26,7 +26,7 @@ export default async function ({ addon }) {
         numStr = numArrFiltered.join("");
       }
     }
-    return Number(numStr) * (isNumberNegative ? -1 : 1);
+    return BigInt(numStr) * (isNumberNegative ? -1n : 1n);
   };
   const shiftDecimalPointToLeft = (num, times) => {
     const isNumberNegative = num[0] === "-";
@@ -44,46 +44,33 @@ export default async function ({ addon }) {
         numStr = numArrFiltered.join("");
       }
     }
-    return Number(numStr) * (isNumberNegative ? -1 : 1);
-  };
-
-  const normalizeNumber = (numStr) => {
-    const isNumberNegative = numStr[0] === "-";
-    const numStrPositive = isNumberNegative ? numStr.substring(1) : numStr;
-
-    let normalizedNum = numStrPositive;
 
     // Adds zero before the decimal point if necessary (.1 → 0.1)
-    if (normalizedNum[0] === ".") {
-      normalizedNum = "0" + normalizedNum;
-    }
-
-    // Removes leading zeros (02.25 → 2.25)
-    if (/^0*$/.test(numStrPositive.split(".")[0])) {
-      // Case where integerPart = (0 or 00 or 000, etc...)
-      const decimalPart = numStrPositive.split(".")[1] || "";
-      normalizedNum = `0.${decimalPart}`;
-    } else {
-      normalizedNum = normalizedNum.replace(/^0*|0*$/, "");
+    if (numStr[0] === ".") {
+      numStr = "0" + numStr;
     }
 
     // Removes trailing zeros (2.250 → 2.25)
-    if (numStrPositive.includes(".")) {
-      normalizedNum = normalizedNum.replace(/0*$/, "");
+    if (numStr.includes(".")) {
+      numStr = numStr.replace(/0*$/, "");
     }
 
     // Removes the decimal point if it's the last character (2. → 2)
-    if (normalizedNum.endsWith(".")) {
-      normalizedNum = normalizedNum.slice(0, -1);
+    if (numStr.endsWith(".")) {
+      numStr = numStr.slice(0, -1);
     }
 
-    return (isNumberNegative ? "-" : "") + normalizedNum;
+    return numStr ? (isNumberNegative ? "-" : "") + numStr : 0;
   };
 
   const isValidNumber = (numStr) => {
-    if (numStr.length > 10) return false;
-    if (amountOfDecimals(numStr) > 5) return false;
-    return normalizeNumber(numStr) === Number(numStr).toString();
+    if (numStr.length > 30) return false;
+    try {
+      BigInt(numStr.replace(".", ""));
+    } catch {
+      return false; // Even though an error would occur later anyway, we still catch now to abort before e.preventDefault().
+    }
+    return true;
   };
 
   const isSupportedElement = (el) => {
@@ -105,7 +92,7 @@ export default async function ({ addon }) {
 
   document.body.addEventListener("keydown", (e) => {
     if (addon.self.disabled) return;
-    if (!["ArrowUp", "ArrowDown"].includes(e.code)) return;
+    if (!["ArrowUp", "ArrowDown"].includes(e.key)) return;
     if (!isSupportedElement(e.target)) return;
     if (!e.target.value) return;
     if (!isValidNumber(e.target.value)) return;
@@ -115,13 +102,13 @@ export default async function ({ addon }) {
     // If this is a number input, it will prevent the default browser behavior when pressing up/down in a
     // number input (increase or decrease by 1). If we didn't prevent, the user would be increasing twice.
 
-    let changeBy = e.code === "ArrowUp" ? 1 : -1;
+    let changeBy = e.key === "ArrowUp" ? 1 : -1;
     if (addon.settings.get("useCustom")) {
       let settingValue = e.shiftKey
         ? addon.settings.get("shiftCustom")
         : e.altKey
-        ? addon.settings.get("altCustom")
-        : addon.settings.get("regularCustom");
+          ? addon.settings.get("altCustom")
+          : addon.settings.get("regularCustom");
       if (settingValue === "") settingValue = 0;
       let valueAsFloat = parseFloat(settingValue);
       if (valueAsFloat < 0) valueAsFloat *= -1; // If user typed a negative number, we make it positive
@@ -137,13 +124,15 @@ export default async function ({ addon }) {
       changeBy *= e.shiftKey
         ? settings[addon.settings.get("shift")]
         : e.altKey
-        ? settings[addon.settings.get("alt")]
-        : settings[addon.settings.get("regular")];
+          ? settings[addon.settings.get("alt")]
+          : settings[addon.settings.get("regular")];
     }
 
-    const newValueAsInt =
-      shiftDecimalPointToRight(e.target.value, 5) + shiftDecimalPointToRight(changeBy.toString(), 5);
-    const newValue = shiftDecimalPointToLeft(newValueAsInt.toString(), 5);
+    const decimalCount = Math.max(amountOfDecimals(e.target.value), amountOfDecimals(changeBy.toString()));
+    const newValueAsBigInt =
+      shiftDecimalPointToRight(e.target.value, decimalCount) +
+      shiftDecimalPointToRight(changeBy.toString(), decimalCount);
+    const newValue = shiftDecimalPointToLeft(newValueAsBigInt.toString(), decimalCount);
 
     if (e.target.className.includes("input_input-form_")) {
       Object.getOwnPropertyDescriptor(e.target.constructor.prototype, "value").set.call(e.target, newValue.toString());

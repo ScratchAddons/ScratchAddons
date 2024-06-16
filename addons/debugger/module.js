@@ -5,6 +5,8 @@ const STATUS_YIELD = 2;
 const STATUS_YIELD_TICK = 3;
 const STATUS_DONE = 4;
 
+const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
+
 let vm;
 
 let paused = false;
@@ -349,12 +351,12 @@ export const singleStep = () => {
   eventTarget.dispatchEvent(new CustomEvent("step"));
 };
 
-export const setup = (_vm) => {
+export const setup = (addon) => {
   if (vm) {
     return;
   }
 
-  vm = _vm;
+  vm = addon.tab.traps.vm;
 
   const originalStepThreads = vm.runtime.sequencer.stepThreads;
   vm.runtime.sequencer.stepThreads = function () {
@@ -407,4 +409,41 @@ export const setup = (_vm) => {
     }
     return count;
   };
+
+  // All instances of AudioEngine use the same AudioContext by default,
+  // which means that opening the sound library resumes the VM's context. See #6847.
+  // This can be fixed by creating a separate context from the sound library.
+  addon.tab
+    .waitForElement("[class*='play-button_play-button_']", {
+      reduxEvents: ["scratch-gui/modals/OPEN_MODAL"],
+    })
+    .then(() => {
+      const soundTab = document.querySelector(
+        "[class*='gui_tab-panel_']:nth-child(4) [class*='asset-panel_detail-area_']"
+      );
+      const reactInternalKey = Object.keys(soundTab).filter((key) => key.startsWith(REACT_INTERNAL_PREFIX));
+      const soundLibraryInstance = soundTab[reactInternalKey].child.sibling.child.child.stateNode;
+      const SoundLibrary = soundLibraryInstance.constructor;
+      const AudioEngine = soundLibraryInstance.audioEngine.constructor;
+      const soundLibraryContext = new AudioContext();
+      soundLibraryInstance.audioEngine = new AudioEngine(soundLibraryContext);
+      SoundLibrary.prototype.componentDidMount = function () {
+        this.audioEngine = new AudioEngine(soundLibraryContext);
+        this.playingSoundPromise = null;
+      };
+    });
+
+  // Prevent the VM's context from being resumed while the project is paused
+  const newResume = function () {
+    if (!paused) AudioContext.prototype.resume.call(this);
+  };
+  if (vm.runtime.audioEngine) {
+    vm.runtime.audioEngine.audioContext.resume = newResume;
+  } else {
+    const originalAttachAudioEngine = vm.runtime.attachAudioEngine;
+    vm.runtime.attachAudioEngine = function (audioEngine) {
+      audioEngine.audioContext.resume = newResume;
+      return originalAttachAudioEngine.call(this, audioEngine);
+    };
+  }
 };
