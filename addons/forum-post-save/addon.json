@@ -1,6 +1,6 @@
 {
   "name": "Save draft posts",
-  "description": "Saves forum posts that you haven't submitted.",
+  "description": "Temporarily saves forum posts that you haven't submitted and restores them when you come back to where you wrote them.",
   "credits": [
     {
       "name": "Weredime (9gr)",
@@ -16,5 +16,5 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "tags": ["community", "forums"],
-  "versionAdded": "1.27.0"
+  "versionAdded": "1.39.0"
 }
