@@ -78,7 +78,7 @@ function getSelectionBBCode(selection) {
     tongue: ":P",
     lol: ":lol:",
     mad: ":mad:",
-    roll: ":rolleyes",
+    roll: ":rolleyes:",
     cool: ":cool:",
   });
 
