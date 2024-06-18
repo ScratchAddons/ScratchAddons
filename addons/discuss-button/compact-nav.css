@@ -5,6 +5,10 @@
   display: none;
 }
 
+#topnav ul.account-nav .logged-in-user .dropdown-toggle {
+  font-size: 0 !important;
+}
+
 .sa-profile-name {
   display: block;
   font-size: 0.75rem;
