@@ -34,7 +34,7 @@
   "latestUpdate": {
     "isMajor": true,
     "version": "1.39.0",
-    "newSettings": ["insertionMarker", "insertionMarkerOpacity", "markerStyle"]
+    "newSettings": ["markerStyle", "fillOpacity", "strokeOpacity"]
   },
   "customCssVariables": [
     {
@@ -373,29 +373,34 @@
       "default": false
     },
     {
-      "name": "Colored insertion markers",
-      "id": "insertionMarker",
-      "type": "boolean",
-      "default": false
-    },
-    {
-      "name": "Insertion marker opacity (0-100%)",
-      "id": "insertionMarkerOpacity",
-      "type": "integer",
-      "min": 0,
-      "max": 100,
-      "default": 20
-    },
-    {
       "name": "Insertion marker style",
       "id": "markerStyle",
       "type": "select",
       "default": "fill",
       "potentialValues": [
-        { "id": "fill", "name": "Fill block" },
-        { "id": "stroke", "name": "Outline block" },
-        { "id": "both", "name": "Fill and outline block" }
+        { "id": "none", "name": "No color" },
+        { "id": "fill", "name": "Fill color" },
+        { "id": "stroke", "name": "Outline color" },
+        { "id": "both", "name": "Fill and outline color" }
       ]
+    },
+    {
+      "name": "Insertion marker opacity",
+      "id": "fillOpacity",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 20,
+      "if": { "settings": { "markerStyle": ["none", "fill", "both"] } }
+    },
+    {
+      "name": "Insertion marker outline opacity",
+      "id": "strokeOpacity",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 80,
+      "if": { "settings": { "markerStyle": ["stroke", "both"] } }
     }
   ],
   "tags": ["editor", "theme", "codeEditor", "featured"],
@@ -421,7 +426,9 @@
         "comment-color": "#FEF49C",
         "input-color": "#FFFFFF",
         "text": "black",
-        "monitors": true
+        "monitors": true,
+        "markerStyle": "fill",
+        "fillOpacity": 20
       }
     },
     {
@@ -444,7 +451,9 @@
         "comment-color": "#423F24",
         "input-color": "#FFFFFF",
         "text": "white",
-        "monitors": false
+        "monitors": false,
+        "markerStyle": "fill",
+        "fillOpacity": 20
       }
     },
     {
@@ -467,7 +476,9 @@
         "comment-color": "#423f24",
         "input-color": "#202020",
         "text": "white",
-        "monitors": false
+        "monitors": false,
+        "markerStyle": "fill",
+        "fillOpacity": 20
       }
     },
     {
@@ -490,7 +501,9 @@
         "comment-color": "#FEF49C",
         "input-color": "#FFFFFF",
         "text": "white",
-        "monitors": false
+        "monitors": false,
+        "markerStyle": "fill",
+        "fillOpacity": 20
       }
     },
     {
@@ -513,7 +526,9 @@
         "comment-color": "#FFFFD2",
         "input-color": "#ffffff",
         "text": "white",
-        "monitors": false
+        "monitors": false,
+        "markerStyle": "fill",
+        "fillOpacity": 20
       }
     },
     {
@@ -536,7 +551,9 @@
         "comment-color": "#FEF49C",
         "input-color": "#202020",
         "text": "colorOnBlack",
-        "monitors": false
+        "monitors": false,
+        "markerStyle": "both",
+        "fillOpacity": 5
       }
     }
   ],
