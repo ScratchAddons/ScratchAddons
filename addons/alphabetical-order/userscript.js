@@ -23,15 +23,6 @@ export default async function ({ addon, msg, console }) {
     : type === "sounds" ? target.sprite.sounds = assets : vm.runtime.targets = assets;
   }
 
-  function updateTargets(type){
-    if(type === "sprites"){
-      vm.emitTargetsUpdate()
-    } else {
-      vm.runtime.requestTargetsUpdate(vm.editingTarget)
-      vm.runtime.emitProjectChanged();
-    }
-  }
-
   function wrapReplaceNameWithNameToIdUpdate(originalFunc, type){
     return function(...args) {
       // we only perform an update if the target and type match up with the target and type from when the user did the reorder operation
@@ -53,11 +44,11 @@ export default async function ({ addon, msg, console }) {
     };
   }
 
-  function restoreAssetsOrder(type) {
+  function restoreAssetsOrder(assetType) {
     // This will still work even if assets are renamed or new assets are added
     // however if assets are deleted it will break. So we assume that asset deletion, deactivates the restore function
-
-    let assetArray = getTargetAssetsByType(vm.editingTarget, type);
+    const selectedAssetName = getSelectedAssetName();
+    let assetArray = getTargetAssetsByType(vm.editingTarget, assetType);
     const newAssets = new Array (nameToOriginalIdx.size);
     const leftovers = [];
     assetArray.forEach((asset)=>{
@@ -69,8 +60,19 @@ export default async function ({ addon, msg, console }) {
       }
     });
 
-    setTargetAssetsByType(vm.editingTarget, type, newAssets.concat(leftovers));
-    updateTargets(type);
+    setTargetAssetsByType(vm.editingTarget, assetType, newAssets.concat(leftovers));
+
+    // update to make sure what we see on screen correctly matches the array
+    vm.emitTargetsUpdate()
+
+    // reselect the asset that was selected before the sort
+    clickAssetWithName(selectedAssetName, assetType);
+  }
+
+  function getSelectedAssetName(){
+    return document.querySelector(
+      "[class*=sprite-selector-item_is-selected] [class*=sprite-selector-item_sprite-name]"
+    ).innerText;
   }
 
   function clickAssetWithName(assetToClickName, assetType) {
@@ -85,9 +87,7 @@ export default async function ({ addon, msg, console }) {
 
   function sortAssetsAlphabetically() {
     const assetType = menuItem.getAttribute("assetType");
-    const selectedAssetName = document.querySelector(
-      "[class*=sprite-selector-item_is-selected] [class*=sprite-selector-item_sprite-name]"
-    ).innerText;
+    const selectedAssetName = getSelectedAssetName();
     const assets = getTargetAssetsByType(vm.editingTarget, assetType);
 
     // get the id to original index map for use when restoring the order
@@ -103,7 +103,8 @@ export default async function ({ addon, msg, console }) {
       assets.sort(compareAssetsByName);
     }
 
-    updateTargets(assetType);
+    // update to make sure what we see on screen correctly matches the array
+    vm.emitTargetsUpdate()
 
     // reselect the asset that was selected before the sort
     clickAssetWithName(selectedAssetName, assetType);
