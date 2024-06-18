@@ -2,7 +2,7 @@ export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
   const ogCloneCounter = vm.runtime.changeCloneCounter;
 
-  function updateCounts(remove) {
+  async function updateCounts(remove) {
     let counts = {};
 
     vm.runtime.targets
@@ -13,20 +13,28 @@ export default async function ({ addon, console }) {
         else counts[target] += 1;
       });
 
-    const spriteNames = Array.from(
-      document
-        .querySelector("[class*=sprite-selector_items-wrapper]")
-        .querySelectorAll("[class*=sprite-selector-item_sprite-name]")
-    );
+    const spriteWrapper = await addon.tab.waitForElement("[class*=sprite-selector_items-wrapper]");
+    const spriteNames = Array.from(spriteWrapper.querySelectorAll("[class*=sprite-selector-item_sprite-name]"));
 
     spriteNames.forEach((spriteName) => {
-      spriteName.querySelector(".clone-count")?.remove();
-      if ((counts[spriteName.innerText.split("\n")[0]] !== undefined) & !remove) {
-        const count = document.createElement("div");
+      if (counts[spriteName.innerText.split("\n")[0]] !== undefined) {
+        const existingElement = spriteName.querySelector(".sa-clone-count");
+        let count;
 
-        count.classList.add("clone-count");
+        if (remove) {
+          existingElement?.remove();
+          return;
+        }
+
+        if (existingElement) {
+          count = existingElement;
+        } else {
+          count = document.createElement("div");
+          count.classList.add("sa-clone-count");
+          spriteName.appendChild(count);
+        }
+
         count.innerText = `(${counts[spriteName.innerText.split("\n")[0]]} clones)`;
-        spriteName.appendChild(count);
       }
     });
   }
