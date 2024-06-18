@@ -3,16 +3,16 @@ export default async function ({ addon, console }) {
 
   // https://github.com/scratchfoundation/scratch-blocks/blob/develop/core/grid.js#L136
   const oldUpdate = ScratchBlocks.Grid.prototype.update;
-  ScratchBlocks.Grid.prototype.update = function(scale) {
+  ScratchBlocks.Grid.prototype.update = function (scale) {
     const spacingSetting = addon.settings.get("useSpacing");
     const spacingAmount = addon.settings.get("spacing");
     if (!addon.self.disabled && spacingSetting) this.spacing_ = spacingAmount;
-    oldUpdate.call(this, scale)
-  }
+    oldUpdate.call(this, scale);
+  };
 
   // https://github.com/scratchfoundation/scratch-blocks/blob/develop/core/grid.js#L167
   const oldSetLineAttr = ScratchBlocks.Grid.prototype.setLineAttributes_;
-  ScratchBlocks.Grid.prototype.setLineAttributes_ = function(line, width, x1, x2, y1, y2) {
+  ScratchBlocks.Grid.prototype.setLineAttributes_ = function (line, width, x1, x2, y1, y2) {
     if (!addon.self.disabled) {
       const DOT_LENGTH = 1;
       const FULL_LENGTH = this.spacing_ + 1;
@@ -37,12 +37,12 @@ export default async function ({ addon, console }) {
             else return NO_LENGTH;
           case "dots":
           default:
-            return DOT_LENGTH
+            return DOT_LENGTH;
         }
       })();
     }
-    oldSetLineAttr.call(this, line, width, x1, x2, y1, y2)
-  }
+    oldSetLineAttr.call(this, line, width, x1, x2, y1, y2);
+  };
 
   function updateGrid() {
     const workspace = addon.tab.traps.getWorkspace();
