@@ -1,12 +1,15 @@
 export default async function ({ addon, msg, console }) {
   const vm = addon.tab.traps.vm;
 
-  function getAssetName(asset){
+  function getAssetName(asset) {
     return asset.hasOwnProperty("sprite") ? asset.sprite.name : asset.name;
   }
 
-  function compareAssetsByName(a,b){
-    return String(getAssetName(a)).localeCompare(String(getAssetName(b)), undefined, { numeric: true, sensitivity: "base" });
+  function compareAssetsByName(a, b) {
+    return String(getAssetName(a)).localeCompare(String(getAssetName(b)), undefined, {
+      numeric: true,
+      sensitivity: "base",
+    });
   }
 
   function isSortedAscending(arr, compare) {
@@ -14,13 +17,15 @@ export default async function ({ addon, msg, console }) {
   }
 
   function getTargetAssetsByType(target, type) {
-    return type === "costumes" ? target.sprite.costumes
-    : type === "sounds" ? target.sprite.sounds : vm.runtime.targets
+    return type === "costumes" ? target.sprite.costumes : type === "sounds" ? target.sprite.sounds : vm.runtime.targets;
   }
 
   function setTargetAssetsByType(target, type, assets) {
-    return type === "costumes" ? target.sprite.costumes = assets
-    : type === "sounds" ? target.sprite.sounds = assets : vm.runtime.targets = assets;
+    return type === "costumes"
+      ? (target.sprite.costumes = assets)
+      : type === "sounds"
+      ? (target.sprite.sounds = assets)
+      : (vm.runtime.targets = assets);
   }
 
   function wrapReplaceNameWithNameToIdUpdate(originalFunc, type){
@@ -28,13 +33,12 @@ export default async function ({ addon, msg, console }) {
       // we only perform an update if the target and type match up with the target and type from when the user did the reorder operation
       if (vm.editingTarget !== targetAndType[0] || type !== targetAndType[1]) return originalFunc.apply(this, args);
 
-      const [idxOrId, newName] = args
-      const asset = type === 'sprites'
-      ? vm.runtime.getTargetById(idxOrId)
-      : getTargetAssetsByType(vm.editingTarget, type)[idxOrId];
+      const [idxOrId, newName] = args;
+      const asset =
+        type === "sprites" ? vm.runtime.getTargetById(idxOrId) : getTargetAssetsByType(vm.editingTarget, type)[idxOrId];
       const oldName = getAssetName(asset);
 
-      if(nameToOriginalIdx.has(oldName)){
+      if (nameToOriginalIdx.has(oldName)) {
         const value = nameToOriginalIdx.get(oldName);
         nameToOriginalIdx.set(newName, value);
         nameToOriginalIdx.delete(oldName);
@@ -51,12 +55,12 @@ export default async function ({ addon, msg, console }) {
     let assetArray = getTargetAssetsByType(vm.editingTarget, assetType);
     const newAssets = new Array (nameToOriginalIdx.size);
     const leftovers = [];
-    assetArray.forEach((asset)=>{
+    assetArray.forEach((asset) => {
       const newIdx = nameToOriginalIdx.get(getAssetName(asset));
-      if(newIdx === undefined) {
-        leftovers.push(asset)
-      }else{
-       newAssets[newIdx] = asset;
+      if (newIdx === undefined) {
+        leftovers.push(asset);
+      } else {
+        newAssets[newIdx] = asset;
       }
     });
 
@@ -77,12 +81,14 @@ export default async function ({ addon, msg, console }) {
 
   function clickAssetWithName(assetToClickName, assetType) {
     const isSprite = assetType === "sprites";
-    const wrapper = document.querySelector(`[class*=${isSprite ? 'sprite-selector_items-wrapper' : 'selector_list-area'}]`);
-    const assetSelector = isSprite ? 'sprite-selector_sprite-wrapper' : 'selector_list-item';
+    const wrapper = document.querySelector(
+      `[class*=${isSprite ? "sprite-selector_items-wrapper" : "selector_list-area"}]`
+    );
+    const assetSelector = isSprite ? "sprite-selector_sprite-wrapper" : "selector_list-item";
 
-    [...wrapper.querySelectorAll(`[class*=${assetSelector}]`)].find(asset =>
-      asset.querySelector("[class*=sprite-selector-item_sprite-name]").innerText === assetToClickName
-    )?.click();
+    [...wrapper.querySelectorAll(`[class*=${assetSelector}]`)]
+      .find((asset) => asset.querySelector("[class*=sprite-selector-item_sprite-name]").innerText === assetToClickName)
+      ?.click();
   }
 
   function sortAssetsAlphabetically() {
@@ -96,10 +102,10 @@ export default async function ({ addon, msg, console }) {
     targetAndType = [vm.editingTarget, assetType];
 
     // sort assets alphabetically
-    if(assetType === 'sprites'){
+    if (assetType === "sprites") {
       // in the case ordering sprites we must ensure that the stage remains untouched
       assets.splice(1, assets.length - 1, ...assets.slice(1).sort(compareAssetsByName));
-    }else{
+    } else {
       assets.sort(compareAssetsByName);
     }
 
@@ -117,22 +123,21 @@ export default async function ({ addon, msg, console }) {
       state: {
         restoreFun: () => restoreAssetsOrder(assetType),
         deletedItem: assetType,
-        isRestoreOrder: true
+        isRestoreOrder: true,
       },
     });
 
     restoreOrderFunctionIsActive = true;
   }
 
-  async function handleEditMenuOpened(){
+  async function handleEditMenuOpened() {
     editMenu = await addon.tab.waitForElement("[class*=menu_right]", { markAsSeen: true });
     if (!addon.self.disabled) {
-
       // if the restorOrder function is active then we hijack the restore button to use as it's action button
-      if(restoreOrderFunctionIsActive){
+      if (restoreOrderFunctionIsActive) {
         const restoreButton = await addon.tab.waitForElement(
-          '[class*="menu-bar_menu-bar-item_"]:nth-child(4) [class*="menu_menu-item_"]:first-child > span',
-        )
+          '[class*="menu-bar_menu-bar-item_"]:nth-child(4) [class*="menu_menu-item_"]:first-child > span'
+        );
         restoreButton.innerText = "Restore previous order";
       }
 
@@ -140,7 +145,7 @@ export default async function ({ addon, msg, console }) {
       const tabIndex = addon.tab.redux.state.scratchGui.editorTab.activeTabIndex;
       const assetType = ["sprites", "costumes", "sounds"][tabIndex];
       const assetArray = getTargetAssetsByType(vm.editingTarget, assetType);
-      const slicedAssetArray = assetType === 'sprites' ? assetArray.slice(1) : assetArray;
+      const slicedAssetArray = assetType === "sprites" ? assetArray.slice(1) : assetArray;
       const isSorted = isSortedAscending(slicedAssetArray, compareAssetsByName);
       menuItem.classList.toggle(addon.tab.scratchClass("menu-bar_disabled"), isSorted);
 
@@ -152,12 +157,14 @@ export default async function ({ addon, msg, console }) {
     }
   }
 
-  function handleStateChangedEvents(action){
-    const isEditMenuOpenedUpdate = action.detail.action.type === "scratch-gui/menus/OPEN_MENU" && action.detail.action.menu === "editMenu"
-    const isRestoreUpdate = action.detail.action && action.detail.action.type === "scratch-gui/restore-deletion/RESTORE_UPDATE";
+  function handleStateChangedEvents(action) {
+    const isEditMenuOpenedUpdate =
+      action.detail.action.type === "scratch-gui/menus/OPEN_MENU" && action.detail.action.menu === "editMenu";
+    const isRestoreUpdate =
+      action.detail.action && action.detail.action.type === "scratch-gui/restore-deletion/RESTORE_UPDATE";
 
-    if(isEditMenuOpenedUpdate) handleEditMenuOpened();
-    if ( isRestoreUpdate && !action.detail.action.hasOwnProperty('isRestoreOrder')) restoreOrderFunctionIsActive = false;
+    if (isEditMenuOpenedUpdate) handleEditMenuOpened();
+    if (isRestoreUpdate && !action.detail.action.hasOwnProperty("isRestoreOrder")) restoreOrderFunctionIsActive = false;
   }
 
   // initialize module level variables to handle async changes
@@ -172,9 +179,9 @@ export default async function ({ addon, msg, console }) {
   menuItem.classList = addon.tab.scratchClass("menu_menu-item", "menu_hoverable");
   menuItem.appendChild(menuItemLabel);
   menuItem.onclick = () => {
-    if (menuItem.classList.contains(addon.tab.scratchClass("menu-bar_disabled"))) return
+    if (menuItem.classList.contains(addon.tab.scratchClass("menu-bar_disabled"))) return;
     sortAssetsAlphabetically();
-  }
+  };
 
   // handle the menu already being opened, and the addon being disabled/enabled
   addon.self.addEventListener("disabled", () => (menuItem.style.display = "none"));
@@ -190,7 +197,7 @@ export default async function ({ addon, msg, console }) {
   addon.tab.redux.addEventListener("statechanged", handleStateChangedEvents);
 
   // pollute asset renaming functions to make sure `originalNameToId` stays accurate despite name changes
-  vm.renameCostume = wrapReplaceNameWithNameToIdUpdate(vm.renameCostume, 'costumes');
-  vm.renameSound = wrapReplaceNameWithNameToIdUpdate(vm.renameSound, 'sounds');
-  vm.renameSprite = wrapReplaceNameWithNameToIdUpdate(vm.renameSprite, 'sprites')
+  vm.renameCostume = wrapReplaceNameWithNameToIdUpdate(vm.renameCostume, "costumes");
+  vm.renameSound = wrapReplaceNameWithNameToIdUpdate(vm.renameSound, "sounds");
+  vm.renameSprite = wrapReplaceNameWithNameToIdUpdate(vm.renameSprite, "sprites");
 }
