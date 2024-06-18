@@ -27,7 +27,7 @@ export function modifiedCreateAllInputs(connectionMap) {
       this.populateArgument_(argumentType, argumentCount, connectionMap, id, input);
       argumentCount++;
     } else {
-      labelText = component.trim().replace("%l ", "");
+      labelText = component == "%l" ? " " : component.replace("%l", "").trim();
     }
     this.addProcedureLabel_(labelText.replace(/\\%/, "%"));
   }
