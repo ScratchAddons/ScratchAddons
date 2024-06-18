@@ -35,7 +35,7 @@ export default async function ({ addon, msg, console }) {
   function wrapReplaceNameWithNameToIdUpdate(originalFunc, type){
     return function(...args) {
       // we only perform an update if the target and type match up with the target and type from when the user did the reorder operation
-      if (vm.editingTarget !== TargetAndType[0] || type !== TargetAndType[1]) return originalFunc.apply(this, args);
+      if (vm.editingTarget !== targetAndType[0] || type !== targetAndType[1]) return originalFunc.apply(this, args);
 
       const [idxOrId, newName] = args
       const asset = type === 'sprites'
@@ -93,7 +93,7 @@ export default async function ({ addon, msg, console }) {
     // get the id to original index map for use when restoring the order
     nameToOriginalIdx = new Map();
     assets.forEach((asset, idx) => nameToOriginalIdx.set(getAssetName(asset), idx));
-    TargetAndType = [vm.editingTarget, assetType];
+    targetAndType = [vm.editingTarget, assetType];
 
     // sort assets alphabetically
     if(assetType === 'sprites'){
@@ -152,19 +152,18 @@ export default async function ({ addon, msg, console }) {
   }
 
   function handleStateChangedEvents(action){
-    const e = action.detail;
     const isEditMenuOpenedUpdate = action.detail.action.type === "scratch-gui/menus/OPEN_MENU" && action.detail.action.menu === "editMenu"
-    const isRestoreUpdate = e.action && e.action.type === "scratch-gui/restore-deletion/RESTORE_UPDATE";
+    const isRestoreUpdate = action.detail.action && action.detail.action.type === "scratch-gui/restore-deletion/RESTORE_UPDATE";
 
     if(isEditMenuOpenedUpdate) handleEditMenuOpened();
-    if ( isRestoreUpdate && !e.action.hasOwnProperty('isRestoreOrder')) restoreOrderFunctionIsActive = false;
+    if ( isRestoreUpdate && !action.detail.action.hasOwnProperty('isRestoreOrder')) restoreOrderFunctionIsActive = false;
   }
 
   // initialize module level variables to handle async changes
   let editMenu;
   let restoreOrderFunctionIsActive = false;
   let nameToOriginalIdx = new Map();
-  let TargetAndType = [null, null]; // used so we can know when we should update the nameToOriginalIdx map
+  let targetAndType = [null, null]; // used so we can know when we should update the nameToOriginalIdx map
 
   // Create the menu item in the 'Edit' menu that when clicked triggers the alphabetical sort
   const menuItem = document.createElement("li");
