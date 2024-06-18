@@ -1,154 +1,182 @@
 export default async function ({ addon, msg, console }) {
   const vm = addon.tab.traps.vm;
 
-  // Add natural sort method to Array prototype
-  Array.prototype.naturalSort = function () {
-    return this.sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" }));
-  };
-
-  // Variables to store asset names and states
-  let currentAssetNames = [];
-  let sortedAssetNames = [];
-  let originalAssetNames = [];
-  let isSorted = false;
-  let shouldChangeRestoreButtonText = false;
-
-  // Function to get and sort asset names based on the type
-  function fetchAndSortAssets(type, applyNaturalSort) {
-    if (type === "costumes") {
-      currentAssetNames = (vm.editingTarget.getCostumes() || []).map((costume) => costume.name);
-    } else if (type === "sounds") {
-      currentAssetNames = (vm.editingTarget.getSounds() || []).map((sound) => sound.name);
-    } else if (type === "sprites") {
-      const spritePane = document.querySelector("[class*=sprite-selector_items-wrapper]");
-      const spriteElements = Array.from(spritePane.querySelectorAll("[class*=sprite-selector-item_sprite-info]"));
-      currentAssetNames = spriteElements.map((element) => element.textContent);
-    }
-
-    if (applyNaturalSort) {
-      sortedAssetNames = [...currentAssetNames].naturalSort();
-    } else {
-      sortedAssetNames = [...originalAssetNames];
-    }
-
-    isSorted = JSON.stringify(currentAssetNames) === JSON.stringify(sortedAssetNames);
+  function getAssetName(asset){
+    return asset.hasOwnProperty("sprite") ? asset.sprite.name : asset.name;
   }
 
-  // Function to sort assets based on the type
-  function sortAssets(type, applyNaturalSort) {
-    fetchAndSortAssets(type, applyNaturalSort);
-    if (!currentAssetNames.length) return;
+  function compareAssetsByName(a,b){
+    return String(getAssetName(a)).localeCompare(String(getAssetName(b)), undefined, { numeric: true, sensitivity: "base" });
+  }
 
-    if (applyNaturalSort) originalAssetNames = [...currentAssetNames];
+  function isSortedAscending(arr, compare) {
+    return arr.every((v, i) => i === 0 || compare(arr[i - 1], v) <= 0);
+  }
 
-    let maxIterations = 1000;
-    let iterations = 0;
+  function getTargetAssetsByType(target, type) {
+    return type === "costumes" ? target.sprite.costumes
+    : type === "sounds" ? target.sprite.sounds : vm.runtime.targets
+  }
 
-    console.log("Current Asset Names:", currentAssetNames);
-    console.log("Target Asset Names:", sortedAssetNames);
+  function setTargetAssetsByType(target, type, assets) {
+    return type === "costumes" ? target.sprite.costumes = assets
+    : type === "sounds" ? target.sprite.sounds = assets : vm.runtime.targets = assets;
+  }
 
-    while (!isSorted && iterations < maxIterations) {
-      for (let i = 0; i < sortedAssetNames.length; i++) {
-        const currentIndex = currentAssetNames.indexOf(sortedAssetNames[i]);
-        if (currentIndex !== i) {
-          console.log(`Reordering ${sortedAssetNames[i]} from ${currentIndex} to ${i}`);
-          if (type === "costumes") {
-            vm.editingTarget.reorderCostume(currentIndex, i);
-          } else if (type === "sounds") {
-            vm.editingTarget.reorderSound(currentIndex, i);
-          } else if (type === "sprites") {
-            vm.reorderTarget(currentIndex + 1, i + 1);
-          }
-          vm.emitTargetsUpdate();
-          fetchAndSortAssets(type, applyNaturalSort);
-          break;
-        }
+  function updateTargets(type){
+    if(type === "sprites"){
+      vm.emitTargetsUpdate()
+    } else {
+      vm.runtime.requestTargetsUpdate(vm.editingTarget)
+      vm.runtime.emitProjectChanged();
+    }
+  }
+
+  function wrapReplaceNameWithNameToIdUpdate(originalFunc, type){
+    return function(...args) {
+      // we only perform an update if the target and type match up with the target and type from when the user did the reorder operation
+      if (vm.editingTarget !== TargetAndType[0] || type !== TargetAndType[1]) return originalFunc.apply(this, args);
+
+      const [idxOrId, newName] = args
+      const asset = type === 'sprites'
+      ? vm.runtime.getTargetById(idxOrId)
+      : getTargetAssetsByType(vm.editingTarget, type)[idxOrId];
+      const oldName = getAssetName(asset);
+
+      if(nameToOriginalIdx.has(oldName)){
+        const value = nameToOriginalIdx.get(oldName);
+        nameToOriginalIdx.set(newName, value);
+        nameToOriginalIdx.delete(oldName);
       }
 
-      vm.emitTargetsUpdate();
-      fetchAndSortAssets(type, applyNaturalSort);
-      iterations++;
-    }
-
-    if (iterations >= maxIterations) {
-      console.error("sortAssets - Possible infinite loop detected at 1000 iterations.");
-    }
-
-    console.log("Final Asset Names:", currentAssetNames);
-    toggleDisableButton(true);
+      return originalFunc.apply(this, args);
+    };
   }
 
-  // Create and setup the menu item
-  const menuItem = document.createElement("li");
-  const menuItemLabel = document.createElement("span");
+  function restoreAssetsOrder(type) {
+    // This will still work even if assets are renamed or new assets are added
+    // however if assets are deleted it will break. So we assume that asset deletion, deactivates the restore function
 
-  menuItem.classList = addon.tab.scratchClass("menu_menu-item", "menu_hoverable");
-  menuItem.appendChild(menuItemLabel);
-  menuItem.onclick = () => handleMenuItemClick();
+    let assetArray = getTargetAssetsByType(vm.editingTarget, type);
+    const newAssets = new Array (nameToOriginalIdx.size);
+    const leftovers = [];
+    assetArray.forEach((asset)=>{
+      const newIdx = nameToOriginalIdx.get(getAssetName(asset));
+      if(newIdx === undefined) {
+        leftovers.push(asset)
+      }else{
+       newAssets[newIdx] = asset;
+      }
+    });
 
-  function handleMenuItemClick() {
-    if (!menuItem.classList.contains(addon.tab.scratchClass("menu-bar_disabled"))) {
-      const assetType = menuItem.getAttribute("assetType");
-      const selectedAssetName = document.querySelector(
-        "[class*=sprite-selector-item_is-selected] [class*=sprite-selector-item_sprite-name]"
-      ).innerText;
-
-      sortAssets(assetType, true);
-
-      const assetsWrapper =
-        assetType === "sprites"
-          ? document.querySelector("[class*=sprite-selector_items-wrapper]")
-          : document.querySelector("[class*=selector_list-area]");
-      const assets =
-        assetType === "sprites"
-          ? assetsWrapper.querySelectorAll("[class*=sprite-selector_sprite-wrapper]")
-          : assetsWrapper.querySelectorAll("[class*=selector_list-item]");
-
-      assets.forEach((asset) => {
-        const assetName = asset.querySelector("[class*=sprite-selector-item_sprite-name]").innerText;
-        if (assetName === selectedAssetName) {
-          asset.click();
-        }
-      });
-
-      addon.tab.redux.dispatch({ type: "scratch-gui/menus/CLOSE_MENU", menu: "editMenu" });
-      setupRestoreFunction(assetType);
-      shouldChangeRestoreButtonText = true;
-    }
+    setTargetAssetsByType(vm.editingTarget, type, newAssets.concat(leftovers));
+    updateTargets(type);
   }
 
-  function setupRestoreFunction(type) {
+  function clickAssetWithName(assetToClickName, assetType) {
+    const isSprite = assetType === "sprites";
+    const wrapper = document.querySelector(`[class*=${isSprite ? 'sprite-selector_items-wrapper' : 'selector_list-area'}]`);
+    const assetSelector = isSprite ? 'sprite-selector_sprite-wrapper' : 'selector_list-item';
+
+    [...wrapper.querySelectorAll(`[class*=${assetSelector}]`)].find(asset =>
+      asset.querySelector("[class*=sprite-selector-item_sprite-name]").innerText === assetToClickName
+    )?.click();
+  }
+
+  function sortAssetsAlphabetically() {
+    const assetType = menuItem.getAttribute("assetType");
+    const selectedAssetName = document.querySelector(
+      "[class*=sprite-selector-item_is-selected] [class*=sprite-selector-item_sprite-name]"
+    ).innerText;
+    const assets = getTargetAssetsByType(vm.editingTarget, assetType);
+
+    // get the id to original index map for use when restoring the order
+    nameToOriginalIdx = new Map();
+    assets.forEach((asset, idx) => nameToOriginalIdx.set(getAssetName(asset), idx));
+    TargetAndType = [vm.editingTarget, assetType];
+
+    // sort assets alphabetically
+    if(assetType === 'sprites'){
+      // in the case ordering sprites we must ensure that the stage remains untouched
+      assets.splice(1, assets.length - 1, ...assets.slice(1).sort(compareAssetsByName));
+    }else{
+      assets.sort(compareAssetsByName);
+    }
+
+    updateTargets(assetType);
+
+    // reselect the asset that was selected before the sort
+    clickAssetWithName(selectedAssetName, assetType);
+
+    // dispatch the redux event to close the menu and create the restore order button
+    addon.tab.redux.dispatch({ type: "scratch-gui/menus/CLOSE_MENU", menu: "editMenu" });
+
     addon.tab.redux.dispatch({
       type: "scratch-gui/restore-deletion/RESTORE_UPDATE",
       state: {
-        restoreFun: () => restoreAssets(type),
-        type: type,
+        restoreFun: () => restoreAssetsOrder(assetType),
+        deletedItem: assetType,
+        isRestoreOrder: true
       },
     });
 
-    queueMicrotask(() => {
-      shouldChangeRestoreButtonText = true;
-    });
+    restoreOrderFunctionIsActive = true;
   }
 
-  function restoreAssets(type) {
-    if (originalAssetNames.length) {
-      currentAssetNames = [...originalAssetNames];
-      sortAssets(type, false);
+  async function handleEditMenuOpened(){
+    editMenu = await addon.tab.waitForElement("[class*=menu_right]", { markAsSeen: true });
+    if (!addon.self.disabled) {
+
+      // if the restorOrder function is active then we hijack the restore button to use as it's action button
+      if(restoreOrderFunctionIsActive){
+        const restoreButton = await addon.tab.waitForElement(
+          '[class*="menu-bar_menu-bar-item_"]:nth-child(4) [class*="menu_menu-item_"]:first-child > span',
+        )
+        restoreButton.innerText = "Restore previous order";
+      }
+
+      // handle adding the sortAlphabetical button to the edit menu
+      const tabIndex = addon.tab.redux.state.scratchGui.editorTab.activeTabIndex;
+      const assetType = ["sprites", "costumes", "sounds"][tabIndex];
+      const assetArray = getTargetAssetsByType(vm.editingTarget, assetType);
+      const slicedAssetArray = assetType === 'sprites' ? assetArray.slice(1) : assetArray;
+      const isSorted = isSortedAscending(slicedAssetArray, compareAssetsByName);
+      menuItem.classList.toggle(addon.tab.scratchClass("menu-bar_disabled"), isSorted);
+
+      if (addon.tab.redux.state.scratchGui.menus.editMenu) {
+        menuItemLabel.textContent = msg(assetType);
+        menuItem.setAttribute("assetType", assetType);
+        editMenu.appendChild(menuItem);
+      }
     }
   }
 
-  function toggleDisableButton(disable) {
-    if (disable) {
-      menuItem.classList.add(addon.tab.scratchClass("menu-bar_disabled"));
-    } else {
-      menuItem.classList.remove(addon.tab.scratchClass("menu-bar_disabled"));
-    }
+  function handleStateChangedEvents(action){
+    const e = action.detail;
+    const isEditMenuOpenedUpdate = action.detail.action.type === "scratch-gui/menus/OPEN_MENU" && action.detail.action.menu === "editMenu"
+    const isRestoreUpdate = e.action && e.action.type === "scratch-gui/restore-deletion/RESTORE_UPDATE";
+
+    if(isEditMenuOpenedUpdate) handleEditMenuOpened();
+    if ( isRestoreUpdate && !e.action.hasOwnProperty('isRestoreOrder')) restoreOrderFunctionIsActive = false;
   }
 
-  const assetTypes = ["sprites", "costumes", "sounds"];
+  // initialize module level variables to handle async changes
   let editMenu;
+  let restoreOrderFunctionIsActive = false;
+  let nameToOriginalIdx = new Map();
+  let TargetAndType = [null, null]; // used so we can know when we should update the nameToOriginalIdx map
 
+  // Create the menu item in the 'Edit' menu that when clicked triggers the alphabetical sort
+  const menuItem = document.createElement("li");
+  const menuItemLabel = document.createElement("span");
+  menuItem.classList = addon.tab.scratchClass("menu_menu-item", "menu_hoverable");
+  menuItem.appendChild(menuItemLabel);
+  menuItem.onclick = () => {
+    if (menuItem.classList.contains(addon.tab.scratchClass("menu-bar_disabled"))) return
+    sortAssetsAlphabetically();
+  }
+
+  // handle the menu already being opened, and the addon being disabled/enabled
   addon.self.addEventListener("disabled", () => (menuItem.style.display = "none"));
   addon.self.addEventListener("reenabled", () => {
     menuItem.style.display = "block";
@@ -157,43 +185,12 @@ export default async function ({ addon, msg, console }) {
     }
   });
 
+  // add an event listener for state changes, that will handle the edit menu opening and setting our restore function to inactive
   addon.tab.redux.initialize();
-  addon.tab.redux.addEventListener("statechanged", handleStateChanged);
+  addon.tab.redux.addEventListener("statechanged", handleStateChangedEvents);
 
-  async function handleStateChanged(action) {
-    if (action.detail.action.type === "scratch-gui/menus/OPEN_MENU" && action.detail.action.menu === "editMenu") {
-      editMenu = await addon.tab.waitForElement("[class*=menu_right]", { markAsSeen: true });
-
-      if (!addon.self.disabled) {
-        const assetType = assetTypes[addon.tab.redux.state.scratchGui.editorTab.activeTabIndex];
-        menuItemLabel.textContent = msg(assetType);
-        menuItem.setAttribute("assetType", assetType);
-
-        fetchAndSortAssets(assetType, true);
-        toggleDisableButton(isSorted);
-
-        if (addon.tab.redux.state.scratchGui.menus.editMenu) {
-          editMenu.appendChild(menuItem);
-        }
-      }
-    }
-
-    const e = action.detail;
-    if (e.action && e.action.type === "scratch-gui/restore-deletion/RESTORE_UPDATE") {
-      shouldChangeRestoreButtonText = false;
-    }
-  }
-
-  while (true) {
-    const restoreButton = await addon.tab.waitForElement(
-      '[class*="menu-bar_menu-bar-item_"]:nth-child(4) [class*="menu_menu-item_"]:first-child > span',
-      {
-        markAsSeen: true,
-        reduxCondition: (state) => state.scratchGui.menus.editMenu,
-        condition: () => shouldChangeRestoreButtonText,
-      }
-    );
-
-    restoreButton.innerText = "Restore previous order";
-  }
+  // pollute asset renaming functions to make sure `originalNameToId` stays accurate despite name changes
+  vm.renameCostume = wrapReplaceNameWithNameToIdUpdate(vm.renameCostume, 'costumes');
+  vm.renameSound = wrapReplaceNameWithNameToIdUpdate(vm.renameSound, 'sounds');
+  vm.renameSprite = wrapReplaceNameWithNameToIdUpdate(vm.renameSprite, 'sprites')
 }
