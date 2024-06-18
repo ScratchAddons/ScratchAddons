@@ -1,8 +1,4 @@
 export default async function ({ addon, console }) {
-  async function sayHelloToUser() {
-    console.log("Hello, " + await addon.auth.fetchUsername());
-  }
-
-  await sayHelloToUser();
+  // console.log("Hello there, " + await addon.auth.fetchUsername());
   console.log("How are you today?");
 }
