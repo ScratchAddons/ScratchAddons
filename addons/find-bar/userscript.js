@@ -1,9 +1,19 @@
+/**
+ * BlockItem 类用于表示一个 Blockly 的块项。
+ *
+ * @class
+ * @param {Object} params - 初始化 BlockItem 的参数
+ * @param {string} params.type - 块的类型
+ * @param {string} params.category - 块所属的类别
+ * @param {string} params.color - 块的颜色
+ * @param {Function} params.func - 块的功能函数
+ */
 import BlockItem from "./blockly/BlockItem.js";
 import BlockInstance from "./blockly/BlockInstance.js";
 import Utils from "./blockly/Utils.js";
 
 /** @typedef {import("../../addon-api/content-script/typedef.js").UserscriptUtilities} UserscriptUtilities @param {UserscriptUtilities} */
-export default async function({ addon, msg, console }) {
+export default async function ({ addon, msg, console }) {
   if (!addon.self._isDevtoolsExtension && window.initGUI) {
     console.log("Extension running, stopping addon");
     window._devtoolsAddonEnabled = true;
@@ -192,14 +202,15 @@ export default async function({ addon, msg, console }) {
         this.selectedTab === 0
           ? this.getScratchBlocks()
           : this.selectedTab === 1
-            ? this.getScratchCostumes()
-            : this.selectedTab === 2
-              ? this.getScratchSounds()
-              : [];
+          ? this.getScratchCostumes()
+          : this.selectedTab === 2
+          ? this.getScratchSounds()
+          : [];
 
       this.dropdown.empty();
 
       for (const proc of scratchBlocks) {
+        debugger;
         let item = this.dropdown.addItem(proc);
 
         if (focusID) {
@@ -223,6 +234,11 @@ export default async function({ addon, msg, console }) {
       return addon.tab.redux.state.scratchGui.editorTab.activeTabIndex;
     }
 
+    /**
+     * 获取 Scratch 编辑器中的所有顶级块。
+     *
+     * @returns {Array<BlockItem>} 返回一个包含所有顶级块的数组。
+     */
     getScratchBlocks() {
       let myBlocks = [];
       let myBlocksByProcCode = {};
@@ -351,6 +367,11 @@ export default async function({ addon, msg, console }) {
       return myBlocks;
     }
 
+    /**
+     * 获取 Scratch 编辑器中的所有顶级块。
+     *
+     * @returns {Array<BlockItem>} 返回一个包含所有顶级块的数组。
+     */
     getScratchCostumes() {
       let costumes = this.utils.getEditingTarget().getCostumes();
 
@@ -366,6 +387,10 @@ export default async function({ addon, msg, console }) {
       return items;
     }
 
+    /**
+     *
+     * @returns {Array<BlockItem>} 返回一个包含所有顶级块的数组。
+     */
     getScratchSounds() {
       let sounds = this.utils.getEditingTarget().getSounds();
 
@@ -781,7 +806,7 @@ export default async function({ addon, msg, console }) {
   window.fb = findBar;
 
   const _doBlockClick_ = Blockly.Gesture.prototype.doBlockClick_;
-  Blockly.Gesture.prototype.doBlockClick_ = function() {
+  Blockly.Gesture.prototype.doBlockClick_ = function () {
     if (!addon.self.disabled && (this.mostRecentEvent_.button === 1 || this.mostRecentEvent_.shiftKey)) {
       // Wheel button...
       // Intercept clicks to allow jump to...?
