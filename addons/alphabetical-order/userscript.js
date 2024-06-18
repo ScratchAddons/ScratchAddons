@@ -30,6 +30,20 @@ export default async function ({ addon, msg, console }) {
       : (vm.runtime.targets = assets);
   }
 
+  function getSelectedAssetName(){
+    return document.querySelector(
+      "[class*=sprite-selector-item_is-selected] [class*=sprite-selector-item_sprite-name]"
+    ).innerText;
+  }
+
+  function selectAssetByName(assets, assetName, assetType){
+    if (assetType !== 'sprites') assetSelect(
+      addon,
+      assets.findIndex((e) => getAssetName(e) === assetName),
+      assetType === 'costumes' ? 'costume' : 'sound'
+    )
+  }
+
   function wrapReplaceNameWithNameToIdUpdate(originalFunc, type){
     return function(...args) {
       // we only perform an update if the target and type match up with the target and type from when the user did the reorder operation
@@ -73,20 +87,6 @@ export default async function ({ addon, msg, console }) {
 
     // update to make sure what we see on screen correctly matches the array
     vm.emitTargetsUpdate()
-  }
-
-  function getSelectedAssetName(){
-    return document.querySelector(
-      "[class*=sprite-selector-item_is-selected] [class*=sprite-selector-item_sprite-name]"
-    ).innerText;
-  }
-
-  function selectAssetByName(assets, assetName, assetType){
-    if (assetType !== 'sprites') assetSelect(
-      addon,
-      assets.findIndex((e) => getAssetName(e) === assetName),
-      assetType === 'costumes' ? 'costume' : 'sound'
-    )
   }
 
   function sortAssetsAlphabetically() {
