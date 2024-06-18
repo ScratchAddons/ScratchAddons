@@ -1,0 +1,13 @@
+{
+  "name": "Forum user-agent Modifier",
+  "description": "Changes the text \"Flash version\" to \"Flash versions\" when clicking the user-agent button on the forums.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["editingScreens"]
+    }
+  ],
+  "tags": ["hidden"],
+  "versionAdded": "1.39.0",
+  "enabledByDefault": true
+}

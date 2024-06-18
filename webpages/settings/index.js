@@ -421,7 +421,11 @@ let fuse;
             ? "theme"
             : manifest.tags.includes("community")
               ? "community"
-              : "editor";
+              : manifest.tags.includes("editor")
+                ? "editor"
+                : "hidden";
+
+      if (manifest._categories[0] === "hidden") continue;
 
       const addCategoryIfTag = (arr) => {
         let count = 0;
