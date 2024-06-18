@@ -47,7 +47,7 @@ for (const library of libraries) {
   const info = libraryLicenseInfo[library];
   const licenseName = info.filename ?? info.license;
   if (!licenseName) continue;
-  let licenseText = licenseNameToText[licenseName]
+  let licenseText = licenseNameToText[licenseName];
   licenseText = String(licenseText).replace(" [year]", info.year ? " " + info.year : "");
   licenseText = String(licenseText).replace(" [fullname]", info.fullname ? " " + info.fullname : "");
   licenseText = String(licenseText).replace(" ([email])", info.email ? " (" + info.email + ")" : "");
