@@ -1,75 +1,53 @@
 export default async function ({ addon, console }) {
-  const blockly = await addon.tab.traps.getBlockly();
-  window.blockly = blockly;
-
-  const workspace = blockly.getMainWorkspace();
+  const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   // https://github.com/scratchfoundation/scratch-blocks/blob/develop/core/grid.js#L136
-  workspace.grid_.update = function (scale) {
-    let themeSetting = addon.settings.get("theme");
-    let spacingSetting = addon.settings.get("useSpacing");
-    let spacingAmount = addon.settings.get("spacing");
+  const oldUpdate = ScratchBlocks.Grid.prototype.update;
+  ScratchBlocks.Grid.prototype.update = function(scale) {
+    const spacingSetting = addon.settings.get("useSpacing");
+    const spacingAmount = addon.settings.get("spacing");
+    if (!addon.self.disabled && spacingSetting) this.spacing_ = spacingAmount;
+    oldUpdate.call(this, scale)
+  }
 
-    this.scale_ = scale;
-
-    let spacing = this.spacing_;
-    if (spacingSetting & !addon.self.disabled) spacing = spacingAmount;
-
-    // MSIE freaks if it sees a 0x0 pattern, so set empty patterns to 100x100.
-    let safeSpacing = spacing * scale || 100;
-
-    this.gridPattern_.setAttribute("width", safeSpacing);
-    this.gridPattern_.setAttribute("height", safeSpacing);
-
-    let half = Math.floor(spacing / 2) + 0.5;
-    let start = half - this.length_ / 2;
-    let end = half + this.length_ / 2;
-
-    half *= scale;
-    start *= scale;
-    end *= scale;
-
-    let strokeWidthY;
-    let strokeWidthX;
-
+  // https://github.com/scratchfoundation/scratch-blocks/blob/develop/core/grid.js#L167
+  const oldSetLineAttr = ScratchBlocks.Grid.prototype.setLineAttributes_;
+  ScratchBlocks.Grid.prototype.setLineAttributes_ = function(line, width, x1, x2, y1, y2) {
     if (!addon.self.disabled) {
-      switch (themeSetting) {
-        case "dots":
-          strokeWidthY = scale;
-          strokeWidthX = scale;
-          break;
-        case "lines":
-          strokeWidthX = scale * (spacing + 1);
-          strokeWidthY = scale * (spacing + 1);
-          break;
-        case "crosshairs":
-          strokeWidthX = scale * 15;
-          strokeWidthY = scale * 15;
-          break;
-        case "none":
-          strokeWidthX = 0;
-          strokeWidthY = 0;
-          break;
-        case "vertical":
-          strokeWidthX = 0;
-          strokeWidthY = scale * (spacing + 1);
-          break;
-        case "horizontal":
-          strokeWidthX = scale * (spacing + 1);
-          strokeWidthY = 0;
-          break;
-      }
-    } else {
-      strokeWidthY = scale;
-      strokeWidthX = scale;
-    }
+      const DOT_LENGTH = 1;
+      const FULL_LENGTH = this.spacing_ + 1;
+      const CROSSHAIR_LENGTH = this.spacing_ / 2.5;
+      const NO_LENGTH = 0;
 
-    this.setLineAttributes_(this.line1_, strokeWidthY, start, end, half, half);
-    this.setLineAttributes_(this.line2_, strokeWidthX, half, half, start, end);
-  };
+      // We are mulitplying line1's (vertical line) and line2's (horizontal line)'s length based on the user's setting.
+      // Scratch calls it "width", so don't get confused.
+      width *= (() => {
+        switch (addon.settings.get("theme")) {
+          case "lines":
+            return FULL_LENGTH;
+          case "crosshairs":
+            return CROSSHAIR_LENGTH;
+          case "none":
+            return NO_LENGTH;
+          case "vertical":
+            if (line === this.line1_) return FULL_LENGTH;
+            else return NO_LENGTH;
+          case "horizontal":
+            if (line === this.line2_) return FULL_LENGTH;
+            else return NO_LENGTH;
+          case "dots":
+          default:
+            return DOT_LENGTH
+        }
+      })();
+    }
+    oldSetLineAttr.call(this, line, width, x1, x2, y1, y2)
+  }
 
   function updateGrid() {
-    workspace.grid_.update(workspace.grid_.scale_);
+    const workspace = addon.tab.traps.getWorkspace();
+    const grid = workspace.getGrid();
+    grid.update(grid.scale_);
   }
 
   updateGrid();
