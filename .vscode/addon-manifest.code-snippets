@@ -1,6 +1,7 @@
 {
   "Addon manifest template": {
     "scope": "json",
+    "isFileTemplate": true,
     "prefix": "addon.json",
     "body": [
       "{",
