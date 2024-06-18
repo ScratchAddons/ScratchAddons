@@ -303,7 +303,7 @@ if (isScratchGui || isProject) {
 }
 
 // Same as editingScreens match
-if (location.pathname.match(/^\/discuss\/(?:topic\/\d+|\d+\/topic\/add|post\/\d+\/edit|settings\/[\w-]+)\/?$/) {
+if (location.pathname.match(/^\/discuss\/(?:topic\/\d+|\d+\/topic\/add|post\/\d+\/edit|settings\/[\w-]+)\/?$/)) {
   const checkUA = () => {
     if (!window.mySettings) return false;
     const ua = window.mySettings.markupSet.find((x) => x.className);
