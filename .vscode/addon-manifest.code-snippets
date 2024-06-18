@@ -26,9 +26,9 @@
       "\t\"versionAdded\": \"1.${6:0}.0\",",
       "\t\"enabledByDefault\": false",
       "}",
-      ""
+      "",
     ],
-    "description": "addon.json template"
+    "description": "addon.json template",
   },
 
   "Boolean setting": {
@@ -40,9 +40,9 @@
       "\t\"id\": \"$2\",",
       "\t\"type\": \"boolean\",",
       "\t\"default\": ${3|false,true|}",
-      "}$0"
+      "}$0",
     ],
-    "description": "Boolean setting"
+    "description": "Boolean setting",
   },
 
   "Integer setting": {
@@ -56,9 +56,9 @@
       "\t\"min\": ${3:0},",
       "\t\"max\": ${4:100},",
       "\t\"default\": ${5:0}",
-      "}$0"
+      "}$0",
     ],
-    "description": "Integer setting"
+    "description": "Integer setting",
   },
 
   "Select setting": {
@@ -74,8 +74,8 @@
       "\t\t${0:{\n\t\t\t\"id\": \"$5\",\n\t\t\t\"name\": \"$6\"\n\t\t\\}}",
       "\t],",
       "\t\"default\": \"$3\"",
-      "}"
+      "}",
     ],
-    "description": "Select setting"
-  }
+    "description": "Select setting",
+  },
 }

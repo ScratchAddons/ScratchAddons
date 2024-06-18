@@ -98,8 +98,8 @@ export default async function ({ addon }) {
       (e.shiftKey
         ? settings[addon.settings.get("shift")]
         : e.altKey
-        ? settings[addon.settings.get("alt")]
-        : settings[addon.settings.get("regular")]) * (e.code === "ArrowUp" ? 1 : -1);
+          ? settings[addon.settings.get("alt")]
+          : settings[addon.settings.get("regular")]) * (e.code === "ArrowUp" ? 1 : -1);
 
     const newValueAsInt =
       shiftDecimalPointToRight(e.target.value, 5) + shiftDecimalPointToRight(changeBy.toString(), 5);
