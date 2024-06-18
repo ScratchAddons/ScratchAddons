@@ -2,8 +2,9 @@ export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
   const ogCloneCounter = vm.runtime.changeCloneCounter;
 
-  async function updateCounts(remove) {
+  async function updateCounts() {
     let counts = {};
+    let remove = addon.self.disabled || !addon.settings.get("showSpriteCount");
 
     vm.runtime.targets
       .filter((target) => !target.isOriginal)
@@ -39,38 +40,28 @@ export default async function ({ addon, console }) {
     });
   }
 
-  function polute() {
-    if (!addon.settings.get("showSpriteCount")) return;
-
+  function pollute() {
     vm.runtime.changeCloneCounter = (e) => {
       ogCloneCounter.call(vm.runtime, e);
 
-      setTimeout(() => {
+      queueMicrotask(() => {
         updateCounts();
-      }, 100);
+      });
     };
-
-    updateCounts(false);
   }
 
-  function unpolute() {
-    vm.runtime.changeCloneCounter = ogCloneCounter;
-    updateCounts(true);
-  }
-
-  polute();
+  pollute();
 
   vm.addListener("targetsUpdate", () => {
-    setTimeout(() => {
-      updateCounts(addon.self.disabled || !addon.settings.get("showSpriteCount"));
-    }, 0);
+    queueMicrotask(() => {
+      updateCounts();
+    });
   });
 
-  addon.self.addEventListener("disabled", () => unpolute());
-  addon.self.addEventListener("reenabled", () => polute());
+  addon.self.addEventListener("disabled", () => updateCounts());
+  addon.self.addEventListener("reenabled", () => updateCounts());
 
   addon.settings.addEventListener("change", () => {
-    if (addon.settings.get("showSpriteCount")) polute();
-    else unpolute();
+    updateCounts();
   });
 }
