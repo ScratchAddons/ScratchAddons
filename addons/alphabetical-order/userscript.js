@@ -1,3 +1,5 @@
+import { assetSelect} from "../asset-conflict-dialog/utils.js";
+
 export default async function ({ addon, msg, console }) {
   const vm = addon.tab.traps.vm;
 
@@ -53,7 +55,7 @@ export default async function ({ addon, msg, console }) {
     // however if assets are deleted it will break. So we assume that asset deletion, deactivates the restore function
     const selectedAssetName = getSelectedAssetName();
     let assetArray = getTargetAssetsByType(vm.editingTarget, assetType);
-    const newAssets = new Array (nameToOriginalIdx.size);
+    let newAssets = new Array (nameToOriginalIdx.size);
     const leftovers = [];
     assetArray.forEach((asset) => {
       const newIdx = nameToOriginalIdx.get(getAssetName(asset));
@@ -63,14 +65,14 @@ export default async function ({ addon, msg, console }) {
         newAssets[newIdx] = asset;
       }
     });
+    newAssets = newAssets.concat(leftovers);
+    setTargetAssetsByType(vm.editingTarget, assetType, newAssets);
 
-    setTargetAssetsByType(vm.editingTarget, assetType, newAssets.concat(leftovers));
+    // reselect the asset that was selected before the sort
+    selectAssetByName(newAssets, selectedAssetName, assetType);
 
     // update to make sure what we see on screen correctly matches the array
     vm.emitTargetsUpdate()
-
-    // reselect the asset that was selected before the sort
-    clickAssetWithName(selectedAssetName, assetType);
   }
 
   function getSelectedAssetName(){
@@ -79,16 +81,12 @@ export default async function ({ addon, msg, console }) {
     ).innerText;
   }
 
-  function clickAssetWithName(assetToClickName, assetType) {
-    const isSprite = assetType === "sprites";
-    const wrapper = document.querySelector(
-      `[class*=${isSprite ? "sprite-selector_items-wrapper" : "selector_list-area"}]`
-    );
-    const assetSelector = isSprite ? "sprite-selector_sprite-wrapper" : "selector_list-item";
-
-    [...wrapper.querySelectorAll(`[class*=${assetSelector}]`)]
-      .find((asset) => asset.querySelector("[class*=sprite-selector-item_sprite-name]").innerText === assetToClickName)
-      ?.click();
+  function selectAssetByName(assets, assetName, assetType){
+    if (assetType !== 'sprites') assetSelect(
+      addon,
+      assets.findIndex((e) => getAssetName(e) === assetName),
+      assetType === 'costumes' ? 'costume' : 'sound'
+    )
   }
 
   function sortAssetsAlphabetically() {
@@ -109,11 +107,11 @@ export default async function ({ addon, msg, console }) {
       assets.sort(compareAssetsByName);
     }
 
+    // reselect the asset that was selected before the sort
+    selectAssetByName(assets, selectedAssetName, assetType);
+
     // update to make sure what we see on screen correctly matches the array
     vm.emitTargetsUpdate()
-
-    // reselect the asset that was selected before the sort
-    clickAssetWithName(selectedAssetName, assetType);
 
     // dispatch the redux event to close the menu and create the restore order button
     addon.tab.redux.dispatch({ type: "scratch-gui/menus/CLOSE_MENU", menu: "editMenu" });
