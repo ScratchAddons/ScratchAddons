@@ -1,16 +1,10 @@
 import Listenable from "../common/Listenable.js";
-/**
- * @typedef {import("./Tab.js").default} Tab
- */
 
 /**
  * Manages object trapping.
  * @extends Listenable
  */
 export default class Trap extends Listenable {
-   /**
-   * @param {Tab} tab
-   */
   constructor(tab) {
     super();
     this._react_internal_key = undefined;
@@ -38,7 +32,6 @@ export default class Trap extends Listenable {
   }
 
   _getBlocksComponent(wrapper) {
-    debugger;
     if (!this._react_internal_key) {
       this._react_internal_key = Object.keys(wrapper).find((key) => key.startsWith(this.REACT_INTERNAL_PREFIX));
     }

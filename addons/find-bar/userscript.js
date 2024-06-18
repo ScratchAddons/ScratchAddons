@@ -2,9 +2,8 @@ import BlockItem from "./blockly/BlockItem.js";
 import BlockInstance from "./blockly/BlockInstance.js";
 import Utils from "./blockly/Utils.js";
 
-/** @typedef {import("../../addon-api/content-script/typedef.js").UserscriptUtilities} UserscriptUtilities @param {UserscriptUtilities} */
 export default async function ({ addon, msg, console }) {
-  if (!addon.self._isDevtoolsExtension && window.initGUI) { // what is initGUI?
+  if (!addon.self._isDevtoolsExtension && window.initGUI) {
     console.log("Extension running, stopping addon");
     window._devtoolsAddonEnabled = true;
     window.dispatchEvent(new CustomEvent("scratchAddonsDevtoolsAddonStopped"));
