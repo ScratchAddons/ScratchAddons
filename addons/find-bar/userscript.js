@@ -13,7 +13,7 @@ import BlockInstance from "./blockly/BlockInstance.js";
 import Utils from "./blockly/Utils.js";
 
 /** @typedef {import("../../addon-api/content-script/typedef.js").UserscriptUtilities} UserscriptUtilities @param {UserscriptUtilities} */
-export default async function ({ addon, msg, console }) {
+export default async function({ addon, msg, console }) {
   if (!addon.self._isDevtoolsExtension && window.initGUI) {
     console.log("Extension running, stopping addon");
     window._devtoolsAddonEnabled = true;
@@ -189,7 +189,7 @@ export default async function ({ addon, msg, console }) {
       }
     }
 
-    showDropDown(focusID, instanceBlock) {
+    showDropDown(focusID, instanceBlock) { // shiftKey hold click block focusID is the current blockID
       if (!focusID && this.dropdownOut.classList.contains("visible")) {
         return;
       }
@@ -202,15 +202,15 @@ export default async function ({ addon, msg, console }) {
         this.selectedTab === 0
           ? this.getScratchBlocks()
           : this.selectedTab === 1
-          ? this.getScratchCostumes()
-          : this.selectedTab === 2
-          ? this.getScratchSounds()
-          : [];
+            ? this.getScratchCostumes()
+            : this.selectedTab === 2
+              ? this.getScratchSounds()
+              : [];
 
       this.dropdown.empty();
 
       for (const proc of scratchBlocks) {
-        debugger;
+        // debugger;
         let item = this.dropdown.addItem(proc);
 
         if (focusID) {
@@ -806,7 +806,7 @@ export default async function ({ addon, msg, console }) {
   window.fb = findBar;
 
   const _doBlockClick_ = Blockly.Gesture.prototype.doBlockClick_;
-  Blockly.Gesture.prototype.doBlockClick_ = function () {
+  Blockly.Gesture.prototype.doBlockClick_ = function() {
     if (!addon.self.disabled && (this.mostRecentEvent_.button === 1 || this.mostRecentEvent_.shiftKey)) {
       // Wheel button...
       // Intercept clicks to allow jump to...?
