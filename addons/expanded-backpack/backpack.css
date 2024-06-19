@@ -2,7 +2,7 @@
 
 [class^="backpack_backpack-list"] {
   /* set height of the item picker, the vanilla height of the backpack is 5.5rem so multiply it by the rows setting */
-  height: calc(var(--expandedBackpack-rows) * 5.5rem);
+  height: calc(var(--expandedBackpack-rows) * 6.5rem);
 }
 
 [class*="backpack_backpack-list-inner"] {
