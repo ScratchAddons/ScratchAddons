@@ -206,8 +206,10 @@ export default async function({ addon, msg, console }) {
             : this.selectedTab === 2
               ? this.getScratchSounds()
               : [];
+      return;
 
       this.dropdown.empty();
+      return;
 
       for (const proc of scratchBlocks) {
         // debugger;
@@ -528,6 +530,10 @@ export default async function({ addon, msg, console }) {
         e.cancelBubble = true;
         return false;
       });
+      var btn = document.createElement('button')
+      btn.textContent = 'lizhetest'
+      item.appendChild(btn)
+      // debugger;
       this.items.push(item);
       this.el.appendChild(item);
       return item;

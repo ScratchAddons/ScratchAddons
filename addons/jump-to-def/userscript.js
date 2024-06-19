@@ -1,5 +1,5 @@
 import Utils from "../find-bar/blockly/Utils.js";
-export default async function ({ addon, msg, console }) {
+export default async function({ addon, msg, console }) {
   if (!addon.self._isDevtoolsExtension && window.initGUI) {
     console.log("Extension running, stopping addon");
     window._devtoolsAddonEnabled = true;
@@ -18,7 +18,7 @@ export default async function ({ addon, msg, console }) {
   });
 
   const _doBlockClick_ = Blockly.Gesture.prototype.doBlockClick_;
-  Blockly.Gesture.prototype.doBlockClick_ = function () {
+  Blockly.Gesture.prototype.doBlockClick_ = function() {
     if (!addon.self.disabled && (this.mostRecentEvent_.button === 1 || this.mostRecentEvent_.shiftKey)) {
       // Wheel button...
       // Intercept clicks to allow jump to...?
