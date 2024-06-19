@@ -80,7 +80,7 @@ export default async function ({ addon, console }) {
 
     try {
       // If something is already selected, the maximum distance that Scratch will tolerate is larger
-      // than if nothing is tested. From my testing it feels right to preserve that larger difference
+      // than if nothing is selected. From my testing it feels right to preserve that larger distance
       // through the gesture.handleMove() below so that it's more likely that another connection will
       // get selected.
       const insertionMarkerManager = gesture.blockDragger_.draggedConnectionManager_;
@@ -121,7 +121,7 @@ export default async function ({ addon, console }) {
 
     // Disable alt opening browser menu in Firefox and stealing focus from the page.
     // This applies while dragging a block (we expect people to use the modifier) or once
-    // after dropping a block (we epxect people to stop pressing the modifier after)
+    // after dropping a block (we expect people to stop pressing the modifier after)
     if (isDragging || disableNextModifierRelease) {
       if (isModifierKeyExactly(e) && shouldDisableModifier()) {
         e.preventDefault();
@@ -144,8 +144,8 @@ export default async function ({ addon, console }) {
     return originalGetFirstStatementConnection.call(this);
   };
 
-  // To reduce possible breakage, getFirstStatementConnection trap only applies when we"re inside
-  // of insertion marker manager code as getFirstStatementConnection can be used in other places.
+  // To reduce possible breakage, the getFirstStatementConnection trap only applies when we're inside
+  // of insertion marker manager code as getFirstStatementConnection is used in other places.
   const originalInsertionMarkerUpdate = ScratchBlocks.InsertionMarkerManager.prototype.update;
   ScratchBlocks.InsertionMarkerManager.prototype.update = function (...args) {
     try {
@@ -157,7 +157,7 @@ export default async function ({ addon, console }) {
   };
 
   // If the user is still holding the modifier when they release the block, we want to preventDefault()
-  // the once they release the modifier key.
+  // once they release the modifier key.
   const originalEndBlockDrag = ScratchBlocks.BlockDragger.prototype.endBlockDrag;
   ScratchBlocks.BlockDragger.prototype.endBlockDrag = function (...args) {
     if (modifierHeld) {
