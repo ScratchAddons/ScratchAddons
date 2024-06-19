@@ -20,7 +20,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       others: "close-button",
     })}">
 	  <img class="${addon.tab.scratchClass(
-      "close-button_close-icon"
+      "close-button_close-icon",
     )}" src="/static/assets/cb666b99d3528f91b52f985dfb102afa.svg">
 	</div>
   </div>
@@ -47,7 +47,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 <p dir="auto"><strong>${m("ctrl-lr")}</strong> &ndash; ${m("ctrl-lr-costume-desc")}</p>
 <hr />
 <p>${m(
-    "youtube"
+    "youtube",
   )} -&nbsp;<a target="_blank" href="https://www.youtube.com/griffpatch" rel="noopener noreferrer">https://www.youtube.com/user/griffpatch</a></p>
 </div>
 </div>

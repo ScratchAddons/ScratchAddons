@@ -83,7 +83,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
             stageHeader: "#111111",
             border: "#ffffff0d",
           },
-          1
+          1,
         );
         // Experimental Dark changes:
         updatePresetIfMatching(
@@ -108,7 +108,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
             stageHeader: "#333333",
             border: "#444444",
           },
-          2
+          2,
         );
       }
       if (manifest.settings) {

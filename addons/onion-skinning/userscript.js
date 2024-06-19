@@ -235,7 +235,7 @@ export default async function ({ addon, global, console, msg }) {
           new Promise((resolve, reject) => {
             item.on("load", () => resolve());
             item.on("error", () => reject(new Error("Raster inside SVG failed to load")));
-          })
+          }),
         );
       }
     });
@@ -284,7 +284,7 @@ export default async function ({ addon, global, console, msg }) {
           ctx,
           new paper.Base({
             matrices: [matrix],
-          })
+          }),
         );
         ctx.restore();
         this.matrix.reset();
@@ -489,7 +489,7 @@ export default async function ({ addon, global, console, msg }) {
           } else {
             throw new Error(`Unknown data format: ${onionCostume.dataFormat}`);
           }
-        })
+        }),
       );
 
       // Make sure we haven't been cancelled
@@ -783,7 +783,7 @@ export default async function ({ addon, global, console, msg }) {
       // TODO: when leaving the paint editor, references to the old zoom controls are kept around by our DOM
       // Need to investigate whether this leaks memory or other issues.
       const oldZoomControlsContainer = paintEditorControlsContainer.querySelector(
-        "[class^='paint-editor_zoom-controls']"
+        "[class^='paint-editor_zoom-controls']",
       );
       if (oldZoomControlsContainer) {
         oldZoomControlsContainer.parentNode.removeChild(oldZoomControlsContainer);
