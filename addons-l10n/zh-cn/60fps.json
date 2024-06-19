@@ -1,0 +1,1 @@
+{"60fps/@name":"更高的作品帧率模式","60fps/@description":"让您以更高帧率(FPS)运行项目，使它们看起来更平滑。按住Alt并点击绿旗，可在Scratch的默认30 FPS和在下方自定义的帧率间切换。","60fps/@info-projectRunsFasterNotice":"改变Scratch项目的帧率也会影响某些代码(如循环)的运行速率，所以大多数项目在以不同的帧率运行时将无法正常运行。高帧率只适用于那些支持高帧率的项目。","60fps/@info-powerSaver":"如果你的浏览器是在省电模式(例如，如果你的电量很低时)，它可能会限制可见帧率，这时使用这个插件可能不会使动画看起来更流畅。","60fps/@settings-name-framerate":"自定义FPS"}

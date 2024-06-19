@@ -1,4 +1,10 @@
 {
   "_locale": "en",
-  "_locale_name": "English"
+  "_locale_name": "English",
+
+  "_general/blocks/green-flag": "flag",
+  "_general/blocks/clockwise": "clockwise",
+  "_general/blocks/anticlockwise": "anti-clockwise",
+  "_general/meta/managedBySa": "Managed by Scratch Addons",
+  "_general/meta/addonSettings": "Addon Settings"
 }

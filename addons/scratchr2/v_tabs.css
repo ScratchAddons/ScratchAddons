@@ -15,7 +15,7 @@
   padding-top: 20px;
   padding-bottom: 8px;
   border-radius: 0;
-  background: #4d97ff;
+  background: #855cd6;
   border: none;
 }
 #content > .cols > .col-12 > .box > .box-head h2 {
@@ -37,37 +37,40 @@
   background: transparent;
 }
 .v-tabs li {
-  margin-right: 14px;
+  margin-right: 10px;
   display: block;
-  width: -moz-fit-content;
-  width: fit-content;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
   background-color: var(--darkWww-box, white);
   border: 1px solid var(--darkWww-border-15, rgba(0, 0, 0, 0.15));
   border-radius: 22px;
-  font-size: 14px;
   line-height: 21px;
 }
 .v-tabs li.first {
   border-radius: 22px;
 }
 .v-tabs li + li {
-  margin-top: 8px;
+  margin-top: 10px;
 }
 .v-tabs li:hover {
   background-color: var(--darkWww-page-tab, rgba(0, 0, 0, 0.1));
   border-color: var(--darkWww-border, rgba(0, 0, 0, 0.1));
 }
 .v-tabs li.active {
-  background-color: var(--darkWww-button, #4d97ff);
+  background-color: var(--darkWww-button, #855cd6);
   border: 1px solid rgba(0, 0, 0, 0.15);
 }
 .v-tabs li.active:hover {
-  background-color: var(--darkWww-button-variant, #4280d7);
+  background-color: var(--darkWww-button-variant, #7854c0);
   border: 1px solid rgba(0, 0, 0, 0.15);
 }
 .v-tabs li a {
-  padding: 10.5px 17.5px;
+  padding: 7.5px 12px;
+  overflow: hidden;
   color: var(--darkWww-box-text, #575e75);
+  font-weight: normal;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .v-tabs li:hover:not(.active) a {
   color: var(--darkWww-page-text, #575e75);

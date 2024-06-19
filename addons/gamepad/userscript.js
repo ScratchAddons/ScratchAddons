@@ -1,6 +1,7 @@
 import GamepadLib from "./gamepadlib.js";
+import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
   // Wait for the project to finish loading. Renderer and scripts will not be fully available until this happens.
@@ -86,7 +87,7 @@ export default async function ({ addon, global, console, msg }) {
   GamepadLib.setConsole(console);
   const gamepad = new GamepadLib();
 
-  gamepad.getHintsLazily = () => {
+  gamepad.getUserHints = () => {
     const parsedOptions = parseOptionsComment();
     if (parsedOptions) {
       return {
@@ -176,7 +177,7 @@ export default async function ({ addon, global, console, msg }) {
     }
     didChangeProject();
   };
-  const removeMappings = () => {
+  const removeStoredMappings = () => {
     const comment = findOptionsComment();
     if (comment) {
       const target = vm.runtime.getTargetForStage();
@@ -184,7 +185,7 @@ export default async function ({ addon, global, console, msg }) {
       didChangeProject();
     }
   };
-  const handleEditorChanged = () => {
+  const handleGamepadMappingChanged = () => {
     if (shouldStoreSettingsInProject) {
       storeMappings();
     }
@@ -194,18 +195,18 @@ export default async function ({ addon, global, console, msg }) {
     if (shouldStoreSettingsInProject) {
       storeMappings();
     } else {
-      removeMappings();
+      removeStoredMappings();
     }
   };
   const handleEditorControllerChanged = () => {
     document.body.classList.toggle("sa-gamepad-has-controller", editor.hasControllerSelected());
-    handleEditorChanged();
+    handleGamepadMappingChanged();
   };
   buttonContainer.addEventListener("click", () => {
     if (!editor) {
       editor = gamepad.editor();
       editor.msg = msg;
-      editor.addEventListener("mapping-changed", handleEditorChanged);
+      editor.addEventListener("mapping-changed", handleGamepadMappingChanged);
       editor.addEventListener("gamepad-changed", handleEditorControllerChanged);
     }
     const editorEl = editor.generateEditor();
@@ -246,6 +247,34 @@ export default async function ({ addon, global, console, msg }) {
     }
     content.appendChild(editorEl);
 
+    const extraOptionsContainer = document.createElement("div");
+    extraOptionsContainer.className = "sa-gamepad-extra-options";
+    content.appendChild(extraOptionsContainer);
+
+    const mappingsWereResetOrCleared = () => {
+      editor.updateAllContent();
+      storeSettingsCheckbox.checked = false;
+      shouldStoreSettingsInProject = false;
+    };
+
+    const resetButton = document.createElement("button");
+    resetButton.className = "sa-gamepad-reset-button";
+    resetButton.textContent = msg("reset");
+    resetButton.addEventListener("click", () => {
+      gamepad.resetControls();
+      mappingsWereResetOrCleared();
+    });
+    extraOptionsContainer.appendChild(resetButton);
+
+    const clearButton = document.createElement("button");
+    clearButton.className = "sa-gamepad-reset-button";
+    clearButton.textContent = msg("clear");
+    clearButton.addEventListener("click", () => {
+      gamepad.clearControls();
+      mappingsWereResetOrCleared();
+    });
+    extraOptionsContainer.appendChild(clearButton);
+
     const storeSettingsLabel = document.createElement("label");
     storeSettingsLabel.className = "sa-gamepad-store-settings";
     storeSettingsLabel.textContent = msg("store-in-project");
@@ -254,28 +283,12 @@ export default async function ({ addon, global, console, msg }) {
     storeSettingsCheckbox.checked = shouldStoreSettingsInProject;
     storeSettingsCheckbox.addEventListener("change", handleStoreSettingsCheckboxChanged);
     storeSettingsLabel.prepend(storeSettingsCheckbox);
-    content.appendChild(storeSettingsLabel);
+    extraOptionsContainer.appendChild(storeSettingsLabel);
 
     editor.focus();
   });
 
-  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
-    document.body.classList.add("sa-gamepad-small");
-  }
-  document.addEventListener(
-    "click",
-    (e) => {
-      if (e.target.closest("[class*='stage-header_stage-button-first']:not(.sa-hide-stage-button)")) {
-        document.body.classList.add("sa-gamepad-small");
-      } else if (
-        e.target.closest("[class*='stage-header_stage-button-last']") ||
-        e.target.closest(".sa-hide-stage-button")
-      ) {
-        document.body.classList.remove("sa-gamepad-small");
-      }
-    },
-    { capture: true }
-  );
+  addSmallStageClass();
 
   const virtualCursorElement = document.createElement("img");
   virtualCursorElement.hidden = true;
@@ -395,7 +408,8 @@ export default async function ({ addon, global, console, msg }) {
 
   while (true) {
     const target = await addon.tab.waitForElement(
-      '[class^="stage-header_stage-size-row"], [class^="stage-header_stage-menu-wrapper"] > [class^="button_outlined-button"]',
+      // Full screen button
+      '[class^="stage-header_stage-size-row"] [class^="button_outlined-button"], [class*="stage-header_unselect-wrapper_"] > [class^="button_outlined-button"]',
       {
         markAsSeen: true,
         reduxEvents: [
@@ -407,7 +421,7 @@ export default async function ({ addon, global, console, msg }) {
       }
     );
     container.dataset.editorMode = addon.tab.editorMode;
-    if (target.className.includes("stage-size-row")) {
+    if (target.closest('[class^="stage-header_stage-size-row"]')) {
       addon.tab.appendToSharedSpace({ space: "stageHeader", element: container, order: 1 });
     } else {
       addon.tab.appendToSharedSpace({ space: "fullscreenStageHeader", element: container, order: 0 });

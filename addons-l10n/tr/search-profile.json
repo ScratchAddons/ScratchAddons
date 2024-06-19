@@ -1,1 +1,1 @@
-{"search-profile/profile":"Profil","search-profile/invalid-username":"\"{username}\" geçerli bir kullanıcı adı değil","search-profile/@name":"Profil ara","search-profile/@description":"Kullanıcı adını aradığınızda bir kullanıcının profiline gitmenizi sağlar."}
+{"search-profile/profile":"Profil","search-profile/invalid-username":"\"{username}\" geçerli bir kullanıcı adı değil veya hesap mevcut değil","search-profile/@name":"Kullanıcı adı aratma","search-profile/@description":"Kullanıcı adını aradığınızda bir kullanıcının profiline gitmenizi sağlar."}

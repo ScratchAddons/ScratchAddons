@@ -6,16 +6,23 @@
       "name": "Jeffalo"
     }
   ],
-  "userscripts": [
+  "info": [
     {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/discuss/*"]
+      "id": "deprecated",
+      "type": "warning",
+      "text": "This addon is no longer supported and does not work anymore."
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "button.css",
+      "matches": ["editingScreens"]
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.0.0",
-  "tags": ["forums", "community"],
+  "tags": ["forums", "community", "beta"],
   "enabledByDefault": false,
   "libraries": ["spark-md5", "text-field-edit"]
 }

@@ -27,7 +27,7 @@ async function getLocales(addon) {
     59: "fa",
   };
 
-  if (location.pathname.split("/")[2] === "settings") {
+  if (["settings", "search"].includes(location.pathname.split("/")[2])) {
     return ["en"];
   }
 
@@ -53,8 +53,8 @@ export default async function ({ addon, msg }) {
   oldScript.remove();
 
   const [sb, loadTranslations] = await Promise.all([
-    import(addon.self.lib + "/thirdparty/cs/scratchblocks.min.es.js").then((mod) => mod.default),
-    import(addon.self.lib + "/thirdparty/cs/translations-all-es.js").then((mod) => mod.default),
+    import("../../libraries/thirdparty/cs/scratchblocks.min.es.js").then((mod) => mod.default),
+    import("../../libraries/thirdparty/cs/translations-all-es.js").then((mod) => mod.default),
   ]);
   window.scratchblocks = sb;
   loadTranslations(sb);
@@ -78,7 +78,7 @@ export default async function ({ addon, msg }) {
       scaleSVG(svg, 0.75);
 
       let container = opts.document.createElement("div");
-      container.className = "scratchblocks3";
+      container.className = "scratchblocks3 scratchblocks-style-scratch3";
       container.appendChild(svg);
 
       element.innerHTML = "";

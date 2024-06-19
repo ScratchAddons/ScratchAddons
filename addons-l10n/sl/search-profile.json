@@ -1,1 +1,1 @@
-{"search-profile/profile":"Profil","search-profile/invalid-username":"\"{username}\" ni veljavno uporabniško ime","search-profile/@name":"Išči profile","search-profile/@description":"Omogoči, da obiščete uporabnikov profil, ko v polje za iskanje vnesete njegovo ime."}
+{"search-profile/profile":"Profil","search-profile/invalid-username":"\"{username}\" ni veljavno uporabniško ime ali pa račun ne obstaja","search-profile/@name":"Iskanje uporabniških imen","search-profile/@description":"Omogoči, da obiščete uporabnikov profil, ko v polje za iskanje vnesete njegovo ime."}

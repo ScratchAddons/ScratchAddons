@@ -1,0 +1,26 @@
+@import url("../styles/colors-light.css");
+
+body {
+  color: var(--content-text);
+  background-color: var(--page-background);
+  font-size: 1rem;
+  font-family: sans-serif;
+}
+
+a {
+  color: var(--blue-text);
+}
+
+#browser-info {
+  font-style: italic;
+}
+
+#problem-details {
+  font-family: monospace;
+}
+
+#restart-url {
+  display: inline-block;
+  margin: 0 6px;
+  font-family: monospace;
+}

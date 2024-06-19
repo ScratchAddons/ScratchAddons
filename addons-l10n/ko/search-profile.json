@@ -1,1 +1,1 @@
-{"search-profile/profile":"프로필","search-profile/invalid-username":"\"{username}\"은 유효하지 않은 사용자명입니다.","search-profile/@name":"프로필 찾기","search-profile/@description":"사용자 이름을 검색할 때 사용자의 프로필로 이동할 수 있습니다."}
+{"search-profile/profile":"프로필","search-profile/@name":"사용자 이름 검색","search-profile/@description":"사용자 이름을 검색할 때 사용자의 프로필로 이동할 수 있습니다."}

@@ -30,6 +30,8 @@
       "default": false
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.4.0",
   "tags": ["community"],
   "enabledByDefault": false

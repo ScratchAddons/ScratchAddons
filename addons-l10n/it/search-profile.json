@@ -1,1 +1,1 @@
-{"search-profile/profile":"Profilo","search-profile/invalid-username":"\"{username}\" non è uno username valido","search-profile/@name":"Cerca profilo","search-profile/@description":"Permette di andare alla pagina del profilo di un utente quando cerchi il suo username."}
+{"search-profile/profile":"Profilo","search-profile/invalid-username":"\"{username}\" non è uno username valido, oppure l'account non esiste","search-profile/@name":"Ricerca utente","search-profile/@description":"Permette di andare alla pagina del profilo di un utente quando cerchi il suo username."}

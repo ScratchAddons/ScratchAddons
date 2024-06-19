@@ -25,7 +25,7 @@ export default async function ({ addon, console, msg }) {
     });
     button.append(img);
     const input = Object.assign(document.createElement("input"), {
-      accept: ".svg, .png, .bmp, .jpg, .jpeg",
+      accept: ".svg, .png, .bmp, .jpg, .jpeg, .sprite2, .sprite3",
       className: `${addon.tab.scratchClass(
         "action-menu_file-input" /* TODO: when adding dynamicDisable, ensure compat with drag-drop */
       )} sa-better-img-uploads-input`,
@@ -49,10 +49,19 @@ export default async function ({ addon, console, msg }) {
 
   while (true) {
     //Catch all upload menus as they are created
-    let menu = await addon.tab.waitForElement(
-      '[class*="sprite-selector_sprite-selector_"] [class*="action-menu_more-buttons_"], [data-tabs] > :nth-child(3) [class*="action-menu_more-buttons_"]',
-      { markAsSeen: true }
-    );
+    const spriteSelector = '[class*="sprite-selector_sprite-selector_"] [class*="action-menu_more-buttons_"]';
+    const stageSelector = '[class*="stage-selector_stage-selector_"] [class*="action-menu_more-buttons_"]';
+    const costumeSelector = '[data-tabs] > :nth-child(3) [class*="action-menu_more-buttons_"]';
+    let menu = await addon.tab.waitForElement(`${spriteSelector}, ${stageSelector}, ${costumeSelector}`, {
+      markAsSeen: true,
+      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+      reduxEvents: [
+        "scratch-gui/mode/SET_PLAYER",
+        "fontsLoaded/SET_FONTS_LOADED",
+        "scratch-gui/locales/SELECT_LOCALE",
+        "scratch-gui/navigation/ACTIVATE_TAB",
+      ],
+    });
     let button = menu.parentElement.previousElementSibling.previousElementSibling; //The base button that the popup menu is from
 
     let id = button.getAttribute("aria-label").replace(/\s+/g, "_");
@@ -69,6 +78,10 @@ export default async function ({ addon, console, msg }) {
     menu.prepend(menuItem);
 
     hdButton.addEventListener("click", (e) => {
+      // When clicking on the button in the "add backdrop menu", don't switch to the stage before
+      // a file was selected.
+      e.stopPropagation();
+
       input.files = new FileList(); //Empty the input to make sure the change event fires even if the same file was uploaded.
       input.click();
     });
@@ -97,26 +110,37 @@ export default async function ({ addon, console, msg }) {
     let processed = new Array();
 
     for (let file of files) {
-      if (file.type.includes("svg")) {
-        //The file is already a svg, we should not change it...
+      if (!/\.(png|jpe?g|bmp)$/i.test(file.name)) {
+        // The file is not processable, so we should ignore it, and let scratch deal with it..
         processed.push(file);
         continue;
       }
 
-      let blob = await new Promise((resolve) => {
-        //Get the Blob data url for the image so that we can add it to the svg
-        let reader = new FileReader();
-        reader.addEventListener("load", () => resolve(reader.result));
-        reader.readAsDataURL(file);
-      });
+      const getImgData = async () => {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        await new Promise((resolve) => {
+          img.onload = resolve;
+        });
+        return img;
+      };
 
-      let i = new Image(); //New image to get the image's size
-      i.src = blob;
-      await new Promise((resolve) => {
-        i.onload = resolve;
-      });
+      const img = await getImgData();
+      let dim = { width: img.width, height: img.height };
 
-      let dim = { width: i.width, height: i.height };
+      // NOTE: we DON'T want to use the uploaded file directly.
+      // We redraw the image into a canvas first, so that:
+      // 1. We always embed a PNG file,
+      // 2. EXIF metadata (such as location, if applicable) is discarded.
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = dim.width;
+      canvas.height = dim.height;
+      ctx.drawImage(img, 0, 0);
+
+      URL.revokeObjectURL(img.src);
+      const dataURL = canvas.toDataURL();
+
       const originalDim = JSON.parse(JSON.stringify(dim));
 
       if (mode === "fit") {
@@ -137,7 +161,7 @@ export default async function ({ addon, console, msg }) {
       } //Otherwise just leave the image the same size
 
       function getResizedWidthHeight(oldWidth, oldHeight) {
-        const STAGE_WIDTH = 479;
+        const STAGE_WIDTH = 480;
         const STAGE_HEIGHT = 360;
         const STAGE_RATIO = STAGE_WIDTH / STAGE_HEIGHT;
 
@@ -200,7 +224,7 @@ export default async function ({ addon, console, msg }) {
                 width="${originalDim.width}"
                 height="${originalDim.height}"
 				transform="scale(${dim.width / originalDim.width},${dim.height / originalDim.height})"
-                xlink:href="${blob}"
+                xlink:href="${dataURL}"
             />
           </g>
         </g>

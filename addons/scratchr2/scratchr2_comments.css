@@ -1,3 +1,5 @@
+@import url("%addon-self-dir%/../../libraries/common/cs/spinner.css");
+
 #comments #comments-loading,
 #comments .posting {
   background-image: none;
@@ -19,7 +21,7 @@
   background-size: 100%;
   filter: var(--darkWww-link-iconFilter, none);
   /* Spinner animation code */
-  /* From https://github.com/LLK/scratch-www/blob/develop/src/components/spinner/spinner.scss */
+  /* From https://github.com/scratchfoundation/scratch-www/blob/develop/src/components/spinner/spinner.scss */
   animation-name: spin-intro, spin;
   animation-duration: 0.25s, 1s;
   animation-timing-function: cubic-bezier(0.3, -3, 0.6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);
@@ -91,6 +93,9 @@
   border-bottom: none;
   border-top-right-radius: 5px;
   padding: 12px;
+  /* comments-linebreaks needs the bottom padding to be 0
+     to display the correct number of lines. */
+  padding-bottom: 0;
   margin-left: 8px;
   margin-bottom: 0;
   background-color: var(--darkWww-box, white);
@@ -98,7 +103,7 @@
 #comments .comment .info > div:not(.name):not(.content):not([data-content="reply-form"]) {
   margin-left: 8px;
   padding: 12px;
-  padding-top: 4px;
+  padding-top: 16px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   border: 1px solid var(--darkWww-border-15, #d9d9d9);
@@ -113,16 +118,17 @@
   border-radius: 8px;
 }
 #comments .comment .info .name a {
-  color: var(--darkWww-link, #4d97ff);
+  color: var(--darkWww-link, #855cd6);
 }
 #comments .comment .info .name a:hover {
-  color: var(--darkWww-link-hover, #4280d7);
+  color: var(--darkWww-link-hover, #7854c0);
 }
 #comments .comment .info .time {
   color: var(--darkWww-box-transparentText, #b3b3b3);
 }
 #comments .comment .info .reply {
   float: right;
+  text-transform: lowercase;
 }
 #comments .comment .info .reply::after {
   content: "";
@@ -164,13 +170,45 @@
   padding: 0 8px;
   background-color: var(--darkWww-blue, #eaf1fc);
   border: none;
-  color: var(--darkWww-link, #4d97ff);
+  color: var(--darkWww-link, #855cd6);
   font-weight: bold;
 }
 #comments .more-replies:hover .pulldown {
-  color: var(--darkWww-link-hover, #4280d7);
+  color: var(--darkWww-link-hover, #7854c0);
 }
 #comments .comment form > .control-group:last-child {
   /* emoji-picker compatibility */
   width: auto;
+}
+#comments .control-group.tooltip {
+  display: flex;
+  flex-direction: column;
+}
+#comments .control-group.tooltip textarea {
+  margin-bottom: 8px;
+}
+#comments .control-group.tooltip.error textarea {
+  box-shadow: none;
+}
+#comments .control-group.tooltip.error .hovertext {
+  position: static;
+  box-shadow: none;
+  order: -1;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  background-color: #ffab1a;
+  padding: 4px;
+  width: 100%;
+}
+#comments .control-group.tooltip.error .hovertext .text {
+  font-size: 13px;
+}
+#comments .control-group.tooltip.error textarea:focus + .hovertext {
+  display: block !important;
+}
+#comments .control-group.tooltip.error .hovertext::after,
+#comments .control-group.tooltip.error .arrow {
+  display: none;
 }

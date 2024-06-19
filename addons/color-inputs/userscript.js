@@ -1,4 +1,4 @@
-export default async function ({ addon, msg, global, console }) {
+export default async function ({ addon, msg, console }) {
   while (true) {
     const swatchRow = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', {
       markAsSeen: true,

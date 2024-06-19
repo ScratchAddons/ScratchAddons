@@ -71,12 +71,16 @@ export default async ({ addon, msg, safeMsg }) => {
     },
     methods: {
       postComment() {
+        const removeReiteratedChars = (string) =>
+          string
+            .split("")
+            .filter((char, i, charArr) => (i === 0 ? true : charArr[i - 1] !== char))
+            .join("");
         const shouldCaptureComment = (value) => {
           // From content-scripts/cs.js
-          const regex = /scratch[ ]?add[ ]?ons/;
-          // Trim like scratchr2
-          const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
-          const limitedValue = trimmedValue.toLowerCase().replace(/[^a-z /]+/g, "");
+          const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, ""); // Trim like scratchr2
+          const limitedValue = removeReiteratedChars(trimmedValue.toLowerCase().replace(/[^a-z]+/g, ""));
+          const regex = /scratchadons/;
           return regex.test(limitedValue);
         };
         if (shouldCaptureComment(this.replyBoxValue)) {
@@ -200,7 +204,7 @@ export default async ({ addon, msg, safeMsg }) => {
         return vue.username;
       },
       commentTimeAgo() {
-        const timeFormatter = new Intl.RelativeTimeFormat("en", {
+        const timeFormatter = new Intl.RelativeTimeFormat(msg.locale, {
           localeMatcher: "best fit",
           numeric: "auto",
           style: "short",
@@ -321,7 +325,7 @@ export default async ({ addon, msg, safeMsg }) => {
     computed: {
       feedbackUrl() {
         const manifest = chrome.runtime.getManifest();
-        return `https://scratchaddons.com/feedback/?ext_version=${manifest.version_name}&utm_source=extension&utm_medium=messagingcrash&utm_campaign=v${manifest.versions}`;
+        return `https://scratchaddons.com/feedback/?ext_version=${manifest.version_name}&utm_source=extension&utm_medium=messagingcrash&utm_campaign=v${manifest.version}`;
       },
       profilesOrdered() {
         // Own profile first, then others
@@ -414,15 +418,24 @@ export default async ({ addon, msg, safeMsg }) => {
           });
       },
 
-      async updateMessageCount() {
+      async updateMessageCount(bypassCache = false) {
         const username = await addon.auth.fetchUsername();
-        const count = await MessageCache.fetchMessageCount(username);
+        const msgCountData = await MessageCache.fetchMessageCount(username, { bypassCache });
+        const count = await MessageCache.getUpToDateMsgCount(scratchAddons.cookieStoreId, msgCountData);
+
         const db = await MessageCache.openDatabase();
         try {
+          // We obtained the up-to-date message count, so we can safely override the cached count in IDB.
           await db.put("count", count, scratchAddons.cookieStoreId);
+
+          if (!bypassCache && msgCountData.resId && !(db instanceof MessageCache.IncognitoDatabase)) {
+            // Note: as of Oct 2023, this method is never called with bypassCache:false, so this never happens
+            await db.put("count", msgCountData.resId, `${scratchAddons.cookieStoreId}_resId`);
+          }
         } finally {
           await db.close();
         }
+
         chrome.runtime.sendMessage({
           forceBadgeUpdate: { store: scratchAddons.cookieStoreId },
         });
@@ -431,7 +444,7 @@ export default async ({ addon, msg, safeMsg }) => {
       // For UI
       markAsRead() {
         MessageCache.markAsRead(addon.auth.csrfToken)
-          .then(() => this.updateMessageCount())
+          .then(() => this.updateMessageCount(true))
           .then(() => {
             this.markedAsRead = true;
           })
@@ -446,7 +459,7 @@ export default async ({ addon, msg, safeMsg }) => {
               this.stMessages.findIndex((alert) => alert.id === id),
               1
             );
-            this.updateMessageCount();
+            this.updateMessageCount(true);
           })
           .catch((e) => console.error("Dismissing alert failed:", e));
       },
@@ -554,8 +567,8 @@ export default async ({ addon, msg, safeMsg }) => {
               resourceType === "project"
                 ? "getProjectObject"
                 : resourceType === "user"
-                ? "getProfileObject"
-                : "getStudioObject";
+                  ? "getProfileObject"
+                  : "getStudioObject";
             const resourceObject = this[resourceGetFunction](resourceId);
             for (const sortedId of sortedIds) resourceObject.commentChains.push(sortedId);
 

@@ -33,7 +33,10 @@
 }
 
 .sa-comment-preview-fade {
-  transition: opacity 0.1s, filter 0.1s, transform 0.1s linear;
+  transition:
+    opacity 0.1s,
+    filter 0.1s,
+    transform 0.1s linear;
 }
 
 .sa-comment-preview-hidden {

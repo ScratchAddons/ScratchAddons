@@ -1,0 +1,115 @@
+@import url("../editor-theme3/compatibility.css");
+
+.sa-mcp-root {
+  display: flex;
+  white-space: nowrap;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  position: absolute;
+  min-width: 100px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow:
+    rgba(0, 0, 0, 0.3) 0 0 3px,
+    rgba(0, 0, 0, 0.2) 0 3px 10px;
+
+  z-index: 999;
+}
+
+.sa-mcp-container {
+  display: flex;
+  flex-flow: column;
+  top: -6px;
+  z-index: 100;
+  position: absolute;
+  box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
+  background-color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+.sa-mcp-input-wrapper {
+  position: relative;
+  margin: 4px;
+  /* !important required for extension, because CSS injection method (and hence order) differs from addon */
+  box-sizing: border-box !important;
+  height: 1.5rem;
+  min-height: 1.5rem;
+
+  /* Change Scratch default styles */
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
+}
+
+.sa-mcp-input-wrapper:focus {
+  /* Change Scratch default styles */
+  box-shadow: none;
+}
+
+.sa-mcp-input-wrapper[data-error="true"] {
+  border-color: red;
+}
+
+.sa-mcp-input-wrapper > input {
+  position: absolute;
+  border: 0;
+  background-color: transparent;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  line-height: 100%;
+  box-sizing: border-box;
+}
+
+.sa-mcp-input-suggestion {
+  color: hsla(225, 15%, 40%, 0.65);
+}
+
+.sa-mcp-preview-container {
+  flex: auto;
+  overflow-y: scroll;
+}
+
+.sa-mcp-root /* <-- specificity */ .sa-mcp-preview-container {
+  scrollbar-width: none;
+}
+
+.sa-mcp-preview-container::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.sa-mcp-preview-blocks {
+  width: 100%;
+  min-height: 100%;
+  /* https://stackoverflow.com/a/22166728/8448397 */
+  float: left;
+}
+
+.sa-mcp-preview-scrollbar {
+  position: absolute;
+  width: 11px;
+  right: 0;
+  bottom: 0;
+}
+
+.sa-mcp-preview-block-bg {
+  width: 100%;
+  fill: transparent;
+  cursor: grab;
+}
+
+.sa-mcp-preview-block {
+  filter: brightness(95%);
+  cursor: grab;
+}
+
+.sa-mcp-preview-block-selection {
+  filter: brightness(103%);
+}
+
+.sa-mcp-preview-block-bg-selection {
+  fill: #7774;
+}

@@ -1,0 +1,88 @@
+{
+  "name": "Collapsing sprite properties",
+  "description": "Hides the sprite properties panel by default, like in Scratch 2.0. Use the info button on the currently selected sprite or double-click a sprite to show the properties panel again. To re-hide it, use the collapse button in the properties panel or double-click a sprite.",
+  "tags": ["editor", "recommended"],
+  "credits": [
+    {
+      "name": "lisa_wolfgang",
+      "link": "https://github.com/lisa-wolfgang/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "transitionDuration",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "transitionDuration"
+        },
+        "options": {
+          "none": "0s",
+          "short": "0.15s",
+          "default": "0.25s",
+          "long": "0.5s"
+        }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Automatically collapse when mouse leaves sprite panel",
+      "id": "autoCollapse",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Collapse panel by default",
+      "id": "hideByDefault",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": {
+          "autoCollapse": false
+        }
+      }
+    },
+    {
+      "name": "Animation speed",
+      "id": "transitionDuration",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "Instant"
+        },
+        {
+          "id": "short",
+          "name": "Quick"
+        },
+        {
+          "id": "default",
+          "name": "Default"
+        },
+        {
+          "id": "long",
+          "name": "Slow"
+        }
+      ],
+      "default": "default"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.30.0",
+  "enabledByDefault": false
+}

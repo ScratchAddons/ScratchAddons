@@ -4,6 +4,14 @@
   "credits": [
     {
       "name": "Jeffalo"
+    },
+    {
+      "name": "OregSam",
+      "link": "https://github.com/OregSamSas"
+    },
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
     }
   ],
   "dynamicEnable": true,
@@ -21,6 +29,24 @@
       "matches": ["projects"]
     }
   ],
+  "settings": [
+    {
+      "id": "projectpage",
+      "name": "Show on project page",
+      "default": false,
+      "type": "boolean"
+    },
+    {
+      "id": "showicononly",
+      "name": "Show icon only",
+      "default": false,
+      "type": "boolean"
+    }
+  ],
+  "latestUpdate": {
+    "version": "1.31.0",
+    "newSettings": ["projectpage"]
+  },
   "tags": ["editor", "projectPlayer", "recommended"],
   "enabledByDefault": false
 }
