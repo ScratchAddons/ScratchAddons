@@ -22,9 +22,10 @@
     {
       "name": "Unnamed setting",
       "id": "spacingMultiplier",
-      "type": "positive_integer",
+      "type": "integer",
       "default": 1,
-      "min": 1
+      "min": 1,
+      "max": 5
     }
   ],
   "dynamicEnable": true,
