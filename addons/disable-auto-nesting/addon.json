@@ -18,6 +18,11 @@
 
   "info": [
     {
+      "type": "info",
+      "text": "On macOS, use the Option key instead of the Alt key and Command key instead of the Control key.",
+      "id": "macOS"
+    },
+    {
       "type": "notice",
       "text": "Examples of a C-Block are if statements or forever loops.",
       "id": "cBlockExample"
