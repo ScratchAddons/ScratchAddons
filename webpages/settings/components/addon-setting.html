@@ -79,7 +79,8 @@
           v-model="addonSettings[setting.id]"
           @change="checkValidity() || updateSettings()"
           :disabled="!addon._enabled"
-          min="0"
+          :min="(setting.min && setting.min > 0) ? setting.min : 0"
+          :max="setting.max"
           number
         />
       </template>
@@ -335,11 +336,7 @@
       linear-gradient(45deg, transparent 75%, #777 75%), linear-gradient(-45deg, transparent 75%, #777 75%);
     background-color: white;
     background-size: 6px 6px;
-    background-position:
-      0 0,
-      0 3px,
-      3px -3px,
-      -3px 0px;
+    background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
   }
   .setting-dropdown .color-preview span {
     display: inline-block;
