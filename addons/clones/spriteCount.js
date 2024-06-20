@@ -23,7 +23,9 @@ export default async function ({ addon, msg, console }) {
 
       if (count !== undefined) {
         if (remove) {
-          existingElement?.remove();
+          if (existingElement) {
+            existingElement.style.display = "none";
+          }
         } else {
           const countElement = existingElement || document.createElement("div");
           if (!existingElement) {
@@ -31,9 +33,10 @@ export default async function ({ addon, msg, console }) {
             spriteName.appendChild(countElement);
           }
           countElement.innerText = msg("sprites", { spriteCount: count });
+          countElement.style.display = "";
         }
-      } else {
-        existingElement?.remove();
+      } else if (existingElement) {
+        existingElement.style.display = "none";
       }
     });
   }
