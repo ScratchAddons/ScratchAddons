@@ -21,13 +21,13 @@ export default async function ({ addon, console, msg }) {
     status.style.fontStyle = "italic";
     addon.tab.displayNoneWhileDisabled(status);
 
-      // Create my-ocular dot
-      let dot = document.createElement("span");
-      addon.tab.displayNoneWhileDisabled(dot);
-      dot.title = msg("status-hover");
-      dot.className = "my-ocular-dot";
+    // Create my-ocular dot
+    let dot = document.createElement("span");
+    addon.tab.displayNoneWhileDisabled(dot);
+    dot.title = msg("status-hover");
+    dot.className = "my-ocular-dot";
 
-      dot.style.backgroundColor = color;
+    dot.style.backgroundColor = color;
 
     // Hide things
     if (addon.settings.get("show-status") === "others" && username === (await addon.auth.fetchUsername())) {
