@@ -19,7 +19,7 @@ export default async function ({ addon, console, msg }) {
   label.append(checkboxInput, sliderSpan);
   divElement.append(span, label);
 
-  addon.tab.displayNoneWhileDisabled(divElement, { display: "flex" });
+  addon.tab.displayNoneWhileDisabled(divElement);
   addon.self.addEventListener("disabled", () => {
     togglePreview(false);
     checkboxInput.checked = false;

@@ -571,7 +571,7 @@ export default async function ({ addon, console, msg }) {
   };
 
   const toggleControlsGroup = createGroup();
-  addon.tab.displayNoneWhileDisabled(toggleControlsGroup, { display: "flex" });
+  addon.tab.displayNoneWhileDisabled(toggleControlsGroup);
 
   const toggleButton = createButton();
   toggleButton.dataset.enabled = settings.enabled;

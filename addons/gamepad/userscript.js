@@ -125,7 +125,7 @@ export default async function ({ addon, console, msg }) {
 
   const container = document.createElement("div");
   container.className = "sa-gamepad-container";
-  addon.tab.displayNoneWhileDisabled(container, { display: "flex" });
+  addon.tab.displayNoneWhileDisabled(container);
   const buttonContainer = document.createElement("span");
   buttonContainer.className = addon.tab.scratchClass("button_outlined-button", "stage-header_stage-button");
   const buttonContent = document.createElement("div");
