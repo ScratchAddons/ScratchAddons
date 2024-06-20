@@ -101,13 +101,14 @@ export default async function({ addon, msg, console }) {
 
             // Hide items in list that do not contain filter text
             let listLI = this.dropdown.items;
+            debugger;
             for (const li of listLI) {
                 let procCode = li.data.procCode;
                 let i = li.data.lower.indexOf(val);
                 if (i >= 0) {
                     li.style.display = "block";
                     while (li.firstChild) {
-                        li.removeChild(li.firstChild);
+                        li.removeChild(li.firstChild); // it removes here
                     }
                     if (i > 0) {
                         li.appendChild(document.createTextNode(procCode.substring(0, i)));
@@ -210,7 +211,6 @@ export default async function({ addon, msg, console }) {
             this.dropdown.empty();
 
             for (const proc of scratchBlocks) {
-                // debugger;
                 let item = this.dropdown.addItem(proc);
 
                 if (focusID) {
@@ -326,6 +326,7 @@ export default async function({ addon, msg, console }) {
             let map = this.workspace.getVariableMap();
 
             let vars = map.getVariablesOfType("");
+            debugger;
             for (const row of vars) {
                 addBlock(
                     row.isLocal ? "var" : "VAR",
@@ -531,7 +532,6 @@ export default async function({ addon, msg, console }) {
             var btn = document.createElement('button')
             btn.textContent = 'lizhetest'
             item.appendChild(btn)
-            // debugger;
             this.items.push(item);
             this.el.appendChild(item);
             return item;
