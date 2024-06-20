@@ -38,7 +38,7 @@ function isBackpackOpen() {
 function createBackpackButton(addon) {
   let backpackButton = document.createElement("div");
   backpackButton.classList.add("sa-backpack-button");
-  // Can't use displayNoneWhileDisabled because it updates after the resize event
+  // TODO?: Can't use displayNoneWhileDisabled because it updates after the resize event
   backpackButton.style.display = "none"; // overridden by userstyle if the addon is enabled
   backpackButton.title = addon.tab.scratchMessage("gui.backpack.header");
   backpackButton.addEventListener("click", toggleBackpack);

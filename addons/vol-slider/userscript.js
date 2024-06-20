@@ -55,9 +55,7 @@ export default async function ({ addon, console }) {
   innerContainer.appendChild(icon);
   innerContainer.appendChild(slider);
   container.appendChild(innerContainer);
-  addon.tab.displayNoneWhileDisabled(container, {
-    display: "flex",
-  });
+  addon.tab.displayNoneWhileDisabled(container);
 
   addSmallStageClass();
 

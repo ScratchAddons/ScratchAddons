@@ -12,6 +12,7 @@
 }
 
 .sa-paint-snap-group {
+  display: flex;
   position: relative;
   flex-direction: row;
 }
