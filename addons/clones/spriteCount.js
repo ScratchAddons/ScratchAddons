@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, msg, console }) {
   const vm = addon.tab.traps.vm;
   const ogCloneCounter = vm.runtime.changeCloneCounter;
 
@@ -35,33 +35,32 @@ export default async function ({ addon, console }) {
           spriteName.appendChild(count);
         }
 
-        count.innerText = `(${counts[spriteName.innerText.split("\n")[0]]} clones)`;
+        count.innerText = msg("sprites", { spriteCount: counts[spriteName.innerText.split("\n")[0]] });
+        console.log(msg("sprites", { spriteCount: counts[spriteName.innerText.split("\n")[0]] }));
+      } else {
+        const existingElement = spriteName.querySelector(".sa-clone-count");
+        existingElement?.remove();
       }
     });
   }
 
-  function pollute() {
-    vm.runtime.changeCloneCounter = (e) => {
-      ogCloneCounter.call(vm.runtime, e);
+  vm.runtime.changeCloneCounter = (e) => {
+    console.log("changeCloneCounter");
+    ogCloneCounter.call(vm.runtime, e);
 
-      queueMicrotask(() => {
-        updateCounts();
-      });
-    };
-  }
-
-  pollute();
+    queueMicrotask(() => {
+      updateCounts();
+    });
+  };
 
   vm.addListener("targetsUpdate", () => {
+    console.log("targetsUpdate");
     queueMicrotask(() => {
       updateCounts();
     });
   });
 
-  addon.self.addEventListener("disabled", () => updateCounts());
-  addon.self.addEventListener("reenabled", () => updateCounts());
-
-  addon.settings.addEventListener("change", () => {
-    updateCounts();
-  });
+  addon.self.addEventListener("disabled", updateCounts);
+  addon.self.addEventListener("reenabled", updateCounts);
+  addon.settings.addEventListener("change", updateCounts);
 }
