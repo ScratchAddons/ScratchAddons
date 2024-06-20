@@ -97,7 +97,7 @@
       "default": false
     },
     {
-      "type": "positive_integer",
+      "type": "integer",
       "id": "threshold",
       "name": "Snapping distance",
       "default": 10,
