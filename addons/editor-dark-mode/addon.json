@@ -458,6 +458,17 @@
       }
     },
     {
+      "name": "accent-formControlText",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "threshold": 128
+      }
+    },
+    {
       "name": "accent-filter",
       "value": {
         "type": "textColor",
