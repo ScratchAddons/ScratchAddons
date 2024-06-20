@@ -13,8 +13,11 @@ export default async function ({ addon, msg, console }) {
         counts[name] = (counts[name] || 0) + 1;
       });
 
-    const spriteWrapper = await addon.tab.waitForElement("[class*=sprite-selector_items-wrapper]");
-    const spriteNames = Array.from(spriteWrapper.querySelectorAll("[class*=sprite-selector-item_sprite-name]"));
+    const spriteNames = Array.from(
+      document
+        .querySelector("[class*=sprite-selector_items-wrapper]")
+        ?.querySelectorAll("[class*=sprite-selector-item_sprite-name]")
+    );
 
     spriteNames.forEach((spriteName) => {
       const name = spriteName.innerText.split("\n")[0];
