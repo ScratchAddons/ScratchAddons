@@ -156,6 +156,12 @@ export default async function ({ addon, console, msg }) {
     image.classList.add("sa-export-image");
     image.src = await exportBlock(true, false, true, block);
 
+    image.onload = function () {
+      const aspect = image.width / image.height;
+      if (aspect >= 1) image.classList.add("wide");
+      else image.classList.add("tall");
+    };
+
     imageContainer.append(image);
     content.append(imageContainer);
 
