@@ -19,7 +19,7 @@
   "versionAdded": "1.13.0",
   "enabledByDefault": false,
   "latestUpdate": {
-    "version": "1.37.0",
+    "version": "1.39.0",
     "temporaryNotice": "You can now copy directly to the system clipboard."
   },
   "permissions": ["clipboardWrite"]
