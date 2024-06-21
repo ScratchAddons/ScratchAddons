@@ -22,9 +22,7 @@ export default async function ({ addon, msg, console }) {
           // parent and child are same category
           parent.getCategory() === block.getCategory() &&
           // not a stack block
-          (block.nextConnection ||
-            (block.outputShape_ > 0 &&
-              block.outputShape_ === parent.outputShape_))
+          (block.nextConnection || (block.outputShape_ > 0 && block.outputShape_ === parent.outputShape_));
         if (!block.striped && block.orginalColour_) {
           block.setColour(block.orginalColour_);
           block.orginalColour_ = null;
@@ -32,7 +30,7 @@ export default async function ({ addon, msg, console }) {
           block.orginalColour_ = block.colour_;
           const shade = addon.settings.get("shade");
           const intensity = addon.settings.get("intensity");
-          const amount = (shade === "lighter" ? 1 : -1) * intensity
+          const amount = (shade === "lighter" ? 1 : -1) * intensity;
           block.setColour(lighten(block.colour_, amount));
         }
       }
@@ -40,12 +38,12 @@ export default async function ({ addon, msg, console }) {
     return originalRender.call(this, opt_bubble);
   };
   if (vm.editingTarget) {
-  vm.emitWorkspaceUpdate();
+    vm.emitWorkspaceUpdate();
   }
   addon.self.addEventListener("disabled", () => vm.emitWorkspaceUpdate());
   addon.self.addEventListener("reenabled", () => vm.emitWorkspaceUpdate());
   addon.settings.addEventListener("change", () => vm.emitWorkspaceUpdate());
-};
+}
 
 function lighten(color, amount) {
   return (
@@ -53,10 +51,7 @@ function lighten(color, amount) {
     color
       .replace(/^#/, "")
       .replace(/../g, (color) =>
-        (
-          "0" +
-          Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)
-        ).substr(-2),
+        ("0" + Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2)
       )
   );
 }
