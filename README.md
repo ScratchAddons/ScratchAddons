@@ -77,7 +77,7 @@ To load the extension into most Chromium-based browsers, go to `chrome://extensi
 
 Go to `about:debugging`, select "This Firefox", click "Load Temporary Add-on...", and select the `manifest.json` file in the `ScratchAddons` folder.
 
-Alternatively, install `web-ext` with `npm install --global web-ext` as administrator from the terminal and in the `ScratchAddons` folder, run `web-ext run` to automatically load the temporary extension in a new, isolated Firefox window. This method automatically updates the extension in the background. Because the browser is isolated, no other extensions will appear and Scratch Addons will be in its default state. The tab may still need to be refreshed for extension changes to take effect.
+Alternatively, install `web-ext` with `npm install --global web-ext` as administrator from the terminal and in the `ScratchAddons` folder, run `web-ext run` to automatically load the temporary extension in a new, isolated Firefox window. This method automatically updates the extension in the background. Because the browser is isolated, no other extensions will appear and Scratch Addons will be in its default state. The tab running Scratch Addons may still need to be refreshed for extension changes to take effect.
 
 > [!NOTE]
 > Firefox extensions loaded this way are removed when the browser is closed.
