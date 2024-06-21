@@ -1,5 +1,5 @@
 {
-  "name": "Comment line breaks",
+  "name": "Line breaks in comments",
   "description": "Makes line breaks (pressing Enter) in comments on the website visible instead of converting them to spaces.",
   "credits": [
     {
