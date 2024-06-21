@@ -4,9 +4,9 @@ export default async function ({ addon, console }) {
   // https://github.com/scratchfoundation/scratch-blocks/blob/develop/core/grid.js#L136
   const oldUpdate = ScratchBlocks.Grid.prototype.update;
   ScratchBlocks.Grid.prototype.update = function (scale) {
-    const spacingMultiplier = addon.settings.get("spacingMultiplier");
+    const spacingDivisor = addon.settings.get("spacingDivisor");
     const oldSpacing = this.spacing_;
-    if (!addon.self.disabled) this.spacing_ /= spacingMultiplier;
+    if (!addon.self.disabled) this.spacing_ /= spacingDivisor;
     oldUpdate.call(this, scale);
     if (!addon.self.disabled) this.spacing_ = oldSpacing;
   };
