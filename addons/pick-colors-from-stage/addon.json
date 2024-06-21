@@ -1,5 +1,5 @@
 {
-  "name": "Costume editor stage eyedropper",
+  "name": "Pick stage colors with eyedropper",
   "description": "Allows the eyedropper in the costume editor to also pick colors from the stage.",
   "credits": [
     {
