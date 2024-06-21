@@ -6,7 +6,6 @@ export default async function ({ addon, console }) {
   (function (Blockly) {
     const BlockSvg = BlocklyInstance.BlockSvg;
     var originalDropdownObject = BlocklyInstance.FieldDropdown.prototype.positionArrow;
-    var vm = addon.tab.traps.vm;
 
     const { GRID_UNIT } = BlockSvg;
 
@@ -239,7 +238,7 @@ export default async function ({ addon, console }) {
 
     function applyAndUpdate(...args) {
       applyChanges(...args);
-      updateAllBlocks(vm, addon.tab.traps.getWorkspace(), BlocklyInstance);
+      updateAllBlocks(BlocklyInstance, addon.tab.traps.getWorkspace());
     }
 
     addon.settings.addEventListener("change", () => applyAndUpdate());
