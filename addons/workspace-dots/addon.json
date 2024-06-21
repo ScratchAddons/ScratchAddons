@@ -14,8 +14,8 @@
         { "id": "dots", "name": "Default dots" },
         { "id": "crosshairs", "name": "Crosshairs" },
         { "id": "lines", "name": "Solid lines" },
-        { "id": "vertical", "name": "Vertical Lines" },
-        { "id": "horizontal", "name": "Horizontal Lines" },
+        { "id": "vertical", "name": "Vertical lines" },
+        { "id": "horizontal", "name": "Horizontal lines" },
         { "id": "none", "name": "None" }
       ]
     },
