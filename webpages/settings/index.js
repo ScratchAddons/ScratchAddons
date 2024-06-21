@@ -496,10 +496,11 @@ let fuse;
       if (iframeData?.addonsCurrentlyOnTab.includes(addonId)) manifest._groups.push("runningOnTab");
       else if (iframeData?.addonsPreviouslyOnTab.includes(addonId)) manifest._groups.push("recentlyUsed");
 
-      if (manifest._enabled) manifest._groups.push("enabled");
+      if (manifest._enabled && !manifest.tags.includes("minor")) manifest._groups.push("enabled");
       else {
         // Addon is disabled
-        if (manifest.tags.includes("recommended")) manifest._groups.push("recommended");
+        if (manifest.tags.includes("minor")) manifest._groups.push("minor");
+        else if (manifest.tags.includes("recommended")) manifest._groups.push("recommended");
         else if (manifest.tags.includes("featured")) manifest._groups.push("featured");
         else if (manifest.tags.includes("beta") || manifest.tags.includes("danger")) manifest._groups.push("beta");
         else if (manifest.tags.includes("forums")) manifest._groups.push("forums");

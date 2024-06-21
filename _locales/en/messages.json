@@ -50,6 +50,12 @@
   "beta": {
     "message": "Beta"
   },
+  "minor": {
+    "message": "Bug fixes"
+  },
+  "minorDisableWarning": {
+    "message": "The \"$1\" addon fixes undesirable behavior in Scratch and we strongly recommend having it enabled. Are you sure you want to disable it?"
+  },
   "danger": {
     "message": "Dangerous"
   },
