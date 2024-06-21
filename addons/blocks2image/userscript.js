@@ -244,6 +244,9 @@ export default async function ({ addon, console, msg }) {
     const scale = isExportPNG ? 2 : 1;
     if (dataShapes === "c-block c-1 hat") {
       translateY = 20; // for My block
+      if (enabledAddons.includes("cat-blocks")) {
+        translateY += 11; // for cat ears, why 11? I dont know
+      }
     }
     if (dataShapes === "hat") {
       translateY = 16; // for Events
@@ -315,8 +318,6 @@ export default async function ({ addon, console, msg }) {
       let { width, height } = iframe.contentDocument.body.querySelector("svg g").getBoundingClientRect();
       svg.setAttribute("width", width + 4 + "px");
       svg.setAttribute("height", height + 4 + "px");
-
-      console.log(svg);
 
       let canvas = document.createElement("canvas");
       let ctx = canvas.getContext("2d");
