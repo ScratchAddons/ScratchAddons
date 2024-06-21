@@ -830,6 +830,21 @@ export default async function ({ addon, msg, console }) {
     _doBlockClick_.call(this);
   };
 
+  // In Chrome, Ctrl+Z will undo edits to the find bar input even if it doesn't have focus.
+  // Call preventDefault() to make sure that the event only goes to scratch-blocks or scratch-paint.
+  document.addEventListener("keydown", (e) => {
+    // Blockly.onKeyDown_:
+    // https://github.com/scratchfoundation/scratch-blocks/blob/1421093/core/blockly.js#L185
+    // KeyboardShortcutsHOC.handleKeyPress:
+    // https://github.com/scratchfoundation/scratch-paint/blob/8119055/src/hocs/keyboard-shortcuts-hoc.jsx#L29
+    if (Blockly.utils.isTargetInput(e) || addon.tab.redux.state?.scratchPaint.textEditTarget !== null) {
+      return;
+    }
+    if (e.keyCode === 90 || e.key === "z" || (e.shiftKey && e.key.toLowerCase() === "z")) {
+      e.preventDefault();
+    }
+  });
+
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
     if (e.detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB") {
