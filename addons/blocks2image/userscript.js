@@ -127,11 +127,12 @@ export default async function ({ addon, console, msg }) {
       useEditorClasses: true,
     });
 
-    const { container, content, closeButton } = modal;
+    const { backdrop, container, content, closeButton } = modal;
     let remove = modal.remove;
     container.classList.add("sa-export-container");
     content.classList.add("sa-export-content");
 
+    backdrop.addEventListener("click", remove);
     closeButton.addEventListener("click", remove);
 
     const controller = new AbortController();

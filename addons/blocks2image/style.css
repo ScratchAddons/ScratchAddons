@@ -11,16 +11,23 @@
 
 .sa-export-image-container {
   display: flex;
-  justify-content: center;
   align-items: center;
+  max-height: 60vh;
+  max-width: 50vw;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: auto;
 }
 
 .sa-export-image {
-  max-width: 70%;
-  max-height: 60vh;
+  max-width: 100vw;
+  max-height: 150vh;
   object-fit: contain;
-  margin-top: 1.5rem;
   pointer-events: none;
+  margin-top: auto;
+  padding: 1rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .sa-export-button-container {
