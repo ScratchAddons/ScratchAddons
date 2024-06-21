@@ -1,4 +1,5 @@
 .sa-emoji-picker {
+  display: inline-block;
   cursor: auto;
   position: absolute;
   width: 390px;
