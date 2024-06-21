@@ -1,5 +1,4 @@
 export default async function ({ addon, msg, console }) {
-  const vm = addon.tab.traps.vm;
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const originalRender = ScratchBlocks.BlockSvg.prototype.render;
   ScratchBlocks.BlockSvg.prototype.render = function (opt_bubble) {
@@ -37,12 +36,19 @@ export default async function ({ addon, msg, console }) {
     }
     return originalRender.call(this, opt_bubble);
   };
-  if (vm.editingTarget) {
-    vm.emitWorkspaceUpdate();
+
+  function updateWorkspaceBlocks() {
+    const workspace = addon.tab.traps.getWorkspace()
+    ScratchBlocks.Events.disable();
+    ScratchBlocks.Xml.clearWorkspaceAndLoadFromXml(ScratchBlocks.Xml.workspaceToDom(workspace), workspace);
+    workspace.toolboxRefreshEnabled_ = true;
+    ScratchBlocks.Events.enable();
   }
-  addon.self.addEventListener("disabled", () => vm.emitWorkspaceUpdate());
-  addon.self.addEventListener("reenabled", () => vm.emitWorkspaceUpdate());
-  addon.settings.addEventListener("change", () => vm.emitWorkspaceUpdate());
+
+  if (addon.self.enabledLate) updateWorkspaceBlocks()
+  addon.self.addEventListener("disabled", updateWorkspaceBlocks);
+  addon.self.addEventListener("reenabled", updateWorkspaceBlocks);
+  addon.settings.addEventListener("change", updateWorkspaceBlocks);
 }
 
 function lighten(color, amount) {
