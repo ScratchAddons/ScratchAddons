@@ -251,6 +251,8 @@ export default async function ({ addon, console, msg }) {
     tertiary: "#3aa8a4",
   };
 
+  const originalNumpadDeleteIcon = Blockly.FieldNumber.NUMPAD_DELETE_ICON;
+
   const fieldBackground = (category) => {
     // Background color for open dropdowns and (in some textModes) Boolean inputs
     // The argument can be a block, field, or category
@@ -397,6 +399,15 @@ export default async function ({ addon, console, msg }) {
       // Labels in custom block editor
       Blockly.WidgetDiv.DIV.classList.add("sa-theme3-editable-label");
     }
+  };
+
+  const oldFieldNumberUpdateDisplay = Blockly.FieldNumber.updateDisplay_;
+  Blockly.FieldNumber.updateDisplay_ = function (...args) {
+    /* Called when editing a number input using the numpad. Scratch's implementation
+       only updates the HTML input. The addon hides the HTML input, so the field itself
+       needs to be updated to make the change visible. */
+    oldFieldNumberUpdateDisplay.call(this, ...args);
+    Blockly.FieldNumber.activeField_.onHtmlInputChange_(new Event(""));
   };
 
   const oldFieldImageSetValue = Blockly.FieldImage.prototype.setValue;
@@ -557,6 +568,9 @@ export default async function ({ addon, console, msg }) {
     if (textMode() === "colorOnWhite") Blockly.Colours.fieldShadow = "rgba(0, 0, 0, 0.15)";
     else Blockly.Colours.fieldShadow = originalColors.fieldShadow;
     Blockly.Colours.text = uncoloredTextColor(); // used by editor-colored-context-menus
+
+    const safeTextColor = encodeURIComponent(uncoloredTextColor());
+    Blockly.FieldNumber.NUMPAD_DELETE_ICON = originalNumpadDeleteIcon.replace("white", safeTextColor);
 
     const workspace = Blockly.getMainWorkspace();
     const flyout = workspace.getFlyout();

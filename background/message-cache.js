@@ -1,5 +1,6 @@
 import * as MessageCache from "../libraries/common/message-cache.js";
 import { notifyNewMessages } from "../addons/scratch-notifier/notifier.js";
+import { onReady } from "./imports/on-ready.js";
 
 let ready = false;
 let duringBadgeUpdate = false;
@@ -42,8 +43,8 @@ export async function updateBadge(defaultStoreId) {
         const text = isLoggedIn ? String(count) : "?";
         // The badge will show incorrect message count in other auth contexts.
         // Blocked on Chrome implementing store ID-based tab query
-        await promisify(chrome.browserAction.setBadgeBackgroundColor.bind(chrome.browserAction))({ color });
-        await promisify(chrome.browserAction.setBadgeText.bind(chrome.browserAction))({ text });
+        await promisify(chrome.action.setBadgeBackgroundColor.bind(chrome.action))({ color });
+        await promisify(chrome.action.setBadgeText.bind(chrome.action))({ text });
         return;
       }
     }
@@ -56,7 +57,7 @@ export async function updateBadge(defaultStoreId) {
   // Hide badge when logged out and showOffline is false,
   // or when the logged-in user has no unread messages,
   // or when the addon is disabled
-  await promisify(chrome.browserAction.setBadgeText.bind(chrome.browserAction))({ text: "" });
+  await promisify(chrome.action.setBadgeText.bind(chrome.action))({ text: "" });
 }
 
 /**
@@ -86,9 +87,22 @@ export async function startCache(defaultStoreId, forceClear) {
 }
 
 // Update badge without fetching messages
-chrome.alarms.create(BADGE_ALARM_NAME, {
-  periodInMinutes: 1,
-});
+export function handleBadgeAlarm() {
+  chrome.alarms.get(BADGE_ALARM_NAME, (a) => {
+    const alarmExists = a !== undefined;
+    const badgeAddonEnabled = scratchAddons.localState.addonsEnabled["msg-count-badge"];
+    if (badgeAddonEnabled && !alarmExists) {
+      chrome.alarms.create(BADGE_ALARM_NAME, {
+        periodInMinutes: 1,
+      });
+    }
+    if (!badgeAddonEnabled && alarmExists) {
+      // Remove unnecessary alarm
+      chrome.alarms.clear(BADGE_ALARM_NAME);
+    }
+  });
+}
+onReady(handleBadgeAlarm);
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (!ready) return;

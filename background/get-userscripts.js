@@ -246,7 +246,13 @@ chrome.webRequest.onBeforeRequest.addListener(
 // Example: going to https://scratch.mit.edu/studios/104 (no slash after 104)
 // will redirect to /studios/104/ (with a slash)
 // If a cache entry is too old, remove it
-chrome.alarms.create("cleanCsInfoCache", { periodInMinutes: 1 });
+const alarmFrequency =
+  typeof browser !== "undefined"
+    ? // ↓ Firefox (event page)
+      1
+    : // ↓ Chromium (service worker)
+      5;
+chrome.alarms.create("cleanCsInfoCache", { periodInMinutes: alarmFrequency });
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === "cleanCsInfoCache") {
     csInfoCache.forEach((obj, key) => {

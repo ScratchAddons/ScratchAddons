@@ -458,6 +458,17 @@
       }
     },
     {
+      "name": "accent-formControlText",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "threshold": 128
+      }
+    },
+    {
       "name": "accent-filter",
       "value": {
         "type": "textColor",
@@ -588,6 +599,28 @@
           "a": 0.8
         },
         "threshold": 110
+      }
+    },
+    {
+      "name": "accent-success",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "transparentSource": "#08bd8c33"
+      }
+    },
+    {
+      "name": "accent-error",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "transparentSource": "#ff8c1a23"
       }
     },
     {
@@ -741,11 +774,29 @@
       "name": "workspace-dots",
       "value": {
         "type": "textColor",
-        "black": "rgba(0, 0, 0, 0.13)",
-        "white": "rgba(255, 255, 255, 0.13)",
         "source": {
           "type": "settingValue",
           "settingId": "workspace"
+        },
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "workspace"
+          },
+          "r": 0.87,
+          "g": 0.87,
+          "b": 0.87
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "workspace"
+          },
+          "r": 0.87,
+          "g": 0.87,
+          "b": 0.87
         }
       }
     },

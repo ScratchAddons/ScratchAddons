@@ -1,0 +1,15 @@
+{
+  "name": "Delete other assets",
+  "description": "Adds an option to the right click menu to easily delete all other costumes, backdrops, or sounds.",
+  "tags": ["editor", "costumeEditor", "recommended"],
+  "versionAdded": "1.39.0",
+  "userscripts": [
+    {
+      "matches": ["projects"],
+      "url": "userscript.js"
+    }
+  ],
+  "credits": [{ "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" }],
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}

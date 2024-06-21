@@ -3,7 +3,7 @@ export const createEditorModal = (tab, title, { isOpen = false } = {}) => {
     className: tab.scratchClass("modal_modal-overlay"),
     dir: tab.direction,
   });
-  container.style.display = isOpen ? "" : "none";
+  container.style.display = "none";
   document.body.appendChild(container);
   const modal = Object.assign(document.createElement("div"), {
     className: tab.scratchClass("modal_modal-content"),
@@ -42,14 +42,19 @@ export const createEditorModal = (tab, title, { isOpen = false } = {}) => {
     `,
   });
   modal.appendChild(content);
+  const open = () => {
+    container.style.display = "";
+    if (tab.editorMode === "editor") {
+      tab.traps.getBlockly().then((Blockly) => Blockly.hideChaff());
+    }
+  };
+  if (isOpen) open();
   return {
     container: modal,
     content,
     backdrop: container,
     closeButton,
-    open: () => {
-      container.style.display = "";
-    },
+    open,
     close: () => {
       container.style.display = "none";
     },

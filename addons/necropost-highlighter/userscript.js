@@ -29,14 +29,12 @@ export default async function ({ addon, global, console, msg }) {
     applyToOpenSourceProjects: "Open Source Projects",
   };
   const searchResultsPageName = "Search Results"; // recent posts and unanswered posts
-  // mobile urls look like: https://scratch.mit.edu/discuss/m/6/*
-  const isMobileSite = /^\/discuss\/m\//.test(location.pathname);
-  // tableBodyNode will be null on mobile and non-table search page:
+  // tableBodyNode will be null on non-table search page:
   // https://scratch.mit.edu/discuss/search/?action=show_user&show_as=posts
-  const tableBodyNode = document.querySelector("tbody"); // null on mobile
+  const tableBodyNode = document.querySelector("tbody");
 
-  if (!tableBodyNode && !isMobileSite) {
-    // Standard site page without a table. Don't run on this page.
+  if (!tableBodyNode) {
+    // No table on this page. Don't run.
     return;
   }
 
@@ -59,7 +57,7 @@ export default async function ({ addon, global, console, msg }) {
   addon.self.addEventListener("disabled", onDisabled);
   addon.self.addEventListener("reenabled", onReenabled);
 
-  // Support for infinite scrolling (only available on Standard not Mobile)
+  // Support for infinite scrolling
   let tableBodyMutationObserver;
   const config = { childList: true };
   attachMutationObserverOnStandardSite();
@@ -83,18 +81,14 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   function attachMutationObserverOnStandardSite() {
-    if (!isMobileSite) {
-      tableBodyMutationObserver = new MutationObserver(onRowsChanged);
-      tableBodyMutationObserver.observe(tableBodyNode, config);
-    }
+    tableBodyMutationObserver = new MutationObserver(onRowsChanged);
+    tableBodyMutationObserver.observe(tableBodyNode, config);
   }
 
   function detachMutationObserverOnStandardSite() {
-    if (!isMobileSite) {
-      tableBodyMutationObserver.takeRecords(); // and discard
-      tableBodyMutationObserver.disconnect();
-      tableBodyMutationObserver = null;
-    }
+    tableBodyMutationObserver.takeRecords(); // and discard
+    tableBodyMutationObserver.disconnect();
+    tableBodyMutationObserver = null;
   }
 
   /**
@@ -145,12 +139,7 @@ export default async function ({ addon, global, console, msg }) {
    */
   function gatherTopics() {
     topics = [];
-    let possibleTopicCells; // verified before forming a topic
-    if (isMobileSite) {
-      possibleTopicCells = document.querySelectorAll(".topic.list>li");
-    } else {
-      possibleTopicCells = document.querySelectorAll(".tcl");
-    }
+    let possibleTopicCells = document.querySelectorAll(".tcl"); // verified before forming a topic
     let theForum = forumOrSearchPageName; // usually, but overridden per cell if on a search page
     for (const cell of possibleTopicCells) {
       if (forumOrSearchPageName.includes(searchResultsPageName)) {
@@ -265,11 +254,6 @@ export default async function ({ addon, global, console, msg }) {
       }
 
       const necropostMessage = msg("necropost");
-      if (isMobileSite) {
-        let replies = topic.topicCell.querySelector("span");
-        replies.textContent += " " + necropostMessage;
-        return;
-      }
       let possibleNewPostsLink = topic.topicCell.querySelector(".tclcon>a");
       if (possibleNewPostsLink) {
         possibleNewPostsLink.textContent = necropostMessage;

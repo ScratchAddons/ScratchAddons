@@ -44,13 +44,30 @@ const localizeSettings = (addonId, setting, tableId) => {
   addonIds.forEach((addonId, i) => {
     if (addonIds.lastIndexOf(addonId) !== i) throw new Error(`Duplicated value "${addonId}" in /addons/addons.json`);
   });
-  await scratchAddons.l10n.load(addonIds);
+  const l10nCacheReq = await chrome.storage.session?.get("l10nCache").catch((err) => console.error(err));
+  const l10nCache = l10nCacheReq?.l10nCache;
+  if (l10nCache) {
+    // No need to fetch any localization files in the background context this time,
+    // the cache has everything we need. See PR #7417
+    scratchAddons.l10n.loadFromCache(l10nCache);
+  } else {
+    await scratchAddons.l10n.load(addonIds);
+  }
   const useDefault = forceEnglish || scratchAddons.l10n.locale.startsWith("en");
+  const cacheReq = await chrome.storage.session?.get("manifests").catch((err) => console.error(err));
+  const cache = cacheReq?.manifests;
+  const newCache = {};
   for (const addonId of addonIds) {
     if (addonId.startsWith("//")) continue;
     let manifest;
     try {
-      manifest = await (await fetch(`/addons/${addonId}/addon.json`)).json();
+      if (cache) {
+        manifest = cache[addonId];
+      } else {
+        const file = await (await fetch(`/addons/${addonId}/addon.json`)).json();
+        manifest = file;
+        newCache[addonId] = JSON.parse(JSON.stringify(file));
+      }
     } catch (ex) {
       console.error(`Failed to load addon manifest for ${addonId}, crashing:`, ex);
       chrome.tabs.create({
@@ -208,6 +225,9 @@ const localizeSettings = (addonId, setting, tableId) => {
       }
     }
     scratchAddons.manifests.push({ addonId, manifest });
+  }
+  if (!cache) {
+    chrome.storage.session?.set({ manifests: newCache });
   }
   scratchAddons.localState.ready.manifests = true;
   scratchAddons.localEvents.dispatchEvent(new CustomEvent("manifestsReady"));

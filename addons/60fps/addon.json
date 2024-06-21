@@ -6,6 +6,11 @@
       "type": "notice",
       "text": "Changing the framerate of Scratch projects also affects the rate at which certain code (such as loops) runs, so most projects won't behave properly when run at a different framerate. Higher framerates are only meant to be used on projects that are designed to support them.",
       "id": "projectRunsFasterNotice"
+    },
+    {
+      "type": "notice",
+      "text": "If your browser is in energy saver mode (e.g. if your battery is low), it may limit the visible framerate and using this addon may not appear to make animations smoother.",
+      "id": "powerSaver"
     }
   ],
   "credits": [
