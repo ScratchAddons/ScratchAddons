@@ -1,0 +1,36 @@
+.sa-export-container {
+  box-sizing: border-box;
+  width: 700px;
+  max-height: min(800px, 80vh);
+  max-width: 85%;
+  margin-top: 12vh;
+  overflow-y: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sa-export-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sa-export-image {
+  max-width: 70%;
+  max-height: 60vh;
+  object-fit: contain;
+  margin-top: 1.5rem;
+  pointer-events: none;
+}
+
+.sa-export-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.sa-export-button-container button {
+  margin-left: 0.5rem;
+  margin-bottom: 1.5rem;
+}
