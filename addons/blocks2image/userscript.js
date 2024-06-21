@@ -250,7 +250,9 @@ export default async function ({ addon, console, msg }) {
         translateY += 16; // for cat ears
       }
     }
-    svgchild.setAttribute("transform", `translate(0,${scale * translateY}) scale(${scale})`);
+
+    translateY += 1;
+    svgchild.setAttribute("transform", `translate(${scale},${scale * translateY}) scale(${scale})`);
     setCSSVars(svg);
     svg.append(makeStyle());
     svg.append(svgchild);
@@ -310,8 +312,10 @@ export default async function ({ addon, console, msg }) {
       document.body.append(iframe);
       iframe.contentDocument.write(serializer.serializeToString(svg));
       let { width, height } = iframe.contentDocument.body.querySelector("svg g").getBoundingClientRect();
-      svg.setAttribute("width", width + "px");
-      svg.setAttribute("height", height + "px");
+      svg.setAttribute("width", width + 4 + "px");
+      svg.setAttribute("height", height + 4 + "px");
+
+      console.log(svg);
 
       let canvas = document.createElement("canvas");
       let ctx = canvas.getContext("2d");
