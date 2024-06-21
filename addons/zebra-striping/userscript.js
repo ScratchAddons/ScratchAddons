@@ -38,14 +38,14 @@ export default async function ({ addon, msg, console }) {
   };
 
   function updateWorkspaceBlocks() {
-    const workspace = addon.tab.traps.getWorkspace()
+    const workspace = addon.tab.traps.getWorkspace();
     ScratchBlocks.Events.disable();
     ScratchBlocks.Xml.clearWorkspaceAndLoadFromXml(ScratchBlocks.Xml.workspaceToDom(workspace), workspace);
     workspace.toolboxRefreshEnabled_ = true;
     ScratchBlocks.Events.enable();
   }
 
-  if (addon.self.enabledLate) updateWorkspaceBlocks()
+  if (addon.self.enabledLate) updateWorkspaceBlocks();
   addon.self.addEventListener("disabled", updateWorkspaceBlocks);
   addon.self.addEventListener("reenabled", updateWorkspaceBlocks);
   addon.settings.addEventListener("change", updateWorkspaceBlocks);
