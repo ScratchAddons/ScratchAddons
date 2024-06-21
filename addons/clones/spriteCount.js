@@ -1,8 +1,9 @@
 export default async function ({ addon, msg, console }) {
   const vm = addon.tab.traps.vm;
   const ogCloneCounter = vm.runtime.changeCloneCounter;
+  let spriteNamesCache;
 
-  async function updateCounts() {
+  async function updateCounts(force) {
     const counts = {};
     const remove = addon.self.disabled || !addon.settings.get("showSpriteCount");
 
@@ -13,11 +14,17 @@ export default async function ({ addon, msg, console }) {
         counts[name] = (counts[name] || 0) + 1;
       });
 
-    const spriteNames = Array.from(
-      document
-        .querySelector("[class*=sprite-selector_items-wrapper]")
-        ?.querySelectorAll("[class*=sprite-selector-item_sprite-name]")
-    );
+    let spriteNames;
+    if (!spriteNamesCache || force) {
+      console.log("Doing querySelector");
+      spriteNames = Array.from(
+        document.querySelectorAll("[class*=sprite-selector_items-wrapper] [class*=sprite-selector-item_sprite-name]")
+      );
+      spriteNamesCache = Array.from(spriteNames);
+    } else {
+      console.log("Using cached sprite names");
+      spriteNames = spriteNamesCache;
+    }
 
     spriteNames.forEach((spriteName) => {
       const name = spriteName.innerText.split("\n")[0];
@@ -49,7 +56,12 @@ export default async function ({ addon, msg, console }) {
     queueMicrotask(updateCounts);
   };
 
-  vm.addListener("targetsUpdate", () => queueMicrotask(updateCounts));
+  vm.addListener("targetsUpdate", (e) =>
+    queueMicrotask(() => {
+      console.log(e);
+      updateCounts.call(this, true);
+    })
+  );
   addon.self.addEventListener("disabled", updateCounts);
   addon.self.addEventListener("reenabled", updateCounts);
   addon.settings.addEventListener("change", updateCounts);
