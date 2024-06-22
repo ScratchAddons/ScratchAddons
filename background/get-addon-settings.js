@@ -161,6 +161,14 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
       }
     }
 
+    if (addonsEnabled["editor-dark-mode"] && addonSettings["editor-dark-mode"]["dots"] === false) {
+      // Transition v1.38 to v1.39
+      madeAnyChanges = true;
+      delete addonSettings["editor-dark-mode"]["dots"];
+      addonsEnabled["workspace-dots"] = true;
+      addonSettings["workspace-dots"]["theme"] = "none"
+    }
+
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
       const settings = addonSettings[addonId] || {};
