@@ -166,7 +166,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
       madeAnyChanges = true;
       delete addonSettings["editor-dark-mode"]["dots"];
       addonsEnabled["workspace-dots"] = true;
-      addonSettings["workspace-dots"]["theme"] = "none"
+      addonSettings["workspace-dots"]["theme"] = "none";
     }
 
     for (const { manifest, addonId } of scratchAddons.manifests) {
