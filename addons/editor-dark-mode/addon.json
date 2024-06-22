@@ -458,6 +458,17 @@
       }
     },
     {
+      "name": "accent-formControlText",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "threshold": 128
+      }
+    },
+    {
       "name": "accent-filter",
       "value": {
         "type": "textColor",
@@ -965,13 +976,6 @@
       "matches": ["projects"]
     },
     {
-      "url": "hide_dots.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "dots": false }
-      }
-    },
-    {
       "url": "paper.css",
       "matches": ["projects"],
       "if": {
@@ -1107,12 +1111,6 @@
       "allowTransparency": true
     },
     {
-      "name": "Show workspace dots",
-      "id": "dots",
-      "type": "boolean",
-      "default": false
-    },
-    {
       "name": "Change the costume editor background",
       "id": "affectPaper",
       "type": "boolean",
@@ -1148,8 +1146,7 @@
         "palette": "#202020cc",
         "fullscreen": "#000000",
         "stageHeader": "#000000",
-        "border": "#ffffff0d",
-        "dots": false
+        "border": "#ffffff0d"
       }
     },
     {
@@ -1174,8 +1171,7 @@
         "palette": "#202020cc",
         "fullscreen": "#000000",
         "stageHeader": "#000000",
-        "border": "#ffffff0d",
-        "dots": false
+        "border": "#ffffff0d"
       }
     },
     {
@@ -1200,8 +1196,7 @@
         "palette": "#2f4066cc",
         "fullscreen": "#051638",
         "stageHeader": "#051638",
-        "border": "#00000026",
-        "dots": false
+        "border": "#00000026"
       }
     },
     {
@@ -1226,8 +1221,7 @@
         "palette": "#222222cc",
         "fullscreen": "#222222",
         "stageHeader": "#222222",
-        "border": "#111111",
-        "dots": false
+        "border": "#111111"
       }
     },
     {
@@ -1252,8 +1246,7 @@
         "palette": "#333333cc",
         "fullscreen": "#282828",
         "stageHeader": "#333333",
-        "border": "#444444",
-        "dots": true
+        "border": "#444444"
       }
     },
     {
@@ -1278,8 +1271,7 @@
         "palette": "#111111cc",
         "fullscreen": "#111111",
         "stageHeader": "#111111",
-        "border": "#ffffff26",
-        "dots": true
+        "border": "#ffffff26"
       }
     },
     {
@@ -1304,8 +1296,7 @@
         "palette": "#e6e8e8cc",
         "fullscreen": "#ffffffff",
         "stageHeader": "#e6e8e8",
-        "border": "#d0d1d2",
-        "dots": true
+        "border": "#d0d1d2"
       }
     },
     {
@@ -1330,8 +1321,7 @@
         "palette": "#7c8083cc",
         "fullscreen": "#000001",
         "stageHeader": "#000001",
-        "border": "#0000006b",
-        "dots": false
+        "border": "#0000006b"
       }
     },
     {
@@ -1356,8 +1346,7 @@
         "palette": "#f9f9f9cc",
         "fullscreen": "#ffffff",
         "stageHeader": "#e8edf1",
-        "border": "#00000026",
-        "dots": true
+        "border": "#00000026"
       }
     },
     {
@@ -1382,8 +1371,7 @@
         "palette": "#f9f9f9cc",
         "fullscreen": "#ffffff",
         "stageHeader": "#e8edf1",
-        "border": "#00000026",
-        "dots": true
+        "border": "#00000026"
       }
     }
   ],

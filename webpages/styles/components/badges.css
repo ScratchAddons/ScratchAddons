@@ -19,12 +19,12 @@
 }
 .badge.green {
   background: #78fd2b;
-  color: #333;
+  color: #000;
   border-color: #53b31c;
 }
 .badge.yellow {
   background: #fddd2b;
-  color: #333;
+  color: #000;
   border-color: #fdab12;
 }
 .badge.red {
@@ -36,8 +36,9 @@
   border-color: #d81212;
 }
 .badge.darkgreen {
-  background: #00b1a8;
-  border-color: #047773;
+  background: #0cd1c7;
+  color: #000;
+  border-color: #12a39e;
 }
 .badge.purple {
   background: rgb(177, 23, 248);
