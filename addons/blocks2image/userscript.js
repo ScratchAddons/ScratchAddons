@@ -89,34 +89,20 @@ export default async function ({ addon, console, msg }) {
     { blocks: true }
   );
 
-  function handleNumberkey(key) {
-    switch (key) {
-      case "1":
-        document.querySelector(".sa-export-copy-button").click();
-        break;
-      case "2":
-        document.querySelector(".sa-export-svg-button").click();
-        break;
-      case "3":
-        document.querySelector(".sa-export-png-button").click();
-        break;
-    }
-  }
-
-  function handleKeyDown(e, remove) {
+  function handleKeyDown(e, functions) {
     switch (e.key) {
       case "Escape":
-        remove();
-        break;
-      case "1":
-      case "2":
-      case "3":
-        handleNumberkey(e.key);
-        remove();
+        functions.remove();
         break;
       case "Enter":
-        document.querySelector(".sa-export-copy-button").click();
-        remove();
+      case "1":
+        functions.handleCopyClick();
+        break;
+      case "2":
+        functions.handleSVGClick();
+        break;
+      case "3":
+        functions.handlePNGClick();
         break;
     }
   }
@@ -134,21 +120,6 @@ export default async function ({ addon, console, msg }) {
 
     backdrop.addEventListener("click", remove);
     closeButton.addEventListener("click", remove);
-
-    const controller = new AbortController();
-    const oldRemove = remove;
-    remove = () => {
-      controller.abort();
-      oldRemove.call(this);
-    };
-
-    document.addEventListener(
-      "keydown",
-      (e) => {
-        handleKeyDown(e, remove);
-      },
-      { signal: controller.signal }
-    );
 
     const imageContainer = document.createElement("div");
     imageContainer.classList.add("sa-export-image-container");
@@ -185,18 +156,37 @@ export default async function ({ addon, console, msg }) {
 
     content.append(buttonContainer);
 
-    copyButton.addEventListener("click", () => {
+    function handleCopyClick() {
       exportBlock(true, true, false, block);
       remove();
-    });
-    svgButton.addEventListener("click", () => {
+    }
+    function handleSVGClick() {
       exportBlock(false, false, false, block);
       remove();
-    });
-    pngButton.addEventListener("click", () => {
+    }
+    function handlePNGClick() {
       exportBlock(true, false, false, block);
       remove();
-    });
+    }
+
+    copyButton.addEventListener("click", handleCopyClick);
+    svgButton.addEventListener("click", handleSVGClick);
+    pngButton.addEventListener("click", handlePNGClick);
+
+    const controller = new AbortController();
+    const oldRemove = remove;
+    remove = () => {
+      controller.abort();
+      oldRemove.call(this);
+    };
+
+    document.addEventListener(
+      "keydown",
+      (e) => {
+        handleKeyDown(e, { remove, handleCopyClick, handleSVGClick, handlePNGClick });
+      },
+      { signal: controller.signal }
+    );
   }
 
   /**
