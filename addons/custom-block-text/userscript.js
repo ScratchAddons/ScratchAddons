@@ -1,4 +1,4 @@
-import { updateAllBlocks } from "../custom-block-shape/update-all-blocks.js";
+import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
 import { clearTextWidthCache } from "../middle-click-popup/module.js";
 
 export default async function ({ addon, console }) {

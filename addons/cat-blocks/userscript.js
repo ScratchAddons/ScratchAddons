@@ -3,7 +3,7 @@
  * It has been modified to work properly in our environment and fix some bugs.
  */
 
-import { updateAllBlocks } from "../custom-block-shape/update-all-blocks.js";
+import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
 
 export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();

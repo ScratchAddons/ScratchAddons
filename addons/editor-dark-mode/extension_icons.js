@@ -1,5 +1,5 @@
 import { textColor } from "../../libraries/common/cs/text-color.esm.js";
-import { updateAllBlocks } from "../custom-block-shape/update-all-blocks.js";
+import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
 
 const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$");
 
