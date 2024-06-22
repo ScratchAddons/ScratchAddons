@@ -1,4 +1,8 @@
-export function updateAllBlocks(blockly, workspace, { updateFlyout = true } = {}) {
+export function updateAllBlocks(
+  blockly,
+  workspace,
+  { updateMainWorkspace = true, updateFlyout = true, updateCategories = false } = {}
+) {
   // Calling Events.disable() will:
   // - prevent changes to the workspace from being added to the undo stack;
   // - prevent project change events from being triggered.
@@ -6,12 +10,22 @@ export function updateAllBlocks(blockly, workspace, { updateFlyout = true } = {}
   blockly.Events.disable();
 
   if (workspace) {
-    blockly.Xml.clearWorkspaceAndLoadFromXml(blockly.Xml.workspaceToDom(workspace), workspace);
+    if (updateMainWorkspace) {
+      blockly.Xml.clearWorkspaceAndLoadFromXml(blockly.Xml.workspaceToDom(workspace), workspace);
+    }
+    const toolbox = workspace.getToolbox();
     const flyout = workspace.getFlyout();
-    if (updateFlyout && flyout) {
-      const flyoutWorkspace = flyout.getWorkspace();
-      blockly.Xml.clearWorkspaceAndLoadFromXml(blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
-      workspace.getToolbox().refreshSelection();
+    if (toolbox && flyout && (updateFlyout || updateCategories)) {
+      if (updateFlyout) {
+        const flyoutWorkspace = flyout.getWorkspace();
+        blockly.Xml.clearWorkspaceAndLoadFromXml(blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
+      }
+      if (updateCategories) {
+        const selectedItemId = toolbox.getSelectedItem().id_;
+        toolbox.categoryMenu_.populate(workspace.options.languageTree);
+        toolbox.selectCategoryById(selectedItemId, false);
+      }
+      toolbox.refreshSelection();
     }
     workspace.toolboxRefreshEnabled_ = true;
   }
