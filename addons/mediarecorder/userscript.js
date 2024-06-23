@@ -2,6 +2,15 @@ import downloadBlob from "../../libraries/common/cs/download-blob.js";
 
 export default async ({ addon, console, msg }) => {
   const LENGTH_LIMIT = 600;
+  const DEFAULT_SETTINGS = {
+    secs: 30,
+    delay: 0,
+    audioEnabled: true,
+    micEnabled: false,
+    waitUntilFlag: true,
+    useStopSign: true,
+  };
+  const LOCALSTORAGE_ENTRY = "sa-record-options";
 
   let isRecording = false;
   let isWaitingForFlag = false;
@@ -16,22 +25,10 @@ export default async ({ addon, console, msg }) => {
 
   const getStoredOptions = () => {
     try {
-      return JSON.parse(localStorage.getItem("sa-record-options"));
+      return JSON.parse(localStorage.getItem(LOCALSTORAGE_ENTRY)) ?? DEFAULT_SETTINGS;
     } catch {
-      return undefined;
+      return DEFAULT_SETTINGS;
     }
-  };
-
-  const storageSettings = getStoredOptions();
-
-  let lastSettings = storageSettings ?? {
-    // Default options
-    seconds: 30,
-    delay: 0,
-    audio: true,
-    mic: false,
-    flag: true,
-    stop: true,
   };
 
   const mimeType = [
@@ -60,6 +57,7 @@ export default async ({ addon, console, msg }) => {
 
     // Options modal
     const getOptions = () => {
+      const storedOptions = getStoredOptions();
       const { backdrop, container, content, closeButton, remove } = addon.tab.createModal(msg("option-title"), {
         isOpen: true,
         useEditorClasses: true,
@@ -82,7 +80,7 @@ export default async ({ addon, console, msg }) => {
         type: "number",
         min: 1,
         max: LENGTH_LIMIT,
-        defaultValue: lastSettings.seconds,
+        defaultValue: storedOptions.secs,
         id: "recordOptionSecondsInput",
         className: addon.tab.scratchClass("prompt_variable-name-text-input"),
       });
@@ -100,7 +98,7 @@ export default async ({ addon, console, msg }) => {
         type: "number",
         min: 0,
         max: LENGTH_LIMIT,
-        defaultValue: lastSettings.delay,
+        defaultValue: storedOptions.delay,
         id: "recordOptionDelayInput",
         className: addon.tab.scratchClass("prompt_variable-name-text-input"),
       });
@@ -118,7 +116,7 @@ export default async ({ addon, console, msg }) => {
       });
       const recordOptionAudioInput = Object.assign(document.createElement("input"), {
         type: "checkbox",
-        defaultChecked: lastSettings.audio,
+        defaultChecked: storedOptions.audioEnabled,
         id: "recordOptionAudioInput",
       });
       const recordOptionAudioLabel = Object.assign(document.createElement("label"), {
@@ -136,7 +134,7 @@ export default async ({ addon, console, msg }) => {
       });
       const recordOptionMicInput = Object.assign(document.createElement("input"), {
         type: "checkbox",
-        defaultChecked: lastSettings.mic,
+        defaultChecked: storedOptions.micEnabled,
         id: "recordOptionMicInput",
       });
       const recordOptionMicLabel = Object.assign(document.createElement("label"), {
@@ -153,7 +151,7 @@ export default async ({ addon, console, msg }) => {
       });
       const recordOptionFlagInput = Object.assign(document.createElement("input"), {
         type: "checkbox",
-        defaultChecked: lastSettings.flag,
+        defaultChecked: storedOptions.waitUntilFlag,
         id: "recordOptionFlagInput",
       });
       const recordOptionFlagLabel = Object.assign(document.createElement("label"), {
@@ -170,7 +168,7 @@ export default async ({ addon, console, msg }) => {
       });
       const recordOptionStopInput = Object.assign(document.createElement("input"), {
         type: "checkbox",
-        defaultChecked: lastSettings.stop,
+        defaultChecked: storedOptions.useStopSign,
         id: "recordOptionStopInput",
       });
       const recordOptionStopLabel = Object.assign(document.createElement("label"), {
@@ -286,6 +284,10 @@ export default async ({ addon, console, msg }) => {
           opts.micEnabled = false;
         }
       }
+
+      // After we see if the user has/enables their mic, save settings to localStorage.
+      localStorage.setItem(LOCALSTORAGE_ENTRY, JSON.stringify(opts));
+
       if (opts.waitUntilFlag) {
         isWaitingForFlag = true;
         Object.assign(recordElem, {
@@ -376,15 +378,6 @@ export default async ({ addon, console, msg }) => {
             console.log("Canceled");
             return;
           }
-
-          // Remember options for next time
-          lastSettings.seconds = opts.secs;
-          lastSettings.delay = opts.delay;
-          lastSettings.audio = opts.audioEnabled;
-          lastSettings.mic = opts.micEnabled;
-          lastSettings.flag = opts.waitUntilFlag;
-          lastSettings.stop = opts.useStopSign;
-          localStorage.setItem("sa-record-options", JSON.stringify(lastSettings));
 
           startRecording(opts);
         }
