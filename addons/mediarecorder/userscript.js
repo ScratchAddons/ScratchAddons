@@ -233,7 +233,6 @@ export default async ({ addon, console, msg }) => {
 
       return optionPromise;
     };
-
     const disposeRecorder = () => {
       isRecording = false;
       recordElem.textContent = msg("record");
