@@ -1,5 +1,6 @@
 import changeAddonState from "./imports/change-addon-state.js";
 import { getMissingOptionalPermissions } from "./imports/util.js";
+import { setUserAsActive } from "./imports/inactivity.js";
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.replaceTabWithUrl) chrome.tabs.update(sender.tab.id, { url: request.replaceTabWithUrl });
@@ -223,6 +224,7 @@ const csInfoCache = new Map();
 // (example: on browser startup, with a Scratch page opening on startup).
 chrome.webRequest.onBeforeRequest.addListener(
   async (request) => {
+    setUserAsActive();
     if (!scratchAddons.localState.allReady) return;
     const identity = createCsIdentity({ tabId: request.tabId, frameId: request.frameId, url: request.url });
     const loadingObj = { loading: true };
@@ -246,26 +248,20 @@ chrome.webRequest.onBeforeRequest.addListener(
 // Example: going to https://scratch.mit.edu/studios/104 (no slash after 104)
 // will redirect to /studios/104/ (with a slash)
 // If a cache entry is too old, remove it
-const alarmFrequency =
-  typeof browser !== "undefined"
-    ? // ↓ Firefox (event page)
-      1
-    : // ↓ Chromium (service worker)
-      5;
-chrome.alarms.create("cleanCsInfoCache", { periodInMinutes: alarmFrequency });
-chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === "cleanCsInfoCache") {
-    csInfoCache.forEach((obj, key) => {
-      if (!obj.loading) {
-        const currentTimestamp = Date.now();
-        const objTimestamp = obj.timestamp;
-        if (currentTimestamp - objTimestamp > 45000) {
-          csInfoCache.delete(key);
-        }
+setInterval(() => {
+  csInfoCache.forEach((obj, key) => {
+    if (!obj.loading) {
+      const currentTimestamp = Date.now();
+      const objTimestamp = obj.timestamp;
+      if (currentTimestamp - objTimestamp > 45000) {
+        csInfoCache.delete(key);
       }
-    });
-  }
-});
+    }
+  });
+}, 30000);
+// This interval may possibly be missed if the background context gets
+// killed or stopped - but at that point, the csInfoCache no longer
+// exists, so we have nothing to clear anyway.
 
 chrome.webRequest.onResponseStarted.addListener(
   (request) => {
