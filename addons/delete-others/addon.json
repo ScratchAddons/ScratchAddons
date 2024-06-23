@@ -1,6 +1,6 @@
 {
   "name": "Delete other assets",
-  "description": "Adds an option to the right click menu to easily delete all other costumes, backdrops, or sounds.",
+  "description": "Adds an option to the right click context menu for costumes and sounds to delete all items expect for the selected one.",
   "tags": ["editor", "costumeEditor", "recommended"],
   "versionAdded": "1.39.0",
   "userscripts": [
