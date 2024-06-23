@@ -378,7 +378,6 @@ export default async ({ addon, console, msg }) => {
             console.log("Canceled");
             return;
           }
-
           startRecording(opts);
         }
       });
