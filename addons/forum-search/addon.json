@@ -13,7 +13,7 @@
     {
       "id": "deprecated",
       "type": "warning",
-      "text": "The database operating behind this addon is experiencing issues, so this addon might not work."
+      "text": "The ScratchDB database used by this addon is offline, so this addon does not work."
     }
   ],
   "dynamicEnable": true,
