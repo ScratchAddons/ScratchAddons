@@ -74,7 +74,8 @@ export default async ({ addon, console, msg }) => {
         })
       );
 
-      // Seconds
+      // Create settings elements
+      // Recording length
       const recordOptionSeconds = document.createElement("p");
       const recordOptionSecondsInput = Object.assign(document.createElement("input"), {
         type: "number",
@@ -90,9 +91,14 @@ export default async ({ addon, console, msg }) => {
       });
       recordOptionSeconds.appendChild(recordOptionSecondsLabel);
       recordOptionSeconds.appendChild(recordOptionSecondsInput);
+      recordOptionSeconds.appendChild(
+        Object.assign(document.createElement("span"), {
+          textContent: msg("seconds"),
+        })
+      );
       content.appendChild(recordOptionSeconds);
 
-      // Delay
+      // Delay before starting
       const recordOptionDelay = document.createElement("p");
       const recordOptionDelayInput = Object.assign(document.createElement("input"), {
         type: "number",
@@ -108,9 +114,14 @@ export default async ({ addon, console, msg }) => {
       });
       recordOptionDelay.appendChild(recordOptionDelayLabel);
       recordOptionDelay.appendChild(recordOptionDelayInput);
+      recordOptionDelay.appendChild(
+        Object.assign(document.createElement("span"), {
+          textContent: msg("seconds"),
+        })
+      );
       content.appendChild(recordOptionDelay);
 
-      // Audio
+      // Audio enabled
       const recordOptionAudio = Object.assign(document.createElement("p"), {
         className: "mediaRecorderPopupOption",
       });
@@ -128,7 +139,7 @@ export default async ({ addon, console, msg }) => {
       recordOptionAudio.appendChild(recordOptionAudioLabel);
       content.appendChild(recordOptionAudio);
 
-      // Mic
+      // Mic enabled
       const recordOptionMic = Object.assign(document.createElement("p"), {
         className: "mediaRecorderPopupOption",
       });
@@ -145,7 +156,7 @@ export default async ({ addon, console, msg }) => {
       recordOptionMic.appendChild(recordOptionMicLabel);
       content.appendChild(recordOptionMic);
 
-      // Green flag
+      // Wait for green flag
       const recordOptionFlag = Object.assign(document.createElement("p"), {
         className: "mediaRecorderPopupOption",
       });
@@ -162,7 +173,7 @@ export default async ({ addon, console, msg }) => {
       recordOptionFlag.appendChild(recordOptionFlagLabel);
       content.appendChild(recordOptionFlag);
 
-      // Stop sign
+      // End on stop sign
       const recordOptionStop = Object.assign(document.createElement("p"), {
         className: "mediaRecorderPopupOption",
       });
@@ -175,14 +186,22 @@ export default async ({ addon, console, msg }) => {
         htmlFor: "recordOptionStopInput",
         textContent: msg("record-until-stop"),
       });
-      recordOptionFlagInput.addEventListener("change", () => {
+      let wasStopInputChecked = storedOptions.useStopSign;
+      const onFlagInputToggle = () => {
         const disabled = (recordOptionStopInput.disabled = !recordOptionFlagInput.checked);
         if (disabled) {
+          wasStopInputChecked = recordOptionStopInput.checked;
           recordOptionStopLabel.title = msg("record-until-stop-disabled", {
             afterFlagOption: msg("record-after-flag"),
           });
+          recordOptionStopInput.checked = false;
+        } else {
+          recordOptionStopLabel.title = "";
+          recordOptionStopInput.checked = wasStopInputChecked;
         }
-      });
+      };
+      recordOptionFlagInput.addEventListener("change", onFlagInputToggle);
+      onFlagInputToggle(); // The option could be unchecked to begin with
       recordOptionStop.appendChild(recordOptionStopInput);
       recordOptionStop.appendChild(recordOptionStopLabel);
       content.appendChild(recordOptionStop);
