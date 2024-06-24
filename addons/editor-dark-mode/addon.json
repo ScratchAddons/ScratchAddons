@@ -1373,6 +1373,31 @@
         "stageHeader": "#e8edf1",
         "border": "#00000026"
       }
+    },
+          {
+      "name": "ScratchLab",
+      "id": "scratch-lab",
+      "description": "Colors used by the ScratchLab editor.",
+      "values": {
+        "page": "#e5f0ff",
+        "primary": "#4d97ff",
+        "highlightText": "#4d97ff",
+        "menuBar": "#0fbd8c",
+        "popup": "#4d97ffe6",
+        "activeTab": "#ffffff",
+        "tab": "#d9e3f2",
+        "selector": "#e9f1fc",
+        "selector2": "#d9e3f2",
+        "selectorSelection": "#ffffff",
+        "accent": "#ffffff",
+        "input": "#ffffff",
+        "workspace": "#f9f9f9",
+        "categoryMenu": "#ffffff",
+        "palette": "#f9f9f9cc",
+        "fullscreen": "#ffffff",
+        "stageHeader": "#e8edf1",
+        "border": "#00000026"
+      }
     }
   ],
   "addonPreview": {
