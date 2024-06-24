@@ -1377,7 +1377,7 @@
           {
       "name": "ScratchLab",
       "id": "scratch-lab",
-      "description": "Colors used by the ScratchLab editor.",
+      "description": "The colors used by the ScratchLab's project editor.",
       "values": {
         "page": "#e5f0ff",
         "primary": "#4d97ff",
