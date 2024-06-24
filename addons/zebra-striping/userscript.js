@@ -1,4 +1,7 @@
 export default async function ({ addon, msg, console }) {
+  await addon.tab.loadScript("/libraries/thirdparty/cs/tinycolor-min.js");
+
+  const vm = addon.tab.traps.vm;
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const originalRender = ScratchBlocks.BlockSvg.prototype.render;
   ScratchBlocks.BlockSvg.prototype.render = function (opt_bubble) {
@@ -12,25 +15,30 @@ export default async function ({ addon, msg, console }) {
       for (const block of this.getDescendants()) {
         const parent = block.getSurroundParent();
         block.striped =
-          // not a shadow block
+          // not a shadow
           !block.isShadow() &&
+          // not a insertion marker
+          !block.isInsertionMarker() &&
           // has a parent
           parent &&
           // parent is not striped
           !parent.striped &&
           // parent and child are same category
           parent.getCategory() === block.getCategory() &&
-          // not a stack block
-          (block.nextConnection || (block.outputShape_ > 0 && block.outputShape_ === parent.outputShape_));
+          // block has a substack (wrap blocks)
+          (block.inputList.some((i) => i.name === "SUBSTACK") ||
+            // block has a output shape (reporter/boolean) and is same as parent's
+            (block.outputShape_ > 0 && block.outputShape_ === parent.outputShape_));
         if (!block.striped && block.orginalColour_) {
           block.setColour(block.orginalColour_);
           block.orginalColour_ = null;
         } else if (block.striped && !block.orginalColour_) {
-          block.orginalColour_ = block.colour_;
+          const color = block.getColour();
+          block.orginalColour_ = color;
           const shade = addon.settings.get("shade");
           const intensity = addon.settings.get("intensity");
-          const amount = (shade === "lighter" ? 1 : -1) * intensity;
-          block.setColour(lighten(block.colour_, amount));
+          const amount = ((shade === "lighter" ? 1 : -1) * intensity) / 2;
+          block.setColour("#" + tinycolor(color).lighten(amount).toHex());
         }
       }
     }
@@ -49,15 +57,4 @@ export default async function ({ addon, msg, console }) {
   addon.self.addEventListener("disabled", updateWorkspaceBlocks);
   addon.self.addEventListener("reenabled", updateWorkspaceBlocks);
   addon.settings.addEventListener("change", updateWorkspaceBlocks);
-}
-
-function lighten(color, amount) {
-  return (
-    "#" +
-    color
-      .replace(/^#/, "")
-      .replace(/../g, (color) =>
-        ("0" + Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2)
-      )
-  );
 }
