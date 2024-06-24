@@ -182,7 +182,7 @@ export default async function ({ addon, console }) {
       // Set to the correct initial position
       this.svgFace_.style.transform = "translate(-87px, 0px)";
     }
-    if (this.shouldWatchMouse()) {
+    if (shouldWatchMouseCursor) {
       this.windowListener = function (event) {
         var time = Date.now();
         if (time < that.lastCallTime + that.CALL_FREQUENCY_MS) return;
