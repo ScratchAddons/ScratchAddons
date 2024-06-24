@@ -1,8 +1,4 @@
 @import url("../editor-theme3/compatibility.css");
-/* set variable */
-:root {
-  --input_max_width: 20em;
-}
 
 .sa-find-bar {
   display: flex;
@@ -23,7 +19,7 @@
   position: relative;
   height: 2rem;
   width: 100%;
-  max-width: var(--input_max_width);
+  max-width: 16em;
 }
 
 .sa-find-dropdown-out {
@@ -31,7 +27,7 @@
   top: -6px;
   z-index: 100;
   width: 100%;
-  max-width: var(--input_max_width);
+  max-width: 16em;
   position: relative;
   padding: 4px;
   border: none;
@@ -41,7 +37,7 @@
 
 .sa-find-dropdown-out.visible {
   position: absolute;
-  width: var(--input_max_width);
+  width: 16em;
   box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
   background-color: white;
 }
@@ -151,4 +147,28 @@
 
 .sa-find-carousel-control:hover {
   color: #ffff80;
+}
+
+
+/* Ori Style */
+#floatWindow {
+    width: 300px;
+    height: 300px;
+    position: fixed;
+    top: 20%;
+    left: 35%;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    z-index: 100;
+    display: block; /* 默认不显示 */
+}
+
+#floatWindow .float-window-header {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+#floatWindow .float-window-content {
+    padding: 2px 16px;
 }
