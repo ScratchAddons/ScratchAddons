@@ -7,7 +7,7 @@ export default async function ({ addon, msg, console }) {
     // Any changes that affect block striping should bubble to the top block of the script.
     // The top block of the script is responsible for striping all of its children.
     // This way stripes are computed exactly once.
-    if (!addon.self.disabled && !this.isInFlyout && !this.isShadow() && this.getParent() === null) {
+    if (!addon.self.disabled && !this.isInFlyout && !this.isShadow() && !this.isInsertionMarker() && this.getParent() === null) {
       const shade = addon.settings.get("shade");
       const intensity = addon.settings.get("intensity");
       const amount = ((shade === "lighter" ? 1 : -1) * intensity) / 2;
@@ -16,7 +16,7 @@ export default async function ({ addon, msg, console }) {
       // parent).
       for (const block of this.getDescendants()) {
         const parent = block.getSurroundParent();
-        block.striped =
+        block.sa_striped =
           // not a shadow
           !block.isShadow() &&
           // not a insertion marker
@@ -24,19 +24,22 @@ export default async function ({ addon, msg, console }) {
           // has a parent
           parent &&
           // parent is not striped
-          !parent.striped &&
+          !parent.sa_striped &&
           // parent and child are same category
           parent.getCategory() === block.getCategory() &&
           // block has a substack (wrap blocks)
           (block.inputList.some((i) => i.name === "SUBSTACK") ||
             // block has a output connection (reporter/boolean) and is same shape as parent
             (this.outputConnection && block.outputShape_ === parent.outputShape_));
-        if (!block.striped && block.orginalColour_) {
-          block.setColour(block.orginalColour_);
-          block.orginalColour_ = null;
-        } else if (block.striped && !block.orginalColour_) {
+        if (!block.sa_striped && block.sa_orginalColour) {
+          block.setColour(...block.sa_orginalColour);
+          block.sa_orginalColour = null;
+        } else if (block.sa_striped && !block.sa_orginalColour) {
           const color = block.getColour();
-          block.orginalColour_ = color;
+          const secondary = block.getColourSecondary();
+          const tertiary = block.getColourTertiary();
+          const quaternary = block.getColourQuaternary();
+          block.sa_orginalColour = [color, secondary, tertiary, quaternary];
           block.setColour("#" + tinycolor(color).lighten(amount).toHex());
         }
       }
