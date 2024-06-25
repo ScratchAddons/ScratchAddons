@@ -573,6 +573,7 @@ export default async function ({ addon, console, msg }) {
     Blockly.FieldNumber.NUMPAD_DELETE_ICON = originalNumpadDeleteIcon.replace("white", safeTextColor);
 
     const workspace = addon.tab.traps.getWorkspace();
+    if (!workspace) return;
     const flyout = workspace.getFlyout();
     const toolbox = workspace.getToolbox();
 
