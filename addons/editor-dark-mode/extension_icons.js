@@ -25,7 +25,7 @@ export default async function ({ addon, console }) {
   };
 
   const reloadToolbox = () => {
-    updateAllBlocks(Blockly, addon.tab.traps.getWorkspace(), {
+    updateAllBlocks(addon.tab, {
       updateMainWorkspace: false,
       updateFlyout: false,
       updateCategories: true,

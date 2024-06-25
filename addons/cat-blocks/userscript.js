@@ -329,6 +329,5 @@ export default async function ({ addon, console }) {
     this.CALL_FREQUENCY_MS = 60;
   };
 
-  const workspace = Blockly.getMainWorkspace();
-  updateAllBlocks(Blockly, workspace);
+  updateAllBlocks(addon.tab);
 }

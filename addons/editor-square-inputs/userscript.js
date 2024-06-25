@@ -29,7 +29,7 @@ export default async function ({ addon }) {
   };
 
   function update() {
-    updateAllBlocks(ScratchBlocks, addon.tab.traps.getWorkspace());
+    updateAllBlocks(addon.tab);
   }
 
   addon.self.addEventListener("disabled", update);

@@ -1,8 +1,10 @@
-export function updateAllBlocks(
-  blockly,
-  workspace,
+export async function updateAllBlocks(
+  tab,
   { updateMainWorkspace = true, updateFlyout = true, updateCategories = false } = {}
 ) {
+  const blockly = await tab.traps.getBlockly();
+  const workspace = tab.traps.getWorkspace();
+
   // Calling Events.disable() will:
   // - prevent changes to the workspace from being added to the undo stack;
   // - prevent project change events from being triggered.

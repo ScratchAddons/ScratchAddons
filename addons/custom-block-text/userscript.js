@@ -48,7 +48,7 @@ export default async function ({ addon, console }) {
     // If font size has changed, middle click popup needs to clear it's cache too
     clearTextWidthCache();
 
-    updateAllBlocks(blocklyInstance, addon.tab.traps.getWorkspace());
+    updateAllBlocks(addon.tab);
   };
 
   const setFontSize = (wantedSize) => {

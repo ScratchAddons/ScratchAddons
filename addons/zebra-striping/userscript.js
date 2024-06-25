@@ -45,7 +45,7 @@ export default async function ({ addon, msg, console }) {
     return originalRender.call(this, opt_bubble);
   };
 
-  updateAllBlocks(ScratchBlocks, addon.tab.traps.getWorkspace(), { updateFlyout: false });
+  updateAllBlocks(addon.tab, { updateFlyout: false });
 
   // The replacement glow filter's ID is randomly generated and changes
   // when the workspace is reloaded (which includes loading the page and

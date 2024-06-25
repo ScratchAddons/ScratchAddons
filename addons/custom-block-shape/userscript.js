@@ -238,7 +238,7 @@ export default async function ({ addon, console }) {
 
     function applyAndUpdate(...args) {
       applyChanges(...args);
-      updateAllBlocks(BlocklyInstance, addon.tab.traps.getWorkspace());
+      updateAllBlocks(addon.tab);
     }
 
     addon.settings.addEventListener("change", () => applyAndUpdate());
