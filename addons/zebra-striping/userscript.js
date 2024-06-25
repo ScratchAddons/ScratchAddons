@@ -7,7 +7,13 @@ export default async function ({ addon, msg, console }) {
     // Any changes that affect block striping should bubble to the top block of the script.
     // The top block of the script is responsible for striping all of its children.
     // This way stripes are computed exactly once.
-    if (!addon.self.disabled && !this.isInFlyout && !this.isShadow() && !this.isInsertionMarker() && this.getParent() === null) {
+    if (
+      !addon.self.disabled &&
+      !this.isInFlyout &&
+      !this.isShadow() &&
+      !this.isInsertionMarker() &&
+      this.getParent() === null
+    ) {
       const shade = addon.settings.get("shade");
       const intensity = addon.settings.get("intensity");
       const amount = ((shade === "lighter" ? 1 : -1) * intensity) / 2;
