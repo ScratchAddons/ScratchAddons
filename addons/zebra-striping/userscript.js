@@ -26,11 +26,7 @@ export default async function ({ addon, msg, console }) {
           // parent is not striped
           !parent.sa_striped &&
           // parent and child are same category
-          parent.getCategory() === block.getCategory() &&
-          // block has a substack (wrap blocks)
-          (block.inputList.some((i) => i.name === "SUBSTACK") ||
-            // block has a output connection (reporter/boolean) and is same shape as parent
-            (this.outputConnection && block.outputShape_ === parent.outputShape_));
+          parent.getCategory() === block.getCategory();
         if (!block.sa_striped && block.sa_orginalColour) {
           block.setColour(...block.sa_orginalColour);
           block.sa_orginalColour = null;
