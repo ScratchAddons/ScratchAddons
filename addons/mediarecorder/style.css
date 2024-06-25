@@ -38,7 +38,6 @@ p.mediaRecorderPopupOption {
 
 .mediaRecorderPopupOption input[type="checkbox"] {
   height: 1.5rem;
-  width: 15px;
   margin-right: -0.25rem;
   accent-color: var(--editorDarkMode-primary, #855cd6);
 }
