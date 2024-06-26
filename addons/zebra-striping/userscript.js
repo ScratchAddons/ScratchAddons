@@ -46,7 +46,7 @@ export default async function ({ addon, msg, console }) {
             "#" + tinycolor(color).lighten(amount).toHex(),
             "#" + tinycolor(secondary).lighten(amount).toHex(),
             "#" + tinycolor(tertiary).lighten(amount).toHex(),
-            "#" + tinycolor(quaternary).lighten(amount).toHex(),
+            "#" + tinycolor(quaternary).lighten(amount).toHex()
           );
           block.setColour("#" + tinycolor(color).lighten(amount).toHex());
         }
