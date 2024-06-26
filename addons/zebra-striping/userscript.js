@@ -31,8 +31,9 @@ export default async function ({ addon, msg, console }) {
           parent &&
           // parent is not striped
           !parent.sa_striped &&
-          // parent and child are same category
-          parent.getCategory() === block.getCategory();
+          // parent and child are same color
+          // we dont check category because other addons can make blocks the same color.
+          parent.getColour() === block.getColour();
         if (!block.sa_striped && block.sa_orginalColour) {
           block.setColour(...block.sa_orginalColour);
           block.sa_orginalColour = null;
@@ -41,7 +42,12 @@ export default async function ({ addon, msg, console }) {
           const secondary = block.getColourSecondary();
           const tertiary = block.getColourTertiary();
           const quaternary = block.getColourQuaternary();
-          block.sa_orginalColour = [color, secondary, tertiary, quaternary];
+          block.setColour(
+            "#" + tinycolor(color).lighten(amount).toHex(),
+            "#" + tinycolor(secondary).lighten(amount).toHex(),
+            "#" + tinycolor(tertiary).lighten(amount).toHex(),
+            "#" + tinycolor(quaternary).lighten(amount).toHex(),
+          );
           block.setColour("#" + tinycolor(color).lighten(amount).toHex());
         }
       }
