@@ -655,7 +655,10 @@ export default async function ({ addon, msg, console }) {
 
         for (const id of Object.keys(blocks._blocks)) {
           const block = blocks._blocks[id];
-          if (block.opcode === "event_whenbroadcastreceived" && block.fields.BROADCAST_OPTION.value === name) {
+          if (
+            block.opcode === "event_whenbroadcastreceived" &&
+            block.fields.BROADCAST_OPTION.value.toLowerCase() === name.toLowerCase()
+          ) {
             uses.push(new BlockInstance(target, block));
           } else if (block.opcode === "event_broadcast" || block.opcode === "event_broadcastandwait") {
             const broadcastInputBlockId = block.inputs.BROADCAST_INPUT.block;
@@ -667,7 +670,7 @@ export default async function ({ addon, msg, console }) {
               } else {
                 eventName = msg("complex-broadcast");
               }
-              if (eventName === name) {
+              if (eventName.toLowerCase() === name.toLowerCase()) {
                 uses.push(new BlockInstance(target, block));
               }
             }
