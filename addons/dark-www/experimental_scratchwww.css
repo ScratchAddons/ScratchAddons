@@ -4,7 +4,8 @@ body {
   background-color: var(--darkWww-page);
   color-scheme: var(--darkWww-page-colorScheme);
 }
-.sa-body-editor {
+.sa-body-editor,
+[class*="stage-wrapper_stage-canvas-wrapper_"] {
   /* If website dark mode is enabled and editor dark mode
   is disabled, inputs and scrollbars in the editor should
   have a light background. */

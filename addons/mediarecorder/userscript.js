@@ -1,7 +1,17 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 
 export default async ({ addon, console, msg }) => {
-  let recordElem;
+  const LENGTH_LIMIT = 600;
+  const DEFAULT_SETTINGS = {
+    secs: 30,
+    delay: 0,
+    audioEnabled: true,
+    micEnabled: false,
+    waitUntilFlag: true,
+    useStopSign: true,
+  };
+  const LOCALSTORAGE_ENTRY = "sa-record-options";
+
   let isRecording = false;
   let isWaitingForFlag = false;
   let waitingForFlagFunc = null;
@@ -10,6 +20,16 @@ export default async ({ addon, console, msg }) => {
   let recordBuffer = [];
   let recorder;
   let timeout;
+
+  let recordElem;
+
+  const getStoredOptions = () => {
+    try {
+      return JSON.parse(localStorage.getItem(LOCALSTORAGE_ENTRY)) ?? DEFAULT_SETTINGS;
+    } catch {
+      return DEFAULT_SETTINGS;
+    }
+  };
 
   const mimeType = [
     // Chrome and Firefox only support encoding as webm
@@ -23,11 +43,21 @@ export default async ({ addon, console, msg }) => {
   const fileExtension = mimeType.split(";")[0].split("/")[1];
 
   while (true) {
-    const elem = await addon.tab.waitForElement('div[class*="menu-bar_file-group"] > div:last-child:not(.sa-record)', {
-      markAsSeen: true,
-      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
-    });
+    const referenceElem = await addon.tab.waitForElement(
+      'div[class*="menu-bar_file-group"] > div:last-child:not(.sa-record)',
+      {
+        markAsSeen: true,
+        reduxEvents: [
+          "scratch-gui/mode/SET_PLAYER",
+          "fontsLoaded/SET_FONTS_LOADED",
+          "scratch-gui/locales/SELECT_LOCALE",
+        ],
+      }
+    );
+
+    // Options modal
     const getOptions = () => {
+      const storedOptions = getStoredOptions();
       const { backdrop, container, content, closeButton, remove } = addon.tab.createModal(msg("option-title"), {
         isOpen: true,
         useEditorClasses: true,
@@ -49,8 +79,8 @@ export default async ({ addon, console, msg }) => {
       const recordOptionSecondsInput = Object.assign(document.createElement("input"), {
         type: "number",
         min: 1,
-        max: 600,
-        defaultValue: 30,
+        max: LENGTH_LIMIT,
+        defaultValue: storedOptions.secs,
         id: "recordOptionSecondsInput",
         className: addon.tab.scratchClass("prompt_variable-name-text-input"),
       });
@@ -67,8 +97,8 @@ export default async ({ addon, console, msg }) => {
       const recordOptionDelayInput = Object.assign(document.createElement("input"), {
         type: "number",
         min: 0,
-        max: 600,
-        defaultValue: 0,
+        max: LENGTH_LIMIT,
+        defaultValue: storedOptions.delay,
         id: "recordOptionDelayInput",
         className: addon.tab.scratchClass("prompt_variable-name-text-input"),
       });
@@ -86,7 +116,7 @@ export default async ({ addon, console, msg }) => {
       });
       const recordOptionAudioInput = Object.assign(document.createElement("input"), {
         type: "checkbox",
-        defaultChecked: true,
+        defaultChecked: storedOptions.audioEnabled,
         id: "recordOptionAudioInput",
       });
       const recordOptionAudioLabel = Object.assign(document.createElement("label"), {
@@ -104,7 +134,7 @@ export default async ({ addon, console, msg }) => {
       });
       const recordOptionMicInput = Object.assign(document.createElement("input"), {
         type: "checkbox",
-        defaultChecked: false,
+        defaultChecked: storedOptions.micEnabled,
         id: "recordOptionMicInput",
       });
       const recordOptionMicLabel = Object.assign(document.createElement("label"), {
@@ -121,7 +151,7 @@ export default async ({ addon, console, msg }) => {
       });
       const recordOptionFlagInput = Object.assign(document.createElement("input"), {
         type: "checkbox",
-        defaultChecked: true,
+        defaultChecked: storedOptions.waitUntilFlag,
         id: "recordOptionFlagInput",
       });
       const recordOptionFlagLabel = Object.assign(document.createElement("label"), {
@@ -138,7 +168,7 @@ export default async ({ addon, console, msg }) => {
       });
       const recordOptionStopInput = Object.assign(document.createElement("input"), {
         type: "checkbox",
-        defaultChecked: true,
+        defaultChecked: storedOptions.useStopSign,
         id: "recordOptionStopInput",
       });
       const recordOptionStopLabel = Object.assign(document.createElement("label"), {
@@ -238,7 +268,7 @@ export default async ({ addon, console, msg }) => {
     };
     const startRecording = async (opts) => {
       // Timer
-      const secs = Math.min(600, Math.max(1, opts.secs));
+      const secs = Math.min(LENGTH_LIMIT, Math.max(1, opts.secs));
 
       // Initialize MediaRecorder
       recordBuffer = [];
@@ -254,6 +284,10 @@ export default async ({ addon, console, msg }) => {
           opts.micEnabled = false;
         }
       }
+
+      // After we see if the user has/enables their mic, save settings to localStorage.
+      localStorage.setItem(LOCALSTORAGE_ENTRY, JSON.stringify(opts));
+
       if (opts.waitUntilFlag) {
         isWaitingForFlag = true;
         Object.assign(recordElem, {
@@ -327,9 +361,11 @@ export default async ({ addon, console, msg }) => {
         (delay - roundedDelay) * 1000
       );
     };
+
+    // Insert start/stop recording button
     if (!recordElem) {
       recordElem = Object.assign(document.createElement("div"), {
-        className: "sa-record " + elem.className,
+        className: "sa-record " + referenceElem.className,
         textContent: msg("record"),
         title: msg("added-by"),
       });
@@ -346,6 +382,6 @@ export default async ({ addon, console, msg }) => {
         }
       });
     }
-    elem.parentElement.appendChild(recordElem);
+    referenceElem.parentElement.appendChild(recordElem);
   }
 };
