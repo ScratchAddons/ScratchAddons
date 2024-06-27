@@ -3,19 +3,9 @@ import { textColor, multiply, brighten, alphaBlend, makeHsv } from "../../librar
 export default async function ({ addon, console }) {
   const paper = await addon.tab.traps.getPaper();
 
-  const secondaryColor = () =>
-    textColor(
-      addon.settings.get("primary"),
-      multiply(addon.settings.get("primary"), { r: 0.66, g: 0.76, b: 0.8 }),
-      brighten(addon.settings.get("primary"), { r: 0.75, g: 0.75, b: 0.75 }),
-      60
-    );
-
   const darkPaperDisabled = () => addon.self.disabled || !addon.settings.get("affectPaper");
 
-  // Change the colors used by the selection tool
-  const isDefaultGuideColor = (color) =>
-    color.type === "rgb" && color.red === 0 && color.green === 0.615686274509804 && color.blue === 0.9254901960784314;
+  // Change a color used by the selection tool
   const oldItemDraw = paper.Item.prototype.draw;
   paper.Item.prototype.draw = function (...args) {
     if (darkPaperDisabled()) {
@@ -33,28 +23,9 @@ export default async function ({ addon, console }) {
         multiply(addon.settings.get("accent"), { r: 0.67, g: 0.67, b: 0.67 }),
         brighten(addon.settings.get("accent"), { r: 0.67, g: 0.67, b: 0.67 })
       );
-    } else if (this.parent?.data.isGuideLayer || this.parent?.parent?.data.isGuideLayer) {
-      if (
-        this.data.origItem || // hover indicator
-        this.parent?.selectionAnchor === this
-      ) {
-        this.saOldStrokeColor = this.parent?.selectionAnchor === this ? null : this.strokeColor;
-        this.saColorChanged = true;
-        this.strokeColor = addon.settings.get("highlightText");
-      } else if (this.strokeColor && isDefaultGuideColor(this.strokeColor)) {
-        this.saOldStrokeColor = this.strokeColor;
-        this.saColorChanged = true;
-        this.strokeColor = secondaryColor();
-      }
-      if (this.fillColor && isDefaultGuideColor(this.fillColor)) {
-        this.saOldFillColor = this.fillColor;
-        this.saColorChanged = true;
-        this.fillColor = addon.settings.get("highlightText");
-      }
     }
     return oldItemDraw.apply(this, args);
   };
-  paper.Item.prototype.getSelectedColor = () => (darkPaperDisabled() ? null : new paper.Color(secondaryColor()));
 
   // Change the colors of background layers
   const updateColors = () => {
@@ -63,32 +34,26 @@ export default async function ({ addon, console }) {
     let artboardBackground;
     let workspaceBackground;
     let checkerboardColor;
-    let blueOutlineColor;
     let crosshairOuterColor;
     let crosshairInnerColor;
     if (!darkPaperDisabled()) {
       artboardBackground = addon.settings.get("accent");
       workspaceBackground = alphaBlend(
         addon.settings.get("accent"),
-        multiply(addon.settings.get("primary"), { a: 0.1 })
+        multiply(makeHsv(addon.settings.get("page"), 0.7, 1), { a: 0.1 })
       );
       checkerboardColor = textColor(
         addon.settings.get("accent"),
-        alphaBlend(
-          addon.settings.get("accent"),
-          multiply(makeHsv(addon.settings.get("primary"), 1, 0.67), { a: 0.15 })
-        ),
-        alphaBlend(addon.settings.get("accent"), multiply(makeHsv(addon.settings.get("primary"), 0.5, 1), { a: 0.15 })),
+        alphaBlend(addon.settings.get("accent"), multiply(makeHsv(addon.settings.get("page"), 1, 0.67), { a: 0.15 })),
+        alphaBlend(addon.settings.get("accent"), multiply(makeHsv(addon.settings.get("page"), 0.5, 1), { a: 0.15 })),
         112 // threshold: #707070
       );
-      blueOutlineColor = secondaryColor();
       crosshairOuterColor = textColor(addon.settings.get("accent"), "#ffffff", "#000000");
       crosshairInnerColor = textColor(addon.settings.get("accent"), "#000000", "#ffffff");
     } else {
       artboardBackground = "#ffffff";
       workspaceBackground = "#ecf1f9";
       checkerboardColor = "#d9e3f2";
-      blueOutlineColor = "#4280d7";
       crosshairOuterColor = "#ffffff";
       crosshairInnerColor = "#000000";
     }
@@ -103,7 +68,6 @@ export default async function ({ addon, console }) {
         for (let i = 3; i < 6; i++) layer._children[2]._children[i].strokeColor = crosshairInnerColor;
       } else if (layer.data.isOutlineLayer) {
         layer._children[0].strokeColor = artboardBackground;
-        layer._children[1].strokeColor = blueOutlineColor;
       } else if (layer.data.isDragCrosshairLayer) {
         for (let i = 0; i < 3; i++) layer.dragCrosshair._children[i].strokeColor = crosshairOuterColor;
         for (let i = 3; i < 6; i++) layer.dragCrosshair._children[i].strokeColor = crosshairInnerColor;

@@ -188,42 +188,43 @@
   .setting-input.check {
     appearance: none;
     display: block;
+    background: var(--button-background);
     width: 40px;
     height: 20px;
-    background-color: var(--switch-background);
-    border: none;
     border-radius: 10px;
     position: relative;
     cursor: pointer;
     transition: all 0.25s ease;
+    border: 1px solid var(--switch-border);
   }
 
   .setting-input.check::before {
     content: "";
     position: absolute;
-    top: 5px;
-    left: 5px;
     display: block;
     width: 10px;
     height: 10px;
     background-color: var(--switch-inner-background);
     border-radius: 5px;
+    top: 4px;
+    left: 4px;
     transition: all 0.25s ease;
   }
   [dir="rtl"] .setting-input.check::before {
-    left: 25px;
+    left: 24px;
   }
 
   .setting-input.check:checked {
     background-color: var(--blue);
+    border-color: var(--blue);
   }
 
   .setting-input.check:checked::before {
     background-color: var(--white-text);
-    left: 25px;
+    left: 24px;
   }
   [dir="rtl"] .setting-input.check:checked::before {
-    left: 5px;
+    left: 4px;
   }
 
   .setting-input.number {
@@ -334,7 +335,11 @@
       linear-gradient(45deg, transparent 75%, #777 75%), linear-gradient(-45deg, transparent 75%, #777 75%);
     background-color: white;
     background-size: 6px 6px;
-    background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
+    background-position:
+      0 0,
+      0 3px,
+      3px -3px,
+      -3px 0px;
   }
   .setting-dropdown .color-preview span {
     display: inline-block;

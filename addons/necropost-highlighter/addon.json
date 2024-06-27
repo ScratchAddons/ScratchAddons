@@ -1,0 +1,143 @@
+{
+  "name": "Necropost highlighter",
+  "description": "Highlights topics started much earlier than others on the same page in selected forums, so you don't waste time reading zombie messages or replies to help, question or request topics that were actually asked long ago.",
+  "info": [
+    {
+      "type": "notice",
+      "id": "whatGetsHighlighted",
+      "text": "Sometimes an older topic is kept alive for good reasons, like an ongoing conversation, or the original poster following up their own topic months later. All older topics in selected forums are highlighted, including occasional lingering topics that are not necroposts. (That's why they get highlighted, but not removed.)"
+    }
+  ],
+  "credits": [
+    {
+      "name": "RT_Borg",
+      "link": "https://github.com/RT-Borg"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "tags": ["community", "forums"],
+  "versionAdded": "1.32.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["^https://scratch.mit.edu/discuss/(?:m/|)(?:search|1|3|4|6|7|9|11|49)/"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["^https://scratch.mit.edu/discuss/(?:m/|)(?:search|1|3|4|6|7|9|11|49)/"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Roughly how many months is 'old'?",
+      "id": "monthCountConsideredOld",
+      "type": "integer",
+      "min": 1,
+      "max": 24,
+      "default": 1
+    },
+    {
+      "name": "Color topic cells?",
+      "id": "colorTopicCells",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Choose custom forums?",
+      "id": "chooseCustomForums",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "New Scratchers (usually accurate)",
+      "id": "applyToNewScratchers",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": {
+          "chooseCustomForums": true
+        }
+      }
+    },
+    {
+      "name": "Help with Scripts (usually accurate)",
+      "id": "applyToHelpWithScripts",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": {
+          "chooseCustomForums": true
+        }
+      }
+    },
+    {
+      "name": "Questions about Scratch (usually accurate)",
+      "id": "applyToQuestionsAboutScratch",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": {
+          "chooseCustomForums": true
+        }
+      }
+    },
+    {
+      "name": "Bugs and Glitches (usually accurate)",
+      "id": "applyToBugsAndGlitches",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": {
+          "chooseCustomForums": true
+        }
+      }
+    },
+    {
+      "name": "Project Ideas (mostly accurate)",
+      "id": "applyToProjectIdeas",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": {
+          "chooseCustomForums": true
+        }
+      }
+    },
+    {
+      "name": "Requests (less accurate)",
+      "id": "applyToRequests",
+      "type": "boolean",
+      "default": false,
+      "if": {
+        "settings": {
+          "chooseCustomForums": true
+        }
+      }
+    },
+    {
+      "name": "Suggestions (less accurate)",
+      "id": "applyToSuggestions",
+      "type": "boolean",
+      "default": false,
+      "if": {
+        "settings": {
+          "chooseCustomForums": true
+        }
+      }
+    },
+    {
+      "name": "Open Source Projects (less accurate)",
+      "id": "applyToOpenSourceProjects",
+      "type": "boolean",
+      "default": false,
+      "if": {
+        "settings": {
+          "chooseCustomForums": true
+        }
+      }
+    }
+  ]
+}

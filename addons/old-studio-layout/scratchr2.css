@@ -54,7 +54,7 @@
 .studio-tab-nav a.active.nav_link > li,
 .studio-tab-nav a.active.nav_link:hover > li {
   background: transparent;
-  border-color: #0fbd8c;
+  border-color: var(--darkWww-box-greenText, #328554);
   color: var(--darkWww-box-text, #575e75);
 }
 .studio-tab-nav .active > li img,

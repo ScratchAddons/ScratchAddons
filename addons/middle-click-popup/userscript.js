@@ -1,478 +1,468 @@
+//@ts-check
+
+import WorkspaceQuerier, { QueryResult } from "./WorkspaceQuerier.js";
+import renderBlock, { BlockComponent, getBlockHeight } from "./BlockRenderer.js";
+import { BlockInstance, BlockShape, BlockTypeInfo } from "./BlockTypeInfo.js";
+import { onClearTextWidthCache } from "./module.js";
+
 export default async function ({ addon, msg, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
-  let mouse = { x: 0, y: 0 };
-
-  class FloatingInput {
-    constructor() {
-      this.floatBar = null;
-      this.floatInput = null;
-      this.dropdownOut = null;
-      this.dropdown = null;
-
-      this.prevVal = "";
-
-      this.DROPDOWN_BLOCK_LIST_MAX_ROWS = 25;
-
-      this.createDom();
-    }
-
-    get workspace() {
-      return Blockly.getMainWorkspace();
-    }
-
-    get selectedTab() {
-      return addon.tab.redux.state.scratchGui.editorTab.activeTabIndex;
-    }
-
-    createDom() {
-      // Popup new input box for block injection
-      this.floatBar = document.body.appendChild(document.createElement("div"));
-      this.floatBar.className = "sa-float-bar";
-      this.floatBar.dir = addon.tab.direction;
-      this.floatBar.style.display = "none";
-
-      this.dropdownOut = this.floatBar.appendChild(document.createElement("div"));
-      this.dropdownOut.className = "sa-float-bar-dropdown-out";
-
-      this.floatInput = this.dropdownOut.appendChild(document.createElement("input"));
-      this.floatInput.className = "sa-float-bar-input";
-      this.floatInput.className = addon.tab.scratchClass("input_input-form", {
-        others: "sa-float-bar-input",
-      });
-
-      this.dropdown = this.dropdownOut.appendChild(document.createElement("ul"));
-      this.dropdown.className = "sa-float-bar-dropdown";
-
-      this.floatInput.addEventListener("keyup", () => this.inputChange());
-      this.floatInput.addEventListener("focus", () => this.inputChange());
-      this.floatInput.addEventListener("keydown", (...e) => this.inputKeyDown(...e));
-      this.floatInput.addEventListener("focusout", () => this.hide());
-
-      this.dropdownOut.addEventListener("mousedown", (...e) => this.onClick(...e));
-
-      document.addEventListener("keydown", (e) => {
-        let ctrlKey = e.ctrlKey || e.metaKey;
-
-        if (e.key === " " && ctrlKey) {
-          // Ctrl + Space (Inject Code)
-          this.show(e);
-          e.cancelBubble = true;
-          e.preventDefault();
-          return true;
-        }
-      });
-    }
-
-    show(e) {
-      if (this.selectedTab !== 0) {
-        return;
-      }
-
-      e.cancelBubble = true;
-      e.preventDefault();
-
-      this.buildFilterList();
-
-      this.floatBar.style.left = (e.clientX ?? mouse.x) + 16 + "px";
-      this.floatBar.style.top = (e.clientY ?? mouse.y) - 8 + "px";
-      this.floatBar.style.display = "";
-      this.floatInput.value = "";
-      this.floatInput.focus();
-    }
-
-    onClick(e) {
-      e.cancelBubble = true;
-      if (!e.target.closest("input")) {
-        e.preventDefault();
-      }
-
-      let sel = e && e.target;
-      if (sel.tagName === "B") {
-        sel = sel.parentNode;
-      }
-
-      if (e instanceof MouseEvent && sel.tagName !== "LI") {
-        // Mouse clicks need to be on a block...
-        return;
-      }
-
-      if (!sel || !sel.data) {
-        sel = this.dropdown.querySelector(".sel");
-      }
-
-      if (!sel) {
-        return;
-      }
-
-      this.createDraggingBlock(sel, e);
-
-      if (e.shiftKey) {
-        this.floatBar.style.display = "";
-        this.floatInput.focus();
-      }
-    }
-
-    createDraggingBlock(sel, e) {
-      let option = sel.data.option;
-      // block:option.block, dom:option.dom, option:option.option
-      if (option.option) {
-        // We need to tweak the dropdown in this xml...
-        let field = option.dom.querySelector("field[name=" + option.pickField + "]");
-        if (field.getAttribute("id")) {
-          field.innerText = option.option[0];
-          field.setAttribute("id", option.option[1] + "-" + option.option[0]);
-        } else {
-          field.innerText = option.option[1];
-        }
-
-        // Handle "stop other scripts in sprite"
-        if (option.option[1] === "other scripts in sprite") {
-          option.dom.querySelector("mutation").setAttribute("hasnext", "true");
-        }
-      }
-
-      // This is mostly copied from https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/scratch_blocks_utils.js#L171
-      // Some bits were removed or changed to fit our needs.
-      this.workspace.setResizesEnabled(false);
-
-      Blockly.Events.disable();
-      try {
-        var newBlock = Blockly.Xml.domToBlock(option.dom, this.workspace);
-
-        Blockly.scratchBlocksUtils.changeObscuredShadowIds(newBlock);
-
-        var svgRootNew = newBlock.getSvgRoot();
-        if (!svgRootNew) {
-          throw new Error("newBlock is not rendered.");
-        }
-
-        let blockBounds = newBlock.svgPath_.getBoundingClientRect();
-        let newBlockX = Math.floor((mouse.x - (blockBounds.left + blockBounds.right) / 2) / this.workspace.scale);
-        let newBlockY = Math.floor((mouse.y - (blockBounds.top + blockBounds.bottom) / 2) / this.workspace.scale);
-        newBlock.moveBy(newBlockX, newBlockY);
-      } finally {
-        Blockly.Events.enable();
-      }
-      if (Blockly.Events.isEnabled()) {
-        Blockly.Events.fire(new Blockly.Events.BlockCreate(newBlock));
-      }
-
-      var fakeEvent = {
-        clientX: mouse.x,
-        clientY: mouse.y,
-        type: "mousedown",
-        preventDefault: function () {
-          e.preventDefault();
-        },
-        stopPropagation: function () {
-          e.stopPropagation();
-        },
-        target: sel,
-      };
-      this.workspace.startDragWithFakeEvent(fakeEvent, newBlock);
-    }
-
-    inputChange() {
-      // Filter the list...
-      let val = (this.floatInput.value || "").toLowerCase();
-      if (val === this.prevVal) {
-        return;
-      }
-
-      this.prevVal = val;
-
-      let p = this.dropdown.parentNode;
-      this.dropdown.remove();
-
-      let count = 0;
-
-      let split = val.split(" ");
-      let listLI = this.dropdown.getElementsByTagName("li");
-      for (const li of listLI) {
-        const procCode = li.data.text;
-        const lower = li.data.lower;
-        // let i = li.data.lower.indexOf(val);
-        // let array = regExp.exec(li.data.lower);
-
-        let im = 0;
-        let match = [];
-        for (let si = 0; si < split.length; si++) {
-          let find = " " + split[si];
-          let idx = lower.indexOf(find, im);
-          if (idx === -1) {
-            match = null;
-            break;
-          }
-          match.push(idx);
-          im = idx + find.length;
-        }
-
-        if (count < this.DROPDOWN_BLOCK_LIST_MAX_ROWS && match) {
-          li.style.display = "block";
-          while (li.firstChild) {
-            li.removeChild(li.firstChild);
-          }
-
-          let i = 0;
-
-          for (let iM = 0; iM < match.length; iM++) {
-            let im = match[iM];
-            if (im > i) {
-              li.appendChild(document.createTextNode(procCode.substring(i, im)));
-              i = im;
-            }
-            let bText = document.createElement("b");
-            let len = split[iM].length;
-            bText.appendChild(document.createTextNode(procCode.substr(i, len)));
-            li.appendChild(bText);
-            i += len;
-          }
-
-          if (i < procCode.length) {
-            li.appendChild(document.createTextNode(procCode.substr(i)));
-          }
-
-          if (count === 0) {
-            li.classList.add("sel");
-          } else {
-            li.classList.remove("sel");
-          }
-          count++;
-        } else {
-          li.style.display = "none";
-          li.classList.remove("sel");
-        }
-      }
-      p.append(this.dropdown);
-    }
-
-    inputKeyDown(e) {
-      if (e.keyCode === 38) {
-        this.navigateFloatFilter(-1);
-        e.preventDefault();
-        return;
-      }
-      if (e.keyCode === 40) {
-        this.navigateFloatFilter(1);
-        e.preventDefault();
-        return;
-      }
-      if (e.keyCode === 13) {
-        // Enter
-        let sel = this.dropdown.querySelector(".sel");
-        if (sel) {
-          this.onClick(e);
-          this.hide();
-        }
-        e.cancelBubble = true;
-        e.preventDefault();
-        return;
-      }
-      if (e.keyCode === 27) {
-        // Escape
-        if (this.floatInput.value.length > 0) {
-          this.floatInput.value = ""; // Clear search first, then close on second press
-          this.inputChange(e);
-        } else {
-          this.hide();
-        }
-        e.preventDefault();
-        return;
-      }
-    }
-
-    buildFilterList() {
-      let options = [];
-
-      let toolbox = this.workspace.getToolbox();
-
-      // This can happen during custom block creation, for example
-      if (!toolbox) return;
-
-      let blocks = toolbox.flyout_.getWorkspace().getTopBlocks();
-      // 107 blocks, not in order... but we can sort by y value or description right :)
-
-      let fullDom = Blockly.Xml.workspaceToDom(toolbox.flyout_.getWorkspace());
-      const doms = {};
-      for (const x of fullDom.children) {
-        if (x.tagName === "BLOCK") {
-          let id = x.getAttribute("id");
-          doms[id] = x;
-        }
-      }
-
-      for (const block of blocks) {
-        this.getBlockText(block, options, doms);
-      }
-
-      options.sort((a, b) =>
-        a.desc.length < b.desc.length ? -1 : a.desc.length > b.desc.length ? 1 : a.desc.localeCompare(b.desc)
-      );
-
-      let count = 0;
-
-      while (this.dropdown.firstChild) {
-        this.dropdown.removeChild(this.dropdown.firstChild);
-      }
-      for (const option of options) {
-        const li = document.createElement("li");
-        const desc = option.desc;
-
-        // bType = hat block reporter boolean
-
-        let bType = this.getEdgeTypeClass(option.block);
-
-        count++;
-
-        li.innerText = desc;
-        li.data = { text: desc, lower: " " + desc.toLowerCase(), option: option };
-
-        let ending = option.block.getCategory();
-        if (option.block.isScratchExtension) {
-          ending = "pen";
-        } else if (addon.tab.getCustomBlock(option.block.procCode_)) {
-          ending = "addon-custom-block";
-        }
-
-        li.className = "sa-block-color-" + ending + " sa-" + bType;
-        if (count > this.DROPDOWN_BLOCK_LIST_MAX_ROWS) {
-          // Limit maximum number of rows to prevent lag when no filter is applied
-          li.style.display = "none";
-        }
-        this.dropdown.appendChild(li);
-      }
-
-      this.dropdownOut.classList.add("vis");
-    }
-
-    navigateFloatFilter(dir) {
-      let sel = this.dropdown.getElementsByClassName("sel");
-      let nxt;
-      if (sel.length > 0 && sel[0].style.display !== "none") {
-        nxt = dir === -1 ? sel[0].previousSibling : sel[sel.length - 1].nextSibling;
-      } else {
-        nxt = this.dropdown.children[0];
-        dir = 1;
-      }
-      while (nxt && nxt.style.display === "none") {
-        nxt = dir === -1 ? nxt.previousSibling : nxt.nextSibling;
-      }
-      if (nxt) {
-        for (const i of sel) {
-          i.classList.remove("sel");
-        }
-        nxt.classList.add("sel");
-        // centerTop(nxt.data.labelID);
-      }
-    }
-
-    getBlockText(block, options, doms) {
-      // block.type;  "looks_nextbackdrop"
-
-      let desc;
-      let picklist, pickField;
-
-      let dom = doms[block.id];
-
-      // dom = doms[block.type];
-
-      const process = (block) => {
-        for (const input of block.inputList) {
-          // input.name = "", input.type = 5
-          let fields = input.fieldRow;
-          for (const field of fields) {
-            // field --- Blockly.FieldLabel .className = "blocklyText"
-            // Blockly.FieldDropdown --- .className = "blocklyText blocklyDropdownText"
-
-            let text;
-
-            if (!picklist && field.className_ === "blocklyText blocklyDropdownText") {
-              picklist = field.getOptions();
-              pickField = field.name;
-              if (picklist && picklist.length > 0) {
-                text = "^^";
-              } else {
-                text = field.getText();
-              }
-            } else {
-              text = field.getText();
-            }
-
-            desc = (desc ? desc + " " : "") + text;
-          }
-
-          if (input.connection) {
-            let innerBlock = input.connection.targetBlock();
-            if (innerBlock) {
-              process(innerBlock); // Recursive process connected child blocks...
-            }
-          }
-        }
-      };
-
-      process(block);
-
-      if (picklist) {
-        for (const item of picklist) {
-          let code = item[1];
-          if (
-            typeof code !== "string" || // Audio Record is a function!
-            code === "DELETE_VARIABLE_ID" ||
-            code === "RENAME_VARIABLE_ID" ||
-            code === "NEW_BROADCAST_MESSAGE_ID" ||
-            code === "NEW_BROADCAST_MESSAGE_ID" ||
-            // editor-searchable-dropdowns compatibility
-            code === "createGlobalVariable" ||
-            code === "createLocalVariable" ||
-            code === "createGlobalList" ||
-            code === "createLocalList" ||
-            code === "createBroadcast"
-          ) {
-            continue; // Skip these
-          }
-          options.push({
-            desc: desc.replace("^^", item[0]),
-            block: block,
-            dom: dom,
-            option: item,
-            pickField: pickField,
-          });
-        }
-      } else {
-        options.push({ desc: desc, block: block, dom: dom });
-      }
-
-      return desc;
-    }
-
-    getEdgeTypeClass(block) {
-      switch (block.edgeShape_) {
-        case 1:
-          return "boolean";
-        case 2:
-          return "reporter";
-        default:
-          return block.startHat_ ? "hat" : "block";
-      }
-    }
-
-    hide() {
-      this.floatBar.style.display = "none";
+  const vm = addon.tab.traps.vm;
+
+  const PREVIEW_LIMIT = 50;
+
+  const popupRoot = document.body.appendChild(document.createElement("div"));
+  popupRoot.classList.add("sa-mcp-root");
+  popupRoot.dir = addon.tab.direction;
+  popupRoot.style.display = "none";
+
+  const popupContainer = popupRoot.appendChild(document.createElement("div"));
+  popupContainer.classList.add("sa-mcp-container");
+
+  const popupInputContainer = popupContainer.appendChild(document.createElement("div"));
+  popupInputContainer.classList.add(addon.tab.scratchClass("input_input-form"));
+  popupInputContainer.classList.add("sa-mcp-input-wrapper");
+
+  const popupInputSuggestion = popupInputContainer.appendChild(document.createElement("input"));
+  popupInputSuggestion.classList.add("sa-mcp-input-suggestion");
+
+  const popupInput = popupInputContainer.appendChild(document.createElement("input"));
+  popupInput.classList.add("sa-mcp-input");
+  popupInput.setAttribute("autocomplete", "off");
+
+  const popupPreviewContainer = popupContainer.appendChild(document.createElement("div"));
+  popupPreviewContainer.classList.add("sa-mcp-preview-container");
+
+  const popupPreviewScrollbarSVG = popupContainer.appendChild(
+    document.createElementNS("http://www.w3.org/2000/svg", "svg")
+  );
+  popupPreviewScrollbarSVG.classList.add(
+    "sa-mcp-preview-scrollbar",
+    "blocklyScrollbarVertical",
+    "blocklyMainWorkspaceScrollbar"
+  );
+  popupPreviewScrollbarSVG.style.display = "none";
+
+  const popupPreviewScrollbarBackground = popupPreviewScrollbarSVG.appendChild(
+    document.createElementNS("http://www.w3.org/2000/svg", "rect")
+  );
+  popupPreviewScrollbarBackground.setAttribute("width", "11");
+  popupPreviewScrollbarBackground.classList.add("blocklyScrollbarBackground");
+
+  const popupPreviewScrollbarHandle = popupPreviewScrollbarSVG.appendChild(
+    document.createElementNS("http://www.w3.org/2000/svg", "rect")
+  );
+  popupPreviewScrollbarHandle.setAttribute("rx", "3");
+  popupPreviewScrollbarHandle.setAttribute("ry", "3");
+  popupPreviewScrollbarHandle.setAttribute("width", "6");
+  popupPreviewScrollbarHandle.setAttribute("x", "2.5");
+  popupPreviewScrollbarHandle.classList.add("blocklyScrollbarHandle");
+
+  const popupPreviewBlocks = popupPreviewContainer.appendChild(
+    document.createElementNS("http://www.w3.org/2000/svg", "svg")
+  );
+  popupPreviewBlocks.classList.add("sa-mcp-preview-blocks");
+
+  const querier = new WorkspaceQuerier();
+
+  let mousePosition = { x: 0, y: 0 };
+  document.addEventListener("mousemove", (e) => {
+    mousePosition = { x: e.clientX, y: e.clientY };
+  });
+
+  onClearTextWidthCache(closePopup);
+
+  /**
+   * @typedef ResultPreview
+   * @property {BlockInstance} block
+   * @property {((endOnly: boolean) => string)?} autocompleteFactory
+   * @property {BlockComponent} renderedBlock
+   * @property {SVGGElement} svgBlock
+   * @property {SVGRectElement} svgBackground
+   */
+  /** @type {ResultPreview[]} */
+  let queryPreviews = [];
+  /** @type {QueryResult | null} */
+  let queryIllegalResult = null;
+  let selectedPreviewIdx = 0;
+  /** @type {BlockTypeInfo[]?} */
+  let blockTypes = null;
+  let limited = false;
+
+  let allowMenuClose = true;
+
+  let popupPosition = null;
+  let popupOrigin = null;
+
+  let previewWidth = 0;
+  let previewHeight = 0;
+
+  let previewScale = 0;
+
+  let previewMinHeight = 0;
+  let previewMaxHeight = 0;
+
+  function openPopup() {
+    if (addon.self.disabled) return;
+
+    // Don't show the menu if we're not in the code editor
+    if (addon.tab.editorMode !== "editor") return;
+    if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 0) return;
+
+    Blockly.hideChaff();
+
+    blockTypes = BlockTypeInfo.getBlocks(Blockly, vm, Blockly.getMainWorkspace(), msg);
+    querier.indexWorkspace([...blockTypes]);
+    blockTypes.sort((a, b) => {
+      const prio = (block) => ["operators", "data"].indexOf(block.category.name) - block.id.startsWith("data_");
+      return prio(b) - prio(a);
+    });
+
+    previewScale = window.innerWidth * 0.00005 + addon.settings.get("popup_scale") / 100;
+    previewWidth = (window.innerWidth * addon.settings.get("popup_width")) / 100;
+    previewMaxHeight = (window.innerHeight * addon.settings.get("popup_max_height")) / 100;
+
+    popupContainer.style.width = previewWidth + "px";
+
+    popupOrigin = { x: mousePosition.x, y: mousePosition.y };
+    popupRoot.style.display = "";
+    popupInput.value = "";
+    popupInput.focus();
+    updateInput();
+  }
+
+  function closePopup() {
+    if (allowMenuClose) {
+      popupOrigin = null;
+      popupPosition = null;
+      popupRoot.style.display = "none";
+      blockTypes = null;
+      querier.clearWorkspaceIndex();
     }
   }
-  const floatingInput = new FloatingInput();
 
-  const _doWorkspaceClick_ = Blockly.Gesture.prototype.doWorkspaceClick_;
-  Blockly.Gesture.prototype.doWorkspaceClick_ = function () {
-    if (!addon.self.disabled && (this.mostRecentEvent_.button === 1 || this.mostRecentEvent_.shiftKey)) {
-      // Wheel button...
-      floatingInput.show(this.mostRecentEvent_);
+  popupInput.addEventListener("input", updateInput);
+
+  function updateInput() {
+    /**
+     * @typedef MenuItem
+     * @property {BlockInstance} block
+     * @property {(endOnly: boolean) => string} [autocompleteFactory]
+     */
+    /** @type {MenuItem[]} */
+    const blockList = [];
+
+    if (popupInput.value.trim().length === 0) {
+      queryIllegalResult = null;
+      if (blockTypes)
+        for (const blockType of blockTypes) {
+          blockList.push({
+            block: blockType.createBlock(),
+          });
+        }
+      limited = false;
+    } else {
+      // Get the list of blocks to display using the input content
+      const queryResultObj = querier.queryWorkspace(popupInput.value);
+      const queryResults = queryResultObj.results;
+      queryIllegalResult = queryResultObj.illegalResult;
+      limited = queryResultObj.limited;
+
+      if (queryResults.length > PREVIEW_LIMIT) queryResults.length = PREVIEW_LIMIT;
+
+      for (const queryResult of queryResults) {
+        blockList.push({
+          block: queryResult.getBlock(),
+          autocompleteFactory: (endOnly) => queryResult.toText(endOnly),
+        });
+      }
     }
 
+    // @ts-ignore Delete the old previews
+    while (popupPreviewBlocks.firstChild) popupPreviewBlocks.removeChild(popupPreviewBlocks.lastChild);
+
+    // Create the new previews
+    queryPreviews.length = 0;
+    let y = 0;
+    for (let resultIdx = 0; resultIdx < blockList.length; resultIdx++) {
+      const result = blockList[resultIdx];
+
+      const mouseMoveListener = () => {
+        updateSelection(resultIdx);
+      };
+
+      const mouseDownListener = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        updateSelection(resultIdx);
+        allowMenuClose = !e.shiftKey;
+        selectBlock();
+        allowMenuClose = true;
+        if (e.shiftKey) popupInput.focus();
+      };
+
+      const svgBackground = popupPreviewBlocks.appendChild(
+        document.createElementNS("http://www.w3.org/2000/svg", "rect")
+      );
+
+      const height = getBlockHeight(result.block);
+      svgBackground.setAttribute("transform", `translate(0, ${(y + height / 10) * previewScale})`);
+      svgBackground.setAttribute("height", height * previewScale + "px");
+      svgBackground.classList.add("sa-mcp-preview-block-bg");
+      svgBackground.addEventListener("mousemove", mouseMoveListener);
+      svgBackground.addEventListener("mousedown", mouseDownListener);
+
+      const svgBlock = popupPreviewBlocks.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "g"));
+      svgBlock.addEventListener("mousemove", mouseMoveListener);
+      svgBlock.addEventListener("mousedown", mouseDownListener);
+      svgBlock.classList.add("sa-mcp-preview-block");
+
+      const renderedBlock = renderBlock(result.block, svgBlock);
+
+      queryPreviews.push({
+        block: result.block,
+        autocompleteFactory: result.autocompleteFactory ?? null,
+        renderedBlock,
+        svgBlock,
+        svgBackground,
+      });
+
+      y += height;
+    }
+
+    const height = (y + 8) * previewScale;
+
+    if (height < previewMinHeight) previewHeight = previewMinHeight;
+    else if (height > previewMaxHeight) previewHeight = previewMaxHeight;
+    else previewHeight = height;
+
+    popupPreviewBlocks.setAttribute("height", `${height}px`);
+    popupPreviewContainer.style.height = previewHeight + "px";
+    popupPreviewScrollbarSVG.style.height = previewHeight + "px";
+    popupPreviewScrollbarBackground.setAttribute("height", "" + previewHeight);
+    popupInputContainer.dataset["error"] = "" + limited;
+
+    popupPosition = { x: popupOrigin.x + 16, y: popupOrigin.y - 8 };
+
+    const popupHeight = popupContainer.getBoundingClientRect().height;
+    const popupBottom = popupPosition.y + popupHeight;
+    if (popupBottom > window.innerHeight) {
+      popupPosition.y -= popupBottom - window.innerHeight;
+    }
+
+    popupRoot.style.top = popupPosition.y + "px";
+    popupRoot.style.left = popupPosition.x + "px";
+
+    selectedPreviewIdx = -1;
+    updateSelection(0);
+    updateCursor();
+    updateScrollbar();
+  }
+
+  function updateSelection(newIdx) {
+    if (selectedPreviewIdx === newIdx) return;
+
+    const oldSelection = queryPreviews[selectedPreviewIdx];
+    if (oldSelection) {
+      oldSelection.svgBackground.classList.remove("sa-mcp-preview-block-bg-selection");
+      oldSelection.svgBlock.classList.remove("sa-mcp-preview-block-selection");
+    }
+
+    if (queryPreviews.length === 0 && queryIllegalResult) {
+      popupInputSuggestion.value =
+        popupInput.value + queryIllegalResult.toText(true).substring(popupInput.value.length);
+      return;
+    }
+
+    const newSelection = queryPreviews[newIdx];
+    if (newSelection && newSelection.autocompleteFactory) {
+      newSelection.svgBackground.classList.add("sa-mcp-preview-block-bg-selection");
+      newSelection.svgBlock.classList.add("sa-mcp-preview-block-selection");
+
+      newSelection.svgBackground.scrollIntoView({
+        block: "nearest",
+        behavior: Math.abs(newIdx - selectedPreviewIdx) > 1 ? "smooth" : "auto",
+      });
+
+      popupInputSuggestion.value =
+        popupInput.value + newSelection.autocompleteFactory(true).substring(popupInput.value.length);
+    } else {
+      popupInputSuggestion.value = "";
+    }
+
+    selectedPreviewIdx = newIdx;
+  }
+
+  // @ts-ignore
+  document.addEventListener("selectionchange", updateCursor);
+
+  function updateCursor() {
+    const cursorPos = popupInput.selectionStart ?? 0;
+    const cursorPosRel = popupInput.value.length === 0 ? 0 : cursorPos / popupInput.value.length;
+
+    let y = 0;
+    for (let previewIdx = 0; previewIdx < queryPreviews.length; previewIdx++) {
+      const preview = queryPreviews[previewIdx];
+
+      var blockX = 5;
+      if (blockX + preview.renderedBlock.width > previewWidth / previewScale)
+        blockX += (previewWidth / previewScale - blockX - preview.renderedBlock.width) * previewScale * cursorPosRel;
+      var blockY = (y + 30) * previewScale;
+
+      preview.svgBlock.setAttribute("transform", `translate(${blockX}, ${blockY}) scale(${previewScale})`);
+
+      y += getBlockHeight(preview.block);
+    }
+
+    popupInputSuggestion.scrollLeft = popupInput.scrollLeft;
+  }
+
+  popupPreviewContainer.addEventListener("scroll", updateScrollbar);
+
+  function updateScrollbar() {
+    const scrollTop = popupPreviewContainer.scrollTop;
+    const scrollY = popupPreviewContainer.scrollHeight;
+
+    if (scrollY <= previewHeight) {
+      popupPreviewScrollbarSVG.style.display = "none";
+      return;
+    }
+
+    const scrollbarHeight = (previewHeight / scrollY) * previewHeight;
+    const scrollbarY = (scrollTop / scrollY) * previewHeight;
+
+    popupPreviewScrollbarSVG.style.display = "";
+    popupPreviewScrollbarHandle.setAttribute("height", "" + scrollbarHeight);
+    popupPreviewScrollbarHandle.setAttribute("y", "" + scrollbarY);
+  }
+
+  function selectBlock() {
+    const selectedPreview = queryPreviews[selectedPreviewIdx];
+    if (!selectedPreview) return;
+
+    const workspace = Blockly.getMainWorkspace();
+    // This is mostly copied from https://github.com/scratchfoundation/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/scratch_blocks_utils.js#L171
+    // Some bits were removed or changed to fit our needs.
+    workspace.setResizesEnabled(false);
+
+    let newBlock;
+    Blockly.Events.disable();
+    try {
+      newBlock = selectedPreview.block.createWorkspaceForm();
+      Blockly.scratchBlocksUtils.changeObscuredShadowIds(newBlock);
+
+      var svgRootNew = newBlock.getSvgRoot();
+      if (!svgRootNew) {
+        throw new Error("newBlock is not rendered.");
+      }
+
+      let blockBounds = newBlock.svgPath_.getBoundingClientRect();
+      let newBlockX = Math.floor((mousePosition.x - (blockBounds.left + blockBounds.right) / 2) / workspace.scale);
+      let newBlockY = Math.floor((mousePosition.y - (blockBounds.top + blockBounds.bottom) / 2) / workspace.scale);
+      newBlock.moveBy(newBlockX, newBlockY);
+    } finally {
+      Blockly.Events.enable();
+    }
+    if (Blockly.Events.isEnabled()) {
+      Blockly.Events.fire(new Blockly.Events.BlockCreate(newBlock));
+    }
+
+    let fakeEvent = {
+      clientX: mousePosition.x,
+      clientY: mousePosition.y,
+      type: "mousedown",
+      stopPropagation: function () {},
+      preventDefault: function () {},
+      target: selectedPreview.svgBlock,
+    };
+    if (workspace.getGesture(fakeEvent)) {
+      workspace.startDragWithFakeEvent(fakeEvent, newBlock);
+    }
+  }
+
+  function acceptAutocomplete() {
+    let factory;
+    if (queryPreviews[selectedPreviewIdx]) factory = queryPreviews[selectedPreviewIdx].autocompleteFactory;
+    else factory = () => popupInputSuggestion.value;
+    if (popupInputSuggestion.value.length === 0 || !factory) return;
+    popupInput.value = factory(false);
+    // Move cursor to the end of the newly inserted text
+    popupInput.selectionStart = popupInput.value.length + 1;
+    updateInput();
+  }
+
+  popupInput.addEventListener("keydown", (e) => {
+    switch (e.key) {
+      case "Escape":
+        // If there's something in the input, clear it
+        if (popupInput.value.length > 0) {
+          popupInput.value = "";
+          updateInput();
+        } else {
+          // If not, close the menu
+          closePopup();
+        }
+        e.stopPropagation();
+        e.preventDefault();
+        break;
+      case "Tab":
+        acceptAutocomplete();
+        e.stopPropagation();
+        e.preventDefault();
+        break;
+      case "Enter":
+        selectBlock();
+        closePopup();
+        e.stopPropagation();
+        e.preventDefault();
+        break;
+      case "ArrowDown":
+        if (selectedPreviewIdx + 1 >= queryPreviews.length) updateSelection(0);
+        else updateSelection(selectedPreviewIdx + 1);
+        e.stopPropagation();
+        e.preventDefault();
+        break;
+      case "ArrowUp":
+        if (selectedPreviewIdx - 1 < 0) updateSelection(queryPreviews.length - 1);
+        else updateSelection(selectedPreviewIdx - 1);
+        e.stopPropagation();
+        e.preventDefault();
+        break;
+    }
+  });
+
+  popupInput.addEventListener("focusout", closePopup);
+
+  // Open on ctrl + space
+  document.addEventListener("keydown", (e) => {
+    if (e.key === " " && (e.ctrlKey || e.metaKey)) {
+      openPopup();
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  });
+
+  // Open on mouse wheel button
+  const _doWorkspaceClick_ = Blockly.Gesture.prototype.doWorkspaceClick_;
+  Blockly.Gesture.prototype.doWorkspaceClick_ = function () {
+    if (this.mostRecentEvent_.button === 1 || this.mostRecentEvent_.shiftKey) openPopup();
+    mousePosition = { x: this.mostRecentEvent_.clientX, y: this.mostRecentEvent_.clientY };
     _doWorkspaceClick_.call(this);
   };
 
-  document.addEventListener("mousemove", (e) => {
-    mouse = { x: e.clientX, y: e.clientY };
-  });
+  // The popup should delete blocks dragged ontop of it
+  const _isDeleteArea = Blockly.WorkspaceSvg.prototype.isDeleteArea;
+  Blockly.WorkspaceSvg.prototype.isDeleteArea = function (e) {
+    if (popupPosition) {
+      if (
+        e.clientX > popupPosition.x &&
+        e.clientX < popupPosition.x + previewWidth &&
+        e.clientY > popupPosition.y &&
+        e.clientY < popupPosition.y + previewHeight
+      ) {
+        return Blockly.DELETE_AREA_TOOLBOX;
+      }
+    }
+    return _isDeleteArea.call(this, e);
+  };
 }

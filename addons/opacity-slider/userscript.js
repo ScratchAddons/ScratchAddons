@@ -1,5 +1,5 @@
 export default async function ({ addon, console, msg }) {
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/tinycolor-min.js");
+  await addon.tab.loadScript("/libraries/thirdparty/cs/tinycolor-min.js");
 
   const CONTAINER_WIDTH = 150;
   const HANDLE_WIDTH = 26;
@@ -47,11 +47,11 @@ export default async function ({ addon, console, msg }) {
 
     // setTimeout(() => {
     // // can't use scratch-paint/fill-style/CHANGE_FILL_COLOR because it checks the hex
-    // // https://github.com/LLK/scratch-paint/blob/0d169c7706d6ddda491b58b9180bb96c6ba946d8/src/lib/make-color-style-reducer.js#L9
+    // // https://github.com/scratchfoundation/scratch-paint/blob/0d169c7706d6ddda491b58b9180bb96c6ba946d8/src/lib/make-color-style-reducer.js#L9
     // const state = addon.tab.redux.state;
     // state.scratchPaint.color.fillColor.primary = color;
     // // need to apply color to selection
-    // // https://github.com/LLK/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/containers/color-indicator.jsx#L70
+    // // https://github.com/scratchfoundation/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/containers/color-indicator.jsx#L70
     // for (let i = 0; i < state.scratchPaint.selectedItems.length; i++) {
     //   console.log(state.scratchPaint.selectedItems[i].fillColor);
     //   state.scratchPaint.selectedItems[i].fillColor.set(color);
@@ -90,7 +90,6 @@ export default async function ({ addon, console, msg }) {
   };
 
   const handleClickBackground = (event) => {
-    if (event.target !== saOpacitySlider) return;
     handleClickOffset = HANDLE_WIDTH / 2;
     changeOpacity(scaleMouseToSliderPosition(event));
   };
@@ -163,6 +162,7 @@ export default async function ({ addon, console, msg }) {
       className: `sa-opacity-handle ${addon.tab.scratchClass("slider_handle")}`,
     });
     saOpacityHandle.addEventListener("mousedown", handleMouseDown);
+    saOpacityHandle.addEventListener("click", (event) => event.stopPropagation());
     const lastSlider = document.querySelector('[class*="slider_last"]');
     lastSlider.className = addon.tab.scratchClass("slider_container");
     setHandlePos(defaultAlpha);

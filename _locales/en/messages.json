@@ -36,10 +36,10 @@
     "message": "Until I turn it back on"
   },
   "muteFor": {
-    "message": "Mute"
+    "message": "Do not disturb"
   },
   "unmute": {
-    "message": "Unmute"
+    "message": "Turn off Do not disturb"
   },
   "recommended": {
     "message": "Recommended"
@@ -170,6 +170,9 @@
   "dark": {
     "message": "Dark"
   },
+  "loading": {
+    "message": "Loading..."
+  },
   "licensesTitle": {
     "message": "Licenses - Scratch Addons"
   },
@@ -242,14 +245,25 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_29": {
-    "message": "New addon: \"opacity slider\", which adds an opacity slider to the costume editor color picker. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_38": {
+    "message": "This is an experimental update that we're releasing to a portion of our user base. It contains some behind-the-scenes changes to support the new extension architecture required by browsers (Manifest V3). If you encounter any issues or unexpected behavior, please $1. There is also a button to send feedback in the settings page.",
+    "description": "!! The placeholder is \"send feedback\"."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_29": {
-    "message": "Other new addons added this update are \"project volume slider\", \"rename broadcasts\", and \"select stage colors in the costume editor\"."
+  "sendFeedbackNotification": {
+    "message": "send feedback"
+  },
+  "extensionUpdateInfo2_v1_38": {
+    "message": "This update doesn't introduce any new features, but stay tuned for upcoming updates."
+  },
+  "readTheBlogPost": {
+    "message": "Read the $1 for more information.",
+    "description": "The placeholder is \"blog post\""
+  },
+  "blogPost": {
+    "message": "blog post"
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
@@ -344,16 +358,17 @@
     "message": "No results found in \"$1\". Perhaps try different keywords?"
   },
   "captureCommentError": {
-    "message": "Message added by Scratch Addons: it appears that your comment doesn't follow $1, which asks Scratchers not to advertise or name browser extensions. This comment wasn't posted because it will probably result in your account getting muted from commenting for 5 minutes."
+    "message": "Message added by Scratch Addons: your comment mentions a browser extension. The $1 urges Scratchers not to advertise them, as the Scratch Team have not reviewed them for safety and can't possibly check every single one. Please follow the aforementioned policy by avoiding any references to browser extensions when posting on Scratch.",
+    "description": "The placeholder is \"Browser Extension Policy\""
   },
   "captureCommentPolicy": {
-    "message": "Scratch Community's Browser Extension/Userscript Policy"
+    "message": "Browser Extension Policy"
   },
   "captureCommentPostAnyway": {
     "message": "Post anyway"
   },
   "captureCommentConfirm": {
-    "message": "Are you sure you want to post this comment? Scratch will probably mute your account from commenting anywhere on Scratch for at least 5 minutes."
+    "message": "Posting this comment may lead to automatic muting of your account, temporarily preventing you from commenting. Persistent muting can result in your account being blocked from Scratch. Are you sure you want to post this comment?"
   },
   "extensionStoreDescription1": {
     "message": "Choose from 100+ options:",

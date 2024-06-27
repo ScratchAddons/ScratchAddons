@@ -37,15 +37,15 @@ export default async function ({ addon, console, msg }) {
   };
 
   // Special value Scratch uses as color when objects with different colors are selected
-  // https://github.com/LLK/scratch-paint/blob/6733e20b56f52d139f9885952a57c7da012a542f/src/helper/style-path.js#L10
+  // https://github.com/scratchfoundation/scratch-paint/blob/6733e20b56f52d139f9885952a57c7da012a542f/src/helper/style-path.js#L10
   const MIXED = "scratch-paint/style-path/mixed";
 
   const SCRATCH_DEFAULT_FILL = parseColor("#9966FF");
   const SCRATCH_DEFAULT_STROKE = parseColor("#000000");
 
   const TOOL_INFO = Object.assign(Object.create(null), {
-    // Tool names and gradient info defined in https://github.com/LLK/scratch-paint/blob/develop/src/lib/modes.js
-    // Search for activateTool() in matching file in https://github.com/LLK/scratch-paint/tree/develop/src/containers
+    // Tool names and gradient info defined in https://github.com/scratchfoundation/scratch-paint/blob/develop/src/lib/modes.js
+    // Search for activateTool() in matching file in https://github.com/scratchfoundation/scratch-paint/tree/develop/src/containers
     BRUSH: {
       resetsFill: true,
     },
@@ -262,8 +262,8 @@ export default async function ({ addon, console, msg }) {
         } else {
           // In non-persistence, we'll only apply the default colors when Scratch resets them to maintain the same behavior.
           // We have to do this weird redux trick because we can't modify these constants:
-          // https://github.com/LLK/scratch-paint/blob/6733e20b56f52d139f9885952a57c7da012a542f/src/reducers/fill-style.js#L7
-          // https://github.com/LLK/scratch-paint/blob/6733e20b56f52d139f9885952a57c7da012a542f/src/reducers/stroke-style.js#L7
+          // https://github.com/scratchfoundation/scratch-paint/blob/6733e20b56f52d139f9885952a57c7da012a542f/src/reducers/fill-style.js#L7
+          // https://github.com/scratchfoundation/scratch-paint/blob/6733e20b56f52d139f9885952a57c7da012a542f/src/reducers/stroke-style.js#L7
           const oldFillColor = fillStyle.get(detail.prev);
           if (oldFillColor.primary === null || oldFillColor.primary === MIXED) {
             const newFillColor = fillStyle.get();

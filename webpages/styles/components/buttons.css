@@ -2,10 +2,11 @@
   color: var(--content-text);
   background: var(--button-background);
   border: 1px solid var(--control-border);
-  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  padding: 7px 12px;
   border-radius: 4px;
   transition: 0.2s ease;
-  height: 32px;
   box-sizing: border-box;
   font-family: inherit;
   font-size: 12px;

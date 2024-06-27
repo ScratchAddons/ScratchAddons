@@ -9,6 +9,7 @@ export default async function ({ addon, console, msg }) {
         })
         .then(() => {
           if (!document.querySelector(".copy-link-button")) return;
+          if (document.querySelector("#scratchAddonsRemixTreeBtn")) return; // Check again because we're inside a promise
           const remixtree = document.createElement("button");
 
           const remixtreeSpan = document.createElement("span");

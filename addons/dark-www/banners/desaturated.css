@@ -1,3 +1,38 @@
+.unsupported-browser,
+.wedo .top-banner,
+.sa-annual-report-2019 .message-section,
+.sa-annual-report-2019 .initiatives-section .initiatives-subsection-header.community,
+.sa-annual-report-2019 .initiatives-section .initiatives-community .community-quotes .community-quote .comment-text,
+.title-banner.mod-conference,
+.conf2019-title-band {
+  background-color: #334766;
+}
+.sa-annual-report-2019 .initiatives-section .initiatives-community .community-quotes .community-quote .comment-text,
+.sa-annual-report-2019
+  .initiatives-section
+  .initiatives-community
+  .community-quotes
+  .community-quote
+  .comment-text::before,
+.sa-annual-report-2019
+  .initiatives-section
+  .initiatives-community
+  .community-quotes
+  .community-quote
+  .comment-text::after {
+  border-color: #334766;
+}
+.parents .title-banner.masthead,
+.download .title-banner.masthead /* Scratch 2.0 and 1.4 download */,
+.gdxfor .extension-header,
+.blue-background,
+.privacy-banner,
+.sa-annual-report-2019 .subnavigation,
+.sa-annual-report-2020 .initiatives-section .initiatives-subsection-header.community,
+.sa-annual-report-2021 .initiatives-section .initiatives-subsection-header.SEC,
+.conf2017-title-band {
+  background-color: #26364d;
+}
 .parents .title-banner.masthead .ted-talk {
   border-color: black;
 }
@@ -17,13 +52,14 @@
 .initiatives-section .initiatives-subsection-content .teacher-quote .comment-text::after {
   border-color: #473e59;
 }
-.banner-wrapper /* Ideas */ {
-  background-color: #99864d;
-}
+.boost .extension-header,
+.ev3 .extension-header,
 .wedo2 .extension-header {
-  background-color: #4d2e33;
+  background-color: #673267;
 }
 .hoc-banner,
+.feature-banner,
+.banner-wrapper /* Ideas */,
 .developers .title-banner.masthead,
 .sa-annual-report-2019 .reach-section,
 .initiatives-section .initiatives-subsection-header.tools,
@@ -35,11 +71,11 @@
 .sa-annual-report-2021 .reach-section,
 .sa-annual-report-2021 .reach-scratch-jr,
 .card .card-button,
-.microbit .extension-header,
-.link .extension-header /* Scratch Link download */ {
+.microbit .extension-header {
   background-color: #27473e;
 }
 .hoc-banner .hoc-banner-image,
+.feature-banner .feature-banner-image,
 .initiatives-section .initiatives-tools .abhi-quote .comment-text,
 .initiatives-section .initiatives-tools .abhi-quote .comment-text::before,
 .initiatives-section .initiatives-tools .abhi-quote .comment-text::after {
@@ -60,20 +96,19 @@
 .sa-annual-report-2020 .reach-scratch-jr {
   background-color: #265064;
 }
-.banner.warning /* confirm email */,
-.modal-flush-bottom-button,
-.ev3 .extension-header,
-.boost .extension-header,
-.validation-error,
-.validation-error::before,
 .error-text,
 .report-modal-content .validation-message,
 .report-modal-content .validation-message::before,
 .compose-comment .compose-error-row .compose-error-tip {
   background-color: #a37629;
 }
+#force-account-rename,
 .financials-section,
 .sa-annual-report-2020 .directors-message,
 .sa-annual-report-2021 .founders-message {
   background-color: #16171d;
+}
+.join-flow-outer-content /* username change */ {
+  background-clip: padding-box;
+  border-color: rgba(255, 255, 255, 0.25);
 }

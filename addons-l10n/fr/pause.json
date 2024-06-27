@@ -1,1 +1,1 @@
-{"pause/@name":"Bouton pause","pause/@description":"Ajoute un bouton pause a côté du drapeau vert."}
+{"pause/play":"Reprendre","pause/@name":"Bouton pause","pause/@description":"Ajoute un bouton pour mettre le projet en pause à côté du drapeau vert.","pause/@info-keybind":"Le projet peut également être mis en pause avec Alt+X (Option+X sur macOS).","pause/@update":"Il existe désormais un raccourci clavier pour mettre les projets en pause."}

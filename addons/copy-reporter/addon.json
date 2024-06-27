@@ -1,0 +1,21 @@
+{
+  "name": "Copy reporter values",
+  "description": "Adds the option to copy values displayed by variable monitors (from the right click context menu) and block reporter balloons.",
+  "credits": [{ "name": "TheKodeToad" }],
+  "tags": ["editor", "codeEditor"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.31.0"
+}

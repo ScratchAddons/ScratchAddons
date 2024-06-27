@@ -1,6 +1,6 @@
 {
-  "name": "Searchable dropdowns",
-  "description": "Allows you to search block dropdowns.",
+  "name": "Block dropdown search",
+  "description": "Allows you to search the options in block dropdowns.",
   "credits": [
     {
       "name": "GarboMuffin"

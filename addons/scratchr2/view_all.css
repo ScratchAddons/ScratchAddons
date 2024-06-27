@@ -107,12 +107,12 @@ body,
   color: var(--darkWww-gray-text, #575e75);
 }
 .box .box-content .pagination .active {
-  background-color: var(--darkWww-button, #4d97ff);
+  background-color: var(--darkWww-button, #855cd6);
   border-color: rgba(0, 0, 0, 0.15);
   color: var(--darkWww-button-text, white);
 }
 .box .box-content .pagination .active:hover {
-  background-color: var(--darkWww-button-variant, #4280d7);
+  background-color: var(--darkWww-button-variant, #7854c0);
 }
 .box .box-content .pagination .disabled {
   opacity: 0.5;

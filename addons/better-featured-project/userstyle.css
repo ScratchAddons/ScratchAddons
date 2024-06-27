@@ -105,6 +105,7 @@
   flex-direction: column;
   flex-wrap: wrap;
 }
+#bio span[data-content="prompt"],
 #status span[data-content="prompt"] {
   position: relative;
   left: 0;
@@ -113,6 +114,9 @@
   height: 107px !important;
   overflow-x: hidden;
   overflow-y: scroll;
+}
+.activity-stream div {
+  width: calc(100% - 24px);
 }
 #profile-box .inner {
   height: 140px !important;
@@ -126,6 +130,7 @@
 }
 .profile-details span {
   display: inline !important;
+  /* 2023: I'm not sure why !important is needed here */
 }
 #lfp-embed {
   position: absolute;

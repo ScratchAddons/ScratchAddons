@@ -8,7 +8,7 @@ a,
 input.link,
 .ui-widget-content a,
 #email-resend-box a {
-  color: var(--darkWww-link, #4d97ff);
+  color: var(--darkWww-link, #855cd6);
   font-weight: bold;
   text-decoration: none;
 }
@@ -20,7 +20,7 @@ body,
   text-shadow: none;
 }
 ::selection {
-  background-color: var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
+  background-color: rgba(77, 151, 255, 0.25);
 }
 .box .box-head h1,
 .box .box-head h2,
@@ -41,8 +41,8 @@ input.link:hover,
 input.link:active,
 input.link.black:hover,
 input.link.black:active {
-  color: var(--darkWww-link-hover, #4280d7);
-  text-decoration: none;
+  color: var(--darkWww-link-hover, #7854c0);
+  text-decoration: var(--colorblind-tdecoOverride, none);
 }
 #content {
   padding-top: 70px;
@@ -70,11 +70,11 @@ textarea {
 }
 input:focus {
   box-shadow: none;
-  border-color: var(--darkWww-button, #4d97ff);
+  border-color: var(--darkWww-button, #855cd6);
 }
 textarea:focus {
-  box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
-  border: 2px solid var(--darkWww-button, #4d97ff);
+  box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(133, 92, 214, 0.25));
+  border: 2px solid var(--darkWww-button, #855cd6);
 }
 .editable-empty,
 .editable.read,
@@ -88,8 +88,8 @@ textarea:focus {
 .editable.write,
 .editable-empty.write {
   border-style: solid !important;
-  border-color: var(--darkWww-button, #4d97ff) !important;
-  box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
+  border-color: var(--darkWww-button, #855cd6) !important;
+  box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(133, 92, 214, 0.25));
 }
 .editable textarea,
 .editable-empty textarea,
@@ -138,7 +138,7 @@ button.grey,
 #email-resend-box input[type="button"]:hover {
   border-radius: 8px;
   border: none;
-  background: var(--darkWww-button, #4d97ff);
+  background: var(--darkWww-button, #855cd6);
   box-shadow: none;
   font-family: inherit;
   font-weight: bold;
@@ -208,7 +208,7 @@ select:focus {
   background-image: var(--darkWww-input-caretHover, url("%addon-self-dir%/assets/caret_hover.svg"));
 }
 select:focus {
-  border-color: var(--darkWww-button, #4d97ff);
+  border-color: var(--darkWww-button, #855cd6);
   outline: none;
 }
 .box {
@@ -231,7 +231,7 @@ select:focus {
   font-weight: normal;
   top: 24px;
   left: -1px;
-  border: 1px solid #4d97ff;
+  border: 1px solid #855cd6;
   box-shadow: none;
 }
 #footer {
@@ -282,7 +282,7 @@ select:focus {
 #topnav .innerwrap {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
-  background-color: var(--darkWww-navbar, #4d97ff);
+  background-color: var(--darkWww-navbar, #855cd6);
   height: 50px;
 }
 #topnav .logo {
@@ -314,6 +314,7 @@ select:focus {
   height: 33px;
   padding: 13px 15px 4px 15px;
   color: var(--darkWww-navbar-text, white);
+  font-weight: bold; /* Override colorblind/bold-links.css */
   font-size: 13.6px;
   line-height: 24px;
 }
@@ -385,7 +386,7 @@ select:focus {
 }
 #topnav ul.account-nav .sign-in .popover {
   margin-top: 40px;
-  background-color: var(--darkWww-navbar, #4d97ff);
+  background-color: var(--darkWww-navbar, #855cd6);
   border-color: rgba(0, 0, 0, 0.1);
   cursor: auto;
 }
@@ -394,7 +395,7 @@ select:focus {
   width: 14px;
   height: 14px;
   transform: rotate(45deg);
-  background-color: var(--darkWww-navbar, #4d97ff);
+  background-color: var(--darkWww-navbar, #855cd6);
   border: none;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   border-left: 1px solid rgba(0, 0, 0, 0.1);
@@ -432,7 +433,7 @@ select:focus {
   height: auto;
   background-color: var(--darkWww-box, white);
   border-radius: 8px;
-  color: var(--darkWww-link, #4d97ff);
+  color: var(--darkWww-link, #855cd6);
   font-size: 12.8px;
   line-height: 24px;
 }
@@ -493,7 +494,8 @@ select:focus {
   padding: 0 4px;
   min-width: 0;
   height: auto;
-  background-color: #ffab1a;
+  background-color: var(--darkWww-messageIndicatorColor, #ffab1a);
+  color: var(--darkWww-messageIndicatorColor-text, white) !important;
   font-size: 11.2px;
   line-height: 16px;
 }
@@ -514,7 +516,7 @@ select:focus {
   line-height: 24px;
 }
 #topnav ul.account-nav .logged-in-user .dropdown-menu {
-  background-color: var(--darkWww-navbar, #4d97ff);
+  background-color: var(--darkWww-navbar, #855cd6);
   margin-top: 0;
   top: 50px;
   padding-top: 5px;
@@ -539,7 +541,9 @@ select:focus {
 }
 #topnav ul.account-nav ul.user-nav li a {
   color: var(--darkWww-navbar-text, white);
+  font-weight: bold; /* Override colorblind/bold-links.css */
   font-size: 13px;
+  white-space: normal;
 }
 #topnav ul.account-nav ul.user-nav li:hover {
   background: var(--darkWww-navbar-border, rgba(0, 0, 0, 0.1));
@@ -576,7 +580,7 @@ select:focus {
 }
 .alert-info {
   background-color: var(--darkWww-blue, #e9f1fc);
-  border-color: var(--darkWww-button, #4d97ff);
+  border-color: var(--darkWww-button, #855cd6);
 }
 .alert-success {
   background-color: var(--darkWww-box-success, #cef2e8);
@@ -621,10 +625,10 @@ select:focus {
   padding-top: 8px;
   padding-right: 8px;
   border-radius: 16px 16px 0 0;
-  background-color: var(--darkWww-navbar, #4d97ff);
+  background-color: var(--darkWww-navbar, #855cd6);
   border: none;
   color: var(--darkWww-navbar-text, white);
-  box-shadow: inset 0 -1px 0 0 var(--darkWww-navbar-variant, #4280d7);
+  box-shadow: inset 0 -1px 0 0 var(--darkWww-navbar-variant, #7854c0);
 }
 .modal .modal-header .close,
 .jqui-modal .ui-widget-header .ui-dialog-titlebar-close {
@@ -673,8 +677,8 @@ select:focus {
   border-radius: 8px;
 }
 #featured-project-modal .project.thumb.selected {
-  border-color: var(--darkWww-button, #4d97ff) !important;
-  box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
+  border-color: var(--darkWww-button, #855cd6) !important;
+  box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(133, 92, 214, 0.25));
 }
 #featured-project-modal .project.thumb img {
   border: none;
@@ -702,5 +706,5 @@ select:focus {
 .modal-footer .btn:not(.blue) {
   border: 1px solid var(--darkWww-border, rgba(0, 0, 0, 0.1));
   background: var(--darkWww-box, white);
-  color: var(--darkWww-link, #4d97ff);
+  color: var(--darkWww-link, #855cd6);
 }
