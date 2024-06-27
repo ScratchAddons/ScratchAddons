@@ -1,6 +1,6 @@
 {
   "name": "SVG uploads fix",
-  "description": "Fixes some bugs in the Scratch editor which breaks some uploaded SVG files from Affinity Designer and scratchblocks.",
+  "description": "Fixes some bugs in the Scratch editor which break some uploaded SVG files from Affinity Designer and scratchblocks.",
   "userscripts": [
     {
       "url": "userscript.js",
