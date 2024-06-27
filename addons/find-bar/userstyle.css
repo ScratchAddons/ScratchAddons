@@ -152,7 +152,7 @@
 
 /* Ori Style */
 #floatWindow {
-    width: 300px;
+    width: 600px;
     height: 300px;
     position: fixed;
     top: 20%;
@@ -160,7 +160,7 @@
     background-color: white;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     z-index: 100;
-    display: block; /* 默认不显示 */
+    display: none; /* 默认不显示 */
 }
 
 #floatWindow .float-window-header {
