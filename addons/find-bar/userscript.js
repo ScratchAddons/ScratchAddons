@@ -442,6 +442,7 @@ export default async function ({ addon, msg, console }) {
       this.el = null;
       this.items = [];
       this.selected = null;
+      this.hovered = null;
       this.carousel = new Carousel(this.utils);
       this.floatWindow = null;
       this.fw_ul = null;
@@ -453,30 +454,30 @@ export default async function ({ addon, msg, console }) {
       const floatWindow = document.createElement("div");
       floatWindow.id = "floatWindow";
 
-      const header = document.createElement("div");
-      header.className = "float-window-header";
-      header.textContent = "References: ";
-      floatWindow.appendChild(header);
+      // const header = document.createElement("div");
+      // header.className = "float-window-header";
+      // header.textContent = "References: ";
+      // floatWindow.appendChild(header);
       // 添加拖动功能
       let isDragging = false;
       let dragStartX, dragStartY;
 
-      header.addEventListener("mousedown", function (e) {
-        isDragging = true;
-        dragStartX = e.clientX - floatWindow.offsetLeft;
-        dragStartY = e.clientY - floatWindow.offsetTop;
-        header.style.cursor = "grabbing";
-      });
+      // header.addEventListener("mousedown", function(e) {
+      //   isDragging = true;
+      //   dragStartX = e.clientX - floatWindow.offsetLeft;
+      //   dragStartY = e.clientY - floatWindow.offsetTop;
+      //   header.style.cursor = "grabbing";
+      // });
+      //
+      // document.addEventListener("mouseup", function() {
+      //   isDragging = false;
+      //   header.style.cursor = "grab";
+      // });
 
       document.addEventListener("mousemove", function (e) {
         if (!isDragging) return;
         floatWindow.style.left = e.clientX - dragStartX + "px";
         floatWindow.style.top = e.clientY - dragStartY + "px";
-      });
-
-      document.addEventListener("mouseup", function () {
-        isDragging = false;
-        header.style.cursor = "grab";
       });
 
       const parentElement = document.createElement("ul");
@@ -588,7 +589,8 @@ export default async function ({ addon, msg, console }) {
 
       item.addEventListener("mouseleave", (e) => {
         // 隐藏浮动窗口
-        this.floatWindow.closeFloatWindow();
+        // this.floatWindow.closeFloatWindow();
+        this.hovered = null;
         e.preventDefault();
       });
 
@@ -598,6 +600,15 @@ export default async function ({ addon, msg, console }) {
     }
 
     onItemHover(item, instanceBlock) {
+      if (this.hovered && this.hovered !== item) {
+        this.hovered.classList.remove("hov");
+        this.hovered = null;
+      }
+      if (this.hovered !== item) {
+        item.classList.add("hov");
+        this.hovered = item;
+      }
+
       let cls = item.data.cls;
       if (cls === "costume" || cls === "sound") {
       } else if (cls === "var" || cls === "VAR" || cls === "list" || cls === "LIST") {
@@ -606,6 +617,26 @@ export default async function ({ addon, msg, console }) {
         for (const block of blocks) {
           const li_item = document.createElement("li");
           li_item.textContent = block.type + ":" + block.id;
+          // mouse enter
+          li_item.addEventListener("mouseenter", (e) => {
+            if (this.hovered && this.hovered !== li_item) {
+              this.hovered.classList.remove("hov");
+              this.hovered = null;
+            }
+            if (this.hovered !== li_item) {
+              li_item.classList.add("hov");
+              this.hovered = li_item;
+            }
+            // mouse leave
+            li_item.addEventListener("mouseleave", (e) => {
+              if (this.hovered && this.hovered !== li_item) {
+                this.hovered.classList.remove("hov");
+                this.hovered = null;
+              }
+              this.hovered = null;
+            });
+          });
+
           this.fw_ul.appendChild(li_item);
         }
         this.floatWindow.showFloatWindow();
@@ -613,15 +644,6 @@ export default async function ({ addon, msg, console }) {
         let blocks = this.getCallsToProcedureById(item.data.labelID);
         this.carousel.build(item, blocks, instanceBlock);
       } else if (cls === "receive") {
-        /*
-          let blocks = [this.workspace.getBlockById(li.data.labelID)];
-          if (li.data.clones) {
-              for (const cloneID of li.data.clones) {
-                  blocks.push(this.workspace.getBlockById(cloneID))
-              }
-          }
-          blocks = blocks.concat(getCallsToEventsByName(li.data.eventName));
-        */
         // Now, fetch the events from the scratch runtime instead of blockly
         let blocks = this.getCallsToEventsByName(item.data.eventName);
         if (!instanceBlock) {
@@ -684,14 +706,14 @@ export default async function ({ addon, msg, console }) {
         this.carousel.build(item, blocks, instanceBlock);
       } else if (cls === "receive") {
         /*
-          let blocks = [this.workspace.getBlockById(li.data.labelID)];
-          if (li.data.clones) {
-              for (const cloneID of li.data.clones) {
-                  blocks.push(this.workspace.getBlockById(cloneID))
-              }
-          }
-          blocks = blocks.concat(getCallsToEventsByName(li.data.eventName));
-        */
+                  let blocks = [this.workspace.getBlockById(li.data.labelID)];
+                  if (li.data.clones) {
+                      for (const cloneID of li.data.clones) {
+                          blocks.push(this.workspace.getBlockById(cloneID))
+                      }
+                  }
+                  blocks = blocks.concat(getCallsToEventsByName(li.data.eventName));
+                */
         // Now, fetch the events from the scratch runtime instead of blockly
         let blocks = this.getCallsToEventsByName(item.data.eventName);
         if (!instanceBlock) {
