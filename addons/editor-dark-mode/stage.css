@@ -2,6 +2,7 @@
 [class*="monitor_list-body_"] {
   background-color: var(--editorDarkMode-page);
   color: var(--editorDarkMode-page-text);
+  color-scheme: var(--editorDarkMode-page-colorScheme);
 }
 [class*="monitor_list-index_"] {
   color: var(--editorDarkMode-page-text);
