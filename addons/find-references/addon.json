@@ -1,0 +1,41 @@
+{
+  "name": "Find references",
+  "description": "Find references",
+  "info": [
+    {
+      "text": "This addon was previously part of the \"developer tools\" addon but has moved here.",
+      "id": "developer-tools"
+    }
+  ],
+  "credits": [
+    {
+      "name": "OriL",
+      "link": "https://github.com/woshichuanqilz"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": [
+        "projects"
+      ]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": [
+        "projects"
+      ]
+    }
+  ],
+  "versionAdded": "1.28.0",
+  "tags": [
+    "editor",
+    "codeEditor",
+    "recommended"
+  ],
+  "enabledByDefault": true
+}
