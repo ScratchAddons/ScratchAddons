@@ -247,7 +247,7 @@ export default async function ({ addon, console, msg }) {
     if (dataShapes === "hat") {
       translateY = 16; // for Events
       if (enabledAddons.includes("cat-blocks")) {
-        translateY += 16; // for cat ears
+        translateY += 15; // for cat ears
       }
     }
 
@@ -268,16 +268,35 @@ export default async function ({ addon, console, msg }) {
     let xArr = [];
     let yArr = [];
 
-    svgchild.childNodes.forEach((g) => {
+    const scale = isExportPNG ? 2 : 1;
+
+    svgchild.childNodes.forEach((g, i) => {
       let x = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[1] || 0;
       let y = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[2] || 0;
-      xArr.push(x * (isExportPNG ? 2 : 1));
-      yArr.push(y * (isExportPNG ? 2 : 1));
+
+      let dataShapes = g.getAttribute("data-shapes");
+
+      // Jazza here: do not ask me why these numbers work. I do not know.
+      if (dataShapes === "c-block c-1 hat") {
+        y -= 20;
+        if (enabledAddons.includes("cat-blocks")) {
+          y -= 11;
+        }
+      }
+      if (dataShapes === "hat") {
+        y -= 16;
+        if (enabledAddons.includes("cat-blocks")) {
+          y -= 15;
+        }
+      }
+
+      xArr.push(x * scale);
+      yArr.push(y * scale);
     });
 
     svgchild.setAttribute(
       "transform",
-      `translate(${-Math.min(...xArr)},${-Math.min(...yArr)}) ${isExportPNG ? "scale(2)" : ""}`
+      `translate(${-Math.min(...xArr) + scale},${-Math.min(...yArr) + scale}) scale(${scale})`
     );
     setCSSVars(svg);
     svg.append(makeStyle());
