@@ -1,18 +1,7 @@
-/**
- * BlockItem 类用于表示一个 Blockly 的块项。
- *
- * @class
- * @param {Object} params - 初始化 BlockItem 的参数
- * @param {string} params.type - 块的类型
- * @param {string} params.category - 块所属的类别
- * @param {string} params.color - 块的颜色
- * @param {Function} params.func - 块的功能函数
- */
 import BlockItem from "./blockly/BlockItem.js";
 import BlockInstance from "./blockly/BlockInstance.js";
 import Utils from "./blockly/Utils.js";
 
-/** @typedef {import("../../addon-api/content-script/typedef.js").UserscriptUtilities} UserscriptUtilities @param {UserscriptUtilities} */
 export default async function ({ addon, msg, console }) {
   if (!addon.self._isDevtoolsExtension && window.initGUI) {
     console.log("Extension running, stopping addon");
@@ -107,7 +96,7 @@ export default async function ({ addon, msg, console }) {
         if (i >= 0) {
           li.style.display = "block";
           while (li.firstChild) {
-            li.removeChild(li.firstChild); // it removes here
+            li.removeChild(li.firstChild);
           }
           if (i > 0) {
             li.appendChild(document.createTextNode(procCode.substring(0, i)));
@@ -187,10 +176,24 @@ export default async function ({ addon, msg, console }) {
           return true;
         }
       }
+
+      // In Chrome, Ctrl+Z will undo edits to the find bar input even if it doesn't have focus.
+      // Call preventDefault() to make sure that the event only goes to scratch-blocks or scratch-paint.
+      // Blockly.onKeyDown_:
+      // https://github.com/scratchfoundation/scratch-blocks/blob/1421093/core/blockly.js#L185
+      // KeyboardShortcutsHOC.handleKeyPress:
+      // https://github.com/scratchfoundation/scratch-paint/blob/8119055/src/hocs/keyboard-shortcuts-hoc.jsx#L29
+      if (!Blockly.utils.isTargetInput(e) && addon.tab.redux.state?.scratchPaint.textEditTarget === null) {
+        if (
+          (ctrlKey || e.altKey) &&
+          (e.keyCode === 90 || e.key === "z" || (e.shiftKey && e.key.toLowerCase() === "z"))
+        ) {
+          e.preventDefault();
+        }
+      }
     }
 
     showDropDown(focusID, instanceBlock) {
-      // shiftKey hold click block focusID is the current blockID
       if (!focusID && this.dropdownOut.classList.contains("visible")) {
         return;
       }
@@ -203,10 +206,10 @@ export default async function ({ addon, msg, console }) {
         this.selectedTab === 0
           ? this.getScratchBlocks()
           : this.selectedTab === 1
-          ? this.getScratchCostumes()
-          : this.selectedTab === 2
-          ? this.getScratchSounds()
-          : [];
+            ? this.getScratchCostumes()
+            : this.selectedTab === 2
+              ? this.getScratchSounds()
+              : [];
 
       this.dropdown.empty();
 
@@ -234,11 +237,6 @@ export default async function ({ addon, msg, console }) {
       return addon.tab.redux.state.scratchGui.editorTab.activeTabIndex;
     }
 
-    /**
-     * 获取 Scratch 编辑器中的所有顶级块。
-     *
-     * @returns {Array<BlockItem>} 返回一个包含所有顶级块的数组。
-     */
     getScratchBlocks() {
       let myBlocks = [];
       let myBlocksByProcCode = {};
@@ -367,11 +365,6 @@ export default async function ({ addon, msg, console }) {
       return myBlocks;
     }
 
-    /**
-     * 获取 Scratch 编辑器中的所有顶级块。
-     *
-     * @returns {Array<BlockItem>} 返回一个包含所有顶级块的数组。
-     */
     getScratchCostumes() {
       let costumes = this.utils.getEditingTarget().getCostumes();
 
@@ -387,10 +380,6 @@ export default async function ({ addon, msg, console }) {
       return items;
     }
 
-    /**
-     *
-     * @returns {Array<BlockItem>} 返回一个包含所有顶级块的数组。
-     */
     getScratchSounds() {
       let sounds = this.utils.getEditingTarget().getSounds();
 
@@ -439,61 +428,11 @@ export default async function ({ addon, msg, console }) {
   class Dropdown {
     constructor(utils) {
       this.utils = utils;
+
       this.el = null;
       this.items = [];
       this.selected = null;
-      this.hovered = null;
       this.carousel = new Carousel(this.utils);
-      this.floatWindow = null;
-      this.fw_ul = null;
-
-      this.createFloatWindow();
-    }
-
-    createFloatWindow() {
-      const floatWindow = document.createElement("div");
-      floatWindow.id = "floatWindow";
-
-      // const header = document.createElement("div");
-      // header.className = "float-window-header";
-      // header.textContent = "References: ";
-      // floatWindow.appendChild(header);
-      // 添加拖动功能
-      let isDragging = false;
-      let dragStartX, dragStartY;
-
-      // header.addEventListener("mousedown", function(e) {
-      //   isDragging = true;
-      //   dragStartX = e.clientX - floatWindow.offsetLeft;
-      //   dragStartY = e.clientY - floatWindow.offsetTop;
-      //   header.style.cursor = "grabbing";
-      // });
-      //
-      // document.addEventListener("mouseup", function() {
-      //   isDragging = false;
-      //   header.style.cursor = "grab";
-      // });
-
-      document.addEventListener("mousemove", function (e) {
-        if (!isDragging) return;
-        floatWindow.style.left = e.clientX - dragStartX + "px";
-        floatWindow.style.top = e.clientY - dragStartY + "px";
-      });
-
-      const parentElement = document.createElement("ul");
-      parentElement.id = "ref_list";
-      floatWindow.appendChild(parentElement);
-      document.body.appendChild(floatWindow);
-      this.fw_ul = document.querySelector("#ref_list");
-
-      floatWindow.showFloatWindow = function () {
-        floatWindow.style.display = "block";
-      };
-
-      floatWindow.closeFloatWindow = function () {
-        floatWindow.style.display = "none";
-      };
-      this.floatWindow = floatWindow;
     }
 
     get workspace() {
@@ -572,101 +511,15 @@ export default async function ({ addon, msg, console }) {
         const colorId = colorIds[proc.cls];
         item.className = `sa-block-color sa-block-color-${colorId}`;
       }
-
       item.addEventListener("mousedown", (e) => {
         this.onItemClick(item);
         e.preventDefault();
         e.cancelBubble = true;
         return false;
       });
-
-      // My Code
-      item.addEventListener("mouseenter", (e) => {
-        // 显示浮动窗口，你可以根据需要调整位置和内容
-        this.onItemHover(item);
-        e.preventDefault();
-      });
-
-      item.addEventListener("mouseleave", (e) => {
-        // 隐藏浮动窗口
-        // this.floatWindow.closeFloatWindow();
-        this.hovered = null;
-        e.preventDefault();
-      });
-
       this.items.push(item);
       this.el.appendChild(item);
       return item;
-    }
-
-    onItemHover(item, instanceBlock) {
-      if (this.hovered && this.hovered !== item) {
-        this.hovered.classList.remove("hov");
-        this.hovered = null;
-      }
-      if (this.hovered !== item) {
-        item.classList.add("hov");
-        this.hovered = item;
-      }
-
-      let cls = item.data.cls;
-      if (cls === "costume" || cls === "sound") {
-      } else if (cls === "var" || cls === "VAR" || cls === "list" || cls === "LIST") {
-        // Search now for all instances
-        let blocks = this.getVariableUsesById(item.data.labelID);
-        for (const block of blocks) {
-          const li_item = document.createElement("li");
-          li_item.textContent = block.type + ":" + block.id;
-          // mouse enter
-          li_item.addEventListener("mouseenter", (e) => {
-            if (this.hovered && this.hovered !== li_item) {
-              this.hovered.classList.remove("hov");
-              this.hovered = null;
-            }
-            if (this.hovered !== li_item) {
-              li_item.classList.add("hov");
-              this.hovered = li_item;
-            }
-            // mouse leave
-            li_item.addEventListener("mouseleave", (e) => {
-              if (this.hovered && this.hovered !== li_item) {
-                this.hovered.classList.remove("hov");
-                this.hovered = null;
-              }
-              this.hovered = null;
-            });
-          });
-
-          this.fw_ul.appendChild(li_item);
-        }
-        this.floatWindow.showFloatWindow();
-      } else if (cls === "define") {
-        let blocks = this.getCallsToProcedureById(item.data.labelID);
-        this.carousel.build(item, blocks, instanceBlock);
-      } else if (cls === "receive") {
-        // Now, fetch the events from the scratch runtime instead of blockly
-        let blocks = this.getCallsToEventsByName(item.data.eventName);
-        if (!instanceBlock) {
-          // Can we start by selecting the first block on 'this' sprite
-          const currentTargetID = this.utils.getEditingTarget().id;
-          for (const block of blocks) {
-            if (block.targetId === currentTargetID) {
-              instanceBlock = block;
-              break;
-            }
-          }
-        }
-        this.carousel.build(item, blocks, instanceBlock);
-      } else if (item.data.clones) {
-        let blocks = [this.workspace.getBlockById(item.data.labelID)];
-        for (const cloneID of item.data.clones) {
-          blocks.push(this.workspace.getBlockById(cloneID));
-        }
-        this.carousel.build(item, blocks, instanceBlock);
-      } else {
-        this.utils.scrollBlockIntoView(item.data.labelID);
-        this.carousel.remove();
-      }
     }
 
     onItemClick(item, instanceBlock) {
@@ -706,14 +559,14 @@ export default async function ({ addon, msg, console }) {
         this.carousel.build(item, blocks, instanceBlock);
       } else if (cls === "receive") {
         /*
-                  let blocks = [this.workspace.getBlockById(li.data.labelID)];
-                  if (li.data.clones) {
-                      for (const cloneID of li.data.clones) {
-                          blocks.push(this.workspace.getBlockById(cloneID))
-                      }
-                  }
-                  blocks = blocks.concat(getCallsToEventsByName(li.data.eventName));
-                */
+          let blocks = [this.workspace.getBlockById(li.data.labelID)];
+          if (li.data.clones) {
+              for (const cloneID of li.data.clones) {
+                  blocks.push(this.workspace.getBlockById(cloneID))
+              }
+          }
+          blocks = blocks.concat(getCallsToEventsByName(li.data.eventName));
+        */
         // Now, fetch the events from the scratch runtime instead of blockly
         let blocks = this.getCallsToEventsByName(item.data.eventName);
         if (!instanceBlock) {
@@ -741,8 +594,8 @@ export default async function ({ addon, msg, console }) {
 
     getVariableUsesById(id) {
       let uses = [];
-      let topBlocks = this.workspace.getTopBlocks();
 
+      let topBlocks = this.workspace.getTopBlocks();
       for (const topBlock of topBlocks) {
         /** @type {!Array<!Blockly.Block>} */
         let kids = topBlock.getDescendants();
@@ -802,7 +655,10 @@ export default async function ({ addon, msg, console }) {
 
         for (const id of Object.keys(blocks._blocks)) {
           const block = blocks._blocks[id];
-          if (block.opcode === "event_whenbroadcastreceived" && block.fields.BROADCAST_OPTION.value === name) {
+          if (
+            block.opcode === "event_whenbroadcastreceived" &&
+            block.fields.BROADCAST_OPTION.value.toLowerCase() === name.toLowerCase()
+          ) {
             uses.push(new BlockInstance(target, block));
           } else if (block.opcode === "event_broadcast" || block.opcode === "event_broadcastandwait") {
             const broadcastInputBlockId = block.inputs.BROADCAST_INPUT.block;
@@ -814,7 +670,7 @@ export default async function ({ addon, msg, console }) {
               } else {
                 eventName = msg("complex-broadcast");
               }
-              if (eventName === name) {
+              if (eventName.toLowerCase() === name.toLowerCase()) {
                 uses.push(new BlockInstance(target, block));
               }
             }
@@ -939,7 +795,6 @@ export default async function ({ addon, msg, console }) {
   }
 
   const findBar = new FindBar();
-  window.fb = findBar;
 
   const _doBlockClick_ = Blockly.Gesture.prototype.doBlockClick_;
   Blockly.Gesture.prototype.doBlockClick_ = function () {

@@ -148,32 +148,3 @@
 .sa-find-carousel-control:hover {
   color: #ffff80;
 }
-
-
-/* Ori Style */
-#floatWindow {
-    width: 600px;
-    height: 300px;
-    position: fixed;
-    top: 20%;
-    left: 35%;
-    background-color: rgb(255, 255, 210);
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    z-index: 100;
-    display: none; /* 默认不显示 */
-    border-radius: 10px;
-}
-
-#floatWindow .float-window-header {
-    padding: 2px 16px;
-    background-color: #5cb85c;
-    color: white;
-}
-
-#floatWindow .float-window-content {
-    padding: 2px 16px;
-}
-
-#floatWindow #ref_list li.hov{
-  background-color: rgba(0, 64, 255, 0.229);
-}
