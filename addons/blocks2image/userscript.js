@@ -277,9 +277,7 @@ export default async function ({ addon, console, msg }) {
 
     svgchild.setAttribute(
       "transform",
-      `translate(${-Math.min(...xArr)},${-Math.min(...yArr) + 18 * (isExportPNG ? 2 : 1)}) ${
-        isExportPNG ? "scale(2)" : ""
-      }`
+      `translate(${-Math.min(...xArr)},${-Math.min(...yArr)}) ${isExportPNG ? "scale(2)" : ""}`
     );
     setCSSVars(svg);
     svg.append(makeStyle());
