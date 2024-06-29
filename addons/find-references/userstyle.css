@@ -159,7 +159,7 @@
   background-color: rgb(255, 255, 210);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   z-index: 100;
-  display: none; /* 默认不显示 */
+  display: flex; /* 默认不显示 */
   border-radius: 10px;
 }
 

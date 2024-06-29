@@ -23,7 +23,7 @@ export default async function({ addon, msg, console }) {
 
   const Blockly = await addon.tab.traps.getBlockly();
 
-  class FindBar {
+  class FindRefs {
     constructor() {
       this.utils = new Utils(addon);
 
@@ -34,6 +34,7 @@ export default async function({ addon, msg, console }) {
       this.findInput = null;
       this.dropdownOut = null;
       this.dropdown = new Dropdown(this.utils);
+      this.floatWindow = this.createFloatWindow()
 
       document.addEventListener("keydown", (e) => this.eventKeyDown(e), true);
     }
@@ -42,11 +43,11 @@ export default async function({ addon, msg, console }) {
       return Blockly.getMainWorkspace();
     }
 
-    createDom(root) {
+    createDom() {
       this.findBarOuter = document.createElement("div");
       this.findBarOuter.className = "sa-find-bar";
       addon.tab.displayNoneWhileDisabled(this.findBarOuter, { display: "flex" });
-      root.appendChild(this.findBarOuter);
+      this.floatWindow.appendChild(this.findBarOuter);
 
       this.findWrapper = this.findBarOuter.appendChild(document.createElement("span"));
       this.findWrapper.className = "sa-find-wrapper";
@@ -68,6 +69,26 @@ export default async function({ addon, msg, console }) {
 
       this.bindEvents();
       this.tabChanged();
+    }
+
+    createFloatWindow() {
+      const floatWindow = document.createElement("div");
+      floatWindow.id = "floatWindow";
+
+      const parentElement = document.createElement("ul");
+      parentElement.id = "ref_list";
+      floatWindow.appendChild(parentElement);
+      document.body.appendChild(floatWindow);
+      this.fw_ul = document.querySelector("#ref_list");
+
+      floatWindow.showFloatWindow = function() {
+        floatWindow.style.display = "block";
+      };
+
+      floatWindow.closeFloatWindow = function() {
+        floatWindow.style.display = "none";
+      };
+      return floatWindow;
     }
 
     bindEvents() {
@@ -446,55 +467,8 @@ export default async function({ addon, msg, console }) {
       this.carousel = new Carousel(this.utils);
       this.floatWindow = null;
       this.fw_ul = null;
-
-      this.createFloatWindow();
     }
 
-    createFloatWindow() {
-      const floatWindow = document.createElement("div");
-      floatWindow.id = "floatWindow";
-
-      // const header = document.createElement("div");
-      // header.className = "float-window-header";
-      // header.textContent = "References: ";
-      // floatWindow.appendChild(header);
-      // 添加拖动功能
-      let isDragging = false;
-      let dragStartX, dragStartY;
-
-      // header.addEventListener("mousedown", function(e) {
-      //   isDragging = true;
-      //   dragStartX = e.clientX - floatWindow.offsetLeft;
-      //   dragStartY = e.clientY - floatWindow.offsetTop;
-      //   header.style.cursor = "grabbing";
-      // });
-      //
-      // document.addEventListener("mouseup", function() {
-      //   isDragging = false;
-      //   header.style.cursor = "grab";
-      // });
-
-      document.addEventListener("mousemove", function(e) {
-        if (!isDragging) return;
-        floatWindow.style.left = e.clientX - dragStartX + "px";
-        floatWindow.style.top = e.clientY - dragStartY + "px";
-      });
-
-      const parentElement = document.createElement("ul");
-      parentElement.id = "ref_list";
-      floatWindow.appendChild(parentElement);
-      document.body.appendChild(floatWindow);
-      this.fw_ul = document.querySelector("#ref_list");
-
-      floatWindow.showFloatWindow = function() {
-        floatWindow.style.display = "block";
-      };
-
-      floatWindow.closeFloatWindow = function() {
-        floatWindow.style.display = "none";
-      };
-      this.floatWindow = floatWindow;
-    }
 
     get workspace() {
       return Blockly.getMainWorkspace();
@@ -938,7 +912,7 @@ export default async function({ addon, msg, console }) {
     }
   }
 
-  const findBar = new FindBar();
+  const findBar = new FindRefs();
   window.fb = findBar;
 
   addon.tab.redux.initialize();
@@ -954,6 +928,6 @@ export default async function({ addon, msg, console }) {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
-    findBar.createDom(root);
+    findBar.createDom();
   }
 }
