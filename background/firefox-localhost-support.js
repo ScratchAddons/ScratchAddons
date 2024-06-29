@@ -10,7 +10,7 @@ if (typeof browser === "object") {
     runAt: scriptObj.run_at,
     allFrames: scriptObj.all_frames,
   }));
-  chrome.scripting.registerContentScripts(scripts);
+  chrome.scripting.registerContentScripts(scripts).catch((e) => console.error(e));
 }
 
 // Scripting API should only be used for local development purposes.
