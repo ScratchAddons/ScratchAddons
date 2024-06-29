@@ -53,9 +53,10 @@
   display: flex;
   align-items: center;
 }
-.tabs button.sa-search-profile-tab {
+.tabs button.sa-search-profile-btn {
   display: var(--searchProfile-_displayNoneWhileDisabledValue, flex) !important;
   align-items: center;
+  padding: 4px 20px;
 }
 .tabs button .tab-icon {
   margin-bottom: 0;
