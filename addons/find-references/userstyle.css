@@ -160,18 +160,21 @@
     background-color: rgb(255, 255, 210);
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     z-index: 100;
-    display: block; /* 默认不显示 */
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
-#floatWindow .float-window-header {
-    padding: 2px 16px;
+#floatWindow .fr-header {
     background-color: #5cb85c;
+    width: 100%;
     color: white;
 }
 
-#floatWindow .float-window-content {
-    padding: 2px 16px;
+#floatWindow #ref_list{
+    background-color: #10e07f;
+    width: 100%;
 }
 
 #floatWindow #ref_list li.hov{

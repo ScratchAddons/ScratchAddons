@@ -46,12 +46,12 @@ export default async function({ addon, msg, console }) {
       const floatWindow = document.createElement("div");
       floatWindow.id = "floatWindow";
 
-      const header = document.createElement("div");
-      header.className = "float-window-header";
-      header.textContent = "References: ";
-      floatWindow.appendChild(header);
-      let isDragging = false;
-      let dragStartX, dragStartY;
+      // const header = document.createElement("div");
+      // header.className = "float-window-header";
+      // header.textContent = "References: ";
+      // floatWindow.appendChild(header);
+      // let isDragging = false;
+      // let dragStartX, dragStartY;
 
       // header.addEventListener("mousedown", function(e) {
       //   isDragging = true;
@@ -71,13 +71,19 @@ export default async function({ addon, msg, console }) {
       //   floatWindow.style.top = e.clientY - dragStartY + "px";
       // });
 
+      // header
+      var header = document.createElement("div");
+      header.classList.add("fr-header");
+      header.textContent = "Find References";
+      floatWindow.appendChild(header);
+
       const ul_refs = document.createElement("ul");
       ul_refs.id = "ref_list";
       floatWindow.appendChild(ul_refs);
 
       // set right
       const scroll_width = document.querySelector("[class*='blocklyScrollbarHandle']").getAttribute('width');
-      floatWindow.style.right = `${parseInt(scroll_width) + 3}px`;
+      floatWindow.style.right = `${parseInt(scroll_width) + 5}px`;
 
       const editor = document.querySelector("[class*='gui_tabs']");
       editor.appendChild(floatWindow);
@@ -90,6 +96,14 @@ export default async function({ addon, msg, console }) {
       floatWindow.closeFloatWindow = function() {
         floatWindow.style.display = "none";
       };
+
+
+      floatWindow.addEventListener("auxclick", (e) => {
+        e.preventDefault();
+        floatWindow.style.display = "none";
+      })
+
+
       this.floatWindow = floatWindow;
     }
 
