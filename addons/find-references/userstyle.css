@@ -1,20 +1,21 @@
 @import url("../editor-theme3/compatibility.css");
 
-.sa-find-bar {
+.sa-fr-bar {
   display: flex;
   align-items: center;
   white-space: nowrap;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   width: 100%;
-  height: 100%;
-  margin-left: 1em;
+  height: 8%;
+  margin-top: 0.1em;
+  margin-left: 0.1em;
 }
-.sa-find-bar[hidden] {
+.sa-fr-bar[hidden] {
   /* !important to override displayNoneWhileDisabled */
   display: none !important;
 }
 
-.sa-find-wrapper {
+.sa-fr-wrapper {
   overflow: visible;
   position: relative;
   height: 2rem;
@@ -22,7 +23,7 @@
   max-width: 16em;
 }
 
-.sa-find-dropdown-out {
+.sa-fr-dropdown-out {
   display: block;
   top: -6px;
   z-index: 100;
@@ -159,16 +160,17 @@
   background-color: rgb(255, 255, 210);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   z-index: 100;
-  border-radius: 10px;
+  border-radius: 5px;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   overflow: hidden;
 }
 
 #floatWindow .fr-header {
   background-color: #5cb85c;
   width: 100%;
-  height: 8%;
+  height: 100%;
   color: white;
   display: flex;
   justify-content: center;

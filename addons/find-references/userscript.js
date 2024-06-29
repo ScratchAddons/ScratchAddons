@@ -87,24 +87,24 @@ export default async function({ addon, msg, console }) {
       floatWindow.appendChild(this.findBarOuter);
 
       this.findWrapper = this.findBarOuter.appendChild(document.createElement("span"));
-      this.findWrapper.className = "sa-find-wrapper";
+      this.findWrapper.className = "sa-fr-wrapper";
 
       this.dropdownOut = this.findWrapper.appendChild(document.createElement("label"));
-      this.dropdownOut.className = "sa-find-dropdown-out";
+      this.dropdownOut.className = "sa-fr-dropdown-out";
 
       this.findInput = this.dropdownOut.appendChild(document.createElement("input"));
       this.findInput.className = addon.tab.scratchClass("input_input-form", {
         others: "sa-find-input",
       });
       // for <label>
-      this.findInput.id = "sa-find-input";
+      this.findInput.id = "sa-fr-input";
       this.findInput.type = "search";
       this.findInput.placeholder = "Find References";
       this.findInput.autocomplete = "off";
 
       this.dropdownOut.appendChild(this.dropdown.createDom());
 
-      floatWindow.appendChild(this.findInput);
+      this.dropdownOut.appendChild(this.findInput);
 
       const ul_refs = document.createElement("ul");
       ul_refs.id = "ref_list";
@@ -135,8 +135,8 @@ export default async function({ addon, msg, console }) {
 
       this.floatWindow = floatWindow;
 
-      // this.bindEvents();
-      // this.tabChanged();
+      this.bindEvents();
+      this.tabChanged();
     }
 
     bindEvents() {
