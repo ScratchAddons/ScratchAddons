@@ -21,7 +21,9 @@
       "matches": [
         "https://scratch.mit.edu/*",
         "https://scratchfoundation.github.io/scratch-gui/*",
-        "http://localhost/*"
+        "http://localhost:8333/*",
+        "http://localhost:8601/*",
+        "http://localhost:8602/*"
       ],
       "run_at": "document_start",
       "js": ["libraries/thirdparty/cs/comlink.js", "libraries/common/cs/text-color.js", "content-scripts/cs.js"],
@@ -31,7 +33,9 @@
       "matches": [
         "https://scratch.mit.edu/*",
         "https://scratchfoundation.github.io/scratch-gui/*",
-        "http://localhost/*"
+        "http://localhost:8333/*",
+        "http://localhost:8601/*",
+        "http://localhost:8602/*"
       ],
       "run_at": "document_start",
       "js": ["content-scripts/prototype-handler.js", "content-scripts/load-redux.js", "content-scripts/fix-console.js"],
@@ -49,9 +53,7 @@
     "https://api.scratch.mit.edu/*",
     "https://clouddata.scratch.mit.edu/*",
     "https://scratchfoundation.github.io/scratch-gui/*",
-    "http://localhost:8333/*",
-    "http://localhost:8601/*",
-    "http://localhost:8602/*"
+    "http://localhost/*"
   ],
   "permissions": [
     "cookies",
@@ -60,7 +62,8 @@
     "declarativeNetRequestWithHostAccess",
     "storage",
     "contextMenus",
-    "alarms"
+    "alarms",
+    "scripting"
   ],
   "optional_permissions": ["notifications", "clipboardWrite"],
   "web_accessible_resources": [
