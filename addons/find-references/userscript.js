@@ -33,7 +33,7 @@ export default async function({ addon, msg, console }) {
       this.findWrapper = null;
       this.findInput = null;
       this.dropdownOut = null;
-      // this.dropdown = new Dropdown(this.utils);
+      this.dropdown = new Dropdown(this.utils);
 
       document.addEventListener("keydown", (e) => this.eventKeyDown(e), true);
     }
@@ -43,6 +43,9 @@ export default async function({ addon, msg, console }) {
     }
 
     createFloatWindow() {
+    }
+
+    createDom() {
       const floatWindow = document.createElement("div");
       floatWindow.id = "floatWindow";
 
@@ -72,10 +75,36 @@ export default async function({ addon, msg, console }) {
       // });
 
       // header
-      var header = document.createElement("div");
-      header.classList.add("fr-header");
-      header.textContent = "Find References";
-      floatWindow.appendChild(header);
+      // var header = document.createElement("div");
+      // header.classList.add("fr-header");
+      // header.textContent = "Find References";
+      //
+      // floatWindow.appendChild(header);
+
+      this.findBarOuter = document.createElement("div");
+      this.findBarOuter.className = "sa-fr-bar";
+      addon.tab.displayNoneWhileDisabled(this.findBarOuter, { display: "flex" });
+      floatWindow.appendChild(this.findBarOuter);
+
+      this.findWrapper = this.findBarOuter.appendChild(document.createElement("span"));
+      this.findWrapper.className = "sa-find-wrapper";
+
+      this.dropdownOut = this.findWrapper.appendChild(document.createElement("label"));
+      this.dropdownOut.className = "sa-find-dropdown-out";
+
+      this.findInput = this.dropdownOut.appendChild(document.createElement("input"));
+      this.findInput.className = addon.tab.scratchClass("input_input-form", {
+        others: "sa-find-input",
+      });
+      // for <label>
+      this.findInput.id = "sa-find-input";
+      this.findInput.type = "search";
+      this.findInput.placeholder = "Find References";
+      this.findInput.autocomplete = "off";
+
+      this.dropdownOut.appendChild(this.dropdown.createDom());
+
+      floatWindow.appendChild(this.findInput);
 
       const ul_refs = document.createElement("ul");
       ul_refs.id = "ref_list";
@@ -105,33 +134,7 @@ export default async function({ addon, msg, console }) {
 
 
       this.floatWindow = floatWindow;
-    }
 
-    createDom(root) {
-      this.createFloatWindow();
-      // this.findBarOuter = document.createElement("div");
-      // this.findBarOuter.className = "sa-find-bar";
-      // addon.tab.displayNoneWhileDisabled(this.findBarOuter, { display: "flex" });
-      // root.appendChild(this.findBarOuter);
-      //
-      // this.findWrapper = this.findBarOuter.appendChild(document.createElement("span"));
-      // this.findWrapper.className = "sa-find-wrapper";
-      //
-      // this.dropdownOut = this.findWrapper.appendChild(document.createElement("label"));
-      // this.dropdownOut.className = "sa-find-dropdown-out";
-      //
-      // this.findInput = this.dropdownOut.appendChild(document.createElement("input"));
-      // this.findInput.className = addon.tab.scratchClass("input_input-form", {
-      //   others: "sa-find-input",
-      // });
-      // // for <label>
-      // this.findInput.id = "sa-find-input";
-      // this.findInput.type = "search";
-      // this.findInput.placeholder = "find-references";
-      // this.findInput.autocomplete = "off";
-      //
-      // this.dropdownOut.appendChild(this.dropdown.createDom());
-      //
       // this.bindEvents();
       // this.tabChanged();
     }
@@ -973,6 +976,6 @@ export default async function({ addon, msg, console }) {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
-    findRefsWindow.createDom(root);
+    findRefsWindow.createDom();
   }
 }

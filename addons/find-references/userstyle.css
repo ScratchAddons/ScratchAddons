@@ -149,34 +149,37 @@
   color: #ffff80;
 }
 
-
 /* Ori Style */
 #floatWindow {
-    width: 300px;
-    height: 300px;
-    position: absolute;
-    top: 20%;
-    /*right: 6px;*/
-    background-color: rgb(255, 255, 210);
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    z-index: 100;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  top: 20%;
+  /*right: 6px;*/
+  background-color: rgb(255, 255, 210);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 #floatWindow .fr-header {
-    background-color: #5cb85c;
-    width: 100%;
-    color: white;
+  background-color: #5cb85c;
+  width: 100%;
+  height: 8%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-#floatWindow #ref_list{
-    background-color: #10e07f;
-    width: 100%;
+#floatWindow #ref_list {
+  background-color: #10e07f;
+  width: 100%;
 }
 
-#floatWindow #ref_list li.hov{
+#floatWindow #ref_list li.hov {
   background-color: rgba(0, 64, 255, 0.229);
 }
