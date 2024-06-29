@@ -17,7 +17,8 @@
   z-index: 10;
   left: 100%;
   margin-inline-start: 10px; /* distance from parent */
-  width: 200px;
+  width: max-content;
+  max-width: 200px;
   padding: 10px;
   border-radius: 10px;
   background: var(--tooltip-background);

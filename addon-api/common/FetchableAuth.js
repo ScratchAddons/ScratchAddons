@@ -96,6 +96,6 @@ export default class FetchableAuth extends AuthCommon {
    * @type {string}
    */
   get scratchLang() {
-    return this._getCookie("scratchlanguage");
+    return this._getCookie("scratchlanguage") || navigator.language;
   }
 }

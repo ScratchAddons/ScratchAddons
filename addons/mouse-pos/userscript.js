@@ -1,3 +1,5 @@
+import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
+
 export default async function ({ addon, console }) {
   var posContainerContainer = document.createElement("div");
   addon.tab.displayNoneWhileDisabled(posContainerContainer, { display: "flex" });
@@ -43,19 +45,7 @@ export default async function ({ addon, console }) {
     },
   });
 
-  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
-    document.body.classList.add("sa-mouse-pos-small");
-  }
-  addon.tab.redux.initialize();
-  addon.tab.redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type === "scratch-gui/StageSize/SET_STAGE_SIZE") {
-      if (e.detail.action.stageSize === "small") {
-        document.body.classList.add("sa-mouse-pos-small");
-      } else {
-        document.body.classList.remove("sa-mouse-pos-small");
-      }
-    }
-  });
+  addSmallStageClass();
 
   while (true) {
     await addon.tab.waitForElement('[class*="controls_controls-container"]', {

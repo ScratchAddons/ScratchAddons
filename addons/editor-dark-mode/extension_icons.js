@@ -24,12 +24,14 @@ export default async function ({ addon, console }) {
   };
 
   const reloadToolbox = () => {
+    Blockly.Events.disable();
     const workspace = Blockly.getMainWorkspace();
     const flyout = workspace.getFlyout();
     const toolbox = workspace.getToolbox();
     const flyoutWorkspace = flyout.getWorkspace();
     Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
     toolbox.populate_(workspace.options.languageTree);
+    Blockly.Events.enable();
   };
   reloadToolbox();
   addon.settings.addEventListener("change", reloadToolbox);

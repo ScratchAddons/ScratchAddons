@@ -124,8 +124,8 @@ function makeHsv(hSource, sSource, vSource) {
     typeof hSource !== "number" && convertToHsv(parseHex(hSource)).s === 0
       ? 0
       : typeof sSource === "number"
-      ? sSource
-      : convertToHsv(parseHex(sSource)).s;
+        ? sSource
+        : convertToHsv(parseHex(sSource)).s;
   const v = typeof vSource === "number" ? vSource : convertToHsv(parseHex(vSource)).v;
   return convertToHex(convertFromHsv({ h, s, v }));
 }

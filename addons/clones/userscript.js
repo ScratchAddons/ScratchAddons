@@ -1,22 +1,12 @@
+import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
+
 export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
   let showOnProjectPage = addon.settings.get("projectpage");
   let showIconOnly = addon.settings.get("showicononly");
 
-  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
-    document.body.classList.add("sa-clones-small");
-  }
-  addon.tab.redux.initialize();
-  addon.tab.redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type === "scratch-gui/StageSize/SET_STAGE_SIZE") {
-      if (e.detail.action.stageSize === "small") {
-        document.body.classList.add("sa-clones-small");
-      } else {
-        document.body.classList.remove("sa-clones-small");
-      }
-    }
-  });
+  addSmallStageClass();
 
   let countContainerContainer = document.createElement("div");
 

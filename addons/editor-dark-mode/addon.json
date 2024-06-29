@@ -63,6 +63,64 @@
       }
     },
     {
+      "name": "page-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-compactScrollbar",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        },
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "page"
+          },
+          "r": 0.83,
+          "g": 0.83,
+          "b": 0.83
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "page"
+          },
+          "r": 0.87,
+          "g": 0.87,
+          "b": 0.87
+        },
+        "threshold": 110
+      }
+    },
+    {
+      "name": "page-loader",
+      "value": {
+        "type": "textColor",
+        "black": "#4d97ff",
+        "white": {
+          "type": "settingValue",
+          "settingId": "page"
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
       "name": "primary-text",
       "value": {
         "type": "textColor",
@@ -108,28 +166,6 @@
       }
     },
     {
-      "name": "primary-transparent25",
-      "value": {
-        "type": "multiply",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primary"
-        },
-        "a": 0.25
-      }
-    },
-    {
-      "name": "primary-transparent20",
-      "value": {
-        "type": "multiply",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primary"
-        },
-        "a": 0.2
-      }
-    },
-    {
       "name": "primary-transparent15",
       "value": {
         "type": "multiply",
@@ -154,9 +190,9 @@
             "type": "settingValue",
             "settingId": "primary"
           },
-          "r": 0.66,
-          "g": 0.76,
-          "b": 0.8
+          "r": 0.85,
+          "g": 0.85,
+          "b": 0.85
         },
         "white": {
           "type": "brighten",
@@ -288,6 +324,37 @@
       }
     },
     {
+      "name": "selector-compactScrollbar",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "selector"
+        },
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "selector"
+          },
+          "r": 0.83,
+          "g": 0.83,
+          "b": 0.83
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "selector"
+          },
+          "r": 0.87,
+          "g": 0.87,
+          "b": 0.87
+        },
+        "threshold": 110
+      }
+    },
+    {
       "name": "selector2-text",
       "value": {
         "type": "textColor",
@@ -323,6 +390,37 @@
       }
     },
     {
+      "name": "selector2-compactScrollbar",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "selector2"
+        },
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "selector2"
+          },
+          "r": 0.83,
+          "g": 0.83,
+          "b": 0.83
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "selector2"
+          },
+          "r": 0.87,
+          "g": 0.87,
+          "b": 0.87
+        },
+        "threshold": 110
+      }
+    },
+    {
       "name": "selectorSelection-text",
       "value": {
         "type": "textColor",
@@ -336,8 +434,8 @@
       "name": "selectorSelection-filter",
       "value": {
         "type": "textColor",
-        "black": "none",
-        "white": "brightness(0) invert(1)",
+        "black": "drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.15)",
+        "white": "brightness(0) invert(1) drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.15)",
         "source": {
           "type": "settingValue",
           "settingId": "selectorSelection"
@@ -372,6 +470,17 @@
       }
     },
     {
+      "name": "accent-formControlText",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "threshold": 128
+      }
+    },
+    {
       "name": "accent-filter",
       "value": {
         "type": "textColor",
@@ -385,18 +494,6 @@
     },
     {
       "name": "accent-desaturateFilter",
-      "value": {
-        "type": "textColor",
-        "black": "saturate(0)",
-        "white": "brightness(0) invert(1) opacity(0.7)",
-        "source": {
-          "type": "settingValue",
-          "settingId": "accent"
-        }
-      }
-    },
-    {
-      "name": "accent-desaturateFilterNew",
       "value": {
         "type": "textColor",
         "black": "grayscale(100%) opacity(0.5)",
@@ -459,7 +556,7 @@
               "type": "makeHsv",
               "h": {
                 "type": "settingValue",
-                "settingId": "primary"
+                "settingId": "page"
               },
               "s": 1,
               "v": 0.67
@@ -468,7 +565,7 @@
               "type": "makeHsv",
               "h": {
                 "type": "settingValue",
-                "settingId": "primary"
+                "settingId": "page"
               },
               "s": 0.5,
               "v": 1
@@ -514,6 +611,28 @@
           "a": 0.8
         },
         "threshold": 110
+      }
+    },
+    {
+      "name": "accent-success",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "transparentSource": "#08bd8c33"
+      }
+    },
+    {
+      "name": "accent-error",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "transparentSource": "#ff8c1a23"
       }
     },
     {
@@ -667,11 +786,29 @@
       "name": "workspace-dots",
       "value": {
         "type": "textColor",
-        "black": "rgba(0, 0, 0, 0.13)",
-        "white": "rgba(255, 255, 255, 0.13)",
         "source": {
           "type": "settingValue",
           "settingId": "workspace"
+        },
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "workspace"
+          },
+          "r": 0.87,
+          "g": 0.87,
+          "b": 0.87
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "workspace"
+          },
+          "r": 0.87,
+          "g": 0.87,
+          "b": 0.87
         }
       }
     },
@@ -714,6 +851,18 @@
         "type": "textColor",
         "black": "rgba(87, 124, 155, 0.13)",
         "white": "rgba(255, 255, 255, 0.05)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "categoryMenu"
+        }
+      }
+    },
+    {
+      "name": "categoryMenu-hoverText",
+      "value": {
+        "type": "textColor",
+        "black": "#3373cc",
+        "white": "#80b5ff",
         "source": {
           "type": "settingValue",
           "settingId": "categoryMenu"
@@ -827,19 +976,16 @@
     {
       "url": "extension_icons.js",
       "matches": ["projects"]
+    },
+    {
+      "url": "paint_icons.js",
+      "matches": ["projects"]
     }
   ],
   "userstyles": [
     {
       "url": "experimental_editor.css",
       "matches": ["projects"]
-    },
-    {
-      "url": "hide_dots.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "dots": false }
-      }
     },
     {
       "url": "paper.css",
@@ -854,6 +1000,14 @@
       "if": {
         "settings": { "affectStage": true }
       }
+    },
+    {
+      "url": "stage_compact_scrollbars.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "affectStage": true },
+        "addonEnabled": ["editor-compact"]
+      }
     }
   ],
   "settings": [
@@ -867,13 +1021,13 @@
       "name": "Highlight color",
       "id": "primary",
       "type": "color",
-      "default": "#4d97ff"
+      "default": "#855cd6"
     },
     {
       "name": "Text and icon highlight color",
       "id": "highlightText",
       "type": "color",
-      "default": "#4d97ff"
+      "default": "#ccb3ff"
     },
     {
       "name": "Menu bar background",
@@ -969,13 +1123,7 @@
       "allowTransparency": true
     },
     {
-      "name": "Show workspace dots",
-      "id": "dots",
-      "type": "boolean",
-      "default": false
-    },
-    {
-      "name": "Change the costume editor background and selection borders",
+      "name": "Change the costume editor background",
       "id": "affectPaper",
       "type": "boolean",
       "default": true
@@ -994,6 +1142,31 @@
       "description": "A dark theme based on a userscript by infinitytec",
       "values": {
         "page": "#111111",
+        "primary": "#855cd6",
+        "highlightText": "#ccb3ff",
+        "menuBar": "#202020",
+        "popup": "#000a",
+        "activeTab": "#202020",
+        "tab": "#151515",
+        "selector": "#202020",
+        "selector2": "#202020",
+        "selectorSelection": "#111111",
+        "accent": "#151515",
+        "input": "#202020",
+        "workspace": "#151515",
+        "categoryMenu": "#202020",
+        "palette": "#202020cc",
+        "fullscreen": "#000000",
+        "stageHeader": "#000000",
+        "border": "#ffffff0d"
+      }
+    },
+    {
+      "name": "3.Darker (blue)",
+      "id": "3darker-blue",
+      "description": "3.Darker with a blue accent color",
+      "values": {
+        "page": "#111111",
         "primary": "#4d97ff",
         "highlightText": "#4d97ff",
         "menuBar": "#202020",
@@ -1010,8 +1183,7 @@
         "palette": "#202020cc",
         "fullscreen": "#000000",
         "stageHeader": "#000000",
-        "border": "#ffffff0d",
-        "dots": false
+        "border": "#ffffff0d"
       }
     },
     {
@@ -1036,8 +1208,7 @@
         "palette": "#2f4066cc",
         "fullscreen": "#051638",
         "stageHeader": "#051638",
-        "border": "#00000026",
-        "dots": false
+        "border": "#00000026"
       }
     },
     {
@@ -1062,8 +1233,7 @@
         "palette": "#222222cc",
         "fullscreen": "#222222",
         "stageHeader": "#222222",
-        "border": "#111111",
-        "dots": false
+        "border": "#111111"
       }
     },
     {
@@ -1071,14 +1241,14 @@
       "id": "experimentalDark",
       "description": "A dark theme by Maximouse based on a userstyle. Not experimental",
       "values": {
-        "page": "#263241",
-        "primary": "#4d97ff",
-        "highlightText": "#4d97ff",
-        "menuBar": "#4d97ff",
+        "page": "#2e3238",
+        "primary": "#855cd6",
+        "highlightText": "#ccb3ff",
+        "menuBar": "#855cd6",
         "popup": "#000a",
         "activeTab": "#282828",
         "tab": "#202020",
-        "selector": "#252c37",
+        "selector": "#292d32",
         "selector2": "#202020",
         "selectorSelection": "#282828",
         "accent": "#282828",
@@ -1088,8 +1258,7 @@
         "palette": "#333333cc",
         "fullscreen": "#282828",
         "stageHeader": "#333333",
-        "border": "#444444",
-        "dots": true
+        "border": "#444444"
       }
     },
     {
@@ -1114,8 +1283,7 @@
         "palette": "#111111cc",
         "fullscreen": "#111111",
         "stageHeader": "#111111",
-        "border": "#ffffff26",
-        "dots": true
+        "border": "#ffffff26"
       }
     },
     {
@@ -1140,8 +1308,7 @@
         "palette": "#e6e8e8cc",
         "fullscreen": "#ffffffff",
         "stageHeader": "#e6e8e8",
-        "border": "#d0d1d2",
-        "dots": true
+        "border": "#d0d1d2"
       }
     },
     {
@@ -1166,14 +1333,38 @@
         "palette": "#7c8083cc",
         "fullscreen": "#000001",
         "stageHeader": "#000001",
-        "border": "#0000006b",
-        "dots": false
+        "border": "#0000006b"
       }
     },
     {
       "name": "Scratch's default colors",
       "id": "scratch",
       "description": "The colors normally used by Scratch",
+      "values": {
+        "page": "#e5f0ff",
+        "primary": "#855cd6",
+        "highlightText": "#855cd6",
+        "menuBar": "#855cd6",
+        "popup": "#4d97ffe6",
+        "activeTab": "#ffffff",
+        "tab": "#d9e3f2",
+        "selector": "#e9f1fc",
+        "selector2": "#d9e3f2",
+        "selectorSelection": "#ffffff",
+        "accent": "#ffffff",
+        "input": "#ffffff",
+        "workspace": "#f9f9f9",
+        "categoryMenu": "#ffffff",
+        "palette": "#f9f9f9cc",
+        "fullscreen": "#ffffff",
+        "stageHeader": "#e8edf1",
+        "border": "#00000026"
+      }
+    },
+    {
+      "name": "Scratch's default colors (blue)",
+      "id": "scratch-blue",
+      "description": "The colors originally used by Scratch 3.0",
       "values": {
         "page": "#e5f0ff",
         "primary": "#4d97ff",
@@ -1192,8 +1383,7 @@
         "palette": "#f9f9f9cc",
         "fullscreen": "#ffffff",
         "stageHeader": "#e8edf1",
-        "border": "#00000026",
-        "dots": true
+        "border": "#00000026"
       }
     }
   ],

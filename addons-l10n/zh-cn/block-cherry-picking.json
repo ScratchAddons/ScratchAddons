@@ -1,0 +1,1 @@
+{"block-cherry-picking/@name":"按 Ctrl 键拖动单个积木","block-cherry-picking/@description":"让你可以按住 Ctrl 键把单个积木从积木组中拖出（而不是积木以及后面连接的所有积木）。","block-cherry-picking/@info-macContextDisabled":"在 macOS 上，用 Cmd 键代替 Ctrl 键。","block-cherry-picking/@info-flipControls":"如果启用了\"翻转控件\"，则单独抓取积木将是默认行为。 按住Ctrl拖动整个脚本。","block-cherry-picking/@settings-name-invertDrag":"翻转控件"}

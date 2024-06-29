@@ -108,7 +108,7 @@ export default async function ({ addon, console, msg }) {
     // Note that when the stage is in small mode, "wide" languages use the same info panel as other
     // languages.
     // List of languages is here:
-    // https://github.com/LLK/scratch-gui/blob/e15b2dfa3a2e58e80fae8d1586c7f56aa0cc0ede/src/lib/locale-utils.js#L6-L18
+    // https://github.com/scratchfoundation/scratch-gui/blob/e15b2dfa3a2e58e80fae8d1586c7f56aa0cc0ede/src/lib/locale-utils.js#L6-L18
     const isWideLocale = !!propertiesPanel.querySelector("[class^=label_input-group-column_]");
     document.body.classList.toggle("sa-sprite-properties-wide-locale", isWideLocale);
   }
