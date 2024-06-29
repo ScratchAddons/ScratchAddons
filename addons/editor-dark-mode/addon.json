@@ -1374,7 +1374,7 @@
         "border": "#00000026"
       }
     },
-          {
+    {
       "name": "Scratch Lab",
       "id": "scratch-lab",
       "description": "The colors used by the Scratch Lab's project editor.",
