@@ -13,8 +13,15 @@
   padding: 1.5rem 2.25rem;
 }
 
-p.recordOptionDescription {
+.mediaRecorderPopup p.recordOptionDescription {
   margin-bottom: 1.5rem;
+}
+
+.recordOptionNote {
+  border: 1px solid var(--editorDarkMode-primary, #855cd6);
+  background-color: var(--editorDarkMode-primary-transparent15, #855cd626);
+  padding: 0.5rem;
+  border-radius: 0.25rem;
 }
 
 .mediaRecorderPopup p {

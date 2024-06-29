@@ -65,14 +65,19 @@ export default async ({ addon, console, msg }) => {
       container.classList.add("mediaRecorderPopup");
       content.classList.add("mediaRecorderPopupContent");
 
-      content.appendChild(
+      const recordOptionDescription = Object.assign(document.createElement("p"), {
+        textContent: msg("record-description", {
+          extension: `.${fileExtension}`,
+        }),
+        className: "recordOptionDescription",
+      });
+      recordOptionDescription.appendChild(
         Object.assign(document.createElement("p"), {
-          textContent: msg("record-description", {
-            extension: `.${fileExtension}`,
-          }),
-          className: "recordOptionDescription",
+          textContent: msg("record-note"),
+          className: "recordOptionNote",
         })
       );
+      content.appendChild(recordOptionDescription);
 
       // Create settings elements
       // Delay before starting
