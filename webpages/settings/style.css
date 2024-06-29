@@ -129,12 +129,19 @@ h1 {
 .reverted {
   transform: scaleY(-1);
 }
-
-.theme-switch {
-  height: 25px;
-  right: 25px;
+.header-button {
+  right: 0;
   position: fixed;
   cursor: pointer;
+  padding: 17.5px;
+  line-height: 0;
+  transition: 0.2s ease;
+}
+.header-button:hover {
+  background: var(--header-hover-darken);
+}
+.theme-switch {
+  height: 25px;
 }
 [dir="rtl"] .theme-switch {
   right: auto;
@@ -374,7 +381,11 @@ button.setting-input.color.open {
   background: linear-gradient(45deg, #777 25%, transparent 25%), linear-gradient(-45deg, #777 25%, transparent 25%),
     linear-gradient(45deg, transparent 75%, #777 75%), linear-gradient(-45deg, transparent 75%, #777 75%);
   background-size: 6px 6px;
-  background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
+  background-position:
+    0 0,
+    0 3px,
+    3px -3px,
+    -3px 0px;
   border-radius: 5px;
   background-color: white;
   display: flex;

@@ -4,10 +4,14 @@
   opacity: 0.6;
 }
 
+.blocklyEditableText > .blocklyEditableLabel {
+  fill: black;
+}
+
 .u-dropdown-searchbar,
 .u-dropdown-searchbar:focus,
 .blocklyDropDownDiv .goog-menuitem,
-.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem .goog-menuitem-content {
+.blocklyNumPadButton {
   color: #575e75;
 }
 .u-dropdown-searchbar:focus {

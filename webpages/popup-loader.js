@@ -120,9 +120,6 @@ async function refetchSession(addon) {
     });
   });
 
-  scratchAddons.methods.getMsgCount = () => {
-    throw new Error("Unimplemented; fetch from IndexedDB or call MessageCache.fetchMessageCount instead");
-  };
   scratchAddons.methods.getEnabledAddons = (tag) =>
     sendMessage({
       getEnabledAddons: {

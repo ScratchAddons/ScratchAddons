@@ -50,6 +50,7 @@
   bottom: calc(100% + 22px);
   pointer-events: auto;
   opacity: 1;
+  z-index: 200;
 }
 
 .sa-paint-snap-settings-line {

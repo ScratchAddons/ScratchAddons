@@ -1,6 +1,6 @@
 {
-  "name": "Disable sprite wobble in sprite pane",
-  "description": "Allow scripts, costumes, and sounds to be moved to different sprites without the sprites moving around within the sprite pane.",
+  "name": "Fix sprite pane glitching",
+  "description": "Fixes a bug in the Scratch editor where scripts, costumes, and sounds can't be dragged and dropped into sprites without the sprites jumping around within the sprite pane.",
   "credits": [
     {
       "name": "Xan",
@@ -9,17 +9,53 @@
     {
       "name": "CST1229",
       "link": "https://github.com/cst1229/"
+    },
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
     }
   ],
   "userstyles": [
     {
       "url": "userstyle.css",
       "matches": ["projects"]
+    },
+    {
+      "url": "disable-wobble.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": {
+          "mode": "no-wobble"
+        }
+      }
     }
   ],
-  "tags": ["editor"],
+  "settings": [
+    {
+      "id": "mode",
+      "name": "Mode",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "Fix bug"
+        },
+        {
+          "id": "no-wobble",
+          "name": "Fix bug and disable sprite wobble"
+        }
+      ],
+      "default": "none"
+    }
+  ],
+  "tags": ["editor", "recommended"],
   "enabledByDefault": false,
   "versionAdded": "1.24.0",
+  "latestUpdate": {
+    "version": "1.35.0",
+    "temporaryNotice": "This addon has been reworked and now fixes the sprite pane glitch without having to disable the wobble animation. If you still want to disable the wobble, there's a setting below."
+  },
   "dynamicEnable": true,
-  "dynamicDisable": true
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true
 }

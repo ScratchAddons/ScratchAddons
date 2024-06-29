@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -426,6 +426,11 @@
               ></comment>
             </div>
           </div>
+        </div>
+
+        <!-- Welcome to Scratch -->
+        <div class="message-type" v-show="welcomeToScratch">
+          <div class="message-type-details welcome-message">{{ uiMessages.welcomeToScratchMsg }}</div>
         </div>
       </div>
 

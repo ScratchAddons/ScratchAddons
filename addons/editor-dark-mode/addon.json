@@ -63,6 +63,49 @@
       }
     },
     {
+      "name": "page-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-compactScrollbar",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        },
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "page"
+          },
+          "r": 0.83,
+          "g": 0.83,
+          "b": 0.83
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "page"
+          },
+          "r": 0.87,
+          "g": 0.87,
+          "b": 0.87
+        },
+        "threshold": 110
+      }
+    },
+    {
       "name": "page-loader",
       "value": {
         "type": "textColor",
@@ -281,6 +324,37 @@
       }
     },
     {
+      "name": "selector-compactScrollbar",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "selector"
+        },
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "selector"
+          },
+          "r": 0.83,
+          "g": 0.83,
+          "b": 0.83
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "selector"
+          },
+          "r": 0.87,
+          "g": 0.87,
+          "b": 0.87
+        },
+        "threshold": 110
+      }
+    },
+    {
       "name": "selector2-text",
       "value": {
         "type": "textColor",
@@ -313,6 +387,37 @@
           "settingId": "selector2"
         },
         "threshold": 128
+      }
+    },
+    {
+      "name": "selector2-compactScrollbar",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "selector2"
+        },
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "selector2"
+          },
+          "r": 0.83,
+          "g": 0.83,
+          "b": 0.83
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "selector2"
+          },
+          "r": 0.87,
+          "g": 0.87,
+          "b": 0.87
+        },
+        "threshold": 110
       }
     },
     {
@@ -362,6 +467,17 @@
             "settingId": "border"
           }
         }
+      }
+    },
+    {
+      "name": "accent-formControlText",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "threshold": 128
       }
     },
     {
@@ -495,6 +611,28 @@
           "a": 0.8
         },
         "threshold": 110
+      }
+    },
+    {
+      "name": "accent-success",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "transparentSource": "#08bd8c33"
+      }
+    },
+    {
+      "name": "accent-error",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "transparentSource": "#ff8c1a23"
       }
     },
     {
@@ -648,11 +786,29 @@
       "name": "workspace-dots",
       "value": {
         "type": "textColor",
-        "black": "rgba(0, 0, 0, 0.13)",
-        "white": "rgba(255, 255, 255, 0.13)",
         "source": {
           "type": "settingValue",
           "settingId": "workspace"
+        },
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "workspace"
+          },
+          "r": 0.87,
+          "g": 0.87,
+          "b": 0.87
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "workspace"
+          },
+          "r": 0.87,
+          "g": 0.87,
+          "b": 0.87
         }
       }
     },
@@ -832,13 +988,6 @@
       "matches": ["projects"]
     },
     {
-      "url": "hide_dots.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "dots": false }
-      }
-    },
-    {
       "url": "paper.css",
       "matches": ["projects"],
       "if": {
@@ -850,6 +999,14 @@
       "matches": ["projects"],
       "if": {
         "settings": { "affectStage": true }
+      }
+    },
+    {
+      "url": "stage_compact_scrollbars.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "affectStage": true },
+        "addonEnabled": ["editor-compact"]
       }
     }
   ],
@@ -966,12 +1123,6 @@
       "allowTransparency": true
     },
     {
-      "name": "Show workspace dots",
-      "id": "dots",
-      "type": "boolean",
-      "default": false
-    },
-    {
       "name": "Change the costume editor background",
       "id": "affectPaper",
       "type": "boolean",
@@ -1007,8 +1158,7 @@
         "palette": "#202020cc",
         "fullscreen": "#000000",
         "stageHeader": "#000000",
-        "border": "#ffffff0d",
-        "dots": false
+        "border": "#ffffff0d"
       }
     },
     {
@@ -1033,8 +1183,7 @@
         "palette": "#202020cc",
         "fullscreen": "#000000",
         "stageHeader": "#000000",
-        "border": "#ffffff0d",
-        "dots": false
+        "border": "#ffffff0d"
       }
     },
     {
@@ -1059,8 +1208,7 @@
         "palette": "#2f4066cc",
         "fullscreen": "#051638",
         "stageHeader": "#051638",
-        "border": "#00000026",
-        "dots": false
+        "border": "#00000026"
       }
     },
     {
@@ -1085,8 +1233,7 @@
         "palette": "#222222cc",
         "fullscreen": "#222222",
         "stageHeader": "#222222",
-        "border": "#111111",
-        "dots": false
+        "border": "#111111"
       }
     },
     {
@@ -1111,8 +1258,7 @@
         "palette": "#333333cc",
         "fullscreen": "#282828",
         "stageHeader": "#333333",
-        "border": "#444444",
-        "dots": true
+        "border": "#444444"
       }
     },
     {
@@ -1137,8 +1283,7 @@
         "palette": "#111111cc",
         "fullscreen": "#111111",
         "stageHeader": "#111111",
-        "border": "#ffffff26",
-        "dots": true
+        "border": "#ffffff26"
       }
     },
     {
@@ -1163,8 +1308,7 @@
         "palette": "#e6e8e8cc",
         "fullscreen": "#ffffffff",
         "stageHeader": "#e6e8e8",
-        "border": "#d0d1d2",
-        "dots": true
+        "border": "#d0d1d2"
       }
     },
     {
@@ -1189,8 +1333,7 @@
         "palette": "#7c8083cc",
         "fullscreen": "#000001",
         "stageHeader": "#000001",
-        "border": "#0000006b",
-        "dots": false
+        "border": "#0000006b"
       }
     },
     {
@@ -1215,8 +1358,7 @@
         "palette": "#f9f9f9cc",
         "fullscreen": "#ffffff",
         "stageHeader": "#e8edf1",
-        "border": "#00000026",
-        "dots": true
+        "border": "#00000026"
       }
     },
     {
@@ -1241,8 +1383,7 @@
         "palette": "#f9f9f9cc",
         "fullscreen": "#ffffff",
         "stageHeader": "#e8edf1",
-        "border": "#00000026",
-        "dots": true
+        "border": "#00000026"
       }
     }
   ],

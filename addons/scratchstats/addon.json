@@ -1,11 +1,18 @@
 {
   "name": "Profile statistics",
   "description": "Shows statistics from ScratchDB on user profiles.",
-  "tags": ["community", "profiles"],
+  "tags": ["community", "profiles", "beta"],
   "credits": [
     {
       "name": "Maximouse",
       "link": "https://scratch.mit.edu/users/Maximouse/"
+    }
+  ],
+  "info": [
+    {
+      "id": "deprecated",
+      "type": "warning",
+      "text": "The ScratchDB database used by this addon is offline, so this addon does not work."
     }
   ],
   "versionAdded": "1.11.0",

@@ -27,6 +27,7 @@
   width: 100%;
   border: none;
   transition: opacity 0.2s;
+  pointer-events: none; /* bar should be non-interactive */
 }
 .u-progress-bar-top .u-progress-bar-inner {
   transition: width 0.2s;

@@ -1,1 +1,1 @@
-{"disable-stage-drag-select/@name":"ドラッグできないスプライト","disable-stage-drag-select/@description":"ステージではShiftキーを押さないとスプライトをドラッグできないようにする。"}
+{"disable-stage-drag-select/@name":"ドラッグできないスプライト","disable-stage-drag-select/@description":"ステージではShiftキーを押さないとスプライトをドラッグできないようにする。","disable-stage-drag-select/@settings-name-drag_while_stopped":"プロジェクト停止中にドラッグを許可"}

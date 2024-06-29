@@ -170,6 +170,9 @@
   "dark": {
     "message": "Dark"
   },
+  "loading": {
+    "message": "Loading..."
+  },
   "licensesTitle": {
     "message": "Licenses - Scratch Addons"
   },
@@ -242,15 +245,18 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_33_2": {
-    "message": "Scratch just released an update that changes some of the colors around the website. If you'd like to update your settings to use these new colors, go back, or otherwise customize the colors, you can reset or change any themes from $1.",
-    "description": "The placeholder is \"Scratch Addons settings\"."
+  "extensionUpdateInfo1_v1_38": {
+    "message": "This is an experimental update that we're releasing to a portion of our user base. It contains some behind-the-scenes changes to support the new extension architecture required by browsers (Manifest V3). If you encounter any issues or unexpected behavior, please $1. There is also a button to send feedback in the settings page.",
+    "description": "!! The placeholder is \"send feedback\"."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_33_2": {
-    "message": "Scratch Addons' developers have been working hard to support the changes, but you might still experience small bugs for some time."
+  "sendFeedbackNotification": {
+    "message": "send feedback"
+  },
+  "extensionUpdateInfo2_v1_38": {
+    "message": "This update doesn't introduce any new features, but stay tuned for upcoming updates."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",

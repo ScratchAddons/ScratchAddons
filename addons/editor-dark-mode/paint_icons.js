@@ -6,9 +6,12 @@ const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$
 export default async function ({ addon, console }) {
   const recolorSvg = (svg) => {
     return svg
-      .replace(/#855cd6/gi, addon.settings.get("highlightText"))
-      .replace(/#ffffff|#fff|white/gi, addon.settings.get("accent"))
-      .replace(/#575e75/gi, textColor(addon.settings.get("accent")));
+      .replace(/#855cd6/gi, "%highlight%")
+      .replace(/#ffffff|#fff|white/gi, "%accent%")
+      .replace(/#575e75/gi, "%text%")
+      .replace(/%highlight%/g, addon.settings.get("highlightText"))
+      .replace(/%accent%/g, addon.settings.get("accent"))
+      .replace(/%text%/g, textColor(addon.settings.get("accent")));
   };
 
   const srcToSvg = async (src) => {
@@ -18,15 +21,20 @@ export default async function ({ addon, console }) {
   };
 
   const updateIcon = async (icon) => {
+    let src = icon.src;
     let oldSvg;
     if (icon.saOriginalSvg) {
       oldSvg = icon.saOriginalSvg;
     } else {
-      oldSvg = await srcToSvg(icon.src);
-      icon.saOriginalSvg = oldSvg;
+      oldSvg = await srcToSvg(src);
     }
-    const newSvg = addon.self.disabled ? oldSvg : recolorSvg(oldSvg);
-    icon.src = `data:image/svg+xml;base64,${btoa(newSvg)}`;
+
+    // The icon might change before srcToSvg resolves - it should only be updated if it hasn't
+    if (icon.src === src) {
+      icon.saOriginalSvg = oldSvg;
+      const newSvg = addon.self.disabled ? oldSvg : recolorSvg(oldSvg);
+      icon.src = `data:image/svg+xml;base64,${btoa(newSvg)}`;
+    }
 
     // React sometimes changes the src of an existing icon instead of creating a new one
     if (!icon.saOverriddenSetAttribute) {
@@ -35,10 +43,8 @@ export default async function ({ addon, console }) {
       icon.setAttribute = function (name, value) {
         oldSetAttribute.call(this, name, value);
         if (name === "src") {
-          srcToSvg(value).then((svg) => {
-            icon.saOriginalSvg = svg;
-            updateIcon(icon);
-          });
+          icon.saOriginalSvg = null;
+          updateIcon(icon);
         }
       };
     }
