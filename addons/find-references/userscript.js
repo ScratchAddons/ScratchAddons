@@ -23,7 +23,7 @@ export default async function({ addon, msg, console }) {
 
   const Blockly = await addon.tab.traps.getBlockly();
 
-  class FindBar {
+  class FindRefsWindow {
     constructor() {
       this.utils = new Utils(addon);
 
@@ -42,32 +42,84 @@ export default async function({ addon, msg, console }) {
       return Blockly.getMainWorkspace();
     }
 
+    createFloatWindow() {
+      const floatWindow = document.createElement("div");
+      floatWindow.id = "floatWindow";
+
+      const header = document.createElement("div");
+      header.className = "float-window-header";
+      header.textContent = "References: ";
+      floatWindow.appendChild(header);
+      let isDragging = false;
+      let dragStartX, dragStartY;
+
+      // header.addEventListener("mousedown", function(e) {
+      //   isDragging = true;
+      //   dragStartX = e.clientX - floatWindow.offsetLeft;
+      //   dragStartY = e.clientY - floatWindow.offsetTop;
+      //   header.style.cursor = "grabbing";
+      // });
+      //
+      // document.addEventListener("mouseup", function() {
+      //   isDragging = false;
+      //   header.style.cursor = "grab";
+      // });
+
+      // document.addEventListener("mousemove", function(e) {
+      //   if (!isDragging) return;
+      //   floatWindow.style.left = e.clientX - dragStartX + "px";
+      //   floatWindow.style.top = e.clientY - dragStartY + "px";
+      // });
+
+      const ul_refs = document.createElement("ul");
+      ul_refs.id = "ref_list";
+      floatWindow.appendChild(ul_refs);
+
+      // set right
+      const scroll_width = document.querySelector("[class*='blocklyScrollbarHandle']").getAttribute('width');
+      floatWindow.style.right = `${parseInt(scroll_width) + 3}px`;
+
+      const editor = document.querySelector("[class*='gui_tabs']");
+      editor.appendChild(floatWindow);
+      this.fw_ul = document.querySelector("#ref_list");
+
+      floatWindow.showFloatWindow = function() {
+        floatWindow.style.display = "block";
+      };
+
+      floatWindow.closeFloatWindow = function() {
+        floatWindow.style.display = "none";
+      };
+      this.floatWindow = floatWindow;
+    }
+
     createDom(root) {
-      this.findBarOuter = document.createElement("div");
-      this.findBarOuter.className = "sa-find-bar";
-      addon.tab.displayNoneWhileDisabled(this.findBarOuter, { display: "flex" });
-      root.appendChild(this.findBarOuter);
-
-      this.findWrapper = this.findBarOuter.appendChild(document.createElement("span"));
-      this.findWrapper.className = "sa-find-wrapper";
-
-      this.dropdownOut = this.findWrapper.appendChild(document.createElement("label"));
-      this.dropdownOut.className = "sa-find-dropdown-out";
-
-      this.findInput = this.dropdownOut.appendChild(document.createElement("input"));
-      this.findInput.className = addon.tab.scratchClass("input_input-form", {
-        others: "sa-find-input",
-      });
-      // for <label>
-      this.findInput.id = "sa-find-input";
-      this.findInput.type = "search";
-      this.findInput.placeholder = "find-references";
-      this.findInput.autocomplete = "off";
-
-      this.dropdownOut.appendChild(this.dropdown.createDom());
-
-      this.bindEvents();
-      this.tabChanged();
+      this.createFloatWindow();
+      // this.findBarOuter = document.createElement("div");
+      // this.findBarOuter.className = "sa-find-bar";
+      // addon.tab.displayNoneWhileDisabled(this.findBarOuter, { display: "flex" });
+      // root.appendChild(this.findBarOuter);
+      //
+      // this.findWrapper = this.findBarOuter.appendChild(document.createElement("span"));
+      // this.findWrapper.className = "sa-find-wrapper";
+      //
+      // this.dropdownOut = this.findWrapper.appendChild(document.createElement("label"));
+      // this.dropdownOut.className = "sa-find-dropdown-out";
+      //
+      // this.findInput = this.dropdownOut.appendChild(document.createElement("input"));
+      // this.findInput.className = addon.tab.scratchClass("input_input-form", {
+      //   others: "sa-find-input",
+      // });
+      // // for <label>
+      // this.findInput.id = "sa-find-input";
+      // this.findInput.type = "search";
+      // this.findInput.placeholder = "find-references";
+      // this.findInput.autocomplete = "off";
+      //
+      // this.dropdownOut.appendChild(this.dropdown.createDom());
+      //
+      // this.bindEvents();
+      // this.tabChanged();
     }
 
     bindEvents() {
@@ -446,55 +498,8 @@ export default async function({ addon, msg, console }) {
       this.carousel = new Carousel(this.utils);
       this.floatWindow = null;
       this.fw_ul = null;
-
-      this.createFloatWindow();
     }
 
-    createFloatWindow() {
-      const floatWindow = document.createElement("div");
-      floatWindow.id = "floatWindow";
-
-      // const header = document.createElement("div");
-      // header.className = "float-window-header";
-      // header.textContent = "References: ";
-      // floatWindow.appendChild(header);
-      // 添加拖动功能
-      let isDragging = false;
-      let dragStartX, dragStartY;
-
-      // header.addEventListener("mousedown", function(e) {
-      //   isDragging = true;
-      //   dragStartX = e.clientX - floatWindow.offsetLeft;
-      //   dragStartY = e.clientY - floatWindow.offsetTop;
-      //   header.style.cursor = "grabbing";
-      // });
-      //
-      // document.addEventListener("mouseup", function() {
-      //   isDragging = false;
-      //   header.style.cursor = "grab";
-      // });
-
-      document.addEventListener("mousemove", function(e) {
-        if (!isDragging) return;
-        floatWindow.style.left = e.clientX - dragStartX + "px";
-        floatWindow.style.top = e.clientY - dragStartY + "px";
-      });
-
-      const parentElement = document.createElement("ul");
-      parentElement.id = "ref_list";
-      floatWindow.appendChild(parentElement);
-      document.body.appendChild(floatWindow);
-      this.fw_ul = document.querySelector("#ref_list");
-
-      floatWindow.showFloatWindow = function() {
-        floatWindow.style.display = "block";
-      };
-
-      floatWindow.closeFloatWindow = function() {
-        floatWindow.style.display = "none";
-      };
-      this.floatWindow = floatWindow;
-    }
 
     get workspace() {
       return Blockly.getMainWorkspace();
@@ -938,22 +943,22 @@ export default async function({ addon, msg, console }) {
     }
   }
 
-  const findBar = new FindBar();
-  window.fb = findBar;
+  const findRefsWindow = new FindRefsWindow();
+  window.fb = findRefsWindow;
 
-  // addon.tab.redux.initialize();
-  // addon.tab.redux.addEventListener("statechanged", (e) => {
-  //   if (e.detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB") {
-  //     findBar.tabChanged();
-  //   }
-  // });
+  addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (e.detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB") {
+      findRefsWindow.tabChanged();
+    }
+  });
 
-  // while (true) {
-  // const root = await addon.tab.waitForElement("ul[class*=gui_tab-list_]", {
-  //   markAsSeen: true,
-  //   reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
-  //   reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
-  // });
-  // findBar.createDom(root);
-  // }
+  while (true) {
+    const root = await addon.tab.waitForElement("ul[class*=gui_tab-list_]", {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+    });
+    findRefsWindow.createDom(root);
+  }
 }
