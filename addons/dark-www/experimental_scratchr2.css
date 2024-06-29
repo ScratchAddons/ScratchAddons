@@ -2,6 +2,7 @@
 html,
 body {
   background-color: var(--darkWww-page);
+  background-image: var(--darkWww-page-scratchr2BackgroundImage);
   color: var(--darkWww-page-scratchr2Text);
   color-scheme: var(--darkWww-page-colorScheme);
 }
@@ -114,20 +115,24 @@ label,
 #comments .sa-emoji-picker {
   background-color: var(--darkWww-box);
   color: var(--darkWww-box-scratchr2Text);
+  text-shadow: none;
 }
 .info-tooltip /* statistics */ {
   background-color: var(--darkWww-box);
   color: var(--darkWww-box-scratchr2LabelText);
+  text-shadow: none;
 }
 .dropdown .dropdown-menu {
   background-color: var(--darkWww-box);
   color: var(--darkWww-box-scratchr2ButtonText);
+  text-shadow: none;
 }
 input,
 textarea,
 select {
   background-color: var(--darkWww-box);
   color: var(--darkWww-box-scratchr2InputText);
+  text-shadow: none;
 }
 .arrow-left,
 .arrow-right {
@@ -269,12 +274,16 @@ button:hover,
 .box,
 .postleft,
 .postfootleft,
-.djangobb blockquote,
 #profile-box .doing,
 .profile-box-footer-module textarea,
 #comments .highlighted,
-.nvtooltip h3 /* statistics */,
 .table-striped tbody > tr:nth-child(odd) > td {
+  background-color: var(--darkWww-gray-scratchr2);
+  color: var(--darkWww-gray-scratchr2Text);
+  text-shadow: var(--darkWww-gray-scratchr2TextShadow);
+}
+.djangobb blockquote,
+.nvtooltip h3 /* statistics */ {
   background-color: var(--darkWww-gray-scratchr2);
   color: var(--darkWww-gray-scratchr2Text);
 }
@@ -593,7 +602,6 @@ ul.pagination span /* mobile forums */,
 
 html,
 body {
-  background-image: none;
   text-shadow: none;
 }
 

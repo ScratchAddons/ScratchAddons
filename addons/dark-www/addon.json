@@ -40,6 +40,36 @@
       }
     },
     {
+      "name": "page-scratchr2GrayText",
+      "value": {
+        "type": "textColor",
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "box"
+          },
+          "r": 0.6,
+          "g": 0.6,
+          "b": 0.6
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "box"
+          },
+          "r": 0.25,
+          "g": 0.25,
+          "b": 0.25
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
       "name": "page-tab",
       "value": {
         "type": "textColor",
@@ -132,6 +162,32 @@
           "type": "settingValue",
           "settingId": "page"
         }
+      }
+    },
+    {
+      "name": "page-scratchr2ButtonText",
+      "value": {
+        "type": "textColor",
+        "black": "#666666",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-scratchr2BackgroundImage",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        },
+        "options": {
+          "#fcfcfc": "url('https://cdn.scratch.mit.edu/scratchr2/static/images/scratch-bg.png')",
+          "#fcfcfcff": "url('https://cdn.scratch.mit.edu/scratchr2/static/images/scratch-bg.png')"
+        },
+        "default": "none"
       }
     },
     {
@@ -814,6 +870,18 @@
       }
     },
     {
+      "name": "gray-greenText",
+      "value": {
+        "type": "textColor",
+        "black": "#328554",
+        "white": "#13ecaf",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
       "name": "gray-boxHighlight",
       "value": {
         "type": "textColor",
@@ -1071,6 +1139,19 @@
       }
     },
     {
+      "name": "gray-scratchr2TextShadow",
+      "value": {
+        "type": "textColor",
+        "black": "0 1px white",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        },
+        "threshold": 224
+      }
+    },
+    {
       "name": "gray-scratchr2SelectedTab",
       "value": {
         "type": "textColor",
@@ -1152,6 +1233,47 @@
         "source": {
           "type": "settingValue",
           "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-scratchr2ProjectStatsBackground",
+      "value": {
+        "type": "map",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        },
+        "options": {
+          "#f2f2f2": "#dddddd",
+          "#f2f2f2ff": "#dddddd"
+        },
+        "default": {
+          "type": "textColor",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "black": {
+            "type": "multiply",
+            "source": {
+              "type": "settingValue",
+              "settingId": "gray"
+            },
+            "r": 0.9,
+            "g": 0.9,
+            "b": 0.9
+          },
+          "white": {
+            "type": "brighten",
+            "source": {
+              "type": "settingValue",
+              "settingId": "gray"
+            },
+            "r": 0.9,
+            "g": 0.9,
+            "b": 0.9
+          }
         }
       }
     },

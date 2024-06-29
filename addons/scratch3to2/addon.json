@@ -1,0 +1,56 @@
+{
+  "name": "Scratch 3.0 \u2192 2.0",
+  "description": "Makes Scratch 3.0-styled pages look like Scratch 2.0.",
+  "tags": ["community", "theme"],
+  "credits": [
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "injectAsStyleElt": true,
+  "versionAdded": "1.34.0",
+  "userstyles": [
+    {
+      "url": "main.css",
+      "matches": ["projects", "scratchWWWNoProject"]
+    },
+    {
+      "url": "home.css",
+      "matches": ["https://scratch.mit.edu/"]
+    },
+    {
+      "url": "explore_and_search.css",
+      "matches": [
+        "https://scratch.mit.edu/explore/*",
+        "https://scratch.mit.edu/search/*"
+      ]
+    },
+    {
+      "url": "ideas.css",
+      "matches": ["https://scratch.mit.edu/ideas"]
+    },
+    {
+      "url": "about.css",
+      "matches": ["https://scratch.mit.edu/about"]
+    },
+    {
+      "url": "project.css",
+      "matches": ["projects"]
+    },
+    {
+      "url": "studio.css",
+      "matches": ["studios"]
+    },
+    {
+      "url": "comments.css",
+      "matches": ["projects", "studios"]
+    },
+    {
+      "url": "messages.css",
+      "matches": ["https://scratch.mit.edu/messages"]
+    }
+  ]
+}

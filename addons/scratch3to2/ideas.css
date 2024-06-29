@@ -1,0 +1,94 @@
+/* Header */
+.banner-wrapper {
+  background-color: var(--darkWww-gray-scratchr2, #f7f7f7);
+}
+.title-banner-h1 {
+  color: var(--darkWww-gray-greenText, #328554);
+  font-weight: normal;
+}
+.title-banner-p > img {
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.2));
+}
+.banner-button {
+  background-color: var(--darkWww-box, white);
+  border: 1px solid var(--darkWww-border-5, #eee);
+  border-radius: 5px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.27);
+  font-size: 1rem;
+}
+.banner-button:hover span {
+  text-decoration: underline;
+}
+
+/* Section titles */
+h2 {
+  color: var(--darkWww-page-scratchr2HeaderText, #554747);
+}
+
+/* Buttons */
+.ideas-button,
+a.ttt-try-tutorial-button {
+  background-image: linear-gradient(
+    var(--darkWww-box-scratchr2ButtonGradientTop, white),
+    var(--darkWww-box-scratchr2ButtonGradientBottom, #ccc)
+  );
+  border: 1px solid var(--darkWww-box-scratchr2ButtonBorder, #999);
+  color: var(--darkWww-box-scratchr2ButtonText, #666);
+  text-shadow: 0 1px var(--darkWww-box, white);
+}
+.ideas-button:hover,
+a.ttt-try-tutorial-button:hover {
+  background-color: var(--darkWww-box-scratchr2ButtonHover, #e6e6e6);
+  background-image: none;
+  text-decoration: none;
+}
+.ideas-button img,
+a.ttt-try-tutorial-button img {
+  filter: var(--darkWww-box-filterInverted, brightness(0.4));
+}
+
+/* Getting Started */
+.tips-getting-started {
+  background-color: transparent;
+}
+
+/* Activity Guides */
+.tips-activity-guides {
+  background-color: transparent;
+}
+.ttt-tile {
+  border-radius: 9px 9px 0 0;
+  box-shadow: 0 0 0 1px var(--darkWww-box-scratchr2Border, #e0e0e0), 0 2px 3px rgba(0, 0, 0, 0.27);
+}
+.ttt-tile-image {
+  border-bottom: 1px solid var(--darkWww-box-scratchr2Border, #e0e0e0);
+  border-radius: 9px 9px 0 0;
+}
+.ttt-tile-image-img {
+  border-radius: 9px 9px 0 0;
+}
+.ttt-tile h3 {
+  color: var(--darkWww-link, #855cd6);
+}
+.ttt-tile:hover h3 {
+  text-decoration: underline;
+}
+.ttt-modal-header {
+  display: none;
+}
+a.ttt-try-tutorial-button > span {
+  color: var(--darkWww-box-scratchr2ButtonText, #666);
+}
+
+/* Bottom area (visually part of the footer) */
+.gray-area {
+  background-color: var(--darkWww-footer-scratchr2, #ececec);
+  box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.14);
+  color: var(--darkWww-footer-scratchr2Text, #666);
+}
+.gray-area h3 {
+  color: var(--darkWww-footer-scratchr2Text, #666);
+}
+#footer {
+  box-shadow: inset 0 -10px 10px -10px rgba(0, 0, 0, 0.14);
+}

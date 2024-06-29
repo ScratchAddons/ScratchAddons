@@ -7,6 +7,7 @@ export default async function ({ addon, console, msg }) {
     user = document.querySelector('[name="q"]').value.trim(),
     valid = /^[\w-]{3,20}$/g.test(user);
   tab.type = "button";
+  tab.className = "sa-search-profile-tab"; // 3.0 → 2.0 compatibility
   tab.setAttribute("role", "tab");
   tab.setAttribute("aria-selected", false);
   tab.tabIndex = -1; // unselected tabs should only be focusable using arrow keys
