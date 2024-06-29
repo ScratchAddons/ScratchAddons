@@ -253,8 +253,8 @@ export default async ({ addon, console, msg }) => {
         "click",
         () =>
           handleOptionClose({
-            secs: Number(recordOptionSecondsInput.value),
-            delay: Number(recordOptionDelayInput.value),
+            secs: Math.min(Number(recordOptionSecondsInput.value), LENGTH_LIMIT),
+            delay: Math.min(Number(recordOptionDelayInput.value), LENGTH_LIMIT),
             audioEnabled: recordOptionAudioInput.checked,
             micEnabled: recordOptionMicInput.checked,
             waitUntilFlag: recordOptionFlagInput.checked,
