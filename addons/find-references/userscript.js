@@ -13,7 +13,7 @@ import BlockInstance from "./blockly/BlockInstance.js";
 import Utils from "./blockly/Utils.js";
 
 /** @typedef {import("../../addon-api/content-script/typedef.js").UserscriptUtilities} UserscriptUtilities @param {UserscriptUtilities} */
-export default async function ({ addon, msg, console }) {
+export default async function({ addon, msg, console }) {
   if (!addon.self._isDevtoolsExtension && window.initGUI) {
     console.log("Extension running, stopping addon");
     window._devtoolsAddonEnabled = true;
@@ -33,7 +33,7 @@ export default async function ({ addon, msg, console }) {
       this.findWrapper = null;
       this.findInput = null;
       this.dropdownOut = null;
-      this.dropdown = new Dropdown(this.utils);
+      // this.dropdown = new Dropdown(this.utils);
 
       document.addEventListener("keydown", (e) => this.eventKeyDown(e), true);
     }
@@ -61,7 +61,7 @@ export default async function ({ addon, msg, console }) {
       // for <label>
       this.findInput.id = "sa-find-input";
       this.findInput.type = "search";
-      this.findInput.placeholder = msg("find-placeholder");
+      this.findInput.placeholder = "find-references";
       this.findInput.autocomplete = "off";
 
       this.dropdownOut.appendChild(this.dropdown.createDom());
@@ -203,10 +203,10 @@ export default async function ({ addon, msg, console }) {
         this.selectedTab === 0
           ? this.getScratchBlocks()
           : this.selectedTab === 1
-          ? this.getScratchCostumes()
-          : this.selectedTab === 2
-          ? this.getScratchSounds()
-          : [];
+            ? this.getScratchCostumes()
+            : this.selectedTab === 2
+              ? this.getScratchSounds()
+              : [];
 
       this.dropdown.empty();
 
@@ -474,7 +474,7 @@ export default async function ({ addon, msg, console }) {
       //   header.style.cursor = "grab";
       // });
 
-      document.addEventListener("mousemove", function (e) {
+      document.addEventListener("mousemove", function(e) {
         if (!isDragging) return;
         floatWindow.style.left = e.clientX - dragStartX + "px";
         floatWindow.style.top = e.clientY - dragStartY + "px";
@@ -486,11 +486,11 @@ export default async function ({ addon, msg, console }) {
       document.body.appendChild(floatWindow);
       this.fw_ul = document.querySelector("#ref_list");
 
-      floatWindow.showFloatWindow = function () {
+      floatWindow.showFloatWindow = function() {
         floatWindow.style.display = "block";
       };
 
-      floatWindow.closeFloatWindow = function () {
+      floatWindow.closeFloatWindow = function() {
         floatWindow.style.display = "none";
       };
       this.floatWindow = floatWindow;
@@ -941,71 +941,19 @@ export default async function ({ addon, msg, console }) {
   const findBar = new FindBar();
   window.fb = findBar;
 
-  const _doBlockClick_ = Blockly.Gesture.prototype.doBlockClick_;
-  Blockly.Gesture.prototype.doBlockClick_ = function () {
-    if (!addon.self.disabled && (this.mostRecentEvent_.button === 1 || this.mostRecentEvent_.shiftKey)) {
-      // Wheel button...
-      // Intercept clicks to allow jump to...?
-      let block = this.startBlock_;
-      for (; block; block = block.getSurroundParent()) {
-        if (block.type === "procedures_definition" || (!this.jumpToDef && block.type === "procedures_call")) {
-          let id = block.id ? block.id : block.getId ? block.getId() : null;
+  // addon.tab.redux.initialize();
+  // addon.tab.redux.addEventListener("statechanged", (e) => {
+  //   if (e.detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB") {
+  //     findBar.tabChanged();
+  //   }
+  // });
 
-          findBar.findInput.focus();
-          findBar.showDropDown(id);
-
-          return;
-        }
-
-        if (
-          block.type === "data_variable" ||
-          block.type === "data_changevariableby" ||
-          block.type === "data_setvariableto"
-        ) {
-          let id = block.getVars()[0];
-
-          findBar.findInput.focus();
-          findBar.showDropDown(id, block);
-
-          findBar.selVarID = id;
-
-          return;
-        }
-
-        if (
-          block.type === "event_whenbroadcastreceived" ||
-          block.type === "event_broadcastandwait" ||
-          block.type === "event_broadcast"
-        ) {
-          // todo: actually index the broadcasts...!
-          let id = block.id;
-
-          findBar.findInput.focus();
-          findBar.showDropDown(id, block);
-
-          findBar.selVarID = id;
-
-          return;
-        }
-      }
-    }
-
-    _doBlockClick_.call(this);
-  };
-
-  addon.tab.redux.initialize();
-  addon.tab.redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB") {
-      findBar.tabChanged();
-    }
-  });
-
-  while (true) {
-    const root = await addon.tab.waitForElement("ul[class*=gui_tab-list_]", {
-      markAsSeen: true,
-      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
-      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
-    });
-    findBar.createDom(root);
-  }
+  // while (true) {
+  // const root = await addon.tab.waitForElement("ul[class*=gui_tab-list_]", {
+  //   markAsSeen: true,
+  //   reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+  //   reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+  // });
+  // findBar.createDom(root);
+  // }
 }
