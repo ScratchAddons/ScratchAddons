@@ -94,7 +94,7 @@ export default async function({ addon, msg, console }) {
 
       this.findInput = this.dropdownOut.appendChild(document.createElement("input"));
       this.findInput.className = addon.tab.scratchClass("input_input-form", {
-        others: "sa-find-input",
+        others: "sa-fr-input",
       });
       // for <label>
       this.findInput.id = "sa-fr-input";
@@ -524,7 +524,7 @@ export default async function({ addon, msg, console }) {
 
     createDom() {
       this.el = document.createElement("ul");
-      this.el.className = "sa-find-dropdown";
+      this.el.className = "sa-fr-dropdown";
       return this.el;
     }
 
@@ -589,7 +589,7 @@ export default async function({ addon, msg, console }) {
         sound: "sounds",
       };
       if (proc.cls === "flag") {
-        item.className = "sa-find-flag";
+        item.className = "sa-fr-flag";
       } else {
         const colorId = colorIds[proc.cls];
         item.className = `sa-block-color sa-block-color-${colorId}`;
@@ -896,10 +896,10 @@ export default async function({ addon, msg, console }) {
 
     createDom() {
       this.el = document.createElement("span");
-      this.el.className = "sa-find-carousel";
+      this.el.className = "sa-fr-carousel";
 
       const leftControl = this.el.appendChild(document.createElement("span"));
-      leftControl.className = "sa-find-carousel-control";
+      leftControl.className = "sa-fr-carousel-control";
       leftControl.textContent = "◀";
       leftControl.addEventListener("mousedown", (e) => this.navLeft(e));
 
@@ -907,7 +907,7 @@ export default async function({ addon, msg, console }) {
       this.count.innerText = this.blocks.length > 0 ? this.idx + 1 + " / " + this.blocks.length : "0";
 
       const rightControl = this.el.appendChild(document.createElement("span"));
-      rightControl.className = "sa-find-carousel-control";
+      rightControl.className = "sa-fr-carousel-control";
       rightControl.textContent = "▶";
       rightControl.addEventListener("mousedown", (e) => this.navRight(e));
 
