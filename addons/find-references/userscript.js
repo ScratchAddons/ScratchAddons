@@ -65,7 +65,6 @@ export default async function({ addon, msg, console }) {
       this.findInput.placeholder = msg("find-placeholder")
       this.findInput.autocomplete = "off";
 
-      this.dropdownOut.appendChild(this.dropdown.createDom());
 
       this.bindEvents();
       this.tabChanged();
@@ -75,7 +74,8 @@ export default async function({ addon, msg, console }) {
       parentElement.id = "ref_list";
       this.floatWindow.appendChild(parentElement);
       document.querySelector("[class*='gui_tabs']").appendChild(this.floatWindow);
-      this.fw_ul = document.querySelector("#ref_list");
+
+      this.dropdownOut.appendChild(this.dropdown.createDom());
     }
 
     createFloatWindow() {
@@ -241,6 +241,7 @@ export default async function({ addon, msg, console }) {
         if (focusID) {
           if (proc.matchesID(focusID)) {
             this.dropdown.onItemClick(item, instanceBlock);
+            this.hideDropDown();
           } else {
             item.style.display = "none";
           }
@@ -470,8 +471,8 @@ export default async function({ addon, msg, console }) {
       this.selected = null;
       this.hovered = null;
       this.carousel = new Carousel(this.utils);
-      this.floatWindow = null;
-      this.fw_ul = null;
+      this.fr_result_list = null;
+      this.blocks_ids = [];
     }
 
 
@@ -482,6 +483,7 @@ export default async function({ addon, msg, console }) {
     createDom() {
       this.el = document.createElement("ul");
       this.el.className = "sa-find-dropdown";
+      this.fr_result_list = document.querySelector("#ref_list");
       return this.el;
     }
 
@@ -560,15 +562,14 @@ export default async function({ addon, msg, console }) {
       });
 
       // My Code
-      item.addEventListener("mouseenter", (e) => {
-        // 显示浮动窗口，你可以根据需要调整位置和内容
-        this.onItemHover(item);
-        e.preventDefault();
-      });
+      // item.addEventListener("mouseenter", (e) => {
+      //   // 显示浮动窗口，你可以根据需要调整位置和内容
+      //   this.onItemHover(item);
+      //   e.preventDefault();
+      // });
 
       item.addEventListener("mouseleave", (e) => {
         // 隐藏浮动窗口
-        // this.floatWindow.closeFloatWindow();
         this.hovered = null;
         e.preventDefault();
       });
@@ -616,9 +617,8 @@ export default async function({ addon, msg, console }) {
             });
           });
 
-          this.fw_ul.appendChild(li_item);
+          this.fr_result_list.appendChild(li_item);
         }
-        this.floatWindow.showFloatWindow();
       } else if (cls === "define") {
         let blocks = this.getCallsToProcedureById(item.data.labelID);
         this.carousel.build(item, blocks, instanceBlock);
@@ -649,6 +649,12 @@ export default async function({ addon, msg, console }) {
     }
 
     onItemClick(item, instanceBlock) {
+      // init set
+      this.blocks_ids = [];
+      while (this.fr_result_list.firstChild) {
+        this.fr_result_list.removeChild(this.fr_result_list.firstChild);
+      }
+
       if (this.selected && this.selected !== item) {
         this.selected.classList.remove("sel");
         this.selected = null;
@@ -658,6 +664,7 @@ export default async function({ addon, msg, console }) {
         this.selected = item;
       }
 
+      let blocks = null;
       let cls = item.data.cls;
       if (cls === "costume" || cls === "sound") {
         // Viewing costumes/sounds - jump to selected costume/sound
@@ -678,10 +685,10 @@ export default async function({ addon, msg, console }) {
         }
       } else if (cls === "var" || cls === "VAR" || cls === "list" || cls === "LIST") {
         // Search now for all instances
-        let blocks = this.getVariableUsesById(item.data.labelID);
+        blocks = this.getVariableUsesById(item.data.labelID);
         this.carousel.build(item, blocks, instanceBlock);
       } else if (cls === "define") {
-        let blocks = this.getCallsToProcedureById(item.data.labelID);
+        blocks = this.getCallsToProcedureById(item.data.labelID);
         this.carousel.build(item, blocks, instanceBlock);
       } else if (cls === "receive") {
         /*
@@ -694,7 +701,7 @@ export default async function({ addon, msg, console }) {
                   blocks = blocks.concat(getCallsToEventsByName(li.data.eventName));
                 */
         // Now, fetch the events from the scratch runtime instead of blockly
-        let blocks = this.getCallsToEventsByName(item.data.eventName);
+        blocks = this.getCallsToEventsByName(item.data.eventName);
         if (!instanceBlock) {
           // Can we start by selecting the first block on 'this' sprite
           const currentTargetID = this.utils.getEditingTarget().id;
@@ -707,7 +714,7 @@ export default async function({ addon, msg, console }) {
         }
         this.carousel.build(item, blocks, instanceBlock);
       } else if (item.data.clones) {
-        let blocks = [this.workspace.getBlockById(item.data.labelID)];
+        blocks = [this.workspace.getBlockById(item.data.labelID)];
         for (const cloneID of item.data.clones) {
           blocks.push(this.workspace.getBlockById(cloneID));
         }
@@ -715,6 +722,40 @@ export default async function({ addon, msg, console }) {
       } else {
         this.utils.scrollBlockIntoView(item.data.labelID);
         this.carousel.remove();
+      }
+
+      if (blocks != null) {
+        for (const block of blocks) {
+          const li_item = document.createElement("li");
+          if (this.blocks_ids.includes(block.id)) {
+            continue;
+          }
+          else {
+            this.blocks_ids.push(block.id);
+          }
+          li_item.textContent = block.type + ":" + block.id;
+          // mouse enter
+          li_item.addEventListener("mouseenter", (e) => {
+            if (this.hovered && this.hovered !== li_item) {
+              this.hovered.classList.remove("hov");
+              this.hovered = null;
+            }
+            if (this.hovered !== li_item) {
+              li_item.classList.add("hov");
+              this.hovered = li_item;
+            }
+            // mouse leave
+            li_item.addEventListener("mouseleave", (e) => {
+              if (this.hovered && this.hovered !== li_item) {
+                this.hovered.classList.remove("hov");
+                this.hovered = null;
+              }
+              this.hovered = null;
+            });
+          });
+
+          this.fr_result_list.appendChild(li_item);
+        }
       }
     }
 
