@@ -168,15 +168,14 @@ export default class Utils {
    * @param {object} block - The block data to create the selected block.
    * @return {object} The created selected block as an SVG element.
    */
-  selectedBlocks(isExportPNG, block) {
-    isExportPNG = false;
+  selectedBlocks(block) {
     let svg = this.exSVG.cloneNode();
 
     let svgchild = block.svgGroup_;
     svgchild = svgchild.cloneNode(true);
     let dataShapes = svgchild.getAttribute("data-shapes");
     let translateY = 0; // blocks no hat
-    const scale = isExportPNG ? 2 : 1;
+    const scale = 1;
     if (dataShapes === "c-block c-1 hat") {
       translateY = 20; // for My block
     }
@@ -198,14 +197,13 @@ export default class Utils {
    * otherwise it selects all blocks. It resolves any non-breaking space whitespace in the SVG element and
    * replaces external images with data URIs.
    *
-   * @param {boolean} isExportPNG - indicates if the SVG element is for exporting as PNG
    * @param {Block} block - the block to select the SVG element for (optional)
    * @return {Promise<SVGElement>} a promise that resolves to the SVG element
    */
-  getSVGElement(isExportPNG, block) {
+  getSVGElement(block) {
     let svg;
     if (block) {
-      svg = this.selectedBlocks(isExportPNG, block);
+      svg = this.selectedBlocks(block);
     }
 
     // resolve nbsp whitespace

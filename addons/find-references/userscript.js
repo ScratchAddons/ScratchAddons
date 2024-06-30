@@ -665,7 +665,7 @@ export default async function ({ addon, msg, console }) {
     }
 
     onItemClick(item, instanceBlock) {
-      this.utils.getSVGElement(false, Blockly.getMainWorkspace().getTopBlocks()[0]).then((svg) => {
+      this.utils.getSVGElement(Blockly.getMainWorkspace().getTopBlocks()[0]).then((svg) => {
         document.querySelector("#ref_list").appendChild(svg);
       });
       // init set
