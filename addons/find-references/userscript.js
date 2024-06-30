@@ -62,7 +62,7 @@ export default async function({ addon, msg, console }) {
       // for <label>
       this.findInput.id = "sa-fr-input";
       this.findInput.type = "search";
-      this.findInput.placeholder = "Find-References";
+      this.findInput.placeholder = msg("find-placeholder")
       this.findInput.autocomplete = "off";
 
       this.dropdownOut.appendChild(this.dropdown.createDom());
@@ -352,6 +352,7 @@ export default async function({ addon, msg, console }) {
 
       let vars = map.getVariablesOfType("");
       for (const row of vars) {
+        // debugger;
         addBlock(
           row.isLocal ? "var" : "VAR",
           row.isLocal ? msg("var-local", { name: row.name }) : msg("var-global", { name: row.name }),

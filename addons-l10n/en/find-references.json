@@ -1,0 +1,21 @@
+{
+  "find-references/find-placeholder": "Find References",
+  "find-references/complex-broadcast": "(expression)",
+  "find-references/var-local": {
+    "string": "var {name}",
+    "developer_comment": "Lowercase 'var' refers to a local variable."
+  },
+  "find-references/var-global": {
+    "string": "VAR {name}",
+    "developer_comment": "Uppercase 'VAR' refers to a global variable."
+  },
+  "find-references/list-local": {
+    "string": "list {name}",
+    "developer_comment": "Lowercase 'list' refers to a local list."
+  },
+  "find-references/list-global": {
+    "string": "LIST {name}",
+    "developer_comment": "Uppercase 'LIST' refers to a global list."
+  },
+  "find-references/event": "event {name}"
+}
