@@ -34,20 +34,26 @@
   text-shadow: var(--darkWww-gray-scratchr2TextShadow, 0 1px white);
   line-height: 20px;
 }
+.messages-header-unread {
+  padding: 2px 4px;
+}
 .messages-admin-list {
   padding: 0 20px;
 }
 .messages-social-list {
   margin: 0;
-  padding: 0 20px;
   background-color: transparent;
   border: none;
 }
 .social-message {
-  padding: 1em 0;
+  padding: 1em 20px;
   border-color: var(--darkWww-border-5, #f3f3f3);
   font-size: 13px;
   line-height: 20px;
+}
+.social-message.mod-unread {
+  background-color: var(--darkWww-gray-scratchr2, #f9f9f9);
+  color: var(--darkWww-gray-scratchr2Text, #322f31);
 }
 .social-message-icon {
   margin-right: 4px;
