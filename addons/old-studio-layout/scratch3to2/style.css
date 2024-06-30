@@ -1,0 +1,89 @@
+/* Page */
+.studio-page #view {
+  max-width: 940px;
+}
+
+/* Follow Studio */
+.studio-info .sa-oldstudio-follow-section {
+  width: auto;
+  max-width: 200px;
+}
+.studio-info .studio-follow-button {
+  padding: 0 10px;
+}
+.studio-page:not(.sa-oldstudio-logged-out) .studio-info .studio-info-footer-stats > div:nth-child(2) {
+  width: auto;
+  max-width: 200px;
+  padding-right: 11px;
+  font-size: 11px;
+  line-height: 20px;
+  font-weight: bold;
+}
+
+/* Info container */
+.studio-info {
+  gap: 5px;
+}
+.studio-info,
+.studio-info .studio-description,
+.studio-info textarea.studio-description {
+  width: 212px;
+}
+
+/* Thumbnail */
+.studio-info .studio-image {
+  width: 212px;
+  height: 141px;
+}
+
+/* Report */
+.studio-info .studio-info-footer-report button {
+  margin: 0;
+  margin-left: auto;
+  border: none;
+  box-shadow: none;
+  font-size: 13px;
+  font-weight: normal;
+}
+.studio-info .studio-info-footer-report button:hover {
+  color: var(--darkWww-link-scratchr2, #855cd6);
+  text-decoration: underline;
+}
+
+/* Tabs */
+.studio-tab-nav li {
+  box-shadow: none;
+  font-weight: bold;
+}
+.studio-tab-nav li img {
+  height: 0;
+}
+.studio-tab-nav .active > li img,
+.studio-tab-nav a.active.nav_link:hover > li img {
+  background-position: -15px -313px;
+  filter: var(--darkWww-box-filter, none);
+}
+.studio-tab-nav [href$="comments"].active li img,
+.studio-tab-nav a[href$="comments"].active.nav_link:hover > li img {
+  background-position: -15px -18px;
+}
+.studio-tab-nav [href$="curators"].active li img,
+.studio-tab-nav a[href$="curators"].active.nav_link:hover > li img {
+  background-position: -15px -366px;
+}
+.studio-tab-nav [href$="activity"].active li img,
+.studio-tab-nav a[href$="activity"].active.nav_link:hover > li img {
+  background-position: -15px -478px;
+}
+.studio-tab-nav li .tab-count {
+  font-weight: bold;
+}
+
+/* Tab content */
+.studio-header-container h2 {
+  font-size: 18px;
+  line-height: normal;
+}
+.studio-compose-container .comments-root-reply {
+  margin-top: 0;
+}

@@ -994,6 +994,18 @@
       }
     },
     {
+      "name": "gray-colorScheme",
+      "value": {
+        "type": "textColor",
+        "black": "light",
+        "white": "dark",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
       "name": "gray-darker",
       "value": {
         "type": "textColor",
