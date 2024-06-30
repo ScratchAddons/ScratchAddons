@@ -104,12 +104,17 @@ body:not(.sa-body-editor) .select select:focus,
 body:not(.sa-body-editor) .select select:hover {
   background-color: var(--darkWww-box, white);
   background-image: none;
+  color: var(--darkWww-box-scratchr2InputText, #555);
 }
 body:not(.sa-body-editor) .select select:focus {
   border-color: var(--darkWww-border-20, #ccc);
 }
 body:not(.sa-body-editor) .select select:focus-visible {
   outline: revert;
+}
+body:not(.sa-body-editor) .select select > option {
+  background-color: var(--darkWww-box, white);
+  color: var(--darkWww-box-scratchr2InputText, #555);
 }
 .inplace-input,
 .inplace-textarea {
@@ -237,6 +242,10 @@ body:not(.sa-body-editor) .select select:focus-visible {
   background-image: url("https://cdn.scratch.mit.edu/scratchr2/static/images/nav-notifications.png");
   background-repeat: no-repeat;
   background-position: center center;
+  background-size: auto;
+}
+#navigation .messages > a:hover::before {
+  background-size: auto;
 }
 #navigation .messages .message-count.show {
   top: 4px;

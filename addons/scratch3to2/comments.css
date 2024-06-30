@@ -64,7 +64,6 @@
   background-image: none;
 }
 .compose-comment .compose-bottom-row .compose-limit {
-  color: var(--darkWww-box-scratchr2ButtonText, #666);
   font-size: 11px;
 }
 .comment-container {
@@ -95,7 +94,6 @@
   line-height: 11px;
 }
 .comment .comment-top-row .username {
-  color: var(--darkWww-box-scratchr2LabelText, #333);
   font-size: 13px;
   font-weight: bold;
 }
@@ -104,7 +102,6 @@
 }
 .comment .comment-top-row .comment-delete,
 .comment .comment-top-row .comment-report {
-  color: var(--darkWww-box-scratchr2GrayText, #999);
   font-size: 13px;
   font-weight: normal;
   opacity: 1;

@@ -47,6 +47,7 @@
   background-color: var(--darkWww-box, white);
   border: 1px solid var(--darkWww-border-20, #ccc);
   border-bottom-color: transparent;
+  box-shadow: none;
   color: var(--darkWww-box-scratchr2ButtonText, #666);
 }
 .tabs button > div {
@@ -62,9 +63,14 @@
   margin-bottom: 0;
   margin-right: 4px;
 }
-.tabs button:not(.active) .tab-icon,
-.tabs button.active .tab-icon {
+.tabs button:not(.active) .tab-icon {
   filter: var(--darkWww-page-filter, none);
+}
+.tabs button:hover .tab-icon {
+  filter: var(--darkWww-gray-filter, none);
+}
+.tabs button.active .tab-icon {
+  filter: var(--darkWww-box-filter, none);
 }
 .tabs button .tab-icon.projects,
 .tabs button .tab-icon.studios {

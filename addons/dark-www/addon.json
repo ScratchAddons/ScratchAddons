@@ -47,7 +47,7 @@
           "type": "multiply",
           "source": {
             "type": "settingValue",
-            "settingId": "box"
+            "settingId": "page"
           },
           "r": 0.6,
           "g": 0.6,
@@ -57,7 +57,7 @@
           "type": "brighten",
           "source": {
             "type": "settingValue",
-            "settingId": "box"
+            "settingId": "page"
           },
           "r": 0.25,
           "g": 0.25,

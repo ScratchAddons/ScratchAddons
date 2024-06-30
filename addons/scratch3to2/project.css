@@ -28,7 +28,7 @@
   line-height: 24px;
   text-shadow: 0 1px var(--darkWww-box, white);
 }
-.banner-button:hover {
+.banner-outer:not(.banner-danger) .banner-button:hover {
   background-color: var(--darkWww-box-scratchr2ButtonHover, #e6e6e6);
   background-image: none;
 }
@@ -54,6 +54,7 @@
   border-top: 1px solid var(--darkWww-gray-boxHighlight, white);
   border-bottom: 1px solid var(--darkWww-box-scratchr2Border, #e0e0e0);
   border-radius: 9px 9px 0 0;
+  color: var(--darkWww-gray-scratchr2Text, #322f31);
   text-shadow: var(--darkWww-gray-scratchr2TextShadow, 0 1px white);
 }
 .preview .project-header img.avatar {
@@ -79,6 +80,11 @@
   height: 38px;
   padding: 0 10px;
   color: var(--darkWww-gray-scratchr2HeaderText, #554747);
+  text-shadow: var(--darkWww-gray-scratchr2TextShadow, 0 1px white);
+}
+.preview .project-header .inplace-input:hover {
+  color: var(--darkWww-box-scratchr2HeaderText, #554747);
+  text-shadow: none;
 }
 
 /* Remix & See inside */
@@ -248,6 +254,7 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
   height: auto;
   background-color: var(--darkWww-gray-scratchr2, #f7f7f7);
   border-left: 1px solid var(--darkWww-box-scratchr2Border, #e0e0e0);
+  color: var(--darkWww-gray-scratchr2Text, #322f31);
   text-shadow: var(--darkWww-gray-scratchr2TextShadow, 0 1px white);
 }
 @media (max-width: 767px) {
@@ -301,18 +308,24 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
   padding: 10px 0;
   background-color: transparent;
   border: none;
+  color: var(--darkWww-gray-scratchr2Text, #322f31);
   font-size: 13px;
   line-height: 20px;
 }
 .preview .project-description-edit .inplace-textarea {
-  color: var(--darkWww-gray-scratchrText, #322f31);
+  color: var(--darkWww-gray-scratchr2Text, #322f31);
   text-shadow: var(--darkWww-gray-scratchr2TextShadow, 0 1px white);
   line-height: 18px;
+}
+.preview .project-description-edit .inplace-textarea:hover {
+  color: var(--darkWww-box-scratchr2Text, #322f31);
+  text-shadow: none;
 }
 .preview .project-description-edit ::placeholder {
   padding: 5px;
   padding-top: 65px; /* center vertically */
   color: var(--darkWww-box-transparentText, #bebebe);
+  text-shadow: none;
   font-size: 16px;
   text-align: center;
   transition: none;
@@ -359,6 +372,7 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
   height: 30px;
   background-image: url("https://cdn.scratch.mit.edu/scratchr2/static/images/stats-icons-dark.png");
   background-size: auto;
+  filter: var(--darkWww-gray-filter, none);
 }
 .project-loves::before {
   background-position: 0 -57px;
@@ -512,6 +526,7 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
   padding: 5px 15px;
   background-color: transparent;
   border-radius: 0;
+  color: var(--darkWww-gray-scratchr2BlackText, black);
 }
 .extension-chip + .extension-chip {
   border-left: 1px solid var(--darkWww-border-15, #bbb);
@@ -558,6 +573,7 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
   border-top: 1px solid var(--darkWww-gray-boxHighlight, white);
   border-bottom: 1px solid var(--darkWww-box-scratchr2Border, #e0e0e0);
   border-radius: 9px 9px 0 0;
+  color: var(--darkWww-gray-scratchr2Text, #322f31);
   text-shadow: var(--darkWww-gray-scratchr2TextShadow, 0 1px white);
 }
 .preview .comments-header h4,
@@ -615,6 +631,22 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
   width: 45px;
   height: 45px;
   border-radius: 0;
+}
+.compose-comment .compose-bottom-row .compose-limit {
+  color: var(--darkWww-box-scratchr2ButtonText, #666);
+}
+.comment .comment-top-row .username {
+  color: var(--darkWww-box-scratchr2LabelText, #333);
+}
+.comment .comment-top-row .comment-delete,
+.comment .comment-top-row .comment-report {
+  color: var(--darkWww-box-scratchr2GrayText, #999);
+}
+.comment .comment-body .comment-bubble {
+  color: var(--darkWww-box-scratchr2Text, #322f31);
+}
+.comment .comment-body .comment-bottom-row .comment-time {
+  color: var(--darkWww-box-scratchr2GrayText, #999);
 }
 .preview .load-more-button {
   margin: 3px auto;

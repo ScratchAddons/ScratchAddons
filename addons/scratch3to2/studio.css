@@ -34,6 +34,7 @@
   background-image: url("https://cdn.scratch.mit.edu/scratchr2/static/images/icons_sm.png");
   background-repeat: no-repeat;
   background-position: -15px -400px;
+  filter: var(--darkWww-button-filter, none);
 }
 .studio-info .studio-image {
   padding: 5px;
@@ -204,6 +205,7 @@
 }
 .studio-project-tile .studio-project-image {
   box-sizing: border-box;
+  background-color: transparent;
   border: 1px solid var(--darkWww-border-15, #ddd);
   border-radius: 0;
 }
@@ -234,6 +236,22 @@
 .studio-compose-container {
   padding-top: 0;
 }
+.compose-comment .compose-bottom-row .compose-limit {
+  color: var(--darkWww-page-scratchr2Text, #322f31);
+}
+.comment .comment-top-row .username {
+  color: var(--darkWww-page-scratchr2LabelText, #333);
+}
+.comment .comment-top-row .comment-delete,
+.comment .comment-top-row .comment-report {
+  color: var(--darkWww-page-scratchr2GrayText, #999);
+}
+.comment .comment-body .comment-bubble {
+  color: var(--darkWww-page-scratchr2Text, #322f31);
+}
+.comment .comment-body .comment-bottom-row .comment-time {
+  color: var(--darkWww-page-scratchr2GrayText, #999);
+}
 
 /* Curators */
 .studio-member-tile {
@@ -256,6 +274,7 @@
 .studio-activity .studio-messages-list {
   background-color: transparent;
   border: none;
+  color: var(--darkWww-page-scratchr2Text, #322f31);
 }
 .social-message {
   padding: 1em 0;
@@ -272,6 +291,7 @@
   padding: 7px;
   background-image: url("https://cdn.scratch.mit.edu/scratchr2/static/images/icons_xs.png");
   opacity: 0.7;
+  filter: var(--darkWww-page-filter, none);
 }
 .studio-activity .studio-activity-icon[src$="activity-curator.svg"] {
   background-position: -7px -265px;

@@ -30,7 +30,7 @@
   border-bottom: 1px solid var(--darkWww-box-scratchr2Border, #e0e0e0);
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  color: var(--darkWww-page-scratchr2HeaderText, #554747);
+  color: var(--darkWww-gray-scratchr2HeaderText, #554747);
   text-shadow: var(--darkWww-gray-scratchr2TextShadow, 0 1px white);
   line-height: 20px;
 }
@@ -44,6 +44,7 @@
   margin: 0;
   background-color: transparent;
   border: none;
+  color: var(--darkWww-box-scratchr2Text, #322f31);
 }
 .social-message {
   padding: 1em 20px;
@@ -86,11 +87,11 @@
 .social-message-icon[src$="studio-activity.svg"] {
   background-position: -7px -225px;
 }
-a.social-messages-profile-link {
+a.social-messages-profile-link:link {
   color: var(--darkWww-link, #855cd6);
 }
 .social-message-date {
-  color: var(--darkWww-page-scratchr2GrayText, #999);
+  color: var(--darkWww-box-scratchr2GrayText, #999);
 }
 
 /* Comments */
@@ -110,6 +111,7 @@ a.social-messages-profile-link {
   padding: 0;
   background-color: transparent;
   border: none;
+  color: var(--darkWww-box-scratchr2Text, #322f31);
   font-style: italic;
 }
 .comment-text::before,

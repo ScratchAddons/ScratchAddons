@@ -1,3 +1,8 @@
+/* Page */
+#view {
+  color: var(--darkWww-page-scratchr2Text, #322f31);
+}
+
 /* Header */
 .banner-wrapper {
   background-color: var(--darkWww-gray-scratchr2, #f7f7f7);
