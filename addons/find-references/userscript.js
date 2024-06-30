@@ -45,7 +45,7 @@ export default async function({ addon, msg, console }) {
 
     createDom() {
       this.findBarOuter = document.createElement("div");
-      this.findBarOuter.className = "sa-find-bar";
+      this.findBarOuter.className = "sa-fr-bar";
       addon.tab.displayNoneWhileDisabled(this.findBarOuter, { display: "flex" });
       this.floatWindow.appendChild(this.findBarOuter);
 
@@ -69,17 +69,19 @@ export default async function({ addon, msg, console }) {
 
       this.bindEvents();
       this.tabChanged();
+
+      // ref_list
+      const parentElement = document.createElement("ul");
+      parentElement.id = "ref_list";
+      this.floatWindow.appendChild(parentElement);
+      document.body.appendChild(this.floatWindow);
+      this.fw_ul = document.querySelector("#ref_list");
     }
 
     createFloatWindow() {
       const floatWindow = document.createElement("div");
       floatWindow.id = "floatWindow";
 
-      const parentElement = document.createElement("ul");
-      parentElement.id = "ref_list";
-      floatWindow.appendChild(parentElement);
-      document.body.appendChild(floatWindow);
-      this.fw_ul = document.querySelector("#ref_list");
 
       floatWindow.showFloatWindow = function() {
         floatWindow.style.display = "block";
