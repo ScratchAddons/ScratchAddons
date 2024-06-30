@@ -13,7 +13,7 @@ import BlockInstance from "./blockly/BlockInstance.js";
 import Utils from "./blockly/Utils.js";
 
 /** @typedef {import("../../addon-api/content-script/typedef.js").UserscriptUtilities} UserscriptUtilities @param {UserscriptUtilities} */
-export default async function({ addon, msg, console }) {
+export default async function ({ addon, msg, console }) {
   if (!addon.self._isDevtoolsExtension && window.initGUI) {
     console.log("Extension running, stopping addon");
     window._devtoolsAddonEnabled = true;
@@ -34,7 +34,7 @@ export default async function({ addon, msg, console }) {
       this.findInput = null;
       this.dropdownOut = null;
       this.dropdown = new Dropdown(this.utils);
-      this.floatWindow = this.createFloatWindow()
+      this.floatWindow = this.createFloatWindow();
 
       document.addEventListener("keydown", (e) => this.eventKeyDown(e), true);
     }
@@ -62,9 +62,8 @@ export default async function({ addon, msg, console }) {
       // for <label>
       this.findInput.id = "sa-fr-input";
       this.findInput.type = "search";
-      this.findInput.placeholder = msg("find-placeholder")
+      this.findInput.placeholder = msg("find-placeholder");
       this.findInput.autocomplete = "off";
-
 
       this.bindEvents();
       this.tabChanged();
@@ -81,15 +80,21 @@ export default async function({ addon, msg, console }) {
     createFloatWindow() {
       const floatWindow = document.createElement("div");
       floatWindow.id = "floatWindow";
-      const scroll_width = document.querySelector("[class*='blocklyScrollbarHandle']").getAttribute('width');
+      const scroll_width = document.querySelector("[class*='blocklyScrollbarHandle']").getAttribute("width");
       floatWindow.style.right = `${parseInt(scroll_width) + 3}px`;
 
+      // middle click floatwindow to close it
+      floatWindow.addEventListener("mousedown", (e) => {
+        if (e.button === 1) {
+          floatWindow.style.display = "none";
+        }
+      });
 
-      floatWindow.showFloatWindow = function() {
+      floatWindow.showFloatWindow = function () {
         floatWindow.style.display = "block";
       };
 
-      floatWindow.closeFloatWindow = function() {
+      floatWindow.closeFloatWindow = function () {
         floatWindow.style.display = "none";
       };
       return floatWindow;
@@ -228,10 +233,10 @@ export default async function({ addon, msg, console }) {
         this.selectedTab === 0
           ? this.getScratchBlocks()
           : this.selectedTab === 1
-            ? this.getScratchCostumes()
-            : this.selectedTab === 2
-              ? this.getScratchSounds()
-              : [];
+          ? this.getScratchCostumes()
+          : this.selectedTab === 2
+          ? this.getScratchSounds()
+          : [];
 
       this.dropdown.empty();
 
@@ -463,7 +468,19 @@ export default async function({ addon, msg, console }) {
     }
   }
 
+  /**
+   * A Dropdown class for displaying a list of items and allowing the user to select one.
+   *
+   * @class
+   * @param {Utils} utils - An instance of the Utils class from blockly/utils.js.
+   */
   class Dropdown {
+    /**
+     * Constructs a new Dropdown instance.
+     *
+     * @constructor
+     * @param {Utils} utils - An instance of the Utils class from blockly/utils.js.
+     */
     constructor(utils) {
       this.utils = utils;
       this.el = null;
@@ -474,7 +491,6 @@ export default async function({ addon, msg, console }) {
       this.fr_result_list = null;
       this.blocks_ids = [];
     }
-
 
     get workspace() {
       return Blockly.getMainWorkspace();
@@ -649,6 +665,9 @@ export default async function({ addon, msg, console }) {
     }
 
     onItemClick(item, instanceBlock) {
+      this.utils.getSVGElement(false, Blockly.getMainWorkspace().getTopBlocks()[0]).then((svg) => {
+        document.querySelector("#ref_list").appendChild(svg);
+      });
       // init set
       this.blocks_ids = [];
       while (this.fr_result_list.firstChild) {
@@ -692,14 +711,14 @@ export default async function({ addon, msg, console }) {
         this.carousel.build(item, blocks, instanceBlock);
       } else if (cls === "receive") {
         /*
-                  let blocks = [this.workspace.getBlockById(li.data.labelID)];
-                  if (li.data.clones) {
-                      for (const cloneID of li.data.clones) {
-                          blocks.push(this.workspace.getBlockById(cloneID))
-                      }
-                  }
-                  blocks = blocks.concat(getCallsToEventsByName(li.data.eventName));
-                */
+                          let blocks = [this.workspace.getBlockById(li.data.labelID)];
+                          if (li.data.clones) {
+                              for (const cloneID of li.data.clones) {
+                                  blocks.push(this.workspace.getBlockById(cloneID))
+                              }
+                          }
+                          blocks = blocks.concat(getCallsToEventsByName(li.data.eventName));
+                        */
         // Now, fetch the events from the scratch runtime instead of blockly
         blocks = this.getCallsToEventsByName(item.data.eventName);
         if (!instanceBlock) {
@@ -729,8 +748,7 @@ export default async function({ addon, msg, console }) {
           const li_item = document.createElement("li");
           if (this.blocks_ids.includes(block.id)) {
             continue;
-          }
-          else {
+          } else {
             this.blocks_ids.push(block.id);
           }
           li_item.textContent = block.type + ":" + block.id;
