@@ -73,6 +73,7 @@
   padding: 12px;
   background-repeat: no-repeat;
   background-position: center center;
+  opacity: 0.7;
 }
 .tabs button .tab-icon.projects {
   background-image: url("%addon-self-dir%/assets/green_flag_gray.png");
