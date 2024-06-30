@@ -62,7 +62,7 @@ export default async function({ addon, msg, console }) {
       // for <label>
       this.findInput.id = "sa-fr-input";
       this.findInput.type = "search";
-      this.findInput.placeholder = "find-references";
+      this.findInput.placeholder = "Find-References";
       this.findInput.autocomplete = "off";
 
       this.dropdownOut.appendChild(this.dropdown.createDom());
@@ -74,13 +74,15 @@ export default async function({ addon, msg, console }) {
       const parentElement = document.createElement("ul");
       parentElement.id = "ref_list";
       this.floatWindow.appendChild(parentElement);
-      document.body.appendChild(this.floatWindow);
+      document.querySelector("[class*='gui_tabs']").appendChild(this.floatWindow);
       this.fw_ul = document.querySelector("#ref_list");
     }
 
     createFloatWindow() {
       const floatWindow = document.createElement("div");
       floatWindow.id = "floatWindow";
+      const scroll_width = document.querySelector("[class*='blocklyScrollbarHandle']").getAttribute('width');
+      floatWindow.style.right = `${parseInt(scroll_width) + 3}px`;
 
 
       floatWindow.showFloatWindow = function() {
