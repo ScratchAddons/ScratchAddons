@@ -31,6 +31,7 @@
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   color: var(--darkWww-page-scratchr2HeaderText, #554747);
+  text-shadow: var(--darkWww-gray-scratchr2TextShadow, 0 1px white);
   line-height: 20px;
 }
 .messages-admin-list {
