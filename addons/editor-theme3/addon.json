@@ -553,7 +553,8 @@
         "text": "colorOnBlack",
         "monitors": false,
         "markerStyle": "both",
-        "fillOpacity": 5
+        "fillOpacity": 5,
+        "strokeOpacity": 50
       }
     }
   ],
