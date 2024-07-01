@@ -272,6 +272,7 @@ export default async function ({ addon, msg, console }) {
      */
     getScratchBlocks() {
       let myBlocks = [];
+      let myBlockSvgs = [];
       let myBlocksByProcCode = {};
 
       let topBlocks = this.workspace.getTopBlocks();
@@ -358,7 +359,6 @@ export default async function ({ addon, msg, console }) {
 
       let vars = map.getVariablesOfType("");
       for (const row of vars) {
-        // debugger;
         addBlock(
           row.isLocal ? "var" : "VAR",
           row.isLocal ? msg("var-local", { name: row.name }) : msg("var-global", { name: row.name }),
@@ -665,10 +665,8 @@ export default async function ({ addon, msg, console }) {
     }
 
     onItemClick(item, instanceBlock) {
-      this.utils.getSVGElement(Blockly.getMainWorkspace().getTopBlocks()[0]).then((svg) => {
-        document.querySelector("#ref_list").appendChild(svg);
-      });
       // init set
+      this.myBlockSvgs = [];
       this.blocks_ids = [];
       while (this.fr_result_list.firstChild) {
         this.fr_result_list.removeChild(this.fr_result_list.firstChild);
@@ -711,14 +709,14 @@ export default async function ({ addon, msg, console }) {
         this.carousel.build(item, blocks, instanceBlock);
       } else if (cls === "receive") {
         /*
-                          let blocks = [this.workspace.getBlockById(li.data.labelID)];
-                          if (li.data.clones) {
-                              for (const cloneID of li.data.clones) {
-                                  blocks.push(this.workspace.getBlockById(cloneID))
-                              }
-                          }
-                          blocks = blocks.concat(getCallsToEventsByName(li.data.eventName));
-                        */
+                                          let blocks = [this.workspace.getBlockById(li.data.labelID)];
+                                          if (li.data.clones) {
+                                              for (const cloneID of li.data.clones) {
+                                                  blocks.push(this.workspace.getBlockById(cloneID))
+                                              }
+                                          }
+                                          blocks = blocks.concat(getCallsToEventsByName(li.data.eventName));
+                                        */
         // Now, fetch the events from the scratch runtime instead of blockly
         blocks = this.getCallsToEventsByName(item.data.eventName);
         if (!instanceBlock) {
@@ -751,7 +749,7 @@ export default async function ({ addon, msg, console }) {
           } else {
             this.blocks_ids.push(block.id);
           }
-          li_item.textContent = block.type + ":" + block.id;
+          li_item.setAttribute("blockID", block.id);
           // mouse enter
           li_item.addEventListener("mouseenter", (e) => {
             if (this.hovered && this.hovered !== li_item) {
@@ -770,6 +768,10 @@ export default async function ({ addon, msg, console }) {
               }
               this.hovered = null;
             });
+          });
+
+          this.utils.getSVGElement(block).then((svg) => {
+            li_item.appendChild(svg);
           });
 
           this.fr_result_list.appendChild(li_item);
