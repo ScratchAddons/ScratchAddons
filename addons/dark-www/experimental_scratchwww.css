@@ -498,6 +498,7 @@ body:not(.sa-body-editor) .formik-input:focus,
 #footer .inner .media li img {
   filter: var(--darkWww-button-filter);
 }
+.banner-wrapper .banner-button img /* "Choose a tutorial" icon */,
 .forms-close-button img,
 .os-chooser .button:not(.active) img {
   filter: none;
