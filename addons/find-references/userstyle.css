@@ -1,5 +1,28 @@
 @import url("../editor-theme3/compatibility.css");
 
+/* Remove default margins, paddings, and borders */
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+/* Set box-sizing to border-box for all elements */
+* {
+  box-sizing: border-box;
+}
+
+/* Remove list styles */
+ul,
+ol {
+  list-style: none;
+}
+
+/* Remove underlines from links */
+a {
+  text-decoration: none;
+}
+
 .sa-fr-bar {
   display: flex;
   align-items: center;
@@ -162,12 +185,6 @@
   display: flex; /* 默认不显示 */
   flex-direction: column;
   border-radius: 10px;
-}
-
-#floatWindow .float-window-header {
-  padding: 2px 16px;
-  background-color: #5cb85c;
-  color: white;
 }
 
 #floatWindow .float-window-content {
