@@ -1,0 +1,1 @@
+{"default-project/@name":"自訂新建時的預設專案","default-project/@description":"原來新建專案，會產生一個有貓咪角色的專案。現在你可以自訂要開啟哪個現存專案當作預設新建範本，或是直接打開空白的專案。","default-project/@preset-name-scratchCat":"帶貓咪角色（原來的）","default-project/@preset-name-emptyProject":"空白的專案","default-project/@settings-name-projectId":"專案 ID"}

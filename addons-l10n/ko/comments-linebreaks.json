@@ -1,1 +1,1 @@
-{"comments-linebreaks/@name":"댓글에서 줄바꿈 보이기","comments-linebreaks/@description":"웹사이트의 댓글에서 Enter 키를 눌러 줄 분리를 볼 수 있게 합니다."}
+{"comments-linebreaks/@name":"댓글에서 줄바꿈 보이기","comments-linebreaks/@description":"웹사이트의 댓글에서 Enter 키를 눌러 줄 분리를 볼 수 있게 합니다.","comments-linebreaks/@info-ownLineBreaks":"줄바꿈은 애드온이 활성화된 유저들에게만 보입니다. 다른 사용자들에게는 그저 스페이스로만 보입니다.","comments-linebreaks/@settings-name-scrollbars":"긴 댓글에 스크롤바 추가","comments-linebreaks/@settings-name-height":"한 번에 보일 최대 줄 수"}

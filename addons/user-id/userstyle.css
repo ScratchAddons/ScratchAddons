@@ -1,5 +1,5 @@
 .sa-user-id {
-  color: var(--darkWww-gray-scratchr2TransparentText, rgba(0, 0, 0, 0.45));
+  color: var(--darkWww-gray-scratchr2GrayText, #888);
   font-size: 16px;
   line-height: normal;
   margin-left: 4px;

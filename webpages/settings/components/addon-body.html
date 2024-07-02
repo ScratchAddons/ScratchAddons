@@ -5,9 +5,10 @@
         <div class="btn-dropdown">
           <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': expanded}" />
         </div>
-        <div class="addon-name">
+        <div class="addon-name tooltip">
           <img :src="addonIconSrc" class="icon-type" />
-          <span @click="devShowAddonIds">{{ addon._displayedAddonId || addon.name }}</span>
+          <span>{{ addon.name}}</span>
+          <span v-if="devMode" class="tooltiptext">{{ addon._addonId }}</span>
         </div>
         <addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
       </div>
@@ -182,7 +183,7 @@
       (This is working as intended per spec.)
       Use CSS class to force animation.
     */
-    animation: addonBlink 2s 1;
+    animation: addonBlink 1s 2 ease-in-out;
   }
 
   .addon-buttons {
@@ -361,13 +362,15 @@
 
   .switch {
     display: block;
-    background: var(--switch-background);
+    background: var(--button-background);
     width: 40px;
     height: 20px;
     border-radius: 10px;
     position: relative;
     cursor: pointer;
     transition: all 0.25s ease;
+    border: 1px solid var(--switch-border);
+    box-sizing: border-box;
   }
   .switch::before {
     content: "";
@@ -377,23 +380,24 @@
     height: 10px;
     background: var(--switch-inner-background);
     border-radius: 5px;
-    top: 5px;
-    left: 5px;
+    top: 4px;
+    left: 4px;
     transition: all 0.25s ease;
   }
 
   .switch[state="on"] {
     background: var(--brand-orange);
+    border-color: var(--brand-orange);
   }
   .switch[state="on"]::before {
     background: var(--white-text);
-    left: 25px;
+    left: 24px;
   }
 
   [dir="rtl"] .switch::before {
-    left: 25px;
+    left: 24px;
   }
   [dir="rtl"] .switch[state="on"]::before {
-    left: 5px;
+    left: 4px;
   }
 </style>

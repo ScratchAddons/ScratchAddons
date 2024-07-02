@@ -8,7 +8,7 @@ import categories from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
 import globalTheme from "../../libraries/common/global-theme.js";
-import minifySettings from "../../libraries/common/minify-settings.js";
+import { deserializeSettings, serializeSettings } from "./settings-utils.js";
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -67,85 +67,15 @@ let fuse;
   chrome.permissions.onAdded?.addListener(updateGrantedPermissions);
   chrome.permissions.onRemoved?.addListener(updateGrantedPermissions);
 
-  const promisify =
-    (callbackFn) =>
-    (...args) =>
-      new Promise((resolve) => callbackFn(...args, resolve));
-
-  let handleConfirmClicked = null;
-
-  const serializeSettings = async () => {
-    const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
-    const storedSettings = await syncGet(["globalTheme", "addonSettings", "addonsEnabled"]);
-    const serialized = {
-      core: {
-        lightTheme: storedSettings.globalTheme,
-        version: chrome.runtime.getManifest().version_name,
-      },
-      addons: {},
-    };
-    for (const addonId of Object.keys(storedSettings.addonsEnabled)) {
-      serialized.addons[addonId] = {
-        enabled: storedSettings.addonsEnabled[addonId],
-        settings: storedSettings.addonSettings[addonId] || {},
-      };
-    }
-    return JSON.stringify(serialized);
-  };
-
-  const deserializeSettings = async (str, manifests, confirmElem) => {
-    const obj = JSON.parse(str);
-    const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
-    const syncSet = promisify(chrome.storage.sync.set.bind(chrome.storage.sync));
-    const { addonSettings, addonsEnabled } = await syncGet(["addonSettings", "addonsEnabled"]);
-    const pendingPermissions = {};
-    for (const addonId of Object.keys(obj.addons)) {
-      const addonValue = obj.addons[addonId];
-      const addonManifest = manifests.find((m) => m._addonId === addonId);
-      if (!addonManifest) continue;
-      const permissionsRequired = addonManifest.permissions || [];
-      const browserPermissionsRequired = permissionsRequired.filter((p) => browserLevelPermissions.includes(p));
-      if (addonValue.enabled && browserPermissionsRequired.length) {
-        pendingPermissions[addonId] = browserPermissionsRequired;
-      } else {
-        addonsEnabled[addonId] = addonValue.enabled;
-      }
-      addonSettings[addonId] = Object.assign({}, addonSettings[addonId], addonValue.settings);
-    }
-    if (handleConfirmClicked) confirmElem.removeEventListener("click", handleConfirmClicked, { once: true });
-    let resolvePromise = null;
-    const resolveOnConfirmPromise = new Promise((resolve) => {
-      resolvePromise = resolve;
-    });
-    handleConfirmClicked = async () => {
-      handleConfirmClicked = null;
-      if (Object.keys(pendingPermissions).length) {
-        const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({
-          permissions: Object.values(pendingPermissions).flat(),
-        });
-        Object.keys(pendingPermissions).forEach((addonId) => {
-          addonsEnabled[addonId] = granted;
-        });
-      }
-      const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
-      await syncSet({
-        globalTheme: !!obj.core.lightTheme,
-        addonsEnabled,
-        addonSettings: minifySettings(addonSettings, prerelease ? null : manifests),
-      });
-      resolvePromise();
-    };
-    confirmElem.classList.remove("hidden-button");
-    confirmElem.addEventListener("click", handleConfirmClicked, { once: true });
-    return resolveOnConfirmPromise;
-  };
-
   vue = window.vue = new Vue({
     el: "body",
     data() {
       return {
         smallMode: false,
+        devMode: false,
         theme: initialTheme,
+        forceEnglishSetting: null,
+        forceEnglishSettingInitial: null,
         switchPath: "../../images/icons/switch.svg",
         moreSettingsOpen: false,
         categoryOpen: true,
@@ -299,6 +229,7 @@ let fuse;
           const blob = new Blob([serialized], { type: "application/json" });
           downloadBlob("scratch-addons-settings.json", blob);
         });
+        // See also unsupported-browser.js
       },
       viewSettings() {
         const openedWindow = window.open("about:blank");
@@ -306,6 +237,7 @@ let fuse;
           const blob = new Blob([serialized], { type: "text/plain" });
           openedWindow.location.replace(URL.createObjectURL(blob));
         });
+        // See also unsupported-browser.js
       },
       importSettings() {
         const inputElem = Object.assign(document.createElement("input"), {
@@ -326,7 +258,7 @@ let fuse;
             inputElem.remove();
             const confirmElem = document.getElementById("confirmImport");
             try {
-              await deserializeSettings(text, vue.manifests, confirmElem);
+              await deserializeSettings(text, vue.manifests, confirmElem, { browserLevelPermissions });
             } catch (e) {
               console.warn("Error when importing settings:", e);
               confirmElem.classList.add("hidden-button");
@@ -341,6 +273,10 @@ let fuse;
         document.body.appendChild(inputElem);
         inputElem.click();
       },
+      applyLanguageSettings() {
+        alert(chrome.i18n.getMessage("importSuccess"));
+        chrome.runtime.reload();
+      },
       openFullSettings() {
         window.open(
           `${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${
@@ -350,7 +286,9 @@ let fuse;
         setTimeout(() => window.parent.close(), 100);
       },
       hidePopup() {
-        document.querySelector(".popup").style.animation = "closePopup 1.6s 1";
+        document.querySelector(".popup").style.animation = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "closePopup 0.35s 1"
+          : "closePopup 0.6s 1";
         document.querySelector(".popup").addEventListener(
           "animationend",
           () => {
@@ -396,6 +334,9 @@ let fuse;
         });
         if (newValue === "forums") this.addonGroups.find((group) => group.id === "forums").expanded = true;
       },
+      forceEnglishSetting(newValue, oldValue) {
+        if (oldValue !== null) chrome.storage.local.set({ forceEnglish: this.forceEnglishSetting });
+      },
     },
     ready() {
       // Autofocus search bar in iframe mode for both browsers
@@ -423,6 +364,11 @@ let fuse;
             .map(() => JSON.parse(JSON.stringify(exampleAddonListItem)));
         }
       }, 0);
+
+      chrome.storage.local.get("forceEnglish", ({ forceEnglish }) => {
+        this.forceEnglishSettingInitial = forceEnglish;
+        this.forceEnglishSetting = forceEnglish;
+      });
 
       window.addEventListener(
         "hashchange",
@@ -470,12 +416,12 @@ let fuse;
       manifest._categories[0] = manifest.tags.includes("popup")
         ? "popup"
         : manifest.tags.includes("easterEgg")
-        ? "easterEgg"
-        : manifest.tags.includes("theme")
-        ? "theme"
-        : manifest.tags.includes("community")
-        ? "community"
-        : "editor";
+          ? "easterEgg"
+          : manifest.tags.includes("theme")
+            ? "theme"
+            : manifest.tags.includes("community")
+              ? "community"
+              : "editor";
 
       const addCategoryIfTag = (arr) => {
         let count = 0;
@@ -686,22 +632,26 @@ let fuse;
   window.onresize = resize;
   resize();
 
+  chrome.management.getSelf((info) => {
+    if (info.installType === "development") vue.devMode = true;
+  });
+
   // Konami code easter egg
   let cursor = 0;
   const KONAMI_CODE = [
-    "ArrowUp",
-    "ArrowUp",
-    "ArrowDown",
-    "ArrowDown",
-    "ArrowLeft",
-    "ArrowRight",
-    "ArrowLeft",
-    "ArrowRight",
-    "KeyB",
-    "KeyA",
+    "arrowup",
+    "arrowup",
+    "arrowdown",
+    "arrowdown",
+    "arrowleft",
+    "arrowright",
+    "arrowleft",
+    "arrowright",
+    "b",
+    "a",
   ];
   document.addEventListener("keydown", (e) => {
-    cursor = e.code === KONAMI_CODE[cursor] ? cursor + 1 : 0;
+    cursor = e.key.toLowerCase() === KONAMI_CODE[cursor] ? cursor + 1 : 0;
     if (cursor === KONAMI_CODE.length) {
       vue.selectedCategory = "easterEgg";
       setTimeout(() => (vue.searchInputReal = ""), 0); // Allow konami code in autofocused search bar

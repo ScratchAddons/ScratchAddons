@@ -1,0 +1,30 @@
+{
+  "name": "Preview project instructions and notes",
+  "description": "In your own projects, adds a toggle above the Instructions field to preview the project instructions and notes as seen by other users.",
+  "credits": [
+    {
+      "name": "Steve0Greatness",
+      "link": "https://scratch.mit.edu/users/Steve0Greatness"
+    },
+    {
+      "name": "World_Languages"
+    }
+  ],
+  "tags": ["community", "projectPage", "featured"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": true
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.35.0"
+}

@@ -1,0 +1,1 @@
+{"block-cherry-picking/@name":"按住 Ctrl 鍵拖曳單個程式積木","block-cherry-picking/@description":"讓你可以按住 Ctrl 鍵把單個積木從程式區塊裡拖曳出來（原來會拖曳出黏在後面的所有積木）。","block-cherry-picking/@info-macContextDisabled":"在 macOS 上，用 Cmd 鍵代替 Ctrl 鍵。","block-cherry-picking/@info-flipControls":"如果啟用「功能反轉」，那麼拖曳單個積木就會變成預設動作，按住 Ctrl 則會變成拖曳整個程式區塊。","block-cherry-picking/@settings-name-invertDrag":"功能反轉"}

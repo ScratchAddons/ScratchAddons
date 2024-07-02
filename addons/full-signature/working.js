@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   let activityStream = document.querySelectorAll(".activity-stream li");
   if (activityStream.length) {
     let container = document.querySelector(".activity-stream").appendChild(document.createElement("div"));

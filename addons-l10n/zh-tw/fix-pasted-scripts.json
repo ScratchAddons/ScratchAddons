@@ -1,0 +1,1 @@
+{"fix-pasted-scripts/@name":"複製積木後不要自動執行","fix-pasted-scripts/@description":"修復一個編輯器的已知問題，就是在複製了一個程式積木，把它貼合到一個程式區塊時，會造成程式會自動執行。"}

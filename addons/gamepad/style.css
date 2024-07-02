@@ -20,11 +20,15 @@
   flex-direction: column;
 }
 .sa-gamepad-popup-content {
-  background-color: white !important;
-  color: #575e75 !important;
   padding: 1.5rem 2.25rem;
   height: 100%;
   overflow-y: auto;
+  color-scheme: var(--editorDarkMode-accent-colorScheme, light);
+  accent-color: var(--editorDarkMode-primary, #855cd6);
+}
+.sa-gamepad-popup-content button,
+.sa-gamepad-popup-content select {
+  color: var(--editorDarkMode-accent-formControlText, #575e75);
 }
 
 .sa-gamepad-popup [class*="modal_header-item-title"] {
@@ -47,7 +51,7 @@
   filter: invert(100%);
 }
 
-.sa-gamepad-small .sa-gamepad-container[data-editor-mode="editor"] {
+.sa-small-stage [class*="gui_body-wrapper_"]:not(.sa-stage-hidden) .sa-gamepad-container {
   display: none !important;
 }
 

@@ -1,1 +1,1 @@
-{"search-profile/profile":"Профиль","search-profile/invalid-username":"\"{username}\" не является допустимым именем пользователя","search-profile/@name":"Поиск профиля","search-profile/@description":"Позволяет перейти к профилю пользователя при поиске его имени пользователя."}
+{"search-profile/profile":"Профиль","search-profile/@description":"Позволяет перейти к профилю пользователя при поиске его имени пользователя."}

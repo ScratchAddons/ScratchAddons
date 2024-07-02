@@ -1,4 +1,4 @@
-// From https://github.com/LLK/scratch-gui/blob/develop/src/lib/download-blob.js
+// From https://github.com/scratchfoundation/scratch-gui/blob/develop/src/lib/download-blob.js
 export default (filename, blob) => {
   const downloadLink = document.createElement("a");
   document.body.appendChild(downloadLink);

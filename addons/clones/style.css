@@ -37,6 +37,6 @@
   content: attr(data-str);
 }
 
-.sa-clones-small .clone-container-container {
+.sa-small-stage .clone-container-container {
   display: none !important;
 }

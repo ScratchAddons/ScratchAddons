@@ -18,11 +18,13 @@ export default async function ({ addon, msg, console }) {
 
       this.prevValue = "";
 
-      this.findLabel = null;
+      this.findBarOuter = null;
       this.findWrapper = null;
       this.findInput = null;
       this.dropdownOut = null;
       this.dropdown = new Dropdown(this.utils);
+
+      document.addEventListener("keydown", (e) => this.eventKeyDown(e), true);
     }
 
     get workspace() {
@@ -30,15 +32,12 @@ export default async function ({ addon, msg, console }) {
     }
 
     createDom(root) {
-      const findBar = root.appendChild(document.createElement("div"));
-      findBar.className = "sa-find-bar";
-      addon.tab.displayNoneWhileDisabled(findBar, { display: "flex" });
+      this.findBarOuter = document.createElement("div");
+      this.findBarOuter.className = "sa-find-bar";
+      addon.tab.displayNoneWhileDisabled(this.findBarOuter, { display: "flex" });
+      root.appendChild(this.findBarOuter);
 
-      this.findLabel = findBar.appendChild(document.createElement("label"));
-      this.findLabel.htmlFor = "sa-find-input";
-      this.findLabel.textContent = msg("find");
-
-      this.findWrapper = findBar.appendChild(document.createElement("span"));
+      this.findWrapper = this.findBarOuter.appendChild(document.createElement("span"));
       this.findWrapper.className = "sa-find-wrapper";
 
       this.dropdownOut = this.findWrapper.appendChild(document.createElement("label"));
@@ -48,6 +47,8 @@ export default async function ({ addon, msg, console }) {
       this.findInput.className = addon.tab.scratchClass("input_input-form", {
         others: "sa-find-input",
       });
+      // for <label>
+      this.findInput.id = "sa-find-input";
       this.findInput.type = "search";
       this.findInput.placeholder = msg("find-placeholder");
       this.findInput.autocomplete = "off";
@@ -55,6 +56,7 @@ export default async function ({ addon, msg, console }) {
       this.dropdownOut.appendChild(this.dropdown.createDom());
 
       this.bindEvents();
+      this.tabChanged();
     }
 
     bindEvents() {
@@ -62,8 +64,15 @@ export default async function ({ addon, msg, console }) {
       this.findInput.addEventListener("keydown", (e) => this.inputKeyDown(e));
       this.findInput.addEventListener("keyup", () => this.inputChange());
       this.findInput.addEventListener("focusout", () => this.hideDropDown());
+    }
 
-      document.addEventListener("keydown", (e) => this.eventKeyDown(e), true);
+    tabChanged() {
+      if (!this.findBarOuter) {
+        return;
+      }
+      const tab = addon.tab.redux.state.scratchGui.editorTab.activeTabIndex;
+      const visible = tab === 0 || tab === 1 || tab === 2;
+      this.findBarOuter.hidden = !visible;
     }
 
     inputChange() {
@@ -108,13 +117,13 @@ export default async function ({ addon, msg, console }) {
       this.dropdown.inputKeyDown(e);
 
       // Enter
-      if (e.keyCode === 13) {
+      if (e.key === "Enter") {
         this.findInput.blur();
         return;
       }
 
       // Escape
-      if (e.keyCode === 27) {
+      if (e.key === "Escape") {
         if (this.findInput.value.length > 0) {
           this.findInput.value = ""; // Clear search first, then close on second press
           this.inputChange();
@@ -127,11 +136,11 @@ export default async function ({ addon, msg, console }) {
     }
 
     eventKeyDown(e) {
-      if (addon.self.disabled) return;
+      if (addon.self.disabled || !this.findBarOuter) return;
 
       let ctrlKey = e.ctrlKey || e.metaKey;
 
-      if (e.key === "f" && ctrlKey && !e.shiftKey) {
+      if (e.key.toLowerCase() === "f" && ctrlKey && !e.shiftKey) {
         // Ctrl + F (Override default Ctrl+F find)
         this.findInput.focus();
         this.findInput.select();
@@ -140,7 +149,7 @@ export default async function ({ addon, msg, console }) {
         return true;
       }
 
-      if (e.keyCode === 37 && ctrlKey) {
+      if (e.key === "ArrowLeft" && ctrlKey) {
         // Ctrl + Left Arrow Key
         if (document.activeElement.tagName === "INPUT") {
           return;
@@ -154,7 +163,7 @@ export default async function ({ addon, msg, console }) {
         }
       }
 
-      if (e.keyCode === 39 && ctrlKey) {
+      if (e.key === "ArrowRight" && ctrlKey) {
         // Ctrl + Right Arrow Key
         if (document.activeElement.tagName === "INPUT") {
           return;
@@ -165,6 +174,21 @@ export default async function ({ addon, msg, console }) {
           e.cancelBubble = true;
           e.preventDefault();
           return true;
+        }
+      }
+
+      // In Chrome, Ctrl+Z will undo edits to the find bar input even if it doesn't have focus.
+      // Call preventDefault() to make sure that the event only goes to scratch-blocks or scratch-paint.
+      // Blockly.onKeyDown_:
+      // https://github.com/scratchfoundation/scratch-blocks/blob/1421093/core/blockly.js#L185
+      // KeyboardShortcutsHOC.handleKeyPress:
+      // https://github.com/scratchfoundation/scratch-paint/blob/8119055/src/hocs/keyboard-shortcuts-hoc.jsx#L29
+      if (!Blockly.utils.isTargetInput(e) && addon.tab.redux.state?.scratchPaint.textEditTarget === null) {
+        if (
+          (ctrlKey || e.altKey) &&
+          (e.keyCode === 90 || e.key === "z" || (e.shiftKey && e.key.toLowerCase() === "z"))
+        ) {
+          e.preventDefault();
         }
       }
     }
@@ -182,10 +206,10 @@ export default async function ({ addon, msg, console }) {
         this.selectedTab === 0
           ? this.getScratchBlocks()
           : this.selectedTab === 1
-          ? this.getScratchCostumes()
-          : this.selectedTab === 2
-          ? this.getScratchSounds()
-          : [];
+            ? this.getScratchCostumes()
+            : this.selectedTab === 2
+              ? this.getScratchSounds()
+              : [];
 
       this.dropdown.empty();
 
@@ -201,8 +225,7 @@ export default async function ({ addon, msg, console }) {
         }
       }
 
-      this.utils.offsetX =
-        this.dropdownOut.getBoundingClientRect().right - this.findLabel.getBoundingClientRect().left + 26;
+      this.utils.offsetX = this.dropdownOut.getBoundingClientRect().width + 32;
       this.utils.offsetY = 32;
     }
 
@@ -247,7 +270,12 @@ export default async function ({ addon, msg, console }) {
         let fields = root.inputList[0];
         let desc;
         for (const fieldRow of fields.fieldRow) {
-          desc = (desc ? desc + " " : "") + fieldRow.getText();
+          desc = desc ? desc + " " : "";
+          if (fieldRow instanceof Blockly.FieldImage && fieldRow.src_.endsWith("green-flag.svg")) {
+            desc += msg("/_general/blocks/green-flag");
+          } else {
+            desc += fieldRow.getText();
+          }
         }
         return desc;
       }
@@ -277,7 +305,7 @@ export default async function ({ addon, msg, console }) {
         if (root.type === "event_whenbroadcastreceived") {
           const fieldRow = root.inputList[0].fieldRow;
           let eventName = fieldRow.find((input) => input.name === "BROADCAST_OPTION").getText();
-          addBlock("receive", "event " + eventName, root).eventName = eventName;
+          addBlock("receive", msg("event", { name: eventName }), root).eventName = eventName;
 
           continue;
         }
@@ -297,17 +325,25 @@ export default async function ({ addon, msg, console }) {
 
       let vars = map.getVariablesOfType("");
       for (const row of vars) {
-        addBlock(row.isLocal ? "var" : "VAR", (row.isLocal ? "var " : "VAR ") + row.name, row);
+        addBlock(
+          row.isLocal ? "var" : "VAR",
+          row.isLocal ? msg("var-local", { name: row.name }) : msg("var-global", { name: row.name }),
+          row
+        );
       }
 
       let lists = map.getVariablesOfType("list");
       for (const row of lists) {
-        addBlock(row.isLocal ? "list" : "LIST", (row.isLocal ? "list " : "LIST ") + row.name, row);
+        addBlock(
+          row.isLocal ? "list" : "LIST",
+          row.isLocal ? msg("list-local", { name: row.name }) : msg("list-global", { name: row.name }),
+          row
+        );
       }
 
       const events = this.getCallsToEvents();
       for (const event of events) {
-        addBlock("receive", "event " + event.eventName, event.block).eventName = event.eventName;
+        addBlock("receive", msg("event", { name: event.eventName }), event.block).eventName = event.eventName;
       }
 
       const clsOrder = { flag: 0, receive: 1, event: 2, define: 3, var: 4, VAR: 5, list: 6, LIST: 7 };
@@ -360,21 +396,28 @@ export default async function ({ addon, msg, console }) {
     }
 
     getCallsToEvents() {
-      const uses = []; // Definition First, then calls to it
-      const found = {};
+      const uses = [];
+      const alreadyFound = new Set();
 
-      let topBlocks = this.workspace.getTopBlocks();
-      for (const topBlock of topBlocks) {
-        /** @type {!Array<!Blockly.Block>} */
-        let kids = topBlock.getDescendants();
-        for (const block of kids) {
-          if (block.type === "event_broadcast" || block.type === "event_broadcastandwait") {
-            const eventName = block.getChildren()[0].inputList[0].fieldRow[0].getText();
-            if (!found[eventName]) {
-              found[eventName] = block;
-              uses.push({ eventName: eventName, block: block });
-            }
-          }
+      for (const block of this.workspace.getAllBlocks()) {
+        if (block.type !== "event_broadcast" && block.type !== "event_broadcastandwait") {
+          continue;
+        }
+
+        const broadcastInput = block.getChildren()[0];
+        if (!broadcastInput) {
+          continue;
+        }
+
+        let eventName = "";
+        if (broadcastInput.type === "event_broadcast_menu") {
+          eventName = broadcastInput.inputList[0].fieldRow[0].getText();
+        } else {
+          eventName = msg("complex-broadcast");
+        }
+        if (!alreadyFound.has(eventName)) {
+          alreadyFound.add(eventName);
+          uses.push({ eventName: eventName, block: block });
         }
       }
 
@@ -404,21 +447,21 @@ export default async function ({ addon, msg, console }) {
 
     inputKeyDown(e) {
       // Up Arrow
-      if (e.keyCode === 38) {
+      if (e.key === "ArrowUp") {
         this.navigateFilter(-1);
         e.preventDefault();
         return;
       }
 
       // Down Arrow
-      if (e.keyCode === 40) {
+      if (e.key === "ArrowDown") {
         this.navigateFilter(1);
         e.preventDefault();
         return;
       }
 
       // Enter
-      if (e.keyCode === 13) {
+      if (e.key === "Enter") {
         // Any selected on enter? if not select now
         if (this.selected) {
           this.navigateFilter(1);
@@ -442,6 +485,7 @@ export default async function ({ addon, msg, console }) {
         nxt = dir === -1 ? nxt.previousSibling : nxt.nextSibling;
       }
       if (nxt) {
+        nxt.scrollIntoView({ block: "nearest" });
         this.onItemClick(nxt);
       }
     }
@@ -451,13 +495,13 @@ export default async function ({ addon, msg, console }) {
       item.innerText = proc.procCode;
       item.data = proc;
       const colorIds = {
-        receive: "event",
-        event: "event",
+        receive: "events",
+        event: "events",
         define: "more",
         var: "data",
         VAR: "data",
-        list: "data_lists",
-        LIST: "data_lists",
+        list: "data-lists",
+        LIST: "data-lists",
         costume: "looks",
         sound: "sounds",
       };
@@ -611,13 +655,25 @@ export default async function ({ addon, msg, console }) {
 
         for (const id of Object.keys(blocks._blocks)) {
           const block = blocks._blocks[id];
-          // To find event broadcaster blocks, we look for the nested "event_broadcast_menu" blocks first that match the event name
-          if (block.opcode === "event_broadcast_menu" && block.fields.BROADCAST_OPTION.value === name) {
-            // Now get the parent block that is the actual broadcast or broadcast and wait
-            const broadcastBlock = blocks.getBlock(block.parent);
-            uses.push(new BlockInstance(target, broadcastBlock));
-          } else if (block.opcode === "event_whenbroadcastreceived" && block.fields.BROADCAST_OPTION.value === name) {
+          if (
+            block.opcode === "event_whenbroadcastreceived" &&
+            block.fields.BROADCAST_OPTION.value.toLowerCase() === name.toLowerCase()
+          ) {
             uses.push(new BlockInstance(target, block));
+          } else if (block.opcode === "event_broadcast" || block.opcode === "event_broadcastandwait") {
+            const broadcastInputBlockId = block.inputs.BROADCAST_INPUT.block;
+            const broadcastInputBlock = blocks._blocks[broadcastInputBlockId];
+            if (broadcastInputBlock) {
+              let eventName;
+              if (broadcastInputBlock.opcode === "event_broadcast_menu") {
+                eventName = broadcastInputBlock.fields.BROADCAST_OPTION.value;
+              } else {
+                eventName = msg("complex-broadcast");
+              }
+              if (eventName.toLowerCase() === name.toLowerCase()) {
+                uses.push(new BlockInstance(target, block));
+              }
+            }
           }
         }
       }
@@ -694,14 +750,14 @@ export default async function ({ addon, msg, console }) {
 
     inputKeyDown(e) {
       // Left Arrow
-      if (e.keyCode === 37) {
+      if (e.key === "ArrowLeft") {
         if (this.el && this.blocks) {
           this.navLeft(e);
         }
       }
 
       // Right Arrow
-      if (e.keyCode === 39) {
+      if (e.key === "ArrowRight") {
         if (this.el && this.blocks) {
           this.navRight(e);
         }
@@ -791,6 +847,13 @@ export default async function ({ addon, msg, console }) {
 
     _doBlockClick_.call(this);
   };
+
+  addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (e.detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB") {
+      findBar.tabChanged();
+    }
+  });
 
   while (true) {
     const root = await addon.tab.waitForElement("ul[class*=gui_tab-list_]", {

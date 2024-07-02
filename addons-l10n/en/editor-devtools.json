@@ -13,7 +13,5 @@
   "editor-devtools/swap": "Swap {var} in Sprite",
   "editor-devtools/lists": "lists",
   "editor-devtools/variables": "variables",
-  "editor-devtools/insert": "Insert",
-  "editor-devtools/start-typing": "Start Typing...",
   "editor-devtools/extension-description-not-for-addon": "Scratch 3 Developer Tools to enhance your Scratch Editing Experience on https://scratch.mit.edu"
 }

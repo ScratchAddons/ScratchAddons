@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   const vm = addon.tab.traps.vm;
 
   const updateStyles = () => {
@@ -32,6 +32,7 @@ export default async function ({ addon, global, console }) {
   previewInner.classList.add("sa-comment-preview-hidden");
   updateStyles();
   addon.settings.addEventListener("change", updateStyles);
+  addon.tab.displayNoneWhileDisabled(previewOuter);
   previewOuter.appendChild(previewInner);
   document.body.appendChild(previewOuter);
 

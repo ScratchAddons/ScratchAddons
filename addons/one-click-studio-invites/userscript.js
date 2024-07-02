@@ -1,5 +1,5 @@
 export default async function (
-  /** @type {import("../../addon-api/content-script/typedef").UserscriptUtilities} */ { addon, msg, global, console }
+  /** @type {import("../../addon-api/content-script/typedef").UserscriptUtilities} */ { addon, msg, console }
 ) {
   const STUDIO_REGEX = /https:\/\/scratch\.mit\.edu\/studios\/([0-9]+)/;
   const xToken = await addon.auth.fetchXToken();
@@ -40,6 +40,8 @@ export default async function (
       button.classList.add("disabled");
       button.disabled = true;
     }
+
+    addon.tab.displayNoneWhileDisabled(button, { display: "block" });
 
     button.addEventListener("click", async () => {
       if (userProfile.invited) {

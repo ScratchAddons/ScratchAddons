@@ -1,5 +1,5 @@
 import Utils from "../find-bar/blockly/Utils.js";
-export default async function ({ addon, msg, global, console }) {
+export default async function ({ addon, msg, console }) {
   if (!addon.self._isDevtoolsExtension && window.initGUI) {
     console.log("Extension running, stopping addon");
     window._devtoolsAddonEnabled = true;

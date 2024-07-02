@@ -1,4 +1,4 @@
-export default async function ({ addon, msg, global, console }) {
+export default async function ({ addon, msg, console }) {
   while (true) {
     const container = await addon.tab.waitForElement("[class^=sound-editor_editor-container]", {
       markAsSeen: true,
@@ -9,6 +9,8 @@ export default async function ({ addon, msg, global, console }) {
         className: "sa-sound-duration",
       })
     );
+    addon.tab.displayNoneWhileDisabled(el);
+
     const state = container[addon.tab.traps.getInternalKey(container)].return.return.return.stateNode;
 
     function setText(running, selected) {
@@ -21,7 +23,7 @@ export default async function ({ addon, msg, global, console }) {
 
     setText(0, state.audioBufferPlayer.buffer.length / state.audioBufferPlayer.buffer.sampleRate);
 
-    // https://github.com/LLK/scratch-gui/blob/develop/src/containers/sound-editor.jsx
+    // https://github.com/scratchfoundation/scratch-gui/blob/develop/src/containers/sound-editor.jsx
 
     // When the sound is played aka the playhead was updated
     const _handleUpdatePlayhead = state.handleUpdatePlayhead;

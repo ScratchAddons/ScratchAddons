@@ -1,1 +1,1 @@
-{"pause/pause":"一時停止","pause/@name":"一時停止ボタン","pause/@description":"緑の旗の横に一時停止ボタンを追加する。"}
+{"pause/pause":"一時停止","pause/play":"再開","pause/@name":"一時停止ボタン","pause/@description":"緑の旗の横に一時停止ボタンを追加する。","pause/@info-keybind":"プロジェクトはAlt+X (macOSでは Option+X) でも一時停止できます。","pause/@update":"プロジェクトをキーボードで一時停止できるようになりました。"}

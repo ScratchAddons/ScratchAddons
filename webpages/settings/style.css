@@ -79,17 +79,12 @@ h1 {
 }
 
 @keyframes addonBlink {
-  10% {
+  0% {
     border: 1px solid var(--content-border);
-  }
-  25% {
-    border: 1px solid var(--orange);
   }
   50% {
-    border: 1px solid var(--content-border);
-  }
-  75% {
     border: 1px solid var(--orange);
+    filter: drop-shadow(0px 0px 4px var(--orange));
   }
   100% {
     border: 1px solid var(--content-border);
@@ -134,12 +129,19 @@ h1 {
 .reverted {
   transform: scaleY(-1);
 }
-
-.theme-switch {
-  height: 25px;
-  right: 25px;
+.header-button {
+  right: 0;
   position: fixed;
   cursor: pointer;
+  padding: 17.5px;
+  line-height: 0;
+  transition: 0.2s ease;
+}
+.header-button:hover {
+  background: var(--header-hover-darken);
+}
+.theme-switch {
+  height: 25px;
 }
 [dir="rtl"] .theme-switch {
   right: auto;
@@ -150,7 +152,8 @@ h1 {
   /* needs !important because it conflicts with display: block */
   display: none !important;
 }
-#confirmImport {
+#confirmImport,
+#applyLanguageSettingsButton {
   border-color: var(--orange);
 }
 
@@ -250,11 +253,16 @@ body.iframe .addon-setting.boolean-setting .setting-label {
 }
 body.iframe .presets-column > .setting-label {
   margin-inline-start: 0;
+  margin-top: 10px;
   margin-bottom: 0;
+  width: 100%;
 }
 body.iframe .presets-column > .addon-setting {
   margin: 5px 0;
   margin-inline-end: 10px;
+}
+body.iframe .presets-column > .addon-setting:last-child {
+  margin-inline-end: 0;
 }
 
 body.iframe .addons-container {
@@ -373,7 +381,11 @@ button.setting-input.color.open {
   background: linear-gradient(45deg, #777 25%, transparent 25%), linear-gradient(-45deg, #777 25%, transparent 25%),
     linear-gradient(45deg, transparent 75%, #777 75%), linear-gradient(-45deg, transparent 75%, #777 75%);
   background-size: 6px 6px;
-  background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
+  background-position:
+    0 0,
+    0 3px,
+    3px -3px,
+    -3px 0px;
   border-radius: 5px;
   background-color: white;
   display: flex;

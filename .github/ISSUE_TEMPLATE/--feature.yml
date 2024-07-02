@@ -15,8 +15,8 @@ body:
   - type: textarea
     id: problem
     attributes:
-      label: Why this would be helpful/solve a problem
-      description: A clear and concise description of how this change could help with a problem or how it could improve something.
+      label: Why this would be helpful
+      description: How would this help with a problem or make something better?
       placeholder: Sometimes I want to...
     validations:
       required: true
@@ -24,9 +24,9 @@ body:
   - type: textarea
     id: howitworks
     attributes:
-      label: What this change does
-      description: A clear and concise description of what this enhancement/change does.
-      placeholder: There will be a new option...
+      label: My suggestion
+      description: Describe the changes you're suggesting and how they work.
+      placeholder: Add an option to...
     validations:
       required: true
 
@@ -34,11 +34,11 @@ body:
     id: alternatives
     attributes:
       label: Possible alternatives
-      description: A clear and concise description of any alternative solutions or features you've thought about or heard of.
+      description: Any alternative solutions or features you've thought about?
       placeholder: We could also ... instead.
 
   - type: textarea
     id: notes
     attributes:
-      label: Demonstration(s) and additional context
+      label: Additional context
       description: Add any other information like screenshots, videos, or context about the feature request here.

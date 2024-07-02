@@ -1,1 +1,1 @@
-{"search-profile/profile":"Profiel","search-profile/invalid-username":"\"{username}\" is geen geldige gebruikersnaam","search-profile/@name":"Profiel zoeken","search-profile/@description":"Laat je een gebruikers' profiel zien wanneer je hun gebruikersnaam opzoekt."}
+{"search-profile/profile":"Profiel","search-profile/invalid-username":"\"{username}\" is geen geldige gebruikersnaam of het account bestaat niet","search-profile/@name":"Gebruikersnaam zoeken","search-profile/@description":"Laat je een gebruikers' profiel zien wanneer je hun gebruikersnaam opzoekt."}

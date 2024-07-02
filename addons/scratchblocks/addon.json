@@ -1,5 +1,5 @@
 {
-  "name": "3.0 Scratchblocks on forums",
+  "name": "Scratch 3.0 forum blocks",
   "description": "Enables the new version of scratchblocks on the forums.",
   "credits": [
     {
@@ -18,7 +18,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["editingScreens"],
+      "matches": ["https://scratch.mit.edu/discuss/*"],
       "runAtComplete": false
     }
   ],

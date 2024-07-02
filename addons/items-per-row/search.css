@@ -26,6 +26,13 @@
   height: auto;
 }
 
+.items-per-row-search-4 .grid .thumbnail.project {
+  height: 204px;
+}
+.items-per-row-search-4 .grid .thumbnail.gallery {
+  height: 160px;
+}
+
 .grid .thumbnail .thumbnail-image,
 .grid .thumbnail .thumbnail-info {
   width: calc(100% - 16px);

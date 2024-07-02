@@ -1,5 +1,7 @@
-/* global $, paste */
+import { setupForumId, getIDLink } from "../better-quoter/module.js";
 export default async function ({ addon, console, msg }) {
+  if (!document.querySelector("textarea")) return;
+  setupForumId(addon);
   const buttons = document.querySelectorAll(".postfootright");
   buttons.forEach(function (elm) {
     const addBtn = document.createElement("li");
@@ -16,28 +18,4 @@ export default async function ({ addon, console, msg }) {
     let id = e.target.closest(".blockpost").id.substring(1);
     window.paste(getIDLink(id, idName, true));
   }
-  function getIDLink(id, name, addSpace) {
-    return `[url=https://scratch.mit.edu/discuss/post/${id}/]${name}[/url]${addSpace ? " " : ""}`;
-  }
-  //Auto-adding IDs to quotes
-  const originalCopyPaste = window.copy_paste;
-  window.copy_paste = function (id) {
-    if (addon.self.disabled || !addon.settings.get("auto_add")) {
-      originalCopyPaste(id);
-      return;
-    }
-    var post = $("#" + id);
-    var username = post.find(".username").text();
-    $.ajax("/discuss/post/" + id.substr(1) + "/source/").done(function (data) {
-      paste(
-        "[quote=" +
-          username +
-          "][small](" +
-          getIDLink(id.substring(1), post["0"].querySelector(".box-head > .conr").textContent, false) +
-          ")[/small]\n" +
-          data +
-          "[/quote]\n"
-      );
-    });
-  };
 }

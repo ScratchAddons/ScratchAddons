@@ -1,0 +1,11 @@
+.sa-share-button {
+  /* Same styles as .media-trash */
+  float: left;
+  clear: both;
+  position: relative;
+  left: 10px;
+}
+
+.media-item-content.not-shared .media-trash {
+  top: 0;
+}

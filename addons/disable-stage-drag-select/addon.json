@@ -8,6 +8,10 @@
     },
     {
       "name": "GarboMuffin"
+    },
+    {
+      "name": "Mr_MPH",
+      "link": "https://scratch.mit.edu/users/Mr_MPH/"
     }
   ],
   "userscripts": [
@@ -16,9 +20,21 @@
       "matches": ["projects"]
     }
   ],
+  "settings": [
+    {
+      "name": "Allow dragging while project is stopped",
+      "id": "drag_while_stopped",
+      "type": "boolean",
+      "default": false
+    }
+  ],
   "tags": ["editor", "featured"],
   "enabledByDefault": false,
   "dynamicDisable": true,
   "dynamicEnable": true,
-  "versionAdded": "1.17.0"
+  "versionAdded": "1.17.0",
+  "latestUpdate": {
+    "version": "1.34.0",
+    "newSettings": ["drag_while_stopped"]
+  }
 }

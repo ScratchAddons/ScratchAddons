@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
@@ -90,6 +90,7 @@
 
     <script src="../set-lang.js" type="module"></script>
     <script src="../check-unsupported.js" defer></script>
+    <script src="../error/check-chrome-storage.js" defer></script>
 
     <style>
       /*
@@ -122,7 +123,9 @@
       <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-cloak v-show="smallMode" alt="Logo" />
       <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" />
       <h1 v-cloak>{{ msg("settings") }}</h1>
-      <img v-cloak @click="setTheme(!theme)" class="theme-switch" :src="themePath" />
+      <div @click="setTheme(!theme)" class="header-button">
+        <img v-cloak class="theme-switch" :src="themePath" />
+      </div>
     </div>
     <div class="main">
       <div
@@ -259,6 +262,34 @@
               <div class="filter-selector" style="margin-left: 16px">
                 <button class="large-button" @click="viewSettings()">{{ msg("viewSettings") }}</button>
               </div>
+            </div>
+          </div>
+        </div>
+        <div class="addon-body">
+          <div class="addon-topbar">
+            <span class="addon-name"
+              ><img src="../../images/icons/translate.svg" class="icon-type" />{{ msg("language") }}
+            </span>
+          </div>
+          <div class="addon-settings">
+            <div class="addon-setting" style="margin-top: 0">
+              <input
+                type="checkbox"
+                class="setting-input check"
+                v-model="forceEnglishSetting"
+                style="margin-inline-start: 0; margin-inline-end: 8px"
+              />
+              <span>Show addon names and descriptions in English</span>
+              <div class="badge red">{{ msg("beta") }}</div>
+              <button
+                class="large-button"
+                id="applyLanguageSettingsButton"
+                v-show="forceEnglishSetting !== null && forceEnglishSetting !== this.forceEnglishSettingInitial"
+                @click="applyLanguageSettings()"
+                style="margin-inline-start: 16px"
+              >
+                {{ msg("applySettings") }}
+              </button>
             </div>
           </div>
         </div>

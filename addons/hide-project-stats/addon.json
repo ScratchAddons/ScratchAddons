@@ -56,42 +56,42 @@
     },
     {
       "url": "hide_remix_count.css",
-      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "matches": ["https://scratch.mit.edu/mystuff/*"],
       "if": {
         "settings": { "remixes": true, "myStuff": true }
       }
     },
     {
       "url": "hide_view_count.css",
-      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "matches": ["https://scratch.mit.edu/mystuff/*"],
       "if": {
         "settings": { "views": true, "myStuff": true }
       }
     },
     {
       "url": "hide_love_count.css",
-      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "matches": ["https://scratch.mit.edu/mystuff/*"],
       "if": {
         "settings": { "loves": true, "myStuff": true }
       }
     },
     {
       "url": "hide_favorite_count.css",
-      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "matches": ["https://scratch.mit.edu/mystuff/*"],
       "if": {
         "settings": { "favorites": true, "myStuff": true }
       }
     },
     {
       "url": "hide_comment_count.css",
-      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "matches": ["https://scratch.mit.edu/mystuff/*"],
       "if": {
         "settings": { "comments": true, "myStuff": true }
       }
     },
     {
       "url": "hide_studio_count.css",
-      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "matches": ["https://scratch.mit.edu/mystuff/*"],
       "if": {
         "settings": { "studios": true, "myStuff": true }
       }
@@ -181,7 +181,7 @@
   "latestUpdate": {
     "version": "1.29.0",
     "temporaryNotice": "The padding between statistics has been fixed, there is now an option to show statistics on your own projects, and the My Stuff page is now supported.",
-    "newSettings": ["comments", "showOwnStats", "myStuff"]
+    "newSettings": ["comments", "showOwnStats", "myStuff", "studios"]
   },
   "enabledByDefault": false
 }

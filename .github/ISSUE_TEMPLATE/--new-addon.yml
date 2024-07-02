@@ -10,13 +10,14 @@ body:
         - Avoid creating duplicates! Read the FAQ page and search through issues and discussions before creating one.
         - Try to make a simple but descriptive title, and include the detailed information below.
         - Make sure to use the latest version of Scratch Addons.
+        - If your new addon is similar to another existing addon, consider mentioning merging them in the Possible alternatives field or suggesting a [new feature](https://github.com/ScratchAddons/ScratchAddons/issues/new?assignees=&labels=status%3A+needs+triage%2Ctype%3A+enhancement&template=--feature.yml) for it.
         - For help, check our [FAQ page](https://scratchaddons.com/faq), open a [discussion](https://github.com/ScratchAddons/ScratchAddons/discussions) or ask on our [Discord server](https://discord.gg/R5NBqwMjNc).
 
   - type: textarea
     id: problem
     attributes:
-      label: Why this would be helpful/solve a problem
-      description: A clear and concise description of how this addon could help with a problem or how it could improve something.
+      label: Why this would be helpful
+      description: How would this help with a problem or make something better?
       placeholder: Sometimes I want to...
     validations:
       required: true
@@ -24,8 +25,8 @@ body:
   - type: textarea
     id: howitworks
     attributes:
-      label: What this addon does
-      description: A clear and concise description of how the features this addon provides work and what they do.
+      label: How this addon works
+      description: Describe your addon and how it works.
       placeholder: This addon adds a button to...
     validations:
       required: true
@@ -34,11 +35,11 @@ body:
     id: alternatives
     attributes:
       label: Possible alternatives
-      description: A clear and concise description of any alternative solutions or features you've thought about or heard of.
-      placeholder: We could also ... instead.
+      description: Could this addon's features also be merged with or added to another one instead? Any alternative solutions or features you've thought about?
+      placeholder: We could also add these features to the ... addon instead.
 
   - type: textarea
     id: notes
     attributes:
-      label: Demonstration(s) and additional context
-      description: Add any other information like screenshots, videos, or context about the new addon here.
+      label: Additional context
+      description: Add any other information like screenshots, videos, or context about your new addon here.
