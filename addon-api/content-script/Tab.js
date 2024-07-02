@@ -8,6 +8,9 @@ import * as modal from "./modal.js";
 
 const DATA_PNG = "data:image/png;base64,";
 
+const isScratchGui =
+  location.origin === "https://scratchfoundation.github.io" || ["8601", "8602"].includes(location.port);
+
 const contextMenuCallbacks = [];
 const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image", "swap-local-global"];
 let createdAnyBlockContextMenus = false;
@@ -19,12 +22,13 @@ let createdAnyBlockContextMenus = false;
  * @property {ReduxHandler} redux
  */
 export default class Tab extends Listenable {
-  constructor(info) {
+  constructor(addonObj, info) {
     super();
     this._addonId = info.id;
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
+    this._addonObj = addonObj;
   }
   /**
    * Version of the renderer (scratch-www, scratchr2, or null if it cannot be determined).
@@ -95,7 +99,12 @@ export default class Tab extends Listenable {
    * @param {string} url - script URL.
    * @returns {Promise}
    */
-  loadScript(url) {
+  loadScript(relativeUrl) {
+    const urlObj = new URL(import.meta.url);
+    urlObj.pathname = relativeUrl;
+
+    const url = urlObj.href;
+
     return new Promise((resolve, reject) => {
       if (scratchAddons.loadedScripts[url]) {
         const obj = scratchAddons.loadedScripts[url];
@@ -207,7 +216,7 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get editorMode() {
-    if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601") {
+    if (isScratchGui) {
       // Note that scratch-gui does not change the URL when going fullscreen.
       if (this.redux.state?.scratchGui?.mode?.isFullScreen) return "fullscreen";
       return "editor";
@@ -292,7 +301,6 @@ export default class Tab extends Listenable {
     const isProject =
       location.pathname.split("/")[1] === "projects" &&
       !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
-    const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
     if (!isProject && !isScratchGui) {
       scratchAddons.console.warn("addon.tab.scratchClass() was used outside a project page");
       return "";
@@ -332,7 +340,6 @@ export default class Tab extends Listenable {
     const isProject =
       location.pathname.split("/")[1] === "projects" &&
       !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
-    const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
     if (!isProject && !isScratchGui) return Promise.resolve();
 
     this._calledScratchClassReady = true;
@@ -361,7 +368,8 @@ export default class Tab extends Listenable {
   get direction() {
     // https://github.com/scratchfoundation/scratch-l10n/blob/master/src/supported-locales.js
     const rtlLocales = ["ar", "ckb", "fa", "he"];
-    const lang = scratchAddons.globalState.auth.scratchLang.split("-")[0];
+    const rawLang = this._addonObj.auth.scratchLang; // Guaranteed to exist
+    const lang = rawLang.split("-")[0];
     return rtlLocales.includes(lang) ? "rtl" : "ltr";
   }
 

@@ -674,6 +674,20 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
           delete settings.links;
           madeAnyChanges = madeChangesToAddon = true;
         }
+
+        if (addonId === "fullscreen" && settings.hideToolbar !== undefined) {
+          // Transition v1.36 to v1.37
+          if (!settings.hideToolbar) {
+            settings.toolbar = "show";
+          } else if (settings.hoverToolbar) {
+            settings.toolbar = "hover";
+          } else {
+            settings.toolbar = "hide";
+          }
+          delete settings.hideToolbar;
+          delete settings.hoverToolbar;
+          madeAnyChanges = madeChangesToAddon = true;
+        }
       }
 
       if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;

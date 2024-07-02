@@ -11,6 +11,11 @@ try {
 if (window.frameElement && window.frameElement.getAttribute("src") === null)
   throw "Scratch Addons: iframe without src attribute ignored";
 if (document.documentElement instanceof SVGElement) throw "Scratch Addons: SVG document ignored";
+if (new URL(location.href).hostname === "localhost") {
+  if (!["8333", "8601", "8602"].includes(new URL(location.href).port)) {
+    throw "Scratch Addons: this localhost port is not supported";
+  }
+}
 
 const MAX_USERSTYLES_PER_ADDON = 100;
 
@@ -642,6 +647,11 @@ const showBanner = () => {
   const NOTIF_TEXT_STYLE = "display: block; color: white !important;";
   const NOTIF_LINK_STYLE = "color: #1aa0d8; font-weight: normal; text-decoration: underline;";
 
+  //
+  const _uiLanguage = chrome.i18n.getUILanguage();
+  const _localeSlash = _uiLanguage.startsWith("en") ? "" : `${_uiLanguage.split("-")[0]}/`;
+  //
+
   const notifInnerText0 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE + "font-weight: bold;",
     textContent: chrome.i18n
@@ -650,7 +660,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_35", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_38", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -660,17 +670,21 @@ const showBanner = () => {
             .outerHTML,
           */
           Object.assign(document.createElement("a"), {
-            href: "https://scratch.mit.edu/scratch-addons-extension/settings?source=updatenotif",
+            // href: "https://scratch.mit.edu/scratch-addons-extension/settings?source=updatenotif",
+            href: `https://scratchaddons.com/${_localeSlash}feedback?ext_version=${
+              chrome.runtime.getManifest().version
+            }&utm_source=extension&utm_medium=updatenotification&utm_campaign=mv3`,
             target: "_blank",
             style: NOTIF_LINK_STYLE,
-            textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
+            // textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
+            textContent: chrome.i18n.getMessage("sendFeedbackNotification"),
           }).outerHTML,
         ][Number(i) - 1]
     ),
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_35"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_38"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,

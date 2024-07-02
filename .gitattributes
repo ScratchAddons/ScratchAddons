@@ -1,3 +1,23 @@
+* text=auto
+
+.vscode/*.json text linguist-language=jsonc
+*.code-snippets text linguist-language=jsonc
+*.css text
+*.html text
+*.js text
+*.js.map text
+*.json text
+*.md text
+*.mjs text
+*.svg text
+*.txt text
+*.yml text
+*.yaml text
+
+*.mp3 binary
+*.png binary
+*.woff2 binary
+
 *.md export-ignore
 LICENSE export-ignore
 .* export-ignore

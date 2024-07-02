@@ -264,6 +264,8 @@ export default async ({ addon, msg, safeMsg }) => {
       profiles: [],
       studios: [],
       projects: [],
+      // There can't be more than one "welcome to Scratch" message
+      welcomeToScratch: false,
 
       // For UI
       messageTypeExtended: {
@@ -303,6 +305,7 @@ export default async ({ addon, msg, safeMsg }) => {
         openMessagesMsg: msg("open-messages"),
         studioPromotionsMsg: msg("studio-promotions"),
         studioHostTransfersMsg: msg("studio-host-transfers"),
+        welcomeToScratchMsg: msg("welcome-to-scratch"),
       },
     },
     watch: {
@@ -319,6 +322,7 @@ export default async ({ addon, msg, safeMsg }) => {
         this.profiles = [];
         this.studios = [];
         this.projects = [];
+        this.welcomeToScratch = false;
         this.analyzeMessages(newVal);
       },
     },
@@ -669,6 +673,8 @@ export default async ({ addon, msg, safeMsg }) => {
             else if (message.comment_type === 2)
               resourceObject = this.getStudioObject(resourceId, message.comment_obj_title);
             resourceObject.unreadComments++;
+          } else if (message.type === "userjoin") {
+            this.welcomeToScratch = true;
           }
         }
         this.messagesReady = true;
