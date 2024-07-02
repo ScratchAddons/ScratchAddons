@@ -85,6 +85,7 @@ export default async function ({ addon, global, console, msg }) {
     if (!showButton || document.querySelector("#sa-project-title-generator-button") !== null) {
       return;
     }
+    await addon.tab.scratchClassReady()
     let nameContainer = await addon.tab.waitForElement('[class*="menu-bar_menu-bar-item"][class*="menu-bar_growable"]');
     nameContainer.classList.add("sa-project-title-generator");
     let nameField = await addon.tab.waitForElement('[class*="project-title-input_title-field"]');
