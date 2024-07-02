@@ -1,3 +1,18 @@
+[class*="monitor_monitor-container_"],
+[class*="monitor_list-body_"] {
+  background-color: var(--editorDarkMode-page);
+  color: var(--editorDarkMode-page-text);
+}
+[class*="monitor_list-index_"] {
+  color: var(--editorDarkMode-page-text);
+}
+[class*="monitor_label_"],
+[class*="monitor_list-empty_"] {
+  color: var(--editorDarkMode-page-text) !important;
+}
+
+[class*="monitor_list-header_"],
+[class*="monitor_list-footer_"],
 [class*="question_question-container_"] {
   background-color: var(--editorDarkMode-accent);
   color: var(--editorDarkMode-accent-text);
