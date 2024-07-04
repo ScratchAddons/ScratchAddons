@@ -120,7 +120,7 @@ export default async function ({ addon, global, console, msg }) {
 
       for (let i = 0; i < folderData.projects.length; i++) {
         const project = document.createElement("div");
-        project.classList.add("project");
+        project.classList.add("sa-project");
         projectDiv.appendChild(project);
 
         const projectIMG = document.createElement("img");

@@ -2,7 +2,6 @@ export default async function ({ addon, console, msg }) {
   const createModal = () => {
     let instructions = document.querySelector(".inplace-textarea");
     let currentFolder = instructions.value.match(/#_.*/)?.[0]?.replace("#_", "") || "";
-    // User Interface
     let ignoreClickOutside = false;
     const {
       backdrop,
