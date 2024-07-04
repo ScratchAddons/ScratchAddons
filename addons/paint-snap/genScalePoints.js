@@ -97,7 +97,7 @@ export default function createScalePoints(paper, lib, objects, sx, sy) {
     ...(snapTo.objectEdges
       ? Object.fromEntries(
           objects
-            .filter((item) => !(item.selected || item.data.isHelperItem))
+            .filter((item) => !(item.selected || item.data.isHelperItem || item.locked || item.guide))
             .map((item) =>
               [
                 sx && [
@@ -158,7 +158,7 @@ export default function createScalePoints(paper, lib, objects, sx, sy) {
     ...(snapTo.objectMidlines
       ? Object.fromEntries(
           objects
-            .filter((item) => !(item.selected || item.data.isHelperItem))
+            .filter((item) => !(item.selected || item.data.isHelperItem || item.locked || item.guide))
             .map((item) =>
               [
                 sx && [

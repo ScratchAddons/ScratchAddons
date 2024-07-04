@@ -28,8 +28,8 @@
   cursor: pointer;
 }
 
-.sa-vol-slider-small .sa-vol-slider-input,
-.sa-vol-slider-small .sa-vol-slider-icon:not([data-icon="mute"]) {
+.sa-small-stage .sa-vol-slider-input,
+.sa-small-stage .sa-vol-slider-icon:not([data-icon="mute"]) {
   display: none;
 }
 

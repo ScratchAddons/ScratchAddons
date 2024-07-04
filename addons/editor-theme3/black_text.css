@@ -6,12 +6,13 @@
 .blocklyEditableText > text {
   fill: var(--editorTheme3-inputColor-blackText);
 }
-.blocklyHtmlInput {
+.sa-theme3-editable-label .blocklyHtmlInput {
+  /* Labels in custom block editor */
   color: var(--editorTheme3-inputColor-blackText);
 }
 
 .blocklyDropDownDiv .goog-menuitem,
-.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem .goog-menuitem-content {
+.blocklyNumPadButton {
   color: black;
 }
 .blocklyDropDownDiv .blocklyText {

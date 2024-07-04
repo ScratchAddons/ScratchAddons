@@ -2,9 +2,9 @@
   "_locale": "en",
   "_locale_name": "English",
 
-  "global/blocks/green-flag": "flag",
-  "global/blocks/clockwise": "clockwise",
-  "global/blocks/anticlockwise": "anti-clockwise",
-  "global/meta/managedBySa": "Managed by Scratch Addons",
-  "global/meta/addonSettings": "Addon Settings"
+  "_general/blocks/green-flag": "flag",
+  "_general/blocks/clockwise": "clockwise",
+  "_general/blocks/anticlockwise": "anti-clockwise",
+  "_general/meta/managedBySa": "Managed by Scratch Addons",
+  "_general/meta/addonSettings": "Addon Settings"
 }

@@ -1,10 +1,10 @@
 a:visited {
-  color: #4d97ff;
+  color: var(--darkWww-link, #855cd6);
 }
 a:active,
 a:active:hover,
 a:visited:hover {
-  color: #4280d7;
+  color: var(--darkWww-link-hover, #7854c0);
 }
 #zoomContainer {
   height: 24px;
@@ -26,17 +26,17 @@ a:visited:hover {
   border-bottom-left-radius: 4px;
 }
 #zoomOut img {
-  content: url("https://scratch.mit.edu/static/assets/1fa6345d57ffc67eccd9f44cf6a383dd.svg");
+  content: url("%addon-self-dir%/assets/zoom_out.svg");
 }
 #zoomEqual img {
-  content: url("https://scratch.mit.edu/static/assets/dba629c24296756d68a135988fe96011.svg");
+  content: url("%addon-self-dir%/assets/zoom_reset.svg");
 }
 #zoomIn {
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
 }
 #zoomIn img {
-  content: url("https://scratch.mit.edu/static/assets/3cfc9b39a0d002246119d47f6756d77e.svg");
+  content: url("%addon-self-dir%/assets/zoom_in.svg");
 }
 .box .box-head {
   padding: 8px 20px;

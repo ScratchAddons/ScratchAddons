@@ -279,7 +279,7 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
         // this is not even a color lol
         return getColor(addonId, obj.source) ? getColor(addonId, obj.true) : getColor(addonId, obj.false);
       case "map":
-        return obj.options[getColor(addonId, obj.source)];
+        return getColor(addonId, obj.options[getColor(addonId, obj.source)] ?? obj.default);
       case "textColor": {
         hex = getColor(addonId, obj.source);
         let black = getColor(addonId, obj.black);
@@ -350,7 +350,7 @@ function waitForDocumentHead() {
 }
 
 function getL10NURLs() {
-  const langCode = /scratchlanguage=([\w-]+)/.exec(document.cookie)?.[1] || "en";
+  const langCode = /scratchlanguage=([\w-]+)/.exec(document.cookie)?.[1] || navigator.language;
   const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
   if (langCode === "pt") {
     urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
@@ -604,7 +604,8 @@ const showBanner = () => {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     text-shadow: none;
     box-shadow: 0 0 20px 0px #0000009e;
-    line-height: 1em;`,
+    font-size: 14px;
+    line-height: normal;`,
   });
   /*
   const notifImageLink = Object.assign(document.createElement("a"), {
@@ -625,7 +626,7 @@ const showBanner = () => {
     style: "margin: 12px;",
   });
   const notifTitle = Object.assign(document.createElement("span"), {
-    style: "font-size: 18px; line-height: 24px; display: inline-block; margin-bottom: 12px;",
+    style: "font-size: 18px; line-height: normal; display: inline-block; margin-bottom: 12px;",
     textContent: chrome.i18n.getMessage("extensionUpdate"),
   });
   const notifClose = Object.assign(document.createElement("img"), {
@@ -638,7 +639,13 @@ const showBanner = () => {
   });
   notifClose.addEventListener("click", () => notifInnerBody.remove(), { once: true });
 
-  const NOTIF_TEXT_STYLE = "display: block; font-size: 14px; color: white !important;";
+  const NOTIF_TEXT_STYLE = "display: block; color: white !important;";
+  const NOTIF_LINK_STYLE = "color: #1aa0d8; font-weight: normal; text-decoration: underline;";
+
+  //
+  const _uiLanguage = chrome.i18n.getUILanguage();
+  const _localeSlash = _uiLanguage.startsWith("en") ? "" : `${_uiLanguage.split("-")[0]}/`;
+  //
 
   const notifInnerText0 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE + "font-weight: bold;",
@@ -648,7 +655,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_33_2", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_38", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -658,16 +665,21 @@ const showBanner = () => {
             .outerHTML,
           */
           Object.assign(document.createElement("a"), {
-            href: "https://scratch.mit.edu/scratch-addons-extension/settings?source=updatenotif",
+            // href: "https://scratch.mit.edu/scratch-addons-extension/settings?source=updatenotif",
+            href: `https://scratchaddons.com/${_localeSlash}feedback?ext_version=${
+              chrome.runtime.getManifest().version
+            }&utm_source=extension&utm_medium=updatenotification&utm_campaign=mv3`,
             target: "_blank",
-            textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
+            style: NOTIF_LINK_STYLE,
+            // textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
+            textContent: chrome.i18n.getMessage("sendFeedbackNotification"),
           }).outerHTML,
         ][Number(i) - 1]
     ),
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_33_2"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_38"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -680,6 +692,7 @@ const showBanner = () => {
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
     href: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
     target: "_blank",
+    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("notifChangelog"),
   });
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
@@ -687,14 +700,17 @@ const showBanner = () => {
       chrome.runtime.getManifest().version
     }&${utm}`,
     target: "_blank",
+    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("feedback"),
   });
   const notifFooterTranslate = Object.assign(document.createElement("a"), {
     href: "https://scratchaddons.com/translate",
     target: "_blank",
+    style: NOTIF_LINK_STYLE,
     textContent: chrome.i18n.getMessage("translate"),
   });
-  const notifFooterLegal = Object.assign(document.createElement("small"), {
+  const notifFooterLegal = Object.assign(document.createElement("span"), {
+    style: NOTIF_TEXT_STYLE + "font-size: 12px;",
     textContent: chrome.i18n.getMessage("notAffiliated"),
   });
   notifFooter.appendChild(notifFooterChangelog);
@@ -727,15 +743,10 @@ const showBanner = () => {
 };
 
 const handleBanner = async () => {
+  if (window.frameElement) return;
   const currentVersion = chrome.runtime.getManifest().version;
-  const [major, minor, _patch] = currentVersion.split(".");
-  let currentVersionMajorMinor = `${major}.${minor}`;
-  if (currentVersionMajorMinor === "1.33" && _patch > 1) {
-    // Consider this a different SA version.
-    // Note that versions are never compared as numbers. Having a distinct
-    // string that uniquely identifies v1.33.x (with x>1) is enough.
-    currentVersionMajorMinor = "1.33.x";
-  }
+  const [major, minor, _] = currentVersion.split(".");
+  const currentVersionMajorMinor = `${major}.${minor}`;
   // Making this configurable in the future?
   // Using local because browser extensions may not be updated at the same time across browsers
   const settings = await promisify(chrome.storage.local.get.bind(chrome.storage.local))(["bannerSettings"]);

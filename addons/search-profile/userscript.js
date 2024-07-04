@@ -5,21 +5,39 @@ export default async function ({ addon, console, msg }) {
     img = tab.appendChild(document.createElement("img")),
     span = tab.appendChild(document.createElement("span")),
     user = document.querySelector('[name="q"]').value.trim(),
-    valid = /^[\w-]{3,20}$/g.test(user);
+    valid = /^[\w-]{2,30}$/g.test(user);
   tab.type = "button";
+  tab.classList.add("sa-search-profile-btn");
   tab.setAttribute("role", "tab");
   tab.setAttribute("aria-selected", false);
   tab.tabIndex = -1; // unselected tabs should only be focusable using arrow keys
   img.src = addon.self.dir + "/user.svg";
-  img.className = "tab-icon";
+  img.className = "tab-icon sa-search-profile-icon";
   span.innerText = msg("profile");
   addon.tab.displayNoneWhileDisabled(tab);
+
+  const setInvalidUsername = () => {
+    tab.disabled = true;
+    tab.title = msg("invalid-username", { username: user });
+  };
 
   // Check if a valid username is entered
   if (valid) {
     tab.addEventListener("click", () => {
       location = `/users/${user}/`;
     });
+    fetch(`https://api.scratch.mit.edu/users/${user}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code == "NotFound") {
+          setInvalidUsername();
+        } else if (!data.code) {
+          span.innerText = "@" + data.username;
+          img.src = data.profile.images["32x32"];
+          img.onload = () => img.classList.add("sa-search-profile-profilepic");
+        }
+      });
+
     nav.addEventListener("keydown", (event) => {
       // Keyboard navigation
       // Modified code from scratch-www/src/components/tabs/tabs.jsx
@@ -57,7 +75,6 @@ export default async function ({ addon, console, msg }) {
       }
     });
   } else {
-    tab.disabled = true;
-    tab.title = msg("invalid-username", { username: user });
+    setInvalidUsername();
   }
 }

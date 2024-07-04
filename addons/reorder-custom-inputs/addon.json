@@ -1,0 +1,40 @@
+{
+  "name": "Rearrangeable custom block inputs",
+  "description": "Allows rearranging custom block parameters on the \"Make a block\" screen.",
+  "credits": [
+    {
+      "name": "Chrome_Cat",
+      "link": "https://scratch.mit.edu/users/Chrome_Cat/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": true
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "arrows.css",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Insert new inputs after selected input",
+      "id": "InsertInputsAfter",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "versionAdded": "1.36.0",
+  "latestUpdate": {
+    "version": "1.37.0",
+    "newSettings": ["InsertInputsAfter"]
+  },
+  "tags": ["editor", "codeEditor", "recommended"],
+  "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}

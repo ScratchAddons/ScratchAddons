@@ -31,9 +31,6 @@ scratchAddons.console = {
   errorForAddon: (addonId) => _realConsole.error.bind(_realConsole, ...consoleOutput(addonId)),
 };
 
-const pendingPromises = {};
-pendingPromises.msgCount = [];
-
 const comlinkIframe1 = document.getElementById("scratchaddons-iframe-1");
 const comlinkIframe2 = document.getElementById("scratchaddons-iframe-2");
 const comlinkIframe3 = document.getElementById("scratchaddons-iframe-3");
@@ -91,13 +88,14 @@ const page = {
   },
   isFetching: false,
   async refetchSession() {
+    if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601") return;
     let res;
     let d;
     if (this.isFetching) return;
     this.isFetching = true;
     scratchAddons.eventTargets.auth.forEach((auth) => auth._refresh());
     try {
-      res = await fetch("https://scratch.mit.edu/session/", {
+      res = await fetch("/session/", {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
         },
@@ -164,35 +162,12 @@ class SharedObserver {
   }
 }
 
-async function requestMsgCount() {
-  let count = null;
-  if (scratchAddons.session.user?.username) {
-    const username = scratchAddons.session.user.username;
-    try {
-      const resp = await fetch(`https://api.scratch.mit.edu/users/${username}/messages/count`);
-      count = (await resp.json()).count || 0;
-    } catch (e) {
-      scratchAddons.console.warn("Could not fetch message count: ", e);
-    }
-  }
-  pendingPromises.msgCount.forEach((resolve) => resolve(count));
-  pendingPromises.msgCount = [];
-}
-
 function onDataReady() {
   const addons = page.addonsWithUserscripts;
 
   scratchAddons.l10n = new Localization(page.l10njson);
 
   scratchAddons.methods = {};
-  scratchAddons.methods.getMsgCount = () => {
-    let promiseResolver;
-    const promise = new Promise((resolve) => (promiseResolver = resolve));
-    pendingPromises.msgCount.push(promiseResolver);
-    // 1 because the array was just pushed
-    if (pendingPromises.msgCount.length === 1) requestMsgCount();
-    return promise;
-  };
   scratchAddons.methods.copyImage = async (dataURL) => {
     return _cs_.copyImage(dataURL);
   };
@@ -222,6 +197,8 @@ function onDataReady() {
 }
 
 function bodyIsEditorClassCheck() {
+  if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601")
+    return document.body.classList.add("sa-body-editor");
   const pathname = location.pathname.toLowerCase();
   const split = pathname.split("/").filter(Boolean);
   if (!split[0] || split[0] !== "projects") return;
