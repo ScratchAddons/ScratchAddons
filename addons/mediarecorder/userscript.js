@@ -65,34 +65,22 @@ export default async ({ addon, console, msg }) => {
       container.classList.add("mediaRecorderPopup");
       content.classList.add("mediaRecorderPopupContent");
 
-      content.appendChild(
+      const recordOptionDescription = Object.assign(document.createElement("p"), {
+        textContent: msg("record-description", {
+          extension: `.${fileExtension}`,
+        }),
+        className: "recordOptionDescription",
+      });
+      recordOptionDescription.appendChild(
         Object.assign(document.createElement("p"), {
-          textContent: msg("record-description", {
-            extension: `.${fileExtension}`,
-          }),
-          className: "recordOptionDescription",
+          textContent: msg("record-note"),
+          className: "recordOptionNote",
         })
       );
+      content.appendChild(recordOptionDescription);
 
-      // Seconds
-      const recordOptionSeconds = document.createElement("p");
-      const recordOptionSecondsInput = Object.assign(document.createElement("input"), {
-        type: "number",
-        min: 1,
-        max: LENGTH_LIMIT,
-        defaultValue: storedOptions.secs,
-        id: "recordOptionSecondsInput",
-        className: addon.tab.scratchClass("prompt_variable-name-text-input"),
-      });
-      const recordOptionSecondsLabel = Object.assign(document.createElement("label"), {
-        htmlFor: "recordOptionSecondsInput",
-        textContent: msg("record-duration"),
-      });
-      recordOptionSeconds.appendChild(recordOptionSecondsLabel);
-      recordOptionSeconds.appendChild(recordOptionSecondsInput);
-      content.appendChild(recordOptionSeconds);
-
-      // Delay
+      // Create settings elements
+      // Delay before starting
       const recordOptionDelay = document.createElement("p");
       const recordOptionDelayInput = Object.assign(document.createElement("input"), {
         type: "number",
@@ -108,9 +96,99 @@ export default async ({ addon, console, msg }) => {
       });
       recordOptionDelay.appendChild(recordOptionDelayLabel);
       recordOptionDelay.appendChild(recordOptionDelayInput);
+      recordOptionDelay.appendChild(
+        Object.assign(document.createElement("span"), {
+          textContent: msg("seconds"),
+        })
+      );
       content.appendChild(recordOptionDelay);
 
-      // Audio
+      // Wait for green flag
+      const recordOptionFlag = Object.assign(document.createElement("p"), {
+        className: "mediaRecorderPopupOption",
+      });
+      const recordOptionFlagInput = Object.assign(document.createElement("input"), {
+        type: "checkbox",
+        defaultChecked: storedOptions.waitUntilFlag,
+        id: "recordOptionFlagInput",
+      });
+      const recordOptionFlagLabel = Object.assign(document.createElement("label"), {
+        htmlFor: "recordOptionFlagInput",
+        textContent: msg("record-after-flag"),
+      });
+      recordOptionFlag.appendChild(recordOptionFlagInput);
+      recordOptionFlag.appendChild(recordOptionFlagLabel);
+      content.appendChild(recordOptionFlag);
+
+      content.appendChild(
+        Object.assign(document.createElement("div"), {
+          className: "mediaRecorderSeparator",
+        })
+      );
+
+      // Recording length
+      const recordOptionSeconds = document.createElement("p");
+      const recordOptionSecondsInput = Object.assign(document.createElement("input"), {
+        type: "number",
+        min: 1,
+        max: LENGTH_LIMIT,
+        defaultValue: storedOptions.secs,
+        id: "recordOptionSecondsInput",
+        className: addon.tab.scratchClass("prompt_variable-name-text-input"),
+      });
+      const recordOptionSecondsLabel = Object.assign(document.createElement("label"), {
+        htmlFor: "recordOptionSecondsInput",
+        textContent: msg("record-duration"),
+      });
+      recordOptionSeconds.appendChild(recordOptionSecondsLabel);
+      recordOptionSeconds.appendChild(recordOptionSecondsInput);
+      recordOptionSeconds.appendChild(
+        Object.assign(document.createElement("span"), {
+          textContent: msg("seconds"),
+        })
+      );
+      content.appendChild(recordOptionSeconds);
+
+      // End on stop sign
+      const recordOptionStop = Object.assign(document.createElement("p"), {
+        className: "mediaRecorderPopupOption",
+      });
+      const recordOptionStopInput = Object.assign(document.createElement("input"), {
+        type: "checkbox",
+        defaultChecked: storedOptions.useStopSign,
+        id: "recordOptionStopInput",
+      });
+      const recordOptionStopLabel = Object.assign(document.createElement("label"), {
+        htmlFor: "recordOptionStopInput",
+        textContent: msg("record-until-stop"),
+      });
+      let wasStopInputChecked = storedOptions.useStopSign;
+      const onFlagInputToggle = () => {
+        const disabled = (recordOptionStopInput.disabled = !recordOptionFlagInput.checked);
+        if (disabled) {
+          wasStopInputChecked = recordOptionStopInput.checked;
+          recordOptionStopLabel.title = msg("record-until-stop-disabled", {
+            afterFlagOption: msg("record-after-flag"),
+          });
+          recordOptionStopInput.checked = false;
+        } else {
+          recordOptionStopLabel.title = "";
+          recordOptionStopInput.checked = wasStopInputChecked;
+        }
+      };
+      recordOptionFlagInput.addEventListener("change", onFlagInputToggle);
+      onFlagInputToggle(); // The option could be unchecked to begin with
+      recordOptionStop.appendChild(recordOptionStopInput);
+      recordOptionStop.appendChild(recordOptionStopLabel);
+      content.appendChild(recordOptionStop);
+
+      content.appendChild(
+        Object.assign(document.createElement("div"), {
+          className: "mediaRecorderSeparator",
+        })
+      );
+
+      // Audio enabled
       const recordOptionAudio = Object.assign(document.createElement("p"), {
         className: "mediaRecorderPopupOption",
       });
@@ -128,7 +206,7 @@ export default async ({ addon, console, msg }) => {
       recordOptionAudio.appendChild(recordOptionAudioLabel);
       content.appendChild(recordOptionAudio);
 
-      // Mic
+      // Mic enabled
       const recordOptionMic = Object.assign(document.createElement("p"), {
         className: "mediaRecorderPopupOption",
       });
@@ -144,48 +222,6 @@ export default async ({ addon, console, msg }) => {
       recordOptionMic.appendChild(recordOptionMicInput);
       recordOptionMic.appendChild(recordOptionMicLabel);
       content.appendChild(recordOptionMic);
-
-      // Green flag
-      const recordOptionFlag = Object.assign(document.createElement("p"), {
-        className: "mediaRecorderPopupOption",
-      });
-      const recordOptionFlagInput = Object.assign(document.createElement("input"), {
-        type: "checkbox",
-        defaultChecked: storedOptions.waitUntilFlag,
-        id: "recordOptionFlagInput",
-      });
-      const recordOptionFlagLabel = Object.assign(document.createElement("label"), {
-        htmlFor: "recordOptionFlagInput",
-        textContent: msg("record-after-flag"),
-      });
-      recordOptionFlag.appendChild(recordOptionFlagInput);
-      recordOptionFlag.appendChild(recordOptionFlagLabel);
-      content.appendChild(recordOptionFlag);
-
-      // Stop sign
-      const recordOptionStop = Object.assign(document.createElement("p"), {
-        className: "mediaRecorderPopupOption",
-      });
-      const recordOptionStopInput = Object.assign(document.createElement("input"), {
-        type: "checkbox",
-        defaultChecked: storedOptions.useStopSign,
-        id: "recordOptionStopInput",
-      });
-      const recordOptionStopLabel = Object.assign(document.createElement("label"), {
-        htmlFor: "recordOptionStopInput",
-        textContent: msg("record-until-stop"),
-      });
-      recordOptionFlagInput.addEventListener("change", () => {
-        const disabled = (recordOptionStopInput.disabled = !recordOptionFlagInput.checked);
-        if (disabled) {
-          recordOptionStopLabel.title = msg("record-until-stop-disabled", {
-            afterFlagOption: msg("record-after-flag"),
-          });
-        }
-      });
-      recordOptionStop.appendChild(recordOptionStopInput);
-      recordOptionStop.appendChild(recordOptionStopLabel);
-      content.appendChild(recordOptionStop);
 
       let resolvePromise = null;
       const optionPromise = new Promise((resolve) => {
@@ -217,8 +253,8 @@ export default async ({ addon, console, msg }) => {
         "click",
         () =>
           handleOptionClose({
-            secs: Number(recordOptionSecondsInput.value),
-            delay: Number(recordOptionDelayInput.value),
+            secs: Math.min(Number(recordOptionSecondsInput.value), LENGTH_LIMIT),
+            delay: Math.min(Number(recordOptionDelayInput.value), LENGTH_LIMIT),
             audioEnabled: recordOptionAudioInput.checked,
             micEnabled: recordOptionMicInput.checked,
             waitUntilFlag: recordOptionFlagInput.checked,
