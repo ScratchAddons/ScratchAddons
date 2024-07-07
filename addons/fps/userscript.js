@@ -1,5 +1,4 @@
 export default async function ({ addon, global, cons, msg }) {
-
   await new Promise((resolve) => {
     if (addon.tab.traps.vm.editingTarget) return resolve();
     addon.tab.traps.vm.runtime.once("PROJECT_LOADED", resolve);
