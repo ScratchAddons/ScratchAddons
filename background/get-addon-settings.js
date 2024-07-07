@@ -22,10 +22,10 @@ const areColorsEqual = (currentColor, oldPresetColor) => {
     hexColor.length === 7 // #{rr}{gg}{bb}  →  #{rr}{gg}{bb}ff
       ? `${hexColor}ff`
       : hexColor.length === 5 // #{r}{g}{b}{a}  →  #{rr}{gg}{bb}{aa}
-      ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}${hexColor[4].repeat(2)}`
-      : hexColor.length === 4 // #{r}{g}{b}  →  #{rr}{gg}{bb}ff
-      ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}ff`
-      : hexColor;
+        ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}${hexColor[4].repeat(2)}`
+        : hexColor.length === 4 // #{r}{g}{b}  →  #{rr}{gg}{bb}ff
+          ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}ff`
+          : hexColor;
 
   // Convert both colors to #{rr}{gg}{bb}{aa}
   const currentColorRRGGBBAA = getRRGGBBAA(currentColorLowercase);
@@ -152,7 +152,7 @@ async function runAddonTransitions() {
    * @param {{ remove: boolean, set: any }} options
    * @returns {any}
    */
-  const addonSetting = (id, setting, { remove, set } = {remove: false}) => {
+  const addonSetting = (id, setting, { remove, set } = { remove: false }) => {
     if (typeof set !== "undefined") {
       // TODO: we should be using Object.create(null) instead of {}
       if (!addonSettings[id]) addonSettings[id] = {};
@@ -165,7 +165,7 @@ async function runAddonTransitions() {
       madeAnyChanges = true;
     }
     return addonSettings[id][setting];
-  }
+  };
 
   /**
    * use addonSetting() in context of an addon id.
@@ -179,21 +179,20 @@ async function runAddonTransitions() {
      * @param {{ remove: boolean, set: any }} options
      * @returns {any}
      */
-    return (setting, { remove, set }) => addonSetting(id, setting, { remove, set })
-  }
+    return (setting, { remove, set }) => addonSetting(id, setting, { remove, set });
+  };
 
   if (addonState("editor-devtools") === "enabled" && addonState("move-to-top-bottom") === "new") {
     // Existing editor-devtools users should have move-to-top-bottom enabled.
     addonState("move-to-top-bottom", "enabled");
   }
 
-
   if (addonSetting("editor-dark-mode", "textShadow") === true && addonState("custom-block-text") === "new") {
     // Transition v1.23 to v1.24
     // Moved text shadow option to the custom-block-text addon
     addonState("custom-block-text", addonState("editor-dark-mode"));
-    addonSetting("editor-dark-mode", "textShadow", { remove: true })
-    addonSetting("custom-block-text", "shadow", { set: true })
+    addonSetting("editor-dark-mode", "textShadow", { remove: true });
+    addonSetting("custom-block-text", "shadow", { set: true });
     // `shadow` isn't the only setting - the other setting, `bold`, is set
     // to its default (false) inside the for loop below.
   }
@@ -218,21 +217,21 @@ async function runAddonTransitions() {
     if (addonState("tutorials-button") === "enabled") {
       // Hide Tutorials button is now a setting in Customizable menu bar. Enable it for existing addon users.
       addonState("custom-menu-bar", "enabled");
-      addonSetting("custom-menu-bar", "hide-tutorials-button", { set: true })
+      addonSetting("custom-menu-bar", "hide-tutorials-button", { set: true });
     }
     if (addonState("editor-compact") === "enabled") {
       // The icons on the menu bar buttons are now hidden via Customizable menu bar.
       // Enable it for existing Compact editor users.
       addonState("custom-menu-bar", "enabled");
-      addonSetting("custom-menu-bar", "menu-labels", { set: "labels" })
+      addonSetting("custom-menu-bar", "menu-labels", { set: "labels" });
     }
   }
 
   if (addonState("editor-dark-mode") === "enabled" && addonSetting("editor-dark-mode", "dots") === false) {
     // Transition v1.38 to v1.39
     addonState("editor-dark-mode", "enabled");
-    addonSetting("editor-dark-mode", "dots", { remove: true })
-    addonSetting("workspace-dots", "theme", { set: "none" })
+    addonSetting("editor-dark-mode", "dots", { remove: true });
+    addonSetting("workspace-dots", "theme", { set: "none" });
   }
 
   for (const { manifest, addonId } of scratchAddons.manifests) {
@@ -245,7 +244,7 @@ async function runAddonTransitions() {
       // We append "cc" to the color so that it's the same as before this update.
       const paletteValue = setting("palette");
       if (paletteValue !== undefined && paletteValue.length === 7) {
-        setting("palette", { set: paletteValue + "cc" })
+        setting("palette", { set: paletteValue + "cc" });
         madeAnyChanges = madeChangesToAddon = true;
       }
       // i stopped here.
