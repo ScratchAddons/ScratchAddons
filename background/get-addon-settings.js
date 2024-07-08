@@ -17,10 +17,10 @@ const areColorsEqual = (currentColor, oldPresetColor) => {
     hexColor.length === 7 // #{rr}{gg}{bb}  →  #{rr}{gg}{bb}ff
       ? `${hexColor}ff`
       : hexColor.length === 5 // #{r}{g}{b}{a}  →  #{rr}{gg}{bb}{aa}
-      ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}${hexColor[4].repeat(2)}`
-      : hexColor.length === 4 // #{r}{g}{b}  →  #{rr}{gg}{bb}ff
-      ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}ff`
-      : hexColor;
+        ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}${hexColor[4].repeat(2)}`
+        : hexColor.length === 4 // #{r}{g}{b}  →  #{rr}{gg}{bb}ff
+          ? `#${hexColor[1].repeat(2)}${hexColor[2].repeat(2)}${hexColor[3].repeat(2)}ff`
+          : hexColor;
 
   // Convert color to #{rr}{gg}{bb}{aa}
   const normalizeColor = (color) => getRRGGBBAA(color.toLowerCase());
@@ -43,7 +43,7 @@ const transitionToNewStorageKeys = async (addonSettings) => {
   });
   await chrome.storage.sync.remove("addonSettings");
   setTimeout(() => chrome.runtime.reload(), 500);
-}
+};
 
 runAddonTransitions();
 
