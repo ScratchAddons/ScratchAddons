@@ -181,14 +181,14 @@ export default async function ({ addon, msg, console }) {
 
       let ctrlKey = e.ctrlKey || e.metaKey;
 
-      if (e.key.toLowerCase() === "f" && ctrlKey && !e.shiftKey) {
-        // Ctrl + F (Override default Ctrl+F find)
-        this.findInput.focus();
-        this.findInput.select();
-        e.cancelBubble = true;
-        e.preventDefault();
-        return true;
-      }
+      //   if (e.key.toLowerCase() === "f" && ctrlKey && !e.shiftKey) {
+      //     // Ctrl + F (Override default Ctrl+F find)
+      //     this.findInput.focus();
+      //     this.findInput.select();
+      //     e.cancelBubble = true;
+      //     e.preventDefault();
+      //     return true;
+      //   }
 
       if (e.key === "ArrowLeft" && ctrlKey) {
         // Ctrl + Left Arrow Key
@@ -612,17 +612,17 @@ export default async function ({ addon, msg, console }) {
         let blocks = this.getVariableUsesById(item.data.labelID);
         for (const block of blocks) {
           const li_item = document.createElement("li");
-          li_item.textContent = block.type + ":" + block.id;
+          li_item.textContent = block.type + " the text is :" + block.id;
           // mouse enter
           li_item.addEventListener("mouseenter", (e) => {
             if (this.hovered && this.hovered !== li_item) {
               this.hovered.classList.remove("hov");
               this.hovered = null;
             }
-            if (this.hovered !== li_item) {
-              li_item.classList.add("hov");
-              this.hovered = li_item;
-            }
+            // if (this.hovered !== li_item) {
+            //   li_item.classList.add("hov");
+            //   this.hovered = li_item;
+            // }
             // mouse leave
             li_item.addEventListener("mouseleave", (e) => {
               if (this.hovered && this.hovered !== li_item) {
@@ -708,15 +708,6 @@ export default async function ({ addon, msg, console }) {
         blocks = this.getCallsToProcedureById(item.data.labelID);
         this.carousel.build(item, blocks, instanceBlock);
       } else if (cls === "receive") {
-        /*
-                                          let blocks = [this.workspace.getBlockById(li.data.labelID)];
-                                          if (li.data.clones) {
-                                              for (const cloneID of li.data.clones) {
-                                                  blocks.push(this.workspace.getBlockById(cloneID))
-                                              }
-                                          }
-                                          blocks = blocks.concat(getCallsToEventsByName(li.data.eventName));
-                                        */
         // Now, fetch the events from the scratch runtime instead of blockly
         blocks = this.getCallsToEventsByName(item.data.eventName);
         if (!instanceBlock) {
@@ -756,10 +747,10 @@ export default async function ({ addon, msg, console }) {
               this.hovered.classList.remove("hov");
               this.hovered = null;
             }
-            if (this.hovered !== li_item) {
-              li_item.classList.add("hov");
-              this.hovered = li_item;
-            }
+            // if (this.hovered !== li_item) {
+            //   li_item.classList.add("hov");
+            //   this.hovered = li_item;
+            // }
             // mouse leave
             li_item.addEventListener("mouseleave", (e) => {
               if (this.hovered && this.hovered !== li_item) {
@@ -770,13 +761,26 @@ export default async function ({ addon, msg, console }) {
             });
           });
 
-          this.utils.getSVGElement(block).then((svg) => {
+          // Get First Block of Current blockGroup
+          const firstBlock = this.getTopBlock(block);
+
+          // Get svg
+          this.utils.getSVGElement(firstBlock, enabledAddons).then((svg) => {
             li_item.appendChild(svg);
           });
 
           this.fr_result_list.appendChild(li_item);
         }
       }
+    }
+
+    getTopBlock(blocksvg) {
+      let currentBlock = blocksvg;
+      while (currentBlock.parentBlock_ !== null) {
+        currentBlock = currentBlock.parentBlock_;
+      }
+      // 当循环结束时，currentBlock 将是顶层块
+      return currentBlock;
     }
 
     getVariableUsesById(id) {
@@ -980,6 +984,7 @@ export default async function ({ addon, msg, console }) {
 
   const findBar = new FindRefs();
   window.fb = findBar;
+  const enabledAddons = await addon.self.getEnabledAddons("codeEditor");
 
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {

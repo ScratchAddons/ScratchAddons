@@ -168,14 +168,14 @@ export default class Utils {
    * @param {object} block - The block data to create the selected block.
    * @return {object} The created selected block as an SVG element.
    */
-  selectedBlocks(block) {
+  selectedBlocks(block, enabledAddons) {
     let svg = this.exSVG.cloneNode();
 
     let svgchild = block.svgGroup_;
     svgchild = svgchild.cloneNode(true);
     let dataShapes = svgchild.getAttribute("data-shapes");
     let translateY = 0; // blocks no hat
-    const scale = 1;
+    const scale = 0.5;
     if (dataShapes === "c-block c-1 hat") {
       translateY = 20; // for My block
     }
@@ -200,10 +200,10 @@ export default class Utils {
    * @param {Block} block - the block to select the SVG element for (optional)
    * @return {Promise<SVGElement>} a promise that resolves to the SVG element
    */
-  getSVGElement(block) {
+  getSVGElement(block, enabledAddons) {
     let svg;
     if (block) {
-      svg = this.selectedBlocks(block);
+      svg = this.selectedBlocks(block, enabledAddons);
     }
 
     // resolve nbsp whitespace
