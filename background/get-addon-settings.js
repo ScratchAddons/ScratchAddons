@@ -484,7 +484,7 @@ const transitionExistingSettings = (
   }
 
   if (addonId === "forum-quote-code-beautifier") {
-    updatePresetIfMatching(1, { bordercolor: "#28A5DA" }, () => setting("bordercolor", { set: "#855cd6"}));
+    updatePresetIfMatching(1, { bordercolor: "#28A5DA" }, () => setting("bordercolor", { set: "#855cd6" }));
   }
 
   if (addonId === "colorblind" && setting("links")) {
