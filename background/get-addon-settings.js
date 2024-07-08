@@ -7,7 +7,8 @@ import {
   transitionToNewStorageKeys,
 } from "./imports/addon-transition.js";
 
-runAddonTransitions();
+const logForTests = [];
+
 /**
  * All changes that involving enabling and/or changing settings for newly made addons.
  * @param {ReturnType<createContext>} context
@@ -22,8 +23,8 @@ const transitionNewAddons = ({ addonSetting, addonState }) => {
     // Transition v1.23 to v1.24
     // Moved text shadow option to the custom-block-text addon
     addonState("custom-block-text", addonState("editor-dark-mode"));
-    addonSetting("editor-dark-mode", "textShadow", { remove: true });
     addonSetting("custom-block-text", "shadow", { set: true });
+    addonSetting("editor-dark-mode", "textShadow", { remove: true });
     // `shadow` isn't the only setting - the other setting, `bold`, is set
     // to its default (false) inside the for loop below.
   }
@@ -501,6 +502,45 @@ const transitionExistingSettings = ({ manifest, addonId }, { addonState }, { set
   }
 };
 
+/**
+ * All changes that involving enabling and/or changing settings for newly made addons.
+ * @param {ReturnType<createContext>} context
+ */
+const runTests = ({ addonState, addonSetting }) => {
+  if (false) {
+    addonState("editor-devtools", "enabled");
+    addonState("move-to-top-bottom", "new");
+
+    console.log("Enabling 'editor-devtools' and making 'move-to-top-bottom' new.");
+    console.log("Expected Result: 'move-to-top-bottom' gets enabled");
+
+    logForTests.push("move-to-top-bottom");
+  }
+  if (false) {
+    addonSetting("editor-dark-mode", "textShadow", { set: true });
+    addonState("custom-block-text", "new");
+
+    console.log("Setting 'editor-dark-mode' 'textShadow' to true and making 'custom-block-text' new.");
+    console.log("Expected Result: 'custom-block-text' is enabled if 'editor-dark-mode' is enabled");
+    console.log("Expected Result: 'custom-block-text' 'shadow' is true");
+    console.log("Expected Result: 'editor-dark-mode' no longer has the 'textShadow' setting");
+
+    logForTests.push("custom-block-text", "editor-dark-mode");
+  }
+  if (false) {
+    addonState("editor-devtools", "disabled");
+    addonState("find-bar", "new");
+    addonState("jump-to-def", "new");
+    addonState("middle-click-popup", "new");
+
+    console.log("Enabling 'editor-devtools', marking 'find-bar', 'jump-to-def', 'middle-click-popup' as new");
+    console.log("Expected Result: 'find-bar', 'jump-to-def', 'middle-click-popup' are disabled");
+
+    logForTests.push("find-bar", "jump-to-def", "middle-click-popup");
+  }
+  // TODO: Finish tests...
+};
+
 async function runAddonTransitions() {
   const {
     [ADDONS_ENABLED_KEY]: addonsEnabled = {},
@@ -518,8 +558,9 @@ async function runAddonTransitions() {
   const addonSettings = Object.assign({}, ...ADDON_SETTINGS_KEYS.map((key) => storageItems[key]));
 
   const context = createContext(addonsEnabled, addonSettings);
-  const { addonState, madeChanges } = context;
+  const { addonState, changesMade: madeChanges } = context;
 
+  runTests(context);
   transitionNewAddons(context);
 
   await new Promise((resolve) => {
@@ -572,8 +613,20 @@ async function runAddonTransitions() {
     if (addonState(addonId) === "new") addonState(addonId, !!manifest.enabledByDefault ? "enabled" : "disabled");
 
     if (settingsContext.changesMade) {
-      console.log(`Changed settings for addon ${addonId}`, addonSettings[addonId]);
+      // TODO: quieter logging
+      // console.log(`Changed settings for addon ${addonId}`, addonSettings[addonId]);
       // addonSettings[addonId] = settings; // In case settings variable was a newly created object
+    }
+    if (logForTests.includes(addonId)) {
+      console.table({
+        _: {
+          addonId,
+          changesMade: context.changesMade,
+          state: addonState(addonId),
+          settingsChangesMade: settingsContext.changesMade,
+          settings: JSON.stringify(addonSettings[addonId]),
+        },
+      });
     }
   }
 
@@ -588,3 +641,5 @@ async function runAddonTransitions() {
   scratchAddons.localState.addonsEnabled = addonsEnabled;
   scratchAddons.localState.ready.addonSettings = true;
 }
+
+runAddonTransitions();

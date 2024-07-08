@@ -66,7 +66,7 @@ export const createContext = (addonsEnabled, settings) => {
       const storageValue = addonsEnabled[id];
       const state = Object.keys(AddonStates).find((s) => AddonStates[s] === storageValue);
       if (newValue) {
-        if (newValue !== state) return;
+        if (newValue === state) return;
         madeAnyChanges = true;
         addonsEnabled[id] = AddonStates[newValue];
         return;
@@ -158,7 +158,7 @@ export const createContext = (addonsEnabled, settings) => {
       };
     },
 
-    get madeChanges() {
+    get changesMade() {
       return madeAnyChanges;
     },
   };
