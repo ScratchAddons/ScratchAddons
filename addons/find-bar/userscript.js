@@ -136,7 +136,7 @@ export default async function ({ addon, msg, console }) {
     }
 
     eventKeyDown(e) {
-      if (addon.self.disabled || !this.findBarOuter) return;
+      if (addon.self.disabled || !this.findBarOuter || addon.tab.editorMode !== "editor") return;
 
       let ctrlKey = e.ctrlKey || e.metaKey;
 
