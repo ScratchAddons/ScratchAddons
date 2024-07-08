@@ -1,4 +1,6 @@
-export const ADDON_SETTINGS_KEYS = ["addonSettings", "addonSettings1", "addonSettings2", "addonSettings3"];
+export const OLD_ADDON_SETTINGS_KEY = "addonSettings";
+export const ADDON_SETTINGS_KEYS = ["addonSettings1", "addonSettings2", "addonSettings3"];
+export const ADDONS_ENABLED_KEY = "addonsEnabled";
 
 /**
  Since presets can change independently of others, we have to keep track of
@@ -61,14 +63,14 @@ export const createContext = (addonsEnabled, settings) => {
      * @returns {keyof AddonStates}
      */
     addonState(id, newValue) {
+      const storageValue = addonsEnabled[id];
+      const state = Object.keys(AddonStates).find((s) => AddonStates[s] === storageValue);
       if (newValue) {
-        // todo: should we check if we actually made changes?
+        if (newValue !== state) return;
         madeAnyChanges = true;
         addonsEnabled[id] = AddonStates[newValue];
         return;
       }
-      const storageValue = addonsEnabled[id];
-      const state = Object.keys(AddonStates).find((s) => AddonStates[s] === storageValue);
       return state;
     },
     /**
@@ -78,10 +80,9 @@ export const createContext = (addonsEnabled, settings) => {
      * @param {{ remove: boolean, set: any }} options
      * @returns {any}
      */
-    addonSetting(id, setting, { remove, set }) {
+    addonSetting(id, setting, { remove, set } = {}) {
       if (typeof set !== "undefined") {
-        // TODO: we should be using Object.create(null) instead of {}
-        if (!settings[id]) settings[id] = {};
+        if (!settings[id]) settings[id] = Object.create(null);
         settings[id][setting] = set;
         madeAnyChanges = true;
       }
@@ -99,43 +100,43 @@ export const createContext = (addonsEnabled, settings) => {
     createSettingsContext(id) {
       // True, yes, you can use ".bind" here, but it removes the infered/explicit typing which I don't like.
       let changesMade = false;
+      /**
+       * get/set/remove addon setting
+       * @param {string} setting setting id
+       * @param {{ remove: boolean, set: any }} options
+       * @returns {any}
+       */
+      const setting = (setting, { remove, set } = {}) => {
+        if (set) changesMade = true;
+        return this.addonSetting(id, setting, { remove, set });
+      };
       return {
-        /**
-         * get/set/remove addon setting
-         * @param {string} setting setting id
-         * @param {{ remove: boolean, set: any }} options
-         * @returns {any}
-         */
-        setting(setting, { remove, set }) {
-          if (set) changesMade = true;
-          addonSetting(id, setting, { remove, set });
-        },
-
+        setting,
         updatePresetIfMatching(version, oldPreset = null, presetOrFn = null) {
           if ((setting("_version") || 0) < version) {
             /**
-             Version must be set even if transition is unnecessary;
-             1) User uses custom settings
-             2) User updates, transition aborts
-             3) User changes settings to old preset values
-             4) Without version, this change will revert after reload!
+              Version must be set even if transition is unnecessary;
+              1) User uses custom settings
+              2) User updates, transition aborts
+              3) User changes settings to old preset values
+              4) Without version, this change will revert after reload!
 
-             Therefore, DO NOT REMOVE CALLS TO THIS METHOD. Instead omit oldPreset and preset
-             when transition is no longer necessary.
+              Therefore, DO NOT REMOVE CALLS TO THIS METHOD. Instead omit oldPreset and preset
+              when transition is no longer necessary.
              */
-            this.setting("_version", version);
+            setting("_version", version);
             if (presetOrFn === null) return;
             const map = {};
             for (const key of Object.keys(oldPreset)) {
-              if (!areSettingsEqual(this.setting(key), oldPreset[key])) return console.log(oldPreset, key);
+              if (!areSettingsEqual(setting(key), oldPreset[key])) return;
               if (typeof presetOrFn === "object") map[key] = presetOrFn.values[key];
             }
 
             const appliedVersions = setting("_appliedVersions");
             if (Array.isArray(appliedVersions)) {
               appliedVersions.push(version);
-              this.setting("_appliedVersions", { set: appliedVersions });
-            } else this.setting("_appliedVersions", { set: [version] });
+              setting("_appliedVersions", { set: appliedVersions });
+            } else setting("_appliedVersions", { set: [version] });
             if (typeof presetOrFn === "function") return presetOrFn(); // Custom migration logic if preset matches
 
             const preset = presetOrFn;
@@ -146,7 +147,7 @@ export const createContext = (addonsEnabled, settings) => {
             )) {
               map[key] = preset.values[key];
             }
-            // TODO:
+            // TODO: this is using an old variable, that needs to get updated
             Object.assign(settings, map);
           }
         },
