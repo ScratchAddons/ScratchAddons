@@ -376,12 +376,12 @@
       "name": "Insertion marker style",
       "id": "markerStyle",
       "type": "select",
-      "default": "fill",
+      "default": "none",
       "potentialValues": [
-        { "id": "none", "name": "No color" },
-        { "id": "fill", "name": "Fill color" },
-        { "id": "stroke", "name": "Outline color" },
-        { "id": "both", "name": "Fill and outline color" }
+        { "id": "none", "name": "Gray" },
+        { "id": "fill", "name": "Colored with gray outline" },
+        { "id": "stroke", "name": "Gray with colored outline" },
+        { "id": "both", "name": "Colored" }
       ]
     },
     {
@@ -390,8 +390,7 @@
       "type": "integer",
       "min": 0,
       "max": 100,
-      "default": 20,
-      "if": { "settings": { "markerStyle": ["none", "fill", "both"] } }
+      "default": 20
     },
     {
       "name": "Insertion marker outline opacity",
@@ -399,8 +398,7 @@
       "type": "integer",
       "min": 0,
       "max": 100,
-      "default": 80,
-      "if": { "settings": { "markerStyle": ["stroke", "both"] } }
+      "default": 0
     }
   ],
   "tags": ["editor", "theme", "codeEditor", "featured"],
@@ -427,8 +425,9 @@
         "input-color": "#FFFFFF",
         "text": "black",
         "monitors": true,
-        "markerStyle": "fill",
-        "fillOpacity": 20
+        "markerStyle": "none",
+        "fillOpacity": 20,
+        "strokeOpacity": 0
       }
     },
     {
@@ -452,8 +451,9 @@
         "input-color": "#FFFFFF",
         "text": "white",
         "monitors": false,
-        "markerStyle": "fill",
-        "fillOpacity": 20
+        "markerStyle": "none",
+        "fillOpacity": 20,
+        "strokeOpacity": 0
       }
     },
     {
@@ -477,8 +477,9 @@
         "input-color": "#202020",
         "text": "white",
         "monitors": false,
-        "markerStyle": "fill",
-        "fillOpacity": 20
+        "markerStyle": "none",
+        "fillOpacity": 20,
+        "strokeOpacity": 0
       }
     },
     {
@@ -502,8 +503,9 @@
         "input-color": "#FFFFFF",
         "text": "white",
         "monitors": false,
-        "markerStyle": "fill",
-        "fillOpacity": 20
+        "markerStyle": "none",
+        "fillOpacity": 20,
+        "strokeOpacity": 0
       }
     },
     {
@@ -527,8 +529,9 @@
         "input-color": "#ffffff",
         "text": "white",
         "monitors": false,
-        "markerStyle": "fill",
-        "fillOpacity": 20
+        "markerStyle": "none",
+        "fillOpacity": 20,
+        "strokeOpacity": 0
       }
     },
     {

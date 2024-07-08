@@ -380,7 +380,12 @@ export default async function ({ addon, console, msg }) {
       if (markerColourStyle === "both") {
         markerBlock.svgPath_.style.fill = styleColour;
         markerBlock.svgPath_.style.stroke = styleColour;
-      } else markerBlock.svgPath_.style[markerColourStyle] = styleColour;
+      } else {
+        markerBlock.svgPath_.style[markerColourStyle] = styleColour;
+        if (markerColourStyle !== "stroke") {
+          markerBlock.svgPath_.style.stroke = "rgb(0, 0, 0)";
+        }
+      }
     }
     return markerBlock;
   };
