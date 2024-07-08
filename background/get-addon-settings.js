@@ -7,10 +7,13 @@ import {
   transitionToNewStorageKeys,
 } from "./imports/addon-transition.js";
 
-const logForTests = [];
+// TODO: Is there a better way for developers to run these test?
+// We don't want to always run them since they change settings.
+const RUN_TESTS = true;
 
 /**
- * All changes that involving enabling and/or changing settings for newly made addons.
+ * All changes that involving enabling and/or changing settings for newly made addons/features.
+ * This should invlove multiple addons. Usually when moving features/settings to different addons.
  * @param {ReturnType<createContext>} context
  */
 const transitionNewAddons = ({ addonSetting, addonState }) => {
@@ -73,7 +76,11 @@ const transitionNewAddons = ({ addonSetting, addonState }) => {
  * @param {ReturnType<createContext>} context
  * @param {ReturnType<ReturnType<createContext>["createSettingsContext"]>} context
  */
-const transitionExistingSettings = ({ manifest, addonId }, { addonState }, { setting, updatePresetIfMatching }) => {
+const transitionExistingSettings = (
+  { manifest, addonId },
+  { addonState },
+  { setting, updatePresetIfMatching, assignSettings }
+) => {
   if (addonId === "editor-dark-mode") {
     // Transition v1.27 to v1.28
     // editor-dark-mode enabled opacity to the block palette.
@@ -86,36 +93,39 @@ const transitionExistingSettings = ({ manifest, addonId }, { addonState }, { set
 
   if (addonId === "dark-www") {
     // Transition v1.22.0 to v1.23.0
+    const primaryColor = setting("primaryColor");
+    const linkColor = setting("linkColor");
     if (
-      (typeof setting("primaryColor") === "string" && setting("primaryColor") !== "#4d97ff") ||
-      (typeof setting("linkColor") === "string" && setting("linkColor") !== "#4d97ff")
+      (typeof primaryColor === "string" && setting("primaryColor") !== "#4d97ff") ||
+      (typeof linkColor === "string" && setting("linkColor") !== "#4d97ff")
     ) {
       if (addonState("dark-www") !== "enabled") {
         addonState("dark-www", addonState("scratchr2"));
-        // TODO: this is using an old variable, that needs to get updated
-        Object.assign(settings, manifest.presets.find((preset) => preset.id === "scratch").values);
+        assignSettings(manifest.presets.find((preset) => preset.id === "scratch").values);
       }
-      if (typeof scratchr2.primaryColor === "string")
-        setting("navbar", { set: setting("button", { set: setting("primaryColor") }) });
-      if (typeof scratchr2.linkColor === "string") setting("link", { set: setting("linkColor") });
+      if (typeof primaryColor === "string") setting("navbar", { set: setting("button", { set: primaryColor }) });
+      if (typeof linkColor === "string") setting("link", { set: linkColor });
       setting("primaryColor", { remove: true });
       setting("linkColor", { remove: true });
     }
 
+    updatePresetIfMatching(1, { navbar: "#4d97ff" }, () => setting("navbar", "#855cd6"));
+    // Old blue "highlight color" setting
+    updatePresetIfMatching(2, { button: "#4d97ff" }, () => setting("button", "#855cd6"));
     updatePresetIfMatching(
-      1,
+      3,
       {
-        navbar: "#4d97ff",
+        page: "#202020",
+        box: "#282828",
+        gray: "#333333",
+        blue: "#252c37",
+        input: "#202020",
+        link: "#4d97ff",
+        footer: "#333333",
+        border: "#606060",
       },
-      () => setting("navbar", "#855cd6")
-    );
-    updatePresetIfMatching(
-      2,
-      {
-        // Old blue "highlight color" setting
-        button: "#4d97ff", // Same old color as "navbar" setting.
-      },
-      () => setting("button", "#855cd6") // Same new color as migration #1
+      () => setting("blue", "#292d32"),
+      setting("link", "#ccb3ff")
     );
     updatePresetIfMatching(
       3,
@@ -474,7 +484,7 @@ const transitionExistingSettings = ({ manifest, addonId }, { addonState }, { set
   }
 
   if (addonId === "forum-quote-code-beautifier") {
-    updatePresetIfMatching(1, { bordercolor: "#28A5DA" }, () => setting("bordercolor", "#855cd6"));
+    updatePresetIfMatching(1, { bordercolor: "#28A5DA" }, () => setting("bordercolor", { set: "#855cd6"}));
   }
 
   if (addonId === "colorblind" && setting("links")) {
@@ -506,39 +516,156 @@ const transitionExistingSettings = ({ manifest, addonId }, { addonState }, { set
  * All changes that involving enabling and/or changing settings for newly made addons.
  * @param {ReturnType<createContext>} context
  */
-const runTests = ({ addonState, addonSetting }) => {
-  if (false) {
-    addonState("editor-devtools", "enabled");
-    addonState("move-to-top-bottom", "new");
+const getNewAddonTests = ({ addonState, addonSetting }) => {
+  // Test scenarios
+  const tests = [
+    {
+      description: "Enabling 'editor-devtools' and making 'move-to-top-bottom' new.",
+      setup: () => {
+        addonState("editor-devtools", "enabled");
+        addonState("move-to-top-bottom", "new");
+      },
+      expected: () => {
+        return addonState("move-to-top-bottom") === "enabled";
+      },
+    },
+    {
+      description: "Setting 'editor-dark-mode' 'textShadow' to true and making 'custom-block-text' new.",
+      setup: () => {
+        addonSetting("editor-dark-mode", "textShadow", { set: true });
+        addonState("custom-block-text", "new");
+      },
+      expected: () => {
+        return (
+          addonState("custom-block-text") === addonState("editor-dark-mode") &&
+          addonSetting("custom-block-text", "shadow") === true &&
+          !addonSetting("editor-dark-mode", "textShadow")
+        );
+      },
+    },
+    {
+      description: "Disabling 'find-bar', 'jump-to-def', 'middle-click-popup' when 'editor-devtools' is disabled.",
+      setup: () => {
+        addonState("editor-devtools", "disabled");
+        ["find-bar", "jump-to-def", "middle-click-popup"].forEach((addon) => {
+          addonState(addon, "new");
+        });
+      },
+      expected: () => {
+        return ["find-bar", "jump-to-def", "middle-click-popup"].every((addon) => addonState(addon) === "disabled");
+      },
+    },
+    {
+      description: "Testing transition for 'custom-menu-bar' with 'tutorials-button' enabled.",
+      setup: () => {
+        addonState("custom-menu-bar", "new");
+        addonState("tutorials-button", "enabled");
+      },
+      expected: () => {
+        return (
+          addonState("custom-menu-bar") === "enabled" &&
+          addonSetting("custom-menu-bar", "hide-tutorials-button") === true
+        );
+      },
+    },
+    {
+      description: "Testing transition for 'custom-menu-bar' with 'editor-compact' enabled.",
+      setup: () => {
+        addonState("custom-menu-bar", "new");
+        addonState("editor-compact", "enabled");
+      },
+      expected: () => {
+        return (
+          addonState("custom-menu-bar") === "enabled" && addonSetting("custom-menu-bar", "menu-labels") === "labels"
+        );
+      },
+    },
+    {
+      description: "Testing transition for 'workspace-dots' with 'editor-dark-mode' enabled and 'dots' set to false.",
+      setup: () => {
+        addonState("editor-dark-mode", "enabled");
+        addonSetting("editor-dark-mode", "dots", { set: false });
+      },
+      expected: () => {
+        return addonState("workspace-dots") === "enabled" && addonSetting("workspace-dots", "theme") === "none";
+      },
+    },
+  ];
 
-    console.log("Enabling 'editor-devtools' and making 'move-to-top-bottom' new.");
-    console.log("Expected Result: 'move-to-top-bottom' gets enabled");
+  return RUN_TESTS ? tests : [];
+};
 
-    logForTests.push("move-to-top-bottom");
-  }
-  if (false) {
-    addonSetting("editor-dark-mode", "textShadow", { set: true });
-    addonState("custom-block-text", "new");
+/**
+ * Get all existing settings tests.
+ * @param {ReturnType<createContext>} context
+ */
+const getExistingSettingsTests = ({ addonState, addonSetting }) => {
+  const tests = [
+    {
+      addonId: "editor-dark-mode",
+      description: "Transition v1.27 to v1.28 for editor-dark-mode",
+      setup: () => {
+        addonSetting("editor-dark-mode", "palette", { set: "#000000" });
+      },
+      expected: ({ setting }) => {
+        const paletteValue = setting("palette");
+        return paletteValue === "#000000cc";
+      },
+    },
+    {
+      addonId: "dark-www",
+      description: "Transition v1.22.0 to v1.23.0 for dark-www",
+      setup: () => {
+        addonSetting("dark-www", "primaryColor", { set: "#000000" });
+        addonSetting("dark-www", "linkColor", { set: "#000000" });
+        addonState("dark-www", "new");
+      },
+      expected: ({ setting }) => {
+        return (
+          setting("navbar") === "#000000" &&
+          setting("link") === "#000000" &&
+          !setting("primaryColor") &&
+          !setting("linkColor")
+        );
+      },
+    },
+    {
+      addonId: "forum-quote-code-beautifier",
+      description: "Transition for forum-quote-code-beautifier",
+      setup: () => {
+        addonSetting("forum-quote-code-beautifier", "bordercolor", { set: "#28A5DA" });
+        addonState("forum-quote-code-beautifier", "new");
+      },
+      expected: ({ setting }) => {
+        return setting("bordercolor") === "#855cd6";
+      },
+    },
+    {
+      addonId: "colorblind",
+      description: "Transition v1.34 to v1.35 for colorblind",
+      setup: () => {
+        addonSetting("colorblind", "links", { set: "bold" });
+        addonState("colorblind", "new");
+      },
+      expected: ({ setting }) => {
+        return setting("underline-style") === "none" && setting("bold") === "all" && !setting("links");
+      },
+    },
+    {
+      addonId: "fullscreen",
+      description: "Transition v1.36 to v1.37 for fullscreen",
+      setup: () => {
+        addonSetting("fullscreen", "hideToolbar", { set: true });
+        addonSetting("fullscreen", "hoverToolbar", { set: true });
+        addonState("fullscreen", "new");
+      },
+      expected: ({ setting }) => {
+        return setting("toolbar") === "hover" && !setting("hideToolbar") && !setting("hoverToolbar");
+      },
+    },
+  ];
 
-    console.log("Setting 'editor-dark-mode' 'textShadow' to true and making 'custom-block-text' new.");
-    console.log("Expected Result: 'custom-block-text' is enabled if 'editor-dark-mode' is enabled");
-    console.log("Expected Result: 'custom-block-text' 'shadow' is true");
-    console.log("Expected Result: 'editor-dark-mode' no longer has the 'textShadow' setting");
-
-    logForTests.push("custom-block-text", "editor-dark-mode");
-  }
-  if (false) {
-    addonState("editor-devtools", "disabled");
-    addonState("find-bar", "new");
-    addonState("jump-to-def", "new");
-    addonState("middle-click-popup", "new");
-
-    console.log("Enabling 'editor-devtools', marking 'find-bar', 'jump-to-def', 'middle-click-popup' as new");
-    console.log("Expected Result: 'find-bar', 'jump-to-def', 'middle-click-popup' are disabled");
-
-    logForTests.push("find-bar", "jump-to-def", "middle-click-popup");
-  }
-  // TODO: Finish tests...
+  return RUN_TESTS ? tests : [];
 };
 
 async function runAddonTransitions() {
@@ -558,15 +685,24 @@ async function runAddonTransitions() {
   const addonSettings = Object.assign({}, ...ADDON_SETTINGS_KEYS.map((key) => storageItems[key]));
 
   const context = createContext(addonsEnabled, addonSettings);
-  const { addonState, changesMade: madeChanges } = context;
+  const { addonState } = context;
 
-  runTests(context);
+  // Some tests overlap each other, so we have to run transitionNewAddons each time.
+  const tests = getNewAddonTests(context);
+  tests.forEach((test) => {
+    test.setup();
+    transitionNewAddons(context);
+    const result = test.expected();
+    console.log(`${test.description} ${result ? "passed" : "failed"}`);
+  });
   transitionNewAddons(context);
 
   await new Promise((resolve) => {
     if (scratchAddons.localState.ready.manifests) resolve();
     else scratchAddons.localEvents.addEventListener("manifestsReady", resolve);
   });
+
+  const existingSettingsTests = getExistingSettingsTests(context);
 
   for (const { manifest, addonId } of scratchAddons.manifests) {
     const settingsContext = context.createSettingsContext(addonId);
@@ -579,7 +715,7 @@ async function runAddonTransitions() {
           // Fill in with default value
           // Cloning required for tables
 
-          setting(option.id, { set: JSON.parse(JSON.stringify(option.default)) });
+          settingsContext.setting(option.id, { set: JSON.parse(JSON.stringify(option.default)) });
         } else if (option.type === "positive_integer" || option.type === "integer") {
           // ^ else means typeof can't be "undefined", so it must be number
           if (typeof settingValue !== "number") {
@@ -591,13 +727,14 @@ async function runAddonTransitions() {
           }
         } else if (option.type === "table") {
           const tableSettingIds = option.row.map((setting) => setting.id);
-          // TODO: this is setting things, but we never go back using settings() to actually set them in the storage.
           setting(option.id).forEach((item, i) => {
+            // Set Default Values for Undefined Settings
             option.row.forEach((setting) => {
               if (item[setting.id] === undefined) {
                 item[setting.id] = option.default[i][setting.id];
               }
             });
+            // Delete Unexpected Settings
             for (const def in item) {
               if (!tableSettingIds.includes(def)) {
                 delete item[def];
@@ -607,36 +744,34 @@ async function runAddonTransitions() {
         }
       }
 
+      existingSettingsTests
+        .filter((test) => test.addonId === addonId)
+        .forEach((test) => {
+          setting("_version", { set: 0 });
+          test.setup();
+          transitionExistingSettings({ manifest, addonId }, context, settingsContext);
+          const result = test.expected(settingsContext);
+          console.log(`${test.description} ${result ? "passed" : "failed"}`);
+        });
+
       transitionExistingSettings({ manifest, addonId }, context, settingsContext);
     }
 
     if (addonState(addonId) === "new") addonState(addonId, !!manifest.enabledByDefault ? "enabled" : "disabled");
 
     if (settingsContext.changesMade) {
-      // TODO: quieter logging
-      // console.log(`Changed settings for addon ${addonId}`, addonSettings[addonId]);
-      // addonSettings[addonId] = settings; // In case settings variable was a newly created object
-    }
-    if (logForTests.includes(addonId)) {
-      console.table({
-        _: {
-          addonId,
-          changesMade: context.changesMade,
-          state: addonState(addonId),
-          settingsChangesMade: settingsContext.changesMade,
-          settings: JSON.stringify(addonSettings[addonId]),
-        },
-      });
+      console.log(`Changed settings for addon ${addonId}`, addonSettings[addonId]);
     }
   }
 
   // Finally, minify the settings and store them in the scratchAddons object
-  const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
-  if (madeChanges)
+  if (context.changesMade) {
+    const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
     chrome.storage.sync.set({
       ...minifySettings(addonSettings, prerelease ? null : scratchAddons.manifests),
       addonsEnabled,
     });
+  }
   scratchAddons.globalState.addonSettings = addonSettings;
   scratchAddons.localState.addonsEnabled = addonsEnabled;
   scratchAddons.localState.ready.addonSettings = true;

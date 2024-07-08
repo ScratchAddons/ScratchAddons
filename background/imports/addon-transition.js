@@ -53,7 +53,7 @@ const AddonStates = Object.freeze({
   disabled: false,
 });
 
-export const createContext = (addonsEnabled, settings) => {
+export const createContext = (addonsEnabled, addonSettings) => {
   let madeAnyChanges = false;
   return {
     /**
@@ -65,8 +65,7 @@ export const createContext = (addonsEnabled, settings) => {
     addonState(id, newValue) {
       const storageValue = addonsEnabled[id];
       const state = Object.keys(AddonStates).find((s) => AddonStates[s] === storageValue);
-      if (newValue) {
-        if (newValue === state) return;
+      if (newValue && newValue !== state) {
         madeAnyChanges = true;
         addonsEnabled[id] = AddonStates[newValue];
         return;
@@ -82,23 +81,22 @@ export const createContext = (addonsEnabled, settings) => {
      */
     addonSetting(id, setting, { remove, set } = {}) {
       if (typeof set !== "undefined") {
-        if (!settings[id]) settings[id] = Object.create(null);
-        settings[id][setting] = set;
+        if (!addonSettings[id]) addonSettings[id] = {};
+        addonSettings[id][setting] = set;
         madeAnyChanges = true;
       }
-      if (!settings[id]) return;
+      if (!addonSettings[id]) return;
       if (remove) {
-        delete settings[id][setting];
+        delete addonSettings[id][setting];
         madeAnyChanges = true;
       }
-      return settings[id][setting];
+      return addonSettings[id][setting];
     },
     /**
      * use addonSetting() in context of an addon id.
      * @param {string} id addon id
      */
     createSettingsContext(id) {
-      // True, yes, you can use ".bind" here, but it removes the infered/explicit typing which I don't like.
       let changesMade = false;
       /**
        * get/set/remove addon setting
@@ -137,6 +135,7 @@ export const createContext = (addonsEnabled, settings) => {
               appliedVersions.push(version);
               setting("_appliedVersions", { set: appliedVersions });
             } else setting("_appliedVersions", { set: [version] });
+
             if (typeof presetOrFn === "function") return presetOrFn(); // Custom migration logic if preset matches
 
             const preset = presetOrFn;
@@ -147,9 +146,11 @@ export const createContext = (addonsEnabled, settings) => {
             )) {
               map[key] = preset.values[key];
             }
-            // TODO: this is using an old variable, that needs to get updated
-            Object.assign(settings, map);
+            this.assignSettings(map)
           }
+        },
+        assignSettings(newSettings) {
+          Object.assign(addonSettings[id], newSettings);
         },
 
         get changesMade() {
