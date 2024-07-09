@@ -6,6 +6,7 @@
 
 .studio-tab-nav li .tab-count .sa-exact-count-tooltip {
   display: none;
+  position: absolute;
   top: 100%;
   left: 50%;
   margin: 0;
@@ -20,6 +21,7 @@
 }
 
 .studio-tab-nav li .tab-count .sa-exact-count-tooltip::before {
+  display: block;
   top: -0.5rem;
   left: 50%;
   margin-left: -0.5rem;
