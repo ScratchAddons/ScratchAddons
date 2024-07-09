@@ -197,5 +197,7 @@ a {
 
 #floatWindow #ref_list li {
   height: 2em;
+  display: flex;
+  flex-direction: row;
   overflow: hidden;
 }

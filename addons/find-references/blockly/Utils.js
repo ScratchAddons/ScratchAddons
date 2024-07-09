@@ -175,7 +175,7 @@ export default class Utils {
     svgchild = svgchild.cloneNode(true);
     let dataShapes = svgchild.getAttribute("data-shapes");
     let translateY = 0; // blocks no hat
-    const scale = 0.5;
+    const scale = 0.4;
     if (dataShapes === "c-block c-1 hat") {
       translateY = 20; // for My block
     }
@@ -226,6 +226,10 @@ export default class Utils {
           item.setAttribute("xlink:href", dataUri);
         })
       ).then(() => {
+        const rect = document.querySelector('[data-id="event_whenkeypressed"]').getBoundingClientRect();
+        // set svg width height base on thie rect
+        svg.setAttribute("width", rect.width);
+        svg.setAttribute("height", rect.height);
         resolve(svg);
       });
     });

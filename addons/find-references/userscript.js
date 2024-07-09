@@ -762,10 +762,16 @@ export default async function ({ addon, msg, console }) {
           });
 
           // Get First Block of Current blockGroup
-          const firstBlock = this.getTopBlock(block);
+          const firstBlock = this.getFirstBlock(block);
+          const noRepBlock = this.getNearestNoReporterBlock(block);
 
-          // Get svg
+          // Get first SVG
           this.utils.getSVGElement(firstBlock, enabledAddons).then((svg) => {
+            li_item.appendChild(svg);
+          });
+
+          // Get Nearest SVG
+          this.utils.getSVGElement(noRepBlock, enabledAddons).then((svg) => {
             li_item.appendChild(svg);
           });
 
@@ -774,12 +780,23 @@ export default async function ({ addon, msg, console }) {
       }
     }
 
-    getTopBlock(blocksvg) {
+    getFirstBlock(blocksvg) {
       let currentBlock = blocksvg;
       while (currentBlock.parentBlock_ !== null) {
         currentBlock = currentBlock.parentBlock_;
       }
       // 当循环结束时，currentBlock 将是顶层块
+      return currentBlock;
+    }
+
+    getNearestNoReporterBlock(currentBlock) {
+      while (
+        (currentBlock.svgGroup_.getAttribute("data-shapes") === "reporter round" ||
+          currentBlock.svgGroup_.getAttribute("data-shapes") === "reporter boolean") &&
+        currentBlock.parentBlock_ !== null
+      ) {
+        currentBlock = currentBlock.parentBlock_;
+      }
       return currentBlock;
     }
 
