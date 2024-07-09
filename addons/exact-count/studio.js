@@ -1,15 +1,27 @@
 export default async function ({ addon, msg }) {
   const pageSize = 40;
   const apiUrlPrefix = "https://api.scratch.mit.edu/studios/" + /[0-9]+/.exec(location.pathname)[0] + "/projects";
+
   const countElement = await addon.tab.waitForElement(".studio-tab-nav > a:first-child .tab-count");
   const originalText = countElement.innerText;
   let counted = false;
+
+  const maxRequestsPerSecond = 5;
+  const minRequestDelay = 1000 / maxRequestsPerSecond;
+  let lastRequestTime = 0;
 
   // Do nothing if the count shown by Scratch isn't 100+
   if (!originalText.includes("+")) return;
 
   async function getPageLength(url, page, cache) {
     if (Object.hasOwnProperty.call(cache, page)) return cache[page];
+    const timeSinceLastRequest = Date.now() - lastRequestTime;
+    if (timeSinceLastRequest < minRequestDelay) {
+      await new Promise((resolve) => {
+        setTimeout(() => resolve(), minRequestDelay - timeSinceLastRequest);
+      });
+    }
+    lastRequestTime = Date.now();
     const res = await fetch(`${url}?limit=${pageSize}&offset=${page * pageSize}`);
     if (res.status !== 200) throw res.status;
     const length = (await res.json()).length;
