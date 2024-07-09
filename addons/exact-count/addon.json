@@ -38,7 +38,7 @@
     },
     {
       "url": "studio.js",
-      "matches": ["https://scratch.mit.edu/studios/*"],
+      "matches": ["studios"],
       "if": {
         "settings": { "studio": true }
       }
@@ -47,7 +47,7 @@
   "userstyles": [
     {
       "url": "studio.css",
-      "matches": ["https://scratch.mit.edu/studios/*"],
+      "matches": ["studios"],
       "if": {
         "settings": { "studio": true }
       }
