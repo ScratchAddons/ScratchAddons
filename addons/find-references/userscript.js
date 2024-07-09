@@ -766,6 +766,10 @@ export default async function ({ addon, msg, console }) {
           const noRepBlock = this.getNearestNoReporterBlock(block);
 
           this.utils.getSVGElement(firstBlock, enabledAddons, false).then((svg1) => {
+            if (firstBlock.startHat_) {
+              const scale = 0.5;
+              svg1.setAttribute("transform", `translate(0,${scale * -16})`);
+            }
             li_item.appendChild(svg1); // 使用 svg1 引用第一个 SVG
             // 获取最近的 SVG
             this.utils.getSVGElement(noRepBlock, enabledAddons, true).then((svg2) => {
