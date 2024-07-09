@@ -63,8 +63,6 @@ export default async function ({ addon, msg }) {
   // Show exact count when "(100+)" is clicked
   async function onCountClick(e) {
     if (addon.self.disabled) return;
-    e.stopPropagation(); // don't switch to Projects tab
-    e.preventDefault();
     countElement.removeEventListener("click", onCountClick);
     countElement.classList.add("sa-exact-count-loading");
     const spinnerElement = Object.assign(document.createElement("span"), {
