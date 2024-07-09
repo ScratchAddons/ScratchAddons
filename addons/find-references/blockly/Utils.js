@@ -170,8 +170,9 @@ export default class Utils {
       if (child.tagName === "g") {
         // 获取 data-shapes 属性
         const dataShapes = child.getAttribute("data-shapes");
+        const dataArgType = child.getAttribute("data-argument-type");
         // 检查 data-shapes 属性值
-        if (dataShapes !== "reporter round" && dataShapes !== "reporter boolean") {
+        if (dataShapes !== "reporter round" && dataShapes !== "reporter boolean" && dataArgType !== "dropdown") {
           // 如果不是期望的值，从父节点中移除该子节点
           svgChild.removeChild(child);
         }
