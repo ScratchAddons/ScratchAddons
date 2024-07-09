@@ -765,14 +765,12 @@ export default async function ({ addon, msg, console }) {
           const firstBlock = this.getFirstBlock(block);
           const noRepBlock = this.getNearestNoReporterBlock(block);
 
-          // Get first SVG
-          this.utils.getSVGElement(firstBlock, enabledAddons).then((svg) => {
-            li_item.appendChild(svg);
-          });
-
-          // Get Nearest SVG
-          this.utils.getSVGElement(noRepBlock, enabledAddons).then((svg) => {
-            li_item.appendChild(svg);
+          this.utils.getSVGElement(firstBlock, enabledAddons, false).then((svg1) => {
+            li_item.appendChild(svg1); // 使用 svg1 引用第一个 SVG
+            // 获取最近的 SVG
+            this.utils.getSVGElement(noRepBlock, enabledAddons, true).then((svg2) => {
+              li_item.appendChild(svg2); // 使用 svg2 引用第二个 SVG，避免覆盖
+            });
           });
 
           this.fr_result_list.appendChild(li_item);
@@ -785,7 +783,7 @@ export default async function ({ addon, msg, console }) {
       while (currentBlock.parentBlock_ !== null) {
         currentBlock = currentBlock.parentBlock_;
       }
-      // 当循环结束时，currentBlock 将是顶层块
+
       return currentBlock;
     }
 

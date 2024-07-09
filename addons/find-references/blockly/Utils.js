@@ -161,6 +161,24 @@ export default class Utils {
     return style;
   }
 
+  removeNonReporterChildren(svgChild) {
+    // 获取所有子节点
+    const children = Array.from(svgChild.childNodes);
+    // 遍历子节点
+    children.forEach((child) => {
+      // 首先判断是否为<g />标签
+      if (child.tagName === "g") {
+        // 获取 data-shapes 属性
+        const dataShapes = child.getAttribute("data-shapes");
+        // 检查 data-shapes 属性值
+        if (dataShapes !== "reporter round" && dataShapes !== "reporter boolean") {
+          // 如果不是期望的值，从父节点中移除该子节点
+          svgChild.removeChild(child);
+        }
+      }
+    });
+  }
+
   /**
    * A function that creates a selected block based on export type and block data.
    *
@@ -168,14 +186,17 @@ export default class Utils {
    * @param {object} block - The block data to create the selected block.
    * @return {object} The created selected block as an SVG element.
    */
-  selectedBlocks(block, enabledAddons) {
+  selectedBlocks(block, enabledAddons, is_need_children) {
     let svg = this.exSVG.cloneNode();
 
     let svgchild = block.svgGroup_;
     svgchild = svgchild.cloneNode(true);
+    if (!is_need_children) {
+      this.removeNonReporterChildren(svgchild);
+    }
     let dataShapes = svgchild.getAttribute("data-shapes");
     let translateY = 0; // blocks no hat
-    const scale = 0.4;
+    const scale = 0.5;
     if (dataShapes === "c-block c-1 hat") {
       translateY = 20; // for My block
     }
@@ -185,8 +206,9 @@ export default class Utils {
         translateY += 16; // for cat ears
       }
     }
+
     svgchild.setAttribute("transform", `translate(0,${scale * translateY}) scale(${scale})`);
-    this.setCSSVars(svg);
+    // this.setCSSVars(svg);
     svg.append(this.makeStyle());
     svg.append(svgchild);
     return svg;
@@ -200,10 +222,10 @@ export default class Utils {
    * @param {Block} block - the block to select the SVG element for (optional)
    * @return {Promise<SVGElement>} a promise that resolves to the SVG element
    */
-  getSVGElement(block, enabledAddons) {
+  getSVGElement(block, enabledAddons, is_need_children) {
     let svg;
     if (block) {
-      svg = this.selectedBlocks(block, enabledAddons);
+      svg = this.selectedBlocks(block, enabledAddons, is_need_children);
     }
 
     // resolve nbsp whitespace
@@ -228,8 +250,10 @@ export default class Utils {
       ).then(() => {
         const rect = document.querySelector('[data-id="event_whenkeypressed"]').getBoundingClientRect();
         // set svg width height base on thie rect
-        svg.setAttribute("width", rect.width);
-        svg.setAttribute("height", rect.height);
+        // svg.setAttribute("width", rect.width);
+        // svg.setAttribute("height", rect.height);
+        // const scale = 0.1;
+        // svg.setAttribute("transform", `translate(0,0) scale(${scale})`);
         resolve(svg);
       });
     });

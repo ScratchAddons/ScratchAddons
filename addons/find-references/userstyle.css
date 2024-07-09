@@ -178,11 +178,9 @@ a {
   height: 300px;
   position: absolute;
   top: 20%;
-  /*left: 35%;*/
-  /* background-color: lightgreen; */
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   z-index: 100;
-  display: flex; /* 默认不显示 */
+  display: flex;
   flex-direction: column;
   border-radius: 10px;
 }
@@ -196,8 +194,8 @@ a {
 }
 
 #floatWindow #ref_list li {
-  height: 2em;
-  display: flex;
-  flex-direction: row;
-  overflow: hidden;
+  height: 4em;
+  display: flex; /* 启用 Flexbox */
+  flex-direction: row; /* 使子元素横向排列 */
+  justify-content: space-between;
 }
