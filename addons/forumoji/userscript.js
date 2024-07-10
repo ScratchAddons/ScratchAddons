@@ -18,10 +18,12 @@ export default async function ({ addon, msg }) {
     forumoji.forEach(([codepoint, char]) => {
       editor.value = editor.value.replaceAll(char, `[img https://u.cubeupload.com/fmji/${codepoint}.png]`);
     });
-    if (/\p{Extended_Pictographic}/u.test(editor.value) && confirm(msg("not-in-forumoji"))) {
-      editor.value = editor.value.replaceAll(/\p{Extended_Pictographic}/gu, "");
-      return;
+    if (/\p{Extended_Pictographic}/u.test(editor.value)) {
+      if (confirm(msg("not-in-forumoji"))) {
+        editor.value = editor.value.replaceAll(/\p{Extended_Pictographic}/gu, "");
+        return;
+      }
+      e.preventDefault();
     }
-    e.preventDefault();
   });
 }
