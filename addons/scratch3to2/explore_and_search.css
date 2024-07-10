@@ -162,6 +162,7 @@ body:not(.sa-body-editor) .outer .sort-mode .select select {
   border-right: 4px solid transparent;
   border-top: 4px solid var(--darkWww-box-scratchr2Caret, black);
   opacity: 0.5;
+  pointer-events: none;
 }
 
 /* Grid */
