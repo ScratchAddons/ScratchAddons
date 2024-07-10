@@ -610,22 +610,7 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
   background-position: -15px -17px;
 }
 .preview .comments-container .comments-allowed-input {
-  margin: 0;
-  margin-left: 5px;
-}
-.toggle-switch {
-  vertical-align: middle;
-  top: 0;
-  width: auto;
-  height: auto;
-}
-.toggle-switch input {
-  width: auto;
-  height: auto;
-  opacity: 1;
-}
-.toggle-switch .slider {
-  display: none;
+  margin-right: 0;
 }
 .preview .comment img.avatar {
   width: 45px;

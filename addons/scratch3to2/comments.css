@@ -1,3 +1,21 @@
+/* Toggle switch */
+.toggle-switch {
+  vertical-align: middle;
+  margin-left: 5px;
+  top: 0;
+  width: auto;
+  height: auto;
+}
+.toggle-switch input {
+  width: auto;
+  height: auto;
+  opacity: 1;
+}
+.toggle-switch .slider {
+  display: none;
+}
+
+/* Comments */
 .comments-root-reply {
   margin: 0;
   padding: 20px;
