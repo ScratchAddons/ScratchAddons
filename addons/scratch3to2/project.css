@@ -87,6 +87,27 @@
   text-shadow: none;
 }
 
+/* project-info */
+.preview .sa-project-info {
+  margin-bottom: 0;
+  padding: 0 5px;
+  background-color: var(--darkWww-gray-scratchr2TableHeader, #eee);
+  border: 1px solid var(--darkWww-border-15, #ccc);
+  border-radius: 5px;
+  color: var(--darkWww-gray-scratchr2GrayText, #999);
+  font-size: 11px;
+  font-weight: normal;
+  line-height: 16px;
+}
+.sa-project-info > * {
+  padding: 0;
+}
+.sa-project-info img {
+  vertical-align: middle;
+  padding-right: 2px;
+  opacity: 0.7;
+}
+
 /* Remix & See inside */
 .preview .project-buttons {
   margin-top: 2px;
