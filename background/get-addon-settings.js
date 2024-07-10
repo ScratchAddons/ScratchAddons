@@ -5,7 +5,7 @@ import minifySettings from "../libraries/common/minify-settings.js";
  the versions separately. Current versions:
 
  - editor-dark-mode 10 (bumped 4 times in v1.33.2)
- - editor-theme3 3 (last bumped in v1.32)
+ - editor-theme3 4 (last bumped in v1.39)
  - dark-www 7 (bumped twice in v1.34.0)
  - forum-quote-code-beautifier 1 (last bumped in v1.34)
  */
@@ -654,6 +654,31 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             // Override the preset color if dark comments are not enabled
             addonSettings["comment-color"] = "#FEF49C";
           }
+
+          // Transition v1.38 to v1.39
+          updatePresetIfMatching(
+            settings,
+            4,
+            {
+              "motion-color": "#80B5FF",
+              "looks-color": "#CCB3FF",
+              "sounds-color": "#E19DE1",
+              "events-color": "#FFD966",
+              "control-color": "#FFBE4C",
+              "sensing-color": "#85C4E0",
+              "operators-color": "#7ECE7E",
+              "data-color": "#FFA54C",
+              "data-lists-color": "#FF9966",
+              "custom-color": "#FF99AA",
+              "Pen-color": "#13ECAF",
+              "sa-color": "#34E4D0",
+              "comment-color": "#FEF49C",
+              "input-color": "#202020",
+              text: "colorOnBlack",
+              // "monitors": false
+            },
+            manifest.presets.find((p) => p.id === "black")
+          );
         }
 
         if (addonId === "forum-quote-code-beautifier") {
