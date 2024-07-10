@@ -108,10 +108,10 @@
   background-color: #2d784c;
 }
 .preview .see-inside-button {
-  border: 1px solid var(--darkWww-button, #855cd6);
+  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
 }
 .preview .see-inside-button:hover {
-  background-color: var(--darkWww-button-variant, #7854c0);
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
 }
 .preview .remix-button::before,
 .preview .see-inside-button::before {
@@ -542,7 +542,7 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
 .extension-chip .extension-action {
   padding: 0;
   background-color: transparent;
-  color: var(--darkWww-link, #855cd6);
+  color: var(--darkWww-link-scratchr2, #855cd6);
   font-size: 10px;
 }
 .extension-chip .extension-action img {

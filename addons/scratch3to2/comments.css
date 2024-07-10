@@ -45,10 +45,10 @@
 }
 .compose-comment .compose-bottom-row .compose-post {
   margin-right: 5px;
-  border: 1px solid var(--darkWww-button, #855cd6);
+  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
 }
 .compose-comment .compose-bottom-row .compose-post:hover {
-  background-color: var(--darkWww-button-variant, #7854c0);
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
 }
 .compose-comment .compose-bottom-row .compose-cancel {
   background-image: linear-gradient(
@@ -98,7 +98,7 @@
   font-weight: bold;
 }
 .comment .comment-top-row .username:hover {
-  color: var(--darkWww-link, #855cd6);
+  color: var(--darkWww-link-scratchr2, #855cd6);
 }
 .comment .comment-top-row .comment-delete,
 .comment .comment-top-row .comment-report {
@@ -138,6 +138,7 @@
 }
 .comment .comment-body .comment-bottom-row .comment-reply {
   margin-left: 15px;
+  color: var(--darkWww-link-scratchr2, #855cd6);
   font-weight: normal;
 }
 .comment .comment-body .comment-bottom-row .comment-reply:hover {

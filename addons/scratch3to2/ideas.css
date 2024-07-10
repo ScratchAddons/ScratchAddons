@@ -73,7 +73,7 @@ a.ttt-try-tutorial-button img {
   border-radius: 9px 9px 0 0;
 }
 .ttt-tile h3 {
-  color: var(--darkWww-link, #855cd6);
+  color: var(--darkWww-link-scratchr2, #855cd6);
 }
 .ttt-tile:hover h3 {
   text-decoration: underline;

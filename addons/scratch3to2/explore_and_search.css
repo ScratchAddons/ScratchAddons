@@ -136,9 +136,13 @@ body:not(.sa-body-editor) .outer .sort-mode .select select:focus {
   transition: none;
 }
 .outer .categories li.active {
+  background-color: var(--darkWww-button-scratchr2, #855cd6);;
   background-image: none;
-  border-color: var(--darkWww-button, #855cd6);
+  border-color: var(--darkWww-button-scratchr2, #855cd6);
   text-shadow: none;
+}
+.outer .categories li.active:hover {
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
 }
 .outer .sort-mode {
   margin-top: 3px;

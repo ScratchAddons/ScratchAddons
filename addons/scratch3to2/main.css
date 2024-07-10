@@ -28,6 +28,12 @@ a {
   font-weight: normal;
   text-shadow: none;
 }
+a,
+a:link,
+a:visited,
+a:active {
+  color: var(--darkWww-link-scratchr2, #855cd6);
+}
 a:hover {
   color: var(--darkWww-link-scratchr2, #855cd6);
   text-decoration: underline;
@@ -35,6 +41,7 @@ a:hover {
 
 /* Buttons */
 .button {
+  background-color: var(--darkWww-button-scratchr2, #855cd6);
   border-radius: 5px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
   font-size: 13px;
@@ -149,6 +156,7 @@ body:not(.sa-body-editor) .select select > option {
 /* Navigation bar */
 #navigation {
   height: 35px;
+  background-color: var(--darkWww-navbar-scratchr2, #855cd6);
   border: none;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
@@ -311,6 +319,8 @@ body:not(.sa-body-editor) .select select > option {
   min-width: 160px;
   max-width: 220px;
   box-sizing: content-box;
+  background-color: var(--darkWww-navbar-scratchr2, #855cd6);
+  background-clip: padding-box;
   border-color: var(--darkWww-border-20, #ccc);
   border-top: none;
   border-right: none;
@@ -519,8 +529,8 @@ body:not(.sa-body-editor) .select select > option {
   opacity: 0.5;
 }
 .modal-content .submit-button {
-  border: 1px solid var(--darkWww-button, #855cd6);
+  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
 }
 .modal-content .submit-button:hover {
-  background-color: var(--darkWww-button-variant, #7854c0);
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
 }

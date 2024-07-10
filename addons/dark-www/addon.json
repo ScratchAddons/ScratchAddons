@@ -1888,6 +1888,29 @@
       }
     },
     {
+      "name": "link-scratchr2IconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "link"
+          },
+          "options": {
+            "#4d97ff": "#1aa0d8",
+            "#4d97ffff": "#1aa0d8",
+            "#25aff4": "#1aa0d8",
+            "#25aff4ff": "#1aa0d8"
+          },
+          "default": {
+            "type": "settingValue",
+            "settingId": "link"
+          }
+        }
+      }
+    },
+    {
       "name": "footer-text",
       "value": {
         "type": "textColor",

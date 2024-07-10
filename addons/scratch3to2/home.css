@@ -66,12 +66,12 @@
   height: 32px;
   box-sizing: border-box;
   padding: 0 10px;
-  border: 1px solid var(--darkWww-button, #855cd6);
+  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
   border-radius: 5px;
   line-height: 30px;
 }
 .intro-banner .intro-subnav .subnav-button:hover {
-  background-color: var(--darkWww-button-variant, #7854c0);
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
 }
 
 /* Box component */
@@ -154,6 +154,7 @@
 }
 .news li h4 {
   font-size: 13px;
+  color: var(--darkWww-link-scratchr2, #855cd6);
 }
 .news li a:hover h4 {
   text-decoration: underline;

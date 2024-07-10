@@ -21,12 +21,12 @@
 .studio-info .studio-follow-button {
   height: 32px;
   padding: 8px 10px;
-  border: 1px solid var(--darkWww-button, #855cd6);
+  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
   font-size: 13px;
   line-height: 18px;
 }
 .studio-info .studio-follow-button:hover {
-  background-color: var(--darkWww-button-variant, #7854c0);
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
 }
 .studio-info .studio-follow-button::before {
   content: "";
@@ -59,10 +59,14 @@
 .studio-info .studio-info-footer-report button {
   height: 26px;
   padding: 0 10px 0 2px;
-  border: 1px solid var(--darkWww-button, #855cd6);
+  background-color: var(--darkWww-button-scratchr2, #855cd6);
+  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
   border-radius: 5px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
   font-size: 13px;
+}
+.studio-info .studio-info-footer-report button:hover {
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
 }
 
 /* Report modal */
@@ -117,11 +121,13 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 .studio-tab-nav .active > li {
-  border-color: var(--darkWww-button, #855cd6);
+  background-color: var(--darkWww-button-scratchr2, #855cd6);
+  border-color: var(--darkWww-button-scratchr2, #855cd6);
   text-shadow: none;
 }
 .studio-tab-nav a.active.nav_link:hover > li {
-  border-color: var(--darkWww-button, #855cd6);
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
+  border-color: var(--darkWww-button-scratchr2, #855cd6);
 }
 .studio-tab-nav li img {
   margin-right: 2px;
@@ -225,6 +231,7 @@
   line-height: 20px;
 }
 .studio-project-tile .studio-project-title {
+  color: var(--darkWww-link-scratchr2, #855cd6);
   font-weight: 800;
 }
 .studio-project-tile .studio-project-username {
@@ -265,6 +272,9 @@
 .studio-member-tile .studio-member-image {
   border: 1px solid var(--darkWww-border-20, #ccc);
   border-radius: 0;
+}
+.studio-member-tile .studio-member-name {
+  color: var(--darkWww-link-scratchr2, #855cd6);
 }
 .studio-member-tile .studio-member-role {
   color: var(--darkWww-gray-scratchr2Text, #322f31);

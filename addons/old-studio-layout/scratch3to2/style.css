@@ -42,12 +42,17 @@
   margin-left: auto;
   border: none;
   box-shadow: none;
+  color: var(--darkWww-link-scratchr2, #855cd6);
   font-size: 13px;
   font-weight: normal;
 }
 .studio-info .studio-info-footer-report button:hover {
   color: var(--darkWww-link-scratchr2, #855cd6);
   text-decoration: underline;
+}
+.studio-info .studio-info-footer-report button img,
+.studio-info .studio-info-footer-report button:hover img {
+  filter: var(--darkWww-link-scratchr2IconFilter, none);
 }
 
 /* Tabs */
