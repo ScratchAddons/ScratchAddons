@@ -313,9 +313,10 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
   line-height: 20px;
 }
 .preview .project-description-edit .inplace-textarea {
+  margin-top: 8px;
   color: var(--darkWww-gray-scratchr2Text, #322f31);
   text-shadow: var(--darkWww-gray-scratchr2TextShadow, 0 1px white);
-  line-height: 18px;
+  line-height: 20px;
 }
 .preview .project-description-edit .inplace-textarea:hover {
   color: var(--darkWww-box-scratchr2Text, #322f31);
