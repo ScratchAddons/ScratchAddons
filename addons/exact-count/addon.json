@@ -44,18 +44,19 @@
     },
     {
       "url": "studio.js",
-      "matches": ["https://scratch.mit.edu/studios/*"],
+      "matches": ["studios"],
       "if": {
         "settings": { "studio": true }
       }
-    },
+    }
+  ],
+  "userstyles": [
     {
-      "url": "forum.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "url": "studio.css",
+      "matches": ["studios"],
       "if": {
-        "settings": { "forumuser": true }
-      },
-      "runAtComplete": false
+        "settings": { "studio": true }
+      }
     }
   ],
   "dynamicEnable": true,
