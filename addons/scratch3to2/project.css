@@ -366,6 +366,42 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
   transition: none;
 }
 
+/* project-notes-tabs */
+.tabs-sa {
+  padding: 10px;
+  padding-bottom: 0;
+}
+.tab-choice-sa {
+  margin: 0;
+  height: 29px;
+  box-sizing: border-box;
+  padding: 0 20px;
+  border-color: transparent;
+  border-radius: 5px 5px 0 0;
+  color: var(--darkWww-gray-scratchr2ButtonText, #666);
+}
+.tab-choice-sa:hover {
+  border-color: var(--darkWww-borde, #ddd);
+  border-bottom-color: transparent;
+  box-shadow: inset 0 1px 0 var(--darkWww-gray-boxHighlight, white);
+}
+.tab-choice-selected-sa,
+.tab-choice-selected-sa:hover {
+  background-color: var(--darkWww-box, white);
+  border-color: var(--darkWww-border-20, #ccc);
+  border-bottom-color: transparent;
+  box-shadow: none;
+  color: var(--darkWww-box-scratchr2ButtonText, #666);
+}
+.tab-choice-sa span {
+  padding: 0;
+  font-size: 13px;
+  line-height: 28px;
+}
+.preview .description-block {
+  border-top: 1px solid var(--darkWww-border, #ddd);
+}
+
 /* Actions row */
 .preview > .inner > .preview-row:nth-child(3),
 .guiPlayer + .preview-row /* actions are below player on small screens */ {
