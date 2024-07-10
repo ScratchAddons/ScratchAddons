@@ -152,10 +152,13 @@
   "paint-skew",
   "preview-project-description",
   "collapse-footer",
+  "delete-others",
   "download-button",
   "reorder-custom-inputs",
   "place-backpack-code-at-cursor",
   "big-save-button",
+  "workspace-dots",
+  "asset-conflict-dialog",
   "forumoji",
 
   "// NEW ADDONS ABOVE THIS ↑↑",

@@ -8,6 +8,9 @@ import * as modal from "./modal.js";
 
 const DATA_PNG = "data:image/png;base64,";
 
+const isScratchGui =
+  location.origin === "https://scratchfoundation.github.io" || ["8601", "8602"].includes(location.port);
+
 const contextMenuCallbacks = [];
 const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image", "swap-local-global"];
 let createdAnyBlockContextMenus = false;
@@ -213,7 +216,7 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get editorMode() {
-    if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601") {
+    if (isScratchGui) {
       // Note that scratch-gui does not change the URL when going fullscreen.
       if (this.redux.state?.scratchGui?.mode?.isFullScreen) return "fullscreen";
       return "editor";
@@ -298,7 +301,6 @@ export default class Tab extends Listenable {
     const isProject =
       location.pathname.split("/")[1] === "projects" &&
       !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
-    const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
     if (!isProject && !isScratchGui) {
       scratchAddons.console.warn("addon.tab.scratchClass() was used outside a project page");
       return "";
@@ -338,7 +340,6 @@ export default class Tab extends Listenable {
     const isProject =
       location.pathname.split("/")[1] === "projects" &&
       !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
-    const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
     if (!isProject && !isScratchGui) return Promise.resolve();
 
     this._calledScratchClassReady = true;
@@ -367,7 +368,8 @@ export default class Tab extends Listenable {
   get direction() {
     // https://github.com/scratchfoundation/scratch-l10n/blob/master/src/supported-locales.js
     const rtlLocales = ["ar", "ckb", "fa", "he"];
-    const lang = scratchAddons.globalState.auth.scratchLang.split("-")[0];
+    const rawLang = this._addonObj.auth.scratchLang; // Guaranteed to exist
+    const lang = rawLang.split("-")[0];
     return rtlLocales.includes(lang) ? "rtl" : "ltr";
   }
 
