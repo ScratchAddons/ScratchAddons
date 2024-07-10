@@ -35,7 +35,7 @@
   "latestUpdate": {
     "isMajor": true,
     "version": "1.39.0",
-    "newSettings": ["markerStyle", "fillOpacity", "strokeOpacity"]
+    "newSettings": ["fillStyle", "fillOpacity", "strokeStyle", "strokeOpacity"]
   },
   "customCssVariables": [
     {
@@ -375,14 +375,13 @@
     },
     {
       "name": "Insertion marker style",
-      "id": "markerStyle",
+      "id": "fillStyle",
       "type": "select",
-      "default": "none",
+      "default": "gray",
       "potentialValues": [
-        { "id": "none", "name": "Gray" },
-        { "id": "fill", "name": "Colored with gray outline" },
-        { "id": "stroke", "name": "Gray with colored outline" },
-        { "id": "both", "name": "Colored" }
+        { "id": "none", "name": "None" },
+        { "id": "gray", "name": "Gray" },
+        { "id": "colored", "name": "Colored" }
       ]
     },
     {
@@ -391,7 +390,21 @@
       "type": "integer",
       "min": 0,
       "max": 100,
-      "default": 20
+      "default": 20,
+      "if": {
+        "settings": { "fillStyle": ["gray", "colored"] }
+      }
+    },
+    {
+      "name": "Insertion marker outline",
+      "id": "strokeStyle",
+      "type": "select",
+      "default": "none",
+      "potentialValues": [
+        { "id": "none", "name": "None" },
+        { "id": "gray", "name": "Gray" },
+        { "id": "colored", "name": "Colored" }
+      ]
     },
     {
       "name": "Insertion marker outline opacity",
@@ -399,7 +412,10 @@
       "type": "integer",
       "min": 0,
       "max": 100,
-      "default": 0
+      "default": 50,
+      "if": {
+        "settings": { "strokeStyle": ["gray", "colored"] }
+      }
     }
   ],
   "tags": ["editor", "theme", "codeEditor", "featured"],
@@ -426,9 +442,10 @@
         "input-color": "#FFFFFF",
         "text": "black",
         "monitors": true,
-        "markerStyle": "none",
+        "fillStyle": "gray",
         "fillOpacity": 20,
-        "strokeOpacity": 0
+        "strokeStyle": "none",
+        "strokeOpacity": 50
       }
     },
     {
@@ -452,9 +469,10 @@
         "input-color": "#FFFFFF",
         "text": "white",
         "monitors": false,
-        "markerStyle": "none",
+        "fillStyle": "gray",
         "fillOpacity": 20,
-        "strokeOpacity": 0
+        "strokeStyle": "none",
+        "strokeOpacity": 50
       }
     },
     {
@@ -478,9 +496,10 @@
         "input-color": "#202020",
         "text": "white",
         "monitors": false,
-        "markerStyle": "none",
+        "fillStyle": "gray",
         "fillOpacity": 20,
-        "strokeOpacity": 0
+        "strokeStyle": "none",
+        "strokeOpacity": 50
       }
     },
     {
@@ -504,9 +523,10 @@
         "input-color": "#FFFFFF",
         "text": "white",
         "monitors": false,
-        "markerStyle": "none",
+        "fillStyle": "gray",
         "fillOpacity": 20,
-        "strokeOpacity": 0
+        "strokeStyle": "none",
+        "strokeOpacity": 50
       }
     },
     {
@@ -530,9 +550,10 @@
         "input-color": "#ffffff",
         "text": "white",
         "monitors": false,
-        "markerStyle": "none",
+        "fillStyle": "gray",
         "fillOpacity": 20,
-        "strokeOpacity": 0
+        "strokeStyle": "none",
+        "strokeOpacity": 50
       }
     },
     {
@@ -556,8 +577,9 @@
         "input-color": "#202020",
         "text": "colorOnBlack",
         "monitors": false,
-        "markerStyle": "both",
+        "fillStyle": "colored",
         "fillOpacity": 5,
+        "strokeStyle": "colored",
         "strokeOpacity": 50
       }
     }
