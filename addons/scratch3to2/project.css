@@ -108,13 +108,14 @@
   opacity: 0.7;
 }
 
-/* Remix & See inside */
+/* Remix, See inside, turbowarp-player */
 .preview .project-buttons {
   margin-top: 2px;
   margin-right: -2px;
 }
 .preview .remix-button,
-.preview .see-inside-button {
+.preview .see-inside-button,
+.preview .sa-tw-button {
   margin-bottom: 0;
   margin-left: 6px;
   height: 32px;
@@ -128,11 +129,19 @@
 .preview .remix-button:hover {
   background-color: #2d784c;
 }
-.preview .see-inside-button {
+.preview .see-inside-button,
+.preview .sa-tw-button.scratch {
   border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
 }
-.preview .see-inside-button:hover {
+.preview .see-inside-button:hover,
+.preview .sa-tw-button.scratch:hover {
   background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
+}
+.preview .sa-tw-button:not(.scratch) {
+  border: 1px solid #ef2424;
+}
+.preview .sa-tw-button:not(.scratch):hover {
+  background-color: #d72020;
 }
 .preview .remix-button::before,
 .preview .see-inside-button::before {
@@ -151,10 +160,14 @@
 .preview .see-inside-button::before {
   background-position: 0 -280px;
 }
+.preview .sa-tw-button::before {
+  margin: 0;
+}
 
 /* Player */
 @media (min-width: 768px) {
-  .preview .guiPlayer {
+  .preview .guiPlayer,
+  .sa-tw-iframe-container {
     padding: 12px 14px;
   }
   .preview .guiPlayer .project-info-alerts {
