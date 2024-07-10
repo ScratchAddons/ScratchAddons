@@ -133,6 +133,8 @@
 }
 .sa-followers-main .user-projects-modal-title {
   padding: 5px 15px !important;
+  box-shadow: 0 -1px 1px #999 !important;
+  color: white !important;
   text-align: left !important;
   font-weight: normal !important;
 }

@@ -314,6 +314,17 @@
 .studio-member-tile .studio-member-role {
   color: var(--darkWww-gray-scratchr2Text, #322f31);
 }
+#sa-studio-followers-button,
+#sa-studio-followers-button + .button {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
+  line-height: 30px;
+}
+#sa-studio-followers-button:hover,
+#sa-studio-followers-button + .button:hover {
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
+}
 
 /* Activity */
 .studio-activity .studio-messages-list {
@@ -391,10 +402,18 @@
   border-right: none;
 }
 
-/* Browse Projects modal */
+/* Browse Projects/Followers modal */
 .user-projects-modal .user-projects-modal-title {
   height: auto;
   padding: 5px 15px;
   background-color: transparent;
   box-shadow: inset 0 -1px 0 0 var(--darkWww-border-5, #eee);
+}
+.sa-followers-main .user-projects-modal-title {
+  height: auto !important;
+  padding: 5px 15px !important;
+  background-color: transparent !important;
+  box-shadow: inset 0 -1px 0 0 var(--darkWww-border-5, #eee) !important;
+  color: var(--darkWww-box-scratchr2HeaderText, #554747) !important;
+  text-align: left !important;
 }
