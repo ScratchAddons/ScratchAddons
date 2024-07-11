@@ -460,6 +460,11 @@ body:not(.sa-body-editor) .select select > option {
   font-size: 13px;
 }
 
+/* collapse-footer */
+:root {
+  --footer-hover-height: 250px !important;
+}
+
 /* Modals */
 .modal-overlay {
   background-color: rgba(0, 0, 0, 0.8);
