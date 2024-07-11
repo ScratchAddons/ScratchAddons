@@ -51,6 +51,10 @@
     {
       "url": "messages.css",
       "matches": ["https://scratch.mit.edu/messages"]
+    },
+    {
+      "url": "download.css",
+      "matches": ["https://scratch.mit.edu/download"]
     }
   ]
 }
