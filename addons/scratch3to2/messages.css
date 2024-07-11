@@ -94,6 +94,16 @@ a.social-messages-profile-link:link {
   color: var(--darkWww-box-scratchr2GrayText, #999);
 }
 
+/* message-filters */
+.filter-container {
+  margin-top: 0;
+  padding: 0.5rem calc(20px - 0.5rem);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+}
+
 /* Comments */
 .comment-message-info,
 .comment-text p {
