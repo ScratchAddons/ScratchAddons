@@ -504,6 +504,19 @@ body:not(.sa-body-editor) .select select > option {
   font-size: 18px;
   line-height: 32px;
 }
+.sa-modal-title {
+  height: auto !important;
+  padding: 5px 15px !important;
+  background-color: transparent !important;
+  box-shadow: inset 0 -1px 0 0 var(--darkWww-border-5, #eee) !important;
+  color: var(--darkWww-box-scratchr2HeaderText, #554747) !important;
+  text-align: left !important;
+}
+.sa-confirm-text {
+  margin-bottom: 0.9375rem !important;
+  color: var(--darkWww-box-scratchr2Text, #322f31);
+  font-size: 13px;
+}
 .modal-content .action-buttons {
   margin: 0;
   padding: 14px 15px 15px;

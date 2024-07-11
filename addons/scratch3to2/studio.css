@@ -409,11 +409,3 @@
   background-color: transparent;
   box-shadow: inset 0 -1px 0 0 var(--darkWww-border-5, #eee);
 }
-.sa-followers-main .user-projects-modal-title {
-  height: auto !important;
-  padding: 5px 15px !important;
-  background-color: transparent !important;
-  box-shadow: inset 0 -1px 0 0 var(--darkWww-border-5, #eee) !important;
-  color: var(--darkWww-box-scratchr2HeaderText, #554747) !important;
-  text-align: left !important;
-}
