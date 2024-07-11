@@ -84,6 +84,20 @@
 .compose-comment .compose-bottom-row .compose-limit {
   font-size: 11px;
 }
+.sa-emoji-button,
+.compose-comment .compose-bottom-row .sa-emoji-picker-see-more {
+  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
+}
+.sa-emoji-button:hover,
+.compose-comment .compose-bottom-row .sa-emoji-picker-see-more:hover {
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
+}
+.sa-emoji-button-www .sa-emoji-picker:not(.sa-emoji-picker-offscreen) {
+  top: 105px;
+}
+.compose-comment .compose-bottom-row .sa-emoji-picker-see-more {
+  margin-top: 5px;
+}
 .comment-container {
   border-bottom: 1px solid var(--darkWww-border-20, #ccc);
 }
