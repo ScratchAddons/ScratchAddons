@@ -77,7 +77,9 @@
   background-color: var(--darkWww-button-scratchr2, #855cd6);
   border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
   border-radius: 5px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.05);
   font-size: 13px;
 }
 .studio-info .studio-info-footer-report button:hover {
@@ -155,7 +157,9 @@
     var(--darkWww-box-scratchr2ButtonGradientBottom, #ccc)
   );
   border-color: var(--darkWww-box-scratchr2ButtonBorder, #999);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.05);
   color: var(--darkWww-box-scratchr2ButtonText, #666);
   text-shadow: 0 1px var(--darkWww-box, white);
   transition: none;
@@ -167,7 +171,9 @@
 .studio-tab-nav li:active {
   padding: 0 10px;
   border: 1px solid var(--darkWww-box-scratchr2ButtonBorder, #999);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.05);
 }
 .studio-tab-nav .active > li {
   background-color: var(--darkWww-button-scratchr2, #855cd6);
@@ -231,7 +237,7 @@
 
 /* Load More */
 .studio-grid-load-more button,
-.studio-compose-container .load-more-button  {
+.studio-compose-container .load-more-button {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -393,11 +399,15 @@
   color: var(--darkWww-box-scratchr2InputText, #555);
   font-size: 13px;
   line-height: 30px;
-  transition: border-color 0.2s linear, box-shadow 0.2s linear;
+  transition:
+    border-color 0.2s linear,
+    box-shadow 0.2s linear;
 }
 .studio-adder-section .studio-adder-row input:focus {
   border-color: rgba(82, 168, 236, 0.8);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  box-shadow:
+    inset 0 1px 1px rgba(0, 0, 0, 0.075),
+    0 0 8px rgba(82, 168, 236, 0.6);
   outline: none;
 }
 .studio-adder-section .studio-adder-row input::placeholder {

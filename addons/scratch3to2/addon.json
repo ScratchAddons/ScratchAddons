@@ -23,10 +23,7 @@
     },
     {
       "url": "explore_and_search.css",
-      "matches": [
-        "https://scratch.mit.edu/explore/*",
-        "https://scratch.mit.edu/search/*"
-      ]
+      "matches": ["https://scratch.mit.edu/explore/*", "https://scratch.mit.edu/search/*"]
     },
     {
       "url": "ideas.css",

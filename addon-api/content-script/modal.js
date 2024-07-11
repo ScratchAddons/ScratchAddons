@@ -243,10 +243,11 @@ export const confirm = (tab, title, message, { useEditorClasses = false, okButto
   }
   content.appendChild(
     Object.assign(document.createElement("div"), {
-      className: {
-        editor: tab.scratchClass("prompt_label"),
-        "scratch-www": "sa-confirm-text",
-      }[mode] || "",
+      className:
+        {
+          editor: tab.scratchClass("prompt_label"),
+          "scratch-www": "sa-confirm-text",
+        }[mode] || "",
       style: { "scratch-www": "margin: .9375rem 0.8275rem 0 .8275rem" }[mode] || "",
       innerText: message,
     })

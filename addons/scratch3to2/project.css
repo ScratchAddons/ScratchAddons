@@ -572,7 +572,7 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
   height: auto;
 }
 .social-form.social-textarea {
-  height: 46px /* two lines */
+  height: 46px; /* two lines */
 }
 
 /* Extensions row */

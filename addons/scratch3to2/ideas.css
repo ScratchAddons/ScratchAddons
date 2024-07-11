@@ -63,7 +63,9 @@ a.ttt-try-tutorial-button img {
 }
 .ttt-tile {
   border-radius: 9px 9px 0 0;
-  box-shadow: 0 0 0 1px var(--darkWww-box-scratchr2Border, #e0e0e0), 0 2px 3px rgba(0, 0, 0, 0.27);
+  box-shadow:
+    0 0 0 1px var(--darkWww-box-scratchr2Border, #e0e0e0),
+    0 2px 3px rgba(0, 0, 0, 0.27);
 }
 .ttt-tile-image {
   border-bottom: 1px solid var(--darkWww-box-scratchr2Border, #e0e0e0);

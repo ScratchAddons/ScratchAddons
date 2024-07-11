@@ -67,7 +67,7 @@
 }
 .social-message-icon[src$="follow.svg"],
 .social-message-icon[src$="curator-invite.svg"],
-.social-message-icon[src$="owner-invite.svg"]
+.social-message-icon[src$="owner-invite.svg"],
 .social-message-icon[src$="host-transfer.svg"] {
   background-position: -7px -265px;
 }
