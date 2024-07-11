@@ -53,6 +53,10 @@
       "matches": ["https://scratch.mit.edu/messages"]
     },
     {
+      "url": "join.css",
+      "matches": ["https://scratch.mit.edu/join"]
+    },
+    {
       "url": "download.css",
       "matches": ["https://scratch.mit.edu/download"]
     }
