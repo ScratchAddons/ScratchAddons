@@ -129,6 +129,25 @@ a.social-messages-profile-link:link {
   display: none;
 }
 
+/* one-click-studio-invites */
+.sa-curator-invite-button {
+  margin-bottom: 0;
+  height: 32px;
+  padding: 0 10px;
+  background-image: linear-gradient(
+    var(--darkWww-box-scratchr2ButtonGradientTop, white),
+    var(--darkWww-box-scratchr2ButtonGradientBottom, #ccc)
+  );
+  border: 1px solid var(--darkWww-box-scratchr2ButtonBorder, #999);
+  color: var(--darkWww-box-scratchr2ButtonText, #666);
+  line-height: 30px;
+  text-shadow: 0 1px var(--darkWww-box, white);
+}
+.sa-curator-invite-button:not(:disabled):hover {
+  background-color: var(--darkWww-box-scratchr2ButtonHover, #e6e6e6);
+  background-image: none;
+}
+
 /* Load More */
 .messages-social-loadmore {
   margin: 3px auto;
