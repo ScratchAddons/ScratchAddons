@@ -237,3 +237,6 @@
   opacity: 0.5;
   cursor: default;
 }
+#curator-link {
+  font-weight: bold;
+}
