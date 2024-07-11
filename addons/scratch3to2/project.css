@@ -504,7 +504,8 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
 .subactions .action-buttons .action-button.copy-link-button::before,
 .subactions .action-buttons .action-button.report-button::before,
 .sa-set-thumbnail-button::before,
-.remixtree-button::before {
+.remixtree-button::before,
+#sa-download-button::before {
   display: none;
 }
 
