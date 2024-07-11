@@ -19,11 +19,16 @@
   font-size: 22px;
   line-height: 26px;
 }
-.studio-info .studio-follow-button {
+.studio-info .studio-follow-button,
+.button.sa-leave-button {
   height: 32px;
-  padding: 8px 10px;
-  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
+  padding: 0 10px;
   font-size: 13px;
+  line-height: 30px;
+}
+.studio-info .studio-follow-button {
+  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
+  padding: 8px 10px;
   line-height: 18px;
 }
 .studio-info .studio-follow-button:hover {
@@ -36,6 +41,12 @@
   background-repeat: no-repeat;
   background-position: -15px -400px;
   filter: var(--darkWww-button-filter, none);
+}
+.button.sa-leave-button {
+  border: 1px solid #ff8c1a;
+}
+.button.sa-leave-button:hover {
+  background-color: #e67e17;
 }
 .studio-info .studio-image {
   padding: 5px;
