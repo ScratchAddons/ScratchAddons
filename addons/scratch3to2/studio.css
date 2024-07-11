@@ -7,6 +7,7 @@
   margin-bottom: 0;
   padding-top: 20px;
   background-image: none;
+  color: var(--darkWww-page-scratchr2Text, #322f31);
 }
 
 /* Info */
@@ -40,6 +41,9 @@
   padding: 5px;
   border: 1px solid var(--darkWww-border-20, #ccc);
   border-radius: 0;
+}
+.studio-info .studio-description {
+  color: var(--darkWww-page-scratchr2Text, #322f31);
 }
 .studio-info .studio-description.uneditable {
   padding: 0;
@@ -270,7 +274,7 @@
   font-weight: 800;
 }
 .studio-project-tile .studio-project-username {
-  color: var(--darkWww-page-text, #322f31);
+  color: var(--darkWww-page-scratchr2Text, #322f31);
   font-weight: normal;
 }
 

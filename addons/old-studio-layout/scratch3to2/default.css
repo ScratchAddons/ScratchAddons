@@ -53,6 +53,9 @@
 }
 
 /* Description */
+.studio-info .studio-description {
+  color: var(--darkWww-gray-scratchr2Text, #322f31);
+}
 .studio-info .studio-description.uneditable {
   color-scheme: var(--darkWww-gray-colorScheme, light);
 }
