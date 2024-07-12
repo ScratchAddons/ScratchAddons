@@ -274,8 +274,8 @@ export default async function ({ addon, console, msg }) {
       document.body.append(iframe);
       iframe.contentDocument.write(serializer.serializeToString(svg));
       let { width, height } = iframe.contentDocument.body.querySelector("svg g").getBoundingClientRect();
-      svg.setAttribute("width", width + 4 + "px");
-      svg.setAttribute("height", height + 4 + "px");
+      svg.setAttribute("width", width + "px");
+      svg.setAttribute("height", height + "px");
 
       let canvas = document.createElement("canvas");
       let ctx = canvas.getContext("2d");
