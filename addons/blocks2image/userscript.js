@@ -207,37 +207,6 @@ export default async function ({ addon, console, msg }) {
     const scale = isExportPNG ? 2 : 1;
     if (dataShapes === "c-block c-1 hat") {
       translateY = 20; // for My block
-      if (enabledAddons.includes("cat-blocks")) {
-        translateY += 11; // for cat ears, why 11? I dont know
-      }
-    }
-    if (dataShapes === "hat") {
-      translateY = 16; // for Events
-      if (enabledAddons.includes("cat-blocks")) {
-        translateY += 15; // for cat ears
-      }
-    }
-
-    translateY += 1;
-    svgchild.setAttribute("transform", `translate(${scale},${scale * translateY}) scale(${scale})`);
-    setCSSVars(svg);
-    svg.append(makeStyle());
-    svg.append(svgchild);
-    return svg;
-  }
-
-  function allBlocks(isExportPNG) {
-    let svg = exSVG.cloneNode();
-
-    let svgchild = document.querySelector("svg.blocklySvg g.blocklyBlockCanvas");
-    svgchild = svgchild.cloneNode(true);
-
-    let xArr = [];
-    let yArr = [];
-
-    const scale = isExportPNG ? 2 : 1;
-    if (dataShapes === "c-block c-1 hat") {
-      translateY = 20; // for My block
     }
     if (dataShapes === "hat") {
       translateY = 16; // for Events
