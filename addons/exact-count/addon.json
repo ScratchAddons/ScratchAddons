@@ -14,6 +14,12 @@
       "name": "World_Languages"
     }
   ],
+  "info": [
+      {
+        "id": "setting-removal",
+        "text": "The forum setting has been removed since the ScratchDB database used by it is offline."
+      }
+    ],
   "settings": [
     {
       "name": "Exact counts for profiles",
