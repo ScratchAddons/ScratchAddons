@@ -2,7 +2,7 @@
 const browserLevelPermissions = ["notifications"];
 if (typeof browser !== "undefined") {
   // Firefox only
-  if (typeof Clipboard.prototype.write === "function") {
+  if (typeof Clipboard.prototype.write !== "function") {
     // Firefox 109-126 only
     browserLevelPermissions.push("clipboardWrite");
   }
