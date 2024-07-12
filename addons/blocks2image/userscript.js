@@ -89,24 +89,6 @@ export default async function ({ addon, console, msg }) {
     { blocks: true }
   );
 
-  function handleKeyDown(e, functions) {
-    switch (e.key) {
-      case "Escape":
-        functions.remove();
-        break;
-      case "Enter":
-      case "1":
-        functions.handleCopyClick();
-        break;
-      case "2":
-        functions.handleSVGClick();
-        break;
-      case "3":
-        functions.handlePNGClick();
-        break;
-    }
-  }
-
   async function exportPopup(block) {
     const modal = addon.tab.createModal(msg("modalTitle"), {
       isOpen: true,
@@ -172,21 +154,6 @@ export default async function ({ addon, console, msg }) {
     copyButton.addEventListener("click", handleCopyClick);
     svgButton.addEventListener("click", handleSVGClick);
     pngButton.addEventListener("click", handlePNGClick);
-
-    const controller = new AbortController();
-    const oldRemove = remove;
-    remove = () => {
-      controller.abort();
-      oldRemove.call(this);
-    };
-
-    document.addEventListener(
-      "keydown",
-      (e) => {
-        handleKeyDown(e, { remove, handleCopyClick, handleSVGClick, handlePNGClick });
-      },
-      { signal: controller.signal }
-    );
   }
 
   /**

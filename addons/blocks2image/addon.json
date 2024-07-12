@@ -28,12 +28,5 @@
     "temporaryNotice": "The addon has been reworked. There is now a modal for saving the blocks as an image, and the image can be copied to the clipboard.",
     "isMajor": true
   },
-  "info": [
-    {
-      "id": "keys",
-      "type": "info",
-      "text": "You can press the enter key to copy the block to the clipbard, or press the 1 - 3 keys corresponding to the buttons."
-    }
-  ],
   "permissions": ["clipboardWrite"]
 }
