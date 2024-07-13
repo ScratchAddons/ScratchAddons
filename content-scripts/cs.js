@@ -104,6 +104,7 @@ const cs = {
     return new Promise((resolve, reject) => {
       if (typeof Clipboard.prototype.write === "function") {
         reject("Use browser API instead");
+        return;
       }
       browser.runtime.sendMessage({ clipboardDataURL: dataURL }).then(
         (res) => {
