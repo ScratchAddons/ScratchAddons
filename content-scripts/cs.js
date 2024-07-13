@@ -100,8 +100,11 @@ const cs = {
     csUrlObserver.dispatchEvent(new CustomEvent("change", { detail: { newUrl } }));
   },
   copyImage(dataURL) {
-    // Firefox only
+    // Firefox 109-126 only
     return new Promise((resolve, reject) => {
+      if (typeof Clipboard.prototype.write === "function") {
+        reject("Use browser API instead");
+      }
       browser.runtime.sendMessage({ clipboardDataURL: dataURL }).then(
         (res) => {
           resolve();
