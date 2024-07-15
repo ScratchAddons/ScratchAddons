@@ -14,13 +14,13 @@ async function getDefaultStoreId() {
   if (cookieStores.length === 0) throw "";
   if (cookieStores.some((store) => store.id === CHROME_DEFAULT)) {
     // Chrome
-    return CHROME_DEFAULT;
+    return scratchAddons.cookieStoreId = CHROME_DEFAULT;
   }
   if (cookieStores.some((store) => store.id === FIFEFOX_DEFAULT)) {
     // Firefox
-    return FIFEFOX_DEFAULT;
+    return scratchAddons.cookieStoreId = FIFEFOX_DEFAULT;
   }
-  return cookieStores[0].id;
+  return scratchAddons.cookieStoreId = cookieStores[0].id;
 }
 
 (async function () {
