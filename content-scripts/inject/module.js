@@ -1,7 +1,7 @@
 import runAddonUserscripts from "./run-userscript.js";
 import Localization from "./l10n.js";
 import "/libraries/thirdparty/cs/comlink.js";
-import {traceableFetchAddon, traceableFetchCS} from "/libraries/common/cs/fetch.js";
+import { traceableFetchAddon, traceableFetchCS } from "/libraries/common/cs/fetch.js";
 
 window.scratchAddons = {};
 scratchAddons.classNames = { loaded: false };
@@ -32,8 +32,7 @@ scratchAddons.console = {
   errorForAddon: (addonId) => _realConsole.error.bind(_realConsole, ...consoleOutput(addonId)),
 };
 
-scratchAddons.traceableFetchAddon =  traceableFetchAddon;
-
+scratchAddons.traceableFetchAddon = traceableFetchAddon;
 
 const comlinkIframe1 = document.getElementById("scratchaddons-iframe-1");
 const comlinkIframe2 = document.getElementById("scratchaddons-iframe-2");
