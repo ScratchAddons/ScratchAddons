@@ -87,8 +87,8 @@ export async function startCache(defaultStoreId, forceClear) {
 }
 
 async function calculateBadgeAlarmInterval() {
-  const DEFAULT_MINS = 1;
-  const INACTIVITY_MINS = 2.5;
+  const DEFAULT_MINS = 1.5;
+  const INACTIVITY_MINS = 3.5;
   if (!chrome.storage.session) return DEFAULT_MINS;
   const o = await chrome.storage.session.get("inactivity");
   return o.inactivity ? INACTIVITY_MINS : DEFAULT_MINS;
