@@ -1,4 +1,4 @@
-const originalFetch = window.fetch;
+const originalFetch = fetch;
 const traceableFetch = async (url, options, context, addonId = "") => {
   let baseUrl;
   if (context == "addon" || context == "cs") {
