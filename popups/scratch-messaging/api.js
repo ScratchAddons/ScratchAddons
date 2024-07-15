@@ -1,5 +1,5 @@
 import { HTTPError } from "../../libraries/common/message-cache.js";
-import { traceableFetchBackground } from "../../libraries/common/cs/fetch.js";
+import { traceableFetchExtension } from "../../libraries/common/cs/fetch.js";
 const parser = new DOMParser();
 
 export { HTTPError };
@@ -15,7 +15,7 @@ export async function deleteComment(addon, { resourceType, resourceId, commentId
   if (resourceType === "user") return deleteLegacyComment(addon, { resourceType, resourceId, commentId });
   const resourceTypeUrl = resourceType === "project" ? "project" : "studio";
   const xToken = await addon.auth.fetchXToken();
-  return traceableFetchBackground(
+  return traceableFetchExtension(
     `https://api.scratch.mit.edu/proxy/comments/${resourceTypeUrl}/${resourceId}/comment/${commentId}?sareferer`,
     {
       headers: {
@@ -32,22 +32,25 @@ export async function deleteComment(addon, { resourceType, resourceId, commentId
 }
 
 const deleteLegacyComment = async (addon, { resourceType, resourceId, commentId }) => {
-  return traceableFetchBackground(`https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/del/?sareferer`, {
-    headers: {
-      "content-type": "application/json",
-      "x-csrftoken": addon.auth.csrfToken,
-      "x-requested-with": "XMLHttpRequest",
-    },
-    body: JSON.stringify({ id: String(commentId) }),
-    method: "POST",
-  }).then((resp) => {
+  return traceableFetchExtension(
+    `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/del/?sareferer`,
+    {
+      headers: {
+        "content-type": "application/json",
+        "x-csrftoken": addon.auth.csrfToken,
+        "x-requested-with": "XMLHttpRequest",
+      },
+      body: JSON.stringify({ id: String(commentId) }),
+      method: "POST",
+    }
+  ).then((resp) => {
     if (!resp.ok)
       throw HTTPError.fromResponse(`Deleting ${resourceType} comment ${commentId} of ${resourceId} failed`, resp);
   });
 };
 
 export async function dismissAlert(addon, alertId) {
-  return traceableFetchBackground("https://scratch.mit.edu/site-api/messages/messages-delete/?sareferer", {
+  return traceableFetchExtension("https://scratch.mit.edu/site-api/messages/messages-delete/?sareferer", {
     headers: {
       "content-type": "application/json",
       "x-csrftoken": addon.auth.csrfToken,
@@ -69,15 +72,18 @@ export async function sendComment(addon, { resourceType, resourceId, content, pa
 export async function sendMigratedComment(addon, { resourceType, resourceId, content, parentId, commenteeId }) {
   const resourceTypeUrl = resourceType === "project" ? "project" : "studio";
   const xToken = await addon.auth.fetchXToken();
-  return traceableFetchBackground(`https://api.scratch.mit.edu/proxy/comments/${resourceTypeUrl}/${resourceId}?sareferer`, {
-    headers: {
-      "content-type": "application/json",
-      "x-csrftoken": addon.auth.csrfToken,
-      "x-token": xToken,
-    },
-    body: JSON.stringify({ content, parent_id: parentId, commentee_id: commenteeId }),
-    method: "POST",
-  })
+  return traceableFetchExtension(
+    `https://api.scratch.mit.edu/proxy/comments/${resourceTypeUrl}/${resourceId}?sareferer`,
+    {
+      headers: {
+        "content-type": "application/json",
+        "x-csrftoken": addon.auth.csrfToken,
+        "x-token": xToken,
+      },
+      body: JSON.stringify({ content, parent_id: parentId, commentee_id: commenteeId }),
+      method: "POST",
+    }
+  )
     .then((resp) => {
       if (!resp.ok) throw HTTPError.fromResponse(`Sending ${resourceTypeUrl} comment on ${resourceId} failed`, resp);
       return resp.json();
@@ -97,15 +103,18 @@ export async function sendMigratedComment(addon, { resourceType, resourceId, con
 }
 
 export async function sendLegacyComment(addon, { resourceType, resourceId, content, parentId, commenteeId }) {
-  return traceableFetchBackground(`https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/add/?sareferer`, {
-    headers: {
-      "content-type": "application/json",
-      "x-csrftoken": addon.auth.csrfToken,
-      "x-requested-with": "XMLHttpRequest",
-    },
-    method: "POST",
-    body: JSON.stringify({ content, parent_id: parentId, commentee_id: commenteeId }),
-  })
+  return traceableFetchExtension(
+    `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/add/?sareferer`,
+    {
+      headers: {
+        "content-type": "application/json",
+        "x-csrftoken": addon.auth.csrfToken,
+        "x-requested-with": "XMLHttpRequest",
+      },
+      method: "POST",
+      body: JSON.stringify({ content, parent_id: parentId, commentee_id: commenteeId }),
+    }
+  )
     .then((resp) => {
       if (!resp.ok) throw HTTPError.fromResponse(`Sending ${resourceType} comment on ${resourceId} failed`, resp);
       return resp.text();
@@ -143,7 +152,7 @@ export async function fetchMigratedComments(
 ) {
   let projectAuthor;
   if (resourceType === "project") {
-    const projectRes = await traceableFetchBackground(`https://api.scratch.mit.edu/projects/${resourceId}`);
+    const projectRes = await traceableFetchExtension(`https://api.scratch.mit.edu/projects/${resourceId}`);
     if (!projectRes.ok) return commentsObj; // empty
     const projectJson = await projectRes.json();
     projectAuthor = projectJson.author.username;
@@ -159,7 +168,7 @@ export async function fetchMigratedComments(
   for (const commentId of commentIds) {
     if (commentsObj[`${resourceType[0]}_${commentId}`]) continue;
 
-    const res = await traceableFetchBackground(getCommentUrl(commentId));
+    const res = await traceableFetchExtension(getCommentUrl(commentId));
 
     if (!res.ok) {
       if (res.status === 404 || res.status === 403) continue;
@@ -174,7 +183,7 @@ export async function fetchMigratedComments(
     let parentComment;
 
     if (json.parent_id) {
-      const resParent = await traceableFetchBackground(getCommentUrl(parentId));
+      const resParent = await traceableFetchExtension(getCommentUrl(parentId));
       if (!resParent.ok) {
         throw HTTPError.fromResponse(
           `Error when fetching parent ${parentId} for comment ${resourceType}/${commentId}`,
@@ -195,7 +204,7 @@ export async function fetchMigratedComments(
     // Note: we need to check replies for all parent comments, reply_count doesn't work properly
 
     const getReplies = async (offset) => {
-      const repliesRes = await traceableFetchBackground(getRepliesUrl(parentId, offset));
+      const repliesRes = await traceableFetchExtension(getRepliesUrl(parentId, offset));
       if (!repliesRes.ok) {
         if (repliesRes.status === 404 || repliesRes.status === 403) return null;
         throw HTTPError.fromResponse(`Ignoring comment ${resourceType}/${commentId}`, repliesRes);
@@ -265,9 +274,12 @@ export async function fetchMigratedComments(
 }
 
 export async function fetchLegacyComments(addon, { resourceType, resourceId, commentIds, page = 1, commentsObj = {} }) {
-  const res = await traceableFetchBackground(`https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/?page=${page}`, {
-    credentials: "omit",
-  });
+  const res = await traceableFetchExtension(
+    `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/?page=${page}`,
+    {
+      credentials: "omit",
+    }
+  );
   if (!res.ok) {
     console.warn(`Ignoring comments ${resourceType}/${resourceId} page ${page}, status ${res.status}`);
     return commentsObj;
@@ -349,7 +361,7 @@ export async function fetchLegacyComments(addon, { resourceType, resourceId, com
 export async function fetchAlerts(addon) {
   const username = await addon.auth.fetchUsername();
   const xToken = await addon.auth.fetchXToken();
-  return traceableFetchBackground(`https://api.scratch.mit.edu/users/${username}/messages/admin`, {
+  return traceableFetchExtension(`https://api.scratch.mit.edu/users/${username}/messages/admin`, {
     headers: {
       "x-token": xToken,
     },

@@ -1,7 +1,7 @@
 import { startCache } from "./message-cache.js";
 import { openMessageCache } from "../libraries/common/message-cache.js";
 import { purgeDatabase } from "../addons/scratch-notifier/notifier.js";
-import {traceableFetchBackground as traceableFetch} from "../libraries/common/cs/fetch.js";
+import { traceableFetchExtension as traceableFetch } from "../libraries/common/cs/fetch.js";
 const promisify =
   (callbackFn) =>
   (...args) =>
