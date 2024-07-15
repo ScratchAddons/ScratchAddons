@@ -7,21 +7,20 @@ const promisify =
   (...args) =>
     new Promise((resolve) => callbackFn(...args, resolve));
 
-function getDefaultStoreId() {
-  // Request Scratch to set the CSRF token.
-  return fetch("https://scratch.mit.edu/csrf_token/", {
-    credentials: "include",
-  })
-    .catch(() => {})
-    .then(() =>
-      promisify(chrome.cookies.get)({
-        url: "https://scratch.mit.edu/",
-        name: "scratchcsrftoken",
-      })
-    )
-    .then((cookie) => {
-      return (scratchAddons.cookieStoreId = cookie.storeId);
-    });
+async function getDefaultStoreId() {
+  const CHROME_DEFAULT = "0";
+  const FIFEFOX_DEFAULT = "firefox-default";
+  const cookieStores = await chrome.cookies.getAllCookieStores();
+  if (cookieStores.length === 0) throw "";
+  if (cookieStores.some((store) => store.id === CHROME_DEFAULT)) {
+    // Chrome
+    return CHROME_DEFAULT;
+  }
+  if (cookieStores.some((store) => store.id === FIFEFOX_DEFAULT)) {
+    // Firefox
+    return FIFEFOX_DEFAULT;
+  }
+  return cookieStores[0].id;
 }
 
 (async function () {
