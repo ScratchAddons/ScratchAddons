@@ -1,4 +1,4 @@
-export default async function ({ addon }) {
+export default async function ({ addon, fetch }) {
   const CACHE = {
     projects: null,
     favorites: null,

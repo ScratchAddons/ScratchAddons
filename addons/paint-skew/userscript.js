@@ -1,6 +1,6 @@
 import { addons, initialize } from "../paint-snap/compatibility.js";
 
-export default async function ({ addon }) {
+export default async function ({ addon, fetch }) {
   const paper = await addon.tab.traps.getPaper();
 
   const addSkew = function () {

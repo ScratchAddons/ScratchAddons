@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   const Blockly = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
 

@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   const spriteMeta = Object.assign(Object.create(null), {
     upload: {
       index: 0,

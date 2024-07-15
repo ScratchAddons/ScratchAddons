@@ -2,6 +2,7 @@ import "./set-lang.js";
 import Addon from "../addon-api/popup/Addon.js";
 import WebsiteLocalizationProvider from "../libraries/common/website-l10n.js";
 import globalTheme from "../../libraries/common/global-theme.js";
+import { traceableFetchBackground } from "../libraries/common/cs/fetch.js";
 
 const scratchAddons = (window.scratchAddons = {});
 // Store event targets for addon.* API events
@@ -53,7 +54,7 @@ async function getActualCookieStore() {
 async function refetchCookies(needsRequest = false) {
   if (needsRequest) {
     try {
-      await fetch("https://scratch.mit.edu/csrf_token/");
+      await traceableFetchBackground("https://scratch.mit.edu/csrf_token/");
     } catch (e) {
       console.error(e);
       scratchAddons.cookieFetchingFailed = true;
@@ -75,7 +76,7 @@ async function refetchSession(addon) {
   scratchAddons.isFetchingSession = true;
   addon.auth._refresh();
   try {
-    res = await fetch("https://scratch.mit.edu/session/", {
+    res = await traceableFetchBackground("https://scratch.mit.edu/session/", {
       headers: {
         "X-Requested-With": "XMLHttpRequest",
       },

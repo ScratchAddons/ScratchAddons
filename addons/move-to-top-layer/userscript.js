@@ -1,6 +1,6 @@
 // Initial code was written by Norbiros
 
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   const vm = addon.tab.traps.vm;
   document.body.addEventListener("click", (e) => {
     if (e.shiftKey && !addon.self.disabled) {

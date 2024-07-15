@@ -1,4 +1,4 @@
-export default async function ({ addon, msg }) {
+export default async function ({ addon, msg, fetch }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   let defaultKeys = null;

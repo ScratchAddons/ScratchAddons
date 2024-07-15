@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   Scratch.MyStuff.ProjectThumbnailCollectionView.prototype.shared = function (project) {
     // Scratch's implementation incorrectly calls fadeOut on the entire list
     if (this.model.options.collectionType === "notshared") {

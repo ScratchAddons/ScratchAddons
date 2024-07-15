@@ -5,7 +5,7 @@
  * to read actual dates.
  */
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, global, console, msg, fetch }) {
   // Default is a little over a month's worth of topics. Reasonably stable through 2022.
   // There's a lot of tolerance. Half or twice as many topics filter pretty much the same.
   const TOPICS_PER_MONTH = 7500;

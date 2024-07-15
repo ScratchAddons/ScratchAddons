@@ -1,6 +1,6 @@
 import { updateTooltips } from "../editor-compact/force-tooltip-update.js";
 
-export default async ({ addon }) => {
+export default async ({ addon, fetch }) => {
   while (true) {
     const soundEditorRobot = await addon.tab.waitForElement('[class*="sound-editor_row-reverse_"] > :nth-child(10)', {
       markAsSeen: true,

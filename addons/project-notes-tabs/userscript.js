@@ -1,6 +1,6 @@
 import { eventTarget as disableSelfEventTarget } from "./disable-self.js";
 
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   addon.tab
     .waitForElement(":root > body", {
       reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,

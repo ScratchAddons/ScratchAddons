@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   let amtOfComments = 0;
   let pass = 0;
   while (true) {

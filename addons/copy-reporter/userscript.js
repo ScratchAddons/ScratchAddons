@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   addon.tab.createEditorContextMenu(
     (ctx) => {
       const className = ctx.type === "monitor_large" ? "monitor_large-value" : "monitor_value";

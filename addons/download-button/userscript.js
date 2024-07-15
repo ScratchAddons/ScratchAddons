@@ -1,6 +1,6 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   const vm = addon.tab.traps.vm;
   const { redux } = addon.tab;
 

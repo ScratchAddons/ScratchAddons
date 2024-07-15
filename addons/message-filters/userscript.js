@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   // Wait for the select element that is the default message filtering select then remove it.
   await addon.tab.waitForElement(".select", { markAsSeen: true });
   document.querySelector(".select").remove();

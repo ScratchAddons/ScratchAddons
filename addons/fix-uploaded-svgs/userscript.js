@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   const originalFileReader = window.FileReader;
   window.FileReader = function () {
     const realFileReader = new originalFileReader();

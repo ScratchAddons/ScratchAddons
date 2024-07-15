@@ -1,6 +1,6 @@
 import { textColor, multiply, brighten, alphaBlend, makeHsv } from "../../libraries/common/cs/text-color.esm.js";
 
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   const paper = await addon.tab.traps.getPaper();
 
   const darkPaperDisabled = () => addon.self.disabled || !addon.settings.get("affectPaper");

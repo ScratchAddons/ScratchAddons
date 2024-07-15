@@ -3,7 +3,7 @@ const RESTORE_DISCUSS_URL = 1;
 
 const YT_LINK_SELECTOR = 'a[href^="https://scratch.mit.edu/discuss/youtube/"], a[href^="/discuss/youtube/"]';
 
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   function handleLink(el, mode) {
     if (mode === CHANGE_TO_YT) {
       el.href = el.href.replace("https://scratch.mit.edu/discuss/youtube/", "https://www.youtube.com/watch?v=");

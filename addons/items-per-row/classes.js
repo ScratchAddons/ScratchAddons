@@ -18,7 +18,7 @@ function setClasses(setting, value, thresholds) {
   }
 }
 
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   await addon.tab.waitForElement("body");
   const updateClasses = () => {
     setClasses("search", addon.settings.get("search"), { min: [5], max: [2], exact: [4] });

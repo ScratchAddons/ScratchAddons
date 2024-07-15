@@ -1,6 +1,7 @@
 import runAddonUserscripts from "./run-userscript.js";
 import Localization from "./l10n.js";
 import "/libraries/thirdparty/cs/comlink.js";
+import {traceableFetchAddon, traceableFetchCS} from "/libraries/common/cs/fetch.js";
 
 window.scratchAddons = {};
 scratchAddons.classNames = { loaded: false };
@@ -30,6 +31,9 @@ scratchAddons.console = {
   warnForAddon: (addonId) => _realConsole.warn.bind(_realConsole, ...consoleOutput(addonId)),
   errorForAddon: (addonId) => _realConsole.error.bind(_realConsole, ...consoleOutput(addonId)),
 };
+
+scratchAddons.traceableFetchAddon =  traceableFetchAddon;
+
 
 const comlinkIframe1 = document.getElementById("scratchaddons-iframe-1");
 const comlinkIframe2 = document.getElementById("scratchaddons-iframe-2");
@@ -95,7 +99,7 @@ const page = {
     this.isFetching = true;
     scratchAddons.eventTargets.auth.forEach((auth) => auth._refresh());
     try {
-      res = await fetch("/session/", {
+      res = await traceableFetchCS("/session/", {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
         },

@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   // Fetch as text without parsing as JSON, because guess what,
   // the code will stringify anyway!
   const emptyProjectPromise = fetch(`${addon.self.dir}/default.json`).then((res) => res.text());

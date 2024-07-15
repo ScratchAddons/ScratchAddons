@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   const vm = addon.tab.traps.vm;
   const loadExtensions = () => {
     if (addon.self.disabled) return;

@@ -1,7 +1,7 @@
 import { setup, setVolume, onVolumeChanged, getVolume, setMuted, setUnmutedVolume, isMuted } from "./module.js";
 import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
 
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   const vm = addon.tab.traps.vm;
   setup(vm);
 

@@ -1,4 +1,4 @@
-export default async function ({ addon }) {
+export default async function ({ addon, fetch }) {
   const vm = addon.tab.traps.vm;
 
   const oldAddSprite = vm.constructor.prototype.addSprite;

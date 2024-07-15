@@ -42,7 +42,7 @@ function updateCssVariables(node, addon) {
   if (pygmentsStyle) pygmentsStyle.disabled = !addon.settings.get("darkForumCode");
 }
 
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   let previewRoot;
   addon.settings.addEventListener("change", () => updateCssVariables(previewRoot, addon));
   addon.self.addEventListener("disabled", () => updateCssVariables(previewRoot, addon));

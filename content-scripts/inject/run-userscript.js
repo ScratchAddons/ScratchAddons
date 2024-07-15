@@ -30,6 +30,7 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
         msg,
         safeMsg: (key, placeholders) =>
           scratchAddons.l10n.escaped(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders),
+        fetch: scratchAddons.traceableFetchAddon(addonId),
       });
     };
     if (runAtComplete && document.readyState !== "complete") {

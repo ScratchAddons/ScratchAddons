@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   let originalNavbar = [];
   while (true) {
     const searchItem = await addon.tab.waitForElement(".search", {

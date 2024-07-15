@@ -1,5 +1,4 @@
 import LocalizationProvider from "../../libraries/common/cs/l10n.js";
-
 export default class UserscriptLocalizationProvider extends LocalizationProvider {
   constructor(urls) {
     super();

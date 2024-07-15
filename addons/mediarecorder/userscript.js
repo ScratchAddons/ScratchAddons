@@ -1,6 +1,6 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 
-export default async ({ addon, console, msg }) => {
+export default async ({ addon, console, msg, fetch }) => {
   let recordElem;
   let isRecording = false;
   let isWaitingForFlag = false;
@@ -318,14 +318,11 @@ export default async ({ addon, console, msg }) => {
         recordElem.textContent = msg("starting-in", { secs: roundedDelay - index });
         await new Promise((resolve) => setTimeout(resolve, 975));
       }
-      setTimeout(
-        () => {
-          recordElem.textContent = msg("stop");
+      setTimeout(() => {
+        recordElem.textContent = msg("stop");
 
-          recorder.start(1000);
-        },
-        (delay - roundedDelay) * 1000
-      );
+        recorder.start(1000);
+      }, (delay - roundedDelay) * 1000);
     };
     if (!recordElem) {
       recordElem = Object.assign(document.createElement("div"), {

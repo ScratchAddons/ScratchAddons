@@ -11,7 +11,7 @@ const removeAllChildren = (element) => {
   }
 };
 
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   setup(addon);
 
   let logsTab;

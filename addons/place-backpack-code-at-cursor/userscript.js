@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   const vm = addon.tab.traps.vm;
   const redux = addon.tab.redux;
 

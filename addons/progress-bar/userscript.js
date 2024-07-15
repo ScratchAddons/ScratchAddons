@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   const useTopBar = addon.settings.get("topbar");
 
   const barOuter = document.createElement("div");
@@ -92,7 +92,7 @@ export default async function ({ addon, console, msg }) {
   const ASSET_REGEX = /^https:\/\/assets\.scratch\.mit\.edu\//;
 
   // Scratch uses fetch() to download the project JSON and upload project assets.
-  const originalFetch = window.fetch;
+  const originalFetch = fetch;
   window.fetch = (url, opts) => {
     if (!addon.self.disabled && typeof url === "string" && opts && typeof opts.method === "string") {
       if (opts.method.toLowerCase() === "get" && PROJECT_REGEX.test(url)) {

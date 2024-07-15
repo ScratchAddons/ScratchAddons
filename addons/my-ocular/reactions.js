@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   let posts = document.querySelectorAll(".blockpost");
   const isLoggedIn = await addon.auth.fetchIsLoggedIn();
   const username = await addon.auth.fetchUsername();

@@ -1,7 +1,7 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import LogView from "./log-view.js";
 
-export default async function createLogsTab({ debug, addon, console, msg }) {
+export default async function createLogsTab({ debug, addon, console, msg, fetch }) {
   const vm = addon.tab.traps.vm;
 
   const tab = debug.createHeaderTab({
@@ -108,7 +108,7 @@ export default async function createLogsTab({ debug, addon, console, msg }) {
                 sprite: targetInfo ? targetInfo.name : msg("unknown-sprite"),
                 type,
                 content: text,
-              })[match]
+              }[match])
           ) + "\n"
         ).repeat(count)
       )

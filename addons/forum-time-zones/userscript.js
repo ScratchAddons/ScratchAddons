@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   const cache = [];
   const locale = addon.auth.scratchLang;
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;

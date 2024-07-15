@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   const oldSliderCarousel = $.fn.sliderCarousel;
   $.fn.sliderCarousel = function (...args) {
     if (args[0] === "initTinyScrollbar") {

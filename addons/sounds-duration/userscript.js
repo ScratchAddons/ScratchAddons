@@ -1,4 +1,4 @@
-export default async function ({ addon, msg, console }) {
+export default async function ({ addon, msg, console, fetch }) {
   while (true) {
     const container = await addon.tab.waitForElement("[class^=sound-editor_editor-container]", {
       markAsSeen: true,

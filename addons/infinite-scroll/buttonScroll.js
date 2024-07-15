@@ -35,7 +35,7 @@ async function commentLoader(
   }
 }
 
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   if (window.location.pathname.split("/")[1] === "users" && addon.settings.get("profileCommentScroll"))
     commentLoader(addon, "#content", "[data-control=load-more]");
   const isStudio = window.location.pathname.split("/")[1] === "studios";

@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   const messages = document.createElement("a");
   messages.href = "/messages/";
   messages.title = msg("messages");

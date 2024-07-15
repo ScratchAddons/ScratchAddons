@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   let mode = addon.settings.get("fitting");
 
   addon.settings.addEventListener("change", () => {

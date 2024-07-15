@@ -1,4 +1,4 @@
-export default async function ({ addon, msg }) {
+export default async function ({ addon, msg, fetch }) {
   const submitButton = document.querySelector("#djangobbwrap .form-submit [type=submit]");
 
   submitButton.addEventListener("click", () => {

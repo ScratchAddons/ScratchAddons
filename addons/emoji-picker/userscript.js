@@ -1,5 +1,5 @@
 import { emojis, unicodeEmojis } from "./emojis.js";
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   let lastParent = null;
   //Functions
   const setEmojiPickerPos = function () {

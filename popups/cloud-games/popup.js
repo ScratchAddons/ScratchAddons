@@ -1,9 +1,10 @@
 import { HTTPError } from "../../libraries/common/message-cache.js";
+import { traceableFetchBackground } from "../../libraries/common/cs/fetch.js";
 
 const studioStrategy = async (studioId) => {
   let res;
   try {
-    res = await fetch(`https://api.scratch.mit.edu/studios/${studioId}/projects/?limit=40`);
+    res = await traceableFetchBackground(`https://api.scratch.mit.edu/studios/${studioId}/projects/?limit=40`);
   } catch (e) {
     console.warn("Error when fetching studio: ", e);
     throw new HTTPError(`Error when fetching studio: ${e}`, 500);
@@ -37,7 +38,7 @@ const strategy = async (addon, displayedGames) =>
       if (type === "studio") return await studioStrategy(id);
       let res;
       try {
-        res = await fetch(`https://api.scratch.mit.edu/projects/${id}`);
+        res = await traceableFetchBackground(`https://api.scratch.mit.edu/projects/${id}`);
       } catch (e) {
         console.warn("Error when fetching project: ", e);
         return null;
@@ -135,7 +136,7 @@ export default async ({ addon, msg, safeMsg }) => {
             let username = await addon.auth.fetchUsername();
             let json;
             try {
-              const res = await fetch(
+              const res = await traceableFetchBackground(
                 `https://clouddata.scratch.mit.edu/logs?projectid=${projectObject.id}&limit=40&offset=0`
               );
               if (res.status >= 400) {
