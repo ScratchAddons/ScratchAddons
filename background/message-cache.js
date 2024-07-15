@@ -86,23 +86,36 @@ export async function startCache(defaultStoreId, forceClear) {
   });
 }
 
+async function calculateBadgeAlarmInterval() {
+  const DEFAULT_MINS = 1.5;
+  const INACTIVITY_MINS = 3.5;
+  if (!chrome.storage.session) return DEFAULT_MINS;
+  const o = await chrome.storage.session.get("inactivity");
+  return o.inactivity ? INACTIVITY_MINS : DEFAULT_MINS;
+}
+
 // Update badge without fetching messages
 export function handleBadgeAlarm() {
-  chrome.alarms.get(BADGE_ALARM_NAME, (a) => {
-    const alarmExists = a !== undefined;
-    const badgeAddonEnabled = scratchAddons.localState.addonsEnabled["msg-count-badge"];
-    if (badgeAddonEnabled && !alarmExists) {
-      chrome.alarms.create(BADGE_ALARM_NAME, {
-        periodInMinutes: 1,
-      });
-    }
-    if (!badgeAddonEnabled && alarmExists) {
-      // Remove unnecessary alarm
-      chrome.alarms.clear(BADGE_ALARM_NAME);
-    }
+  onReady(() => {
+    chrome.alarms.get(BADGE_ALARM_NAME, (currentAlarm) => {
+      const alarmExists = currentAlarm !== undefined;
+      const badgeAddonEnabled = scratchAddons.localState.addonsEnabled["msg-count-badge"];
+      if (badgeAddonEnabled) {
+        calculateBadgeAlarmInterval().then((newPeriod) => {
+          if (!alarmExists || currentAlarm.periodInMinutes !== newPeriod)
+            chrome.alarms.create(BADGE_ALARM_NAME, {
+              periodInMinutes: newPeriod,
+            });
+        });
+      }
+      if (!badgeAddonEnabled && alarmExists) {
+        // Remove unnecessary alarm
+        chrome.alarms.clear(BADGE_ALARM_NAME);
+      }
+    });
   });
 }
-onReady(handleBadgeAlarm);
+handleBadgeAlarm();
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (!ready) return;
