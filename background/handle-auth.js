@@ -9,7 +9,7 @@ const promisify =
 
 function getDefaultStoreId() {
   // Request Scratch to set the CSRF token.
-  return fetch("https://scratch.mit.edu/csrf_token/", {
+  return fetch("https://scratch.mit.edu/csrf_token/?sa=true", {
     credentials: "include",
   })
     .catch(() => {})
