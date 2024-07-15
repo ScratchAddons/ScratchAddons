@@ -53,7 +53,7 @@ async function getActualCookieStore() {
 async function refetchCookies(needsRequest = true) {
   if (needsRequest) {
     try {
-      await fetch("https://scratch.mit.edu/csrf_token/");
+      await fetch("https://scratch.mit.edu/csrf_token/?sa=true");
     } catch (e) {
       console.error(e);
       scratchAddons.cookieFetchingFailed = true;
