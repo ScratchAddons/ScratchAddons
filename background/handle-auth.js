@@ -7,21 +7,20 @@ const promisify =
   (...args) =>
     new Promise((resolve) => callbackFn(...args, resolve));
 
-function getDefaultStoreId() {
-  // Request Scratch to set the CSRF token.
-  return fetch("https://scratch.mit.edu/csrf_token/", {
-    credentials: "include",
-  })
-    .catch(() => {})
-    .then(() =>
-      promisify(chrome.cookies.get)({
-        url: "https://scratch.mit.edu/",
-        name: "scratchcsrftoken",
-      })
-    )
-    .then((cookie) => {
-      return (scratchAddons.cookieStoreId = cookie.storeId);
-    });
+async function getDefaultStoreId() {
+  const CHROME_DEFAULT = "0";
+  const FIFEFOX_DEFAULT = "firefox-default";
+  const cookieStores = await chrome.cookies.getAllCookieStores();
+  if (cookieStores.length === 0) throw "";
+  if (cookieStores.some((store) => store.id === CHROME_DEFAULT)) {
+    // Chrome
+    return CHROME_DEFAULT;
+  }
+  if (cookieStores.some((store) => store.id === FIFEFOX_DEFAULT)) {
+    // Firefox
+    return FIFEFOX_DEFAULT;
+  }
+  return cookieStores[0].id;
 }
 
 (async function () {
@@ -57,7 +56,7 @@ const onCookiesChanged = ({ cookie, cause, removed }) => {
   notify(cookie);
 };
 
-const COOKIE_CHANGE_RATE_LIMIT = 1500; // (ms) First events get processed immediately, then rate-limit is used.
+const COOKIE_CHANGE_RATE_LIMIT = 5000; // (ms) First events get processed immediately, then rate-limit is used.
 const queue = []; // We store cookies.onChanged events here. We'll try to process them all, but there's no guarantee.
 let timer = null; // The integer ID returned by setInterval.
 let n = 0; // Resets to 0 after each "burst" ends. If number is low, the event is processed with no delay.
@@ -92,8 +91,8 @@ const addToQueue = (item) => {
     // Process first 5 events immediately (gets reset after receiving 0 events for `COOKIE_CHANGE_RATE_LIMIT` milliseconds)
     process({ clearIntervalIfQueueEmpty: false });
   }
-  if (queue.length > 15) {
-    // If queue has more than 15 items, remove the oldest one.
+  if (queue.length > 8) {
+    // If queue has more than 8 items, remove the oldest one.
     queue.shift();
   }
 };
