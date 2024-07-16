@@ -3,6 +3,6 @@
   "blocks2image/save": "Save as an image",
   "blocks2image/modalTitle": "Blocks to image",
   "blocks2image/clipboard": "Copy to clipboard",
-  "blocks2image/svg": "Download as a SVG",
-  "blocks2image/png": "Download as a PNG"
+  "blocks2image/svg": "Download as SVG",
+  "blocks2image/png": "Download as PNG"
 }
