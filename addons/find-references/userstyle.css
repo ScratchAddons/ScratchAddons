@@ -24,14 +24,14 @@ a {
 }
 
 .sa-fr-bar {
-  display: flex;
-  align-items: center;
+  /* display: flex;
+  align-items: left;
   white-space: nowrap;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; */
   width: 100%;
   height: 12%;
-  margin-left: 0.1em;
 }
+
 .sa-fr-bar[hidden] {
   /* !important to override displayNoneWhileDisabled */
   display: none !important;
@@ -43,6 +43,8 @@ a {
   height: 2rem;
   width: 100%;
   max-width: 16em;
+  display: flex;
+  flex-direction: row;
 }
 
 .sa-find-dropdown-out {
@@ -183,6 +185,8 @@ a {
   display: flex;
   flex-direction: column;
   border-radius: 10px;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 #floatWindow .float-window-content {
@@ -194,8 +198,36 @@ a {
 }
 
 #floatWindow #ref_list li {
-  height: 4em;
+  height: 2em;
   display: flex; /* 启用 Flexbox */
   flex-direction: row; /* 使子元素横向排列 */
   justify-content: space-between;
+}
+
+#ref_list li.ref_result {
+  opacity: 0.8;
+  transition: opacity 0.3s ease-in-out;
+}
+
+#ref_list li.ref_result:hover {
+  opacity: 1;
+}
+
+/* 为 #ref_list 中的 header li item 设置样式 */
+#ref_list li.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: left;
+  font-weight: bold;
+  padding: 10px;
+}
+
+/* 为 header content 设置样式 */
+#ref_list li.header div:first-child {
+  text-align: left;
+}
+
+/* 为第二列内容设置样式 */
+#ref_list li.header div:last-child {
+  text-align: left;
 }

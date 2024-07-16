@@ -172,7 +172,12 @@ export default class Utils {
         const dataShapes = child.getAttribute("data-shapes");
         const dataArgType = child.getAttribute("data-argument-type");
         // 检查 data-shapes 属性值
-        if (dataShapes !== "reporter round" && dataShapes !== "reporter boolean" && dataArgType !== "dropdown") {
+        if (
+          dataShapes !== "reporter round" &&
+          dataShapes !== "argument round" &&
+          dataShapes !== "reporter boolean" &&
+          dataArgType !== "dropdown"
+        ) {
           // 如果不是期望的值，从父节点中移除该子节点
           svgChild.removeChild(child);
         }
@@ -249,14 +254,18 @@ export default class Utils {
           item.setAttribute("xlink:href", dataUri);
         })
       ).then(() => {
-        const rect = document.querySelector('[data-id="event_whenkeypressed"]').getBoundingClientRect();
-        // set svg width height base on thie rect
-        // svg.setAttribute("width", rect.width);
-        // svg.setAttribute("height", rect.height);
-        // const scale = 0.1;
-        // svg.setAttribute("transform", `translate(0,0) scale(${scale})`);
+        // remove fill color
+        this.removeAllFillStyles(svg);
         resolve(svg);
       });
+    });
+  }
+  removeAllFillStyles(svg) {
+    const pathElements = svg.querySelectorAll(".blocklyPath.blocklyBlockBackground");
+    pathElements.forEach((pathElement) => {
+      if (pathElement.style.fill) {
+        pathElement.style.fill = "";
+      }
     });
   }
 }

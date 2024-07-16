@@ -65,6 +65,12 @@ export default async function ({ addon, msg, console }) {
       this.findInput.placeholder = msg("find-placeholder");
       this.findInput.autocomplete = "off";
 
+      // Create a button element
+      this.collapseButton = document.createElement("button");
+      this.collapseButton.textContent = "Collapse";
+      this.collapseButton.id = "collapseButton";
+      this.findWrapper.appendChild(this.collapseButton);
+
       this.bindEvents();
       this.tabChanged();
 
@@ -97,6 +103,7 @@ export default async function ({ addon, msg, console }) {
       floatWindow.closeFloatWindow = function () {
         floatWindow.style.display = "none";
       };
+
       return floatWindow;
     }
 
@@ -732,9 +739,27 @@ export default async function ({ addon, msg, console }) {
         this.carousel.remove();
       }
 
+      // Create the header li item
+      const header_item = document.createElement("li");
+      // add header to it
+      header_item.classList.add("header");
+
+      // Add the header content
+      const header_content = document.createElement("div");
+      header_content.textContent = "start block";
+      header_item.appendChild(header_content);
+
+      // Add the second column content
+      const second_column = document.createElement("div");
+      second_column.textContent = "directly use block";
+      header_item.appendChild(second_column);
+
+      // Add the header li item to the parent element
+      this.fr_result_list.appendChild(header_item);
       if (blocks != null) {
         for (const block of blocks) {
           const li_item = document.createElement("li");
+          li_item.classList.add("ref_result");
           if (this.blocks_ids.includes(block.id)) {
             continue;
           } else {
@@ -747,6 +772,13 @@ export default async function ({ addon, msg, console }) {
               this.hovered.classList.remove("hov");
               this.hovered = null;
             }
+
+            // click
+            li_item.addEventListener("click", (e) => {
+              const blockId = li_item.getAttribute("blockID");
+              this.utils.scrollBlockIntoView(blockId);
+            });
+
             // if (this.hovered !== li_item) {
             //   li_item.classList.add("hov");
             //   this.hovered = li_item;
