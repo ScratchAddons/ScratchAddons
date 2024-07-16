@@ -4,7 +4,6 @@ import Auth from "./Auth.js";
 
 /**
  * An addon that loads as a popup.
- * @extends Addon
  * @property {Popup} popup
  */
 export default class PopupAddon extends Addon {

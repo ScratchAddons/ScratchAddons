@@ -1,6 +1,5 @@
 /**
  * Wrapper class for EventTarget.
- * @extends EventTarget
  */
 export default class Listenable extends EventTarget {
   constructor(...args) {

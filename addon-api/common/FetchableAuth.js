@@ -10,9 +10,21 @@ export default class FetchableAuth extends AuthCommon {
    * @private
    */
   _refresh() {
+    /**
+     * @private
+     */
     this._lastUsername = undefined;
+    /**
+     * @private
+     */
     this._lastUserId = undefined;
+    /**
+     * @private
+     */
     this._lastIsLoggedIn = undefined;
+    /**
+     * @private
+     */
     this._lastXToken = undefined;
   }
 
@@ -53,7 +65,7 @@ export default class FetchableAuth extends AuthCommon {
 
   /**
    * Fetch whether the user is logged in or not.
-   * @returns {Promise<boolean>} - whether the user is logged in or not.
+   * @returns {Promise<boolean>} Whether the user is logged in or not.
    */
   fetchIsLoggedIn() {
     return this._fetchProperty("_lastIsLoggedIn");
@@ -61,7 +73,7 @@ export default class FetchableAuth extends AuthCommon {
 
   /**
    * Fetch current username.
-   * @returns {Promise<?string>} - the username.
+   * @returns {Promise<?string>} The username.
    */
   fetchUsername() {
     return this._fetchProperty("_lastUsername");
@@ -69,7 +81,7 @@ export default class FetchableAuth extends AuthCommon {
 
   /**
    * Fetch current user ID.
-   * @returns {Promise<?number>} - the user ID.
+   * @returns {Promise<?number>} The user ID.
    */
   fetchUserId() {
     return this._fetchProperty("_lastUserId");
@@ -77,7 +89,7 @@ export default class FetchableAuth extends AuthCommon {
 
   /**
    * Fetch X-Token used in new APIs.
-   * @returns {Promise<?string>} - the X-Token.
+   * @returns {Promise<?string>} The X-Token.
    */
   fetchXToken() {
     return this._fetchProperty("_lastXToken");

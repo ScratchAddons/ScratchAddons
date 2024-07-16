@@ -1,4 +1,6 @@
 import { insert } from "../../libraries/thirdparty/cs/text-field-edit.js";
+
+/** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, msg, console }) {
   await addon.tab.loadScript("/libraries/thirdparty/cs/spark-md5.min.js");
 
