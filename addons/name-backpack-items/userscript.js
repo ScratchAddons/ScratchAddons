@@ -1,4 +1,4 @@
-export default async function ({ addon, msg, console }) {
+export default async function ({ addon, msg, console, fetch }) {
   const oldSend = XMLHttpRequest.prototype.send;
 
   XMLHttpRequest.prototype.send = function () {

@@ -45,7 +45,7 @@ async function getLocales(addon) {
 
   return lang;
 }
-export default async function ({ addon, msg }) {
+export default async function ({ addon, msg, fetch }) {
   window.scratchAddons._scratchblocks3Enabled = true;
 
   let languages = ["en"];

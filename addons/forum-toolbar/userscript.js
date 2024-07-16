@@ -1,5 +1,5 @@
 import { insert, wrapSelection, getSelection } from "../../libraries/thirdparty/cs/text-field-edit.js";
-export default async ({ addon, console, msg }) => {
+export default async ({ addon, console, msg, fetch }) => {
   await addon.tab.waitForElement(".markItUpButton16");
   const textBox = document.querySelector(".markItUpEditor");
   /*

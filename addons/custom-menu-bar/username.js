@@ -1,4 +1,4 @@
-export default async function ({ addon }) {
+export default async function ({ addon, fetch }) {
   while (true) {
     // Profile account menu item
     const menuItem = await addon.tab.waitForElement("[class^=account-nav_user-info_] + div > ul > :first-child", {

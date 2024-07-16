@@ -1,4 +1,4 @@
-export default async ({ addon, console, msg }) => {
+export default async ({ addon, console, msg, fetch }) => {
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
     if (addon.self.disabled || detail.action.type !== "timeout/SET_AUTOSAVE_TIMEOUT_ID") return;

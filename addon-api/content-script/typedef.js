@@ -11,6 +11,7 @@
  * @property {string} msg.locale - Current locale used by msg function.
  * @property {function} safeMsg - Gets localized and HTML-escaped messages. Placeholders are NOT escaped.
  * @property {Console} console - Console API with formatting.
+ * @property {function} fetch - Fetch with Scratch tracability
  */
 
 export default {};

@@ -1,4 +1,4 @@
-export default async function ({ addon }) {
+export default async function ({ addon, fetch }) {
   if (addon.tab.clientVersion === "scratchr2") return;
   let span;
   const change = async (enabled) => {

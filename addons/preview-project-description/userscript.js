@@ -1,6 +1,6 @@
 import { disableTabs } from "../project-notes-tabs/disable-self.js";
 
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   const divElement = Object.assign(document.createElement("div"), {
     className: "sa-toggle-project-preview",
   });

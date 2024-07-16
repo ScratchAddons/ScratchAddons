@@ -1,6 +1,6 @@
 import { textColor } from "../../libraries/common/cs/text-color.esm.js";
 
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   // Style the chart added by the scratchstats addon
   const canvas = await addon.tab.waitForElement("#sa-scratchstats-chart", { markAsSeen: true });
   await addon.tab.loadScript("/libraries/thirdparty/cs/chart.min.js");

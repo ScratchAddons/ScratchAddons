@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   let originalBackpack;
 
   // Event listeners that add dynamic enable/disable

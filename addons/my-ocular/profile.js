@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   const username = Scratch.INIT_DATA.PROFILE.model.username;
   let data = await fetchStatus(username);
 

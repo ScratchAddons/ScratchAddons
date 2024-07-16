@@ -1,3 +1,4 @@
+import { traceableFetchCS } from "./fetch";
 export default class ThumbSetter {
   constructor(projectId, beforeUpload) {
     this._input = null;
@@ -66,14 +67,17 @@ export default class ThumbSetter {
     this._initPromise();
     this.onFinished(this.finished);
     try {
-      const resp = await fetch(`https://scratch.mit.edu/internalapi/project/thumbnail/${this.projectId}/set/`, {
-        method: "POST",
-        body: file,
-        credentials: "include",
-        headers: {
-          "X-CSRFToken": this.getCSRFToken(),
-        },
-      });
+      const resp = await traceableFetchCS(
+        `https://scratch.mit.edu/internalapi/project/thumbnail/${this.projectId}/set/`,
+        {
+          method: "POST",
+          body: file,
+          credentials: "include",
+          headers: {
+            "X-CSRFToken": this.getCSRFToken(),
+          },
+        }
+      );
       if (!resp.ok) {
         const err = new Error(`Server responded with: ${resp.status}`);
         err.status = resp.status;

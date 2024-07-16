@@ -35,7 +35,7 @@ function createDoubleRankItem(data, globalGetter, countryGetter, label) {
   return createItem(number, label);
 }
 
-export default async function ({ addon, msg, console }) {
+export default async function ({ addon, msg, console, fetch }) {
   const createStatsSection = (element, { data, loading, error } = {}) => {
     // "element" is the element whose content to replace
     // "data" is the data from ScratchDB, or null to display a placeholder

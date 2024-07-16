@@ -2,7 +2,7 @@ import BlockItem from "./blockly/BlockItem.js";
 import BlockInstance from "./blockly/BlockInstance.js";
 import Utils from "./blockly/Utils.js";
 
-export default async function ({ addon, msg, console }) {
+export default async function ({ addon, msg, console, fetch }) {
   if (!addon.self._isDevtoolsExtension && window.initGUI) {
     console.log("Extension running, stopping addon");
     window._devtoolsAddonEnabled = true;
@@ -191,10 +191,10 @@ export default async function ({ addon, msg, console }) {
         this.selectedTab === 0
           ? this.getScratchBlocks()
           : this.selectedTab === 1
-            ? this.getScratchCostumes()
-            : this.selectedTab === 2
-              ? this.getScratchSounds()
-              : [];
+          ? this.getScratchCostumes()
+          : this.selectedTab === 2
+          ? this.getScratchSounds()
+          : [];
 
       this.dropdown.empty();
 

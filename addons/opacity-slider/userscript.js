@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   await addon.tab.loadScript("/libraries/thirdparty/cs/tinycolor-min.js");
 
   const CONTAINER_WIDTH = 150;

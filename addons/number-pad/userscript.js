@@ -1,4 +1,4 @@
-export default async function ({ addon, msg, console }) {
+export default async function ({ addon, msg, console, fetch }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   // https://github.com/scratchfoundation/scratch-blocks/blob/develop/core/field_number.js#L165

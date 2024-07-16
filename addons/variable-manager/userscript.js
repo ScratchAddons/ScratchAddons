@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   const vm = addon.tab.traps.vm;
 
   let localVariables = [];

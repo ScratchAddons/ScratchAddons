@@ -65,97 +65,115 @@ function triggerNewSearch(searchContent, query, sort, msg) {
   appendSearch(searchContent, query, 0, sort, msg);
 }
 
-function appendSearch(box, query, page, term, msg) {
-  if (page * 50 > hits) return 0;
-  isCurrentlyProcessing = true;
-  let loading = document.createTextNode(msg("loading"));
-  currentPage = page;
-  box.appendChild(loading);
-  window
-    .fetch(`https://scratchdb.lefty.one/v3/forum/search?q=${encodeURIComponent(query)}&page=${page}&o=${term}`)
-    .catch((err) => {
-      box.removeChild(box.lastChild);
-      box.appendChild(document.createTextNode(msg("error")));
-    })
-    .then((res) => res.json())
-    .then((data) => {
-      hits = data.hits;
-      if (hits === 0) {
-        //there were no hits
+
+export default async function ({ addon, console, msg, fetch }) {
+  function appendSearch(box, query, page, term, msg) {
+    if (page * 50 > hits) return 0;
+    isCurrentlyProcessing = true;
+    let loading = document.createTextNode(msg("loading"));
+    currentPage = page;
+    box.appendChild(loading);
+
+      fetch(`https://scratchdb.lefty.one/v3/forum/search?q=${encodeURIComponent(query)}&page=${page}&o=${term}`)
+      .catch((err) => {
         box.removeChild(box.lastChild);
-        box.appendChild(document.createTextNode(msg("none")));
+        box.appendChild(document.createTextNode(msg("error")));
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        hits = data.hits;
+        if (hits === 0) {
+          //there were no hits
+          box.removeChild(box.lastChild);
+          box.appendChild(document.createTextNode(msg("none")));
 
-        return;
-      }
-      box.removeChild(box.lastChild);
-      for (let post of data.posts) {
-        function createTextBox(data, classes, times) {
-          let element = document.createElement("span");
-          element.classList = classes;
-          element.appendChild(document.createTextNode(data));
-          for (let i = 0; i < times || 0; i++) {
-            element.appendChild(document.createElement("br"));
+          return;
+        }
+        box.removeChild(box.lastChild);
+        for (let post of data.posts) {
+          function createTextBox(data, classes, times) {
+            let element = document.createElement("span");
+            element.classList = classes;
+            element.appendChild(document.createTextNode(data));
+            for (let i = 0; i < times || 0; i++) {
+              element.appendChild(document.createElement("br"));
+            }
+            return element;
           }
-          return element;
-        }
-        function createLabel(text) {
-          let container = document.createElement("div");
-          let textElement = document.createElement("strong");
-          container.appendChild(textElement);
-          textElement.innerText = text;
-          return container;
-        }
-        // the post
-        let postElem = document.createElement("div");
-        postElem.classList = "blockpost roweven firstpost";
+          function createLabel(text) {
+            let container = document.createElement("div");
+            let textElement = document.createElement("strong");
+            container.appendChild(textElement);
+            textElement.innerText = text;
+            return container;
+          }
+          // the post
+          let postElem = document.createElement("div");
+          postElem.classList = "blockpost roweven firstpost";
 
-        // the post box
-        let postBox = document.createElement("div");
-        postBox.classList = ["box"];
-        postElem.appendChild(postBox);
+          // the post box
+          let postBox = document.createElement("div");
+          postBox.classList = ["box"];
+          postElem.appendChild(postBox);
 
-        // all header stuffs
-        let boxHead = document.createElement("div");
-        boxHead.classList = ["box-head"];
-        postBox.appendChild(boxHead);
+          // all header stuffs
+          let boxHead = document.createElement("div");
+          boxHead.classList = ["box-head"];
+          postBox.appendChild(boxHead);
 
-        let boxLink = document.createElement("a");
-        boxLink.setAttribute("href", `https://scratch.mit.edu/discuss/post/${post.id}`);
-        boxLink.appendChild(document.createTextNode(`${post.topic.category} » ${post.topic.title}`));
-        boxHead.appendChild(boxLink);
+          let boxLink = document.createElement("a");
+          boxLink.setAttribute("href", `https://scratch.mit.edu/discuss/post/${post.id}`);
+          boxLink.appendChild(document.createTextNode(`${post.topic.category} » ${post.topic.title}`));
+          boxHead.appendChild(boxLink);
 
-        let boxTime = document.createElement("span");
-        boxTime.classList = "conr";
-        const localizedPostDate = scratchAddons.l10n.datetime(new Date(post.time.posted));
-        boxTime.appendChild(document.createTextNode(localizedPostDate));
-        boxHead.appendChild(boxTime);
+          let boxTime = document.createElement("span");
+          boxTime.classList = "conr";
+          const localizedPostDate = scratchAddons.l10n.datetime(new Date(post.time.posted));
+          boxTime.appendChild(document.createTextNode(localizedPostDate));
+          boxHead.appendChild(boxTime);
 
-        // post content
-        let postContent = document.createElement("div");
-        postContent.classList = "box-content";
-        postBox.appendChild(postContent);
+          // post content
+          let postContent = document.createElement("div");
+          postContent.classList = "box-content";
+          postBox.appendChild(postContent);
 
-        let postLeft = document.createElement("div");
-        postLeft.classList = "postleft";
-        postContent.appendChild(postLeft);
+          let postLeft = document.createElement("div");
+          postLeft.classList = "postleft";
+          postContent.appendChild(postLeft);
 
-        let postLeftDl = document.createElement("dl");
-        postLeft.appendChild(postLeftDl);
+          let postLeftDl = document.createElement("dl");
+          postLeft.appendChild(postLeftDl);
 
-        postLeftDl.appendChild(createLabel(msg("username")));
-        let userLink = document.createElement("a"); // this one is an `a` and not a `span`, so it isnt in the createTextBox function
-        userLink.setAttribute("href", `https://scratch.mit.edu/users/${post.username}`);
-        userLink.appendChild(document.createTextNode(post.username));
-        postLeftDl.appendChild(userLink);
+          postLeftDl.appendChild(createLabel(msg("username")));
+          let userLink = document.createElement("a"); // this one is an `a` and not a `span`, so it isnt in the createTextBox function
+          userLink.setAttribute("href", `https://scratch.mit.edu/users/${post.username}`);
+          userLink.appendChild(document.createTextNode(post.username));
+          postLeftDl.appendChild(userLink);
 
-        postLeftDl.appendChild(document.createElement("br"));
-        postLeftDl.appendChild(document.createElement("br"));
+          postLeftDl.appendChild(document.createElement("br"));
+          postLeftDl.appendChild(document.createElement("br"));
 
-        if (locationQuery !== "") {
-          let userPostButton = document.createElement("a");
-          userPostButton.appendChild(document.createTextNode(msg("posts-here")));
-          userPostButton.addEventListener("click", () => {
-            document.getElementById("forum-search-input").value = `+username:"${post.username}" ${locationQuery}`;
+          if (locationQuery !== "") {
+            let userPostButton = document.createElement("a");
+            userPostButton.appendChild(document.createTextNode(msg("posts-here")));
+            userPostButton.addEventListener("click", () => {
+              document.getElementById("forum-search-input").value = `+username:"${post.username}" ${locationQuery}`;
+              triggerNewSearch(
+                document.getElementById("forum-search-list"),
+                document.getElementById("forum-search-input").value,
+                document.getElementById("forum-search-dropdown").value,
+                msg
+              );
+            });
+            postLeftDl.appendChild(userPostButton);
+
+            postLeftDl.appendChild(document.createElement("br"));
+          }
+
+          let userGlobalButton = document.createElement("a");
+          userGlobalButton.appendChild(document.createTextNode(msg("posts-sitewide")));
+          userGlobalButton.addEventListener("click", () => {
+            document.getElementById("forum-search-input").value = `+username:"${post.username}"`;
             triggerNewSearch(
               document.getElementById("forum-search-list"),
               document.getElementById("forum-search-input").value,
@@ -163,77 +181,60 @@ function appendSearch(box, query, page, term, msg) {
               msg
             );
           });
-          postLeftDl.appendChild(userPostButton);
+          postLeftDl.appendChild(userGlobalButton);
 
           postLeftDl.appendChild(document.createElement("br"));
-        }
+          postLeftDl.appendChild(document.createElement("br"));
 
-        let userGlobalButton = document.createElement("a");
-        userGlobalButton.appendChild(document.createTextNode(msg("posts-sitewide")));
-        userGlobalButton.addEventListener("click", () => {
-          document.getElementById("forum-search-input").value = `+username:"${post.username}"`;
-          triggerNewSearch(
-            document.getElementById("forum-search-list"),
-            document.getElementById("forum-search-input").value,
-            document.getElementById("forum-search-dropdown").value,
-            msg
+          postLeftDl.appendChild(createLabel(msg("first-checked")));
+          postLeftDl.appendChild(createTextBox(scratchAddons.l10n.datetime(new Date(post.time.first_checked)), "", 2));
+
+          postLeftDl.appendChild(createLabel(msg("last-checked")));
+          postLeftDl.appendChild(
+            createTextBox(scratchAddons.l10n.datetime(new Date(post.time.html_last_checked)), "", 2)
           );
-        });
-        postLeftDl.appendChild(userGlobalButton);
 
-        postLeftDl.appendChild(document.createElement("br"));
-        postLeftDl.appendChild(document.createElement("br"));
+          let postRight = document.createElement("div");
+          postRight.classList = "postright";
+          postContent.appendChild(postRight);
 
-        postLeftDl.appendChild(createLabel(msg("first-checked")));
-        postLeftDl.appendChild(createTextBox(scratchAddons.l10n.datetime(new Date(post.time.first_checked)), "", 2));
+          let postMsg = document.createElement("div");
+          postMsg.classList = "postmsg";
+          postRight.appendChild(postMsg);
 
-        postLeftDl.appendChild(createLabel(msg("last-checked")));
-        postLeftDl.appendChild(
-          createTextBox(scratchAddons.l10n.datetime(new Date(post.time.html_last_checked)), "", 2)
-        );
+          let postHTML = document.createElement("div");
+          postHTML.classList = "post_body_html";
+          postHTML.append(...cleanPost(post.content.html));
+          postMsg.appendChild(postHTML);
 
-        let postRight = document.createElement("div");
-        postRight.classList = "postright";
-        postContent.appendChild(postRight);
+          if (post.editor) {
+            let postEdit = document.createElement("p");
+            postEdit.classList = "postedit";
+            let postEditMessage = document.createElement("em");
+            postEditMessage.classList = "posteditmessage";
+            postEditMessage.appendChild(
+              document.createTextNode(
+                msg("last-edited-by", {
+                  username: post.editor,
+                  datetime: scratchAddons.l10n.datetime(new Date(post.time.edited)),
+                })
+              )
+            );
+            postEdit.appendChild(postEditMessage);
+            postMsg.appendChild(postEdit);
+          }
 
-        let postMsg = document.createElement("div");
-        postMsg.classList = "postmsg";
-        postRight.appendChild(postMsg);
+          let clearer = document.createElement("div"); // i guess this is extremely important for formatting
+          clearer.classList = "clearer";
+          postContent.appendChild(clearer);
 
-        let postHTML = document.createElement("div");
-        postHTML.classList = "post_body_html";
-        postHTML.append(...cleanPost(post.content.html));
-        postMsg.appendChild(postHTML);
-
-        if (post.editor) {
-          let postEdit = document.createElement("p");
-          postEdit.classList = "postedit";
-          let postEditMessage = document.createElement("em");
-          postEditMessage.classList = "posteditmessage";
-          postEditMessage.appendChild(
-            document.createTextNode(
-              msg("last-edited-by", {
-                username: post.editor,
-                datetime: scratchAddons.l10n.datetime(new Date(post.time.edited)),
-              })
-            )
-          );
-          postEdit.appendChild(postEditMessage);
-          postMsg.appendChild(postEdit);
+          box.appendChild(postElem);
         }
+        scratchblocks.renderMatching(".forum-search-list pre.blocks");
+        isCurrentlyProcessing = false;
+      });
+  }
 
-        let clearer = document.createElement("div"); // i guess this is extremely important for formatting
-        clearer.classList = "clearer";
-        postContent.appendChild(clearer);
-
-        box.appendChild(postElem);
-      }
-      scratchblocks.renderMatching(".forum-search-list pre.blocks");
-      isCurrentlyProcessing = false;
-    });
-}
-
-export default async function ({ addon, console, msg }) {
   if (!window.scratchAddons._scratchblocks3Enabled) {
     window.scratchblocks = (await import("../../libraries/thirdparty/cs/scratchblocks.min.es.js")).default;
   }

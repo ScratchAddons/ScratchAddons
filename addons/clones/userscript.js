@@ -1,6 +1,6 @@
 import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
 
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   const vm = addon.tab.traps.vm;
 
   let showOnProjectPage = addon.settings.get("projectpage");

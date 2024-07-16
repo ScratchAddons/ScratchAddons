@@ -1,4 +1,4 @@
-export default async ({ addon, console, msg }) => {
+export default async ({ addon, console, msg, fetch }) => {
   if (!addon.tab.redux.state) return console.warn("Redux is not available!");
   const vm = addon.tab.traps.vm;
   if (!vm) return;

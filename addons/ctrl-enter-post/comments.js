@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   let isScratchR2 = addon.tab.clientVersion === "scratchr2";
 
   let textboxSelector = isScratchR2 ? "textarea[name='content']" : "[name='compose-comment']";

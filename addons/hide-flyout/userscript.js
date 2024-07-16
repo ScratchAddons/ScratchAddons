@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   let placeHolderDiv = null;
   let lockObject = null;
   let lockButton = null;

@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   const posts = document.querySelectorAll(".blockpost");
   let opUsername;
 

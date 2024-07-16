@@ -1,3 +1,4 @@
+import { traceableFetchCS } from "./cs/fetch.js";
 export class HTTPError extends Error {
   constructor(message, code) {
     super(message);
@@ -82,7 +83,7 @@ export async function fetchMessageCount(username, options) {
     credentials: "omit", // No need to send cookies, this is a public endpoint
     cache: bypassCache ? "reload" : "default",
   };
-  const resp = await fetch(url, fetchOptions);
+  const resp = await traceableFetchCS(url, fetchOptions);
   const json = await resp.json();
 
   const resId = bypassCache ? null : resp.headers.get("X-Amz-Cf-Id");
@@ -99,11 +100,14 @@ export async function fetchMessageCount(username, options) {
  * @throws {HTTPError} when fetching fails
  */
 export async function fetchMessages(username, xToken, offset) {
-  const resp = await fetch(`https://api.scratch.mit.edu/users/${username}/messages?limit=40&offset=${offset}`, {
-    headers: {
-      "x-token": xToken,
-    },
-  });
+  const resp = await traceableFetchCS(
+    `https://api.scratch.mit.edu/users/${username}/messages?limit=40&offset=${offset}`,
+    {
+      headers: {
+        "x-token": xToken,
+      },
+    }
+  );
   if (!resp.ok) {
     if (resp.status === 404) return [];
     throw HTTPError.fromResponse(`Fetching message offset ${offset} for ${username} failed`, resp);
@@ -251,7 +255,7 @@ export async function getUpToDateMsgCount(cookieStoreId, { count: responseMsgCou
  * @throws {HTTPError} if operation fails
  */
 export function markAsRead(csrfToken) {
-  return fetch("https://scratch.mit.edu/site-api/messages/messages-clear/?sareferer", {
+  return traceableFetchCS("https://scratch.mit.edu/site-api/messages/messages-clear/?sareferer", {
     method: "POST",
     headers: { "x-csrftoken": csrfToken, "x-requested-with": "XMLHttpRequest" },
   }).then((res) => {

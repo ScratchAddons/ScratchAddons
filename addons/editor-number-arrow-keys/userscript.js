@@ -1,4 +1,4 @@
-export default async function ({ addon }) {
+export default async function ({ addon, fetch }) {
   const settings = {
     none: 0,
     hundredth: 0.01,
@@ -107,8 +107,8 @@ export default async function ({ addon }) {
       let settingValue = e.shiftKey
         ? addon.settings.get("shiftCustom")
         : e.altKey
-          ? addon.settings.get("altCustom")
-          : addon.settings.get("regularCustom");
+        ? addon.settings.get("altCustom")
+        : addon.settings.get("regularCustom");
       if (settingValue === "") settingValue = 0;
       let valueAsFloat = parseFloat(settingValue);
       if (valueAsFloat < 0) valueAsFloat *= -1; // If user typed a negative number, we make it positive
@@ -124,8 +124,8 @@ export default async function ({ addon }) {
       changeBy *= e.shiftKey
         ? settings[addon.settings.get("shift")]
         : e.altKey
-          ? settings[addon.settings.get("alt")]
-          : settings[addon.settings.get("regular")];
+        ? settings[addon.settings.get("alt")]
+        : settings[addon.settings.get("regular")];
     }
 
     const decimalCount = Math.max(amountOfDecimals(e.target.value), amountOfDecimals(changeBy.toString()));

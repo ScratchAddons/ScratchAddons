@@ -1,14 +1,14 @@
 import { modifiedCreateAllInputs, modifiedUpdateDeclarationProcCode } from "./modified-funcs.js";
 
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   function createArrow(direction, callback) {
     const path = direction === "left" ? "M 17 13 L 9 21 L 17 30" : "M 9 13 L 17 21 L 9 30";
 
     Blockly.WidgetDiv.DIV.insertAdjacentHTML(
       "beforeend",
       `
-            <svg width="20px" height="40px" 
-                 style="left: ${direction === "left" ? "calc(50% - 20px)" : "calc(50% + 20px)"}" 
+            <svg width="20px" height="40px"
+                 style="left: ${direction === "left" ? "calc(50% - 20px)" : "calc(50% + 20px)"}"
                  class="blocklyTextShiftArrow">
                 <path d="${path}" fill="none" stroke="#FF661A" stroke-width="2"></path>
             </svg>`

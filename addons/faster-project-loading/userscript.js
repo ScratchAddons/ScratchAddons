@@ -1,6 +1,6 @@
 // This is a fix for https://github.com/scratchfoundation/scratch-gui/issues/8805
 
-export default async function ({ addon }) {
+export default async function ({ addon, fetch }) {
   const BACKPACK_URL = "https://backpack.scratch.mit.edu/";
   // Inserting sprites from the backpack requests a ZIP archive from backpack.scratch.mit.edu, so we want to allow those
   const SPRITE_FILE_EXTENSION = ".zip";

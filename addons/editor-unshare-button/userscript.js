@@ -1,4 +1,4 @@
-export default async function ({ addon, msg, console }) {
+export default async function ({ addon, msg, console, fetch }) {
   const { redux } = addon.tab;
   while (true) {
     const button = await addon.tab.waitForElement("span[class*='share-button_share-button'][class*='is-shared']", {

@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   // Fetch projects from a studio
   const fetchStudio = async (studio) => {
     const response = await fetch(`https://api.scratch.mit.edu/studios/${studio}/projects/`);

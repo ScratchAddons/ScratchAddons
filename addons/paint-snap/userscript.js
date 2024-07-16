@@ -5,7 +5,7 @@ import { updateScaleTool } from "./updateScaleTool.js";
 
 /** @type {(api: import("../../addon-api/content-script/typedef").UserscriptUtilities) => Promise<void>} */
 export default async function (api) {
-  const { addon } = api;
+  const { addon, fetch } = api;
   addon.self.addEventListener("disabled", disable);
   addon.self.addEventListener("reenabled", enable);
   loadSettings(addon);

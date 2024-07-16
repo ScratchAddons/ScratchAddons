@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   // Present on forum pages with tbody. Used as a switch to
   // query for table and posts, and determine append/insert location.
   let vf = document.getElementById("vf");
@@ -31,8 +31,8 @@ export default async function ({ addon, console, msg }) {
         } else {
           nextPage = `https://scratch.mit.edu${location.pathname}?page=${page}`;
         }
-        window
-          .fetch(nextPage)
+
+          fetch(nextPage)
           .catch((err) => {
             console.log("Unable to fetch the page!");
           })

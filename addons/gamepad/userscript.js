@@ -1,7 +1,7 @@
 import GamepadLib from "./gamepadlib.js";
 import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
 
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   const vm = addon.tab.traps.vm;
 
   // Wait for the project to finish loading. Renderer and scripts will not be fully available until this happens.

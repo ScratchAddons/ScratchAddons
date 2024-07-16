@@ -1,6 +1,6 @@
 import { eventTarget as tooltipUpdateEventTarget } from "./force-tooltip-update.js";
 
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, fetch }) {
   // The workspace needs to be manually resized via a window resize event
   // whenever the addon modifies or stops modifying UI elements
   resizeWorkspace();

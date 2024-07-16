@@ -1,4 +1,4 @@
-export default async function ({ addon }) {
+export default async function ({ addon, fetch }) {
   while (true) {
     const categoryBody = await addon.tab.waitForElement('[id^="category_body_"]', {
       markAsSeen: true,

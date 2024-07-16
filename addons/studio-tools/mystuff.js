@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async function ({ addon, console, msg, fetch }) {
   while (true) {
     let item = await addon.tab.waitForElement(".media-stats", { markAsSeen: true });
     if (window.location.hash === "#galleries" && item.childElementCount === 2) {

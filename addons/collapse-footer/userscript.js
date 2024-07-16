@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   const enabledAddons = await addon.self.getEnabledAddons("community");
   const footer = await addon.tab.waitForElement("#footer");
   const root = document.documentElement;

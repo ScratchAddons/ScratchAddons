@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, fetch }) {
   const oldAnimate = $.fn.animate;
   $.fn.animate = function (style, ...args) {
     if (!addon.self.disabled && style && style.backgroundColor === "pink") {
