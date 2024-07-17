@@ -25,6 +25,7 @@ export default async function ({ addon, msg, console }) {
 
   class FindRefs {
     constructor() {
+      this.isFloatWindowExpanded = false;
       this.utils = new Utils(addon);
 
       this.prevValue = "";
@@ -36,6 +37,7 @@ export default async function ({ addon, msg, console }) {
       this.dropdown = new Dropdown(this.utils);
       this.floatWindow = this.createFloatWindow();
       this.search_bar_label = null;
+      this.fa_icon_search_bar = null;
 
       document.addEventListener("keydown", (e) => this.eventKeyDown(e), true);
     }
@@ -62,25 +64,14 @@ export default async function ({ addon, msg, console }) {
       this.dropdownOut = this.findWrapper.appendChild(document.createElement("label"));
       this.dropdownOut.className = "sa-fr-dropdown-out";
 
-      // this.findInput = this.dropdownOut.appendChild(document.createElement("input"));
-      // this.findInput.className = addon.tab.scratchClass("input_input-form", {
-      //   others: "sa-fr-input",
-      // });
-
-      // // for <label>
-      // this.findInput.id = "sa-fr-input";
-      // this.findInput.type = "search";
-      // this.findInput.placeholder = msg("find-placeholder");
-      // this.findInput.autocomplete = "off";
-
       const input_wrapper = this.dropdownOut.appendChild(document.createElement("div"));
       // add class
       input_wrapper.className = "sa-fr-input-wrapper";
       this.search_bar_label = input_wrapper.appendChild(document.createElement("label"));
       this.search_bar_label.setAttribute("for", "search_bar");
-      const iElement = document.createElement("i");
-      iElement.classList.add("fas", "fa-eye", "search_icon");
-      this.search_bar_label.appendChild(iElement);
+      this.fa_icon_search_bar = document.createElement("i");
+      this.fa_icon_search_bar.classList.add("fas", "fa-eye", "search_icon");
+      this.search_bar_label.appendChild(this.fa_icon_search_bar);
       input_wrapper.appendChild(this.search_bar_label);
 
       this.findInput = input_wrapper.appendChild(document.createElement("input"));
@@ -133,6 +124,20 @@ export default async function ({ addon, msg, console }) {
       this.findInput.addEventListener("keydown", (e) => this.inputKeyDown(e));
       this.findInput.addEventListener("keyup", () => this.inputChange());
       this.findInput.addEventListener("focusout", () => this.hideDropDown());
+      this.fa_icon_search_bar.addEventListener("click", () => {
+        if (this.isFloatWindowExpanded) {
+          this.findInput.style.paddingLeft = "0";
+          this.findInput.style.marginRight = "0";
+          this.floatWindow.classList.remove("animate-expandWidth");
+          this.floatWindow.classList.add("animate-contractWidth");
+        } else {
+          this.findInput.style.paddingLeft = "0.4em";
+          this.findInput.style.marginRight = "0.5em";
+          this.floatWindow.classList.remove("animate-contractWidth");
+          this.floatWindow.classList.add("animate-expandWidth");
+        }
+        this.isFloatWindowExpanded = !this.isFloatWindowExpanded;
+      });
     }
 
     tabChanged() {

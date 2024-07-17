@@ -2,6 +2,9 @@
 
 :root {
   --sa-fr-bar-height: 3em;
+  --max-width-floatWindow: 300px;
+  --main-bg-color: #855cd6;
+  --main-fg-color: #ffbf82;
 }
 
 /* Remove default margins, paddings, and borders */
@@ -72,7 +75,7 @@ a {
   flex-grow: 0;
 }
 
-.sa-fr-input {
+#sa-fr-input {
   box-shadow: none; /* 设置基础的 box-shadow，这里假设没有焦点时不需要阴影 */
   transition: box-shadow 0.5s, border-radius 0.5s; /* 可选：添加过渡效果使变化更平滑 */
   height: 100%;
@@ -84,13 +87,16 @@ a {
   font-size: 0.75rem;
   display: flex;
   align-items: left;
+  flex-grow: 1;
+  box-shadow: none;
+
   /* init set */
   padding-left: 0em;
   padding-right: 0em;
-  margin-top: 0.1em;
+  /* margin-top: 0.1em; */
   border: 0;
-  /* padding-left: 0.4em; */
-  /* margin-right: 0.5em; */
+  /* padding-left: 0.4em;
+  margin-right: 0.5em; */
 }
 
 .sa-fr-input.focus_on {
@@ -103,23 +109,24 @@ a {
 
 @keyframes inputFocusAnimation {
   from {
-    border-radius: 0.25rem;
-    box-shadow: none;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
   }
   to {
-    border-radius: 1.5em; /* 保持或调整 border-radius */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 应用焦点时的 box-shadow */
+    border-top-left-radius: 1.3em; /* 左上角圆角 */
+    border-bottom-left-radius: 1.3em; /* 左下角圆角 */
   }
 }
 
 @keyframes inputBlurAnimation {
   from {
-    border-radius: 1.5em; /* 如果开始时 border-radius 有变化，这里调整 */
+    border-top-left-radius: 1.3em; /* 如果开始时左侧圆角有变化，这里调整 */
+    border-bottom-left-radius: 1.3em;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 开始时的 box-shadow 应与 inputFocusAnimation 的结束状态相匹配 */
   }
   to {
-    border-radius: 0.25rem;
-    box-shadow: none; /* 恢复到无焦点时的 box-shadow */
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
   }
 }
 
@@ -150,6 +157,7 @@ a {
   width: 100%;
   height: 100%;
   display: flex;
+  background-color: white;
 }
 
 .sa-fr-input-wrapper label,
@@ -182,15 +190,18 @@ a {
   align-items: center;
   width: 100%;
   height: 100%;
-  color: #e1a91a;
-  background-color: white;
-  transform: scale(4);
-  transition: transform 0.5s ease, background-color 0.5s ease;
+  color: var(--main-fg-color);
+  /* color: #e1a91a; */
+  background-color: var(--main-bg-color);
+  transform: scale(1);
+  transition: transform 0.5s ease-in-out, background-color 0.5s ease-in-out;
 }
 
 .sa-fr-input-wrapper label i:hover {
-  background-color: #855cd6; /* 鼠标悬停时改变颜色 */
-  transform: rotate(360deg); /* 保持旋转360度和放大效果 */
+  color: var(--main-bg-color);
+  background-color: var(--main-fg-color);
+  transform: rotate(60deg);
+  transform: scale(1.5);
 }
 
 @keyframes focusOnAnimation {
@@ -216,15 +227,15 @@ a {
   }
 }
 
-.sa-fr-input-wrapper label.focus_on {
+/* .sa-fr-input-wrapper label.focus_on {
   animation: focusOnAnimation 0.5s forwards;
 }
 
 .sa-fr-input-wrapper label:not(.focus_on) {
   animation: focusOffAnimation 0.5s forwards;
-}
+} */
 
-@keyframes scaleUpAnimation {
+/* @keyframes scaleUpAnimation {
   from {
     transform: scale(1);
     color: #e1a91a;
@@ -244,15 +255,15 @@ a {
     transform: scale(1);
     color: #e1a91a;
   }
-}
+} */
 
-.sa-fr-input-wrapper label.focus_on i {
+/* .sa-fr-input-wrapper label.focus_on i {
   animation: scaleUpAnimation 0.5s forwards;
 }
 
 .sa-fr-input-wrapper label:not(.focus_on) i {
   animation: scaleDownAnimation 0.5s forwards;
-}
+} */
 
 .sa-fr-input-input input[type="text"] {
   background-color: #3b4148;
@@ -274,10 +285,6 @@ a {
   max-width: 100%;
   margin-top: 6px;
   border: none;
-}
-
-.sa-fr-dropdown-out.visible > .sa-find-dropdown {
-  /* display: block; */
 }
 
 .sa-find-dropdown > li {
@@ -344,7 +351,7 @@ a {
 
 /* Ori Style */
 #floatWindow {
-  /* width: 300px; */
+  /* width: 100px; */
   /* height: 300px; */
   position: absolute;
   top: 20%;
@@ -361,9 +368,15 @@ a {
 }
 
 .search_icon:hover + #floatWindow {
-  animation-name: expandWidth;
-  animation-duration: 0.5s;
-  animation-fill-mode: forwards;
+  animation: expandWidth 0.5s forwards;
+}
+
+#floatWindow.animate-expandWidth {
+  animation: expandWidth 0.5s ease-in-out forwards;
+}
+
+#floatWindow.animate-contractWidth {
+  animation: animate-contractWidth 0.5s ease-in-out forwards;
 }
 
 @keyframes expandWidth {
@@ -371,7 +384,16 @@ a {
     width: var(--sa-fr-bar-height);
   }
   100% {
-    width: 300px;
+    width: var(--max-width-floatWindow);
+  }
+}
+
+@keyframes animate-contractWidth {
+  from {
+    width: var(--max-width-floatWindow);
+  }
+  to {
+    width: var(--sa-fr-bar-height); /* 动画结束时恢复到元素的初始宽度 */
   }
 }
 
