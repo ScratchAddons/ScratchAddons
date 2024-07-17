@@ -1,11 +1,25 @@
 {
   "name": "SVG uploads fix",
   "description": "Fixes some bugs in the Scratch editor which break some uploaded SVG files from Affinity Designer and scratchblocks.",
+  "credits": [
+    {
+      "name": "StickmanRed",
+      "link": "https://scratch.mit.edu/users/StickmanRed/"
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["projects"],
+      "matches": [ "projects" ],
       "runAtComplete": false
+    }
+  ],
+  "settings": [
+    {
+      "name": "Fix more SVGs (beta)",
+      "id": "removeUnsupported",
+      "type": "boolean",
+      "default": false
     }
   ],
   "dynamicEnable": true,
