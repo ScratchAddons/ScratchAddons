@@ -152,10 +152,13 @@
   "paint-skew",
   "preview-project-description",
   "collapse-footer",
+  "delete-others",
   "download-button",
   "reorder-custom-inputs",
   "place-backpack-code-at-cursor",
   "big-save-button",
+  "workspace-dots",
+  "asset-conflict-dialog",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",

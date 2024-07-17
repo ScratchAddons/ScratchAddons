@@ -109,6 +109,8 @@ export default async function ({ addon, msg, console }) {
     if (addon.tab.editorMode !== "editor") return;
     if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 0) return;
 
+    Blockly.hideChaff();
+
     blockTypes = BlockTypeInfo.getBlocks(Blockly, vm, Blockly.getMainWorkspace(), msg);
     querier.indexWorkspace([...blockTypes]);
     blockTypes.sort((a, b) => {

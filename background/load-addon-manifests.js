@@ -66,7 +66,7 @@ const localizeSettings = (addonId, setting, tableId) => {
       } else {
         const file = await (await fetch(`/addons/${addonId}/addon.json`)).json();
         manifest = file;
-        newCache[addonId] = file;
+        newCache[addonId] = JSON.parse(JSON.stringify(file));
       }
     } catch (ex) {
       console.error(`Failed to load addon manifest for ${addonId}, crashing:`, ex);
