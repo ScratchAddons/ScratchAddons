@@ -79,7 +79,7 @@ export default async function ({ addon, msg, console }) {
       this.search_bar_label = input_wrapper.appendChild(document.createElement("label"));
       this.search_bar_label.setAttribute("for", "search_bar");
       const iElement = document.createElement("i");
-      iElement.classList.add("fas", "fa-eye");
+      iElement.classList.add("fas", "fa-eye", "search_icon");
       this.search_bar_label.appendChild(iElement);
       input_wrapper.appendChild(this.search_bar_label);
 

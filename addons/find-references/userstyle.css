@@ -360,7 +360,7 @@ a {
   transition: width 0.5s;
 }
 
-.sa-find-dropdown:hover + #floatWindow {
+.search_icon:hover + #floatWindow {
   animation-name: expandWidth;
   animation-duration: 0.5s;
   animation-fill-mode: forwards;
