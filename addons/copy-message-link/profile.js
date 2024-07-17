@@ -4,8 +4,8 @@ export default async function ({ addon, console, msg }) {
   while (true) {
     const comment = await addon.tab.waitForElement("div.comment:not(.sa-copy-link)", {
       markAsSeen: true,
-    })
-    comment.classList.add("sa-copy-link")
+    });
+    comment.classList.add("sa-copy-link");
 
     const newElem = document.createElement("span");
     addon.tab.displayNoneWhileDisabled(newElem);
