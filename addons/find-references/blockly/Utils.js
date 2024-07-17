@@ -202,7 +202,7 @@ export default class Utils {
     }
     let dataShapes = svgchild.getAttribute("data-shapes");
     let translateY = 0; // blocks no hat
-    const scale = 0.5;
+    const scale = 0.8;
     if (dataShapes === "c-block c-1 hat") {
       translateY = 20; // for My block
     }

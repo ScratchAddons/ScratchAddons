@@ -2,7 +2,7 @@
 
 :root {
   --sa-fr-bar-height: 3em;
-  --max-width-floatWindow: 300px;
+  --max-width-floatWindow: 400px;
   --max-height-floatWindow: 300px;
   --main-bg-color: #855cd6;
   --main-fg-color: #ffbf82;
@@ -13,6 +13,11 @@
   margin: 0;
   padding: 0;
   border: none;
+}
+
+ol,
+ul {
+  padding: 0;
 }
 
 /* Set box-sizing to border-box for all elements */
@@ -71,8 +76,8 @@ a {
 }
 
 .sa-fr-dropdown-out.visible {
-  position: absolute;
-  width: 16em;
+  /* position: absolute;
+  width: 16em; */
   box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
   background-color: white;
 }
@@ -258,6 +263,7 @@ a {
   max-width: 100%;
   margin-top: 6px;
   border: none;
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 .sa-fr-dropdown > li {
@@ -395,10 +401,19 @@ a {
 }
 
 #floatWindow #ref_list li {
-  height: 2em;
+  height: 3em;
   display: flex; /* 启用 Flexbox */
   flex-direction: row; /* 使子元素横向排列 */
   justify-content: space-between;
+}
+
+#ref_list {
+  padding-left: 0.2em;
+}
+
+#ref_list li {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
 }
 
 #ref_list li.ref_result {
@@ -414,9 +429,13 @@ a {
 #ref_list li.header {
   display: flex;
   justify-content: space-between;
-  align-items: left;
   font-weight: bold;
-  padding: 10px;
+  padding: 5px;
+}
+
+#ref_list li.header div {
+  flex: 1;
+  text-transform: uppercase;
 }
 
 /* 为 header content 设置样式 */
