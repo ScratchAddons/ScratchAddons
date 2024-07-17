@@ -257,6 +257,7 @@ export default async function ({ addon, msg, console }) {
       this.prevValue = focusID ? "" : null; // Clear the previous value of the input search
 
       this.dropdownOut.classList.add("visible");
+      return;
       this.search_bar_label.classList.add("focus_on");
       this.findInput.classList.add("focus_on");
       if (!this.isFloatWindowExpandedOnHeight) {

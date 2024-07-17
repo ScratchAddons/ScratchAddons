@@ -70,6 +70,13 @@ a {
   display: block;
 }
 
+.sa-fr-dropdown-out.visible {
+  position: absolute;
+  width: 16em;
+  box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
+  background-color: white;
+}
+
 /* We need to modify Scratch styles so that the place where the find bar is injected */
 /* has actually correct size information, which is used to make the find bar not cover up controls */
 [class*="gui_tab-list_"] {
@@ -329,6 +336,7 @@ a {
   scrollbar-width: thin; /* Firefox 不支持 em 单位，使用 thin 作为近似值 */
   scrollbar-color: #2ca5e2 transparent; /* 设置滚动条颜色，同时设置轨道颜色为透明 */
   transition: width 0.5s;
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 .search_icon:hover + #floatWindow {
