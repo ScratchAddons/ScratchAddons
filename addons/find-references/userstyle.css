@@ -1,5 +1,9 @@
 @import url("../editor-theme3/compatibility.css");
 
+:root {
+  --sa-fr-bar-height: 2em;
+}
+
 /* Remove default margins, paddings, and borders */
 * {
   margin: 0;
@@ -24,12 +28,12 @@ a {
 }
 
 .sa-fr-bar {
-  /* display: flex;
+  display: flex;
   align-items: left;
   white-space: nowrap;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; */
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   width: 100%;
-  height: 12%;
+  height: var(--sa-fr-bar-height);
 }
 
 .sa-fr-bar[hidden] {
@@ -40,31 +44,30 @@ a {
 .sa-fr-wrapper {
   overflow: visible;
   position: relative;
-  height: 2rem;
+  height: 100%;
   width: 100%;
   /*max-width: 16em;*/
   display: flex;
   flex-direction: row;
 }
 
-.sa-find-dropdown-out {
+.sa-fr-dropdown-out {
   display: block;
-  top: -6px;
+  /*top: -6px;*/
   z-index: 100;
   width: 100%;
-  max-width: 16em;
   position: relative;
-  padding: 4px;
+  /*padding: 4px;*/
   border: none;
   border-radius: 4px;
-  margin-top: 6px;
+  /*margin-top: 6px;*/
 }
 
-.sa-find-dropdown-out.visible {
-  position: absolute;
-  width: 16em;
-  box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
-  background-color: white;
+.sa-fr-dropdown-out.visible {
+  /* position: absolute; */
+  /* width: 16em; */
+  /* box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3); */
+  /* background-color: white; */
 }
 
 /* We need to modify Scratch styles so that the place where the find bar is injected */
@@ -77,27 +80,129 @@ a {
 }
 
 .sa-fr-input {
-  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+  position: relative;
+  right: 0;
   box-sizing: border-box !important;
-  /* !important required for extension, because CSS injection method (and hence order) differs from addon */
-  height: 1.5rem;
-
-  /* Change Scratch default styles */
   border-radius: 0.25rem;
   font-size: 0.75rem;
   padding-left: 0.4em;
   display: flex;
   align-items: left;
+  margin-top: 0.1em;
+  margin-right: 0.5em;
 }
 
 .sa-fr-input:focus {
   /* Change Scratch default styles */
   box-shadow: none;
+  /* width: 100%; */
+  /* transition: width 0.5s ease; */
 }
 
-#collapseButton {
-  width: 2.5em;
-  height: 90%;
+/* My Add */
+.sa-fr-input-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sa-fr-input-wrapper label,
+.sa-fr-input-wrapper input[type="text"] {
+  height: 100%;
+  border-radius: 0.25rem;
+  border-radius: var(--loginBorderRadus);
+}
+
+.sa-fr-input-wrapper label {
+  width: var(--sa-fr-bar-height);
+  height: 100%;
+  position: relative;
+  right: 0;
+  border-top-left-radius: 30%;
+  border-bottom-left-radius: 30%;
+  transition: all 0.5s ease;
+  background-color: #363b41;
+  background-color: var(--loginLabelBackgroundColor);
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sa-fr-input-wrapper label i {
+  color: #e1a91a;
+}
+
+@keyframes focusOnAnimation {
+  from {
+    border-radius: initial;
+    background-color: initial;
+  }
+  to {
+    border-radius: 50%;
+    background-color: rgb(225, 169, 26);
+  }
+}
+
+@keyframes focusOffAnimation {
+  from {
+    border-radius: 50%;
+    background-color: rgb(225, 169, 26);
+  }
+  to {
+    border-radius: initial; /* 恢复到您的初始样式 */
+    background-color: initial; /* 恢复到您的初始样式 */
+    color: initial; /* 恢复到您的初始样式 */
+  }
+}
+
+.sa-fr-input-wrapper label.focus_on {
+  animation: focusOnAnimation 0.5s forwards; /* 动画持续时间为0.5秒，并且在动画结束时保持最后一帧的样式 */
+}
+
+.sa-fr-input-wrapper label:not(.focus_on) {
+  animation: focusOffAnimation 0.5s forwards;
+}
+
+@keyframes scaleUpAnimation {
+  from {
+    transform: scale(1);
+    color: #e1a91a;
+  }
+  to {
+    transform: scale(1.5);
+    color: #8a55d7;
+  }
+}
+
+@keyframes scaleDownAnimation {
+  from {
+    transform: scale(1.5);
+    color: #8a55d7;
+  }
+  to {
+    transform: scale(1);
+    color: #e1a91a;
+  }
+}
+
+.sa-fr-input-wrapper label.focus_on i {
+  animation: scaleUpAnimation 0.5s forwards;
+}
+
+.sa-fr-input-wrapper label:not(.focus_on) i {
+  animation: scaleDownAnimation 0.5s forwards;
+}
+
+.sa-fr-input-input input[type="text"] {
+  background-color: #3b4148;
+  background-color: var(--loginInputBackgroundColor);
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
 }
 
 .sa-find-dropdown {
@@ -115,8 +220,8 @@ a {
   border: none;
 }
 
-.sa-find-dropdown-out.visible > .sa-find-dropdown {
-  display: block;
+.sa-fr-dropdown-out.visible > .sa-find-dropdown {
+  /* display: block; */
 }
 
 .sa-find-dropdown > li {

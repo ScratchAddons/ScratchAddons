@@ -35,6 +35,7 @@ export default async function ({ addon, msg, console }) {
       this.dropdownOut = null;
       this.dropdown = new Dropdown(this.utils);
       this.floatWindow = this.createFloatWindow();
+      this.search_bar_label = null;
 
       document.addEventListener("keydown", (e) => this.eventKeyDown(e), true);
     }
@@ -44,6 +45,12 @@ export default async function ({ addon, msg, console }) {
     }
 
     createDom() {
+      // need fa here
+      const link = document.createElement("link");
+      link.setAttribute("rel", "stylesheet");
+      link.setAttribute("href", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css");
+      document.head.appendChild(link);
+
       this.findBarOuter = document.createElement("div");
       this.findBarOuter.className = "sa-fr-bar";
       addon.tab.displayNoneWhileDisabled(this.findBarOuter, { display: "flex" });
@@ -53,7 +60,7 @@ export default async function ({ addon, msg, console }) {
       this.findWrapper.className = "sa-fr-wrapper";
 
       this.dropdownOut = this.findWrapper.appendChild(document.createElement("label"));
-      this.dropdownOut.className = "sa-find-dropdown-out";
+      this.dropdownOut.className = "sa-fr-dropdown-out";
 
       // this.findInput = this.dropdownOut.appendChild(document.createElement("input"));
       // this.findInput.className = addon.tab.scratchClass("input_input-form", {
@@ -66,11 +73,24 @@ export default async function ({ addon, msg, console }) {
       // this.findInput.placeholder = msg("find-placeholder");
       // this.findInput.autocomplete = "off";
 
-      // Create a button element
-      this.collapseButton = document.createElement("button");
-      this.collapseButton.textContent = "Collapse";
-      this.collapseButton.id = "collapseButton";
-      this.findWrapper.appendChild(this.collapseButton);
+      const input_wrapper = this.dropdownOut.appendChild(document.createElement("div"));
+      // add class
+      input_wrapper.className = "sa-fr-input-wrapper";
+      this.search_bar_label = input_wrapper.appendChild(document.createElement("label"));
+      this.search_bar_label.setAttribute("for", "login__username");
+      const iElement = document.createElement("i");
+      iElement.classList.add("fas", "fa-eye");
+      this.search_bar_label.appendChild(iElement);
+      input_wrapper.appendChild(this.search_bar_label);
+
+      this.findInput = input_wrapper.appendChild(document.createElement("input"));
+      this.findInput.className = addon.tab.scratchClass("input_input-form", {
+        others: "sa-fr-input",
+      });
+      this.findInput.id = "sa-fr-input";
+      this.findInput.type = "search";
+      this.findInput.placeholder = msg("find-placeholder");
+      this.findInput.autocomplete = "off";
 
       this.bindEvents();
       this.tabChanged();
@@ -237,6 +257,9 @@ export default async function ({ addon, msg, console }) {
       this.prevValue = focusID ? "" : null; // Clear the previous value of the input search
 
       this.dropdownOut.classList.add("visible");
+      this.search_bar_label.classList.add("focus_on");
+      this.findInput.classList.add("focus_on");
+
       let scratchBlocks =
         this.selectedTab === 0
           ? this.getScratchBlocks()
@@ -267,6 +290,8 @@ export default async function ({ addon, msg, console }) {
 
     hideDropDown() {
       this.dropdownOut.classList.remove("visible");
+      this.search_bar_label.classList.remove("focus_on");
+      this.findInput.classList.remove("focus_on");
     }
 
     get selectedTab() {
