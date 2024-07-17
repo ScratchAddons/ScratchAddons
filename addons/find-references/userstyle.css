@@ -1,7 +1,7 @@
 @import url("../editor-theme3/compatibility.css");
 
 :root {
-  --sa-fr-bar-height: 2em;
+  --sa-fr-bar-height: 3em;
 }
 
 /* Remove default margins, paddings, and borders */
@@ -63,13 +63,6 @@ a {
   /*margin-top: 6px;*/
 }
 
-.sa-fr-dropdown-out.visible {
-  /* position: absolute; */
-  /* width: 16em; */
-  /* box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3); */
-  /* background-color: white; */
-}
-
 /* We need to modify Scratch styles so that the place where the find bar is injected */
 /* has actually correct size information, which is used to make the find bar not cover up controls */
 [class*="gui_tab-list_"] {
@@ -83,17 +76,21 @@ a {
   box-shadow: none; /* 设置基础的 box-shadow，这里假设没有焦点时不需要阴影 */
   transition: box-shadow 0.5s, border-radius 0.5s; /* 可选：添加过渡效果使变化更平滑 */
   height: 100%;
-  flex-grow: 1;
+  width: 0;
   position: relative;
   right: 0;
   box-sizing: border-box !important;
   border-radius: 0.25rem;
   font-size: 0.75rem;
-  padding-left: 0.4em;
   display: flex;
   align-items: left;
+  /* init set */
+  padding-left: 0em;
+  padding-right: 0em;
   margin-top: 0.1em;
-  margin-right: 0.5em;
+  border: 0;
+  /* padding-left: 0.4em; */
+  /* margin-right: 0.5em; */
 }
 
 .sa-fr-input.focus_on {
@@ -153,7 +150,6 @@ a {
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: flex-end;
 }
 
 .sa-fr-input-wrapper label,
@@ -181,7 +177,20 @@ a {
 }
 
 .sa-fr-input-wrapper label i {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
   color: #e1a91a;
+  background-color: white;
+  transform: scale(4);
+  transition: transform 0.5s ease, background-color 0.5s ease;
+}
+
+.sa-fr-input-wrapper label i:hover {
+  background-color: #855cd6; /* 鼠标悬停时改变颜色 */
+  transform: rotate(360deg); /* 保持旋转360度和放大效果 */
 }
 
 @keyframes focusOnAnimation {
@@ -208,7 +217,7 @@ a {
 }
 
 .sa-fr-input-wrapper label.focus_on {
-  animation: focusOnAnimation 0.5s forwards; /* 动画持续时间为0.5秒，并且在动画结束时保持最后一帧的样式 */
+  animation: focusOnAnimation 0.5s forwards;
 }
 
 .sa-fr-input-wrapper label:not(.focus_on) {
@@ -335,8 +344,8 @@ a {
 
 /* Ori Style */
 #floatWindow {
-  width: 300px;
-  height: 300px;
+  /* width: 300px; */
+  /* height: 300px; */
   position: absolute;
   top: 20%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -345,9 +354,25 @@ a {
   flex-direction: column;
   border-radius: 10px;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: hidden;
   scrollbar-width: thin; /* Firefox 不支持 em 单位，使用 thin 作为近似值 */
   scrollbar-color: #2ca5e2 transparent; /* 设置滚动条颜色，同时设置轨道颜色为透明 */
+  transition: width 0.5s;
+}
+
+.sa-find-dropdown:hover + #floatWindow {
+  animation-name: expandWidth;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes expandWidth {
+  0% {
+    width: var(--sa-fr-bar-height);
+  }
+  100% {
+    width: 300px;
+  }
 }
 
 #floatWindow::-webkit-scrollbar {

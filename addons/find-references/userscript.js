@@ -77,7 +77,7 @@ export default async function ({ addon, msg, console }) {
       // add class
       input_wrapper.className = "sa-fr-input-wrapper";
       this.search_bar_label = input_wrapper.appendChild(document.createElement("label"));
-      this.search_bar_label.setAttribute("for", "login__username");
+      this.search_bar_label.setAttribute("for", "search_bar");
       const iElement = document.createElement("i");
       iElement.classList.add("fas", "fa-eye");
       this.search_bar_label.appendChild(iElement);
