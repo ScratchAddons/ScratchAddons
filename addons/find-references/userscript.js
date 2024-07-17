@@ -50,20 +50,21 @@ export default async function ({ addon, msg, console }) {
       this.floatWindow.appendChild(this.findBarOuter);
 
       this.findWrapper = this.findBarOuter.appendChild(document.createElement("span"));
-      this.findWrapper.className = "sa-find-wrapper";
+      this.findWrapper.className = "sa-fr-wrapper";
 
       this.dropdownOut = this.findWrapper.appendChild(document.createElement("label"));
       this.dropdownOut.className = "sa-find-dropdown-out";
 
-      this.findInput = this.dropdownOut.appendChild(document.createElement("input"));
-      this.findInput.className = addon.tab.scratchClass("input_input-form", {
-        others: "sa-fr-input",
-      });
-      // for <label>
-      this.findInput.id = "sa-fr-input";
-      this.findInput.type = "search";
-      this.findInput.placeholder = msg("find-placeholder");
-      this.findInput.autocomplete = "off";
+      // this.findInput = this.dropdownOut.appendChild(document.createElement("input"));
+      // this.findInput.className = addon.tab.scratchClass("input_input-form", {
+      //   others: "sa-fr-input",
+      // });
+
+      // // for <label>
+      // this.findInput.id = "sa-fr-input";
+      // this.findInput.type = "search";
+      // this.findInput.placeholder = msg("find-placeholder");
+      // this.findInput.autocomplete = "off";
 
       // Create a button element
       this.collapseButton = document.createElement("button");
@@ -1031,6 +1032,12 @@ export default async function ({ addon, msg, console }) {
         this.idx = 0;
       }
     }
+  }
+
+  // switch to small pane used for test
+  const element = document.querySelector('[title="Switch to small stage"]');
+  if (element) {
+    element.click();
   }
 
   const findBar = new FindRefs();

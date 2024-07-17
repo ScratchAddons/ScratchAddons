@@ -37,12 +37,12 @@ a {
   display: none !important;
 }
 
-.sa-find-wrapper {
+.sa-fr-wrapper {
   overflow: visible;
   position: relative;
   height: 2rem;
   width: 100%;
-  max-width: 16em;
+  /*max-width: 16em;*/
   display: flex;
   flex-direction: row;
 }
@@ -86,11 +86,18 @@ a {
   border-radius: 0.25rem;
   font-size: 0.75rem;
   padding-left: 0.4em;
+  display: flex;
+  align-items: left;
 }
 
 .sa-fr-input:focus {
   /* Change Scratch default styles */
   box-shadow: none;
+}
+
+#collapseButton {
+  width: 2.5em;
+  height: 90%;
 }
 
 .sa-find-dropdown {
