@@ -80,6 +80,8 @@ a {
 }
 
 .sa-fr-input {
+  box-shadow: none; /* 设置基础的 box-shadow，这里假设没有焦点时不需要阴影 */
+  transition: box-shadow 0.5s, border-radius 0.5s; /* 可选：添加过渡效果使变化更平滑 */
   height: 100%;
   flex-grow: 1;
   position: relative;
@@ -94,12 +96,57 @@ a {
   margin-right: 0.5em;
 }
 
-.sa-fr-input:focus {
-  /* Change Scratch default styles */
-  box-shadow: none;
-  /* width: 100%; */
-  /* transition: width 0.5s ease; */
+.sa-fr-input.focus_on {
+  animation: inputFocusAnimation 0.5s forwards, placeholderMoveRight 0.5s forwards; /* 添加占位符动画 */
 }
+
+.sa-fr-input:not(.focus_on) {
+  animation: inputBlurAnimation 0.5s forwards, placeholderMoveBack 0.5s forwards; /* 添加占位符动画 */
+}
+
+@keyframes inputFocusAnimation {
+  from {
+    border-radius: 0.25rem;
+    box-shadow: none;
+  }
+  to {
+    border-radius: 1.5em; /* 保持或调整 border-radius */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 应用焦点时的 box-shadow */
+  }
+}
+
+@keyframes inputBlurAnimation {
+  from {
+    border-radius: 1.5em; /* 如果开始时 border-radius 有变化，这里调整 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 开始时的 box-shadow 应与 inputFocusAnimation 的结束状态相匹配 */
+  }
+  to {
+    border-radius: 0.25rem;
+    box-shadow: none; /* 恢复到无焦点时的 box-shadow */
+  }
+}
+
+@keyframes placeholderMoveRight {
+  from {
+    text-indent: 0;
+  }
+  to {
+    text-indent: 0.5em;
+  }
+}
+
+@keyframes placeholderMoveBack {
+  from {
+    text-indent: 0.5em;
+  }
+  to {
+    text-indent: 0;
+  }
+}
+
+/* .sa-fr-input::placeholder {
+  transition: text-indent 0.5s ease;
+} */
 
 /* My Add */
 .sa-fr-input-wrapper {
@@ -299,6 +346,21 @@ a {
   border-radius: 10px;
   overflow-x: hidden;
   overflow-y: scroll;
+  scrollbar-width: thin; /* Firefox 不支持 em 单位，使用 thin 作为近似值 */
+  scrollbar-color: #2ca5e2 transparent; /* 设置滚动条颜色，同时设置轨道颜色为透明 */
+}
+
+#floatWindow::-webkit-scrollbar {
+  width: 0.1em; /* 设置滚动条宽度 */
+}
+
+#floatWindow::-webkit-scrollbar-thumb {
+  background-color: #2ca5e2; /* 设置滚动条颜色 */
+  border-radius: 10em; /* 使滚动条两端变圆 */
+}
+
+#floatWindow::-webkit-scrollbar-button {
+  display: none; /* 移除滚动条上的箭头 */
 }
 
 #floatWindow .float-window-content {
