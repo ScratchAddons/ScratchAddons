@@ -25,7 +25,8 @@ export default async function ({ addon, msg, console }) {
 
   class FindRefs {
     constructor() {
-      this.isFloatWindowExpanded = false;
+      this.isFloatWindowExpandedOnWidth = false;
+      this.isFloatWindowExpandedOnHeight = false;
       this.utils = new Utils(addon);
 
       this.prevValue = "";
@@ -125,18 +126,20 @@ export default async function ({ addon, msg, console }) {
       this.findInput.addEventListener("keyup", () => this.inputChange());
       this.findInput.addEventListener("focusout", () => this.hideDropDown());
       this.fa_icon_search_bar.addEventListener("click", () => {
-        if (this.isFloatWindowExpanded) {
+        if (this.isFloatWindowExpandedOnWidth) {
           this.findInput.style.paddingLeft = "0";
           this.findInput.style.marginRight = "0";
+          this.fa_icon_search_bar.classList.remove("hovered");
           this.floatWindow.classList.remove("animate-expandWidth");
           this.floatWindow.classList.add("animate-contractWidth");
         } else {
+          this.fa_icon_search_bar.classList.add("hovered");
           this.findInput.style.paddingLeft = "0.4em";
           this.findInput.style.marginRight = "0.5em";
           this.floatWindow.classList.remove("animate-contractWidth");
           this.floatWindow.classList.add("animate-expandWidth");
         }
-        this.isFloatWindowExpanded = !this.isFloatWindowExpanded;
+        this.isFloatWindowExpandedOnWidth = !this.isFloatWindowExpandedOnWidth;
       });
     }
 
@@ -185,6 +188,8 @@ export default async function ({ addon, msg, console }) {
           li.style.display = "none";
         }
       }
+
+      console.log("test");
     }
 
     inputKeyDown(e) {
@@ -213,16 +218,6 @@ export default async function ({ addon, msg, console }) {
       if (addon.self.disabled || !this.findBarOuter) return;
 
       let ctrlKey = e.ctrlKey || e.metaKey;
-
-      //   if (e.key.toLowerCase() === "f" && ctrlKey && !e.shiftKey) {
-      //     // Ctrl + F (Override default Ctrl+F find)
-      //     this.findInput.focus();
-      //     this.findInput.select();
-      //     e.cancelBubble = true;
-      //     e.preventDefault();
-      //     return true;
-      //   }
-
       if (e.key === "ArrowLeft" && ctrlKey) {
         // Ctrl + Left Arrow Key
         if (document.activeElement.tagName === "INPUT") {
@@ -264,6 +259,9 @@ export default async function ({ addon, msg, console }) {
       this.dropdownOut.classList.add("visible");
       this.search_bar_label.classList.add("focus_on");
       this.findInput.classList.add("focus_on");
+      if (!this.isFloatWindowExpandedOnHeight) {
+        this.floatWindow.classList.add("animate-expandHeight");
+      }
 
       let scratchBlocks =
         this.selectedTab === 0
@@ -536,7 +534,7 @@ export default async function ({ addon, msg, console }) {
 
     createDom() {
       this.el = document.createElement("ul");
-      this.el.className = "sa-find-dropdown";
+      this.el.className = "sa-fr-dropdown";
       this.fr_result_list = document.querySelector("#ref_list");
       return this.el;
     }
@@ -614,13 +612,6 @@ export default async function ({ addon, msg, console }) {
         e.cancelBubble = true;
         return false;
       });
-
-      // My Code
-      // item.addEventListener("mouseenter", (e) => {
-      //   // 显示浮动窗口，你可以根据需要调整位置和内容
-      //   this.onItemHover(item);
-      //   e.preventDefault();
-      // });
 
       item.addEventListener("mouseleave", (e) => {
         // 隐藏浮动窗口

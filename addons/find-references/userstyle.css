@@ -3,6 +3,7 @@
 :root {
   --sa-fr-bar-height: 3em;
   --max-width-floatWindow: 300px;
+  --max-height-floatWindow: 300px;
   --main-bg-color: #855cd6;
   --main-fg-color: #ffbf82;
 }
@@ -65,6 +66,9 @@ a {
   border-radius: 4px;
   /*margin-top: 6px;*/
 }
+.sa-fr-dropdown-out.visible > .sa-fr-dropdown {
+  display: block;
+}
 
 /* We need to modify Scratch styles so that the place where the find bar is injected */
 /* has actually correct size information, which is used to make the find bar not cover up controls */
@@ -88,7 +92,6 @@ a {
   display: flex;
   align-items: left;
   flex-grow: 1;
-  box-shadow: none;
 
   /* init set */
   padding-left: 0em;
@@ -158,6 +161,7 @@ a {
   height: 100%;
   display: flex;
   background-color: white;
+  overflow: hidden;
 }
 
 .sa-fr-input-wrapper label,
@@ -197,7 +201,7 @@ a {
   transition: transform 0.5s ease-in-out, background-color 0.5s ease-in-out;
 }
 
-.sa-fr-input-wrapper label i:hover {
+.sa-fr-input-wrapper label i.hovered {
   color: var(--main-bg-color);
   background-color: var(--main-fg-color);
   transform: rotate(60deg);
@@ -227,44 +231,6 @@ a {
   }
 }
 
-/* .sa-fr-input-wrapper label.focus_on {
-  animation: focusOnAnimation 0.5s forwards;
-}
-
-.sa-fr-input-wrapper label:not(.focus_on) {
-  animation: focusOffAnimation 0.5s forwards;
-} */
-
-/* @keyframes scaleUpAnimation {
-  from {
-    transform: scale(1);
-    color: #e1a91a;
-  }
-  to {
-    transform: scale(1.5);
-    color: #8a55d7;
-  }
-}
-
-@keyframes scaleDownAnimation {
-  from {
-    transform: scale(1.5);
-    color: #8a55d7;
-  }
-  to {
-    transform: scale(1);
-    color: #e1a91a;
-  }
-} */
-
-/* .sa-fr-input-wrapper label.focus_on i {
-  animation: scaleUpAnimation 0.5s forwards;
-}
-
-.sa-fr-input-wrapper label:not(.focus_on) i {
-  animation: scaleDownAnimation 0.5s forwards;
-} */
-
 .sa-fr-input-input input[type="text"] {
   background-color: #3b4148;
   background-color: var(--loginInputBackgroundColor);
@@ -272,7 +238,7 @@ a {
   border-top-left-radius: 0;
 }
 
-.sa-find-dropdown {
+.sa-fr-dropdown {
   display: none;
   position: relative;
   padding: 0.2em 0;
@@ -287,7 +253,7 @@ a {
   border: none;
 }
 
-.sa-find-dropdown > li {
+.sa-fr-dropdown > li {
   display: block;
   padding: 0.5em 0.3em;
   white-space: nowrap;
@@ -297,19 +263,19 @@ a {
   overflow: hidden;
 }
 
-.sa-find-dropdown > li > b {
+.sa-fr-dropdown > li > b {
   background-color: #aaffaa;
   color: black;
 }
 
 /* Drop down items */
-.sa-find-dropdown > li:hover,
-.sa-find-dropdown > li.sel {
+.sa-fr-dropdown > li:hover,
+.sa-fr-dropdown > li.sel {
   color: var(--sa-block-text-on-bright-background);
   cursor: pointer;
 }
 
-.sa-find-dropdown > li::before {
+.sa-fr-dropdown > li::before {
   content: "\25CF "; /* ● */
 }
 
@@ -317,17 +283,17 @@ a {
   color: #4cbf56;
 }
 /* .sa-find-dropdown added for specificity */
-.sa-find-dropdown > .sa-find-flag:hover,
-.sa-find-dropdown > .sa-find-flag.sel {
+.sa-fr-dropdown > .sa-find-flag:hover,
+.sa-fr-dropdown > .sa-find-flag.sel {
   background-color: #4cbf56;
   color: white;
 }
 
-.sa-find-dropdown .sa-block-color {
+.sa-fr-dropdown .sa-block-color {
   color: var(--sa-block-colored-text);
 }
-.sa-find-dropdown .sa-block-color:hover,
-.sa-find-dropdown .sa-block-color.sel {
+.sa-fr-dropdown .sa-block-color:hover,
+.sa-fr-dropdown .sa-block-color.sel {
   background-color: var(--sa-block-bright-background);
 }
 
@@ -351,8 +317,6 @@ a {
 
 /* Ori Style */
 #floatWindow {
-  /* width: 100px; */
-  /* height: 300px; */
   position: absolute;
   top: 20%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -372,28 +336,32 @@ a {
 }
 
 #floatWindow.animate-expandWidth {
-  animation: expandWidth 0.5s ease-in-out forwards;
+  animation: expand 0.5s ease-in-out forwards;
 }
 
 #floatWindow.animate-contractWidth {
-  animation: animate-contractWidth 0.5s ease-in-out forwards;
+  animation: animate-contract 0.5s ease-in-out forwards;
 }
 
-@keyframes expandWidth {
+@keyframes expand {
   0% {
     width: var(--sa-fr-bar-height);
+    height: var(--sa-fr-bar-height); /* 初始高度 */
   }
   100% {
     width: var(--max-width-floatWindow);
+    height: var(--max-height-floatWindow); /* 展开后的最大高度 */
   }
 }
 
-@keyframes animate-contractWidth {
+@keyframes animate-contract {
   from {
     width: var(--max-width-floatWindow);
+    height: var(--max-height-floatWindow); /* 开始时的高度 */
   }
   to {
     width: var(--sa-fr-bar-height); /* 动画结束时恢复到元素的初始宽度 */
+    height: var(--sa-fr-bar-height); /* 收缩后的高度 */
   }
 }
 
