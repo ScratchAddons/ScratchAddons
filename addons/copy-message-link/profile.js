@@ -1,6 +1,4 @@
 export default async function ({ addon, console, msg }) {
-  let amtOfComments = 0;
-  let pass = 0;
   while (true) {
     const comment = await addon.tab.waitForElement("div.comment:not(.sa-copy-link)", {
       markAsSeen: true,
