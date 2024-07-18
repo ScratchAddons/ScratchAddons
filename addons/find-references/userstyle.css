@@ -397,6 +397,7 @@ a {
   display: flex; /* 启用 Flexbox */
   flex-direction: row; /* 使子元素横向排列 */
   justify-content: space-between;
+  padding-left: 0.2em;
 }
 
 #ref_list li.ref_result {
