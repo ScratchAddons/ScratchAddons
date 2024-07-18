@@ -801,10 +801,6 @@ export default async function ({ addon, msg, console }) {
               this.utils.scrollBlockIntoView(blockId);
             });
 
-            // if (this.hovered !== li_item) {
-            //   li_item.classList.add("hov");
-            //   this.hovered = li_item;
-            // }
             // mouse leave
             li_item.addEventListener("mouseleave", (e) => {
               if (this.hovered && this.hovered !== li_item) {
@@ -823,7 +819,7 @@ export default async function ({ addon, msg, console }) {
             // 获取最近的 SVG
             this.utils.getSVGElement(noRepBlock, enabledAddons, true).then((svg2) => {
               if (firstBlock.startHat_ && !noRepBlock.startHat_) {
-                const scale = 0.8;
+                const scale = 0.6;
                 svg1.setAttribute("transform", `translate(0,${scale * -16})`);
               }
               li_item.appendChild(svg1); // 使用 svg1 引用第一个 SVG
@@ -1056,7 +1052,7 @@ export default async function ({ addon, msg, console }) {
   }
 
   // switch to small pane used for test
-  const element = document.querySelector('[title="Switch to small stage"]');
+  const element = document.querySelector('[class*="toggle-buttons_button"]');
   if (element) {
     element.click();
   }

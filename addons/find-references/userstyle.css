@@ -71,6 +71,7 @@ a {
   border-radius: 4px;
   /*margin-top: 6px;*/
 }
+
 .sa-fr-dropdown-out.visible > .sa-fr-dropdown {
   display: block;
 }
@@ -338,7 +339,7 @@ a {
   flex-direction: column;
   border-radius: 10px;
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: scroll;
   scrollbar-width: thin; /* Firefox 不支持 em 单位，使用 thin 作为近似值 */
   scrollbar-color: #2ca5e2 transparent; /* 设置滚动条颜色，同时设置轨道颜色为透明 */
   transition: width 0.5s;
@@ -383,15 +384,6 @@ a {
   width: 0.1em; /* 设置滚动条宽度 */
 }
 
-#floatWindow::-webkit-scrollbar-thumb {
-  background-color: #2ca5e2; /* 设置滚动条颜色 */
-  border-radius: 10em; /* 使滚动条两端变圆 */
-}
-
-#floatWindow::-webkit-scrollbar-button {
-  display: none; /* 移除滚动条上的箭头 */
-}
-
 #floatWindow .float-window-content {
   padding: 2px 16px;
 }
@@ -411,20 +403,25 @@ a {
   opacity: 0.8;
   transition: opacity 0.3s ease-in-out;
   margin-top: 0.1em;
-  margin-bottom: 0.1em;
+  /* margin-bottom: 0.1em; */
 }
 
-#ref_list li.ref_result:hover {
-  opacity: 1;
+#floatWindow #ref_list li:nth-child(odd) {
+  background-color: #f9f9f9; /* 奇数项背景颜色 */
+}
+
+#floatWindow #ref_list li:nth-child(even) {
+  background-color: #e9e9e9; /* 偶数项背景颜色 */
 }
 
 /* 为 #ref_list 中的 header li item 设置样式 */
-#ref_list li.header {
+#floatWindow #ref_list li.header {
   display: flex;
   justify-content: space-between;
   font-weight: bold;
   /* background-color: var(--main-bg-color); */
   margin: 5px;
+  height: 2em;
 }
 
 #ref_list li.header div {
