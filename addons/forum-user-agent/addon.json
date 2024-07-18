@@ -1,6 +1,6 @@
 {
   "name": "Forum user-agent Modifier",
-  "description": "Changes the text \"Flash version\" to \"Flash versions\" when clicking the user-agent button on the forums.",
+  "description": "Changes the text \"Flash version\" to \"Flash versions\" when clicking the user-agent button on the forums. Prevoisuy part of the extension itself.",
   "info": [
     {
       "text": "This is useful for the Scratch Addons developers to find out if a bug report may be caused by the extension.",
@@ -13,7 +13,7 @@
       "matches": ["editingScreens"]
     }
   ],
-  "tags": ["community, forums"],
+  "tags": ["community", "forums"],
   "versionAdded": "1.39.0",
   "enabledByDefault": true
 }
