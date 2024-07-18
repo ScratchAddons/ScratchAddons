@@ -1,0 +1,125 @@
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
+
+.markItUpHeader > ul > .markItUpButton > a::before {
+  font-size: 22px !important;
+  filter: var(--darkWww-box-filter);
+  font-family: 'Material Symbols Outlined';
+  color: black;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  font-variation-settings:
+  'FILL' var(--materialForumEditorButtons-iconStyle),
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 22;
+  bottom: 3px;
+  position: absolute;
+}
+
+.markItUpHeader > ul > .markItUpDropMenu:not(.markItUpButton12, .markItUpButton14) > ul > .markItUpButton > a::before {
+  font-size: 20px;
+  filter: var(--darkWww-box-filter);
+  font-family: 'Material Symbols Outlined';
+  color: black;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  font-variation-settings:
+  'FILL' var(--materialForumEditorButtons-iconStyle),
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 20;
+  left: 4px;
+  bottom: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.markItUpHeader > ul > .markItUpDropMenu > a::after {
+  content: "expand_more";
+  /* letter-spacing: -5px !important; */
+  left: 20px;
+  font-size: 16px !important;
+  filter: var(--darkWww-box-filter);
+  font-family: 'Material Symbols Outlined';
+  color: black;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  font-variation-settings:
+  'FILL' var(--materialForumEditorButtons-iconStyle),
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 20;
+  position: relative;
+}
+
+.markItUpHeader > ul > .markItUpButton > a {
+  width: 22px;
+  height: 22px;
+  background-size: 20px;
+  background-position: 0 0;
+  border-radius: 0;
+  padding: 0;
+  font-size: 0px;
+}
+
+.markItUpHeader > ul > .markItUpButton > a, /* Bitmap icon and dropdown expand button */
+.markItUpDropMenu:not(.markItUpButton12) ul a, /* Bitmap dropdown option icons, excluding emojis */
+.markItUpButton14 > ul > li, /* Expand buttons of scratchblocks category buttons */
+.markItUpDropMenu::after /* dark-www white dropdown expand buttons */
+{
+  background-image: none !important;
+}
+
+.markItUpHeader ul a {
+  text-indent: 0px !important;
+}
+
+.markItUpDropMenu:not(.markItUpButton12, .markItUpButton14) > ul > li > a {
+  padding-left: 30px !important;
+}
+
+.markItUpHeader > ul > .markItUpDropMenu {
+  background: transparent !important;
+  margin-right: 0 !important;
+}
+
+.markItUpDropMenu > ul > .markItUpDropMenu > a::before {
+  content: "chevron_right";
+  filter: var(--darkWww-box-filter);
+  font-family: 'Material Symbols Outlined';
+  color: black;
+  display: inline-block;
+  position: absolute;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  font-variation-settings:
+  'FILL' var(--materialForumEditorButtons-iconStyle),
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 20;
+  font-size: 20px;
+  width: inherit;
+  text-align: right;
+}
+
+.markItUpHeader > ul > .markItUpDropMenu > a {
+  width: 34px;
+}

@@ -3,6 +3,10 @@
   "description": "Changes the icons for buttons in the forum post editor from pixelated bitmaps to Material icons.",
   "userstyles": [
     {
+      "url": "userstyle.css",
+      "matches": ["editingScreens"]
+    },
+    {
       "url": "icons.css",
       "matches": ["editingScreens"]
     }
@@ -19,6 +23,30 @@
       "note": "addon version",
       "id": "addonVersion",
       "link": "https://github.com/Secret-chest"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["editingScreens"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Icon style",
+      "id": "iconStyle",
+      "type": "select",
+      "potentialValues": [
+        {
+          "name": "Outlined",
+          "id": "0"
+        },
+        {
+          "name": "Filled",
+          "id": "1"
+        }
+      ],
+      "default": "0"
     }
   ],
   "enabledByDefault": false,
