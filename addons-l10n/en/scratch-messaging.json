@@ -56,5 +56,6 @@
   "scratch-messaging/comment-error-reply-limit": "Studio comments can no longer have more than 25 replies.",
   "scratch-messaging/studio-host-transfers": "Studio host transfers",
   "scratch-messaging/studio-host-transfer": "{actor} made you the host of the studio \"{title}\"",
-  "scratch-messaging/st": "A Scratch Team member"
+  "scratch-messaging/st": "A Scratch Team member",
+  "scratch-messaging/welcome-to-scratch": "Welcome to Scratch! After you make projects and comments, you'll get messages about them here."
 }

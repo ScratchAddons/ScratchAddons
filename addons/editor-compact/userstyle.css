@@ -310,6 +310,16 @@ body:not(.sa-columns-enabled) [class*="gui_tab-panel"] [class*="gui_extension-bu
 [class*="selector_list-area"] > div:first-child {
   margin-top: 0.25rem;
 }
+[class*="sprite-selector-item_number"] {
+  margin: 0 -2px;
+  padding: 0 2px;
+  background-color: var(--editorDarkMode-selector2, #d9e3f2);
+  border-radius: 4px;
+}
+[class*="sprite-selector-item_sprite-selector-item_"]:hover [class*="sprite-selector-item_number"],
+[class*="sprite-selector-item_is-selected"] [class*="sprite-selector-item_number"] {
+  background-color: var(--editorDarkMode-selectorSelection, white);
+}
 [class*="selector_list-area"] img[class*="sprite-selector-item_sprite-image"] {
   max-width: 52px;
   max-height: 44px;
