@@ -1,0 +1,20 @@
+{
+  "name": "Forumoji emoji when posting in the forums",
+  "description": "Replaces Unicode emoji with Forumoji emoji before posting a post in the forums.",
+  "tags": ["community", "forums"],
+  "versionAdded": "1.39.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["editingScreens"]
+    }
+  ],
+  "credits": [
+    {
+      "name": "mybearworld",
+      "link": "https://scratch.mit.edu/users/mybearworld/"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}
