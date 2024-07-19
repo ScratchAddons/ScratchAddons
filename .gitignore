@@ -35,3 +35,5 @@ ehthumbs_vista.db
 
 # Development files
 node_modules/
+addons/find-bar/userscript.js
+addons/find-references/userstyle_1.css

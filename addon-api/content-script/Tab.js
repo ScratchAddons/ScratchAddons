@@ -425,7 +425,7 @@ export default class Tab extends Listenable {
       fullscreenStageHeader: {
         // Fullscreen stage header only
         element: () => q("[class^='stage-header_stage-menu-wrapper']"),
-        from: function () {
+        from: function() {
           let emptyDiv = this.element().querySelector(".sa-spacer");
           if (!emptyDiv) {
             emptyDiv = document.createElement("div");
@@ -466,7 +466,7 @@ export default class Tab extends Listenable {
       forumsBeforePostReport: {
         element: () => scope.querySelector(".postfootright > ul"),
         from: () => [],
-        until: function () {
+        until: function() {
           let reportButton = scope.querySelector(
             ".postfootright > ul > li.postreport, .postfootright > ul > li.pseudopostreport"
           );
@@ -485,7 +485,7 @@ export default class Tab extends Listenable {
       },
       forumsAfterPostReport: {
         element: () => scope.querySelector(".postfootright > ul"),
-        from: function () {
+        from: function() {
           let reportButton = scope.querySelector(
             ".postfootright > ul > li.postreport, .postfootright > ul > li.pseudopostreport"
           );
@@ -755,7 +755,7 @@ export default class Tab extends Listenable {
 
     this.traps.getBlockly().then((ScratchBlocks) => {
       const oldShow = ScratchBlocks.ContextMenu.show;
-      ScratchBlocks.ContextMenu.show = function (event, items, rtl) {
+      ScratchBlocks.ContextMenu.show = function(event, items, rtl) {
         const gesture = ScratchBlocks.mainWorkspace.currentGesture_;
         const block = gesture.targetBlock_;
 

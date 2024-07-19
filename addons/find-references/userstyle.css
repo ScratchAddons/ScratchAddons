@@ -1,0 +1,441 @@
+@import url("../editor-theme3/compatibility.css");
+
+:root {
+  --sa-fr-bar-height: 3em;
+  --max-width-floatWindow: 400px;
+  --max-height-floatWindow: 300px;
+  --main-bg-color: #855cd6;
+  --main-fg-color: #ffbf82;
+}
+
+/* Remove default margins, paddings, and borders */
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+ol,
+ul {
+  padding: 0;
+}
+
+/* Set box-sizing to border-box for all elements */
+* {
+  box-sizing: border-box;
+}
+
+/* Remove list styles */
+ul,
+ol {
+  list-style: none;
+}
+
+/* Remove underlines from links */
+a {
+  text-decoration: none;
+}
+
+.sa-fr-bar {
+  display: flex;
+  align-items: left;
+  white-space: nowrap;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  width: 100%;
+  height: var(--sa-fr-bar-height);
+}
+
+.sa-fr-bar[hidden] {
+  /* !important to override displayNoneWhileDisabled */
+  display: none !important;
+}
+
+.sa-fr-wrapper {
+  overflow: visible;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  /*max-width: 16em;*/
+  display: flex;
+  flex-direction: row;
+}
+
+.sa-fr-dropdown-out {
+  display: block;
+  /*top: -6px;*/
+  z-index: 100;
+  width: 100%;
+  position: relative;
+  /*padding: 4px;*/
+  border: none;
+  border-radius: 4px;
+  /*margin-top: 6px;*/
+}
+
+.sa-fr-dropdown-out.visible > .sa-fr-dropdown {
+  display: block;
+}
+
+.sa-fr-dropdown-out.visible {
+  /* position: absolute;
+  width: 16em; */
+  box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
+  background-color: white;
+}
+
+/* We need to modify Scratch styles so that the place where the find bar is injected */
+/* has actually correct size information, which is used to make the find bar not cover up controls */
+[class*="gui_tab-list_"] {
+  width: 100%;
+}
+[class*="gui_tab_"] {
+  flex-grow: 0;
+}
+
+#sa-fr-input {
+  box-shadow: none; /* 设置基础的 box-shadow，这里假设没有焦点时不需要阴影 */
+  transition: box-shadow 0.5s, border-radius 0.5s; /* 可选：添加过渡效果使变化更平滑 */
+  height: 100%;
+  width: 0;
+  position: relative;
+  right: 0;
+  box-sizing: border-box !important;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: left;
+  flex-grow: 1;
+
+  /* init set */
+  padding-left: 0em;
+  padding-right: 0em;
+  /* margin-top: 0.1em; */
+  border: 0;
+  /* padding-left: 0.4em;
+  margin-right: 0.5em; */
+}
+
+.sa-fr-input.focus_on {
+  animation: inputFocusAnimation 0.5s forwards, placeholderMoveRight 0.5s forwards; /* 添加占位符动画 */
+}
+
+.sa-fr-input:not(.focus_on) {
+  animation: inputBlurAnimation 0.5s forwards, placeholderMoveBack 0.5s forwards; /* 添加占位符动画 */
+}
+
+@keyframes inputFocusAnimation {
+  from {
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+  }
+  to {
+    border-top-left-radius: 1.3em; /* 左上角圆角 */
+    border-bottom-left-radius: 1.3em; /* 左下角圆角 */
+  }
+}
+
+@keyframes inputBlurAnimation {
+  from {
+    border-top-left-radius: 1.3em; /* 如果开始时左侧圆角有变化，这里调整 */
+    border-bottom-left-radius: 1.3em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 开始时的 box-shadow 应与 inputFocusAnimation 的结束状态相匹配 */
+  }
+  to {
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+  }
+}
+
+@keyframes placeholderMoveRight {
+  from {
+    text-indent: 0;
+  }
+  to {
+    text-indent: 0.5em;
+  }
+}
+
+@keyframes placeholderMoveBack {
+  from {
+    text-indent: 0.5em;
+  }
+  to {
+    text-indent: 0;
+  }
+}
+
+/* .sa-fr-input::placeholder {
+  transition: text-indent 0.5s ease;
+} */
+
+/* My Add */
+.sa-fr-input-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background-color: white;
+  overflow: hidden;
+}
+
+.sa-fr-input-wrapper label,
+.sa-fr-input-wrapper input[type="text"] {
+  height: 100%;
+  border-radius: 0.25rem;
+  border-radius: var(--loginBorderRadus);
+}
+
+.sa-fr-input-wrapper label {
+  width: var(--sa-fr-bar-height);
+  height: 100%;
+  position: relative;
+  right: 0;
+  border-top-left-radius: 30%;
+  border-bottom-left-radius: 30%;
+  transition: all 0.5s ease;
+  background-color: #363b41;
+  background-color: var(--loginLabelBackgroundColor);
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sa-fr-input-wrapper label i {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: var(--main-fg-color);
+  /* color: #e1a91a; */
+  background-color: var(--main-bg-color);
+  transform: scale(1);
+  transition: transform 0.5s ease-in-out, background-color 0.5s ease-in-out;
+}
+
+.sa-fr-input-wrapper label i.hovered {
+  color: var(--main-bg-color);
+  background-color: var(--main-fg-color);
+  transform: rotate(60deg);
+  transform: scale(1.5);
+}
+
+@keyframes focusOnAnimation {
+  from {
+    border-radius: initial;
+    background-color: initial;
+  }
+  to {
+    border-radius: 50%;
+    background-color: rgb(225, 169, 26);
+  }
+}
+
+@keyframes focusOffAnimation {
+  from {
+    border-radius: 50%;
+    background-color: rgb(225, 169, 26);
+  }
+  to {
+    border-radius: initial; /* 恢复到您的初始样式 */
+    background-color: initial; /* 恢复到您的初始样式 */
+    color: initial; /* 恢复到您的初始样式 */
+  }
+}
+
+.sa-fr-input-input input[type="text"] {
+  background-color: #3b4148;
+  background-color: var(--loginInputBackgroundColor);
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.sa-fr-dropdown {
+  display: none;
+  position: relative;
+  padding: 0.2em 0;
+  font-size: 0.75rem;
+  line-height: 1;
+  overflow-y: auto;
+  min-height: 128px;
+  max-height: 65vh;
+  user-select: none;
+  max-width: 100%;
+  margin-top: 6px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.sa-fr-dropdown > li {
+  display: block;
+  padding: 0.5em 0.3em;
+  white-space: nowrap;
+  margin: 0;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.sa-fr-dropdown > li > b {
+  background-color: #aaffaa;
+  color: black;
+}
+
+/* Drop down items */
+.sa-fr-dropdown > li:hover,
+.sa-fr-dropdown > li.sel {
+  color: var(--sa-block-text-on-bright-background);
+  cursor: pointer;
+}
+
+.sa-fr-dropdown > li::before {
+  content: "\25CF "; /* ● */
+}
+
+.sa-find-flag {
+  color: #4cbf56;
+}
+/* .sa-find-dropdown added for specificity */
+.sa-fr-dropdown > .sa-find-flag:hover,
+.sa-fr-dropdown > .sa-find-flag.sel {
+  background-color: #4cbf56;
+  color: white;
+}
+
+.sa-fr-dropdown .sa-block-color {
+  color: var(--sa-block-colored-text);
+}
+.sa-fr-dropdown .sa-block-color:hover,
+.sa-fr-dropdown .sa-block-color.sel {
+  background-color: var(--sa-block-bright-background);
+}
+
+.sa-find-carousel {
+  font-weight: normal;
+  position: absolute;
+  right: 0;
+  white-space: nowrap;
+  background-color: inherit;
+  z-index: 1;
+  padding: 0;
+}
+
+.sa-find-carousel-control {
+  padding: 0 6px;
+}
+
+.sa-find-carousel-control:hover {
+  color: #ffff80;
+}
+
+/* Ori Style */
+#floatWindow {
+  position: absolute;
+  top: 20%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  scrollbar-width: thin; /* Firefox 不支持 em 单位，使用 thin 作为近似值 */
+  scrollbar-color: #2ca5e2 transparent; /* 设置滚动条颜色，同时设置轨道颜色为透明 */
+  transition: width 0.5s;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.search_icon:hover + #floatWindow {
+  animation: expandWidth 0.5s forwards;
+}
+
+#floatWindow.animate-expandWidth {
+  animation: expand 0.5s ease-in-out forwards;
+}
+
+#floatWindow.animate-contractWidth {
+  animation: animate-contract 0.5s ease-in-out forwards;
+}
+
+@keyframes expand {
+  0% {
+    width: var(--sa-fr-bar-height);
+    height: var(--sa-fr-bar-height); /* 初始高度 */
+  }
+  100% {
+    width: var(--max-width-floatWindow);
+    height: var(--max-height-floatWindow); /* 展开后的最大高度 */
+  }
+}
+
+@keyframes animate-contract {
+  from {
+    width: var(--max-width-floatWindow);
+    height: var(--max-height-floatWindow); /* 开始时的高度 */
+  }
+  to {
+    width: var(--sa-fr-bar-height); /* 动画结束时恢复到元素的初始宽度 */
+    height: var(--sa-fr-bar-height); /* 收缩后的高度 */
+  }
+}
+
+#floatWindow::-webkit-scrollbar {
+  width: 0.1em; /* 设置滚动条宽度 */
+}
+
+#floatWindow .float-window-content {
+  padding: 2px 16px;
+}
+
+#floatWindow #ref_list li.hov {
+  background-color: rgba(0, 64, 255, 0.229);
+}
+
+#floatWindow #ref_list li {
+  height: 3em;
+  display: flex; /* 启用 Flexbox */
+  flex-direction: row; /* 使子元素横向排列 */
+  justify-content: space-between;
+  padding-left: 0.2em;
+}
+
+#ref_list li.ref_result {
+  opacity: 0.8;
+  transition: opacity 0.3s ease-in-out;
+  margin-top: 0.1em;
+  /* margin-bottom: 0.1em; */
+}
+
+#floatWindow #ref_list li:nth-child(odd) {
+  background-color: #f9f9f9; /* 奇数项背景颜色 */
+}
+
+#floatWindow #ref_list li:nth-child(even) {
+  background-color: #e9e9e9; /* 偶数项背景颜色 */
+}
+
+/* 为 #ref_list 中的 header li item 设置样式 */
+#floatWindow #ref_list li.header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  /* background-color: var(--main-bg-color); */
+  margin: 5px;
+  height: 2em;
+}
+
+#ref_list li.header div {
+  flex: 1;
+  text-transform: uppercase;
+}
+
+/* 为 header content 设置样式 */
+#ref_list li.header div:first-child {
+  text-align: left;
+}
+
+/* 为第二列内容设置样式 */
+#ref_list li.header div:last-child {
+  text-align: left;
+}
