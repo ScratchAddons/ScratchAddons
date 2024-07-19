@@ -1,5 +1,3 @@
-import updateToolboxXML from "../../libraries/common/cs/update-toolbox-xml.js";
-
 export default async function ({ addon, console, msg, safeMsg }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
@@ -186,11 +184,19 @@ export default async function ({ addon, console, msg, safeMsg }) {
     return result;
   };
 
+  // If editingTarget is set, the editor has already rendered and we have to tell it to rerender.
+  if (vm.editingTarget) {
+    vm.emitWorkspaceUpdate();
+  }
+
   addon.settings.addEventListener("change", (e) => {
-    // When the separate list category option changes, we need to update the toolbox XML.
+    // When the separate list category option changes, we need to do a workspace update.
     // For all other options, just refresh the toolbox.
+    // Always doing both of these in response to a settings change causes many issues.
     if (addon.settings.get("separateListCategory") !== hasSeparateListCategory) {
-      updateToolboxXML(addon.tab);
+      if (vm.editingTarget) {
+        vm.emitWorkspaceUpdate();
+      }
     } else {
       const workspace = Blockly.getMainWorkspace();
       if (workspace) {
@@ -199,12 +205,14 @@ export default async function ({ addon, console, msg, safeMsg }) {
     }
   });
 
-  const updateToolbox = () => {
+  const dynamicEnableOrDisable = () => {
     // Enabling/disabling is similar to changing settings.
-    // If separate list category is enabled, a toolbox XML update is needed.
+    // If separate list category is enabled, a workspace update is needed.
     // If any other setting is enabled, refresh the toolbox.
     if (addon.settings.get("separateListCategory")) {
-      updateToolboxXML(addon.tab);
+      if (vm.editingTarget) {
+        vm.emitWorkspaceUpdate();
+      }
     }
     if (addon.settings.get("separateLocalVariables") || addon.settings.get("moveReportersDown")) {
       const workspace = Blockly.getMainWorkspace();
@@ -213,11 +221,11 @@ export default async function ({ addon, console, msg, safeMsg }) {
       }
     }
   };
-  updateToolbox();
+
   addon.self.addEventListener("disabled", () => {
-    updateToolbox();
+    dynamicEnableOrDisable();
   });
   addon.self.addEventListener("reenabled", () => {
-    updateToolbox();
+    dynamicEnableOrDisable();
   });
 }

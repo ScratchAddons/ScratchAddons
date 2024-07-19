@@ -1,9 +1,10 @@
-import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
+import { updateAllBlocks } from "../custom-block-shape/update-all-blocks.js";
 import { clearTextWidthCache } from "../middle-click-popup/module.js";
 
 export default async function ({ addon, console }) {
   let currentTextSize = 100;
 
+  const vm = addon.tab.traps.vm;
   const blocklyInstance = await addon.tab.traps.getBlockly();
 
   // Handling the CSS from here instead of a userstyle is much more stable, as
@@ -48,7 +49,7 @@ export default async function ({ addon, console }) {
     // If font size has changed, middle click popup needs to clear it's cache too
     clearTextWidthCache();
 
-    updateAllBlocks(addon.tab);
+    updateAllBlocks(vm, addon.tab.traps.getWorkspace(), blocklyInstance);
   };
 
   const setFontSize = (wantedSize) => {

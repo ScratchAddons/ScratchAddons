@@ -1,5 +1,4 @@
 import { textColor } from "../../libraries/common/cs/text-color.esm.js";
-import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
 
 const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$");
 
@@ -25,11 +24,14 @@ export default async function ({ addon, console }) {
   };
 
   const reloadToolbox = () => {
-    updateAllBlocks(addon.tab, {
-      updateMainWorkspace: false,
-      updateFlyout: false,
-      updateCategories: true,
-    });
+    Blockly.Events.disable();
+    const workspace = Blockly.getMainWorkspace();
+    const flyout = workspace.getFlyout();
+    const toolbox = workspace.getToolbox();
+    const flyoutWorkspace = flyout.getWorkspace();
+    Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
+    toolbox.populate_(workspace.options.languageTree);
+    Blockly.Events.enable();
   };
   reloadToolbox();
   addon.settings.addEventListener("change", reloadToolbox);
