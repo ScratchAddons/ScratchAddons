@@ -660,24 +660,21 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             settings,
             4,
             {
-              "motion-color": "#80B5FF",
-              "looks-color": "#CCB3FF",
-              "sounds-color": "#E19DE1",
-              "events-color": "#FFD966",
-              "control-color": "#FFBE4C",
-              "sensing-color": "#85C4E0",
-              "operators-color": "#7ECE7E",
-              "data-color": "#FFA54C",
-              "data-lists-color": "#FF9966",
-              "custom-color": "#FF99AA",
-              "Pen-color": "#13ECAF",
-              "sa-color": "#34E4D0",
-              "comment-color": "#FEF49C",
-              "input-color": "#202020",
               text: "colorOnBlack",
-              // "monitors": false
             },
-            manifest.presets.find((p) => p.id === "black")
+            () => {
+              madeAnyChanges = madeChangesToAddon = true;
+              Object.assign(
+                {
+                  // Fraction of the "Black" preset
+                  fillStyle: "colored",
+                  fillOpacity: 5,
+                  strokeStyle: "colored",
+                  strokeOpacity: 50,
+                },
+                settings
+              );
+            }
           );
         }
 
