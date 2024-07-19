@@ -1,4 +1,5 @@
 import { removeAlpha, multiply, brighten, alphaBlend } from "../../libraries/common/cs/text-color.esm.js";
+import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
 
 const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$");
 const extensionsCategory = {
@@ -539,8 +540,6 @@ export default async function ({ addon, console, msg }) {
   };
 
   const updateColors = () => {
-    const vm = addon.tab.traps.vm;
-
     for (const category of categories) {
       // CSS variables are used for compatibility with other addons
       const prefix = `--editorTheme3-${category.colorId}`;
@@ -572,22 +571,7 @@ export default async function ({ addon, console, msg }) {
     const safeTextColor = encodeURIComponent(uncoloredTextColor());
     Blockly.FieldNumber.NUMPAD_DELETE_ICON = originalNumpadDeleteIcon.replace("white", safeTextColor);
 
-    const workspace = addon.tab.traps.getWorkspace();
-    if (!workspace) return;
-    const flyout = workspace.getFlyout();
-    const toolbox = workspace.getToolbox();
-
-    // Reload toolbox
-    if (vm.editingTarget) {
-      vm.emitWorkspaceUpdate();
-    }
-    if (!flyout || !toolbox) return;
-    Blockly.Events.disable();
-    const flyoutWorkspace = flyout.getWorkspace();
-    Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
-    toolbox.populate_(workspace.options.languageTree);
-    workspace.toolboxRefreshEnabled_ = true;
-    Blockly.Events.enable();
+    updateAllBlocks(addon.tab, { updateCategories: true });
   };
 
   updateColors();
