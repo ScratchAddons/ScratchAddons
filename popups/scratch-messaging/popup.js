@@ -264,8 +264,6 @@ export default async ({ addon, msg, safeMsg }) => {
       profiles: [],
       studios: [],
       projects: [],
-      // There can't be more than one "welcome to Scratch" message
-      welcomeToScratch: false,
 
       // For UI
       messageTypeExtended: {
@@ -305,7 +303,6 @@ export default async ({ addon, msg, safeMsg }) => {
         openMessagesMsg: msg("open-messages"),
         studioPromotionsMsg: msg("studio-promotions"),
         studioHostTransfersMsg: msg("studio-host-transfers"),
-        welcomeToScratchMsg: msg("welcome-to-scratch"),
       },
     },
     watch: {
@@ -322,7 +319,6 @@ export default async ({ addon, msg, safeMsg }) => {
         this.profiles = [];
         this.studios = [];
         this.projects = [];
-        this.welcomeToScratch = false;
         this.analyzeMessages(newVal);
       },
     },
@@ -529,12 +525,12 @@ export default async ({ addon, msg, safeMsg }) => {
           } else return true;
         } else return false;
       },
-      checkCommentLocation(resourceType, resourceId, commentMessages, elementObject) {
+      checkCommentLocation(resourceType, resourceId, commentIds, elementObject) {
         return Promise.all([
           API.fetchComments(addon, {
             resourceType,
             resourceId,
-            commentMessages,
+            commentIds,
           }),
           addon.self.getEnabledAddons(),
         ])
@@ -662,10 +658,10 @@ export default async ({ addon, msg, safeMsg }) => {
             const resourceId = message.comment_type === 1 ? message.comment_obj_title : message.comment_obj_id;
             let location = commentLocations[message.comment_type].find((obj) => obj.resourceId === resourceId);
             if (!location) {
-              location = { resourceId, commentMessages: [] };
+              location = { resourceId, commentIds: [] };
               commentLocations[message.comment_type].push(location);
             }
-            location.commentMessages.push(message);
+            location.commentIds.push(message.comment_id);
             let resourceObject;
             if (message.comment_type === 0)
               resourceObject = this.getProjectObject(resourceId, message.comment_obj_title);
@@ -673,8 +669,6 @@ export default async ({ addon, msg, safeMsg }) => {
             else if (message.comment_type === 2)
               resourceObject = this.getStudioObject(resourceId, message.comment_obj_title);
             resourceObject.unreadComments++;
-          } else if (message.type === "userjoin") {
-            this.welcomeToScratch = true;
           }
         }
         this.messagesReady = true;
@@ -685,7 +679,7 @@ export default async ({ addon, msg, safeMsg }) => {
         for (const profile of this.profilesOrdered) {
           const location = commentLocations[1].find((obj) => obj.resourceId === profile.username);
           if (location) {
-            await this.checkCommentLocation("user", location.resourceId, location.commentMessages, profile);
+            await this.checkCommentLocation("user", location.resourceId, location.commentIds, profile);
             locationsChecked++;
             this.commentsProgress = Math.round((locationsChecked / locationsToCheckAmt) * 100);
           }
@@ -693,7 +687,7 @@ export default async ({ addon, msg, safeMsg }) => {
         for (const studio of this.studios) {
           const location = commentLocations[2].find((obj) => obj.resourceId === studio.id);
           if (location) {
-            await this.checkCommentLocation("gallery", location.resourceId, location.commentMessages, studio);
+            await this.checkCommentLocation("gallery", location.resourceId, location.commentIds, studio);
             locationsChecked++;
             this.commentsProgress = Math.round((locationsChecked / locationsToCheckAmt) * 100);
           }
@@ -701,7 +695,7 @@ export default async ({ addon, msg, safeMsg }) => {
         for (const project of this.projectsOrdered) {
           const location = commentLocations[0].find((obj) => obj.resourceId === project.id);
           if (location) {
-            await this.checkCommentLocation("project", location.resourceId, location.commentMessages, project);
+            await this.checkCommentLocation("project", location.resourceId, location.commentIds, project);
             locationsChecked++;
             this.commentsProgress = Math.round((locationsChecked / locationsToCheckAmt) * 100);
           }

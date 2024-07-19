@@ -8,9 +8,6 @@ import * as modal from "./modal.js";
 
 const DATA_PNG = "data:image/png;base64,";
 
-const isScratchGui =
-  location.origin === "https://scratchfoundation.github.io" || ["8601", "8602"].includes(location.port);
-
 const contextMenuCallbacks = [];
 const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image", "swap-local-global"];
 let createdAnyBlockContextMenus = false;
@@ -216,7 +213,7 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get editorMode() {
-    if (isScratchGui) {
+    if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601") {
       // Note that scratch-gui does not change the URL when going fullscreen.
       if (this.redux.state?.scratchGui?.mode?.isFullScreen) return "fullscreen";
       return "editor";
@@ -238,7 +235,7 @@ export default class Tab extends Listenable {
   copyImage(dataURL) {
     if (!dataURL.startsWith(DATA_PNG)) return Promise.reject(new TypeError("Expected PNG data URL"));
     if (typeof Clipboard.prototype.write === "function") {
-      // Chrome or Firefox 127+
+      // Chrome
       const blob = dataURLToBlob(dataURL);
       const items = [
         new ClipboardItem({
@@ -247,8 +244,7 @@ export default class Tab extends Listenable {
       ];
       return navigator.clipboard.write(items);
     } else {
-      // Firefox 109-126 only
-      // The image is sent to the background event page where it is copied with extension APIs
+      // Firefox needs Content Script
       return scratchAddons.methods.copyImage(dataURL).catch((err) => {
         return Promise.reject(new Error(`Error inside clipboard handler: ${err}`));
       });
@@ -302,6 +298,7 @@ export default class Tab extends Listenable {
     const isProject =
       location.pathname.split("/")[1] === "projects" &&
       !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
+    const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
     if (!isProject && !isScratchGui) {
       scratchAddons.console.warn("addon.tab.scratchClass() was used outside a project page");
       return "";
@@ -341,6 +338,7 @@ export default class Tab extends Listenable {
     const isProject =
       location.pathname.split("/")[1] === "projects" &&
       !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
+    const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
     if (!isProject && !isScratchGui) return Promise.resolve();
 
     this._calledScratchClassReady = true;

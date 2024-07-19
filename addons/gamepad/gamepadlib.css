@@ -26,27 +26,22 @@
   width: 75px;
   height: 25px;
   border-radius: 0;
-  border: 1px solid var(--editorDarkMode-input-text, #575e75);
-  background: var(--editorDarkMode-input, white);
-  color: var(--editorDarkMode-input-text, #575e75);
-  outline-color: var(--editorDarkMode-primary, #855cd6);
+  border: 1px solid black;
+  background: white;
+  color: black;
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
 .gamepadlib-mapping[data-value="1"] .gamepadlib-keyinput {
-  background: #ffd966;
-  color: black;
+  background: yellow;
 }
 .gamepadlib-keyinput[data-accepting-input="true"] {
-  background: var(--editorDarkMode-primary-transparent35, hsla(260, 60%, 60%, 0.35));
+  background: #d6fff9;
 }
 .gamepadlib-keyinput[data-empty="true"]:not([data-accepting-input="true"]) {
-  color: var(--editorDarkMode-input-transparentText, hsla(225, 15%, 40%, 0.6));
+  color: #aaa;
   font-style: italic;
-}
-.gamepadlib-mapping[data-value="1"] .gamepadlib-keyinput[data-empty="true"]:not([data-accepting-input="true"]) {
-  color: hsla(0, 0%, 0%, 0.6);
 }
 
 .gamepadlib-axis {
@@ -57,7 +52,7 @@
   position: relative;
   width: 150px;
   height: 150px;
-  border: 1px solid var(--editorDarkMode-accent-text, #575e75);
+  border: 1px solid black;
   overflow: hidden;
 }
 .gamepadlib-axis-dot {

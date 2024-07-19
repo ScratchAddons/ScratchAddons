@@ -1,6 +1,6 @@
 {
   "name": "Show exact count",
-  "description": "Shows exact numbers on profiles and the exact project count in studios.",
+  "description": "Shows the exact count for user and studio info. Uses ScratchDB for forums information.",
   "credits": [
     {
       "name": "TheColaber",
@@ -12,12 +12,6 @@
     },
     {
       "name": "World_Languages"
-    }
-  ],
-  "info": [
-    {
-      "id": "setting-removal",
-      "text": "The forum setting has been removed since the ScratchDB database used by it is offline."
     }
   ],
   "settings": [
@@ -32,6 +26,12 @@
       "id": "studio",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "Exact count for forum user",
+      "id": "forumuser",
+      "type": "boolean",
+      "default": false
     }
   ],
   "userscripts": [
@@ -44,19 +44,18 @@
     },
     {
       "url": "studio.js",
-      "matches": ["studios"],
+      "matches": ["https://scratch.mit.edu/studios/*"],
       "if": {
         "settings": { "studio": true }
       }
-    }
-  ],
-  "userstyles": [
+    },
     {
-      "url": "studio.css",
-      "matches": ["studios"],
+      "url": "forum.js",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
       "if": {
-        "settings": { "studio": true }
-      }
+        "settings": { "forumuser": true }
+      },
+      "runAtComplete": false
     }
   ],
   "dynamicEnable": true,

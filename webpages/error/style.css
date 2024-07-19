@@ -1,14 +1,6 @@
-@import url("../styles/colors-light.css");
-
-body {
-  color: var(--content-text);
-  background-color: var(--page-background);
-  font-size: 1rem;
-  font-family: sans-serif;
-}
-
-a {
-  color: var(--blue-text);
+html {
+  font-size: 20px;
+  background-color: white;
 }
 
 #browser-info {
@@ -21,6 +13,6 @@ a {
 
 #restart-url {
   display: inline-block;
-  margin: 0 6px;
+  margin: 0 6px 0 6px;
   font-family: monospace;
 }

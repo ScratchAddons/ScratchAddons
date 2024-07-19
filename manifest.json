@@ -22,8 +22,7 @@
         "https://scratch.mit.edu/*",
         "https://scratchfoundation.github.io/scratch-gui/*",
         "http://localhost:8333/*",
-        "http://localhost:8601/*",
-        "http://localhost:8602/*"
+        "http://localhost:8601/*"
       ],
       "run_at": "document_start",
       "js": ["libraries/thirdparty/cs/comlink.js", "libraries/common/cs/text-color.js", "content-scripts/cs.js"],
@@ -34,8 +33,7 @@
         "https://scratch.mit.edu/*",
         "https://scratchfoundation.github.io/scratch-gui/*",
         "http://localhost:8333/*",
-        "http://localhost:8601/*",
-        "http://localhost:8602/*"
+        "http://localhost:8601/*"
       ],
       "run_at": "document_start",
       "js": ["content-scripts/prototype-handler.js", "content-scripts/load-redux.js", "content-scripts/fix-console.js"],
@@ -53,7 +51,8 @@
     "https://api.scratch.mit.edu/*",
     "https://clouddata.scratch.mit.edu/*",
     "https://scratchfoundation.github.io/scratch-gui/*",
-    "http://localhost/*"
+    "http://localhost:8333/*",
+    "http://localhost:8601/*"
   ],
   "permissions": [
     "cookies",
@@ -62,8 +61,7 @@
     "declarativeNetRequestWithHostAccess",
     "storage",
     "contextMenus",
-    "alarms",
-    "scripting"
+    "alarms"
   ],
   "optional_permissions": ["notifications", "clipboardWrite"],
   "web_accessible_resources": [
@@ -76,12 +74,7 @@
         "addons-l10n/*/*.json",
         "images/cs/*"
       ],
-      "matches": [
-        "https://*.scratch.mit.edu/*",
-        "https://scratchaddons.com/*",
-        "https://scratchfoundation.github.io/*",
-        "http://localhost/*"
-      ]
+      "matches": ["https://*.scratch.mit.edu/*", "https://scratchaddons.com/*"]
     }
   ],
   "browser_specific_settings": {

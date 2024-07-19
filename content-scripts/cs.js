@@ -11,11 +11,6 @@ try {
 if (window.frameElement && window.frameElement.getAttribute("src") === null)
   throw "Scratch Addons: iframe without src attribute ignored";
 if (document.documentElement instanceof SVGElement) throw "Scratch Addons: SVG document ignored";
-if (new URL(location.href).hostname === "localhost") {
-  if (!["8333", "8601", "8602"].includes(new URL(location.href).port)) {
-    throw "Scratch Addons: this localhost port is not supported";
-  }
-}
 
 const MAX_USERSTYLES_PER_ADDON = 100;
 
@@ -100,12 +95,8 @@ const cs = {
     csUrlObserver.dispatchEvent(new CustomEvent("change", { detail: { newUrl } }));
   },
   copyImage(dataURL) {
-    // Firefox 109-126 only
+    // Firefox only
     return new Promise((resolve, reject) => {
-      if (typeof Clipboard.prototype.write === "function") {
-        reject("Use browser API instead");
-        return;
-      }
       browser.runtime.sendMessage({ clipboardDataURL: dataURL }).then(
         (res) => {
           resolve();

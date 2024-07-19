@@ -9,13 +9,6 @@
       "name": "Hans5958"
     }
   ],
-  "info": [
-    {
-      "id": "deprecated",
-      "type": "warning",
-      "text": "The ScratchDB database used by this addon is offline, so this addon does not work."
-    }
-  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "userscripts": [
@@ -30,7 +23,7 @@
       "matches": ["forums"]
     }
   ],
-  "tags": ["forums", "community", "beta"],
+  "tags": ["forums", "community"],
   "enabledByDefault": false,
   "versionAdded": "1.1.0",
   "libraries": ["scratchblocks"]

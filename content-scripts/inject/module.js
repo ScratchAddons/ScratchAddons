@@ -37,9 +37,6 @@ const comlinkIframe3 = document.getElementById("scratchaddons-iframe-3");
 const comlinkIframe4 = document.getElementById("scratchaddons-iframe-4");
 const _cs_ = Comlink.wrap(Comlink.windowEndpoint(comlinkIframe2.contentWindow, comlinkIframe1.contentWindow));
 
-const isScratchGui =
-  location.origin === "https://scratchfoundation.github.io" || ["8601", "8602"].includes(location.port);
-
 const page = {
   _globalState: null,
   get globalState() {
@@ -91,7 +88,7 @@ const page = {
   },
   isFetching: false,
   async refetchSession() {
-    if (isScratchGui) return;
+    if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601") return;
     let res;
     let d;
     if (this.isFetching) return;
@@ -200,7 +197,8 @@ function onDataReady() {
 }
 
 function bodyIsEditorClassCheck() {
-  if (isScratchGui) return document.body.classList.add("sa-body-editor");
+  if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601")
+    return document.body.classList.add("sa-body-editor");
   const pathname = location.pathname.toLowerCase();
   const split = pathname.split("/").filter(Boolean);
   if (!split[0] || split[0] !== "projects") return;
@@ -282,6 +280,7 @@ function loadClasses() {
 const isProject =
   location.pathname.split("/")[1] === "projects" &&
   !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
+const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
 if (isScratchGui || isProject) {
   // Stylesheets are considered to have loaded if this element exists
   const elementSelector = isScratchGui ? "div[class*=index_app_]" : ":root > body > .ReactModalPortal";
