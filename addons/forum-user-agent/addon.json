@@ -3,7 +3,7 @@
   "description": "Changes the text \"Flash version\" to \"Flash versions\" when clicking the user-agent button on the forums. Previously part of the extension itself.",
   "info": [
     {
-      "text": "This is useful for the Scratch Addons developers to check if a forum bug report might be caused by the extension.",
+      "text": "This is useful for Scratch Addons developers to see if a bug that was reported on the forums was possibly caused by the extension.",
       "id": "usefulness"
     }
   ],
