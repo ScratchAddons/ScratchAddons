@@ -1,5 +1,5 @@
 {
-  "name": "Modify browser version on forums",
+  "name": "Modify version information on forums",
   "description": "Changes the text \"Flash version\" to \"Flash versions\" when clicking the globe icon on the forums.",
   "info": [
     {
