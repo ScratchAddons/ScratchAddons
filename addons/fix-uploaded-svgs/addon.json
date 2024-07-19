@@ -2,6 +2,7 @@
   "name": "SVG uploads fix",
   "description": "Fixes some bugs in the Scratch editor which break some uploaded SVG files from Affinity Designer and scratchblocks.",
   "credits": [
+    { "name": "World_Languages" },
     {
       "name": "StickmanRed",
       "link": "https://scratch.mit.edu/users/StickmanRed/"
