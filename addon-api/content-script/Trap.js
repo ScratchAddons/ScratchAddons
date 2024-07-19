@@ -44,7 +44,7 @@ export default class Trap extends Listenable {
     const internal = wrapper[this._react_internal_key];
     let childable = internal;
     /* eslint-disable no-empty */
-    while (((childable = childable.child), !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks)) { }
+    while (((childable = childable.child), !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks)) {}
     /* eslint-enable no-empty */
     return childable;
   }
