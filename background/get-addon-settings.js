@@ -664,16 +664,13 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             },
             () => {
               madeAnyChanges = madeChangesToAddon = true;
-              Object.assign(
-                {
-                  // Fraction of the "Black" preset
-                  fillStyle: "colored",
-                  fillOpacity: 5,
-                  strokeStyle: "colored",
-                  strokeOpacity: 50,
-                },
-                settings
-              );
+              Object.assign(settings, {
+                // Fraction of the "Black" preset
+                fillStyle: "colored",
+                fillOpacity: 5,
+                strokeStyle: "colored",
+                strokeOpacity: 50,
+              });
             }
           );
         }
