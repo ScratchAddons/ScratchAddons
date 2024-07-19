@@ -7,6 +7,12 @@
       "link": "https://scratch.mit.edu/users/StickmanRed/"
     }
   ],
+  "info": [
+    {
+      "id": "about-setting",
+      "text": "The \"fix more SVGs\" setting is experimental. It intends to fix SVG uploads of Scratch blocks, for example those generated with the \"save blocks as image\" feature."
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
