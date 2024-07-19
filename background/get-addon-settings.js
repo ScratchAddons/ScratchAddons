@@ -5,7 +5,7 @@ import minifySettings from "../libraries/common/minify-settings.js";
  the versions separately. Current versions:
 
  - editor-dark-mode 10 (bumped 4 times in v1.33.2)
- - editor-theme3 3 (last bumped in v1.32)
+ - editor-theme3 4 (last bumped in v1.39)
  - dark-www 7 (bumped twice in v1.34.0)
  - forum-quote-code-beautifier 1 (last bumped in v1.34)
  */
@@ -663,6 +663,25 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
             // Override the preset color if dark comments are not enabled
             addonSettings["comment-color"] = "#FEF49C";
           }
+
+          // Transition v1.38 to v1.39
+          updatePresetIfMatching(
+            settings,
+            4,
+            {
+              text: "colorOnBlack",
+            },
+            () => {
+              madeAnyChanges = madeChangesToAddon = true;
+              Object.assign(settings, {
+                // Fraction of the "Black" preset
+                fillStyle: "colored",
+                fillOpacity: 5,
+                strokeStyle: "colored",
+                strokeOpacity: 50,
+              });
+            }
+          );
         }
 
         if (addonId === "forum-quote-code-beautifier") {

@@ -371,6 +371,28 @@ export default async function ({ addon, console, msg }) {
     }
   };
 
+  const oldInsertionMarkerCreateMarkerBlock = Blockly.InsertionMarkerManager.prototype.createMarkerBlock_;
+  Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function (originalBlock) {
+    const markerBlock = oldInsertionMarkerCreateMarkerBlock.call(this, originalBlock);
+    if (!addon.self.disabled) {
+      const styleColour = isColoredTextMode() ? originalBlock.getColourTertiary() : originalBlock.getColour();
+      const fillStyle = addon.settings.get("fillStyle");
+      const strokeStyle = addon.settings.get("strokeStyle");
+
+      markerBlock.svgPath_.style.fill = {
+        none: "transparent",
+        gray: "",
+        colored: styleColour,
+      }[fillStyle];
+      markerBlock.svgPath_.style.stroke = {
+        none: "",
+        gray: "var(--editorDarkMode-workspace-insertionMarker, rgb(0, 0, 0))",
+        colored: styleColour,
+      }[strokeStyle];
+    }
+    return markerBlock;
+  };
+
   const oldBlockShowContextMenu = Blockly.BlockSvg.prototype.showContextMenu_;
   Blockly.BlockSvg.prototype.showContextMenu_ = function (e) {
     Blockly.WidgetDiv.DIV.style.setProperty("--editorTheme3-hoveredItem", fieldBackground(this));
