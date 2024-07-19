@@ -31,6 +31,10 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.4.0",
+  "latestUpdate": {
+    "newSettings": ["removeUnsupported"],
+    "version": "1.39.0"
+  },
   "tags": ["editor", "costumeEditor"],
   "enabledByDefault": false
 }
