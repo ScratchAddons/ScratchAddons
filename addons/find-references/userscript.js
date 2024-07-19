@@ -8,9 +8,10 @@
  * @param {string} params.color - 块的颜色
  * @param {Function} params.func - 块的功能函数
  */
-import BlockItem from "./blockly/BlockItem.js";
-import BlockInstance from "./blockly/BlockInstance.js";
-import Utils from "./blockly/Utils.js";
+import BlockItem from "../find-bar/blockly/BlockItem.js";
+import BlockInstance from "../find-bar/blockly/BlockInstance.js";
+import Utils from "../find-bar/blockly/Utils.js";
+import SVG_Utils from "./SVG_Utils.js";
 
 /** @typedef {import("../../addon-api/content-script/typedef.js").UserscriptUtilities} UserscriptUtilities @param {UserscriptUtilities} */
 export default async function ({ addon, msg, console }) {
@@ -519,6 +520,7 @@ export default async function ({ addon, msg, console }) {
      */
     constructor(utils) {
       this.utils = utils;
+      this.svg_utils = new SVG_Utils(addon);
       this.el = null;
       this.items = [];
       this.selected = null;
@@ -815,9 +817,9 @@ export default async function ({ addon, msg, console }) {
           const firstBlock = this.getFirstBlock(block);
           const noRepBlock = this.getNearestNoReporterBlock(block);
 
-          this.utils.getSVGElement(firstBlock, enabledAddons, false).then((svg1) => {
+          this.svg_utils.getSVGElement(firstBlock, enabledAddons, false).then((svg1) => {
             // 获取最近的 SVG
-            this.utils.getSVGElement(noRepBlock, enabledAddons, true).then((svg2) => {
+            this.svg_utils.getSVGElement(noRepBlock, enabledAddons, true).then((svg2) => {
               if (firstBlock.startHat_ && !noRepBlock.startHat_) {
                 const scale = 0.6;
                 svg1.setAttribute("transform", `translate(0,${scale * -16})`);
