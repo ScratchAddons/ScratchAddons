@@ -259,7 +259,6 @@ export default async ({ addon, msg, safeMsg }) => {
       studioPromotions: [],
       studioHostTransfers: [],
       forumActivity: [],
-      forumActivityAmt: 0,
       studioActivity: [],
       studioActivityAmt: 0,
       remixes: [],
@@ -316,7 +315,6 @@ export default async ({ addon, msg, safeMsg }) => {
         this.studioPromotions = [];
         this.studioHostTransfers = [];
         this.forumActivity = [];
-        this.forumActivityAmt = 0;
         this.studioActivity = [];
         this.studioActivityAmt = 0;
         this.remixes = [];
@@ -631,7 +629,6 @@ export default async ({ addon, msg, safeMsg }) => {
                 topicTitle: message.topic_title,
               });
             }
-            this.forumActivityAmt++;
           } else if (message.type === "remixproject") {
             this.remixes.push({
               parentTitle: message.parent_title,
