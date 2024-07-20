@@ -260,6 +260,7 @@ export default async ({ addon, msg, safeMsg }) => {
       studioHostTransfers: [],
       forumActivity: [],
       studioActivity: [],
+      studioActivityAmt: 0,
       remixes: [],
       profiles: [],
       studios: [],
@@ -318,6 +319,7 @@ export default async ({ addon, msg, safeMsg }) => {
         this.studioHostTransfers = [];
         this.forumActivity = [];
         this.studioActivity = [];
+        this.studioActivityAmt = 0;
         this.remixes = [];
         this.profiles = [];
         this.studios = [];
@@ -646,6 +648,7 @@ export default async ({ addon, msg, safeMsg }) => {
                 studioTitle: message.title,
               });
             }
+            this.studioActivityAmt++;
           } else if (message.type === "loveproject") {
             const projectObject = this.getProjectObject(message.project_id, message.title);
             projectObject.loveCount++;
