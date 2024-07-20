@@ -2,9 +2,13 @@ const PERMISSIONS_IGNORED_IN_CHROME = ["clipboardWrite", "webRequestBlocking"];
 const PERMISSIONS_IGNORED_IN_FIREFOX = [];
 // These host permissions below should be removed during production manifest gen.
 const PERMISSIONS_ALWAYS_IGNORED = [
+  "scripting",
   "https://scratchfoundation.github.io/scratch-gui/*",
+  "https://scratchfoundation.github.io/*",
   "http://localhost:8333/*",
   "http://localhost:8601/*",
+  "http://localhost:8602/*",
+  "http://localhost/*",
 ];
 
 /**
@@ -24,8 +28,8 @@ export default (env, manifest) => {
   manifest.icons["16"] = "images/icon-16.png";
 
   const removePermission = (permToRemove) => {
-    // Affects `permissions`, `host_permissions`, `optional_permissions`, `optional_host_permissions`
-    // as well as content script matches.
+    // Affects `permissions`, `host_permissions`, `optional_permissions`, `optional_host_permissions`,
+    // `web_accessible_resources[i].matches`, and content_scripts[i].matches
     manifest.permissions = manifest.permissions.filter((perm) => perm !== permToRemove);
     manifest.host_permissions = manifest.host_permissions.filter((perm) => perm !== permToRemove);
     manifest.optional_permissions = manifest.optional_permissions.filter((perm) => perm !== permToRemove);
@@ -34,6 +38,9 @@ export default (env, manifest) => {
     }
     manifest.content_scripts.forEach((contentScript) => {
       contentScript.matches = contentScript.matches.filter((match) => match !== permToRemove);
+    });
+    manifest.web_accessible_resources.forEach((resourcesObj) => {
+      resourcesObj.matches = resourcesObj.matches.filter((match) => match !== permToRemove);
     });
   };
 
