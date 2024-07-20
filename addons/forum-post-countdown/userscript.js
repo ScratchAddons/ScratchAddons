@@ -17,9 +17,7 @@ export default async function ({ addon, msg }) {
     localStorage.removeItem("sa-forum-post-countdown");
     return;
   }
-  const secondCount = scratchAddons.session.permissions.new_scratcher
-    ? 120
-    : 60;
+  const secondCount = scratchAddons.session.permissions.new_scratcher ? 120 : 60;
 
   const elt = document.createElement("span");
   elt.id = "sa-forum-post-countdown";

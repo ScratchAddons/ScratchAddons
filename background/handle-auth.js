@@ -131,7 +131,7 @@ async function checkSession() {
   const { scratchSession } = await chrome.storage.session?.get("scratchSession"); // TODO sesionnn
   if (scratchSession && canUseCachedSession) {
     // We didn't wake up due to a cookie change
-    console.log("Used cached /session info.")
+    console.log("Used cached /session info.");
     json = scratchSession;
   } else {
     try {
@@ -141,7 +141,7 @@ async function checkSession() {
         },
       });
       json = await res.json();
-      chrome.storage.session?.set({scratchSession: json}); // TODO sesionnn
+      chrome.storage.session?.set({ scratchSession: json }); // TODO sesionnn
     } catch (err) {
       console.warn(err);
       json = {};
