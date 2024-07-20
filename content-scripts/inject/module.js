@@ -125,7 +125,15 @@ const page = {
       this.isFetching = false;
     };
 
-    scratchAddons.eventTargets.auth.forEach((auth) => auth._refresh(refreshFn));
+    let calledFn = false;
+    const refreshFnOnce = () => {
+      if (!calledFn) {
+        calledFn = true;
+        refreshFn();
+      }
+    };
+
+    scratchAddons.eventTargets.auth.forEach((auth) => auth._refresh(refreshFnOnce));
   },
 };
 Comlink.expose(page, Comlink.windowEndpoint(comlinkIframe4.contentWindow, comlinkIframe3.contentWindow));
