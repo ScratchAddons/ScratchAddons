@@ -29,6 +29,11 @@
       "id": "aboutHighContrast",
       "type": "info",
       "text": "The new High Contrast block colors are available as a preset below."
+    },
+    {
+      "id": "whatsInsertionMarker",
+      "type": "info",
+      "text": "When dragging a block, an \"insertion marker\" is the shadow that appears when moved near to other blocks."
     }
   ],
   "latestUpdate": {
