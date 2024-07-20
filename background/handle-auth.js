@@ -26,7 +26,7 @@ async function getDefaultStoreId() {
 (async function () {
   const defaultStoreId = await getDefaultStoreId();
   console.log("Default cookie store ID: ", defaultStoreId);
-  await checkSession();
+  await checkSession(true);
   startCache(defaultStoreId);
 })();
 
@@ -123,13 +123,13 @@ async function setLanguage() {
 
 let isChecking = false;
 
-async function checkSession() {
+async function checkSession(firstTime = false) {
   let res;
   let json;
   if (isChecking) return;
   isChecking = true;
   const { scratchSession } = (await chrome.storage.session?.get("scratchSession")) ?? {};
-  if (scratchSession && canUseCachedSession) {
+  if (firstTime && scratchSession && canUseCachedSession) {
     // We didn't wake up due to a cookie change
     console.log("Used cached /session info.");
     json = scratchSession;
