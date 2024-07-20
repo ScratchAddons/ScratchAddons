@@ -44,7 +44,6 @@ immediatelyRunFunctionInMainWorld(() => {
 
   const originalXhrOpen = XMLHttpRequest.prototype.open;
   XMLHttpRequest.prototype.open = function (method, path, ...args) {
-    console.log(method, path);
     if (method === "GET" && path === "/session/") {
       this.addEventListener(
         "load",
