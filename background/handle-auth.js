@@ -126,7 +126,6 @@ async function checkSession(firstTime = false) {
   isChecking = true;
   const { scratchSession } = (await chrome.storage.session?.get("scratchSession")) ?? {};
   if (firstTime && scratchSession) {
-    // We didn't wake up due to a cookie change
     console.log("Used cached /session info.");
     json = scratchSession;
   } else {
