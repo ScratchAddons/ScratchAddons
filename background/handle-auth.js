@@ -96,11 +96,7 @@ const addToQueue = (item) => {
     queue.shift();
   }
 };
-let canUseCachedSession = true;
-chrome.cookies.onChanged.addListener((e) => {
-  canUseCachedSession = false;
-  addToQueue(e);
-});
+chrome.cookies.onChanged.addListener((e) => addToQueue(e));
 
 function getCookieValue(name) {
   return new Promise((resolve) => {
@@ -129,7 +125,7 @@ async function checkSession(firstTime = false) {
   if (isChecking) return;
   isChecking = true;
   const { scratchSession } = (await chrome.storage.session?.get("scratchSession")) ?? {};
-  if (firstTime && scratchSession && canUseCachedSession) {
+  if (firstTime && scratchSession) {
     // We didn't wake up due to a cookie change
     console.log("Used cached /session info.");
     json = scratchSession;
