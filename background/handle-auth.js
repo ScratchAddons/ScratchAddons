@@ -141,7 +141,7 @@ async function checkSession() {
         },
       });
       json = await res.json();
-      chrome.storage.session?.set({ scratchSession: json }); // TODO sesionnn
+      chrome.storage.session?.set({ scratchSession: json });
     } catch (err) {
       console.warn(err);
       json = {};
