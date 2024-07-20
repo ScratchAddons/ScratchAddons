@@ -8,6 +8,7 @@ export const init = (console) => {
     if (!isDisabled() && method === "POST" && String(path).startsWith("/internalapi/project/thumbnail/")) {
       console.log("Blocked overwriting thumbnails.");
       method = "OPTIONS"; // This makes sure thumbnail request errors.
+      // TODO: avoid sending the request
     }
     return xhrOpen.call(this, method, path, ...args);
   };

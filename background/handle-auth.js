@@ -96,7 +96,11 @@ const addToQueue = (item) => {
     queue.shift();
   }
 };
-chrome.cookies.onChanged.addListener((e) => addToQueue(e));
+let canUseCachedSession = true;
+chrome.cookies.onChanged.addListener((e) => {
+  canUseCachedSession = false;
+  addToQueue(e);
+});
 
 function getCookieValue(name) {
   return new Promise((resolve) => {
@@ -124,29 +128,37 @@ async function checkSession() {
   let json;
   if (isChecking) return;
   isChecking = true;
-  try {
-    res = await fetch("https://scratch.mit.edu/session/", {
-      headers: {
-        "X-Requested-With": "XMLHttpRequest",
-      },
-    });
-    json = await res.json();
-  } catch (err) {
-    console.warn(err);
-    json = {};
-    // If Scratch is down, or there was no internet connection, recheck soon:
-    if ((res && !res.ok) || !res) {
-      isChecking = false;
-      setTimeout(checkSession, 60000);
-      scratchAddons.globalState.auth = {
-        isLoggedIn: false,
-        username: null,
-        userId: null,
-        xToken: null,
-        csrfToken: null,
-        scratchLang: (await getCookieValue("scratchlanguage")) || navigator.language,
-      };
-      return;
+  const { scratchSession } = await chrome.storage.session?.get("scratchSession"); // TODO sesionnn
+  if (scratchSession && canUseCachedSession) {
+    // We didn't wake up due to a cookie change
+    console.log("Used cached /session info.")
+    json = scratchSession;
+  } else {
+    try {
+      res = await fetch("https://scratch.mit.edu/session/", {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      });
+      json = await res.json();
+      chrome.storage.session?.set({scratchSession: json}); // TODO sesionnn
+    } catch (err) {
+      console.warn(err);
+      json = {};
+      // If Scratch is down, or there was no internet connection, recheck soon:
+      if ((res && !res.ok) || !res) {
+        isChecking = false;
+        setTimeout(checkSession, 60000);
+        scratchAddons.globalState.auth = {
+          isLoggedIn: false,
+          username: null,
+          userId: null,
+          xToken: null,
+          csrfToken: null,
+          scratchLang: (await getCookieValue("scratchlanguage")) || navigator.language,
+        };
+        return;
+      }
     }
   }
   const scratchLang = (await getCookieValue("scratchlanguage")) || navigator.language;

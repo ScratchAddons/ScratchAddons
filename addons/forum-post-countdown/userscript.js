@@ -17,9 +17,7 @@ export default async function ({ addon, msg }) {
     localStorage.removeItem("sa-forum-post-countdown");
     return;
   }
-  const secondCount = (
-    await fetch("/session", { headers: { "x-requested-with": "XMLHttpRequest" } }).then((resp) => resp.json())
-  ).permissions.new_scratcher
+  const secondCount = scratchAddons.session.permissions.new_scratcher
     ? 120
     : 60;
 

@@ -9,11 +9,12 @@ export default class FetchableAuth extends AuthCommon {
   /**
    * @private
    */
-  _refresh() {
+  _refresh(requestFetchFn) {
     this._lastUsername = undefined;
     this._lastUserId = undefined;
     this._lastIsLoggedIn = undefined;
     this._lastXToken = undefined;
+    if (requestFetchFn) this.requestFetchFn = requestFetchFn; // A function to call when data is requested
   }
 
   /**
@@ -28,6 +29,10 @@ export default class FetchableAuth extends AuthCommon {
    * @private
    */
   _waitUntilFetched() {
+    if (this.requestFetchFn) {
+      this.requestFetchFn();
+      this.requestFetchFn = undefined;
+    }
     return new Promise((resolve) => this.addEventListener("session", resolve, { once: true }));
   }
 
