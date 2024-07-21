@@ -107,7 +107,10 @@ export default async function ({ addon, console, msg }) {
     imageContainer.classList.add("sa-export-image-container");
     const image = document.createElement("img");
     image.classList.add("sa-export-image");
-    image.src = await exportBlock(true, false, true, block);
+
+    exportBlock(true, false, true, block).then((result) => {
+      image.src = result;
+    });
 
     image.onload = function () {
       const aspect = image.width / image.height;
