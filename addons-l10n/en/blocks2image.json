@@ -4,5 +4,6 @@
   "blocks2image/modalTitle": "Blocks to image",
   "blocks2image/clipboard": "Copy to clipboard",
   "blocks2image/svg": "Download as SVG",
-  "blocks2image/png": "Download as PNG"
+  "blocks2image/png": "Download as PNG",
+  "blocks2image/loading": "Loading preview..."
 }

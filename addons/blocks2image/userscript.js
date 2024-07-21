@@ -108,10 +108,16 @@ export default async function ({ addon, console, msg }) {
     const image = document.createElement("img");
     image.classList.add("sa-export-image");
 
+    const loadingText = document.createElement("div");
+    loadingText.classList.add("sa-export-loading-text");
+    loadingText.textContent = msg("loading");
+    content.append(loadingText);
+
     const startTime = performance.now();
 
     exportBlock(true, false, true, block).then((result) => {
       image.src = result;
+      content.removeChild(loadingText);
 
       const endTime = performance.now();
       const timeTaken = endTime - startTime;

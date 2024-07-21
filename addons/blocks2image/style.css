@@ -49,3 +49,9 @@
   margin-left: 0.5rem;
   margin-bottom: 1.5rem;
 }
+
+.sa-export-loading-text {
+  text-align: center;
+  padding-top: 1.5rem;
+  font-size: large;
+}
