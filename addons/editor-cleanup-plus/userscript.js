@@ -24,7 +24,7 @@ export default async function ({ addon, console, msg, safeMsg: m }) {
     let result = getOrderedTopBlockColumns(true, workspace);
     let columns = result.cols;
     let orphanCount = result.orphans.blocks.length;
-    if (orphanCount > 0 && !block) {
+    if (orphanCount > 0) {
       let message = msg("orphaned", {
         count: orphanCount,
       });
