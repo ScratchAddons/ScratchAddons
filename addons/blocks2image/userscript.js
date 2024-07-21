@@ -108,8 +108,15 @@ export default async function ({ addon, console, msg }) {
     const image = document.createElement("img");
     image.classList.add("sa-export-image");
 
+    const startTime = performance.now();
+
     exportBlock(true, false, true, block).then((result) => {
       image.src = result;
+
+      const endTime = performance.now();
+      const timeTaken = endTime - startTime;
+
+      console.log(`Time taken: ${timeTaken} ms`);
     });
 
     image.onload = function () {
