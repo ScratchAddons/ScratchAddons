@@ -2,14 +2,14 @@ name: Scan code using ESLint
 
 on:
   push:
-    branches: 
+    branches:
       - master
     paths:
       - '**/*.js'
       - .eslintrc.json
       - .github/workflows/eslint.yml
   pull_request:
-    branches: 
+    branches:
       - master
     paths:
       - '**/*.js'
@@ -18,7 +18,7 @@ on:
 
 jobs:
   scan:
-    name: Scan 
+    name: Scan
     runs-on: ubuntu-latest
     permissions:
       contents: read
