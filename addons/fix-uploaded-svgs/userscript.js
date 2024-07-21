@@ -9,11 +9,9 @@ export default async function ({ addon, console }) {
     }
 
     if (addon.settings.get("removeUnsupported")) {
-      // "dominant-baseline" needs this iframe to shift accordingly
-      const iframe = document.createElement("iframe");
-      iframe.setAttribute("src", "about:blank");
-      document.body.append(iframe);
-      iframe.contentDocument.body.appendChild(svg);
+      // "dominant-baseline" needs this simulated DOM to shift accordingly
+      const doc = document.createDocumentFragment();
+      doc.appendChild(svg);
 
       for (const textElement of svg.getElementsByTagName("text")) {
         // "x" and "y" aren't accounted for by Scratch
@@ -53,8 +51,6 @@ export default async function ({ addon, console }) {
         useElement.replaceWith(referElement);
         useElement.remove();
       }
-
-      iframe.remove();
     }
     return svg;
   }
