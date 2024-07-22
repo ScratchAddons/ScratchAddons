@@ -1022,14 +1022,12 @@ export default async function ({ addon, msg, console }) {
     }
 
     inputKeyDown(e) {
-      // Left Arrow
       if (e.key === "ArrowLeft") {
         if (this.el && this.blocks) {
           this.navLeft(e);
         }
       }
 
-      // Right Arrow
       if (e.key === "ArrowRight") {
         if (this.el && this.blocks) {
           this.navRight(e);
