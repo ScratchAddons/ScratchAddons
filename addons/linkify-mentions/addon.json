@@ -7,13 +7,6 @@
       "link": "https://github.com/Samq64"
     }
   ],
-  "info": [
-    {
-      "type": "notice",
-      "text": "Forum mentions styled with BBCode won't be clickable.",
-      "id": "BBCode"
-    }
-  ],
   "userscripts": [
     {
       "url": "script.js",
