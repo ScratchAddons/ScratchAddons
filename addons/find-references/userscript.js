@@ -189,8 +189,6 @@ export default async function ({ addon, msg, console }) {
           li.style.display = "none";
         }
       }
-
-      console.log("test");
     }
 
     inputKeyDown(e) {
@@ -324,7 +322,6 @@ export default async function ({ addon, msg, console }) {
      */
     getScratchBlocks() {
       let myBlocks = [];
-      let myBlockSvgs = [];
       let myBlocksByProcCode = {};
 
       let topBlocks = this.workspace.getTopBlocks();
@@ -712,7 +709,6 @@ export default async function ({ addon, msg, console }) {
 
     onItemClick(item, instanceBlock) {
       // init set
-      this.myBlockSvgs = [];
       this.blocks_ids = [];
       while (this.fr_result_list.firstChild) {
         this.fr_result_list.removeChild(this.fr_result_list.firstChild);
