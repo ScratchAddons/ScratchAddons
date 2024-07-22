@@ -67,7 +67,6 @@ export default async function ({ addon, msg, console }) {
       this.dropdownOut.className = "sa-fr-dropdown-out";
 
       const input_wrapper = this.dropdownOut.appendChild(document.createElement("div"));
-      // add class
       input_wrapper.className = "sa-fr-input-wrapper";
       this.search_bar_label = input_wrapper.appendChild(document.createElement("label"));
       this.search_bar_label.setAttribute("for", "search_bar");
@@ -141,14 +140,12 @@ export default async function ({ addon, msg, console }) {
     inputChange() {
       this.showDropDown();
 
-      // Filter the list...
       let val = (this.findInput.value || "").toLowerCase();
       if (val === this.prevValue) {
         // No change so don't re-filter
         return;
       }
       this.prevValue = val;
-
       this.dropdown.blocks = null;
 
       // Hide items in list that do not contain filter text
