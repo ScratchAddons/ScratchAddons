@@ -16,7 +16,6 @@ export default async function ({ addon, console }) {
       pingify(post);
       post.querySelectorAll("span, li, blockquote").forEach(el => pingifyTextNode(el));
     });
-    console.log(linkified)
   }
 
   addon.self.addEventListener("disabled", () => {
