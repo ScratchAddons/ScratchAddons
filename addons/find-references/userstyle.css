@@ -94,7 +94,9 @@ a {
 
 #sa-fr-input {
   box-shadow: none; /* 设置基础的 box-shadow，这里假设没有焦点时不需要阴影 */
-  transition: box-shadow 0.5s, border-radius 0.5s; /* 可选：添加过渡效果使变化更平滑 */
+  transition:
+    box-shadow 0.5s,
+    border-radius 0.5s; /* 可选：添加过渡效果使变化更平滑 */
   height: 100%;
   width: 0;
   position: relative;
@@ -116,11 +118,15 @@ a {
 }
 
 .sa-fr-input.focus_on {
-  animation: inputFocusAnimation 0.5s forwards, placeholderMoveRight 0.5s forwards; /* 添加占位符动画 */
+  animation:
+    inputFocusAnimation 0.5s forwards,
+    placeholderMoveRight 0.5s forwards; /* 添加占位符动画 */
 }
 
 .sa-fr-input:not(.focus_on) {
-  animation: inputBlurAnimation 0.5s forwards, placeholderMoveBack 0.5s forwards; /* 添加占位符动画 */
+  animation:
+    inputBlurAnimation 0.5s forwards,
+    placeholderMoveBack 0.5s forwards; /* 添加占位符动画 */
 }
 
 @keyframes inputFocusAnimation {
@@ -211,7 +217,9 @@ a {
   /* color: #e1a91a; */
   background-color: var(--main-bg-color);
   transform: scale(1);
-  transition: transform 0.5s ease-in-out, background-color 0.5s ease-in-out;
+  transition:
+    transform 0.5s ease-in-out,
+    background-color 0.5s ease-in-out;
 }
 
 .sa-fr-input-wrapper label i.hovered {
