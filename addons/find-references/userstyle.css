@@ -407,6 +407,14 @@ a {
   /* margin-bottom: 0.1em; */
 }
 
+#ref_list li.ref_result svg {
+  padding-right: 5px;
+}
+
+#ref_list li.ref_result svg.noHat {
+  padding-top: 10px;
+}
+
 #floatWindow #ref_list li:nth-child(odd) {
   background-color: #f9f9f9; /* 奇数项背景颜色 */
 }

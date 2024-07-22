@@ -816,9 +816,11 @@ export default async function ({ addon, msg, console }) {
           this.svg_utils.getSVGElement(firstBlock, enabledAddons, false).then((svg1) => {
             // 获取最近的 SVG
             this.svg_utils.getSVGElement(noRepBlock, enabledAddons, true).then((svg2) => {
-              if (firstBlock.startHat_ && !noRepBlock.startHat_) {
-                const scale = 0.6;
-                svg1.setAttribute("transform", `translate(0,${scale * -16})`);
+              if (!firstBlock.startHat_) {
+                svg1.classList.add("noHat");
+              }
+              if (!noRepBlock.startHat_) {
+                svg2.classList.add("noHat");
               }
               li_item.appendChild(svg1); // 使用 svg1 引用第一个 SVG
               li_item.appendChild(svg2); // 使用 svg2 引用第二个 SVG，避免覆盖
