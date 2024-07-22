@@ -17,7 +17,6 @@
       "name": "Shock59",
       "link": "https://github.com/shock59"
     },
-    { "name": "Ashimee", "link": "https://github.com/Ashimee" },
     { "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" }
   ],
   "info": [
@@ -30,6 +29,11 @@
       "id": "aboutHighContrast",
       "type": "info",
       "text": "The new High Contrast block colors are available as a preset below."
+    },
+    {
+      "id": "whatsInsertionMarker",
+      "type": "info",
+      "text": "When dragging a block, an \"insertion marker\" is the shadow that appears when moved near to other blocks."
     }
   ],
   "latestUpdate": {
