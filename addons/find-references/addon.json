@@ -18,24 +18,16 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "projects"
-      ]
+      "matches": ["projects"]
     }
   ],
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": [
-        "projects"
-      ]
+      "matches": ["projects"]
     }
   ],
   "versionAdded": "1.28.0",
-  "tags": [
-    "editor",
-    "codeEditor",
-    "recommended"
-  ],
+  "tags": ["editor", "codeEditor", "recommended"],
   "enabledByDefault": true
 }

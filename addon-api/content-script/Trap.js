@@ -9,8 +9,8 @@ import Listenable from "../common/Listenable.js";
  */
 export default class Trap extends Listenable {
   /**
-    * @param {Tab} tab
-    */
+   * @param {Tab} tab
+   */
   constructor(tab) {
     super();
     this._react_internal_key = undefined;

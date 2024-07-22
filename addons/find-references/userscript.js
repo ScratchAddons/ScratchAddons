@@ -281,10 +281,10 @@ export default async function ({ addon, msg, console }) {
         this.selectedTab === 0
           ? this.getScratchBlocks()
           : this.selectedTab === 1
-          ? this.getScratchCostumes()
-          : this.selectedTab === 2
-          ? this.getScratchSounds()
-          : [];
+            ? this.getScratchCostumes()
+            : this.selectedTab === 2
+              ? this.getScratchSounds()
+              : [];
 
       this.dropdown.empty();
 
