@@ -12,9 +12,9 @@ export default async function ({ addon, console }) {
   }
 
   function linkifyAll() {
-    document.querySelectorAll(".post_body_html, .postsignature").forEach(post => {
+    document.querySelectorAll(".post_body_html, .postsignature").forEach((post) => {
       pingify(post);
-      post.querySelectorAll("span, li, blockquote").forEach(el => pingifyTextNode(el));
+      post.querySelectorAll("span, li, blockquote").forEach((el) => pingifyTextNode(el));
     });
   }
 
