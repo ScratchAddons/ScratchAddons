@@ -103,21 +103,6 @@ export default async function ({ addon, msg, console }) {
       const scroll_width = document.querySelector("[class*='blocklyScrollbarHandle']").getAttribute("width");
       floatWindow.style.right = `${parseInt(scroll_width) + 3}px`;
 
-      // middle click floatwindow to close it
-      floatWindow.addEventListener("mousedown", (e) => {
-        if (e.button === 1) {
-          floatWindow.style.display = "none";
-        }
-      });
-
-      floatWindow.showFloatWindow = function () {
-        floatWindow.style.display = "block";
-      };
-
-      floatWindow.closeFloatWindow = function () {
-        floatWindow.style.display = "none";
-      };
-
       return floatWindow;
     }
 
@@ -281,10 +266,10 @@ export default async function ({ addon, msg, console }) {
         this.selectedTab === 0
           ? this.getScratchBlocks()
           : this.selectedTab === 1
-            ? this.getScratchCostumes()
-            : this.selectedTab === 2
-              ? this.getScratchSounds()
-              : [];
+          ? this.getScratchCostumes()
+          : this.selectedTab === 2
+          ? this.getScratchSounds()
+          : [];
 
       this.dropdown.empty();
 
@@ -1063,12 +1048,6 @@ export default async function ({ addon, msg, console }) {
         this.idx = 0;
       }
     }
-  }
-
-  // switch to small pane used for test
-  const element = document.querySelector('[class*="toggle-buttons_button"]');
-  if (element) {
-    element.click();
   }
 
   const findBar = new FindRefs();
