@@ -1,0 +1,24 @@
+{
+  "name": "Enhanced clean up tool",
+  "description": "Enhances the clean up tool with smart column-by-column block organisation and automatic removal of unused lists/variables.",
+  "credits": [
+    {
+      "name": "griffpatch"
+    },
+    {
+      "name": "Chrome_Cat",
+      "link": "https://scratch.mit.edu/users/Chrome_Cat/"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.39.0",
+  "tags": ["editor", "codeEditor", "recommended"],
+  "enabledByDefault": false
+}
