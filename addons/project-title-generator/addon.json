@@ -1,0 +1,45 @@
+{
+  "name": "Project title generator",
+  "description": "Adds a button to generate random titles for your projects.",
+  "credits": [
+    {
+      "name": "lisa_wolfgang",
+      "link": "https://scratch.mit.edu/users/lisa_wolfgang/"
+    },
+    {
+      "name": "Verixion",
+      "link": "https://scratch.mit.edu/users/Verixion/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": false
+    }
+  ],
+  "settings": [
+    {
+      "name": "Automatically generate titles when creating new projects",
+      "type": "boolean",
+      "id": "auto-on-create",
+      "default": true
+    },
+    {
+      "name": "Hide button when project is named",
+      "type": "boolean",
+      "id": "only-untitled",
+      "default": false
+    }
+  ],
+  "tags": ["editor", "easterEgg"],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.24.0"
+}

@@ -64,7 +64,8 @@
 .sa-editormessages::before,
 [class*="account-nav_user-info_"] [class*="account-nav_dropdown-caret-position_"] img,
 [class*="modal_back-button_"] [class*="button_icon_"],
-[class*="modal_header-item-close_"] [class*="close-button_close-icon_"] {
+[class*="modal_header-item-close_"] [class*="close-button_close-icon_"],
+#sa-project-title-generator-button-img {
   filter: var(--editorDarkMode-menuBar-filter);
 }
 [class*="menu-bar_divider_"],
