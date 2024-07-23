@@ -1,0 +1,49 @@
+{
+  "name": "Disable auto nesting with C-Blocks",
+  "description": "When holding the ctrl key (customisable) while dragging a C-Block, they will not expand around the block stack, and will instead place like a normal block.",
+  "credits": [
+    {
+      "name": "Jazza",
+      "link": "https://scratch.mit.edu/users/greeny--231/"
+    },
+    {
+      "name": "GarboMuffin"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor", "featured"],
+  "versionAdded": "1.39.0",
+
+  "info": [
+    {
+      "type": "info",
+      "text": "On macOS, use the Option key instead of the Alt key and Command key instead of the Control key.",
+      "id": "macOS"
+    },
+    {
+      "type": "notice",
+      "text": "Examples of a C-Block are if statements or forever loops.",
+      "id": "cBlockExample"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Modifier key",
+      "type": "select",
+      "id": "key",
+      "default": "ctrl",
+      "potentialValues": [
+        { "id": "ctrl", "name": "Control" },
+        { "id": "alt", "name": "Alt" },
+        { "id": "shift", "name": "Shift" }
+      ]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}
