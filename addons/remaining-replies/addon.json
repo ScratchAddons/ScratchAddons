@@ -28,7 +28,7 @@
       "default": true
     }
   ],
-  "versionAdded": "1.36.0",
+  "versionAdded": "1.39.0",
   "tags": ["community", "comments"],
   "dynamicEnable": true,
   "dynamicDisable": true,
