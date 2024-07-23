@@ -18,6 +18,7 @@ export default [
   },
   ...compat.extends("eslint:recommended"),
   {
+    files: ["**/*.js"],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -39,7 +40,7 @@ export default [
         ClipboardItem: "readonly",
       },
 
-      ecmaVersion: 5,
+      ecmaVersion: 2020,
       sourceType: "module",
     },
 
