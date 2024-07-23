@@ -56,7 +56,7 @@ const page = {
   set dataReady(val) {
     this._dataReady = val;
     onDataReady(); // Assume set to true
-    this.refetchSession();
+    this.refetchSession(true);
   },
 
   runAddonUserscripts, // Gets called by cs.js when addon enabled late
@@ -87,28 +87,53 @@ const page = {
     }
   },
   isFetching: false,
-  async refetchSession() {
+  async refetchSession(firstTime = false) {
     if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601") return;
-    let res;
-    let d;
-    if (this.isFetching) return;
-    this.isFetching = true;
-    scratchAddons.eventTargets.auth.forEach((auth) => auth._refresh());
-    try {
-      res = await fetch("/session/", {
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-        },
-      });
-      d = await res.json();
-    } catch (e) {
-      d = {};
-      scratchAddons.console.warn("Session fetch failed: ", e);
-      if ((res && !res.ok) || !res) setTimeout(() => this.refetchSession(), 60000);
+    const isScratchR2 =
+      !document.querySelector("meta[name='format-detection']") &&
+      document.querySelector("script[type='text/javascript']");
+    if (!firstTime && isScratchR2) {
+      // We assume this function always gets called with firstTime:true at least once.
+      // scratchr2 pages do not support logging in/out without a page reload.
+      // Why even bother to check auth again?
+      return;
     }
-    scratchAddons.session = d;
-    scratchAddons.eventTargets.auth.forEach((auth) => auth._update(d));
-    this.isFetching = false;
+
+    const refreshFn = async () => {
+      let res;
+      let d;
+      if (this.isFetching) return;
+      this.isFetching = true;
+      if (firstTime && window.__scratchAddonsSessionRes?.loaded) {
+        d = window.__scratchAddonsSessionRes.session;
+      } else {
+        try {
+          res = await fetch("/session/", {
+            headers: {
+              "X-Requested-With": "XMLHttpRequest",
+            },
+          });
+          d = await res.json();
+        } catch (e) {
+          d = {};
+          scratchAddons.console.warn("Session fetch failed: ", e);
+          if ((res && !res.ok) || !res) setTimeout(() => this.refetchSession(), 60000);
+        }
+      }
+      scratchAddons.session = d;
+      scratchAddons.eventTargets.auth.forEach((auth) => auth._update(d));
+      this.isFetching = false;
+    };
+
+    let calledFn = false;
+    const refreshFnOnce = () => {
+      if (!calledFn) {
+        calledFn = true;
+        refreshFn();
+      }
+    };
+
+    scratchAddons.eventTargets.auth.forEach((auth) => auth._refresh(refreshFnOnce));
   },
 };
 Comlink.expose(page, Comlink.windowEndpoint(comlinkIframe4.contentWindow, comlinkIframe3.contentWindow));
