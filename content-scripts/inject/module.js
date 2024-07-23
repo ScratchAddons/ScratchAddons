@@ -88,8 +88,7 @@ const page = {
   },
   isFetching: false,
   async refetchSession(firstTime = false) {
-    if (isScratchGui) return;
-
+    if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601") return;
     const isScratchR2 =
       !document.querySelector("meta[name='format-detection']") &&
       document.querySelector("script[type='text/javascript']");
