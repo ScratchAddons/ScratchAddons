@@ -122,8 +122,6 @@ export default async ({ addon, console, msg }) => {
    * 5) add addons-l10n
    */
 
-  // Reminder: forumToolbarLinkDecoration order 1 is reserved by image-uploader
-
   appendButton(
     "forumToolbarTextDecoration",
     createButton("color", {
