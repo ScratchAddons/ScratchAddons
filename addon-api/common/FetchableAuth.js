@@ -29,11 +29,12 @@ export default class FetchableAuth extends AuthCommon {
    * @private
    */
   _waitUntilFetched() {
+    const prom = new Promise((resolve) => this.addEventListener("session", resolve, { once: true }));
     if (this._requestFetchFn) {
       this._requestFetchFn();
       this._requestFetchFn = undefined;
     }
-    return new Promise((resolve) => this.addEventListener("session", resolve, { once: true }));
+    return prom;
   }
 
   /**
