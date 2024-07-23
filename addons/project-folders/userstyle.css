@@ -1,0 +1,59 @@
+.folders {
+  padding: 10px;
+}
+
+.folder {
+  width: 100px;
+  border: 1px black solid;
+  text-align: center;
+  border-radius: 5px;
+  height: 90px;
+  padding: 5px;
+  display: inline-block;
+  margin: 10px;
+  background-color: #fcfcfc;
+  color: black;
+  background-image: none;
+}
+
+.folder:hover {
+  border: 1px black solid;
+  background-color: #fcfcfc;
+  color: black;
+  background-image: none;
+}
+
+.folder-image {
+  height: 50px;
+  width: 50px;
+}
+
+button.project-right-float-btn {
+  float: right;
+  background-color: white !important;
+}
+
+.folder {
+  overflow: hidden;
+}
+
+.sa-project {
+  width: 150px;
+  text-align: center;
+  margin: 10px;
+}
+
+.sa-folder-project-img {
+  height: 100px;
+}
+
+.sa-folder-projects {
+  display: flex;
+  align-items: center;
+  overflow: overlay;
+  padding: 20px;
+}
+
+ul.media-list {
+  padding: 10px;
+}

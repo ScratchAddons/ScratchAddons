@@ -1,0 +1,34 @@
+{
+  "name": "Project Folders",
+  "description": "Put your projects in a folder to access them easily.",
+  "credits": [
+    {
+      "name": "Platformer444",
+      "link": "https://scratch.mit.edu/users/Platformer444"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/mystuff"]
+    },
+    { "url": "project.js", "matches": ["projects"] }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/mystuff"]
+    },
+    { "url": "project.css", "matches": ["projects"] }
+  ],
+  "info": [
+    {
+      "type": "notice",
+      "text": "To create a folder, you need to go to a project and in the end of the instructions, add the foldertag in this format: #_[folderName]",
+      "id": "help"
+    }
+  ],
+  "tags": ["community"],
+  "enabledByDefault": false,
+  "versionAdded": "1.31.0"
+}
