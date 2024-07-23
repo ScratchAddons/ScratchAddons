@@ -93,6 +93,7 @@ const page = {
       !document.querySelector("meta[name='format-detection']") &&
       document.querySelector("script[type='text/javascript']");
     if (!firstTime && isScratchR2) {
+      // We assume this function always gets called with firstTime:true at least once.
       // scratchr2 pages do not support logging in/out without a page reload.
       // Why even bother to check auth again?
       return;
