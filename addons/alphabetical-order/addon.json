@@ -1,0 +1,13 @@
+{
+  "name": "Sort assets in alphabetical order",
+  "description": "Adds an option in the Edit menu to sort assets in alphabetical order.",
+  "tags": ["codeEditor", "editor"],
+  "versionAdded": "1.39.0",
+  "userscripts": [{ "url": "userscript.js", "matches": ["projects"] }],
+  "credits": [
+    { "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" },
+    { "name": "Chrome_Cat", "link": "https://scratch.mit.edu/users/Chrome_Cat/" }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}
