@@ -653,13 +653,13 @@ export default async function ({ addon, console, msg }) {
     const SA_ICON_URL = addon.self.dir + "../../../images/cs/icon.svg";
 
     const managedBySa = elementToClone.cloneNode(true);
-    addon.tab.displayNoneWhileDisabled(managedBySa, { display: "block" });
+    addon.tab.displayNoneWhileDisabled(managedBySa);
     managedBySa.classList.add("sa-theme3-managed");
     managedBySa.querySelector("div span").textContent = msg("/_general/meta/managedBySa");
     managedBySa.querySelector("img[class*=settings-menu_icon_]").src = SA_ICON_URL;
 
     const addonSettingsLink = elementToClone.cloneNode(true);
-    addon.tab.displayNoneWhileDisabled(addonSettingsLink, { display: "block" });
+    addon.tab.displayNoneWhileDisabled(addonSettingsLink);
     addonSettingsLink.classList.add("sa-theme3-link");
     addonSettingsLink.classList.add(addon.tab.scratchClass("menu_menu-section") || "_");
     addonSettingsLink.querySelector("div span").textContent = msg("/_general/meta/addonSettings");
