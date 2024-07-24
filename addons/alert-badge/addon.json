@@ -1,0 +1,48 @@
+{
+  "name": "Highlight message badge when there are alerts",
+  "description": "When there are Scratch Team messages, the color of the notification badge in the navigation bar is changed and an exclamation mark is added.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "injectAsStyleElt": true,
+  "updateUserstylesOnSettingsChange": true,
+  "settings": [
+    {
+      "name": "Alert badge color",
+      "id": "alert",
+      "type": "color",
+      "default": "#cc4400"
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "alertfg",
+      "value": {
+        "type": "textColor",
+        "source": { "type": "settingValue", "settingId": "alert" },
+        "black": "#000000",
+        "white": "#ffffff",
+        "threshold": 180
+      }
+    }
+  ],
+  "tags": ["community"],
+  "versionAdded": "1.37.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "credits": [
+    {
+      "name": "Secret-chest",
+      "link": "https://github.com/Secret-chest"
+    }
+  ]
+}
