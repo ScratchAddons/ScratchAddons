@@ -238,7 +238,7 @@ export default class Tab extends Listenable {
   copyImage(dataURL) {
     if (!dataURL.startsWith(DATA_PNG)) return Promise.reject(new TypeError("Expected PNG data URL"));
     if (typeof Clipboard.prototype.write === "function") {
-      // Chrome
+      // Chrome or Firefox 127+
       const blob = dataURLToBlob(dataURL);
       const items = [
         new ClipboardItem({
@@ -247,7 +247,8 @@ export default class Tab extends Listenable {
       ];
       return navigator.clipboard.write(items);
     } else {
-      // Firefox needs Content Script
+      // Firefox 109-126 only
+      // The image is sent to the background event page where it is copied with extension APIs
       return scratchAddons.methods.copyImage(dataURL).catch((err) => {
         return Promise.reject(new Error(`Error inside clipboard handler: ${err}`));
       });

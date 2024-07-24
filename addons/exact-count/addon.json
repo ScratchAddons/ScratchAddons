@@ -1,6 +1,6 @@
 {
   "name": "Show exact count",
-  "description": "Shows the exact count for user information.",
+  "description": "Shows exact numbers on profiles and the exact project count in studios.",
   "credits": [
     {
       "name": "TheColaber",
@@ -14,10 +14,22 @@
       "name": "World_Languages"
     }
   ],
+  "info": [
+    {
+      "id": "setting-removal",
+      "text": "The forum setting has been removed since the ScratchDB database used by it is offline."
+    }
+  ],
   "settings": [
     {
       "name": "Exact counts for profiles",
       "id": "user",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Exact count for studios",
+      "id": "studio",
       "type": "boolean",
       "default": true
     }
@@ -28,6 +40,22 @@
       "matches": ["https://scratch.mit.edu/users/*/"],
       "if": {
         "settings": { "user": true }
+      }
+    },
+    {
+      "url": "studio.js",
+      "matches": ["studios"],
+      "if": {
+        "settings": { "studio": true }
+      }
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "studio.css",
+      "matches": ["studios"],
+      "if": {
+        "settings": { "studio": true }
       }
     }
   ],
