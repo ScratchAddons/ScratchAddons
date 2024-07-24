@@ -2,26 +2,18 @@ import { startCache } from "./message-cache.js";
 import { openMessageCache } from "../libraries/common/message-cache.js";
 import { purgeDatabase } from "../addons/scratch-notifier/notifier.js";
 
-const promisify =
-  (callbackFn) =>
-  (...args) =>
-    new Promise((resolve) => callbackFn(...args, resolve));
-
-function getDefaultStoreId() {
-  // Request Scratch to set the CSRF token.
-  return fetch("https://scratch.mit.edu/csrf_token/", {
-    credentials: "include",
-  })
-    .catch(() => {})
-    .then(() =>
-      promisify(chrome.cookies.get)({
-        url: "https://scratch.mit.edu/",
-        name: "scratchcsrftoken",
-      })
-    )
-    .then((cookie) => {
-      return (scratchAddons.cookieStoreId = cookie.storeId);
+async function getDefaultStoreId() {
+  try {
+    // Request Scratch to set the CSRF token.
+    const request = await fetch("https://scratch.mit.edu/csrf_token/", {
+      credentials: "include",
     });
+    const cookie = await chrome.cookies.get({
+      url: "https://scratch.mit.edu/",
+      name: "scratchcsrftoken",
+    });
+    return (scratchAddons.cookieStoreId = cookie.storeId);
+  } catch (error) {}
 }
 
 (async function () {
