@@ -6,6 +6,10 @@
   color: #a065ff;
 }
 
+.clone-container-container.show {
+  display: flex;
+}
+
 .clone-container {
   font-size: 0.625rem;
   font-weight: bold;
@@ -37,6 +41,6 @@
   content: attr(data-str);
 }
 
-.sa-small-stage .clone-container-container {
-  display: none !important;
+.sa-small-stage .clone-container-container.show {
+  display: none;
 }

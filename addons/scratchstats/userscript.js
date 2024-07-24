@@ -109,7 +109,7 @@ export default async function ({ addon, msg, console }) {
   );
   const statsBox = document.createElement("div");
   content.insertBefore(statsBox, commentBox);
-  addon.tab.displayNoneWhileDisabled(statsBox, { display: "block" });
+  addon.tab.displayNoneWhileDisabled(statsBox);
   statsBox.className = "box sa-stats slider-carousel-container";
 
   const statsHeader = document.createElement("div");
