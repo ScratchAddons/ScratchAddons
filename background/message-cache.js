@@ -38,9 +38,10 @@ export async function updateBadge(defaultStoreId) {
         const text = isLoggedIn ? String(count) : "?";
         // The badge will show incorrect message count in other auth contexts.
         // Blocked on Chrome implementing store ID-based tab query
+        console.log(":br", color, text);
         await Promise.all([
           chrome.action.setBadgeBackgroundColor({ color }),
-          chrome.action.setBadgeText.bind({ text }),
+          chrome.action.setBadgeText({ text }),
         ]);
         return;
       }
@@ -54,7 +55,7 @@ export async function updateBadge(defaultStoreId) {
   // Hide badge when logged out and showOffline is false,
   // or when the logged-in user has no unread messages,
   // or when the addon is disabled
-  await chrome.action.setBadgeText.bind(chrome.action)({ text: "" });
+  await chrome.action.setBadgeText({ text: "" });
 }
 
 /**
