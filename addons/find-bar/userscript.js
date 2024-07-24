@@ -176,6 +176,21 @@ export default async function ({ addon, msg, console }) {
           return true;
         }
       }
+
+      // In Chrome, Ctrl+Z will undo edits to the find bar input even if it doesn't have focus.
+      // Call preventDefault() to make sure that the event only goes to scratch-blocks or scratch-paint.
+      // Blockly.onKeyDown_:
+      // https://github.com/scratchfoundation/scratch-blocks/blob/1421093/core/blockly.js#L185
+      // KeyboardShortcutsHOC.handleKeyPress:
+      // https://github.com/scratchfoundation/scratch-paint/blob/8119055/src/hocs/keyboard-shortcuts-hoc.jsx#L29
+      if (!Blockly.utils.isTargetInput(e) && addon.tab.redux.state?.scratchPaint.textEditTarget === null) {
+        if (
+          (ctrlKey || e.altKey) &&
+          (e.keyCode === 90 || e.key === "z" || (e.shiftKey && e.key.toLowerCase() === "z"))
+        ) {
+          e.preventDefault();
+        }
+      }
     }
 
     showDropDown(focusID, instanceBlock) {
@@ -640,7 +655,10 @@ export default async function ({ addon, msg, console }) {
 
         for (const id of Object.keys(blocks._blocks)) {
           const block = blocks._blocks[id];
-          if (block.opcode === "event_whenbroadcastreceived" && block.fields.BROADCAST_OPTION.value === name) {
+          if (
+            block.opcode === "event_whenbroadcastreceived" &&
+            block.fields.BROADCAST_OPTION.value.toLowerCase() === name.toLowerCase()
+          ) {
             uses.push(new BlockInstance(target, block));
           } else if (block.opcode === "event_broadcast" || block.opcode === "event_broadcastandwait") {
             const broadcastInputBlockId = block.inputs.BROADCAST_INPUT.block;
@@ -652,7 +670,7 @@ export default async function ({ addon, msg, console }) {
               } else {
                 eventName = msg("complex-broadcast");
               }
-              if (eventName === name) {
+              if (eventName.toLowerCase() === name.toLowerCase()) {
                 uses.push(new BlockInstance(target, block));
               }
             }
