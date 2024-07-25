@@ -89,11 +89,13 @@ async function refetchSession(addon) {
 (async () => {
   const addonId = location.pathname.split("/")[2];
 
-  const popupData = await chrome.runtime.sendMessage({
+  // The value returned on await of `chrome.runtime.sendMessage` is only permited in Chrome 99+
+  const popupData = await new Promise((resolve) => chrome.runtime.sendMessage({
     requestPopupInfo: {
       addonId,
     },
-  });
+  }, resolve));
+
   scratchAddons.globalState = {
     addonSettings: popupData.settings,
   };
