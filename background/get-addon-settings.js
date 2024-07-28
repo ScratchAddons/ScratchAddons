@@ -172,7 +172,7 @@ chrome.storage.sync.get([...ADDON_SETTINGS_KEYS, "addonsEnabled"], (storageItems
       addonSettings["workspace-dots"]["theme"] = "none";
     }
 
-    if (addonSettings["editor-theme3333"]?._version === 3) {
+    if (addonSettings["editor-theme3"]?._version === 3) {
       // Detected update to v1.39 (code below will set the version to 4)
       if (addonsEnabled["msg-count-badge"] && chrome.action.getUserSettings) {
         chrome.action
