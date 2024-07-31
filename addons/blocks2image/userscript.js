@@ -142,11 +142,6 @@ export default async function ({ addon, console, msg }) {
     });
     delete externalImages["data:"];
 
-    // To help with testing this PR. Will be removed.
-    // To see  the logs, export as PNG or SVG.
-    console.log("Images (", svg.querySelectorAll("image").length, ")", Array.from(svg.querySelectorAll("image")));
-    console.log("Amount of different URLs to be fetched:", Object.keys(externalImages).length);
-
     // replace external images with data URIs
     await Promise.all(
       Object.keys(externalImages).map(async (iconUrl) => {
