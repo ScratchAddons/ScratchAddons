@@ -10,6 +10,7 @@ export default async function ({ addon, console }) {
   }
 
   function linkifyAll() {
+    linkified.length = 0;
     document.querySelectorAll(".post_body_html, .postsignature").forEach((post) => {
       pingify(post);
       post.querySelectorAll("span, li, blockquote").forEach(pingifyTextNode);
