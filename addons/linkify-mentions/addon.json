@@ -5,6 +5,10 @@
     {
       "name": "Samq64",
       "link": "https://github.com/Samq64"
+    },
+    {
+      "name": "just-a-hriday",
+      "link": "https://scratch.mit.edu/users/just-a-hriday"
     }
   ],
   "userscripts": [
@@ -13,8 +17,28 @@
       "matches": ["topics"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["topics"],
+      "if": {
+        "settings": {
+          "plainText": true
+        }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Style quote authors as normal text",
+      "id": "plainText",
+      "type": "boolean",
+      "default": false
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.34.0",
   "tags": ["community", "forums"]
 }

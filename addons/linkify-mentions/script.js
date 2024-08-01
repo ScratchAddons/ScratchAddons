@@ -1,6 +1,7 @@
 import { pingifyTextNode } from "../../libraries/common/cs/fast-linkify.js";
 
 export default async function ({ addon, console }) {
+  const authors = document.getElementsByClassName("bb-quote-author");
   const linkified = [];
 
   function pingify(element) {
@@ -16,6 +17,19 @@ export default async function ({ addon, console }) {
       pingify(post);
       post.querySelectorAll("span, li, blockquote").forEach((el) => pingifyTextNode(el));
     });
+
+    for (const author of authors) {
+      const authorName = author.textContent.match(/(?<=^)[\w-]{2,30}(?= wrote:$)/);
+
+      if (!authorName) continue;
+
+      const link = document.createElement("a");
+      link.textContent = authorName;
+      link.href = `https://scratch.mit.edu/users/${authorName}/`;
+
+      author.textContent = " wrote:";
+      author.prepend(link);
+    }
   }
 
   addon.self.addEventListener("disabled", () => {
