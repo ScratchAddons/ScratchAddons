@@ -5,17 +5,14 @@ export default async function ({ addon, console }) {
   const linkified = [];
 
   function pingify(element) {
-    linkified.push({
-      element,
-      original: element.innerHTML,
-    });
-    return pingifyTextNode(element);
+    linkified.push({ element, original: element.innerHTML });
+    pingifyTextNode(element);
   }
 
   function linkifyAll() {
     document.querySelectorAll(".post_body_html, .postsignature").forEach((post) => {
       pingify(post);
-      post.querySelectorAll("span, li, blockquote").forEach((el) => pingifyTextNode(el));
+      post.querySelectorAll("span, li, blockquote").forEach(pingifyTextNode);
     });
 
     for (const author of authors) {
