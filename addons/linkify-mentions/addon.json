@@ -19,7 +19,7 @@
   ],
   "userstyles": [
     {
-      "url": "userstyle.css",
+      "url": "plain-text.css",
       "matches": ["topics"],
       "if": {
         "settings": {
