@@ -1,6 +1,6 @@
 {
   "name": "Clickable forum mentions",
-  "description": "Turns @username mentions on the forums into clickable links.",
+  "description": "Turns @username mentions and quote authors on the forums into clickable links.",
   "credits": [
     {
       "name": "Samq64",
