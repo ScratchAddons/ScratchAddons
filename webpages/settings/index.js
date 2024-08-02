@@ -317,7 +317,7 @@ let fuse;
     },
     events: {
       closesidebar(event) {
-        if (event?.target.classList[0] === "toggle") return;
+        if (event?.target.id === "sidebar-toggle") return;
         if (this.categoryOpen && this.smallMode) {
           this.sidebarToggle();
         }
