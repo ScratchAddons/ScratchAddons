@@ -158,6 +158,7 @@
   "asset-conflict-dialog",
   "remaining-replies",
   "forum-time-zones",
+
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
   "// because the first in the list gets their CSS injected first,",
