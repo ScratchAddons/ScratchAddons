@@ -86,7 +86,7 @@
         },
         {
           "name": "Wiki",
-          "values": { "name": "Wiki", "url": "https://scratch-wiki.info/" }
+          "values": { "name": "Wiki", "url": "https://en.scratch-wiki.info/" }
         }
       ]
     },
