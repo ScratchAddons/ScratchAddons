@@ -1,0 +1,42 @@
+{
+  "name": "Show project thumbnail under green flag overlay",
+  "description": "Shows the project's thumbnail instead of its initial state before starting the project and while it loads.",
+  "credits": [
+    {
+      "name": "Samq64",
+      "link": "https://scratch.mit.edu/users/samq64/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    },
+    {
+      "url": "loading.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "loading": true }
+      }
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": false
+    }
+  ],
+  "settings": [
+    {
+      "name": "Show while loading projects",
+      "id": "loading",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.37.0",
+  "tags": ["community", "theme", "projectPage"]
+}
