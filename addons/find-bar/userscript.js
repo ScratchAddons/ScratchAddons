@@ -34,7 +34,7 @@ export default async function ({ addon, msg, console }) {
     createDom(root) {
       this.findBarOuter = document.createElement("div");
       this.findBarOuter.className = "sa-find-bar";
-      addon.tab.displayNoneWhileDisabled(this.findBarOuter, { display: "flex" });
+      addon.tab.displayNoneWhileDisabled(this.findBarOuter);
       root.appendChild(this.findBarOuter);
 
       this.findWrapper = this.findBarOuter.appendChild(document.createElement("span"));
@@ -136,7 +136,7 @@ export default async function ({ addon, msg, console }) {
     }
 
     eventKeyDown(e) {
-      if (addon.self.disabled || !this.findBarOuter) return;
+      if (addon.self.disabled || !this.findBarOuter || addon.tab.editorMode !== "editor") return;
 
       let ctrlKey = e.ctrlKey || e.metaKey;
 
