@@ -1,7 +1,6 @@
 import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
 
 export default async function ({ addon, console, msg }) {
-
   await new Promise((resolve) => {
     if (addon.tab.traps.vm.editingTarget) return resolve();
     addon.tab.traps.vm.runtime.once("PROJECT_LOADED", resolve);
