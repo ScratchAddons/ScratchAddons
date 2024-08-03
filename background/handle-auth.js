@@ -40,8 +40,8 @@ let isProcessing = false;
 const addToQueue = (item) => {
   if (isProcessing) {
     console.log("ignored cookies due to processing");
-    return
-  };
+    return;
+  }
 
   const { cookie } = item;
   if (cookie.name !== "scratchsessionsid" && cookie.name !== "scratchcsrftoken") {
@@ -73,7 +73,7 @@ const processCookieChanges = () => {
 
   // Because the "scratchlanguage" cookie is not marked as secure by scratch, we won't get notified for it changes.
   // Therefore, we must always run setLanguage since we don't actually know when it changes.
-  processes.push(setLanguage)
+  processes.push(setLanguage);
 
   if (!scratchAddons.cookieStoreId) {
     processes.push(getDefaultStoreId().then(checkSession));
@@ -86,11 +86,13 @@ const processCookieChanges = () => {
       mostRecentCookies.scratchcsrftoken.value === scratchAddons.globalState.auth.csrfToken
     )
   ) {
-    processes.push(checkSession().then(() => {
-      if (mostRecentCookies.scratchsessionsid) {
-        return Promise.all([startCache(scratchAddons.cookieStoreId, true), purgeDatabase()]);
-      }
-    }));
+    processes.push(
+      checkSession().then(() => {
+        if (mostRecentCookies.scratchsessionsid) {
+          return Promise.all([startCache(scratchAddons.cookieStoreId, true), purgeDatabase()]);
+        }
+      })
+    );
   }
   if (mostRecentCookies.scratchsessionsid) {
     // Clear message cache for the store
@@ -100,7 +102,7 @@ const processCookieChanges = () => {
 
   Promise.all(processes).then(() => {
     isProcessing = false;
-  })
+  });
 
   for (const key in mostRecentCookies) {
     notify(mostRecentCookies[key]);
