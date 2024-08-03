@@ -44,7 +44,7 @@ const addToQueue = (item) => {
   };
 
   const { cookie } = item;
-  if (cookie.name !== "scratchsessionsid" && cookie.name !== "scratchlanguage" && cookie.name !== "scratchcsrftoken") {
+  if (cookie.name !== "scratchsessionsid" && cookie.name !== "scratchcsrftoken") {
     // Ignore this event
     return;
   }
@@ -57,7 +57,7 @@ const addToQueue = (item) => {
 };
 
 const processCookieChanges = () => {
-  // Keys could only be "scratchsessionsid", "scratchlanguage", or "scratchcsrftoken"
+  // Keys could only be "scratchsessionsid" or "scratchcsrftoken"
   const mostRecentCookies = {};
   for (const change of cookieQueue.reverse()) {
     if (!mostRecentCookies[change.name]) {
@@ -67,16 +67,16 @@ const processCookieChanges = () => {
   const lastCookie = cookieQueue.at(-1);
   // Reset Queue
   cookieQueue.length = 0;
-  console.log({ mostRecentCookies });
 
   isProcessing = true;
   const processes = [];
 
-  if (mostRecentCookies.scratchlanguage) {
-    processes.push(setLanguage())
-  }
+  // Because the "scratchlanguage" cookie is not marked as secure by scratch, we won't get notified for it changes.
+  // Therefore, we must always run setLanguage since we don't actually know when it changes.
+  processes.push(setLanguage)
+
   if (!scratchAddons.cookieStoreId) {
-    processes.push(getDefaultStoreId().then(() => checkSession()));
+    processes.push(getDefaultStoreId().then(checkSession));
   }
   if (
     // do not refetch for csrf token expiration date change
@@ -180,7 +180,6 @@ async function checkSession(firstTime = false) {
 }
 
 function notify(cookie) {
-  if (cookie.name === "scratchlanguage") return;
   const storeId = cookie.storeId;
   const cond = {};
   if (typeof browser === "object") {
