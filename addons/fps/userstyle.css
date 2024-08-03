@@ -3,13 +3,13 @@
   font-weight: bold;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   white-space: nowrap;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
-  align-items: center;
   padding: 0.25rem;
   user-select: none;
   color: #0fbd8c;
   display: flex;
   align-items: center;
+}
+
+.sa-small-stage .fps-counter {
+  display: none;
 }
