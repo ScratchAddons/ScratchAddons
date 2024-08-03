@@ -30,70 +30,80 @@ async function getDefaultStoreId() {
   startCache(defaultStoreId);
 })();
 
-const onCookiesChanged = ({ cookie, cause, removed }) => {
-  // We already know that this is true:
-  // `cookie.name === "scratchsessionsid" || cookie.name === "scratchlanguage" || cookie.name === "scratchcsrftoken"`
-  if (cookie.name === "scratchlanguage") {
-    setLanguage();
-  } else if (!scratchAddons.cookieStoreId) {
-    getDefaultStoreId().then(() => checkSession());
-  } else if (
-    // do not refetch for csrf token expiration date change
-    cookie.storeId === scratchAddons.cookieStoreId &&
-    !(cookie.name === "scratchcsrftoken" && cookie.value === scratchAddons.globalState.auth.csrfToken)
-  ) {
-    checkSession().then(() => {
-      if (cookie.name === "scratchsessionsid") {
-        startCache(scratchAddons.cookieStoreId, true);
-        purgeDatabase();
-      }
-    });
-  } else if (cookie.name === "scratchsessionsid") {
-    // Clear message cache for the store
-    // This is not the main one, so we don't refetch here
-    openMessageCache(cookie.storeId, true);
-  }
-  notify(cookie);
-};
+// We store cookies.onChanged events here. We'll try to process them all, but there's no guarantee.
+const cookieQueue = [];
 
-const COOKIE_CHANGE_RATE_LIMIT = 5000; // (ms) First events get processed immediately, then rate-limit is used.
-const queue = []; // We store cookies.onChanged events here. We'll try to process them all, but there's no guarantee.
-let timer = null; // The integer ID returned by setInterval.
-let n = 0; // Resets to 0 after each "burst" ends. If number is low, the event is processed with no delay.
+let processTimeout;
+const TIMEOUT_INTERVAL = 500;
+let isProcessing = false;
 
-const process = ({ clearIntervalIfQueueEmpty }) => {
-  if (queue.length > 0) {
-    const item = queue.shift();
-    onCookiesChanged(item);
-    if (clearIntervalIfQueueEmpty) console.log("Processed cookies.onChanged event from queue.");
-  }
-  if (clearIntervalIfQueueEmpty && queue.length === 0) {
-    clearInterval(timer);
-    timer = null;
-    n = 0;
-  }
-};
 const addToQueue = (item) => {
+  if (isProcessing) {
+    console.log("ignored cookies due to processing");
+    return
+  };
+
   const { cookie } = item;
   if (cookie.name !== "scratchsessionsid" && cookie.name !== "scratchlanguage" && cookie.name !== "scratchcsrftoken") {
     // Ignore this event
     return;
   }
 
-  queue.push(item);
-  n++;
-  if (timer === null) {
-    timer = setInterval(() => process({ clearIntervalIfQueueEmpty: true }), COOKIE_CHANGE_RATE_LIMIT);
-    // setInterval may not work as expected in the extension background context, but worst
-    // that can happen is that we discard events instead of processing them later.
+  cookieQueue.push(cookie);
+  if (processTimeout) {
+    clearTimeout(processTimeout);
   }
-  if (n <= 5) {
-    // Process first 5 events immediately (gets reset after receiving 0 events for `COOKIE_CHANGE_RATE_LIMIT` milliseconds)
-    process({ clearIntervalIfQueueEmpty: false });
+  processTimeout = setTimeout(processCookieChanges, TIMEOUT_INTERVAL);
+};
+
+const processCookieChanges = () => {
+  // Keys could only be "scratchsessionsid", "scratchlanguage", or "scratchcsrftoken"
+  const mostRecentCookies = {};
+  for (const change of cookieQueue.reverse()) {
+    if (!mostRecentCookies[change.name]) {
+      mostRecentCookies[change.name] = change;
+    }
   }
-  if (queue.length > 8) {
-    // If queue has more than 8 items, remove the oldest one.
-    queue.shift();
+  const lastCookie = cookieQueue.at(-1);
+  // Reset Queue
+  cookieQueue.length = 0;
+  console.log({ mostRecentCookies });
+
+  isProcessing = true;
+  const processes = [];
+
+  if (mostRecentCookies.scratchlanguage) {
+    processes.push(setLanguage())
+  }
+  if (!scratchAddons.cookieStoreId) {
+    processes.push(getDefaultStoreId().then(() => checkSession()));
+  }
+  if (
+    // do not refetch for csrf token expiration date change
+    lastCookie.storeId === scratchAddons.cookieStoreId &&
+    !(
+      mostRecentCookies.scratchcsrftoken &&
+      mostRecentCookies.scratchcsrftoken.value === scratchAddons.globalState.auth.csrfToken
+    )
+  ) {
+    processes.push(checkSession().then(() => {
+      if (mostRecentCookies.scratchsessionsid) {
+        return Promise.all([startCache(scratchAddons.cookieStoreId, true), purgeDatabase()]);
+      }
+    }));
+  }
+  if (mostRecentCookies.scratchsessionsid) {
+    // Clear message cache for the store
+    // This is not the main one, so we don't refetch here
+    processes.push(openMessageCache(mostRecentCookies.scratchsessionsid.storeId, true));
+  }
+
+  Promise.all(processes).then(() => {
+    isProcessing = false;
+  })
+
+  for (const key in mostRecentCookies) {
+    notify(mostRecentCookies[key]);
   }
 };
 chrome.cookies.onChanged.addListener((e) => addToQueue(e));
