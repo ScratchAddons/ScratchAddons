@@ -59,12 +59,15 @@ const addToQueue = (item) => {
 const processCookieChanges = () => {
   // Keys could only be "scratchsessionsid" or "scratchcsrftoken"
   const mostRecentCookies = {};
+  // Reverse the array since the last cookie changes are the most recent ones.
   for (const change of cookieQueue.reverse()) {
     if (!mostRecentCookies[change.name]) {
       mostRecentCookies[change.name] = change;
     }
   }
-  const lastCookie = cookieQueue.at(-1);
+
+  // Get the store id of the last cookie
+  const lastCookieStoreID = cookieQueue.at(-1).storeId;
   // Reset Queue
   cookieQueue.length = 0;
 
@@ -80,7 +83,7 @@ const processCookieChanges = () => {
   }
   if (
     // do not refetch for csrf token expiration date change
-    lastCookie.storeId === scratchAddons.cookieStoreId &&
+    lastCookieStoreID === scratchAddons.cookieStoreId &&
     !(
       mostRecentCookies.scratchcsrftoken &&
       mostRecentCookies.scratchcsrftoken.value === scratchAddons.globalState.auth.csrfToken
@@ -100,13 +103,8 @@ const processCookieChanges = () => {
     processes.push(openMessageCache(mostRecentCookies.scratchsessionsid.storeId, true));
   }
 
-  Promise.all(processes).then(() => {
-    isProcessing = false;
-  });
-
-  for (const key in mostRecentCookies) {
-    notify(mostRecentCookies[key]);
-  }
+  Promise.all(processes).then(() => (isProcessing = false));
+  notify(lastCookieStoreID);
 };
 chrome.cookies.onChanged.addListener((e) => addToQueue(e));
 
@@ -181,8 +179,7 @@ async function checkSession(firstTime = false) {
   isChecking = false;
 }
 
-function notify(cookie) {
-  const storeId = cookie.storeId;
+function notify(storeId) {
   const cond = {};
   if (typeof browser === "object") {
     // Firefox-exclusive.
