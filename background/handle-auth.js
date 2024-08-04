@@ -11,7 +11,7 @@ async function getDefaultStoreId() {
   const CHROME_DEFAULT = "0";
   const FIFEFOX_DEFAULT = "firefox-default";
   const cookieStores = await chrome.cookies.getAllCookieStores();
-  if (cookieStores.length === 0) throw "";
+  if (cookieStores.length === 0) throw "Unable to find a default cookie store!";
   if (cookieStores.some((store) => store.id === CHROME_DEFAULT)) {
     // Chrome
     return (scratchAddons.cookieStoreId = CHROME_DEFAULT);
@@ -38,6 +38,12 @@ const TIMEOUT_INTERVAL = 500;
 let isProcessing = false;
 
 const addToQueue = (item) => {
+  // This is to prevent a race condition which has a 1 in a billion chance of occurance.
+  if (!scratchAddons.cookieStoreId) {
+    console.log("ignored cookies due to default store not found");
+    return;
+  }
+
   if (isProcessing) {
     console.log("ignored cookies due to processing");
     return;
@@ -50,9 +56,7 @@ const addToQueue = (item) => {
   }
 
   cookieQueue.push(cookie);
-  if (processTimeout) {
-    clearTimeout(processTimeout);
-  }
+  clearTimeout(processTimeout);
   processTimeout = setTimeout(processCookieChanges, TIMEOUT_INTERVAL);
 };
 
@@ -102,7 +106,7 @@ const processCookieChanges = () => {
   // Notify tabs and popups
   notify(storeId);
 };
-chrome.cookies.onChanged.addListener((e) => addToQueue(e));
+chrome.cookies.onChanged.addListener(addToQueue);
 
 function getCookieValue(name) {
   return new Promise((resolve) => {
