@@ -1,0 +1,20 @@
+{
+  "name": "Copy scratchblocks code from editor",
+  "description": "Adds a right-click option for blocks in the project editor to convert them into scratchblocks text form, for sharing code on the Scratch Forums or Wiki.",
+  "credits": [
+  {
+    "name": "pumpkinhasapatch",
+    "link": "https://github.com/pumpkinhasapatch"
+  }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.39.0",
+  "tags": ["editor", "codeEditor"]
+}
