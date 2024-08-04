@@ -90,8 +90,7 @@ const processCookieChanges = () => {
         }
       })
     );
-  }
-  if (mostRecentCookies.scratchsessionsid) {
+  } else if (mostRecentCookies.scratchsessionsid) {
     // Clear message cache for the store
     // This is not the main one, so we don't refetch here
     processes.push(openMessageCache(mostRecentCookies.scratchsessionsid.storeId, true));
