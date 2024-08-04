@@ -56,41 +56,39 @@ const addToQueue = (item) => {
   processTimeout = setTimeout(processCookieChanges, TIMEOUT_INTERVAL);
 };
 
+const oldCookies = {};
+
 const processCookieChanges = () => {
   // Keys could only be "scratchsessionsid" or "scratchcsrftoken"
   const mostRecentCookies = {};
   // Reverse the array since the last cookie changes are the most recent ones.
   for (const change of cookieQueue.reverse()) {
-    if (!mostRecentCookies[change.name]) {
-      mostRecentCookies[change.name] = change;
-    }
+    // Check if we already found a more recent cookie
+    if (mostRecentCookies[change.name]) continue;
+    // Check if this cookie changed from the last time
+    if (oldCookies[change.name] === change.value) continue;
+    mostRecentCookies[change.name] = change;
+    oldCookies[change.name] = change.value;
   }
 
   // Get the store id of the last cookie
-  const lastCookieStoreID = cookieQueue.at(-1).storeId;
+  const storeId = cookieQueue.at(-1).storeId;
   // Reset Queue
   cookieQueue.length = 0;
 
   isProcessing = true;
   const processes = [];
 
-  // Because the "scratchlanguage" cookie is not marked as secure by scratch, we won't get notified for it changes.
+  // Because the "scratchlanguage" cookie is not marked as secure by scratch, we won't get notified for its changes.
   // Therefore, we must always run setLanguage since we don't actually know when it changes.
   processes.push(setLanguage);
 
-  if (!scratchAddons.cookieStoreId) {
-    processes.push(getDefaultStoreId().then(checkSession));
-  }
-  if (
-    // do not refetch for csrf token expiration date change
-    lastCookieStoreID === scratchAddons.cookieStoreId &&
-    !(
-      mostRecentCookies.scratchcsrftoken &&
-      mostRecentCookies.scratchcsrftoken.value === scratchAddons.globalState.auth.csrfToken
-    )
-  ) {
+  if (scratchAddons.cookieStoreId === storeId) {
+    // Recheck session if the changed cookie occurs in the default store.
     processes.push(
       checkSession().then(() => {
+        // The session id changing means we need to refetch all messages
+        // That's why the second parameter of startCache is set to true, to force clear.
         if (mostRecentCookies.scratchsessionsid) {
           return Promise.all([startCache(scratchAddons.cookieStoreId, true), purgeDatabase()]);
         }
@@ -103,8 +101,11 @@ const processCookieChanges = () => {
     processes.push(openMessageCache(mostRecentCookies.scratchsessionsid.storeId, true));
   }
 
+  // Run all promises, then allow any new cookie changes to occur
   Promise.all(processes).then(() => (isProcessing = false));
-  notify(lastCookieStoreID);
+
+  // Notify tabs and popups
+  notify(storeId);
 };
 chrome.cookies.onChanged.addListener((e) => addToQueue(e));
 
