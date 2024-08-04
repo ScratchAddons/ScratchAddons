@@ -79,10 +79,6 @@ const processCookieChanges = () => {
   isProcessing = true;
   const processes = [];
 
-  // Because the "scratchlanguage" cookie is not marked as secure by scratch, we won't get notified for its changes.
-  // Therefore, we must always run setLanguage since we don't actually know when it changes.
-  processes.push(setLanguage);
-
   if (scratchAddons.cookieStoreId === storeId) {
     // Recheck session if the changed cookie occurs in the default store.
     processes.push(
@@ -124,10 +120,6 @@ function getCookieValue(name) {
   });
 }
 
-async function setLanguage() {
-  scratchAddons.globalState.auth.scratchLang = (await getCookieValue("scratchlanguage")) || navigator.language;
-}
-
 let isChecking = false;
 
 async function checkSession(firstTime = false) {
@@ -136,6 +128,9 @@ async function checkSession(firstTime = false) {
   if (isChecking) return;
   isChecking = true;
   const { scratchSession } = (await chrome.storage.session?.get("scratchSession")) ?? {};
+
+  const scratchLang = (await getCookieValue("scratchlanguage")) || navigator.language;
+
   if (firstTime && scratchSession) {
     console.log("Used cached /session info.");
     json = scratchSession;
@@ -161,13 +156,12 @@ async function checkSession(firstTime = false) {
           userId: null,
           xToken: null,
           csrfToken: null,
-          scratchLang: (await getCookieValue("scratchlanguage")) || navigator.language,
+          scratchLang,
         };
         return;
       }
     }
   }
-  const scratchLang = (await getCookieValue("scratchlanguage")) || navigator.language;
   const csrfToken = await getCookieValue("scratchcsrftoken");
   scratchAddons.globalState.auth = {
     isLoggedIn: Boolean(json.user),
