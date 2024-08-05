@@ -63,50 +63,53 @@ const addToQueue = (item) => {
 const oldCookies = {};
 
 const processCookieChanges = () => {
-  // Keys could only be "scratchsessionsid" or "scratchcsrftoken"
-  const mostRecentCookies = {};
+  // Organize cookie changes by which store they occur in and get fill with most recent cookie changes.
+  const cookieChangesByStore = {};
   // Reverse the array since the last cookie changes are the most recent ones.
   for (const change of cookieQueue.reverse()) {
+    const changes = cookieChangesByStore[change.storeId] || {};
     // Check if we already found a more recent cookie
-    if (mostRecentCookies[change.name]) continue;
+    // Note the only cookie names possible are "scratchsessionsid" or "scratchcsrftoken"
+    if (changes[change.name]) continue;
     // Check if this cookie changed from the last time
     if (oldCookies[change.name] === change.value) continue;
-    mostRecentCookies[change.name] = change;
+    changes[change.name] = change;
     oldCookies[change.name] = change.value;
+    cookieChangesByStore[change.storeId] = changes;
   }
-
-  // Get the store id of the last cookie
-  const storeId = cookieQueue.at(-1).storeId;
   // Reset Queue
   cookieQueue.length = 0;
 
-  isProcessing = true;
   const processes = [];
-
-  if (scratchAddons.cookieStoreId === storeId) {
-    // Recheck session if the changed cookie occurs in the default store.
-    processes.push(
-      checkSession().then(() => {
-        // The session id changing means we need to refetch all messages
-        // That's why the second parameter of startCache is set to true, to force clear.
-        if (mostRecentCookies.scratchsessionsid) {
-          return Promise.all([startCache(scratchAddons.cookieStoreId, true), purgeDatabase()]);
-        }
-      })
-    );
-  } else if (mostRecentCookies.scratchsessionsid) {
-    // Clear message cache for the store
-    // This is not the main one, so we don't refetch here
-    processes.push(openMessageCache(mostRecentCookies.scratchsessionsid.storeId, true));
+  for (const storeId in cookieChangesByStore) {
+    const changes = cookieChangesByStore[storeId];
+    if (scratchAddons.cookieStoreId === storeId) {
+      // Recheck session if the changed cookie occurs in the default store.
+      // We don't care if it happens in the other stores since currently we only use session data from default
+      processes.push(
+        checkSession().then(() => {
+          // The session id changing means we need to refetch all messages
+          // That's why the second parameter of startCache is set to true, to force clear.
+          if (changes.scratchsessionsid) {
+            return Promise.all([startCache(storeId, true), purgeDatabase()]);
+          }
+        })
+      );
+    } else if (changes.scratchsessionsid) {
+      // Clear message cache for the store
+      // This is not the main one, so we don't refetch here
+      processes.push(openMessageCache(storeId, true));
+    }
   }
 
+  isProcessing = true;
   // Run all processes, then allow any new cookie changes to occur
   // Note that it is possible for no processes need to be ran
   // That would occur if the scratchcsrftoken token changes in a store other than the default one
   Promise.all(processes).then(() => (isProcessing = false));
 
-  // Notify tabs and popups
-  notify(storeId);
+  // Notify open tabs and popups
+  notify(Object.keys(cookieChangesByStore));
 };
 chrome.cookies.onChanged.addListener(addToQueue);
 
@@ -179,14 +182,17 @@ async function checkSession(firstTime = false) {
   isChecking = false;
 }
 
-function notify(storeId) {
+function notify(storeIds) {
   const cond = {};
   if (typeof browser === "object") {
-    // Firefox-exclusive.
-    cond.cookieStoreId = storeId;
+    // Firefox-exclusive. Chrome does not have this option.
+    cond.cookieStoreId = storeIds;
   }
   // On Chrome this can cause unnecessary session re-fetch, but there should be
   // no harm (aside from extra requests) when doing so.
+  // On top of that, we still send this message to every tab in the store; not good with lots of tabs open.
+  // In the future, we should try to only send this to one tab, or maybe have data sent to all tabs
+  // so that less requests are made.
   chrome.tabs.query(cond, (tabs) =>
     tabs.forEach((tab) => chrome.tabs.sendMessage(tab.id, "refetchSession", () => void chrome.runtime.lastError))
   );
