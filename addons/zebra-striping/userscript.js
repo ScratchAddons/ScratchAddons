@@ -24,7 +24,12 @@ export default async function ({ addon, msg, console }) {
       // parent).
       for (const block of this.getDescendants()) {
         const parent = block.getSurroundParent();
-        let wasStipped = !!block.sa_striped;
+        let wasStripped = !!block.sa_striped;
+        // Ensure the shadow block has the correct stroke by updating it's color to match parent colors.
+        if (block.isShadow() && !parent.sa_striped) {
+          block.updateColour();
+          continue;
+        }
         block.sa_striped =
           // not a shadow
           !block.isShadow() &&
@@ -57,12 +62,13 @@ export default async function ({ addon, msg, console }) {
           );
         }
 
-        if (wasStipped !== block.sa_striped) {
+        if (wasStripped !== block.sa_striped) {
           // Update field dropdowns to match parent color
           for (const input of block.inputList) {
             for (const field of input.fieldRow) {
               if (field instanceof ScratchBlocks.FieldDropdown) {
                 field.box_.setAttribute("fill", field.sourceBlock_.getColour());
+                field.box_.setAttribute("stroke", field.sourceBlock_.getColourTertiary());
               }
             }
           }
@@ -74,6 +80,6 @@ export default async function ({ addon, msg, console }) {
 
   if (addon.self.enabledLate) updateAllBlocks(addon.tab, { updateFlyout: false });
   addon.self.addEventListener("disabled", () => updateAllBlocks(addon.tab, { updateFlyout: false }));
-  addon.self.addEventListener("reenabled", updateAllBlocks(addon.tab, { updateFlyout: false }));
-  addon.settings.addEventListener("change", updateAllBlocks(addon.tab, { updateFlyout: false }));
+  addon.self.addEventListener("reenabled", () => updateAllBlocks(addon.tab, { updateFlyout: false }));
+  addon.settings.addEventListener("change", () => updateAllBlocks(addon.tab, { updateFlyout: false }));
 }
