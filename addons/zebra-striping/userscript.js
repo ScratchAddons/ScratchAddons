@@ -22,6 +22,7 @@ export default async function ({ addon, msg, console }) {
       // parent).
       for (const block of this.getDescendants()) {
         const parent = block.getSurroundParent();
+        let wasStipped = !!block.sa_striped;
         block.sa_striped =
           // not a shadow
           !block.isShadow() &&
@@ -33,7 +34,9 @@ export default async function ({ addon, msg, console }) {
           !parent.sa_striped &&
           // parent and child are same color
           // we dont check category because other addons can make blocks the same color.
-          parent.getColour() === block.getColour();
+          // if the block was stripped we need to look at it's original color in order to get it's real color
+          (parent.getColour() === (block.sa_orginalColour ? block.sa_orginalColour[0] : block.getColour()));
+
         if (!block.sa_striped && block.sa_orginalColour) {
           block.setColour(...block.sa_orginalColour);
           block.sa_orginalColour = null;
@@ -42,13 +45,25 @@ export default async function ({ addon, msg, console }) {
           const secondary = block.getColourSecondary();
           const tertiary = block.getColourTertiary();
           const quaternary = block.getColourQuaternary();
+
+          block.sa_orginalColour = [color, secondary, tertiary, quaternary];
           block.setColour(
             "#" + tinycolor(color).lighten(amount).toHex(),
             "#" + tinycolor(secondary).lighten(amount).toHex(),
             "#" + tinycolor(tertiary).lighten(amount).toHex(),
             "#" + tinycolor(quaternary).lighten(amount).toHex()
           );
-          block.setColour("#" + tinycolor(color).lighten(amount).toHex());
+        }
+
+        if (wasStipped !== block.sa_striped) {
+          // Update field dropdowns to match parent color
+          for (const input of block.inputList) {
+            for (const field of input.fieldRow) {
+              if (field instanceof ScratchBlocks.FieldDropdown) {
+                field.box_.setAttribute("fill", field.sourceBlock_.getColour());
+              }
+            }
+          }
         }
       }
     }
