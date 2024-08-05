@@ -100,7 +100,6 @@ const processCookieChanges = () => {
     processes.push(openMessageCache(mostRecentCookies.scratchsessionsid.storeId, true));
   }
 
-
   // Run all processes, then allow any new cookie changes to occur
   // Note that it is possible for no processes need to be ran
   // That would occur if the scratchcsrftoken token changes in a store other than the default one
