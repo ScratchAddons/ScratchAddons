@@ -35,7 +35,7 @@ export default async function ({ addon, msg, console }) {
           // parent and child are same color
           // we dont check category because other addons can make blocks the same color.
           // if the block was stripped we need to look at it's original color in order to get it's real color
-          (parent.getColour() === (block.sa_orginalColour ? block.sa_orginalColour[0] : block.getColour()));
+          parent.getColour() === (block.sa_orginalColour ? block.sa_orginalColour[0] : block.getColour());
 
         if (!block.sa_striped && block.sa_orginalColour) {
           block.setColour(...block.sa_orginalColour);
