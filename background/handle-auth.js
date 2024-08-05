@@ -131,54 +131,51 @@ function getCookieValue(name) {
 let isChecking = false;
 
 async function checkSession(firstTime = false) {
-  let res;
-  let json;
+  let sessionData = {};
   if (isChecking) return;
   isChecking = true;
-  const { scratchSession } = (await chrome.storage.session?.get("scratchSession")) ?? {};
+
+  const getScratchSession = async () => {
+    const { scratchSession } = (await chrome.storage.session?.get("scratchSession")) ?? {};
+    return scratchSession;
+  };
+
+  let savedSession;
+  if (firstTime && (savedSession = await getScratchSession())) {
+    console.log("Used cached /session info.");
+    sessionData = savedSession;
+  } else {
+    sessionData = await fetch("https://scratch.mit.edu/session/", {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    })
+      .then((res) => (res.ok ? res : Promise.reject(res)))
+      .then((res) => res.json())
+      .catch(() => {
+        // This could happen if there was no internet connection or Scratch is down
+        // Either way, recheck after a minute.
+        setTimeout(checkSession, 60000);
+        // Empty user
+        return {};
+      });
+    chrome.storage.session?.set({ scratchSession: sessionData });
+  }
+  const isLoggedIn = Boolean(sessionData.user);
+  const { username, id: userId, token: xToken } = sessionData.user || {};
 
   const scratchLang = (await getCookieValue("scratchlanguage")) || navigator.language;
-
-  if (firstTime && scratchSession) {
-    console.log("Used cached /session info.");
-    json = scratchSession;
-  } else {
-    try {
-      res = await fetch("https://scratch.mit.edu/session/", {
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-        },
-      });
-      json = await res.json();
-      chrome.storage.session?.set({ scratchSession: json });
-    } catch (err) {
-      console.warn(err);
-      json = {};
-      // If Scratch is down, or there was no internet connection, recheck soon:
-      if ((res && !res.ok) || !res) {
-        isChecking = false;
-        setTimeout(checkSession, 60000);
-        scratchAddons.globalState.auth = {
-          isLoggedIn: false,
-          username: null,
-          userId: null,
-          xToken: null,
-          csrfToken: null,
-          scratchLang,
-        };
-        return;
-      }
-    }
-  }
   const csrfToken = await getCookieValue("scratchcsrftoken");
+
   scratchAddons.globalState.auth = {
-    isLoggedIn: Boolean(json.user),
-    username: json.user ? json.user.username : null,
-    userId: json.user ? json.user.id : null,
-    xToken: json.user ? json.user.token : null,
+    isLoggedIn,
+    username,
+    userId,
+    xToken,
     csrfToken,
     scratchLang,
   };
+  console.log(scratchAddons.globalState.auth);
   isChecking = false;
 }
 
