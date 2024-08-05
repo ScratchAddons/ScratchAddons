@@ -125,18 +125,33 @@ export default async function ({ addon, console, msg }) {
       text.innerHTML = text.innerHTML.replace(/&nbsp;/g, " ");
     });
 
+    const groupBy = (arr, callback) => {
+      // This is a rough Object.groupBy polyfill
+      return arr.reduce((acc = {}, ...args) => {
+        const key = callback(...args);
+        acc[key] ??= [];
+        acc[key].push(args[0]);
+        return acc;
+      }, {});
+    };
+
+    const externalImages = /*Object.*/ groupBy(Array.from(svg.querySelectorAll("image")), (item) => {
+      const iconUrl = item.getAttribute("xlink:href");
+      if (iconUrl.startsWith("data:")) return "data:";
+      else return iconUrl;
+    });
+    delete externalImages["data:"];
+
     // replace external images with data URIs
     await Promise.all(
-      Array.from(svg.querySelectorAll("image")).map(async (item) => {
-        const iconUrl = item.getAttribute("xlink:href");
-        if (iconUrl.startsWith("data:")) return;
+      Object.keys(externalImages).map(async (iconUrl) => {
         const blob = await (await fetch(iconUrl)).blob();
         const reader = new FileReader();
         const dataUri = await new Promise((resolve) => {
           reader.addEventListener("load", () => resolve(reader.result));
           reader.readAsDataURL(blob);
         });
-        item.setAttribute("xlink:href", dataUri);
+        externalImages[iconUrl].forEach((item) => item.setAttribute("xlink:href", dataUri));
       })
     );
     if (!isExportPNG) {

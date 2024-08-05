@@ -37,6 +37,9 @@ const comlinkIframe3 = document.getElementById("scratchaddons-iframe-3");
 const comlinkIframe4 = document.getElementById("scratchaddons-iframe-4");
 const _cs_ = Comlink.wrap(Comlink.windowEndpoint(comlinkIframe2.contentWindow, comlinkIframe1.contentWindow));
 
+const isScratchGui =
+  location.origin === "https://scratchfoundation.github.io" || ["8601", "8602"].includes(location.port);
+
 const page = {
   _globalState: null,
   get globalState() {
@@ -56,24 +59,13 @@ const page = {
   set dataReady(val) {
     this._dataReady = val;
     onDataReady(); // Assume set to true
-    this.refetchSession();
+    this.refetchSession(true);
   },
 
   runAddonUserscripts, // Gets called by cs.js when addon enabled late
 
   fireEvent(info) {
     if (info.addonId) {
-      if (info.name === "disabled") {
-        document.documentElement.style.setProperty(
-          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayNoneWhileDisabledValue`,
-          "none"
-        );
-      } else if (info.name === "reenabled") {
-        document.documentElement.style.removeProperty(
-          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayNoneWhileDisabledValue`
-        );
-      }
-
       // Addon specific events, like settings change and self disabled
       const eventTarget = scratchAddons.eventTargets[info.target].find(
         (eventTarget) => eventTarget._addonId === info.addonId
@@ -87,28 +79,53 @@ const page = {
     }
   },
   isFetching: false,
-  async refetchSession() {
-    if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601") return;
-    let res;
-    let d;
-    if (this.isFetching) return;
-    this.isFetching = true;
-    scratchAddons.eventTargets.auth.forEach((auth) => auth._refresh());
-    try {
-      res = await fetch("/session/", {
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-        },
-      });
-      d = await res.json();
-    } catch (e) {
-      d = {};
-      scratchAddons.console.warn("Session fetch failed: ", e);
-      if ((res && !res.ok) || !res) setTimeout(() => this.refetchSession(), 60000);
+  async refetchSession(firstTime = false) {
+    if (isScratchGui) return;
+    const isScratchR2 =
+      !document.querySelector("meta[name='format-detection']") &&
+      document.querySelector("script[type='text/javascript']");
+    if (!firstTime && isScratchR2) {
+      // We assume this function always gets called with firstTime:true at least once.
+      // scratchr2 pages do not support logging in/out without a page reload.
+      // Why even bother to check auth again?
+      return;
     }
-    scratchAddons.session = d;
-    scratchAddons.eventTargets.auth.forEach((auth) => auth._update(d));
-    this.isFetching = false;
+
+    const refreshFn = async () => {
+      let res;
+      let d;
+      if (this.isFetching) return;
+      this.isFetching = true;
+      if (firstTime && window.__scratchAddonsSessionRes?.loaded) {
+        d = window.__scratchAddonsSessionRes.session;
+      } else {
+        try {
+          res = await fetch("/session/", {
+            headers: {
+              "X-Requested-With": "XMLHttpRequest",
+            },
+          });
+          d = await res.json();
+        } catch (e) {
+          d = {};
+          scratchAddons.console.warn("Session fetch failed: ", e);
+          if ((res && !res.ok) || !res) setTimeout(() => this.refetchSession(), 60000);
+        }
+      }
+      scratchAddons.session = d;
+      scratchAddons.eventTargets.auth.forEach((auth) => auth._update(d));
+      this.isFetching = false;
+    };
+
+    let calledFn = false;
+    const refreshFnOnce = () => {
+      if (!calledFn) {
+        calledFn = true;
+        refreshFn();
+      }
+    };
+
+    scratchAddons.eventTargets.auth.forEach((auth) => auth._refresh(refreshFnOnce));
   },
 };
 Comlink.expose(page, Comlink.windowEndpoint(comlinkIframe4.contentWindow, comlinkIframe3.contentWindow));
@@ -197,8 +214,7 @@ function onDataReady() {
 }
 
 function bodyIsEditorClassCheck() {
-  if (location.origin === "https://scratchfoundation.github.io" || location.port === "8601")
-    return document.body.classList.add("sa-body-editor");
+  if (isScratchGui) return document.body.classList.add("sa-body-editor");
   const pathname = location.pathname.toLowerCase();
   const split = pathname.split("/").filter(Boolean);
   if (!split[0] || split[0] !== "projects") return;
@@ -280,7 +296,6 @@ function loadClasses() {
 const isProject =
   location.pathname.split("/")[1] === "projects" &&
   !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
-const isScratchGui = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
 if (isScratchGui || isProject) {
   // Stylesheets are considered to have loaded if this element exists
   const elementSelector = isScratchGui ? "div[class*=index_app_]" : ":root > body > .ReactModalPortal";

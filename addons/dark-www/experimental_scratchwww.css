@@ -4,7 +4,8 @@ body {
   background-color: var(--darkWww-page);
   color-scheme: var(--darkWww-page-colorScheme);
 }
-.sa-body-editor {
+.sa-body-editor,
+[class*="stage-wrapper_stage-canvas-wrapper_"] {
   /* If website dark mode is enabled and editor dark mode
   is disabled, inputs and scrollbars in the editor should
   have a light background. */
@@ -497,6 +498,7 @@ body:not(.sa-body-editor) .formik-input:focus,
 #footer .inner .media li img {
   filter: var(--darkWww-button-filter);
 }
+.banner-wrapper .banner-button img /* "Choose a tutorial" icon */,
 .forms-close-button img,
 .os-chooser .button:not(.active) img {
   filter: none;

@@ -1,3 +1,5 @@
+import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
+
 export default async function ({ addon, msg, console }) {
   await addon.tab.loadScript("/libraries/thirdparty/cs/tinycolor-min.js");
 
@@ -70,16 +72,8 @@ export default async function ({ addon, msg, console }) {
     return originalRender.call(this, opt_bubble);
   };
 
-  function updateWorkspaceBlocks() {
-    const workspace = addon.tab.traps.getWorkspace();
-    ScratchBlocks.Events.disable();
-    ScratchBlocks.Xml.clearWorkspaceAndLoadFromXml(ScratchBlocks.Xml.workspaceToDom(workspace), workspace);
-    workspace.toolboxRefreshEnabled_ = true;
-    ScratchBlocks.Events.enable();
-  }
-
-  if (addon.self.enabledLate) updateWorkspaceBlocks();
-  addon.self.addEventListener("disabled", updateWorkspaceBlocks);
-  addon.self.addEventListener("reenabled", updateWorkspaceBlocks);
-  addon.settings.addEventListener("change", updateWorkspaceBlocks);
+  if (addon.self.enabledLate) updateAllBlocks(addon.tab, { updateFlyout: false });
+  addon.self.addEventListener("disabled", () => updateAllBlocks(addon.tab, { updateFlyout: false }));
+  addon.self.addEventListener("reenabled", updateAllBlocks(addon.tab, { updateFlyout: false }));
+  addon.settings.addEventListener("change", updateAllBlocks(addon.tab, { updateFlyout: false }));
 }
