@@ -26,7 +26,7 @@ async function getDefaultStoreId() {
 (async function () {
   // If this key wasn't made in the storage, it's likely the first time this code has ever ran.
   // This can also run if a fetch to /session failed and a refetch it needed.
-  const {checkedSession} = await chrome.storage.session?.get("checkedSession") ?? {};
+  const { checkedSession } = (await chrome.storage.session?.get("checkedSession")) ?? {};
 
   const defaultStoreId = await getDefaultStoreId();
   console.log("Default cookie store ID: ", defaultStoreId);
