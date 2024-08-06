@@ -29,11 +29,11 @@ async function getDefaultStoreId() {
   const { checkedSession } = (await chrome.storage.session?.get("checkedSession")) ?? {};
 
   scratchAddons.cookieStoreId = await getDefaultStoreId();
-  console.log("Default cookie store ID: ", defaultStoreId);
+  console.log("Default cookie store ID: ", scratchAddons.cookieStoreId);
   // This won't actually do anything if the service worker falls asleep and wakes up
   // since one of the checkSessions above will run, setting isCheckingSession to true.
   await checkSession(!checkedSession);
-  startCache(defaultStoreId);
+  startCache(scratchAddons.cookieStoreId);
 })();
 
 chrome.alarms.onAlarm.addListener((alarm) => {
