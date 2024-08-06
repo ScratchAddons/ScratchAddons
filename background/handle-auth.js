@@ -24,11 +24,26 @@ async function getDefaultStoreId() {
 }
 
 (async function () {
+  // If this key wasn't made in the storage, it's likely the first time this code has ever ran.
+  // This can also run if a fetch to /session failed and a refetch it needed.
+  const {checkedSession} = await chrome.storage.session?.get("checkedSession") ?? {};
+
   const defaultStoreId = await getDefaultStoreId();
   console.log("Default cookie store ID: ", defaultStoreId);
-  await checkSession(true);
+  // This won't actually do anything if the service worker falls asleep and wakes up
+  // since one of the checkSessions above will run, setting isCheckingSession to true.
+  await checkSession(!checkedSession);
   startCache(defaultStoreId);
 })();
+
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === "recheckSession") {
+    console.log("Rechecking session...");
+    // If the service worker is just waking up, it's likely the checkSession above will run and this won't.
+    // That's because isCheckingSession will be true and stop this one.
+    checkSession(true);
+  }
+});
 
 // We store cookies.onChanged events here. We'll try to process them all, but there's no guarantee.
 const cookieQueue = [];
@@ -128,22 +143,22 @@ function getCookieValue(name) {
   });
 }
 
-let isChecking = false;
-
-async function checkSession(firstTime = false) {
+let isCheckingSession = false;
+async function checkSession(forceFetch = false) {
   let sessionData = {};
-  if (isChecking) return;
-  isChecking = true;
+  if (isCheckingSession) return;
+  isCheckingSession = true;
 
-  const getScratchSession = async () => {
+  const getStorageSession = async () => {
     const { scratchSession } = (await chrome.storage.session?.get("scratchSession")) ?? {};
-    return scratchSession;
+    return scratchSession || {};
   };
 
-  let savedSession;
-  if (firstTime && (savedSession = await getScratchSession())) {
+  // If the service worker is running this function on wake up, use cached data.
+  // Otherwise, try fetching /session and store session data.
+  if (!forceFetch) {
     console.log("Used cached /session info.");
-    sessionData = savedSession;
+    sessionData = await getStorageSession();
   } else {
     sessionData = await fetch("https://scratch.mit.edu/session/", {
       headers: {
@@ -152,12 +167,13 @@ async function checkSession(firstTime = false) {
     })
       .then((res) => (res.ok ? res : Promise.reject(res)))
       .then((res) => res.json())
-      .catch(() => {
+      .catch(async () => {
         // This could happen if there was no internet connection or Scratch is down
         // Either way, recheck after a minute.
-        setTimeout(checkSession, 60000);
-        // Empty user
-        return {};
+        await chrome.alarms.create("recheckSession", { delayInMinutes: 1 });
+        await chrome.storage.session?.set({ checkedSession: false });
+        isCheckingSession = false;
+        throw "Fetch to /session failed. Retrying in one minute.";
       });
     chrome.storage.session?.set({ scratchSession: sessionData });
   }
@@ -175,8 +191,9 @@ async function checkSession(firstTime = false) {
     csrfToken,
     scratchLang,
   };
-  console.log(scratchAddons.globalState.auth);
-  isChecking = false;
+
+  await chrome.storage.session?.set({ checkedSession: true });
+  isCheckingSession = false;
 }
 
 function notify(storeIds) {
