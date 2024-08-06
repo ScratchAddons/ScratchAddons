@@ -7,20 +7,20 @@ const promisify =
   (...args) =>
     new Promise((resolve) => callbackFn(...args, resolve));
 
+const CHROME_DEFAULT = "0";
+const FIFEFOX_DEFAULT = "firefox-default";
 async function getDefaultStoreId() {
-  const CHROME_DEFAULT = "0";
-  const FIFEFOX_DEFAULT = "firefox-default";
   const cookieStores = await chrome.cookies.getAllCookieStores();
+  // This should technically never occur.
   if (cookieStores.length === 0) throw "Unable to find a default cookie store!";
+  // Usually the chrome/ff default is the first in the list, but just in case...
   if (cookieStores.some((store) => store.id === CHROME_DEFAULT)) {
-    // Chrome
-    return (scratchAddons.cookieStoreId = CHROME_DEFAULT);
+    return CHROME_DEFAULT;
   }
   if (cookieStores.some((store) => store.id === FIFEFOX_DEFAULT)) {
-    // Firefox
-    return (scratchAddons.cookieStoreId = FIFEFOX_DEFAULT);
+    return FIFEFOX_DEFAULT;
   }
-  return (scratchAddons.cookieStoreId = cookieStores[0].id);
+  return cookieStores[0].id; // Just in case
 }
 
 (async function () {
@@ -28,7 +28,7 @@ async function getDefaultStoreId() {
   // This can also run if a fetch to /session failed and a refetch it needed.
   const { checkedSession } = (await chrome.storage.session?.get("checkedSession")) ?? {};
 
-  const defaultStoreId = await getDefaultStoreId();
+  scratchAddons.cookieStoreId = await getDefaultStoreId();
   console.log("Default cookie store ID: ", defaultStoreId);
   // This won't actually do anything if the service worker falls asleep and wakes up
   // since one of the checkSessions above will run, setting isCheckingSession to true.
@@ -45,11 +45,13 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   }
 });
 
-// We store cookies.onChanged events here. We'll try to process them all, but there's no guarantee.
+// We store cookies.onChanged events here.
 const cookieQueue = [];
 
+// The amount of time (ms) before we run process code after cookies are changed.
+// Every time a new cookie is added to the queue, we reset the timeout.
+const TIMEOUT_DURATION = 500;
 let processTimeout;
-const TIMEOUT_INTERVAL = 500;
 let isProcessing = false;
 
 const addToQueue = (item) => {
@@ -59,6 +61,9 @@ const addToQueue = (item) => {
     return;
   }
 
+  // This is so we never run into infinite loops.
+  // It is possible that we miss important cookie changes.
+  // But it's worth it. Trust me.
   if (isProcessing) {
     console.log("ignored cookies due to processing");
     return;
@@ -66,13 +71,14 @@ const addToQueue = (item) => {
 
   const { cookie } = item;
   if (cookie.name !== "scratchsessionsid" && cookie.name !== "scratchcsrftoken") {
-    // Ignore this event
+    // These are the only two cookies scratch manages that triggers cookies.onChanged.
+    // Any other cookies are made by other programs/the user and should be ignored.
     return;
   }
 
   cookieQueue.push(cookie);
   clearTimeout(processTimeout);
-  processTimeout = setTimeout(processCookieChanges, TIMEOUT_INTERVAL);
+  processTimeout = setTimeout(processCookieChanges, TIMEOUT_DURATION);
 };
 
 const oldCookies = {};
@@ -126,21 +132,18 @@ const processCookieChanges = () => {
   // Notify open tabs and popups
   notify(Object.keys(cookieChangesByStore));
 };
+
+// Note scratchlanguage is not marked as "secure" and does not trigger cookies.onChanged.
+// Thus would never possibily get added to the queue.
 chrome.cookies.onChanged.addListener(addToQueue);
 
-function getCookieValue(name) {
-  return new Promise((resolve) => {
-    chrome.cookies.get(
-      {
-        url: "https://scratch.mit.edu/",
-        name,
-      },
-      (cookie) => {
-        if (cookie && cookie.value) resolve(cookie.value);
-        else resolve(null);
-      }
-    );
+// It's good to know that chrome.cookies works without internet connection.
+const getCookieValue = async (name) => {
+  const cookie = await chrome.cookies.get({
+    url: "https://scratch.mit.edu/",
+    name,
   });
+  return (cookie && cookie.value) || null;
 }
 
 let isCheckingSession = false;
