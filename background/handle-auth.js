@@ -144,7 +144,7 @@ const getCookieValue = async (name) => {
     name,
   });
   return (cookie && cookie.value) || null;
-}
+};
 
 let isCheckingSession = false;
 async function checkSession(forceFetch = false) {
