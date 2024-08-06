@@ -1,0 +1,39 @@
+{
+  "name": "Remove default sounds in sprites",
+  "description": "Removes the default sounds in sprites when first loading an empty project and when adding a new sprite through the \"Choose a Sprite\", \"Paint\", or \"Surprise\" options.",
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://github.com/TheColaber"
+    }
+  ],
+  "tags": ["editor", "recommended"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "settings": [
+    {
+      "id": "delete",
+      "type": "select",
+      "default": "pop",
+      "name": "Delete",
+      "potentialValues": [
+        {
+          "id": "all",
+          "name": "All sounds"
+        },
+        {
+          "id": "pop",
+          "name": "Pop sound"
+        }
+      ]
+    }
+  ],
+  "versionAdded": "1.39.0"
+}
