@@ -1,5 +1,5 @@
 {
-  "name": "Remove default sounds in sprites",
+  "name": "Remove default \"pop\" sound in sprites",
   "description": "Removes the default sounds in sprites when first loading an empty project and when adding a new sprite through the \"Choose a Sprite\", \"Paint\", or \"Surprise\" options.",
   "credits": [
     {
