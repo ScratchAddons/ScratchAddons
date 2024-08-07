@@ -46,6 +46,9 @@ async function getLocales(addon) {
   return lang;
 }
 export default async function ({ addon, msg }) {
+  const newSB = !document.querySelector(`[src*="scratchblocks.js"]`);
+  if (newSB) return; // Return early for when Scratch bumps scratchblocks versions (it would use scratchblocks.min.js)
+
   window.scratchAddons._scratchblocks3Enabled = true;
 
   let languages = ["en"];
