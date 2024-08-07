@@ -1,15 +1,9 @@
 import minifySettings from "../../libraries/common/minify-settings.js";
 
-const promisify =
-  (callbackFn) =>
-  (...args) =>
-    new Promise((resolve) => callbackFn(...args, resolve));
-
 let handleConfirmClicked = null;
 
 export const serializeSettings = async () => {
-  const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
-  const storedSettings = await syncGet([
+  const storedSettings = await chrome.storage.sync.get([
     "globalTheme",
     "addonSettings1",
     "addonSettings2",
@@ -39,9 +33,7 @@ export const serializeSettings = async () => {
 
 export const deserializeSettings = async (str, manifests, confirmElem, { browserLevelPermissions }) => {
   const obj = JSON.parse(str);
-  const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
-  const syncSet = promisify(chrome.storage.sync.set.bind(chrome.storage.sync));
-  const { addonsEnabled, ...storageItems } = await syncGet([
+  const { addonsEnabled, ...storageItems } = await chrome.storage.sync.get([
     "addonSettings1",
     "addonSettings2",
     "addonSettings3",
@@ -76,7 +68,7 @@ export const deserializeSettings = async (str, manifests, confirmElem, { browser
   handleConfirmClicked = async () => {
     handleConfirmClicked = null;
     if (Object.keys(pendingPermissions).length) {
-      const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({
+      const granted = await chrome.permissions.request({
         permissions: Object.values(pendingPermissions).flat(),
       });
       Object.keys(pendingPermissions).forEach((addonId) => {
@@ -84,7 +76,7 @@ export const deserializeSettings = async (str, manifests, confirmElem, { browser
       });
     }
     const prerelease = chrome.runtime.getManifest().version_name.endsWith("-prerelease");
-    await syncSet({
+    await chrome.storage.sync.set({
       globalTheme: !!obj.core.lightTheme,
       addonsEnabled,
       ...minifySettings(addonSettings, prerelease ? null : manifests),
