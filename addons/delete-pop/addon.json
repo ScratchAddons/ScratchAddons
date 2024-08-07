@@ -22,15 +22,15 @@
       "id": "delete",
       "type": "select",
       "default": "pop",
-      "name": "Delete",
+      "name": "Delete...",
       "potentialValues": [
         {
-          "id": "all",
-          "name": "All sounds"
+          "id": "pop",
+          "name": "Only the \"pop\" sound"
         },
         {
-          "id": "pop",
-          "name": "Pop sound"
+          "id": "all",
+          "name": "All default sounds"
         }
       ]
     }
