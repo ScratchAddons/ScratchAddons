@@ -109,7 +109,13 @@ export default async function ({ addon, console }) {
     const params = { method: "POST", body: form, credentials: "omit" };
 
     let html = await fetch("https://scratch.mit.edu/i18n/setlang/", params);
+    let count = 0;
+
     while (!html.ok) {
+      count++;
+      if (count > 3) {
+        throw new Error("Max retries exceeded while fetching https://scratch.mit.edu/i18n/setlang/");
+      }
       html = await fetch("https://scratch.mit.edu/i18n/setlang/", params);
     }
 
