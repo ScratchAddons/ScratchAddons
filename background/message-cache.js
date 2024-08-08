@@ -7,8 +7,8 @@ let duringBadgeUpdate = false;
 
 const promisify =
   (callbackFn) =>
-  (...args) =>
-    new Promise((resolve) => callbackFn(...args, resolve));
+    (...args) =>
+      new Promise((resolve) => callbackFn(...args, resolve));
 
 const ALARM_NAME = "fetchMessages";
 const BADGE_ALARM_NAME = "updateBadge";
@@ -30,22 +30,27 @@ export async function updateBadge(defaultStoreId) {
   const isLoggedIn = scratchAddons.globalState.auth.isLoggedIn;
   let db;
   try {
-    if (
-      scratchAddons.localState.addonsEnabled["msg-count-badge"] &&
-      (badgeSettings.showOffline || isLoggedIn) &&
-      !scratchAddons.muted
-    ) {
+    if (badgeSettings.showOffline || isLoggedIn) {
       db = await MessageCache.openDatabase();
       const count = await db.get("count", defaultStoreId);
-      // Do not show 0, unless that 0 means logged out
-      if (count || !isLoggedIn) {
-        const color = isLoggedIn ? badgeSettings.color : "#dd2222";
-        const text = isLoggedIn ? String(count) : "?";
-        // The badge will show incorrect message count in other auth contexts.
-        // Blocked on Chrome implementing store ID-based tab query
-        await promisify(chrome.action.setBadgeBackgroundColor.bind(chrome.action))({ color });
-        await promisify(chrome.action.setBadgeText.bind(chrome.action))({ text });
-        return;
+      const tooltipCount = isLoggedIn ? (count > 0 ? ` (${String(count)})` : "") : " (?)";
+      chrome.action.setTitle({
+        title: `${chrome.i18n.getMessage("extensionName")}${tooltipCount}`,
+      });
+      if (
+        scratchAddons.localState.addonsEnabled["msg-count-badge"] &&
+        !scratchAddons.muted
+      ) {
+        // Do not show 0, unless that 0 means logged out
+        if (count || !isLoggedIn) {
+          const color = isLoggedIn ? badgeSettings.color : "#dd2222";
+          const text = isLoggedIn ? String(count) : "?";
+          // The badge will show incorrect message count in other auth contexts.
+          // Blocked on Chrome implementing store ID-based tab query
+          await promisify(chrome.action.setBadgeBackgroundColor.bind(chrome.action))({ color });
+          await promisify(chrome.action.setBadgeText.bind(chrome.action))({ text });
+          return;
+        }
       }
     }
   } catch (e) {
