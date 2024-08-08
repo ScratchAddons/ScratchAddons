@@ -64,7 +64,7 @@ const addToQueue = (item) => {
   // This is so we never run into infinite loops.
   // It is possible that we miss important cookie changes.
   // But it's worth it. Trust me.
-  if (isProcessing) {
+  if (isProcessing || isCheckingSession) {
     console.log("ignored cookies due to processing");
     return;
   }
@@ -76,7 +76,7 @@ const addToQueue = (item) => {
     return;
   }
 
-  cookieQueue.push(cookie);
+  cookieQueue.push(item);
   clearTimeout(processTimeout);
   processTimeout = setTimeout(processCookieChanges, TIMEOUT_DURATION);
 };
@@ -88,15 +88,18 @@ const processCookieChanges = () => {
   const cookieChangesByStore = {};
   // Reverse the array since the last cookie changes are the most recent ones.
   for (const change of cookieQueue.reverse()) {
-    const changes = cookieChangesByStore[change.storeId] || {};
+    const { cookie } = change;
+    const changes = cookieChangesByStore[cookie.storeId] || {};
     // Check if we already found a more recent cookie
     // Note the only cookie names possible are "scratchsessionsid" or "scratchcsrftoken"
-    if (changes[change.name]) continue;
+    if (changes[cookie.name]) continue;
+    // But if the cookie has been removed, set an empty value
+    if (change.removed) cookie.value = "";
     // Check if this cookie changed from the last time
-    if (oldCookies[change.name] === change.value) continue;
-    changes[change.name] = change;
-    oldCookies[change.name] = change.value;
-    cookieChangesByStore[change.storeId] = changes;
+    if (oldCookies[cookie.name] === cookie.value) continue;
+    changes[cookie.name] = cookie;
+    oldCookies[cookie.name] = cookie.value;
+    cookieChangesByStore[cookie.storeId] = changes;
   }
   // Reset Queue
   cookieQueue.length = 0;
@@ -108,7 +111,7 @@ const processCookieChanges = () => {
       // Recheck session if the changed cookie occurs in the default store.
       // We don't care if it happens in the other stores since currently we only use session data from default
       processes.push(
-        checkSession().then(() => {
+        checkSession(true).then(() => {
           // The session id changing means we need to refetch all messages
           // That's why the second parameter of startCache is set to true, to force clear.
           if (changes.scratchsessionsid) {
@@ -148,21 +151,22 @@ const getCookieValue = async (name) => {
 
 let isCheckingSession = false;
 async function checkSession(forceFetch = false) {
-  let sessionData = {};
+  // In case the alarm exists, clear it so we don't have an unnessary call.
+  await chrome.alarms.clear("recheckSession");
+  let sessionData;
   if (isCheckingSession) return;
   isCheckingSession = true;
-
-  const getStorageSession = async () => {
-    const { scratchSession } = (await chrome.storage.session?.get("scratchSession")) ?? {};
-    return scratchSession || {};
-  };
 
   // If the service worker is running this function on wake up, use cached data.
   // Otherwise, try fetching /session and store session data.
   if (!forceFetch) {
-    console.log("Used cached /session info.");
-    sessionData = await getStorageSession();
-  } else {
+    const { scratchSession } = (await chrome.storage.session?.get("scratchSession")) ?? {};
+    sessionData = scratchSession;
+    if (sessionData) {
+      console.log("Used cached /session info.");
+    }
+  }
+  if (!sessionData) {
     sessionData = await fetch("https://scratch.mit.edu/session/", {
       headers: {
         "X-Requested-With": "XMLHttpRequest",
@@ -172,11 +176,14 @@ async function checkSession(forceFetch = false) {
       .then((res) => res.json())
       .catch(async () => {
         // This could happen if there was no internet connection or Scratch is down
-        // Either way, recheck after a minute.
-        await chrome.alarms.create("recheckSession", { delayInMinutes: 1 });
-        await chrome.storage.session?.set({ checkedSession: false });
+        // Either way, recheck after a certain period of time.
+        const { recheckDelay = 1 } = (await chrome.storage.session?.get(["scratchSession", "recheckDelay"])) ?? {};
+        await chrome.alarms.create("recheckSession", { delayInMinutes: recheckDelay });
+        // The delays should go 1 min, 2 min, 4 min, 8 min, 16 min, 32 min, 64 min and should cap at 64 minutes.
+        const delayMultiply = recheckDelay > 33 ? 1 : 2;
+        await chrome.storage.session?.set({ checkedSession: false, recheckDelay: recheckDelay * delayMultiply });
         isCheckingSession = false;
-        throw "Fetch to /session failed. Retrying in one minute.";
+        throw `Fetch to /session failed. Retrying in ${recheckDelay} minutes.`;
       });
     chrome.storage.session?.set({ scratchSession: sessionData });
   }
