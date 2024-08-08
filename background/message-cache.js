@@ -7,8 +7,8 @@ let duringBadgeUpdate = false;
 
 const promisify =
   (callbackFn) =>
-    (...args) =>
-      new Promise((resolve) => callbackFn(...args, resolve));
+  (...args) =>
+    new Promise((resolve) => callbackFn(...args, resolve));
 
 const ALARM_NAME = "fetchMessages";
 const BADGE_ALARM_NAME = "updateBadge";
@@ -37,10 +37,7 @@ export async function updateBadge(defaultStoreId) {
       chrome.action.setTitle({
         title: `${chrome.i18n.getMessage("extensionName")}${tooltipCount}`,
       });
-      if (
-        scratchAddons.localState.addonsEnabled["msg-count-badge"] &&
-        !scratchAddons.muted
-      ) {
+      if (scratchAddons.localState.addonsEnabled["msg-count-badge"] && !scratchAddons.muted) {
         // Do not show 0, unless that 0 means logged out
         if (count || !isLoggedIn) {
           const color = isLoggedIn ? badgeSettings.color : "#dd2222";
