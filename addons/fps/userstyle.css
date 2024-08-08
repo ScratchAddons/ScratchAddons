@@ -6,8 +6,12 @@
   padding: 0.25rem;
   user-select: none;
   color: #0fbd8c;
-  display: flex;
+  display: none;
   align-items: center;
+}
+
+.fps-counter.show {
+  display: flex;
 }
 
 .sa-small-stage .fps-counter {

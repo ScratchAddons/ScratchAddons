@@ -1,34 +1,49 @@
 import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
 
 export default async function ({ addon, console, msg }) {
-  await new Promise((resolve) => {
-    if (addon.tab.traps.vm.editingTarget) return resolve();
-    addon.tab.traps.vm.runtime.once("PROJECT_LOADED", resolve);
-  });
-
-  const renderer = addon.tab.traps.vm.runtime.renderer;
+  const { vm } = addon.tab.traps;
+  const { runtime } = vm;
+  if (!vm.editingTarget) {
+    await new Promise((resolve) => runtime.once("PROJECT_LOADED", resolve));
+  }
 
   let fpsCounterElement = document.createElement("span");
   fpsCounterElement.className = "fps-counter";
-
   addon.tab.displayNoneWhileDisabled(fpsCounterElement);
   addSmallStageClass();
 
   const renderTimes = [];
-  var fps = "?";
-  var lastFps = 0;
-  var firstTime = -1;
+  let lastFps = 0;
+  let wasRunning = false;
 
-  renderer.ogDraw = renderer.draw;
+  const { renderer } = runtime;
+  const _draw = renderer.draw;
   renderer.draw = function () {
-    const now = Date.now();
-    while (renderTimes.length > 0 && renderTimes[0] <= now - 2000) renderTimes.shift();
+    _draw.call(this);
+
+    // Every time this function is ran, store the current time and remove times from half a second ago
+    const now = runtime.currentMSecs;
+    while (renderTimes.length > 0 && renderTimes[0] <= now - 500) renderTimes.shift();
+    // Calculate FPS times of each render frame.
+    const allFps = renderTimes.map((time, i) => 1000 / ((renderTimes[i + 1] ?? now) - time));
     renderTimes.push(now);
-    fps = Math.floor(renderTimes.length / 2);
-    if (firstTime === -1) firstTime = now;
-    if (now - firstTime <= 2500) fps = "?";
+    let fps = 0;
+    if (allFps.length !== 0) {
+      // Average FPS times.
+      fps = Math.round(allFps.reduce((prev, curr) => prev + curr, 0) / allFps.length);
+    }
+
+    // Show/Hide the element based on if there are any threads running
+    if (runtime.threads.length === 0) {
+      if (wasRunning) fpsCounterElement.classList.remove("show");
+      wasRunning = false;
+      return;
+    }
+    if (!wasRunning) fpsCounterElement.classList.add("show");
+    wasRunning = true;
+
+    // Update element text
     if (fps !== lastFps) fpsCounterElement.innerText = msg("fpsCounter", { fps: (lastFps = fps) });
-    renderer.ogDraw();
   };
 
   while (true) {
