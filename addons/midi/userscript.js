@@ -267,6 +267,14 @@ export default async function ({ addon, console, msg }) {
         }
       }
     };
+
+    const oldFlyoutButtonDispose = Blockly.FlyoutButton.prototype.dispose;
+    Blockly.FlyoutButton.prototype.dispose = function () {
+      oldFlyoutButtonDispose.call(this);
+      if (this._saId === "music") {
+        this._saMidiButton.dispose();
+      }
+    }
   }));
 
   // Project page
