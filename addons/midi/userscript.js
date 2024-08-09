@@ -162,6 +162,25 @@ export default async function ({ addon, console, msg }) {
     }
   };
 
+  const createDropdownContent = () => {
+    const noneItem = createDropdownItem(msg("none"));
+    midiDropdown.appendChild(noneItem);
+    noneItem.addEventListener("click", () => {
+      output = null;
+      updateSelection();
+    });
+    for (const midiOutput of midi.outputs.values()) {
+      const dropdownItem = createDropdownItem(midiOutput.name);
+      midiDropdown.appendChild(dropdownItem);
+      dropdownItem.dataset.id = midiOutput.id;
+      dropdownItem.addEventListener("click", () => {
+        output = midiOutput;
+        updateSelection();
+      });
+    }
+    updateSelection();
+  }
+
   const toggleMidiDropdown = async (button, inEditor) => {
     if (midiDropdown) {
       closeMidiDropdown();
@@ -191,24 +210,9 @@ export default async function ({ addon, console, msg }) {
     if (midiBlocked) {
       midiDropdown.classList.add("sa-midi-error");
       midiDropdown.textContent = msg("permission-error");
-      return;
+    } else {
+      createDropdownContent();
     }
-    const noneItem = createDropdownItem(msg("none"));
-    midiDropdown.appendChild(noneItem);
-    noneItem.addEventListener("click", () => {
-      output = null;
-      updateSelection();
-    });
-    for (const midiOutput of midi.outputs.values()) {
-      const dropdownItem = createDropdownItem(midiOutput.name);
-      midiDropdown.appendChild(dropdownItem);
-      dropdownItem.dataset.id = midiOutput.id;
-      dropdownItem.addEventListener("click", () => {
-        output = midiOutput;
-        updateSelection();
-      });
-    }
-    updateSelection();
   };
 
   // Editor
