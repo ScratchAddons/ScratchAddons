@@ -11,7 +11,7 @@ export default async function ({ addon, console }) {
   const stageWrapper = await addon.tab.waitForElement('div[class*="stage-wrapper_stage-wrapper_"]');
   const alerts = document.querySelector(".project-info-alerts");
 
-  if (addon.settings.get("loading") && !(addon.tab.editorMode === "fullscreen")) {
+  if (addon.settings.get("loading") && addon.tab.editorMode !== "fullscreen") {
     const LoaderBackground = stageWrapper.querySelector('[class*="loader_background_"]');
     // Set with JS to ensure the background color doesn't change before the image loads
     LoaderBackground.style.backgroundColor = "rgba(0, 0, 0, 0.25)";
