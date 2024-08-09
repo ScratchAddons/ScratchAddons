@@ -61,7 +61,7 @@ const DROPDOWN_ICON_MARGIN = 8;
 const DROPDOWN_ICON_Y = 16;
 
 export default async function ({ addon, console, msg }) {
-  const midi = await navigator.requestMIDIAccess({ software: true });
+  let midi = null;
   const channelData = new Array(16).fill().map(() => ({
     instrument: -1,
     noteOffTimeouts: new Map(),
@@ -161,11 +161,12 @@ export default async function ({ addon, console, msg }) {
     }
   };
 
-  const toggleMidiDropdown = (button, inEditor) => {
+  const toggleMidiDropdown = async (button, inEditor) => {
     if (midiDropdown) {
       closeMidiDropdown();
       return;
     }
+    if (!midi) midi = await navigator.requestMIDIAccess({ software: true });
     const buttonPos = button.getBoundingClientRect();
     midiDropdown = Object.assign(document.createElement("ul"), {
       className: `sa-midi-dropdown ${inEditor ? "sa-midi-dropdown-editor" : ""}`,
