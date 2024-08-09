@@ -11,7 +11,7 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "injectAsStyleElt": true,
-  "versionAdded": "1.34.0",
+  "versionAdded": "1.39.0",
   "userstyles": [
     {
       "url": "main.css",
