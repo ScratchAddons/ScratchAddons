@@ -3,10 +3,9 @@ import DomHelpers from "./DomHelpers.js";
 import UndoGroup from "./UndoGroup.js";
 
 export default class DevTools {
-  constructor(addon, msg, m) {
+  constructor(addon, msg) {
     this.addon = addon;
     this.msg = msg;
-    this.m = m;
     /**
      * @type {VirtualMachine}
      */
@@ -49,9 +48,9 @@ export default class DevTools {
     };
 
     let originalMsg = blockly.Msg.CLEAN_UP;
-    if (this.addon.settings.get("enableCleanUpPlus")) blockly.Msg.CLEAN_UP = this.m("clean-plus");
+    if (this.addon.settings.get("enableCleanUpPlus")) blockly.Msg.CLEAN_UP = this.msg("clean-plus");
     this.addon.settings.addEventListener("change", () => {
-      if (this.addon.settings.get("enableCleanUpPlus")) blockly.Msg.CLEAN_UP = this.m("clean-plus");
+      if (this.addon.settings.get("enableCleanUpPlus")) blockly.Msg.CLEAN_UP = this.msg("clean-plus");
       else blockly.Msg.CLEAN_UP = originalMsg;
     });
 
@@ -59,7 +58,7 @@ export default class DevTools {
       (items, block) => {
         items.push({
           enabled: blockly.clipboardXml_,
-          text: this.m("paste"),
+          text: this.msg("paste"),
           separator: true,
           _isDevtoolsFirstItem: true,
           callback: () => {
@@ -87,7 +86,7 @@ export default class DevTools {
         items.push(
           {
             enabled: true,
-            text: this.m("make-space"),
+            text: this.msg("make-space"),
             _isDevtoolsFirstItem: true,
             callback: () => {
               this.doCleanUp(block);
@@ -96,7 +95,7 @@ export default class DevTools {
           },
           {
             enabled: true,
-            text: this.m("copy-all"),
+            text: this.msg("copy-all"),
             callback: () => {
               this.eventCopyClick(block);
             },
@@ -104,14 +103,14 @@ export default class DevTools {
           },
           {
             enabled: true,
-            text: this.m("copy-block"),
+            text: this.msg("copy-block"),
             callback: () => {
               this.eventCopyClick(block, 1);
             },
           },
           {
             enabled: true,
-            text: this.m("cut-block"),
+            text: this.msg("cut-block"),
             callback: () => {
               this.eventCopyClick(block, 2);
             },
@@ -144,7 +143,7 @@ export default class DevTools {
           this.selVarID = block.getVars()[0];
           items.push({
             enabled: true,
-            text: this.m("swap", { var: block.getCategory() === "data" ? this.m("variables") : this.m("lists") }),
+            text: this.msg("swap", { var: block.getCategory() === "data" ? this.msg("variables") : this.msg("lists") }),
             callback: () => {
               let wksp = this.getWorkspace();
               let v = wksp.getVariableById(this.selVarID);
