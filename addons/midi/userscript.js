@@ -65,7 +65,7 @@ export default async function ({ addon, console, msg }) {
   let midiBlocked = false;
   const channelData = new Array(16).fill().map(() => ({
     instrument: -1,
-    noteOffTimeouts: new Map(),
+    notesPlaying: new Map(),
   }));
   const targetChannels = new WeakMap();
   let output = null;
@@ -100,19 +100,22 @@ export default async function ({ addon, console, msg }) {
     const midiNote = note > 127 ? note - 12 : note;
     const velocity = Math.round(127 / 100 * util.target.volume);
     const durationMs = 1000 * durationSec;
-    const noteOffTimeouts = channelData[channel].noteOffTimeouts;
-    const timeoutKey = `${midiInstrument}_${midiNote}`;
-    const noteOffTimeout = noteOffTimeouts.get(timeoutKey);
-    if (typeof noteOffTimeout !== "undefined") {
+    const notesPlaying = channelData[channel].notesPlaying;
+    const key = `${midiInstrument}_${midiNote}`;
+    const entry = notesPlaying.get(key);
+    if (typeof entry !== "undefined") {
       // The same note is already being played
-      clearTimeout(noteOffTimeout);
+      clearTimeout(entry.timeout);
       output.send([MSG_NOTE_OFF + channel, midiNote, 64]);
     }
     output.send([MSG_NOTE_ON + channel, midiNote, velocity]);
-    noteOffTimeouts.set(timeoutKey, setTimeout(() => {
-      output.send([MSG_NOTE_OFF + channel, midiNote, 64]);
-      noteOffTimeouts.delete(timeoutKey);
-    }, durationMs));
+    notesPlaying.set(key, {
+      midiNote,
+      timeout: setTimeout(() => {
+        output.send([MSG_NOTE_OFF + channel, midiNote, 64]);
+        notesPlaying.delete(key);
+      }, durationMs),
+    });
   };
 
   let oldPlayDrum;
@@ -168,21 +171,27 @@ export default async function ({ addon, console, msg }) {
     }
   };
 
+  const setOutput = (newOutput) => {
+    if (output) {
+      for (let channel = 0; channel <= 15; ++channel) {
+        for (let [key, entry] of channelData[channel].notesPlaying) {
+          output.send([MSG_NOTE_OFF + channel, entry.midiNote, 64]);
+        }
+      }
+    }
+    output = newOutput;
+    updateSelection();
+  };
+
   const createDropdownContent = () => {
     const noneItem = createDropdownItem(msg("none"));
     midiDropdown.appendChild(noneItem);
-    noneItem.addEventListener("click", () => {
-      output = null;
-      updateSelection();
-    });
+    noneItem.addEventListener("click", () => setOutput(null));
     for (const midiOutput of midi.outputs.values()) {
       const dropdownItem = createDropdownItem(midiOutput.name);
       midiDropdown.appendChild(dropdownItem);
       dropdownItem.dataset.id = midiOutput.id;
-      dropdownItem.addEventListener("click", () => {
-        output = midiOutput;
-        updateSelection();
-      });
+      dropdownItem.addEventListener("click", () => setOutput(midiOutput));
     }
     updateSelection();
   }
