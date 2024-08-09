@@ -1,7 +1,5 @@
 import { updateBadge } from "./message-cache.js";
 
-const BROWSER_ACTION = globalThis.MANIFEST_VERSION === 2 ? "browser_action" : "action";
-
 const periods = [
   {
     // Unfortunately, users on Chrome 96-99 will not get translations for these strings.
@@ -32,10 +30,12 @@ chrome.storage.local.get("muted", (obj) => {
   scratchAddons.muted = obj.muted;
 });
 
-chrome.contextMenus.removeAll();
+chrome.contextMenus?.removeAll();
 let currentMenuItem = null;
 
-chrome.contextMenus.onClicked.addListener(({ parentMenuItemId, menuItemId }) => {
+// NOTE: chrome.contextMenus equals `undefined` on Firefox for Android!
+
+chrome.contextMenus?.onClicked.addListener(({ parentMenuItemId, menuItemId }) => {
   if (parentMenuItemId === "mute") {
     const mins = Number(menuItemId.split("_")[1]);
     contextMenuMuted();
@@ -47,40 +47,42 @@ chrome.contextMenus.onClicked.addListener(({ parentMenuItemId, menuItemId }) => 
 });
 
 function contextMenuUnmuted() {
+  if (chrome.contextMenus === undefined) return; // Firefox for Android
   if (currentMenuItem === "unmute") chrome.contextMenus.remove("unmute");
   currentMenuItem = "mute";
   chrome.contextMenus.create({
     id: "mute",
     title: (chrome.i18n.getMessage && chrome.i18n.getMessage("muteFor")) || "Do not disturb",
-    contexts: [BROWSER_ACTION],
+    contexts: ["action"],
   });
   for (const period of periods) {
     chrome.contextMenus.create({
       id: `mute_${period.mins}`,
       title: period.name,
       parentId: "mute",
-      contexts: [BROWSER_ACTION],
+      contexts: ["action"],
     });
   }
-  // This seems to be run when the extension is loaded, so we'll just set the right icon here.
-  const prerelease = chrome.runtime.getManifest().version_name.includes("-prerelease");
-  chrome.browserAction.setIcon({
+  chrome.action.setIcon({
     path: {
-      16: prerelease ? chrome.runtime.getURL("images/icon-blue-16.png") : chrome.runtime.getURL("images/icon-16.png"),
-      32: prerelease ? chrome.runtime.getURL("images/icon-blue-32.png") : chrome.runtime.getURL("images/icon-32.png"),
+      16: chrome.runtime.getURL(chrome.runtime.getManifest().icons["16"]),
+      32: chrome.runtime.getURL(chrome.runtime.getManifest().icons["32"]),
     },
   });
 }
 
 function contextMenuMuted() {
+  if (chrome.contextMenus === undefined) return; // Firefox for Android
+  // Note: in theory, this function is unreachable
+  // in FF for Android, but we early-return anyway.
   if (currentMenuItem === "mute") chrome.contextMenus.remove("mute");
   currentMenuItem = "unmute";
   chrome.contextMenus.create({
     id: "unmute",
     title: (chrome.i18n.getMessage && chrome.i18n.getMessage("unmute")) || "Turn off Do not disturb",
-    contexts: [BROWSER_ACTION],
+    contexts: ["action"],
   });
-  chrome.browserAction.setIcon({
+  chrome.action.setIcon({
     path: {
       16: chrome.runtime.getURL("images/icon-gray-16.png"),
       32: chrome.runtime.getURL("images/icon-gray-32.png"),
