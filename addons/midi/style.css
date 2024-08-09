@@ -70,6 +70,10 @@
   filter: var(--editorDarkMode-input-filter, none);
 }
 
+.sa-midi-dropdown > li:hover .sa-midi-selected-icon {
+  filter: var(--editorDarkMode-primary-filter2, brightness(0) invert(1));
+}
+
 .sa-midi-selected .sa-midi-selected-icon {
   visibility: visible;
 }
