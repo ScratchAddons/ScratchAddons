@@ -10,7 +10,8 @@
 
 .u-dropdown-searchbar,
 .u-dropdown-searchbar:focus,
-.blocklyDropDownDiv .goog-menuitem {
+.blocklyDropDownDiv .goog-menuitem,
+.blocklyNumPadButton {
   color: #575e75;
 }
 .u-dropdown-searchbar:focus {

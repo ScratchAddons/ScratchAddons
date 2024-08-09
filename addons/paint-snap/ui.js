@@ -29,9 +29,7 @@ export function initUI({ addon, msg }) {
   };
 
   const controlsGroup = createGroup();
-  addon.tab.displayNoneWhileDisabled(controlsGroup, {
-    display: "flex",
-  });
+  addon.tab.displayNoneWhileDisabled(controlsGroup);
 
   const settingPageWrapper = document.createElement("div");
   settingPageWrapper.className = "sa-paint-snap-settings-wrapper";

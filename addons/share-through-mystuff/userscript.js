@@ -13,9 +13,7 @@ export default async function ({ addon, console, msg }) {
   const shareButton = document.createElement("a");
   shareButton.classList.add("sa-share-button");
   shareButton.innerText = msg("share");
-  addon.tab.displayNoneWhileDisabled(shareButton, {
-    display: "block",
-  });
+  addon.tab.displayNoneWhileDisabled(shareButton);
   async function shareConfirmation(event) {
     event.preventDefault();
     const confirmation = await addon.tab.confirm(msg("confirmation-title"), msg("confirmation"));

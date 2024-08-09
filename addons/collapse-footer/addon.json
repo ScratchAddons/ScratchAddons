@@ -1,6 +1,6 @@
 {
   "name": "Sticky footer",
-  "description": "Makes the website footer stick out slightly from the bottom of the window and makes it expand when hovering over it, allowing it to be quickly accessed from anywhere on the page. Previously part of \"Infinite scolling\".",
+  "description": "Makes the website footer stick out slightly from the bottom of the window and makes it expand when hovering over it, allowing it to be quickly accessed from anywhere on the page. Previously part of \"Infinite scrolling\".",
   "credits": [
     {
       "name": "Samq64",
