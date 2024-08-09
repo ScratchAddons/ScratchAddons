@@ -24,7 +24,7 @@ export default async function ({ addon, console, msg }) {
     const now = runtime.currentMSecs;
     // If it's been more than 500ms since the last draw, we want to reset the variables.
     if (typeof lastRender !== "number" || now - lastRender > 500) {
-      lastRender = now
+      lastRender = now;
       lastFps = null;
       return;
     }
