@@ -11,7 +11,7 @@
 
 .sa-midi-dropdown {
   position: absolute;
-  z-index: 10000; /* same as context menu */
+  z-index: 1;
   margin: 0;
   margin-top: 4px;
   padding: 5px 0;
@@ -27,6 +27,7 @@
 }
 
 .sa-midi-dropdown-editor {
+  z-index: 10000; /* same as context menu */
   background-color: var(--editorDarkMode-input, white);
   border-color: var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
   color: var(--editorDarkMode-input-text, #575e75);
