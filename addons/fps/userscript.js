@@ -12,8 +12,8 @@ export default async function ({ addon, console, msg }) {
   addon.tab.displayNoneWhileDisabled(fpsCounterElement);
   addSmallStageClass();
 
-  const renderTimes = [];
-  let lastFps = 0;
+  let lastRender;
+  let lastFps;
   let wasRunning = false;
 
   const { renderer } = runtime;
@@ -21,17 +21,22 @@ export default async function ({ addon, console, msg }) {
   renderer.draw = function () {
     _draw.call(this);
 
-    // Every time this function is ran, store the current time and remove times from half a second ago
     const now = runtime.currentMSecs;
-    while (renderTimes.length > 0 && renderTimes[0] <= now - 500) renderTimes.shift();
-    // Calculate FPS times of each render frame.
-    const allFps = renderTimes.map((time, i) => 1000 / ((renderTimes[i + 1] ?? now) - time));
-    renderTimes.push(now);
-    let fps = 0;
-    if (allFps.length !== 0) {
-      // Average FPS times.
-      fps = Math.round(allFps.reduce((prev, curr) => prev + curr, 0) / allFps.length);
+    // If it's been more than 500ms since the last draw, we want to reset the variables.
+    if (typeof lastRender !== "number" || now - lastRender > 500) {
+      lastRender = now
+      lastFps = null;
+      return;
     }
+    // If the current time has been rendered, return, Don't show infinity.
+    if (now === lastRender) return;
+    // Every time this function is ran, store the current time and remove times from half a second ago
+    let smoothing = 0.9;
+    let calculatedFps = 1000 / (now - lastRender);
+    if (typeof lastFps !== "number") lastFps = calculatedFps;
+    // Calculate a smoothed FPS so that numbers aren't changing too fast.
+    const fps = Math.round(lastFps * smoothing + calculatedFps * (1 - smoothing));
+    lastRender = now;
 
     // Show/Hide the element based on if there are any threads running
     if (runtime.threads.length === 0) {
@@ -40,10 +45,8 @@ export default async function ({ addon, console, msg }) {
       return;
     }
     if (!wasRunning) fpsCounterElement.classList.add("show");
+    if (fps !== lastFps || !wasRunning) fpsCounterElement.innerText = msg("fpsCounter", { fps: (lastFps = fps) });
     wasRunning = true;
-
-    // Update element text
-    if (fps !== lastFps) fpsCounterElement.innerText = msg("fpsCounter", { fps: (lastFps = fps) });
   };
 
   while (true) {
