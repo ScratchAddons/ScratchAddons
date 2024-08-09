@@ -65,6 +65,29 @@
       "if": {
         "settings": { "version": "scratchr2" }
       }
+    },
+    {
+      "url": "scratch3to2/style.css",
+      "matches": ["https://scratch.mit.edu/studios/*"],
+      "if": {
+        "addonEnabled": ["scratch3to2"]
+      }
+    },
+    {
+      "url": "scratch3to2/default.css",
+      "matches": ["https://scratch.mit.edu/studios/*"],
+      "if": {
+        "addonEnabled": ["scratch3to2"],
+        "settings": { "version": "default" }
+      }
+    },
+    {
+      "url": "scratch3to2/scratchr2.css",
+      "matches": ["https://scratch.mit.edu/studios/*"],
+      "if": {
+        "addonEnabled": ["scratch3to2"],
+        "settings": { "version": "scratchr2" }
+      }
     }
   ],
   "settings": [

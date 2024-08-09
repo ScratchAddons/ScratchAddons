@@ -1,0 +1,28 @@
+/* Page */
+.studio-page #view .studio-shell {
+  grid-template-columns: 212px minmax(0, 1fr);
+}
+
+/* Title */
+.studio-info .studio-title {
+  font-weight: bold;
+  line-height: 45px;
+}
+
+/* Folow Studio */
+.studio-page:not(.sa-oldstudio-logged-out) .studio-info .studio-info-footer-stats > div:nth-child(2) {
+  top: 32px;
+  color: var(--darkWww-page-scratchr2Text, #322f31);
+}
+
+/* Description */
+.studio-info .studio-description.uneditable {
+  color-scheme: var(--darkWww-page-colorScheme, light);
+}
+
+/* Tabs */
+.studio-tab-nav li,
+.studio-tab-nav a.active.nav_link > li,
+.studio-tab-nav a.active.nav_link:hover > li {
+  color: var(--darkWww-box-scratchr2Text, #322f31);
+}
