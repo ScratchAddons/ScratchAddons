@@ -5,16 +5,13 @@ export default async function ({ addon, console }) {
   const thumbUrl = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png`;
   const thumb = document.createElement("img");
   thumb.src = thumbUrl;
-  thumb.id = "sa-project-thumb";
   thumb.className = "sa-project-thumb";
 
   const stageWrapper = await addon.tab.waitForElement('div[class*="stage-wrapper_stage-wrapper_"]');
   const alerts = document.querySelector(".project-info-alerts");
 
-  if (addon.settings.get("loading") && addon.tab.editorMode !== "fullscreen") {
+  if (addon.settings.get("loading")) {
     const LoaderBackground = stageWrapper.querySelector('[class*="loader_background_"]');
-    // Set with JS to ensure the background color doesn't change before the image loads
-    LoaderBackground.style.backgroundColor = "rgba(0, 0, 0, 0.25)";
     thumb.classList.add("sa-project-thumb-loading");
     stageWrapper.insertBefore(thumb, LoaderBackground);
     alerts.style.display = "none";
@@ -31,7 +28,7 @@ export default async function ({ addon, console }) {
       alerts.style.display = "flex";
     }
     if (e.detail.action.type == "scratch-gui/vm-status/SET_STARTED_STATE") {
-      document.getElementById("sa-project-thumb").remove();
+      thumb.remove();
     }
   });
 
