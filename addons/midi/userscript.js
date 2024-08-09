@@ -62,6 +62,7 @@ const DROPDOWN_ICON_Y = 16;
 
 export default async function ({ addon, console, msg }) {
   let midi = null;
+  let midiBlocked = false;
   const channelData = new Array(16).fill().map(() => ({
     instrument: -1,
     noteOffTimeouts: new Map(),
@@ -166,7 +167,14 @@ export default async function ({ addon, console, msg }) {
       closeMidiDropdown();
       return;
     }
-    if (!midi) midi = await navigator.requestMIDIAccess({ software: true });
+    if (!midi && !midiBlocked) {
+      try {
+        midi = await navigator.requestMIDIAccess({ software: true });
+      } catch (e) {
+        console.warn(e);
+        midiBlocked = true;
+      }
+    }
     const buttonPos = button.getBoundingClientRect();
     midiDropdown = Object.assign(document.createElement("ul"), {
       className: `sa-midi-dropdown ${inEditor ? "sa-midi-dropdown-editor" : ""}`,
@@ -176,6 +184,13 @@ export default async function ({ addon, console, msg }) {
       `,
     });
     document.body.appendChild(midiDropdown);
+    document.addEventListener("click", () => closeMidiDropdown(), { once: true });
+    midiDropdown.addEventListener("click", (e) => e.stopPropagation());
+    if (midiBlocked) {
+      midiDropdown.classList.add("sa-midi-error");
+      midiDropdown.textContent = msg("permission-error");
+      return;
+    }
     const noneItem = createDropdownItem(msg("none"));
     midiDropdown.appendChild(noneItem);
     noneItem.addEventListener("click", () => {
@@ -192,8 +207,6 @@ export default async function ({ addon, console, msg }) {
       });
     }
     updateSelection();
-    document.addEventListener("click", () => closeMidiDropdown(), { once: true });
-    midiDropdown.addEventListener("click", (e) => e.stopPropagation());
   };
 
   // Editor

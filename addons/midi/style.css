@@ -32,6 +32,17 @@
   color: var(--editorDarkMode-input-text, #575e75);
 }
 
+.sa-midi-dropdown.sa-midi-error {
+  max-width: 250px;
+  padding: 5px;
+  background-color: var(--darkWww-box-error, #fff0df);
+  border-color: #ff8c1a;
+}
+
+.sa-midi-dropdown-editor.sa-midi-error {
+  background-color: var(--editorDarkMode-accent-error, #fff0df);
+}
+
 .sa-midi-dropdown > li {
   margin: 0;
   padding: 8px 12px;

@@ -1,4 +1,5 @@
 {
   "midi/midi-output": "MIDI output",
-  "midi/none": "None"
+  "midi/none": "None",
+  "midi/permission-error": "To use the MIDI output addon, you need to allow Scratch to access MIDI devices."
 }
