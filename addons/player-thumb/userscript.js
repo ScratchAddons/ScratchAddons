@@ -32,7 +32,5 @@ export default async function ({ addon, console }) {
     }
   });
 
-  addon.tab.displayNoneWhileDisabled(thumb, {
-    display: "inline",
-  });
+  addon.tab.displayNoneWhileDisabled(thumb);
 }

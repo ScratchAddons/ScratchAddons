@@ -1,4 +1,5 @@
 .sa-project-thumb {
+  display: inline;
   position: absolute;
   top: 1px;
   bottom: 1px;
