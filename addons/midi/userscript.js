@@ -186,6 +186,8 @@ export default async function ({ addon, console, msg }) {
     document.body.appendChild(midiDropdown);
     document.addEventListener("click", () => closeMidiDropdown(), { once: true });
     midiDropdown.addEventListener("click", (e) => e.stopPropagation());
+    const flyoutSvg = document.querySelector(".blocklyFlyout");
+    if (flyoutSvg) flyoutSvg.addEventListener("wheel", () => closeMidiDropdown(), { once: true });
     if (midiBlocked) {
       midiDropdown.classList.add("sa-midi-error");
       midiDropdown.textContent = msg("permission-error");
