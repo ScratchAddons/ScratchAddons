@@ -75,18 +75,17 @@
 
 .sa-var-manager-scroll-box {
   overflow-y: auto;
-  padding: 0 5px 5px 0;
 }
 
-/* .sa-var-manager.freeze .sa-var-manager-value *, */
-/* .sa-var-manager.freeze .sa-var-manager-name * { */
-  /* opacity: 0.5; */
-/* } */
+.sa-var-manager.freeze .sa-var-manager-value *,
+.sa-var-manager.freeze .sa-var-manager-name * {
+  opacity: 0.5;
+}
 
-/* .sa-var-manager.freeze input:focus, */
-/* .sa-var-manager.freeze textarea:focus { */
-  /* opacity: 1; */
-/* } */
+.sa-var-manager.freeze input:focus,
+.sa-var-manager.freeze textarea:focus {
+  opacity: 1;
+}
 
 .sa-var-manager-heading {
   display: block;
@@ -107,95 +106,45 @@
 }
 
 .sa-var-manager .sa-var-manager-name input {
+  min-width: 32px;
   height: 26px;
-  width: 100%;
-  font-size: calc(var(--customBlockText-size, 100) * 1%);
   text-align: center;
   text-overflow: ellipsis;
   border-radius: 13px;
   color: var(--editorTheme3-text, #ffffff);
-  outline: none;
-  transition: box-shadow 0.25s ease-out, border-color 0.25s ease-out;
+  transition: width 0.25s ease-out;
 }
 
-[data-type="var"] .sa-var-manager-name input {
+.sa-var-manager [data-type="var"] .sa-var-manager-name input {
   background: var(--editorTheme3-data-primary, #ff8c1a);
   border: solid 1px var(--editorTheme3-data-tertiary, #db6e00);
 }
 
-[data-type="list"] .sa-var-manager-name input {
+.sa-var-manager [data-type="list"] .sa-var-manager-name input {
   background: var(--editorTheme3-data_lists-primary, #ff661a);
   border: solid 1px var(--editorTheme3-data_lists-tertiary, #e64d00);
-}
-
-.sa-var-manager-name input:focus {
-  border-color: var(--editorDarkMode-primary, #855cd6);
-  box-shadow: 0 0 0 4px var(--editorDarkMode-primary-transparent35, #855cd659);
 }
 
 .sa-var-manager .sa-var-manager-value {
   width: 75%;
 }
 
-.sa-var-manager-value .sa-var-manager-value-input,
-.sa-var-manager-value > div {
-  border: solid 1px transparent;
-  transition: all 0.25s ease-out, margin 0s;
-}
-
-.sa-var-manager-value input:focus,
-.sa-var-manager-value > div:has(:focus) {
-  border-radius: 5px;
-  border-color: var(--editorDarkMode-primary, #855cd6);
-  box-shadow: 0 0 0 4px var(--editorDarkMode-primary-transparent35, #855cd659);
-  z-index: 1;
-}
-
-.sa-var-manager-value > div {
-  position: relative;
-  display: flex;
-  max-height: 60vh;
-  overflow: auto;
-}
-
-.sa-var-manager-value label,
-.sa-var-manager-value textarea {
-  font-size: 0.85rem;
-  line-height: 2em;
-}
-
-.sa-var-manager-value label {
-  position: absolute;
-  white-space: break-spaces;
-  padding: 9px 0 0 8px;
-  min-width: 2ch;
-  opacity: 0.5;
-  user-select: none;
-}
-
-.sa-var-manager-value input,
-.sa-var-manager-value textarea {
+.sa-var-manager table input {
   background: none;
   border: none;
   padding: 8px;
   width: 100%;
   height: 100%;
-  outline: none;
 }
 
-.sa-var-manager-value textarea {
-  padding: 8px 0 1em 0;
+.sa-var-manager-value > textarea {
+  background: none;
+  border: none;
+  padding: 8px;
+  width: 100%;
+  height: 100%;
+  line-height: 2em;
   resize: none;
-  overflow-y: hidden;
-  /* overflow-wrap: normal; */
-  white-space: nowrap;
-}
-
-.sa-var-manager-value-input::placeholder {
-  font-style: italic;
-  text-align: center;
-  position: relative;
-  top: 1em;
 }
 
 .sa-var-manager-value-input:invalid {
@@ -216,21 +165,20 @@
   width: 100%;
   text-align: left;
 }
-
 .sa-var-manager-too-big:hover {
   text-decoration: underline;
 }
-
 [data-too-big="true"] .sa-var-manager-too-big {
   display: block;
 }
-
-[data-too-big="true"] .sa-var-manager-value input,
-[data-too-big="true"] .sa-var-manager-value > div {
+[data-too-big="true"] .sa-var-manager-value-input {
   display: none;
 }
 
 .sa-var-manager-scroll-box table {
+  overflow: hidden;
+  border: 1px solid var(--editorDarkMode-border, #00000026);
+  border-radius: 5px;
   border-collapse: collapse;
   width: 100%;
 }
@@ -239,26 +187,10 @@
   text-align: left;
 }
 
-.sa-var-manager tr:first-child td:first-child {
-  border-top-left-radius: 5px;
-}
-
-.sa-var-manager tr:first-child td:last-child {
-  border-top-right-radius: 5px;
-}
-
-.sa-var-manager tr:last-child td:first-child {
-  border-bottom-left-radius: 5px;
-}
-
-.sa-var-manager tr:last-child td:last-child {
-  border-bottom-right-radius: 5px;
-}
-
-.sa-var-manager tr:nth-of-type(odd) {
+tr:nth-of-type(odd) {
     background-color: lch(50 0 0 / 0.3);
 }
 
-.sa-var-manager tr:nth-of-type(even) {
+tr:nth-of-type(even) {
     background-color: lch(50 0 0 / 0.2);
 }

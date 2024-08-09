@@ -1,47 +1,90 @@
 export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.vm;
+  const Blockly = await addon.tab.traps.getBlockly();
 
   let localVariables = [];
+  let localLists = [];
   let globalVariables = [];
+  let globalLists = [];
+  let cloudVariables = [];
+  
   let preventUpdate = false;
 
   const manager = document.createElement("div");
   manager.classList.add(addon.tab.scratchClass("asset-panel_wrapper"), "sa-var-manager");
+  
+  const toolbox = document.createElement("div");
+  toolbox.className = "sa-var-manager-toolbox";
 
   const searchBox = document.createElement("input");
   searchBox.placeholder = msg("search");
   searchBox.className = addon.tab.scratchClass("input_input-form", { others: "sa-var-manager-searchbox" });
 
   searchBox.addEventListener("input", (e) => {
-    for (const variable of localVariables) {
-      variable.handleSearch(searchBox.value);
-    }
-    for (const variable of globalVariables) {
-      variable.handleSearch(searchBox.value);
-    }
+    forAllVarsLists((vars) => {
+      for (const variable of vars) {
+        variable.handleSearch(searchBox.value);
+      }
+    });
     updateHeadingVisibility();
   });
+  
+  toolbox.appendChild(searchBox);
+  
+  const newVarBox = document.createElement("div");
+  
+  const newVarButton = document.createElement("button");
+  const newVarIcon = document.createElement("img");
+  newVarIcon.src = addon.self.dir + '/icons/new-var.svg';
+  newVarButton.appendChild(newVarIcon);
+  newVarButton.appendChild(document.createTextNode(Blockly.Msg.NEW_VARIABLE));
+  
+  const newListButton = document.createElement("button");
+  const newListIcon = document.createElement("img");
+  newListIcon.src = addon.self.dir + '/icons/new-list.svg';
+  newListButton.appendChild(newListIcon);
+  newListButton.appendChild(document.createTextNode(Blockly.Msg.NEW_LIST));
+  
+  newVarButton.addEventListener("click", (e) => {
+    newVarButton.blur();
+    Blockly.Variables.createVariable(Blockly.getMainWorkspace(), (id) => {
+      setTimeout(fullReload);
+    }, '');
+  });
+  newListButton.addEventListener("click", (e) => {
+    newListButton.blur();
+    Blockly.Variables.createVariable(Blockly.getMainWorkspace(), (id) => {
+      setTimeout(fullReload);
+    }, 'list');
+  });
+  
+  newVarBox.appendChild(newVarButton);
+  newVarBox.appendChild(newListButton);
+  toolbox.appendChild(newVarBox);
+  
+  manager.appendChild(toolbox);
+  
+  const scrollBox = document.createElement("div");
+  scrollBox.className = "sa-var-manager-scroll-box";
 
-  manager.appendChild(searchBox);
-
-  const localVars = document.createElement("div");
-  const localHeading = document.createElement("span");
-  const localList = document.createElement("table");
-  localHeading.className = "sa-var-manager-heading";
-  localHeading.innerText = msg("for-this-sprite");
-  localVars.appendChild(localHeading);
-  localVars.appendChild(localList);
-
-  const globalVars = document.createElement("div");
-  const globalHeading = document.createElement("span");
-  const globalList = document.createElement("table");
-  globalHeading.className = "sa-var-manager-heading";
-  globalHeading.innerText = msg("for-all-sprites");
-  globalVars.appendChild(globalHeading);
-  globalVars.appendChild(globalList);
-
-  manager.appendChild(localVars);
-  manager.appendChild(globalVars);
+  function buildTableDOM(msgId) {
+    let vars = document.createElement("div");
+    let heading = document.createElement("span");
+    let table = document.createElement("table");
+    heading.className = "sa-var-manager-heading";
+    heading.innerText = msg(msgId);
+    vars.appendChild(heading);
+    vars.appendChild(table);
+    scrollBox.appendChild(vars);
+    return {heading, table};
+  }
+  
+  const { heading: localVarHeading, table: localVarTable } = buildTableDOM("vars-for-this");
+  const { heading: localListHeading, table: localListTable } = buildTableDOM("lists-for-this");
+  const { heading: globalVarHeading, table: globalVarTable } = buildTableDOM("vars-for-all");
+  const { heading: globalListHeading, table: globalListTable } = buildTableDOM("lists-for-all");
+  const { heading: cloudHeading, table: cloudTable } = buildTableDOM("cloud-variables");
+  manager.appendChild(scrollBox);
 
   const varTab = document.createElement("li");
   addon.tab.displayNoneWhileDisabled(varTab);
@@ -51,20 +94,36 @@ export default async function ({ addon, console, msg }) {
 
   const varTabIcon = document.createElement("img");
   varTabIcon.draggable = false;
-  varTabIcon.src = addon.self.dir + "/icon.svg";
+  varTabIcon.src = addon.self.dir + "/icons/icon.svg";
 
   const varTabText = document.createElement("span");
   varTabText.innerText = msg("variables");
 
   varTab.appendChild(varTabIcon);
   varTab.appendChild(varTabText);
+  
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  ctx.font = "13.6px Helvetica, Arial, sans-serif";
+  
+  function forAllVarsLists(action) {
+    action(localVariables);
+    action(localLists);
+    action(globalVariables);
+    action(globalLists);
+    action(cloudVariables);
+  }
 
   function updateHeadingVisibility() {
-    // used to hide the headings if there are no variables
-    let filteredLocals = localVariables.filter((v) => v.row.style.display !== "none");
-    let filteredGlobals = globalVariables.filter((v) => v.row.style.display !== "none");
-    localHeading.style.display = filteredLocals.length === 0 ? "none" : "";
-    globalHeading.style.display = filteredGlobals.length === 0 ? "none" : "";
+    const update = (vars, heading) => {
+      const filtered = vars.filter((v) => v.row.style.display !== "none");
+      heading.style.display = filtered.length === 0 ? "none" : "";
+    };
+    update(localVariables, localVarHeading);
+    update(localLists, localListHeading);
+    update(globalVariables, globalVarHeading);
+    update(globalLists, globalListHeading);
+    update(cloudVariables, cloudHeading);
   }
 
   const rowToVariableMap = new WeakMap();
@@ -86,23 +145,22 @@ export default async function ({ addon, console, msg }) {
       this.target = target;
       this.visible = false;
       this.ignoreTooBig = false;
-      this.buildDOM();
     }
 
     updateValue(force) {
       if (!this.visible && !force) return;
 
       let newValue;
-      let maxSafeLength;
+      let toobig;
       if (this.scratchVariable.type === "list") {
         newValue = this.scratchVariable.value.join("\n");
-        maxSafeLength = 5000000;
+        toobig = newValue.length > 5000000 || this.scratchVariable.value.length > 10000;
       } else {
         newValue = this.scratchVariable.value;
-        maxSafeLength = 1000000;
+        toobig = newValue.length > 1000000;
       }
 
-      if (!this.ignoreTooBig && newValue.length > maxSafeLength) {
+      if (!this.ignoreTooBig && toobig) {
         this.input.value = "";
         this.row.dataset.tooBig = true;
         return;
@@ -128,8 +186,19 @@ export default async function ({ addon, console, msg }) {
 
     resizeInputIfList() {
       if (this.scratchVariable.type === "list") {
+        const length = this.input.isEmpty ? 0 : this.input.value.split("\n").length;
+        this.input.placeholder = length ? "" : msg("empty");
+        if (this.ignoreTooBig) {
+          this.lineNumbers.textContent = ""; // don't display line numbers if too big
+          this.input.style.marginLeft = "8px";
+        } else {
+          this.lineNumbers.textContent = Array.from({length: length}, (_, i) => i+1).join('\n');
+          const margin = Math.max(String(length).length, 2);
+          this.input.style.marginLeft = `calc(${margin}ch + 16px)`;
+        }
+        
         this.input.style.height = "auto";
-        const height = Math.min(1000, this.input.scrollHeight);
+        const height = this.input.scrollHeight;
         if (height > 0) {
           this.input.style.height = height + "px";
         }
@@ -145,9 +214,11 @@ export default async function ({ addon, console, msg }) {
     }
 
     buildDOM() {
+      console.log(this.scratchVariable);
       const id = `sa-variable-manager-${this.scratchVariable.id}`;
 
       const row = document.createElement("tr");
+      row.dataset.type = this.scratchVariable.type == "" ? "var" : "list"
       this.row = row;
       const labelCell = document.createElement("td");
       labelCell.className = "sa-var-manager-name";
@@ -155,10 +226,16 @@ export default async function ({ addon, console, msg }) {
       const label = document.createElement("input");
       label.value = this.scratchVariable.name;
       label.htmlFor = id;
+      
+      const resizeLabel = () => {
+        label.style.maxWidth = "0";
+        label.style.maxWidth = Math.max(32, label.scrollWidth + 20) + "px";
+      }
+      
       const onLabelOut = (e) => {
         e.preventDefault();
         const workspace = Blockly.getMainWorkspace();
-
+        
         let newName = label.value;
         if (newName === this.scratchVariable.name) {
           // If the name is unchanged before we make sure the cloud prefix exists, there's nothing to do.
@@ -198,7 +275,11 @@ export default async function ({ addon, console, msg }) {
             label.value = newName;
           }
         }
+        resizeLabel();
       };
+      
+      label.addEventListener("input", resizeLabel);
+      
       label.addEventListener("keydown", (e) => {
         if (e.key === "Enter") e.target.blur();
       });
@@ -213,6 +294,21 @@ export default async function ({ addon, console, msg }) {
         preventUpdate = false;
         manager.classList.remove("freeze");
       });
+      
+      labelCell.addEventListener("mousedown", (e) => {
+        if (e.target != labelCell) return;
+        e.preventDefault();
+        label.selectionStart = label.value.length;
+        label.focus();
+      });
+      
+      new MutationObserver((mutations, observer) => {
+        mutations.forEach(function(mutation) {
+          observer.disconnect();
+          resizeLabel();
+        });
+      }).observe(labelCell, { attributes: false, childList: true, subtree: false });
+      
       labelCell.appendChild(label);
 
       rowToVariableMap.set(row, this);
@@ -228,27 +324,35 @@ export default async function ({ addon, console, msg }) {
       tooBigElement.addEventListener("click", () => {
         this.ignoreTooBig = true;
         this.updateValue(true);
+        this.resizeInputIfList();
       });
 
       let input;
       if (this.scratchVariable.type === "list") {
         input = document.createElement("textarea");
+        input.isEmpty = this.scratchVariable.value.length === 0;
       } else {
         input = document.createElement("input");
       }
       input.className = "sa-var-manager-value-input";
       input.id = id;
+      if (this.scratchVariable.isCloud) {
+        input.pattern = "\\d{0,256}"; // respect cloud variable format
+        input.title = msg("cloud-restrictions");
+      }
       this.input = input;
 
       this.updateValue(true);
-      if (this.scratchVariable.type === "list") {
-        this.input.addEventListener("input", () => this.resizeInputIfList(), false);
-      }
+      this.input.addEventListener("input", () => {
+        if (this.scratchVariable.type === "list" && this.input.value != "")
+          this.input.isEmpty = false;
+        this.resizeInputIfList();
+      });
 
       const onInputOut = (e) => {
         e.preventDefault();
         if (this.scratchVariable.type === "list") {
-          vm.setVariableValue(this.target.id, this.scratchVariable.id, input.value.split("\n"));
+          vm.setVariableValue(this.target.id, this.scratchVariable.id, input.isEmpty ? [] : input.value.split("\n"));
         } else {
           vm.setVariableValue(this.target.id, this.scratchVariable.id, input.value);
         }
@@ -256,7 +360,23 @@ export default async function ({ addon, console, msg }) {
       };
 
       input.addEventListener("keydown", (e) => {
-        if (e.target.nodeName === "INPUT" && e.key === "Enter") e.target.blur();
+        if (e.target.nodeName === "INPUT") {
+          if (e.key === "Enter") {
+            e.target.blur();
+          }
+        } else {
+          if (e.target.isEmpty) {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              e.target.isEmpty = false;
+              this.resizeInputIfList();
+            }
+          } else if (e.target.value === "" && e.key === "Backspace") {
+            e.target.isEmpty = true;
+              this.resizeInputIfList();
+          }
+        }
+        
       });
       input.addEventListener("focusout", onInputOut);
 
@@ -269,8 +389,19 @@ export default async function ({ addon, console, msg }) {
         preventUpdate = false;
         manager.classList.remove("freeze");
       });
+      
+      if (this.scratchVariable.type === "list") {
+        let box = document.createElement("div");
+        let lineNumbers = document.createElement("label");
+        lineNumbers.setAttribute("for", id)
+        box.appendChild(lineNumbers);
+        this.lineNumbers = lineNumbers;
+        box.appendChild(input);
+        valueCell.appendChild(box);
+      } else {
+        valueCell.appendChild(input);
+      }
 
-      valueCell.appendChild(input);
       valueCell.appendChild(tooBigElement);
       row.appendChild(labelCell);
       row.appendChild(valueCell);
@@ -281,51 +412,72 @@ export default async function ({ addon, console, msg }) {
 
   function fullReload() {
     if (addon.tab.redux.state?.scratchGui?.editorTab?.activeTabIndex !== 3 || preventUpdate) return;
-
+    
+    cleanup();
     const editingTarget = vm.runtime.getEditingTarget();
+    if (!editingTarget.isStage) {
+      Object.values(editingTarget.variables).forEach((v) => {
+        const wrapped = new WrappedVariable(v, editingTarget);
+          if (v.type === "") {
+              localVariables.push(wrapped);
+          } else if (v.type === "list") {
+            localLists.push(wrapped);
+          }
+      });
+    }
     const stage = vm.runtime.getTargetForStage();
-    localVariables = editingTarget.isStage
-      ? []
-      : Object.values(editingTarget.variables)
-          .filter((i) => i.type === "" || i.type === "list")
-          .map((i) => new WrappedVariable(i, editingTarget));
-    globalVariables = Object.values(stage.variables)
-      .filter((i) => i.type === "" || i.type === "list")
-      .map((i) => new WrappedVariable(i, stage));
+    Object.values(stage.variables).forEach((v) => {
+      const wrapped = new WrappedVariable(v, stage);
+      if (v.isCloud) {
+        cloudVariables.push(wrapped);
+      } else if (v.type === "") {
+        globalVariables.push(wrapped);
+      } else if (v.type === "list") {
+        globalLists.push(wrapped);
+      }
+    });
+
+    forAllVarsLists((vars) => {
+      vars.sort((a, b) => {return a.scratchVariable.name.localeCompare(b.scratchVariable.name)});
+      vars.forEach((v) => {
+        v.buildDOM();
+      });
+    });
 
     updateHeadingVisibility();
-
-    while (localList.firstChild) {
-      localList.removeChild(localList.firstChild);
-    }
-    while (globalList.firstChild) {
-      globalList.removeChild(globalList.firstChild);
-    }
-
-    for (const variable of localVariables) {
-      localList.appendChild(variable.row);
-      variable.resizeInputIfList();
-    }
-    for (const variable of globalVariables) {
-      globalList.appendChild(variable.row);
-      variable.resizeInputIfList();
-    }
+    
+    const updateTable = (vars, table) => {
+      while (table.firstChild) {
+        table.removeChild(table.firstChild);
+      }
+      for (const variable of vars) {
+        table.appendChild(variable.row);
+        variable.resizeInputIfList();
+      }
+    };
+    updateTable(localVariables, localVarTable);
+    updateTable(localLists, localListTable);
+    updateTable(globalVariables, globalVarTable);
+    updateTable(globalLists, globalListTable);
+    updateTable(cloudVariables, cloudTable);
   }
 
   function quickReload() {
     if (addon.tab.redux.state?.scratchGui?.editorTab?.activeTabIndex !== 3 || preventUpdate) return;
 
-    for (const variable of localVariables) {
-      variable.updateValue();
-    }
-    for (const variable of globalVariables) {
-      variable.updateValue();
-    }
+    forAllVarsLists((vars) => {
+      for (const variable of vars) {
+        variable.updateValue();
+      }
+    });
   }
 
   function cleanup() {
     localVariables = [];
+    localLists = [];
     globalVariables = [];
+    globalLists = [];
+    cloudVariables = [];
   }
 
   varTab.addEventListener("click", (e) => {
