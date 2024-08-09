@@ -1,6 +1,6 @@
 const MSG_NOTE_OFF = 0x80;
 const MSG_NOTE_ON = 0x90;
-const MSG_PROGRAM_CHANGE = 0xC0;
+const MSG_PROGRAM_CHANGE = 0xc0;
 
 const CH_PERCUSSION = 9;
 
@@ -98,7 +98,7 @@ export default async function ({ addon, console, msg }) {
     }
     // Scratch supports notes between 0 and 130. The highest MIDI note is 127.
     const midiNote = note > 127 ? note - 12 : note;
-    const velocity = Math.round(127 / 100 * util.target.volume);
+    const velocity = Math.round((127 / 100) * util.target.volume);
     const durationMs = 1000 * durationSec;
     const notesPlaying = channelData[channel].notesPlaying;
     const key = `${midiInstrument}_${midiNote}`;
@@ -122,7 +122,7 @@ export default async function ({ addon, console, msg }) {
   const playDrum = function (util, scratchDrum) {
     if (!output) return oldPlayDrum.call(this, util, scratchDrum);
     const midiNote = MIDI_PERCUSSION[scratchDrum] ?? MIDI_PERCUSSION[0];
-    const velocity = Math.round(127 / 100 * util.target.volume);
+    const velocity = Math.round((127 / 100) * util.target.volume);
     output.send([MSG_NOTE_ON + CH_PERCUSSION, midiNote, velocity]);
     output.send([MSG_NOTE_OFF + CH_PERCUSSION, midiNote, 64]);
   };
@@ -153,10 +153,13 @@ export default async function ({ addon, console, msg }) {
     const item = Object.assign(document.createElement("li"), {
       innerText: label,
     });
-    item.insertBefore(Object.assign(document.createElement("img"), {
-      className: "sa-midi-selected-icon",
-      src: addon.self.dir + "/check.svg",
-    }), item.firstChild);
+    item.insertBefore(
+      Object.assign(document.createElement("img"), {
+        className: "sa-midi-selected-icon",
+        src: addon.self.dir + "/check.svg",
+      }),
+      item.firstChild
+    );
     return item;
   };
 
@@ -194,7 +197,7 @@ export default async function ({ addon, console, msg }) {
       dropdownItem.addEventListener("click", () => setOutput(midiOutput));
     }
     updateSelection();
-  }
+  };
 
   const toggleMidiDropdown = async (button, inEditor) => {
     if (midiDropdown) {
@@ -231,7 +234,7 @@ export default async function ({ addon, console, msg }) {
   };
 
   // Editor
-  addon.tab.traps.getBlockly().then((Blockly => {
+  addon.tab.traps.getBlockly().then((Blockly) => {
     const addDropdownIcon = (button) => {
       button.width += DROPDOWN_ICON_MARGIN + DROPDOWN_ICON_SIZE;
       button.svgGroup_.querySelector(".blocklyFlyoutButtonBackground").setAttribute("width", button.width);
@@ -261,12 +264,7 @@ export default async function ({ addon, console, msg }) {
         const buttonXml = xmlDocument.createElement("button");
         buttonXml.setAttribute("text", msg("midi-output"));
         buttonXml.setAttribute("callbackKey", "SELECT_MIDI_OUTPUT");
-        this._saMidiButton = new Blockly.FlyoutButton(
-          this.workspace_,
-          this.targetWorkspace_,
-          buttonXml,
-          false
-        );
+        this._saMidiButton = new Blockly.FlyoutButton(this.workspace_, this.targetWorkspace_, buttonXml, false);
         this._saMidiButton.createDom();
         this._saMidiButton.show();
         addDropdownIcon(this._saMidiButton);
@@ -295,8 +293,8 @@ export default async function ({ addon, console, msg }) {
       if (this._saId === "music") {
         this._saMidiButton.dispose();
       }
-    }
-  }));
+    };
+  });
 
   // Project page
   while (true) {
@@ -310,9 +308,11 @@ export default async function ({ addon, console, msg }) {
       innerText: msg("midi-output"),
     });
     musicInfo.appendChild(button);
-    button.appendChild(Object.assign(document.createElement("img"), {
-      src: DROPDOWN_ICON_URL_WHITE,
-    }));
+    button.appendChild(
+      Object.assign(document.createElement("img"), {
+        src: DROPDOWN_ICON_URL_WHITE,
+      })
+    );
     button.addEventListener("click", (e) => {
       toggleMidiDropdown(button, false);
       e.stopPropagation();
