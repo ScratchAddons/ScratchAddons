@@ -102,8 +102,13 @@ export default async function ({ addon, console, msg }) {
     const durationMs = 1000 * durationSec;
     const noteOffTimeouts = channelData[channel].noteOffTimeouts;
     const timeoutKey = `${midiInstrument}_${midiNote}`;
+    const noteOffTimeout = noteOffTimeouts.get(timeoutKey);
+    if (typeof noteOffTimeout !== "undefined") {
+      // The same note is already being played
+      clearTimeout(noteOffTimeout);
+      output.send([MSG_NOTE_OFF + channel, midiNote, 64]);
+    }
     output.send([MSG_NOTE_ON + channel, midiNote, velocity]);
-    clearTimeout(noteOffTimeouts.get(timeoutKey));
     noteOffTimeouts.set(timeoutKey, setTimeout(() => {
       output.send([MSG_NOTE_OFF + channel, midiNote, 64]);
       noteOffTimeouts.delete(timeoutKey);
@@ -116,6 +121,7 @@ export default async function ({ addon, console, msg }) {
     const midiNote = MIDI_PERCUSSION[scratchDrum] ?? MIDI_PERCUSSION[0];
     const velocity = Math.round(127 / 100 * util.target.volume);
     output.send([MSG_NOTE_ON + CH_PERCUSSION, midiNote, velocity]);
+    output.send([MSG_NOTE_OFF + CH_PERCUSSION, midiNote, 64]);
   };
 
   const vm = addon.tab.traps.vm;
