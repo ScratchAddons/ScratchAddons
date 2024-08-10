@@ -62,9 +62,7 @@ const onReactContextMenu = function (e) {
     const label = document.createElement("span");
     label.textContent = item.label;
     itemElem.append(label);
-    this.displayNoneWhileDisabled(itemElem, {
-      display: "block",
-    });
+    this.displayNoneWhileDisabled(itemElem);
 
     itemElem.addEventListener("click", (e) => {
       e.stopPropagation();

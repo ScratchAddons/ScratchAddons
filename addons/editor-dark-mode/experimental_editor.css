@@ -228,6 +228,16 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="font-dropdown_font-dropdown_"][class*="dropdown_mod-open_"] {
   color: var(--editorDarkMode-accent-openFontDropdownText);
 }
+[class*="alert_alert_"][class*="alert_success_"] {
+  background-color: var(--editorDarkMode-accent-success);
+  box-shadow: 0 0 0 2px var(--editorDarkMode-accent-success);
+}
+[class*="alert_alert_"][class*="alert_warn_"] {
+  background-color: var(--editorDarkMode-accent-error);
+}
+[class*="alert_alert-message_"] {
+  color: var(--editorDarkMode-accent-text);
+}
 
 /* Input background */
 .u-dropdown-searchbar:hover,

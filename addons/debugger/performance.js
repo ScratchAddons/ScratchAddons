@@ -3,7 +3,7 @@ import { onPauseChanged, isPaused } from "./module.js";
 export default async function createPerformanceTab({ debug, addon, console, msg }) {
   const vm = addon.tab.traps.vm;
 
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/chart.min.js");
+  await addon.tab.loadScript("/libraries/thirdparty/cs/chart.min.js");
 
   // In optimized graphs everything still looks good
   const fancyGraphs = addon.settings.get("fancy_graphs");

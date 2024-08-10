@@ -22,6 +22,9 @@
   height: 45px;
   line-height: 30px;
 }
+.studio-info textarea.studio-title ~ .validation-message {
+  line-height: normal;
+}
 .studio-info .sa-oldstudio-follow-section {
   position: absolute;
   width: 200px;

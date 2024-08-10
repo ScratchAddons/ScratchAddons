@@ -1,5 +1,5 @@
 {
-  "name": "Remove autocomplete from search bar",
+  "name": "Disable search bar autocomplete",
   "description": "Stops web browsers from autocompleting suggestions in the navigation bar's search bar.",
   "tags": ["community"],
   "credits": [

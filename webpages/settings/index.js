@@ -56,8 +56,15 @@ let fuse;
     },
   });
 
+  // REMINDER: update similar code at /background/imports/util.js
   const browserLevelPermissions = ["notifications"];
-  if (typeof browser !== "undefined") browserLevelPermissions.push("clipboardWrite");
+  if (typeof browser !== "undefined") {
+    // Firefox only
+    if (typeof Clipboard.prototype.write !== "function") {
+      // Firefox 109-126 only
+      browserLevelPermissions.push("clipboardWrite");
+    }
+  }
   let grantedOptionalPermissions = [];
   const updateGrantedPermissions = () =>
     chrome.permissions.getAll(({ permissions }) => {
@@ -310,7 +317,7 @@ let fuse;
     },
     events: {
       closesidebar(event) {
-        if (event?.target.classList[0] === "toggle") return;
+        if (event?.target.id === "sidebar-toggle") return;
         if (this.categoryOpen && this.smallMode) {
           this.sidebarToggle();
         }
