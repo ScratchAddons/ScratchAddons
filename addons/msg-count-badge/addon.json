@@ -9,11 +9,6 @@
       "type": "info",
       "text": "You can use Do Not Disturb (right click extension icon \u2192 Do not disturb) to temporarily hide the message count.",
       "id": "dndtohide"
-    },
-    {
-      "type": "info",
-      "text": "If you disable this addon, you can still hover over the extension icon to show the message count.",
-      "id": "hoverfortooltip"
     }
   ],
   "settings": [
