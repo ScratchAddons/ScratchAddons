@@ -19,26 +19,32 @@
   ],
   "settings": [
     {
-      "name": "Show scroll for \"What I've been doing\"",
+      "name": "What I've been doing",
       "id": "whatworkingon",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "Show scroll for \"What's Happening?\"",
+      "name": "What's Happening?",
       "id": "whathappen",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "Show scroll for forum signatures",
+      "name": "Forum signatures",
       "id": "signature",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "Show scroll for forum Scratchblocks",
+      "name": "Forum Scratchblocks",
       "id": "blocks",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Project titles",
+      "id": "titles",
       "type": "boolean",
       "default": true
     }
@@ -55,6 +61,10 @@
       "url": "happen.js",
       "matches": ["https://scratch.mit.edu/"],
       "runAtComplete": false
+    },
+    {
+      "url": "disable.js",
+      "matches": ["projects", "profiles", "topics"]
     }
   ],
   "userstyles": [
@@ -84,6 +94,13 @@
       "matches": ["https://scratch.mit.edu/"],
       "if": {
         "settings": { "whathappen": true }
+      }
+    },
+    {
+      "url": "titles.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "titles": true }
       }
     }
   ],
