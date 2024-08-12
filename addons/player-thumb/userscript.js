@@ -10,7 +10,7 @@ export default async function ({ addon, console }) {
   const stageWrapper = await addon.tab.waitForElement('div[class*="stage-wrapper_stage-wrapper_"]');
   const alerts = document.querySelector(".project-info-alerts");
 
-  if (addon.settings.get("loading")) {
+  if (addon.settings.get("loading") && addon.tab.editorMode === "projectpage") {
     const LoaderBackground = stageWrapper.querySelector('[class*="loader_background_"]');
     thumb.classList.add("loading");
     stageWrapper.insertBefore(thumb, LoaderBackground);

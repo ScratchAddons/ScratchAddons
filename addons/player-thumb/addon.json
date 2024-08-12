@@ -10,7 +10,7 @@
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": ["projects"]
+      "matches": ["projects", "projectEmbeds"]
     },
     {
       "url": "loading.css",
@@ -23,7 +23,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["projects"],
+      "matches": ["projects", "projectEmbeds"],
       "runAtComplete": false
     }
   ],
