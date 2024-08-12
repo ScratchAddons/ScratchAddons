@@ -1,0 +1,29 @@
+{
+    "name": "Modern Scratch site",
+    "description": "Changes the look of the Scratch site for a ultra-modern fresh look",
+    "credits": [
+      {
+        "name": "LifeCoderBoy"
+      }
+    ],
+    "dynamicEnable": true,
+    "dynamicDisable": true,
+    "versionAdded": "1.38.5",
+    "userscripts": [
+      {
+
+      }
+    ],
+    "userstyles": [
+      {
+        "url": "home.css",
+        "matches": ["https://scratch.mit.edu"]
+      },
+      {
+        "url": "profile.css",
+        "matches": ["users"]
+      }
+    ],
+    "tags": ["recommended","beta"],
+    "enabledByDefault": true
+  }
