@@ -1,5 +1,6 @@
 body:not(.sa-body-editor) div[class*="loader_background_"] {
   background-color: rgba(0, 0, 0, 0.25);
+  border-radius: calc(0.5rem - 1px);
 }
 
 body:not(.sa-body-editor) div[class*="loader_background_"],
