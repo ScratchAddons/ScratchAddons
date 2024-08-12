@@ -8,3 +8,8 @@ body:not(.sa-body-editor) div[class*="loader_background_"],
   top: calc(2.75rem + 1px);
   height: calc(100% - 2.75rem - 2px);
 }
+
+body:not(.sa-body-editor) [class*="loader_block-animation_"] {
+  /* Remove transparency */
+  filter: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='opaque'><feComponentTransfer><feFuncA type='linear' slope='3.5'></feFuncA></feComponentTransfer></filter></svg>#opaque");
+}
