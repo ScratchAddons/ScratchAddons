@@ -12,7 +12,7 @@ export default async function ({ addon, console }) {
 
   if (addon.settings.get("loading")) {
     const LoaderBackground = stageWrapper.querySelector('[class*="loader_background_"]');
-    thumb.classList.add("sa-project-thumb-loading");
+    thumb.classList.add("loading");
     stageWrapper.insertBefore(thumb, LoaderBackground);
     alerts.style.display = "none";
   }
@@ -21,7 +21,7 @@ export default async function ({ addon, console }) {
   addon.tab.redux.addEventListener("statechanged", (e) => {
     if (e.detail.action.type == "scratch-gui/project-changed/SET_PROJECT_CHANGED") {
       // Move the thumbnail after the project loads
-      thumb.classList.remove("sa-project-thumb-loading");
+      thumb.classList.remove("loading");
       const stage = document.querySelector('div[class*="stage_stage"]');
       const greenFlagOverlay = stage.querySelector('[class*="stage_green-flag-overlay-wrapper_"]');
       stage.insertBefore(thumb, greenFlagOverlay);
