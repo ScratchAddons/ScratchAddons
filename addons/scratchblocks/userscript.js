@@ -60,7 +60,7 @@ export default async function ({ addon, msg }) {
       parse: scratchblocks.parse,
       render: scratchblocks.render,
       document: options.doc || document,
-      scale: 0.75,
+      scale: 0.675,
     };
     const elements = Array.from(opts.document.querySelectorAll(selector));
     elements.forEach((element) => {
