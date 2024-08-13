@@ -17,7 +17,7 @@
       },
       {
         "url": "profile.css",
-        "matches": ["users"]
+        "matches": ["profiles"]
       }
     ],
     "tags": ["recommended","beta"],
