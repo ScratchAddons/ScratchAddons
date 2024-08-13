@@ -33,6 +33,12 @@
     background-color: #d9e5ff;
   }
 
+  .box-content span{
+    color: black;
+  }
+  .box-content span > a{
+    color: #855cd6
+  }
   .box .box-header{
     background-color: var(--explore-orange);
     border-top: none;
