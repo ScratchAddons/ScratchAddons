@@ -1,9 +1,7 @@
 :root {
-    --ste-blue: #4e97fe;
-    --explore-orange: #ffbb00;
-    --explore-green: #338553;
-    --ste-green: #0fbd8c;
-    --scratchr2-blue: #407fff;
+    --theme-blue: #4e97fe;
+    --theme-orange: #ffbb00;
+	--theme-blue-tinted: #d9e5ff;
   }
   .player {
 	display: block;
@@ -40,14 +38,13 @@
 	transform: scale(3) translate(16px,34px);
 }
 .follow-button{
-        background-color: var(--ste-blue);
+        background-color: var(--theme-blue);
         height: 38px;
         width: 84px;
         border-radius: 100px;
 }
 .follow-button.follow.text  {
 	padding: 8px 9px;
-	/* height: 72px; */
 }
 #bio, #status{
 	width: 400px;
@@ -59,7 +56,7 @@
 }
 .doing h3 {
 	text-align: center;
-	background: #417eff;
+	background: var(--theme-blue);
 	color: white;
 	padding: 8px;
 	border-radius: 16px 16px 0 0;
@@ -75,7 +72,7 @@
 .about h3:first {
 	text-align: center;
     width: 270px;
-	background: #417eff;
+	background: var(--theme-blue);
 	color: white;
 	padding: 8px;
 	border-radius: 16px 16px 0 0;
@@ -92,7 +89,7 @@
 	margin-bottom: 27px;
 }
 .activity-feed {
-	background: #d9e5ff;
+	background: var(--theme-blue-tinted);
 	border-radius: 0 0 16px 16px;
 }
 #profile-box .about {
