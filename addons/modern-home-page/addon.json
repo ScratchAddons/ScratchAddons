@@ -10,11 +10,6 @@
     "dynamicEnable": true,
     "dynamicDisable": true,
     "versionAdded": "1.38.5",
-    "userscripts": [
-      {
-
-      }
-    ],
     "userstyles": [
       {
         "url": "home.css",
