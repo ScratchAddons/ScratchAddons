@@ -11,6 +11,18 @@
 	padding: 16px;
 	border-radius: 16px;
 }
+.box{
+  border-radius: 20px;
+}
+  .box .box-header{
+    background-color: var(--theme-orange);
+    border-top: none;
+    padding: 14px 20px;
+    border-radius: 20px 20px 0 0;
+  }
+.box .box-content{
+    background-color: #ffbb0066;
+  }
 #profile-data .box-head {
 	height: 400px;
 }
