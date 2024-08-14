@@ -83,7 +83,7 @@
     border-top: none;
     border-radius: 20px 20px 0 0
   }
-  .activity-li:hover {
+  .activity-li {
     padding: 8px;
     border-radius: 8px;
   }
