@@ -1,8 +1,10 @@
 :root {
   --theme-blue: #4e97fe;
+  --theme-purple: #855cd6;
+  --theme-purple-tinted: #855cd666;
   --theme-orange: #ffbb00;
   --theme-blue-tinted: #d9e5ff;
-  --theme-orange-tinted: #ffbb0066;
+  --theme-orange-tinted: #fadf94;
   --project-hover: #fdc731;
 }
 
@@ -37,6 +39,7 @@
   padding: 14px 20px;
   border-radius: 20px 20px 0 0;
 }
+
 
 .box .box-content {
   background-color: var(--theme-orange-tinted);

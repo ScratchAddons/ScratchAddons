@@ -10,6 +10,12 @@
     "dynamicEnable": true,
     "dynamicDisable": true,
     "versionAdded": "1.38.5",
+    "userscripts": [
+      {
+        "url": "profile.js",
+        "matches": ["profiles"]
+      }
+    ],
     "userstyles": [
       {
         "url": "home.css",
