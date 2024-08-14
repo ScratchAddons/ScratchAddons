@@ -40,7 +40,7 @@ export default [
         ClipboardItem: "readonly",
       },
 
-      ecmaVersion: 2020,
+      ecmaVersion: 2021,
       sourceType: "module",
     },
 
@@ -132,15 +132,15 @@ export default [
     },
   },
   {
-    // The addon uses static fields, only specified in ES13 (2022-)
+    // The addon uses static fields, only specified in ES2022
     // yet supported by older browsers.
-    // We use ES11 (2020) as everything in that version can be used by
-    // the minimum supported browser (Chrome 80, Firefox 86).
+    // We use ES2021 as everything in that version can be used by
+    // the minimum supported browser (Chrome 96, Firefox 109).
     // To properly lint the file, add exception to the parser version.
     files: ["addons/middle-click-popup/*.js"],
 
     languageOptions: {
-      ecmaVersion: 13,
+      ecmaVersion: 2022,
       sourceType: "script",
     },
   },
