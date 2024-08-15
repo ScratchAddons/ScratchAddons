@@ -83,13 +83,13 @@
     border-top: none;
     border-radius: 20px 20px 0 0
   }
-  .activity-li {
+/*   .activity-li {
     padding: 8px;
     border-radius: 8px;
   }
   .activity-li:hover {
     background: #f2f2f2;
-  }
+  } */
   .news li:nth-child(even) {
     border:none !important
   }
