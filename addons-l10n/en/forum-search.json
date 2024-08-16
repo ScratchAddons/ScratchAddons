@@ -13,5 +13,6 @@
   "forum-search/search-cat": "Search posts in \"{cat}\"",
   "forum-search/relevance": "relevance",
   "forum-search/newest": "newest",
-  "forum-search/oldest": "oldest"
+  "forum-search/oldest": "oldest",
+  "forum-search/filter-placeholder": "Filter (eg. username = \"\")"
 }
