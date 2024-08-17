@@ -105,6 +105,10 @@
     }
   ],
   "versionAdded": "1.0.0",
+  "latestUpdate": {
+    "version": "1.40.0",
+    "newSettings": ["titles"]
+  },
   "tags": ["community", "forums", "recommended", "profiles"],
   "enabledByDefault": true
 }
