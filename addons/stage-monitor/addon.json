@@ -4,7 +4,7 @@
   "credits": [
     {
       "name": "Samq64",
-      "link": "https://scratch.mit.edu/users/samq64/"
+      "link": "https://github.com/Samq64"
     },
     {
       "name": "Maximouse",
@@ -148,5 +148,5 @@
   "updateUserstylesOnSettingsChange": true,
   "injectAsStyleElt": true,
   "tags": ["editor", "theme", "projectPlayer"],
-  "versionAdded": "1.35.0"
+  "versionAdded": "1.40.0"
 }
