@@ -98,7 +98,7 @@
       "id": "monitorValueBg",
       "type": "color",
       "allowTransparency": true,
-      "default": "#333333",
+      "default": "#575e75",
       "if": {
         "settings": { "customValueColor": true }
       }
@@ -108,11 +108,10 @@
     {
       "name": "Transparent values",
       "id": "transparent",
-      "description": "Scratch's default monitor colors with transparent value backgrounds.",
+      "description": "Scratch's default monitor colors without value backgrounds.",
       "values": {
         "monitor": "#e5f0ff",
         "listHeader": "#e5f0ff",
-        "monitorRadius": 4,
         "customValueColor": true,
         "monitorValueBg": "#ffffff00"
       }
@@ -124,8 +123,6 @@
       "values": {
         "monitor": "#c1c4c7",
         "listHeader": "#c1c4c7",
-        "monitorRadius": 4,
-        "valueRadius": 4,
         "customValueColor": false
       }
     },
@@ -136,8 +133,6 @@
       "values": {
         "monitor": "#00000040",
         "listHeader": "#00000040",
-        "monitorRadius": 4,
-        "valueRadius": 4,
         "customValueColor": true,
         "monitorValueBg": "#00000040"
       }
