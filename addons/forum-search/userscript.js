@@ -283,7 +283,7 @@ export default async function ({ addon, console, msg }) {
   filterBar.setAttribute("placeholder", msg("filter-placeholder"));
   search.appendChild(searchBar);
   search.appendChild(filterBar);
-  search.appendChild(Object.assign(document.createElement("input"), {type: "submit", style: "display: none"})); // this is a hack to make the enter key work
+  search.appendChild(Object.assign(document.createElement("input"), { type: "submit", style: "display: none" })); // this is a hack to make the enter key work
 
   let searchDropdown = document.createElement("select");
   searchDropdown.id = "forum-search-dropdown";

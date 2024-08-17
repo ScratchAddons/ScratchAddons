@@ -21,7 +21,8 @@
   max-width: 100%;
 }
 
-#forum-search-input, #forum-search-filter-input {
+#forum-search-input,
+#forum-search-filter-input {
   flex: 1 0 0;
   margin-right: 0.25rem;
 }
