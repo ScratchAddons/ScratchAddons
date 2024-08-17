@@ -20,7 +20,7 @@
       "url": "monitor-values.css",
       "matches": ["projects"],
       "if": {
-        "settings": { "custom-value-color": true }
+        "settings": { "customValueColor": true }
       }
     }
   ],
@@ -41,7 +41,7 @@
         "type": "textColor",
         "source": {
           "type": "settingValue",
-          "settingId": "monitor-value-bg"
+          "settingId": "monitorValueBg"
         }
       }
     },
@@ -51,7 +51,7 @@
         "type": "textColor",
         "source": {
           "type": "settingValue",
-          "settingId": "list-header"
+          "settingId": "listHeader"
         }
       }
     }
@@ -66,14 +66,14 @@
     },
     {
       "name": "List header color",
-      "id": "list-header",
+      "id": "listHeader",
       "type": "color",
       "allowTransparency": true,
       "default": "#ffffff"
     },
     {
       "name": "Monitor roundness (px)",
-      "id": "monitor-radius",
+      "id": "monitorRadius",
       "type": "integer",
       "min": 0,
       "max": 11,
@@ -81,7 +81,7 @@
     },
     {
       "name": "Value roundness (px)",
-      "id": "value-radius",
+      "id": "valueRadius",
       "type": "integer",
       "min": 0,
       "max": 11,
@@ -89,18 +89,18 @@
     },
     {
       "name": "Custom value color",
-      "id": "custom-value-color",
+      "id": "customValueColor",
       "type": "boolean",
       "default": false
     },
     {
       "name": "Value color",
-      "id": "monitor-value-bg",
+      "id": "monitorValueBg",
       "type": "color",
       "allowTransparency": true,
       "default": "#333333",
       "if": {
-        "settings": { "custom-value-color": true }
+        "settings": { "customValueColor": true }
       }
     }
   ],
@@ -111,10 +111,10 @@
       "description": "Scratch's default monitor colors with transparent value backgrounds.",
       "values": {
         "monitor": "#e5f0ff",
-        "list-header": "#e5f0ff",
-        "monitor-radius": 4,
-        "custom-value-color": true,
-        "monitor-value-bg": "#ffffff00"
+        "listHeader": "#e5f0ff",
+        "monitorRadius": 4,
+        "customValueColor": true,
+        "monitorValueBg": "#ffffff00"
       }
     },
     {
@@ -123,10 +123,10 @@
       "description": "Makes monitors the same colors as in Scratch 2.0",
       "values": {
         "monitor": "#c1c4c7",
-        "list-header": "#c1c4c7",
-        "monitor-radius": 4,
-        "value-radius": 4,
-        "custom-value-color": false
+        "listHeader": "#c1c4c7",
+        "monitorRadius": 4,
+        "valueRadius": 4,
+        "customValueColor": false
       }
     },
     {
@@ -135,11 +135,11 @@
       "description": "Translucent black monitors like in HTMLifier.",
       "values": {
         "monitor": "#00000040",
-        "list-header": "#00000040",
-        "monitor-radius": 4,
-        "value-radius": 4,
-        "custom-value-color": true,
-        "monitor-value-bg": "#00000040"
+        "listHeader": "#00000040",
+        "monitorRadius": 4,
+        "valueRadius": 4,
+        "customValueColor": true,
+        "monitorValueBg": "#00000040"
       }
     }
   ],
