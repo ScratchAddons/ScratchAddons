@@ -143,5 +143,5 @@
   "updateUserstylesOnSettingsChange": true,
   "injectAsStyleElt": true,
   "tags": ["editor", "theme", "projectPlayer"],
-  "versionAdded": "1.40.0"
+  "versionAdded": "1.39.0"
 }
