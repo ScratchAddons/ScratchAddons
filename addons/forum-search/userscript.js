@@ -166,7 +166,8 @@ function appendSearch(box, query, filter, page, term, msg) {
           let userPostButton = document.createElement("a");
           userPostButton.appendChild(document.createTextNode(msg("posts-here")));
           userPostButton.addEventListener("click", () => {
-            filterBar.value = `username = "${post.username}" AND ${filterBar.value}`;
+            document.getElementById("forum-search-input").value = "";
+            filterBar.value = `username = "${post.username}" AND (${filterBar.value})`;
             triggerNewSearch(
               document.getElementById("forum-search-list"),
               document.getElementById("forum-search-input").value,
@@ -184,6 +185,7 @@ function appendSearch(box, query, filter, page, term, msg) {
         let userGlobalButton = document.createElement("a");
         userGlobalButton.appendChild(document.createTextNode(msg("posts-sitewide")));
         userGlobalButton.addEventListener("click", () => {
+          document.getElementById("forum-search-input").value = "";
           document.getElementById("forum-search-filter-input").value = `username = "${post.username}"`;
           triggerNewSearch(
             document.getElementById("forum-search-list"),
