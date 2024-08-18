@@ -300,7 +300,6 @@ export default async function ({ addon, console, msg }) {
 
   search.appendChild(Object.assign(document.createElement("input"), { type: "submit" }));
 
-
   let searchContent = document.createElement("div");
   searchContent.addEventListener("scroll", (e) => {
     let et = e.target;
