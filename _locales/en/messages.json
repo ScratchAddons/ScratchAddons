@@ -245,9 +245,9 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_38": {
-    "message": "This is an experimental update that we're releasing to a portion of our user base. It contains some behind-the-scenes changes to support the new extension architecture required by browsers (Manifest V3). If you encounter any issues or unexpected behavior, please $1. There is also a button to send feedback in the settings page.",
-    "description": "!! The placeholder is \"send feedback\"."
+  "extensionUpdateInfo1_v1_39": {
+    "message": "New addon: \"delete other costumes or sounds\", which adds an option to the right click context menu for costumes and sounds to delete all items except for the selected one. Go to $1 to enable it.",
+    "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
@@ -255,8 +255,8 @@
   "sendFeedbackNotification": {
     "message": "send feedback"
   },
-  "extensionUpdateInfo2_v1_38": {
-    "message": "This update doesn't introduce any new features, but stay tuned for upcoming updates."
+  "extensionUpdateInfo2_v1_39": {
+    "message": "Other new addons added this update are \"asset conflict dialog\", \"customizable code editor grid\", and  \"remaining reply counter\"."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",
