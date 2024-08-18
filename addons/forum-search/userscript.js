@@ -3,7 +3,6 @@ let currentPage = 0;
 let hits = 10000; // elastic default
 let currentQuery;
 let currentSort = "relevance";
-let locationQuery = "";
 
 const ALLOWED_TAGS = {
   A: ["href"],
@@ -263,19 +262,12 @@ export default async function ({ addon, console, msg }) {
   if (pathSplit[2] !== "settings") {
     switch (pathSplit.length) {
       case 5: {
-        let topicTitle = document
-          .getElementsByClassName("linkst")[0]
-          .getElementsByTagName("li")[2]
-          .innerText.substring(2)
-          .trim();
         filterBar.value = `topic.id = ${pathSplit[3]}`;
-        searchPlaceholder = msg("search-topic", { topic: topicTitle });
         break;
       }
       case 4: {
         let category = document.getElementsByClassName("box-head")[1].getElementsByTagName("span")[0].textContent;
         filterBar.value = ` topic.category = "${category}"`;
-        searchPlaceholder = msg("search-cat", { cat: category });
         break;
       }
     }
