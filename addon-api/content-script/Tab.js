@@ -371,13 +371,9 @@ export default class Tab extends Listenable {
   /**
    * Hides an element when the addon is disabled.
    * @param {HTMLElement} el The element.
-   * @param {object=} opts The options.
-   * @param {string=} opts.display Tthe fallback value for CSS display.
    */
-  displayNoneWhileDisabled(el, { display = "" } = {}) {
-    el.style.display = `var(--${this._addonId.replace(/-([a-z])/g, (g) =>
-      g[1].toUpperCase()
-    )}-_displayNoneWhileDisabledValue${display ? ", " : ""}${display})`;
+  displayNoneWhileDisabled(el) {
+    el.dataset.saHideDisabled = this._addonId;
   }
 
   /**

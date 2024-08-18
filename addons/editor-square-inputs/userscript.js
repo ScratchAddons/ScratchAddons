@@ -1,9 +1,8 @@
-import { updateAllBlocks } from "../custom-block-shape/update-all-blocks.js";
+import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
 
 /** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon }) {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
-  const vm = addon.tab.traps.vm;
 
   const opcodeToSettings = {
     text: "text",
@@ -31,7 +30,7 @@ export default async function ({ addon }) {
   };
 
   function update() {
-    updateAllBlocks(vm, addon.tab.traps.getWorkspace(), ScratchBlocks);
+    updateAllBlocks(addon.tab);
   }
 
   addon.self.addEventListener("disabled", update);

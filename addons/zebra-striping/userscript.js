@@ -1,6 +1,7 @@
+import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
+
 /** @param {import("addonAPI").AddonAPI} */
 export default async function ({ addon, msg, console }) {
-  const vm = addon.tab.traps.vm;
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   const originalRender = ScratchBlocks.BlockSvg.prototype.render;
@@ -45,9 +46,7 @@ export default async function ({ addon, msg, console }) {
     return originalRender.call(this, opt_bubble);
   };
 
-  if (vm.editingTarget) {
-    vm.emitWorkspaceUpdate();
-  }
+  updateAllBlocks(addon.tab, { updateFlyout: false });
 
   // The replacement glow filter's ID is randomly generated and changes
   // when the workspace is reloaded (which includes loading the page and

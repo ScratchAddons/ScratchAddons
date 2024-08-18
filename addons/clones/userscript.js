@@ -15,6 +15,7 @@ export default async function ({ addon, console, msg }) {
   let count = document.createElement("span");
   let icon = document.createElement("span");
 
+  addon.tab.displayNoneWhileDisabled(countContainerContainer);
   countContainerContainer.className = "clone-container-container";
   countContainer.className = "clone-container";
   count.className = "clone-count";
@@ -41,9 +42,10 @@ export default async function ({ addon, console, msg }) {
       count.dataset.str = cache[v] || msg("clones", { cloneCount: v });
     }
 
-    if (v === 0 || (addon.tab.editorMode !== "editor" && !showOnProjectPage))
-      countContainerContainer.style.display = "none";
-    else addon.tab.displayNoneWhileDisabled(countContainerContainer, { display: "flex" });
+    countContainerContainer.classList.toggle(
+      "show",
+      v !== 0 && (addon.tab.editorMode === "editor" || showOnProjectPage)
+    );
   }
 
   addon.settings.addEventListener("change", () => {

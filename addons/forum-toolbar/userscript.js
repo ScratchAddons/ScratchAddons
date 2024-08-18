@@ -21,9 +21,8 @@ export default async ({ addon, console, msg }) => {
       order,
       element,
     });
-    addon.tab.displayNoneWhileDisabled(element, {
-      display: `var(--forumToolbar-${element.dataset.name}, none)`,
-    });
+    addon.tab.displayNoneWhileDisabled(element);
+    element.style.display = `var(--forumToolbar-${element.dataset.name}, none)`;
   };
   const appendDropdown = (space, element, order) => {
     addon.tab.appendToSharedSpace({
@@ -33,9 +32,8 @@ export default async ({ addon, console, msg }) => {
     });
     const buttons = element.children[1].children;
     const display = Array.from(buttons, (button) => `var(--forumToolbar-${button.dataset.name},`);
-    addon.tab.displayNoneWhileDisabled(element, {
-      display: `${display.join("")}none${")".repeat(buttons.length)}`,
-    });
+    addon.tab.displayNoneWhileDisabled(element);
+    element.style.display = `${display.join("")}none${")".repeat(buttons.length)}`;
   };
   const createDropdown = (name, ...buttons) => {
     const liTag = document.createElement("li");
@@ -123,8 +121,6 @@ export default async ({ addon, console, msg }) => {
    * 4) add icon
    * 5) add addons-l10n
    */
-
-  // Reminder: forumToolbarLinkDecoration order 1 is reserved by image-uploader
 
   appendButton(
     "forumToolbarTextDecoration",
