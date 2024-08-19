@@ -21,7 +21,6 @@ export default async function () {
   if (globalTheme === true) {
     lightThemeLink.removeAttribute("media");
   }
-  // TODO: is this right?
   let theme = globalTheme;
   return {
     theme: globalTheme,
