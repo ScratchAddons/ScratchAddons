@@ -9,6 +9,22 @@ import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
 import globalTheme from "../../libraries/common/global-theme.js";
 import { deserializeSettings, serializeSettings } from "./settings-utils.js";
+import {
+  checkAndOpenUnsupportedPage,
+  getForceEnglish,
+  getInstallType,
+  getLanguage,
+  getMessage,
+  getRunningAddons,
+  getSettingsInfo,
+  reload,
+  sendAddonSettingChanges,
+  sendPermissionCheck,
+  setForceEnglish,
+  settingsPageURL,
+  version,
+  versionName,
+} from "../../libraries/common/settings-page-apis.js";
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -65,14 +81,6 @@ let fuse;
       browserLevelPermissions.push("clipboardWrite");
     }
   }
-  let grantedOptionalPermissions = [];
-  const updateGrantedPermissions = () =>
-    chrome.permissions.getAll(({ permissions }) => {
-      grantedOptionalPermissions = permissions.filter((p) => browserLevelPermissions.includes(p));
-    });
-  updateGrantedPermissions();
-  chrome.permissions.onAdded?.addListener(updateGrantedPermissions);
-  chrome.permissions.onRemoved?.addListener(updateGrantedPermissions);
 
   vue = window.vue = new Vue({
     el: "body",
@@ -101,13 +109,10 @@ let fuse;
         categories,
         searchMsg: this.msg("search"),
         browserLevelPermissions,
-        grantedOptionalPermissions,
         addonListObjs: [],
         sidebarUrls: (() => {
-          const uiLanguage = chrome.i18n.getUILanguage();
+          const uiLanguage = getLanguage();
           const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
-          const version = chrome.runtime.getManifest().version;
-          const versionName = chrome.runtime.getManifest().version_name;
           const utm = `utm_source=extension&utm_medium=settingspage&utm_campaign=v${version}`;
           return {
             contributors: `https://scratchaddons.com/${localeSlash}credits?${utm}`,
@@ -159,10 +164,10 @@ let fuse;
         return !this.addonList.some((addon) => addon.matchesSearch && addon.matchesCategory);
       },
       version() {
-        return chrome.runtime.getManifest().version;
+        return version;
       },
       versionName() {
-        return chrome.runtime.getManifest().version_name;
+        return versionName;
       },
       addonAmt() {
         return `${Math.floor(this.manifests.filter((addon) => !addon.tags.includes("easterEgg")).length / 5) * 5}+`;
@@ -189,19 +194,13 @@ let fuse;
         }
       },
       msg(message, ...params) {
-        return chrome.i18n.getMessage(message, ...params);
+        return getMessage(message, ...params);
       },
       direction() {
-        return getDirection(chrome.i18n.getUILanguage());
+        return getDirection(getLanguage());
       },
       openReview() {
-        if (typeof browser !== "undefined") {
-          window.open(`https://addons.mozilla.org/en-US/firefox/addon/scratch-messaging-extension/reviews/`);
-        } else {
-          window.open(
-            `https://chrome.google.com/webstore/detail/scratch-addons/fbeffbjdlemaoicjdapfpikkikjoneco/reviews`
-          );
-        }
+        window.open(getReviewURL());
       },
       clearSearch() {
         this.searchInputReal = "";
@@ -217,9 +216,7 @@ let fuse;
         const value = settingId && this.addonSettings[addon._addonId][settingId];
         setTimeout(() => {
           if (!settingId || this.addonSettings[addon._addonId][settingId] === value) {
-            chrome.runtime.sendMessage({
-              changeAddonSettings: { addonId: addon._addonId, newSettings: this.addonSettings[addon._addonId] },
-            });
+            sendAddonSettingChanges(addon._addonId, this.addonSettings[addon._addonId]);
             console.log("Updated", this.addonSettings[addon._addonId]);
           }
         }, wait);
@@ -258,7 +255,7 @@ let fuse;
             const file = inputElem.files[0];
             if (!file) {
               inputElem.remove();
-              alert(chrome.i18n.getMessage("fileNotSelected"));
+              alert(getMessage("fileNotSelected"));
               return;
             }
             const text = await file.text();
@@ -269,11 +266,11 @@ let fuse;
             } catch (e) {
               console.warn("Error when importing settings:", e);
               confirmElem.classList.add("hidden-button");
-              alert(chrome.i18n.getMessage("importFailed"));
+              alert(getMessage("importFailed"));
               return;
             }
-            alert(chrome.i18n.getMessage("importSuccess"));
-            chrome.runtime.reload();
+            alert(getMessage("importSuccess"));
+            reload();
           },
           { once: true }
         );
@@ -281,15 +278,11 @@ let fuse;
         inputElem.click();
       },
       applyLanguageSettings() {
-        alert(chrome.i18n.getMessage("importSuccess"));
-        chrome.runtime.reload();
+        alert(getMessage("importSuccess"));
+        reload();
       },
       openFullSettings() {
-        window.open(
-          `${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${
-            this.addonToEnable && this.addonToEnable._addonId
-          }`
-        );
+        window.open(`${settingsPageURL}#addon-${this.addonToEnable && this.addonToEnable._addonId}`);
         setTimeout(() => window.parent.close(), 100);
       },
       hidePopup() {
@@ -342,7 +335,7 @@ let fuse;
         if (newValue === "forums") this.addonGroups.find((group) => group.id === "forums").expanded = true;
       },
       forceEnglishSetting(newValue, oldValue) {
-        if (oldValue !== null) chrome.storage.local.set({ forceEnglish: this.forceEnglishSetting });
+        if (oldValue !== null) setForceEnglish(this.forceEnglishSetting);
       },
     },
     ready() {
@@ -372,7 +365,7 @@ let fuse;
         }
       }, 0);
 
-      chrome.storage.local.get("forceEnglish", ({ forceEnglish }) => {
+      getForceEnglish().then((forceEnglish) => {
         this.forceEnglishSettingInitial = forceEnglish;
         this.forceEnglishSetting = forceEnglish;
       });
@@ -395,27 +388,12 @@ let fuse;
     },
   });
 
-  const getRunningAddons = (manifests, addonsEnabled) => {
-    return new Promise((resolve) => {
-      chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
-        if (!tabs[0].id) return;
-        chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", { frameId: 0 }, (res) => {
-          // Just so we don't get any errors in the console if we don't get any response from a non scratch tab.
-          void chrome.runtime.lastError;
-          const addonsCurrentlyOnTab = res ? [...res.userscripts, ...res.userstyles] : [];
-          const addonsPreviouslyOnTab = res ? res.disabledDynamicAddons : [];
-          resolve({ addonsCurrentlyOnTab, addonsPreviouslyOnTab });
-        });
-      });
-    });
-  };
-
-  chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
+  getSettingsInfo(async ({ manifests, addonsEnabled, addonSettings }) => {
     vue.addonSettings = addonSettings;
     const cleanManifests = [];
     let iframeData;
     if (isIframe) {
-      iframeData = await getRunningAddons(manifests, addonsEnabled);
+      iframeData = await getRunningAddons();
     }
     const deepClone = (obj) => JSON.parse(JSON.stringify(obj));
     for (const { manifest, addonId } of manifests) {
@@ -423,12 +401,12 @@ let fuse;
       manifest._categories[0] = manifest.tags.includes("popup")
         ? "popup"
         : manifest.tags.includes("easterEgg")
-          ? "easterEgg"
-          : manifest.tags.includes("theme")
-            ? "theme"
-            : manifest.tags.includes("community")
-              ? "community"
-              : "editor";
+        ? "easterEgg"
+        : manifest.tags.includes("theme")
+        ? "theme"
+        : manifest.tags.includes("community")
+        ? "community"
+        : "editor";
 
       const addCategoryIfTag = (arr) => {
         let count = 0;
@@ -624,7 +602,7 @@ let fuse;
     }
   });
 
-  document.title = chrome.i18n.getMessage("settingsTitle");
+  document.title = getMessage("settingsTitle");
   function resize() {
     if (window.innerWidth < 1100) {
       vue.smallMode = true;
@@ -639,8 +617,8 @@ let fuse;
   window.onresize = resize;
   resize();
 
-  chrome.management.getSelf((info) => {
-    if (info.installType === "development") vue.devMode = true;
+  getInstallType().then((installType) => {
+    if (installType === "development") vue.devMode = true;
   });
 
   // Konami code easter egg
@@ -665,5 +643,7 @@ let fuse;
     }
   });
 
-  chrome.runtime.sendMessage("checkPermissions");
+  sendPermissionCheck();
 })();
+
+checkAndOpenUnsupportedPage();

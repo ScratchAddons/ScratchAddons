@@ -1,3 +1,10 @@
+import {
+  getMessage,
+  getPermissions,
+  requestPermission,
+  sendAddonStateChange,
+} from "../../../libraries/common/settings-page-apis.js";
+
 const isIframe = window.parent !== window;
 
 export default async function ({ template }) {
@@ -45,7 +52,7 @@ export default async function ({ template }) {
         return isIframe ? false : this.groupId === "enabled";
       },
       loadPreset(preset) {
-        if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
+        if (window.confirm(getMessage("confirmPreset"))) {
           for (const property of Object.keys(preset.values)) {
             this.addonSettings[property] = preset.values[property];
           }
@@ -54,7 +61,7 @@ export default async function ({ template }) {
         }
       },
       loadDefaults() {
-        if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
+        if (window.confirm(getMessage("confirmReset"))) {
           for (const property of this.addon.settings) {
             // Clone necessary for tables
             this.addonSettings[property.id] = JSON.parse(JSON.stringify(property.default));
@@ -63,7 +70,7 @@ export default async function ({ template }) {
           console.log(`Loaded default values for ${this.addon._addonId}`);
         }
       },
-      toggleAddonRequest(event) {
+      async toggleAddonRequest(event) {
         const toggle = () => {
           // Prevents selecting text when the shift key is being held down
           event.preventDefault();
@@ -76,9 +83,9 @@ export default async function ({ template }) {
             isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
               ? false
               : event.shiftKey
-                ? false
-                : newState;
-          chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
+              ? false
+              : newState;
+          sendAddonStateChange(this.addon._addonId, newState);
           this.$emit("toggle-addon-request", newState);
         };
 
@@ -86,18 +93,20 @@ export default async function ({ template }) {
           this.$root.browserLevelPermissions.includes(value)
         );
         if (!this.addon._enabled && this.addon.tags.includes("danger")) {
-          const confirmation = confirm(chrome.i18n.getMessage("dangerWarning", [this.addon.name]));
+          const confirmation = confirm(getMessage("dangerWarning", [this.addon.name]));
           if (!confirmation) return;
         }
         if (!this.addon._enabled && requiredPermissions.length) {
-          const result = requiredPermissions.every((p) => this.$root.grantedOptionalPermissions.includes(p));
+          const permissions = await getPermissions();
+          let grantedOptionalPermissions = permissions.filter((p) => this.$root.browserLevelPermissions.includes(p));
+          const result = requiredPermissions.every((p) => grantedOptionalPermissions.includes(p));
           if (result === false) {
             if (isIframe) {
               this.$root.addonToEnable = this.addon;
               document.querySelector(".popup").style.animation = "dropDown 0.35s 1";
               this.$root.showPopupModal = true;
             } else
-              chrome.permissions.request(
+              requestPermission(
                 {
                   permissions: requiredPermissions,
                 },
