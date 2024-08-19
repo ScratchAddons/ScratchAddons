@@ -27,7 +27,7 @@ const promisify =
     new Promise((resolve) => callbackFn(...args, resolve));
 
 document.getElementById("permissionsBtn").addEventListener("click", async () => {
-  const granted = await requestHostPermissions()
+  const granted = await requestHostPermissions();
   if (granted) {
     return reload();
   }

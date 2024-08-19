@@ -67,7 +67,6 @@ export const deserializeSettings = async (str, manifests, confirmElem, { browser
   handleConfirmClicked = async () => {
     handleConfirmClicked = null;
     if (Object.keys(pendingPermissions).length) {
-
       const granted = await requestPermission({
         permissions: Object.values(pendingPermissions).flat(),
       });

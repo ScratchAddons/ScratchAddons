@@ -401,12 +401,12 @@ let fuse;
       manifest._categories[0] = manifest.tags.includes("popup")
         ? "popup"
         : manifest.tags.includes("easterEgg")
-        ? "easterEgg"
-        : manifest.tags.includes("theme")
-        ? "theme"
-        : manifest.tags.includes("community")
-        ? "community"
-        : "editor";
+          ? "easterEgg"
+          : manifest.tags.includes("theme")
+            ? "theme"
+            : manifest.tags.includes("community")
+              ? "community"
+              : "editor";
 
       const addCategoryIfTag = (arr) => {
         let count = 0;

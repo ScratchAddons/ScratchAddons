@@ -117,4 +117,4 @@ export const checkAndOpenUnsupportedPage = () => {
     if (isPopup) chrome.tabs.create({ url: urlToOpen, active: true });
     else location.href = urlToOpen;
   }
-}
+};
