@@ -97,6 +97,9 @@ a.social-messages-profile-link:link {
 .social-message-date {
   color: var(--darkWww-box-scratchr2GrayText, #999);
 }
+.social-message.mod-unread .social-message-date {
+  color: var(--darkWww-gray-scratchr2GrayText, #999);
+}
 
 /* message-filters */
 .filter-container {
@@ -127,6 +130,9 @@ a.social-messages-profile-link:link {
   border: none;
   color: var(--darkWww-box-scratchr2Text, #322f31);
   font-style: italic;
+}
+.social-message.mod-unread .comment-text {
+  color: var(--darkWww-gray-scratchr2Text, #322f31);
 }
 .comment-text::before,
 .comment-text::after {
