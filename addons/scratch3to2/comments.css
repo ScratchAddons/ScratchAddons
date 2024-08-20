@@ -125,6 +125,12 @@
   padding-top: 10px;
   border: none;
 }
+.comment.highlighted-comment {
+  background-color: var(--darkWww-gray-scratchr2, #f9f9f9);
+}
+.comment.highlighted-comment::before {
+  display: none;
+}
 .comment .comment-top-row {
   margin-bottom: 6px;
   line-height: 11px;
@@ -136,6 +142,9 @@
 .comment .comment-top-row .username:hover {
   color: var(--darkWww-link-scratchr2, #855cd6);
 }
+.comment.highlighted-comment .comment-top-row .username {
+  color: var(--darkWww-gray-scratchr2LabelText, #333);
+}
 .comment .comment-top-row .comment-delete,
 .comment .comment-top-row .comment-report {
   font-size: 13px;
@@ -144,6 +153,10 @@
 }
 .comment .comment-top-row .comment-delete {
   margin-right: 10px;
+}
+.comment.comment.highlighted-comment .comment-top-row .comment-delete,
+.comment.comment.highlighted-comment .comment-top-row .comment-report {
+  color: var(--darkWww-gray-scratchr2GrayText, #999);
 }
 .comment .comment-top-row .comment-delete::before,
 .comment .comment-top-row .comment-report::before {
@@ -159,6 +172,9 @@
   background-color: transparent;
   border: none;
 }
+.comment.comment.highlighted-comment .comment-body .comment-bubble {
+  color: var(--darkWww-gray-scratchr2Text, #322f31);
+}
 .comment .comment-body .comment-bubble::before {
   display: none;
 }
@@ -171,6 +187,9 @@
   justify-content: flex-start;
   font-size: 13px;
   line-height: 20px;
+}
+.comment.comment.highlighted-comment .comment-body .comment-bottom-row .comment-time {
+  color: var(--darkWww-gray-scratchr2GrayText, #999);
 }
 .comment .comment-body .comment-bottom-row .comment-reply {
   margin-left: 15px;
