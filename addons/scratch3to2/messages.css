@@ -64,6 +64,10 @@
   padding: 7px;
   background-image: url("https://cdn.scratch.mit.edu/scratchr2/static/images/icons_xs.png");
   opacity: 0.7;
+  filter: var(--darkWww-box-filter, none);
+}
+.social-message.mod-unread .social-message-icon {
+  filter: var(--darkWww-gray-filter, none);
 }
 .social-message-icon[src$="follow.svg"],
 .social-message-icon[src$="curator-invite.svg"],
