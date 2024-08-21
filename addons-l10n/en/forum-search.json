@@ -12,6 +12,6 @@
   "forum-search/oldest": "oldest",
   "forum-search/filter-placeholder": {
     "string": "Filter (e.g. username = \"\")",
-    "comment": "Do not translate 'username' word"
+    "developer_comment": "Do not translate 'username' word"
   }
 }
