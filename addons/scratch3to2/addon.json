@@ -54,6 +54,10 @@
       "matches": ["https://scratch.mit.edu/join"]
     },
     {
+      "url": "guidelines.css",
+      "matches": ["https://scratch.mit.edu/community_guidelines"]
+    },
+    {
       "url": "download.css",
       "matches": ["https://scratch.mit.edu/download"]
     }

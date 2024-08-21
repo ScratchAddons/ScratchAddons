@@ -74,36 +74,6 @@
   background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
 }
 
-/* Box component */
-.box {
-  border-color: var(--darkWww-box-scratchr2Border, #e0e0e0);
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.27);
-}
-.box .box-header {
-  height: auto;
-  padding: 7px 20px;
-  background-color: var(--darkWww-gray-scratchr2, #f7f7f7);
-  border-bottom-color: var(--darkWww-box-scratchr2Border, #e0e0e0);
-  text-shadow: var(--darkWww-gray-scratchr2TextShadow, 0 1px white);
-}
-.box .box-header h4 {
-  color: var(--darkWww-gray-scratchr2HeaderText, #554747);
-  line-height: 20px;
-}
-@media (min-width: 942px) {
-  .box .box-header h4 {
-    font-size: 1rem;
-  }
-}
-.box .box-header p {
-  margin: 0;
-  font-size: 13px;
-  line-height: 20px;
-}
-.box .box-content {
-  color: var(--darkWww-box-scratchr2Text, #322f31);
-}
-
 /* What's Happening? */
 .activity-li {
   margin: 8px 0;

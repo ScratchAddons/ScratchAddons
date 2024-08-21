@@ -1,0 +1,38 @@
+/* Page */
+#view {
+  padding-top: 15px;
+}
+
+/* Header */
+@media (min-width: 942px) {
+  .box .box-header h4 {
+    font-size: 22px;
+    line-height: 26px;
+  }
+}
+
+/* Content */
+.box .box-content {
+  margin: auto;
+  max-width: 700px;
+  padding: 20px;
+}
+.guidelines p {
+  margin-top: 0;
+  text-align: justify;
+}
+.guidelines p,
+.guidelines dl {
+  line-height: 1.25em;
+}
+.guidelines dl dt {
+  padding-left: 25px;
+  background-image: url("%addon-self-dir%/../dark-www/assets/meow.png");
+  background-size: 20px 15px;
+  background-repeat: no-repeat;
+  text-align: left;
+}
+.guidelines dl dd {
+  padding-left: 25px;
+  text-align: justify;
+}
