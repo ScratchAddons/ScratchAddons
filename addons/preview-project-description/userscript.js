@@ -42,11 +42,11 @@ export default async function ({ addon, console, msg }) {
     if (!wasEverEnabled) {
       // TODO: also change animated-thumb/userscript.js (or create new utility)
       const loggedInUser = await addon.auth.fetchUsername();
-      console.log("loggedInUser: " + loggedInUser)
+      console.log("loggedInUser: " + loggedInUser);
       const projectOwner = addon.tab.redux.state?.preview?.projectInfo?.author?.username;
-      console.log("projectOwner: " + projectOwner)
+      console.log("projectOwner: " + projectOwner);
       if (!projectOwner || !loggedInUser || loggedInUser !== projectOwner) {
-        console.log("return")
+        console.log("return");
         return;
       }
     }
