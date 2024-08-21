@@ -72,3 +72,15 @@
 .information-page .info-outer nav a {
   font-weight: bold;
 }
+
+/* Get Help */
+.gethelp-button {
+  margin-bottom: 0;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
+  line-height: 30px;
+}
+.gethelp-button:hover {
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
+}
