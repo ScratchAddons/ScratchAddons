@@ -9,9 +9,7 @@ export default class Listenable extends EventTarget {
     }
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   dispatchEvent(...args) {
     return super.dispatchEvent(...args);
   }

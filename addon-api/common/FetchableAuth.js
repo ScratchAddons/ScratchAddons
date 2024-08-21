@@ -6,25 +6,15 @@ export default class FetchableAuth extends AuthCommon {
     this._refresh();
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   _refresh(requestFetchFn) {
-    /**
-     * @private
-     */
+    /** @private */
     this._lastUsername = undefined;
-    /**
-     * @private
-     */
+    /** @private */
     this._lastUserId = undefined;
-    /**
-     * @private
-     */
+    /** @private */
     this._lastIsLoggedIn = undefined;
-    /**
-     * @private
-     */
+    /** @private */
     this._lastXToken = undefined;
     if (requestFetchFn)
       /** @private */
@@ -39,9 +29,7 @@ export default class FetchableAuth extends AuthCommon {
     throw new Error("Subclasses must implement this.");
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   _waitUntilFetched() {
     const prom = new Promise((resolve) => this.addEventListener("session", resolve, { once: true }));
     if (this._requestFetchFn) {
@@ -51,9 +39,7 @@ export default class FetchableAuth extends AuthCommon {
     return prom;
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   _update(d) {
     this._lastUsername = d.user?.username || null;
     this._lastUserId = d.user?.id || null;
@@ -63,9 +49,7 @@ export default class FetchableAuth extends AuthCommon {
     this.dispatchEvent(new CustomEvent("change"));
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   _fetchProperty(prop) {
     if (typeof this[prop] !== "undefined") return Promise.resolve(this[prop]);
     return this._waitUntilFetched().then(() => this[prop]);

@@ -7,17 +7,13 @@ import Listenable from "./Listenable.js";
 export default class Self extends Listenable {
   constructor(addonObj, info) {
     super();
-    /**
-     * @private
-     */
+    /** @private */
     this._addonId = info.id; // In order to receive fireEvent messages from background
     /**
      * The addon ID for this addon.
      */
     this.id = info.id;
-    /**
-     * @private
-     */
+    /** @private */
     this._addonObj = addonObj;
     // catches both Chrome and Chromium
     /**
@@ -44,9 +40,7 @@ export default class Self extends Listenable {
     return `${this._addonObj._path}addons/${this.id}`;
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   get _eventTargetKey() {
     return "self";
   }

@@ -14,9 +14,7 @@ export default class PopupAddon extends Addon {
     this.popup = new Popup(this);
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   get _path() {
     return chrome.runtime.getURL("");
   }

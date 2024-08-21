@@ -6,9 +6,7 @@ import Listenable from "./Listenable.js";
 export default class Settings extends Listenable {
   constructor(addonObject) {
     super();
-    /**
-     * @private
-     */
+    /** @private */
     this._addonId = addonObject.self.id;
   }
   /**
@@ -23,9 +21,7 @@ export default class Settings extends Listenable {
     if (value === undefined) throw "ScratchAddons exception: invalid setting ID";
     else return value;
   }
-  /**
-   * @private
-   */
+  /** @private */
   get _eventTargetKey() {
     return "settings";
   }

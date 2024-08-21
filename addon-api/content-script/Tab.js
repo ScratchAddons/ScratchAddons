@@ -21,9 +21,7 @@ let createdAnyBlockContextMenus = false;
 export default class Tab extends Listenable {
   constructor(addonObj, info) {
     super();
-    /**
-     * @private
-     */
+    /** @private */
     this._addonId = info.id;
     /**
      * Obtain objects that aren't otherwise available.
@@ -33,9 +31,7 @@ export default class Tab extends Listenable {
      * Get and modify Scratch's redux state.
      */
     this.redux = new ReduxHandler();
-    /**
-     * @private
-     */
+    /** @private */
     this._waitForElementSet = new WeakSet();
     /** @private */
     this._addonObj = addonObj;
@@ -47,9 +43,7 @@ export default class Tab extends Listenable {
   get clientVersion() {
     if (location.origin !== "https://scratch.mit.edu") return "scratch-www"; // scratchr2 cannot be self-hosted
     if (!this._clientVersion)
-      /**
-       * @private
-       */
+      /** @private */
       this._clientVersion = document.querySelector("meta[name='format-detection']")
         ? "scratch-www"
         : document.querySelector("script[type='text/javascript']")
@@ -297,9 +291,7 @@ export default class Tab extends Listenable {
     }
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   get _eventTargetKey() {
     return "tab";
   }
@@ -349,9 +341,7 @@ export default class Tab extends Listenable {
     return res;
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   scratchClassReady() {
     // Make sure to return a resolved promise if this is not a project!
     const isProject =
@@ -359,9 +349,7 @@ export default class Tab extends Listenable {
       !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
     if (!isProject && !isScratchGui) return Promise.resolve();
 
-    /**
-     * @private
-     */
+    /** @private */
     this._calledScratchClassReady = true;
     if (scratchAddons.classNames.loaded) return Promise.resolve();
     return new Promise((resolve) => {

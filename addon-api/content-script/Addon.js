@@ -8,13 +8,9 @@ import Auth from "./Auth.js";
 export default class UserscriptAddon extends Addon {
   constructor(info) {
     super(info);
-    /**
-     * @private
-     */
+    /** @private */
     this._addonId = info.id;
-    /**
-     * @private
-     */
+    /** @private */
     this.__path = `${new URL(import.meta.url).origin}/`;
     /**
      * Allows addon userscripts to get information about the tab they’re currently running on.
@@ -29,9 +25,7 @@ export default class UserscriptAddon extends Addon {
     this.self.enabledLate = info.enabledLate;
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   get _path() {
     return this.__path;
   }

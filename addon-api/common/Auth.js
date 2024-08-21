@@ -47,9 +47,7 @@ export default class Auth extends Listenable {
     return scratchAddons.globalState.auth.scratchLang;
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   get _eventTargetKey() {
     return "auth";
   }

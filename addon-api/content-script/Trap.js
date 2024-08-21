@@ -6,25 +6,15 @@ import Listenable from "../common/Listenable.js";
 export default class Trap extends Listenable {
   constructor(tab) {
     super();
-    /**
-     * @private
-     */
+    /** @private */
     this._react_internal_key = undefined;
-    /**
-     * @private
-     */
+    /** @private */
     this._isWWW = () => tab.clientVersion === "scratch-www";
-    /**
-     * @private
-     */
+    /** @private */
     this._getEditorMode = () => this._isWWW() && tab.editorMode;
-    /**
-     * @private
-     */
+    /** @private */
     this._waitForElement = tab.waitForElement.bind(tab);
-    /**
-     * @private
-     */
+    /** @private */
     this._cache = Object.create(null);
   }
 
@@ -38,16 +28,12 @@ export default class Trap extends Listenable {
     return __scratchAddonsTraps._onceMap.vm;
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   get REACT_INTERNAL_PREFIX() {
     return "__reactInternalInstance$";
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   _getBlocksComponent(wrapper) {
     if (!this._react_internal_key) {
       this._react_internal_key = Object.keys(wrapper).find((key) => key.startsWith(this.REACT_INTERNAL_PREFIX));
@@ -60,9 +46,7 @@ export default class Trap extends Listenable {
     return childable;
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   _getBlocksWrapperComponentSync() {
     const editorMode = this._getEditorMode();
     if (!editorMode || editorMode === "embed")
@@ -75,9 +59,7 @@ export default class Trap extends Listenable {
     return this._getBlocksComponent(elem);
   }
 
-  /**
-   * @private
-   */
+  /** @private */
   async _getBlocksWrapperComponent() {
     const editorMode = this._getEditorMode();
     if (!editorMode || editorMode === "embed")
