@@ -26,7 +26,9 @@ export default class FetchableAuth extends AuthCommon {
      * @private
      */
     this._lastXToken = undefined;
-    if (requestFetchFn) this._requestFetchFn = requestFetchFn; // A function to call when data is requested
+    if (requestFetchFn)
+      /** @private */
+      this._requestFetchFn = requestFetchFn; // A function to call when data is requested
   }
 
   /**

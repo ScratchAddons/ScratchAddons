@@ -37,6 +37,7 @@ export default class Tab extends Listenable {
      * @private
      */
     this._waitForElementSet = new WeakSet();
+    /** @private */
     this._addonObj = addonObj;
   }
   /**
