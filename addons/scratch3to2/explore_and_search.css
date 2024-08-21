@@ -11,9 +11,11 @@
   background-color: transparent;
   box-shadow: none;
 }
-.outer .tabs {
-  /* Search page uses em instead of rem */
-  width: 58.75rem;
+@media (min-width: 942px) {
+  .outer .tabs {
+    /* Search page uses em instead of rem */
+    width: 58.75rem;
+  }
 }
 .tabs {
   background-color: transparent;
