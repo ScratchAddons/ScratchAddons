@@ -1,4 +1,4 @@
-import { disableTabs } from "../project-notes-tabs/disable-self.js";
+import { disableTabs, enableTabs } from "../project-notes-tabs/disable-self.js";
 
 export default async function ({ addon, console, msg }) {
   const divElement = Object.assign(document.createElement("div"), {
@@ -42,16 +42,16 @@ export default async function ({ addon, console, msg }) {
     if (!wasEverEnabled) {
       // TODO: also change animated-thumb/userscript.js (or create new utility)
       const loggedInUser = await addon.auth.fetchUsername();
+      console.log("loggedInUser: " + loggedInUser)
       const projectOwner = addon.tab.redux.state?.preview?.projectInfo?.author?.username;
+      console.log("projectOwner: " + projectOwner)
       if (!projectOwner || !loggedInUser || loggedInUser !== projectOwner) {
+        console.log("return")
         return;
       }
     }
 
-    if (document.querySelector(".sa-project-tabs-wrapper")) {
-      // Since project-notes-tabs runs on runAtComplete:false, and doesn't support
-      // dynamicEnable, it's very unlikely that it hasn't executed yet.
-      // Worst that can happen is that the "preview" toggle isn't accessible until a reload.
+    if (document.body.classList.contains("sa-project-tabs-on")) {
       document.querySelector(".sa-project-tabs-wrapper").appendChild(divElement);
     } else {
       document.querySelector(".project-notes > .description-block > .project-textlabel").append(divElement);
@@ -93,6 +93,7 @@ export default async function ({ addon, console, msg }) {
       // This case will not cause waitForElement to fire.
       // Manually run the injectToggle() function:
       queueMicrotask(injectToggle);
+      enableTabs();
     }
   }
 

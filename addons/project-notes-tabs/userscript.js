@@ -15,6 +15,9 @@ export default async function ({ addon, console }) {
     document.body.classList.remove("sa-project-tabs-on");
   }
   disableSelfEventTarget.addEventListener("disable", disableSelf);
+  disableSelfEventTarget.addEventListener("enable", enableSelf);
+  addon.self.addEventListener("disabled", disableSelf);
+  addon.self.addEventListener("reenabled", enableSelf);
 
   async function remixHandler() {
     while (true) {
@@ -30,14 +33,7 @@ export default async function ({ addon, console }) {
   let tabs;
   let wrapper;
 
-  while (true) {
-    projectNotes = await addon.tab.waitForElement(".project-notes", {
-      markAsSeen: true,
-      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
-    });
-
-    if (!document.body.classList.contains("sa-project-tabs-on")) continue; // We're disabled
-
+  function enableSelf() {
     const labels = document.querySelectorAll(".project-textlabel");
     const descriptions = document.querySelectorAll(".description-block");
     const tabButtons = [];
@@ -49,6 +45,8 @@ export default async function ({ addon, console }) {
     tabs = document.createElement("div");
     wrapper.appendChild(tabs);
     tabs.classList.add("tabs-sa");
+
+    document.body.classList.add("sa-project-tabs-on");
 
     if (!remixHandler.run) {
       remixHandler.run = true;
@@ -75,5 +73,14 @@ export default async function ({ addon, console }) {
     }
 
     selectTab(0);
+  }
+
+  while (true) {
+    projectNotes = await addon.tab.waitForElement(".project-notes", {
+      markAsSeen: true,
+      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+    });
+
+    if (document.body.classList.contains("sa-project-tabs-on")) enableSelf();
   }
 }
