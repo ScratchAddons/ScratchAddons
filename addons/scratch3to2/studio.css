@@ -132,7 +132,7 @@
 .studio-tab-nav {
   margin: 0;
   padding-top: 0;
-  padding-bottom: 6px;
+  padding-bottom: 0;
   border-color: var(--darkWww-border-20, #ccc);
   font-size: 13px;
 }
@@ -141,7 +141,7 @@
 }
 .sub-nav li {
   margin-top: 0;
-  margin-bottom: 0;
+  margin-bottom: 6px;
   margin-right: 6px;
   border-radius: 5px;
 }
