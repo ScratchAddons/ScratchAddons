@@ -575,6 +575,17 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
   height: 46px; /* two lines */
 }
 
+/* Set Thumbnail modal */
+.sa-animated-thumb-popup-content {
+  padding: 0;
+}
+.sa-animated-thumb-popup-actions button {
+  border: 1px solid var(--darkWww-button-scratchr2, #855cd6);
+}
+.sa-animated-thumb-popup-actions button:hover {
+  background-color: var(--darkWww-button-scratchr2Hover, #7854c0);
+}
+
 /* Extensions row */
 .preview .project-notes .preview-row {
   /* Extension list is inside project notes on small screens */
