@@ -3,7 +3,7 @@
 /**
  * @callback MessageFunction
  * @param {string} message The name of the message.
- * @param {Object.<string, number | string>} [placeholders] The values to be inserted for the placeholders.
+ * @param {Object.<string, number | string> =} [placeholders] The values to be inserted for the placeholders.
  * @returns {string}
  */
 
