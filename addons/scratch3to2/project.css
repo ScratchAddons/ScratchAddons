@@ -398,7 +398,7 @@ body:not(.sa-body-editor) [class*="stage_green-flag-overlay_"] > img {
   font-size: 13px;
   line-height: 28px;
 }
-.preview .description-block {
+.preview .sa-project-tabs-wrapper + .description-block {
   border-top: 1px solid var(--darkWww-border, #ddd);
 }
 
