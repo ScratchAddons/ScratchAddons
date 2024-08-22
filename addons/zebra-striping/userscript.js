@@ -42,7 +42,7 @@ export default async function ({ addon, msg, console }) {
           // if the block was stripped we need to look at it's original color in order to get it's real color.
           parent.getColour() === (block.saOrginalColour ? block.saOrginalColour[0] : block.getColour());
 
-        // if the block's stripe state is correct, no need to updaye its state.
+        // if the block's stripe state is correct, no need to update its state.
         if (shouldStripe === block.saStriped) continue;
 
         if (!shouldStripe && block.saOrginalColour) {
