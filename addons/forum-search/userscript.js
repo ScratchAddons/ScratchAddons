@@ -289,7 +289,12 @@ export default async function ({ addon, console, msg }) {
   }
   search.appendChild(searchDropdown);
 
-  search.appendChild(Object.assign(document.createElement("input"), { type: "submit" }));
+  search.appendChild(
+    Object.assign(document.createElement("input"), {
+      type: "submit",
+      className: "button small grey",
+    })
+  );
 
   let searchContent = document.createElement("div");
   searchContent.addEventListener("scroll", (e) => {

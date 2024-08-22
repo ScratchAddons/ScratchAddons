@@ -38,3 +38,9 @@
   background: white;
   border-top: 1px solid #e0e0e0;
 }
+
+#forum-search-form .button {
+  margin: 0;
+  height: 28px;
+  line-height: 18px;
+}
