@@ -31,7 +31,7 @@ export default async function ({ addon, console, msg }) {
       if (mutation.attributeName === "class") {
         injectToggle();
         return;
-      };
+      }
     });
   }
   const mutationObserver = new MutationObserver(callback);
