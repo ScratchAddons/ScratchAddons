@@ -1,4 +1,4 @@
-import { disableTabs, enableTabs } from "../project-notes-tabs/disable-self.js";
+import { disableTabs, enableTabs } from "../project-notes-tabs/module.js";
 
 export default async function ({ addon, console, msg }) {
   const divElement = Object.assign(document.createElement("div"), {
@@ -25,6 +25,18 @@ export default async function ({ addon, console, msg }) {
     checkboxInput.checked = false;
   });
 
+  // Hacky way to support dynamiclly enabling project-notes-tabs
+  function callback(mutationsList, observer) {
+    mutationsList.forEach(mutation => {
+      if (mutation.attributeName === 'class') {
+        injectToggle();
+        //return;
+      };
+    })
+  }
+  const mutationObserver = new MutationObserver(callback)
+  mutationObserver.observe(document.body, { attributes: true })
+
   checkboxInput.addEventListener("change", () => {
     togglePreview(checkboxInput.checked);
   });
@@ -42,11 +54,8 @@ export default async function ({ addon, console, msg }) {
     if (!wasEverEnabled) {
       // TODO: also change animated-thumb/userscript.js (or create new utility)
       const loggedInUser = await addon.auth.fetchUsername();
-      console.log("loggedInUser: " + loggedInUser);
       const projectOwner = addon.tab.redux.state?.preview?.projectInfo?.author?.username;
-      console.log("projectOwner: " + projectOwner);
       if (!projectOwner || !loggedInUser || loggedInUser !== projectOwner) {
-        console.log("return");
         return;
       }
     }
