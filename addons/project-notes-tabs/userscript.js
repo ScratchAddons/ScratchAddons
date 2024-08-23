@@ -1,4 +1,4 @@
-import { eventTarget as disableSelfEventTarget } from "./disable-self.js";
+import { disableTabs, enableTabs } from "./module.js";
 
 export default async function ({ addon, console }) {
   addon.tab
@@ -9,15 +9,8 @@ export default async function ({ addon, console }) {
       document.body.classList.add("sa-project-tabs-on");
     });
 
-  function disableSelf() {
-    document.querySelectorAll(".description-block").forEach((e) => (e.style.display = ""));
-    wrapper.remove();
-    document.body.classList.remove("sa-project-tabs-on");
-  }
-  disableSelfEventTarget.addEventListener("disable", disableSelf);
-  disableSelfEventTarget.addEventListener("enable", enableSelf);
-  addon.self.addEventListener("disabled", disableSelf);
-  addon.self.addEventListener("reenabled", enableSelf);
+  addon.self.addEventListener("disabled", disableTabs);
+  addon.self.addEventListener("reenabled", enableTabs);
 
   async function remixHandler() {
     while (true) {
@@ -33,7 +26,14 @@ export default async function ({ addon, console }) {
   let tabs;
   let wrapper;
 
-  function enableSelf() {
+  while (true) {
+    projectNotes = await addon.tab.waitForElement(".project-notes", {
+      markAsSeen: true,
+      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+    });
+
+    if (!document.body.classList.contains("sa-project-tabs-on")) continue; // We're disabled
+
     const labels = document.querySelectorAll(".project-textlabel");
     const descriptions = document.querySelectorAll(".description-block");
     const tabButtons = [];
@@ -45,8 +45,6 @@ export default async function ({ addon, console }) {
     tabs = document.createElement("div");
     wrapper.appendChild(tabs);
     tabs.classList.add("tabs-sa");
-
-    document.body.classList.add("sa-project-tabs-on");
 
     if (!remixHandler.run) {
       remixHandler.run = true;
@@ -68,19 +66,10 @@ export default async function ({ addon, console }) {
       for (let i = 0; i < sectionCount; i++) {
         const selected = i === index;
         tabButtons[i].classList.toggle("tab-choice-selected-sa", selected);
-        descriptions[i].style.display = selected ? "" : "none";
+        descriptions[i].classList.toggle("sa-tab-hide", !selected);
       }
     }
 
     selectTab(0);
-  }
-
-  while (true) {
-    projectNotes = await addon.tab.waitForElement(".project-notes", {
-      markAsSeen: true,
-      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
-    });
-
-    if (document.body.classList.contains("sa-project-tabs-on")) enableSelf();
   }
 }
