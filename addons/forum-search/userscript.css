@@ -41,6 +41,6 @@
 
 #forum-search-form .button {
   margin: 0;
-  height: 28px;
+  height: auto;
   line-height: 18px;
 }
