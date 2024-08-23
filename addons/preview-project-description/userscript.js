@@ -27,15 +27,15 @@ export default async function ({ addon, console, msg }) {
 
   // Hacky way to support dynamiclly enabling project-notes-tabs
   function callback(mutationsList, observer) {
-    mutationsList.forEach(mutation => {
-      if (mutation.attributeName === 'class') {
+    mutationsList.forEach((mutation) => {
+      if (mutation.attributeName === "class") {
         injectToggle();
         return;
       };
-    })
+    });
   }
-  const mutationObserver = new MutationObserver(callback)
-  mutationObserver.observe(document.body, { attributes: true })
+  const mutationObserver = new MutationObserver(callback);
+  mutationObserver.observe(document.body, { attributes: true });
 
   checkboxInput.addEventListener("change", () => {
     togglePreview(checkboxInput.checked);
