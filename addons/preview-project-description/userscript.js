@@ -30,7 +30,7 @@ export default async function ({ addon, console, msg }) {
     mutationsList.forEach(mutation => {
       if (mutation.attributeName === 'class') {
         injectToggle();
-        //return;
+        return;
       };
     })
   }
