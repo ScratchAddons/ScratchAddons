@@ -35,15 +35,19 @@ export default async function ({ addon, msg, console }) {
           !block.isInsertionMarker() &&
           // has a parent
           parent &&
-          // shadow blocks should be striped if it's parent is striped. otherwise, it should be opposite of parent.
-          (block.isShadow() ? parent.saStriped : !parent.saStriped) &&
-          // parent and child are same color (even shadows match block color)
-          // we dont check category because other addons can make blocks the same color.
-          // if the block was stripped we need to look at it's original color in order to get it's real color.
-          parent.getColour() === (block.saOriginalColour ? block.saOriginalColour[0] : block.getColour());
+          // shadow blocks should be striped if it's parent is striped.
+          (block.isShadow()
+            ? parent.saStriped
+            : // parent and child are same color (even shadows match block color)
+              // we dont check category because other addons can make blocks the same color.
+              // if the block was stripped we need to look at it's original color in order to get it's real color.
+              parent.getColour() === (block.saOriginalColour ? block.saOriginalColour[0] : block.getColour()) &&
+              // non-shadow blocks should be striped if its parent isn't striped.
+              !parent.saStriped);
 
         // if the block's stripe state is correct, no need to update its state.
-        if (shouldStripe === block.saStriped) continue;
+        // if a block has never been stripped (undefined) and shouldStripe is false, the code below won't run
+        if (shouldStripe === Boolean(block.saStriped)) continue;
 
         if (!shouldStripe && block.saOriginalColour) {
           block.setColour(...block.saOriginalColour);
@@ -59,13 +63,14 @@ export default async function ({ addon, msg, console }) {
           block.setColour(...stripedColors);
         }
 
-        // field strokes don't automatically update when setColour is called.
-        // so manually update field dropdowns to match parent color
-        for (const input of block.inputList) {
-          for (const field of input.fieldRow) {
-            if (field instanceof ScratchBlocks.FieldDropdown) {
-              field.box_.setAttribute("fill", field.sourceBlock_.getColour());
-              field.box_.setAttribute("stroke", field.sourceBlock_.getColourTertiary());
+        // field dropdowns in non shadow blocks don't automatically update when setColour is called.
+        if (!block.isShadow()) {
+          for (const input of block.inputList) {
+            for (const field of input.fieldRow) {
+              if (field instanceof ScratchBlocks.FieldDropdown) {
+                field.box_.setAttribute("fill", field.sourceBlock_.getColour());
+                field.box_.setAttribute("stroke", field.sourceBlock_.getColourTertiary());
+              }
             }
           }
         }
