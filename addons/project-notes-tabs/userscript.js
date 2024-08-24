@@ -9,18 +9,18 @@ export default async function ({ addon, console }) {
       document.body.classList.add("sa-project-tabs-on");
     });
 
-  function enableSelf () {
+  function enableSelf() {
     if (addon.self.disabled) return;
     document.body.classList.add("sa-project-tabs-on");
     wrapper.style.display = "";
     selectTab(0);
-  };
+  }
 
   function disableSelf() {
     document.body.classList.remove("sa-project-tabs-on");
     document.querySelectorAll(".description-block").forEach((e) => (e.style.display = ""));
     wrapper.style.display = "none";
-  };
+  }
 
   eventTarget.addEventListener("disable", disableSelf);
   eventTarget.addEventListener("enable", enableSelf);
