@@ -35,14 +35,15 @@ export default async function ({ addon, msg, console }) {
           !block.isInsertionMarker() &&
           // has a parent
           parent &&
-          // shadow blocks should be striped if it's parent is striped.
+          // shadow blocks are part of the parent block and should act differently then a block inside another block
           (block.isShadow()
-            ? parent.saStriped
-            : // parent and child are same color (even shadows match block color)
-              // we dont check category because other addons can make blocks the same color.
-              // if the block was stripped we need to look at it's original color in order to get it's real color.
+            ? // parent is striped
+              parent.saStriped
+            : // parent and child have the same primary color
+              // categories can have the same color (from other addons)
+              // if the block was striped we need to look at it's original color.
               parent.getColour() === (block.saOriginalColour ? block.saOriginalColour[0] : block.getColour()) &&
-              // non-shadow blocks should be striped if its parent isn't striped.
+              // parent is not striped
               !parent.saStriped);
 
         // if the block's stripe state is correct, no need to update its state.
