@@ -40,22 +40,22 @@ export default async function ({ addon, msg, console }) {
           // parent and child are same color (even shadows match block color)
           // we dont check category because other addons can make blocks the same color.
           // if the block was stripped we need to look at it's original color in order to get it's real color.
-          parent.getColour() === (block.saOrginalColour ? block.saOrginalColour[0] : block.getColour());
+          parent.getColour() === (block.saOriginalColour ? block.saOriginalColour[0] : block.getColour());
 
         // if the block's stripe state is correct, no need to update its state.
         if (shouldStripe === block.saStriped) continue;
 
-        if (!shouldStripe && block.saOrginalColour) {
-          block.setColour(...block.saOrginalColour);
-          block.saOrginalColour = null;
-        } else if (shouldStripe && !block.saOrginalColour) {
+        if (!shouldStripe && block.saOriginalColour) {
+          block.setColour(...block.saOriginalColour);
+          block.saOriginalColour = null;
+        } else if (shouldStripe && !block.saOriginalColour) {
           const color = block.getColour();
           const secondary = block.getColourSecondary();
           const tertiary = block.getColourTertiary();
           const quaternary = block.getColourQuaternary();
-          block.saOrginalColour = [color, secondary, tertiary, quaternary];
+          block.saOriginalColour = [color, secondary, tertiary, quaternary];
 
-          const stripedColors = block.saOrginalColour.map((c) => "#" + tinycolor(c).lighten(amount).toHex());
+          const stripedColors = block.saOriginalColour.map((c) => "#" + tinycolor(c).lighten(amount).toHex());
           block.setColour(...stripedColors);
         }
 
