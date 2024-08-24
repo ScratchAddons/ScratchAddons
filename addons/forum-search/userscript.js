@@ -79,6 +79,7 @@ function appendSearch(box, query, filter, page, term, msg) {
       }`,
       {
         headers: {
+          // Note: the following token is well-known and public.
           authorization: "Bearer 3396f61ef5b02abf801096be5f0b0ee620de304dd92fc6045aeb99539cd0bec4",
         },
       }
