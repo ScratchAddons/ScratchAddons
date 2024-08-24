@@ -1,4 +1,4 @@
-import { disableTabs, enableTabs } from "./module.js";
+import { addPreviewToggle, eventTarget } from "./module.js";
 
 export default async function ({ addon, console }) {
   addon.tab
@@ -9,8 +9,30 @@ export default async function ({ addon, console }) {
       document.body.classList.add("sa-project-tabs-on");
     });
 
-  addon.self.addEventListener("disabled", disableTabs);
-  addon.self.addEventListener("reenabled", enableTabs);
+  function enableSelf () {
+    if (addon.self.disabled) return;
+    document.body.classList.add("sa-project-tabs-on");
+    wrapper.style.display = "";
+    selectTab(0);
+  };
+
+  function disableSelf() {
+    document.body.classList.remove("sa-project-tabs-on");
+    document.querySelectorAll(".description-block").forEach((e) => (e.style.display = ""));
+    wrapper.style.display = "none";
+  };
+
+  eventTarget.addEventListener("disable", disableSelf);
+  eventTarget.addEventListener("enable", enableSelf);
+
+  addon.self.addEventListener("disabled", () => {
+    disableSelf();
+    addPreviewToggle();
+  });
+  addon.self.addEventListener("reenabled", () => {
+    enableSelf();
+    addPreviewToggle();
+  });
 
   async function remixHandler() {
     while (true) {
@@ -25,6 +47,17 @@ export default async function ({ addon, console }) {
   let projectNotes;
   let tabs;
   let wrapper;
+  let sectionCount;
+  const tabButtons = [];
+
+  function selectTab(index) {
+    const descriptions = document.querySelectorAll(".description-block");
+    for (let i = 0; i < sectionCount; i++) {
+      const selected = i === index;
+      tabButtons[i].classList.toggle("tab-choice-selected-sa", selected);
+      descriptions[i].style.display = selected ? "" : "none";
+    }
+  }
 
   while (true) {
     projectNotes = await addon.tab.waitForElement(".project-notes", {
@@ -36,8 +69,8 @@ export default async function ({ addon, console }) {
 
     const labels = document.querySelectorAll(".project-textlabel");
     const descriptions = document.querySelectorAll(".description-block");
-    const tabButtons = [];
-    const sectionCount = descriptions.length;
+    tabButtons.length = 0;
+    sectionCount = descriptions.length;
 
     wrapper = document.createElement("div");
     wrapper.classList = "sa-project-tabs-wrapper";
@@ -60,14 +93,6 @@ export default async function ({ addon, console }) {
       tab.addEventListener("click", () => selectTab(i));
       tabButtons.push(tab);
       tabs.appendChild(tab);
-    }
-
-    function selectTab(index) {
-      for (let i = 0; i < sectionCount; i++) {
-        const selected = i === index;
-        tabButtons[i].classList.toggle("tab-choice-selected-sa", selected);
-        descriptions[i].classList.toggle("sa-tab-hide", !selected);
-      }
     }
 
     selectTab(0);

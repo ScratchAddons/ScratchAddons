@@ -1,4 +1,4 @@
-import { disableTabs, enableTabs } from "../project-notes-tabs/module.js";
+import { disableTabs, enableTabs, eventTarget } from "../project-notes-tabs/module.js";
 
 export default async function ({ addon, console, msg }) {
   const divElement = Object.assign(document.createElement("div"), {
@@ -24,18 +24,7 @@ export default async function ({ addon, console, msg }) {
     togglePreview(false);
     checkboxInput.checked = false;
   });
-
-  // Hacky way to support dynamiclly enabling project-notes-tabs
-  function callback(mutationsList, observer) {
-    mutationsList.forEach((mutation) => {
-      if (mutation.attributeName === "class") {
-        injectToggle();
-        return;
-      }
-    });
-  }
-  const mutationObserver = new MutationObserver(callback);
-  mutationObserver.observe(document.body, { attributes: true });
+  addon.self.addEventListener("reenabled", injectToggle);
 
   checkboxInput.addEventListener("change", () => {
     togglePreview(checkboxInput.checked);
@@ -66,6 +55,8 @@ export default async function ({ addon, console, msg }) {
       document.querySelector(".project-notes > .description-block > .project-textlabel").append(divElement);
     }
   }
+
+  eventTarget.addEventListener("addToggle", injectToggle);
 
   while (true) {
     await addon.tab.waitForElement(".project-notes, .project-description", {

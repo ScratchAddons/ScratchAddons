@@ -1,10 +1,12 @@
-export const enableTabs = () => {
-  document.body.classList.add("sa-project-tabs-on");
-  document.querySelector(".sa-project-tabs-wrapper").style.display = "";
-};
+export const eventTarget = new EventTarget();
 
 export const disableTabs = () => {
-  document.body.classList.remove("sa-project-tabs-on");
-  document.querySelectorAll(".description-block").forEach((e) => (e.style.display = ""));
-  document.querySelector(".sa-project-tabs-wrapper").style.display = "none";
-};
+  eventTarget.dispatchEvent(new CustomEvent("disable"));
+}
+export const enableTabs = () => {
+  eventTarget.dispatchEvent(new CustomEvent("enable"));
+}
+
+export const addPreviewToggle = () => {
+  eventTarget.dispatchEvent(new CustomEvent("addToggle"));
+}
