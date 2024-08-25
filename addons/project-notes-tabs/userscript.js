@@ -1,4 +1,4 @@
-import { addPreviewToggle, eventTarget } from "./module.js";
+import { eventTarget, addPreviewToggle, disableTabs } from "./module.js";
 
 export default async function ({ addon, console }) {
   addon.tab
@@ -12,26 +12,21 @@ export default async function ({ addon, console }) {
   function enableSelf() {
     if (addon.self.disabled) return;
     document.body.classList.add("sa-project-tabs-on");
-    wrapper.style.display = "";
     selectTab(0);
   }
-
-  function disableSelf() {
-    document.body.classList.remove("sa-project-tabs-on");
-    document.querySelectorAll(".description-block").forEach((e) => (e.style.display = ""));
-    wrapper.style.display = "none";
-  }
-
-  eventTarget.addEventListener("disable", disableSelf);
   eventTarget.addEventListener("enable", enableSelf);
 
   addon.self.addEventListener("disabled", () => {
-    disableSelf();
+    disableTabs();
     addPreviewToggle();
   });
   addon.self.addEventListener("reenabled", () => {
     enableSelf();
     addPreviewToggle();
+  });
+
+  addon.auth.addEventListener("change", () => {
+    if (wrapper) injectTabs();
   });
 
   async function remixHandler() {
@@ -59,14 +54,8 @@ export default async function ({ addon, console }) {
     }
   }
 
-  while (true) {
-    projectNotes = await addon.tab.waitForElement(".project-notes", {
-      markAsSeen: true,
-      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
-    });
-
-    if (!document.body.classList.contains("sa-project-tabs-on")) continue; // We're disabled
-
+  function injectTabs() {
+    if (wrapper) wrapper.remove();
     const labels = document.querySelectorAll(".project-textlabel");
     const descriptions = document.querySelectorAll(".description-block");
     tabButtons.length = 0;
@@ -74,6 +63,7 @@ export default async function ({ addon, console }) {
 
     wrapper = document.createElement("div");
     wrapper.classList = "sa-project-tabs-wrapper";
+    addon.tab.displayNoneWhileDisabled(wrapper);
     projectNotes.insertBefore(wrapper, projectNotes.querySelector(".description-block"));
     tabs = document.createElement("div");
     wrapper.appendChild(tabs);
@@ -96,5 +86,15 @@ export default async function ({ addon, console }) {
     }
 
     selectTab(0);
+    addPreviewToggle();
+  }
+
+  while (true) {
+    projectNotes = await addon.tab.waitForElement(".project-notes", {
+      markAsSeen: true,
+      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+    });
+
+    if (document.body.classList.contains("sa-project-tabs-on")) injectTabs();
   }
 }

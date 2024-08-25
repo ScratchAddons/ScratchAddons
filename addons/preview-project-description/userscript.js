@@ -25,6 +25,8 @@ export default async function ({ addon, console, msg }) {
     checkboxInput.checked = false;
   });
   addon.self.addEventListener("reenabled", injectToggle);
+  addon.auth.addEventListener("change", injectToggle);
+  eventTarget.addEventListener("addToggle", injectToggle);
 
   checkboxInput.addEventListener("change", () => {
     togglePreview(checkboxInput.checked);
@@ -36,6 +38,7 @@ export default async function ({ addon, console, msg }) {
   let wasEverEnabled = false;
 
   async function injectToggle() {
+    if (addon.tab.editorMode !== "projectpage") return;
     // Remove our element if it's already on the page
     // This is to ensure the toggle is always next to "instructions" when editing.
     divElement.remove();
@@ -55,8 +58,6 @@ export default async function ({ addon, console, msg }) {
       document.querySelector(".project-notes > .description-block > .project-textlabel").append(divElement);
     }
   }
-
-  eventTarget.addEventListener("addToggle", injectToggle);
 
   while (true) {
     await addon.tab.waitForElement(".project-notes, .project-description", {
