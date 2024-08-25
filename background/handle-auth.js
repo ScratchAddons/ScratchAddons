@@ -7,9 +7,9 @@ const promisify =
   (...args) =>
     new Promise((resolve) => callbackFn(...args, resolve));
 
-const CHROME_DEFAULT = "0";
-const FIFEFOX_DEFAULT = "firefox-default";
 async function getDefaultStoreId() {
+  const CHROME_DEFAULT = "0";
+  const FIREFOX_DEFAULT = "firefox-default";
   const cookieStores = await chrome.cookies.getAllCookieStores();
   // This should technically never occur.
   if (cookieStores.length === 0) throw "Unable to find a default cookie store!";
@@ -17,8 +17,8 @@ async function getDefaultStoreId() {
   if (cookieStores.some((store) => store.id === CHROME_DEFAULT)) {
     return CHROME_DEFAULT;
   }
-  if (cookieStores.some((store) => store.id === FIFEFOX_DEFAULT)) {
-    return FIFEFOX_DEFAULT;
+  if (cookieStores.some((store) => store.id === FIREFOX_DEFAULT)) {
+    return FIREFOX_DEFAULT;
   }
   return cookieStores[0].id; // Just in case
 }
