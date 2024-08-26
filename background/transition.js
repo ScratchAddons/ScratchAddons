@@ -2,12 +2,8 @@ const utm = `utm_source=extension&utm_medium=tabscreate&utm_campaign=v${chrome.r
 // Note: chrome.i18n.getUILanguage is not available Chrome 96-99
 const uiLanguage = (chrome.i18n.getUILanguage && chrome.i18n.getUILanguage()) || navigator.language;
 const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
-const developerMode = await new Promise((resolve) => {
-  chrome.management.getSelf((result) => {
-    resolve(result.installType === "development");
-  });
-});
 chrome.runtime.onInstalled.addListener(async (details) => {
+  const developerMode = (await chrome.management.getSelf()).installType;
   const currentVersion = chrome.runtime.getManifest().version;
   const [major, minor, _] = currentVersion.split(".");
   if (details.previousVersion && details.previousVersion.startsWith("0")) {
@@ -22,6 +18,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     });
   }
 });
-if (!developerMode) {
-  chrome.runtime.setUninstallURL(`https://scratchaddons.com/${localeSlash}farewell?${utm}`);
-}
+chrome.management.getSelf((result) => {
+  if (result.installType !== "development") {
+    chrome.runtime.setUninstallURL(`https://scratchaddons.com/${localeSlash}farewell?${utm}`);
+  }
+});
