@@ -1,11 +1,11 @@
 {
-  "name": "Remove autocomplete from search bar",
+  "name": "Disable search bar autocomplete",
   "description": "Stops web browsers from autocompleting suggestions in the navigation bar's search bar.",
   "tags": ["community"],
   "credits": [
     {
-      "name": "jbthepig",
-      "link": "https://scratch.mit.edu/users/jbthepig/"
+      "name": "BroJac5246",
+      "link": "https://github.com/BroJac5246/"
     }
   ],
   "dynamicEnable": true,

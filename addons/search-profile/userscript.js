@@ -5,7 +5,7 @@ export default async function ({ addon, console, msg }) {
     img = tab.appendChild(document.createElement("img")),
     span = tab.appendChild(document.createElement("span")),
     user = document.querySelector('[name="q"]').value.trim(),
-    valid = /^[\w-]{3,20}$/g.test(user);
+    valid = /^[\w-]{2,30}$/g.test(user);
   tab.type = "button";
   tab.classList.add("sa-search-profile-btn");
   tab.setAttribute("role", "tab");

@@ -11,6 +11,11 @@ try {
 if (window.frameElement && window.frameElement.getAttribute("src") === null)
   throw "Scratch Addons: iframe without src attribute ignored";
 if (document.documentElement instanceof SVGElement) throw "Scratch Addons: SVG document ignored";
+if (new URL(location.href).hostname === "localhost") {
+  if (!["8333", "8601", "8602"].includes(new URL(location.href).port)) {
+    throw "Scratch Addons: this localhost port is not supported";
+  }
+}
 
 const MAX_USERSTYLES_PER_ADDON = 100;
 
@@ -95,8 +100,12 @@ const cs = {
     csUrlObserver.dispatchEvent(new CustomEvent("change", { detail: { newUrl } }));
   },
   copyImage(dataURL) {
-    // Firefox only
+    // Firefox 109-126 only
     return new Promise((resolve, reject) => {
+      if (typeof Clipboard.prototype.write === "function") {
+        reject("Use browser API instead");
+        return;
+      }
       browser.runtime.sendMessage({ clipboardDataURL: dataURL }).then(
         (res) => {
           resolve();
@@ -400,6 +409,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
         if (everLoadedUserscriptAddons.has(addonId)) {
           if (!dynamicDisable) return;
           // Addon was reenabled
+          document.querySelector(`[data-sa-hide-disabled-style=${addonId}]`).remove();
           _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
         } else {
           if (!dynamicEnable) return;
@@ -447,6 +457,10 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
           removeAddonStyles(addonId);
         }
         disabledDynamicAddons.add(addonId);
+        const style = document.createElement("style");
+        style.dataset.saHideDisabledStyle = addonId;
+        style.textContent = `[data-sa-hide-disabled=${addonId}] { display: none !important; }`;
+        document.body.appendChild(style);
         _page_.fireEvent({ name: "disabled", addonId, target: "self" });
       } else {
         everLoadedUserscriptAddons.delete(addonId);
@@ -642,6 +656,11 @@ const showBanner = () => {
   const NOTIF_TEXT_STYLE = "display: block; color: white !important;";
   const NOTIF_LINK_STYLE = "color: #1aa0d8; font-weight: normal; text-decoration: underline;";
 
+  //
+  const _uiLanguage = chrome.i18n.getUILanguage();
+  const _localeSlash = _uiLanguage.startsWith("en") ? "" : `${_uiLanguage.split("-")[0]}/`;
+  //
+
   const notifInnerText0 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE + "font-weight: bold;",
     textContent: chrome.i18n
@@ -650,7 +669,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_36", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_39", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -670,7 +689,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_36"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_39"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,

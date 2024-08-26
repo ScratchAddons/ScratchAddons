@@ -170,6 +170,9 @@
   "dark": {
     "message": "Dark"
   },
+  "loading": {
+    "message": "Loading..."
+  },
   "licensesTitle": {
     "message": "Licenses - Scratch Addons"
   },
@@ -242,15 +245,18 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_36": {
-    "message": "New addon: \"rearrangeable custom block inputs\", which allows rearranging custom block parameters on the \"Make a block\" screen. Go to $1 to enable it.",
+  "extensionUpdateInfo1_v1_39": {
+    "message": "New addon: \"delete other costumes or sounds\", which adds an option to the right click context menu for costumes and sounds to delete all items except for the selected one. Go to $1 to enable it.",
     "description": "The placeholder is \"Scratch Addons settings\"."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_36": {
-    "message": "Other new addons added this update are \"customizable menu bar\", \"place backpack code at mouse\", and \"square block text inputs\"."
+  "sendFeedbackNotification": {
+    "message": "send feedback"
+  },
+  "extensionUpdateInfo2_v1_39": {
+    "message": "Other new addons added this update are \"asset conflict dialog\", \"customizable code editor grid\", \"customizable stage monitors\", and  \"remaining reply counter\"."
   },
   "readTheBlogPost": {
     "message": "Read the $1 for more information.",

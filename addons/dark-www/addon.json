@@ -2150,9 +2150,8 @@
       "matches": ["editingScreens"]
     },
     {
-      "url": "scratchstats.js",
-      "matches": ["profiles"],
-      "runAtComplete": false
+      "url": "profile.js",
+      "matches": ["profiles"]
     }
   ],
   "userstyles": [
