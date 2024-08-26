@@ -60,6 +60,7 @@ export async function updateBadge(defaultStoreId) {
   // Hide badge when logged out and showOffline is false,
   // or when the logged-in user has no unread messages,
   // or when the addon is disabled
+  chrome.action.setTitle({ title: "" });
   await promisify(chrome.action.setBadgeText.bind(chrome.action))({ text: "" });
 }
 
