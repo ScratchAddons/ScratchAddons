@@ -1,4 +1,4 @@
-import { eventTarget, addPreviewToggle, disableTabs } from "./module.js";
+import { eventTarget, getPreviewEnabled, addPreviewToggle } from "./module.js";
 
 export default async function ({ addon, console }) {
   addon.tab
@@ -9,22 +9,17 @@ export default async function ({ addon, console }) {
       document.body.classList.add("sa-project-tabs-on");
     });
 
-  function enableSelf() {
-    if (addon.self.disabled) return;
-    document.body.classList.add("sa-project-tabs-on");
-    selectTab(0);
+  function disableSelf() {
+    document.querySelectorAll(".description-block").forEach((e) => (e.style.display = ""));
+    wrapper.remove();
+    document.body.classList.remove("sa-project-tabs-on");
+    addPreviewToggle();
   }
-  eventTarget.addEventListener("enable", enableSelf);
+  eventTarget.addEventListener("disable", disableSelf);
+  addon.self.addEventListener("disabled", disableSelf);
 
-  addon.self.addEventListener("disabled", () => {
-    disableTabs();
-    addPreviewToggle();
-  });
-  addon.self.addEventListener("reenabled", () => {
-    enableSelf();
-    addPreviewToggle();
-  });
-
+  eventTarget.addEventListener("enable", injectTabs);
+  addon.self.addEventListener("reenabled", injectTabs);
   addon.auth.addEventListener("change", () => {
     if (wrapper) injectTabs();
   });
@@ -38,32 +33,24 @@ export default async function ({ addon, console }) {
       projectNotes.insertBefore(wrapper, projectNotes.querySelector(".description-block"));
     }
   }
-
+  let wrapper;
   let projectNotes;
   let tabs;
-  let wrapper;
-  let sectionCount;
-  const tabButtons = [];
-
-  function selectTab(index) {
-    const descriptions = document.querySelectorAll(".description-block");
-    for (let i = 0; i < sectionCount; i++) {
-      const selected = i === index;
-      tabButtons[i].classList.toggle("tab-choice-selected-sa", selected);
-      descriptions[i].style.display = selected ? "" : "none";
-    }
-  }
 
   function injectTabs() {
+    if (addon.self.disabled || getPreviewEnabled()) {
+      document.body.classList.remove("sa-project-tabs-on");
+      return;
+    }
+    document.body.classList.add("sa-project-tabs-on");
     if (wrapper) wrapper.remove();
     const labels = document.querySelectorAll(".project-textlabel");
     const descriptions = document.querySelectorAll(".description-block");
-    tabButtons.length = 0;
-    sectionCount = descriptions.length;
+    const tabButtons = [];
+    const sectionCount = descriptions.length;
 
     wrapper = document.createElement("div");
     wrapper.classList = "sa-project-tabs-wrapper";
-    addon.tab.displayNoneWhileDisabled(wrapper);
     projectNotes.insertBefore(wrapper, projectNotes.querySelector(".description-block"));
     tabs = document.createElement("div");
     wrapper.appendChild(tabs);
@@ -83,6 +70,14 @@ export default async function ({ addon, console }) {
       tab.addEventListener("click", () => selectTab(i));
       tabButtons.push(tab);
       tabs.appendChild(tab);
+    }
+
+    function selectTab(index) {
+      for (let i = 0; i < sectionCount; i++) {
+        const selected = i === index;
+        tabButtons[i].classList.toggle("tab-choice-selected-sa", selected);
+        descriptions[i].style.display = selected ? "" : "none";
+      }
     }
 
     selectTab(0);

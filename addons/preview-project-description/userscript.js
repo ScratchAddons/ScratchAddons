@@ -1,4 +1,4 @@
-import { disableTabs, enableTabs, eventTarget } from "../project-notes-tabs/module.js";
+import { disableTabs, enableTabs, setPreviewEnabled, eventTarget } from "../project-notes-tabs/module.js";
 
 export default async function ({ addon, console, msg }) {
   const divElement = Object.assign(document.createElement("div"), {
@@ -52,7 +52,7 @@ export default async function ({ addon, console, msg }) {
       }
     }
 
-    if (document.body.classList.contains("sa-project-tabs-on")) {
+    if (document.querySelector(".sa-project-tabs-wrapper")) {
       document.querySelector(".sa-project-tabs-wrapper").appendChild(divElement);
     } else {
       document.querySelector(".project-notes > .description-block > .project-textlabel").append(divElement);
@@ -77,6 +77,7 @@ export default async function ({ addon, console, msg }) {
   function togglePreview(override = !currentlyEnabled) {
     const oldCurentlyEnabled = currentlyEnabled;
     currentlyEnabled = override;
+    setPreviewEnabled(currentlyEnabled);
 
     if (currentlyEnabled === true && !wasEverEnabled) {
       wasEverEnabled = true;

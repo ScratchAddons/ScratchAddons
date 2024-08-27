@@ -56,7 +56,3 @@ body.sa-project-tabs-on .project-textlabel {
   /* Hide labels with CSS instead of removing them with JS */
   display: none;
 }
-
-body:not(.sa-project-tabs-on) .sa-project-tabs-wrapper {
-  display: none;
-}
