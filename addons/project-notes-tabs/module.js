@@ -14,7 +14,7 @@ export const addPreviewToggle = () => {
 
 export const setPreviewEnabled = (value) => {
   preview = value;
-}
+};
 
 export const getPreviewEnabled = () => {
   return preview;
