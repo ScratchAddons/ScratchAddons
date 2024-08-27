@@ -33,9 +33,10 @@ export default async function ({ addon, console }) {
       projectNotes.insertBefore(wrapper, projectNotes.querySelector(".description-block"));
     }
   }
-  let wrapper;
+
   let projectNotes;
   let tabs;
+  let wrapper;
 
   function injectTabs() {
     if (addon.self.disabled || getPreviewEnabled()) {
