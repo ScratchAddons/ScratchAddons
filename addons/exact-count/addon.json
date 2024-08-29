@@ -16,6 +16,10 @@
   ],
   "info": [
     {
+      "id": "studioClick",
+      "text": "To see the exact number of projects in a studio, click the \"100+\" on the Projects tab. The \"exact count for studios\" setting below needs to be enabled."
+    },
+    {
       "id": "setting-removal",
       "text": "The forum setting has been removed since the ScratchDB database used by it is offline."
     }
