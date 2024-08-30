@@ -17,7 +17,7 @@
   "info": [
     {
       "id": "studioClick",
-      "text": "To see the exact number of projects in a studio, click the \"100+\" on the Projects tab. The \"exact count for studios\" setting below needs to be enabled."
+      "text": "To see the exact number of projects in a studio, enable the \"exact count for studios\" setting below and click the \"100+\" label on the studio's Projects tab."
     },
     {
       "id": "setting-removal",
