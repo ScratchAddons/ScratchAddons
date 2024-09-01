@@ -57,6 +57,12 @@
       "min": 0,
       "default": 100,
       "max": 150
+    },
+    {
+      "name": "Flat hat blocks",
+      "id": "flat",
+      "type": "boolean",
+      "default": false
     }
   ],
   "presets": [
@@ -67,7 +73,8 @@
       "values": {
         "paddingSize": 100,
         "cornerSize": 100,
-        "notchSize": 100
+        "notchSize": 100,
+        "flat": false
       }
     },
     {
@@ -77,7 +84,8 @@
       "values": {
         "paddingSize": 70,
         "cornerSize": 150,
-        "notchSize": 75
+        "notchSize": 75,
+        "flat": false
       }
     },
     {
@@ -87,7 +95,8 @@
       "values": {
         "paddingSize": 100,
         "cornerSize": 0,
-        "notchSize": 0
+        "notchSize": 0,
+        "flat": true
       }
     },
     {
@@ -97,7 +106,8 @@
       "values": {
         "paddingSize": 70,
         "cornerSize": 0,
-        "notchSize": 0
+        "notchSize": 0,
+        "flat": true
       }
     }
   ]
