@@ -426,29 +426,6 @@
       }
     },
     {
-      "name": "box-borderFilterInverted",
-      "value": {
-        "type": "textColor",
-        "black": "brightness(0.4)",
-        "white": "none",
-        "source": {
-          "type": "alphaBlend",
-          "opaqueSource": {
-            "type": "settingValue",
-            "settingId": "box"
-          },
-          "transparentSource": {
-            "type": "brighten",
-            "source": {
-              "type": "settingValue",
-              "settingId": "border"
-            },
-            "a": 0.94
-          }
-        }
-      }
-    },
-    {
       "name": "box-border",
       "value": {
         "type": "alphaBlend",
