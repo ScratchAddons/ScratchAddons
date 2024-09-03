@@ -216,6 +216,7 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get editorMode() {
+    // Redux isn't really necessary unless entering fullscreen from https://scratch.mit.edu/projects/editor/
     const mode = this.redux.state?.scratchGui?.mode;
     const projectNotAvailable = this.redux.state?.preview?.projectNotAvailable;
     if (projectNotAvailable || !mode) return null;
