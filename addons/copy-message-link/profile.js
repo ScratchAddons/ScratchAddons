@@ -5,7 +5,7 @@ export default async function ({ addon, console, msg }) {
     // See https://github.com/ScratchAddons/ScratchAddons/pull/7657#pullrequestreview-2190078414
     if (this.get(0).querySelector(".sa-copy-link-btn")) return;
     return oldJQueryHtml.call(this, ...args);
-  }
+  };
 
   while (true) {
     const comment = await addon.tab.waitForElement("div.comment:not(.sa-copy-link)", {
