@@ -1,5 +1,5 @@
 {
-  "name": "Show project thumbnail under green flag overlay",
+  "name": "Show project thumbnail while loading",
   "description": "Shows the project's thumbnail instead of its initial state before starting the project and while it loads.",
   "credits": [
     {
@@ -15,13 +15,6 @@
     {
       "url": "userstyle.css",
       "matches": ["projects", "projectEmbeds"]
-    },
-    {
-      "url": "loading.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "loading": true }
-      }
     }
   ],
   "userscripts": [
@@ -29,14 +22,6 @@
       "url": "userscript.js",
       "matches": ["projects", "projectEmbeds"],
       "runAtComplete": false
-    }
-  ],
-  "settings": [
-    {
-      "name": "Show while loading projects",
-      "id": "loading",
-      "type": "boolean",
-      "default": true
     }
   ],
   "dynamicEnable": true,

@@ -10,3 +10,19 @@
   border-radius: calc(0.5rem - 1px);
   background-color: var(--darkWww-page, #fcfcfc);
 }
+
+body:not(.sa-body-editor) div[class*="loader_background_"] {
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: calc(0.5rem - 1px);
+}
+
+body:not(.sa-body-editor) div[class*="loader_background_"],
+.sa-project-thumb.loading {
+  top: calc(2.75rem + 1px);
+  height: calc(100% - 2.75rem - 2px);
+}
+
+body:not(.sa-body-editor) [class*="loader_block-animation_"] {
+  /* Remove transparency */
+  filter: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='opaque'><feComponentTransfer><feFuncA type='linear' slope='3.5'></feFuncA></feComponentTransfer></filter></svg>#opaque");
+}
