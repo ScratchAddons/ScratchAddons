@@ -24,6 +24,8 @@
       "runAtComplete": false
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.40.0",
   "tags": ["community", "theme", "projectPage"]
 }
