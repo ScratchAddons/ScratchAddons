@@ -11,7 +11,7 @@ function immediatelyRunFunctionInMainWorld(fn) {
   div.remove();
 }
 
-const isLocal = location.origin === "https://scratchfoundation.github.io" || location.port === "8601";
+const isLocal = location.origin === "https://scratchfoundation.github.io" || ["8601", "8602"].includes(location.port);
 if ((!(document.documentElement instanceof SVGElement) && location.pathname.split("/")[1] === "projects") || isLocal) {
   immediatelyRunFunctionInMainWorld(() => {
     const oldBind = Function.prototype.bind;
@@ -38,3 +38,23 @@ if ((!(document.documentElement instanceof SVGElement) && location.pathname.spli
     };
   });
 }
+
+immediatelyRunFunctionInMainWorld(() => {
+  window.__scratchAddonsSessionRes = { loaded: false, session: null };
+
+  const originalXhrOpen = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function (method, path, ...args) {
+    if (method === "GET" && path === "/session/") {
+      this.addEventListener(
+        "load",
+        () => {
+          if (this.responseType !== "json") return;
+          window.__scratchAddonsSessionRes.session = this.response;
+          window.__scratchAddonsSessionRes.loaded = true;
+        },
+        { once: true }
+      );
+    }
+    return originalXhrOpen.call(this, method, path, ...args);
+  };
+});

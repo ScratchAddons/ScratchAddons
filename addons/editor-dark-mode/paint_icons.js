@@ -6,9 +6,12 @@ const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$
 export default async function ({ addon, console }) {
   const recolorSvg = (svg) => {
     return svg
-      .replace(/#855cd6/gi, addon.settings.get("highlightText"))
-      .replace(/#ffffff|#fff|white/gi, addon.settings.get("accent"))
-      .replace(/#575e75/gi, textColor(addon.settings.get("accent")));
+      .replace(/#855cd6/gi, "%highlight%")
+      .replace(/#ffffff|#fff|white/gi, "%accent%")
+      .replace(/#575e75/gi, "%text%")
+      .replace(/%highlight%/g, addon.settings.get("highlightText"))
+      .replace(/%accent%/g, addon.settings.get("accent"))
+      .replace(/%text%/g, textColor(addon.settings.get("accent")));
   };
 
   const srcToSvg = async (src) => {

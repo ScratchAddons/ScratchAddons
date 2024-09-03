@@ -2,7 +2,7 @@ import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
 
 export default async function ({ addon, console }) {
   var posContainerContainer = document.createElement("div");
-  addon.tab.displayNoneWhileDisabled(posContainerContainer, { display: "flex" });
+  addon.tab.displayNoneWhileDisabled(posContainerContainer);
 
   var posContainer = document.createElement("div");
   var pos = document.createElement("span");

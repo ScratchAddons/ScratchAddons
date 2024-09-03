@@ -12,7 +12,12 @@
     {
       "name": "DNin01",
       "link": "https://github.com/DNin01"
-    }
+    },
+    {
+      "name": "Shock59",
+      "link": "https://github.com/shock59"
+    },
+    { "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" }
   ],
   "info": [
     {
@@ -24,11 +29,17 @@
       "id": "aboutHighContrast",
       "type": "info",
       "text": "The new High Contrast block colors are available as a preset below."
+    },
+    {
+      "id": "whatsInsertionMarker",
+      "type": "info",
+      "text": "When dragging a block, an \"insertion marker\" is the shadow that appears when moved near to other blocks."
     }
   ],
   "latestUpdate": {
-    "version": "1.36.0",
-    "newSettings": ["monitors"]
+    "isMajor": true,
+    "version": "1.39.0",
+    "newSettings": ["fillStyle", "fillOpacity", "strokeStyle", "strokeOpacity"]
   },
   "customCssVariables": [
     {
@@ -190,6 +201,7 @@
         "settings": { "text": "colorOnBlack" }
       }
     },
+    { "url": "insertion_marker.css", "matches": ["projects"] },
     {
       "url": "forums/base.css",
       "matches": ["https://scratch.mit.edu/discuss/*"],
@@ -364,6 +376,50 @@
       "id": "forums",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Insertion marker style",
+      "id": "fillStyle",
+      "type": "select",
+      "default": "gray",
+      "potentialValues": [
+        { "id": "none", "name": "None" },
+        { "id": "gray", "name": "Gray" },
+        { "id": "colored", "name": "Colored" }
+      ]
+    },
+    {
+      "name": "Insertion marker opacity",
+      "id": "fillOpacity",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 20,
+      "if": {
+        "settings": { "fillStyle": ["gray", "colored"] }
+      }
+    },
+    {
+      "name": "Insertion marker outline",
+      "id": "strokeStyle",
+      "type": "select",
+      "default": "none",
+      "potentialValues": [
+        { "id": "none", "name": "None" },
+        { "id": "gray", "name": "Gray" },
+        { "id": "colored", "name": "Colored" }
+      ]
+    },
+    {
+      "name": "Insertion marker outline opacity",
+      "id": "strokeOpacity",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 50,
+      "if": {
+        "settings": { "strokeStyle": ["gray", "colored"] }
+      }
     }
   ],
   "tags": ["editor", "theme", "codeEditor", "featured"],
@@ -389,7 +445,11 @@
         "comment-color": "#FEF49C",
         "input-color": "#FFFFFF",
         "text": "black",
-        "monitors": true
+        "monitors": true,
+        "fillStyle": "gray",
+        "fillOpacity": 20,
+        "strokeStyle": "none",
+        "strokeOpacity": 50
       }
     },
     {
@@ -412,7 +472,11 @@
         "comment-color": "#423F24",
         "input-color": "#FFFFFF",
         "text": "white",
-        "monitors": false
+        "monitors": false,
+        "fillStyle": "gray",
+        "fillOpacity": 20,
+        "strokeStyle": "none",
+        "strokeOpacity": 50
       }
     },
     {
@@ -435,7 +499,11 @@
         "comment-color": "#423f24",
         "input-color": "#202020",
         "text": "white",
-        "monitors": false
+        "monitors": false,
+        "fillStyle": "gray",
+        "fillOpacity": 20,
+        "strokeStyle": "none",
+        "strokeOpacity": 50
       }
     },
     {
@@ -458,7 +526,11 @@
         "comment-color": "#FEF49C",
         "input-color": "#FFFFFF",
         "text": "white",
-        "monitors": false
+        "monitors": false,
+        "fillStyle": "gray",
+        "fillOpacity": 20,
+        "strokeStyle": "none",
+        "strokeOpacity": 50
       }
     },
     {
@@ -481,7 +553,11 @@
         "comment-color": "#FFFFD2",
         "input-color": "#ffffff",
         "text": "white",
-        "monitors": false
+        "monitors": false,
+        "fillStyle": "gray",
+        "fillOpacity": 20,
+        "strokeStyle": "none",
+        "strokeOpacity": 50
       }
     },
     {
@@ -504,7 +580,11 @@
         "comment-color": "#FEF49C",
         "input-color": "#202020",
         "text": "colorOnBlack",
-        "monitors": false
+        "monitors": false,
+        "fillStyle": "colored",
+        "fillOpacity": 5,
+        "strokeStyle": "colored",
+        "strokeOpacity": 50
       }
     }
   ],
