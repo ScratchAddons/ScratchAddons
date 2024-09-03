@@ -8,3 +8,14 @@
   top: 0;
   left: 0;
 }
+
+/* player-thumb compatibility */
+.sa-body-fullscreen .sa-project-thumb.loading {
+  top: 0;
+  height: 100%;
+}
+
+.sa-body-fullscreen div[class*="loader_background_"] {
+  top: calc(2.75rem);
+  height: calc(100% - 2.75rem);
+}

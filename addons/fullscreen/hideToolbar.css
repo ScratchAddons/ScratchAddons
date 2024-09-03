@@ -9,6 +9,12 @@
   transition: transform 0.3s;
 }
 
+/* player-thumb compatibility */
+.sa-body-fullscreen div[class*="loader_background_"] {
+  top: 0;
+  height: 100%;
+}
+
 .phantom-header {
   position: absolute;
   top: 0px;
