@@ -14,7 +14,11 @@
     }
   ],
   "tags": ["community", "forums"],
-  "versionAdded": "1.39.0",
+  "versionAdded": "1.40.0",
+  "latestUpdate": {
+    "version": "1.40.0",
+    "temporaryNotice": "This is not new, but it can now be disabled."
+  },
   "dynamicEnable": false,
   "enabledByDefault": true
 }
