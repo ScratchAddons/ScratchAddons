@@ -31,6 +31,4 @@ export default async function ({ addon, console }) {
       thumb.remove();
     }
   });
-
-  addon.tab.displayNoneWhileDisabled(thumb);
 }
