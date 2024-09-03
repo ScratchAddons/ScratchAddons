@@ -36,8 +36,6 @@ export default async function ({ addon, console }) {
     }
   });
 
-  addon.tab.displayNoneWhileDisabled(thumb);
-
   addon.tab.addEventListener("urlChange", (e) => {
     if (addon.tab.editorMode === "fullscreen") {
       document.body.classList.add("sa-body-fullscreen");

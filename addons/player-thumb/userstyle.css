@@ -48,11 +48,18 @@ body:not(.sa-body-editor) .sa-project-thumb.loading {
 }
 
 /* Fullscreen */
-.sa-body-fullscreen .sa-project-thumb.loading {
-  top: 6px;
-  height: calc(100% - 12px);
+.sa-body-fullscreen .sa-project-thumb {
+  top: 3px;
+  left: 3px;
+  height: calc(100% - 6px);
   aspect-ratio: 4 / 3;
   border-radius: calc(0.5rem - 3px);
+}
+
+.sa-body-fullscreen .sa-project-thumb.loading {
+  left: auto;
+  top: 6px;
+  height: calc(100% - 12px);
 }
 
 .sa-body-fullscreen div[class*="loader_background_"] {
