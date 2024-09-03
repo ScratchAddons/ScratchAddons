@@ -1,4 +1,12 @@
 export default async function ({ addon, console, msg }) {
+  const oldJQueryHtml = $.fn.html;
+  $.fn.html = function (...args) {
+    // Prevent Scratch from changing the action row of existing comments after loading a new page
+    // See https://github.com/ScratchAddons/ScratchAddons/pull/7657#pullrequestreview-2190078414
+    if (this.get(0).querySelector(".sa-copy-link-btn")) return;
+    return oldJQueryHtml.call(this, ...args);
+  }
+
   while (true) {
     const comment = await addon.tab.waitForElement("div.comment:not(.sa-copy-link)", {
       markAsSeen: true,
