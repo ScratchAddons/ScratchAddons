@@ -30,25 +30,27 @@ export async function updateBadge(defaultStoreId) {
   const isLoggedIn = scratchAddons.globalState.auth.isLoggedIn;
   let db;
   try {
-    if (badgeSettings.showOffline || isLoggedIn) {
+    if (
+      scratchAddons.localState.addonsEnabled["msg-count-badge"] &&
+      (badgeSettings.showOffline || isLoggedIn) &&
+      !scratchAddons.muted
+    ) {
       db = await MessageCache.openDatabase();
       const count = await db.get("count", defaultStoreId);
       const tooltipCount = isLoggedIn ? (count > 0 ? ` (${String(count)})` : "") : " (?)";
       chrome.action.setTitle({
         title: `${chrome.i18n.getMessage("extensionName")}${tooltipCount}`,
       });
-      if (scratchAddons.localState.addonsEnabled["msg-count-badge"] && !scratchAddons.muted) {
-        // Do not show 0, unless that 0 means logged out
-        if (count || !isLoggedIn) {
-          const displayCount = count < 1000 ? String(count) : count <= 9000 ? Math.floor(count / 1000) + "k" : "9k+";
-          const text = isLoggedIn ? String(displayCount) : "?";
-          const color = isLoggedIn ? badgeSettings.color : "#dd2222";
-          // The badge will show incorrect message count in other auth contexts.
-          // Blocked on Chrome implementing store ID-based tab query
-          await promisify(chrome.action.setBadgeBackgroundColor.bind(chrome.action))({ color });
-          await promisify(chrome.action.setBadgeText.bind(chrome.action))({ text });
-          return;
-        }
+      // Do not show 0, unless that 0 means logged out
+      if (count || !isLoggedIn) {
+        const displayCount = count < 1000 ? String(count) : count <= 9000 ? Math.floor(count / 1000) + "k" : "9k+";
+        const text = isLoggedIn ? String(displayCount) : "?";
+        const color = isLoggedIn ? badgeSettings.color : "#dd2222";
+        // The badge will show incorrect message count in other auth contexts.
+        // Blocked on Chrome implementing store ID-based tab query
+        await promisify(chrome.action.setBadgeBackgroundColor.bind(chrome.action))({ color });
+        await promisify(chrome.action.setBadgeText.bind(chrome.action))({ text });
+        return;
       }
     }
   } catch (e) {
