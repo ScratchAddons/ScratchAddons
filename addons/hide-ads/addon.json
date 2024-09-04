@@ -2,7 +2,7 @@
   "name": "Hide advertising comments",
   "description": "Automatically hides comments that contain certain strings deemed as advertising.",
   "tags": ["comments", "community"],
-  "versionAdded": "1.37.0",
+  "versionAdded": "1.40.0",
   "credits": [{ "name": "Jazza", "link": "http://scratch.mit.edu/users/greeny--231" }],
   "userscripts": [{ "matches": ["profiles", "projects", "studios"], "url": "userscript.js" }],
   "userstyles": [{ "matches": ["profiles", "projects", "studios"], "url": "userstyle.css" }],
