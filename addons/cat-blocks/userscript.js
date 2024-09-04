@@ -8,20 +8,33 @@ import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js"
 export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
-  const shouldWatchMouseCursor = addon.settings.get("watch");
+  const oldLayout = Blockly.VerticalFlyout.prototype.layout_;
+  Blockly.VerticalFlyout.prototype.layout_ = function (contents, gaps) {
+    const oldStartHeight = Blockly.BlockSvg.START_HAT_HEIGHT;
+    if (!addon.self.disabled) Blockly.BlockSvg.START_HAT_HEIGHT = 31;
+    oldLayout.call(this, contents, gaps);
+    Blockly.BlockSvg.START_HAT_HEIGHT = oldStartHeight;
+  };
 
-  Blockly.BlockSvg.START_HAT_HEIGHT = 31;
-
-  Blockly.BlockSvg.START_HAT_PATH =
-    "c2.6,-2.3 5.5,-4.3 8.5,-6.2" +
-    "c-1,-12.5 5.3,-23.3 8.4,-24.8c3.7,-1.8 16.5,13.1 18.4,15.4" +
-    "c8.4,-1.3 17,-1.3 25.4,0c1.9,-2.3 14.7,-17.2 18.4,-15.4" +
-    "c3.1,1.5 9.4,12.3 8.4,24.8c3,1.8 5.9,3.9 8.5,6.1";
-
-  Blockly.BlockSvg.TOP_LEFT_CORNER_DEFINE_HAT =
-    "c0,-7.1 3.7,-13.3 9.3,-16.9c1.7,-7.5 5.4,-13.2 7.6,-14.2" +
-    "c2.6,-1.3 10,6 14.6,11.1h33c4.6,-5.1 11.9,-12.4 14.6,-11.1" +
-    "c1.9,0.9 4.9,5.2 6.8,11.1c2.6,0,5.2,0,7.8,0";
+  const oldRenderDrawTop = Blockly.BlockSvg.prototype.renderDrawTop_;
+  Blockly.BlockSvg.prototype.renderDrawTop_ = function (steps, rightEdge) {
+    const oldStartHatPath = Blockly.BlockSvg.START_HAT_PATH;
+    const oldTopCorner = Blockly.BlockSvg.TOP_LEFT_CORNER_DEFINE_HAT;
+    if (!addon.self.disabled) {
+      Blockly.BlockSvg.START_HAT_PATH =
+        "c2.6,-2.3 5.5,-4.3 8.5,-6.2" +
+        "c-1,-12.5 5.3,-23.3 8.4,-24.8c3.7,-1.8 16.5,13.1 18.4,15.4" +
+        "c8.4,-1.3 17,-1.3 25.4,0c1.9,-2.3 14.7,-17.2 18.4,-15.4" +
+        "c3.1,1.5 9.4,12.3 8.4,24.8c3,1.8 5.9,3.9 8.5,6.1";
+      Blockly.BlockSvg.TOP_LEFT_CORNER_DEFINE_HAT =
+        "c0,-7.1 3.7,-13.3 9.3,-16.9c1.7,-7.5 5.4,-13.2 7.6,-14.2" +
+        "c2.6,-1.3 10,6 14.6,11.1h33c4.6,-5.1 11.9,-12.4 14.6,-11.1" +
+        "c1.9,0.9 4.9,5.2 6.8,11.1c2.6,0,5.2,0,7.8,0";
+    }
+    oldRenderDrawTop.call(this, steps, rightEdge);
+    Blockly.BlockSvg.START_HAT_PATH = oldStartHatPath;
+    Blockly.BlockSvg.TOP_LEFT_CORNER_DEFINE_HAT = oldTopCorner;
+  };
 
   Blockly.BlockSvg.prototype.renderCatFace_ = function () {
     this.catPath_.svgFace.setAttribute("fill", "#000000");
@@ -107,7 +120,6 @@ export default async function ({ addon, console }) {
       "c0,-4.6 1.6,-8.9 4.3,-12.3c-2.4,-5.6 -2.9,-12.4 -0.7,-13.4c2.1,-1 9.6,2.6 17,5.8" + "c2.6,0 6.2,0 10.9,0";
     var DEFINE_HAT_RIGHT_EAR_DOWN = "c0,0 25.6,0 44,0c7.4,-3.2 14.8,-6.8 16.9,-5.8c1.2,0.6 1.6,2.9 1.3,5.8";
 
-    var that = this;
     this.catPath_.ear = Blockly.utils.createSvgElement("path", {}, this.catPath_);
     this.catPath_.ear2 = Blockly.utils.createSvgElement("path", {}, this.catPath_);
     if (this.RTL) {
@@ -115,8 +127,8 @@ export default async function ({ addon, console }) {
       this.catPath_.ear.setAttribute("transform", "scale(-1 1)");
       this.catPath_.ear2.setAttribute("transform", "scale(-1 1)");
     }
-    this.catPath_.addEventListener("mouseenter", function (event) {
-      clearTimeout(that.blinkFn);
+    this.catPath_.addEventListener("mouseenter", (event) => {
+      clearTimeout(this.blinkFn);
       // blink
       if (event.target.svgFace.eye) {
         event.target.svgFace.eye.setAttribute("fill-opacity", "0");
@@ -126,7 +138,7 @@ export default async function ({ addon, console }) {
       }
 
       // reset after a short delay
-      that.blinkFn = setTimeout(function () {
+      this.blinkFn = setTimeout(() => {
         if (event.target.svgFace.eye) {
           event.target.svgFace.eye.setAttribute("fill-opacity", "0.6");
           event.target.svgFace.eye2.setAttribute("fill-opacity", "0.6");
@@ -136,106 +148,120 @@ export default async function ({ addon, console }) {
       }, 100);
     });
 
-    this.catPath_.ear.addEventListener("mouseenter", function () {
-      clearTimeout(that.earFn);
-      clearTimeout(that.ear2Fn);
+    this.catPath_.ear.addEventListener("mouseenter", () => {
+      clearTimeout(this.earFn);
+      clearTimeout(this.ear2Fn);
       // ear flick
-      that.catPath_.ear.setAttribute("fill-opacity", "0");
-      that.catPath_.ear2.setAttribute("fill-opacity", "");
-      var bodyPath = that.catPath_.svgBody.getAttribute("d");
+      this.catPath_.ear.setAttribute("fill-opacity", "0");
+      this.catPath_.ear2.setAttribute("fill-opacity", "");
+      var bodyPath = this.catPath_.svgBody.getAttribute("d");
       bodyPath = bodyPath.replace(RIGHT_EAR_UP, RIGHT_EAR_DOWN);
       bodyPath = bodyPath.replace(DEFINE_HAT_RIGHT_EAR_UP, DEFINE_HAT_RIGHT_EAR_DOWN);
       bodyPath = bodyPath.replace(LEFT_EAR_DOWN, LEFT_EAR_UP);
       bodyPath = bodyPath.replace(DEFINE_HAT_LEFT_EAR_DOWN, DEFINE_HAT_LEFT_EAR_UP);
-      that.catPath_.svgBody.setAttribute("d", bodyPath);
+      this.catPath_.svgBody.setAttribute("d", bodyPath);
 
       // reset after a short delay
-      that.earFn = setTimeout(function () {
-        that.catPath_.ear.setAttribute("fill-opacity", "");
-        var bodyPath = that.catPath_.svgBody.getAttribute("d");
+      this.earFn = setTimeout(() => {
+        this.catPath_.ear.setAttribute("fill-opacity", "");
+        var bodyPath = this.catPath_.svgBody.getAttribute("d");
         bodyPath = bodyPath.replace(RIGHT_EAR_DOWN, RIGHT_EAR_UP);
         bodyPath = bodyPath.replace(DEFINE_HAT_RIGHT_EAR_DOWN, DEFINE_HAT_RIGHT_EAR_UP);
-        that.catPath_.svgBody.setAttribute("d", bodyPath);
+        this.catPath_.svgBody.setAttribute("d", bodyPath);
       }, 50);
     });
-    this.catPath_.ear2.addEventListener("mouseenter", function () {
-      clearTimeout(that.earFn);
-      clearTimeout(that.ear2Fn);
+    this.catPath_.ear2.addEventListener("mouseenter", () => {
+      clearTimeout(this.earFn);
+      clearTimeout(this.ear2Fn);
       // ear flick
-      that.catPath_.ear2.setAttribute("fill-opacity", "0");
-      that.catPath_.ear.setAttribute("fill-opacity", "");
-      var bodyPath = that.catPath_.svgBody.getAttribute("d");
+      this.catPath_.ear2.setAttribute("fill-opacity", "0");
+      this.catPath_.ear.setAttribute("fill-opacity", "");
+      var bodyPath = this.catPath_.svgBody.getAttribute("d");
       bodyPath = bodyPath.replace(LEFT_EAR_UP, LEFT_EAR_DOWN);
       bodyPath = bodyPath.replace(DEFINE_HAT_LEFT_EAR_UP, DEFINE_HAT_LEFT_EAR_DOWN);
       bodyPath = bodyPath.replace(RIGHT_EAR_DOWN, RIGHT_EAR_UP);
       bodyPath = bodyPath.replace(DEFINE_HAT_RIGHT_EAR_DOWN, DEFINE_HAT_RIGHT_EAR_UP);
-      that.catPath_.svgBody.setAttribute("d", bodyPath);
+      this.catPath_.svgBody.setAttribute("d", bodyPath);
 
       // reset after a short delay
-      that.ear2Fn = setTimeout(function () {
-        that.catPath_.ear2.setAttribute("fill-opacity", "");
-        var bodyPath = that.catPath_.svgBody.getAttribute("d");
+      this.ear2Fn = setTimeout(() => {
+        this.catPath_.ear2.setAttribute("fill-opacity", "");
+        var bodyPath = this.catPath_.svgBody.getAttribute("d");
         bodyPath = bodyPath.replace(LEFT_EAR_DOWN, LEFT_EAR_UP);
         bodyPath = bodyPath.replace(DEFINE_HAT_LEFT_EAR_DOWN, DEFINE_HAT_LEFT_EAR_UP);
-        that.catPath_.svgBody.setAttribute("d", bodyPath);
+        this.catPath_.svgBody.setAttribute("d", bodyPath);
       }, 50);
     });
-    if (this.RTL) {
-      // Set to the correct initial position
-      this.svgFace_.style.transform = "translate(-87px, 0px)";
+    this.resetFacePosition();
+    this.windowListener = (event) => {
+      if (!this.shouldWatchMouse()) return;
+      var time = Date.now();
+      if (time < this.lastCallTime + this.CALL_FREQUENCY_MS) return;
+      this.lastCallTime = time;
+
+      // mouse watching
+      if (this.workspace) {
+        // not disposed
+        var xy = this.getCatFacePosition();
+        var mouseLocation = {
+          x: event.x / this.workspace.scale,
+          y: event.y / this.workspace.scale,
+        };
+
+        var dx = mouseLocation.x - xy.x;
+        var dy = mouseLocation.y - xy.y;
+        var theta = Math.atan2(dx, dy);
+
+        // Map the vector from the cat face to the mouse location to a much shorter
+        // vector in the same direction, which will be the translation vector for
+        // the cat face
+        var delta = Math.sqrt(dx * dx + dy * dy);
+        var scaleFactor = delta / (delta + 1);
+
+        // Equation for radius of ellipse at theta for axes with length a and b
+        var a = 2;
+        var b = 5;
+        var r = (a * b) / Math.sqrt(Math.pow(b * Math.cos(theta), 2) + Math.pow(a * Math.sin(theta), 2));
+
+        // Convert polar coordinate back to x, y coordinate
+        dx = r * scaleFactor * Math.sin(theta);
+        dy = r * scaleFactor * Math.cos(theta);
+
+        if (this.RTL) dx -= 87; // Translate face over
+        this.svgFace_.style.transform = "translate(" + dx + "px, " + dy + "px)";
+      }
+    };
+    if (addon.settings.get("watch") === true) {
+      this.attachMouseMoveListener();
     }
-    if (shouldWatchMouseCursor) {
-      this.windowListener = function (event) {
-        var time = Date.now();
-        if (time < that.lastCallTime + that.CALL_FREQUENCY_MS) return;
-        that.lastCallTime = time;
-        if (!that.shouldWatchMouse()) return;
+  };
 
-        // mouse watching
-        if (that.workspace) {
-          // not disposed
-          var xy = that.getCatFacePosition();
-          var mouseLocation = {
-            x: event.x / that.workspace.scale,
-            y: event.y / that.workspace.scale,
-          };
+  Blockly.BlockSvg.prototype.attachMouseMoveListener = function () {
+    document.addEventListener("mousemove", this.windowListener);
+  };
 
-          var dx = mouseLocation.x - xy.x;
-          var dy = mouseLocation.y - xy.y;
-          var theta = Math.atan2(dx, dy);
+  Blockly.BlockSvg.prototype.detachMouseMoveListener = function () {
+    document.removeEventListener("mousemove", this.windowListener);
+  };
 
-          // Map the vector from the cat face to the mouse location to a much shorter
-          // vector in the same direction, which will be the translation vector for
-          // the cat face
-          var delta = Math.sqrt(dx * dx + dy * dy);
-          var scaleFactor = delta / (delta + 1);
-
-          // Equation for radius of ellipse at theta for axes with length a and b
-          var a = 2;
-          var b = 5;
-          var r = (a * b) / Math.sqrt(Math.pow(b * Math.cos(theta), 2) + Math.pow(a * Math.sin(theta), 2));
-
-          // Convert polar coordinate back to x, y coordinate
-          dx = r * scaleFactor * Math.sin(theta);
-          dy = r * scaleFactor * Math.cos(theta);
-
-          if (that.RTL) dx -= 87; // Translate face over
-          that.svgFace_.style.transform = "translate(" + dx + "px, " + dy + "px)";
-        }
-      };
-      document.addEventListener("mousemove", this.windowListener);
+  Blockly.BlockSvg.prototype.resetFacePosition = function () {
+    if (this.RTL) {
+      this.svgFace_.style.transform = "translate(-87px, 0px)";
+    } else {
+      this.svgFace_.style.transform = "";
     }
   };
 
   let workspacePositionRect = null;
+  // Currently this function does not work very well in RTL or when zooming in/out too much of the workspace.
   Blockly.BlockSvg.prototype.getCatFacePosition = function () {
-    // getBoundingClientRect is not performant
-    //var offset = that.workspace.getParentSvg().getBoundingClientRect();
     if (!workspacePositionRect) {
       workspacePositionRect = this.workspace.getParentSvg().getBoundingClientRect();
     }
     var offset = { x: workspacePositionRect.x, y: workspacePositionRect.y };
 
+    // flyout category offset
+    offset.x += 60;
     if (!this.isInFlyout && this.workspace.getFlyout()) {
       offset.x += this.workspace.getFlyout().getWidth();
     }
@@ -247,14 +273,14 @@ export default async function ({ addon, console }) {
     if (this.RTL) {
       xy.x = this.workspace.getWidth() - xy.x - this.width;
     }
+
     // convert to workspace units
     xy.x += offset.x / this.workspace.scale;
     xy.y += offset.y / this.workspace.scale;
     // distance to center of face
     xy.x -= 43.5;
     xy.y -= 4;
-    // flyout category offset
-    xy.x += 60;
+
     if (this.RTL) {
       // We've been calculating from the right edge. Convert x to from left edge.
       xy.x = screen.width - xy.x;
@@ -263,8 +289,7 @@ export default async function ({ addon, console }) {
   };
 
   Blockly.BlockSvg.prototype.shouldWatchMouse = function () {
-    if (!shouldWatchMouseCursor) return false;
-    // if (window.vmLoadHigh || !window.CAT_CHASE_MOUSE) return false;
+    if (addon.self.disabled) return false;
     var xy = this.getCatFacePosition();
     const MARGIN = 50;
     var blockXOnScreen = xy.x > -MARGIN && xy.x - MARGIN < screen.width / this.workspace.scale;
@@ -274,14 +299,14 @@ export default async function ({ addon, console }) {
 
   const originalRenderDraw = Blockly.BlockSvg.prototype.renderDraw_;
   Blockly.BlockSvg.prototype.renderDraw_ = function (...args) {
-    if (!this.svgFace_) {
+    if (!addon.self.disabled && !this.svgFace_) {
       this.sa_catBlockConstructor();
     }
     const r = originalRenderDraw.call(this, ...args);
-    if (!this.outputConnection && !this.previousConnection) {
+    if (!addon.self.disabled && !this.outputConnection && !this.previousConnection) {
       this.initCatStuff();
     }
-    if (this.startHat_ && !this.svgFace_.firstChild) {
+    if (!addon.self.disabled && this.startHat_ && !this.svgFace_.firstChild) {
       this.renderCatFace_();
     }
     return r;
@@ -292,29 +317,26 @@ export default async function ({ addon, console }) {
     clearTimeout(this.blinkFn);
     clearTimeout(this.earFn);
     clearTimeout(this.ear2Fn);
-    if (this.windowListener) {
-      document.removeEventListener("mousemove", this.windowListener);
-    }
+    this.detachMouseMoveListener();
     return originalDispose.call(this, ...args);
   };
 
   const originalSetGlowStack = Blockly.BlockSvg.prototype.setGlowStack;
   Blockly.BlockSvg.prototype.setGlowStack = function (isGlowingStack) {
-    if (this.windowListener) {
-      if (isGlowingStack) {
-        // For performance, don't follow the mouse when the stack is glowing
-        document.removeEventListener("mousemove", this.windowListener);
-        if (this.workspace && this.svgFace_.style) {
-          // reset face direction
-          if (this.RTL) {
-            this.svgFace_.style.transform = "translate(-87px, 0px)";
-          } else {
-            this.svgFace_.style.transform = "";
-          }
+    if (isGlowingStack) {
+      // For performance, don't follow the mouse when the stack is glowing
+      this.detachMouseMoveListener();
+      this.resetFacePosition();
+      if (this.workspace && this.svgFace_.style) {
+        // reset face direction
+        if (this.RTL) {
+          this.svgFace_.style.transform = "translate(-87px, 0px)";
+        } else {
+          this.svgFace_.style.transform = "";
         }
-      } else {
-        document.addEventListener("mousemove", this.windowListener);
       }
+    } else {
+      this.attachMouseMoveListener();
     }
     return originalSetGlowStack.call(this, isGlowingStack);
   };
@@ -329,5 +351,23 @@ export default async function ({ addon, console }) {
     this.CALL_FREQUENCY_MS = 60;
   };
 
-  updateAllBlocks(addon.tab);
+  const update = () => updateAllBlocks(addon.tab);
+
+  update();
+
+  addon.self.addEventListener("disabled", update);
+  addon.self.addEventListener("reenabled", update);
+  addon.settings.addEventListener("change", () => {
+    const workspace = addon.tab.traps.getWorkspace();
+    const topBlocks = workspace.getTopBlocks();
+    for (const block of topBlocks) {
+      if (!block.hasInitCatStuff) continue;
+      if (addon.settings.get("watch") === true) {
+        block.attachMouseMoveListener();
+      } else {
+        block.detachMouseMoveListener();
+        block.resetFacePosition();
+      }
+    }
+  });
 }
