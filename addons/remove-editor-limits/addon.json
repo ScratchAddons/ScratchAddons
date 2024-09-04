@@ -1,0 +1,10 @@
+{
+  "name": "Remove code area limits",
+  "description": "Allows you to scroll as far away from existing code as you want.",
+  "credits": [{ "name": "Jazza", "link": "https://jazza.dev/" }],
+  "userscripts": [{ "url": "userscript.js", "matches": ["projects"] }],
+  "tags": ["codeEditor", "editor"],
+  "versionAdded": "1.39.0",
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}
