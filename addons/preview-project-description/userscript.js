@@ -48,7 +48,7 @@ export default async function ({ addon, console, msg }) {
       const loggedInUser = await addon.auth.fetchUsername();
       const projectOwner = addon.tab.redux.state?.preview?.projectInfo?.author?.username;
       if (!projectOwner || !loggedInUser || loggedInUser !== projectOwner) {
-        //return;
+        return;
       }
     }
 

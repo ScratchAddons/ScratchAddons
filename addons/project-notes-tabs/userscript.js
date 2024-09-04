@@ -8,7 +8,10 @@ export default async function ({ addon, console }) {
   });
 
   eventTarget.addEventListener("enable", injectTabs);
-  addon.self.addEventListener("reenabled", injectTabs);
+  addon.self.addEventListener("reenabled", () => {
+    injectTabs();
+    addPreviewToggle();
+  });
   addon.auth.addEventListener("change", () => {
     if (wrapper) injectTabs();
   });
@@ -67,7 +70,6 @@ export default async function ({ addon, console }) {
     }
 
     selectTab(0);
-    addPreviewToggle();
   }
 
   while (true) {
