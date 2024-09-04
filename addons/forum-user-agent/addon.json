@@ -14,7 +14,7 @@
     }
   ],
   "tags": ["community", "forums"],
-  "versionAdded": "1.40.0",
+  "versionAdded": "1.13.0",
   "latestUpdate": {
     "version": "1.40.0",
     "temporaryNotice": "This is not new, but it can now be disabled."
