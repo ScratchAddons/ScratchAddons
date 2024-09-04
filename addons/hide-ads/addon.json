@@ -1,0 +1,68 @@
+{
+  "name": "Hide advertising comments",
+  "description": "Automatically hides comments that contain certain strings deemed as advertising.",
+  "tags": ["comments", "community"],
+  "versionAdded": "1.40.0",
+  "credits": [{ "name": "Jazza", "link": "http://scratch.mit.edu/users/greeny--231" }],
+  "userscripts": [{ "matches": ["profiles", "projects", "studios"], "url": "userscript.js" }],
+  "userstyles": [{ "matches": ["profiles", "projects", "studios"], "url": "userstyle.css" }],
+  "settings": [
+    { "name": "Project comments", "type": "boolean", "default": true, "id": "projects" },
+    { "name": "Studio comments", "type": "boolean", "default": true, "id": "studios" },
+    { "name": "Profile comments", "type": "boolean", "default": true, "id": "profiles" },
+    {
+      "name": "Method of hiding comments",
+      "type": "select",
+      "potentialValues": [
+        { "id": "censor", "name": "Censor content" },
+        { "id": "hide", "name": "Hide comment" }
+      ],
+      "id": "method",
+      "default": "censor"
+    },
+    { "name": "Apply general spam filter", "type": "boolean", "default": true, "id": "spamFilter" },
+    {
+      "name": "Links, strings, and users to match to",
+      "id": "matches",
+      "type": "table",
+      "default": [{ "matchType": "link", "matchValue": "scratch.mit.edu/projects" }],
+      "row": [
+        {
+          "name": "Type",
+          "id": "matchType",
+          "type": "select",
+          "default": "link",
+          "potentialValues": [
+            { "name": "Link", "id": "link" },
+            { "name": "String", "id": "string" },
+            { "name": "User", "id": "user" }
+          ]
+        },
+        {
+          "name": "Match",
+          "id": "matchValue",
+          "type": "untranslated",
+          "default": ""
+        }
+      ],
+      "presets": [
+        { "name": "Project links", "values": { "matchType": "link", "matchValue": "scratch.mit.edu/projects" } },
+        { "name": "Profile links", "values": { "matchType": "link", "matchValue": "scratch.mit.edu/users" } },
+        { "name": "Studio links", "values": { "matchType": "link", "matchValue": "scratch.mit.edu/studios" } },
+        { "name": "Written advertising", "values": { "matchType": "string", "matchValue": "my game" } },
+        { "name": "Written follow request", "values": { "matchType": "string", "matchValue": "follow me" } },
+        { "name": "Friend for friend", "values": { "matchType": "string", "matchValue": "f4f" } }
+      ]
+    }
+  ],
+  "info": [
+    { "type": "info", "id": "caseInsensitive", "text": "All string matches are case insensitive." },
+    {
+      "type": "warning",
+      "id": "cantViewHidden",
+      "text": "If you choose \"Hide comment\" you will not be able to see or report any hidden comments while this addon is enabled."
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
+}

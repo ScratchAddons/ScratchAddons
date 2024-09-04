@@ -1,0 +1,32 @@
+.advertising {
+  text-decoration: underline;
+}
+
+.contains-advertising {
+  opacity: 0.5;
+}
+
+.contains-advertising .comment-top-row,
+.contains-advertising .comment-bottom-row,
+.contains-advertising .comment-bottom-row,
+.contains-advertising + .replies,
+.contains-advertising .actions-wrap,
+.contains-advertising .name,
+.contains-advertising .content + div span,
+.contains-advertising .content + div a {
+  display: none;
+}
+
+/* Ridiculously specific selector to override scratch's equally ridiculously specfic selector (like come on its 1,7,1)*/
+#comments .comment.contains-advertising .info .content + div:not(.name):not(.content):not([data-content="reply-form"]) {
+  padding: 0px;
+  padding-top: 12px;
+}
+
+#comments .comment.contains-advertising .info::before {
+  top: 0px;
+}
+
+#comments .comment.contains-advertising {
+  padding-bottom: 16px;
+}
