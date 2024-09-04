@@ -360,7 +360,7 @@ export default async function ({ addon, console }) {
   addon.settings.addEventListener("change", () => {
     const workspace = addon.tab.traps.getWorkspace();
     const topBlocks = workspace.getTopBlocks();
-    const flyoutWorkspace = workspace.getFlyout().getWorkspace()
+    const flyoutWorkspace = workspace.getFlyout().getWorkspace();
     const flyoutBlocks = flyoutWorkspace.getTopBlocks();
     for (const block of [...topBlocks, ...flyoutBlocks]) {
       if (!block.hasInitCatStuff) continue;
