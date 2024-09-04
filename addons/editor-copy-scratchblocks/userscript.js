@@ -39,7 +39,7 @@ export default async function ({ addon, console, msg }) {
 
     // Get blocks in current sprite as project.json format
     const vm = addon.tab.traps.vm;
-    let blocksJSON = vm.editingTarget.blocks._blocks;
+    let blocksJSON = JSON.parse(vm.toJSON(vm.editingTarget.id)).blocks;
 
 
     // Example input for debugging, copied from the "blocks" section from project.json inside an unzipped .sb3 project.
