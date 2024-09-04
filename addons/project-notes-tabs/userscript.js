@@ -1,22 +1,11 @@
-import { eventTarget, getPreviewEnabled, addPreviewToggle } from "./module.js";
+import { eventTarget, addPreviewToggle } from "./module.js";
 
 export default async function ({ addon, console }) {
-  addon.tab
-    .waitForElement(":root > body", {
-      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
-    })
-    .then(() => {
-      document.body.classList.add("sa-project-tabs-on");
-    });
-
-  function disableSelf() {
+  addon.self.addEventListener("disabled", () => {
     document.querySelectorAll(".description-block").forEach((e) => (e.style.display = ""));
     wrapper.remove();
-    document.body.classList.remove("sa-project-tabs-on");
     addPreviewToggle();
-  }
-  eventTarget.addEventListener("disable", disableSelf);
-  addon.self.addEventListener("disabled", disableSelf);
+  });
 
   eventTarget.addEventListener("enable", injectTabs);
   addon.self.addEventListener("reenabled", injectTabs);
@@ -39,11 +28,7 @@ export default async function ({ addon, console }) {
   let wrapper;
 
   function injectTabs() {
-    if (addon.self.disabled || getPreviewEnabled()) {
-      document.body.classList.remove("sa-project-tabs-on");
-      return;
-    }
-    document.body.classList.add("sa-project-tabs-on");
+    if (addon.self.disabled) return;
     if (wrapper) wrapper.remove();
     const labels = document.querySelectorAll(".project-textlabel");
     const descriptions = document.querySelectorAll(".description-block");
@@ -91,6 +76,6 @@ export default async function ({ addon, console }) {
       reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
     });
 
-    if (document.body.classList.contains("sa-project-tabs-on")) injectTabs();
+    injectTabs();
   }
 }

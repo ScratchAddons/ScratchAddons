@@ -1,7 +1,7 @@
 .sa-toggle-project-preview {
   display: flex;
   align-items: center;
-  margin: 0 0 auto auto;
+  margin-left: auto;
 }
 
 .sa-toggle-project-preview > span {

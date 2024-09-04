@@ -1,4 +1,4 @@
-import { disableTabs, enableTabs, setPreviewEnabled, eventTarget } from "../project-notes-tabs/module.js";
+import { enableTabs, eventTarget } from "../project-notes-tabs/module.js";
 
 export default async function ({ addon, console, msg }) {
   const divElement = Object.assign(document.createElement("div"), {
@@ -48,7 +48,7 @@ export default async function ({ addon, console, msg }) {
       const loggedInUser = await addon.auth.fetchUsername();
       const projectOwner = addon.tab.redux.state?.preview?.projectInfo?.author?.username;
       if (!projectOwner || !loggedInUser || loggedInUser !== projectOwner) {
-        return;
+        //return;
       }
     }
 
@@ -77,7 +77,6 @@ export default async function ({ addon, console, msg }) {
   function togglePreview(override = !currentlyEnabled) {
     const oldCurentlyEnabled = currentlyEnabled;
     currentlyEnabled = override;
-    setPreviewEnabled(currentlyEnabled);
 
     if (currentlyEnabled === true && !wasEverEnabled) {
       wasEverEnabled = true;
@@ -95,21 +94,11 @@ export default async function ({ addon, console, msg }) {
       // This case will not cause waitForElement to fire.
       // Manually run the injectToggle() function:
       queueMicrotask(injectToggle);
-      enableTabs();
     }
+    enableTabs();
   }
 
   async function enablePreview() {
-    if (document.body.classList.contains("sa-project-tabs-on")) {
-      // Disable the project-notes-tabs addon if it's enabled.
-      disableTabs();
-
-      injectToggle();
-
-      // Just in case, wait 1 event loop cycle
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    }
-
     forceReactRerender();
 
     if (!document.querySelector(".project-description")) {
