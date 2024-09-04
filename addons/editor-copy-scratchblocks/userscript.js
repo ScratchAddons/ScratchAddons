@@ -1,9 +1,8 @@
 // From https://github.com/apple502j/parse-sb3-blocks/releases/tag/v0.5.2
-import {toScratchblocks} from "./parse-sb3-blocks.module.js";
+import { toScratchblocks } from "./parse-sb3-blocks.module.js";
 
 // Some code referenced from blocks2image, block-switching and editor-devtools
 export default async function ({ addon, console, msg }) {
-
   // Add right-click "Copy scratchblocks code" button to blocks
   addon.tab.createBlockContextMenu(
     (items, block) => {
@@ -16,18 +15,14 @@ export default async function ({ addon, console, msg }) {
           : // If there's no such button, insert at end
             items.length;
       // "Copy scratchblocks code" message in /addons-l10n/en/editor-copy-scratchblocks.json (translate this)
-      items.splice(
-        insertBeforeIndex,
-        0,
-        {
-          enabled: true,
-          text: msg("copy-scratchblocks"),
-          callback: () => {
-            convertToScratchblocks(block);
-          },
-          separator: true,
-        }
-      );
+      items.splice(insertBeforeIndex, 0, {
+        enabled: true,
+        text: msg("copy-scratchblocks"),
+        callback: () => {
+          convertToScratchblocks(block);
+        },
+        separator: true,
+      });
       return items;
     },
     { blocks: true }
@@ -43,9 +38,12 @@ export default async function ({ addon, console, msg }) {
 
     // Send ID and current blocks to parse-sb3-blocks, set indent spacing and fix variables that have the same name as reporters.
     // Only outputs English blocks, TODO: Detect editor language and pass it to third input for multilingual scratchblocks.
-    const scratchblocks = toScratchblocks(blockId, blocksJSON, "en", {tabs: " ".repeat(4), variableStyle: "as-needed"});
+    const scratchblocks = toScratchblocks(blockId, blocksJSON, "en", {
+      tabs: " ".repeat(4),
+      variableStyle: "as-needed",
+    });
 
     console.log(scratchblocks);
     navigator.clipboard.writeText(scratchblocks);
-  };
+  }
 }
