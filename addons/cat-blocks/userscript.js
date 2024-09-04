@@ -3,6 +3,8 @@
  * It has been modified to work properly in our environment and fix some bugs.
  */
 
+import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
+
 export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
@@ -349,6 +351,8 @@ export default async function ({ addon, console }) {
     this.CALL_FREQUENCY_MS = 60;
   };
 
+  const update = () => updateAllBlocks(addon.tab);
+
   update();
 
   addon.self.addEventListener("disabled", update);
@@ -366,23 +370,4 @@ export default async function ({ addon, console }) {
       }
     }
   });
-
-  function update() {
-    const workspace = addon.tab.traps.getWorkspace();
-    if (workspace) {
-      const vm = addon.tab.traps.vm;
-      if (vm.editingTarget) {
-        vm.emitWorkspaceUpdate();
-      }
-      const flyout = workspace.getFlyout();
-      if (flyout) {
-        Blockly.Events.disable();
-        const flyoutWorkspace = flyout.getWorkspace();
-        Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
-        workspace.getToolbox().refreshSelection();
-        workspace.toolboxRefreshEnabled_ = true;
-        Blockly.Events.enable();
-      }
-    }
-  }
 }
