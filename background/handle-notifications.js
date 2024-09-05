@@ -11,11 +11,11 @@ const periods = [
     mins: 60,
   },
   {
-    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("nhours", "4")) || "4 hours",
+    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("4hours")) || "4 hours",
     mins: 240,
   },
   {
-    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("nhours", "8")) || "8 hours",
+    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("8hours")) || "8 hours",
     mins: 480,
   },
   {
