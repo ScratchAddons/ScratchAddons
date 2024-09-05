@@ -195,10 +195,7 @@ export default async function ({ addon, console, msg }) {
     svgchild = svgchild.cloneNode(true);
     translateY -= Math.min(...yArr);
 
-    svgchild.setAttribute(
-      "transform",
-      `translate(${-Math.min(...xArr) + scale},${translateY}) scale(${scale})`
-    );
+    svgchild.setAttribute("transform", `translate(${-Math.min(...xArr) + scale},${translateY}) scale(${scale})`);
     setCSSVars(svg);
     svg.append(makeStyle());
     svg.append(svgchild);
