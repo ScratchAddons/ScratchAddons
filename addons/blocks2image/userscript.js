@@ -36,8 +36,6 @@ export default async function ({ addon, console, msg }) {
   exSVG.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
   exSVG.setAttribute("version", "1.1");
 
-  const enabledAddons = await addon.self.getEnabledAddons("codeEditor");
-
   addon.tab.createBlockContextMenu(
     (items) => {
       if (addon.self.disabled) return items;
@@ -154,10 +152,10 @@ export default async function ({ addon, console, msg }) {
         externalImages[iconUrl].forEach((item) => item.setAttribute("xlink:href", dataUri));
       })
     );
-    if (!isExportPNG) {
-      exportData(new XMLSerializer().serializeToString(svg));
-    } else {
+    if (isExportPNG) {
       exportPNG(svg);
+    } else {
+      exportData(new XMLSerializer().serializeToString(svg));
     }
   }
 
@@ -165,19 +163,9 @@ export default async function ({ addon, console, msg }) {
     let svg = exSVG.cloneNode();
 
     let svgchild = block.svgGroup_;
+    const translateY = Math.abs(svgchild.getBBox().y);
     svgchild = svgchild.cloneNode(true);
-    let dataShapes = svgchild.getAttribute("data-shapes");
-    let translateY = 0; // blocks no hat
     const scale = isExportPNG ? 2 : 1;
-    if (dataShapes === "c-block c-1 hat") {
-      translateY = 20; // for My block
-    }
-    if (dataShapes === "hat") {
-      translateY = 16; // for Events
-      if (enabledAddons.includes("cat-blocks")) {
-        translateY += 16; // for cat ears
-      }
-    }
     svgchild.setAttribute("transform", `translate(0,${scale * translateY}) scale(${scale})`);
     setCSSVars(svg);
     svg.append(makeStyle());
