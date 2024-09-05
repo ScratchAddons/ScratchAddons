@@ -316,17 +316,3 @@ if (isScratchGui || isProject) {
     }, 10000);
   }
 }
-
-if (location.pathname === "/discuss/3/topic/add/") {
-  const checkUA = () => {
-    if (!window.mySettings) return false;
-    const ua = window.mySettings.markupSet.find((x) => x.className);
-    ua.openWith = window._simple_http_agent = ua.openWith.replace("version", "versions");
-    const textarea = document.getElementById("id_body");
-    if (textarea?.value) {
-      textarea.value = ua.openWith;
-      return true;
-    }
-  };
-  if (!checkUA()) window.addEventListener("DOMContentLoaded", () => checkUA(), { once: true });
-}
