@@ -114,9 +114,9 @@ export default async function ({ addon, console, msg }) {
   async function exportBlock(isExportPNG, block) {
     let svg;
     if (block) {
-      svg = selectedBlocks(isExportPNG, block);
+      svg = selectedBlocks(isExportPNG ? 2 : 1, block);
     } else {
-      svg = allBlocks(isExportPNG);
+      svg = allBlocks(isExportPNG ? 2 : 1);
     }
     // resolve nbsp whitespace
     svg.querySelectorAll("text").forEach((text) => {
@@ -159,13 +159,12 @@ export default async function ({ addon, console, msg }) {
     }
   }
 
-  function selectedBlocks(isExportPNG, block) {
+  function selectedBlocks(scale, block) {
     let svg = exSVG.cloneNode();
 
     let svgchild = block.svgGroup_;
     const translateY = Math.abs(svgchild.getBBox().y);
     svgchild = svgchild.cloneNode(true);
-    const scale = isExportPNG ? 2 : 1;
     svgchild.setAttribute("transform", `translate(0,${scale * translateY}) scale(${scale})`);
     setCSSVars(svg);
     svg.append(makeStyle());
@@ -173,12 +172,11 @@ export default async function ({ addon, console, msg }) {
     return svg;
   }
 
-  function allBlocks(isExportPNG) {
+  function allBlocks(scale) {
     let svg = exSVG.cloneNode();
 
     let svgchild = document.querySelector("svg.blocklySvg g.blocklyBlockCanvas");
     let translateY = 0;
-    const scale = isExportPNG ? 2 : 1;
 
     let xArr = [];
     let yArr = [];
