@@ -181,12 +181,14 @@ export default async function ({ addon, console, msg }) {
     let xArr = [];
     let yArr = [];
 
+    // Loop before cloneNode so getBBox() works.
     svgchild.childNodes.forEach((g) => {
       let x = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[1] || 0;
       let y = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[2] || 0;
       xArr.push(x * scale);
       yArr.push(y * scale);
 
+      // This seems to work since the actual positioning is done with translate.
       if (translateY === 0) translateY = Math.abs(g.getBBox().y);
     });
 
