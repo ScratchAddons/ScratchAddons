@@ -177,7 +177,8 @@ export default async function ({ addon, console, msg }) {
     let svg = exSVG.cloneNode();
 
     let svgchild = document.querySelector("svg.blocklySvg g.blocklyBlockCanvas");
-    svgchild = svgchild.cloneNode(true);
+    let translateY = 0;
+    const scale = isExportPNG ? 2 : 1;
 
     let xArr = [];
     let yArr = [];
@@ -185,16 +186,15 @@ export default async function ({ addon, console, msg }) {
     svgchild.childNodes.forEach((g) => {
       let x = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[1] || 0;
       let y = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[2] || 0;
-      xArr.push(x * (isExportPNG ? 2 : 1));
-      yArr.push(y * (isExportPNG ? 2 : 1));
+      xArr.push(x * scale);
+      yArr.push(y * scale);
+
+      if (translateY === 0) translateY = Math.abs(g.getBBox().y);
     });
 
-    svgchild.setAttribute(
-      "transform",
-      `translate(${-Math.min(...xArr)},${-Math.min(...yArr) + 18 * (isExportPNG ? 2 : 1)}) ${
-        isExportPNG ? "scale(2)" : ""
-      }`
-    );
+    svgchild = svgchild.cloneNode(true);
+
+    svgchild.setAttribute("transform", `translate(${-Math.min(...xArr)},${-Math.min(...yArr) + translateY * scale}) scale(${scale})`);
     setCSSVars(svg);
     svg.append(makeStyle());
     svg.append(svgchild);
