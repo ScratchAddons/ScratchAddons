@@ -163,9 +163,9 @@ export default async function ({ addon, console, msg }) {
     let svg = exSVG.cloneNode();
 
     let svgchild = block.svgGroup_;
-    const translateY = Math.abs(svgchild.getBBox().y);
+    const translateY = Math.abs(svgchild.getBBox().y) * scale + scale;
     svgchild = svgchild.cloneNode(true);
-    svgchild.setAttribute("transform", `translate(0,${scale * translateY}) scale(${scale})`);
+    svgchild.setAttribute("transform", `translate(${scale},${translateY}) scale(${scale})`);
     setCSSVars(svg);
     svg.append(makeStyle());
     svg.append(svgchild);
@@ -189,14 +189,15 @@ export default async function ({ addon, console, msg }) {
       yArr.push(y * scale);
 
       // This seems to work since the actual positioning is done with translate.
-      if (translateY === 0) translateY = Math.abs(g.getBBox().y);
+      if (translateY === 0) translateY = Math.abs(g.getBBox().y) * scale + scale;
     });
 
     svgchild = svgchild.cloneNode(true);
+    translateY -= Math.min(...yArr);
 
     svgchild.setAttribute(
       "transform",
-      `translate(${-Math.min(...xArr)},${-Math.min(...yArr) + translateY * scale}) scale(${scale})`
+      `translate(${-Math.min(...xArr) + scale},${translateY}) scale(${scale})`
     );
     setCSSVars(svg);
     svg.append(makeStyle());
@@ -229,8 +230,8 @@ export default async function ({ addon, console, msg }) {
     document.body.append(iframe);
     iframe.contentDocument.write(serializer.serializeToString(svg));
     let { width, height } = iframe.contentDocument.body.querySelector("svg g").getBoundingClientRect();
-    svg.setAttribute("width", width + "px");
-    svg.setAttribute("height", height + "px");
+    svg.setAttribute("width", width + 4 + "px");
+    svg.setAttribute("height", height + 4 + "px");
 
     let canvas = document.createElement("canvas");
     let ctx = canvas.getContext("2d");
