@@ -3,7 +3,7 @@ import { createButton, createDropdown } from "../forum-toolbar/lib.js";
 import { toBBCode } from "./markdownToBbcode.js";
 
 export default async function ({ addon, msg, console }) {
-  const body = document.querySelector("#id_body");
+  const body = document.querySelector(".markItUpEditor");
   const submitButton = document.querySelector(".form-submit button");
 
   body.addEventListener("input", () => {
