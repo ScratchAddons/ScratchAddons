@@ -27,7 +27,7 @@
   "versionAdded": "1.13.0",
   "enabledByDefault": false,
   "latestUpdate": {
-    "version": "1.39.0",
+    "version": "1.40.0",
     "temporaryNotice": "The addon has been reworked. There is now a modal for saving the blocks as an image, and the image can be copied to the clipboard.",
     "isMajor": true
   },
