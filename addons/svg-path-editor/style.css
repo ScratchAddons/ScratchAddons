@@ -1,0 +1,9 @@
+.sa-svg-path-editor-svg {
+    margin: 1rem;
+    padding: 1rem;
+    background-color: hsla(215, 100%, 95%, 1);
+    border-radius: 1rem;
+}
+.sa-svg-path-editor-input {
+    margin: 0 1rem;
+}
