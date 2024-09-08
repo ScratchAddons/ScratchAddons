@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, msg }) {
   let button;
   let lastPaintMode;
 
@@ -21,12 +21,18 @@ export default async function ({ addon, console }) {
       const img = document.createElement("img");
       img.className = "labeled-icon-button_edit-field-icon_YEtkK";
       img.src = addon.self.dir + "/image.svg";
-      img.alt = "Edit Path";
-      img.title = "Edit Path";
+      img.alt = msg("label");
+      img.title = msg("label");
+      button.appendChild(img);
+
+      const label = document.createElement("span");
+      label.className = "labeled-icon-button_edit-field-title_0dBTI";
+      label.textContent = msg("label");
+      button.appendChild(label);
 
       button.addEventListener("click", async function () {
         if (button.classList.contains("button_mod-disabled_HvX8y")) return;
-        const { content, closeButton, remove } = addon.tab.createModal("Edit Path", {
+        const { content, closeButton, remove } = addon.tab.createModal(msg("label"), {
           isOpen: true
         })
         try {
@@ -65,13 +71,13 @@ export default async function ({ addon, console }) {
 
           const cancelButton = document.createElement("button");
           cancelButton.className = "button action-button close-button white";
-          cancelButton.textContent = "cancel";
+          cancelButton.textContent = addon.tab.scratchMessage("general.cancel");
           cancelButton.addEventListener("click", () => {remove()});
           footer.appendChild(cancelButton);
 
           const saveButton = document.createElement("button");
           saveButton.className = "button action-button submit-button";
-          saveButton.textContent = "save";
+          saveButton.textContent = msg("save");
           saveButton.addEventListener("click", () => {
             addon.tab.redux.state.scratchPaint.selectedItems[0].pathData = input.value;
             remove();
@@ -89,7 +95,6 @@ export default async function ({ addon, console }) {
       });
       if (addon.tab.redux.state.scratchPaint.selectedItems.length !== 1) button.classList.add("button_mod-disabled_HvX8y")
       else if (!addon.tab.redux.state.scratchPaint.selectedItems[0].pathData) button.classList.add("button_mod-disabled_HvX8y")
-      button.appendChild(img);
 
       await addon.tab.waitForElement("div.mode-tools_mode-tools_kuBCO")
       const toolbar = document.querySelector("div.mode-tools_mode-tools_kuBCO");
