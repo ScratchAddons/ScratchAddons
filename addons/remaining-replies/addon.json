@@ -1,0 +1,36 @@
+{
+  "name": "Remaining reply counter",
+  "description": "Shows you how many more replies can be posted on each comment thread in a studio before reaching the limit of 25.",
+  "credits": [
+    {
+      "name": "BarelySmooth",
+      "link": "https://scratch.mit.edu/users/BarelySmooth/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["studios"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "limit10.css",
+      "matches": ["studios"],
+      "if": { "settings": { "show_only_if_less_than_10": true } }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Only show if less than 10 replies remain",
+      "id": "show_only_if_less_than_10",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "versionAdded": "1.39.0",
+  "tags": ["community", "comments"],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true
+}

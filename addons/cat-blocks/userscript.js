@@ -3,11 +3,9 @@
  * It has been modified to work properly in our environment and fix some bugs.
  */
 
-import { isScratchAprilFools24 } from "../hide-flyout/april-fools.js";
+import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
 
 export default async function ({ addon, console }) {
-  if (await isScratchAprilFools24(addon.tab.redux)) return;
-
   const Blockly = await addon.tab.traps.getBlockly();
 
   const shouldWatchMouseCursor = addon.settings.get("watch");
@@ -186,7 +184,7 @@ export default async function ({ addon, console }) {
       // Set to the correct initial position
       this.svgFace_.style.transform = "translate(-87px, 0px)";
     }
-    if (this.shouldWatchMouse()) {
+    if (shouldWatchMouseCursor) {
       this.windowListener = function (event) {
         var time = Date.now();
         if (time < that.lastCallTime + that.CALL_FREQUENCY_MS) return;
@@ -331,20 +329,5 @@ export default async function ({ addon, console }) {
     this.CALL_FREQUENCY_MS = 60;
   };
 
-  const workspace = Blockly.getMainWorkspace();
-  if (workspace) {
-    const vm = addon.tab.traps.vm;
-    if (vm.editingTarget) {
-      vm.emitWorkspaceUpdate();
-    }
-    const flyout = workspace.getFlyout();
-    if (flyout) {
-      Blockly.Events.disable();
-      const flyoutWorkspace = flyout.getWorkspace();
-      Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
-      workspace.getToolbox().refreshSelection();
-      workspace.toolboxRefreshEnabled_ = true;
-      Blockly.Events.enable();
-    }
-  }
+  updateAllBlocks(addon.tab);
 }

@@ -1,8 +1,4 @@
-import { isScratchAprilFools24 } from "./april-fools.js";
-
 export default async function ({ addon, console, msg }) {
-  if (await isScratchAprilFools24(addon.tab.redux)) return;
-
   let placeHolderDiv = null;
   let lockObject = null;
   let lockButton = null;
@@ -84,7 +80,22 @@ export default async function ({ addon, console, msg }) {
   }
 
   function onmouseleave(e, speed = getSpeedValue()) {
-    if (flyoutLock) return;
+    // locked palette, inputting text, and hovering over dropdown menu do not close palette
+    const widget = Blockly.WidgetDiv.owner_;
+    const dropdown = Blockly.DropDownDiv.owner_;
+    const widgetOpenedFromFlyout =
+      (widget === Blockly.ContextMenu && widget.currentBlock?.isInFlyout) ||
+      (widget instanceof Blockly.Field && widget.sourceBlock_?.isInFlyout);
+    const dropdownOpenedFromFlyout =
+      dropdown?.isInFlyout || (dropdown instanceof Blockly.Field && dropdown.sourceBlock_?.isInFlyout);
+    const widgetOrDropdownOpenedFromFlyout = widgetOpenedFromFlyout || dropdownOpenedFromFlyout;
+    // Don't forget to close when the mouse leaves the flyout even when clicking off of a dropdown or input
+    if (widgetOrDropdownOpenedFromFlyout) closeOnMouseUp = true;
+    if (
+      flyoutLock ||
+      ((Blockly.WidgetDiv.isVisible() || Blockly.DropDownDiv.isVisible()) && widgetOrDropdownOpenedFromFlyout) // If the dropdown or input came outside of the flyout, do not keep open the flyout when cursor leaves
+    )
+      return;
     if (e && e.buttons) {
       // dragging a block or scrollbar
       closeOnMouseUp = true;
@@ -137,8 +148,8 @@ export default async function ({ addon, console, msg }) {
 
     document.body.addEventListener("mouseup", () => {
       if (closeOnMouseUp) {
-        onmouseleave();
         closeOnMouseUp = false;
+        onmouseleave();
       }
     });
 
@@ -181,6 +192,15 @@ export default async function ({ addon, console, msg }) {
         Blockly.getMainWorkspace().getToolbox().selectedItem_.setSelected(true);
       }
     });
+
+    const oldShowPositionedByBlock = Blockly.DropDownDiv.showPositionedByBlock;
+    Blockly.DropDownDiv.showPositionedByBlock = function (owner, block, ...args) {
+      const result = oldShowPositionedByBlock.call(this, owner, block, ...args);
+      // Scratch incorrectly sets owner_ to the DropDownDiv itself
+      if (owner instanceof Blockly.Field) Blockly.DropDownDiv.owner_ = owner;
+      else Blockly.DropDownDiv.owner_ = block;
+      return result;
+    };
 
     // category click mode
     const oldSetSelectedItem = Blockly.Toolbox.prototype.setSelectedItem;
