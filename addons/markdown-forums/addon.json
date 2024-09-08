@@ -2,7 +2,7 @@
   "name": "Markdown in forums",
   "description": "Allows using Markdown in forum posts by converting it to BBCode.",
   "tags": ["community", "forums"],
-  "versionAdded": "1.38.0",
+  "versionAdded": "1.40.0",
   "userstyles": [
     {
       "url": "userstyle.css",
