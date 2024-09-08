@@ -113,16 +113,9 @@ export default async function ({ addon, console, msg }) {
     loadingText.textContent = msg("loading");
     content.append(loadingText);
 
-    const startTime = performance.now();
-
     exportBlock(true, false, true, block).then((result) => {
       image.src = result;
       content.removeChild(loadingText);
-
-      const endTime = performance.now();
-      const timeTaken = endTime - startTime;
-
-      console.log(`Time taken: ${timeTaken} ms`);
     });
 
     image.onload = function () {
