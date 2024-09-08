@@ -15,6 +15,6 @@ Third-party libraries included are:
 - [Fuse.js 6.6.2](https://unpkg.com/fuse.js@6.6.2/dist/fuse.esm.min.js) (Apache-2.0)
 - [idb 7.1.1](https://unpkg.com/idb@7.1.1/build/umd.js) (ISC)
 - [Sortable.js 1.15.0](https://unpkg.com/sortablejs@1.15.0/Sortable.min.js) (MIT)
-- [marked 9.1.5](https://unpkg.com/marked@9.1.5/lib/marked.esm.js) (MIT)
+- [marked 14.1.1](https://unpkg.com/marked@14.1.1/lib/marked.esm.js) (MIT)
 
 Note that these libraries are either from official release websites or from unpkg (which distributes the content uploaded to NPM as-is).
