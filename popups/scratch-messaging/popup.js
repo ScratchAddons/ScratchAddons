@@ -73,7 +73,7 @@ export default async ({ addon, msg, safeMsg }) => {
       postComment() {
         const shouldCaptureComment = (value) => {
           // Catch references to Scratch Addons
-          const saRegex = /(scratc|cratc|sratc|scatc|scrac|scrat|scart|scarct)h\s*(ad{1,3}[-\s]*on)/i;
+          const saRegex = /(scratc|cratc|sratc|scatc|scrac|scrat|scart|scartc|scract)h\s*(ad{1,3}[-\s]*on)/i;
           // Catch references to the Chrome Web Store
           const storeRegex = /web\s*store/i;
 
