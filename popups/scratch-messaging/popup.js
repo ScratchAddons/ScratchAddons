@@ -71,17 +71,16 @@ export default async ({ addon, msg, safeMsg }) => {
     },
     methods: {
       postComment() {
-        const removeReiteratedChars = (string) =>
-          string
-            .split("")
-            .filter((char, i, charArr) => (i === 0 ? true : charArr[i - 1] !== char))
-            .join("");
         const shouldCaptureComment = (value) => {
-          // From content-scripts/cs.js
-          const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, ""); // Trim like scratchr2
-          const limitedValue = removeReiteratedChars(trimmedValue.toLowerCase().replace(/[^a-z]+/g, ""));
-          const regex = /scratchadons/;
-          return regex.test(limitedValue);
+          // Catch references to Scratch Addons
+          const saRegex = /(scratc|cratc|sratc|scatc|scrac|scrat|scart|scarct)h\s*(ad{1,3}[-\s]*on)/i;
+          // Catch references to the Chrome Web Store
+          const storeRegex = /web\s*store/i;
+
+          for (const regex of [saRegex, storeRegex]) {
+            if (regex.test(value)) return true;
+          }
+          return false;
         };
         if (shouldCaptureComment(this.replyBoxValue)) {
           alert(chrome.i18n.getMessage("captureCommentError", [chrome.i18n.getMessage("captureCommentPolicy")]));
