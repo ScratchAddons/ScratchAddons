@@ -1,11 +1,18 @@
 {
   "name": "Save blocks as image",
-  "description": "Right click the code area to export blocks as SVG/PNG images.",
+  "description": "Right click on the code area or a stack of blocks to copy it to the clipboard or save it as a PNG or SVG file.",
   "tags": ["editor", "codeEditor"],
   "credits": [
     {
       "name": "summerscar",
       "link": "https://github.com/summerscar"
+    },
+    {
+      "name": "Jazza",
+      "link": "https://scratch.mit.edu/users/greeny--231"
+    },
+    {
+      "name": "World_Languages"
     }
   ],
   "dynamicEnable": true,
@@ -16,6 +23,13 @@
       "matches": ["projects"]
     }
   ],
+  "userstyles": [{ "url": "style.css", "matches": ["projects"] }],
   "versionAdded": "1.13.0",
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "latestUpdate": {
+    "version": "1.40.0",
+    "temporaryNotice": "The addon has been reworked. There is now a modal for saving the blocks as an image, and the image can be copied to the clipboard.",
+    "isMajor": true
+  },
+  "permissions": ["clipboardWrite"]
 }
