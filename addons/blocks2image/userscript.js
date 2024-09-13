@@ -234,10 +234,8 @@ export default async function ({ addon, console, msg }) {
 
   function allBlocks(scale) {
     let svg = exSVG.cloneNode();
-
     let svgchild = document.querySelector("svg.blocklySvg g.blocklyBlockCanvas");
     let translateY = 0;
-
     let xArr = [];
     let yArr = [];
 
@@ -252,9 +250,9 @@ export default async function ({ addon, console, msg }) {
       if (translateY === 0) translateY = Math.abs(g.getBBox().y) * scale + scale;
     });
 
-    svgchild = svgchild.cloneNode(true);
     translateY -= Math.min(...yArr);
 
+    svgchild = svgchild.cloneNode(true);
     svgchild.setAttribute("transform", `translate(${-Math.min(...xArr) + scale},${translateY}) scale(${scale})`);
     setCSSVars(svg);
     svg.append(makeStyle());
