@@ -52,26 +52,14 @@ export default async function ({ addon, console, msg }) {
           : // If there's no such button, insert at end
             items.length;
 
-      items.splice(
-        insertBeforeIndex,
-        0,
-        {
-          enabled: !!svgchild?.childNodes?.length,
-          text: msg("export_all_to_SVG"),
-          callback: () => {
-            exportBlock(false);
-          },
-          separator: true,
+      items.splice(insertBeforeIndex, 0, {
+        enabled: !!svgchild?.childNodes?.length,
+        text: msg("saveAll"),
+        callback: () => {
+          exportPopup();
         },
-        {
-          enabled: !!svgchild?.childNodes?.length,
-          text: msg("export_all_to_PNG"),
-          callback: () => {
-            exportBlock(true);
-          },
-          separator: false,
-        }
-      );
+        separator: true,
+      });
 
       return items;
     },
@@ -88,33 +76,105 @@ export default async function ({ addon, console, msg }) {
           : // If there's no such button, insert at end
             items.length;
 
-      items.splice(
-        insertBeforeIndex,
-        0,
-        {
-          enabled: true,
-          text: msg("export_selected_to_SVG"),
-          callback: () => {
-            exportBlock(false, block);
-          },
-          separator: true,
+      items.splice(insertBeforeIndex, 0, {
+        enabled: true,
+        text: msg("save"),
+        callback: () => {
+          exportPopup(block);
         },
-        {
-          enabled: true,
-          text: msg("export_selected_to_PNG"),
-          callback: () => {
-            exportBlock(true, block);
-          },
-          separator: false,
-        }
-      );
+        separator: true,
+      });
 
       return items;
     },
     { blocks: true }
   );
 
-  async function exportBlock(isExportPNG, block) {
+  async function exportPopup(block) {
+    const modal = addon.tab.createModal(msg("modalTitle"), {
+      isOpen: true,
+      useEditorClasses: true,
+    });
+
+    const { backdrop, container, content, closeButton } = modal;
+    let remove = modal.remove;
+    container.classList.add("sa-export-container");
+    content.classList.add("sa-export-content");
+
+    backdrop.addEventListener("click", remove);
+    closeButton.addEventListener("click", remove);
+
+    const imageContainer = document.createElement("div");
+    imageContainer.classList.add("sa-export-image-container");
+    const image = document.createElement("img");
+    image.classList.add("sa-export-image");
+
+    const loadingText = document.createElement("div");
+    loadingText.classList.add("sa-export-loading-text");
+    loadingText.textContent = msg("loading");
+    content.append(loadingText);
+
+    exportBlock(true, false, true, block).then((result) => {
+      image.src = result;
+      content.removeChild(loadingText);
+    });
+
+    image.onload = function () {
+      const aspect = image.width / image.height;
+      if (aspect >= 1) image.classList.add("wide");
+      else image.classList.add("tall");
+    };
+
+    imageContainer.append(image);
+    content.append(imageContainer);
+
+    const buttonContainer = document.createElement("div");
+    buttonContainer.className = addon.tab.scratchClass("prompt_button-row", { others: "sa-export-button-container" });
+
+    const copyButton = document.createElement("button");
+    const svgButton = document.createElement("button");
+    const pngButton = document.createElement("button");
+
+    copyButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-export-copy-button" });
+    copyButton.textContent = msg("clipboard");
+    svgButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-export-svg-button" });
+    svgButton.textContent = msg("svg");
+    pngButton.className = addon.tab.scratchClass("prompt_ok-button", { others: "sa-export-png-button" });
+    pngButton.textContent = msg("png");
+
+    buttonContainer.append(copyButton);
+    buttonContainer.append(svgButton);
+    buttonContainer.append(pngButton);
+
+    content.append(buttonContainer);
+
+    function handleCopyClick() {
+      exportBlock(true, true, false, block);
+      remove();
+    }
+    function handleSVGClick() {
+      exportBlock(false, false, false, block);
+      remove();
+    }
+    function handlePNGClick() {
+      exportBlock(true, false, false, block);
+      remove();
+    }
+
+    copyButton.addEventListener("click", handleCopyClick);
+    svgButton.addEventListener("click", handleSVGClick);
+    pngButton.addEventListener("click", handlePNGClick);
+  }
+
+  /**
+   *
+   * @param {boolean} isExportPNG - Export as a PNG file
+   * @param {boolean} copyToClipboard - Copy to clipboard
+   * @param {boolean} returnData - Return the imageURL
+   * @param {block object} block - The block object returned by createBlockContextMenu
+   * @returns {dataURL} - DataURL of the image
+   */
+  async function exportBlock(isExportPNG, copyToClipboard, returnData, block) {
     let svg;
     if (block) {
       svg = selectedBlocks(isExportPNG, block);
@@ -158,7 +218,7 @@ export default async function ({ addon, console, msg }) {
     if (!isExportPNG) {
       exportData(new XMLSerializer().serializeToString(svg));
     } else {
-      exportPNG(svg);
+      return exportPNG(svg, copyToClipboard, returnData);
     }
   }
 
@@ -231,40 +291,51 @@ export default async function ({ addon, console, msg }) {
     document.body.removeChild(saveLink);
   }
 
-  function exportPNG(svg) {
-    const serializer = new XMLSerializer();
+  function exportPNG(svg, copy, returnData) {
+    return new Promise((resolve, reject) => {
+      const serializer = new XMLSerializer();
 
-    const iframe = document.createElement("iframe");
-    // iframe.style.display = "none"
-    document.body.append(iframe);
-    iframe.contentDocument.write(serializer.serializeToString(svg));
-    let { width, height } = iframe.contentDocument.body.querySelector("svg g").getBoundingClientRect();
-    svg.setAttribute("width", width + "px");
-    svg.setAttribute("height", height + "px");
+      const iframe = document.createElement("iframe");
+      document.body.append(iframe);
+      iframe.contentDocument.write(serializer.serializeToString(svg));
+      let { width, height } = iframe.contentDocument.body.querySelector("svg g").getBoundingClientRect();
+      svg.setAttribute("width", width + "px");
+      svg.setAttribute("height", height + "px");
 
-    let canvas = document.createElement("canvas");
-    let ctx = canvas.getContext("2d");
+      let canvas = document.createElement("canvas");
+      let ctx = canvas.getContext("2d");
 
-    let img = document.createElement("img");
+      let img = document.createElement("img");
 
-    img.setAttribute(
-      "src",
-      "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(serializer.serializeToString(svg))))
-    );
-    img.onload = function () {
-      canvas.height = img.height;
-      canvas.width = img.width;
-      ctx.drawImage(img, 0, 0, img.width, img.height);
-      // Now is done
-      let dataURL = canvas.toDataURL("image/png");
-      let link = document.createElement("a");
-      const date = new Date();
-      const timestamp = `${date.toLocaleDateString()}-${date.toLocaleTimeString()}`;
+      img.setAttribute(
+        "src",
+        "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(serializer.serializeToString(svg))))
+      );
+      img.onload = function () {
+        canvas.height = img.height;
+        canvas.width = img.width;
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        // Now is done
+        let dataURL = canvas.toDataURL("image/png");
+        let link = document.createElement("a");
+        const date = new Date();
+        const timestamp = `${date.toLocaleDateString()}-${date.toLocaleTimeString()}`;
 
-      link.download = `block_${timestamp}.png`;
-      link.href = dataURL;
-      link.click();
-      iframe.remove();
-    };
+        if (!returnData) {
+          if (copy) {
+            addon.tab.copyImage(dataURL).catch((e) => console.error(`Image could not be copied: ${e}`));
+          } else {
+            link.download = `block_${timestamp}.png`;
+            link.href = dataURL;
+            link.click();
+          }
+        }
+
+        resolve(dataURL);
+
+        iframe.remove();
+      };
+      img.onerror = reject;
+    });
   }
 }
