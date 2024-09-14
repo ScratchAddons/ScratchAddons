@@ -35,10 +35,11 @@ export default async function ({ addon, console, msg }) {
     // Get blocks in current sprite as project.json format
     const vm = addon.tab.traps.vm;
     let blocksJSON = JSON.parse(vm.toJSON(vm.editingTarget.id)).blocks;
+    let language = addon.settings.get("forceEnglish") ? "en" : addon.auth.scratchLang;
 
     // Send ID and current blocks to parse-sb3-blocks, set indent spacing and fix variables that have the same name as reporters.
     // Only outputs English blocks, TODO: Detect editor language and pass it to third input for multilingual scratchblocks.
-    const scratchblocks = toScratchblocks(blockId, blocksJSON, "en", {
+    const scratchblocks = toScratchblocks(blockId, blocksJSON, language, {
       tabs: " ".repeat(4),
       variableStyle: "as-needed",
     });

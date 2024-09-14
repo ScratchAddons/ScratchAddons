@@ -13,6 +13,21 @@
       "matches": ["projects"]
     }
   ],
+  "info": [
+    {
+      "type": "notice",
+      "text": "Blocks in languages other than English may not display correctly in the Discussion Forums and other places. If you use Scratch in another language and have problems with the output text, try enabling the \"Always copy block text in English\" option.",
+      "id": "forceEnglishNotice"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Always copy block text in English",
+      "id": "forceEnglish",
+      "type": "boolean",
+      "default": false
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.39.0",
