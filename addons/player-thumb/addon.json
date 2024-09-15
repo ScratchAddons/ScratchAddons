@@ -1,6 +1,6 @@
 {
   "name": "Show project thumbnail while loading",
-  "description": "Shows the project's thumbnail instead of its initial state before starting the project and while it loads.",
+  "description": "Shows the project's thumbnail as a placeholder before the project is started and while it loads.",
   "credits": [
     {
       "name": "Samq64",
