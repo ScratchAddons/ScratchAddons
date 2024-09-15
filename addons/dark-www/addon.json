@@ -2195,6 +2195,78 @@
       }
     },
     {
+      "name": "box-forumH1Button",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-forumH1ButtonBlack)",
+        "white": "var(--darkWww-forumH1ButtonWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "box-forumH2Button",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-forumH2ButtonBlack)",
+        "white": "var(--darkWww-forumH2ButtonWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "box-forumH3Button",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-forumH3ButtonBlack)",
+        "white": "var(--darkWww-forumH3ButtonWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "box-forumH4Button",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-forumH4ButtonBlack)",
+        "white": "var(--darkWww-forumH4ButtonWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "box-forumH5Button",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-forumH5ButtonBlack)",
+        "white": "var(--darkWww-forumH5ButtonWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "box-forumH6Button",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-forumH6ButtonBlack)",
+        "white": "var(--darkWww-forumH6ButtonWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
       "name": "page-forumUnderlineButton",
       "value": {
         "type": "textColor",

@@ -91,6 +91,25 @@
   background-image: url(color.svg);
 }
 
+.markItUp .sa-markdown-forums-h1 a {
+  background-image: url(h1.svg) !important;
+}
+.markItUp .sa-markdown-forums-h2 a {
+  background-image: url(h2.svg) !important;
+}
+.markItUp .sa-markdown-forums-h3 a {
+  background-image: url(h3.svg) !important;
+}
+.markItUp .sa-markdown-forums-h4 a {
+  background-image: url(h4.svg) !important;
+}
+.markItUp .sa-markdown-forums-h5 a {
+  background-image: url(h5.svg) !important;
+}
+.markItUp .sa-markdown-forums-h6 a {
+  background-image: url(h6.svg) !important;
+}
+
 .markItUpHeader > ul > .markItUpDropMenu {
   margin: 0 !important;
   background: transparent !important;

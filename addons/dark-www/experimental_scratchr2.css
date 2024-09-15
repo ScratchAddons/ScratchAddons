@@ -569,6 +569,18 @@ select,
   --darkWww-forumStrokeButtonWhite: url("%addon-self-dir%/assets/forum_buttons/stroke.png");
   --darkWww-forumUnderlineButtonBlack: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/underline.png");
   --darkWww-forumUnderlineButtonWhite: url("%addon-self-dir%/assets/forum_buttons/underline.png");
+  --darkWww-forumH1ButtonBlack: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/markdown/images/h1.png");
+  --darkWww-forumH1ButtonWhite: url("%addon-self-dir%/assets/forum_buttons/h1.png");
+  --darkWww-forumH2ButtonBlack: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/markdown/images/h2.png");
+  --darkWww-forumH2ButtonWhite: url("%addon-self-dir%/assets/forum_buttons/h2.png");
+  --darkWww-forumH3ButtonBlack: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/markdown/images/h3.png");
+  --darkWww-forumH3ButtonWhite: url("%addon-self-dir%/assets/forum_buttons/h3.png");
+  --darkWww-forumH4ButtonBlack: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/markdown/images/h4.png");
+  --darkWww-forumH4ButtonWhite: url("%addon-self-dir%/assets/forum_buttons/h4.png");
+  --darkWww-forumH5ButtonBlack: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/markdown/images/h5.png");
+  --darkWww-forumH5ButtonWhite: url("%addon-self-dir%/assets/forum_buttons/h5.png");
+  --darkWww-forumH6ButtonBlack: url("https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/markdown/images/h6.png");
+  --darkWww-forumH6ButtonWhite: url("%addon-self-dir%/assets/forum_buttons/h6.png");
 }
 
 html,
@@ -632,6 +644,24 @@ input.link.black {
 }
 .markItUpButton13 > a {
   background-image: var(--darkWww-box-forumBrowserOsButton) !important;
+}
+.sa-markdown-forums-h1 > a {
+  background-image: var(--darkWww-box-forumH1Button) !important;
+}
+.sa-markdown-forums-h2 > a {
+  background-image: var(--darkWww-box-forumH2Button) !important;
+}
+.sa-markdown-forums-h3 > a {
+  background-image: var(--darkWww-box-forumH3Button) !important;
+}
+.sa-markdown-forums-h4 > a {
+  background-image: var(--darkWww-box-forumH4Button) !important;
+}
+.sa-markdown-forums-h5 > a {
+  background-image: var(--darkWww-box-forumH5Button) !important;
+}
+.sa-markdown-forums-h6 > a {
+  background-image: var(--darkWww-box-forumH6Button) !important;
 }
 
 .markItUpHeader > ul > .markItUpDropMenu {
