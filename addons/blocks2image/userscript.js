@@ -17,7 +17,10 @@ export default async function ({ addon, console, msg }) {
         fill: ${Blockly.Colours.text} !important;
     }
     `;
-    for (let userstyle of document.querySelectorAll(".scratch-addons-style[data-addon-id='editor-theme3']")) {
+    for (let userstyle of document.querySelectorAll(`
+      .scratch-addons-style[data-addon-id="editor-theme3"],
+      .sa-custom-block-text-style
+    `)) {
       if (userstyle.disabled) continue;
       style.textContent += userstyle.textContent;
     }
