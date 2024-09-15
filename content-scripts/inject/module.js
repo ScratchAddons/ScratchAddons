@@ -284,9 +284,10 @@ function loadClasses() {
         .flat()
         .map((e) => e.selectorText)
         .filter((e) => e)
-        .map((e) => e.match(/(([\w-]+?)_([\w-]+)_([\w\d-]+))/g))
+        .map((e) => e.match(/(([\w-]+?)_([\w-]+)_(([\w\d-]|\\\+)+))/g))
         .filter((e) => e)
         .flat()
+        .map((e) => e.replace(/\\\+/g, "+"))
     ),
   ];
   scratchAddons.classNames.loaded = true;
