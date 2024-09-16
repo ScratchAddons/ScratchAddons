@@ -980,6 +980,10 @@
     {
       "url": "paint_icons.js",
       "matches": ["projects"]
+    },
+    {
+      "url": "debugger.js",
+      "matches": ["projects"]
     }
   ],
   "userstyles": [
