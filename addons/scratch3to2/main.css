@@ -299,7 +299,7 @@ body:not(.sa-body-editor) .select select > option {
   min-width: 16px;
   height: 15px;
   padding: 0;
-  background-color: #f9a739;
+  background-color: var(--darkWww-messageIndicatorColor-scratchr2, #f9a739);
   border-radius: 10px;
   font-size: 9px;
   line-height: 14px;
