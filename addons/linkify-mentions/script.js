@@ -36,9 +36,6 @@ export default async function ({ addon, console }) {
     }
   });
 
-  addon.self.addEventListener("reenabled", () => {
-    linkifyAll();
-  });
-
+  addon.self.addEventListener("reenabled", linkifyAll);
   linkifyAll();
 }
