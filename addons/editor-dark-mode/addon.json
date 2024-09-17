@@ -78,6 +78,18 @@
       }
     },
     {
+      "name": "page-lightBlueText",
+      "value": {
+        "type": "textColor",
+        "black": "#2e8eb8",
+        "white": "#85c4e0",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
       "name": "page-pinkText",
       "value": {
         "type": "textColor",
