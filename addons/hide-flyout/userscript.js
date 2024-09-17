@@ -210,9 +210,9 @@ export default async function ({ addon, console, msg }) {
       const previousSelection = this.selectedItem_;
       oldSetSelectedItem.call(this, item, shouldScroll);
       if (addon.self.disabled || getToggleSetting() !== "category") return;
-      if (!shouldScroll && !toggle) {
+      if (!shouldScroll) {
         // ignore initial selection when updating the toolbox
-        item.setSelected(false);
+        item.setSelected(toggle);
       } else if (item === previousSelection) {
         toggle = !toggle;
         if (toggle) openFlyout();
