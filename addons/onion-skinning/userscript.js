@@ -571,7 +571,7 @@ export default async function ({ addon, console, msg }) {
   };
 
   const toggleControlsGroup = createGroup();
-  addon.tab.displayNoneWhileDisabled(toggleControlsGroup, { display: "flex" });
+  addon.tab.displayNoneWhileDisabled(toggleControlsGroup);
 
   const toggleButton = createButton();
   toggleButton.dataset.enabled = settings.enabled;
@@ -583,6 +583,10 @@ export default async function ({ addon, console, msg }) {
   settingButton.addEventListener("click", () => setSettingsOpen(!areSettingsOpen()));
   settingButton.title = msg("settings");
   settingButton.appendChild(createButtonImage("settings"));
+
+  document.body.addEventListener("click", (e) => {
+    if (areSettingsOpen() && !e.target.matches(".sa-onion-group *")) setSettingsOpen(false);
+  });
 
   //
   // Settings page

@@ -5,6 +5,7 @@
 .sa-search-sprites-container {
   position: absolute;
   bottom: 0.75rem;
+  display: flex;
   width: 2.75rem;
   height: 2.75rem;
   background-color: var(--editorDarkMode-primary, hsla(260, 60%, 60%, 1));

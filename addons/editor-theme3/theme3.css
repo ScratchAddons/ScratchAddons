@@ -2,7 +2,15 @@
   fill: var(--editorTheme3-inputColor-text);
 }
 .blocklyHtmlInput {
-  background-color: var(--editorTheme3-inputColor);
+  /* Hide the HTML input so that only the SVG part is visible.
+     This is needed for transparent inputs. */
+  background-color: transparent;
+  color: transparent;
+  caret-color: var(--editorTheme3-inputColor-text);
+}
+.sa-theme3-editable-label .blocklyHtmlInput {
+  /* Labels in custom block editor */
+  background-color: var(--editorTheme3-inputColor-editableLabel);
   color: var(--editorTheme3-inputColor-text);
 }
 
@@ -38,12 +46,18 @@
   color: var(--editorTheme3-commentText);
 }
 
-.sa-colormode-submenu li:nth-child(1) div,
-.sa-colormode-submenu li:nth-child(2) div {
-  filter: opacity(0.5) grayscale(1);
+[class*="monitor_list-input_"] {
+  color: inherit !important;
 }
-.sa-theme3-managed {
+
+.sa-colormode-submenu li:nth-child(1),
+.sa-colormode-submenu li:nth-child(2) {
+  filter: opacity(0.5) grayscale(1);
+  cursor: default;
+}
+.sa-colormode-submenu .sa-theme3-managed {
   filter: opacity(0.5);
+  cursor: default;
 }
 .sa-colormode-submenu li:nth-child(1) div img:first-child,
 .sa-colormode-submenu li:nth-child(2) div img:first-child,
@@ -53,8 +67,7 @@
 .sa-colormode-submenu li:nth-child(1):hover,
 .sa-colormode-submenu li:nth-child(2):hover,
 .sa-theme3-managed:hover {
-  background-color: inherit;
-  cursor: default;
+  background-color: transparent;
 }
 .sa-theme3-link .sa-theme3-new-tab {
   margin-left: auto;

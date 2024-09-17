@@ -7,12 +7,6 @@
       "link": "https://github.com/DNin01"
     }
   ],
-  "info": [
-    {
-      "id": "feedback",
-      "text": "We want to expand this addon with other accessibility features in the future. You can send us your feedback by going to scratchaddons.com/feedback or clicking \"Send Feedback\" on the sidebar."
-    }
-  ],
   "customCssVariables": [
     {
       "name": "tdecoOverride",
@@ -33,43 +27,54 @@
       "url": "bold-links.css",
       "matches": ["https://scratch.mit.edu/*"],
       "if": {
-        "settings": { "links": "bold" }
+        "settings": { "bold": "all" }
+      }
+    },
+    {
+      "url": "non-bold-links.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "if": {
+        "settings": { "bold": "none" }
       }
     },
     {
       "url": "underline-links.css",
       "matches": ["https://scratch.mit.edu/*"],
       "if": {
-        "settings": { "links": "underline" }
+        "settings": { "underline-style": ["solid", "dashed", "dotted"] }
       }
     }
   ],
   "settings": [
     {
-      "name": "Link style",
-      "id": "links",
+      "name": "Bold links",
+      "id": "bold",
       "type": "select",
       "potentialValues": [
         {
           "id": "none",
+          "name": "None"
+        },
+        {
+          "id": "default",
           "name": "Default"
         },
         {
-          "id": "bold",
-          "name": "Bold"
-        },
-        {
-          "id": "underline",
-          "name": "Underlined"
+          "id": "all",
+          "name": "All"
         }
       ],
-      "default": "underline"
+      "default": "default"
     },
     {
       "name": "Underline style",
       "id": "underline-style",
       "type": "select",
       "potentialValues": [
+        {
+          "id": "none",
+          "name": "None"
+        },
         {
           "id": "solid",
           "name": "Solid"
@@ -83,16 +88,13 @@
           "name": "Dotted"
         }
       ],
-      "default": "solid",
-      "if": {
-        "settings": { "links": "underline" }
-      }
+      "default": "none"
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "injectAsStyleElt": true,
   "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.34.0",
-  "tags": ["community", "theme", "beta"],
-  "enabledByDefault": false
+  "tags": ["community", "theme"]
 }

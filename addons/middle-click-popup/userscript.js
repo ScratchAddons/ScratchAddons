@@ -106,7 +106,10 @@ export default async function ({ addon, msg, console }) {
     if (addon.self.disabled) return;
 
     // Don't show the menu if we're not in the code editor
+    if (addon.tab.editorMode !== "editor") return;
     if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 0) return;
+
+    Blockly.hideChaff();
 
     blockTypes = BlockTypeInfo.getBlocks(Blockly, vm, Blockly.getMainWorkspace(), msg);
     querier.indexWorkspace([...blockTypes]);

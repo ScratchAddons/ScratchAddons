@@ -332,7 +332,12 @@ export function notifyNewMessages(messages) {
       parent_title: message.parent_title, // Remixes only
     };
     if (!anyNotified && settings.notification_sound === "addons-ping") {
-      new Audio(chrome.runtime.getURL("./addons/scratch-notifier/ping.mp3")).play();
+      // Note: no audio playback in service worker (Chrome)
+      // https://github.com/ScratchAddons/ScratchAddons/issues/3877
+      if (globalThis.Audio) {
+        // Firefox only
+        new Audio(chrome.runtime.getURL("./addons/scratch-notifier/ping.mp3")).play();
+      }
     }
     // Play the sound only once
     anyNotified = true;
@@ -353,6 +358,12 @@ chrome.runtime.onMessage.addListener((message) => {
 });
 
 function htmlToText(html) {
+  // Note: this function does not sanitize HTML. The return value of this function
+  // is shown in plain text format, as part of the notification body.
+  if (!globalThis.document) {
+    // Service worker context (Chromium)
+    return html;
+  }
   if (html === undefined) return;
   const txt = document.createElement("textarea");
   txt.innerHTML = html;

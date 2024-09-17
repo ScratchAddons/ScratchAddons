@@ -1,1 +1,1 @@
-{"search-profile/profile":"Profiili","search-profile/@description":"Voit siirtyä käyttäjän profiiliin, kun haet hänen käyttäjänimeään."}
+{"search-profile/profile":"Profiili","search-profile/invalid-username":"\"{username}\" ei ole kelvollinen käyttäjänimi tai tiliä ei ole olemassa.","search-profile/@name":"Käyttäjänimihaku","search-profile/@description":"Voit siirtyä käyttäjän profiiliin, kun haet hänen käyttäjänimeään."}

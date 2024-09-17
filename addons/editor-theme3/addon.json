@@ -12,7 +12,13 @@
     {
       "name": "DNin01",
       "link": "https://github.com/DNin01"
-    }
+    },
+    {
+      "name": "Shock59",
+      "link": "https://github.com/shock59"
+    },
+    { "name": "0znzw", "link": "https://scratch.mit.edu/users/0znzw" },
+    { "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" }
   ],
   "info": [
     {
@@ -24,11 +30,17 @@
       "id": "aboutHighContrast",
       "type": "info",
       "text": "The new High Contrast block colors are available as a preset below."
+    },
+    {
+      "id": "whatsInsertionMarker",
+      "type": "info",
+      "text": "When dragging a block, an \"insertion marker\" is the shadow that appears when moved near to other blocks."
     }
   ],
   "latestUpdate": {
-    "version": "1.33.2",
-    "isMajor": true
+    "isMajor": true,
+    "version": "1.39.0",
+    "newSettings": ["fillStyle", "fillOpacity", "strokeStyle", "strokeOpacity"]
   },
   "customCssVariables": [
     {
@@ -89,6 +101,31 @@
             "colorOnWhite": "#000000",
             "colorOnBlack": "#ffffff"
           }
+        }
+      }
+    },
+    {
+      "name": "inputColor-editableLabel",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "text"
+          },
+          "options": {
+            "colorOnWhite": "#ffffff",
+            "colorOnBlack": "#282828"
+          },
+          "default": {
+            "type": "settingValue",
+            "settingId": "custom-color"
+          }
+        },
+        "transparentSource": {
+          "type": "settingValue",
+          "settingId": "input-color"
         }
       }
     },
@@ -165,6 +202,7 @@
         "settings": { "text": "colorOnBlack" }
       }
     },
+    { "url": "insertion_marker.css", "matches": ["projects"] },
     {
       "url": "forums/base.css",
       "matches": ["https://scratch.mit.edu/discuss/*"],
@@ -329,10 +367,60 @@
       ]
     },
     {
+      "name": "Change the colors of variables and lists on the stage",
+      "id": "monitors",
+      "type": "boolean",
+      "default": false
+    },
+    {
       "name": "Change the colors of blocks in the forums",
       "id": "forums",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Insertion marker style",
+      "id": "fillStyle",
+      "type": "select",
+      "default": "gray",
+      "potentialValues": [
+        { "id": "none", "name": "None" },
+        { "id": "gray", "name": "Gray" },
+        { "id": "colored", "name": "Colored" }
+      ]
+    },
+    {
+      "name": "Insertion marker opacity",
+      "id": "fillOpacity",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 20,
+      "if": {
+        "settings": { "fillStyle": ["gray", "colored"] }
+      }
+    },
+    {
+      "name": "Insertion marker outline",
+      "id": "strokeStyle",
+      "type": "select",
+      "default": "none",
+      "potentialValues": [
+        { "id": "none", "name": "None" },
+        { "id": "gray", "name": "Gray" },
+        { "id": "colored", "name": "Colored" }
+      ]
+    },
+    {
+      "name": "Insertion marker outline opacity",
+      "id": "strokeOpacity",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 50,
+      "if": {
+        "settings": { "strokeStyle": ["gray", "colored"] }
+      }
     }
   ],
   "tags": ["editor", "theme", "codeEditor", "featured"],
@@ -357,7 +445,12 @@
         "sa-color": "#34E4D0",
         "comment-color": "#FEF49C",
         "input-color": "#FFFFFF",
-        "text": "black"
+        "text": "black",
+        "monitors": true,
+        "fillStyle": "gray",
+        "fillOpacity": 20,
+        "strokeStyle": "none",
+        "strokeOpacity": 50
       }
     },
     {
@@ -379,7 +472,12 @@
         "sa-color": "#2A797C",
         "comment-color": "#423F24",
         "input-color": "#FFFFFF",
-        "text": "white"
+        "text": "white",
+        "monitors": false,
+        "fillStyle": "gray",
+        "fillOpacity": 20,
+        "strokeStyle": "none",
+        "strokeOpacity": 50
       }
     },
     {
@@ -401,7 +499,12 @@
         "sa-color": "#166966",
         "comment-color": "#423f24",
         "input-color": "#202020",
-        "text": "white"
+        "text": "white",
+        "monitors": false,
+        "fillStyle": "gray",
+        "fillOpacity": 20,
+        "strokeStyle": "none",
+        "strokeOpacity": 50
       }
     },
     {
@@ -423,7 +526,12 @@
         "sa-color": "#29BEB8",
         "comment-color": "#FEF49C",
         "input-color": "#FFFFFF",
-        "text": "white"
+        "text": "white",
+        "monitors": false,
+        "fillStyle": "gray",
+        "fillOpacity": 20,
+        "strokeStyle": "none",
+        "strokeOpacity": 50
       }
     },
     {
@@ -445,7 +553,12 @@
         "sa-color": "#29beb8",
         "comment-color": "#FFFFD2",
         "input-color": "#ffffff",
-        "text": "white"
+        "text": "white",
+        "monitors": false,
+        "fillStyle": "gray",
+        "fillOpacity": 20,
+        "strokeStyle": "none",
+        "strokeOpacity": 50
       }
     },
     {
@@ -467,7 +580,12 @@
         "sa-color": "#34E4D0",
         "comment-color": "#FEF49C",
         "input-color": "#202020",
-        "text": "colorOnBlack"
+        "text": "colorOnBlack",
+        "monitors": false,
+        "fillStyle": "colored",
+        "fillOpacity": 5,
+        "strokeStyle": "colored",
+        "strokeOpacity": 50
       }
     }
   ],
