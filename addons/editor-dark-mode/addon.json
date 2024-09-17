@@ -51,6 +51,60 @@
       }
     },
     {
+      "name": "page-purpleText",
+      "value": {
+        "type": "textColor",
+        "black": "#855cd6",
+        "white": "#ccb3ff",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-purpleIconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": {
+          "type": "textColor",
+          "black": "#855cd6",
+          "white": "#ccb3ff",
+          "source": {
+            "type": "settingValue",
+            "settingId": "page"
+          }
+        }
+      }
+    },
+    {
+      "name": "page-pinkText",
+      "value": {
+        "type": "textColor",
+        "black": "#ff3355",
+        "white": "#ff99aa",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-pinkIconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": {
+          "type": "textColor",
+          "black": "#ff3355",
+          "white": "#ff99aa",
+          "source": {
+            "type": "settingValue",
+            "settingId": "page"
+          }
+        }
+      }
+    },
+    {
       "name": "page-tabHoverFilter",
       "value": {
         "type": "textColor",
