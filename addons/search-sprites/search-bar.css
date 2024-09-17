@@ -73,7 +73,7 @@ input.sa-search-sprites-box::placeholder {
   position: absolute;
   width: 2.75rem;
   height: 2.75rem;
-  padding: 0.75rem;
+  padding: 0.625rem;
   filter: var(--editorDarkMode-primary-filter3, brightness(0) invert(1));
   pointer-events: none;
 }
