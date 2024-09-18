@@ -106,6 +106,10 @@ body {
   padding-top: 0.5rem;
 }
 
+.add-button .large-button {
+  display: inline-flex;
+}
+
 .opened {
   border: 1px solid var(--blue-variant);
 }
