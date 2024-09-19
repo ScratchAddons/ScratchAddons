@@ -11,6 +11,8 @@
 [![](https://img.shields.io/github/license/ScratchAddons/ScratchAddons?style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/blob/master/LICENSE)
 [![](https://img.shields.io/discord/806602307750985799?style=flat-square&logo=discord&logoColor=white&color=7289da)](https://discord.gg/R5NBqwMjNc)
 [![](https://img.shields.io/badge/website-scratchaddons.com-ff7b26.svg?style=flat-square)](https://scratchaddons.com)
+![](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fscratchaddons.com%2Fusercount.json&query=count&style=flat-square&label=users&color=%23FF7B27)
+
 
 ## About
 
