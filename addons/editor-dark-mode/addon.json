@@ -751,18 +751,6 @@
       }
     },
     {
-      "name": "workspace-codeZoomFilter",
-      "value": {
-        "type": "textColor",
-        "black": "none",
-        "white": "invert(1) hue-rotate(180deg)",
-        "source": {
-          "type": "settingValue",
-          "settingId": "workspace"
-        }
-      }
-    },
-    {
       "name": "workspace-scrollbar",
       "value": {
         "type": "textColor",
@@ -986,6 +974,10 @@
     },
     {
       "url": "extension_icons.js",
+      "matches": ["projects"]
+    },
+    {
+      "url": "zoom_icons.js",
       "matches": ["projects"]
     },
     {

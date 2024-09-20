@@ -303,9 +303,6 @@ img[class*="tool-select-base_tool-select-icon_"],
 .sa-onion-settings .sa-onion-image {
   filter: var(--editorDarkMode-input-filter);
 }
-.blocklyZoom > image {
-  filter: var(--editorDarkMode-workspace-codeZoomFilter);
-}
 [class*="input_input-form_"]::placeholder,
 [class*="input_input-form_"]::placeholder {
   color: var(--editorDarkMode-input-transparentText);
