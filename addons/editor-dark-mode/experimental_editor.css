@@ -638,7 +638,9 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
   mix-blend-mode: normal;
 }
 .blocklyWidgetDiv .goog-menuitem-highlight {
-  border-color: transparent !important;
+  border: none;
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
 .sa-opacity-slider {
