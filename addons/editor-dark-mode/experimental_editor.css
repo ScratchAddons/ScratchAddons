@@ -580,6 +580,7 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 [dir="rtl"] [class*="sound-editor_input-group_"],
 [dir="rtl"] [class*="sound-editor_row-reverse_"] > [class*="sound-editor_input-group_"],
 .sa-var-manager td,
+[class*="library-item_library-item_"],
 [class*="context-menu_context-menu_"],
 [class*="context-menu_menu-item-bordered_"],
 .blocklyWidgetDiv .goog-menu,
