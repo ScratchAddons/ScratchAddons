@@ -541,6 +541,17 @@
       }
     },
     {
+      "name": "accent-transparent75",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "a": 0.75
+      }
+    },
+    {
       "name": "accent-paintEditorBackground",
       "value": {
         "type": "alphaBlend",
