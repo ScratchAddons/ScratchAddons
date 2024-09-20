@@ -231,6 +231,19 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="font-dropdown_font-dropdown_"][class*="dropdown_mod-open_"] {
   color: var(--editorDarkMode-accent-openFontDropdownText);
 }
+[dir="ltr"] [class*="fixed-tools_mod-dashed-border_"],
+[dir="rtl"] [class*="fixed-tools_mod-dashed-border_"],
+[dir="ltr"] [class*="paint-editor_mod-dashed-border_"],
+[dir="rtl"] [class*="paint-editor_mod-dashed-border_"],
+[dir="ltr"] [class*="mode-tools_mod-dashed-border_"],
+[dir="rtl"] [class*="mode-tools_mod-dashed-border_"],
+[class*="paint-editor_editor-container-top_"],
+[dir="ltr"] [class*="sound-editor_input-group_"],
+[dir="rtl"] [class*="sound-editor_input-group_"],
+[dir="rtl"] [class*="sound-editor_row-reverse_"] > [class*="sound-editor_input-group_"],
+[class*="prompt_cloud-option_"] {
+  border-color: var(--editorDarkMode-accent-divider);
+}
 [class*="sound-editor_round-button_"] {
   border-color: var(--editorDarkMode-accent-transparent75);
 }
@@ -313,6 +326,12 @@ img[class*="tool-select-base_tool-select-icon_"],
 .blocklyDropDownDiv .goog-slider-horizontal .goog-slider-thumb,
 [class*="slider_handle_"] {
   box-shadow: 0 0 0 4px var(--editorDarkMode-input-foregroundShadow);
+}
+[class*="context-menu_menu-item-bordered_"] {
+  border-color: var(--editorDarkMode-input-divider);
+}
+.blocklyWidgetDiv .goog-menuitem {
+  border-color: var(--editorDarkMode-input-divider) !important;
 }
 [class*="question_question-input_"] [class*="input_input-form_"] {
   /* Don't affect ask prompt */
@@ -563,14 +582,7 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 [class*="color-button_color-button-arrow_"],
 [class*="color-picker_divider_"],
 [class*="color-picker_swatch_"],
-[dir="ltr"] [class*="fixed-tools_mod-dashed-border_"],
-[dir="rtl"] [class*="fixed-tools_mod-dashed-border_"],
-[dir="ltr"] [class*="paint-editor_mod-dashed-border_"],
-[dir="rtl"] [class*="paint-editor_mod-dashed-border_"],
-[dir="ltr"] [class*="mode-tools_mod-dashed-border_"],
-[dir="rtl"] [class*="mode-tools_mod-dashed-border_"],
 [class*="dropdown_dropdown_"],
-[class*="paint-editor_editor-container-top_"],
 [class*="paint-editor_canvas-container_"],
 [class*="paint-editor_button-group-button_"],
 [dir="ltr"] [class*="paint-editor_button-group-button_"]:first-of-type,
@@ -578,20 +590,15 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 [class*="sound-editor_button_"],
 [dir="ltr"] [class*="sound-editor_button-group_"] [class*="sound-editor_button_"]:first-of-type,
 [dir="rtl"] [class*="sound-editor_button-group_"] [class*="sound-editor_button_"]:first-of-type,
-[dir="ltr"] [class*="sound-editor_input-group_"],
-[dir="rtl"] [class*="sound-editor_input-group_"],
-[dir="rtl"] [class*="sound-editor_row-reverse_"] > [class*="sound-editor_input-group_"],
 .sa-var-manager td,
 [class*="library-item_library-item_"],
 [class*="context-menu_context-menu_"],
-[class*="context-menu_menu-item-bordered_"],
 .blocklyWidgetDiv .goog-menu,
 .scratchEyedropper,
 .Popover-body,
 .sa-onion-settings,
 .sa-paint-snap-settings,
 [class*="prompt_variable-name-text-input_"],
-[class*="prompt_cloud-option_"],
 [class*="prompt_button-row_"] button,
 [class*="custom-procedures_button-row_"] button,
 [class*="slider-prompt_min-input_"],
@@ -602,7 +609,6 @@ img[src*="c3RvcC1wbGF5YmFjayI+CiAgICAgICAgICAgICAgICAgICAgICAgIDx1c2UgZmlsbD0iYm
 .sa-debugger-log {
   border-color: var(--editorDarkMode-border);
 }
-.blocklyWidgetDiv .goog-menuitem,
 .blocklyDropDownDiv[style*="background-color: rgb(255, 255, 255)"] {
   border-color: var(--editorDarkMode-border) !important;
 }
