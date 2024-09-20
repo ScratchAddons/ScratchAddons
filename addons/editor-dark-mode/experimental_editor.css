@@ -2,7 +2,10 @@
 [class*="gui_body-wrapper_"],
 [class*="gui_tab_"]:not([class*="gui_is-selected_"]):hover,
 [class*="backpack_backpack-item_"] > div,
-[class*="custom-procedures_workspace_"] .blocklySvg {
+[class*="custom-procedures_workspace_"] .blocklySvg,
+[class*="record-modal_meter-container_"],
+[class*="meter_mask_"],
+[class*="record-modal_waveform-container_"] {
   background-color: var(--editorDarkMode-page);
   color: var(--editorDarkMode-page-text);
 }
@@ -420,8 +423,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="stop-all_stop-all_"]:hover,
 .pause-btn:hover,
 [class*="toggle-buttons_button_"][aria-pressed="true"],
-[class*="icon-button_container_"]:not([class*="tool-select-base_is-selected_"]):active,
-[class*="record-modal_waveform-container_"] {
+[class*="icon-button_container_"]:not([class*="tool-select-base_is-selected_"]):active {
   background-color: var(--editorDarkMode-primary-transparent15);
 }
 [class*="library_filter-bar_"],
