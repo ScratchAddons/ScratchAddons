@@ -530,13 +530,29 @@
       }
     },
     {
-      "name": "accent-opacity0",
+      "name": "accent-gradient",
       "value": {
         "type": "multiply",
         "source": {
           "type": "settingValue",
           "settingId": "accent"
         },
+        "r": 0.91,
+        "g": 0.93,
+        "b": 0.95
+      }
+    },
+    {
+      "name": "accent-gradient-opacity0",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "r": 0.91,
+        "g": 0.93,
+        "b": 0.95,
         "a": 0
       }
     },

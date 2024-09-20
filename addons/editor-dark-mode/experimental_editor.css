@@ -206,7 +206,7 @@
   fill: var(--editorDarkMode-accent-text);
 }
 [class*="selector_new-buttons_"]::before {
-  background: linear-gradient(var(--editorDarkMode-accent-opacity0), var(--editorDarkMode-accent));
+  background: linear-gradient(var(--editorDarkMode-accent-gradient-opacity0), var(--editorDarkMode-accent-gradient));
 }
 .sa-float-bar-dropdown > li.sa-boolean::before /* middle-click-popup style */ {
   border-top: 9px solid var(--editorDarkMode-accent);
