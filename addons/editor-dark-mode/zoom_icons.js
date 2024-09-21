@@ -17,10 +17,10 @@ export default async function ({ addon, console }) {
   const updateIcon = async (icon) => {
     let svg;
     if (icon.saOriginalSvg) svg = icon.saOriginalSvg;
-    else svg = icon.saOriginalSvg = (await (await fetch(icon.getAttributeNS(XLINK_NS, "href"))).text());
+    else svg = icon.saOriginalSvg = await (await fetch(icon.getAttributeNS(XLINK_NS, "href"))).text();
     svg = addon.self.disabled ? svg : recolorSvg(svg);
     icon.setAttributeNS(XLINK_NS, "xlink:href", `data:image/svg+xml;base64,${btoa(svg)}`);
-  }
+  };
 
   const updateAllIcons = () => {
     for (let icon of document.querySelectorAll(iconSelector)) updateIcon(icon);

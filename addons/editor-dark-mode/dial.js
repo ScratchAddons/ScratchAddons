@@ -12,14 +12,14 @@ export default async function ({ addon, console }) {
       .replace(/#ffffff|#fff|white/gi, "%white%")
       .replace(/#000000|#000|black/gi, "%black%")
       .replace(/%primary1%/g, addon.settings.get("primary"))
-      .replace(/%primary2%/g, alphaBlend(
-        addon.settings.get("input"),
-        multiply(addon.settings.get("primary"), { a: 0.7 })
-      ))
-      .replace(/%primary3%/g, alphaBlend(
-        addon.settings.get("input"),
-        multiply(addon.settings.get("primary"), { a: 0.375 })
-      ))
+      .replace(
+        /%primary2%/g,
+        alphaBlend(addon.settings.get("input"), multiply(addon.settings.get("primary"), { a: 0.7 }))
+      )
+      .replace(
+        /%primary3%/g,
+        alphaBlend(addon.settings.get("input"), multiply(addon.settings.get("primary"), { a: 0.375 }))
+      )
       .replace(/%white%/g, textColor(addon.settings.get("primary")))
       .replace(/%black%/g, textColor(addon.settings.get("input"), "black"));
   };
