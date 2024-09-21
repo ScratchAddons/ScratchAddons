@@ -222,7 +222,7 @@
 img[class*="tool-select-base_tool-select-icon_"],
 [class*="paint-editor_button-group-button-icon_"],
 [class*="mode-tools_mode-tools-icon_"],
-[class*="library-item_library-item-image_"][src*="static/assets"] /* sound icon */,
+[class*="library-item_library-item-image_"][src*="data:"] /* sound icon */,
 [class*="library-item_featured-extension-metadata-detail_"] img {
   filter: var(--editorDarkMode-accent-filter);
 }
