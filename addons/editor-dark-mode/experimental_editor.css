@@ -407,6 +407,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 }
 
 /* Primary color */
+[class*="backpack_more_"],
 [class*="sprite-selector-item_is-selected_"] [class*="sprite-selector-item_sprite-info_"],
 [class*="delete-button_delete-button-visible_"],
 [class*="stage-selector_stage-selector_"][class*="stage-selector_is-selected_"] [class*="stage-selector_header_"],
