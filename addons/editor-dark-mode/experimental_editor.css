@@ -255,6 +255,15 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="alert_alert_"][class*="alert_warn_"] {
   background-color: var(--editorDarkMode-accent-error);
 }
+[class*="blocks_drag-over_"]::after,
+[class*="backpack_drag-over_"]::after,
+[class*="sprite-selector_scroll-wrapper-dragging_"],
+[class*="sprite-selector_raised_"],
+[class*="sprite-selector_raised_"]:hover,
+[class*="stage-selector_raised_"],
+[class*="stage-selector_raised_"] [class*="stage-selector_header_"] {
+  background-color: var(--editorDarkMode-accent-dropHighlight);
+}
 [class*="alert_alert-message_"] {
   color: var(--editorDarkMode-accent-text);
 }

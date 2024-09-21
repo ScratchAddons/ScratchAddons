@@ -675,6 +675,17 @@
       }
     },
     {
+      "name": "accent-dropHighlight",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "transparentSource": "#4d97ffa8"
+      }
+    },
+    {
       "name": "input-text",
       "value": {
         "type": "textColor",
