@@ -498,6 +498,10 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="action-menu_main-button_"]:hover {
   box-shadow: 0 0 0 6px var(--editorDarkMode-primary-transparent35);
 }
+[class*="dial_gauge-path_"] {
+  fill: var(--editorDarkMode-primary-transparent35);
+  stroke: var(--editorDarkMode-primary);
+}
 [class*="stage-selector_stage-selector_"][class*="stage-selector_is-selected_"] [class*="stage-selector_header-title_"],
 [class*="prompt_button-row_"] button[class*="prompt_ok-button_"],
 [class*="record-modal_button-row_"] button[class*="record-modal_ok-button_"] {

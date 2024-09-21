@@ -1034,6 +1034,10 @@
     {
       "url": "paint_icons.js",
       "matches": ["projects"]
+    },
+    {
+      "url": "dial.js",
+      "matches": ["projects"]
     }
   ],
   "userstyles": [
