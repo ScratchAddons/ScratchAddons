@@ -163,6 +163,7 @@
 [class*="sprite-info_sprite-info_"],
 [class*="stage-selector_stage-selector_"],
 [class*="stage-selector_header_"],
+[class*="drag-layer_image_"],
 .blocklyDropDownDiv .goog-slider-horizontal .goog-slider-thumb,
 [class*="asset-panel_wrapper_"],
 [class*="color-button_outline-swatch_"]::after,
@@ -429,6 +430,7 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="stage_frame_"],
 [class*="sprite-selector-item_sprite-selector-item_"]:hover,
 [class*="stage-selector_stage-selector_"]:hover,
+[class*="drag-layer_image_"],
 [class*="sound-editor_button_"]:focus::before,
 [class*="library-item_library-item_"]:hover {
   border-color: var(--editorDarkMode-primary);
