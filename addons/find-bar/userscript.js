@@ -710,7 +710,6 @@ export default async function ({ addon, msg, console }) {
       } else {
         this.remove();
         this.blocks = blocks;
-        item.appendChild(this.createDom());
 
         this.idx = 0;
         if (instanceBlock) {
@@ -722,6 +721,7 @@ export default async function ({ addon, msg, console }) {
             }
           }
         }
+        item.appendChild(this.createDom());
 
         if (this.idx < this.blocks.length) {
           this.utils.scrollBlockIntoView(this.blocks[this.idx]);

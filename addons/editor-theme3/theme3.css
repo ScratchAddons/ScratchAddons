@@ -46,6 +46,13 @@
   color: var(--editorTheme3-commentText);
 }
 
+[class*="monitor_value_"],
+[class*="monitor_large-value_"],
+[class*="monitor_list-value_"] {
+  background-color: var(--sa-monitor-background) !important;
+  border-color: var(--sa-monitor-border, rgba(0, 0, 0, 0.15));
+  color: var(--sa-monitor-text) !important;
+}
 [class*="monitor_list-input_"] {
   color: inherit !important;
 }
