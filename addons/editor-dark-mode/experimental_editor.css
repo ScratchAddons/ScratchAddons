@@ -445,6 +445,9 @@ img[class*="tool-select-base_tool-select-icon_"],
 [class*="library-item_library-item_"]:hover {
   border-color: var(--editorDarkMode-primary);
 }
+.sa-body-editor input {
+  outline-color: var(--editorDarkMode-primary);
+}
 [class*="green-flag_green-flag_"]:hover,
 [class*="stop-all_stop-all_"]:hover,
 .pause-btn:hover,

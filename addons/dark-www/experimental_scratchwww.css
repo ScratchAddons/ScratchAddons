@@ -511,6 +511,9 @@ body:not(.sa-body-editor) .formik-input:focus,
 .transfer-host-modal .cancel-button {
   box-shadow: 0 0 0 1px var(--darkWww-button);
 }
+body:not(.sa-body-editor) input {
+  outline-color: var(--darkWww-button);
+}
 .button img,
 .preview .see-inside-button::before,
 .subactions .action-buttons .action-button::before,
