@@ -20,7 +20,7 @@ export default async function ({ addon, console }) {
     }
   };
 
-  await addon.tab.waitForElement(".sa-performance-tab-content", { markAsSeen: true });
+  await addon.tab.waitForElement(".sa-performance-tab-content");
   updateCharts();
   addon.settings.addEventListener("change", updateCharts);
   addon.self.addEventListener("disabled", updateCharts);
