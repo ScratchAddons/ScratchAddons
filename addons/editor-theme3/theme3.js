@@ -184,7 +184,8 @@ const bevelFilters = [
 		<feMergeNode in="SourceGraphic"></feMergeNode>
 		<feMergeNode in="comp-2"></feMergeNode>
 	</feMerge>
-</filter>`];
+</filter>`,
+];
 
 export default async function ({ addon, console, msg }) {
   // Will be replaced with the current Scratch theme's colors when entering the editor
@@ -659,9 +660,9 @@ export default async function ({ addon, console, msg }) {
 
   bevelFilters.forEach((filter) => {
     const filterElement = document.createElement("filter");
-    document.querySelector('.injectionDiv > svg > defs').appendChild(filterElement);
+    document.querySelector(".injectionDiv > svg > defs").appendChild(filterElement);
     filterElement.outerHTML = filter;
-    console.log(filter)
+    console.log(filter);
   });
 
   while (true) {

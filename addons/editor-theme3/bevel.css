@@ -1,5 +1,5 @@
 g:not(.blocklyReplaceable) > .blocklyPath {
-    filter: url(#bevelFilter);
+  filter: url(#bevelFilter);
 }
 
 g[data-shapes="argument"]:not(.blocklyReplaceable) > path.blocklyPath.blocklyBlockBackground,
@@ -9,28 +9,35 @@ g[data-argument-type="variable"]:not(.blocklyReplaceable) > path.blocklyPath.blo
 g.blocklyDraggable:not(.blocklyReplaceable) > path[data-argument-type="boolean"],
 g.blocklyEditableText:has(rect.blocklyBlockBackground),
 g[data-argument-type="dropdown"]:has(path.blocklyPath.blocklyBlockBackground) {
-    filter: url(#inputBevelFilter);
+  filter: url(#inputBevelFilter);
 }
 
 g[data-argument-type="dropdown"]:not(.blocklyReplaceable) > path.blocklyPath.blocklyBlockBackground,
 rect.blocklyBlockBackground {
-    filter: url(#inputDarkFilter);
+  filter: url(#inputDarkFilter);
 }
 
-g[data-shapes="c-block c-1 hat"] > g[data-shapes="stack"]:not(.blocklyDraggable) > path.blocklyPath.blocklyBlockBackground {
-    filter: none;
-    stroke: #FFF4;
-    fill: none;
-    stroke-width: 3px
+g[data-shapes="c-block c-1 hat"]
+  > g[data-shapes="stack"]:not(.blocklyDraggable)
+  > path.blocklyPath.blocklyBlockBackground {
+  filter: none;
+  stroke: #fff4;
+  fill: none;
+  stroke-width: 3px;
 }
 
 g[data-shapes="c-block c-1 hat"] > g[data-shapes="stack"]:not(.blocklyDraggable) > g {
-    filter: url(#bevelFilter) hue-rotate(-10deg) brightness(1.25);
+  filter: url(#bevelFilter) hue-rotate(-10deg) brightness(1.25);
 }
 
 text.blocklyText {
-    font-family: Lucida Grande, Verdana, Arial, DejaVu Sans, sans-serif;
-    font-weight: 700;
-    font-size: 10pt;
-    word-spacing: +1px;
+  font-family:
+    Lucida Grande,
+    Verdana,
+    Arial,
+    DejaVu Sans,
+    sans-serif;
+  font-weight: 700;
+  font-size: 10pt;
+  word-spacing: +1px;
 }
