@@ -6,10 +6,10 @@ export default async function ({ addon, console, msg }) {
   let prevEventHandler;
   let handleClickOffset;
   let element;
-  let labelReadout;
   let saOpacityHandle;
   let saOpacitySlider;
   let saOpacitySliderBg;
+  let inputOpacity;
 
   const getColor = () => {
     let fillOrStroke;
@@ -19,15 +19,12 @@ export default async function ({ addon, console, msg }) {
     } else if (state.scratchPaint.modals.strokeColor) {
       fillOrStroke = "stroke";
     } else {
-      // fillOrStroke = "ihadastroke";
       return;
     }
     const colorType = state.scratchPaint.fillMode.colorIndex;
     const primaryOrSecondary = ["primary", "secondary"][colorType];
     const color = state.scratchPaint.color[`${fillOrStroke}Color`][primaryOrSecondary];
     if (color === null || color === "scratch-paint/style-path/mixed") return;
-    // This value can be arbitrary - it can be HEX, RGB, etc.
-    // Use tinycolor to convert them.
     return tinycolor(color).toRgbString();
   };
 
@@ -44,23 +41,10 @@ export default async function ({ addon, console, msg }) {
     };
     addon.tab.redux.addEventListener("statechanged", onEyeDropperOpened);
     element.children[1].children[0].click();
-
-    // setTimeout(() => {
-    // // can't use scratch-paint/fill-style/CHANGE_FILL_COLOR because it checks the hex
-    // // https://github.com/scratchfoundation/scratch-paint/blob/0d169c7706d6ddda491b58b9180bb96c6ba946d8/src/lib/make-color-style-reducer.js#L9
-    // const state = addon.tab.redux.state;
-    // state.scratchPaint.color.fillColor.primary = color;
-    // // need to apply color to selection
-    // // https://github.com/scratchfoundation/scratch-paint/blob/2a9fb2356d961200dc849b5b0a090d33f473c0b5/src/containers/color-indicator.jsx#L70
-    // for (let i = 0; i < state.scratchPaint.selectedItems.length; i++) {
-    //   console.log(state.scratchPaint.selectedItems[i].fillColor);
-    //   state.scratchPaint.selectedItems[i].fillColor.set(color);
-    // }
-    // }, 500);
   };
 
   const setSliderBg = (color) => {
-    const hex = tinycolor(color).toHexString(); // remove alpha value
+    const hex = tinycolor(color).toHexString();
     saOpacitySliderBg.style.background = `linear-gradient(to left, ${hex} 0%, rgba(0, 0, 0, 0) 100%)`;
   };
 
@@ -105,7 +89,7 @@ export default async function ({ addon, console, msg }) {
     const halfHandleWidth = HANDLE_WIDTH / 2;
     const pixelMin = halfHandleWidth;
     const pixelMax = CONTAINER_WIDTH - halfHandleWidth;
-    labelReadout.textContent = Math.round(opacityValue);
+    inputOpacity.value = Math.round(opacityValue);
     saOpacityHandle.style.left = pixelMin + (pixelMax - pixelMin) * (opacityValue / 100) - halfHandleWidth + "px";
 
     const color = tinycolor(getColor()).toRgb();
@@ -142,10 +126,20 @@ export default async function ({ addon, console, msg }) {
     });
 
     const defaultAlpha = tinycolor(getColor()).toRgb().a;
-    labelReadout = Object.assign(document.createElement("span"), {
-      className: addon.tab.scratchClass("color-picker_label-readout"),
+
+    inputOpacity = Object.assign(document.createElement("input"), {
+      type: "number",
+      min: 0,
+      max: 100,
+      value: Math.round(defaultAlpha * 100),
+      className: addon.tab.scratchClass("input_input-form", "input_input-small", "input_input-small-range"),
+      style: "height: 1.5rem",
     });
-    labelReadout.textContent = Math.round(defaultAlpha * 100);
+
+    inputOpacity.addEventListener("input", () => {
+      const opacityValue = Math.min(100, Math.max(0, inputOpacity.value));
+      changeOpacity(opacityValue);
+    });
 
     const defaultColor = getColor();
     saOpacitySlider = Object.assign(document.createElement("div"), {
@@ -163,6 +157,7 @@ export default async function ({ addon, console, msg }) {
     });
     saOpacityHandle.addEventListener("mousedown", handleMouseDown);
     saOpacityHandle.addEventListener("click", (event) => event.stopPropagation());
+
     const lastSlider = document.querySelector('[class*="slider_last"]');
     lastSlider.className = addon.tab.scratchClass("slider_container");
     setHandlePos(defaultAlpha);
@@ -179,7 +174,7 @@ export default async function ({ addon, console, msg }) {
         const color = getColor();
         setSliderBg(color);
         if (detail.action.type === "scratch-paint/color-index/CHANGE_COLOR_INDEX") {
-          labelReadout.textContent = Math.round(tinycolor(color).toRgb().a * 100);
+          inputOpacity.value = Math.round(tinycolor(color).toRgb().a * 100);
           setHandlePos(tinycolor(color).toRgb().a);
         }
       }
@@ -191,7 +186,7 @@ export default async function ({ addon, console, msg }) {
     containerWrapper.appendChild(rowHeader);
     containerWrapper.appendChild(saOpacitySlider);
     rowHeader.appendChild(saLabelName);
-    rowHeader.appendChild(labelReadout);
+    rowHeader.appendChild(inputOpacity);
     saOpacitySlider.appendChild(saOpacitySliderBg);
     saOpacitySlider.appendChild(saOpacityHandle);
     const brightnessSlider = Array.from(element.parentElement.children).filter(
