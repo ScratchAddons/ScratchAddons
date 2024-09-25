@@ -36,7 +36,7 @@
     "message": "Until tomorrow"
   },
   "untilEnabled": {
-    "message": "Until I turn it off"
+    "message": "Until turned off"
   },
   "muteFor": {
     "message": "Do not disturb"
