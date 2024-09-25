@@ -23,7 +23,7 @@ const periods = [
     mins: "tomorrow",
   },
   {
-    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("untilEnabled")) || "Until I turn it off",
+    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("untilEnabled")) || "Until turned off",
     mins: Infinity,
   },
 ];
