@@ -7,6 +7,9 @@
     },
     {
       "name": "GarboMuffin"
+    },
+    {
+      "name": "Valmontechno"
     }
   ],
   "userscripts": [
@@ -25,9 +28,8 @@
   "dynamicDisable": true,
   "versionAdded": "1.11.0",
   "latestUpdate": {
-    "version": "1.28.0",
-    "temporaryNotice": "List items can now be inserted without holding the Shift key."
+    "version": "1.38.0"
   },
-  "tags": ["editor", "featured"],
+  "tags": ["editor", "featured", "beta"],
   "enabledByDefault": false
 }
