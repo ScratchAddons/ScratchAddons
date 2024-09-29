@@ -26,3 +26,63 @@
 .sa-forum-toolbar-color a {
   background-image: url(./palette.png);
 }
+
+.markItUpButton1 {
+  display: var(--forumToolbar-bold);
+}
+
+.markItUpButton2 {
+  display: var(--forumToolbar-italic);
+}
+
+.markItUpButton3 {
+  display: var(--forumToolbar-underline);
+}
+
+.markItUpButton4 {
+  display: var(--forumToolbar-stroke);
+}
+
+.markItUpButton5 {
+  display: var(--forumToolbar-image);
+}
+
+.markItUpButton6 {
+  display: var(--forumToolbar-url);
+}
+
+.markItUpButton7 {
+  display: var(--forumToolbar-size);
+}
+
+.markItUpButton8 {
+  display: var(--forumToolbar-bulletedList);
+}
+
+.markItUpButton9 {
+  display: var(--forumToolbar-numericList);
+}
+
+.markItUpButton10 {
+  display: var(--forumToolbar-listItem);
+}
+
+.markItUpButton11 {
+  display: var(--forumToolbar-quotes);
+}
+
+.markItUpButton12 {
+  display: var(--forumToolbar-smiles);
+}
+
+.markItUpButton13 {
+  display: var(--forumToolbar-browserOs);
+}
+
+.markItUpButton14 {
+  display: var(--forumToolbar-scratchblocks);
+}
+
+.markItUpButton15 {
+  display: var(--forumToolbar-clean);
+}

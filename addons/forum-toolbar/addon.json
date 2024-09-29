@@ -1,6 +1,6 @@
 {
-  "name": "More forum toolbar buttons",
-  "description": "Adds buttons in the forum editing toolbar to insert BBCode tags, such as [center] or [color].",
+  "name": "Customize forum toolbar buttons",
+  "description": "Adds buttons in the forum editing toolbar to insert BBCode tags, such as [center] or [color], and allows hiding regular icons in the toolbar.",
   "credits": [
     {
       "name": "Silk",
@@ -24,6 +24,102 @@
   ],
   "settings": [
     {
+      "name": "Bold",
+      "id": "bold",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Italic",
+      "id": "italic",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Underline",
+      "id": "underline",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Stroke",
+      "id": "stroke",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Image",
+      "id": "image",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "URL",
+      "id": "url",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Font size",
+      "id": "size",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Bulleted list",
+      "id": "bulleted-list",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Numeric list",
+      "id": "numeric-list",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "List item",
+      "id": "list-item",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Quotes",
+      "id": "quotes",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Emojis",
+      "id": "smiles",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Browser/OS",
+      "id": "browser-os",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Scratch Blocks",
+      "id": "scratchblocks",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Clean",
+      "id": "clean",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Color",
+      "id": "color",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "Wikipedia",
       "id": "wp",
       "type": "boolean",
@@ -46,12 +142,6 @@
       "id": "dictionary",
       "type": "boolean",
       "default": false
-    },
-    {
-      "name": "Color",
-      "id": "color",
-      "type": "boolean",
-      "default": true
     },
     {
       "name": "Center",
@@ -154,9 +244,211 @@
           "settingId": "color"
         }
       }
+    },
+    {
+      "name": "bold",
+      "value": {
+        "type": "ternary",
+        "true": "block",
+        "false": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "bold"
+        }
+      }
+    },
+    {
+      "name": "italic",
+      "value": {
+        "type": "ternary",
+        "true": "block",
+        "false": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "italic"
+        }
+      }
+    },
+    {
+      "name": "underline",
+      "value": {
+        "type": "ternary",
+        "true": "block",
+        "false": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "underline"
+        }
+      }
+    },
+    {
+      "name": "stroke",
+      "value": {
+        "type": "ternary",
+        "true": "block",
+        "false": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "stroke"
+        }
+      }
+    },
+    {
+      "name": "image",
+      "value": {
+        "type": "ternary",
+        "true": "block",
+        "false": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "image"
+        }
+      }
+    },
+    {
+      "name": "url",
+      "value": {
+        "type": "ternary",
+        "true": "block",
+        "false": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "url"
+        }
+      }
+    },
+    {
+      "name": "size",
+      "value": {
+        "type": "ternary",
+        "true": "block",
+        "false": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "size"
+        }
+      }
+    },
+    {
+      "name": "bulletedList",
+      "value": {
+        "type": "ternary",
+        "true": "block",
+        "false": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "bulleted-list"
+        }
+      }
+    },
+    {
+      "name": "numericList",
+      "value": {
+        "type": "ternary",
+        "true": "block",
+        "false": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "numeric-list"
+        }
+      }
+    },
+    {
+      "name": "listItem",
+      "value": {
+        "type": "ternary",
+        "true": "block",
+        "false": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "list-item"
+        }
+      }
+    },
+    {
+      "name": "quotes",
+      "value": {
+        "type": "ternary",
+        "true": "block",
+        "false": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "quotes"
+        }
+      }
+    },
+    {
+      "name": "smiles",
+      "value": {
+        "type": "ternary",
+        "true": "block",
+        "false": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "smiles"
+        }
+      }
+    },
+    {
+      "name": "browserOs",
+      "value": {
+        "type": "ternary",
+        "true": "block",
+        "false": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "browser-os"
+        }
+      }
+    },
+    {
+      "name": "scratchblocks",
+      "value": {
+        "type": "ternary",
+        "true": "block",
+        "false": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "scratchblocks"
+        }
+      }
+    },
+    {
+      "name": "clean",
+      "value": {
+        "type": "ternary",
+        "true": "block",
+        "false": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "clean"
+        }
+      }
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.19.0"
+  "versionAdded": "1.19.0",
+  "updateUserstylesOnSettingsChange": true,
+  "latestUpdate": {
+    "version": "1.33.0",
+    "temporaryNotice": "You can now choose which buttons that are normally in the toolbar are shown.",
+    "newSettings": [
+      "bold",
+      "italic",
+      "underline",
+      "stroke",
+      "image",
+      "url",
+      "size",
+      "bulleted-list",
+      "numeric-list",
+      "list-item",
+      "quotes",
+      "smiles",
+      "browser-os",
+      "scratchblocks",
+      "clean"
+    ]
+  }
 }
