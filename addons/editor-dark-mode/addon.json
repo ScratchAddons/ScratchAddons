@@ -583,6 +583,18 @@
       }
     },
     {
+      "name": "accent-divider",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.15)",
+        "white": "rgba(255, 255, 255, 0.15)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        }
+      }
+    },
+    {
       "name": "accent-colorScheme",
       "value": {
         "type": "textColor",
@@ -596,14 +608,41 @@
       }
     },
     {
-      "name": "accent-opacity0",
+      "name": "accent-gradient",
       "value": {
         "type": "multiply",
         "source": {
           "type": "settingValue",
           "settingId": "accent"
         },
+        "r": 0.91,
+        "g": 0.93,
+        "b": 0.95
+      }
+    },
+    {
+      "name": "accent-gradient-opacity0",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "r": 0.91,
+        "g": 0.93,
+        "b": 0.95,
         "a": 0
+      }
+    },
+    {
+      "name": "accent-transparent75",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "a": 0.75
       }
     },
     {
@@ -702,6 +741,17 @@
       }
     },
     {
+      "name": "accent-dropHighlight",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "transparentSource": "#4d97ffa8"
+      }
+    },
+    {
       "name": "input-text",
       "value": {
         "type": "textColor",
@@ -745,6 +795,18 @@
         "source": {
           "type": "settingValue",
           "settingId": "input"
+        }
+      }
+    },
+    {
+      "name": "input-divider",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.15)",
+        "white": "rgba(255, 255, 255, 0.15)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
         }
       }
     },
@@ -803,18 +865,6 @@
           "settingId": "input"
         },
         "a": 0.25
-      }
-    },
-    {
-      "name": "workspace-codeZoomFilter",
-      "value": {
-        "type": "textColor",
-        "black": "none",
-        "white": "invert(1) hue-rotate(180deg)",
-        "source": {
-          "type": "settingValue",
-          "settingId": "workspace"
-        }
       }
     },
     {
@@ -1044,7 +1094,15 @@
       "matches": ["projects"]
     },
     {
+      "url": "zoom_icons.js",
+      "matches": ["projects"]
+    },
+    {
       "url": "paint_icons.js",
+      "matches": ["projects"]
+    },
+    {
+      "url": "dial.js",
       "matches": ["projects"]
     }
   ],
