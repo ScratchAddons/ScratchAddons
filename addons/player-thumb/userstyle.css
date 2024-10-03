@@ -11,6 +11,11 @@
   background-color: var(--darkWww-page, #fcfcfc);
 }
 
+.sa-controls-disabled > img {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
 body:not(.sa-body-editor) div[class*="loader_background_"] {
   background-color: rgba(0, 0, 0, 0.25);
   border-radius: calc(0.5rem - 1px);

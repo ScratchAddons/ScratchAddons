@@ -9,6 +9,8 @@ export default async function ({ addon, console }) {
 
   const stageWrapper = await addon.tab.waitForElement('div[class*="stage-wrapper_stage-wrapper_"]');
   const alerts = document.querySelector(".project-info-alerts");
+  const controls = stageWrapper.querySelector('div[class^="controls_controls-container_"]');
+  controls.classList.add("sa-controls-disabled");
 
   if (addon.tab.editorMode === "projectpage") {
     const LoaderBackground = stageWrapper.querySelector('[class*="loader_background_"]');
@@ -22,6 +24,7 @@ export default async function ({ addon, console }) {
     if (e.detail.action.type == "scratch-gui/project-changed/SET_PROJECT_CHANGED") {
       // Move the thumbnail after the project loads
       thumb.classList.remove("loading");
+      controls.classList.remove("sa-controls-disabled");
       const stage = document.querySelector('div[class*="stage_stage"]');
       const greenFlagOverlay = stage.querySelector('[class*="stage_green-flag-overlay-wrapper_"]');
       stage.insertBefore(thumb, greenFlagOverlay);
