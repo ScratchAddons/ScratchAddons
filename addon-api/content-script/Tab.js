@@ -216,14 +216,18 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get editorMode() {
-    // Redux isn't really necessary unless entering fullscreen from https://scratch.mit.edu/projects/editor/
-    const mode = this.redux.state?.scratchGui?.mode;
-    const projectNotAvailable = this.redux.state?.preview?.projectNotAvailable;
-    if (projectNotAvailable || !mode) return null;
-    if (mode?.showBranding) return "embed";
-    if (mode.isFullScreen) return "fullscreen";
-    if (mode.isPlayerOnly) return "projectpage";
-    return "editor";
+    if (isScratchGui || location.pathname === "/projects/editor" || location.pathname === "/projects/editor/") {
+      // Note that scratch-gui does not change the URL when going fullscreen.
+      if (this.redux.state?.scratchGui?.mode?.isFullScreen) return "fullscreen";
+      return "editor";
+    }
+    const pathname = location.pathname.toLowerCase();
+    const split = pathname.split("/").filter(Boolean);
+    if (!split[0] || split[0] !== "projects") return null;
+    if (split.includes("editor")) return "editor";
+    if (split.includes("fullscreen")) return "fullscreen";
+    if (split.includes("embed")) return "embed";
+    return "projectpage";
   }
 
   /**
