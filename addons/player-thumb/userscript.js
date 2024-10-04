@@ -1,10 +1,9 @@
 export default async function ({ addon, console }) {
   if (addon.tab.editorMode === "editor") return;
 
-  const projectId = window.location.pathname.split("/")[2];
-  const thumbUrl = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png`;
+  const projectId = location.pathname.split("/")[2];
   const thumb = document.createElement("img");
-  thumb.src = thumbUrl;
+  thumb.src = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png`;
   thumb.className = "sa-project-thumb";
 
   const stageWrapper = await addon.tab.waitForElement('div[class*="stage-wrapper_stage-wrapper_"]');
@@ -30,8 +29,6 @@ export default async function ({ addon, console }) {
       stage.insertBefore(thumb, greenFlagOverlay);
       alerts.style.display = "flex";
     }
-    if (e.detail.action.type == "scratch-gui/vm-status/SET_STARTED_STATE") {
-      thumb.remove();
-    }
+    if (e.detail.action.type == "scratch-gui/vm-status/SET_STARTED_STATE") thumb.remove();
   });
 }
