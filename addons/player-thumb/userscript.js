@@ -2,7 +2,7 @@ export default async function ({ addon, console }) {
   let controls, alerts;
 
   const projectId = location.pathname.split("/")[2];
-  if ((projectId) === "editor") return;
+  if (projectId === "editor") return;
 
   const thumb = document.createElement("img");
   thumb.src = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png`;
