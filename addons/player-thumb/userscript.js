@@ -1,14 +1,12 @@
 export default async function ({ addon, console }) {
-
   let controls, alerts;
 
   const projectId = location.pathname.split("/")[2];
-  if (typeof(projectId) !== Number) return;
+  if (typeof projectId !== Number) return;
 
   const thumb = document.createElement("img");
   thumb.src = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png`;
   thumb.className = "sa-project-thumb";
-
 
   // TODO: Wait for Redux properly
   await addon.tab.waitForElement('div[class*="stage-wrapper_stage-wrapper_"]');
@@ -21,7 +19,7 @@ export default async function ({ addon, console }) {
       const stage = document.querySelector('div[class*="stage_stage"]');
       const greenFlagOverlay = stage.querySelector('[class*="stage_green-flag-overlay-wrapper_"]');
       if (greenFlagOverlay) {
-        stage.insertBefore(thumb, greenFlagOverlay)
+        stage.insertBefore(thumb, greenFlagOverlay);
         alerts.style.display = "flex";
       } else {
         thumb.remove();
@@ -30,11 +28,10 @@ export default async function ({ addon, console }) {
     if (e.detail.action.type == "scratch-gui/vm-status/SET_STARTED_STATE") thumb.remove();
   });
 
-
   while (true) {
     const stageWrapper = await addon.tab.waitForElement('div[class*="stage-wrapper_stage-wrapper_"]', {
       markAsSeen: true,
-      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly
+      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
     });
     if (addon.tab.redux.state?.scratchGui?.projectState?.loadingState === "SHOWING_WITH_ID") {
       controls.classList.remove("sa-controls-disabled");
