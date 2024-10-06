@@ -1,12 +1,11 @@
 export default async function ({ addon, console }) {
-  let controls, alerts;
-
   const projectId = location.pathname.split("/")[2];
-  if (projectId === "editor") return;
 
   const thumb = document.createElement("img");
   thumb.src = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png`;
-  thumb.className = "sa-project-thumb";
+  thumb.classList = "sa-project-thumb loading";
+
+  let controls, alerts;
 
   // TODO: Wait for Redux properly
   await addon.tab.waitForElement('div[class*="stage-wrapper_stage-wrapper_"]');
@@ -31,20 +30,16 @@ export default async function ({ addon, console }) {
   while (true) {
     const stageWrapper = await addon.tab.waitForElement('div[class*="stage-wrapper_stage-wrapper_"]', {
       markAsSeen: true,
-      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly && state.scratchGui.projectState.loadingState !== "SHOWING_WITH_ID",
     });
-    if (addon.tab.redux.state?.scratchGui?.projectState?.loadingState === "SHOWING_WITH_ID") {
-      controls.classList.remove("sa-controls-disabled");
-      return;
-    }
     alerts = document.querySelector(".project-info-alerts");
     controls = stageWrapper.querySelector('div[class^="controls_controls-container_"]');
     controls.classList.add("sa-controls-disabled");
 
-    const LoaderBackground = stageWrapper.querySelector('[class*="loader_background_"]');
-    LoaderBackground.style.backgroundColor = "rgba(0, 0, 0, 0.25)"; // Prevent style from being flashed on /projects/editor/
-    thumb.classList.add("loading");
-    stageWrapper.insertBefore(thumb, LoaderBackground);
+    const loaderBackground = stageWrapper.querySelector('[class*="loader_background_"]');
+    stageWrapper.insertBefore(thumb, loaderBackground);
     if (alerts) alerts.style.display = "none";
+    // Ensure thumbnail is injected at least once before adding transparency
+    loaderBackground.style.backgroundColor = "rgba(0, 0, 0, 0.25)";
   }
 }
