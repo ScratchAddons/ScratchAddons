@@ -221,6 +221,18 @@
       }
     },
     {
+      "name": "primary-filter3",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0) invert(0.4)",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        }
+      }
+    },
+    {
       "name": "primary-transparent35",
       "value": {
         "type": "multiply",
