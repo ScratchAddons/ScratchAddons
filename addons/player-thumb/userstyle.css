@@ -34,6 +34,21 @@ body:not(.sa-body-editor) .sa-project-thumb.loading {
   border-radius: calc(0.5rem - 3px);
 }
 
+[class*="stage-wrapper_full-screen"] .sa-project-thumb.loading {
+  top: 6px;
+  left: auto;
+  height: min(100% - 12px, 100vw * 0.75);
+}
+
+[class*="stage-wrapper_full-screen"] div[class*="loader_background_"] {
+  top: calc(2.75rem + 6px);
+  left: auto;
+  width: auto;
+  height: min(100% - 2.75rem - 12px, 100vw * 0.75);
+  aspect-ratio: 4 / 3;
+}
+
+[class*="stage-wrapper_full-screen"] [class*="loader_block-animation_"],
 body:not(.sa-body-editor) [class*="loader_block-animation_"] {
   /* Remove transparency */
   filter: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='opaque'><feComponentTransfer><feFuncA type='linear' slope='3.5'></feFuncA></feComponentTransfer></filter></svg>#opaque");

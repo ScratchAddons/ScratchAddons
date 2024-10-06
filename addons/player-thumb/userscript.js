@@ -41,12 +41,10 @@ export default async function ({ addon, console }) {
     controls = stageWrapper.querySelector('div[class^="controls_controls-container_"]');
     controls.classList.add("sa-controls-disabled");
 
-    if (addon.tab.editorMode === "projectpage") {
-      const LoaderBackground = stageWrapper.querySelector('[class*="loader_background_"]');
-      LoaderBackground.style.backgroundColor = "rgba(0, 0, 0, 0.25)"; // Prevent style from being flashed on /projects/editor/
-      thumb.classList.add("loading");
-      stageWrapper.insertBefore(thumb, LoaderBackground);
-      if (alerts) alerts.style.display = "none";
-    }
+    const LoaderBackground = stageWrapper.querySelector('[class*="loader_background_"]');
+    LoaderBackground.style.backgroundColor = "rgba(0, 0, 0, 0.25)"; // Prevent style from being flashed on /projects/editor/
+    thumb.classList.add("loading");
+    stageWrapper.insertBefore(thumb, LoaderBackground);
+    if (alerts) alerts.style.display = "none";
   }
 }
