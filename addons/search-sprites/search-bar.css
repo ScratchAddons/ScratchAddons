@@ -4,6 +4,7 @@
 
 .sa-search-sprites-container {
   position: absolute;
+  z-index: 21; /* above workspace scrollbar in small stage mode */
   bottom: 0.75rem;
   display: flex;
   width: 2.75rem;
@@ -28,7 +29,7 @@
 .sa-search-sprites-container:hover,
 .sa-search-sprites-container:focus-within,
 .sa-search-sprites-container:not(.sa-search-sprites-empty) {
-  width: calc(100% - 5.75rem);
+  width: max(12rem, calc(100% - 5.75rem));
   background-color: var(--editorDarkMode-input, white);
 }
 
