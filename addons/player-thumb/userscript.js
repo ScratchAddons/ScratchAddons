@@ -30,7 +30,8 @@ export default async function ({ addon, console }) {
   while (true) {
     const stageWrapper = await addon.tab.waitForElement('div[class*="stage-wrapper_stage-wrapper_"]', {
       markAsSeen: true,
-      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly && state.scratchGui.projectState.loadingState !== "SHOWING_WITH_ID",
+      reduxCondition: (state) =>
+        state.scratchGui.mode.isPlayerOnly && state.scratchGui.projectState.loadingState !== "SHOWING_WITH_ID",
     });
     alerts = document.querySelector(".project-info-alerts");
     controls = stageWrapper.querySelector('div[class^="controls_controls-container_"]');
