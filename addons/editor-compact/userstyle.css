@@ -225,7 +225,7 @@ button[class*="action-menu_more-button"] {
 .sa-search-sprites-container:hover,
 .sa-search-sprites-container:focus-within,
 .sa-search-sprites-container:not(.sa-search-sprites-empty) {
-  width: calc(100% - 5rem);
+  width: max(12rem, calc(100% - 5rem));
 }
 input.sa-search-sprites-box {
   padding-inline-start: 2rem;
