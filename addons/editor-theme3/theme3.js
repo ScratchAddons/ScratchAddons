@@ -200,24 +200,19 @@ export default async function ({ addon, console, msg }) {
       if (monitor.opcode === "data_listcontents") colorId = "data_lists";
       let category = categories.find((category) => category.colorId === colorId);
       if (!category) category = extensionsCategory;
-      for (const value of monitorElements[i].querySelectorAll(`
-        [class*="monitor_value_"],
-        [class*="monitor_large-value_"],
-        [class*="monitor_list-value_"]
-      `)) {
-        if (addon.settings.get("monitors") || addon.self.disabled) {
-          value.style.backgroundColor = primaryColor(category);
-          value.style.color = isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor();
-          // Border color for list items
-          if (textMode() === "colorOnBlack") value.style.borderColor = "rgba(255, 255, 255, 0.15)";
-          else value.style.removeProperty("border-color");
-        } else {
-          /* If the addon is enabled but the monitors setting is disabled,
-             the default colors are used even if the Scratch theme is set to high contrast. */
-          value.style.backgroundColor = defaultColors[category.colorId].primary;
-          value.style.color = defaultColors.text;
-          value.style.removeProperty("border-color");
-        }
+      const el = monitorElements[i];
+      if (addon.settings.get("monitors") || addon.self.disabled) {
+        el.style.setProperty("--sa-monitor-background", primaryColor(category));
+        el.style.setProperty("--sa-monitor-text", isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor());
+        // Border color for list items
+        if (textMode() === "colorOnBlack") el.style.setProperty("--sa-monitor-border", "rgba(255, 255, 255, 0.15)");
+        else el.style.removeProperty("--sa-monitor-border");
+      } else {
+        /* If the addon is enabled but the monitors setting is disabled,
+            the default colors are used even if the Scratch theme is set to high contrast. */
+        el.style.setProperty("--sa-monitor-background", defaultColors[category.colorId].primary);
+        el.style.setProperty("--sa-monitor-text", defaultColors.text);
+        el.style.removeProperty("--sa-monitor-border");
       }
     });
   };
