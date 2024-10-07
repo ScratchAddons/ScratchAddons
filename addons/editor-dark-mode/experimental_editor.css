@@ -198,7 +198,8 @@
 [class*="library-item_featured-extension-metadata_"],
 [class*="record-modal_help-text_"],
 [class*="webgl-modal_body_"] > *,
-.sa-editor-modal-content p {
+.sa-editor-modal-content p,
+.sa-debugger-tab-content h2 {
   color: var(--editorDarkMode-accent-text);
 }
 .blocklyFlyoutButton:hover {

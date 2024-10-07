@@ -1116,6 +1116,10 @@
     {
       "url": "dial.js",
       "matches": ["projects"]
+    },
+    {
+      "url": "debugger.js",
+      "matches": ["projects"]
     }
   ],
   "userstyles": [
