@@ -20,8 +20,7 @@ export default async function ({ addon, console }) {
     }
   };
 
-  await addon.tab.waitForElement(".sa-performance-tab-content");
-  updateCharts();
+  window.addEventListener("saDebuggerPerformanceTabShown", updateCharts);
   addon.settings.addEventListener("change", updateCharts);
   addon.self.addEventListener("disabled", updateCharts);
   addon.self.addEventListener("reenabled", updateCharts);

@@ -195,6 +195,7 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
   let isVisible = false;
   const show = () => {
     isVisible = true;
+    window.dispatchEvent(new CustomEvent("saDebuggerPerformanceTabShown"));
   };
   const hide = () => {
     isVisible = false;
