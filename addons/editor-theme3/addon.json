@@ -3,7 +3,8 @@
   "description": "Edit block colors for each category in the editor.",
   "credits": [
     {
-      "name": "NitroCipher/ZenithRogue"
+      "name": "NitroCipher/ZenithRogue",
+      "link": "https://github.com/ZenithRogue"
     },
     {
       "name": "TheColaber",
@@ -39,8 +40,8 @@
   ],
   "latestUpdate": {
     "isMajor": true,
-    "version": "1.39.0",
-    "newSettings": ["fillStyle", "fillOpacity", "strokeStyle", "strokeOpacity"]
+    "version": "1.40.0",
+    "newSettings": ["bevel"]
   },
   "customCssVariables": [
     {
@@ -239,6 +240,13 @@
           "text": "colorOnBlack"
         }
       }
+    },
+    {
+      "url": "bevel.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "bevel": true }
+      }
     }
   ],
   "settings": [
@@ -421,6 +429,12 @@
       "if": {
         "settings": { "strokeStyle": ["gray", "colored"] }
       }
+    },
+    {
+      "name": "Scratch 2.0 Style Block Bevels",
+      "id": "bevel",
+      "type": "boolean",
+      "default": false
     }
   ],
   "tags": ["editor", "theme", "codeEditor", "featured"],
