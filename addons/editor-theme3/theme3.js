@@ -1,4 +1,5 @@
 import { removeAlpha, multiply, brighten, alphaBlend } from "../../libraries/common/cs/text-color.esm.js";
+import { updateAllBlocks } from "../../libraries/common/cs/update-all-blocks.js";
 
 const dataUriRegex = new RegExp("^data:image/svg\\+xml;base64,([A-Za-z0-9+/=]*)$");
 const extensionsCategory = {
@@ -199,24 +200,19 @@ export default async function ({ addon, console, msg }) {
       if (monitor.opcode === "data_listcontents") colorId = "data_lists";
       let category = categories.find((category) => category.colorId === colorId);
       if (!category) category = extensionsCategory;
-      for (const value of monitorElements[i].querySelectorAll(`
-        [class*="monitor_value_"],
-        [class*="monitor_large-value_"],
-        [class*="monitor_list-value_"]
-      `)) {
-        if (addon.settings.get("monitors") || addon.self.disabled) {
-          value.style.backgroundColor = primaryColor(category);
-          value.style.color = isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor();
-          // Border color for list items
-          if (textMode() === "colorOnBlack") value.style.borderColor = "rgba(255, 255, 255, 0.15)";
-          else value.style.removeProperty("border-color");
-        } else {
-          /* If the addon is enabled but the monitors setting is disabled,
-             the default colors are used even if the Scratch theme is set to high contrast. */
-          value.style.backgroundColor = defaultColors[category.colorId].primary;
-          value.style.color = defaultColors.text;
-          value.style.removeProperty("border-color");
-        }
+      const el = monitorElements[i];
+      if (addon.settings.get("monitors") || addon.self.disabled) {
+        el.style.setProperty("--sa-monitor-background", primaryColor(category));
+        el.style.setProperty("--sa-monitor-text", isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor());
+        // Border color for list items
+        if (textMode() === "colorOnBlack") el.style.setProperty("--sa-monitor-border", "rgba(255, 255, 255, 0.15)");
+        else el.style.removeProperty("--sa-monitor-border");
+      } else {
+        /* If the addon is enabled but the monitors setting is disabled,
+            the default colors are used even if the Scratch theme is set to high contrast. */
+        el.style.setProperty("--sa-monitor-background", defaultColors[category.colorId].primary);
+        el.style.setProperty("--sa-monitor-text", defaultColors.text);
+        el.style.removeProperty("--sa-monitor-border");
       }
     });
   };
@@ -368,6 +364,28 @@ export default async function ({ addon, console, msg }) {
         }
       }
     }
+  };
+
+  const oldInsertionMarkerCreateMarkerBlock = Blockly.InsertionMarkerManager.prototype.createMarkerBlock_;
+  Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function (originalBlock) {
+    const markerBlock = oldInsertionMarkerCreateMarkerBlock.call(this, originalBlock);
+    if (!addon.self.disabled) {
+      const styleColour = isColoredTextMode() ? originalBlock.getColourTertiary() : originalBlock.getColour();
+      const fillStyle = addon.settings.get("fillStyle");
+      const strokeStyle = addon.settings.get("strokeStyle");
+
+      markerBlock.svgPath_.style.fill = {
+        none: "transparent",
+        gray: "",
+        colored: styleColour,
+      }[fillStyle];
+      markerBlock.svgPath_.style.stroke = {
+        none: "",
+        gray: "var(--editorDarkMode-workspace-insertionMarker, rgb(0, 0, 0))",
+        colored: styleColour,
+      }[strokeStyle];
+    }
+    return markerBlock;
   };
 
   const oldBlockShowContextMenu = Blockly.BlockSvg.prototype.showContextMenu_;
@@ -539,8 +557,6 @@ export default async function ({ addon, console, msg }) {
   };
 
   const updateColors = () => {
-    const vm = addon.tab.traps.vm;
-
     for (const category of categories) {
       // CSS variables are used for compatibility with other addons
       const prefix = `--editorTheme3-${category.colorId}`;
@@ -572,21 +588,7 @@ export default async function ({ addon, console, msg }) {
     const safeTextColor = encodeURIComponent(uncoloredTextColor());
     Blockly.FieldNumber.NUMPAD_DELETE_ICON = originalNumpadDeleteIcon.replace("white", safeTextColor);
 
-    const workspace = Blockly.getMainWorkspace();
-    const flyout = workspace.getFlyout();
-    const toolbox = workspace.getToolbox();
-
-    // Reload toolbox
-    if (vm.editingTarget) {
-      vm.emitWorkspaceUpdate();
-    }
-    if (!flyout || !toolbox) return;
-    Blockly.Events.disable();
-    const flyoutWorkspace = flyout.getWorkspace();
-    Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
-    toolbox.populate_(workspace.options.languageTree);
-    workspace.toolboxRefreshEnabled_ = true;
-    Blockly.Events.enable();
+    updateAllBlocks(addon.tab, { updateCategories: true });
   };
 
   updateColors();
@@ -646,13 +648,13 @@ export default async function ({ addon, console, msg }) {
     const SA_ICON_URL = addon.self.dir + "../../../images/cs/icon.svg";
 
     const managedBySa = elementToClone.cloneNode(true);
-    addon.tab.displayNoneWhileDisabled(managedBySa, { display: "block" });
+    addon.tab.displayNoneWhileDisabled(managedBySa);
     managedBySa.classList.add("sa-theme3-managed");
     managedBySa.querySelector("div span").textContent = msg("/_general/meta/managedBySa");
     managedBySa.querySelector("img[class*=settings-menu_icon_]").src = SA_ICON_URL;
 
     const addonSettingsLink = elementToClone.cloneNode(true);
-    addon.tab.displayNoneWhileDisabled(addonSettingsLink, { display: "block" });
+    addon.tab.displayNoneWhileDisabled(addonSettingsLink);
     addonSettingsLink.classList.add("sa-theme3-link");
     addonSettingsLink.classList.add(addon.tab.scratchClass("menu_menu-section") || "_");
     addonSettingsLink.querySelector("div span").textContent = msg("/_general/meta/addonSettings");

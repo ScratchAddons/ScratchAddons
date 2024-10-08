@@ -272,6 +272,10 @@ a.message-type-title-text {
   user-select: none;
 }
 
+.welcome-message {
+  padding: 6px 16px;
+}
+
 .status-container {
   padding-top: 10px;
   padding-bottom: 20px;

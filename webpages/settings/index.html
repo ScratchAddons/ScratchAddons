@@ -120,10 +120,18 @@
   </head>
   <body v-cloak :class="{light: theme}">
     <div class="navbar">
-      <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-cloak v-show="smallMode" draggable="false" />
+      <img
+        :src="switchPath"
+        id="sidebar-toggle"
+        class="header-button"
+        @click="sidebarToggle()"
+        v-cloak
+        v-show="smallMode"
+        draggable="false"
+      />
       <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" draggable="false" />
       <h1 v-cloak>{{ msg("settings") }}</h1>
-      <div @click="setTheme(!theme)" class="header-button">
+      <div @click="setTheme(!theme)" class="header-button header-end">
         <img v-cloak class="theme-switch" :src="themePath" draggable="false" />
       </div>
     </div>

@@ -270,7 +270,7 @@
             </div>
             <span class="message-type-title-text">{{ uiMessages.studioActivityMsg }}</span>
             <span class="float-right"
-              ><img class="small-icon" src="../../images/icons/studio.svg" draggable="false" /> {{ studioActivity.length
+              ><img class="small-icon" src="../../images/icons/studio.svg" draggable="false" /> {{ studioActivityAmt
               }}</span
             >
           </div>
@@ -473,6 +473,11 @@
               ></comment>
             </div>
           </div>
+        </div>
+
+        <!-- Welcome to Scratch -->
+        <div class="message-type" v-show="welcomeToScratch">
+          <div class="message-type-details welcome-message">{{ uiMessages.welcomeToScratchMsg }}</div>
         </div>
       </div>
 

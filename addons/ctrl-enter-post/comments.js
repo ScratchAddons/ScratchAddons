@@ -11,7 +11,7 @@ export default async function ({ addon, console, msg }) {
         return state.scratchGui.mode.isPlayerOnly;
       },
     });
-    var button;
+    let button;
     if (isScratchR2) {
       button = textbox.parentNode.parentNode.querySelector(".control-group:not(.tooltip) div[data-control='post'] a");
     } else {
