@@ -88,7 +88,7 @@
       "matches": ["projects"]
     }
   ],
-  "tags": ["editor", "projectPlayer", "featured"],
+  "tags": ["player", "featured"],
   "versionAdded": "1.21.0",
   "latestUpdate": {
     "version": "1.36.0",
