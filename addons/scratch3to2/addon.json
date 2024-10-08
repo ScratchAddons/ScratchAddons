@@ -1,0 +1,80 @@
+{
+  "name": "Scratch 3.0 \u2192 2.0",
+  "description": "Makes Scratch 3.0-styled pages look like Scratch 2.0.",
+  "tags": ["community", "theme"],
+  "credits": [
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "injectAsStyleElt": true,
+  "versionAdded": "1.40.0",
+  "userstyles": [
+    {
+      "url": "main.css",
+      "matches": ["projects", "scratchWWWNoProject"]
+    },
+    {
+      "url": "home.css",
+      "matches": ["https://scratch.mit.edu/"]
+    },
+    {
+      "url": "explore_and_search.css",
+      "matches": ["https://scratch.mit.edu/explore/*", "https://scratch.mit.edu/search/*"]
+    },
+    {
+      "url": "ideas.css",
+      "matches": ["https://scratch.mit.edu/ideas"]
+    },
+    {
+      "url": "about.css",
+      "matches": ["https://scratch.mit.edu/about"]
+    },
+    {
+      "url": "project.css",
+      "matches": ["projects"]
+    },
+    {
+      "url": "studio.css",
+      "matches": ["studios"]
+    },
+    {
+      "url": "comments.css",
+      "matches": ["projects", "studios"]
+    },
+    {
+      "url": "messages.css",
+      "matches": ["https://scratch.mit.edu/messages"]
+    },
+    {
+      "url": "join.css",
+      "matches": ["https://scratch.mit.edu/join"]
+    },
+    {
+      "url": "guidelines.css",
+      "matches": ["https://scratch.mit.edu/community_guidelines"]
+    },
+    {
+      "url": "info.css",
+      "matches": [
+        "https://scratch.mit.edu/faq",
+        "https://scratch.mit.edu/contact-us",
+        "https://scratch.mit.edu/terms_of_use",
+        "https://scratch.mit.edu/privacy_policy",
+        "https://scratch.mit.edu/privacy_policy/app",
+        "https://scratch.mit.edu/privacy_policy/apps",
+        "https://scratch.mit.edu/cookies",
+        "https://scratch.mit.edu/DMCA",
+        "https://scratch.mit.edu/research",
+        "https://scratch.mit.edu/code-of-ethics"
+      ]
+    },
+    {
+      "url": "download.css",
+      "matches": ["https://scratch.mit.edu/download"]
+    }
+  ]
+}
