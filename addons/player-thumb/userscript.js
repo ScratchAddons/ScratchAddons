@@ -25,12 +25,8 @@ export default async function ({ addon, console }) {
       controls.classList.remove("sa-controls-disabled");
       const stage = document.querySelector('div[class*="stage_stage"]');
       const greenFlagOverlay = stage.querySelector('[class*="stage_green-flag-overlay-wrapper_"]');
-      if (greenFlagOverlay) {
-        stage.insertBefore(thumb, greenFlagOverlay);
-        alerts.style.display = "flex";
-      } else {
-        thumb.remove();
-      }
+      stage.insertBefore(thumb, greenFlagOverlay);
+      alerts.style.display = "flex";
     }
     if (e.detail.action.type == "scratch-gui/vm-status/SET_STARTED_STATE") thumb.remove();
   });
