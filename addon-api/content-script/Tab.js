@@ -223,7 +223,7 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get editorMode() {
-    if (isScratchGui) {
+    if (isScratchGui || location.pathname === "/projects/editor" || location.pathname === "/projects/editor/") {
       // Note that scratch-gui does not change the URL when going fullscreen.
       if (this.redux.state?.scratchGui?.mode?.isFullScreen) return "fullscreen";
       return "editor";
