@@ -1,17 +1,17 @@
 [class*="stage-wrapper_full-screen"] [class*="stage_full-screen"],
 [class*="stage-wrapper_full-screen"] [class*="stage_green-flag-overlay-wrapper"],
-.sa-project-thumb {
+[class*="stage-wrapper_full-screen"] .sa-project-thumb {
   border: 0 !important;
   border-radius: 0 !important;
 }
 
 [class*="stage_stage-overlays_"][class*="stage_full-screen_"],
-.sa-project-thumb {
+[class*="stage-wrapper_full-screen"] .sa-project-thumb {
   top: 0;
   left: 0;
 }
 
-.sa-project-thumb {
+[class*="stage-wrapper_full-screen"] .sa-project-thumb {
   width: 100%;
   height: 100%;
 }
