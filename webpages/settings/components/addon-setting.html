@@ -36,7 +36,7 @@
         </div>
         <div class="addon-split-button setting-table-dropdown" :class="{open: rowDropdownOpen}">
           <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-button" @click="addTableRow()">
-            <img class="icon-type" src="../../images/icons/plus.svg" />
+            <img class="icon-type" src="../../images/icons/plus.svg" draggable="false" />
           </button>
           <div v-click-outside="closeResetDropdowns">
             <button
@@ -44,7 +44,7 @@
               class="addon-buttons addon-split-button-dropdown"
               @click="toggleRowDropdown"
             >
-              <img class="icon-type" src="../../images/icons/expand.svg" />
+              <img class="icon-type" src="../../images/icons/expand.svg" draggable="false" />
             </button>
             <ul>
               <li v-for="preset of setting.presets" @click="addTableRow(preset.values)">{{ preset.name }}</li>
@@ -146,7 +146,7 @@
           :title="msg('reset')"
           @click="updateOption(setting.default || '')"
         >
-          <img src="../../images/icons/undo.svg" class="icon-type" /></button
+          <img src="../../images/icons/undo.svg" class="icon-type" draggable="false" /></button
       ></template>
     </div>
   </div>
