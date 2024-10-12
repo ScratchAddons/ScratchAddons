@@ -27,7 +27,7 @@ export default async function ({ addon, console }) {
             // is in CSS.
           },
           {
-            backgroundColor: "hsla(215, 100%, 77%, 1)",
+            backgroundColor: "var(--editorDarkMode-accent-dropHighlight, hsla(215, 100%, 77%, 1))",
           },
         ],
         {

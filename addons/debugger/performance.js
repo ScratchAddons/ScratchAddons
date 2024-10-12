@@ -9,7 +9,19 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
   // In optimized graphs everything still looks good
   const fancyGraphs = addon.settings.get("fancy_graphs");
   const lineWidth = fancyGraphs ? 1 : 2;
-  const lineColor = fancyGraphs ? "hsla(163, 85%, 40%, 0.5)" : "hsla(163, 85%, 40%, 1)";
+  const lineColor = fancyGraphs ? "hsla(178, 65%, 45%, 0.5)" : "hsla(178, 65%, 45%, 1)";
+  const textColor = "#575e75";
+  const gridColor = "rgba(0, 0, 0, 0.1)";
+  const scaleColorOptions = {
+    ticks: {
+      color: textColor,
+    },
+    grid: {
+      borderColor: textColor,
+      tickColor: textColor,
+      color: gridColor,
+    },
+  };
 
   const tab = debug.createHeaderTab({
     text: msg("tab-performance"),
@@ -61,9 +73,13 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
     options: {
       animation: fancyGraphs,
       scales: {
+        x: {
+          ...scaleColorOptions,
+        },
         y: {
           max: getMaxFps(),
           min: 0,
+          ...scaleColorOptions,
         },
       },
       plugins: {
@@ -99,9 +115,13 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
     options: {
       animation: fancyGraphs,
       scales: {
+        x: {
+          ...scaleColorOptions,
+        },
         y: {
           max: 300,
           min: 0,
+          ...scaleColorOptions,
         },
       },
       plugins: {
@@ -176,6 +196,7 @@ export default async function createPerformanceTab({ debug, addon, console, msg 
   let isVisible = false;
   const show = () => {
     isVisible = true;
+    window.dispatchEvent(new CustomEvent("saDebuggerPerformanceTabShown"));
   };
   const hide = () => {
     isVisible = false;

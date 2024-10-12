@@ -47,8 +47,8 @@ export default class Tab extends Listenable {
       this._clientVersion = document.querySelector("meta[name='format-detection']")
         ? "scratch-www"
         : document.querySelector("script[type='text/javascript']")
-          ? "scratchr2"
-          : null;
+        ? "scratchr2"
+        : null;
     return this._clientVersion;
   }
   /**
@@ -164,6 +164,7 @@ export default class Tab extends Listenable {
    * Use this as an optimization and do not rely on the behavior.
    * @param {string[]=} opts.reduxEvents An array of redux events that must be dispatched before resolving the selector.
    * Use this as an optimization and do not rely on the behavior.
+   * @param {boolean=} opts.resizeEvent Whether the selector should be resolved on window resize, in addition to the reduxEvents.
    * @returns {Promise<Element>} The element found.
    */
   waitForElement(selector, opts = {}) {
@@ -178,7 +179,8 @@ export default class Tab extends Listenable {
       }
     }
     const { reduxCondition, condition } = opts;
-    let listener;
+    let reduxListener;
+    let resizeListener;
     let combinedCondition = () => {
       if (condition && !condition()) return false;
       if (this.redux.state) {
@@ -189,20 +191,24 @@ export default class Tab extends Listenable {
       // if it runs a little earlier. Just don't error out.
       return true;
     };
-    if (opts.reduxEvents) {
+    if (opts.reduxEvents || opts.resizeEvent) {
       const oldCondition = combinedCondition;
       let satisfied = false;
       combinedCondition = () => {
         if (oldCondition && !oldCondition()) return false;
         return satisfied;
       };
-      listener = ({ detail }) => {
-        if (opts.reduxEvents.includes(detail.action.type)) {
+      reduxListener = ({ detail }) => {
+        if (opts.reduxEvents && opts.reduxEvents.includes(detail.action.type)) {
           satisfied = true;
         }
       };
       this.redux.initialize();
-      this.redux.addEventListener("statechanged", listener);
+      this.redux.addEventListener("statechanged", reduxListener);
+      resizeListener = () => {
+        if (opts.resizeEvent) satisfied = true;
+      };
+      window.addEventListener("resize", resizeListener);
     }
     const promise = scratchAddons.sharedObserver.watch({
       query: selector,
@@ -210,9 +216,10 @@ export default class Tab extends Listenable {
       condition: combinedCondition,
       elementCondition: opts.elementCondition || null,
     });
-    if (listener) {
+    if (reduxListener || resizeListener) {
       promise.then((match) => {
-        this.redux.removeEventListener("statechanged", listener);
+        this.redux.removeEventListener("statechanged", reduxListener);
+        window.removeEventListener("resize", resizeListener);
         return match;
       });
     }
