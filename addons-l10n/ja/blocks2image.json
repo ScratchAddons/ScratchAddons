@@ -1,1 +1,1 @@
-{"blocks2image/@name":"ブロックを画像に出力"}
+{"blocks2image/saveAll":"全て画像として保存","blocks2image/save":"画像として保存","blocks2image/modalTitle":"ブロックを画像にする","blocks2image/clipboard":"クリップボードにコピーする","blocks2image/svg":"SVG形式でダウンロード","blocks2image/png":"PNG形式でダウンロード","blocks2image/loading":"プレビューを読み込んでいます…","blocks2image/@name":"ブロックを画像に出力","blocks2image/@description":"コードエリアまたはブロックを右クリックして、それらをコピーしたりブロックをSVG/PNGとして出力したりする。","blocks2image/@update":"アドオンが改良されました。ブロックを画像として保存するためのモーダルが追加され、画像をクリップボードにコピーできるようになりました。"}
