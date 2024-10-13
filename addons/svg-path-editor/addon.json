@@ -1,0 +1,31 @@
+{
+  "name": "SVG path editor",
+  "description": "Changing the path of a shape in the Costume Editor with text.",
+  "tags": ["editor", "costumeEditor"],
+  "info": [
+    {
+      "type": "info",
+      "text": "It is enabled only when one figure is selected.",
+      "id": "enablingValidity"
+    }
+  ],
+  "credits": [
+    {
+      "name": "Masaabu-YT",
+      "link": "https://scratch.mit.edu/Masaabu-YT/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.40.0"
+}
