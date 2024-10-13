@@ -307,7 +307,7 @@ export default async ({ addon, msg, safeMsg }) => {
         studioPromotionsMsg: msg("studio-promotions"),
         studioHostTransfersMsg: msg("studio-host-transfers"),
         welcomeToScratchMsg: msg("welcome-to-scratch"),
-        acceptInviteButtonMsg: msg("accept")
+        acceptInviteButtonMsg: msg("accept"),
       },
     },
     watch: {
@@ -803,7 +803,7 @@ export default async ({ addon, msg, safeMsg }) => {
           else return 0;
         });
       },
-      async acceptStudioInvite(studioId,button) {
+      async acceptStudioInvite(studioId, button) {
         console.log(button);
         const xToken = await addon.auth.fetchXToken();
         const username = await addon.auth.fetchUsername();
@@ -820,22 +820,24 @@ export default async ({ addon, msg, safeMsg }) => {
           this.uiMessages.acceptInviteButtonMsg = msg("accepted");
           button.disabled = true;
         }
-            const addCurator = await fetch(`https://scratch.mit.edu/site-api/users/curators-in/${studioId}/add/?usernames=${username}`, {
-              method: "PUT",
-              headers: {
-                "x-csrftoken": csrfToken,
-                "x-requested-with": "XMLHttpRequest",
-              },
-            });
-            if(addCurator.status==200) {
-              this.uiMessages.acceptInviteButtonMsg = msg("accepted");
-              userProfile.invited = false;
-              button.disabled = true;
-            } else {
-              alert(msg("failed"));
-            }
+        const addCurator = await fetch(
+          `https://scratch.mit.edu/site-api/users/curators-in/${studioId}/add/?usernames=${username}`,
+          {
+            method: "PUT",
+            headers: {
+              "x-csrftoken": csrfToken,
+              "x-requested-with": "XMLHttpRequest",
+            },
+          }
+        );
+        if (addCurator.status == 200) {
+          this.uiMessages.acceptInviteButtonMsg = msg("accepted");
+          userProfile.invited = false;
+          button.disabled = true;
+        } else {
+          alert(msg("failed"));
+        }
       },
-
     },
   });
 };
