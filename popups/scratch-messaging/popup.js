@@ -815,9 +815,9 @@ export default async ({ addon, msg, safeMsg }) => {
         });
         let userProfile = await userProfileRes.json();
         if (userProfile.invited) {
-          this.uiMessages.acceptInviteButtonMsg = msg("accept");
+          button.innerText = msg("accept");
         } else {
-          this.uiMessages.acceptInviteButtonMsg = msg("accepted");
+          button.innerText = msg("accepted");
           button.disabled = true;
         }
         const addCurator = await fetch(
@@ -831,7 +831,7 @@ export default async ({ addon, msg, safeMsg }) => {
           }
         );
         if (addCurator.status == 200) {
-          this.uiMessages.acceptInviteButtonMsg = msg("accepted");
+          button.innerText = msg("accepted");
           userProfile.invited = false;
           button.disabled = true;
         } else {
