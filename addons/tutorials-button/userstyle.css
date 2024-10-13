@@ -1,7 +1,0 @@
-/* Hides the Tutorials button and its right divider. */
-[class*="menu-bar_main-menu"] > [class*="menu-bar_menu-bar-item"][class*="menu-bar_hoverable"],
-[class*="menu-bar_main-menu"]
-  > [class*="menu-bar_menu-bar-item"][class*="menu-bar_hoverable"]
-  + [class*="divider_divider"][class*="menu-bar_divider"] {
-  display: none;
-}

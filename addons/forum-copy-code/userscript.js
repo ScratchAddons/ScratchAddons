@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   while (true) {
     const codeBlock = await addon.tab.waitForElement("div.code", {
       markAsSeen: true,
@@ -6,7 +6,7 @@ export default async function ({ addon, global, console, msg }) {
 
     const copyCode = document.createElement("div"); //Div used to store the text
     copyCode.className = "sa-copyCodeDiv"; //Class
-    addon.tab.displayNoneWhileDisabled(copyCode, { display: "block" }); //Dynamic disable
+    addon.tab.displayNoneWhileDisabled(copyCode); //Dynamic disable
 
     const copyCodeButton = document.createElement("span"); //The actual button
     copyCodeButton.className = "sa-copyCodeButton"; //Class

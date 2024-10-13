@@ -1,0 +1,4 @@
+/* My Stuff */
+.media-stats span.stat:nth-child(5) {
+  display: none;
+}

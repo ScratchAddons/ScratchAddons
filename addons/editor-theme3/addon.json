@@ -7,34 +7,161 @@
     },
     {
       "name": "TheColaber",
-      "link": "https://scratch.mit.edu/users/TheColaber"
+      "link": "https://scratch.mit.edu/users/TheColaber/"
+    },
+    {
+      "name": "DNin01",
+      "link": "https://github.com/DNin01"
+    },
+    {
+      "name": "Shock59",
+      "link": "https://github.com/shock59"
+    },
+    { "name": "0znzw", "link": "https://scratch.mit.edu/users/0znzw" },
+    { "name": "Jazza", "link": "https://scratch.mit.edu/users/greeny--231" }
+  ],
+  "info": [
+    {
+      "id": "disablesMenuBar",
+      "type": "notice",
+      "text": "If you want to access Scratch's \"Color Mode\" menu, disable this feature."
+    },
+    {
+      "id": "aboutHighContrast",
+      "type": "info",
+      "text": "The new High Contrast block colors are available as a preset below."
+    },
+    {
+      "id": "whatsInsertionMarker",
+      "type": "info",
+      "text": "When dragging a block, an \"insertion marker\" is the shadow that appears when moved near to other blocks."
     }
   ],
   "latestUpdate": {
-    "version": "1.24.0",
-    "temporaryNotice": "New setting to enable changing the colors of blocks in the forums.",
-    "newSettings": ["forums"]
+    "isMajor": true,
+    "version": "1.39.0",
+    "newSettings": ["fillStyle", "fillOpacity", "strokeStyle", "strokeOpacity"]
   },
   "customCssVariables": [
     {
       "name": "inputColor-text",
       "value": {
-        "type": "textColor",
+        "type": "alphaThreshold",
         "source": {
+          "type": "settingValue",
+          "settingId": "input-color"
+        },
+        "opaque": {
+          "type": "textColor",
+          "source": {
+            "type": "settingValue",
+            "settingId": "input-color"
+          }
+        },
+        "transparent": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "text"
+          },
+          "options": {
+            "white": "#ffffff",
+            "black": "#575e75",
+            "colorOnWhite": "#575e75",
+            "colorOnBlack": "#ffffff"
+          }
+        }
+      }
+    },
+    {
+      "name": "inputColor-blackText",
+      "value": {
+        "type": "alphaThreshold",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input-color"
+        },
+        "opaque": {
+          "type": "textColor",
+          "black": "#000000",
+          "source": {
+            "type": "settingValue",
+            "settingId": "input-color"
+          }
+        },
+        "transparent": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "text"
+          },
+          "options": {
+            "white": "#ffffff",
+            "black": "#000000",
+            "colorOnWhite": "#000000",
+            "colorOnBlack": "#ffffff"
+          }
+        }
+      }
+    },
+    {
+      "name": "inputColor-editableLabel",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "text"
+          },
+          "options": {
+            "colorOnWhite": "#ffffff",
+            "colorOnBlack": "#282828"
+          },
+          "default": {
+            "type": "settingValue",
+            "settingId": "custom-color"
+          }
+        },
+        "transparentSource": {
           "type": "settingValue",
           "settingId": "input-color"
         }
       }
     },
     {
-      "name": "inputColor-forumText",
+      "name": "commentText",
       "value": {
         "type": "textColor",
-        "black": "#000000",
         "source": {
           "type": "settingValue",
-          "settingId": "input-color"
+          "settingId": "comment-color"
         }
+      }
+    },
+    {
+      "name": "commentTextTransparent",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.50)",
+        "white": "rgba(255, 255, 255, 0.50)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "comment-color"
+        }
+      }
+    },
+    {
+      "name": "commentBorder",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "comment-color"
+        },
+        "r": 0.7,
+        "g": 0.7,
+        "b": 0.7
       }
     }
   ],
@@ -55,15 +182,37 @@
       "matches": ["projects"]
     },
     {
+      "url": "black_text.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "text": "black" }
+      }
+    },
+    {
+      "url": "color_on_white.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "text": "colorOnWhite" }
+      }
+    },
+    {
+      "url": "color_on_black.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "text": "colorOnBlack" }
+      }
+    },
+    { "url": "insertion_marker.css", "matches": ["projects"] },
+    {
       "url": "forums/base.css",
-      "matches": ["editingScreens"],
+      "matches": ["https://scratch.mit.edu/discuss/*"],
       "if": {
         "settings": { "forums": true }
       }
     },
     {
       "url": "forums/black_text.css",
-      "matches": ["editingScreens"],
+      "matches": ["https://scratch.mit.edu/discuss/*"],
       "if": {
         "settings": {
           "forums": true,
@@ -73,7 +222,7 @@
     },
     {
       "url": "forums/color_on_white.css",
-      "matches": ["editingScreens"],
+      "matches": ["https://scratch.mit.edu/discuss/*"],
       "if": {
         "settings": {
           "forums": true,
@@ -83,7 +232,7 @@
     },
     {
       "url": "forums/color_on_black.css",
-      "matches": ["editingScreens"],
+      "matches": ["https://scratch.mit.edu/discuss/*"],
       "if": {
         "settings": {
           "forums": true,
@@ -184,7 +333,14 @@
       "name": "Block inputs",
       "id": "input-color",
       "type": "color",
-      "default": "#FFFFFF"
+      "default": "#FFFFFF",
+      "allowTransparency": true
+    },
+    {
+      "name": "Comments",
+      "id": "comment-color",
+      "type": "color",
+      "default": "#FEF49C"
     },
     {
       "name": "Text color",
@@ -211,19 +367,150 @@
       ]
     },
     {
+      "name": "Change the colors of variables and lists on the stage",
+      "id": "monitors",
+      "type": "boolean",
+      "default": false
+    },
+    {
       "name": "Change the colors of blocks in the forums",
       "id": "forums",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Insertion marker style",
+      "id": "fillStyle",
+      "type": "select",
+      "default": "gray",
+      "potentialValues": [
+        { "id": "none", "name": "None" },
+        { "id": "gray", "name": "Gray" },
+        { "id": "colored", "name": "Colored" }
+      ]
+    },
+    {
+      "name": "Insertion marker opacity",
+      "id": "fillOpacity",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 20,
+      "if": {
+        "settings": { "fillStyle": ["gray", "colored"] }
+      }
+    },
+    {
+      "name": "Insertion marker outline",
+      "id": "strokeStyle",
+      "type": "select",
+      "default": "none",
+      "potentialValues": [
+        { "id": "none", "name": "None" },
+        { "id": "gray", "name": "Gray" },
+        { "id": "colored", "name": "Colored" }
+      ]
+    },
+    {
+      "name": "Insertion marker outline opacity",
+      "id": "strokeOpacity",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 50,
+      "if": {
+        "settings": { "strokeStyle": ["gray", "colored"] }
+      }
     }
   ],
   "tags": ["editor", "theme", "codeEditor", "featured"],
   "enabledByDefault": false,
   "presets": [
     {
-      "name": "3.0 Tweaks",
+      "name": "High contrast",
+      "id": "contrast",
+      "description": "Scratch 3.0's high contrast block color palette",
+      "values": {
+        "motion-color": "#80B5FF",
+        "looks-color": "#CCB3FF",
+        "sounds-color": "#E19DE1",
+        "events-color": "#FFD966",
+        "control-color": "#FFBE4C",
+        "sensing-color": "#85C4E0",
+        "operators-color": "#7ECE7E",
+        "data-color": "#FFA54C",
+        "data-lists-color": "#FF9966",
+        "custom-color": "#FF99AA",
+        "Pen-color": "#13ECAF",
+        "sa-color": "#34E4D0",
+        "comment-color": "#FEF49C",
+        "input-color": "#FFFFFF",
+        "text": "black",
+        "monitors": true,
+        "fillStyle": "gray",
+        "fillOpacity": 20,
+        "strokeStyle": "none",
+        "strokeOpacity": 50
+      }
+    },
+    {
+      "name": "Dark",
+      "id": "new-dark",
+      "description": "Dark versions of the default colors that look good in dark themes",
+      "values": {
+        "motion-color": "#2461B7",
+        "looks-color": "#633EAC",
+        "sounds-color": "#863286",
+        "events-color": "#AE8500",
+        "control-color": "#B07200",
+        "sensing-color": "#468CAF",
+        "operators-color": "#438C43",
+        "data-color": "#B46313",
+        "data-lists-color": "#A84210",
+        "custom-color": "#973545",
+        "Pen-color": "#2A7468",
+        "sa-color": "#2A797C",
+        "comment-color": "#423F24",
+        "input-color": "#FFFFFF",
+        "text": "white",
+        "monitors": false,
+        "fillStyle": "gray",
+        "fillOpacity": 20,
+        "strokeStyle": "none",
+        "strokeOpacity": 50
+      }
+    },
+    {
+      "name": "Darker",
+      "id": "dark",
+      "description": "Even darker versions of the default colors",
+      "values": {
+        "motion-color": "#004099",
+        "looks-color": "#220066",
+        "sounds-color": "#752475",
+        "events-color": "#997300",
+        "control-color": "#664100",
+        "sensing-color": "#1f5f7a",
+        "operators-color": "#235c23",
+        "data-color": "#b35900",
+        "data-lists-color": "#993300",
+        "custom-color": "#99004d",
+        "Pen-color": "#064734",
+        "sa-color": "#166966",
+        "comment-color": "#423f24",
+        "input-color": "#202020",
+        "text": "white",
+        "monitors": false,
+        "fillStyle": "gray",
+        "fillOpacity": 20,
+        "strokeStyle": "none",
+        "strokeOpacity": 50
+      }
+    },
+    {
+      "name": "Scratch 3.0 tweaked",
       "id": "tweaks",
-      "description": "Events, Control, and Custom blocks with 2.0 inspired colors",
+      "description": "Scratch 3.0's block colors with Events, Control, and Custom blocks that resemble Scratch 2.0's colors",
       "values": {
         "motion-color": "#4C97FF",
         "looks-color": "#9966FF",
@@ -237,12 +524,18 @@
         "custom-color": "#5f49d8",
         "Pen-color": "#0FBD8C",
         "sa-color": "#29BEB8",
+        "comment-color": "#FEF49C",
         "input-color": "#FFFFFF",
-        "text": "white"
+        "text": "white",
+        "monitors": false,
+        "fillStyle": "gray",
+        "fillOpacity": 20,
+        "strokeStyle": "none",
+        "strokeOpacity": 50
       }
     },
     {
-      "name": "2.0 Colors",
+      "name": "Scratch 2.0 colors",
       "id": "original",
       "description": "The original block colors from Scratch 2.0",
       "values": {
@@ -258,51 +551,46 @@
         "custom-color": "#632d99",
         "Pen-color": "#0e9a6c",
         "sa-color": "#29beb8",
+        "comment-color": "#FFFFD2",
         "input-color": "#ffffff",
-        "text": "white"
-      }
-    },
-    {
-      "name": "Dark",
-      "id": "dark",
-      "description": "Dark versions of the default colors",
-      "values": {
-        "motion-color": "#004099",
-        "looks-color": "#220066",
-        "sounds-color": "#752475",
-        "events-color": "#997300",
-        "control-color": "#664100",
-        "sensing-color": "#1f5f7a",
-        "operators-color": "#235c23",
-        "data-color": "#b35900",
-        "data-lists-color": "#993300",
-        "custom-color": "#99004d",
-        "Pen-color": "#064734",
-        "sa-color": "#166966",
-        "input-color": "#202020",
-        "text": "white"
+        "text": "white",
+        "monitors": false,
+        "fillStyle": "gray",
+        "fillOpacity": 20,
+        "strokeStyle": "none",
+        "strokeOpacity": 50
       }
     },
     {
       "name": "Black",
       "id": "black",
-      "description": "Makes block backgrounds black",
+      "description": "Makes block backgrounds black and borders/text colored",
       "values": {
-        "motion-color": "#4C97FF",
-        "looks-color": "#9966FF",
-        "sounds-color": "#CF63CF",
-        "events-color": "#FFBF00",
-        "control-color": "#FFAB19",
-        "sensing-color": "#5CB1D6",
-        "operators-color": "#59C059",
-        "data-color": "#FF8C1A",
-        "data-lists-color": "#FF661A",
-        "custom-color": "#FF6680",
-        "Pen-color": "#0FBD8C",
-        "sa-color": "#29BEB8",
+        "motion-color": "#80B5FF",
+        "looks-color": "#CCB3FF",
+        "sounds-color": "#E19DE1",
+        "events-color": "#FFD966",
+        "control-color": "#FFBE4C",
+        "sensing-color": "#85C4E0",
+        "operators-color": "#7ECE7E",
+        "data-color": "#FFA54C",
+        "data-lists-color": "#FF9966",
+        "custom-color": "#FF99AA",
+        "Pen-color": "#13ECAF",
+        "sa-color": "#34E4D0",
+        "comment-color": "#FEF49C",
         "input-color": "#202020",
-        "text": "colorOnBlack"
+        "text": "colorOnBlack",
+        "monitors": false,
+        "fillStyle": "colored",
+        "fillOpacity": 5,
+        "strokeStyle": "colored",
+        "strokeOpacity": 50
       }
     }
-  ]
+  ],
+  "presetPreview": {
+    "type": "palette",
+    "colors": ["motion-color", "looks-color", "sounds-color", "events-color", "control-color", "sensing-color"]
+  }
 }

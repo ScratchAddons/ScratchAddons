@@ -40,10 +40,15 @@
   margin-left: 0;
 }
 
+#sidebar li.sub-list::before {
+  display: none;
+}
+
 .v-tabs li a {
   padding: 0.75em 1.5em;
   border: none;
   font-size: 12.8px;
+  font-weight: bold;
   line-height: normal;
   color: var(--darkWww-box-text, #575e75);
 }
@@ -57,7 +62,7 @@
 .v-tabs li.active:hover {
   background-color: transparent;
   border: none;
-  border-bottom: 3px solid #0fbd8c;
+  border-bottom: 3px solid var(--darkWww-box-greenText, #328554);
 }
 
 .button[data-control="load-more"] {

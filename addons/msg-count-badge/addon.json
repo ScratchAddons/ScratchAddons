@@ -2,8 +2,15 @@
   "name": "Message count on extension icon",
   "description": "Adds the current message count in the Scratch Addons icon.",
   "tags": ["popup", "recommended"],
-  "enabledByDefault": true,
+  "enabledByDefault": false,
   "versionAdded": "1.0.0",
+  "info": [
+    {
+      "type": "info",
+      "text": "You can use Do Not Disturb (right click extension icon \u2192 Do not disturb) to temporarily hide the message count.",
+      "id": "dndtohide"
+    }
+  ],
   "settings": [
     {
       "name": "Badge color",
@@ -60,7 +67,14 @@
     },
     {
       "name": "lisa_wolfgang",
-      "link": "https://scratch.mit.edu/users/lisa_wolfgang"
+      "link": "https://scratch.mit.edu/users/lisa_wolfgang/"
     }
-  ]
+  ],
+  "latestUpdate": {
+    "isMajor": true,
+    "version": "1.39.0",
+    "temporaryNotice": "This addon was automatically disabled for some users. You can reenable it to get it back."
+  },
+  "dynamicEnable": true,
+  "dynamicDisable": true
 }

@@ -1,0 +1,23 @@
+.user-info > .avatar {
+  margin-right: 0 !important;
+}
+.user-info > .profile-name {
+  display: none;
+}
+
+#topnav ul.account-nav .logged-in-user .dropdown-toggle {
+  font-size: 0 !important;
+}
+
+.sa-profile-name {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: normal;
+  line-height: normal;
+  padding-bottom: 8px;
+  white-space: normal;
+}
+
+.sa-compact-profile-icon {
+  margin-right: 0px !important;
+}

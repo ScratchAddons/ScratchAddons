@@ -1,41 +1,89 @@
-path.blocklyBlockBackground[fill="#FF6680"],
-path.blocklyBlockBackground[fill="#5CB1D6"],
-path.blocklyBlockBackground[fill="#FFBF00"],
-path.blocklyBlockBackground[fill="#29beb8"],
-g[data-category] > path.blocklyBlockBackground {
-  stroke: #0003;
-}
-g[data-argument-type="dropdown"] > path,
-g[data-argument-type="variable"] > path,
-path[data-argument-type="boolean"],
-g[data-shapes="c-block c-1 hat"] > g[data-shapes="stack"]:not(.blocklyDraggable) > path /* block preview in define block */ {
-  stroke: #0003;
-  fill: #0001;
-}
-g[data-argument-type="dropdown"] > rect,
-g[data-argument-type="variable"] > rect {
-  stroke: #0003;
-  fill: #0000;
-}
-g[data-argument-type*="text"] > path,
-[data-category] g > line {
-  stroke: #0002;
-}
-.scratchCategoryItemBubble {
-  border-color: #0003 !important;
-}
-
-.fieldTextInput {
-  border-color: #0003 !important;
-}
-
-.blocklyBlockBackground[fill="#FFFFFF"] {
-  fill: var(--editorTheme3-inputColor);
-}
 .blocklyEditableText > text {
   fill: var(--editorTheme3-inputColor-text);
 }
 .blocklyHtmlInput {
-  background-color: var(--editorTheme3-inputColor);
+  /* Hide the HTML input so that only the SVG part is visible.
+     This is needed for transparent inputs. */
+  background-color: transparent;
+  color: transparent;
+  caret-color: var(--editorTheme3-inputColor-text);
+}
+.sa-theme3-editable-label .blocklyHtmlInput {
+  /* Labels in custom block editor */
+  background-color: var(--editorTheme3-inputColor-editableLabel);
   color: var(--editorTheme3-inputColor-text);
+}
+
+/* Override Scratch's high contrast theme */
+.blocklyDropDownDiv .goog-menuitem {
+  color: white;
+}
+.blocklyDropDownDiv .blocklyText {
+  /* "Play note" dropdown */
+  fill: white;
+}
+.blocklyDropDownDiv .goog-menuitem-highlight,
+.blocklyDropDownDiv .goog-menuitem-hover,
+.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight {
+  background-color: var(--editorTheme3-hoveredItem, rgba(0, 0, 0, 0.2));
+}
+
+.scratchCommentRect {
+  fill: var(--editorTheme3-commentColor);
+}
+.scratchCommentBody,
+.scratchCommentTextarea {
+  background-color: var(--editorTheme3-commentColor);
+}
+.scratchWorkspaceCommentBorder {
+  stroke: var(--editorTheme3-commentBorder);
+}
+.scratchCommentTextarea::placeholder {
+  color: var(--editorTheme3-commentTextTransparent);
+}
+.scratchCommentText {
+  fill: var(--editorTheme3-commentText);
+  color: var(--editorTheme3-commentText);
+}
+
+[class*="monitor_value_"],
+[class*="monitor_large-value_"],
+[class*="monitor_list-value_"] {
+  background-color: var(--sa-monitor-background) !important;
+  border-color: var(--sa-monitor-border, rgba(0, 0, 0, 0.15));
+  color: var(--sa-monitor-text) !important;
+}
+[class*="monitor_list-input_"] {
+  color: inherit !important;
+}
+
+.sa-colormode-submenu li:nth-child(1),
+.sa-colormode-submenu li:nth-child(2) {
+  filter: opacity(0.5) grayscale(1);
+  cursor: default;
+}
+.sa-colormode-submenu .sa-theme3-managed {
+  filter: opacity(0.5);
+  cursor: default;
+}
+.sa-colormode-submenu li:nth-child(1) div img:first-child,
+.sa-colormode-submenu li:nth-child(2) div img:first-child,
+.sa-theme3-link div img:first-child {
+  visibility: hidden;
+}
+.sa-colormode-submenu li:nth-child(1):hover,
+.sa-colormode-submenu li:nth-child(2):hover,
+.sa-theme3-managed:hover {
+  background-color: transparent;
+}
+.sa-theme3-link .sa-theme3-new-tab {
+  margin-left: auto;
+  height: 1.25rem;
+  width: 1.25rem;
+  filter: var(--editorDarkMode-menuBar-filter, none);
+}
+[dir="rtl"] .sa-theme3-link .sa-theme3-new-tab {
+  margin-left: 0;
+  margin-right: auto;
+  transform: rotate(-90deg);
 }

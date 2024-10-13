@@ -1,13 +1,13 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console }) {
   await addon.tab.traps.getBlockly();
 
   let controlsRect;
   let previousIsHovered = false;
   const speeds = {
     none: "0s",
-    short: "0.25s",
-    default: "0.5s",
-    long: "1s",
+    short: "0.2s",
+    default: "0.3s",
+    long: "0.5s",
   };
 
   const customZoomAreaElement = document.createElement("div");
@@ -63,12 +63,22 @@ export default async function ({ addon, global, console }) {
     }
   }
 
-  await addon.tab.waitForElement(".blocklyZoom");
   if (document.querySelector('[class^="backpack_backpack-container"]')) {
     window.dispatchEvent(new Event("resize"));
   }
-  update();
-  addon.tab.addEventListener("urlChange", update);
   addon.settings.addEventListener("change", update);
   window.addEventListener("resize", onResize);
+  while (true) {
+    await addon.tab.waitForElement(".blocklyZoom", {
+      markAsSeen: true,
+      reduxEvents: [
+        "scratch-gui/mode/SET_PLAYER",
+        "scratch-gui/locales/SELECT_LOCALE",
+        "scratch-gui/theme/SET_THEME",
+        "fontsLoaded/SET_FONTS_LOADED",
+      ],
+      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+    });
+    update();
+  }
 }

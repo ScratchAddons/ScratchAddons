@@ -1,10 +1,10 @@
 {
   "name": "Customizable new sprite position",
-  "description": "Change the default x/y position of new sprites.",
+  "description": "Change where newly created sprites are placed on the stage.",
   "credits": [
     {
       "name": "pufferfish101007",
-      "link": "https://scratch.mit.edu/users/pufferfish101007"
+      "link": "https://scratch.mit.edu/users/pufferfish101007/"
     }
   ],
   "dynamicEnable": true,
@@ -34,12 +34,36 @@
     },
     {
       "id": "library",
-      "name": "Randomize the position of library sprites",
+      "name": "Place sprites from library at random position",
       "type": "boolean",
       "default": false
+    },
+    {
+      "id": "duplicate",
+      "name": "Position for duplicated sprites",
+      "type": "select",
+      "default": "randomize",
+      "potentialValues": [
+        {
+          "id": "custom",
+          "name": "Specified x/y position"
+        },
+        {
+          "id": "keep",
+          "name": "Same as original sprite"
+        },
+        {
+          "id": "randomize",
+          "name": "Random"
+        }
+      ]
     }
   ],
   "versionAdded": "1.13.0",
+  "latestUpdate": {
+    "version": "1.28.0",
+    "newSettings": ["duplicate"]
+  },
   "tags": ["editor", "featured"],
   "enabledByDefault": false
 }

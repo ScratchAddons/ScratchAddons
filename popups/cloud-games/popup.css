@@ -74,7 +74,7 @@ body {
   color: var(--blue-text);
 }
 
-.games {
+.game {
   border-radius: 4px;
   border: 1px solid var(--content-border);
   background: var(--content-background);
@@ -99,4 +99,22 @@ body {
   height: 14px;
   vertical-align: text-bottom;
   filter: var(--content-icon-filter);
+}
+
+.add-button {
+  text-align: center;
+  padding-top: 0.5rem;
+}
+
+.add-button .large-button {
+  display: inline-flex;
+}
+
+.opened {
+  border: 1px solid var(--blue-variant);
+}
+
+.opened .title {
+  background: var(--blue);
+  border-color: var(--blue-variant);
 }

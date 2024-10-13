@@ -131,10 +131,30 @@ export async function sendLegacyComment(addon, { resourceType, resourceId, conte
     });
 }
 
-export async function fetchComments(addon, { resourceType, resourceId, commentIds, page = 1, commentsObj = {} }) {
-  if (resourceType === "user")
-    return fetchLegacyComments(addon, { resourceType, resourceId, commentIds, page, commentsObj });
-  return fetchMigratedComments(addon, { resourceType, resourceId, commentIds, page, commentsObj });
+export async function fetchComments(addon, { resourceType, resourceId, commentMessages, page = 1, commentsObj = {} }) {
+  const commentIds = commentMessages.map((message) => message.comment_id);
+  let comments;
+  if (resourceType === "user") {
+    comments = await fetchLegacyComments(addon, { resourceType, resourceId, commentIds, page, commentsObj });
+  } else {
+    comments = await fetchMigratedComments(addon, { resourceType, resourceId, commentIds, page, commentsObj });
+  }
+  for (let message of commentMessages) {
+    if (!comments[`${resourceType[0]}_${message.comment_id}`]) {
+      // Fetching the full comment failed
+      // Show fragment instead
+      comments[`${resourceType[0]}_${message.comment_id}`] = {
+        author: message.actor_username,
+        authorId: message.actor_id,
+        content: message.comment_fragment,
+        date: message.datetime_created,
+        children: [],
+        childOf: null,
+        replyingTo: message.commentee_username,
+      };
+    }
+  }
+  return comments;
 }
 
 export async function fetchMigratedComments(
@@ -154,15 +174,15 @@ export async function fetchMigratedComments(
       : `https://api.scratch.mit.edu/studios/${resourceId}/comments/${commId}`;
   const getRepliesUrl = (commId, offset) =>
     resourceType === "project"
-      ? `https://api.scratch.mit.edu/users/${projectAuthor}/projects/${resourceId}/comments/${commId}/replies?offset=${offset}&limit=40&nocache=${Date.now()}`
-      : `https://api.scratch.mit.edu/studios/${resourceId}/comments/${commId}/replies?offset=${offset}&limit=40&nocache=${Date.now()}`;
+      ? `https://api.scratch.mit.edu/users/${projectAuthor}/projects/${resourceId}/comments/${commId}/replies?offset=${offset}&limit=40`
+      : `https://api.scratch.mit.edu/studios/${resourceId}/comments/${commId}/replies?offset=${offset}&limit=40`;
   for (const commentId of commentIds) {
     if (commentsObj[`${resourceType[0]}_${commentId}`]) continue;
 
     const res = await fetch(getCommentUrl(commentId));
 
     if (!res.ok) {
-      if (res.status === 404) continue;
+      if (res.status === 404 || res.status === 403) continue;
       throw HTTPError.fromResponse(`Error when fetching comment ${resourceType}/${commentId}`, res);
     }
     const json = await res.json();
@@ -197,7 +217,7 @@ export async function fetchMigratedComments(
     const getReplies = async (offset) => {
       const repliesRes = await fetch(getRepliesUrl(parentId, offset));
       if (!repliesRes.ok) {
-        if (repliesRes.status === 404) return;
+        if (repliesRes.status === 404 || repliesRes.status === 403) return null;
         throw HTTPError.fromResponse(`Ignoring comment ${resourceType}/${commentId}`, repliesRes);
       }
       const repliesJson = await repliesRes.json();
@@ -213,6 +233,7 @@ export async function fetchMigratedComments(
     if (parentComment.reply_count > 0) {
       while (lastRepliesLength === 40) {
         const newReplies = await getReplies(offset);
+        if (!Array.isArray(newReplies)) break;
         newReplies.forEach((c) => replies.push(c));
         lastRepliesLength = newReplies.length;
         offset += 40;
@@ -264,10 +285,9 @@ export async function fetchMigratedComments(
 }
 
 export async function fetchLegacyComments(addon, { resourceType, resourceId, commentIds, page = 1, commentsObj = {} }) {
-  const res = await fetch(
-    `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/?page=${page}&nocache=${Date.now()}`,
-    { credentials: "omit" }
-  );
+  const res = await fetch(`https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/?page=${page}`, {
+    credentials: "omit",
+  });
   if (!res.ok) {
     console.warn(`Ignoring comments ${resourceType}/${resourceId} page ${page}, status ${res.status}`);
     return commentsObj;

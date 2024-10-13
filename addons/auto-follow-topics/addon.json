@@ -1,0 +1,21 @@
+{
+  "name": "Follow topics after posting",
+  "description": "Automatically follow forum topics you post on.",
+  "tags": ["forums", "community"],
+  "credits": [
+    {
+      "name": "Chiroyce",
+      "link": "https://github.com/Chiroyce1"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["topics"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "enabledByDefault": false,
+  "versionAdded": "1.32.0"
+}

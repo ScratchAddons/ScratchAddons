@@ -2,7 +2,8 @@ import { isPaused, setPaused, onPauseChanged, setup } from "./module.js";
 import createLogsTab from "./logs.js";
 import createThreadsTab from "./threads.js";
 import createPerformanceTab from "./performance.js";
-import DevtoolsUtils from "../editor-devtools/blockly/Utils.js";
+import Utils from "../find-bar/blockly/Utils.js";
+import addSmallStageClass from "../../libraries/common/cs/small-stage.js";
 
 const removeAllChildren = (element) => {
   while (element.firstChild) {
@@ -10,8 +11,8 @@ const removeAllChildren = (element) => {
   }
 };
 
-export default async function ({ addon, global, console, msg }) {
-  setup(addon.tab.traps.vm);
+export default async function ({ addon, console, msg }) {
+  setup(addon);
 
   let logsTab;
   const messagesLoggedBeforeLogsTabLoaded = [];
@@ -91,11 +92,7 @@ export default async function ({ addon, global, console, msg }) {
   debuggerButton.addEventListener("click", () => setInterfaceVisible(true));
 
   const setHasUnreadMessage = (unreadMessage) => {
-    // setting image.src is slow, only do it when necessary
-    const newImage = addon.self.dir + (unreadMessage ? "/icons/debug-unread.svg" : "/icons/debug.svg");
-    if (debuggerButtonImage.src !== newImage) {
-      debuggerButtonImage.src = newImage;
-    }
+    debuggerButtonContent.classList.toggle("sa-debugger-unread", unreadMessage);
   };
 
   const interfaceContainer = Object.assign(document.createElement("div"), {
@@ -310,17 +307,27 @@ export default async function ({ addon, global, console, msg }) {
     // Don't scroll to blocks in the flyout
     if (block.workspace.isFlyout) return;
 
-    new DevtoolsUtils(addon).scrollBlockIntoView(blockId);
+    new Utils(addon).scrollBlockIntoView(blockId);
   };
 
-  // May be slightly incorrect in some edge cases.
-  const formatProcedureCode = (proccode) => proccode.replace(/%[nbs]/g, "()");
+  /**
+   * @param {string} procedureCode
+   * @returns {string}
+   */
+  const formatProcedureCode = (procedureCode) => {
+    const customBlock = addon.tab.getCustomBlock(procedureCode);
+    if (customBlock) {
+      procedureCode = customBlock.displayName;
+    }
+    // May be slightly incorrect in some edge cases.
+    return procedureCode.replace(/%[nbs]/g, "()");
+  };
 
   // May be slightly incorrect in some edge cases.
   const formatBlocklyBlockData = (jsonData) => {
     // For sample jsonData, see:
-    // https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/motion.js
-    // https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/control.js
+    // https://github.com/scratchfoundation/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/motion.js
+    // https://github.com/scratchfoundation/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/control.js
 
     const processSegment = (index) => {
       const message = jsonData[`message${index}`];
@@ -340,9 +347,11 @@ export default async function ({ addon, global, console, msg }) {
           } else if (type === "field_image") {
             const src = argInfo.src;
             if (src.endsWith("rotate-left.svg")) {
-              formattedMessage += "↩";
+              formattedMessage += msg("/_general/blocks/anticlockwise");
             } else if (src.endsWith("rotate-right.svg")) {
-              formattedMessage += "↪";
+              formattedMessage += msg("/_general/blocks/clockwise");
+            } else if (src.endsWith("green-flag.svg")) {
+              formattedMessage += msg("/_general/blocks/green-flag");
             }
           } else {
             formattedMessage += "()";
@@ -382,7 +391,6 @@ export default async function ({ addon, global, console, msg }) {
     let text;
     let category;
     let shape;
-    let color;
     if (
       block.opcode === "data_variable" ||
       block.opcode === "data_listcontents" ||
@@ -404,7 +412,6 @@ export default async function ({ addon, global, console, msg }) {
       const customBlock = addon.tab.getCustomBlock(proccode);
       if (customBlock) {
         category = "addon-custom-block";
-        color = customBlock.color;
       } else {
         category = "more";
       }
@@ -418,7 +425,7 @@ export default async function ({ addon, global, console, msg }) {
       );
       category = "more";
     } else {
-      // Try to call things like https://github.com/LLK/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/operators.js#L36
+      // Try to call things like https://github.com/scratchfoundation/scratch-blocks/blob/0bd1a17e66a779ec5d11f4a00c43784e3ac7a7b8/blocks_vertical/operators.js#L36
       var jsonData;
       const fakeBlock = {
         jsonInit(data) {
@@ -440,7 +447,8 @@ export default async function ({ addon, global, console, msg }) {
       if (!text) {
         return null;
       }
-      category = jsonData.category;
+      // jsonData.extensions is not guaranteed to exist
+      category = jsonData.extensions?.includes("scratch_extension") ? "pen" : jsonData.category;
       const isStatement =
         (jsonData.extensions &&
           (jsonData.extensions.includes("shape_statement") ||
@@ -454,33 +462,12 @@ export default async function ({ addon, global, console, msg }) {
       return null;
     }
 
-    if (!color) {
-      const blocklyCategoryMap = {
-        "data-lists": "data_lists",
-        list: "data_lists",
-        events: "event",
-      };
-      const blocklyColor = ScratchBlocks.Colours[blocklyCategoryMap[category] || category];
-      if (blocklyColor) {
-        color = blocklyColor.primary;
-      } else {
-        // block probably belongs to an extension
-        color = ScratchBlocks.Colours.pen.primary;
-      }
-    }
-
     const element = document.createElement("span");
-    element.className = "sa-debugger-block-preview";
+    element.className = "sa-debugger-block-preview sa-block-color";
     element.textContent = text;
-    element.style.backgroundColor = color;
     element.dataset.shape = shape;
 
-    // data-category is used for editor-theme3 compatibility
-    const colorCategoryMap = {
-      list: "data-lists",
-      more: "custom",
-    };
-    element.dataset.category = colorCategoryMap[category] || category;
+    element.classList.add(`sa-block-color-${category}`);
 
     return element;
   };
@@ -543,20 +530,7 @@ export default async function ({ addon, global, console, msg }) {
   }
   setActiveTab(allTabs[0]);
 
-  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
-    document.body.classList.add("sa-debugger-small");
-  }
-  document.addEventListener(
-    "click",
-    (e) => {
-      if (e.target.closest("[class*='stage-header_stage-button-first']")) {
-        document.body.classList.add("sa-debugger-small");
-      } else if (e.target.closest("[class*='stage-header_stage-button-last']")) {
-        document.body.classList.remove("sa-debugger-small");
-      }
-    },
-    { capture: true }
-  );
+  addSmallStageClass();
 
   const ogGreenFlag = vm.runtime.greenFlag;
   vm.runtime.greenFlag = function (...args) {
@@ -640,18 +614,23 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   while (true) {
-    await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {
-      markAsSeen: true,
-      reduxEvents: [
-        "scratch-gui/mode/SET_PLAYER",
-        "scratch-gui/mode/SET_FULL_SCREEN",
-        "fontsLoaded/SET_FONTS_LOADED",
-        "scratch-gui/locales/SELECT_LOCALE",
-      ],
-    });
+    await addon.tab.waitForElement(
+      // Full screen button
+      '[class^="stage-header_stage-size-row"] [class^="button_outlined-button"], [class*="stage-header_unselect-wrapper_"] > [class^="button_outlined-button"]',
+      {
+        markAsSeen: true,
+        reduxEvents: [
+          "scratch-gui/mode/SET_PLAYER",
+          "scratch-gui/mode/SET_FULL_SCREEN",
+          "fontsLoaded/SET_FONTS_LOADED",
+          "scratch-gui/locales/SELECT_LOCALE",
+        ],
+      }
+    );
     if (addon.tab.editorMode === "editor") {
       addon.tab.appendToSharedSpace({ space: "stageHeader", element: debuggerButtonOuter, order: 0 });
     } else {
+      debuggerButtonOuter.remove();
       setInterfaceVisible(false);
     }
   }

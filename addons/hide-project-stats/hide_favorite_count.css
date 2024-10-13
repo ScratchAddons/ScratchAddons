@@ -1,7 +1,18 @@
 .project-favorites {
-  visibility: hidden;
+  font-size: 0;
+  padding-right: 1rem;
 }
 
-.project-favorites::before {
-  visibility: visible;
+.sa-stat-display .project-favorites {
+  font-size: 16px;
+  padding-right: 2rem;
+}
+
+.project-favorites.hidden {
+  display: none;
+}
+
+/* My Stuff */
+.media-stats span.stat:nth-child(4) {
+  display: none;
 }

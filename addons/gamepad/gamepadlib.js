@@ -131,6 +131,8 @@ const padWithEmptyMappings = (array, length) => {
   return array;
 };
 
+const createEmptyMappingList = (length) => padWithEmptyMappings([], length);
+
 const getMovementConfiguration = (usedKeys) => ({
   usesArrows:
     usedKeys.has("ArrowUp") || usedKeys.has("ArrowDown") || usedKeys.has("ArrowRight") || usedKeys.has("ArrowLeft"),
@@ -151,16 +153,22 @@ class GamepadData {
   }
 
   resetMappings() {
+    this.hints = this.gamepadLib.getHints();
     this.buttonMappings = this.getDefaultButtonMappings().map(transformAndCopyMapping);
     this.axesMappings = this.getDefaultAxisMappings().map(transformAndCopyMapping);
   }
 
+  clearMappings() {
+    this.buttonMappings = createEmptyMappingList(this.gamepad.buttons.length);
+    this.axesMappings = createEmptyMappingList(this.gamepad.axes.length);
+  }
+
   getDefaultButtonMappings() {
     let buttons;
-    if (this.gamepadLib.hints.importedSettings) {
-      buttons = this.gamepadLib.hints.importedSettings.buttons;
+    if (this.hints.importedSettings) {
+      buttons = this.hints.importedSettings.buttons;
     } else {
-      const usedKeys = this.gamepadLib.hints.usedKeys;
+      const usedKeys = this.hints.usedKeys;
       const alreadyUsedKeys = new Set();
       const { usesArrows, usesWASD } = getMovementConfiguration(usedKeys);
       if (usesWASD) {
@@ -352,14 +360,14 @@ class GamepadData {
 
   getDefaultAxisMappings() {
     let axes = [];
-    if (this.gamepadLib.hints.importedSettings) {
-      axes = this.gamepadLib.hints.importedSettings.axes;
+    if (this.hints.importedSettings) {
+      axes = this.hints.importedSettings.axes;
     } else {
       // Only return default axis mappings when there are 4 axes, like an xbox controller
       // If there isn't exactly 4, we can't really predict what the axes mean
       // Some controllers map the dpad to *both* buttons and axes at the same time, which would cause conflicts.
       if (this.gamepad.axes.length === 4) {
-        const usedKeys = this.gamepadLib.hints.usedKeys;
+        const usedKeys = this.hints.usedKeys;
         const { usesArrows, usesWASD } = getMovementConfiguration(usedKeys);
         if (usesWASD) {
           axes.push(defaultAxesMappings.wasd[0]);
@@ -414,8 +422,6 @@ class GamepadLib extends EventTarget {
 
     this.connectCallbacks = [];
 
-    this.hints = defaultHints();
-
     this.keysPressedThisFrame = new Set();
     this.oldKeysPressed = new Set();
 
@@ -444,26 +450,28 @@ class GamepadLib extends EventTarget {
     });
   }
 
-  ensureHintsGenerated() {
-    if (this.hints.generated) {
-      return;
-    }
-    if (this.getHintsLazily) {
-      Object.assign(this.hints, this.getHintsLazily());
-    }
-    this.hints.generated = true;
+  getHints() {
+    return Object.assign(defaultHints(), this.getUserHints());
+  }
+
+  getUserHints() {
+    // to be overridden by users
+    return {};
   }
 
   resetControls() {
-    this.hints = defaultHints();
-    this.ensureHintsGenerated();
     for (const gamepad of this.gamepads.values()) {
       gamepad.resetMappings();
     }
   }
 
+  clearControls() {
+    for (const gamepad of this.gamepads.values()) {
+      gamepad.clearMappings();
+    }
+  }
+
   handleConnect(e) {
-    this.ensureHintsGenerated();
     for (const callback of this.connectCallbacks) {
       callback();
     }
@@ -641,11 +649,16 @@ GamepadLib.browserHasBrokenGamepadAPI = () => {
   if (!navigator.getGamepads) {
     return true;
   }
-  // Firefox on Linux has a broken gamepad API implementation that results in strange and sometimes unusable mappings
-  // https://bugzilla.mozilla.org/show_bug.cgi?id=1643358
+  // Firefox on Linux before version 123 has a broken gamepad API that results in strange and unusable mappings
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=1680982
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1643835
   if (navigator.userAgent.includes("Firefox") && navigator.userAgent.includes("Linux")) {
-    return true;
+    const agentMatch = navigator.userAgent.match(/Firefox\/(\d+)/);
+    // If we couldn't find the version number, we'll assume that this is some distant future version of
+    // Firefox that we just can't comprehend with the technology of today. Surely gamepad will work well
+    // by then.
+    const firefoxMajorVersion = agentMatch ? agentMatch[1] : Infinity;
+    return firefoxMajorVersion < 123;
   }
   // Firefox on macOS has other bugs that result in strange and unusable mappings
   // eg. https://bugzilla.mozilla.org/show_bug.cgi?id=1434408
@@ -688,7 +701,7 @@ class GamepadEditor extends EventTarget {
     this.onSelectorChange = this.onSelectorChange.bind(this);
     this.onGamepadsChange = this.onGamepadsChange.bind(this);
 
-    this.selector.onchange = this.onSelectorChange;
+    this.selector.addEventListener("change", this.onSelectorChange);
     this.gamepadLib.addEventListener("gamepadconnected", this.onGamepadsChange);
     this.gamepadLib.addEventListener("gamepaddisconnected", this.onGamepadsChange);
 

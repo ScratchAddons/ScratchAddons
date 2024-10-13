@@ -12,18 +12,31 @@
       "name": "Hans5958",
       "note": "remake",
       "id": "remake"
+    },
+    {
+      "name": "ErrorGamer2000",
+      "link": "https://github.com/ErrorGamer2000",
+      "note": "update",
+      "id": "update"
+    }
+  ],
+  "info": [
+    {
+      "id": "privacy",
+      "type": "notice",
+      "text": "The \"Use Scratch username\" setting will send your Scratch username to TurboWarp.org for use in cloud data. TurboWarp has separate cloud data servers, so the cloud variables will be different than the ones on the Scratch player."
     }
   ],
   "userscripts": [
     {
       "url": "script.js",
-      "matches": ["https://scratch.mit.edu/users/*"]
+      "matches": ["profiles"]
     }
   ],
   "userstyles": [
     {
       "url": "style.css",
-      "matches": ["https://scratch.mit.edu/users/*"]
+      "matches": ["profiles"]
     }
   ],
   "settings": [
@@ -35,13 +48,13 @@
     },
     {
       "id": "alternativePlayer",
-      "name": "Alternative player",
+      "name": "Project player",
       "type": "select",
       "default": "none",
       "potentialValues": [
         {
           "id": "none",
-          "name": "None"
+          "name": "Scratch"
         },
         {
           "id": "turbowarp",
@@ -55,16 +68,7 @@
     },
     {
       "id": "autoPlay",
-      "name": "Auto-play projects (for alternative players)",
-      "type": "boolean",
-      "default": false,
-      "if": {
-        "settings": { "alternativePlayer": ["turbowarp", "forkphorus"] }
-      }
-    },
-    {
-      "id": "forceAlternative",
-      "name": "Force using alternative player",
+      "name": "Auto-play projects",
       "type": "boolean",
       "default": false,
       "if": {
@@ -73,15 +77,27 @@
     },
     {
       "id": "enableTWAddons",
-      "name": "Enable TurboWarp addons",
+      "name": "Enable addons",
       "type": "boolean",
       "default": true,
       "if": {
-        "settings": { "alternativePlayer": ["turbowarp"] }
+        "settings": { "alternativePlayer": "turbowarp" }
+      }
+    },
+    {
+      "id": "shareUsername",
+      "name": "Use Scratch username",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": { "alternativePlayer": "turbowarp" }
       }
     }
   ],
   "tags": ["community", "profiles", "featured"],
   "versionAdded": "1.3.0",
-  "enabledByDefault": false
+  "latestUpdate": {
+    "version": "1.33.0",
+    "newSettings": ["shareUsername"]
+  }
 }

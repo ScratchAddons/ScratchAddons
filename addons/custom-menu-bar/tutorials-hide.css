@@ -1,0 +1,8 @@
+/*
+  file-group is either the left section or the tutorials section.
+  The left section starts with the Scratch logo, which is not hoverable.
+*/
+[class*="menu-bar_file-group_"] > [class*="menu-bar_hoverable_"]:first-child,
+[class*="menu-bar_divider"] {
+  display: none;
+}

@@ -1,1 +1,1 @@
-{"search-profile/profile":"Perfil","search-profile/invalid-username":"\"{username}\" no es un nombre de usuario válido","search-profile/@name":"Buscar perfil","search-profile/@description":"Le permite ir a un perfil cuando busca su nombre de usuario en Scratch."}
+{"search-profile/profile":"Perfil","search-profile/invalid-username":"\"{username}\" no es un nombre de usuario válido o no existe la cuenta","search-profile/@name":"Búsqueda por nombre de usuario","search-profile/@description":"Le permite ir a un perfil cuando busca su nombre de usuario en Scratch."}

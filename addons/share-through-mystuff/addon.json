@@ -1,0 +1,28 @@
+{
+  "name": "Share through My Stuff",
+  "description": "Share projects through the My Stuff page.",
+  "credits": [
+    {
+      "name": "Steve0Greatness",
+      "link": "https://scratch.mit.edu/users/Steve0Greatness/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/mystuff/*"]
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/mystuff/*"],
+      "runAtComplete": true
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "tags": ["community"],
+  "versionAdded": "1.31.0",
+  "enabledByDefault": false
+}

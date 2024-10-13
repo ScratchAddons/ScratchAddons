@@ -1,0 +1,20 @@
+{
+  "paint-snap/toggle": "Toggle Snapping",
+  "paint-snap/settings": "Snap Settings",
+  "paint-snap/snapTo": "Snap to:",
+  "paint-snap/pageEdges": "Edges of the page",
+  "paint-snap/pageCenter": "Center of the page",
+  "paint-snap/pageAxes": "Page x and y axes",
+  "paint-snap/pageCorners": "Corners of the page",
+  "paint-snap/objectEdges": "Edges of objects",
+  "paint-snap/objectCenters": "Centers of objects",
+  "paint-snap/objectMidlines": "Midlines of objects",
+  "paint-snap/objectCorners": "Corners of objects",
+  "paint-snap/snapFrom": "Snap from:",
+  "paint-snap/boxCenter": "Center of selection",
+  "paint-snap/boxCorners": "Corners of selection",
+  "paint-snap/boxEdgeMids": "Selection edge midpoints",
+  "paint-snap/threshold": "Snapping distance",
+  "paint-snap/on": "On",
+  "paint-snap/off": "Off"
+}

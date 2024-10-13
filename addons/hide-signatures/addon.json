@@ -1,10 +1,10 @@
 {
-  "name": "Hide signatures on forums",
+  "name": "Hide forum signatures",
   "description": "Hides signatures in forum posts and adds a \"Show signature\" button.",
   "credits": [
     {
-      "name": "Verixion",
-      "link": "https://scratch.mit.edu/users/Verixion/"
+      "name": "Weredime (9gr)",
+      "link": "https://scratch.mit.edu/users/9gr/"
     }
   ],
   "userscripts": [

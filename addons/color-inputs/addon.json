@@ -1,6 +1,6 @@
 {
-  "name": "Color picker inputs",
-  "description": "Allows setting an exact value (0-100) for each slider in the costume editor color picker.",
+  "name": "Number inputs in color picker",
+  "description": "Lets you set an exact value (0-100) for each slider in the costume editor color picker by typing in a number.",
   "credits": [
     {
       "name": "TheColaber",

@@ -1,1 +1,1 @@
-{"color-inputs/@name":"Renk seçme girişleri","color-inputs/@description":"Kostüm düzenleyici içindeki renk seçicideki her kaydırıcı için tam bir değer (0-100) ayarlamaya izin verir."}
+{"color-inputs/@name":"Renk seçicide sayı girdileri","color-inputs/@description":"Kostüm düzenleyici renk seçiciye bir değer girerek her ayar için tam bir değer (0-100) belirlemenize izin verir."}

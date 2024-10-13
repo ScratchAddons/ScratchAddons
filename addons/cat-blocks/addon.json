@@ -1,10 +1,10 @@
 {
   "name": "Cat blocks",
-  "description": "Brings back editor cat hat blocks from April Fools 2020.",
+  "description": "Brings back editor cat hat blocks that were first introduced for April Fools' Day 2020.",
   "credits": [
     {
       "name": "TheColaber",
-      "link": "https://scratch.mit.edu/users/TheColaber"
+      "link": "https://scratch.mit.edu/users/TheColaber/"
     },
     {
       "name": "GarboMuffin"
@@ -18,8 +18,8 @@
   ],
   "info": [
     {
-      "type": "warning",
-      "text": "The \"Watch mouse cursor\" option may impact performance when the editor is open.",
+      "type": "notice",
+      "text": "The \"watch mouse cursor\" setting may impact performance when the editor is open.",
       "id": "watch"
     }
   ],
@@ -32,7 +32,7 @@
     }
   ],
   "versionAdded": "1.14.0",
-  "tags": ["editor", "codeEditor", "featured"],
+  "tags": ["editor", "codeEditor", "theme", "featured"],
   "enabledByDefault": false,
   "libraries": ["scratch-blocks"]
 }

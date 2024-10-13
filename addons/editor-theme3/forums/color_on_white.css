@@ -39,8 +39,10 @@
   flood-opacity: 0.3;
 }
 
-.sb-label {
-  fill: black;
+.sb-comment,
+.sb3-comment {
+  fill: white;
+  stroke: var(--editorTheme3-commentColor);
 }
 #sb3-dropdownArrow path {
   fill: #575e75;

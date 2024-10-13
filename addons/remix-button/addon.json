@@ -1,10 +1,10 @@
 {
-  "name": "Remix button in own projects",
+  "name": "Remix own projects",
   "description": "Adds the Remix button to your own projects.",
   "credits": [
     {
-      "name": "Verixion",
-      "link": "https://scratch.mit.edu/users/Verixion/"
+      "name": "Weredime (9gr)",
+      "link": "https://scratch.mit.edu/users/9gr/"
     }
   ],
   "userscripts": [

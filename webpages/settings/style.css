@@ -22,7 +22,6 @@ body {
   color: var(--white-text);
   display: flex;
   align-items: center;
-  padding: 0 14px;
   box-shadow: var(--large-shadow);
   user-select: none;
   position: relative;
@@ -36,13 +35,16 @@ h1 {
 }
 
 .navbar a {
-  height: 30px;
+  line-height: 0;
 }
 
 .logo {
-  height: 30px;
-  width: 30px;
-  margin-inline-end: 9px;
+  height: 25px;
+  margin: 0 20px;
+}
+.logo.header-button {
+  margin: 0;
+  padding: 17.5px 20px;
 }
 
 .main {
@@ -79,17 +81,12 @@ h1 {
 }
 
 @keyframes addonBlink {
-  10% {
+  0% {
     border: 1px solid var(--content-border);
-  }
-  25% {
-    border: 1px solid var(--brand-orange);
   }
   50% {
-    border: 1px solid var(--content-border);
-  }
-  75% {
-    border: 1px solid var(--brand-orange);
+    border: 1px solid var(--orange);
+    filter: drop-shadow(0px 0px 4px var(--orange));
   }
   100% {
     border: 1px solid var(--content-border);
@@ -113,31 +110,6 @@ h1 {
   vertical-align: bottom;
 }
 
-.large-button {
-  color: var(--content-text);
-  background: var(--button-background);
-  border: 1px solid var(--control-border);
-  padding: 0 12px;
-  border-radius: 4px;
-  transition: 0.2s ease;
-  height: 32px;
-  box-sizing: border-box;
-  font-family: inherit;
-  font-size: 12px;
-}
-.large-button:hover:not([disabled]) {
-  background: var(--button-hover-background);
-  cursor: pointer;
-}
-.large-button:focus-visible {
-  outline: none;
-  border-color: var(--brand-orange);
-  box-shadow: var(--input-focus-shadow);
-}
-.large-button > * {
-  vertical-align: middle;
-}
-
 .clear-button {
   padding-inline: 7px;
   border-radius: 0 4px 4px 0;
@@ -159,24 +131,34 @@ h1 {
 .reverted {
   transform: scaleY(-1);
 }
-
+.header-button {
+  cursor: pointer;
+  padding: 17.5px;
+  line-height: 0;
+  transition: 0.2s ease;
+}
+.header-button:hover {
+  background: var(--header-hover-darken);
+}
 .theme-switch {
   height: 25px;
-  right: 25px;
-  position: fixed;
-  cursor: pointer;
 }
-[dir="rtl"] .theme-switch {
+.header-end {
+  right: 0;
+  position: fixed;
+}
+[dir="rtl"] .header-end {
   right: auto;
-  left: 25px;
+  left: 0;
 }
 
 .hidden-button {
   /* needs !important because it conflicts with display: block */
   display: none !important;
 }
-#confirmImport {
-  border-color: var(--brand-orange);
+#confirmImport,
+#applyLanguageSettingsButton {
+  border-color: var(--orange);
 }
 
 #search-not-found {
@@ -275,11 +257,16 @@ body.iframe .addon-setting.boolean-setting .setting-label {
 }
 body.iframe .presets-column > .setting-label {
   margin-inline-start: 0;
+  margin-top: 10px;
   margin-bottom: 0;
+  width: 100%;
 }
 body.iframe .presets-column > .addon-setting {
   margin: 5px 0;
   margin-inline-end: 10px;
+}
+body.iframe .presets-column > .addon-setting:last-child {
+  margin-inline-end: 0;
 }
 
 body.iframe .addons-container {
@@ -333,13 +320,18 @@ body.iframe .search-box input {
 }
 
 .permissions div.main {
-  justify-content: center;
-  display: grid;
-  grid-template-rows: 14rem 10rem;
+  display: block;
+  box-sizing: border-box;
+  max-width: fit-content;
+  margin: auto;
+  padding: 2rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-text) transparent;
 }
 
 .permissions-block {
-  margin-top: 3rem;
+  margin-top: 1rem;
   font-size: 1.25rem;
 }
 
@@ -351,6 +343,7 @@ body.iframe .search-box input {
 .permissions-steps {
   display: flex;
   align-items: flex-end;
+  gap: 2rem;
 }
 
 .permissions-steps > div {
@@ -359,11 +352,15 @@ body.iframe .search-box input {
   align-items: center;
 }
 
-.permissions-steps > div:not(:last-child) {
-  margin-right: 2rem;
+@media (max-width: 1000px) {
+  .permissions-steps {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 #permissionsBtn {
+  display: block;
   height: 6rem;
   width: 18rem;
   font-size: 2.5rem;
@@ -371,7 +368,8 @@ body.iframe .search-box input {
 }
 
 #screenshot {
-  height: 10rem;
+  width: 24rem;
+  max-width: 100%;
 }
 
 color-picker {
@@ -398,7 +396,11 @@ button.setting-input.color.open {
   background: linear-gradient(45deg, #777 25%, transparent 25%), linear-gradient(-45deg, #777 25%, transparent 25%),
     linear-gradient(45deg, transparent 75%, #777 75%), linear-gradient(-45deg, transparent 75%, #777 75%);
   background-size: 6px 6px;
-  background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
+  background-position:
+    0 0,
+    0 3px,
+    3px -3px,
+    -3px 0px;
   border-radius: 5px;
   background-color: white;
   display: flex;

@@ -1,0 +1,5 @@
+{
+  "rename-broadcasts/RENAME_BROADCAST": "Rename message",
+  "rename-broadcasts/RENAME_BROADCAST_TITLE": "Rename all \"{name}\" messages to:",
+  "rename-broadcasts/RENAME_BROADCAST_MODAL_TITLE": "Rename Message"
+}

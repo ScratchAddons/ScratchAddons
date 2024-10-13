@@ -7,7 +7,7 @@
     },
     {
       "name": "pufferfish101007",
-      "link": "https://scratch.mit.edu/users/pufferfish101007"
+      "link": "https://scratch.mit.edu/users/pufferfish101007/"
     }
   ],
   "dynamicEnable": true,
@@ -21,18 +21,6 @@
   ],
   "tags": ["editor", "codeEditor", "recommended"],
   "settings": [
-    {
-      "name": "Show option to change block to self",
-      "id": "noop",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Add border",
-      "id": "border",
-      "type": "boolean",
-      "default": true
-    },
     {
       "name": "Motion blocks",
       "id": "motion",
@@ -97,31 +85,36 @@
       }
     },
     {
-      "name": "Custom block arguments",
+      "name": "Custom block parameters",
       "id": "customargs",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "Shown custom block arguments options",
+      "name": "Shown custom block parameters options",
       "id": "customargsmode",
       "type": "select",
       "default": "defOnly",
       "potentialValues": [
         {
           "id": "defOnly",
-          "name": "Arguments in own custom block"
+          "name": "Parameters in own custom block"
         },
         {
           "id": "all",
-          "name": "Arguments in all custom blocks in sprite"
+          "name": "Parameters in all custom blocks in sprite"
         }
       ],
       "if": {
         "settings": { "customargs": true }
       }
+    },
+    {
+      "name": "Show option to change block to self",
+      "id": "noop",
+      "type": "boolean",
+      "default": true
     }
   ],
-  "libraries": ["scratch-blocks"],
   "enabledByDefault": false
 }

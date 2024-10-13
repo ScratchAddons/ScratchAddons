@@ -1,0 +1,26 @@
+{
+  "name": "One-click studio invites",
+  "description": "Accept studio invites directly from Scratch's messages page. An accept button will appear below studio invite messages.",
+  "credits": [
+    {
+      "name": "Weredime (9gr)",
+      "link": "https://scratch.mit.edu/users/9gr/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/messages"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/messages"]
+    }
+  ],
+  "tags": ["community", "studios"],
+  "versionAdded": "1.27.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Point towards random direction block",
+  "description": "Adds a \"random direction\" option to the \"point towards ()\" block that makes the sprite point in a random direction. This will work for everyone using the project.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.35.0",
+  "tags": ["editor"],
+  "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "credits": [
+    {
+      "name": "Tacodiva",
+      "link": "https://github.com/Tacodiva/"
+    },
+    {
+      "name": "pufferfish101007",
+      "link": "https://scratch.mit.edu/users/pufferfish101007/"
+    },
+    {
+      "name": "emir4169"
+    }
+  ]
+}

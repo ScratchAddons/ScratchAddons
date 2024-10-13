@@ -8,6 +8,9 @@ import * as modal from "./modal.js";
 
 const DATA_PNG = "data:image/png;base64,";
 
+const isScratchGui =
+  location.origin === "https://scratchfoundation.github.io" || ["8601", "8602"].includes(location.port);
+
 const contextMenuCallbacks = [];
 const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image", "swap-local-global"];
 let createdAnyBlockContextMenus = false;
@@ -15,49 +18,132 @@ let createdAnyBlockContextMenus = false;
 /**
  * APIs specific to userscripts.
  * @extends Listenable
- * @property {?string} clientVersion - version of the renderer (scratch-www, scratchr2, etc)
  * @property {Trap} traps
  * @property {ReduxHandler} redux
  */
 export default class Tab extends Listenable {
-  constructor(info) {
+  constructor(addonObj, info) {
     super();
     this._addonId = info.id;
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
+    this._addonObj = addonObj;
   }
+  /**
+   * Version of the renderer (scratch-www, scratchr2, or null if it cannot be determined).
+   * @type {?string}
+   */
   get clientVersion() {
+    if (location.origin !== "https://scratch.mit.edu") return "scratch-www"; // scratchr2 cannot be self-hosted
     if (!this._clientVersion)
       this._clientVersion = document.querySelector("meta[name='format-detection']")
         ? "scratch-www"
         : document.querySelector("script[type='text/javascript']")
-        ? "scratchr2"
-        : null;
+          ? "scratchr2"
+          : null;
     return this._clientVersion;
   }
-  addBlock(...a) {
+  /**
+   * @callback Tab~blockCallback
+   * @param {object} params - the passed params.
+   * @param {object} thread - the current thread.
+   */
+  /**
+   * Adds a custom stack block definition. Internally this is a special-cased custom block.
+   * @param {string} proccode the procedure definition code
+   * @param {object} opts - options.
+   * @param {string[]} opts.args - a list of argument names the block takes.
+   * @param {Tab~blockCallback} opts.callback - the callback.
+   * @param {boolean=} opts.hidden - whether the block is hidden from the palette.
+   * @param {string=} opts.displayName - the display name of the block, if different from the proccode.
+   */
+  addBlock(proccode, opts) {
     blocks.init(this);
-    return blocks.addBlock(...a);
+    return blocks.addBlock(proccode, opts);
   }
-  removeBlock(...a) {
-    return blocks.removeBlock(...a);
+  /**
+   * Removes a stack block definition. Should not be called in most cases.
+   * @param {string} proccode the procedure definition code of the block
+   */
+  removeBlock(proccode) {
+    return blocks.removeBlock(proccode);
   }
-  getCustomBlock(...a) {
-    return blocks.getCustomBlock(...a);
+  /**
+   * Sets the color for the custom blocks.
+   * @param {object} colors - the colors.
+   * @param {string=} colors.color - the primary color.
+   * @param {string=} colors.secondaryColor - the secondary color.
+   * @param {string=} colors.tertiaryColor - the tertiary color.
+   */
+  setCustomBlockColor(colors) {
+    return blocks.setCustomBlockColor(colors);
+  }
+  /**
+   * Gets the custom block colors.
+   * @returns {object} - the colors.
+   */
+  getCustomBlockColor() {
+    return blocks.color;
+  }
+  /**
+   * Gets a custom block from the procedure definition code.
+   * @param {string} proccode the procedure definition code.
+   * @returns {object=} the custom block definition.
+   */
+  getCustomBlock(proccode) {
+    return blocks.getCustomBlock(proccode);
   }
   /**
    * Loads a script by URL.
    * @param {string} url - script URL.
    * @returns {Promise}
    */
-  loadScript(url) {
+  loadScript(relativeUrl) {
+    const urlObj = new URL(import.meta.url);
+    urlObj.pathname = relativeUrl;
+
+    const url = urlObj.href;
+
     return new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      script.src = url;
-      document.head.appendChild(script);
-      script.onload = resolve;
-      script.onerror = reject;
+      if (scratchAddons.loadedScripts[url]) {
+        const obj = scratchAddons.loadedScripts[url];
+        if (obj.loaded) {
+          // Script has been already loaded
+          resolve();
+        } else if (obj.error === null) {
+          // Script has been appended to document.head, but not loaded yet.
+          obj.script.addEventListener("load", (e) => {
+            // Script loaded successfully - resolve the promise, but don't edit the global object (since it's already been edited by the original listener).
+            resolve();
+          });
+          obj.script.addEventListener("error", ({ error }) => {
+            // Script failed to load - reject the promise, but don't edit the global object (since it's already been edited by the original listener).
+            reject(`Failed to load script from ${url} - ${error}`);
+          });
+        } else {
+          // Script has been appended to document.head, and failed to load.
+          reject(`Failed to load script from ${url} - ${obj.error}`);
+        }
+      } else {
+        // No other addon has loaded this script yet.
+        const script = document.createElement("script");
+        script.src = url;
+        const obj = (scratchAddons.loadedScripts[url] = {
+          script,
+          loaded: false,
+          error: null,
+        });
+        document.head.appendChild(script);
+        script.addEventListener("load", () => {
+          obj.loaded = true;
+          resolve();
+        });
+        script.addEventListener("error", ({ error }) => {
+          obj.error = error;
+          reject(`Failed to load script from ${url} - ${error}`);
+        });
+      }
     });
   }
   /**
@@ -71,6 +157,7 @@ export default class Tab extends Listenable {
    * Use this as an optimization and do not rely on the behavior.
    * @param {string[]=} opts.reduxEvents - An array of redux events that must be dispatched before resolving the selector.
    * Use this as an optimization and do not rely on the behavior.
+   * @param {boolean=} opts.resizeEvent - True if the selector should be resolved on window resize, in addition to the reduxEvents.
    * @returns {Promise<Element>} - element found.
    */
   waitForElement(selector, opts = {}) {
@@ -85,7 +172,8 @@ export default class Tab extends Listenable {
       }
     }
     const { reduxCondition, condition } = opts;
-    let listener;
+    let reduxListener;
+    let resizeListener;
     let combinedCondition = () => {
       if (condition && !condition()) return false;
       if (this.redux.state) {
@@ -96,20 +184,24 @@ export default class Tab extends Listenable {
       // if it runs a little earlier. Just don't error out.
       return true;
     };
-    if (opts.reduxEvents) {
+    if (opts.reduxEvents || opts.resizeEvent) {
       const oldCondition = combinedCondition;
       let satisfied = false;
       combinedCondition = () => {
         if (oldCondition && !oldCondition()) return false;
         return satisfied;
       };
-      listener = ({ detail }) => {
-        if (opts.reduxEvents.includes(detail.action.type)) {
+      reduxListener = ({ detail }) => {
+        if (opts.reduxEvents && opts.reduxEvents.includes(detail.action.type)) {
           satisfied = true;
         }
       };
       this.redux.initialize();
-      this.redux.addEventListener("statechanged", listener);
+      this.redux.addEventListener("statechanged", reduxListener);
+      resizeListener = () => {
+        if (opts.resizeEvent) satisfied = true;
+      };
+      window.addEventListener("resize", resizeListener);
     }
     const promise = scratchAddons.sharedObserver.watch({
       query: selector,
@@ -117,9 +209,10 @@ export default class Tab extends Listenable {
       condition: combinedCondition,
       elementCondition: opts.elementCondition || null,
     });
-    if (listener) {
+    if (reduxListener || resizeListener) {
       promise.then((match) => {
-        this.redux.removeEventListener("statechanged", listener);
+        this.redux.removeEventListener("statechanged", reduxListener);
+        window.removeEventListener("resize", resizeListener);
         return match;
       });
     }
@@ -130,6 +223,11 @@ export default class Tab extends Listenable {
    * @type {?string}
    */
   get editorMode() {
+    if (isScratchGui || location.pathname === "/projects/editor" || location.pathname === "/projects/editor/") {
+      // Note that scratch-gui does not change the URL when going fullscreen.
+      if (this.redux.state?.scratchGui?.mode?.isFullScreen) return "fullscreen";
+      return "editor";
+    }
     const pathname = location.pathname.toLowerCase();
     const split = pathname.split("/").filter(Boolean);
     if (!split[0] || split[0] !== "projects") return null;
@@ -147,7 +245,7 @@ export default class Tab extends Listenable {
   copyImage(dataURL) {
     if (!dataURL.startsWith(DATA_PNG)) return Promise.reject(new TypeError("Expected PNG data URL"));
     if (typeof Clipboard.prototype.write === "function") {
-      // Chrome
+      // Chrome or Firefox 127+
       const blob = dataURLToBlob(dataURL);
       const items = [
         new ClipboardItem({
@@ -156,7 +254,8 @@ export default class Tab extends Listenable {
       ];
       return navigator.clipboard.write(items);
     } else {
-      // Firefox needs Content Script
+      // Firefox 109-126 only
+      // The image is sent to the background event page where it is copied with extension APIs
       return scratchAddons.methods.copyImage(dataURL).catch((err) => {
         return Promise.reject(new Error(`Error inside clipboard handler: ${err}`));
       });
@@ -207,6 +306,17 @@ export default class Tab extends Listenable {
    * @returns {string} Hashed class names.
    */
   scratchClass(...args) {
+    const isProject =
+      location.pathname.split("/")[1] === "projects" &&
+      !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
+    if (!isProject && !isScratchGui) {
+      scratchAddons.console.warn("addon.tab.scratchClass() was used outside a project page");
+      return "";
+    }
+
+    if (!this._calledScratchClassReady)
+      throw new Error("Wait until addon.tab.scratchClassReady() resolves before using addon.tab.scratchClass");
+
     let res = "";
     args
       .filter((arg) => typeof arg === "string")
@@ -218,7 +328,7 @@ export default class Tab extends Listenable {
                 className.startsWith(classNameToFind + "_") && className.length === classNameToFind.length + 6
             ) || "";
         } else {
-          res += `scratchAddonsScratchClass/${classNameToFind}`;
+          throw new Error("addon.tab.scratchClass call failed. Class names are not ready yet");
         }
         res += " ";
       });
@@ -233,16 +343,26 @@ export default class Tab extends Listenable {
     return res;
   }
 
+  scratchClassReady() {
+    // Make sure to return a resolved promise if this is not a project!
+    const isProject =
+      location.pathname.split("/")[1] === "projects" &&
+      !["embed", "remixes", "studios"].includes(location.pathname.split("/")[3]);
+    if (!isProject && !isScratchGui) return Promise.resolve();
+
+    this._calledScratchClassReady = true;
+    if (scratchAddons.classNames.loaded) return Promise.resolve();
+    return new Promise((resolve) => {
+      window.addEventListener("scratchAddonsClassNamesReady", resolve, { once: true });
+    });
+  }
+
   /**
    * Hides an element when the addon is disabled.
    * @param {HTMLElement} el - the element.
-   * @param {object=} opts - the options.
-   * @param {string=} opts.display - the fallback value for CSS display.
    */
-  displayNoneWhileDisabled(el, { display = "" } = {}) {
-    el.style.display = `var(--${this._addonId.replace(/-([a-z])/g, (g) =>
-      g[1].toUpperCase()
-    )}-_displayNoneWhileDisabledValue${display ? ", " : ""}${display})`;
+  displayNoneWhileDisabled(el) {
+    el.dataset.saHideDisabled = this._addonId;
   }
 
   /**
@@ -250,9 +370,10 @@ export default class Tab extends Listenable {
    * @type {string}
    */
   get direction() {
-    // https://github.com/LLK/scratch-l10n/blob/master/src/supported-locales.js
+    // https://github.com/scratchfoundation/scratch-l10n/blob/master/src/supported-locales.js
     const rtlLocales = ["ar", "ckb", "fa", "he"];
-    const lang = scratchAddons.globalState.auth.scratchLang.split("-")[0];
+    const rawLang = this._addonObj.auth.scratchLang; // Guaranteed to exist
+    const lang = rawLang.split("-")[0];
     return rtlLocales.includes(lang) ? "rtl" : "ltr";
   }
 
@@ -269,6 +390,20 @@ export default class Tab extends Listenable {
    * forumsAfterPostReport - after the report button in forum posts
    * beforeRemixButton - before the remix button in project page
    * studioCuratorsTab - inside the studio curators tab
+   * forumToolbarTextDecoration - after the forum toolbar's text decoration (bold, etc) buttons
+   * forumToolbarLinkDecoration - after the forum toolbar's link buttons
+   * forumToolbarFont - after the forum toolbar's big or small font dropdown
+   * forumToolbarList - after the forum toolbar's list buttons
+   * forumToolbarDecoration - after the forum toolbar's emoji and quote buttons
+   * forumToolbarEnvironment - after the forum toolbar's environment button
+   * forumToolbarScratchblocks - after the forum toolbar's scratchblocks dropdown
+   * forumToolbarTools - after the forum toolbar's remove formatting and preview buttons
+   * assetContextMenuAfterExport - after the export button of asset (sprite, costume, etc)'s context menu
+   * assetContextMenuAfterDelete - after the delete button of asset (sprite, costume, etc)'s context menu
+   * monitor - after the end of the stage monitor context menu
+   * paintEditorZoomControls - before the zoom controls in the paint editor
+   *
+   *
    * @param {object} opts - options.
    * @param {string} opts.space - the shared space name.
    * @param {HTMLElement} element - the element to add.
@@ -328,7 +463,8 @@ export default class Tab extends Listenable {
       afterSoundTab: {
         element: () => q("[class^='react-tabs_react-tabs__tab-list']"),
         from: () => [q("[class^='react-tabs_react-tabs__tab-list']").children[2]],
-        until: () => [q("#s3devToolBar")],
+        // Element used in find-bar addon
+        until: () => [q(".sa-find-bar")],
       },
       forumsBeforePostReport: {
         element: () => scope.querySelector(".postfootright > ul"),
@@ -462,6 +598,48 @@ export default class Tab extends Listenable {
           const potential = Array.prototype.filter.call(scope.children, (c) => endOfVanilla.includes(c.textContent));
           return [potential[potential.length - 1]];
         },
+        until: () => [],
+      },
+      paintEditorZoomControls: {
+        element: () => {
+          return (
+            q(".sa-paintEditorZoomControls-wrapper") ||
+            (() => {
+              const wrapper = Object.assign(document.createElement("div"), {
+                className: "sa-paintEditorZoomControls-wrapper",
+              });
+
+              wrapper.style.display = "flex";
+              wrapper.style.flexDirection = "row-reverse";
+              wrapper.style.height = "calc(1.95rem + 2px)";
+
+              const zoomControls = q("[class^='paint-editor_zoom-controls']");
+
+              zoomControls.replaceWith(wrapper);
+              wrapper.appendChild(zoomControls);
+
+              return wrapper;
+            })()
+          );
+        },
+        from: () => [],
+        until: () => [],
+      },
+      afterProfileCountry: {
+        element: () =>
+          q(".shared-after-country-space") ||
+          (() => {
+            const wrapper = Object.assign(document.createElement("div"), {
+              className: "shared-after-country-space",
+            });
+
+            wrapper.style.display = "inline-block";
+
+            document.querySelector(".location").appendChild(wrapper);
+
+            return wrapper;
+          })(),
+        from: () => [],
         until: () => [],
       },
     };
@@ -655,17 +833,56 @@ export default class Tab extends Listenable {
     addContextMenu(this, ...args);
   }
 
+  /**
+   * @typedef {object} Tab~Modal
+   * @property {HTMLElement} container - the container element.
+   * @property {HTMLElement} content - where the content should be appended.
+   * @property {HTMLElement} backdrop - the modal overlay.
+   * @property {HTMLElement} closeButton - the close (X) button on the header.
+   * @property {function} open - opens the modal.
+   * @property {function} close - closes the modal.
+   * @property {function} remove - removes the modal, making it no longer usable.
+   */
+
+  /**
+   * Creates a modal using the vanilla style.
+   * @param {string} title - the title.
+   * @param {object=} opts - the options.
+   * @param {boolean=} opts.isOpen - whether to open the modal by default.
+   * @param {boolean=} opts.useEditorClasses - if on editor, whether to apply editor styles and not www styles.
+   * @param {boolean=} opts.useSizesClass - if on scratch-www, whether to add modal-sizes class.
+   * @return {Tab~Modal} - the modal.
+   */
   createModal(title, { isOpen = false, useEditorClasses = false, useSizesClass = false } = {}) {
     if (this.editorMode !== null && useEditorClasses) return modal.createEditorModal(this, title, { isOpen });
     if (this.clientVersion === "scratch-www") return modal.createScratchWwwModal(title, { isOpen, useSizesClass });
     return modal.createScratchr2Modal(title, { isOpen });
   }
 
-  confirm(...args) {
-    return modal.confirm(this, ...args);
+  /**
+   * Opens a confirmation dialog. Can be used to replace confirm(), but is async.
+   * @param {string} title - the title.
+   * @param {string} message - the message displayed in the contents.
+   * @param {object=} opts - the options.
+   * @param {boolean=} opts.useEditorClasses - if on editor, whether to apply editor styles and not www styles.
+   * @param {string=} opts.okButtonLabel - the label of the button for approving the confirmation
+   * @param {string=} opts.cancelButtonLabel - the label of the button for rejecting the confirmation
+   * @returns {Promise<boolean>} - whether the confirmation was approved
+   */
+  confirm(title, message, opts) {
+    return modal.confirm(this, title, message, opts);
   }
 
-  prompt(...args) {
-    return modal.prompt(this, ...args);
+  /**
+   * Opens a prompt that a user can enter a value into.
+   * @param {string} title - the title.
+   * @param {string} message - the message displayed in the contents.
+   * @param {string=} defaultValue - the default value.
+   * @param {object=} opts - the options.
+   * @param {boolean=} opts.useEditorClasses - if on editor, whether to apply editor styles and not www styles.
+   * @returns Promise<?string> - the entered value, or null if canceled.
+   */
+  prompt(title, message, defaultValue, opts) {
+    return modal.prompt(this, title, message, defaultValue, opts);
   }
 }

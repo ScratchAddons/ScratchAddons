@@ -1,1 +1,1 @@
-{"pause/pause":"일시정지","pause/@name":"일시정지 버튼","pause/@description":"초록 깃발 옆에 일시 정지 버튼을 추가합니다."}
+{"pause/pause":"일시정지","pause/play":"재개하기","pause/@name":"일시정지 버튼","pause/@description":"시작 버튼 옆에 일시 정지 버튼을 추가합니다.","pause/@info-keybind":"프로젝트는 Alt+X 키로도 멈출 수 있습니다 (macOS에서는 Option+X).","pause/@update":"이제 프로젝트를 멈추는 단축키가 있습니다."}

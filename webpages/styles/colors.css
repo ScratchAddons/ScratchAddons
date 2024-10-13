@@ -1,7 +1,8 @@
 :root {
   --brand-orange: #ff7b26;
-  --brand-orange-opacity35: rgba(255, 123, 38, 0.35);
   --brand-orange-min-font-weight: normal;
+  --orange: #ff7b26;
+  --orange-opacity35: rgba(255, 123, 38, 0.35);
   --yellow-opacity50: rgba(253, 221, 43, 0.5);
   --green: #008000;
   --light-green-variant: #53b31c;
@@ -25,8 +26,8 @@
   --button-hover-background: #1a1a1a;
   --input-background: #222;
   --search-input-background: #111;
-  --switch-background: #111;
-  --switch-inner-background: #aaa;
+  --switch-border: #808080;
+  --switch-inner-background: #eee;
   --tooltip-background: #000;
   --comment-background: #222;
   --unread-comment-background: #000;
@@ -38,6 +39,7 @@
   --warning-border: var(--red);
   --warning-text: #fff;
   --warning-icon-filter: brightness(0) invert(1);
+  --info-border: var(--content-separator);
   --update-background: var(--navigation-background);
   --update-border: var(--purple-opacity75);
   --update-text: #fff;
@@ -46,6 +48,7 @@
   --hover-highlight: rgba(255, 255, 255, 0.05);
   --hover-highlight-reduced: rgba(255, 255, 255, 0.02);
   --hover-darken: rgba(0, 0, 0, 0.1);
+  --header-hover-darken: rgba(0, 0, 0, 0.1);
 
   --large-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   --large-shadow-filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
@@ -53,12 +56,13 @@
   --content-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
   --content-separator: #808080;
   --control-border: #000;
-  --input-focus-shadow: 0 0 0 3px var(--brand-orange-opacity35);
+  --input-focus-shadow: 0 0 0 3px var(--orange-opacity35);
   --fullscreen-popup-shadow: 0 -1px 7px rgba(0, 0, 0, 0.2);
 
   --content-text: #fff;
   --content-icon-filter: brightness(0) invert(1);
   --description-text: #ddd;
+  --description-icon-filter: brightness(0) invert(0.87);
   --label-text: #aaa;
   --gray-text: #808080;
   --placeholder-text: #777;

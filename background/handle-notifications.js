@@ -2,23 +2,28 @@ import { updateBadge } from "./message-cache.js";
 
 const periods = [
   {
-    name: chrome.i18n.getMessage("15min"),
+    // Unfortunately, users on Chrome 96-99 will not get translations for these strings.
+    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("15min")) || "15 minutes",
     mins: 15,
   },
   {
-    name: chrome.i18n.getMessage("1hour"),
+    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("1hour")) || "1 hour",
     mins: 60,
   },
   {
-    name: chrome.i18n.getMessage("8hours"),
+    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("4hours")) || "4 hours",
+    mins: 240,
+  },
+  {
+    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("8hours")) || "8 hours",
     mins: 480,
   },
   {
-    name: chrome.i18n.getMessage("24hours"),
-    mins: 1440,
+    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("untilTomorrow")) || "Until tomorrow",
+    mins: "tomorrow",
   },
   {
-    name: chrome.i18n.getMessage("untilEnabled"),
+    name: (chrome.i18n.getMessage && chrome.i18n.getMessage("untilEnabled")) || "Until turned off",
     mins: Infinity,
   },
 ];
@@ -29,14 +34,25 @@ chrome.storage.local.get("muted", (obj) => {
   scratchAddons.muted = obj.muted;
 });
 
-chrome.contextMenus.removeAll();
+chrome.contextMenus?.removeAll();
 let currentMenuItem = null;
 
-chrome.contextMenus.onClicked.addListener(({ parentMenuItemId, menuItemId }) => {
+// NOTE: chrome.contextMenus equals `undefined` on Firefox for Android!
+
+chrome.contextMenus?.onClicked.addListener(({ parentMenuItemId, menuItemId }) => {
   if (parentMenuItemId === "mute") {
-    const mins = Number(menuItemId.split("_")[1]);
+    const mins = menuItemId.split("_")[1];
     contextMenuMuted();
-    muteForMins(mins);
+    if (mins === "tomorrow") {
+      const now = new Date();
+      const tomorrow = new Date();
+      tomorrow.setDate(now.getDate() + 1);
+      tomorrow.setHours(0, 0, 0, 0);
+      const differenceinMins = Math.ceil(tomorrow.getTime() / 60000 - now.getTime() / 60000);
+      muteForMins(differenceinMins);
+    } else {
+      muteForMins(Number(mins));
+    }
   } else if (menuItemId === "unmute") {
     contextMenuUnmuted();
     unmute();
@@ -44,41 +60,45 @@ chrome.contextMenus.onClicked.addListener(({ parentMenuItemId, menuItemId }) => 
 });
 
 function contextMenuUnmuted() {
+  if (chrome.contextMenus === undefined) return; // Firefox for Android
   if (currentMenuItem === "unmute") chrome.contextMenus.remove("unmute");
   currentMenuItem = "mute";
   chrome.contextMenus.create({
     id: "mute",
-    title: chrome.i18n.getMessage("muteFor"),
-    contexts: ["browser_action"],
+    title: (chrome.i18n.getMessage && chrome.i18n.getMessage("muteFor")) || "Do not disturb",
+    contexts: ["action"],
   });
   for (const period of periods) {
     chrome.contextMenus.create({
       id: `mute_${period.mins}`,
       title: period.name,
       parentId: "mute",
-      contexts: ["browser_action"],
+      contexts: ["action"],
     });
   }
-  chrome.browserAction.setIcon({
+  chrome.action.setIcon({
     path: {
-      16: "../images/icon-16.png",
-      32: "../images/icon-32.png",
+      16: chrome.runtime.getURL(chrome.runtime.getManifest().icons["16"]),
+      32: chrome.runtime.getURL(chrome.runtime.getManifest().icons["32"]),
     },
   });
 }
 
 function contextMenuMuted() {
+  if (chrome.contextMenus === undefined) return; // Firefox for Android
+  // Note: in theory, this function is unreachable
+  // in FF for Android, but we early-return anyway.
   if (currentMenuItem === "mute") chrome.contextMenus.remove("mute");
   currentMenuItem = "unmute";
   chrome.contextMenus.create({
     id: "unmute",
-    title: chrome.i18n.getMessage("unmute"),
-    contexts: ["browser_action"],
+    title: (chrome.i18n.getMessage && chrome.i18n.getMessage("unmute")) || "Turn off Do not disturb",
+    contexts: ["action"],
   });
-  chrome.browserAction.setIcon({
+  chrome.action.setIcon({
     path: {
-      16: "../images/icon-gray-16.png",
-      32: "../images/icon-gray-32.png",
+      16: chrome.runtime.getURL("images/icon-gray-16.png"),
+      32: chrome.runtime.getURL("images/icon-gray-32.png"),
     },
   });
 }

@@ -4,7 +4,19 @@
   "credits": [
     {
       "name": "TheColaber",
-      "link": "https://scratch.mit.edu/users/TheColaber"
+      "link": "https://scratch.mit.edu/users/TheColaber/"
+    }
+  ],
+  "info": [
+    {
+      "type": "notice",
+      "text": "Line breaks are only visible to users with this addon enabled. They will appear as spaces for others.",
+      "id": "ownLineBreaks"
+    },
+    {
+      "type": "info",
+      "text": "On profile pages, line breaks at the beginning or end of a comment do not appear.",
+      "id": "scratchr2Linebreaks"
     }
   ],
   "userscripts": [
@@ -18,9 +30,45 @@
     {
       "url": "break-spaces.css",
       "matches": ["studios", "projects"]
+    },
+    {
+      "url": "scrollbars.css",
+      "matches": ["studios", "projects"],
+      "if": {
+        "settings": {
+          "scrollbars": true
+        }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Add scroll bars to tall comments",
+      "id": "scrollbars",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Maximum number of lines visible at once",
+      "id": "height",
+      "type": "integer",
+      "min": 1,
+      "max": 100,
+      "default": 5,
+      "if": {
+        "settings": {
+          "scrollbars": true
+        }
+      }
     }
   ],
   "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
   "versionAdded": "1.8.0",
+  "latestUpdate": {
+    "version": "1.29.0",
+    "newSettings": ["scrollbars", "height"]
+  },
   "tags": ["community", "comments"]
 }

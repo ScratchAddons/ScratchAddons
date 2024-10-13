@@ -2,10 +2,10 @@ import ThumbSetter from "../../libraries/common/cs/thumb-setter.js";
 import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
 import { init, saveConfig, isOverwritingEnabled, blockOverwriting } from "./persistent-thumb.js";
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, console, msg }) {
   init(console);
-  let projectId = location.href.match(/\d+/)[0];
-  blockOverwriting(isOverwritingEnabled(projectId));
+  let projectId = location.href.match(/\d+/)?.[0];
+  if (projectId) blockOverwriting(isOverwritingEnabled(projectId));
   const createModal = () => {
     // User Interface
     let ignoreClickOutside = false;
@@ -126,7 +126,7 @@ export default async function ({ addon, global, console, msg }) {
         .then(
           (canceled) => {
             if (canceled) return;
-            thumbImage.src = `https://cdn2.scratch.mit.edu/get_image/project/${projectId}_480x360.png?nocache=${Date.now()}`;
+            thumbImage.src = `https://uploads.scratch.mit.edu/get_image/project/${projectId}_480x360.png?nocache=${Date.now()}`;
             content.classList.add("sa-animated-thumb-successful");
             saveConfig(projectId, stopOverwritingCheckbox.checked);
           },
@@ -175,8 +175,8 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   addon.tab.addEventListener("urlChange", () => {
-    projectId = location.href.match(/\d+/)[0];
-    blockOverwriting(isOverwritingEnabled(projectId));
+    projectId = location.href.match(/\d+/)?.[0] || projectId;
+    if (projectId) blockOverwriting(isOverwritingEnabled(projectId));
   });
 
   localStorage.removeItem("saAnimatedThumbShowTooltip");

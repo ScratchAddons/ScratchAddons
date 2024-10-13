@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
-    <link rel="icon" href="../../images/icon.png" />
     <script src="../set-lang.js" type="module"></script>
+    <link rel="icon" href="../../images/icon.png" id="favicon" />
     <link rel="stylesheet" href="style.css" />
     <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
     <script src="../../libraries/thirdparty/vue.js" defer></script>
@@ -15,11 +15,12 @@
        * Imports are here to attempt to speed up load. Also, it means licenses.html loads fewer unused styles, and this file doesn't get licenses.html's styles! In order of when it will be noticed/needed on the page
       */
       @import url("../styles/colors.css");
+      @import url("../styles/components/buttons.css");
     </style>
   </head>
   <body class="permissions">
     <div class="navbar">
-      <a href="./index.html"><img src="../../images/icon.svg" class="logo" alt="Logo" /></a>
+      <a href="./index.html"><img src="../../images/icon-transparent.svg" class="logo header-button" alt="Logo" /></a>
       <h1 v-cloak>{{ msg("permissions") }}</h1>
     </div>
     <div v-cloak class="main">

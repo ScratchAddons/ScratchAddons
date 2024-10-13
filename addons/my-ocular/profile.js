@@ -1,38 +1,47 @@
-export default async function ({ addon, global, console, msg }) {
-  var username = document.querySelector("#profile-data > div.box-head > div > h2").innerText;
+export default async function ({ addon, console, msg }) {
+  const username = Scratch.INIT_DATA.PROFILE.model.username;
+  let data = await fetchStatus(username);
 
-  var container = document.querySelector(".location");
+  if (typeof data.userStatus !== "string") return;
 
-  var response = await fetch(`https://my-ocular.jeffalo.net/api/user/${username}`);
-  var data = await response.json();
+  const span = document.createElement("span");
+  span.textContent = data.userStatus;
+  span.className = "sa-ocular-status";
+  span.title = msg("status-hover");
 
-  var statusText = data.status;
-  var color = data.color;
-  if (statusText) {
-    var statusSpan = document.createElement("i"); // for whatever reason, chrome turns variable named status into text. why the heck. aaaaaaaaaaaaaaaaaa
-    statusSpan.title = msg("status-hover");
-    statusSpan.innerText = statusText;
+  span.style.fontStyle = "italic";
+  span.style.display = "inline-block !important";
 
-    var dot = document.createElement("span");
-    dot.title = msg("status-hover");
-    dot.style.height = "10px";
-    dot.style.width = "10px";
-    dot.style.marginLeft = "5px";
-    dot.style.backgroundColor = "#bbb"; //default incase bad
-    dot.style.borderRadius = "50%";
+  const dot = document.createElement("span");
+  dot.style.backgroundColor = data.color;
+  span.appendChild(dot);
 
-    dot.style.setProperty("display", "inline-block", "important"); // i have to do it like this because .style doesn't let me set prio, and featured project banner messes with this without !important
+  addon.tab.appendToSharedSpace({
+    space: "afterProfileCountry",
+    element: span,
+    order: 9, // set back due to width of element
+  });
 
-    dot.style.backgroundColor = color;
+  addon.settings.addEventListener("change", updateOcular);
+  addon.self.addEventListener("disabled", () => updateOcular(true));
+  addon.self.addEventListener("reenabled", () => updateOcular());
 
-    var locationElem = document.createElement("span"); // create a new location element
-    locationElem.classList.add("group"); // give it the group class so it fits in
-    locationElem.innerText = container.innerText; // set it to the old innertext
+  async function fetchStatus(username) {
+    const response = await fetch(`https://my-ocular.jeffalo.net/api/user/${username}`);
+    const data = await response.json();
+    return {
+      userStatus: data.status?.replace(/\n/g, " "),
+      color: data.color,
+    };
+  }
 
-    container.innerText = ""; // clear the old location
-
-    container.appendChild(locationElem); // give it the location
-    container.appendChild(statusSpan);
-    container.appendChild(dot);
+  async function updateOcular(disabled) {
+    let span = document.querySelector(".sa-ocular-status");
+    let isMyProfile = addon.settings.get("show-status") === "others" && username === (await addon.auth.fetchUsername());
+    if (isMyProfile || addon.settings.get("profile") === false || disabled === true) {
+      span.style.display = "none";
+    } else {
+      span.style.display = "inline-block";
+    }
   }
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
@@ -39,7 +39,6 @@
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
-    <link rel="icon" href="../../images/icon.png" />
 
     <!-- Preload index.js imports -->
     <link rel="modulepreload" href="../../libraries/common/cs/download-blob.js" />
@@ -54,7 +53,7 @@
 
     <!-- Preload images -->
     <link rel="preload" href="../../images/icons/switch.svg" as="image" />
-    <link rel="preload" href="../../images/icon.svg" as="image" />
+    <link rel="preload" href="../../images/icon-transparent.svg" as="image" />
     <link rel="preload" href="../../images/icons/list.svg" as="image" />
     <link rel="preload" href="../../images/icons/puzzle.svg" as="image" />
     <link rel="preload" href="../../images/icons/web.svg" as="image" />
@@ -91,6 +90,7 @@
 
     <script src="../set-lang.js" type="module"></script>
     <script src="../check-unsupported.js" defer></script>
+    <script src="../error/check-chrome-storage.js" defer></script>
 
     <style>
       /*
@@ -98,6 +98,7 @@
       */
       @import url("../styles/colors.css");
       @import url("../styles/components/badges.css");
+      @import url("../styles/components/buttons.css");
       @import url("../styles/components/filter.css");
       @import url("../styles/components/categories.css");
       @import url("../styles/components/search.css");
@@ -108,6 +109,7 @@
       @import url("../styles/components/enablepopup.css");
     </style>
 
+    <link rel="icon" href="../../images/icon.png" id="favicon" />
     <link rel="stylesheet" href="style.css" />
 
     <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
@@ -118,10 +120,20 @@
   </head>
   <body v-cloak :class="{light: theme}">
     <div class="navbar">
-      <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-cloak v-show="smallMode" alt="Logo" />
-      <img src="../../images/icon.svg" class="logo" alt="Logo" />
+      <img
+        :src="switchPath"
+        id="sidebar-toggle"
+        class="header-button"
+        @click="sidebarToggle()"
+        v-cloak
+        v-show="smallMode"
+        alt="Logo"
+      />
+      <img src="../../images/icon-transparent.svg" class="logo" alt="Logo" />
       <h1 v-cloak>{{ msg("settings") }}</h1>
-      <img v-cloak @click="setTheme(!theme)" class="theme-switch" :src="themePath" />
+      <div @click="setTheme(!theme)" class="header-button header-end">
+        <img v-cloak class="theme-switch" :src="themePath" />
+      </div>
     </div>
     <div class="main">
       <div
@@ -258,6 +270,34 @@
               <div class="filter-selector" style="margin-left: 16px">
                 <button class="large-button" @click="viewSettings()">{{ msg("viewSettings") }}</button>
               </div>
+            </div>
+          </div>
+        </div>
+        <div class="addon-body">
+          <div class="addon-topbar">
+            <span class="addon-name"
+              ><img src="../../images/icons/translate.svg" class="icon-type" />{{ msg("language") }}
+            </span>
+          </div>
+          <div class="addon-settings">
+            <div class="addon-setting" style="margin-top: 0">
+              <input
+                type="checkbox"
+                class="setting-input check"
+                v-model="forceEnglishSetting"
+                style="margin-inline-start: 0; margin-inline-end: 8px"
+              />
+              <span>Show addon names and descriptions in English</span>
+              <div class="badge red">{{ msg("beta") }}</div>
+              <button
+                class="large-button"
+                id="applyLanguageSettingsButton"
+                v-show="forceEnglishSetting !== null && forceEnglishSetting !== this.forceEnglishSettingInitial"
+                @click="applyLanguageSettings()"
+                style="margin-inline-start: 16px"
+              >
+                {{ msg("applySettings") }}
+              </button>
             </div>
           </div>
         </div>

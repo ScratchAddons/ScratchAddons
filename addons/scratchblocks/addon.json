@@ -1,10 +1,10 @@
 {
-  "name": "3.0 Scratchblocks on forums",
+  "name": "Scratch 3.0 forum blocks",
   "description": "Enables the new version of scratchblocks on the forums.",
   "credits": [
     {
-      "name": "Verixion",
-      "link": "https://scratch.mit.edu/users/Verixion/"
+      "name": "Weredime (9gr)",
+      "link": "https://scratch.mit.edu/users/9gr/"
     },
     {
       "name": "CubeyTheCube",
@@ -18,7 +18,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["editingScreens"],
+      "matches": ["https://scratch.mit.edu/discuss/*"],
       "runAtComplete": false
     }
   ],

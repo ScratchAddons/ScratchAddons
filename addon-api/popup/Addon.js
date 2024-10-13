@@ -12,7 +12,7 @@ export default class PopupAddon extends Addon {
     super(info);
     this.auth.dispose();
     this.auth = new Auth(this);
-    this.popup = new Popup();
+    this.popup = new Popup(this);
   }
 
   /**

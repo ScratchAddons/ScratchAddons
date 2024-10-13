@@ -67,10 +67,6 @@
 .markItUp .preview a {
   background-image: url(done.svg) !important;
 }
-#ibbBtn,
-#uploadButton {
-  background-image: url(uploader.svg) !important;
-}
 
 .sa-forum-toolbar-link > a {
   background-image: url(link.svg);

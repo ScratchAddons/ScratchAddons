@@ -1,6 +1,8 @@
-*       @WorldLanguages
-/addons/ @WorldLanguages
 /.github/ @Hans5958
-/addons-l10n/ @apple502j
-/_locales/ @apple502j
-/addon-api/ @WorldLanguages
+# /addons/addons.json @WorldLanguages  # New addons
+/addon-api @WorldLanguages
+/background @WorldLanguages
+/content-scripts @WorldLanguages
+/libraries @WorldLanguages
+manifest.json @WorldLanguages
+README.md @WorldLanguages

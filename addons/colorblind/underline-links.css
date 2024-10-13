@@ -1,0 +1,37 @@
+/* Include */
+a,
+a:link,
+a:not([href]),
+a:hover,
+a:active,
+a.black:hover,
+a.black:active,
+a.reply,
+input.link,
+input.link:hover,
+input.link:active,
+input.link.black:hover,
+input.link.black:active,
+span.comment-reply,
+.news li h4,
+#footer .lists dd a,
+#comments .more-replies .pulldown,
+#email-resend-box a {
+  text-decoration: underline;
+  text-decoration-style: var(--colorblind-underlineStyle);
+}
+
+/* Exclude */
+a.slider-carousel-control,
+a.button,
+a.nav_link,
+.button a,
+.button a:hover,
+.button a:active,
+#navigation .link > a,
+#topnav ul.site-nav li a,
+#navigation .dropdown > li a,
+#topnav ul.account-nav ul.user-nav li a,
+.extension-chip a {
+  text-decoration: none;
+}

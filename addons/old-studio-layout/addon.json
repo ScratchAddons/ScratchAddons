@@ -8,7 +8,6 @@
       "id": "mobile"
     },
     {
-      "type": "notice",
       "text": "The size of most elements is not changed. If you want to see more projects and curators at once, use the \"more items per row\" addon.",
       "id": "itemsPerRow"
     }
@@ -25,14 +24,14 @@
       "name": "defaultLinkIconFilter",
       "value": {
         "type": "recolorFilter",
-        "source": "#4d97ff"
+        "source": "#855cd6"
       }
     },
     {
       "name": "defaultLinkHoverIconFilter",
       "value": {
         "type": "recolorFilter",
-        "source": "#4280d7"
+        "source": "#7854c0"
       }
     }
   ],

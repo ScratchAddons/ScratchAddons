@@ -1,21 +1,26 @@
 {
-  "name": "60FPS project player mode",
-  "description": "Alt+Click the green flag to toggle 60FPS.",
+  "name": "Higher project framerate mode",
+  "description": "Lets you run projects at more frames per second (FPS) so they look smoother. Hold Alt and click the green flag to toggle between Scratch's default 30 FPS and a custom framerate set below.",
   "info": [
     {
       "type": "notice",
-      "text": "Projects will run twice as fast at 60FPS, because they typically run at 30FPS.",
+      "text": "Changing the framerate of Scratch projects also affects the rate at which certain code (such as loops) runs, so most projects won't behave properly when run at a different framerate. Higher framerates are only meant to be used on projects that are designed to support them.",
       "id": "projectRunsFasterNotice"
+    },
+    {
+      "type": "notice",
+      "text": "If your browser is in energy saver mode (e.g. if your battery is low), it may limit the visible framerate and using this addon may not appear to make animations smoother.",
+      "id": "powerSaver"
     }
   ],
   "credits": [
     {
       "name": "Jeffalo",
-      "link": "https://scratch.mit.edu/users/Jeffalo"
+      "link": "https://scratch.mit.edu/users/Jeffalo/"
     },
     {
       "name": "TheColaber",
-      "link": "https://scratch.mit.edu/users/TheColaber"
+      "link": "https://scratch.mit.edu/users/TheColaber/"
     }
   ],
   "dynamicEnable": true,
@@ -28,7 +33,7 @@
   ],
   "settings": [
     {
-      "name": "Alt+GreenFlag FPS",
+      "name": "Custom FPS",
       "id": "framerate",
       "type": "integer",
       "min": 31,
@@ -36,7 +41,7 @@
       "default": 60
     }
   ],
-  "tags": ["editor", "projectPlayer", "recommended"],
+  "tags": ["editor", "projectPlayer", "featured"],
   "versionAdded": "1.1.0",
-  "enabledByDefault": true
+  "enabledByDefault": false
 }

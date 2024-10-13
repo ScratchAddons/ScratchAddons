@@ -1,0 +1,49 @@
+.sa-vol-slider {
+  position: relative;
+  /* Size when the slider is hidden - same as icon */
+  width: 20px;
+  box-sizing: content-box;
+}
+
+.sa-vol-slider-inner {
+  position: absolute;
+  top: 0;
+  height: 100%;
+}
+
+[dir="ltr"] .sa-vol-slider-inner {
+  left: 0.25rem;
+}
+
+[dir="rtl"] .sa-vol-slider-inner {
+  right: 0.25rem;
+}
+
+.sa-vol-slider-inner:not(:hover) > .sa-vol-slider-input {
+  opacity: 0;
+  width: 0;
+}
+
+[dir="ltr"] .sa-vol-slider-inner:not(:hover) > .sa-vol-slider-input {
+  margin-left: -3px;
+}
+
+[dir="rtl"] .sa-vol-slider-inner:not(:hover) > .sa-vol-slider-input {
+  margin-right: -3px;
+}
+
+.sa-vol-slider-inner:hover {
+  z-index: 1;
+}
+
+.pos-container-container,
+.clone-container-container,
+[class*="turbo-mode_turbo-container"] {
+  transition: opacity 0.25s ease;
+}
+
+.sa-vol-slider:hover ~ .pos-container-container,
+.sa-vol-slider:hover ~ .clone-container-container,
+.sa-vol-slider:hover ~ [class*="turbo-mode_turbo-container"] {
+  opacity: 0;
+}

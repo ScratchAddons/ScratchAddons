@@ -3,7 +3,7 @@ export const createEditorModal = (tab, title, { isOpen = false } = {}) => {
     className: tab.scratchClass("modal_modal-overlay"),
     dir: tab.direction,
   });
-  container.style.display = isOpen ? "" : "none";
+  container.style.display = "none";
   document.body.appendChild(container);
   const modal = Object.assign(document.createElement("div"), {
     className: tab.scratchClass("modal_modal-content"),
@@ -31,7 +31,7 @@ export const createEditorModal = (tab, title, { isOpen = false } = {}) => {
   closeButton.appendChild(
     Object.assign(document.createElement("img"), {
       className: tab.scratchClass("close-button_close-icon"),
-      src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
+      src: import.meta.url + "/../../../images/cs/close-s3.svg",
     })
   );
   const content = Object.assign(document.createElement("div"), {
@@ -42,14 +42,19 @@ export const createEditorModal = (tab, title, { isOpen = false } = {}) => {
     `,
   });
   modal.appendChild(content);
+  const open = () => {
+    container.style.display = "";
+    if (tab.editorMode === "editor") {
+      tab.traps.getBlockly().then((Blockly) => Blockly.hideChaff());
+    }
+  };
+  if (isOpen) open();
   return {
     container: modal,
     content,
     backdrop: container,
     closeButton,
-    open: () => {
-      container.style.display = "";
-    },
+    open,
     close: () => {
       container.style.display = "none";
     },
@@ -89,8 +94,8 @@ export const createScratchWwwModal = (title, { isOpen = false, useSizesClass = t
       height: 3rem;
       box-sizing: border-box;
       padding-top: 0.75rem;
-      background-color: var(--darkWww-navbar, #4d97ff);
-      box-shadow: 0 -1px 0 0 inset var(--darkWww-navbar-variant, #4280d7);
+      background-color: var(--darkWww-navbar, #855cd6);
+      box-shadow: 0 -1px 0 0 inset var(--darkWww-navbar-variant, #7854c0);
       color: var(--darkWww-navbar-text, white);
       text-align: center;
       font-weight: bold;
@@ -124,10 +129,8 @@ export const createScratchWwwModal = (title, { isOpen = false, useSizesClass = t
 
 export const createScratchr2Modal = (title, { isOpen = false } = {}) => {
   const backdrop = Object.assign(document.createElement("div"), {
-    className: "modal-backdrop fade",
+    className: "modal-backdrop fade hide",
   });
-  if (isOpen) backdrop.classList.add("in");
-  else backdrop.classList.add("hide");
   document.body.appendChild(backdrop);
   const modal = Object.assign(document.createElement("div"), {
     className: "modal fade hide",
@@ -157,7 +160,7 @@ export const createScratchr2Modal = (title, { isOpen = false } = {}) => {
     setTimeout(() => {
       backdrop.classList.add("in");
       modal.classList.add("in");
-    }, 300);
+    }, 0);
   };
   const close = () => {
     modal.classList.remove("in");
@@ -187,7 +190,7 @@ export const createScratchr2Modal = (title, { isOpen = false } = {}) => {
   };
 };
 
-const createButtonRow = (tab, mode) => {
+const createButtonRow = (tab, mode, { okButtonLabel, cancelButtonLabel } = {}) => {
   const buttonRow = Object.assign(document.createElement("div"), {
     className: {
       editor: tab.scratchClass("prompt_button-row"),
@@ -197,13 +200,15 @@ const createButtonRow = (tab, mode) => {
   });
   const cancelButton = Object.assign(document.createElement("button"), {
     className: { "scratch-www": "button action-button close-button white" }[mode] || "",
-    innerText: tab.scratchMessage(
-      {
-        editor: "gui.prompt.cancel",
-        "scratch-www": "general.cancel",
-        scratchr2: "Cancel",
-      }[mode]
-    ),
+    innerText:
+      cancelButtonLabel ||
+      tab.scratchMessage(
+        {
+          editor: "gui.prompt.cancel",
+          "scratch-www": "general.cancel",
+          scratchr2: "Cancel",
+        }[mode]
+      ),
   });
   buttonRow.appendChild(cancelButton);
   const okButton = Object.assign(document.createElement("button"), {
@@ -211,19 +216,21 @@ const createButtonRow = (tab, mode) => {
       editor: tab.scratchClass("prompt_ok-button"),
       "scratch-www": "button action-button submit-button",
     }[mode],
-    innerText: tab.scratchMessage(
-      {
-        editor: "gui.prompt.ok",
-        "scratch-www": "general.okay",
-        scratchr2: "OK",
-      }[mode]
-    ),
+    innerText:
+      okButtonLabel ||
+      tab.scratchMessage(
+        {
+          editor: "gui.prompt.ok",
+          "scratch-www": "general.okay",
+          scratchr2: "OK",
+        }[mode]
+      ),
   });
   buttonRow.appendChild(okButton);
   return { buttonRow, cancelButton, okButton };
 };
 
-export const confirm = (tab, title, message, { useEditorClasses = false } = {}) => {
+export const confirm = (tab, title, message, { useEditorClasses = false, okButtonLabel, cancelButtonLabel } = {}) => {
   const { remove, container, content, backdrop, closeButton } = tab.createModal(title, {
     isOpen: true,
     useEditorClasses: useEditorClasses,
@@ -241,7 +248,10 @@ export const confirm = (tab, title, message, { useEditorClasses = false } = {}) 
       innerText: message,
     })
   );
-  const { buttonRow, cancelButton, okButton } = createButtonRow(tab, mode);
+  const { buttonRow, cancelButton, okButton } = createButtonRow(tab, mode, {
+    okButtonLabel,
+    cancelButtonLabel,
+  });
   if (mode === "scratchr2") container.appendChild(buttonRow);
   else content.appendChild(buttonRow);
   okButton.focus();

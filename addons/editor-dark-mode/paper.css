@@ -1,3 +1,12 @@
-.paper-canvas_paper-canvas_1y588 {
+[class*="paint-editor_canvas-container_"] {
+  color: var(--editorDarkMode-accent-text);
+}
+
+[class*="paper-canvas_paper-canvas_"] {
   background-color: var(--editorDarkMode-accent-paintEditorBackground);
+}
+
+[class*="scrollable-canvas_vertical-scrollbar_"],
+[class*="scrollable-canvas_horizontal-scrollbar_"] {
+  background-color: var(--editorDarkMode-accent-paintEditorScrollbar);
 }

@@ -1,4 +1,4 @@
-export default async function ({ addon, msg, global, console }) {
+export default async function ({ addon, msg, console }) {
   const { redux } = addon.tab;
   while (true) {
     const button = await addon.tab.waitForElement("span[class*='share-button_share-button'][class*='is-shared']", {
@@ -8,7 +8,7 @@ export default async function ({ addon, msg, global, console }) {
 
     button.classList.add("sa-unshare-button");
     button.querySelector("span").innerText = msg("unshare-button");
-    button.addEventListener("click", async (e) => {
+    button.addEventListener("click", async function thisFunction(e) {
       if (!(await addon.tab.confirm(msg("unshare-button"), msg("unshare-msg"), { useEditorClasses: true }))) return;
       redux.dispatch({
         type: "SET_COMMENT_FETCH_STATUS",
@@ -42,6 +42,8 @@ export default async function ({ addon, msg, global, console }) {
         });
 
         button.classList.remove("sa-unshare-button");
+        button.removeEventListener("click", thisFunction);
+
         redux.dispatch({
           type: "UPDATE_PROJECT_INFO",
           info: {
