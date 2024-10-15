@@ -7,10 +7,11 @@ export default async function ({ addon, console }) {
     Blockly.WidgetDiv.DIV.insertAdjacentHTML(
       "beforeend",
       `
-            <svg width="20px" height="40px" 
-                 style="left: ${direction === "left" ? "calc(50% - 20px)" : "calc(50% + 20px)"}" 
-                 class="blocklyTextShiftArrow">
-                <path d="${path}" fill="none" stroke="#FF661A" stroke-width="2"></path>
+            <svg width="20px" height="40px"
+                 style="left: ${direction === "left" ? "calc(50% - 24px)" : "calc(50% + 24px)"}"
+                 class="sa-reorder-inputs-arrow">
+                <path d="${path}" fill="none" stroke="#FF661A" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>`
     );
 
@@ -191,7 +192,7 @@ export default async function ({ addon, console }) {
     }
 
     Blockly.FieldTextInputRemovable.prototype.showEditor_ = originalShowEditor;
-    Blockly.WidgetDiv.DIV.querySelectorAll(".blocklyTextShiftArrow").forEach((e) => e.remove());
+    Blockly.WidgetDiv.DIV.querySelectorAll(".sa-reorder-inputs-arrow").forEach((e) => e.remove());
   }
 
   const Blockly = await addon.tab.traps.getBlockly();
