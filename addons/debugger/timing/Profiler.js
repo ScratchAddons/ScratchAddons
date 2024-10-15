@@ -17,11 +17,15 @@ class Profiler {
     const profiler = this;
     let propSet = false;
 
-    /* the goal is to call profile() just before execute(),
-    however without access to execute() we need to be creative in how we hook our code in.
+    /*
+    Execute() is called once per line of scratch code to evaluate recursively every block in that line.
+    We aim to start out timer just before execute is called, and then stop it the next time execute is called.
+    Ideally we'd just wrap execute() with a function that calls profile(),
+    however without access to execute() we can't just wrap it, so we need to be creative in how we hook our code in.
+
     The key idea is that there are two properties that are got/set just before and after execute() that we can use.
-    - runtime.profiler is got once before execute() so we start the timer here
-    - thread.blockGlowInFrame is set once after execute() so we use this to avoid checking runtime.profiler more than once.
+    - runtime.profiler is got once before execute() so we start the profiler here.
+    - manthread.blockGlowInFrame is set once after execute() so we use this to reset runtime.profiler and stop it triggering further
     */
 
     Object.defineProperty(vm.runtime, "profiler", {
@@ -68,12 +72,26 @@ class Profiler {
 
     if (this.config.showLineByLine && this.currentBlock !== null) this.tm.stopTimer(this.currentBlock);
 
-    if (this.config.showRTC) this.totalRTC += this.getRTCofBlockLine(blockId, this.thread.blockContainer._blocks);
+    if (this.config.showRTC) this.totalRTC += this.getRTCofBlockLine(blockId, this.thread.blockContainer._blocks, this.thread.target.variables);
 
     this.currentBlock = blockId;
   }
 
-  getRTCofBlockLine(rootBlockId, blocks) {
+  getN(block, variables){
+    if('LIST' in block.fields){
+      // if the block has a LIST field return the length of the list in that field
+      return variables[block.fields.LIST.id].value.length;
+    }else if(block.inputs.length){
+      // this block is almost certainly string contains but unfortunately there's no way to get the reported value of just the elements inside this string
+      // instead we'll just pretend the reported string was length 10
+      return 10
+    }
+    // something has gone wrong as all O(n) blocks have either a LIST field or an input field.
+    // If 0 is returned, the RTC table is likely formatted wrong, and needs fixing.
+    return 0;
+  }
+
+  getRTCofBlockLine(rootBlockId, blocks, variables) {
     if (this.rtcCache.has(rootBlockId)) {
       return this.rtcCache.get(rootBlockId);
     }
@@ -84,7 +102,11 @@ class Profiler {
     const fieldKeys = Object.keys(block.fields);
     const field =
       fields.length && ["EFFECT", "OPERATOR"].includes(fieldKeys[0]) ? ":" + fields[0].value.toLowerCase() : "";
-    const rtc = this.rtcTable[block.opcode + field];
+    let rtc = this.rtcTable[block.opcode + field];
+
+    // If RTC is given by two values in the table then the operation has O(n) time complexity and depends on the string/list length
+    const input_dependent = Array.isArray(rtc)
+    rtc = input_dependent ? rtc[1] + rtc[0] * this.getN(block, variables) : rtc
     let ownRTC = block?.opcode && rtc && rtc != "N/A" ? rtc : 0;
     const childrenRTC =
       inputs.length !== 0
@@ -94,7 +116,8 @@ class Profiler {
             .reduce((acc, curr) => acc + curr, 0)
         : 0;
     const totalRTC = ownRTC + childrenRTC;
-    this.rtcCache.set(rootBlockId, totalRTC);
+    if(!input_dependent) this.rtcCache.set(rootBlockId, totalRTC);
+
     return totalRTC;
   }
 

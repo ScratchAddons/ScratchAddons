@@ -29,7 +29,7 @@ class TableRows extends LogView {
       callCount: timer.callCount,
     };
     if (this.config.showRTC) {
-      rowValues.rtc = Math.floor(timer.totalRTC / timer.callCount);
+      rowValues.rtc = (timer.totalRTC / timer.callCount).toFixed(1);
     }
     return rowValues;
   }
