@@ -73,11 +73,7 @@ class Profiler {
     if (this.config.showLineByLine && this.currentBlock !== null) this.tm.stopTimer(this.currentBlock);
 
     if (this.config.showRTC)
-      this.totalRTC += this.getRTCofBlockLine(
-        blockId,
-        this.thread.blockContainer._blocks,
-        this.thread.target.variables
-      );
+      this.totalRTC += this.getRTCofBlockLine(blockId, this.thread.blockContainer._blocks, this.thread.target);
 
     this.currentBlock = blockId;
   }
@@ -108,7 +104,7 @@ class Profiler {
     let field =
       fields.length && ["EFFECT", "OPERATOR"].includes(fieldKeys[0]) ? ":" + fields[0].value.toLowerCase() : "";
 
-    if( block.opcode == "pen_stamp"){
+    if (block.opcode == "pen_stamp") {
       // if the block is stamp then RTC depends on whether we are stamping bitmap or vector
       field = target.sprite.costumes[target.currentCostume].dataFormat == "svg" ? ":vector" : ":bitmap";
     }
@@ -126,6 +122,9 @@ class Profiler {
             .reduce((acc, curr) => acc + curr, 0)
         : 0;
     const totalRTC = ownRTC + childrenRTC;
+
+    // If the RTC is independent of the input then it never changes and we can cache it
+    const input_dependent = Array.isArray(rtc) || block.opcode == "pen_stamp";
     if (!input_dependent) this.rtcCache.set(rootBlockId, totalRTC);
 
     return totalRTC;
