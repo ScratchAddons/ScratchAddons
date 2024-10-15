@@ -1,0 +1,49 @@
+#sa-download-button:before {
+  background-image: url("./download.svg");
+  display: inline-block;
+  margin-top: -2px;
+  margin-right: 0.25rem;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  width: 1.125rem;
+  height: 1.125rem;
+  vertical-align: middle;
+  content: "";
+}
+
+#sa-download-button.waiting {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+@keyframes spin-intro {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+
+#sa-download-button.loading:before {
+  background-image: url(https://scratch.mit.edu/svgs/modal/spinner-white.svg);
+  background-size: 100%;
+  filter: var(--darkWww-button-filter);
+  animation-name: spin-intro, spin;
+  animation-duration: 0.25s, 1s;
+  animation-timing-function: cubic-bezier(0.3, -3, 0.6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);
+  animation-delay: 0s, 0.25s;
+  animation-iteration-count: 1, infinite;
+}

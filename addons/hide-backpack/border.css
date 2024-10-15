@@ -1,0 +1,19 @@
+body:not(.sa-backpack-open) [class*="blocks_blocks_"] .injectionDiv,
+body:not(.sa-backpack-open) [class*="gui_extension-button-container_"], /* for editor-stage-left */
+body:not(.sa-backpack-open) [class*="asset-panel_wrapper_"] {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.sa-backpack-open [class*="backpack_backpack-list_"] {
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+}
+
+.sa-backpack-open [dir="ltr"] [class*="backpack_backpack-list_"] {
+  border-top-right-radius: 0.5rem;
+}
+
+.sa-backpack-open [dir="rtl"] [class*="backpack_backpack-list_"] {
+  border-top-left-radius: 0.5rem;
+}

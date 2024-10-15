@@ -34,7 +34,7 @@ export default async function ({ addon, msg, console }) {
     createDom(root) {
       this.findBarOuter = document.createElement("div");
       this.findBarOuter.className = "sa-find-bar";
-      addon.tab.displayNoneWhileDisabled(this.findBarOuter, { display: "flex" });
+      addon.tab.displayNoneWhileDisabled(this.findBarOuter);
       root.appendChild(this.findBarOuter);
 
       this.findWrapper = this.findBarOuter.appendChild(document.createElement("span"));
@@ -117,13 +117,13 @@ export default async function ({ addon, msg, console }) {
       this.dropdown.inputKeyDown(e);
 
       // Enter
-      if (e.keyCode === 13) {
+      if (e.key === "Enter") {
         this.findInput.blur();
         return;
       }
 
       // Escape
-      if (e.keyCode === 27) {
+      if (e.key === "Escape") {
         if (this.findInput.value.length > 0) {
           this.findInput.value = ""; // Clear search first, then close on second press
           this.inputChange();
@@ -136,11 +136,11 @@ export default async function ({ addon, msg, console }) {
     }
 
     eventKeyDown(e) {
-      if (addon.self.disabled || !this.findBarOuter) return;
+      if (addon.self.disabled || !this.findBarOuter || addon.tab.editorMode !== "editor") return;
 
       let ctrlKey = e.ctrlKey || e.metaKey;
 
-      if (e.key === "f" && ctrlKey && !e.shiftKey) {
+      if (e.key.toLowerCase() === "f" && ctrlKey && !e.shiftKey) {
         // Ctrl + F (Override default Ctrl+F find)
         this.findInput.focus();
         this.findInput.select();
@@ -149,7 +149,7 @@ export default async function ({ addon, msg, console }) {
         return true;
       }
 
-      if (e.keyCode === 37 && ctrlKey) {
+      if (e.key === "ArrowLeft" && ctrlKey) {
         // Ctrl + Left Arrow Key
         if (document.activeElement.tagName === "INPUT") {
           return;
@@ -163,7 +163,7 @@ export default async function ({ addon, msg, console }) {
         }
       }
 
-      if (e.keyCode === 39 && ctrlKey) {
+      if (e.key === "ArrowRight" && ctrlKey) {
         // Ctrl + Right Arrow Key
         if (document.activeElement.tagName === "INPUT") {
           return;
@@ -174,6 +174,21 @@ export default async function ({ addon, msg, console }) {
           e.cancelBubble = true;
           e.preventDefault();
           return true;
+        }
+      }
+
+      // In Chrome, Ctrl+Z will undo edits to the find bar input even if it doesn't have focus.
+      // Call preventDefault() to make sure that the event only goes to scratch-blocks or scratch-paint.
+      // Blockly.onKeyDown_:
+      // https://github.com/scratchfoundation/scratch-blocks/blob/1421093/core/blockly.js#L185
+      // KeyboardShortcutsHOC.handleKeyPress:
+      // https://github.com/scratchfoundation/scratch-paint/blob/8119055/src/hocs/keyboard-shortcuts-hoc.jsx#L29
+      if (!Blockly.utils.isTargetInput(e) && addon.tab.redux.state?.scratchPaint.textEditTarget === null) {
+        if (
+          (ctrlKey || e.altKey) &&
+          (e.keyCode === 90 || e.key === "z" || (e.shiftKey && e.key.toLowerCase() === "z"))
+        ) {
+          e.preventDefault();
         }
       }
     }
@@ -255,7 +270,12 @@ export default async function ({ addon, msg, console }) {
         let fields = root.inputList[0];
         let desc;
         for (const fieldRow of fields.fieldRow) {
-          desc = (desc ? desc + " " : "") + fieldRow.getText();
+          desc = desc ? desc + " " : "";
+          if (fieldRow instanceof Blockly.FieldImage && fieldRow.src_.endsWith("green-flag.svg")) {
+            desc += msg("/_general/blocks/green-flag");
+          } else {
+            desc += fieldRow.getText();
+          }
         }
         return desc;
       }
@@ -427,21 +447,21 @@ export default async function ({ addon, msg, console }) {
 
     inputKeyDown(e) {
       // Up Arrow
-      if (e.keyCode === 38) {
+      if (e.key === "ArrowUp") {
         this.navigateFilter(-1);
         e.preventDefault();
         return;
       }
 
       // Down Arrow
-      if (e.keyCode === 40) {
+      if (e.key === "ArrowDown") {
         this.navigateFilter(1);
         e.preventDefault();
         return;
       }
 
       // Enter
-      if (e.keyCode === 13) {
+      if (e.key === "Enter") {
         // Any selected on enter? if not select now
         if (this.selected) {
           this.navigateFilter(1);
@@ -635,7 +655,10 @@ export default async function ({ addon, msg, console }) {
 
         for (const id of Object.keys(blocks._blocks)) {
           const block = blocks._blocks[id];
-          if (block.opcode === "event_whenbroadcastreceived" && block.fields.BROADCAST_OPTION.value === name) {
+          if (
+            block.opcode === "event_whenbroadcastreceived" &&
+            block.fields.BROADCAST_OPTION.value.toLowerCase() === name.toLowerCase()
+          ) {
             uses.push(new BlockInstance(target, block));
           } else if (block.opcode === "event_broadcast" || block.opcode === "event_broadcastandwait") {
             const broadcastInputBlockId = block.inputs.BROADCAST_INPUT.block;
@@ -647,7 +670,7 @@ export default async function ({ addon, msg, console }) {
               } else {
                 eventName = msg("complex-broadcast");
               }
-              if (eventName === name) {
+              if (eventName.toLowerCase() === name.toLowerCase()) {
                 uses.push(new BlockInstance(target, block));
               }
             }
@@ -686,7 +709,6 @@ export default async function ({ addon, msg, console }) {
       } else {
         this.remove();
         this.blocks = blocks;
-        item.appendChild(this.createDom());
 
         this.idx = 0;
         if (instanceBlock) {
@@ -698,6 +720,7 @@ export default async function ({ addon, msg, console }) {
             }
           }
         }
+        item.appendChild(this.createDom());
 
         if (this.idx < this.blocks.length) {
           this.utils.scrollBlockIntoView(this.blocks[this.idx]);
@@ -727,14 +750,14 @@ export default async function ({ addon, msg, console }) {
 
     inputKeyDown(e) {
       // Left Arrow
-      if (e.keyCode === 37) {
+      if (e.key === "ArrowLeft") {
         if (this.el && this.blocks) {
           this.navLeft(e);
         }
       }
 
       // Right Arrow
-      if (e.keyCode === 39) {
+      if (e.key === "ArrowRight") {
         if (this.el && this.blocks) {
           this.navRight(e);
         }

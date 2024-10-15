@@ -22,7 +22,6 @@ body {
   color: var(--white-text);
   display: flex;
   align-items: center;
-  padding: 0 14px;
   box-shadow: var(--large-shadow);
   user-select: none;
   position: relative;
@@ -36,13 +35,16 @@ h1 {
 }
 
 .navbar a {
-  height: 30px;
+  line-height: 0;
 }
 
 .logo {
-  height: 30px;
-  width: 30px;
-  margin-inline-end: 9px;
+  height: 25px;
+  margin: 0 20px;
+}
+.logo.header-button {
+  margin: 0;
+  padding: 17.5px 20px;
 }
 
 .main {
@@ -129,16 +131,25 @@ h1 {
 .reverted {
   transform: scaleY(-1);
 }
-
+.header-button {
+  cursor: pointer;
+  padding: 17.5px;
+  line-height: 0;
+  transition: 0.2s ease;
+}
+.header-button:hover {
+  background: var(--header-hover-darken);
+}
 .theme-switch {
   height: 25px;
-  right: 25px;
-  position: fixed;
-  cursor: pointer;
 }
-[dir="rtl"] .theme-switch {
+.header-end {
+  right: 0;
+  position: fixed;
+}
+[dir="rtl"] .header-end {
   right: auto;
-  left: 25px;
+  left: 0;
 }
 
 .hidden-button {
@@ -309,13 +320,18 @@ body.iframe .search-box input {
 }
 
 .permissions div.main {
-  justify-content: center;
-  display: grid;
-  grid-template-rows: 14rem 10rem;
+  display: block;
+  box-sizing: border-box;
+  max-width: fit-content;
+  margin: auto;
+  padding: 2rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-text) transparent;
 }
 
 .permissions-block {
-  margin-top: 3rem;
+  margin-top: 1rem;
   font-size: 1.25rem;
 }
 
@@ -327,6 +343,7 @@ body.iframe .search-box input {
 .permissions-steps {
   display: flex;
   align-items: flex-end;
+  gap: 2rem;
 }
 
 .permissions-steps > div {
@@ -335,11 +352,15 @@ body.iframe .search-box input {
   align-items: center;
 }
 
-.permissions-steps > div:not(:last-child) {
-  margin-right: 2rem;
+@media (max-width: 1000px) {
+  .permissions-steps {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 #permissionsBtn {
+  display: block;
   height: 6rem;
   width: 18rem;
   font-size: 2.5rem;
@@ -347,7 +368,8 @@ body.iframe .search-box input {
 }
 
 #screenshot {
-  height: 10rem;
+  width: 24rem;
+  max-width: 100%;
 }
 
 color-picker {

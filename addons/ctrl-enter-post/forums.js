@@ -10,7 +10,7 @@ export default async function ({ addon }) {
 
   if (!textarea) return;
   textarea.addEventListener("keydown", (e) => {
-    if (!addon.self.disabled && (e.ctrlKey || e.metaKey) && (e.code === "Enter" || e.code === "NumpadEnter")) {
+    if (!addon.self.disabled && (e.ctrlKey || e.metaKey) && e.key === "Enter") {
       postButton.click();
     }
   });
